@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>发起限制规则</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        //获取节点属性.
+        var flowNo = GetQueryString("FK_Flow");
+
+        var flow = new Entity("BP.WF.Flow", flowNo);
+        $(function () {
+            //初始化下拉框.
+            InitBar(6);
+            if(flow.StartLimitRole==6)
+                $("#TB_ColNotExit_Fields").val(flow.StartLimitPara);
+
+        });
+
+        function Save() {
+            flow.StartLimitRole = StartLimitRole.ColNotExit;
+            flow.StartLimitPara = $("#TB_ColNotExit_Fields").val();
+            flow.CopyURL();  //从url里面copy数据.
+            flow.CopyForm(); //从from里面copy数据.
+            if (flow.Update() == 0)
+                flow.Insert();
+
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>
+            <label for="RB_ColNotExit">
+                按照发起字段不能重复规则
+            </label>
+            <br />
+            <br />
+        </legend><a href="javascript:ShowHidden('fields')">填写设置字段</a>
+        <div id="fields" style="display: none; color: Gray">
+            <ul>
+                <li>设置一个列允许重复，比如：NSRBH</li>
+                <li>设置多个列的时候，需要用逗号分开，比如：field1,field2</li>
+                <li>流程在发起的时候如果发现，该列是重复的，就抛出异常，阻止流程发起。</li>
+                <li>比如：纳税人注销流程，一个纳税人只能发起一次注销，就要配置纳税人字段，让其不能重复。</li>
+            </ul>
+        </div>
+        <input type="text" class="input" id="TB_ColNotExit_Fields" />
+    </fieldset>
+</body>
+</html>

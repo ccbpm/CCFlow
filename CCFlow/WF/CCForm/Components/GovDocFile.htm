@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>公文正文</title>
+    <meta charset="UTF-8" />
+    <base target="_self" />
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+    <script type="text/javascript">
+
+        var frmID = GetQueryString("FrmID");
+        var oid = GetQueryString("OID");
+        var nodeID = GetQueryString("FK_Node");
+        var flowNo = GetQueryString("FK_Flow");
+
+        $(function () {
+          
+        });
+
+        ///保存的时候.
+        function Save() {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCFormr_Components");
+            handler.AddFormData();
+            var text = $("#DDL_WordKey option:selected").text();//获取字号select的text
+            handler.AddUrlData(); //增加参数数据
+            handler.AddPara("DocWordName", text);
+            var data = handler.DoMethodReturnString("DocWord_Save");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            //  alert("保存成功");
+            window.parent.ChangeDocWordVal(data);
+        }
+
+    </script>
+</head>
+<body>
+    <form id="cc">
+        <table style="width:100%;">
+            <tr>
+                <td> 字 </td>
+                <td> <select id="DDL_WordKey" name="DDL_WordKey" onchange="DocWord_ReGenerDocWord()"></select> </td>
+                <td> 年度 </td>
+                <td>
+                    <select id="DDL_Year" name="DDL_Year" onchange="DocWord_ReGenerDocWord()">
+                    </select>
+                </td>
+                <td>流水号</td>
+                <td> <input type="text" id="TB_LSH" name="TB_LSH" />  </td>
+            </tr>
+
+            <tr>
+                <td colspan="6">
+                    <!--<input type="button" value="自动生成编号" onclick="AutoNum();" />
+                    <input type="button" value="自定义编号" onclick="NewNum();" />-->
+                    <!--<input type="button" value="选择空闲编号" onclick="SelecBlankNum();" />-->
+                    <input type="button" value="保存并关闭" onclick="Save();" />
+                    <!--<input type="button" value="关闭" onclick="Close();" />-->
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="6">
+                    <div id="list"></div>
+                </td>
+            </tr>
+
+        </table>
+
+    </form>
+</body>
+</html>

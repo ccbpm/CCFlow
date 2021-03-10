@@ -1,0 +1,282 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>正在加载请稍候...</title>
+    <link href="./Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="./Scripts/easyUI145/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="./Scripts/easyUI145/themes/icon.css" />
+    <link href="./Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
+    <link href="./Scripts/bootstrap/css/font-awesome.css" rel="Stylesheet" />
+    <link rel="stylesheet" href="./Scripts/bootstrap/css/css.css" type="text/css" media="all" />
+    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
+    <link href="../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+
+    <script src="Scripts/bootstrap/js/jquery.min.js" type="text/javascript"></script>
+
+    <script src="Scripts/config.js" type="text/javascript"></script>
+    <script src="Comm/Gener.js" type="text/javascript"></script>
+    <script src="Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../DataUser/JSLibData/MyFlowPublic.js" type="text/javascript"></script>
+    <script src="./Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <script src="Scripts/config.js" type="text/javascript"></script>
+    <script src="Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="Scripts/bootstrap/js/jquery.cokie.min.js" type="text/javascript"></script>
+    <script src="Scripts/Cookie.js" type="text/javascript"></script>
+    <script src="./Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="./Scripts/easyUI145/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+    <script src="Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
+    <link href="Scripts/layui/layui/css/modules/layer/default/layer.css" rel="stylesheet" />
+    <script src="Scripts/layui/layui/lay/modules/layer.js" type="text/javascript"></script>
+    <!--UEditor-->
+    <style type="text/css">
+        body {
+            padding: 0px;
+            margin: 0px;
+        }
+
+
+        .errorInput {
+            border: 1px red solid !important;
+        }
+
+
+
+        body iframe {
+            border: none;
+        }
+
+        #header > b, .returnTackHeader b {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #fff;
+            margin: 12px;
+            float: left;
+            text-align: center;
+            color: rgb(192, 193, 204);
+            line-height: 25px;
+        }
+
+        #topContentDiv i.topContentDiv-i {
+            display: block;
+            width: 33px;
+            height: 22px;
+            background: url("Scripts/bootstrap/css/img/sanjiao_03.png") no-repeat;
+            background-size: 80%;
+            position: absolute;
+            top: 56px;
+            left: 50px;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+
+
+        #divCurrentForm {
+            float: none;
+            width: auto;
+        }
+
+        #Message {
+            text-align: left;
+            word-wrap: break-word;
+            color: red;
+        }
+
+        #lastOptMsg {
+            text-align: left;
+            margin: 10px auto 0px auto;
+            padding-left: 10px;
+            background: white;
+        }
+
+        .titleAlertSpan {
+            font-weight: bold;
+        }
+
+        body {
+            background: #f0f3f4;
+        }
+    </style>
+    <!--JS 加载-->
+    <script type="text/javascript">
+        loadScript("./ccbpm.js?Version=" + Math.random(), function () {
+            loadScript('./MyFlowSelfForm.js');
+        });
+    </script>
+
+</head>
+<body  >
+<div id="divCurrentForm" style="position: relative;">
+    <!--底部功能按钮 发送、移交-->
+    <div  style="WIDTH:100%;background:#fff; padding:10px 0px 0px; margin-bottom:10px">
+        <div id="ToolBar" style="padding: 3px 3px; margin: 0px auto; text-align: left;"
+             class="Bar">
+        </div>
+    </div>
+    <!--上半部分表单-->
+    <div id="topContentDiv" class="row" style="padding: 20px 5px; margin: 0px auto;">
+        <i style="display: none;"></i>
+        <div id="contentDiv">
+            <form id="divCCForm" method="post">
+
+                <!--头部功能按钮 发送、移交-->
+                <div class="topBar" id="topBar">
+                </div>
+                <!--flowInfo-->
+                <div class="flowInfo" id="flowInfo">
+                </div>
+                <!--childThread-->
+                <div class="childThread" id='childThread'>
+                </div>
+
+                <!--主表单-->
+                <div id="CCForm">
+
+                    <br />
+                    <img src='./Img/loading.gif' />
+                    正在初始化表单模板及数据，请耐心等待。。。
+                    <br />
+                    <br />
+
+                </div>
+
+                <!--Pub2 -->
+                <div class="pub2Class" id="pub2Class">
+                    <!-- <uc1:Pub ID="Pub2" runat="server"/>-->
+                </div>
+                <!--DIVINFO-->
+                <div id='divinfo' style='width: 155px; position: absolute; display: none; cursor: pointer;
+                    align: left; border-left: 1px solid #336699; border-top: 1px solid #336699; border-right: 1px solid #336699;'>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--底部功能按钮 发送、移交-->
+
+</div>
+<!--杨玉慧加 暂时解决POP窗不好用的问题-->
+<div class="modal fade" id="returnPopValModal">
+    <div class="modal-dialog" style="margin-left: auto; margin-right: auto;">
+        <div class="modal-content" style="border-radius: 0px;">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true" style="background: none;
+                        border: none; float: right;">
+                    ×</button>
+                <h4 class="modal-title">
+                    选择提出人</h4>
+            </div>
+            <div class="modal-body">
+                <iframe style="width: 100%; border: 0px; height: 400px;" id="iframePopModalForm"
+                        name="iframePopModalForm"></iframe>
+                <div style="text-align: right;">
+                    <button type="button" id="btnPopValCancel" class="btn" data-dismiss="modal">
+                        取消</button>
+                    <button type="button" id="btnPopValOK" class="btn" data-dismiss="modal">
+                        确定</button>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!--下拉框选项提示信息-->
+<div class="popover fade top in" role="tooltip" id="div_NoticeInfo" style="top: 24.01042366027832px;
+        left: 304.98961639404297px; display: none;">
+    <div class="arrow" style="left: 50.22522522522522%;">
+    </div>
+    <h3 class="popover-title">
+        <span>title</span><span style="color: white; opacity: 1; float: right; cursor: pointer;"
+                                id="span_CloseNoticeInfo">×</span></h3>
+    <div class="popover-content">
+        顶部的 Popover 中的一些内容</div>
+</div>
+<!--杨玉慧加  附件弹出窗口-->
+<div class="modal fade" id="athModal">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 0px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color: white;
+                        opacity: 1; display: none;">
+                    ×</button>
+                <h4 class="modal-title">
+                    选择附件</h4>
+            </div>
+            <div class="modal-body">
+                <iframe style="width: 100%; border: 0px; height: 400px;" id="iframeAthForm" name="iframeAthForm">
+                </iframe>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!--杨玉慧加  中间导航-->
+<iframe id="navIframe" style="display: none;"></iframe>
+<div>
+    <iframe id="hisIframe" style="width: 100%; display: none;"></iframe>
+</div>
+<!--杨玉慧加   提示信息弹出窗口-->
+<div class="modal fade" id="msgModal" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 0px;">
+            <div class="modal-header">
+                <button type="button" class="close" id="btnMsgModalOK1" aria-hidden="true" style="color: white;
+                        opacity: 1; display: none;">
+                    ×</button>
+                <h4 class="modal-title">
+                    提示信息</h4>
+            </div>
+            <div class="modal-body" style="text-align: left; word-wrap: break-word;">
+                <div style="width: 100%; border: 0px; height: 400px;" id="msgModalContent" name="iframePopModalForm">
+                </div>
+                <div style="text-align: right;">
+                    <button type="button" id="btnMsgModalOK" class="btn" data-dismiss="modal">
+                        确定</button>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+<div id="ShowPFlow" style="display: none;">
+    <button id="btnShowPFlow" value="查看父流程信息" style="float: left;">查看父流程信息</button>
+</div>
+<!--之前返回的信息-->
+<div id="lastOptMsg">
+</div>
+
+<div class="modal fade" id="MessageDiv">
+    <div class="modal-dialog" style="margin-left: auto; margin-right: auto; width: 800px;">
+        <div class="modal-content" style="border-radius: 0px;">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true" style="background: none;
+                        border: none; float: right;">
+                    ×</button>
+                <h4 class="modal-title">
+                    提示</h4>
+            </div>
+            <div class="modal-body">
+                <div id='Message'>
+                </div>
+                <div style="text-align: right;">
+                    <button type="button" class="btn" data-dismiss="modal">
+                        确定</button>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+</body>
+</html>

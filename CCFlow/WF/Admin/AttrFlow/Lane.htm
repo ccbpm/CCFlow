@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>泳道图-设计</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        var nodes = null;
+        var lanes = null;
+
+        $(function () {
+
+            var flowNo = "016";
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
+            handler.AddPara("FK_Flow", flowNo);
+            lanes = handler.DoMethodReturnJSON("Lane_Init");
+
+            nodes = new Entities("BP.WF.Template.NodeSimples");
+            nodes.Retrieve("FK_Flow", flowNo);
+
+            //lanes = lanes.Retrieve("FK_Flow", flowNo);
+            //alert(lanes.length);
+
+            var html = "<table style='width:95%;' >";
+            html += "<tr>";
+            for (var i = 0; i < lanes.length; i++) {
+                var lane = lanes[i];
+                html += "<th>" + lane.Title + "</th>";
+            }
+            html += "<th>未分组</th>";
+            html += "</tr>";
+
+
+            html += "<tr>";
+            for (var i = 0; i < lanes.length; i++) {
+
+                //定义到一个数组里面去.
+                var nodeIDs = lane.NodeIDs.split(',');
+
+                html += "<td>";
+
+                var names = "";
+                for (var idx = 0; idx < nodeIDs.length; idx++) {
+
+                    var id = nodeIDs[idx];
+                    if (id == null || id == '')
+                        continue;
+
+                    names += "<br/>" + GetNameByNodeID(id);
+                }
+
+                html += names;
+
+                html += "<br/><br/></td>";
+            }
+            html += "<td>未分组的节点都放这里</td>";
+            html += "</tr>";
+            html += "</table>";
+
+            $("#docs").html(html);
+        });
+
+        function GetNameByNodeID(nodeID) {
+
+            for (var it = 0; it < nodes.length; it++) {
+
+                var nd = nodes[it];
+                if (nd.NodeID == nodeID)
+                    return nd.Name;
+            }
+
+            return "无名称.";
+        }
+    </script>
+
+</head>
+<body>
+
+    <h3>泳道图</h3>
+
+    <div id="docs"></div>
+
+</body>
+</html>

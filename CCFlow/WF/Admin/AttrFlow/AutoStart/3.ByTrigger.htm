@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>自动发起</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            //初始化下拉框.
+            InitBar(AutoStart.ByTrigger);
+
+            //获取节点属性.
+            var flowNo = GetQueryString("FK_Flow");
+
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            //批量为复制.
+            if (flow.FlowRunWay == AutoStart.ByTrigger) {
+                GenerFullAllCtrlsVal(flow);
+    
+            }
+
+        });
+
+        function Save() {
+
+            //更新节点表单类型.
+            var flowNo = GetQueryString("FK_Flow");
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            flow.FlowRunWay = AutoStart.ByTrigger;
+            flow.CopyURL();  //从url里面copy数据.
+            flow.CopyForm(); //从from里面copy数据.
+            if (flow.Update() == 0)
+                flow.Insert();
+
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>
+            <label for="RB_FlowRunWay_3">触发式启动</label>
+        </legend>
+
+        <ul style="color:Gray">
+            <li>说明:第三方软件向特定的表 WF_Task 中写入数据，每写入一条数据系统就会自动发起一条流程。</li>
+            <li>ccBPM就会读取这张表来完成流程的发起，发起成功后就把这条记录设置成已经发起的状态。</li>
+            <li>详见设置以及该表的结构参考<a href="javascript:WinOpen('http://ccbpm.mydoc.io/?v=5404&t=17088')">操作手册</a></li>
+        </ul>
+        <font color="gray">
+        </font>
+    </fieldset>
+    <fieldset>
+        <legend id="help"></legend>
+        <ul>
+            <li> 定义：自动启动工作流程，一个流程的开始节点的填写与发起是在特定规则的设置下自动发起的流程。</li>
+            <li> 解释：通常模式下的流程启动是手工的启动，就是用户从一个发起列表，点击流程名字，就启动了该流程。但是有的时候，是系统自动发起该流程。</li>
+
+            <li>应用场景</li>
+            <li> 1 周例会流程，用户希望每个周都要启动例会通知流程这个启动是让系统自动发起而非人工发起。</li>
+
+
+        </ul>
+    </fieldset>
+</body>
+</html>

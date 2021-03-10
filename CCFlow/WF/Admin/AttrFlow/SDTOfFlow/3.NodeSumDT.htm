@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>流程计划时间计算</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            //初始化下拉框.
+            InitBar(SDTOfFlow.NodeSumDT);
+
+
+        });
+
+        function Save() {
+
+            //更新节点表单类型.
+            var flowNo = GetQueryString("FK_Flow");
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            flow.SDTOfFlowRole = SDTOfFlow.NodeSumDT;
+            flow.CopyURL();  //从url里面copy数据.
+            flow.CopyForm(); //从from里面copy数据.
+            if (flow.Update() == 0)
+                flow.Insert();
+
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>
+            <label for="RB_ByAllNodes">按照所有节点设置的时间之和计算。</label>
+        </legend>
+        <ul>
+            <li>一个流程有多个节点，每个节点都设置了应该完成天数。</li>
+            <li>一个流程应该完成的天数，是所有节点的时效考核的数据之和。</li>
+        </ul>
+    </fieldset>
+</body>
+</html>

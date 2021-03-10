@@ -1,0 +1,98 @@
+﻿<html>
+<head>
+    <meta charset="UTF-8">
+    <title>正在加载请稍候...</title>
+    <script src="/WF/Comm/JScript.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/bootstrap/js/jquery.min.js" type="text/javascript" ></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+
+    <!-- 引用通用的js文件. -->
+    <script src="/WF/Scripts/config.js" type="text/javascript" ></script>
+    <script src="/WF/Comm/Gener.js" type="text/javascript" ></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+           
+            $("#Msg").html("<br><center><img src=./Img/loading.gif />正在加载,请稍后......</center>");
+            //获取扫描二维码或者链接登陆的用户信息并登陆
+            var handler = new HttpHandler("BP.Cloud.HttpHandler.Root");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Root_Guest_Login");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+            if (data.indexOf("GusetNo@") != -1) {
+                
+               //外部客户填写信息
+                var name = window.prompt('初次使用，填写姓名:');
+                if (name == null || name == undefined ) {
+                    return ;
+                }
+                var tel = window.prompt('初次使用，填写手机号:');
+                if (tel == null || tel == undefined) {
+                    return;
+                }
+                handler = new HttpHandler("BP.Cloud.HttpHandler.Root");
+                handler.Clear();
+                //外部客户登陆
+                handler.AddPara("GuestNo", data.replace("GusetNo@", ""));
+                handler.AddPara("GuestName", name);
+                handler.AddPara("Tel", tel);
+                data = handler.DoMethodReturnString("Guest_Login");
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    return;
+                }
+            }
+
+
+            var state = GetQueryString(state);
+            state = state.split('|');
+
+
+         
+            handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddPara("FK_Flow", state[0].replace("FlowNo_", ""));
+            handler.AddPara("OrgNo", state[0].replace("OrgNo_", ""));
+            handler.AddPara("FrmID", state[2].replace("FrmID_", ""));
+            handler.AddPara("FrmOID", state[3].replace("FrmOID_", ""));
+
+            handler.AddUrlData();
+            data = handler.DoMethodReturnString("DictFlow_Init");
+
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<br>" + data);
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+
+                data = data.replace('url@', ''); //如果返回url，就直接转向.
+                data = data.replace('?DoType=HttpHandler', '?');
+                data = data.replace('&DoType=HttpHandler', '');
+                data = data.replace('&DoMethod=MyFlow_Init', '');
+                data = data.replace('&HttpHandlerName=BP.WF.HttpHandler.WF_MyFlow', '');
+                data = data.replace('?&', '?');
+
+                //如果返回url，就直接转向.
+                window.location.href = data;
+                return;
+            }
+
+            $("#Msg").html(data);
+
+            return;
+        });
+    </script>
+</head>
+<body>
+
+    <form id="cc">
+
+        <div id="Msg" style=""> 正在加载，请稍后。。。</div>
+
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,269 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>驰骋工作流</title>
+    <!-- 引用通用的js文件. -->
+    <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript"></script>
+    <script language="JavaScript" src="/WF/Comm/JS/Calendar/WdatePicker.js" defer="defer"
+            type="text/javascript"></script>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="../Img/ccbpm.ico" type="image/x-icon" />
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+
+    <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
+    <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
+
+    <script src="../Scripts/bootstrap/bootstrap-treeview/src/js/bootstrap-treeview.js" type="text/javascript"></script>
+    <link href="../Scripts/bootstrap/bootstrap-treeview/src/css/bootstrap-treeview.css" rel="stylesheet" type="text/css" />
+
+
+    <!-- 导入配置文件. -->
+    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        var selectedRows = [];
+        var subFlowGuid;
+        $(function () {
+            var subFlowMyPK = GetQueryString("SubFlowMyPK");
+            subFlowGuid = new Entity("BP.WF.Template.SubFlowHandGuide", subFlowMyPK);
+            if (subFlowGuid.SubFlowGuideSQL == "") {
+                alert("请配置启动子流程的前置导航SQL语句");
+                return;
+            }
+            if(subFlowGuid.IsTreeConstruct == 1){
+                if(subFlowGuid.SubFlowGuideSQL.indexOf("ParentNo")==-1){
+                    alert("配置的启动子流程的前置导航SQL语句不包含ParentNo,请联系管理员");
+                    return;
+                }
+            }
+            //使用懒加载
+            var sql = subFlowGuid.SubFlowGuideSQL.replace("@ParentNo",subFlowGuid.ParentNo);
+            var dt = DBAccess.RunSQLReturnTable(sql);
+            var jsonTree = findChildren(dt,subFlowGuid.ParentNo);
+
+
+            $('#tree').treeview({
+                data: jsonTree,         // 数据源
+                showCheckbox: false,   //是否显示复选框
+                highlightSelected: true,    //是否高亮选中
+                nodeIcon: 'glyphicon',
+                emptyIcon: '',    //没有子节点的节点图标
+                multiSelect: false,    //多选
+                onNodeChecked: function (event, data) {
+
+                },
+                onNodeSelected: function (event, data) {
+
+                    loadSelectGrid(data.id,data.text);
+
+                },
+                onNodeExpanded: function (event, data){
+                    var url = sql = subFlowGuid.SubFlowGuideSQL.replace("@ParentNo",data.id);
+                    var json = DBAccess.RunSQLReturnTable(url);
+                    var jsonTree = findChildren(json, data.id);
+                    $("#tree").treeview("deleteChildrenNode", data.nodeId);	//删除当前节点下的所有子节点
+
+                    $("#tree").treeview("addNode", [data.nodeId, { node: jsonTree, silent: true }]);
+                }
+            });
+
+            //显示已经选择的节点
+            var gwfs = new Entities("BP.WF.GenerWorkFlows");
+            gwfs.Retrieve("PWorkID", GetQueryString("PWorkID"), "FK_Flow", subFlowGuid.SubFlowNo, "WFState", 1);
+            $.each(gwfs, function (i, item) {
+                selectedRows.push({
+                    "No": GetPara(item.AtPara,"SubFlowGuideEnNoFiled"),
+                    "Name": GetPara(item.AtPara,"SubFlowGuideEnNameFiled"),
+                    "WorkID":item.WorkID
+                })
+            });
+
+            $('#selectGrid').bootstrapTable({
+                striped: false,
+                cache: false,
+                data: selectedRows,
+                sortOrder: "asc",
+                strictSearch: true,
+                minimumCountColumns: 2,
+                clickToSelect: true,
+                sortable: false,
+                cardView: false,
+                detailView: false,
+                uniqueId: "No",
+                columns: [{
+                    field: 'No',
+                    title: '编码',
+                    visible: false
+                },{
+                    field: 'Name',
+                    title: '名称'
+                },{
+                    field: 'WorkID',
+                    title: 'WorkID',
+                    visible: false
+                }, {
+                        title: '操作', formatter: function (value, row, index) {
+                            return '<a class="btn btn-danger" href="#" onclick="remove(\'' + row.No + '\','+row.WorkID+')">移除</a>';
+                        }
+                    }]
+            });
+            $('#selectGrid').bootstrapTable('hideColumn', 'No');
+            var _Html = "<table>";
+            _Html += '<thead class="">';
+            _Html += '<tr>';
+            _Html += '<th><label><input id="btSelectAll" type="checkbox" onclick="checkAllOrUncheck()"></th>';
+            _Html += '<th style="width: 150px; ">编号</th >';
+            _Html += '<th >名称</th >';
+            _Html += "</tr>";
+            _Html += '</thead>';
+            _Html += "<tobdy>";
+
+            for (var i = 0; i < dt.length; i++) {
+                _Html += "<tr>";
+                _Html += "<td><input type='checkbox'   id='" + dt[i].No + "' data-info='" + dt[i].Name + "'/></td><td>" + dt[i].Name + "</td><td>" + dt[i].No + "</td>";
+                _Html += "</tr>"
+            }
+            _Html += "</tbody>";
+            _Html += "</table>";
+            $("#showMsg").html(_Html);
+
+        })
+
+        function findChildren(jsonArray, parentNo) {
+            var appendToTree = function (treeToAppend, o) {
+                $.each(treeToAppend, function (i, child) {
+                    if (o.id == child.ParentNo)
+                        o.nodes.push({
+                            "id": child.No,
+                            "text": child.Name,
+                            "nodes": []
+                        });
+                });
+
+                $.each(o.nodes, function (i, o) {
+                    appendToTree(jsonArray, o);
+                });
+
+            };
+
+            var jsonTree = [];
+            var jsonchildTree = [];
+            if ($.isArray(jsonArray) && typeof parentNo !== "undefined") {
+                //如果parentNo不为0，则增加parentNo的部门数据
+                if (parentNo != 0) {
+                    $.each(jsonArray, function (i, item) {
+                        if (item.No == parentNo) {
+                            jsonTree.push({
+                                "id": parentNo,
+                                "text": item.Name,
+                                "nodes": []
+                            });
+                            return;
+                        }
+                    });
+                }
+
+
+                $.each(jsonArray, function (i, o) {
+                    if (o.ParentNo == parentNo) {
+                        jsonchildTree.push(o);
+                        jsonTree.push({
+                            "id": o.No,
+                            "text": o.Name,
+                            "nodes": []
+                        });
+                    }
+                });
+
+                $.each(jsonTree, function (i, o) {
+                    appendToTree(jsonArray, o);
+                });
+
+            }
+            function _(treeArray) {
+                $.each(treeArray, function (i, o) {
+                    if ($.isArray(o.nodes)) {
+                        if (o.nodes.length == 0) {
+                            // o.nodes = undefined;
+                        } else {
+                            _(o.nodes);
+                        }
+                    }
+                });
+            }
+            _(jsonTree);
+            return jsonTree;
+        }
+
+        function loadSelectGrid(no,name) {
+            if ($.isArray(selectedRows)) {
+                var isHave = false;
+                $.each(selectedRows, function (i, o) {
+                    if (o.No == no) {
+                        isHave = true;
+                        return true;
+                    }
+                });
+                if (isHave == false)
+                    selectedRows.push({ "No": no, "Name": name ,"WorkID":0});
+            }
+            $('#selectGrid').bootstrapTable("load", selectedRows);
+        }
+
+        function remove(no,workID) {
+            if ($.isArray(selectedRows)) {
+                var isHave = false;
+                var objs= $.grep(selectedRows, function (o) {
+                    return o.No != no;
+                });
+                selectedRows = objs;
+                //删除对应启用的子流程
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+                handler.AddPara("WorkID", workID);
+                handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+                var data = handler.DoMethodReturnString("SubFlowGuid_DeleteSubFlowDraf");
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    console.log(data);
+                    return;
+                }
+              
+            }
+            $('#selectGrid').bootstrapTable("load", selectedRows);
+        }
+
+        //获取选择的项的NO，Name
+        function Btn_OK() {
+            return selectedRows;
+        }
+    </script>
+</head>
+<!--<body>
+    <form id="cc">
+    <center>
+        <div id="showMsg">
+        </div>
+    </center>
+    </form>
+</body>-->
+<body style="overflow-y:hidden">
+    <div class="container-fluid" style="overflow:hidden">
+        <div class="row row-margin-top">
+            <div class="col-md-6 col-sm-6" style="height:100%">
+                <div id="tree" style="overflow-y:auto;height:500px"></div>
+            </div>
+            <div class="col-md-6 col-sm-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="selectGrid"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

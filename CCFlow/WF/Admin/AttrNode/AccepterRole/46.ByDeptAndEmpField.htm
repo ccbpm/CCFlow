@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js"></script>
+</head>
+<body>
+    <div id="App">
+        <div id="bar"> </div>
+
+        <!--<div id="AdminModel">-->
+            <fieldset >
+                <legend>设置(超级管理员)</legend>
+                <ul>
+                    <li> 设置部门的查询SQL </li>
+                    <textarea id="TB_SQL"  class="SQL" style="width: 95%; height: 50px" v-model="sql"></textarea>
+
+                    <li>选择人员部门人员字段:<input type="text" id="TB_EmpField" name="TB_EmpField" v-model="EmpField"/></li>
+                    <li>
+                        <label> <input type="checkbox" id="CB_IsAutoLoadEmps" name="CB_IsAutoLoadEmps" v-model="isAutoLoadEmps" /> 是否自动加载上一次选择的人员？</label>
+                    </li>
+                    <li>
+                        <label> <input type="checkbox" id="CB_IsSimpleSelector" name="CB_IsSimpleSelector" v-model="isSimpleSelector" @click="IsChange(this)" /> 是否单项选择(只能选择一个人)？</label>
+                    </li>
+                </ul>
+            </fieldset>
+
+
+        <fieldset>
+            <legend>已经选择的部门</legend>
+            <div id="dept">
+                <ul>
+                    <li v-show="depts.length===0">未设置</li>
+                    <template v-for="dept in depts">
+                        <li v-if="dept.FK_DeptText!=undefined">{{dept.FK_DeptText}}</li>
+                    </template>
+                </ul>
+
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend id="help">帮助</legend>
+            <ul>
+                <li>节点绑定部门就是该节点下绑定部门里面的所有人员都可以接受该工作.</li>
+            </ul>
+        </fieldset>
+    </div>
+    <script type="text/javascript">
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                adminModel: 1,
+                orgModel: 0,
+                depts: [],
+                webuser: null,
+                deliverWay: DeliveryWay.ByDeptAndEmpField,
+                nodeId: GetQueryString("FK_Node"),
+                EmpField:"",
+                sql:"",
+                isAutoLoadEmps: false,
+                isSimpleSelector: false
+            },
+            methods: {
+                OpenNew: function () {
+
+                    var nodeID = GetQueryString("FK_Node");
+                    var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
+
+                    url += url + '&NodeID=' + nodeID + '&PKVal=' + nodeID;
+
+                    OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 500, 350, function () {
+                        Baseinfo.depts = getDepts();
+                    });
+                },
+                SetGroupDepts: function () {
+                    OpenNodDeptGroup(this.webuser.GroupNo);
+
+                },
+                SetOrgDepts: function () {
+                    OpenNodDeptGroup(this.webuser.OrgNo);
+                },
+                BindDeptTree: function () {
+                    BindDeptTree();
+                },
+                BindDeptTreeGroup: function () {
+                    BindDeptTreeGroup();
+                }
+
+            },
+            created() {
+                InitBar(this.deliverWay);
+                this.depts = getDepts();
+
+                //根据用户的信息，判断是否启用那个设置工具。
+                this.webuser = new WebUser();
+                this.adminModel = this.webuser.No == "admin" ? 1 : 0;
+                this.orgModel = this.webuser.No == "admin" ? 0 : 1;
+                var selector = new Entity("BP.WF.Template.Selector", this.nodeId);
+                if (selector.IsAutoLoadEmps == 1)
+                    this.isAutoLoadEmps = true;
+                if (selector.IsSimpleSelector == 1)
+                    this.isSimpleSelector = true;
+                var node = new Entity("BP.WF.Node",this.nodeId);
+                this.sql = node.DeliveryParas;
+                this.EmpField = selector.SelectorP1;
+
+            }
+        });
+        function OpenNodDeptGroup(orgNo) {
+            var url = "NodeDeptGroup.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node");
+            OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 500, 600, function () {
+                Baseinfo.depts = getDepts();
+            });
+        }
+
+        //保存
+        function Save() {
+
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = Baseinfo.deliverWay;
+            node.DeliveryParas = Baseinfo.sql;
+            node.Update();
+            var Selector = new Entity("BP.WF.Template.Selector", Baseinfo.nodeId);
+            Selector.IsAutoLoadEmps = Baseinfo.isAutoLoadEmps ; //按照规则把数据放入到entity.
+            Selector.IsSimpleSelector = Baseinfo.isSimpleSelector ;
+            Selector.SelectorP1 = Baseinfo.EmpField;
+            Selector.Update();
+        }
+    </script>
+</body>
+</html>

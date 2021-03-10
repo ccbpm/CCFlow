@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>多人处理规则</title>
+
+    <link href="../../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js"></script>
+    <script src="../../Admin.js"></script>
+    <script>
+        var nodeID = GetQueryString("FK_Node");
+        var node = new Entity("BP.WF.Node", nodeID);
+        $(function () {
+            InitBar(TodolistModel.TeamupGroupLeader);
+            $("#DDL_TeamLeaderConfirmRole  option[value='"+node.TeamLeaderConfirmRole+"'] ").attr("selected",true)
+            $("#TB_TeamLeaderConfirmDoc").val(node.TeamLeaderConfirmDoc);
+        });
+        function Save() {
+            $("#Btn_Save").val('正在保存请稍候...');
+            node.TodolistModel = TodolistModel.TeamupGroupLeader;
+            node.TeamLeaderConfirmRole = $("#DDL_TeamLeaderConfirmRole option:selected").val();
+            node.TeamLeaderConfirmDoc = $("#TB_TeamLeaderConfirmDoc").val();
+            node.Update();
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+
+    </div>
+    <form id="cc">
+        <fieldset>
+            <legend>
+                <label for="RB_TodolistModel_4">
+                    协作组长模式
+                </label>
+            </legend>
+            <ul style="color: Gray">
+                <li>这个模式与协作模式区别在于，如果当前的人员中有一个是组长（领导），他在执行发送的时候就标记这个流程结束。</li>
+                <li>这种模式有如下3中情况：</li>
+                <li>第一种：接受人员列表里没有领导/组长，这种模式与协作模式是一样的，就是所有的成员都表态（举手）才能向下发送。</li>
+                <li>第二种：只有一个领导/组长的情况，领导/组长向下发送的时候，标识该节点完成。比如: 当前节点是一个采样节点，采样组有1个组长n个组员，只有组长向下发送的时候才标记次该工作完成。</li>
+                <li>第三种：有n个领导/组长的情况，n>=1 任何一个领导/组长向下发送的时候标记该流程完成。比如：当前节点的采样任务交给了两个采样组负责，有两个组长n个成员，任何一个组长向下发送，标记该工作结束。</li>
+                <li>
+                    组长确认方式：<select name="DDL_TeamLeaderConfirmRole" id="DDL_TeamLeaderConfirmRole">
+                        <option value="0">按照Port_Dept中的Leader字段, 来确定处理人集合的组长。 </option>
+                        <option value="1">按照SQL表达式作为接受人集合的组长。 </option>
+                        <option value="2">会签节点的主持人模式。 </option>
+                    </select>
+                </li>
+                <li>
+                    内容(对于按照SQL方式填写才有效)：<input type="text" id="TB_TeamLeaderConfirmDoc" name="TB_TeamLeaderConfirmDoc" />
+                </li>
+            </ul>
+        </fieldset>
+    </form>
+</body>
+</html>

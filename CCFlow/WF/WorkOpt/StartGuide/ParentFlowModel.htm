@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>启动流程</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+
+    <script src="../../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
+
+    <script src="../../Scripts/bootstrap/bootstrap-treeview/src/js/bootstrap-treeview.js" type="text/javascript"></script>
+    <link href="../../Scripts/bootstrap/bootstrap-treeview/src/css/bootstrap-treeview.css" rel="stylesheet" type="text/css" />
+    <style>
+        ul li {
+            list-style: none;
+        }
+
+        a, a:hover {
+            text-decoration: none;
+        }
+    </style>
+    <script type="text/javascript">
+
+        var webUser = new WebUser();
+        var workID = GetQueryString("WorkID");
+        var flowNo = GetQueryString("FK_Flow");
+        var partPK = GetQueryString("PartPK");
+        var part = null;
+
+        //初始化人员
+        $(function () {
+
+            //零件.
+            var parts = new Entities("BP.WF.Template.Parts");
+
+            //检查该流程是否已经被设置了。
+            parts.Retrieve("PartType", "ParentSubFlowGuide", "FK_Flow", flowNo);
+            if (parts.length != 0) {
+                //alert('没有配置要启动的父流程.');
+                //return;
+            }
+
+            var html = "<ul class='list-group'>";
+            for (var idx = 0; idx < parts.length; idx++) {
+
+                part = parts[idx];
+                BindData();
+                break;
+
+                // html += "<li ><b>" + part.Name + "</b></li>";
+            }
+            html += "</ul>";
+            $("#Table").append(html);
+
+        });
+
+        function Search() {
+            BindData();
+        }
+
+
+        function BindData() {
+            var html = "<table class='table table-bordered table-hover' >";
+            html += "<tr>";
+            html += "<th>#</th>";
+            html += "<th>标题</th>";
+            html += "<th>状态</th>";
+            html += "<th>发起人</th>";
+            html += "<th>发起日期</th>";
+            html += "</tr>";
+
+            var pflowNo = part.Tag0;
+
+            //产生数据.
+            var sql = "SELECT * FROM WF_GenerWorkFlow WHERE WFState >1 AND FK_Flow='" + pflowNo + "'";
+            var keyVal = $("#TB_Key").val();
+            if (keyVal != null && keyVal!="")
+                sql = "SELECT * FROM WF_GenerWorkFlow WHERE WFState >1 AND FK_Flow='" + pflowNo + "' AND( Title like '[%]"+keyVal+"%' OR Starter like '[%]"+keyVal+"%')";
+            var rpts = DBAccess.RunDBSrc(sql);
+
+            var idx = 0;
+            for (var i = 0; i < rpts.length; i++) {
+                var rpt = rpts[i];
+
+                idx++;
+                if (rpt.WFState == 0 || rpt.WFState == 1)
+                    continue;
+
+                html += "<tr>";
+                html += "<td>" + idx + "</td>";
+                html += "<td><a href=\"javascript:StartIt('" + rpt.OID + "')\" >" + rpt.Title + "</td>";
+
+                if (rpt.WFState == 2)
+                    html += "<td><font >运行中</font></td>";
+
+                else if (rpt.WFState == 3)
+                    html += "<td><font color=green><b>已完成</b></font></td>";
+                else if (rpt.WFState == 5)
+                    html += "<td><font color=red>退回</font></td>";
+                else
+                    html += "<td>未知</td>";
+
+
+                html += "<td>" + rpt.Starter + "</td>";
+                html += "<td>" + rpt.RDT + "</td>";
+                html += "</tr>";
+            }
+
+            html += "</table>";
+
+            $("#Table").html(html);
+        }
+
+        //发起父流程.
+        function StartIt(pWorkID) {
+
+            var en = new Entity("BP.WF.GenerWorkFlow", pWorkID);
+            // var url = "../../MyFlow.htm?FK_Flow=" + flowNo + "&FK_Node=" + flowNo + "01";
+            //// url += "&WorkID=" + workID;
+            // url += "&PFlowNo=" + en.FK_Flow ;
+            // url += "&PNodeID=" + en.FK_Node + "&PWorkID=" + pWorkID;
+            // url += "&IsGuide=1";
+            // url += "&CopyFormWorkID=" + pWorkID;
+            // url += "&CopyFormNode=" + en.FK_Node;
+            // window.location.href = url;
+            // return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_StartGuide");
+            handler.AddPara("MyPK", part.MyPK);
+            handler.AddPara("FK_Flow", flowNo);
+            handler.AddPara("WorkID", workID);
+
+            handler.AddPara("PFlowNo", en.FK_Flow);
+            handler.AddPara("PNodeID", en.FK_Node);
+            handler.AddPara("PWorkID", pWorkID);
+
+            handler.AddPara("CopyFormWorkID", en.WorkID);
+            handler.AddPara("CopyFormNode", en.FK_Node);
+             workID= handler.DoMethodReturnString("ParentFlowModel_StartIt");
+
+            var url = "../../MyFlowGener.htm?FK_Flow=" + flowNo + "&FK_Node=" + flowNo + "01";
+            url += "&WorkID=" + workID;
+            url += "&PFlowNo=" + en.FK_Flow;
+            url += "&PNodeID=" + en.FK_Node + "&PWorkID=" + pWorkID;
+            url += "&IsGuide=1";
+            url += "&CopyFormWorkID=" + pWorkID;
+            url += "&CopyFormNode=" + en.FK_Node;
+            window.location.href = url;
+        }
+    </script>
+
+</head>
+<body>
+    <div class="container-fluid">
+        <br />
+            <table>
+                <tr>
+                    <th>
+                        <h4 class="text-center" id="title">关键字查询</h4>
+                    </th>
+                    <th>
+                        <input class="form-control" type="text" placeholder="" id="TB_Key" />
+                    </th>
+                    <th>
+                        <input class="form-control" type="button" value="查询" onclick="Search()"/>
+                    </th>
+                </tr>
+            </table>
+
+        <div id="docs">
+            <div id="Table"></div>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        #WX {
+            width: 231px;
+            height: 285px;
+            background: red;
+            padding: 10px;
+            background: #fff;
+            border: solid 1px #d8d8d8;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+        }
+
+        .bd_weixin_popup_head {
+            font-size: 12px;
+            font-weight: bold;
+            text-align: left;
+            line-height: 16px;
+            height: 16px;
+            position: absolute;
+            color: #000;
+        }
+
+            .bd_weixin_popup_head span {
+                font-size: 12px;
+                font-weight: bold;
+                text-align: left;
+                line-height: 16px;
+            }
+
+        .bd_weixin_popup_close {
+            width: 16px;
+            height: 16px;
+            text-decoration: none;
+            font-size: 16px;
+            text-align: right;
+            position: absolute;
+            right: 0;
+            top: 0;
+            cursor: pointer;
+        }
+
+        .bd_weixin_popup_foot {
+            font-size: 12px;
+            text-align: left;
+            line-height: 22px;
+            color: #666;
+        }
+
+        #weixin {
+            width: 185px;
+            height: auto;
+            margin: 10px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="WX">
+        <div class="bd_weixin_popup_head">
+            <span>分享到微信、朋友圈</span>
+            <a class="bd_weixin_popup_close">×</a>
+            <div id="weixin"></div>
+            <div class="bd_weixin_popup_foot">使用“扫一扫”即可将网页分享至朋友圈。</div>
+        </div>
+    </div>
+
+    <script src="/WF/Scripts/jquery-1.11.0.min.js" type='text/javascript'></script>
+    <script src="/WF/Scripts/QueryString.js" type='text/javascript'></script>
+    <script src="/WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="/WF/Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" src="http://cdn.staticfile.org/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+    <script type="text/javascript">
+        var handler = new HttpHandler("BP.CCBill.WF_CCBill")
+        handler.AddUrlData();
+        var url = handler.DoMethodReturnString("DictFlow_Qcode");
+        //var webUser = new WebUser();
+        //var redirect_uri = "http://eyer.ccflow.org/WF/MyFlowShare.htm";//获取页面的链接
+       // redirect_uri = encodeURIComponent(redirect_uri)
+        //页面链接需要使用网页授权获取用户信息
+        //var path = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5c371647cecd1db2&redirect_uri=" + redirect_uri + "&response_type=code&scope=snsapi_userinfo&state=FlowNo_219|OrgNo_JiNa|FrmID_Frm_FenSiHuoDongDengJi_JiNaYiXingXinXiKeJiYouXianGongSi|FrmOID_100#wechat_redirect";
+        $("#weixin").qrcode({
+            text: url, //设置二维码内容
+            width: 185, //设置宽度,默认生成的二维码大小是 256×256
+            height: 185, //设置高度
+            typeNumber: -1, //计算模式
+            background: "#ffffff", //背景颜色
+            foreground: "#000000" //前景颜色
+        });
+    </script>
+</body>
+</html>

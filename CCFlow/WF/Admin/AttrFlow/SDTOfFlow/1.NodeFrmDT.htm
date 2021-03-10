@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>流程计划时间计算</title>
+    
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            InitBar(SDTOfFlow.NodeFrmDT);
+            var fk_flow = GetQueryString("FK_Flow");
+
+            var data = new Entity("BP.WF.Flow", fk_flow);
+            fk_flow = fk_flow.replace(/^0+/, "");
+            var FK_MapData = "ND" + fk_flow + "Rpt";
+
+            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+            mapAttrs.Retrieve("FK_MapData", FK_MapData);
+
+            //查询日期字段下拉框所有值
+            var options = "";
+            for (var i = 0; i < mapAttrs.length; i++) {
+                if (mapAttrs[i].MyDataType != 6 && mapAttrs[i].MyDataType != 7)
+                    continue;
+                if (mapAttrs[i].KeyOfEn == "RDT" || mapAttrs[i].KeyOfEn == "CDT" || mapAttrs[i].KeyOfEn == "FlowEnderRDT" || mapAttrs[i].KeyOfEn == "FlowStartRDT")
+                    continue;
+                options += "<option value=" + mapAttrs[i].KeyOfEn + ">" + mapAttrs[i].Name + "</option>";
+            }
+            //日期字段下拉框赋值
+            $("#DDL_StartFields").append(options);
+            $("#DDL_Fields").append(options);
+            //计划开始时间
+            var SDTOfFlowRole_StartDateField = data.GetPara("SDTOfFlowRole_StartDateField");
+            if (SDTOfFlowRole_StartDateField == null || SDTOfFlowRole_StartDateField == undefined || SDTOfFlowRole_StartDateField == '') {
+                $("#DDL_StartFields").val(0);
+            } else {
+                $("#DDL_StartFields").val(SDTOfFlowRole_StartDateField);
+            }
+            //流程计划完成时间
+            var SDTOfFlowRole_DateField = data.GetPara("SDTOfFlowRole_DateField");
+            if (SDTOfFlowRole_DateField == null || SDTOfFlowRole_DateField == undefined || SDTOfFlowRole_DateField == '') {
+                $("#DDL_Fields").val(0);
+            } else {
+                $("#DDL_Fields").val(SDTOfFlowRole_DateField);
+            }
+
+        });
+
+        function Save() {
+            //流程应完成日期计算规则保存.
+            var flow = new Entity("BP.WF.Flow", GetQueryString("FK_Flow"));
+            flow.SDTOfFlowRole = SDTOfFlow.NodeFrmDT;
+
+            var SDTOfFlowRole_DateField = $("#DDL_Fields").val();
+            flow.SetPara("SDTOfFlowRole_DateField", SDTOfFlowRole_DateField); //按表单字段的字段
+
+            var SDTOfFlowRole_StartDateField = $("#DDL_StartFields").val();
+            flow.SetPara("SDTOfFlowRole_StartDateField", SDTOfFlowRole_StartDateField);
+
+            flow.CopyURL();  //从url里面copy数据.
+            flow.CopyForm(); //从from里面copy数据.
+            flow.Update();
+
+            window.location.href = window.location.href;
+        }
+
+    </script>
+</head>
+<body>
+
+    <div id="bar"></div>
+
+    <fieldset>
+        <legend>
+            <label for="RB_BySpecDateField">
+                按照节点表单的日期字段计算。
+            </label>
+            <br />
+            <br />
+        </legend>
+        <ul style="color: Gray">
+            <li>
+                请选择计划开始日期的字段.
+                <select id="DDL_StartFields">
+                    <option value="0">--请选择--</option>
+                </select>
+            </li>
+            <li>
+                请选择计划完成日期的字段.
+                <select id="DDL_Fields">
+                    <option value="0">--请选择--</option>
+                </select>
+            </li>
+        </ul>
+
+    </fieldset>
+</body>
+</html>

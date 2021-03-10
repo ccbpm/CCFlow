@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>多人处理规则</title>
+
+    <link href="../../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js"></script>
+    <script src="../../Admin.js"></script>
+    <style>
+        .olText {
+            list-style: none;
+            margin-bottom: 10px;
+        }
+    </style>
+    <script>
+        var nodeID = GetQueryString("FK_Node");
+        var node = new Entity("BP.WF.Node", nodeID);
+        $(function () {
+            InitBar(TodolistModel.Teamup);
+
+            //初始化代办删除规则
+            //获得参数值
+            var delRole = node.GetPara("GenerWorkerListDelRole");
+            //将获取的值绑定到radio
+            if (delRole == undefined)
+                delRole = 0;
+
+            $("#RB_GenerWorkerListDelRole_" + delRole).attr('checked', 'true');
+
+        });
+        function Save() {
+            $("#Btn_Save").val('正在保存请稍候...');
+            node.TodolistModel = TodolistModel.Teamup;
+            var role = $("input[name='GenerWorkerListDelRole']:checked").val();
+            node.SetPara("GenerWorkerListDelRole", role);
+            node.Update();
+            window.location.href = window.location.href;
+        }
+        //打开代办删除规则
+        function ToolDelRole() {
+            var url = "../GenerWorkerListDelRole.htm?s=d34&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+            OpenEasyUiDialogExtCloseFunc(url, '代办删除规则', 800, 500, function () {
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+
+    </div>
+    <form id="cc">
+
+        <fieldset>
+            <legend>
+                协作模式下待办删除规则
+            </legend>
+            <ul style="color: Gray;list-style:none">
+                <li>
+                    <input type="radio" ID="RB_GenerWorkerListDelRole_0" name="GenerWorkerListDelRole" value="0"
+                           onclick="rb_onchange(0)" /><label   style="color:black;font-weight:bolder"   for="RB_GenerWorkerListDelRole_0">不删除</label>
+                    <ol class="olText">
+                        <li>正常处理待办工作，不对其他人员的待办做删除处理。</li>
+                    </ol>
+                </li>
+                <li>
+                    <input type="radio" ID="RB_GenerWorkerListDelRole_1"
+                           name="GenerWorkerListDelRole" value="1"
+                           onClick="rb_onchange(1)" /><label style="color:black;font-weight:bolder"   for="RB_GenerWorkerListDelRole_1">删除同部门的人员(包括主部门+兼职部门)</label>
+                    <ol class="olText">
+                        <li>当前工作完成后，该节点上的其他待办人员如果有本部门的人，就把他删除。</li>
+                        <li>删除的范围是与当前处理人是同一个部门，包括兼职部门。</li>
+                    </ol>
+                </li>
+                <li>
+                    <input type="radio" ID="RB_GenerWorkerListDelRole_3"
+                           name="GenerWorkerListDelRole" value="3"
+                           onClick="rb_onchange(3)" /><label  style="color:black;font-weight:bolder"  for="RB_GenerWorkerListDelRole_3">删除主部门的人员</label>
+                    <ol class="olText">
+                        <li>当前工作完成后，该节点上的其他待办人员如果有本部门的人，就把他删除。</li>
+                        <li>删除的范围是与当前处理人是同一个<font color="red"><b>主部门</b></font>。</li>
+                    </ol>
+                </li>
+                <li>
+                    <input type="radio" ID="RB_GenerWorkerListDelRole_4" name="GenerWorkerListDelRole" value="4"
+                           onClick="rb_onchange(4)" /><label  style="color:black;font-weight:bolder"   for="RB_GenerWorkerListDelRole_4">删除兼职部门的人员</label>
+                    <ol class="olText">
+                        <li>当前工作完成后，该节点上的其他待办人员如果有本部门的人，就把他删除。</li>
+                        <li>删除的范围是与当前处理人是同一个<font color="red"><b>兼职部门</b></font>。</li>
+                    </ol>
+                </li>
+                <li>
+                    <input type="radio" ID="RB_GenerWorkerListDelRole_2"
+                           name="GenerWorkerListDelRole" value="2"
+                           onClick="rb_onchange(2)" /><label  style="color:black;font-weight:bolder"   for="RB_GenerWorkerListDelRole_2"> 删除同岗位的人员 </label>
+                    <ol class="olText">
+                        <li>如果当前节点是协作模式的节点。</li>
+                        <li>当前工作完成后，该节点绑定的岗位集合，当前操作员的岗位集合，与剩余每个人员的岗位集合对比如果有交集，该人员就被删除。</li>
+                    </ol>
+                </li>
+            </ul>
+        </fieldset>
+
+
+        <fieldset>
+            <legend>待办删除规则的应用背景</legend>
+            <ul>
+                <li>当前节点必须是协作模式的节点.</li>
+                <li>多个部门的不同岗位上的人员一起处理工作.</li>
+                <li>比如：一个节点上有资产岗、财务岗、审法岗三个不同的岗位上的人员一起协作.</li>
+                <li>每个岗位上的人有可能大于等于2，需求是只要有一个人审批，这个岗位上的另外一个人的待办自动消失.</li>
+                <li>比如财务岗上有3个人可以审批，分别是zhangsan,lisi,wangwu,其中一个lisi审批完毕后，其余两个人就不审批了.</li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend id="help">
+                说明
+            </legend>
+            <ul style="color: Gray">
+                <li>A发送到B ，B节点上有n个人可以处理。这个n个人都可以去处理，都可以去发送，有最后一个处理人发送到下一个节点上去，这n个人的处理不分顺序。这样的模式我们叫做协作模式。</li>
+                <li>协作模式通常用在具有审核组件的表单中，每个人都可以填写自己的意见，发表自己的看法，在审核组件里审核每个人在一个节点上只能写入一条数据，也就是说只能表达一次意见。</li>
+                <li>也经常用在传阅的情况下，必须这些人都读取了，知道了才能向下运动。它与抄送不同的地方是，抄送可以不看，就可以向下运行，但是他必须处理才能向下运行。</li>
+                <li>通常的协作模式，就是多人都要点击一下发送功能按钮，来确认自己处理了，确认自己同意了或者认可了。</li>
+                <!--<li><input id="Btn" type="button" value="协作模式下代办删除规则" onclick="ToolDelRole()" /></li>-->
+            </ul>
+        </fieldset>
+
+    </form>
+</body>
+</html>

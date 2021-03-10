@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>发起限制规则</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        //获取节点属性.
+        var flowNo = GetQueryString("FK_Flow");
+
+        var flow = new Entity("BP.WF.Flow", flowNo);
+
+        $(function () {
+            //初始化下拉框.
+            InitBar(1);
+            if (flow.StartLimitRole >= 1 && flow.StartLimitRole <= 5) {
+                $("#DDL_ByTime option[value='" + flow.StartLimitRole + "']").attr("selected", true);
+                $("#TB_ByTimePara").val(flow.StartLimitPara);
+            }
+
+        });
+
+        function Save() {
+
+            flow.StartLimitRole = $("#DDL_ByTime option:selected").val();
+            flow.StartLimitPara = $("#TB_ByTimePara").val();
+            flow.CopyURL();  //从url里面copy数据.
+            flow.CopyForm(); //从from里面copy数据.
+            if (flow.Update() == 0)
+                flow.Insert();
+
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>
+            <label for="RB_ByTime">
+                按时间规则计算
+            </label>
+            <br />
+            <br />
+        </legend>
+        <table style="width: 100%">
+            <tr>
+                <td style="width: 80px;">
+                    规则模式：
+                </td>
+                <td>
+                    <br />
+                    <select id="DDL_ByTime">
+                        <option value="1">每人每天一次</option>
+                        <option value="2">每人每周一次</option>
+                        <option value="3">每人每月一次</option>
+                        <option value="4">每人每季一次</option>
+                        <option value="5">每人每年一次</option>
+                    </select>
+                    <br />
+                </td>
+
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <a href="javascript:ShowHidden('FQGZ')">发起时间段限制参数设置:</a>
+                    <br />
+                    <div id="FQGZ" style="display: none; color: Gray">
+                        <ul>
+                            <li>该设置，可以为空。</li>
+                            <li>用来限制该流程可以在什么时间段内发起。</li>
+                            <li>例如:按照每人每天一次设置时间范围，规则参数：@08:30-09:00@18:00-18:30，解释：该流程只能在08:30-09:00与18:00-18:30两个时间段发起且只能发起一次。</li>
+                        </ul>
+
+                    </div>
+                    <input type="text" class="input" id="TB_ByTimePara" />
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</body>
+</html>

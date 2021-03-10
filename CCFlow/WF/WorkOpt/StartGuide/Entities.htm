@@ -1,0 +1,398 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>驰骋工作流</title>
+    <meta charset="UTF-8" />
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../../Scripts/jquery-1.11.0.min.js"></script>
+    <style type="text/css">
+        table {
+            width: 600px;
+            text-align: center;
+        }
+
+            table tr th, td {
+                height: 30px;
+                line-height: 30px;
+                border: 1px solid #ccc;
+            }
+
+        #pageStyle {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border: 1px solid #CCC;
+            line-height: 32px;
+            text-align: center;
+            color: #999;
+            margin-top: 20px;
+            text-decoration: none;
+        }
+
+            #pageStyle:hover {
+                background-color: #CCC;
+            }
+
+            #pageStyle .active {
+                background-color: #0CF;
+                color: #ffffff;
+            }
+    </style>
+    <script type="text/javascript" language="javascript">
+
+        //页面启动函数.
+        var str = location.href; //取得整个地址栏
+        var num = str.indexOf("?");
+        str = str.substr(num + 1);
+        //流程编号
+        var FK_Flow = GetQueryString("FK_Flow");
+        //工作ID
+        var WorkID = GetQueryString("WorkID");
+        //节点编号
+        var FK_Node = parseInt(GetQueryString("FK_Flow") + "01");
+        //前置导航的模式
+        var StartGuideWay = GetQueryString("StartGuideWay");
+
+
+        var pageSize = 10;  //每页显示的记录条数
+        var curPage = 0;   //显示第curPage页
+        var len;         //总行数
+        var page;        //总页数
+        $(function () {
+
+            //执行查询.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnJSON("StartGuide_Init");
+
+            //显示数据.
+            StartGuide_Init(data);
+
+            var fl = new Entity("BP.WF.Flow", FK_Flow);
+            var html = "<a href=\"javascript:WinOpen('" + fl.StartGuideLink + "')\" >" + fl.StartGuideLab + "</a>";
+            $("#leftBar").html(html);
+            //分页
+            Paginator();
+        });
+
+        //分页处理
+        function Paginator() {
+            len = $("#dataList tr").length - 1;   //去掉表头
+            page = len % pageSize == 0 ? len / pageSize : Math.floor(len / pageSize) + 1;//根据记录条数，计算页数
+            console.log("len:" + len + "page:" + page);
+            document.getElementById("page").value = page;
+            curPage = 1;
+            displayPage();//显示第一页
+            $("#nextpage").click(function () {//下一页
+                if (curPage < page) {
+                    curPage += 1;
+                }
+                else {
+                    alert("已经是最后一页");
+                }
+                displayPage();
+            });
+            $("#lastpage").click(function () {//上一页
+                if (curPage > 1) {
+                    curPage -= 1;
+                }
+                else {
+                    alert("已经是最后一页");
+                }
+                displayPage();
+            });
+            $("#npage").click(function () {//跳到固定某一页
+                var npage = parseInt(document.getElementById("curPage").value);
+                if (npage > page || npage < 1) {
+                    alert("该页不存在");
+                }
+                else {
+                    curPage = npage;
+                }
+                displayPage();
+            });
+        }
+
+        function displayPage() {
+            var begin = (curPage - 1) * pageSize;//起始记录号
+            var end = begin + pageSize;
+            console.log("  begin:" + len + "   end:" + end);
+            if (end > len) end = len;
+            $("#dataList tr").hide();
+            $("#dataList tr").each(function (i) {
+                if (i - 1 >= begin && i - 1 < end)//显示第page页的记录
+                {
+                    $("#show_tab_one").show();
+                    $(this).show();
+                    document.getElementById("curPage").value = curPage;
+                }
+            });
+
+        }
+        function pageSize2() {
+            curPage = 0;   //显示第curPage页
+            pageSize = parseInt(document.getElementById("pageSize").value);
+            len = $("#dataList tr").length - 1;   //去掉表头
+            page = len % pageSize == 0 ? len / pageSize : Math.floor(len / pageSize) + 1;//根据记录条数，计算页数
+            console.log("len:" + len + "page:" + page);
+            document.getElementById("page").value = page;
+            curPage = 1;
+            displayPage();//显示第一页
+        }
+
+        //a链接点击变色，再点其他回复原色
+        function changCss(obj) {
+            var arr = document.getElementsByTagName("a");
+            for (var i = 0; i < arr.length; i++) {
+                if (obj == arr[i]) {       //当前页样式
+                    obj.style.backgroundColor = "#006B00";
+                    obj.style.color = "#ffffff";
+                }
+                else {
+                    arr[i].style.color = "";
+                    arr[i].style.backgroundColor = "";
+                }
+            }
+        }
+        document.onkeydown = function (e) { // 回车提交表单
+            // 兼容FF和IE和Opera
+            var theEvent = window.event || e;
+            var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+            if (code == 13) {
+                KeyOfSearch();
+                return false;
+            }
+        }
+
+        //关键字查询
+        function KeyOfSearch() {
+
+            //获取要查询的关键字
+            var key = document.getElementById('TB_Key').value;
+
+            //执行查询.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddUrlData();
+            handler.AddPara("Keys", key); //增加参数.
+            var data = handler.DoMethodReturnJSON("StartGuide_Init");
+
+            //显示数据.
+            StartGuide_Init(data);
+        }
+
+        //发起
+        function SendMulit() {
+
+            //获取选中的checkbox
+            var rdVal = "";
+            var cbVal = "";
+            //循环取值
+            $("input[name='BySQLMulti']:checked").each(function () {
+                cbVal = "'" + $(this).val() + "'," + cbVal + "";
+            });
+            rdVal = cbVal;
+            //替换潜在的错误
+            rdVal = rdVal.replace("undefined", "");
+
+            //            var url = MyFlow + "?DoType=StartGuide_MulitSend&" + str + "&Keys=" + rdVal + "&m=" + Math.random();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddUrlData();
+            handler.AddPara("Keys", rdVal);
+            var data = handler.DoMethodReturnString("StartGuide_MulitSend");
+
+            //出现异常，提示错误
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            //跳转
+            var href = "MyFlow.htm?FK_Flow=" + FK_Flow + "&FK_Node=" + FK_Node + "&WorkID=" + WorkID + "&Nos=" + data + "&IsCheckGuide=1";
+            //获取URL参数
+            if (location.search.indexOf("PrjNo") != -1)
+                href = href + "&PrjNo=" + GetQueryString("PrjNo") + "&PrjName=" + GetQueryString("PrjName");
+            window.location.href = href;
+
+        }
+        //加载方法
+        function StartGuide_Init(data) {
+
+            //判断是否出现异常
+            if (data.indexOf('err@') == 0) {
+
+                _Html += "<tr><td>";
+                _Html += "" + data + "";
+                _Html += "</td></tr>";
+
+                $('#dataList').html([_Html].join(''));
+                return;
+            }
+
+
+            //选中的超链接及参数
+            var href = "../../MyFlow.htm?FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + FK_Node + "&WorkID=" + GetQueryString("WorkID") + "&IsCheckGuide=1";
+            //获取URL参数
+            if (location.search.indexOf("PrjNo") != -1)
+                href = href + "&PrjNo=" + GetQueryString("PrjNo") + "&PrjName=" + GetQueryString("PrjName");
+
+            var _Html = "";
+
+
+            //循环取出来的数据
+            for (var i in data) {
+
+                var key = "No";
+                var Name = "Name";
+
+
+                var thHtml = "<tr><th>Idx</th>";
+                //如果是第一行，先生成table列名
+                if (i < 1) {
+                    for (var k in data[i]) {
+                        if (k == "NO" || k == "No") { //No这一列，不显示
+                            key = data[i][k];
+                        }
+                        else if (k == "NAME" || k == "Name") {
+                            Name = data[i][k];
+                            thHtml += "<th>NAME</th>";
+                        }
+                        else {
+                            thHtml += "<th>" + k + "</th>";
+                        }
+                    }
+                    _Html += thHtml + "</tr>";
+                }
+                //添加要显示的数据
+                _Html += "<tr>";
+
+                var extParas = "";
+
+                //如果是SQL多条模式，增加勾选框
+                if (StartGuideWay == "BySQLMulti") {
+                    if (data[i]["NO"] == null || data[i]["NO"] == '' || data[i]["NO"] == undefined || data[i]["NO"] == "undefined")
+                        _Html += "<td class='Idx' nowrap><input type='checkbox' name='BySQLMulti' value='" + data[i]["No"] + "' id='" + data[i]["No"] + "' />" + (parseInt(i) + parseInt(1)) + "</td>";
+                    else
+                        _Html += "<td class='Idx' nowrap><input type='checkbox' name='BySQLMulti' value='" + data[i]["NO"] + "' id='" + data[i]["NO"] + "' />" + (parseInt(i) + parseInt(1)) + "</td>";
+                }
+                else {
+                    _Html += "<td class='Idx' nowrap>" + (parseInt(i) + parseInt(1)) + "</td>";
+
+                    //把扩展的paras 求出来.
+                    for (var v in data[i]) {
+
+                        if (v == "NO" || v == "No" || v == "Name" || v == "NAME") { //此处No列不显示 why?
+                            continue;   //此处被zhoupeng注释掉. 如果name 有 #特殊字符就不行了，目前通过底部传值了.
+                        }
+
+                        //判断参数值里边是否包含特殊字符，包含则替换
+                        var val = data[i][v];
+                        if (val == null || val == undefined)
+                            continue;
+
+                        val = val + "";
+                        if (val.indexOf("#") != -1) {
+                            val = val.replace(/\#/g, "%23");
+                        }
+                        if (val.indexOf("%") != -1) {
+                            val = val.replace(/\%/g, "%25");
+                        }
+                        if (val.indexOf("&") != -1) {
+                            val = val.replace(/\&/g, "%26");
+                        }
+                        //  extParas += "&" + v + "=" + val;
+                    }
+                }
+
+
+                //根据sql查询的列名，依次显示，并对应列名.
+                for (var v in data[i]) {
+
+                    if (v == "NO" || v == "No") {//此处No列不显示
+                        key = data[i][v];
+                        if (key == null)
+                            key = "";
+                    }
+
+                    else if (v == "NAME" || v == "Name") {
+
+                        if (key.length < 0)//如果No没有在Name列之前，就去读josn中指定的对象值
+                            key = data[i]["NO"];
+                        if (key == null || key == '' || key == undefined || key == "undefined")
+                            key = data[i]["No"];
+                        _Html += "<td nowrap>";
+                        //如果是SQL多条模式，去掉超链接
+                        if (StartGuideWay == "BySQLMulti") {
+                            _Html += "" + key + "-" + data[i][v] + ""; //No,Name一起显示在Name列中
+                        }
+                        else {
+                            _Html += "   <a href='" + href + extParas + "&KeyNo=" + key + "' target='_self'>";
+                            _Html += "" + key + "-" + data[i][v] + ""; //No,Name一起显示在Name列中
+                            _Html += "</a>";
+                        }
+                        _Html += "</td>";
+                    }
+                    else {
+                        _Html += "<td nowrap> " + data[i][v] + "</td>"; //显示其他列
+                    }
+                }
+
+                _Html += "</tr>";
+            }
+
+            //在容器中显示
+            $('#dataList').html([
+                _Html
+            ].join(''));
+
+            //如果是SQL多条模式，增加发送按钮
+            if (StartGuideWay == "BySQLMulti") {
+                var sendMultiHtml = "<tr><td><input type='button' name='pub_Send' value='发起' id='Btn_Send' onclick='SendMulit()'/></td></tr>";
+                $("#mainTable tr:last").after(sendMultiHtml);
+            }
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+        <div id="mainPanel" region="center" border="true" class="mainPanel">
+            <table id="mainTable" style="width: 100%;">
+                <caption id="cap_Title">
+                    提示：请点击连接发起流程
+                </caption>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div style="float: left">
+                                输入关键字:
+                                <input name="TB_Key" type="text" id="TB_Key" />
+                                <input type="button" name="pub_Btn" value="查询" id="Btn_Search" onclick="KeyOfSearch()" />
+                            </div>
+                            <div id='leftBar' style="float: right" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table id="dataList" style="width: 100%;">
+                            </table>
+                            <div style="float:right">
+                                <input id="lastpage" type="button" value="上一页" />
+                                <input id="nextpage" type="button" value="下一页" />
+
+                                跳转到<input id="curPage" type="text" size="5" />
+                                <input id="npage" type="button" value="确定" />
+                                共<input id="page" type="text" size="1" readonly="readonly" />页
+
+                                每页显示<input id="pageSize" type="text" value="2" size="5" />行<input type="button" value="确定" onclick="pageSize2()" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+</body>
+</html>

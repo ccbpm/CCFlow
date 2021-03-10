@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>请选择表单</title>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
+    <!-- 导入配置文件. -->
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <script type="text/javascript">
+
+        $(function () {
+
+            // 初始化人员.   //开始加载数据.
+            var workid = GetQueryString("WorkID");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+            handler.AddPara("WorkID", GetQueryString("WorkID"));
+            handler.AddPara("FID", GetQueryString("FID"));
+            var data = handler.DoMethodReturnString("StartGuideFrms_Init");
+
+            if (data.indexOf('err@') == 0) {
+                document.getElementById("Msg").innerHTML = data;
+                return;
+            }
+
+            var flowNo = GetQueryString("FK_Flow");
+
+            var frms = JSON.parse(data);
+            var html = "<ul>";
+            for (var i = 0; i < frms.length; i++) {
+
+                var frm = frms[i];
+
+                html += "<li>";
+                html += "<a href='../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workid + "&FK_Node=" + flowNo + "01&IsCheckGuide=1&Frms=" + frm.FK_Frm + "' >" + frm.GuanJianZiDuan + "</a>";
+                html += "</li>";
+            }
+            html += "<ul>";
+            document.getElementById("docs").innerHTML = html;
+        });
+
+    </script>
+
+    <style type="text/css">
+        #tb_msg {
+            height: 72px;
+            width: 272px;
+        }
+    </style>
+</head>
+<body>
+
+    <h3>&nbsp;&nbsp;&nbsp;&nbsp;请选择 </h3>
+     <hr />
+
+       <div id="docs"></div>
+
+</body>
+</html>

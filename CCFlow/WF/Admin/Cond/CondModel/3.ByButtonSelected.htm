@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <!--SQL编辑器-->
+    <link href="../../../Scripts/CodeMirror/lib/codemirror.css" rel="stylesheet" />
+    <link href="../../../Scripts/CodeMirror/addon/hint/show-hint.css" rel="stylesheet" />
+    <script src="../../../Scripts/CodeMirror/lib/codemirror.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
+    <script src="../../../Scripts/CodeMirror/mode/sql/sql.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
+    <script src="../../../Scripts/LoadSql.js"></script>
+
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            InitBar( DirCondModel.ByButtonSelected );
+            var nodeNo = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeNo);
+            if (node.CondModel == DirCondModel.ByButtonSelected && node.GetPara("IsShowReturnNodeInToolbar") == 1)
+                $('#CB_IsShowReturnNodeInToolbar').attr('checked', 'true');
+
+        });
+
+        function Save() {
+
+            //更新节点表单类型.
+            var nodeNo = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeNo);
+            node.CondModel = DirCondModel.ByButtonSelected;
+            node.SetPara("");
+            if ($("#CB_IsShowReturnNodeInToolbar").is(':checked') == true)
+                node.SetPara("IsShowReturnNodeInToolbar", 1);
+            else
+                node.SetPara("IsShowReturnNodeInToolbar", 0);
+            node.Update();
+            alert("保存成功")
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+
+    <div id="bar"></div>
+
+    <fieldset>
+        <legend>
+            <label for="RB_CondModel_2"> 主观选择：按钮模式 </label>
+        </legend>
+
+        <ul>
+            <li style="font-weight: bold;font-size: 15px;">
+                <label><input type="checkbox" id="CB_IsShowReturnNodeInToolbar" />退回节点是否现在工具栏</label>
+            </li>
+            <li>
+                用户发送的时候，在发送按钮有选择按钮，是ccbpm为您计算出来的可以发送到的节点。
+            </li>
+            <li>是有操作者来决定要发送到那个节点上去. </li>
+            <li>如果您选择的节点的接收人规则是由上一步发送人员来选择的，系统就会弹出接受人按钮. </li>
+            <!--<li> <img calss="HelpImg" src="CondModel1.png" onclick="WinOpen('CondModel1.png')" style="width:100%;" /> </li>-->
+        </ul>
+    </fieldset>
+</body>
+</html>

@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js"></script>
+</head>
+<body>
+    <div id="App">
+        <div id="bar"> </div>
+        <fieldset>
+            <legend>
+                <label for="RB_CHWay_1">
+                    按时效考核
+                </label>
+            </legend>
+            <ul style="color: Gray">
+                <li>按时间点计算，或者说按照设置的时间区间计算。 </li>
+                <li>这个方式有：1. 设置天数，比如设置应该在几天几小时完成。 </li>
+                <li>2. 按表单的表单字段，选择时间字段，按其设置的时间计算。 </li>
+                <li>3. 流转自定义。 </li>
+                <li><a href="javascript:SetCHRoleDtl();">设置时效考核的计算方式</a> </li>
+            </ul>
+
+        </fieldset>
+
+    </div>
+    <script type="text/javascript">
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                adminModel: 1,
+                orgModel: 0,
+                depts: [],
+                webuser: null,
+                deliverWay: CHWay.ByTime
+            },
+            
+            created() {
+                InitBar(this.deliverWay);
+            }
+        });
+        
+        function SetCHRoleDtl() {
+            var url = "../CHRoleDtl.htm?FK_Node=" + GetQueryString("FK_Node");
+            window.location.href = url;
+        }
+        //保存
+        function Save() {
+            
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.CHWay = Baseinfo.deliverWay;
+            node.Update();
+            alert("保存成功.");
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>多人处理规则</title>
+
+    <link href="../../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js"></script>
+    <script src="../../Admin.js"></script>
+    <script>
+        var nodeID = GetQueryString("FK_Node");
+        var node = new Entity("BP.WF.Node", nodeID);
+        $(function () {
+            InitBar(TodolistModel.Order);
+        });
+        function Save() {
+            $("#Btn_Save").val('正在保存请稍候...');
+            node.TodolistModel = TodolistModel.Order;
+            node.Update();
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+
+    </div>
+    <form id="cc">
+        <fieldset>
+            <legend>
+                <label for="RB_TodolistModel_2">
+                    队列模式
+                </label>
+            </legend>
+            <ul style="color: Gray">
+                <li>A发送到B ，B节点上有n个人可以处理。这个n个人按照设置的先后顺序去处理，在同一个时间点必须有一个人待办，其他人看不到。</li>
+                <li>应用场景: 一个公文发送给一个部门，该部门下n个人可以接受（注意这是一个节点），按照国内的行政制度，这n个人会从小到达排一个队列，有最小的级别的工作人员审批，然后依次类推，走到最后由最后一个人发送到下一个节点去。这n个人都是该节点的处理人，这n个人的审核步骤是由他们的顺序确定的，所以在设置该节点的接受人时，要按照顺序执行。</li>
+                <li>通常这样的模式也与审核组件一起使用，每个人按照顺序表达意见后，就发送到下一个节点。</li>
+                <li>在退回的时候，第一个人退回的是上一个节点，其他人则是依次退回。</li>
+            </ul>
+        </fieldset>
+    </form>
+</body>
+</html>

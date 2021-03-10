@@ -1,0 +1,57 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        $(function () {
+            InitBar(OvertimeRole.RunSql);
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            if(node.OutTimeDeal==OvertimeRole.RunSql)
+                $("#TB_SQL").val(node.DoOutTime)
+        });
+
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.OutTimeDeal = OvertimeRole.RunSql;
+            node.DoOutTime = $("#TB_SQL").val();
+            node.Update();
+            alert("保存成功.");
+        }
+    </script>
+</head>
+<body>
+
+    <div id="bar"> </div>
+
+    <fieldset>
+        <legend><label for="RB_OutTimeDeal_6">执行SQL </label> </legend>
+        <br />
+        <a href="javascript:ShowHidden('sql');"> 请输入要执行的SQL：</a>
+        <br />
+        <div id="sql" style="display:none">
+            <ul>
+                <li>当前的的sql支持ccbpm的表达式.比如:@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.OrgNo</li>
+                <li>执行相关的SQL，处理相关的业务逻辑。</li>
+            </ul>
+        </div>
+
+        <textarea id="TB_SQL" name="TB_SQL" rows="3"> </textarea>
+    </fieldset>
+</body>
+</html>

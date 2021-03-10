@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>流程计划时间计算</title>
+    <!--SQL编辑器-->
+    <link href="../../../Scripts/CodeMirror/lib/codemirror.css" rel="stylesheet" />
+    <link href="../../../Scripts/CodeMirror/addon/hint/show-hint.css" rel="stylesheet" />
+    <script src="../../../Scripts/CodeMirror/lib/codemirror.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
+    <script src="../../../Scripts/CodeMirror/mode/sql/sql.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
+    <script src="../../../Scripts/LoadSql.js"></script>
+
+    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            //初始化下拉框.
+            InitBar(SDTOfFlow.SQLDT);
+
+            //获取节点属性.
+            var flowNo = GetQueryString("FK_Flow");
+
+            var flow = new Entity("BP.WF.Flow", flowNo);
+
+            //sql语句赋值
+
+            $("#TB_SQL").val(flow.SDTOfFlowRoleSQL);
+
+        });
+        function Save() {
+
+            //更新节点表单类型.
+            var flowNo = GetQueryString("FK_Flow");
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            flow.SDTOfFlowRole = SDTOfFlow.SQLDT;
+            flow.SDTOfFlowRoleSQL = editor.getValue();//按sql
+            flow.CopyURL();  //从url里面copy数据.
+            flow.CopyForm(); //从from里面copy数据.
+            if (flow.Update() == 0)
+                flow.Insert();
+
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>
+            <label for="RB_BySQL">
+                按sql计算.
+            </label>
+            <br />
+            <br />
+        </legend>
+        <textarea type="text" value="" id="TB_SQL" name="TB_SQL" style="width: 90%;"></textarea>
+        <br />
+        例如: SELECT myfield FROM xxxx WHERE OID=@WorkID 返回值是一行，一列的string类型的数据，比如: 2019-09-09
+    </fieldset>
+</body>
+</html>

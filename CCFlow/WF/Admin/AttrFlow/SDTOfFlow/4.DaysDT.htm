@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>流程计划时间计算</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            //初始化下拉框.
+            InitBar(SDTOfFlow.DaysDT);
+
+            //获取节点属性.
+            var flowNo = GetQueryString("FK_Flow");
+
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            //天数赋值
+            var SDTOfFlowRole_Days = flow.GetPara("SDTOfFlowRole_Days");
+            $("#TB_Days").val(SDTOfFlowRole_Days);
+
+
+        });
+
+        function Save() {
+
+            //更新节点表单类型.
+            var flowNo = GetQueryString("FK_Flow");
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            flow.SDTOfFlowRole = SDTOfFlow.DaysDT;
+
+            var SDTOfFlowRole_Days = $("#TB_Days").val();
+            flow.SetPara("SDTOfFlowRole_Days", SDTOfFlowRole_Days); //按规定的天数
+
+            flow.CopyURL();  //从url里面copy数据.
+            flow.CopyForm(); //从from里面copy数据.
+            if (flow.Update() == 0)
+                flow.Insert();
+
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>
+            <label for="RB_ByDays">按照规定的天数计算。</label>
+        </legend>
+        <ul>
+            <li>输入流程应该完成的天数:<input type="text" value="" id="TB_Days" name="TB_Days" /></li>
+            <li>设置多少天，就按照这个流程的天数来计算，该流程的应该完成日期。</li>
+        </ul>
+    </fieldset>
+</body>
+</html>

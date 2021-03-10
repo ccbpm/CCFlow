@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>发起限制规则</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        //获取节点属性.
+        var flowNo = GetQueryString("FK_Flow");
+
+        var flow = new Entity("BP.WF.Flow", flowNo);
+
+        $(function () {
+
+            //初始化下拉框.
+            InitBar(9)
+            if (flow.StartLimitRole == 9)
+                $("#flowNo").val(flow.StartLimitPara)    
+        });
+
+        function Save() {
+            flow.StartLimitRole = StartLimitRole.OnlyOneSubFlow;
+            flow.StartLimitPara = $("#flowNo").val();
+            flow.CopyURL();  //从url里面copy数据.
+            flow.CopyForm(); //从from里面copy数据.
+            if (flow.Update() == 0)
+                flow.Insert();
+
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>
+            <label for="RB_OnlyOneSubFlow">
+                为子流程时的规则.
+            </label>
+        </legend>
+        <ul>
+            <!--<li><label> <input type="checkbox" id="" /> 如果当前为子流程，仅仅只能被调用1次，不能被重复调用。</label></li>
+            <li><label> <input type="checkbox" /> 如果当前为子流程，需要等到指定的子流程结束以后才能启动该流程。</label></li>-->
+
+            <li>指定的流程编号:<input type=text id="flowNo" />多个子流程用逗号分开.比如:001,003</li>
+        </ul>
+    </fieldset>
+</body>
+</html>

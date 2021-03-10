@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <!--SQL编辑器-->
+    <link href="../../../Scripts/CodeMirror/lib/codemirror.css" rel="stylesheet" />
+    <link href="../../../Scripts/CodeMirror/addon/hint/show-hint.css" rel="stylesheet" />
+    <script src="../../../Scripts/CodeMirror/lib/codemirror.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
+    <script src="../../../Scripts/CodeMirror/mode/sql/sql.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
+    <script src="../../../Scripts/LoadSql.js"></script>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            InitBar(AutoStart.ByDesignee);
+            //获取节点属性
+            var flowNo = GetQueryString("FK_Flow");
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            //批量为复制.
+            if (flow.FlowRunWay == AutoStart.ByDesignee) {
+                GenerFullAllCtrlsVal(flow);
+                $("#TB_SpecEmp").val(flow.RunObj);
+            }
+
+        });
+
+        function Save() {
+
+            var fk_flow = GetQueryString("FK_Flow");
+            var data = new Entity("BP.WF.Flow", fk_flow);
+            data.FlowRunWay = AutoStart.ByDesignee;
+            data.RunObj = $("#TB_SpecEmp").val();
+            data.CopyURL();  //从url里面copy数据.
+            data.CopyForm(); //从from里面copy数据.
+            data.Update();
+            
+            window.location.href = window.location.href;
+        }
+
+    </script>
+</head>
+<body>
+
+    <div id="bar"></div>
+
+    <fieldset>
+        <legend>
+            <label for="RB_FlowRunWay_1">指定人员按时启动</label>
+        </legend>
+        <br />
+        <a href="javascript:ShowHidden('emps')">操作员参数设置帮助:</a>
+
+        <div id="emps" style=" display:none;color:Gray">
+            <ul>
+                <li>说明：指定的人员指定的发起时间点自动启动流程。</li>
+                <li>请打开操作手册：<a href="javascript:WinOpen('http://ccbpm.mydoc.io/?v=5404&t=17088')">操作手册</a></li>
+                <li>一个人启动的参数格式：人员编号@时间点1@时间点2@时间点n  </li>
+
+                <li>n个人启动的参数格式：人员编号@时间点1@时间点2@时间点n,人员编号@时间点1@时间点2@时间点n,人员编号@时间点1@时间点2@时间点n</li>
+                <li>比如：zhangshan@01:01@12:01  让张三在每天的 1点零1分，与12点零1分发起此流程。</li>
+                <li>比如：zhangshan@-01 01:01  让张三在每月1号的1点零1分发起此流程。</li>
+                <li>比如：zhangshan@06-01 01:01  让张三在每年的6月1号的1点零1分发起此流程。</li>
+                <li>cc的日期格式为：yyyy-MM-dd HH:mm 如果时间匹配到您设置的时间点，那么系统就会触发流程，多个时间点用@符号隔开。</li>
+            </ul>
+        </div>
+
+        <br />
+
+        <input type="text" style="width:95%" id="TB_SpecEmp" name="TB_SpecEmp" />
+    </fieldset>
+    <fieldset>
+        <legend id="help"></legend>
+        <ul>
+            <li> 定义：自动启动工作流程，一个流程的开始节点的填写与发起是在特定规则的设置下自动发起的流程。</li>
+            <li> 解释：通常模式下的流程启动是手工的启动，就是用户从一个发起列表，点击流程名字，就启动了该流程。但是有的时候，是系统自动发起该流程。</li>
+
+            <li>应用场景</li>
+            <li> 1 周例会流程，用户希望每个周都要启动例会通知流程这个启动是让系统自动发起而非人工发起。</li>
+
+
+        </ul>
+    </fieldset>
+</body>
+</html>

@@ -65,7 +65,7 @@ namespace BP.Demo
                 lk.X = x - 50;
                 lk.Y = y - 20;
                 lk.FK_MapData = "ND" + nd.NodeID;
-                lk.Text = "办事指南";
+                lk.Lab = "办事指南";
                 lk.Target = "_blank";
                 lk.URLExt = "/App/GovService/FlowHelp.htm?FK_Flow=" + nd.FK_Flow;
                 lk.Insert();

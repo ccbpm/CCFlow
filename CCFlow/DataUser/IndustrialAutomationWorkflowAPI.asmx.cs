@@ -112,7 +112,7 @@ namespace ccbpm
             if (BP.Web.WebUser.No != userNo)
                 BP.WF.Dev2Interface.Port_LoginBySID(sid);
 
-            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable();
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(userNo);
             return BP.Tools.Json.ToJson(dt);
         }
         #endregion

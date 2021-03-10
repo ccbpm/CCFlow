@@ -107,11 +107,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentFTP, Version=33.0.3.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
-      <HintPath>..\..\..\CCFlowCloud\packages\FluentFTP.33.0.3\lib\net45\FluentFTP.dll</HintPath>
+    <Reference Include="FluentFTP">
+      <HintPath>..\..\RefDLL\FluentFTP.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=1.3.1.9, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <HintPath>..\..\..\CCFlowCloud\packages\SharpZipLib.1.3.1\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\RefDLL\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp">
       <HintPath>..\..\RefDLL\itextsharp.dll</HintPath>

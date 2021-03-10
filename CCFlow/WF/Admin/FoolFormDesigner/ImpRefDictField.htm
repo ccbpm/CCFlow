@@ -1,0 +1,355 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <base target="_self" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="renderer" content="webkit" />
+    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/icon.css" />
+    <link rel="stylesheet" type="text/css" href="../../Comm/Style/CommStyle.css" />
+    <link rel='stylesheet' type='text/css' href='../../Comm/Style/Table0.css' />
+    <script type="text/javascript" src="../../Scripts/easyUI/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/easyUI/jquery.easyui.min.js"></script>
+    <!--<script type="text/javascript" src="../../Comm/Menu.js"></script>
+        <script type="text/javascript" src="../../Comm/ShortKey.js"></script>-->
+    <script type="text/javascript" src="../../Comm/JScript.js"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js"></script>
+    <!--<script type="text/javascript" src="../../Scripts/jquery/ajaxfileupload.js"></script>-->
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../../Scripts/EasyUIUtility.js"></script>
+    <!-- <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+        <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script> -->
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../Comm/Style/Tabs.css" rel="stylesheet" type="text/css" />
+    <link href="../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <script src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function OpenSelectBindKey(ctl) {
+            OpenEasyUiDialog("ImpTableFieldSelectBindKey.htm?ctl_id=" + ctl.id, "bindKey", "绑定值", 950, 550, "icon-property", true);
+            return;
+            var url = 'ImpTableFieldSelectBindKey.aspx';
+            var str = window.showModalDialog(url, '', 'dialogHeight: 550px; dialogWidth:950px; dialogTop: 100px; dialogLeft: 100px; center: no; help: no');
+            if (str == undefined)
+                return;
+            if (str == null)
+                return;
+            ctl.value = str;
+            return;
+        }
+        //上移
+        function up(obj, idxTBColumnIdx) {
+            var objParentTR = $(obj).parent().parent();
+            var prevTR = objParentTR.prev();
+            var currTrId;
+            var prevTrId;
+            if (prevTR.length > 0 && !isNaN(prevTR.children(":eq(0)").text())) {
+                prevTR.insertAfter(objParentTR);
+                currTrId = Number(objParentTR.children(":eq(0)").text());
+                prevTrId = Number(prevTR.children(":eq(0)").text());
+                objParentTR.children(":eq(0)").text(prevTrId);
+                prevTR.children(":eq(0)").text(currTrId);
+                objParentTR.children(":eq(" + idxTBColumnIdx + ")").children(":first").val(prevTrId);
+                prevTR.children(":eq(" + idxTBColumnIdx + ")").children(":first").val(currTrId);
+            }
+        }
+        //下移
+        function down(obj, idxTBColumnIdx) {
+            var objParentTR = $(obj).parent().parent();
+            var nextTR = objParentTR.next();
+            var currTrId;
+            var nextTrId;
+            if (nextTR.length > 0 && !isNaN(nextTR.children(":eq(0)").text())) {
+                nextTR.insertBefore(objParentTR);
+                currTrId = Number(objParentTR.children(":eq(0)").text());
+                nextTrId = Number(nextTR.children(":eq(0)").text());
+                objParentTR.children(":eq(0)").text(nextTrId);
+                nextTR.children(":eq(0)").text(currTrId);
+                objParentTR.children(":eq(" + idxTBColumnIdx + ")").children(":first").val(nextTrId);
+                nextTR.children(":eq(" + idxTBColumnIdx + ")").children(":first").val(currTrId);
+            }
+        }
+        function CheckAll(checked) {
+            $.each($(":checkbox"), function () {
+                if ($(this).attr("disabled") !== "disabled") {
+                    this.checked = checked;
+                }
+            });
+        }
+        function doShow(step) {
+            $.each(["step1", "step2", "step3"], function (i, o) {
+                if (step == o) {
+                    $("#" + o).show();
+                } else {
+                    $("#" + o).hide();
+                }
+            });
+        }
+       
+        function step2(FK_MapData, FK_SFDBSrc, STable) {
+            var attrs = new Entities("BP.Sys.MapAttrs");
+            attrs.Retrieve("FK_MapData", FK_MapData);
+            var columns = new Entities("BP.Sys.MapAttrs");
+            columns.Retrieve("FK_MapData", STable);
+            html = "";
+            $.each(columns, function (i, o) {
+                var checkboxAttributes = "";
+                $.each(attrs, function (attrIndex, attr) {
+                    if (attr.KeyOfEn == o.KeyOfEn) {
+                        checkboxAttributes = " disabled='disabled' onclick='return false' ";
+                        return false;
+                    }
+                });
+                html += "<tr>";
+                html += "	<td nowrap>" + i + "</td>";
+                html += "	<td nowrap>";
+                html += "		<input type='checkbox' id='CB_Col_" + o.KeyOfEn + "' name='CB_Col_" + o.KeyOfEn + "' no='" + o.KeyOfEn + "' " + checkboxAttributes + ">";
+                html += "		<label for='CB_Col_" + o.KeyOfEn + "'>" + o.KeyOfEn + "</label>";
+                html += "	</td>";
+                html += "	<td nowrap>" + o.Name + "</td>";
+               
+                html += "	<td nowrap>" + GetDataTypeDesc(o.MyDataType) + "</td>";
+
+               
+                html += "	<td nowrap>" + o.MaxLen + "</td>";
+                html += "</tr>";
+            });
+            $("#all_columns").html(html);
+            $("#chooseColumn").text(STable || json.STable || "");
+
+            $("#step2ToStep3").html("<a href='javascript:void(0);' class='easyui-linkbutton' onclick='step3(\"" + FK_MapData + "\", \"" + FK_SFDBSrc + "\", \"" + (STable || json.STable) + "\")'>下一步</a>");
+            $.parser.parse("#step2ToStep3");
+
+            doShow("step2");
+        }
+
+        function GetDataTypeDesc(dataType) {
+            switch (dataType) {
+                case 4:
+                    return "布尔(Int)";
+                case 6:
+                    return "日期nvarchar";
+                case 7:
+                    return "日期时间nvarchar";
+                case 5:
+                    return "双精度(double)";
+                case 3:
+                    return "浮点(float)";
+                case 2:
+                    return "整型(int)";
+                case 8:
+                    return "货币(float)";
+                case 1:
+                    return "字符(nvarchar)";
+                default:
+                    return "@没有此类型";
+            }
+        }
+        function step3(FK_MapData, FK_SFDBSrc, STable) {
+            $("#step3BackToStep2").html("<a href='javascript:void(0);' class='easyui-linkbutton' onclick='step2(\"" + FK_MapData + "\", \"" + FK_SFDBSrc + "\", \"" + STable + "\")'>上一步</a>");
+            $.parser.parse("#step3BackToStep2");
+
+            var no = [];
+            $("input:checkbox:checked").each(function () {
+                if ($(this).attr("id") != "CB_CheckAll") {
+                    no.push($(this).attr("no"));
+                }
+            });
+            $("#FK_MapData").val(FK_MapData);
+            $("#FK_SFDBSrc").val(FK_SFDBSrc);
+            $("#STable").val(STable);
+
+            var columns = new Entities("BP.Sys.MapAttrs");
+            columns.Retrieve("FK_MapData", STable);
+
+            var selectFields = ","+no.join(",")+",";
+            var selectColumns = $.grep(columns, function (item) {
+                return selectFields.indexOf(","+item.KeyOfEn+",")!=-1;
+            });
+
+            var myDataType = new Entities("BP.Sys.SysEnums");
+            myDataType.Retrieve("EnumKey", "MyDataType");
+            var LGType = new Entities("BP.Sys.SysEnums");
+            LGType.Retrieve("EnumKey", "LGType");
+            var html = "";
+            $.each(selectColumns, function (i, o) {
+               
+                html += "<tr>";
+                html += "	<td nowrap class='Idx'>" + (i + 1) + "</td>";
+                html += "	<td nowrap>" + o.KeyOfEn + "</td>";
+                html += "	<td nowrap>";
+                html += "		<input type='text' id='TB_Desc_" + o.KeyOfEn + "' name='TB_Desc_" + o.KeyOfEn + "' value='" + o.Name + "' size='20'>";
+                html += "	</td>";
+                html += "	<td nowrap>";
+                html += "		<select id='DDL_DBType_" + o.KeyOfEn + "' name='DDL_DBType_" + o.KeyOfEn + "' style='min-width:90px;'>";
+                $.each(myDataType, function (enumIndex, enum_) {
+                    html += "		<option value='" + enum_.IntKey + "' " + ((enum_.IntKey == o.MyDataType) ? "selected='selected'" : "") + ">" + enum_.Lab + "</option>";
+                });
+                html += "		</select>";
+                html += "	</td>";
+                html += "	<td nowrap>";
+                html += "		<select id='DDL_LogicType_" + o.KeyOfEn + "' name='DDL_LogicType_" + o.KeyOfEn + "' style='min-width:90px;'>";
+                $.each(LGType, function (enumIndex, enum_) {
+                    html += "		<option value='" + enum_.IntKey + "'>" + enum_.Lab + "</option>";
+                });
+                html += "		</select>";
+                html += "	</td>";
+                html += "	<td nowrap>";
+                html += "		<input type='text' id='TB_BindKey_" + o.KeyOfEn + "' name='TB_BindKey_" + o.KeyOfEn + "' ondblclick='OpenSelectBindKey(this)' size='30'>";
+                html += "	</td>";
+                html += "	<td nowrap>";
+
+             
+                html += "		<input type='text' id='TB_Len_" + o.KeyOfEn + "' name='TB_Len_" + o.KeyOfEn + "' value='" + o.MaxLen + "' size='5'>";
+                html += "	</td>";
+                html += "	<td nowrap style='style=\"text-align:center\"'>";
+                html += "		<input type='hidden' id='HID_Idx_" + o.KeyOfEn + "' name='HID_Idx_" + o.KeyOfEn + "' value='" + (i + 1) + "'>";
+                html += "		<a href='javascript:void(0);' onclick='up(this, 7)' class='easyui-linkbutton' data-options=\"iconCls:'icon-up'\"></a>";
+                html += "		&nbsp;";
+                html += "		<a href='javascript:void(0)' onclick='down(this, 7)' class='easyui-linkbutton' data-options=\"iconCls:'icon-down'\"></a>";
+                html += "	</td>";
+                html += "</tr>";
+            });
+            $("#selected_columns").html(html);
+            $.parser.parse($(".easyui-linkbutton").parent());
+            doShow("step3");
+        }
+        
+        $(function () {
+            step2(GetQueryString("FK_MapData"), "local", GetQueryString("RefFrm"));
+        })
+        function btn_Save_Click() {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            handler.AddFormData();
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            var json = handler.DoMethodReturnString("ImpTableField_Save");
+            /* json = JSON.parse(json);
+            alert(json.msg);
+            return; */
+            alert(json);
+            if (GetQueryString("reset") == "true") {
+                findFn(window, "ResetFrm", "请手动重置表单");
+            }
+            window.close();
+        }
+        function findFn(window_, fn, failMsg, index) {
+            if (isNaN(parseInt(index)) || parseInt(index) < 1) {
+                index = 1;
+            }
+            if (index >= 9) {
+                alert(failMsg);
+            } else if (window_) {
+                if (typeof window_[fn] === "function") {
+                    window_[fn].call();
+                } else if (window_.opener) {
+                    findFn(window_.opener, fn, failMsg, ++index);
+                } else if (window_.parent) {
+                    findFn(window_.parent, fn, failMsg, ++index);
+                } else {
+                    alert(failMsg);
+                }
+            } else {
+                alert(failMsg);
+            }
+        }
+    </script>
+</head>
+<body>
+   
+    <div id="step2" class="easyui-layout" style="height: 100%; display: none;" data-options="fit:true">
+        <div data-options="region:'center',title:'第2步：请选择要导入的数据列（<span id=\'chooseColumn\'></span>）'"
+             style="padding: 5px; height: 100%">
+            <table class="Table" style="width: 100%" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <td nowrap class="GroupTitle">
+                            序
+                        </td>
+                        <td nowrap class="GroupTitle">
+                            <input type="checkbox" id="CB_CheckAll" name="CB_CheckAll" onclick="CheckAll(this.checked)">
+                            <label for="CB_CheckAll">
+                                字段名
+                            </label>
+                        </td>
+                        <td nowrap class="GroupTitle">
+                            中文描述
+                        </td>
+                        <td nowrap class="GroupTitle" style="width: 80px; text-align: center">
+                            类型
+                        </td>
+                        <td nowrap class="GroupTitle" style="width: 50px; text-align: center">
+                            最大长度
+                        </td>
+                    </tr>
+                </thead>
+                <tbody id="all_columns">
+                </tbody>
+            </table>
+            <a href="javascript:void(0);" onclick="step1()" class="easyui-linkbutton">上一步</a>
+            <span id="step2ToStep3"></span>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+        </div>
+    </div>
+    <div id="step3" class="easyui-layout" style="height: 800px; display: none;" data-options="fit:true">
+        <div data-options="region:'center',title:'第3步：导入字段生成表单'" style="padding: 5px; height: 1000px">
+            <form id="frm">
+                <table class="Table" style="width: 100%;" cellpadding="0" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <td nowrap class="GroupTitle">
+                                序
+                            </td>
+                            <td nowrap class="GroupTitle">
+                                字段名
+                            </td>
+                            <td nowrap class="GroupTitle">
+                                中文描述
+                            </td>
+                            <td nowrap class="GroupTitle">
+                                数据类型
+                            </td>
+                            <td nowrap class="GroupTitle">
+                                逻辑类型
+                            </td>
+                            <td nowrap class="GroupTitle">
+                                绑定值(双击选择)
+                            </td>
+                            <td nowrap class="GroupTitle">
+                                最大长度
+                            </td>
+                            <td nowrap class="GroupTitle">
+                                顺序
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody id="selected_columns">
+                    </tbody>
+                </table>
+                <input type="hidden" id="FK_MapData" name="FK_MapData">
+                <input type="hidden" id="FK_SFDBSrc" name="FK_SFDBSrc">
+                <input type="hidden" id="STable" name="STable">
+            </form>
+            <span id="step3BackToStep2"></span><a href="javascript:void(0);" onclick="btn_Save_Click();"
+                                                  class="easyui-linkbutton" data-options="plain:false,iconCls:'icon-save'">导入字段，生成表单</a>
+            <br>
+            <br>
+        </div>
+    </div>
+</body>
+</html>

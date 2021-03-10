@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>高级设置</title>
+
+    <link href="../../../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <link href="../../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/vue.js"></script>
+    <script src="../../../Admin.js"></script>
+    <style>
+        #Btn_Save {
+            margin-left: 80% !important;
+        }
+    </style>
+    <script>
+        //组织主键.
+        var mypk = "SingleChoiceSmall_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+        var en = new Entity("BP.Sys.MapExt");
+        en.MyPK = mypk;
+        var i = en.RetrieveFromDBSources();
+        if (i == 0)
+            $("#Btn_Delete").attr("disabled", true);
+        else
+            $("#Btn_Delete").removeAttr("disabled");
+
+        $(function () {
+            $("#DDL_Tag").val(en.Tag)
+        });
+        function Save() {
+            $("#Btn_Save").val("保存中...");
+            en.FK_MapData = GetQueryString("FK_MapData");
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+            en.ExtType = "SingleChoiceSmall";
+            en.MyPK = mypk;
+            en.Tag = $("#DDL_Tag").val(); //工作方式.
+
+            if (en.Update() == 0)
+                en.Insert();
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+        <fieldset>
+            <legend>工作方式 </legend>
+            <br />
+            请选择：
+            <select id="DDL_Tag">
+                <option value="0"> combox 方式 </option>
+                <option value="1"> checkboxs 横向</option>
+                <option value="2"> checkboxs 纵向</option>
+            </select>
+            <br />
+            <input id="Btn_Save" type="button" onclick="Save()" value="保存" />
+        </fieldset>
+    </form>
+</body>
+</html >

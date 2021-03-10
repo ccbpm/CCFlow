@@ -1,0 +1,264 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../../Scripts/easyUI145/jquery.min.js"></script>
+    <script src="../../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../../CCFlowEnum.js"></script>
+    <script type="text/javascript">
+        //页面启动函数.
+        var frmID = GetQueryString("FK_MapData");
+        var flowNo = GetQueryString("FK_Flow");
+        var nodeID = GetQueryString("FK_Node");
+
+        var btnFrmLib = null;
+        var selFrmNode = null;
+        var Btn_Flows = null;
+        $(function () {
+            InitBar(Imp.NodeFrmImp);
+            btnFrmLib = document.getElementById("btnFrmLib");
+            selFrmNode = document.getElementById("selFrmNode");
+            Btn_Flows = document.getElementById("Btn_Flows");
+            if (nodeID == 0) {
+
+                $("ul li:eq(1)").hide();
+                $("ul li:eq(2)").hide();
+            }
+            else {
+                $("ul li:eq(1)").show();
+                $("ul li:eq(2)").show();
+            }
+            $("#Msg").html("<img src=../../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            /*
+            *  首先要把初始化控件的代码写入到这里,不然会导致界面的批量赋值失败.
+            */
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Imp_Init");
+
+            if (data.indexOf("err@") > -1) {
+                alert(data);
+                return;
+            }
+
+            data = JSON.parse(data);
+
+            //02.从节点表单导入
+            var nodes = data["WF_Node"] || [];
+            var ulHtml = '';
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i];
+
+                if (node.NodeID == nodeID)
+                    continue;
+                ulHtml += '<li><input id="nd' + node.NodeID + '" type="radio" name="node" class="btn btn-default" data-nodeid=' + node.NodeID + '><label for="nd' + node.NodeID + '">ID:' + node.NodeID + ' - ' + node.Name + '<label/></li>'
+            }
+            $('#ulNodeFrmImp').html(ulHtml);
+
+            //03.从表单库导入
+            var treedata = data["Sys_FormTree"];
+            var rootdata = $.grep(treedata, function (item) {
+                return item.ParentNo == "0";
+            })[0];
+
+            //构建树节点数据
+            var root = {};
+            root.text = rootdata.Name;
+            root.state = "open";
+            root.children = createJsonToTree(treedata, rootdata.No, data);
+
+
+            $('#ulLib').tree({
+                data: [root],
+                onSelect: function (node) {
+                    if (node.children == undefined) {
+                        btnFrmLib.disabled = "";
+                        selFrmNode.value = node.id;
+                    } else {
+                        btnFrmLib.disabled = "disabled";
+                    }
+                }
+            });
+
+            //04.从外部数据源导入
+            var srcdata = data["SFDBSrcs"],
+                tableHtml = "";
+
+            tableHtml += "<table class='Table' cellSpacing='0' cellPadding='0'  border='0' style='width:100%'>";
+            tableHtml += "<tr><td class='GroupTitle'>第1步：请选择数据源</td></tr>";
+            tableHtml += "<tr><td valign='top' nowrap>";
+            tableHtml += "<ul class='navlist'>";
+            srcdata.forEach(function (item) {
+                tableHtml += "<li><div><a href='javascript:GoToStep2(\"" + item.No + "\")'><span class='nav'>" + item.No + "  -  " + item.Name + "</span></a></div></li>";
+            });
+            tableHtml += "</ul>";
+            tableHtml += "</td></tr>";
+            tableHtml += "</table>";
+            $("#srclayout").html(tableHtml);
+
+            
+            var treedata1 = data["WF_FlowSort"];
+            var rootdata1 = $.grep(treedata1, function (item) {
+                return item.ParentNo == "0";
+            })[0];
+
+            //构建树节点数据
+            var root1 = {};
+            treeJson = [];
+            root1.text = rootdata1.Name;
+            root1.state = "open";
+            root1.children = createJsonToTree(treedata1, rootdata1.No, data, "Flow");
+
+            $('#ul1').tree({
+                data: [root1],
+                onSelect: function (node) {
+                    if (node.children == undefined) {
+                        Btn_Flows.disabled = "";
+                        $("#HD_FlowID").val(node.id);
+                    } else {
+                        Btn_Flows.disabled = "disabled";
+                    }
+                }
+            });
+
+            //加载完成.
+            $("#Msg").html("");
+        });
+        //树形结构转换
+        var treeJson = [];
+        function createJsonToTree(treedata, parentNo, data, Type) {
+            for (var i = 0; i < treedata.length; i++) {
+                var folder = treedata[i];
+                if (folder.ParentNo == parentNo) {
+                    treeJson.push({
+                        "id": folder.No,
+                        "text": folder.Name,
+                        "children": creatTreeChildern(treedata, folder.No, data, Type),
+                        "state": "closed"
+                    });
+                }
+            }
+            function _(treeArray) {
+                $.each(treeArray, function (i, o) {
+                    if ($.isArray(o.nodes)) {
+                        if (o.nodes.length == 0) {
+                            o.nodes = undefined;
+                        } else {
+                            _(o.nodes);
+                        }
+                    }
+                });
+            }
+            _(treeJson);
+            return treeJson;
+        }
+
+        function creatTreeChildern(jsonArray, parentNo, data, Type) {
+            var childList = []
+            for (var i = 0; i < jsonArray.length; i++) {
+                var folder = jsonArray[i];
+                if (folder.ParentNo == parentNo) {
+                    childList.push({
+                        "id": folder.No,
+                        "text": folder.Name,
+                        "children": creatTreeChildern(jsonArray, folder.No, data, Type),
+                        "state": "closed"
+                    });
+                }
+            }
+            if (Type == "Flow") {
+                $.grep(data["WF_Flow"], function (map) {
+                    //选出当前节点的二级节点
+                    return map.FK_FlowSort == parentNo;
+
+                }).forEach(function (frm) {
+                    childList.push({
+                        "text": frm.Name,
+                        "id": frm.No
+                    });
+                });
+            }
+            else
+                $.grep(data["Sys_MapData"], function (map) {
+                    //选出当前节点的二级节点
+                    return map.FK_FormTree == parentNo;
+
+                }).forEach(function (frm) {
+                    childList.push({
+                        "text": frm.Name,
+                        "id": frm.No
+                    });
+                });
+            return childList;
+        }
+        //从一个节点导入.
+        function CopyFromNodeFrm() {
+
+            var nodeIdSelected = $('#ulNodeFrmImp input:checked').data().nodeid;
+
+            if (nodeIdSelected == null || nodeIdSelected == undefined) {
+                alert('请选择一个节点');
+                return;
+            }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            handler.AddPara("FromFrmID", "ND" + nodeIdSelected);
+
+            if ($('#CB_IsClear').attr('checked') == 'checked')
+                handler.AddPara("IsClear", 1);
+            else
+                handler.AddPara("IsClear", 0);
+
+            var val = document.getElementById("CB_IsSetReadonly").checked;
+            if (val == true)
+                handler.AddPara("IsSetReadonly", 1);
+            else
+                handler.AddPara("IsSetReadonly", 0);
+
+            if (confirm('您确定要从[' + nodeIdSelected + ']执行导入吗？导入后会清空当前的设计的元素。') == false)
+                return;
+
+            var data = handler.DoMethodReturnString("Imp_FromsCopyFrm");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
+            window.parent.location.href = window.parent.location.href;
+
+        }
+    </script>
+</head>
+<body>
+
+    <div id="bar"></div>
+
+    <fieldset>
+        <legend>请选择一个节点表单</legend>
+        <!-- 节点表单列表 -->
+        <ul id="ulNodeFrmImp">
+        </ul>
+        <hr />
+        <input type="checkbox" checked="checked" id="CB_IsClear" name="CB_IsClear" disabled="true" />
+        <label for="CB_IsClear">
+            是否清除现在已有的元素
+        </label>
+        <input type="checkbox" checked="checked" id="CB_IsSetReadonly" name="CB_IsSetReadonly" /><label for="CB_IsSetReadonly">是否只读</label>
+        <input type="button" value="执行从节点表单导入" onclick="CopyFromNodeFrm()" id="copyFromFrmNodeSave" />
+    </fieldset>
+</body>
+</html>

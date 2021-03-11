@@ -18,3 +18,5 @@ var IsPopEnableSelfInput = true;
 //工作处理器:发送退回成功后,提示信息关闭倒计时设置(单位:秒)
 //调用的页面  /WF/Toolbar.js  , /WF/WorkOpt/AccepterOfGener.htm
 var WF_WorkOpt_LeftSecond = 30;
+
+var IsRecordUserLog = 0;

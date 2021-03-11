@@ -628,6 +628,8 @@ function Send(isHuiQian, formType) {
     if (formType == 5)
         if (FromTreeSend() == false)
             return;
+    if ("undefined" == typeof IsRecordUserLog)
+        IsRecordUserLog = false;
 
     if (IsRecordUserLog == true) {
         if(pageData.FK_Node==parseInt(pageData.FK_Flow)+"01")

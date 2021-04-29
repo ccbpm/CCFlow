@@ -50,7 +50,7 @@ namespace BP.Sys
         /// <summary>
         /// 系统字典表
         /// </summary>
-        SysDict=7,
+        SysDict = 7,
         /// <summary>
         /// WebApi接口
         /// </summary>
@@ -236,11 +236,11 @@ namespace BP.Sys
                             pa[1] = pa[1].Replace("@WebUser.No", BP.Web.WebUser.No);
                         if (pa[1].Contains("@WebUser.Name"))
                             pa[1] = pa[1].Replace("@WebUser.Name", BP.Web.WebUser.Name);
-						if (pa[1].Contains("@WebUser.FK_DeptName"))
+                        if (pa[1].Contains("@WebUser.FK_DeptName"))
                             pa[1] = pa[1].Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
                         if (pa[1].Contains("@WebUser.FK_Dept"))
                             pa[1] = pa[1].Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-                        
+
                     }
                     catch
                     { }
@@ -337,7 +337,7 @@ namespace BP.Sys
                     dt = BP.Tools.Json.ToDataTable(postData);
                     return dt;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     throw new Exception("设置的WebAPI接口返回的数据出错，请检查接口返回值。");
                 }
@@ -388,13 +388,13 @@ namespace BP.Sys
                 if (runObj.Contains("@WebUser.Name"))
                     runObj = runObj.Replace("@WebUser.Name", BP.Web.WebUser.Name);
 
-				if (runObj.Contains("@WebUser.FK_DeptName"))
+                if (runObj.Contains("@WebUser.FK_DeptName"))
                     runObj = runObj.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
 
                 if (runObj.Contains("@WebUser.FK_Dept"))
                     runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
-                
+
 
                 if (runObj.Contains("@") == true && ht != null)
                 {
@@ -437,7 +437,7 @@ namespace BP.Sys
                 if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
                 {
                     dt.Columns["no"].ColumnName = "No";
-                    dt.Columns["name"].ColumnName = "Name";   
+                    dt.Columns["name"].ColumnName = "Name";
 
                 }
                 return dt;
@@ -453,7 +453,7 @@ namespace BP.Sys
 
             if (this.SrcType == Sys.SrcType.SysDict)
             {
-                string sql = "SELECT MyPK, BH, Name FROM Sys_SFTableDtl where FK_SFTable='" + this.No+"'";
+                string sql = "SELECT MyPK, BH, Name FROM Sys_SFTableDtl where FK_SFTable='" + this.No + "'";
                 return src.RunSQLReturnTable(sql);
             }
             #endregion
@@ -465,11 +465,11 @@ namespace BP.Sys
         /// 修改外键数据
         /// </summary>
         /// <returns></returns>
-        public void UpdateData(string No,string Name,string FK_SFTable)
+        public void UpdateData(string No, string Name, string FK_SFTable)
         {
             var sql = "";
             if (this.SrcType == Sys.SrcType.SysDict)
-                sql = "update Sys_SFTableDtl set Name = '" + Name + "' where MyPK='"+ FK_SFTable + "_" + No + "'";
+                sql = "update Sys_SFTableDtl set Name = '" + Name + "' where MyPK='" + FK_SFTable + "_" + No + "'";
             else
                 sql = "update " + FK_SFTable + " set Name = '" + Name + "' where No = '" + No + "'";
             DBAccess.RunSQL(sql);
@@ -482,7 +482,7 @@ namespace BP.Sys
         {
             var sql = "";
             if (this.SrcType == Sys.SrcType.SysDict)
-                sql = "insert into  Sys_SFTableDtl(MyPK,FK_SFTable,BH,Name) values('" + FK_SFTable+"_"+ No +"','" + FK_SFTable + "','"+ No + "','"+ Name + "')";
+                sql = "insert into  Sys_SFTableDtl(MyPK,FK_SFTable,BH,Name) values('" + FK_SFTable + "_" + No + "','" + FK_SFTable + "','" + No + "','" + Name + "')";
             else
                 sql = "insert into  " + FK_SFTable + "(No,Name) values('" + No + "','" + Name + "')";
             DBAccess.RunSQL(sql);
@@ -528,7 +528,7 @@ namespace BP.Sys
                         switch (this.EnMap.EnDBUrl.DBType)
                         {
                             case DBType.MSSQL:
-                                sql = "SELECT CONVERT(INT, MAX(CAST(" + field + " as int)) )+1 AS No FROM Sys_SFTableDtl where FK_SFTable='" + table+"'";
+                                sql = "SELECT CONVERT(INT, MAX(CAST(" + field + " as int)) )+1 AS No FROM Sys_SFTableDtl where FK_SFTable='" + table + "'";
                                 break;
                             case DBType.PostgreSQL:
                                 sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM Sys_SFTableDtl where FK_SFTable='" + table + "'";
@@ -558,7 +558,7 @@ namespace BP.Sys
                         return "";
                     }
                 }
-                
+
                 try
                 {
                     string sql = null;
@@ -1009,7 +1009,6 @@ namespace BP.Sys
             {
                 UAC uac = new UAC();
                 uac.OpenForSysAdmin();
-                uac.IsInsert = false;
                 return uac;
             }
         }
@@ -1240,9 +1239,6 @@ namespace BP.Sys
                 }
             }
             #endregion  如果是 系统字典表.
-
-
-
 
             #region 如果是本地类. 
             if (this.SrcType == Sys.SrcType.BPClass)

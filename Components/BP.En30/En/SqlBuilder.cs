@@ -1008,8 +1008,11 @@ namespace BP.En
                 Attr refAttr = attr.HisFKEn.EnMap.GetAttrByKey(attr.UIRefKeyValue);
                 //added by liuxc,2017-9-11，此处增加是否存在实体表，因新增的字典表类型“动态SQL查询”，此类型没有具体的实体表，完全由SQL动态生成的数据集合，此处不判断会使生成的SQL报错
                 //if (DBAccess.IsExitsObject(fktable))
+                if(fktable.Equals("Port_Emp")==true && SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + ".UserID  AND " + fktable + "_" + attr.Field +".OrgNo = '"+BP.Web.WebUser.OrgNo+"' ";
+                else
+                    from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + "." + refAttr.Field;
 
-                from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + "." + refAttr.Field;
             }
             return from + " WHERE (1=1) ";
         }
@@ -1043,7 +1046,11 @@ namespace BP.En
                     }
                     else
                     {
-                        from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON ISNULL( " + enTable + "." + attr.Field + ", '" + en.GetValByKey(attr.Key) + "')=" + tableAttr + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
+                        if (table.Equals("Port_Emp") == true && SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                            from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON ISNULL( " + enTable + "." + attr.Field + ", '" + en.GetValByKey(attr.Key) + "')=" + tableAttr + ".UserID AND " + tableAttr + ".OrgNo = '" + BP.Web.WebUser.OrgNo + "' ";
+                        else
+                            from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON ISNULL( " + enTable + "." + attr.Field + ", '" + en.GetValByKey(attr.Key) + "')=" + tableAttr + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
+
                     }
                     //where=where+" AND "+" ("+en.EnMap.PhysicsTable+"."+attr.Field+"="+en1.EnMap.PhysicsTable+"_"+attr.Key+"."+en1.EnMap.Attrs.GetFieldByKey(attr.UIRefKeyValue )+" ) "  ;
                     continue;
@@ -1427,7 +1434,7 @@ namespace BP.En
             string val = ""; // key = null;
             string mainTable = "";
 
-            if (en.EnMap.HisFKAttrs.Count != 0)
+           // if (en.EnMap.HisFKAttrs.Count != 0)
                 mainTable = en.EnMap.PhysicsTable + ".";
 
             if (en.EnMap.Attrs.Count == 0)

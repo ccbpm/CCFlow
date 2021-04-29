@@ -176,6 +176,7 @@ namespace BP.WF.Data
             {
                 UAC uac = new UAC();
                 uac.Readonly();
+                uac.IsExp = true;
                 return uac;
             }
         }
@@ -712,8 +713,11 @@ namespace BP.WF.Data
                 map.EnType = EnType.View;
 
                 map.AddTBString(MyDeptFlowAttr.Title, null, "标题", true, false, 0, 100, 150, true);
+                map.AddTBInt(MyFlowAttr.FID, 0, "FID", false, false);
+                map.AddTBInt(MyFlowAttr.PWorkID, 0, "PWorkID", false, false);
                 map.AddDDLEntities(MyDeptFlowAttr.FK_Flow, null, "流程", new Flows(), false);
                 map.AddTBString(MyDeptFlowAttr.BillNo, null, "单据编号", true, false, 0, 100, 50);
+                map.AddTBInt(MyDeptFlowAttr.FK_Node, 0, "节点编号", false, false);
 
                 map.AddTBString(MyDeptFlowAttr.StarterName, null, "发起人", true, false, 0, 30, 40);
                 map.AddTBDateTime(MyDeptFlowAttr.RDT, "发起日期", true, true);
@@ -754,10 +758,11 @@ namespace BP.WF.Data
 
 
                 RefMethod rm = new RefMethod();
-                rm.Title = "流程轨迹";  
-                rm.ClassMethodName = this.ToString() + ".DoTrack";
+                rm.Title = "表单/轨迹";  
+                rm.ClassMethodName = this.ToString() + ".DoOpenLastForm";
                 rm.Icon = "../../WF/Img/FileType/doc.gif";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.IsForEns = true;
                 map.AddRefMethod(rm);
               
                 this._enMap = map;
@@ -771,8 +776,27 @@ namespace BP.WF.Data
         {
             return "../../WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
         }
-		#endregion
-	}
+        public string DoOpenLastForm()
+        {
+
+            Paras pss = new Paras();
+            pss.SQL = "SELECT MYPK FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID ORDER BY RDT DESC";
+            pss.Add("ActionType", (int)BP.WF.ActionType.Forward);
+            pss.Add("WorkID", this.WorkID);
+            DataTable dt = DBAccess.RunSQLReturnTable(pss);
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                string myPk = dt.Rows[0][0].ToString();
+                return "/WF/MyView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
+            }
+
+            Node nd = new Node(this.FK_Node);
+
+            return "/WF/CCForm/FrmGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&FK_MapData=" + nd.NodeFrmID + "&ReadOnly=1&IsEdit=0";
+        }
+
+        #endregion
+    }
 	/// <summary>
     /// 我部门的流程s
 	/// </summary>

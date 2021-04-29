@@ -185,20 +185,7 @@ namespace BP.Sys.FrmUI
             }
         }
 
-        /// <summary>
-        /// 是否可以排序?
-        /// </summary>
-        public bool IsOrder
-        {
-            get
-            {
-                return this.GetValBooleanByKey(FrmAttachmentAttr.IsOrder);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.IsOrder, value);
-            }
-        }
+     
         /// <summary>
         /// 自动控制大小
         /// </summary>
@@ -550,6 +537,10 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSysEnum(FrmAttachmentAttr.AthSaveWay, 0, "保存方式", true, true, FrmAttachmentAttr.AthSaveWay,
                   "@0=保存到web服务器@1=保存到数据库@2=ftp服务器");
 
+                //@hongyan. 
+                map.AddBoolean(FrmAttachmentAttr.IsIdx, false, "是否排序?", true, true);
+
+
                 map.AddTBString(FrmAttachmentAttr.Sort, null, "类别", true, false, 0, 500, 20, true, null);
                 map.SetHelperAlert(FrmAttachmentAttr.Sort, "设置格式:生产类,文件类,其他，也可以设置一个SQL，比如select Name FROM Port_Dept  \t\n目前已经支持了扩展列,可以使用扩展列定义更多的字段，该设置将要被取消.");
 
@@ -581,7 +572,6 @@ namespace BP.Sys.FrmUI
 
                 map.AddBoolean(FrmAttachmentAttr.IsUpload, true, "是否可以上传", true, true);
                 map.AddBoolean(FrmAttachmentAttr.IsDownload, true, "是否可以下载", true, true);
-                map.AddBoolean(FrmAttachmentAttr.IsOrder, false, "是否可以排序", true, true);
 
                 map.AddBoolean(FrmAttachmentAttr.IsAutoSize, true, "自动控制大小", true, true);
                 map.AddBoolean(FrmAttachmentAttr.IsNote, true, "是否增加备注", true, true);
@@ -617,29 +607,17 @@ namespace BP.Sys.FrmUI
                 map.AddTBAtParas(3000);
                 #endregion 其他属性。
 
+                #region 基本配置.
                 RefMethod rm = new RefMethod();
-                rm.Title = "高级配置";
                 //  rm.Icon = "/WF/Admin/CCFormDesigner/Img/Menu/CC.png";
                 //rm.ClassMethodName = this.ToString() + ".DoAdv";
                 // rm.RefMethodType = RefMethodType.RightFrameOpen;
                 //  map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "类别设置";
-                rm.ClassMethodName = this.ToString() + ".DoSettingSort";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
                 rm = new RefMethod();
                 rm.Title = "测试FTP服务器";
                 rm.ClassMethodName = this.ToString() + ".DoTestFTPHost";
                 rm.RefMethodType = RefMethodType.Func;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "设置扩展列";
-                rm.ClassMethodName = this.ToString() + ".DtlOfAth";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Icon = "icon-fire";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -647,6 +625,8 @@ namespace BP.Sys.FrmUI
                 rm.ClassMethodName = this.ToString() + ".ResetAthName";
                 rm.HisAttrs.AddTBString("F", null, "命名后的标记", true, false, 0, 100, 50);
                 rm.RefMethodType = RefMethodType.Func;
+                rm.Icon = "icon-note";
+
                 string msg = "说明：";
                 msg += "\t\n 1. 每个附件都有一个标记比如，Ath1,Ath2, FJ. ";
                 msg += "\t\n 2. 这个标记在一个表单中不能重复，这个标记也叫附件的小名。";
@@ -654,6 +634,26 @@ namespace BP.Sys.FrmUI
                 msg += "\t\n 4. 比如：一个父流程的附件组件的标记为Ath1, 一个子流程的表单的附件表单要看到这个附件信息，就需要把两个小名保持一致。";
                 rm.Warning = msg;
                 map.AddRefMethod(rm);
+
+                #endregion 基本配置.
+
+
+                #region 高级设置.
+                rm = new RefMethod();
+                rm.GroupName = "实验中功能";
+                rm.Title = "类别设置";
+                rm.ClassMethodName = this.ToString() + ".DoSettingSort";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "实验中功能";
+                rm.Title = "设置扩展列";
+                rm.ClassMethodName = this.ToString() + ".DtlOfAth";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+                #endregion 基本配置.
+
 
                 this._enMap = map;
                 return this._enMap;
@@ -679,7 +679,7 @@ namespace BP.Sys.FrmUI
 
             //修改模版.
             string myPKNew = this.FK_MapData + "_" + fname;
-            string sql = "UPDATE Sys_FrmAttachment SET MyPK='"+ myPKNew + "', NoOfObj='"+fname+"' WHERE MyPK='"+this.MyPK+"' ";
+            string sql = "UPDATE Sys_FrmAttachment SET MyPK='" + myPKNew + "', NoOfObj='" + fname + "' WHERE MyPK='" + this.MyPK + "' ";
             DBAccess.RunSQL(sql);
 
             //修改分组信息，不然就丢失了.
@@ -687,7 +687,7 @@ namespace BP.Sys.FrmUI
             DBAccess.RunSQL(sql);
 
             //修改：数据库.
-            sql = "UPDATE Sys_FrmAttachmentDB SET NoOfObj='"+ fname + "',FK_FrmAttachment='"+ myPKNew + "'  WHERE FK_FrmAttachment='" + this.MyPK+"'";
+            sql = "UPDATE Sys_FrmAttachmentDB SET NoOfObj='" + fname + "',FK_FrmAttachment='" + myPKNew + "'  WHERE FK_FrmAttachment='" + this.MyPK + "'";
             DBAccess.RunSQL(sql);
 
             return "执行成功: 您需要关闭表单设计器，然后重新进入。";

@@ -30,6 +30,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string Idx = "Idx";
         /// <summary>
+        /// 批量发送后是否隐藏父流程的待办.
+        /// </summary>
+        public const string SubFlowHidTodolist = "SubFlowHidTodolist";
+        /// <summary>
         /// 显示在那里？
         /// </summary>
         public const string YGWorkWay = "YGWorkWay";
@@ -124,13 +128,32 @@ namespace BP.WF.Template
         /// 平级子流程节点
         /// </summary>
         public const string SameLevelNode = "SameLevelNode";
-
+        /// <summary>
+        /// 启动模式
+        /// </summary>
+        public const string SubFlowStartModel = "SubFlowStartModel";
+        /// <summary>
+        /// 展现风格.
+        /// </summary>
+        public const string SubFlowShowModel = "SubFlowShowModel";
         #endregion
 
         /// <summary>
         /// 自动启动子流程：发送规则.
         /// </summary>
         public const string SendModel = "SendModel";
+        /// <summary>
+        /// 父流程字段值拷贝到对应子流程字段中
+        /// </summary>
+        public const string SubFlowCopyFields = "SubFlowCopyFields";
+        /// <summary>
+        /// 子流程结束后填充父流程的规则
+        /// </summary>
+        public const string BackCopyRole = "BackCopyRole";
+        /// <summary>
+        /// 子流程字段值拷贝到对应父流程字段中
+        /// </summary>
+        public const string ParentFlowCopyFields = "ParentFlowCopyFields";
 
     }
     /// <summary>
@@ -232,6 +255,20 @@ namespace BP.WF.Template
                 SetValByKey(SubFlowYanXuAttr.FK_Node, value);
             }
         }
+        /// <summary>
+        /// 发送成功后是否隐藏父流程的待办.
+        /// </summary>
+        public bool SubFlowHidTodolist
+        {
+            get
+            {
+                return this.GetValBooleanByKey(SubFlowYanXuAttr.SubFlowHidTodolist);
+            }
+            set
+            {
+                SetValByKey(SubFlowYanXuAttr.SubFlowHidTodolist, value);
+            }
+        }
         public SubFlowType SubFlowType
         {
             get
@@ -328,6 +365,29 @@ namespace BP.WF.Template
                 return this.GetValIntByKey(FlowAttr.IsAutoSendSLSubFlowOver);
             }
         }
+
+        public string SubFlowCopyFields
+        {
+            get
+            {
+                return this.GetValStringByKey(SubFlowAttr.SubFlowCopyFields);
+            }
+        }
+        public int BackCopyRole
+        {
+            get
+            {
+                return this.GetValIntByKey(SubFlowAttr.BackCopyRole);
+            }
+        }
+
+        public string ParentFlowCopyFields
+        {
+            get
+            {
+                return this.GetValStringByKey(SubFlowAttr.ParentFlowCopyFields);
+            }
+        }
         #endregion
 
         #region 构造函数
@@ -385,8 +445,23 @@ namespace BP.WF.Template
                 map.AddTBString(SubFlowAttr.ReturnToNode, null, "要退回的节点", true, true, 0, 200, 150, false);
 
                 map.AddTBInt(SubFlowAttr.SendModel, 0, "自动触发的子流程发送方式", false, true);
+                map.AddTBInt(SubFlowAttr.SubFlowStartModel, 0, "启动模式", false, true);
+
+                map.AddTBString(SubFlowAttr.SubFlowCopyFields, null, "父流程字段对应子流程字段", false, false, 0, 400, 150, true);
+                map.AddTBInt(SubFlowAttr.BackCopyRole, 0, "子流程结束后数据字段反填规则", false,true); ;
+                map.AddTBString(SubFlowAttr.ParentFlowCopyFields, null, "子流程字段对应父流程字段", true, false, 0, 400, 150, true);
+
+                map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowSta, 1, "状态", true, true, SubFlowYanXuAttr.SubFlowSta,
+           "@0=禁用@1=启用@2=只读");
+
 
                 map.AddTBInt(SubFlowAttr.Idx, 0, "顺序", true, false);
+
+
+                //为中科软增加. 批量发送后，需要隐藏父流程的待办.
+                map.AddTBInt(SubFlowAttr.SubFlowHidTodolist, 0, "批量发送后是否隐藏父流程待办", true, false);
+
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -435,6 +510,15 @@ namespace BP.WF.Template
         public SubFlows(int fk_node)
         {
             this.Retrieve(SubFlowYanXuAttr.FK_Node, fk_node);
+        }
+
+        /// <summary>
+        /// 根据主流程编号获取该流程启动的子流程数据
+        /// </summary>
+        /// <param name="fk_flow"></param>
+        public SubFlows(string fk_flow)
+        {
+            this.Retrieve(SubFlowYanXuAttr.FK_Flow, fk_flow);
         }
         #endregion
 

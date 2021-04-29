@@ -859,6 +859,54 @@ namespace BP.WF.HttpHandler
             return json;
         }
         /// <summary>
+        /// 最近发起的流程.
+        /// </summary>
+        /// <returns></returns>
+        public string StartEaryer_Init()
+        {
+            //定义容器.
+            DataSet ds = new DataSet();
+
+            //获得能否发起的流程.
+            string sql = "SELECT FK_Flow as No,FlowName as Name, FK_FlowSort,B.Name as FK_FlowSortText,B.Domain, COUNT(WorkID) as Num ";
+            sql += " FROM WF_GenerWorkFlow A, WF_FlowSort B  ";
+            sql += " WHERE Starter='"+BP.Web.WebUser.No+"'  AND A.FK_FlowSort=B.No  ";
+            sql += " GROUP BY FK_Flow, FlowName, FK_FlowSort, B.Name,B.Domain ";
+
+            DataTable dtStart = DBAccess.RunSQLReturnTable(sql); 
+            dtStart.TableName = "Start";
+            ds.Tables.Add(dtStart);
+
+            DataTable dtSort = new DataTable("Sort");
+            dtSort.Columns.Add("No", typeof(string));
+            dtSort.Columns.Add("Name", typeof(string));
+            dtSort.Columns.Add("Domain", typeof(string));
+
+            string nos = "";
+            foreach (DataRow dr in dtStart.Rows)
+            {
+                string no = dr["FK_FlowSort"].ToString();
+                if (nos.Contains(no) == true)
+                    continue;
+
+                string name =  dr["FK_FlowSortText"].ToString();
+                string domain = dr["Domain"].ToString();
+
+                nos += "," + no;
+
+                DataRow mydr = dtSort.NewRow();
+                mydr[0] = no;
+                mydr[1] = name;
+                mydr[2] = domain;
+                dtSort.Rows.Add(mydr);
+            }
+
+            dtSort.TableName = "Sort";
+            ds.Tables.Add(dtSort);
+
+            return BP.Tools.Json.DataSetToJson(ds, false);
+        }
+        /// <summary>
         /// 获得发起列表 
         /// </summary>
         /// <returns></returns>
@@ -993,7 +1041,7 @@ namespace BP.WF.HttpHandler
             /* 如果不是删除流程注册表. */
             Paras ps = new Paras();
             string dbstr = SystemConfig.AppCenterDBVarStr;
-            ps.SQL = "SELECT  * FROM WF_GenerWorkFlow  WHERE (Emps LIKE '%@" + WebUser.No + "@%' OR Emps LIKE '%@" + WebUser.No + ",%' OR Emps LIKE '%,"+WebUser.No+"@%') and WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
+            ps.SQL = "SELECT  * FROM WF_GenerWorkFlow  WHERE (Emps LIKE '%@" + WebUser.No + "@%' OR Emps LIKE '%@" + WebUser.No + ",%' OR Emps LIKE '%," + WebUser.No + "@%') and WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             //添加oracle的处理
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -1630,7 +1678,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <returns></returns>
         public string Batch_Init()
-        { 
+        {
             string sql = "SELECT a.NodeID, a.Name,a.FlowName, a.BatchRole, COUNT(WorkID) AS NUM  FROM  WF_Node a, WF_EmpWorks b ";
             sql += " WHERE A.NodeID=b.FK_Node AND B.FK_Emp='" + WebUser.No + "'  ";
             sql += " AND b.WFState NOT IN (7) GROUP BY A.NodeID, a.Name,a.FlowName,a.BatchRole ";

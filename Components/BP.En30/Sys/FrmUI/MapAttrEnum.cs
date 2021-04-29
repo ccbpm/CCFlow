@@ -181,7 +181,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, true);
                 //CCS样式
-                map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
+                map.AddDDLSQL(MapAttrAttr.CSSCtrl, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
                 #endregion 傻瓜表单。
 
                 #region 执行的方法.
@@ -311,10 +311,8 @@ namespace BP.Sys.FrmUI
                             break;
                     }
                 }
-               
             }
             mapAttr.Update();
-
           
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
@@ -357,7 +355,11 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoSysEnum()
         {
-            return "../../Admin/CCFormDesigner/DialogCtr/EnumerationNew.htm?DoType=FrmEnumeration_SaveEnum&EnumKey=" + this.UIBindKey;
+            if(SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                return "../../Admin/CCFormDesigner/DialogCtr/EnumerationNewSAAS.htm?DoType=FrmEnumeration_SaveEnum&EnumKey=" + this.UIBindKey+"&OrgNo="+BP.Web.WebUser.OrgNo;
+            else
+                return "../../Admin/CCFormDesigner/DialogCtr/EnumerationNew.htm?DoType=FrmEnumeration_SaveEnum&EnumKey=" + this.UIBindKey;
+
         }
 
         public string DoDDLFullCtrl2019()

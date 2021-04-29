@@ -13,6 +13,7 @@ namespace BP.Sys
         /// 转载数据
         /// </summary>
         public const string FullData = "FullData";
+        public const string FullDataDtl = "FullDataDtl";
         /// <summary>
         /// 求和
         /// </summary>

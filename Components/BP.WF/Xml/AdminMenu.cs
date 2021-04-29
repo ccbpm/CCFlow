@@ -111,7 +111,7 @@ namespace BP.WF.XML
         /// <returns></returns>
         public bool IsCanUse(string no)
         {
-            return true;    
+            return true;
         }
     }
     /// <summary>
@@ -141,7 +141,11 @@ namespace BP.WF.XML
         {
             get
             {
-                return SystemConfig.PathOfWebApp + "DataUser\\XML\\AdminMenu.xml";
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    return SystemConfig.PathOfWebApp + "DataUser\\XML\\AdminMenuCloud.xml";
+                else
+                    return SystemConfig.PathOfWebApp + "DataUser\\XML\\AdminMenu.xml";
+
             }
         }
         /// <summary>

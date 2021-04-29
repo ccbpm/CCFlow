@@ -464,7 +464,7 @@ namespace BP.WF.Template
                 gwf.FK_FlowSort = fl.FK_FlowSort;
                 gwf.SysType = fl.SysType;
                 gwf.Title = rpt.Title;
-                gwf.WFState = WFState.ReturnSta; /*设置为退回的状态*/
+                gwf.WFState = WFState.ReturnSta; /* 设置为退回的状态 */
                 gwf.FK_Dept = rpt.FK_Dept;
 
                 Dept dept = new Dept(empStarter.FK_Dept);
@@ -562,6 +562,7 @@ namespace BP.WF.Template
                 rw.RDT = DataType.CurrentDataTime;
                 rw.IsBackTracking = false;
                 rw.MyPK = DBAccess.GenerGUID();
+                rw.Insert();
                 #endregion   加入退回信息, 让接受人能够看到退回原因.
 
                 //更新流程表的状态.

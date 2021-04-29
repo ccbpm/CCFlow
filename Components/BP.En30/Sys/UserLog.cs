@@ -157,7 +157,7 @@ namespace BP.Sys
             this.MyPK = DBAccess.GenerGUID();
             this.RDT = DataType.CurrentDataTime;
             if (SystemConfig.IsBSsystem)
-                this.IP = Web.HttpContextHelper.Request.ServerVariables["REMOTE_ADDR"].ToString();
+                this.IP = BP.Difference.Glo.GetIP; 
             return base.beforeInsert();
         }
         #region 重写

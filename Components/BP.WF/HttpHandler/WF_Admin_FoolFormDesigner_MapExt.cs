@@ -825,6 +825,27 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
+                //如果是复选框
+                if(attr.MyDataType == DataType.AppBoolean && attr.UIContralType == UIContralType.CheckBok)
+                {
+                    FrmRB rb = new FrmRB();
+                    rb.FK_MapData = this.FK_MapData;
+                    rb.KeyOfEn = this.KeyOfEn;
+                    rb.IntKey = 0;
+                    rb.Lab = "否";
+                    rb.EnumKey = attr.UIBindKey;
+                    rb.Insert(); //插入数据.
+
+                    rb = new FrmRB();
+                    rb.FK_MapData = this.FK_MapData;
+                    rb.KeyOfEn = this.KeyOfEn;
+                    rb.IntKey = 1;
+                    rb.Lab = "是";
+                    rb.EnumKey = attr.UIBindKey;
+                    rb.Insert(); //插入数据.
+
+                }
+
                 rbs.Retrieve(FrmRBAttr.FK_MapData, this.FK_MapData, FrmRBAttr.KeyOfEn, this.KeyOfEn);
             }
 

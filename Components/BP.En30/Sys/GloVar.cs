@@ -1,4 +1,4 @@
-﻿ using System;
+﻿using System;
 using System.Collections;
 using BP.DA;
 using BP.En;
@@ -82,7 +82,7 @@ namespace BP.Sys
                 {
                     return this.GetValIntByKey(GloVarAttr.Val);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     return 0;
                     throw new Exception("@" + this.Name + ", 没有设置默认值." + this.Val);
@@ -100,11 +100,11 @@ namespace BP.Sys
                 try
                 {
                     return this.GetValDecimalByKey(GloVarAttr.Val);
-                  }
+                }
                 catch
                 {
                     return 0;
-                    throw new Exception("@" + this.Name + ", 没有设置默认值."+ this.Val);
+                    throw new Exception("@" + this.Name + ", 没有设置默认值." + this.Val);
                 }
             }
             set
@@ -122,7 +122,7 @@ namespace BP.Sys
             {
                 this.SetValByKey(GloVarAttr.Val, value);
             }
-        }	
+        }
         /// <summary>
         /// note
         /// </summary>
@@ -135,6 +135,17 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(GloVarAttr.Note, value);
+            }
+        }
+        public int Idx
+        {
+            get
+            {
+                return this.GetValIntByKey(GloVarAttr.Idx);
+            }
+            set
+            {
+                this.SetValByKey(GloVarAttr.Idx, value);
             }
         }
         /// <summary>
@@ -169,27 +180,27 @@ namespace BP.Sys
             this.No = no;
             this.Retrieve();
         }
-         /// <summary>
-		/// 键值
-		/// </summary>
-		/// <param name="key">key</param>
-		/// <param name="isNullAsVal"></param> 
+        /// <summary>
+        /// 键值
+        /// </summary>
+        /// <param name="key">key</param>
+        /// <param name="isNullAsVal"></param> 
         public GloVar(string key, object isNullAsVal)
-		{
-			try
-			{
-				this.No=key;
-				this.Retrieve(); 
-			}
-			catch
-			{				
-				if (this.RetrieveFromDBSources()==0)
-				{
-					this.Val = isNullAsVal.ToString();
-					this.Insert();
-				}
-			}
-		}
+        {
+            try
+            {
+                this.No = key;
+                this.Retrieve();
+            }
+            catch
+            {
+                if (this.RetrieveFromDBSources() == 0)
+                {
+                    this.Val = isNullAsVal.ToString();
+                    this.Insert();
+                }
+            }
+        }
         /// <summary>
         /// EnMap
         /// </summary>
@@ -201,13 +212,12 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_GloVar", "全局变量");
-                
 
                 map.AddTBStringPK(GloVarAttr.No, null, "键", true, false, 1, 50, 20);
                 map.AddTBString(GloVarAttr.Name, null, "名称", true, false, 0, 120, 20);
-                map.AddTBString(GloVarAttr.Val, null, "值", true, false, 0, 4000, 20,true);
+                map.AddTBString(GloVarAttr.Val, null, "值", true, false, 0, 4000, 20, true);
                 map.AddTBString(GloVarAttr.GroupKey, null, "分组值", true, false, 0, 120, 20, true);
-                map.AddTBStringDoc(GloVarAttr.Note, null, "说明", true, false,true);
+                map.AddTBStringDoc(GloVarAttr.Note, null, "说明", true, false, true);
                 map.AddTBInt(GloVarAttr.Idx, 0, "顺序号", true, true);
                 this._enMap = map;
                 return this._enMap;
@@ -228,12 +238,12 @@ namespace BP.Sys
             get
             {
                 if (_Holidays != null)
-                    return _Holidays; 
+                    return _Holidays;
                 GloVar en = new GloVar();
-                en.No ="Holiday";
-                int i= en.RetrieveFromDBSources();
-                if (i==0)
-                    _Holidays="";
+                en.No = "Holiday";
+                int i = en.RetrieveFromDBSources();
+                if (i == 0)
+                    _Holidays = "";
                 else
                     _Holidays = en.Val;
                 return _Holidays;
@@ -278,7 +288,7 @@ namespace BP.Sys
             {
                 if (cfg.No == key)
                     return cfg.Val;
-            }   
+            }
 
             throw new Exception("error key=" + key);
         }
@@ -371,6 +381,11 @@ namespace BP.Sys
         }
         #endregion
 
+        #region 风格处理.
+       
+        #endregion
+
+
         #region 构造
         /// <summary>
         /// 全局变量s
@@ -426,4 +441,3 @@ namespace BP.Sys
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
     }
 }
- 

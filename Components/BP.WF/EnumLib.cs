@@ -1049,6 +1049,10 @@ namespace BP.WF
         /// </summary>
         ByDeptLeader = 23,
         /// <summary>
+        /// 找自己的直属领导.
+        /// </summary>
+        ByEmpLeader = 50,
+        /// <summary>
         /// 按照用户组计算(本组织范围内)
         /// </summary>
         ByTeamOrgOnly = 24,

@@ -54,8 +54,11 @@ namespace BP.WF
         {
             get
             {
+               string  userNo = BP.Web.WebUser.No;
+               
                 Paras ps = new Paras();
                 string dbstr = SystemConfig.AppCenterDBVarStr;
+                string wfSql = "  1=1  ";
 
                 /*不是授权状态*/
                 if (BP.WF.Glo.IsEnableTaskPool == true)
@@ -67,9 +70,47 @@ namespace BP.WF
                     ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp ";
                 }
 
-                ps.Add("FK_Emp", BP.Web.WebUser.No);
+                ps.Add("FK_Emp", userNo);
 
-                //  Log.DebugWriteInfo(ps.SQL);
+                //获取授权给他的人员列表.
+
+                Auths aths = new Auths();
+                aths.Retrieve(AuthAttr.Auther, userNo);
+                foreach (Auth auth in aths)
+                {
+                    //判断是否授权到期.
+                    if (auth.TakeBackDT == "")
+                        continue;
+
+                    switch (auth.AuthType)
+                    {
+                        case AuthorWay.All:
+                            if (BP.WF.Glo.IsEnableTaskPool == true)
+                            {
+                                ps.SQL += " UNION  SELECT Count(*) FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp='" + auth.Auther + "' AND TaskSta!=1  ";
+                            }
+                            else
+                            {
+                                ps.SQL += " UNION  SELECT Count(*) FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp='" + auth.Auther + "' ";
+                            }
+                            break;
+                        case AuthorWay.SpecFlows:
+                            if (BP.WF.Glo.IsEnableTaskPool == true)
+                            {
+                                ps.SQL += " UNION SELECT Count(*) FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp='" + auth.Auther + "' AND  FK_Flow = '" + auth.FlowNo + "' AND TaskSta!=0 ";
+                            }
+                            else
+                            {
+                                ps.SQL += " UNION SELECT Count(*) FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp='" + auth.Auther + "' AND  FK_Flow = '" + auth.FlowNo + "'  ";
+                            }
+                            break;
+                        case AuthorWay.None: //非授权状态下.
+                            continue;
+                        default:
+                            throw new Exception("no such way...");
+                    }
+                }
+
                 return DBAccess.RunSQLReturnValInt(ps);
             }
         }
@@ -230,8 +271,9 @@ namespace BP.WF
             get
             {
                 Paras ps = new Paras();
-                ps.SQL = "SELECT count( distinct WorkID ) as Num FROM WF_GenerWorkFlow WHERE Starter=" + SystemConfig.AppCenterDBVarStr + "Starter AND WFState= " + (int)WFState.Runing;
+                ps.SQL = "SELECT Count(a.WorkID) as Num FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND  A.Starter=" + SystemConfig.AppCenterDBVarStr + "Starter AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND B.IsPass!=-2";
                 ps.Add("Starter", WebUser.No);
+                ps.Add("FK_Emp", WebUser.No);
                 return DBAccess.RunSQLReturnValInt(ps);
             }
         }
@@ -536,84 +578,32 @@ namespace BP.WF
         /// <param name="workid"></param>
         /// <param name="fid"></param>
         /// <returns></returns>
-        public static DataTable DB_GenerTrackTable(string fk_flow, Int64 workid, Int64 fid, string workids = "")
+        public static DataTable DB_GenerTrackTable(string fk_flow, Int64 workid, Int64 fid)
         {
             #region 获取track数据.
 
             string sqlOfWhere1 = "";
-            string sql = "";
             DataTable dt = null;
             string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
 
-            Flow flow = new Flow(fk_flow);
-
-
-            //包含父子流程
-            if (workids.Contains(",") == true)
+            if (fid == 0)
             {
-
+                sqlOfWhere1 = " WHERE (FID=" + dbStr + "WorkID11 OR WorkID=" + dbStr + "WorkID12 )  ";
+                ps.Add("WorkID11", workid);
+                ps.Add("WorkID12", workid);
             }
             else
-            {
-                sqlOfWhere1 = " WHERE FID=" + dbStr + "WorkID11 OR WorkID=" + dbStr + "WorkID12   ";
-                ps.Add("WorkID11", Int64.Parse(workids));
-                ps.Add("WorkID12", Int64.Parse(workids));
-
+            { //获取分合流的数据
+                sqlOfWhere1 = " WHERE (FID=" + dbStr + "FID11 OR WorkID=" + dbStr + "FID12 ) ";
+                ps.Add("FID11", fid);
+                ps.Add("FID12", fid);
             }
 
-            if (workids.Contains(",") == true)
-            {
-                //根据workids获取对应的流程
-                sql = "SELECT FK_Flow From WF_GenerWorkFlow Where WorkID IN (" + workids + ") ORDER BY WorkID ASC";
-                dt = DBAccess.RunSQLReturnTable(sql);
-
-                sqlOfWhere1 = " WHERE FID IN (" + workids + ") OR WorkID IN (" + workids + ")  ";
-                sql = "SELECT * From (";
-                int idx = 0;
-                foreach (DataRow dr in dt.Rows)
-                {
-                    if (idx != 0)
-                        sql += " UNION ";
-                    sql += "SELECT MyPK, ActionType, ActionTypeText, FID, WorkID, NDFrom, NDFromT, NDTo, NDToT, EmpFrom, EmpFromT, EmpTo, EmpToT, RDT, WorkTimeSpan, Msg, NodeData, Exer, Tag FROM ND" + int.Parse(dr[0].ToString()) + "Track " + sqlOfWhere1;
-                    idx++;
-                }
-                if(flow.TrackOrderBy == 0) //正序显示
-                    sql += " )AS Track  ORDER BY RDT ASC ";
-                else //倒序显示
-                    sql += " )AS Track  ORDER BY RDT DESC ";
-
-
-            }
-            else
-            {
-                sqlOfWhere1 = " WHERE FID=" + dbStr + "WorkID11 OR WorkID=" + dbStr + "WorkID12   ";
-                ps.Add("WorkID11", Int64.Parse(workids));
-                ps.Add("WorkID12", Int64.Parse(workids));
-                sql = "SELECT MyPK,ActionType,ActionTypeText,FID,WorkID,NDFrom,NDFromT,NDTo,NDToT,EmpFrom,EmpFromT,EmpTo,EmpToT,RDT,WorkTimeSpan,Msg,NodeData,Exer,Tag FROM ND" + int.Parse(fk_flow) + "Track " + sqlOfWhere1 ;
-                if (flow.TrackOrderBy == 0) //正序显示
-                    sql += " ORDER BY RDT ASC ";
-                else //倒序显示
-                    sql += " ORDER BY RDT DESC ";
-                ps.SQL = sql;
-            }
-            //if (fid == 0)
-            //{
-            //    sqlOfWhere1 = " WHERE (FID=" + dbStr + "WorkID11 OR WorkID=" + dbStr + "WorkID12 )  ";
-            //    ps.Add("WorkID11", workid);
-            //    ps.Add("WorkID12", workid);
-            //}
-            //else
-            //{ //获取分合流的数据
-            //    sqlOfWhere1 = " WHERE (FID=" + dbStr + "FID11 OR WorkID=" + dbStr + "FID12 ) ";
-            //    ps.Add("FID11", fid);
-            //    ps.Add("FID12", fid);
-            //}
-
-            //string sql = "SELECT * From";
-            //sql += "(SELECT MyPK,ActionType,ActionTypeText,FID,WorkID,NDFrom,NDFromT,NDTo,NDToT,EmpFrom,EmpFromT,EmpTo,EmpToT,RDT,WorkTimeSpan,Msg,NodeData,Exer,Tag FROM ND" + int.Parse(fk_flow) + "Track " + sqlOfWhere1;
-            //sql += "UNION SELECT MyPK,ActionType,ActionTypeText,FID,WorkID,NDFrom,NDFromT,NDTo,NDToT,EmpFrom,EmpFromT,EmpTo,EmpToT,RDT,WorkTimeSpan,Msg,NodeData,Exer,Tag FROM ND8Track " + sqlOfWhere1+")";
-            //sql += " AS Track  ORDER BY RDT ASC ";
+            string sql = "SELECT * From";
+            sql += "(SELECT MyPK,ActionType,ActionTypeText,FID,WorkID,NDFrom,NDFromT,NDTo,NDToT,EmpFrom,EmpFromT,EmpTo,EmpToT,RDT,WorkTimeSpan,Msg,NodeData,Exer,Tag FROM ND" + int.Parse(fk_flow) + "Track " + sqlOfWhere1;
+            sql += "UNION SELECT MyPK,ActionType,ActionTypeText,FID,WorkID,NDFrom,NDFromT,NDTo,NDToT,EmpFrom,EmpFromT,EmpTo,EmpToT,RDT,WorkTimeSpan,Msg,NodeData,Exer,Tag FROM ND" + int.Parse(fk_flow) + "Track " + sqlOfWhere1 + ")";
+            sql += " AS Track  ORDER BY RDT ASC ";
             ps.SQL = sql;
 
 
@@ -1097,12 +1087,12 @@ namespace BP.WF
             {
                 if (flowNo == null)
                 {
-                    ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote,AtPara FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter ORDER BY RDT";
+                    ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote,AtPara,FK_Node,FID FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter ORDER BY RDT";
                     ps.Add(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
                 }
                 else
                 {
-                    ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote,AtPara FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter AND FK_Flow=" + dbStr + "FK_Flow ORDER BY RDT";
+                    ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote,AtPara,FK_Node,FID FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter AND FK_Flow=" + dbStr + "FK_Flow ORDER BY RDT";
                     ps.Add(GenerWorkFlowAttr.FK_Flow, flowNo);
                     ps.Add(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
                 }
@@ -1112,13 +1102,13 @@ namespace BP.WF
             {
                 if (flowNo == null)
                 {
-                    ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote,AtPara FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter AND Domain=" + dbStr + "Domain ORDER BY RDT";
+                    ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote,AtPara,FK_Node,FID FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter AND Domain=" + dbStr + "Domain ORDER BY RDT";
                     ps.Add(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
                     ps.Add(GenerWorkFlowAttr.Domain, domain);
                 }
                 else
                 {
-                    ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote,AtPara FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter AND FK_Flow=" + dbStr + "FK_Flow AND Domain=" + dbStr + "Domain ORDER BY RDT";
+                    ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote,AtPara,FK_Node,FID FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter AND FK_Flow=" + dbStr + "FK_Flow AND Domain=" + dbStr + "Domain ORDER BY RDT";
                     ps.Add(GenerWorkFlowAttr.FK_Flow, flowNo);
                     ps.Add(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
                     ps.Add(GenerWorkFlowAttr.Domain, domain);
@@ -1135,6 +1125,8 @@ namespace BP.WF
                 dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
                 dt.Columns["FLOWNAME"].ColumnName = "FlowName";
                 dt.Columns["ATPARA"].ColumnName = "AtPara";
+                dt.Columns["FID"].ColumnName = "FID";
+                dt.Columns["FK_NODE"].ColumnName = "FK_Node";
             }
             if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
@@ -1145,6 +1137,8 @@ namespace BP.WF
                 dt.Columns["fk_flow"].ColumnName = "FK_Flow";
                 dt.Columns["flowname"].ColumnName = "FlowName";
                 dt.Columns["atpara"].ColumnName = "AtPara";
+                dt.Columns["fid"].ColumnName = "FID";
+                dt.Columns["fk_node"].ColumnName = "FK_Node";
             }
             return dt;
         }
@@ -1435,43 +1429,36 @@ namespace BP.WF
             else
             {
                 if (BP.WF.Glo.IsEnableTaskPool == true)
-                {
-                    //如果有授权人
-                    if (aths.Count > 0)
-                        sql = "SELECT * FROM WF_EmpWorks A WHERE  TaskSta=0 AND A.FK_Emp='" + userNo + "' " + whereSQL + "";
-                    else
-                        sql = "SELECT * FROM WF_EmpWorks A WHERE  TaskSta=0 AND A.FK_Emp='" + userNo + "' " + whereSQL + "  ORDER BY ADT DESC ";
-
-                }
+                      sql = "SELECT  *, null as Auther FROM WF_EmpWorks A WHERE  TaskSta=0 AND A.FK_Emp='" + userNo + "' " + whereSQL + "";
                 else
-                {
-                    //如果有授权人
-                    if (aths.Count > 0)
-                        sql = "SELECT * FROM WF_EmpWorks A WHERE  A.FK_Emp='" + userNo + "' " + whereSQL + "";
-                    else
-                        sql = "SELECT * FROM WF_EmpWorks A WHERE  A.FK_Emp='" + userNo + "' " + whereSQL + " ORDER BY ADT DESC ";
+                     sql = "SELECT  *, null as Auther FROM WF_EmpWorks A WHERE  A.FK_Emp='" + userNo + "' " + whereSQL + "";
 
+                foreach (Auth ath in aths)
+                {
+
+                    string todata = ath.TakeBackDT.Replace("-", "");
+                    if (DataType.IsNullOrEmpty(ath.TakeBackDT) == false)
+                    {
+                        int mydt = int.Parse(todata);
+                        int nodt = int.Parse(DateTime.Now.ToString("yyyyMMdd"));
+                        if (mydt < nodt)
+                            continue;
+                        sql += " UNION ";
+                   
+                        if (ath.AuthType == AuthorWay.SpecFlows)
+                            sql += "SELECT *,'" + ath.Auther + "' as Auther FROM WF_EmpWorks WHERE  FK_Emp='" + ath.Auther + "' AND FK_Flow='" + ath.FlowNo + "' " + whereSQL + "";
+                        else
+                            sql += "SELECT *,'" + ath.Auther + "' as Auther FROM WF_EmpWorks WHERE  FK_Emp='" + ath.Auther + "' " + whereSQL + "";
+                       
+
+                    }
                 }
+                sql += " ORDER BY ADT DESC";
+
             }
 
 
-            foreach (Auth ath in aths)
-            {
-
-                string todata = ath.TakeBackDT.Replace("-", "");
-                if (DataType.IsNullOrEmpty(ath.TakeBackDT) == false)
-                {
-                    int mydt = int.Parse(todata);
-                    int nodt = int.Parse(DateTime.Now.ToString("yyyyMMdd"));
-                    if (mydt < nodt)
-                        continue;
-                    sql += " UNION ";
-                    if (aths.Count >= 2)
-                        sql += "SELECT * FROM WF_EmpWorks WHERE  FK_Emp='" + ath.Auther + "' " + whereSQL + "";
-                    else
-                        sql += "SELECT * FROM WF_EmpWorks WHERE  FK_Emp='" + ath.Auther + "' " + whereSQL + " ORDER BY ADT DESC ";
-                }
-            }
+            
 
             //获得待办.
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
@@ -1493,7 +1480,7 @@ namespace BP.WF
                 dt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
                 dt.Columns["FK_NODE"].ColumnName = "FK_Node";
                 dt.Columns["NODENAME"].ColumnName = "NodeName";
-                dt.Columns["WORKERDEPT"].ColumnName = "WorkerDept";
+                //dt.Columns["WORKERDEPT"].ColumnName = "WorkerDept";
                 dt.Columns["TITLE"].ColumnName = "Title";
                 dt.Columns["RDT"].ColumnName = "RDT";
                 dt.Columns["ADT"].ColumnName = "ADT";
@@ -1594,34 +1581,34 @@ namespace BP.WF
 
             Auths aths = new Auths();
             aths.Retrieve(AuthAttr.Auther, userNo);
-            foreach (Auth emp in aths)
+            foreach (Auth auth in aths)
             {
                 //判断是否授权到期.
-                if (emp.TakeBackDT == "")
+                if (auth.TakeBackDT == "")
                     continue;
 
-                switch (emp.AuthType)
+                switch (auth.AuthType)
                 {
                     case AuthorWay.All:
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                         {
-                            ps.SQL += " UNION  SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp='" + emp.Auther + "' AND TaskSta!=1  ";
+                            ps.SQL += " UNION  SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp='" + auth.Auther + "' AND TaskSta!=1  ";
                         }
                         else
                         {
-                            ps.SQL += " UNION  SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp='" + emp.Auther + "' ";
+                            ps.SQL += " UNION  SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp='" + auth.Auther + "' ";
                         }
                         break;
-                    //case AuthorWay.SpecFlows:
-                    //    if (BP.WF.Glo.IsEnableTaskPool == true)
-                    //    {
-                    //        ps.SQL += " UNION SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp='" + emp.No + "' AND  FK_Flow IN " + emp.AuthorFlows + " AND TaskSta!=0 ";
-                    //    }
-                    //    else
-                    //    {
-                    //        ps.SQL += " UNION SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp='" + emp.No + "' AND  FK_Flow IN " + emp.AuthorFlows + "  ";
-                    //    }
-                    //    break;
+                    case AuthorWay.SpecFlows:
+                        if (BP.WF.Glo.IsEnableTaskPool == true)
+                        {
+                            ps.SQL += " UNION SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp='" + auth.Auther + "' AND  FK_Flow = '" + auth.FlowNo + "' AND TaskSta!=0 ";
+                        }
+                        else
+                        {
+                            ps.SQL += " UNION SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp='" + auth.Auther + "' AND  FK_Flow = '" + auth.FlowNo + "'  ";
+                        }
+                        break;
                     case AuthorWay.None: //非授权状态下.
                         continue;
                     default:
@@ -4708,7 +4695,11 @@ namespace BP.WF
             rpt.RetrieveFromDBSources();
             msg = wf.DoFlowOver(ActionType.FlowOver, msg, nd, rpt, stopFlowType);
 
-            msg += FlowOverAutoSendParentOrSameLevelFlow(wf.HisGenerWorkFlow, wf.HisFlow);
+            Work wk = nd.HisWork;
+            wk.OID = workID;
+            wk.RetrieveFromDBSources();
+            WorkNode wn = new WorkNode(wk, nd);
+            msg +=WorkNodePlus.SubFlowEvent(wn).OutMessageHtml;
 
             return msg;
         }
@@ -4716,7 +4707,7 @@ namespace BP.WF
         /// <summary>
         /// 流程运行完成后自动运行/结束父流程或者同级子流程
         /// </summary>
-        public static string FlowOverAutoSendParentOrSameLevelFlow(GenerWorkFlow gwf, Flow flow)
+        public static string FlowOverAutoSendParentOrSameLevelFlow(GenerWorkFlow gwf, Flow flow,SubFlow subFlow)
         {
             if (gwf.PWorkID == 0)
                 return "";
@@ -4725,12 +4716,6 @@ namespace BP.WF
             Int64 slWorkID = gwf.GetParaInt("SLWorkID");
             if (slWorkID == 0)//启动该流程的是父子流程
             {
-                SubFlows subFlows = new SubFlows();
-                int count = subFlows.Retrieve(SubFlowAttr.FK_Node, gwf.PNodeID, SubFlowAttr.SubFlowNo, flow.No);
-                if (count == 0)
-                    //throw new Exception("父子流程关系配置信息丢失，请联系管理员");
-                    return "";
-                SubFlow subFlow = subFlows[0] as SubFlow;
                 GenerWorkFlow pgwf = new GenerWorkFlow(gwf.PWorkID);
                 if (flow.IsToParentNextNode == true || subFlow.IsAutoSendSubFlowOver == 1)
                 {
@@ -4768,12 +4753,6 @@ namespace BP.WF
             {
                 string slFlowNo = gwf.GetParaString("SLFlowNo");
                 Int32 slNodeID = gwf.GetParaInt("SLNodeID");
-
-                SubFlows subFlows = new SubFlows();
-                int count = subFlows.Retrieve(SubFlowAttr.FK_Node, slNodeID, SubFlowAttr.SubFlowNo, flow.No);
-                if (count == 0)
-                    throw new Exception("同级子流程关系配置信息丢失，请联系管理员");
-                SubFlow subFlow = subFlows[0] as SubFlow;
                 Flow fl = new Flow(slFlowNo);
                 GenerWorkFlow subgwf = new GenerWorkFlow(slWorkID);
                 if (subFlow.IsAutoSendSLSubFlowOver == 1)

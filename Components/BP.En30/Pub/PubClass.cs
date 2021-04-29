@@ -768,7 +768,7 @@ namespace BP.Pub
                         break;
                     case FieldType.FK:
                         Entity myen = attr.HisFKEn; // ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
-                        en.RunSQL("comment on column  " + en.EnMap.PhysicsTable + "." + attr.Field + " IS " + attr.Desc + ", 外键:对应物理表:" + myen.EnMap.PhysicsTable + ",表描述:" + myen.EnDesc);
+                        en.RunSQL("comment on column  " + en.EnMap.PhysicsTable + "." + attr.Field + " IS '" + attr.Desc + ", 外键:对应物理表:" + myen.EnMap.PhysicsTable + ",表描述:" + myen.EnDesc + "'");
                         break;
                     case FieldType.PKFK:
                         Entity myen1 = attr.HisFKEn; // ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
@@ -1367,7 +1367,7 @@ namespace BP.Pub
         {
             get
             {
-                return BP.NetPlatformImpl.Sys_PubClass.RequestParas;
+                return BP.Difference.Glo.RequestParas;
             }
         }
     }

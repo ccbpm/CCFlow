@@ -17,41 +17,7 @@ using MySql.Data.MySqlClient;
 
 namespace BP.Sys
 {
-    /// <summary>
-    /// 数据源类型
-    /// </summary>
-    public enum DBSrcType
-    {
-        /// <summary>
-        /// 本机数据库
-        /// </summary>
-        Localhost = 0,
-        /// <summary>
-        /// SQL
-        /// </summary>
-        SQLServer = 1,
-        /// <summary>
-        /// Oracle
-        /// </summary>
-        Oracle = 2,
-        /// <summary>
-        /// MySQL
-        /// </summary>
-        MySQL = 3,
-        /// <summary>
-        /// Informix
-        /// </summary>
-        Informix = 4,
-        PostgreSQL=5,
-        /// <summary>
-        /// WebService数据源
-        /// </summary>
-        WebServices = 100,
-        /// <summary>
-        /// 海尔的Dubbo服务.
-        /// </summary>
-        Dubbo=50
-    }
+
     /// <summary>
     /// 数据源
     /// </summary>
@@ -77,6 +43,7 @@ namespace BP.Sys
         /// 数据库名称
         /// </summary>
         public const string DBName = "DBName";
+        public const string ConnString = "ConnString";
     }
     /// <summary>
     /// 数据源
@@ -100,48 +67,7 @@ namespace BP.Sys
                 }
             }
         }
-        /// <summary>
-        /// 是否是树形实体?
-        /// </summary>
-        public string UserID
-        {
-            get
-            {
-                return this.GetValStringByKey(SFDBSrcAttr.UserID);
-            }
-            set
-            {
-                this.SetValByKey(SFDBSrcAttr.UserID, value);
-            }
-        }
-        /// <summary>
-        /// 密码
-        /// </summary>
-        public string Password
-        {
-            get
-            {
-                return this.GetValStringByKey(SFDBSrcAttr.Password);
-            }
-            set
-            {
-                this.SetValByKey(SFDBSrcAttr.Password, value);
-            }
-        }
-        /// <summary>
-        /// 数据库名称
-        /// </summary>
-        public string DBName
-        {
-            get
-            {
-                return this.GetValStringByKey(SFDBSrcAttr.DBName);
-            }
-            set
-            {
-                this.SetValByKey(SFDBSrcAttr.DBName, value);
-            }
-        }
+
         /// <summary>
         /// 数据库类型
         /// </summary>
@@ -156,9 +82,17 @@ namespace BP.Sys
                 this.SetValByKey(SFDBSrcAttr.DBSrcType, (int)value);
             }
         }
-        /// <summary>
-        /// IP地址
-        /// </summary>
+        public string DBName
+        {
+            get
+            {
+                return this.GetValStringByKey(SFDBSrcAttr.DBName);
+            }
+            set
+            {
+                this.SetValByKey(SFDBSrcAttr.DBName, value);
+            }
+        }
         public string IP
         {
             get
@@ -170,6 +104,7 @@ namespace BP.Sys
                 this.SetValByKey(SFDBSrcAttr.IP, value);
             }
         }
+
         /// <summary>
         /// 数据库类型
         /// </summary>
@@ -242,7 +177,9 @@ namespace BP.Sys
                             conn.Close();
                         if (cmd != null)
                             cmd.Dispose();
-                        throw new Exception("RunSQL 错误，SQL=" + sql);
+                       // throw new Exception("RunSQL 错误，SQL=" + sql);
+                        throw new Exception("RunSQL 错误，SQL=" + sql + " ex=" + ex.Message);
+
                     }
                 case Sys.DBSrcType.Oracle:
                     OracleConnection connOra = new OracleConnection(this.ConnString);
@@ -264,7 +201,7 @@ namespace BP.Sys
                             connOra.Close();
                         if (cmdOra != null)
                             cmdOra.Dispose();
-                        throw new Exception("RunSQL 错误，SQL=" + sql);
+                        throw new Exception("RunSQL 错误，SQL=" + sql+" ex="+ex.Message );
                     }
                 case Sys.DBSrcType.MySQL:
                     MySqlConnection connMySQL = new MySqlConnection(this.ConnString);
@@ -285,9 +222,11 @@ namespace BP.Sys
                             connMySQL.Close();
                         if (cmdMySQL != null)
                             cmdMySQL.Dispose();
-                        throw new Exception("RunSQL 错误，SQL=" + sql);
+                        throw new Exception("RunSQL 错误，SQL=" + sql + " ex=" + ex.Message);
+
+                        //throw new Exception("RunSQL 错误，SQL=" + sql);
                     }
-                    //From Zhou IBM删除
+                //From Zhou IBM删除
                 //case Sys.DBSrcType.Informix:
                 //    IfxConnection connIfx = new IfxConnection(this.ConnString);
                 //    IfxCommand cmdIfx = null;
@@ -322,7 +261,16 @@ namespace BP.Sys
         /// <returns></returns>
         public DataTable RunSQLReturnTable(string runObj)
         {
-            return RunSQLReturnTable(runObj, new Paras() );
+            return RunSQLReturnTable(runObj, new Paras());
+        }
+
+        public string RunSQLReturnString(string runObj, string isNullasVal=null )
+        {
+            DataTable dt = RunSQLReturnTable(runObj);
+            if (dt.Rows.Count == 0)
+                return isNullasVal;
+
+            return dt.Rows[0][0].ToString();
         }
         /// <summary>
         /// 运行SQL返回datatable
@@ -443,43 +391,7 @@ namespace BP.Sys
                             mysqlConn.Close();
                         throw new Exception("SQL=" + runObj + " Exception=" + ex.Message);
                     }
-                    //From Zhou IBM 删除
-                //case Sys.DBSrcType.Informix:
-                //    IfxConnection ifxConn = new IfxConnection(ConnString);
-                //    IfxDataAdapter ifxAda = null;
-                //    IfxParameter myParameterIfx = null;
 
-                //    try
-                //    {
-                //        ifxConn.Open();
-                //        ifxAda = new IfxDataAdapter(runObj, ifxConn);
-                //        ifxAda.SelectCommand.CommandType = CommandType.Text;
-
-                //        if (ps != null)
-                //        {
-                //            // 加入参数
-                //            foreach (Para para in ps)
-                //            {
-                //                myParameterIfx = new IfxParameter(para.ParaName, para.val);
-                //                myParameterIfx.Size = para.Size;
-                //                ifxAda.SelectCommand.Parameters.Add(myParameterIfx);
-                //            }
-                //        }
-
-                //        DataTable ifxTb = new DataTable("otb");
-                //        ifxAda.Fill(ifxTb);
-                //        ifxAda.Dispose();
-                //        ifxConn.Close();
-                //        return ifxTb;
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        if (ifxAda != null)
-                //            ifxAda.Dispose();
-                //        if (ifxConn.State == ConnectionState.Open)
-                //            ifxConn.Close();
-                //        throw new Exception("SQL=" + runObj + " Exception=" + ex.Message);
-                //    }
                 default:
                     break;
             }
@@ -561,7 +473,7 @@ namespace BP.Sys
                             mysqlConn.Close();
                         throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
                     }
-                    //
+                //
                 //case Sys.DBSrcType.Informix:
                 //    IfxConnection ifxConn = new IfxConnection(ConnString);
                 //    IfxDataAdapter ifxAda = null;
@@ -590,36 +502,6 @@ namespace BP.Sys
             }
             return null;
         }
-
-        /// <summary>
-        /// 获取SQLServer链接服务器的表/视图名，根据链接服务器的命名规则组合
-        /// </summary>
-        /// <param name="objName">表/视图名称</param>
-        /// <returns></returns>
-        public string GetLinkedServerObjName(string objName)
-        {
-            //目前还只是考虑到SqlServer数据库中建立链接服务器的功能，其他数据库还没有考虑
-            //Oracle中有DBLink功能，但具体还没有研究；MySQL中的Federated引擎功能还不完善，貌似只能增加mysql的外链数据库，且效率可能不大好也
-            switch (this.DBSrcType)
-            {
-                case Sys.DBSrcType.Localhost:
-                    if (DBAccess.AppCenterDBType != DBType.MSSQL)
-                        throw new Exception("目前只支持CCFlow主数据库为SqlServer的模式，其他数据库类型暂不支持建立数据源。");
-
-                    return objName;
-                case Sys.DBSrcType.SQLServer:
-                    return string.Format("{0}.{1}.dbo.{2}", this.No, this.DBName, objName);
-                case Sys.DBSrcType.Oracle:
-                    return string.Format("{0}..{1}.{2}", this.No, this.UserID.ToUpper(), objName.ToUpper());
-                case Sys.DBSrcType.MySQL:
-                    return string.Format("OPENQUERY({0},'SELECT * FROM {1}')", this.No, objName);
-                case Sys.DBSrcType.Informix:
-                    return string.Format("OPENQUERY({0},'SELECT * FROM {1}')", this.No, objName);
-                default:
-                    throw new Exception("@未涉及的数据库类型。");
-            }
-        }
-
         /// <summary>
         /// 判断数据源所在库中是否已经存在指定名称的对象【表/视图】
         /// </summary>
@@ -717,12 +599,17 @@ namespace BP.Sys
                 map.AddTBString(SFDBSrcAttr.Name, null, "数据源名称", true, false, 0, 30, 20);
 
                 map.AddDDLSysEnum(SFDBSrcAttr.DBSrcType, 0, "数据源类型", true, true,
-                  SFDBSrcAttr.DBSrcType, "@0=应用系统主数据库(默认)@1=SQLServer数据库@2=Oracle数据库@3=MySQL数据库@4=Informix数据库@50=Dubbo服务@100=WebService数据源");
-
-                map.AddTBString(SFDBSrcAttr.UserID, null, "数据库登录用户ID", true, false, 0, 30, 20);
-                map.AddTBString(SFDBSrcAttr.Password, null, "数据库登录用户密码", true, false, 0, 30, 20);
-                map.AddTBString(SFDBSrcAttr.IP, null, "IP地址/数据库实例名", true, false, 0, 500, 20);
+                  SFDBSrcAttr.DBSrcType,
+                  "@0=应用系统主数据库(默认)@1=SQLServer数据库@2=Oracle数据库@3=MySQL数据库@4=Informix数据库@50=Dubbo服务@100=WebService数据源");
                 map.AddTBString(SFDBSrcAttr.DBName, null, "数据库名称/Oracle保持为空", true, false, 0, 30, 20);
+                map.AddTBStringDoc(SFDBSrcAttr.ConnString, null, "连接串", true, false, true);
+
+                if (SystemConfig.RunOnPlant.Equals("CCFlow") == false)
+                {
+                    map.AddTBString(SFDBSrcAttr.UserID, null, "数据库登录用户ID", true, false, 0, 30, 20);
+                    map.AddTBString(SFDBSrcAttr.Password, null, "密码", true, false, 0, 30, 20);
+                    map.AddTBString(SFDBSrcAttr.IP, null, "IP地址/数据库实例名", true, false, 0, 500, 20);
+                }
 
                 //map.AddDDLSysEnum(SFDBSrcAttr.DBSrcType, 0, "数据源类型", true, true,
                 //    SFDBSrcAttr.DBSrcType, "@0=应用系统主数据库@1=SQLServer@2=Oracle@3=MySQL@4=Infomix");
@@ -753,18 +640,20 @@ namespace BP.Sys
                 {
                     case Sys.DBSrcType.Localhost:
                         return SystemConfig.AppCenterDSN;
-                    case Sys.DBSrcType.SQLServer:
-                        return "password=" + this.Password + ";persist security info=true;user id=" + this.UserID + ";initial catalog=" + this.DBName + ";data source=" + this.IP + ";timeout=999;multipleactiveresultsets=true";
-                    case Sys.DBSrcType.Oracle:
-                        return "user id=" + this.UserID + ";data source=" + this.IP + ";password=" + this.Password + ";Max Pool Size=200";
-                    case Sys.DBSrcType.MySQL:
-                        return "Data Source=" + this.IP + ";Persist Security info=True;Initial Catalog=" + this.DBName + ";User ID=" + this.UserID + ";Password=" + this.Password + ";";
-                    case Sys.DBSrcType.Informix:
-                        return "Host=" + this.IP + "; Service=; Server=; Database=" + this.DBName + "; User id=" + this.UserID + "; Password=" + this.Password + "; ";  //Service为监听客户端连接的服务名，Server为数据库实例名，这两项没提供
-                    case Sys.DBSrcType.PostgreSQL:
-                        return "Server=" + this.IP + ";Port=5432;Database=" + this.DBName + ";UserId=" + this.UserID + ";Password=" + this.Password + ";;Pooling=False;";
                     default:
-                        throw new Exception("@没有判断的类型.");
+                        return this.GetValStringByKey(SFDBSrcAttr.ConnString);
+                        //case Sys.DBSrcType.SQLServer:
+                        //    return "password=" + this.Password + ";persist security info=true;user id=" + this.UserID + ";initial catalog=" + this.DBName + ";data source=" + this.IP + ";timeout=999;multipleactiveresultsets=true";
+                        //case Sys.DBSrcType.Oracle:
+                        //    return "user id=" + this.UserID + ";data source=" + this.IP + ";password=" + this.Password + ";Max Pool Size=200";
+                        //case Sys.DBSrcType.MySQL:
+                        //    return "Data Source=" + this.IP + ";Persist Security info=True;Initial Catalog=" + this.DBName + ";User ID=" + this.UserID + ";Password=" + this.Password + ";";
+                        //case Sys.DBSrcType.Informix:
+                        //    return "Host=" + this.IP + "; Service=; Server=; Database=" + this.DBName + "; User id=" + this.UserID + "; Password=" + this.Password + "; ";  //Service为监听客户端连接的服务名，Server为数据库实例名，这两项没提供
+                        //case Sys.DBSrcType.PostgreSQL:
+                        //    return "Server=" + this.IP + ";Port=5432;Database=" + this.DBName + ";UserId=" + this.UserID + ";Password=" + this.Password + ";;Pooling=False;";
+                        //default:
+                        //    throw new Exception("@没有判断的类型.");
                 }
             }
         }
@@ -775,10 +664,9 @@ namespace BP.Sys
         public string DoConn()
         {
             if (this.No == "local")
-                return "本地连接不需要测试是否连接成功.";
+                return "本地连接不需要测试.";
 
             if (this.DBSrcType == Sys.DBSrcType.Localhost)
-                //throw new Exception("@在该系统中只能有一个本地连接.");
                 return "@在该系统中只能有一个本地连接.";
 
             string dsn = "";
@@ -790,27 +678,6 @@ namespace BP.Sys
                     conn.ConnectionString = this.ConnString;
                     conn.Open();
                     conn.Close();
-
-                    //删除应用.
-                    try
-                    {
-                        DBAccess.RunSQL("Exec sp_droplinkedsrvlogin " + this.No + ",Null ");
-                        DBAccess.RunSQL("Exec sp_dropserver " + this.No);
-                    }
-                    catch
-                    {
-                    }
-
-                    //创建应用.
-                    string sql = "";
-                    sql += "sp_addlinkedserver @server='" + this.No + "', @srvproduct='', @provider='SQLOLEDB', @datasrc='" + this.IP + "'";
-                    DBAccess.RunSQL(sql);
-
-                    //执行登录.
-                    sql = "";
-                    sql += " EXEC sp_addlinkedsrvlogin '" + this.No + "','false', NULL, '" + this.UserID + "', '" + this.Password + "'";
-                    DBAccess.RunSQL(sql);
-
                     return "恭喜您，该(" + this.Name + ")连接配置成功。";
                 }
                 catch (Exception ex)
@@ -854,12 +721,10 @@ namespace BP.Sys
                     return ex.Message;
                 }
             }
-           
+
             if (this.DBSrcType == Sys.DBSrcType.WebServices)
             {
-                string url = this.IP +
-                             (this.IP.EndsWith(".asmx") ? "?wsdl" : this.IP.EndsWith(".svc") ? "?singleWsdl" : "");
-
+                string url = this.ConnString;
                 try
                 {
                     HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
@@ -874,7 +739,6 @@ namespace BP.Sys
                     return ex.Message;
                 }
             }
-
             return "没有涉及到的连接测试类型...";
         }
         /// <summary>
@@ -962,7 +826,7 @@ namespace BP.Sys
             }
             else
             {
-                var dsn = GetDSN();
+                var dsn = this.ConnString;
                 var conn = GetConnection(dsn);
                 try
                 {
@@ -981,7 +845,7 @@ namespace BP.Sys
         /// 获得数据列表.
         /// </summary>
         /// <returns></returns>
-        public DataTable GetTables(bool isCutFlowTables=false)
+        public DataTable GetTables(bool isCutFlowTables = false)
         {
             var sql = new StringBuilder();
             sql.AppendFormat("SELECT ss.SrcTable FROM Sys_SFTable ss WHERE ss.FK_SFDBSrc = '{0}'", this.No);
@@ -1149,7 +1013,7 @@ namespace BP.Sys
             }
             else
             {
-                var dsn = GetDSN();
+                var dsn = this.ConnString;
                 var conn = GetConnection(dsn);
                 try
                 {
@@ -1187,9 +1051,9 @@ namespace BP.Sys
                 {
                     string no = dr["No"].ToString();
 
-                    if (no.Contains("WF_") 
+                    if (no.Contains("WF_")
                         || no.Contains("Track")
-                        || no.Contains("Sys_") 
+                        || no.Contains("Sys_")
                         || no.Contains("Demo_"))
                         continue;
 
@@ -1203,62 +1067,6 @@ namespace BP.Sys
             }
 
             return allTables;
-        }
-        /// <summary>
-        /// 获取连接字符串
-        /// <para></para>
-        /// <para>added by liuxc,2015-6-9</para>
-        /// </summary>
-        /// <returns></returns>
-        private string GetDSN()
-        {
-            string dsn = "";
-
-            var dbType = this.DBSrcType;
-            if (dbType == Sys.DBSrcType.Localhost)
-            {
-                switch (SystemConfig.AppCenterDBType)
-                {
-                    case DBType.MSSQL:
-                        dbType = Sys.DBSrcType.SQLServer;
-                        break;
-                    case DBType.Oracle:
-                        dbType = Sys.DBSrcType.Oracle;
-                        break;
-                    case DBType.MySQL:
-                        dbType = Sys.DBSrcType.MySQL;
-                        break;
-                    case DBType.Informix:
-                        dbType = Sys.DBSrcType.Informix;
-                        break;
-                    case DBType.PostgreSQL:
-                        dbType = Sys.DBSrcType.PostgreSQL;
-                        break;
-                    default:
-                        throw new Exception("没有涉及到的连接测试类型...");
-                }
-            }
-
-            switch (dbType)
-            {
-                case Sys.DBSrcType.SQLServer:
-                    dsn = "Password=" + this.Password + ";Persist Security Info=True;User ID=" + this.UserID +
-                      ";Initial Catalog=" + this.DBName + ";Data Source=" + this.IP +
-                      ";Timeout=999;MultipleActiveResultSets=true";
-                    break;
-                case Sys.DBSrcType.Oracle:
-                    dsn = "user id=" + this.UserID + ";data source=" + this.IP + ";password=" + this.Password + ";Max Pool Size=200";
-                    break;
-                case Sys.DBSrcType.MySQL:
-                    dsn = "Data Source=" + this.IP + ";Persist Security info=True;Initial Catalog=" + this.DBName + ";User ID=" + this.UserID + ";Password=" + this.Password + ";";
-                    break;
-                case Sys.DBSrcType.Informix:
-                    dsn = "Provider=Ifxoledbc;Data Source=" + this.DBName + "@" + this.IP + ";User ID=" + this.UserID + ";Password=" + this.Password + ";";
-                    break;
-                default:
-                    throw new Exception("没有涉及到的连接测试类型...");
-            }
-            return dsn;
         }
         /// <summary>
         /// 获取数据库连接
@@ -1290,7 +1098,7 @@ namespace BP.Sys
                         throw new Exception("没有涉及到的连接测试类型...");
                 }
             }
-            this.DBSrcType= dbType;
+            this.DBSrcType = dbType;
             switch (dbType)
             {
                 case Sys.DBSrcType.SQLServer:
@@ -1303,20 +1111,19 @@ namespace BP.Sys
                 case Sys.DBSrcType.MySQL:
                     conn = new MySql.Data.MySqlClient.MySqlConnection(dsn);
                     break;
-                // from Zhou 删除IBM
-                //case Sys.DBSrcType.Informix:
-                //    conn = new System.Data.OleDb.OleDbConnection(dsn);
-                //    break;
+                    // from Zhou 删除IBM
+                    //case Sys.DBSrcType.Informix:
+                    //    conn = new System.Data.OleDb.OleDbConnection(dsn);
+                    //    break;
             }
-
             return conn;
         }
 
         private DataTable RunSQLReturnTable(string sql, System.Data.Common.DbConnection conn, string dsn, CommandType cmdType)
         {
             if (conn is System.Data.SqlClient.SqlConnection)
-                return DBAccess.RunSQLReturnTable(sql, (System.Data.SqlClient.SqlConnection)conn, dsn, cmdType,null);
-             
+                return DBAccess.RunSQLReturnTable(sql, (System.Data.SqlClient.SqlConnection)conn, dsn, cmdType, null);
+
             //if (conn is System.Data.OracleClient.OracleConnection)
             //    return DBAccess.RunSQLReturnTable(sql, (System.Data.OracleClient.OracleConnection)conn, cmdType, dsn);
             if (conn is OracleConnection)
@@ -1330,8 +1137,6 @@ namespace BP.Sys
 
                 var ada = new MySqlDataAdapter(sql, mySqlConn);
                 ada.SelectCommand.CommandType = CommandType.Text;
-
-
                 try
                 {
                     DataTable oratb = new DataTable("otb");
@@ -1559,12 +1364,12 @@ namespace BP.Sys
                     sql.AppendLine("    ON ucc.table_name = utc.TABLE_NAME");
                     sql.AppendLine("   AND ucc.column_name = utc.COLUMN_NAME");
                     sql.AppendLine(string.Format(" WHERE utc.TABLE_NAME = '{0}'", tableName.ToUpper()));
-                    sql.AppendLine(" ORDER BY colid ASC");
+                    sql.AppendLine(" ORDER BY utc.COLUMN_ID ASC");
 
                     break;
                 case Sys.DBSrcType.MySQL:
                     //分别代表字段名,类型，描述，类型加长度（char（11））
-                  string  sql2= "Select COLUMN_NAME as No,DATA_TYPE AS DBType,	COLUMN_COMMENT AS Name ,COLUMN_TYPE  AS DBLength,row_number()over(order by COLUMN_NAME) AS colid from INFORMATION_SCHEMA.COLUMNS Where table_name='" + tableName + "'AND table_schema = 'ccgx-portal'";
+                    string sql2 = "Select COLUMN_NAME as No,DATA_TYPE AS DBType,	COLUMN_COMMENT AS Name ,COLUMN_TYPE  AS DBLength,row_number()over(order by COLUMN_NAME) AS colid from INFORMATION_SCHEMA.COLUMNS Where table_name='" + tableName + "'AND table_schema = 'ccgx-portal'";
                     sql.Append(sql2);
                     //sql.AppendLine("SELECT ");
                     //sql.AppendLine("    column_name AS 'No',");
@@ -1590,9 +1395,9 @@ namespace BP.Sys
                 dt = DBAccess.RunSQLReturnTable(sql.ToString());
                 return dt;
             }
-                
 
-            var dsn = GetDSN();
+
+            var dsn = this.ConnString;
             var conn = GetConnection(dsn);
 
             try
@@ -1656,7 +1461,7 @@ namespace BP.Sys
             if (this.No != "local" && this.DBSrcType == Sys.DBSrcType.Localhost)
                 throw new Exception("@在该系统中只能有一个本地连接，请选择其他数据源类型。");
 
-            //测试数据库连接
+            //测试数据库连接.
             DoConn();
 
             return base.beforeUpdateInsertAction();
@@ -1710,7 +1515,7 @@ namespace BP.Sys
         {
             QueryObject qo = new QueryObject(this);
             qo.AddWhere(SFDBSrcAttr.DBSrcType, " < ", 100);
-            int i= qo.DoQuery();
+            int i = qo.DoQuery();
             if (i == 0)
                 return this.RetrieveAll();
             return i;
@@ -1722,7 +1527,7 @@ namespace BP.Sys
         public int RetrieveWCSrc()
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(SFDBSrcAttr.DBSrcType, "= ", (int) DBSrcType.WebServices );
+            qo.AddWhere(SFDBSrcAttr.DBSrcType, "= ", (int)DBSrcType.WebServices);
             int i = qo.DoQuery();
             if (i == 0)
                 return this.RetrieveAll();

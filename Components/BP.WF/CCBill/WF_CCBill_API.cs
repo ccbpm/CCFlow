@@ -13,7 +13,7 @@ using BP.WF;
 using BP.WF.Template;
 using BP.WF.Data;
 using BP.WF.HttpHandler;
-using BP.NetPlatformImpl;
+using BP.Difference;
 using BP.CCBill.Template;
 
 

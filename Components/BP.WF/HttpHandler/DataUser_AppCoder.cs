@@ -48,7 +48,7 @@ namespace BP.WF.HttpHandler
             string whereStrPuls = "";
 
 
-            if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
+            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
             {
                 whereStr += " WHERE OrgNo = '" + WebUser.OrgNo + "'";
                 whereStrPuls += " AND OrgNo = '" + WebUser.OrgNo + "'";
@@ -110,7 +110,7 @@ namespace BP.WF.HttpHandler
             string whereStr = "";
             string whereStrPuls = "";
 
-            if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
+            if (Glo.CCBPMRunModel != CCBPMRunModel.Single )
             {
                 whereStr += " WHERE OrgNo = '" + WebUser.OrgNo + "'";
                 whereStrPuls += " AND OrgNo = '" + WebUser.OrgNo + "'";
@@ -144,9 +144,9 @@ namespace BP.WF.HttpHandler
 
             //待办的 - 流程分组.
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
-                sql = "SELECT c.FlowName, count(a.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B, WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID AND A.IsPass=0 GROUP BY C.FlowName";
+                sql = "SELECT c.FlowName as name, count(a.WorkID) as value FROM WF_GenerWorkerList A,Port_Dept B, WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID AND A.IsPass=0 GROUP BY C.FlowName";
             else
-                sql = "SELECT c.FlowName, count(a.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B, WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID AND A.IsPass=0 AND C.OrgNo='"+WebUser.OrgNo+"' GROUP BY C.FlowName";
+                sql = "SELECT c.FlowName as name, count(a.WorkID) as value  FROM WF_GenerWorkerList A,Port_Dept B, WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID AND A.IsPass=0 AND C.OrgNo='" + WebUser.OrgNo+"' GROUP BY C.FlowName";
 
             //sql = "SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 GROUP BY FlowName";
             DataTable TodolistByFlow = DBAccess.RunSQLReturnTable(sql);
@@ -158,19 +158,19 @@ namespace BP.WF.HttpHandler
             //逾期的 - 流程分组.
             if (SystemConfig.AppCenterDBType == DBType.MySQL)
             {
-                sql = "SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 and STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now() GROUP BY FlowName";
+                sql = "SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 "+ whereStrPuls+" and STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now() GROUP BY FlowName";
 
             }
             else if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
-                sql = "SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 GROUP BY FlowName ";
-                sql += "UNION SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 GROUP BY FlowName";
+                sql = "SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 GROUP BY FlowName ";
+                sql += "UNION SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 GROUP BY FlowName";
             }
             else
             {
-                sql = "SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 and convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120) GROUP BY FlowName";
+                sql = "SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120) GROUP BY FlowName";
             }
-            sql = "SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 GROUP BY FlowName";
+            sql = "SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  GROUP BY FlowName";
             DataTable OverTimeByFlow = DBAccess.RunSQLReturnTable(sql);
             OverTimeByFlow.TableName = "OverTimeByFlow";
             ds.Tables.Add(OverTimeByFlow);
@@ -179,17 +179,17 @@ namespace BP.WF.HttpHandler
 
             if (SystemConfig.AppCenterDBType == DBType.MySQL)
             {
-                sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now() GROUP BY DeptName";
+                sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now() GROUP BY DeptName";
 
             }
             else if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
-                sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 GROUP BY DeptName ";
-                sql += "UNION SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 GROUP BY DeptName";
+                sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 GROUP BY DeptName ";
+                sql += "UNION SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 GROUP BY DeptName";
             }
             else
             {
-                sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120) GROUP BY DeptName";
+                sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120) GROUP BY DeptName";
             }
             //sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 GROUP BY DeptName";
             DataTable OverTimeByDept = DBAccess.RunSQLReturnTable(sql);

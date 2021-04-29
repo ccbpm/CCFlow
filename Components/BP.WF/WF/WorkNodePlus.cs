@@ -735,5 +735,161 @@ namespace BP.WF
                 }
             }
         }
+
+        /// <summary>
+        /// 子流程运行结束后
+        /// </summary>
+        /// <param name="wn"></param>
+       public static SendReturnObjs SubFlowEvent(WorkNode wn)
+        {
+            GenerWorkFlow gwf = wn.HisGenerWorkFlow;
+            //不是子流程
+            if (gwf.PWorkID == 0)
+                return wn.HisMsgObjs;
+           
+
+            //子流程运行到该节点时主流程自动运行到下一个节点
+            if(gwf.WFState!=WFState.Complete && wn.HisNode.IsToParentNextNode == true)
+            {
+                GenerWorkFlow pgwf = new GenerWorkFlow(gwf.PWorkID);
+                if (pgwf.FK_Node == gwf.PNodeID)
+                {
+                    SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(gwf.PFlowNo, gwf.PWorkID);
+                    string sendSuccess = "父流程自动运行到下一个节点，" + returnObjs.ToMsgOfHtml();
+                    wn.HisMsgObjs.AddMsg("info", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+                }
+                return wn.HisMsgObjs;
+            }
+
+            //判断是不是子流程结束后显示父流程待办
+            if (gwf.WFState == WFState.Complete)
+            {
+                Int64 slWorkID = gwf.GetParaInt("SLWorkID");
+                string slFlowNo = gwf.GetParaString("SLFlowNo");
+                Int32 slNodeID = gwf.GetParaInt("SLNodeID");
+
+                SubFlows subFlows = new SubFlows();
+                if (slWorkID == 0)
+                    subFlows.Retrieve(SubFlowAttr.FK_Node, gwf.PNodeID, SubFlowAttr.SubFlowNo, wn.HisFlow.No);
+                else
+                   subFlows.Retrieve(SubFlowAttr.FK_Node, slNodeID, SubFlowAttr.SubFlowNo, wn.HisFlow.No);
+
+                if(subFlows.Count==0)
+                    return wn.HisMsgObjs;
+
+                SubFlow subFlow = subFlows[0] as SubFlow;
+                if (subFlow.BackCopyRole != 0 && slWorkID==0)
+                {
+                  
+                    Node pNd = new Node(subFlow.FK_Node);
+                    Work pwork = pNd.HisWork;
+                    pwork.OID = gwf.PWorkID;
+                    pwork.RetrieveFromDBSources();
+                    GERpt prpt = new BP.WF.Data.GERpt("ND" + int.Parse(subFlow.FK_Flow) + "Rpt");
+                    prpt.OID = gwf.PWorkID;
+                    prpt.RetrieveFromDBSources();
+                    //判断是否启用了数据字段反填规则
+                    if (subFlow.BackCopyRole == 1 || subFlow.BackCopyRole == 3)
+                    {
+                        //子流程数据拷贝到父流程中
+                        pwork.Copy(wn.HisWork);
+                        prpt.Copy(wn.HisWork);
+                    }
+                    //子流程数据拷贝到父流程中
+                    if ((subFlow.BackCopyRole == 2 || subFlow.BackCopyRole == 3)&& DataType.IsNullOrEmpty(subFlow.ParentFlowCopyFields) == false)
+                    {
+                        Work wk = wn.HisWork;
+                        Attrs attrs = wk.EnMap.Attrs;
+                        //获取子流程的签批字段
+                        string keyOfEns = "";
+                        string keyVals = ""; //签批字段存储的值
+                        foreach (Attr attr in attrs)
+                        {
+                            if (attr.UIContralType == UIContralType.SignCheck)
+                            {
+                                keyOfEns += attr.Field + ",";
+                                continue;
+                            }
+
+                        }
+                     
+                        //父流程把子流程不同字段进行匹配赋值
+                        AtPara ap = new AtPara(subFlow.ParentFlowCopyFields);
+                        foreach (String str in ap.HisHT.Keys)
+                        {
+                            Object val = ap.GetValStrByKey(str);
+                            if (DataType.IsNullOrEmpty(val.ToString()) == true)
+                                continue;
+                            pwork.SetValByKey(val.ToString(), wk.GetValByKey(str));
+                            prpt.SetValByKey(val.ToString(), wk.GetValByKey(str));
+                            if (keyOfEns.Contains(str + ",") == true)
+                                keyVals += wk.GetValByKey(str);
+                        }
+                        if (DataType.IsNullOrEmpty(keyVals) == false)
+                        {
+                            string trackPTable = "ND" + int.Parse(wn.HisFlow.No) + "Track";
+                            //把子流程的签批字段对应的审核信息拷贝到父流程中
+                            keyVals = keyVals.Substring(1);
+                            string sql = "SELECT * FROM " + trackPTable + " WHERE ActionType=22 AND WorkID=" + wn.WorkID + " AND NDFrom IN(" + keyVals + ")";
+                            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                            Tracks tracks = new Tracks();
+                            BP.En.QueryObject.InitEntitiesByDataTable(tracks, dt, null);
+                            foreach (Track t in tracks)
+                            {
+
+                                t.WorkID = pwork.OID;
+                                t.FID = pwork.FID;
+                                t.FK_Flow = subFlow.FK_Flow;
+                                t.HisActionType = ActionType.WorkCheck;
+                                t.MyPK = DBAccess.GenerOIDByGUID().ToString();
+                                t.Insert();
+                            }
+                        }
+                      
+                    }
+                    pwork.Update();
+                    prpt.Update();
+
+                }
+               
+
+                //子流程运行结束后父流程是否自动往下运行一步
+                string msg = BP.WF.Dev2Interface.FlowOverAutoSendParentOrSameLevelFlow(wn.HisGenerWorkFlow, wn.HisFlow, subFlow);
+                if (DataType.IsNullOrEmpty(msg) == false)
+                {
+                    wn.HisMsgObjs.AddMsg("info", msg, msg, SendReturnMsgType.Info);
+                    return wn.HisMsgObjs;
+                }
+                
+                string mypk = "";
+                Int64 PWorkID = 0;
+                bool isSameLeavl = false;
+                if (gwf.GetParaInt("SLNodeID") != 0)
+                {
+                    mypk = gwf.GetParaInt("SLNodeID") + "_" + wn.HisFlow.No + "_0";
+                    PWorkID = gwf.GetValInt64ByKey("SLWorkID");
+                }
+                else
+                {
+                    mypk = gwf.PNodeID + "_" + wn.HisFlow.No + "_0";
+                    PWorkID = gwf.PWorkID;
+                }
+
+                SubFlowHandGuide subflow = new SubFlowHandGuide(mypk);
+                if (subflow.SubFlowHidTodolist == true)
+                {
+                    GenerWorkFlow pgwf = new GenerWorkFlow(PWorkID);
+                    string mysql = "SELECT COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + gwf.PWorkID + " AND FK_Flow='" + wn.HisFlow.No + "' AND WFState !=3 ";
+                    if (DBAccess.RunSQLReturnValInt(mysql, 0) == 0)
+                    {
+                        DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 Where WorkID=" + pgwf.WorkID+" AND FK_Node="+pgwf.FK_Node);
+
+                    }
+                }
+            }
+            
+            return wn.HisMsgObjs;
+
+        } 
     }
 }

@@ -314,7 +314,12 @@ namespace BP.WF.HttpHandler
                         sql = "SELECT " + BP.Sys.Glo.UserNo + ",Name FROM Port_Emp A, WF_NodeDept B WHERE A.FK_Dept=B.FK_Dept AND B.FK_Node=" + nodeid;
                         break;
                     case DeliveryWay.ByBindEmp:
-                        sql = "SELECT " + BP.Sys.Glo.UserNo + ",Name from Port_Emp WHERE " + BP.Sys.Glo.UserNo + " in (select FK_Emp from WF_NodeEmp where FK_Node='" + nodeid + "') ";
+                        if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                            sql = "SELECT " + BP.Sys.Glo.UserNo + ",Name FROM Port_Emp WHERE " + BP.Sys.Glo.UserNo + " IN (SELECT FK_Emp from WF_NodeEmp where FK_Node='" + nodeid + "') AND OrgNo='"+BP.Web.WebUser.OrgNo+"'";
+                        else
+                            sql = "SELECT " + BP.Sys.Glo.UserNo + ",Name FROM Port_Emp WHERE " + BP.Sys.Glo.UserNo + " in (SELECT FK_Emp from WF_NodeEmp where FK_Node='" + nodeid + "') ";
+
+
                         //emps.RetrieveInSQL("select fk_emp from wf_NodeEmp WHERE fk_node=" + int.Parse(this.FK_Flow + "01") + " ");
                         break;
                     case DeliveryWay.ByDeptAndStation:
@@ -337,10 +342,14 @@ namespace BP.WF.HttpHandler
                         {
                             sql = "SELECT A.No, A.Name, B.Name as FK_DeptText FROM  Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No";
                             //sql = "SELECT c.No, c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, Port_Emp C WHERE A.FK_Dept=B.No AND A.FK_Emp=C.No";
-
                         }
                         else
-                            sql = "SELECT c." + BP.Sys.Glo.UserNo + ", c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, Port_Emp C WHERE A.FK_Dept=B.No AND B.OrgNo='" + BP.Web.WebUser.OrgNo + "' AND A.FK_Emp=C." + BP.Sys.Glo.UserNoWhitOutAS + " ";
+                        {
+                            sql = "SELECT c." + BP.Sys.Glo.UserNo + ", c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, Port_Emp C WHERE A.FK_Dept=B.No  AND A.FK_Emp=C." + BP.Sys.Glo.UserNoWhitOutAS + " ";
+                            sql += " AND A.OrgNo='" + BP.Web.WebUser.OrgNo + "' ";
+                            sql += " AND B.OrgNo='" + BP.Web.WebUser.OrgNo + "' ";
+                            sql += " AND C.OrgNo='" + BP.Web.WebUser.OrgNo + "' ";
+                        }
 
                         break;
                     case DeliveryWay.BySelectedOrgs: //按照设置的组织计算: 20202年3月开始约定此规则.

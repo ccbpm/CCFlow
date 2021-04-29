@@ -310,9 +310,9 @@ namespace BP.WF.Data
 
                 map.AddTBString(CHAttr.TimeLimit, null, "限期", true, true, 0, 50, 5);
 
-                map.AddTBString(CHAttr.UseDays, null, "用时", true, true, 0, 50, 5);
-                map.AddTBString(CHAttr.OverDays, null, "逾期", true, true, 0, 50, 5);
-                 
+                map.AddTBFloat(CHAttr.UseDays, 0, "实际使用天", false, true);
+                map.AddTBFloat(CHAttr.OverDays, 0, "逾期天", false, true);
+
                 map.AddDDLSysEnum(CHAttr.CHSta, 0, "状态", true, true, CHAttr.CHSta,
                     "@0=及时完成@1=按期完成@2=逾期完成@3=超期完成");
 

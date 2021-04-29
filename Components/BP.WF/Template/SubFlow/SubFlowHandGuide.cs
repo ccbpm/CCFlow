@@ -21,6 +21,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string SubFlowGuideSQL = "SubFlowGuideSQL";
         /// <summary>
+        /// 分组的SQL
+        /// </summary>
+        public const string SubFlowGuideGroup = "SubFlowGuideGroup";
+        /// <summary>
         /// 编号字段.
         /// </summary>
         public const string SubFlowGuideEnNoFiled = "SubFlowGuideEnNoFiled";
@@ -28,14 +32,14 @@ namespace BP.WF.Template
         /// 名称字段
         /// </summary>
         public const string SubFlowGuideEnNameFiled = "SubFlowGuideEnNameFiled";
-		/// <summary>
+        /// <summary>
         /// 是否是树形结构
         /// </summary>
-		public const string IsTreeConstruct="IsTreeConstruct";
-		/// <summary>
+        public const string IsTreeConstruct = "IsTreeConstruct";
+        /// <summary>
         /// 父节点编号
         /// </summary>
-		public const string ParentNo="ParentNo";
+        public const string ParentNo = "ParentNo";
     }
     /// <summary>
     /// 手工启动子流程.
@@ -122,20 +126,29 @@ namespace BP.WF.Template
             }
         }
 
-		public bool IsTreeConstruct
-		{
-			get
-			{
-				return this.GetValBooleanByKey(SubFlowHandGuideAttr.IsTreeConstruct);
-			}
-		}
-		public string ParentNo
+        public bool IsTreeConstruct
+        {
+            get
+            {
+                return this.GetValBooleanByKey(SubFlowHandGuideAttr.IsTreeConstruct);
+            }
+        }
+        public string ParentNo
         {
             get
             {
                 return this.GetValStringByKey(SubFlowHandGuideAttr.ParentNo);
             }
         }
+
+        public bool SubFlowHidTodolist
+        {
+            get
+            {
+                return this.GetValBooleanByKey(SubFlowHandGuideAttr.SubFlowHidTodolist);
+            }
+        }
+
         #endregion
 
         #region 构造函数
@@ -176,8 +189,21 @@ namespace BP.WF.Template
                 msg += "\t\nSQL配置支持ccbpm表达式.";
                 map.SetHelperAlert(SubFlowHandGuideAttr.SubFlowGuideSQL, msg);
 
+
+                map.AddTBString(SubFlowHandGuideAttr.SubFlowGuideGroup, null, "分组的SQL", true, false, 0, 200, 150, true);
+
                 map.AddTBString(SubFlowHandGuideAttr.SubFlowGuideEnNoFiled, null, "实体No字段", true, false, 0, 40, 150);
                 map.AddTBString(SubFlowHandGuideAttr.SubFlowGuideEnNameFiled, null, "实体Name字段", true, false, 0, 40, 150);
+
+                //@0=单条手工启动, 1=按照简单数据源批量启动. @2=分组数据源批量启动. @3=树形结构批量启动.
+                map.AddTBInt(SubFlowHandAttr.SubFlowStartModel, 0, "启动模式", false, false);
+
+                //@0=表格模式, 1=列表模式.
+                map.AddTBInt(SubFlowHandAttr.SubFlowShowModel, 0, "展现模式", false, false);
+                //  map.Add(SubFlowHandAttr.IsTreeConstruct, 0, "是否是树结构", false, true);
+
+                //批量发送后，是否隐藏父流程的待办. @yln.
+                map.AddBoolean(SubFlowAttr.SubFlowHidTodolist, false, "发送后是否隐藏父流程待办",false,false);
 
                 this._enMap = map;
                 return this._enMap;
@@ -185,13 +211,13 @@ namespace BP.WF.Template
         }
         #endregion
 
-        protected override  bool beforeUpdateInsertAction()
+        protected override bool beforeUpdateInsertAction()
         {
-            if (this.IsTreeConstruct== true
-                && DataType.IsNullOrEmpty(this.ParentNo) == true)
-            {
-                throw new Exception("请配置父节点的编号");
-            }
+            //if (this.IsTreeConstruct== true
+            //    && DataType.IsNullOrEmpty(this.ParentNo) == true)
+            //{
+            //    throw new Exception("请配置父节点的编号");
+            //}
             return base.beforeUpdateInsertAction();
         }
 

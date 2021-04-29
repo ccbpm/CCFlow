@@ -58,6 +58,7 @@ namespace BP.WF.HttpHandler
         {
             string userNo = this.GetRequestVal("TB_No");
             string pass = this.GetRequestVal("TB_PW");
+            string openid = this.GetRequestVal("openid");
 
             BP.Port.Emp emp = new Emp();
             emp.UserID = userNo;
@@ -67,7 +68,23 @@ namespace BP.WF.HttpHandler
                 {
                     /*如果包含昵称列,就检查昵称是否存在.*/
                     Paras ps = new Paras();
-                    ps.SQL = "SELECT " + BP.Sys.Glo.UserNo + " FROM Port_Emp WHERE NikeName=" + SystemConfig.AppCenterDBVarStr +"userNo";
+                    ps.SQL = "SELECT " + BP.Sys.Glo.UserNo + " FROM Port_Emp WHERE NikeName=" + SystemConfig.AppCenterDBVarStr + "userNo";
+                    ps.Add("userNo", userNo);
+                    //string sql = "SELECT No FROM Port_Emp WHERE NikeName='" + userNo + "'";
+                    string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
+                    if (no == null)
+                        return "err@用户名或者密码错误.";
+
+                    emp.UserID = no;
+                    int i = emp.RetrieveFromDBSources();
+                    if (i == 0)
+                        return "err@用户名或者密码错误.";
+                }
+                else if (DBAccess.IsExitsTableCol("Port_Emp", "Tel") == true) 
+                {
+                    /*如果包含昵称列,就检查昵称是否存在.*/
+                    Paras ps = new Paras();
+                    ps.SQL = "SELECT " + BP.Sys.Glo.UserNo + " FROM Port_Emp WHERE Tel=" + SystemConfig.AppCenterDBVarStr + "userNo";
                     ps.Add("userNo", userNo);
                     //string sql = "SELECT No FROM Port_Emp WHERE NikeName='" + userNo + "'";
                     string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
@@ -90,6 +107,11 @@ namespace BP.WF.HttpHandler
 
             //调用登录方法.
             BP.WF.Dev2Interface.Port_Login(emp.UserID);
+
+            //if (!DataType.IsNullOrEmpty(openid) && openid != "undefined") {
+            //    emp.Wei_UserID = openid;
+            //    emp.Update();
+            //}
 
             return "登录成功.";
         }

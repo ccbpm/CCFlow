@@ -9,6 +9,8 @@ using BP.Sys;
 using BP.DA;
 using BP.En;
 using BP.CCBill;
+using System.IO;
+using System.Text;
 
 namespace BP.WF.HttpHandler
 {
@@ -130,6 +132,9 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
         #endregion 如果是单据.
+
+
+
 
         /// <summary>
         /// 从本机装载表单模版
@@ -260,7 +265,7 @@ namespace BP.WF.HttpHandler
                 }
             }
         }
-        
+
         /// <summary>
         /// 从流程上copy表单
         /// @徐彪来调用.
@@ -299,15 +304,20 @@ namespace BP.WF.HttpHandler
                 bool isClear = this.GetRequestValBoolen("IsClear");
                 bool isSetReadonly = this.GetRequestValBoolen("IsSetReadonly");
 
+                //首先初始化本部门的.
+                MapData mymd = new MapData(this.FK_MapData);
+                string frmSort = mymd.FK_FormTree; //表单类别,防止表单类别冲掉,导致表单树看不到他.
+
+
                 MapData md = new MapData(fromMapData);
                 MapData.ImpMapData(this.FK_MapData, BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(md.No));
 
                 //设置为只读模式.
                 if (isSetReadonly == true)
                     MapData.SetFrmIsReadonly(this.FK_MapData);
-            
+
                 //清空缓存
-                MapData mymd = new MapData(this.FK_MapData);
+                mymd = new MapData(this.FK_MapData);
 
                 // 如果是节点表单，就要执行一次修复，以免漏掉应该有的系统字段。
                 if (this.FK_MapData.Contains("ND") == true)
@@ -318,7 +328,23 @@ namespace BP.WF.HttpHandler
 
                     //设置节点ID.
                     mymd.Name = nd.Name;
+                    mymd.FK_FormTree = "";
                     mymd.Update();
+
+                    //如果包含ND，就保持附件的从表一致.
+                    if (fromMapData.IndexOf("ND") ==0)
+                    {
+                        MapDtls dtls = new MapDtls(fromMapData);
+
+                    }
+
+
+                }
+                else
+                {
+                    mymd.FK_FormTree = frmSort;
+                    mymd.Update();
+
                 }
 
                 mymd.RepairMap();

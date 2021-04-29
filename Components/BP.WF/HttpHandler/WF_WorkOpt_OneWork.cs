@@ -148,20 +148,12 @@ namespace BP.WF.HttpHandler
         {
             DataSet ds = new DataSet();
 
-            string workids = "";
-            if (this.FID == 0)
-                workids = BP.WF.Dev2Interface.GetParentChildWorkID(this.WorkID, "");
-            else
-                workids = BP.WF.Dev2Interface.GetParentChildWorkID(this.FID, "");
-
-            workids = workids.Substring(0, workids.Length - 1);
-
-            //获取track.
-            DataTable dt = BP.WF.Dev2Interface.DB_GenerTrackTable(this.FK_Flow, this.WorkID, this.FID, workids);
+            //获取干流程和子线程中的Track信息
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerTrackTable(this.FK_Flow, this.WorkID, this.FID);
             ds.Tables.Add(dt);
 
 
-            #region  父子流程数据存储到这里.
+            /*#region  父子流程数据存储到这里.
             Hashtable ht = new Hashtable();
             foreach (DataRow dr in dt.Rows)
             {
@@ -215,49 +207,19 @@ namespace BP.WF.HttpHandler
                     ht.Add(mypk, msg);
                 }
             }
-            #endregion
+            #endregion*/
 
-            //获取 WF_GenerWorkFlow
+            //获取当前流程的待办信息 WF_GenerWorkFlow
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = this.WorkID;
             gwf.RetrieveFromDBSources();
             ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
 
-            
-
             if (gwf.WFState != WFState.Complete)
             {
                 GenerWorkerLists gwls = new GenerWorkerLists();
-                QueryObject qo = new QueryObject(gwls);
-                //获取待办， //现在父节点查看流程，需要看子流程是否存在待办
-                if (workids.Contains(",") == true && gwf.PWorkID == 0)
-                {
-                    workids = workids.Replace(gwf.WorkID + ",", "");
-                    workids = workids.Substring(0, workids.Length - 1);
-                    qo.AddWhere(GenerWorkerListAttr.WorkID, workids);
-                    qo.addOr();
-                    qo.AddWhere(GenerWorkerListAttr.FID, workids);
+                gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.Idx);
 
-                }
-                else
-                {
-                    if (this.FID == 0)
-                    {
-                        qo.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
-                        qo.addOr();
-                        qo.AddWhere(GenerWorkerListAttr.FID, this.WorkID);
-                    }
-
-                    if (this.FID != 0)
-                    {
-                        qo.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
-                        qo.addOr();
-                        qo.AddWhere(GenerWorkerListAttr.WorkID, this.FID);
-                    }
-                }
-                qo.addOrderBy(GenerWorkerListAttr.Idx);
-                qo.DoQuery();
-                
                 //warning 补偿式的更新.  做特殊的判断，当会签过了以后仍然能够看isPass=90的错误数据.
                 foreach (GenerWorkerList item in gwls)
                 {
@@ -273,6 +235,10 @@ namespace BP.WF.HttpHandler
             //把节点审核配置信息.
             NodeWorkCheck fwc = new NodeWorkCheck(gwf.FK_Node);
             ds.Tables.Add(fwc.ToDataTableField("FrmWorkCheck"));
+
+            //获取启动的子流程信息
+            SubFlows subFlows = new SubFlows(this.FK_Flow);
+            ds.Tables.Add(subFlows.ToDataTableField("WF_SubFlow"));
 
             //返回结果.
             return BP.Tools.Json.DataSetToJson(ds, false);

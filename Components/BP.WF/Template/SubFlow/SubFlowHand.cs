@@ -12,6 +12,10 @@ namespace BP.WF.Template
     /// </summary>
     public class SubFlowHandAttr : SubFlowAttr
     {
+        /// <summary>
+        /// 启动流程的标签.
+        /// </summary>
+        public const string SubFlowLab = "SubFlowLab";
     }
     /// <summary>
     /// 手工启动子流程.
@@ -170,6 +174,41 @@ namespace BP.WF.Template
                 return this.GetValIntByKey(SubFlowAutoAttr.SendModel);
             }
         }
+
+        /// <summary>
+        /// 运行类型
+        /// </summary>
+        public SubFlowModel SubFlowModel
+        {
+            get
+            {
+                return (SubFlowModel)this.GetValIntByKey(SubFlowAutoAttr.SubFlowModel);
+            }
+        }
+
+        public string SubFlowLab
+        {
+            get
+            {
+                return this.GetValStringByKey(SubFlowHandAttr.SubFlowLab);
+            }
+        }
+
+        public int SubFlowStartModel
+        {
+            get
+            {
+                return this.GetValIntByKey(SubFlowAutoAttr.SubFlowStartModel);
+            }
+        }
+
+        public FrmSubFlowSta SubFlowSta 
+        {
+            get
+            {
+                return (FrmSubFlowSta)this.GetValIntByKey(SubFlowYanXuAttr.SubFlowSta);
+            }
+        }
         /// <summary>
         /// 指定的流程启动后,才能启动该子流程(请在文本框配置子流程).
         /// </summary>
@@ -193,6 +232,12 @@ namespace BP.WF.Template
         /// 手工启动子流程
         /// </summary>
         public SubFlowHand() { }
+
+        public SubFlowHand(string mypk)
+        {
+            this.MyPK = mypk;
+            this.Retrieve();
+        }
         /// <summary>
         /// 重写基类方法
         /// </summary>
@@ -218,6 +263,9 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowSta, 1, "状态", true, true, SubFlowYanXuAttr.SubFlowSta,
             "@0=禁用@1=启用@2=只读");
+                //@yln
+                map.AddTBString(SubFlowHandAttr.SubFlowLab, null, "启动文字标签", true, false, 0, 20, 150);
+
 
                 map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowModel, 0, "子流程模式", true, true, SubFlowYanXuAttr.SubFlowModel,
                 "@0=下级子流程@1=同级子流程");
@@ -248,22 +296,61 @@ namespace BP.WF.Template
                 map.SetHelperAlert(SubFlowHandAttr.SpecFlowOver, "指定的流程结束后，才能启动该子流程，多个子流程用逗号分开. 001,002");
                 map.AddTBString(SubFlowHandAttr.SpecFlowOverNote, null, "备注", true, false, 0, 500, 150, true);
 
+                map.AddTBString(SubFlowAttr.SubFlowCopyFields, null, "父流程字段对应子流程字段", true, false, 0, 400, 150, true);
+
+                map.AddDDLSysEnum(SubFlowAttr.BackCopyRole, 0, "子流程结束后数据字段反填规则", true, true,
+              SubFlowAttr.BackCopyRole, "@0=不反填@1=字段自动匹配@2=按照设置的格式@3=混合模式");
+
+                map.AddTBString(SubFlowAttr.ParentFlowCopyFields, null, "子流程字段对应父流程字段", true, false, 0, 400, 150, true);
+                map.SetHelperAlert(SubFlowHandAttr.ParentFlowCopyFields, "子流程结束后，按照设置模式:格式为@SubField1=ParentField1@SubField2=ParentField2@SubField3=ParentField3,即子流程字段对应父流程字段，设置成立复制\r\n如果使用签批字段时，请使用按照设置模式");
+
                 map.AddTBInt(SubFlowHandAttr.Idx, 0, "显示顺序", true, false);
 
-                map.AddBoolean(SubFlowHandGuideAttr.IsSubFlowGuide, false, "是否启用子流程批量发起前置导航", false, true, true);
+
+                //@0=单条手工启动, 1=按照简单数据源批量启动. @2=分组数据源批量启动. @3=树形结构批量启动.
+                map.AddTBInt(SubFlowHandAttr.SubFlowStartModel, 0, "启动模式", false, false);
+
+                //@0=表格模式, 1=列表模式.
+                map.AddTBInt(SubFlowHandAttr.SubFlowShowModel, 0, "展现模式", false, false);
 
                 RefMethod rm = new RefMethod();
-                rm.Title = "批量发起前置导航";
-                rm.ClassMethodName = this.ToString() + ".DoSetGuide";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+               // rm.Title = "批量发起前置导航";
+              //  rm.ClassMethodName = this.ToString() + ".DoSetGuide";
+            //    rm.RefMethodType = RefMethodType.RightFrameOpen;
+              //  map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "发起模式";
+                rm.ClassMethodName = this.ToString() + ".DoStartModel";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "显示模式";
+                rm.ClassMethodName = this.ToString() + ".DoShowModel";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
 
+        /// <summary>
+        /// 发起模式.
+        /// </summary>
+        /// <returns></returns>
+        public string DoStartModel()
+        {
+            return "../../../WF/Admin/AttrNode/SubFlowStartModel/Default.htm?MyPK=" + this.MyPK;
+        }
+
+        public string DoShowModel()
+        {
+            return "../../../WF/Admin/AttrNode/SubFlowShowModel/Default.htm?MyPK=" + this.MyPK;
+        }
+        
         public string DoSetGuide()
         {
             return "EnOnly.htm?EnName=BP.WF.Template.SubFlowHandGuide&MyPK="+this.MyPK;
@@ -274,6 +361,7 @@ namespace BP.WF.Template
             this.MyPK = this.FK_Node + "_" + this.SubFlowNo + "_0";
             return base.beforeInsert();
         }
+
         #region 移动.
         /// <summary>
         /// 上移

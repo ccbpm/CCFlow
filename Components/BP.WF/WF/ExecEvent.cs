@@ -165,6 +165,7 @@ namespace BP.WF
             if (pms.Count == 0)
                 return msg; //如果没有设置消息.
 
+            //撤销之后.
             if (doType.Equals(EventListNode.UndoneAfter) == true)
             {
                 AtPara ap = new AtPara(atPara);

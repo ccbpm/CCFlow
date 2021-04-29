@@ -584,18 +584,18 @@ namespace BP.WF.Template
                 RefMethod rm = new RefMethod();
                 rm = new RefMethod();
                 rm.Title = "自动发起";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/AutoStart.png";
+                //rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/AutoStart.png";
                 rm.ClassMethodName = this.ToString() + ".DoSetStartFlowDataSources()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-plane";
                 map.AddRefMethod(rm);
-
-           
 
                 rm = new RefMethod();
                 rm.Title = "发起限制规则";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Limit.png";
                 rm.ClassMethodName = this.ToString() + ".DoLimit()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-ban";
                 map.AddRefMethod(rm);
 
                 //rm = new RefMethod();
@@ -610,6 +610,7 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/StartGuide.png";
                 rm.ClassMethodName = this.ToString() + ".DoStartGuideV2019()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-list";
                 map.AddRefMethod(rm);
 
 
@@ -618,6 +619,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoAction";
                 rm.Icon = "../../WF/Img/Event.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-energy";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -625,6 +627,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoMessage";
                 rm.Icon = "../../WF/Img/Message24.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-bubbles";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -632,6 +635,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoNodesICON";
                 //  rm.Icon = "../../WF/Img/Event.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-heart";
                 map.AddRefMethod(rm);
 
 
@@ -641,6 +645,8 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoVer()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 // rm.GroupName = "实验中的功能";
+                rm.Icon = "icon-doc";
+
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -649,6 +655,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoPowerModel()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 // rm.GroupName = "实验中的功能";
+                rm.Icon = "icon-settings";
                 map.AddRefMethod(rm);
 
 
@@ -657,6 +664,7 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/AutoStart.png";
                 rm.ClassMethodName = this.ToString() + ".DoBatchStart()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-calculator";
                 map.AddRefMethod(rm);
 
                 //rm = new RefMethod();
@@ -674,6 +682,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoSDTOfFlow";
                 //rm.Icon = "../../WF/Img/Event.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-clock";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -683,6 +692,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoDeadLineRole()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 // rm.GroupName = "实验中的功能";
+                rm.Icon = "icon-clock";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -691,6 +701,7 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Admin/CCFormDesigner/Img/OvertimeRole.png";
                 rm.ClassMethodName = this.ToString() + ".DoOverDeadLineRole()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-energy";
                 // rm.GroupName = "实验中的功能";
                 map.AddRefMethod(rm);
 
@@ -712,8 +723,8 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Img/EntityFunc/Flow/CheckRpt.png";
                 rm.ClassMethodName = this.ToString() + ".DoCheck2018Url";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
+                rm.Icon = "icon-paper-plane";
+               // map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.GroupName = "模拟测试";
@@ -721,6 +732,7 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Img/EntityFunc/Flow/CheckRpt.png";
                 rm.ClassMethodName = this.ToString() + ".DoCheck";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-paper-plane";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -729,10 +741,8 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Img/EntityFunc/Flow/CheckRpt.png";
                 rm.ClassMethodName = this.ToString() + ".TestingContainer";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Icon = "icon-paper-plane";
                 map.AddRefMethod(rm);
-
-
-
                 #endregion 模拟测试.
 
                 #region 流程模版管理.
@@ -742,6 +752,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoImp()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "流程模版";
+                rm.Icon = "icon-paper-plane";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -750,41 +761,46 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoExps()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "流程模版";
+                rm.Icon = "icon-paper-plane";
                 map.AddRefMethod(rm);
                 #endregion 流程模版管理.
 
                 #region 开发接口.
                 rm = new RefMethod();
                 rm.Title = "与业务表数据同步";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/DTS.png";
+               // rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/DTS.png";
 
                 rm.ClassMethodName = this.ToString() + ".DoDTSBTable()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "开发接口";
+                rm.Icon = "icon-paper-plane";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "URL调用接口";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/URL.png";
+                //rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/URL.png";
                 rm.ClassMethodName = this.ToString() + ".DoAPI()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "开发接口";
+                rm.Icon = "icon-paper-plane";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "SDK开发接口";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/API.png";
+                //rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/API.png";
                 rm.ClassMethodName = this.ToString() + ".DoAPICode()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "开发接口";
+                rm.Icon = "icon-paper-plane";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "代码事件开发接口";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/API.png";
+               // rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/API.png";
                 rm.ClassMethodName = this.ToString() + ".DoAPICodeFEE()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "开发接口";
+                rm.Icon = "icon-paper-plane";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -792,8 +808,8 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoFlowAttrExt()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "开发接口";
+                rm.Icon = "icon-paper-plane";
                 map.AddRefMethod(rm);
-
                 #endregion 开发接口.
 
                 #region 流程运行维护.
@@ -803,6 +819,7 @@ namespace BP.WF.Template
                 rm.Warning = "您确定要执行吗? 注意:此方法耗费资源。";// "您确定要执行删除流程数据吗？";
                 rm.ClassMethodName = this.ToString() + ".DoReloadRptData";
                 rm.GroupName = "流程维护";
+                rm.Icon = "icon-briefcase";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -816,6 +833,8 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 rm.Warning = "您确定要根据新的规则重新产生标题吗？";
                 rm.GroupName = "流程维护";
+                rm.Icon = "icon-briefcase";
+
 
                 //设置相关字段.
                 rm.RefAttrKey = FlowAttr.TitleRoleNodes;
@@ -834,6 +853,8 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 rm.Warning = "您确定要重新生成吗？";
                 rm.GroupName = "流程维护";
+                rm.Icon = "icon-briefcase";
+
                 map.AddRefMethod(rm);
 
                 //带有参数的方法.
@@ -845,6 +866,7 @@ namespace BP.WF.Template
                 rm.HisAttrs.AddTBString("FieldNew", null, "新字段英文名", true, false, 0, 100, 100);
                 rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
                 rm.HisAttrs.AddBoolen("thisFlowOnly", true, "仅仅当前流程");
+                rm.Icon = "icon-briefcase";
                 rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
                 map.AddRefMethod(rm);
 
@@ -854,6 +876,7 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Field.png";
                 rm.ClassMethodName = this.ToString() + ".DoFlowFields()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-briefcase";
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
 
@@ -863,6 +886,7 @@ namespace BP.WF.Template
                 rm.Title = "删除该流程全部数据"; // this.ToE("DelFlowData", "删除数据"); // "删除数据";
                 rm.Warning = "您确定要执行删除流程数据吗? \t\n该流程的数据删除后，就不能恢复，请注意删除的内容。";// "您确定要执行删除流程数据吗？";
                 rm.ClassMethodName = this.ToString() + ".DoDelData";
+                rm.Icon = "icon-briefcase";
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
 
@@ -876,6 +900,7 @@ namespace BP.WF.Template
                 rm.HisAttrs.AddTBDateTime("DTFrom", null, "时间从", true, true);
                 rm.HisAttrs.AddTBDateTime("DTTo", null, "时间到", true, true);
                 rm.HisAttrs.AddBoolen("thisFlowOnly", true, "仅仅当前流程");
+                rm.Icon = "icon-briefcase";
                 rm.ClassMethodName = this.ToString() + ".DoDelFlows";
                 map.AddRefMethod(rm);
 
@@ -887,6 +912,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoDelDataOne";
                 rm.HisAttrs.AddTBInt("WorkID", 0, "输入工作ID", true, false);
                 rm.HisAttrs.AddTBString("beizhu", null, "删除备注", true, false, 0, 100, 100);
+                rm.Icon = "icon-briefcase";
                 map.AddRefMethod(rm);
 
 
@@ -897,6 +923,7 @@ namespace BP.WF.Template
                 rm.HisAttrs.AddTBInt("WorkID", 0, "输入工作ID", true, false);
                 rm.HisAttrs.AddTBInt("NodeID", 0, "节点ID", true, false);
                 rm.HisAttrs.AddTBString("Worker", null, "接受人编号", true, false, 0, 100, 100);
+                rm.Icon = "icon-briefcase";
                 rm.ClassMethodName = this.ToString() + ".DoSetTodoEmps";
                 map.AddRefMethod(rm);
 
@@ -907,6 +934,7 @@ namespace BP.WF.Template
                 rm.GroupName = "流程维护";
                 rm.ClassMethodName = this.ToString() + ".DoStopFlow";
                 rm.HisAttrs.AddTBInt("WorkID", 0, "输入工作ID", true, false);
+                rm.Icon = "icon-briefcase";
                 rm.HisAttrs.AddTBString("beizhu", null, "备注", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
 
@@ -918,6 +946,7 @@ namespace BP.WF.Template
                 rm.HisAttrs.AddTBInt("workid", 0, "请输入要会滚WorkID", true, false);
                 rm.HisAttrs.AddTBInt("nodeid", 0, "回滚到的节点ID", true, false);
                 rm.HisAttrs.AddTBString("note", null, "回滚原因", true, false, 0, 600, 200);
+                rm.Icon = "icon-briefcase";
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
                 #endregion 流程运行维护.
@@ -929,6 +958,7 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Img/Btn/Rpt.gif";
                 rm.ClassMethodName = this.ToString() + ".DoOpenRpt()";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Icon = "icon-briefcase";
                 map.AddRefMethod(rm);
 
                 //rm = new RefMethod();
@@ -945,6 +975,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_DataCharts()";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.GroupName = "流程监控";
+                rm.Icon = "icon-briefcase";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -953,6 +984,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_Search()";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.GroupName = "流程监控";
+                rm.Icon = "icon-briefcase";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -961,6 +993,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_Group()";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.GroupName = "流程监控";
+                rm.Icon = "icon-briefcase";
                 map.AddRefMethod(rm);
 
 
@@ -999,6 +1032,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_DeleteLog()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "流程监控";
+                rm.Icon = "icon-briefcase";
                 map.AddRefMethod(rm);
 
 
@@ -1012,6 +1046,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
                 rm.Visable = false;
+                rm.Icon = "icon-briefcase";
                 map.AddRefMethod(rm);
 
                 //rm = new RefMethod();
@@ -1028,6 +1063,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoNodeAttrs()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
+                rm.Icon = "icon-briefcase";
                 // map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -1036,6 +1072,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoTruckRight()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
+                rm.Icon = "icon-briefcase";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -1048,6 +1085,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
                 rm.GroupName = "实验中的功能";
+                rm.Icon = "icon-briefcase";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -1059,6 +1097,7 @@ namespace BP.WF.Template
                 rm.RefAttrLinkLabel = "业务表字段同步配置";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
+                rm.Icon = "icon-briefcase";
                 map.AddRefMethod(rm);
 
 
@@ -1070,6 +1109,7 @@ namespace BP.WF.Template
                 rm.Warning = "您确定要设置审核组件模式吗？ \t\n 1, 第2个节点以后的节点表单都指向第2个节点表单.  \t\n  2, 结束节点都设置为只读模式. ";
                 rm.GroupName = "实验中的功能";
                 rm.ClassMethodName = this.ToString() + ".DoSetFWCModel()";
+                rm.Icon = "icon-briefcase";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -1078,6 +1118,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.Func;
                 rm.Warning = "您确定要设置审核组件模式吗？ \t\n 1, 表NDxxxRpt是自动创建的.  \t\n  2, 在设置流程过程中有些多余的字段会生成到NDxxRpt表里. \t\n 3,这里是删除数据字段为null 并且是多余的字段.";
                 rm.GroupName = "实验中的功能";
+                rm.Icon = "icon-briefcase";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -1086,9 +1127,9 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.Func;
                 rm.Warning = "您确定要设置审核组件模式吗？ \t\n 1, 表NDxxxRpt是自动创建的.  \t\n  2, 在设置流程过程中有些多余的字段会生成到NDxxxRpt表里. \t\n 3,这里是删除数据字段为null 并且是多余的字段.";
                 rm.GroupName = "实验中的功能";
+                rm.Icon = "icon-briefcase";
                 map.AddRefMethod(rm);
                 #endregion 实验中的功能
-
 
                 //rm = new RefMethod();
                 //rm.Title = "设置自动发起"; // "报表运行";

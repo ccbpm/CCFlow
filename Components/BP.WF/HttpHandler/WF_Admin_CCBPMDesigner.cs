@@ -21,49 +21,12 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_CCBPMDesigner : DirectoryPageBase
     {
-        public string NewFlow2020_Save_del()
-        {
-            try
-            {
-                string FlowName = this.GetRequestVal("FlowName");
-                string flowSort = this.GetRequestVal("FlowSort").Trim();
 
-                int flowFrmModelval = this.GetRequestValInt("FlowFrmModel");
-                //   string FrmUrl = this.GetRequestVal("FrmUrl");
-                // string FlowVersion = this.GetRequestVal("FlowVersion");
-
-                string flowNo = BP.WF.Template.TemplateGlo.NewFlow(flowSort, FlowName,
-                        Template.DataStoreModel.SpecTable, null, null);
-
-                Flow fl = new Flow(flowNo);
-                if (flowFrmModelval == 1)
-                {
-                    //设置默认的模式.
-                    fl.FlowFrmModel = FlowFrmModel.TraditionModel;
-                    fl.FrmUrl = "ND" + int.Parse(flowNo) + "01";
-                }
-                else
-                {
-                    fl.FlowFrmModel = (FlowFrmModel)flowFrmModelval;
-                }
-                fl.DirectUpdate();
-
-                //清空WF_Emp 的StartFlows ,让其重新计算.
-                // DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
-                return flowNo;
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
-
-            return "创建成功.";
-        }
         /// <summary>
         /// 选择器
         /// </summary>
         /// <returns></returns>
-        public string SelectEmps_Init()
+        public string SelectFlows_Init()
         {
             string fk_flowsort = this.GetRequestVal("FK_FlowSort").Substring(1);
 
@@ -711,42 +674,41 @@ namespace BP.WF.HttpHandler
 
             //获得当前管理员管理的组织数量.
             OrgAdminers adminers = null;
-            if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
-            {
-                //WebUser.OrgNo = orgs[0].GetValStrByKey("No");
-            }
-            else
-            {
-                //查询他管理多少组织.
-                adminers = new OrgAdminers();
-                adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.UserID);
-                if (adminers.Count == 0)
-                {
-                    BP.WF.Port.Admin2.Orgs orgs = new Orgs();
-                    int i = orgs.Retrieve("Adminer", this.GetRequestVal("TB_No"));
-                    if (i == 0)
-                        return "err@非管理员或二级管理员用户，不能登录后台.";
 
-                    foreach (BP.WF.Port.Admin2.Org org in orgs)
-                    {
-                        OrgAdminer oa = new OrgAdminer();
-                        oa.FK_Emp = WebUser.No;
-                        oa.OrgNo = org.No;
-                        oa.Save();
-                    }
-                    adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.UserID);
+            //查询他管理多少组织.
+            adminers = new OrgAdminers();
+            adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.UserID);
+            if (adminers.Count == 0)
+            {
+                BP.WF.Port.Admin2.Orgs orgs = new Orgs();
+                int i = orgs.Retrieve("Adminer", this.GetRequestVal("TB_No"));
+                if (i == 0)
+                    return "err@非管理员或二级管理员用户，不能登录后台.";
+
+                foreach (BP.WF.Port.Admin2.Org org in orgs)
+                {
+                    OrgAdminer oa = new OrgAdminer();
+                    oa.FK_Emp = WebUser.No;
+                    oa.OrgNo = org.No;
+                    oa.Save();
                 }
+                adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.UserID);
             }
+
 
             //设置他的组织，信息.
             WebUser.No = emp.UserID; //登录帐号.
             WebUser.FK_Dept = emp.FK_Dept;
             WebUser.FK_DeptName = emp.FK_DeptText;
 
-            WebUser.SID = DBAccess.GenerGUID(); //设置SID.
 
             //执行登录.
-            BP.WF.Dev2Interface.Port_Login(emp.UserID, emp.SID, emp.OrgNo);
+            BP.WF.Dev2Interface.Port_Login(emp.UserID, null, emp.OrgNo);
+
+            //设置SID.
+            WebUser.SID = DBAccess.GenerGUID(); //设置SID.
+            emp.SID = WebUser.SID; //设置SID.
+            BP.WF.Dev2Interface.Port_SetSID(emp.UserID, WebUser.SID);
 
             //执行更新到用户表信息.
             // WebUser.UpdateSIDAndOrgNoSQL();
@@ -755,7 +717,7 @@ namespace BP.WF.HttpHandler
             if (adminers.Count == 1)
                 return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
 
-            return "url@SelectOneOrg.htm?SID=" + emp.SID + "&UserNo=" + emp.UserID;
+            return "url@SelectOneOrg.htm?SID=" + emp.SID + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
             // return orgs.ToJson(); //返回这个Json,让其选择一个组织登录.
         }
         /// <summary>
@@ -1422,10 +1384,54 @@ namespace BP.WF.HttpHandler
                     menu.Url = "";
                     newMenus.Add(menu);
                 }
-                DataTable dt = newMenus.ToDataTable();
-                treeJson = BP.Tools.Json.ToJson(newMenus.ToDataTable());
+                return BP.Tools.Json.ToJson(newMenus.ToDataTable());
             }
-            else
+            if (Glo.CCBPMRunModel == CCBPMRunModel.SAAS)
+            {
+                //查询全部.
+                AdminMenuCloudGroups groups = new AdminMenuCloudGroups();
+                groups.RetrieveAll();
+
+                AdminMenuClouds menus = new AdminMenuClouds();
+                menus.RetrieveAll();
+
+                // 定义容器.
+                AdminMenuClouds newMenus = new AdminMenuClouds();
+
+                foreach (AdminMenuCloudGroup menu in groups)
+                {
+
+                    //是否可以使用？
+                    if (menu.IsCanUse(WebUser.No) == false)
+                        continue;
+                    AdminMenuCloud newMenu = new AdminMenuCloud();
+                    newMenu.No = menu.No;
+                    newMenu.Name = menu.Name;
+                    newMenu.GroupNo = "0";
+                    newMenu.For = menu.For;
+                    newMenu.Url = "";
+                    newMenus.Add(newMenu);
+                }
+
+                foreach (AdminMenuCloud menu in menus)
+                {
+                    if (menu.Name.Equals("系统设置") && menu.Url.Contains("BP.Cloud.OrgSetting.Org"))
+                        menu.Url = menu.Url + "&No=" + WebUser.OrgNo;
+                    newMenus.Add(menu);
+                }
+                //添加默认，无权限
+                if (newMenus.Count == 0)
+                {
+                    AdminMenuCloud menu = new AdminMenuCloud();
+                    menu.No = "1";
+                    menu.GroupNo = "0";
+                    menu.Name = "无权限";
+                    menu.Url = "";
+                    newMenus.Add(menu);
+                }
+                return BP.Tools.Json.ToJson(newMenus.ToDataTable());
+            }
+            if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
             {
                 //查询全部.
                 AdminMenuGroups groups = new AdminMenuGroups();
@@ -1470,8 +1476,7 @@ namespace BP.WF.HttpHandler
                     menu.Url = "";
                     newMenus.Add(menu);
                 }
-                DataTable dt = newMenus.ToDataTable();
-                treeJson = BP.Tools.Json.ToJson(newMenus.ToDataTable());
+                return BP.Tools.Json.ToJson(newMenus.ToDataTable());
             }
             return treeJson;
         }

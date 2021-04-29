@@ -362,7 +362,6 @@ namespace BP.WF.HttpHandler
             #endregion 如果没有ndFrm 就增加上.
 
             //组合这个实体才有外键信息.
-            FrmNodeExts fnes = new FrmNodeExts();
             foreach (FrmNode fn in fns)
             {
                 MapData md = new MapData();
@@ -372,10 +371,12 @@ namespace BP.WF.HttpHandler
                     fn.Delete();  //说明该表单不存在了，就需要把这个删除掉.
                     continue;
                 }
-
-                FrmNodeExt myen = new FrmNodeExt(fn.MyPK);
-                fnes.AddEntity(myen);
+               // FrmNodeExt myen = new FrmNodeExt(fn.MyPK);
+                //fnes.AddEntity(myen);
             }
+
+            FrmNodeExts fnes = new FrmNodeExts();
+            fnes.Retrieve(FrmNodeAttr.FK_Flow, this.FK_Flow, FrmNodeAttr.FK_Node, this.FK_Node, FrmNodeAttr.Idx);
 
             //把json数据返回过去.
             return fnes.ToJson();

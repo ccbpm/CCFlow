@@ -5,6 +5,24 @@ using System.Text;
 namespace BP.DA
 {
     /// <summary>
+    /// 数据库的大小写
+    /// </summary>
+    public enum FieldCaseModel
+    {
+        /// <summary>
+        /// 无
+        /// </summary>
+        None,
+        /// <summary>
+        /// 大写
+        /// </summary>
+        UpperCase,
+        /// <summary>
+        /// 小写
+        /// </summary>
+        Lowercase
+    }
+    /// <summary>
     /// 时间计算方式
     /// </summary>
     public enum TWay

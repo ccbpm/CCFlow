@@ -1122,7 +1122,7 @@ namespace BP.WF.HttpHandler
         protected string ExportDGToExcel(System.Data.DataTable dt, Entity en, string title, Attrs mapAttrs = null, string filename = null)
         {
             if (filename == null)
-                filename = title + "_" + DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";//"Ep" + this.Session.SessionID + ".xls";
+                filename = title + "_" + DataType.CurrentDataCNOfLong + "_" + WebUser.No + ".xls";//"Ep" + this.Session.SessionID + ".xls";
             string file = filename;
             bool flag = true;
             string filepath = SystemConfig.PathOfTemp;

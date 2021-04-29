@@ -252,6 +252,8 @@ namespace BP.WF.HttpHandler
                     attr.DirectInsert();
                 }
             }
+            MapData mapData = new MapData(rptNo);
+            mapData.ClearCash();
             return "保存成功.";
         }
         #endregion

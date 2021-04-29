@@ -17,7 +17,6 @@ namespace BP.WF.HttpHandler
 {
     public class WF_Admin_DevelopDesigner : BP.WF.HttpHandler.DirectoryPageBase
     {
-
         #region 执行父类的重写方法.
         /// <summary>
         /// 构造函数
@@ -87,6 +86,40 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        #region 插入模版.
+        /// <summary>
+        /// 获取开发者表单模板目录
+        /// </summary>
+        /// <returns></returns>
+        public string Template_Init()
+        {
+            string path = SystemConfig.PathOfDataUser + "Style\\TemplateFoolDevelopDesigner\\";
+            var tmps = new DirectoryInfo(path).GetFiles("*.htm");
+
+            return BP.Tools.Json.ToJson(tmps);
+        }
+        /// <summary>
+        /// 根据名称获取开发者表单文件内容
+        /// </summary>
+        /// <returns></returns>
+        public string Template_GenerHtml()
+        {
+            var fileName = this.GetRequestVal("DevTempName");
+            string path = SystemConfig.PathOfDataUser + "Style\\TemplateFoolDevelopDesigner\\";
+
+            string filePath = path + fileName;
+
+            Stream stream = new FileStream(filePath, FileMode.Open);
+            Encoding encode = System.Text.Encoding.GetEncoding("UTF-8");
+            StreamReader reader = new StreamReader(stream, encode);
+            string strHtml = reader.ReadToEnd();
+
+            reader.Close();
+            stream.Close();
+            return strHtml;
+        }
+        #endregion 插入模版.
+
         public string Fields_Init()
         {
             string html = DBAccess.GetBigTextFromDB("Sys_MapData", "No",
@@ -102,9 +135,6 @@ namespace BP.WF.HttpHandler
         {
             string html = DBAccess.GetBigTextFromDB("Sys_MapData", "No",
                 this.FrmID, "HtmlTemplateFile");
-
-
-
 
             return "替换成功.";
             //return html;

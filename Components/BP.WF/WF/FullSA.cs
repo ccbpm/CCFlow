@@ -48,8 +48,12 @@ namespace BP.WF
             /* 如果启用了要计算未来的处理人 */
             SelectAccper sa = new SelectAccper();
 
+            Node toNode = currWorkNode.JumpToNode;
             //首先要清除以前的计算，重新计算。
-            sa.Delete(SelectAccperAttr.WorkID, workid);
+            if (toNode != null)
+                DBAccess.RunSQL("Delete From WF_SelectAccper Where WorkID=" + workid + " AND FK_Node !=" + toNode.NodeID);
+            else
+                DBAccess.RunSQL("Delete From WF_SelectAccper Where WorkID=" + workid);
 
             //求出已经路过的节点.
             DataTable dt = DBAccess.RunSQLReturnTable("SELECT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID", "WorkID", workid);

@@ -199,7 +199,7 @@ namespace BP.Sys
 
                 this.SetValByKey(FrmAttachmentDBAttr.FileName, str);
 
-                string fileExt = str.Substring(str.LastIndexOf('.')+1);
+                string fileExt = str.Substring(str.LastIndexOf('.') + 1);
 
                 //后缀名.
                 this.SetValByKey(FrmAttachmentDBAttr.FileExts, fileExt);
@@ -232,7 +232,7 @@ namespace BP.Sys
             {
                 this.SetValByKey(FrmAttachmentDBAttr.FK_FrmAttachment, value);
 
-               
+
                 if (DataType.IsNullOrEmpty(this.FK_MapData) == true)
                     throw new Exception("err@错误:请首先给FK_MapData赋值..");
 
@@ -312,7 +312,7 @@ namespace BP.Sys
             }
         }
 
-    
+
 
         /// <summary>
         /// 所在部门
@@ -467,7 +467,7 @@ namespace BP.Sys
                 map.AddTBString(FrmAttachmentDBAttr.RefPKVal, null, "实体主键", true, false, 0, 50, 20);
                 map.AddTBInt(FrmAttachmentDBAttr.FID, 0, "FID", true, false);
                 map.AddTBInt(FrmAttachmentDBAttr.NodeID, 0, "节点ID", true, false);
-                
+
 
                 map.AddTBString(FrmAttachmentDBAttr.Sort, null, "类别", true, false, 0, 200, 20);
                 map.AddTBString(FrmAttachmentDBAttr.FileFullName, null, "文件路径", true, false, 0, 700, 20);
@@ -507,10 +507,10 @@ namespace BP.Sys
             if (System.IO.Directory.Exists(pathOfTemp) == false)
                 System.IO.Directory.CreateDirectory(pathOfTemp);
 
-            string tempFile =  pathOfTemp +System.Guid.NewGuid()+"."+this.FileExts;
+            string tempFile = pathOfTemp + System.Guid.NewGuid() + "." + this.FileExts;
 
 
-          //  string tempFile = SystemConfig.PathOfTemp + + this.FileName;
+            //  string tempFile = SystemConfig.PathOfTemp + + this.FileName;
             try
             {
                 if (System.IO.File.Exists(tempFile) == true)
@@ -528,6 +528,12 @@ namespace BP.Sys
 
             return tempFile;
         }
+        public string DoDown()
+        {
+
+            return "执行成功.";
+        }
+
         /// <summary>
         /// 重写
         /// </summary>
@@ -544,9 +550,9 @@ namespace BP.Sys
                 return;
 
             //是一个流程先判断流程是否结束，如果结束了，就不让删除.
-         //   string nodeID = this.FK_MapData.Replace("ND", "");
-          //  if (DataType.IsNumStr(nodeID) = true)
-           // {
+            //   string nodeID = this.FK_MapData.Replace("ND", "");
+            //  if (DataType.IsNumStr(nodeID) = true)
+            // {
             //}
 
 
@@ -573,17 +579,17 @@ namespace BP.Sys
             }
 
 
-             base.afterDelete();
+            base.afterDelete();
         }
 
-     
+
         #endregion
 
         /// <summary>
         /// 获得临时文件
         /// </summary>
         /// <returns></returns>
-        public string GenerTempFile(AthSaveWay saveWay= Sys.AthSaveWay.IISServer)
+        public string GenerTempFile(AthSaveWay saveWay = Sys.AthSaveWay.IISServer)
         {
             if (saveWay == Sys.AthSaveWay.IISServer)
                 return this.FileFullName;
@@ -595,6 +601,25 @@ namespace BP.Sys
                 throw new Exception("@尚未处理存储到db里面的文件.");
 
             throw new Exception("@尚未处理存储到db里面的文件.");
+        }
+
+        /// <summary>
+        /// 向下移動
+        /// </summary>
+        public void DoDownTabIdx()
+        {
+            this.DoOrderDown(FrmAttachmentDBAttr.RefPKVal, this.RefPKVal,
+                FrmAttachmentDBAttr.FK_FrmAttachment, this.FK_FrmAttachment, FrmAttachmentDBAttr.Idx);
+        }
+        /// <summary>
+        /// 向上移動
+        /// </summary>
+        public void DoUpTabIdx()
+        {
+            this.DoOrderUp(FrmAttachmentDBAttr.RefPKVal, this.RefPKVal,
+               FrmAttachmentDBAttr.FK_FrmAttachment, this.FK_FrmAttachment, FrmAttachmentDBAttr.Idx);
+
+            //  this.DoOrderUp(FrmAttachmentDBAttr.FK_MapData, this.FK_MapData, FrmAttachmentDBAttr.Idx);
         }
     }
     /// <summary>

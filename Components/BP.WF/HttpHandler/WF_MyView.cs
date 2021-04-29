@@ -635,7 +635,17 @@ namespace BP.WF.HttpHandler
             string toDoEmps = ";"+gwf.TodoEmps;
 
             //当前的流程还是运行中的，并且可以执行当前工作,如果是，就直接转到工作处理器.
-            if (gwf.WFState != WFState.Complete && toDoEmps.Contains(";" + WebUser.No + ","))
+            if (gwf.FID != 0)
+            {
+                Node nd = new Node(gwf.FK_Node);
+                if (nd.HisRunModel == RunModel.SubThread && toDoEmps.Contains(";" + WebUser.No+ ","))
+                {
+                    WF_MyFlow handler = new WF_MyFlow();
+                    return handler.MyFlow_Init();
+                }
+            }
+
+            if (gwf.FID == 0 && gwf.WFState != WFState.Complete && toDoEmps.Contains(";" + WebUser.No + ","))
             {
                 WF_MyFlow handler = new WF_MyFlow();
                 return handler.MyFlow_Init();

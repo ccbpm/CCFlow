@@ -27,7 +27,6 @@ namespace BP.WF.Template
         {
             FileInfo info = new FileInfo(path);
             DataSet ds = new DataSet();
-
             try
             {
                 ds.ReadXml(path);
@@ -1817,6 +1816,7 @@ namespace BP.WF.Template
                 nd.FlowName = flow.Name;
                 nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
                 nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
+                nd.CondModel = DirCondModel.ByDDLSelected; 
 
                 nd.X = 200;
                 nd.Y = 250;

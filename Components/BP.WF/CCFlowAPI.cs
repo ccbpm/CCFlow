@@ -601,9 +601,9 @@ namespace BP.WF
 
                     //执行装载填充.
                     string mypk = MapExtXmlList.PageLoadFull + "_" + md.No;
-                    me = mes.GetEntityByKey("MyPK", mypk) as MapExt;
-                    if (frmNode.IsEnableLoadData == true && me != null)
+                    if (frmNode.IsEnableLoadData == true && md.IsPageLoadFull==true)
                     {
+                        me= mes.GetEntityByKey("MyPK", mypk) as MapExt;
                         //执行通用的装载方法.
                         MapAttrs attrs = md.MapAttrs;
                         MapDtls dtls = md.MapDtls;

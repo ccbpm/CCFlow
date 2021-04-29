@@ -946,7 +946,7 @@ namespace BP.En
                 }
             }
 
-            DataTable dt = this.ToDataTableDescField();
+            DataTable dt = this.ToDataTableField();
             DataSet ds = new DataSet();
             ds.Tables.Add(dt); //  this.ToDataSet();
             ds.WriteXml(file);
@@ -1451,7 +1451,16 @@ namespace BP.En
                         || attr.MyFieldType == FieldType.PKFK)
                         dr[attr.Key] = val.ToString().Trim();
                     else
-                        dr[attr.Key] = val;
+                    {
+                        try
+                        {
+                            dr[attr.Key] = val;
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception("err@列[" + attr.Key + "]，设置值:" + val + "错误，也许是类型匹配");
+                        }
+                    }
                 }
                 dt.Rows.Add(dr);
             }

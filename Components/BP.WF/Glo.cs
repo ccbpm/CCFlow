@@ -18,6 +18,7 @@ using System.IO;
 using System.Collections.Generic;
 using BP.Sys.FrmUI;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace BP.WF
 {
@@ -1106,6 +1107,7 @@ namespace BP.WF
                     case "WF_EmpWorks":
                     case "WF_GenerEmpWorkDtls":
                     case "WF_GenerEmpWorks":
+                    case "V_GPM_EmpMenu":
                         continue;
                     case "Sys_Enum":
                         en.CheckPhysicsTable();
@@ -1190,7 +1192,7 @@ namespace BP.WF
         /// 当前版本号-为了升级使用.
         /// 20200602:升级方向条件.
         /// </summary>
-        public static int Ver = 20201130;
+        public static int Ver = 20210211;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -1221,8 +1223,12 @@ namespace BP.WF
             {
                 GroupField groupField = new GroupField();
                 groupField.CheckPhysicsTable();
-                DBAccess.RunSQL("UPDATE Sys_GroupField SET FrmID=enName WHERE FrmID is null");
+                DBAccess.RunSQL("UPDATE Sys_GroupField SET FrmID=enName WHERE FrmID IS null");
             }
+
+            //升级.
+            Auth ath = new Auth();
+            ath.CheckPhysicsTable();
 
             //先升级脚本,就是说该文件如果被修改了就会自动升级.
             UpdataCCFlowVerSQLScript();
@@ -1237,11 +1243,15 @@ namespace BP.WF
             if (!SystemConfig.OrganizationIsView)
                 CheckGPM();
 
+
             MapAttr attr = new MapAttr();
             attr.CheckPhysicsTable();
 
             FlowExt fe = new FlowExt();
             fe.CheckPhysicsTable();
+
+            MapData mapData = new MapData();
+            mapData.CheckPhysicsTable();
 
             #region 升级优化集团版的应用. 2020.04.03
 
@@ -1266,7 +1276,7 @@ namespace BP.WF
                 DBAccess.DropTableColumn("WF_NodeToolbar", "ShowWhere");
             }
             //--2020.11.30 FrmLab中Text字段在人大金仓是关键字
-            if (DBAccess.IsExitsTableCol("Sys_FrmLab", "Text") == true)
+            if (DBAccess.IsExitsTableCol("Sys_FrmLab", "Lab") == false)
             {
                 DBAccess.RunSQL("ALTER TABLE Sys_FrmLab ADD Lab NVARCHAR(100) DEFAULT  NULL");
                 DBAccess.RunSQL("UPDATE Sys_FrmLab SET Lab=Text WHERE Lab='' AND  Text!='' ");
@@ -1705,6 +1715,40 @@ namespace BP.WF
                 extP.Insert(); //执行插入.
 
             }
+
+            //装载填充
+            exts = new MapExts();
+            exts.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull);
+            foreach (MapExt ext in exts)
+            {
+                mapData.No = ext.FK_MapData;
+                if (mapData.RetrieveFromDBSources() == 0)
+                {
+                    ext.Delete();
+                    continue;
+                }
+                if (DataType.IsNullOrEmpty(mapData.GetParaString("IsPageLoadFull")) == false)
+                    continue;
+                mapData.IsPageLoadFull = true;
+                mapData.Update();
+
+                //修改填充数据的值
+                ext.Doc = ext.Tag;
+
+                string tag1 = ext.Tag1;
+                if (DataType.IsNullOrEmpty(tag1) == true)
+                {
+                    ext.Update();
+                    continue;
+                }
+                MapDtls dtls = mapData.MapDtls;
+                foreach (MapDtl dtl in dtls)
+                {
+                    tag1 = tag1.Replace("*" + dtl.No + "=", "$" + dtl.No + ":");
+                }
+                ext.Tag1 = tag1;
+                ext.Update();
+            }
             #endregion 升级 填充数据.
 
             string msg = "";
@@ -1740,7 +1784,8 @@ namespace BP.WF
 
                 #region 修复丢失的发起人.
                 Flows fls = new Flows();
-                fls.RetrieveAll();
+                fls.GetNewEntity.CheckPhysicsTable();
+
                 foreach (Flow item in fls)
                 {
                     if (DBAccess.IsExitsObject(item.PTable) == false)
@@ -1807,9 +1852,6 @@ namespace BP.WF
 
                 BP.WF.Template.MapDtlExt dtlExt = new MapDtlExt();
                 dtlExt.CheckPhysicsTable();
-
-                MapData mapData = new MapData();
-                mapData.CheckPhysicsTable();
 
                 //删除枚举.
                 DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey IN ('SelectorModel','CtrlWayAth')");
@@ -1989,9 +2031,7 @@ namespace BP.WF
                         sqls += "@UPDATE Sys_MapExt SET MyPK= ExtType||'_'||FK_Mapdata||'_'||AttrOfOper WHERE ExtType='" + MapExtXmlList.DDLFullCtrl + "'";
                         sqls += "@UPDATE Sys_MapExt SET MyPK= ExtType||'_'||FK_Mapdata||'_'||AttrsOfActive WHERE ExtType='" + MapExtXmlList.ActiveDDL + "'";
                     }
-
-
-                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    else if (SystemConfig.AppCenterDBType == DBType.MySQL)
                     {
                         sqls += "UPDATE Sys_MapExt SET MyPK=CONCAT(ExtType,'_',FK_Mapdata,'_',AttrOfOper) WHERE ExtType='" + MapExtXmlList.TBFullCtrl + "'";
                         sqls += "@UPDATE Sys_MapExt SET MyPK=CONCAT(ExtType,'_',FK_Mapdata,'_',AttrOfOper) WHERE ExtType='" + MapExtXmlList.PopVal + "'";
@@ -2134,47 +2174,50 @@ namespace BP.WF
                 #endregion
 
                 #region 重新生成view WF_EmpWorks,  2013-08-06.
-
-                if (DBAccess.IsExitsObject("WF_EmpWorks") == true)
-                    DBAccess.RunSQL("DROP VIEW WF_EmpWorks");
-
-                if (DBAccess.IsExitsObject("V_FlowStarterBPM") == true)
-                    DBAccess.RunSQL("DROP VIEW V_FlowStarterBPM");
-
-                if (DBAccess.IsExitsObject("V_TOTALCH") == true)
-                    DBAccess.RunSQL("DROP VIEW V_TOTALCH");
-
-                if (DBAccess.IsExitsObject("V_TOTALCHYF") == true)
-                    DBAccess.RunSQL("DROP VIEW V_TOTALCHYF");
-
-                if (DBAccess.IsExitsObject("V_TotalCHWeek") == true)
-                    DBAccess.RunSQL("DROP VIEW V_TotalCHWeek");
-
-                if (DBAccess.IsExitsObject("V_WF_Delay") == true)
-                    DBAccess.RunSQL("DROP VIEW V_WF_Delay");
-
-                string sqlscript = "";
-                //执行必须的sql.
-                switch (SystemConfig.AppCenterDBType)
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 {
-                    case DBType.Oracle:
-                        sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitView_Ora.sql";
-                        break;
-                    case DBType.MSSQL:
-                    case DBType.Informix:
-                        sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitView_SQL.sql";
-                        break;
-                    case DBType.MySQL:
-                        sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitView_MySQL.sql";
-                        break;
-                    case DBType.PostgreSQL:
-                        sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitView_PostgreSQL.sql";
-                        break;
-                    default:
-                        break;
+                    if (DBAccess.IsExitsObject("WF_EmpWorks") == true)
+                        DBAccess.RunSQL("DROP VIEW WF_EmpWorks");
+
+                    if (DBAccess.IsExitsObject("V_FlowStarterBPM") == true)
+                        DBAccess.RunSQL("DROP VIEW V_FlowStarterBPM");
+
+                    if (DBAccess.IsExitsObject("V_TOTALCH") == true)
+                        DBAccess.RunSQL("DROP VIEW V_TOTALCH");
+
+                    if (DBAccess.IsExitsObject("V_TOTALCHYF") == true)
+                        DBAccess.RunSQL("DROP VIEW V_TOTALCHYF");
+
+                    if (DBAccess.IsExitsObject("V_TotalCHWeek") == true)
+                        DBAccess.RunSQL("DROP VIEW V_TotalCHWeek");
+
+                    if (DBAccess.IsExitsObject("V_WF_Delay") == true)
+                        DBAccess.RunSQL("DROP VIEW V_WF_Delay");
+
+                    string sqlscript = "";
+                    //执行必须的sql.
+                    switch (SystemConfig.AppCenterDBType)
+                    {
+                        case DBType.Oracle:
+                            sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitView_Ora.sql";
+                            break;
+                        case DBType.MSSQL:
+                        case DBType.Informix:
+                            sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitView_SQL.sql";
+                            break;
+                        case DBType.MySQL:
+                            sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitView_MySQL.sql";
+                            break;
+                        case DBType.PostgreSQL:
+                            sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitView_PostgreSQL.sql";
+                            break;
+                        default:
+                            break;
+                    }
+
+                    DBAccess.RunSQLScript(sqlscript);
                 }
 
-                DBAccess.RunSQLScript(sqlscript);
                 #endregion
 
                 #region 升级Img
@@ -2440,8 +2483,11 @@ namespace BP.WF
         /// <returns></returns>
         public static bool IsCanInstall()
         {
-            string sql = "";
+            
+            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                throw new Exception("err@初次安装必须设置 CCBPMRunModel=0 为单机版，安装后在修改集团或者saas版.");
 
+            string sql = "";
             string errInfo = "";
             try
             {
@@ -2476,7 +2522,6 @@ namespace BP.WF
                 errInfo = " 当前用户没有[创建索引]的权限. ";
                 DBAccess.CreatIndex("AA", "OID"); //可否创建索引.
 
-
                 errInfo = " 当前用户没有[查询数据表]的权限. ";
                 sql = "select * from AA "; //检查是否有查询的权限.
                 DBAccess.RunSQLReturnTable(sql);
@@ -2503,6 +2548,16 @@ namespace BP.WF
                 errInfo = " 当前用户没有[删除表]的权限.";
                 sql = "DROP TABLE AA"; //检查是否可以删除表.
                 DBAccess.RunSQL(sql);
+
+                if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                {
+                    sql = " set @@global.sql_mode ='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';";
+                    DBAccess.RunSQL(sql);
+                }
+
+                if (SystemConfig.AppCenterDBDatabase.Contains("-") == true)
+                    throw new Exception("err@数据库名称不能包含 '-' 号，您可以使用 '_' .");
+
                 return true;
             }
             catch (Exception ex)
@@ -2525,7 +2580,6 @@ namespace BP.WF
                 info += "\t\n3. 必须有删除创建索引主键的权限。 ";
                 info += "\t\n4. 我们建议您设置当前数据库连接用户为管理员权限。 ";
                 info += "\t\n ccbpm检查出来的信息如下：" + errInfo;
-
                 info += "\t\n etc: 数据库测试异常信息:" + ex.Message;
 
                 throw new Exception("err@" + info);
@@ -2645,6 +2699,12 @@ namespace BP.WF
 
             MapDtl mapdtl = new MapDtl();
             mapdtl.CheckPhysicsTable();
+
+            MapData mapData = new MapData();
+            mapData.CheckPhysicsTable();
+
+            SysEnum sysenum = new SysEnum();
+            sysenum.CheckPhysicsTable();
 
             CC cc = new CC();
             cc.CheckPhysicsTable();
@@ -2812,8 +2872,8 @@ namespace BP.WF
             #region 5, 初始化数据.
             if (isInstallFlowDemo)
             {
-                sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitPublicData.sql";
-                DBAccess.RunSQLScript(sqlscript);
+               // sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitPublicData.sql";
+               // DBAccess.RunSQLScript(sqlscript);
             }
             // else
             // {
@@ -4193,7 +4253,11 @@ namespace BP.WF
                 return en;
 
             DataTable dt = null;
-            string sql = item.Tag;
+            string sql = item.Doc;
+            string fk_dbSrc = item.FK_DBSrc;
+            SFDBSrc sfdb = null;
+            if (DataType.IsNullOrEmpty(fk_dbSrc) == false && fk_dbSrc.Equals("local") == false)
+                sfdb = new SFDBSrc(fk_dbSrc);
             if (string.IsNullOrEmpty(sql) == false)
             {
                 /* 如果有填充主表的sql  */
@@ -4201,9 +4265,20 @@ namespace BP.WF
 
                 if (string.IsNullOrEmpty(sql) == false)
                 {
-                    if (sql.Contains("@"))
+                    int num = Regex.Matches(sql.ToUpper(), "WHERE").Count;
+                    if (num == 1)
+                    {
+                        string sqlext = sql.Substring(0, sql.ToUpper().IndexOf("WHERE"));
+                        sqlext = sql.Substring(sqlext.Length + 1);
+                        if (sqlext.Contains("@"))
+                            throw new Exception("设置的sql有错误可能有没有替换的变量:" + sql);
+                    }
+                    if (num > 1 && sql.Contains("@"))
                         throw new Exception("设置的sql有错误可能有没有替换的变量:" + sql);
-                    dt = DBAccess.RunSQLReturnTable(sql);
+                    if (sfdb != null)
+                        dt = sfdb.RunSQLReturnTable(sql);
+                    else
+                        dt = DBAccess.RunSQLReturnTable(sql);
                     if (dt.Rows.Count == 1)
                     {
                         DataRow dr = dt.Rows[0];
@@ -4239,14 +4314,14 @@ namespace BP.WF
             {
                 //如果有数据，就不要填充了.
 
-                string[] sqls = item.Tag1.Split('*');
+                string[] sqls = item.Tag1.Split('$');
                 foreach (string mysql in sqls)
                 {
                     if (string.IsNullOrEmpty(mysql))
                         continue;
-                    if (mysql.Contains(dtl.No + "=") == false)
+                    if (mysql.Contains(dtl.No + ":") == false)
                         continue;
-                    if (mysql.Equals(dtl.No + "=") == true)
+                    if (mysql.Equals(dtl.No + ":") == true)
                         continue;
 
                     #region 处理sql.
@@ -4256,8 +4331,17 @@ namespace BP.WF
                     if (string.IsNullOrEmpty(sql))
                         continue;
 
-                    if (sql.Contains("@"))
+                    int num = Regex.Matches(sql.ToUpper(), "WHERE").Count;
+                    if (num == 1)
+                    {
+                        string sqlext = sql.Substring(0, sql.ToUpper().IndexOf("WHERE"));
+                        sqlext = sql.Substring(sqlext.Length + 1);
+                        if (sqlext.Contains("@"))
+                            throw new Exception("设置的sql有错误可能有没有替换的变量:" + sql);
+                    }
+                    if (num > 1 && sql.Contains("@"))
                         throw new Exception("设置的sql有错误可能有没有替换的变量:" + sql);
+
                     if (isSelf == true)
                     {
                         MapDtl mdtlSln = new MapDtl();
@@ -4295,9 +4379,12 @@ namespace BP.WF
                         (gedtls.GetNewEntity as GEDtl).CheckPhysicsTable();
                     }
 
-                    dt = DBAccess.RunSQLReturnTable(sql.StartsWith(dtl.No + "=")
-                                                       ? sql.Substring((dtl.No + "=").Length)
-                                                       : sql);
+                    sql = sql.StartsWith(dtl.No + "=") ? sql.Substring((dtl.No + "=").Length) : sql;
+                    if (sfdb != null)
+                        dt = sfdb.RunSQLReturnTable(sql);
+                    else
+                        dt = DBAccess.RunSQLReturnTable(sql);
+
                     foreach (DataRow dr in dt.Rows)
                     {
                         GEDtl gedtl = gedtls.GetNewEntity as GEDtl;
@@ -4602,8 +4689,23 @@ namespace BP.WF
             //替换字符
             exp = exp.Replace("~", "'");
 
-            if (exp.Contains("@") == false)
+            //替换我们只处理WHERE 后面的内容
+            //需要判断SQL 中含有几个WHERE字符
+            int num = Regex.Matches(exp.ToUpper(), "WHERE").Count;
+            if (num == 0)
                 return exp;
+            //我们暂时处理含有一个WHERE的情况
+            string expFrom = "";
+            if (num == 1)
+            {
+                expFrom = exp.Substring(0, exp.ToUpper().IndexOf("WHERE"));
+                exp = exp.Substring(expFrom.Length);
+            }
+
+            string expWhere = "";
+
+            if (exp.Contains("@") == false)
+                return expFrom + exp;
 
             //首先替换加; 的。
             exp = exp.Replace("@WebUser.No;", WebUser.No);
@@ -4622,7 +4724,7 @@ namespace BP.WF
                 exp = exp.Replace("@WebUser.OrgNo", WebUser.OrgNo);
 
             if (exp.Contains("@") == false)
-                return exp;
+                return expFrom + exp;
 
             //增加对新规则的支持. @MyField; 格式.
             if (en != null)
@@ -4633,7 +4735,7 @@ namespace BP.WF
                     exp = exp.Replace("@WorkID", row["OID"].ToString());
 
                 if (exp.Contains("@") == false)
-                    return exp;
+                    return expFrom + exp;
 
                 foreach (string key in row.Keys)
                 {
@@ -4646,7 +4748,7 @@ namespace BP.WF
 
                     //不包含@则返回SQL语句
                     if (exp.Contains("@") == false)
-                        return exp;
+                        return expFrom + exp;
                 }
 
 
@@ -4693,7 +4795,7 @@ namespace BP.WF
                 #endregion
 
                 if (exp.Contains("@") == false)
-                    return exp;
+                    return expFrom + exp;
             }
 
             if (exp.Contains("@") && SystemConfig.IsBSsystem == true)
@@ -4718,7 +4820,7 @@ namespace BP.WF
             exp = exp.Replace("~", "'");
             exp = exp.Replace("\r", "");
             exp = exp.Replace("\n", "");
-            return exp;
+            return expFrom + exp;
         }
         /// <summary>
         /// 加密MD5
@@ -5942,6 +6044,7 @@ namespace BP.WF
         private static void InitCH2017(Flow fl, Node nd, Int64 workid, Int64 fid, string title, string prvRDT, string sdt,
             DateTime dtNow, GenerWorkerList gwl)
         {
+           
             // 开始节点不考核.
             if (nd.IsStartNode || nd.HisCHWay == CHWay.None)
                 return;
@@ -6320,7 +6423,7 @@ namespace BP.WF
                         qo.addAnd();
                         qo.AddWhere(FrmAttachmentDBAttr.Rec, "!=", WebUser.No);
                     }
-                    qo.addOrderBy("RDT");
+                    qo.addOrderBy("Idx,RDT");
                     qo.DoQuery();
 
                 }
@@ -6341,7 +6444,7 @@ namespace BP.WF
                 qo.addAnd();
                 qo.AddWhere(FrmAttachmentDBAttr.Rec, "!=", WebUser.No);
             }
-            qo.addOrderBy("RDT");
+            qo.addOrderBy("Idx,RDT");
             qo.DoQuery();
             return dbs;
         }
@@ -6875,7 +6978,10 @@ namespace BP.WF
             //request.ContentType = "application/x-www-form-urlencoded";
             //请求的身份验证信息为默认
             request.Credentials = CredentialCache.DefaultCredentials;
-            request.ContentType = "application/x-www-form-urlencoded";
+           // request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentType = "application/json";
+            //  request.ContentType = "application/x-www-form-urlencoded";
+
             //请求超时时间
             request.Timeout = 10000;
             //创建输入流
@@ -6893,14 +6999,15 @@ namespace BP.WF
             dataStream.Close();
 
             HttpWebResponse res;
-            try
-            {
-                res = (HttpWebResponse)request.GetResponse();
-            }
-            catch (WebException ex)
-            {
-                res = (HttpWebResponse)ex.Response;
-            }
+
+            res = (HttpWebResponse)request.GetResponse();
+
+            //}
+            //catch (WebException ex)
+            //{
+            //    throw new Exception(ex.Message);
+            //    //res = (HttpWebResponse)ex.Response;
+            //}
             StreamReader sr = new StreamReader(res.GetResponseStream(), Encoding.UTF8);
             //读取返回消息
             string data = sr.ReadToEnd();

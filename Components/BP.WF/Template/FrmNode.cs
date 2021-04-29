@@ -728,6 +728,7 @@ namespace BP.WF.Template
                 map.AddTBInt(FrmNodeAttr.Is1ToN, 0, "是否1变N？", true, false);
                 map.AddTBString(FrmNodeAttr.HuiZong, null, "子线程要汇总的数据表", true, true, 0, 300, 20);
                 map.AddTBInt(FrmNodeAttr.FrmEnableRole, 0, "表单启用规则", true, false);
+
                 map.AddTBString(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", true, true, 0, 900, 20);
 
 

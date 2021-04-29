@@ -80,11 +80,15 @@ namespace BP.Sys
         /// <summary>
         /// 是否可以排序
         /// </summary>
-        public const string IsOrder = "IsOrder";
+        public const string IsOrder11 = "IsOrder";
         /// <summary>
         /// 数据存储方式
         /// </summary>
         public const string AthSaveWay = "AthSaveWay";
+        /// <summary>
+        /// 是否排序？
+        /// </summary>
+        public const string IsIdx = "IsIdx";
         /// <summary>
         /// 是否要转换成html，方便在线浏览.
         /// </summary>
@@ -416,21 +420,6 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(FrmAttachmentAttr.DeleteWay, (int)value);
-            }
-        }
-
-        /// <summary>
-        /// 是否可以排序?
-        /// </summary>
-        public bool IsOrder
-        {
-            get
-            {
-                return this.GetValBooleanByKey(FrmAttachmentAttr.IsOrder);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.IsOrder, value);
             }
         }
         /// <summary>
@@ -881,7 +870,6 @@ namespace BP.Sys
                 //hzm新增列
                 map.AddTBInt(FrmAttachmentAttr.DeleteWay, 1, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的", false, false);
                 map.AddBoolean(FrmAttachmentAttr.IsDownload, true, "是否可以下载", false, false);
-                map.AddBoolean(FrmAttachmentAttr.IsOrder, false, "是否可以排序", false, false);
 
 
                 map.AddBoolean(FrmAttachmentAttr.IsAutoSize, true, "自动控制大小", false, false);
@@ -890,6 +878,13 @@ namespace BP.Sys
 
                 map.AddBoolean(FrmAttachmentAttr.IsShowTitle, true, "是否显示标题列", false, false);
                 map.AddTBInt(FrmAttachmentAttr.UploadType, 0, "上传类型0单个1多个2指定", false, false);
+
+                map.AddTBInt(FrmAttachmentAttr.IsIdx, 0, "是否排序", false, false);
+
+
+                //@hongyan. 
+               // map.AddBoolean(FrmAttachmentAttr.IsIdx, false, "是否排序?", true, true);
+
                 #region 流程属性.
                 //对于父子流程有效.
                 map.AddTBInt(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式0=PK,1=FID,2=ParentID", false, false);

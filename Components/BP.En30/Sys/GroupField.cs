@@ -25,9 +25,7 @@ namespace BP.Sys
         /// <summary>
         /// 按钮控件
         /// </summary>
-        public const string Btn = "Btn";
-
-       
+        public const string Btn = "Btn";          
 
     }
     /// <summary>

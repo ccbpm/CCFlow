@@ -957,9 +957,6 @@ namespace BP.WF.Template
 
                 //map.AddTBFloat(MapDtlAttr.X, 5, "距左", false, false);
                 //map.AddTBFloat(MapDtlAttr.Y, 5, "距上", false, false);
-
-                
-
                 //  map.AddTBFloat(MapDtlAttr.W, 200, "宽度", true, false);
 
                 //map.AddTBFloat(MapDtlAttr.FrmW, 900, "表单宽度", true, true);
@@ -998,10 +995,20 @@ namespace BP.WF.Template
                 #endregion 导入导出填充.
 
                 #region 超链接.
-                map.AddBoolean(MapDtlAttr.IsEnableLink, false, "是否启用超链接", true, true);
-                map.AddTBString(MapDtlAttr.LinkLabel, "", "超连接标签", true, false, 0, 50, 100);
-                map.AddTBString(MapDtlAttr.LinkTarget, null, "连接目标", true, false, 0, 10, 100);
-                map.AddTBString(MapDtlAttr.LinkUrl, null, "连接URL", true, false, 0, 200, 200, true);
+                map.AddBoolean(MapDtlAttr.IsEnableLink, false, "相关功能1", true, true);
+                map.AddTBString(MapDtlAttr.LinkLabel, "", "超连接/功能标签", true, false, 0, 50, 100);
+                map.AddDDLSysEnum(MapDtlAttr.ExcType, 0, "执行类型", true, true, "ExcType",
+                    "@0=超链接@1=函数");
+                map.AddTBString(MapDtlAttr.LinkTarget, null, "LinkTarget", true, false, 0, 10, 100);
+                map.AddTBString(MapDtlAttr.LinkUrl, null, "连接/函数", true, false, 0, 200, 200, true);
+
+                
+                map.AddBoolean(MapDtlAttr.IsEnableLink2, false, "相关功能2", true, true);
+                map.AddTBString(MapDtlAttr.LinkLabel2, "", "超连接/功能标签", true, false, 0, 50, 100);
+                map.AddDDLSysEnum(MapDtlAttr.ExcType2, 0, "执行类型", true, true, "ExcType",
+                    "@0=超链接@1=函数");
+                map.AddTBString(MapDtlAttr.LinkTarget2, null, "LinkTarget", true, false, 0, 10, 100);
+                map.AddTBString(MapDtlAttr.LinkUrl2, null, "连接/函数", true, false, 0, 200, 200, true);
                 #endregion 超链接.
 
                 #region 工作流相关.
@@ -1020,21 +1027,25 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "隐藏字段"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".HidAttr";
-                rm.Icon = "../Img/Setting.png";
+                //rm.Icon = "../Img/Setting.png";
+                rm.Icon = "icon-ghost";
+                
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "导入其它表/视图字段"; // "设计表单";
+                rm.Title = "导入其它数据源字段"; // "设计表单";
                 rm.Warning = "导入后系统不会自动刷新，请手工刷新。";
                 rm.ClassMethodName = this.ToString() + ".ImpFields";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Icon = "icon-arrow-down-circle";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "导入其从表字段"; // "设计表单";
+                rm.Icon = "icon-arrow-down-circle";
+                rm.Title = "导入其它从表字段"; // "设计表单";
                 rm.Warning = "导入后系统不会自动刷新，请手工刷新。";
                 rm.ClassMethodName = this.ToString() + ".ImpFromDtlID";
                 rm.HisAttrs.AddTBString("ID", null, "请输入要导入的从表ID", true, false, 0, 100, 100);
@@ -1042,6 +1053,7 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Icon = "icon-credit-card";
                 rm.Title = "多表头"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoMultiTitle";
                // rm.Icon = "../Img/AttachmentM.png";
@@ -1053,7 +1065,9 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "设计傻瓜表单"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DFoolFrm";
-                rm.Icon = "../Img/Setting.png";
+                //  rm.Icon = "../Img/Setting.png";
+                rm.Icon = "icon-screen-desktop";
+
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
@@ -1063,15 +1077,18 @@ namespace BP.WF.Template
                 rm.Title = "设计自由表单"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DFreeFrm";
                 rm.Icon = "../Img/Setting.png";
+                rm.Icon = "icon-screen-desktop";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "从表附件属性"; // "设计表单";
+                rm.Title = "从表附件"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".OpenAthAttr";
-                rm.Icon = "../Img/AttachmentM.png";
+                //  rm.Icon = "../Img/AttachmentM.png";
+                rm.Icon = "icon-paper-clip";
+
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
@@ -1082,6 +1099,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".GenerAttrs";
                 rm.RefMethodType = RefMethodType.Func;
                 rm.Warning = "生成英文字段列，方便字段数据copy使用.";
+                rm.Icon = "icon-heart";
                 map.AddRefMethod(rm);
                 #endregion 相关方法.
 
@@ -1090,7 +1108,9 @@ namespace BP.WF.Template
                 rm.GroupName = "实验中的功能";
                 rm.Title = "列自动计算"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".ColAutoExp";
-                rm.Icon = "../Img/Setting.png";
+               // rm.Icon = "../Img/Setting.png";
+                rm.Icon = "icon-pin";
+
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -1100,7 +1120,9 @@ namespace BP.WF.Template
                 rm.GroupName = "实验中的功能";
                 rm.Title = "数据导入"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DtlImp";
-                rm.Icon = "../Img/Setting.png";
+                //rm.Icon = "../Img/Setting.png";
+                rm.Icon = "icon-action-redo";
+
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -1110,7 +1132,9 @@ namespace BP.WF.Template
                 rm.GroupName = "实验中的功能";
                 rm.Title = "数据导入v2019"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DtlImpV2019";
-                rm.Icon = "../Img/Setting.png";
+                //rm.Icon = "../Img/Setting.png";
+                rm.Icon = "icon-action-redo";
+
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -1121,7 +1145,9 @@ namespace BP.WF.Template
                 rm.GroupName = "实验中的功能";
                 rm.Title = "事件"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoAction";
-                rm.Icon = "../Img/Setting.png";
+              //  rm.Icon = "../Img/Setting.png";
+                rm.Icon = "icon-energy";
+                
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -1603,6 +1629,7 @@ namespace BP.WF.Template
         {
             MapDtl dtl = new MapDtl();
             dtl.No = this.No;
+            dtl.FK_MapData = this.FK_MapData;
             dtl.Delete();
 
             //删除分组
@@ -1616,6 +1643,11 @@ namespace BP.WF.Template
                 FrmAttachment ath = new FrmAttachment();
                 ath.Delete(FrmAttachmentAttr.MyPK, this.No + "_AthMDtl");
             }
+
+
+            //执行清空缓存到的AutoNum.
+            MapData md = new MapData(this.FK_MapData);
+            md.ClearAutoNumCash(true); //更新缓存.
 
             base.afterDelete();
         }

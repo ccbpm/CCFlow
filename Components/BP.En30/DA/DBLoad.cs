@@ -6,7 +6,7 @@ using Oracle.ManagedDataAccess.Client;
 using System.Data.OleDb;
 using System.Data.Odbc;
 using System.Data.SqlClient;
-using BP.NetPlatformImpl;
+using BP.Difference;
 
 namespace BP.DA
 {

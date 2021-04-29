@@ -850,7 +850,8 @@ namespace BP.Sys
         {
             get
             {
-                return AppSettings["RunOnPlant"] ?? "";
+                return "CCFlow";
+                //return AppSettings["RunOnPlant"] ?? "";
             }
         }
         public static string CustomerURL
@@ -982,6 +983,49 @@ namespace BP.Sys
         }
         #endregion
 
+        #region 微信公众号相关
+        /// <summary>
+        /// 公众号唯一标识
+        /// </summary>
+        public static string WXGZH_Appid
+        {
+            get
+            {
+                return AppSettings["WXGZH_Appid"];
+            }
+        }
+        /// <summary>
+        /// 公众号开发者密码
+        /// </summary>
+        public static string WXGZH_AppSecret
+        {
+            get
+            {
+                return AppSettings["WXGZH_AppSecret"];
+            }
+        }
+        /// <summary>
+        /// 公众号token
+        /// </summary>
+        public static string WXGZH_Token
+        {
+            get
+            {
+                return AppSettings["GZHToKen"];
+            }
+        }
+        /// <summary>
+        /// 公众号EncodingAESKey
+        /// </summary>
+        public static string WXGZH_AESKey
+        {
+            get
+            {
+                return AppSettings["GZHEncodingAESKey"];
+            }
+        }
+        #endregion
+
         #region 钉钉配置相关
         /// <summary>
         /// 企业标识
@@ -1034,6 +1078,7 @@ namespace BP.Sys
             }
         }
         #endregion
+
         #region 百度云配置相关
         /// <summary>
         /// 百度云应用ID
@@ -1066,8 +1111,9 @@ namespace BP.Sys
             }
         }
         #endregion
+
         /// <summary>
-        ///取得配置 NestedNamesSection 内的相应 key 的内容
+        ///取得配置 NestedNamesSection 内的相应 key 的内容.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
@@ -1337,6 +1383,24 @@ namespace BP.Sys
                         return DBModel.Domain;
                     default:
                         return DBModel.Single;
+                }
+            }
+        }
+        /// <summary>
+        /// 大小写模式
+        /// </summary>
+        public static FieldCaseModel AppCenterDBFieldCaseModel
+        {
+            get
+            {
+                switch (AppCenterDBType)
+                {
+                    case DBType.Oracle:
+                        return FieldCaseModel.UpperCase;
+                    case DBType.PostgreSQL:
+                        return FieldCaseModel.Lowercase;
+                    default:
+                        return FieldCaseModel.None;
                 }
             }
         }

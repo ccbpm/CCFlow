@@ -107,10 +107,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentFTP">
-      <HintPath>..\..\RefDLL\FluentFTP.dll</HintPath>
+    <Reference Include="FluentFTP, Version=33.1.7.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\CCFlowCloud\packages\FluentFTP.33.1.7\lib\net45\FluentFTP.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.0.0.999, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp">
@@ -162,6 +163,11 @@
     <Compile Include="Data\CCListExt.cs" />
     <Compile Include="Data\CHNode.cs" />
     <Compile Include="Data\MyAuthto.cs" />
+    <Compile Include="Difference\CCInterface.cs" />
+    <Compile Include="Difference\Cloud.cs" />
+    <Compile Include="Difference\WF.cs" />
+    <Compile Include="Difference\WF_DynamicWebService.cs" />
+    <Compile Include="Difference\WF_File.cs" />
     <Compile Include="DINGTalk\DDSDK\AccessToken.cs" />
     <Compile Include="DINGTalk\DDSDK\Analyze.cs" />
     <Compile Include="DINGTalk\DDSDK\CacheItem.cs" />
@@ -290,6 +296,7 @@
     <Compile Include="HttpHandler\WF_Admin_Template.cs" />
     <Compile Include="HttpHandler\WF_Admin_MobileFrmDesigner.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner_FlowDevModel.cs" />
+    <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_StyletDfine.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_Batch.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_StartGuide.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_Selecter.cs" />
@@ -319,11 +326,6 @@
     <Compile Include="HttpHandler\GPMPage.cs" />
     <Compile Include="HttpHandler\WF_Admin_Multilingual.cs" />
     <Compile Include="HttpWebResponseUtility.cs" />
-    <Compile Include="NetPlatformImpl\CCInterface.cs" />
-    <Compile Include="NetPlatformImpl\Cloud.cs" />
-    <Compile Include="NetPlatformImpl\WF.cs" />
-    <Compile Include="NetPlatformImpl\WF_DynamicWebService.cs" />
-    <Compile Include="NetPlatformImpl\WF_File.cs" />
     <Compile Include="OverrideFile.cs" />
     <Compile Include="Port\Admin2\OrgAdminer.cs" />
     <Compile Include="Port\Admin2\User.cs" />
@@ -357,6 +359,7 @@
     <Compile Include="Template\FrmNodeJiJian.cs" />
     <Compile Include="Template\MapDataURL.cs" />
     <Compile Include="Template\MapDtlExt.cs" />
+    <Compile Include="Template\MapFrmReferencePanel.cs" />
     <Compile Include="Template\MapFrmWord.cs" />
     <Compile Include="Template\FrmOrg.cs" />
     <Compile Include="Template\NodeExt.cs" />
@@ -400,9 +403,11 @@
     <Compile Include="WeiXin\DTS\DTSUserIcon.cs" />
     <Compile Include="WeiXin\Glo.cs" />
     <Compile Include="WeiXin\Msg\MsgBase.cs" />
+    <Compile Include="WeiXin\Msg\WeiXinGZHModel.cs" />
     <Compile Include="WeiXin\User.cs" />
     <Compile Include="WeiXin\Msg\WeinXinModel.cs" />
     <Compile Include="WeiXin\WeiXinEntity.cs" />
+    <Compile Include="WeiXin\WeiXinGZHEntity.cs" />
     <Compile Include="WeiXin\WXBizMsgCrypt.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
     <Compile Include="DTS\GenerTitle.cs" />
@@ -555,7 +560,9 @@
     <Compile Include="Data\NDXRptBase.cs" />
     <Compile Include="WF\AthUnReadLog.cs" />
     <Compile Include="WorkFlowBuessRole.cs" />
+    <Compile Include="Xml\AdminMenuCloud.cs" />
     <Compile Include="Xml\Admin2Menu.cs" />
+    <Compile Include="Xml\AdminMenuCloudGroup.cs" />
     <Compile Include="Xml\AdminMenu.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -607,7 +614,9 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Readme.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

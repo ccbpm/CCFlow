@@ -2187,6 +2187,9 @@ namespace BP.En
             int i = 0;
             try
             {
+                if (this.PKVal!=null && this.PKVal.Equals("0") == true)
+                    this.PKVal = DBAccess.GenerOID(this.ClassID);
+
                 i = this.DirectInsert();
             }
             catch (Exception ex)

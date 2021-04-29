@@ -14,7 +14,7 @@ using System.Collections;
 using System.Net;
 using System.Xml.Schema;
 using System.IO;
-using BP.NetPlatformImpl;
+using BP.Difference;
 
 namespace BP.WF.HttpHandler
 {
@@ -682,52 +682,6 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(enums.ToDataTableField("DBSrcType"));
 
             return BP.Tools.Json.ToJson(ds);
-        }
-
-        public string SFDBSrcNewGuide_SaveSrc()
-        {
-            SFDBSrc src = new SFDBSrc();
-            src.No = this.GetRequestVal("TB_No");
-            if (src.RetrieveFromDBSources() > 0 && this.GetRequestVal("NewOrEdit") == "New")
-            {
-                return ("已经存在数据源编号为“" + src.No + "”的数据源，编号不能重复！");
-            }
-            src.Name = this.GetRequestVal("TB_Name");
-            src.DBSrcType = (DBSrcType)this.GetRequestValInt("DDL_DBSrcType");
-            switch (src.DBSrcType)
-            {
-                case DBSrcType.SQLServer:
-                case DBSrcType.Oracle:
-                case DBSrcType.MySQL:
-                case DBSrcType.Informix:
-                    if (src.DBSrcType != DBSrcType.Oracle)
-                        src.DBName = this.GetRequestVal("TB_DBName");
-                    else
-                        src.DBName = string.Empty;
-                    src.IP = this.GetRequestVal("TB_IP");
-                    src.UserID = this.GetRequestVal("TB_UserID");
-                    src.Password = this.GetRequestVal("TB_PWword");
-                    break;
-                case DBSrcType.WebServices:
-                    src.DBName = string.Empty;
-                    src.IP = this.GetRequestVal("TB_IP");
-                    src.UserID = string.Empty;
-                    src.Password = string.Empty;
-                    break;
-                default:
-                    break;
-            }
-            //测试是否连接成功，如果连接不成功，则不允许保存。
-            string testResult = src.DoConn();
-
-            if (testResult.IndexOf("连接配置成功") == -1)
-            {
-                return (testResult + ".保存失败！");
-            }
-
-            src.Save();
-
-            return "保存成功..";
         }
 
         public string SFDBSrcNewGuide_DelSrc()

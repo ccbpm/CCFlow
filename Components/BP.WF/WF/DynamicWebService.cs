@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using BP.WF.NetPlatformImpl;
+using BP.WF.Difference;
 
 namespace BP.WF
 {

@@ -831,7 +831,7 @@ namespace BP.Sys
 
                 // 数据类型 @0=SQL@1=URLJSON@2=FunctionJSON.
                 map.AddTBInt(MapExtAttr.DBType, 0, "数据类型", true, false);
-                map.AddTBString(MapExtAttr.FK_DBSrc, null, "数据源", true, false, 0, 100, 20);
+                map.AddTBString(MapExtAttr.FK_DBSrc, "local", "数据源", true, false, 0, 100, 20);
 
                 // add by zhoupeng 2013-12-21 计算的优先级,用于js的计算. 
                 // 也可以用于 字段之间的计算 优先级.
@@ -853,6 +853,7 @@ namespace BP.Sys
             switch (this.ExtType)
             {
                 case MapExtXmlList.FullData:
+                case MapExtXmlList.FullDataDtl:
                     break;
                 case MapExtXmlList.ActiveDDL:
                     this.MyPK = MapExtXmlList.ActiveDDL + "_" + this.FK_MapData + "_" + this.AttrOfOper;
@@ -1077,7 +1078,14 @@ namespace BP.Sys
                if (sql.Contains("@") == true)
                     return "err@字段" + field + "执行的SQL中有@符号";
 
-                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                DataTable dt = null;
+                if(DataType.IsNullOrEmpty(this.FK_DBSrc) == false && this.FK_DBSrc.Equals("local")==false)
+                {
+                    SFDBSrc sfdb = new SFDBSrc(this.FK_DBSrc);
+                    dt = sfdb.RunSQLReturnTable(sql);
+                }
+                else
+                    dt = DBAccess.RunSQLReturnTable(sql);
                 if (SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle || SystemConfig.AppCenterDBType == BP.DA.DBType.PostgreSQL)
                 {
                     dt.Columns["NO"].ColumnName = "No";
@@ -1125,7 +1133,16 @@ namespace BP.Sys
 
             if (sql.Contains("@") == true)
                 return "err@执行的SQL中" + sql+" 有@符号没有被替换";
-            return BP.Tools.Json.ToJson(DBAccess.RunSQLReturnTable(sql));
+            DataTable dt = null;
+            if (DataType.IsNullOrEmpty(this.FK_DBSrc) == false && this.FK_DBSrc.Equals("local") == false)
+            {
+                SFDBSrc sfdb = new SFDBSrc(this.FK_DBSrc);
+                dt = sfdb.RunSQLReturnTable(sql);
+            }
+            else
+                dt = DBAccess.RunSQLReturnTable(sql);
+
+            return BP.Tools.Json.ToJson(dt);
         }
 
         private  string DealExp(string exp,string paras, Entity en)

@@ -107,6 +107,7 @@ namespace BP.WF.DTS
                 int fk_node = int.Parse(dr["FK_Node"] + "");
                 long workid = long.Parse(dr["WorkID"] + "");
                 string title = dr["Title"] + "";
+
                 //判断流程是否设置逾期消息
                 PushMsg pushMsg = new PushMsg();
                 int count = pushMsg.Retrieve(PushMsgAttr.FK_Flow, fk_flow, PushMsgAttr.FK_Node, 0, PushMsgAttr.FK_Event, EventListNode.FlowOverDue);
@@ -311,7 +312,6 @@ namespace BP.WF.DTS
                         case OutTimeDeal.AutoJumpToSpecNode: //跳转到指定的节点.
                             try
                             {
-                               
                                 int jumpNode = int.Parse(doOutTime);
                                 Node jumpToNode = new Node(jumpNode);
 

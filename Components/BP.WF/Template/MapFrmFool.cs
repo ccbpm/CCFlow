@@ -101,7 +101,7 @@ namespace BP.WF.Template
             {
                 UAC uac = new UAC();
                 //uac.OpenForSysAdmin();
-                uac.OpenForAppAdmin() ;//2020.6.22zsy修改.
+                uac.OpenForAppAdmin();//2020.6.22zsy修改.
                 uac.IsInsert = false;
                 return uac;
             }
@@ -134,46 +134,54 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("Sys_MapData", "傻瓜表单属性");
-                
-                map.CodeStruct = "4";
 
                 #region 基本属性.
-
                 map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, true, 1, 190, 20);
+                map.SetHelperUrl(MapDataAttr.No, "xxxx");
 
-                if (BP.WF.Glo.CCBPMRunModel == CCBPMRunModel.Single)
-                    map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 100, 20);
+                if (BP.WF.Glo.CCBPMRunModel == CCBPMRunModel.SAAS)
+                {
+                    map.AddTBString(MapDataAttr.PTable, null, "存储表", false, false, 0, 100, 20);
+                }
                 else
+                {
                     map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 100, 20);
-
+                    string msg = "提示:";
+                    msg += "\t\n1. 该表单把数据存储到那个表里.";
+                    msg += "\t\n2. 该表必须有一个int64未的OID列作为主键..";
+                    msg += "\t\n3. 如果指定了一个不存在的表,系统就会自动创建上.";
+                    map.SetHelperAlert(MapDataAttr.PTable, msg);
+                }
 
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20, true);
 
-                map.AddDDLSysEnum(MapDataAttr.TableCol, 0, "表单显示列数", true, true, "显示方式",
-                    "@0=4列@1=6列@2=上下模式3列");
+                map.AddTBInt(MapDataAttr.TableCol, 0, "显示列数", false, false);
 
+                // map.AddDDLSysEnum(MapDataAttr.TableCol, 0, "显示方式", true, true, "显示方式",
+                // "@0=4列@1=6列@2=上下模式3列");
                 //  map.AddTBInt(MapDataAttr.TableWidth, 900, "傻瓜表单宽度", true, false);
                 // map.AddTBInt(MapDataAttr.TableHeight, 900, "傻瓜表单高度", true, false);
 
                 map.AddTBInt(MapDataAttr.FrmW, 900, "表单宽度", true, false);
                 map.AddTBInt(MapDataAttr.FrmH, 900, "表单高度", true, false);
 
-                //数据源.
-                map.AddDDLEntities(MapDataAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
-
-                if (BP.WF.Glo.CCBPMRunModel == CCBPMRunModel.Single)
-                    map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
+                if (BP.WF.Glo.CCBPMRunModel == CCBPMRunModel.SAAS)
+                {
+                }
                 else
-                    map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), false);
-
+                {
+                    map.AddTBString(MapDataAttr.DBSrc, null, "数据源", false, false, 0, 500, 20);
+                   // map.AddDDLEntities(MapDataAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
+                    map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
+                }
 
                 //表单的运行类型.
                 map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型",
-                    true, false, MapDataAttr.FrmType);
+                    true, true, MapDataAttr.FrmType);
+
                 //表单解析 0 普通 1 页签展示
                 map.AddDDLSysEnum(MapDataAttr.FrmShowType, 0, "表单展示方式", true, true, "表单展示方式",
                     "@0=普通方式@1=页签方式");
-
                 #endregion 基本属性.
 
                 #region 设计者信息.
@@ -183,40 +191,35 @@ namespace BP.WF.Template
                 map.AddTBString(MapDataAttr.GUID, null, "GUID", true, true, 0, 128, 20, false);
                 map.AddTBString(MapDataAttr.Ver, null, "版本号", true, true, 0, 30, 20);
                 // map.AddTBString(MapFrmFreeAttr.DesignerTool, null, "表单设计器", true, true, 0, 30, 20);
-
                 map.AddTBString(MapDataAttr.Note, null, "备注", true, false, 0, 400, 100, true);
                 //增加参数字段.
                 map.AddTBAtParas(4000);
                 map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", false, false);
                 #endregion 设计者信息.
 
-                //查询条件.
-                map.AddSearchAttr(MapDataAttr.DBSrc);
-
-                #region 方法 - 基本功能.
+                #region 基本功能.
 
                 RefMethod rm = new RefMethod();
-                
 
                 rm = new RefMethod();
                 rm.Title = "装载填充"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoPageLoadFull";
-                rm.Icon = "../../WF/Img/FullData.png";
+                // rm.Icon = "../../WF/Img/FullData.png";
+                rm.Icon = "icon-reload";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
+                // rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "表单事件"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoEvent";
                 rm.Icon = "../../WF/Img/Event.png";
+                rm.Icon = "icon-energy";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
-               
 
                 rm = new RefMethod();
                 rm.Title = "批量修改字段"; // "设计表单";
@@ -224,19 +227,21 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/field.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                //  map.AddRefMethod(rm);
+                rm.Icon = "icon-calculator";
+                map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "手机端表单";
                 rm.Icon = "../../WF/Admin/CCFormDesigner/Img/telephone.png";
                 rm.ClassMethodName = this.ToString() + ".MobileFrmDesigner";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-screen-smartphone";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "隐藏字段";
                 rm.Icon = "../../WF/Admin/CCFormDesigner/Img/telephone.png";
+                rm.Icon = "icon-list";
                 rm.ClassMethodName = this.ToString() + ".FrmHiddenField";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -245,19 +250,21 @@ namespace BP.WF.Template
                 rm.Title = "表单body属性"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoBodyAttr";
                 rm.Icon = "../../WF/Img/Script.png";
+                rm.Icon = "icon-social-spotify";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
+                //rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "导出XML表单模版"; // "设计表单";
+                rm.Title = "导出模版"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoExp";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "../../WF/Img/Export.png";
                 rm.Visable = true;
                 rm.RefAttrLinkLabel = "导出到xml";
                 rm.Target = "_blank";
+                rm.Icon = "icon-social-spotify";
                 map.AddRefMethod(rm);
 
 
@@ -269,6 +276,7 @@ namespace BP.WF.Template
                 rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
                 rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
                 rm.Icon = "../../WF/Img/ReName.png";
+                rm.Icon = "icon-refresh";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -278,6 +286,7 @@ namespace BP.WF.Template
                 rm.RefAttrLinkLabel = "表单检查";
                 rm.Icon = "../../WF/Img/Check.png";
                 rm.Target = "_blank";
+                rm.Icon = "icon-eye";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -285,6 +294,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoTabIdx";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-list";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -292,6 +302,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoBill";
                 rm.Icon = "../../WF/Img/FileType/doc.gif";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-printer";
                 map.AddRefMethod(rm);
 
 
@@ -300,9 +311,16 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoBill2019";
                 rm.Icon = "../../WF/Img/FileType/doc.gif";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-printer";
                 map.AddRefMethod(rm);
 
 
+                rm = new RefMethod();
+                rm.Title = "参考面板";
+                rm.ClassMethodName = this.ToString() + ".DoRefPanel";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-grid";
+                map.AddRefMethod(rm);
                 #endregion 方法 - 基本功能.
 
                 #region 高级功能.
@@ -311,13 +329,15 @@ namespace BP.WF.Template
                 rm.GroupName = "高级功能";
                 rm.ClassMethodName = this.ToString() + ".DoChangeFrmType()";
                 rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "修改表单类型", true, true);
+                rm.Icon = "icon-refresh";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "启动傻瓜表单设计器";
+                rm.Title = "傻瓜表单设计";
                 rm.GroupName = "高级功能";
                 rm.ClassMethodName = this.ToString() + ".DoDesignerFool";
-                rm.Icon = "../../WF/Img/FileType/xlsx.gif";
+                //rm.Icon = "../../WF/Img/FileType/xlsx.gif";
+                rm.Icon = "icon-note";
                 rm.Visable = true;
                 rm.Target = "_blank";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
@@ -328,6 +348,7 @@ namespace BP.WF.Template
                 rm.GroupName = "高级功能";
                 rm.ClassMethodName = this.ToString() + ".DoInitScript";
                 rm.Icon = "../../WF/Img/Script.png";
+                rm.Icon = "icon-social-dropbox";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -347,7 +368,8 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "调用查询API"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoSearch";
-                rm.Icon = "../../WF/Img/Table.gif";
+                //rm.Icon = "../../WF/Img/Table.gif";
+                rm.Icon = "icon-magnifier";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
@@ -357,7 +379,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "调用分析API"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoGroup";
-                rm.Icon = "../../WF/Img/Table.gif";
+                rm.Icon = "icon-chart";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
@@ -369,9 +391,10 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "批量设置验证规则";
                 rm.GroupName = "实验中的功能";
-                rm.Icon = "../../WF/Img/RegularExpression.png";
+                //rm.Icon = "../../WF/Img/RegularExpression.png";
                 rm.ClassMethodName = this.ToString() + ".DoRegularExpressionBatch";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-settings";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -381,6 +404,7 @@ namespace BP.WF.Template
                 //rm.Icon = "../../WF/Img/RegularExpression.png";
                 rm.ClassMethodName = this.ToString() + ".DoOneKeySetReadonly";
                 rm.RefMethodType = RefMethodType.Func;
+                rm.Icon = "icon-settings";
                 map.AddRefMethod(rm);
 
                 #endregion 实验中的功能
@@ -454,7 +478,7 @@ namespace BP.WF.Template
 
                 MapData map = new MapData(this.No);
                 //避免显示在表单库中
-               // map.FK_FrmSort = "";
+                // map.FK_FrmSort = "";
                 map.FK_FormTree = "";
                 map.DirectUpdate();
             }
@@ -556,7 +580,7 @@ namespace BP.WF.Template
                 //设置 GroupID
                 foreach (DataRow dr in dt.Rows)
                 {
-                    DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID="+gf.OID +" WHERE MyPK='"+dr[0].ToString()+"'");
+                    DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE MyPK='" + dr[0].ToString() + "'");
                 }
             }
 
@@ -737,7 +761,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBatchEditAttr()
         {
-            return "../../Admin/FoolFormDesigner/BatchEdit.htm?FK_MapData=" +
+            return "../../Admin/FoolFormDesigner/FieldTypeListBatch.htm?FK_MapData=" +
                    this.No + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
@@ -776,6 +800,14 @@ namespace BP.WF.Template
             return "../../Comm/Search.htm?s=34&FK_MapData=" + this.No + "&EnsName=" + this.No;
         }
         /// <summary>
+        /// 参考面板
+        /// </summary>
+        /// <returns></returns>
+        public string DoRefPanel()
+        {
+            return "../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.MapFrmReferencePanel&PKVal=" + this.No;
+        }
+        /// <summary>
         /// 调用分析API
         /// </summary>
         /// <returns></returns>
@@ -791,7 +823,7 @@ namespace BP.WF.Template
         {
             return "../../Comm/Search.htm?s=34&FK_MapData=" + this.No + "&EnsName=BP.Sys.SFDBSrcs";
         }
-       
+
         public string DoPageLoadFull()
         {
             return "../../Admin/FoolFormDesigner/MapExt/PageLoadFull.htm?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";

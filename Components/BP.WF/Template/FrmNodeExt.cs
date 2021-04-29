@@ -131,12 +131,9 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_FrmNode", "节点表单");
 
+                #region 基本信息.
                 map.AddMyPK();
-
                 map.AddDDLEntities(FrmNodeAttr.FK_Frm, null, "表单", new MapDatas(), false);
-
-                map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程编号", true, true, 0, 4, 20);
-                map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点ID", true, true);
 
                 map.AddBoolean(FrmNodeAttr.IsPrint, false, "是否可以打印", true, true);
                 map.AddBoolean(FrmNodeAttr.IsEnableLoadData, false, "是否启用装载填充事件", true, true);
@@ -153,21 +150,13 @@ namespace BP.WF.Template
 
                 //map.AddBoolean(FrmNodeAttr.IsEnableFWC, false, "是否启用审核组件？", true, true, true);
 
-                map.AddDDLSysEnum(FrmNodeAttr.IsEnableFWC, (int)FrmWorkCheckSta.Disable, "审核组件状态",
-                true, true, NodeWorkCheckAttr.FWCSta, "@0=禁用@1=启用@2=只读");
-                map.SetHelperAlert(FrmNodeAttr.IsEnableFWC, "控制该表单是否启用审核组件？如果启用了就显示在该表单上;");
-
-
-                //签批字段
-                map.AddDDLSQL(NodeWorkCheckAttr.CheckField, null, "签批字段",
-                    Glo.SQLOfCheckField, true);
-
-                map.AddDDLSysEnum(FrmSubFlowAttr.SFSta, (int)FrmSubFlowSta.Disable, "父子流程组件状态",
-                true, true, FrmSubFlowAttr.SFSta, "@0=禁用@1=启用@2=只读");
-
                 //单据编号对应字段
                 map.AddDDLSQL(NodeWorkCheckAttr.BillNoField, null, "单据编号对应字段",
                     Glo.SQLOfBillNo, true);
+
+
+                map.AddTBString(FrmNodeAttr.FrmNameShow, null, "表单显示名字", true, false, 0, 100, 20);
+                map.SetHelperAlert(FrmNodeAttr.FrmNameShow, "显示在表单树上的名字,默认为空,表示与表单的实际名字相同.多用于节点表单的名字在表单树上显示.");
 
                 //map.AddDDLSysEnum(BP.WF.Template.FrmWorkCheckAttr.FWCSta, 0, "审核组件(是否启用审核组件？)", true, true);
 
@@ -182,75 +171,48 @@ namespace BP.WF.Template
                 //是否显示.
                 map.AddTBString(FrmNodeAttr.GuanJianZiDuan, null, "关键字段", true, false, 0, 20, 20);
 
-                #region 表单启用规则.
-                map.AddDDLSysEnum(FrmNodeAttr.FrmEnableRole, 0, "启用规则", false, false, FrmNodeAttr.FrmEnableRole,
-                    "@0=始终启用@1=有数据时启用@2=有参数时启用@3=按表单的字段表达式@4=按SQL表达式@5=不启用@6=按岗位@7=按部门");
-
-                map.SetHelperAlert(FrmNodeAttr.FrmEnableRole, "用来控制该表单是否显示的规则.");
-                map.AddTBStringDoc(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", false, false, true);
-                #endregion 表单启用规则.
-
-                map.AddTBString(FrmNodeAttr.FrmNameShow, null, "表单显示名字", true, false, 0, 100, 20);
-                map.SetHelperAlert(FrmNodeAttr.FrmNameShow, "显示在表单树上的名字,默认为空,表示与表单的实际名字相同.多用于节点表单的名字在表单树上显示.");
+                
 
                 //显示的
                 map.AddTBInt(FrmNodeAttr.Idx, 0, "顺序号", true, false);
                 map.SetHelperAlert(FrmNodeAttr.Idx, "在表单树上显示的顺序,可以通过列表调整.");
 
+                #endregion 基本信息.
+
+                #region 组件属性.
+                map.AddDDLSysEnum(FrmNodeAttr.IsEnableFWC, (int)FrmWorkCheckSta.Disable, "审核组件状态",
+             true, true, NodeWorkCheckAttr.FWCSta, "@0=禁用@1=启用@2=只读");
+                map.SetHelperAlert(FrmNodeAttr.IsEnableFWC, "控制该表单是否启用审核组件？如果启用了就显示在该表单上;");
+
+                //签批字段
+                map.AddDDLSQL(NodeWorkCheckAttr.CheckField, null, "签批字段",
+                    Glo.SQLOfCheckField, true);
+
+                map.AddDDLSysEnum(FrmSubFlowAttr.SFSta, (int)FrmSubFlowSta.Disable, "父子流程组件状态",
+                true, true, FrmSubFlowAttr.SFSta, "@0=禁用@1=启用@2=只读");
+                #endregion
+
+                #region 隐藏字段.
+                //@0=始终启用@1=有数据时启用@2=有参数时启用@3=按表单的字段表达式@4=按SQL表达式@5=不启用@6=按岗位@7=按部门.
+                map.AddTBInt(FrmNodeAttr.FrmEnableRole, 0, "启用规则", false, false);
+                map.AddTBString(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", true, false, 0, 900, 20);
+                map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程编号", false, false, 0, 4, 20);
+                map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点ID", false, false);
+                #endregion 隐藏字段.
+
+                #region 相关功能..
                 RefMethod rm = new RefMethod();
                 rm.Title = "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoDFrm()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-settings"; //正则表达式
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "启用规则";
                 rm.ClassMethodName = this.ToString() + ".DoEnableRole()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "字段权限";
-                rm.ClassMethodName = this.ToString() + ".DoFields()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-               
-                rm = new RefMethod();
-                rm.Title = "组件权限";
-                rm.ClassMethodName = this.ToString() + ".DoComponents()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Visable = false;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "从表权限";
-                rm.ClassMethodName = this.ToString() + ".DoDtls()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "附件权限";
-                rm.ClassMethodName = this.ToString() + ".DoAths()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "图片附件权限";
-                rm.ClassMethodName = this.ToString() + ".DoImgAths()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "从其他节点Copy权限设置";
-                rm.ClassMethodName = this.ToString() + ".DoCopyFromNode()";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "改变表单类型";
-                rm.ClassMethodName = this.ToString() + ".DoChangeFrmType()";
-                rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "修改表单类型", true, true);
+                rm.Icon = "icon-settings"; //正则表达式
                 map.AddRefMethod(rm);
 
                 //rm = new RefMethod();
@@ -264,21 +226,77 @@ namespace BP.WF.Template
                 //rm.Icon = ../../Img/Mobile.png";
                 rm.ClassMethodName = this.ToString() + ".DoFrmNodeWorkCheck";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "表单组件";
+                // rm.GroupName = "表单组件";
+                rm.Icon = "icon-settings"; //正则表达式
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "表单列表";
-                rm.ClassMethodName = this.ToString() + ".DoBindFrms()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "表单列表";
+                //rm.ClassMethodName = this.ToString() + ".DoBindFrms()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "批量设置";
                 rm.ClassMethodName = this.ToString() + ".DoBatchSetting()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "表单组件";
+                rm.Icon = "icon-settings"; //正则表达式
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "改变表单类型";
+                rm.ClassMethodName = this.ToString() + ".DoChangeFrmType()";
+                rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "修改表单类型", true, true);
+                rm.Icon = "icon-settings"; //正则表达式
+                map.AddRefMethod(rm);
+                #endregion 基本设置.
+
+                #region 表单元素权限.
+                rm = new RefMethod();
+                rm.GroupName = "表单元素权限";
+                rm.Title = "字段权限";
+                rm.ClassMethodName = this.ToString() + ".DoFields()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "表单元素权限";
+                rm.Title = "组件权限";
+                rm.ClassMethodName = this.ToString() + ".DoComponents()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Visable = false;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "表单元素权限";
+                rm.Title = "从表权限";
+                rm.ClassMethodName = this.ToString() + ".DoDtls()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "表单元素权限";
+                rm.Title = "附件权限";
+                rm.ClassMethodName = this.ToString() + ".DoAths()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "表单元素权限";
+                rm.Title = "图片附件权限";
+                rm.ClassMethodName = this.ToString() + ".DoImgAths()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "表单元素权限";
+                rm.Title = "从其他节点Copy权限设置";
+                rm.ClassMethodName = this.ToString() + ".DoCopyFromNode()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-settings"; //正则表达式
+                map.AddRefMethod(rm);
+
+                #endregion 表单元素权限.
 
                 this._enMap = map;
                 return this._enMap;
@@ -306,7 +324,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBindFrms()
         {
-            return "../../Admin/Sln/BindFrms.htm?FK_Node="+this.FK_Node+"&FK_Flow="+this.FK_Flow;
+            return "../../Admin/Sln/BindFrms.htm?FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow;
         }
 
         /// <summary>
@@ -391,6 +409,20 @@ namespace BP.WF.Template
         /// 节点表单
         /// </summary>
         public FrmNodeExts() { }
+        /// <summary>
+        /// 节点表单
+        /// </summary>
+        /// <param name="NodeID">节点ID</param>
+        public FrmNodeExts(string fk_flow, int nodeID)
+        {
+            QueryObject qo = new QueryObject(this);
+            qo.AddWhere(FrmNodeAttr.FK_Flow, fk_flow);
+            qo.addAnd();
+            qo.AddWhere(FrmNodeAttr.FK_Node, nodeID);
+
+            qo.addOrderBy(FrmNodeAttr.Idx);
+            qo.DoQuery();
+        }
         #endregion 构造方法..
 
         #region 公共方法.

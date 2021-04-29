@@ -577,7 +577,9 @@ namespace BP.Pub
                             return dr["RDT"].ToString(); //审核日期.
                         case "RDT-NYR":
                             string rdt = dr["RDT"].ToString(); //审核日期.
-                            return DataType.ParseSysDate2DateTimeFriendly(rdt);
+                            DateTime dt = Convert.ToDateTime(rdt);
+                            return dt.Year+"\\'c4\\'ea"+ dt.Month + "\\'d4\\'c2" + dt.Day + "\\'c8\\'d5";
+                            return Convert.ToDateTime(rdt).ToString("yyyy年MM月dd日");
                         case "Rec":
                             return dr["EmpFrom"].ToString(); //记录人.
                         case "RecName":
@@ -613,7 +615,9 @@ namespace BP.Pub
                     return row["RDT"].ToString(); //审核日期.
                 case "RDT-NYR":
                     string rdt = row["RDT"].ToString(); //审核日期.
-                    return DataType.ParseSysDate2DateTimeFriendly(rdt);
+                    DateTime dt = Convert.ToDateTime(rdt);
+                    return dt.Year + "\\'c4\\'ea" + dt.Month + "\\'d4\\'c2" + dt.Day + "\\'c8\\'d5";
+                    return Convert.ToDateTime(rdt).ToString("yyyy年MM月dd日");
                 case "Rec":
                     return row["EmpFrom"].ToString(); //记录人.
                 case "RecName":
@@ -1254,11 +1258,16 @@ namespace BP.Pub
                         wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "RDT"));
                         str = str.Replace(wkKey, wkVal);
 
+                        wkKey = "<WorkCheck.RDT-NYR." + nfFrom + ">";
+                        wkVal = this.GetValueCheckWorkByKey(row, "RDT-NYR");
+                        str = str.Replace(wkKey, wkVal);
+
+
                         //审核人的签名. 2020.11.28 by zhoupeng @yln
                         wkKey = "<WorkCheck.Siganture." + nfFrom + ">";
                         if (str.Contains(wkKey) == true)
                         {
-                            wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "Siganture"));
+                            wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "EmpFrom"));
                             String filePath = SystemConfig.PathOfDataUser + "\\Siganture\\" + wkVal + ".jpg";
                             //定义rtf中图片字符串.
                             StringBuilder mypict = new StringBuilder();

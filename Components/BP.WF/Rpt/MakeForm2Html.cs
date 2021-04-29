@@ -1026,7 +1026,7 @@ namespace BP.WF
                         {
                             isDropTR = true;
                             html += " <tr>";
-                            html += " <td  class='FDesc' style='width:143px' >" + attr.Name + "</td>";
+                            html += " <td  class='FoolFrmFieldCtrl' style='width:143px' >" + attr.Name + "</td>";
                             html += " <td  ColSpan=3 style='width:712.5px' class='FContext'>";
                             html += text;
                             html += " </td>";
@@ -1039,7 +1039,7 @@ namespace BP.WF
                         {
                             isDropTR = true;
                             html += " <tr>";
-                            html += " <td ColSpan=4 class='FDesc' >" + attr.Name + "</td>";
+                            html += " <td ColSpan=4 class='FoolFrmFieldCtrl' >" + attr.Name + "</td>";
                             html += " </tr>";
                             html += " <tr>";
                             html += " <td ColSpan=4 class='FContext'>";
@@ -1052,7 +1052,7 @@ namespace BP.WF
                         if (isDropTR == true)
                         {
                             html += " <tr>";
-                            html += " <td class='FDesc' style='width:143px'>" + attr.Name + "</td>";
+                            html += " <td class='FoolFrmFieldCtrl' style='width:143px'>" + attr.Name + "</td>";
                             html += " <td class='FContext' style='width:332px'>";
                             html += text;
                             html += " </td>";
@@ -1062,7 +1062,7 @@ namespace BP.WF
 
                         if (isDropTR == false)
                         {
-                            html += " <td  class='FDesc'style='width:143px'>" + attr.Name + "</td>";
+                            html += " <td  class='FoolFrmFieldCtrl'style='width:143px'>" + attr.Name + "</td>";
                             html += " <td class='FContext' style='width:332px'>";
                             html += text;
                             html += " </td>";

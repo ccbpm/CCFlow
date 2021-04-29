@@ -125,8 +125,8 @@ namespace BP.WF.Template
                 //    "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");                
                 //map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
 
-                map.AddTBInt(MapAttrAttr.UIHeight, 1, "高度", true, false);
-                map.AddTBInt(MapAttrAttr.UIWidth, 1, "宽度", true, false);
+                map.AddTBFloat(MapAttrAttr.UIHeight, 1, "高度", true, false);
+                map.AddTBFloat(MapAttrAttr.UIWidth, 1, "宽度", true, false);
 
                 map.AddTBString(MapAttrAttr.Name, null, "名称", true, false, 0, 500, 20, true);
                 #endregion 通用的属性.

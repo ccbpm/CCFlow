@@ -21,7 +21,8 @@ namespace BP.DA
     {
         public static bool IsNullOrEmpty(string s)
         {
-            if (s == null || s.Equals("") == true || s.Equals("null") == true)
+              
+            if (s == null || s.Equals("") == true || s.Equals("null") == true || s.Equals("undefined") ==true)
                 return true;
             return false;
         }
@@ -1744,8 +1745,7 @@ namespace BP.DA
         /// <summary>
         /// 当前的日期时间
         /// </summary>
-        public static string CurrentDataTimess
-        {
+        public static string CurrentDataTimess{
             get
             {
                 return DateTime.Now.ToString(DataType.SysDataTimeFormat + ":ss");
@@ -2340,7 +2340,7 @@ namespace BP.DA
         /// <returns></returns>
         public static BP.En30.ccportal.PortalInterfaceSoapClient GetPortalInterfaceSoapClientInstance()
         {
-            return NetPlatformImpl.DA_DataType.GetPortalInterfaceSoapClientInstance();
+            return Difference.DA_DataType.GetPortalInterfaceSoapClientInstance();
         }
         private static string _BPMHost = null;
         /// <summary>

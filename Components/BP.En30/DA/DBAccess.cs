@@ -468,7 +468,7 @@ namespace BP.DA
             string fileSaveField)
         {
             if (DataType.IsNullOrEmpty(pkVal) == true)
-                return "err@GetBigTextFromDB,没有获得数据.";
+                return "";
             //对于特殊的数据库进行判断.
             if (SystemConfig.AppCenterDBType == DBType.Oracle
                 || SystemConfig.AppCenterDBType == DBType.PostgreSQL
@@ -3028,7 +3028,7 @@ namespace BP.DA
         /// <returns>返回执行结果</returns>
         public static DataTable RunSQLReturnTable(string sql, Paras paras)
         {
-            if (DataType.IsNullOrEmpty(sql))
+           if (DataType.IsNullOrEmpty(sql))
                 throw new Exception("要执行的 sql = null ");
 
             try

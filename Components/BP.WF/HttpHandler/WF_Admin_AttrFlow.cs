@@ -646,65 +646,33 @@ namespace BP.WF.HttpHandler
 
             BP.WF.Nodes nds = new BP.WF.Nodes(this.FK_Flow);
 
-            #region 求出来选择的节点.
+            #region 其他节点的处理人方式（求选择的节点）
             string nodesOfSMS = "";
-            string nodesOfEmail = "";
             foreach (BP.WF.Node mynd in nds)
             {
                 foreach (string key in HttpContextHelper.RequestParamKeys)
                 {
-                    if (key.Contains("CB_Station_" + mynd.NodeID)
-                        && nodesOfSMS.Contains(mynd.NodeID + "") == false)
-                        nodesOfSMS += mynd.NodeID + ",";
-
                     if (key.Contains("CB_SMS_" + mynd.NodeID)
                         && nodesOfSMS.Contains(mynd.NodeID + "") == false)
                         nodesOfSMS += mynd.NodeID + ",";
 
-                    if (key.Contains("CB_Email_" + mynd.NodeID)
-                        && nodesOfEmail.Contains(mynd.NodeID + "") == false)
-                        nodesOfEmail += mynd.NodeID + ",";
+
                 }
             }
-
-            //节点.
-            msg.MailNodes = nodesOfEmail;
             msg.SMSNodes = nodesOfSMS;
-            #endregion 求出来选择的节点.
+            #endregion 其他节点的处理人方式（求选择的节点）
 
-            #region 短信保存.
+            //发给指定的人员
+            msg.ByEmps = HttpContextHelper.RequestParams("TB_Emps");
+
             //短消息发送设备
             msg.SMSPushModel = this.GetRequestVal("PushModel");
 
-            //短信推送方式。
-            msg.SMSPushWay = Convert.ToInt32(HttpContextHelper.RequestParams("RB_SMS").Replace("RB_SMS_", ""));
+            //邮件标题
+            msg.MailTitle_Real = HttpContextHelper.RequestParams("TB_title");
 
-            //短信手机字段.
-            msg.SMSField = HttpContextHelper.RequestParams("DDL_SMS_Fields");
-            //替换变量
-            string smsstr = HttpContextHelper.RequestParams("TB_SMS");
-            //扬玉慧 此处是配置界面  不应该把用户名和用户编号转化掉
-            //smsstr = smsstr.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-            //smsstr = smsstr.Replace("@WebUser.No", BP.Web.WebUser.No);
-
-            // smsstr = smsstr.Replace("@RDT",);
             //短信内容模版.
-            msg.SMSDoc_Real = smsstr;
-            #endregion 短信保存.
-
-            #region 邮件保存.
-            //邮件.
-            //msg.MailPushWay = Convert.ToInt32(HttpContext.Current.Request["RB_Email"].ToString().Replace("RB_Email_", "")); ;
-            //2019-07-25 zyt改造
-            msg.MailPushWay = Convert.ToInt32(HttpContextHelper.RequestParams("RB_Email").Replace("RB_Email_", ""));
-            //邮件标题与内容.
-            msg.MailTitle_Real = HttpContextHelper.RequestParams("TB_Email_Title");
-            msg.MailDoc_Real = HttpContextHelper.RequestParams("TB_Email_Doc");
-
-            //邮件地址.
-            msg.MailAddress = HttpContextHelper.RequestParams("DDL_Email_Fields");
-
-            #endregion 邮件保存.
+            msg.SMSDoc_Real = HttpContextHelper.RequestParams("TB_SMS");
 
             //保存.
             if (DataType.IsNullOrEmpty(msg.MyPK) == true)

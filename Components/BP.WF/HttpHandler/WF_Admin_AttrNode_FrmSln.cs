@@ -143,6 +143,7 @@ namespace BP.WF.HttpHandler
         public string RefOneFrmTreeFrms_Init()
         {
             string sql = "";
+            string key = GetRequestVal("KeyWord");//查询的关键字
             //单机模式下
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
             {
@@ -155,6 +156,8 @@ namespace BP.WF.HttpHandler
                 sql += " WHERE ";
                 sql += " A.FK_FormTree = B.NO ";
                 //sql += " AND B.OrgNo = '" + WebUser.OrgNo + "'";
+                if (DataType.IsNullOrEmpty(key) == false)
+                    sql += " AND A.Name like '%" + key + "%'";
                 sql += "ORDER BY B.IDX,A.IDX";
 
             }
@@ -171,6 +174,8 @@ namespace BP.WF.HttpHandler
                 sql += " WHERE ";
                 sql += " A.FK_FormTree = B.NO ";
                 sql += " AND B.OrgNo = '" + WebUser.OrgNo + "' ";
+                if (DataType.IsNullOrEmpty(key) == false)
+                    sql += " AND A.Name like '%" + key + "%'";
                 sql += "ORDER BY B.IDX,A.IDX";
             }
 
@@ -188,6 +193,8 @@ namespace BP.WF.HttpHandler
                 sql += " A.FK_FormTree = B.NO ";
                 sql += " AND B.OrgNo = '" + WebUser.OrgNo + "' ";
                 sql += " AND C.No =B.OrgNo ";
+                if (DataType.IsNullOrEmpty(key) == false)
+                    sql += " AND A.Name like '%" + key + "%'";
 
                 sql += " UNION  ";
 
@@ -198,6 +205,8 @@ namespace BP.WF.HttpHandler
                 sql += " WHERE ";
                 sql += "  A.No = B.FrmID  AND B.OrgNo=C.No ";
                 sql += "  AND B.OrgNo = '" + WebUser.OrgNo + "' ";
+                if (DataType.IsNullOrEmpty(key) == false)
+                    sql += " AND A.Name like '%" + key + "%'";
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);

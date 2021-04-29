@@ -555,62 +555,60 @@ namespace BP.WF
         /// <param name="mailTitle"></param>
         /// <param name="mailDoc"></param>
         /// <returns></returns>
-        public static async Task<bool> SendEmailNowAsync(string mail, string mailTitle, string mailDoc)
+        public static bool SendEmailNowAsync(string mail, string mailTitle, string mailDoc)
         {
-            //if (1 == 1)
-            //    return;
-
-            return await Task.Run(() =>
+            try
             {
-                try
-                {
-                    System.Net.Mail.MailMessage myEmail = new System.Net.Mail.MailMessage();
+                System.Net.Mail.MailMessage myEmail = new System.Net.Mail.MailMessage();
 
-                    //邮件地址.
-                    string emailAddr = SystemConfig.GetValByKey("SendEmailAddress", null);
-                    if (emailAddr == null)
-                        emailAddr = "ccbpmtester@tom.com";
+                //邮件地址.
+                string emailAddr = SystemConfig.GetValByKey("SendEmailAddress", null);
+                if (emailAddr == null)
+                    emailAddr = "ccbpmtester@tom.com";
 
-                    string emailPassword = SystemConfig.GetValByKey("SendEmailPass", null);
-                    if (emailPassword == null)
-                        emailPassword = "ccbpm123";
+                string emailPassword = SystemConfig.GetValByKey("SendEmailPass", null);
+                if (emailPassword == null)
+                    emailPassword = "ccbpm123";
 
-                    mailDoc = DataType.ParseText2Html(mailDoc);
+                mailDoc = DataType.ParseText2Html(mailDoc);
 
-                    string displayName = SystemConfig.GetValByKey("SendEmailDisplayName", "驰骋BPM");
-                    myEmail.From = new System.Net.Mail.MailAddress(emailAddr, displayName, System.Text.Encoding.UTF8);
+                string displayName = SystemConfig.GetValByKey("SendEmailDisplayName", "驰骋BPM");
+                myEmail.From = new System.Net.Mail.MailAddress(emailAddr, displayName, System.Text.Encoding.UTF8);
 
-                    myEmail.To.Add(mail);
-                    myEmail.Subject = mailTitle;
-                    myEmail.SubjectEncoding = System.Text.Encoding.UTF8;//邮件标题编码
-                    myEmail.IsBodyHtml = true;
-                    myEmail.Body = mailDoc;
-                    myEmail.BodyEncoding = System.Text.Encoding.UTF8;//邮件内容编码
-                    myEmail.IsBodyHtml = true;//是否是HTML邮件
-                    myEmail.Priority = MailPriority.High; // 邮件优先级
+                myEmail.To.Add(mail);
+                myEmail.Subject = mailTitle;
+                myEmail.SubjectEncoding = System.Text.Encoding.UTF8;//邮件标题编码
+                myEmail.IsBodyHtml = true;
+                myEmail.Body = mailDoc;
+                myEmail.BodyEncoding = System.Text.Encoding.UTF8;//邮件内容编码
+                myEmail.IsBodyHtml = true;//是否是HTML邮件
+                myEmail.Priority = MailPriority.High; // 邮件优先级
 
-                    SmtpClient client = new SmtpClient();
-                    client.UseDefaultCredentials = true;
-                    if (SystemConfig.GetValByKeyInt("SendEmailEnableSsl", 1) == 1)
-                        client.EnableSsl = true;  //经过ssl加密.
-                    else
-                        client.EnableSsl = false;
+                SmtpClient client = new SmtpClient();
+                client.UseDefaultCredentials = true;
+                if (SystemConfig.GetValByKeyInt("SendEmailEnableSsl", 1) == 1)
+                    client.EnableSsl = true;  //经过ssl加密.
+                else
+                    client.EnableSsl = false;
 
-                    client.Credentials = new System.Net.NetworkCredential(emailAddr, emailPassword);
-                    client.Port = SystemConfig.GetValByKeyInt("SendEmailPort", 587); //使用的端口
-                    client.Host = SystemConfig.GetValByKey("SendEmailHost", "smtp.gmail.com");
+                client.Credentials = new System.Net.NetworkCredential(emailAddr, emailPassword);
+                client.Port = SystemConfig.GetValByKeyInt("SendEmailPort", 587); //使用的端口
+                client.Host = SystemConfig.GetValByKey("SendEmailHost", "smtp.gmail.com");
 
-                    object userState = myEmail;
-                    client.SendAsync(myEmail, userState);
-                }
-                catch (Exception e)
-                {
-                    throw new Exception("err@" + mail + "邮箱有误");
-                    return true;
-                }
+                object userState = myEmail;
+                //调用自带的异步方法
 
-                return true;
-            });
+                client.Send(myEmail);
+                client.SendMailAsync(myEmail);
+                client.SendAsync(myEmail, userState);
+            }
+            catch (Exception e)
+            {
+                Log.DebugWriteError(e.Message);
+                return false;
+            }
+
+            return true;
         }
         /// <summary>
         /// SAAS发送.
@@ -624,16 +622,69 @@ namespace BP.WF
 
             string httpUrl = messageUrl + "?Sender=" + BP.Web.WebUser.No + "&OrgNo=" + WebUser.OrgNo + "&ToUserIDs=" + this.SendToEmpNo + "&Title=" + this.Title + "&Docs=" + this.GetValDocText();
 
-            string json = "{";
-            json += " \"Sender\": \"" + WebUser.No + "\",";
-            json += " \"OrgNo\": \"" + WebUser.OrgNo + "\",";
-            json += " \"SendTo\": \"" + this.SendToEmpNo + "\",";
-            json += " \"Tel\": \"" + this.Mobile + "\",";
-            json += " \"Title\":\"" + this.Title + "\",";
+            string json = "";
+            if (SystemConfig.CustomerNo.Equals("YuTong") == true)
+            {
+                json = "{";
+                json += " \"token\": '34c45c2b30512e8a8e10467cee45d7ed',";
+                json += " \"Sender\": \"" + WebUser.No + "\",";
+                json += " \"OrgNo\": \"" + WebUser.OrgNo + "\",";
+                json += " \"userid\": \"" + this.SendToEmpNo + "\",";
+                json += " \"Tel\": \"" + this.Mobile + "\",";
+                json += " \"title\":\"" + this.Title + "\",";
+                json += " \"MsgFlg\":\"" + this.MsgFlag + "\",";
+                json += " \"MobileInfo\":\"" + this.MobileInfo + " \",";
+                json += " \"contents\":\"" + this.Doc + " \",";
+                json += " \"wx\":'true',";
+                json += " \"isEmail\":'true',";
+                json += " \"url\":\"" + this.OpenURL + " \"}";
+            }
+            else
+            {
+                json = "{";
+                json += " \"Sender\": \"" + WebUser.No + "\",";
+                json += " \"OrgNo\": \"" + WebUser.OrgNo + "\",";
+                json += " \"SendTo\": \"" + this.SendToEmpNo + "\",";
+                json += " \"Tel\": \"" + this.Mobile + "\",";
+                json += " \"Title\":\"" + this.Title + "\",";
+                json += " \"MsgFlg\":\"" + this.MsgFlag + "\",";
+                json += " \"MobileInfo\":\"" + this.MobileInfo + " \",";
+                json += " \"Doc\":\"" + this.Doc + " \",";
+                json += " \"Url\":\"" + this.OpenURL + " \"}";
+            }
+
+
+
+            //注册到url里面去.
+            BP.WF.Glo.HttpPostConnect(httpUrl, json);
+        }
+        public void DealYuTong()
+        {
+            //获取设置.
+            string messageUrl = SystemConfig.AppSettings["HandlerOfMessage"];
+            if (DataType.IsNullOrEmpty(messageUrl) == true)
+                return;
+
+            string httpUrl = messageUrl;//  + "?Sender=" + BP.Web.WebUser.No + "&OrgNo=" + WebUser.OrgNo + "&ToUserIDs=" + this.SendToEmpNo + "&Title=" + this.Title + "&Docs=" + this.GetValDocText();
+
+            string json = "";
+
+            json = "{";
+            json += " \"token\":\"34c45c2b30512e8a8e10467cee45d7ed\",";
+        //    json += " \"Sender\": \"" + WebUser.No + "\",";
+         //   json += " \"OrgNo\": \"" + WebUser.OrgNo + "\",";
+            json += " \"userid\": \"" + this.SendToEmpNo + "\",";
+          //  json += " \"Tel\": \"" + this.Mobile + "\",";
+            json += " \"title\":\"" + this.Title + "\",";
             json += " \"MsgFlg\":\"" + this.MsgFlag + "\",";
-            json += " \"MobileInfo\":\"" + this.MobileInfo + " \",";
-            json += " \"Doc\":\"" + this.Doc + " \",";
-            json += " \"Url\":\"" + this.OpenURL + " \"}";
+           // json += " \"MobileInfo\":\"" + this.MobileInfo + " \",";
+
+            json += " \"MsgAL\": null,";
+
+            json += " \"contents\":\"" + this.Doc + " \",";
+            json += " \"wx\":'true',";
+            json += " \"isEmail\":'true',";
+            json += " \"url\":\"" + this.OpenURL + " \"}";
 
             //注册到url里面去.
             BP.WF.Glo.HttpPostConnect(httpUrl, json);
@@ -651,6 +702,15 @@ namespace BP.WF
                     SendMsgToSAAS();
                     return;
                 }
+
+                if (SystemConfig.CustomerNo.Equals("YuTong") == true)
+                {
+                    DealYuTong();
+                    return;
+                }
+                
+
+
 
                 if (this.HisEmailSta != MsgSta.UnRun)
                     return;
@@ -675,7 +735,7 @@ namespace BP.WF
                     }
                     else
                     {   //单个邮箱
-                        //SendEmailNowAsync(this.Email, this.Title, this.DocOfEmail);
+                        SendEmailNowAsync(this.Email, this.Title, this.DocOfEmail);
                     }
                 }
                 #endregion 发送邮件

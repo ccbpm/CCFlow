@@ -114,13 +114,22 @@
     <Reference Include="IBM.Data.Informix">
       <HintPath>..\..\RefDLL\IBM.Data.Informix.dll</HintPath>
     </Reference>
+    <Reference Include="K4os.Compression.LZ4, Version=1.1.11.0, Culture=neutral, PublicKeyToken=2186fa9121ef231d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\chichengsoft\CCFlowCloud\packages\K4os.Compression.LZ4.1.1.11\lib\net45\K4os.Compression.LZ4.dll</HintPath>
+    </Reference>
+    <Reference Include="K4os.Compression.LZ4.Streams, Version=1.1.11.0, Culture=neutral, PublicKeyToken=2186fa9121ef231d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\chichengsoft\CCFlowCloud\packages\K4os.Compression.LZ4.Streams.1.1.11\lib\net45\K4os.Compression.LZ4.Streams.dll</HintPath>
+    </Reference>
+    <Reference Include="K4os.Hash.xxHash, Version=1.0.6.0, Culture=neutral, PublicKeyToken=32cd54395057cec3, processorArchitecture=MSIL">
+      <HintPath>..\..\..\chichengsoft\CCFlowCloud\packages\K4os.Hash.xxHash.1.0.6\lib\net45\K4os.Hash.xxHash.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Expression.Interactions">
       <HintPath>..\..\RefDLL\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
-    <Reference Include="MySql.Data, Version=8.0.13.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+    <Reference Include="MySql.Data, Version=8.0.20.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\RefDLL\MySql.Data.dll</HintPath>
+      <HintPath>..\..\CCFlow\Bin\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\RefDLL\Newtonsoft.Json.dll</HintPath>
@@ -150,6 +159,9 @@
     <Reference Include="System.Management" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\chichengsoft\CCFlowCloud\packages\System.Runtime.CompilerServices.Unsafe.4.6.0\lib\netstandard1.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
@@ -162,6 +174,12 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="ThoughtWorks.QRCode">
       <HintPath>..\..\RefDLL\ThoughtWorks.QRCode.dll</HintPath>
+    </Reference>
+    <Reference Include="Ubiety.Dns.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\chichengsoft\CCFlowCloud\packages\MySql.Data.8.0.20\lib\net452\Ubiety.Dns.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Zstandard.Net, Version=1.1.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\chichengsoft\CCFlowCloud\packages\MySql.Data.8.0.20\lib\net452\Zstandard.Net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -205,10 +223,10 @@
     <Compile Include="Port\Team.cs" />
     <Compile Include="Port\TeamEmp.cs" />
     <Compile Include="Port\TeamType.cs" />
-    <Compile Include="NetPlatformImpl\CacheHelper.cs" />
-    <Compile Include="NetPlatformImpl\DA.cs" />
-    <Compile Include="NetPlatformImpl\HttpContextHelper.cs" />
-    <Compile Include="NetPlatformImpl\Sys.cs" />
+    <Compile Include="Difference\CacheHelper.cs" />
+    <Compile Include="Difference\DA.cs" />
+    <Compile Include="Difference\HttpContextHelper.cs" />
+    <Compile Include="Difference\Sys.cs" />
     <Compile Include="OverrideFile.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Pub\Rpt2Base.cs" />
@@ -264,6 +282,7 @@
     <Compile Include="Sys\FrmUI\ExtLink.cs" />
     <Compile Include="Sys\FrmUI\ExtHandWriting.cs" />
     <Compile Include="Sys\GloVarExt.cs" />
+    <Compile Include="Sys\MapAttrEnum.cs" />
     <Compile Include="Sys\MapExtXml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -323,6 +342,7 @@
     </Compile>
     <Compile Include="Sys\Langue.cs" />
     <Compile Include="Sys\SFTableSQL.cs" />
+    <Compile Include="Tools\BaseFileUtils.cs" />
     <Compile Include="Tools\Cryptography.cs" />
     <Compile Include="DA\EnumDA.cs" />
     <Compile Include="DA\DataType.cs">
@@ -530,7 +550,9 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Readme.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

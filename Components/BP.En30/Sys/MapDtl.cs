@@ -216,8 +216,18 @@ namespace BP.Sys
         #region 参数属性.
         public const string IsEnableLink = "IsEnableLink";
         public const string LinkLabel = "LinkLabel";
+        public const string ExcType = "ExcType";
         public const string LinkUrl = "LinkUrl";
         public const string LinkTarget = "LinkTarget";
+
+        
+
+        public const string IsEnableLink2 = "IsEnableLink2";
+        public const string LinkLabel2 = "LinkLabel2";
+        public const string ExcType2 = "ExcType2";
+        public const string LinkUrl2 = "LinkUrl2";
+        public const string LinkTarget2 = "LinkTarget2";
+
         /// <summary>
         /// 从表存盘方式(失去焦点自动存盘，手工存盘)
         /// </summary>
@@ -1772,10 +1782,11 @@ namespace BP.Sys
                 }
             }
 
+
             //执行清空缓存到的AutoNum.
             MapData md = new MapData(this.FK_MapData);
             md.ClearAutoNumCash(true); //更新缓存.
-           
+
             return base.beforeDelete();
         }
     }

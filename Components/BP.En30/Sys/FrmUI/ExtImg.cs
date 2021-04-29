@@ -116,8 +116,8 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSysEnum(MapAttrAttr.RowSpan, 1, "行数", true, true, "RowSpanAttrString",
                    "@1=跨1个行@2=跨2行@3=跨3行");
 
-                map.AddTBInt(MapAttrAttr.UIWidth, 0, "宽度", true, false);
-                map.AddTBInt(MapAttrAttr.UIHeight, 0, "高度", true, false);
+                map.AddTBFloat(MapAttrAttr.UIWidth, 0, "宽度", true, false);
+                map.AddTBFloat(MapAttrAttr.UIHeight, 0, "高度", true, false);
 
                 this._enMap = map;
                 return this._enMap;

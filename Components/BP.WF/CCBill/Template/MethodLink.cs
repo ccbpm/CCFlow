@@ -133,7 +133,7 @@ namespace BP.CCBill.Template
                 map.AddTBInt(MethodAttr.PopHeight, 700, "高度", true, false);
 
                 map.AddTBString(MethodAttr.MethodName, null, "连接标签", true, false, 0, 200, 10, true);
-                map.AddTBStringDoc(MethodAttr.MethodDoc_Url, null, "连接URL", true, false);
+                map.AddTBString(MethodAttr.MethodDoc_Url, null, "连接URL", true, false, 0, 300, 10);
 
                 #region 工具栏.
                 map.AddBoolean(MethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);

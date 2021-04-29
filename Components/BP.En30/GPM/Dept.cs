@@ -143,9 +143,14 @@ namespace BP.GPM
 
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
+				string rootNo="0";
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single && WebUser.IsAdmin == false)
+                    rootNo = "@WebUser.FK_Dept";
+                else
+                    rootNo = "@WebUser.OrgNo";
                 map.AttrsOfOneVSM.AddBranchesAndLeaf(new DeptEmps(), new BP.Port.Emps(),
                    DeptEmpAttr.FK_Dept,
-                   DeptEmpAttr.FK_Emp, "对应人员", BP.Port.EmpAttr.FK_Dept, BP.Port.EmpAttr.Name, BP.Port.EmpAttr.No, "@WebUser.FK_Dept");
+                   DeptEmpAttr.FK_Emp, "对应人员", BP.Port.EmpAttr.FK_Dept, BP.Port.EmpAttr.Name, BP.Port.EmpAttr.No, rootNo);
 
 
                 //平铺模式.

@@ -116,7 +116,7 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否启用？", true, true);
                 //map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", false, false);
 
-                map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
+                map.AddDDLSQL(MapAttrAttr.CSSCtrl, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
                 #endregion 基本字段信息.
 
                 #region 傻瓜表单

@@ -249,7 +249,14 @@ namespace BP.WF.Data
         {
             get
             {
-                return this.GetValStringByKey(GERptAttr.BillNo);
+                try
+                {
+                    return this.GetValStringByKey(GERptAttr.BillNo);
+                }
+                catch (Exception ex)
+                {
+                    return "";
+                }
             }
             set
             {

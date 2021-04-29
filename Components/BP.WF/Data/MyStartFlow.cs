@@ -176,7 +176,7 @@ namespace BP.WF.Data
             {
                 UAC uac = new UAC();
                 uac.Readonly();
-                uac.IsExp = UserRegedit.HaveRoleForExp(this.ToString());
+                uac.IsExp = true;
                 return uac;
             }
         }
@@ -753,13 +753,13 @@ namespace BP.WF.Data
                     MyStartFlowAttr.WFState, "not in", "('0')", 0, true);
                 map.AttrsOfSearch.Add(search);
 
-                RefMethod rm = new RefMethod();
-                rm.Title = "轨迹";
-                rm.ClassMethodName = this.ToString() + ".DoTrack";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                rm.Icon = "../../WF/Img/Track.png";
-                rm.IsForEns = true;
-                map.AddRefMethod(rm);
+               RefMethod rm = new RefMethod();
+                /*  rm.Title = "轨迹";
+                 rm.ClassMethodName = this.ToString() + ".DoTrack";
+                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                 rm.Icon = "../../WF/Img/Track.png";
+                 rm.IsForEns = true;
+                 map.AddRefMethod(rm);*/
 
                 rm = new RefMethod();
                 rm.Title = "表单/轨迹";
@@ -769,12 +769,12 @@ namespace BP.WF.Data
                 rm.IsForEns = true;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
+              /*  rm = new RefMethod();
                 rm.Title = "打印表单";
                 rm.ClassMethodName = this.ToString() + ".DoPrintFrm";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.IsForEns = false;
-                map.AddRefMethod(rm);
+                map.AddRefMethod(rm);*/
 
                 this._enMap = map;
                 return this._enMap;

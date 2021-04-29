@@ -1436,6 +1436,25 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion
 
+                #region 发起子流程
+                bool isMobile = this.GetRequestValBoolen("IsMobile");
+                if (isMobile == false)
+                {
+                    SubFlowHands subFlows = new SubFlowHands(this.FK_Node);
+                    foreach (SubFlowHand subFlow in subFlows)
+                    {
+                        if (subFlow.SubFlowStartModel != 0 && subFlow.SubFlowSta == FrmSubFlowSta.Enable)
+                        {
+                            dr = dt.NewRow();
+                            dr["No"] = "SubFlow";
+                            dr["Name"] = DataType.IsNullOrEmpty(subFlow.SubFlowLab) == true ? "发起" + subFlow.SubFlowName : subFlow.SubFlowLab;
+                            dr["Oper"] = "SendSubFlow(\'" + subFlow.SubFlowNo + "\',\'" + subFlow.MyPK + "\')";
+                            dt.Rows.Add(dr);
+                        }
+                    }
+                }
+                #endregion
+
                 #region  加载自定义的button.
                 BP.WF.Template.NodeToolbars bars = new NodeToolbars();
                 bars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node, NodeToolbarAttr.IsMyFlow, 1, NodeToolbarAttr.Idx);

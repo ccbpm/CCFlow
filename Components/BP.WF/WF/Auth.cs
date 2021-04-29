@@ -17,15 +17,15 @@ namespace BP.WF
         /// <summary>
         /// 不授权
         /// </summary>
-        None=2,
+        None=0,
         /// <summary>
         /// 全部授权
         /// </summary>
-        All=0,
+        All=1,
         /// <summary>
         /// 指定流程授权
         /// </summary>
-        SpecFlows=1
+        SpecFlows=2
     }
     /// <summary>
     /// 授权属性

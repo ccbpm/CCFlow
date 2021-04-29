@@ -514,6 +514,7 @@ namespace BP.Sys
             get
             {
                 SysEnums obj = this.GetRefObject("SysEnums") as SysEnums;
+                obj = null;
                 if (obj == null)
                 {
                     obj = new SysEnums();
@@ -703,6 +704,16 @@ namespace BP.Sys
             this.Row.SetValByKey("FrmRBs", null);
             this.Row.SetValByKey("MapAttrs", null);
             return;
+        }
+        /// <summary>
+        /// 格式
+        /// </summary>
+        public string FoolStyleJSON
+        {
+            get
+            {
+                return "";
+            }
         }
         /// <summary>
         /// 清空缓存
@@ -944,7 +955,23 @@ namespace BP.Sys
                 this.SetPara("IsHaveCA", value);
             }
         }
-     
+
+        /// <summary>
+        ///是否启用装载填充
+        /// </summary>
+        public bool IsPageLoadFull
+        {
+            get
+            {
+                return this.GetParaBoolen("IsPageLoadFull", false);
+
+            }
+            set
+            {
+                this.SetPara("IsPageLoadFull", value);
+            }
+        }
+
         /// <summary>
         /// 数据源
         /// </summary>
@@ -1674,18 +1701,23 @@ namespace BP.Sys
                 switch (dt.TableName)
                 {
                     case "Sys_MapDtl":
-
                         foreach (DataRow dr in dt.Rows)
                         {
-
                             MapDtl dtl = new MapDtl();
                             foreach (DataColumn dc in dt.Columns)
                             {
                                 object val = dr[dc.ColumnName] as object;
                                 if (val == null)
                                     continue;
-
-                                dtl.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
+                                //如果是节点表单，是从表，则从表的名字不修改了.
+                                if (dc.ColumnName.Equals("PTable") == true && val.ToString().IndexOf("ND") == 0)
+                                {
+                                    dtl.SetValByKey(dc.ColumnName, val.ToString());
+                                }
+                                else
+                                {
+                                    dtl.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
+                                }
 
                             }
                             dtl.Insert();
@@ -2273,7 +2305,7 @@ namespace BP.Sys
             if (i1 == 0)
             {
                 /*没有线的情况，按照图片来计算。*/
-                i1 = DBAccess.RunSQLReturnValFloat("SELECT Max(X+W) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
+                i1 = DBAccess.RunSQLReturnValFloat("SELECT Max(X+UIWidth) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
             }
             this.MaxRight = i1;
 
@@ -2290,12 +2322,12 @@ namespace BP.Sys
             i1 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y1) FROM Sys_FrmLine WHERE FK_MapData='" + this.No + "'", 0);
             /*小周鹏添加2014/10/23-----------------------START*/
             if (i1 == 0) /*没有线，只有图片的情况下。*/
-                i1 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+H) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
+                i1 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+UIHeight) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
 
             /*小周鹏添加2014/10/23-----------------------END*/
             i2 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y)  FROM Sys_FrmLab  WHERE FK_MapData='" + this.No + "'", 0);
             if (i2 == 0)
-                i2 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+H) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
+                i2 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+UIHeight) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
             //求出最底部的 附件
             float endFrmAtt = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+H)  FROM Sys_FrmAttachment  WHERE FK_MapData='" + this.No + "'", 0);
             //求出最底部的明细表

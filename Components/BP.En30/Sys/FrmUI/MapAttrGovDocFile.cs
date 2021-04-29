@@ -114,7 +114,7 @@ namespace BP.Sys.FrmUI
                 map.SetHelperAlert(MapAttrAttr.UIWidth, "对自由表单,从表有效,显示文本框的宽度.");
 
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否启用？", true, true);
-                map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
+                map.AddDDLSQL(MapAttrAttr.CSSCtrl, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
                 #endregion 基本字段信息.
 
                 #region 傻瓜表单

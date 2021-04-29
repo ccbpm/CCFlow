@@ -41,7 +41,6 @@ namespace BP.Port
         /// 邮箱
         /// </summary>
         public const string Email = "Email";
-		
 
         #endregion
     }

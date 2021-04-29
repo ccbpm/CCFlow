@@ -327,7 +327,15 @@ namespace BP.Sys
                 return sql;
 
             if (this.Count == 0)
-                throw new Exception("@枚举值" + enumKey + "已被删除。");
+            {
+                SysEnumMain enumMain = new SysEnumMain(enumKey);
+                RegIt(enumKey, enumMain.CfgVal);
+                new SysEnums(enumKey);
+
+                if (this.Count == 0)
+                    throw new Exception("@枚举值" + enumKey + "已被删除。");
+            }
+               
 
             sql = " CASE NVL(" + mTable + field + "," + def + ")";
             foreach (SysEnum se1 in this)
@@ -348,7 +356,15 @@ namespace BP.Sys
         public string GenerCaseWhenForOracle(string mTable, string key, string field, string enumKey, int def)
         {
             if (this.Count == 0)
-                throw new Exception("@枚举值（" + enumKey + "）已被删除，无法形成期望的SQL。");
+            {
+                SysEnumMain enumMain = new SysEnumMain(enumKey);
+                RegIt(enumKey, enumMain.CfgVal);
+                new SysEnums(enumKey);
+
+                if (this.Count == 0)
+                    throw new Exception("@枚举值（" + enumKey + "）已被删除，无法形成期望的SQL。");
+            }
+                
 
 
             string sql = "";

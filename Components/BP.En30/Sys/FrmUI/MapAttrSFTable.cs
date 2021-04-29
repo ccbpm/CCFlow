@@ -114,7 +114,7 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
                 //CCS样式
-                map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
+                map.AddDDLSQL(MapAttrAttr.CSSCtrl, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
 
                 // map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
                 // map.AddBoolean("IsEnableJS", false, "是否启用JS高级设置？", true, true); //参数字段.

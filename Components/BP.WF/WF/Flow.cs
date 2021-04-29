@@ -415,8 +415,8 @@ namespace BP.WF
                 //}
                 //else
                 //{
-                    return this.GetValStringByKey(FlowAttr.StartGuidePara1);
-               // }
+                return this.GetValStringByKey(FlowAttr.StartGuidePara1);
+                // }
             }
             set
             {
@@ -884,8 +884,8 @@ namespace BP.WF
 
                 //检查报表.
                 this.CheckRpt();
-                int i = wk.DirectInsert();
-                if (i == 0)
+                //int i = wk.DirectInsert();
+                //if (i == 0)
                     throw new Exception("@创建工作失败：请您刷新一次，如果问题仍然存在请反馈给管理员，技术信息：" + ex.StackTrace + " @ 技术信息:" + ex.Message);
             }
 
@@ -1053,6 +1053,31 @@ namespace BP.WF
                     throw new Exception("@父流程的工作ID不正确，没有查询到数据" + PWorkID);
                 //wk.Copy(wkFrom);
                 //rpt.Copy(wkFrom);
+                SubFlows subFlows = new SubFlows();
+                subFlows.Retrieve(SubFlowAttr.SubFlowNo, this.No, SubFlowAttr.FK_Node, int.Parse(PNodeIDStr));
+                if (subFlows.Count == 0)
+                    throw new Exception("err@没有查询到WF_NodeSubFlow中SubFlowNo=" + this.No + "对应的父子流程信息");
+                SubFlow subFlow = subFlows[0] as SubFlow;
+                if (DataType.IsNullOrEmpty(subFlow.SubFlowCopyFields) == false)
+                {
+                    Attrs attrs = wkFrom.EnMap.Attrs;
+                    //父流程把子流程不同字段进行匹配赋值
+                    AtPara ap = new AtPara(subFlow.SubFlowCopyFields);
+                    foreach (String str in ap.HisHT.Keys)
+                    {
+                        Object val = ap.GetValStrByKey(str);
+                        if (DataType.IsNullOrEmpty(val.ToString()) == true)
+                            continue;
+
+                        wk.SetValByKey(val.ToString(), wkFrom.GetValByKey(str));
+                        rpt.SetValByKey(val.ToString(), wkFrom.GetValByKey(str));
+                        if (dt.Columns.Contains(str))
+                        {
+                            wk.SetValByKey(val.ToString(), dt.Rows[0][str]);
+                            rpt.SetValByKey(val.ToString(), dt.Rows[0][str]);
+                        }
+                    }
+                }
                 #endregion 从调用的节点上copy.
 
                 #region 获取web变量.
@@ -1632,6 +1657,7 @@ namespace BP.WF
                 md.No = item.FK_Frm;
                 if (md.IsExits == false)
                     err += "@节点" + item.FK_Node + "绑定的表单:" + item.FK_Frm + ",已经被删除了.";
+                md.ClearCash();
             }
             #endregion
 
@@ -1686,11 +1712,10 @@ namespace BP.WF
                 DBAccess.RunSQL(sql);
 
                 foreach (Node nd in nds)
-                {
+                { 
                     //设置它的位置类型.
                     // nd.RetrieveFromDBSources();
                     nd.SetValByKey(NodeAttr.NodePosType, (int)nd.GetHisNodePosType());
-
                     msg += "@信息: -------- 开始检查节点ID:(" + nd.NodeID + ")名称:(" + nd.Name + ")信息 -------------";
 
                     #region 对节点的访问规则进行检查
@@ -1852,12 +1877,14 @@ namespace BP.WF
                         {
                             md.PTable = "ND" + nd.NodeID;
                             md.Update();
+                            md.ClearCash();
                         }
 
                         //检查数据表.
                         GEEntity geEn = new GEEntity(md.No);
                         geEn.CheckPhysicsTable();
                     }
+                   
                 }
                 #endregion
 
@@ -1981,6 +2008,8 @@ namespace BP.WF
                 }
                 #endregion 检查如果是合流节点必须不能是由上一个节点指定接受人员。
 
+           
+
                 //如果协作模式的节点，方向条件规则是下拉框的，修改为按线的.
                 sql = "UPDATE WF_Node SET CondModel = 2 WHERE CondModel = 1 AND TodolistModel = 1";
                 DBAccess.RunSQL(sql);
@@ -1990,6 +2019,13 @@ namespace BP.WF
 
                 // 检查流程， 处理计算字段.
                 Node.CheckFlow(nds, this.No);
+                foreach (Node nd in nds)
+                {
+                   
+                    nd.ClearAutoNumCash();
+                    nd.Row = null;
+                    BP.DA.Cash2019.DeleteRow("BP.WF.Node", nd.NodeID + "");
+                }
 
                 //创建track.
                 Track.CreateOrRepairTrackTable(this.No);
@@ -2377,7 +2413,7 @@ namespace BP.WF
 
 
             // Sys_Enum
-            if(SystemConfig.CCBPMRunModel != CCBPMRunModel.SAAS)
+            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.SAAS)
                 sql = "SELECT MyPK FROM Sys_Enum WHERE EnumKey IN ( SELECT No FROM Sys_EnumMain WHERE No IN (SELECT UIBindKey from Sys_MapAttr WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData") + " ) )";
             else
                 sql = "SELECT MyPK FROM Sys_Enum WHERE RefPK IN ( SELECT No FROM Sys_EnumMain WHERE No IN (SELECT UIBindKey from Sys_MapAttr WHERE " + Glo.MapDataLikeKey(this.No, "FK_MapData") + " ) )";
@@ -4393,7 +4429,7 @@ namespace BP.WF
             string sql = "SELECT COUNT(*) AS A FROM WF_GenerWorkerList WHERE IsPass=0 AND FK_Flow='" + this.No + "' ";
             int num = DBAccess.RunSQLReturnValInt(sql);
             if (num != 0)
-                return "err@该流程下有未完成的流程【"+ num + "】个您不能删除，可以通过如下SQL查询:"+sql;
+                return "err@该流程下有未完成的流程【" + num + "】个您不能删除，可以通过如下SQL查询:" + sql;
 
             //检查流程有没有版本管理？
             if (this.FK_FlowSort.Length > 1)
@@ -4403,7 +4439,7 @@ namespace BP.WF
                 if (dt.Rows.Count >= 1)
                     return "err@删除流程出错，该流程下有[" + dt.Rows.Count + "]个子版本您不能删除。";
             }
-             
+
             sql = "";
             //sql = " DELETE FROM WF_chofflow WHERE FK_Flow='" + this.No + "'";
             sql += "@ DELETE FROM WF_GenerWorkerlist WHERE FK_Flow='" + this.No + "'";
@@ -4491,8 +4527,8 @@ namespace BP.WF
 
             //清空WF_Emp中的StartFlow 
 
-            if (SystemConfig.CCBPMRunModel== CCBPMRunModel.Single )
-            DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows ='' ");
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows ='' ");
             else
                 DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows ='' WHERE OrgNo='" + BP.Web.WebUser.OrgNo + "'");
 

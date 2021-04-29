@@ -416,10 +416,10 @@ namespace BP.WF
 
             /*该节点不允许撤销.*/
             if (nd.HisCancelRole == CancelRole.None)
-                throw new Exception("当前节点，不允许撤销。");
+                return "err@当前节点，不允许撤销。";
 
             if (nd.IsStartNode && nd.HisNodeWorkType != NodeWorkType.StartWorkFL)
-                throw new Exception("当前节点是开始节点，所以您不能撤销。");
+                return "err@当前节点是开始节点，所以您不能撤销。";
 
             //如果撤销到的节点和当前流程运行到的节点相同，则是分流、或者分河流
             if (this.UnSendToNode == nd.NodeID)
@@ -436,7 +436,7 @@ namespace BP.WF
                             + "  ) ";
                     DataTable dt = DBAccess.RunSQLReturnTable(threadSQL);
                     if (dt == null || dt.Rows.Count == 0)
-                        throw new Exception("err@流程运行错误：当不存在子线程时,改过程应该处于待办状态");
+                        return "err@流程运行错误：当不存在子线程时,改过程应该处于待办状态";
 
                     string toEmps = "";
                     foreach (DataRow dr in dt.Rows)
@@ -553,7 +553,7 @@ namespace BP.WF
             sql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND IsPass=1 AND IsEnable=1 AND WorkID=" + this.WorkID + " ORDER BY RDT DESC ";
             int cancelToNodeID = DBAccess.RunSQLReturnValInt(sql, 0); //计算要撤销到的节点.
             if (cancelToNodeID == 0)
-                throw new Exception("err@您没有权限操作该工作.");
+                return "err@您没有权限操作该工作.";
 
             if (nd.HisCancelRole == CancelRole.SpecNodes)
             {
@@ -561,10 +561,10 @@ namespace BP.WF
                 NodeCancels ncs = new NodeCancels();
                 ncs.Retrieve(NodeCancelAttr.FK_Node, wn.HisNode.NodeID);
                 if (ncs.Count == 0)
-                    throw new Exception("err@流程设计错误, 您设置了当前节点(" + wn.HisNode.Name + ")可以让指定的节点人员撤销，但是您没有设置指定的节点.");
+                    return "err@流程设计错误, 您设置了当前节点(" + wn.HisNode.Name + ")可以让指定的节点人员撤销，但是您没有设置指定的节点.";
 
                 if (ncs.Contains(cancelToNodeID) == false && cancelToNodeID != gwf.FK_Node)
-                    throw new Exception("@撤销流程错误,您没有权限执行撤销发送,当前节点不可以执行撤销.");
+                    return "err@撤销流程错误,您没有权限执行撤销发送,当前节点不可以执行撤销.";
             }
 
             if (nd.HisCancelRole == CancelRole.OnlyNextStep)
@@ -572,7 +572,7 @@ namespace BP.WF
                 /*如果仅仅允许撤销上一步骤.*/
                 WorkNode wnPri = wn.GetPreviousWorkNode();
                 if (wnPri.HisNode.NodeID != cancelToNodeID && cancelToNodeID!=gwf.FK_Node)
-                    throw new Exception("err@您不能执行撤消发送，因为当前工作不是您发送的或下一步工作已处理。");
+                    return "err@您不能执行撤消发送，因为当前工作不是您发送的或下一步工作已处理。";
             }
 
             //求出来要撤销到的节点. @hongyan
@@ -684,7 +684,7 @@ namespace BP.WF
                     if (at == ActionType.TeampUp)
                     {
                         /*如果是写作人员，就不允许他撤销 */
-                        throw new Exception("@您是节点[" + cancelToNode.Name + "]的会签人，您不能执行撤销。");
+                        return "err@您是节点[" + cancelToNode.Name + "]的会签人，您不能执行撤销。";
                     }
                 }
             }

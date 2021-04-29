@@ -1532,7 +1532,8 @@ namespace BP.En
                         {
                             if (isUpper == true)
                             {
-                                if (SystemConfig.AppCenterDBType == DBType.KingBase
+                                if ((SystemConfig.AppCenterDBType == DBType.KingBase
+                                    || SystemConfig.AppCenterDBType == DBType.Oracle)
                                     && attr.MyFieldType == FieldType.RefText)
                                     en.SetValByKey(attr.Key, dr[attr.Key]);
                                 else
@@ -1566,7 +1567,8 @@ namespace BP.En
                 {
                     if (isUpper == true)
                     {
-                        if (SystemConfig.AppCenterDBType == DBType.KingBase
+                        if ((SystemConfig.AppCenterDBType == DBType.KingBase
+                                    || SystemConfig.AppCenterDBType == DBType.Oracle)
                             && dt.Columns.Contains(str) == true)
                             en.SetValByKey(str, dr[str]);
                         else

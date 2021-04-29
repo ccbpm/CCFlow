@@ -11,7 +11,7 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
-using BP.NetPlatformImpl;
+using BP.Difference;
 
 namespace BP.WF.HttpHandler
 {
@@ -94,14 +94,19 @@ namespace BP.WF.HttpHandler
         
             BP.GPM.Depts depts = new GPM.Depts();
 			string parentNo = this.GetRequestVal("ParentNo");
-            //QueryObject qo = new QueryObject(depts);
-            //qo.addOrderBy(GPM.DeptAttr.Idx);
-            //qo.DoQuery();
-            //if (WebUser.No.Equals("admin") == false)
-            //{
 			QueryObject qo = new QueryObject(depts);
-			if(DataType.IsNullOrEmpty(parentNo)==false)
-				qo.AddWhere(GPM.DeptAttr.ParentNo,parentNo);
+            if (DataType.IsNullOrEmpty(parentNo) == false)
+            {
+                if (parentNo.Equals("0") == true)
+                {
+                    qo.AddWhere(GPM.DeptAttr.ParentNo, parentNo);
+                    qo.addOr();
+                    qo.AddWhereInSQL(GPM.DeptAttr.ParentNo, "SELECT No From Port_Dept Where ParentNo='0'");
+                }
+                    
+                else
+                    qo.AddWhere(GPM.DeptAttr.ParentNo, parentNo);
+            }
 			qo.addOrderBy(GPM.DeptAttr.Idx);
 			qo.DoQuery();
 

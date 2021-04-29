@@ -378,12 +378,12 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
             string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.SearchType;
 
+
             //查询出单流程的所有字段
             MapAttrs attrs = new MapAttrs();
             attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo, MapAttrAttr.Idx);
-
-            ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
-
+            
+            
 
             //默认显示的系统字段 标题、创建人、创建时间、部门、状态.
             MapAttrs mattrsOfSystem = new MapAttrs();
@@ -396,15 +396,28 @@ namespace BP.WF.HttpHandler
 
             ds.Tables.Add(mattrsOfSystem.ToDataTableField("Sys_MapAttrOfSystem"));
 
+            attrs.RemoveEn(rptNo + "_OID");
+            attrs.RemoveEn(rptNo + "_Title");
+            attrs.RemoveEn(rptNo + "_FlowStarter");
+            attrs.RemoveEn(rptNo + "_FK_Dept");
+            attrs.RemoveEn(rptNo + "_WFState");
+            attrs.RemoveEn(rptNo + "_WFSta");
+            attrs.RemoveEn(rptNo + "_FlowEmps");
+
+            ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
+
+
+
+
             //系统字段字符串
-            string sysFields = BP.WF.Glo.FlowFields;
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Field");
-            dt.TableName = "Sys_Fields";
-            DataRow dr = dt.NewRow();
-            dr["Field"] = sysFields;
-            dt.Rows.Add(dr);
-            ds.Tables.Add(dt);
+            /* string sysFields = BP.WF.Glo.FlowFields;
+             DataTable dt = new DataTable();
+             dt.Columns.Add("Field");
+             dt.TableName = "Sys_Fields";
+             DataRow dr = dt.NewRow();
+             dr["Field"] = sysFields;
+             dt.Rows.Add(dr);
+             ds.Tables.Add(dt);*/
 
             return BP.Tools.Json.ToJson(ds);
         }

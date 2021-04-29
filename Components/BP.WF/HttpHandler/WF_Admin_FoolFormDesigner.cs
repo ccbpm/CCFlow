@@ -152,7 +152,7 @@ namespace BP.WF.HttpHandler
         public string MapDefDtlFreeFrm_Init()
         {
             string isFor = this.GetRequestVal("For");
-            if (isFor != "")
+            if (DataType.IsNullOrEmpty(isFor)==false)
                 return "sln@" + isFor;
 
             if (this.FK_MapDtl.Contains("_Ath") == true)
@@ -269,23 +269,6 @@ namespace BP.WF.HttpHandler
             string flag = GetRequestVal("flag");
             //此处为字段中文转拼音，设置为最大20个字符，edited by liuxc,2017-9-25
             return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, Equals(flag, "true"), true, 20);
-        }
-
-        public string Designer_GFDoUp()
-        {
-            string msg = "";
-            GroupField gf = new GroupField(this.RefOID);
-            gf.DoUp();
-
-            return msg;
-        }
-        public string Designer_GFDoDown()
-        {
-            string msg = "";
-            GroupField mygf = new GroupField(this.RefOID);
-            mygf.DoDown();
-
-            return msg;
         }
         /// <summary>
         /// 增加一个枚举类型
@@ -560,22 +543,30 @@ namespace BP.WF.HttpHandler
         public string ImpTableField_Step2()
         {
 
-            Dictionary<string, object> dictionary = new Dictionary<string, object>();
+            DataSet ds = new DataSet();
 
             SFDBSrc src = new SFDBSrc(this.FK_SFDBSrc);
-            dictionary.Add("SFDBSrc", src.ToDataTableField());
+            ds.Tables.Add(src.ToDataTableField("SFDBSrc"));
 
             DataTable tables = src.GetTables();
-            dictionary.Add("tables", tables);
+            tables.TableName = "tables";
+            ds.Tables.Add(tables);
 
             DataTable tableColumns = src.GetColumns(this.STable);
-            dictionary.Add("columns", tableColumns);
+            tableColumns.TableName = "columns";
+            ds.Tables.Add(tableColumns);
 
             MapAttrs attrs = new MapAttrs(this.FK_MapData);
-            dictionary.Add("attrs", attrs.ToDataTableField("attrs"));
-            dictionary.Add("STable", this.STable);
+            ds.Tables.Add(attrs.ToDataTableField("attrs"));
+            DataTable dt = new DataTable();
+            dt.TableName = "STable";
+            dt.Columns.Add("STable");
+		    DataRow dr = dt.NewRow();
+            dr["STable"]=this.STable;
+            dt.Rows.Add(dr);
+		    ds.Tables.Add(dt);
 
-            return BP.Tools.Json.ToJson(dictionary);
+            return BP.Tools.Json.ToJson(ds);
         }
 
         private List<string> sCols = null;
@@ -2181,7 +2172,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public List<WSMethod> GetWebServiceMethods(SFDBSrc dbsrc)
         {
-            return BP.WF.NetPlatformImpl.WF_Admin_FoolFormDesigner.GetWebServiceMethods(dbsrc);
+            return BP.WF.Difference.WF_Admin_FoolFormDesigner.GetWebServiceMethods(dbsrc);
         }
 
         /// <summary>

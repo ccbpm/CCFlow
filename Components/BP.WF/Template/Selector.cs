@@ -468,6 +468,22 @@ namespace BP.WF.Template
                 sqlGroup = BP.WF.Glo.DealExp(sqlGroup, en, null);  //@祝梦娟
                 DataTable dt = DBAccess.RunSQLReturnTable(sqlGroup);
                 dt.TableName = "Depts";
+                //转换大小写
+                foreach (DataColumn col in dt.Columns)
+                {
+                    string colName = col.ColumnName.ToLower();
+                    switch (colName)
+                    {
+                        case "no":
+                            col.ColumnName = "No";
+                            break;
+                        case "name":
+                            col.ColumnName = "Name";
+                            break;
+                        default:
+                            break;
+                    }
+                }
                 ds.Tables.Add(dt);
             }
 
@@ -477,6 +493,25 @@ namespace BP.WF.Template
 
             DataTable dtEmp = DBAccess.RunSQLReturnTable(sqlDB);
             dtEmp.TableName = "Emps";
+            //转换大小写
+            foreach (DataColumn col in dtEmp.Columns)
+            {
+                string colName = col.ColumnName.ToLower();
+                switch (colName)
+                {
+                    case "no":
+                        col.ColumnName = "No";
+                        break;
+                    case "name":
+                        col.ColumnName = "Name";
+                        break;
+                    case "fk_dept":
+                        col.ColumnName = "FK_Dept"; 
+                        break;
+                    default:
+                        break;
+                }
+            }
             ds.Tables.Add(dtEmp);
 
             //求默认选择的数据.
@@ -487,6 +522,21 @@ namespace BP.WF.Template
 
                 DataTable dtDef = DBAccess.RunSQLReturnTable(sqlDB);
                 dtDef.TableName = "DefaultSelected";
+                foreach (DataColumn col in dtDef.Columns)
+                {
+                    string colName = col.ColumnName.ToLower();
+                    switch (colName)
+                    {
+                        case "no":
+                            col.ColumnName = "No";
+                            break;
+                        case "name":
+                            col.ColumnName = "Name";
+                            break;
+                        default:
+                            break;
+                    }
+                }
 
                 ds.Tables.Add(dtDef);
             }
@@ -508,6 +558,21 @@ namespace BP.WF.Template
                     sqlDB = BP.WF.Glo.DealExp(sqlDB, en, null);
 
                 DataTable dtForce = DBAccess.RunSQLReturnTable(sqlDB);
+                foreach (DataColumn col in dtForce.Columns)
+                {
+                    string colName = col.ColumnName.ToLower();
+                    switch (colName)
+                    {
+                        case "no":
+                            col.ColumnName = "No";
+                            break;
+                        case "name":
+                            col.ColumnName = "Name";
+                            break;
+                        default:
+                            break;
+                    }
+                }
                 dtForce.TableName = "ForceSelected";
                 ds.Tables.Add(dtForce);
             }

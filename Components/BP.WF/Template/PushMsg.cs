@@ -795,10 +795,12 @@ namespace BP.WF.Template
             string openWorkURl = "";
 
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-                openWorkURl = hostUrl + "/App/Portal/GuideWeiXin.aspx?DoType=OpenWork&WorkID=" + workid+"&FK_Flow="+currNode.FK_Flow ;
+            {
+                //openWorkURl = hostUrl + "/App/Portal/GuideWeiXin.aspx?DoType=OpenWork&WorkID=" + workid + "&FK_Flow=" + currNode.FK_Flow + "&GUID=" + WebUser.SID;
+                openWorkURl = "";
+            }
             else
                 openWorkURl = hostUrl + "WF/Do.htm?DoType=OF&SID=" + sid;
-
 
             openWorkURl = openWorkURl.Replace("//", "/");
             openWorkURl = openWorkURl.Replace("http:/", "http://");
@@ -997,6 +999,20 @@ namespace BP.WF.Template
                 }
             }
             #endregion 发送给指定的接收人
+
+            #region 发送给流程发起人
+            if (this.SMSPushWay ==6)
+            {
+                GenerWorkFlow gwf = new GenerWorkFlow(workid);
+                string smsDocReal = smsDoc.Clone() as string;
+                smsDocReal = smsDocReal.Replace("{EmpStr}", gwf.StarterName);
+                openUrl = openUrl.Replace("{EmpStr}", gwf.Starter);
+                //发送消息
+                BP.WF.Dev2Interface.Port_SendMessage(gwf.Starter, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
+                //处理短消息.
+                toEmpIDs += gwf.StarterName + ",";
+            }
+            #endregion 发送给流程发起人
 
             #region 不同的消息事件，接收人不同的处理
             if (this.SMSPushWay == 1)

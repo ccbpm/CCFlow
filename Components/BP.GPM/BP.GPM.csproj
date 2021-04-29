@@ -52,11 +52,11 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bar\Bar.cs">
+    <Compile Include="Bar\Base\Bar.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bar\BarEmp.cs" />
-    <Compile Include="Bar\BarBase.cs" />
+    <Compile Include="Bar\Base\BarBase.cs" />
     <Compile Include="Bar\BarOfStart.cs" />
     <Compile Include="Bar\BarOfTodolist.cs" />
     <Compile Include="Crypto.cs">

@@ -193,6 +193,18 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 流程完成条件
+        /// </summary>
+        public Conds CondsOfFlowComplete
+        {
+            get
+            {
+                var ens = this.GetEntitiesAttrFromAutoNumCash(new Conds(),
+                    CondAttr.FK_Node, this.NodeID, CondAttr.CondType, (int)CondType.Flow, CondAttr.Idx);
+                return ens as Conds;
+            }
+        }
+        /// <summary>
         /// 他的将要转向的方向集合
         /// 如果他没有到转向方向,他就是结束节点.
         /// 没有生命周期的概念,全部的节点.
@@ -400,38 +412,41 @@ namespace BP.WF
                     var ens = this.GetEntitiesAttrFromAutoNumCash(new PushMsgs(),
                   PushMsgAttr.FK_Node, this.NodeID);
 
-
                     obj = ens as PushMsgs;
 
-                    /*//检查是否有默认的发送？如果没有就增加上他。
-                    bool isHaveSend = false;
-                    bool isHaveReturn = false;
-                    foreach (PushMsg item in obj)
+                    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                     {
-                        if (item.FK_Event == EventListNode.SendSuccess)
-                            isHaveSend = true;
 
-                        if (item.FK_Event == EventListNode.ReturnAfter)
-                            isHaveReturn = true;
+                        //检查是否有默认的发送？如果没有就增加上他。
+                        bool isHaveSend = false;
+                        bool isHaveReturn = false;
+                        foreach (PushMsg item in obj)
+                        {
+                            if (item.FK_Event == EventListNode.SendSuccess)
+                                isHaveSend = true;
+
+                            if (item.FK_Event == EventListNode.ReturnAfter)
+                                isHaveReturn = true;
+                        }
+
+                        if (isHaveSend == false )
+                        {
+                            PushMsg pm = new PushMsg();
+                            pm.FK_Event = EventListNode.SendSuccess;
+                            pm.SMSPushWay = 1; //*默认:让其使用短消息提醒.
+                            pm.SMSPushModel = "Email";
+                            obj.AddEntity(pm);
+                        }
+
+                        if (isHaveReturn == false)
+                        {
+                            PushMsg pm = new PushMsg();
+                            pm.FK_Event = EventListNode.ReturnAfter;
+                            pm.SMSPushWay = 1;  //*默认:让其使用短消息提醒. 
+                            pm.SMSPushModel = "Email";
+                            obj.AddEntity(pm);
+                        }
                     }
-
-                    if (isHaveSend == false && SystemConfig.GetValByKeyBoolen("SendSuccess", false))
-                    {
-                        PushMsg pm = new PushMsg();
-                        pm.FK_Event = EventListNode.SendSuccess;
-                        pm.SMSPushWay = 1;  *//*默认:让其使用短消息提醒.*//*
-                        pm.SMSPushModel = "Email";
-                        obj.AddEntity(pm);
-                    }
-
-                    if (isHaveReturn == false && SystemConfig.GetValByKeyBoolen("ReturnAfter", false) )
-                    {
-                        PushMsg pm = new PushMsg();
-                        pm.FK_Event = EventListNode.ReturnAfter;
-                        pm.SMSPushWay = 1;  *//*默认:让其使用短消息提醒.*//*
-                        pm.SMSPushModel = "Email";
-                        obj.AddEntity(pm);
-                    }*/
 
                     this.SetRefObject("PushMsg", obj);
                 }
@@ -795,7 +810,7 @@ namespace BP.WF
                     break;
             }
             //断头路节点
-            if(this.IsSendBackNode == true)
+            if (this.IsSendBackNode == true)
             {
                 this.NodePosType = NodePosType.Mid;
             }
@@ -2805,7 +2820,7 @@ namespace BP.WF
                 map.AddTBInt(NodeWorkCheckAttr.FWCVer, 0, "审核组件版本", false, false);
                 map.AddTBInt("FWCAth", 0, "审核附件是否启用", false, false);
                 map.AddTBString(NodeWorkCheckAttr.CheckField, null, "签批字段", true, false, 0, 50, 10, false);
-                map.AddTBString(NodeWorkCheckAttr.FWCDefInfo, null, "默认意见", true, false, 0, 100, 10);
+                map.AddTBString(NodeWorkCheckAttr.FWCDefInfo, null, "默认意见", true, false, 0, 50, 10);
                 #endregion 审核组件.
 
                 #region 子流程信息

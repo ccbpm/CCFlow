@@ -124,22 +124,16 @@ namespace BP.Sys.FrmUI
                 help += "\t\r 2. 对于float,decimal数据类型，如果设置0.0000就是标识要保留4位小数,如果是1.0000 标识保留4位小数,默认值为1.";
                 map.SetHelperAlert("DefVal", help);
 
-                map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
-                map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, true);
-
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
                 map.AddBoolean(MapAttrAttr.IsSecret, false, "是否保密？", true, true);
                 map.AddBoolean("ExtIsSum", false, "是否显示合计(对从表有效)", true, true);
                 map.SetHelperAlert("ExtIsSum", "如果是从表，就需要显示该从表的合计,在从表的底部.");
-
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
-                //CCS样式
-                map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
                 #endregion 基本信息.
 
-                #region 傻瓜表单。
+                #region 傻瓜表单
                 map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "TextBox单元格数", true, true, "ColSpanAttrDT",
                    "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
@@ -147,12 +141,17 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "Label文本单元格数", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
+                map.AddTBFloat(MapAttrAttr.UIWidth, 80, "宽度", true, false);
+                map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, true);
+
                 //文本跨行
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
                 //显示的分组.
                 map.AddDDLSQL(MapAttrAttr.GroupID,0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
-                #endregion 傻瓜表单。
+
+                map.AddDDLSQL(MapAttrAttr.CSSCtrl, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
+                #endregion 傻瓜表单
 
                 #region 执行的方法.
                 RefMethod rm = new RefMethod();
@@ -162,36 +161,42 @@ namespace BP.Sys.FrmUI
                 rm.Title = "正则表达式";
                 rm.ClassMethodName = this.ToString() + ".DoRegularExpression()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-settings"; //正则表达式
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "事件绑函数";
                 rm.ClassMethodName = this.ToString() + ".BindFunction()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-puzzle"; //事件绑定函数。
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "取多个字段计算结果";
+                rm.Title = "字段计算";
                 rm.ClassMethodName = this.ToString() + ".DoAutoFull()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-energy"; //取多个字段计算结果.
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "对从表列自动计算";
+                rm.Title = "对从表列计算";
                 rm.ClassMethodName = this.ToString() + ".DoAutoFullDtlField()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-energy"; //取多个字段计算结果.
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "设置只读文本框RMB大写";
-                rm.ClassMethodName = this.ToString() + ".DoRMBDaXie()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "对两个日期求天数";
+                rm.Title = "求两个日期天数";
                 rm.ClassMethodName = this.ToString() + ".DoReqDays()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-energy"; //取多个字段计算结果.
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "设置文本框RMB大写";
+                rm.ClassMethodName = this.ToString() + ".DoRMBDaXie()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-wrench";  
                 map.AddRefMethod(rm);
                 #endregion 执行的方法.
 

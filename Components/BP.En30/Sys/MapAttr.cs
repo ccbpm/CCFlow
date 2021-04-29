@@ -9,66 +9,6 @@ using BP.Pub;
 namespace BP.Sys
 {
     /// <summary>
-    /// 文本框类型
-    /// </summary>
-    public enum TBModel
-    {
-        /// <summary>
-        /// 正常的
-        /// </summary>
-        Normal,
-        /// <summary>
-        /// 大文本
-        /// </summary>
-        BigDoc,
-        /// <summary>
-        /// 富文本
-        /// </summary>
-        RichText,
-        /// <summary>
-        /// 超大文本
-        /// </summary>
-        SupperText
-    }
-    /// <summary>
-    /// 数字签名类型
-    /// </summary>
-    public enum SignType
-    {
-        /// <summary>
-        /// 无
-        /// </summary>
-        None,
-        /// <summary>
-        /// 图片
-        /// </summary>
-        Pic,
-        /// <summary>
-        /// 山东CA签名.
-        /// </summary>
-        CA,
-        /// <summary>
-        /// 广东CA
-        /// </summary>
-        GDCA,
-        /// <summary>
-        /// 图片盖章
-        /// </summary>
-        GZCA
-    }
-
-    public enum PicType
-    {
-        /// <summary>
-        /// 自动签名
-        /// </summary>
-        Auto,
-        /// <summary>
-        /// 手动签名
-        /// </summary>
-        ShouDong
-    }
-    /// <summary>
     /// 实体属性
     /// </summary>
     public class MapAttrAttr : EntityMyPKAttr
@@ -182,6 +122,10 @@ namespace BP.Sys
         /// </summary>
         public const string GroupID = "GroupID";
         /// <summary>
+        /// 图标
+        /// </summary>
+        public const string ICON = "ICON";
+        /// <summary>
         /// 是否是签字
         /// </summary>
         public const string IsSigan = "IsSigan";
@@ -241,7 +185,7 @@ namespace BP.Sys
         /// </summary>
         public const string TBModel = "TBModel";
 
-        public const string CSS = "CSS";
+        public const string CSSCtrl = "CSSCtrl";
 
 
         #region 参数属性.
@@ -837,7 +781,7 @@ namespace BP.Sys
                 return this.KeyOfEn;
             }
         }
-      
+
         public int MyDataType
         {
             get
@@ -1274,7 +1218,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetValStrByKey(MapAttrAttr.UIRefKey);
-                if (DataType.IsNullOrEmpty(s)==true)
+                if (DataType.IsNullOrEmpty(s) == true)
                     s = "No";
                 return s;
             }
@@ -1499,11 +1443,15 @@ namespace BP.Sys
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
 
                 //显示的分组.
-                map.AddTBInt(MapAttrAttr.GroupID, 1, "显示的分组", true, false);
+                map.AddTBString(MapAttrAttr.GroupID, null, "显示的分组", false, true, 0, 20, 20);
+                //map.AddTBInt(MapAttrAttr.GroupID, 1, "显示的分组", true, false);
 
                 map.AddBoolean(MapAttrAttr.IsEnableInAPP, true, "是否在移动端中显示", true, true);
+
+                // xxx 新增的样式.
+                map.AddTBString(MapAttrAttr.CSSCtrl, "0", "CSSCtrl自定义样式", true, false, 0, 50, 20);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "序号", true, false);
-                map.AddTBString(MapAttrAttr.CSS, "0", "自定义样式", true, false, 1, 100, 20);
+                map.AddTBString(MapAttrAttr.ICON, "0", "ICON", true, false, 0, 50, 20);
 
                 //参数属性.
                 map.AddTBAtParas(4000); //
@@ -1795,7 +1743,7 @@ namespace BP.Sys
             string keyofenC = this.KeyOfEn.Clone() as string;
             keyofenC = keyofenC.ToLower();
             string keyFields = PubClass.KeyFields;
-            if (keyFields!=null && keyFields.Contains("," + keyofenC + ",") == true)
+            if (keyFields != null && keyFields.Contains("," + keyofenC + ",") == true)
                 throw new Exception("@错误:[" + this.KeyOfEn + "]是字段关键字，您不能用它做字段。");
 
             if (this.IsExit(MapAttrAttr.KeyOfEn, this.KeyOfEn,
@@ -1808,7 +1756,31 @@ namespace BP.Sys
             if (this.Idx == 0)
                 this.Idx = DBAccess.RunSQLReturnValInt(string.Format("SELECT {0} FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'", SqlBuilder.GetIsNullInSQL("MAX(Idx)", "0"))) + 1;
             this.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+
             return base.beforeInsert();
+        }
+        protected override void afterInsert()
+        {
+            if (this.KeyOfEn.Equals("Tel") || this.Name.Contains("电话") || this.Name.Contains("手机"))
+            {
+                DBAccess.RunSQL("UPDATE Sys_MapAttr SET ICON='icon-phone' WHERE MyPK='" + this.MyPK + "'");
+            }
+            else if (this.KeyOfEn.Contains("Email") || this.Name.Contains("邮件") || this.Name.Contains("手机"))
+            {
+                DBAccess.RunSQL("UPDATE Sys_MapAttr SET ICON='icon-envelope-letter' WHERE MyPK='" + this.MyPK + "'");
+            }
+            else if (this.KeyOfEn.Contains("Addr") || this.Name.Contains("地址"))
+            {
+                DBAccess.RunSQL("UPDATE Sys_MapAttr SET ICON='icon-location-pin' WHERE MyPK='" + this.MyPK + "'");
+            }
+            else if (this.MyDataType == DataType.AppMoney)
+            {
+                DBAccess.RunSQL("UPDATE Sys_MapAttr SET ICON='fa-cny' WHERE MyPK='" + this.MyPK + "'");
+            }
+
+
+
+            base.afterInsert();
         }
         /// <summary>
         /// 删除之前
@@ -1854,10 +1826,10 @@ namespace BP.Sys
         /// <summary>
         /// 实体属性s
         /// </summary>
-        public MapAttrs(string fk_map)
+        public MapAttrs(string frmID)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(MapAttrAttr.FK_MapData, fk_map);
+            qo.AddWhere(MapAttrAttr.FK_MapData, frmID);
             qo.addOrderBy(MapAttrAttr.GroupID, MapAttrAttr.Idx);
             qo.DoQuery();
         }
@@ -1900,7 +1872,7 @@ namespace BP.Sys
 
 
         #region 业务方法.
-         
+
         #endregion
 
 

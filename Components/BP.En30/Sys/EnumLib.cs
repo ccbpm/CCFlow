@@ -6,6 +6,45 @@ using System.Text;
 namespace BP.Sys
 {
     /// <summary>
+    /// 数据源类型
+    /// </summary>
+    public enum DBSrcType
+    {
+        /// <summary>
+        /// 本机数据库
+        /// </summary>
+        Localhost = 0,
+        /// <summary>
+        /// SQL
+        /// </summary>
+        SQLServer = 1,
+        /// <summary>
+        /// Oracle
+        /// </summary>
+        Oracle = 2,
+        /// <summary>
+        /// MySQL
+        /// </summary>
+        MySQL = 3,
+        /// <summary>
+        /// Informix
+        /// </summary>
+        Informix = 4,
+        /// <summary>
+        /// PGSQL
+        /// </summary>
+        PostgreSQL = 5,
+        /// <summary>
+        /// WebService数据源
+        /// </summary>
+        WebServices = 100,
+        /// <summary>
+        /// 海尔的Dubbo服务.
+        /// </summary>
+        Dubbo = 50
+        
+    }
+    /// <summary>
     /// 消息控制方式
     /// </summary>
     public enum MsgCtrl

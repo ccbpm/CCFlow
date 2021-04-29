@@ -174,6 +174,7 @@ namespace BP.WF.Data
                 //uac.LoadRightFromCCGPM(this);
                 //return uac;
                 uac.Readonly();
+                uac.IsExp = true;
                 return uac;
             }
         }
@@ -754,12 +755,12 @@ namespace BP.WF.Data
 
 
                 RefMethod rm = new RefMethod();
-                rm.Title = "轨迹";
+               /* rm.Title = "轨迹";
                 rm.ClassMethodName = this.ToString() + ".DoTrack";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Icon = "../../WF/Img/Track.png";
                 rm.IsForEns = true;
-                map.AddRefMethod(rm);
+                map.AddRefMethod(rm);*/
 
                 rm = new RefMethod();
                 rm.Title = "表单";

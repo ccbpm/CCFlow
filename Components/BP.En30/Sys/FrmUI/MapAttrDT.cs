@@ -137,7 +137,7 @@ namespace BP.Sys.FrmUI
 
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
                 //CCS样式
-                map.AddDDLSQL(MapAttrAttr.CSS, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
+                map.AddDDLSQL(MapAttrAttr.CSSCtrl, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
 
                 #endregion 基本信息.
 
@@ -171,18 +171,21 @@ namespace BP.Sys.FrmUI
                 rm.Title = "正则表达式";
                 rm.ClassMethodName = this.ToString() + ".DoRegularExpression()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-settings"; //正则表达式
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "事件绑函数";
                 rm.ClassMethodName = this.ToString() + ".BindFunction()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-puzzle"; //事件绑定函数。
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "日期输入限制";
                 rm.ClassMethodName = this.ToString() + ".DataFieldInputRole()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-ban"; 
                 map.AddRefMethod(rm);
 
                 #endregion 执行的方法.

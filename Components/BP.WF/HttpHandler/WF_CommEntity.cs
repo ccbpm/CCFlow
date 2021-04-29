@@ -1215,14 +1215,37 @@ namespace BP.WF.HttpHandler
                 if(IsExitIdx == 1)
                 {
                     if (rootNo.Equals("0"))
-                        trees.Retrieve("ParentNo", rootNo, "Idx");
+                    {
+                        Entities ens = attr.HisFKEns;
+                        ens.Retrieve("ParentNo", rootNo, "Idx");
+                        string vals = "";
+                        foreach(Entity item in ens)
+                        {
+                            vals += "'" + item.GetValStringByKey("No") + "'" + ",";
+                        }
+                        vals = vals+"'0'";
+                        trees.RetrieveInOrderBy("ParentNo", vals, "Idx");
+
+
+                    }
+                       
                     else
                         trees.Retrieve("No", rootNo, "Idx");
                 }
                 else
                 {
                     if (rootNo.Equals("0"))
-                        trees.Retrieve("ParentNo", rootNo);
+                    {
+                        Entities ens = trees;
+                        ens.Retrieve("ParentNo", rootNo, "Idx");
+                        string vals = "";
+                        foreach (Entity item in ens)
+                        {
+                            vals += "'" + item.GetValStringByKey("No") + "'" + ",";
+                        }
+                        vals = vals + "'0'";
+                        trees.RetrieveIn("ParentNo", vals);
+                    }
                     else
                         trees.Retrieve("No", rootNo);
                 }

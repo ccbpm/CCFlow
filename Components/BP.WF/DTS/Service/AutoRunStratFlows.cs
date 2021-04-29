@@ -59,30 +59,32 @@ namespace BP.WF.DTS
                 if (fl.HisFlowRunWay == BP.WF.FlowRunWay.HandWork)
                     continue;
 
-                if (DateTime.Now.ToString("HH:mm") == fl.Tag && fl.HisFlowRunWay== FlowRunWay.SpecEmp )
+                if (DateTime.Now.ToString("HH:mm") == fl.Tag && fl.HisFlowRunWay == FlowRunWay.SpecEmp)
                     continue;
 
-                if (fl.RunObj == null || fl.RunObj == "")
+                /*if (fl.RunObj == null || fl.RunObj == "")
                 {
                     string msg = "您设置自动运行流程错误，没有设置流程内容，流程编号：" + fl.No + ",流程名称:" + fl.Name;
                     Log.DebugWriteError(msg);
                     continue;
-                }
+                }*/
 
                 #region 判断当前时间是否可以运行它。
-                string nowStr = DateTime.Now.ToString("yyyy-MM-dd,HH:mm");
-                string[] strs = fl.RunObj.Split('@'); //破开时间串。
-                bool IsCanRun = false;
-                foreach (string str in strs)
+                if (fl.HisFlowRunWay == FlowRunWay.SpecEmp)
                 {
-                    if (string.IsNullOrEmpty(str))
+                    string nowStr = DateTime.Now.ToString("yyyy-MM-dd,HH:mm");
+                    string[] strs = fl.RunObj.Split('@'); //破开时间串。
+                    bool IsCanRun = false;
+                    foreach (string str in strs)
+                    {
+                        if (string.IsNullOrEmpty(str))
+                            continue;
+                        if (nowStr.Contains(str))
+                            IsCanRun = true;
+                    }
+                    if (IsCanRun == false )
                         continue;
-                    if (nowStr.Contains(str))
-                        IsCanRun = true;
                 }
-
-                if (IsCanRun == false)
-                    continue;
 
                 // 设置时间.
                 fl.Tag = DateTime.Now.ToString("HH:mm");
@@ -165,20 +167,7 @@ namespace BP.WF.DTS
                 return;
             }
 
-            // 获取从表数据.
-            DataSet ds = new DataSet();
-            string[] dtlSQLs = me.Tag1.Split('*');
-            foreach (string sql in dtlSQLs)
-            {
-                if (string.IsNullOrEmpty(sql))
-                    continue;
 
-                string[] tempStrs = sql.Split('=');
-                string dtlName = tempStrs[0];
-                DataTable dtlTable = DBAccess.RunSQLReturnTable(sql.Replace(dtlName + "=", ""));
-                dtlTable.TableName = dtlName;
-                ds.Tables.Add(dtlTable);
-            }
             #endregion 读取数据.
 
             #region 检查数据源是否正确.
@@ -200,19 +189,22 @@ namespace BP.WF.DTS
             if (errMsg.Length > 2)
             {
                 Log.DefaultLogWriteLineError("流程(" + fl.Name + ")的开始节点设置发起数据,不完整." + errMsg);
+
                 return;
             }
             #endregion 检查数据源是否正确.
 
             #region 处理流程发起.
-            string nodeTable = "ND" + int.Parse(fl.No) + "01";
+            string frmID = "ND" + int.Parse(fl.No) + "01";
+
+            string err = "";
             int idx = 0;
             foreach (DataRow dr in dtMain.Rows)
             {
                 idx++;
 
                 string mainPK = dr["MainPK"].ToString();
-                string sql = "SELECT OID FROM " + nodeTable + " WHERE MainPK='" + mainPK + "'";
+                string sql = "SELECT OID FROM " + fl.PTable + " WHERE MainPK='" + mainPK + "'";
                 if (DBAccess.RunSQLReturnTable(sql).Rows.Count != 0)
                 {
                     continue; /*说明已经调度过了*/
@@ -234,81 +226,37 @@ namespace BP.WF.DTS
 
                 #region  给值.
                 //System.Collections.Hashtable ht = new Hashtable();
+                //创建workid.
+                Int64 workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fl.No, null, null, starter, null);
 
-                Work wk = fl.NewWork();
+                //创建工作.
+                GEEntity wk = new GEEntity(frmID, workID);
+               // Work wk = fl.NewWork();
 
-                string err = "";
-                #region 检查用户拼写的sql是否正确？
-                foreach (DataColumn dc in dtMain.Columns)
-                {
-                    string f = dc.ColumnName.ToLower();
-                    switch (f)
-                    {
-                        case "starter":
-                        case "mainpk":
-                        case "refmainpk":
-                        case "tonode":
-                            break;
-                        default:
-                            bool isHave = false;
-                            foreach (Attr attr in wk.EnMap.Attrs)
-                            {
-                                if (attr.Key.ToLower() == f)
-                                {
-                                    isHave = true;
-                                    break;
-                                }
-                            }
-                            if (isHave == false)
-                            {
-                                err += " " + f + " ";
-                            }
-                            break;
-                    }
-                }
-                if (string.IsNullOrEmpty(err) == false)
-                    throw new Exception("您设置的字段:" + err + "不存在开始节点的表单中，设置的sql:" + me.Tag);
-
-                #endregion 检查用户拼写的sql是否正确？
-
+                //给主表赋值.
                 foreach (DataColumn dc in dtMain.Columns)
                     wk.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
-
-                if (ds.Tables.Count != 0)
+                
+                // 获取从表数据.
+                DataSet ds = new DataSet();
+                string[] dtlSQLs = me.Tag1.Split('*');
+                foreach (string sqlDtl in dtlSQLs)
                 {
-                    // MapData md = new MapData(nodeTable);
-                    MapDtls dtls = new MapDtls(nodeTable);
-                    foreach (MapDtl dtl in dtls)
-                    {
-                        foreach (DataTable dt in ds.Tables)
-                        {
-                            if (dt.TableName != dtl.No)
-                                continue;
+                    if (string.IsNullOrEmpty(sqlDtl))
+                        continue;
 
-                            //删除原来的数据。
-                            GEDtl dtlEn = dtl.HisGEDtl;
-                            dtlEn.Delete(GEDtlAttr.RefPK, wk.OID.ToString());
+                    //替换变量.
+                    string mySqlDtl = sqlDtl.Replace("@MainPK", mainPK);
 
-                            // 执行数据插入。
-                            foreach (DataRow drDtl in dt.Rows)
-                            {
-                                if (drDtl["RefMainPK"].ToString() != mainPK)
-                                    continue;
-
-                                dtlEn = dtl.HisGEDtl;
-                                foreach (DataColumn dc in dt.Columns)
-                                    dtlEn.SetValByKey(dc.ColumnName, drDtl[dc.ColumnName].ToString());
-
-                                dtlEn.RefPK = wk.OID.ToString();
-                                dtlEn.OID = 0;
-                                dtlEn.Insert();
-                            }
-                        }
-                    }
+                    string[] tempStrs = mySqlDtl.Split('=');
+                    string dtlName = tempStrs[0];
+                    DataTable dtlTable = DBAccess.RunSQLReturnTable(mySqlDtl.Replace(dtlName + "=", ""));
+                    dtlTable.TableName = dtlName;
+                    ds.Tables.Add(dtlTable);
                 }
                 #endregion  给值.
 
-
+                #region 取出约定的到达人员.
                 int toNodeID = 0;
                 try
                 {
@@ -318,29 +266,27 @@ namespace BP.WF.DTS
                 {
                     /*有可能在4.5以前的版本中没有tonode这个约定.*/
                 }
+                string toEmps = null;
+                try
+                {
+                    toEmps = dr["ToEmps"].ToString();
+                }
+                catch
+                {
+                    /*有可能在4.5以前的版本中没有tonode这个约定.*/
+                }
+                #endregion 取出约定的到达人员.
 
                 // 处理发送信息.
                 //  Node nd =new Node();
                 string msg = "";
                 try
                 {
-                    if (toNodeID == 0)
-                    {
-                        WorkNode wn = new WorkNode(wk, fl.HisStartNode);
-                        msg = wn.NodeSend().ToMsgOfText();
-                    }
+                    
+                    //执行发送到下一个节点.
+                    SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(fl.No, workID, wk.Row, ds, toNodeID, toEmps);
 
-                    if (toNodeID == fl.StartNodeID)
-                    {
-                        /* 发起后让它停留在开始节点上，就是为开始节点创建一个待办。*/
-                        Int64 workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fl.No, null, null, WebUser.No, null);
-                        if (workID != wk.OID)
-                            throw new Exception("@异常信息:不应该不一致的workid.");
-                        else
-                            wk.Update();
-                        msg = "已经为(" + WebUser.No + ") 创建了开始工作节点. ";
-                    }
-
+                    msg = "@自动发起:" + mainPK + "第" + idx + "条:  - " + objs.MsgOfText;
                     Log.DefaultLogWriteLineInfo(msg);
                 }
                 catch (Exception ex)

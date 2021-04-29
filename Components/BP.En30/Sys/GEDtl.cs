@@ -298,6 +298,10 @@ namespace BP.Sys
         {
             this.FK_MapDtl = fk_mapdtl;
         }
+        public GEDtls(string fk_mapdtl,object pkval)
+        {
+            this.FK_MapDtl = fk_mapdtl;
+        }
         #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

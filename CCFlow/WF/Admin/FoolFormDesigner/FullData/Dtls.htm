@@ -14,8 +14,11 @@
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../Admin.js"></script>
     <script type="text/javascript">
-
+        var extType = "";
         $(function () {
+
+            extType = GetQueryString("ExtType");
+            extType = extType == null || extType == undefined ? "" : extType;
 
             InitBar("Dtls");
 
@@ -24,16 +27,19 @@
             var frmID = GetQueryString("FK_MapData");
             var refPK = GetQueryString("RefPK");
 
+           
+
             var thisPK = refPK + "_FullData";
+            if (extType == "PageLoadFull")
+                thisPK = refPK;
 
             var en = new Entity("BP.Sys.MapExt");
-            en.MyPK = refPK + "_FullData";
+            en.MyPK = thisPK;
             en.SetPKVal(en.MyPK);
             var n = en.RetrieveFromDBSources();
 
             var tag1 = en.Tag1;
 
-            //            alert(tag1);
 
             //获得从表.
             var mapDtls = new Entities("BP.Sys.MapDtls");
@@ -46,6 +52,7 @@
 
             var html = "<table style='width:99%;'>";
             for (var i = 0; i < mapDtls.length; i++) {
+
                 var sql = "";
                 if (tag1 != "" && tag1 != null) {
                     sql = tag1.split("$")[i + 1].split(":")[1]; //分割字符串，获取sql语句
@@ -53,15 +60,14 @@
 
                 var dtl = mapDtls[i];
                 html += "<tr>";
-                html += "<th>" + dtl.No + " - " + dtl.Name+"</th>";
+                html += "<td>" + dtl.No + " - " + dtl.Name + "</td>";
                 html += "</tr>";
 
                 html += "<tr>";
                 html += "<td>";
-                html += "<textarea id='" + dtl.No + "' style='width:98%;' >" + FormatSQL( sql) + "</textarea>";
+                html += "<textarea id='" + dtl.No + "' style='width:98%;' >" + FormatSQL(sql) + "</textarea>";
                 html += "</td>";
                 html += "</tr>";
-
             }
 
             $("#doc").html(html);
@@ -75,13 +81,22 @@
             var refPK = GetQueryString("RefPK");
 
             var thisPK = refPK + "_FullData";
+            if (extType == "PageLoadFull")
+                thisPK = refPK;
 
             var en = new Entity("BP.Sys.MapExt");
-            en.MyPK = refPK + "_FullData";
+            en.MyPK = thisPK;
             en.SetPKVal(en.MyPK);
             var n = en.RetrieveFromDBSources();
             en.FK_MapData = frmID;
-            en.ExtType = "FullData";
+            if (extType == "PageLoadFull") {
+                en.AttrOfOper = "";
+                en.ExtType = "PageLoadFull";
+            }
+            else {
+                en.AttrOfOper = GetQueryString("KeyOfEn");
+                en.ExtType = "FullData";
+            }
 
             //生成SQL, 执行保存.
             //格式为: #ND101$ SELECT * FROM SXX WHERE AA='11';
@@ -100,7 +115,7 @@
                 tag1 += "$" + dtl.No + ":" + sql;
             }
             en.Tag1 = tag1;
-            en.AttrOfOper = GetQueryString("KeyOfEn");
+           
 
             if (n == 0)
                 en.Insert();
@@ -117,16 +132,19 @@
         <div id="bar"> </div>
         <div id="doc"></div>
 
-        <fieldset >
-            <legend id="help">帮助.</legend>
-            <ul>
-                <li>填充从表的SQL </li>
-                <li>返回一个数据源，该数据源的列，需要与从表的列匹配，对于匹配上的数据自动填充.</li>
-                <li>实例:<font color="green">SELECT * FROM Demo_Resume WHERE RefPK='@Key' </font></li>
-                <li>@Key 是系统约定的标记，就是选择的编号或者ID. </li>
-                <li>这个数据源就会清空的方式复制到从表里面去. </li>
-            </ul>
-        </fieldset>
     </form>
+
+
+    <fieldset>
+        <legend>帮助.</legend>
+        <ul>
+            <li>填充从表的SQL </li>
+            <li>返回一个数据源，该数据源的列，需要与从表的列匹配，对于匹配上的数据自动填充.</li>
+            <li>实例:<font color="green">SELECT * FROM Demo_Resume WHERE RefPK='@Key' </font></li>
+            <li>@Key 是系统约定的标记，就是选择的编号或者ID. </li>
+            <li>这个数据源就会清空的方式复制到从表里面去. </li>
+        </ul>
+    </fieldset>
+
 </body>
 </html>

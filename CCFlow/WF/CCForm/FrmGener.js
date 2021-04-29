@@ -279,6 +279,46 @@ function GenerFrm() {
 
     //获得sys_mapdata.
     var mapData = frmData["Sys_MapData"][0];
+    //根据表单类型不同生成表单.
+
+    var isTest = GetQueryString("IsTest");
+    var isFloolFrm = false;
+    var isDevelopForm = false;
+    if (isTest == "1") {
+
+        var frmType = GetQueryString("FrmType");
+        if (frmType == 'FreeFrm')
+            GenerFreeFrm(mapData, frmData); //自由表单.
+        else if (frmType == 'Develop') {
+            isDevelopForm = true;
+            GenerDevelopFrm(frmData, mapData.No); //开发者表单.
+
+        }
+        else {
+            GenerFoolFrm(mapData, frmData); //生成傻瓜表单.
+            isFloolFrm = true;
+        }
+
+    } else {
+        if (mapData.FrmType == 0 || mapData.FrmType == 10) {
+            GenerFoolFrm(mapData, frmData); //生成傻瓜表单.
+            isFloolFrm = true;
+        } else if (mapData.FrmType == 8) {
+            GenerDevelopFrm(frmData, mapData.No); //开发者表单.
+            isDevelopForm = true;
+
+        }
+        else
+            GenerFreeFrm(mapData, frmData); //自由表单.
+    }
+    //xu
+    /*var rel = /style='[^=>]*'([(\s+\w+=)|>])/g
+    var rels = /style="[^=>]*"([(\s+\w+=)|>])/g
+
+    $('#CCForm').html($('#CCForm').html().replace(rel, ''));
+    $('#CCForm').html($('#CCForm').html().replace(rels, ''));*/
+
+    $.parser.parse("#CCForm");
 
     //初始化Sys_MapData
     var h = mapData.FrmH;
@@ -290,9 +330,10 @@ function GenerFrm() {
     document.title = mapData.Name;
 
     $('#divCCForm').height(h);
-
+  
     $('#topContentDiv').height(h);
-    $('#topContentDiv').width(w);
+    if (isDevelopForm = false)
+        $('#topContentDiv').width(w);
     $('.Bar').width(w + 15);
 
     var marginLeft = $('#topContentDiv').css('margin-left');
@@ -303,7 +344,6 @@ function GenerFrm() {
 
     marginLeft = parseFloat(marginLeft.substr(0, marginLeft.length - 2)) + 50;
     $('#topContentDiv i').css('left', marginLeft.toString() + 'px');
-    $('#CCForm').html('');
 
     // 加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
     var enName = frmData.Sys_MapData[0].No;
@@ -337,40 +377,7 @@ function GenerFrm() {
     }
 
 
-    //根据表单类型不同生成表单.
-
-    var isTest = GetQueryString("IsTest");
-    var isFloolFrm = false;
-    if (isTest == "1") {
-
-        var frmType = GetQueryString("FrmType");
-        if (frmType == 'FreeFrm')
-            GenerFreeFrm(mapData, frmData); //自由表单.
-        else if (frmType == 'Develop')
-            GenerDevelopFrm(frmData, mapData.No); //开发者表单.
-        else {
-            GenerFoolFrm(mapData, frmData); //生成傻瓜表单.
-            isFloolFrm = true;
-        }
-
-    } else {
-        if (mapData.FrmType == 0 || mapData.FrmType == 10) {
-            GenerFoolFrm(mapData, frmData); //生成傻瓜表单.
-            isFloolFrm = true;
-        } else if (mapData.FrmType == 8) {
-            GenerDevelopFrm(frmData, mapData.No); //开发者表单.
-        }
-        else
-            GenerFreeFrm(mapData, frmData); //自由表单.
-    }
-    //xu
-    /*var rel = /style='[^=>]*'([(\s+\w+=)|>])/g
-    var rels = /style="[^=>]*"([(\s+\w+=)|>])/g
-
-    $('#CCForm').html($('#CCForm').html().replace(rel, ''));
-    $('#CCForm').html($('#CCForm').html().replace(rels, ''));*/
-
-    $.parser.parse("#CCForm");
+   
     var isReadonly = GetQueryString("IsReadonly");
 
     //原有的。

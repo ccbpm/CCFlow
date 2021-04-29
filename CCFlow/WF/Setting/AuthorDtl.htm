@@ -58,32 +58,24 @@
         var webUser = null;
         var emp = null;
         var currPowerFlag = "";
-        var flows = [];
         var treeFlowName = "";
         $(function () {
             BindPop();
-            var mtags = $("#TB_Flows");
-            //初始化mtags
-            mtags.mtags({
-                "fit": true,
-                "onUnselect": function (record) {
-                    //点×时同时删除数组元素
-                    for (var i = 0; i < flows.length; i++) {
-                        if (flows[i].Name == record.Name) {
-                            flows.splice(i, 1);
-                            break;
-                        }
-                    }
-                }
-            });
+            
             webUser = new WebUser();
 
             $('#Btn_Auto').bind('click', function () { BindPop(); $('#selectEmpsModal').modal().show(); });//选择授权人按钮
 
             var FK_FlowSorts = new Entities("BP.WF.Template.FlowSorts");
-            FK_FlowSorts.Retrieve("Name", "流程树");
+            if (webUser.CCBPMRunModel == 2)
+                FK_FlowSorts.Retrieve("Name", "流程树","OrgNo",webUser.OrgNo);
+            else
+                FK_FlowSorts.Retrieve("Name", "流程树");
             var staUrl = "../WorkOpt/SelectFlows.htm?FK_FlowSort=F" + FK_FlowSorts[0].No + "&IsSelectMore=1&treeFlowName=" + treeFlowName;
-
+            var authType = GetQueryString("AuthType");
+            if (authType == null || authType == undefined || authType == "")
+                authType = 1;
+            $("#DDL_AuthorWay").val(authType);
             //设置流程字段的显示与隐藏
             var select = $("#DDL_AuthorWay").val();
             if (select == 2) {
@@ -103,7 +95,7 @@
 
             //流程选择事件
 
-            $("#TB_Flows").bind("dblclick", function () {
+            $("#SelectFlowBtn").bind("click", function () {
                 $("#title").html("选择流程");
                 $('#iframeSelectEmpsForm').attr('src', staUrl);
                 $('#selectEmpsModal').modal().show();
@@ -118,7 +110,7 @@
                 //加载授权收回时间
                 $("#TB_DT").val(GetQueryString("TakeBackDT"))
                 //更改保存按钮为修改
-                $("#Btn_Save").val("修改");
+                $("#Btn_Save").html("修改");
             }
 
         });
@@ -136,6 +128,8 @@
             $("#TB_EmpName").val(name);
         }
 
+        
+
         function BindPop() {
 
             var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
@@ -147,7 +141,6 @@
                 dept = u.FK_Dept;
             }
             var url = "../WorkOpt/SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&s=" + Math.random();
-            //  url = url.replace('101', '10102');
             url = url.replace('=101&', '=10102&');
             $('#iframeSelectEmpsForm').attr('src', url);
         }
@@ -157,7 +150,8 @@
         function Save() {
 
             var en = new Entity("BP.WF.Auth");
-            en.MyPK = webUser.No + "_" + $("#DDL_AuthorWay").val() + "_" + $("#TB_No").val();
+            var mypk = webUser.No + "_" + $("#DDL_AuthorWay").val() + "_" + $("#TB_No").val();
+            en.MyPK = mypk;
             var i = en.RetrieveFromDBSources();
             en.Auther = webUser.No;
             en.AuthType = $("#DDL_AuthorWay").val();
@@ -173,17 +167,20 @@
 
             en.RDT = getNowFormatDate();
             if (en.AuthType == 2) {
-
+                var val = $("#TB_FlowNames").val();
+                if (val == null || val == "") {
+                    alert("选择需要授权的流程");
+                    return;
+                }
+                var flows = val.split(",");
                 for (var j = 0; j < flows.length; j++) {
-
-                    var flowNo = flows[j].No;
-                    var flowName = flows[j].Name;
+                    var str = flows[j];
+                    var flowNo = str.split(".")[0];
+                    var flowName = str.split(".")[1];
                     en.FlowNo = flowNo;
                     en.FlowName = flowName;
-                    if (i == 0)
-                        en.Insert();
-                    else
-                        en.Update();
+                    en.MyPK = mypk + "_" + flowNo;
+                    en.Save();
                 }
             } else {
                 if (i == 0)
@@ -203,21 +200,10 @@
             if (data == '取消') {
                 return;
             }
-            var returnVal = frames["iframeSelectEmpsForm"].window.returnVal;
-            var powerFlag = currPowerFlag;
-            var recName = returnVal.Name.split(",");
-            for (var i = 0; i < recName.length; i++) {
-                var No = recName[i].split(".")[0];
-                //var Name = recName[i].split(".")[1];
-                flows.push({
-                    "No": No,
-                    "Name": recName[i],
-                });
-            }
-            var mtags = $("#TB_Flows");
-
-            mtags.mtags("loadData", flows);
-            //InitMtags($("#TB_Flows"), powerFlag,0,1);
+            var no = frames["iframeSelectEmpsForm"].window.returnVal.No;
+            var name = frames["iframeSelectEmpsForm"].window.returnVal.Name;
+            $("#TB_Flows").val(no);
+            $("#TB_FlowNames").val(name);
 
         }
         //初始化接收人员列表
@@ -285,13 +271,13 @@
                     授权方式:
                 </td>
                 <td>
-                    <select name="DDL_AuthorWay" class="form-control" id="DDL_AuthorWay" disabled="disabled">
+                    <select name="DDL_AuthorWay" class="form-control" id="DDL_AuthorWay">
                         <option value="0">不授权</option>
                         <option selected="selected" value="1">全部流程授权</option>
                         <option value="2">指定流程授权</option>
                     </select>
                 </td>
-                <td> 目前仅仅支持全部流程授权. </td>
+                <td></td>
             </tr>
 
             <tr id="flowID">
@@ -299,12 +285,10 @@
                     流程:
                 </td>
                 <td height="45px">
-                    <div id='TB_Flows' data-power=" + model.PowerFlag + " style='width:100%' class='mtags'></div>
-                    <div id='TB_Flows' style='width:100%' class='mtags'></div>
-                    <!--<input class="form-control mtags" type="text" id="TB_Flows" name="TB_Flows" />-->
+                    <input type="hidden" id="TB_Flows" name="TB_Flows" class="form-control" />
+                    <input type="text" id="TB_FlowNames" name="TB_FlowNames" class="form-control" readonly="readonly" />
                 </td>
-                <td>
-                </td>
+                <td> <input type="button" value="选择授权流程" id="SelectFlowBtn" /> </td>
             </tr>
 
             <tr>

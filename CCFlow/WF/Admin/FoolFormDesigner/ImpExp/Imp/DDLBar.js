@@ -33,6 +33,7 @@ function InitBar(optionKey) {
 
     html += "<option value=null  disabled='disabled'>+从表结构导入生成表单</option>";
     html += "<option value=" + Imp.ExternalDataSourseImp + ">&nbsp;&nbsp;&nbsp;&nbsp;外部数据源导入</option>";
+    html += "<option value=" + Imp.WebAPIImp + ">&nbsp;&nbsp;&nbsp;&nbsp;WebAPI接口导入</option>";
 
     html += "<option value=null  disabled='disabled'>+导出</option>";
     html += "<option value=" + Imp.ExportFrm + ">&nbsp;&nbsp;&nbsp;&nbsp;导出表单模板</option>";
@@ -85,6 +86,9 @@ function GetUrl(optionKey) {
             break;
         case Imp.ExportFrm:
             url = "ExportFrm.htm";
+            break;
+        case Imp.WebAPIImp:
+            url = "WebAPIImp.htm";
             break;
         default:
             url = "localhostImp.htm";

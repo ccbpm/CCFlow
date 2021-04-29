@@ -34,7 +34,7 @@
         });
 
         function Save() {
-            $("#Btn_Save").val("正在保存请稍后...")
+            $("#Btn_Save").html("正在保存请稍后...")
             //更新节点表单类型.
             var nodeNo = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeNo);
@@ -48,14 +48,14 @@
     <div id="bar">
     </div>
 
-    <fieldset>
-        <legend>
-            <label for="RB_CondModel_1">发送后手工选择到达节点与接受人.</label>
+    <fieldset id="help">
+        <legend id="help">
+             发送后手工选择到达节点与接受人. 
         </legend>
         <ul>
             <li>该模式多用于分合流节点. </li>
             <li>在异表单的合流节点上配置该模式，合流节点的操作员发送后，就转到该页面上，选择到达的节点。 </li>
-            <li> <img style="width:80%;" src="CondModel2.png" onclick="WinOpen('CondModel2.png')" /> </li>
+            <li> <img class="HelpImg"   src="CondModel2.png" /> </li>
             <li>也可以用于协作模式下的节点,到达的节点是需要最后一个人审核,由最后一个人选择到达的节点与接受人.</li>
         </ul>
     </fieldset>

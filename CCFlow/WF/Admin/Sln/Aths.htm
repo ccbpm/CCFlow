@@ -9,6 +9,10 @@
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 自己的系统风格统一. -->
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <style type="text/css">
         th, td {
             text-align: center;
@@ -26,7 +30,7 @@
 
             var ens = new Entities("BP.Sys.FrmAttachments");
             ens.Retrieve("FK_MapData", frmID);
-             
+
             var html = "";
 
             for (var i = 0; i < ens.length; i++) {
@@ -102,15 +106,21 @@
     </script>
 </head>
 <body onkeypress="Esc();">
-    <table id="Table1" class="table tableizer-table  table-striped table-bordered table-hover table-condensed">
-    <caption>节点-表单-多附件权限 </caption>
-        <tr>
-            <td>编号</td>
-            <td>名称</td>
-            <td>附件类型</td>
-            <td>操作</td>
-        </tr>
-    </table>
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <strong> 节点-表单-多附件权限</strong>
+        </div>
+        <table id="Table1" class="table tableizer-table  table-striped table-bordered table-hover table-condensed">
+          
+            <tr>
+                <td>编号</td>
+                <td>名称</td>
+                <td>附件类型</td>
+                <td>操作</td>
+            </tr>
+        </table>
+
+    </div>
 
 </body>
 </html>

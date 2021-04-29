@@ -15,6 +15,8 @@
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
     <script type="text/javascript">
         $(function () {
 
@@ -57,40 +59,19 @@
     </div>
 
     <fieldset>
-        <legend>
+        <legend> 数据集按时启动</legend>
 
-            <label for="RB_FlowRunWay_2">数据集按时启动</label>
-
-        </legend>
-        <br />
-
-        <a href="javascript:ShowHidden('sql')">SQL参数设置帮助:</a>
-        <div id="sql" style=" display:none;color:Gray">
-            <ul>
-                <li>请设置一个SQL语句，该语句返回一个数据源。</li>
-                <li>系统就会对每一条数据发起一条流程，这就是按照数据源的模式自动发起流程。</li>
-                <li>该数据源的列名如果与开始节点表单的字段名一致，就会自动赋值。</li>
-                <li>该参数支持ccbpm的表达式。比如:@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.OrgNo</li>
-                <li>请打开操作手册：<a href="javascript:WinOpen('http://ccbpm.mydoc.io/?v=5404&t=17088')">操作手册</a></li>
-            </ul>
-        </div>
+        <ul>
+            <li> 设置开始节点表单的主表从表的数据源。 </li>
+            <li> 按照数据源启动SQL。 </li>
+            <li> 详情点击下面链接进入设置页面。 </li>
+        </ul>
 
         <br />
         <h3> <a href="javascript:SQLSetting()">设置要启动流程的数据源SQL</a></h3>
 
         <!--<textarea type=text style="width:95%" id="TB_SQL" name="TB_SQL"></textarea>-->
     </fieldset>
-    <fieldset>
-        <legend id="help"></legend>
-        <ul>
-            <li> 定义：自动启动工作流程，一个流程的开始节点的填写与发起是在特定规则的设置下自动发起的流程。</li>
-            <li> 解释：通常模式下的流程启动是手工的启动，就是用户从一个发起列表，点击流程名字，就启动了该流程。但是有的时候，是系统自动发起该流程。</li>
 
-            <li>应用场景</li>
-            <li> 1 周例会流程，用户希望每个周都要启动例会通知流程这个启动是让系统自动发起而非人工发起。</li>
-
-
-        </ul>
-    </fieldset>
 </body>
 </html>

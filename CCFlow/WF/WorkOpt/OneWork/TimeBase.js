@@ -1,4 +1,4 @@
-﻿
+﻿var subFlows = [];
 function InitPage() {
 
     var isMobile = GetQueryString('IsMobile');
@@ -36,6 +36,9 @@ function InitPage() {
     //获得工作人员列表.
     var gwls = data["WF_GenerWorkerList"];
 
+    //该流程启动的子流程数据
+    subFlows = data["WF_SubFlow"];
+
     //前进的 track. 用于获取当前节点的上一个节点的track.
     var trackDotOfForward = null;
 
@@ -66,8 +69,8 @@ function InitPage() {
             if (isHaveThread == false)
                 firstTrack = track;
             isHaveThread = true;
-            if(track.ActionType != ActionType.WorkCheck)
-            threadTrMyPK += track.MyPK + ",";
+            if (track.ActionType != ActionType.WorkCheck)
+                threadTrMyPK += track.MyPK + ",";
             continue;
         }
         var at = track.ActionType;
@@ -81,12 +84,12 @@ function InitPage() {
             newRow = "<tr  title='子线程前进 ' >";
             newRow += "<td class='TDTime' >" + GenerLeftIcon(firstTrack) + "</td>";
             newRow += "<td class='TDBase' ></td>";
-            newRow += "<td class='TDDoc' ><img src = '../../Img/Action/ForwardFL.png' width = '10px;' class='ImgOfAC' alt = '子线程前进' />子线程前进<p><a href='javaScript:OpenSubThreadTime(" + firstTrack.FID + ",\"" + threadTrMyPK+"\")'>查看子线程时间轴</a></p></td>";
+            newRow += "<td class='TDDoc' ><img src = '../../Img/Action/ForwardFL.png' width = '10px;' class='ImgOfAC' alt = '子线程前进' />子线程前进<p><a href='javaScript:OpenSubThreadTime(" + firstTrack.FID + ",\"" + threadTrMyPK + "\")'>查看子线程时间轴</a></p></td>";
             newRow += "</tr>";
 
             $("#Table1 tr:last").after(newRow);
         }
-        isHaveThread = false;  
+        isHaveThread = false;
         threadTrMyPK = "";
 
         if (track.ActionType == ActionType.FlowBBS)
@@ -109,23 +112,28 @@ function InitPage() {
         //内容.
         var doc = "";
         doc += img + track.NDFromT + " - " + track.ActionTypeText;
-       
 
-        
+
+
         if (at == ActionType.Return) {
             doc += "<p><span>退回到:</span><font color=green>" + track.NDToT + "</font><span>退回给:</span><font color=green>" + track.EmpToT + "</font></p>";
             doc += "<p><span>退回意见如下</span>  </p>";
         }
 
         var isHaveCheck = false;
+        var nodeSubFlows = $.grep(subFlows, function (subFlow) {
+            return subFlow.FK_Node == track.NDFrom && subFlow.SubFlowSta==1;
+        });
+
         if (at == ActionType.Forward || at == ActionType.FlowOver) {
             doc += "<p><span>到达节点:</span><font color=green>" + track.NDToT + "</font><span>到达人员:</span><font color=green>" + track.EmpToT + "</font> </p>";
 
             //判断是否隐藏
             if (Hide_IsOpenFrm == true) {
-                doc += "<p><span><a href=\"javascript:OpenFrm('" + workid + "','" + track.NDFrom + "','" + fk_flow + "','" + fid + "','" + track.NDFrom + "','" + track.MyPK+"')\">查看表单</a></span></p>";
+                doc += "<p><span><a href=\"javascript:OpenFrm('" + workid + "','" + track.NDFrom + "','" + fk_flow + "','" + fid + "','" + track.NDFrom + "','" + track.MyPK + "')\">查看表单</a></span></p>";
             }
-
+            if (nodeSubFlows.length!=0)
+                doc += "<p><span><a href=\"javascript:void(0);\" onclick=\"OpenSubFlowTable(this,'" + workid + "','" + track.NDFrom + "')\">查看子流程</a></span></p>";
             //说明审核组件采用的是2019版本
             if (track.Msg != null && track.Msg != undefined && track.Msg.indexOf("WorkCheck@") != -1) {
                 var val = track.Msg.split("WorkCheck@");
@@ -146,9 +154,9 @@ function InitPage() {
                     }
                 }
             }
-            
-                
-           
+
+
+
         }
 
         //协作发送.
@@ -180,7 +188,7 @@ function InitPage() {
         if (msg == "0")
             msg = "";
 
-        if (msg != "" && isHaveCheck==false) {
+        if (msg != "" && isHaveCheck == false) {
 
             while (msg.indexOf('\t\n') >= 0) {
                 msg = msg.replace('\t\n', '<br>');
@@ -240,6 +248,9 @@ function InitPage() {
                 if (gwl.IsPass == 1)
                     continue;
 
+                if (gwl.IsPass == 3 || gwl.IsPass < 0)
+                    continue;
+
                 var doc = "";
                 doc += "<span>审批人</span>";
                 doc += gwl.FK_EmpText;
@@ -250,9 +261,9 @@ function InitPage() {
                     doc += "<span>阅读状态:</span>";
 
                     if (gwl.IsRead == "1")
-                        doc += "<span><font color=green>已阅读.</font></span>";
+                        doc += "<span>已阅.</span>";
                     else
-                        doc += "<span><font color=green>尚未阅读.</font></span>";
+                        doc += "<span><font color=green>未阅.</font></span>";
                 }
                 doc += "<br>";
                 doc += "<span>工作到达日期:</span>";
@@ -291,6 +302,12 @@ function InitPage() {
                     doc += "<span>还剩余:</span>";
                     doc += timeLeft;
                 }
+                var nodeSubFlows = $.grep(subFlows, function (subFlow) {
+                    return subFlow.FK_Node == gwl.FK_Node && subFlow.SubFlowSta == 1;
+                });
+                if (nodeSubFlows.length != 0)
+                    doc += "<br><p><span><a href=\"javascript:void(0);\" onclick=\"OpenSubFlowTable(this,'" + gwl.WorkID + "','" + gwl.FK_Node + "')\">查看子流程</a></span></p>";
+
 
                 var left = "";
                 left += "<br><img src='../../../DataUser/UserIcon/" + gwl.FK_Emp + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' />";
@@ -316,11 +333,47 @@ function InitPage() {
         window.resizeTo(w, h);
     }
 }
- 
-//子线程，子流程的时间轴轨迹
-function OpenSubThreadTime(workID,mypks) {
 
-    OpenBootStrapModal("./TimeSubThread.htm?MyPks="+mypks+"&FK_Flow="+GetQueryString("FK_Flow")+"&FK_Node="+GetQueryString("FK_Node"), "SubThread", "子线程", 500, 600);
+//子线程，子流程的时间轴轨迹
+function OpenSubThreadTime(workID, mypks) {
+
+    OpenBootStrapModal("./TimeSubThread.htm?MyPks=" + mypks + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node"), "SubThread", "子线程", 500, 600);
+}
+
+/**
+ * 父流程启动的子流程
+ * @param {any} workID
+ */
+function OpenSubFlowTable(obj,workid,fk_node) {
+    var nodeSubFlows = $.grep(subFlows, function (subFlow) {
+        return subFlow.FK_Node == fk_node && subFlow.SubFlowSta == 1;
+    });
+    //显示一个table,包含启动的子流程名称和启动的子流程实例
+    var _html = "";
+    var gwfs = new Entities("BP.WF.GenerWorkFlows");
+    gwfs.Retrieve("PWorkID", workid, "PNodeID", fk_node);
+    nodeSubFlows.forEach(function (subFlow) {
+        _html += subFlow.SubFlowName + "<br>";
+        _html += "<div style='display: block;height: 1px;width: 95%;margin: 8px 0;background-color: #dcdfe6;position: relative;'></div>"
+        $.each(gwfs, function (i, gwf) {
+            if (gwf.FK_Flow == subFlow.SubFlowNo) {
+                _html +="<a href=\"javaScript:OpenSubFlow("+gwf.WorkID+",'"+gwf.FK_Flow+"',"+gwf.FK_Node+","+gwf.PWorkID+")\">"+gwf.Title + "<br>";
+            }
+        })
+    });
+    var p = $(obj).offset();
+    $('#subFlowDiv').html(_html);
+    $('#subFlowinfo').offset({ top: p.top + 20 - 2, left: p.left+30 });
+    $('#subFlowinfo').show();
+
+}
+
+/* 打开子流程表单. */
+function OpenSubFlow(workid, flowNo, nodeID, pworkid) {
+    var url = "../../MyView.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID+ "&PWorkID=" + pworkid;
+    window.open(url);
+    //window.location.url = url;
+    return;
 }
 
 //生成左边的icon.

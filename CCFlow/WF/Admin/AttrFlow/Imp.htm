@@ -96,7 +96,11 @@
             var fk_flowSort = GetQueryString("FK_FlowSort");
             var url = "../Template/Flow.htm?SortNo=" + fk_flowSort;
             window.location.href = url;
-
+        }
+        function Imp_DoneBPM()
+        {
+            alert("已经取消了支持.");
+            return;
         }
     </script>
 </head>
@@ -104,7 +108,7 @@
 
     <form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
         <fieldset>
-            <legend>从本机导入 </legend>
+            <legend>从本机导入ccbpm格式 </legend>
             <ul>
                 <li>从本机导入：请您选择本机的一个xml格式文件 点击导入按钮完成导入。</li>
                 <li>
@@ -129,12 +133,26 @@
                             <input type="text" id="TB_SpecFlowNo" />
                         </li>
                     </ul>
-                    <br />
+
+                </li>
+                <li>
+                    <input type="button" id="Btn_Imp" value="执行导入" onclick="Imp_Done();" />
                 </li>
             </ul>
-            <div style="text-align: left; padding: 5px;">
-                <input type="button" id="Btn_Imp" value="执行导入" onclick="Imp_Done();" />
-            </div>
+
+            <legend>从本机导入bpmn2.0格式</legend>
+            <ul>
+                <li>导入符合bpmn2.0格式的文件 </li>
+                <li>
+                    请选择文件:
+                    <input style="background-color:white;color:#000000" type="file" id="File_UploadBPMN" name="File_Upload" />
+                </li>
+                <li>
+                    <input type="button" id="Btn_ImpBPMN" value="执行导入" onclick="Imp_DoneBPM();" />
+                </li>
+            </ul>
+
+
         </fieldset>
 
         <fieldset>

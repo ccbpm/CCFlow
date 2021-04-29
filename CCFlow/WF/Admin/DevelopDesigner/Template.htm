@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>手机屏幕显示字段排序 </title>
+
+    <!--引入jquery-->
+    <script src="../../Scripts/jquery-1.11.0.min.js"></script>
+    <!--引入bootstrap-->
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+
+    <!--引入通用的JS-->
+    <script src="../../Scripts/QueryString.js"></script>
+    <script src="../../Scripts/config.js"></script>
+    <script src="../../Comm/Gener.js"></script>
+    <script src="../../Scripts/PinYin.js"></script>
+    <script src="../../Scripts/vue.js"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+    <script src="./js/ueditor/dialogs/internal.js"></script>
+    <script src="../../../../DataUser/JSLibData/CommonShowConfig.js"></script>
+    <script src="./DialogCtr/Public.js"></script>
+    <link href="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+
+        var frmID = "";
+        var dtGroups = null;
+        var mapAttrs = null;
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
+
+        $(function () {
+
+            var data = handler.DoMethodReturnString("Template_Init");
+
+            debugger
+            if (data.indexOf('err') >= 0) {
+
+                alert(data);
+                return;
+            }
+            data = JSON.parse(data);
+
+            var html = "<ul>";
+
+            for (var i = 0; i < data.length; i++) {
+                var temp = data[i];
+
+                html += "<li ><a href=\"javascript:Save('" + temp.OriginalPath + "')\" >" + temp.OriginalPath.replace(".htm", "") + "</a></li>";
+            }
+            html += "</ul>";
+              
+            $("#devTemp").append(html);
+        });
+
+
+        function Save(val) {
+
+            var ctrl = document.getElementById("CB_IsCalearHtml");
+            var isClear = ctrl.checked;
+            if (ctrl == true) {
+                var val = confirm("您确定要清楚现有的html插入指定的模版吗？");
+                if (val == false)
+                    return;
+            }
+
+            handler.AddPara("DevTempName", val);
+
+            var data = handler.DoMethodReturnString("Template_GenerHtml");
+
+            if (data.indexOf('err') >= 0) {
+                alert(data);
+                DevForm_Close();
+                return;
+            }
+
+            if (isClear == true) {
+                editor.setContent('');
+                editor.execCommand('insertHtml', data);
+            }
+            else {
+                editor.execCommand('insertHtml', data);
+            }
+
+            DevForm_Close();
+            debugger
+        }
+        function DevForm_Close() {
+            dialog.close(true);
+        }
+    </script>
+
+</head>
+<body>
+    <form id="form1">
+        <div id="toolbar">
+            请选择模版：
+            <label>
+                <input type="checkbox" id="CB_IsCalearHtml" value="1" checked="true" />
+                是否清空已有的html?
+            </label>
+        </div>
+
+        <div id="devTemp"> </div>
+
+        <fieldset>
+            <legend id="help">说明 </legend>
+            <ul>
+                <li> 所有的模版文件位于 DataUser\Style\TemplateFoolDevelopDesigner\*.htm </li>
+                <li> 如果要维护这些文件，请直接打开该目录进行维护。 </li>
+            </ul>
+        </fieldset>
+
+
+
+    </form>
+</body>
+</html>

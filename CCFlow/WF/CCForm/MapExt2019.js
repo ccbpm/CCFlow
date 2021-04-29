@@ -2,7 +2,7 @@
 var oldValue = "";
 var oid;
 var highlightindex = -1;
-function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt,TBModel) {
+function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, TBModel) {
     openDiv(sender, tbid);
     var mapExt = new Entity("BP.Sys.MapExt", fk_mapExt);
     var myEvent = window.event || arguments[0];
@@ -64,15 +64,14 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt,TBModel) {
         if (selectVal != oldValue) {
             $("#divinfo").empty();
             //获得对象.
-           
-            var dataObj = GenerDB(mapExt.Tag4, selectVal, mapExt.DBType);
+            var dataObj = GenerDB(mapExt.Tag4, selectVal, mapExt.DBType, mapExt.FK_DBSrc);
             if ($.isEmptyObject(dataObj)) {
                 $("#divinfo").hide();
                 return;
             }
 
             //简洁模式
-            if (TBModel == "Simple"){
+            if (TBModel == "Simple") {
                 $.each(dataObj, function (idx, item) {
 
                     var no = item.No;
@@ -90,8 +89,8 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt,TBModel) {
             }
 
             //表格模式
-            if(TBModel=="Table")
-                showDataGrid(sender, tbid, dataObj, mapExt); 
+            if (TBModel == "Table")
+                showDataGrid(sender, tbid, dataObj, mapExt);
 
             oldValue = selectVal;
 
@@ -100,20 +99,20 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt,TBModel) {
 }
 
 //文本自动填充 表格模式
-function showDataGrid(sender, tbid, dataObj,mapExt) {
+function showDataGrid(sender, tbid, dataObj, mapExt) {
     var columns = mapExt.Tag3;
     $("#divinfo").append(" <table id='viewGrid'></table>");
     //取消DIV的宽度
-    document.getElementById("divinfo").style.width="";
+    document.getElementById("divinfo").style.width = "";
 
     var searchTableColumns = [{
-         //title: 'Number',//标题  可不加  
-        formatter: function (value, row, index) {  
-            return index+1;  
-        }  
+        //title: 'Number',//标题  可不加  
+        formatter: function (value, row, index) {
+            return index + 1;
+        }
 
     }];
-            
+
     //显示列的中文名称.
     if (typeof columns == "string") {
         $.each(columns.split(","), function (i, o) {
@@ -138,7 +137,7 @@ function showDataGrid(sender, tbid, dataObj,mapExt) {
         var options = {
             striped: true,
             cache: false,
-            showHeader:true,
+            showHeader: true,
             sortOrder: "asc",
             strictSearch: true,
             minimumCountColumns: 2,
@@ -162,14 +161,14 @@ function showDataGrid(sender, tbid, dataObj,mapExt) {
             highlightindex = -1;
             $("#" + tbid).val(row.No);
 
-            FullIt(row.No, mapExt.MyPK,tbid);
-           
+            FullIt(row.No, mapExt.MyPK, tbid);
+
         };
         $('#viewGrid').bootstrapTable(options);
         $('#viewGrid').bootstrapTable("load", dataObj);
     }
-   
-  
+
+
 }
 
 function isLegalName(name) {
@@ -194,7 +193,8 @@ function openDiv(e, tbID) {
 
         orgObject.style.top = t + 'px';
         orgObject.style.left = l + 'px';
-        orgObject.style.width = $("#" + tbID).width()+"px";
+        orgObject.style.width = "";
+        orgObject.style.border = "1px solid rgb(51, 102, 153)";
         orgObject.style.display = "block";
         txtObject.focus();
     }
@@ -426,7 +426,7 @@ function ReturnValTBFullCtrl(ctrl, fk_mapExt) {
 /* 自动填充 */
 function DDLFullCtrl(selectVal, ddlChild, fk_mapExt) {
 
-    FullIt(selectVal, fk_mapExt,ddlChild);
+    FullIt(selectVal, fk_mapExt, ddlChild);
 }
 
 /* 级联下拉框  param 传到后台的一些参数  例如从表的行数据 主表的字段值 如果param参数在，就不去页面中取KVS 了，PARAM 就是*/
@@ -471,7 +471,7 @@ function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
         }
     }
 
-    var dataObj = GenerDB(dbSrc, selectVal, mapExt.DBType); //获得数据源.
+    var dataObj = GenerDB(dbSrc, selectVal, mapExt.DBType, mapExt.FK_DBSrc); //获得数据源.
 
     // 这里要设置一下获取的外部数据.
     // 获取原来选择值.
@@ -544,7 +544,7 @@ function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
         ddl.options[0].selected = true;
         var chg = $("#" + ddlChild).attr("onchange");
         $("#" + ddlChild).change();
-       
+
     }
 }
 
@@ -566,7 +566,7 @@ function ItemClick(sender, val, tbid, fk_mapExt) {
     $("#" + tbid).val(oldValue);
 
     // 填充.
-    FullIt(oldValue,fk_mapExt,tbid);
+    FullIt(oldValue, fk_mapExt, tbid);
 }
 
 function MyOver(sender) {
@@ -625,21 +625,21 @@ function CheckRegInput(oInput, filter, tipInfo) {
     }
     if (!result) {
         $("#" + oInput).addClass('errorInput');
-        var errorId = oInput+"error";
-        if($("#"+errorId).length == 0){
-           var span = $("<span id='"+errorId+"' style='color:red'></span>");
-           $("#" + oInput ).parent().append(span);
+        var errorId = oInput + "error";
+        if ($("#" + errorId).length == 0) {
+            var span = $("<span id='" + errorId + "' style='color:red'></span>");
+            $("#" + oInput).parent().append(span);
         }
-        $("#"+errorId).html(tipInfo);
+        $("#" + errorId).html(tipInfo);
 
     } else {
         $("#" + oInput).removeClass('errorInput');
-        var errorId = oInput+"error";
+        var errorId = oInput + "error";
         if ($("#" + errorId).length != 0)
             $("#" + errorId).remove();
-            //$("[name=" + oInput + ']').parent().removeChild($("#" + errorId));
+        //$("[name=" + oInput + ']').parent().removeChild($("#" + errorId));
 
-            
+
 
     }
     return result;
@@ -767,7 +767,7 @@ function FullIt(selectVal, refPK, elementId) {
         oid = 0;
         return;
     }
-    var mypk ="";
+    var mypk = "";
     if (refPK.indexOf("FullData") != -1)
         mypk = refPK;
     else
@@ -781,7 +781,7 @@ function FullIt(selectVal, refPK, elementId) {
     //没有填充其他控件
     if (i == 0)
         return;
-   
+
     //生成关键字.
     GenerPageKVs();
 
@@ -807,23 +807,9 @@ function FullIt(selectVal, refPK, elementId) {
 function FullCtrl(selectVal, ctrlIdBefore, mapExt) {
     var dbSrc = mapExt.Doc;
     if (dbSrc == null || dbSrc == "") {
-       // alert("没有配置填充主表的信息");
+        // alert("没有配置填充主表的信息");
         return;
     }
-    var dataObj = GenerDB(dbSrc, selectVal, mapExt.DBType);
-
-    TableFullCtrl(dataObj, ctrlIdBefore);
-}
-
-function TableFullCtrl(dataObj, ctrlIdBefore) {
-
-    if ($.isEmptyObject(dataObj)) {
-        // alert('系统错误不应该查询不到数据:'+dbSrc);
-        return;
-    }
-
-    var data = dataObj[0]; //获得这一行数据.
-
 
     //针对主表或者从表的文本框自动填充功能，需要确定填充的ID
     var beforeID = null;
@@ -837,7 +823,39 @@ function TableFullCtrl(dataObj, ctrlIdBefore) {
         beforeID = ctrlIdBefore.substring(0, ctrlIdBefore.indexOf('TB_'));
         endId = ctrlIdBefore.substring(ctrlIdBefore.lastIndexOf('_'));
     }
+    var isDtlField = endId !== "" ? true : false;
 
+    var dataObj = GenerDB(dbSrc, selectVal, mapExt.DBType, mapExt.FK_DBSrc, isDtlField);
+
+    TableFullCtrl(dataObj, ctrlIdBefore, beforeID, endId);
+
+    //如果含有FullDataDtl也需要处理
+    var mapExts = new Entities("BP.Sys.MapExts");
+    mapExts.Retrieve("FK_MapData", mapExt.FK_MapData, "AttrOfOper", mapExt.AttrOfOper, "ExtType", "FullDataDtl");
+    for (var i = 0; i < mapExts.length; i++) {
+        var item = mapExts[i];
+        var dbSrc = item.Doc;
+        if (dbSrc != null && dbSrc != "") {
+            var dataObj = GenerDB(dbSrc, selectVal, item.DBType, item.FK_DBSrc, isDtlField);
+
+            TableFullCtrl(dataObj, ctrlIdBefore, beforeID, endId);
+        }
+
+    }
+}
+
+function TableFullCtrl(dataObj, ctrlIdBefore, beforeID, endId) {
+
+    if ($.isEmptyObject(dataObj)) {
+        // alert('系统错误不应该查询不到数据:'+dbSrc);
+        return;
+    }
+
+    var data = dataObj[0]; //获得这一行数据.
+    if (typeof frmMapAttrs != "undefined" && frmMapAttrs != null && frmMapAttrs.length != 0)
+        data = DealDataTableColName(data, frmMapAttrs);
+    else
+        data = DealDataTableColName(data, mapAttrs);
     //遍历属性，给属性赋值.
     var valID;
     var tbs;
@@ -890,13 +908,13 @@ function TableFullCtrl(dataObj, ctrlIdBefore) {
 
         //获取表单中所有的字段
         if (valID.length == 0) {
-            if (tbs == undefined || tbs=="") {
+            if (tbs == undefined || tbs == "") {
                 if (endId != "") {
                     //获取所在的行
                     tbs = $("#" + ctrlIdBefore).parent().parent().find("input")
                 }
                 else
-                   tbs = $('input');
+                    tbs = $('input');
             }
             if (selects == undefined || selects == "") {
                 if (endId != "") {
@@ -906,7 +924,7 @@ function TableFullCtrl(dataObj, ctrlIdBefore) {
                 else
                     selects = $('select');
             }
-            
+
             $.each(tbs, function (i, tb) {
                 var name = $(tb).attr("id");
                 if (name == null || name == undefined)
@@ -937,12 +955,12 @@ function TableFullCtrl(dataObj, ctrlIdBefore) {
 }
 
 /**填充下拉框信息**/
-function FullCtrlDDL(selectVal, ctrlID , mapExt) {
+function FullCtrlDDL(selectVal, ctrlID, mapExt) {
 
     var doc = mapExt.Tag;
     if (doc == "" || doc == null)
         return;
-   
+
     var dbSrcs = doc.split('$'); //获得集合.
     for (var i = 0; i < dbSrcs.length; i++) {
 
@@ -952,7 +970,7 @@ function FullCtrlDDL(selectVal, ctrlID , mapExt) {
         var ctrlID = dbSrc.substring(0, dbSrc.indexOf(':'));
         var src = dbSrc.substring(dbSrc.indexOf(':') + 1);
 
-        var db = GenerDB(src, selectVal, mapExt.DBType); //获得数据源.
+        var db = GenerDB(src, selectVal, mapExt.DBType, mapExt.FK_DBSrc); //获得数据源.
 
         //重新绑定下拉框.
         GenerBindDDL("DDL_" + ctrlID, db);
@@ -1045,7 +1063,7 @@ function GenerPageKVs() {
 }
 
 /**处理SQL语句/函数/**/
-function GenerDB(dbSrc, selectVal, dbType) {
+function GenerDB(dbSrc, selectVal, dbType, dbSource, isDtlField) {
 
 
     //处理sql，url参数.
@@ -1054,12 +1072,14 @@ function GenerDB(dbSrc, selectVal, dbType) {
         selectVal = selectVal.replace(/'/g, '');
 
     dbSrc = dbSrc.replace(/@Key/g, selectVal);
+    dbSrc = dbSrc.replace(/@key/g, selectVal);
+    dbSrc = dbSrc.replace(/@KEY/g, selectVal);
 
-    dbSrc = DealExp(dbSrc);
+    dbSrc = DealExp(dbSrc, null, isDtlField);
     dbSrc = DealSQL(dbSrc, selectVal, kvs);
 
     //获取数据源.
-    dataObj = DBAccess.RunDBSrc(dbSrc, dbType);
+    dataObj = DBAccess.RunDBSrc(dbSrc, dbType, dbSource);
     return dataObj;
 }
 
@@ -1071,6 +1091,9 @@ function DealSQL(dbSrc, key, kvs) {
     dbSrc = dbSrc.replace(/~/g, "'");
 
     dbSrc = dbSrc.replace(/@Key/g, key);
+    dbSrc = dbSrc.replace(/@key/g, key);
+    dbSrc = dbSrc.replace(/@KEY/g, key);
+
     dbSrc = dbSrc.replace(/@Val/g, key);
     dbSrc = dbSrc.replace(/\n/g, "");
     var oid = GetQueryString("OID");

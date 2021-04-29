@@ -17,6 +17,10 @@
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../../../Scripts/vue.js" type="text/javascript"></script>
     <script src="../Admin.js"></script>
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+    <!-- 自己的系统风格统一end -->
 </head>
 <body>
     <div id="App">
@@ -52,7 +56,7 @@
                 <ul>
                     <li>特别说名:<font color=red> 如果当前节点为开始节点，所有的人员都可以发起。</font></li>
                     <li>A节点发送到B节点，如果B节点的接受人规则是由A来选择的,这样的行为类似于发送邮件模式，就是我选择谁就发送给谁.</li>
-                    <li>这种模式是有上一个节点的发送人主管判断的，而非自动计算。</li>
+                    <li>这种模式是有上一个节点的发送人主观判断的，而非自动计算。</li>
                     <li>人员选择有两种：海选与固定范围的多选.</li>
                     <li>海选:就是可以选择任何人,如下图，可以在文本框里搜索.</li>
                     <li>固定范围的选择:就是需要设置选择人的范围，比如：按照SQL,部门，人员设定仅仅选择副局长，副部长.</li>

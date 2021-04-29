@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>装载填充</title>
+    <!--SQL编辑器-->
+    <link href="../../../Scripts/CodeMirror/lib/codemirror.css" rel="stylesheet" />
+    <link href="../../../Scripts/CodeMirror/addon/hint/show-hint.css" rel="stylesheet" />
+    <script src="../../../Scripts/CodeMirror/lib/codemirror.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
+    <script src="../../../Scripts/CodeMirror/mode/sql/sql.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
+    <script src="../../../Scripts/LoadSql.js"></script>
+    <!--引用样式. -->
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="../../Admin.js"></script>
+    <script type="text/javascript">
+        //页面启动函数.
+        $(function () {
+
+            var frmID = GetQueryString("FK_MapData");
+
+            //定义主键值.
+            var pkval = "PageLoadFull_" + frmID;
+
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.SetPKVal(pkval);
+            var i = mapExt.RetrieveFromDBSources();
+            if (i == 0) {
+                document.getElementById("Btn_Delete").disabled = false;
+            }
+
+            //给主键赋值.
+            var tag = FormatSQL(mapExt.Tag);
+            $("#TB_SQL").val(tag);
+
+            //求从表个数
+            var mapDtls = new Entities("BP.Sys.MapDtls");
+            mapDtls.Retrieve("FK_MapData", frmID, "FK_Node", 0);
+            var sqls = mapExt.Tag1.split('*');
+
+            var html = "<table style='width:100%;'>";
+            for (var i = 0; i < mapDtls.length; i++) {
+                var mapDtl = mapDtls[i];
+
+                html += "<tr>";
+                html += "<th> 填充从表:" + mapDtl.No + " " + mapDtl.Name + "</th>";
+                html += "<td><font color=green>" + GenerFields(mapDtl.No) + "</font></td>";
+                html += "</tr>";
+
+                var sqlVal = '';
+
+                for (var idx = 0; idx < sqls.length; idx++) {
+
+                    var sql = sqls[idx];
+                    if (sql == null || sql == "")
+                        continue;
+
+                    var key = sql.substring(0, sql.indexOf('='));
+                    if (key == mapDtl.No) {
+                        sqlVal = sql.substring(sql.indexOf('=') + 1);
+                        break;
+                    }
+                }
+
+                sqlVal = FormatSQL(sqlVal);
+
+                html += "<tr>";
+                html += "<td colspan=2><textarea  id='TB_" + mapDtl.No + "' style='width:99%;' >" + sqlVal + "</textarea></td>";
+                html += "</tr>";
+
+                //    html += "<br>填充方式:<select id='DDL_" + mapDtl.No + "' ><option value='0' >每次打开的时候填充</option></select>";
+                //   html += "<option value='0' >每次打开的时候填充</option></select>";
+            }
+
+            $("#dtls").html(html);
+
+            //给field赋值.
+
+            $("#fields").html(GenerFields(frmID));
+
+        });
+        function GenerFields(frmID) {
+
+            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+            mapAttrs.Retrieve("FK_MapData", frmID);
+
+            var strs = "<b>可用字段</b>:";
+            for (var i = 0; i < mapAttrs.length; i++) {
+                var en = mapAttrs[i];
+                if (en.KeyOfEn == "OID" || en.KeyOfEn == "RDT" || en.KeyOfEn == "CDT" || en.KeyOfEn == "FID")
+                    continue;
+
+                strs += "" + en.KeyOfEn + ",";
+            }
+
+            return strs;
+        }
+        //执行保存
+        function Save() {
+
+            var frmID = GetQueryString("FK_MapData");
+
+            //定义主键值.
+            var pkval = "PageLoadFull_" + frmID;
+
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.SetPKVal(pkval);
+            mapExt.Tag = editor.getValue();
+
+            if (mapExt.Tag != null && mapExt.Tag != "" && CheckIsSQL(mapExt.Tag) == false) {
+                alert('请输入合法的查询SQL\t\n' + mapExt.Tag);
+                return;
+            }
+
+            mapExt.FK_MapData = frmID;
+            mapExt.ExtType = "PageLoadFull";
+
+            //求从表信息.
+            //求从表个数
+            var mapDtls = new Entities("BP.Sys.MapDtls");
+            mapDtls.Retrieve("FK_MapData", frmID, "FK_Node", 0);
+            var sqls = "";
+            for (var i = 0; i < mapDtls.length; i++) {
+                var mapDtl = mapDtls[i];
+                var val = $("#TB_" + mapDtl.No).val();
+
+                if (val != null && val != "" && CheckIsSQL(val) == false) {
+                    alert('请输入合法的查询SQL' + val);
+                    return;
+                }
+
+                sqls += "*" + mapDtl.No + "=" + val;
+            }
+
+            mapExt.Tag1 = sqls;
+            mapExt.Save();
+
+            alert("保存成功.");
+
+        }
+        function Delete() {
+
+            if (confirm('您确认要删除吗?') == false)
+                return;
+
+            var frmID = GetQueryString("FK_MapData");
+
+            //定义主键值.
+            var pkval = "PageLoadFull_" + frmID;
+
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.SetPKVal(pkval);
+            mapExt.RetrieveFromDBSources();
+            mapExt.Delete();
+
+            window.location.href = window.location.href;
+        }
+
+    </script>
+    <base target="_self" />
+</head>
+<body>
+    <form method="post" action="" id="form1">
+        <div id="bar" class="cs-tr cs-bar">
+            <label style="float:left;font-size:15px;font-weight:bolder;">装载填充</label>
+
+            <input id="Btn_Save" type="button" value="保存" onclick="Save()" />
+            <input id="Btn_Delete" type="button" value="删除" onclick="Delete()" />
+
+        </div>
+
+        <fieldset>
+            <legend>主表SQL设置</legend>
+            <br />
+            <textarea name="TB_SQL" class="SQL" rows="7" cols="70" id="TB_SQL" style="width: 99%;"></textarea>
+            <font color="green">
+                <div id="fields"></div>
+            </font>
+
+
+
+            <legend>从表SQL设置</legend>
+           
+
+            <div id="dtls">
+            </div>
+        </fieldset>
+
+
+        <fieldset>
+            <legend id="Help">帮助</legend>
+            <ul>
+                <li> 填充主表的sql,表达式里支持@变量与约定的公用变量, @WebUser.* 是ccbpm的表达式. 比如:@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.OrgNo</li>
+                <li> 比如1: SELECT No,Name,Tel FROM Port_Emp WHERE No='@WebUser.No' </li>
+                <li> 比如2: SELECT No,Name,Tel FROM Port_Emp WHERE No='@MyFieldName' </li>
+                <li> 返回的数据是一行多列，如果列名与主表的字段名匹配就自动赋值. </li>
+                <li> 注意：sql查询返回的列名要区分大小写,为了避免字段输入拼写错误，我们为您列出了本表单的字段信息. </li>
+                <!--<li><font color="green">  </font> </li>-->
+            </ul>
+        </fieldset>
+
+
+    </form>
+</body>
+</html>

@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>新建流程向导</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../Admin.js"></script>
+    <script type="text/javascript">
+
+        var model = 0; //运行模式 0专业版 1简洁版
+        var flowSort = "";
+        $(function () {
+
+            $("#EtcModel").css("display", "none");//显示div
+
+            var sort = GetQueryString("sort");
+
+        });
+
+
+        //创建流程.
+        function CreateModel(model) {
+            var val = window.os();
+            if (val == null || val == undefined)
+                return;
+            var url = "NewFlow1_0.htm?sort=" + GetQueryString("sort");
+            window.location.href = url;
+        }
+
+        ///打开帮助.
+        function OpenFrmHelp() {
+            var url = "http://ccbpm.mydoc.io";
+        }
+
+        //其他模式.
+        function EtcModel() {
+
+            $("#EtcModel").css("display", "block");//隐藏div
+        }
+    </script>
+</head>
+<body>
+
+    <fieldset>
+        <legend>新建流程 => 选择流程表单方案 </legend>
+        <ul>
+            <li>
+                <a href="javascript:CreateModel('1')">使用推荐流行表单设计模式，创建新流程。</a>
+                <ul>
+                    <li>首先需要在表单库里创建一个表单.</li>
+                    <li>选择这个表单，每个节点绑定到这个表单上。</li>
+                    <li>不同的节点，设置不同的表单字段权限。</li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:EtcModel();">使用其他模式创建流程。</a>
+                <div id="EtcModel">
+                    <ul>
+                        <li><b>内置表单</b></li>
+                        <li><a href="NewFlow.htm?FrmType=0">傻瓜模式</a></li>
+                        <li><a href="NewFlow.htm?FrmType=0">开发者表单</a></li>
+                        <li><a href="NewFlow.htm?FrmType=0">累加表单</a></li>
+
+                        <li><b>绑定独立表单</b></li>
+                        <li>傻瓜模式</li>
+                        <li>开发者表单</li>
+                        <li>累加表单</li>
+                    </ul>
+                </div>
+            </li>
+            <!--<li>
+                <a href="NewFlow.htm?Model=1">导入流程模版</a>
+                <ul>
+                    <表单库li>驰骋BPM云提供的.</表单库li>
+                    <li>选择这个表单，每个节点绑定到这个表单上。</li>
+                    <li>不同的节点，设置不同的表单字段权限。</li>
+                </ul>
+
+            </li>-->
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>帮助</legend>
+        <ul>
+            <li>ccbpm为了适应不同的审批，生产环境提供了多种表单方案。</li>
+            <li>您可以根据自己的习惯与应用场景来选择。</li>
+            <li><a href="">视频教程</a>。</li>
+            <li>
+                <a href="http://ccflow.org/ke.htm"><img src='../../Img/FileType/rmvb.gif' />教您做一个小流程</a>
+            </li>
+        </ul>
+    </fieldset>
+
+</body>
+</html>

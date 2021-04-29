@@ -1,7 +1,6 @@
 ﻿
 //阅读并关闭.
-function ReadAndClose()
-{
+function ReadAndClose() {
     var msg = "";
     if ($("#FlowBBS_Doc").length == 1) {
         var doc = $("#FlowBBS_Doc").val();
@@ -56,8 +55,14 @@ $(function () {
     var theme = webUser.Theme;
     if (theme == null || theme == undefined || theme == "")
         theme = "Default";
-    $('head').append('<link href="../DataUser/Style/CSS/' + theme + '/ccbpm.css" rel="stylesheet" type="text/css" />');
+
+    //$('head').append('<link href="../DataUser/Style/CSS/' + theme + '.css" rel="stylesheet" type="text/css" />');
+    //$('head').append('<link href="../DataUser/Style/MyFlow.css" rel="Stylesheet" />');
+
+    //$('head').append('<link href="../DataUser/Style/CSS/' + theme + '.css" rel="stylesheet" type="text/css" />');
+    $('head').append('<link href="../DataUser/Style/GloVarsCSS.css" rel="stylesheet" type="text/css" />');
     $('head').append('<link href="../DataUser/Style/MyFlow.css" rel="Stylesheet" />');
+
 
     initPageParam(); //初始化参数
 
@@ -150,7 +155,7 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage, H) {
     if (projectName == "WF") {
         projectName = "";
     }
-   
+
     if (plant == "JFlow")
         projectName = basePath;
     var url = basePath + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal;
@@ -461,7 +466,7 @@ function GepParaByName(name, atPara) {
 
 //初始化下拉列表框的OPERATION
 function InitDDLOperation(flowData, mapAttr, defVal) {
-    if (mapAttr.UIIsEnable == "0" || pageData.IsReadonly=="1")
+    if (mapAttr.UIIsEnable == "0" || pageData.IsReadonly == "1")
         return "";
     var operations = '';
     var data = flowData[mapAttr.KeyOfEn];
@@ -606,7 +611,7 @@ function GenerWorkNode() {
     var node = flowData.WF_Node[0];
     var gfs = flowData.Sys_MapAttr;
 
-  
+
     //设置标题.
     document.title = node.FlowName + ',' + node.Name; // "业务流程管理（BPM）平台";
 
@@ -661,7 +666,7 @@ function GenerWorkNode() {
                 GenerDevelopFrm(flowData, flowData.WF_FrmNode[0].FK_Frm);
             }
         }
-           
+
     }
 
     //公文表单
@@ -739,7 +744,7 @@ function GenerWorkNode() {
             autoTextarea(item);
         });
     }
-    
+
 
     //为 DISABLED 的 TEXTAREA 加TITLE 
     var disabledTextAreas = $('#divCCForm textarea:disabled');
@@ -977,7 +982,7 @@ document.BindEditorMapAttr = [];
 
 
 
-  
+
 function To(url) {
     window.name = "dialogPage"; window.open(url, "dialogPage")
 }

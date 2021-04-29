@@ -40,9 +40,9 @@
         });
 
         //确定 流程选择
-        function SelectEmps() {
+        function SelectFlows() {
 
-            GetSelectedEmpsReturnVal();
+            GetSelectedFlowsReturnVal();
 
             //No  是返回到别的页面的值
             if (returnVal.No == undefined || returnVal.No == '') {
@@ -171,7 +171,7 @@
                             //handler.AddPara("FK_Node", GetQueryString("FK_Node"));
                             if (pageData.FK_FlowSort != undefined)
                                 handler.AddPara("FK_FlowSort", pageData.FK_FlowSort);
-                            var data = handler.DoMethodReturnString("SelectEmps_Init");
+                            var data = handler.DoMethodReturnString("SelectFlows_Init");
                             if (data.indexOf('err@') == 0) {
                                 alert(data);
                                 return;
@@ -193,7 +193,7 @@
                                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
                                 //handler.AddPara("FK_Node", GetQueryString("FK_Node"));
                                 handler.AddPara("FK_FlowSort", pageData.FK_FlowSort);
-                                var data = handler.DoMethodReturnString("SelectEmps_Init");
+                                var data = handler.DoMethodReturnString("SelectFlows_Init");
 
                                 if (data.indexOf('err@') == 0) {
                                     alert(data);
@@ -209,7 +209,7 @@
                 "plugins": plugins
 
             }).on('changed.jstree', function (node, cb) {
-                GetSelectedEmpsReturnVal();
+                GetSelectedFlowsReturnVal();
             })
         }
         //弹出树
@@ -250,7 +250,7 @@
             });
         }
         //获取树选中的值
-        function GetSelectedEmpsReturnVal() {
+        function GetSelectedFlowsReturnVal() {
 
             var instance = $('#OrgJSTree').jstree(true);
 
@@ -288,10 +288,10 @@
 <body>
     <input type="button" onclick="Close()" value="取消" /><input type="button" value="上一级"
         id="toPrevDept" />
-    <input type="button" onclick="SelectEmps()" value="确定" />
+    <input type="button" onclick="SelectFlows()" value="确定" />
     <div id="OrgJSTree" class="tree-demo jstree jstree-1 jstree-default">
     </div>
-    <input type="button" onclick="Close()" value="取消" /><input type="button" onclick="SelectEmps()"
+    <input type="button" onclick="Close()" value="取消" /><input type="button" onclick="SelectFlows()"
         value="确定" />
 </body>
 </html>

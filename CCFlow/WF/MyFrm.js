@@ -30,8 +30,15 @@ $(function () {
     var theme = webUser.Theme;
     if (theme == null || theme == undefined || theme == "")
         theme = "Default";
-    $('head').append('<link href="../DataUser/Style/CSS/' + theme + '/ccbpm.css" rel="stylesheet" type="text/css" />');
+
+
+    //$('head').append('<link href="../DataUser/Style/CSS/' + theme + '.css" rel="stylesheet" type="text/css" />');
+    $('head').append('<link href="../DataUser/Style/GloVarsCSS.css" rel="stylesheet" type="text/css" />');
     $('head').append('<link href="../DataUser/Style/MyFlow.css" rel="Stylesheet" />');
+
+
+    //$('head').append('<link href="../DataUser/Style/CSS/' + theme + '.css" rel="stylesheet" type="text/css" />');
+    //$('head').append('<link href="../DataUser/Style/MyFlow.css" rel="Stylesheet" />');
 
     // initToolBar();//初始化按钮
     initPageParam(); //初始化参数
@@ -202,7 +209,7 @@ window.onload = function () {
     setToobarUnVisible();
 
 };
- 
+
 
 //双击签名
 function figure_Template_Siganture(SigantureID, val, type) {
@@ -528,14 +535,14 @@ function GenerWorkNode() {
             flowData.MainTable[0] = frmDB;
 
         }
-        
+
     } catch (err) {
         //console.log(data);
         alert("err@ GenerWorkNode转换JSON失败,请查日志.");
         return;
     }
 
-   
+
     //处理附件的问题 
     if (flowData.Sys_FrmAttachment.length != 0) {
         Skip.addJs("./CCForm/Ath.js");

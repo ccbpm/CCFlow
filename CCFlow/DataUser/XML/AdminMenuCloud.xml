@@ -1,0 +1,31 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <!-- 管理员菜单:
+  1, 用于显示在流程设计器功能菜单栏.
+  2, For="admin" 标识只有admin用户可以使用. 
+     比如： For="00000120"  只有这个管理员才可以使用. 
+     For="SecondAdmin" 说明只对二级管理员有效.
+     
+  3, 如果 For="" 标识所有的管理员都可以使用.
+  4, ParentNo="AdminMenu"，固定值，目前只有一个根节点.
+  系统维护管理员菜单  
+  -->
+
+  <!-- 所有的人都可以维护组织结构. -->
+
+  <Group No="System" Name="系统管理" For="cloud" />
+
+  <Item No="601" GroupNo="System" Name="系统设置" Url="../../Comm/RefFunc/En.htm?EnName=BP.Cloud.OrgSetting.Org" />
+  <Item No="602" GroupNo="System" Name="系统枚举" Url="/Admin/CCFormDesigner/SysEnum/List.htm"  />
+  <Item No="603" GroupNo="System" Name="系统外键"  Url="/Admin/CCFormDesigner/SFList.htm"  />
+ 
+  
+  <Group No="Org" Name="组织结构" For="cloud" />
+    <Item No="503" GroupNo="Org" Name="人员台帐" Url="/WF/Comm/Search.htm?EnsName=BP.Cloud.EmpWebs"  />
+   <Item No="501" GroupNo="Org" Name="岗位类型维护" Url="../../Comm/Ens.htm?EnsName=BP.Cloud.StationTypeExts"  />
+   <Item No="502" GroupNo="Org" Name="岗位维护"  Url="../../Comm/Search.htm?EnsName=BP.Cloud.StationExts"  />
+  <Item No="504" GroupNo="Org" Name="组织结构" Url="/App/Org/Organization.htm"  />
+
+ 
+
+</NewDataSet>

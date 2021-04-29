@@ -12,6 +12,11 @@
     <script type="text/javascript" src="../Gener.js"></script>
     <script src="../JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    
+
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
     <script type="text/javascript" src="../../Scripts/Cookie.js"></script>
@@ -135,17 +140,17 @@
 
             //权限控制.
             if (mapData.GetPara("IsInsert") == 1) {
-                html += "<input style='background-image: url(../../Img/Btn/New.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 8px;' type='button' value='新建' id='Btn_New' onclick='New()' />";
+                html += "<button  value='新建' id='Btn_New' onclick='New()' class='cc-btn-tab btn-new' >新建</button>";
             }
 
             if (mapData.GetPara("IsUpdate") == 1) {
-                html += "<input style='background-image: url(../../Img/Btn/Save.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 8px;' type='button' value='保存' id='Btn_Save' onclick='Save()' />";
+                html += "<button type='button' value='保存' id='Btn_Save' onclick='Save()' class='cc-btn-tab btn-save' >保存</button>";
             }
             if (mapData.GetPara("IsImp") == 1) {
-                html += "<input style='background-image: url(../../Img/Btn/Imp.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 8px;' type='button' value='导入' id='Btn_Imp' onclick='Import()' />";
+                html += "<button  type='button' value='导入' id='Btn_Imp' onclick='Import()' class='cc-btn-tab btn-imp' >导入</button>";
             }
 
-            html += "<input style='background-image: url(../../Img/Btn/PackUp_zip.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 8px;' type='button' value='导出' id='Btn_Exp' onclick='Export()' />";
+            html += "<button type='button' value='导出' id='Btn_Exp' onclick='Export()' class='cc-btn-tab btn-exp' >导出</button>";
 
 
             $("#Btns").append(html);
@@ -159,7 +164,7 @@
             var mapAtrrs = frmData.Sys_MapAttr;
             var dtls = frmData.Dtls;
 
-            var html = "<table border=0 id='Table1' style='width:99%;'>";
+            var html = "<table class='table' id='Table1'>";
             html += "<tr>";
             html += "<th>序</th>";
 
@@ -208,7 +213,7 @@
                     html += "<td>" + InitMapAttrOfCtrl(mapAttr, dtl, pkval) + "</td>";
                 }
                 //主键中还有双引号的进行转义
-                if (pkval != null && pkval !=undefined && pkval instanceof String )
+                if (pkval != null && pkval != undefined && pkval instanceof String)
                     pkval = pkval.replace(/"/g, "&quot;");
                 html += "<td ><a href=\"javascript:OpenEn('" + pkval + "')\">详细</a></td>";
                 if (mapData.GetPara("IsDelete") == "1")
@@ -624,16 +629,17 @@
     </script>
 </head>
 <body>
-
-    <div style="right:30px; position:absolute; z-index:100; " id="Btns">
-        <!--  <input type='button' value='保存' id='Btn_Save' onclick='Save()' />-->
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <div class="pull-right" id="Btns">
+                <!--  <input type='button' value='保存' id='Btn_Save' onclick='Save()' />-->
+            </div>
+        </div>
+        <form id="divCCForm" method="post">
+            <div id="mytable"> </div>
+        </form>
+        <div id="Msg"></div>
     </div>
-
-    <form style="position:relative; top:40px;" id="divCCForm" method="post">
-        <div id="mytable"> </div>
-    </form>
-    <div id="Msg"></div>
-
 </body>
 
 </html>

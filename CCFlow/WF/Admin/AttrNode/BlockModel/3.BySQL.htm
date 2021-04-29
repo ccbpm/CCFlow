@@ -11,7 +11,10 @@
     <script src="../../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
     <script src="../../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
     <script src="../../../Scripts/LoadSql.js"></script>
-
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+    <!-- 自己的系统风格统一end -->
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -38,7 +41,7 @@
 
         function Save() {
 
-            $("#Btn_Save").val("正在保存请稍候...");
+            $("#Btn_Save").html("正在保存请稍候...");
             node.BlockModel = BlockModel.BySQL;
 
             //node.BlockExp = $("#TB_SQL").val();

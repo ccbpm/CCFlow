@@ -20,6 +20,9 @@
     <link href="../fonts/font-icons.min.css" rel="Stylesheet" />
     <script src="../JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <!-- 自己的系统风格统一. -->
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
     <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
     <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
 
@@ -126,7 +129,6 @@
                         frmData[uiBindKeys[i].No] = operdata;
                     }
                 }
-
             }
 
             InitToolbar(); //初始工具栏.
@@ -134,7 +136,7 @@
             //生成傻瓜表单.
             GenerFoolFrm(mapData, mainData, frmData);
             //修改页面样式
-            debugger
+            //debugger
             if ($("ul.tabs").length != 0) {
                 var li = $("<li style='float:right !important;z-index:999; top:0px' class='cs-btn-group panel-body panel-body-noheader panel-body-noborder layout-body'></li>");
                 li.append($("#Btns").children());
@@ -146,8 +148,6 @@
             } else {
                 $("#CCFormTabs").css("top", "35px");
             }
-
-
         })
 
         ///设置.
@@ -293,8 +293,8 @@
 
                     if (uiBindKey.toLowerCase().indexOf("select") == -1 && uiBindKey.indexOf("Dept") != -1 && uiBindKey.indexOf(".") != -1) {
 
-                         var pushData;
-                        if(mapAttr.UIIsEnable=="1"){
+                        var pushData;
+                        if (mapAttr.UIIsEnable == "1") {
                             var webUser = new WebUser();
                             var ens = new Entities(uiBindKey);
                             ens.RetrieveAll();
@@ -302,23 +302,23 @@
                                 pushData = findChildren(ens, "0");
                             else
                                 pushData = findChildren(ens, webUser.FK_Dept);
-                        }else{
-                            pushData=[];
+                        } else {
+                            pushData = [];
                             var selectText = frmData.MainTable[0][mapAttr.KeyOfEn + "Text"];
                             if (defValue == null)
-                                defValue="";
+                                defValue = "";
                             if (selectText == null || selectText == "") {
                                 selectText = defValue;
                             }
-                            
+
                             pushData.push({ "id": defValue, "text": selectText, "children": [] });
-                            if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0 && defValue!="")  
+                            if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0 && defValue != "")
                                 $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
 
                         }
                         $('#DDL_' + mapAttr.KeyOfEn).combotree('loadData', pushData);
                         if (mapAttr.UIIsEnable == 0)
-                           $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
+                            $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
 
                         $('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', defValue);
                         var target = $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('find', defValue)
@@ -414,7 +414,7 @@
                             $('#DDL_' + param[0]).combotree('setValue', realVal);
 
                         }
-                      
+
                         if (realVal == "1") {
                             var obj = document.getElementById("CB_" + param[0])
                             if (obj != null)
@@ -522,11 +522,12 @@
                     isDropTR = true;
                     html += "<tr>";
                     if (attr.UIContralType == 2) {
-                        html += "<td class='FContext' colspan='4' >";
+                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'></td>";
+                        html += "<td class='FContext'  colspan=3>";
                         html += InitMapAttrOfCtrl(attr);
                         html += "</td>";
                     } else {
-                        html += "<td class='FDesc' style='width:20%;'>" + lab + "</td>";
+                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'>" + lab + "</td>";
                         html += "<td class='FContext'  colspan=3>";
                         html += InitMapAttrOfCtrl(attr);
                         html += "</td>";
@@ -537,7 +538,7 @@
 
                     if (rm != null) {
                         html += "<tr>";
-                        html += "<td class='FDesc' style='width:20%;'></td>";
+                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'></td>";
                         html += "<td colspan=3>";
                         html += GenerRM(rm);
                         html += "</td>";
@@ -558,7 +559,7 @@
 
                     if (rm != null) {
                         html += "<tr>";
-                        html += "<td class='FDesc' style='width:20%;'></td>";
+                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'></td>";
                         html += "<td colspan=3>";
                         html += GenerRM(rm);
                         html += "</td>";
@@ -573,11 +574,12 @@
                     html += "<tr>";
 
                     if (attr.UIContralType == 2) {
-                        html += "<td class='FContext' colspan='2' >";
+                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'></td>";
+                        html += "<td class='FContext'>";
                         html += InitMapAttrOfCtrl(attr);
                         html += "</td>";
                     } else {
-                        html += "<td class='FDesc' style='width:20%;'>" + lab + "</td>";
+                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'>" + lab + "</td>";
                         html += "<td class='FContext'  >";
                         html += InitMapAttrOfCtrl(attr);
                         html += "</td>";
@@ -597,27 +599,38 @@
 
                 if (isDropTR == false) {
 
+                    if (rm != null) {
+                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'></td>";
+                        html += "<td class='FContext'></td>";
+                        html += "</tr>";
+                        html += "<tr>";
+                    }
                     if (attr.UIContralType == 2) {
-                        html += "<td class='FContext' colspan='2' >";
+                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'></td>";
+                        html += "<td class='FContext'>";
                         html += InitMapAttrOfCtrl(attr);
                         html += "</td>";
                     } else {
-                        html += "<td class='FDesc' style='width:20%;'>" + lab + "</td>";
+                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'>" + lab + "</td>";
                         html += "<td class='FContext'  >";
                         html += InitMapAttrOfCtrl(attr);
                         html += "</td>";
                     }
-                    html += "</tr>";
+                    //html += "</tr>";
 
-                    isDropTR = !isDropTR;
+                   //isDropTR = !isDropTR;
 
                     if (rm != null) {
-                        html += "<tr>";
+                        //html += "<tr>";
                         html += "<td colspan=2>";
                         html += GenerRM(rm);
                         html += "</td>";
+                        html += "</tr>"
 
-                        isDropTR = false;
+                        isDropTR = true;;
+                    } else {
+                        html += "</tr>";
+                        isDropTR = !isDropTR;
                     }
                     continue;
                 }
@@ -630,9 +643,9 @@
             if (entityAthType == 1) {
                 html += "<tr>";
                 if (fileDesc == "")
-                    html += "<td class='FDesc' style='width:20%;'>附件上传</td>";
+                    html += "<td class='FoolFrmFieldCtrl' style='width:20%;'>附件上传</td>";
                 else
-                    html += "<td class='FDesc' style='width:20%;'>" + fileDesc + "</td>";
+                    html += "<td class='FoolFrmFieldCtrl' style='width:20%;'>" + fileDesc + "</td>";
                 html += "<td colspan=3>";
                 html += "<input type='file' id='File_Upload' name='File_Upload' style='background-color:white;' onchange='changeFile(1)' />";
                 html += "已上传的文件：<span id='FileInfo'></span>";
@@ -957,16 +970,15 @@
             //新增时En.htm页面隐藏
             if (window.parent && window.parent.$('#EnLayout').length == 1)
                 window.parent.$('#EnLayout').layout('remove', 'west');
+
             parent.window.location.href = url.replace("EnOnly", "En"); //刷新.
-
-
         }
 
         function Save() {
 
-            $("#Btn_Save").val('正在保存');
+            $("#Btn_Save").html('正在保存');
             this.Update();
-            $("#Btn_Save").val('保存');
+            $("#Btn_Save").html('保存');
         }
 
         //更新.
@@ -1239,245 +1251,265 @@
             left: 40px;
         }*/
         .panel-body {
-            padding: 0px;
+            padding: 0
         }
 
         .tabs {
-            border-width: 1px 0 1px 0;
+            border-width: 1px 0 1px 0
         }
 
         .btn-default {
-            border: 0px;
+            border: 0
         }
 
         .cs-btn-group {
             width: auto !important;
-            min-height: 34px;
+            margin-top:6px !important;
             text-align: right;
-            background-color: transparent;
+            background-color: transparent
         }
 
             .cs-btn-group .l-btn-icon {
-                display: none;
+                display: none
             }
 
             .cs-btn-group .l-btn-text {
-                margin: 0;
+                margin: 0
             }
 
         .layout-panel {
             position: absolute;
             right: 0;
             top: 0 !important;
-            box-shadow: none;
+            box-shadow: none
         }
 
         .layout-panel-north {
             width: auto !important;
             left: auto !important;
-            background-color: transparent;
+            background-color: transparent
         }
 
         .btn {
-            padding: 0 10px;
+            padding: 0 15px;
             color: #fff !important;
-            border-radius: 0px !important;
-            border: 0;
-            height: 24px;
-            line-height: 24px;
+            border-radius: 0 !important;
+            border: 0 !important;
+            height: 32px;
+            line-height: 32px;
             box-sizing: border-box;
+            margin-top: 3px;
+            margin-left: 5px;
+            border-radius: 3px !important;
         }
 
             .btn:hover {
-                padding: 0 10px;
-                border: 0;
+                border: 0
             }
 
         .btn-light-green {
-            background-color: #50b6ac !important;
+            background-color: #50b6ac !important
         }
 
             .btn-light-green:hover {
-                background-color: #50b6ac;
+                background-color: #38a399 !important
             }
 
         .btn-light-blue {
-            background-color: #62cae3 !important;
+            background-color: #62cae3 !important
         }
 
             .btn-light-blue:hover {
-                background-color: #62cae3;
+                background-color: #24a3c1 !important
             }
 
         .btn-light-yellow {
-            background-color: #f3ba20 !important;
+            background-color: #f3ba20 !important
         }
 
             .btn-light-yellow:hover {
-                background-color: #f3ba20;
+                background-color: #c0900e !important
             }
 
         .btn-light-red {
-            background-color: #f74f52 !important;
+            background-color: #f74f52 !important
         }
 
             .btn-light-red:hover {
-                background-color: #f74f52;
+                background-color: #da191c !important
             }
 
         .btn-white {
             border: 1px solid #031f5d;
             background-color: #fff !important;
-            color: #031f5d !important;
+            color: #031f5d !important
         }
 
             .btn-white:hover {
-                border: 1px solid #031f5d;
+                border: 1px solid #031f5d
             }
 
-        .tabs-wrap .tabs, .tabs-panels, .tabs li a.tabs-inner, .tabs-panels table, td.FDesc, td.FContext, td {
-            border: 0;
+        .tabs li a.tabs-inner, .tabs-panels, .tabs-panels table, .tabs-wrap .tabs, td, td.FContext, td.FDesc {
+            border: 0
         }
 
         .tabs-wrap table {
-            width: 100% !important;
+            width: 100% !important
         }
 
         .tabs-wrap .tabs {
             padding-left: 0;
             width: auto;
-            border-bottom: 1px solid #0a2561;
+            height: 42px !important;
+           
+            border-bottom: 1px solid #efefef;
         }
 
-        .tabs li a.tabs-inner {
-            padding: 0 16px;
-            background: none;
-            border-radius: 5px 5px 0 0;
+        .tabs-wrap .tabs a {
+            ;
+            height: 42px !important;
+           
         }
 
-            .tabs li a.tabs-inner:hover {
-                background: none;
-                font-weight: bold;
+        .tabs li {
+            margin: 0px;
+        }
+
+            .tabs li a.tabs-inner {
+                padding: 0 16px;
+                background: 0 0;
+                border-radius: 0px;
+                font-size: 14px;
+                color: #414141
             }
 
+                .tabs li a.tabs-inner:hover {
+                    background: #dbdbf5
+                }
+
         .tabs li.tabs-selected a.tabs-inner {
-            border: 1px solid #0a2561;
-            border-bottom-color: #fff;
+            border: 0;
+            border-bottom: 2px solid #4d49bf;
             background: #fff;
+            border-radius: 0px;
+        }
+
+            .tabs li a.tabs-inner .tabs-title {
+                font-size: 15px !important
+            }
+
+        table {
+            border: 0
         }
 
         td {
             box-sizing: border-box;
+           
         }
 
-            td a {
-                color: #15398b;
-                font-size: 12px;
-            }
+        td a {
+            color: #4d49bf;
+            font-size: 13px
+        }
 
                 td a img {
-                    vertical-align: -2px;
+                    vertical-align: -2px
                 }
 
             td.FContext {
-                width: 30%;
+                width: 30%
             }
 
                 td.FContext:nth-child(2) {
-                    padding-right: 30px;
+                    padding-right: 30px
                 }
 
-                td.FContext > *:only-child {
+                td.FContext > :only-child {
                     width: 100% !important;
                     font-size: 13px;
                     color: #282828;
-                    box-sizing: border-box;
+                    box-sizing: border-box
                 }
 
                 td.FContext[colspan] {
-                    padding-right: 0;
+                    padding-right: 0
                 }
 
-        select[disabled], input[type=text]:disabled, .form-control, .form-control[disabled], .form-control[readonly], fieldset[disabled] {
+        .form-control, .form-control[disabled], .form-control[readonly], fieldset[disabled], input[type=text]:disabled, select[disabled] {
             background-color: #fff;
-            border: 1px solid #ccc !important;
+           
             text-align: left !important;
             height: 32px;
-            box-sizing: border-box;
+            box-sizing: border-box
         }
 
-            select[disabled], input[type=text]:disabled, .form-control[disabled], .form-control[readonly], fieldset[disabled] {
-                background-color: #f7f6f9;
+            .form-control[disabled], .form-control[readonly], fieldset[disabled], input[type=text]:disabled, select[disabled] {
+                background-color: #f7f6f9
             }
 
-        td input[type="text"], td input[type="number"], td input[type="date"], td input[type="tel"] {
-            height: 32px;
+        td input[type=date], td input[type=number], td input[type=tel], td input[type=text] {
+            height: 32px
         }
 
-        td input[type="checkbox"] {
+        td input[type=checkbox] {
             margin-right: 5px;
+          
             width: 16px;
             height: 16px;
+            vertical-align: top;
         }
 
         td label {
-            font-size: 13px;
+            font-size: 13px
         }
 
-        /*td.FDesc {
-           padding-right: 10px;
-            text-align: right;
-            box-sizing: border-box;
-        }*/
-        /*td.FDesc:first-child {
-            width: 81px!important;
-        }
-        td:nth-child(3)[class="FDesc"] {
-            width: 130px!important;
-        }*/
         .cs-form-import > .layout-panel-center {
-            padding: 5px 0 0 16px;
+            padding: 0px 15px 0 16px
         }
 
         .cs-form-import > .layout-panel-north {
             top: 6px !important;
             padding-right: 21px;
-            border-radius: 0;
+            border-radius: 0
+        }
+
+        .enonly-center .tabs-panels {
+            padding: 10px 0px;
         }
     </style>
 </head>
 <body class="easyui-layout cs-form-import" data-options="fit:true">
     <div id="Btns" class="cs-btn-group" data-options="region:'north',noheader:true,split:false,border:false">
         <!--<a id="Btn_New" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-blue" data-options="plain:true,iconCls:'icon-new'"
-    onclick="New()" style="margin-right:5px;">新建</a>-->
+        onclick="New()" style="margin-right:5px;">新建</a>-->
 
 
 
-        <button id="Btn_New" onclick="New()">
-            <img src="../../Img/Btn/New.png" style="width:22px;height:22px;" /> 新建
+        <button id="Btn_New" class="cc-btn-tab" onclick="New()">
+            <i class="iconfont icon-xinjian"></i> 新建
         </button>
 
         <!--<input style='background-image: url(../../Img/Btn/New.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 6px;height:30px;' type="button" />-->
         <!--<a id="Btn_Save" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-green"
-    data-options="plain:true,iconCls:'icon-save'" onclick="Update()" style="margin-right:5px;">保存</a>-->
+        data-options="plain:true,iconCls:'icon-save'" onclick="Update()" style="margin-right:5px;">保存</a>-->
 
-        <button id="Btn_Save" onclick="Update()">
-            <img src="../../Img/Btn/Save.png" style="width:22px;height:22px;" />保存
-        </button>
-        
-        <button id="Btn_Delete" onclick="Delete()">
-            <img src="../../Img/Btn/Delete2.png" style="width:22px;height:22px;" />删除
+        <button id="Btn_Save" class="cc-btn-tab" onclick="Update()">
+            <i class="iconfont icon-Save"></i> 保存
         </button>
 
-        <button id="Btn_Setting" onclick="Setting()">
-            <img src="../../Img/Btn/setting.png" style="width:22px;height:22px;" />设置
+        <button id="Btn_Delete" class="cc-btn-tab" onclick="Delete()">
+            <i class="iconfont icon-shanchu1"></i>  删除
+        </button>
+
+        <button id="Btn_Setting" class="cc-btn-tab" onclick="Setting()">
+            <i class="iconfont icon-jurassic_setup-batch"></i>  设置
         </button>
 
 
     </div>
-    <div class="easyui-layout" data-options="region:'center'" style="margin: 0px;overflow: auto">
-        <div class="easyui-layout" id="CCFormTabs" data-options="region:'center',noheader:true,border:false,fit:true" style="margin: 0px;
-                    padding: 0px; overflow: auto">
+    <div class="easyui-layout" data-options="region:'center'" style="margin: 0px;overflow: auto;">
+        <div class="easyui-layout enonly-center" id="CCFormTabs" data-options="region:'center',noheader:true,border:false,fit:true" style="margin: 0px;
+                    padding: 0px; overflow: auto;">
             <br />
             <br />
             <center>

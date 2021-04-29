@@ -18,13 +18,12 @@
  *     
  *  4. 代国强来完善这两个方法，参考 D:\ccflow\CCFlow\WF\CCBill\Admin\MethodDoc.htm 页面。
  *  
- *  
  */
 
 $(document).ready(function () {
 
     //动态添加新风格 
-    SetNewCSS();
+    SetCSS();
 
     //设置帮助页面内容 
     // SetHelpPage();
@@ -48,10 +47,13 @@ $(document).ready(function () {
 function AddBtnIcon() {
 
     //保存按钮icon
-    if ($("#Btn_Save").height() > 25)
-        $("#Btn_Save").attr('style', 'background-image: url(../../../Img/Btn/Save.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    /*if ($("#Btn_Save").height() > 25) {
+        $("#Btn_Save").addClass("cc-btn Btn_Save");
+       // $("#Btn_Save").attr('style', 'background-image: url(../../../Img/Btn/Save.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
+    }
     else
         $("#Btn_Save").attr('style', 'background-image: url(../../../Img/Btn/Save.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 6px;');
+
 
     if ($("#Btn_Delete").height() > 25)
         $("#Btn_Delete").attr('style', 'background-image: url(../../../Img/Btn/Delete.png); background-repeat: no-repeat; background-size: 14px 14px; background-position: 6px 8px;');
@@ -98,22 +100,35 @@ function AddBtnIcon() {
     else {
         $("#Btn_New").attr('style', 'background-image: url(../../../Img/Btn/New.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 6px;');
         $("#Btn_New").attr('height', 50);
-    }
+    }*/
+
+    $("#Btn_Save").addClass("cc-btn-tab btn-save");
+    $("#Btn_Batch").addClass("cc-btn-tab btn-batch");
+    $("#Btn_Delete").addClass("cc-btn-tab btn-delete");
+    $("#Btn_Back").addClass("cc-btn-tab btn-back");
+    $("#Btn_Imp").addClass("cc-btn-tab btn-imp");
+    $("#Btn_Exp").addClass("cc-btn-tab btn-exp");
+    $("#Btn_Help").addClass("cc-btn-tab btn-hlep");
+    $("#Btn_Advanced").addClass("cc-btn-tab btn-advanced");
+    $("#Btn_New").addClass("cc-btn-tab btn-new");
 }
 
 style = ''
 //动态添加新风格  
-function SetNewCSS() {
+function SetCSS() {
+
+    //处理 ToolBar.
     //body下添加一个父Div
     var div = document.createElement('div');
     $(div).attr('class', 'cs-content-box');
     $('#bar').wrap(div);
+
     $('fieldset').wrapAll(div);
     //帮助ul风格
     div = document.createElement('div');
     $(div).attr('class', 'cs-help');
     var ulID = $('ul').attr('id');
-    if (ulID!="ul1")
+    if (ulID != "ul1")
         $('ul').wrap(div);
 
     $.each($("legend"), function (i, obj) {
@@ -170,7 +185,6 @@ function HelpDiv() {
             this.css('display', 'none');
 
             alert(this.id);
-
 
         }
     });
@@ -286,6 +300,78 @@ function LoadCodeMirror(id) {
         theme: "eclipse"
     });
 
+}
+
+//显示表单的字段, 用于拼写SQL.
+function ShowFrmFields(divID) {
+
+    var frmID = GetQueryString("FK_MapData");
+    if (frmID == null)
+        frmID = GetQueryString("FrmID");
+
+    if (frmID == null)
+        return;
+
+    if (divID == undefined)
+        divID = "FrmFileds";
+
+    var div = $("#" + divID);
+    if (div.length == 0)
+        return;
+
+    var mapAttrs = new Entities("BP.Sys.MapAttrs");
+    mapAttrs.Retrieve("FK_MapData", frmID, "GroupID,Idx");
+
+    var html = "";
+    html + "表单字段:";
+    html += "<table>";
+    html += "<caption>表单字段</caption>";
+
+    html += "<tr>";
+    html += "<th># </th>";
+    html += "<th>名称</th>";
+    html += "<th>字段</th>";
+    html += "<th>类型</th>";
+    html += "</tr>";
+
+    var idx = 0;
+    for (var i = 0; i < mapAttrs.length; i++) {
+        var en = mapAttrs[i];
+
+        if (en.MyDataType >= 8)
+            continue;
+
+        if (en.KeyOfEn == 'OID' || en.KeyOfEn == 'Rec' || en.KeyOfEn == 'FID' || en.KeyOfEn == 'RefPK')
+            continue;
+
+        idx++;
+
+        html += "<tr>";
+        html += "<td>" + idx + "</td>";
+        html += "<td>" + en.Name + "</td>";
+        html += "<td>" + en.KeyOfEn + "</td>";
+        html += "<td>" + GetDBType(en.MyDataType) + "</td>";
+        html += "</tr>";
+    }
+    html += "</table>";
+    div.html(html);
+
+    function GetDBType(type) {
+        if (type == 1)
+            return "String";
+        if (type == 2 || type == 3 || type == 4)
+            return "数值";
+
+        if (type == 6)
+            return "日期";
+
+        if (type == 7)
+            return "日期时间";
+
+        if (type == 8)
+            return "金额";
+        return "未知";
+    }
 }
 
 

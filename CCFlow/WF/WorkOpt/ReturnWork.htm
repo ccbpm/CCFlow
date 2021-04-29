@@ -62,6 +62,8 @@
 
         // ?
         var isFrameCross = GetQueryString("isFrameCross");
+        isFrameCross = isFrameCross == null || isFrameCross == undefined ? 0 : isFrameCross;
+
 
         var _ReturnWin_IsBackTracking_Selected = false;
         $(function () {

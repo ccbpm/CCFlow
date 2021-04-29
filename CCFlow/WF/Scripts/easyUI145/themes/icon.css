@@ -1,4 +1,5 @@
-﻿.icon-blank{
+
+.icon-blank{
 	background:url('icons/blank.gif') no-repeat center center;
 }
 .icon-new{
@@ -353,3 +354,6 @@
 {
     background: url('../../../Admin/CCFormDesigner/Img/telephone.png') no-repeat;
 }
+.icon-edit::before{content: '\e657';}
+.icon-property::before{content: '\e620';}
+.icon-save::before{content: '\e647';}

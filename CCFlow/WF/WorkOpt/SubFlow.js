@@ -49,7 +49,7 @@ function SubFlow_Init(node) {
 
     var subFlowGuids = $.grep(subFlows, function (subFlow) {
 
-        return subFlow.IsSubFlowGuide == 1;
+        return subFlow.SubFlowStartModel !=0;
     });
     //表示存在批量发起子流程
     if (subFlowGuids.length != 0) {
@@ -66,7 +66,7 @@ function ShowBtnListSubFlow(subFlows, fsf, node, workID, pworkID, flowNo, nodeID
         var subFlow = subFlows[i];
 
         //如果子流程为启动模式
-        if (fsf.SFSta == FrmSubFlowSta.Enable && GetQueryString("DoType") != "View") {
+        /*if (fsf.SFSta == FrmSubFlowSta.Enable && GetQueryString("DoType") != "View") {
             //增加启动按钮
             if (subFlow.SubFlowModel == 0 || subFlow.SubFlowModel == null) { //下级子流程.
                 _Html += "<div style='text-align:left'><input type='button' value='会签单位' onclick=\"javascript:SelectOpenIt(0,'" + subFlow.MyPK + "','" + subFlow.SubFlowNo + "'," + workID + "," + nodeID + ",'" + flowNo + "'," + GetQueryString("FID") + ")\"  /></div>";
@@ -86,11 +86,11 @@ function ShowBtnListSubFlow(subFlows, fsf, node, workID, pworkID, flowNo, nodeID
                     _Html += "<div style='text-align:left'><input type='button' value='会签单位' onclick=\"javascript:SelectOpenIt(1,'" + subFlow.MyPK + "','" + subFlow.SubFlowNo + "'," + gwf.PWorkID + "," + gwf.PNodeID + ",'" + gwf.PFlowNo + "'," + gwf.PFID + "," + workID + "," + nodeID + ",'" + flowNo + "')\"  /></div>";
                 }
             }
-        }
+        }*/
         //} else {
         //    _Html += "<div style='float:left'><span>" + subFlow.SubFlowName + "</span></div>";
         //}
-
+        _Html += "<div>" + subFlow.SubFlowName + "</div>";
         var gwfs = new Entities("BP.WF.GenerWorkFlows");
         if (fsf.SFShowCtrl == SFShowCtrl.All)
             gwfs.Retrieve("PWorkID", pworkID, "FK_Flow", subFlow.SubFlowNo, "WFState"); //流程.          
@@ -105,12 +105,12 @@ function ShowBtnListSubFlow(subFlows, fsf, node, workID, pworkID, flowNo, nodeID
                 _Html += "<div style='line-height: 30px;padding-left: 6px;' id='" + item.WorkID + "'>" + GetPara(item.AtPara, "SubFlowGuideEnNameFiled") + "<span class='glyphicon glyphicon-remove' style='margin-left:3px' onclick='DeleteSubFlowDraf(" + item.WorkID + ",\"" + item.FK_Flow + "\")'></span></div>";
                 continue;
             }
-            _Html += "</div>";
-
+           
             var url = "./MyView.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "&IsCheckGuide=1&Frms=" + item.Paras_Frms + "&FK_Node=" + item.FK_Node + "&PNodeID=" + item.PNodeID + "&PWorkID=" + item.PWorkID;
             _Html += "<div style='line-height: 30px;padding-left: 6px;' id='" + item.WorkID + "'>" + item.Title + "<span class='glyphicon glyphicon-folder-open' style='margin-left:3px' onclick='OpenIt(\"" + url + "\")'></span></div>";
 
         }
+        _Html += "</div>";
 
     }
     return _Html;
@@ -274,66 +274,6 @@ function ShowTableSubFlow(subFlows, sf, node, workID, pworkID, flowNo, nodeID) {
     _Html += "</table>";
     return _Html;
 
-}
-
-
-//弹出打开选择发起子流程的前置导航
-function SelectOpenIt(IsStartSameLevelFlow, subFlowMyPK, fk_flow, pworkID, pnodeID, pflowNo, pfid, slworkid, slnodeID, slFlow) {
-
-    var W = document.body.clientWidth - 340;
-    var H = document.body.clientHeight - 340;
-    var url = "./WorkOpt/SubFlowGuid.htm?SubFlowMyPK=" + subFlowMyPK + "&PWorkID=" + pworkID + "&FK_Flow=" + fk_flow;
-    OpenBootStrapModal(url, "eudlgframe", "选择", W, H,
-        "icon-edit", true, function () {
-            var iframe = document.getElementById("eudlgframe");
-            if (iframe) {
-                var selectItems = iframe.contentWindow.Btn_OK();
-                var _Html = "";
-                var selectNos = "";
-                if (selectItems != null && $.isArray(selectItems)) {
-                    $.each(selectItems, function (i, item) {
-
-                        selectNos += item.No + "@" + item.Name + ",";
-                    });
-
-
-                    //处理发起的流程
-                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-                    handler.AddPara("IsStartSameLevelFlow", IsStartSameLevelFlow);
-                    handler.AddPara("FK_Flow", fk_flow); //子流程的flowNo
-                    handler.AddPara("PWorkID", pworkID); //当前流程的WorkID.
-                    handler.AddPara("PNodeID", pnodeID); //当前节点的
-                    handler.AddPara("PFlowNo", pflowNo); // 当前流程.
-                    handler.AddPara("PFID", pfid);
-                    handler.AddPara("SLWorkID", slworkid); //同级的workid
-                    handler.AddPara("SLNodeID", slnodeID); //同级的workid
-                    handler.AddPara("SLFlow", slFlow);
-                    handler.AddPara("SelectNos", selectNos); //选择的实体编号，名称.
-                    handler.AddPara("SubFlowMyPK", subFlowMyPK);  //
-
-                    var data = handler.DoMethodReturnString("SubFlowGuid_Save");
-                    if (data.indexOf("err@") != -1) {
-                        alert(data);
-                        return;
-                    }
-                    data = JSON.parse(data);
-                    for (var j = 0; j < data.length; j++) {
-                        var item = data[j];
-                        if (item.WFState == 1) {
-                            //只显示标题
-                            _Html += "<div style='line-height: 30px;padding-left: 6px;' id='" + item.WorkID + "'>" + GetPara(item.AtPara, "SubFlowGuideEnNameFiled") + "<span class='glyphicon glyphicon-remove' style='margin-left:3px' onclick='DeleteSubFlowDraf(" + item.WorkID + ",\"" + item.FK_Flow + "\")'></span></div>";
-                            continue;
-                        }
-                        _Html += "</div>";
-
-                    }
-                    $("#WFState_" + fk_flow).html(_Html);
-                }
-            }
-
-        }, null, function () {
-
-        });
 }
 
 //删除子流程

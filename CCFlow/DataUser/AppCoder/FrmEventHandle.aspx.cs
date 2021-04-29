@@ -1,4 +1,15 @@
 ﻿using System;
+using System.Data;
+using System.Collections.Generic;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using BP.DA;
+using BP.Sys;
+using BP.Port;
+using BP.En;
+using BP.WF;
+using BP.Web;
 
 public partial class DataUser_AppCoder_FrmEventHandle : System.Web.UI.Page
 {
@@ -98,8 +109,8 @@ public partial class DataUser_AppCoder_FrmEventHandle : System.Web.UI.Page
             //string rec = en.GetValStrByKey("Rec");
 
             ////访问数据库案例。
-            //int result = DBAccess.RunSQL("DELETE FROM  WF_Emp WHERE 1=2 ");
-            //DataTable dt = DBAccess.RunSQLReturnTable("SELECT * FROM WF_Emp");
+            //int result = BP.DA.DBAccess.RunSQL("DELETE FROM  WF_Emp WHERE 1=2 ");
+            //DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_Emp");
         }
         #endregion 当表单保存后.
     }

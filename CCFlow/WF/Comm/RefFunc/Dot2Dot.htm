@@ -10,8 +10,10 @@
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
-
-
+    <!-- 自己的系统风格统一. -->
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+   
     <script type="text/javascript">
 
         var selectedEles = null;
@@ -89,7 +91,7 @@
             html += "</div>";
 
             html += "<div style='float:left'>";
-            html += "<input type=text value='" + KeyVal + "'id='Search_Key' placeholder='输入编号或者名称'/><input type=button value='查询' onclick='Search();'  /><input type=button value='保存' onclick='Save()' />";
+            html += "<input type=text value='" + KeyVal + "'id='Search_Key' placeholder='输入编号或者名称'/><input type=button value='查询' onclick='Search();'  /><input type=button value='保存' onclick='Save()' class='cc-btn-tab'/>";
             html += "</div>";
 
             html += "</th>";
@@ -180,7 +182,7 @@
             html += "</div>";
 
             html += "<div style='float:left'>";
-            html += "<input type=button value='保存' onclick='Save();' id='save' />";
+            html += "<input type=button value='保存' onclick='Save();' id='save' class='cc-btn-tab'/>";
             html += "</div>";
 
             html += "</th>";

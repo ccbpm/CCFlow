@@ -4,7 +4,6 @@ using System.Collections;
 using System.Web;
 using System.Data;
 using System.Web.Services;
-using BP.DA;
 
 /// <summary>
 /// 此接口为程序员二次开发使用,在阅读代码前请注意如下事项.
@@ -41,7 +40,7 @@ namespace ccbpm
             if (BP.Web.WebUser.No != userNo)
                 BP.WF.Dev2Interface.Port_LoginBySID(sid);
 
-            flowNo =DataType.ParseStringOnlyIntNumber(flowNo);   //规避注入风险，added by liuxc
+            flowNo = BP.DA.DataType.ParseStringOnlyIntNumber(flowNo);   //规避注入风险，added by liuxc
 
             //创建WorkID,并返回.
             return BP.WF.Dev2Interface.Node_CreateBlankWork(flowNo, null, null, userNo, null);
@@ -64,7 +63,7 @@ namespace ccbpm
             if (BP.Web.WebUser.No != userNo)
                 BP.WF.Dev2Interface.Port_LoginBySID(sid);
 
-           AtPara ap = new AtPara(paras);
+            BP.DA.AtPara ap = new BP.DA.AtPara(paras);
 
             BP.WF.SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(flowNo, workid, ap.HisHT, null, toNodeID, toEmps);
             return objs.ToMsgOfSpecText(); //输出特殊的格式，让接受者解析.
@@ -112,7 +111,7 @@ namespace ccbpm
             if (BP.Web.WebUser.No != userNo)
                 BP.WF.Dev2Interface.Port_LoginBySID(sid);
 
-            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(userNo);
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable();
             return BP.Tools.Json.ToJson(dt);
         }
         #endregion

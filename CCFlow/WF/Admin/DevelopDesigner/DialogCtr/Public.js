@@ -136,7 +136,6 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr,uicontrolT
 
     if (dataType == "FlowBBS")
         _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='text' style='width:98%' placeholder='评论组件'/>";
-
     if (dataType == "GovDocFile")
         _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='component' style='width:98%' placeholder='公文正文组件'/>";
 

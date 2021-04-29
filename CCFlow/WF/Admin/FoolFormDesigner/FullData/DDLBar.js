@@ -7,15 +7,26 @@ function InitBar(optionKey) {
 
     html += "<option value='Main' >填充主表</option>";
     html += "<option value='Dtls' >填充从表</option>";
-    html += "<option value='DDLs' >填充下拉框</option>";
+    if (extType != "PageLoadFull")
+        html += "<option value='DDLs' >填充下拉框</option>";
     html += "</select >";
 
+
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-    html += "<input type='button' value='返回' onclick='Back()' id='Btn_Back' title='' />"
-    html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";
+    html += "<input type='button' value='返回' onclick='Back()' id='Btn_Back' title='' />";
+    html += "<input  id='Btn_Help' type=button onclick='EtcDBFull()' value='多数据源填充(列/字段)' />";
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
+}
+function DBTypeChange() {
+
+    var val = $("#DDL_DBType").val();
+    if (val == 0) {
+        $("#DBSrc").show();
+    } else {
+        $("#DBSrc").hide();
+    }
 }
 
 
@@ -26,7 +37,7 @@ function HelpOnline() {
 
 function Back() {
 
-//    var myPK = GetQueryString('MyPK');
+    //    var myPK = GetQueryString('MyPK');
     var refPK = GetQueryString("RefPK");
     //    var keyOfEn = refPK.split("_")[2];
     var extType = GetQueryString("ExtType");
@@ -41,7 +52,10 @@ function Back() {
     if (refPK.indexOf('Pop') == 0)
         var url = '../Pop/Default.htm?FK_MapData=' + GetQueryString('FK_MapData') + "&KeyOfEn=" + GetQueryString("KeyOfEn");
 
-  
+    if (refPK.indexOf('PageLoadFull') == 0)
+        var url = '../MapExt/PageLoadFull.htm?FK_MapData=' + GetQueryString('FK_MapData');
+
+
     window.location.href = url;
     return;
 }
@@ -59,7 +73,7 @@ function changeOption() {
 
     var url = GetUrl(optionKey);
 
-    window.location.href = url + "?RefPK=" + refPK + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + GetQueryString('KeyOfEn');
+    window.location.href = url + "?RefPK=" + refPK + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + GetQueryString('KeyOfEn') + "&ExtType=" + GetQueryString("ExtType");
 }
 
 function GetUrl(popModel) {

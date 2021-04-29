@@ -11,16 +11,13 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-    <script src="../Admin.js"></script>
-    <style>
-        #Btn_Save {
-            background-image: url(../../Img/Btn/Save.png) !important;
-        }
 
-        #Btn_Back {
-            background-image: url(../../Img/Btn/Back.png) !important;
-        }
-    </style>
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <script src="../Admin.js"></script>
+  
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
@@ -93,6 +90,7 @@
             if (CHWayOfTimeRole == 0) {
                 var TimeLimit = $("#TB_TimeLimit").val();
                 var TimeLimitHH = $("#TBPara_TimeLimitHH").val();
+                var TimeLimitMM = $("#TBPara_TimeLimitMM").val();
                 if (isNaN(TimeLimit) || (TimeLimit % 1 !== 0)) {
                     alert("天数请输入整数！");
                     return;
@@ -101,6 +99,11 @@
                     alert("小时请输入整数！");
                     return;
                 }
+                if (isNaN(TimeLimitMM) || (TimeLimitMM % 1 !== 0)) {
+                    alert("分钟请输入整数！");
+                    return;
+                }
+
             }
             node.SetPara("CHWayOfTimeRole", CHWayOfTimeRole); //时间点考核方式
 
@@ -127,98 +130,101 @@
     </script>
 </head>
 <body>
-    <form id="cc">
-        <div style="right:30px; position:absolute; z-index:100; ">
-            <input id="Btn_Save" type="button" value="保存" onclick="Save()" />
-            <input id="Btn_Back" type="button" value="返回" onclick="Back()" />
+    <div class="container-full">
+
+        <div id="titleH4" class="attrnode-bar-header">
+            <span class="pull-right">
+                <button id="Btn_Save" class="cc-btn-tab btn-new" onclick="Save()">保存</button>
+                <button id="Btn_Back" class="cc-btn-tab btn-hlep" onclick="Back()">返回</button>
+            </span>
+            <strong>设置按照时间点的考核方式 </strong>
         </div>
-        <table style="width: 100%;">
-            <caption> 设置按照时间点的考核方式</caption>
-            
-            <tr>
-                <td>
-                    <fieldset>
-                        <legend>
-                            <input type="radio" value="0" id="RB_CHWayOfTimeRole_0" name="RB_CHWayOfTimeRole" />
-                            <label for="RB_CHWayOfTimeRole_0">按时效考核</label>
-                        </legend>
-                        <!-- *********************************8  按时效考核 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  -->
+        <form id="cc">           
+            <table style="width: 100%;">
+               
+                <tr>
+                    <td>
+                        <fieldset>
+                            <legend>
+                                <input type="radio" value="0" id="RB_CHWayOfTimeRole_0" name="RB_CHWayOfTimeRole" />
+                                <label for="RB_CHWayOfTimeRole_0">按时效考核</label>
+                            </legend>
+                            <!-- *********************************8  按时效考核 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  -->
 
 
-                        <table style="width: 100%;">
-                            <tr>
-                                <td nowarp="true">
-                                    限期完成时限：
-                                </td>
-                                <td>
-                                    <input type="text" id="TB_TimeLimit" name="TB_TimeLimit" style="width: 60px;" min="0" onblur="testInt(this)" />天,
-                                </td>
-                                <td>
-                                    <input type="text" id="TBPara_TimeLimitHH" name="TBPara_TimeLimitHH" style="width: 60px;" min="0" onblur="testInt(this)" />小时,
-                                </td>
-                                <!--<td style="color: Gray">
-                                <input type="text" id="TBPara_TimeLimitMM" name="TBPara_TimeLimitMM" style="width: 30px;" />分钟
-                            </td>-->
-                            </tr>
-                            <tr>
-                                <td>
-                                    节假日
-                                </td>
-                                <td>
-                                    <select name="DDL_TWay" id="DDL_TWay">
-                                    </select>
-                                </td>
-                                <td>
-                                    <a href="javascript:WinOpen('../../Comm/Sys/Holiday.htm');">节假日维护</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4">
-                                    说明: WF_CH 这个表用于存储时效考核数据,您可以仔细研究该表的结构并做想用的考核数据的使用.
-                                </td>
-                            </tr>
-                        </table>
+                            <table style="width: 100%;">
+                                <tr>
+                                    <td nowarp="true">
+                                        限期完成时限：
+                                    </td>
+                                    <td colspan="2">
+                                        <input type="text" id="TB_TimeLimit" name="TB_TimeLimit" style="width: 60px;border: none;border-bottom: thin solid #827c7ccc;border-radius: 0px;" min="0" onblur="testInt(this)" />天,
 
-                    </fieldset>
+                                        <input type="text" id="TBPara_TimeLimitHH" name="TBPara_TimeLimitHH" style="width: 60px;border: none;border-bottom: thin solid #827c7ccc;border-radius: 0px;" min="0" onblur="testInt(this)" />小时,
+
+                                        <input type="text" id="TBPara_TimeLimitMM" name="TBPara_TimeLimitMM" style="width: 60px;border: none;border-bottom: thin solid #827c7ccc;border-radius: 0px;" onblur="testInt(this)" />分钟
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        节假日
+                                    </td>
+                                    <td>
+                                        <select name="DDL_TWay" id="DDL_TWay">
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <a href="javascript:WinOpen('../../Comm/Sys/Holiday.htm');">节假日维护</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        说明: WF_CH 这个表用于存储时效考核数据,您可以仔细研究该表的结构并做想用的考核数据的使用.
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </fieldset>
 
 
-                    <fieldset>
-                        <legend>
-                            <input type="radio" value="1" id="RB_CHWayOfTimeRole_1" name="RB_CHWayOfTimeRole" />
-                            <label for="RB_CHWayOfTimeRole_1">
-                                按表单的表单字段计算.
-                            </label>
-                        </legend>
+                        <fieldset>
+                            <legend>
+                                <input type="radio" value="1" id="RB_CHWayOfTimeRole_1" name="RB_CHWayOfTimeRole" />
+                                <label for="RB_CHWayOfTimeRole_1">
+                                    按表单的表单字段计算.
+                                </label>
+                            </legend>
 
 
-                        请选择日期字段:
+                            请选择日期字段:
 
-                        <select id="DDL_Fields">
-                            <option value="0">请选择</option>
-                        </select>
+                            <select id="DDL_Fields">
+                                <option value="0">请选择</option>
+                            </select>
 
-                        <ul>
-                            <li style="color: Gray"> 选择表单中的日期时间字段来计算。</li>
-                        </ul>
-                    </fieldset>
-                    <!--<fieldset>
-                    <legend>
-                        <input type="radio" value="2" id="RB_CHWayOfTimeRole_2" name="RB_CHWayOfTimeRole">
-                        <label for="RB_CHWayOfTimeRole_2">
-                            流转自定义.
-                        </label>
-                    </legend>
-                    <ul style="color: Gray">
-                        <li>启用流转自定义时间点考核，则按照流转自定义设置的时间来计算节点完成时间。</li>
+                            <ul>
+                                <li style="color: Gray"> 选择表单中的日期时间字段来计算。</li>
+                            </ul>
+                        </fieldset>
+                        <!--<fieldset>
+                            <legend>
+                                <input type="radio" value="2" id="RB_CHWayOfTimeRole_2" name="RB_CHWayOfTimeRole">
+                                <label for="RB_CHWayOfTimeRole_2">
+                                    流转自定义.
+                                </label>
+                            </legend>
+                            <ul style="color: Gray">
+                                <li>启用流转自定义时间点考核，则按照流转自定义设置的时间来计算节点完成时间。</li>
 
-                    </ul>
-                </fieldset>-->
+                            </ul>
+                        </fieldset>-->
 
 
 
-                </td>
-            </tr>
-        </table>
-    </form>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
 </body>
 </html>

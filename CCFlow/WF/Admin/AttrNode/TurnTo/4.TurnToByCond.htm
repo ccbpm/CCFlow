@@ -9,6 +9,10 @@
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+    <!-- 自己的系统风格统一end -->
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
@@ -18,7 +22,7 @@
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
-                InitBar(TurnToDeal.TurnToByCond);
+            InitBar(TurnToDeal.TurnToByCond);
         });
         function Save() {
             var nodeID = GetQueryString("FK_Node");
@@ -31,25 +35,20 @@
     </script>
 </head>
 <body>
-    <div id="bar">
 
-    </div>
     <form id="cc">
-        <!--<div id="bar" class="cs-tr cs-bar">
-            <label style="float:left;font-size:15px;font-weight:bolder;padding-top:10px;">发送后转向</label>
-            <input type="button" ID="Btn_Save" runat="server" value="保存" onclick="Btn_Save_Click()" />
-        </div>-->
+        <div id="bar">
+        </div>
         <fieldset>
             <legend>
                 <label for="RB_TurnToDeal_3"> 按照设置的条件转向 </label>
             </legend>
 
-            <ul style="color: Gray">
+            <ul>
                 <li>根据设置的方向条件自动转向</li>
             </ul>
         </fieldset>
 
     </form>
-
 </body>
 </html>

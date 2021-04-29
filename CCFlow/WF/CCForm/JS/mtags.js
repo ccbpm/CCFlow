@@ -1,7 +1,7 @@
 ﻿(function ($) {
-	if ("undefined" == typeof IsPopEnableSelfInput) {
+	/*if ("undefined" == typeof IsPopEnableSelfInput) {
 		IsPopEnableSelfInput = false;
-	} 
+	} */
 	function onUnselect(target, record) {
 		var opts = getOptions(target);
 		opts.onUnselect.call("", record);
@@ -31,7 +31,7 @@
 	function append(target, datas, remove) {
 		var opts = getOptions(target);
 		var container;
-		if (IsPopEnableSelfInput == false)
+		if (opts.IsEnter == false)
 			container = $(target).find(".ccflow-input-span-container");
 		else
 			container = $(target).find(".ccflow-input-span-container-span");
@@ -63,7 +63,7 @@
 	}
 
 	function clear(target) {
-		if (IsPopEnableSelfInput == false)
+		if (opts.IsEnter == false)
 			$(target).find(".ccflow-input-span-container span").remove();
 		else
 			$(target).find(".ccflow-input-span-container-span span").remove();
@@ -77,7 +77,7 @@
 		var opts = getOptions(target);
 		var textField = opts.textField;
 		var text = [];
-		if (IsPopEnableSelfInput == false)
+		if (opts.IsEnter == false)
 			$(target).find(".ccflow-input-span-container span").each(function () {
 				text.push($(this).data()[textField]);
 			});
@@ -92,7 +92,7 @@
 		var opts = getOptions(target);
 		var valueField = opts.valueField;
 		var text = [];
-		if (IsPopEnableSelfInput == false)
+		if (opts.IsEnter == false)
 			$(target).find(".ccflow-input-span-container span").each(function () {
 				text.push($(this).data()[valueField]);
 			});
@@ -109,7 +109,8 @@
 
 	function contains(target, data, valueField) {
 		var flag = false;
-		if (IsPopEnableSelfInput == false)
+		var opts = getOptions(target);
+		if (opts.IsEnter == false)
 			$(target).find(".ccflow-input-span-container span").each(function () {
 				if (data[valueField] == $(this).data()[valueField]) {
 					flag = true;
@@ -129,18 +130,23 @@
 	function create(target) {
 		var opts = getOptions(target);
 		var html = "";
-		html += '<div class="main-container">';
-		if (IsPopEnableSelfInput == false) {
-			html += '<div class="ccflow-input-span-container">';
+		if (opts.IsEnter == true) {
+			html += '<div style="margin-bottom:6px"><input type = "text" id = "TB_InputAuto_' + opts.KeyOfEn + '" autocomplete = "off"  style = "flex-grow: 1;width: 80%;border: none;border-bottom:1px solid #ccc !important;outline: none;padding: 0;color: #666;font-size: 14px;appearance: none;height: 28px;background-color: transparent;" />';
+			html += '<button type="button" class="el-button" id="' + target.id + '_Button" ><span>' + opts.Title + '</span></button></div>';
+		}
+		html += '<div class="main-container" >';
+		if (opts.IsEnter == false) {
+			html += '<div class="ccflow-input-span-container" >';
             html += '<div id="stuff" placeholder="请双击选择" style="display: inline; border-left: 1px solid white; width: 1px;"></div>';
 		} else {
-			html += '<div class="ccflow-input-span-container" style="display: flex;flex-wrap: wrap;">';
+			html += '<div class="ccflow-input-span-container" style="display: flex;flex-wrap: wrap;border:none">';
 			html += '<div id="stuff" style="display: inline; border-left: 1px solid white; width: 1px;"></div>';
 			html += '<span class="ccflow-input-span-container-span" style="display: contents;"></span>';
-            html += '<input type = "text" id = "TB_InputAuto_' + opts.KeyOfEn +'" placeholder="请双击选择" autocomplete = "off"  style = "flex-grow: 1;width: 0.0961538%;max-width: 198px;border: none;outline: none;padding: 0;color: #666;font-size: 14px;appearance: none;height: 28px;background-color: transparent;" >';
+			
         }
 		html += '</div>';
 		html += '</div>';
+		
 		$(target).html(html);
 		$("#TB_InputAuto_" + opts.KeyOfEn).on('keypress', function (event) {
 			//回车事件
@@ -233,7 +239,9 @@
 		"KeyOfEn": "KeyOfEn",
 		"RefPKVal":"RefPKVal",
 		"valueField" : "No",
-		"textField" : "Name",
+		"textField": "Name",
+		"IsEnter": false,
+		"Title":"选择",
 		"onUnselect" : function (record) {
 		}
 	};

@@ -30,20 +30,182 @@
         $(function () {
             var subFlowMyPK = GetQueryString("SubFlowMyPK");
             subFlowGuid = new Entity("BP.WF.Template.SubFlowHandGuide", subFlowMyPK);
-            if (subFlowGuid.SubFlowGuideSQL == "") {
-                alert("请配置启动子流程的前置导航SQL语句");
+            if (subFlowGuid.SubFlowGuideSQL == null || subFlowGuid.SubFlowGuideSQL == "") {
+                alert("请配置批量启动子流程的实体数据源");
                 return;
             }
-            if(subFlowGuid.IsTreeConstruct == 1){
-                if(subFlowGuid.SubFlowGuideSQL.indexOf("ParentNo")==-1){
-                    alert("配置的启动子流程的前置导航SQL语句不包含ParentNo,请联系管理员");
+
+            if (subFlowGuid.SubFlowStartModel == 1) {
+                $("#treeDiv").hide();
+                //列表批量启动模式
+                ListSubFlowGuid(subFlowGuid);
+
+            }
+            if (subFlowGuid.SubFlowStartModel == 2) {
+                $("#treeDiv").hide();
+                //分组批量启动模式
+                if (subFlowGuid.SubFlowGuideGroup == null || subFlowGuid.SubFlowGuideGroup == "") {
+                    alert("请配置批量启动子流程的分组数据源")
+                }
+            }
+
+            if (subFlowGuid.SubFlowStartModel == 3) {
+                $("#listDiv").hide();
+                //树结构启动模式
+                if (subFlowGuid.SubFlowGuideSQL.indexOf("ParentNo") == -1) {
+                    alert("配置批量启动子流程的SQL语句不包含ParentNo,请联系管理员");
                     return;
                 }
             }
-            //使用懒加载
-            var sql = subFlowGuid.SubFlowGuideSQL.replace("@ParentNo",subFlowGuid.ParentNo);
+        });
+        /**
+         * 列表结构的解析
+         * @param subFlowGuid
+         */
+        function ListSubFlowGuid(subFlowGuid) {
+            var sql = subFlowGuid.SubFlowGuideSQL;
+            sql = DealExp(sql);
             var dt = DBAccess.RunSQLReturnTable(sql);
-            var jsonTree = findChildren(dt,subFlowGuid.ParentNo);
+            var columns = [];
+            columns.push({
+                field: "_checkbox",
+                checkbox: true,
+                formatter: function (value, row, index) {
+                    if (row.checked) {
+                        return {
+                            "checked": true
+                        }
+                    }
+                }
+
+            });
+            columns.push({
+                field: 'No',
+                title: '编号'
+            });
+            columns.push({
+                field: 'Name',
+                title: '名称'
+            });
+
+            var options = {
+                striped: true,
+                cache: false,
+                strictSearch: true,
+                minimumCountColumns: 2,
+                highlightSelected: true,
+                clickToSelect: true,
+                singleSelect: false,
+                sortable: false,
+                cardView: false,
+                detailView: false,
+                uniqueId: "No",
+                columns: columns
+            };
+            options.onCheck = function (row, element) {
+                loadSelectGrid(row.No);
+
+            };
+            options.onUncheck = function (row, element) {
+                remove(row.Name);
+            };
+            $('#listGrid').bootstrapTable(options);
+            $("#listGrid").bootstrapTable("load", dt);
+        }
+        /**
+         * 分组结构的解析
+         * @param subFlowGuid
+         */
+        function GroupSubFlowGuid(subFlowGuid) {
+            //分组
+            var sql = subFlowGuid.SubFlowGuideGroup;
+            sql = DealExp(sql);
+            var groupdt = DBAccess.RunSQLReturnTable(sql);
+            //数据源
+            sql = subFlowGuid.SubFlowGuideSQL;
+            sql = DealExp(sql);
+            var dt = DBAccess.RunSQLReturnTable(sql);
+            var html = "";
+            //获取分组字段
+            var fieldFK = "", groupPK = "";
+            if(groupdt.length != 0 && dt.length != 0){
+                var idx = 0;
+                for (var obj in groupdt[0]) {
+                    if (idx == 0) {
+                        groupPK = obj;
+                        break;
+                    }
+                    idx++;
+                }
+
+                idx = 0;
+                for (var obj in dt[0]) {
+                    if (idx == 2) {
+                        fieldFK = obj;
+                        break;
+                    }
+                    idx++;
+                }
+            }
+            for (var i = 0; i < groupdt.length; i++) {
+                var group = groupdt[i];
+
+                html += "<tr>";
+                html += "<th colspan=3>";
+                html += "<input type='checkbox'  onclick='CheckAll(this.checked, \"" + group.No + "\");' id='Group_" + group.No + "'  /><label for='Group_" + group.No + "'>" + group.Name + "</label>";
+                html += "</th>";
+                html += "</tr>";
+                var myNum = -1;
+                for (var idx = 0; idx < dt.length; idx++) {                 
+                    if (en[fieldFK] != group[groupPK])
+                        continue;
+
+                    var isHave = false;
+                    
+                    var lab = en.Name;
+                    var checked = "";
+                    if (isHave) {
+                        lab = "<font color=green>" + en.Name + "</font>";
+                        checked = "checked";
+                    }
+
+                    myNum++;
+                    if (myNum == 0)
+                        html += "<tr>";
+                        html += "<td><input type='checkbox' name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' " + checked + " onclick='CheckOrUnCheckRow(this,\""+en.No+"\",\""+en.Name+"\")'/><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+
+                    if (myNum == showSpan - 1) {
+
+                        html += "</tr>";
+                        myNum = -1;
+                    }
+                }
+
+                if (myNum == 0) {
+                    html += "<td colspan=2></td>";
+                    html += "</tr>";
+                }
+
+                if (myNum == 1) {
+                    html += "<td></td>";
+                    html += "</tr>";
+                }
+
+            }
+            $("#listGrid").html(html);
+
+          
+        }
+        /**
+         * 树形结构的解析
+         * @param subFlowGuid
+         */
+        function TreeSubFlowGuid(subFlowGuid) {
+            //使用懒加载
+            var sql = subFlowGuid.SubFlowGuideSQL.replace("@ParentNo", subFlowGuid.ParentNo);
+            sql = DealExp(sql);
+            var dt = DBAccess.RunSQLReturnTable(sql);
+            var jsonTree = findChildren(dt, subFlowGuid.ParentNo);
 
 
             $('#tree').treeview({
@@ -51,18 +213,18 @@
                 showCheckbox: false,   //是否显示复选框
                 highlightSelected: true,    //是否高亮选中
                 nodeIcon: 'glyphicon',
-                emptyIcon: '',    //没有子节点的节点图标
                 multiSelect: false,    //多选
+
                 onNodeChecked: function (event, data) {
 
                 },
                 onNodeSelected: function (event, data) {
 
-                    loadSelectGrid(data.id,data.text);
+                    loadSelectGrid(data.id, data.text);
 
                 },
-                onNodeExpanded: function (event, data){
-                    var url = sql = subFlowGuid.SubFlowGuideSQL.replace("@ParentNo",data.id);
+                onNodeExpanded: function (event, data) {
+                    var url = sql = subFlowGuid.SubFlowGuideSQL.replace("@ParentNo", data.id);
                     var json = DBAccess.RunSQLReturnTable(url);
                     var jsonTree = findChildren(json, data.id);
                     $("#tree").treeview("deleteChildrenNode", data.nodeId);	//删除当前节点下的所有子节点
@@ -76,9 +238,9 @@
             gwfs.Retrieve("PWorkID", GetQueryString("PWorkID"), "FK_Flow", subFlowGuid.SubFlowNo, "WFState", 1);
             $.each(gwfs, function (i, item) {
                 selectedRows.push({
-                    "No": GetPara(item.AtPara,"SubFlowGuideEnNoFiled"),
-                    "Name": GetPara(item.AtPara,"SubFlowGuideEnNameFiled"),
-                    "WorkID":item.WorkID
+                    "No": GetPara(item.AtPara, "SubFlowGuideEnNoFiled"),
+                    "Name": GetPara(item.AtPara, "SubFlowGuideEnNameFiled"),
+                    "WorkID": item.WorkID
                 })
             });
 
@@ -98,18 +260,18 @@
                     field: 'No',
                     title: '编码',
                     visible: false
-                },{
+                }, {
                     field: 'Name',
                     title: '名称'
-                },{
+                }, {
                     field: 'WorkID',
                     title: 'WorkID',
                     visible: false
                 }, {
-                        title: '操作', formatter: function (value, row, index) {
-                            return '<a class="btn btn-danger" href="#" onclick="remove(\'' + row.No + '\','+row.WorkID+')">移除</a>';
-                        }
-                    }]
+                    title: '操作', formatter: function (value, row, index) {
+                        return '<a class="btn btn-danger" href="#" onclick="remove(\'' + row.No + '\',' + row.WorkID + ')">移除</a>';
+                    }
+                }]
             });
             $('#selectGrid').bootstrapTable('hideColumn', 'No');
             var _Html = "<table>";
@@ -131,7 +293,7 @@
             _Html += "</table>";
             $("#showMsg").html(_Html);
 
-        })
+        }
 
         function findChildren(jsonArray, parentNo) {
             var appendToTree = function (treeToAppend, o) {
@@ -199,7 +361,7 @@
             return jsonTree;
         }
 
-        function loadSelectGrid(no,name) {
+        function loadSelectGrid(no, name) {
             if ($.isArray(selectedRows)) {
                 var isHave = false;
                 $.each(selectedRows, function (i, o) {
@@ -209,36 +371,77 @@
                     }
                 });
                 if (isHave == false)
-                    selectedRows.push({ "No": no, "Name": name ,"WorkID":0});
+                    selectedRows.push({ "No": no, "Name": name});
             }
-            $('#selectGrid').bootstrapTable("load", selectedRows);
+            if(subFlowGuid.SubFlowStartModel == 3)
+                $('#selectGrid').bootstrapTable("load", selectedRows);
         }
 
-        function remove(no,workID) {
+        function remove(no) {
             if ($.isArray(selectedRows)) {
                 var isHave = false;
-                var objs= $.grep(selectedRows, function (o) {
+                var objs = $.grep(selectedRows, function (o) {
                     return o.No != no;
                 });
                 selectedRows = objs;
-                //删除对应启用的子流程
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-                handler.AddPara("WorkID", workID);
-                handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
-                var data = handler.DoMethodReturnString("SubFlowGuid_DeleteSubFlowDraf");
-                if (data.indexOf("err@") != -1) {
-                    alert(data);
-                    console.log(data);
-                    return;
-                }
-              
             }
-            $('#selectGrid').bootstrapTable("load", selectedRows);
+            if (subFlowGuid.SubFlowStartModel == 3)
+                $('#selectGrid').bootstrapTable("load", selectedRows);
         }
+
+        //选择与取消选择.
+        function CheckAll(checked, no) {
+
+            $("input[name='" + no + "']").each(function () {
+                this.checked = checked;
+            });
+            var cbs = $("input[type='checkbox']:checked");
+            selectedRows = [];
+            cbs.each(function () {
+                if (this.id.indexOf('CB_') == -1)
+                    return true;
+                selectedRows.push({ No: this.value, Name: $(this).siblings().text() });
+            });
+
+        }
+
+        function CheckOrUnCheckRow(obj, no, name) {
+            if (obj.checked == true) {
+                loadSelectGrid(no, name);
+            } else {
+                remove(no, name);
+            }
+
+
+        }
+
 
         //获取选择的项的NO，Name
         function Btn_OK() {
-            return selectedRows;
+            //发送子流程
+            if (selectedRows.length == 0 || $.isArray(selectedRows) == false) {
+                alert("请选择需要接收子流程的人员列表");
+                return false;
+            }
+            var selectNos = "";
+            $.each(selectedRows, function (i, item) {
+                selectNos += item.No + "@" + item.Name + ",";
+            });
+            //处理发起的流程
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddPara("WorkID", GetQueryString("WorkID")); //当前流程的WorkID.
+            handler.AddPara("FK_Node", GetQueryString("FK_Node")); //当前节点的
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow")); // 当前流程.
+            handler.AddPara("FID", GetQueryString("FID"));
+            handler.AddPara("SelectNos", selectNos); //选择的实体编号，名称.
+            handler.AddPara("SubFlowMyPK", GetQueryString("SubFlowMyPK")); 
+            var data = handler.DoMethodReturnString("SubFlowGuid_Send");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return false;
+            }
+            alert(data);
+            return true;
         }
     </script>
 </head>
@@ -253,16 +456,25 @@
 <body style="overflow-y:hidden">
     <div class="container-fluid" style="overflow:hidden">
         <div class="row row-margin-top">
-            <div class="col-md-6 col-sm-6" style="height:100%">
-                <div id="tree" style="overflow-y:auto;height:500px"></div>
-            </div>
-            <div class="col-md-6 col-sm-6">
-                <div class="row">
-                    <div class="col-md-12">
-                        <table id="selectGrid"></table>
+            <div id="treeDiv">
+                <div class="col-md-6 col-sm-6" style="height:100%">
+                    <div id="tree" style="overflow-y:auto;height:500px"></div>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="selectGrid"></table>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div id="listDiv">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="listGrid"></table>
+                    </div>
+                </div>
+            </div>  
         </div>
     </div>
 </body>

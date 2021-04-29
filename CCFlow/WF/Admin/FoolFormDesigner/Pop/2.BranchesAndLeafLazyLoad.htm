@@ -41,10 +41,8 @@
             //设置按钮是否可以用?
             if (i == 0) {
                 $("#Btn_Delete").hide();
-                $("#Btn_FullData").hide()
-            } else {
-                $("#Btn_Delete").show();
-                $("#Btn_FullData").show();
+                $("#Btn_FullData").hide();
+                $("#Btn_Gener").hide();
             }
         });
         function Save() {
@@ -118,129 +116,138 @@
     <div id="bar">
     </div>
     <form id="cc">
-    <table id="Table1" style="width: 99%;">
-        
-        <tr>
-            <th colspan="2">
-                基本信息
-            </th>
-        </tr>
-        <tr>
-            <td>
-                标题
-            </td>
-            <td>
-                <input type="text" id="TBPara_Title" name="TBPara_Title" style="width: 99%;" />
-                <br />
-                <font color="gray">显示在窗口的文字，比如:关联流水. </font>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                弹窗属性
-            </td>
-            <td>
-                高度:<input type="text" id="TB_H" name="TB_H" style="width: 80px; text-align: right" />
-                宽度:<input type="text" id="TB_W" name="TB_W" style="width: 80px; text-align: right" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                搜索提示
-            </td>
-            <td>
-                <input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width: 99%;" />
-                <br>
-                <font color="gray">显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.</font>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                高级设置
-            </td>
-            <td>
-                数据源类型
-                <select id="DDL_DBType" name="DDL_DBType">
-                    <option value="0">执行SQL</option>
-                    <option value="1">执行url返回JSON</option>
-                    <option value="2">执行CCFromRef.js返回JSON</option>
-                </select>
-                选择类型:
-                <input type="radio" id="RBPara_SelectType_0" name="RBPara_SelectType" value="0" />
-                <label for="RBPara_SelectType_0">
-                    单选</label>
-                <input type="radio" id="RBPara_SelectType_1" name="RBPara_SelectType" value="1" />
-                <label for="RBPara_SelectType_1">
-                    多选</label>
-            </td>
-        </tr>
-        <tr>
-            <th colspan="2">
-                搜索数据源
-            </th>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <textarea id="TB_Tag1" name="TB_Tag1" style="width: 98%; height: 23px;">
-</textarea>
-            </td>
+        <table id="Table1" style="width: 99%;">
+
             <tr>
-                <td colspan="2">
-                    <font color="gray">点击关键字执行搜索返回的数据源,
-                        <br />
-                        比如:/DataUser/Handler.ashx?DoType=SearchEmps&Keyword=@Key @Key是关键字,是搜索的关键字. </font>
+                <th colspan="2">
+                    基本信息
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    标题
+                </td>
+                <td>
+                    <input type="text" id="TBPara_Title" name="TBPara_Title" style="width: 99%;" />
+                    <br />
+                    <font color="gray">显示在窗口的文字，比如:关联流水. </font>
                 </td>
             </tr>
-        </tr>
-        <tr>
-            <th colspan="2">
-                左侧树列表数据源
-            </th>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <textarea id="TB_Tag2" name="TB_Tag2" style="width: 98%; height: 23px;">
-                </textarea>
-                <font color="gray">设置一个可以返回json的数据源该数据源有No,Name,ParentNo三个约定的列.
-                    <br />比如:/DataUser/Handler.ashx?DoType=ReqDepts </front>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                根目录树编号:<input id="TB_Doc" name="TB_Doc" value="0" style="width: 250px;" type="text" />
-                支持ccbpm的表达式,比如:@WebUser.FK_Dept , @FieldName ,@WebUser.OrgNo
-                <!--<font color=gray>对树结构有效</font>-->
-                </input>
-            </td>
-        </tr>
-        <tr>
-            <th colspan="2">
-                右上列表信息数据源(点左边树一个节点查询数据源)
-            </th>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <textarea id="TB_Tag3" name="TB_Tag3" style="width: 98%; height: 23px;">
-                </textarea>
-                <font color="gray">选择右边的树返回的详细信息列表数据源,
+            <tr>
+                <td>
+                    弹窗属性
+                </td>
+                <td>
+                    高度:<input type="text" id="TB_H" name="TB_H" style="width: 80px; text-align: right" />
+                    宽度:<input type="text" id="TB_W" name="TB_W" style="width: 80px; text-align: right" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    搜索提示
+                </td>
+                <td>
+                    <input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width: 99%;" />
                     <br />
-                    比如:/DataUser/Handler.ashx?DoType=ReqEmpsByDeptNo&DeptNo=@Key
-                    <br />
-                    @Key是关键字,是搜索的关键字. </font>
-            </td>
-        </tr>
-        <tr>
-            <th colspan="2">
-                数据列名与中文意思对照
-            </th>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <input type="text" id="TB_Tag" name="TB_Tag" style="width: 99%;" />
-                <font color="gray">该选项可以为空,在右上角的列表里查询或点树树干的数据源出现的列表,需要用中文显示列头. 例如: No=编号,Name=名称,Addr=地址,</font>
-            </td>
-        </tr>
-    </table>
+                    <font color="gray">显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.</font>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    高级设置
+                </td>
+                <td>
+                    数据源类型
+                    <select id="DDL_DBType" name="DDL_DBType">
+                        <option value="0">执行SQL</option>
+                        <option value="1">执行url返回JSON</option>
+                        <option value="2">执行CCFromRef.js返回JSON</option>
+                    </select>
+                    选择类型:
+                    <input type="radio" id="RBPara_SelectType_0" name="RBPara_SelectType" value="0" />
+                    <label for="RBPara_SelectType_0">
+                        单选
+                    </label>
+                    <input type="radio" id="RBPara_SelectType_1" name="RBPara_SelectType" value="1" />
+                    <label for="RBPara_SelectType_1">
+                        多选
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    搜索数据源
+                </th>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <textarea id="TB_Tag1" name="TB_Tag1" style="width: 98%; height: 23px;">
+</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <font color="gray">
+                        点击关键字执行搜索返回的数据源,
+                        <br />
+                        比如:/DataUser/Handler.ashx?DoType=SearchEmps&Keyword=@Key @Key是关键字,是搜索的关键字.
+                    </font>
+                </td>
+            </tr>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    左侧树列表数据源
+                </th>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <textarea id="TB_Tag2" name="TB_Tag2" style="width: 98%; height: 23px;">
+                </textarea>
+                    <font color="gray">
+                        设置一个可以返回json的数据源该数据源有No,Name,ParentNo三个约定的列.
+                        <br />比如:/DataUser/Handler.ashx?DoType=ReqDepts </front>
+                    </font>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    根目录树编号:<input id="TB_Doc" name="TB_Doc" value="0" style="width: 250px;" type="text" />
+                    支持ccbpm的表达式,比如:@WebUser.FK_Dept , @FieldName ,@WebUser.OrgNo
+                    <!--<font color=gray>对树结构有效</font>-->
+                    </input>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    右上列表信息数据源(点左边树一个节点查询数据源)
+                </th>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <textarea id="TB_Tag3" name="TB_Tag3" style="width: 98%; height: 23px;">
+                </textarea>
+                    <font color="gray">
+                        选择右边的树返回的详细信息列表数据源,
+                        <br />
+                        比如:/DataUser/Handler.ashx?DoType=ReqEmpsByDeptNo&DeptNo=@Key
+                        <br />
+                        @Key是关键字,是搜索的关键字.
+                    </font>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    数据列名与中文意思对照
+                </th>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="text" id="TB_Tag" name="TB_Tag" style="width: 99%;" />
+                    <font color="gray">该选项可以为空,在右上角的列表里查询或点树树干的数据源出现的列表,需要用中文显示列头. 例如: No=编号,Name=名称,Addr=地址,</font>
+                </td>
+            </tr>
+        </table>
     </form>
 </body>
 </html>

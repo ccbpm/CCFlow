@@ -267,7 +267,7 @@
 
             var groupItem = groupItems[0];
             var dbTyep = groupItem.CtrlType == "ListSQL" ? 0 : 1;
-            var ifcData = DBAccess.RunDBSrc(groupItem.Val, dbTyep);
+            var ifcData = DBAccess.RunDBSrc(groupItem.Val, dbTyep,mapExt.FK_DBSrc);
             $("#HD_GroupField").val(groupItem.FieldKey);
             $("#groupDiv").append("<a id='all' class='menuGroupSelected' href='javascript:void(0);'>全部</a>");
             var hd_GroupValue = $("<input type='hidden' value='' />");
@@ -367,7 +367,7 @@
                 if (value == null || value == "null") value = "";
                 dbSrc = dbSrc.replace(regC, value);
             });
-            data = DBAccess.RunDBSrc(dbSrc, mapExt.DBType);
+            data = DBAccess.RunDBSrc(dbSrc, mapExt.DBType, mapExt.FK_DBSrc);
 
             $("#jsonDataTable").html("");
             //if (data && data.length > 0) {

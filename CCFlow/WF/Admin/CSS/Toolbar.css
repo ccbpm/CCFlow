@@ -1,0 +1,36 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    background: #eeeeee;
+}
+.toolbar_FoolHeader {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    background: #d0d0d0;
+    height: 50px;
+    line-height: 37px;
+    text-align: center;
+}
+.toolbar_FoolHeader span {
+    color: #fff;
+}
+
+.toolbar_FoolHeader input {
+    float: left;
+    height: 30px;
+    margin-right: 20px;
+    margin-top: 10px;
+    padding: 0 15px;
+    border: none;
+}
+.toolbar_FoolHeader input:hover{
+    background:#134da5;
+    color:#fff;
+    cursor:pointer;
+}
+.ToolBar,.toolbar_FoolHeadercenter {
+    width: 50%;
+    margin: auto;
+}

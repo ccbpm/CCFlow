@@ -1,6 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using BP.DA;
-
+using BP.En;
+using BP.WF;
+using BP.Web;
+using System.Data;
+using System.Text;
 public partial class DataUser_Do : System.Web.UI.Page
 {
     #region 常用变量.
@@ -44,11 +52,11 @@ public partial class DataUser_Do : System.Web.UI.Page
             {
                 case "SetHeJi":
                     string sql = "UPDATE ND101 SET HeJi=(SELECT SUM(XiaoJi) FROM ND101Dtl1 WHERE RefPK=" + this.OID + ") WHERE OID=" + this.OID;
-                    DBAccess.RunSQL(sql);
+                    BP.DA.DBAccess.RunSQL(sql);
                     //把合计转化成大写.
-                    float hj = DBAccess.RunSQLReturnValFloat("SELECT HeJi FROM ND101 WHERE OID=" + this.OID, 0);
-                    sql = "UPDATE ND101 SET DaXie='" + DataType.ParseFloatToCash(hj) + "' WHERE OID=" + this.OID;
-                    DBAccess.RunSQL(sql);
+                    float hj = BP.DA.DBAccess.RunSQLReturnValFloat("SELECT HeJi FROM ND101 WHERE OID=" + this.OID, 0);
+                    sql = "UPDATE ND101 SET DaXie='" + BP.DA.DataType.ParseFloatToCash(hj) + "' WHERE OID=" + this.OID;
+                    BP.DA.DBAccess.RunSQL(sql);
                     break;
                 case "OutOK":
                     /*在这是里处理您的业务过程。*/
@@ -80,11 +88,11 @@ public partial class DataUser_Do : System.Web.UI.Page
             decimal strRows = 0;
 
             string rowsSql = "select *from " + dtlTable + " where RefPK ='" + getworkid + "'";
-            int count = DBAccess.RunSQLReturnCOUNT(rowsSql);
+            int count = BP.DA.DBAccess.RunSQLReturnCOUNT(rowsSql);
             if (!DataType.IsNullOrEmpty(onValue))
             {
                 sqlParas = "select " + DtlColumn + "from " + dtlTable + " where RefPK =" + getworkid + " and " + DtlColumn + "='" + onValue + "'";
-                strRows = DBAccess.RunSQLReturnCOUNT(sqlParas);
+                strRows = BP.DA.DBAccess.RunSQLReturnCOUNT(sqlParas);
                 if (strRows > 0)
                 {
                     Response.Write("false");
@@ -97,7 +105,7 @@ public partial class DataUser_Do : System.Web.UI.Page
             else
             {
                 sqlParas = "select " + DtlColumn + " from " + dtlTable + " where RefPK =" + getworkid + " and  " + DtlColumn + "<>''";
-                strRows = DBAccess.RunSQLReturnCOUNT(sqlParas);
+                strRows = BP.DA.DBAccess.RunSQLReturnCOUNT(sqlParas);
 
                 if (strRows < count)
                 {

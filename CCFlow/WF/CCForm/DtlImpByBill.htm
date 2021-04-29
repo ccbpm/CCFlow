@@ -161,7 +161,7 @@
             dbSrc = dbSrc.replace("@WebUser.FK_DeptNameOfFull", webUser.FK_DeptNameOfFull);
            dbSrc = dbSrc.replace('@WebUser.FK_DeptName', webUser.FK_DeptName);
             dbSrc = dbSrc.replace('@WebUser.FK_Dept', webUser.FK_Dept);
-            data = DBAccess.RunDBSrc(dbSrc, mapExt.DBType);
+            data = DBAccess.RunDBSrc(dbSrc, mapExt.DBType, mapExt.FK_DBSrc);
 
             $("#jsonDataTable").html("");
             if (data && data.length > 0) {

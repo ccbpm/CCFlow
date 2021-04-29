@@ -203,8 +203,10 @@
                 InputKeyWordData();
             });
 
-            if (tableUrl.indexOf("@Key") > -1) {
+            if (tableUrl.toLowerCase().indexOf("@key") > -1) {
                 tableUrl = replaceAll(tableUrl, "@Key", "");
+                tableUrl = replaceAll(tableUrl, "@key", "");
+                tableUrl = replaceAll(tableUrl, "@KEY", "");
             }
 
             InputKeyWordData();

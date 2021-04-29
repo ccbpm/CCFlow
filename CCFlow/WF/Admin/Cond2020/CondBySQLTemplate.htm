@@ -11,17 +11,13 @@
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script src="../Admin.js" type="text/javascript"></script>
 
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <base target="_self" />
-    <style>
-        #Btn_Back {
-            background-image: url(../../Img/Btn/Back.png) !important;
-        }
 
-        #Btn_Save {
-            background-image: url(../../Img/Btn/Save.png) !important;
-        }
-    </style>
     <script type="text/javascript">
 
         function Esc() {
@@ -113,7 +109,7 @@
                 return;
             }
 
-          //  alert(data);
+            //  alert(data);
             Back();
             //$("#Msg").html("<font color=green>" + data + "</font>");
 
@@ -177,55 +173,63 @@
     </script>
 </head>
 <body onkeypress="Esc();">
-    <form id="cc">
-        <div style="right:30px; position:absolute; z-index:100; ">
-                <input id="Btn_Save" type="button" value="保存" onclick="Save()" />
-                <!--<input type="button" value="删除" onclick="Delete()" />-->
-                <input type="button" onclick="Back()" value="返回" id="Btn_Back" />
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <span class="pull-right">
+                <button id="Btn_Save" name="Btn_Save" onclick="Save();">保存</button>
+                <button id="Btn_Back" name="Btn_Back" onclick="Back();">返回</button>
+
+            </span>
+            <strong>方向条件-按照SQl</strong>
         </div>
-        <table style="position:relative;top:10px; margin: 8px; width:100%">
-            <caption>
-                <img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' /> 方向条件-按照SQl
-            </caption>
-            <tr>
-                <td style="width: 20%;">
-                    选择一个SQL模版:
-                </td>
-                <td>
-                    <select id="DDL_Template" name="DDL_Template">
-                    </select>
-                    <!--<textarea rows="4"  style="width:95%;" id="TB_Docs" name="TB_Docs" > </textarea>-->
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    备注(不为空):
-                </td>
-                <td>
-                    <input type="text" value="" id="TB_Note" name="TB_Note" style="width: 95%;" />
-                </td>
-            </tr>
-        </table>
-        
-        <div style="text-align: left">
-            <h4>
-                &nbsp; &nbsp; &nbsp; &nbsp;帮助
-            </h4>
-            <ul>
+        <form id="cc">
+            <!--div style="right:30px; position:absolute; z-index:100; ">
+        <input id="Btn_Save" type="button" value="保存" onclick="Save()" />
+        <<input type="button" value="删除" onclick="Delete()" />>
+        <input type="button" onclick="Back()" value="返回" id="Btn_Back" />
+    </div-->
+            <table class="table">
+
+                <tr>
+                    <td style="width: 20%;">
+                        选择一个SQL模版:
+                    </td>
+                    <td>
+                        <select id="DDL_Template" name="DDL_Template">
+                        </select>
+                        <!--<textarea rows="4"  style="width:95%;" id="TB_Docs" name="TB_Docs" > </textarea>-->
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        备注(不为空):
+                    </td>
+                    <td>
+                        <input type="text" value="" id="TB_Note" name="TB_Note" style="width: 95%;" />
+                    </td>
+                </tr>
+            </table>
+
+            <div style="text-align: left">
+                <h4>
+                    &nbsp; &nbsp; &nbsp; &nbsp;帮助
+                </h4>
                 <ul>
-                    <li>该功能是为了方便业务人员设置个性化的SQL的条件.</li>
-                    <li>开发人员把sql条件设置好，起一个容易识别的中文名字，让流程开发人员方便设置于选择使用，点击这里<a href="javascript:WinOpen('/WF/Comm/Search.htm?EnsName=BP.WF.Template.SQLTemplates&SQLType=0')">执行SQL模版设置</a>.</li>
-                    <li>在文本框里设置一个查询SQL，它返回一行一列。比如: SELECT COUNT(*) AS Num FROM MyTable WHERE NAME='@MyFieldName'。</li>
-                    <li>该SQL参数支持系统的表达式，什么是ccflow的表达式请查看说明书。</li>
-                    <li>当前登录信息变量: @WebUser.No, @WebUser.Name, @WebUser.FK_Dept.</li>
-                    <li>系统就会获取该返回的值把它转化为decimal类型</li>
-                    <li>如果该值大于零，该条件就是成立的否则不成立。</li>
+                   
+                        <li>该功能是为了方便业务人员设置个性化的SQL的条件.</li>
+                        <li>开发人员把sql条件设置好，起一个容易识别的中文名字，让流程开发人员方便设置于选择使用，点击这里<a href="javascript:WinOpen('/WF/Comm/Search.htm?EnsName=BP.WF.Template.SQLTemplates&SQLType=0')">执行SQL模版设置</a>.</li>
+                        <li>在文本框里设置一个查询SQL，它返回一行一列。比如: SELECT COUNT(*) AS Num FROM MyTable WHERE NAME='@MyFieldName'。</li>
+                        <li>该SQL参数支持系统的表达式，什么是ccflow的表达式请查看说明书。</li>
+                        <li>当前登录信息变量: @WebUser.No, @WebUser.Name, @WebUser.FK_Dept.</li>
+                        <li>系统就会获取该返回的值把它转化为decimal类型</li>
+                        <li>如果该值大于零，该条件就是成立的否则不成立。</li>
+                  
                 </ul>
-            </ul>
-        </div>
-    </form>
-    <center>
-        <div id="Msg" />
-    </center>
+            </div>
+        </form>
+        <center>
+            <div id="Msg" />
+        </center>
+    </div>
 </body>
 </html>

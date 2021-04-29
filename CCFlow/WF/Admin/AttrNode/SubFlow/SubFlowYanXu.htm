@@ -5,9 +5,10 @@
     <title>延续子流程</title>
     <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <!--link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" /-->
+
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -16,17 +17,12 @@
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <base target="_self" />
     <script src="../../Admin.js"></script>
-    <style>
-        #Btn_New2 {
-            border: 1px solid #031f5d;
-            background-color: #fff;
-            color: #031f5d;
-            background-image: url(../../../Img/Btn/New.png);
-            background-repeat: no-repeat;
-            background-size: 13px 13px;
-            background-position: 1px 6px;
-        }
-    </style>
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+    <link href="../../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+
     <script type="text/javascript">
         //打开窗体.
         function OpenEasyUiDialogExt(url, title, w, h, isReload) {
@@ -135,59 +131,67 @@
     </script>
 </head>
 <body>
-    <div style="right:30px; position:absolute; z-index:100;top:-4px ">
-        <input id="Btn_New" type="button" value="增加集团子流程" onclick="AddGroup()" />
-        <input id="Btn_New2" type="button" value="增加本组织子流程" onclick="AddOrg()" />
-        <input id="Btn_Help" type="button" value="帮助" onclick="Help()" />
-    </div>
-    <table id="Table1" style="width: 100%">
-        <caption>
-            <img style="margin-bottom:8px;" align="middle" src='../../../Img/Event.png' />
-            延续子流程
-        </caption>
-        <tr>
-            <th>
-                序
-            </th>
-            <th>
-                编号
-            </th>
-            <th>
-                流程名称
-            </th>
-            <th>
-                运行模式
-            </th>
-            <th>
-                状态
-            </th>
-            <th>
-                编辑
-            </th>
-            <th>
-                删除
-            </th>
-            <th>
-                顺序
-            </th>
-        </tr>
-    </table>
-    <br />
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <span class="pull-right">
+                <button id="Btn_New" name="Btn_New" onclick="AddGroup();">增加集团子流程</button>
+                <button id="Btn_New2" class="cc-btn-tab btn-batch" name="Btn_New2" onclick="AddOrg();">增加本组织子流程</button>
+                <button id="Btn_Help" name="Btn_Help" onclick="Help();">帮助</button>
 
-    <div style="position:relative;" id="Msg">
-    </div>
-    <!--
-    <fieldset>
-                    <legend>填写帮助</legend>
-                    <ul>
-                        <li>延续流程就是当前的子流程.</li>
-                        <li>延续流程是子流程的一种,该子流程只能被发起一次.</li>
-                    </ul>
-                </fieldset>-->
+            </span>
+            <strong>
+                延续子流程
+            </strong>
+        </div>
 
-    <fieldset>
-        <legend>运行效果</legend>
-        <img src="SubFlowYanXu-1.png" style="width:70%" />
-    </fieldset>
+        <table id="Table1" class="table" style="width: 100%">          
+            <tr>
+                <th>
+                    序
+                </th>
+                <th>
+                    编号
+                </th>
+                <th>
+                    流程名称
+                </th>
+                <th>
+                    运行模式
+                </th>
+                <th>
+                    状态
+                </th>
+                <th>
+                    编辑
+                </th>
+                <th>
+                    删除
+                </th>
+                <th>
+                    顺序
+                </th>
+            </tr>
+        </table>
+        <br />
+
+        <div style="position:relative;" id="Msg">
+        </div>
+        <!--
+        <fieldset>
+                        <legend>填写帮助</legend>
+                        <ul>
+                            <li>延续流程就是当前的子流程.</li>
+                            <li>延续流程是子流程的一种,该子流程只能被发起一次.</li>
+                        </ul>
+                    </fieldset>-->
+
+        <fieldset id="help">
+            <legend>运行效果</legend>
+
+            <br />
+
+            <img src="SubFlowYanXu-1.png" class="HelpImg" style="width:70%" />
+        </fieldset>
+        </div>
 </body>
 </html>

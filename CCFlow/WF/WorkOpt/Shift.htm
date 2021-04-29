@@ -15,7 +15,7 @@
     <link href="../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
-    <link href="../Comm/JS/layer/layer.css" rel="stylesheet" />
+    <link href="../Scripts/layui/layui/css/modules/layer/default/layer.css" rel="stylesheet" />
     <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script src="../Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script src="../Scripts/layui/layui/lay/modules/layer.js"></script>
     <script src="../../DataUser/JSLibData/CommonShowConfig.js"></script>
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
@@ -82,8 +82,6 @@
 
             $('body').append($(selectEmpModalHtml));
             var ccs_fk_dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
-            if (plant == "JFlow")
-                ccs_fk_dept = $.cookie('FK_Dept');
             if (ccs_fk_dept == null || ccs_fk_dept == '' || ccs_fk_dept == undefined) {
                 var u = new WebUser();
                 ccs_fk_dept = u.FK_Dept;
@@ -115,7 +113,7 @@
 
             var data = handler.DoMethodReturnString("Shift_Save");
             data = data.replace("@null", "");
-            
+
 
             if (window.parent != null && window.parent.WindowCloseReloadPage != null && typeof window.parent.WindowCloseReloadPage === "function") {
                 window.parent.WindowCloseReloadPage(data);
@@ -174,13 +172,14 @@
 <body>
 
     <div style="padding:15px">
-        <p style="margin-bottom:10px;">请选择要转办的人：</p>
+        <p style="margin-bottom:10px;">请选择要移交(转办)的人：</p>
         <div style="width:100%;float:left;">
+            <!--placeholder="请输入人员编号、名称、简拼、全拼."-->
             <input type="text" id="ToEmp" name="ToEmp" value=''
-                   placeholder="请输入人员编号、名称、简拼、全拼."
+                   readonly="true"
                    style="width:80%; margin-right:15px; float:left" class="layui-input" />
             <button id="BtnSelectEmps" type="button" class="layui-btn layui-btn-normal" style="float:left">
-                 选人
+                选人
             </button>
 
         </div>

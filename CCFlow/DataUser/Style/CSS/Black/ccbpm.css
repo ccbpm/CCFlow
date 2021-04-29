@@ -35,24 +35,23 @@ input:hover[type="button"]
 button[type="button"] {
     border: 0; /*background: #4D77A7;*/
     background: #fff;
-    color: #333;
-    font-size: 14px;
-    height:30px;
-    padding: 0 15px;
+    color: #545454;
+    font-size: 12px;
+    padding: 4px 15px;
     margin: 5px 3px 5px 3px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+    border-radius: 3px;
+    border: 1px solid #d2cdcd;
 }
 
 button:hover[type="button"] {
     border: 0; /*background: #4D77A7;*/
-    background: #f5f5f5;
-    font-size: 14px;
-    height:30px;
-    padding: 0 15px;
+    background: #1d7dd4;
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 15px;
     margin: 5px 3px 5px 3px;
-    border-radius: 4px;
-    border: 1px solid #999;
+    border-radius: 3px;
+    border: 1px solid #1d7dd4;
 }
 .form-control[disabled],
 .form-control[readonly],
@@ -116,7 +115,7 @@ select[disabled], input[type=text]:disabled
 /*  table 类型风格 */
 table
 {
-    border: 1px outset #ccc;
+    border: 1px outset #C0C0C0;
     padding: inherit;
     margin: 0;
     border-collapse: collapse;
@@ -129,7 +128,7 @@ table
 {
     background-color: #663300;
     font-size: 12px;
-    border: 1px solid #ccc;
+    border: 1px solid #C2D5E3;
     text-align: center;
     height: 20px;
     line-height: 20px;
@@ -154,7 +153,7 @@ table
 th
 {
     border-width: 1px;
-    border-color: #ccc;
+    border-color: #C2D5E3;
     border-style: solid;
     line-height: 25px;
     color: 0a0a0a;
@@ -197,7 +196,7 @@ td
     color: #333333;
     font-size: 12px;
     border-width: 1px;
-    border-color: #ccc;
+    border-color: #C2D5E3;
 }
 
 
@@ -241,10 +240,10 @@ caption
     font-size: 14px;
     background-position: 12px 6px;
     border-bottom: 1px #CCCCCC solid;
+    text-indent: 1.8em;
     line-height: 30px;
     color: #336699;
     font-weight: bolder;
-    background:#fff;
 }
 
 .TBDoc
@@ -366,7 +365,7 @@ caption
     background-color: #FFFFFF;
     border-bottom-style: double;
     border-bottom-width: 2px;
-    border-bottom-color: #ccc;
+    border-bottom-color: #C0C0C0;
     border-right-style: none;
     border-left-style: none;
 }
@@ -449,13 +448,10 @@ display:block;
 
 input[type=text], input[type=password], select
 {
-    border-radius: 4px;
+    border-radius: 5px;
     border: thin solid #CCCCCC;
-    height:40px;
-    box-sizing:border-box;
-    box-shadow:none;
-    padding-left: 6px;
-    padding-right:6px;
+    margin: 1px 1px;
+    height:28px;
 }
 
 .FDesc
@@ -472,24 +468,29 @@ input[type=text], input[type=password], select
 #contentTable .checkbox{margin-left:3%;}
 
 select {
-    height: 30px;
+    height: 29px;
 }
 
 textarea,iframe[src*="Ath.htm"] {
-    border-radius: 4px !important;
+    margin-top:6px !important;
+    border-radius: 5px !important;
+    /* border: #2884fa 1px solid;
+    margin: 0px 10px;*/
     line-height: 15px !important;
-    padding: 6px;
+    padding-left: 6px !important;
+    margin: 4px 0px !important;
     width:100%;
     text-align: left;
     min-height: 40px;
-    border:solid 1px #ccc;
-   margin:0!important;
-    box-sizing:border-box;
 }
  
 
 #topContentDiv {
     background: #fff;
+    border-radius: 5px;
+    padding: 8px 0px 0px 0px;
+    margin: 8px 15px 15px 15px;
+    border: #EFEFEF 1px solid;
     overflow: auto;
 }
  
@@ -512,26 +513,11 @@ display:none;
 }
 
 .modal-header {
-	background: #f5f5f5;
-	color: #333;
-    padding:5px;
-    margin:0!important;
+    background: #f2f2f2;
+    color: white;
+    height:50px;
 }
 
-.modal-header button{
-    width:32px!important;
-    height:32px!important;
-    border-radius:4px;
-    text-align:center;
-    padding:0!important;
-    border:solid 1px #ddd!important;
-    background-color:#fff!important;
-}
-
-.modal-header button:hover{
-    border:solid 1px #ccc!important;
-    background-color:#f5f5f5!important;
-}
 
 .modal-body {
     border-radius: 20px;
@@ -586,7 +572,7 @@ display:none;
 
 #header {
     height: 50px;
-    font: bold 16px;
+    font: bold 16px "微软雅黑";
     background:rgb(157, 159, 175);
     color: #fff;
     text-align: left;
@@ -612,7 +598,7 @@ display:none;
     font-size: 14px;
     padding: 4px 8px;
     margin: 5px 3px 5px 3px;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor:pointer;
     font-weight: bold;
    /* display:none;*/
@@ -620,7 +606,7 @@ display:none;
 
 #CCForm label {
     font-weight: normal;
-    font-size:14px;
+    font-size:12px;
     margin-bottom:0px;
 }
 .state {
@@ -667,10 +653,7 @@ cursor:pointer;
 .modal-title {
     text-align: left;
     font-size: 16px;
-    color:#000;
-    padding-left:10px;
-    line-height:32px;
-    font-weight:bold;
+    color:#0000007a;
 }
 
 .input-group-addon {
@@ -735,7 +718,7 @@ border:none;
 
 .returnTackHeader {
     height: 50px;
-    font: bold 16px;
+    font: bold 16px "微软雅黑";
     background: rgb(157, 159, 175) !important;
     color: #fff;
     text-align: left;
@@ -862,175 +845,4 @@ body table tr td {
         display: none;
     }
 }
-.form-control{
-    box-shadow:none;
-    padding-left:6px;
-    padding-right:6px;
-}
  
-
-/**新增表格样式设置**/
-#divCCForm table td{
-    padding:6px!important;
-    font-size:16px;
-}
-#ShowTable a{
-    word-wrap: break-word;
-    word-break: normal;
-}
-.modal-footer{
-    padding:6px;
-}
-.modal-footer .btn + .btn{
-    margin:0 6px!important;
-}
-
-#CCForm table th,#CCForm table td{
-    font-size:16px;
-}
-
-/**表单新增样式**/
-
-#CCForm{
-    margin-left:auto;
-    margin-right:auto;
-    font-family:'宋体';
-    box-sizing:border-box;
-}
-
-.form-gray-title{
-    font-size:36px;
-    text-align:center;
-    font-weight:bold;
-    line-height:1.2;
-    margin-bottom:30px;
-    font-family:'宋体';
-    color: #000;
-}
-.form-gray-table{
-    width:100%;
-    margin-left:auto;
-    margin-right:auto;
-    font-family:'宋体';
-    box-sizing:border-box;
-}
-.form-gray-table th,.form-gray-table td{
-    border:solid 1px #666;
-    padding:6px!important;
-    word-wrap: break-word;
-    word-break: break-all;
-    font-size:16px;
-}
-
-.form-gray-table th{
-    text-align:center;
-    width:140px!important;
-    background:#dae3f3;
-}
-.form-gray-table td th,.form-gray-table td td{
-    font-size:12px!important;
-    /*white-space: nowrap;*/
-}
-.form-remarks{
-    margin-left:auto;
-    margin-right:auto;
-}
-
-.form-gray-table td input,
-.form-gray-table td button,
-.form-gray-table td select,
-.form-gray-table td textarea{
-    font-size:16px;
-}
-.form-gray-table-first,.form-gray-table-first th,.form-gray-table-first td{
-    border:none;
-}
-.form-gray-table-first th,.form-gray-table-first td{
-    padding:6px!important;
-    word-wrap: break-word;
-    word-break: break-all;
-    font-size:16px;
-}
-
-.form-red-title{
-    font-size:36px;
-    text-align:center;
-    font-weight:bold;
-    line-height:1.2;
-    margin-bottom:30px;
-    font-family:'宋体';
-    color: #f00;
-}
-.form-red-table{
-    width:100%;
-    margin-left:auto;
-    margin-right:auto;
-    font-family:'宋体';
-    box-sizing:border-box;
-}
-.form-red-table th,.form-red-table td{
-    border:solid 1px #f00;
-    padding:6px!important;
-    word-wrap: break-word;
-    word-break: break-all;
-    font-size:16px;
-    color:#f00;
-}
-
-.form-red-table th{
-    text-align:center;
-    width:140px!important;
-    background:#fff;
-}
-.form-red-table td th,.form-red-table td td{
-    font-size:12px!important;
-    white-space: nowrap;
-}
-
-.form-red-table td input,
-.form-red-table td button,
-.form-red-table td select,
-.form-red-table td textarea{
-    font-size:16px;
-}
-.form-red-table-first{    
-    width:100%;
-    margin-left:auto;
-    margin-right:auto;
-    font-family:'宋体';
-    box-sizing:border-box;
-    color:#f00;
-}
-.form-red-table-first,.form-red-table-first th,.form-red-table-first td{
-    border:none;
-    color:#f00;
-}
-.form-red-table-first th,.form-red-table-first td{
-    padding:6px!important;
-    word-wrap: break-word;
-    word-break: break-all;
-    font-size:16px;
-}
-.from-logo{
-    width:180px;
-    height:auto;
-    margin-bottom:30px;
-}
-.annex-table th,
-.annex-table td{
-    font-size:14px!important;
-    text-align:center;
-    padding: 4px!important;
-}
-.annex-table th{
-    background:#f5f5f5!important;
-    vertical-align:middle;
-}
-.annex-table .operate a{
-    display:inline-block;
-    margin-left:5px;
-    margin-right:5px;
-}
-#tracktable{
-    background:#fff!important;
-}

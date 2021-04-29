@@ -356,7 +356,7 @@ function GenerDevelopFrm(wn, fk_mapData) {
     $.each(aths, function (idex, ath) {
         var element = $("Img[data-key=" + ath.MyPK + "]");
         if (element.length != 0) {
-            var eleHtml = $("<div id='Div_" + ath.MyPK + "' name='Ath' style=' height:auto;' ></div>");
+            var eleHtml = $("<div id='Div_" + ath.MyPK + "' name='Ath' style=' height:auto;margin:5px 10px' ></div>");
             $(element).after(eleHtml);
             $(element).remove(); //移除Imge节点
             AthTable_Init(ath, "Div_" + ath.MyPK);
@@ -400,15 +400,16 @@ function GenerDevelopFrm(wn, fk_mapData) {
         figure_Develop_IFrame(element, iframe);
 
     }
-
-    ////按钮
-    //var frmBtns = frmData.Sys_FrmBtn;
-    //for (var i = 0; i < frmBtns.length; i++) {
-    //    var frmBtn = frmBtns[i];
-
-    //    figure_Develop_Btn(frmBtn);
-
-    //}
+    debugger
+    if (frmData.WF_FrmNodeComponent == null || frmData.WF_FrmNodeComponent == undefined) {
+        var element = $("Img[data-type=WorkCheck]");
+        if (element.length != 0)
+            $(element).remove();
+        element = $("Img[data-type=SubFlow]");
+        if (element.length != 0)
+            $(element).remove();
+    }
+    
     //审核组件的判断
     if (frmData.WF_FrmNodeComponent != null && frmData.WF_FrmNodeComponent != undefined) {
         var nodeComponents = frmData.WF_FrmNodeComponent[0];//节点组件
@@ -429,13 +430,13 @@ function GenerDevelopFrm(wn, fk_mapData) {
             //        figure_Develop_FigureSubFlowDtl(nodeComponents, element);
             //    //如果有审核组件，增加审核组件的HTML
             //    //if (element.getAttribute("data-type") == "WorkCheck")
-                    
+
             //})
 
         }
-    }
+    } 
 
-    if ($("#SubFlow").length == 1) {
+    if ($("#SubFlow").length == 1 && frmData.WF_Node!=undefined) {
         Skip.addJs(ccbpmPath + "/WF/WorkOpt/SubFlow.js");
         var html = SubFlow_Init(frmData.WF_Node[0]);
         $("#SubFlow").html(html);
@@ -470,12 +471,12 @@ function figure_Develop_Dtl(element, frmDtl, ext) {
             src = "./CCForm/DtlCard.htm";
     }
 
-    src += "?EnsName=" + frmDtl.No + "&RefPKVal=" + pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=" + pageData.IsReadonly + "&Version=1";
+    src += "?EnsName=" + frmDtl.No + "&RefPKVal=" + pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=" + pageData.IsReadonly + "&Version=1&FrmType=8";
     src += "&WorkID=" + pageData.OID + "&FID=" + GetQueryString("FID") + "&PWorkID=" + GetQueryString("PWorkID") + "&FK_Node=" + GetQueryString("FK_Node");
     var W = element.width();
-    var eleHtml = $("<div id='Fd" + frmDtl.No + "' name='Dtl' style='width:99%px; height:auto;' ></div>");
+    var eleHtml = $("<div id='Fd" + frmDtl.No + "' name='Dtl' style='height:auto;margin:5px 10px;border-top:1px solid #D0D0D0' ></div>");
 
-    var eleIframe = $("<iframe class= 'Fdtl' name='Dtl'  ID = 'Dtl_" + frmDtl.No + "' src = '" + src + "' frameborder=0  style='width:100%;"
+    var eleIframe = $("<iframe class= 'Fdtl' name='Dtl'  ID = 'Dtl_" + frmDtl.No + "' src = '" + src + "' frameborder=0  style='width:100%; height:auto;"
         + "height: auto; text-align: left; '  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
     eleHtml.append(eleIframe);
     $(element).after(eleHtml);
@@ -765,13 +766,12 @@ function figure_Develop_IFrame(element, frame) {
 
 //子流程
 function figure_Develop_FigureSubFlowDtl(wf_node, element) {
+    
     Skip.addJs(ccbpmPath + "/WF/WorkOpt/SubFlow.js");
-    var html = SubFlow_Init(node);
+    var html = SubFlow_Init(wf_node);
 
-    var eleHtml = $("<div id=''SubFlow" + wf_node.NodeID + "' style='width:" + w + "px; height:auto;' >" + html+"</div>");
+    var eleHtml = $("<div id='SubFlow' style='width:100% height:auto;' >" + html + "</div>");
 
-
-    eleHtml.append(eleIframe);
     $(element).after(eleHtml);
     $(element).remove(); //移除SubFlow节点
 }
@@ -906,10 +906,15 @@ function figure_Develop_Map(MapID, UIIsEnable) {
 function GetFieldAth(mapAttr) {
     //获取上传附件列表的信息及权限信息
     var nodeID = pageData.FK_Node;
-    var no = nodeID.toString().substring(nodeID.toString().length - 2);
-    var IsStartNode = 0;
-    if (no == "01")
-        IsStartNode = 1;
+    if (nodeID == null || nodeID == undefined)
+        IsStartNode = 0;
+    else {
+        var no = nodeID.substring(nodeID.length - 2);
+        var IsStartNode = 0;
+        if (no == "01")
+            IsStartNode = 1;
+    }
+   
 
     //创建附件描述信息.
     var mypk = mapAttr.MyPK;
@@ -978,9 +983,11 @@ function GetFieldAth(mapAttr) {
         return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "' data-type='0'><label >附件(" + dbs.length + ")</label></div>";
 
     eleHtml += "<div style='text-align:left;padding-left:10px;display:inline'  data-type='1'>";
+
+    var workid = GetQueryString("WorkID");
     for (var i = 0; i < dbs.length; i++) {
         var db = dbs[i];
-        eleHtml += "<label><a style='font-weight:normal;font-size:12px'  href=\"javascript:Down2018('" + mypk + "','" + pageData.WorkID + "','" + db.MyPK + "','" + pageData.FK_Flow + "','" + pageData.FK_Node + "','" + mapAttr.FK_MapData + "','" + mypk + "')\"><img src='./Img/FileType/" + db.FileExts + ".gif' />" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
+        eleHtml += "<label><a style='font-weight:normal;font-size:12px'  href=\"javascript:Down2018('" + db.MyPK + "','" + workid + "');\"><img src='./Img/FileType/" + db.FileExts + ".gif' />" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
     }
     eleHtml += "</div>";
     eleHtml += "</div>";

@@ -43,7 +43,7 @@
             html += "<th style='background-color:#F2F2F2;'>序</th>";
             html += "<th style='background-color:#F2F2F2;'>授权给</th>";
             html += "<th style='background-color:#F2F2F2;'>授权类型</th>";
-            //html += "<th style='background-color:#F2F2F2;'>流程</th>";
+            html += "<th style='background-color:#F2F2F2;'>流程</th>";
             html += "<th style='background-color:#F2F2F2;'>收回日期</th>";
             html += "<th style='background-color:#F2F2F2;'>状态</th>";
             html += "<th colspan='2' style='background-color:#F2F2F2;text-align:center'>操作</th>";
@@ -52,6 +52,7 @@
             html += "<tbody>";
             var takeBackDT = "";
             var num = 1;
+
             for (var i = 0; i < ens.length; i++) {
 
                 en = ens[i];
@@ -83,16 +84,21 @@
                 html += "<td>" + num + "</td>";
                 html += "<td>" + en.AutherToEmpName + "</td>";
                 html += "<td>" + AuthTypeName + "</td>";
-                //if (en.AuthType == 2) {
-                //    html += "<td>" + flowName + "</td>";
-                //} else {
-                //    html += "<td>" + en.FlowName + "</td>";
-                //}
+                var flowNames = "";
+                if (en.AuthType == 2) {
+                    flowNames = GetFlowNames(ens, en);
+                    html += "<td>" + flowNames + "</td>";
+                } else {
+                    html += "<td></td>";
+                }
                 html += "<td>" + en.TakeBackDT + "</td>";
                 html += "<td>" + state + "</td>";
                 var MyPK = en.Auther + "_" + en.AuthType + "_" + en.AutherToEmpNo;
-                html += "<td style='text-align:center'><a href=\"javascript:Del('" + MyPK + "')\">删除</a></td>";
-                html += "<td style='text-align:center'><a href='AuthorDtl.htm?UpdateInfo=1&AutherToEmpNo=" + en.AutherToEmpNo + "&AutherToEmpName=" + en.AutherToEmpName + "&AuthType=" + en.AuthType + "&TakeBackDT=" + en.TakeBackDT+"' >修改</a></td>";
+                if (en.AuthType == 2)
+                    html += "<td style='text-align:center'><a href=\"javascript:Del('" + MyPK + "','" + flowNames +"')\">删除</a></td>";
+                else
+                    html += "<td style='text-align:center'><a href=\"javascript:Del('" + MyPK + "')\">删除</a></td>";
+               // html += "<td style='text-align:center'><a href='AuthorDtl.htm?UpdateInfo=1&AutherToEmpNo=" + en.AutherToEmpNo + "&AutherToEmpName=" + en.AutherToEmpName + "&AuthType=" + en.AuthType + "&TakeBackDT=" + en.TakeBackDT+"' >修改</a></td>";
                 html += "</tr>";
                 num++;
             }
@@ -105,19 +111,52 @@
 
         });
 
+
+        function GetFlowNames(auths,auth) {
+            var items = $.grep(auths, function (item) {
+                return item.AuthType == 2 && auth.TakeBackDT == item.TakeBackDT;
+            });
+            var flowNames = [];
+            items.forEach(function (item) {
+                flowNames.push(item.FlowNo+"."+item.FlowName);
+            });
+            return flowNames.join(",")
+        }
+
         //执行删除.
-        function Del(MyPK) {
+        function Del(MyPK, flowNames) {
             if (window.confirm('您确定要删除吗？') == false)
                 return;
-            var Auth = new Entity("BP.WF.Auth", MyPK);
-            var res = Auth.Delete();
-            if (res == 1) {
-                alert("删除成功");
-                window.location.href = window.location.href;
+            if (flowNames == null || flowNames == "") {
+                var Auth = new Entity("BP.WF.Auth", MyPK);
+                var res = Auth.Delete();
+                if (res == 1) {
+                    alert("删除成功");
+                    window.location.href = window.location.href;
+                }
+                else {
+                    alert("删除失败");
+                }
+                return;
             }
-            else {
+
+            var auth = new Entity("BP.WF.Auth");
+            var isSuccess = true;;
+
+            flowNames.split(",").forEach(function (item) {
+                if (item != "") {
+                    var strs = item.split(".");
+                    var res = auth.Delete("MyPK", MyPK + "_" + strs[0]);
+                    if (res == 0)
+                        isSuccess = false;
+
+                }
+            });
+            if (isSuccess == false)
                 alert("删除失败");
-            }
+
+            window.location.href = window.location.href;
+           
 
         }
 

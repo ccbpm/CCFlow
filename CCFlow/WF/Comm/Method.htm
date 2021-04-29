@@ -121,7 +121,7 @@
                 if (attr.ColSpan == 3) {
                     isDropTR = true;
                     html += "<tr>";
-                    html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
+                    html += "<td  class='FoolFrmFieldCtrl' style='width:120px;'>" + lab + "</td>";
                     html += "<td ColSpan=3>";
                     html += InitMapAttrOfCtrlFool(frmData, attr);
                     html += "</td>";
@@ -142,7 +142,7 @@
 
                 if (isDropTR == true) {
                     html += "<tr>";
-                    html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
+                    html += "<td class='FoolFrmFieldCtrl' style='width:120px;'>" + lab + "</td>";
                     html += "<td class='FContext'  >";
                     html += InitMapAttrOfCtrlFool(frmData, attr);
                     html += "</td>";
@@ -151,7 +151,7 @@
                 }
 
                 if (isDropTR == false) {
-                    html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
+                    html += "<td class='FoolFrmFieldCtrl' style='width:120px;'>" + lab + "</td>";
                     html += "<td class='FContext'>";
                     html += InitMapAttrOfCtrlFool(frmData, attr);
                     html += "</td>";

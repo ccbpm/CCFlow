@@ -18,7 +18,7 @@
 
     function GetHtmlByMapAttrAndFrmComponent(mapData, frmComponent) {
         var _html = "";
-
+       
         switch (frmComponent) {
             case 4: //地图控件
                 _html = "<div style='text-align:left;padding-left:0px' id='Map_" + mapData.KeyOfEn + "' data-type='Map' data-key='" + mapData.MyPK + "' leipiplugins='component'>";
@@ -92,7 +92,12 @@
                 _html += "&nbsp;&nbsp;<span class='score-tips' style='vertical-align: middle;color:#ff6600;font: 12px/1.5 tahoma,arial,\"Hiragino Sans GB\",宋体,sans-serif;'><strong>" + num + "  分</strong></span>";
                 _html += "</span></span>";
                 break;
-
+            case 110://公文正文组件
+                _html = "<input type='text'  id='TB_" + mapData.KeyOfEn + "' name='TB_" + mapData.KeyOfEn + "' data-key='" + mapData.KeyOfEn + "' data-name='" + mapData.Name + "' data-type='GovDocFile'   leipiplugins='component' style='width:98%' placeholder='公文正文组件'/>";
+                break;
+            case 120://父子流程
+                _html = "<img src='../CCFormDesigner/Controls/DataView/SubFlowDtl.png' style='width:67%;height:200px'  leipiplugins='component'   data-type='SubFlow'/>"
+                break;
         }
         return _html;
     }

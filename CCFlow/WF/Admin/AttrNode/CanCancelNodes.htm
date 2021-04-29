@@ -11,6 +11,10 @@
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
 
     <script src="../Admin.js"></script>
+    <!-- 自己的系统风格统一. -->
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
@@ -100,26 +104,34 @@
     </script>
 </head>
 <body>
-    <form id="cc">
-        <div style="right:30px; position:absolute; z-index:100;margin:10px ">
-            <input type='button' value='保存' class='Btn' onclick='Save()' />
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <span class="pull-right">
+
+                <button id="Btn_Save" name="Btn_Save" onclick="Save();">保存</button>
+
+
+            </span>
+            <strong>设置可撤销的节点</strong>
         </div>
-        <fieldset>
-            <legend>设置可撤销的节点</legend>
-            <br />
-            <table width='100%' id="table1">
-                <tr>
-                </tr>
-            </table>
-        </fieldset>
-        
-        <fieldset>
-            <legend id="help"></legend>
-            <ul>
-                <li>只有节点属性的撤销规则被设置成撤销制订的节点，此功能才有效。 </li>
-                <li>设置撤销的节点如果是当前节点下一步骤的节点，设置无意义，系统不做检查，撤销时才做检查。</li>
-            </ul>
-        </fieldset>
-    </form>
+        <form id="cc">
+          
+            <fieldset>
+             
+                <table width='100%' class="table" id="table1">
+                    <tr>
+                    </tr>
+                </table>
+            </fieldset>
+
+            <fieldset>
+                <legend id="help"></legend>
+                <ul>
+                    <li>只有节点属性的撤销规则被设置成撤销制订的节点，此功能才有效。 </li>
+                    <li>设置撤销的节点如果是当前节点下一步骤的节点，设置无意义，系统不做检查，撤销时才做检查。</li>
+                </ul>
+            </fieldset>
+        </form>
+    </div>
 </body>
 </html>

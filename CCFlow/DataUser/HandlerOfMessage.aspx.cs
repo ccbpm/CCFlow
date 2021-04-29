@@ -61,14 +61,10 @@ namespace CCFlow.DataUser
                         string msgFlg = dictionary["msgFlag"].ToString();
                         int fk_node = 0;
                         Int64 workid = 0;
-                        string fk_flow = "";
                         if (DataType.IsNullOrEmpty(msgFlg) == false)
                         {
-                            string[] msgFlgs = msgFlg.Split('_');
-                            fk_node = int.Parse(msgFlgs[0]);
-                            workid = Int64.Parse(msgFlgs[1]);
-                            if(msgFlgs.Length>=3)
-                                fk_flow = msgFlg.Split('_')[2];
+                            fk_node = int.Parse(msgFlg.Split('_')[0]);
+                            workid = Int64.Parse(msgFlg.Split('_')[1]);
                         }
                         string agentId = SystemConfig.WX_AgentID ?? null;
                         if (agentId != null)
@@ -82,10 +78,10 @@ namespace CCFlow.DataUser
                             {
                                 byte[] bytes = UTF8Encoding.UTF8.GetBytes(msgContent);
                                 msgContent = Convert.ToBase64String(bytes);
-                                
+
 
                                 New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + SystemConfig.WX_CorpID
-                                 + "&redirect_uri=" + SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=URL_" + msgContent + ",WorkID_" + workid + ",FK_Node_" + fk_node+",FK_Flow_"+ fk_flow + "#wechat_redirect";
+                                 + "&redirect_uri=" + SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=URL_" + msgContent + ",WorkID_" + workid + ",FK_Node_" + fk_node + "#wechat_redirect";
                                 GenerWorkFlow gwf = new GenerWorkFlow(workid);
                                 string str = "\t\n您好:";
                                 str += "\t\n    工作{" + gwf.Title + "}有一条新消息 .";
@@ -97,7 +93,7 @@ namespace CCFlow.DataUser
                             {
                                 newArticle.description = msgContent;
                                 New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + SystemConfig.WX_CorpID
-                                + "&redirect_uri=" + SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=MyView,WorkID_" + workid + ",FK_Node_" + fk_node + ",FK_Flow_" + fk_flow + "#wechat_redirect";
+                                + "&redirect_uri=" + SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=MyView,WorkID_" + workid + ",FK_Node_" + fk_node + "#wechat_redirect";
                             }
 
                             newArticle.url = New_Url;

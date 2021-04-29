@@ -5,7 +5,7 @@ function ShowMultiFile(AttrFiles, FileManagers, isExitMyNum) {
     //如果多附件没有分类
     if (AttrFiles.length == 0) {
         html += "<tr>";
-        html += "<td class='FDesc' style='width:20%;'>多附件上传</td>";
+        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'>多附件上传</td>";
         if (isExitMyNum == true)
             html += "<td colspan=2>";
         else
@@ -45,7 +45,7 @@ function ShowMultiFile(AttrFiles, FileManagers, isExitMyNum) {
     for (var i = 0; i < AttrFiles.length; i++) {
         var attrFile = AttrFiles[i];
         html += "<tr>";
-        html += "<td class='FDesc' style='width:20%;'>" + attrFile.FileName + "</td>";
+        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'>" + attrFile.FileName + "</td>";
         if (isExitMyNum == true)
             html += "<td colspan=2>";
         else

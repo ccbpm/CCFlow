@@ -23,13 +23,16 @@ $(function () {
     //构造表单.
     GenerFrm(); //表单数据.
 
+    //装载风格.
+    LoadCss();
+
     if (parent != null && parent.document.getElementById('editSubGrid') != undefined) {
         //计算高度，展示滚动条
         var height = $(parent.document.getElementById('editSubGrid')).height() - 110;
         $('#topContentDiv').height(height);
 
         $(window).resize(function () {
-            $("#CCForm").height($(window).height() - 150 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
+            $("#CCForm").height($(window).height() - 150 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");;
         });
     }
 
@@ -47,7 +50,40 @@ $(function () {
     if (typeof FormOnLoadCheckIsNull != 'undefined' && FormOnLoadCheckIsNull instanceof Function) {
         FormOnLoadCheckIsNull();
     }
+
+    //$('head').append('<link href="../DataUser/Style/MyFlow.css" rel="Stylesheet" />');
+
+    //$('head').append('<link href="../DataUser/Style/CSS/' + theme + '.css" rel="stylesheet" type="text/css" />');
+    $('head').append('<link href="../../DataUser/Style/FoolFrmStyle/Default.css" rel="stylesheet" type="text/css" />');
+    $('head').append('<link href="../../DataUser/Style/GloVarsCSS.css" rel="stylesheet" type="text/css" />');
+
 });
+
+
+//动态的装载css.
+function LoadCss() {
+    // 动态加载css
+    var loadStyle = function (url) {
+        var link = document.createElement('link');
+        link.rel = "stylesheet";
+        link.type = "text/css";
+        link.href = url;
+        var head = document.getElementsByTagName("head")[0];
+        head.appendChild(link);
+    };
+
+    // css加载
+    var url = "../../DataUser/Style/FoolFrmStyle/Default.css?ref=11" + Math.random();
+    // loadStyle(url);
+    url = "../../DataUser/Style/GloVarsCSS.css?ref=11" + Math.random();
+    // loadStyle(url);
+
+    $('head').children(':last').attr({
+        rel: "stylesheet",
+        type: 'text/css',
+        href: url,
+    });
+}
 
 
 function SetHegiht() {
@@ -1066,7 +1102,7 @@ function GetPageParas(sArgName) {
     var sHref = window.location.href;
     var args = sHref.split("?");
     var retval = "";
-    if (args[0] == sHref) /*参数为空*/{
+    if (args[0] == sHref) /*参数为空*/ {
         return retval; /*无需做任何处理*/
     }
     var str = args[1];

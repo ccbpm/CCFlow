@@ -47,7 +47,7 @@
 
         function Save() {
 
-            $("#Btn_Save").val("正在保存....");
+            $("#Btn_Save").html("正在保存....");
 
             var fk_node = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", fk_node);

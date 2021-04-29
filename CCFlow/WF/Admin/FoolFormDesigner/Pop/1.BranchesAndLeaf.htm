@@ -29,6 +29,7 @@
         $(function () {
 
             InitBar("PopBranchesAndLeaf");
+
             var html = "";
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.MyPK = "PopBranchesAndLeaf_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
@@ -56,13 +57,14 @@
             //p").val(mapExt.GetPara("SearchTip"));
             // $("#TB_RootTreeNo").val(mapExt.GetPara("RootNo")); //树的根节点编号.
 
+            $("#Btn_Delete").show();
+            $("#Btn_FullData").show();
+
             //设置按钮是否可以用?
             if (i == 0) {
                 $("#Btn_Delete").hide();
-                $("#Btn_FullData").hide()
-            } else {
-                $("#Btn_Delete").show();
-                $("#Btn_FullData").show();
+                $("#Btn_FullData").hide();
+                $("#Btn_Gener").hide();
             }
         });
         function Save() {
@@ -84,7 +86,6 @@
 
             mapExt.ExtType = "PopBranchesAndLeaf";
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
-
 
             var err = "";
 
@@ -117,6 +118,7 @@
             mapExt.MyPK = "PopBranchesAndLeaf_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
             mapExt.Delete();
+
             window.location.href = window.location.href;
         }
 
@@ -273,26 +275,26 @@
             </tr>
             <!-- 填充其他数据控件的数据源 -->
             <!--<tr>
-        <th colspan="4">
-            <a href="javascript:ShowHidden('tabsT')">返回值填充其他数据控件的数据源</a>
-            <div id="tabsT" style="color: Gray; display: none">
-                <ul>
-                    <li>该数据源可以为空</li>
-                    <li>如果配置了，系统就会按照配置数据源所返回的列与字段名相同的控件匹配进行赋值。</li>
-                    <li>当使用SQL获取数据源必须包含@Key变量，并且当前模式为单选。</li>
-                    <li>例如：SELECT No AS YuanGongBianHao, Name AS MingCheng, Tel AS DianHua, Email AS YouJian
-                        FROM port_emp WHERE No='@Key'</li>
-                    <li>当使用URL获取数据源必须包含@Key变量，并且当前模式为单选。</li>
-                    <li>例如：/DataUser/Handler.ashx?DoType=ReqEmpsByDeptNo&DeptNo=@Key @Key是选择的主键</li>
-                </ul>
-            </div>
-        </th>
-    </tr>
-    <tr>
-        <td colspan="4">
-            <input id="TB_Tag4" name="TB_Tag4" style="width: 100%;" />
-        </td>
-    </tr>-->
+                <th colspan="4">
+                    <a href="javascript:ShowHidden('tabsT')">返回值填充其他数据控件的数据源</a>
+                    <div id="tabsT" style="color: Gray; display: none">
+                        <ul>
+                            <li>该数据源可以为空</li>
+                            <li>如果配置了，系统就会按照配置数据源所返回的列与字段名相同的控件匹配进行赋值。</li>
+                            <li>当使用SQL获取数据源必须包含@Key变量，并且当前模式为单选。</li>
+                            <li>例如：SELECT No AS YuanGongBianHao, Name AS MingCheng, Tel AS DianHua, Email AS YouJian
+                                FROM port_emp WHERE No='@Key'</li>
+                            <li>当使用URL获取数据源必须包含@Key变量，并且当前模式为单选。</li>
+                            <li>例如：/DataUser/Handler.ashx?DoType=ReqEmpsByDeptNo&DeptNo=@Key @Key是选择的主键</li>
+                        </ul>
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <input id="TB_Tag4" name="TB_Tag4" style="width: 100%;" />
+                </td>
+            </tr>-->
             <!-- 数据列名与中文意思对照  &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&-->
             <tr>
                 <td colspan="2">
@@ -326,9 +328,13 @@
                 </td>
             </tr>
         </table>
+
         <fieldset>
-            <legend>样例</legend>
-            <img alt="" src='1.BranchesAndLeaf.png' onclick="WinOpen('1.BranchesAndLeaf.png')" style="width: 500px;" />
+            <legend id="help"></legend>
+            <ul>
+                <li><font color="red"> 返回的数据，都要区分大小写，并且所有的SQL ，都要按照顺序进行。</font>  </li>
+                <li> <img alt="" src='1.BranchesAndLeaf.png' onclick="WinOpen('1.BranchesAndLeaf.png')" style="width: 500px;" /> </li>
+            </ul>
         </fieldset>
     </form>
 </body>

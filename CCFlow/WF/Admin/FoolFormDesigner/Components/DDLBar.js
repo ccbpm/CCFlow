@@ -35,23 +35,25 @@ function InitBar(optionKey) {
     html += "<option value=" + FrmComponents.FrmImgAth + " >&nbsp;&nbsp;&nbsp;&nbsp;图片附件 </option>";
     html += "<option value=" + FrmComponents.IDCard + " >&nbsp;&nbsp;&nbsp;&nbsp;身份证 </option>";
     html += "<option value=" + FrmComponents.AthShow + " >&nbsp;&nbsp;&nbsp;&nbsp;字段附件</option>";
+    html += "<option value=" + FrmComponents.Ath + ">&nbsp;&nbsp;&nbsp;&nbsp;独立附件(表格模式展示)</option>";
     html += "<option value=" + FrmComponents.HyperLink + " >&nbsp;&nbsp;&nbsp;&nbsp;超链接 </option>";
     html += "<option value=" + FrmComponents.Btn + ">&nbsp;&nbsp;&nbsp;&nbsp;按钮</option>";
     html += "<option value=" + FrmComponents.HandWriting + " >&nbsp;&nbsp;&nbsp;&nbsp;写字板</option>";
     html += "<option value=" + FrmComponents.Score + ">&nbsp;&nbsp;&nbsp;&nbsp;评分控件</option>";
-    html += "<option value=" + FrmComponents.Ath + ">&nbsp;&nbsp;&nbsp;&nbsp;独立附件(表格模式展示)</option>";
     html += "<option value=" + FrmComponents.Dtl + ">&nbsp;&nbsp;&nbsp;&nbsp;从表</option>";
     html += "<option value=" + FrmComponents.Frame + ">&nbsp;&nbsp;&nbsp;&nbsp;框架</option>";
     if (frmType == 0)//傻瓜表单
         html += "<option value=" + FrmComponents.BigText + ">&nbsp;&nbsp;&nbsp;&nbsp;大块Html说明文字引入</option>";
 
     html += "<option value=null  disabled='disabled'>+流程组件</option>";
-    html += "<option value=" + FrmComponents.GovDocFile + ">&nbsp;&nbsp;&nbsp;&nbsp;公文正文组件</option>";
     html += "<option value=" + FrmComponents.SignCheck + ">&nbsp;&nbsp;&nbsp;&nbsp;签批组件</option>";
     html += "<option value=" + FrmComponents.FlowBBS + ">&nbsp;&nbsp;&nbsp;&nbsp;评论（抄送）组件</option>";
     html += "<option value=" + FrmComponents.GovDocFile + ">&nbsp;&nbsp;&nbsp;&nbsp;公文正文组件</option>";
     html += "<option value=" + FrmComponents.DocWord + ">&nbsp;&nbsp;&nbsp;&nbsp;发文字号</option>";
     html += "<option value=" + FrmComponents.DocWordReceive + ">&nbsp;&nbsp;&nbsp;&nbsp;收文字号</option>";
+    html += "<option value=" + FrmComponents.WorkCheck + ">&nbsp;&nbsp;&nbsp;&nbsp;审核组件</option>";
+    if (frmType ==8)
+    html += "<option value=" + FrmComponents.SubFlow + ">&nbsp;&nbsp;&nbsp;&nbsp;父子流程组件</option>";
     html += "<option value=" + FrmComponents.JobSchedule + ">&nbsp;&nbsp;&nbsp;&nbsp;流程进度图</option>";
 
     html += "<option value=null  disabled='disabled'>+移动端控件</option>";
@@ -156,6 +158,9 @@ function changeOption() {
         case FrmComponents.Score:
             roleName = "101.Score.htm";
             break;
+        case FrmComponents.SubFlow:
+            roleName = "120.SubFlow.htm";
+            break;
         default:
             roleName = "4.Map.htm";
             break;
@@ -218,15 +223,23 @@ function Save() {
             break;
         case 101://评分控件
             return ExtScore();
+        case 110://公文正文组件
+            return ExtGovDocFile();
+        case 120://公文正文组件
+            return SubFlow();
         default:
             break;
-
     }
     return "";
 }
 
+function SubFlow() {
+    return GetHtmlByMapAttrAndFrmComponent(null, 120)
+}
+
 //地图
 function ExtMap() {
+
     var name = window.prompt('请输入地图名称:\t\n比如:中国地图', '地图');
     if (name == null || name == undefined || name.trim() == "")
         return "";
@@ -349,7 +362,9 @@ function ExtDocWord() {
         return GetHtmlByMapAttrAndFrmComponent(mapAttr, 17);
     }
 }
-
+/**
+ * 收文字号
+ */
 function DocWordReceive() {
     var en = new Entity("BP.Sys.MapAttr");
     en.SetPKVal(fk_mapData + "_DocWordReceive");
@@ -379,6 +394,55 @@ function DocWordReceive() {
 
 }
 
+/**
+ * 在线wps编辑
+ */
+function ExtGovDocFile() {
+    var name = window.prompt('请输入在线编辑组件的名称:\t\n比如:正文', '');
+    if (name == null || name == undefined || name.trim() == "")
+        return "";
+
+    var frmID = fk_mapData;
+    var mapAttrs = new Entities("BP.Sys.MapAttrs");
+    mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
+    if (mapAttrs.length >= 1) {
+        alert('名称：[' + name + "]已经存在.");
+        ExtGovDocFile();
+        return "";
+    }
+
+    //获得ID.
+    var id = StrToPinYin(name);
+
+    var mypk = frmID + "_" + id;
+    var mapAttr = new Entity("BP.Sys.MapAttr");
+    mapAttr.MyPK = mypk;
+    if (mapAttr.IsExits == true) {
+        alert('名称：[' + name + "]已经存在.");
+        return "";
+    }
+    mapAttr.FK_MapData = frmID;
+    mapAttr.KeyOfEn = id;
+    mapAttr.Name = name;
+    mapAttr.GroupID = 1;
+    mapAttr.UIContralType = 110; 
+    mapAttr.MyDataType = 1;
+    mapAttr.LGType = 0;
+    mapAttr.ColSpan = 3; //
+    mapAttr.TextColSpan = 1; //
+    mapAttr.UIWidth = 150;
+    mapAttr.UIHeight = 50;
+    mapAttr.IsEnableInAPP = 1;
+    mapAttr.Insert(); //插入字段.
+    if (frmType != 8)
+        window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttGovDocFile&MyPK=" + mapAttr.MyPK;
+    if (frmType == 8) {
+        return GetHtmlByMapAttrAndFrmComponent(mapAttr, 110)
+    }
+}
+
+
+
 //签批组件
 function ExtWorkCheck() {
     var name = window.prompt('请输入签批组件的名称:\t\n比如:办公室意见、拟办意见', '');
@@ -390,7 +454,7 @@ function ExtWorkCheck() {
     mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
     if (mapAttrs.length >= 1) {
         alert('名称：[' + name + "]已经存在.");
-        ExtAth();
+        ExtWorkCheck();
         return "";
     }
 
@@ -804,7 +868,7 @@ function ExtBtn() {
     mapAttr.IsEnableInAPP = 0;
     mapAttr.Insert(); //插入字段.
     mapAttr.Retrieve();
-     
+
     if (frmType != 8) {
         window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmBtn&MyPK=" + en.MyPK;
         return;

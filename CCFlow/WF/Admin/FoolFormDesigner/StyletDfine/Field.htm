@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>模版管理</title>
+    <script src="../../../Scripts/jquery-1.11.0.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        //获得集合.
+        var ens = null;
+        var en = null;
+        $(function () {
+
+            var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_StyletDfine");
+            ens = hander.DoMethodReturnJSON("Template_Init");
+
+            GenerBindDDL("DDL_Style", ens, "No", "Name");
+
+            LoadCss();
+
+            //$(".FoolFrmBody").on("click", function () {
+            //    DDLChange("FoolFrmBody");
+            //})
+
+            //$(".FoolFrmTable").on("click", function () {
+            //    DDLChange("FoolFrmTable");
+            //})
+
+            //$(".FoolFrmFieldName").on("click", function () {
+            //    DDLChange("FoolFrmFieldName");
+            //})
+
+        });
+
+
+        function LoadCss() {
+
+            var url = "../../../../DataUser/Style/FoolFrmPreview.css?ref=11" + Math.random();
+
+            // 动态加载css
+            var loadStyle = function (url) {
+                var link = document.createElement('link');
+                link.rel = "stylesheet";
+                link.type = "text/css";
+                link.href = url;
+                var head = document.getElementsByTagName("head")[0];
+                head.appendChild(link);
+            };
+
+            // css加载
+            loadStyle(url);
+
+            $('head').children(':last').attr({
+                rel: "stylesheet",
+                type: 'text/css',
+                href: url,
+            });
+        }
+
+        function DDLChange() {
+
+            var val = $("#DDL_Style").val();
+            if (val == "" || val == undefined)
+                return;
+
+            var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_StyletDfine");
+            hander.AddPara("Name", val);
+            var msg = hander.DoMethodReturnString("Template_Selected");
+            // alert(msg);
+            //  window.location.href = window.location.href;
+            //alert(ens);
+
+            LoadCss();
+        }
+
+        function Save() {
+
+            if (en == null) {
+                alert('保存错误:没有选择样式.');
+                return;
+            }
+
+            $("#Btn_Save").html("正在保存...");
+            //执行copy.
+            en.CopyForm();
+            en.Val = en.AtPara;
+            en.Update();
+
+            $("#Btn_Save").html("保存");
+        }
+
+
+        function Back() {
+
+            var url = "Default.htm?FK_MapData=" + GetQueryString("FrmID");
+            url += "&FrmID=" + GetQueryString("FrmID");
+            url += "&FK_Flow=" + GetQueryString("FK_Flow");
+            url += "&FK_Node=" + GetQueryString("FK_Node");
+            window.location.href = url;
+        }
+
+        function App() {
+
+            if (window.confirm('您确认要执行吗？确定后，就会替换现在的风格文件。') == false)
+                return;
+
+            var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_StyletDfine");
+            var data = hander.DoMethodReturnString("Default_App");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //  alert(data);
+            Back();
+        }
+
+        function LoadTemplate() {
+
+            var url = "Template.htm?FK_MapData=" + GetQueryString("FrmID");
+            url += "&FrmID=" + GetQueryString("FrmID");
+            url += "&FK_Flow=" + GetQueryString("FK_Flow");
+            url += "&FK_Node=" + GetQueryString("FK_Node");
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body class="FoolFrmBody">
+
+    <div>
+        字段风格定义:
+        <input type="button" value="返回样式定义" onclick="Back();" />
+        <select id="DDL_Style" onchange="DDLChange()"> </select>
+        <input type="button" value="保存为模版" onclick="App();" />
+    </div>
+
+    <!-- 表单部分. -->
+    <center>
+        <table class="FoolFrmTable">
+            <tr class="FoolFrmTitleTR">
+                <td colspan=4 class='FoolFrmTitleIcon'>
+                    <div style='float:left;margin-top:1px'>
+                        <img src='../../../../DataUser/ICON/LogBiger.png' style='height:50px;' />
+                    </div>
+                    <div style='float:right;margin-top:8px' class="FoolFrmTitleLable">
+                        请假申请单
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="FoolFrmGroupBar" colspan="4"> 基本信息</td>
+            </tr>
+
+            <tr class="FoolFrmFieldTR">
+                <td class="FoolFrmFieldName"> 申请人 </td>
+                <td class="FoolFrmFieldCtrl"> <input type="text" /> </td>
+                <td class="FoolFrmFieldName"> 申请日期 </td>
+                <td class="FoolFrmFieldCtrl">  <input type="text" /></td>
+            </tr>
+
+            <tr class="FoolFrmFieldTR">
+                <td class="FoolFrmFieldName"> 申请人部门 </td>
+                <td colspan="3" class="FoolFrmFieldCtrl"> <input type="text" value="交通事业部" />  </td>
+            </tr>
+
+            <tr class="FoolFrmFieldTR">
+                <td colspan="4" class="FoolFrmFieldCtrl">
+                    请假原因 <br />
+                    <textarea style="width:95%;" cols="10"> </textarea>
+                </td>
+            </tr>
+        </table>
+    </center>
+    <!-- end.表单部分. -->
+
+</body>
+</html>

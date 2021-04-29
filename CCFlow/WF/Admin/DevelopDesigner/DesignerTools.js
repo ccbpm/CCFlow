@@ -11,34 +11,37 @@ document.onkeydown = function () {
     }
 }
 
+
 //格式化
 function FormatHtml() {
-   /* var val = window.confirm('您确定要格式化吗？');
-    if (val == false)
-        return;
-    debugger
-    //首先执行保存.
-    SaveForm();
-    var rels = /style="[^=>]*"([(\s+\w+=)|>])/g
-    var ssss = /style\s*?=\s*?([‘"])[\s\S]*?\1/
-    var dsd = /style=\"(.*?)\"/g
-    var newHtml = ''
 
-    newHtml = formeditor.replace(rels, '');
-    newHtml = newHtml.replace(ssss, '');
-    newHtml = newHtml.replace(dsd, '');
-    //执行保存.
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
-    handler.AddPara("FK_MapData", pageParam.fk_mapdata);
-    handler.AddPara("HtmlCode", encodeURIComponent(newHtml));
-    var data = handler.DoMethodReturnString("SaveForm");
-    if (data.indexOf("err@") != -1) {
-        alert(data);
-        return;
-    }
+    alert("未实现.");
 
-    leipiEditor.getContent(newHtml);
-    leipiEditor.sync();       //同步内容*/
+    /* var val = window.confirm('您确定要格式化吗？');
+     if (val == false)
+         return;
+     //首先执行保存.
+     SaveForm();
+     var rels = /style="[^=>]*"([(\s+\w+=)|>])/g
+     var ssss = /style\s*?=\s*?([‘"])[\s\S]*?\1/
+     var dsd = /style=\"(.*?)\"/g
+     var newHtml = ''
+ 
+     newHtml = formeditor.replace(rels, '');
+     newHtml = newHtml.replace(ssss, '');
+     newHtml = newHtml.replace(dsd, '');
+     //执行保存.
+     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
+     handler.AddPara("FK_MapData", pageParam.fk_mapdata);
+     handler.AddPara("HtmlCode", encodeURIComponent(newHtml));
+     var data = handler.DoMethodReturnString("SaveForm");
+     if (data.indexOf("err@") != -1) {
+         alert(data);
+         return;
+     }
+ 
+     leipiEditor.getContent(newHtml);
+     leipiEditor.sync();       //同步内容*/
 }
 
 
@@ -70,13 +73,12 @@ function FrmAttr() {
 //表单属性.
 function OpenFoolFrm() {
 
-    var frmID = GetQueryString("FK_MapData");
-    var nodeID = GetQueryString("NodeID");
-    var flowNo = GetQueryString("FK_Flow");
-
-    var url = "../FoolFormDesigner/Designer.htm?FK_MapData=" + frmID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
-    window.open(url);
-
+    var url = "../FoolFormDesigner/Designer.htm?FK_Flow=" + GetQueryString("FK_Flow");
+    url += "&FK_Node=" + GetQueryString("FK_Node");
+    url += "&FK_MapData=" + GetQueryString("FK_MapData");
+    url += "&FrmID=" + GetQueryString("FK_MapData");
+    window.location.href = url;
+    return;
 }
 
 //移动表单
@@ -106,6 +108,19 @@ function ImpFrmTemplate() {
     var url = "../FoolFormDesigner/ImpExp/Imp/Default.htm?FK_MapData=" + frmID + "&FrmID=" + frmID + "&DoType=FunList&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
     window.open(url);
 }
+
+
+//导入表单模版.
+function Template() {
+
+    var frmID = GetQueryString("FK_MapData");
+    var flowNo = GetQueryString("FK_Flow");
+    var nodeID = GetQueryString("FK_Node");
+
+    var url = "../FoolFormDesigner/ImpExp/Imp/Default.htm?FK_MapData=" + frmID + "&FrmID=" + frmID + "&DoType=FunList&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+    window.open(url);
+}
+
 
 
 

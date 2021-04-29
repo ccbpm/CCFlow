@@ -23,7 +23,8 @@
     <script type="text/javascript" src="../../../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script src="../../../Comm/Gener.js"></script>
-    <style type="text/css">
+    <style>
+
         .textbox-addon {
             position: absolute;
         }
@@ -54,7 +55,7 @@
             node.RetrieveFromDBSources();
 
             //查询表单字段
-            Sys_MapAttr = new Entities("BP.Sys.MapAttrs", "FK_MapData", "ND"+fk_node);
+            Sys_MapAttr = new Entities("BP.Sys.MapAttrs", "FK_MapData", "ND" + fk_node);
             Fields();//字段查询.
 
         })
@@ -65,7 +66,7 @@
             var html = "";
             var num = 1;
             html += "<table width='100%'>";
-           
+
             html += "<thead>";
             html += "<tr>";
             html += "<th>序</th>";
@@ -77,7 +78,7 @@
             //遍历字段
             for (var i = 0; i < Sys_MapAttr.length; i++) {
                 var mapAttr = Sys_MapAttr[i];
-                    if (mapAttr.KeyOfEn == "CDT" ||
+                if (mapAttr.KeyOfEn == "CDT" ||
                     mapAttr.KeyOfEn == "Emps" ||
                     mapAttr.KeyOfEn == "FID" ||
                     mapAttr.KeyOfEn == "FK_Dept" ||
@@ -88,29 +89,29 @@
                     mapAttr.KeyOfEn == "Rec") {
 
                     continue;
-                    }
-                    html += "<tr>";
-                    html += "<td>" + num + "</td>";
-                    html += "<td>" + mapAttr.KeyOfEn + "</td>";
-                
-                    var checked = "";
-                    var Keys = node.GetPara("NodeNote");
-                        if (Keys != undefined) {
-                            var Vals = Keys.split(",");
-                            for (var k = 0; k < Vals.length; k++) {
-                            if (Vals[k] == mapAttr.KeyOfEn) {
-                                checked = " checked=true ";
-                            }
+                }
+                html += "<tr>";
+                html += "<td>" + num + "</td>";
+                html += "<td>" + mapAttr.KeyOfEn + "</td>";
+
+                var checked = "";
+                var Keys = node.GetPara("NodeNote");
+                if (Keys != undefined) {
+                    var Vals = Keys.split(",");
+                    for (var k = 0; k < Vals.length; k++) {
+                        if (Vals[k] == mapAttr.KeyOfEn) {
+                            checked = " checked=true ";
                         }
                     }
-                       
+                }
 
-                    html += "<td><label><input type='checkbox' " + checked + " name='FieldAttr' id='" + mapAttr.KeyOfEn + "' />" + mapAttr.Name + "</label></td>";
+
+                html += "<td><label><input type='checkbox' " + checked + " name='FieldAttr' id='" + mapAttr.KeyOfEn + "' />" + mapAttr.Name + "</label></td>";
                 html += "</tr>";
                 num++;
 
             }
-                
+
             html += "</tbody>";
             html += "</table>";
             html += "<input type=button onclick='SaveFields();' value='保存' />";
@@ -124,15 +125,15 @@
             //获取选中的表单字段.
             var nodeNote = ",";
             $.each($('input:checkbox[name=FieldAttr]:checked'), function (i, obj) {
-                nodeNote +=  obj.id + ",";
+                nodeNote += obj.id + ",";
             });
 
-            node.SetPara("NodeNote",nodeNote);
+            node.SetPara("NodeNote", nodeNote);
             node.Update();
             window.location.href = window.location.href;
 
         }
-        
+
 
     </script>
 </head>

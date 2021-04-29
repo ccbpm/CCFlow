@@ -35,7 +35,7 @@
         function InitLeft() {
             var nowDate = getNowFormatDate();
             var sql = "SELECT Auther,AuthName, FK_Flow,FlowName, COUNT(FK_Flow) as Num   FROM V_WF_AuthTodolist ";
-            sql += "WHERE EmpNo = '" + webUser.No + "'";
+            sql += "WHERE AutherToEmpNo = '" + webUser.No + "'";
             sql += " AND TakeBackDT >= '" + nowDate + "'";
             sql += "     GROUP BY Auther, AuthName, FK_Flow, FlowName  ";
             var dt = DBAccess.RunSQLReturnTable(sql);
@@ -73,7 +73,7 @@
             html += "</tr></thead>";
 
             var sql = "SELECT *   FROM V_WF_AuthTodolist ";
-            sql += "WHERE EmpNo = '" + webUser.No + "' and Auther ='" + author + "' and FK_Flow ='" + flowNo + "'";
+            sql += "WHERE AutherToEmpNo = '" + webUser.No + "' and Auther ='" + author + "' and FK_Flow ='" + flowNo + "'";
             sql += "  AND TakeBackDT >= '" + nowDate + "'";
             var data = DBAccess.RunSQLReturnTable(sql);
             for (var i = 0; i < data.length; i++) {

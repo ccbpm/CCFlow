@@ -117,19 +117,20 @@
             if (global.dbType == 0) {
                 json = GetDataTableByField("Tag2", rootNo);
             } else 
-                json = DBAccess.RunDBSrc(treeUrl, global.dbType); //执行url返回json.
+                json = DBAccess.RunDBSrc(treeUrl, global.dbType, mapExt.FK_DBSrc); //执行url返回json.
 
             var jsonTree = findChildren(json, rootNo);
             $('#tree').treeview({
                 data: jsonTree,         // 数据源
                 showCheckbox: mapExt.ShowCheckBox,   //是否显示复选框
-                highlightSelected: true,    //是否高亮选中
+                highlightSelected: true,    //是否高亮选中.
+                3
                 //nodeIcon: 'glyphicon glyphicon-user',    //节点上的图标
                 nodeIcon: 'glyphicon',
                 emptyIcon: '',    //没有子节点的节点图标
                 multiSelect: false,    //多选
                 onNodeChecked: function (event, data) {
-                    //alert(data.id);
+                    
                 },
                 nodeUnchecked: function (event, node) {
                 },
@@ -144,13 +145,16 @@
                     }
                 },
                 onNodeExpanded: function (event, data) {
-                    if (global.TreeUrl.indexOf("@Key") != -1) {
+                    var url = global.TreeUrl+"";
+                    if (url.toLowerCase().indexOf("@key") != -1) {
                         var json;
                         if (global.dbType == 0) {
                             json = GetDataTableByField("Tag2", data.id);
                         } else {
                             var url = global.TreeUrl.replace("@Key", data.id);
-                            json = DBAccess.RunDBSrc(url, global.dbType);
+                            url = url.replace("@key", data.id);
+                            url = url.replace("@KEY", data.id);
+                            json = DBAccess.RunDBSrc(url, global.dbType, mapExt.FK_DBSrc);
                         }
                         var jsonTree = findChildren(json, data.id, global.lazyLoad);
                         $("#tree").treeview("deleteChildrenNode", data.nodeId);	//删除当前节点下的所有子节点
@@ -227,6 +231,8 @@
                 json = GetDataTableByField("Tag1", keyWord);
             } else {
                 gridUrl = replaceAll(gridUrl, "@Key", keyWord);
+                gridUrl = replaceAll(gridUrl, "@key", keyWord);
+                gridUrl = replaceAll(gridUrl, "@KEY", keyWord);
                 json = DBAccess.RunDBSrc(gridUrl);
             }
 
@@ -318,6 +324,8 @@
 
             global.TreeUrl = treeUrl;
             treeUrl = treeUrl.replace("@Key", rootNo);
+            treeUrl = treeUrl.replace("@key", rootNo);
+            treeUrl = treeUrl.replace("@KEY", rootNo);
 
             if (treeUrl == "") {
                 alert('配置错误:查询数据源，初始化树的数据源不能为空。');
@@ -347,8 +355,10 @@
                 loadViewGrid(treeTag1,keyWord);
             });
 
-            if (treeUrl.indexOf("@Key") > -1) {
+            if (treeUrl.toLowerCase().indexOf("@key") > -1) {
                 treeUrl = replaceAll(treeUrl, "@Key", "");
+                treeUrl = replaceAll(treeUrl, "@key", "");
+                treeUrl = replaceAll(treeUrl, "@KEY", "");
             }
 
             $('#viewGrid_Panel').hide();

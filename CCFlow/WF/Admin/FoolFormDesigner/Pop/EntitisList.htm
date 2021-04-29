@@ -30,10 +30,11 @@
             $("#TB_Tag").val(mapExt.Tag); //查询数据源.
 
             //设置按钮是否可以用?
-            if (i == 0)
-                $("#Btn_Delete").attr("disabled", true);
-            else
-                $("#Btn_Delete").removeAttr("disabled");
+            if (i == 0) {
+                $("#Btn_Delete").hide();
+                $("#Btn_FullData").hide();
+                $("#Btn_Gener").hide();
+            }
 
         });
 

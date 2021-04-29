@@ -9,6 +9,10 @@
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+    <!-- 自己的系统风格统一end -->
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
@@ -34,26 +38,25 @@
 </head>
 <body>
     <div id="bar">
-
     </div>
     <form id="cc">
-        <!--<div id="bar" class="cs-tr cs-bar">
-            <label style="float:left;font-size:15px;font-weight:bolder;padding-top:10px;">发送后转向</label>
-            <input type="button" ID="Btn_Save" runat="server" value="保存" onclick="Btn_Save_Click()" />
-        </div>-->
+
         <fieldset>
 
             <legend>
-                <label for="RB_TurnToDeal_1">提示指定信息 </label>
+                提示指定信息
             </legend>
-            <br />
 
-            <input type="text" ID="TB_SpecMsg" name="TB_SpecMsg" runat="server" TextMode="MultiLine" Rows=3 style="width:90%" />
+            <input type="text" ID="TB_SpecMsg"
+                   placeholder="比如：您的申请已经发送至  @VarAcceptersName  进行审批。"
+                   name="TB_SpecMsg" runat="server" TextMode="MultiLine" Rows=3 style="width:90%; margin-top:30px;" />
+        </fieldset>
 
-            <legend id="help"></legend>
-            <ul style="color: Gray">
+        <fieldset>
+            <legend id="help">帮助</legend>
+            <ul >
                 <li>按照您定义的信息格式，提示给已经操作完成的用户。</li>
-                <li>比如：您的申请已经发送至XXX用户进行审批。 </li>
+                <li>比如：您的申请已经发送至XXX 进行审批。 </li>
                 <li>该自定义信息支持ccbpm的表达式，具体可参考右侧帮助文档。 </li>
                 <li>发送后系统变量如下: </li>
                 <li>您可以设置为: 当前工作提交给:【 @VarAcceptersName 】处理. </li>

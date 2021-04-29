@@ -94,50 +94,101 @@
     <script type="text/javascript">
         var deptNo = "";
         var webUser = new WebUser();
-        var setting = {
-            view: {
-                dblClickExpand: false, //双击节点时，是否自动展开父节点的标识
-                showLine: true, //是否显示节点之间的连线
-                fontCss: {}, //字体样式函数
-                selectedMulti: false //设置是否允许同时选中多个节点
-            },
-            check: {
-                chkboxType: { "Y": "ps", "N": "ps" },
-                chkboxType: { "Y": "", "N": "" },
-                chkStyle: "checkbox", //复选框类型
-                enable: false //每个节点上是否显示 CheckBox
-            },
-            edit: {
-                enable: true,
-                editNameSelectAll: true,
-                showRemoveBtn: false,
-                showRenameBtn: false,
-                removeTitle: "remove",
-                renameTitle: "rename"
-            },
-            data: {
-                simpleData: {
+        var tree = {
+            zTree:'',
+            pNode:'',
+            setting:{
+                isSimpleData: true,
+                treeNodeKey: "id",
+                treeNodeParentKey: "pid",
+                showLine: true,
+                root:{
+                    isRoot:true,
+                    nodes:[]
+                },
+                view:{
+                    dblClickExpand: false, //双击节点时，是否自动展开父节点的标识
+                    showLine: true, //是否显示节点之间的连线
+                    fontCss: {}, //字体样式函数
+                    selectedMulti: false //设置是否允许同时选中多个节点
+                },
+                check: {
+                    chkboxType: { "Y": "ps", "N": "ps" },
+                    chkboxType: { "Y": "", "N": "" },
+                    chkStyle: "checkbox", //复选框类型
+                    enable: false //每个节点上是否显示 CheckBox
+                },
+                edit: {
                     enable: true,
-                    idKey: "id",
-                    pIdKey: "pid",
-                    rootPId: ""
+                    editNameSelectAll: true,
+                    showRemoveBtn: false,
+                    showRenameBtn: false,
+                    removeTitle: "remove",
+                    renameTitle: "rename"
+                },
+                data: {
+                    simpleData: {
+                        enable: true,
+                        idKey: "id",
+                        pIdKey: "pid",
+                        rootPId: WebUser.FK_Dept
+                    }
+                },
+                callback: {
+                   /* onClick: function (event, treeId, treeNode) {
+                        deptNo = treeNode.id;
+                        BindEmps();
+                    },*/
+                    //onRightClick: OnRightClick,
+                    onExpand:function(event,treeId,treeNode){
+                        tree.pNode = treeNode;
+                        tree.loadNodeByPNode();
+                    }
                 }
             },
-            callback: {
+            loadRootNode:function(){ //加载根节点,pid=0
+                var zNodes=[];
+                var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+                if (webUser.CCBPMRunModel == 2)
+                    handler.AddPara("ParentNo", webUser.OrgNo);
+                else
+                    handler.AddPara("ParentNo", 0);
+                var ens = handler.DoMethodReturnJSON("Organization_Init");
+                var zNodes = createJsonToTree(ens);
+                $.fn.zTree.init($("#regionZTree"), tree.setting,zNodes);
+                tree.zTree = $.fn.zTree.getZTreeObj("regionZTree");
+            },
 
-            } //这里是节点点击事件
+            /**
+             * 该方法是点击父节点的+号后执行的，意味着执行该方法的时候树已经生成了
+             * 所以才能用tree.zTree
+             */
+            loadNodeByPNode:function(){
+                var children=[];
+                var folder=false;
+                //获取pid = mid的数据，也就是子节点的id等于父节点的id，说明此父节点加载了子节点
+                if(!tree.zTree.getNodeByParam("pid",tree.pNode.id)){
+                    var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+                    handler.AddPara("ParentNo",tree.pNode.id);
+                    var ens = handler.DoMethodReturnJSON("Organization_Init");
+                    var zNodes = createJsonToTree(ens);
+                    tree.zTree.addNodes(tree.pNode,zNodes,folder);
+                }
+            }
+
         };
 
         $(function () {
             
             $("#pageloading").show();
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+            /*var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
             var ens = handler.DoMethodReturnJSON("Organization_Init");
 
             var jsonTree = createJsonToTree(ens);
             zTreeObj = $.fn.zTree.init($("#regionZTree"), setting, jsonTree);
-            fillter(zTreeObj); //设置展开前三级
+            fillter(zTreeObj); //设置展开前三级*/
+            tree.loadRootNode();
         });
         //设置展开前三级
         function fillter(zTreeObj) {
@@ -145,34 +196,75 @@
             var nodeList = zTreeObj.getNodes(); //展开第一个根节点
             for (var i = 0; i < nodeList.length; i++) { //设置节点展开第二级节点
                 zTreeObj.expandNode(nodeList[i], true, false, true);
-                //					var nodespan = nodeList[i].children;
-                //					for(var j = 0; j < nodespan.length; j++) { //设置节点展开第三级节点
-                //						zTreeObj.expandNode(nodespan[j], true, false, true);
-                //					}
+
             }
         }
         //转换ztree需要的数据格式
         var treeJson = [];
         function createJsonToTree(jsonArray) {
+            treeJson = [];
+            var fk_dept = webUser.FK_Dept;
+            if (webUser.CCBPMRunModel != 0) {
+                fk_dept = webUser.OrgNo;
+            }
+            if (webUser.No == "admin") {
 
-            for (var i = 0; i < jsonArray.length; i++) {
-                var data = jsonArray[i];
-                if (data.No == "" || data.No == undefined)
-                    continue;
-                treeJson.push({
-                    "id": data.No,
-                    "pid": data.ParentNo,
-                    "name": data.Name,
-                    "idx": data.Idx
+                for (var i = 0; i < jsonArray.length; i++) {
+                    var data = jsonArray[i];
+                    if (data.No === "" || data.No == undefined)
+                        continue;
+                    treeJson.push({
+                        "id": data.No,
+                        "pid": data.ParentNo,
+                        "name": data.Name,
+                        "idx": data.Idx,
+                        isParent:true,
+                        parent: true
 
+                    });
+                }
+            } else {
+
+                //添加本部门的一条数据
+                $.each(jsonArray, function (i, o) {
+                    if (o.No == fk_dept) {
+                        treeJson.push({
+                            "id": o.No,
+                            "pid": o.ParentNo,
+                            "name": o.Name,
+                            "idx": o.Idx,
+                            isParent:true,
+                            parent: true
+
+                        });
+                        return;
+                    }
                 });
+                //循环加入本部门的所有下级部门
+                findChildren(jsonArray, fk_dept);
             }
             return treeJson;
         }
+        function findChildren(jsonArray, parentNo) {
 
-         //更新.
+            $.each(jsonArray, function (i, o) {
+                if (o.ParentNo == parentNo) {
+                    treeJson.push({
+                        "id": o.No,
+                        "pid": o.ParentNo,
+                        "name": o.Name,
+                        "idx": o.Idx
+
+                    });
+                    findChildren(jsonArray, o.No);
+                }
+            });
+        }
+
+
+        //更新.
         function Save() {
-            var nodes = zTreeObj.getSelectedNodes();
+            var nodes = tree.zTree.getSelectedNodes();
             var empNo = GetQueryString("FK_Emp");
             var deptNo = GetQueryString("FK_DEPT");
             
@@ -181,6 +273,11 @@
             var en = new Entity("BP.GPM.DeptEmp");
             en.SetPKVal(deptNo + "_" + empNo);
             en.Delete();
+
+            //取消人员部门岗位关系
+            var ens = new Entities("BP.GPM.DeptEmpStations")
+            ens.Delete("FK_Emp",empNo,"FK_Dept",deptNo);
+
             //改变主部门
             var emp = new Entity("BP.Port.Emp", empNo);
             var deptNo = nodes[0].id;

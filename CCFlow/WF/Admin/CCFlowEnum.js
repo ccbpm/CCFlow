@@ -30,6 +30,7 @@ function getRunModelName(keyValue) {
     }
 }
 
+
 //投递方式
 if (typeof DeliveryWay == "undefined") {
     var DeliveryWay = {}
@@ -84,8 +85,10 @@ if (typeof DeliveryWay == "undefined") {
         //由上一节点发送人通过“人员选择器”选择接受人
         DeliveryWay.BySelectedForPrj = 21,
         DeliveryWay.BySelectedOrgs = 22,
-        //按照用户组计算(本组织范围内)
+        //找部门负责人
         DeliveryWay.ByDeptLeader = 23,
+        //找直属领导.
+        DeliveryWay.ByEmpLeader = 50,
         //按照用户组计算(全集团)
         DeliveryWay.ByTeamOrgOnly = 24,
         //仅按用户组计算.
@@ -348,7 +351,11 @@ if (typeof Imp == "undefined") {
         /// <summary>
         /// 导出表单模板
         /// </summary>
-        Imp.ExportFrm = 6
+        Imp.ExportFrm = 6,
+        /// <summary>
+        /// WebAPI导入
+        /// </summary>
+        Imp.WebAPIImp = 7
 }
 //方向条件控制
 if (typeof DirCondModel == "undefined") {
@@ -756,6 +763,7 @@ if (typeof FileShowWay == "undefined") {
         /// </summary>
         FileShowWay.Free = 2
 }
+
 /// <summary>
 /// 附件删除规则
 /// </summary>
@@ -773,4 +781,62 @@ if (typeof AthDeleteWay == "undefined") {
         /// 只删除自己上传 2
         /// </summary>
         AthDeleteWay.DelSelf = 2
+}
+
+
+/// <summary>
+/// 子流程启动模式
+/// </summary>
+if (typeof SubFlowStartModel == "undefined") {
+    var SubFlowStartModel = {}
+    /// <summary>
+    /// 单独启动 0
+    /// </summary>
+    SubFlowStartModel.Single = 0,
+        /// <summary>
+        /// 简单列表模式批量发起 1
+        /// </summary>
+        SubFlowStartModel.Simple = 1,
+        /// <summary>
+        /// 分组模式 2
+        /// </summary>
+        SubFlowStartModel.Group = 2,
+        //树模式.
+        SubFlowStartModel.Tree = 3
+}
+
+/// <summary>
+/// 子流程显示模式
+/// </summary>
+if (typeof SubFlowShowModel == "undefined") {
+    var SubFlowShowModel = {}
+    /// <summary>
+    /// 表格模式 0
+    /// </summary>
+    SubFlowShowModel.Table = 0,
+        /// <summary>
+        /// 列表模式 1
+        /// </summary>
+        SubFlowShowModel.List = 1
+}
+
+/// <summary>
+/// 表单启用规则
+/// </summary>
+if (typeof BindFrmsNodeEnableRole == "undefined") {
+    var BindFrmsNodeEnableRole = {}
+    /// <summary>
+    /// 表格模式 0
+    /// </summary>
+    BindFrmsNodeEnableRole.None = 0,
+        /// <summary>
+        /// 列表模式 1
+        /// </summary>
+        BindFrmsNodeEnableRole.ByData = 1,
+        BindFrmsNodeEnableRole.ByPara = 1,
+        BindFrmsNodeEnableRole.ByExp = 1,
+        BindFrmsNodeEnableRole.BySQL = 1,
+        BindFrmsNodeEnableRole.ByData = 1,
+        BindFrmsNodeEnableRole.ByDat1a = 1,
+        BindFrmsNodeEnableRole.ByDa3ta = 1
 }

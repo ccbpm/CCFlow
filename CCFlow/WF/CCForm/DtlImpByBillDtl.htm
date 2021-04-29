@@ -115,7 +115,7 @@
             $("#jsonDataTable").html("");
             if (refPK.indexOf(',') == -1) {
                 dbSrc = dbSrc.replace('@Key', refPK);
-                var data = DBAccess.RunDBSrc(dbSrc, mapExt.DBType);
+                var data = DBAccess.RunDBSrc(dbSrc, mapExt.DBType, mapExt.FK_DBSrc);
                 InitTableByData(data);
                 return;
             }
@@ -127,7 +127,7 @@
                 if (refPK[i] == "")
                     continue;
                 dbSrc = dbSrc.replace('@Key', refPK[i]);
-                var pkdata = DBAccess.RunDBSrc(dbSrc, mapExt.DBType);
+                var pkdata = DBAccess.RunDBSrc(dbSrc, mapExt.DBType, mapExt.FK_DBSrc);
                $.each(pkdata,function(i,obj){
                     data.push(obj);
                });

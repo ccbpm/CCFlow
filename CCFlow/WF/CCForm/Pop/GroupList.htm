@@ -80,7 +80,7 @@
                     return;
                 }
                 groups = JSON.parse(groups);
-                entities = mapExt.DoMethodReturnString("GetDataTableByField", "Tag2", "",  GetQueryString("OID"));//数据源.
+                entities = mapExt.DoMethodReturnString("GetDataTableByField", "Tag2", "", null, GetQueryString("OID"));//数据源.
                 if (entities.indexOf("err@") != -1) {
                     alert(entities);
                     return;

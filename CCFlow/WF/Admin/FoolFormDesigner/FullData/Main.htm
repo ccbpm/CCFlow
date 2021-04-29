@@ -12,28 +12,61 @@
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../Admin.js"></script>
+    <!--<script src="../../../Scripts/LoadSql.js"></script>-->
     <script type="text/javascript">
+        var extType = "";
 
         $(function () {
+
+            extType = GetQueryString("ExtType");
+            extType = extType == null || extType == undefined ? "" : extType;
 
             InitBar("Main");
 
             //查询出来数据.
             var frmID = GetQueryString("FK_MapData");
+
+
             var refPK = GetQueryString("RefPK");
 
             var thisPK = refPK + "_FullData";
 
+            if (extType == "PageLoadFull") {
+                //确定后执行的函数需要隐藏
+                $("#okBack1").hide();
+                $("#okBack2").hide();
+
+                //只能SQL填充数据源
+                $("select[name='DDL_DBType'] option[value='1']").remove();
+                $("select[name='DDL_DBType'] option[value='2']").remove();
+
+                thisPK = refPK;
+            }
+
+            //显示字段.
+            ShowFrmFields();
+
+
             var en = new Entity("BP.Sys.MapExt");
-            en.MyPK = refPK + "_FullData";
+            en.MyPK = thisPK;
             en.SetPKVal(thisPK);
             en.RetrieveFromDBSources();
 
+
+            //绑定数据源类型. 在填充的时候，设置数据源.
+            var ens = new Entities("BP.Sys.SFDBSrcs");
+            ens.RetrieveAll();
+            GenerBindDDL("DDL_FK_DBSrc", ens, "No", "Name", en.FK_DBSrc);
 
             en.Doc = FormatSQL(en.Doc);
 
             //给下列框赋值.
             GenerFullAllCtrlsVal(en);
+
+            $("#TB_SQL").val(en.Doc);
+
+
+            DBTypeChange();
 
 
         });
@@ -45,31 +78,53 @@
             var refPK = GetQueryString("RefPK");
 
             var thisPK = refPK + "_FullData";
+            if (extType == "PageLoadFull")
+                thisPK = refPK;
 
             var en = new Entity("BP.Sys.MapExt");
-            en.MyPK = refPK + "_FullData";
+            en.MyPK = thisPK;
             en.SetPKVal(en.MyPK);
             var i = en.RetrieveFromDBSources();
 
             en.FK_MapData = frmID;
-            en.ExtType = "FullData";
-            en.DBType = $("#DDL_DBType").val(); //获得选择的值.
+            if (extType != "PageLoadFull") {
+                en.ExtType = "FullData"; //.通用的.
+                en.AttrOfOper = GetQueryString("KeyOfEn");
+            }
+            else {
+                en.ExtType = "PageLoadFull";
+                en.AttrOfOper = "";
+            }
 
-            var sql = $("#TB_Doc").val();
+            en.DBType = $("#DDL_DBType").val(); //获得选择的值.
+            en.FK_DBSrc = $("#DDL_FK_DBSrc").val(); //获得选择的值.
+
+            var sql = $("#TB_SQL").val();
             if (sql == '') {
                 alert("填充主表的sql不能为空！");
                 return;
             }
+
+            if (sql.indexOf('@Key') == -1 && extType != "PageLoadFull") {
+                alert("表达式里必须有 @Key 参数.");
+                return;
+            }
+
             en.Doc = sql; //设置主表的SQL.
             var tag2 = $("#TB_Tag2").val();
             en.Tag2 = tag2; //设置主表的SQL.
-            en.AttrOfOper = GetQueryString("KeyOfEn");
+
             if (i == 0)
                 en.Insert();
             else
                 en.Update();
 
             window.location.href = window.location.href;
+        }
+        function EtcDBFull() {
+            var url = window.location.href;
+            url = url.replace("Main.htm", "MainDtlList.htm");
+            window.location.href = url;
         }
     </script>
 </head>
@@ -79,26 +134,36 @@
         </div>
         <table style="width: 99%;">
             <tr>
-                <td colspan="2">
-                    填充主表数据SQL
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width: 98%;"> </textarea>
-                </td>
-            </tr>
-            <tr>
                 <td>数据源类型</td>
                 <td>
-                    <select id="DDL_DBType" name="DDL_DBType">
+                    <select id="DDL_DBType" name="DDL_DBType" onchange="DBTypeChange(this)">
                         <option value="0">执行SQL</option>
                         <option value="1">执行url返回JSON</option>
                         <option value="2">执行CCFromRef.js返回JSON</option>
                     </select>
                 </td>
             </tr>
+            <tr id="DBSrc">
+                <td> 数据源</td>
+                <td>
+                    <select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc">
+                    </select>
+                </td>
+            </tr>
+
             <tr>
+                <td colspan="2">
+                    填充主表数据数据源表达式(SQL/URL)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <textarea rows="4" name="TB_SQL" id="TB_SQL" style="width: 98%;"> </textarea>
+                </td>
+            </tr>
+
+
+            <tr id="okBack1">
                 <td colspan="4">
                     <a href="javascript:ShowHidden('backFunction')">确定后执行的JS</a>,可以为空.
                     <div id="backFunction" style="color: Gray; display: none">
@@ -108,14 +173,17 @@
                     </div>
                 </td>
             </tr>
-            <tr>
+            <tr id="okBack2">
                 <td colspan="4">
                     <input type="text" id="TB_Tag2" name="TB_Tag2" style="width: 99%;" />
                 </td>
             </tr>
         </table>
+
+        <br />
+
         <fieldset>
-            <legend>SQL帮助.</legend>
+            <legend>SQL填写帮助.</legend>
             <ul>
                 <li>必须返回一行数据的 SQL或者数据源. </li>
                 <li>返回的列名要与字段名进行对应，如果匹配的不管控件类型系统就会自动赋值.</li>
@@ -127,15 +195,18 @@
                 <li> @Key 就是指选择的主键. 是系统约定的标记. </li>
             </ul>
 
-            <legend>URL帮助.</legend>
+            <legend>URL填写帮助.</legend>
             <ul>
                 <li>必须返回一行数据的的json格式的数据源. </li>
                 <li>返回的列名要与字段名进行对应，如果匹配的不管控件类型系统就会自动赋值.</li>
                 <li>实例：  <font color="green"> /App/Handler.ashx?DoType=EmpFull&Key=@Key </font></li>
                 <li> @Key 就是指选择的主键. 是系统约定的标记. </li>
             </ul>
+            <legend> 该表单的字段 </legend>
 
+            <div id="FrmFileds"></div>
         </fieldset>
+
     </form>
 </body>
 </html>

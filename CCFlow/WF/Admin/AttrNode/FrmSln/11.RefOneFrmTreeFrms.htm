@@ -14,38 +14,51 @@
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+
+    <!-- 自己的系统风格统一end -->
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+
     <script type="text/javascript">
         var nodeFrmID = "";
+        var keyWord = "";
         $(function () {
 
-            var html = "<table style='width:98%' >";
-            html += "<tr>";
-            html += "<th>序号</th>";
-            html += "<th>类别</th>";
-            html += "<th>表单ID</th>";
-            html += "<th>名称</th>";
-            html += "<th>存储表</th>";
-            html += "<th>创建组织</th>";
-            html += "<th>操作</th>";
-            html += "</tr>";
+            GetData();
 
+
+        });
+
+        function SearchIt() {
+            keyWord = window.prompt('请输入关键字', keyWord);
+            if (keyWord == null || keyWord == undefined)
+                keyWord = "";
+            GetData();
+        }
+
+        function GetData() {
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode_FrmSln");
             handler.AddPara("NodeID", GetQueryString("NodeID"));
+            handler.AddPara("KeyWord", keyWord);
             var data = handler.DoMethodReturnString("RefOneFrmTreeFrms_Init");
 
             if (data.indexOf('err@') == 0) {
                 alert(data);
+                $("#frms").html("");
                 return;
             }
 
             data = JSON.parse(data);
             if (data.length == 0) {
                 var html2 = "没有可供选择的表单。";
+                $("#frms").html("");
                 $("#info").html(html2);
                 return;
             }
+            var html = "";
             for (var i = 0; i < data.length; i++) {
                 var en = data[i];
 
@@ -65,10 +78,8 @@
                 html += "<td><a href=\"javascript:Save('" + en.No + "')\">绑定</a></td>";
                 html += "</tr>";
             }
-            html += "</table>";
             $("#frms").html(html);
-        });
-
+        }
         function Save(selectFrm) {
 
             if (window.confirm('您确定要绑定:' + selectFrm + "吗？") == false)
@@ -119,7 +130,24 @@
 </head>
 <body>
     <div id="table">
-        <div id="frms"></div>
+        <div>
+            <table style="width:100%">
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>类别</th>
+                        <th>表单ID</th>
+                        <th>名称<div style='float:right'><img src='../../../Img/Search.png' style='width:24px;' onclick='SearchIt();' /></div></th>
+                        <th>存储表</th>
+                        <th>创建组织</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="frms">
+
+                </tbody>
+            </table>
+        </div>
         <div id="info"></div>
     </div>
 </body>

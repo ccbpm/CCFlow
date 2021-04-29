@@ -11,6 +11,10 @@
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../Admin.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+
 
     <base target="_self" />
     <script type="text/javascript">
@@ -107,8 +111,9 @@
         <div id="Msg"></div>
         <br />
         <br />
-        <fieldset>
-            <legend> 什么是方向条件的优先级? </legend>
+
+        <fieldset id="help">
+            <legend id="help"> 什么是方向条件的优先级? </legend>
             <ul>
                 <li>在转向中，如果出现一个以上的路线都成立时时，系统就会按照第一个路线来计算，那一个排列最前面就按照那一个计算。</li>
                 <li>例如：在demo中002.请假流程，如果一个人员既有基层岗，也有中层岗那么到达基层与中层的路线都会成立，如果设置了方向条件的优先级，系统就会按照优先满足的条件的路线计算。</li>

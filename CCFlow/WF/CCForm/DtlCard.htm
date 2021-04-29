@@ -6,7 +6,7 @@
     <link href="../Scripts/bootstrap/css/TableExp/bootstrap-table-expandable.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/bootstrap/js/jquery.min.js" type="text/javascript"></script>
     <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    
+
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
@@ -42,7 +42,7 @@
             var sys_MapDtl = mainData["Main"][0]; //从表描述.
             var sys_mapAttrs = mainData["MapAttrs"]; //从表字段.
             var mapDtls = mainData["MapDtls"]; //从表的从表集合.
-            
+
             $('#dt_CardPanel').html(''); //清空表格数据
             //表头
             var thread = $('<thead></thead>');
@@ -54,7 +54,7 @@
             var th = $("<th></th>");
             var rowShowModel = sys_MapDtl.EditModel;
             //有新增权限，添加按钮
-            if (sys_MapDtl.IsInsert == 1&& sys_MapDtl.IsReadonly == "0" && isReadonly != "1") {
+            if (sys_MapDtl.IsInsert == 1 && sys_MapDtl.IsReadonly == "0" && isReadonly != "1") {
                 th = $("<th><img src='../Img/Btn/Add.gif' style='cursor: pointer;' name='insertBtn' onclick='insertRow(" + rowShowModel + ")' /></th>");
             }
             th.css('width', '30px');
@@ -101,19 +101,19 @@
                 if (sys_MapDtl.IsUpdate == 1) {
                     var optionEdit = $("<img src='../Img/Btn/Edit.gif' onclick='updateRow(" + dataObj.OID + ", " + rowShowModel + ")' class='updateRow' titile='修改' style='cursor:pointer;'/>");
                     optionTD.append(optionEdit);
-                    optionTD.append("&nbsp;&nbsp;");       
+                    optionTD.append("&nbsp;&nbsp;");
                 }
                 if (sys_MapDtl.IsDelete == 1) {
                     var optionDelete = $("<img src='../Img/Btn/Delete.png' onclick='deleteRow(" + dataObj.OID + ")' class='delRow' titile='删除' style='cursor:pointer;'/>");
                     optionTD.append(optionDelete);
                 }
-                if(sys_MapDtl.IsReadonly == "0" && isReadonly != "1")
+                if (sys_MapDtl.IsReadonly == "0" && isReadonly != "1")
                     tbodyTr.append(optionTD);
 
                 //点击行展开行后的内容
                 var tbodyExpTr = $('<tr></tr>');
                 var tbodyExpTd = $('<td colspan=' + columnCount + ' align="center"></td>');
-                
+
                 //加载子表
                 var childTable = ChildDtls(mapDtls, tbodyExpTd, dataObj.OID);
                 tbodyExpTr.append(childTable);
@@ -352,7 +352,7 @@
                 var FK_MapData = GetQueryString("FK_MapData");
                 var FID = GetQueryString("FID");
                 var FK_Node = GetQueryString("FK_Node");
-                window.parent.DtlFrm(ensName, refPKVal, '0', EditModel, InitMainTable,FK_MapData,FK_Node,FID,false);
+                window.parent.DtlFrm(ensName, refPKVal, '0', EditModel, InitMainTable, FK_MapData, FK_Node, FID, false);
                 return;
             }
         }
@@ -364,9 +364,9 @@
                 var FK_MapData = GetQueryString("FK_MapData");
                 var fid = GetQueryString("FID");
                 if (fid == "" || fid == undefined)
-                 fid = 0
+                    fid = 0
                 var FK_Node = GetQueryString("FK_Node");
-                window.parent.DtlFrm(ensName, refPKVal, OID, EditModel, InitMainTable, FK_MapData, FK_Node, fid,true);
+                window.parent.DtlFrm(ensName, refPKVal, OID, EditModel, InitMainTable, FK_MapData, FK_Node, fid, true);
             }
         }
 

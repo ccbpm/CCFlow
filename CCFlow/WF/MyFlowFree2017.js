@@ -831,16 +831,16 @@ function figure_Template_Dtl(frmDtl) {
 
         //表格模式
         if (pageData.IsReadonly) {
-            src = "./CCForm/" + dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1&" + urlParam + "&Version=1";
+            src = "./CCForm/" + dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1&" + urlParam + "&Version=1&FrmType=1";
         } else {
-            src = "./CCForm/" + dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData +"&IsReadonly=0&" + urlParam + "&Version=1";
+            src = "./CCForm/" + dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=0&" + urlParam + "&Version=1&FrmType=1";
         }
     } else if (frmDtl.ListShowModel == "1") {
         //卡片模式
         if (pageData.IsReadonly) {
-            src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1&" + urlParam + "&Version=1";
+            src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1&" + urlParam + "&Version=1&FrmType=1";
         } else {
-            src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=0&" + urlParam + "&Version=1";
+            src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=0&" + urlParam + "&Version=1&FrmType=1";
         }
     }
 

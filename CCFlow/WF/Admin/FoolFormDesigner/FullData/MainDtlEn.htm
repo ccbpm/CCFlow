@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>填充主表</title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../Admin.js"></script>
+    <!--<script src="../../../Scripts/LoadSql.js"></script>-->
+    <script type="text/javascript">
+        var refPK = "";
+        var myPK = "";
+        var frmID = "";
+        $(function () {
+
+            //查询出来数据.
+            frmID = GetQueryString("FK_MapData");
+            refPK = GetQueryString("RefPK");
+            myPK = GetQueryString("MyPK");
+            myPK = myPK == null || myPK == undefined ? "" : myPK;
+
+            //显示字段.调用 Admin.js 的方法.
+            ShowFrmFields();
+
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = myPK;
+            en.RetrieveFromDBSources();
+
+            //绑定数据源类型. 在填充的时候，设置数据源.
+            var ens = new Entities("BP.Sys.SFDBSrcs");
+            ens.RetrieveAll();
+            GenerBindDDL("DDL_FK_DBSrc", ens, "No", "Name", en.FK_DBSrc);
+
+            en.Doc = FormatSQL(en.Doc);
+
+            //给下列框赋值.
+            GenerFullAllCtrlsVal(en);
+
+            $("#TB_SQL").val(en.Doc);
+
+            DBTypeChange();
+
+        });
+
+        function Save() {
+
+            //更新节点表单类型.
+            var en = new Entity("BP.Sys.MapExt", myPK);
+            var i = en.RetrieveFromDBSources();
+
+            en.FK_MapData = frmID;
+            en.ExtType = "FullData" + "Dtl"; //.通用的.
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+
+
+            en.DBType = $("#DDL_DBType").val(); //获得选择的值.
+            en.FK_DBSrc = $("#DDL_FK_DBSrc").val(); //获得选择的值.
+
+
+            var sql = $("#TB_SQL").val();
+            if (sql == '') {
+                alert("表达式不能为空！");
+                return;
+            }
+
+            if (sql.indexOf('@Key') == -1) {
+                alert("表达式里必须有 @Key 参数.");
+                return;
+            }
+
+
+            en.Doc = sql; //设置主表的SQL.
+            var tag2 = $("#TB_Tag2").val();
+
+            if (tag2 == "" || tag2 == null) {
+                alert("备注不能为空.");
+                return;
+            }
+
+            en.Tag2 = tag2; //设置主表的SQL.
+
+
+            if (i == 0) {
+                en.Insert();
+                alert("新增成功....");
+            }
+            else {
+                en.Update();
+                alert("修改成功....");
+            }
+
+            Back();
+            //window.location.href = window.location.href;
+        }
+        function Back() {
+            var url = "";
+            url = "MainDtlList.htm?FK_MapData=" + GetQueryString("FK_MapData");
+            url += "&RefPK=" + GetQueryString("RefPK");
+            url += "&KeyOfEn=" + GetQueryString("KeyOfEn");
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+
+        <div id="Bar">
+            <input id="Btn_Back" type="button" onclick="Back();" value="返回" />
+            <input id="Btn_Save" type="button" onclick="Save();" value="保存" />
+        </div>
+
+        <table style="width: 99%;">
+
+            <tr>
+                <td>数据源类型</td>
+                <td>
+                    <select id="DDL_DBType" name="DDL_DBType" onchange="DBTypeChange(this)">
+                        <option value="0">执行SQL</option>
+                        <option value="1">执行url返回JSON</option>
+                        <option value="2">执行CCFromRef.js返回JSON</option>
+                    </select>
+                </td>
+            </tr>
+            <tr id="DBSrc">
+                <td> 数据源</td>
+                <td>
+                    <select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc">
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    填充主表数据数据源表达式(SQL/URL)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <textarea rows="4" name="TB_SQL" id="TB_SQL" style="width: 98%;"> </textarea>
+                </td>
+            </tr>
+
+            <tr id="okBack1">
+                <td colspan="1">
+                    备注
+                </td>
+                <td colspan="1">
+                    <input type="text" id="TB_Tag2" name="TB_Tag2" style="width: 99%;" />
+                </td>
+            </tr>
+        </table>
+
+        <br />
+
+        <fieldset>
+            <legend>SQL填写帮助.</legend>
+            <ul>
+                <li>必须返回一行数据的 SQL或者数据源. </li>
+                <li>返回的列名要与字段名进行对应，如果匹配的不管控件类型系统就会自动赋值.</li>
+                <li>
+                    实例： <font color="green">
+                        SELECT  Name as MingCheng, Tel as DianHua, Email FROM WF_EMP WHERE No='@Key'
+                    </font>
+                </li>
+                <li> @Key 就是指选择的主键. 是系统约定的标记. </li>
+            </ul>
+
+            <legend>URL填写帮助.</legend>
+            <ul>
+                <li>必须返回一行数据的的json格式的数据源. </li>
+                <li>返回的列名要与字段名进行对应，如果匹配的不管控件类型系统就会自动赋值.</li>
+                <li>实例：  <font color="green"> /App/Handler.ashx?DoType=EmpFull&Key=@Key </font></li>
+                <li> @Key 就是指选择的主键. 是系统约定的标记. </li>
+            </ul>
+            <legend> 该表单的字段 </legend>
+
+            <div id="FrmFileds"></div>
+        </fieldset>
+
+    </form>
+</body>
+</html>

@@ -17,6 +17,7 @@
     <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
@@ -27,13 +28,25 @@
         $(function () {
 
             InitBar("Simple");
+
             var html = "";
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn") + "_FullData";
+            mapExt.MyPK = GenerMapExtPK();
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
+
+            //设置按钮是否可以用?
+            if (i == 0) {
+                $("#Btn_FullData").hide();
+                $("#Btn_Delete").hide();
+            }
 
             //格式化.
             mapExt.Tag4 = FormatSQL(mapExt.Tag4);
+
+            //绑定数据源类型. 在填充的时候，设置数据源.
+            var ens = new Entities("BP.Sys.SFDBSrcs");
+            ens.RetrieveAll();
+            GenerBindDDL("DDL_FK_DBSrc", ens, "No", "Name", mapExt.FK_DBSrc);
 
             //批量为复制.
             GenerFullAllCtrlsVal(mapExt);
@@ -47,12 +60,7 @@
             //按照文本计算.
             $("#TB_SQL").val(tag);
             editor.setValue($("#TB_SQL").val());
-            //设置按钮是否可以用?
-            if (i == 0) {
-                $("#Btn_FullData").hide();
-            } else {
-                $("#Btn_FullData").show();
-            }
+
         });
 
         function Save() {
@@ -66,7 +74,7 @@
             en.Update();
 
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn") + "_FullData";
+            mapExt.MyPK = GenerMapExtPK();
             var n = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
             mapExt.CopyURL();  //从url里面copy数据.
@@ -76,7 +84,6 @@
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
             mapExt.FK_MapData = GetQueryString("FK_MapData");
 
-
             mapExt.Tag4 = editor.getValue(); //设置主表的SQL.
             if (mapExt.Tag4.indexOf('@Key') == -1) {
                 alert('保存错误：您必须有@Key变量，请参考帮助文件。');
@@ -85,7 +92,17 @@
 
             if (mapExt.Update() == 0)
                 mapExt.Insert();
+
             window.location.href = window.location.href;
+        }
+        function DBTypeChange() {
+
+            var val = $("#DDL_DBType").val();
+            if (val == 0) {
+                $("#DBSrc").show();
+            } else {
+                $("#DBSrc").hide();
+            }
         }
     </script>
     <style type="text/css">
@@ -108,23 +125,31 @@
     </div>
     <form id="cc">
         <table id="table" style="width: 100%;">
-
             <tr>
                 <td>
                     数据源类型
                 </td>
                 <td>
-                    <select id="DDL_DBType" name="DDL_DBType" onchange="changeDoc(this)">
+                    <select id="DDL_DBType" name="DDL_DBType" onchange="DBTypeChange(this)">
                         <option value="0">执行SQL</option>
                         <option value="1">执行url返回JSON</option>
                         <option value="2">执行CCFromRef.js返回JSON</option>
                     </select>
                 </td>
             </tr>
+            <tr id="DBSrc">
+                <td>
+                    数据源
+                </td>
+                <td>
+                    <select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc">
+                    </select>
+                </td>
+            </tr>
+ 
             <tr>
                 <td colspan="2">
-                    数据源: <a href="javascript:ShowHidden('sqlexp')"> <img src="../../../Img/Btn/Help.gif" /> 帮助: </a>
-
+                    搜索列表数据源配置:
                 </td>
             </tr>
             <tr>
@@ -134,6 +159,9 @@
             </tr>
             <tr>
                 <td colspan="2" style="width: 100%;">
+
+                    <a href="javascript:ShowHidden('sqlexp')"> <img src="../../../Img/Btn/Help.gif" />表达式填写帮助: </a>
+
                     <div id='sqlexp' style='color: Gray; display: none'>
                         <fieldset>
                             <legend>填充SQL帮助:</legend>
@@ -154,12 +182,12 @@
 
 
                             <legend>主表运行效果</legend>
-                            <img src="1.Simple.png" style="width:90%;" />
+                            <img  id="HelpImg" src="1.Simple.png" style="width:90%;" />
                         </fieldset>
 
                         <fieldset>
                             <legend>从表运行效果</legend>
-                            <img src="1.Simple-1.png" style="width:90%;" />
+                            <img  id="HelpImg" src="1.Simple-1.png" style="width:90%;" />
                         </fieldset>
                     </div>
                 </td>

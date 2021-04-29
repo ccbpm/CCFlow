@@ -29,9 +29,10 @@
         //页面启动函数
 
         var ens = null;
+        var frmID = GetQueryString("FrmID");
         $(function () {
 
-            var frmID = GetQueryString("FrmID");
+           
             ens = new Entities("BP.Sys.MapAttrs", "FK_MapData", frmID, "GroupID", GetQueryString("GroupField"), "UIVisible", "1", "Idx");
 
             //alert(ens.length);
@@ -45,8 +46,8 @@
                 addRow += "<td>" + en.KeyOfEn + "</td>";
                 addRow += "<td><input type=text value='" + en.Name + "'id='TBN_" + en.KeyOfEn + "' /></td>";
                 addRow += "<td><input type=text value='" + en.Idx + "'id='TB_" + en.KeyOfEn + "' /></td>";
-                addRow += "<td><a href='javascript:void(0);' onclick='doUp(parseInt(this.id))' id='" + rowNo + "'><img src='../../Img/Btn/Up.GIF' border=0></a></td>";
-                addRow += "<td><a href='javascript:void(0);' onclick = 'doDown(parseInt(this.id))'  id='" + rowNo + "'><img src='../../Img/Btn/Down.gif' border=0></a></td>";
+                addRow += "<td><a href='javascript:void(0);' onclick='doUp("+rowNo+",\""+en.MyPK+"\")' id='" + rowNo + "'><img src='../../Img/Btn/Up.GIF' border=0></a></td>";
+                addRow += "<td><a href='javascript:void(0);' onclick = 'doDown(" + rowNo + ",\"" + en.MyPK +"\")'  id='" + rowNo + "'><img src='../../Img/Btn/Down.gif' border=0></a></td>";
 
                 addRow += "</tr>";
 
@@ -56,12 +57,12 @@
         //获取行对象的函数
         function getRowEn(paramNo) {
             var KeyOfEn = $("table tr:eq(" + paramNo + ") td:eq(1)").text();
-            var mypk = GetQueryString("FK_MapData") + "_" + KeyOfEn;
+            var mypk = frmID + "_" + KeyOfEn;
             var en = new Entity("BP.Sys.MapAttr", mypk);
             return en;
         }
         //向上移动
-        function doUp(paramNo) {
+        function doUp(paramNo,mypk) {
             //最顶端,直接返回
             if (paramNo == 1) {
                 return;

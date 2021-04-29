@@ -14,8 +14,13 @@
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+    <!-- 自己的系统风格统一end -->
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+
     <script type="text/javascript">
 
         var nodeFrmID = "";
@@ -174,7 +179,7 @@
         function SetFrm() {
             var nodeID = GetQueryString("FK_Node");
             var url = "11.RefOneFrmTreeFrms.htm?NodeID=" + nodeID;
-            OpenEasyUiDialogExt(url, '选择要绑定的表单', 600, 450, false);
+            OpenEasyUiDialogExt(url, '选择要绑定的表单', 800, 450, false);
         }
         function BatchEdit() {
             var url = "BatchEditSln.htm?NodeID=" + nodeID;
@@ -186,8 +191,8 @@
 <body>
 
     <div id="bar"> </div>
-    <fieldset>
-        <legend>选择表单</legend>
+    <fieldset id="help">
+        <legend id="help">选择表单</legend>
         <ul>
             <!--<li>表单类别：<select id="DDL_FrmTree" name="DDL_FrmTree" onchange="change()"> </select> </li>
             <li>表单:  <select id="DDL_RefOneFrmTree" name="DDL_RefOneFrmTree"> </select> </li>
@@ -200,6 +205,8 @@
             <li>2.使用下面的设置字段权限设置[为该表单的元素设置权限],然后执行批量设置. </li>
             <li>3.一般来说，开始节点设置为自定义方案，其他节点设置为只读方案. </li>
             <li>4.在批量设置里，使用不同的签批组件对应不同的节点. </li>
+
+            <li>5.<font color="green">我们建议您绑定的表单与流程业务表的名称相同，如果您需要单据编号，在绑定的表单里增加一个BillNo字段即可。 </font></li>
 
         </ul>
 

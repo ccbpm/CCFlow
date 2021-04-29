@@ -1,1 +1,4 @@
 驰骋工作流引擎任务自动执行.xml
+
+如何配置请参考：
+https://www.cnblogs.com/gcgc/p/11594467.html

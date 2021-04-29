@@ -3,28 +3,63 @@
 <head>
     <meta charset="UTF-8" />
     <title>驰骋流程&表单设计器 </title>
+    <base target="_self" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link href="../../Style/skin/css/login.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="login-bg" onload="checkCookie()">
+
+    <form id="cc">
+        <div class="login-box_admin">
+            <!--<h1 class="logo-name">驰骋流程&表单设计器</h1>-->
+            <div class="logo">
+                <img class="imgsty" src="../../../DataUser/ICON/IconSmall.png" alt="" />
+            </div>
+            <div class="login-form">
+                <div class="form-group">
+
+                    <select class="form-control" id="DDL_System" onchange="SelectChange()">
+                        <option value="Default" onclick="setCookie('username', $(this).val(), 30)"> 驰骋BPM专业版 </option>
+                        <option value="DefaultSimple" onclick="setCookie('username', $(this).val(), 30)">驰骋BPM极简版(beta)</option>
+                        <option value="DefaultFrm" onclick="setCookie('username', $(this).val(), 30)"> 驰骋表单引擎(beta)</option>
+                        <option value="DefaultGPM" onclick="setCookie('username', $(this).val(), 30)"> 驰骋权限管理(beta)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+
+                    <input type="text" id="TB_No" name="TB_No" value="admin" placeholder="默认账号:admin" lay-verify="required" class="form-control" />
+                </div>
+                <div class="form-group">
+
+                    <input type="password" id="TB_PW" name="TB_PW" placeholder="默认密码:123" lay-verify="required" class="form-control" />
+                </div>
+                <div id="validate" class="form-group" style="display: none">
+
+                    <input type="text" class="form-control" placeholder="验证码" id="inputCode" style="width:50%;display: inline" />
+                    <canvas id="canvas" width="78" height="24"></canvas>
+                    <a href="javascript:void(0)" style="margin-left: 10px" onclick="createCode()">看不清</a>
+                </div>
+
+                <input type="button" class="btn btn-primary btn-block" value="登录" id="Btn_Login" onclick="Login();" />
+                <!--//  <input type="button" class="btn btn-primary btn-block" value="登录简洁版(开发中)" id="Btn_LoginSimple" onclick="LoginSimple();" />
+                // <input type="button" class="btn btn-primary btn-block" value="登录表单引擎(开发中)" id="Btn_LoginFrm" onclick="LoginFrm();" />-->
+                <div id="Msg" class="msg"></div>
+                <div class="login-nav">
+                    <a href="../../AppClassic/Login.htm" class="pull-right">前台登录</a>
+
+                    <a href="http://ccbpm.mydoc.io" target=_blank class="pull-right">帮助文档&nbsp;&nbsp;</a>
+                </div>
+            </div>
+        </div>
+    </form>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script src="../../Comm/JS/validation.js"></script>
-    <base target="_self" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-    <link href="../../Style/skin/css/login.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-    <style>
-        #DDL_System::-ms-expand {
-            display: none;
-        }
-
-        #DDL_System {
-            padding: 5px 10px;
-            border: 1px solid #dcd8d8;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none; /*去掉下拉箭头*/
-        }
-    </style>
     <script type="text/javascript">
 
         document.onkeydown = function (e) {
@@ -38,7 +73,6 @@
         //初始化页面函数.....
         $(function () {
 
-          
             if (! +[1,]) {
                 //  alert("这是ie浏览器，您只能使用sliverlight版本浏览器。");
                 // window.location.href = '../XAP/Designer.htm';
@@ -87,7 +121,10 @@
                 }
             });
 
-            $("#Msg").html("<font color=green>" + data + "</font>");
+            if (data.indexOf("err@") == -1)
+                $("#Msg").html("<font color=green>" + data + "</font>");
+            else
+                $("#Msg").html("<font color=red>" + data + "</font>");
 
         });
 
@@ -187,68 +224,5 @@
             }
         }
     </script>
-
-    <style>
-        .imgsty {
-            display: inline-block;
-            height: auto;
-            max-width: 100%;
-        }
-    </style>
-</head>
-
-<body class="login-bg" onload="checkCookie()">
-
-    <form id="cc">
-        <div class="login-box_admin">
-            <!--<h1 class="logo-name">驰骋流程&表单设计器</h1>-->
-            <div style="margin-bottom: 10px">
-                <img class="imgsty" src="../../../DataUser/ICON/IconSmall.png" alt="" />
-            </div>
-            <div class="login-form">
-                <div class="form-group">
-                    <b>您要登录的系统:</b>
-                    <select class="form-control" style=" width:auto;display:inline" id="DDL_System" onchange="SelectChange()">
-                        <option value="Default" onclick="setCookie('username', $(this).val(), 30)"> 驰骋BPM专业版 </option>
-                        <option value="DefaultSimple" onclick="setCookie('username', $(this).val(), 30)">驰骋BPM极简版(beta)</option>
-                        <option value="DefaultFrm" onclick="setCookie('username', $(this).val(), 30)"> 驰骋表单引擎(beta)</option>
-                        <option value="DefaultGPM" onclick="setCookie('username', $(this).val(), 30)"> 驰骋权限管理(beta)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <input type="text" id="TB_No" name="TB_No" value="admin" placeholder="请输入账号" lay-verify="required" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <input type="password" id="TB_PW" name="TB_PW" placeholder="请输入密码" lay-verify="required" class="form-control" />
-                </div>
-                <div id="validate" class="form-group" style="display: none">
-
-                    <input type="text" class="form-control" placeholder="验证码" id="inputCode" style="width:50%;display: inline" />
-                    <canvas id="canvas" width="78" height="24"></canvas>
-                    <a href="javascript:void(0)" style="margin-left: 10px" onclick="createCode()">看不清</a>
-                </div>
-                <input type="button" class="btn btn-primary btn-block" value="登录" id="Btn_Login" onclick="Login();" />
-                <!--//  <input type="button" class="btn btn-primary btn-block" value="登录简洁版(开发中)" id="Btn_LoginSimple" onclick="LoginSimple();" />
-                // <input type="button" class="btn btn-primary btn-block" value="登录表单引擎(开发中)" id="Btn_LoginFrm" onclick="LoginFrm();" />-->
-
-                <div class="row login-nav">
-                    <div class="col-xs-6">默认密码：123</div>
-                    <div class="col-xs-6 ">
-
-                        <a href="../../AppClassic/Login.htm" class="pull-right">前台登录</a>
-
-                        <a href="http://ccbpm.mydoc.io" target=_blank class="pull-right">帮助文档&nbsp;&nbsp;</a>
-
-                    </div>
-                    <br />
-                    <div id="Msg" style=" float:right;margin-right:14px">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-
-
 </body>
 </html>

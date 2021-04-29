@@ -1,0 +1,299 @@
+﻿body {
+    margin: 0 auto; /*color: #000;
+            line-height: 20px;
+            font-family: 宋体;
+            text-align: center;
+            width: 90%;*/
+    background-color: #f7f6f9;
+    overflow: auto !important;
+}
+
+.wrapper-dropdown-2 {
+    /* Size and position */
+    position: relative; /* Enable absolute positionning for children and pseudo elements */
+    width: 80px;
+    margin: 0;
+    border-radius: 6px;
+    margin-left: 0px;
+    padding: 6px 25px;
+    /* Styles */
+    color: white;
+    cursor: pointer;
+    outline: none;
+}
+
+    .wrapper-dropdown-2:after {
+        content: "";
+        width: 0;
+        height: 0;
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        margin-top: -3px;
+        border-width: 6px 6px 0 6px;
+    }
+
+    .wrapper-dropdown-2 .dropdown {
+        /* Size & position */
+        position: absolute;
+        z-index: 100;
+        top: 100%;
+        margin-left: 130px;
+        /* Styles */
+        background: white;
+        -webkit-transition: all 0.3s ease-out;
+        -moz-transition: all 0.3s ease-out;
+        -ms-transition: all 0.3s ease-out;
+        -o-transition: all 0.3s ease-out;
+        transition: all 0.3s ease-out;
+        list-style: none;
+        /* Hiding */
+        opacity: 0;
+        pointer-events: none;
+    }
+
+        .wrapper-dropdown-2 .dropdown li a {
+            position: fixed;
+            height: 29px;
+            line-height: 29px;
+            z-index: 100000;
+            margin-top: 3px;
+            padding-top: 10px;
+            list-style: none;
+            display: block;
+            padding: 9px;
+            -webkit-transition: all 0.3s ease-out;
+            -moz-transition: all 0.3s ease-out;
+            -ms-transition: all 0.3s ease-out;
+            -o-transition: all 0.3s ease-out;
+            transition: all 0.3s ease-out;
+        }
+
+
+    /* Active state */
+    .wrapper-dropdown-2.active .dropdown {
+        opacity: 1;
+        pointer-events: auto;
+        list-style: none;
+    }
+
+textarea, input[type=text] {
+    width: 100%;
+}
+
+body {
+    font-size: .80em;
+    font-family: "Helvetica Neue", "Lucida Grande", "Segoe UI", Arial, Helvetica, Verdana, sans-serif;
+    margin: 0px;
+    padding: 0px;
+    color: #696969;
+}
+
+input.align_cb {
+    padding-left: 4px;
+    cursor: pointer;
+    margin: 0;
+    vertical-align: middle;
+}
+
+label.align_cbl {
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 2px;
+}
+
+th {
+    /*background-color: InfoBackground;*/
+    background-color: #f1f1f1;
+}
+
+.cs-btn-group {
+    border: 0;
+    text-align: left;
+}
+
+    .cs-btn-group a {
+        margin-left: 6px;
+        padding: 7px 10px;
+        color: #fff;
+        font-size: 14px;
+        line-height: 32px;
+        height: 32px;
+        border: 0 none;
+        border-radius: 3px;
+        background-image: none;
+        box-sizing: border-box;
+    }
+    .cs-btn-group a i{ padding-right:3px;}
+    .cs-btn-group a:hover{ opacity:0.8}
+
+    .cs-btn-group span.l-btn-left.l-btn-left {
+        padding: 0;
+        background-image: none;
+    }
+    .cs-btn-group a.l-btn span span.l-btn-text{ font-size:14px;}
+.btn-light-green {
+    background-color: #50b6ac;
+}
+
+    .btn-light-green:hover {
+        background-color: #50b6ac;
+    }
+
+.btn-light-blue {
+    background-color: #62cae3;
+}
+
+    .btn-light-blue:hover {
+        background-color: #62cae3;
+    }
+
+.btn-light-yellow {
+    background-color: #f3ba20;
+}
+
+    .btn-light-yellow:hover {
+        background-color: #f3ba20;
+    }
+
+.btn-light-red {
+    background-color: #f74f52;
+}
+
+    .btn-light-red:hover {
+        background-color: #f74f52;
+    }
+
+.cs-easyui-layout {
+    margin: auto;
+    background: #eeeeee;
+    overflow: auto;
+}
+
+.cs-panel-center {
+    position: static;
+    margin: 60px auto 100px !important;
+    width: 950px !important;
+    border: 1px solid #d7d7d7;
+    padding: 25px;
+    /*overflow:auto*/
+}
+
+#divCCForm td {
+    border: none;
+}
+
+.cs-panel-body {
+    background-color: #fff;
+    border: 0;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+}
+
+.cs-panel-north {
+ width:100%;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    padding:5px 0px;
+}
+
+    .cs-panel-north .cs-btn-group {
+        margin: auto;
+        width: 1200px !important;
+        background-color: #fff;
+    }
+
+.cs-table {
+    width: 100%;
+}
+
+    .cs-table td a {
+        color: #15398b;
+        height: 24px;
+        box-sizing: border-box;
+    }
+
+        .cs-table td a:hover.l-btn-plain {
+            padding: 0;
+        }
+
+a.l-btn span span span.l-btn-empty {
+    background-position: center
+}
+
+.state-show{ margin-left:192px; width:150px;height:auto; position:fixed; z-index:10;display: none; color: Gray; background:#fff;border:1px solid #f1f1f1; box-shadow:0px 1px 5px #ccc;}
+.state-show a{ color:#414141; display:block; text-decoration:none; margin:0px; padding:0px 0px 0px 10px; border-radius:0px;}
+.state-show a:hover{ color:#fff; background:#f74f52;padding:0px 0px 0px 10px;}
+
+
+.cs-table th a {
+    height: 30px;
+    color: #282828;
+    vertical-align: middle;
+}
+
+    .cs-table th a:hover {
+        padding: 0 5px 0 0;
+        background-color: transparent;
+        border-color: transparent;
+        text-decoration: none;
+    }
+
+.cs-table td, .cs-table th {
+    line-height: 40px;
+}
+
+.cs-table td {
+    padding: 7px;
+}
+
+.cs-table th {
+    padding-left: 20px;
+}
+
+.cs-table input[type=text], .cs-table select, .cs-table textarea {
+    margin: 0 !important;
+    width: 100% !important;
+    background-color: #fff;
+}
+
+.cs-table input[type="radio"], .cs-table input[type="checkbox"] {
+    position: static;
+    padding-left: 0;
+    width: 16px !important;
+    height: 16px;
+    vertical-align: -4px;
+}
+
+.checkbox, .radio {
+    margin-left: 0 !important;
+}
+
+    .checkbox label, .radio label {
+        padding-left: 0;
+    }
+
+.cs-order {
+    float: right;
+    height: 30px;
+}
+
+.image-local {
+    width: 116px;
+    font-size: 16px;
+    line-height: 28px;
+    text-align: center;
+    color: #fff;
+    background-color: #0073eb;
+    border: none;
+    display: inline-block;
+    vertical-align: middle;
+    height: 28px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+#state li {
+    list-style: none;
+    margin-top: 3px;
+}

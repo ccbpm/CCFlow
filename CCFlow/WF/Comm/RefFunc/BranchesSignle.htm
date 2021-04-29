@@ -338,7 +338,7 @@
                 columns: searchTableColumns
             });
 
-            var json = DBAccess.RunDBSrc(gridUrl); //执行url返回json.
+            var json = DBAccess.RunDBSrc(gridUrl, mapExt.DBType, mapExt.FK_DBSrc); //执行url返回json.
             if ($.isArray(json)) {
                 $('#tree_Panel').hide();
                 $('#viewGrid_Panel').show();

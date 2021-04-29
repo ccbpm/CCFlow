@@ -11,6 +11,10 @@
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script src="../Admin.js" type="text/javascript"></script>
 
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
     <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
 
@@ -19,14 +23,7 @@
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <base target="_self" />
-    <style>
-        #Btn_Back{
-            background-image: url(../../Img/Btn/Back.png) !important;
-        }
-        #Btn_Save{
-            background-image: url(../../Img/Btn/Save.png) !important;
-        }
-    </style>
+
     <script type="text/javascript">
 
         var OperForString = null;
@@ -194,46 +191,55 @@
     </script>
 </head>
 <body>
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <span class="pull-right">
 
-    <form id="cc">
-        <div style="right:30px; position:absolute; z-index:100; ">
-            <input id="Btn_Save" type='button' value='保存' onclick='Save();' />
-            <input type="button" onclick="Back()" value="返回" id="Btn_Back" />
+                <button id="Btn_Save" name="Btn_Save" onclick="Save();">保存</button>
+              
+                <button id="Btn_Back" name="Btn_Back" onclick="Back();">返回</button>
+
+            </span>
+            <strong>按照表单的字段作为条件</strong>
         </div>
-        <table id="table" style="position:relative;top:10px; margin: 8px; width:100%">
-            <caption><img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' />按照表单的字段作为条件</caption>
-            <tr>
-                <td style="width:20%;">选择表单字段: </td>
-                <td>
-                    <select id="DDL_Fields" name="DDL_Fields" onchange="changeCond(this)"></select>
-                    <a href="javascript:alert('提示:\t\n1.如果没有您期望的字段,请在流程设计器中检查一下流程. \t\n2.检查流程后，节点表单字段才能汇总上来.')">  <img src='../../Img/Btn/Help.gif' /> 为什么没有我要的字段？</a>
-                </td>
-            </tr>
+        <form id="cc">
+          
+            <table id="table" class="table">
+              
+                <tr>
+                    <td style="width:20%;">选择表单字段: </td>
+                    <td>
+                        <select id="DDL_Fields" name="DDL_Fields" onchange="changeCond(this)"></select>
+                        <a href="javascript:alert('提示:\t\n1.如果没有您期望的字段,请在流程设计器中检查一下流程. \t\n2.检查流程后，节点表单字段才能汇总上来.')">  <img src='../../Img/Btn/Help.gif' /> 为什么没有我要的字段？</a>
+                    </td>
+                </tr>
 
-            <tr>
-                <td style="width:20%;">操作符: </td>
-                <td><select id="DDL_Operator" name="DDL_Operator" style="width:100px;"></select> </td>
-            </tr>
+                <tr>
+                    <td style="width:20%;">操作符: </td>
+                    <td><select id="DDL_Operator" name="DDL_Operator" style="width:100px;"></select> </td>
+                </tr>
 
-            <tr>
-                <td style="width:20%;">值: </td>
-                <td>
-                    <input type="text" value="" style="width:100px;" id="TB_Val" name="TB_Val" />
-                    <input type="text" value="" style="width:100px;" id="TB_Text" name="TB_Text" />
-                    <span id="opts"> </span>
-                    <br />
-                    <select id="DDL_Val" name="DDL_Val" style="width:100px;">  </select>
-
-
-                </td>
-            </tr>
-
-        </table>
+                <tr>
+                    <td style="width:20%;">值: </td>
+                    <td>
+                        <input type="text" value="" style="width:100px;" id="TB_Val" name="TB_Val" />
+                        <input type="text" value="" style="width:100px;" id="TB_Text" name="TB_Text" />
+                        <span id="opts"> </span>
+                        <br />
+                        <select id="DDL_Val" name="DDL_Val" style="width:100px;">  </select>
 
 
-    </form>
+                    </td>
+                </tr>
 
-    <center><div id="Msg" /></center>
+            </table>
+
+
+        </form>
+
+        <center><div id="Msg" /></center>
+
+    </div>
 
 </body>
 </html>

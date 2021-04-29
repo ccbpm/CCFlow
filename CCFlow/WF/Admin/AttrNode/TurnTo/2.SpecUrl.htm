@@ -9,6 +9,10 @@
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+    <!-- 自己的系统风格统一end -->
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
@@ -33,28 +37,27 @@
     </script>
 </head>
 <body>
-    <div id="bar">
-
-    </div>
     <form id="cc">
-        <!--<div id="bar" class="cs-tr cs-bar">
-        <label style="float:left;font-size:15px;font-weight:bolder;padding-top:10px;">发送后转向</label>
-        <input type="button" ID="Btn_Save" runat="server" value="保存" onclick="Btn_Save_Click()" />
-    </div>-->
+
+        <div id="bar">
+        </div>
+
         <fieldset>
             <legend>
-                <label for="RB_TurnToDeal_2"> 转向指定的URL </label>- <a href="javascript:ShowHidden('SpecUrl')">帮助:</a>
+                转向指定的URL
             </legend>
-            <br />
-            <div id="SpecUrl" style="display: none">
-                <ul style="color: Gray">
-                    <li>按照您定义的url转向，可处理较为复杂的业务逻辑处理。</li>
-                    <li>比如：URL为MyFlow.htm页面或www.baidu.com。 </li>
-                    <li>该URL支持ccbpm参数形式，具体传值参考右侧帮助。 </li>
-                    <li>启动子流程实例: /WF/MyFlow.htm?FK_Flow=003&PFlowNo=002 </li>
-                </ul>
-            </div>
-            <input type="text" ID="TB_SpecURL" name="TB_SpecURL" runat="server" style="width:90%" />
+            <input type="text" placeholder="请输入URL比如 http://ccbpm.cn/aaa.htm"  ID="TB_SpecURL" name="TB_SpecURL" runat="server" style="width:90%; margin-top:30px;" />
+        </fieldset>
+
+
+        <fieldset>
+            <legend id="help"> 帮助</legend>
+            <ul style="color: Gray">
+                <li>按照您定义的url转向，可处理较为复杂的业务逻辑处理。</li>
+                <li>比如：URL为MyFlow.htm页面或www.baidu.com。 </li>
+                <li>该URL支持ccbpm参数形式，具体传值参考右侧帮助。 </li>
+                <li>启动子流程实例: /WF/MyFlow.htm?FK_Flow=003&PFlowNo=002 </li>
+            </ul>
         </fieldset>
 
     </form>

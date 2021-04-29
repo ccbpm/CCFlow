@@ -1,8 +1,7 @@
-.login-bg{ background: url(../images/login_bg.png) no-repeat center center fixed;
-             
-           background-size: 100% 100%;    
-    }
+.login-bg {    background: url(../images/bg.png) no-repeat center center fixed;    background-size: 100% 100%;}
 
+.logo img{ width:80%; margin-bottom:10px;
+}
 /*login box*/
 .login-box{z-index:100;margin:0 auto;padding-top:10%;max-width:360px}
 
@@ -10,13 +9,27 @@
 
 .login-form{ background:  #fff; padding: 40px 30px; border:1px solid #ddd; border-radius: 5px;}
 
-.login-nav{ color: #999; font-size: 12px;}
+.login-nav{  font-size: 12px;}
+.login-nav a { margin-left: 10px;
+    }
 
-
-
+.msg {
+        color: #c60303;
+        margin-top: 8px;
+        margin-bottom:8px;
+        font-size: 12px;
+    }
 /*login box*/
-.login-box_admin{z-index:100;margin:0 auto;padding-top:10%;max-width:360px}
+.login-box_admin {
+    z-index: 100;
+    margin: 0 auto;
+    padding-top: 10%;
+    max-width: 360px
+}
 
 .login-box_admin h1{ background: url(../../../../DataUser/ICON/IconSmall.png) no-repeat left; width:500px; height: 120px;text-indent: -9999px;}
+
+.copyright {
+color:#fff; text-align:center; line-height:32px}
  
 

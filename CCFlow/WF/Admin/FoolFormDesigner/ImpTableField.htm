@@ -143,7 +143,7 @@
                 if (o.Name.indexOf('Pub_YF') > 0)
                     return true;
 
-                if ((STable || json.STable || "").toLowerCase() === (o.No || "").toLowerCase()) {
+                if ((STable || json["STable"][0].STable || "").toLowerCase() === (o.No || "").toLowerCase()) {
                     html += "<li><font color=red><b>" + o.Name + "</font></b></li>";
                 } else {
                     html += "<li><a href='javascript: step2(\"" + FK_MapData + "\", \"" + FK_SFDBSrc + "\", \"" + o.No + "\");' >" + o.Name + "</a></li>";

@@ -1,0 +1,75 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <dt>
+    <No>FoolFrmBody</No>
+    <Name>窗体属性:FoolFrmBody</Name>
+    <Val>@font-color=red@font-size=24</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>0</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmTable</No>
+    <Name>大框表格:FoolFrmTable</Name>
+    <Val>@font-color=red@font-size=24</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>1</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmTitleTH</No>
+    <Name>标题表头:FoolFrmTitleTH</Name>
+    <Val>@font-color=red@font-size=24</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>2</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmTitleIcon</No>
+    <Name>标题图标:FoolFrmIcon</Name>
+    <Val>@font-color=red@font-size=24</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>3</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmTitleLable</No>
+    <Name>标题:FoolFrmTitleLable</Name>
+    <Val>@font-color=red@font-size=24</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>4</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmGroupBar</No>
+    <Name>分组字段:FoolFrmGroupBar</Name>
+    <Val>@font-color=red@font-size=24</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>5</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmFieldTR</No>
+    <Name>字段行:FoolFrmFieldTR</Name>
+    <Val>@font-color=red@font-size=24</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>6</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmFieldName</No>
+    <Name>字段名称:FoolFrmFieldName</Name>
+    <Val>@font-color=red@font-size=24</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>7</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmFieldCtrl</No>
+    <Name>字段控件:FoolFrmFieldCtrl</Name>
+    <Val>@font-color=red@font-size=24</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>8</Idx>
+  </dt>
+</NewDataSet>

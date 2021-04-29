@@ -67,21 +67,14 @@
         });
 
         var pageData = {};
-
+        var enumKey = GetQueryString('EnumKey');
+        var orgNo = GetQueryString("OrgNo");
         //初始化,信息.
         $(function () {
 
-            var enumKey = GetQueryString('EnumKey');
-
-            if (enumKey == null) {
-                NewEnum();
-                return;
-            }
-
             //获得枚举值.
-            var enumKey = GetQueryString('EnumKey'); // $.trim($("#TB_KeyOfEn").val());
-            var enumMain = new Entity("BP.Cloud.Sys.SysEnumMain", enumKey);
-            Edit(enumMain.No, enumMain.Name, enumMain.CfgVal);
+            var enumMain = new Entity("BP.Cloud.Sys.SysEnumMain", orgNo+"_"+enumKey);
+            Edit(enumMain.EnumKey, enumMain.Name, enumMain.CfgVal);
 
         });
 
@@ -180,7 +173,7 @@
             var webUser = new WebUser();
             //删除现在的枚举值.
             var se = new Entity("BP.Cloud.Sys.SysEnum");
-           // se.Delete("EnumKey", keyofEn);
+            se.Delete("RefPK", orgNo+"_"+keyofEn);
 
             var strs = '';
             for (var i = 0; i < 30; i++) {
@@ -195,12 +188,14 @@
 
                 //给实体的各个属性赋值.
                 se.EnumKey = keyofEn;
+                se.RefPK = orgNo + "_" + keyofEn;
+                se.OrgNo = orgNo;
                 se.Lab = v;
                 se.IntKey = i;
                 se.Lang = "CH";
-                se.MyPK = se.EnumKey + '_CH_' + se.IntKey;
+                se.MyPK = se.EnumKey + '_CH_' + se.IntKey+"_"+orgNo;
                 se.SetPKVal(se.MyPK);
-                se.OrgNo(webUser.FK_Dept);
+                se.OrgNo = orgNo;
                 se.Insert();
             }
 
@@ -213,8 +208,8 @@
             }
 
             var en = new Entity("BP.Cloud.Sys.SysEnumMain");
-            en.SetPKVal(keyofEn);
-            en.No = keyofEn;
+            en.SetPKVal(orgNo+"_"+keyofEn);
+            en.No = orgNo + "_" + keyofEn;
 
             if (doType == "FrmEnumeration_NewEnum") {
                 var i = en.RetrieveFromDBSources();
@@ -226,7 +221,8 @@
                 en.CfgVal = strs;
                 en.Lang = "CH";
                 en.Name = name;
-                en.OrgNo(webUser.FK_Dept);
+                en.OrgNo = orgNo;
+                en.EnumKey = keyofEn;
                 en.Insert();
 
             } else {
@@ -241,7 +237,7 @@
             // var data = en.DoMethodReturnString("SaveEnum", strs);
             //alert(data);
 
-            var url = '?EnumKey=' + keyofEn + '&DoType=FrmEnumeration_SaveEnum&s=' + Math.random();
+            var url = '?EnumKey=' + keyofEn + '&DoType=FrmEnumeration_SaveEnum&s=' + Math.random()+"&OrgNo="+orgNo;
             window.location.href = url;
         }
     </script>

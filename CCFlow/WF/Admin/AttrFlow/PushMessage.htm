@@ -22,16 +22,10 @@
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script src="../Admin.js"></script>
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
     <base target="_self" />
-    <style>
-        #Btn_New {
-            background-image: url(../../Img/Btn/New.png) !important;
-        }
 
-        #Btn_Help {
-            background-image: url(../../Img/Btn/Help.png) !important;
-        }
-    </style>
     <script type="text/javascript">
         function Esc() {
             if (event.keyCode == 27)
@@ -56,7 +50,12 @@
 
             var ens = new Entities("BP.WF.Template.PushMsgs");
             ens.Retrieve("FK_Flow", GetQueryString("FK_Flow"), "FK_Node", 0);
-
+            var emailCheck = "";
+            var ccmsg = ""
+            var sms = "";
+            var dingding = "";
+            var weixin = "";
+            var tm = "";
             for (var i = 0; i < ens.length; i++) {
 
                 var en = new Entity("BP.WF.Template.PushMsg", ens[i].MyPK);
@@ -65,8 +64,29 @@
                 newRow = "<tr ><td class=Idx>" + (i + 1) + "</td>";
                 newRow += "<td><a href='PushMessageFlow.htm?&FK_Event=" + en.FK_Event + "&MyPK=" + en.MyPK + "&FK_Flow=" + en.FK_Flow + "'>" + en.FK_Event + "</a></td>";
                 newRow += "<td>" + PushWayText(en.FK_Event, en.MailPushWay) + "</td>";
-                newRow += "<td>" + en.MailTitle + "</td>";
-                newRow += "<td>" + PushWayText(en.FK_Event, en.SMSPushWay) + "</td>";
+                newRow += "<td>"
+                //发送形式
+                var pushModel = en.SMSPushModel;
+
+                if (pushModel.indexOf('Email') != -1)
+                    emailCheck = "checked=checked"
+                if (pushModel.indexOf('CCMsg') != -1)
+                    ccmsg = "checked=checked"
+                if (pushModel.indexOf('SMS') != -1)
+                    sms = "checked=checked"
+                if (pushModel.indexOf('DingDing') != -1)
+                    dingding = "checked=checked"
+                if (pushModel.indexOf('WeiXin') != -1)
+                    weixin = "checked=checked"
+                if (pushModel.indexOf('WS') != -1)
+                    tm = "checked=checked"
+                newRow += "<label><input id='CB_SMSPushModel_Email' type='checkbox' name='CB_SMSPushModel' value='Email' disabled " + emailCheck + "/>邮件</label>";
+                newRow += "<label><input id='CB_SMSPushModel_CCMsg' type='checkbox' name='CB_SMSPushModel' value='CCMsg' disabled  " + ccmsg + "/>站内消息</label>";
+                newRow += "<label><input id='CB_SMSPushModel_SMS' type='checkbox' name='CB_SMSPushModel' value='SMS' disabled " + sms + "/>短信</label>";
+                newRow += "<label><input id='CB_SMSPushModel_DingDing' type='checkbox' name='CB_SMSPushModel' value='DingDing' disabled " + dingding + "/>钉钉</label>";
+                newRow += "<label><input id='CB_SMSPushModel_WeiXin' type='checkbox' name='CB_SMSPushModel' value='WeiXin' disabled " + weixin + "/>微信</label>";
+                newRow += "<label><input id='CB_SMSPushModel_WS' type='checkbox' name='CB_SMSPushModel' value='WS' disabled " + tm + "/>WebServices</label>";
+                newRow += "</td>";
                 newRow += "<td><a  href=\"javascript:Delete('" + en.MyPK + "')\"><img src='../../../WF/Img/Btn/Delete.gif' border=0 />删除</a>";
                 newRow += "</td>";
 
@@ -79,9 +99,9 @@
 
         function PushWayText(EventListNode, PushWay) {
             var ret = {
-                "FlowWarning": ["不发送", "发送给所有处理人", "向指定的字段发送", "其他节点的处理人"],
-                "FlowOver": ["不发送", "发送给所有处理人", "向指定的字段发送", "其他节点的处理人"],
-                "FlowDelete": ["不发送", "发送给所有处理人", "向指定的字段发送", "其他节点的处理人"]
+                "FlowWarning": ["不发送", "发送给所有处理人", "向指定的字段发送", "其他节点的处理人", "按照SQL计算", "发给指定的人", "开始节点的发起人"],
+                "FlowOver": ["不发送", "发送给所有处理人", "向指定的字段发送", "其他节点的处理人", "按照SQL计算", "发给指定的人", "开始节点的发起人"],
+                "FlowDelete": ["不发送", "发送给所有处理人", "向指定的字段发送", "其他节点的处理人", "按照SQL计算", "发给指定的人", "开始节点的发起人"]
             };
 
             return ret[EventListNode][PushWay];
@@ -124,53 +144,56 @@
         li {
             font-size: 14px;
         }
-       
     </style>
 </head>
-<body onkeypress="Esc();" style="font-size: smaller">
-    <form method="post" action="./PushMessage.htm?FK_Node=102&amp;FK_Flow=001&amp;tk=0.047329046785519&amp;s=0.3961371863054315"
-          id="form1">
+<body onkeypress="Esc();">
+    <div class="container-full">
 
-        <div style="right:30px; position:absolute; z-index:100; ">
-                <input type="button" value="新建消息" id="Btn_New" onclick="ShowHidden('state')" />&nbsp;&nbsp;
-                <div id="state" style="width:200px;height:auto; position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: bl">
-                    <ul>
-                        <li><a href="javascript:PushMessageEntity('FlowOver');">流程结束后</a> </li>
-                        <li><a href="javascript:PushMessageEntity('FlowFix');">流程冻结后</a> </li>
-                        <li><a href="javascript:PushMessageEntity('FlowWarning');">流程处理预警</a> </li>
-                        <li><a href="javascript:PushMessageEntity('FlowOverDue');">流程处理逾期</a> </li>
-                    </ul>
+        <form method="post" action="./PushMessage.htm?FK_Node=102&amp;FK_Flow=001&amp;tk=0.047329046785519&amp;s=0.3961371863054315"
+              id="form1">
+
+            <div id="titleH4" class="attrnode-bar-header">
+                <div class="pull-right">
+                    <button  id="Btn_New" class="cc-btn-tab btn-new" onclick="ShowHidden('state')" >新建消息</button>
+                    <div id="state" style="width:200px;height:auto; position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: bl">
+                        <ul>
+                            <li><a href="javascript:PushMessageEntity('FlowOver');">流程结束后</a> </li>
+                            <li><a href="javascript:PushMessageEntity('FlowFix');">流程冻结后</a> </li>
+                            <li><a href="javascript:PushMessageEntity('FlowWarning');">流程处理预警</a> </li>
+                            <li><a href="javascript:PushMessageEntity('FlowOverDue');">流程处理逾期</a> </li>
+                        </ul>
+                    </div>
+                    <button id="Btn_Help"  class="cc-btn-tab btn-hlep" onclick="Help()" >我需要帮助</button>
                 </div>
-                <input id="Btn_Help" type="button" value="我需要帮助" onclick="Help()" />
-        </div>
-        <div style="position:relative;top:0px; margin: 8px">
-            <table class="table table-bordered table-hover table-condensed" id="Table1" style="width: 100%">
-                <caption>
-                    <img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' />消息事件
-                </caption>
-                <tr>
-                    <th>
-                        序
-                    </th>
-                    <th>
-                        消息发生事件
-                    </th>
-                    <th>
-                        启用邮件
-                    </th>
-                    <th>
-                        邮件标题
-                    </th>
-                    <th>
-                        启用短信
-                    </th>
-                    <th>
-                        操作
-                    </th>
-                </tr>
-            </table>
+                <strong>消息事件 </strong>
+            </div>
             
-        </div>
-    </form>
+
+            <div style="position:relative;top:0px; margin: 8px">
+                <table class="table table-bordered table-hover table-condensed" id="Table1" style="width: 100%">
+                    
+                    <tr>
+                        <th>
+                            序
+                        </th>
+                        <th>
+                            消息发生事件
+                        </th>
+                        <th>
+                            消息接收规则
+                        </th>
+                        <th>
+                            发送形式
+                        </th>
+
+                        <th>
+                            操作
+                        </th>
+                    </tr>
+                </table>
+
+            </div>
+        </form>
+    </div>
 </body>
 </html>

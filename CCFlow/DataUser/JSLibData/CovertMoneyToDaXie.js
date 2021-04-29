@@ -1,9 +1,9 @@
-ï»¿function Rmb2DaXie(val) {
-    //æ­¤å¤„å¯é¢„é˜²å¦‚æœæ§ä»¶æ˜¯æ™®é€šçš„æ–‡æœ¬æ¡†æ—¶ï¼Œå½•å…¥éæ•°å­—çš„ç¬¦å·è‡ªåŠ¨å»é™¤
+function Rmb2DaXie(val) {
+    //´Ë´¦¿ÉÔ¤·ÀÈç¹û¿Ø¼şÊÇÆÕÍ¨µÄÎÄ±¾¿òÊ±£¬Â¼Èë·ÇÊı×ÖµÄ·ûºÅ×Ô¶¯È¥³ı
     var rmb = clearNoNum(val);
     var dx = AmountLtoU(rmb);
-    if (dx == 'æ— æ•ˆ') {
-        alert('æ— æ•ˆçš„æ•°å­—æ ¼å¼ï¼');
+    if (dx == 'ÎŞĞ§') {
+        alert('ÎŞĞ§µÄÊı×Ö¸ñÊ½£¡');
         return false;
     }
 
@@ -12,16 +12,16 @@
 
 
 function AmountLtoU(num) {
-    ///<summery>å°å†™é‡‘é¢è½¬åŒ–å¤§å†™é‡‘é¢</summery>
-    ///<param name=num type=number>é‡‘é¢</param>
-    if (isNaN(num)) return "æ— æ•ˆ";
+    ///<summery>Ğ¡Ğ´½ğ¶î×ª»¯´óĞ´½ğ¶î</summery>
+    ///<param name=num type=number>½ğ¶î</param>
+    if (isNaN(num)) return "ÎŞĞ§";
     var strPrefix = "";
-    if (num < 0) strPrefix = "(è´Ÿ)";
+    if (num < 0) strPrefix = "(¸º)";
     num = Math.abs(num);
-    if (num > 999000000000000) return "è¶…é¢(ä¸å¤§äº999ä¸‡äº¿)";    //ä¸è¶…è¿‡999ä¸‡äº¿
+    if (num > 999000000000000) return "³¬¶î(²»´óÓÚ999ÍòÒÚ)";    //²»³¬¹ı999ÍòÒÚ
     var strOutput = "";
-    var strUnit = 'ä½°æ‹¾ä¸‡ä»Ÿä½°æ‹¾äº¿ä»Ÿä½°æ‹¾ä¸‡ä»Ÿä½°æ‹¾åœ†è§’åˆ†';
-    var strCapDgt = 'é›¶å£¹è´°åè‚†ä¼é™†æŸ’æŒç–';
+    var strUnit = '°ÛÊ°ÍòÇª°ÛÊ°ÒÚÇª°ÛÊ°ÍòÇª°ÛÊ°Ô²½Ç·Ö';
+    var strCapDgt = 'ÁãÒ¼·¡ÈşËÁÎéÂ½Æâ°Æ¾Á';
     num += "00";
     var intPos = num.indexOf('.');
     if (intPos >= 0) {
@@ -31,7 +31,7 @@ function AmountLtoU(num) {
     for (var i = 0; i < num.length; i++) {
         strOutput += strCapDgt.substr(num.substr(i, 1), 1) + strUnit.substr(i, 1);
     }
-    return strPrefix + strOutput.replace(/é›¶è§’é›¶åˆ†$/, 'æ•´').replace(/é›¶[ä»Ÿä½°æ‹¾]/g, 'é›¶').replace(/é›¶{2,}/g, 'é›¶').replace(/é›¶([äº¿|ä¸‡])/g, '$1').replace(/é›¶+åœ†/, 'åœ†').replace(/äº¿é›¶{0,3}ä¸‡/, 'äº¿').replace(/^åœ†/, "é›¶åœ†");
+    return strPrefix + strOutput.replace(/Áã½ÇÁã·Ö$/, 'Õû').replace(/Áã[Çª°ÛÊ°]/g, 'Áã').replace(/Áã{2,}/g, 'Áã').replace(/Áã([ÒÚ|Íò])/g, '$1').replace(/Áã+Ô²/, 'Ô²').replace(/ÒÚÁã{0,3}Íò/, 'ÒÚ').replace(/^Ô²/, "ÁãÔ²");
 };
 
 function getArgsFromHref(sArgName) {
@@ -39,9 +39,9 @@ function getArgsFromHref(sArgName) {
     var args = sHref.split("?");
     var retval = "";
 
-    if (args[0] == sHref) /*å‚æ•°ä¸ºç©º*/
+    if (args[0] == sHref) /*²ÎÊıÎª¿Õ*/
     {
-        return retval; /*æ— éœ€åšä»»ä½•å¤„ç†*/
+        return retval; /*ÎŞĞè×öÈÎºÎ´¦Àí*/
     }
 
     var str = args[1];
@@ -58,12 +58,9 @@ function getArgsFromHref(sArgName) {
 }
 
 function clearNoNum(val) {
-    if (val == undefined || val == "" || val == null)
-        return "";
-    val = val.toString();
-    val = val.replace(/[^\d.]/g, "");  //æ¸…é™¤â€œæ•°å­—â€å’Œâ€œ.â€ä»¥å¤–çš„å­—ç¬¦
-    val = val.replace(/^\./g, "");  //éªŒè¯ç¬¬ä¸€ä¸ªå­—ç¬¦æ˜¯æ•°å­—è€Œä¸æ˜¯.
-    val = val.replace(/\.{2,}/g, "."); //åªä¿ç•™ç¬¬ä¸€ä¸ª. æ¸…é™¤å¤šä½™çš„.
+    val = val.replace(/[^\d.]/g, "");  //Çå³ı¡°Êı×Ö¡±ºÍ¡°.¡±ÒÔÍâµÄ×Ö·û
+    val = val.replace(/^\./g, "");  //ÑéÖ¤µÚÒ»¸ö×Ö·ûÊÇÊı×Ö¶ø²»ÊÇ.
+    val = val.replace(/\.{2,}/g, "."); //Ö»±£ÁôµÚÒ»¸ö. Çå³ı¶àÓàµÄ.
     val = val.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
     return val;
 }

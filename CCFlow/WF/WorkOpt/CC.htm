@@ -124,15 +124,12 @@
 
             $('body').append($(selectEmpModalHtml));
             var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
+           
             if (dept == null || dept == '' || dept == undefined) {
-                dept = $.cookie('FK_Dept');
-            }
-            if (dept == undefined) {
                 var u = new WebUser();
                 dept = u.FK_Dept;
             }
             var url = "SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&IsSelectMore=1" + "&s=" + Math.random();
-            //  url = url.replace('101', '10102');
             url = url.replace('=101&', '=10102&');
 
             $('#iframeSelectEmpsForm').attr('src', url);

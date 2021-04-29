@@ -14,7 +14,7 @@
     <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
     <link href="../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../Comm/JS/layer/layer.css" rel="stylesheet" />
+    <link href="../Scripts/layui/layui/css/modules/layer/default/layer.css" rel="stylesheet" />
     <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script src="../Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script src="../Scripts/layui/layui/lay/modules/layer.js"></script>
     <script src="../../DataUser/JSLibData/CommonShowConfig.js"></script>
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
@@ -45,9 +45,11 @@
         #Message {
             width: 100%;
         }
-        #viewModal{
-            max-width:1000px;
+
+        #viewModal {
+            max-width: 1000px;
         }
+
         #SelectEmp {
             position: relative;
             width: 300px;
@@ -89,7 +91,7 @@
         var selectEmpNo = "";
         var IsSend = GetQueryString("IsSend"); //是否发送？该参数是ToNodes.htm 带回来的.
         var isFrameCross = GetQueryString("isFrameCross");
-        if (isFrameCross == null || isFrameCross == undefined || isFrameCross == "" || isFrameCross=="null")
+        if (isFrameCross == null || isFrameCross == undefined || isFrameCross == "" || isFrameCross == "null")
             isFrameCross = 0;
         var pageFrom = GetQueryString("PageFrom");
         //判断读秒关闭的参数是否存在
@@ -138,9 +140,6 @@
 
             //获得部门编号.
             var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
-            if (dept == null || dept == '' || dept == undefined) {
-                dept = $.cookie('FK_Dept');
-            }
 
             if (dept == null || dept == '' || dept == undefined) {
                 var u = new WebUser();
@@ -207,7 +206,7 @@
 
                 $("#Table1 tbody").append(row);
                 selectEmp += sa.EmpName + ",";
-                selectEmpNo+=sa.FK_Emp+","
+                selectEmpNo += sa.FK_Emp + ","
             }
         }
 
@@ -303,7 +302,7 @@
         }
 
         function SendIt() {
-           
+
             var httphandler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             httphandler.AddUrlData(); //FK_Flow,FK_Node,WorkID,FID,ToNode 等参数.
 
@@ -313,7 +312,7 @@
             $("#Btn_SelectEmps").attr("disabled", "disabled"); //选择人按钮不可以用.
 
             var data = httphandler.DoMethodReturnString("AccepterOfGener_Send");
-            
+
             if (data.indexOf('err@') == 0) {  //如果发送失败.
 
                 DealErrMsg(data);
@@ -418,7 +417,7 @@
 
         //取消移交
         function CloseAll() {
-           
+
             if (isFrameCross == 0) {
                 // 取得父页面URL，用于判断是否是来自测试流程
                 var pareUrl = window.top.document.referrer;
@@ -438,12 +437,12 @@
                 window.parent.parent.close();
                 ChildrenPostMessage('', 'returnWorkWindowClose');
             }
-            
+
 
             window.close();
         }
 
-       
+
 
         //关闭model.
         function CloseModel() {
@@ -457,7 +456,7 @@
                             selectEmp = selectEmp.substring(0, selectEmp.length - 1);
                             window.parent.returnWorkWindowClose(selectEmp);
                         }
-                       
+
                     } else {
                         window.parent.returnWorkWindowClose("");
                     }
@@ -475,9 +474,9 @@
                     ChildrenPostMessage('', 'returnWorkWindowClose');
                 }
 
-               
+
             }
-          
+
         }
 
         //设置选中的人员
@@ -588,7 +587,7 @@
 
         }
 
-  
+
     </script>
 
 </head>

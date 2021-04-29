@@ -580,7 +580,7 @@ function InitMapAttr(Sys_MapAttr, workNodeData, groupID) {
         if (attr.ColSpan == 3) {
             isDropTR = true;
             html += "<tr>";
-            html += "<td  class='FDesc'  >" + lab + "</td>";
+            html += "<td  class='FoolFrmFieldCtrl'  >" + lab + "</td>";
             html += "<td ColSpan=3>";
             html += InitMapAttrOfCtrl(attr, enable, defval);
             html += "</td>";
@@ -601,7 +601,7 @@ function InitMapAttr(Sys_MapAttr, workNodeData, groupID) {
 
         if (isDropTR == true) {
             html += "<tr>";
-            html += "<td class='FDesc' style='width:80px;' >" + lab + "</td>";
+            html += "<td class='FoolFrmFieldCtrl' style='width:80px;' >" + lab + "</td>";
             html += "<td class='FContext'  >";
             html += InitMapAttrOfCtrl(attr, enable, defval);
             html += "</td>";
@@ -610,7 +610,7 @@ function InitMapAttr(Sys_MapAttr, workNodeData, groupID) {
         }
 
         if (isDropTR == false) {
-            html += "<td  class='FDesc'>" + lab + "</td>";
+            html += "<td  class='FoolFrmFieldCtrl'>" + lab + "</td>";
             html += "<td class='FContext'  >";
             html += InitMapAttrOfCtrl(attr, enable, defval);
             html += "</td>";

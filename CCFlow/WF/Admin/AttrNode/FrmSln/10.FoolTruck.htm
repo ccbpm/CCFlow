@@ -15,8 +15,13 @@
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+    <!-- 自己的系统风格统一end -->
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+
     <script type="text/javascript">
 
         var nodeID = 0;
@@ -188,7 +193,7 @@
         }
 
         function Save() {
-            $("#Btn_Save").val("正在保存...");
+            $("#Btn_Save").html("正在保存...");
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
             node.FormType = FormSlnType.FoolTruck;
@@ -206,7 +211,7 @@
             var flow = new Entity("BP.WF.Flow", node.FK_Flow);
             flow.DoMethodReturnString("DoCheck");
 
-            $("#Btn_Save").val("保存成功.");
+            $("#Btn_Save").html("保存成功.");
         }
 
 
@@ -246,7 +251,7 @@
                             sln.Insert();
                         }
                     }
-                   
+
                 })
 
                 //更新表单类型.

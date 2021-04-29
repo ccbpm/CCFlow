@@ -25,12 +25,21 @@
             var html = "您好：" + webUser.No + " - " + webUser.Name + ",共有:<font color=red>" + datas.length + " </font>个. <a href='Login.htm'>切换管理员</a>";
             $("#title").html(html);
 
+            var orgNo = webUser.OrgNo;
+
+
+
             var html = "<ul style='align:left'>";
             for (var i = 0; i < datas.length; i++) {
 
                 var data = datas[i];
 
-                html += "<li><a href=\"javascript:SelectOrg('" + data.No + "');\" >" + data.Name + " </a> </li>";
+                if (data.No == orgNo)
+                    html += "<li><h2><a href=\"javascript:SelectOrg('" + data.No + "');\" >" + data.No + " " + data.Name + " </a></h2> </li>";
+                else
+                    html += "<li><a href=\"javascript:SelectOrg('" + data.No + "');\" >" + data.No + " " + data.Name + " </a> </li>";
+
+
             }
             html += "</ul>";
             $("#list").html(html);

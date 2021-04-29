@@ -1,0 +1,171 @@
+	
+/* 大框表格:FoolFrmTable */	
+.FoolFrmTable	
+{ 	
+ border-color:#330099;	
+ selfbody-hight:322px;	
+ border-width:0px;	
+ background-color:#FFFFFF;	
+ border-which:all;	
+ font-style:italic;	
+ font-height:px;	
+ border-style:solid;	
+ font-family:SimSun;	
+ color:;	
+ selfbody-width:200px;	
+ font-weight:bold;	
+ font-size:20px;	
+}	
+/* 标题表头:FoolFrmTitleTR */	
+.FoolFrmTitleTR	
+{ 	
+ border-color:;	
+ selfbody-hight:px;	
+ border-width:px;	
+ background-color:;	
+ border-which:all;	
+ font-style:normal;	
+ font-height:px;	
+ border-style:none;	
+ font-family:SimSun;	
+ color:;	
+ selfbody-width:200px;	
+ font-weight:normal;	
+ font-size:20px;	
+}	
+/* 标题图标:FoolFrmIcon */	
+.FoolFrmTitleIcon	
+{ 	
+ border-color:#666666;	
+ selfbody-hight:px;	
+ border-width:0px;	
+ background-color:#FFFFFF;	
+ border-which:all;	
+ font-style:normal;	
+ font-height:px;	
+ border-style:solid;	
+ font-family:SimSun;	
+ color:;	
+ selfbody-width:px;	
+ font-weight:normal;	
+ font-size:px;	
+}	
+/* 标题:FoolFrmTitleLable */	
+.FoolFrmTitleLable	
+{ 	
+ border-color:#FFFF00;	
+ selfbody-hight:px;	
+ border-width:5px;	
+ background-color:none;	
+ border-which:bottom;	
+ font-style:italic;	
+ font-height:35px;	
+ border-style:none;	
+ font-family:SimSun;	
+ color:#663366;	
+ selfbody-width:px;	
+ font-weight:normal;	
+ font-size:18px;	
+}	
+/* 分组字段:FoolFrmGroupBarTR */	
+.FoolFrmGroupBarTR	
+{ 	
+ border-color:;	
+ selfbody-hight:px;	
+ border-width:px;	
+ background-color:#CCCCFF;	
+ border-which:bottom;	
+ font-style:italic;	
+ font-height:px;	
+ border-style:none;	
+ font-family:SimSun;	
+ color:#FFFFFF;	
+ selfbody-width:200px;	
+ font-weight:normal;	
+ font-size:20px;	
+}	
+/* 分组字段:FoolFrmGroupBarTD */	
+.FoolFrmGroupBarTD	
+{ 	
+ border-color:;	
+ selfbody-hight:px;	
+ border-width:px;	
+ background-color:#CCCCFF;	
+ border-which:bottom;	
+ font-style:italic;	
+ font-height:px;	
+ border-style:none;	
+ font-family:SimSun;	
+ color:#FFFFFF;	
+ selfbody-width:200px;	
+ font-weight:bold;	
+ font-size:20px;	
+}	
+/* 字段行:FoolFrmFieldTR */	
+.FoolFrmFieldTR	
+{ 	
+ border-color:;	
+ selfbody-hight:px;	
+ border-width:px;	
+ background-color:;	
+ border-which:bottom;	
+ font-style:normal;	
+ font-height:px;	
+ font-color:red;	
+ border-style:none;	
+ font-family:SimSun;	
+ selfbody-width:px;	
+ font-weight:normal;	
+ font-size:px;	
+}	
+/* 单元格TD:FoolFrmFieldTD */	
+.FoolFrmFieldTD	
+{ 	
+ border-color:;	
+ selfbody-hight:px;	
+ border-width:px;	
+ background-color:;	
+ border-which:bottom;	
+ font-style:normal;	
+ font-height:px;	
+ font-color:red;	
+ border-style:none;	
+ font-family:SimSun;	
+ selfbody-width:px;	
+ font-weight:normal;	
+ font-size:px;	
+}	
+/* 字段名:FoolFrmFieldName */	
+.FoolFrmFieldName	
+{ 	
+ border-color:#FFFFFF;	
+ selfbody-hight:23pt;	
+ border-width:1px;	
+ background-color:#FFFFFF;	
+ border-which:all;	
+ font-style:italic;	
+ font-height:px;	
+ border-style:groove;	
+ font-family:SimHei;	
+ color:#663366;	
+ selfbody-width:200in;	
+ font-weight:normal;	
+ font-size:16px;	
+}	
+/* 控件:FoolFrmFieldCtrl */	
+.FoolFrmFieldCtrl	
+{ 	
+ border-color:#FFFFFF;	
+ selfbody-hight:px;	
+ border-width:0px;	
+ background-color:#FFFFFF;	
+ border-which:bottom;	
+ font-style:normal;	
+ font-height:px;	
+ border-style:solid;	
+ font-family:SimHei;	
+ color:#663366;	
+ selfbody-width:200em;	
+ font-weight:normal;	
+ font-size:16px;	
+}

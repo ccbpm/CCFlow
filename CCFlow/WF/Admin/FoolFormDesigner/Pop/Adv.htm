@@ -20,9 +20,12 @@
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.MyPK = GetQueryString("RefPK");
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
+            if (i == 0) {
+                alert("系统错误:没有保存");
+                return;
+            }
 
             if (i == 0) {
-
                 mapExt.H = 500;
                 mapExt.W = 900;
                 mapExt.SetPara("Title", "请选择");
@@ -35,9 +38,27 @@
                 mapExt.W = 900;
 
 
+            //绑定数据源类型.
+            var ens = new Entities("BP.Sys.SFDBSrcs");
+            ens.RetrieveAll();
+            GenerBindDDL("DDL_FK_DBSrc", ens, "No", "Name", mapExt.FK_DBSrc);
+
             //批量为复制.
             GenerFullAllCtrlsVal(mapExt);
+
+
+
         });
+
+        function DBTypeChange() {
+            var val = $("#DDL_DBType").val();
+
+            if (val == 0) {
+                $("#DBSrc").show();
+            } else {
+                $("#DBSrc").hide();
+            }
+        }
 
         function Save() {
 
@@ -58,7 +79,6 @@
 
             mapExt.ExtType = GetQueryString("PopModel");
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
-
 
             var err = "";
 
@@ -94,14 +114,12 @@
 
             document.location.href = url + "?KeyOfEn=" + keyOfEn + "&FK_MapData=" + frmID;
             //    var url = '../Pop/Default.htm?FK_MapData=' + GetQueryString('FK_MapData') + "&KeyOfEn=" + GetQueryString("KeyOfEn");
-
-
         }
     </script>
 </head>
 <body>
-
-    <table class="table ">
+    <input id='Btn_Save' type=button onclick='Save()' value='保存' />
+    <table class="table" style="width:100%;">
         <tr>
             <td>
                 <a href="javascript:ShowHidden('h_title')">标题</a>
@@ -119,9 +137,7 @@
             </td>
         </tr>
         <tr>
-            <td>
-                弹窗属性
-            </td>
+            <td> 弹窗属性 </td>
             <td>
                 高度:<input type="text" id="TB_H" name="TB_H" style="width: 80px; text-align: right" />
                 宽度:<input type="text" id="TB_W" name="TB_W" style="width: 80px; text-align: right" />
@@ -143,17 +159,27 @@
             </td>
         </tr>-->
         <tr>
+            <td>数据源类型</td>
             <td>
-                高级设置
-            </td>
-            <td>
-                数据源类型
-                <select id="DDL_DBType" name="DDL_DBType">
+                <select id="DDL_DBType" name="DDL_DBType" onchange="DBTypeChange()">
                     <option value="0">执行SQL</option>
                     <option value="1">执行url返回JSON</option>
                     <option value="2">执行CCFromRef.js返回JSON</option>
                 </select>
-                选择类型:
+            </td>
+        </tr>
+
+        <tr id="DBSrc">
+            <td>数据源</td>
+            <td>
+                <select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc">
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td>选择类型</td>
+            <td>
                 <input type="radio" id="RBPara_SelectType_0" name="RBPara_SelectType" value="0" />
                 <label for="RBPara_SelectType_0">
                     单选
@@ -164,8 +190,13 @@
                 </label>
             </td>
         </tr>
+
+        <tr>
+            <td colspan="2">
+                <label> <input type="checkbox" id="CBPara_IsEnter" /> 是否允许手工输入 </label>
+            </td>
+        </tr>
     </table>
-    <input id='Btn_Save' type=button onclick='Save()' value='保存' />
     <!--<input type='button' value='返回' onclick='Back()' id='Btn_Back' title='' />-->
 </body>
 </html>

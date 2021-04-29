@@ -25,6 +25,7 @@ if (typeof FrmComponents == "undefined") {
         FrmComponents.Dtl = 80,//从表
         FrmComponents.Frame = 90,//框架
         FrmComponents.Score = 101,//评分控件
-        FrmComponents.GovDocFile = 110//公文正文
+        FrmComponents.GovDocFile = 110,//公文正文
+        FrmComponents.SubFlow = 120//公文正文
 
 }

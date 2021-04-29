@@ -13,6 +13,9 @@
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
@@ -41,7 +44,7 @@
             $("#DDL_BatchCheckNoteModel option[value='" + selVal + "']").attr("selected", true);
 
             var listCount = node.GetPara("BatchCheckListCount");
-             if (listCount == 0 || listCount == null || listCount == undefined)
+            if (listCount == 0 || listCount == null || listCount == undefined)
                 listCount = 15;
 
             $("#TB_BatchCheckListCount").val(listCount);
@@ -103,7 +106,7 @@
         }
         function Save() {
 
-            $("#Btn_Save").val('正在保存请稍候...');
+            $("#Btn_Save").html('正在保存请稍候...');
 
             node.BatchRole = BatchRole.Group;
 

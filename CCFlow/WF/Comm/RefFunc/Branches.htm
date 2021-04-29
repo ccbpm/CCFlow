@@ -48,12 +48,12 @@
 
             //跟节点编号.
             rootNo = GetQueryString("RootNo");
-            if (rootNo == "@WebUser.FK_Dept") 
+            if (rootNo == "@WebUser.FK_Dept")
                 rootNo = webUser.FK_Dept;
             if (webUser.CCBPMRunModel == 2)
                 rootNo = webUser.OrgNo;
 
-            if (rootNo==null || rootNo == "")
+            if (rootNo == null || rootNo == "")
                 rootNo = "0";
 
             //多对多实体.
@@ -291,7 +291,7 @@
                 columns: searchTableColumns
             });
 
-            var json = DBAccess.RunDBSrc(gridUrl); //执行url返回json.
+            var json = DBAccess.RunDBSrc(gridUrl, mapExt.DBType, mapExt.FK_DBSrc); //执行url返回json.
             if ($.isArray(json)) {
                 $('#tree_Panel').hide();
                 $('#viewGrid_Panel').show();
@@ -321,9 +321,6 @@
             }
             return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
         }
-
-
-
 
         function getChildNodeIdArr(node, checked) {
             var ts = [];
@@ -367,6 +364,7 @@
 
         var en = null;
         function saveCheckNodes(selectNodes, flag) {
+
             for (var i = 0; i < selectNodes.length; i++) {
                 en = new Entity(GetQueryString("Dot2DotEnName"));
                 en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
@@ -378,14 +376,28 @@
             }
         }
         function deleteCheckNodes(selectNodes, flag) {
+
+
+            var pkval = GetPKVal();
+
+            var dot2EnName = GetQueryString("Dot2DotEnName");
+
+            var AttrOfOneInMM = GetQueryString("AttrOfOneInMM");
+
             for (var i = 0; i < selectNodes.length; i++) {
-                var en = new Entity(GetQueryString("Dot2DotEnName"));
-                en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+
+                var en = new Entity(dot2EnName);
+
+                en[ AttrOfOneInMM ] = pkval;
+
+                var refVal = null;
                 if (flag == 0)
-                    en[GetQueryString("AttrOfMInMM")] = selectNodes[i].id;
+                    refVal = selectNodes[i].id;
                 else
-                    en[GetQueryString("AttrOfMInMM")] = $('#tree').treeview('getNode', selectNodes[i]).id;
-                en.Delete();
+                    refVal = $('#tree').treeview('getNode', selectNodes[i]).id;
+
+                en[GetQueryString("AttrOfMInMM")] = refVal;
+                en.Delete(AttrOfOneInMM,pkval, GetQueryString("AttrOfMInMM"),refVal);
             }
         }
         function CheckAll() {

@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>字段权限</title>
 
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
@@ -10,6 +10,10 @@
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <!-- 自己的系统风格统一. -->
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -91,27 +95,31 @@
     </script>
 </head>
 <body onkeypress="Esc();">
+    <div class="container-full">
+        <div class="attrnode-bar-header">            
+            <strong> 节点-表单-字段权限</strong>
+        </div>
+        <form id="cc">
 
-<form id="cc" > 
+            <table id="Table1" style="width:90%;">              
+                <tr>
+                    <th>字段</th>
+                    <th>名称</th>
+                    <th>类型</th>
+                    <th>可见？</th>
+                    <th>可用？</th>
+                    <th>是否是签名？</th>
+                    <th>默认值</th>
+                    <th>检查必填？</th>
+                    <th>正则表达式</th>
+                    <th>写入流程数据表？</th>
+                </tr>
+            </table>
+        </form>
 
-<table id="Table1" style="width:90%;">
-<caption>节点-表单-字段权限</caption>
-<tr>
-<th>字段</th>
-<th>名称</th>
-<th>类型</th>
-<th>可见？</th>
-<th>可用？</th>
-<th>是否是签名？</th>
-<th>默认值</th>
-<th>检查必填？</th>
-<th>正则表达式</th>
-<th>写入流程数据表？</th>
-</tr>
-</table>
-</form>
+        <center><div id="Msg" /></center>
 
- <center><div id="Msg" /></center>
+    </div>
 
 </body>
 </html>

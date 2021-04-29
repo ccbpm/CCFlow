@@ -23,10 +23,13 @@ function InitBar(optionKey) {
 
     html += "</select >";
 
-    html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-    //html += "<input  id='Btn_Help' type=button onclick='Adv()' value='高级设置' />";
-    html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";
+   /* html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
+    html += "<input  id='Btn_Help' type=button onclick='Adv()' value='高级设置' />";
+    html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";*/
 
+    html += "<button  id='Btn_Save' class='cc-btn-tab btn-save'  onclick='Save()' >保存</button>";
+    //html += "<input  id='Btn_Help' type=button onclick='Adv()' value='高级设置' />";
+    html += "<button  id='Btn_Help'class='cc-btn-tab btn-hlep' onclick='HelpOnline()'>在线帮助</button>";
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");

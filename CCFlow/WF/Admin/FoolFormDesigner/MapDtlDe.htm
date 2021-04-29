@@ -3,8 +3,10 @@
 <head>
     <title>明细表属性</title>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
-    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
@@ -18,6 +20,8 @@
     <script type="text/javascript">
 
         closeWhileEscUp();
+        var multiTitle = null;  //表头
+        var multiTitle1 = null; //表头1
 
         //页面启动函数.
         $(function () {
@@ -35,71 +39,46 @@
             var attrs = new Entities("BP.Sys.MapAttrs");
             attrs.Retrieve("FK_MapData", fk_mapDtl, "Idx");
 
-            $("#trTitle").append("<th>序</th>");
+            var enEntity = new Entity("BP.Sys.MapDtl", fk_mapDtl);
 
-            var colNum = 0;
+            //获得表头.
+            multiTitle = enEntity.GetPara("MultiTitle");
+            multiTitle1 = enEntity.GetPara("MultiTitle1");
+
+            //是否是三级表头
+            /* var isThrMulti = false;
+               if (multiTitle1 == null || multiTitle1 == undefined || multiTitle1 == "" && multiTitle1 == "undefined")
+                   multiTitle1 = "";
+               if (multiTitle1 != "")
+                   isThrMulti = true;*/
+
+            //是否是二级表头
+            var isSecMulti = false;
+            if (multiTitle == null || multiTitle == undefined || multiTitle == "" || multiTitle == "undefined")
+                multiTitle = multiTitle1;
+            if (multiTitle == null || multiTitle == undefined || multiTitle == "" && multiTitle == "undefined")
+                multiTitle = "";
+
+            if (multiTitle != "")
+                isSecMulti = true;
+
+
+
+
             var fields = "WorkID,ReturnNode,ReturnNodeName,Returner,ReturnerName,ReturnToNode,ReturnToEmp,BeiZhu,RDT,IsBackTracking,";
             //生成表头..
-            for (var i = 0; i < attrs.length; i++) {
-
-                var attr = attrs[i];
-                var visable = attr.UIVisible;
-                if (visable == 0)
-                    continue;
-                if (fk_mapDtl == "BP.WF.ReturnWorks" && fields.indexOf(attr.KeyOfEn + ",") != -1)
-                    continue;
-                if (fk_flow != null && attr.AtPara.indexOf("FK_Flow=" + fk_flow) == -1)
-                    continue;
-
-                colNum++;
-
-                var mypk = attr.MyPK;
-                var dataType = attr.MyDataType;
-                var field = attr.KeyOfEn;
-                var name = attr.Name;
-                var lgType = attr.LGType;
-                var uiBindKey = attr.UIBindKey;
-                var uiContralType = attr.UIContralType; //控件类型.
-                var uiWidth = attr.UIWidth; //宽度.
-
-                var nameLink = "";
-                if (lgType == 0) {
-                    if (attr.MyDataType == "1" && attr.UIContralType == 1)
-                        nameLink = "<a href=\"javascript:EditTable('" + fk_mapDtl + "','" + mypk + "','" + uiBindKey + "')\" > " + name + "</a>";
-                    else
-                        nameLink = "<a href=\"javascript:Edit('" + mypk + "','" + dataType + "',null,'" + attr.FK_MapData + "'," + uiContralType + ")\" > " + name + "</a>";
-                }
-
-                if (lgType == 1) {
-                    nameLink = "<a href=\"javascript:EditEnumForDtl('" + fk_mapDtl + "','" + mypk + "','" + uiBindKey + "')\" > " + name + "</a>";
-                }
-
-                if (lgType == 2) {
-                    nameLink = "<a href=\"javascript:EditTable('" + fk_mapDtl + "','" + mypk + "','" + uiBindKey + "')\" > " + name + "</a>";
-                }
-
-                var col = "";
-                if (dataType == 2 || dataType == 3 || dataType == 5 || dataType == 6 || dataType == 8)
-                    col = "<th style='word-break: keep-all;' nowarp=true ><a href=\"javascript:Up('" + mypk + "');\" ><img src='../../../WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:Down('" + mypk + "')\" ><img src='../../../WF/Img/Btn/Right.gif' /></a></th>";
-                else
-                    col = "<th style='width:" + uiWidth + "px;word-break: keep-all;' nowarp=true ><a href=\"javascript:Up('" + mypk + "');\" ><img src='../../../WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:Down('" + mypk + "')\" ><img src='../../../WF/Img/Btn/Right.gif' /></a></th>";
-
-                $("#trTitle").append(col);
-            }
-
-            var mapDtl = new Entity("BP.Sys.MapDtl");
-            mapDtl.No = fk_mapDtl;
-            mapDtl.RetrieveFromDBSources();
-
-
-            if (mapDtl.IsEnableAthM == 1) {
-                $("#trTitle").append("<th>附件</th>");
+            //一级表头
+            if (isSecMulti == false) {
+                $("#trTitle").append("<th>序</th>");
+                showTable(attrs, fk_mapDtl, fk_flow, enEntity);
             }
 
 
-            $("#trTitle").append("<th>操作</th>");
+            //二级表头
+            if (isSecMulti == true) {
+                showSecTable(attrs, multiTitle, fk_mapDtl, fk_flow, enEntity);
+            }
 
-            //  $("#trTitle").append("</tr>");
 
 
             //生成内容行.
@@ -165,7 +144,7 @@
                     newRow += td;
                 }
 
-                if (mapDtl.IsEnableAthM == 1) {
+                if (enEntity.IsEnableAthM == 1) {
                     var opt = "";
                     opt += "<a href=\"javascript:alert('1.点击可以上传附件.\t\r 2.附件权限控制在从表属性里设置.')\" >上传</a>";
                     newRow += "<td>" + opt + "</td>";
@@ -178,9 +157,186 @@
             }
 
             $("#Msg").html("");
+            setIframeHeight();
 
         });
 
+        function setIframeHeight() {
+            var h = $("body").height();
+            if ($("body").height() < 240) {
+                h = 240;
+            }
+            if (window.frameElement != null)
+                $("#" + window.frameElement.getAttribute("id"), parent.document).height(h + 20);
+        }
+
+        /**
+         * 只有一级表头的解析
+         * @param mapAttr
+         */
+        function showTable(attrs, fk_mapDtl, fk_flow, mapDtl) {
+
+            var colNum = 0;
+            for (var i = 0; i < attrs.length; i++) {
+
+                var attr = attrs[i];
+                var visable = attr.UIVisible;
+                if (visable == 0)
+                    continue;
+                if (fk_mapDtl == "BP.WF.ReturnWorks" && fields.indexOf(attr.KeyOfEn + ",") != -1)
+                    continue;
+                if (fk_flow != null && attr.AtPara.indexOf("FK_Flow=" + fk_flow) == -1)
+                    continue;
+
+                colNum++;
+
+                var namelink = GenerNameLink(attr);
+                var dataType = attr.MyDataType;
+
+                var col = "";
+                if (dataType == 2 || dataType == 3 || dataType == 5 || dataType == 6 || dataType == 8)
+                    col = "<th style='word-break: keep-all;' nowarp=true >" + namelink + "</th>";
+                else
+                    col = "<th style='width:" + attr.UIWidth + "px;word-break: keep-all;' nowarp=true >" + namelink + "</th>";
+
+                $("#trTitle").append(col);
+            }
+
+            if (mapDtl.IsEnableAthM == 1) {
+                $("#trTitle").append("<th>附件</th>");
+            }
+
+            $("#trTitle").append("<th>操作</th>");
+        }
+
+        function GenerNameLink(attr) {
+
+            var mypk = attr.MyPK;
+            var dataType = attr.MyDataType;
+            var field = attr.KeyOfEn;
+            var name = attr.Name;
+            var lgType = attr.LGType;
+            var uiBindKey = attr.UIBindKey;
+            var uiContralType = attr.UIContralType; //控件类型.
+            var uiWidth = attr.UIWidth; //宽度.
+
+            var nameLink = "";
+
+            var fk_mapDtl = GetQueryString("FK_MapDtl");
+
+            //普通类型字段.
+            if (lgType == 0) {
+                if (attr.MyDataType == "1" && attr.UIContralType == 1)
+                    nameLink = "<a href=\"javascript:EditTable('" + fk_mapDtl + "','" + mypk + "','" + uiBindKey + "')\" > " + name + "</a>";
+                else
+                    nameLink = "<a href=\"javascript:Edit('" + mypk + "','" + dataType + "',null,'" + attr.FK_MapData + "'," + uiContralType + ")\" > " + name + "</a>";
+            }
+
+            //枚举.
+            if (lgType == 1) {
+                nameLink = "<a href=\"javascript:EditEnumForDtl('" + fk_mapDtl + "','" + mypk + "','" + uiBindKey + "')\" > " + name + "</a>";
+            }
+
+            //外键.
+            if (lgType == 2) {
+                nameLink = "<a href=\"javascript:EditTable('" + fk_mapDtl + "','" + mypk + "','" + uiBindKey + "')\" > " + name + "</a>";
+            }
+
+
+            var tdUp = "<a href=\"javascript:Up('" + attr.MyPK + "','1');\" class='easyui-linkbutton l-btn l-btn-plain' data-options='iconCls:icon-left,plain:true'  alt='向左动顺序' ><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-left'>-</span></a>";
+            var tdDown = "<a href=\"javascript:Down('" + attr.MyPK + "','1');\" class='easyui-linkbutton l-btn l-btn-plain' data-options='iconCls:icon-right,plain:true' alt='向右动顺序' ><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-right'>-</span></a>";
+
+            var col = "";
+            col = tdUp + nameLink + tdDown; // "<a href=\"javascript:Down('" + mypk + "')\" ><img src='../../../WF/Img/Btn/Right.gif' /></a>";
+
+            return col;
+        }
+        /**
+         * 二级表头，从表最多二级表头
+         * @param mapAttrs
+         * @param multiTitle
+         * @param fk_mapDtl
+         * @param fk_flow
+         * @param enEntity
+         */
+        function showSecTable(mapAttrs, multiTitle, fk_mapDtl, fk_flow, enEntity) {
+
+            var _html = "<tr>";
+            _html += "<th rowspan=2>序</th>";
+            var _secHtml = "";
+            var currentGroup = "";
+            var idx1 = 0;
+            var idx = 0;
+
+            for (var i = 0; i < mapAttrs.length; i++) {
+                var attr = mapAttrs[i];
+                if (attr.UIVisible == 0)
+                    continue;
+                if (fk_mapDtl == "BP.WF.ReturnWorks" && fields.indexOf(attr.KeyOfEn + ",") != -1)
+                    continue;
+                if (fk_flow != null && attr.AtPara.indexOf("FK_Flow=" + fk_flow) == -1)
+                    continue;
+
+                idx++;
+                var mypk = attr.MyPK;
+                var dataType = attr.MyDataType;
+                var field = attr.KeyOfEn;
+                var name = attr.Name;
+                var lgType = attr.LGType;
+                var uiBindKey = attr.UIBindKey;
+                var uiContralType = attr.UIContralType; //控件类型.
+                var uiWidth = attr.UIWidth; //宽度.
+
+                var nameLink = "";
+
+
+                //判断该字段是否隶属于二级表头的分组
+                if (multiTitle.indexOf("," + attr.KeyOfEn + ",") == -1)
+                    _html += "<th rowspan=2>" + GenerNameLink(attr) + "</th>";
+                else {
+                    var fields = getMutliFile(attr.KeyOfEn, multiTitle);
+                    if (fields != "" && (currentGroup == "" || currentGroup != fields[0])) {
+                        _html += "<th colspan=" + (fields.length - 1) + " style='text-align:center'><label>" + fields[0] + "</label>&nbsp;</th>";
+                        currentGroup = fields[0];
+                        idx1++;
+                    }
+
+                    nameLink = GenerNameLink(attr);
+
+                    if (dataType == 2 || dataType == 3 || dataType == 5 || dataType == 6 || dataType == 8)
+                        _secHtml += "<th style='word-break: keep-all;' nowarp=true >" + nameLink + "</th>";
+                    else
+                        _secHtml += "<th style='width:" + uiWidth + "px;word-break: keep-all;' nowarp=true >" + nameLink + "</th>";
+                }
+            }
+            if (enEntity.IsEnableAthM == 1)
+                _html += "<th rowspan=2>附件</th>";
+
+            _html += "<th rowspan=2>操作</th>";
+            _html += "</tr>";
+            _html += "<tr>" + _secHtml + "</tr>";
+            $("#trTitle").html(_html);
+        }
+
+        /**
+         * 获取二级表头
+         * @param keyOfEn
+         * @param multi
+         */
+        function getMutliFile(keyOfEn, multi) {
+
+            var fields = multi.split(";");
+            for (var i = 0; i < fields.length; i++) {
+                var str = fields[i];
+                if (str == "")
+                    continue;
+                if (str.indexOf("," + keyOfEn + ",") == -1)
+                    continue;
+                var strs = str.substring(0, str.length - 1).split(",");
+                return strs;
+            }
+            return "";
+        }
 
         function AddF(fk_mapdata) {
 
@@ -378,11 +534,11 @@
     </script>
 </head>
 <body>
-<table id='dtlTable' >
-<tr id='trTitle'>
-</tr>
+    <table id='dtlTable' style="width:100%;">
+        <tr id='trTitle'>
+        </tr>
 
-</table>
+    </table>
 
 
 </body>

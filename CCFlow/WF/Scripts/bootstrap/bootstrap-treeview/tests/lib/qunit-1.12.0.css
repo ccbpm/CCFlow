@@ -15,7 +15,7 @@
 }
 
 #qunit-testrunner-toolbar, #qunit-userAgent, #qunit-testresult, #qunit-tests li { font-size: small; }
-#qunit-tests { font-size: smaller; }
+#qunit-tests { }
 
 
 /** Resets */
@@ -113,7 +113,7 @@
 
 #qunit-tests li .runtime {
 	float: right;
-	font-size: smaller;
+	
 }
 
 .qunit-assert-list {

@@ -223,7 +223,7 @@
 
                     var work = data[i];
                     if (groupBy == "ByNode" || groupBy == "NodeName") {
-                        if (work.NodeName != groupName) {
+                        if (work.FK_Node!=nodeID) {
                             continue;
                         }
                     } else if (groupBy == "ByFlow") {
@@ -358,7 +358,7 @@
                         }
                     }
 
-                    listbox += "<td>" + GetState(work.WFState) + "</td>";
+                    listbox += "<td>" + GetState(work.WFState, work.Auther) + "</td>";
                     listbox += "<td>" + GetPRI(work.PRI) + "</td>";
 
                     //备注
@@ -397,13 +397,15 @@
                 url = node.BatchSelfUrl;
             window.location.href = url;
         }
-        function GetState(wfState) {
+        function GetState(wfState,auther) {
 
             switch (parseInt(wfState)) {
                 case 1:
-                    return window.lang.caogao;
+                    return "<font color=#bc65e0>" +window.lang.caogao+"</font>";
                 case 2:
-                    return window.lang.daiban;
+                    if (auther != null && auther != undefined && auther != "")
+                        return "<font color=orange>授权</font>";
+                    return "<font color=green>"+window.lang.daiban+"</font>";
                     break;
                 case 3: //已完成.
                     return window.lang.ywc;

@@ -13,7 +13,13 @@
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../Admin.js"></script>
     <script type="text/javascript">
+
+        var extType = "";
+
         $(function () {
+
+            extType = GetQueryString("ExtType");
+            extType = extType == null || extType == undefined ? "" : extType;
 
             InitBar("DDLs");
             var html = "";
@@ -92,25 +98,27 @@
 </head>
 <body>
     <form id="cc">
-    <div id="bar">
-    </div>
-    
-    <div id="doc">
-    </div>
-    <fieldset>
-        <legend>帮助.</legend>
-        <ul>
-            <li>填充下拉框的SQL, </li>
-            <li>返回一个数据源用来填充下拉框，改行里必须有No,Name两个字段 No就是下拉框的值，Name就是下拉框的标签.</li>
-            <li>
-                实例(选择的人员的岗位下拉框)：
-                <font color="green">
-                    SELECT B.FK_Station AS No, A.Name FROM Port_Station A, Port_DeptEmpStation B
-                    WHERE B.FK_Emp='@Key' AND B.Station=A.No
-                </font>
-            </li>
-            <li>@Key 系统约定的选择的编号.</li>
-        </ul>
-    </fieldset>
+
+        <div id="bar">
+        </div>
+
+        <div id="doc">
+        </div>
+        <fieldset>
+            <legend>帮助.</legend>
+            <ul>
+                <li>填充下拉框的SQL, </li>
+                <li>返回一个数据源用来填充下拉框，该行里必须有No,Name两个字段 No就是下拉框的值，Name就是下拉框的标签.</li>
+                <li>
+                    实例(选择的人员的岗位下拉框)：
+                    <font color="green">
+                        SELECT B.FK_Station AS No, A.Name FROM Port_Station A, Port_DeptEmpStation B
+                        WHERE B.FK_Emp='@Key' AND B.Station=A.No
+                    </font>
+                </li>
+                <li>@Key 系统约定的选择的编号.</li>
+            </ul>
+        </fieldset>
+    </form>
 </body>
 </html>

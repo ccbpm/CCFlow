@@ -8,114 +8,12 @@
     <link href="../../Scripts/easyUI145/themes/default/dialog.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../CCFormDesigner/normalize/css/ns-default.css" rel="stylesheet" type="text/css" />
-    <link href="../CCFormDesigner/normalize/css/ns-style-bar.css" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script src="../../Scripts/config.js" type="text/javascript"></script>
-    <script src="../../Comm/Gener.js" type="text/javascript"></script>
-    <script src="../../Scripts/Cookie.js" type="text/javascript"></script>
-    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="FuncTrees.js" type="text/javascript"></script>
-    <script src="Default.js"></script>
-    <link href="Default.css" rel="stylesheet" />
-    <link href="../../../Portal20/static/fonts/font-icons.min.css" rel="stylesheet" />
-    <link href="../../../Portal20/static/fonts/font-awesome.css" rel="stylesheet" />
-    <link href="../../../Portal20/static/select2/4.0/select2.css" rel="stylesheet" />
-    <script src="../../../Portal20/static/select2/4.0/select2.js"></script>
-    <style>
-        .window-header {
-            height: 18px;
-        }
-
-        #rightUL {
-            list-style: none;
-            position: absolute;
-            z-index: 100;
-            right: 10px;
-            top: 10px;
-        }
-
-            #rightUL span {
-                width: 120px;
-                right: 10px;
-                font-size: 16px;
-                color: black;
-                background-color: white;
-            }
-
-        .nav > li {
-            float: left;
-            list-style: none;
-        }
-
-        #rightUL a {
-            display: block;
-            text-decoration: none;
-            padding-bottom: 2px;
-            width: 100px;
-            height: 30px;
-            font-size: 14px;
-            text-align: center;
-            line-height: 30px;
-            color: black;
-            border: 1px solid black;
-            background-color: #F1F1F1;
-            border-radius: 10px;
-        }
-
-            #rightUL a:hover {
-                background-color: white;
-            }
-
-        .drop-down-content {
-            padding: 0;
-            display: none;
-            /*position: absolute;*/
-        }
-
-        .nav .drop-down:hover .drop-down-content {
-            display: block;
-        }
-
-        .tabs-header:not(:nth-child(1)) {
-            width: 85% !important;
-            border: none !important;
-        }
-
-        .headTiele label {
-            color: red;
-        }
-    </style>
-    <script>
-        //页面启动函数.
-        $(function () {
-            $("#ShowMsg").hide();
-            var webUser = new WebUser();
-            if (webUser.No == "") {
-                window.location.href = "Login.htm";
-                return;
-            }
-
-            $("#UserName").append(webUser.Name);
-            if (webUser.CCBPMRunModel == 1) {
-                var en = new Entity("BP.WF.Port.Admin2.Org", GetQueryString("OrgNo"));
-                $("title").text("驰骋BPM设计器—" + "组织编号:" + GetQueryString("OrgNo") + "-名称:" + en.Name);
-
-            }
-            else {
-                $("#OrgNo").hide();
-                $("#OrgName").hide();
-                $("#Login2App").show();
-                $("#org").hide();
-            }
-
-            return;
-        });
-
-    </script>
+    <link href="../CCFormDesigner/normalize/css/ns-style-bar.css" rel="stylesheet" type="text/css" />   
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />    
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    
 </head>
-<body class="easyui-layout" data-options="fit: true">
+<body class="easyui-layout default-skin" data-options="fit: true">
     <div id="ShowMsg" class="panel window mymask mymaskContainer" style="display: none;
         width: 160px; height: 32px; z-index: 21008; text-align: center; font-size: 14px;
         font-weight: bold;">
@@ -123,31 +21,28 @@
         请稍后...
     </div>
 
-    <div class="window-mask mymask" style="width: 100%; height: 100%; display: block;
-        z-index: 21006;">
+    <div class="window-mask mymask" style="width: 100%; height: 100%; display: block; z-index: 21006;">
     </div>
-    <div data-options="region:'west',border:true,split:true" title="<img src='../../../DataUser/ICON/CCBPMDesigner.png' style='display:block; margin: auto;width:160px;vertical-align:middle' />"
-         style="width: 270px;">
-        <div id="menuTab" class="easyui-tabs bar-menu" data-options="fit:true,border:false">
+    <div data-options="region:'west',border:true,split:true,collapsible:false" title="驰骋BPM" style="width: 270px;">
+        <div id="menuTab" class="easyui-tabs tab-menu" data-options="fit:true,border:false">
         </div>
     </div>
     <div data-options="region:'center',border:true" collapsible="true">
 
-        <div id="tabs" class="easyui-tabs cs-header" fit="true" border="false" data-options="tools:'#tab-tools',onBeforeClose:EventListener_TabClose,onClose:EventListener_TabCloseed">
+        <div id="tabs" class="easyui-tabs default-header" fit="true" border="false" data-options="tools:'#tab-tools',onBeforeClose:EventListener_TabClose,onClose:EventListener_TabCloseed">
 
             <ul id="rightUL" class="nav">
-
-                <li class="drop-down user-menu mr5">
-                    <img style="margin-bottom:10px" align="middle" src='../../AppClassic/Img/ico-user.png' />
+                <li class="drop-down user-menu">   
+                    <i class="iconfont icon-guanliyuan"></i>
                     <span id="UserName" href="#"></span>
                     <ul style="list-style:none;" class="drop-down-content">
                         <!--<li><a id="OrgNo" href="#">组织编号：</a></li>
                         <li><a id="OrgName" href="#">组织名称：</a></li>-->
-                        <li><a id="org" href="/WF/Admin/Portal/SelectOneOrg.htm">切换组织</a></li>
-                        <li><a href="#" id="Login2App" data-options="plain:true" onclick="Login2App()">登陆前台</a></li>
-                        <li><a href="#" onclick="addTab('', '个人中心', '../../Setting/Default.htm', '')">个人中心</a></li>
-                        <li><a href="#" onclick="LoginOut()">退出登录</a></li>
-                        <li><a target="_blank" href="http://ccflow.org">关于</a></li>
+                        <li><a id="org" href="/WF/Admin/Portal/SelectOneOrg.htm"><i class="iconfont icon-xiancheng2"></i>切换组织</a></li>
+                        <li><a href="#" id="Login2App" data-options="plain:true" onclick="Login2App()"><i class="iconfont icon-home-copy"></i>登陆前台</a></li>
+                        <li><a href="#" onclick="addTab('', '个人中心', '../../Setting/Default.htm', '')"><i class="iconfont icon-guanli"></i>个人中心</a></li>
+                        <li><a href="#" onclick="LoginOut()"><i class="iconfont icon-tuichu"></i>退出登录</a></li>
+                        <li><a target="_blank" href="http://ccflow.org"><i class="iconfont icon-guanyu"></i>关于</a></li>
 
                     </ul>
 
@@ -156,18 +51,6 @@
             </ul>
         </div>
 
-        <div id="tab-tools" style="height: 32px!important;">
-            <!--<a href="#" class="easyui-linkbutton" id="Login2App" data-options="plain:true" onclick="Login2App()">
-                <img alt='使用普通用户,登录前台demo系统' class="ico" src='../../AppClassic/Img/ico-user.png' />登录前台
-            </a>
-
-            <a href="#" class="easyui-linkbutton" data-options="plain:true"
-               onclick="LoginOut()">
-                <img alt='退出ccbpm流程设计器' class="ico" src='../../AppClassic/Img/ico-exit.png' />退出
-            </a>-->
-
-
-        </div>
     </div>
     <!--  context menu -->
     <div id="mFlowRoot" class="easyui-menu" style="width: 120px;">
@@ -197,73 +80,73 @@
     <div id="mFlowSort" class="easyui-menu" style="width: 120px;">
         <div onclick="newFlow()">
 
-            <img src="../../Scripts/easyUI145/themes/icons/edit_add.png">新建流程
+            <i class="iconfont icon-xinjianliucheng"></i>新建流程
         </div>
 
         <div onclick="ImpFlowBySort()">
-            <img src="../../Scripts/easyUI145/themes/icons/redo.png">导入流程模板
+            <i class="iconfont icon-daochu"></i>导入流程模板
         </div>
         <div class="menu-sep">
         </div>
         <div onclick="newFlowSort(false)">
-            <img src="../../Scripts/easyUI145/themes/icons/tree_folder.gif">新建同级类别
+            <i class="iconfont icon-xinjianleibie"></i>新建同级类别
         </div>
         <div onclick="newFlowSort(true)">
-            <img src="../../Scripts/easyUI145/themes/icons/tree_folder.gif">新建子级类别
+            <i class="iconfont icon-xinjian1"></i>新建子级类别
         </div>
         <div onclick="editFlowSort()">
-            <img src="../../Scripts/easyUI145/themes/icons/pencil.png">编辑
+            <i class="iconfont icon-bianji"></i>编辑
         </div>
         <div class="menu-sep">
         </div>
         <div onclick="deleteFlowSort()">
-            <img src="../../Scripts/easyUI145/themes/icons/delete.png">删除
+            <i class="iconfont icon-guanbi"></i>删除
         </div>
         <div class="menu-sep">
         </div>
         <div onclick="moveUpFlowSort()">
-            <img src="../../Scripts/easyUI145/themes/icons/up.gif">上移
+            <i class="iconfont icon-shangyi"></i>上移
         </div>
         <div onclick="moveDownFlowSort()">
-            <img src="../../Scripts/easyUI145/themes/icons/down.gif">下移
+            <i class="iconfont icon-xy"></i>下移
         </div>
         <div class="menu-sep">
         </div>
         <div onclick="RefreshNode('flowTree', 'F99')">
-            <img src="../../Scripts/easyUI145/themes/icons/reload.png">刷新
+            <i class="iconfont icon-refresh"></i>刷新
         </div>
         <div onclick="viewFlowSort()">
-            <img src="../../Scripts/easyUI145/themes/icons/tip.png">树节点属性
+            <i class="iconfont icon-shuxing"></i>树节点属性
         </div>
     </div>
     <div id="mFlow" class="easyui-menu" style="width: 120px;">
         <div onclick="showFlow()">
-            <img src="Img/ico-flow-pic.png">设计流程图
+            <i class="iconfont icon-jiedian"></i>设计流程图
         </div>
         <!--<div onclick="RefreshFlowJson()" data-options="iconCls:'icon-reset'">重置流程图</div>-->
         <!--<div class="menu-sep">
         </div>-->
         <div onclick="ImpFlow()">
-            <img src="Img/ico-flow-import.png">导入流程模板
+            <i class="iconfont icon-daoru"></i>导入流程模板
         </div>
         <div onclick="ExpFlow()">
-            <img src="Img/ico-flow-export.png">导出流程模板
+            <i class="iconfont icon-daochu"></i>导出流程模板
         </div>
         <div class="menu-sep">
         </div>
         <div onclick="DeleteFlow()">
-            <img src="Img/ico-flow-delete.png">删除流程
+            <i class="iconfont icon-guanbi"></i>删除流程
         </div>
         <div onclick="FlowProperty()">
-            <img src="Img/ico-flow-prototype.png">流程属性
+            <i class="iconfont icon-shuxing"></i>流程属性
         </div>
         <div class="menu-sep">
         </div>
         <div onclick="moveUpFlow()">
-            <img src="Img/ico-flow-up.png">上移
+            <i class="iconfont icon-shangyi"></i>上移
         </div>
         <div onclick="moveDownFlow()">
-            <img src="Img/ico-flow-down.png">下移
+            <i class="iconfont icon-xy"></i>下移
         </div>
     </div>
     <!--  <div onclick="ImpLocalFlow()" data-options="iconCls:'icon-imp'">导入本机流程模版</div>
@@ -294,70 +177,70 @@
             <img src="../../Scripts/easyUI145/themes/icons/edit_add.png">新建实体表单
         </div>-->
         <div onclick="openFrm('../FoolFormDesigner/NewFrmGuide.htm')">
-            <img src="../../Scripts/easyUI145/themes/icons/sheet.png">新建表单
+            <i class="iconfont icon-linshibiaoge"></i>新建表单
         </div>
         <div class="menu-sep">
         </div>
         <div onclick="newCCFormSort(false)">
-            <img src="../../Scripts/easyUI145/themes/icons/tree_folder.gif">新建同级类别
+            <i class="iconfont icon-xinjianleibie"></i>新建同级类别
         </div>
         <div onclick="newCCFormSort(true)">
-            <img src="../../Scripts/easyUI145/themes/icons/tree_folder.gif">新建子级类别
+            <i class="iconfont icon-xinjian1"></i>新建子级类别
         </div>
         <div class="menu-sep">
         </div>
         <div onclick="EditCCFormSort()">
-            <img src="../../Scripts/easyUI145/themes/icons/pencil.png">编辑
+            <i class="iconfont icon-bianji"></i>编辑
         </div>
         <div onclick="DeleteCCFormSort()">
-            <img src="../../Scripts/easyUI145/themes/icons/delete.png">删除
+            <i class="iconfont icon-guanbi"></i>删除
         </div>
         <div class="menu-sep">
         </div>
         <div onclick="moveUpCCFormSort()">
-            <img src="../../Scripts/easyUI145/themes/icons/up.gif">上移
+            <i class="iconfont icon-shangyi"></i>上移
         </div>
         <div onclick="moveDownCCFormSort()">
-            <img src="../../Scripts/easyUI145/themes/icons/down.gif">下移
+            <i class="iconfont icon-xy"></i>下移
         </div>
         <div class="menu-sep">
         </div>
         <div onclick="RefreshNode('formTree', '1')">
-            <img src="../../Scripts/easyUI145/themes/icons/reload.png">刷新
+            <i class="iconfont icon-refresh"></i>刷新
         </div>
     </div>
     <div id="mForm" class="easyui-menu" style="width: 120px;">
         <div onclick="Bill_CCForm()">
-            <img src="../../Scripts/easyUI145/themes/icons/property.png">表单属性
+            <i class="iconfont icon-biaoge-xianshi"></i>表单属性
         </div>
         <div onclick="Bill_Open()">
-            <img src="../../Scripts/easyUI145/themes/icons/property.png">数据查询
+            <i class="iconfont icon-Search"></i>数据查询
         </div>
         <div class="menu-sep">
         </div>
         <!--  <div onclick="CCForm_Attr()" data-options="iconCls:'icon-property'">
             表单属性</div>-->
         <div onclick="designFoolFrm()">
-            <img src="../../Scripts/easyUI145/themes/icons/sheet.png">设计傻瓜表单
+            <i class="iconfont icon-biaoge"></i>设计傻瓜表单
         </div>
         <div onclick="designFreeFrm()">
-            <img src="../../Scripts/easyUI145/themes/icons/library.png">设计自由表单
+            <i class="iconfont icon-biaodandingzhimoban"></i>设计自由表单
         </div>
         <!--<div onclick="CopyFrm()" data-options="iconCls:'icon-copy'">复制表单</div>-->
         <div class="menu-sep">
         </div>
         <div onclick="moveUpCCFormTree()">
-            <img src="../../Scripts/easyUI145/themes/icons/up.gif">上移
+            <i class="iconfont icon-shangyi"></i>上移
         </div>
         <div onclick="moveDownCCFormTree()">
-            <img src="../../Scripts/easyUI145/themes/icons/down.gif">下移
+            <i class="iconfont icon-xy"></i>下移
         </div>
         <div onclick="deleteCCFormTreeMapData()">
-            <img src="../../Scripts/easyUI145/themes/icons/delete.png">删除
+            <i class="iconfont icon-guanbi"></i>删除
         </div>
 
         <div onclick="CopyFrm()">
-            <img src="../../Scripts/easyUI145/themes/icons/copy.png">复制
+            <i class="iconfont icon-anli"></i>复制
         </div>
         <!--<div class="menu-sep"></div>
         <div onclick="RefreshNode('formTree', '1')" data-options="iconCls:'icon-reload'">刷新</div>-->
@@ -472,8 +355,45 @@
             删除人员
         </div>
     </div>
+    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Scripts/Cookie.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Style/skin/js/FuncTrees.js" type="text/javascript"></script>
+    <script src="../../Style/skin/js/Default.js"></script>
     <script src="../CCFormDesigner/normalize/js/classie.js" type="text/javascript"></script>
     <script src="../CCFormDesigner/normalize/js/modernizr.custom.js" type="text/javascript"></script>
     <script src="../CCFormDesigner/normalize/js/notificationFx.js" type="text/javascript"></script>
+    <script>
+        //页面启动函数.
+        $(function () {
+            $("#ShowMsg").hide();
+            var webUser = new WebUser();
+            if (webUser.No == "") {
+                window.location.href = "Login.htm";
+                return;
+            }
+
+            $("#UserName").append(webUser.Name);
+            if (webUser.CCBPMRunModel == 1) {
+                var en = new Entity("BP.WF.Port.Admin2.Org", GetQueryString("OrgNo"));
+                $("title").text("驰骋BPM设计器—" + "组织编号:" + GetQueryString("OrgNo") + "-名称:" + en.Name);
+
+            }
+            else {
+                $("#OrgNo").hide();
+                $("#OrgName").hide();
+                $("#Login2App").show();
+                $("#org").hide();
+            }
+
+            return;
+        });
+
+    </script>
+
 </body>
 </html>

@@ -86,6 +86,29 @@ UE.plugins['frmmobile'] = function () {
         }
     };
 }
+//插入模板..
+UE.plugins['template'] = function () {
+    var me = this, thePlugins = 'template';
+    var frmID = pageParam.fk_mapdata;
+    var W = 500;
+    var H = 500;
+    var url = '../DevelopDesigner/Template.htm?FK_Flow=' + GetQueryString("FK_Flow") + '&FK_Node=' + GetQueryString('FK_Node') + '&FK_MapData=' + GetQueryString("FK_MapData");
+    me.commands[thePlugins] = {
+        execCommand: function (method, dataType) {
+            var dialog = new UE.ui.Dialog({
+                iframeUrl: url,
+                name: thePlugins,
+                editor: this,
+                title: '插入模板',
+                cssRules: "width:" + W + "px;height:" + H + "px;",
+
+            });
+            dialog.render();
+            dialog.open();
+
+        }
+    };
+}
 UE.plugins['text'] = function () {
     var me = this, thePlugins = 'text';
     me.commands[thePlugins] = {
@@ -149,7 +172,13 @@ UE.plugins['text'] = function () {
             this.hide();
         },
         _setwidth: function () {
-            var w = prompt("请输入数值：比如25", baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width').replace("px", ""));
+            var w = prompt("请输入：比如25(数值)或者50%(百分比)", baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width').replace("px", ""));
+            var percent = new RegExp(/^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/);
+            var result = percent.test(w);
+            if (result) {
+                baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w);
+                return;
+            }
 
             var patrn = /^(-)?\d+(\.\d+)?$/;
             if (patrn.exec(w) == null && w != "" && w != null) {
@@ -224,6 +253,10 @@ UE.plugins['edit'] = function () {
     var me = this, thePlugins = 'edit';
     me.commands[thePlugins] = {
         execCommand: function (method, datatype, obj) {
+            if (datatype == "SubFlow") {
+                showFigurePropertyWin(datatype, null, pageParam.fk_mapdata, obj);
+                return;
+            }
             if (obj != null) {
                 var keyOfEn = obj.getAttribute("data-key");
 
@@ -379,7 +412,7 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
     }
 
     if (shap == 'SubFlow') {
-        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.FrmSubFlow&PKVal=' + fk_mapdata.replace('ND', '') + '&tab=子线程组件';
+        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.FrmSubFlow&PKVal=' + fk_mapdata.replace('ND', '') + '&tab=父子流程组件';
         CCForm_ShowDialog(url, '父子流程组件', null, null, shap, fk_mapdata.replace('ND', ''), anchorEl);
 
         return;
@@ -410,14 +443,12 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
 
     if (shap == 'IFrame') {
 
-
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapFrameExt&PKVal=' + mypk;
         CCForm_ShowDialog(url, '框架组件', null, null, shap, mypk, anchorEl);
         return;
     }
 
     if (shap == 'HandWriting') {
-
 
         var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&PKVal=' + mypk;
         CCForm_ShowDialog(url, '签字版组件', null, null, shap, mypk, anchorEl);
@@ -427,7 +458,6 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
     if (shap == 'Score') {
         var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtScore&PKVal=' + mypk;
         CCForm_ShowDialog(url, '评分组件', null, null, shap, mypk, anchorEl);
-
         return;
     }
 
@@ -483,7 +513,7 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
         }, 1000);
         return;
     }
-        
+
     //弹出框编辑属性
     OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, w, h, 'icon-library', false, null, null, null, function () {
         switch (shap) {
@@ -546,7 +576,7 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
                         if (en.UIContralType == 0) {
                             var attributes;
                             if (en.UIHeight <= 23) {
-                                attributes = { "data-type": "Text"};
+                                attributes = { "data-type": "Text" };
                             } else {
                                 attributes = {
                                     "data-type": "Textarea",
@@ -564,7 +594,7 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
                 }
                 break;
             case "Dtl":
-               
+
                 break;
             case "Img":
                 var en = new Entity("BP.Sys.FrmUI.ExtImg");
@@ -597,8 +627,8 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
             case "SubFlow":
                 var nodeID = GetQueryString("FK_Node");
                 var subFlow = new Entity("BP.WF.Template.FrmSubFlow", nodeID);
-                if (subFlow.SFSta == 0)
-                    UE.dom.domUtils.remove(anchorEl, false);
+                //if (subFlow.SFSta == 0)
+                 //   UE.dom.domUtils.remove(anchorEl, false);
             case "HyperLink":
                 break;
             case "IFrame":
@@ -608,11 +638,8 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
                     UE.dom.domUtils.remove(anchorEl, false);
                 break;
         }
-
     });
-
 }
-
 
 /**
  * 宏控件
@@ -867,7 +894,7 @@ UE.plugins['textarea'] = function () {
                     alert('字段没有获取到，请联系管理员');
                     return false;
                 }
-                var mapAttr = new Entity("BP.Sys.MapAttr", );
+                var mapAttr = new Entity("BP.Sys.MapAttr");
                 mapAttr.MyPK = pageParam.fk_mapdata + "_" + keyOfEn;
                 mapAttr.Delete();
                 var mapExt = new Entities("BP.Sys.MapExts");
@@ -877,7 +904,14 @@ UE.plugins['textarea'] = function () {
             this.hide();
         },
         _setwidth: function () {
-            var w = prompt("请输入数值：比如25", baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width').replace("px", ""));
+            var w = prompt("请输入：比如25(数值)或者50%(百分比)", baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width').replace("px", ""));
+
+            var percent = new RegExp(/^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/);
+            var result = percent.test(w);
+            if (result) {
+                baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w);
+                return;
+            }
 
             var patrn = /^(-)?\d+(\.\d+)?$/;
             if (patrn.exec(w) == null && w != "" && w != null) {
@@ -1465,10 +1499,13 @@ UE.plugins['component'] = function () {
             if (dataType == "WorkCheck") { //审核组件
                 var mypk = GetQueryString("FK_Node");
 
-                //if (mypk == null || mypk == undefined) {
-                //    alert('非节点表单,不能添加审核组件');
-                //    return;
-                //}
+                if (mypk == null || mypk == undefined) {
+                    alert('非节点表单,只添加审核组件标识');
+                    var _html = "<img src='../CCFormDesigner/Controls/DataView/FrmCheck.png' style='width:67%;height:200px'  leipiplugins='component'  data-type='WorkCheck'/>"
+                    leipiEditor.execCommand('insertHtml', _html);
+
+                    return;
+                }
                 var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.NodeWorkCheck&PKVal=' + mypk + '&tab=审核组件';
                 OpenEasyUiDialog(url, "eudlgframe", '组件', 800, 550, "icon-property", true, null, null, null, function () {
                     //加载js
@@ -1480,11 +1517,13 @@ UE.plugins['component'] = function () {
                 });
 
             }
-            if (dataType == "SubFlow") {//父子流程
+            if (dataType == "SubFlow") { //父子流程
                 var mypk = GetQueryString("FK_Node");
 
                 if (mypk == null || mypk == undefined) {
-                    alert('非节点表单,不能添加父子流程');
+                    alert('非节点表单,只增加父子流程标识，属性配置请在节点属性，父子流程组件中配置');
+                    var _html = "<img src='../CCFormDesigner/Controls/DataView/SubFlowDtl.png' style='width:67%;height:200px'  leipiplugins='component'   data-type='SubFlow'/>"
+                    leipiEditor.execCommand('insertHtml', _html);
                     return;
                 }
                 var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PKVal=' + mypk + '&tab=父子流程组件';
@@ -1534,13 +1573,13 @@ UE.plugins['component'] = function () {
                     en.MyPK = mypk;
                     en.Delete();
                 }
-                if (dataType == "Map" || dataType == "Score" || dataType == "HandWriting" ) {
+                if (dataType == "Map" || dataType == "Score" || dataType == "HandWriting") {
                     var mapAttr = new Entity("BP.Sys.MapAttr");
                     mapAttr.MyPK = mypk;
                     mapAttr.Delete();
                 }
 
-                if (dataType == "GovDocFile"  || dataType == "DocWord" || dataType == "DocWordReceive"  ) {
+                if (dataType == "GovDocFile" || dataType == "DocWord" || dataType == "DocWordReceive") {
                     var mapAttr = new Entity("BP.Sys.MapAttr", pageParam.fk_mapdata + "_" + mypk);
                     mapAttr.Delete();
                 }
@@ -1553,7 +1592,7 @@ UE.plugins['component'] = function () {
                     var frmBtn = new Entity("BP.Sys.FrmUI.FrmBtn", pageParam.fk_mapdata + "_" + mypk);
                     frmBtn.Delete();
                 }
-               
+
                 if (dataType == "SubFlow") {
                     var nodeID = GetQueryString("FK_Node");
                     var subFlow = new Entity("BP.WF.Template.FrmSubFlow", nodeID);
@@ -1626,10 +1665,10 @@ UE.plugins['component'] = function () {
             if (dataType == "HandWriting")
                 _html = popup.formatHtml(
                     '<nobr>手写签名版控件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
-            if (dataType == "WorkCheck")
+            if (dataType == "WorkCheck" && pageParam.fk_node != 0)
                 _html = popup.formatHtml(
                     '<nobr>审核组件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
-            if (dataType == "SubFlow")
+            if (dataType == "SubFlow" && pageParam.fk_node != 0)
                 _html = popup.formatHtml(
                     '<nobr>父子流程控件: <span onclick=$$._edittext() class="edui-clickable">编辑</span>&nbsp;&nbsp;<span onclick=$$._delete() class="edui-clickable">删除</span></nobr>');
 
@@ -1742,146 +1781,146 @@ UE.plugins['leipi_template'] = function () {
     };
 };
 
-UE.registerUI('button_leipi', function (editor, uiName) {
-    if (!this.options.toolleipi) {
-        return false;
-    }
-    //注册按钮执行时的command命令，使用命令默认就会带有回退操作
-    editor.registerCommand(uiName, {
-        execCommand: function () {
-            editor.execCommand('leipi');
-        }
-    });
-    //创建一个button
-    var btn = new UE.ui.Button({
-        //按钮的名字
-        name: uiName,
-        //提示
-        title: "表单设计器",
-        //需要添加的额外样式，指定icon图标，这里默认使用一个重复的icon
-        cssRules: 'background-position: -401px -40px;',
-        //点击时执行的命令
-        onclick: function () {
-            //这里可以不用执行命令,做你自己的操作也可
-            editor.execCommand(uiName);
-        }
-    });
-    /*
-        //当点到编辑内容上时，按钮要做的状态反射
-        editor.addListener('selectionchange', function () {
-            var state = editor.queryCommandState(uiName);
-            if (state == -1) {
-                btn.setDisabled(true);
-                btn.setChecked(false);
-            } else {
-                btn.setDisabled(false);
-                btn.setChecked(state);
-            }
-        });
-    */
-    //因为你是添加button,所以需要返回这个button
-    return btn;
-});
-UE.registerUI('button_template', function (editor, uiName) {
-    if (!this.options.toolleipi) {
-        return false;
-    }
-    //注册按钮执行时的command命令，使用命令默认就会带有回退操作
-    editor.registerCommand(uiName, {
-        execCommand: function () {
-            try {
-                leipiFormDesign.exec('leipi_template');
-                //leipiFormDesign.fnCheckForm('save');
-            } catch (e) {
-                alert('打开模板异常');
-            }
+//UE.registerUI('button_leipi', function (editor, uiName) {
+//    if (!this.options.toolleipi) {
+//        return false;
+//    }
+//    //注册按钮执行时的command命令，使用命令默认就会带有回退操作
+//    editor.registerCommand(uiName, {
+//        execCommand: function () {
+//            editor.execCommand('leipi');
+//        }
+//    });
+//    //创建一个button
+//    var btn = new UE.ui.Button({
+//        //按钮的名字
+//        name: uiName,
+//        //提示
+//        title: "表单设计器",
+//        //需要添加的额外样式，指定icon图标，这里默认使用一个重复的icon
+//        cssRules: 'background-position: -401px -40px;',
+//        //点击时执行的命令
+//        onclick: function () {
+//            //这里可以不用执行命令,做你自己的操作也可
+//            editor.execCommand(uiName);
+//        }
+//    });
+//    /*
+//        //当点到编辑内容上时，按钮要做的状态反射
+//        editor.addListener('selectionchange', function () {
+//            var state = editor.queryCommandState(uiName);
+//            if (state == -1) {
+//                btn.setDisabled(true);
+//                btn.setChecked(false);
+//            } else {
+//                btn.setDisabled(false);
+//                btn.setChecked(state);
+//            }
+//        });
+//    */
+//    //因为你是添加button,所以需要返回这个button
+//    return btn;
+//});
+//UE.registerUI('button_template', function (editor, uiName) {
+//    if (!this.options.toolleipi) {
+//        return false;
+//    }
+//    //注册按钮执行时的command命令，使用命令默认就会带有回退操作
+//    editor.registerCommand(uiName, {
+//        execCommand: function () {
+//            try {
+//                leipiFormDesign.exec('leipi_template');
+//                //leipiFormDesign.fnCheckForm('save');
+//            } catch (e) {
+//                alert('打开模板异常');
+//            }
 
-        }
-    });
-    //创建一个button
-    var btn = new UE.ui.Button({
-        //按钮的名字
-        name: uiName,
-        //提示
-        title: "表单模板",
-        //需要添加的额外样式，指定icon图标，这里默认使用一个重复的icon
-        cssRules: 'background-position: -339px -40px;',
-        //点击时执行的命令
-        onclick: function () {
-            //这里可以不用执行命令,做你自己的操作也可
-            editor.execCommand(uiName);
-        }
-    });
+//        }
+//    });
+//    //创建一个button
+//    var btn = new UE.ui.Button({
+//        //按钮的名字
+//        name: uiName,
+//        //提示
+//        title: "表单模板",
+//        //需要添加的额外样式，指定icon图标，这里默认使用一个重复的icon
+//        cssRules: 'background-position: -339px -40px;',
+//        //点击时执行的命令
+//        onclick: function () {
+//            //这里可以不用执行命令,做你自己的操作也可
+//            editor.execCommand(uiName);
+//        }
+//    });
 
-    //因为你是添加button,所以需要返回这个button
-    return btn;
-});
-UE.registerUI('button_preview', function (editor, uiName) {
-    if (!this.options.toolleipi) {
-        return false;
-    }
-    //注册按钮执行时的command命令，使用命令默认就会带有回退操作
-    editor.registerCommand(uiName, {
-        execCommand: function () {
-            try {
-                leipiFormDesign.fnReview();
-            } catch (e) {
-                alert('leipiFormDesign.fnReview 预览异常');
-            }
-        }
-    });
-    //创建一个button
-    var btn = new UE.ui.Button({
-        //按钮的名字
-        name: uiName,
-        //提示
-        title: "预览",
-        //需要添加的额外样式，指定icon图标，这里默认使用一个重复的icon
-        cssRules: 'background-position: -420px -19px;',
-        //点击时执行的命令
-        onclick: function () {
-            //这里可以不用执行命令,做你自己的操作也可
-            editor.execCommand(uiName);
-        }
-    });
+//    //因为你是添加button,所以需要返回这个button
+//    return btn;
+//});
+//UE.registerUI('button_preview', function (editor, uiName) {
+//    if (!this.options.toolleipi) {
+//        return false;
+//    }
+//    //注册按钮执行时的command命令，使用命令默认就会带有回退操作
+//    editor.registerCommand(uiName, {
+//        execCommand: function () {
+//            try {
+//                leipiFormDesign.fnReview();
+//            } catch (e) {
+//                alert('leipiFormDesign.fnReview 预览异常');
+//            }
+//        }
+//    });
+//    //创建一个button
+//    var btn = new UE.ui.Button({
+//        //按钮的名字
+//        name: uiName,
+//        //提示
+//        title: "预览",
+//        //需要添加的额外样式，指定icon图标，这里默认使用一个重复的icon
+//        cssRules: 'background-position: -420px -19px;',
+//        //点击时执行的命令
+//        onclick: function () {
+//            //这里可以不用执行命令,做你自己的操作也可
+//            editor.execCommand(uiName);
+//        }
+//    });
 
-    //因为你是添加button,所以需要返回这个button
-    return btn;
-});
+//    //因为你是添加button,所以需要返回这个button
+//    return btn;
+//});
 
-UE.registerUI('button_save', function (editor, uiName) {
-    if (!this.options.toolleipi) {
-        return false;
-    }
-    //注册按钮执行时的command命令，使用命令默认就会带有回退操作
-    editor.registerCommand(uiName, {
-        execCommand: function () {
-            try {
-                SaveForm();
-            } catch (e) {
-                alert('leipiFormDesign.fnCheckForm("save") 保存异常');
-            }
+//UE.registerUI('button_save', function (editor, uiName) {
+//    if (!this.options.toolleipi) {
+//        return false;
+//    }
+//    //注册按钮执行时的command命令，使用命令默认就会带有回退操作
+//    editor.registerCommand(uiName, {
+//        execCommand: function () {
+//            try {
+//                SaveForm();
+//            } catch (e) {
+//                alert('leipiFormDesign.fnCheckForm("save") 保存异常');
+//            }
 
-        }
-    });
-    //创建一个button
-    var btn = new UE.ui.Button({
-        //按钮的名字
-        name: uiName,
-        //提示
-        title: "保存表单",
-        //需要添加的额外样式，指定icon图标，这里默认使用一个重复的icon
-        cssRules: 'background-position: -481px -20px;',
-        //点击时执行的命令
-        onclick: function () {
-            //这里可以不用执行命令,做你自己的操作也可
-            editor.execCommand(uiName);
-        }
-    });
+//        }
+//    });
+//    //创建一个button
+//    var btn = new UE.ui.Button({
+//        //按钮的名字
+//        name: uiName,
+//        //提示
+//        title: "保存表单",
+//        //需要添加的额外样式，指定icon图标，这里默认使用一个重复的icon
+//        cssRules: 'background-position: -481px -20px;',
+//        //点击时执行的命令
+//        onclick: function () {
+//            //这里可以不用执行命令,做你自己的操作也可
+//            editor.execCommand(uiName);
+//        }
+//    });
 
-    //因为你是添加button,所以需要返回这个button
-    return btn;
-});
+//    //因为你是添加button,所以需要返回这个button
+//    return btn;
+//});
 
 //手写签名版.
 function ExtHandWriting() {
@@ -2278,10 +2317,13 @@ function ExtScore() {
 //全局变量
 var pageParam = {};
 pageParam.fk_mapdata = GetQueryString("FK_MapData");
+pageParam.fk_node = GetQueryString("FK_Node");
+if (pageParam.fk_node == null || pageParam.fk_node == undefined)
+    pageParam.fk_node = 0;
 
 function SaveForm() {
 
-    $("#Btn_Save").val("正在保存请稍后.");
+    $("#Btn_Save").html("正在保存请稍后.");
 
     try {
         Save();
@@ -2290,8 +2332,9 @@ function SaveForm() {
         return;
     }
 
-    $("#Btn_Save").val("保存成功");
-    setTimeout(function () { $("#Btn_Save").val("保存."); }, 1000);
+    $("#Btn_Save").html("保存成功");
+    setTimeout(function () { $("#Btn_Save").html("保存."); }, 1000);
+   // alert("保存成功.");
 }
 var formeditor = "";
 //保存表单的htm代码
@@ -2309,7 +2352,7 @@ function Save() {
         return false;
     }
 
-    $("#Btn_Save").val("正在保存...");
+    $("#Btn_Save").html("正在保存...");
 
 
     leipiEditor.sync();       //同步内容
@@ -2505,16 +2548,16 @@ function Save() {
     //获取表单的附件，从表，图片附件，审核组件
     leipiEditor.focus(true);
     var imgs = leipiEditor.document.getElementsByTagName("Img");
-    var _html=""
+    var _html = ""
     var aths = new Entities("BP.Sys.FrmAttachments");
-    aths.Retrieve("FK_MapData", pageParam.fk_mapdata,"FK_Node",0);
+    aths.Retrieve("FK_MapData", pageParam.fk_mapdata, "FK_Node", 0);
     $.each(aths, function (i, ath) {
         document.getElementsByTagName("Im")
         var element = getElementByAttr(imgs, "data-key", ath.MyPK);
         if (element == null)
             element = leipiEditor.document.getElementById("TB_" + ath.NoOfObj);
         //增加该元素
-        if (element==null) {
+        if (element == null) {
             _html = "<img src='../CCFormDesigner/Controls/DataView/AthMulti.png' style='width:67%;height:200px'  leipiplugins='ath' data-key='" + ath.MyPK + "' />"
             leipiEditor.execCommand('insertHtml', _html);
         }
@@ -2522,7 +2565,7 @@ function Save() {
 
     //从表
     var dtls = new Entities("BP.Sys.MapDtls");
-    dtls.Retrieve("FK_MapData", pageParam.fk_mapdata,"FK_Node",0);
+    dtls.Retrieve("FK_MapData", pageParam.fk_mapdata, "FK_Node", 0);
     $.each(dtls, function (i, dtl) {
         var element = getElementByAttr(imgs, "data-key", dtl.No);
         //增加该元素
@@ -2551,7 +2594,7 @@ function Save() {
         if (element == null) {
             var node = new Entity("BP.WF.Node", fk_node);
             //并且签批字段为空时增加审核组件
-            if (node.FWCSta != 0 && (node.CheckField == null || node.CheckField == undefined|| node.CheckField == "" )) {
+            if (node.FWCSta != 0 && (node.CheckField == null || node.CheckField == undefined || node.CheckField == "")) {
                 var _html = "<img src='../CCFormDesigner/Controls/DataView/FrmCheck.png' style='width:67%;height:200px'  leipiplugins='component' data-key='" + fk_node + "'  data-type='WorkCheck'/>"
                 leipiEditor.execCommand('insertHtml', _html);
             }
@@ -2561,20 +2604,20 @@ function Save() {
     //获得内容.
     formeditor = leipiEditor.getContent();
 
-    $("#Btn_Save").val("正在保存....");
+    $("#Btn_Save").html("正在保存....");
 
     //保存表单的html信息
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DevelopDesigner");
     handler.AddPara("FK_MapData", pageParam.fk_mapdata);
     handler.AddPara("HtmlCode", encodeURIComponent(formeditor));
-    
+
     var data = handler.DoMethodReturnString("SaveForm");
     if (data.indexOf("err@") != -1) {
         alert(data);
         return;
     }
 
-    $("#Btn_Save").val("保存");
+    $("#Btn_Save").html("保存");
 }
 
 var webUser = new WebUser();

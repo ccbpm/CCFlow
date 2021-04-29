@@ -174,10 +174,7 @@
                     else
                         html += "<td nowrap>" + item.WFStateText + "</td>";
 
-                    //  var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-                    //   handler.AddPara("TodoEmps", item.TodoEmps);
-                    //  emps = handler.DoMethodReturnString("DealUserInfoShowModel");
-
+                 
                     var emps = item.TodoEmps.split(';');
                     var myemps = "";
 
@@ -212,8 +209,7 @@
 
                     html += "</tr>";
 
-                    //加载他下面的子流程.
-                    //   html = InsertSubFlows(item.FK_Flow, item.FK_Node, item.WorkID, 1);
+                 
                 }
             }
 

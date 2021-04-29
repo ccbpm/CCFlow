@@ -96,7 +96,7 @@ namespace CCFlow.WF.CCForm
                 return "ND" + this.FK_Node + "_DocMultiAth"; // this.Request.QueryString["FK_FrmAttachment"];
             }
         }
-        
+
         public int _fk_node = 0;
         public int FK_Node
         {
@@ -135,7 +135,7 @@ namespace CCFlow.WF.CCForm
                 return Int64.Parse(str);
             }
         }
-        
+
         public string IsCC
         {
             get
@@ -174,16 +174,18 @@ namespace CCFlow.WF.CCForm
                 bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
                 FrmAttachmentDB downDB = new FrmAttachmentDB();
 
-                downDB.MyPK = this.DelPKVal == null ? this.MyPK : this.DelPKVal;
+                downDB.MyPK = this.MyPK;
                 downDB.Retrieve();
                 FrmAttachment dbAtt = new FrmAttachment();
-                dbAtt.MyPK = this.FK_FrmAttachment;
+                dbAtt.MyPK = downDB.FK_FrmAttachment;
                 dbAtt.Retrieve();
 
                 if (dbAtt.ReadRole != 0 && this.FK_Node != 0)
                 {
+                    //标记已经阅读了.
                     GenerWorkerList gwf = new GenerWorkerList();
-                    int count = gwf.Retrieve(GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No, GenerWorkerListAttr.FK_Node, this.FK_Node, GenerWorkerListAttr.WorkID, this.WorkID);
+                    int count = gwf.Retrieve(GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No,
+                        GenerWorkerListAttr.FK_Node, this.FK_Node, GenerWorkerListAttr.WorkID, this.WorkID);
                     if (count != 0)
                     {
                         string str = gwf.GetParaString(dbAtt.NoOfObj);
@@ -212,6 +214,7 @@ namespace CCFlow.WF.CCForm
                     {
                         filepath = downDB.FileFullName;
                     }
+
                     #region 文件下载（并删除临时明文文件）
                     if (!"firefox".Contains(HttpContext.Current.Request.Browser.Browser.ToLower()))
                         tempName = HttpUtility.UrlEncode(tempName);
@@ -238,7 +241,6 @@ namespace CCFlow.WF.CCForm
                     else
                         tempDescFile = tempFile;
                     BP.WF.HttpHandler.HttpHandlerGlo.DownloadFile(tempDescFile, downDB.FileName);
-
                 }
 
                 if (dbAtt.AthSaveWay == AthSaveWay.DB)

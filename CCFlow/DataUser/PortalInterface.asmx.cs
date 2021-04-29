@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Collections;
+using System.Web;
 using System.Web.Services;
 using BP.DA;
-using BP.Sys;
 
 namespace ccbpm
 {
@@ -40,16 +42,16 @@ namespace ccbpm
         public bool SendWhen(string flowNo, int nodeID, Int64 workid, string userNo, string userName)
         {
             //BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  " + tel + " msgInfo:" + msgInfo);
-            // if (SystemConfig.IsEnableCCIM && sendToEmpNo != null)
-            //    BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo,DataType.CurrentDataTime);
+            // if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+            //    BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
             return true;
         }
         [WebMethod(EnableSession = true)]
         public bool FlowOverBefore(string flowNo, int nodeID, Int64 workid, string userNo, string userName)
         {
             //BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  " + tel + " msgInfo:" + msgInfo);
-            // if (SystemConfig.IsEnableCCIM && sendToEmpNo != null)
-            //    BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo,DataType.CurrentDataTime);
+            // if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+            //    BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
             return true;
         }
         /// <summary>
@@ -64,10 +66,10 @@ namespace ccbpm
         [WebMethod(EnableSession = true)]
         public bool SendToDingDing(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo)
         {
-            //  Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  MyPK" + mypk +" UserNo:"+userNo+ " Tel:" + tel + " msgInfo:" + msgInfo);
+            //   BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  MyPK" + mypk +" UserNo:"+userNo+ " Tel:" + tel + " msgInfo:" + msgInfo);
 
-            //if (SystemConfig.IsEnableCCIM && sendToEmpNo != null)
-            //    BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo,DataType.CurrentDataTime);
+            //if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+            //    BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
             return true;
         }
         /// <summary>
@@ -82,9 +84,9 @@ namespace ccbpm
         [WebMethod]
         public bool SendToWeiXin(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo)
         {
-            //Log.DefaultLogWriteLineInfo("接口调用成功: SendToWeiXin  MyPK" + mypk + " UserNo:" + userNo + " Tel:" + tel + " msgInfo:" + msgInfo);
-            if (SystemConfig.IsEnableCCIM && sendToEmpNo != null)
-                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo,DataType.CurrentDataTime);
+            // BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWeiXin  MyPK" + mypk + " UserNo:" + userNo + " Tel:" + tel + " msgInfo:" + msgInfo);
+            if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
             return true;
         }
         /// <summary>
@@ -101,9 +103,9 @@ namespace ccbpm
         [WebMethod]
         public bool SendToEmail(string mypk, string sender, string sendToEmpNo, string email, string title, string maildoc)
         {
-            //Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " email:" + email + " title:" + title + " maildoc:" + maildoc);
-            if (SystemConfig.IsEnableCCIM && sendToEmpNo != null)
-                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, title + " \t\n " + maildoc,DataType.CurrentDataTime);
+            // BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " email:" + email + " title:" + title + " maildoc:" + maildoc);
+            if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, title + " \t\n " + maildoc, BP.DA.DataType.CurrentDataTime);
             return true;
         }
         /// <summary>
@@ -117,10 +119,10 @@ namespace ccbpm
         [WebMethod]
         public bool SendToCCIM(string mypk, string userNo, string msg, string sourceUserNo, string tag = null)
         {
-            //  Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " userNo:" + userNo + " msg:" + msg);
+            //   BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " userNo:" + userNo + " msg:" + msg);
 
-            if (SystemConfig.IsEnableCCIM && userNo != null)
-                BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, userNo, msg,DataType.CurrentDataTime);
+            if (BP.Sys.SystemConfig.IsEnableCCIM && userNo != null)
+                BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, userNo, msg, BP.DA.DataType.CurrentDataTime);
             //BP.CCIM.Glo.SendMsg(userNo, sourceUserNo, msg);
             return true;
         }
@@ -157,11 +159,11 @@ namespace ccbpm
                 if (userNo.Contains(" ") == true)
                     return false;
 
-                if (DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
+                if (BP.DA.DBAccess.IsView("Port_Emp", BP.Sys.SystemConfig.AppCenterDBType) == true)
                     return false;
 
                 string sql = "UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + userNo + "'";
-               DBAccess.RunSQL(sql);
+                BP.DA.DBAccess.RunSQL(sql);
                 return true;
             }
             catch (Exception ex)
@@ -183,7 +185,7 @@ namespace ccbpm
             try
             {
                 string sql = "SELECT Pass FROM Port_Emp WHERE No='" + userNo + "'";
-                string pass =DBAccess.RunSQLReturnVal(sql) as string;
+                string pass = BP.DA.DBAccess.RunSQLReturnVal(sql) as string;
                 if (pass == password)
                     return 1; //成功返回1.
                 return 0; //失败返回0.
@@ -204,7 +206,7 @@ namespace ccbpm
             #region 简单 Demo
             try
             {
-                return DBAccess.RunSQLReturnTable("SELECT No,Name,ParentNo FROM Port_Dept WHERE No='" + deptNo + "'");
+                return BP.DA.DBAccess.RunSQLReturnTable("SELECT No,Name,ParentNo FROM Port_Dept WHERE No='" + deptNo + "'");
             }
             catch (Exception ex)
             {
@@ -222,7 +224,7 @@ namespace ccbpm
             #region 简单 Demo
             try
             {
-                return DBAccess.RunSQLReturnTable("SELECT No,Name,ParentNo FROM Port_Dept ORDER BY ParentNo,No");
+                return BP.DA.DBAccess.RunSQLReturnTable("SELECT No,Name,ParentNo FROM Port_Dept ORDER BY ParentNo,No");
             }
             catch (Exception ex)
             {
@@ -240,7 +242,7 @@ namespace ccbpm
             #region 简单 Demo
             try
             {
-                return DBAccess.RunSQLReturnTable("SELECT No,Name,ParentNo FROM Port_Dept WHERE ParentNo='" + parentDeptNo + "' ORDER BY ParentNo,No");
+                return BP.DA.DBAccess.RunSQLReturnTable("SELECT No,Name,ParentNo FROM Port_Dept WHERE ParentNo='" + parentDeptNo + "' ORDER BY ParentNo,No");
             }
             catch (Exception ex)
             {
@@ -258,7 +260,7 @@ namespace ccbpm
             #region 简单 Demo
             try
             {
-                return DBAccess.RunSQLReturnTable("SELECT No,Name,FK_StationType FROM Port_Station ORDER BY FK_StationType,No");
+                return BP.DA.DBAccess.RunSQLReturnTable("SELECT No,Name,FK_StationType FROM Port_Station ORDER BY FK_StationType,No");
             }
             catch (Exception ex)
             {
@@ -276,7 +278,7 @@ namespace ccbpm
             #region 简单 Demo
             try
             {
-                return DBAccess.RunSQLReturnTable("SELECT No,Name,FK_StationType FROM Port_Station WHERE No='" + stationNo + "'");
+                return BP.DA.DBAccess.RunSQLReturnTable("SELECT No,Name,FK_StationType FROM Port_Station WHERE No='" + stationNo + "'");
             }
             catch (Exception ex)
             {
@@ -294,7 +296,7 @@ namespace ccbpm
             #region 简单 Demo
             try
             {
-                return DBAccess.RunSQLReturnTable("SELECT a.No,a.Name,a.FK_Dept,b.Name as FK_DeptText FROM Port_Emp a, Port_Dept b WHERE (a.FK_Dept=b.No) ");
+                return BP.DA.DBAccess.RunSQLReturnTable("SELECT a.No,a.Name,a.FK_Dept,b.Name as FK_DeptText FROM Port_Emp a, Port_Dept b WHERE (a.FK_Dept=b.No) ");
             }
             catch (Exception ex)
             {
@@ -312,7 +314,7 @@ namespace ccbpm
             #region 简单 Demo
             try
             {
-                return DBAccess.RunSQLReturnTable("SELECT a.No,a.Name,a.FK_Dept,b.Name as FK_DeptText FROM Port_Emp a, Port_Dept b WHERE a.FK_Dept=b.No AND A.FK_Dept='" + deptNo + "' ");
+                return BP.DA.DBAccess.RunSQLReturnTable("SELECT a.No,a.Name,a.FK_Dept,b.Name as FK_DeptText FROM Port_Emp a, Port_Dept b WHERE a.FK_Dept=b.No AND A.FK_Dept='" + deptNo + "' ");
             }
             catch (Exception ex)
             {
@@ -331,7 +333,7 @@ namespace ccbpm
             #region 简单 Demo
             try
             {
-                return DBAccess.RunSQLReturnTable("SELECT a.No,a.Name,a.FK_Dept,b.Name as FK_DeptText FROM Port_Emp a, Port_Dept b WHERE (a.No='" + no + "') AND (a.FK_Dept=b.No) ");
+                return BP.DA.DBAccess.RunSQLReturnTable("SELECT a.No,a.Name,a.FK_Dept,b.Name as FK_DeptText FROM Port_Emp a, Port_Dept b WHERE (a.No='" + no + "') AND (a.FK_Dept=b.No) ");
             }
             catch (Exception ex)
             {
@@ -350,7 +352,7 @@ namespace ccbpm
             try
             {
 
-                return DBAccess.RunSQLReturnTable("SELECT FK_Dept,FK_Emp FROM Port_DeptEmp");
+                return BP.DA.DBAccess.RunSQLReturnTable("SELECT FK_Dept,FK_Emp FROM Port_DeptEmp");
             }
             catch (Exception ex)
             {
@@ -369,7 +371,7 @@ namespace ccbpm
             try
             {
                 string sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE No IN(SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + empNo + "')";
-                return DBAccess.RunSQLReturnTable(sql);
+                return BP.DA.DBAccess.RunSQLReturnTable(sql);
             }
             catch (Exception ex)
             {
@@ -388,7 +390,7 @@ namespace ccbpm
             try
             {
                 string sql = "SELECT No,Name,FK_StationType FROM Port_Station WHERE No IN(SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + empNo + "')";
-                return DBAccess.RunSQLReturnTable(sql);
+                return BP.DA.DBAccess.RunSQLReturnTable(sql);
             }
             catch (Exception ex)
             {
@@ -406,7 +408,7 @@ namespace ccbpm
             #region 简单 Demo
             try
             {
-                return DBAccess.RunSQLReturnTable("SELECT FK_Dept,FK_Emp,FK_Station FROM Port_DeptEmpStation");
+                return BP.DA.DBAccess.RunSQLReturnTable("SELECT FK_Dept,FK_Emp,FK_Station FROM Port_DeptEmpStation");
             }
             catch (Exception ex)
             {
@@ -429,7 +431,7 @@ namespace ccbpm
             #region 简单 Demo
             try
             {
-                return DBAccess.RunSQLReturnTable("SELECT a.No,a.Name,a.FK_Dept FROM Port_Emp A, Port_DeptEmpStation B WHERE A.No=B.FK_Emp AND B.FK_Station IN (" + stationNos + ")");
+                return BP.DA.DBAccess.RunSQLReturnTable("SELECT a.No,a.Name,a.FK_Dept FROM Port_Emp A, Port_DeptEmpStation B WHERE A.No=B.FK_Emp AND B.FK_Station IN (" + stationNos + ")");
             }
             catch (Exception ex)
             {
@@ -448,7 +450,7 @@ namespace ccbpm
             #region 简单 Demo
             try
             {
-                return DBAccess.RunSQLReturnTable("SELECT a.No,a.Name,a.FK_Dept FROM Port_Emp A, Port_DeptEmp B WHERE A.No=B.No AND B.FK_Dept IN (" + deptNos + ")");
+                return BP.DA.DBAccess.RunSQLReturnTable("SELECT a.No,a.Name,a.FK_Dept FROM Port_Emp A, Port_DeptEmp B WHERE A.No=B.No AND B.FK_Dept IN (" + deptNos + ")");
             }
             catch (Exception ex)
             {
@@ -470,7 +472,7 @@ namespace ccbpm
             try
             {
                 string sql = "SELECT a.No,a.Name,a.FK_Dept FROM Port_Emp A, Port_DeptEmpStation B WHERE A.No=B.FK_Emp AND B.FK_Station IN (" + stations + ") AND A.FK_Dept='" + deptNo + "'";
-                return DBAccess.RunSQLReturnTable(sql);
+                return BP.DA.DBAccess.RunSQLReturnTable(sql);
             }
             catch (Exception ex)
             {

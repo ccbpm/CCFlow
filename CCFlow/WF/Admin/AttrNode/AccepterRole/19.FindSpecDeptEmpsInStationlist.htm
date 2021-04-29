@@ -15,6 +15,10 @@
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../../../Scripts/vue.js" type="text/javascript"></script>
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+    <!-- 自己的系统风格统一end -->
 </head>
 <body>
     <div id="App">
@@ -42,61 +46,77 @@
             </div>
         </div>
 
-    </div>
-    <script type="text/javascript">
-        var Baseinfo = new Vue({
-            el: '#App',
-            data: {
-                adminModel: 1,
-                orgModel: 0,
-                stas: [],
-                webuser: null,
-                deliverWay: DeliveryWay.FindSpecDeptEmpsInStationlist
-            },
-            methods: {
-                OpenDot2DotStations: function () {
-                    OpenDot2DotStations();
-                },
-                OpenNew: function () {
-                    var nodeID = GetQueryString("FK_Node");
-                    var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
-                    OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500, function () {
-                        Baseinfo.stas = getStas();
-                    });
-                },
-                SetGroupStations: function () {
-                    OpenNodStationGroup(this.webuser.GroupNo);
+        <div class="cs-content-box">
+            <div style="background-color:#ffffff;  box-shadow: 0 0 10px rgba(0,0,0,.1); border-radius: 3px; padding: 0 28px 12px;margin: -6px 0 10px; border: 0;font-size: 13px;">
 
+                <fieldset id="help">
+                    <legend id="help">帮助 </legend>
+                    <ul>
+                        <li>说明：绑定的所有的人员，都可以处理该节点的工作。</li>
+                        <li> 绑定多少个人，当前节点就有多少个人处理，这一种是最简洁最直接的方式。</li>
+                        <li> 适用于当前节点人员比较稳定，一般不会变化的情况。</li>
+                        <li> 如果人员变化比较频繁，就需要设置岗位，让岗位设置人员。</li>
+                    </ul>
+                </fieldset>
+            </div>
+        </div>
+
+
+        <script type="text/javascript">
+            var Baseinfo = new Vue({
+                el: '#App',
+                data: {
+                    adminModel: 1,
+                    orgModel: 0,
+                    stas: [],
+                    webuser: null,
+                    deliverWay: DeliveryWay.FindSpecDeptEmpsInStationlist
                 },
-                SetOrgStations: function () {
-                    OpenNodStationGroup(this.webuser.FK_Dept);
+                methods: {
+                    OpenDot2DotStations: function () {
+                        OpenDot2DotStations();
+                    },
+                    OpenNew: function () {
+                        var nodeID = GetQueryString("FK_Node");
+                        var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+                        OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500, function () {
+                            Baseinfo.stas = getStas();
+                        });
+                    },
+                    SetGroupStations: function () {
+                        OpenNodStationGroup(this.webuser.GroupNo);
+
+                    },
+                    SetOrgStations: function () {
+                        OpenNodStationGroup(this.webuser.FK_Dept);
+                    }
+                },
+                created() {
+                    InitBar(this.deliverWay);
+                    this.stas = getStas();
+
+                    //根据用户的信息，判断是否启用那个设置工具。
+                    this.webuser = new WebUser();
+                    this.adminModel = this.webuser.No == "admin" ? 1 : 0;
+                    this.orgModel = this.webuser.No == "admin" ? 0 : 1;
                 }
-            },
-            created() {
-                InitBar(this.deliverWay);
-                this.stas = getStas();
-
-                //根据用户的信息，判断是否启用那个设置工具。
-                this.webuser = new WebUser();
-                this.adminModel = this.webuser.No == "admin" ? 1 : 0;
-                this.orgModel = this.webuser.No == "admin" ? 0 : 1;
-            }
-        });
-
-        function OpenNodStationGroup(orgNo) {
-            var url = "NodeStationGroup.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node");
-            OpenEasyUiDialogExtCloseFunc(url, '绑定岗位', 500, 600, function () {
-                Baseinfo.stas = getStas();
             });
-        }
 
-        //保存
-        function Save() {
-            var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = Baseinfo.deliverWay;
-            node.Update();
-        }
-    </script>
-</body>
+            function OpenNodStationGroup(orgNo) {
+                var url = "NodeStationGroup.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node");
+                OpenEasyUiDialogExtCloseFunc(url, '绑定岗位', 500, 600, function () {
+                    Baseinfo.stas = getStas();
+                });
+            }
+
+            //保存
+            function Save() {
+                var nodeID = GetQueryString("FK_Node");
+                var node = new Entity("BP.WF.Node", nodeID);
+                node.DeliveryWay = Baseinfo.deliverWay;
+                node.Update();
+            }
+        </script>
+
+    </div></body>
 </html>

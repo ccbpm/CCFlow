@@ -7,6 +7,11 @@ using System.Web.Services;
 using BP.WF;
 using BP.WF.Template;
 using BP.WF.Data;
+using System.Net;
+using System.IO;
+using System.Text;
+using BP.Cloud;
+using System.Security.Cryptography;
 using BP.DA;
 
 namespace CCFlow.DataUser
@@ -18,9 +23,13 @@ namespace CCFlow.DataUser
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
     // 若要允许使用 ASP.NET AJAX 从脚本中调用此 Web 服务，请取消对下行的注释。
-    // [System.Web.Script.Services.ScriptService]
+    [System.Web.Script.Services.ScriptService]
     public class LocalWS : System.Web.Services.WebService
     {
+        //微信开发者appid和secret_key
+        //第一版小程序
+        private static string appid = "wxd4893788d8f6088b";
+        private static string secret = "3f0850c81baf10847c05d01b769d2990";
         /// <summary>
         /// 获得工作进度-用于展示流程的进度图
         /// </summary>
@@ -30,8 +39,9 @@ namespace CCFlow.DataUser
         {
             DataSet ds = BP.WF.Dev2Interface.DB_JobSchedule(workID);
             return BP.Tools.Json.ToJson(ds);
+
         }
-       
+
         /// <summary>
         /// 获得待办
         /// </summary>
@@ -46,7 +56,7 @@ namespace CCFlow.DataUser
             else
                 sql = "SELECT * FROM WF_EmpWorks WHERE Domain='" + sysNo + "' AND FK_Emp='" + userNo + "'";
 
-            DataTable dt =DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -68,7 +78,7 @@ namespace CCFlow.DataUser
         /// <returns>返回我可以发起的流程列表.</returns>
         public string DB_StarFlows(string userNo, string domain = null)
         {
-            DataTable dt = BP.WF.Dev2Interface.DB_StarFlows(userNo);
+            DataTable dt = BP.WF.Dev2Interface.DB_StarFlows(userNo, domain);
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -85,7 +95,7 @@ namespace CCFlow.DataUser
             else
                 sql = "SELECT * FROM WF_GenerWorkFlow WHERE Domain='" + domain + "' AND Starter='" + userNo + "'";
 
-            DataTable dt =DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -99,7 +109,7 @@ namespace CCFlow.DataUser
         {
             // if ( password.Equals("xxxxxx") == false)
             //  return "err@密码错误";
-            // DataTable dt =DBAccess.RunSQLReturnTable(sqlOfSelect);
+            // DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlOfSelect);
             // return BP.Tools.Json.ToJson(dt);
             throw new Exception("err@请实现该方法,密码部分是双方约定的,不对外公开的.");
         }
@@ -126,7 +136,7 @@ namespace CCFlow.DataUser
         [WebMethod]
         public string SendWork(string flowNo, Int64 workid, string atParas, int toNodeID, string toEmps)
         {
-           AtPara ap = new AtPara(atParas);
+            BP.DA.AtPara ap = new BP.DA.AtPara(atParas);
 
             BP.WF.SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(flowNo, workid, ap.HisHT, toNodeID, toEmps);
 
@@ -198,8 +208,8 @@ namespace CCFlow.DataUser
         public string WillToNodes(int currNodeID)
         {
             Node nd = new Node(currNodeID);
-            if (nd.CondModel != DirCondModel.ByButtonSelected)
-                return "err@xxxxx";
+            if (nd.CondModel != DirCondModel.ByLineCond)
+                return "err@当前节点是由选择的.";
 
             Directions dirs = new Directions();
             Nodes nds = dirs.GetHisToNodes(currNodeID, false);
@@ -215,8 +225,9 @@ namespace CCFlow.DataUser
         [WebMethod]
         public string Node_ReturnWork(Int64 workid, int returnToNodeID, string returnMsg)
         {
-            GenerWorkFlow gwf=new GenerWorkFlow(workid);
-            return BP.WF.Dev2Interface.Node_ReturnWork(gwf.WorkID, returnToNodeID, returnMsg);
+            //GenerWorkFlow gwf = new GenerWorkFlow(workid);
+            //return BP.WF.Dev2Interface.Node_ReturnWork(gwf.FK_Flow, gwf.WorkID, gwf.FID, gwf.FK_Node, returnToNodeID, returnMsg);
+            return "";
         }
         /// <summary>
         /// 写入审核信息
@@ -227,7 +238,7 @@ namespace CCFlow.DataUser
         public void Node_WriteWorkCheck(Int64 workid, string msg)
         {
             GenerWorkFlow gwf = new GenerWorkFlow(workid);
-              BP.WF.Dev2Interface.WriteTrackWorkCheck(gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID, msg,"审核",null);
+            BP.WF.Dev2Interface.WriteTrackWorkCheck(gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID, msg, "审核", null);
         }
         /// <summary>
         /// 是否可以查看该工作
@@ -239,7 +250,7 @@ namespace CCFlow.DataUser
         [WebMethod]
         public bool Flow_IsCanView(string flowNo, Int64 workid, string userNo)
         {
-            return BP.WF.Dev2Interface.Flow_IsCanViewTruck(flowNo, workid,userNo);
+            return BP.WF.Dev2Interface.Flow_IsCanViewTruck(flowNo, workid, userNo);
         }
         /// <summary>
         /// 是否可以处理当前工作.
@@ -271,6 +282,7 @@ namespace CCFlow.DataUser
         [WebMethod]
         public string CurrFlowInfo(string flowNo)
         {
+            
             Flow fl = new Flow(flowNo);
             return fl.ToJson();
         }
@@ -282,10 +294,240 @@ namespace CCFlow.DataUser
         [WebMethod]
         public string CurrGenerWorkFlowInfo(Int64 workID)
         {
+            
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
             return gwf.ToJson();
         }
+        /// <summary>
+        /// 授权后获取小程序用户的OpenID
+        /// </summary>
+        [WebMethod]
+        public string ASCGetUserInfo(string code)
+        {
+            string url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + appid + "&secret=" + secret + "&js_code=" + code + "&grant_type=client_credential";
+            string serviceAddress = url;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceAddress);
+            request.Method = "GET";
+            request.ContentType = "textml;charset=UTF-8";
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            Stream myResponseStream = response.GetResponseStream();
+            StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.UTF8);
+            string retString = myStreamReader.ReadToEnd();
+            myStreamReader.Close();
+            myResponseStream.Close();
+            return retString;
+        }
+        /// <summary>
+        /// 解密微信授权的手机号
+        /// </summary>
+        /// <param name="encryptedDataStr"></param>
+        /// <param name="key"></param>
+        /// <param name="iv"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public string AES_Decrypt(string encryptedDataStr, string key, string iv)
+        {
 
+            RijndaelManaged rijalg = new RijndaelManaged();
+            //-----------------    
+            //设置 cipher 格式 AES-128-CBC    
+
+            rijalg.KeySize = 128;
+
+            rijalg.Padding = PaddingMode.PKCS7;
+            rijalg.Mode = CipherMode.CBC;
+
+            rijalg.Key = Convert.FromBase64String(key);
+            rijalg.IV = Convert.FromBase64String(iv);
+
+
+            byte[] encryptedData = Convert.FromBase64String(encryptedDataStr);
+            //解密    
+            ICryptoTransform decryptor = rijalg.CreateDecryptor(rijalg.Key, rijalg.IV);
+
+            string result;
+
+            using (MemoryStream msDecrypt = new MemoryStream(encryptedData))
+            {
+                using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                {
+                    using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                    {
+
+                        result = srDecrypt.ReadToEnd();
+                    }
+                }
+            }
+
+            return result;
+        }
+        /// <summary>
+        ///BPM登录
+        /// </summary>
+        /// <param name="openID"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public string LoadOrgInfo(string openID)
+        {
+            //先从Port_User 去查找 openID, 如果没有记录，就转到注册页面上去
+            //如果有就列出此人所有注册过的公司，选择其一登录
+            User user = new User();
+            int i = user.Retrieve(UserAttr.SOpenID,openID);
+            if (i == 1)
+            {
+                Emps emps = new Emps();
+                emps.Retrieve(EmpAttr.OpenID, openID);
+                return emps.ToJson();
+            }
+            return "info@zhuce";
+        }
+        /// <summary>
+        /// 注册企业
+        /// </summary>
+        /// <param name="orgName"></param>
+        /// <param name="orgShortName"></param>
+        /// <param name="openid">小程序ID</param>
+        /// <param name="userName"></param>
+        /// <param name="tel"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public string RegByXiaoChengXu(string orgName, string orgShortName,
+            string openid, string userName, string tel)
+        {
+            
+            //注册企业.
+            BP.Cloud.Org org = new BP.Cloud.Org();
+            org.No = BP.DA.DBAccess.GenerGUID(4, "Port_Org", "No");
+            org.Name = orgShortName;
+            org.NameFull = orgName;
+            org.Adminer = openid;
+            org.AdminerName = userName;
+            org.Insert();
+
+
+            //增加这个人员.
+            Emp emp = new Emp();
+            emp.No = org.No + "_" + openid;
+            emp.Name = userName;
+            emp.Pass = "123";
+            emp.OrgNo = org.No;
+            emp.OrgName = org.NameFull;
+            // 设置ID.
+            emp.UserID = openid;
+            emp.OpenID = openid;
+
+            emp.FK_Dept = org.No;
+            emp.Tel = tel;
+            emp.Insert();
+
+            BP.Cloud.User user = new User();
+            int i= user.Retrieve(UserAttr.SOpenID, openid);
+            if (i == 0)
+            {
+                user.Copy(emp);
+                user.No = emp.OpenID;
+                user.OrgNo = emp.OrgNo;
+                user.SOpenID = emp.OpenID;
+                user.Insert();
+            }
+            else
+            {
+                user.Copy(emp);
+                user.No = emp.OpenID;
+                user.OrgNo = emp.OrgNo;
+                user.SOpenID = emp.OpenID;
+                user.Update();
+            }
+
+            ////初始化部门.
+            //BP.Cloud.Dept dept = new Dept();
+            //dept.ParentNo = "100";
+            //dept.No = org.No;
+            //dept.Name = org.Name;
+            //dept.OrgNo = org.No;
+            //dept.Insert();
+
+            //dept.ParentNo = org.No;
+            //dept.No = BP.DA.DBAccess.GenerGUID(5, "Port_Dept", "No");
+            //dept.Name = "办公室";
+            //dept.OrgNo = org.No;
+            //dept.Insert();
+
+            //dept.ParentNo = org.No;
+            //dept.No = BP.DA.DBAccess.GenerGUID(5, "Port_Dept", "No");
+            //dept.Name = "财务部";
+            //dept.OrgNo = org.No;
+            //dept.Insert();
+
+            BP.Web.WebUser.OrgNo = org.No;
+            //生成其他的信息.(@lizhenerr 有报错？)
+            org.Init_OrgDatas();
+
+            //管理员登录
+            BP.WF.Dev2Interface.Port_Login(openid, null, org.No);
+
+            ////初始化岗位.
+            //BP.Cloud.Station sta = new Station();
+            //sta.No = BP.DA.DBAccess.GenerGUID();
+            //sta.Name = "办公室主任";
+            //sta.OrgNo = org.No;
+            //sta.Insert();
+
+            //sta = new Station();
+            //sta.No = BP.DA.DBAccess.GenerGUID();
+            //sta.Name = "财务部主任";
+            //sta.OrgNo = org.No;
+            //sta.Insert();
+
+            return org.ToJson();
+        }
+        /// <summary>
+        /// 检查此人是否加入
+        /// </summary>
+        [WebMethod]
+        public string CheckJoin(string openID, string orgNo)
+        {
+            ////让管理员登录.
+            //this.LetUserLogin("admin", "ccs");
+
+            BP.Cloud.HttpHandler.App_Portal apl = new BP.Cloud.HttpHandler.App_Portal();
+            return apl.Invited_CheckIsExit(openID, orgNo);
+
+            ////让管理员退出。
+            //BP.Web.WebUser.Exit();
+
+            //return "加入成功！";
+        }
+        /// <summary>
+        /// 扫码增加人员
+        /// </summary>
+        [WebMethod]
+        public string CreateEmp(string openID, string orgNo, string userNo, string tel, string empName, string deptNo)
+        {
+            ////让管理员登录.
+            //this.LetUserLogin("admin", "ccs");
+
+            BP.Cloud.HttpHandler.App_Portal apl = new BP.Cloud.HttpHandler.App_Portal();
+            return apl.Invited_AddEmp(openID, orgNo, userNo, tel, empName, deptNo);
+
+            ////让管理员退出。
+            //BP.Web.WebUser.Exit();
+
+            //return "加入成功！";
+        }
+        /// <summary>
+        /// 获取单位该单位的部门列表
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="orgNo"></param>
+        [WebMethod]
+        public string ASCLoadDepts(string orgNo)
+        {
+            string sql = "SELECT * FROM Port_Dept WHERE OrgNo='" + orgNo + "' ORDER BY Idx";
+            DataTable dt = new DataTable();
+            dt = DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(dt);
+        }
 
     }
 }

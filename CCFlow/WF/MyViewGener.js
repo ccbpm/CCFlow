@@ -30,8 +30,13 @@ $(function () {
     var theme = webUser.Theme;
     if (theme == null || theme == undefined || theme == "")
         theme = "Default";
-    $('head').append('<link href="../DataUser/Style/CSS/' + theme + '/ccbpm.css" rel="stylesheet" type="text/css" />');
+
+    //$('head').append('<link href="../DataUser/Style/CSS/' + theme + '.css" rel="stylesheet" type="text/css" />');
+    $('head').append('<link href="../DataUser/Style/GloVarsCSS.css" rel="stylesheet" type="text/css" />');
     $('head').append('<link href="../DataUser/Style/MyFlow.css" rel="Stylesheet" />');
+
+    //$('head').append('<link href="../DataUser/Style/CSS/' + theme + '.css" rel="stylesheet" type="text/css" />');
+    //$('head').append('<link href="../DataUser/Style/MyFlow.css" rel="Stylesheet" />');
 
     // initToolBar();//初始化按钮
     initPageParam(); //初始化参数
@@ -379,7 +384,7 @@ function returnWorkWindowClose(data) {
 
     OptSuc(data);
 }
- 
+
 
 //AtPara  @PopValSelectModel=0@PopValFormat=0@PopValWorkModel=0@PopValShowModel=0
 function GepParaByName(name, atPara) {
@@ -564,7 +569,7 @@ function GenerWorkNode() {
     //   HelpAlter();
 
     //判断类型不同的类型不同的解析表单. 处理中间部分的表单展示.
-
+    var isDevelopForm = false;
     if (node.FormType == 5) {
         if (typeof GenerTreeFrm != 'undefined' && GenerTreeFrm instanceof Function)
             GenerTreeFrm(flowData); /*树形表单*/
@@ -585,6 +590,7 @@ function GenerWorkNode() {
         Skip.addJs("./CCForm/FrmDevelop.js");
         $('head').append('<link href="../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
         GenerDevelopFrm(flowData, flowData.Sys_MapData[0].No);
+        isDevelopForm = true;
     }
 
     //2018.1.1 新增加的类型, 流程独立表单， 为了方便期间都按照自由表单计算了.
@@ -600,6 +606,7 @@ function GenerWorkNode() {
             Skip.addJs("./CCForm/FrmDevelop.js");
             $('head').append('<link href="../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
             GenerDevelopFrm(flowData, flowData.WF_FrmNode[0].FK_Frm);
+            isDevelopForm = true;
         }
     }
 
@@ -633,7 +640,8 @@ function GenerWorkNode() {
         $(".form-unit-title center h4 b").css("margin-left", "-" + width + "px");
     }
 
-    $('#topContentDiv').width(w);
+    if (isDevelopForm == false)
+        $('#topContentDiv').width(w);
     $('.Bar').width(w + 15);
     $('#lastOptMsg').width(w + 15);
 
@@ -670,7 +678,7 @@ function GenerWorkNode() {
         ////加载JS文件
         var s = document.createElement('script');
         s.type = 'text/javascript';
-        s.src = "../DataUser/JSLibData/" + enName + "_Self.js?t="+Math.random();
+        s.src = "../DataUser/JSLibData/" + enName + "_Self.js?t=" + Math.random();
         var tmp = document.getElementsByTagName('script')[0];
         tmp.parentNode.insertBefore(s, tmp);
     }

@@ -14,7 +14,6 @@
 
             var flowNo = "076";
             var lanes = new Entities("BP.WF.Template.Lanes");
-            debugger
             lanes = lanes.DoMethodReturnJSON("RetrieveByFlowNo", flowNo);
 
             //lanes = lanes.Retrieve("FK_Flow", flowNo);

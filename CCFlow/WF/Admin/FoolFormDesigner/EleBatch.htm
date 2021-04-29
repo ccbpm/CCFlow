@@ -14,6 +14,7 @@
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script src="../Admin.js"></script>
     <script type="text/javascript">
 
         var keyofen = GetQueryString('KeyOfEn');
@@ -45,7 +46,7 @@
             var nodes = new Entities("BP.WF.Nodes", "FK_Flow", fk_flow);
             nodes.Retrieve("FK_Flow", fk_flow);
 
-            alert(nodes.length);
+            //   alert(nodes.length);
 
 
             if (nodes.length == 0) {
@@ -118,6 +119,7 @@
         2.根据数组对象,动态生成行插入到列表中
         */
         function generTable(para) {
+
             //隐藏说明性质的DIV标签
             $('#tip').hide();
 
@@ -205,38 +207,31 @@
 </head>
 <body>
     <form method="post" action="" id="form1">
-    <div>
-        <div class="easyui-layout">
-            <div title="批量操作" style="width: 200px;">
-                <ul class='navlist'>
-                    <li>
-                        <div>
-                            <a id="copy" href="javascript:void(0);" onclick="generTable(this.id)"><span class="nav">
-                                批量复制</span></a>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <a id="update" href="javascript:void(0);" onclick="generTable(this.id)"><span class="nav">
-                                批量更新</span></a>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <a id="delete" href="javascript:void(0);" onclick="generTable(this.id)"><span class="nav">
-                                批量删除</span></a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div data-options="region:'center'">
+        <fieldset>
+            <legend>批量操作 </legend>
+            <ul class='navlist'>
+                <li>
+                    <a id="copy" href="javascript:void(0);" onclick="generTable(this.id)">
+                        批量复制
+                    </a>
+                </li>
+                <li>
+                    <a id="update" href="javascript:void(0);" onclick="generTable(this.id)">
+                        批量更新
+                    </a>
+                </li>
+                <li>
+                    <a id="delete" href="javascript:void(0);" onclick="generTable(this.id)">
+                        批量删除
+                    </a>
+                </li>
+            </ul>
+        </fieldset>
+
+        <fieldset>
+            <legend>选择批量操作的节点</legend>
             <table id="Table1" class='Table1' cellpadding='0' cellspacing='0' border='0' style='width: 100%'>
-                <tr>
-                    <td class='GroupTitle' colspan='3'>
-                        选择批量操作的节点:
-                    </td>
-                </tr>
+
                 <tr>
                     <td class='GroupTitle' style='width: 140px'>
                         表单ID
@@ -244,27 +239,26 @@
                     <td class='GroupTitle' style='width: 140px'>
                         名称
                     </td>
-                    <td class='GroupTitle' nowrap>
+                    <td class='GroupTitle'>
                         操作
                     </td>
                 </tr>
             </table>
             <br />
-            <br />
             <input type="button" id="temp" name="batch" value="批量执行" onclick="runBatch(this.id)" />
-        </div>
-        <div id="tip" data-options="region:'center'">
-            <div style='width: 100%'>
-                <div class='easyui-panel' title='表单元素的批量处理' data-options="iconCls:'icon-tip',fit:true"
-                    style='height: auto; padding: 10px'>
-                    仅用节点表单，它包括如下几种处理方式<br />
-                    1，批量更新元素属性。<br />
-                    2，批量增加。<br />
-                    3、批量删除。
-                </div>
-            </div>
-        </div>
-    </div>
+
+            <br />
+
+
+            <legend> 表单元素的批量处理</legend>
+            <ul>
+                <li>仅用节点表单，它包括如下几种处理方式 </li>
+                <li>1，批量更新元素属性。 </li>
+                <li>2，批量增加。 </li>
+                <li>3、批量删除。 </li>
+            </ul>
+        </fieldset>
+
     </form>
 </body>
 </html>

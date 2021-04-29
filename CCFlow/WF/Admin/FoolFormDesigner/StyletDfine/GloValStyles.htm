@@ -1,0 +1,413 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>系统样式管理</title>
+    <script src="../../../Scripts/jquery-1.11.0.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/jquery.colorpicker.js"></script>
+
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <script src="StyleEditor.js"></script>
+    <script type="text/javascript">
+
+        //获得集合.
+        var ens = null;
+        var en = null;
+        $(function () {
+
+            var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_StyletDfine");
+            hander.AddUrlData();
+            var data = hander.DoMethodReturnString("GloValStyles_Init");
+            if (data.indexOf("err@") == 0) {
+                alert(data);
+                return;
+            }
+
+            ens = new Entities("BP.Sys.GloVars");
+            ens.Retrieve("GroupKey", "CSS");
+
+            var css = GetQueryString("CSS");
+
+            if (css == null || css == undefined) {
+                $("#Btn_Save").attr("disabled", true);
+            } else {
+                $("#Btn_Save").attr("disabled", false);
+            }
+
+            GenerBindDDL("DDL_List", ens, "No", "Name", css);
+
+            $("#DDL_List").val(css);
+
+            if (css != null) {
+
+                en = new Entity("BP.Sys.GloVar", css);
+                en.AtPara = en.Val;
+
+                //执行批量赋值.
+                GenerFullAllCtrlsVal(en);
+                LoadCss();
+            }
+
+            //增加事件，调用 StyleEditer.js .
+            AddEvent();
+
+        });
+
+        function LoadCss() {
+
+            var url = "../../../../DataUser/Style/GloVarsCSSTemp.css?ref=11" + Math.random();
+
+            // 动态加载css
+            var loadStyle = function (url) {
+                var link = document.createElement('link');
+                link.rel = "stylesheet";
+                link.type = "text/css";
+                link.href = url;
+                var head = document.getElementsByTagName("head")[0];
+                head.appendChild(link);
+            };
+
+            // css加载
+            loadStyle(url);
+
+            $('head').children(':last').attr({
+                rel: "stylesheet",
+                type: 'text/css',
+                href: url,
+            });
+        }
+
+        function DDLChange() {
+
+            var val = $("#DDL_List").val();
+            if (val == "" || val == undefined) {
+                window.location.href = "GloValStyles.htm";
+                return;
+            }
+
+            window.location.href = "GloValStyles.htm?CSS=" + val;
+            return;
+        }
+
+        function Save() {
+
+            var val = $("#DDL_List").val();
+            if (val == "" || val == undefined)
+                return;
+
+            var en = new Entity("BP.Sys.GloVar", val);
+            if (en == null) {
+                alert('保存错误:没有选择样式.');
+                return;
+            }
+
+            en.AtPara = "";
+
+            //处理数据.
+            DealHidCtrl();
+
+            $("#Btn_Save").html("正在保存...");
+            //执行copy.
+            en.CopyForm();
+            en.Val = en.AtPara;
+            en.Update();
+
+
+            var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_StyletDfine");
+            var data = hander.DoMethodReturnString("GloValStyles_App");
+
+
+            $("#Btn_Save").html("保存成功");
+
+            setTimeout(function () {
+                $("#Btn_Save").html("保存");
+            }, 1000);
+        }
+        function New() {
+
+            var name = window.prompt("请输入中文标签");
+            if (name == null || name == undefined || name == "")
+                return;
+
+            var key = GenerPinYin(name);
+
+            var no = window.prompt("请输入英文标记", key);
+            if (no == null || no == undefined)
+                return;
+
+            var en = new Entity("BP.Sys.GloVar");
+            en.No = no;
+            en.Name = name;
+            en.GroupKey = "CSS";
+            en.Insert();
+            window.location.href = "?CSS=" + no;
+        }
+        function GenerPinYin(name) {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_StyletDfine");
+            handler.AddPara("IsQuanPin", 1);
+            handler.AddPara("TB_Name", name);
+            var data = handler.DoMethodReturnString("GloValStyles_PinYin");
+
+            if (data.indexOf('err@') >= 0) {
+                alert(data);
+                return;
+            }
+            return data;
+        }
+
+        function Delete() {
+
+            var no = GetQueryString("CSS");
+            var en = new Entity("BP.Sys.GloVar", no);
+
+            if (window.confirm("您确认要删除【" + en.Name + "】吗？") == false)
+                return;
+
+            en.Delete();
+            window.location.href = "GloValStyles.htm";
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <label class="fz18">样式模版: </label>
+            <button id="Btn_New" value="新建" onclick="New();" class="cc-btn-tab btn-new">新建</button>
+            <button id="Btn_Delete" value="删除" onclick="Delete();" class="cc-btn-tab btn-delete">删除</button>
+        </div>
+        <!--div class="ccbmp-system-style">
+
+        </div-->
+
+        <table class="table">
+            <tr>
+                <td style=" border:1px solid #efefef" valign="top">
+                    <div class="GloValsTemp">
+
+                        我是中国人...
+                        <br />
+                        我是山东人...
+                        <br />
+
+                        我是菏泽人...
+                        <br />
+                    </div>
+                </td>
+                <td style="width:60%;border:0px" valign="top">
+                    <div class="foolfrmbody_formdesign">
+                        <!--<h2>样式模版 </h2>-->
+                        <div id="styleeditor" class=" form-horizontal">
+                            <div class="form-group">
+                                <!--<label class="col-sm-2 control-label">模板选择:</label>-->
+                                <!-- css设计面板. -->
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="DDL_List" onchange="DDLChange()">
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="DDL_Style" style="visibility:hidden">
+                                        <option value="GloValsTemp">FrmStyle </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--<div class="ttstyle" style="background:#4e6dc3;color:#fff;margin:0;">样式编辑器</div>-->
+                            <div class="ttstyle">整体</div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">背景颜色:</label><div class="col-sm-4">
+                                    <input class="form-control" id="TBPara_background-color" value="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">整体宽度:</label><div class="col-sm-4">
+                                    <input class="form-control " id="TBPara_selfbody-width_Temp" value="" />
+                                </div><div class="col-sm-2">
+                                    <select id="TBPara_selfbody-width-unit_Temp" class="form-control">
+                                        <option value="px">px</option>
+                                        <option value="pt">pt</option>
+                                        <option value="em">em</option>
+                                        <option value="ex">ex</option>
+                                        <option value="pc">pc</option>
+                                        <option value="cm">cm</option>
+                                        <option value="mm">mm</option>
+                                        <option value="in">in</option>
+                                        <option value="%">%</option>
+                                    </select>
+                                </div><div class="col-sm-2">
+                                    <input type="hidden" id="TBPara_selfbody-width" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">整体高度:</label><div class="col-sm-4">
+                                    <input class="form-control" id="TBPara_selfbody-hight_Temp" value="" />
+                                </div><div class="col-sm-2">
+                                    <select id="TBPara_selfbody-hight-unit_Temp" class="form-control">
+                                        <option value="px">px</option>
+                                        <option value="pt">pt</option>
+                                        <option value="em">em</option>
+                                        <option value="ex">ex</option>
+                                        <option value="pc">pc</option>
+                                        <option value="cm">cm</option>
+                                        <option value="mm">mm</option>
+                                        <option value="in">in</option>
+                                        <option value="%">%</option>
+                                    </select>
+                                </div><div class="col-sm-2">
+                                    <input type="hidden" id="TBPara_selfbody-hight" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="ttstyle">字体</div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">字体大小:</label><div class="col-sm-4">
+                                    <input class="form-control" id="TBPara_font-size_Temp" value="" />
+                                </div><div class="col-sm-2">
+                                    <select id="TBPara_font-size-unit_Temp" class="form-control">
+                                        <option value="px">px</option>
+                                        <option value="pt">pt</option>
+                                        <option value="em">em</option>
+                                        <option value="ex">ex</option>
+                                        <option value="pc">pc</option>
+                                        <option value="cm">cm</option>
+                                        <option value="mm">mm</option>
+                                        <option value="in">in</option>
+                                        <option value="%">%</option>
+                                    </select>
+                                </div><div class="col-sm-2">
+                                    <input type="hidden" id="TBPara_font-size" class="form-control" />
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">字体粗细:</label><div class="col-sm-4">
+                                    <select id="TBPara_font-weight" class="form-control">
+                                        <option value="normal">正常</option>
+                                        <option value="bold">加粗</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">字体样式:</label><div class="col-sm-4">
+                                    <select id="TBPara_font-style" class="form-control">
+                                        <option value="normal">正常</option>
+                                        <option value="italic">斜体</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">字体行高:</label><div class="col-sm-4">
+                                    <input class="form-control" id="TBPara_font-height_Temp" value="" />
+                                </div><div class="col-sm-2">
+                                    <select id="TBPara_font-height-unit_Temp" class="form-control">
+                                        <option value="px">px</option>
+                                        <option value="pt">pt</option>
+                                        <option value="em">em</option>
+                                        <option value="ex">ex</option>
+                                        <option value="pc">pc</option>
+                                        <option value="cm">cm</option>
+                                        <option value="mm">mm</option>
+                                        <option value="in">in</option>
+                                        <option value="%">%</option>
+                                    </select>
+                                </div><div class="col-sm-2">
+                                    <input type="hidden" id="TBPara_font-height" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">字体款式:</label><div class="col-sm-4">
+                                    <select id="TBPara_font-family" class="form-control">
+                                        <option value="SimSun">宋体</option>
+                                        <option value="SimHei">黑体</option>
+                                        <option value="Microsoft YaHei">微软雅黑</option>
+                                        <option value="Microsoft JhengHei">微软正黑体</option>
+                                        <option value="NSimSun">新宋体</option>
+                                        <option value="PMingLiU">新细明体</option>
+                                        <option value="MingLiU">细明体</option>
+                                        <option value="DFKai-SB">标楷体</option>
+                                        <option value="FangSong">仿宋</option>
+                                        <option value="KaiTi">楷体</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">字体颜色:</label><div class="col-sm-4">
+                                    <input class="form-control" id="TBPara_color" value="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">边框:</label><div class="col-sm-4">
+                                    <select id="TBPara_border-which" class="form-control">
+                                        <option value="all" selected>全部</option>
+                                        <option value="top">上</option>
+                                        <option value="bottom">下</option>
+                                        <option value="left">左</option>
+                                        <option value="right">右</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">边框宽度:</label><div class="col-sm-4">
+                                    <input class="form-control" type="text" id="TBPara_border-width_Temp" value="" />
+                                </div><div class="col-sm-2">
+                                    <select id="TBPara_border-width-unit_Temp" class="form-control">
+                                        <option value="px">px</option>
+                                        <option value="pt">pt</option>
+                                        <option value="em">em</option>
+                                        <option value="ex">ex</option>
+                                        <option value="pc">pc</option>
+                                        <option value="cm">cm</option>
+                                        <option value="mm">mm</option>
+                                        <option value="in">in</option>
+                                        <option value="%">%</option>
+                                    </select>
+                                </div><div class="col-sm-2">
+                                    <input type="hidden" id="TBPara_border-width" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">边框颜色:</label><div class="col-sm-4">
+                                    <input class="form-control" id="TBPara_border-color" value="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">边框样式:</label><div class="col-sm-4">
+                                    <select id="DDLPara_border-style" class="form-control">
+                                        <option value="none">无</option>
+                                        <option value="solid">实线</option>
+                                        <option value="double">双线</option>
+                                        <option value="groove">3D凹槽</option>
+                                        <option value="ridge">3D垄状</option>
+                                        <option value="dashed">虚线</option>
+                                        <option value="dotted">点状</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2">
+                                    <input type="button" value="保存" id="Btn_Save" name="Btn_Save" onclick="Save();" />
+
+                                   <!-- 下面的不能保存. -->
+                                    <!--<button id="Btn_Sav1e" name="Btn_S1ave" type="button" value="保存" onclick="Save();" class="cc-btn-tab btn-save">保存</button>-->
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+</body>
+</html>

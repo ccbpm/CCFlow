@@ -38,7 +38,7 @@ function InitBar(key) {
     html += "<option value=" + OvertimeRole.RunSql + ">&nbsp;&nbsp;&nbsp;&nbsp;执行SQL</option>";
     html += "</select >";
 
-    html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
+    html += "<button  id='Btn_Save' onclick='Save()'/>保存</button>";
     //html += "<input  id='Btn_Back' type=button onclick='Back()' value='返回' />";
     //html += "<input type=button onclick='AdvSetting()' value='高级设置' />";
     //   html += "<input type=button onclick='Help()' value='帮助' />";

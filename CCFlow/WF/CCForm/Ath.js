@@ -20,7 +20,6 @@ function AthTable_Init(athchment, athDivID, refPKVal) {
 
     AthParams.FK_MapData = athchment.FK_MapData;
 
-    debugger
     //2.上传的URL的设置
     var uploadUrl = "";
     if (plant == 'CCFlow')
@@ -31,7 +30,7 @@ function AthTable_Init(athchment, athDivID, refPKVal) {
     uploadUrl += "&WorkID=" + pageData.WorkID;
     uploadUrl += "&FID=" + pageData.FID;
     uploadUrl += "&FK_Node=" + pageData.FK_Node;
-    uploadUrl += "&PWorkID=" +GetQueryString("PWorkID");
+    uploadUrl += "&PWorkID=" + GetQueryString("PWorkID");
     uploadUrl += "&FK_MapData=" + AthParams.FK_MapData;
 
     //3.初始化附件列表
@@ -54,7 +53,7 @@ function AthTable_Init(athchment, athDivID, refPKVal) {
         "fileType": AthParams.realFileExts,//文件类型限制，默认不限制，注意写的是文件后缀
         "FK_FrmAttachment": athchment.MyPK,
         "IsExpCol": athchment.IsExpCol == 0 ? false : true,
-        "TopNumOfUpload":athDesc.TopNumOfUpload//附件上传的最大数量
+        "TopNumOfUpload": athDesc.TopNumOfUpload//附件上传的最大数量
     });
 }
 
@@ -64,7 +63,7 @@ function AthTable_Init(athchment, athDivID, refPKVal) {
 */
 function beforeUploadFun(opt) {
     if (parseInt(athDesc.IsExpCol) == 0) {
-        var sort = $("#Sort_"+opt.FK_FrmAttachment).val();
+        var sort = $("#Sort_" + opt.FK_FrmAttachment).val();
         if (sort != null && sort != "" && sort != undefined)
             opt.otherData = [{ "name": "Sort", "value": sort }];
     }
@@ -95,7 +94,7 @@ function InitAthPage(athDivID, uploadUrl) {
     //1.请求后台数据
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
     handler.AddUrlData();
-    if (athDivID.indexOf("_AthMDtl")!=-1)
+    if (athDivID.indexOf("_AthMDtl") != -1)
         handler.AddPara("RefOID", AthParams.PKVal == undefined ? pageData.WorkID : AthParams.PKVal);
     //alert("RefOID=" + AthParams.PKVal);
     handler.AddPara("FK_FrmAttachment", athDivID.replace("Div_", ""));
@@ -122,7 +121,7 @@ function InitAthPage(athDivID, uploadUrl) {
 
     //2.自定义表单模式.
     if (athDesc.AthRunModel == 2) {
-        src = "../../DataUser/OverrideFiles/AthSelf.htm?PKVal=" +AthParams.PKVal + "&Ath=" + athDesc.NoOfObj + "&FK_MapData=" + athDesc.FK_MapData + "&FK_FrmAttachment=" + athDesc.MyPK;
+        src = "../../DataUser/OverrideFiles/AthSelf.htm?PKVal=" + AthParams.PKVal + "&Ath=" + athDesc.NoOfObj + "&FK_MapData=" + athDesc.FK_MapData + "&FK_FrmAttachment=" + athDesc.MyPK;
         window.location.href = src;
         return;
     }
@@ -133,7 +132,7 @@ function InitAthPage(athDivID, uploadUrl) {
     }
     AthParams.AthInfo[athDesc.MyPK].push([athDesc.NumOfUpload, athDesc.TopNumOfUpload, athDesc.FileMaxSize, athDesc.Exts]);
 
-    
+
     //AthParams.NumOfUpload = athDesc.NumOfUpload; //最低上传的数量.
     //AthParams.TopNumOfUpload = athDesc.TopNumOfUpload; //最大上传的数量.
     //AthParams.FileMaxSize = athDesc.FileMaxSize; //最大上传的附件大小.
@@ -159,29 +158,29 @@ function InitAthPage(athDivID, uploadUrl) {
     }
     //4.2 普通附件的展示方式（包含图片，word文档，pdf等）
     else {
-        if ($("#fileUpload_" + athDesc.MyPK).length!=0)
+        if ($("#fileUpload_" + athDesc.MyPK).length != 0)
             uploadEvent.cleanFileEvent(uploadTools.getInitOption("fileUpload_" + athDesc.MyPK));
         if ($("#tbody_" + athDesc.MyPK).length == 0)
             $("#" + athDivID).html(FileShowWayTable(athDesc, dbs, uploadUrl));
         else
             $("#tbody_" + athDesc.MyPK).html(FileShowWayTable(athDesc, dbs, uploadUrl));
     }
-        
+
 }
 
 
-        
+
 /**
 * 生成附件列表的Html代码(Table模式)
 * @param athDesc 附件属性
 * @param dbs 附件列表
 */
 var columnNum = 6;
-function FileShowWayTable(athDesc, dbs,uploadUrl) {
+function FileShowWayTable(athDesc, dbs, uploadUrl) {
     var _html = "<table class='table annex-table'>";
     //1.是否启用扩展列
     var mapAttrs = null;
-    if (athDesc.IsExpCol != 0) { 
+    if (athDesc.IsExpCol != 0) {
         mapAttrs = new Entities("BP.Sys.MapAttrs");
         var extMapData = athDesc.MyPK;
         mapAttrs.Retrieve("FK_MapData", extMapData);
@@ -196,18 +195,18 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
         currImgPath = '../Img';
     //3.是否显示标题列
     if (athDesc.IsShowTitle == 1 && $("#thead_" + athDesc.MyPK).length == 0) {
-        _html += "<thead id='thead_" + athDesc.MyPK+"'>";
+        _html += "<thead id='thead_" + athDesc.MyPK + "'>";
         _html += "<tr style='border:0px;'>";
 
         var colstyle = "line-height:30px;border: 1px solid #ddd;background-color:white;";
 
         _html += "<th  style='" + colstyle + "width:50px;'>序号</th>";
         if (isHaveSort == true)
-            _html += "<th style='" + colstyle + "width:120px' nowrap=true >" + sortColoum +"</th>";  
+            _html += "<th style='" + colstyle + "width:120px' nowrap=true >" + sortColoum + "</th>";
         if ((athDesc.IsUpload == 0 || pageData.IsReadonly == "1") || athDesc.IsExpCol == 1)
             _html += "<th  style='" + colstyle + "width:200px'>文件名</th>";
         else
-            _html += "<th  style='" + colstyle + "width:200px'>文件名<div style='float:right' id='fileUpload_" + athDesc.MyPK+"' class='fileUploadContent'></div> </th>";
+            _html += "<th  style='" + colstyle + "width:200px'>文件名<div style='float:right' id='fileUpload_" + athDesc.MyPK + "' class='fileUploadContent'></div> </th>";
         //_html += "<th  style='" + colstyle + "width:50px;'>大小KB</th>";
         _html += "<th  style='" + colstyle + "width:120px;'>上传时间</th>";
         _html += "<th  style='" + colstyle + "width:80px;'>上传人</th>";
@@ -217,7 +216,7 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
                 if (mapAttr.UIIsInput == 1 && mapAttr.UIIsEnable == 1)
                     _html += "<th style='" + colstyle + "'><span style='color:red' class='mustInput' data-keyofen='" + mapAttr.KeyOfEn + "' >*</span>";
                 else
-                    _html += "<th style='" + colstyle +"'>";
+                    _html += "<th style='" + colstyle + "'>";
                 if (mapAttr.UIContralType == 0)
                     _html += "<label for='TB_" + mapAttr.KeyOfEn + "' class='" + (mapAttr.UIIsInput == 1 ? "mustInput" : "") + "' >" + mapAttr.Name + "</label></th>";
 
@@ -229,7 +228,10 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
                     _html += "<label for='RB_" + mapAttr.KeyOfEn + "' class='" + (mapAttr.UIIsInput == 1 ? "mustInput" : "") + "'  >" + mapAttr.Name + "</label></th>";
             })
         }
-
+        //排序列的增加
+        if (athDesc.IsIdx == 1 && athDesc.IsReadonly != 1) {
+            _html += "<th  nowrap=true  style='" + colstyle + "width:50px' >排序</th>";
+        }
         //增加操作列
         _html += "<th  nowrap=true  style='" + colstyle + "width:100px' >";
         if (athDesc.IsDownload == 1 && dbs.length > 0)
@@ -245,11 +247,11 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
     if (isHaveSort == true && athDesc.Sort.lastIndexOf(",") + 1 != athDesc.Sort.length)
         athDesc.Sort = athDesc.Sort + ",";
 
-    var fileSorts = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(athDesc.Sort.indexOf('@') + 1).split(',') : athDesc.Sort.split(',');  
-           
+    var fileSorts = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(athDesc.Sort.indexOf('@') + 1).split(',') : athDesc.Sort.split(',');
+
     var athIdx = 0;
     if ($("#tbody_" + athDesc.MyPK).length == 0)
-        _html += "<tbody id='tbody_" + athDesc.MyPK +"'>";
+        _html += "<tbody id='tbody_" + athDesc.MyPK + "'>";
     //循环分组
     for (var j = 0; j < fileSorts.length; j++) {
         var sort = fileSorts[j]
@@ -257,9 +259,9 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
         if (fileSorts.length > 1 && sort == "")
             continue;
 
-                
+
         var IsExistFile = false; //该分组是否有文件，不存在文件增加一行空白数据
-                
+
         var isAddSortTD = false; //是否增加类别所在的列
 
         for (var k = 0; k < dbs.length; k++) {
@@ -281,7 +283,7 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
             }
 
             //②附件名称 ，扩展了预览功能，先阶段需要用户自己在DataUser/OverrideFiles/Ath.js重写AthViewOverWrite_Del方法
-            _html += "<td style='text-align:left'><a href=\"javascript:AthView('" + athDesc.MyPK + "','" + AthParams.PKVal + "','" + db.MyPK + "');\" ><img src='" + currImgPath + "/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='" + currImgPath + "/FileType/Undefined.gif'\" style='margin-right:5px;float:left;' />" + db.FileName + "</td>";
+            _html += "<td style='text-align:left'><a href=\"javascript:AthView('" + db.MyPK + "');\" ><img src='" + currImgPath + "/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='" + currImgPath + "/FileType/Undefined.gif'\" style='margin-right:5px;float:left;' />" + db.FileName + "</td>";
 
             //③附件大小
             //_html += "<td>" + db.FileSize + "</td>";
@@ -307,31 +309,41 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
                 });
             }
 
+            //排序列的增加
+            if (athDesc.IsIdx == 1 && athDesc.IsReadonly != 1) {
+                _html += "<td class='operate'>";
+                _html += "<a href=\"javascript:GFDoUp('" + db.MyPK + "' )\"><img src=\"../WF/\Img/\Btn/\Up.GIF\"/></a>";
+                _html += "<a href=\"javascript:GFDoDown('" + db.MyPK + "');\"><img src=\"../WF/\Img/\Btn/\Down.GIF\"/></a>";
+                _html += "</td>";
+            }
+
             //⑦操作列的增加.
             _html += "<td class='operate'>";
             if (athDesc.IsDownload == 1)
-                _html += "<a href=\"javascript:Down2018('" + athDesc.MyPK + "','" + db.MyPK + "')\">下载</a>";
+                _html += "<a href=\"javascript:Down2018('" + db.MyPK + "')\"><img src=\"../WF/\Img/\Btn/\Down.gif\"/></a>&nbsp;&nbsp;&nbsp;&nbsp;";
             if (pageData.IsReadonly != 1) {
                 if (athDesc.DeleteWay == 1)//删除所有
-                    _html += "<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "','"+db.FileName+"')\">删除</a>";
+                    _html += "<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "','" + db.FileName + "')\"><img src=\"../WF/\Img/\Btn/\Delete.gif\"/></a>";
                 var webuser = new WebUser();
                 if (athDesc.DeleteWay == 2 && db.Rec == webuser.No)//删除自己上传的
-                    _html += "<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "','" + db.FileName +"')\">删除</a>";
+                    _html += "<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "','" + db.FileName + "')\"><img src=\"../WF/\Img/\Btn/\Delete.gif\"/></a>";
             }
             _html += "</td>";
-            _html += "</tr>";
-        }
 
-        if (IsExistFile == false || (athDesc.IsExpCol == 1 && athDesc.IsUpload == true && pageData.IsReadonly != "1" )) {
+            _html += "</tr>";
+        } //结束数据输出.
+
+        //输出上传功能》
+        if (IsExistFile == false || (athDesc.IsExpCol == 1 && athDesc.IsUpload == true && pageData.IsReadonly != "1")) {
             athIdx++;
 
             //①序号
             _html += "<td class='Idx'>" + athIdx + "</td>";
 
             //增加类别列
-            if (isHaveSort == true) 
+            if (isHaveSort == true)
                 _html += "<td>" + sort + "</td>";
-                   
+
             //②附件名称
             if (athDesc.IsUpload == true && pageData.IsReadonly != "1")
                 _html += "<td style='width:100px;color:red'>请上传附件..</td>";
@@ -339,7 +351,7 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
                 _html += "<td style='width:100px;color:red'></td>";
 
             //③附件大小
-           // _html += "<td>&nbsp&nbsp</td>";
+            // _html += "<td>&nbsp&nbsp</td>";
             //④上传时间
             _html += "<td>&nbsp&nbsp</td>";
             //⑤上传人
@@ -353,13 +365,13 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
             }
             //⑦操作列的增加.
             if (athDesc.IsExpCol == 1)
-                _html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\",\"" + athDesc.MyPK + "\")'>上传</a>&nbsp;&nbsp;&nbsp;<a href=\"\" onclick='return SaveUpload(\""+athDesc.MyPK+"\",\"" + uploadUrl+"\")'>保存</a></td>";
-            else 
+                _html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\",\"" + athDesc.MyPK + "\")'>上传</a>&nbsp;&nbsp;&nbsp;<a href=\"\" onclick='return SaveUpload(\"" + athDesc.MyPK + "\",\"" + uploadUrl + "\")'>保存</a></td>";
+            else
                 _html += "<td></td>";
-                    
+
             _html += "</tr>";
         }
-        
+
     }
     //附件可上传并且存在分组，增加分组的选择下拉框
     if (athDesc.IsUpload == true && pageData.IsReadonly != "1" && (isHaveSort == true || athDesc.IsNote)) {
@@ -375,7 +387,7 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
         if (isHaveSort == true) {
             _html += "<div style='float:left;padding-right:2px'>";
             _html += "请选择" + sortColoum + "：";
-            _html += "<select id='Sort_"+athDesc.MyPK+"' class='form-control' style='margin:0px 0px !important;width:auto !important'>" + operations + "</select>";
+            _html += "<select id='Sort_" + athDesc.MyPK + "' class='form-control' style='margin:0px 0px !important;width:auto !important'>" + operations + "</select>";
             _html += "</div>";
         }
         if (athDesc.IsNote)
@@ -384,14 +396,33 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
         _html += "</td>";
         _html += "</tr>";
     }
-    
+
     if ($("#tbody_" + athDesc.MyPK).length == 0) {
         _html += "</tbody>";
         _html += "</table>";
     }
-   
+
     return _html;
 
+}
+// 向上移动.
+function GFDoUp(mypk) {
+
+    var en = new Entity("BP.Sys.FrmAttachmentDB", mypk);
+    var data = en.DoMethodReturnString("DoUpTabIdx");
+    if (data.indexOf('err@') != -1)
+        alert(data);
+    window.location.href = window.location.href;
+}
+
+//向下移动.
+function GFDoDown(mypk) {
+
+    var en = new Entity("BP.Sys.FrmAttachmentDB", mypk);
+    var data = en.DoMethodReturnString("DoDownTabIdx");
+    if (data.indexOf('err@') != -1)
+        alert(data);
+    window.location.href = window.location.href;
 }
 
 /**
@@ -401,9 +432,9 @@ function FileShowWayTable(athDesc, dbs,uploadUrl) {
 */
 function FileShowPic(athDesc, dbs, uploadUrl) {
     var exts = athDesc.Exts;
-    if(exts!=null && exts!= undefined && (exts.indexOf("*.*")!=-1 || exts==""))
+    if (exts != null && exts != undefined && (exts.indexOf("*.*") != -1 || exts == ""))
         exts = "image/gif,image/jpg,image/jepg,image/jpeg,image/bmp,image/png,image/tif,image/gsp";
-   
+
     var _Html = "<form id='Form_" + athDesc.MyPK + "' enctype='multipart/form-data' method='post'>";
     for (var i = 0; i < dbs.length; i++) {
         var db = dbs[i];
@@ -416,14 +447,14 @@ function FileShowPic(athDesc, dbs, uploadUrl) {
         if (athDesc.IsDownload == 0)
             _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0' >" + db.FileName + "</p>";
         else
-            _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0' ><a href=\"javascript:Down2018('" + athDesc.MyPK + "','" + db.MyPK + "')\">" + db.FileName.split(".")[0] + "</a></p>";
+            _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0' ><a href=\"javascript:Down2018('" + db.MyPK + "');\" >" + db.FileName.split(".")[0] + "</a></p>";
         _Html += "</div>";
         _Html += "</div>";
     }
     //可以上传附件，增加上传附件按钮
     if (athDesc.IsUpload == true && pageData.IsReadonly != "1") {
 
-        _Html += "<div class='image-item space'><input type='file' id='file_" + athDesc.MyPK + "'name='file_" + athDesc.MyPK +"' accept='" + exts + "' onchange='UploadChange(\"" + uploadUrl+"\",\""+athDesc.MyPK+"\");'></div>";
+        _Html += "<div class='image-item space'><input type='file' id='file_" + athDesc.MyPK + "'name='file_" + athDesc.MyPK + "' accept='" + exts + "' onchange='UploadChange(\"" + uploadUrl + "\",\"" + athDesc.MyPK + "\");'></div>";
     }
     _Html += "</form>";
 
@@ -498,7 +529,7 @@ function GetSortLenth_FromDB(sort, dbs) {
 function GetFileStream(mypk, FK_FrmAttachment) {
     var Url = "";
     if (plant == "CCFlow") {
-        if(window.location.href.indexOf("/CCForm")!=-1)
+        if (window.location.href.indexOf("/CCForm") != -1)
             Url = './DownFile.aspx?DoType=Down&MyPK=' + mypk + '&FK_FrmAttachment=' + FK_FrmAttachment;
         else if (window.location.href.indexOf("/CCBill") != -1)
             Url = '../CCForm/DownFile.aspx?DoType=Down&MyPK=' + mypk + '&FK_FrmAttachment=' + FK_FrmAttachment;
@@ -520,19 +551,22 @@ function GetFileStream(mypk, FK_FrmAttachment) {
 * @param fk_ath  附件的属性
 * @param MyPK 上传附件数据的信息主键
 */
-function Down2018(fk_frmattachment, MyPK,fileName) {
-   
+function Down2018(mypk) {
+
+    var nodeID = GetQueryString("FK_Node");
+    var workID = GetQueryString("WorkID");
+
     var url = "";
     if (plant == "CCFlow")
-        url = basePath + '/WF/CCForm/DownFile.aspx?DoType=Down&MyPK=' + MyPK + '&FK_FrmAttachment=' + fk_frmattachment+ '&FK_Node=' + pageData.FK_Node+'&WorkID='+pageData.WorkID;
+        url = basePath + '/WF/CCForm/DownFile.aspx?DoType=Down&MyPK=' + mypk + "&WorkID=" + workID + "&FK_Node=" + nodeID;
     else {
         var currentPath = window.document.location.href;
         var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-        url = path + 'WF/Ath/downLoad.do?MyPK=' + MyPK + '&FK_FrmAttachment=' + fk_frmattachment + '&FK_Node=' + pageData.FK_Node + '&WorkID=' + pageData.WorkID;
+        url = path + 'WF/Ath/downLoad.do?MyPK=' + mypk + "&WorkID=" + workID + "&FK_Node=" + nodeID;
     }
-    if (IEVersion() <11) {
+    if (IEVersion() < 11) {
         window.open(url);
-		return;
+        return;
     }
     var link = document.createElement('a');
     link.setAttribute("download", "");
@@ -551,12 +585,12 @@ function Down2018(fk_frmattachment, MyPK,fileName) {
 * @param fk_frmattachment 附件属性MyPK
 * @param PKVal 附件控制权限的ID
 */
-function DownZip(fk_frmattachment,PKVal) {
+function DownZip(fk_frmattachment, PKVal) {
 
     var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
     httpHandler.AddUrlData();
     httpHandler.AddPara("FK_FrmAttachment", fk_frmattachment);
-    httpHandler.AddPara("PKVal",PKVal)
+    httpHandler.AddPara("PKVal", PKVal)
     var data = httpHandler.DoMethodReturnString("AttachmentUpload_DownZip");
 
     if (data.indexOf('err@') == 0) {
@@ -580,7 +614,7 @@ function DownZip(fk_frmattachment,PKVal) {
         }
         window.location.href = str;
 
-        
+
 
     }
 
@@ -601,7 +635,6 @@ function Del(delPKVal, fk_framAttachment, name) {
         console.log(data);
         return;
     }
-    debugger
     var opt = AthParams.Opt;
     var fileListArray = uploadFileList.getFileList(opt);
     var newFileListArray = [];
@@ -610,34 +643,32 @@ function Del(delPKVal, fk_framAttachment, name) {
             continue;
         newFileListArray.push(fileListArray[i]);
     }
-    
+
     uploadFileList.setFileList(newFileListArray, opt);
     //获取
     InitAthPage("Div_" + fk_framAttachment);
-    
 }
 
-
 //在线预览，如果需要连接其他的文件预览查看器，就需要在这里重写该方法.
-function AthView(fk_ath, pkVal, delPKVal) {
+function AthView(mypk) {
 
     if (typeof AthViewOverWrite === 'function') {
-        AthViewOverWrite(fk_ath, pkVal, delPKVal);
+        AthViewOverWrite(mypk);
         return;
     }
 
-    var FK_Node = GetQueryString("FK_Node");
-    var FK_Flow = GetQueryString("FK_Flow");
-    var FK_MapData = GetQueryString("FK_MapData");
+    var nodeID = GetQueryString("FK_Node");
+    var workID = GetQueryString("WorkID");
 
-    if (plant == "CCFlow")
-        window.location.href = basePath + '/WF/CCForm/DownFile.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=' + FK_Node + '&FK_Flow=' + FK_Flow + '&FK_MapData=' + FK_MapData + '&Ath=' + fk_ath;
-    else {
-        var currentPath = window.document.location.href;
-        var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-        Url = path + 'WF/Ath/downLoad.do?DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=' + FK_Node + '&FK_Flow=' + FK_Flow + '&FK_MapData=' + FK_MapData + '&Ath=' + fk_ath;
-        window.location.href = Url;
+    if (plant == "CCFlow") {
+        window.location.href = basePath + '/WF/CCForm/DownFile.aspx?DoType=Down&MyPK=' + mypk + '&PKVal=' + mypk + '&FK_Node=' + nodeID + "&WorkID=" + workID;
+        return;
     }
+
+    var currentPath = window.document.location.href;
+    var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
+    Url = path + 'WF/Ath/downLoad.do?DelPKVal=' + mypk + '&PKVal=' + mypk + '&FK_Node=' + nodeID + "&WorkID=" + workID;
+    window.location.href = Url;
 }
 
 /**
@@ -654,16 +685,15 @@ function changeSort(sort, FK_FrmAttachment) {
         inputObj.setAttribute('name', "file_" + FK_FrmAttachment);
         inputObj.setAttribute('type', 'file');
         document.forms[0].appendChild(inputObj);
-        
     }
     document.getElementById("file_" + FK_FrmAttachment).click();*/
     //激活上传文件
-    $("#fileUpload_"+FK_FrmAttachment+" .uploadBts .selectFileBt").click()
+    $("#fileUpload_" + FK_FrmAttachment + " .uploadBts .selectFileBt").click()
 
 }
 
 
-function SaveUpload(fk_frmAttachment,uploadUrl) {
+function SaveUpload(fk_frmAttachment, uploadUrl) {
 
     //必填项和正则表达式检查
     var formCheckResult = true;
@@ -700,7 +730,7 @@ function UploadChange(uploadUrl, fk_frmAttachment) {
     var file = document.getElementById("file_" + fk_frmAttachment).files[0];
     var fileSize = AthParams.AthInfo[fk_frmAttachment][0][2];
     if (file.size * 1000 > fileSize) {
-        alert("上传附件大小的最大限制是" + fileSize+"KB");
+        alert("上传附件大小的最大限制是" + fileSize + "KB");
         return;
     }
     var fileExt = fileObj.substring(fileObj.lastIndexOf(".")).toLowerCase();
@@ -708,15 +738,15 @@ function UploadChange(uploadUrl, fk_frmAttachment) {
     var exts = AthParams.AthInfo[fk_frmAttachment][0][3];
     if (exts == null || exts == "" || exts == undefined)
         exts = "*.*";
-     //附件的后缀
+    //附件的后缀
     if (exts != "*.*" && exts.indexOf(fileExt) == -1) {
-        alert("附件上传的格式是" + exts );
+        alert("附件上传的格式是" + exts);
         return;
     }
-    
-   
 
-   
+
+
+
     //form表单序列话
     var parasData = $("form").serialize();
     //form表单序列化时调用了encodeURLComponent方法将数据编码了
@@ -727,7 +757,7 @@ function UploadChange(uploadUrl, fk_frmAttachment) {
     parasData = parasData.replace(/RB_/g, '');
     parasData = parasData.replace(/CB_/g, '');
     parasData = parasData.replace(/DDL_/g, '');
-    uploadUrl +=  "&parasData=" + parasData;
+    uploadUrl += "&parasData=" + parasData;
 
     //提交数据
     var option = {
@@ -764,7 +794,7 @@ function UploadChange(uploadUrl, fk_frmAttachment) {
 
 
 
-    
+
 ////关闭窗口  适用于扩展属性
 //function close() {
 //    if (parent != undefined && parent.SetAth != undefined && typeof (parent.SetAth) == "function") {
@@ -1125,4 +1155,3 @@ function InitRBShowContentAth(mapAttr, defValue, RBShowModel, enableAttr) {
 //    return checkRegResult;
 //}
 
-  

@@ -121,9 +121,13 @@
                     fields += "*" + item.id;
                 }
             }
-
-            mapData.SetPara("RptSearchKeys", fields + "*");
-
+			
+			if (fields == "") {
+                mapData.SetPara("RptSearchKeys", "");
+            } else {
+                mapData.SetPara("RptSearchKeys", fields + "*");
+            }
+            
             fields = "";
             oChecks = document.getElementById("StringKeys").getElementsByTagName("input");
             for (var i = 0, len = oChecks.length; i < len; i++) {
@@ -131,8 +135,14 @@
                 if (item.checked) {
                     fields += "*" + item.id+","+item.getAttribute("data-name");
                 }
+				
             }
-            mapData.SetPara("StringSearchKeys", fields + "*");
+			
+			if (fields == "") {
+                mapData.SetPara("StringSearchKeys", "");
+            } else {
+                mapData.SetPara("StringSearchKeys", fields + "*");
+            }
 
             mapData.Update();
 

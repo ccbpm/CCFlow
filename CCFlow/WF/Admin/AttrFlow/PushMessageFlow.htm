@@ -85,15 +85,12 @@
             for (i = 0, len = nodes.length; i < len; i++) {
                 var n = nodes[i];
                 $("#SMS_Nodes").append("<label><input id='CB_SMS_" + n.NodeID + "' type='checkbox' name='CB_SMS_" + n.NodeID + "' />" + n.Name + "</label>");
-                $("#Email_Nodes").append("<label><input id='CB_Email_" + n.NodeID + "' type='checkbox' name='CB_Email_" + n.NodeID + "' />" + n.Name + "</label>");
             }
 
             //03.实体初始化 （如果有）
             if (en.MyPK != "") {
-                $("input:radio[name='RB_SMS']").eq(en.SMSPushWay).attr("checked", true);
-                $("input:radio[name='RB_Email']").eq(en.MailPushWay).attr("checked", true);
+                $("input:radio[name='RB_SMS']").eq(en.SMSPushWay == 6 ? 4 : en.SMSPushWay).attr("checked", true);
                 $("#DDL_SMS_Fields").val(en.SMSField);
-                $("#DDL_Email_Fields").val(en.MailAddress);
                 $("#TB_SMS").val(en.SMSDoc);
                 $("#TB_Email_Title").val(en.MailTitle);
                 $("#TB_Email_Doc").val(en.MailDoc);
@@ -175,7 +172,7 @@
         }
     </script>
 </head>
-<body onkeypress="Esc();" style="font-size: smaller">
+<body onkeypress="Esc();" >
     <form id="cc">
         <div id="bar" class="cs-tr cs-bar">
             <label style="float:left;font-size:13px;font-weight:bolder;padding-top:10px;"> 时限预警、超期 - 消息实体</label>
@@ -185,159 +182,83 @@
 
         <div style="position:relative;">
             <table style="width: 100%">
-
                 <tr>
-                    <td>
-                        <fieldset>
-                            <legend>启用短信设置</legend>
-                            <br />
-                            <table style="width: 100%;">
-                                <tr>
-                                    <td colspan="2">
-                                        <input id="RB_SMS_0" type="radio" name="RB_SMS" value="0"
-                                               checked="checked" /><label for="RB_SMS_0">不发送</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <input id="RB_SMS_1" type="radio" name="RB_SMS" value="1" /><label for="RB_SMS_1">发送当前节点的所有人</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 200px;">
-                                        <input id="RB_SMS_2" type="radio" name="RB_SMS" value="2" /><label for="RB_SMS_2">表单上的字段作为接受对象</label>
-                                    </td>
-                                    <td>
-                                        <select name="DDL_SMS_Fields" id="DDL_SMS_Fields" class="frmfields">
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="RB_SMS_3" type="radio" name="RB_SMS" value="3" /><label for="RB_SMS_3">其他节点的处理人</label>
-                                    </td>
-                                    <td id="SMS_Nodes">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>发送形式</label>
-                                    </td>
-                                    <td>
-                                        <label><input id='CB_SMSPushModel_0' type='checkbox' name='CB_SMSPushModel' value='0' />站内消息</label>
-                                        <label><input id='CB_SMSPushModel_1' type='checkbox' name='CB_SMSPushModel' value='1' />短信</label>
-                                        <label><input id='CB_SMSPushModel_4' type='checkbox' name='CB_SMSPushModel' value='2' />钉钉</label>
-                                        <label><input id='CB_SMSPushModel_3' type='checkbox' name='CB_SMSPushModel' value='3' />微信</label>
-                                        <label><input id='CB_SMSPushModel_2' type='checkbox' name='CB_SMSPushModel' value='4' />即时通</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-
-                                        <a href="javascript:ShowHidden('sms')">短信发送内容模版:</a>
-                                        <br />
-                                        <div id="sms" style="display: none; color: Gray">
-                                            <ul>
-                                                <li>cc会根据不同的事件设置不同的信息模版。</li>
-                                                <li>这些模版都是标准的提示，如果您要需要个性化的提示请修改该模版。</li>
-                                                <li>该参数支持cc表达式。</li>
-                                                <li>您可以使用@符号来编写您所需要的内容。</li>
-                                                <li>对于信息提示有两个系统参数分别是{Title}流程标题， {URL} 打开流程的连接。</li>
-                                                <li>cc在生成消息的时候会根据模版把信息替换下来，发送给用户。</li>
-                                                <li>最新格式的cc字段表达式为: <font color="red">@+字段名+分号</font> 比如 @QingJiaLeiXing; </li>
-                                            </ul>
-                                        </div>
-
-                                        <textarea name="TB_SMS" rows="3" cols="20" id="TB_SMS"
-                                                  style="width: 95%;">
-有新工作{{Title}}需要您处理, 发送人:@WebUser.No, @WebUser.Name,打开{Url} .</textarea>
-                                    </td>
-                                </tr>
-                            </table>
-                        </fieldset>
-                        <!--------   邮件提醒.   -------------------------->
-                        <fieldset>
-                            <legend>启用邮件提醒</legend>
-
-                            <br />
-                            <table style="width: 100%;">
-                                <tr>
-                                    <td colspan="2">
-                                        <input id="RB_Email_0" type="radio" name="RB_Email"
-                                               value="0" checked="checked" /><label for="RB_Email_0">不发送</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <input id="RB_Email_1" type="radio" name="RB_Email"
-                                               value="1" /><label for="RB_Email_1">发送当前节点的所有人</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="RB_Email_2" type="radio" name="RB_Email"
-                                               value="2" /><label for="RB_Email_2">表单上的字段作为邮件</label>
-                                    </td>
-                                    <td>
-                                        选择一个字段:<select name="DDL_Email_Fields" id="DDL_Email_Fields" class="frmfields">
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input id="RB_Email_3" type="radio" name="RB_Email"
-                                               value="3" /><label for="RB_Email_3">其他节点的处理人</label>
-                                    </td>
-                                    <td id="Email_Nodes">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" style="width: 200px;">
-
-                                        <a href="javascript:ShowHidden('titeemail')">邮件标题模版:</a>
-                                        <div id="titeemail" style="display: none; color: Gray">
-                                            <ul>
-                                                <li>该参数支持cc表达式。</li>
-                                                <li>您可以使用@符号来编写您所需要的内容。</li>
-                                                <li>最新格式的cc字段表达式为:<font color="red"> @+字段名+分号</font>比如 @QingJiaLeiXing; </li>
-                                            </ul>
-                                        </div>
-
-                                        <br />
-                                        <input name="TB_Email_Title" type="text" value="新工作{{Title}},发送人@WebUser.No,@WebUser.Name"
-                                               id="TB_Email_Title" style="width: 500px;" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-
-                                        <a href="javascript:ShowHidden('st2ate')">邮件内容模版:</a>
-                                        <div id="st2ate" style="display: none; color: Gray">
-                                            <ul>
-                                                <li>该参数支持cc表达式。</li>
-                                                <li>您可以使用@符号来编写您所需要的内容。</li>
-                                                <li>最新格式的cc字段表达式为:<font color="red"> @+字段名+分号</font>比如 @QingJiaLeiXing; </li>
-                                            </ul>
-                                        </div>
-                                        <br />
-
-                                        <textarea name="TB_Email_Doc" rows="3" cols="20" id="TB_Email_Doc"
-                                                  style="width: 500px;">
-	
-您好:	
-    有新工作{{Title}}需要您处理, 点击这里打开工作报告{Url} .	
-致! 	
-    @WebUser.No, @WebUser.Name	
-    @RDT</textarea>
-                                    </td>
-                                </tr>
-                            </table>
-                        </fieldset>
-
-
+                    <td colspan="2">
+                        <input id="RB_SMS_0" type="radio" name="RB_SMS" value="0"
+                               checked="checked" /><label for="RB_SMS_0">不发送</label>
                     </td>
                 </tr>
-            </table>
+                <tr>
+                    <td colspan="2">
+                        <input id="RB_SMS_1" type="radio" name="RB_SMS" value="1" /><label for="RB_SMS_1">发送当前节点的所有人</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 200px;">
+                        <input id="RB_SMS_2" type="radio" name="RB_SMS" value="2" /><label for="RB_SMS_2">表单上的字段作为接受对象</label>
+                    </td>
+                    <td>
+                        <select name="DDL_SMS_Fields" id="DDL_SMS_Fields" class="frmfields">
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input id="RB_SMS_3" type="radio" name="RB_SMS" value="3" /><label for="RB_SMS_3">其他节点的处理人</label>
+                    </td>
+                    <td id="SMS_Nodes">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input id="RB_SMS_6" type="radio" name="RB_SMS" value="6" /><label for="RB_SMS_6">开始节点的发起人</label>
+                    </td>
+                    <td id="SMS_Nodes">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>发送形式</label>
+                    </td>
+                    <td>
+                        <label><input id='CB_SMSPushModel_0' type='checkbox' name='CB_SMSPushModel' value='0' />站内消息</label>
+                        <label><input id='CB_SMSPushModel_1' type='checkbox' name='CB_SMSPushModel' value='1' />短信</label>
+                        <label><input id='CB_SMSPushModel_4' type='checkbox' name='CB_SMSPushModel' value='2' />钉钉</label>
+                        <label><input id='CB_SMSPushModel_3' type='checkbox' name='CB_SMSPushModel' value='3' />微信</label>
+                        <label><input id='CB_SMSPushModel_2' type='checkbox' name='CB_SMSPushModel' value='4' />即时通</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>邮件标题</label>
+                    </td>
+                    <td>
+                        <input type="text" id="TB_Title" name="TB_Title" style="width:97%;" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+
+                        <a href="javascript:ShowHidden('sms')">消息发送内容模版:</a>
+                        <br />
+                        <div id="sms" style="display: none; color: Gray">
+                            <ul>
+                                <li>cc会根据不同的事件设置不同的信息模版。</li>
+                                <li>这些模版都是标准的提示，如果您要需要个性化的提示请修改该模版。</li>
+                                <li>该参数支持cc表达式。</li>
+                                <li>您可以使用@符号来编写您所需要的内容。</li>
+                                <li>对于信息提示有两个系统参数分别是{Title}流程标题， {URL} 打开流程的连接。</li>
+                                <li>cc在生成消息的时候会根据模版把信息替换下来，发送给用户。</li>
+                                <li>最新格式的cc字段表达式为: <font color="red">@+字段名+分号</font> 比如 @QingJiaLeiXing; </li>
+                            </ul>
+                        </div>
+
+                        <textarea name="TB_SMS" rows="3" cols="20" id="TB_SMS"  style="width: 95%;">
+有新工作{{Title}}需要您处理, 发送人:@WebUser.No, @WebUser.Name,打开{Url} .</textarea>
+                    </td>
+                </tr>
+            </table>    
         </div>
     </form>
 </body>

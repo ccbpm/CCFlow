@@ -56,7 +56,7 @@
                 var mapDtl = mapDtls[i];
 
                 html += "<tr>";
-                html += "<th> 填充从表:" + mapDtl.No + " " + mapDtl.Name + "</th>";
+                html += "<th> 填充从表: <font color=red><b>" + mapDtl.No + " " + mapDtl.Name + "</b></font></th>";
                 html += "<td><font color=green>" + GenerFields(mapDtl.No) + "</font></td>";
                 html += "</tr>";
 
@@ -173,7 +173,7 @@
         }
 
         function Back() {
-            var url = "../../AttrFlow/AutoStart/Default.htm?FK_Flow=" + flowNo;
+            var url = "../../AttrFlow/AutoStart/2.ByTimeData.htm?FK_Flow=" + flowNo;
             window.location.href = url;
         }
 
@@ -208,6 +208,23 @@
             <div id="dtls">
             </div>
         </fieldset>
+
+
+        <fieldset>
+            <legend id="Help">帮助</legend>
+            <ul>
+                <li> 填充主表的 sql 必须有MainPK, 字段, 可以有ToNode,ToEmps 字段。</li>
+                <li> 关于MainPK 字段：它可以是一个订单号、事故号、单据号、或者字符组合的不重复的编号，如果MainPK已经存在，就不在发起了。</li>
+                <li> 主表的每行记录都可以是一个, 可以有ToNode,ToEmps 字段。</li>
+            </ul>
+        </fieldset>
+
+
+        <!--<legend>说明:</legend>
+        <ul>
+            <li> 设置一个查询SQL,  </li>
+            <li> SQL里面必须有一个@MainPK 变量 </li>
+        </ul>-->
 
 
 

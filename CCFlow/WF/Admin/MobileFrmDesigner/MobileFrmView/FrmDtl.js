@@ -1008,7 +1008,7 @@ function Dtl_PopBranchesAndLeaf(mapExt, mapAttr, OID) {
                     RemoveFunc = replaceAll(RemoveFunc, "~", "'");
                 }
                 //调用移除函数
-                DBAccess.RunDBSrc(RemoveFunc, mapExt.DBType);
+                DBAccess.RunDBSrc(RemoveFunc, mapExt.DBType,mapExt.FK_DBSrc);
             }
             console.log("unselect: " + JSON.stringify(record));
         }
@@ -1067,7 +1067,7 @@ function Dtl_PopBranches(mapExt, mapAttr, OID) {
                     RemoveFunc = replaceAll(RemoveFunc, "~", "'");
                 }
                 //调用移除函数
-                DBAccess.RunDBSrc(RemoveFunc, mapExt.DBType);
+                DBAccess.RunDBSrc(RemoveFunc, mapExt.DBType, mapExt.FK_DBSrc);
             }
         }
     });

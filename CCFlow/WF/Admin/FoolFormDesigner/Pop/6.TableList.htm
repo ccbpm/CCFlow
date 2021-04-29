@@ -36,10 +36,8 @@
             //设置按钮是否可以用?
             if (i == 0) {
                 $("#Btn_Delete").hide();
-                $("#Btn_FullData").hide()
-            } else {
-                $("#Btn_Delete").show();
-                $("#Btn_FullData").show();
+                $("#Btn_FullData").hide();
+                $("#Btn_Gener").hide();
             }
         });
         function Save() {
@@ -122,15 +120,8 @@
                 </td>
             </tr>-->
             <tr>
-                <td>
-                    弹窗属性
-                </td>
-                <td>
-                    高度:<input type="text" id="TB_H" name="TB_H" style="width: 80px; text-align: right" />
-                    宽度:<input type="text" id="TB_W" name="TB_W" style="width: 80px; text-align: right" />
-                    <font color="gray">用于控制弹出窗口的大小</font>
-                </td>
-                <td>
+               
+                <td colspan="3">
                     设置显示列数
                 </td>
                 <td>

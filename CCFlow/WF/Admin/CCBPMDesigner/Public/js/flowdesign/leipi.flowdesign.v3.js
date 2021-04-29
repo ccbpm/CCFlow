@@ -27,22 +27,20 @@
         menuStyle: {
             border: '1px solid #5a6377',
             minWidth: '150px',
-            padding: '5px 10'
         },
         itemStyle: {
-            fontFamily: 'verdana, helvetica, arial, sans-serif',
             color: '#333',
             fontSize: '12px',
             border: '0',
             /*borderLeft:'5px solid #fff',*/
-            padding: '5px 30px 5px 20px'
+            padding: '5px 15px 5px 10px'
         },
         itemHoverStyle: {
             border: '0',
             cursor: 'pointer',
             /*borderLeft:'5px solid #49afcd',*/
             color: '#fff',
-            backgroundColor: '#2980b9'
+            /*backgroundColor: '#2980b9'*/
         },
         mtAfterDrop: function (params) {
 
@@ -188,7 +186,7 @@
 
 
                             if (node.RunModel == 0) {
-                                $('#pmfun span').text("普通:" + nodeID.value);
+                                $('#pmfun span').text("线型:" + nodeID.value);
                             }
                             if (node.RunModel == 1) {
                                 $('#pmfun span').text("合流:" + nodeID.value);
@@ -261,11 +259,11 @@
         });
 
         //使节点可拖动
-        jsPlumb.draggable(jsPlumb.getSelector(".process-step"));
+        jsPlumb.draggable(jsPlumb.getSelector(".process-step"), { containment: $("#flowdesign_canvas") });
         initEndPoints();
 
         //使标签可拖动
-        jsPlumb.draggable(jsPlumb.getSelector(".process-lab"));
+        jsPlumb.draggable(jsPlumb.getSelector(".process-lab"), { containment: $("#flowdesign_canvas") });
         initEndPoints();
 
         //绑定添加连接操作。画线-input text值  拒绝重复连接

@@ -1,0 +1,93 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+   
+  <dt>
+    <No>FoolFrmTable</No>
+    <Name>大框表格:FoolFrmTable</Name>
+    <Val>@background-color=#FFFFFF@selfbody-width_Temp=200@selfbody-width-unit_Temp=px@selfbody-width=200 px@selfbody-hight_Temp=322@selfbody-hight-unit_Temp=px@selfbody-hight=322 px@font-size_Temp=20@font-size-unit_Temp=px@font-size=20 px@font-weight=bold@font-style=italic@font-height_Temp=@font-height-unit_Temp=px@font-height= px@font-family=SimSun@color=@border-which=all@border-width_Temp=0@border-width-unit_Temp=px@border-width=0 px@border-color=#330099@border-style=solid</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>1</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmTitleTR</No>
+    <Name>标题表头:FoolFrmTitleTR</Name>
+    <Val>@background-color=@selfbody-width_Temp=200@selfbody-width-unit_Temp=px@selfbody-width=200 px@selfbody-hight_Temp=@selfbody-hight-unit_Temp=px@selfbody-hight= px@font-size_Temp=20@font-size-unit_Temp=px@font-size=20 px@font-weight=normal@font-style=normal@font-height_Temp=@font-height-unit_Temp=px@font-height= px@font-family=SimSun@color=@border-which=all@border-width_Temp=@border-width-unit_Temp=px@border-width= px@border-color=@border-style=none</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>2</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmTitleIcon</No>
+    <Name>标题图标:FoolFrmIcon</Name>
+    <Val>@background-color=#FFFFFF@selfbody-width_Temp=@selfbody-width-unit_Temp=px@selfbody-width= px@selfbody-hight_Temp=@selfbody-hight-unit_Temp=px@selfbody-hight= px@font-size_Temp=@font-size-unit_Temp=px@font-size= px@font-weight=normal@font-style=normal@font-height_Temp=@font-height-unit_Temp=px@font-height= px@font-family=SimSun@color=@border-which=all@border-width_Temp=0@border-width-unit_Temp=px@border-width=0 px@border-color=#666666@border-style=solid</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>3</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmTitleLable</No>
+    <Name>标题:FoolFrmTitleLable</Name>
+    <Val>@background-color=none@selfbody-width_Temp=@selfbody-width-unit_Temp=px@selfbody-width= px@selfbody-hight_Temp=@selfbody-hight-unit_Temp=px@selfbody-hight= px@font-size_Temp=18@font-size-unit_Temp=px@font-size=18 px@font-weight=normal@font-style=italic@font-height_Temp=35@font-height-unit_Temp=px@font-height=35 px@font-family=SimSun@color=#663366@border-which=bottom@border-width_Temp=5@border-width-unit_Temp=px@border-width=5 px@border-color=#FFFF00@border-style=none</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>4</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmGroupBarTR</No>
+    <Name>分组字段:FoolFrmGroupBarTR</Name>
+    <Val>@background-color=#CCCCFF@selfbody-width_Temp=200@selfbody-width-unit_Temp=px@selfbody-width=200 px@selfbody-hight_Temp=@selfbody-hight-unit_Temp=px@selfbody-hight= px@font-size_Temp=20@font-size-unit_Temp=px@font-size=20 px@font-weight=normal@font-style=italic@font-height_Temp=@font-height-unit_Temp=px@font-height= px@font-family=SimSun@color=#FFFFFF@border-which=bottom@border-width_Temp=@border-width-unit_Temp=px@border-width= px@border-color=@border-style=none</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>5</Idx>
+  </dt>
+
+  <dt>
+    <No>FoolFrmGroupBarTD</No>
+    <Name>分组字段:FoolFrmGroupBarTD</Name>
+    <Val>@background-color=#CCCCFF@selfbody-width_Temp=200@selfbody-width-unit_Temp=px@selfbody-width=200 px@selfbody-hight_Temp=@selfbody-hight-unit_Temp=px@selfbody-hight= px@font-size_Temp=20@font-size-unit_Temp=px@font-size=20 px@font-weight=normal@font-style=italic@font-height_Temp=@font-height-unit_Temp=px@font-height= px@font-family=SimSun@color=#FFFFFF@border-which=bottom@border-width_Temp=@border-width-unit_Temp=px@border-width= px@border-color=@border-style=none</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>5</Idx>
+  </dt>
+  
+  <dt>
+    <No>FoolFrmFieldTR</No>
+    <Name>字段行:FoolFrmFieldTR</Name>
+    <Val>@background-color=@selfbody-width_Temp=@selfbody-width-unit_Temp=px@selfbody-width= px@selfbody-hight_Temp=@selfbody-hight-unit_Temp=px@selfbody-hight= px@font-size_Temp=@font-size-unit_Temp=px@font-size= px@font-weight=normal@font-style=normal@font-height_Temp=@font-height-unit_Temp=px@font-height= px@font-family=SimSun@font-color=red@border-which=bottom@border-width_Temp=@border-width-unit_Temp=px@border-width= px@border-color=@border-style=none</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>6</Idx>
+  </dt>
+
+  <dt>
+    <No>FoolFrmFieldTD</No>
+    <Name>单元格TD:FoolFrmFieldTD</Name>
+    <Val>@background-color=@selfbody-width_Temp=@selfbody-width-unit_Temp=px@selfbody-width= px@selfbody-hight_Temp=@selfbody-hight-unit_Temp=px@selfbody-hight= px@font-size_Temp=@font-size-unit_Temp=px@font-size= px@font-weight=normal@font-style=normal@font-height_Temp=@font-height-unit_Temp=px@font-height= px@font-family=SimSun@font-color=red@border-which=bottom@border-width_Temp=@border-width-unit_Temp=px@border-width= px@border-color=@border-style=none</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>8</Idx>
+  </dt>
+  
+  <dt>
+    <No>FoolFrmFieldName</No>
+    <Name>字段名:FoolFrmFieldName</Name>
+    <Val>@background-color=#FFFFFF@selfbody-width_Temp=200@selfbody-width-unit_Temp=in@selfbody-width=200 in@selfbody-hight_Temp=23@selfbody-hight-unit_Temp=pt@selfbody-hight=23 pt@font-size_Temp=16@font-size-unit_Temp=px@font-size=16 px@font-weight=normal@font-style=italic@font-height_Temp=@font-height-unit_Temp=px@font-height= px@font-family=SimHei@color=#663366@border-which=all@border-width_Temp=1@border-width-unit_Temp=px@border-width=1 px@border-color=#FFFFFF@border-style=groove</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>7</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmFieldCtrl</No>
+    <Name>控件:FoolFrmFieldCtrl</Name>
+    <Val>@background-color=#FFFFFF@selfbody-width_Temp=200@selfbody-width-unit_Temp=em@selfbody-width=200 em@selfbody-hight_Temp=@selfbody-hight-unit_Temp=px@selfbody-hight= px@font-size_Temp=16@font-size-unit_Temp=px@font-size=16 px@font-weight=normal@font-style=italic@font-height_Temp=@font-height-unit_Temp=px@font-height= px@font-family=SimHei@color=#663366@border-which=bottom@border-width_Temp=0@border-width-unit_Temp=px@border-width=0 px@border-color=#FFFFFF@border-style=solid</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>8</Idx>
+  </dt>
+
+ 
+ 
+
+
+</NewDataSet>

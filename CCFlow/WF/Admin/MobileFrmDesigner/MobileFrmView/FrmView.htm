@@ -392,7 +392,7 @@
                 var oldBack = $.back;
                 $.back = function () {
 
-                 //   alert('ss');
+                    //   alert('ss');
                     return;
                     if (viewApi.canBack()) { //如果view可以后退，则执行view的后退
                         //viewApi.back();
@@ -508,7 +508,7 @@
     <div id="main" class="mui-page">
         <!--页面标题栏开始-->
         <div class="mui-navbar-inner mui-bar mui-bar-nav">
-            <a class="mui-icon mui-icon-left-nav mui-pull-left" href="javascript: window.history.back();"></a>
+            <a class="mui-icon mui-icon-left-nav mui-pull-left" href="javascript: alert('预览页不允许后退.');"></a>
             <!--<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
                 <span class="mui-icon mui-icon-left-nav"></span>
             </button>-->

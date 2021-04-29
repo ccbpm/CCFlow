@@ -354,7 +354,7 @@ Common.CustomPagePlug1 = function (operation) {
                             html += "<td>" + (parseInt(k) + 1 + parseInt(PageData.InitData.PageSize) * (parseInt(PageData.InitData.PageIndex) - 1)) + "</td>";
                         }
                         else if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "Operation") {//序号  序号的类型是SN colname列名称为空){
-                            html += ('<td><a style="text-decoration:underline;" href="#" onclick="updateReport(this)" class="btn btn-link btn_det">编辑</a>' + '<a href="#" style="text-decoration:underline;" onclick="delReport(this)" class="btn btn-link btn_det">删除</a></td>');
+                            html += ('<td style="white-space: nowrap"><a style="text-decoration:underline;" href="#" onclick="updateReport(this)" class="btn btn-link btn_det">编辑</a>' + '<a href="#" style="text-decoration:underline;" onclick="delReport(this)" class="btn btn-link btn_det">删除</a></td>');
                             html += "</tr>";
                         }
                             //自定义内容
@@ -782,12 +782,12 @@ Common.CustomPagePlug = function (operation) {
                             html += "<td " + style +">" + (parseInt(k) + 1 + parseInt(_this.InitData.PageSize) * (parseInt(_this.InitData.PageIndex) - 1)) + "</td>";
                         }
                         else if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "Operation") {//序号  序号的类型是SN colname列名称为空){
-                            html += ('<td ' + style+'><a style="text-decoration:underline;" href="#" onclick="updateReport(this)" class="btn btn-link btn_det">编辑</a>' + '<a href="#" style="text-decoration:underline;" onclick="delReport(this)" class="btn btn-link btn_det">删除</a></td>');
+                            html += ('<td style="white-space: nowrap"><a style="text-decoration:underline;" href="#" onclick="updateReport(this)" class="btn btn-link btn_det">编辑</a>' + '<a href="#" style="text-decoration:underline;" onclick="delReport(this)" class="btn btn-link btn_det">删除</a></td>');
                             html += "</tr>";
                         }
                         //自定义内容
                         else if ($(headers[i]).data().custom != undefined && $(headers[i]).data().customcontent != undefined) {
-
+                            style = "style='white-space: nowrap'";
                             var tmp = '';
                             var customCount = parseInt($(headers[i]).data().customcontent);
                             for (var j = 1; j <= customCount; j++) {
@@ -797,7 +797,7 @@ Common.CustomPagePlug = function (operation) {
                                 tmp += '<' + tmpC[0] + ' ' + tmpC[1] + '>' + tmpC[2] + '</' + tmpC[0] + '>';
                             }
                            // if (isMultihead == false)
-                                html += ('<td " + style+">' + tmp + '</td>');
+                                html += ('<td ' + style+'>' + tmp + '</td>');
                           //  else
                            //     operHtml += ('<td " + style+">' + tmp + '</td>');
                         }

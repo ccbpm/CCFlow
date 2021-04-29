@@ -1,0 +1,213 @@
+﻿body {
+}
+.FoolFrmBody {
+    width: 80%;
+    min-width:750px;
+}
+.foolfrmbody_formdesign {
+    width: 16%;
+    float: right;
+    background: #fff;
+    padding: 13px;
+    margin-top:20px;
+    border-radius:5px;
+    min-width:210px;
+}
+.FoolFrmBody input, textarea {
+    border: 1px solid #b9b9b9;
+    border-radius: 5px;
+    padding: 8px 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.FoolFrmBody input[type=checkbox],input[type=radio]{
+    width:auto;
+}
+table {
+    width:100%;
+    background: #fff;
+    padding:10px;
+}
+table td a{
+    text-decoration:none;
+    padding-right: 0;
+    color: #15398b;
+    width: 24px;
+    height: 24px;
+    padding:2px;
+    box-sizing: border-box;
+}
+.FoolFrmTable td, #contentTable td {
+    padding: 8px 10px;
+    border: 1px solid #eeeeee;
+}
+
+.FoolFrmTable tr {
+    border-bottom: 1px solid #dcdcdc;
+}
+.ttstyle{
+    margin-top:10px;
+}
+input,textarea{
+    outline: none;
+}
+textarea {
+    height: 120px;
+}
+
+td {
+    line-height:24px;
+}
+#styleeditor select {
+    height: 26px;
+}
+.ttstyle {
+    border: 1px solid rgba(0,0,0,.125);
+    height: 35px;
+    line-height: 35px;
+    background: #f1f1f1;
+    padding-left: 5px;
+    margin-bottom: 20px;
+}
+.borderwidthval {
+    width: 30%;
+    height: 20px;
+}
+.styletitle {
+    width: 100%;
+    height: 35px;
+    font-size:14px;
+}
+.tbody {
+    width: 100%;
+}
+#Btn_SaveItem {
+    width: 100%;
+    height: 40px;
+    margin-top: 20px;
+}
+input:focus {
+    background-color: #eeeeee;
+}
+textarea:focus {
+    background-color: #eeeeee;
+}
+#contentTable input[type=radio] {
+    width: auto;
+}
+#contentTable input[type=checkbox] {
+  margin-left:10px;
+}
+#contentTable input, textarea {
+    border: 1px solid #b9b9b9;
+    border-radius: 5px;
+    padding: 8px 8px;
+   /* width: 100%;*/
+    box-sizing: border-box;
+}
+.FoolFrmFieldTR select {
+    border: 1px solid #b9b9b9;
+    border-radius: 5px;
+    padding: 8px 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+ul{
+    margin:0;
+    padding:0;
+}
+ul li{
+    list-style:none;
+   
+}
+.torbalnav{
+    min-width:770px;
+}
+
+ul li a {
+    color: #000;
+    text-decoration: none;
+    padding: 19px;
+    font-size: 14px;
+}
+.childnav {
+    display:none;
+    position: absolute;
+    margin-left: 184px;
+    margin-top: 41px;
+}
+.childnav li{
+    background:#eeeeee;
+    border-bottom:1px solid #ccc;
+}
+.childnav li:hover {
+    background: #e2e2e2;
+}
+
+/*弹窗*/
+#pop-ups {
+    border-radius:10px;
+    border:1px solid #cccccc;
+    width:auto;
+    height:auto;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+   background:#fff;
+}
+#pop-ups .tips{
+    width:100%;
+    height:55px;
+    background:#99CCCC;
+    border-top-right-radius:10px;
+    border-top-left-radius:10px;
+}
+.close {
+    width:30px;
+    height:30px;
+    cursor:pointer;
+    float: right;
+   padding-top:26px;
+   padding-right:17px;
+    font-size: 0px;
+    display: block;
+}
+.close::before, .close::after {
+        content: '';
+        width: 30px;
+        height: 2px;
+        background: #FFF;
+        display: block;
+}
+
+.close::before {
+    transform: rotate(45deg);
+}
+.close::after {
+    transform: translateY(-2px) rotate(-45deg);
+}
+#pop-ups{
+    display:none;
+}
+.tipstitle {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding-left:20px;
+    height: 55px;
+    line-height: 55px;
+    color: #fff;
+}
+.tipscont {
+    width: 100%;
+    height:295px;
+}
+iframe {
+    border: none;
+    overflow-y:auto;
+}

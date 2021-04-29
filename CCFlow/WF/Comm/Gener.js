@@ -521,7 +521,7 @@ function GenerFullAllCtrlsVal(data) {
         // 处理参数字段.....................
         if (attr == "AtPara") {
 
-            debugger;
+            // debugger;
             //val=@Title=1@SelectType=0@SearchTip=2@RootTreeNo=0
             $.each(val.split("@"), function (i, o) {
                 if (o == "") {
@@ -1164,7 +1164,6 @@ var Entity = (function () {
             var self = this;
             //var params = getParams(self);
             var params = getParams1(this);
-
 
             var result;
 
@@ -2024,7 +2023,7 @@ var DBAccess = (function () {
         dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
     }
 
-    DBAccess.RunSQL = function (sql) {
+    DBAccess.RunSQL = function (sql, dbSrc) {
         if (dynamicHandler == "")
             return;
         var count = 0;
@@ -2038,7 +2037,7 @@ var DBAccess = (function () {
             crossDomain: IsIELower10 == true ? false : true,
             url: dynamicHandler + "?DoType=DBAccess_RunSQL&t=" + new Date().getTime(),
             dataType: 'html',
-            data: { "SQL": sql },
+            data: { "SQL": encodeURIComponent(sql), "DBSrc": dbSrc },
             success: function (data) {
                 count = parseInt(data);
                 if (isNaN(count)) {
@@ -2054,7 +2053,7 @@ var DBAccess = (function () {
 
     };
     //执行数据源返回json.
-    DBAccess.RunDBSrc = function (dbSrc, dbType) {
+    DBAccess.RunDBSrc = function (dbSrc, dbType, dbSource) {
 
         if (dbSrc == "" || dbSrc == null || dbSrc == undefined) {
             alert("数据源为空..");
@@ -2083,7 +2082,7 @@ var DBAccess = (function () {
 
         //执行的SQL
         if (dbType == 0) {
-            return DBAccess.RunSQLReturnTable(dbSrc);
+            return DBAccess.RunSQLReturnTable(dbSrc, dbSource);
         }
 
         //执行URL
@@ -2121,9 +2120,10 @@ var DBAccess = (function () {
     };
 
     //执行方法名返回str.
-    DBAccess.RunSQLReturnVal = function (sql) {
+    DBAccess.RunSQLReturnVal = function (sql, dbSrc) {
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
         handler.AddPara("SQL", sql);
+        handler.AddPara("DBSrc", dbSrc);
         var dt = handler.DoMethodReturnString("RunSQL_Init");
         if (dt.length == 0)
             return null;
@@ -2136,7 +2136,7 @@ var DBAccess = (function () {
         return firItem[firAttr];
     };
 
-    DBAccess.RunSQLReturnTable = function (sql) {
+    DBAccess.RunSQLReturnTable = function (sql, dbSrc) {
         if (dynamicHandler == "")
             return;
 
@@ -2157,7 +2157,7 @@ var DBAccess = (function () {
             crossDomain: IsIELower10 == true ? false : true,
             url: dynamicHandler + "?DoType=DBAccess_RunSQLReturnTable" + "&t=" + new Date().getTime(),
             dataType: 'html',
-            data: { "SQL": sql },
+            data: { "SQL": encodeURIComponent(sql), "DBSrc": dbSrc },
             success: function (data) {
                 if (data.indexOf("err@") != -1) {
                     alert(data);
@@ -2711,7 +2711,7 @@ function FormatDate(now, mask) {
 }
 
 //表达式的替换.
-function DealExp(expStr, webUser) {
+function DealExp(expStr, webUser, isDtlField) {
 
     if (expStr.indexOf('@') == -1)
         return expStr;
@@ -2731,6 +2731,8 @@ function DealExp(expStr, webUser) {
         return expStr;
 
     var objs = document.all;
+    if (isDtlField != undefined && isDtlField == true)
+        objs = window.parent.document.all;
     var length1;
     for (var i = 0; i < objs.length; i++) {
 
@@ -2751,7 +2753,7 @@ function DealExp(expStr, webUser) {
         if (NodeID == null)
             continue;
         var NodeType = objs[i].getAttribute("type");
-        var NodeValue = "";
+        var NodeValue = objs[i].value;
         if (obj != "input" && (NodeType == "text" || NodeType == "radio" || NodeType == "checkbox")) {
             NodeValue = objs[i].value;
             if (NodeType == "checkbox") {
@@ -2955,4 +2957,52 @@ $(function () {
  */
 function ChildrenPostMessage(info, action) {
     parent.postMessage({ action: action, info: info }, "*");
+}
+
+/**
+ * 按照MapAttrs的规范去，处理jsonDT的大小写.
+ * @param {数据集合} jsonDT
+ * @param {属性集合} mapAttrs
+ */
+function DealDataTableColName(jsonDT, mapAttrs) {
+
+    var data = {};
+    //遍历数据源的列.
+    for (colName in jsonDT) {
+
+        var val = jsonDT[colName];
+
+        // alert("colName:[" + colName + "] val:[" + val + "]");
+        //找到。
+        var isHave = false;
+        for (var i = 0; i < mapAttrs.length; i++) {
+
+            var mapAttr = mapAttrs[i];
+
+            if (mapAttr.KeyOfEn.toUpperCase() == colName.toUpperCase()) {
+
+                if (val == null || val == "" || val == " ") {
+
+                    //如果是数值类型的就让其为 0. 不然会填充错误，保存错误。
+                    if (mapAttr.MyDataType == 2 //int 
+                        || mapAttr.MyDataType == 3 //AppFloat
+                        || mapAttr.MyDataType == 4 // boolen
+                        || mapAttr.MyDataType == 5) { //AppDouble
+                        val = 0;
+                    }
+
+                    if (mapAttr.MyDataType == 8) //AppMoney
+                        val = "0.00";
+                }
+                data[mapAttr.KeyOfEn] = val; //jsonDT[colName];
+                isHave = true;
+                break;
+            }
+        }
+
+        if (isHave == false) {
+            alert("数据源字段名[" + colName + "]没有匹配到表单字段.");
+        }
+    }
+    return data;
 }

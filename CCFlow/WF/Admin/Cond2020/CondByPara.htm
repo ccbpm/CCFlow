@@ -11,18 +11,14 @@
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script src="../Admin.js" type="text/javascript"></script>
 
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
 
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <base target="_self" />
-    <style>
-        #Btn_Back {
-            background-image: url(../../Img/Btn/Back.png) !important;
-        }
-
-        #Btn_Save {
-            background-image: url(../../Img/Btn/Save.png) !important;
-        }
-    </style>
+ 
     <script type="text/javascript">
 
         function Esc() {
@@ -104,7 +100,7 @@
                 return;
             }
 
-          //  alert("保存成功");
+            //  alert("保存成功");
             Back();
 
 
@@ -156,58 +152,66 @@
         /**/</script>
 </head>
 <body onkeypress="Esc();">
-    <form id="cc">
-        <div style="right:30px; position:absolute; z-index:100; ">
-                <!--<input type="button" value="加载模版" onclick="LoadTemplate()" />-->
-                <input id="Btn_Save" type="button" value="保存" onclick="Save()" />
-                <!--<input type="button" value="删除" onclick="Delete()" />-->
-                <input type="button" onclick="Back()" value="返回" id="Btn_Back" />
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <span class="pull-right">
+                <button id="Btn_Save" name="Btn_Save" onclick="Save();">保存</button>
+                <button id="Btn_Back" name="Btn_Back" onclick="Back();">返回</button>
+
+            </span>
+            <strong>方向条件-开发者参数</strong>
         </div>
-        <table style="position:relative;top:10px; margin: 8px; width:100%">
-            <caption>
-                <img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' /> 方向条件-开发者参数
-            </caption>
-            <tr>
-                <td style="width: 20%;">
-                    请输入参数
-                </td>
-                <td>
-                    <textarea rows="1" cols="150" id="TB_Docs" name="TB_Docs" style="width: 95%;"> </textarea>
-                </td>
-            </tr>
-            <tr>
-                <td style="width: 20%;">
-                    备注(不为空):
-                    <br />
-                </td>
-                <td>
-                    <input type="text" value="" id="TB_Note" name="TB_Note" style="width: 95%;" />
-                </td>
-            </tr>
-        </table>
+        <form id="cc">
+            <!--div style="right:30px; position:absolute; z-index:100; ">
+        <<input type="button" value="加载模版" onclick="LoadTemplate()" />>
+            <input id="Btn_Save" type="button" value="保存" onclick="Save()" />
+            <<input type="button" value="删除" onclick="Delete()" />>
+        <input type="button" onclick="Back()" value="返回" id="Btn_Back" />
+    </!--div-->
+            <table class="table">
 
-        <div style="text-align: left">
-            <h4>
-                &nbsp; &nbsp; &nbsp; &nbsp;帮助
-            </h4>
+                <tr>
+                    <td style="width: 20%;">
+                        请输入参数
+                    </td>
+                    <td>
+                        <textarea rows="1" cols="150" id="TB_Docs" name="TB_Docs" style="width: 95%;"> </textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 20%;">
+                        备注(不为空):
+                        <br />
+                    </td>
+                    <td>
+                        <input type="text" value="" id="TB_Note" name="TB_Note" style="width: 95%;" />
+                    </td>
+                </tr>
+            </table>
 
-            <ul>
-                <li>表达式格式：参数+空格+操作符+空格+值，仅支持一个表达式。格式如下：</li>
-                <li>Emp = zhangsan</li>
-                <li>JinE = 30</li>
-                <li>JinE >= 30</li>
-                <li>JinE > 30</li>
-                <li>Way = '1'</li>
-                <li>Way != '1'</li>
-                <li>Name LIKE %li%</li>
-                <li>如果要设置为恒等：1 = 1 设置为恒等，条件始终成立。</li>
-            </ul>
+            <div style="text-align: left">
+                <h4>
+                    &nbsp; &nbsp; &nbsp; &nbsp;帮助
+                </h4>
 
-        </div>
+                <ul>
+                    <li>表达式格式：参数+空格+操作符+空格+值，仅支持一个表达式。格式如下：</li>
+                    <li>Emp = zhangsan</li>
+                    <li>JinE = 30</li>
+                    <li>JinE >= 30</li>
+                    <li>JinE > 30</li>
+                    <li>Way = '1'</li>
+                    <li>Way != '1'</li>
+                    <li>Name LIKE %li%</li>
+                    <li>如果要设置为恒等：1 = 1 设置为恒等，条件始终成立。</li>
+                </ul>
 
-    </form>
-    <center>
-        <div id="Msg" />
-    </center>
+            </div>
+
+        </form>
+        <center>
+            <div id="Msg" />
+        </center>
+    </div>
 </body>
 </html>

@@ -105,6 +105,8 @@
             } else {
                 key = replaceAll(key, "'", "");
                 dbSrc = replaceAll(dbSrc, "@Key", key);
+                dbSrc = replaceAll(dbSrc, "@key", key);
+                dbSrc = replaceAll(dbSrc, "@KEY", key);
                 dbSrc = replaceAll(dbSrc, "~", "'");
                 //获得json.
                 json = DBAccess.RunDBSrc(dbSrc, dbType);
@@ -237,12 +239,15 @@
 
                 },
                 onNodeExpanded: function (event, data) {
-                    if (global.TreeUrl.indexOf("@Key") != -1) {
+                    var url = global.TreeUrl + "";
+                    if (url.toLowerCase().indexOf("@key") != -1) {
                         var json;
                         if (global.dbType == 0) {
                             json = GetDataTableByField("Tag2", data.id);
                         } else {
                             var url = global.TreeUrl.replace("@Key", data.id);
+                            url = url.replace("@key", data.id);
+                            url = url.replace("@KEY", data.id);
                             json = DBAccess.RunDBSrc(url, global.dbType);
                         }
                            
@@ -467,10 +472,11 @@
             var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
             frmEleDBs.Retrieve("FK_MapData", FK_MapData, "EleID", AttrOfOper, "RefPKVal", oid);
             $.each(frmEleDBs, function (i, o) {
-                global.selectedRows.push({
-                    "No": o.Tag1,
-                    "Name": o.Tag2
-                });
+                if(o.Tag5==null || o.Tag5=="")
+                    global.selectedRows.push({
+                        "No": o.Tag1,
+                        "Name": o.Tag2
+                    });
             });
             loadViewGrid(global.selectedRows);
         });

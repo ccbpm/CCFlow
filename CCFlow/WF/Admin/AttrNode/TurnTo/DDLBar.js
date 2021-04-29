@@ -20,7 +20,7 @@ function InitBar(optionKey) {
         }
     }
     html += "</select >";
-    html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
+    html += "<button  id='Btn_Save' type='button'class='cc-btn-tab btn-save' onclick='Save()' value='保存' >保存</button>";
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
 }

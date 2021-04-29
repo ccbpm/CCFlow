@@ -36,7 +36,7 @@
             //更新节点表单类型.
             var nodeNo = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeNo);
-            node.CondModel =DirCondModel.ByLineCond; // CondModel.Line;
+            node.CondModel = DirCondModel.ByLineCond; // CondModel.Line;
             node.CopyURL();  //从url里面copy数据.
             node.CopyForm(); //从from里面copy数据.
             if (node.Update() == 0)
@@ -51,9 +51,10 @@
     <div id="bar">
     </div>
 
-    <fieldset>
-        <legend>
-            <label for="RB_CondModel_0"> 由连接线条件控制</label>
+    <fieldset id="help">
+
+        <legend id="help">
+            由连接线条件控制
         </legend>
 
         <ul>
@@ -61,7 +62,7 @@
             <li>该模式需要为每一跟连接线设置方向条件.</li>
             <li>ccbpm在发送的时候会检查这些条件，如果条件成立就转向这个节点. </li>
             <li>该模式是让ccbpm自动为您计算要发送到的节点. </li>
-            <li> <img calss="HelpImg" src="CondModel0.png" onclick="WinOpen('CondModel0.png')" style="width:100%;" /> </li>
+            <li> <img class="HelpImg" src="CondModel0.png" /> </li>
             <li>请在右边要到达的节点设置方向条件. </li>
 
         </ul>

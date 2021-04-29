@@ -181,7 +181,6 @@ function GetWorkCheck_Node(checkData, keyOfEn, checkField, FWCVer) {
 
 }
 function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isShowCheck, FWCVer) {
-    debugger
     var _Html = "";
     //解析节点上传的附件
     var subaths = GetSubAths(track.NodeID, aths);
@@ -220,7 +219,6 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
         if (frmWorkCheck.FWCAth == 1) {
             _Html += "<div style='float:right' id='uploaddiv' data-info='" + frmWorkCheck.FWCShowModel + "' onmouseover='UploadFileChange(this)'></div>";
         }
-        debugger
         if ("undefined" == typeof IsShowWorkCheckUsefulExpres) {
             IsShowWorkCheckUsefulExpres = true;
         }
@@ -535,6 +533,9 @@ function GetUserSiganture(userNo, userName) {
     var func = " oncontextmenu='return false;' ondragstart='return false;'  onselectstart='return false;' onselect='document.selection.empty();'";
     //先判断，是否存在签名图片
     var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+    if (webUser && webUser.CCBPMRunModel == 2)
+        handler = new HttpHandler("BP.Cloud.HttpHandler.App");
+
     handler.AddPara('No', userNo);
     data = handler.DoMethodReturnString("HasSealPic");
 
@@ -542,7 +543,12 @@ function GetUserSiganture(userNo, userName) {
     if (data.length > 0)
         return userName;
 
-    return "<img src='../../DataUser/Siganture/" + userNo + ".jpg?m=" + Math.random() + "' title='" + userName + "' " + func + " style='height:40px;' border=0 alt='" + userNo + "' />";
+
+    if (webUser && webUser.CCBPMRunModel == 2)
+        return "<img src='../../DataUser/Siganture/"+webUser.OrgNo+"/" + userNo + ".jpg?m=" + Math.random() + "' title='" + userName + "' " + func + " style='height:40px;' border=0 alt='" + userNo + "' />";
+    else
+        return "<img src='../../DataUser/Siganture/" + userNo + ".jpg?m=" + Math.random() + "' title='" + userName + "' " + func + " style='height:40px;' border=0 alt='" + userNo + "' />";
+
 }
 
 

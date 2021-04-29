@@ -35,6 +35,11 @@
             window.location.href = url;
         }
     </script>
+    <style type="text/css">
+        .cs-content-box legend {
+            position: static;
+        }
+    </style>
 </head>
 <body>
 
@@ -48,21 +53,21 @@
     </div>
 
     <fieldset>
-        <legend> <label><input type="radio" id="ss" name="ss" value="0" checked="checked" /> 驰骋BPM独立表单 </label>   </legend>
+        <legend> <label><input type="radio"  name="ss" value="0" checked="checked" /> 驰骋BPM独立表单 </label>   </legend>
         <ul>
             <li> 仅为流程绑定表单所用,没有其他的增删改查的填写功能. </li>
             <li> 以下两种类型的表单也可以绑定到节点上. </li>
         </ul>
     </fieldset>
     <fieldset>
-        <legend> <label><input type="radio" id="ss" name="ss" value="2" /> 实体表单 </label>   </legend>
+        <legend> <label><input type="radio"  name="ss" value="2" /> 实体表单 </label>   </legend>
         <ul>
             <li> 具有独立的增删改查的功能 </li>
             <li> 具有编号，名称固定的属性，比如：学生、固定资产. </li>
         </ul>
     </fieldset>
     <fieldset>
-        <legend> <label><input type="radio" id="ss" name="ss" value="1" /> 单据 </label>   </legend>
+        <legend> <label><input type="radio" name="ss" value="1" /> 单据 </label>   </legend>
         <ul>
             <li> 具有独立的增删改查的功能 </li>
             <li> 具有流水号，单据号的性质的字段，比如：学生缴费记录、固定资产维护记录. </li>

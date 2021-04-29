@@ -13,6 +13,9 @@
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
@@ -55,17 +58,17 @@
             html += "<th>标题</th>";
             var files = "";
             files = node.GetPara("BatchFields");
-            
+
             var num = 2;
             for (var i = 0; i < mapAttrs.length; i++) {
-                
+
                 var en = mapAttrs[i];
-                
+
                 if (files == undefined)
                     continue;
                 if (files.indexOf(en.KeyOfEn) == -1)
                     continue;
-                
+
                 html += "<th>" + en.Name + "</th>";
                 num++;
             }
@@ -88,7 +91,7 @@
         }
         function Save() {
 
-            $("#Btn_Save").val('正在保存请稍候...');
+            $("#Btn_Save").html('正在保存请稍候...');
 
             node.BatchRole = BatchRole.WorkCheckModel;
 

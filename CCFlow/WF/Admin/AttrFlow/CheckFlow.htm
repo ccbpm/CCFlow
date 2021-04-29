@@ -4,18 +4,30 @@
 <head runat="server">
     <title>流程检查</title>
     <meta charset="UTF-8" />
+
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="cc-checkflow">
+        <form id="form1">
+            <table style="width:100%;">
+            </table>
+            <h2>流程检查信息</h2>
+            <div id="Msg" class="cc-checkflow-msg" />
+        </form>
+    </div>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-    <script type="text/javascript" language="javascript" >
+    <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
 
             $("#Msg").html("<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>正在执行流程检查,大约持续1-3分钟时间,请稍后......</blue><br><br><br><br></center>");
-           
+
             var en = new Entity("BP.WF.Flow", GetQueryString("FK_Flow"));
             var data = en.DoMethodReturnString("DoCheck");
 
@@ -26,11 +38,11 @@
 
             var tips = data.split("@");
             //第一个元素为空,删除掉
-            delete(tips[0]);
+            delete (tips[0]);
             html = "<ul>";
             for (index in tips) {
                 tip = tips[index];
-                html += "<li style='list-style-type:none;'>" + tip + "</li>";
+                html += "<li>" + tip + "</li>";
             }
             html += "<ul>";
 
@@ -49,29 +61,5 @@
             window.location.href = url;
         }
     </script>
-
-    <style type="text/css">
-        
-  body
-  { 
-   background-image:url(../../Img/doctor.png);
-   background-repeat:no-repeat;
-   background-position:right;
-  }
-    
-    </style>
-
-</head>
-<body >
-
- <form id="form1" >
-
- <table style="width:100%;">
- </table>
- 流程检查信息
- <div id="Msg"/> 
-  
-
-    </form>
 </body>
 </html>

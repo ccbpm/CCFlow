@@ -14,9 +14,14 @@
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />  
+    <!-- 自己的系统风格统一end -->
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <style type="text/css">
+     
         select[disabled], input[type=text]:disabled {
             width: auto;
             padding-left: 10px;
@@ -28,9 +33,7 @@
             appearance: none;
             -moz-appearance: none;
             -webkit-appearance: none;
-            
         }
-
     </style>
     <script type="text/javascript">
 
@@ -90,7 +93,7 @@
         }
 
         function Save() {
-            $("#Btn_Save").val("正在保存...");
+            $("#Btn_Save").html("正在保存...");
 
             //更新节点表单类型.
             var nodeID = GetQueryString("FK_Node");
@@ -121,7 +124,7 @@
             //设置显示的主表单,在完成的流程轨迹里可以看到该表单.
             SetNDxxRpt_FrmType(node.FK_Flow, 0);
 
-            $("#Btn_Save").val("保存成功");
+            $("#Btn_Save").html("保存成功");
         }
 
 
@@ -187,7 +190,7 @@
                 </li>
             </ul>
 
-            <legend id="help">说明</legend>
+            <strong style="color:#ff0000">说明</strong>
             <ul>
                 <li>当前节点可以引用其他节点的表单.</li>
                 <li>一般流程都符合1，2规律. 这个1，2规律是:开始节点填写表单, 第2个节点是只读的，第2个以后都是审批节点。</li>

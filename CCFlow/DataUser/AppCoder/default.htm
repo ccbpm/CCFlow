@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="../../WF/Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        //页面启动函数.
+        $(function () {
+
+            $("#msg").html("正在执行ccbpm服务，请稍候.... 在执行的过程中ccbpm会把执行的过程与错误写入到 \datauser\Log\下面。");
+
+            /* 
+
+            打开该类文件BP.WF.HttpHandler.WF_WorkOpt，或者全局搜索ccbpmServices 定位到这个方法.
+            该方法解决了如下问题：
+                        
+            该类文件
+            */
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            var data = handler.DoMethodReturnString("ccbpmServices");
+
+            $("#msg").html(data);
+        });
+    </script>
+</head>
+<body>
+
+<h3>
+<div  id="msg"></div>
+</h3>
+
+
+</body>
+</html>

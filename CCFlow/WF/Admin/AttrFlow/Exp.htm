@@ -33,6 +33,8 @@
 
             $("#downli").html("驰骋工作流引擎已经为您生成了流程模版文件，<a href=\"javascript:Down();\" >请点击这里下载到本机</a>。");
 
+            $("#downliBPMN").html("点击下载: <a href=\"javascript:DownBPMN();\" >请点击这里下载到本机</a>。");
+
 
             //创建处理类.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
@@ -42,6 +44,12 @@
             $("#Msg").html(data);
 
         });
+
+        function DownBPMN()
+        {
+            alert("我们在2017年，取消了支持.");
+            return;
+        }
 
         function Down() {
 
@@ -76,12 +84,21 @@
 
 
     <fieldset>
-        <legend>下载到本机   </legend>
+        <legend>下载到本机ccbpm格式</legend>
         <ul>
             <li id="downli"></li>
             <li>该xml格式的流程模版文件可以通过，软盘交换到其它ccbpm系统中去。</li>
         </ul>
+
+        <legend>下载到本机bpmn2.0格式</legend>
+        <ul>
+            <li id="downliBPMN"></li>
+            <li>改格式的文件导出后，可以生成bpmn2.0，但是一些ccflow自己的特征就不能被保留住了。</li>
+            <li>改格式:丢失了ccbpm的内置表单元素。</li>
+        </ul>
+
     </fieldset>
+
     <fieldset>
         <legend>
             <img src="../CCBPMDesigner/Img/FlowPublic.png" />共享到共有云服务器(暂停开放)
@@ -90,7 +107,6 @@
             请先注册ccbpm私有云账号
             <!--<a href='javascript: window.parent.closeTab("用户注册");window.parent.addTab("RegUser", "用户注册", "../../../WF/Admin/Clound/RegUser.aspx","");'>注册</a>-->
             <div />
-
             <ul>
                 <li>感谢您共享该文件.</li>
                 <li>导出到公有云的流程模版需要经过审核才能发布。 </li>

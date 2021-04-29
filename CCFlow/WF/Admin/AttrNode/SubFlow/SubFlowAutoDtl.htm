@@ -15,22 +15,26 @@
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <base target="_self" />
     <script type="text/javascript">
-
+        var keyWord = "";
+        var nodeID = GetQueryString("FK_Node");
+        var orgNo = GetQueryString("OrgNo");
         //页面启动函数.
         $(function () {
             $("#Msg").html("<img src=../../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+            GetData();
 
-            //求出来已经设置的延续子流程.
-            var nodeID = GetQueryString("FK_Node");
-            var orgNo = GetQueryString("OrgNo");
+        });
 
-            //查询出来数据.
-            //    var sql = "SELECT A.No AS SortNo, A.Name as SORTNAME, b.No AS NO, b.Name AS FLOWNAME ";
-            //    sql += " FROM WF_FlowSort a, WF_Flow b WHERE (A.OrgNo='" + orgNo + "' OR A.ParentNo='" + orgNo + "') AND A.No=B.FK_FlowSort ";
-            //    sql += " ORDER BY A.Idx, b.Idx ";
+        function SearchIt() {
+            keyWord = window.prompt('请输入关键字', keyWord);
+            if (keyWord == null || keyWord == undefined)
+                keyWord = "";
+            GetData();
+        }
 
+        function GetData() {
             var dt = new Entities("BP.WF.Flows");
-            dt.RetrieveAll("FlowSort");
+            dt.RetrieveCond("Name", "like", '%' + keyWord + '%', "No");
 
             var Autos = new Entities("BP.WF.Template.SubFlowAutos");
             Autos.Retrieve("FK_Node", nodeID, "SubFlowType", 1);
@@ -41,7 +45,6 @@
 
                 var en = dt[i];
 
-                //console.log(en);
 
                 html += "<tr>";
 
@@ -74,11 +77,8 @@
 
                 html += "</tr>";
             }
-
-            $("#Table1 tr:last").after(html);
-
-        });
-
+            $("#SubFlows").html(html);
+        }
 
         function CheckIt(flowNo, name) {
 
@@ -116,21 +116,26 @@
 <body>
     <table id="Table1" style="width: 100%">
         <caption>
-            请选择一个子流程</caption>
-        <tr>
-            <th>
-                流程类别
-            </th>
-            <th>
-                流程编号
-            </th>
-            <th>
-                名称
-            </th>
-            <th>
-                操作
-            </th>
-        </tr>
+            请选择一个子流程
+        </caption>
+        <thead>
+            <tr>
+                <th>
+                    流程类别
+                </th>
+                <th>
+                    流程编号
+                </th>
+                <th>
+                    名称<div style='float:right'><img src='../../../Img/Search.png' style='width:24px;' onclick='SearchIt();'></div>
+                </th>
+                <th>
+                    操作
+                </th>
+            </tr>
+        </thead>
+        <tbody id="SubFlows">
+        </tbody>
     </table>
 </body>
 </html>

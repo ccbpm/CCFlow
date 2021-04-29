@@ -6,6 +6,8 @@ var basePath = basePath();
 
 function basePath()
 {
+                 //jflow下常用目录
+                 var dir=['/WF','/DataUser','GPM','App','Portal','CCMobile'];
 	 //获取当前网址，如： http://localhost:80/jflow-web/index.jsp  
 	 var curPath=window.document.location.href;  
 	 //获取主机地址之后的目录，如： jflow-web/index.jsp  
@@ -15,9 +17,14 @@ function basePath()
 	 var localhostPaht=curPath.substring(0,pos);  
 	//获取带"/"的项目名，如：/jflow-web
 	var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);  
-	
-	return localhostPaht+projectName;
-	
+
+	for (var i = 0;i <dir.length;i++) {
+                    if(projectName==dir[i]){
+                    projectName="";
+                    break;
+                  }
+              }	
+             return localhostPaht+projectName;
 }
 
 /**

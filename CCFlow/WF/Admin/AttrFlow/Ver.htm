@@ -14,17 +14,11 @@
     <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
     <script src="../Admin.js"></script>
     <base target="_self" />
-    <style>
-        #Btn_New {
-            background-image: url(../../Img/Btn/New.png) !important;
-        }
 
-        #Btn_Help {
-            background-image: url(../../Img/Btn/Help.png) !important;
-        }
-    </style>
     <script type="text/javascript">
         //页面启动函数.
         $(function () {
@@ -43,7 +37,7 @@
 
             var html = "";
             html += "<table class='table table-bordered  table-hover table-condensed' style='width:100%;'>";
-            html += "<caption><img style='vertical-align:middle' src='../../Img/Event.png' />版本管理</caption>";
+          
             html += "<tr>";
             html += "<th>版本号</th>";
             html += "<th>流程编号</th>";
@@ -99,8 +93,9 @@
         function changeOrOpenTab(flowName, flowNo) {
             //"&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1", node.iconCls
             var webUser = new WebUser();
-            var url = "../CCBPMDesigner/Designer.htm?FK_Flow=" + flowNo
-                + "&UserNo=" + webUser.No + "&SID=" + webUser.SID + "&Flow_V=1&OrgNo=" +.webUser.OrgNo;
+            var url = "../CCBPMDesigner/Designer.htm?FK_Flow=" + flowNo;
+
+            url += "&UserNo=" + webUser.No + "&SID=" + webUser.SID + "&Flow_V=1&OrgNo=" + webUser.OrgNo;
 
             window.parent.parent.addTab(flowNo, flowNo + "." + flowName, url,
                 "icon-flow1");
@@ -176,15 +171,18 @@
     </style>
 </head>
 <body>
+    <div class="container-full">
 
-    <div id="docs"></div>
-    <div style="right:30px; position:absolute; z-index:100; top:0px">
-        <input id="Btn_New" type="button" value="新建版本" onclick="NewVer();" />
-        <input id="Btn_Help" type="button" value="帮助" onclick="More();" />
+        <div id="titleH4" class="attrnode-bar-header">
+            <span class="pull-right">
+                <button id="Btn_New" class="cc-btn-tab btn-new" onclick="NewVer();">新建版本</button>
+                <button id="Btn_Help" class="cc-btn-tab btn-hlep" onclick="More();">帮助?</button>
+            </span>
+            <strong>版本管理 </strong>
+        </div>
+        <div id="docs"></div>
+
+        <div style="position:relative;" id="Msg"></div>
     </div>
-
-
-    <div style="position:relative;" id="Msg"></div>
-
 </body>
 </html>

@@ -8,6 +8,9 @@
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
@@ -72,7 +75,7 @@
 
         function Btn_Save_Click() {
 
-            $("#Btn_Save").val('正在保存请稍候...');
+            $("#Btn_Save").html('正在保存请稍候...');
 
             var checkBoxIDs = "";
             var cb = $("input[name='CB_Node']:checked").each(function (j) {

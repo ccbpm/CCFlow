@@ -234,21 +234,24 @@
             var mapAttrOfAll = data["Sys_MapAttr"];
 
             //系统字段字符串
-            var sysFields = "," + data["Sys_Fields"][0].Field;
+            //var sysFields = "," + data["Sys_Fields"][0].Field;
 
             //表单字段
             var mapAttrOfFrm = $.grep(mapAttrOfAll, function (item) {
-                if (item.UIContralType != 0 && item.UIContralType != 1 && item.UIContralType != 2 && item.UIContralType != 3)
-                    return true;
-                if (item.KeyOfEn!="FK_NY" && sysFields.indexOf("," + item.KeyOfEn + ",") != -1)
+                if (item.UIVisible == 0)
+                    return false;
+                //if (item.UIContralType != 0 && item.UIContralType != 1 && item.UIContralType != 2 && item.UIContralType != 3)
+                //    return true;
+                if (item.KeyOfEn!="FK_NY")
                     return true;
 
                 return false;
 
-            }, true);
+            });
 
             //用户选择显示的字段
             var selectFields = ur.GetPara("SelectFields");
+            selectFields = selectFields == null || selectFields == undefined ? "" : selectFields;
 
             //生成表格的Cols数组
             columns.push({

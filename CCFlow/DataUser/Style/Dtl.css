@@ -3,36 +3,38 @@
 /*  Table 风格  */
 table
 {
+    font-family: verdana,arial,sans-serif;
     font-size: 14px;
     color: #333333;
-    width: 100%;
-    border-collapse:collapse;
-    box-sizing:border-box;
+    border-width: 1px;
+    border-color: #D0D0D0;
+    border-collapse: collapse;
 }
 table th
 {
-    border: 1px solid #ccc;
-    padding: 6px;
+    border: 1px solid #D0D0D0;
+    padding: 1px 4.9px;
     background-color: #F9F9F9;
-    font-weight: bold;
-    text-align:center;
+    font-weight: normal;
+    font-style: normal;
+}
+.thStyle
+{
+   padding: 1px 3.9px;  
 }
 table td
 {
-    border: 1px solid #ccc;
-    padding: 6px;
+    border: 1px solid #D0D0D0;
+    padding: 1px;
     background-color: #ffffff;
-    text-align:center;
 }
 
 input[type=text], input[type=password], select
 {
-    border-radius: 4px;
+    border-radius: 5px;
     border: thin solid #CCCCCC;
-    height:32px;
-    padding-left:10px;
-    padding-right:10px;
-    box-sizing:border-box;
+    margin: 1px 1px;
+    height:23px;
 }
 select {
     apperance: none;
@@ -52,12 +54,12 @@ select {
 td input[type="textbox"]
 {
     margin: 0px;
-    border: 1px solid #ccc;
+    border: 1px solid #D6DDE6;
     padding: 0px;
 }
 
 input[disabled],input:disabled{
-border:1px solid #ddd;
+border:1px solid #DDD;
 background-color:#F9F9F9;
 color:#030303;
 } 

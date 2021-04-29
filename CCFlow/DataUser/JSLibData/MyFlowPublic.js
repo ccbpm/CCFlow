@@ -1,75 +1,177 @@
-ï»¿/*
-1. è¯¥JSæ–‡ä»¶è¢«åµŒå…¥åˆ°äº†MyFlowGener.htm çš„å·¥ä½œå¤„ç†å™¨ä¸­. 
-2. å¼€å‘è€…å¯ä»¥é‡å†™è¯¥æ–‡ä»¶å¤„ç†é€šç”¨çš„åº”ç”¨,æ¯”å¦‚é€šç”¨çš„å‡½æ•°.
-
+/*
+1. ¸ÃJSÎÄ¼þ±»Ç¶Èëµ½ÁËMyFlowGener.htm µÄ¹¤×÷´¦ÀíÆ÷ÖÐ. 
+2. ¿ª·¢Õß¿ÉÒÔÖØÐ´¸ÃÎÄ¼þ´¦ÀíÍ¨ÓÃµÄÓ¦ÓÃ,±ÈÈçÍ¨ÓÃµÄº¯Êý.
 */
- 
 
-//è½¬åŒ–æ‹¼éŸ³çš„æ–¹æ³•
-function StrToPinYin(str) {
+function GenerNextStepEmp() {
+    var qingjiaren = $("TB_QingJiaRen").val();
 
- 
-	var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
-	handler.AddPara("name", str);
-	handler.AddPara("flag", "false");
-	data = handler.DoMethodReturnString("ParseStringToPinyin");
-	return data;
+    var url = "xxx.aspx?QingJiaRen=" + qingjiaren;
+
+    $("TB_DiYiJiShenPiRen").val("zhangsna");
+
+    return "";
 }
 
-       
+//Ò³ÃæÆô¶¯º¯Êý.
+$(document).ready(function () {
+    //±íµ¥¼ÓÔØÉ¸Ñ¡·¢ËÍÏÂÀ­¿ò£¨´Ë·½·¨ÔÚ±íµ¥¼ÓÔØÇ°Ö´ÐÐµÄ£¬È¡²»µ½¶ÔÓ¦µÄ±íµ¥ÔªËØ£¬ÎÞ·¨Íê³ÉÉ¸Ñ¡£©
+    LoaclOperation();
+
+});
 
 /*
+ * ´Ëº¯ÊýÎª·¢ËÍÇ°×öJSÐ§Ñé¼ì²édemoËùÓÃ.
+ * 1. º¯ÊýÀïÃæ¿ÉÒÔÊ¹ÓÃjqueryÓï·¨.
+ * 2. ÅäÖÃµ½·¢ËÍJS°´Å¥Àï if (CheckBlank()==false) return true; ¼´¿É±»µ÷ÓÃ.
+ * 3. ´Ë·½·¨Ò²¿ÉÒÔÐ´Èëµ½ xxxx_Self.jsÀïÃæ.
+ * 4. return trueÖ´ÐÐ·¢ËÍ¶¯×÷£¬return false ×èÖ¹Ö´ÐÐ.
+ **/
+function CheckBlank() {
+    if ($("#TB_Email").val() == null) {
+        alert('ÓÊ¼þ²»ÄÜÎª¿Õ.');
+        return false;
+    }
+    if ($("#TB_Tel").val() == null) {
+        alert('µç»°²»ÄÜÎª¿Õ.');
+        return false;
+    }
+    return true;
+}
 
-1. beforeSaveã€beforeSendã€ beforeReturnã€ beforeDelete 
-2 .MyFlowGenerã€MyFlowTreeçš„å›ºå®šæ–¹æ³•ï¼Œç¦æ­¢åˆ é™¤
-3.ä¸»è¦å†™ä¿å­˜å‰ã€å‘é€å‰ã€é€€å›žå‰ã€åˆ é™¤å‰äº‹ä»¶
-4.è¿”å›žå€¼ä¸º trueã€false
+function DZ() {
+
+    alert('sss');
+    var url = 'pop.htm';
+    window.open(url);
+}
+function LoaclOperation() {
+
+    if (GetQueryString("NodeID") != "202")
+        return;
+    var val = $("#DDL_SFBJBL option:selected").val();
+
+    if (val == 0) {
+
+        //Æô¶¯×ÓÁ÷³ÌµÄÑ¡ÏîÉèÖÃÎª²»¿É¼û
+        $("#DDL_ToNode option").eq(0).hide();
+        $("#DDL_ToNode option").eq(1).hide();
+        $("#DDL_ToNode option").eq(2).show();
+
+        //½«BarÉÏµÄ·¢ËÍ½ÚµãÉèÖÃÎª½á°ì½Úµã
+        $("#DDL_ToNode").val("203");
+
+    }
+    else {
+
+        //ÏÔÊ¾ÆôÓÃÆô¶¯×ÓÁ÷³ÌµÄÑ¡Ïî
+        $("#DDL_ToNode option").eq(0).show();
+        $("#DDL_ToNode option").eq(1).show();
+        $("#DDL_ToNode option").eq(2).hide();
+
+        //½«BarÉÏµÄ·¢ËÍ½ÚµãÉèÖÃÎª½á°ì½Úµã
+        $("#DDL_ToNode").val("302");
+
+    }
+}
+/*
+
+1. beforeSave¡¢beforeSend¡¢ beforeReturn¡¢ beforeDelete 
+2 .MyFlowGener¡¢MyFlowTreeµÄ¹Ì¶¨·½·¨£¬½ûÖ¹É¾³ý
+3.Ö÷ÒªÐ´±£´æÇ°¡¢·¢ËÍÇ°¡¢ÍË»ØÇ°¡¢É¾³ýÇ°ÊÂ¼þ
+4.·µ»ØÖµÎª true¡¢false
 
 */
 
-
-//ä¿å­˜å‰äº‹ä»¶
-function beforeSave(saveType) {
- 
-	return true;
-
+//±£´æÇ°ÊÂ¼þ
+function beforeSave() {
+    return true;
 }
 
-
-//å‘ç”Ÿå‰äº‹ä»¶
+//·¢ÉúÇ°ÊÂ¼þ
 function beforeSend() {
- 
-	return true;
+    return true;
 }
 
-//é€€å›žå‰äº‹ä»¶
+//ÍË»ØÇ°ÊÂ¼þ
 function beforeReturn() {
-	return true;
+    return true;
 }
 
-//åˆ é™¤å‰äº‹ä»¶
+//É¾³ýÇ°ÊÂ¼þ
 function beforeDelete() {
-	return true;
+    return true;
 }
 
 
-//æŠ„é€é˜…è¯»é¡µé¢å¢žåŠ å…³é—­å‰äº‹ä»¶
-function beforeCCClose() {
-	return true;
-}
-
-//æµç¨‹ç»“æŸå‰
-function beforeStopFow() {
-	return;
-}
-//æµç¨‹ç»“æŸåŽ
-function afterStopFow() {
-	return;
-}
-
-//å…³é—­å¼¹å‡ºçª—åˆ·æ–°é¡µé¢
+/**
+ * ·¢ËÍ×ßÖ®ºó£¬µ¯³öÀ´µÄÏûÏ¢.
+ * @param {html¸ñÊ½µÄÐÅÏ¢} msg
+ */
 function WindowCloseReloadPage(msg) {
+    return;
 
-	//ReloadGxjtList(msg);
+    if ($('#returnWorkModal:hidden').length == 0 && $('#returnWorkModal').length > 0) {
+        $('#returnWorkModal').modal('hide');
+    }
 
-} 
+    //Ôö¼ÓmsgµÄÄ£Ì¬´°¿Ú
+    //³õÊ¼»¯ÍË»Ø´°¿ÚµÄSRC.
+    var html = '<div class="modal fade" id="msgModal" data-backdrop="static">'
+        + '<div class="modal-dialog">'
+        + '<div class="modal-content" style="border-radius: 0px;">'
+        + '<div class="modal-header" style="background:#f2f2f2;">'
+        + '<button type="button" class="close" id="btnMsgModalOK1" aria-hidden="true" style="color: #0000007a;display: none;">&times;</button>'
+        + '<h4 class="modal-title" style="color:#000;">ÌáÊ¾ÐÅÏ¢</h4>'
+        + '</div>'
+        + '<div class="modal-body" style="text-align: left; word-wrap: break-word;">'
+        + '<div style="width:100%; border: 0px; height: 200px;overflow-y:auto" id="msgModalContent" name="iframePopModalForm"></div>'
+        + '<div style="text-align: right;">'
+        + ' <button type="button" id="btnMsgModalOK" class="btn" data-dismiss="modal">È·¶¨(30Ãë)</button >'
+        + '</div>'
+        + '</div>'
+        + '</div><!-- /.modal-content -->'
+        + '</div><!-- /.modal-dialog -->'
+        + '</div>';
+
+    $('body').append($(html));
+    if (msg == null || msg == undefined)
+        msg = "";
+    msg = msg.replace("@²é¿´<img src='/WF/Img/Btn/PrintWorkRpt.gif' >", '')
+
+    $("#msgModalContent").html(msg.replace(/@/g, '<br/>').replace(/null/g, ''));
+    var trackA = $('#msgModalContent a:contains("¹¤×÷¹ì¼£")');
+    var trackImg = $('#msgModalContent img[src*="PrintWorkRpt.gif"]');
+    trackA.remove();
+    trackImg.remove();
+
+    $('#btnMsgModalOK').bind('click', function () {
+        var id = window.parent.nthTabs.getActiveId();
+        var idlist = id.split("TLJ");
+        //console.log("==="+idlist);
+        if (idlist.length > 0) {
+            $('#' + idlist[1], parent.document).attr('src', $('#' + idlist[1], parent.document).attr('src'));
+        }
+        window.parent.nthTabs.delTab(id);
+    });
+    $('#btnMsgModalOK1').bind('click', function () {
+        //ÌáÊ¾ÏûÏ¢ÓÐ´íÎó£¬Ò³Ãæ²»Ìø×ª
+        var msg = $("#msgModalContent").html();
+        if (msg.indexOf("err@") == -1) {
+            window.close();
+        }
+        else {
+            setToobarEnable();
+            $("#msgModal").modal("hidden");
+        }
+
+        if (window.parent != null && window.parent != undefined)
+            window.parent.close();
+        opener.window.focus();
+    });
+
+    $("#msgModal").modal().show();
+    interval = setInterval("clock()", 1000);
+}
+
+

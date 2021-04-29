@@ -235,8 +235,8 @@
                 if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
                     isDropTR = true;
                     html += "<tr>";
-                    html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
-                    html += "<td id='Td_" + attr.KeyOfEn + "' ColSpan=3>";
+                    html += "<td  class='FoolFrmFieldCtrl' style='width:120px;'>" + lab + "</td>";
+                    html += "<td id='TD_" + attr.KeyOfEn + "' ColSpan=3>";
                     html += InitMapAttrOfCtrl(attr, enable, defval);
                     html += "</td>";
                     html += "</tr>";
@@ -247,7 +247,7 @@
                 if (attr.ColSpan == 4) {
                     isDropTR = true;
                     html += "<tr>";
-                    html += "<td id='Td_" + attr.KeyOfEn + "' ColSpan='4'>" + lab + "</br>";
+                    html += "<td id='TD_" + attr.KeyOfEn + "' ColSpan='4'>" + lab + "</br>";
                     html += InitMapAttrOfCtrl(attr, enable, defval);
                     html += "</td>";
                     html += "</tr>";
@@ -256,8 +256,8 @@
 
                 if (isDropTR == true) {
                     html += "<tr>";
-                    html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
-                    html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext'  >";
+                    html += "<td class='FoolFrmFieldCtrl' style='width:120px;'>" + lab + "</td>";
+                    html += "<td id='TD_" + attr.KeyOfEn + "' class='FContext'  >";
                     html += InitMapAttrOfCtrl(attr, enable, defval);
                     html += "</td>";
                     isDropTR = !isDropTR;
@@ -265,8 +265,8 @@
                 }
 
                 if (isDropTR == false) {
-                    html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
-                    html += "<td id='Td_" + attr.KeyOfEn + "' class='FContext'>";
+                    html += "<td class='FoolFrmFieldCtrl' style='width:120px;'>" + lab + "</td>";
+                    html += "<td id='TD_" + attr.KeyOfEn + "' class='FContext'>";
                     html += InitMapAttrOfCtrl(attr, enable, defval);
                     html += "</td>";
                     html += "</tr>";
@@ -275,7 +275,7 @@
                 }
             }
             if (isDropTR == false) {
-                html += "<td class='FDesc' ColSpan='2'></td>";
+                html += "<td class='FoolFrmFieldCtrl' ColSpan='2'></td>";
 
                 html += "</tr>";
             }

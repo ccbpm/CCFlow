@@ -390,16 +390,16 @@ function figure_Template_Dtl(frmDtl, ext) {
 
 
         if (pageData.IsReadonly == "1") {
-            src = dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1" + strs + "&m=" + Math.random();
+            src = dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1&FrmType=1" + strs + "&m=" + Math.random();
         } else {
-            src = dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=0" + strs + "&m=" + Math.random();
+            src = dtlUrl + ".htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=0&FrmType=1" + strs + "&m=" + Math.random();
         }
 
     } else if (frmDtl.ListShowModel == "1") {
         if (pageData.IsReadonly == "1") {
-            src = "./DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1" + strs + "&m=" + Math.random();
+            src = "./DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1&FrmType=1" + strs + "&m=" + Math.random();
         } else {
-            src = "./DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=0" + strs + "&m=" + Math.random();
+            src = "./DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=0&FrmType=1" + strs + "&m=" + Math.random();
         }
     }
 

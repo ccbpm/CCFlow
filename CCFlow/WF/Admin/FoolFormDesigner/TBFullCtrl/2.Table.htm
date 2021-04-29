@@ -50,8 +50,7 @@
             //设置按钮是否可以用?
             if (i == 0) {
                 $("#Btn_FullData").hide();
-            } else {
-                $("#Btn_FullData").show();
+                $("#Btn_Delete").hide();
             }
         });
         function Save() {
@@ -71,7 +70,6 @@
             mapExt.CopyURL();  //从url里面copy数据.
             mapExt.CopyForm(); //从from里面copy数据.
 
-
             mapExt.ExtType = "FullData";
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
             mapExt.FK_MapData = GetQueryString("FK_MapData");
@@ -81,8 +79,6 @@
             var val = mapExt.Save();
             window.location.href = window.location.href;
         }
-
-
     </script>
     <style type="text/css">
         .style1 {
@@ -95,7 +91,6 @@
     </div>
     <form id="cc">
         <table id="table" style="width: 100%;">
-           
             <tr>
                 <td>
                     数据源类型
@@ -110,7 +105,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    数据源  <a href="javascript:ShowHidden('sqlexp')">帮助: </a>
+                    数据源<a href="javascript:ShowHidden('sqlexp')">帮助: </a>
                 </td>
             </tr>
             <tr>
@@ -126,7 +121,6 @@
                                 WF_Emp WHERE No LIKE '@Key%'
                             </li>
                             <li>5.为防止URL编码规定like的第一个%写成[%],如果like '%@Key%' 写成'[%]@Key%'</li>
-
                         </ul>
                     </div>
                 </td>
@@ -157,6 +151,8 @@
             </tr>
         </table>
     </form>
+
+
     <fieldset>
         <legend>运行效果</legend>
         <a href="javascript:WinOpen('2.Simple-1.png');">  <img src="2.Simple-1.png" style="width:90%;" /> </a>

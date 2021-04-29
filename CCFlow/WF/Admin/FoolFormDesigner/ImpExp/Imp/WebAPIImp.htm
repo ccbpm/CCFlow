@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../../Scripts/easyUI145/jquery.min.js"></script>
+    <script src="../../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../../CCFlowEnum.js"></script>
+    <script type="text/javascript">
+        //页面启动函数.
+        var frmID = GetQueryString("FK_MapData");
+        var flowNo = GetQueryString("FK_Flow");
+        var nodeID = GetQueryString("FK_Node");
+
+        var btnFrmLib = null;
+        var selFrmNode = null;
+        var Btn_Flows = null;
+        $(function () {
+            
+            InitBar(Imp.WebAPIImp);
+
+            btnFrmLib = document.getElementById("btnFrmLib");
+            selFrmNode = document.getElementById("selFrmNode");
+            Btn_Flows = document.getElementById("Btn_Flows");
+           
+        });
+       
+        function doImpFromOutside() {
+            var api = $("#TB_WebAPI").val();
+            if (api == null || api == "") {
+                alert("请填写的请求的WebAPI接口的URL");
+                return;
+            }
+            
+            var winWidth = 1050;
+            var winHeight = 600;
+            var iTop = (window.screen.height - 30 - winHeight) / 2; //获得窗口的垂直位置;
+            var iLeft = (window.screen.width - 10 - winWidth) / 2; //获得窗口的水平位置;
+            var url = "./WebAPIImpTableField.htm?FK_MapData=" + frmID + "&reset=true" + "&API=" + encodeURIComponent(api);
+
+            window.open(url, "_blank", "height=" + winHeight + "px,width=" + winWidth + "px,top=" + iTop + ",left=" + iLeft + ",toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no");
+        }
+    </script>
+</head>
+<body>
+
+    <div id="bar"></div>
+
+    <fieldset style="height: 90%;">
+        <legend>调用外部接口导入字段生成表单</legend>
+        <ul>
+            <li><input type="text" id="TB_WebAPI" style="width:100%"/></li>
+            <li>操作提示：根据WebAPI接口获取的字段信息集合，把选择的字段信息导入该表单</li>
+            <li>在自由表单里，双列排序，在傻瓜表单里，按照顺序排序。</li>
+        </ul>
+        <label style="padding-left: 8px;">
+        </label>
+        <input type="button" value="进入导入数据字段向导" onclick="doImpFromOutside()" style="margin-left: 40px;" />
+    </fieldset>
+</body>
+</html>

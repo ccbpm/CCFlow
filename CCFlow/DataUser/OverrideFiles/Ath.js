@@ -14,37 +14,13 @@
 */
 function OnUploadClick() {
 
-
     return true;
 
+  //  alert('todo:陈荣元，该事件已经被激活.');
+    // window.onblur();
 
     return false; //就是关闭不弹出窗口.
 
-}
-//附件上传与查看, 可以重写。
-
-//在线预览，如果需要连接其他的文件预览查看器，就需要在这里重写该方法.
-function AthViewOverWrite_Del(fk_ath, pkVal, delPKVal) {
-
-   alert(fk_ath + pkVal + delPKVal + ":AthViewOverWrite执行成功.");
-
-}
-
-//文件上传成功后,要激活的事件,用户进行二次开发比如：把ftp文件转化pdf进行预览.
-//mypks=多个用逗号分开.
-function AfterAthUploadOver(frmID, pkVal, mypks) {
-
-    return;
-
-    //执行成功.
-    alert("AfterAthUploadOver执行成功:" + frmID + pkVal + mypks);
-    return;
-    //var url = "http://127.0.0.1:8012/addTask?url="+mypks;
-
-    var url = "http://127.0.0.1:8012/addTask?id=" + mypks;
-    $("#feeds").load(url, { limit: 25 }, function () {
-
-    });
-
+    //return true; //不要进行上传了。
 
 }

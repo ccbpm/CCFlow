@@ -15,29 +15,36 @@
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../../../Scripts/vue.js" type="text/javascript"></script>
-
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+    <!-- 自己的系统风格统一end -->
     <script type="text/javascript">
 
         $(function () {
+
             InitBar(DeliveryWay.ByDeptLeader);
 
         });
         function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            node.DeliveryWay = DeliveryWay.ByFEE;
+            node.DeliveryWay = DeliveryWay.ByDeptLeader;
             node.Update();
         }
     </script>
 </head>
 <body>
     <div id="App">
-        <div id="bar" > </div>
-        <fieldset >
-            <legend id="help" >帮助说明</legend>
+        <div id="bar"> </div>
+        <fieldset>
+            <legend id="help">帮助说明</legend>
             <ul>
-                <li> 上一个节点发送人所在部门的部门负责人，处理该工作。 </li>
-                <li> 部门负责人信息，存储到表Port_Dept 字段：Leader 中.  </li>
+                <li> 上一个节点发送人的直属领导，处理该工作。 </li>
+                <li> 部门负责人信息，存储到表 Port_Dept 字段：Leader 中.  </li>
+                <li> 注意:Leader 字段是登录人员的帐号.    </li>
+
+                <li> <font color="red">说明：</font>如果当前部门没有负责人，就向上一级部门去找负责人，如果在没有，就提示错误。  </li>
             </ul>
         </fieldset>
     </div>

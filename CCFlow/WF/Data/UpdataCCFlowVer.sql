@@ -1,11 +1,10 @@
-﻿
+﻿﻿
 /** -- ========================= 系统升级SQL (为了方便系统升级代码写入的问题,增加该SQL) 目的是为了方便JFlow CCFlow 的统一版本升级. **/
 
 -- 升级旧版本，删除连接线, 如果升级到这里有错误，就需要删除重复的连接线.;
 update WF_Direction set mypk=replace(mypk, '_0','') ;
 
-
-
+ 
 DELETE FROM sys_enum where enumkey='SearchUrlOpenType';
 
 DELETE FROM Sys_MapAttr WHERE KeyOfEn='MyNum';
@@ -106,6 +105,12 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.MapFrmFool','@No=�
 -- 字段属性 String ; 
 DELETE FROM Sys_EnCfg WHERE No='BP.Sys.FrmUI.MapAttrString';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Sys.FrmUI.MapAttrString','@MyPK=基础,基础属性，数据属性.@ColSpan=外观,傻瓜表单属性，外观.');
+
+-- 字段属性 Num ; 
+DELETE FROM Sys_EnCfg WHERE No='BP.Sys.FrmUI.MapAttrNum';
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Sys.FrmUI.MapAttrNum','@MyPK=基础,基础属性，数据属性.@ColSpan=外观,傻瓜表单属性，外观.');
+
+
 -- 枚举;
 DELETE FROM Sys_EnCfg WHERE No='BP.Sys.FrmUI.MapAttrEnum';
 DELETE FROM Sys_EnCfg WHERE No='BP.Sys.FrmUI.MapAttrEnum';
@@ -118,7 +123,8 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FlowExt','@No=基�
 
 --新版本的流程属性,节点属性;
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.NodeExt';
-INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.NodeExt','@NodeID=基本配置@SendLab=按钮权限,控制工作节点可操作按钮.@RunModel=运行模式,分合流,父子流程@AutoJumpRole0=跳转,自动跳转规则当遇到该节点时如何让其自动的执行下一步.');
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.NodeExt',
+'@NodeID=基本配置@SendLab=按钮权限,控制工作节点可操作按钮.@ReturnLab=退回规则,退回规则设置.@RunModel=运行模式,分合流,父子流程@AutoJumpRole0=跳转,自动跳转规则当遇到该节点时如何让其自动的执行下一步.');
   
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.MapDataExt';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.MapDataExt','@No=基本属性@Designer=设计者信息');

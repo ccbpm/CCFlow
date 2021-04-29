@@ -13,6 +13,9 @@
     <script src="../WF/Scripts/config.js" type="text/javascript"></script>
     <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
 
+    <!-- 引入GPM配置. -->
+    <script src="config.js"></script>
+
     <script src="../WF/Scripts/bootstrap/bootstrap-treeview/src/js/bootstrap-treeview.js" type="text/javascript"></script>
     <link href="../WF/Scripts/bootstrap/bootstrap-treeview/src/css/bootstrap-treeview.css" rel="stylesheet" type="text/css" />
     <script src="../WF/Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -97,43 +100,88 @@
         var deptNo = "";
         var webUser = new WebUser();
 
-        var setting = {
-            view: {
-                dblClickExpand: false, //双击节点时，是否自动展开父节点的标识
-                showLine: true, //是否显示节点之间的连线
-                fontCss: {}, //字体样式函数
-                selectedMulti: false //设置是否允许同时选中多个节点
-            },
-            check: {
-                chkboxType: { "Y": "ps", "N": "ps" },
-                chkboxType: { "Y": "", "N": "" },
-                chkStyle: "checkbox", //复选框类型
-                enable: false //每个节点上是否显示 CheckBox
-            },
-            edit: {
-                enable: true,
-                editNameSelectAll: true,
-                showRemoveBtn: false,
-                showRenameBtn: false,
-                removeTitle: "remove",
-                renameTitle: "rename"
-            },
-            data: {
-                simpleData: {
+        var tree = {
+            zTree: '',
+            pNode: '',
+            setting: {
+                isSimpleData: true,
+                treeNodeKey: "id",
+                treeNodeParentKey: "pid",
+                showLine: true,
+                root: {
+                    isRoot: true,
+                    nodes: []
+                },
+                view: {
+                    dblClickExpand: false, //双击节点时，是否自动展开父节点的标识
+                    showLine: true, //是否显示节点之间的连线
+                    fontCss: {}, //字体样式函数
+                    selectedMulti: false //设置是否允许同时选中多个节点
+                },
+                check: {
+                    chkboxType: { "Y": "ps", "N": "ps" },
+                    chkboxType: { "Y": "", "N": "" },
+                    chkStyle: "checkbox", //复选框类型
+                    enable: false //每个节点上是否显示 CheckBox
+                },
+                edit: {
                     enable: true,
-                    idKey: "id",
-                    pIdKey: "pid",
-                    rootPId: WebUser.FK_Dept
+                    editNameSelectAll: true,
+                    showRemoveBtn: false,
+                    showRenameBtn: false,
+                    removeTitle: "remove",
+                    renameTitle: "rename"
+                },
+                data: {
+                    simpleData: {
+                        enable: true,
+                        idKey: "id",
+                        pIdKey: "pid",
+                        rootPId: WebUser.FK_Dept
+                    }
+                },
+                callback: {
+                    onClick: function (event, treeId, treeNode) {
+                        deptNo = treeNode.id;
+                        BindEmps();
+                    },
+                    onRightClick: OnRightClick,
+                    onExpand: function (event, treeId, treeNode) {
+                        tree.pNode = treeNode;
+                        tree.loadNodeByPNode();
+                    }
                 }
             },
-            callback: {
+            loadRootNode: function () { //加载根节点,pid=0
+                var zNodes = [];
+                var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+                if (webUser.CCBPMRunModel == 2)
+                    handler.AddPara("ParentNo", webUser.OrgNo);
+                else
+                    handler.AddPara("ParentNo", 0);
+                var ens = handler.DoMethodReturnJSON("Organization_Init");
+                var zNodes = createJsonToTree(ens);
+                $.fn.zTree.init($("#regionZTree"), tree.setting, zNodes);
+                tree.zTree = $.fn.zTree.getZTreeObj("regionZTree");
+            },
 
-                onClick: function (event, treeId, treeNode) {
-                    deptNo = treeNode.id;
-                    BindEmps();
-                },
-                onRightClick: OnRightClick
-            } //这里是节点点击事件
+            /**
+             * 该方法是点击父节点的+号后执行的，意味着执行该方法的时候树已经生成了
+             * 所以才能用tree.zTree
+             */
+            loadNodeByPNode: function () {
+                var children = [];
+                var folder = false;
+                //获取pid = mid的数据，也就是子节点的id等于父节点的id，说明此父节点加载了子节点
+                if (!tree.zTree.getNodeByParam("pid", tree.pNode.id)) {
+                    var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+                    handler.AddPara("ParentNo", tree.pNode.id);
+                    var ens = handler.DoMethodReturnJSON("Organization_Init");
+                    var zNodes = createJsonToTree(ens);
+                    tree.zTree.addNodes(tree.pNode, zNodes, folder);
+                }
+            }
+
         };
 
         //右键菜单功能实现
@@ -211,7 +259,7 @@
         })(jQuery);
         //右键点击
         function OnRightClick(event, treeId, treeNode) {
-            zTreeObj.selectNode(treeNode);
+            tree.zTree.selectNode(treeNode);
             if (treeNode) {
                 //弹出菜单
                 $("#menu").popupSmallMenu({
@@ -239,7 +287,7 @@
 
         //上移部门
         function moveUpDept(treeNode, item) {
-            var dept = new Entity("BP.GPM.Dept", treeNode.id);
+            var dept = new Entity(deptEnName, treeNode.id);
             var data = dept.DoMethodReturnString("DoUp");
             //树节点直接更新
             var before = $("#" + treeNode.tId).prev();
@@ -251,7 +299,7 @@
 
         //下移部门
         function moveDownDept(treeNode, item) {
-            var dept = new Entity("BP.GPM.Dept", treeNode.id);
+            var dept = new Entity(deptEnName, treeNode.id);
             var data = dept.DoMethodReturnString("DoDown");
             //树节点直接更新
             var next = $("#" + treeNode.tId).next();
@@ -263,109 +311,68 @@
         //增加同级部门
         function NewSameLevel(treeNode) {
 
-            var alt = "请输入部门编号";
-            alt += "\t\n 1.如为空，则系统自动生成.";
-            alt += "\t\n 2.如输入已经存在的部门编码，系统就会抛出错误.";
-            alt += "\t\n 3.当前部门的编码为:" + treeNode.id + ", 父节点的ID为:" + treeNode.pid;
-
-            var deptNo = prompt(alt, "");
-            if (deptNo == null || deptNo == '') {
-                //需要系统自动生成编号,就直接走insert();
-
-            } else {
-
-                while (true) {
-                    if (deptNo == null || deptNo == '') {
-                        break;
-                    } else {
-                        var dept = new Entity("BP.GPM.Dept");
-                        dept.No = deptNo;
-                        if (dept.RetrieveFromDBSources() == 0)
-                            break;
-
-                        deptNo = prompt('该编号已经存在,请重新输入，(点击取消让系统自动生成编号)', deptNo);
-                        continue;
-                    }
-                    break;
-                }
+            if (treeNode.pid == null) {
+                alert('您不能增加同级,当前级别是最高级.');
+                return;
             }
 
-            if (deptNo == '')
-                deptNo = null;
+            var deptNo = null;
+            //如果部门编号的模式是自己编写的.
+            if (NewDeptNoModel == 0) {
+                deptNo = GenerNewDeptNo(treeNode.id, treeNode.pid);
+                if (deptNo == null || deptNo == undefined)
+                    return;
+            }
 
             var val = prompt("请输入部门名称", "");
             if (val == null || val == '') {
                 return false;
             }
 
-
-            var dept = new Entity("BP.GPM.Dept");
+            var dept = new Entity(deptEnName);
             dept.Name = val;
             dept.ParentNo = treeNode.pid;
             if (deptNo != null)
                 dept.No = deptNo;
             dept.Insert();
 
-
             //更新树节点
             var treeObj = $.fn.zTree.getZTreeObj("regionZTree");
             var parentNode = treeObj.getNodeByTId(treeNode.parentTId);
-            var newNode = { name: val };
+            var newNode = { name: val, id: dept.No };
             //把这个新节点添加到当前选中的节点下，作为它的子节点
             newNode = treeObj.addNodes(parentNode, newNode);
         }
 
         //增加下级部门
         function NewNextLevel(treeNode) {
+            var deptNo = null;
+            //如果部门编号的模式是自己编写的.
+            if (NewDeptNoModel == 0) {
 
-
-            var alt = "请输入部门编号";
-            alt += "\t\n 1.如为空，则系统自动生成.";
-            alt += "\t\n 2.如输入已经存在的部门编码，系统就会抛出错误.";
-            alt += "\t\n 3.当前部门的编码为:" + treeNode.id + ", 父节点的ID为:" + treeNode.pid;
-
-            var deptNo = prompt(alt, "");
-            if (deptNo == null || deptNo == '') {
-                //需要系统自动生成编号,就直接走insert();
-
-            } else {
-
-                while (true) {
-                    if (deptNo == null || deptNo == '') {
-                        break;
-                    } else {
-                        var dept = new Entity("BP.GPM.Dept");
-                        dept.No = deptNo;
-                        if (dept.RetrieveFromDBSources() == 0)
-                            break;
-
-                        deptNo = prompt('该编号已经存在,请重新输入，(点击取消让系统自动生成编号)', deptNo);
-                        continue;
-                    }
-                    break;
-                }
+                deptNo = GenerNewDeptNo(treeNode.id, treeNode.pid);
+                if (deptNo == null || deptNo == undefined)
+                    return;
             }
-
-            if (deptNo == '')
-                deptNo = null;
-
 
             var val = prompt("请输入部门名称", "");
             if (val == null || val == '') {
                 return false;
             }
 
-            var dept = new Entity("BP.GPM.Dept");
-
+            var dept = new Entity(deptEnName);
             if (deptNo != null)
                 dept.No = deptNo;
 
             dept.Name = val;
             dept.ParentNo = treeNode.id;
             dept.Insert();
+
             //更新树节点
             var treeObj = $.fn.zTree.getZTreeObj("regionZTree");
-            var newNode = { name: val };
+
+            var newNode = { name: val, id: dept.No };
+            //var newNode = { name: val };
             //把这个新节点添加到当前选中的节点下，作为它的子节点
             newNode = treeObj.addNodes(treeNode, newNode);
         }
@@ -378,7 +385,7 @@
                 return false;
             }
 
-            var dept = new Entity("BP.GPM.Dept", treeNode.id);
+            var dept = new Entity(deptEnName, treeNode.id);
             dept.Name = val;
             dept.Update();
             //更新树节点
@@ -388,12 +395,47 @@
         function Delete(treeNode) {
             if (confirm("你确定删除该部门吗？") == false)
                 return;
-            var dept = new Entity("BP.GPM.Dept", treeNode.id);
+            var dept = new Entity(deptEnName, treeNode.id);
             dept.Delete();
             //树节点删除
             var my = document.getElementById(treeNode.tId);
             if (my != null)
                 my.parentNode.removeChild(my);
+        }
+
+        function GenerNewDeptNo(no, parentNo) {
+
+            var alt = "请输入部门编号";
+            alt += "\t\n 1.如为空，则系统自动生成.";
+            alt += "\t\n 2.如输入已经存在的部门编码，系统就会抛出错误.";
+            alt += "\t\n 3.当前部门的编码为:" + no + ", 父节点的ID为:" + parentNo;
+
+            var deptNo = prompt(alt, "");
+            if (deptNo == null || deptNo == '') {
+                //需要系统自动生成编号,就直接走insert();
+
+            } else {
+
+                while (true) {
+                    if (deptNo == null || deptNo == '') {
+                        break;
+                    } else {
+                        var dept = new Entity(deptEnName);
+                        dept.No = deptNo;
+                        if (dept.RetrieveFromDBSources() == 0)
+                            break;
+
+                        deptNo = prompt('该编号已经存在,请重新输入，(点击取消让系统自动生成编号)', deptNo);
+                        continue;
+                    }
+                    break;
+                }
+            }
+
+            if (deptNo == '')
+                deptNo = null;
+
+            return deptNo;
         }
 
         //初始化
@@ -402,13 +444,13 @@
             $("#pageloading").show();
             Reset();//加载重置查询条件
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
-            var ens = handler.DoMethodReturnJSON("Organization_Init");
+            //var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+            //var ens = handler.DoMethodReturnJSON("Organization_Init");
 
-            var jsonTree = createJsonToTree(ens);
+            //var jsonTree = createJsonToTree(ens);
             //var jsonTree = findChildren(ens, webUser.FK_Dept);
-            zTreeObj = $.fn.zTree.init($("#regionZTree"), setting, jsonTree);
-            fillter(zTreeObj); //设置展开前三级
+            tree.loadRootNode();
+            fillter(); //设置展开前三级
             //绑定帮助信息.
             var html = "<br><br> <h3 style='padding-left:5px'>驰骋组织结构管理</h3>";
 
@@ -430,17 +472,18 @@
         });
 
         //设置展开前三级
-        function fillter(zTreeObj) {
+        function fillter() {
             //获得树形图对象
-            var nodeList = zTreeObj.getNodes();　　　　　　 //展开第一个根节点
+            var nodeList = tree.zTree.getNodes();　　　　　　 //展开第一个根节点
             for (var i = 0; i < nodeList.length; i++) { //设置节点展开第二级节点
-                zTreeObj.expandNode(nodeList[i], true, false, true);
+                tree.zTree.expandNode(nodeList[i], true, false, true);
 
             }
         }
         //转换ztree需要的数据格式
         var treeJson = [];
         function createJsonToTree(jsonArray) {
+            treeJson = [];
             var fk_dept = webUser.FK_Dept;
             if (webUser.CCBPMRunModel != 0) {
                 fk_dept = webUser.OrgNo;
@@ -449,13 +492,15 @@
 
                 for (var i = 0; i < jsonArray.length; i++) {
                     var data = jsonArray[i];
-                    if (data.No == "" || data.No == undefined)
+                    if (data.No === "" || data.No == undefined)
                         continue;
                     treeJson.push({
                         "id": data.No,
                         "pid": data.ParentNo,
                         "name": data.Name,
-                        "idx": data.Idx
+                        "idx": data.Idx,
+                        isParent: true,
+                        parent: true
 
                     });
                 }
@@ -468,7 +513,9 @@
                             "id": o.No,
                             "pid": o.ParentNo,
                             "name": o.Name,
-                            "idx": o.Idx
+                            "idx": o.Idx,
+                            isParent: true,
+                            parent: true
 
                         });
                         return;
@@ -498,7 +545,7 @@
         //绑定人员.
         function BindEmps() {
 
-            var dept = new Entity("BP.GPM.Dept", deptNo);
+            var dept = new Entity(deptEnName, deptNo);
 
             var html = "";
             html += "<div class='container'>";
@@ -516,11 +563,8 @@
             html += "<th style='background-color:#F2F2F2;'>位置</th>";
             html += "</tr></thead>";
 
-            var emps = new Entities("BP.GPM.Emps");
+            var emps = new Entities(empEnsName);
             emps.Retrieve("FK_Dept", dept.No, "Idx");
-
-
-
 
             var empNos = ",";
             html += "<tbody>";
@@ -531,15 +575,15 @@
                 html += "<td>" + emp.No + "</td>";
                 html += "<td><a href=\"javascript:EditEmp('" + emp.No + "')\">" + emp.Name + "</a></td>";
                 html += "<td>" + dept.Name + "</td>";
-                if (emp.Email == null || emp.Email == "")
+                if (emp.Email == null || emp.Email === "")
                     html += "<td>-</td>";
                 else
                     html += "<td>" + emp.Email + "</td>";
-                if (emp.Tel == null || emp.Tel == "")
+                if (emp.Tel == null || emp.Tel === "")
                     html += "<td>-</td>";
                 else
                     html += "<td>" + emp.Tel + "</td>";
-                html += "<td><a href=\"javascript:Del('" + emp.No + "')\" ><img src='../WF/Img/Btn/Delete.gif'>删除</a></td>";
+                html += "<td><a href=\"javascript:Del('" + emp.No + "','" + dept.No + "')\" ><img src='../WF/Img/Btn/Delete.gif'>删除</a></td>";
                 html += "<td><img src='../WF/Img/Btn/Up.GIF' onclick=\"Up('" + emp.No + "')\" alt='上移' />-<img src='../WF/Img/Btn/Down.gif' onclick=\"Down('" + emp.No + "')\" alt='下移' /> </td>";
                 html += "</tr>";
                 empNos += emp.No + ',';
@@ -565,7 +609,7 @@
                 if (empNos.indexOf(',' + deptEmp.FK_Emp + ',') != -1)
                     continue;
 
-                var emp = new Entity("BP.GPM.Emp");
+                var emp = new Entity(empEnName);
                 emp.No = deptEmp.FK_Emp;
                 emp.SetPKVal(emp.No);
                 if (emp.RetrieveFromDBSources() == 0) {
@@ -578,11 +622,11 @@
                 html += "<td>" + emp.No + "</td>";
                 html += "<td><a href=\"javascript:EditEmp('" + emp.No + "')\">" + emp.Name + "</a></td>";
                 html += "<td>兼职</td>";
-                if (emp.Email == null || emp.Email == "")
+                if (emp.Email == null || emp.Email === "")
                     html += "<td>-</td>";
                 else
                     html += "<td>" + emp.Email + "</td>";
-                if (emp.Tel == null || emp.Tel == "")
+                if (emp.Tel == null || emp.Tel === "")
                     html += "<td>-</td>";
                 else
                     html += "<td>" + emp.Tel + "</td>";
@@ -593,8 +637,6 @@
 
                 empNos += emp.No + ',';
             }
-
-
 
             //找一下 Port_DeptEmpStation 里面有的数据，但是在 Port_DeptEmp没有的就，插入进去.
 
@@ -628,38 +670,54 @@
         }
 
         function Up(no) {
-            var emp = new Entity("BP.GPM.Emp", no);
+            var emp = new Entity(empEnName, no);
             var data = emp.DoMethodReturnString("DoUp");
             BindEmps();
         }
         function Down(no) {
 
-            var emp = new Entity("BP.GPM.Emp", no);
+            var emp = new Entity(empEnName, no);
             var data = emp.DoMethodReturnString("DoDown");
             BindEmps();
         }
 
         function EditDept(no) {
-            var url = '../WF/Comm/En.htm?EnName=BP.GPM.Dept&No=' + no;
+            var url = '../WF/Comm/En.htm?EnName=' + deptEnName + '&No=' + no + '&FK_Dept=' + deptNo;
             OpenBootStrapModal(url, "eudlgframe", "编辑", '800', '500', "icon-edit", true, null, null);
         }
 
         function EditEmp(no) {
 
             if (no == undefined) {
-                var url = '../WF/Comm/En.htm?EnName=BP.GPM.Emp&FK_Dept=' + deptNo;
-                OpenBootStrapModal(url, "eudlgframe", "新增", '800', '500', "icon-edit", true, null, null);
+
+                //编号生成规则： 0=手工输入自己编号 1=系统自动生成.
+                if (NewEmpNoModel == 0) {
+
+                }
+
+                var url = '../WF/Comm/En.htm?EnName=' + empEnName + '&FK_Dept=' + deptNo;
+                OpenBootStrapModal(url, "eudlgframe", "编辑", '800', '500', "icon-edit", false, function () { }, null, function () {
+                    //刷新打开的页面
+                    BindEmps();
+                });
                 return;
             }
 
-            var url = '../WF/Comm/En.htm?EnName=BP.GPM.Emp&No=' + no;
-            OpenBootStrapModal(url, "eudlgframe", "编辑", '800', '500', "icon-edit", true, null, null);
+            var url = '../WF/Comm/En.htm?EnName=' + empEnName + '&No=' + no + '&FK_Dept=' + deptNo;
+            OpenBootStrapModal(url, "eudlgframe", "编辑", '800', '500', "icon-edit", false, function () { }, null, function () {
+                //刷新打开的页面
+                BindEmps();
+            });
         }
+
 
         function RefEmps() {
 
             var url = "../WF/Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.GPM.Dept&Dot2DotEnsName=BP.GPM.DeptEmps&Dot2DotEnName=BP.GPM.DeptEmp&AttrOfOneInMM=FK_Dept&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept&No=" + deptNo + "&PKVal=" + deptNo + "&s=0.13113811473063341";
-            OpenBootStrapModal(url, "eudlgframe", "关联人员", '1000', '500', "icon-edit", true, null, null);
+            OpenBootStrapModal(url, "eudlgframe", "关联人员", '1000', '500', "icon-edit", true, null, null, function () {
+                //刷新打开的页面
+                BindEmps();
+            });
         }
 
         function Del(no) {
@@ -667,12 +725,15 @@
             if (confirm('您确定要删除该人员吗？') == false)
                 return;
 
+            var deptEmpPK = deptNo + "_" + no;
+
+
             //取消人员部门管理关系
             var en = new Entity("BP.GPM.DeptEmp");
-            en.SetPKVal(deptNo + "_" + no);
+            en.SetPKVal(deptEmpPK);
             en.Delete();
 
-            var en = new Entity("BP.GPM.Emp", no);
+            var en = new Entity(empEnName, no);
             en.Delete();
 
             //取消人员部门岗位管理关系
@@ -724,15 +785,15 @@
                 html += "<td>" + emp.No + "</td>";
                 html += "<td><a href=\"javascript:EditEmp('" + emp.No + "')\">" + emp.Name + "</a></td>";
                 html += "<td>" + emp.deptName + "</td>";
-                if (emp.Email == null || emp.Email == "")
+                if (emp.Email == null || emp.Email === "")
                     html += "<td>-</td>";
                 else
                     html += "<td>" + emp.Email + "</td>";
-                if (emp.Tel == null || emp.Tel == "")
+                if (emp.Tel == null || emp.Tel === "")
                     html += "<td>-</td>";
                 else
                     html += "<td>" + emp.Tel + "</td>";
-                html += "<td><a href=\"javascript:Del('" + emp.No + "')\" ><img src='../WF/Img/Btn/Delete.gif'>删除</a></td>";
+                html += "<td><a href=\"javascript:Del('" + emp.No + "','" + emp.FK_Dept + "');\" ><img src='../WF/Img/Btn/Delete.gif'>删除</a></td>";
                 html += "</tr>";
             }
             html += "</tbody>";

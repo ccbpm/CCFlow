@@ -51,9 +51,8 @@ function GenerFrm() {
     }
     //定义常用的变量.
 
-
     //设置标题.
-    document.getElementById("title").innerHTML = "移动应用表单预览";
+    document.getElementById("title").innerHTML = "表单预览(字段排序在傻瓜表单设计器中)";
 
 
     BindFrm(frmData);

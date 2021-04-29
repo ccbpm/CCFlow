@@ -219,17 +219,17 @@ function SetState() {
     if (flowDevModel == FlowDevModel.Prefessional ||
         flowDevModel == FlowDevModel.FoolTruck ||
         flowDevModel == FlowDevModel.InternetOfThings) {
-        $("#pmAttribute").after("<li id='pmFrmSln'><i class='icon-th'></i>&nbsp;<span class='_label'>表单方案</span></li>");
-        $("#pmFrmSln").after("<li id='pmFrmD'><i class='icon-th'></i>&nbsp;<span class='_label'>设计表单</span></li>");
+        $("#pmAttribute").after("<li id='pmFrmSln'><i class='iconfont icon-biaodandingzhimoban'></i>&nbsp;<span class='_label'>表单方案</span></li>");
+        $("#pmFrmSln").after("<li id='pmFrmD'><i class='iconfont icon-linshibiaoge'></i>&nbsp;<span class='_label'>设计表单</span></li>");
     }
     if (flowDevModel == FlowDevModel.FrmTree ||
         flowDevModel == FlowDevModel.SDKFrm ||
         flowDevModel == FlowDevModel.SelfFrm)
-        $("#pmAttribute").after("<li id='pmFrmSln'><i class='icon-th'></i>&nbsp;<span class='_label'>表单方案</span></li>");
+        $("#pmAttribute").after("<li id='pmFrmSln'><i class='iconfont icon-biaodandingzhimoban'></i>&nbsp;<span class='_label'>表单方案</span></li>");
 
     if (flowDevModel == FlowDevModel.JiJian ||
         flowDevModel == FlowDevModel.RefOneFrmTree) {
-        $("#pmAttribute").after("<li id='pmFrmPower'><i class='icon-comment'></i>&nbsp;<span class='_label'>表单权限</span></li>");
+        $("#pmAttribute").after("<li id='pmFrmPower'><i class='iconfont icon-biaoge'></i>&nbsp;<span class='_label'>表单权限</span></li>");
 
     }
 
@@ -494,7 +494,7 @@ $(function () {
                 strs += "'process_name':'" + data.Name + "',";
                 strs += "'process_to':0,";
                 strs += "'icon':'icon-ok',";
-                strs += "'style':'width:auto;height:41px;line-height:41px;color:#0e76a8;left:" + mLeft + "px;top:" + mTop + "px;'";
+                strs += "'style':'width:auto;color:#0e76a8;left:" + mLeft + "px;top:" + mTop + "px;'";
                 strs += "}";
                 strs = eval("(" + strs + ")");
 
@@ -713,13 +713,15 @@ $(function () {
     $("#Btn_Save").bind('click', function () {
 
         $("#Btn_Save").attr("disabled", true);
-        $("#Btn_Save").html("正在保存...");
+        $("#Btn_Save").html("<i class='iconfont icon-baocun'></i> 正在保存...");
 
         SaveFlow(_canvas);
 
-        $("#Btn_Save").html("保存");
+        $("#Btn_Save").html("<i class='iconfont icon-baocun'></i> 保存成功");
 
-        // alert("保存成功！");
+        setTimeout(function () {
+            $("#Btn_Save").html("<i class='iconfont icon-baocun'></i> 保存");
+        }, 1000);
 
     });
     /*保存*/
@@ -1009,7 +1011,7 @@ function GenerDrowFlowData() {
         }
 
 
-        strs += "'style':'width:auto;minWidth:121px;height:41px;line-height:41px;color:#0e76a8;left:" + node.X + "px" + ";top:" + node.Y + "px;'";
+        strs += "'style':'width:auto;minWidth:121px;color:#0e76a8;left:" + node.X + "px" + ";top:" + node.Y + "px;'";
 
         if (i == nodes.length - 1)
             strs += "}";

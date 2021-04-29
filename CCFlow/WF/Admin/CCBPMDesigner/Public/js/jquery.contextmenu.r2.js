@@ -21,7 +21,7 @@
   var defaults = {
     menuStyle: {
       listStyle: 'none',
-      padding: '1px',
+     
       margin: '0px',
       backgroundColor: '#fff',
       border: '1px solid #999',
@@ -58,8 +58,7 @@
                });
     }
     if (!shadow) {
-      shadow = $('<div></div>')
-                 .css({backgroundColor:'RED',position:'absolute',opacity:0.2,zIndex:499})
+      shadow = $('<div></div>')                
                  .appendTo('body')
                  .hide();
     }

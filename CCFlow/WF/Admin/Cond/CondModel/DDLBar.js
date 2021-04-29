@@ -5,7 +5,7 @@ function InitBar(optionKey) {
 
     html += "<select id='changBar' onchange='changeOption()'>";
 
-    html += "<option value=null  disabled='disabled'>+主管判断（选择）</option>";
+    html += "<option value=null  disabled='disabled'>+主观选择</option>";
     html += "<option value=" + DirCondModel.ByDDLSelected + ">&nbsp;&nbsp;&nbsp;&nbsp;下拉框模式</option>";
     html += "<option value=" + DirCondModel.ByButtonSelected + ">&nbsp;&nbsp;&nbsp;&nbsp;按钮模式</option>";
     html += "<option value=" + DirCondModel.ByPopSelect + ">&nbsp;&nbsp;&nbsp;&nbsp;发送后手工选择到达节点与接受人</option>";

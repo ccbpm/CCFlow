@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>填充主表</title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.11.0.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../Admin.js"></script>
+    <!--<script src="../../../Scripts/LoadSql.js"></script>-->
+    <script type="text/javascript">
+
+        //http://localhost:2296/WF/Admin/FoolFormDesigner/FullData/MainDtlList.htm
+        //    ? FK_MapData = Frm_KeHuDingShan & RefPK=TBFullCtrl_Frm_KeHuDingShan_KeHuBianHao
+        //    & KeyOfEn=KeHuBianHao
+
+        $(function () {
+
+            var frmID = GetQueryString("FK_MapData");
+            var keyOfEn = GetQueryString("KeyOfEn");
+
+            //查询出来数据.
+            var ens = new Entities("BP.Sys.MapExts");
+            ens.Retrieve("FK_MapData", frmID, "AttrOfOper", keyOfEn);
+
+            var html = "<table style='width:99%;padding:10px margin:5px;'>";
+            html += "<tr>";
+            html += "<th>#</th>";
+            html += "<th>数据源类型</th>";
+            html += "<th>数据源</th>";
+            html += "<th>备注</th>";
+            html += "<th>表达式</th>";
+            html += "<th>标记</th>";
+            html += "<th colspan=2>操作</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < ens.length; i++) {
+
+                var en = ens[i];
+
+                // if (en.ExtType != "FullDataDtl")
+                //   continue;
+
+                html += "<tr>";
+                html += "<td>" + i + "</td>";
+
+                var val = "SQL";
+                if (en.DBType == 0)
+                    val = "SQL";
+                if (en.DBType == 1)
+                    val = "URL";
+                if (en.DBType == 2)
+                    val = "函数";
+
+                html += "<td>" + val + "</td>";
+                html += "<td>" + en.FK_DBSrc + "</td>";
+
+                //类型.
+                if (en.ExtType == "FullData")
+                    html += "<td><font color=green>主表数据</font></td>";
+                else
+                    html += "<td>" + en.Tag2 + "</td>";
+
+
+                val = en.Doc;
+                val = val.replace("~", "'");
+                val = val.replace("~", "'");
+                val = val.replace("~", "'");
+                val = val.replace("~", "'");
+                html += "<td>" + val + "</td>";
+
+
+
+
+                if (en.ExtType == "FullData") {
+                    html += "<td colspan=2>[<a href=\"javascript:Back('" + en.MyPK + "')\" >修改</a>]</td>";
+                } else {
+                    html += "<td>[<a href=\"javascript:Edit('" + en.MyPK + "')\" >修改</a>]</td>";
+                    html += "<td>[<a href=\"javascript:Delete('" + en.MyPK + "')\" >删除</a>]</td>";
+                }
+
+                html += "</tr>";
+            }
+            html += "</table>";
+
+            $("#docs").html(html);
+
+
+            //显示字段.调用 Admin.js 的方法.
+            ShowFrmFields();
+
+
+        });
+
+        function Delete(myPK) {
+
+            if (window.confirm("您确定要删除吗?") == false)
+                return;
+
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = myPK;
+            en.Delete();
+            window.location.href = window.location.href;
+        }
+        function Edit(myPK) {
+
+            var url = "";
+            url = "MainDtlEn.htm?FK_MapData=" + GetQueryString("FK_MapData");
+            url += "&RefPK=" + GetQueryString("RefPK");
+            url += "&KeyOfEn=" + GetQueryString("KeyOfEn");
+            url += "&MyPK=" + myPK;
+            window.location.href = url;
+        }
+
+        function New() {
+
+            var en = new Entity("BP.Sys.MapExt");
+
+            //更新节点表单类型.
+            var frmID = GetQueryString("FK_MapData");
+
+            var mypk = "";
+
+            var en = new Entity("BP.Sys.MapExt");
+
+            en.FK_MapData = frmID;
+            en.ExtType = "FullDataDtl"; //.通用的.
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+
+            en.DBType = 0;
+            en.FK_DBSrc = "local";
+
+            var sql = "SELECT AAA AS '指定的字段名1',";
+            sql += " BBB as '指定的字段名2', ";
+            sql += " CCC as '指定的字段名2' ";
+            sql += " FROM  MyTable WHERE 主键列='@Key'";
+            en.Doc = sql;
+
+            en.Tag2 = "非主表数据源"; //设置主表的SQL.
+            en.Insert();
+
+            Edit(en.MyPK);
+        }
+        function Back() {
+            var url = "";
+            url = "Default.htm?FK_MapData=" + GetQueryString("FK_MapData");
+            url += "&RefPK=" + GetQueryString("RefPK");
+            url += "&KeyOfEn=" + GetQueryString("KeyOfEn");
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+
+        <div id="Bar">
+            <input id='Btn_Back' type='button' onclick='Back()' value='返回' />
+            <input id='Btn_New' type=button onclick='New()' value='新建' />
+        </div>
+
+        <br />
+
+        <div id="docs"></div>
+
+        <br />
+
+
+        <fieldset id="help">
+            <legend>SQL填写帮助.</legend>
+            <ul>
+                <li>必须返回一行数据的 SQL或者数据源. </li>
+                <li>返回的列名要与字段名进行对应，如果匹配的不管控件类型系统就会自动赋值.</li>
+                <li>
+                    实例： <font color="green">
+                        SELECT  Name as MingCheng, Tel as DianHua, Email FROM WF_EMP WHERE No='@Key'
+                    </font>
+                </li>
+                <li> @Key 就是指选择的主键. 是系统约定的标记. </li>
+            </ul>
+
+            <legend>URL填写帮助.</legend>
+            <ul>
+                <li>必须返回一行数据的的json格式的数据源. </li>
+                <li>返回的列名要与字段名进行对应，如果匹配的不管控件类型系统就会自动赋值.</li>
+                <li>实例：  <font color="green"> /App/Handler.ashx?DoType=EmpFull&Key=@Key </font></li>
+                <li> @Key 就是指选择的主键. 是系统约定的标记. </li>
+            </ul>
+            <legend> 该表单的字段 </legend>
+
+            <div id="FrmFileds"></div>
+        </fieldset>
+
+    </form>
+</body>
+</html>

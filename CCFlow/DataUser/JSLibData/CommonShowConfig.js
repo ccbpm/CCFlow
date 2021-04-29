@@ -9,14 +9,22 @@ var Hide_IsOpenFrm = true; //时间轴中是否显示查看表单:true 显示
 var Hide_HastenWork = true; //在途是否显示催办按钮:true 显示
 var Hide_IsTodoList = true; //待办列表中是否显示查看授权:true 显示
 var UserICon = "@basePath/DataUser/Siganture/"; //默认的用户签名地址
-var UserIConExt = ".JPG";
-var IsShowDevelopFieldLab = false; //开发者表单设计器设计插入字段时增加的文本
+var UserIConExt = ".jpg";
 
-//Pop弹出框是否可以选择，有可以输入，输入是按回车键或者失去焦点的时候默认是输入完一条信息
-var IsPopEnableSelfInput = true;
+/**
+ * 退回窗口的配置信息.
+ * */
 
-//工作处理器:发送退回成功后,提示信息关闭倒计时设置(单位:秒)
-//调用的页面  /WF/Toolbar.js  , /WF/WorkOpt/AccepterOfGener.htm
-var WF_WorkOpt_LeftSecond = 30;
+//是否强制设置退回并原路返回?
+var ReturnWin_IsBackTracking_Selected = true; //是否默认选中?
+var ReturnWin_IsKillEtcThread_Show = false; //是否显示:全部子线程退回.
 
-var IsRecordUserLog = 0;
+//是否记录用户登陆，发送日志
+var IsRecordUserLog = false;
+
+//审核组件是否显示常用短语
+var IsShowWorkCheckUsefulExpres = true;
+
+
+
+

@@ -18,8 +18,7 @@
   <Item11 No="601" GroupNo="System" Name="组织信息" For="admin" Url="/Admin/Setting/Link.html?DoType=EditOrgInfo" />
   <Item No="670" GroupNo="System" Name="系统枚举" For="admin" Url="../../Admin/FoolFormDesigner/SysEnumList.htm?DoType=AddEnum"  />
   <Item No="671" GroupNo="System" Name="系统外键" For="admin" Url="../../Admin/FoolFormDesigner/SFList.htm?DoType=AddEnum"  />
-	<Item No="672" GroupNo="System" Name="数据源" For="admin" Url="../../Comm/Search.htm?EnsName=BP.Sys.SFDBSrcs"  />
-
+  <Item No="672" GroupNo="System" Name="数据源" For="admin" Url="../../Comm/Search.htm?EnsName=BP.Sys.SFDBSrcs"  />
   <!-- 
   <Item1 No="002" GroupNo="System" Name="节假日设置" For="admin" Url="../../Comm/Sys/Holiday.htm"  />
   <Item1 No="003" GroupNo="System" Name="表结构"    For="admin" Url="../../Comm/Sys/SystemClass.htm"  />
@@ -32,9 +31,8 @@
   -->
 
   <Group No="Org" Name="组织结构" />
-  <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../../Comm/Ens.htm?EnsName=BP.GPM.StationTypeExts"  />
-  <Item No="502" GroupNo="Org" Name="岗位维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.GPM.StationExts"  />
-
+   <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.Port.StationTypes"  />
+  <Item No="502" GroupNo="Org" Name="岗位维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.Port.Stations"  />
   <!-- <Item1 No="502" GroupNo="Org" Name="部门台帐" For="admin" Url="../../Comm/Search.htm?EnsName=BP.Cloud.Depts"  />
   <Item1 No="502" GroupNo="Org" Name="部门树" For="admin" Url="../../Comm/Tree.htm?EnsName=BP.GPM.Depts"  />
   <Item1 No="502" GroupNo="Org" Name="部门人员树" For="admin" Url="../../Comm/TreeEns.htm?TreeEnsName=BP.GPM.Depts&amp;EnsName=BP.GPM.Emps&amp;RefPK=FK_Dept"  />
@@ -42,7 +40,7 @@
   <Item1 No="504" GroupNo="Org" Name="权限组" For="admin" Url="../../Comm/Search.htm?EnsName=BP.En.Groups"  />
   -->
 
-  <Item No="503" GroupNo="Org" Name="人员台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.EmpExts"  />
+  <Item No="503" GroupNo="Org" Name="人员台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Emps"  />
   <Item No="504" GroupNo="Org" Name="组织结构" For="admin" Url="../../../GPM/Organization.htm"  />
 
   <Item1 No="601" GroupNo="Org" Name="自动报表" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Data.AutoRpts"  />

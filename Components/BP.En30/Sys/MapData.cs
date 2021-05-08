@@ -2287,6 +2287,7 @@ namespace BP.Sys
         {
             if (this.HisFrmType != FrmType.FreeFrm)
                 return;
+            return;
 
             #region 计算最左边,与最右边的值。
             // 求最左边.

@@ -334,9 +334,9 @@
                         </select>
 
                     </div><div class="form-group">
-                        <button type="button" value="应用" class="cc-btn-tab btn btn_app" onclick="App();" id="Btn_App"> 应用</button>
+                        <button type="button" value="应用"  onclick="App();" id="Btn_Save"> 应用</button>
                         <button type="button" value="删除模版" id="Btn_Delete" onclick="Delete();">删除模版</button>
-                        <button type="button" value="保存为模版" onclick="SaveAsTemplate();" id="Btn_Save">保存为模版</button>
+                        <button type="button" value="保存为模版" onclick="SaveAsTemplate();" id="Btn_SaveAs">保存为模版</button>
                     </div>
                     <div class="form-group">
                         <!--<select id="DB" onchange="DDL_TableCol_Change" class="form-control">
@@ -391,8 +391,7 @@
                         <tr class="FoolFrmFieldTR" style="border:none;">
                             <td colspan="4" class="FoolFrmFieldTD">
                                 <div class="FoolFrmFieldName" onclick="DDLChange('FoolFrmFieldName')">*申请原因</div>
-                                <textarea class="FoolFrmFieldCtrl" onclick="DDLChange('FoolFrmFieldCtrl')" style="width:100%;" placeholder="不少于50字，请仔细填写。" cols="10">
-                            </textarea>
+                                <textarea class="FoolFrmFieldCtrl" onclick="DDLChange('FoolFrmFieldCtrl')" style="width:100%;" placeholder="不少于50字，请仔细填写。" cols="10"></textarea>
                             </td>
                         </tr>
 
@@ -432,16 +431,16 @@
                             <td class="FoolFrmFieldTD"> <div class="FoolFrmFieldName" onclick="DDLChange('FoolFrmFieldName')">整治面貌</div>    </td>
                             <td class="FoolFrmFieldTD" colspan="3">
 
-                                <label>
+                                <label class="FoolFrmFieldCtrl">
                                     <input class="FoolFrmFieldCtrl" type="radio" id="TB_ZZMM_0" name="ZZMM" />群众
                                 </label>
-                                <label>
+                                <label class="FoolFrmFieldCtrl">
                                     <input class="FoolFrmFieldCtrl" type="radio" id="TB_ZZMM_1" name="ZZMM" />团员
                                 </label>
-                                <label>
+                                <label class="FoolFrmFieldCtrl">
                                     <input class="FoolFrmFieldCtrl" type="radio" id="TB_ZZMM_2" name="ZZMM" />党员
                                 </label>
-                                <label>
+                                <label class="FoolFrmFieldCtrl">
                                     <input class="FoolFrmFieldCtrl" type="radio" id="TB_ZZMM_3" name="ZZMM" />无党派人士
                                 </label>
                             </td>

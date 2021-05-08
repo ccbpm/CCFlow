@@ -627,8 +627,8 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
             case "SubFlow":
                 var nodeID = GetQueryString("FK_Node");
                 var subFlow = new Entity("BP.WF.Template.FrmSubFlow", nodeID);
-                //if (subFlow.SFSta == 0)
-                 //   UE.dom.domUtils.remove(anchorEl, false);
+            //if (subFlow.SFSta == 0)
+            //   UE.dom.domUtils.remove(anchorEl, false);
             case "HyperLink":
                 break;
             case "IFrame":
@@ -797,7 +797,14 @@ UE.plugins['enum'] = function () {
             this.hide();
         },
         _setwidth: function () {
-            var w = prompt("请输入数值：比如25", baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width').replace("px", ""));
+            var w = prompt("请输入：比如25(数值)或者50%(百分比)", baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width').replace("px", ""));
+
+            var percent = new RegExp(/^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/);
+            var result = percent.test(w);
+            if (result) {
+                baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w);
+                return;
+            }
 
             var patrn = /^(-)?\d+(\.\d+)?$/;
             if (patrn.exec(w) == null && w != "" && w != null) {
@@ -806,6 +813,16 @@ UE.plugins['enum'] = function () {
                 var hh = baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width');
                 baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w + 'px');
             }
+
+            /*var w = prompt("请输入数值：比如25", baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width').replace("px", ""));
+
+            var patrn = /^(-)?\d+(\.\d+)?$/;
+            if (patrn.exec(w) == null && w != "" && w != null) {
+                alert("不合法的输入");
+            } else {
+                var hh = baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width');
+                baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w + 'px');
+            }*/
         }
     });
     popup.render();
@@ -1032,7 +1049,14 @@ UE.plugins['select'] = function () {
             this.hide();
         },
         _setwidth: function () {
-            var w = prompt("请输入数值：比如25", baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width').replace("px", ""));
+            var w = prompt("请输入：比如25(数值)或者50%(百分比)", baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width').replace("px", ""));
+
+            var percent = new RegExp(/^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/);
+            var result = percent.test(w);
+            if (result) {
+                baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w);
+                return;
+            }
 
             var patrn = /^(-)?\d+(\.\d+)?$/;
             if (patrn.exec(w) == null && w != "" && w != null) {
@@ -2333,8 +2357,8 @@ function SaveForm() {
     }
 
     $("#Btn_Save").html("保存成功");
-    setTimeout(function () { $("#Btn_Save").html("保存."); }, 1000);
-   // alert("保存成功.");
+    setTimeout(function () { $("#Btn_Save").html("保存"); }, 1000);
+    // alert("保存成功.");
 }
 var formeditor = "";
 //保存表单的htm代码

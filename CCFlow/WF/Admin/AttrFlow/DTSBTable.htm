@@ -27,9 +27,7 @@
         legend {
             border-bottom: none;
         }
-        #Btn_Save {
-            background-image: url(../../Img/Btn/Save.png) !important;
-        }
+ 
     </style>
 
     <script type="text/javascript" language="javascript">
@@ -213,117 +211,126 @@
     </script>
 </head>
 <body>
-    <div id="bar" class="cs-tr cs-bar">
-        <label style="float:left; font-size :15px;font-weight:bolder;">与业务表数据同步</label>
-        <input id="Btn_Save" type="button" value="保存" onclick="Save();" />
-    </div>
-    <form id="cc">
-
-
-
-        <fieldset>
-            <legend>
-                <input type="radio" value="0" id="RB_DTSWay_0" name="RB_DTSWay" />
-                <label for="RB_DTSWay_0">
-                    不执行同步
-                </label>
-            </legend>
-            <ul style="color: Gray">
-                <li>流程运行的数据存储到,不与其他系统交换数据。</li>
-                <li>其他系统可以读写这个表的数据，完成相关的业务操作。</li>
-                <li>该表名是可以在流程属性配置。</li>
-            </ul>
-        </fieldset>
-        <fieldset>
-            <legend>
-                <input type="radio" value="1" id="RB_DTSWay_1" name="RB_DTSWay" />
-                <label for="RB_DTSWay_1">
-                    执行同步
-                </label>
-            </legend>
-            <table class="table table-hover tab-content table-bordered" style="text-align: center;margin-top:20px">
-                <tr>
-                    <td>
-                        请选择要导出的数据源
-                    </td>
-                    <td>
-                        <select id="DDL_DBSrc" name="DDL_DBSrc">
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        指定的表
-                    </td>
-                    <td>
-                        <select id="DDL_Table" name="DDL_Table">
-                        </select>
-                        <br /> 要把数据同步到那个数据表里去？
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        同步的计算方式
-                    </td>
-                    <td>
-                        &nbsp; <a class="btn btn-default btn-sm" href="javascript:OpenFields()">设置字段匹配</a>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td style="border-bottom: none;">
-                        同步的时间
-                    </td>
-                    <td style="border-bottom: none;">
-                        <input id="RB_DTSTime_0" type="radio" name="RB_DTSTime" value="0" /><span for="RB_DTSTime_0">所有的节点发送后</span>
-                        <br />
-                        <input id="RB_DTSTime_2" type="radio" name="RB_DTSTime" value="2" /><span for="RB_DTSTime_2">流程结束时</span>
-                        <br />
-                        <input id="RB_DTSTime_1" type="radio" name="RB_DTSTime" value="1" /><span for="RB_DTSTime_1">指定的节点发送后</span>
-                        [<a href="javascript:void(0)" onclick="OpenDTSNodes()">设置同步的节点</a>]
-                        <div id="dis" style="display: none;">
-                        </div>
-                    </td>
-
-                </tr>
-            </table>
-        </fieldset>
-        <fieldset id="nodeSelect" style="display:none;">
-            <div id="" style="margin-top:10px;margin-bottom:10px">
-                <table id="Table1" style='width:90%;'>
-                    <caption>设置同步的节点</caption>
-                    <tr>
-                        <th>#</th>
-                        <th>名称</th>
-                        <th>节点ID</th>
-                        <th>步骤</th>
-                    </tr>
-                </table>
+    <div class="container-full">
+        <div id="titleH4" class="attrnode-bar-header">
+            <div class="pull-right">
+                <div id="bar">
+                    <button id="Btn_Save" type="button" value="保存" onclick="Save();" class="cc-btn-tab btn-save">保存</button>
+                </div>
             </div>
-        </fieldset>
-        <fieldset>
-            <legend>应用场景</legend>
-            <ol>
-                <li>在稍大的应用中，流程系统与业务系统的数据库是分开的。比如：业务流程系统、固定资产系统、客户关系管理系统、财务系统。</li>
-                <li>在固定资产管理系统中，流程审批数据库与固定资产数据库是分开的，一个固定资产的采购申请走完后，需要把该固定资产采购的信息同步到固定资产系统中去，或者一个固定资产的报废需要把该审批结果需要更新固定资产状态。</li>
-                <li>流程走完一个订单审批后，需要把订单的信息同步到仓库管理系统中去。</li>
-            </ol>
-        </fieldset>
-        <fieldset>
-            <legend>帮助</legend>
-            <ol>
-                <li>
-                    ccbpm在运转的过程中会把节点表单的数据存储到ccbpm数据库的数据表 <span style="color: Blue;">
-                        [<%=fl.PTable%>]
-                    </span>里，这个表的名称可以在流程属性里定义。
-                </li>
-                <li>流程数据存储表可以自定义，定义路径：流程属性=》 基本属性=》流程数据表。</li>
-                <li>有的应用场景下，会把该表的业务数据同步到其他系统中去，ccbpm提供了事件可以使用编程的方式实现这样的需求。</li>
-                <li>为了更好的适应开发者的需求，我们提供了界面化的定义工具。 </li>
-                <li>该功能可以把流程数据转出到指定的数据库上，指定的数据表里。</li>
-            </ol>
-        </fieldset>
+            <strong>与业务表数据同步 </strong>
+        </div>
 
-    </form>
+        <form id="cc">
+
+
+
+            <fieldset>
+                <legend>
+                    <input type="radio" value="0" id="RB_DTSWay_0" name="RB_DTSWay" />
+                    <label for="RB_DTSWay_0">
+                        不执行同步
+                    </label>
+                </legend>
+                <ul style="color: Gray">
+                    <li>流程运行的数据存储到,不与其他系统交换数据。</li>
+                    <li>其他系统可以读写这个表的数据，完成相关的业务操作。</li>
+                    <li>该表名是可以在流程属性配置。</li>
+                </ul>
+            </fieldset>
+            <fieldset>
+                <legend>
+                    <input type="radio" value="1" id="RB_DTSWay_1" name="RB_DTSWay" />
+                    <label for="RB_DTSWay_1">
+                        执行同步
+                    </label>
+                </legend>
+                <div class="pd10">
+                    <table class="table table-hover" style="text-align: center;margin-top:20px">
+                        <tr>
+                            <td>
+                                请选择要导出的数据源
+                            </td>
+                            <td>
+                                <select id="DDL_DBSrc" name="DDL_DBSrc">
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                指定的表
+                            </td>
+                            <td>
+                                <select id="DDL_Table" name="DDL_Table">
+                                </select>
+                                <br /> 要把数据同步到那个数据表里去？
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                同步的计算方式
+                            </td>
+                            <td>
+                                &nbsp; <a class="btn btn-default btn-sm" href="javascript:OpenFields()">设置字段匹配</a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="border-bottom: none;">
+                                同步的时间
+                            </td>
+                            <td style="border-bottom: none;">
+                                <input id="RB_DTSTime_0" type="radio" name="RB_DTSTime" value="0" /><span for="RB_DTSTime_0">所有的节点发送后</span>
+                                <br />
+                                <input id="RB_DTSTime_2" type="radio" name="RB_DTSTime" value="2" /><span for="RB_DTSTime_2">流程结束时</span>
+                                <br />
+                                <input id="RB_DTSTime_1" type="radio" name="RB_DTSTime" value="1" /><span for="RB_DTSTime_1">指定的节点发送后</span>
+                                [<a href="javascript:void(0)" onclick="OpenDTSNodes()">设置同步的节点</a>]
+                                <div id="dis" style="display: none;">
+                                </div>
+                            </td>
+
+                        </tr>
+                    </table>
+                </div>
+            </fieldset>
+            <fieldset id="nodeSelect" style="display:none;">
+                <div id="" style="margin-top:10px;margin-bottom:10px">
+                    <table id="Table1" class="table">
+                        <caption>设置同步的节点</caption>
+                        <tr>
+                            <th>#</th>
+                            <th>名称</th>
+                            <th>节点ID</th>
+                            <th>步骤</th>
+                        </tr>
+                    </table>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>应用场景</legend>
+                <ol>
+                    <li>在稍大的应用中，流程系统与业务系统的数据库是分开的。比如：业务流程系统、固定资产系统、客户关系管理系统、财务系统。</li>
+                    <li>在固定资产管理系统中，流程审批数据库与固定资产数据库是分开的，一个固定资产的采购申请走完后，需要把该固定资产采购的信息同步到固定资产系统中去，或者一个固定资产的报废需要把该审批结果需要更新固定资产状态。</li>
+                    <li>流程走完一个订单审批后，需要把订单的信息同步到仓库管理系统中去。</li>
+                </ol>
+            </fieldset>
+            <fieldset>
+                <legend>帮助</legend>
+                <ol>
+                    <li>
+                        ccbpm在运转的过程中会把节点表单的数据存储到ccbpm数据库的数据表 <span style="color: Blue;">
+                            [<%=fl.PTable%>]
+                        </span>里，这个表的名称可以在流程属性里定义。
+                    </li>
+                    <li>流程数据存储表可以自定义，定义路径：流程属性=》 基本属性=》流程数据表。</li>
+                    <li>有的应用场景下，会把该表的业务数据同步到其他系统中去，ccbpm提供了事件可以使用编程的方式实现这样的需求。</li>
+                    <li>为了更好的适应开发者的需求，我们提供了界面化的定义工具。 </li>
+                    <li>该功能可以把流程数据转出到指定的数据库上，指定的数据表里。</li>
+                </ol>
+            </fieldset>
+
+        </form>
+    </div>
 </body>
 </html>

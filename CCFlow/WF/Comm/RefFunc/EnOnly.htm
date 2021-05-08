@@ -687,7 +687,7 @@
             if (H > rm.H)
                 H = rm.H;
             if (parseInt(rm.RefMethodType) == RefMethodType.LinkeWinOpen) {
-                html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + W + "\",\"" + H + "\",false)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+                html = "<a href='javascript:WinOpenFull(\"" + rm.Url + "\",\"" + rm.Title + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
             }
 
             if (parseInt(rm.RefMethodType) == RefMethodType.Func) {
@@ -1264,7 +1264,7 @@
 
         .cs-btn-group {
             width: auto !important;
-            margin-top:6px !important;
+            margin-top:3px !important;
             text-align: right;
             background-color: transparent
         }
@@ -1474,7 +1474,7 @@
         }
 
         .enonly-center .tabs-panels {
-            padding: 10px 0px;
+            padding: 18px 0px 0px;
         }
     </style>
 </head>

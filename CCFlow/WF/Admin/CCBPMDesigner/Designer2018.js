@@ -418,6 +418,10 @@ $(function () {
     //新建流程演示
     ShowNewFlowGif = function (s) {
 
+  alert('请在流程树的节点上点击右键.');
+return;
+
+
         if (!s) s = 200000;
 
         alertModal4.modal('toggle');

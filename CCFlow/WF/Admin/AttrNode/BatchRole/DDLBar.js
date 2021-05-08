@@ -23,7 +23,7 @@ function InitBar(optionKey) {
    
     html += "</select >";
 
-    html += "<button  id='Btn_Save'class='cc-btn-tab btn-save' type=button onclick='Save()' value='保存' >保存</button>";
+    html += "<button  id='Btn_Save' class='cc-btn-tab btn-save' type=button onclick='Save()' value='保存' >保存</button>";
 
     //   html += "<input  id='Btn_SaveAndClose' type=button onclick='SaveAndClose()' value='保存并关闭' />";
     //  html += "<input type=button onclick='OldVer()' value='使用旧版本' />";

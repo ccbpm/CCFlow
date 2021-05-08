@@ -309,7 +309,7 @@
                     if (mapAttr.UIIsEnable == 0)
                         enableAttr = "disabled='disabled'";
 
-                    return "<input maxlength=" + mapAttr.MaxLen + " id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;height:23px;' type='text'  " + enableAttr + " />";
+                    return "<input maxlength=" + mapAttr.MaxLen + " id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' style='width:80%;height:23px;' type='text'  " + enableAttr + " />";
                 }
 
 
@@ -484,7 +484,7 @@
 <body>
     <form id="cc">
         <div style="right:30px; position:absolute; z-index:100; ">
-            <input type="button" id="Btn_Done" name="Btn_Done" value="执行" onclick="Done()" />
+            <input type="button" id="Btn_Done" name="Btn_Done" value="执行" onclick="Done()" class="cc-btn-tab" />
         </div>
 
         <div style="position:relative;" id="CCForm">

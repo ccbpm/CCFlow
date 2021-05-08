@@ -103,7 +103,7 @@
             powerModels.Retrieve("Model", "FlowData", "FlowNo", flowNo);
             //李震bs
             var html = "";
-            html += "<table class='table table-hover table-condensed' style='width:100%;'>";
+            html += "<table class='table table-hover' style='width:100%;'>";
           
             html += "<tr>";
             html += "<th>#</th>";
@@ -113,7 +113,7 @@
             html += "</tr>";
             for (var i = 0; i < models.length; i++) {
                 var model = models[i];
-                html += "<tr>";
+                html += "<tr style='vertical-align:middle;'>";
                 html += "<td>" + (i + 1) + "</td>";
                 html += "<td>" + model.PowerFlag + " " + model.PowerFlagName + "</td>";
                 //岗位

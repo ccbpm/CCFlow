@@ -282,6 +282,7 @@ function AddICON(attr) {
 
     //如果是 textBox. 
     if (attr.UIContralType == 0) {
+
     }
 
     SetICON("TB_Tel", "icon-phone");
@@ -355,17 +356,17 @@ function GenerGroupTR(groupEn, tabCol, data) {
                 }
             }
             tdId = "id='THAth_" + ath.MyPK+"'";
-            leftBtn += "<div title='点击编辑属性'  style='cursor: pointer' onclick=\"javascript:EditAth('" + groupEn.CtrlID + "')\" >附件:" + lab + "</div>";
+            leftBtn += "<div title='编辑附件属性'  style='cursor: pointer' onclick=\"javascript:EditAth('" + groupEn.CtrlID + "')\" >附件:" + lab + "</div>";
             break;
         case "Frame":
-            leftBtn += "<div title='点击编辑属性'  style='cursor: pointer' onclick=\"javascript:EditFrame('" + groupEn.CtrlID + "')\" >" + lab + "</div>";
+            leftBtn += "<div title='编辑框架属性'  style='cursor: pointer' onclick=\"javascript:EditFrame('" + groupEn.CtrlID + "')\" >" + lab + "</div>";
             break;
         case "SubFlow":
-            leftBtn += "<div title='点击编辑属性'  style='cursor: pointer' onclick=\"javascript:EditSubFlow('" + groupEn.CtrlID + "')\" >" + lab + "</div>";
+            leftBtn += "<div title='编辑子流程属性'  style='cursor: pointer' onclick=\"javascript:EditSubFlow('" + groupEn.CtrlID + "')\" >" + lab + "</div>";
             break;
         case "Dtl":
 
-            leftBtn += "<div title='点击编辑属性' style='cursor: pointer' onclick=\"javascript:EditDtl('" + groupEn.CtrlID + "')\" >从表属性:" + lab + "</div>";
+            leftBtn += "<div title='编辑从表属性' style='cursor: pointer' onclick=\"javascript:EditDtl('" + groupEn.CtrlID + "')\" >从表属性:" + lab + "</div>";
 
             //中间连接.
             midBtn = "";
@@ -855,7 +856,7 @@ function InitMapAttr(Sys_MapAttr, tableCol) {
             UseColSpan = 0;
             rowSpan = 1;
             html += "<tr class='FoolFrmFieldTR' >";
-            html += "<td  id='TD_" + attr.KeyOfEn + "' class='FoolFrmFieldTD' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colspan=" + textColSpan + " class='tdSpan'>" + GenerLabel(attr) + "</td>";
+            html += "<td  id='TD_" + attr.KeyOfEn + "' class='FoolFrmFieldName' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " colspan=" + textColSpan + " class='tdSpan'>" + GenerLabel(attr) + "</td>";
             html += "<td  class='FoolFrmFieldCtrl' id='TD_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' colspan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
             html += InitMapAttrOfCtrlFool(attr);
             html += "</td>";
@@ -1010,7 +1011,7 @@ function InitMapAttr(Sys_MapAttr, tableCol) {
 
 function InitMapAttrOfCtrlFool(mapAttr) {
     var elemHtml = "";
-    var ccsCtrl = "";
+    var ccsCtrl = " class='form-control' ";
     //  mapAttr.CCSCtrl = "HongSeTEXTBOXFengGe";
     if (mapAttr.CSSCtrl != "")
         ccsCtrl = " class='" + mapAttr.CSSCtrl + "'";
@@ -1120,7 +1121,7 @@ function InitMapAttrOfCtrlFool(mapAttr) {
     }
 
     if (mapAttr.MyDataType == 2 && mapAttr.LGType == 0) {
-        return "<div id='DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group'><input " + ccsCtrl + "  value='0' style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "'/></div>";
+        return "<div id='DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group'><input " + ccsCtrl + "  value='0' style='text-align:right;'  onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "'/></div>";
     }
 
     if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
@@ -1129,7 +1130,7 @@ function InitMapAttrOfCtrlFool(mapAttr) {
         if (attrdefVal != null && attrdefVal !== "" && attrdefVal.indexOf(".") >= 0)
             bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
 
-        return "<input " + ccsCtrl + " value='0.00' style='text-align:right;'class='form-control'  onkeyup=" + '"' + "valitationAfter(this, 'float');if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + " valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        return "<input " + ccsCtrl + " value='0.00' style='text-align:right;'  onkeyup=" + '"' + "valitationAfter(this, 'float');if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + " valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
     }
 
     if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
@@ -1154,7 +1155,7 @@ function InitMapAttrOfCtrlFool(mapAttr) {
             bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
         else
             bit = 2;
-        return "<div id='DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group'><input value='0.00' " + ccsCtrl + " style='text-align:right;' class='form-control' onkeyup=" + '"' + "valitationAfter(this, 'money');limitLength(this," + bit + "); FormatMoney(this, " + bit + ", ',')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo');" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/></div>";
+        return "<div id='DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group'><input value='0.00' " + ccsCtrl + " style='text-align:right;' onkeyup=" + '"' + "valitationAfter(this, 'money');limitLength(this," + bit + "); FormatMoney(this, " + bit + ", ',')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo');" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/></div>";
     }
 
 
@@ -1178,7 +1179,7 @@ function InitMapAttrOfCtrlFool(mapAttr) {
                 operations += "<option  value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
             });
 
-            return "<div id='DIV_" + mapAttr.KeyOfEn + "'><select " + ccsCtrl + " class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' id='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + "  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + operations + "</select></div>";
+            return "<div id='DIV_" + mapAttr.KeyOfEn + "'><select " + ccsCtrl + " name='DDL_" + mapAttr.KeyOfEn + "' id='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + "  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'>" + operations + "</select></div>";
 
         } else if (mapAttr.UIContralType == 3) { //单选按钮
 

@@ -1004,17 +1004,12 @@
                     <i class="iconfont icon-shouji"></i>手机
                 </a>
 
-                <select id="DDL_TableCol" class="form-control" style="width:120px; display:inline-block" onchange="DDL_TableCol_Change()">
-                    <option value="0">标准型4列</option>
-                    <option value="1" selected="selected">紧凑型6列</option>
-                </select>
-
-                <a href="javascript:FrmWithAdd();" class="easyui-linkbutton btn-light-red">
-                    <i class="iconfont icon-jiajianchengchu-1"></i>宽度
-                </a>
-                <a href="javascript:FrmWithCut();" class="easyui-linkbutton btn-light-red">
-                    <i class="iconfont icon-jiajianchengchu-"></i>宽度
-                </a>
+                <!--<a href="javascript:FrmWithAdd();" class="easyui-linkbutton btn-light-red">
+        <i class="iconfont icon-jiajianchengchu-1"></i>宽度
+    </a>
+    <a href="javascript:FrmWithCut();" class="easyui-linkbutton btn-light-red">
+        <i class="iconfont icon-jiajianchengchu-"></i>宽度
+    </a>-->
 
                 <a id="StyletDfine" href="javascript:StyletDfine();" class="easyui-linkbutton  btn-light-blue">
                     <i class="iconfont icon-fengge1"></i>表单风格
@@ -1029,8 +1024,15 @@
                 </a>
 
                 <!--<a id="BatchAddF" href="javascript:BatchAddF();" class="easyui-linkbutton btn-light-red">
-                    <i class="iconfont icon-duowenjian"></i>批处理
-                </a>-->
+        <i class="iconfont icon-duowenjian"></i>批处理
+    </a>-->
+
+
+                <select id="DDL_TableCol" class="form-control" style="width:120px; height:20px; align:right; float:right; display:inline-block" onchange="DDL_TableCol_Change()">
+                    <option value="0">标准型4列</option>
+                    <option value="1" selected="selected">紧凑型6列</option>
+                </select>
+
             </div>
         </div>
 

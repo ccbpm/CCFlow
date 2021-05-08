@@ -46,11 +46,13 @@
     <form id="cc">
         <fieldset>
             <legend>其他选项设置</legend>
-            <br /><font color="gray">被阻塞时提示信息(默认为:符合发送阻塞规则，不能向下发送):</font>
-            <input type="text" id="TB_Alert" name="TB_Alert" runat="server" style="width: 95%" />
+            <div class="pd15">
+                <font color="gray">被阻塞时提示信息(默认为:符合发送阻塞规则，不能向下发送):</font>
+                <input type="text" id="TB_Alert" name="TB_Alert" runat="server" style="width: 95%" />
+            </div>
         </fieldset>
         <fieldset>
-            <legend id="help" class="form-instructor"></legend>
+            <legend id="help" class="form-instructor">说明</legend>
             <ul>
                 <li>发送阻塞，就是让当前节点不能向下运动的规则。</li>
                 <li>如果满足一定的条件，就不能让其向下运动。</li>

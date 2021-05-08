@@ -1140,8 +1140,8 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
     //AppString
     if (mapAttr.MyDataType == "1") {  //不是外键
 
-        //附件
-        if (mapAttr.UIContralType == "6") {
+        //附件.
+        if (mapAttr.UIContralType == 6) {
 
             //获取上传附件列表的信息及权限信息
             var nodeID = pageData.FK_Node;
@@ -1150,7 +1150,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             if (no == "01")
                 IsStartNode = 1;
 
-            //创建附件描述信息.
+            //创建附件描述信息. 
             var mypk = mapAttr.MyPK;
 
             //获取附件显示的格式
@@ -1401,7 +1401,6 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         if (mapAttr.Tip != "" && mapAttr.Tip != null)
             tip = "<span style='color: #C0C0C0;'>(" + mapAttr.Tip + ")</span>";
 
-
         return "<label ><input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " onchange='changeCBEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'/> &nbsp;" + mapAttr.Name + tip + "</label>";
     }
 
@@ -1411,6 +1410,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             enableAttr = "";
         else
             enableAttr = "disabled='disabled'";
+
         if (mapAttr.UIContralType == 1)
             //return "<select " + enableAttr + "  id='DDL_" + mapAttr.KeyOfEn + "' class='form-control' >" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
             return "<select id='DDL_" + mapAttr.KeyOfEn + "' class='form-control'  onchange='changeEnable(this,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' value='" + defValue + "'>" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
@@ -1438,7 +1438,8 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         return "<input onfocus='removeplaceholder(this," + bit + ");' onblur='addplaceholder(this," + bit + ");' value='" + defValue + "' style='text-align:right;'class='form-control'  onkeyup=" + '"' + "valitationAfter(this, 'float');if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + " valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + type + "  id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
     }
 
-    if ((mapAttr.MyDataType == 2)) { //AppInt
+    //AppInt 整数类型.
+    if ( mapAttr.MyDataType == 2 ) { 
         var enableAttr = '';
         if (mapAttr.UIIsEnable != 1) {
             enableAttr = "disabled='disabled'";

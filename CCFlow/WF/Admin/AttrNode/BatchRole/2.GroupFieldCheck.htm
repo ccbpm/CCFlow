@@ -135,29 +135,40 @@
     </div>
     <form id="cc">
         <fieldset>
-
             <legend>
                 <label>审核字段分组模式</label>
             </legend>
-            <br />
-            <ul>
-                <li>
-                    <label>填写意见格式 </label>
-                    <select id="DDL_BatchCheckNoteModel">
-                        <option value="0">选择的多条记录一个意见框. </option>
-                        <option value="1">每个记录后面都有一个意见框. </option>
-                        <option value="2">无意见</option>
-                    </select>
-                </li>
-                <li>
-                    <label>批处理列显示行数:</label><input type="text" id="TB_BatchCheckListCount" />
-                </li>
-                <li>
-                    <label>设置分组</label>
-                    <select id="DDL_BatchCheckNoteField">
-                    </select>
-                </li>
-            </ul>
+
+            <table>
+                <tr>
+                    <td> 填写意见格式</td>
+                    <td>
+                        <select id="DDL_BatchCheckNoteModel">
+                            <option value="0">选择的多条记录一个意见框. </option>
+                            <option value="1">每个记录后面都有一个意见框. </option>
+                            <option value="2">无意见</option>
+                        </select>
+                    </td>
+
+                </tr>
+
+
+                <tr>
+                    <td> 批处理列显示行数</td>
+                    <td> <input type="text" id="TB_BatchCheckListCount" /></td>
+                </tr>
+
+                <tr>
+                    <td> 设置分组</td>
+                    <td>
+                        <select id="DDL_BatchCheckNoteField">
+                        </select>
+                    </td>
+                </tr>
+
+            </table>
+
+
         </fieldset>
 
         <fieldset>

@@ -16,47 +16,19 @@
     <script language="JavaScript" type="text/javascript" src="../../Style/Verify.js"></script>
     <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js" defer="defer"></script>
     <base target="_self" />
-
+    <script src="../Admin.js"></script>
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <style>
-        <style >
-        .table-head {
-            padding-right: 17px;
-            background-color: #999;
-            color: #000;
+        .table > thead > tr > th {
+            border-top: 1px solid #dbe3e6 !important
         }
-
-        .table-body {
-            width: 100%;
-            height: 390px;
-            overflow-y: scroll;
-        }
-
-            .table-head table, .table-body table {
-                width: 90%;
-            }
-
-            .table-head tr, .table-body tr {
-                line-height: 35px;
-            }
-
-            .table-head th, .table-body td {
-                text-align: center;
-            }
-
-            .table-body table tr:nth-child(2n+1) {
-                background-color: #f2f2f2;
-            }
-
-        .total {
-            float: right;
-            padding-right: 20px;
-            margin-top: 5px;
+        .table-striped > tbody > tr:nth-of-type(odd) {
+            background: #f9f9f9
         }
     </style>
-    </style>
+  
     <script language="javascript" type="text/javascript">
 
         closeWhileEscUp();
@@ -125,7 +97,7 @@
                 //newRow += "<td><a href=\"javascript:Ref('" + sysEnumMain.No + "');\" >引用</a></td>";
 
                 newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >" + sysEnumMain.CfgVal + "</a></td>";
-                newRow += "<td style='width:50px;'><a href=\"javascript:Del('" + sysEnumMain.No + "','" + sysEnumMain.Name + "');\" ><img src='../../Img/Btn/Delete.gif' alt='删除' ></a></td>";
+                newRow += "<td style='width:50px;'><a href=\"javascript:Del('" + sysEnumMain.No + "','" + sysEnumMain.Name + "');\" >删除</a></td>";
 
                 newRow += "</tr>";
 
@@ -249,27 +221,34 @@
     </script>
 </head>
 <body onkeypress="Esc()">
-    <div class="table-head">
-        <table style=" width:98%;">
-            <caption>枚举值列表  <a href="javascript:NewEnum()">新建枚举</a>  <span style="float:right;">枚举值名称:<input id="EnumValue" />&nbsp;&nbsp;<a href="javascript:SelectEnum()">查询</a></span></caption>
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <div class="pull-right" style="padding-top:5px;">
+                枚举值名称: <input id="EnumValue" class="cc-input" />&nbsp;&nbsp;<button type="button" onclick="SelectEnum()" id="Btn_Search">查询</button>
+                <button type="button" id="Btn_New" onclick="NewEnum()">新建</button>
+                <button type="button" id="Btn_Help" onclick="NewEnum()">帮助</button>
 
-            <tr>
-                <th style='width:53px;'>序</th>
-                <th style='width:103px;'>枚举值</th>
-                <th style='width:103px;'>名称</th>
-                <th>枚举信息</th>
-                <th style='width:53px;'>操作</th>
-            </tr>
-        </table>
+            </div>
+            <strong>枚举值列表</strong>
+        </div>
+      
+        <div class="table-body">
+            <table id="Table1" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style='width:53px;'>序</th>
+                        <th style='width:103px;'>枚举值</th>
+                        <th style='width:103px;'>名称</th>
+                        <th>枚举信息</th>
+                        <th style='width:53px;'>操作</th>
+                    </tr>
+                </thead>
+                <tr>
+                </tr>
+            </table>
+        </div>
+
+        <div id="Msg"></div>
     </div>
-    <div class="table-body">
-        <table id="Table1" style=" width:100%;">
-            <tr>
-            </tr>
-        </table>
-    </div>
-
-    <div id="Msg"></div>
-
 </body>
 </html>

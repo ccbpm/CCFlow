@@ -34,10 +34,60 @@
     <script src="../CCForm/MapExt2016.js" type="text/javascript"></script>
     <!--serach页面JS开发接口-->
     <script src="../../DataUser/JSLibData/SearchSelf.js" type="text/javascript"></script>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="Style/Search.css" rel="stylesheet" />
     <base target="_self" />
     <style type="text/css">
+        .JColResizer > tbody > tr > td {
+            padding: 8px !important;
+        }
+        .modal-header {
+            line-height: 38px !important;
+            height: 38px !important;
+            background: #f7f7f7 !important;
+            padding: 0px 10px !important;
+        }
+
+        .modal-header .modal-title {
+            color: #4d49bf !important;
+            font-weight: bold !important;
+            line-height: 38px !important;
+            height: 38px !important;
+            margin-top: 0px !important;
+        }
+
+        .modal-header h3 {
+            font-size: 16px;
+            color: #414141;
+        }
+
+        .modal-header #closeModal {
+            background: #f7941f !important;
+            font-size: 14px !important;
+            width: 16px !important;
+            height: 16px !important;
+            line-height: 16px !important;
+            text-align: center !important;
+            border-radius: 50% !important;
+            color: #fff !important;
+            padding: 0px !important;
+            margin: 10px !important;
+        }
         
+        .modal-header #closeModal:hover {
+            color: #fff !important;
+            background: #4d49bf !important;
+        }
+        .pagination > li > a {
+            color: #565656;
+            background: #f5f5ff;
+            border-color: #fefefe;
+        }
+        .pagination > li > a:hover {
+            color: #fff;
+            background: #4d49bf;
+            border-color: #fefefe;
+        }
     </style>
     <script language="javascript" type="text/javascript">
         var ensName = GetQueryString("EnsName");
@@ -318,7 +368,7 @@
 
                 str += "<label style='text-align: right; margin-top:5px;margin-left:5px;' for='DDL_" + attr.Field + "'>" + attr.Name + ":</label>";
 
-                str += "<select class='form-control' style='margin-top:5px;width:" + attr.Width + "px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
+                str += "<select  style='margin-top:5px;width:" + attr.Width + "px' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
                 str = $(str);
 
                 barCount += 1;
@@ -362,26 +412,26 @@
                 $("#DDL_" + attr.Field).val(selectVal);
             }
 
-            html += '<a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
+            html += '<a href="#"class="cc-bnt-tab" style="margin-left:20px" id="search_btn" onclick="Search()">查询</a>  ';
             var btnLab1 = cfg.GetPara("BtnLab1");
             var btnLab2 = cfg.GetPara("BtnLab2");
             if (btnLab1 != null && btnLab1 != undefined && btnLab1 != "")
-                html += "&nbsp;<a href='#'class='btn btn-default btn-sm'   onclick='executeFunction(\"" + cfg.GetPara("BtnJS1") + "\",\"" + btnLab1 + "\")'>" + btnLab1 + "</a>";
+                html += "&nbsp;<a href='#'class='cc-bnt-tab'   onclick='executeFunction(\"" + cfg.GetPara("BtnJS1") + "\",\"" + btnLab1 + "\")'>" + btnLab1 + "</a>";
 
             if (btnLab2 != null && btnLab2 != undefined && btnLab2 != "")
-                html += "&nbsp;<a href='#'class='btn btn-default btn-sm'   onclick='executeFunction(\"" + cfg.GetPara("BtnJS2") + "\",\"" + btnLab2 + "\")'>" + btnLab2 + "</a>";
+                html += "&nbsp;<a href='#'class='cc-bnt-tab'   onclick='executeFunction(\"" + cfg.GetPara("BtnJS2") + "\",\"" + btnLab2 + "\")'>" + btnLab2 + "</a>";
 
             if (mapBase.IsInsert.toString().toLowerCase() == "true") {
-                html += '<a href="#" class="btn btn-default btn-sm" id="new_btn" onclick="New()">新建</a>  ';
+                html += '<a href="#" class="cc-bnt-tab" id="new_btn" onclick="New()">新建</a>  ';
             }
-            html += '<a href="#" class="btn btn-default btn-sm" id="exp_btn" onclick="Exp()">导出</a>  ';
+            html += '<a href="#" class="cc-bnt-tab" id="exp_btn" onclick="Exp()">导出</a>  ';
 
             if (mapBase.IsImp.toString().toLowerCase() == "true")
-                html += '<a href="#" class="btn btn-default btn-sm" id="imp_btn" onclick="Imp()">导入</a>';
+                html += '<a href="#" class="cc-bnt-tab" id="imp_btn" onclick="Imp()">导入</a>';
 
             var webUser = new WebUser();
             if (webUser.No == "admin")
-                html += '<a href="#" class="btn btn-default btn-sm" id="setting_btn" onclick="Setting()">设置</a>';
+                html += '<a href="#" class="cc-bnt-tab" id="setting_btn" onclick="Setting()">设置</a>';
 
             $("#toolbar").append(html);
 
@@ -426,7 +476,7 @@
                     if (keyLabel == null || keyLabel == undefined || keyLabel == "")
                         keyLabel = "关键字";
                     html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>" + keyLabel + ":</label></td>";
-                    html += "<td align='left'><input style='width:100%;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
+                    html += "<td align='left'><input style='width:100%;' class='cc-input' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "'  /></td>";
                 }
                 //String字段查询
             } else {
@@ -447,7 +497,7 @@
                         fieldV = "";
                     count++;
                     html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_" + str[1] + "'>" + str[0] + ":</label></td>";
-                    html += "<td align='left'><input style='width:100%;' type=text id='TB_" + str[1] + "' name='TB_" + str[1] + "' value='" + fieldV + "' class='form-control' /></td>";
+                    html += "<td align='left'><input style='width:100%;' type=text id='TB_" + str[1] + "' name='TB_" + str[1] + "' value='" + fieldV + "' /></td>";
                     if (count == countNum) {
                         count = 0;
                         html += "</tr>";
@@ -484,8 +534,8 @@
 
 
                     html += "<td align='right'><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_" + str[1] + "'>" + str[0] + ":</label></td>";
-                    html += "<td align='left'><input style='width:80px;min-width:80px;' type=text id='TB_" + str[1] + "_0' name='TB_" + str[1] + "' value='" + val1 + "' class='form-control' />";
-                    html += "<label>&nbsp;&nbsp;～&nbsp;&nbsp</label><input style='width:80px;min-width:80px;' type=text id='TB_" + str[1] + "_1' name='TB_" + str[1] + "' value='" + val2 + "' class='form-control' /></td>";
+                    html += "<td align='left'><input style='width:80px;min-width:80px;' type=text id='TB_" + str[1] + "_0' name='TB_" + str[1] + "' value='" + val1 + "'  />";
+                    html += "<label>&nbsp;&nbsp;～&nbsp;&nbsp</label><input style='width:80px;min-width:80px;' type=text id='TB_" + str[1] + "_1' name='TB_" + str[1] + "' value='" + val2 + "' /></td>";
                     count++;
                     if (count >= countNum) {
                         count = 0;
@@ -500,11 +550,11 @@
                 html += "<td align='right'><label style='text-align: right; margin-top:5px;padding-left:20px;'>" + mapBase.DTSearchLable + ":</label></td>";
 
                 if (mapBase.DTSearchWay == "1") {
-                    html += "<td align='left'><input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control Wdate' /></td>";
-                    html += "<td align='left'>&nbsp;<label>到</label>&nbsp;&nbsp<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control Wdate' /></td>";
+                    html += "<td align='left'><input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;'  /></td>";
+                    html += "<td align='left'>&nbsp;<label>到</label>&nbsp;&nbsp<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' /></td>";
                 } else {
-                    html += "<td align='left'><input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:140px;' class='form-control Wdate' /></td>";
-                    html += "<td align='left'>&nbsp;<label>到</label>&nbsp;&nbsp<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:140px;' class='form-control Wdate' /></td>";
+                    html += "<td align='left'><input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:140px;'  /></td>";
+                    html += "<td align='left'>&nbsp;<label>到</label>&nbsp;&nbsp<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:140px;' /></td>";
                 }
             }
 
@@ -522,29 +572,29 @@
                 }
 
                 html += "<td align='right'><label style='text-align: right; margin-top:5px;margin-left:5px;' for='DDL_" + attr.Field + "'>" + attr.Name + ":</label></td>";
-                html += "<td align='left'><select class='form-control' style='margin-top:5px;width:100%;' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select></td>";
+                html += "<td align='left'><select  style='margin-top:5px;width:100%;' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select></td>";
             }
 
             //增加按钮.
-            html += '<td align="left" colspan=2 ><a href="#"class="btn btn-primary btn-sm" style="margin-left:10px" id="search_btn" onclick="Search()">查询</a>  ';
+            html += '<td align="left" colspan=2><a href="#"class="cc-btn-tab" style="margin-left:10px" id="search_btn" onclick="Search()">查询</a>  ';
 
             var btnLab1 = cfg.GetPara("BtnLab1");
             var btnLab2 = cfg.GetPara("BtnLab2");
             if (btnLab1 != null && btnLab1 != undefined && btnLab1 != "")
-                html += "&nbsp;<a href='#'class='btn btn-default btn-sm'  onclick='executeFunction(\"" + cfg.GetPara("BtnJS1") + "\",\"" + btnLab1 + "\")'>" + btnLab1 + "</a>";
+                html += "&nbsp;<a href='#'class='cc-btn-tab'  onclick='executeFunction(\"" + cfg.GetPara("BtnJS1") + "\",\"" + btnLab1 + "\")'>" + btnLab1 + "</a>";
 
             if (btnLab2 != null && btnLab2 != undefined && btnLab2 != "")
-                html += "&nbsp;<a href='#'class='btn btn-default btn-sm'   onclick='executeFunction(\"" + cfg.GetPara("BtnJS2") + "\",\"" + btnLab2 + "\")'>" + btnLab2 + "</a>";
+                html += "&nbsp;<a href='#'class='cc-btn-tab'   onclick='executeFunction(\"" + cfg.GetPara("BtnJS2") + "\",\"" + btnLab2 + "\")'>" + btnLab2 + "</a>";
 
             if (mapBase.IsInsert.toString().toLowerCase() == "true")
-                html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="new_btn" onclick="New()">新建</a>';
+                html += '&nbsp;<a href="#" class="cc-btn-tab" id="new_btn" onclick="New()">新建</a>';
 
-            html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="exp_btn" onclick="Exp()">导出</a>';
+            html += '&nbsp;<a href="#" class="cc-btn-tab" id="exp_btn" onclick="Exp()">导出</a>';
 
             if (mapBase.IsImp.toString().toLowerCase() == "true")
-                html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="exp_btn" onclick="Imp()">导入</a> ';
+                html += '&nbsp;<a href="#" class="cc-btn-tab" id="exp_btn" onclick="Imp()">导入</a> ';
             if (new WebUser().No == "admin")
-                html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="setting_btn" onclick="Setting()">设置</a>';
+                html += '&nbsp;<a href="#" class="cc-btn-tab" id="setting_btn" onclick="Setting()">设置</a>';
 
             html += "</td></tr>";
 
@@ -1626,19 +1676,23 @@
 
 </head>
 <body id="SearchHtml" class="cs-search-html">
-    <div class="wrapper wrapper-content animated fadeInRight cs-table" style="padding: 0px 10px 0px 10px">
-        <div class="ibox-content">
+    <div class="wrapper-content animated fadeInRight ">
+        
             <div class="row cs-shadow-box">
                 <div class="panel panel-default" style="border: 0px; margin-bottom: 3px">
-                    <div id="toolbar" style="width: 100%">
+                    <div class="pull-right">
+                        <table id="toolbar" class="table-tdno-solid" style="border:0px;">
+                        </table>
                     </div>
                 </div>
             </div>
             <div class="row cs-shadow-box">
-                <table id="dg" class="table table-hover" style="word-wrap: break-word; word-break: break-all;">
-                </table>
+                <div class="pd15">
+                    <table id="dg" class="table table-striped" style="word-wrap: break-word; word-break: break-all;">
+                    </table>
+                </div>
                 <!-- 显示分页信息 -->
-                <div>
+                <div style="padding:0px 20px;">
                     <div class="row cs-pagination" style="float:left;width:65%;text-align: left;">
                         <ul class="pagination  controls" style="margin-left:20px"><li class=" controls" id="JsResult"></li></ul>
                     </div>
@@ -1651,7 +1705,7 @@
                 </div>
 
             </div>
-        </div>
+    
         <div id="Msg">
         </div>
     </div>

@@ -59,7 +59,7 @@ input.ccflow-search {
 	max-width: inherit;
 }
 .ccflow-block {
-	position: absolute;
+	position:relative;
 	width: 100px;
 	max-height: 120px;
 	background-color: #fff;

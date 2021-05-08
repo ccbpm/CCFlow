@@ -144,11 +144,11 @@
             data = JSON.parse(data);
 
             //生成分组的字符串.
-            var str = "";
+            var str = "@";
             for (var i = 0; i < data.length; i++) {
-                if (str.indexOf('@' + data[i].FlowName) == -1) {
+                if (str.indexOf('@' + data[i].FlowName+"@") == -1) {
                     if (flowNos == null || (flowNos != null && flowNos.indexOf(data[i].FK_Flow) != -1))
-                        str += "@" + data[i].FlowName;
+                        str += data[i].FlowName+"@";
                 }
 
             }

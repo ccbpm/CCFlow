@@ -18,7 +18,9 @@
     <link href="../../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
@@ -186,48 +188,56 @@
     <base target="_self" />
 </head>
 <body>
-    <form method="post" action="" id="form1">
-        <div id="bar" class="cs-tr cs-bar">
-            <label style="float:left;font-size:15px;font-weight:bolder;">自动发起按照SQL设置数据源</label>
+    <div class="container-full">
 
-            <input id="Btn_Save" type="button" value="保存" onclick="Save()" />
-            <input id="Btn_Delete" type="button" value="删除" onclick="Delete()" />
-            <input id="Btn_Back" type="button" value="返回" onclick="Back()" />
-            <input id="Btn_Help" type="button" value="帮助" onclick="Help()" />
+        <div id="titleH4" class="attrnode-bar-header">
+            <span class="pull-right">
+                <button id="Btn_Save" class="cc-btn-tab btn-save" onclick="Save();">保存</button>
+                <button id="Btn_Delete" class="cc-btn-tab btn-delete" onclick="Delete();">删除</button>
+                <button id="Btn_Back" class="cc-btn-tab btn-back" onclick="Back();">返回</button>
+                <button id="Btn_Help" class="cc-btn-tab btn-hlep" onclick="Help();">帮助</button>
+            </span>
+            <strong>自动发起按照SQL设置数据源 </strong>
         </div>
-
-        <fieldset>
-            <legend>主表SQL设置</legend>
-            <br />
-            <textarea name="TB_SQL" class="SQL" rows="7" cols="70" id="TB_SQL" style="width: 99%;"></textarea>
-            <font color="green"><div id="fields"></div> </font>
-        </fieldset>
-        <fieldset>
-
-            <legend>从表SQL设置</legend>
-            <div id="dtls">
-            </div>
-        </fieldset>
+        <form method="post" action="" id="form1">
 
 
-        <fieldset>
-            <legend id="Help">帮助</legend>
+            <fieldset>
+                <legend>主表SQL设置</legend>
+                <div class="pd15">
+                    <textarea name="TB_SQL" class="SQL" rows="7" cols="70" id="TB_SQL" style="width: 99%;"></textarea>
+                    <font color="green"><div id="fields"></div> </font>
+                </div>
+            </fieldset>
+            <fieldset>
+
+                <legend>从表SQL设置</legend>
+                <div class="pd15">
+                    <div id="dtls">
+                    </div>
+                </div>
+            </fieldset>
+
+
+            <fieldset>
+                <legend id="Help">帮助</legend>
+                <ul>
+                    <li> 填充主表的 sql 必须有MainPK, 字段, 可以有ToNode,ToEmps 字段。</li>
+                    <li> 关于MainPK 字段：它可以是一个订单号、事故号、单据号、或者字符组合的不重复的编号，如果MainPK已经存在，就不在发起了。</li>
+                    <li> 主表的每行记录都可以是一个, 可以有ToNode,ToEmps 字段。</li>
+                </ul>
+            </fieldset>
+
+
+            <!--<legend>说明:</legend>
             <ul>
-                <li> 填充主表的 sql 必须有MainPK, 字段, 可以有ToNode,ToEmps 字段。</li>
-                <li> 关于MainPK 字段：它可以是一个订单号、事故号、单据号、或者字符组合的不重复的编号，如果MainPK已经存在，就不在发起了。</li>
-                <li> 主表的每行记录都可以是一个, 可以有ToNode,ToEmps 字段。</li>
-            </ul>
-        </fieldset>
-
-
-        <!--<legend>说明:</legend>
-        <ul>
-            <li> 设置一个查询SQL,  </li>
-            <li> SQL里面必须有一个@MainPK 变量 </li>
-        </ul>-->
+                <li> 设置一个查询SQL,  </li>
+                <li> SQL里面必须有一个@MainPK 变量 </li>
+            </ul>-->
 
 
 
-    </form>
+        </form>
+    </div>
 </body>
 </html>

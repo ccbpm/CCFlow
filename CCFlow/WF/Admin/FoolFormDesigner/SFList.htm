@@ -85,9 +85,9 @@
 
                 if (fk_mapData != null) {
                     if (GetQueryString('From') != null)
-                        nameLink = "<input type=radio id='RB" + sfTable.No + "' name='RB' value='" + sfTable.No + "@" + sfTable.Name + "@" + sfTable.FK_Val + "' /><label for='RB" + sfTable.No + "'> " + sfTable.No + " </label>";
+                        nameLink = "<label for='RB" + sfTable.No + "'> <input type=radio id='RB" + sfTable.No + "' name='RB' value='" + sfTable.No + "@" + sfTable.Name + "@" + sfTable.FK_Val + "' /> " + sfTable.No + " </label>";
                     else
-                        nameLink = "<a href=\"javascript:AddSFTable('" + sfTable.No + "')\" ><img src='../../Img/Btn/Add.gif' border=0 />" + sfTable.No + "</a>";
+                        nameLink = "<a href=\"javascript:AddSFTable('" + sfTable.No + "')\" class='cc-btn-tab btn-edit'> " + sfTable.No + "</a>";
                 }
                 else
                     nameLink = sfTable.No;
@@ -105,9 +105,9 @@
 
                 newRow += "<td>";
 
-                newRow += "<a href=\"javascript:Edit('" + sfTable.No + "','" + sfTable.SrcType + "')\"><img src='../../Img/Btn/Edit.gif' border=0 />编辑</a>";
+                newRow += "<a href=\"javascript:Edit('" + sfTable.No + "','" + sfTable.SrcType + "')\"  class='cc-btn-tab btn-edit'>编辑</a>";
 
-                newRow += " - <a href=\"javascript:Del('" + sfTable.No + "','" + sfTable.Name + "','" + sfTable.SrcType + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
+                newRow += " - <a href=\"javascript:Del('" + sfTable.No + "','" + sfTable.Name + "','" + sfTable.SrcType + "')\"  class='cc-btn-tab btn-del'>删除</a>";
                 newRow += "</td>";
                 newRow += "</tr>";
                 
@@ -270,36 +270,43 @@
     </script>
 </head>
 <body onkeypress="Esc()">
-    <table id="Table1" style="width: 98%;">
-        <caption style="margin-bottom:5px">
-            字典列表 - <a href="javascript:New()">创建字典表</a>
-            &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" class="form-control" placeholder="请输入编号或名称" style="height:27px" id="TB_Key" /> <input type="button" id="btn_search" onclick="Search()" value="查询" />
-        </caption>
-        <tr>
-            <th>
-                序
-            </th>
-            <th>
-                编号
-            </th>
-            <th>
-                名称
-            </th>
-            <th>
-                数据源
-            </th>
-            <th>
-                类型
-            </th>
-            <th>
-                格式
-            </th>
-            <th>
-                编辑
-            </th>
-        </tr>
-    </table>
-    <div id="Msg">
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <div class="pull-right">
+                <input type="text" placeholder="请输入编号或名称" id="TB_Key" /> <input type="button" class="cc-btn-tab" id="btn_search" onclick="Search()" value="查询" />
+                <a href="javascript:New()" class="cc-btn-tab btn-edit">创建字典表</a>
+            </div>
+            <strong>字典列表  </strong>
+        </div>
+
+        <table id="Table1" class="table">
+            
+            <tr>
+                <th>
+                    序
+                </th>
+                <th>
+                    编号
+                </th>
+                <th>
+                    名称
+                </th>
+                <th>
+                    数据源
+                </th>
+                <th>
+                    类型
+                </th>
+                <th>
+                    格式
+                </th>
+                <th>
+                    编辑
+                </th>
+            </tr>
+        </table>
+        <div id="Msg">
+        </div>
     </div>
 </body>
 </html>

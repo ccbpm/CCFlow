@@ -357,3 +357,4 @@
 .icon-edit::before{content: '\e657';}
 .icon-property::before{content: '\e620';}
 .icon-save::before{content: '\e647';}
+.panel-with-icon::before{content: '\e677';}

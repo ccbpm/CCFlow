@@ -472,10 +472,10 @@
 .slider-inner {border-color:#95B8E7;background:#E0ECFF;}
 .slider-rule span {border-color:#95B8E7;}
 .slider-rulelabel span {color:#000000;}
-.menu {position:absolute;margin:0;padding:2px;border-width:1px;border-style:solid;overflow:hidden;}
+.menu {position:absolute;margin:0;border-width:1px;border-style:solid;overflow:hidden;}
 .menu-inline {position:relative;}
 .menu-item {position:relative;margin:0;padding:0;overflow:hidden;white-space:nowrap;cursor:pointer;border-width:1px;border-style:solid;}
-.menu-text {height:20px;line-height:20px;float:left;padding-left:28px;}
+.menu-text {height:24px;line-height:24px;float:left;padding-left:10px;}
 .menu-icon {position:absolute;width:16px;height:16px;left:2px;top:50%;margin-top:-8px;}
 .menu-rightarrow {position:absolute;width:16px;height:16px;right:0;top:50%;margin-top:-8px;}
 .menu-line {position:absolute;left:26px;top:0;height:2000px;font-size:1px;}
@@ -487,12 +487,12 @@
 .menu-text,.menu-text span {font-size:12px;}
 .menu-shadow {position:absolute;-moz-border-radius:5px 5px 5px 5px;-webkit-border-radius:5px 5px 5px 5px;border-radius:5px 5px 5px 5px;background:#ccc;-moz-box-shadow:2px 2px 3px #cccccc;-webkit-box-shadow:2px 2px 3px #cccccc;box-shadow:2px 2px 3px #cccccc;filter:progid:DXImageTransform.Microsoft.Blur(pixelRadius=2,MakeShadow=false,ShadowOpacity=0.2);}
 .menu-rightarrow {background:url('images/menu_arrows.png') no-repeat -32px center;}
-.menu-line {border-left:1px solid #ccc;border-right:1px solid #fff;}
-.menu-sep {border-top:1px solid #ccc;border-bottom:1px solid #fff;}
+/*.menu-line {border-left:1px solid #ccc;border-right:1px solid #fff;}
+.menu-sep {border-top:1px solid #ccc;border-bottom:1px solid #fff;}*/
 .menu {background-color:#fafafa;border-color:#ddd;color:#444;}
 .menu-content {background:#ffffff;}
 .menu-item {border-color:transparent;_border-color:#fafafa;}
-.menu-active {color:#fff;background:#4d49bf;}
+.menu-active {color:#fff;background:#4d49bf; border-radius:0px;}
 .menu-active-disabled {border-color:transparent;background:transparent;color:#444;}
 /*三级菜单的样式，后面可以统一到二级和一级*/#mFlow .menu-line,#mFlow .menu-sep,#mFlowSort .menu-line,#mFlowSort .menu-sep,#mFormSort .menu-line,#mFormSort .menu-sep,#mForm .menu-line,#mForm .menu-sep {display:none;}
 #mFlow,#mFlowSort,#mFormSort,#mForm {border:0;padding:0;background-color:#fff;box-shadow:0 0 6px rgba(0,0,0,.2);}

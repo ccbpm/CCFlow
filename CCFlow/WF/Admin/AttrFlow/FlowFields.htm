@@ -12,6 +12,7 @@
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <base target="_self" />
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
@@ -180,124 +181,134 @@
     </style>
 </head>
 <body onkeypress="Esc()">
-    <table class="table table-bordered table-hover table-condensed" id="Table1" style="width: 100%">
-        <h4>
-            流程系统字段</h4>
-        <tr>
-            <th style="width: 5%">
-                序
-            </th>
-            <th style="width: 20%">
-                字段名
-            </th>
-            <th style="width: 20%">
-                字段中文名称
-            </th>
-            <th style="width: 10%">
-                最小长度
-            </th>
-            <th style="width: 10%">
-                最大长度
-            </th>
-            <th style="width: 20%">
-                业务类型
-            </th>
-            <th style="width: 15%">
-                其他
-            </th>
-        </tr>
-    </table>
-    <table class="table table-bordered table-hover table-condensed" id="Table2" style="width: 100%">
-        <h4>
-            普通字段
-        </h4>
-        <tr>
-            <th style="width: 5%">
-                序
-            </th>
-            <th style="width: 20%">
-                字段名
-            </th>
-            <th style="width: 20%">
-                字段中文名称
-            </th>
-            <th style="width: 10%">
-                最小长度
-            </th>
-            <th style="width: 10%">
-                最大长度
-            </th>
-            <th style="width: 20%">
-                业务类型
-            </th>
-            <th style="width: 15%">
-                其他
-            </th>
-        </tr>
-    </table>
-    <table class="table table-bordered table-hover table-condensed" id="Table3" style="width: 100%">
-        <h4>
-            枚举字段</h4>
-        <tr>
-            <th style="width: 5%">
-                序
-            </th>
-            <th style="width: 20%">
-                字段名
-            </th>
-            <th style="width: 20%">
-                字段中文名称
-            </th>
-            <th style="width: 10%">
-                最小长度
-            </th>
-            <th style="width: 10%">
-                最大长度
-            </th>
-            <th style="width: 20%">
-                业务类型
-            </th>
-            <th style="width: 15%">
-                其他
-            </th>
-        </tr>
-    </table>
-    <table class="table table-bordered table-hover table-condensed" id="Table4" style="width: 100%">
-        <h4>
-            外键字段</h4>
-        <tr>
-            <th style="width: 5%">
-                序
-            </th>
-            <th style="width: 20%">
-                字段名
-            </th>
-            <th style="width: 20%">
-                字段中文名称
-            </th>
-            <th style="width: 10%">
-                最小长度
-            </th>
-            <th style="width: 10%">
-                最大长度
-            </th>
-            <th style="width: 20%">
-                业务类型
-            </th>
-            <th style="width: 15%">
-                其他
-            </th>
-        </tr>
-    </table>
-    <table class="table table-bordered table-hover table-condensed">
-        <tr>
-            <th colspan="7">
-                <div style="float: right" id="dtsbt">
-                    如果您想把该表的数据实时的同步到您指定的表，请执行【<a href="DTSBTable.htm?FK_Flow=flowNo">与业务数据表同步</a>】</div>
-            </th>
-        </tr>
-    </table>
-    <div id="Msg">
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <strong>流程系统字段 </strong>
+        </div>
+        <table class="table  table-hover" id="Table1" style="width: 100%">
+
+            <tr>
+                <th style="width: 5%">
+                    序
+                </th>
+                <th style="width: 20%">
+                    字段名
+                </th>
+                <th style="width: 20%">
+                    字段中文名称
+                </th>
+                <th style="width: 10%">
+                    最小长度
+                </th>
+                <th style="width: 10%">
+                    最大长度
+                </th>
+                <th style="width: 20%">
+                    业务类型
+                </th>
+                <th style="width: 15%">
+                    其他
+                </th>
+            </tr>
+        </table>
+        <div class="attrnode-bar-header">
+            <strong>普通字段 </strong>
+        </div>
+        <table class="table  table-hover " id="Table2" style="width: 100%">
+       
+            <tr>
+                <th style="width: 5%">
+                    序
+                </th>
+                <th style="width: 20%">
+                    字段名
+                </th>
+                <th style="width: 20%">
+                    字段中文名称
+                </th>
+                <th style="width: 10%">
+                    最小长度
+                </th>
+                <th style="width: 10%">
+                    最大长度
+                </th>
+                <th style="width: 20%">
+                    业务类型
+                </th>
+                <th style="width: 15%">
+                    其他
+                </th>
+            </tr>
+        </table>
+        <div class="attrnode-bar-header">
+            <strong>枚举字段 </strong>
+        </div>
+        <table class="table table-hover " id="Table3" style="width: 100%">
+         
+            <tr>
+                <th style="width: 5%">
+                    序
+                </th>
+                <th style="width: 20%">
+                    字段名
+                </th>
+                <th style="width: 20%">
+                    字段中文名称
+                </th>
+                <th style="width: 10%">
+                    最小长度
+                </th>
+                <th style="width: 10%">
+                    最大长度
+                </th>
+                <th style="width: 20%">
+                    业务类型
+                </th>
+                <th style="width: 15%">
+                    其他
+                </th>
+            </tr>
+        </table>
+        <div class="attrnode-bar-header">
+            <strong>外键字段 </strong>
+        </div>
+        <table class="table table-hover" id="Table4" style="width: 100%">
+         
+            <tr>
+                <th style="width: 5%">
+                    序
+                </th>
+                <th style="width: 20%">
+                    字段名
+                </th>
+                <th style="width: 20%">
+                    字段中文名称
+                </th>
+                <th style="width: 10%">
+                    最小长度
+                </th>
+                <th style="width: 10%">
+                    最大长度
+                </th>
+                <th style="width: 20%">
+                    业务类型
+                </th>
+                <th style="width: 15%">
+                    其他
+                </th>
+            </tr>
+        </table>
+        <table class="table table-hover ">
+            <tr>
+                <th colspan="7">
+                    <div style="float: right" id="dtsbt">
+                        如果您想把该表的数据实时的同步到您指定的表，请执行【<a href="DTSBTable.htm?FK_Flow=flowNo">与业务数据表同步</a>】
+                    </div>
+                </th>
+            </tr>
+        </table>
+        <div id="Msg">
+        </div>
     </div>
 </body>
 <script language="javascript" type="text/javascript">

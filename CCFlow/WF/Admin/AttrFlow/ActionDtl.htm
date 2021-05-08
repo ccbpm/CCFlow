@@ -20,21 +20,17 @@
 
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
 
+
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script src="../Admin.js"></script>
-    <style>
-        #Btn_Save {
-            background-image: url(../../Img/Btn/Save.png) !important;
-        }
 
-        #Btn_Back {
-            background-image: url(../../Img/Btn/Back.png) !important;
-        }
-    </style>
     <script type="text/javascript">
         //页面启动函数.
         $(function () {
@@ -132,67 +128,75 @@
     </script>
 </head>
 <body>
-    <form id="cc">
-        <div style="right:30px; position:absolute; z-index:100; top:-3px">
-            <input id="Btn_Save" name="Btn_Save" value="保存" onclick="Save();" type="button" />
-            <input id="Btn_Back" name="Button1" value="返回" onclick="Back();" type="button" />
+    <div class="container-full">
+
+        <div id="titleH4" class="attrnode-bar-header">
+            <span class="pull-right">
+                <button id="Btn_Save" class="cc-btn-tab btn-save" onclick="Save();">保存</button>
+                <button id="Btn_Back" class="cc-btn-tab btn-back" onclick="Back();">返回</button>
+            </span>
+            <strong>新增事件 </strong>
         </div>
-        <div style="position:relative;">
-            <table style="width:100%;" id="Table2">
-
-                <caption> <img style="vertical-align:middle" src='../../Img/Event.png' />新增事件 </caption>
-
-                <tr>
-                    <td>事件类型</td>
-                    <td>
-                        <select id="DDL_FK_Event" name="DDL_FK_Event">
-                            <option value="FlowOnCreateWorkID">  创建工作ID后 </option>
-                            <option value="FlowOverBefore" selected="selected">  流程结束前</option>
-                            <option value="FlowOverAfter">  流程结束后</option>
-                            <option value="BeforeFlowDel">  流程删除前</option>
-                            <option value="AfterFlowDel">  流程删除后</option>
-                        </select>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>执行内容类型</td>
-                    <td><select id="DDL_EventDoType" name="DDL_EventDoType" onchange="doChangeContent(this)"></select></td>
-                </tr>
-
-                <tr>
-                    <td>执行内容</td>
-                    <td>
-
-                        <textarea id="TB_SQL" name="TB_Doc" style="display: none; width:98%;"></textarea>	<!-- 其它事件 -->
-                        <select id="DDL_Doc" name="DDL_Doc" style="display: none;"></select>	<!-- 业务单元 -->
-                        <span id="sp_webapi" style="color:blue">调用事件时，无论成功与否，都不会影响流程正常运行，如果需要阻断流程执行，请自定义方法，比如抛出异常</span>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td colspan=1>
-                        执行成功信息提示(可为空)
-                    </td>
-                    <td colspan=1>
-                        <input type=text id="MsgOK" name="MsgOK" />
-                    </td>
-                </tr>
-
-                <tr>
-                    <td colspan=1>
-                        执行失败时提示(可为空)
-                    </td>
-
-                    <td>
-                        <input type=text id="MsgError" name="MsgError" />
-                    </td>
-                </tr>
-            </table>
-        </div>
+        <form id="cc">
         
+            <div style="position:relative;">
+                <table class="table" id="Table2">
 
-    </form>
+                
+
+                    <tr>
+                        <td>事件类型</td>
+                        <td>
+                            <select id="DDL_FK_Event" name="DDL_FK_Event">
+                                <option value="FlowOnCreateWorkID">  创建工作ID后 </option>
+                                <option value="FlowOverBefore" selected="selected">  流程结束前</option>
+                                <option value="FlowOverAfter">  流程结束后</option>
+                                <option value="BeforeFlowDel">  流程删除前</option>
+                                <option value="AfterFlowDel">  流程删除后</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>执行内容类型</td>
+                        <td><select id="DDL_EventDoType" name="DDL_EventDoType" onchange="doChangeContent(this)"></select></td>
+                    </tr>
+
+                    <tr>
+                        <td>执行内容</td>
+                        <td>
+
+                            <textarea id="TB_SQL" name="TB_Doc" style="display: none; width:98%;"></textarea>	<!-- 其它事件 -->
+                            <select id="DDL_Doc" name="DDL_Doc" style="display: none;"></select>	<!-- 业务单元 -->
+                            <span id="sp_webapi" style="color:blue">调用事件时，无论成功与否，都不会影响流程正常运行，如果需要阻断流程执行，请自定义方法，比如抛出异常</span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan=1>
+                            执行成功信息提示(可为空)
+                        </td>
+                        <td colspan=1>
+                            <input type=text id="MsgOK" name="MsgOK" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan=1>
+                            执行失败时提示(可为空)
+                        </td>
+
+                        <td>
+                            <input type=text id="MsgError" name="MsgError" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+        </form>
+
+    </div>
 
 </body>
 </html>

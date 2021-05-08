@@ -103,6 +103,8 @@ function AddBtnIcon() {
     }*/
 
     $("#Btn_Save").addClass("cc-btn-tab btn-save");
+    $("#Btn_SaveAs").addClass("cc-btn-tab btn-save");
+
     $("#Btn_Batch").addClass("cc-btn-tab btn-batch");
     $("#Btn_Delete").addClass("cc-btn-tab btn-delete");
     $("#Btn_Back").addClass("cc-btn-tab btn-back");
@@ -111,6 +113,10 @@ function AddBtnIcon() {
     $("#Btn_Help").addClass("cc-btn-tab btn-hlep");
     $("#Btn_Advanced").addClass("cc-btn-tab btn-advanced");
     $("#Btn_New").addClass("cc-btn-tab btn-new");
+    $("#Btn_Search").addClass("cc-btn-tab btn-search");
+    $("#Btn_App").addClass("cc-btn-tab btn btn_app");
+
+
 }
 
 style = ''

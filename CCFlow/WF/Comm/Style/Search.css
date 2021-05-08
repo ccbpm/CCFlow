@@ -21,8 +21,9 @@ table > td {
     margin: 8px 0;
     display: block;
     font-size: 13px;
+    border-radius:0px;
 }
-
+.pagination>li{ border-radius:0px;}
 .pagination .controls {
     float: left;
     border: 0;
@@ -78,11 +79,12 @@ table > td {
 }
 
 .cs-table tbody td, .JColResizer > tbody > tr > td, .JColResizer > tbody > tr > th {
-    padding: 4px 0 4px 6px !important;
+   
 }
 
 .cs-table tbody td {
     border-bottom: 1px solid #ddd !important;
+   
 }
 
 .fixed-table-container thead th .th-inner {
@@ -114,7 +116,7 @@ table > td {
     }
 
 .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
-    color: #15398b;
+    color: #565656;background:#f5f5ff; border-color:#fefefe;
 }
 
 /**.fixed-table-border {

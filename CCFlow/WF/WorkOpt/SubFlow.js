@@ -116,9 +116,37 @@ function ShowBtnListSubFlow(subFlows, fsf, node, workID, pworkID, flowNo, nodeID
     return _Html;
 
 }
+function GetState(wfState) {
+
+    switch (parseInt(wfState)) {
+        case 1:
+            return "草稿";
+        case 2:
+          
+            return "运行中";
+            break;
+        case 3: //已完成.
+            return "已完成";
+            break;
+        case 4:
+            return "挂起";
+        case 5:
+            return "退回";
+        case 6:
+            return "转发";
+        case 7:
+            return "删除";
+        case 8:
+            return "加签";
+        case 11:
+            return "加签回复";
+        default:
+            return "其它";
+    }
+}
+
 //表格模式展示子流程
 function ShowTableSubFlow(subFlows, sf, node, workID, pworkID, flowNo, nodeID) {
-
     var _Html = "";
 
     _Html += "<table width='100%'>";
@@ -226,10 +254,8 @@ function ShowTableSubFlow(subFlows, sf, node, workID, pworkID, flowNo, nodeID) {
             else
                 _Html += "<td nowrap>" + item.NodeName + "</td>";
             //流程的状态 
-            if (item.WFStateText == null || item.WFStateText == "")
-                _Html += "<td nowrap>&nbsp;</td>";
-            else
-                _Html += "<td nowrap>" + item.WFStateText + "</td>";
+           
+                _Html += "<td nowrap>" + GetState(item.WFState) + "</td>";
 
 
             var emps = item.TodoEmps.split(';');

@@ -42,7 +42,7 @@
                 newRow += "<td>" + node.NodeID + "</td>";
                 newRow += "<td>" + node.Name + "</td>";
                 newRow += "<td><img src='../ClientBin/NodeIcon/" + node.ICON + ".png' style='width:24px'  onerror=\"src='../ClientBin/NodeIcon/Default.jpg' \" />" + node.ICON + "</td>";
-                newRow += "<td><a class='btn btn-xs' href=\"javascript:Chenge('" + node.NodeID + "');\" >更换</a></td>";
+                newRow += "<td><a class='cc-btn-tab' href=\"javascript:Chenge('" + node.NodeID + "');\" >更换</a></td>";
                 newRow += "</tr>";
 
                 $("#Table1 tr:last").after(newRow);
@@ -77,7 +77,7 @@
                 <strong>节点icons维护,用户流程图、流程轨迹的显示. </strong>
             </div>
             <div>
-                <table class="table table-bordered table-hover table-condensed" id="Table1" style="width: 100%">
+                <table class="table" id="Table1">
 
                     <tr>
                         <th>

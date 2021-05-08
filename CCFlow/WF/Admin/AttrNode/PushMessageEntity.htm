@@ -80,7 +80,8 @@
 
             //初始化 01 02 03
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
-            handler.AddUrlData();
+           handler.AddUrlData();
+          //  handler.AddPara("xx", "123");
             var data = handler.DoMethodReturnString("PushMsgEntity_Init");
 
             if (data.indexOf('err@') == 0) {

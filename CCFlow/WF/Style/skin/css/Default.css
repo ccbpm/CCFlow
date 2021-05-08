@@ -2,6 +2,7 @@ body{margin:0 auto}
 .white{ color: #fff;}
 a{text-decoration: none;}
 input,textarea,button,select{ outline: 0;}
+
 /*驰骋按钮*/
 .container-full{ padding: 0px 10px;}
 .cc-btn{ background:#fff !important; border:1px solid #d7e6fd !important;color:#134da5 !important; border-radius:3px; font-size: 14px !important; }
@@ -65,18 +66,17 @@ a.ablue{ color:#134da5;text-decoration: none;}a.ablue:hover{color:#009688}
 .nav .drop-down:hover .drop-down-content{display:block}
 .headTiele label{color:red}
 
-.default-skin .tab-menu .tabs-wrap{background:#eae9fb;height:54px;margin: 0px;}
-.default-skin .tab-menu .tabs-wrap .tabs{border-width:0;height:54px!important;padding-left:0px; width:100%; margin: 0px;}
+.default-skin .tab-menu .tabs-wrap{background:#eae9fb;height:50px;margin: 0px;}
+.default-skin .tab-menu .tabs-wrap .tabs{border-width:0;height:50px!important;padding-left:0px; width:100%; margin: 0px;}
 
 .default-skin .tab-menu .tabs-wrap .tabs li{ width:33%; margin:0px;}
 
-
-.default-skin .tab-menu .tabs-wrap .tabs li a{ background:0 0;border:0;color:#4d49bf;font-weight:500;height:48px!important; line-height:24px!important;  display:block;margin:0px;font-family: "iconfont" !important;   -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale;text-align:center; position:relative; padding:3px 0px;}
-.default-skin .tab-menu .tabs-wrap .tabs li a:before{content: "\e660";font-size:18px; display:block }
-.default-skin .tab-menu .tabs-wrap .tabs li.tabs-first a:before{content: "\e65e";font-size:18px; display:block }
-.default-skin .tab-menu .tabs-wrap .tabs li.tabs-last a:before{content: "\e677"; font-size:18px; display:block}
+.default-skin .tab-menu .tabs-wrap .tabs li a{ background:0 0;border:0;color:#4d49bf;font-weight:500;height:44px!important; line-height:22px!important;  display:block;margin:0px;font-family: "iconfont" !important;   -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale;text-align:center; position:relative; padding:3px 0px;}
+.default-skin .tab-menu .tabs-wrap .tabs li a:before{content: "\e660";font-size:16px; display:block; height:18px; padding-top:3px; }
+.default-skin .tab-menu .tabs-wrap .tabs li.tabs-first a:before{content: "\e65e";font-size:16px; display:block }
+.default-skin .tab-menu .tabs-wrap .tabs li.tabs-last a:before{content: "\e677"; font-size:16px; display:block}
 .default-skin .tab-menu .tabs-wrap .tabs li a:hover{background:#dbdbf5;}
-.default-skin .tab-menu .tabs-wrap .tabs .tabs-title{font-size:15px !important;}
+.default-skin .tab-menu .tabs-wrap .tabs .tabs-title{font-size:14px !important;}
 .default-skin .tab-menu .tabs-wrap .tabs .tabs-selected{background:#4d49bf;}
 .default-skin .tab-menu .tabs-wrap .tabs .tabs-selected  a.tabs-inner{ background:#4d49bf;color:#fff;}
 .default-skin .tab-menu .tabs-panels .panel-body{background:#f5f5ff;}
@@ -91,18 +91,18 @@ a.ablue{ color:#134da5;text-decoration: none;}a.ablue:hover{color:#009688}
 .default-skin .tab-menu .tabs-panels .tree .tree-folder-open:before {content: "\e63a";}
 
 .default-skin .tab-menu .tabs-panels .tree .tree-file{ width:auto;height:auto;padding-right: 3px; }
-.default-skin .tab-menu .tabs-panels .tree .tree-file:before {content: "\e802"; font-size:14px}
-.default-skin .tab-menu .tabs-panels .tree{margin-top:10px}
+.default-skin .tab-menu .tabs-panels .tree .tree-file:before {content: "\e632"; font-size:14px}
+.default-skin .tab-menu .tabs-panels .tree{margin-top:3px}
 .default-skin .tab-menu .tabs-panels .tree li {background:#f5f5ff;}
 .default-skin .tab-menu .tabs-panels .tree li .tree-node{line-height:40px;height:40px;color:#565656}
 .default-skin .tab-menu .tabs-panels .tree li .tree-node:hover{background:#ffffff;color:#565656}
 /*.default-skin .tab-menu .tabs-panels .tree li .tree-node-hover{background:#ffffff;color:#565656}*/
-.default-skin .tab-menu .tabs-panels .tree li .tree-node .tree-title{font-size:15px !important;font-weight:500; }
+.default-skin .tab-menu .tabs-panels .tree li .tree-node .tree-title{font-size:14px !important;font-weight:500; }
 .default-skin .tab-menu .tabs-panels .tree li .tree-indent{width:4px}
 
 .default-skin .tab-menu .tabs-panels .tree li ul{ position:relative;}
 /*.default-skin .tab-menu .tabs-panels .tree li ul:before {content: ""; border-left:1px dotted #ccc; position:absolute; height:100%; width:2px; left:10px; }*/
-.default-skin .tab-menu .tabs-panels .tree li ul li .tree-node .tree-title{font-size:14px !important;}
+.default-skin .tab-menu .tabs-panels .tree li ul li .tree-node .tree-title{font-size:13px !important;}
 .default-skin .tab-menu .tabs-panels .tree .tree-hit{ background:none !important; color:#565656; top:0; margin-top:0px; height:auto; font-size:16px;}
 .default-skin .tab-menu .tabs-panels .tree .tree-expanded:before {content: "\e66a" !important; }
 .default-skin .tab-menu .tabs-panels .tree .tree-collapsed:before {content: "\e640";}
@@ -191,9 +191,8 @@ a.ablue{ color:#134da5;text-decoration: none;}a.ablue:hover{color:#009688}
 .cs-main-box .icon-star{}
 .cs-main-box .badge i{transform:scale(.8);margin:2px 0 0 0}
     .cs-main-box path {
-        stroke: #4d49bf;
-        fill: #4d49bf;
-        stroke-width: 2
+     
+        stroke-width:2
     }
 .cs-main-box  path:hover{stroke:#ff6600;fill:#ff6600}
 #nodeMenu{ padding: 0px !important; margin-left: 3px; margin-top: 38px;}
@@ -202,10 +201,11 @@ a.ablue{ color:#134da5;text-decoration: none;}a.ablue:hover{color:#009688}
 .mainul2 li i,.mainul3 li i{ font-size: 14px;}
 .mainul2 li:hover,.mainul3 li:hover{ background:#4d49bf;color:#fff;}
 
-.modal-header{ padding: 10px 15px;}
+.modal-header{ line-height:38px; height:38px;  background:#f7f7f7; padding:0px 10px;}
+.modal-header .modal-title{color:#4d49bf;font-weight:bold;line-height:38px; height:38px;}
 .modal-header h3{ font-size: 16px; color: #414141;}
-.modal-header .close{  font-size: 24px;opacity:0.8;}
-.modal-header .close:hover{ color: #9d0e29;}
+.modal-header .close{  background: #f7941f;font-size:16px; width:16px; height: 16px; line-height: 16px; text-align: center; border-radius: 50%; color: #fff !important; padding: 0px; margin: 10px;}
+.modal-header .close:hover{ color: #fff!important;  background:#4d49bf;}
 .modal-footer{ padding: 10px 15px;}
 .modal-footer .btn{margin-right:6px;margin-top:0px;padding:0 12px;line-height:28px;border:0 none;border-radius:3px;background-image:none;box-shadow:none;text-shadow:none;box-sizing:border-box; color: #fff;}
 #jqContextMenu{ box-shadow:0px 0px 5px #CCCCCC} 
@@ -281,10 +281,10 @@ a.ablue{ color:#134da5;text-decoration: none;}a.ablue:hover{color:#009688}
 .ui-widget .ui-widget-content{ border:0px}
 .ui-dialog .ui-dialog-titlebar{ border:0px; border-bottom:1px solid #ccc; background:none; border-radius:0px;}
 .ui-dialog .ui-dialog-titlebar .ui-dialog-title{font-size:16px;}
-.ui-dialog .ui-dialog-titlebar .ui-icon{ font-family: "iconfont";  font-size: 20px;  font-style: normal;  -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale; background:none;color:#000;text-indent:0}
+.ui-dialog .ui-dialog-titlebar .ui-icon{ font-family: "iconfont";  font-size: 16px;  font-style: normal;  -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale; background:none;color:#000;text-indent:0}
 .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close{ background:none;border:0px;}
-.ui-dialog .ui-dialog-titlebar .ui-icon:before{content: "\e7e8";}
-
+.ui-dialog .ui-dialog-titlebar .ui-icon:before{content: "\e7e8";background: #f7941f; width:16px; height: 16px; line-height: 16px; text-align: center; border-radius: 50%; color: #fff; padding: 0px; margin: 0px;}
+.ui-dialog .ui-dialog-titlebar .ui-icon:hover::before{background: #4d49bf;}
 .ui-dialog .ui-dialog-content{ padding:0px !important;}
 /*CCFlow\WF\Admin\AttrFlow\CheckFlow.htm*/
 .cc-checkflow{}
@@ -293,8 +293,9 @@ a.ablue{ color:#134da5;text-decoration: none;}a.ablue:hover{color:#009688}
 .cc-checkflow .cc-checkflow-msg ul li{ padding:3px 0px; line-height:24px;}
 
 /**admin.js按钮设置*/
-.cc-btn-tab{ cursor: pointer;padding: 3px 10px; margin-left: 8px; font-family: "iconfont";  font-size: 15px;  font-style: normal;  -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale; background:none !important;color:#000; border-radius: 3px; border:1px solid #4d49bf!important; color:#4d49bf!important}
-.cc-btn-tab:hover{opacity: 0.85;background:#4d49bf!important;color:#fff!important; }
+.cc-btn-tab{ cursor: pointer;padding: 3px 10px; margin-left: 8px; font-family: "iconfont";  font-size: 13px;  font-style: normal;  -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale; background:none !important;color:#000; border-radius: 3px; border:1px solid #4d49bf!important; color:#4d49bf!important}
+.cc-btn-tab:hover{background:#4d49bf!important;color:#fff!important; }
+a.cc-btn-tab:hover{text-decoration:none !important;}
 .cc-btn-tab:focus,.cc-btn-tab:active,.cc-btn-tab:hover{ border: 0px;outline:0;}
 
 .btn-save:before{content: "\e647"; padding-right: 5px;}
@@ -302,7 +303,7 @@ a.ablue{ color:#134da5;text-decoration: none;}a.ablue:hover{color:#009688}
 .btn-batch:before{content: "\e725"; padding-right: 5px;}
 
 .btn-delete:before{content: "\e63c"; padding-right: 5px;}
-
+.btn-del:before{content: "\e7e8"; padding-right: 5px;}
 .btn-back:before{content: "\e641"; padding-right: 5px;}
 
 .btn-imp:before{content: "\e651"; padding-right: 5px;}
@@ -330,6 +331,7 @@ a.ablue{ color:#134da5;text-decoration: none;}a.ablue:hover{color:#009688}
 .btn-foolfrm:before{content: "\e637"; padding-right: 5px;}
 
 .btn-close:before{content: "\e7e8"; padding-right: 5px;}
+.btn-edit:before{content: "\e657"; padding-right: 5px;}
 /*
 .MyFlowTree-navi-tab{padding:5px;display:block;line-height:18px;height:18px;padding-left:16px;text-decoration:none;border:1px solid #fff;border-bottom:1px #e5e5e5 solid}
 .cs-navi-tab:hover{background:#ffeeac;border:1px solid #db9f00}
@@ -370,3 +372,34 @@ a.ablue{ color:#134da5;text-decoration: none;}a.ablue:hover{color:#009688}
 
 .FoolFrmFieldCtrl{ text-align:right}
 input.form-control:focus{ border:1px solid #4d49bf }
+.cc-input{ border:1px solid #d1d1d1; padding:2px 5px; border-radius:3px;}
+.cc-input:focus{ border:1px solid #4d49bf }
+.table-tdno-solid td{ border:0px; border-bottom:0px !important}
+.cc-dialog-easyui{}
+.cc-dialog-easyui .layout-panel-west{ background:#f2f0f2;border-radius:0px !important;}
+.cc-dialog-easyui .layout-panel-west .panel-header{ background:#4d49bf;line-height:30px;height:30px;}
+.cc-dialog-easyui .layout-panel-west .panel-header .panel-title{ color:#fff; line-height:30px; font-size:14px;}
+.cc-dialog-easyui .layout-panel-west .panel-body{ background:#f2f0f2}
+.cc-dialog-easyui .layout-panel-west .panel-body .navlist{ padding:0px; width:100%}
+.cc-dialog-easyui .layout-panel-west .panel-body .navlist li a{ color:#505050;  font-size:14px; padding-top:5px; padding-bottom:5px;display:block}
+.cc-dialog-easyui .layout-panel-west .panel-body .navlist li i{ display:inline-block; width:20px;padding-left:20px;}
+.cc-dialog-easyui .layout-panel-west .panel-body .navlist li a:hover{background:#fff;}
+
+.group-easyui .panel{ padding:10px;}
+.group-easyui  .panel-header{ background:#f5f5ff;}
+.group-easyui  .panel-header .panel-title{ color:#4d49bf; padding:5px 10px; font-size:14px;}
+.group-easyui .panel-body, .group-easyui  .panel-header{ border-color:#f5f5ff;}
+.group-easyui .form-control{ padding:0px 5px;}
+
+.group-easyui-body .layout-panel-west td{ border-width:0px;}
+.group-easyui-body  #toolBar{ background:#f5f5ff !important; text-align:right}
+.group-easyui-body  #toolBar label{color:#4d49bf; padding:5px 10px; font-size:14px;}
+.group-easyui-body .panel{-webkit-box-shadow:none;box-shadow:none; padding:8px;}
+.group-easyui-body .layout-panel-center .panel-body{ border:0px; padding:0px  !important;}
+.group-easyui-body .layout-panel-center .panel-body .tabs-panels,.group-easyui-body .layout-panel-center .panel-body .tabs-header{border:0px;}
+.group-easyui-body .layout-panel-center .panel-body .tabs{ padding:0px; border-color:#f2f2f2; border-width:0px 0px 2px 0px;}
+.group-easyui-body .layout-panel-center .panel-body .tabs-panels .panel{ padding:15px 0px;}
+.group-easyui-body .layout-panel-center .panel-body .tabs .tabs-icon{ width:0px;}
+.group-easyui-body .layout-panel-center .panel-body .tabs .tabs-with-icon{ padding:5px 10px;}
+.group-easyui-body .layout-panel-center .panel-body .tabs li a.tabs-inner{ border:0px; background:none;}
+.group-easyui-body .layout-panel-center .panel-body .tabs li.tabs-selected a.tabs-inner{ color:#4d49bf; border-bottom: 2px solid #4d49bf;}

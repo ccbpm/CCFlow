@@ -10,7 +10,7 @@
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
-
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
 
     <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
@@ -98,7 +98,7 @@
             //分析项目
             GroupAnalysis(data);
             //分析结果显示
-            doPostBack(null,true);
+            doPostBack(null, true);
         }
 
         function InitToolBar(data) {
@@ -206,7 +206,7 @@
                 }
                 html += "<tr>";
                 html += "<td>";
-                html += "<input type='checkbox' id='" + groupAttrs[i].Field + "' name='groupContent' " + checked + " onclick='javascript:doPostBack(this,true)' value='" + groupAttrs[i].Field + "'/><label for='" + groupAttrs[i].Field + "'>" + groupAttrs[i].Name + "</label>";
+                html += "<label for='" + groupAttrs[i].Field + "'><input type='checkbox' id='" + groupAttrs[i].Field + "' name='groupContent' " + checked + " onclick='javascript:doPostBack(this,true)' value='" + groupAttrs[i].Field + "'/>" + groupAttrs[i].Name + "</label>";
                 html += "</td>";
                 html += "</tr>";
                 $("#CheckBoxList").append(html);
@@ -225,10 +225,10 @@
                     checked = "checked=checked";
                 }
                 html += "<tr>";
-                html += "<td>";
-                html += "<input type='checkbox' id='" + analyAtts[i].Field + "' name='groupAnaly' " + checked + " onclick='javascript:doPostBack(this,true)' value='" + analyAtts[i].Field + "'/><label for='" + analyAtts[i].Field + "'>" + analyAtts[i].Name + "</label>";
+                html += "<td align='center'>";
+                html += "<label for='" + analyAtts[i].Field + "'><input type='checkbox' id='" + analyAtts[i].Field + "' name='groupAnaly' " + checked + " onclick='javascript:doPostBack(this,true)' value='" + analyAtts[i].Field + "'/>" + analyAtts[i].Name + "</label>";
                 html += "</td>";
-                html += "<td style='font-size:12px;text-align:right'>";
+                html += "<td style='font-size:12px;text-align:right;padding:5px;'>";
                 html += "<select style='width:80%' class='form-control' name='DDL_" + analyAtts[i].Field + "' ID='DDL_" + analyAtts[i].Field + "' onchange='javascript:doPostBack(this,true)'>" + InitDDLOperation(data, analyAtts[i], null) + "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
                 html += "</td>";
                 html += "</tr>";
@@ -314,7 +314,7 @@
             var AttrsOfGroup = data["AttrsOfGroup"];
             var ActiveAttr = data["ActiveAttr"];
             var noShowSum = "";
-            
+
             //生成表格
             if ($("#CB_IsShowPict").is(":checked") == false) {
                 GenerTable("Content", groupSearch, AttrsOfNum, AttrsOfGroup, ur, ActiveAttr, noShowSum);
@@ -887,15 +887,15 @@
 
     </script>
 </head>
-<body class="easyui-layout">
+<body class="easyui-layout group-easyui">
     <form id="cc" class="form-inline" role="form">
-        <div id="mainDiv" data-options="region:'center',title:'学生',noheader:false" style="padding: 5px">
-            <div class="easyui-layout" data-options="fit:true">
-                <div id="toolBar" data-options="region:'north',noheader:true,split:false" style="padding: 2px;height: 34px; background-color: #E0ECFF; line-height: 30px">
-                    <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" onclick="Search()">查询</a>
-                    <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-excel'" onclick="Exp()">导出全部</a>
+        <div id="mainDiv" data-options="region:'center',title:'学生',noheader:false,collapsible:false,split:false" style="padding: 5px">
+            <div class="easyui-layout group-easyui-body" data-options="fit:true">
+                <div id="toolBar" data-options="region:'north',noheader:true,split:false" style="padding: 5px 10px 0px; height:60px;  ">
+                    <a href="#" class="cc-btn-tab" data-options="plain:true,iconCls:'icon-search'" onclick="Search()">查询</a>
+                    <a href="#" class="cc-btn-tab" data-options="plain:true,iconCls:'icon-excel'" onclick="Exp()">导出全部</a>
                 </div>
-                <div data-options="region:'west',title:'分组条件',split:true" style="width: 280px;">
+                <div data-options="region:'west',title:'分组条件',split:true,collapsible:false,split:false" style="width: 280px;">
                     <div class="easyui-panel" title="显示内容" style=" Contentpadding: 5px; margin-bottom: 5px">
                         <table id="CheckBoxList" style="border-style:None;width:100%;"></table>
                     </div>
@@ -903,25 +903,27 @@
                         <table id="AnalyGroup" cellspacing='0' cellpadding='0' border='0' style='border-style:none;width:100%'></table>
                     </div>
                     <div class="easyui-panel" title="图表" style="padding: 5px; margin-bottom: 5px">
-                        <table class="table" style=" width: 90%">
+                        <table class="table" style="border:none;">
                             <tr>
                                 <td>
-                                    高度：<input name="TB_H" type="text" value="460" id="TB_H" class="aspNetDisabled" style="width: 60px; height: auto;
+                                    高度：<input name="TB_H" type="text" value="460" id="TB_H" class="form-control" style="width: 60px; height: auto;
                                         text-align: right" />
                                 </td>
                                 <td style="text-align: right">
-                                    宽度：<input name="TB_W" type="text" value="800" id="TB_W" class="aspNetDisabled" style="width: 60px; height: auto;
+                                    宽度：<input name="TB_W" type="text" value="800" id="TB_W" class="form-control" style="width: 60px; height: auto;
                                         text-align: right" />
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
                                     <span class="aspNetDisabled" title="注意：仅当“显示内容”选择1项时，图表功能才可用！" style="float: left">
-                                        <input id="CB_IsShowPict" type="checkbox" name="CB_IsShowPict" onclick="javascript:doPostBack(this,false)" />
-                                        <label for="CB_IsShowPict">显示图表</label>
+                                        <label for="CB_IsShowPict">
+                                            <input id="CB_IsShowPict" type="checkbox" name="CB_IsShowPict" onclick="javascript:doPostBack(this,false)" />
+                                            显示图表
+                                        </label>
                                     </span>
                                     <span style="float: right">
-                                        <a id="lbtnApply" class="aspNetDisabled easyui-linkbutton" data-options="iconCls:&#39;icon-ok&#39;,plain:true">应用</a>
+                                        <a id="lbtnApply" class="cc-btn-tab" data-options="iconCls:&#39;icon-ok&#39;,plain:true">应用</a>
                                     </span>
                                 </td>
                             </tr>

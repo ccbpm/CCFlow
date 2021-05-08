@@ -9,14 +9,14 @@
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
-    <!-- 自己的系统风格统一. -->
-    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
-    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
-    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
     <base target="_self" />
     <style type="text/css">
         th, td {
             text-align: center;
+        }
+        input[type=checkbox], input[type=radio] {
+            margin-top:0px;
         }
     </style>
     <script type="text/javascript">
@@ -83,20 +83,20 @@
                         html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_RegularExp" + "' type='text' placeholder='正则表达式' value=''/></td>";
                         html += "<td><input onkeydown='upischange(" + i + ");' id='" + en.KeyOfEn + "_DefVal" + "' type='text' placeholder='默认值…' value='" + en.DefVal + "'/>&nbsp;&nbsp;<a href='#' onclick=ShowHidden('state','" + en.KeyOfEn + "')>默认值<a/></td>";
                     }
-                    html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIVisible' id='" + en.KeyOfEn + "_UIVisible" + "' type='checkbox' " + (en.UIVisible ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIVisible" + "'>可见</div></label></td>";
+                    html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIVisible' id='" + en.KeyOfEn + "_UIVisible" + "' type='checkbox' " + (en.UIVisible ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIVisible" + "' style='padding-left:20px;'>可见</div></label></td>";
                     if (en.UIContralType == 14) {
                         html += "<td> - </td>";
                     } else {
 
-                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='" + en.KeyOfEn + "_UIIsEnable" + "' type='checkbox' " + (en.UIIsEnable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIIsEnable" + "'>可编辑</div></label></td>";
+                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='" + en.KeyOfEn + "_UIIsEnable" + "' type='checkbox' " + (en.UIIsEnable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_UIIsEnable" + "'style='padding-left:30px;'>可编辑</div></label></td>";
                     }
                     if (en.UIContralType >= 4) {
                         html += "<td colspan=3> - </td>";
                     } else {
-                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsSigan' id='" + en.KeyOfEn + "_IsSigan" + "' type='checkbox' " + (en.IsSigan ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsSigan" + "'>签名</div></label></td>";
-                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsNotNull' id='" + en.KeyOfEn + "_IsNotNull" + "' type='checkbox' " + (en.UIIsInput ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsNotNull" + "'>必填</div></label></td>";
+                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsSigan' id='" + en.KeyOfEn + "_IsSigan" + "' type='checkbox' " + (en.IsSigan ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsSigan" + "'style='padding-left:20px;'>签名</div></label></td>";
+                        html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsNotNull' id='" + en.KeyOfEn + "_IsNotNull" + "' type='checkbox' " + (en.UIIsInput ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsNotNull" + "'style='padding-left:20px;'>必填</div></label></td>";
                         if (isShowNDRpt == true)
-                            html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + en.KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (en.IsWriteToFlowTable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToFlowTable" + "'>写入ND" + parseInt(flowNo) + "Rpt</div></label></td>";
+                            html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + en.KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (en.IsWriteToFlowTable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToFlowTable" + "'style='padding-left:20px;'>写入ND" + parseInt(flowNo) + "Rpt</div></label></td>";
 
                     }
                     //html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToGenerWorkFlow' id='" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "' type='checkbox' " + (en.IsWriteToGenerWorkFlow ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "'>写入WF_GernrWorkFlow</div></label></td>";
@@ -360,24 +360,26 @@
                 <th>
                     默认值
                 </th>
-                <th>
-                    <input onclick="CheckAll('UIVisible');" id='KeyOfEn_UIVisible' type="checkbox" />
-                    <label for="KeyOfEn_UIVisible">
-                        可见
-                    </label>
+                <th><label for="KeyOfEn_UIVisible">
+    <input onclick="CheckAll('UIVisible');" id='KeyOfEn_UIVisible' type="checkbox" />
+    可见
+</label>
                 </th>
                 <th>
-                    <input onclick="CheckAll('UIIsEnable');" id='KeyOfEn_UIIsEnable' type='checkbox' /><label for="KeyOfEn_UIIsEnable">
+                    <label for="KeyOfEn_UIIsEnable">
+                        <input onclick="CheckAll('UIIsEnable');" id='KeyOfEn_UIIsEnable' type='checkbox' />
                         可编辑
                     </label>
                 </th>
                 <th>
-                    <input onclick="CheckAll('IsSigan');" id='KeyOfEn_IsSigan' type='checkbox' /><label for="KeyOfEn_IsSigan">
+                    <label for="KeyOfEn_IsSigan">
+                        <input onclick="CheckAll('IsSigan');" id='KeyOfEn_IsSigan' type='checkbox' />
                         签名
                     </label>
                 </th>
                 <th>
-                    <input onclick="CheckAll('IsNotNull');" id='KeyOfEn_IsNotNull' type='checkbox' /><label for="KeyOfEn_IsNotNull">
+                    <label for="KeyOfEn_IsNotNull">
+                        <input onclick="CheckAll('IsNotNull');" id='KeyOfEn_IsNotNull' type='checkbox' />
                         必填
                     </label>
                 </th>

@@ -50,9 +50,9 @@
         showCloseBtn = true;
     //关闭按钮
     if(showCloseBtn == true)
-        var btnClose = $("<button type='button' id='closeModal' style='color:#0000007a;float: right;font-size: 22px;margin:0;background: transparent;border: none;' data-dismiss='modal' aria-hidden='true'>×</button>");
+        var btnClose = $("<button type='button' id='closeModal' style='color:#0000007a;float: right;font-size: 22px;margin:0;background: transparent;border: none;' data-dismiss='modal' aria-hidden='true'><i class='iconfont icon-guanbi'></i></button>");
     if (closeBtnColor && closeBtnColor != "")
-        btnClose = $("<button type='button' id='closeModal' style='color:black;float: right;background: transparent;border: none;' data-dismiss='modal' aria-hidden='true'>X</button>");
+        btnClose = $("<button type='button' id='closeModal' style='color:black;float: right;background: transparent;border: none;' data-dismiss='modal' aria-hidden='true'><i class='iconfont icon-guanbi'></i></button>");
    
     //标题
     var titleHead = $("<h4 class='modal-title' style='color:white;margin-top:7px;'></h4>");

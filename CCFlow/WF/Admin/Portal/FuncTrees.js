@@ -74,7 +74,7 @@ var functrees = [];
 //1.流程库
 functrees.push({
     Id: "flowTree",
-    Name: "流程树",
+    Name: "流程",
     AttrCols: ["TTYPE", "DTYPE", "ISPARENT"],
     ServiceCount: 1,
     Nodes: [{
@@ -100,7 +100,7 @@ functrees.push({
 //2.表单库
 functrees.push({
     Id: "formTree",
-    Name: "表单树",
+    Name: "表单",
     AttrCols: ["TType"],
     RootASC: { Field: "TType", Index: ["FormType", "FormType", "CloundData"] },  //"SRCROOT", 
     ServiceCount: 1, //2
@@ -147,7 +147,7 @@ if (plant != "CCFlow") {
 }
 functrees.push({
     Id: "sysTree",
-    Name: "系统管理",
+    Name: "系统",
     ServiceCount: 1,
     AttrCols: ["Url"],
     Nodes: [{

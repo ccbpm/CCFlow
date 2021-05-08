@@ -1,5 +1,4 @@
-﻿﻿
-/** -- ========================= 系统升级SQL (为了方便系统升级代码写入的问题,增加该SQL) 目的是为了方便JFlow CCFlow 的统一版本升级. **/
+﻿/** -- ========================= 系统升级SQL (为了方便系统升级代码写入的问题,增加该SQL) 目的是为了方便JFlow CCFlow 的统一版本升级. **/
 
 -- 升级旧版本，删除连接线, 如果升级到这里有错误，就需要删除重复的连接线.;
 update WF_Direction set mypk=replace(mypk, '_0','') ;
@@ -149,6 +148,10 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.CCBill.FrmBill','@No=基础信�
 -- 2019.05.15 ; 
 DELETE FROM Sys_EnCfg WHERE No='BP.CCBill.FrmDict';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.CCBill.FrmDict','@No=基础信息,单据基础配置信息.@BtnNewLable=单据按钮权限,用于控制每个功能按钮启用规则.@BtnImpExcel=列表按钮,列表按钮控制@Designer=设计者,流程开发设计者信息');
+
+-- 2020.04.27
+-- DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FrmNodeExt';
+-- INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FrmNodeExt','@MyPK=基础信息,表单关系配置.@IsEnableFWC=流程组件');
  
  ----2019.06.03;
  update Sys_MapAttr set ColSpan =0 ,TextColSpan = 2 where UIContralType=9 and ColSpan = 1;

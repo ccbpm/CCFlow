@@ -13,7 +13,8 @@
     <!-- 自己的系统风格统一. -->
     <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
     <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
-   
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+
     <script type="text/javascript">
 
         var selectedEles = null;
@@ -82,7 +83,7 @@
                 entities.RetrieveAll();
             entities = unique(entities);//去重复的人员
 
-            var html = "<table style='width:100%;' >";
+            var html = "<table class='table' >";
             html += "<tr>";
             html += "<th colspan=3>";
 
@@ -91,7 +92,7 @@
             html += "</div>";
 
             html += "<div style='float:left'>";
-            html += "<input type=text value='" + KeyVal + "'id='Search_Key' placeholder='输入编号或者名称'/><input type=button value='查询' onclick='Search();'  /><input type=button value='保存' onclick='Save()' class='cc-btn-tab'/>";
+            html += "<input type=text value='" + KeyVal + "'id='Search_Key' placeholder='输入编号或者名称'/><input type=button value='查询' onclick='Search();' class='cc-btn-tab' /><input type=button value='保存' onclick='Save()' class='cc-btn-tab'/>";
             html += "</div>";
 
             html += "</th>";
@@ -126,9 +127,9 @@
                 if (myNum == 0)
                     html += "<TR>";
                 if (isHave == true)
-                    html += "<td><input type='checkbox' class='dot2_checkbox' checked=true name='CB' id='CB_" + en.No + "'  value='" + en.No + "'/><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+                    html += "<td><label for='CB_" + en.No + "'><input type='checkbox' class='dot2_checkbox' checked=true name='CB' id='CB_" + en.No + "'  value='" + en.No + "'/>" + lab + "</label></td>";
                 else
-                    html += "<td><input type='checkbox' class='dot2_checkbox'  name='CB' id='CB_" + en.No + "'  value='" + en.No + "'/><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+                    html += "<td><label for='CB_" + en.No + "'><input type='checkbox' class='dot2_checkbox'  name='CB' id='CB_" + en.No + "'  value='" + en.No + "'/>" + lab + "</label></td>";
 
                 if (myNum == 2) {
                     html += "</tr>";
@@ -172,7 +173,7 @@
 
             var groups = hand.DoMethodReturnJSON("Dot2Dot_GenerGroupEntitis");
 
-            var html = "<table style='width:100%;' >";
+            var html = "<table class='table' >";
 
             html += "<tr>";
             html += "<th colspan=3>";
@@ -195,7 +196,7 @@
                 html += "<tr>";
                 html += "<th colspan=3>";
 
-                html += "<input type='checkbox'  onclick='CheckAll(this.checked, \"" + group.No + "\");' id='Group_" + group.No + "' name='Group_" + group.No + "' /><label for='Group_" + group.No + "'>" + group.Name + "</label>";
+                html += "<label for='Group_" + group.No + "'><input type='checkbox'  onclick='CheckAll(this.checked, \"" + group.No + "\");' id='Group_" + group.No + "' name='Group_" + group.No + "' /> " + group.Name + "</label>";
 
                 html += "</th>";
                 html += "</tr>";
@@ -251,9 +252,9 @@
                         html += "<TR>";
 
                     if (isHave == true)
-                        html += "<td><input type='checkbox' class='dot2_checkbox' checked=true name='CB_" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+                        html += "<td><label for='CB_" + en.No + "'><input type='checkbox' class='dot2_checkbox' checked=true name='CB_" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /> " + lab + "</label></td>";
                     else
-                        html += "<td><input type='checkbox' class='dot2_checkbox'  name='CB_" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+                        html += "<td><label for='CB_" + en.No + "'><input type='checkbox' class='dot2_checkbox'  name='CB_" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /> " + lab + "</label></td>";
 
 
                     if (myNum == 2) {
@@ -354,12 +355,13 @@
         /**/</script>
 </head>
 <body>
+    <div class="container-full" style="padding-top:10px;">
+        <table id="Table1">
+        </table>
 
-    <table id="Table1">
-    </table>
-
-    <input type=button id="Btn_Save" onclick="Save();" style="display: none;" value="Save" />
-    <div id="Msg"> </div>
+        <input type=button id="Btn_Save" class="cc-btn-tab" onclick="Save();" style="display: none;" value="Save" />
+        <div id="Msg"> </div>
+    </div>
     <script type="text/javascript">
         $(function () {
             //给全选的复选框添加事件

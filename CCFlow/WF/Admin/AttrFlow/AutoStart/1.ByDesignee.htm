@@ -67,26 +67,27 @@
         <legend>
             <label for="RB_FlowRunWay_1">指定人员按时启动</label>
         </legend>
-        <br />
-        <a href="javascript:ShowHidden('emps')">操作员参数设置帮助:</a>
+        <div class="pd10">
+            <a href="javascript:ShowHidden('emps')">操作员参数设置帮助:</a>
 
-        <div id="emps" style=" display:none;color:Gray">
-            <ul>
-                <li>说明：指定的人员指定的发起时间点自动启动流程。</li>
-                <li>请打开操作手册：<a href="javascript:WinOpen('http://ccbpm.mydoc.io/?v=5404&t=17088')">操作手册</a></li>
-                <li>一个人启动的参数格式：人员编号@时间点1@时间点2@时间点n  </li>
+            <div id="emps" style=" display:none;color:Gray">
+                <ul>
+                    <li>说明：指定的人员指定的发起时间点自动启动流程。</li>
+                    <li>请打开操作手册：<a href="javascript:WinOpen('http://ccbpm.mydoc.io/?v=5404&t=17088')">操作手册</a></li>
+                    <li>一个人启动的参数格式：人员编号@时间点1@时间点2@时间点n  </li>
 
-                <li>n个人启动的参数格式：人员编号@时间点1@时间点2@时间点n,人员编号@时间点1@时间点2@时间点n,人员编号@时间点1@时间点2@时间点n</li>
-                <li>比如：zhangshan@01:01@12:01  让张三在每天的 1点零1分，与12点零1分发起此流程。</li>
-                <li>比如：zhangshan@-01 01:01  让张三在每月1号的1点零1分发起此流程。</li>
-                <li>比如：zhangshan@06-01 01:01  让张三在每年的6月1号的1点零1分发起此流程。</li>
-                <li>cc的日期格式为：yyyy-MM-dd HH:mm 如果时间匹配到您设置的时间点，那么系统就会触发流程，多个时间点用@符号隔开。</li>
-            </ul>
+                    <li>n个人启动的参数格式：人员编号@时间点1@时间点2@时间点n,人员编号@时间点1@时间点2@时间点n,人员编号@时间点1@时间点2@时间点n</li>
+                    <li>比如：zhangshan@01:01@12:01  让张三在每天的 1点零1分，与12点零1分发起此流程。</li>
+                    <li>比如：zhangshan@-01 01:01  让张三在每月1号的1点零1分发起此流程。</li>
+                    <li>比如：zhangshan@06-01 01:01  让张三在每年的6月1号的1点零1分发起此流程。</li>
+                    <li>cc的日期格式为：yyyy-MM-dd HH:mm 如果时间匹配到您设置的时间点，那么系统就会触发流程，多个时间点用@符号隔开。</li>
+                </ul>
+            </div>
+
+            <br />
+
+            <input type="text" style="width:95%" id="TB_SpecEmp" name="TB_SpecEmp" />
         </div>
-
-        <br />
-
-        <input type="text" style="width:95%" id="TB_SpecEmp" name="TB_SpecEmp" />
     </fieldset>
     <fieldset>
         <legend id="help"></legend>

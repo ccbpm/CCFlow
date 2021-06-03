@@ -57,8 +57,8 @@
     </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentFTP, Version=33.0.3.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentFTP.33.0.3\lib\net45\FluentFTP.dll</HintPath>
+    <Reference Include="FluentFTP">
+      <HintPath>..\RefDLL\FluentFTP.dll</HintPath>
     </Reference>
     <Reference Include="FtpSupport">
       <HintPath>..\RefDLL\FtpSupport.dll</HintPath>

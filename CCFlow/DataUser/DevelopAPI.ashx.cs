@@ -337,7 +337,7 @@ namespace CCFlow.DataUser
                 if (BP.DA.DataType.IsNullOrEmpty(workidStr) == true)
                     continue;
 
-                string st1r = BP.WF.Dev2Interface.Flow_DoDeleteFlowByFlag(null, Int64.Parse(workidStr), "删除", true);
+                string st1r = BP.WF.Dev2Interface.Flow_DoDeleteFlowByFlag(Int64.Parse(workidStr), "删除", true);
             }
 
             Output("删除成功.");

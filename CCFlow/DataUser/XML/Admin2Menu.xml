@@ -26,6 +26,7 @@
   <Item No="202" GroupNo="OrgAdmin2" Name="岗位类型维护"  Url="../../Comm/Search.htm?EnsName=BP.Port.StationTypes"  />
   <Item No="203" GroupNo="OrgAdmin2" Name="岗位维护"   Url="../../Comm/Search.htm?EnsName=BP.Port.Stations"  />
   <Item No="001" GroupNo="OrgAdmin2" Name="数据源"  Url="../../Comm/Search.htm?EnsName=BP.Sys.SFDBSrcs"  />
+  <Item No="001" GroupNo="OrgAdmin2" Name="数据表"  Url="../../Comm/Search.htm?EnsName=BP.Sys.SFTables"  />
 
 
   <Group No="GPM" Name="菜单权限管理"  For="admin"  />

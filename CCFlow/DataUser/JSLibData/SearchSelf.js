@@ -33,6 +33,3 @@ function ImpFlowTemplate() {
     var url = "/App/FlowDesigner/Template.htm?EnsName=BP.Cloud.Template.FlowExts";
     window.location.href = url;
 }
-function DelTodoEmps(str) {
-    return str;
-}

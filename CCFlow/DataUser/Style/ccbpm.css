@@ -1,12 +1,16 @@
 /*  Table ����   */
+
+@import url('../../WF/Style/skin/css/Default.css');
+@import url('../../WF/Style/skin/adminfont/iconfont.css');
+@import url('../../WF/Scripts/bootstrap/css/bootstrap.min.css');
+
 body
 {
-    color: #333333;
-    font-family: "Open Sans" , sans-serif;
+    color: #333333; 
     padding: 0px !important;
     margin: 0px !important;
     font-size: 14px;
-    direction: ltr;
+   
 }
 /* ͼƬ�Ŵ�������ʽ */
 .HelpImg:hover {
@@ -106,7 +110,7 @@ input[type="password"]:-ms-input-placeholder {
 
 /*  table ���ͷ��� */
 table {
-    border: 1px outset #dce4e6;
+    border: 1px outset #f2f2f2;
     padding: inherit;
     margin: 0;
     border-collapse: collapse;
@@ -130,7 +134,7 @@ thead>tr>th{ text-align: center;}
 
 th {
     border-width: 1px;
-    border-color: #dce4e6;
+    border-color: #f2f2f2;
     border-style: solid;
     line-height: 25px;
     color: 0a0a0a;
@@ -147,7 +151,7 @@ th {
 .Idx
 {
     font-size: 12px;
-    border: 1px solid #ccc;
+    border: 1px solid #f2f2f2;
     text-align: center;
     font-weight: bold;
     width: 30px;
@@ -156,9 +160,9 @@ th {
 /* ss */
 .Sum
 {
-    background-color:InfoBackground;
+    background-color:#f7f7f7;
     font-size: 12px;
-    border: 1px solid #ccc;
+    
     text-align: left;
     font-weight: bold;
 }
@@ -174,7 +178,7 @@ td
     color: #333333;
     font-size: 13px;
     border-width: 1px;
-    border-color: #dce4e6;
+    border-color: #f2f2f2;
 }
 td label{ padding-right:5px;}
 
@@ -216,11 +220,10 @@ caption
     height: 30px;
     text-align: left;
     font-size: 14px;
-    background-position: 12px 6px;
-    border-bottom: 1px #CCCCCC solid;
-    text-indent: 1.8em;
+	padding:0px;
+   
     line-height: 30px;
-    color: #336699;
+    color: #009688;
     font-weight: bolder;
 }
 
@@ -309,8 +312,7 @@ caption
     text-align: left;
     font-size: 12px;
     margin-left: 4px;
-    border: lightgrey 1px solid;
-    border-top: none;
+   
     width: 35%;
 }
 

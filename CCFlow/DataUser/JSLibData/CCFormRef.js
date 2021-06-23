@@ -189,9 +189,4 @@ function IsSaveDtl() {
     });
 
     return regInput;
-}  
-
-
-function AlertData() {
-    alert(curRowIndex);
-}
+}    

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+   
+  <Item No="101" Name="登录信息" WinDocType="1" ColSpan="1"
+        Docs="" 
+        Icon="icon-people" />
+
+  <Item No="102" Name="关于驰骋快速开发平台" WinDocType="1" ColSpan="1"
+        Docs="驰骋快速开发平台简称ccflow. 他包含工作流引擎、表单引擎、规则引擎、组织结构管理、菜单管理等."
+        Icon="icon-people" />
+    
+</NewDataSet>

@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>内置流程菜单</title>
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../Portal/GenerIcons.js"></script>
+
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    <script src="../EnumLab.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            InitBar(MenuModel.FlowUrl); //发起全部流程.
+            var html = "";
+
+        });
+
+        function Save() {
+
+            //更新节点表单类型.
+            var moduleNo = GetQueryString("ModuleNo");
+            var en = new Entity("BP.GPM.Menu2020.Menu");
+            en.ModuleNo = moduleNo;
+            en.Name = $("#TB_Title").val();
+            //en.UrlExt = $("#TB_Url").val();
+            en.MenuModel = MenuModel.FlowUrl; //类型.
+
+            en.Icon = IconStart; //默认的图标.
+            en.MenuCtrlWay = 1; //任何人都可以使用.
+
+            en.UrlExt = $("#TB_UrlExt").val();
+            if (en.UrlExt.indexOf('000') != -1) {
+                alert("请设置流程编号.");
+                return;
+            }
+
+            en.Insert();
+
+            alert("创建成功，您可以在在菜单里执行高级编辑与授权.");
+
+            window.location.href = "../../Comm/En.htm?EnName=BP.GPM.Menu2020.Menu&No=" + en.No;
+
+            //window.location.href = "../Menus.htm";
+        }
+        function Selection(val, label) {
+
+            // var val = $("#DDL_UrlExt").val();
+            $("#TB_UrlExt").val(val);
+
+            var ctrl = $("#DDL_UrlExt");
+
+            //var label = ctrl.options[ctrl.selectedIndex].text;
+
+            $("#TB_Title").val(label);
+
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+    <fieldset>
+        <legend>发起流程 </legend>
+        <ul>
+            <li>菜单标题： </li>
+            <li> <input type="text" value="发起" id="TB_Title" placeholder="请输入菜单名字..." /> </li>
+            <li>菜单链接： </li>
+            <li>
+                <input type="text" value="" id="TB_UrlExt" style="width:300px;" placeholder="请输入菜单连接..." />
+                <br />
+                <select id="DDL_UrlExt" onchange="Selection(this.value,this.options[this.selectedIndex].text)">
+                    <option value="Start.htm"> 发起 </option>
+                    <option value="MyFlow.htm?FK_Flow=000"> 发起指定的流程 </option>
+
+                    <option value="Todolist.htm"> 待办</option>
+                    <option value="Todolist.htm?FK_Flow=000"> 指定的流程待办 </option>
+
+                    <option value="Runing.htm"> 在途</option>
+                    <option value="Runing.htm?FK_Flow=000"> 指定的流程在途 </option>
+
+                    <option value="CC.htm"> 抄送</option>
+                    <option value="CC.htm?FK_Flow=000"> 指定的抄送在途 </option>
+
+                    <!--<option value="Start.htm"> 发起全部流程</option>
+                    <option value="Start.htm"> 发起全部流程</option>-->
+                </select>
+            </li>
+        </ul>
+        <input type="button" id="Btn_Save" value="创建" onclick="Save();" />
+    </fieldset>
+
+    <fieldset>
+        <legend id="help"></legend>
+        <ul>
+            <li> 把发起流程的菜单绑定到当前模块下。</li>
+            <li> 解释：一个人能够启动那些流程是根据角色判断的，一个流程能被那些人可以发起是根据开始节点的访问规则设置的。</li>
+        </ul>
+    </fieldset>
+</body>
+</html>

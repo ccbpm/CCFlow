@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>新建系统</title>
+    <!--- 引入代码. -->
+    <script src="../Scripts/jquery/jquery.min.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+
+
+        });
+
+        function Save() {
+
+            var name = $("#TB_Name").val();
+            if (name == null || name == undefined) {
+                alert("错误请输入系统名称");
+                return;
+            }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_GPM");
+            handler.AddUrlData();
+            handler.AddFormData();
+
+            var data = handler.DoMethodReturnString("NewSystem_Save");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            alert("创建系统成功，您需要为模块创建菜单");
+
+
+            var url = "../Comm/En.htm?EnName=BP.GPM.Menu2020.MySystem&No=" + data;
+            window.location.href = url;
+
+            //    /WF/Comm / RefFunc / EnOnly.htm ? EnName = BP.GPM.Menu2020.MySystem & No=AppFlow & s=0.5017031840109709
+            // window.location.href = "./CreateMenu/Default.htm?ModuleNo="+data;
+            //   window.location.href = "Menus.htm?ModuleNo=" + data;
+
+        }
+    </script>
+</head>
+<body>
+
+    <form id="CCForm" name="CCForm">
+        系统名称：(最好不要超过6个汉字)
+
+        <table>
+            <tr>
+                <td>
+                    <input type="text" placeholder="比如：车辆管理、固定资产管理" id="TB_Name" name="TB_Name" style="width:400px;" />
+                </td>
+            </tr>
+        </table>
+
+        <table>
+
+            <tr>
+                <td># </td>
+                <td>模块名称: （不超过8个汉字） </td>
+            </tr>
+
+            <tr>
+                <td>1 </td>
+                <td> <input type="text" id="TB_1" name="TB_1" /> </td>
+                <td>比如：车辆台账 </td>
+            </tr>
+            <tr>
+                <td>2 </td>
+                <td> <input type="text" id="TB_2" name="TB_2" /> </td>
+                <td>比如：司机管理 </td>
+
+            </tr>
+            <tr>
+                <td>3 </td>
+                <td> <input type="text" id="TB_3" name="TB_3" /> </td>
+                <td>比如：费用管理 </td>
+
+            </tr>
+            <tr>
+                <td>4 </td>
+                <td> <input type="text" id="TB_4" name="TB_4" /> </td>
+                <td>比如：报表查询 </td>
+            </tr>
+            <tr>
+                <td>5 </td>
+                <td> <input type="text" id="TB_5" name="TB_5" /> </td>
+                <td>比如: 系统管理 </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">后续可以增加 </td>
+            </tr>
+        </table>
+
+        <input id="Btn_Save" type="button" onclick="Save();" value="下一步" />
+
+    </form>
+
+</body>
+</html>

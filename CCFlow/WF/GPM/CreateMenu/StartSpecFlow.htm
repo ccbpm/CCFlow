@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>自动发起</title>
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    <script src="../EnumLab.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            InitBar(MenuModel.StartSpecFlow);
+            var html = "";
+
+        });
+
+        function Save() {
+
+            //更新节点表单类型.
+            var moduleNo = GetQueryString("ModuleNo");
+            var en = new Entity("BP.GPM.Menu2020.Menu");
+            en.ModuleNo = moduleNo;
+
+            en.Name = $("#TB_Title").val();
+            en.UrlExt = $("#TB_Url").val();
+
+            en.MenuModel = "StartSpecFlow"; //发起指定的流程.
+            en.Insert();
+
+            alert("创建成功");
+
+            window.location.href = "../../Comm/En.htm?EnName=BP.GPM.Menu2020.Menu&No=" + en.No;
+
+            //window.location.href = "../Menus.htm";
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+    <fieldset>
+        <legend>发起指定的流程 </legend>
+        <ul>
+            <li>菜单标题,比如:用车申请单 </li>
+            <li> <input type="text" value="" id="TB_Title" placeholder="用车申请,车辆台账..." /> </li>
+            <li>流程模板编号: </li>
+            <li> <input type="text" value="" id="TB_Url" placeholder="比如：001"/> </li>
+        </ul>
+        <input type="button" id="Btn_Save" value="创建" onclick="Save();" />
+    </fieldset>
+
+    <fieldset>
+        <legend id="help">帮助</legend>
+        <ul>
+
+            <li> 发起指定的流程，系统就会链接到 MyFlow.htm?FK_Flow=xxx的功能页面上。 </li>
+            <li> 如果当前人员没有启动该流程的权限，就会提示错误。 </li>
+
+
+        </ul>
+    </fieldset>
+</body>
+</html>

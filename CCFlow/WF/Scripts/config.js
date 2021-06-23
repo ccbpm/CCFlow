@@ -152,7 +152,7 @@ Skip.addJs = function (url,rootObject) {
     if (rootObject == null || rootObject==undefined)
         rootObject = document.getElementsByTagName('script')[0];
     Skip.includeJsText(rootObject, oXmlHttp.responseText);
-    }
+}
 
 
 function IEVersion() {

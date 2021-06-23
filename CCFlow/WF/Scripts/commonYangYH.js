@@ -737,11 +737,16 @@ Common.CustomPagePlug = function (operation) {
                             if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "date") {//类型是日期的TD
                                 html += "<td " + style+">" + _this.DateFromMSJsonString(obje[$(headers[i]).data().colname]) + "</td>"
                             } else if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "Money") {
-                                var defValue = obje[$(headers[i]).data().colname];
-                                if (!/\./.test(defValue))
-                                    defValue += '.00';
-                                defValue = formatNumber(defValue, 2, ',');
-                                html += "<td " + style +">" + defValue + "</td>"
+                                var defVal = $(headers[i]).data().DefVal;
+                                var bit = 2;
+                                if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
+                                    bit = defVal.substring(defVal.indexOf(".") + 1).length;
+
+                                var val = obje[$(headers[i]).data().colname];
+                                if (!/\./.test(val))
+                                    val += '.00';
+                                val = formatNumber(val, bit, ',');
+                                html += "<td " + style + ">" + val + "</td>"
                             }
                             else if ($(headers[i]).data().opeation != undefined) {//存在操作按钮的TD
                                 //添加字符截取功能

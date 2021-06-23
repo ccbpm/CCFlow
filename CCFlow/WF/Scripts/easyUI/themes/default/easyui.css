@@ -18,7 +18,7 @@
 .panel-loading{background:url(images/loading.gif) no-repeat 10px 10px}
 /*.panel-tool-close{background:url(images/panel_tools.png) no-repeat -16px 0}*/
 .panel-tool-close::before{content: '\e7e8'; background: #f7941f; width:16px; height: 16px; line-height: 16px; text-align: center; border-radius: 50%; color: #fff; padding: 0px; margin: 0px;}
-.panel-tool-close:hover::before{background: #4d49bf;}
+.panel-tool-close:hover::before{background: #009688;}
 .panel-tool-min{background:url(images/panel_tools.png) no-repeat 0 0}
 .panel-tool-max{background:url(images/panel_tools.png) no-repeat 0 -16px}
 .panel-tool-restore{background:url(images/panel_tools.png) no-repeat -16px -16px}
@@ -62,8 +62,8 @@
 .window .window-body {border-width:0px;border-style:solid;border-top-width:0px; padding: 15px;}
 .window .window-body-noheader {border-top-width:1px;}
 .window .panel-body-nobottom {border-bottom-width:0;}
-.window .window-header  .panel-title{ line-height:38px; height:38px; margin:0px 8px; font-size:15px; color:#4d49bf}
-.window .window-header .panel-icon,.window .window-header .panel-tool {margin-top:-8px;background: none; font-family: "iconfont" !important;  font-size: 16px;  font-style: normal;  -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale;color:#4d49bf}
+.window .window-header  .panel-title{ line-height:38px; height:38px; margin:0px 8px; font-size:15px; color:#009688}
+.window .window-header .panel-icon,.window .window-header .panel-tool {margin-top:-8px;background: none; font-family: "iconfont" !important;  font-size: 16px;  font-style: normal;  -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale;color:#009688}
 .window .window-header .panel-icon {left:10px;top:50%;}
 .window .window-header .panel-tool {right:10px; }
 .window .window-header .panel-with-icon {padding-left:25px;}

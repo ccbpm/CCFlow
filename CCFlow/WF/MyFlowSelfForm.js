@@ -333,6 +333,10 @@ function GenerWorkNode() {
     var wf_node = workNodeData.WF_Node[0];
     var frmName = mapData.Name;
 
+   
+    var workID = GetQueryString("WorkID");
+    var fk_flow = GetQueryString("FK_Flow");
+    var fk_node = GetQueryString("FK_Flow");
     var url = wf_node.FormUrl;
     if (url == "")
         url = "../DataUser/DefaultSelfFormUrl.htm";
@@ -343,7 +347,7 @@ function GenerWorkNode() {
     if (url.indexOf('?') == -1) {
         url = url + "?1=2";
     }
-    url += "&WorkID=" + GetPageParas("WorkID") + "&FK_Flow=" + GetPageParas("FK_Flow") + "&FK_Node=" + GetPageParas("FK_Node");
+    url += "&WorkID=" + workID + "&FK_Flow=" + fk_flow + "&FK_Node=" + fk_node;
 
     var html = "<iframe ID='SelfForm' src='" + url + "' frameborder=0  style='width:100%;' leftMargin='0' topMargin='0'/>";
 

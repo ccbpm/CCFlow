@@ -1,6 +1,7 @@
 ﻿
 
 function GenerFoolFrm(wn) {
+    debugger 
     flowData = wn;
 
     //初始化Sys_MapData
@@ -74,7 +75,8 @@ function GenerFoolFrm(wn) {
                     var dtl = dtls[k];
                     if (dtl.No != gf.CtrlID)
                         continue;
-
+                    if (dtl.IsView == "0")
+                        continue;
                     html += "<tr>";
                     html += "  <td colspan='" + tableCol + "'  >";
 
@@ -195,7 +197,14 @@ function GenerFoolFrm(wn) {
 
             //从表..
             if (gf.CtrlType == 'Dtl') {
+                var dtls = flowData.Sys_MapDtl;
+                var mydtls = $.grep(dtls, function (dtl) {
+                    return dtl.No == gf.CtrlID && dtl.IsView != 0;
+                })
 
+                if (mydtls.length == 0)
+                    continue;
+                var dtl = mydtls[0];
                 html += "<tr class='FoolFrmGroupBarTR' >";
                 html += "  <th class='FoolFrmGroupBarTD'  id='THDtl_" + gf.CtrlID + "' colspan='" + tableCol + "' >";
                 html += "   <div style='float:left;display:inline'  class='FoolFrmGroupBarTD'>" + gf.Lab + "</div>";
@@ -203,23 +212,13 @@ function GenerFoolFrm(wn) {
 
                 html += "  </th>";
                 html += "</tr>";
+                html += "<tr class='FoolFrmFieldTR' >";
+                html += "  <td id='Dtl_" + dtl.No + "' colspan='" + tableCol + "' class='FoolFrmFieldCtrl' >";
 
-                var dtls = flowData.Sys_MapDtl;
+                html += Ele_Dtl(dtl);
 
-                for (var k = 0; k < dtls.length; k++) {
-
-                    var dtl = dtls[k];
-                    if (dtl.No != gf.CtrlID)
-                        continue;
-
-                    html += "<tr class='FoolFrmFieldTR' >";
-                    html += "  <td id='Dtl_" + dtl.No + "' colspan='" + tableCol + "' class='FoolFrmFieldCtrl' >";
-
-                    html += Ele_Dtl(dtl);
-
-                    html += "  </td>";
-                    html += "</tr>";
-                }
+                html += "  </td>";
+                html += "</tr>";
                 continue;
             }
 
@@ -290,10 +289,11 @@ function GenerFoolFrm(wn) {
 
             //字段类的控件.
             if (gf.CtrlType == '' || gf.CtrlType == null) {
-
-                html += "<tr class='FoolFrmFieldTR' >";
-                html += "  <th colspan='" + tableCol + "' class='FoolFrmGroupBarTD' >" + gf.Lab + "</th>";
-                html += "</tr>";
+                if (gf.ShowType != 2) {
+                    html += "<tr class='FoolFrmFieldTR' >";
+                    html += "  <th colspan='" + tableCol + "' class='FoolFrmGroupBarTD' >" + gf.Lab + "</th>";
+                    html += "</tr>";
+                }
                 if (tableCol == 4 || tableCol == 6)
                     html += InitMapAttr(flowData.Sys_MapAttr, flowData, gf.OID, tableCol);
                 else if (tableCol == 3)
@@ -752,7 +752,10 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
             isDropTR = true;
             html += "<tr class='FoolFrmFieldTR' >";
             html += "<td  id='TD_" + attr.KeyOfEn + "'  class='" + labClass + "' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + lab + "</td>";
-            html += "<td  class='FoolFrmFieldCtrl' id='TD_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
+            if (attr.IsSigan == "5") 
+                html += "<td  class='FoolFrmFieldCtrl' id='TD_" + attr.KeyOfEn + "'  style='text-align: center;width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
+            else
+                html += "<td  class='FoolFrmFieldCtrl' id='TD_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
             html += InitMapAttrOfCtrlFool(flowData, attr);
             html += "</td>";
             html += "</tr>";
@@ -775,7 +778,11 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
                 } else {
                     html += "<td  id='TD_" + attr.KeyOfEn + "'  class='" + labClass + "' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + lab + "</td>";
                 }
-                html += "<td  class='FoolFrmFieldCtrl' id='TD_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
+                if (attr.IsSigan == "5") {
+                    html += "<td  class='FoolFrmFieldCtrl' id='TD_" + attr.KeyOfEn + "'  style='text-align: center;width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
+                }
+                else
+                    html += "<td  class='FoolFrmFieldCtrl' id='TD_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
                 html += InitMapAttrOfCtrlFool(flowData, attr);
                 html += "</td>";
                 if (rowSpan != 1) {
@@ -835,7 +842,10 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
                     } else {
                         html += "<td  id='TD_" + attr.KeyOfEn + "'  class='" + labClass + "' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + lab + "</td>";
                     }
-                    html += "<td  class='FoolFrmFieldCtrl' id='TD_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
+                    if (attr.IsSigan == "5") 
+                        html += "<td  class='FoolFrmFieldCtrl' id='TD_" + attr.KeyOfEn + "'  style='text-align: center;width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
+                    else
+                        html += "<td  class='FoolFrmFieldCtrl' id='TD_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
                     html += InitMapAttrOfCtrlFool(flowData, attr);
                     html += "</td>";
                     if (rowSpan != 1) {
@@ -878,7 +888,10 @@ function InitMapAttr(Sys_MapAttr, flowData, groupID, tableCol) {
                     } else {
                         html += "<td  id='TD_" + attr.KeyOfEn + "'  class='" + labClass + "' style='width:" + textWidth + ";' rowSpan=" + rowSpan + " ColSpan=" + textColSpan + " class='tdSpan'>" + lab + "</td>";
                     }
-                    html += "<td  class='FoolFrmFieldCtrl' id='TD_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
+                    if (attr.IsSigan == "5") 
+                        html += "<td  class='FoolFrmFieldCtrl' id='TD_" + attr.KeyOfEn + "'  style='text-align: center;width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
+                    else
+                        html += "<td  class='FoolFrmFieldCtrl' id='TD_" + attr.KeyOfEn + "'  style='width:" + colWidth + ";' ColSpan=" + colSpan + " rowSpan=" + rowSpan + " class='tdSpan'>";
                     html += InitMapAttrOfCtrlFool(flowData, attr);
                     html += "</td>";
                     if (UseColSpan == tableCol) {
@@ -1292,6 +1305,19 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
                 if (webUser.CCBPMRunModel == 2)
                     val = webUser.OrgNo + "/";
                 return "<img alt='" + val + "' src='../DataUser/Siganture/" + val + UserIConExt + "'  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+            }
+            if (mapAttr.IsSigan == "5") {
+                //查找默认值
+                var val = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
+                //如果是图片签名，并且可以编辑
+                var ondblclick = ""
+                if (mapAttr.UIIsEnable == 1) {
+                    ondblclick = " ondblclick='figure_Template_HandWrite(\"" + mapAttr.KeyOfEn + "\",\"" + val + "\")'";
+                }
+
+                var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' type=hidden />";
+                eleHtml += "<img src='" + val + "' " + ondblclick + " onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"  style='border:0px;height:50px;width:50%' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                return eleHtml;
             }
             if (mapAttr.IsSecret)
                 return "<div  id='TDIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group'><input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "'  class='form-control' type='password' placeholder='" + (mapAttr.Tip || '') + "' style='width:100%'/></div>";
@@ -1729,7 +1755,7 @@ function Ele_Dtl(frmDtl) {
             src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=0&" + urlParam + "&Version=1&FrmType=0";
         }
     }
-    return "<iframe style='width:100%;height:100%' name='Dtl' ID='Dtl_" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+    return "<iframe style='width:100%;height:100%' name='Dtl' ID='IFrame_" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
 }
 
 function InitRBShowContent(flowData, mapAttr, defValue, RBShowModel, enableAttr) {
@@ -1766,13 +1792,16 @@ function GetLab(flowData, attr) {
     if (contralType == 2) {//枚举复选框
         forID = "CB_" + attr.KeyOfEn;
     }
+    var ccsLab = "";
+    if (attr.CSSLabel != "")
+        ccsLab = " class='" + attr.CSSLabel + "'";
 
     //文本框，下拉框，单选按钮
     if (contralType == 0 || contralType == 1 || contralType == 2 || contralType == 3 || contralType == 4 || contralType == 13 || contralType == 8 || contralType == 50 || contralType == 101) {
         if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
             lab = " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
         }
-        lab += "<label id='Lab_" + attr.KeyOfEn + "' for='" + forID + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "' >" + attr.Name + "</label>";
+        lab += "<label " + ccsLab+" id='Lab_" + attr.KeyOfEn + "' for='" + forID + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "' >" + attr.Name + "</label>";
 
         return lab;
     }
@@ -1791,7 +1820,7 @@ function GetLab(flowData, attr) {
 
         //附件的url
         var eleHtml = '';
-        var nodeID = pageData.FK_Node;
+        var nodeID = GetQueryString("FK_Node");
         var url = "";
         url += "&WorkID=" + pageData.WorkID;
         url += "&FK_Node=" + nodeID;
@@ -1821,7 +1850,7 @@ function GetLab(flowData, attr) {
         if (ath[0].AthRunModel == 2) {
             src = "../DataUser/OverrideFiles/Ath.htm?PKVal=" + pageData.WorkID + "&FID=" + pageData["FID"] + "&Ath=" + noOfObj + "&FK_MapData=" + attr.FK_MapData + "&FK_FrmAttachment=" + mypk + url + "&M=" + Math.random();
         }
-        lab = "<label id='Lab_" + attr.KeyOfEn + "' for='athModel_" + attr.KeyOfEn + "'><div style='text-align:left'><a href='javaScript:void(0)' onclick='OpenAth(\"" + src + "\",\"" + attr.Name + "\",\"" + attr.KeyOfEn + "\",\"" + attr.MyPK + "\",\"" + attr.AtPara + "\",\"" + attr.FK_MapData + "\",0)' style='text-align:left'>" + attr.Name + "<image src='./Img/Tree/Dir.gif'></image></a></div></label>";
+        lab = "<label " + ccsLab +" id='Lab_" + attr.KeyOfEn + "' for='athModel_" + attr.KeyOfEn + "'><div style='text-align:left'><a href='javaScript:void(0)' onclick='OpenAth(\"" + attr.Name + "\",\"" + attr.KeyOfEn + "\",\"" + attr.MyPK + "\",\"" + attr.AtPara + "\",\"" + attr.FK_MapData + "\",0)' style='text-align:left'>" + attr.Name + "<image src='./Img/Tree/Dir.gif'></image></a></div></label>";
         return lab;
     }
 

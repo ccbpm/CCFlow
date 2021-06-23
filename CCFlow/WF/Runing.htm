@@ -68,10 +68,8 @@
         var isContainFuture = GetQueryString("IsContainFuture");
         if (isContainFuture == null || isContainFuture == undefined || isContainFuture == "")
             isContainFuture = "0";
-        //Hide_HastenWork:是否隐藏该条信息,CommonShowConfig.js中定义
-        if ("undefined" == typeof Hide_HastenWork) {
-            var Hide_HastenWork = true;
-        }
+        var Hide_HastenWork = getConfigByKey("Hide_HastenWork", false); //是否隐藏该条信息, CommonShowConfig.js中定义
+       
         //页面启动函数.
         $(function () {
             InitPage();

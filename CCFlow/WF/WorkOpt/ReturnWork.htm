@@ -65,14 +65,8 @@
         isFrameCross = isFrameCross == null || isFrameCross == undefined ? 0 : isFrameCross;
 
 
-        var _ReturnWin_IsBackTracking_Selected = false;
+        var _ReturnWin_IsBackTracking_Selected = getConfigByKey("ReturnWin_IsBackTracking_Selected", false);;
         $(function () {
-
-            try {
-                _ReturnWin_IsBackTracking_Selected = ReturnWin_IsBackTracking_Selected;
-            } catch (e) {
-                _ReturnWin_IsBackTracking_Selected = false;
-            }
 
             ////是否选择. 退回并原路返回. 强制设置，退回并原路返回.
             if (_ReturnWin_IsBackTracking_Selected == true) {
@@ -303,14 +297,15 @@
             //提示退回消息， 并关闭窗口，刷新父父窗口.
             data = data.replace(/null/g, '');
             if (isFrameCross == 0) {
-                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                var url = window.parent ? window.parent.location.href : "";
+                if (window.parent && typeof window.parent.returnWorkWindowClose=="function" && url.indexOf("WorkCheckModel")==-1) {
                     window.parent.returnWorkWindowClose(data);
-                } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
+                } else if (window.opener && typeof window.opener.returnWorkWindowClose == "function" && url.indexOf("WorkCheckModel") == -1) {
                     window.opener.returnWorkWindowClose(data);
                 } else {
                     $("#DIV_Nodes").hide();
                     $("#DIV_Doc").hide();
-                    $("#btnReturn").attr('disabled', true);
+                    $("#btnReturn").hide();
                     $('body').append($('<div>' + data + '</div>'));
                     $('#btnOk').attr('disabled', true);
                 }
@@ -325,12 +320,13 @@
         //取消退回
         function Close(flag) {
             if (isFrameCross == 0) {
-                if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                var url = window.parent ? window.parent.location.href : "";
+                if (window.parent && typeof window.parent.returnWorkWindowClose == "function" && url.indexOf("WorkCheckModel") == -1) {
                     window.parent.returnWorkWindowClose("取消");
                     if (flag == 1)
                         window.parent.close();
                 }
-                else if (window.parent != null && window.parent.CloseBootstrapDialog != null) {
+                else if (window.parent && typeof window.parent.CloseBootstrapDialog == "function") {
                     window.parent.CloseBootstrapDialog("");
                 }
                 else {

@@ -226,6 +226,12 @@ $(function () {
         $('[name=Rollback]').bind('click', function () { initModal("Rollback"); $('#returnWorkModal').modal().show(); });
     }
 
+    //生成二维码
+    if ($('[name=QRCode]').length > 0) {
+        $('[name=QRCode]').bind('click', function () { initModal("QRCode"); $('#returnWorkModal').modal().show();  });
+    }
+
+
 });
 //添加保存动态
 function SaveOnly() {
@@ -502,6 +508,11 @@ function initModal(modalType, toNode, url) {
                 SetPageSize(50, 60);
                 modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Rollback.htm?WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random();
                 break;
+            case "QRCode":
+                $('#modalHeader').text("生成二维码");
+                SetPageSize(50, 60);
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/QRCode/GenerCode.htm?WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&PWorkID=" + paramData.PWorkID + "&Info=&s=" + Math.random();
+                break;
             default:
                 break;
         }
@@ -595,6 +606,7 @@ function ChangeToNodeState(toNode) {
  * @param {isHuiQian} isHuiQian 是否是会签模式
  * @param {formType} formType 表单方案模式
  */
+var IsRecordUserLog = getConfigByKey("IsRecordUserLog", false);
 function Send(isHuiQian, formType) {
 
     //正在发送
@@ -628,9 +640,7 @@ function Send(isHuiQian, formType) {
     if (formType == 5)
         if (FromTreeSend() == false)
             return;
-    if ("undefined" == typeof IsRecordUserLog)
-        IsRecordUserLog = false;
-
+   
     if (IsRecordUserLog == true) {
         if(pageData.FK_Node==parseInt(pageData.FK_Flow)+"01")
             UserLogInsert("StartFlow", "发起流程");

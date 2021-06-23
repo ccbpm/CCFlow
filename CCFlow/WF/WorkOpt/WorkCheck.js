@@ -219,10 +219,8 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
         if (frmWorkCheck.FWCAth == 1) {
             _Html += "<div style='float:right' id='uploaddiv' data-info='" + frmWorkCheck.FWCShowModel + "' onmouseover='UploadFileChange(this)'></div>";
         }
-        if ("undefined" == typeof IsShowWorkCheckUsefulExpres) {
-            IsShowWorkCheckUsefulExpres = true;
-        }
-        if (IsShowWorkCheckUsefulExpres == true)
+      
+        if (getConfigByKey("IsShowWorkCheckUsefulExpres", true) == true)
             _Html += "<div style='float:right'><a onmouseover = 'UsefulExpresFlow(\"WorkCheck\",\"WorkCheck_Doc\");' ><span style='font-size:15px;'>常用短语</span>  <img alt='编辑常用审批语言.' src='../WF/Img/Btn/Edit.gif' /></a></div>";
 
         _Html += "<div style='float:left;width:100%;'>";

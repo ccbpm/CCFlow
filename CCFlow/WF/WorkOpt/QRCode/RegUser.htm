@@ -1,0 +1,282 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>注册外部用户</title>
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <script src="../../../DataUser/JSLibData/CommonShowConfig.js"></script>
+    <style type="text/css">
+
+        .login-box {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 320px;
+            height: 241px;
+            max-height: 300px;
+        }
+
+        .login-body .login-box h3 {
+            color: #444;
+            font-size: 22px;
+            font-weight: 100;
+            text-align: center;
+        }
+
+        .login-box .layui-input[type='number'] {
+            display: inline-block;
+            width: 50%;
+            vertical-align: top;
+        }
+
+        .login-box img {
+            display: inline-block;
+            width: 46%;
+            height: 38px;
+            border: none;
+            vertical-align: top;
+            cursor: pointer;
+            margin-left: 4%;
+        }
+
+        .login-box button.btn-reset {
+            width: 95px;
+        }
+
+        .login-box button.btn-submit {
+            width: 190px;
+        }
+
+        .login-main {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 350px;
+            margin: 0 auto;
+        }
+
+        .login-main header {
+            margin-top: 150px;
+            height: 35px;
+            line-height: 35px;
+            font-size: 30px;
+            font-weight: 100;
+            text-align: center;
+        }
+
+        .login-main header, .login-main form, .login-main form .layui-input-inline {
+            margin-bottom: 15px;
+        }
+
+        .login-main form .layui-input-inline, .login-main form .layui-input-inline input, .login-main form .layui-input-inline button {
+            width: 100%;
+        }
+
+        .login-main form .login-btn {
+            margin-bottom: 5px;
+        }
+    </style>
+    <script type="text/javascript">
+        layui.use(['form', 'jquery', 'layer'], function () {
+            var form = layui.form;
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            //添加表单失焦事件
+            //验证表单
+            $('#TB_No').blur(function () {
+                var user = $(this).val();
+                if (user == "") {
+                    $('#wr').removeAttr('hidden');
+                    $('#ri').attr('hidden', 'hidden');
+                    layer.msg('账号不能为空');
+                }
+
+                var en = new Entity("BP.WF.Port.User");
+                en.No = user;
+                if (en.IsExits() == true) {
+                    layer.confirm("该账号已经注册过了，您需要直接登录吗?", function (index) {
+                        layer.close(index);
+                        var url = window.location.href;
+                        url = url.replace("RegUser.htm", "Login.htm");
+                        url += "&Tel=" + en.No;
+                        window.location.href = url;
+                    });
+                }
+                $('#ri').removeAttr('hidden');
+                $('#wr').attr('hidden', 'hidden');
+               
+            });
+            $('#TB_Name').blur(function () {
+                var name = $(this).val();
+                var en = new Entity("BP.WF.Port.User");
+                en.Name = name;
+                if (en.IsExits() == true) {
+                    $('#nwr').removeAttr('hidden');
+                    $('#nri').attr('hidden', 'hidden');
+                    layer.msg('改昵称已经被注册，请更改昵称! ');
+                    return;
+
+                }
+                $('#nri').removeAttr('hidden');
+                $('#nwr').attr('hidden', 'hidden');
+
+            });
+
+            // you code ...
+            // 为密码添加正则验证
+            $('#TB_Pass1').blur(function () {
+                if ($('#TB_Pass1').val() == "") {
+                    $('#pwr').removeAttr('hidden');
+                    $('#pri').attr('hidden', 'hidden');
+                    layer.msg('密码不能为空');
+                }
+                //var reg = /^[\w]{6,12}$/;
+                /**if (!($('#TB_Pass1').val().match(reg))) {
+                    //layer.msg('请输入合法密码');
+                    $('#pwr').removeAttr('hidden');
+                    $('#pri').attr('hidden', 'hidden');
+                    layer.msg('请输入合法密码');
+                } else {*/
+                    $('#pri').removeAttr('hidden');
+                    $('#pwr').attr('hidden', 'hidden');
+                //}
+            });
+
+            //验证两次密码是否一致
+            $('#TB_Pass2').blur(function () {
+                if ($('#TB_Pass1').val() != $('#TB_Pass2').val()) {
+                    $('#rpwr').removeAttr('hidden');
+                    $('#rpri').attr('hidden', 'hidden');
+                    layer.msg('两次输入密码不一致!');
+                } else {
+                    $('#rpri').removeAttr('hidden');
+                    $('#rpwr').attr('hidden', 'hidden');
+                };
+            });
+
+            //
+            //添加表单监听事件,提交注册信息
+            form.on('submit(sub)', function (data) {
+                var en = new Entity("BP.WF.Port.User");
+                en.No = data.field.TB_No;
+                en.Name = data.field.TB_Name;
+                en.Pass = data.field.TB_Pass1;
+                en.Insert(); //注册成功，并开始登录.
+
+                layer.alert("注册成功.");
+                //开始进入到二维码.
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_QRCode");
+                handler.AddPara("No", en.No);
+                handler.AddPara("Pass", pass1);
+                var data = handler.DoMethodReturnString("Login_Submit");
+                if (data.indexOf("err@") == 0) {
+                    alert(data);
+                    return;
+                }
+                window.location.href = data;
+                //防止页面跳转
+                return false;
+            });
+
+        });
+
+
+
+        //登录.
+        function Login() {
+
+            var no = $("#TB_No").val();
+            var url = window.location.href;
+            url = url.replace("RegUser.htm", "Login.htm");
+            url += "&Tel=" + no;
+            window.location.href = url;
+        }
+    </script>
+
+
+</head>
+<body>
+    <div class="login-main">
+        <header class="layui-elip" style="width: 82%">注册页</header>
+
+        <!-- 表单选项 -->
+        <form class="layui-form">
+            <div class="layui-input-inline">
+                <!-- 用户名 -->
+                <div class="layui-inline" style="width: 85%">
+                    <input type="text" id="TB_No" name="TB_No" required lay-verify="required" placeholder="请输入手机号，作为登陆账号" autocomplete="off" class="layui-input">
+                </div>
+                <!-- 对号 -->
+                <div class="layui-inline">
+                    <i class="layui-icon" id="ri" style="color: green;font-weight: bolder;" hidden></i>
+                </div>
+                <!-- 错号 -->
+                <div class="layui-inline">
+                    <i class="layui-icon" id="wr" style="color: red; font-weight: bolder;" hidden>ဆ</i>
+                </div>
+            </div>
+            <div class="layui-input-inline">
+                <!-- 用户名 -->
+                <div class="layui-inline" style="width: 85%">
+                    <input type="text" id="TB_Name" name="TB_Name" required lay-verify="required" placeholder="请输入昵称" autocomplete="off" class="layui-input">
+                </div>
+                <!-- 对号 -->
+                <div class="layui-inline">
+                    <i class="layui-icon" id="nri" style="color: green;font-weight: bolder;" hidden></i>
+                </div>
+                <!-- 错号 -->
+                <div class="layui-inline">
+                    <i class="layui-icon" id="nwr" style="color: red; font-weight: bolder;" hidden>ဆ</i>
+                </div>
+            </div>
+            <!-- 密码 -->
+            <div class="layui-input-inline">
+                <div class="layui-inline" style="width: 85%">
+                    <input type="password" id="TB_Pass1" name="TB_Pass1" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                </div>
+                <!-- 对号 -->
+                <div class="layui-inline">
+                    <i class="layui-icon" id="pri" style="color: green;font-weight: bolder;" hidden></i>
+                </div>
+                <!-- 错号 -->
+                <div class="layui-inline">
+                    <i class="layui-icon" id="pwr" style="color: red; font-weight: bolder;" hidden>ဆ</i>
+                </div>
+            </div>
+            <!-- 确认密码 -->
+            <div class="layui-input-inline">
+                <div class="layui-inline" style="width: 85%">
+                    <input type="password" id="TB_Pass2" name="TB_Pass2" required lay-verify="required" placeholder="请确认密码" autocomplete="off" class="layui-input">
+                </div>
+                <!-- 对号 -->
+                <div class="layui-inline">
+                    <i class="layui-icon" id="rpri" style="color: green;font-weight: bolder;" hidden></i>
+                </div>
+                <!-- 错号 -->
+                <div class="layui-inline">
+                    <i class="layui-icon" id="rpwr" style="color: red; font-weight: bolder;" hidden>ဆ</i>
+                </div>
+            </div>
+
+
+            <div class="layui-input-inline login-btn" style="width: 85%">
+                <button type="submit" lay-submit lay-filter="sub" class="layui-btn">注册</button>
+            </div>
+            <hr style="width: 85%" />
+            <p style="width: 85%"><a href="javaScript:void(0)" class="fl" onclick="Login()">已有账号？立即登录</a><a href="javascript:;" class="fr">忘记密码？</a></p>
+        </form>
+    </div>
+
+   
+</body>
+</html>

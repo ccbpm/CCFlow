@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>登录</title>
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../Scripts/layui/layui/layui.js"  type="text/javascript"></script>
+    <script src="../../../DataUser/JSLibData/CommonShowConfig.js"></script>
+    <style type="text/css">
+     
+        .login-box {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 320px;
+            height: 241px;
+            max-height: 300px;
+        }
+
+        .login-body .login-box h3 {
+            color: #444;
+            font-size: 22px;
+            font-weight: 100;
+            text-align: center;
+        }
+
+        .login-box .layui-input[type='number'] {
+            display: inline-block;
+            width: 50%;
+            vertical-align: top;
+        }
+
+        .login-box img {
+            display: inline-block;
+            width: 46%;
+            height: 38px;
+            border: none;
+            vertical-align: top;
+            cursor: pointer;
+            margin-left: 4%;
+        }
+
+        .login-box button.btn-reset {
+            width: 95px;
+        }
+
+        .login-box button.btn-submit {
+            width: 190px;
+        }
+
+        .login-main {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 350px;
+            margin: 0 auto;
+        }
+
+        .login-main header {
+            margin-top: 150px;
+            height: 35px;
+            line-height: 35px;
+            font-size: 30px;
+            font-weight: 100;
+            text-align: center;
+        }
+
+        .login-main header, .login-main form, .login-main form .layui-input-inline {
+            margin-bottom: 15px;
+        }
+
+        .login-main form .layui-input-inline, .login-main form .layui-input-inline input, .login-main form .layui-input-inline button {
+            width: 100%;
+        }
+
+        .login-main form .login-btn {
+            margin-bottom: 5px;
+        }
+
+    </style>
+    <script type="text/javascript">
+
+        $(function () {
+            var tel = GetQueryString("Tel");
+            $("#TB_No").val(tel);
+
+        });
+        layui.form.on('submit(login)', function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_QRCode");
+            handler.AddPara("No", data.field.TB_No);
+            handler.AddPara("Pass", data.field.TB_Pass);
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Login_Submit");
+            if (data.indexOf("err@") == 0) {
+                alert(data);
+                return;
+            }
+            window.location.href = data;
+            return false;
+        })
+
+        //登录.
+        function Reg() {
+
+            var no = $("#TB_No").val();
+            var url = window.location.href;
+            url = url.replace("Login.htm", "RegUser.htm");
+            url += "&Tel=" + no;
+            window.location.href = url;
+        }
+    </script>
+
+</head>
+<body>
+    <div class="login-main">
+        <header class="layui-elip">登录</header>
+        <form class="layui-form">
+            <div class="layui-input-inline">
+                <input type="text" name="TB_No" id="TB_No" required lay-verify="required" placeholder="请输入用户名" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <input type="password" name="TB_Pass" id="TB_Pass" required lay-verify="required" placeholder="请输入密码" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <div class="layui-input-inline login-btn">
+                <button lay-submit lay-filter="login" class="layui-btn">登录</button>
+            </div>
+            <hr />
+          
+            <p><a href="javaScript:void(0)" class="fl" onclick="Reg()">立即注册</a></p>
+        </form>
+    </div>
+
+</body>
+</html>

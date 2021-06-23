@@ -291,13 +291,9 @@
         var workID;
         var fid;
         var gwf;
-        // var uh = new UrlHerf(location.href);
+        var Hide_IsRead = getConfigByKey("Hide_IsRead", true);//是否隐藏该条信息,CommonShowConfig.js中定义
         $(function () {
-            //Hide_IsRead:是否隐藏该条信息,CommonShowConfig.js中定义
-            if ("undefined" == typeof Hide_IsRead) {
-                var Hide_IsRead = true;
-            }
-
+          
             fk_Flow = GetQueryString("FK_Flow");// uh["FK_Flow"];
             workID = GetQueryString("WorkID");// uh["FK_Flow"];
             fid = GetQueryString("FID");// uh["FK_Flow"];

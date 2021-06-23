@@ -15,45 +15,42 @@
     <div class="layui-fluid">
         <div class="welcome-datainfo">
             <div class="layui-row">
-                <div class="layui-col-md2 layui-col-xs6">
-                    <a href="javascript:;" class="layui-bg-red">
-                        <h3><i class="iconfont icon-liucheng"></i>流程模版</h3>
-                        <p>
-                            <cite id="FlowNum"> 0 </cite>
-                        </p>
-                    </a>
-                </div>
-                <div class="layui-col-md2 layui-col-xs6">
-                    <a href="javascript:;" class="layui-bg-cyan">
-                        <h3><i class="iconfont icon-anli"></i>实例总数</h3>
-                        <p>
-                            <cite id="FlowInstaceNum">0</cite>
-                        </p>
-                    </a>
-                </div>
-                <div class="layui-col-md2 layui-col-xs6">
-                    <a href="javascript:;" class="layui-bg-green">
-                        <h3><i class="iconfont icon-biaodandingzhimoban"></i>已完成</h3>
-                        <p>
-                            <cite id="FlowComplete">0</cite>
-                        </p>
-                    </a>
-                </div>
-                <div class="layui-col-md2 layui-col-xs6">
-                    <a href="javascript:;" class="layui-bg-blue">
-                        <h3><i class="iconfont icon-daiban"></i>运行中</h3>
-                        <p>
-                            <cite id="TodolistNum">0</cite>
-                        </p>
-                    </a>
-                </div>
-                <div class="layui-col-md2 layui-col-xs6">
-                    <a href="javascript:;" class="layui-bg-orange">
-                        <h3><i class="iconfont icon-wj-thwj"></i>退回</h3>
-                        <p>
-                            <cite id="ReturnNum">0</cite>
-                        </p>
-                    </a>
+                <div class="layui-col-sm24 layui-col-md12">
+                    <div class="layui-row iconhref">
+                        <div class="layui-col-md3 layui-col-xs3">
+                            <a href="javascript:;" class="">
+                                <i class="iconfont icon-anli main-bg1"></i>
+                                <p>
+                                    <cite id="FlowInstaceNum" class="main-cl1"> 0 </cite>
+                                    <span>实例总数</span>
+                                </p>
+                            </a>
+                        </div>
+                        <div class="layui-col-md3 layui-col-xs3">
+                            <a href="javascript:;" class="">
+                                <i class="iconfont icon-biaodandingzhimoban main-bg2"></i>
+                                <p>
+                                    <cite id="FlowComplete" class="main-cl2">0</cite><span>已完成</span>
+                                </p>
+                            </a>
+                        </div>
+                        <div class="layui-col-md3 layui-col-xs3">
+                            <a href="javascript:;" class="">
+                                <i class="iconfont icon-daiban main-bg2"></i>
+                                <p>
+                                    <cite id="TodolistNum" class="main-cl2">0</cite><span>运行中</span>
+                                </p>
+                            </a>
+                        </div>
+                        <div class="layui-col-md3 layui-col-xs3">
+                            <a href="javascript:;" class="">
+                                <i class="iconfont icon-wj-thwj main-bg2"></i>
+                                <p>
+                                    <cite id="ReturnNum" class="main-cl2">0</cite><span>退回</span>
+                                </p>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -104,7 +101,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
     <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
@@ -158,7 +155,7 @@
             var TodoListReturnByEmp_Y = new Array();
             var TodoListOverTByEmp_Y = new Array();
 
-           // $("#Msg").html("<img src=../../WF/Admin/Portal/Img/loading_small.gif />&nbsp;正在加载,请稍后......");
+            // $("#Msg").html("<img src=../../WF/Admin/Portal/Img/loading_small.gif />&nbsp;正在加载,请稍后......");
 
             //获得数数量，并把数量绑定.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
@@ -180,8 +177,8 @@
                 })
                 ComplateFlowsByNY_Y[i] = num;
             });
-           
-            queryChart_FlowsByNY(yearMonth, ComplateFlowsByNY_Y,"ComplateFlowsByNY");
+
+            queryChart_FlowsByNY(yearMonth, ComplateFlowsByNY_Y, "ComplateFlowsByNY");
 
             //逾期完成的流程-按月份.
             var OverComplateFlowsByNY = data.OverComplateFlowsByNY;
@@ -195,7 +192,7 @@
                 })
                 OverComplateFlowsByNY_Y[i] = num;
             });
-            queryChart_FlowsByNY(yearMonth, OverComplateFlowsByNY_Y,"OverComplateFlowsByNY");
+            queryChart_FlowsByNY(yearMonth, OverComplateFlowsByNY_Y, "OverComplateFlowsByNY");
 
             //运行中的流程-按部门.
             var TodoListAllByDept = data.TodoListAllByDept;
@@ -215,7 +212,7 @@
                         return false;
                     }
                 });
-                TodoListReturnByDept_Y[i] =num;
+                TodoListReturnByDept_Y[i] = num;
             });
 
             //逾期
@@ -229,10 +226,10 @@
                 });
                 TodoListOverTByDept_Y[i] = num;
             });
-            
-           
 
-            queryChart_FlowsOfTodoList(TodolistByDept_X, TodolistAllByDept_Y, TodoListReturnByDept_Y, TodoListOverTByDept_Y,"TodoListByDept");
+
+
+            queryChart_FlowsOfTodoList(TodolistByDept_X, TodolistAllByDept_Y, TodoListReturnByDept_Y, TodoListOverTByDept_Y, "TodoListByDept");
 
             //待办-按流程.
             var TodoListAllByFlow = data.TodoListAllByFlow;
@@ -293,7 +290,7 @@
             });
 
 
-           
+
             //退回
             $.each(TodolistByEmp_X, function (i, empName) {
                 var num = 0;
@@ -327,7 +324,7 @@
 
 
         //完成的流程发起-按月份.
-        function queryChart_FlowsByNY(FlowsByNY_X, FlowsByNY_Y,chartID) {
+        function queryChart_FlowsByNY(FlowsByNY_X, FlowsByNY_Y, chartID) {
 
             // 基于准备好的dom，初始化echarts实例
             var myChart = echarts.init(document.getElementById(chartID));
@@ -371,7 +368,7 @@
 
             // 指定图表的配置项和数据
             var option = {
-               
+
                 grid: {
                     top: '10%',
                     right: '1%',
@@ -383,7 +380,7 @@
                     trigger: 'axis'
                 },
                 legend: { //顶部显示 与series中的数据类型的name一致
-                  data: ['全部', '退回', '逾期']
+                    data: ['全部', '退回', '逾期']
                 },
                 xAxis: {
                     type: 'category',
@@ -397,17 +394,17 @@
                     data: TodolistAll_Y,
                     type: 'line',
                     smooth: true
-                    },
-                    {
-                        name: '退回',
-                        data: TodolistReturn_Y,
-                        type: 'line',
-                        smooth: true
-                    }, {
-                        name: '逾期',
-                        data: TodolistOverT_Y,
-                        type: 'line',
-                        smooth: true
+                },
+                {
+                    name: '退回',
+                    data: TodolistReturn_Y,
+                    type: 'line',
+                    smooth: true
+                }, {
+                    name: '逾期',
+                    data: TodolistOverT_Y,
+                    type: 'line',
+                    smooth: true
                 }]
             };
 

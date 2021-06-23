@@ -47,13 +47,9 @@
         var webUser = null;
         var keyword = null;
         var data = null;
-
+        var Hide_IsTodoList = getConfigByKey("Hide_IsTodoList", false);
         //页面启动函数.
         $(function () {
-            //Hide_IsTodoList:是否隐藏该条信息,CommonShowConfig.js中定义
-            if ("undefined" == typeof Hide_IsTodoList) {
-                var Hide_IsTodoList = true;
-            }
 
             if (webUser == null)
                 webUser = new WebUser();
@@ -189,13 +185,13 @@
 
                 var groupName = str;
 
-               // if (groupBy == "ByFlow")
-                   // flows.Retrieve("FlowName", groupName);
+                // if (groupBy == "ByFlow")
+                // flows.Retrieve("FlowName", groupName);
                 if (groupBy == "ByNode") {
                     groupName = str.substring(0, str.indexOf("_"));
-                    nodeID = str.substring(str.indexOf("_")+1, 100);
-                  //  alert(nodeID);
-                  //  flows.Retrieve("NodeName", groupName);
+                    nodeID = str.substring(str.indexOf("_") + 1, 100);
+                    //  alert(nodeID);
+                    //  flows.Retrieve("NodeName", groupName);
                 }
 
                 listbox += "<tr   >";
@@ -210,8 +206,8 @@
                 if (groupBy == "ByNode")
                     showBatch = true;
 
-                if (showBatch ) {
-                   // var fk_node = strs[idx].substring(strs[idx].indexOf("_") + 1);
+                if (showBatch) {
+                    // var fk_node = strs[idx].substring(strs[idx].indexOf("_") + 1);
                     listbox += "<th colspan=1 class='table-title' onclick=\"javascript:Batch('" + nodeID + "')\" >批处理</th> ";
                 }
 
@@ -223,7 +219,7 @@
 
                     var work = data[i];
                     if (groupBy == "ByNode" || groupBy == "NodeName") {
-                        if (work.FK_Node!=nodeID) {
+                        if (work.FK_Node != nodeID) {
                             continue;
                         }
                     } else if (groupBy == "ByFlow") {
@@ -311,9 +307,9 @@
 
                     } else {
                         if (isRead == 0)
-                            url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' />" + title + "</a>";
+                            url = "<a href=\"javascript:OpenWork('" + flowNo + "', " + nodeID + ", " + workID + ", " + pWorkID + ", " + fid + ", '" + title + "', 0, '" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' />" + title + "</a>";
                         else
-                            url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_Read.png' />" + title + "</a>";
+                            url = "<a href=\"javascript:OpenWork('" + flowNo + "', " + nodeID + ", " + workID + ", " + pWorkID + ", " + fid + ", '" + title + "', 1, '" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_Read.png' />" + title + "</a>";
 
                     }
 
@@ -379,6 +375,56 @@
                 div.innerHTML = realCount;
             }
         }
+
+        //打开工作.
+        function OpenWork(flowNo, nodeID, workid, pWorkID, fid, title, isRead, paras) {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddPara("FK_Flow", flowNo);
+            handler.AddPara("FK_Node", nodeID);
+            handler.AddPara("WorkID", workid);
+            handler.AddPara("PWorkID", pWorkID);
+            handler.AddPara("FID", fid);
+            handler.AddPara("IsRead", isRead);
+            handler.AddPara("Paras", paras);
+
+            var data = handler.DoMethodReturnString("MyFlow_Init");
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<br>" + data);
+
+                $("#loadMsg").hide();
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+
+                data = data.replace('url@', ''); //如果返回url，就直接转向.
+                data = data.replace('?DoType=HttpHandler', '?');
+                data = data.replace('&DoType=HttpHandler', '');
+                data = data.replace('&DoMethod=MyFlow_Init', '');
+                data = data.replace('&HttpHandlerName=BP.WF.HttpHandler.WF_MyFlow', '');
+                data = data.replace('?&', '?');
+
+                data = "../" + data;
+
+                try {
+                    //  if (window.top != null && window.top.vm != null) {
+                    window.top.vm.openTab(title, data);
+                    return;
+                } catch
+                {
+                    window.open(data); //打开流程.
+                    return;
+                }
+            }
+
+            alert(data);
+
+
+            //  'MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "'
+
+        }
+
         function Batch(fk_node) {
             var node = new Entity("BP.WF.Node", fk_node);
             var url = "";
@@ -397,15 +443,15 @@
                 url = node.BatchSelfUrl;
             window.location.href = url;
         }
-        function GetState(wfState,auther) {
+        function GetState(wfState, auther) {
 
             switch (parseInt(wfState)) {
                 case 1:
-                    return "<font color=#bc65e0>" +window.lang.caogao+"</font>";
+                    return "<font color=#bc65e0>" + window.lang.caogao + "</font>";
                 case 2:
                     if (auther != null && auther != undefined && auther != "")
                         return "<font color=orange>授权</font>";
-                    return "<font color=green>"+window.lang.daiban+"</font>";
+                    return "<font color=green>" + window.lang.daiban + "</font>";
                     break;
                 case 3: //已完成.
                     return window.lang.ywc;

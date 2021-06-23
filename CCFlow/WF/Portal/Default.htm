@@ -1,0 +1,387 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="./icons/font-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="./icons/icons.css">
+    <link rel="stylesheet" type="text/css" href="./layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="./layui/css/customer.css">
+    <script src="../Scripts/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/vue/vue.js"></script>
+
+    <script src="FeiGe/dist/ummessage-sdk.min.js"></script>
+
+    <!--- 引入代码. -->
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script type="text/javascript" src="./js/sortjs/Sortable.min.js"></script>
+
+    <script type="text/javascript">
+        //初始化页面函数.....
+        $(function () {
+
+        });
+    </script>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .drag-class {
+            border: 1px solid #2D93CA !important;
+            background: white !important;
+        }
+    </style>
+    <style id="theme-data">
+    </style>
+    <style id="layout-data">
+    </style>
+</head>
+
+<body class="layui-layout-body">
+
+    <div id="g-app-main" v-cloak>
+        <div :class="sideBarOpen?'':'g-admin-sidebar-fold'">
+            <!--layUi layout start-->
+            <div class="layui-layout g-admin-layout">
+                <!-- header -->
+                <div class="layui-header">
+                    <ul class="layui-nav g-layout-left">
+                        <li class="layui-nav-item g-admin-flexible" @click="resizeSideBar">
+                            <a href="javascript:void(0)" title="侧边栏"
+                               :style="'transform: rotate(' + sideBarOpen?'0':'180deg' + ')'">
+                                <i class="layui-icon layui-icon-shrink-right"></i>
+                            </a>
+                        </li>
+                        <li class="layui-nav-item layui-hide-xs">
+                            <a href="javascript:void(0)" title="快捷" @mouseover.stop="showShortCut = true"
+                               @mouseenter="stopTimeout" @mouseleave="closeDropdown">
+                                快捷
+                            </a>
+
+                            <dl class="layui-nav-child drop-down" :class="{'layui-show':showShortCut}" style='width: 72px;'
+                                @click.stop="showShortCut = false" @mouseenter="stopTimeout" @mouseleave="closeDropdown">
+                                <dd @click='openTab("发起","../Start.htm")'>
+                                    <a class="drop-down-item">
+                                        <i class="icon-share-alt"></i>发起
+                                    </a>
+                                </dd>
+                                <dd @click='openTab("待办","../Todolist.htm")'>
+                                    <a class="drop-down-item">
+                                        <i class="icon-bell"></i>待办
+                                    </a>
+                                </dd>
+                                <dd @click='openTab("在途","../Runing.htm")'>
+                                    <a class="drop-down-item">
+                                        <i class="icon-clock"></i>在途
+                                    </a>
+                                </dd>
+                                <dd @click='openTab("查询","../Search.htm")'>
+                                    <a class="drop-down-item">
+                                        <i class="icon-magnifier"></i>查询
+                                    </a>
+                                </dd>
+                            </dl>
+                            <!-- <dl class="layui-nav-child drop-down" style='text-align: center;'>
+                                {volist name='quick' id='k'}
+                                <dd @click='openTab("{$k.title}","{$k.data}")'><a>{$k.title}</a></dd>
+                                {/volist}
+                            </dl> -->
+                        </li>
+                        <li class="layui-nav-item" @click="reLoadCurrentPage">
+                            <a href="javascript:void(0)">
+                                <i class="layui-icon layui-icon-refresh-3"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="layui-nav g-layout-right">
+                        <li v-if="isAdmin" id="iconFlow" class="layui-nav-item layui-hide-xs"
+                            @click="openTab('流程','Flows.htm')">
+                            <a href="javascript:void(0)" class="flex-item">
+                                <i class="icon-heart"></i>
+                                <span>流程</span>
+                            </a>
+                        </li>
+
+                        <li v-if="isAdmin" id="iconFrm" class="layui-nav-item layui-hide-xs"
+                            @click="openTab('表单','Frms.htm')">
+                            <a href="javascript:void(0)" class="flex-item">
+                                <!--<i class="layui-icon layui-icon-form"></i>-->
+                                <i class="icon-diamond"></i>
+                                <span>表单</span>
+                            </a>
+                        </li>
+
+                        <li v-if="isAdmin" id="iconMenu" class="layui-nav-item layui-hide-xs"
+                            @click="openTab('菜单','../GPM/Menus.htm')">
+                            <a href="javascript:void(0)" class="flex-item">
+                                <!--<i class="layui-icon layui-icon-engine"></i>-->
+                                <i class="icon-menu"></i>
+                                <!--<i class="layui-icon layui-icon-form"></i>-->
+                                <span>菜单</span>
+                            </a>
+                        </li>
+
+                        <li v-if="isAdmin" id="iconOrg" class="layui-nav-item layui-hide-xs"
+                            @click="openTab('组织','../../GPM/Organization.htm')">
+                            <a href="javascript:void(0)" class="flex-item">
+                                <i class="icon-people"></i>
+                                <span>组织</span>
+                            </a>
+                        </li>
+
+                        <!--<li class="layui-nav-item layui-hide-xs" onClick='layer_show("桌面个性化设计","",500,400)'>
+                            <a href="javascript:void(0)">
+                                <i class="layui-icon layui-icon-component"></i>
+                            </a>
+                        </li>-->
+
+                        <li id="iconIM" class="layui-nav-item layui-hide-xs" onclick="OpenMsgPanel()">
+                            <a href="javascript:void(0)">
+                                <i class="icon-bubbles"></i> 消息
+                            </a>
+                        </li>
+
+
+                        <li class="layui-nav-item layui-hide-xs" @click="openThemePicker">
+                            <a href="javascript:void(0)">
+                                <i class="layui-icon layui-icon-theme"></i>
+                            </a>
+                        </li>
+
+                        <li class="layui-nav-item layui-hide-xs" @click="changeFullScreenStatus">
+                            <a href="javascript:void(0)">
+                                <i class="layui-icon "
+                                   :class="inFullScreenMode ? 'layui-icon-screen-restore':'layui-icon-screen-full'"></i>
+                            </a>
+                        </li>
+                        <li class="layui-nav-item " style="margin-right: 20px" @mouseover.stop="showUserActions = true"
+                            @mouseenter="stopTimeout" @mouseleave="closeDropdown">
+                            <a href="javascript:void(0)">
+                                <span id="username">{{webUser.Name}}</span>
+                            </a>
+                            <dl class="layui-nav-child drop-down" :class="{'layui-show': showUserActions}" @mousemove.stop
+                                @mouseenter="stopTimeout" @mouseleave="closeDropdown">
+                                <dd>
+                                    <a href="javascript:void(0)" @click='openTab("个人信息","../Setting/Default.htm")'>个人信息</a>
+                                </dd>
+                                <!--<dd><a href="javascript:void(0)" @click='openTab("修改密码","../Setting/ChangePassword.htm")'>修改密码</a></dd>-->
+                                <dd>
+                                    <a href="javascript:void(0)"
+                                       @click='openTab("切换组织","../Setting/ChangeDept.htm")'>切换组织</a>
+                                </dd>
+                                <dd><a href="javascript:void(0)" @click="logout">退出登录</a></dd>
+                            </dl>
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- menus -->
+                <div v-if="classicalLayout" class="layui-side layui-side-menu">
+                    <div class="layui-side-scroll">
+                        <div class="layui-logo" v-if="sideBarOpen">驰骋BPM</div>
+                        <div class="layui-logo" v-else style="display: flex;align-items: center; justify-content: center;">
+                            <img src="image/logo.png" style="width: 32px;height:32px;" alt="logo">
+                        </div>
+                        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                        <ul class="layui-nav layui-nav-tree">
+                            <li v-for="(item,index) in menuTreeData" @click="sideBarOpen = true"
+                                :class="[item.open ? 'layui-nav-itemed': '','layui-nav-item']">
+                                <a v-if="Array.isArray(menuTreeData) && menuTreeData.length > 0" href="javascript:void(0)"
+                                   @click="foldMenus(menuTreeData,item)">
+                                    <i :class="item.Icon"></i>
+                                    <cite style="margin-left:8px">{{item.Name}}</cite>
+                                    <span class="layui-nav-more"></span>
+                                </a>
+                                <a v-else href="javascript:void(0)" :class="{'layui-this' : item.No === selectedId}"
+                                   @click="openTab(item.Name,item.Url),selectedId = item.No">
+                                    <i :class="item.Icon"></i>
+                                    <cite style="margin-left:8px">{{item.Name}}</cite>
+                                </a>
+                                <dl v-show="Array.isArray(menuTreeData) && menuTreeData.length > 0 && item.open"
+                                    ref="c-sort-tree"
+                                    class="layui-nav-child">
+                                    <dd v-for="(ite,idx) in item.children"
+                                        :data-id="ite.No" :data-no="ite.No"
+                                        :data-idx="idx" :data-name="ite.Name"
+                                        :class="calcClassList(ite,1).concat([ite.open ? 'layui-nav-itemed': '',{'layui-this': ite.No === selectedId}])">
+                                        <a v-if="Array.isArray(ite.children) && ite.children.length > 0"
+                                           @click="foldMenus(item.children,ite)" style="cursor: pointer;">
+                                            <i :class="ite.Icon"></i> {{ite.Name}}
+                                            <span class="layui-nav-more"></span>
+                                        </a>
+                                        <a v-else @click="openTab(ite.Name,ite.Url),selectedId = ite.No"
+                                           :class="{'layui-this': ite.No === selectedId}" style="cursor: pointer;">
+                                            <i :class="ite.Icon"></i> {{ite.Name}}
+                                        </a>
+                                        <dl v-show="Array.isArray(ite.children) && ite.children.length > 0 && ite.open"
+                                            class="layui-nav-child" ref="c-sort-tree-child">
+                                            <dd v-for="(it,it_idx) in ite.children" :data-id="it.No" :data-pid="ite.No"
+                                                :data-no="it.No" :data-name="it.Name" :data-pidx="idx" :data-idx="it_idx"
+                                                :class="calcClassList(item,2)" @click.right.stop>
+                                                <a @click="openTab(it.Name,it.Url),selectedId = it.No"
+                                                   :class="{'layui-this': it.No === selectedId}" style="cursor: pointer;">
+                                                    <i :class="it.Icon"></i> {{it.Name}}
+                                                </a>
+                                            </dd>
+                                        </dl>
+                                    </dd>
+                                </dl>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div v-else class="layui-side layui-side-menu" :style="sideBarOpen?'':'width:65px'">
+                    <div class="layui-side-scroll">
+                        <div class="sideMenuBar">
+                            <li class="top-menu-item" @click="initMenus">
+                                <img src="./image/logo.png" alt="logo">
+                                <!-- <p>LOGO</p> -->
+                            </li>
+                            <li v-for="(item,index) in menuTreeData" :key="index" class="top-menu-item"
+                                :class="{'selected-top-menu':selectedTopMenuIndex === index}" @click="selectTopMenu(index)">
+                                <i :class="item.Icon"></i>
+                                <span>{{item.Name}}</span>
+                            </li>
+                        </div>
+                        <div class="menus-wrapper">
+                            <div class="layui-logo">驰骋BPM</div>
+                            <div class="sub-menu-divider">
+                                <div class="line"></div>
+                                <span>{{subMenuTitle}}</span>
+                                <div class="line"></div>
+                            </div>
+                            <ul class="layui-nav layui-nav-tree" ref="sort-tree" :style="sideBarOpen?'':'display:none'">
+                                <li v-for="(item,index) in subMenuData.children" class="layui-nav-item" :data-id="item.No"
+                                    :data-no="item.No"
+                                    :data-idx="index" :data-name="item.Name" :class="calcClassList(item,1)">
+                                    <!--                                <a href="javascript:void(0)" @click="foldMenus(subMenuData.children,item,$event)">-->
+                                    <a href="javascript:void(0)" @click="item.open = !item.open">
+                                        <i :class="item.Icon"></i>
+                                        <cite style="margin-left:8px">{{item.Name}}</cite>
+                                        <span class="layui-nav-more"></span>
+                                    </a>
+                                    <!--                                <a v-else href="javascript:void(0)" :class="{'layui-this' : item.No === selectedId}"-->
+                                    <!--                                   @click="openTab(item.Name,item.Url),selectedId = item.No">-->
+                                    <!--                                    <i :class="item.Icon"></i>-->
+                                    <!--                                    <cite style="margin-left:8px">{{item.Name}}</cite>-->
+                                    <!--                                </a>-->
+                                    <dl v-show="Array.isArray(item.children) && item.children.length > 0 && item.open"
+                                        ref="sort-tree-child">
+                                        <dd v-for="(it,idx) in item.children" :data-id="it.No" :data-pid="item.No"
+                                            :data-no="it.No" :data-name="it.Name" :data-pidx="index" :data-idx="idx"
+                                            :class="calcClassList(item,2)" @click.right.stop>
+                                            <a @click="openTab(it.Name,it.Url),selectedId = it.No"
+                                               :class="{'layui-this': it.No === selectedId}"
+                                               style="padding-left: 45px;cursor: pointer;">
+                                                <i :class="it.Icon"></i>
+                                                <span style="margin-left: 8px;">{{it.Name}}</span>
+                                            </a>
+                                        </dd>
+                                    </dl>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- tabs -->
+                <div class="g-admin-pagetabs" @click.right.prevent="openTabDropdownMenu" @mouseleave="closeDropdown">
+                    <div class="layui-icon g-admin-tabs-control layui-icon-prev" @click="toLeftPage"></div>
+                    <div class="layui-icon g-admin-tabs-control layui-icon-next" @click="toRightPage"></div>
+                    <div class="layui-icon g-admin-tabs-control layui-icon-down"
+                         @click="showPagesAction = !showPagesAction">
+                        <ul class="layui-nav g-admin-tabs-select">
+                            <li class="layui-nav-item">
+                                <a href="javascript:void(0)"><span class="layui-nav-more"></span></a>
+                                <dl class="layui-nav-child layui-anim-fadein layui-anim layui-anim-upbit"
+                                    :class="{'layui-show': showPagesAction}" @mouseleave="showPagesAction = false">
+                                    <dd @click="closeCurrentTabs(selectedTabsIndex)">
+                                        <a href="javascript:void(0)">
+                                            <i class="icon-check"></i>关闭当前标签页
+                                        </a>
+                                    </dd>
+                                    <dd @click="closeOtherTabs">
+                                        <a href="javascript:void(0)"><i class="icon-minus"></i>关闭其它标签页</a>
+                                    </dd>
+                                    <dd @click="closeAllTabs">
+                                        <a href="javascript:void(0)"><i class="icon-exclamation"></i>关闭全部标签页</a>
+                                    </dd>
+                                    <dd @click="reLoadCurrentPage">
+                                        <a href="javascript:void(0)"><i class='icon-reload'></i>刷新</a>
+                                    </dd>
+
+                                </dl>
+                            </li>
+                            <span class="layui-nav-bar" style="left: 20px; top: 35px; width: 0; opacity: 0;"></span>
+                        </ul>
+                    </div>
+
+                    <dl v-if="tabDropdownVisible" :style="contextMenuStyle" @mouseleave="tabDropdownVisible = false"
+                        @click.stop="tabDropdownVisible = false">
+                        <dd @click="closeCurrentTabs(selectedTabsIndex)">
+                            <a href="javascript:void(0)"><i class="icon-check"></i>关闭当前标签页</a>
+                        </dd>
+                        <dd @click="closeOtherTabs"><a href="javascript:void(0)"><i class="icon-minus"></i>关闭其它标签页</a></dd>
+                        <dd @click="closeAllTabs">
+                            <a href="javascript:void(0)"><i class="icon-exclamation"></i>关闭全部标签页</a>
+                        </dd>
+                        <dd @click="reLoadCurrentPage"><a href="javascript:void(0)"><i class='icon-reload'></i>刷新</a></dd>
+                    </dl>
+
+                    <div class="layui-tab" lay-allowclose="true" lay-filter="g-admin-layout-tabs">
+                        <ul class="layui-tab-title" ref="iframe-tabs">
+                            <li @click="selectedTabsIndex = -1" :class="{'layui-this':selectedTabsIndex === -1}">
+                                <i class="layui-icon layui-icon-home"></i><i class="layui-icon layui-unselect layui-tab-close">ဆ</i>
+                            </li>
+                            <li v-for="(item,index) in tabsList" @click="selectedTabsIndex = index"
+                                :class="{'layui-this':selectedTabsIndex === index}">
+                                <span>{{item.name}}</span><i class="layui-icon layui-unselect layui-tab-close"
+                                                             @click="closeCurrentTabs(index)">ဆ</i>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- body -->
+                <div class="layui-body">
+                    <div :class="{'layui-show':selectedTabsIndex === -1}" class="g-admin-tabsbody-item">
+                        <iframe src="Home.htm" frameborder="0" ref="iframe-home" class="g-admin-iframe"></iframe>
+                    </div>
+                    <div v-for="(item,index) in tabsList" class="g-admin-tabsbody-item"
+                         :class="{'layui-show':index === selectedTabsIndex}">
+                        <iframe :src="item.src" frameborder="0" :ref="'iframe-'+index" class="g-admin-iframe"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--layUi layout end-->
+    <script src="js/vue/ThemeData.js"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="./layui/layui.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        layui.config({
+            base: '../Scripts/layui/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use('index');
+        var loading = layer.load(2, {
+            shade: false,
+            time: 2000
+        });
+    </script>
+    <script src="Default.js"></script>
+    <script src="index.js"></script>
+    <!--<script src="umsdk/dist/umsdk.min.js"></script>-->
+    <script src="FeigeAPI.js"></script>
+</body>
+
+</html>

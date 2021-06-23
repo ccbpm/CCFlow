@@ -6,21 +6,15 @@ var pageData = {};
 var globalVarList = {};
 var flowData = {};
 document.BindEditorMapAttr = [];
-
+var webUser = new WebUser();
 
 //处理，表单没有加载完，就可以点击发送按钮.
 var isLoadOk = false;
-
+debugger
+var UserICon = getConfigByKey("UserICon", '../DataUser/Siganture/'); //获取签名图片的地址
+var UserIConExt = getConfigByKey("UserIConExt", '.jpg');  //签名图片的默认后缀
 $(function () {
-
-    if ("undefined" == typeof UserICon) {
-        UserICon = '../DataUser/Siganture/';
-    } else {
-        UserICon = UserICon.replace("@basePath", basePath);
-    }
-    if ("undefined" == typeof UserIConExt) {
-        UserIConExt = '.jpg';
-    }
+    UserICon = UserICon.replace("@basePath", basePath);
 
     //动态加载css样式
     if (webUser == null)
@@ -1240,7 +1234,9 @@ function GenerWorkNode() {
 
     //2018.1.1 新增加的类型, 流程独立表单， 为了方便期间都按照自由表单计算了.
     var frmNode = flowData["WF_FrmNode"];
-    if (node.FormType == 11 && frmNode != null && frmNode != undefined) {
+    var flow = flowData["WF_Flow"];
+    debugger
+    if ((flow && flow[0].FlowDevModel==1 || node.FormType == 11) && frmNode != null && frmNode != undefined) {
         frmNode = frmNode[0];
         if (frmNode.FrmSln == 1) {
             /*只读的方案.*/

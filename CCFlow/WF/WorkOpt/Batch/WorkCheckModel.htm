@@ -12,6 +12,7 @@
     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../Scripts/bootstrap/BootstrapUIDialog.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
@@ -150,20 +151,23 @@
             }
 
             var toNDS = JSON.parse(data);
-            var toNodeDDL = $('<select style="width:auto;" id="DDL_ToNode"></select>');
-            $.each(toNDS, function (i, toNode) {
-                var opt = "";
-                if (toNode.IsSelected == "1") {
-                    var opt = $("<option value='" + toNode.No + "' selected='true' >" + toNode.Name + "</option>");
-                    opt.data(toNode);
-                } else {
-                    var opt = $("<option value='" + toNode.No + "' data-info='" + toNode.IsSelected + "'>" + toNode.Name + "</option>");
-                    opt.data(toNode);
-                }
-                toNodeDDL.append(opt);
-            });
+            if (toNDS != null && toNDS != undefined && toNDS != "") {
+                var toNodeDDL = $('<select style="width:auto;" id="DDL_ToNode"></select>');
+                $.each(toNDS, function (i, toNode) {
+                    var opt = "";
+                    if (toNode.IsSelected == "1") {
+                        var opt = $("<option value='" + toNode.No + "' selected='true' >" + toNode.Name + "</option>");
+                        opt.data(toNode);
+                    } else {
+                        var opt = $("<option value='" + toNode.No + "' data-info='" + toNode.IsSelected + "'>" + toNode.Name + "</option>");
+                        opt.data(toNode);
+                    }
+                    toNodeDDL.append(opt);
+                });
 
-            $("#Btn_Send").after(toNodeDDL);
+                $("#Btn_Send").after(toNodeDDL);
+            }
+
         }
 
         function To(url) {
@@ -212,7 +216,7 @@
 
             $("#Btn_Send").val("正在执行请稍候...");
 
-            var toNodeID = $("#DDL_ToNode").val();
+            var toNodeID = 0;
             if ($("#DDL_ToNode").length > 0 && $("#ToEmps").html() == "") {
                 var selectToNode = $('#DDL_ToNode  option:selected').data();
                 toNodeID = selectToNode.No;
@@ -310,22 +314,45 @@
             var data = handler.DoMethodReturnString("Batch_Group");
         }
 
+
         function Btn_Return() {
 
             if (window.confirm('您确定要执行本次批处理退回操作吗？') == false)
                 return;
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-            handler.AddFormData();
-            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
-            var data = handler.DoMethodReturnString("Batch_Return");
+            var workIds = GetWorkIDs();
+
+            if (workIds == "") {
+                alert("选择需要退回的流程数据");
+                return;
+            }
+            var url = "";
+            var fk_node = GetQueryString("FK_Node");
+            var isFrameCross = window.location.href.indexOf(basePath) == -1 ? 1 : 0;
+            if (workIds.indexOf(",") == -1)
+                url = "../ReturnWork.htm?FK_Node=" + fk_node + "&WorkID=" + workIds + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+            else {
+                var workID = workIds.substring(0, workIds.indexOf(","));
+                url = "../ReturnWork.htm?FK_Node=" + fk_node + "&WorkID=" + workID + "&WorkIDs=" + workIds + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+            }
+
+
+            OpenBootStrapModal(url, "ReturnModel", "退回", 600, 400, null, null, null, null, function () {
+                window.location.href = window.location.href.replace("#", "");
+            });
         }
 
         function Btn_Delete() {
             if (window.confirm('您确定要执行本次批处理删除操作吗？') == false)
                 return;
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-            handler.AddFormData();
-            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            var workIds = GetWorkIDs();
+
+            if (workIds == "") {
+                alert("选择需要退回的流程数据");
+                return;
+            }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_Batch");
+            handler.AddPara("WorkIDs", workIds);
             var data = handler.DoMethodReturnString("Batch_Delete");
             if (data.indexOf("err@") != -1) {
                 alert(data);
@@ -342,12 +369,30 @@
             $("#batchModal").modal("hidden");
         }
 
+        function GetWorkIDs() {
+            var workIds = "";
+            //获取退回数据的行数
+            $("input[type='checkbox']:checked").each(function () {
+                var id = $(this).attr('id');
+                if (id != null && id != undefined) {
+                    isHave = true;
+                    workid = id.replace("CB_", "");
+                    workIds += workid + ",";
+                }
+
+            });
+            if (workIds != "")
+                workIds = workIds.substring(0, workIds.length - 1);
+            return workIds;
+        }
         function Btn_Back() {
             var type = GetQueryString("Type");
             if (type == 0)
-                window.location.href = "Batch.htm";
-            if (type == 1)
-                window.location.href = "Batch.htm?FK_Node=" + GetQueryString("FK_Node");
+                window.location.href = "../../Batch.htm";
+            else if (type == 1)
+                window.location.href = "../../Batch.htm?FK_Node=" + GetQueryString("FK_Node");
+            else
+                window.location.href = "../../Batch.htm";
         }
 
         function InitMapAttr(mapAttr) {

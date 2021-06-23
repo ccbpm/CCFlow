@@ -19,11 +19,14 @@
         var FK_Node;
         var FID;
         var toNodeID = 0;//当前选中的节点
+        var isFrameCross = GetQueryString("isFrameCross");
+        if (isFrameCross == null || isFrameCross == undefined || isFrameCross == "" || isFrameCross == "null")
+            isFrameCross = 0;
         //判断读秒关闭的参数是否存在
         if ("undefined" == typeof WF_WorkOpt_LeftSecond) {
             var WF_WorkOpt_LeftSecond = 30;
         }
-        var isFrameCross = GetQueryString("isFrameCross");
+       
         //初始化数据
         $(function () {
             WorkID = GetQueryString("WorkID");

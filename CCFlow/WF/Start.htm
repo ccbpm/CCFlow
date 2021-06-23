@@ -36,51 +36,57 @@
     <script src="Data/lang/lang.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
 
-        function GroupBarClick(groupName) {
 
-            var alt = document.getElementById('Img' + groupName).alert;
-            var sta = 'block';
-            if (alt == 'Max') {
-
-                sta = 'block';
-                alt = 'Min';
-                classname = 'fa fa-chevron-down';
-
-            } else {
-                sta = 'none';
-                alt = 'Max';
-                classname = 'fa  fa-chevron-up';
-            }
-
-            document.getElementById('Img' + groupName).className = classname;
-            document.getElementById('Img' + groupName).alert = alt;
-
-            var i = 0;
-            for (i = 0; i <= 600; i++) {
-
-                var row = document.getElementById(groupName + i);
-
-                if (row == null || row == undefined || row.style == null)
-                    continue;
-
-                if (sta == 'block') {
-                    row.style.display = '';
-                } else {
-                    row.style.display = sta;
-                }
-            }
-        }
         //发起时打开窗口
         function WinOpenStartFlow(flowNo, title) {
 
             var showList = GetQueryString("ShowList");
             var url = "";
-            if (showList == 1)
+            if (showList == 1) {
                 url = "List.htm?FK_Flow=" + flowNo;
-            else
-                url = "MyFlow.htm?FK_Flow=" + flowNo;
+                window.open(url);
+                return;
+            }
 
-            window.open(url);
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddPara("FK_Flow", flowNo);
+            var data = handler.DoMethodReturnString("MyFlow_Init");
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html("<br>" + data);
+
+                $("#loadMsg").hide();
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+
+                data = data.replace('url@', ''); //如果返回url，就直接转向.
+                data = data.replace('?DoType=HttpHandler', '?');
+                data = data.replace('&DoType=HttpHandler', '');
+                data = data.replace('&DoMethod=MyFlow_Init', '');
+                data = data.replace('&HttpHandlerName=BP.WF.HttpHandler.WF_MyFlow', '');
+                data = data.replace('?&', '?');
+
+                data = "../" + data;
+
+                try {
+                    //  if (window.top != null && window.top.vm != null) {
+                    window.top.vm.openTab(title, data);
+                    return;
+                } catch
+                {
+                    window.open(data); //打开流程.
+                    return;
+                }
+                //如果返回url，就直接转向.
+                // window.location.href = data;
+                // return;
+            }
+
+            alert(data);
+
+            //$("#Msg").html(data);
+            // url = "MyFlow.htm?FK_Flow=" + flowNo;
             return;
 
             layer.open({
@@ -122,7 +128,40 @@
             //    content: url
             //});
         }
+        function GroupBarClick(groupName) {
 
+            var alt = document.getElementById('Img' + groupName).alert;
+            var sta = 'block';
+            if (alt == 'Max') {
+
+                sta = 'block';
+                alt = 'Min';
+                classname = 'fa fa-chevron-down';
+
+            } else {
+                sta = 'none';
+                alt = 'Max';
+                classname = 'fa  fa-chevron-up';
+            }
+
+            document.getElementById('Img' + groupName).className = classname;
+            document.getElementById('Img' + groupName).alert = alt;
+
+            var i = 0;
+            for (i = 0; i <= 600; i++) {
+
+                var row = document.getElementById(groupName + i);
+
+                if (row == null || row == undefined || row.style == null)
+                    continue;
+
+                if (sta == 'block') {
+                    row.style.display = '';
+                } else {
+                    row.style.display = sta;
+                }
+            }
+        }
         //我发起的流程.
         function WinOpenStart(flowNo, title) {
 

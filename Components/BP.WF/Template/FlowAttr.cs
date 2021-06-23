@@ -72,6 +72,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string FlowRunWay = "FlowRunWay";
         /// <summary>
+        /// 工作模式
+        /// </summary>
+        public const string WorkModel = "WorkModel";
+        /// <summary>
         /// 运行的设置
         /// </summary>
         public const string RunObj = "RunObj";

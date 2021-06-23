@@ -50,7 +50,6 @@ namespace BP.WF.HttpHandler
                 DBAccess.RunSQL(sql);
             }
             return "移动成功..";
-
         }
         /// <summary>
         /// 构造函数
@@ -589,6 +588,54 @@ namespace BP.WF.HttpHandler
                 DataTable dtFlowSorts = DBAccess.RunSQLReturnTable(sql);
                 dtFlowSorts.TableName = "FlowTree";
 
+                //没有数据就预制数据.
+                if (dtFlowSorts.Rows.Count == 0)
+                {
+                    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                    {
+                        FlowSort fs = new FlowSort();
+                        fs.ParentNo = "0";
+                        fs.Name = "流程根目录";
+                        fs.No = "100";
+                        fs.Insert();
+
+                        fs.No = "101";
+                        fs.Name = "业务流程目录1";
+                        fs.ParentNo = "100";
+                        fs.Idx = 0;
+                        fs.Insert();
+
+                        fs.No = "102";
+                        fs.Name = "业务流程目录2";
+                        fs.ParentNo = "100";
+                        fs.Idx = 2;
+                        fs.Insert();
+                    }
+                    else
+                    {
+                        FlowSort fs = new FlowSort();
+                        fs.ParentNo = "100";
+                        fs.Name = "流程根目录";
+                        fs.No = WebUser.OrgNo;
+                        fs.OrgNo = WebUser.OrgNo;
+                        fs.Insert();
+
+                        fs.No = "101";
+                        fs.Name = "业务流程目录1";
+                        fs.ParentNo = WebUser.OrgNo;
+                        fs.Idx = 0;
+                        fs.OrgNo = WebUser.OrgNo;
+                        fs.Insert();
+
+                        fs.No = "102";
+                        fs.Name = "业务流程目录2";
+                        fs.ParentNo = WebUser.OrgNo;
+                        fs.Idx = 2;
+                        fs.OrgNo = WebUser.OrgNo;
+                        fs.Insert();
+                    }
+                }
+
                 DataTable dtFlows = null;
                 try
                 {
@@ -603,7 +650,6 @@ namespace BP.WF.HttpHandler
                     sql = "SELECT No,Name,FK_FlowSort AS TreeNo, WorkModel, '' as Icon, '' as Url FROM WF_Flow WHERE 1=1  " + sqlWhere + " AND  FK_FlowSort!='' ORDER BY FK_FlowSort,Idx  ";
                     dtFlows = DBAccess.RunSQLReturnTable(sql);
                 }
-
                 dtFlows.TableName = "Flows";
                 #endregion 流程树.
 
@@ -611,6 +657,54 @@ namespace BP.WF.HttpHandler
                 sql = "SELECT No,Name, ParentNo, '' as Icon FROM Sys_FormTree WHERE 1=1 " + sqlWhere + "  ORDER BY Idx,No ";
                 DataTable dtFrmSorts = DBAccess.RunSQLReturnTable(sql);
                 dtFrmSorts.TableName = "FrmTree";
+
+                //没有数据就预制数据.
+                if (dtFrmSorts.Rows.Count == 0)
+                {
+                    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                    {
+                        FrmTree fs = new FrmTree();
+                        fs.ParentNo = "0";
+                        fs.Name = "根目录";
+                        fs.No = "100";
+                        fs.Insert();
+
+                        fs.No = "101";
+                        fs.Name = "业务表单目录1";
+                        fs.ParentNo = "100";
+                        fs.Idx = 0;
+                        fs.Insert();
+
+                        fs.No = "102";
+                        fs.Name = "业务表单目录2";
+                        fs.ParentNo = "100";
+                        fs.Idx = 2;
+                        fs.Insert();
+                    }
+                    else
+                    {
+                        FrmTree fs = new FrmTree();
+                        fs.ParentNo = "100";
+                        fs.Name = "根目录";
+                        fs.No = WebUser.OrgNo;
+                        fs.OrgNo = WebUser.OrgNo;
+                        fs.Insert();
+
+                        fs.No = "101";
+                        fs.Name = "业务表单目录1";
+                        fs.ParentNo = WebUser.OrgNo;
+                        fs.Idx = 0;
+                        fs.OrgNo = WebUser.OrgNo;
+                        fs.Insert();
+
+                        fs.No = "102";
+                        fs.Name = "业务表单目录2";
+                        fs.ParentNo = WebUser.OrgNo;
+                        fs.Idx = 2;
+                        fs.OrgNo = WebUser.OrgNo;
+                        fs.Insert();
+                    }
+                }
 
                 sql = "SELECT No,Name,FK_FormTree AS TreeNo,  '' as Icon, FrmType FROM Sys_MapData WHERE 1=1 " + sqlWhere + " AND (FK_FormTree!='' AND FK_FormTree IS NOT NULL)   ORDER BY FK_FormTree,Idx  ";
                 DataTable dtFrms = DBAccess.RunSQLReturnTable(sql);

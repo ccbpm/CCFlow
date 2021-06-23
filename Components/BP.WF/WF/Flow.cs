@@ -4156,6 +4156,8 @@ namespace BP.WF
                 map.AddTBString(FlowAttr.SysType, null, "系统类别", true, false, 0, 3, 10);
 
                 map.AddTBInt(FlowAttr.FlowRunWay, 0, "运行方式", false, false);
+                map.AddTBInt(FlowAttr.WorkModel, 0, "WorkModel", false, false);
+
 
                 //  map.AddDDLEntities(FlowAttr.FK_FlowSort, "01", "流程类别", new FlowSorts(), false);
                 //map.AddDDLSysEnum(FlowAttr.FlowRunWay, (int)FlowRunWay.HandWork, "运行方式", false,

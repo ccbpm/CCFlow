@@ -1252,11 +1252,11 @@ namespace BP.WF
                 map.AddTBDateTime(GenerWorkFlowAttr.SDTOfFlowWarning, null, "流程预警时间", true, true);
 
                 //父子流程信息.
-                map.AddTBString(GenerWorkFlowAttr.PFlowNo, null, "父流程编号", true, false, 0, 3, 10);
+                map.AddTBString(GenerWorkFlowAttr.PFlowNo, null, "父流程编号", true, false, 0, 100, 10);
                 map.AddTBInt(GenerWorkFlowAttr.PWorkID, 0, "父流程ID", true, true);
                 map.AddTBInt(GenerWorkFlowAttr.PNodeID, 0, "父流程调用节点", true, true);
                 map.AddTBInt(GenerWorkFlowAttr.PFID, 0, "父流程调用的PFID", true, true);
-                map.AddTBString(GenerWorkFlowAttr.PEmp, null, "子流程的调用人", true, false, 0, 32, 10);
+                map.AddTBString(GenerWorkFlowAttr.PEmp, null, "子流程的调用人", true, false, 0, 100, 10);
 
                 //客户流程信息.
                 map.AddTBString(GenerWorkFlowAttr.GuestNo, null, "客户编号", true, false, 0, 100, 10);

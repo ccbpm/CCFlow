@@ -866,6 +866,7 @@ namespace BP.WF.HttpHandler
             string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQL.ToString();
 
             string sql = this.GetRequestVal("TB_Docs");
+            string FK_DBSrc = this.GetRequestVal("FK_DBSrc");
 
             //把其他的条件都删除掉.
             //DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType="+(int)condTypeEnum+" AND NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.SQL);
@@ -883,6 +884,7 @@ namespace BP.WF.HttpHandler
 
             cond.FK_Flow = this.FK_Flow;
             cond.OperatorValue = sql;
+            cond.FK_DBSrc = FK_DBSrc;
             cond.Note = this.GetRequestVal("TB_Note"); //备注.
 
             cond.FK_Flow = this.FK_Flow;

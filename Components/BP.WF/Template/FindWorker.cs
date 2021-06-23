@@ -8,7 +8,7 @@ using BP.DA;
 using BP.Web;
 using BP.Port;
 using BP.Sys;
-
+using System.Collections;
 
 namespace BP.WF.Template
 {
@@ -190,114 +190,65 @@ namespace BP.WF.Template
             }
             #endregion 按节点绑定的人员处理.
 
-            string empno = WebUser.No;
-            string empdept = WebUser.FK_Dept;
+            string empNo = WebUser.No;
+            string empDept = WebUser.FK_Dept;
+
             #region 找指定节点的人员直属领导 .
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByEmpLeader)
             {
+                //查找指定节点的人员， 如果没有节点，就是当前的节点.
                 string para = town.HisNode.DeliveryParas;
-                para = para.Replace("@", "");
-                para = para.Replace("@", "");
-                //查找指定节点的人员
-                if (DataType.IsNullOrEmpty(para) == false)
+                if (DataType.IsNullOrEmpty(para) == true)
+                    para = this.currWn.HisNode.NodeID.ToString();
+
+                //throw new Exception("err@配置错误，当前节点是找指定节点的直属领导，但是您没有设置指定的节点ID.");
+
+                string[] strs = para.Split(',');
+                foreach (string str in strs)
                 {
-                    string[] strs = para.Split(',');
-                    foreach (string str in strs)
+                    if (DataType.IsNullOrEmpty(str) == true)
+                        continue;
+
+                    ps = new Paras();
+                    ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node ";
+                    ps.Add("OID", this.WorkID);
+                    ps.Add("FK_Node", int.Parse(str));
+                    dt = DBAccess.RunSQLReturnTable(ps);
+                    if (dt.Rows.Count != 1)
+                        continue;
+
+                    empNo = dt.Rows[0][0].ToString();
+
+                    //查找人员的直属leader
+                    sql = "";
+                    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                        sql = "SELECT Leader,FK_Dept FROM Port_Emp WHERE No='" + empNo + "'";
+                    else
+                        sql = "SELECT Leader,FK_Dept FROM Port_Emp WHERE No='" + BP.Web.WebUser.OrgNo + "_" + empNo + "'";
+
+                    DataTable dtEmp = DBAccess.RunSQLReturnTable(sql);
+
+                    //查找他的leader, 如果没有就找部门领导.
+                    string leader = dtEmp.Rows[0][0] as string;
+                    string deptNo = dtEmp.Rows[0][1] as string;
+                    if (leader == null)
                     {
-                        if (DataType.IsNullOrEmpty(str) == true)
-                            continue;
-
-                        ps = new Paras();
-                        ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node ";
-                        ps.Add("OID", this.WorkID);
-                        ps.Add("FK_Node", int.Parse(str));
-
-                        dt = DBAccess.RunSQLReturnTable(ps);
-                        if (dt.Rows.Count != 1)
-                            continue;
-
-                        empno = dt.Rows[0][0].ToString();
-                        
-                        ps = new Paras();
-                        //if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-                        //    ps.Add("No", BP.Web.WebUser.OrgNo + "_" + WebUser.No);
-                        //else
-                        //    ps.Add("No", BP.Web.WebUser.No);
-
-                        //查找人员的直属leader
-                        ps.SQL = "SELECT Leader FROM Port_Emp WHERE No='" + empno + "'"; 
-                        string leader = DBAccess.RunSQLReturnStringIsNull(ps, null);
+                        sql = "SELECT Leader FROM Port_Dept WHERE No='" + deptNo + "'";
+                        leader = DBAccess.RunSQLReturnStringIsNull(sql, null);
                         if (leader == null)
-                        {
-                            ps = new Paras();
-                            ps.SQL = "SELECT Leader FROM Port_Dept WHERE No='" + empno + "'";
-                            ps.Add("No", BP.Web.WebUser.FK_Dept);
-                            leader = DBAccess.RunSQLReturnStringIsNull(ps, null);
-                            if (leader == null)
-                                throw new Exception("@流程设计错误:下一个节点(" + town.HisNode.Name + ")设置的按照直属领导计算，没有维护(" + WebUser.No + "," + BP.Web.WebUser.Name + ")的直属领导 . ");
-                        }
-                        dt = DBAccess.RunSQLReturnTable(ps);
-                        return dt;
+                            throw new Exception("@流程设计错误:下一个节点(" + town.HisNode.Name + ")设置的按照直属领导计算，没有维护(" + WebUser.No + "," + BP.Web.WebUser.Name + ")的直属领导 . ");
                     }
+                    dt = DBAccess.RunSQLReturnTable(sql);
+                    return dt;
                 }
-
-                    
             }
             #endregion .按照部门负责人计算
 
             #region 按照部门负责人计算. @hongyan 翻译过去.
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByDeptLeader)
-            {
-                string para = town.HisNode.DeliveryParas;
-                para = para.Replace("@", "");
-                para = para.Replace("@", "");
-                //查找指定节点的人员
-                if (DataType.IsNullOrEmpty(para) == false)
-                {
-                    string[] strs = para.Split(',');
-                    foreach (string str in strs)
-                    {
-                        if (DataType.IsNullOrEmpty(str) == true)
-                            continue;
-                        ps = new Paras();
-                        ps.SQL = "SELECT FK_Emp,FK_Dept FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node ";
-                        ps.Add("OID", this.WorkID);
-                        ps.Add("FK_Node", int.Parse(str));
+                return ByDeptLeader();
 
-                        dt = DBAccess.RunSQLReturnTable(ps);
-                        if (dt.Rows.Count != 1)
-                            continue;
-
-                        empno = dt.Rows[0][0].ToString();
-                        empdept = dt.Rows[0][1].ToString();
-
-                        ps = new Paras();
-                        ps.Add("No", empdept);
-                        ps.SQL = "SELECT Leader FROM Port_Dept WHERE No='" + empdept + "'";
-
-                        string leader = DBAccess.RunSQLReturnStringIsNull(ps, null);
-                        if (leader == null)
-                            throw new Exception("@流程设计错误:下一个节点(" + town.HisNode.Name + ")设置的按照部门负责人计算，当前您的部门(" + WebUser.FK_Dept + "," + BP.Web.WebUser.FK_DeptName + ")没有维护负责人 . ");
-
-                        //如果有这个人,并且是当前人员，说明他本身就是经理或者部门负责人.
-                        if (leader.Equals(empno) == true)
-                        {
-                            BP.Port.Dept mydept = new BP.Port.Dept(BP.Web.WebUser.FK_Dept);
-                            ps = new Paras();
-                            ps.SQL = "SELECT PARENTNO FROM PORT_DEPT WHERE NO=" + empdept + "";
-                            String sql2 = DBAccess.RunSQLReturnString(ps);
-                            ps.SQL = "SELECT Leader FROM Port_Dept WHERE No=" + sql2 + "";
-                            leader = DBAccess.RunSQLReturnStringIsNull(ps, null);
-                            if (leader == null || leader == "")
-                                throw new Exception("@流程设计错误:下一个节点(" + town.HisNode.Name + ")设置的按照部门负责人计算，当前您的部门(" + mydept.Name + ")没有维护负责人 . ");
-                        }
-                        dt = DBAccess.RunSQLReturnTable(ps);
-                        return dt;
-                    }
-                }
-            }
             #endregion .按照部门负责人计算
-
 
             #region 按照选择的人员处理。
             if (town.HisNode.HisDeliveryWay == DeliveryWay.BySelected || town.HisNode.HisDeliveryWay == DeliveryWay.BySelectedForPrj
@@ -554,8 +505,23 @@ namespace BP.WF.Template
                 if (this.currWn.rptGe.EnMap.Attrs.Contains(specEmpFields) == false)
                     throw new Exception("@您设置的接受人规则是按照表单指定的字段，决定下一步的接受人员，该字段{" + specEmpFields + "}已经删除或者丢失。");
 
+                //判断该字段是否启用了pop返回值？
+                sql = "SELECT  Tag1 AS VAL FROM Sys_FrmEleDB WHERE RefPKVal=" + this.WorkID + " AND EleID='" + specEmpFields + "'";
+                string emps = "";
+                DataTable dtVals = DBAccess.RunSQLReturnTable(sql);
+
                 //获取接受人并格式化接受人, 
-                string emps = this.currWn.rptGe.GetValStringByKey(specEmpFields);
+                if (dtVals.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtVals.Rows)
+                        emps += dr[0].ToString() + ",";
+                }
+                else
+                {
+                    emps = this.currWn.rptGe.GetValStringByKey(specEmpFields);
+                }
+
+
                 emps = emps.Replace(" ", ""); //去掉空格.
 
                 if (emps.Contains(",") && emps.Contains(";"))
@@ -626,7 +592,6 @@ namespace BP.WF.Template
                 if (DataType.IsNullOrEmpty(prjNo) == true)
                     throw new Exception("err@没有找到项目编号PrjNo.");
             }
-
 
             #region 为省立医院增加，按照指定的部门范围内的岗位计算..
             if (town.HisNode.HisDeliveryWay == DeliveryWay.FindSpecDeptEmpsInStationlist)
@@ -919,7 +884,7 @@ namespace BP.WF.Template
                 if (BP.Sys.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
                     ps = new Paras();
-                    sql = "SELECT UserID as No,Name FROM Port_Emp WHERE UserID=" + dbStr + "FK_Emp AND OrgNo=" + dbStr + "OrgNo ";
+                    ps.SQL = "SELECT UserID as No,Name FROM Port_Emp WHERE UserID=" + dbStr + "FK_Emp AND OrgNo=" + dbStr + "OrgNo ";
                     ps.Add("FK_Emp", WebUser.No);
                     ps.Add("OrgNo", WebUser.OrgNo);
 
@@ -928,7 +893,7 @@ namespace BP.WF.Template
                 else
                 {
                     ps = new Paras();
-                    sql = "SELECT No,Name FROM Port_Emp WHERE No=" + dbStr + "FK_Emp ";
+                    ps.SQL = "SELECT No,Name FROM Port_Emp WHERE No=" + dbStr + "FK_Emp ";
                     ps.Add("FK_Emp", WebUser.No);
                     dt = DBAccess.RunSQLReturnTable(ps);
 
@@ -945,56 +910,6 @@ namespace BP.WF.Template
                 }
             }
             #endregion
-
-            string empNo = WebUser.No;
-            string empDept = WebUser.FK_Dept;
-
-            #region 按指定的节点的人员岗位，做为下一步骤的流程接受人。
-            if (town.HisNode.HisDeliveryWay == DeliveryWay.BySpecNodeEmpStation)
-            {
-                /* 按指定的节点的人员岗位 */
-                string para = town.HisNode.DeliveryParas;
-                para = para.Replace("@", "");
-                para = para.Replace("@", "");
-
-                if (DataType.IsNullOrEmpty(para) == false)
-                {
-                    string[] strs = para.Split(',');
-
-                    foreach (string str in strs)
-                    {
-                        if (DataType.IsNullOrEmpty(str) == true)
-                            continue;
-
-                        ps = new Paras();
-                        ps.SQL = "SELECT FK_Emp,FK_Dept FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node ";
-                        ps.Add("OID", this.WorkID);
-                        ps.Add("FK_Node", int.Parse(str));
-
-                        dt = DBAccess.RunSQLReturnTable(ps);
-                        if (dt.Rows.Count != 1)
-                            continue;
-
-                        empNo = dt.Rows[0][0].ToString();
-                        empDept = dt.Rows[0][1].ToString();
-                    }
-
-                    //  throw new Exception("@流程设计错误，到达的节点（" + town.HisNode.Name + "）在指定的节点中没有数据，无法找到工作的人员，指定的节点是:"+para);
-                }
-                else
-                {
-                    if (this.currWn.rptGe.Row.ContainsKey(para) == false)
-                        throw new Exception("@在找人接收人的时候错误@字段{" + para + "}不包含在rpt里，流程设计错误。");
-
-                    empNo = this.currWn.rptGe.GetValStrByKey(para);
-                    if (DataType.IsNullOrEmpty(empNo))
-                        throw new Exception("@字段{" + para + "}不能为空，没有取出来处理人员。");
-
-                    BP.Port.Emp em = new BP.Port.Emp(empNo);
-                    empDept = em.FK_Dept;
-                }
-            }
-            #endregion 按指定的节点人员，做为下一步骤的流程接受人。
 
             #region 按照自定义的URL来计算
             if (town.HisNode.HisDeliveryWay == DeliveryWay.BySelfUrl)
@@ -1104,6 +1019,7 @@ namespace BP.WF.Template
             #endregion 按照自定义的URL来计算
 
             #region 最后判断 - 按照岗位来执行。
+            //从历史数据中获取接收人
             if (this.currWn.HisNode.IsStartNode == false)
             {
                 ps = new Paras();
@@ -1157,13 +1073,8 @@ namespace BP.WF.Template
                 dt = DBAccess.RunSQLReturnTable(ps);
                 // 如果能够找到.
                 if (dt.Rows.Count >= 1)
-                {
-                    if (dt.Rows.Count == 1)
-                    {
-                        /*如果人员只有一个的情况，说明他可能要 */
-                    }
                     return dt;
-                }
+               
             }
 
             /* 如果执行节点 与 接受节点岗位集合一致 */
@@ -1264,6 +1175,10 @@ namespace BP.WF.Template
             /* 没有查询到的情况下, 按照最大匹配数 提高一个级别计算，递归算法未完成。
              * 因为:以上已经做的岗位的判断，就没有必要在判断其它类型的节点处理了。
              * */
+            //获取当前人员信息的
+            Hashtable ht = GetEmpDeptBySFModel();
+            empDept = ht["DeptNo"].ToString();
+            empNo = ht["EmpNo"].ToString();
             string nowDeptID = empDept.Clone() as string;
 
             //第1步:直线父级寻找.
@@ -1335,7 +1250,141 @@ namespace BP.WF.Template
             return mydt;
             #endregion  按照岗位来执行。
         }
+       
+        private Hashtable GetEmpDeptBySFModel()
+        {
+            Node nd = town.HisNode;
+            Hashtable ht = new Hashtable();
+            //身份模式.
+            var sfModel = nd.GetParaInt("ShenFenModel");
 
+            //身份参数.
+            var sfVal = nd.GetParaString("ShenFenVal");
+
+            //按照当前节点的身份计算
+            if (sfModel == 0)
+                sfVal = currWn.HisNode.NodeID.ToString();
+
+            //按照指定节点的身份计算.
+            if (sfModel == 0 || sfModel == 1)
+            {
+                if(DataType.IsNullOrEmpty(sfVal))
+                    sfVal = currWn.HisNode.NodeID.ToString();
+                Paras ps = new Paras();
+                ps.SQL = "SELECT FK_Emp,FK_Dept FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node Order By RDT DESC";
+                ps.Add("OID", this.WorkID);
+                ps.Add("FK_Node", int.Parse(sfVal));
+
+                DataTable dt = DBAccess.RunSQLReturnTable(ps);
+                if (dt.Rows.Count == 0)
+                    throw new Exception("err@不符合常理，没有找到数据");
+                ht.Add("EmpNo", dt.Rows[0][0].ToString());
+                ht.Add("DeptNo", dt.Rows[0][0].ToString());
+            }
+
+            //按照 字段的值的人员编号作为身份计算.
+            if (sfModel == 2)
+            {
+                //获得字段的值.
+                string empNo = "";
+                if (currWn.HisNode.HisFormType == NodeFormType.RefOneFrmTree)
+                    empNo = currWn.HisWork.GetValStrByKey(sfVal);
+                else
+                    empNo = currWn.rptGe.GetValStrByKey(sfVal);
+                BP.Port.Emp emp = new BP.Port.Emp();
+                emp.UserID = empNo;
+                if (emp.RetrieveFromDBSources() == 0)
+                    throw new Exception("err@根据字段值:" + sfVal + "在Port_Emp中没有找到人员信息");
+                ht.Add("EmpNo", emp.No);
+                ht.Add("DeptNo", emp.FK_Dept);
+            }
+            return ht;
+        }
+        /// <summary>
+        /// 找部门的领导
+        /// </summary>
+        /// <returns></returns>
+        private DataTable ByDeptLeader()
+        {
+
+            Node nd = town.HisNode;
+
+            //身份模式.
+            var sfModel = nd.GetParaInt("ShenFenModel");
+
+            //身份参数.
+            var sfVal = nd.GetParaString("ShenFenVal");
+
+            //按照当前节点的身份计算
+            if (sfModel == 0)
+                return ByDeptLeader_Nodes(currWn.HisNode.NodeID.ToString());
+
+            //按照指定节点的身份计算.
+            if (sfModel == 1)
+                return ByDeptLeader_Nodes(sfVal);
+
+            //按照 字段的值的人员编号作为身份计算.
+            if (sfModel == 2)
+            {
+                //获得字段的值.
+                string empNo = "";
+                if (currWn.HisNode.HisFormType == NodeFormType.RefOneFrmTree)
+                    empNo = currWn.HisWork.GetValStrByKey(sfVal);
+                else
+                    empNo = currWn.rptGe.GetValStrByKey(sfVal);
+                BP.Port.Emp emp = new BP.Port.Emp();
+                emp.UserID = empNo;
+                if (emp.RetrieveFromDBSources() == 0)
+                {
+                    throw new Exception("err@根据字段值:" + sfVal + "在Port_Emp中没有找到人员信息");
+                }
+                return ByDeptLeader_Fields(emp.No, emp.FK_Dept);
+            }
+
+            throw new Exception("err@没有判断的身份模式.");
+        }
+        private DataTable ByDeptLeader_Nodes(string nodes)
+        {
+            DataTable dt = null;
+            //查找指定节点的人员， 如果没有节点，就是当前的节点.
+            if (DataType.IsNullOrEmpty(nodes) == true)
+                nodes = this.currWn.HisNode.NodeID.ToString();
+
+            Paras ps = new Paras();
+            ps.SQL = "SELECT FK_Emp,FK_Dept FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node Order By RDT DESC";
+            ps.Add("OID", this.WorkID);
+            ps.Add("FK_Node", int.Parse(nodes));
+
+            dt = DBAccess.RunSQLReturnTable(ps);
+            if (dt.Rows.Count == 0)
+                throw new Exception("err@不符合常理，没有找到数据");
+            string empNo = dt.Rows[0][0].ToString();
+            string deptNo = dt.Rows[0][1].ToString();
+            return ByDeptLeader_Fields(empNo, deptNo);
+        }
+        private DataTable ByDeptLeader_Fields(string empNo, string empDept)
+        {
+            BP.Port.Dept mydept = new BP.Port.Dept(empDept);
+            Paras ps = new Paras();
+            ps.Add("No", empDept);
+            ps.SQL = "SELECT Leader FROM Port_Dept WHERE No='" + empDept + "'";
+
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
+            if (dt.Rows.Count == 0)
+                throw new Exception("@流程设计错误:下一个节点(" + town.HisNode.Name + ")设置的按照部门负责人计算，当前您的部门(" + mydept.No + "," + mydept.Name + ")没有维护负责人 . ");
+               
+
+            //如果有这个人,并且是当前人员，说明他本身就是经理或者部门负责人.
+            if (dt.Rows[0][0].ToString().Equals(empNo) == true)
+            {
+                
+                ps.SQL = "SELECT Leader FROM Port_Dept WHERE No=(SELECT PARENTNO FROM PORT_DEPT WHERE NO='" + empDept + "')";
+                dt = DBAccess.RunSQLReturnTable(ps);
+                if (dt.Rows.Count == 0)
+                    throw new Exception("@流程设计错误:下一个节点(" + town.HisNode.Name + ")设置的按照部门负责人计算，当前您的部门(" + mydept.Name + ")上级没有维护负责人 . ");
+            }
+            return dt;
+        }
         /// <summary>
         /// 获得指定部门下是否有该岗位的人员.
         /// </summary>

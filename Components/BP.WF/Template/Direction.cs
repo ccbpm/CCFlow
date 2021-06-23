@@ -25,6 +25,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string FK_Flow = "FK_Flow";
         /// <summary>
+        /// 描述
+        /// </summary>
+        public const string Des = "Des";
+        /// <summary>
         /// 顺序
         /// </summary>
         public const string Idx = "Idx";
@@ -90,6 +94,17 @@ namespace BP.WF.Template
                 this.SetValByKey(DirectionAttr.Idx, value);
             }
         }
+        public string Des
+        {
+            get
+            {
+                return this.GetValStringByKey(DirectionAttr.Des);
+            }
+            set
+            {
+                this.SetValByKey(DirectionAttr.Des, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -127,6 +142,7 @@ namespace BP.WF.Template
                 //map.AddTBInt(DirectionAttr.CondExpModel, 0, "条件计算方式", false, true);
                 map.AddTBInt(DirectionAttr.Idx, 0, "计算优先级顺序", true, true);
 
+                map.AddTBString(DirectionAttr.Des, null, "流程", true, true, 0, 100, 0, false);
 
                 //相关功能。
                 map.AttrsOfOneVSM.Add(new BP.WF.Template.DirectionStations(), new BP.Port.Stations(),

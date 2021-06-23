@@ -19,7 +19,7 @@ namespace BP.CCBill
     /// </summary>
     public class Dev2Interface
     {
-       
+
         /// <summary>
         /// 创建工作ID
         /// </summary>
@@ -27,7 +27,7 @@ namespace BP.CCBill
         /// <param name="userNo">用户编号</param>
         /// <param name="htParas">参数</param>
         /// <returns>一个新的WorkID</returns>
-        public static Int64 CreateBlankBillID(string frmID, string userNo, Hashtable htParas,string billNo=null)
+        public static Int64 CreateBlankBillID(string frmID, string userNo, Hashtable htParas, string billNo = null)
         {
             GenerBill gb = new GenerBill();
             if (DataType.IsNullOrEmpty(billNo) == true)
@@ -35,7 +35,8 @@ namespace BP.CCBill
                 int i = gb.Retrieve(GenerBillAttr.FrmID, frmID, GenerBillAttr.Starter, userNo, GenerBillAttr.BillState, 0);
                 if (i == 1)
                     return gb.WorkID;
-            }else
+            }
+            else
             {
                 int i = gb.Retrieve(GenerBillAttr.FrmID, frmID, GenerBillAttr.BillNo, billNo);
                 if (i == 1)
@@ -44,7 +45,7 @@ namespace BP.CCBill
 
             FrmBill fb = new FrmBill(frmID);
 
-            gb.WorkID = DBAccess.GenerOID("CCBill");
+            gb.WorkID = DBAccess.GenerOID("WorkID");
             gb.BillState = BillState.None; //初始化状态.
             gb.Starter = BP.Web.WebUser.No;
             gb.StarterName = BP.Web.WebUser.Name;
@@ -52,7 +53,7 @@ namespace BP.CCBill
             gb.FrmID = fb.No; //单据ID
 
             if (DataType.IsNullOrEmpty(billNo) == false)
-                gb.BillNo = billNo ; //BillNo
+                gb.BillNo = billNo; //BillNo
             gb.FK_Dept = BP.Web.WebUser.FK_Dept;
             gb.DeptName = BP.Web.WebUser.FK_DeptName;
             gb.FK_FrmTree = fb.FK_FormTree; //单据类别.
@@ -109,13 +110,22 @@ namespace BP.CCBill
             //创建rpt.
             BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt(frmID);
 
-            int i= rpt.Retrieve("Starter", WebUser.No, "BillState", 0);
+
+
+            int i = rpt.Retrieve("Starter", WebUser.No, "BillState", 0);
             if (i >= 1)
             {
+                if (htParas != null)
+                    rpt.Copy(htParas);
+
                 rpt.SetValByKey("RDT", DataType.CurrentData);
                 rpt.Update();
                 return rpt.OID;
             }
+
+            //执行copy数据.
+            if (htParas != null)
+                rpt.Copy(htParas);
 
             //更新基础的数据到表单表.
             rpt.SetValByKey("BillState", 0);
@@ -128,8 +138,10 @@ namespace BP.CCBill
 
             //rpt.SetValByKey("Title", gb.Title);
             rpt.SetValByKey("BillNo", rpt.GenerNewNoByKey("BillNo"));
-            rpt.OID = DBAccess.GenerOID("CCBill");
+            rpt.OID = DBAccess.GenerOID("WorkID");
             rpt.InsertAsOID(rpt.OID);
+
+
             return rpt.OID;
         }
 
@@ -145,9 +157,9 @@ namespace BP.CCBill
 
             GenerBill gb = new GenerBill();
             gb.WorkID = workID;
-           int i= gb.RetrieveFromDBSources();
-           if (i == 0)
-               return "";
+            int i = gb.RetrieveFromDBSources();
+            if (i == 0)
+                return "";
             gb.BillState = BillState.Editing;
 
             //创建rpt.
@@ -300,10 +312,10 @@ namespace BP.CCBill
         /// <param name="frmID"></param>
         /// <param name="workID"></param>
         /// <returns></returns>
-        public static string MyBill_DeleteDicts(string frmID, string workIds)
+        public static string MyDict_DeleteDicts(string frmID, string workIds)
         {
             FrmBill fb = new FrmBill(frmID);
-            string sql = "DELETE FROM " + fb.PTable + " WHERE OID in (" + workIds+")";
+            string sql = "DELETE FROM " + fb.PTable + " WHERE OID in (" + workIds + ")";
             DBAccess.RunSQLs(sql);
             return "删除成功.";
         }
@@ -316,7 +328,7 @@ namespace BP.CCBill
         public static string MyEntityTree_Delete(string frmID, string billNo)
         {
             FrmBill fb = new FrmBill(frmID);
-            string sql = "DELETE FROM " + fb.PTable + " WHERE BillNo='"+ billNo + "' OR ParentNo='"+ billNo+"'";
+            string sql = "DELETE FROM " + fb.PTable + " WHERE BillNo='" + billNo + "' OR ParentNo='" + billNo + "'";
             DBAccess.RunSQLs(sql);
             return "删除成功.";
         }
@@ -351,7 +363,7 @@ namespace BP.CCBill
             //设置标题.
             gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
             gb.BillNo = BP.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
-           
+
             gb.DirectInsert(); //执行插入.
 
             //更新基础的数据到表单表.
@@ -368,7 +380,7 @@ namespace BP.CCBill
             //复制明细。
             MapDtls dtls = new MapDtls(frmID);
             if (dtls.Count > 0)
-            { 
+            {
                 foreach (MapDtl dtl in dtls)
                 {
                     if (dtl.IsCopyNDData == false)
@@ -406,10 +418,10 @@ namespace BP.CCBill
                                 newDB.Insert();
                             }
                         }
-                            
+
                     }
                 }
-               
+
             }
 
             //获取附件组件、
@@ -417,16 +429,16 @@ namespace BP.CCBill
             //复制附件数据。
             if (athDecs.Count > 0)
             {
-                foreach(FrmAttachment athDec in athDecs)
+                foreach (FrmAttachment athDec in athDecs)
                 {
                     FrmAttachmentDBs aths = new FrmAttachmentDBs();
-                    aths.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, athDec.MyPK,FrmAttachmentDBAttr.RefPKVal, workID);
+                    aths.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, athDec.MyPK, FrmAttachmentDBAttr.RefPKVal, workID);
                     foreach (FrmAttachmentDB athDB in aths)
                     {
                         FrmAttachmentDB athDB_N = new FrmAttachmentDB();
                         athDB_N.Copy(athDB);
                         athDB_N.RefPKVal = rpt.OID.ToString();
-                        athDB_N.MyPK= DBAccess.GenerGUID();
+                        athDB_N.MyPK = DBAccess.GenerGUID();
                         athDB_N.Insert();
                     }
                 }

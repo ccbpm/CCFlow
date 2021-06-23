@@ -90,6 +90,11 @@ namespace BP.WF
         /// </summary>
         public const string OrgNo = "OrgNo";
         #endregion
+
+        public const string CCToOrgNo = "CCToOrgNo";
+        public const string CCToOrgName = "CCToOrgName";
+        public const string CCToDept = "CCToDept";
+        public const string CCToDeptName = "CCToDeptName";
     }
     /// <summary>
     /// 抄送

@@ -199,6 +199,7 @@ namespace BP.CCBill
             {
                 if (this._enMap != null)
                     return this._enMap;
+
                 Map map = new Map("Sys_MapData", "单据属性");
 
 
@@ -323,9 +324,7 @@ namespace BP.CCBill
                 map.AddTBString(FrmDictAttr.Tag2, null, "Tag2", false, false, 0, 500, 20);
                 #endregion 扩展参数.
 
-
                 map.AddTBAtParas(800); //参数属性.
-
 
                 #region 基本功能.
                 RefMethod rm = new RefMethod();
@@ -451,7 +450,6 @@ namespace BP.CCBill
                 map.AddRefMethod(rm);
 
                 #endregion
-
 
                 #region 报表定义.
                 rm = new RefMethod();
@@ -667,7 +665,7 @@ namespace BP.CCBill
         /// <returns></returns>
         public string DoDesigner()
         {
-            if (this.FrmType == Sys.FrmType.FreeFrm)
+            if (this.FrmType ==BP.Sys.FrmType.FreeFrm)
                 return "";
             return "";
         }

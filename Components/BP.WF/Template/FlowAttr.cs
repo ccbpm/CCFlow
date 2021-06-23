@@ -350,6 +350,10 @@ namespace BP.WF.Template
         /// 数据源
         /// </summary>
         public const string DTSDBSrc = "DTSDBSrc";
+        /// <summary>
+        /// webapi
+        /// </summary>
+        public const string DTSWebAPI = "DTSWebAPI";
         #endregion
 
         #region 权限组.
@@ -557,9 +561,13 @@ namespace BP.WF.Template
         /// </summary>
         None,
         /// <summary>
-        /// 同步
+        /// 按数据源同步
         /// </summary>
-        Syn
+        Syn,
+        /// <summary>
+        /// 按WebAPI方式同步
+        /// </summary>
+        WebAPI
     }
     /// <summary>
     /// 数据同步的时间

@@ -15,7 +15,7 @@ using BP.WF.Data;
 using BP.WF.HttpHandler;
 using BP.Difference;
 using BP.CCBill.Template;
-
+using Newtonsoft.Json.Linq;
 
 namespace BP.CCBill
 {
@@ -226,10 +226,168 @@ namespace BP.CCBill
                     ht.Add("IsView", isTrue);
                 if (ctrlM.CtrlObj.Equals("BtnDelete") == true)
                     ht.Add("IsDelete", isTrue);
+               
             }
-
+            ht.Add("IsShowDataVer", 1);
             return BP.Tools.Json.ToJson(ht);
         }
+
+        /// <summary>
+        /// 获取单据，实体按钮权限集合
+        /// </summary>
+        /// <returns></returns>
+        public string CCFrom_ToolBar_Init()
+        {
+            FrmDict frmDict = new FrmDict(this.FrmID);
+            bool isReadonly = this.GetRequestValBoolen("IsReadonly");
+            DataTable dt = new DataTable("ToolBar");
+            dt.Columns.Add("No");
+            dt.Columns.Add("Name");
+            dt.Columns.Add("Type");
+            dt.Columns.Add("Role", typeof(int));
+            dt.Columns.Add("Icon");
+            DataRow dr = dt.NewRow();
+            //获取实体单据的权限
+            string jsonString = CCFrom_FrmPower();
+            //把json转换成实体
+            JObject jObject = JObject.Parse(jsonString);
+            //新建
+            if(jObject.GetValue("IsInsert")!=null && jObject.GetValue("IsInsert").ToString().Equals("1") && isReadonly == false)
+            {
+                dr = dt.NewRow();
+                dr["No"] = "Add";
+                dr["Name"] = DataType.IsNullOrEmpty(frmDict.BtnNewLable) == true ? "新建" : frmDict.BtnNewLable;
+                dr["Icon"] = "xinjian";
+                dt.Rows.Add(dr);
+            }
+            //保存
+            if (jObject.GetValue("IsSave")!=null && jObject.GetValue("IsSave").ToString().Equals("1") && isReadonly == false)
+            {
+                dr = dt.NewRow();
+                dr["No"] = "Save";
+                dr["Name"] = DataType.IsNullOrEmpty(frmDict.BtnSaveLable) == true ? "保存" : frmDict.BtnSaveLable;
+                dr["Icon"] = "baocun";
+                dt.Rows.Add(dr);
+            }
+            //提交
+            if (jObject.GetValue("IsSubmit")!=null && jObject.GetValue("IsSubmit").ToString().Equals("1") && isReadonly == false)
+            {
+                dr = dt.NewRow();
+                dr["No"] = "Submit";
+                dr["Name"] = DataType.IsNullOrEmpty(frmDict.BtnSubmitLable) == true ? "提交" : frmDict.BtnSubmitLable;
+                dr["Icon"] = "baocun";
+                dt.Rows.Add(dr);
+            }
+            //删除
+            if (jObject.GetValue("IsDelete")!=null && jObject.GetValue("IsDelete").ToString().Equals("1") && isReadonly == false)
+            {
+                dr = dt.NewRow();
+                dr["No"] = "Delete";
+                dr["Name"] = DataType.IsNullOrEmpty(frmDict.BtnDelLable) == true ? "删除" : frmDict.BtnDelLable;
+                dr["Icon"] = "shanchu1";
+                dt.Rows.Add(dr);
+            }
+            ////数据快照
+            //if (jObject.GetValue("IsShowDataVer")!=null && jObject.GetValue("IsShowDataVer").ToString().Equals("1") && isReadonly == false)
+            //{
+            //    dr = dt.NewRow();
+            //    dr["No"] = "DataVer";
+            //    dr["Name"] = DataType.IsNullOrEmpty(frmDict.BtnDataVer) == true ? "数据快照" : frmDict.BtnDataVer;
+            //    dr["Icon"] = "book";
+            //    dt.Rows.Add(dr);
+            //}
+
+            //查询
+            if (jObject.GetValue("IsView")!=null && jObject.GetValue("IsView").ToString().Equals("1") && isReadonly == false)
+            {
+                dr = dt.NewRow();
+                dr["No"] = "Search";
+                dr["Name"] = DataType.IsNullOrEmpty(frmDict.BtnSearchLabel) == true ? "查询" : frmDict.BtnSearchLabel;
+                dr["Icon"] = "Search";
+                dt.Rows.Add(dr);
+            }
+            if (frmDict.BtnGroupEnable == true)
+            {
+                //分组
+                dr = dt.NewRow();
+                dr["No"] = "Group";
+                dr["Name"] = DataType.IsNullOrEmpty(frmDict.BtnGroupLabel) == true ? "分析" : frmDict.BtnGroupLabel;
+                dr["Icon"] = "fenzu";
+                dt.Rows.Add(dr);
+            }
+
+            if (frmDict.BtnPrintHtmlEnable == true)
+            {
+                dr = dt.NewRow();
+                dr["No"] = "Print";
+                dr["Type"] = "HTML";
+                dr["Name"] = DataType.IsNullOrEmpty(frmDict.BtnPrintHtml) == true ? "打印HTML" : frmDict.BtnPrintHtml;
+                dr["Icon"] = "print";
+                dt.Rows.Add(dr);
+            }
+
+            if (frmDict.BtnPrintPDFEnable == true)
+            {
+                dr = dt.NewRow();
+                dr["No"] = "Print";
+                dr["Type"] = "PDF";
+                dr["Name"] = DataType.IsNullOrEmpty(frmDict.BtnPrintPDF) == true ? "打印PDF" : frmDict.BtnPrintPDF;
+                dr["Icon"] = "print";
+                dt.Rows.Add(dr);
+            }
+
+            if (frmDict.BtnPrintRTFEnable == true)
+            {
+                dr = dt.NewRow();
+                dr["No"] = "Print";
+                dr["Type"] = "RTF";
+                dr["Name"] = DataType.IsNullOrEmpty(frmDict.BtnPrintRTF) == true ? "打印RTF" : frmDict.BtnPrintRTF;
+                dr["Icon"] = "print";
+                dt.Rows.Add(dr);
+            }
+
+            if (frmDict.BtnPrintCCWordEnable == true)
+            {
+                dr = dt.NewRow();
+                dr["No"] = "Print";
+                dr["Type"] = "CCWord";
+                dr["Name"] = DataType.IsNullOrEmpty(frmDict.BtnPrintCCWord) == true ? "打印CCWord" : frmDict.BtnPrintCCWord;
+                dr["Icon"] = "print";
+                dt.Rows.Add(dr);
+            }
+            if (frmDict.BtnExpZipEnable ==true)
+            {
+                dr = dt.NewRow();
+                dr["No"] = "Print";
+                dr["Type"] = "ZIP";
+                dr["Name"] = DataType.IsNullOrEmpty(frmDict.BtnExpZip) == true ? "打包ZIP" : frmDict.BtnExpZip;
+                dr["Icon"] = "print";
+                dt.Rows.Add(dr);
+            }
+
+            //关联流程
+            DictFlows dictFlows = new BP.CCBill.Template.DictFlows();
+            dictFlows.Retrieve("FrmID", this.FrmID);
+            foreach(DictFlow dict in dictFlows)
+            {
+                dr = dt.NewRow();
+                dr["No"] = "dictFlow";
+                dr["Type"] = dict.FlowNo;
+                dr["Name"] = dict.Label;
+                dr["Icon"] = "shezhi";
+                dt.Rows.Add(dr);
+            }
+            if (WebUser.No.Equals("admin"))
+            {
+                dr = dt.NewRow();
+                dr["No"] = "Setting";
+                dr["Name"] = "设置";
+                dr["Icon"] = "shezhi";
+                dt.Rows.Add(dr);
+            }
+            return BP.Tools.Json.ToJson(dt);
+        }
+
 
         /// <summary>
         /// 获取菜单列表

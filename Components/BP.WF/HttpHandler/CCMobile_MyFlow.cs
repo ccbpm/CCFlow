@@ -31,9 +31,9 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GenerWorkNode()
         {
+
             WF_MyFlow en = new WF_MyFlow();
             return en.GenerWorkNode();
-             
         }
         /// <summary>
         /// 绑定多表单中获取节点表单的数据
@@ -79,7 +79,7 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("KeyOfEn", typeof(string));
             dt.Columns.Add("NoteVal", typeof(string));
             string nodeNote = nd.GetParaString("NodeNote");
-           
+
             foreach (MapAttr attr in attrs)
             {
                 if (nodeNote.Contains("," + attr.KeyOfEn + ",") == false)
@@ -119,8 +119,8 @@ namespace BP.WF.HttpHandler
                 dr["NoteVal"] = text;
                 dt.Rows.Add(dr);
 
-             }
-           
+            }
+
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -130,7 +130,7 @@ namespace BP.WF.HttpHandler
         public string InitToolBar()
         {
             DataSet ds = new DataSet();
-            
+
             //节点信息
             Node nd = new Node(this.FK_Node);
             ds.Tables.Add(nd.ToDataTableField("WF_Node"));
@@ -186,7 +186,7 @@ namespace BP.WF.HttpHandler
                 dt.TableName = "HuiQian";
                 dt.Columns.Add("isAskForOrHuiQian", typeof(int));
                 DataRow dr = dt.NewRow();
-                if(isAskForOrHuiQian == true)
+                if (isAskForOrHuiQian == true)
                     dr["isAskForOrHuiQian"] = 1;
                 else
                     dr["isAskForOrHuiQian"] = 0;
@@ -329,11 +329,11 @@ namespace BP.WF.HttpHandler
         public string FrmGener_Save()
         {
             WF_CCForm ccfrm = new WF_CCForm();
-            string str= ccfrm.FrmGener_Save();
+            string str = ccfrm.FrmGener_Save();
 
             // 这里保存的时候，需要保存到草稿,没有看到PC端对应的方法。
             string nodeIDStr = this.FK_Node.ToString();
-            if (nodeIDStr.EndsWith("01")==true)
+            if (nodeIDStr.EndsWith("01") == true)
             {
                 Flow fl = new Flow(this.FK_Flow);
                 if (fl.DraftRole == DraftRole.SaveToDraftList)
@@ -347,7 +347,7 @@ namespace BP.WF.HttpHandler
 
         public string MyFlowGener_Delete()
         {
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByWriteLog(this.FK_Flow, this.WorkID, Web.WebUser.Name+"用户删除", true);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByWriteLog(this.FK_Flow, this.WorkID, Web.WebUser.Name + "用户删除", true);
             return "删除成功...";
         }
 

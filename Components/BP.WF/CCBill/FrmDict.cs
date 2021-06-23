@@ -18,6 +18,7 @@ namespace BP.CCBill
     /// </summary>
     public class FrmDictAttr : FrmAttr
     {
+
     }
     /// <summary>
     /// 实体表单
@@ -146,6 +147,169 @@ namespace BP.CCBill
                 this.SetValByKey(FrmDictAttr.BillNoFormat, value);
             }
         }
+        /// <summary>
+        /// 新建标签
+        /// </summary>
+        public string BtnNewLable
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmDictAttr.BtnNewLable);
+            }
+        }
+        /// <summary>
+        /// 删除标签
+        /// </summary>
+        public string BtnDelLable
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmDictAttr.BtnDelLable);
+            }
+        }
+        /// <summary>
+        /// 保存标签
+        /// </summary>
+        public string BtnSaveLable
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmDictAttr.BtnSaveLable);
+            }
+        }
+        /// <summary>
+        /// 提交标签
+        /// </summary>
+        public string BtnSubmitLable
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmDictAttr.BtnSubmitLable);
+            }
+        }
+        /// <summary>
+        /// 查询标签
+        /// </summary>
+        public string BtnSearchLabel
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmDictAttr.BtnSearchLabel);
+            }
+        }
+        /// <summary>
+        /// 数据快照
+        /// </summary>
+        public string BtnDataVer
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmDictAttr.BtnDataVer);
+            }
+        }
+        /// <summary>
+        /// 分组按钮
+        /// </summary>
+        public bool BtnGroupEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FrmDictAttr.BtnGroupEnable);
+            }
+        }
+        public string BtnGroupLabel
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmDictAttr.BtnGroupLabel);
+            }
+        }
+        /// <summary>
+        /// 打印HTML按钮
+        /// </summary>
+        public bool BtnPrintHtmlEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FrmDictAttr.BtnPrintHtmlEnable);
+            }
+        }
+        public string BtnPrintHtml
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmDictAttr.BtnPrintHtml);
+            }
+        }
+        /// <summary>
+        /// 打印PDF按钮
+        /// </summary>
+        public bool BtnPrintPDFEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FrmDictAttr.BtnPrintPDFEnable);
+            }
+        }
+        public string BtnPrintPDF
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmDictAttr.BtnPrintPDF);
+            }
+        }
+        /// <summary>
+        /// 打印RTF按钮
+        /// </summary>
+        public bool BtnPrintRTFEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FrmDictAttr.BtnPrintRTFEnable);
+            }
+        }
+        public string BtnPrintRTF
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmDictAttr.BtnPrintRTF);
+            }
+        }
+        /// <summary>
+        /// 打印CCWord按钮
+        /// </summary>
+        public bool BtnPrintCCWordEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FrmDictAttr.BtnPrintCCWordEnable);
+            }
+        }
+        public string BtnPrintCCWord
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmDictAttr.BtnPrintCCWord);
+            }
+        }
+        /// <summary>
+        /// 打印ZIP按钮
+        /// </summary>
+        public bool BtnExpZipEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FrmDictAttr.BtnExpZipEnable);
+            }
+        }
+        public string BtnExpZip
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmDictAttr.BtnExpZip);
+            }
+        }
+
         #endregion
 
         #region 构造方法
@@ -224,8 +388,13 @@ namespace BP.CCBill
                 map.AddTBString(FrmDictAttr.BtnSubmitLable, "提交", "提交", true, false, 0, 50, 20);
                 //map.AddBoolean(FrmDictAttr.BtnSubmitEnable, true, "是否可用？", true, true);
 
+                //删除.
                 map.AddTBString(FrmDictAttr.BtnDelLable, "删除", "删除", true, false, 0, 50, 20);
-                // map.AddBoolean(FrmDictAttr.BtnDelEnable, true, "是否可用？", true, true);
+
+                //数据版本.
+                map.AddTBString(FrmDictAttr.BtnDataVer, "数据快照", "数据快照", true, false, 0, 50, 20);
+
+                //map.AddBoolean(FrmDictAttr.BtnDelEnable, true, "是否可用？", true, true);
 
                 map.AddTBString(FrmDictAttr.BtnSearchLabel, "列表", "列表", true, false, 0, 50, 20);
                 //map.AddBoolean(FrmDictAttr.BtnSearchEnable, true, "是否可用？", true, true);
@@ -279,6 +448,25 @@ namespace BP.CCBill
 
                 #region 基本功能.
                 RefMethod rm = new RefMethod();
+
+                rm = new RefMethod();
+                rm.Title = "执行方法"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoMethod";
+                rm.Icon = "../../WF/Img/Event.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "表单事件"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoEvent";
+                rm.Icon = "../../WF/Img/Event.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
                 rm = new RefMethod();
                 rm.Title = "设计表单"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoDesigner";
@@ -314,34 +502,18 @@ namespace BP.CCBill
                 map.AddRefMethod(rm);
 
 
-                rm = new RefMethod();
-                rm.Title = "绑定到菜单目录"; // "设计表单";
-                rm.HisAttrs.AddDDLSQL("MENUNo", null, "选择菜单目录", "SELECT No,Name FROM GPM_Menu WHERE MenuType=3");
-                rm.HisAttrs.AddTBString("Name", "@Name", "菜单名称", true, false, 0, 100, 100);
-                rm.ClassMethodName = this.ToString() + ".DoBindMenu";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.Func;
-                rm.Target = "_blank";
-                //rm.GroupName = "开发接口";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "绑定到菜单目录"; // "设计表单";
+                //rm.HisAttrs.AddDDLSQL("MENUNo", null, "选择菜单目录", "SELECT No,Name FROM GPM_Menu WHERE MenuType=3");
+                //rm.HisAttrs.AddTBString("Name", "@Name", "菜单名称", true, false, 0, 100, 100);
+                //rm.ClassMethodName = this.ToString() + ".DoBindMenu";
+                //rm.Visable = true;
+                //rm.RefMethodType = RefMethodType.Func;
+                //rm.Target = "_blank";
+                ////rm.GroupName = "开发接口";
+                //map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "表单事件"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoEvent";
-                rm.Icon = "../../WF/Img/Event.png";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "执行方法"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoMethod";
-                rm.Icon = "../../WF/Img/Event.png";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
                 #endregion 基本功能.
 
                 #region 权限规则.
@@ -383,6 +555,16 @@ namespace BP.CCBill
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "数据版本权限规则"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoBtnDataVer";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.LinkModel;
+                rm.RefAttrKey = FrmDictAttr.BtnDataVer;
+                rm.GroupName = "权限规则";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
                 rm.Title = "查询权限"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoSearchRole";
                 rm.Visable = true;
@@ -397,8 +579,6 @@ namespace BP.CCBill
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
-
-
                 #endregion
 
                 #region 报表定义.
@@ -417,7 +597,6 @@ namespace BP.CCBill
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
-
 
                 rm = new RefMethod();
                 rm.GroupName = "报表定义";
@@ -441,6 +620,48 @@ namespace BP.CCBill
             }
         }
         #endregion
+
+        /// <summary>
+        /// 执行模板复制
+        /// </summary>
+        /// <param name="frmID"></param>
+        /// <param name="frmName"></param>
+        /// <param name="ptable"></param>
+        /// <returns></returns>
+        public string DoCopyTemplate(string newFrmID, string frmName, string ptable)
+        {
+            bool isSetReadonly = true;
+            bool isCopyMethod = false;
+
+            MapData md = new MapData(this.No);
+            md.DoCopy(newFrmID, frmName);
+
+            MapData mdTo = new MapData(newFrmID);
+            if (ptable==null)
+            mdTo.PTable = ptable;
+            mdTo.Name = frmName;
+            mdTo.Update();
+
+            #region 如果要设置为只读的.
+            if (isSetReadonly == true)
+            {
+                MapAttrs mattrs = new MapAttrs();
+                mattrs.Retrieve(MapAttrAttr.FK_MapData, newFrmID);
+
+                foreach (MapAttr item in mattrs)
+                {
+                    if (item.UIIsEnable == false)
+                        continue;
+
+                    item.UIIsEnable = false;
+                    item.Update();
+                }
+            }
+            #endregion 如果要设置为只读的.
+
+
+            return "执行成功.";
+        }
 
         protected void InsertCtrlModel()
         {
@@ -644,7 +865,7 @@ namespace BP.CCBill
                 MapAttr attr = new MapAttr();
                 attr.FK_MapData = this.No;
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = "RDT";  
+                attr.KeyOfEn = "RDT";
                 attr.Name = "创建时间";
                 attr.MyDataType = DataType.AppDateTime;
                 attr.UIContralType = UIContralType.TB;
@@ -755,6 +976,15 @@ namespace BP.CCBill
         {
             return "../../CCBill/Admin/BillRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSave";
         }
+        /// <summary>
+        /// 数据版本权限规则.
+        /// </summary>
+        /// <returns></returns>
+        public string DoBtnDataVer()
+        {
+            return "../../CCBill/Admin/DataVerRole.htm?s=34&FrmID=" + this.No + "&CtrlObj=BtnSave";
+        }
+
         /// <summary>
         /// 提交权限规则
         /// </summary>

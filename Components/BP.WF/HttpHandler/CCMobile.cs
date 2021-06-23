@@ -171,6 +171,7 @@ namespace BP.WF.HttpHandler
             //ht.Add("Todolist_Draft", BP.WF.Dev2Interface.Todolist_Draft); //草稿数量.
 
             ht.Add("Todolist_HuiQian", BP.WF.Dev2Interface.Todolist_HuiQian); //会签数量.
+            ht.Add("Todolist_Drafts", BP.WF.Dev2Interface.Todolist_Draft); //会签数量.
 
             return BP.Tools.Json.ToJsonEntityModel(ht);
         }

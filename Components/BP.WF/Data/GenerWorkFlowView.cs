@@ -710,12 +710,7 @@ namespace BP.WF.Data
             if (qo.DoQuery() == 0)
                 throw new Exception("工作 GenerWorkFlowView [" + workId + "]不存在。");
         }
-        /// <summary>
-        /// 执行修复
-        /// </summary>
-        public void DoRepair()
-        {
-        }
+
         /// <summary>
         /// 重写基类方法
         /// </summary>
@@ -729,56 +724,50 @@ namespace BP.WF.Data
                 Map map = new Map("WF_GenerWorkFlow", "流程查询");
 
                 map.AddTBIntPK(GenerWorkFlowViewAttr.WorkID, 0, "WorkID", true, true);
-                map.AddTBString(GenerWorkFlowViewAttr.StarterName, null, "发起人", true, false, 0, 30, 10);
-                map.AddTBString(GenerWorkFlowViewAttr.Title, null, "标题", true, false, 0, 100, 10, true);
-                map.AddDDLSysEnum(GenerWorkFlowViewAttr.WFSta, 0, "流程状态", true, false, GenerWorkFlowViewAttr.WFSta,
+                map.AddTBString(GenerWorkFlowViewAttr.StarterName, null, "发起人", true, true, 0, 30, 10);
+                map.AddTBString(GenerWorkFlowViewAttr.Title, null, "标题", true, true, 0, 100, 10, true);
+
+                map.AddDDLSysEnum(GenerWorkFlowViewAttr.WFSta, 0, "流程状态", true, false,
+                    GenerWorkFlowViewAttr.WFSta,
                     "@0=运行中@1=已完成@2=其他");
 
-                map.AddDDLSysEnum(GenerWorkFlowViewAttr.WFState, 0, "流程状态", true, false, MyStartFlowAttr.WFState);
-                map.AddTBString(GenerWorkFlowViewAttr.NodeName, null, "当前节点名称", true, false, 0, 100, 10);
+                map.AddDDLSysEnum(GenerWorkFlowViewAttr.WFState, 0, "大状态", true, false, MyStartFlowAttr.WFState);
+                map.AddTBString(GenerWorkFlowViewAttr.NodeName, null, "当前节点名称", true, true, 0, 100, 10);
                 map.AddTBDateTime(GenerWorkFlowViewAttr.RDT, "记录日期", true, true);
-                map.AddTBString(GenerWorkFlowViewAttr.BillNo, null, "单据编号", true, false, 0, 100, 10);
-                map.AddTBStringDoc(GenerWorkFlowViewAttr.FlowNote, null, "备注", true, false, true);
+                map.AddTBString(GenerWorkFlowViewAttr.BillNo, null, "单据编号", true, true, 0, 100, 10);
+                //map.AddTBStringDoc(GenerWorkFlowViewAttr.FlowNote, null, "备注", true, false, true);
 
                 map.AddDDLEntities(GenerWorkFlowViewAttr.FK_FlowSort, null, "类别", new FlowSorts(), false);
                 map.AddDDLEntities(GenerWorkFlowViewAttr.FK_Flow, null, "流程", new Flows(), false);
-                map.AddDDLEntities(GenerWorkFlowViewAttr.FK_Dept, null, "部门", new BP.Port.Depts(), false);
+                map.AddDDLEntities(GenerWorkFlowViewAttr.FK_Dept, null, "隶属部门", new BP.Port.Depts(), false);
 
                 map.AddTBInt(GenerWorkFlowViewAttr.FID, 0, "FID", false, false);
                 map.AddTBInt(GenerWorkFlowViewAttr.FK_Node, 0, "FK_Node", false, false);
-
-                map.AddTBString(GenerWorkFlowViewAttr.FK_NY, null, "月份", true, false, 0, 100, 10);
+                map.AddTBString(GenerWorkFlowViewAttr.FK_NY, null, "发起月份", true, true, 0, 100, 10);
 
                 //map.AddSearchAttr(GenerWorkFlowViewAttr.FK_Dept);
                 map.AddSearchAttr(GenerWorkFlowViewAttr.FK_Flow);
                 map.AddSearchAttr(GenerWorkFlowViewAttr.WFSta);
                 map.AddSearchAttr(GenerWorkFlowViewAttr.FK_NY, 4000);
 
-
                 //把不等于 0 的去掉.
                 map.AddHidden(GenerWorkFlowViewAttr.WFState, "!=", "0");
 
-
                 RefMethod rm = new RefMethod();
-                
+
 
                 rm = new RefMethod();
-                rm.Title = "删除";
-                rm.ClassMethodName = this.ToString() + ".DoDelete";
-                rm.Warning = "您确定要删除吗？";
-                rm.Icon = "../../WF/Img/Btn/Delete.gif";
-                rm.IsForEns = false;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Icon = "../../WF/Img/Btn/CC.gif";
+                //rm.Icon = "../../WF/Img/Btn/CC.gif";
+                rm.Icon = "icon-key";
                 rm.Title = "移交";
+
                 rm.ClassMethodName = this.ToString() + ".DoFlowShift";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Icon = "../../WF/Img/Btn/Back.png";
+                // rm.Icon = "../../WF/Img/Btn/Back.png";
+                rm.Icon = "icon-reload";
                 rm.Title = "回滚";
                 rm.ClassMethodName = this.ToString() + ".DoRollback";
 
@@ -787,9 +776,9 @@ namespace BP.WF.Data
                 rm.HisAttrs.AddTBString("Note", null, "回滚原因", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
-                rm.Icon = "../../WF/Img/Btn/CC.gif";
+                //rm.Icon = "../../WF/Img/Btn/CC.gif";
+                rm.Icon = "icon-social-tumblr";
                 rm.Title = "跳转";
                 rm.IsForEns = false;
                 rm.ClassMethodName = this.ToString() + ".DoFlowSkip";
@@ -797,15 +786,38 @@ namespace BP.WF.Data
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Icon = "../../WF/Img/Btn/CC.gif";
-                rm.Title = "修复该流程数据实例";
+                //rm.Icon = "../../WF/Img/Btn/CC.gif";
+                rm.Icon = "icon-wrench";
+                rm.Title = "修复数据";
+                //  rm.Title = "修复该流程数据实例";
+
                 rm.IsForEns = false;
                 rm.ClassMethodName = this.ToString() + ".RepairDataIt";
                 rm.RefMethodType = RefMethodType.Func;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "调整";
+                rm.Title = "轨迹查看";
+                rm.ClassMethodName = this.ToString() + ".DoTrack";
+                // rm.Icon = "../../WF/Img/Track.png";
+                rm.Icon = "icon-graph";
+                rm.IsForEns = true;
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "轨迹修改";
+                rm.Icon = "icon-graph";
+                rm.IsForEns = false;
+                rm.ClassMethodName = this.ToString() + ".DoEditTrack";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "调整流程";
+                rm.Icon = "icon-target";
                 rm.HisAttrs.AddTBString("RenYuan", null, "调整到人员", true, false, 0, 100, 100);
                 //rm.HisAttrs.AddTBInt("shuzi", 0, "调整到节点", true, false);
                 rm.HisAttrs.AddDDLSQL("nodeID", "0", "调整到节点",
@@ -814,26 +826,30 @@ namespace BP.WF.Data
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "轨迹";
-                rm.ClassMethodName = this.ToString() + ".DoTrack";
-                rm.Icon = "../../WF/Img/Track.png";
-                rm.IsForEns = true;
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "修改轨迹";
-                rm.IsForEns = false;
-                rm.ClassMethodName = this.ToString() + ".DoEditTrack";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
                 rm.Title = "调整数据";
                 rm.IsForEns = false;
+                rm.Icon = "icon-target";
                 rm.ClassMethodName = this.ToString() + ".DoEditFrm";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "彻底删除";
+                rm.ClassMethodName = this.ToString() + ".DoDelete";
+                rm.Warning = "您确定要删除吗？包括该流程的所有数据。";
+                // rm.Icon = "../../WF/Img/Btn/Delete.gif";
+                rm.Icon = "icon-close";
+                rm.IsForEns = false;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "逻辑删除";
+                rm.ClassMethodName = this.ToString() + ".DoDeleteFlag";
+                rm.HisAttrs.AddTBString("Note", null, "删除原因", true, false, 0, 100, 100);
+             //   rm.Warning = "您确定要删除吗？";
+                // rm.Icon = "../../WF/Img/Btn/Delete.gif";
+                rm.Icon = "icon-close";
+                rm.IsForEns = false;
                 map.AddRefMethod(rm);
 
                 this._enMap = map;
@@ -858,7 +874,7 @@ namespace BP.WF.Data
                 return "err@当前节点表单类型不同.";
 
             string frmID = nd.NodeFrmID;
-            return "../../Admin/AttrFlow/AdminFrmList.htm?FK_Flow="+this.FK_Flow+"&FrmID="+frmID+"&WorkID="+this.WorkID;
+            return "../../Admin/AttrFlow/AdminFrmList.htm?FK_Flow=" + this.FK_Flow + "&FrmID=" + frmID + "&WorkID=" + this.WorkID;
         }
 
         #region 执行功能.
@@ -872,10 +888,16 @@ namespace BP.WF.Data
             }
             catch (Exception ex)
             {
-                return "err@"+ex.Message;
+                return "err@" + ex.Message;
             }
 
         }
+        /// <summary>
+        /// 修复数据
+        /// 1. 当前的节点的数据不小心丢失.
+        /// 2. 从轨迹里把数据找到溯源到业务表里.
+        /// </summary>
+        /// <returns></returns>
         public string RepairDataIt()
         {
             string infos = "";
@@ -1049,6 +1071,25 @@ namespace BP.WF.Data
             catch (Exception ex)
             {
                 return "移交失败@" + ex.Message;
+            }
+        }
+        /// <summary>
+        /// 逻辑删除
+        /// </summary>
+        /// <returns></returns>
+        public string DoDeleteFlag(string msg)
+        {
+            if (BP.WF.Dev2Interface.Flow_IsCanViewTruck(this.FK_Flow, this.WorkID) == false)
+                return "您没有操作该流程数据的权限.";
+
+            try
+            {
+                BP.WF.Dev2Interface.Flow_DoDeleteFlowByFlag(this.WorkID, msg, true);
+                return "删除成功";
+            }
+            catch (Exception ex)
+            {
+                return "删除失败@" + ex.Message;
             }
         }
         /// <summary>

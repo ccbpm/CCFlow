@@ -28,6 +28,38 @@ namespace BP.WF.HttpHandler
     public class WF_Admin_FoolFormDesigner : DirectoryPageBase
     {
         #region 表单设计器.
+        public string Designer_Move()
+        {
+            //当前的MyPK.
+            string mypk = this.MyPK; //当前的主键.
+
+            //获得当前分组下的字段集合.
+            string mypks = this.GetRequestVal("MyPKs"); //字段集合.
+            int groupID = this.GetRequestValInt("GroupID");
+
+            GroupField gf = new GroupField(groupID);
+            if (gf.CtrlType.Equals("") == false)
+                return "err@你不能移动到【" + gf.Lab + "】它是非字段分组，您不能移动。";
+
+            //MapAttr attr = new MapAttr(mypk);
+            //if (attr.GroupID != gf.OID)
+            //{
+            //    // if（ attr.KeyOfEn.LastIndexOf("_RDT")!=0 || attr.KeyOfEn.LastIndexOf("_Checker") != 0
+            //    //   || attr.KeyOfEn.LastIndexOf("_Checker") != 0
+            //}
+
+            string[] strs = mypks.Split(',');
+            for (int i = 0; i < strs.Length; i++)
+            {
+                var str = strs[i];
+                // string sql = "UPDATE Sys_MapAttr SET FK_FormTree ='" + sortNo + "',Idx=" + i + " WHERE MyPK='" + str + "'";
+                string sql = "UPDATE Sys_MapAttr SET GroupID=" + groupID + ", Idx=" + i + " WHERE MyPK='" + str + "'";
+                DBAccess.RunSQL(sql);
+            }
+            return "表单顺序移动成功..";
+
+            //return "移动成功.";
+        }
         /// <summary>
         /// 是不是第一次进来.
         /// </summary>
@@ -98,11 +130,9 @@ namespace BP.WF.HttpHandler
             MapFrames frms = new MapFrames(this.FK_MapData);
             ds.Tables.Add(frms.ToDataTableField("Sys_MapFrame"));
 
-
             //附件表.
             FrmAttachments aths = new FrmAttachments(this.FK_MapData);
             ds.Tables.Add(aths.ToDataTableField("Sys_FrmAttachment"));
-
 
             //加入扩展属性.
             MapExts MapExts = new MapExts(this.FK_MapData);
@@ -139,7 +169,6 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-
             //把dataet转化成json 对象.
             return BP.Tools.Json.ToJson(ds);
         }
@@ -152,7 +181,7 @@ namespace BP.WF.HttpHandler
         public string MapDefDtlFreeFrm_Init()
         {
             string isFor = this.GetRequestVal("For");
-            if (DataType.IsNullOrEmpty(isFor)==false)
+            if (DataType.IsNullOrEmpty(isFor) == false)
                 return "sln@" + isFor;
 
             if (this.FK_MapDtl.Contains("_Ath") == true)
@@ -298,12 +327,20 @@ namespace BP.WF.HttpHandler
                 attr.MyDataType = DataType.AppInt;
             attr.LGType = En.FieldTypeS.Enum;
 
+            
             SysEnumMain sem = new Sys.SysEnumMain();
             sem.No = attr.UIBindKey;
             if (sem.RetrieveFromDBSources() != 0)
                 attr.Name = sem.Name;
             else
-                attr.Name = "枚举" + attr.UIBindKey;
+            {
+                Int32 count = sem.Retrieve("EnumKey", attr.UIBindKey, "OrgNo", WebUser.OrgNo);
+                if(count!=0)
+                    attr.Name = sem.Name;
+                else
+                    attr.Name = "枚举" + attr.UIBindKey;
+            }
+               
 
             //paras参数
             Paras ps = new Paras();
@@ -561,10 +598,10 @@ namespace BP.WF.HttpHandler
             DataTable dt = new DataTable();
             dt.TableName = "STable";
             dt.Columns.Add("STable");
-		    DataRow dr = dt.NewRow();
-            dr["STable"]=this.STable;
+            DataRow dr = dt.NewRow();
+            dr["STable"] = this.STable;
             dt.Rows.Add(dr);
-		    ds.Tables.Add(dt);
+            ds.Tables.Add(dt);
 
             return BP.Tools.Json.ToJson(ds);
         }
@@ -677,7 +714,7 @@ namespace BP.WF.HttpHandler
                         mylen = 0;
                         //ma.isu = true;
                     }
-                        
+
 
                     ma.MaxLen = mylen;
                 }
@@ -845,7 +882,7 @@ namespace BP.WF.HttpHandler
                 //根据No 排序
                 ob.addOrderBy(SFTableAttr.No);
                 //返回对象为dt
-                dt=ob.DoQueryToTable();
+                dt = ob.DoQueryToTable();
                 dt.TableName = "SFTables";
                 ds.Tables.Add(dt);
             }
@@ -1024,7 +1061,7 @@ namespace BP.WF.HttpHandler
 
             //Paras ps = new Paras();
             //ps.SQL = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID=" + SystemConfig.AppCenterDBVarStr + "FrmID AND  ( CtrlType='' OR CtrlType= NULL ) ";
-           // ps.Add("FrmID", this.FK_MapData);
+            // ps.Add("FrmID", this.FK_MapData);
             string sql = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID='" + this.FK_MapData + "' AND (CtrlType='' OR CtrlType= NULL) ";
             attr.GroupID = DBAccess.RunSQLReturnValInt(sql, 0);
             attr.Insert();
@@ -1104,7 +1141,7 @@ namespace BP.WF.HttpHandler
             {
 
                 UIContralType uiContralType = (UIContralType)this.GetRequestValInt("UIContralType");
-               
+
                 attr.UIWidth = 100;
                 attr.UIHeight = 23;
                 if (uiContralType == UIContralType.SignCheck || uiContralType == UIContralType.FlowBBS)
@@ -1117,7 +1154,7 @@ namespace BP.WF.HttpHandler
                     attr.UIVisible = true;
                     attr.UIIsEnable = true;
                 }
-                   
+
                 attr.ColSpan = 1;
                 attr.MinLen = 0;
                 attr.MaxLen = 50;
@@ -1367,7 +1404,7 @@ namespace BP.WF.HttpHandler
 
             //枚举值.
             string enumKey = this.EnumKey;
-            if (DataType.IsNullOrEmpty(enumKey) == true || enumKey.Equals("null")==true)
+            if (DataType.IsNullOrEmpty(enumKey) == true || enumKey.Equals("null") == true)
             {
                 MapAttr ma = new MapAttr(this.MyPK);
                 enumKey = ma.UIBindKey;
@@ -1860,7 +1897,7 @@ namespace BP.WF.HttpHandler
                 /*初始化默认值.*/
                 ath.NoOfObj = "Ath1";
                 ath.Name = "我的附件";
-               // ath.SaveTo = SystemConfig.PathOfDataUser + "\\UploadFile\\" + this.FK_MapData + "\\";
+                // ath.SaveTo = SystemConfig.PathOfDataUser + "\\UploadFile\\" + this.FK_MapData + "\\";
                 ath.W = 150;
                 ath.H = 40;
                 ath.Exts = "*.*";

@@ -23,6 +23,7 @@ namespace BP.WF.HttpHandler
 {
     abstract public class DirectoryPageBase
     {
+
         #region 执行方法.
         /// <summary>
         /// 获得Form数据.
@@ -116,7 +117,7 @@ namespace BP.WF.HttpHandler
                 //    isCanDealToken = false;
 
                 //if (isCanDealToken == true)
-                 //   this.DealToken(myEn, myEn.DoType);
+                //   this.DealToken(myEn, myEn.DoType);
             }
 
             //string token=myEn.ToString
@@ -160,17 +161,31 @@ namespace BP.WF.HttpHandler
             if (this.DoType.Contains(">") == true)
                 return "err@非法的脚本植入.";
 
-            return "err@子类[" + this.ToString() + "]没有重写该[" + this.RequestParasOfAll + "]方法，请确认该方法是否缺少或者是非public类型的.";
+            return "err@子类[" + this.ToString() + "]没有重写该[" + this.GetRequestVal("DoMethod") + "]方法，请确认该方法是否缺少或者是非public类型的.";
         }
         #endregion 执行方法.
 
         #region 公共方法.
+        public Hashtable ht = null;
+        public void AddPara(string key, string val)
+        {
+            if (ht == null)
+                ht = new Hashtable();
+            ht.Add(key, val);
+        }
         public string GetRequestVal(string key)
         {
+            if (ht != null && ht.ContainsKey(key))
+            {
+                string myval = ht[key] as string;
+                return HttpUtility.UrlDecode(myval, System.Text.Encoding.UTF8);
+            }
+
             string val = HttpContextHelper.Current.Request.QueryString[key];
             if (val == null)
             {
                 val = HttpContextHelper.RequestParams(key);
+                //@hongyan.
                 if (val == null)
                     return null;
             }
@@ -275,17 +290,17 @@ namespace BP.WF.HttpHandler
             get
             {
                 string urlExt = "";
-              
+
                 // 适配framework和core（注：net core的rawurl中不含form data）
                 foreach (string key in HttpContextHelper.RequestParamKeys)
                 {
                     if (key.Equals("1") == true || key.Equals("t") == true || key.Equals("T") == true) // 过滤url中1=1的情形
                         continue;
-                   
+
                     string value = HttpContextHelper.RequestParams(key);
                     if (!String.IsNullOrEmpty(value))
                         urlExt += string.Format("&{0}={1}", key, value);
-                   
+
                 }
                 return urlExt;
             }
@@ -311,7 +326,7 @@ namespace BP.WF.HttpHandler
                     if (para == "1=1")
                         continue;
 
-                    
+
                     if (para.Contains("DoType=")
                        || para.Contains("DoMethod=")
                        || para.ToLower().Equals("t")
@@ -324,7 +339,7 @@ namespace BP.WF.HttpHandler
 
                 foreach (string key in HttpContextHelper.RequestParamKeys)
                 {
-                    
+
                     if (key.Equals("DoType")
                         || key.Equals("DoMethod")
                         || key.ToLower().Equals("t")
@@ -755,7 +770,6 @@ namespace BP.WF.HttpHandler
             {
                 if (_workID != 0)
                     return _workID;
-
                 string str = this.GetRequestVal("WorkID");
                 if (DataType.IsNullOrEmpty(str) == true)
                 {
@@ -1237,7 +1251,7 @@ namespace BP.WF.HttpHandler
                         if (attr.Key.Equals("MyNum"))
                             continue;
 
-                        if (attr.Key.Equals("WorkID")==true)
+                        if (attr.Key.Equals("WorkID") == true)
                             continue;
 
                         if (attr.Key.Equals("MyFilePath") || attr.Key.Equals("MyFileExt")
@@ -1245,7 +1259,8 @@ namespace BP.WF.HttpHandler
                             || attr.Key.Equals("MyFileW") || attr.Key.Equals("MyFileSize")
                             || attr.Key.Equals("RefPK"))
                             continue;
-
+                        if (dt.Columns.Contains(attr.Key) == false)
+                            continue;
 
 
                         if (attr.MyDataType == DataType.AppBoolean)
@@ -1257,7 +1272,7 @@ namespace BP.WF.HttpHandler
                             string text = "";
                             if (attr.IsFKorEnum || attr.IsFK)
                                 text = dr[attr.Key + "Text"].ToString();
-                            else if (dt.Columns.Contains(attr.Key+"T") == true)
+                            else if (dt.Columns.Contains(attr.Key + "T") == true)
                                 text = dr[attr.Key + "T"].ToString();
                             else
                                 text = dr[attr.Key].ToString();
@@ -1287,6 +1302,7 @@ namespace BP.WF.HttpHandler
             catch (Exception e)
             {
                 flag = false;
+                throw new Exception("数据导出有问题," + e.Message);
             }
             finally
             {

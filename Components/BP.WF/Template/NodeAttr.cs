@@ -165,10 +165,6 @@ namespace BP.WF.Template
         /// </summary>
         public const string IsTask = "IsTask";
         /// <summary>
-        /// 是否是业务单元？
-        /// </summary>
-        public const string IsBUnit = "IsBUnit";
-        /// <summary>
         /// 节点工作类型
         /// </summary>
         public const string NodeWorkType = "NodeWorkType";

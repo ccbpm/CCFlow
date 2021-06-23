@@ -283,6 +283,16 @@ namespace BP.WF.HttpHandler
         {
 
         }
+        /// <summary>
+        /// 为宁海特殊处理
+        /// </summary>
+        /// <returns></returns>
+        public string GoToMyFlow_Init()
+        {
+            string userNo = this.GetRequestVal("UserNo");
+            BP.WF.Dev2Interface.Port_Login(userNo);
+            return "登录成功";
+        }
         protected override string DoDefaultMethod()
         {
             return base.DoDefaultMethod();
@@ -870,10 +880,10 @@ namespace BP.WF.HttpHandler
             //获得能否发起的流程.
             string sql = "SELECT FK_Flow as No,FlowName as Name, FK_FlowSort,B.Name as FK_FlowSortText,B.Domain, COUNT(WorkID) as Num ";
             sql += " FROM WF_GenerWorkFlow A, WF_FlowSort B  ";
-            sql += " WHERE Starter='"+BP.Web.WebUser.No+"'  AND A.FK_FlowSort=B.No  ";
+            sql += " WHERE Starter='" + BP.Web.WebUser.No + "'  AND A.FK_FlowSort=B.No  ";
             sql += " GROUP BY FK_Flow, FlowName, FK_FlowSort, B.Name,B.Domain ";
 
-            DataTable dtStart = DBAccess.RunSQLReturnTable(sql); 
+            DataTable dtStart = DBAccess.RunSQLReturnTable(sql);
             dtStart.TableName = "Start";
             ds.Tables.Add(dtStart);
 
@@ -889,7 +899,7 @@ namespace BP.WF.HttpHandler
                 if (nos.Contains(no) == true)
                     continue;
 
-                string name =  dr["FK_FlowSortText"].ToString();
+                string name = dr["FK_FlowSortText"].ToString();
                 string domain = dr["Domain"].ToString();
 
                 nos += "," + no;

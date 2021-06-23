@@ -23,6 +23,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public WF_Admin_FoolFormDesigner_StyletDfine()
         {
+
         }
 
         #region GloValStyles.htm
@@ -53,6 +54,9 @@ namespace BP.WF.HttpHandler
 
             //内容.
             docs = docs.Replace(en.No, "GloValsTemp");
+
+            //要去掉.
+            docs = docs.Replace("!important", "");
 
             //保存一个临时文件,
             string path = SystemConfig.PathOfDataUser + "Style\\GloVarsCSSTemp.css";
@@ -127,6 +131,7 @@ namespace BP.WF.HttpHandler
         {
             //获得标准的配置文件,用于比较缺少或者删除的标记.
             string path = SystemConfig.PathOfWebApp + "\\WF\\Admin\\FoolFormDesigner\\StyletDfine\\DefaultStyle.xml";
+
             System.Data.DataSet ds = new System.Data.DataSet();
             ds.ReadXml(path);
             DataTable dt = ds.Tables[0];
@@ -243,9 +248,10 @@ namespace BP.WF.HttpHandler
                 if (item.Contains("_Temp") == true)
                     continue;
 
-                docs += "\t\n " + item + ":" + ap.GetValStrByKey(item).Trim().Replace(" ", "") + ";";
+                docs += "\t\n " + item + ":" + ap.GetValStrByKey(item).Trim().Replace(" ", "") + " !important;";
+                //docs += "\t\n " + item + ":" + ap.GetValStrByKey(item).Trim().Replace(" ", "") + " ;";
             }
-            docs += "\t\n}";
+            docs += "\t\n }";
             return docs;
         }
         #endregion 风格设计页面..
@@ -337,12 +343,9 @@ namespace BP.WF.HttpHandler
                 en.Idx = idx;
                 ens.AddEntity(en);
             }
-
-
             ens.Delete("GroupKey", "FoolFrmStyle");
             foreach (BP.Sys.GloVar en in ens)
                 en.Insert();
-
 
             //生成临时文件.  如果是 isApp==true ,就生成正式的风格文件.
             Default_App_Ext(ens, isApp);

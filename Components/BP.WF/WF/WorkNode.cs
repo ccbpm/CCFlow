@@ -1108,8 +1108,7 @@ namespace BP.WF
             //    return (Node)this.HisNode.HisToNodes[0];
 
             // 判断是否有用户选择的节点.
-            if (this.HisNode.CondModel == DirCondModel.ByButtonSelected
-                || this.HisNode.CondModel == DirCondModel.ByDDLSelected)
+            if (this.HisNode.CondModel == DirCondModel.ByPopSelect)
             {
                 // 获取用户选择的节点. @Hongyan
                 string nodes = this.HisGenerWorkFlow.Paras_ToNodes;
@@ -3087,7 +3086,6 @@ namespace BP.WF
             {
                 if (this.HisNode.IsStartNode)
                 {
-                    //this.addMsg("UnDoNew", "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&UserNo="+WebUser.No+"&SID="+WebUser.SID+"&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "' ><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='MyFlow.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + int.Parse(toNode.FK_Flow) + "01' ><img src='./Img/New.gif' border=0/>新建流程</a>。");
                     this.addMsg("UnDo", "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "' ><img src='" + SystemConfig.HostURLOfBS + "/WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>.");
                 }
                 else
@@ -3097,7 +3095,6 @@ namespace BP.WF
             }
 
 
-            //  this.addMsg("Rpt", "@<a href='WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + wk.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>");
             #endregion 处理消息提示
         }
         /// <summary>

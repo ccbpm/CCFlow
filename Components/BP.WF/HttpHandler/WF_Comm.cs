@@ -14,6 +14,8 @@ using BP.WF;
 using BP.WF.Template;
 using BP.Difference;
 using System.Text;
+using BP.Tools;
+using System.Reflection;
 
 namespace BP.WF.HttpHandler
 {
@@ -777,40 +779,41 @@ namespace BP.WF.HttpHandler
             {
                 string[] str = paras.Split('~');
                 myparas = new object[str.Length];
-                RefMethod rm = null;
-                foreach (RefMethod item in en.EnMap.HisRefMethods)
+               
+                int idx = 0;
+                ParameterInfo[] paramInfos = mp.GetParameters();
+                foreach(ParameterInfo paramInfo in paramInfos)
                 {
-                    if (item.ClassMethodName.Replace(this.EnName + ".", "").Equals(methodName + "()"))
-                    {
-                        rm = item;
-                        break;
-                    }
-                }
-                if (rm != null)
-                {
-                    Attrs attrs = rm.HisAttrs;
-                    int idx = 0;
-
-                    foreach (Attr attr in attrs)
-                    {
-                        if (idx >= str.Length)
-                            break;
                         myparas[idx] = str[idx];
-                        if (attr.MyDataType == DataType.AppInt)
-                            myparas[idx] = Int32.Parse(str[idx]);
-                        if (attr.MyDataType == DataType.AppFloat)
+                    try
+                    {
+                        if (paramInfo.ParameterType.Name.Equals("Single"))
                             myparas[idx] = float.Parse(str[idx]);
-                        if (attr.MyDataType == DataType.AppDouble)
+                        if (paramInfo.ParameterType.Name.Equals("Double"))
                             myparas[idx] = double.Parse(str[idx]);
-                        if (attr.MyDataType == DataType.AppMoney)
+                        if (paramInfo.ParameterType.Name.Equals("Int32"))
+                            myparas[idx] = Int32.Parse(str[idx]);
+                        if (paramInfo.ParameterType.Name.Equals("Int64"))
+                            myparas[idx] = Int64.Parse(str[idx]);
+                        if (paramInfo.ParameterType.Name.Equals("Decimal"))
                             myparas[idx] = new Decimal(double.Parse(str[idx]));
-                        idx++;
+                        if (paramInfo.ParameterType.Name.Equals("Boolean"))
+                        {
+                            if (str[idx].ToLower().Equals("true") || str[idx].Equals("1"))
+                                myparas[idx] = true;
+                            else
+                                myparas[idx] = false;
+                        }
+
                     }
+                    catch(Exception e)
+                    {
+                        throw new Exception("err@类[" + this.EnName + "]方法[" + methodName + "]值"+ str[idx]+"转换成"+ paramInfo.ParameterType.Name+"失败");
+                    }
+                    
+                    idx++;
                 }
-                else
-                {
-                    myparas = str;
-                }
+                
 
             }
 
@@ -1040,8 +1043,48 @@ namespace BP.WF.HttpHandler
             //执行该方法.
             object[] myparas = new object[0];
 
+
             if (DataType.IsNullOrEmpty(paras) == false)
-                myparas = paras.Split('~');
+            {
+                string[] str = paras.Split('~');
+                myparas = new object[str.Length];
+
+                int idx = 0;
+                ParameterInfo[] paramInfos = mp.GetParameters();
+                foreach (ParameterInfo paramInfo in paramInfos)
+                {
+                    myparas[idx] = str[idx];
+                    try
+                    {
+                        if (paramInfo.ParameterType.Name.Equals("Single"))
+                            myparas[idx] = float.Parse(str[idx]);
+                        if (paramInfo.ParameterType.Name.Equals("Double"))
+                            myparas[idx] = double.Parse(str[idx]);
+                        if (paramInfo.ParameterType.Name.Equals("Int32"))
+                            myparas[idx] = Int32.Parse(str[idx]);
+                        if (paramInfo.ParameterType.Name.Equals("Int64"))
+                            myparas[idx] = Int64.Parse(str[idx]);
+                        if (paramInfo.ParameterType.Name.Equals("Decimal"))
+                            myparas[idx] = new Decimal(double.Parse(str[idx]));
+                        if (paramInfo.ParameterType.Name.Equals("Boolean"))
+                        {
+                            if (str[idx].ToLower().Equals("true") || str[idx].Equals("1"))
+                                myparas[idx] = true;
+                            else
+                                myparas[idx] = false;
+                        }
+
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception("err@类[" + this.EnName + "]方法[" + methodName + "]值" + str[idx] + "转换成" + paramInfo.ParameterType.Name + "失败");
+                    }
+
+                    idx++;
+                }
+
+
+            }
 
             string result = mp.Invoke(ens, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
             return result;
@@ -1956,6 +1999,8 @@ namespace BP.WF.HttpHandler
             foreach (string str in ap.HisHT.Keys)
             {
                 var val = ap.GetValStrByKey(str);
+                if (DataType.IsNullOrEmpty(val) == true || val.Equals("null") == true)
+                    val = "all";
                 if (val.Equals("all"))
                     continue;
 
@@ -3496,14 +3541,43 @@ namespace BP.WF.HttpHandler
         }
         public string RunUrlCrossReturnString()
         {
-            string url = this.GetRequestVal("url");
+            string url = this.GetRequestVal("urlExt");
             string strs = DataType.ReadURLContext(url, 9999, System.Text.Encoding.UTF8);
             return strs;
         }
-        #endregion
+        /// <summary>
+        /// 通过接口返回JSON数据
+        /// </summary>
+        /// <returns></returns>
+        public string RunWebAPIReturnString()
+        {
+            //设置请求头
+            Hashtable headerMap = new Hashtable();
+            //设置token
+            string token = "";
+            //如果对接系统的token
+            if (!DataType.IsNullOrEmpty(WebUser.Token))
+                token = WebUser.Token;
+            else
+                token = WebUser.SID;
 
-        //执行方法.
-        public string HttpHandler()
+            //设置返回值格式
+            headerMap.Add("Content-Type", "application/json");
+            //设置token，用于接口校验
+            headerMap.Add("Authorization", token);
+
+            string url = this.GetRequestVal("url");
+            string postData = BP.WF.Glo.HttpPostConnect(url, headerMap,null);
+            var res = postData.ToJObject();
+            if (res["code"].ToString() == "200")
+                return res["data"].ToString();
+            else
+                return "[]";
+        }
+    #endregion
+
+    //执行方法.
+    public string HttpHandler()
         {
             //@樊雷伟 , 这个方法需要同步.
 

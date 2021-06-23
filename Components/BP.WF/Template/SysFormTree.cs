@@ -146,8 +146,15 @@ namespace BP.WF.Template
 
         protected override bool beforeDelete()
         {
+            string sql = "SELECT COUNT(*) as Num FROM Sys_MapData WHERE FK_FormTree='" + this.No+"'";
+            int num = DBAccess.RunSQLReturnValInt(sql);
+            if (num != 0)
+                throw new Exception("err@您不能删除该目录，下面有表单。");
+
+
             if (!DataType.IsNullOrEmpty(this.No))
                 DeleteChild(this.No);
+
             return base.beforeDelete();
         }
         /// <summary>

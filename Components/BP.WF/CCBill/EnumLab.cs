@@ -9,14 +9,30 @@ using BP.CCBill.Template;
 namespace BP.CCBill
 {
     /// <summary>
-    /// 实体类型
+    /// 方法类型模式
     /// </summary>
-    public enum EntityType
+    public class MethodModelClass
     {
-        CCFrom = 0,
-        FrmBill = 1,
-        FrmDict = 2,
-        EntityTree = 3
+        /// <summary>
+        /// 链接或者按钮
+        /// </summary>
+        public const string LinkButton = "LinkButton";
+        /// <summary>
+        /// 方法
+        /// </summary>
+        public const string Func = "Func";
+        /// <summary>
+        /// 修改实体数据流程
+        /// </summary>
+        public const string FlowBaseData = "FlowBaseData";
+        /// <summary>
+        /// 新建实体流程
+        /// </summary>
+        public const string FlowNewEntity = "FlowNewEntity";
+        /// <summary>
+        /// 新建实体流程
+        /// </summary>
+        public const string FlowEtc = "FlowEtc";
     }
 
     public enum SearchDataRole

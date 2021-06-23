@@ -236,7 +236,11 @@ namespace BP.WF
         /// <summary>
         /// 按照岗位智能计算
         /// </summary>
-        ByStationAI = 13
+        ByStationAI = 13,
+        /// <summary>
+        /// 按照webapi接口计算
+        /// </summary>
+        ByWebAPI=14
     }
     /// <summary>
     /// 流程删除规则

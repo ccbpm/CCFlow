@@ -5,10 +5,11 @@ using BP.Web;
 using BP.Sys;
 using BP.DA;
 using BP.WF.Template;
+using BP.WF.HttpHandler;
 
 namespace BP.WF.HttpHandler
 {
-    public class WF_Admin_AttrFlow : BP.WF.HttpHandler.DirectoryPageBase
+    public class WF_Admin_AttrFlow : DirectoryPageBase
     {
         /// <summary>
         /// 构造函数

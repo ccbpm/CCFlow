@@ -12,7 +12,7 @@ namespace BP.CCBill.Template
     /// <summary>
     /// 功能执行
     /// </summary>
-    public class MethodFunc : EntityMyPK
+    public class MethodFunc : EntityNoName
     {
         #region 基本属性
         /// <summary>
@@ -43,20 +43,7 @@ namespace BP.CCBill.Template
                 this.SetValByKey(MethodAttr.MethodID, value);
             }
         }
-        /// <summary>
-        /// 方法名
-        /// </summary>
-        public string MethodName
-        {
-            get
-            {
-                return this.GetValStringByKey(MethodAttr.MethodName);
-            }
-            set
-            {
-                this.SetValByKey(MethodAttr.MethodName, value);
-            }
-        }
+       
         public string MsgErr
         {
             get
@@ -151,13 +138,13 @@ namespace BP.CCBill.Template
         public string Gener_MethodDoc_JavaScript_function()
         {
             string paras = "";
-            MapAttrs attrs = new MapAttrs(this.MyPK);
+            MapAttrs attrs = new MapAttrs(this.No);
             foreach (MapAttr item in attrs)
             {
                 paras += item.KeyOfEn + ",";
             }
             if (attrs.Count > 1)
-                paras = paras.Substring(0, paras.Length-1);
+                paras = paras.Substring(0, paras.Length - 1);
 
             string strs = " function " + this.MethodID + "(" + paras + ") {";
             strs += this.MethodDoc_JavaScript;
@@ -183,15 +170,15 @@ namespace BP.CCBill.Template
                 if (DataType.IsNullOrEmpty(strs) == true)
                     return this.MethodDoc_JavaScript_Demo;
 
-                strs = strs.Replace("/#", "+"); 
-                strs = strs.Replace("/$", "-"); 
+                strs = strs.Replace("/#", "+");
+                strs = strs.Replace("/$", "-");
                 return strs;
             }
             set
             {
 
                 this.SaveBigTxtToDB("JSScript", value);
-                 
+
             }
         }
 
@@ -250,7 +237,7 @@ namespace BP.CCBill.Template
         }
         public MethodFunc(string mypk)
         {
-            this.MyPK = mypk;
+            this.No = mypk;
             this.Retrieve();
         }
         /// <summary>
@@ -264,11 +251,26 @@ namespace BP.CCBill.Template
                     return this._enMap;
 
                 Map map = new Map("Frm_Method", "功能方法");
-                map.AddMyPK();
 
-                map.AddTBString(MethodAttr.FrmID, null, "表单ID", true, true, 0, 300, 10);
-                map.AddTBString(MethodAttr.MethodName, null, "方法名", true, false, 0, 300, 10, true);
+
+                //主键.
+                map.AddTBStringPK(MethodAttr.No, null, "编号", true, true, 0, 50, 10);
+                map.AddTBString(MethodAttr.Name, null, "方法名", true, false, 0, 300, 10);
                 map.AddTBString(MethodAttr.MethodID, null, "方法ID", true, true, 0, 300, 10);
+                map.AddTBString(MethodAttr.GroupID, null, "分组ID", true, true, 0, 50, 10);
+
+                //功能标记.
+                map.AddTBString(MethodAttr.MethodModel, null, "方法模式", true, true, 0, 300, 10);
+                map.AddTBString(MethodAttr.Tag1, null, "Tag1", true, true, 0, 300, 10);
+                map.AddTBString(MethodAttr.Mark, null, "Mark", true, true, 0, 300, 10);
+                map.AddTBString(MethodAttr.FrmID, null, "表单ID", true, true, 0, 300, 10);
+
+
+                map.AddTBString(MethodAttr.Icon, null, "图标", true, false, 0, 50, 10, true);
+
+                map.AddTBStringDoc(MethodAttr.Docs, null, "功能说明", true, false, true);
+                map.SetHelperAlert(MethodAttr.Docs, "对于该功能的描述.");
+
 
                 map.AddDDLSysEnum(MethodAttr.WhatAreYouTodo, 0, "执行完毕后干啥？", true, true, MethodAttr.WhatAreYouTodo,
                 "@0=关闭提示窗口@1=关闭提示窗口并刷新@2=转入到Search.htm页面上去");
@@ -288,7 +290,6 @@ namespace BP.CCBill.Template
                 map.AddTBInt(MethodAttr.PopHeight, 100, "弹窗高度", true, false);
                 map.AddTBInt(MethodAttr.PopWidth, 260, "弹窗宽度", true, false);
                 #endregion 外观.
-
 
                 #region 显示位置控制.
                 map.AddBoolean(MethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);
@@ -328,7 +329,7 @@ namespace BP.CCBill.Template
         /// <returns></returns>
         public string DoParas()
         {
-            return "../../CCBill/Admin/MethodParas.htm?MyPK=" + this.MyPK;
+            return "../../CCBill/Admin/MethodParas.htm?No=" + this.No;
         }
         /// <summary>
         /// 方法内容
@@ -336,7 +337,13 @@ namespace BP.CCBill.Template
         /// <returns></returns>
         public string DoDocs()
         {
-            return "../../CCBill/Admin/MethodDoc.htm?MyPK=" + this.MyPK;
+            return "../../CCBill/Admin/MethodDoc.htm?No=" + this.No;
+        }
+        protected override bool beforeInsert()
+        {
+            if (DataType.IsNullOrEmpty(this.No) == true)
+                this.No = DBAccess.GenerGUID();
+            return base.beforeInsert();
         }
         #endregion 执行方法.
 
@@ -344,7 +351,7 @@ namespace BP.CCBill.Template
     /// <summary>
     /// 功能执行
     /// </summary>
-    public class MethodFuncs : EntitiesMyPK
+    public class MethodFuncs : EntitiesNoName
     {
         /// <summary>
         /// 功能执行

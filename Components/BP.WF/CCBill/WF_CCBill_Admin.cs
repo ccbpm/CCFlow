@@ -23,19 +23,94 @@ namespace BP.CCBill
     /// </summary>
     public class WF_CCBill_Admin : DirectoryPageBase
     {
+        #region 方法的操作.
+        /// <summary>
+        /// 方法的初始化
+        /// </summary>
+        /// <returns></returns>
+        public string Method_Init()
+        {
+            BP.CCBill.Template.GroupMethod gnn = new GroupMethod();
+
+            GroupMethods gms = new GroupMethods();
+            int i = gms.Retrieve(GroupMethodAttr.FrmID, this.FrmID, "Idx");
+            if (i == 0)
+            {
+                GroupMethod gm = new GroupMethod();
+                gm.FrmID = this.FrmID;
+                gm.Name = "相关操作";
+                gm.MethodType = "Home";
+                gm.Icon = "icon-home";
+                gm.Insert();
+                gms.Retrieve(GroupMethodAttr.FrmID, this.FrmID, "Idx");
+            }
+
+            DataTable dtGroups = gms.ToDataTableField("Groups");
+            dtGroups.TableName = "Groups";
+
+            Methods methods = new Methods();
+            methods.Retrieve(MethodAttr.FrmID, this.FrmID, MethodAttr.IsEnable, 1, "Idx");
+
+            DataTable dtMethods = methods.ToDataTableField("Methods");
+            dtMethods.TableName = "Methods";
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dtGroups);
+            ds.Tables.Add(dtMethods);
+
+            return BP.Tools.Json.ToJson(ds);
+
+        }
+        /// <summary>
+        /// 移动分组
+        /// </summary>
+        /// <returns></returns>
+        public string Method_MoverGroup()
+        {
+            string[] ens = this.GetRequestVal("GroupIDs").Split(',');
+            string frmID = this.FrmID;
+            for (int i = 0; i < ens.Length; i++)
+            {
+                var en = ens[i];
+
+                string sql = "UPDATE Frm_GroupMethod SET Idx=" + i + " WHERE No='" + en + "' AND FrmID='" + frmID + "'";
+                DBAccess.RunSQL(sql);
+            }
+            return "目录移动成功..";
+        }
+        /// <summary>
+        /// 移动方法.
+        /// </summary>
+        /// <returns></returns>
+        public string Method_MoverMethod()
+        {
+            string sortNo = this.GetRequestVal("GroupID");
+
+            string[] ens = this.GetRequestVal("MethodIDs").Split(',');
+            for (int i = 0; i < ens.Length; i++)
+            {
+                var enNo = ens[i];
+                string sql = "UPDATE Frm_Method SET GroupID ='" + sortNo + "',Idx=" + i + " WHERE No='" + enNo + "'";
+                DBAccess.RunSQL(sql);
+            }
+            return "方法顺序移动成功..";
+        }
+        #endregion 方法的操作.
+
         /// <summary>
         /// 构造函数
         /// </summary>
         public WF_CCBill_Admin()
         {
+
         }
         /// <summary>
         /// 获得js,sql内容.
         /// </summary>
         /// <returns></returns>
-        public string MethodDoc_GetScript() 
+        public string MethodDoc_GetScript()
         {
-            var en = new MethodFunc(this.MyPK);
+            var en = new MethodFunc(this.No);
             int type = this.GetRequestValInt("TypeOfFunc");
             if (type == 0)
                 return en.MethodDoc_SQL;
@@ -54,7 +129,7 @@ namespace BP.CCBill
         /// <returns></returns>
         public string MethodDoc_SaveScript()
         {
-            var en = new MethodFunc(this.MyPK);
+            var en = new MethodFunc(this.No);
 
             int type = this.GetRequestValInt("TypeOfFunc");
             string doc = this.GetRequestVal("doc");
@@ -66,14 +141,13 @@ namespace BP.CCBill
             //script.
             if (type == 1)
             {
-               
                 en.MethodDoc_JavaScript = doc;
 
-                string path=SystemConfig.PathOfDataUser + "JSLibData\\Method\\" ;
+                string path = SystemConfig.PathOfDataUser + "JSLibData\\Method\\";
                 if (System.IO.Directory.Exists(path) == false)
                     System.IO.Directory.CreateDirectory(path);
                 //写入文件.
-                string file = path + en.MyPK + ".js";
+                string file = path + en.No + ".js";
                 DataType.WriteFile(file, funcstr);
             }
 

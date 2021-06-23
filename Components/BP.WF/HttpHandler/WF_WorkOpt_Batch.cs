@@ -262,7 +262,7 @@ namespace BP.WF.HttpHandler
             foreach (GenerWorkFlow gwf in gwfs)
             {
                 msg += "@对工作(" + gwf.Title + ")处理情况如下。<br>";
-                string mes = BP.WF.Dev2Interface.Flow_DoDeleteFlowByFlag(nd.FK_Flow, gwf.WorkID, "批量删除", true);
+                string mes = BP.WF.Dev2Interface.Flow_DoDeleteFlowByFlag(gwf.WorkID, "批量删除", true);
                 msg += mes;
                 msg += "<hr>";
             }

@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using BP.Sys.FrmUI;
 using System.Linq;
 using System.Text.RegularExpressions;
+using BP.Tools;
 
 namespace BP.WF
 {
@@ -4254,57 +4255,218 @@ namespace BP.WF
 
             DataTable dt = null;
             string sql = item.Doc;
+            /* 如果有填充主表的sql  */
+            sql = Glo.DealExp(sql, en, null);
             string fk_dbSrc = item.FK_DBSrc;
+            //填充方式，0=sql，1=url,2=CCFromRef.js , 3=webapi
+            int doWay = item.DoWay;
+             
             SFDBSrc sfdb = null;
-            if (DataType.IsNullOrEmpty(fk_dbSrc) == false && fk_dbSrc.Equals("local") == false)
-                sfdb = new SFDBSrc(fk_dbSrc);
-            if (string.IsNullOrEmpty(sql) == false)
+            //如果是sql方式填充
+            if (doWay == 0)
             {
-                /* 如果有填充主表的sql  */
-                sql = Glo.DealExp(sql, en, null);
-
+                if (DataType.IsNullOrEmpty(fk_dbSrc) == false && fk_dbSrc.Equals("local") == false)
+                    sfdb = new SFDBSrc(fk_dbSrc);
                 if (string.IsNullOrEmpty(sql) == false)
                 {
-                    int num = Regex.Matches(sql.ToUpper(), "WHERE").Count;
-                    if (num == 1)
+                    if (string.IsNullOrEmpty(sql) == false)
                     {
-                        string sqlext = sql.Substring(0, sql.ToUpper().IndexOf("WHERE"));
-                        sqlext = sql.Substring(sqlext.Length + 1);
-                        if (sqlext.Contains("@"))
-                            throw new Exception("设置的sql有错误可能有没有替换的变量:" + sql);
-                    }
-                    if (num > 1 && sql.Contains("@"))
-                        throw new Exception("设置的sql有错误可能有没有替换的变量:" + sql);
-                    if (sfdb != null)
-                        dt = sfdb.RunSQLReturnTable(sql);
-                    else
-                        dt = DBAccess.RunSQLReturnTable(sql);
-                    if (dt.Rows.Count == 1)
-                    {
-                        DataRow dr = dt.Rows[0];
-                        foreach (DataColumn dc in dt.Columns)
+                        int num = Regex.Matches(sql.ToUpper(), "WHERE").Count;
+                        if (num == 1)
                         {
-                            //去掉一些不需要copy的字段.
-                            switch (dc.ColumnName)
+                            string sqlext = sql.Substring(0, sql.ToUpper().IndexOf("WHERE"));
+                            sqlext = sql.Substring(sqlext.Length + 1);
+                            if (sqlext.Contains("@"))
+                                throw new Exception("设置的sql有错误可能有没有替换的变量:" + sql);
+                        }
+                        if (num > 1 && sql.Contains("@"))
+                            throw new Exception("设置的sql有错误可能有没有替换的变量:" + sql);
+                        if (sfdb != null)
+                            dt = sfdb.RunSQLReturnTable(sql);
+                        else
+                            dt = DBAccess.RunSQLReturnTable(sql);
+                        if (dt.Rows.Count == 1)
+                        {
+                            DataRow dr = dt.Rows[0];
+                            foreach (DataColumn dc in dt.Columns)
                             {
-                                case WorkAttr.OID:
-                                case WorkAttr.FID:
-                                case WorkAttr.Rec:
-                                case WorkAttr.MD5:
-                                case "RefPK":
-                                case WorkAttr.RecText:
-                                    continue;
-                                default:
-                                    break;
-                            }
+                                //去掉一些不需要copy的字段.
+                                switch (dc.ColumnName)
+                                {
+                                    case WorkAttr.OID:
+                                    case WorkAttr.FID:
+                                    case WorkAttr.Rec:
+                                    case WorkAttr.MD5:
+                                    case "RefPK":
+                                    case WorkAttr.RecText:
+                                        continue;
+                                    default:
+                                        break;
+                                }
 
-                            if (string.IsNullOrEmpty(en.GetValStringByKey(dc.ColumnName)) || en.GetValStringByKey(dc.ColumnName) == "0")
-                                en.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
+                                if (string.IsNullOrEmpty(en.GetValStringByKey(dc.ColumnName)) || en.GetValStringByKey(dc.ColumnName) == "0")
+                                    en.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
+                            }
                         }
                     }
                 }
             }
+            //如果是webapi方式填充
+            else if (doWay == 3) {
+                //请求地址
+                string apiUrl = sql;
+                //设置请求头
+                Hashtable headerMap = new Hashtable();
+                //设置token
+                string token = "";
+                //如果对接系统的token
+                if (!DataType.IsNullOrEmpty(WebUser.Token))
+                    token = WebUser.Token;
+                else
+                    token = WebUser.SID;
 
+                //设置返回值格式
+                headerMap.Add("Content-Type", "application/json");
+                //设置token，用于接口校验
+                headerMap.Add("Authorization",token);
+
+                try
+                {
+                    //post方式请求数据
+                    string postData = HttpPostConnect(apiUrl, headerMap, "");
+                    //数据序列化
+                    var jsonData = postData.ToJObject();
+                    //code=200，表示请求成功，否则失败
+                    if (!jsonData["code"].ToString().Equals("200"))
+                        return en;
+
+                    //获取返回的数据
+                    var data = jsonData["data"].ToString().ToJObject();
+                    //获取主表数据
+                    string mainTable = data["mainTable"].ToString();
+                    dt = Json.ToDataTable(mainTable);
+
+                    //获取全部附件数据
+                    var athsJSON = jsonData["aths"].ToString().ToJObject();
+                    for (int i = 0; i < athsJSON.Count; i++)
+                    {
+                        //获取附件
+                        var athDatas = athsJSON[i];
+                        //获取附件组件ID
+                        string FK_FrmAttachment = athDatas["attachmentid"].ToString();
+                        //获取当前组件中的附件数据
+                        var athArryData = athDatas["attachmentdbs"].ToString().ToJObject();
+                        //填充附件数据
+                        for (int k = 0; k < athArryData.Count; k++)
+                        {
+                            var athData = athArryData[k];
+                            //生成mypk主键值
+                            string guid = DBAccess.GenerGUID();
+                            FrmAttachment attachment = new FrmAttachment(FK_FrmAttachment);
+
+                            //是否要先删除掉原有附件？根据实际需求，再做调整
+                            //FrmAttachmentDBs attachmentDBs = new FrmAttachmentDBs();
+                            //attachmentDBs.Retrieve(FrmAttachmentDBAttr.RefPKVal, workID, FrmAttachmentDBAttr.FK_MapData, attachment.FK_MapData);
+                            //attachmentDBs.Delete();
+
+                            //插入数据
+                            FrmAttachmentDB attachmentDB = new FrmAttachmentDB();
+                            attachmentDB.MyPK = guid;
+                            attachmentDB.FK_FrmAttachment = FK_FrmAttachment;
+                            attachmentDB.FK_MapData = attachment.FK_MapData;
+                            attachmentDB.RefPKVal = workID.ToString();
+                            attachmentDB.FID = 0;//先默认为0
+                            attachmentDB.Rec = athData["rec"].ToString();//执行人
+                            attachmentDB.FileFullName = athData["fileFullName"].ToString();//附件全路径
+                            attachmentDB.FileName = athData["fileName"].ToString();//附件名称
+                            attachmentDB.FileExts = athData["fileExts"].ToString();//文件类型
+                            attachmentDB.Sort = athData["sort"].ToString();//附件类型
+                            attachmentDB.FK_Dept = athData["fk_dept"].ToString();//上传人所在部门
+                            attachmentDB.FK_DeptName = athData["fk_deptName"].ToString();//上传人所在部门名称
+                            attachmentDB.RecName = athData["recName"].ToString();//上传人名称
+                            attachmentDB.RDT = athData["rdt"].ToString();//上传时间
+                            attachmentDB.UploadGUID = guid;
+                            attachment.Insert();
+                        }
+                    }
+
+                    //获取从表数据
+                    var dtlJSON = jsonData["dtls"].ToString().ToJObject();
+                    for (int i = 0; i < dtlJSON.Count; i++)
+                    {
+                        var dtlDatas = dtlJSON[i];
+                        //获取从表编号
+                        string dtlNo = dtlDatas["dtlNo"].ToString();
+                        //定义map
+                        MapDtl dtl = new MapDtl(dtlNo);
+                        //插入之前判断
+                        GEDtls gedtls = null;
+                        try
+                        {
+                            gedtls = new GEDtls(dtl.No);
+                            if (dtl.DtlOpenType == DtlOpenType.ForFID)
+                            {
+                                if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, workID) > 0)
+                                    continue;
+                            }
+                            else
+                            {
+                                //如果存在数据，默认先删除
+                                if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, en.PKVal) > 0)
+                                    gedtls.Delete(GEDtlAttr.RefPK, en.PKVal);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            (gedtls.GetNewEntity as GEDtl).CheckPhysicsTable();
+                        }
+                        //获取从表数据
+                        var dtlArryData = dtlDatas["dtl"].ToString().ToJObject();
+                        for (int k = 0; k < dtlArryData.Count; k++)
+                        {
+                            //获取一条数据
+                            var dtlData = dtlArryData[k];
+                            //从表数据
+                            string dtlDataStr = dtlData["dtlData"].ToString();
+                            //从表附件数据
+                            var dtlAthData = dtlData["dtlAths"].ToString().ToJObject();
+                            //从表数据字符串，转换成datatable
+                            DataTable dtlDt = Json.ToDataTable(dtlDataStr);
+                            //执行数据插入
+                            foreach (DataRow dr in dtlDt.Rows)
+                            {
+                                GEDtl gedtl = gedtls.GetNewEntity as GEDtl;
+                                foreach (DataColumn dc in dt.Columns)
+                                {
+                                    gedtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
+                                }
+
+                                switch (dtl.DtlOpenType)
+                                {
+                                    case DtlOpenType.ForEmp:  // 按人员来控制.
+                                        gedtl.RefPK = en.PKVal.ToString();
+                                        gedtl.FID = long.Parse(en.PKVal.ToString());
+                                        break;
+                                    case DtlOpenType.ForWorkID: // 按工作ID来控制
+                                        gedtl.RefPK = en.PKVal.ToString();
+                                        gedtl.FID = long.Parse(en.PKVal.ToString());
+                                        break;
+                                    case DtlOpenType.ForFID: // 按流程ID来控制.
+                                        gedtl.RefPK = workID.ToString();
+                                        gedtl.FID = long.Parse(en.PKVal.ToString());
+                                        break;
+                                }
+                                gedtl.RDT = DataType.CurrentDataTime;
+                                gedtl.Rec = WebUser.No;
+                                gedtl.Insert();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex) {
+                    throw new Exception("接口请求失败,message:"+ex.Message.ToString());
+                }
+            }
             if (string.IsNullOrEmpty(item.Tag1)
                 || item.Tag1.Length < 15)
                 return en;
@@ -4325,7 +4487,7 @@ namespace BP.WF
                         continue;
 
                     #region 处理sql.
-                    sql = Glo.DealExp(mysql, en, null);
+                    sql = Glo.DealExp(mysql.Replace(dtl.No + ":", "").ToString(), en, null);
                     #endregion 处理sql.
 
                     if (string.IsNullOrEmpty(sql))
@@ -6981,6 +7143,70 @@ namespace BP.WF
            // request.ContentType = "application/x-www-form-urlencoded";
             request.ContentType = "application/json";
             //  request.ContentType = "application/x-www-form-urlencoded";
+
+            //请求超时时间
+            request.Timeout = 10000;
+            //创建输入流
+            Stream dataStream;
+            try
+            {
+                dataStream = request.GetRequestStream();
+            }
+            catch (Exception)
+            {
+                return "0";//连接服务器失败
+            }
+            //发送请求
+            dataStream.Write(dataArray, 0, dataArray.Length);
+            dataStream.Close();
+
+            HttpWebResponse res;
+
+            res = (HttpWebResponse)request.GetResponse();
+
+            //}
+            //catch (WebException ex)
+            //{
+            //    throw new Exception(ex.Message);
+            //    //res = (HttpWebResponse)ex.Response;
+            //}
+            StreamReader sr = new StreamReader(res.GetResponseStream(), Encoding.UTF8);
+            //读取返回消息
+            string data = sr.ReadToEnd();
+            sr.Close();
+            return data;
+        }
+        /// <summary>
+        /// httppost方式发送数据
+        /// </summary>
+        /// <param name="url">要提交的url</param>
+        /// <param name="headerMap">自定义的请求头</param>
+        /// <param name="postDataStr"></param>
+        /// <param name="timeOut">超时时间</param>
+        /// <param name="encode">text code.</param>
+        /// <returns>成功：返回读取内容；失败：0</returns>
+        public static string HttpPostConnect(string serverUrl,Hashtable headerMap, string postData)
+        {
+            var dataArray = Encoding.UTF8.GetBytes(postData);
+            //创建请求
+            var request = (HttpWebRequest)HttpWebRequest.Create(serverUrl);
+            request.Method = "POST";
+            request.ContentLength = dataArray.Length;
+            //设置上传服务的数据格式  设置之后不好使
+            //request.ContentType = "application/x-www-form-urlencoded";
+            //请求的身份验证信息为默认
+            request.Credentials = CredentialCache.DefaultCredentials;
+            // request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentType = "application/json";
+            //  request.ContentType = "application/x-www-form-urlencoded";
+
+            //设置请求头
+            if (headerMap.Count > 0) {
+                foreach (string key in headerMap.Keys)
+                {
+                    request.Headers.Add(key,headerMap[key].ToString());
+                }
+            }
 
             //请求超时时间
             request.Timeout = 10000;

@@ -8,6 +8,9 @@ using BP.Web;
 using BP.Sys;
 using BP.WF.Template;
 using BP.WF.Data;
+using System.Text;
+using BP.Tools;
+
 namespace BP.WF
 {
     /// <summary>
@@ -50,7 +53,7 @@ namespace BP.WF
                 gwfSubFlow.StarterName = WebUser.Name;
                 gwfSubFlow.Update();
                 //把草稿移交给当前人员. - 更新工作人员列表.
-                DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET FK_Emp='"+WebUser.No+"',FK_EmpText='"+BP.Web.WebUser.Name+"' WHERE WorkID="+gwfSubFlow.WorkID);
+                DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET FK_Emp='" + WebUser.No + "',FK_EmpText='" + BP.Web.WebUser.Name + "' WHERE WorkID=" + gwfSubFlow.WorkID);
                 //更新track表.
                 //DBAccess.RunSQL("UPDATE ND"+int.Parse(gwfSubFlow.FK_Flow) +"Track SET FK_Emp='" + WebUser.No + "',FK_EmpText='" + WebUser.Name + "' WHERE WorkID=" + gwfSubFlow.WorkID);
 
@@ -220,6 +223,8 @@ namespace BP.WF
             if (role == StartLimitRole.ColNotExit)
             {
                 /* 指定的列名集合不存在，才可以发起流程。*/
+                if (DataType.IsNullOrEmpty(flow.StartLimitPara) == true)
+                    throw new Exception("err@流程发起限制规则出现错误,StartLimitRole.ColNotExit , 没有配置参数. ");
 
                 //求出原来的值.
                 string[] strs = flow.StartLimitPara.Split(',');
@@ -237,6 +242,7 @@ namespace BP.WF
                         throw new Exception("@流程设计错误,您配置的检查参数(" + flow.StartLimitPara + "),中的列(" + str + ")已经不存在表单里.");
                     }
                 }
+
 
                 //找出已经发起的全部流程.
                 sql = "SELECT " + flow.StartLimitPara + " FROM " + ptable + " WHERE  WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
@@ -327,120 +333,299 @@ namespace BP.WF
                 return;
 
             #region zqp, 编写同步的业务逻辑,执行错误就抛出异常.
-
-            //获取同步字段
-            string[] dtsArray = fl.DTSFields.Split('@');
-            //本系统字段
-            string lcAttrs = "";
-            //业务系统字段
-            string ywAttrs = "";
-
-            for (int i = 0; i < dtsArray.Length; i++)
+            if (fl.DTSWay == DataDTSWay.Syn)
             {
-                //获取本系统字段
-                lcAttrs += dtsArray[i].Split('=')[0] + ",";
-                //获取业务系统字段
-                ywAttrs += dtsArray[i].Split('=')[1] + ",";
-            }
+                //获取同步字段
+                string[] dtsArray = fl.DTSFields.Split('@');
+                //本系统字段
+                string lcAttrs = "";
+                //业务系统字段
+                string ywAttrs = "";
 
-            string[] lcArr = lcAttrs.TrimEnd(',').Split(',');//取出对应的主表字段
-            string[] ywArr = ywAttrs.TrimEnd(',').Split(',');//取出对应的业务表字段
-
-            //判断本系统表是否存在
-            string sql = "SELECT " + lcAttrs.TrimEnd(',') + " FROM " + fl.PTable.ToUpper() + " WHERE OID=" + rpt.OID;
-            DataTable lcDt = DBAccess.RunSQLReturnTable(sql);
-            if (lcDt.Rows.Count == 0)
-                throw new Exception("没有找到业务表数据.");
-
-            //获取配置的，要同步的业务表
-            BP.Sys.SFDBSrc src = new BP.Sys.SFDBSrc(fl.DTSDBSrc);
-            sql = "SELECT " + ywAttrs.TrimEnd(',') + " FROM " + fl.DTSBTable.ToUpper();
-            //获取业务表，是否有数据
-            DataTable ywDt = src.RunSQLReturnTable(sql);
-
-            //插入字段字符串
-            string values = "";
-            //更新字段字符串
-            string upVal = "";
-
-            //循环本系统表，组织同步语句
-            for (int i = 0; i < lcArr.Length; i++)
-            {
-                //系统类别
-                switch (src.DBSrcType)
+                for (int i = 0; i < dtsArray.Length; i++)
                 {
-                    case Sys.DBSrcType.Localhost:
-                        switch (SystemConfig.AppCenterDBType)
-                        {
-                            case DBType.MSSQL:
-                                break;
-                            case DBType.Oracle:
-                                //如果是时间类型，要进行转换
-                                if (ywDt.Columns[ywArr[i]].DataType == typeof(DateTime))
-                                {
-                                    if (!DataType.IsNullOrEmpty(lcDt.Rows[0][lcArr[i].ToString()].ToString()) && lcDt.Rows[0][lcArr[i].ToString()] != "@RDT")
-                                        values += "to_date('" + lcDt.Rows[0][lcArr[i].ToString()] + "','YYYY-MM-DD'),";
-                                    else
-                                        values += "'',";
-                                    continue;
-                                }
-                                values += "'" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
-                                upVal += upVal + ywArr[i] + "='" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
-                                continue;
-                                break;
-                            case DBType.MySQL:
-                                break;
-                            case DBType.Informix:
-                                break;
-                            default:
-                                throw new Exception("没有涉及到的连接测试类型...");
-                        }
-                        break;
-                    case Sys.DBSrcType.SQLServer:
-                        break;
-                    case Sys.DBSrcType.MySQL:
-                        break;
-                    case Sys.DBSrcType.Oracle:
-                        //如果是时间类型，要进行转换
-                        if (ywDt.Columns[ywArr[i]].DataType == typeof(DateTime))
-                        {
-                            if (!DataType.IsNullOrEmpty(lcDt.Rows[0][lcArr[i].ToString()].ToString()) && lcDt.Rows[0][lcArr[i].ToString()] != "@RDT")
-                                values += "to_date('" + lcDt.Rows[0][lcArr[i].ToString()] + "','YYYY-MM-DD'),";
-                            else
-                                values += "'',";
-                            continue;
-                        }
-                        values += "'" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
-                        upVal += upVal + ywArr[i] + "='" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
-                        continue;
-                    default:
-                        throw new Exception("暂时不支您所使用的数据库类型!");
+                    //获取本系统字段
+                    lcAttrs += dtsArray[i].Split('=')[0] + ",";
+                    //获取业务系统字段
+                    ywAttrs += dtsArray[i].Split('=')[1] + ",";
                 }
-                values += "'" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
 
+                string[] lcArr = lcAttrs.TrimEnd(',').Split(',');//取出对应的主表字段
+                string[] ywArr = ywAttrs.TrimEnd(',').Split(',');//取出对应的业务表字段
+
+                //判断本系统表是否存在
+                string sql = "SELECT " + lcAttrs.TrimEnd(',') + " FROM " + fl.PTable.ToUpper() + " WHERE OID=" + rpt.OID;
+                DataTable lcDt = DBAccess.RunSQLReturnTable(sql);
+                if (lcDt.Rows.Count == 0)
+                    throw new Exception("没有找到业务表数据.");
+
+                //获取配置的，要同步的业务表
+                BP.Sys.SFDBSrc src = new BP.Sys.SFDBSrc(fl.DTSDBSrc);
+                sql = "SELECT " + ywAttrs.TrimEnd(',') + " FROM " + fl.DTSBTable.ToUpper();
+                //获取业务表，是否有数据
+                DataTable ywDt = src.RunSQLReturnTable(sql);
+
+                //插入字段字符串
+                string values = "";
+                //更新字段字符串
+                string upVal = "";
+
+                //循环本系统表，组织同步语句
+                for (int i = 0; i < lcArr.Length; i++)
+                {
+                    //系统类别
+                    switch (src.DBSrcType)
+                    {
+                        case Sys.DBSrcType.Localhost:
+                            switch (SystemConfig.AppCenterDBType)
+                            {
+                                case DBType.MSSQL:
+                                    break;
+                                case DBType.Oracle:
+                                    //如果是时间类型，要进行转换
+                                    if (ywDt.Columns[ywArr[i]].DataType == typeof(DateTime))
+                                    {
+                                        if (!DataType.IsNullOrEmpty(lcDt.Rows[0][lcArr[i].ToString()].ToString()) && lcDt.Rows[0][lcArr[i].ToString()] != "@RDT")
+                                            values += "to_date('" + lcDt.Rows[0][lcArr[i].ToString()] + "','YYYY-MM-DD'),";
+                                        else
+                                            values += "'',";
+                                        continue;
+                                    }
+                                    values += "'" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
+                                    upVal += upVal + ywArr[i] + "='" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
+                                    break;
+                                case DBType.MySQL:
+                                    break;
+                                case DBType.Informix:
+                                    break;
+                                default:
+                                    throw new Exception("没有涉及到的连接测试类型...");
+                            }
+                            break;
+                        case Sys.DBSrcType.SQLServer:
+                            break;
+                        case Sys.DBSrcType.MySQL:
+                            break;
+                        case Sys.DBSrcType.Oracle:
+                            //如果是时间类型，要进行转换
+                            if (ywDt.Columns[ywArr[i]].DataType == typeof(DateTime))
+                            {
+                                if (!DataType.IsNullOrEmpty(lcDt.Rows[0][lcArr[i].ToString()].ToString()) && lcDt.Rows[0][lcArr[i].ToString()] != "@RDT")
+                                    values += "to_date('" + lcDt.Rows[0][lcArr[i].ToString()] + "','YYYY-MM-DD'),";
+                                else
+                                    values += "'',";
+                                continue;
+                            }
+                            values += "'" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
+                            upVal += upVal + ywArr[i] + "='" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
+                            continue;
+                        default:
+                            throw new Exception("暂时不支您所使用的数据库类型!");
+                    }
+                    values += "'" + lcDt.Rows[0][lcArr[i].ToString()] + "',";
+
+                }
+
+                values = values.Substring(0, values.Length - 1);
+                upVal = upVal.Substring(0, upVal.Length - 1);
+
+                //查询对应的业务表中是否存在这条记录
+                sql = "SELECT * FROM " + fl.DTSBTable.ToUpper() + " WHERE " + fl.DTSBTablePK + "='" + lcDt.Rows[0][fl.DTSBTablePK] + "'";
+                DataTable dt = src.RunSQLReturnTable(sql);
+                //如果存在，执行更新，如果不存在，执行插入
+                if (dt.Rows.Count > 0)
+                    sql = "UPDATE " + fl.DTSBTable.ToUpper() + " SET " + upVal + " WHERE " + fl.DTSBTablePK + "='" + lcDt.Rows[0][fl.DTSBTablePK] + "'";
+                else
+                    sql = "INSERT INTO " + fl.DTSBTable.ToUpper() + "(" + ywAttrs.TrimEnd(',') + ") VALUES(" + values + ")";
+
+                try
+                {
+                    src.RunSQL(sql);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
             }
-
-            values = values.Substring(0, values.Length - 1);
-            upVal = upVal.Substring(0, upVal.Length - 1);
-
-            //查询对应的业务表中是否存在这条记录
-            sql = "SELECT * FROM " + fl.DTSBTable.ToUpper() + " WHERE " + fl.DTSBTablePK + "='" + lcDt.Rows[0][fl.DTSBTablePK] + "'";
-            DataTable dt = src.RunSQLReturnTable(sql);
-            //如果存在，执行更新，如果不存在，执行插入
-            if (dt.Rows.Count > 0)
-                sql = "UPDATE " + fl.DTSBTable.ToUpper() + " SET " + upVal + " WHERE " + fl.DTSBTablePK + "='" + lcDt.Rows[0][fl.DTSBTablePK] + "'";
-            else
-                sql = "INSERT INTO " + fl.DTSBTable.ToUpper() + "(" + ywAttrs.TrimEnd(',') + ") VALUES(" + values + ")";
-
-            try
+            if (fl.DTSWay == DataDTSWay.WebAPI)
             {
-                src.RunSQL(sql);
+                //推送的数据
+                string info = "{";
+                //推送的主表数据
+                string mainTable = "";
+                mainTable += "\"mainTable\":";
+                mainTable += "{";
+                MapAttrs attrs = new MapAttrs(currNode.NodeFrmID);
+                foreach (MapAttr attr in attrs)
+                {
+                    if (attr.KeyOfEn.Equals("Title") || attr.KeyOfEn.Equals("BillNo"))
+                        continue;
+                    if (attr.KeyOfEn.Equals("AtPara") || attr.KeyOfEn.Equals("BillState"))
+                        continue;
+                    if (attr.KeyOfEn.Equals("RDT") || attr.KeyOfEn.Equals("OrgNo"))
+                        continue;
+                    if (attr.KeyOfEn.Equals("FK_Dept") || attr.KeyOfEn.Equals("FID"))
+                        continue;
+                    if (attr.KeyOfEn.Equals("Starter") || attr.KeyOfEn.Equals("StarterName"))
+                        continue;
+                    if (attr.KeyOfEn.Equals("OID") || attr.KeyOfEn.Equals("Rec"))
+                        continue;
+                    mainTable += "\"" + attr.KeyOfEn + "\":\"" + rpt.GetValStrByKey(attr.KeyOfEn) + "\",";
+                }
+                mainTable += "\"oid\":\"" + gwf.WorkID + "\"";
+                mainTable += "}";
+
+                //推送的从表数据
+                string dtls = "[";
+                string dtlData = "";
+
+                MapDtls mapDtls = new MapDtls();
+                mapDtls.Retrieve(MapDtlAttr.FK_MapData, currNode.NodeFrmID);
+                foreach (MapDtl dtl in mapDtls)
+                {
+                    dtlData += "{";
+                    dtlData += "\"dtlNo\":\"" + dtl.No + "\",";
+                    //多个从表的数据
+                    string dtlList = "[";
+                    //每一行数据
+                    string dtlOne = "";
+                    //每一行的字段数据
+                    string dtlKeys = "";
+                    //从表附件
+                    string dtlAths = "[";
+                    string dtlAth = "";
+
+                    MapAttrs dtlAttrs = new MapAttrs(dtl.No);
+                    GEDtls geDtls = new GEDtls(dtl.No);
+                    geDtls.Retrieve(GEDtlAttr.RefPK, gwf.WorkID);
+                    foreach (GEDtl geDtl in geDtls)
+                    {
+                        dtlKeys = "{";
+                        foreach (MapAttr attr in dtlAttrs)
+                        {
+                            if (attr.KeyOfEn.Equals("OID") || attr.KeyOfEn.Equals("RefPK"))
+                                continue;
+                            if (attr.KeyOfEn.Equals("FID") || attr.KeyOfEn.Equals("RDT"))
+                                continue;
+                            if (attr.KeyOfEn.Equals("Rec") || attr.KeyOfEn.Equals("AthNum"))
+                                continue;
+                            dtlKeys += "\"" + attr.KeyOfEn + "\":\"" + geDtl.GetValByKey(attr.KeyOfEn) + "\",";
+                        }
+                        if (!DataType.IsNullOrEmpty(dtlKeys))
+                            dtlKeys = dtlKeys.Substring(0, dtlKeys.Length - 1);
+                        dtlKeys += "}";
+
+                        FrmAttachmentDBs attachmentDBs = new FrmAttachmentDBs();
+                        attachmentDBs.Retrieve(FrmAttachmentDBAttr.FK_MapData, dtl.No, FrmAttachmentDBAttr.RefPKVal, geDtl.OID);
+                        foreach (FrmAttachmentDB frmAttachmentDB in attachmentDBs)
+                        {
+                            dtlAth += "{";
+                            dtlAth += "\"fileFullName\":\"" + frmAttachmentDB.FileFullName + "\",";
+                            dtlAth += "\"fileName\":\"" + frmAttachmentDB.FileName + "\",";
+                            dtlAth += "\"sort\":\"" + frmAttachmentDB.Sort + "\",";
+                            dtlAth += "\"fileExts\":\"" + frmAttachmentDB.FileExts + "\",";
+                            dtlAth += "\"rdt\":\"" + frmAttachmentDB.RDT + "\",";
+                            dtlAth += "\"rec\":\"" + frmAttachmentDB.Rec + "\",";
+                            dtlAth += "\"myPK\":\"" + frmAttachmentDB.MyPK + "\",";
+                            dtlAth += "\"recName\":\"" + frmAttachmentDB.RecName + "\",";
+                            dtlAth += "\"fk_dept\":\"" + frmAttachmentDB.FK_Dept + "\",";
+                            dtlAth += "\"fk_deptName\":\"" + frmAttachmentDB.FK_DeptName + "\"";
+                            dtlAth += "},";
+                        }
+                        if (!DataType.IsNullOrEmpty(dtlAth))
+                            dtlAth = dtlAth.Substring(0, dtlAth.Length - 1);
+                        dtlAth += "]";
+                        dtlOne += "{";
+                        dtlOne += "\"dtlData\":" + dtlKeys + ",";
+                        dtlOne += "\"dtlAths\":[" + dtlAth + "";
+                        dtlOne += "},";
+                    }
+                    if (!DataType.IsNullOrEmpty(dtlOne))
+                        dtlOne = dtlOne.Substring(0, dtlOne.Length - 1);
+                    dtlList += dtlOne;
+                    dtlList += "]";
+
+                    dtlData += "\"dtl\":" + dtlList + "";
+                    dtlData += "},";
+                }
+                if (!DataType.IsNullOrEmpty(dtlData))
+                    dtlData = dtlData.Substring(0, dtlData.Length - 1);
+                dtls += dtlData;
+                dtls += "]";
+
+                //附件数据
+                string aths = "[";
+                string ath = "";
+
+                FrmAttachments attachments = new FrmAttachments();
+                attachments.Retrieve(FrmAttachmentAttr.FK_MapData, currNode.NodeFrmID, FrmAttachmentAttr.FK_Node, 0);
+                foreach (FrmAttachment attachment in attachments)
+                {
+                    FrmAttachmentDBs dbs = new FrmAttachmentDBs();
+                    dbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, attachment.MyPK, FrmAttachmentDBAttr.FK_MapData, currNode.NodeFrmID, FrmAttachmentDBAttr.RefPKVal, gwf.WorkID);
+                    if (dbs.Count <= 0)
+                        continue;
+                    ath += "{";
+                    ath += "\"attachmentid\":\"" + attachment.MyPK + "\",";
+
+                    string athdb = "";
+                    foreach (FrmAttachmentDB db in dbs)
+                    {
+                        athdb += "{";
+                        athdb += "\"fileFullName\":\"" + db.FileFullName + "\",";
+                        athdb += "\"fileName\":\"" + db.FileName + "\",";
+                        athdb += "\"sort\":\"" + db.Sort + "\",";
+                        athdb += "\"fileExts\":\"" + db.FileExts + "\",";
+                        athdb += "\"rdt\":\"" + db.RDT + "\",";
+                        athdb += "\"myPK\":\"" + db.MyPK + "\",";
+                        athdb += "\"refPKVal\":\"" + db.RefPKVal + "\",";
+                        athdb += "\"rec\":\"" + db.Rec + "\",";
+                        athdb += "\"recName\":\"" + db.RecName + "\",";
+                        athdb += "\"fk_dept\":\"" + db.FK_Dept + "\",";
+                        athdb += "\"fk_deptName\":\"" + db.FK_DeptName + "\",";
+                        athdb += "},";
+                    }
+                    if (!DataType.IsNullOrEmpty(athdb))
+                        athdb = athdb.Substring(0, athdb.Length - 1);
+                    ath += "\"athdb\":" + athdb + "";
+                    ath += "},";
+                }
+                if (!DataType.IsNullOrEmpty(ath))
+                    ath = ath.Substring(0, ath.Length - 1);
+                aths += ath;
+                aths += "]";
+
+                info += mainTable;
+                info += ",\"dtls\":" + dtls;
+                info += ",\"aths\":" + aths;
+                info += "}";
+
+                string apiUrl = fl.DTSWebAPI;
+                Hashtable headerMap = new Hashtable();
+                //设置token
+                string token = "";
+                //如果对接系统的token
+                if (!DataType.IsNullOrEmpty(WebUser.Token))
+                    token = WebUser.Token;
+                else
+                    token = WebUser.SID;
+
+                //设置返回值格式
+                headerMap.Add("Content-Type", "application/json");
+                //设置token，用于接口校验
+                headerMap.Add("Authorization", token);
+                //执行POST
+                string postData = BP.WF.Glo.HttpPostConnect(apiUrl, headerMap, info.ToString());
+                var res = postData.ToJObject();
+                if (!res["code"].ToString().Equals("200"))
+                {
+                    BP.DA.Log.DefaultLogWriteLine(LogType.Info, "同步失败:WebAPI请求地址：" + apiUrl + ",请求内容：" + postData);
+                    BP.DA.Log.DefaultLogWriteLine(LogType.Info, "失败数据:" + info);
+                }
+                return;
+
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            #endregion qinfaliang, 编写同步的业务逻辑,执行错误就抛出异常.
+            #endregion zqp, 编写同步的业务逻辑,执行错误就抛出异常.
             return;
         }
         /// <summary>
@@ -740,16 +925,16 @@ namespace BP.WF
         /// 子流程运行结束后
         /// </summary>
         /// <param name="wn"></param>
-       public static SendReturnObjs SubFlowEvent(WorkNode wn)
+        public static SendReturnObjs SubFlowEvent(WorkNode wn)
         {
             GenerWorkFlow gwf = wn.HisGenerWorkFlow;
             //不是子流程
             if (gwf.PWorkID == 0)
                 return wn.HisMsgObjs;
-           
+
 
             //子流程运行到该节点时主流程自动运行到下一个节点
-            if(gwf.WFState!=WFState.Complete && wn.HisNode.IsToParentNextNode == true)
+            if (gwf.WFState != WFState.Complete && wn.HisNode.IsToParentNextNode == true)
             {
                 GenerWorkFlow pgwf = new GenerWorkFlow(gwf.PWorkID);
                 if (pgwf.FK_Node == gwf.PNodeID)
@@ -772,15 +957,15 @@ namespace BP.WF
                 if (slWorkID == 0)
                     subFlows.Retrieve(SubFlowAttr.FK_Node, gwf.PNodeID, SubFlowAttr.SubFlowNo, wn.HisFlow.No);
                 else
-                   subFlows.Retrieve(SubFlowAttr.FK_Node, slNodeID, SubFlowAttr.SubFlowNo, wn.HisFlow.No);
+                    subFlows.Retrieve(SubFlowAttr.FK_Node, slNodeID, SubFlowAttr.SubFlowNo, wn.HisFlow.No);
 
-                if(subFlows.Count==0)
+                if (subFlows.Count == 0)
                     return wn.HisMsgObjs;
 
                 SubFlow subFlow = subFlows[0] as SubFlow;
-                if (subFlow.BackCopyRole != 0 && slWorkID==0)
+                if (subFlow.BackCopyRole != 0 && slWorkID == 0)
                 {
-                  
+
                     Node pNd = new Node(subFlow.FK_Node);
                     Work pwork = pNd.HisWork;
                     pwork.OID = gwf.PWorkID;
@@ -796,7 +981,7 @@ namespace BP.WF
                         prpt.Copy(wn.HisWork);
                     }
                     //子流程数据拷贝到父流程中
-                    if ((subFlow.BackCopyRole == 2 || subFlow.BackCopyRole == 3)&& DataType.IsNullOrEmpty(subFlow.ParentFlowCopyFields) == false)
+                    if ((subFlow.BackCopyRole == 2 || subFlow.BackCopyRole == 3) && DataType.IsNullOrEmpty(subFlow.ParentFlowCopyFields) == false)
                     {
                         Work wk = wn.HisWork;
                         Attrs attrs = wk.EnMap.Attrs;
@@ -812,7 +997,7 @@ namespace BP.WF
                             }
 
                         }
-                     
+
                         //父流程把子流程不同字段进行匹配赋值
                         AtPara ap = new AtPara(subFlow.ParentFlowCopyFields);
                         foreach (String str in ap.HisHT.Keys)
@@ -845,13 +1030,13 @@ namespace BP.WF
                                 t.Insert();
                             }
                         }
-                      
+
                     }
                     pwork.Update();
                     prpt.Update();
 
                 }
-               
+
 
                 //子流程运行结束后父流程是否自动往下运行一步
                 string msg = BP.WF.Dev2Interface.FlowOverAutoSendParentOrSameLevelFlow(wn.HisGenerWorkFlow, wn.HisFlow, subFlow);
@@ -860,36 +1045,22 @@ namespace BP.WF
                     wn.HisMsgObjs.AddMsg("info", msg, msg, SendReturnMsgType.Info);
                     return wn.HisMsgObjs;
                 }
-                
-                string mypk = "";
-                Int64 PWorkID = 0;
-                bool isSameLeavl = false;
-                if (gwf.GetParaInt("SLNodeID") != 0)
-                {
-                    mypk = gwf.GetParaInt("SLNodeID") + "_" + wn.HisFlow.No + "_0";
-                    PWorkID = gwf.GetValInt64ByKey("SLWorkID");
-                }
-                else
-                {
-                    mypk = gwf.PNodeID + "_" + wn.HisFlow.No + "_0";
-                    PWorkID = gwf.PWorkID;
-                }
 
-                SubFlowHandGuide subflow = new SubFlowHandGuide(mypk);
-                if (subflow.SubFlowHidTodolist == true)
+
+                if (subFlow.SubFlowHidTodolist == true)
                 {
-                    GenerWorkFlow pgwf = new GenerWorkFlow(PWorkID);
+                    GenerWorkFlow pgwf = new GenerWorkFlow(gwf.PWorkID);
                     string mysql = "SELECT COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + gwf.PWorkID + " AND FK_Flow='" + wn.HisFlow.No + "' AND WFState !=3 ";
                     if (DBAccess.RunSQLReturnValInt(mysql, 0) == 0)
                     {
-                        DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 Where WorkID=" + pgwf.WorkID+" AND FK_Node="+pgwf.FK_Node);
+                        DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 Where WorkID=" + pgwf.WorkID + " AND FK_Node=" + pgwf.FK_Node);
 
                     }
                 }
             }
-            
+
             return wn.HisMsgObjs;
 
-        } 
+        }
     }
 }

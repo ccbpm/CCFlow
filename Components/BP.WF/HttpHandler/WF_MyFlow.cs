@@ -463,13 +463,11 @@ namespace BP.WF.HttpHandler
             string auther = this.GetRequestVal("Auther");
             if (DataType.IsNullOrEmpty(auther) == false)
             {
-                //  BP.Web.WebUser.IsAuthorize = true;
                 BP.Web.WebUser.Auth = auther;
                 BP.Web.WebUser.AuthName = BP.DA.DBAccess.RunSQLReturnString("SELECT Name FROM Port_Emp WHERE No='" + auther + "'");
             }
             else
             {
-                // BP.Web.WebUser.IsAuthorize = true;
                 BP.Web.WebUser.Auth = "";
                 BP.Web.WebUser.AuthName = ""; // BP.DA.DBAccess.RunSQLReturnString("SELECT Name FROM Port_Emp WHERE No='" + auther + "'");
             }
@@ -484,6 +482,8 @@ namespace BP.WF.HttpHandler
             else
             {
                 isCanDo = todEmps.Contains(";" + WebUser.No + ",");
+                if(WebUser.No.Equals("Guest") == true)
+                    isCanDo = todEmps.Contains(";" + GuestUser.No + ",");
                 if (isCanDo == false)
                     isCanDo = Dev2Interface.Flow_IsCanDoCurrentWork(this.WorkID, BP.Web.WebUser.No);
             }
@@ -1132,7 +1132,7 @@ namespace BP.WF.HttpHandler
                     dt.Rows.Add(dr);
                 }
 
-                if (btnLab.JumpWayEnable && 1 == 2)
+                if (btnLab.JumpWayEnum!=JumpWay.CanNotJump)
                 {
                     /*跳转*/
                     dr = dt.NewRow();
@@ -1434,10 +1434,19 @@ namespace BP.WF.HttpHandler
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
                 }
+                bool isMobile = this.GetRequestValBoolen("IsMobile");
+                if(isMobile == false && btnLab.QRCodeRole!= 0)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "QRCode";
+                    dr["Name"] = DataType.IsNullOrEmpty(btnLab.QRCodeLab)==true?"生成二维码": btnLab.QRCodeLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
                 #endregion
 
                 #region 发起子流程
-                bool isMobile = this.GetRequestValBoolen("IsMobile");
+
                 if (isMobile == false)
                 {
                     SubFlowHands subFlows = new SubFlowHands(this.FK_Node);
@@ -2755,6 +2764,7 @@ namespace BP.WF.HttpHandler
                 #region 处理授权 
                 if (DataType.IsNullOrEmpty(auther) == false)
                 {
+                    gwf = new GenerWorkFlow(this.WorkID);
                     gwf.SetPara("Auth", BP.Web.WebUser.AuthName + "授权");
                     gwf.Update();
                 }
@@ -3134,6 +3144,7 @@ namespace BP.WF.HttpHandler
 
             }
             #endregion 为开始工作创建待办
+
             return "保存到待办";
         }
 
@@ -3568,35 +3579,43 @@ namespace BP.WF.HttpHandler
             Int64 workID = this.WorkID; //表单的主表.
 
             #region 判断当前的节点类型,获得表单的ID.
-            if (this.currND.HisFormType == NodeFormType.RefOneFrmTree)
+            try
             {
-                //获取绑定的表单
-                FrmNode frmnode = new FrmNode(this.FK_Node, this.currND.NodeFrmID);
-                switch (frmnode.WhoIsPK)
+                if (this.currND.HisFormType == NodeFormType.RefOneFrmTree)
                 {
-                    case WhoIsPK.FID:
-                        workID = this.FID;
-                        break;
-                    case WhoIsPK.PWorkID:
-                        workID = this.PWorkID;
-                        break;
-                    case WhoIsPK.P2WorkID:
-                        GenerWorkFlow gwff = new GenerWorkFlow(this.PWorkID);
-                        workID = gwff.PWorkID;
-                        break;
-                    case WhoIsPK.P3WorkID:
-                        string sqlId = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
-                        workID = DBAccess.RunSQLReturnValInt(sqlId, 0);
-                        break;
-                    case WhoIsPK.RootFlowWorkID:
-                        workID = BP.WF.Dev2Interface.GetRootWorkIDBySQL(this.WorkID, this.PWorkID);
-                        break;
-                    default:
-                        break;
+                    //获取绑定的表单
+                    FrmNode frmnode = new FrmNode(this.FK_Node, this.currND.NodeFrmID);
+                    switch (frmnode.WhoIsPK)
+                    {
+                        case WhoIsPK.FID:
+                            workID = this.FID;
+                            break;
+                        case WhoIsPK.PWorkID:
+                            workID = this.PWorkID;
+                            break;
+                        case WhoIsPK.P2WorkID:
+                            GenerWorkFlow gwff = new GenerWorkFlow(this.PWorkID);
+                            workID = gwff.PWorkID;
+                            break;
+                        case WhoIsPK.P3WorkID:
+                            string sqlId = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.PWorkID + ")";
+                            workID = DBAccess.RunSQLReturnValInt(sqlId, 0);
+                            break;
+                        case WhoIsPK.RootFlowWorkID:
+                            workID = BP.WF.Dev2Interface.GetRootWorkIDBySQL(this.WorkID, this.PWorkID);
+                            break;
+                        default:
+                            break;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
             }
             #endregion 判断当前的节点类型,获得表单的ID.
 
+            #region 主题方法.
             try
             {
                 ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.currND, workID,
@@ -3627,6 +3646,9 @@ namespace BP.WF.HttpHandler
                 Log.DefaultLogWriteLineError(ex);
                 return "err@" + ex.Message;
             }
+
+            #endregion 主题方法.
+
         }
 
         /**

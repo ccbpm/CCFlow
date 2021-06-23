@@ -93,6 +93,10 @@ namespace BP.CCBill
         /// </summary>
         public const string BtnDelLable = "BtnDelLable";
         /// <summary>
+        /// 数据版本
+        /// </summary>
+        public const string BtnDataVer = "BtnDataVer";
+        /// <summary>
         /// 按钮del启用规则
         /// </summary>
         public const string BtnDelEnable = "BtnDelEnable";

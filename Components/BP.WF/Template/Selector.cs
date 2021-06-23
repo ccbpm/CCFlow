@@ -373,6 +373,9 @@ namespace BP.WF.Template
                 case SelectorModel.AccepterOfDeptStationOfCurrentOper:
                     ds = AccepterOfDeptStationOfCurrentOper(nodeid, en);
                     break;
+                case SelectorModel.ByWebAPI:
+                    ds = ByWebAPI(en);
+                    break;
                 default:
                     throw new Exception("@错误:没有判断的选择类型:" + this.SelectorModel);
                     break;
@@ -931,6 +934,63 @@ namespace BP.WF.Template
             dtEmp = DBAccess.RunSQLReturnTable(sql);
             dtEmp.TableName = "Emps";
             ds.Tables.Add(dtEmp);
+
+            return ds;
+        }
+        private DataSet ByWebAPI(Entity en) 
+        {
+            DataSet ds = new DataSet();
+            //返回值
+            string postData = "";
+            //配置的api地址
+            string apiUrl = this.SelectorP1;
+            if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
+                apiUrl = apiUrl.Replace("@WebApiHost", SystemConfig.AppSettings["WebApiHost"].ToString());
+
+            //增加header参数
+            Hashtable headerMap = new Hashtable();
+            //设置token
+            string token = "";
+            //如果对接系统的token
+            if (!DataType.IsNullOrEmpty(WebUser.Token))
+                token = WebUser.Token;
+            else
+                token = WebUser.SID;
+
+            //saas模式，需要传入systemNo
+            if(SystemConfig.CCBPMRunModel== CCBPMRunModel.SAAS)
+            {
+                //获取系统编号
+                //string systemNo = BP.DA.DBAccess.RunSQLReturnStringIsNull("select No from port_domain where No=(select domain from port_org where No=(select orgNo from port_emp where No='" + WebUser.No + "'))", "");
+                //headerMap.Add("systemNo", systemNo);
+                //headerMap.Add("orgNo", WebUser.OrgNo);
+            }
+            //集团模式，传入域编号
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
+            {
+                //传入域
+                headerMap.Add("orgNo", WebUser.OrgNo);
+            }
+
+            //加入token
+            headerMap.Add("Content-Type", "application/json");
+            headerMap.Add("Authorization", token);
+            
+            
+
+            apiUrl = BP.WF.Glo.DealExp(apiUrl, en, null);
+            //执行POST
+            postData = BP.WF.Glo.HttpPostConnect(apiUrl, headerMap,"");
+
+            DataTable dt = BP.Tools.Json.ToDataTable(postData);
+            dt.TableName = "Emps";
+            ds.Tables.Add(dt);
+
+            //部门
+            //string sql = "SELECT distinct No,Name, ParentNo FROM Port_Dept where No='null'";
+            //DataTable dtDept = DBAccess.RunSQLReturnTable(sql);
+            //dtDept.TableName = "Depts";
+            //ds.Tables.Add(dtDept);
 
             return ds;
         }

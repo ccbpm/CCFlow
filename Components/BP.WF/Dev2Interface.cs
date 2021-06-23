@@ -54,26 +54,34 @@ namespace BP.WF
         {
             get
             {
-               string  userNo = BP.Web.WebUser.No;
-               
+                //Flow flow = new Flow("111");
+                //WorkNode wn = new WorkNode(123, 2301);
+                //FindWorker fw = new FindWorker();
+                //DataTable dt = fw.DoIt(flow, wn, wn);
+
+                string userNo = BP.Web.WebUser.No;
+
                 Paras ps = new Paras();
                 string dbstr = SystemConfig.AppCenterDBVarStr;
-                string wfSql = "  1=1  ";
+                string wfSql = "AND  1=1  ";
+
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    wfSql = " AND OrgNo='" + WebUser.OrgNo + "'";
 
                 /*不是授权状态*/
                 if (BP.WF.Glo.IsEnableTaskPool == true)
                 {
-                    ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta!=1 ";
+                    ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta!=1 " + wfSql;
                 }
                 else
                 {
-                    ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp ";
+                    ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp " + wfSql;
                 }
 
                 ps.Add("FK_Emp", userNo);
 
                 //获取授权给他的人员列表.
-
+                wfSql = "  1=1  ";
                 Auths aths = new Auths();
                 aths.Retrieve(AuthAttr.Auther, userNo);
                 foreach (Auth auth in aths)
@@ -271,7 +279,7 @@ namespace BP.WF
             get
             {
                 Paras ps = new Paras();
-                ps.SQL = "SELECT Count(a.WorkID) as Num FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND  A.Starter=" + SystemConfig.AppCenterDBVarStr + "Starter AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND B.IsPass!=-2";
+                ps.SQL = "SELECT Count(a.WorkID) as Num FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND A.TodoEmps  not like '%" + WebUser.No + ",%' AND A.Starter=" + SystemConfig.AppCenterDBVarStr + "Starter AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0) AND B.IsPass!=-2";
                 ps.Add("Starter", WebUser.No);
                 ps.Add("FK_Emp", WebUser.No);
                 return DBAccess.RunSQLReturnValInt(ps);
@@ -1283,7 +1291,7 @@ namespace BP.WF
         /// <param name="flowNo">流程编号</param>
         /// <param name="domain">域</param>
         /// <returns></returns>
-        public static DataTable DB_Todolist(string userNo, int fk_node = 0, string flowNo = null, 
+        public static DataTable DB_Todolist(string userNo, int fk_node = 0, string flowNo = null,
             string domain = null)
         {
             string sql = "";
@@ -1408,6 +1416,8 @@ namespace BP.WF
             if (flowNo != null)
                 whereSQL = " AND A.FK_Flow='" + flowNo + "'";
 
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                whereSQL = " AND A.OrgNo='" + WebUser.OrgNo + "'";
 
             //获得授权信息.
             Auths aths = new Auths();
@@ -1429,9 +1439,9 @@ namespace BP.WF
             else
             {
                 if (BP.WF.Glo.IsEnableTaskPool == true)
-                      sql = "SELECT  *, null as Auther FROM WF_EmpWorks A WHERE  TaskSta=0 AND A.FK_Emp='" + userNo + "' " + whereSQL + "";
+                    sql = "SELECT  *, null as Auther FROM WF_EmpWorks A WHERE  TaskSta=0 AND A.FK_Emp='" + userNo + "' " + whereSQL + "";
                 else
-                     sql = "SELECT  *, null as Auther FROM WF_EmpWorks A WHERE  A.FK_Emp='" + userNo + "' " + whereSQL + "";
+                    sql = "SELECT  *, null as Auther FROM WF_EmpWorks A WHERE  A.FK_Emp='" + userNo + "' " + whereSQL + "";
 
                 foreach (Auth ath in aths)
                 {
@@ -1444,12 +1454,12 @@ namespace BP.WF
                         if (mydt < nodt)
                             continue;
                         sql += " UNION ";
-                   
+
                         if (ath.AuthType == AuthorWay.SpecFlows)
                             sql += "SELECT *,'" + ath.Auther + "' as Auther FROM WF_EmpWorks WHERE  FK_Emp='" + ath.Auther + "' AND FK_Flow='" + ath.FlowNo + "' " + whereSQL + "";
                         else
                             sql += "SELECT *,'" + ath.Auther + "' as Auther FROM WF_EmpWorks WHERE  FK_Emp='" + ath.Auther + "' " + whereSQL + "";
-                       
+
 
                     }
                 }
@@ -1458,7 +1468,7 @@ namespace BP.WF
             }
 
 
-            
+
 
             //获得待办.
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
@@ -1520,7 +1530,7 @@ namespace BP.WF
                 dt.Columns["pflowno"].ColumnName = "PFlowNo";
                 dt.Columns["fk_node"].ColumnName = "FK_Node";
                 dt.Columns["nodename"].ColumnName = "NodeName";
-              //  dt.Columns["workerdept"].ColumnName = "WorkerDept";
+                //  dt.Columns["workerdept"].ColumnName = "WorkerDept";
                 dt.Columns["title"].ColumnName = "Title";
                 dt.Columns["rdt"].ColumnName = "RDT";
                 dt.Columns["adt"].ColumnName = "ADT";
@@ -2034,7 +2044,7 @@ namespace BP.WF
 
                 dt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
                 dt.Columns["FK_NODE"].ColumnName = "FK_Node";
-               // dt.Columns["WORKERDEPT"].ColumnName = "WorkerDept";
+                // dt.Columns["WORKERDEPT"].ColumnName = "WorkerDept";
                 dt.Columns["FK_EMP"].ColumnName = "FK_Emp";
                 dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
 
@@ -2070,7 +2080,7 @@ namespace BP.WF
 
                 dt.Columns["pflowno"].ColumnName = "PFlowNo";
                 dt.Columns["fk_node"].ColumnName = "FK_Node";
-              //  dt.Columns["workerdept"].ColumnName = "WorkerDept";
+                //  dt.Columns["workerdept"].ColumnName = "WorkerDept";
                 dt.Columns["fk_emp"].ColumnName = "FK_Emp";
                 dt.Columns["fk_flowsort"].ColumnName = "FK_FlowSort";
 
@@ -2137,7 +2147,7 @@ namespace BP.WF
 
                 dt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
                 dt.Columns["FK_NODE"].ColumnName = "FK_Node";
-             //   dt.Columns["WORKERDEPT"].ColumnName = "WorkerDept";
+                //   dt.Columns["WORKERDEPT"].ColumnName = "WorkerDept";
                 dt.Columns["FK_EMP"].ColumnName = "FK_Emp";
                 dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
 
@@ -2173,7 +2183,7 @@ namespace BP.WF
 
                 dt.Columns["pflowno"].ColumnName = "PFlowNo";
                 dt.Columns["fk_node"].ColumnName = "FK_Node";
-             //   dt.Columns["workerdept"].ColumnName = "WorkerDept";
+                //   dt.Columns["workerdept"].ColumnName = "WorkerDept";
                 dt.Columns["fk_emp"].ColumnName = "FK_Emp";
                 dt.Columns["fk_flowsort"].ColumnName = "FK_FlowSort";
 
@@ -3091,12 +3101,12 @@ namespace BP.WF
             }
             else
             {
-                BP.WF.Dev2Interface.Port_Login(myEmp.UserID,sid, myEmp.OrgNo);
+                BP.WF.Dev2Interface.Port_Login(myEmp.UserID, sid, myEmp.OrgNo);
                 // BP.WF.Dev2Interface.Port_Login(myEmp, myEmp.OrgNo);
             }
             return;
         }
-        
+
         /// <summary>
         /// 登录
         /// </summary>
@@ -3124,7 +3134,7 @@ namespace BP.WF
             if (i == 0)
                 throw new Exception("err@用户名:" + emp.GetValByKey("No") + "不存在.");
 
-            if (sid != null)
+            if (sid != null && sid != "")
                 if (emp.SID.Equals(sid) == false)
                     throw new Exception("err@SID错误.");
 
@@ -4289,7 +4299,7 @@ namespace BP.WF
 
                     //删除数据。
                     DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='ND" + toNodeID + "' AND RefPKVal='" + wk.OID + "'");
-                    FrmAttachmentDBs athDBs = new FrmAttachmentDBs("ND" + gwfFrom.FK_Node,gwfFrom.WorkID.ToString());
+                    FrmAttachmentDBs athDBs = new FrmAttachmentDBs("ND" + gwfFrom.FK_Node, gwfFrom.WorkID.ToString());
 
                     foreach (FrmAttachmentDB athDB in athDBs)
                     {
@@ -4407,7 +4417,6 @@ namespace BP.WF
         {
             //if (WebUser.IsAdmin==false)
             //    throw 
-
             try
             {
                 WorkFlow.DeleteFlowByReal(workID, isDelSubFlow);
@@ -4492,7 +4501,7 @@ namespace BP.WF
         /// <param name="msg">逻辑删除的原因</param>
         /// <param name="isDelSubFlow">逻辑删除的原因</param>
         /// <returns>执行信息,执行不成功抛出异常.</returns>
-        public static string Flow_DoDeleteFlowByFlag(string flowNo, Int64 workID, string msg, bool isDelSubFlow)
+        public static string Flow_DoDeleteFlowByFlag(Int64 workID, string msg, bool isDelSubFlow)
         {
             WorkFlow wf = new WorkFlow(workID);
             wf.DoDeleteWorkFlowByFlag(msg);
@@ -4503,14 +4512,14 @@ namespace BP.WF
                 gwfs.Retrieve(GenerWorkFlowAttr.FID, workID);
                 foreach (GenerWorkFlow item in gwfs)
                 {
-                    Flow_DoDeleteFlowByFlag(item.FK_Flow, item.WorkID, "删除子流程:" + msg, false);
+                    Flow_DoDeleteFlowByFlag(item.WorkID, "删除子流程:" + msg, false);
                 }
                 //删除子流程
                 gwfs = new GenerWorkFlows();
                 gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, workID);
                 foreach (GenerWorkFlow item in gwfs)
                 {
-                    Flow_DoDeleteFlowByFlag(item.FK_Flow, item.WorkID, "删除子流程:" + msg, false);
+                    Flow_DoDeleteFlowByFlag(item.WorkID, "删除子流程:" + msg, false);
                 }
             }
             return "删除成功";
@@ -4699,7 +4708,9 @@ namespace BP.WF
             wk.OID = workID;
             wk.RetrieveFromDBSources();
             WorkNode wn = new WorkNode(wk, nd);
-            msg +=WorkNodePlus.SubFlowEvent(wn).OutMessageHtml;
+
+            SendReturnObjs objs = WorkNodePlus.SubFlowEvent(wn);
+            msg += objs == null ? "" : objs.OutMessageHtml;//onjs有可能为null的处理
 
             return msg;
         }
@@ -4707,7 +4718,7 @@ namespace BP.WF
         /// <summary>
         /// 流程运行完成后自动运行/结束父流程或者同级子流程
         /// </summary>
-        public static string FlowOverAutoSendParentOrSameLevelFlow(GenerWorkFlow gwf, Flow flow,SubFlow subFlow)
+        public static string FlowOverAutoSendParentOrSameLevelFlow(GenerWorkFlow gwf, Flow flow, SubFlow subFlow)
         {
             if (gwf.PWorkID == 0)
                 return "";
@@ -4801,6 +4812,21 @@ namespace BP.WF
             wk.Retrieve();
 
             WorkNode wn = new WorkNode(wk, nd);
+            if (wn.rptGe == null)
+            {
+                wn.rptGe = nd.HisFlow.HisGERpt;
+                if (wk.FID != 0)
+                {
+                    wn.rptGe.OID = wk.FID;
+                }
+                else
+                {
+                    wn.rptGe.OID = workid;
+                }
+
+                wn.rptGe.RetrieveFromDBSources();
+                wk.Row = wn.rptGe.Row;
+            }
             return wn.NodeSend_GenerNextStepNode().NodeID;
         }
         /// <summary>
@@ -5861,15 +5887,11 @@ namespace BP.WF
         public static bool Flow_IsCanDeleteFlowInstance(string flowNo, Int64 workid, string userNo)
         {
             if (WebUser.No.Equals("admin") == true)
-            {
                 return true;
-            }
 
             Flow fl = new Flow(flowNo);
             if (fl.FlowDeleteRole == FlowDeleteRole.AdminOnly)
-            {
                 return false;
-            }
 
             //是否是用户管理员?
             if (fl.FlowDeleteRole == FlowDeleteRole.AdminAppOnly)
@@ -6736,7 +6758,6 @@ namespace BP.WF
                 htPara.Add(StartFlowParaNameList.PEmp, parentEmp);
             }
 
-
             string dbstr = SystemConfig.AppCenterDBVarStr;
             if (DataType.IsNullOrEmpty(starter))
                 starter = WebUser.No;
@@ -6746,6 +6767,11 @@ namespace BP.WF
 
             // 下一个工作人员。
             Emp empStarter = new Emp(starter);
+            if (starter.Equals(WebUser.No))
+            {
+                empStarter.FK_Dept = WebUser.FK_Dept;
+                empStarter.SetValByKey("FK_DeptText", WebUser.FK_DeptName);
+            }
             Work wk = fl.NewWork(empStarter, htPara);
             Int64 workID = wk.OID;
 
@@ -6769,6 +6795,7 @@ namespace BP.WF
                     }
                     wk.SetValByKey(str, ht[str]);
                 }
+                wk.Update();
             }
             wk.OID = workID;
             if (workDtls != null)
@@ -8371,7 +8398,7 @@ namespace BP.WF
 
             CCList list = new CCList();
             //list.MyPK = DBAccess.GenerOIDByGUID().ToString(); // workID + "_" + fk_node + "_" + empNo;
-            list.MyPK =  workID + "_" + fk_node + "_" + toEmpNo;
+            list.MyPK = workID + "_" + fk_node + "_" + toEmpNo;
             list.FID = FID;
             list.FK_Flow = fk_flow;
             list.FlowName = fl.Name;
@@ -8659,6 +8686,7 @@ namespace BP.WF
                     if (nd.IsEndNode == false && WebUser.IsAdmin == false)
                         if (Dev2Interface.Flow_IsCanDoCurrentWork(workID, WebUser.No) == false)
                             return "没有执行保存.";
+
                     //这里取消了保存异常.
                     //throw new Exception("err@工作已经发送到下一个环节,您不能执行保存.");
                 }
@@ -10129,20 +10157,6 @@ namespace BP.WF
                 return "签章错误：" + ex.Message;
             }
         }
-        /// <summary>
-        /// 增加附件
-        /// </summary>
-        /// <param name="nodeid">节点ID</param>
-        /// <param name="workid">工作ID</param>
-        /// <param name="athNo">附件编号，如果当前节点只有一个附件可以为空.</param>
-        /// <param name="frmID">表单ID</param>
-        /// <param name="filePath">文件路径:比如：c:\\xxx.xls</param>
-        /// <param name="fileName">文件名称:比如：我的文档.xls</param>
-        /// <returns>执行结果</returns>
-        public static string CCForm_AddAth(int nodeid, Int64 workid, string athNo, string frmID, string filePath, string fileName)
-        {
-            return "增加成功";
-        }
         #endregion ccform 接口
 
         #region 页面.
@@ -10150,7 +10164,7 @@ namespace BP.WF
         /// 附件上传接口
         /// </summary>
         /// <param name="nodeid">节点ID</param>
-        /// <param name="flowid">流程ID</param>
+        /// <param name="flowNo">流程ID</param>
         /// <param name="workid">工作ID</param>
         /// <param name="athNo">附件属性No</param>
         /// <param name="frmID">FK_MapData</param>
@@ -10158,7 +10172,7 @@ namespace BP.WF
         /// <param name="fileName">附件名称</param>
         /// <param name="sort">分类</param>
         /// <returns></returns>
-        public static string CCForm_AddAth(int nodeid, string flowid, Int64 workid, String athNo, string frmID, string filePath, string fileName, string sort = null, Int32 fid = 0, Int32 pworkid = 0)
+        public static string CCForm_AddAth(int nodeid, string flowNo, Int64 workid, String athNo, string frmID, string filePath, string fileName, string sort = null, Int32 fid = 0, Int32 pworkid = 0)
         {
             string pkVal = workid.ToString();
             // 多附件描述.
@@ -10217,6 +10231,7 @@ namespace BP.WF
             if (athDesc.AthSaveWay == AthSaveWay.IISServer)
             {
                 string savePath = athDesc.SaveTo;
+
                 if (savePath.Contains("@") == true || savePath.Contains("*") == true)
                 {
                     /*如果有变量*/
@@ -10225,7 +10240,7 @@ namespace BP.WF
                     if (savePath.Contains("@") && nodeid != 0)
                     {
                         /*如果包含 @ */
-                        BP.WF.Flow flow = new BP.WF.Flow(flowid);
+                        BP.WF.Flow flow = new BP.WF.Flow(flowNo);
                         BP.WF.Data.GERpt myen = flow.HisGERpt;
                         myen.OID = workid;
                         myen.RetrieveFromDBSources();
@@ -10246,20 +10261,8 @@ namespace BP.WF
 
                 try
                 {
-                    savePath = SystemConfig.PathOfWebApp + savePath;
-                }
-                catch (Exception ex)
-                {
-                    savePath = SystemConfig.PathOfDataUser + "UploadFile\\" + mapData.No + "\\";
-                    //return "err@获取路径错误" + ex.Message + ",配置的路径是:" + savePath + ",您需要在附件属性上修改该附件的存储路径.";
-                }
-
-                try
-                {
                     if (System.IO.Directory.Exists(savePath) == false)
-                    {
                         System.IO.Directory.CreateDirectory(savePath);
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -10305,8 +10308,9 @@ namespace BP.WF
                 dbUpload.MyPK = guid; // athDesc.FK_MapData + oid.ToString();
                 dbUpload.NodeID = nodeid;
                 dbUpload.Sort = sort;
-                dbUpload.FK_FrmAttachment = athNo;
                 dbUpload.FK_MapData = athDesc.FK_MapData;
+                dbUpload.FK_FrmAttachment = athNo;
+
                 dbUpload.FileExts = ext;
                 dbUpload.FID = fid;
                 if (fileEncrypt == true)
@@ -10768,7 +10772,7 @@ namespace BP.WF
             sql += "SELECT FK_Emp FROM  Port_DeptEmpStation WHERE FK_STATION ";
             sql += "IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + nodeID + ") ";
             if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
-                sql += " AND Port_DeptEmpStation.OrgNo='"+BP.Web.WebUser.OrgNo+"'";
+                sql += " AND Port_DeptEmpStation.OrgNo='" + BP.Web.WebUser.OrgNo + "'";
 
             sql += ") ORDER BY A.FK_Dept,A.No ";
             return DBAccess.RunSQLReturnTable(sql);

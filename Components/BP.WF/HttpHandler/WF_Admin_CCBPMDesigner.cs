@@ -21,7 +21,6 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_CCBPMDesigner : DirectoryPageBase
     {
-
         /// <summary>
         /// 选择器
         /// </summary>
@@ -110,7 +109,6 @@ namespace BP.WF.HttpHandler
 
                 dt.Rows.Add(dr);
             }
-
             return BP.Tools.Json.ToJson(dt);
         }
 
@@ -125,7 +123,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <returns>返回保存方法</returns>
         public string Designer_SaveNodeName()
-        {
+        { 
             string sql = "UPDATE WF_Node SET Name='" + this.Name + "' WHERE NodeID=" + this.FK_Node;
             DBAccess.RunSQL(sql);
 
@@ -648,14 +646,16 @@ namespace BP.WF.HttpHandler
             if (emp.CheckPass(pass) == false)
                 return "err@用户名或密码错误.";
 
-            //如果是单机版本，仅仅admin登录.
+            //如果是单机版本，仅仅admin登录. 
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
             {
-                if (emp.UserID.Equals("admin") == false)
-                    return "err@非admin不能登录.";
+                string adminer = SystemConfig.GetValByKey("Adminer","admin");
+
+                if (adminer.IndexOf( emp.UserID)  ==-1 )
+                    return "err@非admin，管理员账号不能登录.";
 
                 //让其登录.
-                BP.WF.Dev2Interface.Port_Login(emp.UserID);
+                BP.WF.Dev2Interface.Port_Login("admin");
 
                 //只有一个组织的情况.
                 if (DBAccess.IsView("Port_Emp") == false)

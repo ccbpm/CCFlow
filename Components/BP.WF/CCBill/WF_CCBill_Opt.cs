@@ -14,7 +14,8 @@ using BP.WF.Template;
 using BP.WF.Data;
 using BP.WF.HttpHandler;
 using BP.CCBill.Template;
-
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace BP.CCBill
 {
@@ -149,7 +150,7 @@ namespace BP.CCBill
             string dtTo = this.GetRequestVal("DTTo");
             if (DataType.IsNullOrEmpty(dtFrom) == false)
             {
-               
+
                 //取前一天的24：00
                 if (dtFrom.Trim().Length == 10) //2017-09-30
                     dtFrom += " 00:00:00";
@@ -182,6 +183,5 @@ namespace BP.CCBill
             return BP.Tools.Json.ToJson(ds);
         }
         #endregion 关联单据.
-
     }
 }

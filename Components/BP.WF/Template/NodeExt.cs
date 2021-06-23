@@ -347,32 +347,31 @@ namespace BP.WF.Template
                 //map.AddBoolean(NodeAttr.IsTask, true, "允许分配工作否?", true, true, false, "http://ccbpm.mydoc.io/?v=5404&t=17904");
                 //map.AddBoolean(NodeAttr.IsExpSender, true, "本节点接收人不允许包含上一步发送人", true, true, false);
                 //map.AddBoolean(NodeAttr.IsRM, true, "是否启用投递路径自动记忆功能?", true, true, false, "http://ccbpm.mydoc.io/?v=5404&t=17905");
-                map.AddBoolean(NodeAttr.IsOpenOver, false, "已阅即完成?", true, true, true);
+                map.AddBoolean(NodeAttr.IsOpenOver, false, "已阅即完成?", true, true, false);
                 map.SetHelperUrl(NodeAttr.IsOpenOver, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3653663&doc_id=31094");
 
-
-                map.AddBoolean(NodeAttr.IsToParentNextNode, false, "子流程运行到该节点时，让父流程自动运行到下一步", true, true);
-
                 //为铁路局,会签子流程. 增加 @yln. 
-                map.AddBoolean(NodeAttr.IsSendDraftSubFlow, false, "是否发送草稿子流程?", true, true);
+                map.AddBoolean(NodeAttr.IsSendDraftSubFlow, false, "是否发送草稿子流程?", true, true, true);
                 map.SetHelperAlert(NodeAttr.IsSendDraftSubFlow, "如果有启动的草稿子流程，是否发送它们？"); //增加帮助。
+                map.AddBoolean(NodeAttr.IsToParentNextNode, false, "子流程运行到该节点时，让父流程自动运行到下一步", true, true, true);
+
+                map.AddBoolean(NodeAttr.IsGuestNode, false,
+                    "是否是外部用户执行的节点(非组织结构人员参与处理工作的节点)?", true, true, true,
+                    "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661834&doc_id=31094");
 
                 map.AddBoolean(NodeAttr.IsYouLiTai, false, "该节点是否是游离态", true, true);
                 map.SetHelperUrl(NodeAttr.IsYouLiTai, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3653664&doc_id=31094");
                 //  map.SetHelperAlert(NodeAttr.IsYouLiTai, "当节点为游离状态的时候，只有连接的节点是固定节点才可以往下运行，否则流程结束");
 
-                map.AddTBDateTime("DTFrom", "生命周期从", true, true);
-                map.AddTBDateTime("DTTo", "生命周期到", true, true);
+                //map.AddTBDateTime("DTFrom", "生命周期从", true, true);
+                //map.AddTBDateTime("DTTo", "生命周期到", true, true);
 
-                map.AddBoolean(NodeAttr.IsBUnit, false, "是否是节点模版（业务单元）?", true, true, true,
-                    "http://ccbpm.mydoc.io/?v=5404&t=17904");
+                //map.AddBoolean(NodeAttr.IsBUnit, false, "是否是节点模版（业务单元）?", true, true, true,
+                //    "http://ccbpm.mydoc.io/?v=5404&t=17904");
 
                 map.AddTBString(NodeAttr.FocusField, null, "焦点字段", true, false, 0, 50, 10, true,
                     "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3653665&doc_id=31094");
 
-                map.AddBoolean(NodeAttr.IsGuestNode, false,
-                    "是否是外部用户执行的节点(非组织结构人员参与处理工作的节点)?", true, true, true,
-                    "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661834&doc_id=31094");
 
 
                 //节点业务类型.
@@ -384,6 +383,7 @@ namespace BP.WF.Template
                 map.AddTBInt(NodeAttr.DeliveryWay, 0, "接受人规则", false, false);
 
                 map.AddTBString(NodeAttr.SelfParas, null, "自定义属性", true, false, 0, 500, 10, true);
+                map.SetHelperUrl(NodeAttr.SelfParas, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3653666&doc_id=31094");
 
                 map.AddTBInt(NodeAttr.Step, 0, "步骤(无计算意义)", true, false);
                 map.SetHelperUrl(NodeAttr.Step, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3576085&doc_id=31094");
@@ -395,21 +395,20 @@ namespace BP.WF.Template
                 #region 分合流子线程属性
                 map.AddDDLSysEnum(NodeAttr.RunModel, 0, "节点类型",
                     true, false, NodeAttr.RunModel, "@0=普通@1=合流@2=分流@3=分合流@4=子线程");
-
-                map.SetHelperUrl(NodeAttr.RunModel, "http://ccbpm.mydoc.io/?v=5404&t=17940"); //增加帮助.
+                map.SetHelperUrl(NodeAttr.RunModel, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661853&doc_id=31094"); //增加帮助.
 
                 //子线程类型.
                 map.AddDDLSysEnum(NodeAttr.SubThreadType, 0, "子线程类型", true, false, NodeAttr.SubThreadType, "@0=同表单@1=异表单");
-                map.SetHelperUrl(NodeAttr.SubThreadType, "http://ccbpm.mydoc.io/?v=5404&t=17944"); //增加帮助
+                map.SetHelperUrl(NodeAttr.SubThreadType, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661855&doc_id=31094"); //增加帮助
 
                 map.AddTBDecimal(NodeAttr.PassRate, 100, "完成通过率", true, false);
-                map.SetHelperUrl(NodeAttr.PassRate, "http://ccbpm.mydoc.io/?v=5404&t=17945"); //增加帮助.
+                map.SetHelperUrl(NodeAttr.PassRate, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661856&doc_id=31094"); //增加帮助.
 
                 // 启动子线程参数 2013-01-04
                 map.AddDDLSysEnum(NodeAttr.SubFlowStartWay, (int)SubFlowStartWay.None, "子线程启动方式", true, true,
                     NodeAttr.SubFlowStartWay, "@0=不启动@1=指定的字段启动@2=按明细表启动");
                 map.AddTBString(NodeAttr.SubFlowStartParas, null, "启动参数", true, false, 0, 100, 10, true);
-                map.SetHelperUrl(NodeAttr.SubFlowStartWay, "http://ccbpm.mydoc.io/?v=5404&t=17946"); //增加帮助
+                map.SetHelperUrl(NodeAttr.SubFlowStartWay, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661859&doc_id=31094"); //增加帮助
 
 
                 //增加对退回到合流节点的 子线城的处理控制.
@@ -435,11 +434,14 @@ namespace BP.WF.Template
 
                 //为广西计算中心加.
                 map.AddBoolean(NodeAttr.IsSendBackNode, false, "是否是发送返回节点(发送当前节点,自动发送给该节点的发送人,发送节点.)?", true, true, true);
+                map.SetHelperUrl(NodeAttr.IsSendBackNode, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661865&doc_id=31094");
+
+
                 #endregion 分合流子线程属性
 
                 #region 自动跳转规则
                 map.AddBoolean(NodeAttr.AutoJumpRole0, false, "处理人就是发起人", true, true, true);
-                map.SetHelperUrl(NodeAttr.AutoJumpRole0, "http://ccbpm.mydoc.io/?v=5404&t=17949"); //增加帮助
+                map.SetHelperUrl(NodeAttr.AutoJumpRole0, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3982473&doc_id=31094"); //增加帮助
 
                 map.AddBoolean(NodeAttr.AutoJumpRole1, false, "处理人已经出现过", true, true, true);
                 map.AddBoolean(NodeAttr.AutoJumpRole2, false, "处理人与上一步相同", true, true, true);
@@ -450,21 +452,30 @@ namespace BP.WF.Template
 
                 #region  功能按钮状态
                 map.AddTBString(BtnAttr.SendLab, "发送", "发送按钮标签", true, false, 0, 50, 10);
-                map.SetHelperUrl(BtnAttr.SendLab, "http://ccbpm.mydoc.io/?v=5404&t=16219");
+                map.SetHelperUrl(BtnAttr.SendLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3577079&doc_id=31094");
                 map.AddTBString(BtnAttr.SendJS, "", "按钮JS函数", true, false, 0, 999, 10);
                 //map.SetHelperBaidu(BtnAttr.SendJS, "ccflow 发送前数据完整性判断"); //增加帮助.
-                map.SetHelperUrl(BtnAttr.SendJS, "http://ccbpm.mydoc.io/?v=5404&t=17967");
+                map.SetHelperUrl(BtnAttr.SendJS, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3577079&doc_id=31094");
 
                 map.AddTBString(BtnAttr.SaveLab, "保存", "保存按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.SaveEnable, true, "是否启用", true, true);
-                map.SetHelperUrl(BtnAttr.SaveLab, "http://ccbpm.mydoc.io/?v=5404&t=24366"); //增加帮助
+                map.SetHelperUrl(BtnAttr.SaveLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3577137&doc_id=31094"); //增加帮助
 
 
 
                 map.AddTBString(BtnAttr.CCLab, "抄送", "抄送按钮标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(NodeAttr.CCRole, 0, "抄送规则", true, true, NodeAttr.CCRole,
-                    "@@0=不能抄送@1=手工抄送@2=自动抄送@3=手工与自动@4=按表单SysCCEmps字段计算@5=在发送前打开抄送窗口");
-                map.SetHelperUrl(BtnAttr.CCLab, "http://ccbpm.mydoc.io/?v=5404&t=16259"); //增加帮助.
+                    "@0=不能抄送@1=手工抄送@2=自动抄送@3=手工与自动@4=按表单SysCCEmps字段计算@5=在发送前打开抄送窗口");
+                map.SetHelperUrl(BtnAttr.CCLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3579867&doc_id=31094"); //增加帮助.
+
+
+                map.AddTBString(BtnAttr.QRCodeLab, "二维码", "二维码标签", true, false, 0, 50, 10);
+                map.AddDDLSysEnum(BtnAttr.QRCodeRole, 0, "二维码规则", true, true, BtnAttr.QRCodeRole,
+                    "@0=无@1=查看流程表单-无需权限@2=查看流程表单-需要登录@3=外部账户协作模式处理工作");
+
+                // map.SetHelperUrl(BtnAttr.QRCodeLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3579867&doc_id=31094"); //增加帮助.
+
+
 
                 // add 2014-04-05.
                 //  map.AddDDLSysEnum(NodeAttr.CCWriteTo, 0, "抄送写入规则",
@@ -473,23 +484,29 @@ namespace BP.WF.Template
 
                 map.AddTBString(BtnAttr.ShiftLab, "移交", "移交按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ShiftEnable, false, "是否启用", true, true);
-                map.SetHelperUrl(BtnAttr.ShiftLab, "http://ccbpm.mydoc.io/?v=5404&t=16257"); //增加帮助.note:none
+
+                // map.SetHelperUrl(BtnAttr.ShiftLab, "http://ccbpm.mydoc.io/?v=5404&t=16257");
+                map.SetHelperUrl(BtnAttr.ShiftLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979829&doc_id=31094");
+
 
                 map.AddTBString(BtnAttr.DelLab, "删除", "删除按钮标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.DelEnable, 0, "删除规则", true, true, BtnAttr.DelEnable);
-                map.SetHelperUrl(BtnAttr.DelLab, "http://ccbpm.mydoc.io/?v=5404&t=17992"); //增加帮助.
+                map.SetHelperUrl(BtnAttr.DelLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979834&doc_id=31094"); //增加帮助.
 
                 map.AddTBString(BtnAttr.EndFlowLab, "结束流程", "结束流程按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.EndFlowEnable, false, "是否启用", true, true);
-                map.SetHelperUrl(BtnAttr.EndFlowLab, "http://ccbpm.mydoc.io/?v=5404&t=17989"); //增加帮助
+                map.SetHelperUrl(BtnAttr.EndFlowLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979861&doc_id=31094"); //增加帮助
 
                 map.AddTBString(BtnAttr.ShowParentFormLab, "查看父流程", "查看父流程按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ShowParentFormEnable, false, "是否启用", true, true);
+                map.SetHelperUrl(BtnAttr.ShowParentFormLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979871&doc_id=31094"); //增加帮助
 
 
                 #region 公文相关.
                 // add 2019.1.9 for 东孚.
-                map.AddTBString(BtnAttr.OfficeBtnLab, "打开公文", "公文按钮标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.OfficeBtnLab, "打开公文", "公文按钮标签", true, false, 0, 50, 10, true);
+                map.SetHelperUrl(BtnAttr.OfficeBtnLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979875&doc_id=31094"); //增加帮助
+
                 map.AddDDLSysEnum(BtnAttr.OfficeBtnEnable, 0, "文件状态", true, true, BtnAttr.OfficeBtnEnable,
                 "@0=不可用@1=可编辑@2=不可编辑", false);
 
@@ -504,25 +521,32 @@ namespace BP.WF.Template
                 //map.AddBoolean(BtnAttr.OfficeBtnEnable, false, "是否启用", true, true);
 
                 // add 2017.9.1 for 天业集团.
-                map.AddTBString(BtnAttr.PrintHtmlLab, "打印Html", "打印Html标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.PrintHtmlLab, "打印Html", "打印Html标签", true, false, 0, 50, 10, true);
                 map.AddBoolean(BtnAttr.PrintHtmlEnable, false, "(打印Html)是否启用", true, true);
+                map.SetHelperUrl(BtnAttr.PrintHtmlLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979893&doc_id=31094"); //增加帮助
                 // add 2020.5.25 for 交投集团.
                 map.AddBoolean(BtnAttr.PrintHtmlMyView, false, "(打印Html)显示在查看器工具栏?", true, true);
                 map.AddBoolean(BtnAttr.PrintHtmlMyCC, false, "(打印Html)显示在抄送工具栏?", true, true, true);
 
+
+
                 // add 2017.9.1 for 天业集团.
-                map.AddTBString(BtnAttr.PrintPDFLab, "打印pdf", "打印pdf标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.PrintPDFLab, "打印pdf", "打印pdf标签", true, false, 0, 50, 10, true);
                 map.AddBoolean(BtnAttr.PrintPDFEnable, false, "(打印pdf)是否启用", true, true);
+                map.SetHelperUrl(BtnAttr.PrintPDFLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979894&doc_id=31094"); //增加帮助
+
 
                 // add 2020.5.25 for 交投集团.
-                map.AddBoolean(BtnAttr.PrintPDFMyView, false, "(打印pdf)显示在查看器工具栏?", true, true);
+                map.AddBoolean(BtnAttr.PrintPDFMyView, false, "(打印pdf)显示在查看器工具栏?", true, true, true);
                 map.AddBoolean(BtnAttr.PrintPDFMyCC, false, "(打印pdf)显示在抄送工具栏?", true, true, false);
 
                 map.AddDDLSysEnum(BtnAttr.PrintPDFModle, 0, "PDF打印规则", true, true, BtnAttr.PrintPDFModle, "@0=全部打印@1=单个表单打印(针对树形表单)", true);
-                map.AddTBString(BtnAttr.ShuiYinModle, null, "打印水印规则", true, false, 20, 100, 100, true);
+                map.AddTBString(BtnAttr.ShuiYinModle, null, "PDF水印内容", true, false, 20, 100, 100, true);
+                map.SetHelperUrl(BtnAttr.ShuiYinModle, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=4055911&doc_id=31094"); //增加帮助
 
-                map.AddTBString(BtnAttr.PrintZipLab, "打包下载", "打包下载zip按钮标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.PrintZipLab, "打包下载", "打包下载zip按钮标签", true, false, 0, 50, 10, true);
                 map.AddBoolean(BtnAttr.PrintZipEnable, false, "(打包下载zip)是否启用", true, true);
+                map.SetHelperUrl(BtnAttr.PrintZipLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979897&doc_id=31094"); //增加帮助
 
                 // add 2020.5.25 for 交投集团.
                 map.AddBoolean(BtnAttr.PrintZipMyView, false, "(打包下载zip)显示在查看器工具栏?", true, true);
@@ -539,15 +563,16 @@ namespace BP.WF.Template
                 //map.AddDDLSysEnum(NodeAttr.FJOpen, 0, this.ToE("FJOpen", "附件权限"), true, true, 
                 //    NodeAttr.FJOpen, "@0=关闭附件@1=操作员@2=工作ID@3=流程ID");
 
-                map.AddTBString(BtnAttr.TrackLab, "轨迹", "轨迹按钮标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.TrackLab, "轨迹", "轨迹按钮标签", true, false, 0, 50, 10, true);
                 map.AddBoolean(BtnAttr.TrackEnable, true, "是否启用", true, true);
+                map.SetHelperUrl(BtnAttr.TrackLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3579860&doc_id=31094");//增加帮助
 
                 //map.SetHelperUrl(BtnAttr.TrackLab, this[SYS_CCFLOW, "轨迹"]); //增加帮助
-                map.SetHelperUrl(BtnAttr.TrackLab, "http://ccbpm.mydoc.io/?v=5404&t=24369");
+                //map.SetHelperUrl(BtnAttr.TrackLab, "http://ccbpm.mydoc.io/?v=5404&t=24369");
 
                 map.AddTBString(BtnAttr.HungLab, "挂起", "挂起按钮标签", false, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.HungEnable, false, "是否启用", false, false);
-                map.SetHelperUrl(BtnAttr.HungLab, "http://ccbpm.mydoc.io/?v=5404&t=16267"); //增加帮助.
+                map.SetHelperUrl(BtnAttr.HungLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979970&doc_id=31094"); //增加帮助.
 
                 //      map.AddTBString(BtnAttr.SelectAccepterLab, "接受人", "接受人按钮标签", true, false, 0, 50, 10);
                 //      map.AddDDLSysEnum(BtnAttr.SelectAccepterEnable, 0, "工作方式",
@@ -555,10 +580,10 @@ namespace BP.WF.Template
                 //      map.SetHelperUrl(BtnAttr.SelectAccepterLab, "http://ccbpm.mydoc.io/?v=5404&t=16256"); //增加帮助
 
 
-                map.AddTBString(BtnAttr.SearchLab, "查询", "查询按钮标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.SearchLab, "查询", "查询按钮标签", true, false, 0, 50, 10, true);
                 map.AddBoolean(BtnAttr.SearchEnable, false, "是否启用", true, true);
                 //map.SetHelperUrl(BtnAttr.SearchLab, this[SYS_CCFLOW, "查询"]); //增加帮助
-                map.SetHelperUrl(BtnAttr.SearchLab, "http://ccbpm.mydoc.io/?v=5404&t=24373");
+                map.SetHelperUrl(BtnAttr.SearchLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979975&doc_id=31094");
 
                 //map.AddTBString(BtnAttr.WorkCheckLab, "审核", "审核按钮标签", true, false, 0, 50, 10);
                 //map.AddBoolean(BtnAttr.WorkCheckEnable, false, "是否启用", true, true);
@@ -572,8 +597,9 @@ namespace BP.WF.Template
                 //map.AddBoolean(BtnAttr.AskforEnable, false, "是否启用", true, true);
                 //map.SetHelperUrl(BtnAttr.AskforLab, "http://ccbpm.mydoc.io/?v=5404&t=16258");
 
-                map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10, true);
                 map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "会签模式", true, true, BtnAttr.HuiQianRole, "@0=不启用@1=协作(同事)模式@4=组长(领导)模式");
+                map.SetHelperUrl(BtnAttr.HuiQianLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979976&doc_id=31094");
 
                 //map.AddDDLSysEnum(BtnAttr.IsCanAddHuiQianer, 0, "协作模式被加签的人处理规则", true, true, BtnAttr.IsCanAddHuiQianer,
                 //   "0=不允许增加其他协作人@1=允许增加协作人", false);
@@ -586,15 +612,15 @@ namespace BP.WF.Template
                 // add by 周朋 2014-11-21. 让用户可以自己定义流转.
                 map.AddTBString(BtnAttr.TCLab, "流转自定义", "流转自定义", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.TCEnable, false, "是否启用", true, true);
-                map.SetHelperUrl(BtnAttr.TCEnable, "http://ccbpm.mydoc.io/?v=5404&t=17978");
+                map.SetHelperUrl(BtnAttr.TCLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3938664&doc_id=31094");
 
                 //map.AddTBString(BtnAttr.AskforLabRe, "执行", "加签按钮标签", true, false, 0, 50, 10);
                 //map.AddBoolean(BtnAttr.AskforEnable, false, "是否启用", true, true);
                 // map.SetHelperUrl(BtnAttr.AskforLab, this[SYS_CCFLOW, "加签"]); //增加帮助
 
                 // 删除了这个模式,让表单方案进行控制了,保留这两个字段以兼容.
-                map.AddTBString(BtnAttr.WebOfficeLab, "公文", "文档按钮标签", false, false, 0, 50, 10);
-                map.AddTBInt(BtnAttr.WebOfficeEnable, 0, "文档启用方式", false, false);
+                //  map.AddTBString(BtnAttr.WebOfficeLab, "公文", "文档按钮标签", false, false, 0, 50, 10);
+                // map.AddTBInt(BtnAttr.WebOfficeEnable, 0, "文档启用方式", false, false);
 
                 //cut bye zhoupeng.
                 //map.AddTBString(BtnAttr.WebOfficeLab, "公文", "文档按钮标签", true, false, 0, 50, 10);
@@ -606,56 +632,69 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.PRILab, "重要性", "重要性", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.PRIEnable, 0, "重要性规则", true, true, BtnAttr.PRIEnable, @"0=不启用@1=只读@2=编辑");
                 //map.AddBoolean(BtnAttr.PRIEnable, false, "是否启用", true, true);
+                map.SetHelperUrl(BtnAttr.PRILab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979978&doc_id=31094");
 
                 // add by 周朋 2015-08-06. 节点时限.
                 map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.CHRole, 0, "时限规则", true, true, BtnAttr.CHRole, @"0=禁用@1=启用@2=只读@3=启用并可以调整流程应完成时间");
+                map.SetHelperUrl(BtnAttr.CHLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979979&doc_id=31094");
 
                 // add 2017.5.4  邀请其他人参与当前的工作.
                 map.AddTBString(BtnAttr.AllotLab, "分配", "分配按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.AllotEnable, false, "是否启用", true, true);
+                map.SetHelperUrl(BtnAttr.AllotLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979980&doc_id=31094");
 
                 // add by 周朋 2015-12-24. 节点时限.
                 map.AddTBString(BtnAttr.FocusLab, "关注", "关注", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.FocusEnable, false, "是否启用", true, true);
+                map.SetHelperUrl(BtnAttr.FocusLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979981&doc_id=31094");
 
                 // add 2017.5.4 确认就是告诉发送人，我接受这件工作了.
                 map.AddTBString(BtnAttr.ConfirmLab, "确认", "确认按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ConfirmEnable, false, "是否启用", true, true);
+                map.SetHelperUrl(BtnAttr.ConfirmLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979983&doc_id=31094");
 
                 // add 2019.3.10 增加List.
                 map.AddTBString(BtnAttr.ListLab, "列表", "列表按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ListEnable, true, "是否启用", true, true);
+                map.SetHelperUrl(BtnAttr.ListLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979983&doc_id=31094");
 
                 // 批量审核
                 map.AddTBString(BtnAttr.BatchLab, "批量审核", "批量审核标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.BatchEnable, false, "是否启用", true, true);
+                map.SetHelperUrl(BtnAttr.BatchLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979986&doc_id=31094");
 
                 //备注 流程不流转，设置备注信息提醒已处理人员当前流程运行情况
                 map.AddTBString(BtnAttr.NoteLab, "备注", "备注标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.NoteEnable, 0, "启用规则", true, true, BtnAttr.NoteEnable, @"0=禁用@1=启用@2=只读");
+                map.SetHelperUrl(BtnAttr.NoteLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979987&doc_id=31094");
 
                 //for 周大福.
                 map.AddTBString(BtnAttr.HelpLab, "帮助", "帮助标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.HelpRole, 0, "帮助显示规则", true, true, BtnAttr.HelpRole, @"0=禁用@1=启用@2=强制提示@3=选择性提示");
+                map.SetHelperUrl(BtnAttr.HelpLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979989&doc_id=31094");
 
                 //for ctrl.cn
                 map.AddTBString(BtnAttr.NextLab, "下一条", "下一条", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.NextRole, 0, "获得规则", true, true, BtnAttr.NextRole, @"0=禁用@1=相同节点@2=相同流程@3=相同的人@4=不限流程", true);
+                map.SetHelperUrl(BtnAttr.NextLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979990&doc_id=31094");
 
 
-                // 不常用的功能移动到这里.
+                // 合流节点的：不常用的功能移动到这里.
                 map.AddTBString(BtnAttr.ThreadLab, "子线程", "子线程按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ThreadEnable, false, "是否启用", true, true);
-                map.SetHelperUrl(BtnAttr.ThreadLab, "http://ccbpm.mydoc.io/?v=5404&t=16263"); //增加帮助
+                map.SetHelperUrl(BtnAttr.ThreadLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3577139&doc_id=31094"); //增加帮助
 
                 map.AddDDLSysEnum(NodeAttr.ThreadKillRole, (int)ThreadKillRole.None, "子线程删除方式", true, true,
            NodeAttr.ThreadKillRole, "@0=不能删除@1=手工删除@2=自动删除", true);
+                map.SetHelperUrl(BtnAttr.ThreadLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3579441&doc_id=31094"); //增加帮助
 
+                //跳转.
                 map.AddTBString(BtnAttr.JumpWayLab, "跳转", "跳转按钮标签", true, false, 0, 50, 10);
+                map.SetHelperUrl(BtnAttr.JumpWayLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3980001&doc_id=31094"); //增加帮助.
+
                 map.AddDDLSysEnum(NodeAttr.JumpWay, 0, "跳转规则", true, true, NodeAttr.JumpWay);
                 map.AddTBString(NodeAttr.JumpToNodes, null, "可跳转的节点", true, false, 0, 200, 10, true);
-                map.SetHelperUrl(NodeAttr.JumpWay, "http://ccbpm.mydoc.io/?v=5404&t=16261"); //增加帮助.
                 #endregion  功能按钮状态
 
                 #region 退回处理.
@@ -664,21 +703,25 @@ namespace BP.WF.Template
                 map.SetHelperUrl(NodeAttr.ReturnRole, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3579467&doc_id=31094"); //增加帮助.
                 map.AddTBString(NodeAttr.ReturnAlert, null, "被退回后信息提示", true, false, 0, 999, 10, true);
 
-                map.AddBoolean(NodeAttr.IsBackTracking, false, "是否可以原路返回(启用退回功能才有效)", true, true, false);
+                map.AddBoolean(NodeAttr.IsBackTracking, false, "是否可以原路返回(启用退回功能才有效)", true, true, true);
                 map.SetHelperUrl(NodeAttr.IsBackTracking, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3579850&doc_id=31094"); //增加帮助.
 
                 //add for guangxi.
-                map.AddBoolean(NodeAttr.IsKillEtcThread, true, "是否全部子线程退回(子线程退回到分流节点有效)", true, true, false);
+                map.AddBoolean(NodeAttr.IsKillEtcThread, true, "是否全部子线程退回(子线程退回到分流节点有效)", true, true, true);
                 map.SetHelperAlert(NodeAttr.IsKillEtcThread, "子线程退回到分流节点是，是否允许全部退回。");
 
-                //map.AddTBString(NodeAttr.RetunFieldsLable, "退回扩展字段", "退回扩展字段", true, false, 0, 50, 20);
-                map.AddTBString(BtnAttr.ReturnField, "", "退回信息填写字段", true, false, 0, 50, 10);
-
-                map.AddTBString(NodeAttr.ReturnReasonsItems, null, "退回原因", true, false, 0, 999, 10, true);
                 map.AddBoolean(NodeAttr.ReturnCHEnable, false, "是否启用退回考核规则", true, true);
+                map.SetHelperUrl(NodeAttr.ReturnCHEnable, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3980009&doc_id=31094"); //增加帮助.
 
                 map.AddDDLSysEnum(NodeAttr.ReturnOneNodeRole, 0, "单节点退回规则", true, true, NodeAttr.ReturnOneNodeRole,
                    "@0=不启用@1=按照[退回信息填写字段]作为退回意见直接退回@2=按照[审核组件]填写的信息作为退回意见直接退回", true);
+                //map.AddTBString(NodeAttr.RetunFieldsLable, "退回扩展字段", "退回扩展字段", true, false, 0, 50, 20);
+
+                map.AddTBString(BtnAttr.ReturnField, "", "退回信息填写字段", true, false, 0, 50, 10);
+                map.SetHelperUrl(BtnAttr.ReturnField, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3579854&doc_id=31094"); //增加帮助.
+
+                map.AddTBString(NodeAttr.ReturnReasonsItems, null, "退回原因", true, false, 0, 999, 10, true);
+
                 #endregion 退回处理.
 
                 //节点工具栏,主从表映射.
@@ -686,7 +729,6 @@ namespace BP.WF.Template
 
                 #region 基础功能.
                 RefMethod rm = null;
-
                 rm = new RefMethod();
                 rm.Title = "接收人规则";
                 //  rm.Icon = "../../WF/Admin/AttrNode/Img/Sender.png";
@@ -731,7 +773,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "发送阻塞规则";
                 rm.ClassMethodName = this.ToString() + ".DoBlockModel";
-               // rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/BlockModel.png";
+                // rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/BlockModel.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "icon-close";
                 map.AddRefMethod(rm);
@@ -751,7 +793,7 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "icon-list";
                 //map.AddRefMethod(rm);
-                
+
                 ////暂时去掉. 
                 //rm = new RefMethod();
                 //rm.Title = "待办删除规则";
@@ -765,7 +807,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "上传公文模板";
                 rm.ClassMethodName = this.ToString() + ".DocTemp";
-              //  rm.Icon = "../../WF/Img/FileType/doc.gif";
+                //  rm.Icon = "../../WF/Img/FileType/doc.gif";
                 //设置相关字段.
                 rm.RefAttrKey = BtnAttr.OfficeBtnEnable;
                 rm.RefAttrLinkLabel = "公文模板维护";
@@ -1048,14 +1090,14 @@ namespace BP.WF.Template
                 rm.Icon = "icon-layers";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
+                /*rm = new RefMethod();
                 rm.Title = "退回扩展列";
                 rm.ClassMethodName = this.ToString() + ".DtlOfReturn";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkModel;
                 rm.RefAttrKey = NodeAttr.ReturnCHEnable;
                 rm.Icon = "icon-layers";
-                map.AddRefMethod(rm);
+                map.AddRefMethod(rm);*/
                 #endregion 实验中的功能
 
                 this._enMap = map;
@@ -1187,7 +1229,7 @@ namespace BP.WF.Template
         public string DoSortingMapAttrs()
         {
             return "../../Admin/MobileFrmDesigner/Default.htm?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
-                   this.NodeID + "&t=" + DataType.CurrentDataTime;
+                   this.NodeID + "&FK_Node=" + this.NodeID + "&t=" + DataType.CurrentDataTime;
         }
         #endregion 表单相关.
 
@@ -1500,10 +1542,11 @@ namespace BP.WF.Template
             {
                 /*如果是合流点*/
             }
-            else
-            {
-                this.SetValByKey(BtnAttr.ThreadEnable, false); //子线程.
-            }
+            //子线程也可以启用，只能查看不能做任何操作
+            /*  else
+              {
+                  this.SetValByKey(BtnAttr.ThreadEnable, false); //子线程.
+              }*/
 
             //如果启动了会签,并且是抢办模式,强制设置为队列模式.或者组长模式.
             if (this.HuiQianRole != WF.HuiQianRole.None)
@@ -1515,7 +1558,7 @@ namespace BP.WF.Template
                 {
                     DBAccess.RunSQL("UPDATE WF_Node SET TodolistModel=" + (int)TodolistModel.TeamupGroupLeader + ", TeamLeaderConfirmRole=" + (int)TeamLeaderConfirmRole.HuiQianLeader + " WHERE NodeID=" + this.NodeID);
                     if (this.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne && this.AddLeaderEnable == true)
-                        this.AddLeaderEnable=false;
+                        this.AddLeaderEnable = false;
                 }
             }
 

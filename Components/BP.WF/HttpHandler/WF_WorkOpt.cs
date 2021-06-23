@@ -647,7 +647,7 @@ namespace BP.WF.HttpHandler
 
             foreach (BP.WF.Template.FrmNode item in fns)
             {
-                item.GuanJianZiDuan = item.HisFrm.Name;
+               // item.GuanJianZiDuan = item.HisFrm.Name;
                 //  item.GuanJianZiDuan = item.HisFrm.FK_Flow11;
             }
             return fns.ToJson();
@@ -3309,7 +3309,7 @@ namespace BP.WF.HttpHandler
 
             //按照标记删除.
             if (deleteWay == "1")
-                BP.WF.Dev2Interface.Flow_DoDeleteFlowByFlag(this.FK_Flow, this.WorkID, doc, isDelSubFlow);
+                BP.WF.Dev2Interface.Flow_DoDeleteFlowByFlag(this.WorkID, doc, isDelSubFlow);
 
             //彻底删除.
             if (deleteWay == "3")
@@ -4762,6 +4762,138 @@ namespace BP.WF.HttpHandler
             return "删除成功";
         }
         #endregion 会签.
+
+
+        public string JumpWay_Init()
+        {
+            Node node = new Node(this.FK_Node);
+            string sql = "";
+            switch (node.JumpWay)
+            {
+                case JumpWay.CanNotJump://不跳转
+                    break;
+                case JumpWay.Previous://向前跳转
+                    sql = "SELECT NodeID,Name FROM WF_Node WHERE NodeID IN (SELECT FK_Node FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " )";
+                    break;
+                case JumpWay.Next://向后跳转
+                    sql = "SELECT NodeID,Name FROM WF_Node WHERE NodeID NOT IN (SELECT FK_Node FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " ) AND FK_Flow='" + this.FK_Flow + "'";
+                    break;
+                case JumpWay.AnyNode://任意节点
+                    sql = "SELECT NodeID,Name FROM WF_Node WHERE FK_Flow='" + this.FK_Flow + "' ORDER BY STEP";
+                    break;
+                case JumpWay.JumpSpecifiedNodes://指定节点
+                    sql = node.JumpToNodes;
+                    sql = sql.Replace("@WebUser.No", WebUser.No);
+                    sql = sql.Replace("@WebUser.Name", WebUser.Name);
+                    sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                    if (sql.Contains("@"))
+                    {
+                        Work wk = node.HisWork;
+                        wk.OID = this.WorkID;
+                        wk.RetrieveFromDBSources();
+                        foreach (Attr attr in wk.EnMap.Attrs)
+                        {
+                            if (sql.Contains("@") == false)
+                                break;
+                            sql = sql.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
+                        }
+                    }
+                    break;
+                default:
+                    throw new Exception(node.JumpWay+"还未增加改类型的判断.");
+            }
+            sql = sql.Replace("~", "'");
+            if (DataType.IsNullOrEmpty(sql) == false)
+            {
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                if(SystemConfig.AppCenterDBFieldCaseModel== FieldCaseModel.UpperCase
+                    || SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+                {
+                    foreach (DataColumn col in dt.Columns)
+                    {
+                        string colName = col.ColumnName.ToLower();
+                        switch (colName)
+                        {
+                            case "nodeid":
+                                col.ColumnName = "NodeID";
+                                break;
+                            case "name":
+                                col.ColumnName = "Name";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                return BP.Tools.Json.ToJson(dt);
+            }
+            return "";
+        }
+
+
+        public string JumpWay_Send()
+        {
+            try
+            {
+                int toNodeID = this.GetRequestValInt("ToNode");
+               
+                SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, toNodeID, null);
+                string strs = objs.ToMsgOfHtml();
+                strs = strs.Replace("@", "<br>@");
+                #region 处理发送后转向.
+                //当前节点.
+                Node currNode = new Node(this.FK_Node);
+                /*处理转向问题.*/
+                switch (currNode.HisTurnToDeal)
+                {
+                    case TurnToDeal.SpecUrl:
+                        string myurl = currNode.TurnToDealDoc.Clone().ToString();
+                        if (myurl.Contains("?") == false)
+                            myurl += "?1=1";
+                        Attrs myattrs = currNode.HisWork.EnMap.Attrs;
+                        Work hisWK = currNode.HisWork;
+                        foreach (Attr attr in myattrs)
+                        {
+                            if (myurl.Contains("@") == false)
+                                break;
+                            myurl = myurl.Replace("@" + attr.Key, hisWK.GetValStrByKey(attr.Key));
+                        }
+                        myurl = myurl.Replace("@WebUser.No", BP.Web.WebUser.No);
+                        myurl = myurl.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                        myurl = myurl.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                        if (myurl.Contains("@"))
+                        {
+                            BP.WF.Dev2Interface.Port_SendMsg("admin", currNode.Name + "在" + currNode.Name + "节点处，出现错误", "流程设计错误，在节点转向url中参数没有被替换下来。Url:" + myurl, "Err" + currNode.No + "_" + this.WorkID, SMSMsgType.Err, this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+                            throw new Exception("流程设计错误，在节点转向url中参数没有被替换下来。Url:" + myurl);
+                        }
+
+                        if (myurl.Contains("PWorkID") == false)
+                            myurl += "&PWorkID=" + this.WorkID;
+
+                        myurl += "&FromFlow=" + this.FK_Flow + "&FromNode=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID;
+                        return "TurnUrl@" + myurl;
+                    case TurnToDeal.TurnToByCond:
+
+                        return strs;
+                    default:
+                        strs = strs.Replace("@WebUser.No", BP.Web.WebUser.No);
+                        strs = strs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                        strs = strs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                        return strs;
+                }
+                #endregion
+                return strs;
+            }
+            catch (Exception ex)
+            {
+                AthUnReadLog athUnReadLog = new AthUnReadLog();
+                athUnReadLog.CheckPhysicsTable();
+                if (ex.Message.IndexOf("url@") != -1)
+                    return ex.Message.Replace("/WorkOpt/","/");
+                return "err@" + ex.Message;
+            }
+        }
 
     }
 }

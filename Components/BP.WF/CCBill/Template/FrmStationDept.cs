@@ -151,7 +151,7 @@ namespace BP.CCBill.Template
             }
         }
  
-        #region 为了适应自动翻译成java的需要,把实体转换成List.
+        #region 为了适应自动翻译成java的需要,把实体转换成 List.
         /// <summary>
         /// 转化成 java list,C#不能调用.
         /// </summary>
@@ -173,6 +173,6 @@ namespace BP.CCBill.Template
             }
             return list;
         }
-        #endregion 为了适应自动翻译成java的需要,把实体转换成List.
+        #endregion 为了适应自动翻译成java的需要,把实体转换成 List.
     }
 }

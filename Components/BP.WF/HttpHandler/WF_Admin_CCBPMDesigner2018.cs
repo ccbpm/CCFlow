@@ -193,6 +193,53 @@ namespace BP.WF.HttpHandler
                 return "@err:"+ex.Message;
             }
         }
+        public string Direction_Init()
+        {
+            try
+            {
+                string pk = this.FK_Flow + "_" + this.FK_Node + "_" + this.GetValFromFrmByKey("ToNode");
+
+                Direction dir = new Direction();
+                dir.MyPK = pk;
+
+                if (dir.RetrieveFromDBSources() > 0)
+                {
+                    return dir.Des;
+                }
+
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return "@err:" + ex.Message;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public string Direction_Save()
+        {
+            try
+            {
+                string pk = this.FK_Flow + "_" + this.FK_Node + "_" + this.GetValFromFrmByKey("ToNode");
+                
+                Direction dir = new Direction();
+                dir.MyPK = pk;
+                
+                if (dir.RetrieveFromDBSources()>0)
+                {
+                    dir.Des = this.GetValFromFrmByKey("Des");
+                    dir.DirectUpdate();
+                }
+                
+                return "@保存成功！";
+            }
+            catch (Exception ex)
+            {
+                return "@err:" + ex.Message;
+            }
+        }
         /// <summary>
         /// 添加标签
         /// </summary>

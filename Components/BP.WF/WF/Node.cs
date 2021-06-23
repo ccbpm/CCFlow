@@ -715,7 +715,7 @@ namespace BP.WF
 
             if (this.IsStartNode)
             {
-                this.SetValByKey(BtnAttr.ReturnRole, (int)ReturnRole.CanNotReturn);
+                //this.SetValByKey(BtnAttr.ReturnRole, (int)ReturnRole.CanNotReturn);
                 this.SetValByKey(BtnAttr.ShiftEnable, 0);
                 this.SetValByKey(BtnAttr.EndFlowEnable, 0);
 
@@ -1636,6 +1636,14 @@ namespace BP.WF
                 SetValByKey(NodeAttr.JumpToNodes, value);
             }
         }
+
+        public JumpWay JumpWay
+        {
+            get
+            {
+                return (JumpWay)this.GetValIntByKey(NodeAttr.JumpWay);
+            }
+        }
         /// <summary>
         /// 工作ID
         /// </summary>
@@ -2399,20 +2407,20 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.IsTask, value);
             }
         }
-        /// <summary>
-        /// 是否是业务单元
-        /// </summary>
-        public bool IsBUnit
-        {
-            get
-            {
-                return this.GetValBooleanByKey(NodeAttr.IsBUnit);
-            }
-            set
-            {
-                this.SetValByKey(NodeAttr.IsBUnit, value);
-            }
-        }
+        ///// <summary>
+        ///// 是否是业务单元
+        ///// </summary>
+        //public bool IsBUnit
+        //{
+        //    get
+        //    {
+        //        return this.GetValBooleanByKey(NodeAttr.IsBUnit);
+        //    }
+        //    set
+        //    {
+        //        this.SetValByKey(NodeAttr.IsBUnit, value);
+        //    }
+        //}
         /// <summary>
         /// 是否可以移交
         /// </summary>
@@ -2810,7 +2818,7 @@ namespace BP.WF
                 //map.AddTBString(NodeAttr.FK_FlowSortT, null, "FK_FlowSortT", false, true, 0, 100, 10);
 
                 map.AddTBString(NodeAttr.FrmAttr, null, "FrmAttr", false, true, 0, 300, 10);
-                map.AddTBInt(NodeAttr.IsBUnit, 0, "是否是节点模版(业务单元)", true, false);
+              //  map.AddTBInt(NodeAttr.IsBUnit, 0, "是否是节点模版(业务单元)", true, false);
                 #endregion 基本属性.
 
                 #region 审核组件.
@@ -2963,7 +2971,7 @@ namespace BP.WF
 
                 map.AddTBString(NodeAttr.FocusField, null, "焦点字段", false, false, 0, 30, 10);
                 map.AddTBString(NodeAttr.JumpToNodes, null, "可跳转的节点", true, false, 0, 100, 10, true);
-
+                map.AddTBInt(NodeAttr.JumpWay, 0, "跳转规则", false, false);
                 map.AddTBString(NodeAttr.RefOneFrmTreeType, "", "独立表单类型", false, false, 0, 100, 10);//RefOneFrmTree
 
                 map.AddTBString(NodeAttr.DoOutTimeCond, null, "执行超时的条件", false, false, 0, 200, 100);

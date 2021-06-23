@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BP.Sys;
@@ -86,6 +87,32 @@ namespace BP.WF
             //如果执行了节点发送成功时间. 
             if (doType.Equals(EventListNode.SendSuccess) == true)
                 WorkNodePlus.SendDraftSubFlow(wn); //执行自动发送子流程草稿.
+
+            #region 2021.5.30 gaoxin. 更新授权岗位:为中科软
+            //更新授权岗位:为中科软. 如果是当前节点的处理人员是按照岗位绑定的，就需要吧授权岗，写入到 Emps里面去.
+            if (doType.Equals(EventListNode.SendSuccess) == true && SystemConfig.GetValByKeyBoolen("IsEnableAuthDeptStation",false)==true)
+            {
+                // 如果这些计算人员的方式有岗位的因素，就需要把当前人员授权岗增加上去.
+                if (wn.HisNode.HisDeliveryWay== DeliveryWay.ByStation
+                    || wn.HisNode.HisDeliveryWay == DeliveryWay.ByStationOnly
+                    || wn.HisNode.HisDeliveryWay == DeliveryWay.ByStationAndEmpDept
+                    || wn.HisNode.HisDeliveryWay== DeliveryWay.ByDeptAndStation)
+                {
+                    string sql = "SELECT A.FK_Dept, A.FK_Station FROM Port_DeptEmpStation A, WF_NodeStation B ";
+                    sql += " WHERE A.FK_Emp='"+WebUser.No+"' AND A.FK_Station=B.FK_Station AND B.FK_Node="+wn.HisNode.NodeID;
+                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                       string strs = "@"+dr[0].ToString() + "_" + dr[1].ToString()+"@";
+                        if (wn.HisGenerWorkFlow.Emps.Contains("@"+strs) == true)
+                            continue;
+
+                        wn.HisGenerWorkFlow.Emps += strs;
+                    }
+                }
+            }
+            #endregion 2021.5.30. 
 
             //写入消息之前，删除所有的消息.
             if (BP.WF.Glo.IsEnableSysMessage == true)
@@ -213,6 +240,9 @@ namespace BP.WF
             int toNodeID = 0;
             if (wn.JumpToNode != null)
                 toNodeID = wn.JumpToNode.NodeID;
+
+            //执行的参数.
+            BP.WF.CCBill_FlowEvent.DoFlow(doType, wn, atPara);
 
             #region 写入消息之前,删除消息,不让其在提醒.
             if (BP.WF.Glo.IsEnableSysMessage == true)

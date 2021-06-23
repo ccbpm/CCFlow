@@ -380,7 +380,7 @@ namespace BP.WF.Template
 
                 #region 基本属性。
                 map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 4, 3);
-                map.SetHelperUrl(FlowAttr.No, "http://ccbpm.mydoc.io/?v=5404&t=17023"); //使用alert的方式显示帮助信息.
+                map.SetHelperUrl(FlowAttr.No, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661868&doc_id=31094"); //使用alert的方式显示帮助信息.
 
                // map.AddDDLEntities(FlowAttr.FK_FlowSort, null, "类别", new FlowSorts(), true);
 
@@ -405,26 +405,26 @@ namespace BP.WF.Template
                 // add 2013-02-14 唯一确定此流程的标记
                 map.AddTBString(FlowAttr.FlowMark, null, "流程标记", true, false, 0, 150, 10);
                 map.AddTBString(FlowAttr.FlowEventEntity, null, "流程事件实体", true, true, 0, 150, 10);
-                map.SetHelperUrl(FlowAttr.FlowMark, "http://ccbpm.mydoc.io/?v=5404&t=16847");
-                map.SetHelperUrl(FlowAttr.FlowEventEntity, "http://ccbpm.mydoc.io/?v=5404&t=17026");
+                map.SetHelperUrl(FlowAttr.FlowMark, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661870&doc_id=31094");
+                map.SetHelperUrl(FlowAttr.FlowEventEntity, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661871&doc_id=31094");
 
                 // add 2013-02-05.
                 map.AddTBString(FlowAttr.TitleRole, null, "标题生成规则", true, false, 0, 150, 10, true);
-                map.SetHelperUrl(FlowAttr.TitleRole, "http://ccbpm.mydoc.io/?v=5404&t=17040");
-                map.AddTBString(FlowAttr.TitleRoleNodes, null, "生成标题的节点", true, false, 0, 300, 10, false);
+                map.SetHelperUrl(FlowAttr.TitleRole, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661872&doc_id=31094");
+                map.AddTBString(FlowAttr.TitleRoleNodes, null, "生成标题的节点", true, false, 0, 300, 10);
                 string msg = "设置帮助";
-                msg += "\r\n 1. 如果为空表示只在开始节点生成标题.";
-                msg += "\r\n 2. * 表示在任意节点可生成标题.";
-                msg += "\r\n 3. 要在指定的节点重新生成标题用逗号分开,比如: 102,105,109";
-                map.SetHelperAlert(FlowAttr.TitleRoleNodes, msg);
+                //msg += "\r\n 1. 如果为空表示只在开始节点生成标题.";
+                //msg += "\r\n 2. * 表示在任意节点可生成标题.";
+                //msg += "\r\n 3. 要在指定的节点重新生成标题用逗号分开,比如: 102,105,109";
+                map.SetHelperAlert(FlowAttr.TitleRoleNodes, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661873&doc_id=31094");
 
 
 
                 map.AddBoolean(FlowAttr.IsCanStart, true, "可以独立启动否？(独立启动的流程可以显示在发起流程列表里)", true, true, true);
-                map.SetHelperUrl(FlowAttr.IsCanStart, "http://ccbpm.mydoc.io/?v=5404&t=17027");
+                map.SetHelperUrl(FlowAttr.IsCanStart, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661874&doc_id=31094");
 
                 map.AddBoolean(FlowAttr.IsFullSA, false, "是否自动计算未来的处理人？", true, true, true);
-                map.SetHelperUrl(FlowAttr.IsFullSA, "http://ccbpm.mydoc.io/?v=5404&t=17034");
+                map.SetHelperUrl(FlowAttr.IsFullSA, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661875&doc_id=31094");
 
                 //map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "为子流程时结束规则", true, true,
                 // FlowAttr.IsAutoSendSubFlowOver, "@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
@@ -432,12 +432,10 @@ namespace BP.WF.Template
                 //map.AddBoolean(FlowAttr.GuestFlowRole, false, "是否外部用户参与流程(非组织结构人员参与的流程)", true, true, false);
                 map.AddDDLSysEnum(FlowAttr.GuestFlowRole, (int)GuestFlowRole.None, "外部用户参与流程规则",
                  true, true, "GuestFlowRole", "@0=不参与@1=开始节点参与@2=中间节点参与");
+                map.SetHelperUrl(FlowAttr.GuestFlowRole, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661876&doc_id=31094");
 
-                map.SetHelperUrl(FlowAttr.GuestFlowRole, "http://ccbpm.mydoc.io/?v=5404&t=17039");
-
-                map.AddDDLSysEnum(FlowAttr.FlowAppType, (int)FlowAppType.Normal, "流程应用类型",
-                  true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
-                map.SetHelperUrl(FlowAttr.FlowAppType, "http://ccbpm.mydoc.io/?v=5404&t=17035");
+                map.AddDDLSysEnum(FlowAttr.FlowAppType, (int)FlowAppType.Normal, "流程应用类型",true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
+                //map.SetHelperUrl(FlowAttr.FlowAppType, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661877&doc_id=31094");
 
                 //map.AddDDLSysEnum(FlowAttr.SDTOfFlow, (int)TimelineRole.ByNodeSet, "时效性规则",
                 // true, true, FlowAttr.SDTOfFlow, "@0=按节点(由节点属性来定义)@1=按发起人(开始节点SysSDTOfFlow字段计算)");
@@ -446,30 +444,38 @@ namespace BP.WF.Template
                 // 草稿
                 map.AddDDLSysEnum(FlowAttr.Draft, (int)DraftRole.None, "草稿规则",
                true, true, FlowAttr.Draft, "@0=无(不设草稿)@1=保存到待办@2=保存到草稿箱");
-                map.SetHelperUrl(FlowAttr.Draft, "http://ccbpm.mydoc.io/?v=5404&t=17037");
+                map.SetHelperUrl(FlowAttr.Draft, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661878&doc_id=31094");
 
                 // add for 华夏银行.
-                map.AddDDLSysEnum(FlowAttr.FlowDeleteRole, (int)FlowDeleteRole.AdminOnly, "流程实例删除规则",
-            true, true, FlowAttr.FlowDeleteRole,
+                map.AddDDLSysEnum(FlowAttr.FlowDeleteRole, (int)FlowDeleteRole.AdminOnly, "流程实例删除规则",true, true, FlowAttr.FlowDeleteRole,
             "@0=超级管理员可以删除@1=分级管理员可以删除@2=发起人可以删除@3=节点启动删除按钮的操作员");
+                map.SetHelperUrl(FlowAttr.FlowDeleteRole, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661879&doc_id=31094");
+
 
                 //子流程结束时，让父流程自动运行到下一步。
-                map.AddBoolean(FlowAttr.IsToParentNextNode, false, "子流程结束时，让父流程自动运行到下一步", true, true);
+                map.AddBoolean(FlowAttr.IsToParentNextNode, false, "子流程结束时，让父流程自动运行到下一步", true, true,true);
+                map.SetHelperUrl(FlowAttr.IsToParentNextNode, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661880&doc_id=31094");
 
-                map.AddDDLSysEnum(FlowAttr.FlowAppType, (int)FlowAppType.Normal, "流程应用类型", true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
+                //map.AddDDLSysEnum(FlowAttr.FlowAppType, (int)FlowAppType.Normal, "流程应用类型", true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
+                //map.SetHelperUrl(FlowAttr.FlowAppType, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661877&doc_id=31094");
+
                 map.AddTBString(FlowAttr.HelpUrl, null, "帮助文档", true, false, 0, 100, 10, true);
 
 
                 //为 莲荷科技增加一个系统类型, 用于存储当前所在流程树的第2级流程树编号.
                 map.AddTBString(FlowAttr.SysType, null, "系统类型", false, false, 0, 50, 10, false);
+
+
                 map.AddTBString(FlowAttr.Tester, null, "发起测试人", true, false, 0, 100, 10, true);
+                map.SetHelperUrl(FlowAttr.Tester, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661882&doc_id=31094");
 
                 sql = "SELECT No,Name FROM Sys_EnumMain WHERE No LIKE 'Flow_%' ";
                 map.AddDDLSQL("NodeAppType", null, "业务类型枚举(可为Null)", sql, true);
 
                 // add 2014-10-19.
                 map.AddDDLSysEnum(FlowAttr.ChartType, (int)FlowChartType.Icon, "节点图形类型", true, true,
-                    "ChartType", "@0=几何图形@1=肖像图片");
+                    "ChartType", "@0=几何图形@1=肖像图片"); 
+                map.SetHelperUrl(FlowAttr.ChartType, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661883&doc_id=31094");
 
                 map.AddTBString(FlowAttr.HostRun, null, "运行主机(IP+端口)", true, false, 0, 40, 10, true);
                 #endregion 基本属性。
@@ -479,7 +485,7 @@ namespace BP.WF.Template
                 //批量发起 add 2013-12-27. 
                 map.AddBoolean(FlowAttr.IsBatchStart, false, "是否可以批量发起流程？(如果是就要设置发起的需要填写的字段,多个用逗号分开)", true, true, true);
                 map.AddTBString(FlowAttr.BatchStartFields, null, "发起字段s", true, false, 0, 100, 10, true);
-                map.SetHelperUrl(FlowAttr.IsBatchStart, "http://ccbpm.mydoc.io/?v=5404&t=17047");
+                map.SetHelperUrl(FlowAttr.IsBatchStart, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3952886&doc_id=31094");
 
                 //add 2013-05-22.
                 map.AddTBString(FlowAttr.HistoryFields, null, "历史查看字段", true, false, 0, 100, 10, true);
@@ -492,26 +498,26 @@ namespace BP.WF.Template
                 map.SetHelperAlert(FlowAttr.IsStartInMobile, "用于控制手机端流程发起列表.");
 
                 map.AddBoolean(FlowAttr.IsMD5, false, "是否是数据防止篡改(MD5数据加密防篡改)", true, true, true);
-                map.SetHelperUrl(FlowAttr.IsMD5, "http://ccbpm.mydoc.io/?v=5404&t=17028");
+                map.SetHelperUrl(FlowAttr.IsMD5, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3952971&doc_id=31094");
 
                 map.AddBoolean(FlowAttr.IsJM, false, "是否是数据加密流程(把所有字段加密存储)", true, true, true);
-                map.SetHelperUrl(FlowAttr.IsJM, "http://ccbpm.mydoc.io/?v=5404&t=17028");
+                map.SetHelperUrl(FlowAttr.IsJM, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3952997&doc_id=31094");
 
                 // 数据存储.
                 map.AddDDLSysEnum(FlowAttr.DataStoreModel, (int)DataStoreModel.ByCCFlow, "数据存储", true, true, FlowAttr.DataStoreModel, "@0=数据轨迹模式@1=数据合并模式");
-                map.SetHelperUrl(FlowAttr.DataStoreModel, "http://ccbpm.mydoc.io/?v=5404&t=17038");
+                map.SetHelperUrl(FlowAttr.DataStoreModel, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3953009&doc_id=31094");
 
                 map.AddTBString(FlowAttr.PTable, null, "流程数据存储表", true, false, 0, 30, 10);
-                map.SetHelperUrl(FlowAttr.PTable, "http://ccbpm.mydoc.io/?v=5404&t=17897");
+                map.SetHelperUrl(FlowAttr.PTable, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=4000827&doc_id=31094");
 
 
                 //map.SetHelperBaidu(FlowAttr.HistoryFields, "ccflow 历史查看字段");
                 map.AddTBString(FlowAttr.FlowNoteExp, null, "备注的表达式", true, false, 0, 100, 10, true);
-                map.SetHelperUrl(FlowAttr.FlowNoteExp, "http://ccbpm.mydoc.io/?v=5404&t=17043");
+                map.SetHelperUrl(FlowAttr.FlowNoteExp, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3953022&doc_id=31094");
 
                 //add  2013-08-30.
                 map.AddTBString(FlowAttr.BillNoFormat, null, "单据编号格式", true, false, 0, 50, 10, false);
-                map.SetHelperUrl(FlowAttr.BillNoFormat, "http://ccbpm.mydoc.io/?v=5404&t=17041");
+                map.SetHelperUrl(FlowAttr.BillNoFormat, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3953012&doc_id=31094");
 
                 // add 2019-09-25 by zhoupeng
                 map.AddTBString(FlowAttr.BuessFields, null, "关键业务字段", true, false, 0, 100, 10, false);
@@ -1487,7 +1493,7 @@ namespace BP.WF.Template
                 gwf.TaskSta = TaskSta.None;/**取消共享模式*/
                 gwf.FK_Dept = rpt.FK_Dept;
 
-                Dept dept = new Dept(empStarter.FK_Dept);
+                Dept dept = new Dept(rpt.FK_Dept);
 
                 gwf.DeptName = dept.Name;
                 gwf.PRI = 1;
@@ -2097,7 +2103,7 @@ namespace BP.WF.Template
             FlowSort fs = new FlowSort(fl.FK_FlowSort);
             if(SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
-                if (fs.ParentNo.Equals(WebUser.OrgNo) == true)
+                if (fs.ParentNo.Equals(WebUser.OrgNo) == true || fs.ParentNo.Equals("100") == true)
                     this.SysType = fl.FK_FlowSort;
                 else
                 {

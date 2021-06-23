@@ -471,7 +471,7 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10, false);
                 map.AddTBString(NodeAttr.FK_Flow, null, "FK_Flow", false, false, 0, 4, 10);
                 map.AddDDLSysEnum(NodeAttr.CCWriteTo, 0, "抄送数据写入规则", true, true, NodeAttr.CCWriteTo,"@0=写入抄送列表@1=写入待办@2=写入待办与抄送列表");
-                map.SetHelperUrl(NodeAttr.CCWriteTo, "http://ccbpm.mydoc.io/?v=5404&t=17976"); //增加帮助.
+                map.SetHelperUrl(NodeAttr.CCWriteTo, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3580017&doc_id=31094"); //增加帮助.
 
 
                 map.AddBoolean(CCAttr.CCIsAttr, false, "按表单字段抄送", true, true, true);

@@ -961,6 +961,25 @@ namespace BP.WF.Template
             }
         }
 
+
+        public string QRCodeLab
+        {
+            get
+            {
+                return this.GetValStrByKey(BtnAttr.QRCodeLab);
+            }
+        }
+        /// <summary>
+        /// 二维码规则
+        /// </summary>
+        public int QRCodeRole
+        {
+            get
+            {
+                return this.GetValIntByKey(BtnAttr.QRCodeRole);
+            }
+        }
+
         #endregion
 
         #region 构造方法
@@ -1034,6 +1053,10 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.CCLab, "抄送", "抄送按钮标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.CCRole, 0, "抄送规则", true, true, BtnAttr.CCRole);
 
+                map.AddTBString(BtnAttr.QRCodeLab, "二维码", "二维码标签", true, false, 0, 50, 10);
+                map.AddDDLSysEnum(BtnAttr.QRCodeRole, 0, "二维码规则", true, true, BtnAttr.QRCodeRole,
+                    "@0=无@1=查看流程表单-无需权限@2=查看流程表单-需要登录@3=外部账户协作模式处理工作");
+
                 //  map.AddBoolean(BtnAttr, true, "是否启用", true, true);
 
                 map.AddTBString(BtnAttr.ShiftLab, "移交", "移交按钮标签", true, false, 0, 50, 10);
@@ -1060,9 +1083,8 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.TrackLab, "轨迹", "轨迹按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.TrackEnable, true, "是否启用", true, true);
 
-                map.AddTBString(BtnAttr.SelectAccepterLab, "接受人", "接受人按钮标签", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(BtnAttr.SelectAccepterEnable, 0, "方式",
-          true, true, BtnAttr.SelectAccepterEnable);
+                //map.AddTBString(BtnAttr.SelectAccepterLab, "接受人", "接受人按钮标签", true, false, 0, 50, 10);
+                //map.AddDDLSysEnum(BtnAttr.SelectAccepterEnable, 0, "方式",true, true, BtnAttr.SelectAccepterEnable);
 
                 // map.AddBoolean(BtnAttr.SelectAccepterEnable, false, "是否启用", true, true);
                 //map.AddTBString(BtnAttr.OptLab, "选项", "选项按钮标签", true, false, 0, 50, 10);

@@ -75,6 +75,7 @@ namespace BP.WF
                 //这两个变量在累加表单用到.
                 FrmNode frmNode = new FrmNode();
                 Flow flow = new Flow(fk_flow);
+                myds.Tables.Add(flow.ToDataTableField("WF_Flow"));
 
                 if (nd.HisFormType == NodeFormType.RefOneFrmTree
                     || nd.HisFormType == NodeFormType.FoolTruck
@@ -117,6 +118,23 @@ namespace BP.WF
                                     dr["IsSigan"] = 0;
 
                                 dr["DefVal"] = item.DefVal;
+                            }
+                        }
+
+                        //从表权限的设置
+                        MapDtls mapdtls = new MapDtls();
+                        mapdtls.Retrieve(MapDtlAttr.FK_MapData, nd.NodeFrmID+"_"+frmNode.FK_Node);
+                        foreach (DataRow dr in myds.Tables["Sys_MapDtl"].Rows)
+                        {
+                            foreach (MapDtl mapDtl in mapdtls)
+                            {
+                                string no = dr["No"].ToString() + "_" + frmNode.FK_Node;
+                                if (no.Equals(mapDtl.No) == true)
+                                {
+                                    dr["IsView"] = mapDtl.IsView==true?1:0;
+                                    break;
+                                }
+
                             }
                         }
                     }
@@ -860,12 +878,12 @@ namespace BP.WF
                 #endregion
 
                 #region 增加流程节点表单绑定信息.
+                myds.Tables.Add(frmNode.ToDataTableField("WF_FrmNode"));
                 if (nd.HisFormType == NodeFormType.RefOneFrmTree)
                 {
                     /* 独立流程节点表单. */
                     nd.WorkID = workID; //为获取表单ID ( NodeFrmID )提供参数.
-                    myds.Tables.Add(frmNode.ToDataTableField("WF_FrmNode"));
-
+                  
                     //设置单据编号,对于绑定的表单.
                     if (nd.IsStartNode == true && DataType.IsNullOrEmpty(frmNode.BillNoField) == false)
                     {

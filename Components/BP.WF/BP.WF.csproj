@@ -107,7 +107,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentFTP">
+    <Reference Include="FluentFTP, Version=33.1.7.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\FluentFTP.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=1.0.0.999, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
@@ -158,6 +159,20 @@
   <ItemGroup>
     <Compile Include="AppClass.cs" />
     <Compile Include="CCBill\Template\DictFlow.cs" />
+    <Compile Include="CCBill\Template\GroupMethod.cs" />
+    <Compile Include="CCBill\Template\MethodBill.cs" />
+    <Compile Include="CCBill\Sys\Func.cs" />
+    <Compile Include="CCBill\Template\MethodFlowEtc.cs" />
+    <Compile Include="CCBill\Template\MethodFlowNewEntity.cs" />
+    <Compile Include="CCBill\Template\MethodFlowBaseData.cs" />
+    <Compile Include="CCBill\Template\MethodFlow.cs" />
+    <Compile Include="CCBill\Template\MethodQRCode.cs" />
+    <Compile Include="CCBill\Template\MethodSingleDictGenerWorkFlow.cs" />
+    <Compile Include="CCBill\FrmBBS.cs" />
+    <Compile Include="CCBill\WF_CCBill_Admin_CreateFunc.cs" />
+    <Compile Include="CCBill\WF_CCBill_OptComponents.cs" />
+    <Compile Include="CCBill\WF_CCBill_OptOneFlow.cs" />
+    <Compile Include="CCBill\WF_Methd.cs" />
     <Compile Include="Data\AutoRptDtl.cs" />
     <Compile Include="Data\AutoRpt.cs" />
     <Compile Include="Data\CCListExt.cs" />
@@ -196,6 +211,7 @@
     <Compile Include="DTS\CheckErr\CheckDirCondModel.cs" />
     <Compile Include="DTS\DTS_SendMsgToWarningWorker.cs" />
     <Compile Include="DTS\Service\Auto_Rpt_Dtl_DTS.cs" />
+    <Compile Include="DTS\Service\AddAuthStation.cs" />
     <Compile Include="DTS\Service\GenerAllEmpsStartFlows.cs" />
     <Compile Include="DTS\Service\AutoRun_WhoExeIt.cs" />
     <Compile Include="DTS\CheckErr\Tool_RepairTodoList.cs" />
@@ -264,6 +280,19 @@
     <Compile Include="CCBill\WF_CCBill_Opt.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="GloSQL.cs" />
+    <Compile Include="GPM\Home\EnumLab.cs" />
+    <Compile Include="GPM\Home\WindowTemplate.cs" />
+    <Compile Include="GPM\Menu2020\DeptMenu.cs" />
+    <Compile Include="GPM\Menu2020\EmpMenu.cs" />
+    <Compile Include="GPM\Menu2020\EnumLab.cs" />
+    <Compile Include="GPM\Menu2020\Group.cs" />
+    <Compile Include="GPM\Menu2020\GroupDept.cs" />
+    <Compile Include="GPM\Menu2020\GroupEmp.cs" />
+    <Compile Include="GPM\Menu2020\GroupMenu.cs" />
+    <Compile Include="GPM\Menu2020\GroupStation.cs" />
+    <Compile Include="GPM\Menu2020\StationMenu.cs" />
+    <Compile Include="GPM\Home\Window.cs" />
+    <Compile Include="GPM\WF_GPM_CreateMenu.cs" />
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -277,6 +306,8 @@
     <Compile Include="HttpHandler\WF_Admin_CCFormDesigner_FrmEvent.cs" />
     <Compile Include="HttpHandler\WF_Admin_Cond2020.cs" />
     <Compile Include="HttpHandler\WF_Admin_DeveloperDesigner.cs" />
+    <Compile Include="GPM\WF_GPM.cs" />
+    <Compile Include="HttpHandler\WF_Portal.cs" />
     <Compile Include="HttpHandler\WF_CCForm_Components.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_Components.cs.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_ImpExp.cs" />
@@ -297,6 +328,7 @@
     <Compile Include="HttpHandler\WF_Admin_MobileFrmDesigner.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner_FlowDevModel.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_StyletDfine.cs" />
+    <Compile Include="HttpHandler\WF_WorkOpt_QRCode.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_Batch.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_StartGuide.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_Selecter.cs" />
@@ -326,10 +358,15 @@
     <Compile Include="HttpHandler\GPMPage.cs" />
     <Compile Include="HttpHandler\WF_Admin_Multilingual.cs" />
     <Compile Include="HttpWebResponseUtility.cs" />
+    <Compile Include="GPM\Menu2020\Menu.cs" />
+    <Compile Include="GPM\Menu2020\Module.cs" />
+    <Compile Include="GPM\Menu2020\MySystem.cs" />
+    <Compile Include="GPM\Menu2020\PortPage.cs" />
     <Compile Include="OverrideFile.cs" />
     <Compile Include="Port\Admin2\OrgAdminer.cs" />
     <Compile Include="Port\Admin2\User.cs" />
     <Compile Include="Port\DeptFlowSearch.cs" />
+    <Compile Include="Port\User.cs" />
     <Compile Include="Template\CondEnum.cs" />
     <Compile Include="Template\EnumLab.cs" />
     <Compile Include="Template\FlowOrg.cs" />
@@ -356,7 +393,6 @@
     </Compile>
     <Compile Include="Data\FastInput.cs" />
     <Compile Include="Template\FrmNodeExt.cs" />
-    <Compile Include="Template\FrmNodeJiJian.cs" />
     <Compile Include="Template\MapDataURL.cs" />
     <Compile Include="Template\MapDtlExt.cs" />
     <Compile Include="Template\MapFrmReferencePanel.cs" />
@@ -409,6 +445,7 @@
     <Compile Include="WeiXin\WeiXinEntity.cs" />
     <Compile Include="WeiXin\WeiXinGZHEntity.cs" />
     <Compile Include="WeiXin\WXBizMsgCrypt.cs" />
+    <Compile Include="WF\CCBill_FlowEvent.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
     <Compile Include="DTS\GenerTitle.cs" />
     <Compile Include="DTS\ClearRepLineLab.cs" />
@@ -615,8 +652,10 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="GPM\Menu2020\readme.txt" />
     <Content Include="Readme.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

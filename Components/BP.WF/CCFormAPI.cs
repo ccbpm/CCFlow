@@ -852,7 +852,7 @@ namespace BP.WF
             MapAttrs dtlAttrs = new MapAttrs(dtl.No);
             foreach (MapAttr attr in dtlAttrs)
             {
-                #region 修改区分大小写. Oracle
+                /*#region 修改区分大小写. Oracle
                 if (DBType.Oracle == SystemConfig.AppCenterDBType)
                 {
                     foreach (DataColumn dr in dtDtl.Columns)
@@ -916,7 +916,7 @@ namespace BP.WF
                         }
                     }
                 }
-                #endregion 修改区分大小写.
+                #endregion 修改区分大小写.*/
 
                 if (attr.UIContralType == UIContralType.TB)
                     continue;
@@ -987,7 +987,8 @@ namespace BP.WF
 
                 //增加排序.
                 qo.addOrderBy(GEDtlAttr.OID);
-                return qo.DoQueryToTable();
+                qo.DoQuery();
+                return dtls.ToDataTableField();
             }
             catch (Exception ex)
             {

@@ -2272,24 +2272,29 @@ namespace BP.WF
                         rdt = rdt.Substring(0, 10);
                 }
                 //先判断节点中水印的设置
-                string words = "";
+                //判断是否打印水印
+                bool isPrintShuiYin = SystemConfig.GetValByKeyBoolen("IsPrintBackgroundWord", false);
                 Node nd = null;
                 if (gwf != null)
-                {
                     nd = new Node(gwf.FK_Node);
+                if (isPrintShuiYin == true)
+                {
+                    string words = "";
                     if (nd.NodeID != 0)
                         words = nd.ShuiYinModle;
+
+                    if (DataType.IsNullOrEmpty(words) == true)
+                        words = Glo.PrintBackgroundWord;
+                    words = words.Replace("@RDT", rdt);
+
+                    if (words.Contains("@") == true)
+                        words = Glo.DealExp(words, en);
+
+                    string templateFilePathMy = SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\";
+                    WaterImageManage wim = new WaterImageManage();
+                    wim.DrawWords(templateFilePathMy + "ShuiYin.png", words, float.Parse("0.15"), ImagePosition.Center, path + "\\ShuiYin.png");
                 }
-                if (DataType.IsNullOrEmpty(words) == true)
-                    words = Glo.PrintBackgroundWord;
-                words = words.Replace("@RDT", rdt);
-
-                if (words.Contains("@") == true)
-                    words = Glo.DealExp(words, en);
-
-                string templateFilePathMy = SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\";
-                WaterImageManage wim = new WaterImageManage();
-                wim.DrawWords(templateFilePathMy + "ShuiYin.png", words, float.Parse("0.15"), ImagePosition.Center, path + "\\ShuiYin.png");
+               
                 #endregion
 
                 //生成 表单的 html.

@@ -143,6 +143,23 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// webapi
+        /// </summary>
+        public string DTSWebAPI
+        {
+            get
+            {
+                string str = this.GetParaString(FlowAttr.DTSWebAPI);
+                if (DataType.IsNullOrEmpty(str))
+                    return "local";
+                return str;
+            }
+            set
+            {
+                this.SetPara(FlowAttr.DTSWebAPI, value);
+            }
+        }
+        /// <summary>
         /// 业务表
         /// </summary>
         public string DTSBTable
@@ -1920,7 +1937,12 @@ namespace BP.WF
                 msg += "@编号:  " + this.No + " 名称:" + this.Name + " , 存储表:" + this.PTable;
 
                 msg += "@信息:开始检查节点流程报表.";
-                this.DoCheck_CheckRpt(this.HisNodes);
+                string str = this.DoCheck_CheckRpt(this.HisNodes);
+                if (DataType.IsNullOrEmpty(str) == false)
+                {
+                    msg += "@错误:表单枚举,外键字段UIBindKey信息丢失,请描述该字段的设计过程，反馈给开发人员,并删除错误字段重新在表单上创建。错误字段信息如下:";
+                    msg += "@[" + str + "]";
+                }
 
                 #region 检查焦点字段设置是否还有效 
                 msg += "@信息:开始检查节点的焦点字段";
@@ -2951,8 +2973,9 @@ namespace BP.WF
         /// 检查数据报表.
         /// </summary>
         /// <param name="nds"></param>
-        private void DoCheck_CheckRpt(Nodes nds)
+        private string DoCheck_CheckRpt(Nodes nds)
         {
+            string msg = "";
             string fk_mapData = "ND" + int.Parse(this.No) + "Rpt";
             string flowId = int.Parse(this.No).ToString();
 
@@ -2979,7 +3002,7 @@ namespace BP.WF
             }
 
             //所有节点表单字段的合集.
-            sql = "SELECT MyPK, KeyOfEn,DefVal FROM Sys_MapAttr WHERE FK_MapData IN (" + ndsstrs + ")";
+            sql = "SELECT MyPK, KeyOfEn,DefVal,Name,LGType,MyDataType,UIContralType,UIBindKey,FK_MapData FROM Sys_MapAttr WHERE FK_MapData IN (" + ndsstrs + ")";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             //求已经存在的字段集合。
@@ -2995,6 +3018,18 @@ namespace BP.WF
             //遍历 - 所有节点表单字段的合集
             foreach (DataRow dr in dt.Rows)
             {
+                //如果是枚举，外键字段，判断是否判定了对应的枚举和外键
+                Int32 lgType = Int32.Parse(dr["LGType"].ToString());
+                Int32 contralType  = Int32.Parse(dr["UIContralType"].ToString());
+
+                if((lgType == 2 && contralType==1) || (lgType==0 &&contralType == 1 && Int32.Parse(dr["MyDataType"].ToString())==1))
+                {
+                    if (dr["UIBindKey"] == null || DataType.IsNullOrEmpty(dr["UIBindKey"].ToString()) == true)
+                        msg += "表单" + dr["FK_MapData"].ToString() + "中,外键/外部数据源字段:" + dr["Name"].ToString() +"("+ dr["KeyOfEn"].ToString() + ");";
+                }
+                if(lgType==1&&(dr["UIBindKey"] == null || DataType.IsNullOrEmpty(dr["UIBindKey"].ToString()) == true))
+                    msg += "表单"+dr["FK_MapData"].ToString()+"中,枚举字段:"+ dr["Name"].ToString() + "(" + dr["KeyOfEn"].ToString() + ");";
+
                 if (pks.Contains("@" + dr["KeyOfEn"].ToString() + "@") == true)
                     continue;
 
@@ -3534,6 +3569,7 @@ namespace BP.WF
             DBAccess.RunSQL("UPDATE Sys_MapAttr SET Name='活动时间' WHERE FK_MapData='ND" + flowId + "Rpt' AND KeyOfEn='CDT'");
             DBAccess.RunSQL("UPDATE Sys_MapAttr SET Name='参与者' WHERE FK_MapData='ND" + flowId + "Rpt' AND KeyOfEn='Emps'");
             #endregion 尾后处理.
+            return msg;
         }
         #endregion 其他公用方法1
 
@@ -4378,6 +4414,12 @@ namespace BP.WF
             if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = WebUser.OrgNo;
 
+            //清空WF_Emp中的StartFlow 
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows ='' ");
+            else
+                DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows ='' WHERE OrgNo='" + BP.Web.WebUser.OrgNo + "'");
+
             return base.beforeInsert();
         }
         /// <summary>
@@ -4532,7 +4574,6 @@ namespace BP.WF
             else
                 DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows ='' WHERE OrgNo='" + BP.Web.WebUser.OrgNo + "'");
 
-
             //删除数据的接口.
             DoDelData();
 
@@ -4540,7 +4581,6 @@ namespace BP.WF
 
             return "执行成功.";
         }
-
         /// <summary>
         /// 向上移动
         /// </summary>
@@ -4746,6 +4786,13 @@ namespace BP.WF
             qo.AddWhere(FlowAttr.FK_FlowSort, flowSort);
             qo.addOrderBy(FlowAttr.No);
             qo.DoQuery();
+        }
+        public override int RetrieveAll()
+        {
+            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
+                return this.Retrieve(FlowSortAttr.OrgNo, BP.Web.WebUser.OrgNo, FlowSortAttr.Idx);
+            int i = base.RetrieveAll(FlowSortAttr.Idx);
+            return i;
         }
         #endregion
 

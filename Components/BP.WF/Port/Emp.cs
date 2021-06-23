@@ -32,8 +32,9 @@ namespace BP.WF.Port
         /// 手机号码
         /// </summary>
         public const string Tel = "Tel";
-		#endregion 
-	}
+        
+        #endregion
+    }
 	/// <summary>
 	/// Emp 的摘要说明。
 	/// </summary>
@@ -109,6 +110,7 @@ namespace BP.WF.Port
                 this.SetValByKey(EmpAttr.Tel, value);
             }
         }
+        
         #endregion
 
         public bool CheckPass(string pass)
@@ -175,6 +177,7 @@ namespace BP.WF.Port
                 map.AddDDLEntities(EmpAttr.FK_Dept, null, "部门", new BP.Port.Depts(), true);
                 map.AddTBString(EmpAttr.SID, null, "SID", false, false, 0, 20, 10);
                 map.AddTBString(EmpAttr.Tel, null, "手机号码", false, false, 0, 11, 30);
+               
                 #endregion 字段
 
                 map.AddSearchAttr(EmpAttr.FK_Dept); //查询条件.

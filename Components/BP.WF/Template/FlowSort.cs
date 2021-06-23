@@ -112,6 +112,34 @@ namespace BP.WF.Template
             }
         }
 
+        #region 创建节点.
+        /// <summary>
+        /// 创建同级目录.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string DoCreateSameLevelNodeMy(string name)
+        {
+            EntityTree en = this.DoCreateSameLevelNode(name);
+            en.Name = name;
+            en.Update();
+            return en.No;
+        }
+        /// <summary>
+        /// 创建下级目录.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string DoCreateSubNodeMy(string name)
+        {
+            EntityTree en = this.DoCreateSubNode(name);
+            en.Name = name;
+            en.Update();
+            return en.No;
+        }
+        #endregion 创建节点.
+
+
         /// <summary>
         /// 创建的时候，给他增加一个OrgNo。
         /// </summary>
@@ -123,10 +151,6 @@ namespace BP.WF.Template
 
             return base.beforeInsert();
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         protected override bool beforeUpdate()
         {
             //更新流程引擎控制表.
@@ -144,7 +168,30 @@ namespace BP.WF.Template
             DBAccess.RunSQL(sql);
             return base.beforeUpdate();
         }
+        /// <summary>
+        /// 删除之前的逻辑  @hongyan
+        /// </summary>
+        /// <returns></returns>
+        protected override bool beforeDelete()
+        {
+            //检查是否有流程？
+            Paras ps = new Paras();
+            ps.SQL = "SELECT COUNT(*) FROM WF_Flow WHERE FK_FlowSort=" + SystemConfig.AppCenterDBVarStr + "fk_flowSort";
+            ps.Add("fk_flowSort", this.No);
+            //string sql = "SELECT COUNT(*) FROM WF_Flow WHERE FK_FlowSort='" + fk_flowSort + "'";
+            if (DBAccess.RunSQLReturnValInt(ps) != 0)
+                throw new Exception( "err@该目录下有流程，您不能删除。");
 
+            //检查是否有子目录？
+            ps = new Paras();
+            ps.SQL = "SELECT COUNT(*) FROM WF_FlowSort WHERE ParentNo=" + SystemConfig.AppCenterDBVarStr + "ParentNo";
+            ps.Add("ParentNo", this.No);
+            //sql = "SELECT COUNT(*) FROM WF_FlowSort WHERE ParentNo='" + fk_flowSort + "'";
+            if (DBAccess.RunSQLReturnValInt(ps) != 0)
+                throw new Exception ("err@该目录下有子目录，您不能删除。");
+
+            return base.beforeDelete();
+        }
     }
     /// <summary>
     /// 流程类别
@@ -165,6 +212,10 @@ namespace BP.WF.Template
                 return new FlowSort();
             }
         }
+        /// <summary>
+        /// @hongyan.
+        /// </summary>
+        /// <returns></returns>
         public override int RetrieveAll()
         {
             if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
@@ -174,17 +225,24 @@ namespace BP.WF.Template
             if (i == 0)
             {
                 FlowSort fs = new FlowSort();
+                fs.Name = "流程树";
+                fs.No = "100";
+                fs.ParentNo = "0";
+                fs.Insert();
+
+                fs = new FlowSort();
                 fs.Name = "公文类";
                 fs.No = "01";
+                fs.ParentNo = "100";
                 fs.Insert();
 
                 fs = new FlowSort();
                 fs.Name = "办公类";
                 fs.No = "02";
+                fs.ParentNo = "100";
                 fs.Insert();
-                i = base.RetrieveAll();
+                i = base.RetrieveAll(FlowSortAttr.Idx);
             }
-
             return i;
         }
 

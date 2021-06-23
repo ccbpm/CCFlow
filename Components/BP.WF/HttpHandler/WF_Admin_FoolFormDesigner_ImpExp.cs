@@ -293,11 +293,15 @@ namespace BP.WF.HttpHandler
         /// <param name="isClear">是否清楚现有的元素？</param>
         /// <param name="isSetReadonly">是否设置为只读？</param>
         /// <returns>执行结果</returns>
-        public string Imp_CopyFrm(string frmID = null)
+        public string Imp_CopyFrm(string frmID = null, string fromFrmID=null)
         {
             try
             {
-                string fromMapData = frmID;
+                if (frmID == null)
+                    frmID = this.FK_MapData;
+
+
+                string fromMapData = fromFrmID;
                 if (fromMapData == null)
                     fromMapData = this.GetRequestVal("FromFrmID");
 
@@ -305,24 +309,24 @@ namespace BP.WF.HttpHandler
                 bool isSetReadonly = this.GetRequestValBoolen("IsSetReadonly");
 
                 //首先初始化本部门的.
-                MapData mymd = new MapData(this.FK_MapData);
+                MapData mymd = new MapData(frmID);
                 string frmSort = mymd.FK_FormTree; //表单类别,防止表单类别冲掉,导致表单树看不到他.
 
 
                 MapData md = new MapData(fromMapData);
-                MapData.ImpMapData(this.FK_MapData, BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(md.No));
+                MapData.ImpMapData(frmID, BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(md.No));
 
                 //设置为只读模式.
                 if (isSetReadonly == true)
-                    MapData.SetFrmIsReadonly(this.FK_MapData);
+                    MapData.SetFrmIsReadonly(frmID);
 
                 //清空缓存
-                mymd = new MapData(this.FK_MapData);
+                mymd = new MapData(frmID);
 
                 // 如果是节点表单，就要执行一次修复，以免漏掉应该有的系统字段。
-                if (this.FK_MapData.Contains("ND") == true)
+                if (frmID.Contains("ND") == true)
                 {
-                    string fk_node = this.FK_MapData.Replace("ND", "");
+                    string fk_node = frmID.Replace("ND", "");
                     Node nd = new Node(int.Parse(fk_node));
                     nd.RepareMap(nd.HisFlow);
 

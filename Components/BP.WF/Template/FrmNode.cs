@@ -77,10 +77,6 @@ namespace BP.WF.Template
         /// </summary>
         public const string IsEnable = "IsEnable";
         /// <summary>
-        /// 关键字段
-        /// </summary>
-        public const string GuanJianZiDuan = "GuanJianZiDuan";
-        /// <summary>
         /// 汇总
         /// </summary>
         public const string HuiZong = "HuiZong";
@@ -427,20 +423,7 @@ namespace BP.WF.Template
                 this.SetValByKey(FrmNodeAttr.IsEnable, value);
             }
         }
-        /// <summary>
-        /// 关键字段
-        /// </summary>
-        public string GuanJianZiDuan
-        {
-            get
-            {
-                return this.GetValStringByKey(FrmNodeAttr.GuanJianZiDuan);
-            }
-            set
-            {
-                this.SetValByKey(FrmNodeAttr.GuanJianZiDuan, value);
-            }
-        }
+        
         /// <summary>
         /// 显示的名字
         /// </summary>
@@ -738,7 +721,7 @@ namespace BP.WF.Template
                 //是否显示
                 map.AddTBInt(FrmNodeAttr.IsEnable, 1, "是否显示", true, false);
 
-                map.AddTBString(FrmNodeAttr.GuanJianZiDuan, null, "关键字段", true, true, 0, 20, 20);
+               // map.AddTBString(FrmNodeAttr.GuanJianZiDuan, null, "关键字段", true, true, 0, 20, 20);
 
                 //@2019.09.30 by zhoupeng.
                 map.AddTBString(FrmNodeAttr.FrmNameShow, null, "表单显示名字", true, false, 0, 100, 20);

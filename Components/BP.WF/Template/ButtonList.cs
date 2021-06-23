@@ -115,6 +115,16 @@ namespace BP.WF.Template
         /// 抄送规则
         /// </summary>
         public const string CCRole = "CCRole";
+
+        /// <summary>
+        /// 二维码
+        /// </summary>
+        public const string QRCodeLab = "QRCodeLab";
+        /// <summary>
+        /// 二维码规则
+        /// </summary>
+        public const string QRCodeRole = "QRCodeRole";
+
         /// <summary>
         /// 删除
         /// </summary>

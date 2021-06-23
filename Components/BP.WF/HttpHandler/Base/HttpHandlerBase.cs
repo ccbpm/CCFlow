@@ -40,6 +40,7 @@ namespace BP.WF.HttpHandler
                 HttpContextHelper.Response.Headers["Access-Control-Allow-Credentials"] = "true";
                 HttpContextHelper.Response.Headers["Access-Control-Allow-Headers"] = "x-requested-with,content-type";
 
+
                 //if (!string.IsNullOrEmpty(allAccess_Control_Allow_Origin))
                 //{
                 //    var origin = HttpContextHelper.Request.Headers["Origin"];

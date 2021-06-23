@@ -74,6 +74,10 @@ namespace BP.WF.Template
         /// 顺序号
         /// </summary>
         public const string Idx = "Idx";
+        /// <summary>
+        /// 数据源
+        /// </summary>
+        public const string FK_DBSrc = "FK_DBSrc";
 
         #region 属性。
         /// <summary>
@@ -211,6 +215,20 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(CondAttr.RefFlowNo, value);
+            }
+        }
+        /// <summary>
+        /// 数据源
+        /// </summary>
+        public string FK_DBSrc
+        {
+            get
+            {
+                return this.GetValStringByKey(CondAttr.FK_DBSrc);
+            }
+            set
+            {
+                this.SetValByKey(CondAttr.FK_DBSrc, value);
             }
         }
         /// <summary>
@@ -707,7 +725,14 @@ namespace BP.WF.Template
                         }
                     }
 
-                    int result = DBAccess.RunSQLReturnValInt(sql, -1);
+                    int result = 0;
+                    //如果是本地数据源
+                    if (this.FK_DBSrc == "local")
+                        result = DBAccess.RunSQLReturnValInt(sql, -1);
+                    else {
+                        SFDBSrc dbSrc = new SFDBSrc(this.FK_DBSrc);
+                        result = dbSrc.RunSQLReturnInt(sql,0);
+                    }
                     if (result <= 0)
                         return false;
 
@@ -747,7 +772,15 @@ namespace BP.WF.Template
                         }
                     }
 
-                    int result = DBAccess.RunSQLReturnValInt(sql, -1);
+                    int result = 0;
+                    //如果是本地数据源
+                    if (this.FK_DBSrc == "local")
+                        result = DBAccess.RunSQLReturnValInt(sql, -1);
+                    else
+                    {
+                        SFDBSrc dbSrc = new SFDBSrc(this.FK_DBSrc);
+                        result = dbSrc.RunSQLReturnInt(sql, 0);
+                    }
                     if (result <= 0)
                         return false;
 

@@ -9,10 +9,10 @@ using BP.Sys;
 
 namespace BP.CCBill.Template
 {
-	/// <summary>
-	/// 表单方法属性
-	/// </summary>
-    public class MethodAttr:EntityMyPKAttr
+    /// <summary>
+    /// 表单方法属性
+    /// </summary>
+    public class MethodAttr : EntityNoNameAttr
     {
         #region 基本属性.
         /// <summary>
@@ -20,37 +20,50 @@ namespace BP.CCBill.Template
         /// </summary>
         public const string FrmID = "FrmID";
         /// <summary>
+        /// 分组ID
+        /// </summary>
+        public const string GroupID = "GroupID";
+        /// <summary>
         /// 方法ID
         /// </summary>
         public const string MethodID = "MethodID";
         /// <summary>
-        /// 方法名
+        /// 图标
         /// </summary>
-        public const string MethodName = "MethodName";
+        public const string Icon = "Icon";
         /// <summary>
         /// 方法类型
         /// </summary>
         public const string RefMethodType = "RefMethodType";
         /// <summary>
+        /// 方法打开模式
+        /// </summary>
+        public const string MethodModel = "MethodModel";
+        /// <summary>
+        /// 标记
+        /// </summary>
+        public const string Mark = "Mark";
+        /// <summary>
+        /// tag
+        /// </summary>
+        public const string Tag1 = "Tag1";
+        /// <summary>
         /// 显示方式.
         /// </summary>
         public const string ShowModel = "ShowModel";
-        /// <summary>
-        /// 类型
-        /// </summary>
-        public const string ExeType = "ExeType";
         /// <summary>
         /// 处理内容
         /// </summary>
         public const string MethodDoc_Url = "MethodDoc_Url";
         /// <summary>
-        /// 方法的内容类型
+        /// 内容类型
         /// </summary>
         public const string MethodDocTypeOfFunc = "MethodDocTypeOfFunc";
         /// <summary>
-        /// 处理内容 tag.
+        /// 处理内容s
         /// </summary>
-        public const string Idx = "Idx";
+        public const string Docs = "Docs";
+      
         /// <summary>
         /// 执行警告信息-对功能方法有效
         /// </summary>
@@ -67,6 +80,10 @@ namespace BP.CCBill.Template
         /// 执行完毕后干啥？
         /// </summary>
         public const string WhatAreYouTodo = "WhatAreYouTodo";
+        /// <summary>
+        /// Idx
+        /// </summary>
+        public const string Idx = "Idx";
         #endregion 基本属性.
 
         #region 外观.
@@ -94,11 +111,24 @@ namespace BP.CCBill.Template
         /// </summary>
         public const string IsSearchBar = "IsSearchBar";
         #endregion 显示位置
+
+        #region 流程方法相关.
+        /// <summary>
+        /// 流程结束后是否同步字段?
+        /// </summary>
+        public const string DTSDataWay = "DTSDataWay";
+        public const string DTSSpecFiels = "DTSSpecFiels";
+        public const string DTSWhenFlowOver = "DTSWhenFlowOver";
+        public const string DTSWhenNodeOver = "DTSWhenNodeOver";
+        public const string FlowNo = "FlowNo";
+        #endregion 流程方法相关.
+
+        public const string IsEnable = "IsEnable";
     }
-	/// <summary>
-	/// 表单方法
-	/// </summary>
-    public class Method : EntityMyPK
+    /// <summary>
+    /// 表单方法
+    /// </summary>
+    public class Method : EntityNoName
     {
         #region 基本属性
         /// <summary>
@@ -116,6 +146,32 @@ namespace BP.CCBill.Template
             }
         }
         /// <summary>
+        /// 方法分组ID
+        /// </summary>
+        public string GroupID
+        {
+            get
+            {
+                return this.GetValStringByKey(MethodAttr.GroupID);
+            }
+            set
+            {
+                this.SetValByKey(MethodAttr.GroupID, value);
+            }
+        }
+        public string Icon
+        {
+            get
+            {
+                return this.GetValStringByKey(MethodAttr.Icon);
+            }
+            set
+            {
+                this.SetValByKey(MethodAttr.Icon, value);
+            }
+        }
+
+        /// <summary>
         /// 方法ID
         /// </summary>
         public string MethodID
@@ -129,21 +185,19 @@ namespace BP.CCBill.Template
                 this.SetValByKey(MethodAttr.MethodID, value);
             }
         }
-        /// <summary>
-        /// 方法名
-        /// </summary>
-        public string MethodName
+        
+        public string FlowNo
         {
             get
             {
-                return this.GetValStringByKey(MethodAttr.MethodName);
+                return this.GetValStringByKey(MethodAttr.FlowNo);
             }
             set
             {
-                this.SetValByKey(MethodAttr.MethodName, value);
+                this.SetValByKey(MethodAttr.FlowNo, value);
             }
         }
-        
+
         /// <summary>
         /// 方法类型
         /// </summary>
@@ -158,6 +212,48 @@ namespace BP.CCBill.Template
                 this.SetValByKey(MethodAttr.RefMethodType, (int)value);
             }
         }
+        /// <summary>
+        /// 模式
+        /// </summary>
+        public string MethodModel
+        {
+            get
+            {
+                return this.GetValStringByKey(MethodAttr.MethodModel);
+            }
+            set
+            {
+                this.SetValByKey(MethodAttr.MethodModel, value);
+            }
+        }
+        /// <summary>
+        /// 标记
+        /// </summary>
+        public string Mark
+        {
+            get
+            {
+                return this.GetValStringByKey(MethodAttr.Mark);
+            }
+            set
+            {
+                this.SetValByKey(MethodAttr.Mark, value);
+            }
+        }
+        /// <summary>
+        /// tag1
+        /// </summary>
+        public string Tag1
+        {
+            get
+            {
+                return this.GetValStringByKey(MethodAttr.Tag1);
+            }
+            set
+            {
+                this.SetValByKey(MethodAttr.Tag1, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -166,6 +262,15 @@ namespace BP.CCBill.Template
         /// </summary>
         public Method()
         {
+        }
+        /// <summary>
+        /// 表单方法
+        /// </summary>
+        /// <param name="no"></param>
+        public Method(string no)
+        {
+            this.No = no;
+            this.Retrieve();
         }
         /// <summary>
         /// 重写基类方法
@@ -179,16 +284,33 @@ namespace BP.CCBill.Template
 
                 Map map = new Map("Frm_Method", "表单方法");
 
-                map.AddMyPK();
+                //主键.
+                map.AddTBStringPK(MethodAttr.No, null, "编号", true, true, 0, 50, 10);
+                map.AddTBString(MethodAttr.Name, null, "方法名", true, false, 0, 300, 10);
+                map.AddTBString(MethodAttr.MethodID, null, "方法ID", true, true, 0, 300, 10);
+                map.AddTBString(MethodAttr.GroupID, null, "分组ID", true, true, 0, 50, 10);
 
-                map.AddTBString(MethodAttr.FrmID, null, "表单ID", true, false, 0, 300, 10);
-                map.AddTBString(MethodAttr.MethodID, null, "方法ID", true, false, 0, 300, 10);
-                map.AddTBString(MethodAttr.MethodName, null, "方法名", true, false, 0, 300, 10);
-                map.AddTBString(MethodAttr.WarningMsg, null, "功能执行警告信息", true, false, 0, 300, 10);
+                //功能标记.
+                map.AddTBString(MethodAttr.MethodModel, null, "方法模式", true, true, 0, 300, 10);
+                map.AddTBString(MethodAttr.Tag1, null, "Tag1", true, true, 0, 300, 10);
+                map.AddTBString(MethodAttr.Mark, null, "Mark", true, true, 0, 300, 10);
+
+
+                map.AddTBString(MethodAttr.FrmID, null, "表单ID", true, true, 0, 300, 10);
+                map.AddTBString(MethodAttr.FlowNo, null, "流程编号", true, true, 0, 10, 10);
+
+
+                map.AddTBString(MethodAttr.Icon, null, "图标", true, false, 0, 50, 10, true);
+
+             
+
+                //临时存储.
+                map.AddTBString(MethodAttr.Docs, null, "方法内容", true, false, 0, 300, 10);
 
                 map.AddDDLSysEnum(MethodAttr.RefMethodType, 0, "方法类型", true, false, MethodAttr.RefMethodType,
-                    "@0=模态窗口打开@1=新窗口打开@2=右侧窗口打开@3=实体集合的功能@4=功能");
-
+                "@0=功能@1=模态窗口打开@2=新窗口打开@3=右侧窗口打开");
+            
+                 
                 #region 显示位置控制.
                 map.AddBoolean(MethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);
                 map.AddBoolean(MethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
@@ -200,12 +322,29 @@ namespace BP.CCBill.Template
                 map.AddTBInt(MethodAttr.PopWidth, 0, "弹窗宽度", true, false);
                 #endregion 外观.
 
+
+                #region 对功能有效
                 //对功能有效.
+                map.AddTBString(MethodAttr.WarningMsg, null, "功能执行警告信息", true, false, 0, 300, 10);
                 map.AddTBString(MethodAttr.MsgSuccess, null, "成功提示信息", true, false, 0, 300, 10, true);
                 map.AddTBString(MethodAttr.MsgErr, null, "失败提示信息", true, false, 0, 300, 10, true);
                 map.AddDDLSysEnum(MethodAttr.WhatAreYouTodo, 0, "执行完毕后干啥？", true, true, MethodAttr.WhatAreYouTodo,
                 "@0=关闭提示窗口@1=关闭提示窗口并刷新@2=转入到Search.htm页面上去");
+                #endregion 对功能有效
 
+
+                #region (流程)相同字段数据同步方式.
+                map.AddDDLSysEnum(MethodAttr.DTSDataWay, 0, "同步相同字段数据方式", true, true, MethodAttr.DTSDataWay,
+               "@0=不同步@1=同步全部的相同字段的数据@2=同步指定字段的数据");
+
+                map.AddTBString(MethodAttr.DTSSpecFiels, null, "要同步的字段", true, false, 0, 300, 10, true);
+
+                map.AddBoolean(MethodAttr.DTSWhenFlowOver, false, "流程结束后同步？", true, true, true);
+                map.AddBoolean(MethodAttr.DTSWhenNodeOver, false, "节点发送成功后同步？", true, true, true);
+                #endregion (流程)相同字段数据同步方式.
+
+                //是否启用？
+                map.AddBoolean(MethodAttr.IsEnable, true, "是否启用？", true, true, true);
                 map.AddTBInt(MethodAttr.Idx, 0, "Idx", true, false);
                 this._enMap = map;
                 return this._enMap;
@@ -224,11 +363,18 @@ namespace BP.CCBill.Template
         }
         #endregion 移动.
 
+        protected override bool beforeInsert()
+        {
+            if (DataType.IsNullOrEmpty(this.No) == true)
+                this.No = DBAccess.GenerGUID();
+            return base.beforeInsert();
+        }
+
     }
     /// <summary>
     /// 表单方法
     /// </summary>
-    public class Methods : EntitiesMyPK
+    public class Methods : EntitiesNoName
     {
         /// <summary>
         /// 表单方法

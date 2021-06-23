@@ -19,6 +19,7 @@ using BP.Difference;
 using BP.Sys;
 using System.Net;
 using System.Drawing;
+using BP.En30.Tools;
 
 namespace BP.WF.HttpHandler
 {
@@ -2036,8 +2037,12 @@ namespace BP.WF.HttpHandler
                 && this.FK_Node != 999999)
             {
                 Node nd = new BP.WF.Node(this.FK_Node);
+
+                Flow flow = new Flow(nd.FK_Flow);
+
                 BP.WF.Template.FrmNode fn = new BP.WF.Template.FrmNode(nd.NodeID, frmID);
-                if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree || nd.HisFormType == NodeFormType.FoolTruck)
+
+                if (flow.FlowDevModel == FlowDevModel.JiJian || nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree || nd.HisFormType == NodeFormType.FoolTruck)
                 {
                     /*如果
                      * 1,传来节点ID, 不等于0.
@@ -3517,7 +3522,20 @@ namespace BP.WF.HttpHandler
                     {
                         //文件保存的路径
                         //file.SaveAs(realSaveTo);
-                        HttpContextHelper.UploadFile(file, realSaveTo);
+
+                       
+                        if(athDesc.FileType==1 || (exts.ToUpper().Equals("JPG")|| exts.ToUpper().Equals("PNG")
+                            || exts.ToUpper().Equals("JPEG") || exts.ToUpper().Equals("GIF")))
+                        {
+                            string orgPath = realSaveTo.Replace("." + exts, "") + "Org." + exts;
+                            HttpContextHelper.UploadFile(file, orgPath);
+                            new Luban(orgPath).Compress(realSaveTo);
+                        }
+                        else
+                        {
+                            HttpContextHelper.UploadFile(file, realSaveTo);
+                        }
+                           
                     }
 
                     //执行附件上传前事件，added by liuxc,2017-7-15

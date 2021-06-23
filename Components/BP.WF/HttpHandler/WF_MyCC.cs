@@ -572,26 +572,31 @@ namespace BP.WF.HttpHandler
             BtnLab btnLab = new BtnLab(this.FK_Node);
             string tKey = DateTime.Now.ToString("MM-dd-hh:mm:ss");
             string toolbar = "";
+            bool isMobile = this.GetRequestValBoolen("IsMobile");
             try
             {
                 CCList list = new CCList();
                 bool isCheckOver = list.IsExit(CCListAttr.WorkID, this.WorkID,
                    CCListAttr.CCTo, WebUser.No,CCListAttr.Sta,(int)CCSta.CheckOver);
                 DataRow dr = dt.NewRow();
-                if(isCheckOver == true)
+                if (isMobile == false)
                 {
-                    dr["No"] = "Close";
-                    dr["Name"] = "关闭";
-                    dr["Oper"] = "CloseWindow();";
+                    if (isCheckOver == true)
+                    {
+                        dr["No"] = "Close";
+                        dr["Name"] = "关闭";
+                        dr["Oper"] = "CloseWindow();";
+                    }
+                    else
+                    {
+                        dr["No"] = "ReadAndClose";
+                        dr["Name"] = "阅件完毕";
+                        dr["Oper"] = "ReadAndClose();";
+                    }
+
+                    dt.Rows.Add(dr);
+
                 }
-                else
-                {
-                    dr["No"] = "ReadAndClose";
-                    dr["Name"] = "阅件完毕";
-                    dr["Oper"] = "ReadAndClose();";
-                }
-                
-                dt.Rows.Add(dr);
 
 
                 //加载轨迹.

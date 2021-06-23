@@ -93,10 +93,48 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Template_Init()
         {
+            DataSet ds = new DataSet();
             string path = SystemConfig.PathOfDataUser + "Style\\TemplateFoolDevelopDesigner\\";
-            var tmps = new DirectoryInfo(path).GetFiles("*.htm");
+            //var tmps = new DirectoryInfo(path).GetFiles("*.htm");
+            string[] files = System.IO.Directory.GetDirectories(path);//获取子文件夹
+            //模版类型
+            DataTable dt = new DataTable();
+            dt.TableName = "dirs";
+            dt.Columns.Add("No");
+            dt.Columns.Add("Name");
+            DataRow dr = dt.NewRow();
+            //模版信息
+            DataTable filesDt = new DataTable();
+            filesDt.TableName = "temps";
+            filesDt.Columns.Add("No");
+            filesDt.Columns.Add("Name");
+            filesDt.Columns.Add("Dir");
+            DataRow tempdr = filesDt.NewRow();
 
-            return BP.Tools.Json.ToJson(tmps);
+            foreach (string item in files)
+            {
+                //模版分类
+                dr = dt.NewRow();
+                dr["No"] = item;
+                dr["Name"] = System.IO.Path.GetFileName(item); ;
+                dt.Rows.Add(dr);
+
+                //获取模版
+                string[] temps = System.IO.Directory.GetFiles(item, "*.htm");
+                foreach (string temp in temps)
+                {
+                    tempdr = filesDt.NewRow();
+                    tempdr["No"] = temp;
+                    tempdr["Name"] = System.IO.Path.GetFileName(temp);
+                    tempdr["Dir"] = System.IO.Path.GetFileName(item);
+                    filesDt.Rows.Add(tempdr);
+                }
+            }
+
+            ds.Tables.Add(dt);
+            ds.Tables.Add(filesDt);
+
+            return BP.Tools.Json.ToJson(ds);
         }
         /// <summary>
         /// 根据名称获取开发者表单文件内容
@@ -105,7 +143,8 @@ namespace BP.WF.HttpHandler
         public string Template_GenerHtml()
         {
             var fileName = this.GetRequestVal("DevTempName");
-            string path = SystemConfig.PathOfDataUser + "Style\\TemplateFoolDevelopDesigner\\";
+            var fielDir= this.GetRequestVal("DevTempDir");
+            string path = SystemConfig.PathOfDataUser + "Style\\TemplateFoolDevelopDesigner\\\\"+ fielDir+"\\\\";
 
             string filePath = path + fileName;
 

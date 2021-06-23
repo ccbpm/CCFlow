@@ -52,7 +52,7 @@ function GenerFrm() {
     //定义常用的变量.
 
     //设置标题.
-    document.getElementById("title").innerHTML = "表单预览(字段排序在傻瓜表单设计器中)";
+    document.getElementById("title").innerHTML = "表单预览";
 
 
     BindFrm(frmData);
@@ -91,6 +91,12 @@ function BindFrm(frmData) {
     });
     $('#CCForm').append(mapAttrsHtml);
     //遍历循环生成 li
+    var node = new Entity("BP.WF.Node");
+    var fk_node = GetQueryString("FK_Node");
+    if (fk_node != null && fk_node != undefined && fk_node != "0" && fk_node != "null") {
+        node.SetPKVal(fk_node);
+        node.Retrieve();
+    }
 
     for (var i = 0; i < Sys_GroupFields.length; i++) {
 
@@ -215,7 +221,7 @@ function BindFrm(frmData) {
     //处理下拉框级联等扩展信息
     if (pageData.IsReadonly != "1") {
 
-        AfterBindEn_DealMapExt(frmData);
+        // AfterBindEn_DealMapExt(frmData);
     }
 
     //设置为只读模式

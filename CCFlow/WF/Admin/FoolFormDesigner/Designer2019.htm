@@ -1,11 +1,10 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+
     <title>ccform傻瓜表单设计器</title>
     <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
-    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
@@ -22,303 +21,49 @@
     <script src="../../CCForm/FrmEnd.js" defer="defer" type="text/javascript"></script>
     <script src="../../CCForm/MapExt2019.js" defer="defer" type="text/javascript"></script>
     <script src="Designer.js" type="text/javascript"></script>
+    <script src="../../CCForm/OptionLinkOthers.js" type="text/javascript"></script>
+    <script src="../../../DataUser/JSLibData/CommonShowConfig.js"></script>
 
-    <base target="_self" />
-    <style type="text/css">
-        body {
-            margin: 0 auto; /*color: #000;
-            line-height: 20px;
-            font-family: 宋体;
-            text-align: center;
-            width: 90%;*/
-            background-color: #f7f6f9;
-            overflow: auto !important;
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- 样式风格 icon.. -->
+    <link href="../../Comm/fonts/simple-line-icons.css" rel="stylesheet" />
+    <link href="../../Comm/fonts/font-icons.min.css" rel="stylesheet" />
+    <link href="../../Comm/fonts/font-awesome.css" rel="stylesheet" />
+
+    <link href="../CSS/FoolFrmBody.css" rel="stylesheet" />
+
+    <!-- 字段样式表. -->
+    <link href="../../../DataUser/Style/GloVarsCSS.css" rel="stylesheet" />
+    <style>
+        .ccbpm-input-group {
+            position: relative;
+            line-height: 34px;
         }
 
-        .wrapper-dropdown-2 {
-            /* Size and position */
-            position: relative; /* Enable absolute positionning for children and pseudo elements */
-            width: 80px;
-            margin: 0;
-            border-radius: 6px;
-            margin-left: 0px;
-            padding: 6px 25px;
-            /* Styles */
-            color: white;
-            cursor: pointer;
-            outline: none;
-        }
-
-            .wrapper-dropdown-2:after {
-                content: "";
-                width: 0;
-                height: 0;
+            .ccbpm-input-group i {
                 position: absolute;
-                right: 16px;
+                z-index: 99;
+                left: 8px;
                 top: 50%;
-                margin-top: -3px;
-                border-width: 6px 6px 0 6px;
+                margin-top: -6px;
             }
 
-            .wrapper-dropdown-2 .dropdown {
-                /* Size & position */
-                position: absolute;
-                z-index: 100;
-                top: 100%;
-                margin-left: 130px;
-                /* Styles */
-                background: white;
-                -webkit-transition: all 0.3s ease-out;
-                -moz-transition: all 0.3s ease-out;
-                -ms-transition: all 0.3s ease-out;
-                -o-transition: all 0.3s ease-out;
-                transition: all 0.3s ease-out;
-                list-style: none;
-                /* Hiding */
-                opacity: 0;
-                pointer-events: none;
+            .ccbpm-input-group input {
+                padding-left: 26px !important;
             }
-
-                .wrapper-dropdown-2 .dropdown li a {
-                    position: fixed;
-                    height: 29px;
-                    line-height: 29px;
-                    z-index: 100000;
-                    margin-top: 3px;
-                    padding-top: 10px;
-                    list-style: none;
-                    display: block;
-                    padding: 9px;
-                    -webkit-transition: all 0.3s ease-out;
-                    -moz-transition: all 0.3s ease-out;
-                    -ms-transition: all 0.3s ease-out;
-                    -o-transition: all 0.3s ease-out;
-                    transition: all 0.3s ease-out;
-                }
-
-
-            /* Active state */
-            .wrapper-dropdown-2.active .dropdown {
-                opacity: 1;
-                pointer-events: auto;
-                list-style: none;
-            }
-
-        textarea, input[type=text] {
-            width: 100%;
-        }
-
-        body {
-            font-size: .80em;
-            font-family: "Helvetica Neue", "Lucida Grande", "Segoe UI", Arial, Helvetica, Verdana, sans-serif;
-            margin: 0px;
-            padding: 0px;
-            color: #696969;
-        }
-
-        input.align_cb {
-            padding-left: 4px;
-            cursor: pointer;
-            margin: 0;
-            vertical-align: middle;
-        }
-
-        label.align_cbl {
-            display: inline-block;
-            vertical-align: middle;
-            margin-bottom: 2px;
-        }
-
-        th {
-            /*background-color: InfoBackground;*/
-            background-color: #f1f1f1;
-        }
-
-        .cs-btn-group {
-            border: 0;
-            text-align: left;
-        }
-
-            .cs-btn-group a {
-                margin-left: 6px;
-                padding: 5px 14px;
-                color: #fff;
-                font-size: 13px;
-                line-height: 28px;
-                height: 26px;
-                border: 0 none;
-                border-radius: 3px;
-                background-image: none;
-                box-sizing: border-box;
-            }
-
-            .cs-btn-group span.l-btn-left.l-btn-left {
-                padding: 0;
-                background-image: none;
-            }
-
-        .btn-light-green {
-            background-color: #50b6ac;
-        }
-
-            .btn-light-green:hover {
-                background-color: #50b6ac;
-            }
-
-        .btn-light-blue {
-            background-color: #62cae3;
-        }
-
-            .btn-light-blue:hover {
-                background-color: #62cae3;
-            }
-
-        .btn-light-yellow {
-            background-color: #f3ba20;
-        }
-
-            .btn-light-yellow:hover {
-                background-color: #f3ba20;
-            }
-
-        .btn-light-red {
-            background-color: #f74f52;
-        }
-
-            .btn-light-red:hover {
-                background-color: #f74f52;
-            }
-
-        .cs-easyui-layout {
-            margin: auto;
-            background: #d0d0d0;
-            overflow: auto;
-        }
-
-        .cs-panel-center {
-            position: static;
-            margin: 42px auto 0 !important;
-            width: 950px !important;
-            /*overflow:auto*/
-        }
-
-        .cs-panel-body {
-            background-color: #fff;
-            border: 0;
-            border-radius: 4px;
-            box-shadow: 0 0 10px rgba(0,0,0,.1);
-        }
-
-        .cs-panel-north {
-            position: fixed;
-            left: 0;
-            right: 0;
-            background-color: #F7F6F9;
-            border-bottom: 1px solid #ddd;
-        }
-
-            .cs-panel-north .cs-btn-group {
-                margin: auto;
-                width: 1100px !important;
-                background-color: #F7F6F9;
-            }
-
-        .cs-table {
-            width: 100%;
-        }
-
-            .cs-table td a {
-                padding-right: 0;
-                color: #15398b;
-                width: 24px;
-                height: 24px;
-                box-sizing: border-box;
-            }
-
-                .cs-table td a:hover.l-btn-plain {
-                    padding: 0;
-                }
-
-        a.l-btn span span span.l-btn-empty {
-            background-position: center
-        }
-
-        .cs-table th a {
-            height: 30px;
-            color: #282828;
-            vertical-align: middle;
-        }
-
-            .cs-table th a:hover {
-                padding: 0 5px 0 0;
-                background-color: transparent;
-                border-color: transparent;
-                text-decoration: none;
-            }
-
-        .cs-table td, .cs-table th {
-            line-height: 30px;
-        }
-
-        .cs-table td {
-            padding: 7px;
-        }
-
-        .cs-table th {
-            padding-left: 20px;
-        }
-
-        .cs-table input[type=text], .cs-table select, .cs-table textarea {
-            margin: 0 !important;
-            width: 100% !important;
-            background-color: #fff;
-        }
-
-        .cs-table input[type="radio"], .cs-table input[type="checkbox"] {
-            position: static;
-            padding-left: 0;
-            width: 16px !important;
-            height: 16px;
-            vertical-align: -4px;
-        }
-
-        .checkbox, .radio {
-            margin-left: 0 !important;
-        }
-
-            .checkbox label, .radio label {
-                padding-left: 0;
-            }
-
-        .cs-order {
-            float: right;
-            height: 30px;
-        }
-
-        .image-local {
-            width: 116px;
-            font-size: 16px;
-            line-height: 28px;
-            text-align: center;
-            color: #fff;
-            background-color: #0073eb;
-            border: none;
-            display: inline-block;
-            vertical-align: middle;
-            height: 28px;
-            box-sizing: border-box;
-            outline: none;
-        }
-
-        #state li {
-            list-style: none;
-            margin-top: 3px;
-        }
     </style>
+
+    <!---  自定义的风格. -->
+    <link href="Designer.css" rel="stylesheet" />
+    <link href="../../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+
+    <script src="../Admin.js"></script>
+    <base target="_self" />
+    <script src="DesignerNewEleMenu.js"></script>
     <script type="text/javascript">
         //然浏览器最大化.
         function ResizeWindow() {
-
 
             if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen
                 var myw = screen.availWidth;   //定义一个myw，接受到当前全屏的宽
@@ -327,7 +72,6 @@
                 window.resizeTo(myw, myh);     //把当前窗体的长宽跳转为myw和myh
             }
         }
-
         function WinOpen(url, name) {
             window.open(url, name, 'height=600, width=800, top=0, left=0, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
         }
@@ -348,418 +92,7 @@
                 ctrl.style.display = 'block';
             }
         }
-    </script>
-    <link href="../../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript">
 
-
-
-        //记录改变字段样式 不可编辑，不可见
-        var mapAttrs = [];
-        function changeEnable(obj, FK_MapData, KeyOfEn, AtPara) {
-            var selecedval = $(obj).children('option:selected').val();  //弹出select的值.
-            cleanAll();
-            if (AtPara.indexOf('@IsEnableJS=1') >= 0)
-                setEnable(FK_MapData, KeyOfEn, selecedval);
-
-        }
-        function clickEnable(obj, FK_MapData, KeyOfEn, AtPara) {
-            var selectVal = $(obj).val();
-            cleanAll();
-            if (AtPara.indexOf('@IsEnableJS=1') >= 0)
-                setEnable(FK_MapData, KeyOfEn, selectVal);
-        }
-        //启用了显示与隐藏.
-        function setEnable(FK_MapData, KeyOfEn, selectVal) {
-            var pkval = FK_MapData + "_" + KeyOfEn + "_" + selectVal;
-            var frmRB = new Entity("BP.Sys.FrmRB", pkval);
-
-
-            //解决字段隐藏显示.
-            var cfgs = frmRB.FieldsCfg;
-
-            //@Title=3@OID=2@RDT=1@FID=3@CDT=2@Rec=1@Emps=3@FK_Dept=2@FK_NY=3
-            if (cfgs) {
-
-                var strs = cfgs.split('@');
-
-                for (var i = 0; i < strs.length; i++) {
-
-                    var str = strs[i];
-                    var kv = str.split('=');
-
-                    var key = kv[0];
-                    var sta = kv[1];
-
-                    if (sta == 0)
-                        continue; //什么都不设置.
-
-
-                    if (sta == 1) {  //要设置为可编辑.
-                        SetCtrlShow(key);
-                        SetCtrlEnable(key);
-                    }
-
-                    if (sta == 2) { //要设置为不可编辑.
-                        SetCtrlShow(key);
-                        SetCtrlUnEnable(key);
-                        mapAttrs.push(key);
-                    }
-
-                    if (sta == 3) { //不可见.
-                        SetCtrlHidden(key);
-                        mapAttrs.push(key);
-                    }
-
-                }
-
-
-            }
-
-            //解决为其他字段设置值.
-            var setVal = frmRB.SetVal;
-            if (setVal) {
-                var strs = setVal.split('@');
-
-                for (var i = 0; i < strs.length; i++) {
-
-                    var str = strs[i];
-                    var kv = str.split('=');
-
-                    var key = kv[0];
-                    var value = kv[1];
-                    SetCtrlVal(key, value);
-                    mapAttrs.push(key);
-
-                }
-            }
-        }
-
-        //设置是否可以用?
-        function SetCtrlEnable(key) {
-
-            var ctrl = $("#TB_" + key);
-            if (ctrl.length > 0) {
-                ctrl.removeAttr("readonly");
-            }
-
-            ctrl = $("#DDL_" + key);
-            if (ctrl.length > 0) {
-                ctrl.removeAttr("disabled");
-            }
-
-            ctrl = $("#CB_" + key);
-            if (ctrl.length > 0) {
-                ctrl.removeAttr("disabled");
-            }
-
-            ctr = document.getElementsByName('RB_' + key);
-            if (ctrl != null) {
-                var ses = new Entities("BP.Sys.SysEnums");
-                ses.Retrieve("EnumKey", key);
-                for (var i = 0; i < ses.length; i++)
-                    $("#RB_" + key + "_" + ses[i].IntKey).removeAttr("disabled");
-            }
-        }
-        function SetCtrlUnEnable(key) {
-
-            var ctrl = $("#TB_" + key);
-            if (ctrl.length > 0) {
-                ctrl.attr("readonly", "true");
-            }
-
-            ctrl = $("#DDL_" + key);
-            if (ctrl.length > 0) {
-                ctrl.attr("disabled", "disabled");
-            }
-
-            ctrl = $("#CB_" + key);
-            if (ctrl.length > 0) {
-
-                ctrl.attr("disabled", "disabled");
-            }
-
-            ctrl = $("#RB_" + key);
-            if (ctrl != null) {
-                $('input[name=RB_' + key + ']').attr("disabled", "disabled");
-                //ctrl.attr("disabled", "disabled");
-            }
-        }
-        //设置隐藏?
-        function SetCtrlHidden(key) {
-
-            var ctrl = $("#DIV_" + key);
-            if (ctrl.length > 0) {
-                ctrl.hide();
-            }
-
-        }
-        //设置显示?
-        function SetCtrlShow(key) {
-
-            var ctrl = $("#DIV_" + key);
-            if (ctrl.length > 0) {
-                ctrl.show();
-            }
-
-        }
-
-        //设置值?
-        function SetCtrlVal(key, value) {
-            var ctrl = $("#TB_" + key);
-            if (ctrl.length > 0) {
-                ctrl.val(value);
-            }
-
-            ctrl = $("#DDL_" + key);
-            if (ctrl.length > 0) {
-                ctrl.val(value);
-            }
-
-            ctrl = $("#CB_" + key);
-            if (ctrl.length > 0) {
-                ctrl.val(value);
-            }
-
-            ctrl = $("#RB_" + key + "_" + value);
-            if (ctrl.length > 0) {
-                ctrl.val(value);
-                ctrl.attr('checked', true);
-            }
-        }
-
-        //清空值?
-        function CleanCtrlVal(key) {
-            var ctrl = $("#TB_" + key);
-            if (ctrl.length > 0) {
-                ctrl.val('');
-            }
-
-            ctrl = $("#DDL_" + key);
-            if (ctrl.length > 0) {
-                ctrl.val('');
-            }
-
-            ctrl = $("#CB_" + key);
-            if (ctrl.length > 0) {
-                ctrl.val('');
-            }
-
-            ctrl = $("#RB_" + key);
-            if (ctrl.length > 0) {
-                ctrl.val('');
-            }
-        }
-        //清空所有的设置
-        function cleanAll() {
-            for (var i = 0; i < mapAttrs.length; i++) {
-                SetCtrlShow(mapAttrs[i]);
-                SetCtrlEnable(mapAttrs[i]);
-                CleanCtrlVal(mapAttrs[i]);
-            }
-
-        }
-
-        function GenerGroupContext(groupEn, data, tableCol) {
-
-
-            switch (groupEn.CtrlType) {
-
-                case "Ath":
-                    if (groupEn.CtrlID == "")
-                        return "";
-                    var athEn = $.grep(data.Sys_FrmAttachment, function (ath) { return ath.MyPK == groupEn.CtrlID });
-
-                    if (athEn.length == 0) {
-                        return "<tr><td colspan=" + tableCol + " style='width:100%;height:200px;' > 附件[" + groupEn.CtrlID + "]丢失</td></tr>";
-                    }
-                    if (athEn[0].IsVisable == "0")
-                        return "";
-
-                    return "<tr><td colspan=" + tableCol + " style='width:" + athEn[0].H + "px;'><div id='Div_" + athEn[0].MyPK + "'></div></td></tr>";
-
-                    break;
-                case "SubFlow":
-
-                    var flowNo = GetQueryString("FK_Flow");
-                    var nodeID = GetQueryString("FK_Node");
-
-                    var src = "../../WorkOpt/SubFlow.htm?WorkID=0&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
-
-                    var compent = new Entity("BP.WF.Template.FrmSubFlow", nodeID);
-
-                    var frameDocs = "<iframe ID='F_SubFlow_" + nodeID + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + compent.SF_H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
-                    return "<tr><td colspan=" + tableCol + " id='SubFlow" + nodeID + "' style='width:300px;'>" + frameDocs + "</td></tr>";
-
-                    break;
-                case "Frame":
-                    var frameEn = $.grep(data.Sys_MapFrame, function (frame) { return frame.MyPK == groupEn.CtrlID });
-                    if (frameEn.length == 0) {
-                        return "<tr><td colspan=" + tableCol + " style='width:100%;height:200px;' > 框架[" + groupEn.CtrlID + "]丢失</td></tr>";
-                    }
-
-                    var src = frameEn[0].URL;
-                    if (src.indexOf('?') == -1)
-                        src = frameEn[0].URL + "?PKVal=0&FK_MapData=" + pageData.fk_mapdata + "&MapFrame=" + frameEn[0].MyPK;
-                    else
-                        src = frameEn[0].URL + "&PKVal=0&FK_MapData=" + pageData.fk_mapdata + "&MapFrame=" + frameEn[0].MyPK;
-
-                    var frameUrl = "<iframe ID='F" + frameEn[0].MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + frameEn[0].H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
-                    return "<tr><td colspan=" + tableCol + " id='TD" + frameEn[0].MyPK + "' style='width:" + frameEn[0].H + "px;'>" + frameUrl + "</td></tr>";
-
-                    break;
-                case "FWC":
-                    return "<tr><td colspan=" + tableCol + " style='width:100%;' ><div id='WorkCheck'></div></td></tr>";
-                case "Dtl":
-
-                    var dtl = $.grep(data.Sys_MapDtl, function (dtl) { return dtl.No == groupEn.CtrlID });
-
-                    if (dtl.length == 1) {
-                        var src = "MapDtlDe.htm?DoType=Edit&FK_MapData=" + pageData.fk_mapdata + "&FK_MapDtl=" + dtl[0].No;
-                        var frameUrl = "<iframe ID='F" + dtl[0].No + "' frameborder=0 style='padding:0px;border:0px;width:100%;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
-                        return "<tr><td colspan=" + tableCol + " id='TD" + dtl[0].No + "'>" + frameUrl + "</td></tr>";
-                    } else {
-                        html = "<tr><td colspan=" + tableCol + " style='width:100%;height:200px;' > 从表[" + groupEn.CtrlID + "]丢失</td></tr>";
-                        return html;
-                    }
-                    break;
-                default:
-                    return "";
-            }
-
-            return html;
-        }
-
-        function GenerGroupTR(groupEn, tabCol, data) {
-
-            var lab = groupEn.Lab;
-            if (lab == "")
-                lab = "编辑";
-
-            //左边的按钮.
-            var leftBtn = "<div style='text-align:left; float:left'>";
-
-            var midBtn = "";
-            var isShow = true;
-            switch (groupEn.CtrlType) {
-                case "Ath":
-                    if (groupEn.CtrlID == "") {
-                        isShow = false;
-                        break;
-                    }
-                    //创建附件描述信息.
-                    var frmattachments = data.Sys_FrmAttachment;
-                    var ath = null;
-                    for (var i = 0; i < frmattachments.length; i++) {
-                        if (frmattachments[i].MyPK == groupEn.CtrlID) {
-                            ath = frmattachments[i];
-                            break;
-                        }
-
-                    }
-                    if (ath == null) {
-                        isShow = false;
-                        break;
-                    }
-                    if (ath.IsVisable == "0") {
-                        //如果是节点字段附件的时候就隐藏
-                        var mapAttr = $.grep(data.Sys_MapAttr, function (obj, i) {
-                            if (obj.MyPK == groupEn.CtrlID)
-                                return obj;
-                        });
-                        if (mapAttr.length != 0) {
-                            isShow = false;
-                            break;
-                        }
-                    }
-                    leftBtn += "<a href=\"javascript:EditAth('" + groupEn.CtrlID + "')\" >附件:" + lab + "</a>";
-                    break;
-                case "Frame":
-                    leftBtn += "<a href=\"javascript:EditFrame('" + groupEn.CtrlID + "')\" >" + lab + "</a>";
-                    break;
-                case "SubFlow":
-                    leftBtn += "<a href=\"javascript:EditSubFlow('" + groupEn.CtrlID + "')\" >" + lab + "</a>";
-                    break;
-                case "Dtl":
-
-                    leftBtn += "<a href=\"javascript:EditDtl('" + groupEn.CtrlID + "')\" >从表属性:" + lab + "</a>";
-
-                    //中间连接.
-                    midBtn = "";
-                    midBtn += '<a href="javascript:AddFForDtl(\'' + groupEn.CtrlID + '\');"><img src="../../Img/Btn/New.gif" border="0/">插入列</a>';
-                    //midBtn += '<a href="javascript:document.getElementById(\'F' + groupEn.CtrlID + '\').contentWindow.AddFGroup(\'' + groupEn.CtrlID + '\');"><img src="../../Img/Btn/New.gif" border="0/">插入列组</a>';
-                    //midBtn += '<a href="javascript:document.getElementById(\'F'+ groupEn.CtrlID + '\').contentWindow.CopyF(\'' +  groupEn.CtrlID + '\');"><img src="../../Img/Btn/Copy.gif" border="0/">复制列</a>';
-                    midBtn += "";
-
-                    break;
-                case "FWC":
-                    leftBtn += "<a href=\"javascript:FrmNodeComponent()\" >审核审批</a>";
-                    break;
-                default:
-                    leftBtn += "<a href=\"javascript:GroupField('" + groupEn.EnName + "','" + groupEn.OID + "')\" >" + lab + "</a>";
-                    break;
-            }
-            if (isShow == true) {
-                leftBtn += "</div>";
-
-
-                //右边的按钮都一样.
-                var rightBtn = "<div class='cs-order'>" + midBtn;
-                rightBtn += "<a href=\"javascript:GFDoUp('" + groupEn.OID + "' )\"  class='easyui-linkbutton l-btn l-btn-plain'  data-options='iconCls:icon-up,plain:true' ><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-up'>&nbsp;</span></span></span></a>";
-                rightBtn += "<a href=\"javascript:GFDoDown('" + groupEn.OID + "');\" class='easyui-linkbutton l-btn l-btn-plain' data-options='iconCls:icon-down,plain:true'><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-down'>&nbsp;</span></span></span></a>";
-                rightBtn += "</div>";
-
-                var html = "<tr>";
-                html += "<th colspan=" + tabCol + ">";
-
-
-                html += leftBtn + rightBtn;
-
-                html += "</th>";
-                html += "</tr>";
-            }
-
-            return html;
-        }
-
-        function GenerLabel(attr) {
-
-            var fk_mapdata = GetQueryString("FK_MapData");
-
-            var tdUp = "<a href=\"javascript:Up('" + attr.MyPK + "','1');\" class='easyui-linkbutton l-btn l-btn-plain' data-options='iconCls:icon-left,plain:true'  alt='向左动顺序' ><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-left'>&nbsp;</span></span></span></a>";
-            var tdDown = "<a href=\"javascript:Down('" + attr.MyPK + "','1');\" class='easyui-linkbutton l-btn l-btn-plain' data-options='iconCls:icon-right,plain:true' alt='向右动顺序' ><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-right'>&nbsp;</span></span></span></a>";
-
-            if (attr.LGType == 0 && attr.UIContralType == 1) {
-                return tdUp + "<a href=\"javascript:EditTableSQL('" + attr.MyPK + "','" + attr.KeyOfEn + "');\" > " + attr.Name + "</a>" + tdDown;
-            }
-
-            if (attr.LGType == 0) {
-                return tdUp + "<a href=\"javascript:Edit('" + attr.MyPK + "','" + attr.MyDataType + "','" + attr.GroupID + "','" + attr.LGType + "','" + attr.UIContralType + "');\" > " + attr.Name + "</a>" + tdDown;
-            }
-
-            if (attr.LGType == 1)
-                return tdUp + "<a href=\"javascript:EditEnum('" + attr.FK_MapData + "','" + attr.MyPK + "','" + attr.KeyOfEn + "');\" > " + attr.Name + "</a>" + tdDown;
-
-            if (attr.LGType == 2)
-                return tdUp + "<a href=\"javascript:EditTable('" + attr.FK_MapData + "','" + attr.MyPK + "','" + attr.KeyOfEn + "');\" > " + attr.Name + "</a>" + tdDown;
-        }
-
-        function AddFForDtl(fk_mapdtl) {
-
-            var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdtl + '&inlayer=1&s=' + Math.random();
-            OpenEasyUiDialog(url, "eudlgframe", "插入列", 800, 500, "icon-edit", true, null, null, null, function () {
-
-                var frm = document.getElementById("F" + fk_mapdtl);
-                frm.src = frm.src;
-
-                // window.location.href = window.location.href;
-                //ReloadDtlFrame();
-            });
-        }
-
-
-    </script>
-    <script language="javascript" type="text/javascript">
 
         function ReLoad(data) {
             window.location.href = window.location.href;
@@ -928,7 +261,7 @@
         }
         function ExpImp() {
 
-            var url = './ImpExp/Imp.htm?FK_MapData=' + pageData.fk_mapdata + "&DoType=FunList&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+            var url = './ImpExp/Imp/Default.htm?FK_MapData=' + pageData.fk_mapdata + "&DoType=FunList&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
 
             OpenEasyUiDialog(url, "eudlgframe", '导入导出', 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -952,8 +285,6 @@
                 window.location.href = window.location.href;
 
             });
-
-
         }
         function Edit(mypk, ftype, gf, fk_mapdtl, uiContralType) {
 
@@ -1020,6 +351,11 @@
                 if (uiContralType == 16) {
                     title = '系统定位属性';
                     url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrFixed&PKVal=' + mypk + '&s=' + Math.random();
+                }
+
+                if (uiContralType == 110) {
+                    title = '公文正文组件';
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrGovDocFile&PKVal=' + mypk + '&s=' + Math.random();
                 }
 
                 if (uiContralType == 17) {
@@ -1134,20 +470,24 @@
             window.location.href = window.location.href;
         }
 
+        function GroupFieldDoUp(refOID) {
 
-        function GFDoUp(refoid) {
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
-            handler.AddPara("RefOID", refoid);
-            var data = handler.DoMethodReturnString("Designer_GFDoUp");
-            ReLoad(data, this);
+            var en = new Entity("BP.Sys.GroupField", refOID);
+            en.DoMethodReturnString("DoUp");
 
+            //var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            //handler.AddPara("RefOID", refoid);
+            //var data = handler.DoMethodReturnString("Designer_GFDoUp");
+            ReLoad(en, this);
         }
-        function GFDoDown(refoid) {
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
-            handler.AddPara("RefOID", refoid);
-            var data = handler.DoMethodReturnString("Designer_GFDoDown");
-            ReLoad(data, this);
+        function GroupFieldDoDown(refoid) {
+            var en = new Entity("BP.Sys.GroupField", refoid);
+            en.DoMethodReturnString("DoDown");
 
+            //var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            //handler.AddPara("RefOID", refoid);
+            //var data = handler.DoMethodReturnString("Designer_GFDoDown");
+            ReLoad(en, this);
         }
 
         function GroupBarClick(rowIdx) {
@@ -1214,9 +554,7 @@
             OpenEasyUiDialog(url, "eudlgframe", '轨迹图', 400, 700, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
-
         }
-
 
         /// 审核组件.
         function EditFWC(mypk) {
@@ -1285,7 +623,7 @@
         }
 
         function MapDataEdit() {
-              var  url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFool&PKVal=' + GetQueryString("FK_MapData");
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFool&PKVal=' + GetQueryString("FK_MapData");
             //获取页面的大小
             var W = document.body.clientWidth - 80;
             var H = document.body.clientHeight - 80;
@@ -1308,7 +646,7 @@
                 window.location.href = window.location.href;
             });
         }
-       
+
 
         function FrmNodeComponent(mypk) {
 
@@ -1330,12 +668,10 @@
 
             var url = '../MobileFrmDesigner/Default.htm?FK_Flow=' + GetQueryString("FK_Flow") + '&FK_Node=' + GetQueryString('FK_Node') + '&FK_MapData=' + GetQueryString("FK_MapData");
 
-            OpenEasyUiDialog(url, "eudlgframe", '手机表单设计器-按下行拖拽完成移动', 800, 550, "icon-property", true, null, null, null, function () {
+            OpenEasyUiDialog(url, "eudlgframe", '手机表单设计器', 450, 550, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }
-
-
 
         //新增从表.
         function NewMapDtl() {
@@ -1387,34 +723,19 @@
             });
         }
 
-        function EditM2M(dtlKey) {
-            var url = 'MapM2M.htm?DoType=Edit&FK_MapData=' + pageData.fk_mapdata + '&NoOfObj=' + dtlKey;
-            // OpenEasyUiDialog(url, 'dtl', '属性', 800, 500, "icon-edit");
-        }
-
-
-        /// 多选.
-        function MapM2M() {
-            var url = 'MapM2M.htm?DoType=List&FK_MapData=' + pageData.fk_mapdata;
-
-            OpenEasyUiDialog(url, "eudlgframe", '多选', 950, 600, "icon-edit", true, null, null, null, function () {
-                window.location.href = window.location.href;
-            });
-        }
-
-        function MapM2MM() {
-            var url = 'MapM2MM.htm?FK_MapData=' + pageData.fk_mapdata;
-
-            OpenEasyUiDialog(url, "eudlgframe", '多选', 950, 600, "icon-edit", true, null, null, null, function () {
-                window.location.href = window.location.href;
-            });
-        }
-
         //修改附件.
         function EditAth(ath) {
             var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + pageData.fk_mapdata + '&MyPK=' + ath;
 
             OpenEasyUiDialog(url, "eudlgframe", '附件', 950, 600, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+        //新建附件.
+        function NewAth2020() {
+            var url = './Ath/Default.htm?FK_MapData=' + pageData.fk_mapdata + "&FrmType=0";
+            OpenEasyUiDialog(url, "eudlgframe", '新建附件', 800, 500, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }
@@ -1540,7 +861,13 @@
             OpenEasyUiDialog(url, "eudlgframe", '新建组件', 800, 500, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
+        }
 
+        function GloValStyles() {
+            var url = './StyletDfine/GloValStyles.htm?FK_MapData=' + pageData.fk_mapdata + "&FrmType=0";
+            OpenEasyUiDialog(url, "eudlgframe", '样式表', 800, 500, "icon-property", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
 
         function DropDown(el) {
@@ -1572,8 +899,8 @@
         }
 
         function ImpRefDict() {
-            var bill = new Entity("BP.CCBill.FrmBill",GetQueryString("FK_MapData"));
-            var url = "./ImpRefDictField.htm?FK_MapData=" + GetQueryString("FK_MapData")+"&RefFrm="+bill.RefDict;
+            var bill = new Entity("BP.CCBill.FrmBill", GetQueryString("FK_MapData"));
+            var url = "./ImpRefDictField.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&RefFrm=" + bill.RefDict;
             //获取页面的大小
             var W = document.body.clientWidth - 180;
             var H = document.body.clientHeight - 180;
@@ -1581,97 +908,172 @@
                 window.location.href = window.location.href;
             });
         }
-        $(function () {
 
-        });
+        //风格定义.
+        function StyletDfine() {
 
+            var url = "./StyletDfine/Default.htm?FK_Flow=" + GetQueryString("FK_Flow");
+            url += "&FK_Node=" + GetQueryString("FK_Node");
+            url += "&FK_MapData=" + GetQueryString("FK_MapData");
+            url += "&FrmID=" + GetQueryString("FK_MapData");
+
+            window.location.href = url;
+        }
+
+        function ToDevFrm() {
+
+            // http://localhost:2296/WF/Admin/FoolFormDesigner/Designer.htm?FK_MapData=Frm_KeHuDingShan&FK_Flow=&FK_Node=0
+
+            var url = "../DevelopDesigner/Designer.htm?FK_Flow=" + GetQueryString("FK_Flow");
+            url += "&FK_Node=" + GetQueryString("FK_Node");
+            url += "&FK_MapData=" + GetQueryString("FK_MapData");
+            url += "&FrmID=" + GetQueryString("FK_MapData");
+            window.location.href = url;
+            return;
+        }
     </script>
 </head>
 <body onkeypress="Esc();" class="easyui-layout layout panel-noscroll" topmargin="0" leftmargin="0">
 
     <div class="easyui-layout layout cs-easyui-layout" data-options="fit:true" style="width: 100%; height: 628px;">
         <div class="panel layout-panel layout-panel-north cs-panel-north">
-            <div data-options="region:'north'" id="toolbar" style="padding: 0px;
+            <div data-options="region:'north'" id="Toolba1r" style="padding: 0px;text-align:center;
         overflow-y: hidden;
 " title="表单设计器-工具栏"
                  class="panel-body panel-body-noheader layout-body cs-btn-group">
-                <a href="javascript:MapDataEdit();" class="easyui-linkbutton btn-light-green">
-                    表单属性
+                <a href="javascript:MapDataEdit();" class="easyui-linkbutton btn-light-zi">
+                    <i class="iconfont icon-shuxing"></i>属性
                 </a>
                 <a id="FrmillBtn" href="javascript:FrmBillEdit();" class="easyui-linkbutton btn-light-green">
-                    单据属性
+                    <i class="iconfont icon-gaojibaobiaoshezhi"></i>单据属性
                 </a>
 
                 <a href="javascript:ImpRefDict();" class="easyui-linkbutton btn-light-blue" id="RefDict">
-                    导入关联表单模板
+                    <i class="iconfont icon-daoru"></i>导入关联表单模板
                 </a>
 
-                <a href="javascript:ExpImp();" class="easyui-linkbutton btn-light-blue">
-                    导入/导出
+                <a href="javascript:ExpImp();" class="easyui-linkbutton btn-light-zi">
+                    <i class="iconfont icon-daorudaochu"></i>导入/导出
                 </a>
 
-                <input type="button" value="+新建" id="Btn_Save" onmouseover="ShowHidden('state')" />
+                <!--<a id="Btn_New" class="easyui-linkbutton btn-light-green" onmouseover="ShowHidden2021('state')">
+                    <i class="iconfont icon-xinjianbiaodan"></i>新建2021
+                </a>
+                <div id="divMenus"></div>-->
 
-                <div id="state" style="margin-left:133px; width:150px;height:auto; position:fixed; z-index:10;display: none; color: Gray">
+
+                <a id="Btn_Save" class="easyui-linkbutton btn-light-green" onmouseover="ShowHidden('state')">
+                    <i class="iconfont icon-xinjianbiaodan"></i>+新建元素
+                </a>
+
+                <!--<input type="button" value="+新建" id="Btn_Save" onmouseover="ShowHidden('state')" />-->
+
+                <div id="state" class="state-show">
                     <ul>
                         <li>
-                            <a href="javascript:AddF();" class="easyui-linkbutton btn-light-yellow">
-                                新建字段
+                            <a href="javascript:AddF();" title="文本、数值、枚举、下拉框、外键等字段。">
+                                <i class="iconfont icon-ziduan"></i> 基本字段
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:AddComponent();" class="easyui-linkbutton btn-light-yellow">
-                                新建组件
+                            <a href="javascript:NewMapDtl();" title="从表子表也叫明细表比如：简历、报销内容、采购信息、行程表。">
+                                <i class="iconfont icon-tianjiashujubiao"></i> 子(从)&nbsp;表
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:GroupFieldNew();" class="easyui-linkbutton btn-light-green">
-                                新建字段分组
+                            <a href="javascript:NewAth();">
+                                <i class="iconfont icon-fujian"></i>多&nbsp;&nbsp;附&nbsp;&nbsp;件
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:GroupFieldFWCNew();" class="easyui-linkbutton btn-light-red">
-                                新建审核分组
+                            <a href="javascript:NewAth2020();">
+                                <i class="iconfont icon-fujian"></i>多附件(新)
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="javascript:AddComponent();" title="框架、定位、手机号、超链接、评分、公文字号等.">
+                                <i class="iconfont icon-zujian"></i> 通用组件
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:NewMapDtl();" class=" easyui-linkbutton btn-light-blue">
-                                新建从表
+                            <a href="javascript:GroupFieldNew();" title="增加字段分组，不同业务的字段放到不同的分组里，比如：基本信息、教育信息、培训信息。">
+                                <i class="iconfont icon-fenzu"></i> 字段分组
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:NewAth();" class=" easyui-linkbutton btn-light-green">
-                                新建附件
+                            <a href="javascript:GroupFieldFWCNew();" title="批量的增加三个字段：审核人、审核日期、审核信息。">
+                                <i class="iconfont icon-shenhe"></i> 审核分组
                             </a>
                         </li>
-                        <li>
-                            <a href="javascript:NewFrame();" class=" easyui-linkbutton btn-light-yellow">
-                                新建框架
-                            </a>
-                        </li>
+
+                        <!--<li>
+                <a href="javascript:NewFrame();">
+                    <i class="iconfont icon-fengge2"></i> 框架(内嵌自定义url)
+                </a>
+            </li>-->
 
                     </ul>
                 </div>
-                <a href="javascript:BatchAddF();" class="easyui-linkbutton btn-light-red">
-                    批量修改字段
+
+                <a href="javascript:FrmNodeComponent();" class="easyui-linkbutton btn-light-green" id="FrmNodeComponent">
+                    <i class="iconfont icon-jiedian-"></i>节点组件
                 </a>
-                <a href="javascript:FrmNodeComponent();" class="easyui-linkbutton btn-light-blue" id="FrmNodeComponent">节点表单组件</a>
-                <a href="javascript:MobileFrm();" class="easyui-linkbutton  btn-light-green">
-                    手机表单
+                <a id="MobileFrm" href="javascript:MobileFrm();" class="easyui-linkbutton  btn-light-blue">
+                    <i class="iconfont icon-shouji"></i>手机
+                </a>
+
+
+                <!--<a href="javascript:FrmWithAdd();" class="easyui-linkbutton btn-light-red">
+        <i class="iconfont icon-jiajianchengchu-1"></i>宽度
+    </a>
+    <a href="javascript:FrmWithCut();" class="easyui-linkbutton btn-light-red">
+        <i class="iconfont icon-jiajianchengchu-"></i>宽度
+    </a>-->
+
+                <a id="StyletDfine" href="javascript:StyletDfine();" class="easyui-linkbutton  btn-light-blue">
+                    <i class="iconfont icon-fengge1"></i>风格
+                </a>
+
+                <!--<a id="GloValStyles" href="javascript:GloValStyles();" class="easyui-linkbutton  btn-light-yellow">
+        <i class="iconfont icon-yangshi"></i>字段样式
+    </a>-->
+                <a id="DDL_TableCol" href="javascript:DDL_TableCol_Change();" class="easyui-linkbutton  btn-light-yellow" data-num="4">
+                    <i class="iconfont icon-yangshi"></i>4列
+                </a>
+
+                <select id="DDL_TableCol" class="form-control" style="width:120px; display:inline-block" onchange="DDL_TableCol_Change()">
+                    <option value="0">标准型4列</option>
+                    <option value="1" selected="selected">紧凑型6列</option>
+                </select>
+
+                <a id="BatchAddF" href="javascript:ToDevFrm();" class="easyui-linkbutton  btn-light-red">
+                    <i class="iconfont icon-yangshi"></i>开发者表单
                 </a>
 
             </div>
         </div>
-        <div class="panel layout-panel layout-panel-center cs-panel-center">
-            <div data-options="region:'center'" title="" class="panel-body panel-body-noheader layout-body cs-panel-body">
-                <form id="divCCForm" enctype="multipart/form-data" method="post">
-                    <table id="contentTable" class="cs-table">
-                    </table>
 
-                </form>
 
-            </div>
-        </div>
+        <div id="contentTable" style="width: 100%; margin-top: 65px;"></div>
+
+        <!--<table id="contentTable" class="cs-table">
+        </table>-->
+        <style>
+            .FoolFrmTable {
+                padding: 25px;
+                width: 80%;
+                margin-left: 10%;
+            }
+
+            .input-group-Designer {
+                width: 20px;
+                top: 32px;
+                left: 14px;
+                position: relative;
+            }
+        </style>
+
     </div>
 </body>
 </html>

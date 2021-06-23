@@ -37,14 +37,13 @@ function InitBar(optionKey) {
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
 }
 
-function Adv()
-{
+function Adv() {
     var url = "Adv.htm?FK_Flow=" + GetQueryString("FK_Flow");
     OpenEasyUiDialogExt(url, '高级设置', 600, 400, false);
 }
 
 function HelpOnline() {
-    var url = "http://ccbpm.mydoc.io";
+    var url = "http://doc.ccbpm.cn";
     window.open(url);
 }
 

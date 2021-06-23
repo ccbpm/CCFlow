@@ -114,7 +114,7 @@ function AddBtnIcon() {
     $("#Btn_Advanced").addClass("cc-btn-tab btn-advanced");
     $("#Btn_New").addClass("cc-btn-tab btn-new");
     $("#Btn_Search").addClass("cc-btn-tab btn-search");
-    $("#Btn_App").addClass("cc-btn-tab btn btn_app");
+    $("#Btn_App").addClass("cc-btn-tab btn_app");
 
 
 }

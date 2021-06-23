@@ -58,7 +58,8 @@
             var fields = data["Fields"]; //已经存在的字段，所有的字段.
 
             //清空以前的数据、根据新的返回对象重新渲染table内容
-            $("#Table1 tr").remove();
+            //$("#Table1 tr").remove();
+
             //增加处理.
             for (var i = 0; i < sfTabls.length; i++) {
 
@@ -280,7 +281,6 @@
         </div>
 
         <table id="Table1" class="table">
-            
             <tr>
                 <th>
                     序
@@ -305,6 +305,7 @@
                 </th>
             </tr>
         </table>
+
         <div id="Msg">
         </div>
     </div>

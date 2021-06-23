@@ -27,22 +27,22 @@
 
             //if (entityType == 1 || entityType == 2) {
 
-            var option2 = document.createElement("option");
-            $(option2).val('8');
-            $(option2).text('开发者表单');
-            $('#DDL_FrmType').append(option2);
+            //var option2 = document.createElement("option");
+            //$(option2).val('8');
+            //$(option2).text('开发者表单');
+            //$('#DDL_FrmType').append(option2);
 
 
-            //先创建好select里面的option元素
-            var option = document.createElement("option");
-            $(option).val('0');
-            $(option).text('傻瓜表单');
-            $('#DDL_FrmType').append(option);
+            ////先创建好select里面的option元素
+            //var option = document.createElement("option");
+            //$(option).val('0');
+            //$(option).text('傻瓜表单');
+            //$('#DDL_FrmType').append(option);
 
-            var option1 = document.createElement("option");
-            $(option1).val('1');
-            $(option1).text('自由表单');
-            $('#DDL_FrmType').append(option1);
+            //var option1 = document.createElement("option");
+            //$(option1).val('1');
+            //$(option1).text('自由表单');
+            //$('#DDL_FrmType').append(option1);
 
             //$("#DDL_FrmType").it;
             //  }
@@ -53,7 +53,7 @@
 
             //创建表单类型.
             if (entityType == 0 && webUser.CCBPMRunModel != 2) {
-                GenerBindEnumKey("DDL_FrmType", "FrmType", frmType);
+               // GenerBindEnumKey("DDL_FrmType", "FrmType", frmType);
             }
 
             var caption = "";
@@ -149,7 +149,28 @@
                     创建的表单类型
                 </td>
                 <td>
-                    <select name="DDL_FrmType" id="DDL_FrmType" onchange="FrmTypeChange()" />
+
+                    <select name="DDL_FrmType" id="DDL_FrmType" onchange="FrmTypeChange()">
+                        <option value=null disabled='disabled'>+驰骋ccform内置表单</option>
+                        <option value=0>&nbsp;&nbsp;傻瓜表单</option>
+                        <option value=8>&nbsp;&nbsp;开发者表单</option>
+                        <option value=1 disabled='disabled'>&nbsp;&nbsp;自由表单(暂停支持)</option>
+
+                        <option value=null disabled='disabled'>+插件表单(暂停支持)</option>
+
+                        <option value=4 disabled='disabled'>&nbsp;&nbsp;Word表单</option>
+                        <option value=5 disabled='disabled'>&nbsp;&nbsp;在线编辑模式Excel表单</option>
+                        <option value=6 disabled='disabled'>&nbsp;&nbsp;VSTO模式Excel表单</option>
+
+                        <option value=null disabled='disabled'>+其他表单</option>
+                        <option value=3>&nbsp;&nbsp;嵌入式表单</option>
+                        <option value=7 >&nbsp;&nbsp;实体类组件</option>
+
+                    </select>
+
+                    <!--<select name="DDL_FrmType" id="DDL_FrmType" onchange="FrmTypeChange()" />-->
+
+
                 </td>
                 <td>
                     根据自己的业务场景需要选择相应的表单类型.

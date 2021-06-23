@@ -222,8 +222,10 @@
             frmID = GetQueryString("FK_MapData");
             if (frmID == null || frmID == undefined)
                 frmID = GetQueryString("FrmID");
-
-            var url = "./MobileFrmView/FrmView.htm?IsTest=1&FrmID=" + frmID;
+            var fk_node = GetQueryString("FK_Node");
+            if (fk_node == null || fk_node == undefined || fk_node == "")
+                fk_node = 0;
+            var url = "./MobileFrmView/FrmView.htm?IsTest=1&FrmID=" + frmID + "&FK_Node=" + fk_node;
             window.location.href = url;
             return;
 

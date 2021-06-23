@@ -178,9 +178,9 @@
                 html += "</tr>";
             });
             $("#all_columns").html(html);
-            $("#chooseColumn").text(STable || json.STable || "");
-
-            $("#step2ToStep3").html("<a href='javascript:void(0);' class='easyui-linkbutton' onclick='step3(\"" + FK_MapData + "\", \"" + FK_SFDBSrc + "\", \"" + (STable || json.STable) + "\")'>下一步</a>");
+            $("#chooseColumn").text(STable || json.STable[0].STable || "");
+            STable = STable || json.STable[0].STable || "";
+            $("#step2ToStep3").html("<a href='javascript:void(0);' class='easyui-linkbutton' onclick='step3(\"" + FK_MapData + "\", \"" + FK_SFDBSrc + "\", \"" + STable + "\")'>下一步</a>");
             $.parser.parse("#step2ToStep3");
 
             doShow("step2");

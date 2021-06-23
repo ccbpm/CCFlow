@@ -43,8 +43,7 @@
         <div class="navbar-inner">
             <div class="container">
                 <div class="ccbpm-designer-header">
-                    <div class="pull-right">
-
+                    <div style="text-align:center">
                         <button class="btn btn-light-green" type="button" onclick="ShowNewFlowGif()">
                             <i class="iconfont icon-xinjian"></i> 新建
                         </button>
@@ -88,7 +87,7 @@
                             <i class="iconfont icon-help"></i> 帮助
                         </button>
                     </div>
-                    <span id="flowDevModelText"></span>
+
                 </div>
 
             </div>
@@ -220,6 +219,9 @@
             </p>
         </div>
         <div class="modal-footer">
+            <button class="btn btn-primary savetext" data-dismiss="modal" id="lineLabSave" aria-hidden="true">
+                保存
+            </button>
             <button class="btn btn-primary savetext" data-dismiss="modal" id="lineDel" aria-hidden="true">
                 删除
             </button>
@@ -316,6 +318,9 @@
         <!--div class="process-step btn" style="left: 189px; top: 340px;"><span class="process-num badge badge-inverse"><i class="icon-star icon-white"></i>3</span> 步骤3</div-->
     </div>
 
+    <div class="canvas-fixed">
+        <span id="flowDevModelText" style=""></span> 编辑：欧阳  时间：2021-05-20
+    </div>
 
     <!--JL.plus-->
     <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -337,6 +342,9 @@
     <script type="text/javascript" src="Public/js/jquery.multiselect2side/js/jquery.multiselect2side.js?2025"></script>
     <!--flowdesign-->
     <script type="text/javascript" src="Public/js/flowdesign/leipi.flowdesign.v3.js?2025"></script>
+    <script src="../../Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
     <script src="Designer2018.js" type="text/javascript"></script>
 
     <!--</div>-->

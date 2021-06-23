@@ -1,7 +1,68 @@
 ﻿
+
 function InitBar(optionKey) {
 
-    var html = "<b>流程计划时间计算</b>:";
+    var html = "<b>限制规则</b>:";
+
+    html += "<select id='changBar' onchange='changeOption()'>";
+
+    var groups = GetDBGroup();
+    var dtls = GetDBDtl();
+
+    for (var i = 0; i < groups.length; i++) {
+
+        var group = groups[i];
+        html += "<option value=null  disabled='disabled'>+" + group.Name + "</option>";
+
+        for (var idx = 0; idx < dtls.length; idx++) {
+            var dtl = dtls[idx];
+            if (dtl.GroupNo != group.No) continue;
+            html += "<option value=" + dtl.No + ">&nbsp;&nbsp;" + dtl.Name + "</option>";
+        }
+    }
+    html += "</select >";
+
+    html += "<button  id='Btn_Save' class='cc-btn-tab btn-save'  onclick='Save()' >保存</button>";
+
+    document.getElementById("bar").innerHTML = html;
+    $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
+}
+
+function GetDBGroup() {
+
+    var json = [
+        { "No": "A", "Name": "限制规则" }
+    ];
+    return json;
+}
+function GetDBDtl() {
+
+    var json = [
+
+        { "No": 0, "Name": "不限制", "GroupNo": "A", "Url": "0.None.htm" },
+        { "No": 1, "Name": "按时间规则计算", "GroupNo": "A", "Url": "1.TimeDT.htm" },
+        { "No": 6, "Name": "按照发起字段不能重复规则", "GroupNo": "A", "Url": "6.ColNotExit.htm" },
+        { "No": 7, "Name": "按SQL规则 ", "GroupNo": "A", "Url": "7.BySQL.htm" },
+
+        { "No": 9, "Name": "为子流程时仅仅只能被调用1次.", "GroupNo": "A", "Url": "9.OnlyOneSubFlow.htm" }
+    ];
+    return json;
+}
+function GetUrl(optionKey) {
+
+    var json = GetDBDtl();
+    for (var i = 0; i < json.length; i++) {
+        var en = json[i];
+        if (en.No == optionKey)
+            return en.Url;
+    }
+    return "0.None.htm";
+}
+
+
+function InitBar_Del(optionKey) {
+
+    var html = "<b></b>:";
 
     html += "<select id='changBar' onchange='changeOption()'>";
 
@@ -24,38 +85,6 @@ function InitBar(optionKey) {
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
 }
-
-//function GetDBGroup() {
-
-//    var json = [
-
-//        { "No": "A", "Name": "流程计划时间计算" },
-//    ];
-//    return json;
-//}
-
-//function GetDBDtl() {
-
-//    var json = [
-
-//        { "No": 0, "Name": "不限制（默认）", "GroupNo": "A", "Url": "0.None.htm" },
-
-//        { "No": 1, "Name": " 按时间规则计算", "GroupNo": "A", "Url": "1.NodeFrmDT.htm" },
-//        { "No": 2, "Name": " 按时间规则计算", "GroupNo": "A", "Url": "1.NodeFrmDT.htm" },
-//        { "No": 3, "Name": " 按时间规则计算", "GroupNo": "A", "Url": "1.NodeFrmDT.htm" },
-//        { "No": 4, "Name": " 按时间规则计算", "GroupNo": "A", "Url": "1.NodeFrmDT.htm" },
-//        { "No": 5, "Name": " 按时间规则计算", "GroupNo": "A", "Url": "1.NodeFrmDT.htm" },
-
-//        { "No": 6, "Name": "按照发起字段不能重复规则", "GroupNo": "A", "Url": "6.ColNotExit.htm" },
-
-//        { "No": 7, "Name": "按SQL规则", "GroupNo": "A", "Url": "7.SQLDT.htm" },
-//        { "No": 8, "Name": "按SQL规则", "GroupNo": "A", "Url": "7.SQLDT.htm" },
-
-//        { "No": 9, "Name": "为子流程时的规则", "GroupNo": "A", "Url": "9.OnlyOneSubFlow.htm" },
-//    ];
-//    return json;
-//}
-
 function Adv()
 {
     var url = "Adv.htm?FK_Flow=" + GetQueryString("FK_Flow");
@@ -80,37 +109,6 @@ function changeOption() {
     var url = GetUrl(optionKey);
 
     window.location.href = url + "?FK_Flow=" + flowNo;
-}
-
-function GetUrl(optionKey) {
-
-    switch (parseInt(optionKey)) {
-        case StartLimitRole.None:
-            url = "0.None.htm";
-            break;
-        case StartLimitRole.Day:
-        case StartLimitRole.Week:
-        case StartLimitRole.Month:
-        case StartLimitRole.JD:
-        case StartLimitRole.Year:
-            url = "1.TimeDT.htm";
-            break;
-        case StartLimitRole.ColNotExit:
-            url = "6.ColNotExit.htm";
-            break;
-        case StartLimitRole.ResultIsZero:
-        case StartLimitRole.ResultIsNotZero:
-            url = "7.BySQL.htm";
-            break;
-        case StartLimitRole.OnlyOneSubFlow:
-            url = "9.OnlyOneSubFlow.htm";
-            break;
-        default:
-            url = "0.None.htm";
-            break;
-    }
-
-    return url;
 }
 
 function CheckFlow(flowNo) {

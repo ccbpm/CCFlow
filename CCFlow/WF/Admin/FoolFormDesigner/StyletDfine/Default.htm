@@ -9,25 +9,29 @@
     <script src="../../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
-    <script src="../../../Comm/jquery.colorpicker.js"></script>
 
     <link href="../../CSS/FoolFrmBody.css" rel="stylesheet" />
     <link href="../../CSS/Toolbar.css" rel="stylesheet" />
 
     <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
     <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../../Scripts/layui/layui/layui.js" type="text/javascript"></script>
     <link href="../../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
-    <script src="../../Admin.js"></script>
-
+    <!-- <script src="../../Admin.js"></script>-->
     <!--<link href="../../../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />-->
     <!-- 用于显示图标 -->
     <link href="../../../Comm/fonts/simple-line-icons.css" rel="stylesheet" />
     <link href="../../../Comm/fonts/font-icons.min.css" rel="stylesheet" />
     <link href="../../../Comm/fonts/font-awesome.css" rel="stylesheet" />
-
+    <script src="StyleEditor.js"></script>
     <!-- 字段的三个风格. -->
     <style type="text/css">
+        .layui-btn-radius {
+            border-radius: 10px;
+        }
+
         .FoolFrmBody table tr td {
             position: relative
         }
@@ -42,25 +46,76 @@
         .FoolFrmBody input {
             padding-left: 25px;
         }
+
+        .layui-row {
+            margin-bottom: 5px;
+        }
+
+        .layui-col-xs2 {
+            padding-left: 5px
+        }
+
+        .layui-inline {
+            margin-bottom: 5px;
+        }
+
+        .layui-input-inline {
+            width: 100px !important;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 38px;
+            line-height: 36px;
+            text-align: center;
+            color: #d2d2d2;
+        }
+
+        .layui-input, .layui-select, .layui-textarea {
+            height: 38px;
+            line-height: 1.3;
+            line-height: 38px\9;
+            border-width: 1px;
+            border-style: solid;
+            background-color: #fff;
+            border-radius: 2px;
+        }
     </style>
-    <script src="StyleEditor.js"></script>
     <script type="text/javascript">
-
-        //获得集合.
-        var ens = null;
-        var en = null;
         var styleNo = null;
-        $(function () {
-
-            $("#c4").show();
-            $("#c6").hide();
-
+        layui.use(['dropdown', 'colorpicker', 'layer', 'table', 'form', 'laydate'], function () {
+            var dropdown = layui.dropdown
+                , form = layui.form
+                , layer = layui.layer
+                , colorpicker = layui.colorpicker
+                , laydate = layui.laydate
+                , element = layui.element
+                , $ = layui.jquery;
+            form.render('select');
             //绑定模版.
             var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_StyletDfine");
             ens = hander.DoMethodReturnJSON("Default_GenerTemplate");
-
+            var templates = [];
             var templateName = GetQueryString("Template");
-            GenerBindDDL("DDL_Template", ens, "No", "Name", templateName);
+            templateName = templateName == null || templateName == undefined ? "" : templateName;
+            $.each(ens, function (i, item) {
+                if (item.No == templateName) {
+                    $("#TB_Template").html(item.Name);
+                }
+                templates.push({
+                    "id": item.No,
+                    "title": item.Name
+                });
+            })
+            dropdown.render({
+                elem: '#Btn_Template'
+                , data: templates
+                , click: function (obj) {
+                    TemplateChange(obj.id);
+                }
+            });
 
             if (templateName && templateName.indexOf("Sys.") > 0)
                 $("#Btn_Delete").attr("disabled", "disabled");
@@ -68,105 +123,324 @@
             //绑定面板.
             var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_StyletDfine");
             ens = hander.DoMethodReturnJSON("Default_GenerGloVars");
-            //绑定下拉框.
+
+            //绑定风格文件
             GenerBindDDL("DDL_Style", ens, "No", "Name");
-
-            //var idx = GetQueryString("Idx");
-            //if (idx == null || idx == undefined)
-            //    idx = 1;
-            //$("#DDL_Style").get(0).selectedIndex = idx;
-
-            DDL_Style_Change("FoolFrmTable");
 
             //装载风格文件.
             LoadCss();
 
             //增加事件，调用 StyleEditer.js .
-            AddEvent();
+            AddEventExt();
 
             //增加字段icon.
             AddICON();
+
+            styleNo = $("#DDL_Style").val();
+
+
+            //设置颜色
+            $.each($(".layui-color"), function (i, item) {
+                var id = item.id;
+                //开启全功能
+                colorpicker.render({
+                    elem: '#' + id
+                    , color: ''
+                    , format: 'rgb'
+                    , predefine: true
+                    , alpha: true
+                    , done: function (color) {
+                        var cssID = this.elem.replace("#div_", "");
+                        $('#TBPara_' + cssID).val(color); //向隐藏域赋值
+                        var changeobj = $('#DDL_Style').val();//要改变的对象.
+                        if (changeobj) { //判断是否有选中对象
+                            var cssText = $("." + changeobj).attr("style")
+                            cssText = cssText == null || cssText == undefined ? "" : cssText;
+                            cssText = cssText + cssID + ":" + color + " !important";
+                            $("." + changeobj).css("cssText", cssText);
+                            setTimeout(function () { }, 500);
+                        }
+                        color || this.change(color); //清空时执行 change
+                    }
+                    , change: function (color) {
+                        var cssID = this.elem.replace("#div_", "");
+                        //给当前页面头部和左侧设置主题色
+                        var changeobj = $('#DDL_Style').val();//要改变的对象.
+                        if (changeobj) { //判断是否有选中对象
+                            var cssText = $("." + changeobj).attr("style") + cssID + ":" + color + " !important";
+                            $("." + changeobj).css(cssID, color);
+                            setTimeout(function () { }, 500);
+                        }
+                    }
+
+                });
+            });
+
+
+            //处理工具栏按钮
+            $('.layui-toolbar').on('click', function () {
+                var url = "";
+                var title = "";
+                var type = $(this).data('type');
+                switch (type) {
+                    case "Back": //返回
+                        Back();
+                        break;
+                    case "Btn_App"://应用
+                        App();
+                        break;
+                    case "Btn_Delete"://删除模板
+                        Delete(templateName);
+                        break;
+                    case "Btn_Save"://保存为模板
+                        SaveAsTemplate();
+                        break;
+                    case "Btn_Refresh"://刷新
+                        window.location.href = window.location.href;
+                        break;
+                    default: break;
+                }
+
+            });
+            //改变风格Style
+            form.on('select(StyleChange)', function (data) {
+                if (data.value == null || data.value == "") {
+                    //显示.
+                    $("#styleeditor").hide();
+                    return;
+                }
+                if (data.value == "FoolFrmTable") {
+                    $(".stylegroup").hide();
+                    $(".styledetail").hide();
+
+                } else {
+                    $(".stylegroup").show();
+                    $(".styledetail").show();
+                }
+                DDLChange(data.value, colorpicker);
+                form.render('select');
+            });
+
+            form.on('select(ChangeStyle)', function (data) {
+                DDLChange("FoolFrmFieldInput", colorpicker);
+                form.render('select');
+            })
+
+            //字体大小单位的监听
+            form.on('select(unit)', function (data) {
+                var id = data.elem.id;
+                var textId = id.replace("-unit", "");
+                var changeobj = $('#DDL_Style').val();//要改变的对象
+                var thispropertyval = $("#" + textId).val();//文字大小的值
+                if (changeobj) {//判断是否有选中对象
+                    var cssText = $("." + changeobj).attr("style")
+                    cssText = cssText == null || cssText == undefined ? "" : cssText;
+                    cssText += "font-size:" + thispropertyval + data.value + " !important";
+                    $("." + changeobj).css("cssText", cssText);
+                }
+            });
+            //字体设计
+            form.on('select(font)', function (data) {
+                var id = data.elem.id;
+                var cssID = id.replace("TBPara_", "");
+                cssID = cssID.replace("DDLPara_", "");
+                var changeobj = $('#DDL_Style').val();//要改变的对象
+                if (changeobj) {
+                    var cssText = $("." + changeobj).attr("style")
+                    cssText = cssText == null || cssText == undefined ? "" : cssText;
+                    cssText +=cssID + ":" + data.value + " !important";
+                    $("." + changeobj).css("cssText", cssText);
+                }
+            })
+            //边框
+            form.on('select(borderWhich)', function (data) {
+                var changeobj = $('#DDL_Style').val();
+                var thispropertyval = $("#TBPara_border-width_Temp").val();
+                var borderselect = data.value;
+                if (changeobj) {
+                    var cssText = $("." + changeobj).attr("style");
+                    cssText = cssText == null || cssText == undefined ? "" : cssText;
+                    if (borderselect == "all") {
+                        cssText += "border-width:" + thispropertyval + $("#TBPara_border-width-unit_Temp").val() + " !important";
+                    } else {
+                        cssText += "border-" + borderselect + "-width:" + thispropertyval + $("#TBPara_border-width-unit_Temp").val() + " !important";
+                    }
+                    $("." + changeobj).css("cssText", cssText);
+                }
+            })
+
+            //表单中标签或者输入框的点击事件
+            $.each(ens, function (i, en) {
+                $("." + en.No).attr("data-info", en.No);
+                $("." + en.No).on('click', function () {
+                    if ($(this).attr("data-info") == "FoolFrmFieldRow" || $(this).attr("data-info") == "FoolFrmTitle")
+                        return;
+                    DDLChange($(this).attr("data-info"), colorpicker);
+                    form.render();
+                    return;
+                })
+            })
+
+            form.render();
+
+
+
+            /**
+             * 改变模板文件
+             * @param val
+             */
+            function TemplateChange(val) {
+                if (val == "" || val == undefined) {
+                    return;
+                }
+
+                var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_StyletDfine");
+                hander.AddPara("Name", val);
+                var msg = hander.DoMethodReturnString("Default_Template_Selected");
+
+                var url = "?FK_MapData=" + GetQueryString("FK_MapData");
+                url += "&FrmID=" + GetQueryString("FrmID");
+                url += "&FK_Node=" + GetQueryString("FK_Node");
+                url += "&FK_Flow=" + GetQueryString("FK_Flow");
+                url += "&Template=" + val;
+
+                window.location.href = url;
+            }
+            /**
+             *退回
+             */
+            function Back() {
+                var url = "../Designer.htm?FK_MapData=" + GetQueryString("FK_MapData");
+                url += "&FrmID=" + GetQueryString("FrmID");
+
+                url += "&FK_Flow=" + GetQueryString("FK_Flow");
+                url += "&FK_Node=" + GetQueryString("FK_Node");
+                window.location.href = url;
+            }
+            /*
+             * 应用
+             */
+            function App() {
+                layer.confirm('您确认要执行吗？确定后，就会替换现在的风格文件。', {
+                    btn: ['确定', '取消']
+                }, function (index) {
+                    layer.close(index);
+                    SaveItem();
+                    var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_StyletDfine");
+                    var data = hander.DoMethodReturnString("Default_App");
+
+                    if (data.indexOf('err@') == 0) {
+                        layer.alert(data);
+                        return;
+                    }
+                    Back();
+                }, function (index) {
+                    layer.close(index);
+
+                });
+
+            }
+            /**
+             * 删除模板
+             */
+            function Delete(val) {
+
+                if (val == "") {
+                    layer.alert("请选择一个模版.");
+                    return;
+                }
+
+                layer.confirm('您确认要执行删除吗？', {
+                    btn: ['确定', '取消']
+                }, function (index) {
+                    layer.close(index);
+                    var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_StyletDfine");
+                    hander.AddPara("Name", val);
+                    var data = hander.DoMethodReturnString("Default_Template_Delete");
+                    alert(data);
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    window.location.href = window.location.href;
+                }, function (index) {
+                    layer.close(index);
+
+                });
+
+            }
+            /**
+             * 保存为模板
+             */
+            function SaveAsTemplate() {
+                layer.prompt({
+                    title: '请输入模版名称,不能有特殊符号.',
+                    formType: 0,
+                    value: '',
+                }, function (str, index) {
+                    layer.close(index);
+                    if (str == null || str == undefined || str == "")
+                        return;
+                    var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_StyletDfine");
+                    hander.AddPara("TemplateName", str);
+                    var data = hander.DoMethodReturnString("Default_SaveAsTemplate");
+                    layer.alert(data);
+                    if (data.indexOf('err@') == 0)
+                        return;
+                });
+            }
+
+            /**
+             * 动态加载css样式
+             */
+            function LoadCss() {
+
+                var url = "../../../../DataUser/Style/FoolFrmStyle/DefaultPreview.css?ref=11" + Math.random();
+
+                // 动态加载css
+                var loadStyle = function (url) {
+                    var link = document.createElement('link');
+                    link.rel = "stylesheet";
+                    link.type = "text/css";
+                    link.href = url;
+                    var head = document.getElementsByTagName("head")[0];
+                    head.appendChild(link);
+                };
+
+                // css加载
+                loadStyle(url);
+
+                $('head').children(':last').attr({
+                    rel: "stylesheet",
+                    type: 'text/css',
+                    href: url,
+                });
+            }
+
+            function SetICONForCtrl(id, icon) {
+
+                var html = "";
+                html += ' <i class="' + icon + '"></i>';
+                $('#' + id).before(html);
+                $("#" + id).css("padding-left", "40px");
+
+            }
+            function AddICON() {
+
+                SetICONForCtrl("TB_Tel", "input-icon icon-phone");
+                SetICONForCtrl("TB_Email", "input-icon icon-envelope-letter");
+                SetICONForCtrl("TB_Addr", "input-icon icon-location-pin");
+
+                SetICONForCtrl("TB_SQR", "input-icon layui-icon layui-icon-username");
+                SetICONForCtrl("TB_SQRQ", "input-icon layui-icon layui-icon-date");
+            }
         });
-
-        function SetICONForCtrl(id, icon) {
-
-            var html = "";
-            html += '<div class="input-group">';
-            html += ' <i class="' + icon + '"></i>';
-            $('#' + id).before(html);
-            $('#' + id).after('</div>');
-
-        }
-        function AddICON() {
-
-            SetICONForCtrl("TB_Tel", "icon-phone");
-            SetICONForCtrl("TB_Email", "icon-envelope-letter");
-            SetICONForCtrl("TB_Addr", "icon-location-pin");
-
-            SetICONForCtrl("TB_SQR", "icon-user");
-            SetICONForCtrl("TB_SQRQ", "icon-calendar");
-        }
-
-        //表单风格变化以后.
-        function TemplateChange() {
-
-            var val = $("#DDL_Template").val();
-            if (val == "" || val == undefined) {
-                return;
-            }
-
-            var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_StyletDfine");
-            hander.AddPara("Name", val);
-            var msg = hander.DoMethodReturnString("Default_Template_Selected");
-
-            var url = "?FK_MapData=" + GetQueryString("FK_MapData");
-            url += "&FrmID=" + GetQueryString("FrmID");
-            url += "&FK_Node=" + GetQueryString("FK_Node");
-            url += "&FK_Flow=" + GetQueryString("FK_Flow");
-            url += "&Template=" + val;
-
-            window.location.href = url;
-        }
-
-        function DDLChange(changeToStyleNo) {
-
-            //显示.
-            $("#styleeditor").show();
-
-            //保存旧的条目.
-            SaveItem(styleNo);
-
-            styleNo = changeToStyleNo;
-
-            en = new Entity("BP.Sys.GloVar", styleNo);
-
-            //执行批量赋值.
-            var val = en.Val;
-            en.AtPara = val;
-            GenerFullAllCtrlsVal(en);
-
-            $("#DDL_Style").val(styleNo);
-
-        }
-        //调样式的面板
-        function DDL_Style_Change() {
-
-            var val = $("#DDL_Style").val();
-            if (val == null || val == "") {
-                //显示.
-                $("#styleeditor").hide();
-
-                //执行一次保存.
-                SaveItem();
-                return;
-            }
-
-            DDLChange(val);
-        }
-
         //保存应用.
         function SaveItem(styleNo) {
 
+            if (styleNo == null || styleNo == undefined)
+                styleNo = $("#DDL_Style").val();
             en = new Entity("BP.Sys.GloVar", styleNo);
 
             $("#Btn_SaveItem").val("正在保存...");
@@ -198,419 +472,362 @@
             setTimeout(function () { $("#Btn_SaveItem").val("保存"); }, 500);
         }
 
-        function Back() {
+        //调样式的面板
+        function DDL_Style_Change() {
 
-            var url = "../Designer.htm?FK_MapData=" + GetQueryString("FK_MapData");
-            url += "&FrmID=" + GetQueryString("FrmID");
+            var val = $("#DDL_Style").val();
+            if (val == null || val == "") {
+                //显示.
+                $("#styleeditor").hide();
 
-            url += "&FK_Flow=" + GetQueryString("FK_Flow");
-            url += "&FK_Node=" + GetQueryString("FK_Node");
-
-            //alert(url);
-
-            window.location.href = url;
-            return;
-        }
-
-        //应用.
-        function App() {
-
-            if (window.confirm('您确认要执行吗？确定后，就会替换现在的风格文件。') == false)
-                return;
-
-            var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_StyletDfine");
-            var data = hander.DoMethodReturnString("Default_App");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
+                //执行一次保存.
+                //SaveItem();
                 return;
             }
 
-            // alert(data);
+            if (val == "FoolFrmTable") {
+                $(".stylegroup").hide();
+                $(".styledetail").hide();
 
-            Back();
-        }
-        function SaveAsTemplate() {
-
-            var str = window.prompt("请输入模版名称,不能有特殊符号.", "");
-            if (str == null || str == undefined || str == "")
-                return;
-
-            var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_StyletDfine");
-            hander.AddPara("TemplateName", str);
-            var data = hander.DoMethodReturnString("Default_SaveAsTemplate");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
+            } else {
+                $(".stylegroup").show();
+                $(".styledetail").show();
             }
 
-            alert(data);
+            DDLChange(val);
         }
 
-        function LoadCss() {
 
-            var url = "../../../../DataUser/Style/FoolFrmStyle/DefaultPreview.css?ref=11" + Math.random();
+        function DDLChange(changeToStyleNo, colorpicker) {
 
-            // 动态加载css
-            var loadStyle = function (url) {
-                var link = document.createElement('link');
-                link.rel = "stylesheet";
-                link.type = "text/css";
-                link.href = url;
-                var head = document.getElementsByTagName("head")[0];
-                head.appendChild(link);
-            };
+            //显示.
+            $("#styleeditor").show();
 
-            // css加载
-            loadStyle(url);
+            //保存旧的条目.
+            SaveItem(styleNo);
 
-            $('head').children(':last').attr({
-                rel: "stylesheet",
-                type: 'text/css',
-                href: url,
-            });
+            styleNo = changeToStyleNo;
+
+            en = new Entity("BP.Sys.GloVar", styleNo);
+
+            //执行批量赋值.
+            var val = en.Val;
+            en.AtPara = val;
+            GenerFullAllCtrlsVal(en);
+
+
+
+            $("#DDL_Style").val(styleNo);
+
         }
 
-        function Delete() {
-
-            var val = $("#DDL_Template").val();
-            if (val == null || val == undefined || val == '') {
-                alert("请选择一个模版.");
-                return;
-            }
-
-            if (window.confirm('您确认要执行删除吗？') == false)
-                return;
-
-            var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_StyletDfine");
-            hander.AddPara("Name", val);
-            var data = hander.DoMethodReturnString("Default_Template_Delete");
-            alert(data);
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-            window.location.href = window.location.href;
-        }
-
-        //表单样式：变化的时候.
-        function DDL_TableCol_Change() {
-
-            var val = $("#DB").val();
-
-            if (val == 0) {
-                $("#c4").show();
-                $("#c6").hide();
-            }
-
-            if (val == 1) {
-                $("#c6").show();
-                $("#c4").hide();
-                alert("未实现");
-            }
-        }
     </script>
 </head>
 <body>
-    <form id="CCForm" class="form-inline">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header" style="text-align: center;box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);background-color:white">
+            <div class="layui-btn-container" style="padding-top:10px">
+                <button type="button" class="layui-btn  layui-btn-sm  layui-toolbar" data-type="Back">
+                    <i class="layui-icon layui-icon-return"></i>返回
+                </button>
+                <button class="layui-btn  layui-btn-normal layui-btn-sm   layui-toolbar" id="Btn_Template">
+                    <span id="TB_Template">请选择模板</span>
+                    <i class="layui-icon layui-icon-down layui-font-12"></i>
+                </button>
 
-        <div style="padding:10px;">
-            <div class="container-full">
-                <!--<a href="javascript:FrmWithAdd();" class="easyui-linkbutton btn-light-red">
-                    返回表单设计器
-                </a>-->
-                <div>
-                    <div class="form-group">
-                        <button onclick="Back();" type="button" id="Btn_Back">返回</button>
-                        <!--<input type="button" value="套用模版" onclick="LoadTemplate();">-->
-                    </div><div class="form-group">
-                        <!--<label>
-                            套用模版：
-                        </label>-->
-                        &nbsp;
-                        <select id="DDL_Template" onchange="TemplateChange();" class="form-control">
-                        </select>
-
-                    </div><div class="form-group">
-                        <button type="button" value="应用"  onclick="App();" id="Btn_Save"> 应用</button>
-                        <button type="button" value="删除模版" id="Btn_Delete" onclick="Delete();">删除模版</button>
-                        <button type="button" value="保存为模版" onclick="SaveAsTemplate();" id="Btn_SaveAs">保存为模版</button>
-                    </div>
-                    <div class="form-group">
-                        <!--<select id="DB" onchange="DDL_TableCol_Change" class="form-control">
-                            <option id="4" selected="selected"> 标准型4列显示</option>
-                            <option id="6">紧凑型6列显示</option>
-                        </select>-->
-                        <!--<label>
-                            <input type="radio" id="RB_4" name="RB" />标准型4列显示
-
-                        </label>
-                        <label>
-                            <input type="radio" id="RB_6" name="RB" />紧凑型6列显示
-                        </label>-->
-                    </div>
-                </div>
+                <button type="button" class="layui-btn  layui-btn-warm layui-btn-sm  layui-toolbar" data-type="Btn_App">
+                    <i class="layui-icon layui-icon-app"></i>应用
+                </button>
+                <button type="button" class="layui-btn layui-btn-danger  layui-btn-sm  layui-toolbar" data-type="Btn_Delete" id="Btn_Delete">
+                    <i class="layui-icon layui-icon-delete"></i>删除模版
+                </button>
+                <button type="button" class="layui-btn layui-btn-warm layui-btn-sm  layui-toolbar" data-type="Btn_Save">
+                    <i class="layui-icon layui-icon-save"></i>保存为模版
+                </button>
+                <button type="button" class="layui-btn   layui-btn-sm  layui-toolbar " data-type="Btn_Refresh">
+                    <i class="layui-icon layui-icon-refresh"></i>刷新
+                </button>
             </div>
         </div>
+        <div class="layui-body" style="margin-top:20px;left:15px">
+            <div class="layui-row">
+                <form class="layui-form">
+                    <div class="layui-col-xs8">
+                        <div class="layui-card layui-panel" style="height:100%">
+                            <div class="layui-card-body">
+                                <div class="layui-row FoolFrmTitle">
+                                    <div class="layui-col-xs12">
+                                        <div class="FoolFrmTitleLable" style='float:left;margin-top:8px'>傻瓜表单样式定义器</div>
+                                        <div class="FoolFrmTitleIcon" style='float:right;margin-top:1px'><img src='../../../../DataUser/ICON/LogBiger.png' style='height:40px;' /></div>
+                                    </div>
+                                </div>
+                                <div class="layui-row FoolFrmGroupBar">
+                                    <div class="layui-col-xs12">基本信息</div>
+                                </div>
+                                <div class="layui-row FoolFrmFieldRow">
 
-        <div style="width:90%;margin:0 auto;min-width:1050px;">
+                                    <div class="layui-col-xs2 FoolFrmFieldLabel">申请人</div>
+                                    <div class="layui-col-xs4 FoolFrmFieldInput">
+                                        <div class="layui-form-item">
+                                            <input class="layui-input" type="text" id="TB_SQR" value="驰骋工作流" />
+                                        </div>
 
-            <div id="c4" class="FoolFrmBody" style="width:700px;float:left;margin-top:20px;border-radius:5px;border: 1px solid #d7d7d7;">
-                <center>
-                    <table class="FoolFrmTable" style="width:700px;">
-                        <tr class='FoolFrmTitleTR'>
-                            <td colspan="4" class='FoolFrmTitleTD'>
-                                <div class='FoolFrmTitleIcon' onclick="DDLChange('FoolFrmTitleIcon')" style='float:left;margin-top:1px'><img src='../../../../DataUser/ICON/LogBiger.png' style='height:50px;' /></div>
+                                    </div>
+                                    <div class="layui-col-xs2 FoolFrmFieldLabel">申请日期</div>
+                                    <div class="layui-col-xs4 FoolFrmFieldInput"><input class="layui-input" type="text" id="TB_SQRQ" value="2003-02-23" /></div>
+                                </div>
+                                <div class="layui-row FoolFrmFieldRow">
+                                    <div class="layui-col-xs2 FoolFrmFieldLabel">地址</div>
+                                    <div class="layui-col-xs10 FoolFrmFieldInput">
+                                        <input class="layui-input" type="text" id="TB_Addr" value="济南市.高新区.碧桂园凤凰中心19层" />
+                                    </div>
+                                </div>
+                                <div class="layui-row FoolFrmFieldRow">
+                                    <div class="layui-col-xs12 FoolFrmFieldLabel"><span style="color:red">*</span>申请原因</div>
+                                    <div class="layui-col-xs12FoolFrmFieldInput">
+                                        <textarea class="layui-textarea" id="TB_SQYY" placeholder="不少于50字，请仔细填写" cols="10"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-row FoolFrmFieldRow">
+                                    <div class="layui-col-xs2 FoolFrmFieldLabel">电话</div>
+                                    <div class="layui-col-xs4 FoolFrmFieldInput"><input class="layui-input" type="text" id="TB_Tel" value="0531-82374939" /></div>
+                                    <div class="layui-col-xs2 FoolFrmFieldLabel">邮件</div>
+                                    <div class="layui-col-xs4 FoolFrmFieldInput"><input class="layui-input" type="text" id="TB_Email" value="ccs@ccflow.org" /></div>
+                                </div>
+                                <div class="layui-row FoolFrmFieldRow">
+                                    <div class="layui-col-xs2 FoolFrmFieldLabel"> 是否执行到位？</div>
+                                    <div class="layui-col-xs4 FoolFrmFieldInput">
+                                        <div class="">
+                                            <input type="checkbox" name="CB_IsOK" lay-skin="switch" lay-text="ON|OFF">
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-xs2 FoolFrmFieldLabel">性别</div>
+                                    <div class="layui-col-xs4">
+                                        <select name="DDL_XB" id="DDL_XB" lay-filter="ChangeStyle">
+                                            <option value="1">男</option>
+                                            <option value="0">女</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-row FoolFrmFieldRow">
+                                    <div class="layui-col-xs2 FoolFrmFieldLabel">整治面貌</div>
+                                    <div class="layui-col-xs10 FoolFrmFieldInput">
+                                        <input type="radio" id="TB_ZZMM_0" name="ZZMM" value="0" title="群众" checked>
+                                        <input type="radio" id="TB_ZZMM_1" name="ZZMM" value="1" title="团员" />
+                                        <input type="radio" id="TB_ZZMM_2" name="ZZMM" value="2" title="党员" />
+                                        <input type="radio" id="TB_ZZMM_3" name="ZZMM" value="3" title="无党派人士" />
+                                    </div>
+                                </div>
 
-                                <div class='FoolFrmTitleLable' onclick="DDLChange('FoolFrmTitleLable')" style='float:right;margin-top:8px'>傻瓜表单样式定义器</div>
-                            </td>
-                        </tr>
-
-                        <tr class="FoolFrmGroupBarTR">
-                            <td class="FoolFrmGroupBarTD" colspan="4" onclick="DDLChange('FoolFrmGroupBarTD')"> 基本信息</td>
-                        </tr>
-
-                        <tr class="FoolFrmFieldTR">
-                            <td class="FoolFrmFieldTD"> <div class="FoolFrmFieldName" onclick="DDLChange('FoolFrmFieldName')">申请人</div> </td>
-                            <td class="FoolFrmFieldTD"> <input class="FoolFrmFieldCtrl" onclick="DDLChange('FoolFrmFieldCtrl')" type="text" id="TB_SQR" value="驰骋工作流" /> </td>
-                            <td class="FoolFrmFieldTD"> <div class="FoolFrmFieldName" onclick="DDLChange('FoolFrmFieldName')">申请日期</div> </td>
-                            <td class="FoolFrmFieldTD">  <input class="FoolFrmFieldCtrl" onclick="DDLChange('FoolFrmFieldCtrl')" type="text" id="TB_SQRQ" value="2003-02-23" /></td>
-                        </tr>
-
-                        <tr class="FoolFrmFieldTR">
-                            <td class="FoolFrmFieldTD">
-                                <div class="FoolFrmFieldName" onclick="DDLChange('FoolFrmFieldName')">地址</div>
-                            </td>
-                            <td class="FoolFrmFieldTD" onclick="DDLChange('FoolFrmFieldCtrl')" colspan="3">
-                                <input class="FoolFrmFieldCtrl" onclick="DDLChange('FoolFrmFieldCtrl')" type="text" id="TB_Addr" value="济南市.高新区.碧桂园凤凰中心19层" />
-                            </td>
-                        </tr>
-
-                        <tr class="FoolFrmFieldTR" style="border:none;">
-                            <td colspan="4" class="FoolFrmFieldTD">
-                                <div class="FoolFrmFieldName" onclick="DDLChange('FoolFrmFieldName')">*申请原因</div>
-                                <textarea class="FoolFrmFieldCtrl" onclick="DDLChange('FoolFrmFieldCtrl')" style="width:100%;" placeholder="不少于50字，请仔细填写。" cols="10"></textarea>
-                            </td>
-                        </tr>
-
-                        <tr class="FoolFrmFieldTR">
-                            <td class="FoolFrmFieldTD"><div class="FoolFrmFieldName" onclick="DDLChange('FoolFrmFieldName')">电话</div> </td>
-                            <td class="FoolFrmFieldTD">
-                                <!--<span  id="TB_Tel" ></span>-->
-                                <!--<label id="TB_Tel_Div" class="icon-wenjianjia"></label>-->
-                                <input class="FoolFrmFieldCtrl" onclick="DDLChange('FoolFrmFieldCtrl')" id="TB_Tel" value="0531-82374939" />
-                            </td>
-                            <td class="FoolFrmFieldTD">
-                                <div class="FoolFrmFieldName" onclick="DDLChange('FoolFrmFieldName')">邮件</div>
-
-                            </td>
-                            <td class="FoolFrmFieldTD" onclick="DDLChange('FoolFrmFieldCtrl')">
-                                <input class="FoolFrmFieldCtrl" onclick="DDLChange('FoolFrmFieldCtrl')" type="text" id="TB_Email" value="ccs@ccflow.org" />
-                            </td>
-                        </tr>
-
-                        <tr class="FoolFrmFieldTR">
-                            <td class="FoolFrmFieldTD" colspan="2">
-                                <input class="FoolFrmFieldCtrl" onclick="DDLChange('FoolFrmFieldCtrl')" type="checkbox" id="CB_IsOK" />
-                                <label class="FoolFrmFieldName" for="CB_IsOK">
-                                    是否执行到位？
-                                </label>
-                            </td>
-                            <td class="FoolFrmFieldTD" onclick="DDLChange('FoolFrmFieldName')"> <div class="FoolFrmFieldName" onclick="DDLChange('FoolFrmFieldName')">性别</div>  </td>
-                            <td class="FoolFrmFieldTD">
-                                <select class="FoolFrmFieldCtrl" id="DDL_XB">
-                                    <option value="1">男</option>
-                                    <option value="0">女</option>
-                                </select>
-                            </td>
-                        </tr>
-
-                        <tr class="FoolFrmFieldTR">
-                            <td class="FoolFrmFieldTD"> <div class="FoolFrmFieldName" onclick="DDLChange('FoolFrmFieldName')">整治面貌</div>    </td>
-                            <td class="FoolFrmFieldTD" colspan="3">
-
-                                <label class="FoolFrmFieldCtrl">
-                                    <input class="FoolFrmFieldCtrl" type="radio" id="TB_ZZMM_0" name="ZZMM" />群众
-                                </label>
-                                <label class="FoolFrmFieldCtrl">
-                                    <input class="FoolFrmFieldCtrl" type="radio" id="TB_ZZMM_1" name="ZZMM" />团员
-                                </label>
-                                <label class="FoolFrmFieldCtrl">
-                                    <input class="FoolFrmFieldCtrl" type="radio" id="TB_ZZMM_2" name="ZZMM" />党员
-                                </label>
-                                <label class="FoolFrmFieldCtrl">
-                                    <input class="FoolFrmFieldCtrl" type="radio" id="TB_ZZMM_3" name="ZZMM" />无党派人士
-                                </label>
-                            </td>
-                        </tr>
-                    </table>
-                </center>
-            </div>
-
-
-            <div class="foolfrmbody_formdesign">
-                <!-- css设计面板. -->
-                <select class="ttstyle" style="width:100%;margin-bottom:10px;" id="DDL_Style" onchange="DDL_Style_Change()"></select>
-
-                <div id="styleeditor" style="display:block;width:100%;">
-                    <!--<div class="ttstyle" style="background:#4e6dc3;color:#fff;margin:0;">样式编辑器</div>-->
-                    <div class="ttstyle">整体</div>
-                    <div class="styletitle">
-                        背景颜色：
-                        <input class="borderwidthval" id="TBPara_background-color" value="" />
+                            </div>
+                        </div>
                     </div>
-                    <div class="styletitle">
-                        整体宽度：
-                        <input class="borderwidthval" id="TBPara_selfbody-width_Temp" value="" />
-                        <select id="TBPara_selfbody-width-unit_Temp">
-                            <option value="px">px</option>
-                            <option value="pt">pt</option>
-                            <option value="em">em</option>
-                            <option value="ex">ex</option>
-                            <option value="pc">pc</option>
-                            <option value="cm">cm</option>
-                            <option value="mm">mm</option>
-                            <option value="in">in</option>
-                            <option value="%">%</option>
-                        </select>
-                        <input type="hidden" id="TBPara_selfbody-width" />
-                    </div>
-                    <div class="styletitle">
-                        整体高度：
-                        <input class="borderwidthval" id="TBPara_selfbody-hight_Temp" value="" />
-                        <select id="TBPara_selfbody-hight-unit_Temp">
-                            <option value="px">px</option>
-                            <option value="pt">pt</option>
-                            <option value="em">em</option>
-                            <option value="ex">ex</option>
-                            <option value="pc">pc</option>
-                            <option value="cm">cm</option>
-                            <option value="mm">mm</option>
-                            <option value="in">in</option>
-                            <option value="%">%</option>
-                        </select>
-                        <input type="hidden" id="TBPara_selfbody-hight" />
-                    </div>
-                    <div class="ttstyle">字体</div>
-                    <div class="styletitle">
-                        字体大小：
-                        <input class="borderwidthval" id="TBPara_font-size_Temp" value="" />
-                        <select id="TBPara_font-size-unit_Temp">
-                            <option value="px">px</option>
-                            <option value="pt">pt</option>
-                            <option value="em">em</option>
-                            <option value="ex">ex</option>
-                            <option value="pc">pc</option>
-                            <option value="cm">cm</option>
-                            <option value="mm">mm</option>
-                            <option value="in">in</option>
-                            <option value="%">%</option>
-                        </select>
-                        <input type="hidden" id="TBPara_font-size" />
-
-                    </div>
-                    <div class="styletitle">
-                        字体粗细：
-                        <select id="TBPara_font-weight">
-                            <option value="normal">正常</option>
-                            <option value="bold">加粗</option>
-                        </select>
-                    </div>
-                    <div class="styletitle">
-                        字体样式：
-                        <select id="TBPara_font-style">
-                            <option value="normal">正常</option>
-                            <option value="italic">斜体</option>
-                        </select>
-                    </div>
-                    <div class="styletitle">
-                        字体行高：
-                        <input class="borderwidthval" id="TBPara_font-height_Temp" value="" />
-                        <select id="TBPara_font-height-unit_Temp">
-                            <option value="px">px</option>
-                            <option value="pt">pt</option>
-                            <option value="em">em</option>
-                            <option value="ex">ex</option>
-                            <option value="pc">pc</option>
-                            <option value="cm">cm</option>
-                            <option value="mm">mm</option>
-                            <option value="in">in</option>
-                            <option value="%">%</option>
-                        </select>
-                        <input type="hidden" id="TBPara_font-height" />
-                    </div>
-                    <div class="styletitle">
-                        字体款式：
-                        <select id="TBPara_font-family">
-                            <option value="SimSun">宋体</option>
-                            <option value="SimHei">黑体</option>
-                            <option value="Microsoft YaHei">微软雅黑</option>
-                            <option value="Microsoft JhengHei">微软正黑体</option>
-                            <option value="NSimSun">新宋体</option>
-                            <option value="PMingLiU">新细明体</option>
-                            <option value="MingLiU">细明体</option>
-                            <option value="DFKai-SB">标楷体</option>
-                            <option value="FangSong">仿宋</option>
-                            <option value="KaiTi">楷体</option>
-                        </select>
-                    </div>
-                    <div class="styletitle">
-                        字体颜色：
-                        <input class="borderwidthval" id="TBPara_color" value="" />
-                    </div>
-                    <div class="ttstyle">
-                        边框：
-                        <select id="TBPara_border-which" style="float:right;height:33px;line-height:33px;border:none;">
-                            <option value="all" selected>全部</option>
-                            <option value="top">上</option>
-                            <option value="bottom">下</option>
-                            <option value="left">左</option>
-                            <option value="right">右</option>
-                        </select>
-                    </div>
-                    <div class="styletitle">
-                        边框宽度：
-                        <input class="borderwidthval" type="text" id="TBPara_border-width_Temp" value="" />
-                        <select id="TBPara_border-width-unit_Temp">
-                            <option value="px">px</option>
-                            <option value="pt">pt</option>
-                            <option value="em">em</option>
-                            <option value="ex">ex</option>
-                            <option value="pc">pc</option>
-                            <option value="cm">cm</option>
-                            <option value="mm">mm</option>
-                            <option value="in">in</option>
-                            <option value="%">%</option>
-                        </select>
-                        <input type="hidden" id="TBPara_border-width" />
-                    </div>
-                    <div class="styletitle">
-                        边框颜色： <input class="borderwidthval" id="TBPara_border-color" value="" />
-                    </div>
-                    <div class="styletitle">
-                        边框样式：
-                        <select id="DDLPara_border-style">
-                            <option value="none">无</option>
-                            <option value="solid">实线</option>
-                            <option value="double">双线</option>
-                            <option value="groove">3D凹槽</option>
-                            <option value="ridge">3D垄状</option>
-                            <option value="dashed">虚线</option>
-                            <option value="dotted">点状</option>
-                        </select>
-                    </div>
-                </div>
-
-                <input type="button" id="Btn_SaveItem" onclick="SaveItem()" value="保存" />
-
-                <!--<button id="Btn_SaveItem"  class="btn btn-primary" onclick="SaveItem()" style="width:100%;margin-top:20px;">保存</button>-->
+                    <div class="layui-col-xs4">
+                        <div class="layui-card layui-panel" style="margin: 0px 30px 30px;">
+                            <div class="layui-card-body">
+                                <div>
+                                    <div>
+                                        <select name="DDL_Style" id="DDL_Style" lay-filter="StyleChange" style="width:200px"></select>
+                                        <div id="styleeditor" style="display:block;width:100%;">
+                                            <div class="ttstyle">整体</div>
+                                            <div class="styletitle layui-inline">
+                                                <label class="layui-form-label"> 背景颜色：</label>
+                                                <div class="layui-input-inline">
+                                                    <input class="borderwidthval layui-input" type="hidden" id="TBPara_background-color" value="" />
+                                                    <div id="div_background-color" class="layui-color"></div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline styletitle">
+                                                <label class="layui-form-label"> 整体宽度：</label>
+                                                <div class="layui-input-inline">
+                                                    <input class="borderwidthval layui-input" id="TBPara_selfbody-width_Temp" value="" />
+                                                </div>
+                                                <div class="layui-input-inline">
+                                                    <select id="TBPara_selfbody-width-unit_Temp" lay-filter="unit">
+                                                        <option value="px">px</option>
+                                                        <option value="pt">pt</option>
+                                                        <option value="em">em</option>
+                                                        <option value="ex">ex</option>
+                                                        <option value="pc">pc</option>
+                                                        <option value="cm">cm</option>
+                                                        <option value="mm">mm</option>
+                                                        <option value="in">in</option>
+                                                        <option value="%">%</option>
+                                                    </select>
+                                                </div>
+                                                <input type="hidden" id="TBPara_selfbody-width" />
+                                            </div>
 
 
+                                            <div class="layui-inline styletitle">
+                                                <label class="layui-form-label">  整体高度：</label>
+                                                <div class="layui-input-inline">
+                                                    <input class="borderwidthval layui-input" id="TBPara_selfbody-hight_Temp" value="" />
+                                                </div>
+                                                <div class="layui-input-inline">
+                                                    <select id="TBPara_selfbody-hight-unit_Temp" lay-filter="unit">
+                                                        <option value="px">px</option>
+                                                        <option value="pt">pt</option>
+                                                        <option value="em">em</option>
+                                                        <option value="ex">ex</option>
+                                                        <option value="pc">pc</option>
+                                                        <option value="cm">cm</option>
+                                                        <option value="mm">mm</option>
+                                                        <option value="in">in</option>
+                                                        <option value="%">%</option>
+                                                    </select>
+                                                </div>
+                                                <input type="hidden" id="TBPara_selfbody-hight" />
+                                            </div>
+                                            <div class="ttstyle stylegroup">字体</div>
+                                            <div class="styletitle styledetail layui-inline">
+                                                <label class="layui-form-label">字体大小：</label>
+                                                <div class="layui-input-inline">
+                                                    <input class="borderwidthval layui-input" id="TBPara_font-size_Temp" value="" />
+                                                </div>
+                                                <div class="layui-input-inline">
+                                                    <select id="TBPara_font-size-unit_Temp" lay-filter="unit">
+                                                        <option value="px">px</option>
+                                                        <option value="pt">pt</option>
+                                                        <option value="em">em</option>
+                                                        <option value="ex">ex</option>
+                                                        <option value="pc">pc</option>
+                                                        <option value="cm">cm</option>
+                                                        <option value="mm">mm</option>
+                                                        <option value="in">in</option>
+                                                        <option value="%">%</option>
+                                                    </select>
+                                                </div>
+                                                <input type="hidden" id="TBPara_font-size" />
+
+                                            </div>
+                                            <div class="styletitle styledetail  layui-inline">
+                                                <label class="layui-form-label"> 字体粗细：</label>
+                                                <div class="layui-input-inline">
+                                                    <select id="TBPara_font-weight" lay-filter="font">
+                                                        <option value="normal">正常</option>
+                                                        <option value="bold">加粗</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="styletitle styledetail  layui-inline">
+                                                <label class="layui-form-label"> 字体样式：</label>
+                                                <div class="layui-input-inline">
+                                                    <select id="TBPara_font-style" lay-filter="font">
+                                                        <option value="normal">正常</option>
+                                                        <option value="italic">斜体</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="styletitle styledetail  layui-inline">
+                                                <label class="layui-form-label">字体行高：</label>
+                                                <div class="layui-input-inline">
+                                                    <input class="borderwidthval layui-input" id="TBPara_font-height_Temp" value="" />
+                                                </div>
+                                                <div class="layui-input-inline">
+                                                    <select id="TBPara_font-height-unit_Temp" lay-filter="unit">
+                                                        <option value="px">px</option>
+                                                        <option value="pt">pt</option>
+                                                        <option value="em">em</option>
+                                                        <option value="ex">ex</option>
+                                                        <option value="pc">pc</option>
+                                                        <option value="cm">cm</option>
+                                                        <option value="mm">mm</option>
+                                                        <option value="in">in</option>
+                                                        <option value="%">%</option>
+                                                    </select>
+                                                </div>
+                                                <input type="hidden" id="TBPara_font-height" />
+                                            </div>
+                                            <div class="styletitle styledetail layui-inline">
+                                                <label class="layui-form-label">字体款式：</label>
+                                                <div class="layui-input-inline">
+                                                    <select id="TBPara_font-family" lay-filter="font">
+                                                        <option value="SimSun">宋体</option>
+                                                        <option value="SimHei">黑体</option>
+                                                        <option value="Microsoft YaHei">微软雅黑</option>
+                                                        <option value="Microsoft JhengHei">微软正黑体</option>
+                                                        <option value="NSimSun">新宋体</option>
+                                                        <option value="PMingLiU">新细明体</option>
+                                                        <option value="MingLiU">细明体</option>
+                                                        <option value="DFKai-SB">标楷体</option>
+                                                        <option value="FangSong">仿宋</option>
+                                                        <option value="KaiTi">楷体</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="styletitle styledetail layui-inline">
+                                                <label class="layui-form-label"> 字体颜色：</label>
+                                                <div class="layui-input-inline">
+                                                    <input class="borderwidthval layui-input" id="TBPara_color" value="" type="hidden" />
+                                                    <div id="div_color" class="layui-color"></div>
+                                                </div>
+
+                                            </div>
+                                            <div class="ttstyle stylegroup">
+                                                <label class="layui-form-label"> 边框：</label>
+                                                <div class="layui-input-inline" style="float:left">
+                                                    <select id="TBPara_border-which" lay-filter="borderWhich">
+                                                        <option value="all" selected>全部</option>
+                                                        <option value="top">上</option>
+                                                        <option value="bottom">下</option>
+                                                        <option value="left">左</option>
+                                                        <option value="right">右</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="styletitle styledetail layui-inline">
+                                                <label class="layui-form-label"> 边框宽度：</label>
+                                                <div class="layui-input-inline">
+                                                    <input class="borderwidthval layui-input" id="TBPara_border-width_Temp" value="" />
+                                                </div>
+                                                <div class="layui-input-inline">
+                                                    <select id="TBPara_border-width-unit_Temp" lay-filter="unit">
+                                                        <option value="px">px</option>
+                                                        <option value="pt">pt</option>
+                                                        <option value="em">em</option>
+                                                        <option value="ex">ex</option>
+                                                        <option value="pc">pc</option>
+                                                        <option value="cm">cm</option>
+                                                        <option value="mm">mm</option>
+                                                        <option value="in">in</option>
+                                                        <option value="%">%</option>
+                                                    </select>
+                                                </div>
+                                                <input type="hidden" id="TBPara_border-width" />
+                                            </div>
+                                            <div class="styletitle styledetail">
+                                                <label class="layui-form-label"> 边框颜色：</label>
+                                                <div class="layui-input-inline">
+                                                    <input class="borderwidthval layui-input" id="TBPara_border-color" value="" type="hidden" />
+                                                    <div id="div_border-color" class="layui-color"></div>
+                                                </div>
+                                            </div>
+                                            <div class="styletitle styledetail layui-inline">
+                                                <label class="layui-form-label"> 边框样式：</label>
+                                                <div class="layui-input-inline">
+                                                    <select id="DDLPara_border-style" lay-filter="font" style="width:50px">
+                                                        <option value="none">无</option>
+                                                        <option value="solid">实线</option>
+                                                        <option value="double">双线</option>
+                                                        <option value="groove">3D凹槽</option>
+                                                        <option value="ridge">3D垄状</option>
+                                                        <option value="dashed">虚线</option>
+                                                        <option value="dotted">点状</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" id="Btn_SaveItem" onclick="SaveItem()" class="layui-btn layui-btn-fluid">保存</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-    </form>
+    </div>
 
 </body>
 </html>

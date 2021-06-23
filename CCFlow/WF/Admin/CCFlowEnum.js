@@ -551,6 +551,27 @@ if (typeof FlowFrmType == "undefined") {
 }
 
 
+//表单应用类型.
+if (typeof EntityType == "undefined") {
+    var EntityType = {}
+    //独立表单
+    EntityType.SingleFrm = 0,
+        /// <summary>
+        /// 单据.
+        /// </summary>
+        EntityType.FrmBill = 1,
+        /// <summary>
+        /// 实体.
+        /// </summary>
+        EntityType.FrmDict = 2,
+        /// <summary>
+        ///   实体树
+        /// </summary>
+        EntityType.EntityTree = 3
+}
+
+
+
 //表单类型
 if (typeof FrmType == "undefined") {
     var FrmType = {}

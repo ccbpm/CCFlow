@@ -14,10 +14,10 @@
     <script src="../../Scripts/PinYin.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <style>
-        body
-        {
-            font-family:Microsoft YaHei;
+        body {
+            font-family: Microsoft YaHei;
         }
+
         input:first-line {
             /**font-weight:bolder;*/
         }
@@ -178,17 +178,18 @@
     </script>
     <!--<base target="_self" /> -->
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+  
 </head>
 <body>
     <form id="cc">
-        <table style="width: 100%;">
+        <table class="ccbmp-table">
             <tr>
                 <th colspan="2">
                     <div style="float: left">
                         新增普通类型的字段
                     </div>
                     <div style="float: right" id="Temp0">
-                        <a href="javascript:HidAttr();">隐藏字段</a>|
+                        <a href="javascript:HidAttr();">隐藏字段</a> &nbsp; &nbsp;
                         <a href="javascript:ToTemplate();">常用字段模版</a>
                     </div>
                 </th>
@@ -202,7 +203,7 @@
                                 中文名
                             </td>
                             <td>
-                                <input style="font-weight:bolder; width:85%" type="text" name="TB_Name" id="TB_Name" />
+                                <input style="font-weight:bolder;" type="text" name="TB_Name" id="TB_Name" />
                             </td>
                         </tr>
                         <tr>
@@ -224,15 +225,15 @@
                                     简拼
                                 </label>
                                 <a href="javaScript:void(0)" onclick="SelectOne();" title="从数据表里选择字段" class="easyui-linkbutton"
-                                   data-options="iconCls:'icon-add',toggle:true">...</a>
+                                   data-options="toggle:true">更多...</a>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <a href="javaScript:void(0)" onclick="Create(false);" class="easyui-linkbutton" data-options="iconCls:'icon-add',toggle:true">
+                                <a href="javaScript:void(0)" onclick="Create(false);" class="easyui-linkbutton" data-options="toggle:true">
                                     创建字段
                                 </a> <a href="javaScript:void(0)" onclick="Create(true);" class="easyui-linkbutton"
-                                        data-options="iconCls:'icon-add',toggle:true">保存+创建</a>
+                                        data-options="toggle:true">保存+创建</a>
                                 <!--<input type="button" id="Btn_Create" value="创建新字段" name="Btn_Create"  onclick="Create();" />-->
                             </td>
                         </tr>

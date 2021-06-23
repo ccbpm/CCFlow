@@ -12,8 +12,10 @@
 
             var mypk = GetQueryString("MyPK");
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("EditTrackDtl_Init");
+            handler.AddUrlData(); //加入url的参数.
+            //执行方法返回string数据.
+            var data = handler.DoMethodReturnString("EditTrackDtl_Init"); 
+
             if (data.indexOf("WorkCheck@") != -1) {
                 var val = data.replace('null', '').split("WorkCheck@");
                 if (val.length == 2)
@@ -51,16 +53,16 @@
 
         function Save() {
 
-            var mypk = GetQueryString("MyPK");
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
-            handler.AddUrlData();
-            var msg = $("#TB_Msg").val();
-
+            var msg = $("#TB_Msg").val(); //获得页面数据.
             if (msg == "" || msg == undefined || msg == null) {
                 alert("办理情况不能为空");
                 return;
             }
-            handler.AddPara("Msg", msg);
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrFlow");
+            handler.AddUrlData(); //增加url里面的参数.
+            handler.AddPara("Msg", msg); //加入指定的参数.
+            //执行方法返回执行结果.
             var data = handler.DoMethodReturnString("EditTrackDtl_Save");
             if (data.indexOf('err@') == 0) {
                 alert(data); //如果是异常，就提提示.

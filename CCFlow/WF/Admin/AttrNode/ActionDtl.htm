@@ -32,12 +32,18 @@
     <script src="../../Scripts/LoadSql.js"></script>
 
     <script type="text/javascript">
-
+        var mypk = GetQueryString("MyPK");
         //页面启动函数.
         $(function () {
 
             $("#Msg").html("正在加载,请稍后......");
 
+           
+            var en = null;
+            if (mypk != null && mypk != undefined && mypk != "") {
+                en = new Entity("BP.Sys.FrmEvent",mypk);
+            }
+            
             //初始化groupID.
             var nodeID = GetQueryString("FK_Node");
 
@@ -57,6 +63,22 @@
             // 业务单元
             var BuessUnits = JSON.parse(data);
             GenerBindDDL("DDL_Doc", BuessUnits, "No", "Name", "");
+
+            //绑定数据源类型. 在填充的时候，设置数据源.
+            var ens = new Entities("BP.Sys.SFDBSrcs");
+            ens.RetrieveAll();
+            GenerBindDDL("DDL_FK_DBSrc", ens, "No", "Name", "");
+            if (en != null) {
+                GenerFullAllCtrlsVal(en);
+                if (en.EventDoType == 2) {
+                    $("#DBSrc").show();
+                    $("#TB_Doc").val(en.DoDoc);
+                }
+                 else
+                    $("#DBSrc").hide();
+            }
+               
+           
 
         });
 
@@ -100,8 +122,19 @@
                 return;
             }
 
-            en.SetPKVal(en.FK_Event + Math.random());
-            en.Insert();
+            if (en.EventDoType == 2)
+                en.FK_DBSrc = $("#DDL_FK_DBSrc").val();
+            else
+                en.FK_DBSrc = "";
+
+            if (mypk != null && mypk != undefined && mypk != "") {
+                en.SetPKVal(mypk);
+                en.Update();
+            } else {
+                en.SetPKVal(en.FK_Event + Math.random());
+                en.Insert();
+            }
+           
 
             Back();
 
@@ -116,6 +149,12 @@
             } else {
                 $("#TB_Doc").show();
                 $("#DDL_Doc").hide();
+            }
+
+            if ($(o).val() == "2") {
+                $("#DBSrc").show();
+            } else {
+                $("#DBSrc").hide();
             }
 
             if ($(o).val() == "8")
@@ -175,6 +214,15 @@
                         <td>
                             <select id="DDL_EventDoType" name="DDL_EventDoType" onchange="doChangeContent(this)">
                             </select>
+                        </td>
+                    </tr>
+
+                    <tr id="DBSrc">
+                        <td>
+                            数据源
+                        </td>
+                        <td>
+                            <select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc"></select>
                         </td>
                     </tr>
                     <tr>

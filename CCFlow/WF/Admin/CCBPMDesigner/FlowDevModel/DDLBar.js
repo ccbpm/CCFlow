@@ -20,12 +20,37 @@ function InitBar(optionKey) {
             html += "<option value=" + dtl.No + ">&nbsp;&nbsp;" + dtl.Name + "</option>";
         }
     }
-    html += "</select >";
+    html += "</select>";
 
-    //  html += "<input  id='Btn_Save' type=button onclick='Save()' value='创建' />";
+    var from = GetQueryString("From");
+
+    if (from == "Flows.htm")
+        html += "<input  id='Btn_Save' type=button onclick='Save()' value='创建流程' />";
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
+}
+
+//创建流程.
+function Save() {
+
+    var newFlowInfo = getNewFlowInfo();
+
+    $("#Btn_Save").val("正在创建,");
+
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner_FlowDevModel");
+    handler.AddPara("SortNo", newFlowInfo.FlowSort);
+    handler.AddPara("FlowName", newFlowInfo.FlowName);
+    handler.AddPara("FlowDevModel", newFlowInfo.FlowFrmModel);
+    handler.AddPara("FrmUrl", newFlowInfo.FrmUrl);
+    handler.AddPara("FrmID", newFlowInfo.FrmID);
+    var data = handler.DoMethodReturnString("FlowDevModel_Save");
+
+    var webUser = new WebUser();
+    var url = "../Designer.htm?FK_Flow=" + data + "&OrgNo=" + webUser.OrgNo + "&SID=" + webUser.SID + "&UserNo=" + webUser.No + "&From=Ver2021";
+    //  var url = "";
+    window.location.href = url;
+
 }
 
 function GenerName() {
@@ -72,21 +97,23 @@ function GetDBDtl() {
     return json;
 }
 
-
 function HelpOnline() {
-    var url = "http://ccbpm.mydoc.io";
+    var url = "http://doc.ccbpm.cn";
     window.open(url);
 }
 function changeOption() {
     //获得流程类别.
     var sortNo = GetQueryString("SortNo");
+    var from = GetQueryString("From");
+
     var obj = document.getElementById("changBar");
     var sele = obj.options;
     var index = obj.selectedIndex;
     var optionKey = optionKey = sele[index].value;
 
     var url = GetUrl(optionKey);
-    window.location.href = url + "?SortNo=" + sortNo;
+
+    window.location.href = url + "?SortNo=" + sortNo + "&From=" + from;
 }
 //高级设置.
 function AdvSetting() {

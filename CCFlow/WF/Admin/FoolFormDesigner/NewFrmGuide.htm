@@ -14,24 +14,32 @@
     <base target="_self" />
     <script src="../Admin.js"></script>
     <script type="text/javascript">
+
+        function GetSortNo() {
+            var sortNo = GetQueryString("FK_FrmSort");
+            if (sortNo == null || sortNo == "" || sortNo == "null")
+                sortNo = GetQueryString("SortNo");
+
+            return sortNo;
+        }
         //新建表单
         function CreateFrm() {
-            var obj = document.getElementsByName("ss")
+            var obj = document.getElementsByName("RBFrmType")
             for (var i = 0; i < obj.length; i++) { //遍历Radio
                 if (obj[i].checked) {
                     frmType = obj[i].value;
                 }
             }
 
-            var url = "../CCFormDesigner/NewFrmGuide.htm?Step=0&EntityType=" + frmType + "&FK_FrmSort=" + GetQueryString("FK_FrmSort");
+            var url = "../CCFormDesigner/NewFrmGuide.htm?Step=0&EntityType=" + frmType + "&FK_FrmSort=" + GetSortNo();
             window.location.href = url;
         }
         function ImpFrmFromFtp() {
-            var url = "../Template/From.htm?SortNo=" + GetQueryString("FK_FrmSort");
+            var url = "../Template/From.htm?SortNo=" + GetSortNo();
             window.location.href = url;
         }
         function ImpFrmFromLocal() {
-            var url = "../Template/ImpFrmLocal.htm?SortNo=" + GetQueryString("FK_FrmSort");
+            var url = "../Template/ImpFrmLocal.htm?SortNo=" + GetSortNo();
             window.location.href = url;
         }
     </script>
@@ -53,21 +61,17 @@
     </div>
 
     <fieldset>
-        <legend> <label><input type="radio"  name="ss" value="0" checked="checked" /> 驰骋BPM独立表单 </label>   </legend>
+        <legend> <label><input type="radio" name="RBFrmType" value="0" checked="checked" /> 驰骋BPM独立表单 </label>   </legend>
         <ul>
             <li> 仅为流程绑定表单所用,没有其他的增删改查的填写功能. </li>
             <li> 以下两种类型的表单也可以绑定到节点上. </li>
         </ul>
-    </fieldset>
-    <fieldset>
-        <legend> <label><input type="radio"  name="ss" value="2" /> 实体表单 </label>   </legend>
+        <legend> <label><input type="radio" name="RBFrmType" value="2" /> 实体表单 </label>   </legend>
         <ul>
             <li> 具有独立的增删改查的功能 </li>
             <li> 具有编号，名称固定的属性，比如：学生、固定资产. </li>
         </ul>
-    </fieldset>
-    <fieldset>
-        <legend> <label><input type="radio" name="ss" value="1" /> 单据 </label>   </legend>
+        <legend> <label><input type="radio" name="RBFrmType" value="1" /> 单据 </label>   </legend>
         <ul>
             <li> 具有独立的增删改查的功能 </li>
             <li> 具有流水号，单据号的性质的字段，比如：学生缴费记录、固定资产维护记录. </li>
@@ -75,13 +79,13 @@
     </fieldset>
 
 
-    <fieldset>
+    <!--<fieldset>
         <legend id="help"></legend>
         <ul>
             <li>根据自己的需要，请正确的选择表单类型</li>
             <li>每种表单类型的表单应用场景不一样.</li>
         </ul>
-    </fieldset>
+    </fieldset>-->
 
 </body>
 </html>

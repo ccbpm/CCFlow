@@ -36,14 +36,32 @@
 </head>
 <body>
     <div id="App">
-        <div id="bar" > </div>
-        <fieldset >
-            <legend id="help" >帮助说明</legend>
+        <div id="bar"> </div>
+        <div class="cs-content-box">
+            <div id="NodeSelect" style="width:100%;margin-top:10px;margin-bottom:10px;background-color:#ffffff">
+                <table style='width:100%'>
+                    <caption>请选择要指定的节点</caption>
+                    <tr>
+                        <th>#</th>
+                        <th>名称</th>
+                        <th>步骤</th>
+                    </tr>
+                    <tr v-for="(node,index) in nodes">
+                        <td class=Idx>{{index+1}}</td>
+                        <td v-if="selectNodes.indexOf(node.NodeID)!=-1"><input type='radio' name='RB_NodeNo' :value='node.NodeID' checked='checked' /><label>名称:{{node.Name}}</label></td>
+                        <td v-else=v-else><label><input type='radio' name='RB_NodeNo' :value="node.NodeID" />节点ID:{{node.NodeID}}   -  名称:{{node.Name}}</label></td>
+                        <td>{{node.Step}}</td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+        <fieldset>
+            <legend id="help">帮助说明</legend>
             <ul>
-                <li> 上一个节点发送人的直属领导，处理该工作。 </li>
+                <li> 指定节点发送人的直属领导，处理该工作。 </li>
                 <li> 信息，存储到表 Port_Emp 字段：Leader 中.  </li>
-                <li> 注意:Leader 字段是登录人员的帐号.    </li>
-                <li> <font color="red">说明：</font>如果当前人员没有负责人，就找部门负责人，如果在没有，就提示错误。  </li>
+                <li> <font color="red">说明：使用本规则前，请配置相应人员的直属部门的Leader！</font>  </li>
             </ul>
         </fieldset>
     </div>
@@ -54,13 +72,44 @@
                 deliverWay: DeliveryWay.ByEmpLeader,
                 nodeId: GetQueryString("FK_Node")
             },
+            methods: {
+                OpenNew: function () {
+                    var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
+                    var nodeID = GetQueryString("FK_Node");
+                    url += '&NodeID=' + nodeID + '&PKVal=' + nodeID;
+                    OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 800, 600, function () {
+                        Baseinfo.depts = getDepts();
+                    });
+                },
+
+            },
             created() {
                 InitBar(this.deliverWay);
+                var nd = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
+                var ens = new Entities("BP.WF.Nodes");
+                ens.Retrieve("FK_Flow", nd.FK_Flow);
+                var paras = nd.DeliveryParas;
+                //该流程的所有节点
+                this.nodes = $.grep(ens, function (obj, i) {
+                    return obj.NodeID != undefined;
+                });
+                this.selectNodes = paras == null ? "" : paras; //选中的节点
             }
         });
         function Save() {
-            var node = new Entity("BP.WF.Node", Baseinfo.nodeId);
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
             node.DeliveryWay = Baseinfo.deliverWay;
+            var object = document.getElementsByName("RB_NodeNo");
+            var DeliveryParas = "";
+            for (var i = 0; i < object.length; i++) {
+                if (object[i].checked) {
+                    DeliveryParas += object[i].value;
+                    if (i < object.length - 1)
+                        DeliveryParas += ',';
+                }
+            }
+            node.DeliveryParas = DeliveryParas;
 
             node.Update();
         }

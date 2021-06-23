@@ -1,0 +1,332 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 增加一个配置  -->
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Scripts/layui/layui/layui.js"></script>
+    <style>
+        body{
+            line-height:24px;
+        }
+        .layui-th {
+            padding: 8px 10px;
+            margin: 4px;
+            background-color: #f7f7f7;
+            font-size: 13px;
+            border: 0px;
+            text-align: left;
+            word-break: keep-all;
+            font-weight: bold;
+            color: #333333;
+        }
+        .layui-row {
+            margin-top: 5px;
+        }
+    </style>
+    <script type="text/javascript">
+        var fk_mapdata = GetQueryString("FK_MapData");
+        var groupID = GetQueryString("GroupField");
+        if (groupID == null)
+            groupID = 0;
+        var dataType = GetQueryString("DataType");
+        layui.extend({
+            pinyin: "../../Scripts/layui/ext/pinyin"
+        });
+        layui.use(['pinyin'], function () {
+            var pinyin = layui.pinyin;
+            var Ele_TBName = document.getElementById("TB_Name");
+            Ele_TBName.focus();
+
+            PageTransfer_value = dataType; //取出页面传至
+            //给单选赋值
+            if (PageTransfer_value == "TextBox") {
+                $("#RB_String").attr("checked", true);
+            }
+
+            if (PageTransfer_value == "TextBoxInt") {
+                $("#RB_Int").attr("checked", true);
+            }
+
+            if (PageTransfer_value == "TextBoxFloat") {
+                $("#RB_Float").attr("checked", true);
+            }
+
+            if (PageTransfer_value == "TextBoxMoney") {
+                $("#RB_Money").attr("checked", true);
+            }
+
+            if (PageTransfer_value == "Date") {
+                $("#RB_Date").attr("checked", true);
+            }
+
+            if (PageTransfer_value == "DateTime") {
+                $("#RB_DateTime").attr("checked", true);
+            }
+
+            if (PageTransfer_value == "CheckBox") {
+                $("#RB_Boolen").attr("checked", true);
+            }
+
+            $('#TB_Name').blur(function () //文本失去焦点时触发的事件
+            {
+                var name = document.getElementById("TB_Name").value;
+                var val = $('input:radio[name="RB_QPJP"]:checked').val();
+                if (name == "") {
+                    document.getElementById("TB_KeyOfEn").value = "";
+                    return;
+                }
+
+                var keyVal = SpecWords(name);
+                if (keyVal == null) {
+                    if (val == "ziduanquanpin")
+                        $("#TB_KeyOfEn").val(pinyin.ConvertPinyin(name));
+                    else
+                        $("#TB_KeyOfEn").val(pinyin.makePy(name));
+                } else {
+                    $("#TB_KeyOfEn").val(keyVal);
+                }
+
+
+            });
+            //点击全拼
+            $('input[id=RB_QP]').change(function () {
+                var name = document.getElementById("TB_Name").value;
+                var keyVal = SpecWords(name);
+                if (keyVal == null)
+                    $("#TB_KeyOfEn").val(pinyin.ConvertPinyin(name));
+                else
+                    $("#TB_KeyOfEn").val(keyVal);
+            });
+            //点击简拼
+            $('input[id=RB_JP]').change(function () {
+                var name = document.getElementById("TB_Name").value;
+                var keyVal = SpecWords(name);
+                if (keyVal == null)
+                    $("#TB_KeyOfEn").val(pinyin.makePy(name));
+                else
+                    $("#TB_KeyOfEn").val(keyVal);
+            });
+        });
+        //特别词汇.
+        function SpecWords(str) {
+            if (str == '项目编号') return 'PrjNo';
+            if (str == '项目名称') return 'PrjName';
+            if (str == '电话') return 'Tel';
+            if (str == '地址') return 'Addr';
+            if (str == '邮件') return 'Email';
+            if (str == '手机') return 'Mobile';
+            if (str == '合计') return 'HeJi';
+            return null;
+        }
+
+
+        //传入父窗体
+        function GetFrmInfo() {
+            return {
+                Name: $.trim($("#TB_Name").val()),
+                KeyOfEn: $.trim($("#TB_KeyOfEn").val()),
+                IsCreateLabel: $("#CB_scbq").prop("checked"),
+                IsHidenField: $("#CB_sfyczd").prop("checked"),
+                FieldType: $('input:radio[name=Field_Type]:checked').val()
+            };
+        }
+        //在这里把返回值获取到，放入到对应的文本框里.
+        function SelectOne() {
+
+            var url = "./FieldTypeListChoseOneField.htm?FK_MapData=" + GetQueryString("FK_MapData");
+            window.location.href = url;
+        }
+        function ToTemplate() {
+            var url = "./Template/Fields.htm?FK_MapData=" + GetQueryString("FK_MapData");
+            window.location.href = url;
+        }
+
+        function HidAttr() {
+            var url = 'HidAttr.htm?FK_MapData=' + GetQueryString("FK_MapData");
+            window.location.href = url;
+        }
+
+        function ContainsChinese(str) {
+
+            ///<summary>判断指定字符串是否包含汉字</summary>
+            if (!str) {
+                return false;
+            }
+
+            return new RegExp("[\\u4E00-\\u9FFF]+", "g").test(str);
+        }
+
+        function Create(isSaveAndNew) {
+
+            var name = $("#TB_Name").val();
+            if (name == '' || name == null) {
+                alert('请输入字段中文名称');
+                return;
+            }
+
+            var no = $("#TB_KeyOfEn").val();
+            if (no == '' || no == null) {
+                alert('请输入字段英文名称');
+                return;
+            }
+
+            if (ContainsChinese(no)) {
+                alert('字段英文名称 不能包含汉字！');
+                return;
+            }
+
+            var fType = $('input[name="Field_Type"]:checked').val();
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            handler.Clear();
+
+            if (plant == "CCFlow")
+                name = encodeURIComponent(name);
+
+            //特殊判断系统字段.
+            if (no.toUpperCase() == "BILLNO")
+                no = "BillNo";
+
+            //特殊判断系统字段.
+            if (no.toUpperCase() == "NO")
+                no = "MyNo";
+
+            handler.AddPara("name", name);
+            handler.AddPara("FType", fType);
+            handler.AddPara("FK_MapData", fk_mapdata);
+            handler.AddPara("KeyOfEn", no);
+            handler.AddPara("GroupField", groupID);
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+
+            var data = handler.DoMethodReturnString("FieldTypeSelect_Create");
+            if (data.indexOf("err@") >= 0) {
+                alert(data);
+                return;
+            }
+
+            var url = data.replace('url@', '');
+            if (isSaveAndNew == false) {
+                window.location.href = url + "&inlayer=" + GetQueryString("inlayer");
+                return;
+            }
+
+            window.location.href = "FrmTextBox.htm?DataType=" + coverTypeToName(fType) + "&FK_MapData=" + fk_mapdata + "&GroupField=" + groupID + "&m=" + Math.random();
+            return;
+        }
+
+        function coverTypeToName(type) {
+            switch (parseInt(type)) {
+                case 1:
+                    return "TextBox";
+                case 2:
+                    return "TextBoxInt";
+                case 3:
+                    return "TextBoxFloat";
+                case 4:
+                    return "CheckBox";
+                case 6:
+                    return "Date";
+                case 7:
+                    return "DateTime";
+                case 8:
+                    return "TextBoxMoney";
+            }
+            return "TextBox";
+        }
+    </script>
+</head>
+<body>
+    <div class="layui-container">
+        <div class="layui-row layui-th">
+            <div class="layui-col-xs6">
+                <div style="float: left">
+                    新增普通类型的字段
+                </div>
+            </div>
+            <div class="layui-col-xs6">
+                <div style="float: right" id="Temp0">
+                    <a href="javascript:HidAttr();">隐藏字段</a> &nbsp; &nbsp;
+                    <a href="javascript:ToTemplate();">常用字段模版</a>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row" >
+            <div class="layui-col-xs6">
+                <div class="layui-row">
+                    <div class="layui-col-xs2">
+                        中文名
+                    </div>
+                    <div class="layui-col-xs6">
+                        <input style="font-weight:bolder;line-height:24px" type="text" name="TB_Name" id="TB_Name" />
+                    </div>
+                </div>
+                <div class="layui-row" >
+                    <div class="layui-col-xs2">
+                        英文名
+                    </div>
+                    <div class="layui-col-xs6">
+                        <input style="font-weight:bolder;line-height:24px;margin-top:4px" type="text" name="TB_KeyOfEn" id="TB_KeyOfEn" />
+                    </div>
+                </div>
+                <div class="layui-row">
+                    <div class="layui-col-xs12">
+                        <input type="radio" name="RB_QPJP" id="RB_QP" checked="checked" value="ziduanquanpin" />
+                        <label for="RB_QP">
+                            全拼
+                        </label>
+                        <input type="radio" name="RB_QPJP" id="RB_JP" value="ziduanjianpin" />
+                        <label for="RB_JP">
+                            简拼
+                        </label>
+                        <button class="layui-btn layui-btn-primary layui-border-green layui-btn-sm"  onclick="SelectOne();" title="从数据表里选择字段">更多...</button>
+                    </div>
+
+                </div>
+                <div class="layui-row">
+                    <div class="layui-col-xs12">
+                        <button class="layui-btn layui-border-blue layui-btn-primary layui-btn-sm" onclick="Create(false);" >创建字段</button>
+                       <button class="layui-btn  layui-border-blue layui-btn-primary layui-btn-sm" onclick="Create(true);" >保存+创建</button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="layui-col-xs6">
+                <input type="radio" name="Field_Type" id="RB_String" value="1" />
+                <label for="RB_String">
+                    字符型。<font color="Gray">如:姓名、地址、邮编、电话。</font><br />
+                </label>
+                <input type="radio" name="Field_Type" id="RB_Int" value="2" />
+                <label for="RB_Int">
+                    整数型。<font color="Gray">如:年龄、个数。</font><br />
+                </label>
+                <input type="radio" name="Field_Type" id="RB_Money" value="8" />
+                <label for="RB_Money">
+                    金额型。<font color="Gray">如:单价、薪水。</font><br />
+                </label>
+                <input type="radio" name="Field_Type" id="RB_Float" value="3" />
+                <label for="RB_Float">
+                    浮点型。<font color="Gray">如：身高、体重、长度。</font><br />
+                </label>
+                
+                <input type="radio" name="Field_Type" id="RB_Date" value="6" />
+                <label for="RB_Date">
+                    日期型。<font color="Gray">如：出生日期、发生日期yyyy-MM-dd。</font><br />
+                </label>
+                <input type="radio" name="Field_Type" id="RB_DateTime" value="7" />
+                <label for="RB_DateTime">
+                    日期时间型。<font color="Gray">如：发生日期时间yyyy-MM-dd HH:mm。</font><br />
+                </label>
+                <input type="radio" name="Field_Type" id="RB_Boolen" value="4" />
+                <label for="RB_Boolen">
+                    Boole型(是/否)。<font color="Gray">如：是否完成、是否达标。</font><br />
+                </label>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>

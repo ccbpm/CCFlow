@@ -36,89 +36,92 @@
     <base target="_self" />
 </head>
 <body>
-    <form method="post" action="" id="form1">
-        <table style="width:99%;">
-            <caption> 装载填充 </caption>
-            <tr>
-                <td>
+    <div class="container-full">
+        <form method="post" action="" id="form1">
+            <table style="width:99%;">
+                <caption> 装载填充 </caption>
+                <tr>
+                    <td>
 
-                    <fieldset>
-                        <legend>
-                            <label>
-                                <input type="radio" value="0" id="RB_IsPageLoadFull_0" name="RB_IsPageLoadFull" checked="checked" />
-                                不启用
-                            </label>
-                        </legend>
+                        <fieldset>
+                            <legend>
+                                <label>
+                                    <input type="radio" value="0" id="RB_IsPageLoadFull_0" name="RB_IsPageLoadFull" checked="checked" />
+                                    不启用
+                                </label>
+                            </legend>
 
-                        <ul>
-                            <li>不设置，不启用，默认为不启用。</li>
-                        </ul>
-                    </fieldset>
+                            <ul>
+                                <li>不设置，不启用，默认为不启用。</li>
+                            </ul>
+                        </fieldset>
 
-                    <fieldset>
-                        <legend>
-                            <label><input type="radio" value="1" id="RB_IsPageLoadFull_1" name="RB_IsPageLoadFull" />启用 </label>
+                        <fieldset>
+                            <legend>
+                                <label><input type="radio" value="1" id="RB_IsPageLoadFull_1" name="RB_IsPageLoadFull" />启用 </label>
 
-                        </legend>
-                        <ul>
-                            <li>启用后需要您配置数据填充模式.</li>
-                        </ul>
-                    </fieldset>
-                </td>
-            </tr>
+                            </legend>
+                            <ul>
+                                <li>启用后需要您配置数据填充模式.</li>
+                            </ul>
+                        </fieldset>
+                    </td>
+                </tr>
 
-            <tr>
-                <td>
-                    <input type="button" value="保存" onclick="Save();" />
-                    <input type="button" value="设置填充" id="Btn_FullData" onclick="Set();" />
-                    <a href="javascript:ShowHidden('sqlexp')"><img src="../../../Img/Btn/Help.gif" />帮助:</a>
-                </td>
-            </tr>
-        </table>
+                <tr>
+                    <td>
+                        <input type="button" value="保存" onclick="Save();" />
+                        <input type="button" value="设置填充" id="Btn_FullData" onclick="Set();" />
+                        <a href="javascript:ShowHidden('sqlexp')"><img src="../../../Img/Btn/Help.gif" />帮助:</a>
+                    </td>
+                </tr>
+            </table>
 
-        <div id='sqlexp' style='color: Gray; display: none'>
-            <fieldset>
-                <legend id="Help">帮助</legend>
-                <ul>
-                    <li> 填充主表的sql,表达式里支持@变量与约定的公用变量, @WebUser.* 是ccbpm的表达式. 比如:@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.OrgNo</li>
-                    <li> 比如1: SELECT No,Name,Tel FROM Port_Emp WHERE No='@WebUser.No' </li>
-                    <li> 比如2: SELECT No,Name,Tel FROM Port_Emp WHERE No='@MyFieldName' </li>
-                    <li> 返回的数据是一行多列，如果列名与主表的字段名匹配就自动赋值. </li>
-                    <li> 注意：sql查询返回的列名要区分大小写,为了避免字段输入拼写错误，我们为您列出了本表单的字段信息. </li>
-                    <!--<li><font color="green">  </font> </li>-->
-                </ul>
-            </fieldset>
-        </div>
+            <div id='sqlexp' style='color: Gray; display: none'>
+                <fieldset>
+                    <legend id="Help">帮助</legend>
+                    <ul>
+                        <li> 填充主表的sql,表达式里支持@变量与约定的公用变量, @WebUser.* 是ccbpm的表达式. 比如:@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.OrgNo</li>
+                        <li> 比如1: SELECT No,Name,Tel FROM Port_Emp WHERE No='@WebUser.No' </li>
+                        <li> 比如2: SELECT No,Name,Tel FROM Port_Emp WHERE No='@MyFieldName' </li>
+                        <li> 返回的数据是一行多列，如果列名与主表的字段名匹配就自动赋值. </li>
+                        <li> 注意：sql查询返回的列名要区分大小写,为了避免字段输入拼写错误，我们为您列出了本表单的字段信息. </li>
+                        <!--<li><font color="green">  </font> </li>-->
+                    </ul>
+                </fieldset>
+            </div>
 
-        <div id="Msg">
-        </div>
-        <script type="text/javascript">
+            <div id="Msg">
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
 
 
-            function Save() {
-                var frmID = GetQueryString("FK_MapData");
-                
-                var en = new Entity("BP.Sys.MapData", frmID);
+        function Save() {
+            var frmID = GetQueryString("FK_MapData");
 
-                var isEnable = $("input[name='RB_IsPageLoadFull']:checked").val();
-                if (isEnable == "1")
-                    en.SetPara("IsPageLoadFull", 1);
-                else
-                    en.SetPara("IsPageLoadFull", 0);
-                   
-                en.Update();
-                window.location.href = window.location.href;
-                return;
-            }
+            var en = new Entity("BP.Sys.MapData", frmID);
 
-            function Set() {
-                var frmID = GetQueryString("FK_MapData");
-                var myPK = "PageLoadFull_" + frmID;;
-                var url = "../FullData/Main.htm?FK_MapData=" + frmID + "&RefPK=" + myPK + "&ExtType=PageLoadFull";
-                window.location.href = url;
-                return;
-            }
-        </script>
+            var isEnable = $("input[name='RB_IsPageLoadFull']:checked").val();
+            if (isEnable == "1")
+                en.SetPara("IsPageLoadFull", 1);
+            else
+                en.SetPara("IsPageLoadFull", 0);
+
+            en.Update();
+            window.location.href = window.location.href;
+            return;
+        }
+
+        function Set() {
+            var frmID = GetQueryString("FK_MapData");
+            var myPK = "PageLoadFull_" + frmID;;
+            var url = "../FullData/Main.htm?FK_MapData=" + frmID + "&RefPK=" + myPK + "&ExtType=PageLoadFull";
+            window.location.href = url;
+            return;
+        }
+    </script>
     </form>
 </body>
 </html>

@@ -1,4 +1,4 @@
-﻿body {
+body {
     margin: 0 auto; /*color: #000;
             line-height: 20px;
             font-family: 宋体;
@@ -133,35 +133,41 @@ th {
     }
     .cs-btn-group a.l-btn span span.l-btn-text{ font-size:14px;}
 .btn-light-green {
-    background-color: #50b6ac;
+    background-color: #27a659;
 }
 
     .btn-light-green:hover {
-        background-color: #50b6ac;
+        background-color: #27a659;
     }
+.btn-light-zi {
+    background-color: #4d4abf;
+}
 
+    .btn-light-zi:hover {
+        background-color: #4d4abf;
+    }
 .btn-light-blue {
-    background-color: #62cae3;
+    background-color: #44b6ae;
 }
 
     .btn-light-blue:hover {
-        background-color: #62cae3;
+        background-color: #44b6ae;
     }
 
 .btn-light-yellow {
-    background-color: #f3ba20;
+    background-color: #f09b0a;
 }
 
     .btn-light-yellow:hover {
-        background-color: #f3ba20;
+        background-color: #f09b0a;
     }
 
 .btn-light-red {
-    background-color: #f74f52;
+    background-color: #8775a7;
 }
 
     .btn-light-red:hover {
-        background-color: #f74f52;
+        background-color: #8775a7;
     }
 
 .cs-easyui-layout {
@@ -221,9 +227,9 @@ a.l-btn span span span.l-btn-empty {
     background-position: center
 }
 
-.state-show{ margin-left:192px; width:150px;height:auto; position:fixed; z-index:10;display: none; color: Gray; background:#fff;border:1px solid #f1f1f1; box-shadow:0px 1px 5px #ccc;}
-.state-show a{ color:#414141; display:block; text-decoration:none; margin:0px; padding:0px 0px 0px 10px; border-radius:0px;}
-.state-show a:hover{ color:#fff; background:#f74f52;padding:0px 0px 0px 10px;}
+.state-show{ margin-left:182px; width:120px;height:auto; position:fixed; z-index:10;display: none; color: Gray; background:#fff;border:1px solid #f1f1f1; box-shadow:0px 1px 5px #ccc;}
+.state-show a{ color:#414141; display:block; text-decoration:none; margin:0px; padding:0px 0px 0px 10px; border-radius:0px;text-align:left}
+.state-show a:hover{ color:#fff; background:#27a659;padding:0px 0px 0px 10px;}
 
 
 .cs-table th a {

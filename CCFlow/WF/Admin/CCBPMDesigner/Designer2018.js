@@ -6,6 +6,8 @@ flow = new Entity("BP.WF.Flow", flowNo);
 var webUser = new WebUser();
 var basepath = "";
 var flowDevModel = flow.GetPara("FlowDevModel"); //设计模式.
+var pageFrom = GetQueryString("From");
+pageFrom = pageFrom == null || pageFrom == undefined ? "" : pageFrom
 $(function () {
 
     if (flowDevModel == null || flowDevModel == undefined)
@@ -16,10 +18,10 @@ $(function () {
     if (runModel != null && runModel != undefined && runModel == "2")
         ccbpmRunModel = 2;
 
-    //if (ccbpmRunModel == 2) {
-    //  basepath = "../../WF/Admin/";
-    //} else {
-    basepath = "../";
+    if (pageFrom == "")
+        basepath = "../";
+    else
+        basepath = "../Admin/";
     //}
     //设置状态. 根据不同的模式来设计.
     SetState();
@@ -123,7 +125,12 @@ function EidtFrm() {
         var frmID = flow.FrmUrl;
         var nodeID = parseInt(flowNo + "01");
         var url = basepath + "FoolFormDesigner/Designer.htm?FrmID=" + frmID + "&FK_Flow=" + flowNo + "&FK_MapData=" + frmID + "&FK_Node=" + nodeID;
-        window.parent.addTab(nodeID, "设计表单" + nodeID, url);
+
+        if (pageFrom == "") {
+            window.parent.addTab(nodeID, "设计表单" + nodeID, url);
+        } else {
+            window.top.vm.openTab("设计表单" + nodeID, url);
+        }
     }
 
     //自定义表单.
@@ -141,6 +148,9 @@ function EidtFrm() {
         WinOpen(url);
 
     }
+}
+function AddTab(windowPK, title, url) {
+
 }
 /**
  * 设置审核组件的状态
@@ -418,8 +428,8 @@ $(function () {
     //新建流程演示
     ShowNewFlowGif = function (s) {
 
-  alert('请在流程树的节点上点击右键.');
-return;
+        alert('请在流程树的节点上点击右键.');
+        return;
 
 
         if (!s) s = 200000;
@@ -428,10 +438,32 @@ return;
         setTimeout(function () { alertModal4.modal("hide") }, s);
     }
     //消息弹出（线）
-    fAlert = function (messages, s) {
+    fAlert = function (messages, s, c) {
+
         if (!messages) messages = "请选择您要执行的操作";
         if (!s) s = 200000;
-        $("#LineModal").find(".modal-body").html(messages);
+
+        //获取连接线连接的ID
+        var fromNodeID = c.sourceId.replace('window', '');
+        var toNodeID = c.targetId.replace('window', '');
+        var dirLabId = "TB_Direction_LAB_" + fromNodeID + "_" + toNodeID;
+        //获取流程编号
+        var flowNo = GetQueryString("FK_Flow");
+
+        var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
+        hander.AddPara("FK_Node", fromNodeID);
+        hander.AddPara("FK_Flow", flowNo);
+        hander.AddPara("ToNode", toNodeID);
+        var data = hander.DoMethodReturnString("Direction_Init");
+        if (data.indexOf('err@') == 0) {
+            alert(data); //删除失败的情况.
+            return;
+        }
+
+        var labText = '请输入线上文字描述:<br/><input style="width:90%" id="' + dirLabId + '" type="text" value="' + data + '">';
+
+        //$("#LineModal").find(".modal-body").html(messages);
+        $("#LineModal").find(".modal-body").html(labText);
         $("#LineModal").modal('toggle');
         setTimeout(function () { alertModal1.modal("hide") }, s);
     }
@@ -979,6 +1011,7 @@ function GenerDrowFlowData() {
 
 
     var strs = "{'total':" + nodes.length + ", 'list':[";
+    var lineDesList = new Array();
     //遍历节点个数，输入节点.
     for (var i = 0; i < nodes.length; i++) {
 
@@ -986,11 +1019,16 @@ function GenerDrowFlowData() {
 
         //获得到达的节点.
         var toNodes = "";
+
         for (var idx = 0; idx < dirs.length; idx++) {
             var dir = dirs[idx];
 
             if (dir.Node == node.NodeID) {
                 toNodes += "," + dir.ToNode;
+                var lineDes = {};
+                lineDes.id = node.NodeID + "_" + dir.ToNode;
+                lineDes.des = dir.Des;
+                lineDesList.push(lineDes);
             }
         }
 
@@ -1025,8 +1063,9 @@ function GenerDrowFlowData() {
 
     strs += "] }";
 
-
-    return eval("(" + strs + ")");
+    var canvasObj = eval("(" + strs + ")");
+    canvasObj.process_des = lineDesList;
+    return canvasObj;
 }
 
 function DealSpecStr(str) {
@@ -1109,17 +1148,23 @@ function WinOpen(url) {
 
 //流程属性.
 function FlowProperty() {
-    var baseurl = "";
+    var url = "";
     /*if (ccbpmRunModel == 2) {
         baseurl = "../../WF";
     } else {
        
     }*/
-    baseurl = "../../";
-    var url = baseurl + "Comm/En.htm?EnName=BP.WF.Template.FlowExt&PKVal=" + flowNo + "&Lang=CH";
+    //baseurl = "../../";
+    //var url = baseurl + "Comm/En.htm?EnName=BP.WF.Template.FlowExt&PKVal=" + flowNo + "&Lang=CH";
 
-    //OpenEasyUiDialogExt(url, "流程属性", 900, 500, false);
-    window.parent.addTab(flowNo, "流程属性" + flowNo, url);
+    if (pageFrom == "") {
+        url = "../../Comm/En.htm?EnName=BP.WF.Template.FlowExt&PKVal=" + flowNo + "&Lang=CH";
+        window.parent.addTab(flowNo, "流程属性" + flowNo, url);
+    } else {
+        url = "../Comm/En.htm?EnName=BP.WF.Template.FlowExt&PKVal=" + flowNo + "&Lang=CH"
+        window.top.vm.openTab("流程属性" + flowNo, url);
+    }
+
 
     //  WinOpen(url);
     //    OpenEasyUiDialog(url, "eudlgframe", '流程属性', 1000, 550, "icon-property", true, null, null, null, function () {
@@ -1150,10 +1195,19 @@ function FlowCheck() {
 
     var flowId = Number(flowNo);
     flowId = String(flowId);
-    url = "../AttrFlow/CheckFlow.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
+
     // WinOpen(url);
-    OpenEasyUiDialog(url, "FlowCheck" + flowNo, "检查流程" + flowNo, 600, 500, "icon - library", false);
-    //window.parent.addTab(flowNo + "_JCLC", "检查流程" + flowNo, url);
+    var url = "";
+    if (typeof top.layui == "undefined") {
+        url = "../AttrFlow/CheckFlow.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
+        OpenEasyUiDialog(url, "FlowCheck" + flowNo, "检查流程" + flowNo, 600, 500, "icon - library", false);
+    }
+
+    else {
+        url = "../Admin/AttrFlow/CheckFlow.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
+        LayuiPopRight(url, "检查流程" + flowNo, 600, false);
+    }
+
 }
 
 //运行流程
@@ -1164,8 +1218,10 @@ function FlowRun() {
     flow.DoMethodReturnString("ClearCash");
 
     var url = basepath + "TestFlow.htm?FK_Flow=" + flowNo + "&Lang=CH";
-    //WinOpen(url);
-    window.parent.addTab(flowNo + "_YXLH", "运行流程" + flowNo, url);
+    if (pageFrom == "")
+        window.parent.addTab(flowNo + "_YXLH", "运行流程" + flowNo, url);
+    else
+        window.top.vm.openTab("运行流程" + flowNo, url);
 }
 //运行流程
 function FlowRun2020() {
@@ -1245,9 +1301,8 @@ function NodeAttr(nodeID) {
     //    baseurl = "../../WF/";
     //} else {
     baseurl = "../../";
-    //}
-
-    //var url = "../../Comm/RefFunc/EnV2.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
+    if (pageFrom == "Ver2021")
+        baseurl = "../";
     var url = baseurl + "Comm/En.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
     var html = "";
     if (top == self) {
@@ -1258,11 +1313,14 @@ function NodeAttr(nodeID) {
         }
     }
     else {
-        //var html = "<a href=\"javascript:OpenEasyUiDialogExt('" + url + "','';\" >主页</a> - ";
-        if (ccbpmRunModel == 2) {
-            window.parent.addTab(nodeID, "节点属性", url);
+        if (pageFrom == "Ver2021") {
+            window.top.vm.openTab("节点属性" + nodeID, url);
         } else {
-            window.parent.addTab(nodeID, "节点属性" + nodeID, url);
+            if (ccbpmRunModel == 2) {
+                window.parent.addTab(nodeID, "节点属性", url);
+            } else {
+                window.parent.addTab(nodeID, "节点属性" + nodeID, url);
+            }
         }
     }
     //OpenEasyUiDialogExt(url, html+"属性", 900, 500, false);
@@ -1272,14 +1330,20 @@ function NodeAttr(nodeID) {
 function NodeAttrOld(nodeID) {
     var baseurl = "";
     baseurl = "../../";
-
+    if (pageFrom == "Ver2021")
+        baseurl = "../";
     //if (ccbpmRunModel == 2) {
     //    baseurl = "../../WF/";
     //} else {
     //    baseurl = "../../";
     //}
     var url = baseurl + "Comm/En.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
-    window.parent.addTab(nodeID, "节点属性" + nodeID, url);
+    if (pageFrom == "Ver2021") {
+        window.top.vm.openTab("节点属性" + nodeID, url);
+    } else {
+        window.parent.addTab(nodeID, "节点属性" + nodeID, url);
+    }
+
     //OpenEasyUiDialogExt(url, "节点属性", 800, 500, false);
 }
 
@@ -1288,7 +1352,12 @@ function NodeFrmSln(nodeID) {
     //表单方案.
     var url = basepath + "AttrNode/FrmSln/Default.htm?FK_Node=" + nodeID;
 
-    window.parent.addTab(nodeID + "_JDFA", "表单方案" + nodeID, url);
+    if (pageFrom == "Ver2021") {
+        window.top.vm.openTab("表单方案" + nodeID, url);
+    } else {
+        window.parent.addTab(nodeID + "_JDFA", "表单方案" + nodeID, url);
+    }
+
     // OpenEasyUiDialogExt(url, "表单方案", 800, 500, false);
 }
 
@@ -1342,7 +1411,9 @@ function NodeFrmD(nodeID) {
 function FrmPower(nodeID) {
 
     var frmID = "ND" + parseInt(flowNo + "01");
-    var en = new Entity("BP.WF.Template.FrmNodeJiJian");
+    //var en = new Entity("BP.WF.Template.FrmNodeJiJian");
+    var en = new Entity("BP.WF.Template.FrmNodeExt");
+
     var mypk = frmID + "_" + nodeID + "_" + flowNo;
     en.SetPKVal(mypk);
     if (en.IsExits() == false) {
@@ -1358,6 +1429,8 @@ function FrmPower(nodeID) {
 
     var baseurl = "";
     baseurl = "../../";
+    if (pageFrom == "Ver2021")
+        baseurl = "../";
 
     //if (ccbpmRunModel == 2) {
     //    baseurl = "../../WF/";
@@ -1366,17 +1439,26 @@ function FrmPower(nodeID) {
     //}
 
     //傻瓜表单.
-    var url = baseurl + "Comm/En.htm?EnName=BP.WF.Template.FrmNodeJiJian&MyPK=" + mypk + "&Lang=CH";
+    //  var url = baseurl + "Comm/En.htm?EnName=BP.WF.Template.FrmNodeJiJian&MyPK=" + mypk + "&Lang=CH";
+    var url = baseurl + "Comm/En.htm?EnName=BP.WF.Template.FrmNodeExt&MyPK=" + mypk + "&Lang=CH";
+
     if (flowDevModel == FlowDevModel.RefOneFrmTree)
         url = baseurl + "Comm/En.htm?EnName=BP.WF.Template.FrmNodeExt&MyPK=" + mypk + "&Lang=CH";
-    window.parent.addTab(nodeID + "_Fool", "设计表单" + nodeID, url);
+
+    if (pageFrom == "Ver2021")
+        window.top.vm.openTab("设计表单" + nodeID, url);
+    else
+        window.parent.addTab(nodeID + "_Fool", "设计表单" + nodeID, url);
+
 }
 
 function NodeFrmFool(nodeID) {
     //傻瓜表单.
     var url = basepath + "FoolFormDesigner/Designer.htm?FK_MapData=ND" + nodeID + "&IsFirst=1&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
-    //WinOpen(url);
-    window.parent.addTab(nodeID + "_Fool", "设计表单" + nodeID, url);
+    if (pageFrom == "Ver2021")
+        window.top.vm.openTab("设计表单" + nodeID, url);
+    else
+        window.parent.addTab(nodeID + "_Fool", "设计表单" + nodeID, url);
 }
 
 //绑定表单库的表单.
@@ -1388,23 +1470,24 @@ function NodeFrmRefOneFrmTree(nodeID) {
     //Frm_WoDeShaGuaBiaoShan_501_005
     var baseurl = "";
     baseurl = "../../";
-
-    //if (ccbpmRunModel == 2) {
-    //    baseurl = "../../WF/";
-    //} else {
-    //    baseurl = "../../";
-    //}
+    if (pageFrom == "Ver2021")
+        baseurl = "../";
 
     var url = baseurl + "Comm/En.htm?EnName=BP.WF.Template.FrmNodeExt&MyPK=" + myPK + "&Lang=CH";
-    //WinOpen(url);
-    window.parent.addTab(nodeID + "_Fool", "绑定表单属性:" + nodeID, url);
+    if (pageFrom == "Ver2021")
+        window.top.vm.openTab("绑定表单属性:" + nodeID, url);
+    else
+        window.parent.addTab(nodeID + "_Fool", "绑定表单属性:" + nodeID, url);
 }
 
 function NodeFrmFree(nodeID) {
 
     //自由表单.
     var url = basepath + "CCFormDesigner/FormDesigner.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
-    window.parent.addTab(nodeID + "_Free", "设计表单" + nodeID, url);
+    if (pageFrom == "Ver2021")
+        window.top.vm.openTab("设计表单" + nodeID, url);
+    else
+        window.parent.addTab(nodeID + "_Free", "设计表单" + nodeID, url);
     ///CCFormDesigner/FormDesigner.htm?FK_Node=9502&FK_MapData=ND9502&FK_Flow=095&UserNo=admin&SID=c3466cb7-edbe-4cdc-92df-674482182d01
     //WinOpen(url);
 }
@@ -1412,14 +1495,20 @@ function NodeFrmFree(nodeID) {
 function NodeFrmDeveloper(nodeID) {
     //开发者表单.
     var url = basepath + "DevelopDesigner/Designer.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
-    window.parent.addTab(nodeID + "_Developer", "设计表单" + nodeID, url);
+    if (pageFrom == "Ver2021")
+        window.top.vm.openTab("设计表单" + nodeID, url);
+    else
+        window.parent.addTab(nodeID + "_Developer", "设计表单" + nodeID, url);
 }
 
 //接受人规则.
 function NodeAccepterRole(nodeID) {
     //接受人规则.
     var url = basepath + "AttrNode/AccepterRole/Default.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
-    window.parent.addTab(nodeID + "_JSGZ", "接受人规则" + nodeID, url);
+    if (pageFrom == "Ver2021")
+        window.top.vm.openTab("接受人规则" + nodeID, url);
+    else
+        window.parent.addTab(nodeID + "_JSGZ", "接受人规则" + nodeID, url);
     //OpenEasyUiDialogExt(url, "接受人规则", 800, 500, false);
 }
 

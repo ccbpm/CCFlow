@@ -107,6 +107,7 @@
         }
 
         function AddFrm(enumID, fk_mapdata) {
+            
 
             var url = '';
             var str = prompt("请输入字段名(必须为字母开头、数字或者下划线组合):", enumID);
@@ -123,6 +124,7 @@
             handler.AddPara("FK_MapData", fk_mapdata);
             handler.AddPara("GroupFeid", groupField);
             handler.AddPara("EnumKey", enumID);
+            handler.AddPara("UIContralType",GetQueryString("Type"))
             var data = handler.DoMethodReturnString("SysEnumList_SaveEnumField");
             if (data.indexOf("err@") >= 0) {
                 alert(data);

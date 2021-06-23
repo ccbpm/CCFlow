@@ -3,7 +3,7 @@
     jQuery.getScript(basePath + "/WF/Admin/Admin.js")
         .done(function () {
             /* 耶，没有问题，这里可以干点什么 */
-             //alert('ok');
+            //alert('ok');
         })
         .fail(function () {
             /* 靠，马上执行挽救操作 */
@@ -17,16 +17,16 @@ function InitBar(optionKey) {
 
     html += "<option value=null  disabled='disabled'>+内置表单</option>";
     html += "<option value=" + FormSlnType.FoolForm + ">&nbsp;&nbsp;傻瓜表单(默认)</option>";
-    html += "<option value=" + FormSlnType.FreeForm + ">&nbsp;&nbsp;自由表单</option>";
+    html += "<option value=" + FormSlnType.FreeForm + "  disabled='disabled' >&nbsp;&nbsp;自由表单</option>";
     html += "<option value=" + FormSlnType.FoolTruck + " >&nbsp;&nbsp;累加模式表单</option>";
     html += "<option value=" + FormSlnType.Developer + " >&nbsp;&nbsp;开发者表单</option>";
-   // html += "<option value=" + FormSlnType.WebOffice + "  >&nbsp;&nbsp;公文表单(weboffice)</option>";
+    // html += "<option value=" + FormSlnType.WebOffice + "  >&nbsp;&nbsp;公文表单(weboffice)</option>";
 
 
     html += "<option value=null  disabled='disabled'>+自定义表单</option>";
     html += "<option value=" + FormSlnType.SelfForm + " >&nbsp;&nbsp;嵌入式表单</option>";
     html += "<option value=" + FormSlnType.SDKForm + " >&nbsp;&nbsp;SDK表单(我自定义的表单)</option>";
-    html += "<option value=" + FormSlnType.SDKFormSmart+ " >&nbsp;&nbsp;智能SDK表单(我自定义的表单)</option>";
+    html += "<option value=" + FormSlnType.SDKFormSmart + " >&nbsp;&nbsp;智能SDK表单(我自定义的表单)</option>";
 
 
     html += "<option value=null  disabled='disabled'>+绑定表单库里的表单</option>";
@@ -43,7 +43,7 @@ function InitBar(optionKey) {
 
     //  html += "<input  id='Btn_Help' type=button onclick='Help()' value='视频帮助' />";
     html += "<button  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />在线帮助</button>";
-    
+
 
 
     document.getElementById("bar").innerHTML = html;
@@ -109,7 +109,7 @@ function DDeveloper() {
 
 
 function HelpOnline() {
-    var url = "http://ccbpm.mydoc.io";
+    var url = "http://doc.ccbpm.cn";
     window.open(url);
 }
 

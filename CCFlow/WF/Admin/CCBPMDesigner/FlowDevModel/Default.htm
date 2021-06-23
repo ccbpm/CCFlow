@@ -17,11 +17,13 @@
             //获得流程类别.
             var sortNo = GetQueryString("SortNo");
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner_FlowDevModel");
+            var from = GetQueryString("From");
 
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner_FlowDevModel");
             var model = handler.DoMethodReturnString("Default_Init");
             var url = GetUrl(model);
-            document.location.href = url + "?SortNo=" + sortNo;
+            document.location.href = url + "?SortNo=" + sortNo + "&From=" + from;
 
         });
 

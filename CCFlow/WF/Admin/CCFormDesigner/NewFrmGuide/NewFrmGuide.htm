@@ -28,54 +28,56 @@
 </head>
 <body>
     <form id="cc">
-    <table style="width: 99%;">
-        <caption>
-            请选择表单工作模式</caption>
-        <tr>
-            <th colspan=2>
-              流程表单挂接模式
-            </th>
-        </tr>
-        <tr>
-            <td valign="top">
-                <ul>
-                    <li>该模式用于绑定到流程的节点上，与ccbpm的流程结合.</li>
-                    <li>多用于一个节点有多个表单，或者分合流节点上。</li>
-                    <li>独立表单支持，ccbpm内置的傻瓜表单、自由表单、嵌入（定义）式表单、VSTO表单等类型</li>
-                    <li>右图就是表单树绑定的流程独立表单。</li>
-                    <li><a href="javascript:NewFrm()"><img src='../../../Img/Btn/New.gif' />创建独立表单</a></li>
-                </ul>
-            </td>
+        <table style="width: 99%;">
+            <caption>
+                请选择表单工作模式
+            </caption>
+            <tr>
+                <th colspan=2>
+                    流程表单挂接模式
+                </th>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <ul>
+                        <li>该模式用于绑定到流程的节点上，与ccbpm的流程结合.</li>
+                        <li>多用于一个节点有多个表单，或者分合流节点上。</li>
+                        <li>独立表单支持，ccbpm内置的傻瓜表单、自由表单、嵌入（定义）式表单、VSTO表单等类型</li>
+                        <li>右图就是表单树绑定的流程独立表单。</li>
+                        <li><a href="javascript:NewFrm()"><img src='../../../Img/Btn/New.gif' />创建独立表单</a></li>
+                    </ul>
+                </td>
 
-            <td>
-            <img src="../../AttrNode/Img/Tree.png" width="400px" alt="" />
-            </td>
-        </tr>
-        <tr>
-            <th colspan="2">单据模式</th>
-        </tr>
-        <tr>
-            <td valign="top">
-                <ul>
-                    <li>单据模式，就是当前的表单以单据的方式出现的。</li>
-                    <li>创建一个表单对应一个表，对该表进行增、删、改、查、打印、统计分析操作。</li>
-                    <li>比如：客户台账、采购单、入库单、联系人、固定资产台账等等...</li>
-                    <li>单据模式支持简易的流程审批操作。</li>
-                    <li>该模式下的表单仍然可以被流程树所绑定。</li>
-                    <li>单据模式仅仅支持ccbpm内置的傻瓜表单、自由表单两种类型</li>
-                    <li><a href="javascript:NewBill()"><img src='../../../Img/Btn/New.gif' />创建单据</a></li>
+                <td>
+                    <img src="../../AttrNode/Img/Tree.png" width="400px" alt="" />
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2">单据模式</th>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <ul>
+                        <li>单据模式，就是当前的表单以单据的方式出现的。</li>
+                        <li>创建一个表单对应一个表，对该表进行增、删、改、查、打印、统计分析操作。</li>
+                        <li>比如：客户台账、采购单、入库单、联系人、固定资产台账等等...</li>
+                        <li>单据模式支持简易的流程审批操作。</li>
+                        <li>该模式下的表单仍然可以被流程树所绑定。</li>
+                        <li>单据模式仅仅支持ccbpm内置的傻瓜表单、自由表单两种类型</li>
+                        <li><a href="javascript:NewBill()"><img src='../../../Img/Btn/New.gif' />创建单据</a></li>
 
-                </ul>
-            </td>
+                    </ul>
+                </td>
 
-              <td>
-              <a href="javascript:WinOpen('../../AttrNode/Img/Bill.png');">
-             <img src="../../AttrNode/Img/Bill.png" width="400px" alt=""/></a>
-            </td>
-        </tr>
-    </table>
+                <td>
+                    <a href="javascript:WinOpen('../../AttrNode/Img/Bill.png');">
+                        <img src="../../AttrNode/Img/Bill.png" width="400px" alt="" />
+                    </a>
+                </td>
+            </tr>
+        </table>
 
-    <input  type="button" value="下一步" />
+        <input type="button" value="下一步" />
     </form>
 </body>
 </html>

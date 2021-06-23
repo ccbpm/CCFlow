@@ -1,38 +1,79 @@
 ﻿
+
 function InitBar(optionKey) {
 
     var html = "<b>自动发起</b>:";
 
     html += "<select id='changBar' onchange='changeOption()'>";
 
-    html += "<option value=null  disabled='disabled'>+配置模式</option>";
+    var groups = GetDBGroup();
+    var dtls = GetDBDtl();
 
-    html += "<option value=" + AutoStart.None + ">&nbsp;&nbsp;&nbsp;&nbsp;手工启动（默认）</option>";
-    html += "<option value=" + AutoStart.ByDesignee + ">&nbsp;&nbsp;&nbsp;&nbsp;指定人员按时启动</option>";
-    html += "<option value=" + AutoStart.ByTineData + ">&nbsp;&nbsp;&nbsp;&nbsp;数据集按时启动</option>";
+    for (var i = 0; i < groups.length; i++) {
 
-    html += "<option value=null  disabled='disabled'>+开发者模式</option>";
-    html += "<option value=" + AutoStart.ByTrigger + ">&nbsp;&nbsp;&nbsp;&nbsp;触发试启动</option>";
+        var group = groups[i];
+        html += "<option value=null  disabled='disabled'>+" + group.Name + "</option>";
+
+        for (var idx = 0; idx < dtls.length; idx++) {
+            var dtl = dtls[idx];
+            if (dtl.GroupNo != group.No) continue;
+            html += "<option value=" + dtl.No + ">&nbsp;&nbsp;" + dtl.Name + "</option>";
+        }
+    }
 
     html += "</select >";
 
-    html += "<button  id='Btn_Save' class='cc-btn-tab btn-save' type=button onclick='Save()' value='保存' >保存</button>";
-    //html += "<input  id='Btn_Help' type=button onclick='Adv()' value='高级设置' />";
-    html += "<button  id='Btn_Help'class='cc-btn-tab btn-hlep' type=button onclick='HelpOnline()' value='在线帮助' >在线帮助</button>";
+    /* html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
+     html += "<input  id='Btn_Help' type=button onclick='Adv()' value='高级设置' />";
+     html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";*/
 
+    html += "<button  id='Btn_Save' class='cc-btn-tab btn-save'  onclick='Save()' >保存</button>";
+    //html += "<input  id='Btn_Help' type=button onclick='Adv()' value='高级设置' />";
+    html += "<button  id='Btn_Help'class='cc-btn-tab btn-hlep' onclick='HelpOnline()'>在线帮助</button>";
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
 }
 
-function Adv()
-{
+function GetDBGroup() {
+
+    var json = [
+        { "No": "A", "Name": "配置模式" },
+        { "No": "B", "Name": "开发者模式" }
+
+    ];
+    return json;
+}
+function GetDBDtl() {
+
+    var json = [
+
+        { "No": 0, "Name": "手工启动（默认）", "GroupNo": "A", "Url": "0.None.htm" },
+        { "No": 1, "Name": "指定人员按时启动", "GroupNo": "A", "Url": "1.ByDesignee.htm" },
+        { "No": 2, "Name": "数据集按时启动", "GroupNo": "A", "Url": "2.ByTimeData.htm" },
+
+        { "No": 3, "Name": "触发试启动", "GroupNo": "B", "Url": "3.ByTrigger.htm" }
+    ];
+    return json;
+}
+function GetUrl(optionKey) {
+
+    var json = GetDBDtl();
+    for (var i = 0; i < json.length; i++) {
+        var en = json[i];
+        if (en.No == optionKey)
+            return en.Url;
+    }
+    return "0.None.htm";
+}
+
+function Adv() {
     var url = "Adv.htm?FK_Flow=" + GetQueryString("FK_Flow");
     OpenEasyUiDialogExt(url, '高级设置', 600, 400, false);
 }
 
 function HelpOnline() {
-    var url = "http://ccbpm.mydoc.io";
+    var url = "http://doc.ccbpm.cn";
     window.open(url);
 }
 
@@ -51,28 +92,6 @@ function changeOption() {
     window.location.href = url + "?FK_Flow=" + flowNo;
 }
 
-function GetUrl(optionKey) {
-
-    switch (parseInt(optionKey)) {
-        case AutoStart.None:
-            url = "0.None.htm";
-            break;
-        case AutoStart.ByDesignee:
-            url = "1.ByDesignee.htm";
-            break;
-        case AutoStart.ByTineData:
-            url = "2.ByTimeData.htm";
-            break;
-        case AutoStart.ByTrigger:
-            url = "3.ByTrigger.htm";
-            break;
-        default:
-            url = "0.None.htm";
-            break;
-    }
-
-    return url;
-}
 
 function CheckFlow(flowNo) {
     var flow = new Entity('BP.WF.Flow', flowNo);

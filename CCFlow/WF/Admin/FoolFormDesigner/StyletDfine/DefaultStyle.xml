@@ -1,17 +1,14 @@
 ﻿<Table>
 
-  <Item No="FoolFrmTable" Name="大框表格:FoolFrmTable" Val="@font-color=red@font-size=24" />
-
-  <Item No="FoolFrmTitleTR" Name="标题:FoolFrmTitleTR" Val="@font-color=red@font-size=24" />
-  <Item No="FoolFrmTitleIcon" Name="图标:FoolFrmIcon" Val="@font-color=red@font-size=24" />
+ 
+  <Item No="FoolFrmTitle" Name="标题:FoolFrmTitle" Val="@font-color=red@font-size=24" />
+  <Item No="FoolFrmTitleIcon" Name="图标:FoolFrmTitleIcon" Val="@font-color=red@font-size=24" />
   <Item No="FoolFrmTitleLable" Name="标签:FoolFrmTitleLable" Val="@font-color=red@font-size=24" />
 
-  <Item No="FoolFrmGroupBarTR" Name="分组:FoolFrmGroupBarTR" Val="@font-color=red@font-size=24" />
-  <Item No="FoolFrmGroupBarTD" Name="分组:FoolFrmGroupBarTD" Val="@font-color=red@font-size=24" />
+  <Item No="FoolFrmGroupBar" Name="分组:FoolFrmGroupBar" Val="@font-color=red@font-size=24" />
 
-  <Item No="FoolFrmFieldTR" Name="字段行:FoolFrmFieldTR" Val="@font-color=red@font-size=24" />
-  <Item No="FoolFrmFieldTD" Name="单元格:FoolFrmFieldTD" Val="@font-color=red@font-size=24" />
-  <Item No="FoolFrmFieldName" Name="名称:FoolFrmFieldName" Val="@font-color=red@font-size=24" />
-  <Item No="FoolFrmFieldCtrl" Name="控件:FoolFrmFieldCtrl" Val="@font-color=red@font-size=24" />
+  <Item No="FoolFrmFieldRow" Name="字段行:FoolFrmFieldRow" Val="@font-color=red@font-size=24" />
+  <Item No="FoolFrmFieldLabel" Name="标签:FoolFrmFieldLabel" Val="@font-color=red@font-size=24" />
+  <Item No="FoolFrmFieldInput" Name="控件:FoolFrmFieldInput" Val="@font-color=red@font-size=24" />
 
 </Table>

@@ -24,12 +24,41 @@
         <!--<model-component></model-component>-->
         <div id="bar">
         </div>
+        <fieldset>
+            <legend>人员身份规则</legend>
+            <ul>
+                <li style="list-style:none">
+                    <input type="radio" value="0" id="SF_0"  v-model="SF" checked="checked" /> <label style="font-weight:bolder" for="SF_0"> 当前人员的身份（默认）</label>
+                    <ol class="olText">
+                        <li>说明：就是上一步发送作为当前节点的人员身份。 </li>
+                    </ol>
 
+                    <input type="radio" value="1" id="SF_1" v-model="SF" /> <label style="font-weight:bolder" for="SF_1"> 指定节点的人员身份</label>
+                    <ol class="olText">
+                        <li> 说明：指定节点发送人的作为当前节点的人员身份。 </li>
+                        <li>请选择节点:
+                            <select id="DDL_Nodes" v-model="node">
+                                <option v-for="option in nodes" :value="option.NodeID">{{option.Name}}</option>
+                            </select>
+                        </li>
+                    </ol>
+                    <input type="radio" value="2" id="SF_2" v-model="SF" /> <label style="font-weight:bolder" for="SF_2"> 按表单字段作为人员身份（该字段里存储的是账号）</label>
+                    <ol class="olText">
+                        <li> 说明：指定表单字段作为人员编号作为当前节点的人员身份，比如：我替别人请假，请假人字段作为人员身份。 </li>
+                        <li>请选择字段:
+                            <select id="DDL_Fields" v-model="field">
+                                <option v-for="option in fields" :value="option.KeyOfEn">{{option.Name}}</option>
+                            </select>
+                        </li>
+                    </ol>
+                </li>
+            </ul>
+        </fieldset>
         <fieldset>
             <legend>绑定岗位</legend>
             <ul>
-                <li><a href="javascript:OpenDot2DotStations()" >绑定岗位-分组模式</a> </li>
-                <li><a href="javascript:OpenBranchesAndLeafStations()" >绑定岗位-左右树结构模式</a> </li>
+                <li><a href="javascript:OpenDot2DotStations()">绑定岗位-分组模式</a> </li>
+                <li><a href="javascript:OpenBranchesAndLeafStations()">绑定岗位-左右树结构模式</a> </li>
             </ul>
         </fieldset>
 
@@ -56,6 +85,16 @@
                 <li>第4步：查找全局岗位人员。</li>
             </ul>
         </fieldset>
+        <fieldset>
+            <legend id="help">什么是人员身份?</legend>
+            <ul>
+                <li> 就是按照那个人员来计算当前节点的接受人规则，默认是谁操作的按照谁的身份计算。 </li>
+                <li> 比如：我要请假，找部门负责人，就按照当前操作员的身份计算。 </li>
+
+                <li> 有的环境下并不是按照当前人员计算。 </li>
+                <li> 比如：我要为别人请假，找部门负责人，要按照指定的字段（该字段就是被请假人员的账号）作为人员身份。 </li>
+            </ul>
+        </fieldset>
     </div>
     <script type="text/javascript">
         var Baseinfo = new Vue({
@@ -64,6 +103,11 @@
                 adminModel: 1,
                 orgModel: 0,
                 stas: [],
+                nodes: [],//指定节点
+                fields: [],//指定的字段
+                SF: 0,
+                node: "",
+                field:"",
                 webuser: null,
                 deliverWay: DeliveryWay.ByStation
             },
@@ -89,6 +133,36 @@
             created() {
                 InitBar(this.deliverWay);
                 this.stas = getStas();
+                var nodeID = GetQueryString("FK_Node");
+                var node = new Entity("BP.WF.Node", nodeID);
+
+                var flowNo = node.FK_Flow; 
+
+               
+                //绑定节点s
+                var nodes = new Entities("BP.WF.Nodes");
+                nodes.Retrieve("FK_Flow", flowNo);
+                this.nodes = $.grep(nodes, function (obj, i) {
+                    return obj.NodeID != undefined
+                });
+
+                //绑定字段s
+                var flowID = parseInt(flowNo);
+
+                var ens = new Entities("BP.Sys.MapAttrs");
+                if (ens.FormType == 11)
+                    ens.Retrieve("FK_MapData", node.NodeFrmID);
+                else
+                    ens.Retrieve("FK_MapData", "ND" + flowID + "Rpt");
+                this.fields = $.grep(ens, function (obj, i) {
+                    return obj.MyPK != undefined
+                });
+
+                //设置选择的Model.
+                this.SF = node.GetPara("ShenFenModel");
+                this.SF = this.SF == null || this.SF == undefined || this.SF == "" ? 0 : this.SF;
+                this.node = node.GetPara("ShenFenVal");
+                this.field = node.GetPara("ShenFenVal");
 
                 //根据用户的信息，判断是否启用那个设置工具。
                 this.webuser = new WebUser();
@@ -108,6 +182,15 @@
         function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
+            if (Baseinfo.SF == 1) {
+                node.SetPara("ShenFenVal", Baseinfo.node);
+            }
+
+            //如果按照字段.
+            if (Baseinfo.SF == 2) {
+                node.SetPara("ShenFenVal", Baseinfo.field);
+            }
+            node.SetPara("ShenFenModel", Baseinfo.SF);
             node.DeliveryWay = Baseinfo.deliverWay;
             node.Update();
         }

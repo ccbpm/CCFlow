@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>发送后转向</title>
+    <link href="../../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+    <!-- 自己的系统风格统一end -->
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="../../Admin.js"></script>
+    <script src="DDLBar.js"></script>
+    <script src="../../CCFlowEnum.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+            InitBar(TurnToDeal.SpecMsg);
+        });
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.TurnToDeal = TurnToDeal.SpecMsg;
+            node.TurnToDealDoc = $("#TB_SpecMsg").val();
+            node.Update();
+
+            alert("保存完毕");
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+    <form id="cc">
+
+        <fieldset>
+
+            <legend>
+                提示指定信息
+            </legend>
+
+            <input type="text" ID="TB_SpecMsg"
+                   placeholder="比如：您的申请已经发送至  @VarAcceptersName  进行审批。"
+                   name="TB_SpecMsg" runat="server" TextMode="MultiLine" Rows=3 style="width:90%; margin-top:30px;" />
+        </fieldset>
+
+        <fieldset>
+            <legend id="help">帮助</legend>
+            <ul >
+                <li>按照您定义的信息格式，提示给已经操作完成的用户。</li>
+                <li>比如：您的申请已经发送至XXX 进行审批。 </li>
+                <li>该自定义信息支持ccbpm的表达式，具体可参考右侧帮助文档。 </li>
+                <li>发送后系统变量如下: </li>
+                <li>您可以设置为: 当前工作提交给:【 @VarAcceptersName 】处理. </li>
+                <li>例如：您的请假申请单，已经提交给 @VarAcceptersName ，提交到：  @VarToNodeName , 请假了@QingJiaTianTianShu天.</li>
+            </ul>
+        </fieldset>
+
+    </form>
+
+</body>
+</html>

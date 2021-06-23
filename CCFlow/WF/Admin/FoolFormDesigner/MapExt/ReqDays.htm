@@ -17,7 +17,7 @@
             color: blue
         }
     </style>
-        <script type="text/javascript" language="javascript" >
+    <script type="text/javascript" language="javascript">
         var fk_MapData = GetQueryString("FK_MapData");
         var keyOfEn = GetQueryString("KeyOfEn");
 
@@ -56,49 +56,51 @@
         });
         function Save() {
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
-            handler .AddPara("FK_MapData", GetQueryString("FK_MapData"));
-            handler .AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
-            handler .AddPara("DDL_StarRDT", $("#DDL_StarRDT").val());
-            handler .AddPara("DDL_EndRDT", $("#DDL_EndRDT").val());
-            handler .AddPara("RDTRadio", $("input[type='radio']:checked").val());
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
+            handler.AddPara("DDL_StarRDT", $("#DDL_StarRDT").val());
+            handler.AddPara("DDL_EndRDT", $("#DDL_EndRDT").val());
+            handler.AddPara("RDTRadio", $("input[type='radio']:checked").val());
             var data = handler.DoMethodReturnString("LoadRDTClo_Save");
             alert(data);
         }
 
-        </script >
-        </head >
-        <body >
-        <form id="cc" >
-        <div style="right:10px; position:absolute; z-index:100; top:-3px" >
-
-        <input type="button" value="保存" onclick="Save()" id="Btn_Save" / >
-        </div >
-        <table id="table" style="width: 100%;" >
-        <caption >
-        自动计算日期天数
-        </caption >
-        <tr >
-        <td colspan="3" style="width: 95%;" >
-        选择开始日期:<select id="DDL_StarRDT" name="DDL_StarRDT" > </select >
-        选择结束日期:<select id="DDL_EndRDT" name="DDL_EndRDT" > </select >
-        </td >
-        </tr >
-        <tr >
-        <td colspan="3" style="width: 95%;" >
-        <label > <input type="radio" value="0" name="RDTRadio" / > 包含节假日</label >
-        <label > <input type="radio" value="1" name="RDTRadio" / > 不包含节假日</label >
-        <label> <input type="button" value="节假日维护" target="_parent" onclick="window.location.href='/WF/Comm/Sys/Holiday.htm'"/ > </label>
-        </td >
-        </tr >
-        </table >
 
 
-        <div id="Msg" >
-        </div >
+    </script>
+</head>
+<body>
+    <form id="cc">
+        <div style="right:10px; position:absolute; z-index:100; top:-3px">
+
+            <input type="button" value="保存" onclick="Save()" id="Btn_Save" =/ />
+        </div>
+        <table id="table" style="width: 100%;">
+            <caption>
+                自动计算日期天数
+            </caption>
+            <tr>
+                <td colspan="3" style="width: 95%;">
+                    选择开始日期:<select id="DDL_StarRDT" name="DDL_StarRDT"> </select>
+                    选择结束日期:<select id="DDL_EndRDT" name="DDL_EndRDT"> </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="width: 95%;">
+                    <label> <input type="radio" value="0" name="RDTRadio" =/ /> 包含节假日</label>
+                    <label> <input type="radio" value="1" name="RDTRadio" =/ /> 不包含节假日</label>
+                    <label> <input type="button" value="节假日维护" target="_parent" onclick="window.location.href='../../../Comm/Sys/Holiday.htm'" /> </label>
+                </td>
+            </tr>
+        </table>
 
 
-        </form >
-        </body >
-        </html >
+        <div id="Msg">
+        </div>
+
+
+    </form>
+</body>
+</html>
     </style>
 </head>

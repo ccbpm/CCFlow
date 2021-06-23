@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>发送后转向</title>
+    <link href="../../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+    <!-- 自己的系统风格统一end -->
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="../../Admin.js"></script>
+    <script src="DDLBar.js"></script>
+    <script src="../../CCFlowEnum.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+            InitBar(TurnToDeal.TurntoClose);
+        });
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.TurnToDeal = TurnToDeal.TurntoClose;
+            node.Update();
+            alert("保存完毕");
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+
+    </div>
+    <form id="cc">
+        <!--<div id="bar" class="cs-tr cs-bar">
+            <label style="float:left;font-size:15px;font-weight:bolder;padding-top:10px;">发送后转向</label>
+            <input type="button" ID="Btn_Save" runat="server" value="保存" onclick="Btn_Save_Click()" />
+        </div>-->
+        <fieldset>
+            <legend>
+                <label for="RB_TurnToDeal_3"> 发送完毕就关闭，不提示任何信息。 </label>
+            </legend>
+
+            <ul style="color: Gray">
+                <li>发送之后，不提示任何信息，直接关闭窗口。</li>
+            </ul>
+        </fieldset>
+
+    </form>
+
+</body>
+</html>

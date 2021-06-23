@@ -105,6 +105,7 @@
             html += "</table>";
             $("#gwls").html(html);
 
+            
 
             //******************************** 绑定流程信息 **/
             var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
@@ -119,7 +120,7 @@
             html += "<th>工作ID</th>";
             html += "<td>" + gwf.WorkID + "</td>";
             html += "<th>状态</th>";
-            html += "<td>" + gwf.WFStateText + "</td>";
+            html += "<td>" + GetWFState(gwf.WFState) + "</td>";
             html += "<th>发起人</th>";
             html += "<td>" + gwf.Starter + "," + gwf.StarterName + "</td>";
             html += "</tr>";
@@ -169,7 +170,23 @@
             window.open('../../MyFlow.htm?FK_Flow=' + flowNo + '&WorkID=' + workid + "&FID=" + fid + "&FK_Node=" + nodeID, '_self');
             window.parent.InitPageUserInfo();
         }
-
+        
+        function GetWFState(wfstate) {
+            switch (parseInt(wfstate)) {
+                case 0:
+                    return "<font color='black'>空白</font>";
+                case 1:
+                    return "<font color='black'>草稿</font>";
+                case 2:
+                    return "<font color='#d9b653' style='font-weight:bolder;'>运行中</font>";
+                case 3: //已完成.
+                    return "<font color='green' style='font-weight:bolder;'>已完成</font>";
+                case 4:
+                    return "<font color='black'>挂起</font>";
+                case 5:
+                    return "<font color='red' style='font-weight:bolder;'>退回</font>";
+            }
+        }
 
         function OpenRpt() {
             var url = "../../WFRpt.htm?WorkID=" + workID + "&FK_Flow=" + flowNo;

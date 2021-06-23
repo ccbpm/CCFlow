@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>驰骋工作流</title>
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <!--<link href="../../../DataUser/Style/table0.css" rel="stylesheet"  type="text/css" />-->
+
+    <!--layui的引用-->
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <!-- end -->
+
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Scripts/PinYin.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        var maxIndx = 0; //定义新增之后的最大序号
+        var fk_sftable = GetQueryString("FK_SFTable");
+        var QueryType = GetQueryString("QueryType");
+        $(function() {
+            InitPage();
+
+        });
+
+        function InitPage() {
+            //外键是sql形式的时候，只能查看
+            if (QueryType == "Sql") {
+                $("#Btns").hide();
+            }
+            var sfTable = new Entity("BP.Sys.SFTable", fk_sftable);
+            var ens = sfTable.DoMethodReturnJSON("GenerDataOfJson");
+
+            maxIndx = ens.length;
+            var html = "<table class='layui-table' layui-skin='line'>";
+            html += "<tr>";
+            html += "<th nowrap='' style='width:5%;text-align:center'><input id='checkedAll' onclick='SelectAll(this)' type='checkbox' name='checkedAll'></th>";
+            html += "<th nowrap='' style='width:5%'>索引</th>";
+            html += "<th nowrap='' style='width:15%'>编号</th>";
+            html += "<th nowrap='' style='width:75%'>名称</th>";
+            html += "</tr>";
+            //绑定数据.
+            for (var i = 0; i < ens.length; i++) {
+                var No = ens[i].No;
+                //系统字典表时查的是BH
+                if (QueryType == "Dict") {
+                    No = ens[i].BH;
+                }
+                html += "<tr>";
+                html += "<td align='center'><input id='IDX_" + No + "'  type='checkbox' name='IDX_" + No + "' /></td>";
+                html += "<td><label for='IDX_" + No + "'>" + (i + 1) + "</label></td>";
+                html += "<td><input class='layui-input'  name='TB_No_" + (i + 1) + "' id='TB_No_" + (i + 1) + "' type='text' disabled='disabled' value='" + No + "'/></td>";
+                html += "<td><input class='layui-input'  name='TB_Name_" + (i + 1) + "' id='TB_Name_" + (i + 1) + "' type='text' value='" + ens[i].Name + "' style='width:98%;'/></td>";
+                html += "</tr>";
+            }
+            html += "</tble>";
+            $('#mytable').html("").append(html);
+        }
+
+        //是否保存过了.
+        var isSave = true;
+        var currNewNo = "";
+
+        //新建.
+        function New() {
+
+            maxIndx++;
+            var html = "";
+
+            var sfTable = new Entity("BP.Sys.SFTable", fk_sftable);
+            if (sfTable.NoGenerModel == 1) { //按流水号的生成规则计算方式
+                if (isSave == true) {
+
+                    var generNewNo = sfTable.DoMethodReturnString("GenerSFTableNewNo");
+                    if (generNewNo.indexOf('err@') == 0)
+                        generNewNo = "";
+
+                    currNewNo = generNewNo;
+                }
+                if (isSave == false) {
+                    if (currNewNo != "") {
+                        generNewNo = parseInt(currNewNo) + 1;
+                        if (generNewNo >= 10) {
+                            generNewNo = "0" + generNewNo;
+                        }
+                        if (generNewNo > 0 && generNewNo < 10) {
+                            generNewNo = "00" + generNewNo;
+                        }
+
+                        currNewNo++;
+                    } else {
+                        generNewNo = "";
+
+                    }
+
+                }
+            } else { //其他
+                var generNewNo = sfTable.DoMethodReturnString("GenerSFTableNewNo");
+                if (generNewNo.indexOf('err@') == 0)
+                    generNewNo = "";
+
+                currNewNo = generNewNo;
+            }
+
+            html += "<tr>";
+            html += "<td class='Idx'><font color=red>*</font></td>";
+            if (sfTable.NoGenerModel == 2 || sfTable.NoGenerModel == 3)
+                html += "<td ><input class='layui-input'  name='TB_No_" + maxIndx + "' id='TB_No_" + maxIndx + "' readonly='readonly' type='text' value='" + generNewNo + "' /></td>";
+            else
+                html += "<td ><input class='layui-input'  name='TB_No_" + maxIndx + "' id='TB_No_" + maxIndx + "' type='text' value='" + generNewNo + "' /></td>";
+            html += "<td ><input class='layui-input'  name='TB_Name_" + maxIndx + "' id='TB_Name_" + maxIndx + "' type='text' style='width:98%;' /></td>";
+            html += "</tr>";
+
+            $("#mytable tbody:last").append(html);
+
+            //按全拼生成编号
+            if (sfTable.NoGenerModel == 2) {
+
+                $("#TB_Name_" + maxIndx).blur(function() {
+                    var TB_Name = $("#TB_Name_" + maxIndx).val();
+                    ParsePinYin(TB_Name, true, "TB_No_" + maxIndx);
+
+                });
+            }
+            //按简拼生成编号
+            if (sfTable.NoGenerModel == 3) {
+
+                $("#TB_Name_" + maxIndx).blur(function() {
+                    var TB_Name = $("#TB_Name_" + maxIndx).val();
+                    ParsePinYin(TB_Name, false, "TB_No_" + maxIndx);
+
+                });
+            }
+            isSave = false;
+        }
+
+        //更新.
+        function Save() {
+            //保存更新
+            var SFTable = new Entity("BP.Sys.SFTable", fk_sftable);
+            var ens = SFTable.DoMethodReturnJSON("GenerDataOfJson");
+            for (var i = 0; i < ens.length; i++) {
+                var No = ens[i].No;
+                if (QueryType == "Dict") {
+                    No = ens[i].BH;
+                }
+                var newName = $("#TB_Name_" + (i + 1)).val();
+                SFTable.DoMethodReturnString("UpdateData", No, newName, fk_sftable);
+
+            }
+            //保存新增
+            for (var j = ens.length; j < maxIndx; j++) {
+                var No = $("#TB_No_" + (j + 1)).val();
+                if (No == '' || No == null) {
+                    alert("编号不能为空！");
+                    return;
+                }
+                var Name = $("#TB_Name_" + (j + 1)).val();
+                if (No != undefined || Name != undefined) {
+                    SFTable.DoMethodReturnString("InsertData", No, Name, fk_sftable);
+                }
+            }
+
+            isSave = true;
+            InitPage(); //刷新.
+        }
+        //删除
+        function Delete() {
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+            var SFTable = new Entity("BP.Sys.SFTable", fk_sftable);
+            //获得选中的所有.
+            var cbs = $("input[type='checkbox']:checked");
+            var str = "";
+
+            cbs.each(function() {
+                if (this.id.indexOf('IDX_') == -1)
+                    return true;
+                str = this.id.substring(4);
+                SFTable.DoMethodReturnString("DeleteData", str, fk_sftable);
+
+            });
+            InitPage(); //刷新.
+        }
+        //选中所有
+        function SelectAll(obj) {
+            var checkeds = $("input[type='checkbox']");
+            if (obj.checked == true) {
+                //获取name=box的复选框 遍历输出复选框
+                for (var i = 0; i < checkeds.length; i++) {
+                    checkeds[i].checked = true;
+                }
+            } else {
+                for (var i = 0; i < checkeds.length; i++) {
+                    checkeds[i].checked = false;
+                }
+            }
+        }
+    </script>
+    <style>
+        #divCCForm {
+            padding: 20px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <form id="divCCForm">
+        <div>
+            <div class="easyui-panel">
+                <div id="Btns" class="ToolBar" style="width:auto">
+                    <a href="#" class="layui-btn layui-btn-primary layui-border-green layui-btn-sm" onclick="Save()">
+                        <i class="layui-icon layui-icon-file"></i>保存
+                    </a>
+                    <a id="newbtn" href="#" class="layui-btn layui-btn-primary layui-border-blue layui-btn-sm" onclick="New()">
+                        <i class="layui-icon layui-icon-add-1"></i>新增
+                    </a>
+                    <a id="delbtn" href="#" class="layui-btn layui-btn-primary layui-border-red layui-btn-sm" onclick="Delete()">
+                        <i class="layui-icon layui-icon-delete"></i>删除
+                    </a>
+                </div>
+                <div id="mytable"> </div>
+            </div>
+        </div>
+
+        <div id="Msg"></div>
+    </form>
+
+</body>
+
+</html>

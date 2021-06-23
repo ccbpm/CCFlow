@@ -64,7 +64,7 @@ function Adv()
 }
 
 function HelpOnline() {
-    var url = "http://ccbpm.mydoc.io";
+    var url = "http://doc.ccbpm.cn";
     window.open(url);
 }
 

@@ -50,13 +50,13 @@
         //这是连接线路的绘画样式
         connectorPaintStyle: {
             lineWidth: 3,
-            strokeStyle: "#49afcd",
+            strokeStyle: "#4f7bba",
             joinstyle: "round"
         },
         //鼠标经过样式
         connectorHoverStyle: {
             lineWidth: 3,
-            strokeStyle: "#da4f49"
+            strokeStyle: "#32b291"
         }
 
     }; /*defaults end*/
@@ -105,6 +105,7 @@
 
     /*Flowdesign 命名纯粹为了美观，而不是 formDesign */
     $.fn.Flowdesign = function (options) {
+
         var _canvas = $(this);
         //右键步骤的步骤号
         _canvas.append('<input type="hidden" id="leipi_active_id" value="0"/><input type="hidden" id="leipi_copy_id" value="0"/>');
@@ -223,6 +224,7 @@
                 lastProcessId = row.id;
             }); //each
         }
+
         //显示标签
         var labNoteData = defaults.labNoteData;
         if (labNoteData.list) {
@@ -283,9 +285,10 @@
         //绑定删除确认操作
         jsPlumb.bind("click", function (c) {
 
-            fAlert();
+            fAlert("", 0, c);
             $("#lineDel").unbind("click");
             $("#lineSet").unbind("click");
+            $("#lineLabSave").unbind("click");
             //删除节点方向连接线
             $("#lineDel").click(function () {
 
@@ -333,6 +336,38 @@
                 });
 
             })
+            $("#lineLabSave").click(function () {
+
+                //获取连接线连接的ID
+                var fromNodeID = c.sourceId.replace('window', '');
+                var toNodeID = c.targetId.replace('window', '');
+
+                //获取流程编号
+                var flowNo = GetQueryString("FK_Flow");
+                var dirLabId = "TB_Direction_LAB_" + fromNodeID + "_" + toNodeID;
+                var des = $("#" + dirLabId).val();
+                des = des.replace(/(^\s*)|(\s*$)/g, "");
+
+                var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
+                hander.AddPara("FK_Node", fromNodeID);
+                hander.AddPara("FK_Flow", flowNo);
+                hander.AddPara("ToNode", toNodeID);
+                hander.AddPara("Des", des);
+                var data = hander.DoMethodReturnString("Direction_Save");
+                if (data.indexOf('err@') == 0) {
+                    alert(data); //删除失败的情况.
+                    return;
+                }
+
+                c.removeOverlay("des_" + fromNodeID + "_" + toNodeID);
+                c.addOverlay(['Label', {
+                    label: '<label style="font-size:14px;margin-bottom:25px;margin-left:-20px;color:#00a6ac;">' + des + '</label>', width: 12, length: 12, location: 0.5, id: "des_" + fromNodeID + "_" + toNodeID, events: {
+                        click: function (labelOverlay, originalEvent) {
+                        }
+                    }
+                }])
+            })
+
             // if(confirm("你确定取消连接吗?是：取消 否：方向指向"))
             // {
             //     jsPlumb.detach(c);
@@ -344,6 +379,8 @@
 
 
         });
+
+
 
         //连接成功回调函数
         function mtAfterDrop(params) {
@@ -397,7 +434,6 @@
                 var toArr = prcsto.split(",");
                 var processData = defaults.processData;
                 $.each(toArr, function (j, targetId) {
-
                     if (targetId != '' && targetId != 0) {
                         //检查 source 和 target是否存在
                         var is_source = false, is_target = false;
@@ -412,9 +448,18 @@
                         });
 
                         if (is_source && is_target) {
+                            var desid = sourceId + "_" + targetId;
+                            var linedes = processData.process_des.filter(function (el) { return el.id == desid; })[0].des;
                             jsPlumb.connect({
                                 source: "window" + sourceId,
-                                target: "window" + targetId
+                                target: "window" + targetId,
+                                 overlays: [
+                                    ['Label', {
+                                        label: '<label style="font-size:14px;margin-bottom:25px;margin-left:-20px;color:#00a6ac;">' + (linedes == null ? '' : linedes) + '</label>', width: 12, length: 12, location: 0.5, id: "des_" + sourceId + "_" + targetId, events: {
+                                            click: function (labelOverlay, originalEvent) {
+                                            }
+                                        }
+                                 }]]
                                 /* ,labelStyle : { cssClass:"component label" }
                                 ,label : id +" - "+ n*/
                             });

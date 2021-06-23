@@ -319,6 +319,8 @@ function GenerFrm() {
     $('#CCForm').html($('#CCForm').html().replace(rels, ''));*/
 
     $.parser.parse("#CCForm");
+    if(typeof layui !="undefined")
+        layui.form.render();
 
     //初始化Sys_MapData
     var h = mapData.FrmH;

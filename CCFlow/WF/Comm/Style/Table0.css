@@ -3,7 +3,7 @@ body
 {
   font-size: 12px;
 }
-
+input,textarea,button,select{ outline: 0;}
 /*  table 类型风格 */
 table
 {
@@ -39,7 +39,25 @@ table
    border-left-style: none;
 }
 
-
+/***/
+.ccbmp-table{ width:100%; line-height:24px;}
+.ccbmp-table th, .Title
+{
+    padding: 8px 10px;
+    margin: 4px;
+    background-color: #f7f7f7;
+    font-size: 13px;
+    border: 0px;
+    text-align: left;
+    word-break: keep-all;
+    font-weight: bold;
+    color: #333333;
+}
+.ccbmp-table  td{ border:0px;}
+.ccbmp-table a{ color:#009688}
+.ccbmp-table a:hover{ color:#333333}
+.ccbmp-table ul{ margin-left:0px; padding:0px 0px 0px 10px;}
+.ccbmp-table li{ list-style-type:none;}
 /*  时学业添加 结束位置 */
 th, .Title
 {

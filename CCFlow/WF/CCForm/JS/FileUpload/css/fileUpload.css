@@ -196,10 +196,10 @@
 }
 
 .selectFileBt {
-    height: 30px;
+    /**height: 30px;*/
     line-height: 10px;
-    width: 85px;
-    text-align:center;
+    width: 70px;
+    text-align: center;
     background-color: white !important;
     color: black !important;
     border: 1px solid #999 !important;

@@ -48,8 +48,8 @@
 
             //$.base64.utf8encode = true;
 
-            var myPK = GetQueryString("MyPK");
-            en = new Entity("BP.CCBill.Template.MethodFunc", myPK);
+            var no = GetQueryString("No");
+            en = new Entity("BP.CCBill.Template.MethodFunc", no);
 
             GenerBindEnumKey("DDL_WhatAreYouTodo", "WhatAreYouTodo", en.WhatAreYouTodo);
 
@@ -63,7 +63,7 @@
 
             //生成参数内容.
             var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", myPK);
-            var html = "<font color=yellow ><b>//自定义方法名:" + en.MethodName + ",共有:" + attrs.length + "参数;&nbsp;";
+            var html = "<font color=yellow ><b>//自定义方法名:" + en.Name + ",共有:" + attrs.length + "参数;&nbsp;";
 
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
@@ -143,7 +143,7 @@
             //根据选择获取变化内容.
             var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin");
             handler.AddPara("TypeOfFunc", funcType);
-            handler.AddPara("MyPK", en.MyPK);
+            handler.AddPara("No", en.No);
             var data = handler.DoMethodReturnString("MethodDoc_GetScript");
 
             editor.setValue(data);
@@ -151,11 +151,11 @@
         }
 
         function DemoSQL() {
-            var url = "MethodDocDemoSQL.htm?MyPK=" + GetQueryString("MyPK");
+            var url = "MethodDocDemoSQL.htm?No=" + GetQueryString("No");
             WinOpen(url);
         }
         function DemoJS() {
-            var url = "MethodDocDemoJS.htm?MyPK=" + GetQueryString("MyPK");
+            var url = "MethodDocDemoJS.htm?No=" + GetQueryString("No");
             WinOpen(url);
         }
 
@@ -184,7 +184,7 @@
             funcstr="";
         }
         function ToMethodParas() {
-            window.location.href = "MethodParas.htm?MyPK=" + GetQueryString("MyPK");
+            window.location.href = "MethodParas.htm?No=" + GetQueryString("No");
         }
     </script>
 </head>

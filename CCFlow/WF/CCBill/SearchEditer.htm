@@ -30,6 +30,8 @@
     <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/layui/LayuiDialog.js"></script>
+
     <style type="text/css">
         .fixed-table-container thead th .th-inner {
             padding: 8px;
@@ -117,12 +119,12 @@
 
             pageIdx = GetQueryString("PageIdx");//当前页
 
-            frmBill = new Entity("BP.CCBill.FrmBill", frmID);
+            frmBill = new Entity("BP.CCBill.FrmDict", frmID);
             document.title = frmBill.Name;
 
             //当前用户查询信息.
             ur = new Entity("BP.Sys.UserRegedit");
-            ur.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
+            ur.MyPK = webUser.No + frmID + "_SearchAttrs";
             ur.RetrieveFromDBSources();
 
             //初始化查询条件
@@ -227,7 +229,7 @@
             html += '<td align="left" colspan=2 ><a href="#"class="btn btn-primary btn-sm" style="margin-left:20px" id="Btn_Search" onclick="Search()">查询</a>  ';
 
             //获得配置的按钮.
-            var fb = new Entity("BP.CCBill.FrmBill", frmID);
+            var fb = new Entity("BP.CCBill.FrmDict", frmID);
 
             if (fb.BtnNewLable == "") fb.BtnNewLable = "新建";
             if (fb.BtnDelLable == "") fb.BtnDelLable = "删除";
@@ -235,11 +237,21 @@
             if (fb.BtnExpExcel == "") fb.BtnExpExcel = "导出";
             if (fb.BtnGroupLabel == "") fb.BtnGroupLabel = "分析";
 
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_API");
+            handler.AddPara("FrmID", frmID);
+            var powerData = handler.DoMethodReturnString("CCFrom_FrmPower");
+            if (powerData.indexOf("err@") != -1) {
+                alert(powerData);
+                return;
+            }
+            powerData = JSON.parse(powerData);
+
+
             //权限判断按钮.
-            if (fb.BtnNewEnable == 1)
+            if (parseInt(powerData.IsInsert) == 1)
                 html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_New" onclick="New()">' + fb.BtnNewLable + '</a>';
 
-            if (fb.BtnDelEnable == 1)
+            if (parseInt(powerData.IsDelete) == 1)
                 html += '&nbsp;<a href="#" class="btn btn-default btn-sm" id="Btn_Del" onclick="javascript:Delete();">' + fb.BtnDelLable + '</a>';
 
             if (fb.BtnImpExcelEnable == 1)
@@ -263,7 +275,7 @@
                 if (fm.IsSearchBar != 1)
                     continue;
 
-                html += "<input type='button' value='" + fm.MethodName + "' id='Btn_" + fm.MethodID + "' onclick=\"Done('" + fm.WarningMsg + "','" + fm.MyPK + "');\" />";
+                html += "<input type='button' value='" + fm.Name + "' id='Btn_" + fm.MethodID + "' onclick=\"Done('" + fm.WarningMsg + "','" + fm.MyPK + "');\" />";
             }
 
 
@@ -303,7 +315,7 @@
             //保存查询条件.
 
             ur = new Entity("BP.Sys.UserRegedit");
-            ur.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
+            ur.MyPK = webUser.No + frmID + "_SearchAttrs";
             ur.FK_Emp = webUser.No;
 
             if ($("#TB_Key") != null && $("#TB_Key").val() != "")
@@ -360,7 +372,7 @@
             data = JSON.parse(data);
 
             ur = new Entity("BP.Sys.UserRegedit");
-            ur.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
+            ur.MyPK = webUser.No + frmID + "_SearchAttrs";
             ur.RetrieveFromDBSources();
 
 
@@ -621,7 +633,6 @@
         }
 
 
-
         //导入.
         function Imp() {
             alert('尚未实现');
@@ -652,7 +663,7 @@
 
             var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddUrlData();
-            var workID = handler.DoMethodReturnString("MyBill_CreateBlankDictID");
+            var workID = handler.DoMethodReturnString("MyDict_CreateBlankDictID");
             OpenIt(workID, frmID);
             //var url = "MyBill.htm?FK_MapData=" + frmID + "&FrmID=" + frmID + "&WorkID=" + workID;
             //window.location.href=url;
@@ -678,8 +689,8 @@
             workid = workid.substring(0, workid.length - 1);
             var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("FrmID", GetQueryString("FrmID"));
-            handler.AddPara("WorkID", workid);
-            var data = handler.DoMethodReturnString("MyBill_DeleteDicts");
+            handler.AddPara("WorkIDs", workid);
+            var data = handler.DoMethodReturnString("MyDict_Deletes");
 
             if (data.indexOf('err@') == 0) {
                 alert(data);
@@ -738,8 +749,13 @@
 
             var url = "";
             url = "MyDict.htm?WorkID=" + workid + "&FrmID=" + frmID + "&FK_MapData=" + frmID;
-            if (rowOpenModel == 0)
+
+            if (rowOpenModel == 0) {
+                //  LayuiPopRight(url, 0, false);
+                //return;
                 window.open(url);
+            }
+
             if (rowOpenModel == 1)
                 window.location.href = url;
             if (rowOpenModel == 2) {

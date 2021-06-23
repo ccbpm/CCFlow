@@ -439,7 +439,7 @@ function AfterBindEn_DealMapExt(frmData) {
             continue;
 
         if (mapExt.AttrOfOper == '')
-            continue; //如果是不操作字段，就conntinue;
+            continue; //如果是不操作字段
 
         var mapAttr1 = null;
         for (var j = 0; j < mapAttrs.length; j++) {
@@ -457,13 +457,7 @@ function AfterBindEn_DealMapExt(frmData) {
         if (mapAttr.UIVisible == 0)
             continue;
 
-        //var mapAttr = new Entity("BP.Sys.MapAttr");
-        //mapAttr.SetPKVal(mapExt.FK_MapData + "_" + mapExt.AttrOfOper);
-        ////由于客户pop有实效问题，此处暂时注掉
-        //if (mapAttr.RetrieveFromDBSources() == 0) {
-        //    //mapExt.Delete();
-        //    continue;
-        //}
+     
 
         //证件类扩展
         if (mapAttr.UIContralType == 13)
@@ -494,11 +488,12 @@ function AfterBindEn_DealMapExt(frmData) {
             continue;
         }
 
-        //下拉框填充其他控件
+        //下拉框填充其他控件（枚举，下拉框）
         var DDLFull = mapAttr.GetPara("IsFullData");
         if (DDLFull != undefined && DDLFull != "" && DDLFull == "1" && (mapExt.MyPK.indexOf("DDLFullCtrl") != -1)) {
             if (mapAttr.UIIsEnable == 0 || pageData.IsReadonly == "1")
                 continue;
+           
             //枚举类型
             if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1 && mapAttr.UIContralType == 3) {
                 var ddlOper = $('input:radio[name="RB_' + mapExt.AttrOfOper + '"]');
@@ -535,9 +530,6 @@ function AfterBindEn_DealMapExt(frmData) {
 
                 if (mapExt.DoWay == 0)
                     break;
-
-                alert(mapExt.DoWay);
-
 
                 if ((mapAttr.UIIsEnable == 0 || pageData.IsReadonly == "1") && mapExt.Tag == 0) {
                     var oid = (pageData.WorkID || pageData.OID || "");
@@ -743,7 +735,7 @@ function AfterBindEn_DealMapExt(frmData) {
                 break;
             case "AutoFullDLL": // 自动填充下拉框.
                 continue; //已经处理了。
-            case "AutoFull": //自动填充  //a+b=c DOC='@DanJia*@ShuLiang'  等待后续优化
+            case "AutoFull": //自动计算  //a+b=c DOC='@DanJia*@ShuLiang'  等待后续优化
                 //循环  KEYOFEN
                 //替换@变量
                 //处理 +-*%
@@ -942,7 +934,7 @@ function AfterBindEn_DealMapExt(frmData) {
     }
 
     $.each(detailExt, function (idx, obj) {
-        var iframeDtl = $("#Dtl_" + obj[0].DtlNo);
+        var iframeDtl = $("#IFrame_" + obj[0].DtlNo);
         iframeDtl.load(function () {
             $(this).contents().find(":input[id=formExt]").val(JSON.stringify(detailExt[obj[0].DtlNo]));
             if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {
@@ -1424,11 +1416,11 @@ function ChangeWorkCheck(elementID, str) {
 }
 
 //弹出附件
-function OpenAth(url, title, keyOfEn, athMyPK, atPara, FK_MapData, frmType) {
+function OpenAth(url,title, keyOfEn, athMyPK, atPara, FK_MapData, frmType) {
     var H = document.body.clientHeight - 240;
     var W = document.body.clientWidth - 140;
 
-    OpenBootStrapModalByContent(url, "AthTable_Init('" + athMyPK + "','Div_" + athMyPK + "')", 'Div_' + athMyPK, title, W, H, "icon-property", null, null, null, function () {
+    OpenBootStrapModalByContent("", "AthTable_Init('" + athMyPK + "','Div_" + athMyPK + "')", 'Div_' + athMyPK, title, W, H, "icon-property", null, null, null, function () {
 
 
         //获取附件显示的格式
@@ -1490,9 +1482,12 @@ function OpenAth(url, title, keyOfEn, athMyPK, atPara, FK_MapData, frmType) {
 }
 
 function Ath_Init(mypk, FK_MapData) {
-    var nodeID = pageData.FK_Node;
-    var no = nodeID.toString().substring(nodeID.toString().length - 2);
+
     var IsStartNode = 0;
+    var nodeID = pageData.FK_Node;
+    if (nodeID == null || nodeID == undefined || nodeID == "")
+        nodeID = 0;
+    var no = nodeID.toString().substring(nodeID.toString().length - 2);
     if (no == "01")
         IsStartNode = 1;
 

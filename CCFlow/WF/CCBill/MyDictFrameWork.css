@@ -1,0 +1,196 @@
+*, html, body {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+#app {
+    width: 100vw;
+    height: 100vh;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    height: 100%;
+    overflow: auto;
+    background-color: white;
+    border-right: 2px solid #eee;
+    transition: all ease .5s;
+}
+
+.sidebar .group {
+    transition: all ease .5s;
+    background-color: white;
+    border-bottom: 1px solid #eee;
+
+}
+
+.sidebar .group p {
+    box-sizing: border-box;
+    padding-left: 15px;
+    line-height: 60px;
+    font-size: 15px;
+    font-weight: 600;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+
+}
+
+.sidebar .group p i {
+    margin-right: 8px;
+}
+
+.sidebar .group .group-items {
+    height: auto;
+}
+
+.sidebar .group .group-items .item {
+    height: 40px;
+    line-height: 40px;
+    padding-left: 30px;
+    box-sizing: border-box;
+    font-size: 13px;
+    background-color: #f9f9f9;
+    transition: all ease .5s;
+    cursor: pointer;
+
+}
+
+.sidebar .group .group-items .item i {
+    margin-right: 8px;
+    min-width: 13px;
+}
+
+.sidebar .group .group-items .active {
+    background-color: #009688 !important;
+    color: white !important;
+}
+
+
+
+.main {
+    width: calc(100% - 240px);
+    height: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all ease .5s;
+    position: relative;
+}
+
+.main .indicator{
+    position: absolute;
+    left: -15px;
+    top: 50%;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #EEEEEE;
+    background-color: white;
+}
+
+.main .tab-page {
+    width: 100%;
+    position: relative;
+    height: 35px;
+    background-color: white;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 75px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.main .tab-page .tab {
+    flex-shrink: 0;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #666;
+    line-height: 35px;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    transition: all ease .4s;
+}
+
+.main .tab-page .tab span {
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+.main .tab-page .fixed {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.main .tab-page .active {
+    background-color: #f9f9f9;
+    border-top: 2px solid #000;
+}
+
+.main .tab-page .tab .layui-icon-home {
+    margin-right: 10px;
+}
+
+
+.layui-tab-close {
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    line-height: 16px;
+    border-radius: 50%;
+    font-size: 12px;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 2px;
+    background-color: #F5F5F5;
+}
+
+.layui-tab-close:hover {
+    background-color: #FF5722;
+    color: #fff;
+}
+
+dl dd {
+    height: 35px;
+    line-height: 35px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+dl dd i {
+    margin-right: 8px;
+
+}
+
+
+.main .content {
+    width: calc(100vw - 262px);
+    height: calc(100vh - 70px);
+}
+
+.main .content .tab-iframe {
+    width: calc(100vw - 262px);
+    height: calc(100vh - 70px);
+}

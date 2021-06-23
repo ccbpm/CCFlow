@@ -295,10 +295,6 @@ function setEnable(FK_MapData, KeyOfEn, selectVal, frmType) {
         mapAttrs[KeyOfEn].push(NDMapAttrs);
     }
 
-
-
-
-
     //设置是否隐藏分组、获取字段分组所有的tr
     var trs = $("#CCForm  table tr .attr-group");
     var isHidden = false;
@@ -319,9 +315,6 @@ function setEnable(FK_MapData, KeyOfEn, selectVal, frmType) {
             $(obj).parent().hide();
 
     });
-
-
-
 }
 
 //设置是否可以用?

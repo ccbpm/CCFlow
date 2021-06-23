@@ -134,13 +134,19 @@
             a.click();
         }
         function Back() {
+
             var frmID = GetQueryString("FrmID");
             var EntityType = GetQueryString("EntityType");
-            var url = "../Search.htm?EnsName=" + frmID + "&FrmID=" + frmID;
+
+            var md = new Entity("BP.Sys.MapData", frmID);
+            EntityType = md.EntityType;
+
+            var url = "../SearchDict.htm?EnsName=" + frmID + "&FrmID=" + frmID;
             if (EntityType == "2")
                 url = "../SearchBill.htm?EnsName=" + frmID + "&FrmID=" + frmID;
             if (EntityType == "1")
                 url = "../SearchDict.htm?EnsName=" + frmID + "&FrmID=" + frmID;
+
             window.location.href = url;
         }
     </script>

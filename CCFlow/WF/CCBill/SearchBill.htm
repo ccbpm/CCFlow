@@ -177,7 +177,7 @@
 
                             fields.push(item[0]);
                             html += "<td><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_" + item[0] + "'>" + item[1] + ":&nbsp;&nbsp</label></td>"
-                            html += "<td align='left'><input style='width:100%;' type=text id='TB_" + item[0] + "'  name='TB_" + item[0] + "' value='" + fieldV + "' class='form-control' /></td>";
+                            html += "<td align='left'><input style='width:95%;' type=text id='TB_" + item[0] + "'  name='TB_" + item[0] + "' value='" + fieldV + "' class='form-control' /></td>";
                             count++;
                             if (count == 4) {
                                 html += "</tr>";
@@ -194,7 +194,7 @@
                 var keyLabel = GetPara(atPara, "DTSearchLabel");
                 var keyLabel = "关键字";
                 html += "<td><label  style='text-align: right; margin-top:5px;margin-left:5px;' for='TB_Key'>" + keyLabel + ":&nbsp;&nbsp</label></td>"
-                html += "<td align='left'><input style='width:100%;' type=text id='TB_Key' placeholder='请输入关键字...' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
+                html += "<td align='left'><input style='width:95%;' type=text id='TB_Key' placeholder='请输入关键字...' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' /></td>";
                 count++;
             }
 
@@ -281,7 +281,7 @@
                 if (fm.IsSearchBar != 1)
                     continue;
 
-                html += "<input type='button' value='" + fm.MethodName + "' id='Btn_" + fm.MethodID + "' onclick=\"Done('" + fm.WarningMsg + "','" + fm.MyPK + "');\" />";
+                html += "<input type='button' value='" + fm.Name + "' id='Btn_" + fm.MethodID + "' onclick=\"Done('" + fm.WarningMsg + "','" + fm.MyPK + "');\" />";
             }
 
 
@@ -1157,6 +1157,10 @@
 
         //复制一条数据 //创建新的workid 复制从表、附件
         function CopyBill(workid, frmID) {
+
+            if (window.confirm("您确定要执行复制吗?") == false)
+                return;
+
             var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("FrmID", frmID);
             handler.AddPara("WorkID", workid);

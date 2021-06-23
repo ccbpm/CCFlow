@@ -1,12 +1,7 @@
 ﻿
 function InitMapAttrOfCtrl(mapAttr, frmData) {
 
-    var str = '';
-    var defValue = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
-
-    var isInOneRow = false; //是否占一整行
-    var islabelIsInEle = false; //
-
+    var defValue = mapAttr.DefVal;
     var eleHtml = '';
 
     //外部数据源类型.
@@ -18,7 +13,7 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+        return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " class='layui-input'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
     }
 
     //外键类型.
@@ -37,11 +32,11 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
             sfTable.SetPKVal(uiBindKey);
             var count = sfTable.RetrieveFromDBSources();
             if (count != 0 && sfTable.CodeStruct == "1") {
-                return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='width:" + parseInt(mapAttr.UIWidth) * 2 + "px;height:28px'></select>";
+                return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='width:" + parseInt(mapAttr.UIWidth) * 2 + "px;height:28px' class='layui-input'></select>";
             }
         }
 
-        return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+        return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " class='layui-input'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
     }
 
     //外部数据类型.
@@ -54,7 +49,7 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
             enableAttr = "disabled='disabled'";
 
         if (mapAttr.UIContralType == 1)
-            return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+            return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " class='layui-input'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
         if (mapAttr.UIContralType == 3) {
             //横向排列
             var RBShowModel = 3;
@@ -100,7 +95,7 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
             if (mapAttr.UIIsEnable == 0)
                 enableAttr = "disabled='disabled'";
 
-            return "<input id='TB_" + mapAttr.KeyOfEn + "' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;height:28px;' type='text'  " + enableAttr + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+            return "<input id='TB_" + mapAttr.KeyOfEn + "' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;height:28px;' type='text'  " + enableAttr + "' placeholder='" + (mapAttr.Tip || '') + "' class='layui-input'/>";
         }
 
         if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
@@ -129,7 +124,7 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
         }
 
         //普通的大块文本.
-        return "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />"
+        return "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " class='layui-input'/>"
     }
     if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == 8) {
         //如果是图片签名，并且可以编辑
@@ -151,7 +146,7 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<input " + enableAttr + " style='width:120px;' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' class='Wdate'   placeholder='" + (mapAttr.Tip || '') + "'/>";
+        return "<input " + enableAttr + " style='width:120px;' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' class='Wdate'   placeholder='" + (mapAttr.Tip || '') + "' class='layui-input'/>";
     }
 
     //时期时间类型.
@@ -163,7 +158,7 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<input id='TB_" + mapAttr.KeyOfEn + "' class='Wdate'  type='text'  style='width:160px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "' />";
+        return "<input id='TB_" + mapAttr.KeyOfEn + "' class='Wdate'  type='text'  style='width:160px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "' class='layui-input'/>";
     }
 
     // boolen 类型.
@@ -194,7 +189,7 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
             enableAttr = "disabled='disabled'";
 
         if (mapAttr.UIContralType == 1)
-            return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+            return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " class='layui-input'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
         if (mapAttr.UIContralType == 3) {
             //横向排列
             var RBShowModel = 3;
@@ -226,7 +221,7 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
             bit = defVal.substring(defVal.indexOf(".") + 1).length;
 
         // alert(mapAttr.KeyOfEn);
-        return "<input style='text-align:right;width:125px;'  onkeyup=" + '"' + "if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        return "<input style='text-align:right;width:125px;'  onkeyup=" + '"' + "if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "' class='layui-input'/>";
     }
 
     if ((mapAttr.MyDataType == 2)) { //AppInt
@@ -235,7 +230,7 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
             enableAttr = "disabled='disabled'";
         }
 
-        return "<input style='text-align:right;width:125px;' onkeyup=" + '"' + "if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value)) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        return "<input style='text-align:right;width:125px;' onkeyup=" + '"' + "if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value)) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "' class='layui-input'/>";
     }
 
     //AppMoney  AppRate
@@ -255,7 +250,7 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
         else
             bit = 2;
 
-        return "<input style='text-align:right;width:125px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        return "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'  id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "' class='layui-input'/>";
     }
 
     alert(mapAttr.Name + "的类型没有判断.");

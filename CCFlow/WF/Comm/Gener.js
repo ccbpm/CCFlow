@@ -864,6 +864,11 @@ var Entity = (function () {
             return;
         }
 
+        if (pkval === "undefined") {
+            alert(' pkval 不能为 undefined ');
+            throw Error('pkval 不能为 undefined ');
+        }
+
         this.enName = enName;
 
         if (pkval != null && typeof pkval === "object") {
@@ -1446,7 +1451,8 @@ var Entity = (function () {
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     var url = dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + pkval + "&MethodName=" + methodName + "&t=" + new Date().getTime();
-                    ThrowMakeErrInfo("Entity_DoMethodReturnString-" + self.enName + " pkval=" + pkval + " MethodName=" + methodName, textStatus, url);
+                    ThrowMakeErrInfo("Entity_DoMethodReturnString-" + self.enName + " pkval=" + pkval + " MethodName=" + methodName, textStatus,
+                        url, XMLHttpRequest, errorThrown);
 
                     //    string = "Entity.DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
                     //  alert(string);
@@ -2184,8 +2190,9 @@ var DBAccess = (function () {
             return;
         }
 
-        if (url.match(/^http:\/\//)) {
-            url = dynamicHandler + "?DoType=RunUrlCrossReturnString&t=" + new Date().getTime() + "&url=" + url
+        if (url.match(/^http:\/\//) == false) {
+            alert("err@url无效");
+            return;
         }
 
         var string;
@@ -2193,7 +2200,8 @@ var DBAccess = (function () {
         $.ajax({
             type: 'post',
             async: false,
-            url: url,
+            url: dynamicHandler + "?DoType=RunUrlCrossReturnString&t=" + new Date().getTime(),
+            data: { urlExt: url },
             dataType: 'html',
             xhrFields: {
                 withCredentials: IsIELower10 == true ? false : true
@@ -2346,7 +2354,6 @@ var HttpHandler = (function () {
                 //parameters["file"] = fileObj;
                 parameters.append("file", fileObj)
             }
-
         },
         AddPara: function (key, value) {
             if (params.indexOf("&" + key + "=") == -1) {
@@ -2427,6 +2434,7 @@ var HttpHandler = (function () {
                     processData: false,
                     success: function (data) {
                         jsonString = data;
+
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random();
@@ -2630,12 +2638,22 @@ var GuestUser = function () {
 
 };
 
-function ThrowMakeErrInfo(funcName, obj, url) {
+function ThrowMakeErrInfo(funcName, textStatus, url, XMLHttpRequest, errorThrown) {
 
     var msg = "1. " + funcName + " err@系统发生异常.";
     msg += "\t\n2.检查请求的URL连接是否错误：" + url;
     msg += "\t\n3.估计是数据库连接错误或者是系统环境问题. ";
-    msg += "\t\n4.技术信息:status: " + obj.status + " readyState: " + obj.readyState;
+    msg += "\t\n4.技术信息";
+
+    if (textStatus != null && textStatus != undefined)
+        msg += " \t\m  textStatus: " + JSON.stringify(textStatus);
+
+    if (errorThrown != null && errorThrown != undefined)
+        msg += " \t\mt  errorThrown: " + JSON.stringify(errorThrown);
+
+    if (XMLHttpRequest != null && XMLHttpRequest != undefined)
+        msg += " \t\m  XMLHttpRequest: " + JSON.stringify(XMLHttpRequest);
+
     msg += "\t\n5.您要打开执行的handler查看错误吗？ ";
     // msg += "\t\n5 您可以执行一下http://127.0.0.1/WF/Default.aspx/jsp/php 测试一下，动态文件是否可以被执行。";
 
@@ -2917,6 +2935,7 @@ $(function () {
     //不需要权限信息..
     if (url.indexOf('login.htm') != -1
         || url.indexOf('dbinstall.htm') != -1
+        || url.indexOf('qrcodescan.htm') != -1
         || url.indexOf('default.htm') != -1
         || url.indexOf('index.htm') != -1
         || url.indexOf('registerbywebsite.htm') != -1
@@ -3005,4 +3024,36 @@ function DealDataTableColName(jsonDT, mapAttrs) {
         }
     }
     return data;
+}
+
+/**
+ * 通用配置的获取
+ * @param {any} key  变量
+ * @param {any} defVal 默认值
+ */
+function getConfigByKey(key, defVal) {
+
+    if (typeof CommonConfig == "undefined") {
+        CommonConfig = {};
+        CommonConfig[key] = defVal;
+        return defVal;
+    }
+    if (CommonConfig[key] == undefined)
+        CommonConfig[key] = defVal;
+
+    return CommonConfig[key];
+}
+/**
+ * 对象数组分组
+ * @param {any} array
+ * @param {any} f
+ */
+function groupBy(array, f) {
+    const groups = {};
+    $.each(array, function (i, o) {
+        const group = f(o);
+        groups[group] = groups[group] || [];
+        groups[group].push(o);
+    });
+    return groups;
 }

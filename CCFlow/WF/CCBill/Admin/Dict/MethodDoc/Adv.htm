@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>高级设置</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            jQuery.getScript(basePath + "/WF/Admin/Admin.js")
+                .done(function () {
+                    /* 耶，没有问题，这里可以干点什么 */
+                    // alert('ok');
+                })
+                .fail(function () {
+                    /* 靠，马上执行挽救操作 */
+                    //alert('err');
+                });
+
+            //InitBar(StartGuideWay.ByFrms);
+            //var nodeID = GetQueryString("FK_Flow") + "01";
+            //nodeID = parseInt(nodeID);
+            //var node = new Entity("BP.WF.Node", nodeID);
+        });
+
+        function Save() {
+            return;
+
+            var fk_flow = GetQueryString("FK_Flow");
+            var data = new Entity("BP.WF.Flow", fk_flow);
+
+            data.StartGuideWay = StartGuideWay.ByFrms;
+
+            //设置的模式.
+            data.TB_StartGuidePara1 = $("#DDL_Model").val();
+
+            data.Update();
+
+            window.location.href = window.location.href;
+        }
+
+        function Close() {
+            window.close();
+        }
+    </script>
+</head>
+<body>
+    <fieldset>
+        <legend>右侧连接 </legend>
+        <textarea id="TB_GuideLink" name="TB_GuideLink" style="width: 98%; height: 51px"></textarea>
+        <legend>连接标签 </legend>
+        <textarea class="TextBoxReadonly" id="TB_GuideLab" name="TB_GuideLab" style="width: 98%;
+                    height: 51px"></textarea>
+    </fieldset>
+    <button onclick="Save()">保存 </button>
+    <button onclick="Close()">关闭 </button>
+
+</body>
+</html>

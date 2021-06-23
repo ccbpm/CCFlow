@@ -1,225 +1,251 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!DOCTYPE html>
+<html>
+
 <head>
-    <title>方法推送 </title>
-    <script type="text/javascript">
-        //删除.
-        function Del(mypk, nodeid) {
-            if (mypk == '') {
-                alert("默认发送不允许删除，您可以修改。");
-                return;
-            }
-            if (window.confirm('您确定要删除吗?') == false)
-                return;
-            window.location.href = 'Method.htm?MyPK=' + mypk + '&DoType=Del&FrmID=' + nodeid;
-        }
-    </script>
-    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../Portal/icons/font-icons.min.css" />
+    <script type="text/javascript" src="../../Portal/js/sortjs/Sortable.min.js"></script>
+    <!--- 引入代码. -->
+    <script src="../../Scripts/jquery/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../../Scripts/config.js"></script>
-    <script type="text/javascript" src="../../Comm/Gener.js"></script>
-    <script src="../../Scripts/PinYin.js" type="text/javascript"> </script>
-    <base target="_self" />
-    <script type="text/javascript">
-        function Esc() {
-            if (event.keyCode == 27)
-                window.close();
-            return true;
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Portal/js/vue/vue.js"></script>
+    <script src="../../Scripts/layui/LayuiDialog.js"></script>
+    <script src="../../Scripts/layui/layui/layui.js"></script>
+    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <!--    <script type="text/javascript" src="methods.js"></script>-->
+    <script src="../EnumLab.js"></script>
+    <style>
+        .method {
+            width: 100%;
         }
 
-        /*隐藏与显示.*/
-        function ShowHidden(ctrlID) {
-
-            var ctrl = document.getElementById(ctrlID);
-            if (ctrl.style.display == "block") {
-                ctrl.style.display = 'none';
-            } else {
-                ctrl.style.display = 'block';
+            .method .row {
+                display: flex;
+                justify-content: flex-start;
+                flex: 0.2;
+                height: 40px;
+                line-height: 40px;
+                background-color: #FAFAFA;
             }
+
+                /*method .row .item {*/
+                /*    box-sizing: border-box;*/
+                /*    flex-shrink: 0;*/
+                /*    text-align: center;*/
+                /*    width: 20%;*/
+                /*    border: 1px solid #eee;*/
+                /*    font-weight: 600;*/
+                /*}*/
+
+                .method .row .item {
+                    box-sizing: border-box;
+                    flex-shrink: 0;
+                    text-align: center;
+                    border-right: 1px solid #eee;
+                    border-bottom: 1px solid #eee;
+                }
+
+        .item-name {
+            width: 20%;
+            text-overmethod: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+            padding-left: 30px;
         }
-    </script>
-    <script type="text/javascript" language="javascript">
-        //页面启动函数.
-        $(function () {
+
+        .item-other {
+            width: 12%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .item-docs {
+            width: 30%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .item-index {
+            background-color: #FAFAFA;
+            padding-right: 40px;
+            color: #999999
+        }
+
+        .method .row .folder-item {
+            box-sizing: border-box;
+            width: 76%;
+            padding-left: 20px;
+            cursor: pointer;
+        }
+
+        .wrapper .row {
+            background-color: #fff;
+        }
+
+        #s-main {
+            transition: all ease .4s;
+            margin-top: 40px;
+        }
+
+        .fixed {
+            position: fixed;
+            top: 25px;
+            left: 0;
+            width: 100%;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .layui-input-block > .layui-form-switch {
+            margin-top: 0 !important;
+        }
+    </style>
+    <script type="text/javascript">
+
+
+        //转到菜单
+        function ToMenu() {
+            var moduleNo = GetQueryString("ModuleNo");
+            var module = new Entity("BP.GPM.Menu2020.Module", moduleNo);
+            var url = "../GPM/Menus.htm?SystemNo=" + module.SystemNo;
+            window.top.vm.openTab(name, url);
+        }
+
+        //转到菜单
+        function ToDictAttr() {
 
             var frmID = GetQueryString("FrmID");
-            var ens = new Entities("BP.CCBill.Template.Methods");
-            ens.Retrieve("FrmID", frmID, "Idx");
+            var url = "../../Comm/En.htm?EnName=BP.CCBill.FrmDict&No=" + frmID;
 
-            for (var i = 0; i < ens.length; i++) {
+            OpenLayuiDialog(url, '', 9000, 0, null, false);
 
-               // var en = new Entity("BP.CCBill.Template.Method", ens[i]);
-
-                var en =  ens[i];
-
-                var newRow = "";
-                newRow = "<tr ><td class=Idx>" + (i + 1) + "</td>";
-                newRow += "<td>" + en.MethodID + "</td>";
-                newRow += "<td><a href=\"javascript:Open('" + en.MyPK + "','" + en.RefMethodType + "');\"' >" + en.MethodName + "</a></td>";
-                newRow += "<td>" + en.RefMethodTypeText + "</td>";
-                newRow += "<td><img src='../../Img/Btn/Up.gif' onclick=\"Up('" + en.MyPK + "')\" alt='上移' />&nbsp;-&nbsp;<img src='../../Img/Btn/Down.gif' onclick=\"Down('" + en.MyPK + "')\" alt='下移' /> </td>";
-                newRow += "<td>";
-                if (en.RefMethodType != 2) {
-                    newRow += " <a href=\"javascript:Paras('" + en.MyPK + "')\">参数</a> - ";
-                newRow += " <a href=\"javascript:Docs('" + en.MyPK + "')\">执行内容</a> - ";
-                }
-                
-                newRow += " <a href=\"javascript:Delete('" + en.MyPK + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
-
-                newRow += "</td>";
-                newRow += "</tr>";
-                $("#Table1 tr:last").after(newRow);
-            }
-        });
-
-        function Paras(mypk) {
-            url = "MethodParas.htm?MyPK=" + mypk;
-            WinOpenFull(url);
-        }
-        function Docs(mypk) {
-            url = "MethodDoc.htm?MyPK=" + mypk;
-            WinOpenFull(url);
+            //   OpenDialogAndCloseRefresh(url,"",9000,900,)
+            //  window.top.vm.openTab(name, url);
         }
 
-        //打开.
-        function Open(mypk, type) {
+        function GoToFrmD() {
+            var frmID = GetQueryString("FrmID");
+            GoToFrmDesigner(frmID);
 
-            var url = "../../Comm/EnOnly.htm?EnName=BP.CCBill.Template.MethodLink&MyPK=" + mypk;
-            if (type == 0)
-                url = "../../Comm/En.htm?EnName=BP.CCBill.Template.MethodFunc&MyPK=" + mypk;
-            WinOpenFull(url);
         }
-        function Up(no) {
-            var emp = new Entity("BP.CCBill.Template.Method", no);
-            var data = emp.DoMethodReturnString("DoUp");
-            window.location.href = window.location.href;
-        }
-        function Down(no) {
+        //打开设计表单.
+        function GoToFrmDesigner(frmID) {
 
-            var emp = new Entity("BP.CCBill.Template.Method", no);
-            var data = emp.DoMethodReturnString("DoDown");
-            window.location.href = window.location.href;
-        }
-        //删除.
-        function Delete(myPK) {
-            if (window.confirm('您确定要删除吗？') == false)
-                return;
-            var en = new Entity("BP.CCBill.Template.Method");
-            en.MyPK = myPK;
-            en.Delete();
-            window.location.href = window.location.href;
-        }
-        //创建一个参数连接.
-        function CreateMethodLink() {
-            var name = window.prompt('请输入方法中文名称', "我的连接");
-            if (name == null || name == undefined)
-                return;
+            if (frmID == undefined)
+                frmID = GetQueryString("FrmID");
 
-            var pinYin = ParsePinYin(name, true, null);
+            //  var module = new Entity("BP.GPM.Menu2020.Module", moduleNo);
+            var url = "../Admin/CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + frmID + "&FrmID=" + frmID;
 
-            var id = window.prompt('方法ID', pinYin);
-            if (name == null || name == undefined)
-                return;
-
-            var en = new Entity("BP.CCBill.Template.Method");
-            en.FrmID = GetQueryString("FrmID");
-            en.MethodID = id;
-            en.MethodName = name;
-            en.RefMethodType = 2;
-            en.SetPKVal(en.FrmID + "_" + en.MethodID);
-            if (en.IsExits() == true) {
-                alert('该方法名已经存在，请重新创建');
-                return;
-            }
-            en.Insert();
-
-            var url = "../../Comm/EnOnly.htm?EnName=BP.CCBill.Template.MethodLink&MyPK=" + en.MyPK;
-            WinOpenFull(url);
-            //window.location.href = window.location.href;
-        }
-
-        //创建一个参数连接.
-        function CreateFunc() {
-            var name = window.prompt('请输入方法中文名称', "注销学籍");
-            if (name == null || name == undefined)
-                return;
-
-            var pinYin = ParsePinYin(name, true, null);
-
-            var id = window.prompt('方法ID', pinYin);
-            if (name == null || name == undefined)
-                return;
-
-            var en = new Entity("BP.CCBill.Template.Method");
-            en.FrmID = GetQueryString("FrmID");
-            en.MethodID = id;
-            en.MethodName = name;
-            en.RefMethodType = 0;
-            en.SetPKVal(en.FrmID + "_" + en.MethodID);
-            if (en.IsExits() == true) {
-                alert('该方法名已经存在，请重新创建');
-                return;
-            }
-            en.Insert();
-
-            var url = "../../Comm/En.htm?EnName=BP.CCBill.Template.MethodFunc&MyPK=" + en.MyPK;
-            WinOpenFull(url);
-            //window.location.href = window.location.href;
-        }
-
-        function MethodDtl(eventType) {
-
-            var url = 'MethodDtl.htm?FrmID=' + GetQueryString('FrmID');
-            url += '&FK_Flow=' + GetQueryString('FK_Flow');
-            url += '&FK_Event=' + eventType;
-            url += '&tk=' + Math.random();
-
-            window.location.href = url;
-        }
-        function Help() {
-            var url = "http://ccbpm.mydoc.io";
-            window.open(url);
+            window.top.vm.openTab(frmID, url);
         }
     </script>
 </head>
-<body onkeypress="Esc();">
-    <table id="Table1" style="width: 100%">
-        <caption>
-            方法
-        </caption>
-        <tr>
-            <th>
-                序
-            </th>
-            <th>
-                ID
-            </th>
-            <th>
-                名称
-            </th>
-            <th>
-                类型
-            </th>
-            <th>
-                显示顺序
-            </th>
-            <th>
-                操作
-            </th>
-        </tr>
-    </table>
-    <fieldset style="border: 0px;">
-        <input type="button" value="帮助" onclick="Help()" />
-        <input type="button" value="+新建方法" id="Btn_Save" onclick="ShowHidden('state')" />&nbsp;&nbsp;
-        <div id="state" style="display: none; color: Gray">
-            <ul>
-                <li><a href="javascript:CreateMethodLink();">创建连接</a> </li>
-                <!--<li><a href="javascript:CreateMethodLink('3');">超链接在新窗口打开方法</a> </li>-->
-                <li><a href="javascript:CreateFunc();">执行功能方法</a> </li>
-                <!--<li><a href="javascript:CreateFunc();">有参数的方法</a> </li>-->
-            </ul>
+
+<body>
+
+
+    <span class="layui-breadcrumb">
+
+        <a href=""><i class="icon-home"></i>  首页</a>
+
+        <a href="javascript:ToMenu()"><i class="icon-menu"></i>  菜单设计</a>
+        <a href="javascript:ToDictAttr()"><i class="icon-heart"></i>  实体属性</a>
+        <a href="javascript:GoToFrmD()"><i class="icon-diamond"></i>  表单设计器</a>
+        <a><cite>方法设计器</cite></a>
+    </span>
+
+
+    <!--<div id="idcc">
+        <i class="icon-Home"></i>\\系统\\模块\\菜单\\实体菜单\\方法设计器
+    </div>-->
+
+    <div class="method" id="method" v-cloak>
+
+        <div class="row fixed">
+            <div class="item item-other" @click="expandAll = !expandAll">
+                <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs">
+                    {{expandAll ? '折叠所有' : '展开所有'}}
+                </button>
+            </div>
+            <div class="item item-name"><i class="icon-app"></i> 方法名</div>
+            <div class="item item-other">方法模式</div>
+            <div class="item item-docs">内容</div>
+            <div class="item item-other">启用？</div>
+            <div class="item item-other">操作</div>
         </div>
-    </fieldset>
+        <div ref="sort-main" id="s-main">
+            <div class="wrapper" v-for="(group,index) in flowNodes" :key="index" :data-no="group.No" :data-id="group.No"
+                 :data-pid="group.ParentNo">
+                <div class="row item-top-dp" @click="group.open = !group.open" :data-no="group.No" :data-name="group.Name" :data-idx="index">
+                    <div class="item item-other" style="text-align: center">
+                        <i v-if="group.children.length > 0" class="layui-icon"
+                           :class="group.open ? 'layui-icon-up':'layui-icon-right'"></i>
+                        <i v-else=v-else class="layui-icon layui-icon-subtraction"></i>
+                    </div>
+                    <div class="item folder-item " style="text-align: left; background-color:azure;"
+                         :data-no="group.No" :data-name="group.Name" :data-idx="index">
+
+                        <!--<i class="icon-folder" style="margin-right: 8px"></i>-->
+                        <!--<span @click.stop="EditSort(item.No,item.Name)">{{group.Name}}</span>-->
+
+                        <span> <i :class="group.Icon" style="margin-right: 8px"> </i>  {{group.Name}}</span>
+                    </div>
+
+                    <div class="item item-other ">
+                        <button @click.stop :data-no="group.No" :data-name="group.Name" :data-idx="index"
+                                class="layui-btn layui-btn-primary layui-border-black layui-btn-sm t-btn">
+                            <i class="layui-icon layui-icon-down layui-font-12"></i> 目录
+                        </button>
+                    </div>
+                </div>
+                <div v-show="group.open" :data-id="group.No" ref="child-row">
+                    <div class="row item-name-dp" v-for="(method,idx) in group.children" :key="idx" :data-pid="group.No"
+                         :data-no="method.No" :data-name="method.Name" :data-pidx="index"
+                         :data-idx="idx"
+                         :data-id="method.No">
+                        <div class="item item-other item-index" style="text-align: right;">{{idx + 1}}</div>
+
+                        <div class="item item-name " @click.stop="MethodAttr(method.No)"
+                             style="text-align: left" :data-no="method.No" :data-name="method.Name" :data-pidx="index"
+                             :data-idx="idx">
+                            <span><i :class="method.Icon" style="margin-right: 8px"> </i> {{method.Name}}</span>
+                        </div>
+                        <div class="item item-other">{{method.MethodModel}}</div>
+                        <div class="item item-docs" v-html="method.Docs"></div>
+                        <div class="item item-other">
+                            <form class="layui-form" action="">
+                                <div class="layui-form-item" style="margin: 0">
+                                    <div class="layui-input-block" style="margin: 0" :data-id="method.No"
+                                         @click="changeMethodEnableStatus(method,this)">
+                                        <input type="checkbox" lay-skin="switch" lay-text="ON|OFF"
+                                               :checked="parseInt(method.IsEnable) === 1">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="item item-other">
+                            <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs c-btn"
+                                    :data-name="method.Name" :data-no="method.No" :data-pidx="index" :data-idx="idx">
+                                <i class="layui-icon layui-icon-down layui-font-12"></i> 方法
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="Method.js"></script>
+
 </body>
+
 </html>

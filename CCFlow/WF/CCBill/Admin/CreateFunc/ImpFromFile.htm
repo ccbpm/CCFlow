@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>链接</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../EnumLab.js"></script>
+    <script src="../../../Admin/Admin.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+
+            //  InitBar(0);
+            InitBar(MethodModel.ImpFromFile);
+            //   InitBar("ImpFromFile");
+
+        });
+
+        function Save() {
+
+            $("#Msg").html("正在创建,请稍后......");
+
+            var name = $("#TB_Name").val();
+            var id = $("#TB_No").val();
+            if (name == undefined || name == null || name == "") {
+                alert("请输入名称.");
+                return;
+            }
+
+            var en = new Entity("BP.CCBill.Template.Method");
+            en.FrmID = GetQueryString("FrmID");
+            en.GroupID = GetQueryString("GroupID"); //分组ID.
+            en.MethodID = id;
+
+            en.Name = name;
+            en.MethodModel = MethodModel.ImpFromFile; //设置为链接按钮.
+            en.RefMethodType = 1;
+            en.UrlExt = "./OptComponents/ImpFromFile.htm";
+            //en.SetPKVal(en.FrmID + "_" + en.MethodID);
+            //if (en.IsExits() == true) {
+            //    alert('该方法名已经存在，请重新创建');
+            //    return;
+            //}
+
+            en.Icon = "icon-drop";
+            en.Insert();
+
+            var url = "../../../Comm/En.htm?EnName=BP.CCBill.Template.MethodLink&No=" + en.No;
+            window.location.href = url;
+        }
+
+        function GenerPinYin() {
+
+            //是否是全拼.
+            var isQuanPin = 0;
+            if (document.getElementById("RB_ZZMM_0").checked == true)
+                isQuanPin = 1;
+
+            // var name = $('#TB_Nam').val();
+            var name = document.getElementById("TB_Name").value;
+            if (name == "")
+                return;
+
+            var handler = new HttpHandler("BP.Cloud.HttpHandler.Admin_CCFormDesigner");
+            handler.AddPara("IsQuanPin", isQuanPin);
+            handler.AddPara("TB_Name", encodeURIComponent(name));
+            var data = handler.DoMethodReturnString("NewFrmGuide_GenerPinYin");
+
+            $("#Msg").html("");
+
+            if (data.indexOf('err@') >= 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
+
+            $('#TB_No').val(data);
+
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>导入数据 </legend>
+        <table>
+            <tr>
+                <td>标签: </td>
+                <td>  <input type="text" value="" id="TB_Name" name="TB_Name" onblur="GenerPinYin()" /></td>
+            </tr>
+
+            <tr>
+                <td>方法ID </td>
+                <td>
+                    <input type="text" value="" id="TB_No" name="TB_No" />
+                    <!--<input type="text" id="TB_No_Org" name="TB_No_Org" style="width: 100%;" hidden=hidden />-->
+                </td>
+            </tr>
+
+            <tr>
+                <td> </td>
+                <td>
+                    <input id="RB_ZZMM_0" type="radio" name="RB_ZZMM" value="0" checked="true" onclick="GenerPinYin()" /><label for="RB_ZZMM_0" onclick="GenerPinYin()">全拼</label>
+                    <input id="RB_ZZMM_1" type="radio" name="RB_ZZMM" value="1" onclick="GenerPinYin()" /><label for="RB_ZZMM_1" onclick="GenerPinYin()">简拼</label>
+                </td>
+            </tr>
+        </table>
+        <!--<input type="button" id="Btn_Save" name="Btn_Save" value="执行创建" onclick="Save();" />-->
+        <div id="Msg"></div>
+    </fieldset>
+
+</body>
+</html>

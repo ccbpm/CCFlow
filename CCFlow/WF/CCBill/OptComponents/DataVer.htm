@@ -1,0 +1,291 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>数据快照</title>
+
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Comm/fonts/font-icons.min.css" rel="Stylesheet" />
+
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <link href="../../Scripts/SyntaxHighlighter/Styles/shCoreDefault.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/SyntaxHighlighter/shCore.js" type="text/javascript"></script>
+    <script src="../../Scripts/SyntaxHighlighter/shBrushCSharp.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script type="text/javascript">
+        var frmID;
+        var workID;
+        $(function () {
+
+            frmID = GetQueryString("FrmID");
+            workID = GetQueryString("WorkID");
+
+            //查询出来版本.
+            var vers = new Entities("BP.Sys.EnVers");
+            vers.Retrieve("FrmID", frmID, "EnPKValue", workID, "EnVer");
+
+            //所有的快照数据.
+            var verDtls = new Entities("BP.Sys.EnVerDtls");
+            verDtls.Retrieve("FrmID", frmID, "EnPKValue", workID);
+
+            //所有的字段.
+            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+            mapAttrs.Retrieve("FK_MapData", frmID);
+
+            //数据.
+            var frmEn = new Entity(frmID, workID);
+
+            //生成表头.
+            var html = "<table>";
+            html += "<tr>";
+            html += "<th>#</th>";
+            html += "<th>字段</th>";
+            html += "<th>名称</th>";
+            for (var i = 0; i < vers.length; i++) {
+                var ver = vers[i];
+                // if (ver.IsMainVer == 1)
+                //  html += "<th title='" + ver.RDT + ", 主版本' ><font color=green size='18px'>" + ver.EnVer + "</font></th>";
+                //  else
+                html += "<th title='" + ver.RDT + "'> #" + ver.EnVer + "</th>";
+            }
+            html += " <th>变化?</th>";
+            html += " <th>当前数据</th>";
+            html += " <th>操作</th>";
+            html += "</tr>";
+
+            var sysFiels = ",AtPara,OID,WorkID,WFState,BillNo,Title,RDT,CDT,OrgNo,Starter,StarterName,BillState,FK_Dept,";
+
+            //遍历字段.
+            for (var i = 0; i < mapAttrs.length; i++) {
+
+                var mapAttr = mapAttrs[i];
+                if (sysFiels.indexOf(',' + mapAttr.KeyOfEn + ',') >= 0) continue;
+                if (mapAttr.UIContralType >= 4)
+                    continue;
+
+                html += "<tr>";
+                html += "<td>" + i + "</td>";
+                html += "<td>" + mapAttr.KeyOfEn + "</td>";
+                html += "<td>" + mapAttr.Name + "</td>";
+
+                //数据是否有变化?
+                var isChange = false;
+                var myval = null;
+
+                //循环版本.
+                for (var idx = 0; idx < vers.length; idx++) {
+
+                    var ver = vers[idx]; //获得版本.
+
+                    var isHave = false;
+
+                    for (var myIdx = 0; myIdx < verDtls.length; myIdx++) {
+
+                        var verDtl = verDtls[myIdx];
+                        if (verDtl.RefPK != ver.MyPK)
+                            continue;
+
+                        if (verDtl.AttrKey != mapAttr.KeyOfEn)
+                            continue;
+
+                        if (myval == null)
+                            myval = verDtl.MyVal;
+
+                        if (myval != verDtl.MyVal) {
+                            isChange = true;
+                        }
+
+                        html += "<td>" + verDtl.MyVal + "</td>";
+                        //html += "<td><label><input type=radio name='" + verDtl.AttrKey + "' id='RB_" + verDtl.AttrKey + "_" + verDtl.RefPK + "' />" + verDtl.MyVal + "</label></td>";
+                        isHave = true;
+                        break;
+                    }
+
+                    if (isHave == false)
+                        html += "<td>无数据</td>";
+                }
+
+                //判断数组的是是否一样？.
+                // var strs[] = vals.split(';');
+
+                if (isChange == true)
+                    html += "<td bgcolor=red><font ><b>有</b></font></td>";
+                else
+                    html += "<td>无</td>";
+
+                if (mapAttr.UIContralType == 0)
+                    html += "<td>" + frmEn[mapAttr.KeyOfEn] + "</td>";
+                else
+                    html += "<td>[" + frmEn[mapAttr.KeyOfEn] + "][" + frmEn[mapAttr.KeyOfEn + 'Text'] + "]</td>";
+
+                html += "<td><a href=\"javascript:AppFieldData('" + mapAttr.KeyOfEn + "')\" ><i class='icon-reload'></i> 应用 </a></td>";
+
+                html += "</tr>";
+            }
+
+            html += "<tr>";
+            html += "<td colspan=3></td>";
+            for (var i = 0; i < vers.length; i++) {
+                var ver = vers[i];
+
+                // if (ver.IsMainVer == 1)
+                //  html += "<th title='" + ver.RDT + ", 主版本' ><font color=green size='18px'>" + ver.EnVer + "</font></th>";
+                //  else
+                html += "<td title='" + ver.RDT + "'>";
+                html += "#" + ver.EnVer + "";
+                html += "<br>日期:" + ver.RDT;
+                html += "<br>拍照人:" + ver.RecNo;
+                html += "<br>名称:" + ver.RecName;
+                html += "<br>备注:" + ver.MyNote;
+                html += "<br><a href=\"javascript:Delete('" + ver.MyPK + "');\" ><i class='icon-close'></i>删除快照</a>";
+                html += "<br><a href=\"javascript:Reback('" + ver.MyPK + "');\" ><i class='icon-reload'></i>还原到此位置</a>";
+                html += "</td>";
+
+                //<a href=\"javascript:Delete('" + ver.MyPK + "');\" > #" + ver.EnVer + "</a> </td>";
+            }
+
+            html += "<td colspan=1></td>";
+            html += "<td colspan=1><a href='javascript:NewVer()'> <i class='icon-camera'></i> 创建数据快照</a></td>";
+            html += "<td colspan=1></td>";
+            html += "</tr>";
+            html += "</table>";
+
+            $("#docs").html(html);
+
+        });
+
+        //还原到此位置.
+        function Reback(mypk) {
+
+
+            if (window.confirm("确定要还原到当前的快照吗？现有的数据将会被覆盖，请慎重执行。") == false)
+                return;
+
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_OptComponents");
+            handler.AddUrlData();
+            handler.AddPara("MyPK", mypk);
+            var data = handler.DoMethodReturnString("DataVer_Reback");
+            alert(data);
+            if (data.indexOf("err@") == 0) {
+                return;
+            }
+            window.location.reload(); // = url;
+        }
+
+
+        function Delete(mypk) {
+
+            if (window.confirm("系统将要删除备份的快照数据，您确定要删除吗？") == false)
+                return;
+            var en = new Entity("BP.Sys.EnVer", mypk);
+            en.Delete(); //已经在删除的逻辑里写了删除dtl数据。
+            window.location.href = window.location.href;
+        }
+
+        function NewVer() {
+
+            if (window.confirm("您确定要创建 数据快照 吗？") == false)
+                return;
+
+            var val = window.prompt("备注*", "");
+            if (val == null || val == undefined) return;
+            if (val == "") val = "无";
+
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_OptComponents");
+            handler.AddUrlData();
+            handler.AddPara("MyNote", val);
+
+            var data = handler.DoMethodReturnString("DataVer_NewVer");
+            alert(data);
+            if (data.indexOf("err@") == 0) {
+                return;
+            }
+
+            var url = "DataVer.htm?WorkID=" + workID + "&FrmID=" + frmID;
+            window.location.reload(); // = url;
+            // DataVer.htm ? WorkID = 126 & FrmID=Dict_XueShengTaiZhang1 & FK_MapData=Dict_XueShengTaiZhang1
+            //window.location.href = url;
+        }
+
+
+        //应用此数据.
+        function AppFieldData(keyOfEn) {
+
+            var val = window.prompt("请输入要复原的版本号: (请输入数字,1,2,3)", "1");
+            if (val == undefined || val == null)
+                return;
+
+            //var msg = "请输入要回滚的版本号: ";
+            //msg += "\t\n 1. 如果确定要执行，系统就把当前字段[" + keyOfEn + "]的值[" + val + "]，更新到数据库中。";
+            //msg += "\t\n 2. 当前主版本的值为[" + valOfMainVer + "]，您确定要覆盖当前数据吗？";
+            //if (window.confirm(msg) == false)
+            //    return;
+
+            //设置为主版本.
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_OptComponents");
+            handler.AddUrlData();
+            //  handler.AddPara("MyPK", mypk);
+            handler.AddPara("KeyOfEn", keyOfEn);
+            handler.AddPara("VerNum", val);
+            var data = handler.DoMethodReturnString("DataVer_AppFieldData");
+            alert(data);
+            if (data.indexOf("err@") == 0) {
+                return;
+            }
+            window.location.href = window.location.href;
+        }
+
+        function Ver() {
+
+            var frmID = GetQueryString("FrmID");
+            var workID = GetQueryString("WorkID");
+            url = "DataVer.htm?FrmID=" + frmID + "&WorkID=" + workID;
+            window.location.href = url;
+            return;
+        }
+
+        function BackToFrm() {
+
+            var frmID = GetQueryString("FrmID");
+            var workID = GetQueryString("WorkID");
+            url = "../MyDict.htm?FrmID=" + frmID + "&WorkID=" + workID;
+            window.location.href = url;
+            return;
+            //var md = new Entity("BP.Sys.MapData", frmID);
+            //EntityType = md.EntityType;
+            //var url = "../SearchDict.htm?EnsName=" + frmID + "&FrmID=" + frmID;
+            //if (EntityType == "2")
+            //    url = "../SearchBill.htm?EnsName=" + frmID + "&FrmID=" + frmID;
+            //if (EntityType == "1")
+            //    url = "../SearchDict.htm?EnsName=" + frmID + "&FrmID=" + frmID;
+            //window.location.href = url;
+        }
+    </script>
+</head>
+<body>
+    <form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
+
+        <br />
+        <a href='javascript:BackToFrm()'> &nbsp;&nbsp; <i class='icon-home'>返回表单</i></a> \\ <i class='icon-camera'></i>数据快照
+        <br />
+        <br />
+
+        <!--<a href='javascript:BackToFrm()'> <i class='icon-camera'></i> 返回：创建数据快照</a>-->
+        <!--<input type="button" value="返回:快照管理" id="Btn_Ver" onclick="Ver()" />-->
+        <!--<input type="button" value="创建数据快照" id="Btn_New" onclick="NewVer()" />-->
+        <!--<input type="button" value="快照数据" id="Btn_Ver" onclick="DataCheck()" />-->
+        <!--<input type="button" value="创建新版本" id="Btn_New" onclick="NewVer()" />-->
+
+        <div id="docs"></div>
+
+
+        <!--<button id="Btn_Crate" onclick="CreateVer()"> 创建新版本</button>
+        <button id="Btn_Crate" onclick="Delete()"> 删除版本</button>
+        <button id="Btn_Crate" onclick="DataCheck()"> 版本对比</button>-->
+    </form>
+</body>
+</html>

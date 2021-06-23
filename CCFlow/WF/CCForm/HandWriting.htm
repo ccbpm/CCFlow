@@ -8,6 +8,7 @@
     <title>手写签名版</title>
     <script src="../Scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../Scripts/bootstrap/css/bootstrap.min.css" />
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/config.js"></script>
@@ -39,7 +40,7 @@
 
         .wapr_nav_left {
             margin: 10px 0;
-            padding: 0 20px;
+            padding: 0 10px;
             float: left;
             font-size: 15px;
             color: #333;
@@ -86,10 +87,18 @@
 
         .wapr_nav_left_img4 {
             display: block;
-            width: 15px;
+            width: 20px;
             height: 15px;
             background: url(Img/4.png) no-repeat;
             margin-left: 7px;
+        }
+
+        .wapr_nav_left_img6 {
+            display: block;
+            width: 20px;
+            height: 16px;
+            background: url(Img/6.png) no-repeat;
+            margin-left: 12px;
         }
 
         .qudiao {
@@ -103,7 +112,7 @@
             position: absolute;
             top: 5px;
             right: 6px;
-            width:60px;
+            width: 60px;
             /* color: #fff; */
             height: 50px;
             /* 重点代码让input隐藏 */
@@ -115,32 +124,40 @@
             height: 40px;
             width: 35px;
         }
+
+        html, body {
+            -ms-overflow-style: scrollbar;
+        }
     </style>
 </head>
 <body>
     <div class="wapr" id="sxb" style="height: 100%">
         <div class="wapr_nav clearfix" id="button">
             <div id="saveBtn" onclick="saveSignature();" class="wapr_nav_left"><span class="wapr_nav_left_img1"></span>保存</div>
-            <div id="addImg" onclick="AddImg()" class="wapr_nav_left"><span class="wapr_nav_left_img2"></span>插入<input id="inputImg" type="file" /></div>
-
-            <div id="clearBtn" onclick="clearCanvas()" class="wapr_nav_left qudiao"><span class="wapr_nav_left_img3"></span>重置</div>
-            <!-- <div class="wapr_nav_right"><span class="wapr_nav_left_img4"></span>取消</div>-->
+            <div id="addImg" style="width:55px;" onclick="AddImg()" class="wapr_nav_left">
+                <span class="wapr_nav_left_img2"></span>插入
+                <input id="inputImg" type="file" />
+            </div>
+            <div id="clr" val="0" onclick="clearsame()" class="wapr_nav_left"><span class="wapr_nav_left_img6"></span><div id="xpc">橡皮擦</div></div>
+            <div id="clearBtn" onclick="clearCanvas(1)" class="wapr_nav_left"><span class="wapr_nav_left_img3"></span>重置</div>
+            <div val="0" style="margin-top:14px;padding-right:0px;" class="wapr_nav_left qudiao">粗细</div>
+            <div val="0" class="wapr_nav_left qudiao">
+                <select class="form-control" onchange="setfont()" id="select-font-size">
+                    <option style="font-size:16px" value="2">细</option>
+                    <option style="font-size:16px" value="5" selected="selected">中</option>
+                    <option style="font-size:16px" value="8">粗</option>
+                </select>
+            </div>
         </div>
-        <div id="signature" class="js-signature" data-border="0px solid black" data-line-color="#bc0000"
-             data-auto-fit="true">
+        <div id="signature" class="js-signature" data-border="0px solid black" data-line-color="#bc0000" data-auto-fit="true" style="overflow:auto;">
         </div>
     </div>
     <script type="text/javascript">
         $(window).resize(function () {
-            Auto();
-
-            //ctx.restore();
-        });
-        function Auto() {
             // 变化后需要做的事
             var canvawidth = document.getElementById("signature").offsetWidth;
             var canvaheight = document.getElementById("signature").offsetHeight;
-            var iframe = window.parent.document.getElementById("eudlgframe");
+            var iframe = $($(".layui-layer-content", parent.document)[0]).find("iframe")[0];
             //console.log( )
             document.body.style.height = iframe.offsetHeight + "px";
             document.getElementById("signature").style.height = document.getElementById("sxb").offsetHeight - document.getElementById("button").offsetHeight + 'px';
@@ -154,48 +171,56 @@
             canvas.height = height;
             canvas.style.width = width + 'px';
             canvas.style.height = height + 'px';
-            //SavePC = pic;
             //创建image对象
             var imgObj = new Image();
             imgObj.src = png;
             var ctx = canvas.getContext("2d");
             //待图片加载完后，将其显示在canvas上
             imgObj.onload = function () {
-                // console.log(width+"========"+canvawidth);
                 ctx.strokeStyle = "#000";
-                ctx.drawImage(this, (width - canvawidth) / 2, (height - canvaheight) / 2);//this即是imgObj,保持图片的原始大小：470*480
-                //ctx.drawImage(this, 0, 0,1024,768);//改变图片的大小到1024*768
+                ctx.drawImage(this, (width - canvawidth) / 2, (height - canvaheight) / 2); //this即是imgObj,保持图片的原始大小：470*480
                 ctx.restore();
                 ctx.save();
             }
-        }
-       
+
+            //ctx.restore();
+        })
     </script>
     <script type="text/javascript">
         var imagePath = "";
-        var SavePC = ""
+        var SavePC = "";
+        var deptNo = "";
+        var elementID = GetQueryString("ElementID");
+        if (elementID!=null && elementID.indexOf("WorkCheck_") != -1)
+            deptNo = elementID.replace("WorkCheck_", "");
+        var user = new WebUser();
         $(document).on('ready', function () {
-            
-            //alert('还未实现.');
-            //if ($('.js-signature').length) {
             $('.js-signature').jqSignature();
             document.getElementById("signature").style.width = document.getElementById("sxb").offsetWidth + 'px';
             var canvas = $('#signature').children()[0];
             //canvas.width = img.width;
-            canvas.height = 159;
-            canvas.style.height = "159px";
+            if (user.FK_Dept == "951979" || user.Name == "白晓春") {
+                canvas.height = 860;
+                canvas.style.height = "860px";
+            } else {
+                canvas.height = 215;
+                canvas.style.height = "215px";
+            }
             var ctx = canvas.getContext("2d");
             ctx.strokeStyle = "#000";
             ctx.restore();
             //从缓存取出除父页面图片的二进制流
             InsertImg("");
-            //  }
-            Auto();
         });
 
 
+        function ComeBack() {
+            window.screen.height = "100%";
+            window.screen.width = "100%";
+        }
+
         //插入
-         //在input file内容改变的时候触发事件
+        //在input file内容改变的时候触发事件
         $('#inputImg').change(function () {
             //获取input file的files文件数组;
             //$('#filed')获取的是jQuery对象，.get(0)转为原生对象;
@@ -211,16 +236,16 @@
                 console.log(e);
                 //选择所要显示图片的img，要赋值给img的src就是e中target下result里面
                 //转为base64编码格式的地址并加载到画布
+                clearCanvas(0);
                 InsertImg(e.target.result);
                 //是否是插入的图片
                 window.localStorage.setItem("InsertTmg", "true");
-               
+
             }
         })
-
         //加载保存的签名
         function InsertImg(SavePC) {
-            if(SavePC=="")
+            if (SavePC == "")
                 SavePC = localStorage.getItem("writeImg");
             var img = new Image();
             var user = new WebUser();
@@ -253,8 +278,10 @@
                 ctx.save();
             }
         }
-
-        function clearCanvas() {
+        function clearCanvas(type) {
+            if (type == 1) {
+                window.parent.typecon = false;
+            }
             //$('#signature').html('<p><em></em></p>');
             $('.js-signature').eq(0).jqSignature('clearCanvas');
             var canvas = $('#signature').children()[0]
@@ -262,22 +289,99 @@
             ctx.strokeStyle = "#000";
             ctx.restore();
         }
+
+        function clearsame() {
+            if ($('#clr').attr('val') == 1) {
+                var canvas = $('#signature').children()[0];
+                canvas.style.cursor = 'crosshair';
+                $('#clr').attr('val', '0');
+                $('#xpc').text("橡皮擦");
+            } else {
+                var canvas = $('#signature').children()[0];
+                canvas.style.cursor = 'url(Img/6.png)';
+
+
+                $('#clr').attr('val', '1');
+                $('#xpc').text("取消");
+            }
+        }
+
+
+        function setfont() {
+            $('.js-signature').jqSignature('setfont');
+        }
+
         function isCanvasBlank(canvas) {
-            var blank = document.createElement('canvas');//系统获取一个空canvas对象
+            var blank = document.createElement('canvas'); //系统获取一个空canvas对象
             blank.width = canvas.width;
             blank.height = canvas.height;
-            return canvas.toDataURL() == blank.toDataURL();//比较值相等则为空
+            return canvas.toDataURL() == blank.toDataURL(); //比较值相等则为空
         }
+
         function saveSignature() {
+            window.parent.mrimg = false;
             var canvas = $('#signature').children()[0];
             if (isCanvasBlank(canvas)) {
                 SavePC = '';
+                window.parent.typecon = false;
             } else {
                 $('#signature').empty();
                 var pic = $('.js-signature').jqSignature('getDataURL');
-                //var pic = $('.js-signature').eq(0).jSignature("getData", "svgbase64")
                 SavePC = pic;
+                window.parent.typecon = true;
             }
+            if (SavePC == "") {
+                baocui(SavePC);
+            } else {
+                tailor(SavePC);
+            }
+        }
+
+        $('.js-signature').eq(0).on('jq.signature.changed', function () {
+            $('#saveBtn').attr('disabled', false);
+        });
+        /**
+        * 裁剪空白区域
+        * @param base64
+        * @param callback
+        */
+        function tailor(base64) {
+            var img = new Image();//创建图片对象
+            img.src = base64;
+            img.onload = function () {
+                var c = document.createElement('canvas');//创建处理画布对象
+                var ctx = c.getContext('2d');
+                c.width = img.width;
+                c.height = img.height;
+                ctx.drawImage(img, 0, 0);//绘制
+                var imgData = ctx.getImageData(0, 0, c.width, c.height).data;//读取图片数据
+                var lOffset = c.width, rOffset = 0, tOffset = c.height, bOffset = 0;
+                for (var i = 0; i < c.width; i++) {
+                    for (var j = 0; j < c.height; j++) {
+                        var pos = (i + c.width * j) * 4
+                        if (imgData[pos] == 255 || imgData[pos + 1] == 255 || imgData[pos + 2] == 255 || imgData[pos + 3] == 255) {
+                            bOffset = Math.max(j, bOffset); // 找到有色彩的最下端
+                            rOffset = Math.max(i, rOffset); // 找到有色彩的最右端
+                            tOffset = Math.min(j, tOffset); // 找到有色彩的最上端
+                            lOffset = Math.min(i, lOffset); // 找到有色彩的最左端
+                        }
+                    }
+                }
+                lOffset++;
+                rOffset++;
+                tOffset++;
+                bOffset++;
+                var x = document.createElement("canvas");//创建处理后画布对象
+                x.width = rOffset - lOffset;
+                x.height = bOffset - tOffset;
+                var xx = x.getContext("2d");
+                xx.drawImage(img, lOffset, tOffset, x.width, x.height, 0, 0, x.width, x.height);//绘制
+                baocui(x.toDataURL());
+            }
+        }
+
+        function baocui(SavePC) {
+            
             //图片二进制流存入到缓存中
             window.localStorage.setItem("writeImg", SavePC);
             //console.log(SavePC+"pic=========");
@@ -288,7 +392,7 @@
                 parent.setHandWriteSrc("WorkCheck", SavePC, 1);
                 return;
             }
-            var newpic = pic.replace(/^data:image\/(png|jpg);base64,/, "");
+            var newpic = SavePC.replace(/^data:image\/(png|jpg);base64,/, "");
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
             handler.AddPara("FK_Node", GetQueryString("FK_Node"));
             handler.AddPara("WorkID", GetQueryString("WorkID"));
@@ -305,13 +409,7 @@
                 imagePath = data.replace('info@', '');
                 parent.setHandWriteSrc(GetQueryString("KeyOfEn"), imagePath, 0);
             }
-
-            alert("图片上传成功.");
         }
-
-        $('.js-signature').eq(0).on('jq.signature.changed', function () {
-            window.localStorage.setItem("InsertTmg", "false");
-        });
 
     </script>
 </body>

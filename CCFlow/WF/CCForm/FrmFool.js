@@ -49,6 +49,8 @@ function GenerFoolFrm(mapData, frmData) {
 
                 if (dtl.No != gf.CtrlID)
                     continue;
+                if (dtl.IsView == 0)
+                    continue;
 
                 html += "<tr>";
                 html += "  <th   id='THDtl_" + gf.CtrlID + "' colspan='" + tableCol + "' class='form-unit'><div style='float:left;display:inline'>" + gf.Lab + "</div><div style='float:right;display:inline'><img title='全屏显示' style='width: 30px; padding: 0px 5px; cursor: pointer;' src='../Img/Full.png' onclick='WindowOpenDtl(\"" + gf.CtrlID +"\")' /></div></th>";
@@ -1104,11 +1106,10 @@ function InitMapAttrOfCtrl(mapAttr) {
                 return "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "' data-type='0'><label >附件(" + dbs.length + ")</label></div>";
 
             eleHtml = "<div style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "' data-type='1'>";
-
             var workID = GetQueryString("WorkID");
             for (var i = 0; i < dbs.length; i++) {
                 var db = dbs[i];
-                eleHtml += "<label><a style='font-weight:normal;font-size:12px' href=\"javascript:Down2018('" + db.MyPK + "','" + workID+"')\"><img src='../Img/FileType/" + db.FileExts + ".gif' />" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
+                eleHtml += "<label><a style='font-weight:normal;font-size:12px' href=\"javascript:Down2018('" + db.MyPK + "','" + workID + "')\"><img src='../Img/FileType/" + db.FileExts.toLowerCase() + ".gif' />" + db.FileName + "</a></label>&nbsp;&nbsp;&nbsp;"
             }
             eleHtml += "</div>";
             return eleHtml;
@@ -1357,7 +1358,7 @@ function InitMapAttrOfCtrl(mapAttr) {
 
         checkedStr = ConvertDefVal(frmData, '', mapAttr.KeyOfEn);
 
-        return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'   id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " onchange='changeCBEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")'/><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
+        return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'   id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " onchange='changeCBEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' lay-skin='primary' value='1'/><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
     }
 
     //枚举类型.
@@ -1397,7 +1398,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         if (mapAttr.IsSecret)
             type = " type='password' ";
 
-        return "<input  onfocus='removeplaceholder(this," + bit + ");' onblur='addplaceholder(this," + bit + ");'  style='text-align:right;width:100%'  onkeyup=" + '"' + "if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + type + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        return "<input  onfocus='removeplaceholder(this," + bit + ");' onblur='addplaceholder(this," + bit + ");'  style='text-align:right;width:90%'  onkeyup=" + '"' + "if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + type + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
     }
 
     if ((mapAttr.MyDataType == 2)) { //AppInt
@@ -1409,7 +1410,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         if (mapAttr.IsSecret)
             type = " type='password' ";
 
-        return "<input  onfocus='removeplaceholder(this,0);' onblur='addplaceholder(this,0);' value='" + defValue + "' style='text-align:right;' class='form-control' onkeyup=" + '"' + "limitLength(this," + bit + ");valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + type + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+        return "<input  onfocus='removeplaceholder(this,0);' onblur='addplaceholder(this,0);' value='" + defValue + "' style='text-align:right;width:90%' class='form-control' onkeyup=" + '"' + "limitLength(this," + bit + ");valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + type + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
 
     }
 

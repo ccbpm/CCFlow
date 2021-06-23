@@ -1,0 +1,160 @@
+
+.wrapper{
+    width: 100vw;
+    height: 100vh;
+    margin: 0 auto;
+    box-sizing: border-box;
+    position: relative;
+
+}
+
+.wrapper .form-head{
+    height: 60px;
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 20px;
+    padding-right: 20px;
+    border: 1px solid #eee;
+}
+
+.ph{
+    height: 40px;
+    width: 100%;
+    background-image: url("../Img/BillState/titlebg.png");
+    background-repeat: repeat-x;
+    background-position: 0 0;
+    background-size: 100% 40px;
+    line-height: 40px;
+    padding-left: 12px;
+    box-sizing: border-box;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333333;
+}
+
+.wrapper .form-head .item{
+    line-height: 60px;
+    font-size: 14px;
+    margin-right: 40px;
+    font-weight: bold;
+}
+
+.wrapper .form-head .item span{
+    color: #999;
+    font-weight: 400;
+}
+
+.wrapper .form-body{
+    width: 100%;
+    height: calc(100vh - 480px);
+    padding: 8px 12px;
+    box-sizing: border-box;
+    border: 1px solid #eee;
+    overflow: auto;
+    background-color: #fff9ec;
+}
+
+.wrapper .form-body .reply-item {
+    width: 100%;
+    min-height: 80px;
+    border-bottom: 1px solid #EEEEEE;
+    box-sizing: border-box;
+    padding-top: 8px;
+}
+
+.wrapper .form-body .reply-item .info{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.wrapper .form-body .reply-item .info .left{
+    color: #666666;
+    font-size: 13px;
+}
+
+.wrapper .form-body .reply-item .info .del-btn{
+    color: #F34743;
+    font-size: 12px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.wrapper .form-body .reply-item .info .reply-btn{
+    color: #459dff;
+    font-size: 12px;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.wrapper .form-body .reply-item .content{
+    padding: 8px;
+    box-sizing: border-box;
+    color: #999999;
+}
+
+.submit-area{
+    position: absolute;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: 0;
+    left: 0;
+    flex-direction: column;
+    background-color: white;
+}
+
+.submit-area .form-textarea{
+    min-height: 100px;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    border: 1px solid #eee;
+    width: 100%;
+}
+
+.submit-area .form-textarea .area{
+    outline: none;
+    border: 1px solid #eee;
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.operate-list{
+    display: flex;
+    align-items: center;
+}
+
+.submit-area .form-textarea .area:focus{
+    border: 1px solid #999;
+}
+
+
+.submit-area .reply-info{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #999999;
+    margin-top: 8px;
+
+}
+
+.submit-area .reply-info button{
+    border: 1px solid #a0ccea;
+    background-color: white;
+    width: 120px;
+    height: 36px;
+    line-height: 36px;
+    font-weight: 500;
+    font-size: 16px;
+    text-align: center;
+    color: #459dff;
+}
+
+.submit-area .reply-info p span{
+    margin-right: 24px;
+}
+

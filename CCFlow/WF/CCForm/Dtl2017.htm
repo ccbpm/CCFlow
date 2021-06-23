@@ -16,6 +16,7 @@
     <script type="text/javascript" src="../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>-->
 
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/BootstrapUIDialog.js"></script>
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <!--<script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
@@ -51,8 +52,8 @@
     <script src="../../DataUser/JSLibData/CCFormRef.js" type="text/javascript"></script>
     <script src="../../DataUser/SFTable.js" type="text/javascript"></script>
     <style>
-        th,td{
-            white-space:normal;
+        th, td {
+            white-space: normal;
         }
     </style>
 
@@ -132,7 +133,7 @@
             handler.AddJson(param);
             var data = handler.DoMethodReturnString(method);
             if (data.indexOf("err@") != -1) {
-                alert('保存数据出错' + data); 
+                alert('保存数据出错' + data);
                 return;
             }
 
@@ -407,7 +408,7 @@
                     //处理复选框  设置表格中数据的值
                     var textVal = workNodeData.Blank[0][o.data().KeyOfEn];
                     //var ckEle = $.grep(tmplate, function (obj) {
-                      //  return $(obj).attr('name') == 'CB_' + o.data().KeyOfEn || $(obj).attr('name') == 'CB_' + o.data().KeyOfEn + '_' + newRowIndex;
+                    //  return $(obj).attr('name') == 'CB_' + o.data().KeyOfEn || $(obj).attr('name') == 'CB_' + o.data().KeyOfEn + '_' + newRowIndex;
                     //})
                     var ckEle = tmplate.find('[name=CB_' + o.data().KeyOfEn + ']');
                     if (ckEle.length == 1) {
@@ -522,7 +523,7 @@
             if ($("body").height() < 260) {
                 h = 260;
             }
-            if (window.frameElement!=null)
+            if (window.frameElement != null)
                 $("#" + window.frameElement.getAttribute("id"), parent.document).height(h + 40);
         }
 
@@ -664,7 +665,7 @@
             // 表头start --------------------
             if ($('#dtlDiv div table thead tr').length == 0) {
                 var multi = GetPara(sys_MapDtl.AtPara, "MultiTitle");
-                if (multi==null || multi == undefined || multi=="")
+                if (multi == null || multi == undefined || multi == "")
                     multi = GetPara(sys_MapDtl.AtPara, "MultiTitle1")
                 if (multi != null && multi != undefined && multi != "")
                     isMulti = true;
@@ -698,7 +699,7 @@
                         if (mapAttrObj.MyDataType == 8)
                             th = $('<th data-coltype="Money"' + rowspan + '></th>');
 
-                       
+
                         th.data(mapAttrObj);
 
                         if (mapAttrObj.MyDataType == 6)
@@ -730,7 +731,7 @@
                         if (mapAttrObj.MyDataType == 8)
                             th = $('<th data-coltype="Money" data-info="' + mapAttrObj.KeyOfEn + '"></th>');
 
-                        
+
                         th.data(mapAttrObj);
                         if (mapAttrObj.MyDataType == 6)
                             th.css('width', 110);
@@ -739,7 +740,7 @@
                         else
                             th.css('width', mapAttrObj.UIWidth);
 
-                        th.html("<div style='min-width:"+th.css("width")+";white-space:noraml;'>"+mapAttrObj.Name+"</div>");
+                        th.html("<div style='min-width:" + th.css("width") + ";white-space:noraml;'>" + mapAttrObj.Name + "</div>");
 
                         if (mapAttrObj.UIVisible == 0)
                             th.css("display", "none");
@@ -810,8 +811,8 @@
 
                     imgStr += '<img title="选项" style="width: 40px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option(' + impModel + ');" />';
                 }
-                if (frmType != "0" && isShowFull!="1")
-                imgStr += '<img title="全屏显示" style="width: 30px;padding: 0px 5px;cursor:pointer;" src="../Img/Full.png" onclick="WindowOpenDtl()" />'
+                if (frmType != "0" && isShowFull != "1")
+                    imgStr += '<img title="全屏显示" style="width: 30px;padding: 0px 5px;cursor:pointer;" src="../Img/Full.png" onclick="WindowOpenDtl()" />'
                 var delTh = $($(th).append(imgStr));
 
                 var delThData;
@@ -1007,7 +1008,7 @@
                                             }
 
                                         }
-                                       
+
                                         tmplate.val(textVal);
                                     }
                                     //处理单选按钮。。。 还没做
@@ -1697,8 +1698,19 @@
                         } //AppDate
                         else if (mapAttr.MyDataType == 6) {//AppDate
                             var enableAttr = '';
+                            var frmDate = mapAttr.IsSupperText;//获取日期格式
+                            var dateFmt = '';
+                            if (frmDate == 0) {
+                                dateFmt = "yyyy-MM-dd";
+                            } else if (frmDate == 3) {
+                                dateFmt = "yyyy-MM";
+                            } else if (frmDate == 6) {
+                                dateFmt = "MM-dd";
+                            } else
+                                dateFmt = "yyyy-MM-dd";
+
                             if (mapAttr.UIIsEnable == 1) {
-                                enableAttr = 'onfocus="' + 'WdatePicker();SetChange(false);"' + ' onchange="SetChange(true);" style="width:110px;"';
+                                enableAttr = 'onfocus="' + 'WdatePicker({dateFmt:' + '\'' + dateFmt + '\'});SetChange(false);"  onchange="SetChange(true);" style="width:110px;"';
                             } else {
                                 enableAttr = "disabled='disabled'";
                             }
@@ -1706,8 +1718,21 @@
                         }
                         else if (mapAttr.MyDataType == 7) {// AppDateTime = 7
                             var enableAttr = '';
+                            var frmDate = mapAttr.IsSupperText; //获取日期格式
+                            var dateFmt = '';
+                            if (frmDate == 1) {
+                                dateFmt = "yyyy-MM-dd HH:mm";
+                            } else if (frmDate == 2) {
+                                dateFmt = "yyyy-MM-dd HH:mm:ss";
+                            } else if (frmDate == 4) {
+                                dateFmt = "HH:mm";
+                            } else if (frmDate == 5) {
+                                dateFmt = "HH:mm:ss";
+                            } else
+                                dateFmt = "yyyy-MM-dd HH:mm";
+
                             if (mapAttr.UIIsEnable == 1) {
-                                enableAttr = 'onfocus="' + 'WdatePicker({dateFmt:' + '\'yyyy-MM-dd HH:mm\'});SetChange(false);"' + ' onchange="SetChange(true);" style="width:127px;"';
+                                enableAttr = 'onfocus="WdatePicker({dateFmt:' + '\'' + dateFmt + '\'});SetChange(false);"  onchange="SetChange(true);" style="width:127px;"';
                             } else {
                                 enableAttr = "disabled='disabled'";
                             }
@@ -1721,7 +1746,7 @@
                             }
                             //CHECKBOX 默认值
                             eleHtml += "<div style='white-space: nowrap;align:center;'><input style='text-align:center;' type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' /></div>";
-                           // eleHtml += '<span class="labRb" for="CB_' + mapAttr.KeyOfEn + '">' + mapAttr.Name + '</span></div>';
+                            // eleHtml += '<span class="labRb" for="CB_' + mapAttr.KeyOfEn + '">' + mapAttr.Name + '</span></div>';
                         }
 
                         if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
@@ -1842,8 +1867,8 @@
                 if (mapAttr.MyDataType != "4" && mapAttr.UIContralType != "2") {
                     if (mapAttr.MyDataType != 6 && mapAttr.MyDataType != 7)
                         eleHtml.css('width', mapAttr.UIWidth);
-                } 
-                else 
+                }
+                else
                     eleHtml.css('width', "auto");
                 eleHtml.val(defValue);
             }
@@ -2046,7 +2071,7 @@
         /**/</script>
     <style type="text/css">
         * {
-            font-family: '宋体';
+            font-family: '微软雅黑';
             font-size: 14px;
         }
 
@@ -2061,6 +2086,15 @@
 
         input[type=text], input[type=password], select {
             box-sizing: border-box;
+        }
+
+        * {
+            scrollbar-color: #9cc9f0 #f7f7f9;
+            scrollbar-width: thin;
+        }
+
+        * {
+            font-family: microsoftYaHei,'微软雅黑';
         }
     </style>
 </head>

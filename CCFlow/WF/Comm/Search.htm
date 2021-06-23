@@ -5,6 +5,7 @@
     <title>查询</title>
     <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="./fonts/font-icons.min.css" rel="Stylesheet" />
     <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet"
           type="text/css" />
     <link href="../Scripts/bootstrap/css/style.min.css" rel="stylesheet" type="text/css"
@@ -41,6 +42,7 @@
         .JColResizer > tbody > tr > td {
             padding: 8px !important;
         }
+
         .modal-header {
             line-height: 38px !important;
             height: 38px !important;
@@ -48,46 +50,48 @@
             padding: 0px 10px !important;
         }
 
-        .modal-header .modal-title {
-            color: #4d49bf !important;
-            font-weight: bold !important;
-            line-height: 38px !important;
-            height: 38px !important;
-            margin-top: 0px !important;
-        }
+            .modal-header .modal-title {
+                color: #009688 !important;
+                font-weight: bold !important;
+                line-height: 38px !important;
+                height: 38px !important;
+                margin-top: 0px !important;
+            }
 
-        .modal-header h3 {
-            font-size: 16px;
-            color: #414141;
-        }
+            .modal-header h3 {
+                font-size: 16px;
+                color: #414141;
+            }
 
-        .modal-header #closeModal {
-            background: #f7941f !important;
-            font-size: 14px !important;
-            width: 16px !important;
-            height: 16px !important;
-            line-height: 16px !important;
-            text-align: center !important;
-            border-radius: 50% !important;
-            color: #fff !important;
-            padding: 0px !important;
-            margin: 10px !important;
-        }
-        
-        .modal-header #closeModal:hover {
-            color: #fff !important;
-            background: #4d49bf !important;
-        }
+            .modal-header #closeModal {
+                background: #f7941f !important;
+                font-size: 14px !important;
+                width: 16px !important;
+                height: 16px !important;
+                line-height: 16px !important;
+                text-align: center !important;
+                border-radius: 50% !important;
+                color: #fff !important;
+                padding: 0px !important;
+                margin: 10px !important;
+            }
+
+                .modal-header #closeModal:hover {
+                    color: #fff !important;
+                    background: #009688 !important;
+                }
+
         .pagination > li > a {
             color: #565656;
             background: #f5f5ff;
             border-color: #fefefe;
         }
-        .pagination > li > a:hover {
-            color: #fff;
-            background: #4d49bf;
-            border-color: #fefefe;
-        }
+
+            .pagination > li > a:hover {
+                color: #fff;
+                background: #009688;
+                border-color: #fefefe;
+            }
     </style>
     <script language="javascript" type="text/javascript">
         var ensName = GetQueryString("EnsName");
@@ -576,25 +580,25 @@
             }
 
             //增加按钮.
-            html += '<td align="left" colspan=2><a href="#"class="cc-btn-tab" style="margin-left:10px" id="search_btn" onclick="Search()">查询</a>  ';
+            html += '<td align="left" colspan=2 ><a href="#"class="cc-btn-tab" style="padding:6px 15px; margin-left:10px" id="search_btn" onclick="Search()">查询</a>  ';
 
             var btnLab1 = cfg.GetPara("BtnLab1");
             var btnLab2 = cfg.GetPara("BtnLab2");
             if (btnLab1 != null && btnLab1 != undefined && btnLab1 != "")
-                html += "&nbsp;<a href='#'class='cc-btn-tab'  onclick='executeFunction(\"" + cfg.GetPara("BtnJS1") + "\",\"" + btnLab1 + "\")'>" + btnLab1 + "</a>";
+                html += "&nbsp;<a href='#'class='cc-btn-tab' style='padding: 6px 15px;' onclick='executeFunction(\"" + cfg.GetPara("BtnJS1") + "\",\"" + btnLab1 + "\")'>" + btnLab1 + "</a>";
 
             if (btnLab2 != null && btnLab2 != undefined && btnLab2 != "")
-                html += "&nbsp;<a href='#'class='cc-btn-tab'   onclick='executeFunction(\"" + cfg.GetPara("BtnJS2") + "\",\"" + btnLab2 + "\")'>" + btnLab2 + "</a>";
+                html += "&nbsp;<a href='#'class='cc-btn-tab'  style='padding: 6px 15px;'  onclick='executeFunction(\"" + cfg.GetPara("BtnJS2") + "\",\"" + btnLab2 + "\")'>" + btnLab2 + "</a>";
 
             if (mapBase.IsInsert.toString().toLowerCase() == "true")
-                html += '&nbsp;<a href="#" class="cc-btn-tab" id="new_btn" onclick="New()">新建</a>';
+                html += '&nbsp;<a href="#" class="cc-btn-tab" style="padding: 6px 15px;" id="new_btn" onclick="New()">新建</a>';
 
-            html += '&nbsp;<a href="#" class="cc-btn-tab" id="exp_btn" onclick="Exp()">导出</a>';
+            html += '&nbsp;<a href="#" class="cc-btn-tab" style="padding: 6px 15px;" id="exp_btn" onclick="Exp()">导出</a>';
 
             if (mapBase.IsImp.toString().toLowerCase() == "true")
-                html += '&nbsp;<a href="#" class="cc-btn-tab" id="exp_btn" onclick="Imp()">导入</a> ';
+                html += '&nbsp;<a href="#" class="cc-btn-tab" style="padding: 6px 15px;" id="exp_btn" onclick="Imp()">导入</a> ';
             if (new WebUser().No == "admin")
-                html += '&nbsp;<a href="#" class="cc-btn-tab" id="setting_btn" onclick="Setting()">设置</a>';
+                html += '&nbsp;<a href="#" class="cc-btn-tab" style="padding: 6px 15px;" id="setting_btn" onclick="Setting()">设置</a>';
 
             html += "</td></tr>";
 
@@ -924,7 +928,12 @@
                     fixed: false,
                     sortable: true,
                     rowspan: keyRowSpan,
+                    align: field.toLowerCase() == "icon"?"center":"left",
                     formatter: function (value, row, index) {
+                        //如果这个字段是Icon
+                        if (this.field.toLowerCase() == "icon" && row[this.field] != "") {
+                            return "<i  class='" + row[this.field] + "'></i>";
+                        }
                         if (this.field == focusField) {
                             var pkval = row[enPK];
                             var paras = "&" + enPK + "=" + pkval;
@@ -1680,7 +1689,7 @@
         
             <div class="row cs-shadow-box">
                 <div class="panel panel-default" style="border: 0px; margin-bottom: 3px">
-                    <div class="pull-right">
+                    <div >
                         <table id="toolbar" class="table-tdno-solid" style="border:0px;">
                         </table>
                     </div>

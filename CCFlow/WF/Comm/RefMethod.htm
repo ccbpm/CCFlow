@@ -35,10 +35,6 @@
 
             var data = handler.DoMethodReturnString("Refmethod_Init");
 
-
-
-
-
             //如果错误,就提示.
             if (data.indexOf('err@') == 0) {
                 alert(data);
@@ -121,7 +117,7 @@
             //循环显示数据
 
             var html = "<table style='width:100%' >";
-            html += "<caption>" + rm.Title + "</caption>";
+        //    html += "<caption>" + rm.Title + "</caption>";
 
             html += InitMapAttr(attrs, json);
 
@@ -483,15 +479,18 @@
 </head>
 <body>
     <form id="cc">
-        <div style="right:30px; position:absolute; z-index:100; ">
-            <input type="button" id="Btn_Done" name="Btn_Done" value="执行" onclick="Done()" class="cc-btn-tab" />
-        </div>
+
 
         <div style="position:relative;" id="CCForm">
         </div>
 
         <div id="Msg">
         </div>
+
+        <div style="right:30px; position:absolute; z-index:100; ">
+            <input type="button" id="Btn_Done" name="Btn_Done" value="执行" onclick="Done()" class="cc-btn-tab" />
+        </div>
+
     </form>
     <script type="text/javascript">
 

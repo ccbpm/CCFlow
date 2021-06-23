@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>单据权限规则</title>
+    <script type="text/javascript">
+        //创建规则.
+        function Del(mypk, nodeid) {
+            if (mypk == '') {
+                alert("默认发送不允许创建规则，您可以修改。");
+                return;
+            }
+            if (window.confirm('您确定要创建规则吗?') == false)
+                return;
+            window.location.href = 'Method.htm?MyPK=' + mypk + '&DoType=Del&FrmID=' + nodeid;
+        }
+    </script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <base target="_self" />
+    <script type="text/javascript">
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        function Help() {
+            var url = "http://ccbpm.mydoc.io";
+            window.open(url);
+        }
+ 
+    </script>
+    <script type="text/javascript" language="javascript">
+        var CtrlObj = GetQueryString("CtrlObj");
+        var frmID = GetQueryString("FrmID");
+        var ret = {
+            "BtnNew": ["任何人都可以创建","所有的人都可以创建。", "启用按照岗位计算创建规则", "启用按照设置的人员计算创建规则"," 启用按照设置的部门计算创建规则"],
+            "BtnSave": ["任何人都可以保存", "所有的人都可以保存。", "启用按照岗位计算保存规则", "启用按照设置的人员计算保存规则", " 启用按照设置的部门计算保存规则"],
+            "BtnSubmit": ["任何人都可以提交", "所有的人都可以提交。", "启用按照岗位计算提交规则", "启用按照设置的人员计算提交规则", " 启用按照设置的部门计算提交规则"],
+            "BtnSearch": ["任何人都可以查询", "所有的人都可以查询。", "启用按照岗位计算查询规则", "启用按照设置的人员计算查询规则", " 启用按照设置的部门计算查询规则","启用按照本部门查询规则"],
+            "BtnDelete": ["任何人都可以删除", "所有的人都可以删除。", "启用按照岗位计算删除规则", "启用按照设置的人员计算删除规则", " 启用按照设置的部门计算删除规则","启用按照本部门删除规则"],
+
+        }
+        //页面启动函数.
+        $(function () {
+            var en = new Entity("BP.CCBill.Template.CtrlModel");
+            en.SetPKVal(frmID + "_" + CtrlObj);
+            en.RetrieveFromDBSources();
+            GenerFullAllCtrlsVal(en);
+
+            //修改页面显示的内容
+            var obj = ret[CtrlObj];
+            $("label[for='CB_IsEnableAll']").html(obj[0]);
+            $("#Enable_Help").html(obj[1]);
+            $("label[for='CB_IsEnableStatio']").html(obj[2]);
+            $("label[for='CB_IsEnableUser']").html(obj[3]);
+            $("label[for='CB_IsEnableDept']").html(obj[4]);
+            //if (CtrlObj == "BtnNew" || CtrlObj == "BtnSave" || CtrlObj == "BtnSubmit") {
+            //    $("#CB_IsEnableMyDept").parent().parent().parent().hide();
+            //} else {
+            //    $("label[for='CB_IsEnableMyDept']").html(obj[5]);
+            //}
+          
+        });
+
+        function Save() {
+            //创建实体.
+            var en = new Entity("BP.CCBill.Template.CtrlModel");
+            en.SetPKVal(frmID + "_" + CtrlObj);
+            en.RetrieveFromDBSources();
+            en.CopyForm();
+            en.SetPKVal(frmID + "_" + CtrlObj);
+            en.FrmID = frmID;
+            en.CtrlObj = CtrlObj;
+            en.Save();
+            window.location.href = window.location.href;
+        }
+
+        //设置岗位.
+        function OpenDot2DotStations() {
+
+            var url = "../../Comm/RefFunc/Dot2DotSignle.htm?EnName=BP.CCBill.Template.CtrlModelDtl&Dot2DotEnsName=BP.CCBill.Template.CtrlModelDtls";
+            url += "&AttrOfOneInMM=FrmID&AttrOfMInMM=IDs&EnsOfM=BP.WF.Port.Stations";
+            url += "&DefaultGroupAttrKey=FK_StationType&FrmID=" + frmID + "&PKVal=" + frmID+"&Para=CtrlObj&ParaVal="+CtrlObj+"&Para1=OrgType&ParaVal1=Station&SaveType=1";
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight<document.documentElement.clientHeight?document.body.clientHeight:document.documentElement.clientHeight - 40;
+            OpenEasyUiDialogExt(url, '设置岗位', W, H, true);
+        }
+        //设置岗位新方式.
+        function OpenNewStations() {
+
+            var refPK =frmID+"_"+CtrlObj;
+
+            var url = "../../Comm/RefFunc/BranchesAndLeafSignle.htm?EnName=BP.CCBill.Template.CtrlModel&Dot2DotEnsName=BP.CCBill.Template.CtrlModelDtls&Dot2DotEnName=BP.CCBill.Template.CtrlModelDtl&AttrOfOneInMM=FrmID&AttrOfMInMM=IDs&EnsOfM=BP.WF.Port.Stations&DefaultGroupAttrKey=FK_StationType&FrmID=" + frmID + "&PKVal=" + refPK+"&Para=CtrlObj&ParaVal="+CtrlObj+"&Para1=OrgType&ParaVal1=Station&SaveType=1";
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight<document.documentElement.clientHeight?document.body.clientHeight:document.documentElement.clientHeight - 40;
+            OpenEasyUiDialogExt(url, '设置岗位', W, H, true);
+        }
+        //绑定人员
+        function BindEmps() {
+             var refPK =frmID+"_"+CtrlObj;
+            var url = "../../Comm/RefFunc/BranchesAndLeafSignle.htm?EnName=BP.CCBill.Template.CtrlModel&Dot2DotEnsName=BP.CCBill.Template.CtrlModelDtls&Dot2DotEnName=BP.CCBill.Template.CtrlModelDtl&AttrOfOneInMM=FrmID&AttrOfMInMM=IDs&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept&FrmID=" + frmID + "&PKVal=" + refPK+"&Para=CtrlObj&ParaVal="+CtrlObj+"&Para1=OrgType&ParaVal1=User&SaveType=1";
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight<document.documentElement.clientHeight?document.body.clientHeight:document.documentElement.clientHeight - 40;
+            OpenEasyUiDialogExt(url, '设置人员', W, H, true);
+
+        }
+        //弹出新页面
+        function BindDepts() {
+            var url = "../../Comm/RefFunc/BranchesSignle.htm?EnName=BP.CCBill.Template.CtrlModel&Dot2DotEnsName=BP.CCBill.Template.CtrlModelDtls&Dot2DotEnName=BP.CCBill.Template.CtrlModelDtl&AttrOfOneInMM=FrmID&AttrOfMInMM=IDs&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=&FrmID=" + frmID + "&PKVal=" + frmID+"&Para=CtrlObj&ParaVal="+CtrlObj+"&Para1=OrgType&ParaVal1=Dept&SaveType=1";;
+            var W = document.body.clientWidth - 80;
+            var H = document.body.clientHeight<document.documentElement.clientHeight?document.body.clientHeight:document.documentElement.clientHeight - 40;
+            OpenEasyUiDialogExt(url, "绑定部门", W, H, true);
+        }
+
+    </script>
+</head>
+<body onkeypress="Esc();" style="font-size: smaller">
+    <table id="Table1" style="width: 100%">
+        <caption>
+            数据创建规则
+        </caption>
+        <!-- 规则1 -->
+        <tr>
+            <th>
+                <label>
+                    <input type="checkbox" value="1" checked="true" id="CB_IsEnableAll" name="CB_IsEnableAll" />
+                    <label for="CB_IsEnableAll">任何人都可以创建</label>
+                </label>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    <li id="Enable_Help">所有的人都可以创建。</li>
+                    <li>如果选择该规则，其他的规则都不用设置了。</li>
+                </ul>
+            </td>
+        </tr>
+        <!-- end规则1 -->
+        <!-- 规则2 -->
+        <tr>
+            <th>
+                <label>
+                    <input type="checkbox" value="1" id="CB_IsEnableStation" name="CB_IsEnableStation" />
+                    <label for="CB_IsEnableStation">启用按照岗位计算创建规则</label>
+                </label>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    <li><a href="javascript:OpenDot2DotStations()">设置/更改岗位(旧版本)</a></li>
+                    <li><a href="javascript:OpenNewStations()">设置/更改岗位（左右树结构）</a> </li>
+                </ul>
+            </td>
+        </tr>
+        <!-- end规则2 -->
+        <!-- 规则3 -->
+        <tr>
+            <th>
+                <label>
+                    <input type="checkbox" value="1" id="CB_IsEnableUser" name="CB_IsEnableUser" />
+                    <label for="CB_IsEnableUser">启用按照设置的人员计算创建规则</label>
+                </label>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    <li><a href="javascript:BindEmps()">设置/更改人员</a></li>
+                </ul>
+            </td>
+        </tr>
+        <!-- end规则3 -->
+        <!-- 规则4 -->
+        <tr>
+            <th>
+                <label>
+                    <input type="checkbox" value="1" id="CB_IsEnableDept" name="CB_IsEnableDept" />
+                    <label for="CB_IsEnableDept">启用按照设置的部门计算创建规则</label>
+                </label>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    <li><a href="javascript:BindDepts()">设置/更改部门</a></li>
+                </ul>
+            </td>
+        </tr>
+        <!-- end规则4 -->
+        <!-- 规则5 -->
+        <!--<tr>
+            <th>
+                <label>
+                    <input type="checkbox" value="1" id="CB_IsEnableMyDept" name="CB_IsEnableMyDept" />
+                    <label for="CB_IsEnableMyDept">启用按照本部门查询规则</label>
+                </label>
+            </th>
+        </tr>-->
+        
+        <!-- end规则4 -->
+    </table>
+    <input type="button" id="Btn_Save" value="保存" onclick="Save()" />
+    <input type="button" id="Btn_Help" value="我需要帮助" onclick="Help()" />
+</body>
+</html>

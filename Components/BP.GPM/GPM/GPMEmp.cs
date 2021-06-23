@@ -19,20 +19,20 @@ namespace BP.GPM
         {
             get
             {
-                if ( this.No.Equals("admin")==true)
+                if (this.No.Equals("admin") == true)
                     return true;
 
-              
-                    string sql = "SELECT COUNT(FK_Emp) FROM Port_DeptEmpStation WHERE FK_Emp='" + this.No + "'";
-                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
-                        return false;
 
-                    sql = "SELECT COUNT(FK_Emp) FROM Port_DeptEmp WHERE FK_Emp='" + this.No + "'";
-                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
-                        return false;
-                 
+                string sql = "SELECT COUNT(FK_Emp) FROM Port_DeptEmpStation WHERE FK_Emp='" + this.No + "'";
+                if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
+                    return false;
 
-              
+                sql = "SELECT COUNT(FK_Emp) FROM Port_DeptEmp WHERE FK_Emp='" + this.No + "'";
+                if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
+                    return false;
+
+
+
 
                 return true;
             }
@@ -166,7 +166,7 @@ namespace BP.GPM
         /// 操作员
         /// </summary>
         /// <param name="no">编号</param>
-        public GPMEmp(string no):base(no)
+        public GPMEmp(string no) : base(no)
         {
         }
         public override UAC HisUAC
@@ -207,17 +207,18 @@ namespace BP.GPM
 
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Tel, null, "电话", true, false, 0, 20, 130);
-                map.AddTBString(EmpAttr.Email, null, "邮箱", true, false, 0, 100, 132,true);
+                map.AddTBString(EmpAttr.Email, null, "邮箱", true, false, 0, 100, 132, true);
                 map.AddTBString(EmpAttr.PinYin, null, "拼音", true, false, 0, 500, 132, true);
 
                 // 0=不签名 1=图片签名, 2=电子签名.
-                map.AddDDLSysEnum(EmpAttr.SignType, 0, "签字类型", true,true, EmpAttr.SignType,
-                    "@0=不签名@1=图片签名@2=电子签名");
+                // map.AddDDLSysEnum(EmpAttr.SignType, 0, "签字类型", true,true, EmpAttr.SignType,
+                // "@0=不签名@1=图片签名@2=电子签名");
 
                 map.AddTBInt(EmpAttr.Idx, 0, "序号", true, false);
                 #endregion 字段
 
-                map.AddSearchAttr(EmpAttr.SignType);
+                map.AddSearchAttr(EmpAttr.FK_Dept);
+                //  map.AddSearchAttr(EmpAttr.SignType);
 
                 //节点绑定部门. 节点绑定部门.
                 map.AttrsOfOneVSM.AddBranches(new EmpMenus(), new BP.GPM.Menus(),

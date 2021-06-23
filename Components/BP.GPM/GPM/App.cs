@@ -307,15 +307,15 @@ namespace BP.GPM
                 map.AddDDLEntities(AppAttr.FK_AppSort, null, "类别", new AppSorts(), false);
                 map.AddBoolean(AppAttr.IsEnable, true, "启用?", true, true);
 
-                map.AddTBString(AppAttr.UrlExt, null, "默认连接", true, false, 0, 3900, 100, true);
-                map.AddTBString(AppAttr.SubUrl, null, "第二连接", true, false, 0, 3900, 100, true);
+                //map.AddTBString(AppAttr.UrlExt, null, "默认连接", true, false, 0, 3900, 100, true);
+                //map.AddTBString(AppAttr.SubUrl, null, "第二连接", true, false, 0, 3900, 100, true);
 
-                map.AddTBString(AppAttr.UidControl, null, "用户名控件", true, false, 0, 100, 100);
-                map.AddTBString(AppAttr.PwdControl, null, "密码控件", true, false, 0, 100, 100);
-                map.AddDDLSysEnum(AppAttr.ActionType, 0, "提交类型", true, true, AppAttr.ActionType, "@0=GET@1=POST");
-                map.AddDDLSysEnum(AppAttr.SSOType, 0, "登录方式", true, true, AppAttr.SSOType, "@0=SID验证@1=连接@2=表单提交@3=不传值");
-                map.AddDDLSysEnum(AppAttr.OpenWay, 0, "打开方式", true, true, AppAttr.OpenWay,
-                    "@0=新窗口@1=本窗口@2=覆盖新窗口");
+                //map.AddTBString(AppAttr.UidControl, null, "用户名控件", true, false, 0, 100, 100);
+                //map.AddTBString(AppAttr.PwdControl, null, "密码控件", true, false, 0, 100, 100);
+                //map.AddDDLSysEnum(AppAttr.ActionType, 0, "提交类型", true, true, AppAttr.ActionType, "@0=GET@1=POST");
+                //map.AddDDLSysEnum(AppAttr.SSOType, 0, "登录方式", true, true, AppAttr.SSOType, "@0=SID验证@1=连接@2=表单提交@3=不传值");
+                //map.AddDDLSysEnum(AppAttr.OpenWay, 0, "打开方式", true, true, AppAttr.OpenWay,
+                //    "@0=新窗口@1=本窗口@2=覆盖新窗口");
 
                 map.AddTBString(AppAttr.RefMenuNo, null, "关联菜单编号", true, false, 0, 300, 100);
                 map.AddTBString(AppAttr.AppRemark, null, "备注", true, false, 0, 500, 100, true);
@@ -375,9 +375,6 @@ namespace BP.GPM
 
         protected override bool beforeUpdate()
         {
-            //检查表.
-            CheckPTable();
-
             if (DataType.IsNullOrEmpty(this.RefMenuNo) == false)
             {
                 //系统类别
@@ -422,7 +419,7 @@ namespace BP.GPM
 
             appMenu.Name = this.Name;
             appMenu.HisMenuType = MenuType.App;
-            
+
             appMenu.Update();
 
             //设置相关的菜单编号.
@@ -464,7 +461,6 @@ namespace BP.GPM
 
             menu.Update();
             #endregion
-
 
             Menu dir2 = appMenu.DoCreateSubNode() as Menu;
             dir2.FK_App = this.No;

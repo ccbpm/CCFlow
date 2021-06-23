@@ -381,7 +381,6 @@ namespace BP.GPM
 
                 map.AddTBStringPK(BarAttr.No, null, "编号", true, false, 100, 200, 200);
                 map.AddTBString(BarAttr.Name, null, "名称", true, false, 100, 3900, 20);
-
                 map.AddTBString(BarAttr.Title, null, "标题", true, false, 0, 3900, 20);
 
                 //map.AddDDLSysEnum(BarAttr.BarType, 0, "信息块类型", true, true, 
@@ -510,7 +509,6 @@ namespace BP.GPM
 
                 if (en.IsCanView == false)
                     continue;
-
 
                 BP.GPM.BarEmp barEmp = new BarEmp();
                 barEmp.MyPK = en.No+"_"+Web.WebUser.No;

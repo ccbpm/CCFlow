@@ -10,17 +10,20 @@ namespace BP.Sys
     {
         #region 基本属性
 
-        public const string EnVerPK = "EnVerPK";
-        public const string EnName = "EnName";
+        public const string RefPK = "RefPK";
+        public const string FrmID = "FrmID";
+        public const string EnPKValue = "EnPKValue";
+
         public const string AttrKey = "AttrKey";
         public const string AttrName = "AttrName";
-        public const string OldVal = "OldVal";
-        public const string NewVal = "NewVal";
+        public const string MyVal = "MyVal";
         public const string EnVer = "EnVer";
-
         public const string RDT = "RDT";
         public const string Rec = "Rec";
 
+        public const string RefVerMyPK = "RefVerMyPK";
+        public const string LGType = "LGType";
+        public const string BindKey = "BindKey";
         #endregion
     }
     /// <summary>
@@ -43,18 +46,40 @@ namespace BP.Sys
 
             }
         }
-        /// <summary>
-        /// 实体名称
-        /// </summary>
-        public string EnName
+        public string RefPK
         {
             get
             {
-                return this.GetValStringByKey(EnVerDtlAttr.EnName);
+                return this.GetValStringByKey(EnVerDtlAttr.RefPK);
             }
             set
             {
-                SetValByKey(EnVerDtlAttr.EnName, value);
+                SetValByKey(EnVerDtlAttr.RefPK, value);
+            }
+        }
+        /// <summary>
+        /// 实体名称
+        /// </summary>
+        public string FrmID
+        {
+            get
+            {
+                return this.GetValStringByKey(EnVerDtlAttr.FrmID);
+            }
+            set
+            {
+                SetValByKey(EnVerDtlAttr.FrmID, value);
+            }
+        }
+        public string EnPKValue
+        {
+            get
+            {
+                return this.GetValStringByKey(EnVerDtlAttr.EnPKValue);
+            }
+            set
+            {
+                SetValByKey(EnVerDtlAttr.EnPKValue, value);
             }
         }
         /// <summary>
@@ -74,16 +99,15 @@ namespace BP.Sys
         /// <summary>
         /// 版本主表PK
         /// </summary>
-        public string EnVerPK
+        public string BindKey
         {
             get
             {
-                return this.GetValStringByKey(EnVerDtlAttr.EnVerPK);
+                return this.GetValStringByKey(EnVerDtlAttr.BindKey);
             }
-
             set
             {
-                SetValByKey(EnVerDtlAttr.EnVerPK, value);
+                SetValByKey(EnVerDtlAttr.BindKey, value);
             }
         }
         /// <summary>
@@ -100,78 +124,36 @@ namespace BP.Sys
                 SetValByKey(EnVerDtlAttr.AttrName, value);
             }
         }
-
-
-
+        public int LGType
+        {
+            get
+            {
+                return this.GetValIntByKey(EnVerDtlAttr.LGType);
+            }
+            set
+            {
+                SetValByKey(EnVerDtlAttr.LGType, value);
+            }
+        }
         /// <summary>
         /// 旧值
         /// </summary>
-        public string OldVal
+        public string MyVal
         {
             get
             {
-                return this.GetValStringByKey(EnVerDtlAttr.OldVal);
+                return this.GetValStringByKey(EnVerDtlAttr.MyVal);
             }
             set
             {
-                SetValByKey(EnVerDtlAttr.OldVal, value);
-            }
-        }
-
-        /// <summary>
-        /// 新值
-        /// </summary>
-        public string NewVal
-        {
-            get
-            {
-                return this.GetValStringByKey(EnVerDtlAttr.NewVal);
-            }
-            set
-            {
-                SetValByKey(EnVerDtlAttr.NewVal, value);
-            }
-        }
-
-        /// <summary>
-        /// 版本号
-        /// </summary>
-        public int EnVer
-        {
-            get
-            {
-                return this.GetValIntByKey(EnVerDtlAttr.EnVer);
-            }
-            set
-            {
-                SetValByKey(EnVerDtlAttr.EnVer, value);
-            }
-        }
+                if (value ==null)
+                SetValByKey(EnVerDtlAttr.MyVal, "");
+                else
+                    SetValByKey(EnVerDtlAttr.MyVal, value);
 
 
-        public string RDT
-        {
-            get
-            {
-                return this.GetValStringByKey(EnVerDtlAttr.RDT);
-            }
-            set
-            {
-                SetValByKey(EnVerDtlAttr.RDT, value);
             }
         }
-        public string Rec
-        {
-            get
-            {
-                return this.GetValStringByKey(EnVerDtlAttr.Rec);
-            }
-            set
-            {
-                SetValByKey(EnVerDtlAttr.Rec, value);
-            }
-        }
-
         #endregion
 
         #region 扩展属性
@@ -194,22 +176,22 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_EnVerDtl", "实体修改明细");
+                Map map = new Map("Sys_EnVerDtl", "版本明细");
                 map.EnType = EnType.Dot2Dot; //实体类型，admin 系统管理员表，PowerAble 权限管理表,也是用户表,你要想把它加入权限管理里面请在这里设置。。
-                map.IndexField = EnVerDtlAttr.EnName;
+                map.IndexField = EnVerDtlAttr.FrmID;
 
                 map.AddMyPK();
-                map.AddTBString(EnVerDtlAttr.EnName, null, "实体名", true, false, 0, 200, 30);
-                map.AddTBString(EnVerDtlAttr.EnVerPK, null, "版本主表PK", false, false, 0, 100, 100);
-                map.AddTBString(EnVerDtlAttr.AttrKey, null, "字段", false, false, 0, 100, 1);
-                map.AddTBString(EnVerDtlAttr.AttrName, null, "字段名", true, false, 0, 200, 30);
-                map.AddTBString(EnVerDtlAttr.OldVal, null, "旧值", true, false, 0, 100, 30);
-                map.AddTBString(EnVerDtlAttr.NewVal, null, "新值", true, false, 0, 100, 30);
-                //map.AddTBString(EnVerDtlAttr.EnNo, null, "选中行编号", true, false, 0, 100, 30);
-                map.AddTBInt(EnVerDtlAttr.EnVer, 1, "版本号(日期)", true, false);
+                map.AddTBString(EnVerDtlAttr.RefPK, null, "关联版本主键", true, false, 0, 50, 30);
 
-                map.AddTBDateTime(EnVerDtlAttr.RDT, null, "日期", true, false);
-                map.AddTBString(EnVerDtlAttr.Rec, null, "版本号", true, false, 0, 100, 30);
+                map.AddTBString(EnVerDtlAttr.FrmID, null, "FrmID", false, false, 0, 200, 1);
+                map.AddTBString(EnVerDtlAttr.EnPKValue, null, "EnPKValue", true, false, 0, 50, 30);
+
+                map.AddTBString(EnVerDtlAttr.AttrKey, null, "字段", false, false, 0, 200, 1);
+                map.AddTBString(EnVerDtlAttr.AttrName, null, "字段名", true, false, 0, 200, 30);
+                map.AddTBInt(EnVerDtlAttr.LGType, 0, "逻辑类型", true, false);
+                map.AddTBString(EnVerDtlAttr.BindKey, null, "外部数据源", true, false, 0, 200, 30);
+
+                map.AddTBString(EnVerDtlAttr.MyVal, null, "数据值", true, false, 0, 4000, 30);
 
                 this._enMap = map;
                 return this._enMap;
@@ -226,16 +208,6 @@ namespace BP.Sys
        
         public EnVerDtls()
         {
-        }
-
-        public EnVerDtls(string enVerPK)
-        {
-            this.Retrieve(EnVerDtlAttr.EnVerPK, enVerPK);
-        }
-
-        public EnVerDtls(string enVerPK, int ver)
-        {
-            this.Retrieve(EnVerDtlAttr.EnVerPK, enVerPK, EnVerDtlAttr.EnVer, ver);
         }
         #endregion
 

@@ -187,6 +187,8 @@ namespace BP.Sys
 
         public const string CSSCtrl = "CSSCtrl";
 
+        public const string CSSLabel = "CSSLabel";
+
 
         #region 参数属性.
         /// <summary>
@@ -1450,6 +1452,7 @@ namespace BP.Sys
 
                 // xxx 新增的样式.
                 map.AddTBString(MapAttrAttr.CSSCtrl, "0", "CSSCtrl自定义样式", true, false, 0, 50, 20);
+                map.AddTBString(MapAttrAttr.CSSLabel, "0", "CSSLabel标签样式", true, false, 0, 50, 20);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "序号", true, false);
                 map.AddTBString(MapAttrAttr.ICON, "0", "ICON", true, false, 0, 50, 20);
 

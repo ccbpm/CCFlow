@@ -521,7 +521,6 @@ namespace BP.Sys
                     if (SystemConfig.AppCenterDBType == DBType.MySQL)
                     {
                         string strs = "";
-
                         Paras ps = new Paras();
                         ps.SQL = "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData=" + ps.DBStr + "FK_MapData AND LGType=1";
                         ps.Add("FK_MapData", this.No);
@@ -543,9 +542,16 @@ namespace BP.Sys
                         if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                         {
                             QueryObject qo = new QueryObject(obj);
+
                             qo.AddWhereInSQL(SysEnumAttr.EnumKey, "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND LGType=1 ");
                             qo.addAnd();
+
+                            qo.addLeftBracket();
                             qo.AddWhere(SysEnumAttr.OrgNo, BP.Web.WebUser.OrgNo);
+                            qo.addOr();
+                            qo.AddWhereIsNull(SysEnumAttr.OrgNo);
+                            qo.addRightBracket();
+
                             qo.addOrderBy(SysEnumAttr.IntKey);
                             qo.DoQuery();
                         }
@@ -1142,15 +1148,15 @@ namespace BP.Sys
         /// <summary>
         /// 实体表单类型.@0=独立表单@1=单据@2=编号名称实体@3=树结构实体
         /// </summary>
-        public int EntityType
+        public EntityType EntityType
         {
             get
             {
-                return this.GetValIntByKey(MapDataAttr.EntityType);
+                return (EntityType)this.GetValIntByKey(MapDataAttr.EntityType);
             }
             set
             {
-                this.SetValByKey(MapDataAttr.EntityType, value);
+                this.SetValByKey(MapDataAttr.EntityType, (EntityType)value);
             }
         }
         #endregion
@@ -1328,6 +1334,7 @@ namespace BP.Sys
                 map.AddTBInt(MapDataAttr.FrmW, 900, "FrmW", true, true);
                 map.AddTBInt(MapDataAttr.FrmH, 1200, "FrmH", true, true);
 
+                // @0=4列, @1=6 列.
                 map.AddTBInt(MapDataAttr.TableCol, 0, "傻瓜表单显示的列", true, true);
 
                 //Tag
@@ -1375,6 +1382,20 @@ namespace BP.Sys
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+        /// <summary>
+        /// 执行复制.
+        /// </summary>
+        /// <param name="copyToFrmID"></param>
+        /// <param name="frmName"></param>
+        /// <param name="ptable"></param>
+        /// <returns></returns>
+        public string DoCopy(string copyToFrmID, string frmName)
+        {
+
+            BP.Sys.CCFormAPI.CopyFrm(this.No, copyToFrmID, frmName, this.FK_FormTree);
+
+            return "执行成功";
         }
 
         /// <summary>
@@ -1658,10 +1679,10 @@ namespace BP.Sys
             // 定义在最后执行的sql.
             string endDoSQL = "";
 
-			MapData mdOld = new MapData();
-			mdOld.No= specFrmID;
-			mdOld.Delete();
-            
+            MapData mdOld = new MapData();
+            mdOld.No = specFrmID;
+            mdOld.Delete();
+
 
             // 求出dataset的map.
             string oldMapID = "";
@@ -1680,9 +1701,9 @@ namespace BP.Sys
                     oldMapID = dtMap.Rows[0]["No"].ToString();
             }
 
-			//检查是否存在OID字段.
+            //检查是否存在OID字段.
             mdOld.No = oldMapID;
-            int count =  mdOld.RetrieveFromDBSources();
+            int count = mdOld.RetrieveFromDBSources();
 
             //现在表单的类型
             FrmType frmType = mdOld.HisFrmType;
@@ -1753,26 +1774,27 @@ namespace BP.Sys
                             ////表单类别编号不为空，则用原表单类别编号
                             //if (DataType.IsNullOrEmpty(mdOld.f) == false)
                             //    md.FK_FrmSort = mdOld.FK_FrmSort;
-							
+
                             if (DataType.IsNullOrEmpty(mdOld.PTable) == false)
                                 md.PTable = mdOld.PTable;
                             if (DataType.IsNullOrEmpty(mdOld.Name) == false)
                                 md.Name = mdOld.Name;
 
-							if(count!=0){
-								 md.HisFrmType = mdOld.HisFrmType;
-								if (frmType == FrmType.Develop)
-									md.HisFrmType = FrmType.Develop;
+                            if (count != 0)
+                            {
+                                md.HisFrmType = mdOld.HisFrmType;
+                                if (frmType == FrmType.Develop)
+                                    md.HisFrmType = FrmType.Develop;
 
-								if (entityType != md.HisEntityType)
-									md.HisEntityType = entityType;
-							}
-                           
+                                if (entityType != md.HisEntityType)
+                                    md.HisEntityType = entityType;
+                            }
+
 
                             //表单应用类型保持不变
                             md.AppType = mdOld.AppType;
-							if(md.DirectUpdate()==0)
-								md.DirectInsert();
+                            if (md.DirectUpdate() == 0)
+                                md.DirectInsert();
                             Cash2019.UpdateRow(md.ToString(), md.No.ToString(), md.Row);
 
                             //如果是开发者表单，赋值HtmlTemplateFile数据库的值并保存到DataUser下
@@ -2083,7 +2105,7 @@ namespace BP.Sys
                             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                             {
                                 se.OrgNo = BP.Web.WebUser.OrgNo;
-                                se.RefPK = se.OrgNo + "_" + se.EnumKey;
+                              //  se.RefPK = se.OrgNo + "_" + se.EnumKey;
                                 se.MyPK = se.EnumKey + "_" + se.Lang + "_" + se.IntKey + "_" + se.OrgNo;
                                 if (se.IsExits)
                                     continue;
@@ -2499,6 +2521,16 @@ namespace BP.Sys
         protected override bool beforeDelete()
         {
             string sql = "";
+            // 检查该表单是否可以被删除?
+            if (DBAccess.IsExitsObject("GPM_Menu") == true)
+            {
+                // 是否有菜单引用?
+                sql = "SELECT  COUNT(*) AS Num   FROM GPM_Menu WHERE UrlExt='" + this.No + "'";
+                if (DBAccess.RunSQLReturnValInt(sql) > 0)
+                    throw new Exception("err@该表单已经被菜单引用，您不能删除.");
+            }
+
+            sql = "";
             sql = "SELECT * FROM Sys_MapDtl WHERE FK_MapData ='" + this.No + "'";
             DataTable Sys_MapDtl = DBAccess.RunSQLReturnTable(sql);
 

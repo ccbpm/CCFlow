@@ -290,21 +290,34 @@ namespace BP.GPM
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 130);
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 100, 10);
 
+
                 map.AddDDLEntities(EmpAttr.FK_Dept, null, "主部门", new BP.Port.Depts(), false);
+                string msg = "最后登录的部门:";
+                msg += "\t\n 1.常用部门，一个人有多个部门，但是必须有一个主部门。";
+                msg += "\t\n 2.在多部门的情况下，切换部门的时候，这个保存的最后登录的部门。";
+                map.SetHelperAlert(EmpAttr.FK_Dept, msg);
+
 
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Tel, null, "电话", true, false, 0, 20, 130);
+
                 map.AddTBString(EmpAttr.Leader, null, "直属部门领导", true, false, 0, 20, 130);
+                map.SetHelperAlert(EmpAttr.Leader, "这里是领导的登录帐号，不是中文名字，用于流程的接受人规则中。");
+
+
                 map.AddTBString(EmpAttr.Email, null, "邮箱", true, false, 0, 100, 132, true);
                 map.AddTBString(EmpAttr.PinYin, null, "拼音", true, false, 0, 500, 132, true);
 
-                //// 0=不签名 1=图片签名, 2=电子签名.
+                //  0=不签名 1=图片签名, 2=电子签名.
                 //map.AddDDLSysEnum(EmpAttr.SignType, 0, "签字类型", true, true, EmpAttr.SignType,
-                //    "@0=不签名@1=图片签名@2=电子签名");
+                // "@0=不签名@1=图片签名@2=电子签名");
 
-                map.AddTBString(EmpAttr.OrgNo, null, "组织编号", true, false, 0, 50, 50, true);
+                if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                    map.AddTBString(EmpAttr.OrgNo, null, "组织编号", true, false, 0, 50, 50);
 
                 map.AddTBInt(EmpAttr.Idx, 0, "序号", true, false);
+                map.SetHelperAlert(EmpAttr.Idx, "显示的顺序");
+
                 #endregion 字段
 
                 RefMethod rm = new RefMethod();
@@ -376,12 +389,14 @@ namespace BP.GPM
             if (DataType.IsNullOrEmpty(this.Name) == true)
                 throw new Exception("err@名称不能为空.");
 
-            //邮箱格式
-            Regex r = new Regex("^\\s*([A-Za-z0-9_-]+(\\.\\w+)*@(\\w+\\.)+\\w{2,5})\\s*$");
 
-            if (r.IsMatch(this.Email) == false)
-                throw new Exception("邮箱格式不正确.");
-
+            if (DataType.IsNullOrEmpty(this.Email) == false)
+            {
+                //邮箱格式
+                Regex r = new Regex("^\\s*([A-Za-z0-9_-]+(\\.\\w+)*@(\\w+\\.)+\\w{2,5})\\s*$");
+                if (r.IsMatch(this.Email) == false)
+                    throw new Exception("邮箱格式不正确.");
+            }
 
             string pinyinQP = DataType.ParseStringToPinyin(this.Name).ToLower();
             string pinyinJX = DataType.ParseStringToPinyinJianXie(this.Name).ToLower();

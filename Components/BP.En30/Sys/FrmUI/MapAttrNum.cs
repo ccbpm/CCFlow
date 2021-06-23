@@ -13,7 +13,32 @@ namespace BP.Sys.FrmUI
     /// </summary>
     public class MapAttrNum : EntityMyPK
     {
-        #region 文本字段参数属性.
+        #region 属性.
+        /// <summary>
+        /// 默认值
+        /// </summary>
+        public string DefVal
+        {
+            get
+            {
+                return this.GetValStrByKey(MapAttrAttr.DefVal);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.DefVal, value);
+            }
+        }
+        public int DefValType
+        {
+            get
+            {
+                return this.GetValIntByKey(MapAttrAttr.DefValType);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.DefValType, value);
+            }
+        }
         /// <summary>
         /// 表单ID
         /// </summary>
@@ -155,8 +180,6 @@ namespace BP.Sys.FrmUI
 
                 #region 执行的方法.
                 RefMethod rm = new RefMethod();
-
-
                 rm = new RefMethod();
                 rm.Title = "正则表达式";
                 rm.ClassMethodName = this.ToString() + ".DoRegularExpression()";
@@ -198,37 +221,21 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "icon-wrench";  
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "全局风格定义";
+                rm.ClassMethodName = this.ToString() + ".DoGloValStyles()";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Icon = "icon-wrench";
+                rm.RefAttrKey = MapAttrAttr.CSSCtrl;
+                map.AddRefMethod(rm);
                 #endregion 执行的方法.
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
-        /// <summary>
-        /// 默认值
-        /// </summary>
-        public string DefVal
-        {
-            get
-            {
-                return this.GetValStrByKey(MapAttrAttr.DefVal);
-            }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.DefVal, value);
-            }
-        }
-        public int DefValType
-        {
-            get
-            {
-                return this.GetValIntByKey(MapAttrAttr.DefValType);
-            }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.DefValType, value);
-            }
-        }
+      
         protected override bool beforeUpdateInsertAction()
         {
             //如果没默认值.
@@ -309,7 +316,7 @@ namespace BP.Sys.FrmUI
         #region 方法执行.
         public string DoAutoFullDtlField()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/AutoFullDtlField.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn);
+            return "../../Admin/FoolFormDesigner/MapExt/AutoFullDtlField.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         /// <summary>
         /// 自动计算
@@ -317,7 +324,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoAutoFull()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/AutoFull.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn);
+            return "../../Admin/FoolFormDesigner/MapExt/AutoFull.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         /// <summary>
         /// 设置开窗返回值
@@ -325,16 +332,15 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoPopVal()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/PopVal.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK);
+            return "../../Admin/FoolFormDesigner/MapExt/PopVal.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn  + "&MyPK=" + this.MyPK;
         }
-
         /// <summary>
         /// 正则表达式
         /// </summary>
         /// <returns></returns>
         public string DoRegularExpression()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/RegularExpressionNum.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK);
+            return "../../Admin/FoolFormDesigner/MapExt/RegularExpressionNum.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" +  this.MyPK;
         }
         /// <summary>
         /// 文本框自动完成
@@ -342,16 +348,19 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoTBFullCtrl()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/TBFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK);
+            return "../../Admin/FoolFormDesigner/MapExt/TBFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" +  this.KeyOfEn + "&MyPK=" + this.MyPK;
         }
-        
         /// <summary>
         /// 扩展控件
         /// </summary>
         /// <returns></returns>
         public string DoEditFExtContral()
         {
-            return "../../Admin/FoolFormDesigner/EditFExtContral.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK);
+            return "../../Admin/FoolFormDesigner/EditFExtContral.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" +  this.KeyOfEn + "&MyPK=" + this.MyPK;
+        }
+        public string DoGloValStyles()
+        {
+            return "../../Admin/FoolFormDesigner/StyletDfine/GloValStyles.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" +  this.KeyOfEn + "&MyPK=" + this.MyPK;
         }
         #endregion 方法执行.
     }

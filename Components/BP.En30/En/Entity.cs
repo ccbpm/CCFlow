@@ -1194,6 +1194,48 @@ namespace BP.En
             DBAccess.RunSQLs(sqls);
         }
         /// <summary>
+        /// 插入到之前
+        /// </summary>
+        /// <param name="groupKeyAttr">分组属性</param>
+        /// <param name="groupKeyVal">分组值</param>
+        /// <param name="idxAttr">Idx属性</param>
+        /// <param name="moveToPK">要移动到的主键值</param>
+        protected void DoOrderMoveTo(string groupKeyAttr, string groupKeyVal, string idxAttr, string moveToPK)
+        {
+            string pkval = this.PKVal.ToString();
+            string pk = this.PK;
+            string table = this.EnMap.PhysicsTable;
+
+            string sql = "SELECT " + pk + " ," + idxAttr + " FROM " + table + " WHERE " + groupKeyAttr + "='" + groupKeyVal + "' order by " + idxAttr;
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            int idx = 0;
+            string nextNo = "";
+            string myNo = "";
+            bool isMeet = false;
+
+            string sqls = "";
+            foreach (DataRow dr in dt.Rows)
+            {
+                myNo = dr[pk].ToString();
+                if (isMeet == true)
+                {
+                    nextNo = myNo;
+                    isMeet = false;
+                }
+                idx++;
+
+                if (myNo == pkval)
+                    isMeet = true;
+
+                sqls += "@ UPDATE " + table + " SET " + idxAttr + "=" + idx + " WHERE " + pk + "='" + myNo + "'";
+            }
+
+            sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "-1 WHERE " + pk + "='" + nextNo + "'";
+            sqls += "@ UPDATE  " + table + " SET " + idxAttr + "=" + idxAttr + "+1 WHERE " + pk + "='" + pkval + "'";
+
+            DBAccess.RunSQLs(sqls);
+        }
+        /// <summary>
         /// 下移
         /// </summary>
         /// <param name="groupKeyAttr">分组字段1</param>
@@ -2187,7 +2229,7 @@ namespace BP.En
             int i = 0;
             try
             {
-                if (this.PKVal!=null && this.PKVal.Equals("0") == true)
+                if (this.PKVal != null && this.PKVal.Equals("0") == true)
                     this.PKVal = DBAccess.GenerOID(this.ClassID);
 
                 i = this.DirectInsert();
@@ -2229,17 +2271,17 @@ namespace BP.En
 
                 if (ver.RetrieveFromDBSources() == 0)
                 {
-                    ver.No = enName;
+                    ver.FrmID = enName;
                     ver.PKValue = this.PKVal.ToString();
                     ver.Name = this.EnMap.EnDesc;
                 }
                 else
                 {
-                    ver.EVer++;
+                    //  ver.EVer++;
                 }
 
                 ver.RDT = rdt;
-                ver.Rec = BP.Web.WebUser.Name;
+                ver.RecNo = BP.Web.WebUser.Name;
                 ver.Save();
 
                 // 保存字段数据.
@@ -2249,18 +2291,18 @@ namespace BP.En
                     if (attr.IsRefAttr)
                         continue;
 
-                    EnVerDtl dtl = new EnVerDtl();
-                    dtl.EnVerPK = ver.MyPK;
-                    dtl.EnVer = ver.EVer;
-                    dtl.EnName = ver.No;
-                    dtl.AttrKey = attr.Key;
-                    dtl.AttrName = attr.Desc;
-                    //dtl.OldVal = this.GetValStrByKey(attr.Key);   //第一个版本时，旧值没有
-                    dtl.RDT = rdt;
-                    dtl.Rec = BP.Web.WebUser.Name;
-                    dtl.NewVal = this.GetValStrByKey(attr.Key);
-                    dtl.MyPK = ver.MyPK + "_" + attr.Key + "_" + dtl.EnVer;
-                    dtl.Insert();
+                    //EnVerDtl dtl = new EnVerDtl();
+                    //dtl.EnVerPK = ver.MyPK;
+                    //dtl.EnVer = ver.EVer;
+                    //dtl.EnName = ver.No;
+                    //dtl.AttrKey = attr.Key;
+                    //dtl.AttrName = attr.Desc;
+                    ////dtl.OldVal = this.GetValStrByKey(attr.Key);   //第一个版本时，旧值没有
+                    //dtl.RDT = rdt;
+                    //dtl.Rec = BP.Web.WebUser.Name;
+                    //dtl.NewVal = this.GetValStrByKey(attr.Key);
+                    //dtl.MyPK = ver.MyPK + "_" + attr.Key + "_" + dtl.EnVer;
+                    //dtl.Insert();
                 }
             }
 
@@ -2609,8 +2651,10 @@ namespace BP.En
             }
             catch (System.Exception ex)
             {
+                //@hongyan. 需要翻.
+                string msg = ex.Message;
 
-                if (ex.Message.Contains("列名") || ex.Message.Contains("将截断字符串") || ex.Message.Contains("缺少") || ex.Message.Contains("的值太大"))
+                if (msg.Contains("列名") || msg.Contains("将截断字符串") || msg.Contains("缺少") || msg.Contains("的值太大") || msg.Contains("too long")==true)
                 {
                     /*说明字符串长度有问题.*/
                     this.CheckPhysicsTable();
@@ -2700,72 +2744,72 @@ namespace BP.En
                 if (ver.RetrieveFromDBSources() == 0)
                 {
                     /*初始化数据.*/
-                    ver.PKValue = this.PKVal.ToString();
-                    ver.No = enName;
-                    ver.RDT = rdt;
-                    ver.Name = this.EnMap.EnDesc;
-                    ver.Rec = BP.Web.WebUser.Name;
-                    ver.Insert();
+                    //ver.PKValue = this.PKVal.ToString();
+                    //ver.No = enName;
+                    //ver.RDT = rdt;
+                    //ver.Name = this.EnMap.EnDesc;
+                    //ver.Rec = BP.Web.WebUser.Name;
+                    //ver.Insert();
 
-                    foreach (Attr attr in this.EnMap.Attrs)
-                    {
-                        if (attr.IsRefAttr)
-                            continue;
+                    //foreach (Attr attr in this.EnMap.Attrs)
+                    //{
+                    //    if (attr.IsRefAttr)
+                    //        continue;
 
-                        dtl = new EnVerDtl();
-                        dtl.EnVerPK = ver.MyPK;
-                        dtl.EnVer = ver.EVer;
-                        dtl.EnName = ver.No;
-                        dtl.AttrKey = attr.Key;
-                        dtl.AttrName = attr.Desc;
+                    //    dtl = new EnVerDtl();
+                    //    dtl.EnVerPK = ver.MyPK;
+                    //    dtl.EnVer = ver.EVer;
+                    //    dtl.EnName = ver.No;
+                    //    dtl.AttrKey = attr.Key;
+                    //    dtl.AttrName = attr.Desc;
 
-                        dtl.RDT = rdt;
-                        dtl.Rec = BP.Web.WebUser.Name;
-                        dtl.NewVal = this.GetValStrByKey(attr.Key);
+                    //    dtl.RDT = rdt;
+                    //    dtl.Rec = BP.Web.WebUser.Name;
+                    //    dtl.NewVal = this.GetValStrByKey(attr.Key);
 
-                        dtl.MyPK = ver.MyPK + "_" + attr.Key + "_" + dtl.EnVer;
-                        dtl.Insert();
-                    }
+                    //    dtl.MyPK = ver.MyPK + "_" + attr.Key + "_" + dtl.EnVer;
+                    //    dtl.Insert();
+                    //}
                     return;
                 }
 
                 //更新主版本信息.
-                ver.EVer += 1;
-                ver.Rec = BP.Web.WebUser.No;
-                ver.RDT = rdt;
-                ver.Update();
+                //ver.EVer += 1;
+                //ver.Rec = BP.Web.WebUser.No;
+                //ver.RDT = rdt;
+                //ver.Update();
 
-                //获取上一版本的数据
-                EnVerDtls dtls = new EnVerDtls(ver.MyPK, ver.EVer - 1);
+                ////获取上一版本的数据
+                //EnVerDtls dtls = new EnVerDtls(ver.MyPK, ver.EVer - 1);
 
-                // 保存字段数据.
-                Attrs attrs = this.EnMap.Attrs;
-                foreach (Attr attr in attrs)
-                {
-                    if (attr.IsRefAttr)
-                        continue;
+                //// 保存字段数据.
+                //Attrs attrs = this.EnMap.Attrs;
+                //foreach (Attr attr in attrs)
+                //{
+                //    if (attr.IsRefAttr)
+                //        continue;
 
-                    dtl = new BP.Sys.EnVerDtl();
-                    dtl.EnVerPK = ver.MyPK;
-                    dtl.EnVer = ver.EVer;
-                    dtl.EnName = ver.No;
-                    dtl.AttrKey = attr.Key;
-                    dtl.AttrName = attr.Desc;
+                //    dtl = new BP.Sys.EnVerDtl();
+                //    dtl.EnVerPK = ver.MyPK;
+                //    dtl.EnVer = ver.EVer;
+                //    dtl.EnName = ver.No;
+                //    dtl.AttrKey = attr.Key;
+                //    dtl.AttrName = attr.Desc;
 
-                    dtlTemp = dtls.GetEntityByKey(EnVerDtlAttr.AttrKey, attr.Key) as EnVerDtl;
+                //    dtlTemp = dtls.GetEntityByKey(EnVerDtlAttr.AttrKey, attr.Key) as EnVerDtl;
 
-                    if (dtlTemp != null)
-                        dtl.OldVal = dtlTemp.NewVal;
-                    else
-                        dtl.OldVal = this.GetValStrByKey(attr.Key);
+                //    if (dtlTemp != null)
+                //        dtl.OldVal = dtlTemp.NewVal;
+                //    else
+                //        dtl.OldVal = this.GetValStrByKey(attr.Key);
 
-                    dtl.RDT = rdt;
-                    dtl.Rec = BP.Web.WebUser.Name;
-                    dtl.NewVal = this.GetValStrByKey(attr.Key);
+                //    dtl.RDT = rdt;
+                //    dtl.Rec = BP.Web.WebUser.Name;
+                //    dtl.NewVal = this.GetValStrByKey(attr.Key);
 
-                    dtl.MyPK = ver.MyPK + "_" + attr.Key + "_" + dtl.EnVer;
-                    dtl.Insert();
-                }
+                //    dtl.MyPK = ver.MyPK + "_" + attr.Key + "_" + dtl.EnVer;
+                //    dtl.Insert();
+                //}
             }
             return;
         }
@@ -3065,7 +3109,7 @@ namespace BP.En
                 bool isHave = false;
                 foreach (DataRow dr in dtAttr.Rows)
                 {
-                    if (dr["FName"].ToString().ToLower() == attr.Field.ToLower())
+                    if (dr["FName"].ToString().ToLower().Equals(attr.Field.ToLower()))
                     {
                         isHave = true;
                         FType = dr["FType"] as string;
@@ -3152,7 +3196,7 @@ namespace BP.En
                                     /*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
                                     foreach (DataRow dr in dtYueShu.Rows)
                                     {
-                                        if (dr["FName"].ToString().ToLower() == attr.Key.ToLower())
+                                        if (dr["FName"].ToString().ToLower().Equals(attr.Key.ToLower()))
                                             DBAccess.RunSQL("ALTER TABLE " + table + " drop constraint " + dr[0].ToString());
                                     }
 
@@ -3311,8 +3355,23 @@ namespace BP.En
                 if (item.IsRefAttr == true)
                     continue;
 
-                sql = "exec sp_rename '" + ptable + ".[" + item.Key + "]','" + item.Key + "','column';";
-                DBAccess.RunSQL(sql);
+                bool isHave = false;
+                foreach (DataRow dr in dtAttr.Rows)
+                {
+                    string fName = dr["FName"].ToString();
+                    if (fName.Equals(item.Key) == true)
+                    {
+                        isHave = true;
+                        break;
+                    }
+                }
+
+                //如果字段有大小写的变化,就修正过来.
+                if (isHave == false)
+                {
+                    sql = "exec sp_rename '" + ptable + ".[" + item.Key + "]','" + item.Key + "','column';";
+                    DBAccess.RunSQL(sql);
+                }
             }
             #endregion 重命名表名字段名.
 
@@ -3371,7 +3430,7 @@ namespace BP.En
                 bool isHave = false;
                 foreach (DataRow dr in dtAttr.Rows)
                 {
-                    if (dr["FName"].ToString().ToLower() == attr.Field.ToLower())
+                    if (dr["FName"].ToString().ToLower().Equals(attr.Field.ToLower()))
                     {
                         isHave = true;
                         FType = dr["FType"] as string;

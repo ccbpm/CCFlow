@@ -330,7 +330,7 @@ namespace BP.Sys
                 string apiParams = apiUrl.Split('?')[1];
                 //执行POST
                 postData = BP.Tools.PubGlo.HttpPostConnect(apiHost, apiParams);
-
+                
                 DataTable dt = null;
                 try
                 {
@@ -1102,6 +1102,21 @@ namespace BP.Sys
                 rm.IsForEns = false;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "修改属性";
+                rm.ClassMethodName = this.ToString() + ".DoAttr";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.IsForEns = true;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "新建字典";
+                rm.ClassMethodName = this.ToString() + ".DoNew";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.IsForEns = true;
+                map.AddRefMethod(rm);
+
+
                 //rm = new RefMethod();
                 //rm.Title = "创建Table向导";
                 //rm.ClassMethodName = this.ToString() + ".DoGuide";
@@ -1122,6 +1137,14 @@ namespace BP.Sys
         }
         #endregion
 
+        public string DoAttr()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/Comm/EnOnly.htm?EnsName=BP.Sys.SFTable&No="+this.No;
+        }
+        public string DoNew()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTable/Default.htm?DoType=New&FromApp=SL&s=0.3256071044807922";
+        }
         /// <summary>
         /// 数据源管理
         /// </summary>
@@ -1154,6 +1177,10 @@ namespace BP.Sys
                 return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
             }
         }
+        /// <summary>
+        /// 检查是否有依赖的引用？
+        /// </summary>
+        /// <returns></returns>
         public string IsCanDelete()
         {
             MapAttrs attrs = new MapAttrs();
@@ -1177,7 +1204,6 @@ namespace BP.Sys
         }
         protected override bool beforeInsert()
         {
-
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
 
@@ -1401,7 +1427,7 @@ namespace BP.Sys
                 }
             }
         }
-
+        
     }
     /// <summary>
     /// 用户自定义表s

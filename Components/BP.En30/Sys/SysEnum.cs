@@ -30,10 +30,6 @@ namespace BP.Sys
         /// OrgNo
         /// </summary>
         public const string OrgNo = "OrgNo";
-        /// <summary>
-        /// 关联主键
-        /// </summary>
-        public const string RefPK = "RefPK";
     }
     /// <summary>
     /// SysEnum
@@ -53,20 +49,6 @@ namespace BP.Sys
         }
 
         #region 实现基本的方法
-        /// <summary>
-        /// 关联外键
-        /// </summary>
-        public string RefPK
-        {
-            get
-            {
-                return this.GetValStringByKey(SysEnumAttr.RefPK);
-            }
-            set
-            {
-                this.SetValByKey(SysEnumAttr.RefPK, value);
-            }
-        }
         public string OrgNo
         {
             get
@@ -206,13 +188,15 @@ namespace BP.Sys
 
                 map.AddMyPK();
                 map.AddTBString(SysEnumAttr.Lab, null, "Lab", true, false, 1, 300, 8);
+
+                //不管是那个模式  就是短号. 
                 map.AddTBString(SysEnumAttr.EnumKey, null, "EnumKey", true, false, 1, 100, 8);
                 map.AddTBInt(SysEnumAttr.IntKey, 0, "Val", true, false);
                 map.AddTBString(SysEnumAttr.Lang, "CH", "语言", true, false, 0, 10, 8);
 
                 map.AddTBString(SysEnumMainAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 8);
-                map.AddTBString(SysEnumAttr.RefPK, null, "RefPK", true, false, 0, 50, 8);
-                
+
+
 
                 this._enMap = map;
                 return this._enMap;
@@ -335,7 +319,7 @@ namespace BP.Sys
                 if (this.Count == 0)
                     throw new Exception("@枚举值" + enumKey + "已被删除。");
             }
-               
+
 
             sql = " CASE NVL(" + mTable + field + "," + def + ")";
             foreach (SysEnum se1 in this)
@@ -364,8 +348,6 @@ namespace BP.Sys
                 if (this.Count == 0)
                     throw new Exception("@枚举值（" + enumKey + "）已被删除，无法形成期望的SQL。");
             }
-                
-
 
             string sql = "";
             sql = " CASE " + mTable + field;
@@ -383,44 +365,17 @@ namespace BP.Sys
         }
         public void LoadIt(string enumKey)
         {
-            if (this.Full(enumKey) == false)
+            if (this.Full(enumKey) == true)
+                return;
+
+            try
             {
-
-                try
-                {
-                    DBAccess.RunSQL("UPDATE Sys_Enum SET Lang='" + Web.WebUser.SysLang + "' WHERE LANG IS NULL ");
-
-                    DBAccess.RunSQL("UPDATE Sys_Enum SET MyPK=EnumKey+'_'+Lang+'_'+cast(IntKey as NVARCHAR )");
-
-                    //增加数据库类型判断
-                    DBUrl dbUrl = new DBUrl();
-                    if (DBType.MSSQL == dbUrl.DBType)
-                    {
-                        DBAccess.RunSQL("UPDATE Sys_Enum SET MyPK=EnumKey+'_'+Lang+'_'+cast(IntKey as NVARCHAR )");
-                    }
-                    else if (DBType.Oracle == dbUrl.DBType)
-                    {
-                        DBAccess.RunSQL("UPDATE Sys_Enum SET MyPK = EnumKey || '_' || Lang || '_' || cast(IntKey  as VARCHAR(5))");
-                    }
-                    else if (DBType.MySQL == dbUrl.DBType)
-                    {
-                        DBAccess.RunSQL("UPDATE Sys_Enum SET MyPK = CONCAT (EnumKey,'_', Lang,'_',CAST(IntKey AS CHAR(5)))");
-                    }
-                }
-                catch
-                {
-
-                }
-
-                try
-                {
-                    BP.Sys.XML.EnumInfoXml xml = new BP.Sys.XML.EnumInfoXml(enumKey);
-                    this.RegIt(enumKey, xml.Vals);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("@你没有预制[" + enumKey + "]枚举值。@在修复枚举值出现错误:" + ex.Message);
-                }
+                BP.Sys.XML.EnumInfoXml xml = new BP.Sys.XML.EnumInfoXml(enumKey);
+                this.RegIt(enumKey, xml.Vals);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("@你没有预制[" + enumKey + "]枚举值。@在修复枚举值出现错误:" + ex.Message);
             }
         }
         /// <summary>
@@ -464,7 +419,7 @@ namespace BP.Sys
 
                 foreach (string s in strs)
                 {
-                    if (DataType.IsNullOrEmpty(s) ==true)
+                    if (DataType.IsNullOrEmpty(s) == true)
                         continue;
 
                     string[] vk = s.Split('=');
@@ -504,10 +459,15 @@ namespace BP.Sys
 
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
+                //如果是自定义的枚举.
                 if (enumKey.Contains(BP.Web.WebUser.OrgNo + "_"))
                 {
+                    string mykey = enumKey.Replace(BP.Web.WebUser.OrgNo + "_", "");
+
                     /* 看看xml配置里面是否有?*/
-                    qo.AddWhere(SysEnumAttr.RefPK, enumKey);
+                    qo.AddWhere(SysEnumAttr.OrgNo, BP.Web.WebUser.OrgNo);
+                    qo.addAnd();
+                    qo.AddWhere(SysEnumAttr.EnumKey, mykey);
                     qo.addOrderBy(SysEnumAttr.IntKey);
                     if (qo.DoQuery() == 0)
                         return false;
@@ -524,13 +484,11 @@ namespace BP.Sys
                 Cash.AddObj("EnumOf" + enumKey + Web.WebUser.SysLang, Depositary.Application, this);
                 return true;
             }
-            else
-            {
-                qo.AddWhere(SysEnumAttr.EnumKey, enumKey);
-                qo.addAnd();
-                qo.AddWhere(SysEnumAttr.Lang, Web.WebUser.SysLang);
-            }
 
+
+            qo.AddWhere(SysEnumAttr.EnumKey, enumKey);
+            qo.addAnd();
+            qo.AddWhere(SysEnumAttr.Lang, Web.WebUser.SysLang);
             qo.addOrderBy(SysEnumAttr.IntKey);
             if (qo.DoQuery() == 0)
             {

@@ -265,7 +265,10 @@ namespace BP.Sys
             GroupField groupField = new GroupField();
             groupField.Retrieve(GroupFieldAttr.FrmID, fk_mapdata, GroupFieldAttr.CtrlType, "");
             attr.GroupID = groupField.OID;
-            attr.Save();
+            if (attr.RetrieveFromDBSources() == 0)
+                attr.Insert();
+            else
+                attr.Update();
 
             //如果是普通的字段, 这个属于外部数据类型,或者webservices类型. sql 语句类型.
             if (attr.LGType == FieldTypeS.Normal)
@@ -284,7 +287,10 @@ namespace BP.Sys
                 attrH.UIVisible = false;
                 attrH.UIIsEnable = false;
                 attrH.MyPK = attrH.FK_MapData + "_" + attrH.KeyOfEn;
-                attrH.Save();
+                if (attrH.RetrieveFromDBSources() == 0)
+                    attrH.Insert();
+                else
+                    attrH.Update();
             }
         }
         /// <summary>
@@ -1214,30 +1220,30 @@ namespace BP.Sys
         /// <summary>
         /// 复制表单
         /// </summary>
-        /// <param name="srcFrmID">源表单ID</param>
+        /// <param name="copyToFrmID">源表单ID</param>
         /// <param name="copyFrmID">copy到表单ID</param>
-        /// <param name="copyFrmName">表单名称</param>
-        public static string CopyFrm(string srcFrmID, string copyFrmID, string copyFrmName, string fk_frmTree)
+        /// <param name="copyFrmName">新实体表单名称</param>
+        public static string CopyFrm(string srcFrmID, string copyToFrmID, string copyFrmName, string fk_frmTree)
         {
             MapData mymd = new MapData();
-            mymd.No = copyFrmID;
+            mymd.No = copyToFrmID;
             if (mymd.RetrieveFromDBSources() == 1)
-                throw new Exception("@目标表单ID:" + copyFrmID + "已经存在，位于:" + mymd.FK_FormTreeText + "目录下.");
+                throw new Exception("@目标表单ID:" + copyToFrmID + "已经存在，位于:" + mymd.FK_FormTreeText + "目录下.");
 
             //获得源文件信息.
             DataSet ds = GenerHisDataSet(srcFrmID);
 
             //导入表单文件.
-            ImpFrmTemplate(copyFrmID, ds, false);
+            ImpFrmTemplate(copyToFrmID, ds, false);
 
             //复制模版文件.
-            MapData md = new MapData(copyFrmID);
+            MapData mdCopyTo = new MapData(copyToFrmID);
 
-            if (md.HisFrmType == FrmType.ExcelFrm)
+            if (mdCopyTo.HisFrmType == FrmType.ExcelFrm)
             {
                 /*如果是excel表单，那就需要复制excel文件.*/
                 string srcFile = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + srcFrmID + ".xls";
-                string toFile = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + copyFrmID + ".xls";
+                string toFile = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + copyToFrmID + ".xls";
                 if (System.IO.File.Exists(srcFile) == true)
                 {
                     if (System.IO.File.Exists(toFile) == false)
@@ -1245,7 +1251,7 @@ namespace BP.Sys
                 }
 
                 srcFile = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + srcFrmID + ".xlsx";
-                toFile = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + copyFrmID + ".xlsx";
+                toFile = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + copyToFrmID + ".xlsx";
                 if (System.IO.File.Exists(srcFile) == true)
                 {
                     if (System.IO.File.Exists(toFile) == false)
@@ -1253,12 +1259,12 @@ namespace BP.Sys
                 }
             }
 
-            md.Retrieve();
+            mdCopyTo.Retrieve();
 
-            md.FK_FormTree = fk_frmTree;
-          //  md.FK_FrmSort = fk_frmTree;
-            md.Name = copyFrmName;
-            md.Update();
+            mdCopyTo.FK_FormTree = fk_frmTree;
+            //  md.FK_FrmSort = fk_frmTree;
+            mdCopyTo.Name = copyFrmName;
+            mdCopyTo.Update();
 
             return "表单复制成功,您需要重新登录，或者刷新才能看到。";
         }
@@ -1270,7 +1276,7 @@ namespace BP.Sys
         /// <param name="isSetReadonly">是否把空间设置只读？</param>
         public static void ImpFrmTemplate(string toFrmID, DataSet fromds, bool isSetReadonly)
         {
-            MapData md = new MapData(toFrmID);
+            //  MapData md = new MapData(toFrmID);
             MapData.ImpMapData(toFrmID, fromds);
         }
         /// <summary>
@@ -1694,7 +1700,6 @@ namespace BP.Sys
         }
         #endregion 模版操作.
 
-
         #region 其他功能.
         /// <summary>
         /// 保存枚举
@@ -1818,6 +1823,8 @@ namespace BP.Sys
             if (removeSpecialSymbols)
                 name = DataType.ParseStringForName(name, maxLen);
 
+            //单.
+            name = name.Replace("单", "Dan");
 
             try
             {

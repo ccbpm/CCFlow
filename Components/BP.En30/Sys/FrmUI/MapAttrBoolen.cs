@@ -163,6 +163,14 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "全局风格定义";
+                rm.ClassMethodName = this.ToString() + ".DoGloValStyles()";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Icon = "icon-wrench";
+                rm.RefAttrKey = MapAttrAttr.CSSCtrl;
+                map.AddRefMethod(rm);
+
 
                 this._enMap = map;
                 return this._enMap;
@@ -201,6 +209,10 @@ namespace BP.Sys.FrmUI
         #endregion
 
         #region 基本功能.
+        public string DoGloValStyles()
+        {
+            return "../../Admin/FoolFormDesigner/StyletDfine/GloValStyles.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
+        }
         /// <summary>
         /// 绑定函数
         /// </summary>

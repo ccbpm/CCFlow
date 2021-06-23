@@ -254,6 +254,35 @@ namespace BP.Sys
 
             return 0;
         }
+        public  void RunSQLs(string sql)
+        {
+            if (DataType.IsNullOrEmpty(sql))
+                return;
+
+            //sql = DealSQL(sql);//去掉注释.
+
+            sql = sql.Replace("@GO", "~");
+            sql = sql.Replace("@", "~");
+
+            if (sql.Contains("';'") == false)
+                sql = sql.Replace(";", "~");
+
+            sql = sql.Replace("UPDATE", "~UPDATE");
+            sql = sql.Replace("DELETE", "~DELETE");
+            sql = sql.Replace("INSERT", "~INSERT");
+
+            string[] strs = sql.Split('~');
+            foreach (string str in strs)
+            {
+                if (DataType.IsNullOrEmpty(str))
+                    continue;
+
+                if (str.Contains("--") || str.Contains("/*"))
+                    continue;
+
+                RunSQL(str);
+            }
+        }
         /// <summary>
         /// 运行SQL
         /// </summary>
@@ -1369,19 +1398,17 @@ namespace BP.Sys
                     break;
                 case Sys.DBSrcType.MySQL:
                     //分别代表字段名,类型，描述，类型加长度（char（11））
-                    string sql2 = "Select COLUMN_NAME as No,DATA_TYPE AS DBType,	COLUMN_COMMENT AS Name ,COLUMN_TYPE  AS DBLength,row_number()over(order by COLUMN_NAME) AS colid from INFORMATION_SCHEMA.COLUMNS Where table_name='" + tableName + "'AND table_schema = 'ccgx-portal'";
-                    sql.Append(sql2);
-                    //sql.AppendLine("SELECT ");
-                    //sql.AppendLine("    column_name AS 'No',");
-                    //sql.AppendLine("    data_type AS 'DBType',");
-                    //sql.AppendLine(string.Format("    {0} AS DBLength,", GetIsNullInSQL("character_maximum_length", "numeric_precision")));
-                    //sql.AppendLine("    ordinal_position AS colid,");
-                    //sql.AppendLine("    column_comment AS 'Name'");
-                    //sql.AppendLine("FROM");
-                    //sql.AppendLine("    information_schema.columns");
-                    //sql.AppendLine("WHERE");
-                    //sql.AppendLine(string.Format("    table_schema = '{0}'", this.DBSrcType == Sys.DBSrcType.Localhost ? DBAccess.GetAppCenterDBConn.Database : this.DBName));
-                    //sql.AppendLine(string.Format("        AND table_name = '{0}';", tableName));
+                    sql.AppendLine("SELECT ");
+                    sql.AppendLine("    column_name AS 'No',");
+                    sql.AppendLine("    data_type AS 'DBType',");
+                    sql.AppendLine(string.Format("    {0} AS DBLength,", GetIsNullInSQL("character_maximum_length", "numeric_precision")));
+                    sql.AppendLine("    ordinal_position AS colid,");
+                    sql.AppendLine("    column_comment AS 'Name'");
+                    sql.AppendLine("FROM");
+                    sql.AppendLine("    information_schema.columns");
+                    sql.AppendLine("WHERE");
+                    sql.AppendLine(string.Format("    table_schema = '{0}'", DBAccess.GetAppCenterDBConn.Database));
+                    sql.AppendLine(string.Format("        AND table_name = '{0}';", tableName));
                     break;
                 case Sys.DBSrcType.Informix:
                     break;

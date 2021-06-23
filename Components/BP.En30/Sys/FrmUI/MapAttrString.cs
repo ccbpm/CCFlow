@@ -236,7 +236,7 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
 
                 map.AddDDLSysEnum(MapAttrAttr.IsSigan, 0, "签名模式", true, true,
-                    MapAttrAttr.IsSigan, "@0=无@1=图片签名@2=山东CA@3=广东CA@4=图片盖章");
+                    MapAttrAttr.IsSigan, "@0=无@1=图片签名@2=山东CA@3=广东CA@4=图片盖章@5=手写签名");
                 map.SetHelperAlert(MapAttrAttr.IsSigan, "图片签名,需要的是当前是只读的并且默认值为@WebUser.No,其他签名需要个性化的编写数字签章的集成代码.");
 
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false);
@@ -386,6 +386,14 @@ namespace BP.Sys.FrmUI
                 rm.Icon = "icon-magic-wand";
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "全局风格定义";
+                rm.ClassMethodName = this.ToString() + ".DoGloValStyles()";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Icon = "icon-wrench";
+                rm.RefAttrKey = MapAttrAttr.CSSCtrl;
+                map.AddRefMethod(rm);
+
                 //rm = new RefMethod();
                 //rm.Title = "转化为评论组件";
                 //rm.ClassMethodName = this.ToString() + ".DoSetFlowBBS()";
@@ -399,6 +407,10 @@ namespace BP.Sys.FrmUI
                 return this._enMap;
             }
 
+        }
+        public string DoGloValStyles()
+        {
+            return "../../Admin/FoolFormDesigner/StyletDfine/GloValStyles.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
         }
         /// <summary>
         /// 字段分组查询语句
@@ -573,7 +585,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoPopFullCtrl()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/PopFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
+            return "../../Admin/FoolFormDesigner/MapExt/PopFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + this.MyPK;
         }
         /// <summary>
         /// 多条件查询列表模式
@@ -581,7 +593,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoPopFullCtrlAdv()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/PopFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
+            return "../../Admin/FoolFormDesigner/MapExt/PopFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + this.MyPK;
         }
         #endregion 方法执行 Pop填充自动完成.
 
@@ -658,7 +670,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoLink()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/Link.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK) + "&FK_MapExt=Link_" + this.FK_MapData + "_" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/Link.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK + "&FK_MapExt=Link_" + this.FK_MapData + "_" + this.KeyOfEn;
         }
         /// <summary>
         /// 设置开窗返回值
@@ -666,7 +678,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoPopVal()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/PopVal.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK) + "&FK_MapExt=PopVal_" + this.FK_MapData + "_" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/PopVal.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK + "&FK_MapExt=PopVal_" + this.FK_MapData + "_" + this.KeyOfEn;
         }
         /// <summary>
         /// 正则表达式
@@ -674,7 +686,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoRegularExpression()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/RegularExpression.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK);
+            return "../../Admin/FoolFormDesigner/MapExt/RegularExpression.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
         }
 
         /// <summary>
@@ -683,7 +695,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoTBFullCtrl2019()
         {
-            return "../../Admin/FoolFormDesigner/TBFullCtrl/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
+            return "../../Admin/FoolFormDesigner/TBFullCtrl/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + this.MyPK;
         }
 
         /// <summary>
@@ -692,7 +704,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoInputCheck()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/InputCheck.htm?FK_MapData=" + this.FK_MapData + "&OperAttrKey=" + this.KeyOfEn + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK) + "&DoType=New&ExtType=InputCheck";
+            return "../../Admin/FoolFormDesigner/MapExt/InputCheck.htm?FK_MapData=" + this.FK_MapData + "&OperAttrKey=" + this.KeyOfEn + "&RefNo=" + this.MyPK + "&DoType=New&ExtType=InputCheck";
         }
         /// <summary>
         /// 扩展控件
@@ -700,7 +712,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoEditFExtContral()
         {
-            return "../../Admin/FoolFormDesigner/EditFExtContral.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK);
+            return "../../Admin/FoolFormDesigner/EditFExtContral.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
         }
         /// <summary>
         /// 扩展控件2019
@@ -708,7 +720,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoEditFExtContral2019()
         {
-            return "../../Admin/FoolFormDesigner/EditFExtContral/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK);
+            return "../../Admin/FoolFormDesigner/EditFExtContral/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
         }
         #endregion 方法执行.
 

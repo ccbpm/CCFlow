@@ -144,7 +144,7 @@ namespace BP.GPM
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
 				string rootNo="0";
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single && WebUser.IsAdmin == false)
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single &&(DataType.IsNullOrEmpty(WebUser.No)==true || WebUser.IsAdmin == false))
                     rootNo = "@WebUser.FK_Dept";
                 else
                     rootNo = "@WebUser.OrgNo";

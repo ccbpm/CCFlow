@@ -45,6 +45,10 @@ namespace BP.Sys
         /// </summary>
         public const string EventDoType = "EventDoType";
         /// <summary>
+        /// 数据源
+        /// </summary>
+        public const string FK_DBSrc = "FK_DBSrc";
+        /// <summary>
         /// 执行内容
         /// </summary>
         public const string DoDoc = "DoDoc";
@@ -171,6 +175,14 @@ namespace BP.Sys
             set
             {
                 this.SetPara(FrmEventAttr.MonthedParas, value);
+            }
+        }
+
+        public string FK_DBSrc
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmEventAttr.FK_DBSrc);
             }
         }
         #endregion 参数属性.
@@ -641,6 +653,7 @@ namespace BP.Sys
 
                 //执行内容. EventDoType 0=SQL,1=URL.... 
                 map.AddTBInt(FrmEventAttr.EventDoType, 0, "事件执行类型", true, true);
+                map.AddTBString(FrmEventAttr.FK_DBSrc, "local", "数据源", true, false, 0, 100, 20);
                 map.AddTBString(FrmEventAttr.DoDoc, null, "执行内容", true, true, 0, 400, 10);
                 map.AddTBString(FrmEventAttr.MsgOK, null, "成功执行提示", true, true, 0, 400, 10);
                 map.AddTBString(FrmEventAttr.MsgError, null, "异常信息提示", true, true, 0, 400, 10);
@@ -921,8 +934,17 @@ namespace BP.Sys
                 case EventDoType.SQL:
                     try
                     {
-                        // 允许执行带有GO的sql.
-                        DBAccess.RunSQLs(doc);
+                        if (DataType.IsNullOrEmpty(nev.FK_DBSrc) == false && nev.FK_DBSrc.Equals("local") == false)
+                        {
+                            SFDBSrc sfdb = new SFDBSrc(nev.FK_DBSrc);
+                            sfdb.RunSQLs(doc);
+
+                        }
+                        else
+                        {
+                           // 允许执行带有GO的sql.
+                            DBAccess.RunSQLs(doc);
+                        }
                         return nev.MsgOK(en);
                     }
                     catch (Exception ex)

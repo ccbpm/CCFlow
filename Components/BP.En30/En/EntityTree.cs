@@ -5,9 +5,9 @@ using BP.DA;
 
 namespace BP.En
 {
-	/// <summary>
-	/// 属性列表
-	/// </summary>
+    /// <summary>
+    /// 属性列表
+    /// </summary>
     public class EntityTreeAttr
     {
         /// <summary>
@@ -34,14 +34,14 @@ namespace BP.En
         /// 图标
         /// </summary>
         public const string ICON = "ICON";
-       /// <summary>
-       /// 节点类型
-       /// </summary>
+        /// <summary>
+        /// 节点类型
+        /// </summary>
         public const string MenuType = "MenuType";
     }
-	/// <summary>
-	/// 树实体
-	/// </summary>
+    /// <summary>
+    /// 树实体
+    /// </summary>
     abstract public class EntityTree : Entity
     {
         #region 属性
@@ -128,7 +128,7 @@ namespace BP.En
                 this.SetValByKey(EntityTreeAttr.Idx, value);
             }
         }
-       
+
         #endregion
 
         #region 构造函数
@@ -209,29 +209,37 @@ namespace BP.En
         /// 新建同级节点
         /// </summary>
         /// <returns></returns>
-        public EntityTree DoCreateSameLevelNode()
+        public EntityTree DoCreateSameLevelNode(string name = null)
         {
+            //@hongyan
             EntityTree en = this.CreateInstance() as EntityTree;
-            en.No =DBAccess.GenerOID(this.ToString()).ToString(); // en.GenerNewNoByKey(EntityTreeAttr.No);
-            en.Name = "新建节点" + en.No;
+            en.No = DBAccess.GenerOID(this.ToString()).ToString(); // en.GenerNewNoByKey(EntityTreeAttr.No);
+            if (name == null)
+                en.Name = "新建节点" + en.No;
+            else
+                en.Name = name;
+
             en.ParentNo = this.ParentNo;
-           // en.MenuType = this.MenuType;
-          //  en.IsDir = false;
-           // en.TreeNo = this.GenerNewNoByKey(EntityTreeAttr.TreeNo, EntityTreeAttr.ParentNo, this.ParentNo);
             en.Insert();
+
             return en;
         }
         /// <summary>
         /// 新建子节点
         /// </summary>
         /// <returns></returns>
-        public EntityTree DoCreateSubNode()
+        public EntityTree DoCreateSubNode(string name=null)
         {
+            //@hongyan
             EntityTree en = this.CreateInstance() as EntityTree;
             en.No = DBAccess.GenerOID(this.ToString()).ToString(); // en.GenerNewNoByKey(EntityTreeAttr.No);
-            en.Name = "新建节点" + en.No;
+            if (name == null)
+                en.Name = "新建节点" + en.No;
+            else
+                en.Name = name;
+
             en.ParentNo = this.No;
-          //  en.MenuType = this.MenuType + 1;
+            //  en.MenuType = this.MenuType + 1;
             //en.IsDir = false;
             //en.TreeNo = this.GenerNewNoByKey(EntityTreeAttr.TreeNo, EntityTreeAttr.ParentNo, this.No);
             //if (en.TreeNo.Substring(en.TreeNo.Length - 2) == "01")
@@ -267,9 +275,9 @@ namespace BP.En
         }
         #endregion
     }
-	/// <summary>
+    /// <summary>
     /// 树实体s
-	/// </summary>
+    /// </summary>
     abstract public class EntitiesTree : Entities
     {
         #region 转化为树结构的tree.
@@ -279,19 +287,19 @@ namespace BP.En
         /// 转化为json树
         /// </summary>
         /// <returns></returns>
-        public string ToJsonOfTree(string rootNo="0")
+        public string ToJsonOfTree(string rootNo = "0")
         {
             appendMenus = new StringBuilder();
             appendMenuSb = new StringBuilder();
             EntityTree root = this.GetEntityByKey(EntityTreeAttr.ParentNo, rootNo) as EntityTree;
             if (root == null)
-               return "err@没有找到rootNo=" + rootNo + "的entity.";
+                return "err@没有找到rootNo=" + rootNo + "的entity.";
 
             appendMenus.Append("[{");
             appendMenus.Append("'id':'" + root.No + "',");
             appendMenus.Append("'pid':'" + root.ParentNo + "',");
             appendMenus.Append("'text':'" + root.Name + "'");
-           // appendMenus.Append(IsPermissionsNodes(ens, dms, root.No));
+            // appendMenus.Append(IsPermissionsNodes(ens, dms, root.No));
 
             // 增加它的子级.
             appendMenus.Append(",'children':");
@@ -312,7 +320,7 @@ namespace BP.En
                 if (item.ParentNo != parentEn.No)
                     continue;
 
-                appendMenuSb.Append("{'id':'" + item.No + "','pid':'"+item.ParentNo+"','text':'" + item.Name + "'");
+                appendMenuSb.Append("{'id':'" + item.No + "','pid':'" + item.ParentNo + "','text':'" + item.Name + "'");
                 //appendMenuSb.Append(IsPermissionsNodes(ens, dms, item.No));
                 EntityTree treeNode = item as EntityTree;
                 // 增加它的子级.
@@ -376,7 +384,7 @@ namespace BP.En
         /// <returns></returns>
         public int RetrieveHisChinren(EntityTree en)
         {
-            int i=this.Retrieve(EntityTreeAttr.ParentNo, en.No);
+            int i = this.Retrieve(EntityTreeAttr.ParentNo, en.No);
             this.AddEntity(en);
             return i + 1;
         }

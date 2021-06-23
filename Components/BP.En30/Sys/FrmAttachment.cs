@@ -537,6 +537,14 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentAttr.Exts, value);
             }
         }
+
+        public int FileType
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmAttachmentAttr.FileType);
+            }
+        }
         /// <summary>
         /// 保存到
         /// </summary>

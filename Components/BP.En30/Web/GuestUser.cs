@@ -53,6 +53,9 @@ namespace BP.Web
             GuestUser.No = guestNo;
             GuestUser.Name = guestName;
 
+            //Session、Cookie存储客户信息
+           
+
             //记录内部客户信息.
             BP.Port.Emp em = new Emp();
             em.UserID = "Guest";
@@ -62,6 +65,13 @@ namespace BP.Web
                 em.Insert();
             }
             BP.Web.WebUser.SignInOfGener(em);
+
+            if (SystemConfig.IsBSsystem)
+            {
+                HttpContextHelper.AddCookie("CCS", "GuestNo", guestNo);
+                HttpContextHelper.AddCookie("CCS", "GuestName", HttpUtility.UrlEncode(guestName));
+            }
+
             return;
         }
 

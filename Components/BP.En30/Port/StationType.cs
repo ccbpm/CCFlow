@@ -105,11 +105,13 @@ namespace BP.Port
                 map.AddTBStringPK(StationTypeAttr.No, null, "编号", true, true, 1, 5, 5);
                 map.AddTBString(StationTypeAttr.Name, null, "名称", true, false, 1, 50, 20);
                 map.AddTBInt(StationTypeAttr.Idx, 0, "顺序", true, false);
-                map.AddTBString(StationTypeAttr.OrgNo, null, "组织机构编号", true, false, 0, 50, 20);
 
-                
                 if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                {
                     map.AddHidden(StationTypeAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);
+                    map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
+                }
+
 
                 this._enMap = map;
                 return this._enMap;

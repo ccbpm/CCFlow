@@ -214,6 +214,36 @@ namespace BP.Pub
             return pict.ToString();
         }
         /// <summary>
+        /// 输入轨迹表.
+        /// </summary>
+        /// <returns></returns>
+        public string GetFlowTrackTable()
+        {
+
+            //定义表头.
+            string title = @"\trowd\trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx1065\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx2126\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx3187\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx4248\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx5309\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx6370\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx7431\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx8492\pard\intbl\qj\lang2052\kerning2\f1\fs21\'d0\'f2\'ba\'c5\lang1033\f0\cell\lang2052\f1\'d6\'b4\'d0\'d0\'bb\'b7\'bd\'da\lang1033\f0\cell\lang2052\f1\'b0\'ec\'c0\'ed\'c7\'e9\'bf\'f6\lang1033\f0\cell\lang2052\f1\'d7\'b4\'cc\'ac\lang1033\f0\cell\lang2052\f1\'d6\'b4\'d0\'d0\'c8\'cb\lang1033\f0\cell\lang2052\f1\'bf\'aa\'ca\'bc\'ca\'b1\'bc\'e4\lang1033\f0\cell\lang2052\f1\'bd\'e1\'ca\'f8\'ca\'b1\'bc\'e4\lang1033\f0\cell\lang2052\f1\'c0\'fa\'ca\'b1TTT\lang1033\f0\cell\row";
+
+            //内容行部分.
+            string row = @"\trowd\
+trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trpaddl108\trpaddr108\trpaddfl3\trpaddfr3
+\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx1065\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx2126\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx3187\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx4248\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx5309\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx6370\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx7431\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx8492\pard\intbl\qj\f2 <Idx>\f0\cell\f2 <NDFromT>    \f0\cell\f2 <State>        \f0\cell\f2 <ActionTypeTex>            \f0\cell\f2 <EmpFromT>                \f0\cell\f2 <StartTime>                    \f0\cell\f2                     <EndTime>                        \f0\cell\f2 <PassTime>    \f0\cell\row\";
+
+
+            string str = "";
+            int idx = 0;
+            foreach (DataRow dr in dtTrack.Rows)
+            {
+                idx++;
+                string dataRow = row.Clone() as string;
+
+                dataRow = dataRow.Replace("<Idx>", idx.ToString());
+                dataRow = dataRow.Replace("<NDFromT>", dr["NDFromT"].ToString());
+                str += dataRow;
+            }
+            return title + str;
+        }
+        /// <summary>
         /// 获取ICON图片的数据。
         /// </summary>
         /// <param name="key"></param>
@@ -578,7 +608,7 @@ namespace BP.Pub
                         case "RDT-NYR":
                             string rdt = dr["RDT"].ToString(); //审核日期.
                             DateTime dt = Convert.ToDateTime(rdt);
-                            return dt.Year+"\\'c4\\'ea"+ dt.Month + "\\'d4\\'c2" + dt.Day + "\\'c8\\'d5";
+                            return dt.Year + "\\'c4\\'ea" + dt.Month + "\\'d4\\'c2" + dt.Day + "\\'c8\\'d5";
                             return Convert.ToDateTime(rdt).ToString("yyyy年MM月dd日");
                         case "Rec":
                             return dr["EmpFrom"].ToString(); //记录人.
@@ -626,11 +656,11 @@ namespace BP.Pub
                 case "Note":
                     return row["Msg"].ToString();
                 case "Siganture":
-                    string empNo= row["EmpFrom"].ToString(); //记录人.
+                    string empNo = row["EmpFrom"].ToString(); //记录人.
                     //审核人的签名. @yln
 
 
-                    return "";
+                    return empNo;
                 default:
                     return row[key] as string;
             }
@@ -999,7 +1029,7 @@ namespace BP.Pub
         /// </summary>
         public DataTable dtTrack = null;
         public DataTable subFlows = null;
-   
+
         /// <summary>
         /// 单据生成 
         /// </summary>
@@ -1048,6 +1078,15 @@ namespace BP.Pub
                 {
                     if (para == null || para == "")
                         continue;
+
+                    //如果包含,时间表.
+                    if (para.Contains("FlowTrackTable") == true && dtTrack != null)
+                    {
+                        str = str.Replace("<FlowTrackTable>", this.GetFlowTrackTable());
+                        continue;
+
+                    }
+
 
                     try
                     {
@@ -1133,60 +1172,61 @@ namespace BP.Pub
                         row_end = str.Substring(pos_rowKey).IndexOf("\\row");
                     }
 
-                    if (row_start != -1 && row_end != -1)
+                    if (row_start == -1 || row_end == -1)
+                        continue; //如果没有发现标记.
+
+                    //获得row的数据.
+                    string row = str.Substring(row_start, (pos_rowKey - row_start) + row_end);
+                    str = str.Replace(row, "");
+
+                    Map map = dtls.GetNewEntity.EnMap;
+                    int i = dtls.Count;
+                    while (i > 0)
                     {
-                        string row = str.Substring(row_start, (pos_rowKey - row_start) + row_end);
-                        str = str.Replace(row, "");
+                        i--;
+                        string rowData = row.Clone() as string;
+                        dtl = dtls[i];
+                        //替换序号  
+                        int rowIdx = i + 1;
+                        rowData = rowData.Replace("<IDX>", rowIdx.ToString());
 
-                        Map map = dtls.GetNewEntity.EnMap;
-                        int i = dtls.Count;
-                        while (i > 0)
+                        foreach (Attr attr in map.Attrs)
                         {
-                            i--;
-                            string rowData = row.Clone() as string;
-                            dtl = dtls[i];
-                            //替换序号  
-                            int rowIdx = i + 1;
-                            rowData = rowData.Replace("<IDX>", rowIdx.ToString());
-
-                            foreach (Attr attr in map.Attrs)
+                            switch (attr.MyDataType)
                             {
-                                switch (attr.MyDataType)
-                                {
-                                    case DataType.AppDouble:
-                                    case DataType.AppFloat:
-                                        rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValStringByKey(attr.Key));
-                                        break;
-                                    case DataType.AppMoney:
-                                        rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValDecimalByKey(attr.Key).ToString("0.00"));
-                                        break;
-                                    case DataType.AppInt:
+                                case DataType.AppDouble:
+                                case DataType.AppFloat:
+                                    rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValStringByKey(attr.Key));
+                                    break;
+                                case DataType.AppMoney:
+                                    rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValDecimalByKey(attr.Key).ToString("0.00"));
+                                    break;
+                                case DataType.AppInt:
 
-                                        if (attr.MyDataType == DataType.AppBoolean)
-                                        {
-                                            rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValStrByKey(attr.Key));
-                                            int v = dtl.GetValIntByKey(attr.Key);
-                                            if (v == 1)
-                                                rowData = rowData.Replace("<" + shortName + "." + attr.Key + "Text>", "是");
-                                            else
-                                                rowData = rowData.Replace("<" + shortName + "." + attr.Key + "Text>", "否");
-                                        }
+                                    if (attr.MyDataType == DataType.AppBoolean)
+                                    {
+                                        rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValStrByKey(attr.Key));
+                                        int v = dtl.GetValIntByKey(attr.Key);
+                                        if (v == 1)
+                                            rowData = rowData.Replace("<" + shortName + "." + attr.Key + "Text>", "是");
                                         else
-                                        {
-                                            if (attr.IsEnum)
-                                                rowData = rowData.Replace("<" + shortName + "." + attr.Key + "Text>", GetCode(dtl.GetValRefTextByKey(attr.Key)));
-                                            else
-                                                rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValStrByKey(attr.Key));
-                                        }
-                                        break;
-                                    default:
-                                        rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", GetCode(dtl.GetValStrByKey(attr.Key)));
-                                        break;
-                                }
+                                            rowData = rowData.Replace("<" + shortName + "." + attr.Key + "Text>", "否");
+                                    }
+                                    else
+                                    {
+                                        if (attr.IsEnum)
+                                            rowData = rowData.Replace("<" + shortName + "." + attr.Key + "Text>", GetCode(dtl.GetValRefTextByKey(attr.Key)));
+                                        else
+                                            rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValStrByKey(attr.Key));
+                                    }
+                                    break;
+                                default:
+                                    rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", GetCode(dtl.GetValStrByKey(attr.Key)));
+                                    break;
                             }
-
-                            str = str.Insert(row_start, rowData);
                         }
+
+                        str = str.Insert(row_start, rowData);
                     }
                 }
                 #endregion 从表
@@ -1262,7 +1302,6 @@ namespace BP.Pub
                         wkVal = this.GetValueCheckWorkByKey(row, "RDT-NYR");
                         str = str.Replace(wkKey, wkVal);
 
-
                         //审核人的签名. 2020.11.28 by zhoupeng @yln
                         wkKey = "<WorkCheck.Siganture." + nfFrom + ">";
                         if (str.Contains(wkKey) == true)
@@ -1294,10 +1333,10 @@ namespace BP.Pub
                         if (str.Contains(wkKey) == true)
                         {
                             wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "WriteDB"));
-                          
+
                             //定义rtf中图片字符串.
                             StringBuilder mypict = new StringBuilder();
-                         
+
                             //将要插入的图片转换为16进制字符串
                             byte[] buffer = Convert.FromBase64String(wkVal);
                             StringBuilder imgs = new StringBuilder();
@@ -1323,14 +1362,14 @@ namespace BP.Pub
                             mypict.Append(@"\jpegblip");
                             mypict.Append(@"\picscalex100");
                             mypict.Append(@"\picscaley100");
-                            mypict.Append(@"\picwgoal" + 45*15);
-                            mypict.Append(@"\pichgoal" + 40*15);
+                            mypict.Append(@"\picwgoal" + 45 * 15);
+                            mypict.Append(@"\pichgoal" + 40 * 15);
                             mypict.Append(imgs.ToString() + "}");
                             mypict.AppendLine();
                             str = str.Replace(wkKey, mypict.ToString()); ;
                         }
 
-                      
+
                     }
                 }
 
@@ -1363,8 +1402,35 @@ namespace BP.Pub
                         checkStr = moduleStr;
                         foreach (string tag in tags)
                         {
-                            checkStr = checkStr.Replace("<WorkCheckList." + tag + ">",
-                                                         this.GetCode(this.GetValueCheckWorkByKey(row, tag)));
+                            if (tag == "Siganture") {
+                                string empNo = this.GetCode(this.GetValueCheckWorkByKey(row, "Siganture"));
+
+                                String filePath = SystemConfig.PathOfDataUser + "\\Siganture\\" + empNo + ".jpg";
+                                //定义rtf中图片字符串.
+                                StringBuilder mypict = new StringBuilder();
+                                //获取要插入的图片
+                                System.Drawing.Image imgAth = System.Drawing.Image.FromFile(filePath);
+
+                                //将要插入的图片转换为16进制字符串
+                                string imgHexStringImgAth = GetImgHexString(imgAth, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                //生成rtf中图片字符串
+                                mypict.AppendLine();
+                                mypict.Append(@"{\pict");
+                                mypict.Append(@"\jpegblip");
+                                mypict.Append(@"\picscalex100");
+                                mypict.Append(@"\picscaley100");
+                                mypict.Append(@"\picwgoal" + imgAth.Width * 15);
+                                mypict.Append(@"\pichgoal" + imgAth.Height * 15);
+                                mypict.Append(imgHexStringImgAth + "}");
+                                mypict.AppendLine();
+                                checkStr = checkStr.Replace("<WorkCheckList." + tag + ">",
+                                                             mypict.ToString());
+                            }
+                            else
+                            {
+                                checkStr = checkStr.Replace("<WorkCheckList." + tag + ">",
+                                                             this.GetCode(this.GetValueCheckWorkByKey(row, tag)));
+                            }
                         }
 
                         str = str.Insert(beginIdx, checkStr);

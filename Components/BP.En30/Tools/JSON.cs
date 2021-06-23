@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using BP.DA;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace BP.Tools
 {
@@ -363,6 +364,27 @@ namespace BP.Tools
             strs = strs.Replace("\r", "\\r");
             strs = strs.Replace("/", "\\/");
             return strs;
+        }
+    }
+    public static partial class ExtensionsJson {
+        /// <summary>
+        /// 字串反序列化成linq对象
+        /// </summary>
+        /// <param name="Json">字串</param>
+        /// <returns></returns>
+        public static JObject ToJObject(this string Json)
+        {
+            return Json == null ? JObject.Parse("{}") : JObject.Parse(Json.Replace("&nbsp;", ""));
+        }
+        /// <summary>
+        /// 字串反序列化成指定对象实体(列表)
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="Json">字串</param>
+        /// <returns></returns>
+        public static List<T> ToList<T>(this string Json)
+        {
+            return Json == null ? null : JsonConvert.DeserializeObject<List<T>>(Json);
         }
     }
 }

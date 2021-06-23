@@ -165,11 +165,10 @@ namespace BP.Sys
                  * 为了能够支持cloud 我们做了如下变更.
                  * 1. 增加了OrgNo, EnumKey 字段.
                  * 2. 如果是单机版用户,原来的业务逻辑不变化.
-                 * 3. 如果是SAAS模式, No=  EnumKey+"_"+OrgNo 
+                 * 3. 如果是SAAS模式, No=  OrgNo+"_"+EnumKey ;
                  */
 
                 map.AddTBStringPK(SysEnumMainAttr.No, null, "编号", true, false, 1, 40, 8);
-
                 map.AddTBString(SysEnumMainAttr.Name, null, "名称", true, false, 0, 40, 8);
                 map.AddTBString(SysEnumMainAttr.CfgVal, null, "配置信息", true, false, 0, 1500, 8);
                 map.AddTBString(SysEnumMainAttr.Lang, "CH", "语言", true, false, 0, 10, 8);

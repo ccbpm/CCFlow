@@ -412,6 +412,7 @@ namespace BP.Port
         {
             if (BP.Web.WebUser.No.Equals(this.UserID) == false)
                 return "err@sss";
+
             return "执行成功.";
         }
         #endregion 方法测试代码.

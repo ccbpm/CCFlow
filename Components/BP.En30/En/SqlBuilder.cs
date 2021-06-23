@@ -1008,8 +1008,8 @@ namespace BP.En
                 Attr refAttr = attr.HisFKEn.EnMap.GetAttrByKey(attr.UIRefKeyValue);
                 //added by liuxc,2017-9-11，此处增加是否存在实体表，因新增的字典表类型“动态SQL查询”，此类型没有具体的实体表，完全由SQL动态生成的数据集合，此处不判断会使生成的SQL报错
                 //if (DBAccess.IsExitsObject(fktable))
-                if(fktable.Equals("Port_Emp")==true && SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-                    from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + ".UserID  AND " + fktable + "_" + attr.Field +".OrgNo = '"+BP.Web.WebUser.OrgNo+"' ";
+                if (fktable.Equals("Port_Emp") == true && SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + ".UserID  AND " + fktable + "_" + attr.Field + ".OrgNo = '" + BP.Web.WebUser.OrgNo + "' ";
                 else
                     from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + "." + refAttr.Field;
 
@@ -1434,8 +1434,8 @@ namespace BP.En
             string val = ""; // key = null;
             string mainTable = "";
 
-           // if (en.EnMap.HisFKAttrs.Count != 0)
-                mainTable = en.EnMap.PhysicsTable + ".";
+            // if (en.EnMap.HisFKAttrs.Count != 0)
+            mainTable = en.EnMap.PhysicsTable + ".";
 
             if (en.EnMap.Attrs.Count == 0)
             {
@@ -1477,19 +1477,19 @@ namespace BP.En
                         }
                         break;
                     case DataType.AppInt:
-                        if (attr.IsNull || (attr.DefValType == 0 && attr.DefaultVal == "10002" || attr.DefaultVal == "10002.00"))
+                        if (attr.IsNull || attr.DefValType == 0)
                             val = val + "," + mainTable + attr.Field + " " + attr.Key + "";
                         else
                             val = val + ",ISNULL(" + mainTable + attr.Field + "," + attr.DefaultVal + ")   " + attr.Key + "";
 
                         if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
                         {
-                            if (DataType.IsNullOrEmpty(attr.UIBindKey))
-                                throw new Exception("@" + en.ToString() + " key=" + attr.Key + " UITag=" + attr.UITag + "");
+                            if (DataType.IsNullOrEmpty(attr.UIBindKey) == true)
+                                throw new Exception("@系统严重异常:" + en.ToString() + " Key=" + attr.Key + " UITag=" + attr.UITag + ", UIBindKey 无数据，请描述该字段的设计过程，反馈给开发人员。");
 
 #warning 20111-12-03 不应出现异常。
-                            if (attr.UIBindKey.Contains("."))
-                                throw new Exception("@" + en.ToString() + " &UIBindKey=" + attr.UIBindKey + " @Key=" + attr.Key);
+                            if (attr.UIBindKey.Contains(".")==true)
+                                throw new Exception("@系统异常:" + en.ToString() + " &UIBindKey=" + attr.UIBindKey + " @Key=" + attr.Key);
 
                             Sys.SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
                             val = val + "," + ses.GenerCaseWhenForOracle(mainTable, attr.Key, attr.Field, attr.UIBindKey, int.Parse(attr.DefaultVal.ToString()));
@@ -1523,16 +1523,16 @@ namespace BP.En
                                                         "CONVERT(varchar(100),  getdate(), 23)') " + attr.Key;
                             else
                                 val = val + "," + mainTable + attr.Field + " " + attr.Key;
-                        }  
+                        }
                         else
                         {
                             if (SystemConfig.CustomerNo == "ASSET")
-                                val = val + ",ISNULL(CONVERT(varchar(100), "+mainTable + attr.Field+", 23),'" +
+                                val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 23),'" +
                                                          "CONVERT(varchar(100), " + attr.DefaultVal.ToString() + ", 23)') " + attr.Key;
                             else
                                 val = val + ",ISNULL(" + mainTable + attr.Field + ", '" + attr.DefaultVal + "') " + attr.Key;
 
-                            
+
                         }
                         break;
                     case DataType.AppDateTime:
@@ -2483,7 +2483,7 @@ namespace BP.En
                             var val = en.GetValStrByKey(attr.Key).Replace('\'', '~');
 
                             //@yln 对存储的数据进行加密.
-                            if ( en.EnMap.IsJM  && attr.IsPK==false && DataType.IsNullOrEmpty(val)==false  )
+                            if (en.EnMap.IsJM && attr.IsPK == false && DataType.IsNullOrEmpty(val) == false)
                             {
 
                             }
@@ -2520,7 +2520,7 @@ namespace BP.En
                                         ps.Add(attr.Key, 0);
                                     else
                                         ps.Add(attr.Key, int.Parse(attr.DefaultValOfReal));
-                                }                               
+                                }
                                 else
                                     ps.Add(attr.Key, int.Parse(strInt.ToString()));
                             }
@@ -2573,7 +2573,7 @@ namespace BP.En
                             {
                                 da = DataType.CurrentData;
                             }
-                             ps.Add(attr.Key, da);
+                            ps.Add(attr.Key, da);
 
                             break;
                         case DataType.AppDateTime:
@@ -2593,7 +2593,7 @@ namespace BP.En
             {
                 Attr attr = en.EnMap.GetAttrByKey(errKey);
                 errKey = "@attrKey=" + attr.Key + ",AttrVal=" + en.Row[attr.Key] + ",DataType=" + attr.MyDataTypeStr;
-                throw new Exception("生成参数期间错误:"+en.ToString()+","+en.EnMap.PhysicsTable+";" + errKey + "@错误信息:" + ex.Message);
+                throw new Exception("生成参数期间错误:" + en.ToString() + "," + en.EnMap.PhysicsTable + ";" + errKey + "@错误信息:" + ex.Message);
             }
 
             if (keys != null)

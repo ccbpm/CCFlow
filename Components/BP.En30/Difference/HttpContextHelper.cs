@@ -176,6 +176,22 @@ namespace BP.Web
             Response.Cookies.Add(cookie);
         }
 
+        public static void AddCookie(string cookieName, string keyName, string value)
+        {
+            HttpCookie cookie = HttpContext.Current.Request.Cookies[cookieName];
+            //如果cookie=null则新建一个cookie
+            if (cookie == null)
+                cookie = new HttpCookie(HttpUtility.UrlEncode(cookieName));
+            //如果该键不存在，则新建一个键值并赋值；否则直接赋值
+            if (string.IsNullOrEmpty(cookie.Values[keyName]))
+                cookie.Values.Add(keyName, HttpUtility.UrlEncode(value));
+            else
+                cookie.Values[keyName] = HttpUtility.UrlEncode(value);
+
+            Response.AppendCookie(cookie);
+        }
+
+
         /// <summary>
         /// 删除指定的键值的cookie。
         /// </summary>
@@ -197,6 +213,8 @@ namespace BP.Web
 
             return cookie[key];
         }
+        
+
 
         public static string RequestParams(string key)
         {

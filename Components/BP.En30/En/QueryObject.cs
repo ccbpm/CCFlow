@@ -525,6 +525,11 @@ namespace BP.En
             this.SQL = " OR ";
         }
 
+        public void addSQL(string sql)
+        {
+            this.SQL = "("+sql+")";
+        }
+
         #region 关于endsql
         public void addGroupBy(string attr)
         {

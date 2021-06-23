@@ -6,6 +6,28 @@ using System.Text;
 namespace BP.Sys
 {
     /// <summary>
+    /// 实体类型
+    /// </summary>
+    public enum EntityType
+    {
+        /// <summary>
+        /// 独立表单
+        /// </summary>
+        SingleFrm = 0,
+        /// <summary>
+        /// 单据
+        /// </summary>
+        FrmBill=1,
+        /// <summary>
+        /// 实体
+        /// </summary>
+        FrmDict=2,
+        /// <summary>
+        /// 实体树
+        /// </summary>
+        EntityTree = 3
+    }
+    /// <summary>
     /// 数据源类型
     /// </summary>
     public enum DBSrcType

@@ -1643,6 +1643,22 @@ namespace BP.Sys
             }
 
         }
+
+        public string ChangeMapAttrIdx(string mypkArr)
+        {
+            string[] mypks = mypkArr.Split(',');
+            for (int i = 0; i < mypks.Length; i++)
+            {
+                string mypk = mypks[i];
+                if (mypk == null || mypk == "")
+                    continue;
+
+                string sql = "UPDATE Sys_MapAttr SET Idx=" + i + " WHERE MyPK='" + mypk + "' ";
+                DBAccess.RunSQL(sql);
+            }
+            return "移动成功..";
+        }
+
         protected override bool beforeInsert()
         {
             //在属性实体集合插入前，clear父实体的缓存.

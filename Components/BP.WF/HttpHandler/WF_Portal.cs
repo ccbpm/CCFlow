@@ -589,8 +589,21 @@ namespace BP.WF.HttpHandler
                 DataTable dtFlowSorts = DBAccess.RunSQLReturnTable(sql);
                 dtFlowSorts.TableName = "FlowTree";
 
-                sql = "SELECT No,Name,FK_FlowSort AS TreeNo, WorkModel, '' as Icon, '' as Url FROM WF_Flow WHERE 1=1  " + sqlWhere + " AND  FK_FlowSort!='' ORDER BY FK_FlowSort,Idx  ";
-                DataTable dtFlows = DBAccess.RunSQLReturnTable(sql);
+                DataTable dtFlows = null;
+                try
+                {
+                    sql = "SELECT No,Name,FK_FlowSort AS TreeNo, WorkModel, '' as Icon, '' as Url FROM WF_Flow WHERE 1=1  " + sqlWhere + " AND  FK_FlowSort!='' ORDER BY FK_FlowSort,Idx  ";
+                    dtFlows = DBAccess.RunSQLReturnTable(sql);
+                }
+                catch (Exception ex)
+                {
+                    Flow fl = new Flow();
+                    fl.CheckPhysicsTable();
+
+                    sql = "SELECT No,Name,FK_FlowSort AS TreeNo, WorkModel, '' as Icon, '' as Url FROM WF_Flow WHERE 1=1  " + sqlWhere + " AND  FK_FlowSort!='' ORDER BY FK_FlowSort,Idx  ";
+                    dtFlows = DBAccess.RunSQLReturnTable(sql);
+                }
+
                 dtFlows.TableName = "Flows";
                 #endregion 流程树.
 

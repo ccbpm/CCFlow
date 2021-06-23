@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+	<!-- 元素类别  -->
+  <Item No="001" Name="体育新闻" More="更多" LinkModel="0" PopH="0" PopW="0" MoreLinke="http://ccbpm.cn" 
+        Docs="xcxcvxcvxcvcxvxc" Height="200px;"  Width="300px" Icon="icon_users" />
+
+  <Item No="002" Name="体育34新闻" More="更多"  MoreLinke="http://ccbpm.cn"
+        Docs="xcxcvxcvxcvcxvxc" Height="200px;"  Width="300px" Icon="icon_users" />
+
+
+</NewDataSet>

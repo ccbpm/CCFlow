@@ -51,7 +51,7 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr,uicontrolT
             return;
         _Html += "<span leipiplugins='enum' id='SR_" + keyOfEn + "' title='单选' name='leipiNewField'  data-key='" + keyOfEn + "' data-type='" + dataType + "'>";
         for (var i = 0; i < enums.length; i++) {
-            _Html += "<label><input type='radio' value= '" + enums[i].IntKey + "' id='RB_" + keyOfEn + "_" + enums[i].IntKey + "' name='RB_" + keyOfEn + "' data-key='" + keyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + uiBindKey + "' class='form-control'  style='width:15px;height:15px;'/>" + enums[i].Lab + "</label>&nbsp;&nbsp;";
+            _Html += "<label><input type='radio' value= '" + enums[i].IntKey + "' id='RB_" + keyOfEn + "_" + enums[i].IntKey + "' name='RB_" + keyOfEn + "' data-key='" + keyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + uiBindKey + "'  style='width:15px;height:15px;'/>" + enums[i].Lab + "</label>&nbsp;&nbsp;";
         }
         _Html += "</span>";
     }
@@ -61,9 +61,9 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr,uicontrolT
         enums.Retrieve("EnumKey", uiBindKey);
         if (enums.length == 0)
             return;
-        _Html += "<span leipiplugins='enum' id='SC_" + keyOfEn + "' title='复选框' name='leipiNewField' data-type='EnumCheckBox'   data-bindKey='" + uiBindKey + "'>";
+        _Html += "<span leipiplugins='enum' id='SC_" + keyOfEn + "' title='复选框' name='leipiNewField' data-type='EnumCheckBox'  data-key='" + keyOfEn + "'   data-bindKey='" + uiBindKey + "'>";
         for (var i = 0; i < enums.length; i++) {
-                _Html += "<label><input type='checkbox' value= '" + enums[i].IntKey + "' id='CB_" + keyOfEn + "_" + enums[i].IntKey + "' name='CB_" + keyOfEn + "' data-key='" + keyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + uiBindKey + "' class='form-control'  style='width:15px;height:15px;'/>" + enums[i].Lab  + "&nbsp;&nbsp;</label>";
+                _Html += "<label><input type='checkbox' value= '" + enums[i].IntKey + "' id='CB_" + keyOfEn + "_" + enums[i].IntKey + "' name='CB_" + keyOfEn + "' data-key='" + keyOfEn + "'  data-type='" + dataType + "'   data-bindKey='" + uiBindKey + "'   style='width:15px;height:15px;'/>" + enums[i].Lab  + "&nbsp;&nbsp;</label>";
         }
         _Html += "</span>";
     }
@@ -136,6 +136,7 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr,uicontrolT
 
     if (dataType == "FlowBBS")
         _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='text' style='width:98%' placeholder='评论组件'/>";
+
     if (dataType == "GovDocFile")
         _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='component' style='width:98%' placeholder='公文正文组件'/>";
 

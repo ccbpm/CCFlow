@@ -84,7 +84,7 @@
                 _html = "<span class='score-star' style='text-align:left;padding-left:0px'   data-key='" + mapData.MyPK + "' id='SC_" + mapData.KeyOfEn + "'>";
                 _html += "<span class='simplestar' data-type='Score'  leipiplugins='component'  data-key='" + mapData.MyPK + "' id='Star_" + mapData.KeyOfEn + "'>";
 
-                var num = mapAttr.Tag2;
+                var num = mapData.Tag2;
                 for (var i = 0; i < num; i++) {
 
                     _html += "<img src='../../Style/Img/star_2.png'  data-type='Score'  leipiplugins='component'  data-key='" + mapData.MyPK + "'/>";

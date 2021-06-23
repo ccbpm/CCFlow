@@ -20,7 +20,7 @@
     <script src="../../../../DataUser/JSLibData/CommonShowConfig.js"></script>
     <script src="./DialogCtr/Public.js"></script>
     <link href="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" />
-
+    <script src="../Admin.js"></script>
     <script type="text/javascript">
 
         var frmID = "";
@@ -32,28 +32,47 @@
 
             var data = handler.DoMethodReturnString("Template_Init");
 
-            debugger
             if (data.indexOf('err') >= 0) {
 
                 alert(data);
                 return;
             }
             data = JSON.parse(data);
+            var dirs = data.dirs;
+            var temps = data.temps;
 
-            var html = "<ul>";
+            tempData = temps;
 
-            for (var i = 0; i < data.length; i++) {
-                var temp = data[i];
+            var dir1ul = "<ul>";
 
-                html += "<li ><a href=\"javascript:Save('" + temp.OriginalPath + "')\" >" + temp.OriginalPath.replace(".htm", "") + "</a></li>";
+            //var html="<ul>";
+            //for (var i = 0; i < data.length; i++) {
+            //    var temp = data[i];
+
+            //    html += "<li ><a href=\"javascript:Save('" + temp.OriginalPath + "')\" >" + temp.OriginalPath.replace(".htm", "") + "</a></li>";
+            //}
+            //html += "</ul>";
+
+            //$("#devTemp").append(html);
+
+            for (var i = 0; i < dirs.length; i++) {
+                var dir = dirs[i];
+                dir1ul += "<li><img src='../../Img/M2MM.png' />" + dir.Name + "";
+
+                dir1ul += "<ul>";
+                for (var k = 0; k < temps.length; k++) {
+                    
+                    var temp = temps[k];
+                    if (temp.Dir == dir.Name)
+                        dir1ul += "<li style='padding-left: 24px'><a  href='javascript:Save(\"" + temp.Name + "\",\"" + dir.Name + "\")'><img src='../../Img/ie.gif' />" +   temp.Name.replace(".htm", "") + "</a></li>";
+                }
+                dir1ul += "</ul></li>";
             }
-            html += "</ul>";
-              
-            $("#devTemp").append(html);
+            dir1ul += "</ul>";
+            $("#devTemp").html(dir1ul);
         });
 
-
-        function Save(val) {
+        function Save(val, dir) {
 
             var ctrl = document.getElementById("CB_IsCalearHtml");
             var isClear = ctrl.checked;
@@ -64,6 +83,7 @@
             }
 
             handler.AddPara("DevTempName", val);
+            handler.AddPara("DevTempDir", dir);
 
             var data = handler.DoMethodReturnString("Template_GenerHtml");
 
@@ -92,18 +112,22 @@
 </head>
 <body>
     <form id="form1">
-        <div id="toolbar">
-            请选择模版：
-            <label>
-                <input type="checkbox" id="CB_IsCalearHtml" value="1" checked="true" />
-                是否清空已有的html?
-            </label>
+        <!--<div id="toolbar">
+            <h4> 请选择模版：</h4>
+        </div>-->
+
+        <div id="devTemp">
+
+
         </div>
 
-        <div id="devTemp"> </div>
+        <label>
+            <input type="checkbox" id="CB_IsCalearHtml" value="1" checked="true" />
+            是否清空已有的html?
+        </label>
 
         <fieldset>
-            <legend id="help">说明 </legend>
+            <legend id="help"></legend>
             <ul>
                 <li> 所有的模版文件位于 DataUser\Style\TemplateFoolDevelopDesigner\*.htm </li>
                 <li> 如果要维护这些文件，请直接打开该目录进行维护。 </li>

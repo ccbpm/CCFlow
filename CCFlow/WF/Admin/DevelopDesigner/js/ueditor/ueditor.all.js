@@ -18918,7 +18918,7 @@ UE.plugins['video'] = function (){
                 tdWidth = Math.floor(tableWidth / opt.numCols - defaultValue.tdPadding * 2 - defaultValue.tdBorder);
 
             //todo其他属性
-            !opt.tdvalign && (opt.tdvalign = me.options.tdvalign);
+            !opt.tdvalign && (opt.tdvalign = "middle");//me.options.tdvalign);
             me.execCommand("inserthtml", createTable(opt, tdWidth));
         }
     };

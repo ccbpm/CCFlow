@@ -154,9 +154,8 @@
         }
 
         /* 打开表单. */
-        function OpenFrm(workid, nodeID, flowNo) {
-            var url = "MyView.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
-            window.open(url);
+        function OpenFrm(workid, nodeID, flowNo,fid,pworkid,title) {
+            JumpFlowPage("MyView", title, workid, flowNo, nodeID, fid,pworkid);
             return;
         }
 
@@ -305,7 +304,7 @@
                         is1 = true;
                     }
                     listbox += "<td>" + num + "</td>";
-                    listbox += "<td><a href=\"javascript:OpenFrm('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "')\" >" + work.Title + "</a></td>";
+                    listbox += "<td><a href=\"javascript:OpenFrm('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "',"+work.FID+","+work.PWorkID+",'"+work.FlowName+"')\" >" + work.Title + "</a></td>";
                     listbox += "<td>" + work.StarterName + "</td>";
                     listbox += "<td>" + work.DeptName + "</td>";
                     listbox += "<td>" + work.FlowName + "</td>";

@@ -42,14 +42,16 @@
             html += "<th>控制方案</th>";
             html += "<th>审核组件状态</th>";
             html += "<th>签批组件</th>";
+            html += "<th>签名类型</th>";
             // html += "<th>元素权限</th>";
             html += "<th>详情</th>";
             html += "</tr>";
             html += "</thead>";
-            //获得节点s.
-            var nodes = new Entities("BP.WF.Template.NodeSimples");
-            nodes.Retrieve("FK_Flow", node.FK_Flow);
 
+
+            //获得节点s.
+            var nodes = new Entities("BP.WF.Template.FrmWorkChecks");
+            nodes.Retrieve("FK_Flow", node.FK_Flow);
 
             for (var i = 0; i < nodes.length; i++) {
 
@@ -73,8 +75,13 @@
                     html += "<td><select id='DDL_FrmSln_" + json.NodeID + "' ></select></td>";
                     //审核组件.
                     html += "<td><select id='DDL_FWCSta_" + json.NodeID + "' ></select></td>";
+
                     //签批组件.
                     html += "<td><select id='DDL_CheckField_" + json.NodeID + "' ></select></td>";
+
+
+                    //签批组件.
+                    html += "<td><select id='DDL_SigantureEnabel_" + json.NodeID + "' ></select></td>";
 
                     //元素权限.
                     //    html += "<td><a href='' >编辑</a></td>"; //
@@ -96,7 +103,16 @@
             $("#sln").html(html);
 
 
+            //求出枚举值，然后绑定上.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode_FrmSln");
+            handler.AddPara("Fk_Frm", frmNode.FK_Frm);
+            var data = handler.DoMethodReturnJSON("BatchEditSln_InitDDLData");
 
+            var frmSln = data["FrmSln"];
+            var fwcSta = data["FWCSta"];
+            var cfs = data["CheckFields"];
+
+            var SigantureEnabel = data["SigantureEnabel"];
 
             //绑定ddl.
             for (var i = 0; i < nodes.length; i++) {
@@ -117,14 +133,6 @@
                     continue;
                 }
 
-                //求出枚举值，然后绑定上.
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode_FrmSln");
-                handler.AddPara("Fk_Frm", frmNode.FK_Frm);
-                var data = handler.DoMethodReturnJSON("BatchEditSln_InitDDLData");
-
-                var frmSln = data["FrmSln"];
-                var fwcSta = data["FWCSta"];
-                var cfs = data["CheckFields"];
 
                 //绑定方案.
                 GenerBindDDL("DDL_FrmSln_" + json.NodeID, frmSln, "IntKey", "Lab", frmNode.FrmSln);
@@ -132,9 +140,16 @@
                 //绑定状态.
                 GenerBindDDL("DDL_FWCSta_" + json.NodeID, fwcSta, "IntKey", "Lab", frmNode.IsEnableFWC);
 
+
                 //绑定字段.
                 GenerBindDDL("DDL_CheckField_" + json.NodeID, cfs, "No", "Name", frmNode.CheckField);
+
                 $("#DDL_CheckField_" + json.NodeID + " option:first").remove();//有两个“请选择”，移除一个
+
+
+                //签字类型.
+                GenerBindDDL("DDL_SigantureEnabel_" + json.NodeID, SigantureEnabel, "IntKey", "Lab", json.SigantureEnabel);
+
             }
         });
 
@@ -182,6 +197,12 @@
                     frmNode.IsEnableFWC = $("#DDL_FWCSta_" + json.NodeID).val();
                     frmNode.CheckField = $("#DDL_CheckField_" + json.NodeID).val();
                     frmNode.Update();
+
+                    //..ss..dd.sss.
+                    //var nodeWorkCheck = new Entity("BP.WF.Template.FrmWorkCheck", json.NodeID);
+                    // nodeWorkCheck.SigantureEnabel = $("#DDL_SigantureEnabel_" + json.NodeID).val();
+                    //nodeWorkCheck.Update();
+
 
                     if (IsEnableFWC == 0)
                         IsEnableFWC = frmNode.IsEnableFWC;

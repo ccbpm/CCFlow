@@ -194,6 +194,7 @@ new Vue({
             //开始执行删除.
             var flow = new Entity("BP.CCBill.Template.Method", no);
             flow.Delete();
+
             // var data = flow.DoMethodReturnString("DoDelete");
             // layer.msg(data);
             //  if (data.indexOf("err@") == 0)

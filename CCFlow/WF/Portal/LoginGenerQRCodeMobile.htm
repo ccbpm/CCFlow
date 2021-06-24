@@ -13,13 +13,6 @@
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script src="../Comm/JS/validation.js"></script>
     <script type="text/javascript">
-        document.onkeydown = function (e) {
-            e = e || window.event;
-            if (e.keyCode == 13) {
-                Login();
-                return false;
-            }
-        }
 
         //初始化页面函数.....
         $(function () {
@@ -164,72 +157,12 @@
                 }
             }
         }
-        //手机扫描登录.
-        function Mobile() {
-            var url = "LoginGenerQRCodeMobile.htm";
-
-            
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
-            var data = handler.DoMethodReturnString("LoginGenerQRCodeMobile_Init");
-            if (data.indexOf("err@") == true)
-            {
-                //系统错误.
-                alert(data);
-                return;
-            }
-            
-            WinOpen(data, "");
-        }
     </script>
 </head>
 
-<body class="login-bg" onload="checkCookie()">
+<body class="login-bg">
 
     <form id="cc">
-        <div class="login-box_admin">
-            <!--<h1 class="logo-name">驰骋流程&表单设计器</h1>-->
-            <div class="logo">
-                <img class="imgsty" src="../../DataUser/ICON/IconSmall.png" alt="" />
-            </div>
-            <div class="login-form">
-                <div class="form-group">
-
-                    <select class="form-control" id="DDL_System" onchange="SelectChange()">
-                        <option value="Default" onclick="setCookie('username', $(this).val(), 30)"> 驰骋流程应用快速开发平台 - 专业版 </option>
-                        <option value="Business" disabled="disabled" onclick="setCookie('username', $(this).val(), 30)"> 驰骋流程应用快速开发平台 - 商业版 </option>
-
-                    </select>
-                </div>
-
-                <div class="form-group">
-
-                    <input type="text" id="TB_No" name="TB_No" value="admin" placeholder="默认账号:admin" lay-verify="required" class="form-control" />
-                </div>
-                <div class="form-group">
-
-                    <input type="password" id="TB_PW" name="TB_PW" placeholder="默认密码:123" lay-verify="required" class="form-control" />
-                </div>
-
-                <div id="validate" class="form-group" style="display: none">
-
-                    <input type="text" class="form-control" placeholder="验证码" id="inputCode" style="width:50%;display: inline" />
-                    <canvas id="canvas" width="78" height="24"></canvas>
-                    <a href="javascript:void(0)" style="margin-left: 10px" onclick="createCode()">看不清</a>
-                </div>
-
-                <input type="button" class="btn btn-primary btn-block" value="登录" id="Btn_Login" onclick="Login();" />
-
-                <!--<input type="button" class="btn btn-primary btn-block" value="测试版本test" id="Btn_LoginExt" onclick="LoginText();" />-->
-                <!--//  <input type="button" class="btn btn-primary btn-block" value="登录简洁版(开发中)" id="Btn_LoginSimple" onclick="LoginSimple();" />
-                // <input type="button" class="btn btn-primary btn-block" value="登录表单引擎(开发中)" id="Btn_LoginFrm" onclick="LoginFrm();" />-->
-                <div id="Msg" class="msg"></div>
-                <div class="login-nav">
-                    <a href="javascript:Mobile();" class="pull-left">手机登录</a>
-                    <a href="../AppClassic/Login.htm" class="pull-right">前台登录</a>
-                    <a href="http://doc.ccbpm.cn" target=_blank class="pull-right">帮助文档&nbsp;&nbsp;</a>
-                </div>
-            </div>
-        </div>
     </form>
 
 </body>

@@ -379,49 +379,9 @@
         //打开工作.
         function OpenWork(flowNo, nodeID, workid, pWorkID, fid, title, isRead, paras) {
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-            handler.AddPara("FK_Flow", flowNo);
-            handler.AddPara("FK_Node", nodeID);
-            handler.AddPara("WorkID", workid);
-            handler.AddPara("PWorkID", pWorkID);
-            handler.AddPara("FID", fid);
-            handler.AddPara("IsRead", isRead);
-            handler.AddPara("Paras", paras);
+            JumpFlowPage("MyFlow", title, workid, flowNo, nodeID, fid, pWorkID, isRead, paras);
 
-            var data = handler.DoMethodReturnString("MyFlow_Init");
-            if (data.indexOf('err@') == 0) {
-                $("#Msg").html("<br>" + data);
-
-                $("#loadMsg").hide();
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) {
-
-                data = data.replace('url@', ''); //如果返回url，就直接转向.
-                data = data.replace('?DoType=HttpHandler', '?');
-                data = data.replace('&DoType=HttpHandler', '');
-                data = data.replace('&DoMethod=MyFlow_Init', '');
-                data = data.replace('&HttpHandlerName=BP.WF.HttpHandler.WF_MyFlow', '');
-                data = data.replace('?&', '?');
-
-                data = "../" + data;
-
-                try {
-                    //  if (window.top != null && window.top.vm != null) {
-                    window.top.vm.openTab(title, data);
-                    return;
-                } catch
-                {
-                    window.open(data); //打开流程.
-                    return;
-                }
-            }
-
-            alert(data);
-
-
-            //  'MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "'
+            return;
 
         }
 

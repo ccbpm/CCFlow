@@ -73,7 +73,7 @@
                         }
                         layer.alert("执行成功");
                         break;
-                    case 1:
+                    case 1: 
                         Skip.addJs('../../../DataUser/JSLibData/Method/' + mypk + '.js');
                         ExecScript(methodFunc)
                         break;
@@ -81,12 +81,10 @@
                         var handler = new HttpHandler("BP.CCBill.WF_CCBill");
                         handler.AddUrlData();
                         handler.AddFormData();
+                        debugger
                         data = handler.DoMethodReturnString("DoMethodPara_ExeUrl");
-                        if (data.indexOf('err@') >= 0) {
-                            layer.alert('系统错误:' + data);
-                            return;
-                        }
-                        layer.alert("执行成功");
+                        layer.alert(data);
+                      
                         break;
                 }
             })
@@ -152,6 +150,7 @@
             //执行这个 script.
             try {
                 var data = eval(func.MethodID + "(" + paras + ")");
+                debugger
                 if (data == undefined || data == "")
                     data = "执行成功";
                 layer.alert(data);

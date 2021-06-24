@@ -160,7 +160,7 @@
         }
 
         function Save() {
-
+            debugger
             //执行选择类型的保存.
             var selectFuncType = $('input[name="RB_MethodDocTypeOfFunc"]:checked').val();
 
@@ -174,7 +174,7 @@
 
             handler.AddPara("doc", doc); //不知道是否可以存储.
             handler.AddPara("TypeOfFunc", selectFuncType);
-            handler.AddPara("funcstr", funcstr+doc+"\r\n}");//拼上function部分
+            handler.AddPara("funcstr", funcstr+doc+"\r\n");//拼上function部分
 
             var data = handler.DoMethodReturnString("MethodDoc_SaveScript");
 

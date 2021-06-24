@@ -41,7 +41,7 @@
 
             $("#docs").html(methodFunc.Docs);
 
-           
+
 
         });
 
@@ -50,7 +50,7 @@
          */
         function Done() {
 
-        
+
             var altMsg = methodFunc.WarningMsg;
             if (altMsg == "")
                 altMsg = "您确定要执行吗？";
@@ -59,7 +59,7 @@
                 //如果是JS执行，先加载js
                 if (methodFunc.MethodDocTypeOfFunc == 1) {
                     //加载执行方法的js
-                    Skip.addJs('../../../DataUser/JSLibData/Method/' + mypk + '.js');
+                    Skip.addJs('../../../DataUser/JSLibData/Method/' + mypk + '.js', document.head);
                     doMethod();
                     return;
                 }
@@ -71,7 +71,6 @@
          * 执行方法
          */
         function doMethod() {
-
             $("#Msg").html("正在执行方法，请稍后......");
             var data = "";
             switch (methodFunc.MethodDocTypeOfFunc) {
@@ -86,28 +85,17 @@
                         $("#Btn_Done").attr('disabled', true);
                     break;
                 case 1://执行JavaScript
-                    data = eval(methodFunc.MethodID + "()");
-                    layer.alert(data);
+                    data = Skip.addJs('../../../DataUser/JSLibData/Method/' + mypk + '.js');
+                    //layer.alert(data);
                     break;
                 case 2://URL模式
+                    debugger
                     var url = methodFunc.MethodDoc_Url;
                     if (url.indexOf('?') == -1)
                         url += "?1=1";
-                    url += "&FrmID=" + frmID + "&WorkID=" + workid;
+                    url += "&MethodName=" + methodFunc.MethodID+"&FrmID=" + frmID + "&WorkID=" + workid;
                     //执行url返回数据.
                     var data = DBAccess.RunUrlReturnString(url);
-
-                    if (methodFunc.MsgSuccess == "")
-                        methodFunc.MsgSuccess = "执行成功.";
-
-                    if (methodFunc.MsgErr == "")
-                        methodFunc.MsgErr = "执行失败.";
-
-                    if (data.indexOf('err@') != -1) {
-                        layer.alert(methodFunc.MsgErr + "#" + data);
-                        return;
-                    }
-                    data = data == null || data == "" ? methodFunc.MsgSuccess : data;
                     layer.alert(data);
                     break;
                 default:
@@ -127,7 +115,7 @@
         <div id="docs" class="cs-help">
         </div>
 
-        <button type="button" id="Btn_Done" class="layui-btn layui-btn-sm layui-btn-normal" style="float: right; margin: 0px 30px 10px 0px; " onclick="Done()">执行</button>
+        <button type="button" id="Btn_Done" class="layui-btn layui-btn-sm layui-btn-normal" style="float: right; margin: 0px 30px 10px 0px; " onclick="doMethod()">执行</button>
     </fieldset>
 
 </body>

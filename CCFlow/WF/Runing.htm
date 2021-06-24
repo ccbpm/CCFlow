@@ -116,9 +116,8 @@
         }
 
         /* 打开表单. */
-        function OpenFrm(workid, nodeID, flowNo, fid) {
-            var url = "MyView.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&FID=" + fid;
-            window.open(url);
+        function OpenFrm(workid, nodeID, flowNo, fid,title) {
+            JumpFlowPage("MyView", title, workid, flowNo, nodeID, fid);
             return;
         }
 
@@ -192,7 +191,7 @@
                         currNodeName = work.NodeName
 
 
-                    listbox += "<td><a href=\"javascript:OpenFrm('" + work.WorkID + "','" + work.CurrNode + "','" + work.FK_Flow + "','" + work.FID + "')\" >" + work.Title + "</a></td>";
+                    listbox += "<td><a href=\"javascript:OpenFrm('" + work.WorkID + "','" + work.CurrNode + "','" + work.FK_Flow + "','" + work.FID + "','" + work.FlowName+"')\" >" + work.Title + "</a></td>";
                     //  newRow += "<td>" + work.FlowName + "</td>";
                     listbox += "<td>" + work.StarterName + "</td>";
                     listbox += "<td>" + work.DeptName + "</td>";

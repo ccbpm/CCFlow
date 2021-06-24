@@ -48,54 +48,11 @@
                 return;
             }
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-            handler.AddPara("FK_Flow", flowNo);
-            var data = handler.DoMethodReturnString("MyFlow_Init");
-            if (data.indexOf('err@') == 0) {
-                $("#Msg").html("<br>" + data);
+            JumpMyFlowPage("MyFlow",title,null,flowNo);
 
-                $("#loadMsg").hide();
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) {
-
-                data = data.replace('url@', ''); //如果返回url，就直接转向.
-                data = data.replace('?DoType=HttpHandler', '?');
-                data = data.replace('&DoType=HttpHandler', '');
-                data = data.replace('&DoMethod=MyFlow_Init', '');
-                data = data.replace('&HttpHandlerName=BP.WF.HttpHandler.WF_MyFlow', '');
-                data = data.replace('?&', '?');
-
-                data = "../" + data;
-
-                try {
-                    //  if (window.top != null && window.top.vm != null) {
-                    window.top.vm.openTab(title, data);
-                    return;
-                } catch
-                {
-                    window.open(data); //打开流程.
-                    return;
-                }
-                //如果返回url，就直接转向.
-                // window.location.href = data;
-                // return;
-            }
-
-            alert(data);
-
-            //$("#Msg").html(data);
-            // url = "MyFlow.htm?FK_Flow=" + flowNo;
+          
             return;
 
-            layer.open({
-                skin: 'layer-class',
-                type: 2,
-                title: title + ' : 发起申请',
-                area: ['96%', '90%'],
-                content: url
-            });
         }
 
         //查询
@@ -170,13 +127,6 @@
             window.open(url);
             return;
 
-            //layer.open({
-            //    skin: 'layer-class',
-            //    type: 2,
-            //    title: title + ' : 我发起的流程',
-            //    area: ['96%', '90%'],
-            //    content: url
-            //});
         }
 
         function WinOpenList(flowNo, title) {
@@ -185,13 +135,7 @@
             var url = "List.htm?RptNo=ND" + Number(flowNo) + "RptMy&FK_Flow=" + flowNo + "&SearchType=My";
             window.open(url);
             return;
-            //layer.open({
-            //    skin: 'layer-class',
-            //    type: 2,
-            //    title: title + ' : 我发起的流程列表',
-            //    area: ['96%', '90%'],
-            //    content: url
-            //});
+     
         }
 
 
@@ -201,13 +145,7 @@
             var url = "./RptDfine/Search.htm?RptNo=ND" + Number(flowNo) + "RptMyJoin&FK_Flow=" + flowNo + "&SearchType=MyJoin";
             window.open(url);
             return;
-            //layer.open({
-            //    skin: 'layer-class',
-            //    type: 2,
-            //    title: title + ' : 我审批的流程',
-            //    area: ['96%', '90%'],
-            //    content: url
-            //});
+     
         }
 
         //批量发起.

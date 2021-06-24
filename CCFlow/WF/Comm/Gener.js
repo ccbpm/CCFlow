@@ -3057,3 +3057,57 @@ function groupBy(array, f) {
     });
     return groups;
 }
+
+/**
+ * 执行跳转到MyFlow/MyView页面的判断方法
+ * @param {any} title
+ * @param {any} workid
+ * @param {any} fk_flow
+ * @param {any} fk_node
+ * @param {any} fid
+ * @param {any} pworkid
+ */
+function JumpFlowPage(pageType, title, workid, fk_flow, fk_node, fid, pworkid,isread,paras) {
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+    if (pageType = "MyView")
+        handler = new HttpHandler("BP.WF.HttpHandler.WF_MyView");
+    if (workid != null && workid != undefined)
+        handler.AddPara("WorkID",workid);
+    handler.AddPara("FK_Flow", fk_flow);
+    if (fk_node != null && fk_node != undefined)
+        handler.AddPara("FK_Node",fk_node);
+    if (fid != null && fid != undefined)
+        handler.AddPara("FID",fid);
+    if (pworkid != null && pworkid != undefined)
+        handler.AddPara("PWorkID", pworkid);
+    if (isread != null && isread != undefined)
+        handler.AddPara("IsRead", isread);
+    if (paras != null && paras != undefined)
+        handler.AddPara("Paras", paras);
+    var data = handler.DoMethodReturnString("MyFlow_Init");
+    if (pageType = "MyView")
+        data = handler.DoMethodReturnString("MyView_Init");
+    if (data.indexOf('err@') == 0) {
+        alert(data);
+        return;
+    }
+
+    if (data.indexOf('url@') == 0) {
+
+        data = data.replace('url@', ''); //如果返回url，就直接转向.
+        data = data.replace('?DoType=HttpHandler', '?');
+        data = data.replace('&DoType=HttpHandler', '');
+        data = data.replace('&DoMethod=MyFlow_Init', '');
+        data = data.replace('&HttpHandlerName=BP.WF.HttpHandler.WF_MyFlow', '');
+        data = data.replace('?&', '?');
+        try {
+            var url = "../" + data;
+            window.top.vm.openTab(title, url);
+            return;
+        } catch
+        {
+            window.open(data); //打开流程.
+            return;
+        }
+    }
+}

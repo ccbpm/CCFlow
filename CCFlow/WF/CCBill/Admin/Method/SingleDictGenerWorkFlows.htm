@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>链接</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../EnumLab.js"></script>
+    <script src="../../../Admin/Admin.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+
+            //  InitBar(0);
+            InitBar(MethodModel.SingleDictGenerWorkFlows);
+
+        });
+
+        function Save() {
+
+
+            var name = $("#TB_Name").val();
+            if (name == undefined || name == null || name == "") {
+                alert("请输入方法名称.");
+                return;
+            }
+
+
+            var en = new Entity("BP.CCBill.Template.Method");
+            en.FrmID = GetQueryString("FrmID");
+            en.GroupID = GetQueryString("GroupID"); //分组ID.
+            en.MethodID = MethodModel.SingleDictGenerWorkFlows;
+
+            en.Name = name;
+            en.MethodModel = MethodModel.SingleDictGenerWorkFlows; //设置为链接按钮.
+            en.RefMethodType = 1;
+
+            // en.SetPKVal(en.FrmID + "_" + en.MethodID);
+            //if (en.IsExits() == true) {
+            //    alert('该方法名已经存在，请重新创建');
+            //    return;
+            //}
+
+            $("#Msg").html("正在创建,请稍后......");
+
+            en.Icon = "icon-drop";
+            en.Insert();
+
+            var url = "../../../Comm/En.htm?EnName=BP.CCBill.Template.MethodLink&No=" + en.No;
+            window.location.href = url;
+        }
+
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>功能标签 </legend>
+        <table>
+            <tr>
+                <td>标签: </td>
+                <td>  <input type="text" value="业务流程列表" id="TB_Name" name="TB_Name" /></td>
+            </tr>
+        </table>
+        <!--<input type="button" id="Btn_Save" name="Btn_Save" value="执行创建" onclick="Save();" />-->
+        <div id="Msg"></div>
+
+
+        <legend> 说明</legend>
+
+        <ol>
+            <li>一个实体发起的所有流程 </li>
+            <li>比如：在一个学生身上发起的，请假流程、入党申请流程、基本资料变更流程. </li>
+            <li>比如：在一个固定资产身发起的：领用流程、维修流程、折旧流程、移交流程. </li>
+            <li>所有的流程都组合一个表显示出来</li>
+        </ol>
+
+    </fieldset>
+</body>
+</html>

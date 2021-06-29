@@ -22,7 +22,7 @@ new Vue({
             layui.use('dropdown', function () {
                 var dropdown = layui.dropdown
                 var topNodeItems = [
-                    { title: '<i class=icon-plus></i> 新建方法', id: "NewMethodByGroup" },
+                    { title: '<i class=icon-plus></i> 新建组件(方法)', id: "NewMethodByGroup" },
                     { title: '<i class=icon-star></i> 目录属性', id: "EditSort" },
                     { title: '<i class=icon-folder></i> 新建目录', id: "NewSort" },
                     { title: '<i class=icon-pencil></i> 修改名称', id: "EditSortName" },
@@ -72,12 +72,15 @@ new Vue({
                     trigger: 'contextmenu',
                     data: childNodeMenuItems,
                     click: function (data, othis) {
+                        debugger;
                         //_this.childNodeOption(data.id, $(this.elem)[0].dataset.No, $(this.elem)[0].dataset.name, $(this.elem)[0].dataset.pidx, $(this.elem)[0].dataset.idx)
 
                         // var obj = $(this.elem)[0].dataset;
                         // console.log(obj);
 
-                        var en = $(this.elem)[0].dataset;
+                        var obj = $(this.elem)[0].dataset;
+                        console.log(obj);
+
 
                         _this.childNodeOption(data.id, $(this.elem)[0].dataset.no, $(this.elem)[0].dataset.name, $(this.elem)[0].dataset.pidx, $(this.elem)[0].dataset.idx)
 
@@ -91,12 +94,15 @@ new Vue({
                         debugger;
 
                         var obj = $(this.elem)[0].dataset;
-                        var myPK = obj.No;
+                        var no = obj.No;
+                        if (no == undefined)
+                            no = obj.no;
+
                         var idx = obj.idx;
 
                         //console.log(obj);
 
-                        _this.childNodeOption(data.id, myPK, $(this.elem)[0].dataset.name, $(this.elem)[0].dataset.pidx, idx)
+                        _this.childNodeOption(data.id, no, $(this.elem)[0].dataset.name, $(this.elem)[0].dataset.pidx, idx)
                     }
                 }]
                 dropdown.render(cRenderOptions[0]);
@@ -139,7 +145,7 @@ new Vue({
             if (en.MethodModel == "Link") enName = "BP.CCBill.Template.MethodLink";
             if (en.MethodModel == "QRCode") enName = "BP.CCBill.Template.MethodQRCode";
             if (en.MethodModel == "FlowBaseData") enName = "BP.CCBill.Template.MethodFlowBaseData";
-            if (en.MethodModel == "FlowNewEntity")  enName = "BP.CCBill.Template.FlowNewEntity";
+            if (en.MethodModel == "FlowNewEntity") enName = "BP.CCBill.Template.FlowNewEntity";
 
             if (en.MethodModel === "SingleDictGenerWorkFlows" || en.MethodModel === "SingleDictGenerWorkFlow")
                 enName = "BP.CCBill.Template.MethodSingleDictGenerWorkFlow";
@@ -207,31 +213,30 @@ new Vue({
             this.$set(this.flowNodes[pidx], 'children', leaveItems)
         },
 
-        childNodeOption: function (key, data, name, pidx, idx) {
+        childNodeOption: function (key, methodNo, name, pidx, idx) {
 
             // key=菜单标记, data 行的主键, name = 行的名称, pIdx=父级的编号, idx=当前的idx.
             switch (key) {
                 case "Attr": //方法的属性.
-                    this.MethodAttr(data);
+                    this.MethodAttr(methodNo);
                     break;
                 case "Designer":
-                    this.Designer(data, name);
+                    this.Designer(methodNo, name);
                     break;
                 case "NewMethod":
 
-                    var enMethod = new Entity("BP.CCBill.Template.Method", data);
-
+                    var enMethod = new Entity("BP.CCBill.Template.Method", methodNo);
                     //  NewFlow(dat)
                     this.NewMethodByGroup(enMethod.GroupID);
                     break;
                 case "Copy":
-                    this.CopyMethod(data);
+                    this.CopyMethod(methodNo);
                     break;
                 case "EditMethodName":
-                    this.EditMethodName(data, name, pidx, idx);
+                    this.EditMethodName(methodNo, name, pidx, idx);
                     break;
                 case "Delete":
-                    this.DeleteMethon(data, pidx, idx);
+                    this.DeleteMethon(methodNo, pidx, idx);
                     break;
             }
         },  //分组上的事件.
@@ -280,7 +285,7 @@ new Vue({
             var moduleNo = GetQueryString("ModuleNo");
             var frmID = GetQueryString("FrmID");
 
-            url = "./CreateFunc/Func.htm?GroupID=" + groupID + "&FrmID=" + frmID + "&ModuleNo=" + moduleNo + "&s=" + Math.random();
+            url = "./Method/Func.htm?GroupID=" + groupID + "&FrmID=" + frmID + "&ModuleNo=" + moduleNo + "&s=" + Math.random();
 
             //新建方法.
             OpenLayuiDialog(url, '', 9000, 0, null, true);
@@ -411,6 +416,7 @@ new Vue({
                     }
                 });
                 var childSortableContainers = this.$refs['child-row']
+                console.log(childSortableContainers)
                 for (var i = 0; i < childSortableContainers.length; i++) {
                     var csc = childSortableContainers[i]
                     new Sortable(csc, {
@@ -505,35 +511,37 @@ new Vue({
 
                 //生成方法内容.
                 var doc = "";
-                if (method.MethodModel == MethodModel.Link)  doc = method.Tag1;
+
+                if (method.MethodModel == MethodModel.Link) doc = method.Tag1;
                 if (method.MethodModel == MethodModel.QRCode) doc = "手机扫描一下，就可以看到该表单信息.";
+                if (method.MethodModel === MethodModel.DictLog) doc = "操作轨迹日志";
+                if (method.MethodModel === MethodModel.FrmBBS) doc = "日志-日常记录-评论";
+                if (method.MethodModel === MethodModel.DataVer) doc = "数据版本控制-数据快照";
 
                 if (method.MethodModel == MethodModel.Func) {
 
                     doc = "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.Template.MethodFunc','" + method.Name + "','" + method.No + "')\" >属性</a>";
-                    var url = "./Dict/MethodDoc/Default.htm?No=" + method.No;
+                    var url = "./MethodDoc/Default.htm?No=" + method.No;
                     doc += "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','',9000,0,null,false)\" >编写脚本</a>";
                 }
 
                 //修改实体资料流程.
                 if (method.MethodModel == MethodModel.FlowBaseData) {
 
-                    doc = "<a href=\"javascript:DesignerFlow('" + method.MethodID + "','" + method.Name + "');\" ><i class=icon-heart ></i>设计流程 </a> ";
-
                     if (method.Mark === "StartFlow") {
                         method.MethodModel = "发起流程:" + method.FlowNo;
-
+                        doc = "<a  " + btnStyle + "  href=\"javascript:DesignerFlow('" + method.MethodID + "','" + method.Name + "');\" ><i class=icon-heart ></i>设计流程 </a> ";
                     }
 
                     if (method.Mark === "Search") {
                         method.MethodModel = "流程数据查询:" + method.FlowNo;
-                        doc = "<a href='' ><i class=icon-grid >  设置查询内容</a>";
+                        //  doc = "<a href='' ><i class=icon-grid >  设置查询内容</a>";
                         //doc += "<a class='layui-btn layui-btn-primary layui-border-blue layui-btn-xs' href=\"alert();\" >方法</a>";
                     }
 
                     if (method.Mark === "Group") {
                         method.MethodModel = "流程数据分析:" + + method.FlowNo;
-                        doc = "<a href='' ><i class=icon-chart >设置分析内容</a>";
+                        //  doc = "<a href='' ><i class=icon-chart >设置分析内容</a>";
                     }
                 }
 
@@ -547,13 +555,15 @@ new Vue({
                 //实体新建流程.
                 if (method.MethodModel == MethodModel.FlowNewEntity) {
                     method.MethodModel = "新建实体";
-                    doc = "<a href=\"javascript:DesignerFlow('" + method.MethodID + "','" + method.Name + "');\" ><i class=icon-heart ></i>设计流程 </a> ";
+                    //  doc = "<a href=\"javascript:DesignerFlow('" + method.MethodID + "','" + method.Name + "');\" ><i class=icon-heart ></i>设计流程 </a> ";
                 }
 
                 //实体其他业务流程.
                 if (method.MethodModel == MethodModel.FlowEtc) {
                     method.MethodModel = "实体其他业务流程";
-                    doc = "<a href=\"javascript:DesignerFlow('" + method.MethodID + "','" + method.Name + "');\" ><i class=icon-heart ></i>设计流程 </a> ";
+
+                    if (method.Mark === "StartFlow")
+                        doc = "<a  " + btnStyle + " href=\"javascript:DesignerFlow('" + method.MethodID + "','" + method.Name + "');\" ><i class=icon-heart ></i>设计流程 </a> ";
                 }
 
                 //如果是单据.
@@ -569,16 +579,17 @@ new Vue({
 
                     if (html === "") {
 
-                        html += "<a " + btnStyle + " href=\"javascript:addTab('list','" + method.Name + "','../CCBill/SearchBill.htm?FrmID=" + method.Tag1 + "');\"  >列表</a>";
+                        // html += "<a " + btnStyle + " href=\"javascript:addTab('list','" + method.Name + "','../CCBill/SearchBill.htm?FrmID=" + method.Tag1 + "');\"  >列表</a>";
                         //var url = "/Comm/RefFunc/En.htm?EnName=BP.CCBill.FrmDict&PKVal=Dict_CESHI1";
                         // html += "<a class='layui-btn layui-btn-primary layui-border-blue layui-btn-xs' href='../Comm/En.htm?EnName=BP.CCBill.FrmDict&PKVal=" + menu.UrlExt + "' target=_blank >属性</a>";
-                        html += "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.FrmBill','" + method.Name + "','" + method.Mark + "')\" >单据属性</a>";
+                        html += "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.FrmBill','" + method.Name + "','" + method.Tag1 + "')\" >单据属性</a>";
                         //html += "<a " + btnStyle + "  href=\"javascript:addTab('../CCBill/Admin/Method.htm?FrmID=" + menu.UrlExt + "&ModuleNo=" + menu.ModuleNo + "','方法:" + menu.Name + "');\" >方法</a>";
                         html += "<a " + btnStyle + "  href=\"javascript:GoToFrmDesigner('" + method.Tag1 + "')\" >表单设计</a>";
                     }
 
                     doc = html;
                 }
+
                 //方法内容.
                 method.Docs = doc;
 
@@ -667,7 +678,7 @@ function EditGroupName(groupID) {
 //新建:方法.
 function NewMethod(groupID) {
 
-    var url = "./CreateFunc/Func.htm?FrmID=" + frmID + "&GroupID=" + groupID;
+    var url = "./Method/Func.htm?FrmID=" + frmID + "&GroupID=" + groupID;
     window.open(url);
 }
 

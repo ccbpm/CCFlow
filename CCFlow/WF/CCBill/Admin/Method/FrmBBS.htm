@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>链接</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../EnumLab.js"></script>
+    <script src="../../../Admin/Admin.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            //  InitBar(0);
+            InitBar(MethodModel.FrmBBS);
+        });
+
+        function Save() {
+
+            $("#Msg").html("正在创建,请稍后......");
+
+            var name = $("#TB_Name").val();
+            var id = $("#TB_No").val();
+            if (name == undefined || name == null || name == "") {
+                alert("请输入名称.");
+                return;
+            }
+
+            var en = new Entity("BP.CCBill.Template.Method");
+            en.FrmID = GetQueryString("FrmID");
+            en.GroupID = GetQueryString("GroupID"); //分组ID.
+
+            en.MethodID = "FrmBBS";
+            en.Mark = "FrmBBS";
+            en.Tag1 = "FrmBBS";
+
+            en.Name = name;
+            en.MethodModel = MethodModel.FrmBBS; //设置为链接按钮.
+            en.RefMethodType = 1;
+            en.UrlExt = "./OptComponents/FrmBBS.htm";
+           // en.SetPKVal(en.FrmID + "_" + en.MethodID);
+
+            en.Icon = "icon-film";
+            en.Insert();
+
+            var url = "../../../Comm/En.htm?EnName=BP.CCBill.Template.MethodLink&No=" + en.No;
+            window.location.href = url;
+        }
+
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>BBS标签 </legend>
+        <ul>
+            <li>标签 </li>
+            <li> <input type="text" value="日常记录" id="TB_Name" name="TB_Name" /> </li>
+        </ul>
+
+        <div id="Msg"></div>
+    </fieldset>
+
+
+    <fieldset>
+        <legend>帮助 </legend>
+
+        <ul>
+            <li>一个实体里只有一个该组件菜单</li>
+            <li>广泛用于：填写客户跟踪信息、实体跟踪记录、实体留言记录、多个人对一个实体的操作记录。</li>
+        </ul>
+    </fieldset>
+
+</body>
+</html>

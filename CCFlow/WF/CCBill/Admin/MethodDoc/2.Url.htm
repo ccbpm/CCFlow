@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>SQL模式</title>
+
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(function () {
+
+            InitBar(2); //url模式.
+
+            var no = GetQueryString("No");
+            en = new Entity("BP.CCBill.Template.MethodFunc", no);
+
+            $("#TB_Url").val(en.Tag1);
+
+            //生成参数内容.
+            var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", no);
+            var html = "<b>共有:" + attrs.length + "参数;&nbsp;";
+
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                html += "【" + attr.Name + "," + attr.KeyOfEn + ";】";
+            }
+            html += "</b></font>";
+            $("#paras").html(html);
+
+        });
+
+        function Save() {
+
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_MethodDoc");
+            handler.AddUrlData();
+
+            var url = $("#TB_Url").val();
+
+            handler.AddPara("TypeOfFunc", 2); //urlExt.
+            handler.AddPara("Tag1", url);
+            var data = handler.DoMethodReturnString("MethodDoc_SaveScript");
+
+
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend> 参数  </legend>
+        <ul>
+            <li> <div id="paras"></div></li>
+            <li> <button id='Btn_Attrs' onclick='Paras()'>设置参数</button> - <button id='Btn_Attrs' onclick='FrmAttrs()'>表单参考字段</button> </li>
+        </ul>
+
+        <legend> 设置  </legend>
+        要执行的URL:
+        <input type="text" id="TB_Url" name="" placeholder="请输入url" style="width:90%;" />
+
+        <legend>什么是Url?</legend>
+        <ul>
+            <li> 1. 请输入一个url 比如: http://ccflow.org/cc.htm  </li>
+            <li> 2. 系统就会把当前实体的主键带入到这个url <b>  http://ccflow.org/cc.htm?WorkID=xxxx&FrmID=Dict_Student </b></li>
+            <li> 3. 执行的结果反馈到当前页面上来. </li>
+        </ul>
+
+    </fieldset>
+
+
+
+</body>
+</html>

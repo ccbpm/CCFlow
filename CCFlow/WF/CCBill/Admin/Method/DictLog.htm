@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>操作日志</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../EnumLab.js"></script>
+    <script src="../../../Admin/Admin.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            //  InitBar(0);
+            InitBar(MethodModel.DictLog);
+        });
+
+        function Save() {
+
+            var name = $("#TB_Name").val();
+            if (name == undefined || name == null || name == "") {
+                alert("请输入名称.");
+                return;
+            }
+
+            $("#Msg").html("正在创建,请稍后......");
+
+            var en = new Entity("BP.CCBill.Template.Method");
+            en.FrmID = GetQueryString("FrmID");
+            en.GroupID = GetQueryString("GroupID"); //分组ID.
+
+            en.MethodID = MethodModel.DictLog;
+            en.Mark = MethodModel.DictLog;
+            en.Tag1 = MethodModel.DictLog;
+            en.Icon = "icon-eye";
+
+            en.Name = name;
+            en.MethodModel = MethodModel.DictLog; //设置为链接按钮.
+            en.RefMethodType = 1;
+            en.UrlExt = "./OptComponents/DictLog.htm";
+            //en.SetPKVal(en.FrmID + "_" + en.MethodID);
+            en.Insert();
+
+            var url = "../../../Comm/En.htm?EnName=BP.CCBill.Template.MethodLink&No=" + en.No;
+            window.location.href = url;
+        }
+
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>操作日志 </legend>
+        <ul>
+            <li>标签：<input type="text" value="操作日志" id="TB_Name" name="TB_Name" /> </li>
+        </ul>
+
+        <div id="Msg"></div>
+        <legend>帮助 </legend>
+        <ul>
+            <li>类似与数据库的备份</li>
+            <li>可以在一定的事件对当前的实体进行数据备份，可以恢复到数据到指定的数据备份。</li>
+            <li><img src="DictLog.png" /></li>
+        </ul>
+    </fieldset>
+
+</body>
+</html>

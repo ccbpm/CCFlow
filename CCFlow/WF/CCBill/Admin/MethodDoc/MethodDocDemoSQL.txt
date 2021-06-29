@@ -1,0 +1,11 @@
+﻿/* 执行SQL就是可以执行多个SQL脚本, */
+/* 1.多个SQL脚本可以以 ; 分割. */
+/* 2.注释可以以 斜线* 我的注释内容表达 *斜线 体现. */
+/* 3.内容支持ccbpm表达式,比如:全局变量的@WebUser.No, @WebUser.Name, @WebUser.FK_Dept . */
+/* 4.如果要获取本表单主表的数据就可以使用 @字段名. 比如: UPDATE XXX SET AA='BB' WHERE OID=@OID */
+/* 5.如果要执行存储过程，请使用 EXEC YouProName @Field1, @Field2 */
+/* 5.1 EXEC dbo.uspGetEmployeeManagers @BusinessEntityID = 50; */
+/* 5.2 EXEC AdventureWorks2012.dbo.uspGetEmployeeManagers 50; */
+
+UPDATE @FrmID SET StudentState=0 WHERE OID=@OID ;
+UPDATE @FrmID SET Title='@Title' WHERE OID=@OID ;

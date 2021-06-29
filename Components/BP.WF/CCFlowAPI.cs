@@ -209,14 +209,13 @@ namespace BP.WF
 
                 bool isHaveSubFlow = false;
                 #region 没有审核组件分组就增加上审核组件分组. 
-                if (nd.NodeFrmID.Equals("ND" + nd.NodeID) == true ||
-                    ((nd.HisFormType == NodeFormType.RefOneFrmTree || flow.FlowDevModel == FlowDevModel.JiJian)
-                    && DataType.IsNullOrEmpty(frmNode.MyPK) == false))
+                if (nd.NodeFrmID.Equals("ND" + nd.NodeID) == true || flow.FlowDevModel == FlowDevModel.JiJian||
+                    (nd.HisFormType == NodeFormType.RefOneFrmTree && DataType.IsNullOrEmpty(frmNode.MyPK) == false))
                 {
                     bool isHaveFWC = false;
                     //绑定表单库中的表单
                     if ((DataType.IsNullOrEmpty(frmNode.MyPK) == false
-                        && frmNode.IsEnableFWC != FrmWorkCheckSta.Disable) || (nd.NodeFrmID == "ND" + nd.NodeID && nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable))
+                        && frmNode.IsEnableFWC != FrmWorkCheckSta.Disable) || ((nd.NodeFrmID == "ND" + nd.NodeID|| flow.FlowDevModel == FlowDevModel.JiJian) && nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable))
                         isHaveFWC = true;
 
                     if ((nd.FormType == NodeFormType.FoolForm

@@ -3112,7 +3112,7 @@ namespace BP.WF
         /// </summary>
         /// <param name="userID">人员编号</param>
         /// <param name="sid">sid</param>
-        /// <param name="orgNo">组织解构编码</param>
+        /// <param name="orgNo">组织结构编码</param>
         /// <returns></returns>
         public static void Port_Login(string userID, string sid = null, string orgNo = null)
         {
@@ -10050,7 +10050,7 @@ namespace BP.WF
             tk.WorkID = workID;
             tk.FrmID = frmID;
             tk.FrmName = frmName;
-            tk.FrmActionType = BP.CCBill.FrmActionType.BBS;
+            tk.ActionType = "BBS";
             tk.ActionTypeText = "评论";
 
             tk.Rec = WebUser.No;
@@ -10058,7 +10058,7 @@ namespace BP.WF
             tk.DeptNo = WebUser.FK_Dept;
             tk.DeptName = WebUser.FK_DeptName;
 
-            tk.MyPK = tk.FrmID + "_" + tk.WorkID + "_" + tk.Rec + "_" + (int)BP.CCBill.FrmActionType.BBS;
+            tk.MyPK = tk.FrmID + "_" + tk.WorkID + "_" + tk.Rec + "_100" ;
             tk.Msg = msg;
             tk.RDT = DataType.CurrentDataTime;
 

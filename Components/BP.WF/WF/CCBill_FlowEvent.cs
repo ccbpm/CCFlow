@@ -30,7 +30,7 @@ namespace BP.WF
 
                 string flowFrmID = "ND" + int.Parse(wn.HisFlow.No + "01");
 
-               // MapData md = new MapData(flowFrmID);
+                // MapData md = new MapData(flowFrmID);
 
                 //同步主表数据.
                 Row row = wn.rptGe.Row;
@@ -65,10 +65,28 @@ namespace BP.WF
 
                 //创建工作，并copy数据过去.
                 Row row = wn.rptGe.Row;
-                Int64  frmWorkID = BP.CCBill.Dev2Interface.CreateBlankDictID(menu.FrmID, BP.Web.WebUser.No, row);
+                BP.CCBill.Dev2Interface.SaveDictWork(menu.FrmID, wn.WorkID, row);
 
-                //提交工作.
-                BP.CCBill.Dev2Interface.SubmitWork(menu.FrmID, frmWorkID);
+                //替换实体名字.
+                if (row.ContainsKey("DictName") == true)
+                {
+                    string dictName = row["DictName"].ToString();
+                    GEEntity ge = new GEEntity(menu.FrmID, wn.WorkID);
+                    ge.SetValByKey("Title", dictName);
+                    ge.Update();
+                }
+
+                //GenerWorkFlow gwf = wn.HisGenerWorkFlow;
+                //gwf.PWorkID = gwf.WorkID;
+                //gwf.PFlowNo = menu.FrmID;
+
+                //写入日志.
+                string myparas = "";
+                myparas += "@PWorkID=" + wn.WorkID;
+                myparas += "@PFlowNo=" + wn.HisFlow.No;
+                myparas += "@PNodeID=" + wn.HisNode.NodeID;
+                BP.CCBill.Dev2Interface.Dict_AddTrack(menu.FrmID, null, wn.WorkID, CCBill.FrmActionType.StartRegFlow, "流程创建实体",
+                    myparas, wn.HisFlow.No, wn.HisFlow.Name, wn.HisNode.NodeID, wn.WorkID);
             }
             #endregion 如果是新建实体流程.
 

@@ -188,7 +188,7 @@ namespace BP.WF.Template
             ps.Add("ParentNo", this.No);
             //sql = "SELECT COUNT(*) FROM WF_FlowSort WHERE ParentNo='" + fk_flowSort + "'";
             if (DBAccess.RunSQLReturnValInt(ps) != 0)
-                throw new Exception ("err@该目录下有子目录，您不能删除。");
+                throw new Exception ("err@该目录下有子目录，您不能删除...");
 
             return base.beforeDelete();
         }

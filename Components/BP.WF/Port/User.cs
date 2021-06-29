@@ -49,7 +49,7 @@ namespace BP.WF.Port
 
         #region 组织属性.
         /// <summary>
-        /// 组织解构编码
+        /// 组织结构编码
         /// </summary>
         public const string OrgNo = "OrgNo";
         /// <summary>
@@ -66,7 +66,7 @@ namespace BP.WF.Port
 
         #region 权限.
         /// <summary>
-        /// 组织解构编码
+        /// 组织结构编码
         /// </summary>
         public const string IsSaller = "IsSaller";
         #endregion 组织属性.

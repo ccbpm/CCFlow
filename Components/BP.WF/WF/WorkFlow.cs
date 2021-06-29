@@ -1242,6 +1242,7 @@ namespace BP.WF
 
             //获得当前的节点.
             WorkNode wn = this.GetCurrentWorkNode();
+            wn.rptGe = rpt;
 
             //调用结束前事件.
             string mymsg = ExecEvent.DoFlow(EventListFlow.FlowOverBefore, wn, null);

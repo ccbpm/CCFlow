@@ -423,7 +423,7 @@ namespace BP.WF.Template
                 this.SetValByKey(FrmNodeAttr.IsEnable, value);
             }
         }
-        
+
         /// <summary>
         /// 显示的名字
         /// </summary>
@@ -714,14 +714,13 @@ namespace BP.WF.Template
 
                 map.AddTBString(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", true, true, 0, 900, 20);
 
-
                 //模版文件，对于office表单有效.
                 map.AddTBString(FrmNodeAttr.TempleteFile, null, "模版文件", true, true, 0, 500, 20);
 
                 //是否显示
                 map.AddTBInt(FrmNodeAttr.IsEnable, 1, "是否显示", true, false);
 
-               // map.AddTBString(FrmNodeAttr.GuanJianZiDuan, null, "关键字段", true, true, 0, 20, 20);
+                // map.AddTBString(FrmNodeAttr.GuanJianZiDuan, null, "关键字段", true, true, 0, 20, 20);
 
                 //@2019.09.30 by zhoupeng.
                 map.AddTBString(FrmNodeAttr.FrmNameShow, null, "表单显示名字", true, false, 0, 100, 20);

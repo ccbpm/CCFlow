@@ -158,6 +158,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppClass.cs" />
+    <Compile Include="CCBill\Demo\M_ZhuXiaoXueJi.cs" />
     <Compile Include="CCBill\Template\DictFlow.cs" />
     <Compile Include="CCBill\Template\GroupMethod.cs" />
     <Compile Include="CCBill\Template\MethodBill.cs" />
@@ -169,7 +170,9 @@
     <Compile Include="CCBill\Template\MethodQRCode.cs" />
     <Compile Include="CCBill\Template\MethodSingleDictGenerWorkFlow.cs" />
     <Compile Include="CCBill\FrmBBS.cs" />
-    <Compile Include="CCBill\WF_CCBill_Admin_CreateFunc.cs" />
+    <Compile Include="CCBill\Track.cs" />
+    <Compile Include="CCBill\WF_CCBill_Admin_MethodDoc.cs" />
+    <Compile Include="CCBill\WF_CCBill_Admin_Method.cs" />
     <Compile Include="CCBill\WF_CCBill_OptComponents.cs" />
     <Compile Include="CCBill\WF_CCBill_OptOneFlow.cs" />
     <Compile Include="CCBill\WF_Methd.cs" />
@@ -229,7 +232,6 @@
     <Compile Include="CCBill\Template\EmpCreate.cs" />
     <Compile Include="CCBill\Template\StationCreate.cs" />
     <Compile Include="CCBill\Template\CtrlModel.cs" />
-    <Compile Include="CCBill\Track.cs" />
     <Compile Include="CCBill\WF_CCBill_Portal.cs" />
     <Compile Include="CCBill\WF_CCBill_API.cs" />
     <Compile Include="CCBill\WF_CCBill.cs" />

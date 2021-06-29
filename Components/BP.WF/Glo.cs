@@ -3104,7 +3104,7 @@ namespace BP.WF
                 DBAccess.RunSQLReturnString(tmp);
             }
 
-            //检查组织解构是否正确.
+            //检查组织结构是否正确.
             string sql = "SELECT * FROM Port_Dept WHERE ParentNo='0' ";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)

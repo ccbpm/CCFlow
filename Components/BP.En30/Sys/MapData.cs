@@ -115,9 +115,12 @@ namespace BP.Sys
         /// </summary>
         public const string FlowCtrls = "FlowCtrls";
         /// <summary>
-        ///组织解构.
+        ///组织结构.
         /// </summary>
         public const string OrgNo = "OrgNo";
+        public const string Icon = "Icon";
+
+        
 
         #region 报表属性(参数的方式存储).
         /// <summary>
@@ -1368,6 +1371,9 @@ namespace BP.Sys
                 map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", true, true);
                 map.AddTBString(MapDataAttr.GUID, null, "GUID", true, false, 0, 128, 20);
                 map.AddTBString(MapDataAttr.Ver, null, "版本号", true, false, 0, 30, 20);
+
+                map.AddTBString(MapDataAttr.Icon, null, "Icon", true, false, 0, 500, 20, true);
+
 
                 //流程控件.
                 map.AddTBString(MapDataAttr.FlowCtrls, null, "流程控件", true, true, 0, 200, 20);

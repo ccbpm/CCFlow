@@ -20,7 +20,7 @@ namespace BP.Sys
         /// </summary>
         public const string Lang = "Lang";
         /// <summary>
-        /// 组织解构编码
+        /// 组织结构编码
         /// </summary>
         public const string OrgNo = "OrgNo";
         /// <summary>

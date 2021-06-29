@@ -268,6 +268,31 @@ namespace BP.Sys
             else
                 this.RetrieveFromCash(FrmLineAttr.FK_MapData, (object)fk_mapdata);
         }
+
+        public void SaveFrmEleDBs(string fk_mapdata,string eleID,string refPKVal,string paras)
+        {
+            if (DataType.IsNullOrEmpty(paras) == true)
+                return;
+            string[] strs = paras.Split(';');
+            FrmEleDB frmEleDB = null;
+            foreach(string str in strs)
+            {
+                string[] vals = str.Split(',');
+                frmEleDB =new FrmEleDB();
+                frmEleDB.MyPK = eleID + "_" + refPKVal + "_" + vals[0];
+                frmEleDB.FK_MapData = fk_mapdata;
+                frmEleDB.EleID = eleID;
+                frmEleDB.RefPKVal = refPKVal;
+                frmEleDB.Tag1 = vals[0];
+                if (vals.Length >=2 && DataType.IsNullOrEmpty(vals[1])==false)
+                    frmEleDB.Tag2 = vals[1];
+                else
+                    frmEleDB.Tag2 = "";
+                if (vals.Length==3)
+                frmEleDB.Tag3 = vals[2];
+                frmEleDB.Save();
+            }
+        }
         /// <summary>
         /// 得到它的 Entity
         /// </summary>

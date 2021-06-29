@@ -23,25 +23,26 @@
         var isHaveParas = false; //执行的方法是否含有参数
         var attrs = null;       //参数字段集合
         $(function () {
-            //初始化页面
-            methodFunc = new Entity("BP.CCBill.Template.MethodFunc", mypk);
-
+           
             attrs = new Entities("BP.Sys.MapAttrs");
             attrs.Retrieve("FK_MapData", mypk);
             isHaveParas = attrs.length > 0 ? true : false;
 
-            if (isHaveParas == true)
+            if (isHaveParas == true) {
                 window.location.href = window.location.href.replace("DoMethod.htm", "DoMethodPara.htm");
+                return;
+            }
+
+            //初始化页面
+            methodFunc = new Entity("BP.CCBill.Template.MethodFunc", mypk);
 
             $("#Btn_Done").html("执行:" + methodFunc.Name);
 
             //方法描述.
-            if (methodFunc.Docs === "" || methodFunc.Docs.length == 0)
-                methodFunc.Docs = "操作说明未设置...";
+            if (methodFunc.Mark === "" || methodFunc.Mark.length == 0)
+                methodFunc.Mark = "操作说明未设置...";
 
-            $("#docs").html(methodFunc.Docs);
-
-
+            $("#docs").html(methodFunc.Mark);
 
         });
 
@@ -93,7 +94,7 @@
                     var url = methodFunc.MethodDoc_Url;
                     if (url.indexOf('?') == -1)
                         url += "?1=1";
-                    url += "&MethodName=" + methodFunc.MethodID+"&FrmID=" + frmID + "&WorkID=" + workid;
+                    url += "&MethodName=" + methodFunc.MethodID + "&FrmID=" + frmID + "&WorkID=" + workid;
                     //执行url返回数据.
                     var data = DBAccess.RunUrlReturnString(url);
                     layer.alert(data);
@@ -115,7 +116,15 @@
         <div id="docs" class="cs-help">
         </div>
 
-        <button type="button" id="Btn_Done" class="layui-btn layui-btn-sm layui-btn-normal" style="float: right; margin: 0px 30px 10px 0px; " onclick="doMethod()">执行</button>
+       <br />
+
+        <center>
+            <button type="button" id="Btn_Done" class="layui-btn layui-btn-sm layui-btn-normal" style="float: center; margin: 0px 30px 10px 0px; "
+                    onclick="doMethod()">
+                执行
+            </button>
+        </center>
+
     </fieldset>
 
 </body>

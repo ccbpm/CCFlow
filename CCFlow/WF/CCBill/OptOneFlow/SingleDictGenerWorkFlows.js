@@ -22,11 +22,9 @@ new Vue({
             layui.use('dropdown', function () {
                 var dropdown = layui.dropdown
                 var topNodeItems = [
-                    { title: '<i class=icon-plus></i> 新建方法', id: "NewFlow" },
-                    { title: '<i class=icon-star></i> 目录属性', id: "EditSort" },
-                    { title: '<i class=icon-folder></i> 新建目录', id: "NewSort" },
-                    { title: '<i class=icon-pencil></i> 修改名称', id: "EditSortName" },
-                    { title: '<i class=icon-close></i> 删除目录', id: "DeleteSort" }
+                    { title: '<i class=icon-plus></i> 查询', id: "NewFlow" },
+                    { title: '<i class=icon-star></i> 分析', id: "EditSort" }
+                   
                 ]
                 var tRenderOptions = [{
                     elem: '.item-top-dp',
@@ -48,11 +46,11 @@ new Vue({
                 dropdown.render(tRenderOptions[1]);
 
                 var childNodeMenuItems = [
-                    { title: '<i class=icon-star></i> 方法属性', id: "Attr" },
-                    { title: '<i class=icon-plane></i> 新建方法', id: "Start" },
-                    { title: '<i class=icon-settings></i> 设计方法', id: "Designer" },
-                    { title: '<i class=icon-docs></i> 复制方法', id: "Copy" },
-                    { title: '<i class=icon-pencil></i> 修改名称', id: "EditFlowName" },
+                    { title: '<i class=icon-star></i> 查看表单', id: "Attr" },
+                    { title: '<i class=icon-plane></i> 移交', id: "Start" },
+                    { title: '<i class=icon-settings></i> 退回', id: "Designer" },
+                    { title: '<i class=icon-docs></i> 回滚', id: "Copy" },
+                    { title: '<i class=icon-pencil></i> 修改', id: "EditFlowName" },
                     { title: '<i class=icon-close></i> 删除方法', id: "Delete" }
                 ]
                 var cRenderOptions = [{
@@ -246,7 +244,7 @@ new Vue({
         },
         NewFlow: function (data, name) {
 
-            url = "./CreateFunc/Func.htm?GroupID=" + data + "&FrmID=" + GetQueryString("FrmID") + "&s=" + Math.random();
+            url = "./Method/Func.htm?GroupID=" + data + "&FrmID=" + GetQueryString("FrmID") + "&s=" + Math.random();
 
             //新建方法.
             OpenLayuiDialog(url, '', 9000, false, true, true, false, true);
@@ -447,10 +445,10 @@ new Vue({
         handler.AddUrlData();
         var ds = handler.DoMethodReturnJSON("SingleDictGenerWorkFlows_Init");
 
-       // console.log(ds);
+        // console.log(ds); 
         var flows = ds["Flows"];
         var ens = ds["GenerWorkFlows"];
-
+        console.log(ens);
         var nodes = flows;
 
         for (var i = 0; i < nodes.length; i++) {
@@ -468,11 +466,16 @@ new Vue({
                 if (en.WFState <= 1) continue; //草稿与空白的
 
                 //退回的.
-                if (en.WFState === 2) en.Icon = "icon-clock"; //运行中的.
-                if (en.WFState === 3) en.Icon = "icon-check"; //已完成的.
-                if (en.WFState === 5) en.Icon = "icon-action-undo"; //退回的.
-
-                fs.children.push(method);
+                if (en.WFState === 2) { en.Icon = "icon-clock"; en.Icontitle = "运行中"; }//运行中的.
+                if (en.WFState === 3) {
+                    en.Icon = "icon-check"; en.Icontitle = "已完成";
+            }//已完成的.
+                if (en.WFState === 5) {
+                    en.Icon = "icon-action-undo"; en.Icontitle = "退回";
+        } //退回的.
+                var dateArray = en.TodoEmps.split(",");
+                en.TodoEmps = dateArray[1];
+                fs.children.push(en);
             }
         }
 
@@ -536,7 +539,7 @@ function EditGroupName(groupID) {
 //新建:方法.
 function NewMethod(groupID) {
 
-    var url = "./CreateFunc/Func.htm?FrmID=" + frmID + "&GroupID=" + groupID;
+    var url = "./Method/Func.htm?FrmID=" + frmID + "&GroupID=" + groupID;
     window.open(url);
 }
 

@@ -19,14 +19,23 @@
         $(function () {
 
             var menuNo = GetQueryString("MenuNo");
+            var methodNo = GetQueryString("MethodNo");
 
-            //初始化页面
-            var en = new Entity("BP.CCBill.Template.MethodFlowNewEntity", menuNo);
-            var workID = en.DoMethodReturnString("CreateWorkID");
-            var url = "../../MyFlowGener.htm?FK_Flow=" + en.FlowNo + "&FrmID=" + en.FrmID + "&WorkID=" + workID + "&FK_Node=" + en.FlowNo + "01";
+            var workID = GetQueryString("WorkID");
+            var doType = GetQueryString("DoType");
+
+            var url = "";
+            if (doType == "Bill") {
+                //初始化页面
+                var en = new Entity("BP.CCBill.Template.MethodBill", methodNo);
+                var billWorkID = en.DoMethodReturnString("CreateWorkID", workID);
+                url = "../../CCBill/MyBill.htm?FK_Flow=" + en.FlowNo + "&FrmID=" + en.Tag1 + "&WorkID=" + billWorkID+"&FK_Node=0";
+            }
+
+            if (url == "")
+                alert("没有判断的执行类型:" + doType);
 
             //  alert(url);
-
             window.location.href = url;
         });
 

@@ -33,6 +33,7 @@ function ToolBar_Init() {
             case "Save":
                 //保存信息
                 layui.form.on('submit(Save)', function (data) {
+                    this.innerHTML = "<i class='iconfont icon-baocun'></i>正在保存";
                     var formData = getDictFormData(data.field);
                     var handler = new HttpHandler("BP.CCBill.WF_CCBill");
                     for (var key in formData) {
@@ -40,14 +41,36 @@ function ToolBar_Init() {
                     }
                     handler.AddUrlData();
                     var data = handler.DoMethodReturnString("MyDict_SaveIt");
+                    this.innerHTML = "<i class='iconfont icon-baocun'></i>保存";
                     if (data.indexOf("err@") != -1) {
                         layer.alert(data);
+                        return false;
                     }
+                    layer.alert("保存成功");
+                    return false;
+                })
+                break;
+            case "Submit":
+                //保存信息
+                layui.form.on('submit(Submit)', function (data) {
+                    this.innerHTML = "<i class='iconfont icon-baocun'></i>正在提交";
+                    var formData = getDictFormData(data.field);
+                    var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+                    for (var key in formData) {
+                        handler.AddPara(key, encodeURIComponent(formData[key]));
+                    }
+                    handler.AddUrlData();
+                    var data = handler.DoMethodReturnString("MyDict_Submit");
+                    this.innerHTML = "<i class='iconfont icon-baocun'></i>提交";
+                    if (data.indexOf("err@") != -1) {
+                        layer.alert(data);
+                        return false;
+                    }
+                    layer.alert("提交成功");
+
                     return false;
                 })
 
-                break;
-            case "Submit":
                 break;
             case "Delete":
                 layer.confirm('您确定要删除吗?', function (index) {

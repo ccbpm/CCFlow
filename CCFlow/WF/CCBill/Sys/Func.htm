@@ -23,7 +23,7 @@
 
             var funcNo = GetQueryString("FuncNo");
             //初始化页面.
-              enFunc = new Entity("BP.CCBill.Sys.Func", funcNo);
+            enFunc = new Entity("BP.CCBill.Sys.Func", funcNo);
 
             attrs = new Entities("BP.Sys.MapAttrs");
             attrs.Retrieve("FK_MapData", mypk);

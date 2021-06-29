@@ -1,50 +1,82 @@
-﻿
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!DOCTYPE html>
+<html>
 <head>
-    <title>统计分析</title>
-    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
-    <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
-    <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
-    <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
-    <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-
-    <!--引入图表-->
-   <!-- <script src="FusionCharts/fusioncharts.js" type="text/javascript"></script>-->
-    <script src="../Comm/EChart/echarts.js" type="text/javascript"></script>
-    <!--引入公共的JS-->
-    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <meta charset="utf-8" />
+    <title>综合分析</title>
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <!--layui-->
+    <script src="../Scripts/layui/layui/lay/modules/layer.js"></script>
+    <link href="../Scripts/layui/layui/css/modules/layer/default/layer.css" rel="stylesheet" />
+    <link href="../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <link href="../Scripts/layui/style/admin.css" rel="stylesheet" />
+    <!--通用的JS-->
     <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/echartsjs/echarts.min.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <style type="text/css">
-        input[type=text], input[type=password], select
-        {
-            border: thin solid #cccccc;
-            margin: 2px 1px;
-            height: 24px;
-            background-color: rgba(255, 255, 255, 0.77);
+        .layui-table-view {
+            margin-right: 10px;
         }
-        td
-        {
-            border-color:#ccc;
+
+        .layui-elem-field legend {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .layui-input, .layui-select, .layui-textarea {
+            height: 28px !important;
+        }
+
+        .layui-form-label {
+            padding: 3px 8px !important;
+        }
+
+        .layui-btn {
+            height: 28px !important;
+            line-height: 28px !important;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgb(239, 239, 239);
+            border-radius: 2px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #bfbfbf;
+            border-radius: 10px;
+        }
+
+        .layui-tab-content {
+            overflow-y: scroll;
+        }
+
+        .layui-table-patch > .layui-table-cell {
+            width: 10px !important;
         }
     </style>
-
     <script type="text/javascript">
+        var searchFields = new Array(); //DDL的查询条件
         //定义公共个变量.
         var webUser = new WebUser();
 
-        var ensName = GetQueryString("FrmID");
+        var frmID = GetQueryString("frmID");
         var OrderBy = this.GetQueryString("OrderBy");
         var OrderWay = this.GetQueryString("OrderWay");
         var NumKey = this.GetQueryString("NumKey");
 
         //当前用户页面信息.
         var ur = new Entity("BP.Sys.UserRegedit");
-        ur.MyPK = webUser.No + ensName + "_Group";
+        ur.MyPK = webUser.No + frmID + "_Group";
 
         ur.RetrieveFromDBSources();
         ur.OrderBy = OrderBy;
@@ -54,35 +86,27 @@
         var count = ur.GetPara("RecCount");
         var mapBase;
         var searchAttrs;
-
-
-        //初始化页面
+        /**
+         *
+         * 初始化页面
+         */
         $(function () {
-            var groupCount = $('input[name="groupContent"]:checked').length;
-            if (groupCount > 1)
-                $("#CB_IsShowPict").attr("disabled", "disabled");
 
-            if (ur.IsPic == 1)
-                document.getElementById("CB_IsShowPict").checked = "checked";
-
-            var isHideToolbar = GetQueryString("IsHideToolBar");
-            if (isHideToolbar == "1")
-                $("#groupLayOut").layout("remove", "north");
-         
-            //初始化按钮
-            InitToolbar();
-
+            InitToolbar();  //初始化按钮
             //显示内容
             DealGroupContent();
             //分析项目
             GroupAnalysis();
-            //显示数据
-            doPostBack(0);
-
-
+            //分析结果显示
+            ShowData();
+            layui.form.render();
         });
 
-        //初始化数据.
+        /**
+         *
+         * 初始化工具栏操作
+         *
+         */
         function InitToolbar() {
 
             //创建处理器.
@@ -95,55 +119,87 @@
             document.title = mapBase.EnDesc;
 
             if (mapBase.IsView == "false") {
-                alert("对不起，您没有查看的权限！");
+                layer.alert("对不起，您没有查看的权限！");
                 return;
             }
 
             //获得查询信息，包含了查询数据表.
-            var data = handler.DoMethodReturnJSON("Group_SearchAttrs");
-
+            var data = handler.DoMethodReturnString("Group_SearchAttrs");
+            if (data.indexOf("err@") != -1) {
+                layer.alert(data);
+                console.log(data);
+                return;
+            }
+            data = JSON.parse(data);
             //绑定外键枚举查询条件.
             searchAttrs = data["Attrs"];
 
-            //格式为: @WFSta=0@FK_Dept=02
-            var json = AtParaToJson(ur.Vals);
+            //当前用户页面信息.
+            var searchUr = new Entity("BP.Sys.UserRegedit");
+            searchUr.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
+            searchUr.RetrieveFromDBSources();
+            var json = AtParaToJson(searchUr.Vals);
 
-            for (var i = searchAttrs.length-1; i >= 0; i--) {
-
-                var attr = searchAttrs[i];
-                var str = "";
-                str += "<label for='CXDDL_" + attr.Field + "'>" + attr.Name + " : </label><select class='form-control' name='CXDDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
-                str = $(str);
-                $("#toolBar").prepend(str); //设置基础信息.
+            var _html = "";
+            if (mapBase.IsShowSearchKey == "1") {
+                _html += '<div class="layui-inline">';
+                _html += '<label class="layui-form-label">关键字:</label>';
+                _html += '<div class="layui-input-inline">';
+                _html += '<input type="text" id="TB_Key" name="TB_Key" value="' + searchUr.SearchKey + '"  autocomplete="off" class="layui-input" />';
+                _html += '</div>';
+                _html += '</div>';
             }
-
-            var html = "";
-            if (mapBase.IsShowSearchKey == "1")
-                html += "<label for='TB_Key'>关键字:</label><input  style='width:100px;' type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' class='form-control' />&nbsp;&nbsp;&nbsp;&nbsp;";
 
             if (mapBase.DTSearchWay != "0") {
+                _html += '<div class="layui-inline">';
+                _html += '<label class="layui-form-label">' + mapBase.DTSearchLable + ':</label>';
+                var info = "data-info=\"yyyy-MM-dd\"";
+                if (mapBase.DTSearchWay != "1")
+                    info = "data-info=\"yyyy-MM-dd HH:mm\"";
 
-                html += mapBase.DTSearchLable;
-
-                if (mapBase.DTSearchWay == "1") {
-                    html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control Wdate' />";
-                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:120px;' class='form-control Wdate' />&nbsp;&nbsp;&nbsp;&nbsp;";
-                } else {
-                    html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:135px;' class='form-control Wdate' />";
-                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:135px;' class='form-control Wdate' />&nbsp;&nbsp;&nbsp;&nbsp;";
-                }
+                _html += '<div class="layui-input-inline" style="width:145px">';
+                _html += '<input type="text" id="TB_DTFrom" name="TB_DTFrom" value="' + searchUr.DTFrom + '"' + info + '   class="layui-input" />';
+                _html += '</div>';
+                _html += '</div>';
+                _html += '<div class="layui-inline" ">';
+                _html += '<label class="layui-form-label" style="width:20px">到:</label>';
+                _html += '<div class="layui-input-inline" style="width:145px">';
+                _html += '<input type="text" id="TB_DTTo" name="TB_DTTo" value="' + searchUr.DTTo + '"' + info + ' class="layui-input" />';
+                _html += '</div>';
+                _html += '</div>';
             }
+
+            for (var i = searchAttrs.length - 1; i >= 0; i--) {
+
+                var attr = searchAttrs[i];
+                _html += '<div class="layui-inline ">';
+                _html += '<label class="layui-form-label">' + attr.Name + ':</label>';
+                _html += '<div class="layui-input-inline" style="width:145px">';
+                _html += '<select name="CXDDL_' + attr.Field + '" ID="DDL_' + attr.Field + '">' + InitDDLOperation(data, attr, "all") + '</select>';
+
+                _html += '</div>';
+                _html += '</div>';
+                searchFields.push({ type: "select", id: "DDL_" + attr.Field });
+            }
+
+            //增加操作按钮
+            _html += '<div class="layui-inline">';
+            _html += '<div class="layui-input-inline">';
+            _html += '<input type="button" class="layui-btn" id="searchBtn" onclick="Search()"  style="margin-left: 15px" value="分析"/>';
+
+            _html += '<input type="button" class="layui-btn layui-btn-primary" id="searchBtn" onclick="ToSearch()"  style="margin-left: 15px" value="查询"/>';
+
+            // _html += '<input type="button" class="layui-btn layui-btn-primary" onclick="Exp()" value="导出"/>';
+
+            _html += '</div>';
+            $("#toolBar").html(_html);
 
             //绑定外键枚举查询条件.
             var attrs = data["Attrs"];
 
-            //当前用户页面信息.
-            var searchUr = new Entity("BP.Sys.UserRegedit");
-            searchUr.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
-            searchUr.RetrieveFromDBSources();
-            var json = AtParaToJson(searchUr.Vals);
 
-            $("#toolBar").prepend(html); //设置基础信息.
+
+
 
             //为查询外键赋值.
             for (var i = 0; i < attrs.length; i++) {
@@ -157,121 +213,150 @@
             }
 
         }
-        //初始化下拉列表框的OPERATION
-        function InitDDLOperation(frmData, mapAttr, defVal) {
 
-            var operations = "";
-            if (defVal == "all")
-                operations += "<option value='all' >全部</option>";
-
-            var ens = frmData[mapAttr.Field];
-            if (ens == null) {
-                ens = [{ 'IntKey': 0, 'Lab': '否' }, { 'IntKey': 1, 'Lab': '是'}];
-            }
-            for (var i = 0; i < ens.length; i++) {
-
-                var en = ens[i];
-
-                var selected = "";
-                if (en.Selected && en.Selected.toString() == "true")
-                    selected = "selected=selected";
-
-                if (en.No == undefined)
-                    operations += "<option value='" + en.IntKey + "' " + selected + ">" + en.Lab + "</option>";
-                else
-                    operations += "<option value='" + en.No + "' " + selected + ">" + en.Name + "</option>";
-            }
-            return operations;
+        //到查询页面.
+        function ToSearch() {
+            var url = "SearchDict.htm?FrmID=" + GetQueryString("FrmID");
+            window.location.href = url;
         }
 
+        /**
+         *
+         * 分组条件
+         */
         function DealGroupContent() {
             //创建处理器.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             handler.AddUrlData();  //增加参数.
-            var data = handler.DoMethodReturnJSON("Group_ContentAttrs");
+            var data = handler.DoMethodReturnString("Group_ContentAttrs");
             if (data.indexOf('err@') != -1) {
-                alert(data);
+                layer.alert(data);
+                console.log(data);
                 return;
             }
+            data = JSON.parse(data);
             var groupAttrs = data;
             if (groupAttrs.length == 0) {
                 alert("[" + document.title + "]没有外键或枚举，不能做分组查询.");
                 return;
             }
-
+            var _html = "";
             for (var i = 0; i < groupAttrs.length; i++) {
-                var html = "";
+
                 var checked = "";
                 if (groupAttrs[i].Checked && groupAttrs[i].Checked.toString() == "true") {
                     checked = "checked=checked";
                 }
-                html += "<tr>";
-                html += "<td>";
-                html += "<input type='checkbox' id='" + groupAttrs[i].Field + "' name='groupContent' " + checked + " onclick='javascript:doPostBack(1,\"\")' value='" + groupAttrs[i].Field + "'/><label for='" + groupAttrs[i].Field + "'>" + groupAttrs[i].Name + "</label>";
-                html += "</td>";
-                html += "</tr>";
-                $("#CheckBoxList").append(html);
+                _html += '<div class="layui-form-item">';
+
+                _html += '<div class="layui-input-block" style="margin-left:20px">';
+                _html += "<input type='checkbox' id='" + groupAttrs[i].Field + "' name='groupContent' " + checked + " onclick='javascript:ShowData(this,\"\")' value='" + groupAttrs[i].Field + "' lay-skin='primary' lay-filter='switch' title='" + groupAttrs[i].Name + "'/>";
+                _html += '</div>';
+                _html += '</div>';
             }
+            $("#CheckBoxList").html(_html);
 
         }
+        /**
+         * 分析项目
+         */
         function GroupAnalysis() {
             //创建处理器.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             handler.AddUrlData();  //增加参数.
             var data = handler.DoMethodReturnString("Group_Analysis");
             if (data.indexOf('err@') != -1) {
-                alert(data);
+                layer.alert(data);
+                console.log(data);
                 return;
             }
             var data = JSON.parse(data);
             var analyAtts = data["Attrs"];
 
-
+            var _html = "";
             for (var i = 0; i < analyAtts.length; i++) {
-                var html = "";
+
                 var checked = "";
                 if (analyAtts[i].Checked && analyAtts[i].Checked.toString() == "true") {
                     checked = "checked=checked";
                 }
-                html += "<tr>";
-                html += "<td>";
-                html += "<input type='checkbox' id='" + analyAtts[i].Field + "' name='groupAnaly' " + checked + " onclick='javascript:doPostBack(1,\"\")' value='" + analyAtts[i].Field + "'/><label for='" + analyAtts[i].Field + "'>" + analyAtts[i].Name + "</label>";
-                html += "</td>";
-                html += "<td style='font-size:12px;text-align:right'>";
-                html += "<select class='form-control' name='DDL_" + analyAtts[i].Field + "' ID='DDL_" + analyAtts[i].Field + "' onchange='javascript:doPostBack(1,\"\")'>" + InitDDLOperation(data, analyAtts[i], null) + "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
-                html += "</td>";
-                html += "</tr>";
-                $("#AnalyGroup").append(html);
+                _html += '<div class="layui-form-item">';
+                _html += '<div class="layui-inline">';
+                _html += '<div class="layui-input-block" style="margin-left:20px">';
+                _html += "<input type='checkbox' id='" + analyAtts[i].Field + "' name='groupAnaly' " + checked + " onclick='javascript:ShowData(this,\"\")' value='" + analyAtts[i].Field + "' lay-skin='primary' lay-filter='switch' title='" + analyAtts[i].Name + "'/>";
+                _html += '</div>';
+                _html += '</div>';
+                _html += '<div class="layui-inline" style="width:100px;margin-top:5px">';
+                _html += "<select style='width:80%' class='form-control' name='DDL_Aly_" + analyAtts[i].Field + "' ID='DDL_Aly_" + analyAtts[i].Field + "' onchange='javascript:ShowData(this,\"\")'>" + InitDDLOperation(data, analyAtts[i], null) + "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
+                _html += '</div>';
+                _html += '</div>';
+                _html += '</div>';
             }
+            $("#AnalyGroup").html(_html);
         }
+        /**
+         * 显示数据
+         *
+         */
+        function ShowData() {
+            var groupCount = $('input[name="groupContent"]:checked');
+            if (groupCount.length == 0) {
+                var _html = "";
+                _html += '<div class="layadmin-tips">'
+                _html += '<i class="layui-icon layui-icon-help" face=""></i>';
 
-        function doPostBack() {
-            var groupCount = $('input[name="groupContent"]:checked').length;
-            if (groupCount != 1) {
-                $("#CB_IsShowPict").attr("disabled", "disabled");
-                $("#CB_IsShowPict").attr("checked", false);
-            }else {
-                $("#CB_IsShowPict").attr("disabled", false);
-                $("#CB_IsShowPict").attr("checked", true);
+                _html += '<div class="layui-text" style="font-size: 30px;color:red;color: red;display: inline-block;height: 300px;text-align: left;vertical-align: middle;border-top:0px">必须选择一项分组条件</div>'
+
+                _html += '</div>'
+                $("#Content").html(_html);
+                return false;
             }
+            var groupAnaly = $('input[name="groupAnaly"]:checked');
+            if (groupAnaly.length == 0) {
+                var _html = "";
+                _html += '<div class="layadmin-tips">'
+                _html += '<i class="layui-icon layui-icon-help" face=""></i>';
+
+                _html += '<div class="layui-text" style="font-size: 30px;color:red;color: red;display: inline-block;height: 300px;text-align: left;vertical-align: middle;border-top:0px">必须选择一项分析项</div>'
+
+                _html += '</div>'
+                $("#Content").html(_html);
+
+                return false;
+            }
+            if (groupCount.length > 1) {
+                $("#CB_IsShowPict").attr("disabled", "disabled");
+
+                $("#CB_IsShowPict").prop("checked", false);
+                $($("#CB_IsShowPict").next()[0]).removeClass("layui-form-checked");
+            }
+
+            else {
+                $("#CB_IsShowPict").attr("disabled", false);
+                $($("#CB_IsShowPict").next()[0]).removeClass("layui-checkbox-disbaled").removeClass("layui-disabled");
+                $("#CB_IsShowPict").prop("checked", true);
+                $($("#CB_IsShowPict").next()[0]).addClass("layui-form-checked");
+            }
+
 
             //给注册表信息重新赋值
             ur = new Entity("BP.Sys.UserRegedit");
-            ur.MyPK = webUser.No + ensName + "_Group";
+            ur.MyPK = webUser.No + frmID + "_Group";
             var selectedGroupKey = "";
-            $('input[name="groupContent"]:checked').each(function () {
-                selectedGroupKey += '@' + $(this).val(); //将选中的值添加到数组chk_value中  
+            groupCount.each(function () {
+                selectedGroupKey += ',' + $(this).val() + ","; //将选中的值添加到数组chk_value中
             });
             var stateNumKey = "";
-            $('input[name="groupAnaly"]:checked').each(function () {
+
+            groupAnaly.each(function () {
                 var key = $(this).val();
                 //获取下拉框的值
-                var defVal = $("#DDL_" + key).val();
+                var defVal = $("#DDL_Aly_" + key).val();
 
-                stateNumKey += '@' + $(this).val() + '=' + defVal; //将选中的值添加到数组chk_value中  
+                stateNumKey += ',' + $(this).val() + '=' + defVal + ","; //将选中的值添加到数组chk_value中
             });
 
-            ur.Vals = "SelectedGroupKey=" + selectedGroupKey + "@StateNumKey" + stateNumKey + '@';
+            ur.Vals = "@SelectedGroupKey=" + selectedGroupKey + "@StateNumKey=" + stateNumKey;
 
             if ($("#CB_IsShowPict").is(":checked") == true)
                 ur.IsPic = 1;
@@ -280,38 +365,52 @@
 
             ur.SetPKVal(ur.MyPK);
             ur.FK_Emp = webUser.No;
-            ur.CfgKy = ensName;
+            ur.CfgKy = frmID;
             ur.Save();
+
+            var searchUr = new Entity("BP.Sys.UserRegedit");
+            searchUr.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
+            searchUr.RetrieveFromDBSources();
+
+
+            //增加时间条件的查询
+            if ($("#TB_DTFrom").length > 0) {
+                searchUr.DTFrom = $("#TB_DTFrom").val();
+                searchUr.DTTo = $("#TB_DTTo").val();
+            }
+            //增加下拉框的查询条件
+            var vals = "";
+            $.each(searchFields, function () {
+                var id = this.id.replace("DDL_", "");
+                vals += "@" + id + "=" + $("#" + this.id).val();
+            });
+            searchUr.Vals = vals;
+            searchUr.Update();
 
             Group_Search();
         }
         function Group_Search() {
-//            if (FusionCharts("column_chart") != undefined)
-//                FusionCharts("column_chart").dispose();
-//            if (FusionCharts("pie_chart") != undefined)
-//                FusionCharts("pie_chart").dispose();
-//            if (FusionCharts("line_chart") != undefined)
-//                FusionCharts("line_chart").dispose();
 
             //重新获取注册信息
             ur = new Entity("BP.Sys.UserRegedit");
-            ur.MyPK = webUser.No + ensName + "_Group";
+            ur.MyPK = webUser.No + frmID + "_Group";
 
             ur.RetrieveFromDBSources();
 
             //创建处理器.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             handler.AddUrlData();  //增加参数.
-            handler.AddFormData();
+            //handler.AddFormData();
             var groupList = "";
             $('input[name="groupContent"]').each(function () {
-                groupList += '@' + $(this).val(); //将选中的值添加到数组chk_value中  
+                groupList += '@' + $(this).val(); //将选中的值添加到数组chk_value中
             });
             handler.AddPara("GroupList", groupList);
 
             var data = handler.DoMethodReturnString("Group_Search");
             if (data.indexOf('err@') != -1) {
-                alert(data);
+                layer.alert(data);
+                console.log(data);
                 return;
             }
 
@@ -320,333 +419,162 @@
                 $("#Content").html("").append(data);
                 return;
             }
+            $("#Content").html("");
             var data = JSON.parse(data);
-            var groupSearch = data["GroupSearch"];
-            var AttrsOfNum = data["AttrsOfNum"];
-            var AttrsOfGroup = data["AttrsOfGroup"];
-            var ActiveAttr = data["ActiveAttr"];
-            var noShowSum = data["NoShowSum"].NoShowSum;
-            if (noShowSum == null)
-                noShowSum = "";
 
+            var mainData = data["MainData"];
+            var mapAttrs = data["Sys_MapAttr"];
+            var attrsOfNum = data["AttrsOfNum"];
             //生成表格
             if (ur.IsPic == 0) {
-                GenerTable("Content", groupSearch, AttrsOfNum, AttrsOfGroup, ur, ActiveAttr, noShowSum);
+                GenerTable("Content", mainData, mapAttrs, attrsOfNum);
                 //生成图表
             } else {
-                GenerChart(groupSearch, AttrsOfGroup, AttrsOfNum, ur, ActiveAttr, noShowSum);
+                GenerChart(mainData, mapAttrs, attrsOfNum);
             }
 
         }
+        function GenerTable(divID, mainData, mapAttrs) {
+            $("#" + divID).append($("<table class='layui-hide' id='groupTable' lay-filter='groubTable'></table>"));
+            //表格显示的列
+            var columns = new Array();;
+            columns.push({
+                title: '序',
+                field: '',
+                align: 'center',
+                width: 50,
+                type: 'numbers',
+                totalRowText: '汇总'
+            });
+            $.each(mapAttrs, function (i, attr) {
+                var field = attr.KeyOfEn;
+                var title = attr.Name;
+                var width = attr.Width;
 
-        function GenerTable(divId, groupSearch, AttrsOfNum, AttrsOfGroup, ur, ActiveAttr, noShowSum) {
-            var html = "<table id='mainTable'  class='Table' cellspacing='0' cellpadding='0' border='0' style='border-style:none;width:100%' > ";
-            //生成表头
-
-            /**含有合计的时候**/
-            if (ur.Vals.indexOf("=AMOUNT") != -1) {
-                html += "<tr>";
-                html += "<td rowspan=2 class='GroupTitle' style='background-color:#eee'>ID</td>";
-
-                for (var i = 0; i < AttrsOfGroup.length; i++) {
-                    html += "<td rowspan=2 class='GroupTitle' style='background-color:#eee'>" + AttrsOfGroup[i].Name + "</td>";
+                if (field == "Title") {
+                    width = 230;
                 }
+                var isTotalRow = false;
+                if (field == "Group_Number")
+                    isTotalRow = true;
+                if (ur.Vals.indexOf(field + "=") != -1)
+                    isTotalRow = true;
 
-                // 增加数据列
-                for (var i = 0; i < AttrsOfNum.length; i++) {
-                    if (ur.Vals.indexOf.indexOf(AttrsOfNum[i].KeyOfEn + "=AMOUNT") != -1)
-                    /*  如果本数据列 包含累计 */
-                        html += "<td  colspan=2 class='GroupTitle' style='background-color:#eee' >" + AttrsOfNum[i].Name + "</td>";
-                    else
-                        html += "<td  rowspan=2 class='GroupTitle' style='background-color:#eee'>" + AttrsOfNum[i].Name + "</td>";
-                }
-                html += "</tr>";
-                html += "<tr>";
-                for (var i = 0; i < AttrsOfNum.length; i++) {
-                    if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=AMOUNT") == -1)
-                        continue;
+                if (attr.UIContralType == 1) {
+                    if (width == null || width == "" || width == undefined)
+                        width = 180;
 
-                    html += "<td class='GroupTitle'>本月</td>"; //本月 this.ToE("OrderCondErr")
-                    html += "<td class='GroupTitle'>累计</td>"; //累计
-                }
-
-                html += "</tr>";
-
-            } else {
-                html += "<tr>";
-                html += "<td class='GroupTitle' style='text-align:center;background-color:#eee' >序</td>";
-                html += "</td>";
-                // 分组条件
-                for (var i = 0; i < AttrsOfGroup.length; i++) {
-
-                    if (OrderBy == AttrsOfGroup[i].KeyOfEn) {
-                        switch (OrderWay) {
-                            case "Down":
-                                html += "<td class='GroupTitle' style='background-color:#eee'><a href='Group.htm?EnsName=" + GetQueryString("EnsName") + "&OrderBy=" + AttrsOfGroup[i].KeyOfEn + "&OrderWay=Up' >" + AttrsOfGroup[i].Name + "<img src='../Img/ArrDown.gif' border=0/></a></td>";
-                                break;
-                            case "Up":
-                            default:
-                                html += "<td class='GroupTitle' style='background-color:#eee'><a href='Group.htm?EnsName=" + GetQueryString("EnsName") + "&OrderBy=" + AttrsOfGroup[i].KeyOfEn + "&OrderWay=Down' >" + AttrsOfGroup[i].Name + "<img src='../Img/ArrUp.gif' border=0/></a></td>";
-                                break;
+                    columns.push({
+                        field: field, //字段名
+                        title: title, //标题名称
+                        minWidth: width, //宽度
+                        sort: true,
+                        totalRow: isTotalRow,
+                        templet: function (data) {
+                            var val = data[this.field + "Text"];
+                            if (val == null && val == undefined)
+                                val = data[this.field + "T"];
+                            if (val == null && val == undefined)
+                                val = data[this.field];
+                            return val;
                         }
-                    }
-                    else {
-                        html += "<td class='GroupTitle' style='background-color:#eee'><a href='Group.htm?EnsName=" + GetQueryString("EnsName") + "&OrderBy=" + AttrsOfGroup[i].KeyOfEn + "&OrderWay=Down' >" + AttrsOfGroup[i].Name + "</a></td>";
-                    }
+                    });
+                    return true;
                 }
-
-                // 分组数据
-                for (var i = 0; i < AttrsOfNum.length; i++) {
-                    var lab = "";
-                    if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=SUM") != -1) {
-                        lab = "(合计)" + AttrsOfNum[i].Name;
-                    }
-                    else {
-                        lab = "(平均)" + AttrsOfNum[i].Name;
+                if (attr.UIContralType == 2) {
+                    if (width == null || width == "" || width == undefined) {
+                        width = 60;
                     }
 
-                    if (OrderBy == AttrsOfNum[i].KeyOfEn) {
-                        switch (OrderWay) {
-                            case "Down":
-                                if (NumKey == AttrsOfNum[i].KeyOfEn)
-                                    html += "<td class='GroupTitle' style='background-color:#eee'>" + lab + "<a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Up'><img src='../Img/ArrDown.gif' border=0/></a></td>";
-                                else
-                                    html += "<td class='GroupTitle' style='background-color:#eee'><a href=\"Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Up'><img src='../Img/ArrDown.gif' border=0/></a></td>";
-                                break;
-                            case "Up":
-                            default:
-                                if (NumKey == AttrsOfNum[i].KeyOfEn)
-                                    html += "<td class='GroupTitle' style='background-color:#eee'>" + lab + "<a href='Group.htm?EnsName=" + ensName + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Down'><img src='../Img/ArrUp.gif' border=0/></a></td>";
-                                else
-                                    html += "<td class='GroupTitle' nowrap><a href=\"Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?EnsName=" + ensName + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderWay=Down'><img src='../Img/ArrUp.gif' border=0/></a></td>";
-                                break;
+                    columns.push({
+                        field: field,
+                        title: title,
+                        minWidth: width,
+                        sort: true,
+                        totalRow: isTotalRow,
+                        templet: function (data) {
+                            if (data[this.field] == "0") return "否";
+                            if (data[this.field] == "1") return "是";
                         }
-                    }
-                    else {
-                        if (NumKey == AttrsOfNum[i].KeyOfEn)
-                            html += "<td class='GroupTitle' style='background-color:#eee'>" + lab + "<a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "' ><img src='../Img/ArrDownUp.gif' border=0/></a></td>";
-                        else
-                            html += "<td class='GroupTitle' style='background-color:#eee'><a href=\"Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "\" >" + lab + "</a><a href='Group.htm?EnsName=" + ensName + "&NumKey=" + AttrsOfNum[i].KeyOfEn + "&OrderBy=" + AttrsOfNum[i].KeyOfEn + "' ><img src='../Img/ArrDownUp.gif' border=0/></a></td>";
-
-                    }
+                    });
+                    return true;
                 }
-                html += "<td class='GroupTitle' style='background-color:#eee'></td>";
-            }
-
-            html += "</tr>"
-
-            //生成详情的url searchAttrs
-            var baseUrl = "ContrastDtl.htm?EnsName=" + ensName + "&TitleName=" + mapBase.EnDesc;
-            var keys = "";
-
-            // 分组的信息中是否包含部门？
-            var IsHaveFK_Dept = false;
-            if (ur.Vals.indexOf("FK_Dept") != -1)
-                IsHaveFK_Dept = true;
-
-            for (var i = 0; i < searchAttrs.length; i++) {
-                var attr = searchAttrs[i];
-
-                if (attr.MyFieldType == 6)
-                    continue;
-
-                if (IsHaveFK_Dept && attr.Field == "FK_Dept")
-                    continue;
-
-                var val = $("#DDL_" + attr.Field).val();
-
-                if (val == "all")
-                    continue;
-                if (keys.indexOf(attr.Field) == -1)
-                    keys += "&" + attr.Field + "=" + val;
-            }
-
-            baseUrl = baseUrl + keys;
-
-
-            //生成数据行
-            for (var i = 0; i < groupSearch.length; i++) {
-                var url = "";
-                var dr = groupSearch[i];
-                $.each(AttrsOfGroup, function (k, o) {
-                    if (url.indexOf(o.KeyOfEn) == -1)
-                        url += "&" + o.KeyOfEn + "=" + dr[o.KeyOfEn];
+                if (width == null || width == "" || width == undefined)
+                    width = 100;
+                if (field == "FlowStartRDT")
+                    width = 160;
+                columns.push({
+                    field: field,
+                    title: title,
+                    minWidth: width,
+                    sort: true,
+                    totalRow: isTotalRow,
                 });
+            });
+            columns.push({
+                field: "oper",
+                title: "操作",
+                minWidth: 80,
+                templet: function (data) {
+                    var url = "ContrastDtl.htm?EnsName=" + frmID + "&TitleName=" + mapBase.EnDesc;
+                    $.each(mapAttrs, function (k, o) {
+                        if (url.indexOf(o.KeyOfEn) == -1)
+                            url += "&" + o.KeyOfEn + "=" + data[o.KeyOfEn];
+                    });
 
-
-                if ((i + 1) % 2 == 0)
-                    html += "<tr bgcolor='AliceBlue' >";
-                else
-                    html += "<tr bgcolor='white' >";
-                html += "<td class='Idx' nowrap>" + dr.IDX + "</td>";
-                for (var j = 0; j < AttrsOfGroup.length; j++) {
-                    html += "<td  nowrap >" + dr[AttrsOfGroup[j].KeyOfEn + "T"] + "</td>";
+                    return "<a href=\"javascript:WinOpen('" + url + "', 'wincommgroup',900,900);\"  class='btn btn-default btn - sm easyui- linkbutton'>详细</a>"
                 }
-                for (var j = 0; j < AttrsOfNum.length; j++) {
-                    var obj = dr[AttrsOfNum[j].KeyOfEn];
-                    if (obj == null || obj == undefined) obj = "-";
-                    if (AttrsOfNum[j].MyDataType == 8) {
-                        if (ur.Vals.indexOf(AttrsOfNum[j].KeyOfEn + "=AMOUNT") != -1) {
-                            //需要转换为金额类型，小数位数不到两位的补全,功能待定
-                            html += "<td class='TDNum' nowrap >" + obj + "</td>";
-                            html += "<td class='TDNum' nowrap >" + dr[AttrsOfNum[j].KeyOfEn + "Amount"] + "</td>";
-                        } else {
-                            html += "<td class='TDNum' nowrap >" + obj + "</td>";
-                        }
-                    } else {
-                        if (ur.Vals.indexOf(AttrsOfNum[j].KeyOfEn + "=AMOUNT") != -1) {
-                            html += "<td class='TDNum' nowrap >" + obj + "</td>";
-                            html += "<td class='TDNum' nowrap >" + dr[AttrsOfNum[j].KeyOfEn + "Amount"] + "</td>";
-                        } else {
-                            html += "<td class='TDNum' nowrap >" + obj + "</td>";
-                        }
-                    }
-                }
-                url = baseUrl + url;
-                html += "<td nowrap ><a href=\"javascript:WinOpen('" + url + "', 'wincommgroup',900,900);\"  class='easyui-linkbutton'>详细</a></td>";
-                html += "</tr>";
-            }
+            });
 
-            //汇总信息
-            html += "<tr class='TRSum'>";
-            html += "<td nowrap>汇总</td>";
-            for (var j = 0; j < AttrsOfGroup.length; j++) {
-                html += "<td  nowrap ></td>";
-            }
-            var AttrsOfNum1 = AttrsOfNum;
-            var d = 0;
-            for (var i = 0; i < AttrsOfNum.length; i++) {
-                if (noShowSum.indexOf("@" + AttrsOfNum[i].KeyOfEn + "@") != -1) {
-                    var isHave = false;
-                    for (var j = 0; j < ActiveAttr.length; j++) {
-                        if (ActiveAttr[j].AttrKey != AttrsOfNum[i].KeyOfEn)
-                            continue;
+            layui.use(['table', 'form'], function () {
+                var table = layui.table;
+                var height = $(document).height() - $("#toolBar").height() - 100;
+                if ($(".layui-tab-title").length != 0)
+                    height = 470;
+                table.render({
+                    elem: '#groupTable'
+                    , data: mainData
+                    //, cellMinWidth: 80
+                    , toolbar: 'true' //开启头部工具栏，并为其绑定左侧模板
+                    , defaultToolbar: ['exports']
+                    , title: '数据分析'
+                    , cols: [columns]
+                    , limit: Number.MAX_VALUE
+                    , height: height
+                    , totalRow: true
+                    , done: function (res, curr, count) {
+                        var tds = $(".layui-table-total tr td");
+                        $.each(tds, function (i, item) {
 
-                        isHave = true;
+                            var key = $(item).attr("data-field");
+                            if (ur.Vals.indexOf(key + "=AVG") != -1) {
+                                var children = $($(item).find("div")[0]);
 
-                        var exp = ActiveAttr[j].ExpApp;
-                        if (exp == null || exp == "") {
-                            html += "<td></td>";
-                            break;
-                        }
-
-                        for (var k = 0; k < AttrsOfNum1.length; k++) {
-                            if (exp.indexOf("@" + AttrsOfNum1[k].KeyOfEn + "@") != -1) {
-                                d = 0;
-                                $.each(groupSearch, function (i, o) {
-                                    d += parseFloat(o[AttrsOfNum1[k].KeyOfEn]);
-                                });
-
-                                exp = exp.replace("@" + AttrsOfNum1[k].KeyOfEn + "@", d);
+                                //获取子节点的值
+                                var value = children.html();
+                                children.html((value / count).toFixed(2));
                             }
-                        }
 
-                        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
-                        handler.AddPara("Exp", exp);
-                        var data = handler.DoMethodReturnString("ParseExpToDecimal");
-                        //待定
-                        html += "<td class='TDNum' nowrap >" + data.toFixed(4) + "</td>";
+                        });
                     }
 
-                    if (isHave == false)
-                        html += "<td></td>";
-
-                    continue;
-                }
-
-                switch (AttrsOfNum[i].MyDataType) {
-                    case 8:
-                        if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=AMOUNT") != -1) {
-                            d = 0;
-                            $.each(groupSearch, function (k, o) {
-                                if (o[AttrsOfNum[i].KeyOfEn] != null && o[AttrsOfNum[i].KeyOfEn] != undefined)
-                                d += parseFloat(o[AttrsOfNum[i].KeyOfEn]);
-                            });
-                            html += "<td class='TDNum' nowrap >" + d.toFixed(4) + "</td>";
-
-                            d = 0;
-                            $.each(groupSearch, function (k, o) {
-                                if (o[AttrsOfNum[i].KeyOfEn + "Amount"] != null && o[AttrsOfNum[i].KeyOfEn + "Amount"] != undefined)
-                                d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
-                            });
-                            html += "<td class='TDNum' nowrap >" + d.toFixed(4) + "</td>";
-                        }
-                        else {
-                            d = 0;
-                            $.each(groupSearch, function (k, o) {
-                                if (o[AttrsOfNum[i].KeyOfEn + "Amount"] != null && o[AttrsOfNum[i].KeyOfEn + "Amount"] != undefined)
-                                d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
-                            });
-
-                            if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=AVG") < 1)
-                                html += "<td class='TDNum' nowrap >" + d.toFixed(4) + "</td>";
-                            else {
-                                if (groupSearch.length == 0)
-                                    html += "<td class='TDNum' nowrap ></td>";
-                                else
-                                    html += "<td class='TDNum' nowrap >" + (d / groupSearch.length).toFixed(4) + "</td>";
-                            }
-                        }
-                        break;
-                    default:
-                        if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=AMOUNT") != -1) {
-                            d = 0;
-                            $.each(groupSearch, function (k, o) {
-                                if (o[AttrsOfNum[i].KeyOfEn] != null && o[AttrsOfNum[i].KeyOfEn] != undefined)
-                                    d += parseFloat(o[AttrsOfNum[i].KeyOfEn]);
-                            });
-
-                            html += "<td class='TDNum' nowrap >" + d + "</td>";
-
-                            d = 0;
-                            $.each(groupSearch, function (k, o) {
-                                if (o[AttrsOfNum[i].KeyOfEn + "Amount"] != null && o[AttrsOfNum[i].KeyOfEn + "Amount"] != undefined)
-                                d += parseFloat(o[AttrsOfNum[i].KeyOfEn + "Amount"]);
-                            });
-                            html += "<td class='TDNum' nowrap >" + d + "</td>";
-
-                        } else {
-                            d = 0;
-                            $.each(groupSearch, function (k, o) {
-                                if(o[AttrsOfNum[i].KeyOfEn]!=null && o[AttrsOfNum[i].KeyOfEn]!=undefined)
-                                    d += parseFloat(o[AttrsOfNum[i].KeyOfEn]);
-                            });
-
-                            if (ur.Vals.indexOf(AttrsOfNum[i].KeyOfEn + "=AVG") == -1)
-                                html += "<td class='TDNum' nowrap >" + d + "</td>";
-                            else {
-                                if (groupSearch.length == 0)
-                                    html += "<td class='TDNum' nowrap ></td>";
-                                else
-                                    html += "<td class='TDNum' nowrap >" + (d / groupSearch.length).toFixed(4) + "</td>";
-                            }
-                        }
-                        break;
-
-                }
-            }
-            html += "<td class='TDNum' nowrap ></td>";
-            html += "</tr>";
-            html += "</table>";
-            $("#" + divId).html("").append(html);
+                });
+            });
         }
 
-
-
-        function GenerChart(groupSearch, AttrsOfGroup, AttrsOfNum, ur, ActiveAttr, noShowSum) {
-            var html = "";
-            var width = document.body.clientWidth - 320;
-            var height = document.body.clientHeight - 80;
-            //增加分组
-            html += "<div class='easyui-tabs' data-options=\"fit:true\">";
-            html += "<div id='table_div' title='分组数据' data-options=\"iconCls:'icon-table'\" style='padding:5px'></div>";
-            //增加柱状图像
-            html += "<div id='column_chart_div'  title='柱状图' data-options=\"iconCls:'icon-columnchart'\" style='padding:5px;text-align:center;width: "+width+"px;height:"+height+"px;'></div>";
-            //增加饼图
-            html += "<div id='pie_chart_div' title='饼状图' data-options=\"iconCls:'icon-piechart'\" style='padding:5px;text-align:center;width: " + width + "px;height:" + height + "px;'></div>";
-            //增加折线图
-            html += "<div  id='line_chart_div' title='折线图' data-options=\"iconCls:'icon-linechart'\" style='padding:5px;text-align:center;width: " + width + "px;height:" + height + "px;'></div>";
-            html += "</div>";
+        /**
+         * 图标展示
+         * @param mainData
+         * @param mapAttrs
+         * @param AttrsOfNum
+         * @param ur
+         * @param ActiveAttr
+         * @param noShowSum
+         */
+        function GenerChart(mainData, mapAttrs, attrsOfNum) {
+            //groupSearch = thisGroupSearch;
+            //AttrsOfNum = thisAttrsOfNum;
+            //AttrsOfGroup = thisAttrsOfGroup;
             var width = $("#TB_W").val();
             if (width == "" || width == 0)
                 width = 300;
@@ -654,202 +582,226 @@
             if (height == "" || height == 0)
                 height = 300;
 
-            $("#Content").html("").append(html);
-            $.parser.parse("#Content");
+            var _html = "";
+            _html += '<div class="layui-tab layui-tab-card" style="height:550px" >';
+            _html += '<ul class="layui-tab-title" id="tabEchart">';
+            _html += '<li class="layui-this">分组数据</li>';
+            _html += '<li >柱状图</li>';
+            _html += '<li>折线图</li>';
+            _html += '<li>饼状图</li>';
+            _html += '</ul>';
 
-            //获取url项目的名称
-            var projectName = "";
-            if (plant != "CCFlow") {
-                var pathName = window.location.pathname.substring(1); //jflow-web/WF/Comm/Group.htm
-                projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+            _html += '<div class="layui-tab-content" style="">';
+
+            _html += '<div class="layui-tab-item layui-show" id="table_div"></div>';
+            _html += '<div class="layui-tab-item layui-form layui-border-box layui-table-view" id="bar_chart_div" style="width:' + width + 'px:height:' + height + 'px" ></div>';
+            _html += '<div class="layui-tab-item " id="line_chart_div">4</div>';
+
+            _html += '<div class="layui-tab-item" id="pie_chart_div">3</div>';
+
+            _html += '</div>';
+            _html += '</div>';
+
+
+
+            $("#Content").html(_html);
+
+            var xAxis = [];
+            for (var i = 0; i < mainData.length; i++) {
+                var str = mainData[i][mapAttrs[0].KeyOfEn + "Text"];
+                if (str == null || str == undefined)
+                    str = mainData[i][mapAttrs[0].KeyOfEn + "T"];
+                xAxis[i] = str;
             }
-            GenerTable("table_div", groupSearch, AttrsOfNum, AttrsOfGroup, ur, ActiveAttr, noShowSum);
-            GenerateColumnChart(groupSearch, AttrsOfGroup[0].KeyOfEn, AttrsOfNum, width, height, projectName);
-            GeneratePieChart(groupSearch, AttrsOfGroup[0].KeyOfEn, AttrsOfNum, width, height, projectName);
-            GenerateLineChart(groupSearch, AttrsOfGroup[0].KeyOfEn, AttrsOfNum, width, height, projectName);
+            //分析项目
+            var analyKey = ur.Vals.substring(ur.Vals.indexOf("@StateNumKey"));
+
+
+            //表格
+            GenerTable("table_div", mainData, mapAttrs, xAxis, width);
+            var width = $("#table_div").width();
+            //柱状图
+            GenerateBarChart(mainData, mapAttrs, attrsOfNum, xAxis, width);
+
+            //折线图
+            GenerateLineChart(mainData, mapAttrs, attrsOfNum, xAxis, width);
+
+            //饼状图
+            GeneratePieChart(mainData, mapAttrs, attrsOfNum, xAxis, mapAttrs[0].KeyOfEn, width);
+
         }
 
-        //柱状图像
-        function GenerateColumnChart(groupSearch, KeyOfEn, AttrsOfNum, w, h, projectName) {
+        /**
+         * 柱状图
+         * @param groupSearch
+         * @param AttrsOfNum
+         * @param xAxis
+         */
+        function GenerateBarChart(mainData, mapAttrs, attrsOfNum, xAxis, width) {
+
+            $("#bar_chart_div").css("width", width + "px").css("height", "300px");
+            var myChart = echarts.init(document.getElementById('bar_chart_div'));
             var series = [];
-            var product = [];
-            var dataSet = [];
-            product.push("product");
-            for (var i = 0; i < AttrsOfNum.length; i++) {
-                if (AttrsOfNum[i].Name == null || AttrsOfNum[i].Name == "")
-                    continue;
-                product.push(AttrsOfNum[i].Name);
-                series.push({ type: 'bar' });
-             }
-             dataSet.push(product);
-             for (var i = 0; i < groupSearch.length; i++) {
-                var source = [];
-                source.push(groupSearch[i][KeyOfEn + "T"]);
-                for (var j = 0; j < AttrsOfNum.length; j++) {
-                    if (AttrsOfNum[j].Name == null || AttrsOfNum[j].Name == "")
-                        continue;
-                    source.push(groupSearch[i][AttrsOfNum[j].KeyOfEn]);
-
-                }
-                dataSet.push(source);
-             }
-
-            // 基于准备好的dom，初始化echarts实例
-            var myChart = echarts.init(document.getElementById('column_chart_div'));
-            // 指定图表的配置项和数据
-            var option = {
-                title: {
-                    text: document.title
-                },
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow'
-                    }
-                },
-                toolbox: {
-                    show: true,
-                    feature: {
-                        magicType: { show: true, type: ['line', 'bar'] },
-                        restore: { show: true },
-                        saveAsImage: { show: true }
-                    }
-                },
-                legend: {
-                    data: product
-                },
-                dataset: {
-                    source:dataSet
-                },
-                xAxis: { type: 'category' },
-                // 声明一个 Y 轴，数值轴。
-                yAxis: {},
-                series: series
-            };
-
-            // 使用刚指定的配置项和数据显示图表。
-            myChart.setOption(option);
-
-        }
-        //饼图
-        function GeneratePieChart(groupSearch, KeyOfEn, AttrsOfNum, w, h, projectName) {
-            var legenddata = [];
-            for (var i = 0; i < groupSearch.length; i++) {
-                legenddata.push(groupSearch[i][KeyOfEn + "T"]);
-            }
-
-            var firstKey = AttrsOfNum[0];
-            var series = [];
-            for (var j = 0; j < groupSearch.length; j++) {
-                series.push({ value: groupSearch[j][firstKey.KeyOfEn], name: groupSearch[j][KeyOfEn + "T"] });
-            }
-
-
-            // 基于准备好的dom，初始化echarts实例
-            var myChart = echarts.init(document.getElementById('pie_chart_div'));
-            // 指定图表的配置项和数据
-            var option = {
-                title: {
-                    text: document.title,
-                    left: 'center'
-                },
-                tooltip: {
-                    trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
-                },
-                legend: {
-                    bottom: 10,
-                    left: 'center',
-                    data: legenddata
-                },
-                series: [
-                  {
-                      type: 'pie',
-                      radius: '65%',
-                      center: ['50%', '50%'],
-                      selectedMode: 'single',
-                      data: series
-                  }
-                ],
-                itemStyle: {
-                    emphasis: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                }
-            };
-            // 使用刚指定的配置项和数据显示图表。
-            myChart.setOption(option);
-
-        }
-        //折线图
-        function GenerateLineChart(groupSearch, KeyOfEn, AttrsOfNum, w, h, projectName) {
-            var xdata = [];
-            for (var i = 0; i < groupSearch.length; i++) {
-                xdata.push(groupSearch[i][KeyOfEn + "T"]);
-            }
-            var product = [];
-            var series = [];
-            product.push("product");
-            for (var i = 0; i < AttrsOfNum.length; i++) {
-                if (AttrsOfNum[i].Name == null || AttrsOfNum[i].Name == "")
-                    continue;
-                product.push(AttrsOfNum[i].Name);
-            }
-            for (var i = 0; i < AttrsOfNum.length; i++) {
-                if (AttrsOfNum[i].Name == null || AttrsOfNum[i].Name == "")
+            for (var i = 0; i < attrsOfNum.length; i++) {
+                if (attrsOfNum[i].Name == null || attrsOfNum[i].Name == "")
                     continue;
                 var data = [];
-                for (var j = 0; j < groupSearch.length; j++) {
-                    data.push(groupSearch[j][AttrsOfNum[i].KeyOfEn]);
+                for (var j = 0; j < mainData.length; j++) {
+                    data[j] = mainData[j][attrsOfNum[i].KeyOfEn];
                 }
-                series.push({ "name": AttrsOfNum[i].Name, type: 'line', data: data });
+                series.push({
+                    name: attrsOfNum[i].Name,
+                    data: data,
+                    type: 'bar',
+                    smooth: true,
+
+                });
             }
-            
-            // 基于准备好的dom，初始化echarts实例
-            var myChart = echarts.init(document.getElementById('line_chart_div'));
             // 指定图表的配置项和数据
             var option = {
-                title: {
-                    text: document.title,
-                    left: 'left'
+                grid: {
+                    top: '5%',
+                    right: '1%',
+                    left: '1%',
+                    bottom: '10%',
+                    containLabel: true
                 },
                 tooltip: {
-                    trigger: 'item',
-                    formatter: '{a} <br/>{b} : {c}'
-                },
-                legend: {
-                    left: 'center',
-                    data: product
+                    trigger: 'axis'
                 },
                 xAxis: {
                     type: 'category',
-                    name: 'x',
-                    splitLine: { show: false },
-                    data:xdata
-                },
-                grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                    containLabel: true
+                    data: xAxis
                 },
                 yAxis: {
-                    //type: 'log',
-                    name: 'y'
+                    type: 'value'
                 },
                 series: series
             };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+        /**
+         * 折线图
+         * @param groupSearch
+         * @param AttrsOfNum
+         * @param xAxis
+         */
+        function GenerateLineChart(mainData, mapAttrs, attrsOfNum, xAxis, width) {
+            $("#line_chart_div").css("width", width + "px").css("height", "300px");
+            var myChart = echarts.init(document.getElementById('line_chart_div'));
+            var series = [];
+
+            for (var i = 0; i < attrsOfNum.length; i++) {
+                if (attrsOfNum[i].Name == null || attrsOfNum[i].Name == "")
+                    continue;
+                var data = [];
+                for (var j = 0; j < mainData.length; j++) {
+                    data[j] = mainData[j][attrsOfNum[i].KeyOfEn];
+                }
+                series.push({
+                    name: attrsOfNum[i].Name,
+                    data: data,
+                    type: 'line',
+
+                });
+            }
+            // 指定图表的配置项和数据
+            var option = {
+                grid: {
+                    top: '5%',
+                    right: '1%',
+                    left: '1%',
+                    bottom: '10%',
+                    containLabel: true
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: xAxis
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: series
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+
+        function GeneratePieChart(mainData, mapAttrs, attrsOfNum, xAxis, KeyOfEn, width) {
+            $("#pie_chart_div").css("width", width + "px").css("height", "300px");
+            var myChart = echarts.init(document.getElementById('pie_chart_div'));
+            var series = [];
+            for (var i = 0; i < attrsOfNum.length; i++) {
+                if (attrsOfNum[i].Name == null || attrsOfNum[i].Name == "")
+                    continue;
+                var data = [];
+                for (var j = 0; j < mainData.length; j++) {
+                    var val = mainData[j][KeyOfEn + "Text"];
+                    if (val == null || val == undefined)
+                        val = mainData[j][KeyOfEn + "T"];
+                    data.push({
+                        "value": mainData[j][attrsOfNum[i].KeyOfEn],
+                        "name": val
+                    });
+                }
+                series.push({
+                    name: attrsOfNum[i].Name,
+                    data: data,
+                    type: 'pie',
+                    radius: '60%',
+                    center: ['60%', '50%'],
+                    itemStyle: {
+                        // emphasis：英文意思是 强调;着重;（轮廓、图形等的）鲜明;突出，重读
+                        // emphasis：设置鼠标放到哪一块扇形上面的时候，扇形样式、阴影
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(30, 144, 255，0.5)'
+                        }
+                    },
+
+                });
+            }
+
+            var option = {
+
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b} : {c} ({d}%)'
+                },
+                legend: {
+                    // orient 设置布局方式，默认水平布局，可选值：'horizontal'（水平） ¦ 'vertical'（垂直）
+                    orient: 'vertical',
+                    // x 设置水平安放位置，默认全图居中，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
+                    x: 'left',
+                    // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
+                    y: 'center',
+                    itemWidth: 24,   // 设置图例图形的宽
+                    itemHeight: 18,  // 设置图例图形的高
+                    textStyle: {
+                        color: '#666'  // 图例文字颜色
+                    },
+                    // itemGap设置各个item之间的间隔，单位px，默认为10，横向布局时为水平间隔，纵向布局时为纵向间隔
+                    itemGap: 10,
+                    //backgroundColor: '#f8f8f8',  // 设置整个图例区域背景颜色
+                    data: xAxis
+                },
+                series: series
+            };
+
             // 使用刚指定的配置项和数据显示图表。
             myChart.setOption(option);
         }
 
         function Search() {
             //保存查询条件.
-            var ensName = GetQueryString("EnsName");
+            var frmID = GetQueryString("FrmID");
             var ur = new Entity("BP.Sys.UserRegedit");
-            ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
+            ur.MyPK = webUser.No + "_" + frmID + "_SearchAttrs";
             ur.FK_Emp = webUser.No;
 
             if ($("#TB_Key") != null && $("#TB_Key").val() != "")
@@ -875,7 +827,7 @@
             ur.FK_Emp = webUser.No;
             ur.CfgKey = "SearchAttrs";
             ur.Vals = str;
-            ur.FK_MapData = ensName;
+            ur.FK_MapData = frmID;
             ur.SetPara("RecCount", count);
             ur.Save();
             //查询
@@ -885,74 +837,144 @@
 
         function Exp() {
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
-            handler.AddPara("EnsName", GetQueryString("EnsName"));
+            handler.AddPara("FrmID", GetQueryString("FrmID"));
+            handler.AddUrlData();  //增加参数.
+            handler.AddFormData();
+            var groupList = "";
+            $('input[name="groupContent"]').each(function () {
+                groupList += '@' + $(this).val(); //将选中的值添加到数组chk_value中
+            });
+            handler.AddPara("GroupList", groupList);
             //查询集合
             var data = handler.DoMethodReturnString("Group_Exp");
-            var url = "";
-            if (data.indexOf('err@') == 0) {
+            if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
                 alert(data);
+                return;
             }
-            if (plant != 'CCFlow') {
-                var currentPath = window.document.location.href;
-                var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-                data = path + data;
-            }
+
+            //data = GetLocalWFPreHref() + data;
+
             window.open(data);
             return;
 
         }
 
         function WinOpen(url, winName) {
-            var newWindow = window.open(url, winName, 'height=800,width=1030,top=' + (window.screen.availHeight - 800) / 2 + ',left=' + (window.screen.availWidth - 1030) / 2 + ',scrollbars=yes,resizable=yes,toolbar=false,location=false,center=yes,center: yes;');
-            newWindow.focus();
+            layer.open({
+                type: 2,
+                title: mapBase.EnDesc + "数据分析详情",
+                shade: false,
+                maxmin: true,
+                area: ['80%', '90%'],
+                content: url
+            });
             return;
         }
-
     </script>
 </head>
-<body class="easyui-layout">
-   <form  id="cc">
-        <div id="mainDiv" data-options="region:'center',title:'学生',noheader:true" style="padding: 5px">
-            <div class="easyui-layout"  data-options="fit:true" id="groupLayOut">
-                <div id="toolBar" data-options="region:'north',noheader:true,split:false" style="padding: 2px;height: 34px; line-height: 30px">
-                     <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" onclick="Search()">查询</a>
-                      <a href="#"  class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-excel'" onclick="Exp()">导出全部</a>
-                </div>
-                <div data-options="region:'west',title:'分组条件',split:true" style="padding: 5px; width: 260px;">
-                    <div class="easyui-panel" title="显示内容" style="padding: 5px; margin-bottom: 5px;overflow:hidden">
-                        <table id="CheckBoxList" style="border-style:None;width:100%;"></table>
-                    </div>
-                    <div class="easyui-panel" title="分析项目" style="padding: 5px; margin-bottom: 5px;overflow:hidden">
-                        <table id="AnalyGroup"  cellspacing='0' cellpadding='0' border='0' style='border-style:none;width:100%' ></table>
-                    </div>
-                    <div class="easyui-panel" title="图表" style="padding: 5px; margin-bottom: 5px;overflow:hidden">
-                        <table cellpadding="0" cellspacing="0" border="0" style="border-style: none; width: 100%">
-                            <tr>
-                                <td>
-                                    高度：<input name="TB_H" type="text" value="460" id="TB_H"  class="aspNetDisabled" style="width: 60px; height: auto;
-                                        text-align: right" />
-                                </td>
-                                <td style="text-align: right">
-                                    宽度：<input name="TB_W" type="text" value="800" id="TB_W"  class="aspNetDisabled" style="width: 60px; height: auto;
-                                        text-align: right" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <span class="aspNetDisabled" title="注意：仅当“显示内容”选择1项时，图表功能才可用！" style="float: left">
-                                        <input id="CB_IsShowPict" type="checkbox" name="CB_IsShowPict"  onclick="javascript:doPostBack()" />
-                                        <label for="CB_IsShowPict">显示图表</label>
-                                    </span>
-                                    <span style="float: right">
-                                        <a id="lbtnApply" class="aspNetDisabled easyui-linkbutton" data-options="iconCls:&#39;icon-ok&#39;,plain:true">应用</a></span>
-                                </td>
-                            </tr>
-                        </table>
+<body>
+    <div class="layui-body layui-tab-content site-demo site-demo-body" style="left:0px !important">
+        <form class="layui-form">
+            <div id="toolBar" class="layui-header layui-card" style="height:auto;padding:10px"></div>
+            <div class="layui-col-md2">
+                <div class="layui-card">
+                    <div class="layui-card-header">分组条件</div>
+                    <div id="CheckBoxList">
+
                     </div>
                 </div>
-                <div id="Content" data-options="region:'center'" style="padding: 5px;"></div>
-           </div>
-        </div>
-    </form>
+                <div class="layui-card">
+                    <div class="layui-card-header" style="border-top:1px solid #f6f6f6;">分析项目</div>
+                    <div id="AnalyGroup">
+
+                    </div>
+                </div>
+                <div class="layui-card">
+                    <div class="layui-card-header">图表</div>
+                    <div class="layui-form-item" style="margin-top:5px">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="width:30px">高度</label>
+                            <div class="layui-input-inline" style="width:60px">
+                                <input type="text" name="TB_H" id="TB_H" lay-verify="required|number" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="width:30px">宽度</label>
+                            <div class="layui-input-inline" style="width:60px">
+                                <input type="text" name="TB_W" id="TB_W" lay-verify="required|number" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" pane="">
+
+                        <div class="layui-input-block" style="margin-left:20px">
+                            <input type="checkbox" checked="" name="CB_IsShowPict" id="CB_IsShowPict" lay-skin='primary' title="显示图标" lay-filter="switch" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md10">
+                <div class="layui-card" id="Content" style="margin-left:20px;height:550px">
+
+                </div>
+
+            </div>
+        </form>
+
+    </div>
+
+    <script>
+        layui.use(['layedit', 'table', 'element', 'laydate'], function () {
+            var table = layui.table;
+            var form = layui.form;
+            form.on('checkbox(switch)', function (data) {
+                ShowData();
+            });
+            if ($("#TB_DTFrom").length == 1) {
+                layui.laydate.render({
+                    elem: '#TB_DTFrom'
+                    , format: $("#TB_DTFrom").attr("data-info")
+                });
+                layui.laydate.render({
+                    elem: '#TB_DTTo'
+                    , format: $("#TB_DTTo").attr("data-info")
+                });
+            }
+
+        });
+    </script>
+    <script type="text/javascript">
+        /**
+         * 初始化下拉框
+         * @param frmData
+         * @param mapAttr
+         * @param defVal
+         */
+        function InitDDLOperation(frmData, mapAttr, defVal) {
+
+            var operations = "";
+            if (defVal == "all")
+                operations += "<option value='all' >全部</option>";
+
+            var ens = frmData[mapAttr.Field];
+            if (ens == null) {
+                ens = [{ 'IntKey': 0, 'Lab': '否' }, { 'IntKey': 1, 'Lab': '是' }];
+            }
+            for (var i = 0; i < ens.length; i++) {
+
+                var en = ens[i];
+
+                var selected = "";
+                if (en.Selected && en.Selected.toString() == "true")
+                    selected = "selected=selected";
+
+                if (en.No == undefined)
+                    operations += "<option value='" + en.IntKey + "' " + selected + ">" + en.Lab + "</option>";
+                else
+                    operations += "<option value='" + en.No + "' " + selected + ">" + en.Name + "</option>";
+            }
+            return operations;
+        }
+    </script>
 </body>
 </html>

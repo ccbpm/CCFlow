@@ -6,6 +6,8 @@
 */
 function DoMethond(methodID) {
 
+    debugger;
+
     //不同的方法类型执行不同的操作.
     //var en = new Entity("BP.CCBill.Template.Method", methodID);
     var en = GetMethoh(methodID);
@@ -73,7 +75,7 @@ function DoFlowEtc(en)
 
     if (en.Mark === "StartFlow") {
         var handler = new HttpHandler("BP.CCBill.WF_CCBill");
-        handler.AddPara("MethodID", en.MyPK);
+        handler.AddPara("MethodID", en.No);
         handler.AddPara("WorkID", GetQueryString("WorkID"));
         var data = handler.DoMethodReturnString("MyDict_DoFlowEtc_StartFlow");
         if (data.indexOf('err@') == 0) {
@@ -98,8 +100,9 @@ function DoFlow(en) {
         return "../../App/OneFlow/RptGroup.htm?SearchType=My&FK_Flow=" + en.FlowNo;
 
     if (en.Mark === "StartFlow") {
+
         var handler = new HttpHandler("BP.CCBill.WF_CCBill");
-        handler.AddPara("MethodID", en.MyPK);
+        handler.AddPara("MethodID", en.No);
         handler.AddPara("WorkID", GetQueryString("WorkID"));
         var data = handler.DoMethodReturnString("MyDict_DoFlowBaseData_StartFlow");
         if (data.indexOf('err@') == 0) {

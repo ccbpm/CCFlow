@@ -26,19 +26,19 @@ window.onload = function () {
                     padding: '0 10px',
                 }
             },
-            sideBarStyle: function (){
+            sideBarStyle: function () {
                 return {
-                    width: this.sideBarOpen ? '240px': '5px'
+                    width: this.sideBarOpen ? '240px' : '5px'
                 }
             },
-            mainStyle: function (){
+            mainStyle: function () {
                 return {
-                    width: this.sideBarOpen ? 'calc(100% - 240px)': '100%'
+                    width: this.sideBarOpen ? 'calc(100% - 240px)' : '100%'
                 }
             },
-            contentStyle: function (){
+            contentStyle: function () {
                 return {
-                    width: this.sideBarOpen ? 'calc(100vw - 262px)': '100%'
+                    width: this.sideBarOpen ? 'calc(100vw - 262px)' : '100%'
                 }
             }
         },
@@ -90,9 +90,31 @@ window.onload = function () {
 
                 // alert(method.No);
 
-                var loading = layer.msg("加载中..",{
+                var loading = layer.msg("加载中..", {
                     icon: 16
                 })
+
+                //var load = layer.msg("正在处理,请稍候...", {
+                //    icon: 16,
+                //    anim: 2
+                //})
+
+                if (method.MethodModel === "Bill") {
+
+                    if (method.Mark == "NewBill")
+                        method.Docs = "./Opt/GotoLink.htm?FrmID=" + method.FrmID + "&MethodNo=" + method.No + "&WorkID=" + GetQueryString("WorkID") + "&DoType=Bill";
+
+                    if (method.Mark == "Search")
+                        method.Docs = "./SearchBill.htm?FrmID=" + method.Tag1 + "&PWorkID=" + GetQueryString("WorkID") + "&DoType=Bill";
+
+                    if (method.Docs == "") {
+                        alert("没有解析的mark=" + method.Mark);
+                        return;
+                    }
+
+                    //   alert(method.Docs);
+                    //alert(method.Docs);
+                }
 
                 //如果是一个方法.
                 if (method.MethodModel === "Func") {
@@ -108,13 +130,12 @@ window.onload = function () {
                     method.Docs = "./OptComponents/QRCode.htm?FrmID=" + method.FrmID + "&MethodNo=" + method.No + "&WorkID=" + GetQueryString("WorkID");
                 }
 
-
-                //
+                //单个实体发起的流程汇总.
                 if (method.MethodModel === "SingleDictGenerWorkFlows") {
                     method.Docs = "./OptOneFlow/SingleDictGenerWorkFlows.htm?FrmID=" + method.FrmID + "&No=" + method.No + "&WorkID=" + GetQueryString("WorkID");
                 }
 
-                //修改基础数据的.
+                //修改基础数据的的流程.
                 if (method.MethodModel === "FlowBaseData") {
                     //通过找个方法 window.open(method.Docs);
 
@@ -137,9 +158,30 @@ window.onload = function () {
                     method.Docs = "./OptComponents/DataVer.htm?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID");
                 }
 
+                //日志.
+                if (method.MethodModel == "DictLog") {
+                    method.Docs = "./OptComponents/DictLog.htm?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID");
+                }
+
+                //超链接.
+                if (method.MethodModel == "Link") {
+                    if (method.UrlExt.indexOf('?') > 0)
+                        method.Docs = method.UrlExt + "&FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID");
+                    else
+                        method.Docs = method.UrlExt + "?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID");
+                }
+
                 if (method.Docs === "") {
-                    alert("没有解析的Url-MethodModel:" + method.MethodModel + " - " + method.Mark);
-                    return;
+
+                    var url = method.UrlExt;
+                    if (url === "") {
+                        alert("没有解析的Url-MethodModel:" + method.MethodModel + " - " + method.Mark);
+                        return;
+                    }
+                    if (url.indexOf('?') > 0)
+                        method.Docs = url + "&FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID");
+                    else
+                        method.Docs = url + "?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID");
                 }
 
                 var isExist = this.iframes.filter(function (iframe) {

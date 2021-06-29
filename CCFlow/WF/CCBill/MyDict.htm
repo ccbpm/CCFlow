@@ -77,7 +77,7 @@
     <script id="view" type="text/html">
         <div class="layui-btn-container">
             {{#  layui.each(d, function(index, item){ }}
-            <button type="button" class="layui-btn layui-btn-sm" name="{{item.No}}" {{# if(item.No=="Save"|| item.No=="Submit"){}}={{# if(item.No=="Save"|| item.No=="Submit"){}} lay-submit="" lay-filter="{{item.No}}" {{#  }; }}={{#  }; }} data-type="{{=item.Type}}"><i class="iconfont icon-{{item.Icon}}"></i>{{item.Name}}</button>
+            <button type="button" class="layui-btn layui-btn-sm" name="{{item.No}}" {{# if(item.No=="Save"|| item.No=="Submit"){}} lay-submit="" lay-filter="{{item.No}}" {{#  }; }} data-type="{{=item.Type}}"><i class="iconfont icon-{{item.Icon}}"></i>{{item.Name}}</button>
             {{#  }); }}
         </div>
     </script>

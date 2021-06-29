@@ -64,7 +64,7 @@ namespace BP.GPM
         /// </summary>
         public const string QQ = "QQ";
         /// <summary>
-        /// 组织解构编码
+        /// 组织结构编码
         /// </summary>
         public const string OrgName = "OrgName";
         public const string OpenID = "OpenID";

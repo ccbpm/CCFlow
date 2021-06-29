@@ -386,7 +386,7 @@ namespace BP.GPM.AD
                 }
                 return;
             }
-            //组织解构,更新跟目录的.
+            //组织结构,更新跟目录的.
             if (entry.Name.IndexOf("OU=") == 0)
             {
 

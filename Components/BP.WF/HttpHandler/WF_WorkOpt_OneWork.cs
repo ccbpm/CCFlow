@@ -1266,7 +1266,7 @@ namespace BP.WF.HttpHandler
         {
             BP.CCBill.Tracks tracks = new BP.CCBill.Tracks();
             BP.En.QueryObject qo = new En.QueryObject(tracks);
-            qo.AddWhere(TrackAttr.ActionType, (int)BP.CCBill.FrmActionType.BBS);
+            qo.AddWhere(TrackAttr.ActionType, BP.CCBill.FrmActionType.BBS);
             qo.addAnd();
             qo.addLeftBracket();
 

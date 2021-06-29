@@ -25,25 +25,7 @@ namespace BP.WF.DTS
             this.Help = "对于节点属性里配置的自动执行或者机器执行的节点上的任务自动发送下去。";
             this.GroupName = "流程自动执行定时任务";
         }
-        /// <summary>
-        /// 设置执行变量
-        /// </summary>
-        /// <returns></returns>
-        public override void Init()
-        {
-        }
-        /// <summary>
-        /// 当前的操纵员是否可以执行这个方法
-        /// </summary>
-        public override bool IsCanDo
-        {
-            get
-            {
-                if (BP.Web.WebUser.IsAdmin == true)
-                    return true;
-                return false;
-            }
-        }
+      
         /// <summary>
         /// 执行
         /// </summary>
@@ -86,5 +68,28 @@ namespace BP.WF.DTS
 
             return info;
         }
+
+        #region 重写。
+        /// <summary>
+        /// 设置执行变量
+        /// </summary>
+        /// <returns></returns>
+        public override void Init()
+        {
+        }
+        /// <summary>
+        /// 当前的操纵员是否可以执行这个方法
+        /// </summary>
+        public override bool IsCanDo
+        {
+            get
+            {
+                if (BP.Web.WebUser.IsAdmin == true)
+                    return true;
+                return false;
+            }
+        }
+        #endregion 重写。
+
     }
 }

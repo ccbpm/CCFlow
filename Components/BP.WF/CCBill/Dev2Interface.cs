@@ -19,32 +19,109 @@ namespace BP.CCBill
     /// </summary>
     public class Dev2Interface
     {
+        /// <summary>
+        /// 增加日志
+        /// </summary>
+        /// <param name="at"></param>
+        /// <param name="frmID"></param>
+        /// <param name="workID"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        public static void Dict_AddTrack(string frmID, string frmName, Int64 workID, string at, string msg, string paras = null,
+            string flowNo = null, string flowName = null, int nodeID = 0, Int64 workid = 0)
+        {
+            BP.CCBill.Track tk = new BP.CCBill.Track();
+            tk.WorkID = workID;
+            tk.FrmID = frmID;
+            tk.FrmName = frmName;
+            tk.ActionType = at;
+
+            switch (at)
+            {
+                case FrmActionType.BBS:
+                    tk.ActionTypeText = "评论";
+                    break;
+                case FrmActionType.Create:
+                    tk.ActionTypeText = "创建";
+                    break;
+                case FrmActionType.DataVerReback:
+                    tk.ActionTypeText = "数据版本";
+                    break;
+                case FrmActionType.Save:
+                    tk.ActionTypeText = "保存";
+                    break;
+                case FrmActionType.StartFlow:
+                    tk.ActionTypeText = "发起流程";
+                    break;
+                default:
+                    tk.ActionTypeText = "其他";
+                    break;
+            }
+
+            tk.Rec = WebUser.No;
+            tk.RecName = WebUser.Name;
+            tk.DeptNo = WebUser.FK_Dept;
+            tk.DeptName = WebUser.FK_DeptName;
+
+            // 流程信息。
+            tk.WorkID = workid;
+            tk.NodeID = nodeID;
+            if (flowName != null)
+                tk.FlowName = flowName;
+            if (flowNo != null)
+                tk.FlowNo = flowNo;
+
+            //tk.MyPK = tk.FrmID + "_" + tk.WorkID + "_" + tk.Rec + "_" + (int)BP.CCBill.FrmActionType.BBS;
+            tk.Msg = msg;
+            tk.RDT = DataType.CurrentDataTime;
+
+            ////流程信息.
+            //tk.NodeID = nodeID;
+            //tk.NodeName = nodeName;
+            //tk.FlowNo = flowNo;
+            //tk.FlowName = flowName;
+            //tk.FID = fid;
+            tk.Insert();
+        }
+
 
         /// <summary>
-        /// 创建工作ID
+        /// 创建单据的WorkID
         /// </summary>
-        /// <param name="frmID">表单ID</param>
-        /// <param name="userNo">用户编号</param>
-        /// <param name="htParas">参数</param>
-        /// <returns>一个新的WorkID</returns>
-        public static Int64 CreateBlankBillID(string frmID, string userNo, Hashtable htParas, string billNo = null)
+        /// <param name="frmID"></param>
+        /// <param name="userNo"></param>
+        /// <param name="htParas"></param>
+        /// <param name="billNo"></param>
+        /// <param name="pDictID"></param>
+        /// <param name="pDictWorkID"></param>
+        /// <returns></returns>
+        public static Int64 CreateBlankBillID(string frmID, string userNo = null, Hashtable htParas = null, string pDictFrmID = null,
+            Int64 pDictWorkID = 0)
         {
+            if (userNo == null)
+                userNo = WebUser.No;
+
             GenerBill gb = new GenerBill();
-            if (DataType.IsNullOrEmpty(billNo) == true)
+            int i = gb.Retrieve(GenerBillAttr.FrmID, frmID, GenerBillAttr.Starter, userNo, GenerBillAttr.BillState, 0);
+            if (i == 1)
             {
-                int i = gb.Retrieve(GenerBillAttr.FrmID, frmID, GenerBillAttr.Starter, userNo, GenerBillAttr.BillState, 0);
-                if (i == 1)
-                    return gb.WorkID;
+                GERpt rpt1 = new GERpt(frmID, gb.WorkID);
+                if (htParas != null)
+                    rpt1.Copy(htParas);
+
+                rpt1.SetValByKey("BillState", 0);
+                rpt1.SetValByKey("Starter", gb.Starter);
+                rpt1.SetValByKey("StarterName", gb.StarterName);
+                rpt1.SetValByKey("FK_Dept", WebUser.FK_Dept);
+                rpt1.SetValByKey("RDT", gb.RDT);
+                rpt1.SetValByKey("Title", gb.Title);
+                rpt1.SetValByKey("BillNo", gb.BillNo);
+                rpt1.Update();
+                return gb.WorkID;
             }
-            else
-            {
-                int i = gb.Retrieve(GenerBillAttr.FrmID, frmID, GenerBillAttr.BillNo, billNo);
-                if (i == 1)
-                    return gb.WorkID;
-            }
+
 
             FrmBill fb = new FrmBill(frmID);
-
             gb.WorkID = DBAccess.GenerOID("WorkID");
             gb.BillState = BillState.None; //初始化状态.
             gb.Starter = BP.Web.WebUser.No;
@@ -52,14 +129,22 @@ namespace BP.CCBill
             gb.FrmName = fb.Name; //单据名称.
             gb.FrmID = fb.No; //单据ID
 
-            if (DataType.IsNullOrEmpty(billNo) == false)
-                gb.BillNo = billNo; //BillNo
+            //if (DataType.IsNullOrEmpty(billNo) == false)
+            //    gb.BillNo = billNo; //BillNo
             gb.FK_Dept = BP.Web.WebUser.FK_Dept;
             gb.DeptName = BP.Web.WebUser.FK_DeptName;
             gb.FK_FrmTree = fb.FK_FormTree; //单据类别.
             gb.RDT = DataType.CurrentDataTime;
             gb.NDStep = 1;
             gb.NDStepName = "启动";
+
+            //父字典信息.
+            if (pDictFrmID != null)
+            {
+                gb.PFrmID = pDictFrmID;
+                gb.PWorkID = pDictWorkID;
+            }
+
 
             //创建rpt.
             BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt(frmID);
@@ -68,25 +153,28 @@ namespace BP.CCBill
             if (fb.EntityType == EntityType.FrmBill)
             {
                 gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
-                if (DataType.IsNullOrEmpty(billNo) == false)
-                    gb.BillNo = billNo;
-                else
-                    gb.BillNo = BP.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
+                //if (DataType.IsNullOrEmpty(billNo) == false)
+                //    gb.BillNo = billNo;
+                //else
+                gb.BillNo = BP.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
             }
 
             if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict)
             {
                 rpt.EnMap.CodeStruct = fb.EnMap.CodeStruct;
-                if (DataType.IsNullOrEmpty(billNo) == false)
-                    gb.BillNo = billNo;
-                else
-                    gb.BillNo = rpt.GenerNewNoByKey("BillNo");
-
+                //if (DataType.IsNullOrEmpty(billNo) == false)
+                //    gb.BillNo = billNo;
+                //else
+                gb.BillNo = rpt.GenerNewNoByKey("BillNo");
                 // BP.CCBill.Dev2Interface.GenerBillNo(fb.BillNoFormat, gb.WorkID, null, frmID);
                 gb.Title = "";
             }
 
             gb.DirectInsert(); //执行插入.
+
+            //如果.
+            if (htParas != null)
+                rpt.Copy(htParas);
 
             //更新基础的数据到表单表.
             // rpt = new BP.WF.Data.GERpt(frmID);
@@ -102,17 +190,21 @@ namespace BP.CCBill
 
             return gb.WorkID;
         }
+        /// <summary>
+        /// 创建一个实体ID
+        /// </summary>
+        /// <param name="frmID">实体ID</param>
+        /// <param name="userNo">用户编号</param>
+        /// <param name="htParas">参数</param>
+        /// <returns>一个实例的workid</returns>
         public static Int64 CreateBlankDictID(string frmID, string userNo, Hashtable htParas)
         {
+            if (userNo == null)
+                userNo = WebUser.No;
 
-            FrmBill fb = new FrmBill(frmID);
-
-            //创建rpt.
-            BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt(frmID);
-
-
-
-            int i = rpt.Retrieve("Starter", WebUser.No, "BillState", 0);
+            // 创建一个实体, 先检查一下是否有空白的数据.
+            GERpt rpt = new GERpt(frmID);
+            int i = rpt.Retrieve("Starter", userNo, "BillState", 0);
             if (i >= 1)
             {
                 if (htParas != null)
@@ -120,12 +212,16 @@ namespace BP.CCBill
 
                 rpt.SetValByKey("RDT", DataType.CurrentData);
                 rpt.Update();
-                return rpt.OID;
+                return rpt.OID; //如果有空白的数据，就返回给他.
             }
+
 
             //执行copy数据.
             if (htParas != null)
                 rpt.Copy(htParas);
+
+            FrmBill fb = new FrmBill(frmID);
+
 
             //更新基础的数据到表单表.
             rpt.SetValByKey("BillState", 0);
@@ -134,15 +230,52 @@ namespace BP.CCBill
             rpt.SetValByKey("FK_Dept", WebUser.FK_Dept);
             rpt.SetValByKey("RDT", DataType.CurrentData);
 
-            rpt.EnMap.CodeStruct = fb.EnMap.CodeStruct;
+            //设置编号生成规则.
+            rpt.EnMap.CodeStruct = fb.BillNoFormat;
 
             //rpt.SetValByKey("Title", gb.Title);
             rpt.SetValByKey("BillNo", rpt.GenerNewNoByKey("BillNo"));
             rpt.OID = DBAccess.GenerOID("WorkID");
             rpt.InsertAsOID(rpt.OID);
-
-
             return rpt.OID;
+        }
+        /// <summary>
+        /// 保存实体数据
+        /// </summary>
+        /// <param name="frmID">表单ID</param>
+        /// <param name="workid">工作ID</param>
+        /// <param name="htParas">参数数据</param>
+        /// <returns></returns>
+        public static void SaveDictWork(string frmID, Int64 workid, Hashtable htParas)
+        {
+            // 创建一个实体, 先检查一下是否有空白的数据.
+            GERpt rpt = new GERpt(frmID);
+            rpt.OID = workid;
+            if (rpt.RetrieveFromDBSources() == 0)
+            {
+                if (htParas != null)
+                    rpt.Copy(htParas);
+
+                //设置编号生成规则.
+                FrmBill fb = new FrmBill(frmID);
+                rpt.EnMap.CodeStruct = fb.BillNoFormat;
+                rpt.SetValByKey("BillNo", rpt.GenerNewNoByKey("BillNo"));
+                rpt.InsertAsOID(workid);
+            }
+            else
+            {
+                //执行copy数据.
+                if (htParas != null)
+                    rpt.Copy(htParas);
+            }
+
+            //更新基础的数据到表单表.
+            rpt.SetValByKey("BillState", 100);
+            rpt.SetValByKey("Starter", WebUser.No);
+            rpt.SetValByKey("StarterName", WebUser.Name);
+            rpt.SetValByKey("FK_Dept", WebUser.FK_Dept);
+            rpt.SetValByKey("RDT", DataType.CurrentData);
+            rpt.Update();
         }
 
         /// <summary>
@@ -151,7 +284,7 @@ namespace BP.CCBill
         /// <param name="frmID">表单ID</param>
         /// <param name="workID">工作ID</param>
         /// <returns>返回保存结果</returns>
-        public static string SaveWork(string frmID, Int64 workID)
+        public static string SaveBillWork(string frmID, Int64 workID)
         {
             FrmBill fb = new FrmBill(frmID);
 
@@ -160,6 +293,7 @@ namespace BP.CCBill
             int i = gb.RetrieveFromDBSources();
             if (i == 0)
                 return "";
+
             gb.BillState = BillState.Editing;
 
             //创建rpt.
@@ -216,6 +350,8 @@ namespace BP.CCBill
             int i = gb.RetrieveFromDBSources();
             if (i == 0)
                 return "";
+
+            //设置为归档状态.
             gb.BillState = BillState.Over;
 
             //创建rpt.
@@ -223,7 +359,6 @@ namespace BP.CCBill
 
             if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict)
             {
-
                 gb.Title = rpt.Title;
                 gb.Update();
                 return "提交成功...";

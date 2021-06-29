@@ -1541,15 +1541,15 @@ namespace BP.WF.HttpHandler
             //增加排序
             if (encfg != null)
             {
-                string orderBy = encfg.GetParaString("OrderBy");
-                bool isDesc = encfg.GetParaBoolen("IsDeSc");
+                string orderBy = encfg.GetValStrByKey("OrderBy");
+                bool isDesc = encfg.GetValBooleanByKey("IsDeSc");
 
                 if (DataType.IsNullOrEmpty(orderBy) == false)
                 {
                     if (isDesc)
-                        qo.addOrderByDesc(encfg.GetParaString("OrderBy"));
+                        qo.addOrderByDesc(orderBy);
                     else
-                        qo.addOrderBy(encfg.GetParaString("OrderBy"));
+                        qo.addOrderBy(orderBy);
                 }
             }
 
@@ -2410,15 +2410,15 @@ namespace BP.WF.HttpHandler
             //增加排序
             if (encfg != null)
             {
-                string orderBy = encfg.GetParaString("OrderBy");
-                bool isDesc = encfg.GetParaBoolen("IsDeSc");
+                string orderBy = encfg.GetValStrByKey("OrderBy");
+                bool isDesc = encfg.GetValBooleanByKey("IsDeSc");
 
                 if (DataType.IsNullOrEmpty(orderBy) == false)
                 {
                     if (isDesc)
-                        qo.addOrderByDesc(encfg.GetParaString("OrderBy"));
+                        qo.addOrderByDesc(orderBy);
                     else
-                        qo.addOrderBy(encfg.GetParaString("OrderBy"));
+                        qo.addOrderBy(orderBy);
                 }
 
             }
@@ -4306,17 +4306,17 @@ namespace BP.WF.HttpHandler
                 return "info@<img src='../Img/Warning.gif' /><b><font color=red> 您没有选择显示内容/分析项目</font></b>";
 
             ////不显示合计列。
-            //string NoShowSum = SystemConfig.GetConfigXmlEns("NoShowSum", this.EnsName);
-            //DataTable showSum = new DataTable("NoShowSum");
-            //showSum.Columns.Add("NoShowSum");
-            //DataRow sumdr = showSum.NewRow();
-            //sumdr["NoShowSum"] = NoShowSum;
-            //showSum.Rows.Add(sumdr);
+            /*string NoShowSum = SystemConfig.GetConfigXmlEns("NoShowSum", this.EnsName);
+            DataTable showSum = new DataTable("NoShowSum");
+            showSum.Columns.Add("NoShowSum");
+            DataRow sumdr = showSum.NewRow();
+            sumdr["NoShowSum"] = NoShowSum;
+            showSum.Rows.Add(sumdr);
 
-            //DataTable activeAttr = aas.ToDataTable();
-            //activeAttr.TableName = "ActiveAttr";
-            //ds.Tables.Add(activeAttr);
-            //ds.Tables.Add(showSum);
+            DataTable activeAttr = aas.ToDataTable();
+            activeAttr.TableName = "ActiveAttr";
+            ds.Tables.Add(activeAttr);
+            ds.Tables.Add(showSum);*/
 
             return BP.Tools.Json.ToJson(ds);
         }
@@ -4457,7 +4457,8 @@ namespace BP.WF.HttpHandler
 
             }
             #endregion 分析项的整合
-
+            if (DataType.IsNullOrEmpty(selectSQL) == true || selectSQL.Equals("SELECT ") == true)
+                return null;
             selectSQL = selectSQL.Substring(0, selectSQL.Length - 1);
 
             #endregion SelectSQL语句的组合

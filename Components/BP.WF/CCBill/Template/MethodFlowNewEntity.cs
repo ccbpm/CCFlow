@@ -180,6 +180,7 @@ namespace BP.CCBill.Template
             gwf.PFlowNo = this.FrmID;
             gwf.SetPara("FlowNewEntity", "1"); //设置标记，等到流程结束后，自动写入到Dict一笔记录.
             gwf.SetPara("MenuNo", this.No); //菜单编号.
+            gwf.PWorkID = gwf.WorkID; //实体保存的ID 与 流程ID一致。
             gwf.Update();
 
             return workid.ToString();

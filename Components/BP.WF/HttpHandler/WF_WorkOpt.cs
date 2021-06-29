@@ -3471,11 +3471,11 @@ namespace BP.WF.HttpHandler
         {
             /*如果是协作模式, 就要检查当前是否主持人, 当前是否是会签模式. */
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-            if (gwf.FK_Node != this.FK_Node)
-                return "err@当前流程已经运动到[" + gwf.NodeName + "]上,当前处理人员为[" + gwf.TodoEmps + "]";
+            if (gwf.FK_Node != this.FK_Node && this.FK_Node!=0)
+                return "err@当前流程已经运动到[" + gwf.NodeName + "]上,当前处理人员为[" + gwf.TodoEmps + "]，this.FK_Node="+this.FK_Node;
 
             //当前节点ID.
-            Node nd = new Node(this.FK_Node);
+            Node nd = new Node(gwf.FK_Node);
 
             //判断当前是否是协作模式.
             if (nd.TodolistModel == TodolistModel.Teamup && nd.IsStartNode == false)
@@ -3495,7 +3495,7 @@ namespace BP.WF.HttpHandler
                     //判断是否有不发送标记？
                     if (this.GetRequestValBoolen("IsSend") == true)
                     {
-                        SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID);
+                        SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(gwf.FK_Flow, this.WorkID);
                         return "info@" + objs.ToMsgOfHtml();
                     }
                 }
@@ -3518,13 +3518,13 @@ namespace BP.WF.HttpHandler
             Selector select = new Selector(toNodeID);
 
             if (select.SelectorModel == SelectorModel.GenerUserSelecter)
-                return "url@AccepterOfGener.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + nd.FK_Flow + "&ToNode=" + toNodeID + "&PWorkID=" + gwf.PWorkID;
+                return "url@AccepterOfGener.htm?WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "&FK_Flow=" + nd.FK_Flow + "&ToNode=" + toNodeID + "&PWorkID=" + gwf.PWorkID;
 
             if (select.SelectorModel == SelectorModel.AccepterOfDeptStationEmp)
-                return "url@AccepterOfDeptStationEmp.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + nd.FK_Flow + "&ToNode=" + toNodeID + "&PWorkID=" + gwf.PWorkID;
+                return "url@AccepterOfDeptStationEmp.htm?WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "&FK_Flow=" + nd.FK_Flow + "&ToNode=" + toNodeID + "&PWorkID=" + gwf.PWorkID;
 
             if (select.SelectorModel == SelectorModel.Url)
-                return "BySelfUrl@" + select.SelectorP1 + "?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + nd.FK_Flow + "&ToNode=" + toNodeID + "&PWorkID=" + gwf.PWorkID;
+                return "BySelfUrl@" + select.SelectorP1 + "?WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "&FK_Flow=" + nd.FK_Flow + "&ToNode=" + toNodeID + "&PWorkID=" + gwf.PWorkID;
 
             //获得 部门与人员.
             DataSet ds = select.GenerDataSet(toNodeID, wk);

@@ -385,7 +385,7 @@ namespace BP.CCBill
                 map.AddTBString(FrmDictAttr.BtnSaveLable, "保存", "保存", true, false, 0, 50, 20);
                 //map.AddBoolean(FrmDictAttr.BtnSaveEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmDictAttr.BtnSubmitLable, "提交", "提交", true, false, 0, 50, 20);
+                //  map.AddTBString(FrmDictAttr.BtnSubmitLable, "提交", "提交", true, false, 0, 50, 20);
                 //map.AddBoolean(FrmDictAttr.BtnSubmitEnable, true, "是否可用？", true, true);
 
                 //删除.
@@ -516,6 +516,41 @@ namespace BP.CCBill
 
                 #endregion 基本功能.
 
+                #region 报表定义.
+                rm = new RefMethod();
+                rm.GroupName = "报表定义";
+                rm.Title = "设置显示的列"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoRpt_ColsChose";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "报表定义";
+                rm.Title = "设置多表头"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoRptMTitle";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "报表定义";
+                rm.Title = "列的顺序"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoRpt_ColsIdxAndLabel";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                //   map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "报表定义";
+                rm.Title = "查询条件"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoRpt_SearchCond";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+                #endregion 报表定义.
+
+
                 #region 权限规则.
                 rm = new RefMethod();
                 rm.Title = "创建规则"; // "设计表单";
@@ -526,7 +561,6 @@ namespace BP.CCBill
                 rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Title = "保存规则"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoSaveRole";
@@ -536,14 +570,14 @@ namespace BP.CCBill
                 rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "提交规则"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoSubmitRole";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.LinkModel;
-                rm.RefAttrKey = FrmDictAttr.BtnSubmitLable;
-                rm.GroupName = "权限规则";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "提交规则"; // "设计表单";
+                //rm.ClassMethodName = this.ToString() + ".DoSubmitRole";
+                //rm.Visable = true;
+                //rm.RefMethodType = RefMethodType.LinkModel;
+                //rm.RefAttrKey = FrmDictAttr.BtnSubmitLable;
+                //rm.GroupName = "权限规则";
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "删除规则"; // "设计表单";
@@ -581,39 +615,7 @@ namespace BP.CCBill
                 map.AddRefMethod(rm);
                 #endregion
 
-                #region 报表定义.
-                rm = new RefMethod();
-                rm.GroupName = "报表定义";
-                rm.Title = "设置显示的列"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoRpt_ColsChose";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.GroupName = "报表定义";
-                rm.Title = "设置多表头"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoRptMTitle";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.GroupName = "报表定义";
-                rm.Title = "列的顺序"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoRpt_ColsIdxAndLabel";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                //   map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.GroupName = "报表定义";
-                rm.Title = "查询条件"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoRpt_SearchCond";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
-                #endregion 报表定义.
 
                 this._enMap = map;
                 return this._enMap;
@@ -637,8 +639,8 @@ namespace BP.CCBill
             md.DoCopy(newFrmID, frmName);
 
             MapData mdTo = new MapData(newFrmID);
-            if (ptable==null)
-            mdTo.PTable = ptable;
+            if (ptable == null)
+                mdTo.PTable = ptable;
             mdTo.Name = frmName;
             mdTo.Update();
 
@@ -1063,7 +1065,7 @@ namespace BP.CCBill
         #region 业务逻辑.
         public string CreateBlankWorkID()
         {
-            return BP.CCBill.Dev2Interface.CreateBlankDictID(this.No, BP.Web.WebUser.No, null).ToString();
+            return BP.CCBill.Dev2Interface.CreateBlankDictID(this.No, null, null).ToString();
         }
         #endregion 业务逻辑.
 

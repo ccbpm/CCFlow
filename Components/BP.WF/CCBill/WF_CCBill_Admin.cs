@@ -49,7 +49,8 @@ namespace BP.CCBill
             dtGroups.TableName = "Groups";
 
             Methods methods = new Methods();
-            methods.Retrieve(MethodAttr.FrmID, this.FrmID, MethodAttr.IsEnable, 1, "Idx");
+         //   methods.Retrieve(MethodAttr.FrmID, this.FrmID, MethodAttr.IsEnable, 1, "Idx");
+            methods.Retrieve(MethodAttr.FrmID, this.FrmID,  "Idx");
 
             DataTable dtMethods = methods.ToDataTableField("Methods");
             dtMethods.TableName = "Methods";
@@ -104,63 +105,7 @@ namespace BP.CCBill
         {
 
         }
-        /// <summary>
-        /// 获得js,sql内容.
-        /// </summary>
-        /// <returns></returns>
-        public string MethodDoc_GetScript()
-        {
-            var en = new MethodFunc(this.No);
-            int type = this.GetRequestValInt("TypeOfFunc");
-            if (type == 0)
-                return en.MethodDoc_SQL;
-
-            if (type == 1)
-                return en.MethodDoc_JavaScript;
-
-            if (type == 2)
-                return en.MethodDoc_Url;
-
-            return "err@没有判断的类型.";
-        }
-        /// <summary>
-        /// 保存脚本
-        /// </summary>
-        /// <returns></returns>
-        public string MethodDoc_SaveScript()
-        {
-            var en = new MethodFunc(this.No);
-
-            int type = this.GetRequestValInt("TypeOfFunc");
-            string doc = this.GetRequestVal("doc");
-            string funcstr = this.GetRequestVal("funcstr");
-            //sql模式.
-            if (type == 0)
-                en.MethodDoc_SQL = doc;
-
-            //script.
-            if (type == 1)
-            {
-                en.MethodDoc_JavaScript = doc;
-
-                string path = SystemConfig.PathOfDataUser + "JSLibData\\Method\\";
-                if (System.IO.Directory.Exists(path) == false)
-                    System.IO.Directory.CreateDirectory(path);
-                //写入文件.
-                string file = path + en.No + ".js";
-                DataType.WriteFile(file, funcstr);
-            }
-
-            //url.
-            if (type == 2)
-                en.MethodDoc_Url = doc;
-
-            en.MethodDocTypeOfFunc = type;
-            en.Update();
-
-            return "保存成功.";
-        }
-
+       
         #region 执行父类的重写方法.
         /// <summary>
         /// 默认执行的方法

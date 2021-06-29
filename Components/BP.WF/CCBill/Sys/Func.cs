@@ -10,6 +10,9 @@ using BP.CCBill.Template;
 
 namespace BP.CCBill.Sys
 {
+    /// <summary>
+    /// 属性
+    /// </summary>
     public class FuncAttr : MethodAttr
     {
         /// <summary>
@@ -20,6 +23,14 @@ namespace BP.CCBill.Sys
         /// 功能ID
         /// </summary>
         public const string FuncID = "FuncID";
+        /// <summary>
+        /// 功能来源
+        /// </summary>
+        public const string FuncSrc = "FuncSrc";
+        /// <summary>
+        /// 功能内容
+        /// </summary>
+        public const string DTSName = "DTSName";
     }
     /// <summary>
     /// 独立方法
@@ -65,8 +76,6 @@ namespace BP.CCBill.Sys
                 this.SetValByKey(MethodAttr.MsgSuccess, value);
             }
         }
-
-
         public string MethodDoc_Url
         {
             get
@@ -105,7 +114,7 @@ namespace BP.CCBill.Sys
         {
             get
             {
-                string file = SystemConfig.CCFlowAppPath + "WF\\CCBill\\Admin\\MethodDocDemoJS.txt";
+                string file = SystemConfig.CCFlowAppPath + "WF\\CCBill\\Admin\\MethodDoc\\MethodDocDemoJS.txt";
                 string doc = DataType.ReadTextFile(file); //读取文件.
                 doc = doc.Replace("/#", "+"); //为什么？
                 doc = doc.Replace("/$", "-"); //为什么？
@@ -119,7 +128,7 @@ namespace BP.CCBill.Sys
         {
             get
             {
-                string file = SystemConfig.CCFlowAppPath + "WF\\CCBill\\Admin\\MethodDocDemoSQL.txt";
+                string file = SystemConfig.CCFlowAppPath + "WF\\CCBill\\Admin\\MethodDoc\\MethodDocDemoSQL.txt";
                 string doc = DataType.ReadTextFile(file); //读取文件.
                                                           //  doc = doc.Replace("@FrmID", this.FrmID);
                 return doc;
@@ -249,13 +258,19 @@ namespace BP.CCBill.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Frm_StandAloneFunc", "功能方法");
+                Map map = new Map("Frm_Func", "功能");
 
                 map.AddTBStringPK(FuncAttr.No, null, "编号", true, true, 0, 50, 10);
                 map.AddTBString(FuncAttr.Name, null, "方法名", true, false, 0, 300, 10, true);
 
                 map.AddTBString(FuncAttr.FuncID, null, "方法ID", true, false, 0, 300, 10, true);
                 map.AddTBString(FuncAttr.Icon, null, "图标", true, false, 0, 50, 10, true);
+
+                map.AddDDLSysEnum(FuncAttr.FuncSrc, 0, "功能来源", true, false, "FuncSrc",
+              "@0=自定义@1=系统内置");
+                map.AddTBString(FuncAttr.DTSName, null, "功能内容", true, false, 0, 300, 10, true);
+
+
 
                 map.AddTBStringDoc(FuncAttr.Docs, null, "功能说明", true, false, true);
                 map.SetHelperAlert(FuncAttr.Docs, "对于该功能的描述.");
@@ -275,7 +290,7 @@ namespace BP.CCBill.Sys
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
                 //rm.GroupName = "开发接口";
-                map.AddRefMethod(rm);
+                //  map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "方法内容"; // "设计表单";
@@ -315,7 +330,6 @@ namespace BP.CCBill.Sys
             return "../../CCBill/Admin/MethodDoc.htm?No=" + this.No;
         }
         #endregion 执行方法.
-
     }
     /// <summary>
     /// 独立方法s

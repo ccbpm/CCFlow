@@ -713,15 +713,21 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
-        /// 表单ID
+        /// 表单ID 
         /// </summary>
         public string FrmID
         {
             get
             {
+
+                //@hongyan
                 string str = this.GetRequestVal("FrmID");
+
                 if (DataType.IsNullOrEmpty(str) == true)
-                    return this.GetRequestVal("FK_MapData");
+                    str = this.GetRequestVal("FK_MapData");
+
+                if (DataType.IsNullOrEmpty(str) == true)
+                    str = this.GetRequestVal("FK_Frm");
 
                 return str;
             }

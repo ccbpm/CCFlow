@@ -21,7 +21,7 @@ namespace BP.CCBill
     /// <summary>
     /// 页面功能实体
     /// </summary>
-    public class WF_CCBill_Admin_CreateFunc : DirectoryPageBase
+    public class WF_CCBill_Admin_Method : DirectoryPageBase
     {
         #region 属性.
         public string GroupID
@@ -42,10 +42,38 @@ namespace BP.CCBill
         }
         #endregion 属性.
 
+
+        public string Bill_Save()
+        {
+            string fromFrmID = this.GetRequestVal("FromFrmID");
+            string toFrmID = this.GetRequestVal("ToFrmID");
+
+            //这里仅仅复制主表的字段.
+            MapAttrs attrsFrom = new MapAttrs();
+            attrsFrom.Retrieve(MapAttrAttr.FK_MapData, fromFrmID);
+            foreach (MapAttr attr in attrsFrom)
+            {
+                if (attr.IsExit(MapAttrAttr.FK_MapData, toFrmID, MapAttrAttr.KeyOfEn, attr.KeyOfEn) == true)
+                    continue;
+
+                attr.FK_MapData = toFrmID;
+                attr.MyPK = attr.FK_MapData + "_" + toFrmID;
+                attr.Insert();
+            }
+            return "复制成功.";
+
+            ////如果是发起流程的方法，就要表单的字段复制到，流程的表单上去.
+            //BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp handlerFrm = new WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp();
+            ////   handler.AddPara
+            //handlerFrm.Imp_CopyFrm(toFrmID, fromFrmID);
+
+            //return "复制成功.";
+        }
+
         /// <summary>
         /// 构造函数
         /// </summary>
-        public WF_CCBill_Admin_CreateFunc()
+        public WF_CCBill_Admin_Method()
         {
 
         }
@@ -101,6 +129,7 @@ namespace BP.CCBill
             //执行更新. 设置为不能独立启动.
             BP.WF.Flow fl = new WF.Flow(flowNo);
             fl.IsCanStart = false;
+            fl.TitleRole = "@WebUser.No 在@RDT 发起【@DictName】";
             fl.Update();
             #endregion 创建一个流程.
 
@@ -108,7 +137,20 @@ namespace BP.CCBill
             //如果是发起流程的方法，就要表单的字段复制到，流程的表单上去.
             BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp handlerFrm = new WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp();
             //   handler.AddPara
-            handlerFrm.Imp_CopyFrm("ND" + int.Parse(flowNo + "01"), this.FrmID);
+            string ndFrmID = "ND" + int.Parse(flowNo + "01");
+            handlerFrm.Imp_CopyFrm(ndFrmID, this.FrmID);
+
+            MapAttr attr = new MapAttr(ndFrmID + "_Title");
+            attr.UIVisible = false;
+            attr.Name = "流程标题";
+            attr.Update();
+
+            //生成名称字段.
+            attr.KeyOfEn = "DictName";
+            attr.Name = "名称";
+            attr.UIVisible = true;
+            attr.MyPK = attr.FK_MapData + "_" + attr.KeyOfEn;
+            attr.DirectInsert();
 
             //更新开始节点.
             BP.WF.Node nd = new WF.Node(int.Parse(flowNo + "01"));
@@ -130,7 +172,7 @@ namespace BP.CCBill
             en.FrmID = this.FrmID;
             en.DTSWhenFlowOver = true; // 是否在流程结束后同步?
             en.DTSDataWay = 1; // 同步所有相同的字段.
-            en.UrlExt = "../CCBill/Opt/StartFlowByNewEntity.htm?FlowNo=" + en.FlowNo + "&FrmID=" + this.FrmID+"&MenuNo="+pkval;
+            en.UrlExt = "../CCBill/Opt/StartFlowByNewEntity.htm?FlowNo=" + en.FlowNo + "&FrmID=" + this.FrmID + "&MenuNo=" + pkval;
             en.Update();
 
             return pkval; //返回的方法ID;

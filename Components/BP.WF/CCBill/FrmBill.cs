@@ -210,7 +210,6 @@ namespace BP.CCBill
                 map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 500, 20, true);
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20, true);
 
-
                 if (CCBPMRunModel.SAAS == SystemConfig.CCBPMRunModel)
                 {
                     string sql = "SELECT No,Name FROM WF_FlowSort WHERE OrgNo='"+BP.Web.WebUser.OrgNo+ "' AND No!='" + BP.Web.WebUser.OrgNo + "'";
@@ -221,7 +220,6 @@ namespace BP.CCBill
                 {
                     map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
                 }
-
 
                 map.AddDDLSysEnum(MapDataAttr.TableCol, 0, "表单显示列数", true, true, "傻瓜表单显示方式",
                  "@0=4列@1=6列@2=上下模式3列");
@@ -292,7 +290,6 @@ namespace BP.CCBill
 
                 map.AddTBString(FrmBillAttr.RefBill, null, "关联单据ID", true, false, 0, 100, 20, true);
                 map.SetHelperAlert(FrmBillAttr.RefBill, "请输入单据编号,多个单据编号用逗号分开.\t\n比如:Bill_Sale,Bill_QingJia");
-
                 #endregion 按钮权限.
 
                 #region 查询按钮权限.

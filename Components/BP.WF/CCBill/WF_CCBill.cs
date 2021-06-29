@@ -68,17 +68,21 @@ namespace BP.CCBill
             }
 
             //创建工作.
-            Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(md.MethodID, ht);
+            Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(md.FlowNo, ht);
 
             //更新标记, 表示:该流程被谁发起.
             GenerWorkFlow gwf = new GenerWorkFlow(workid);
             gwf.PWorkID = this.WorkID;
-            gwf.PFlowNo = this.FrmID;
+            gwf.PFlowNo = md.FrmID;
+
             gwf.SetPara("FlowBaseData", "1"); //启动了修改基础资料流程..
-            gwf.SetPara("DictFrmID", this.FrmID); //启动了修改基础资料流程..
+            gwf.SetPara("DictFrmID", md.FrmID); //启动了修改基础资料流程..
             gwf.SetPara("DictWorkID", this.WorkID); //启动了修改基础资料流程..
 
             gwf.Update();
+
+            //写日志.
+            BP.CCBill.Dev2Interface.Dict_AddTrack(md.FrmID, null, this.WorkID, FrmActionType.StartFlow, "启动:" + gwf.FlowName + ",标题:" + gwf.Title);
 
             //   GEEntity frm=new GEEntity("ND"+int.Parse())
             return "../MyFlow.htm?FK_Flow=" + md.FlowNo + "&WorkID=" + workid;
@@ -115,6 +119,9 @@ namespace BP.CCBill
             gwf.PFlowNo = this.FrmID;
             gwf.SetPara("DictFlowEtc", "1"); //启动了其他业务流程.
             gwf.Update();
+
+            //写日志.
+            BP.CCBill.Dev2Interface.Dict_AddTrack(md.FrmID, null, this.WorkID, FrmActionType.StartFlow, "启动:" + gwf.FlowName + ",标题:" + gwf.Title);
 
             //   GEEntity frm=new GEEntity("ND"+int.Parse())
             return "../MyFlow.htm?FK_Flow=" + md.FlowNo + "&WorkID=" + workid;
@@ -260,7 +267,7 @@ namespace BP.CCBill
         /// <returns></returns>
         public string DoMethodPara_ExeUrl()
         {
-            MethodFunc func = new MethodFunc(this.MyPK);
+            MethodFunc func = new MethodFunc(this.PKVal);
             string doc = func.MethodDoc_Url;
 
             GEEntity en = new GEEntity(func.FrmID, this.WorkID);
@@ -269,7 +276,7 @@ namespace BP.CCBill
             if (doc.Contains("@") == true)
             {
                 MapAttrs attrs = new MapAttrs();
-                attrs.Retrieve(MapAttrAttr.FK_MapData, this.MyPK);
+                attrs.Retrieve(MapAttrAttr.FK_MapData, this.PKVal);
                 foreach (MapAttr item in attrs)
                 {
                     if (doc.Contains("@") == false)
@@ -307,7 +314,7 @@ namespace BP.CCBill
             #region 开始执行SQLs.
             try
             {
-
+                doc += "&MethodName=" + func.MethodID;
                 DataType.ReadURLContext(doc, 99999);
                 if (func.MsgSuccess.Equals(""))
                     func.MsgSuccess = "执行成功.";
@@ -342,7 +349,7 @@ namespace BP.CCBill
         /// <returns></returns>
         public string MyDict_CreateBlankDictID()
         {
-            return BP.CCBill.Dev2Interface.CreateBlankDictID(this.FrmID, BP.Web.WebUser.No, null).ToString();
+            return BP.CCBill.Dev2Interface.CreateBlankDictID(this.FrmID, null, null).ToString();
         }
         /// <summary>
         /// 执行保存 @hongyan
@@ -382,7 +389,7 @@ namespace BP.CCBill
                 rpt.OID = this.WorkID;
                 rpt.SetValByKey("BillState", (int)BillState.Editing);
                 rpt.Update();
-                string str = BP.CCBill.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
+                string str = BP.CCBill.Dev2Interface.SaveBillWork(this.FrmID, this.WorkID);
                 return str;
             }
             catch (Exception ex)
@@ -429,14 +436,13 @@ namespace BP.CCBill
             ExecEvent.DoFrm(md, EventListFrm.SaveBefore, rpt, null);
 
             rpt.OID = this.WorkID;
-            rpt.SetValByKey("BillState", (int)BillState.Editing);
+            rpt.SetValByKey("BillState", 100);
             rpt.Update();
 
-            string str = BP.CCBill.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
 
             //执行保存后事件
             ExecEvent.DoFrm(md, EventListFrm.SaveAfter, rpt, null);
-            return str;
+            return "保存成功.";
         }
 
         /// <summary>
@@ -445,6 +451,7 @@ namespace BP.CCBill
         /// <returns></returns>
         public string MyDict_Submit()
         {
+            return "err@不在支持提交功能.";
             //  throw new Exception("dddssds");
             //执行保存.
             MapData md = new MapData(this.FrmID);
@@ -464,11 +471,9 @@ namespace BP.CCBill
             rpt.SetValByKey("BillState", (int)BillState.Over);
             rpt.Update();
 
-            string str = BP.CCBill.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
-
             //执行保存后事件
             ExecEvent.DoFrm(md, EventListFrm.SaveAfter, rpt, null);
-            return str;
+            return "提交";
         }
 
         public string GetFrmEntitys()
@@ -506,7 +511,7 @@ namespace BP.CCBill
 
         public string MyBill_SaveAsDraft()
         {
-            string str = BP.CCBill.Dev2Interface.SaveWork(this.FrmID, this.WorkID);
+            string str = BP.CCBill.Dev2Interface.SaveBillWork(this.FrmID, this.WorkID);
             return str;
         }
         //删除单据
@@ -1064,8 +1069,6 @@ namespace BP.CCBill
                     //qo.AddWhere("Starter", "=", WebUser.No);
                 }
             }
-
-
 
             //获得行数.
             ur.SetPara("RecCount", qo.GetCount());

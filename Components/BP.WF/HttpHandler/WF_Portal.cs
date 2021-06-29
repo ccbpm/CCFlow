@@ -94,7 +94,7 @@ namespace BP.WF.HttpHandler
             {
                 //调用登录方法.
                 BP.WF.Dev2Interface.Port_Login(this.UserNo, this.SID);
-                return "url@Default.htm?UserNo=" + this.UserNo + "&SID=" + SID;
+                return "url@Apps.htm?UserNo=" + this.UserNo + "&SID=" + SID;
 
             }
 
@@ -307,10 +307,13 @@ namespace BP.WF.HttpHandler
             string sqlWhere = "";
             string sql = "";
             if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
-                sqlWhere = " AND OrgNo='" + BP.Web.WebUser.OrgNo + "'";
+                sqlWhere = "   OrgNo='" + BP.Web.WebUser.OrgNo + "' AND No!='" + WebUser.OrgNo + "'";
+            else
+                sqlWhere = "   No!='100' ";
+
 
             //求内容.
-            sql = "SELECT No,Name FROM Sys_FormTree WHERE 1=1 " + sqlWhere + " ORDER BY Idx ";
+            sql = "SELECT No,Name FROM Sys_FormTree WHERE  " + sqlWhere + " ORDER BY Idx ";
             DataTable dtSort = DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
@@ -337,7 +340,18 @@ namespace BP.WF.HttpHandler
 
             //求流程内容.
             sql = "SELECT No,Name,FrmType,FK_FormTree,PTable,DBSrc,Icon,EntityType FROM Sys_MapData WHERE 1=1 " + sqlWhere + " ORDER BY Idx ";
-            DataTable dtFlow = DBAccess.RunSQLReturnTable(sql);
+            DataTable dtFlow = null;
+            try
+            {
+                dtFlow = DBAccess.RunSQLReturnTable(sql);
+            }
+            catch (Exception ex)
+            {
+                MapData md = new MapData();
+                md.CheckPhysicsTable();
+                dtFlow = DBAccess.RunSQLReturnTable(sql);
+            }
+
             if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
                 dtFlow.Columns[0].ColumnName = "No";
@@ -402,18 +416,24 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Flows_InitSort()
         {
-            //获得数量.
-            string sqlWhere = "";
-            string sql = "";
-            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
-                sqlWhere = " AND OrgNo='" + BP.Web.WebUser.OrgNo + "'";
 
             //求数量.
-            sql = "SELECT  FK_FlowSort, WFState, COUNT(*) AS Num FROM WF_GenerWorkFlow WHERE 1=1 " + sqlWhere + " GROUP BY FK_FlowSort, WFState ";
+            string sqlWhere = "";
+            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                sqlWhere = "   OrgNo='" + BP.Web.WebUser.OrgNo + "' AND WFState>0 ";
+            else
+                sqlWhere = " WFState>0 ";
+
+
+            string sql = "SELECT  FK_FlowSort, WFState, COUNT(*) AS Num FROM WF_GenerWorkFlow WHERE " + sqlWhere + " GROUP BY FK_FlowSort, WFState ";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             //求内容.
-            sql = "SELECT No,Name, 0 as WFSta2, 0 as WFSta3, 0 as WFSta5 FROM WF_FlowSort WHERE 1=1 " + sqlWhere + " ORDER BY Idx ";
+            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                sqlWhere = "   OrgNo='" + BP.Web.WebUser.OrgNo + "' AND No!='" + WebUser.OrgNo + "'";
+            else
+                sqlWhere = "   No!='100' ";
+            sql = "SELECT No,Name, 0 as WFSta2, 0 as WFSta3, 0 as WFSta5 FROM WF_FlowSort WHERE  " + sqlWhere + " ORDER BY Idx ";
             DataTable dtSort = DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
@@ -765,6 +785,16 @@ namespace BP.WF.HttpHandler
         #endregion   加载菜单.
 
 
+        /// <summary>
+        /// 生成页面
+        /// </summary>
+        /// <returns></returns>
+        public string LoginGenerQRCodeMobile_Init()
+        {
+            var url = SystemConfig.HostURL + "/FastMobilePortal/Login.htm";
+
+            return "";
+        }
 
     }
 }

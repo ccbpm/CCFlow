@@ -293,12 +293,12 @@ namespace BP.WF.HttpHandler
         /// <param name="isClear">是否清楚现有的元素？</param>
         /// <param name="isSetReadonly">是否设置为只读？</param>
         /// <returns>执行结果</returns>
-        public string Imp_CopyFrm(string frmID = null, string fromFrmID=null)
+        public string Imp_CopyFrm(string toFrmID = null, string fromFrmID=null)
         {
             try
             {
-                if (frmID == null)
-                    frmID = this.FK_MapData;
+                if (toFrmID == null)
+                    toFrmID = this.FK_MapData;
 
 
                 string fromMapData = fromFrmID;
@@ -309,24 +309,26 @@ namespace BP.WF.HttpHandler
                 bool isSetReadonly = this.GetRequestValBoolen("IsSetReadonly");
 
                 //首先初始化本部门的.
-                MapData mymd = new MapData(frmID);
+                MapData mymd = new MapData(toFrmID);
                 string frmSort = mymd.FK_FormTree; //表单类别,防止表单类别冲掉,导致表单树看不到他.
 
 
-                MapData md = new MapData(fromMapData);
-                MapData.ImpMapData(frmID, BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(md.No));
+                MapData mdFrom = new MapData(fromMapData);
+                DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(mdFrom.No);
+                
+                MapData.ImpMapData(toFrmID, ds);
 
                 //设置为只读模式.
                 if (isSetReadonly == true)
-                    MapData.SetFrmIsReadonly(frmID);
+                    MapData.SetFrmIsReadonly(toFrmID);
 
                 //清空缓存
-                mymd = new MapData(frmID);
+                mymd = new MapData(toFrmID);
 
                 // 如果是节点表单，就要执行一次修复，以免漏掉应该有的系统字段。
-                if (frmID.Contains("ND") == true)
+                if (toFrmID.Contains("ND") == true)
                 {
-                    string fk_node = frmID.Replace("ND", "");
+                    string fk_node = toFrmID.Replace("ND", "");
                     Node nd = new Node(int.Parse(fk_node));
                     nd.RepareMap(nd.HisFlow);
 

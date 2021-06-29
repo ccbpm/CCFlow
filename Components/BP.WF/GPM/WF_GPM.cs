@@ -62,7 +62,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Menu_Move()
         {
-            
+
             string sortNo = this.GetRequestVal("RootNo");
             string[] EnNos = this.GetRequestVal("EnNos").Split(',');
             for (int i = 0; i < EnNos.Length; i++)
@@ -78,7 +78,7 @@ namespace BP.WF.HttpHandler
 
         public string Home_Init()
         {
-            string str = SystemConfig.PathOfData+ "\\XML\\BarTemp.xml";
+            string str = SystemConfig.PathOfData + "\\XML\\BarTemp.xml";
             DataSet ds = new DataSet();
             ds.ReadXml(str);
 
@@ -97,10 +97,13 @@ namespace BP.WF.HttpHandler
 
             //创建根目录。
             BP.Sys.FrmTree frmTree = new FrmTree();
-            if (rootNo.Equals("0")==true)
-            frmTree.Retrieve(FrmTreeAttr.ParentNo, rootNo);
+            if (rootNo.Equals("0") == true)
+            {
+                int i = frmTree.Retrieve(FrmTreeAttr.ParentNo, rootNo);
+            }
             else
                 frmTree.Retrieve(FrmTreeAttr.No, rootNo);
+
             //类别.
             BP.WF.Template.FlowSort fs = new BP.WF.Template.FlowSort();
             if (rootNo.Equals("0") == true)

@@ -43,7 +43,7 @@ namespace BP.CCBill.Template
                 this.SetValByKey(MethodAttr.MethodID, value);
             }
         }
-       
+
         public string MsgErr
         {
             get
@@ -66,8 +66,17 @@ namespace BP.CCBill.Template
                 this.SetValByKey(MethodAttr.MsgSuccess, value);
             }
         }
-
-
+        public string Tag1
+        {
+            get
+            {
+                return this.GetValStringByKey(MethodAttr.Tag1);
+            }
+            set
+            {
+                this.SetValByKey(MethodAttr.Tag1, value);
+            }
+        }
         public string MethodDoc_Url
         {
             get
@@ -106,7 +115,7 @@ namespace BP.CCBill.Template
         {
             get
             {
-                string file = SystemConfig.CCFlowAppPath + "WF\\CCBill\\Admin\\MethodDocDemoJS.txt";
+                string file = SystemConfig.CCFlowAppPath + "WF\\CCBill\\Admin\\MethodDoc\\MethodDocDemoJS.txt";
                 string doc = DataType.ReadTextFile(file); //读取文件.
                 doc = doc.Replace("/#", "+"); //为什么？
                 doc = doc.Replace("/$", "-"); //为什么？
@@ -120,7 +129,7 @@ namespace BP.CCBill.Template
         {
             get
             {
-                string file = SystemConfig.CCFlowAppPath + "WF\\CCBill\\Admin\\MethodDocDemoSQL.txt";
+                string file = SystemConfig.CCFlowAppPath + "WF\\CCBill\\Admin\\MethodDoc\\MethodDocDemoSQL.txt";
                 string doc = DataType.ReadTextFile(file); //读取文件.
                 doc = doc.Replace("@FrmID", this.FrmID);
                 return doc;
@@ -262,49 +271,48 @@ namespace BP.CCBill.Template
                 //功能标记.
                 map.AddTBString(MethodAttr.MethodModel, null, "方法模式", true, true, 0, 300, 10);
                 map.AddTBString(MethodAttr.Tag1, null, "Tag1", true, true, 0, 300, 10);
-                map.AddTBString(MethodAttr.Mark, null, "Mark", true, true, 0, 300, 10);
+               // map.AddTBString(MethodAttr.Mark, null, "Mark", true, true, 0, 300, 10);
                 map.AddTBString(MethodAttr.FrmID, null, "表单ID", true, true, 0, 300, 10);
-
 
                 map.AddTBString(MethodAttr.Icon, null, "图标", true, false, 0, 50, 10, true);
 
-                map.AddTBStringDoc(MethodAttr.Docs, null, "功能说明", true, false, true);
-                map.SetHelperAlert(MethodAttr.Docs, "对于该功能的描述.");
+                map.AddTBString(MethodAttr.Mark, null, "功能说明", true, false, 0, 900, 10, true);
+                map.SetHelperAlert(MethodAttr.Mark, "对于该功能的描述.");
 
+                // map.AddTBStringDoc(MethodAttr.Docs, null, "功能说明", true, false, true);
 
-                map.AddDDLSysEnum(MethodAttr.WhatAreYouTodo, 0, "执行完毕后干啥？", true, true, MethodAttr.WhatAreYouTodo,
-                "@0=关闭提示窗口@1=关闭提示窗口并刷新@2=转入到Search.htm页面上去");
+                //    map.AddDDLSysEnum(MethodAttr.WhatAreYouTodo, 0, "执行完毕后干啥？", true, true, MethodAttr.WhatAreYouTodo,
+                //   "@0=关闭提示窗口@1=关闭提示窗口并刷新@2=转入到Search.htm页面上去");
 
                 map.AddTBString(MethodAttr.WarningMsg, null, "功能执行警告信息", true, false, 0, 300, 10, true);
-                map.AddDDLSysEnum(MethodAttr.ShowModel, 0, "显示方式", true, true, MethodAttr.ShowModel,
-                  "@0=按钮@1=超链接");
+                //map.AddDDLSysEnum(MethodAttr.ShowModel, 0, "显示方式", true, true, MethodAttr.ShowModel,
+                //  "@0=按钮@1=超链接");
 
                 map.AddDDLSysEnum(MethodAttr.MethodDocTypeOfFunc, 0, "内容类型", true, false, "MethodDocTypeOfFunc",
                "@0=SQL@1=URL@2=JavaScript@3=业务单元");
 
-                map.AddTBString(MethodAttr.MethodDoc_Url, null, "URL执行内容", false, false, 0, 300, 10);
                 map.AddTBString(MethodAttr.MsgSuccess, null, "成功提示信息", true, false, 0, 300, 10, true);
                 map.AddTBString(MethodAttr.MsgErr, null, "失败提示信息", true, false, 0, 300, 10, true);
 
                 #region 外观.
-                map.AddTBInt(MethodAttr.PopHeight, 100, "弹窗高度", true, false);
-                map.AddTBInt(MethodAttr.PopWidth, 260, "弹窗宽度", true, false);
+                //  map.AddTBInt(MethodAttr.PopHeight, 100, "弹窗高度", true, false);
+                //    map.AddTBInt(MethodAttr.PopWidth, 260, "弹窗宽度", true, false);
                 #endregion 外观.
 
                 #region 显示位置控制.
-                map.AddBoolean(MethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);
-                map.AddBoolean(MethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
-                map.AddBoolean(MethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
+                // map.AddBoolean(MethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);
+                //  map.AddBoolean(MethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
+                //  map.AddBoolean(MethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
                 #endregion 显示位置控制.
 
                 RefMethod rm = new RefMethod();
-                rm.Title = "方法参数"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoParas";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
+                //rm.Title = "方法参数"; // "设计表单";
+                //rm.ClassMethodName = this.ToString() + ".DoParas";
+                //rm.Visable = true;
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.Target = "_blank";
                 //rm.GroupName = "开发接口";
-                map.AddRefMethod(rm);
+                //  map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "方法内容"; // "设计表单";
@@ -337,7 +345,7 @@ namespace BP.CCBill.Template
         /// <returns></returns>
         public string DoDocs()
         {
-            return "../../CCBill/Admin/MethodDoc.htm?No=" + this.No;
+            return "../../CCBill/Admin/MethodDoc/Default.htm?No=" + this.No;
         }
         protected override bool beforeInsert()
         {

@@ -146,41 +146,7 @@ namespace BP.CCBill
                 this.SetValByKey(FrmBBSAttr.WorkID, value);
             }
         }
-        /// <summary>
-        /// 活动类型
-        /// </summary>
-        public BP.CCBill.FrmActionType FrmActionType
-        {
-            get
-            {
-                return (BP.CCBill.FrmActionType)this.GetValIntByKey(FrmBBSAttr.ActionType);
-            }
-            set
-            {
-                this.SetValByKey(FrmBBSAttr.ActionType, (int)value);
-            }
-        }
-        /// <summary>
-        /// 获取动作文本
-        /// </summary>
-        /// <param name="at"></param>
-        /// <returns></returns>
-        public static string GetActionTypeT(BP.CCBill.FrmActionType at)
-        {
-            switch (at)
-            {
-                case BP.CCBill.FrmActionType.Save:
-                    return "保存";
-                case BP.CCBill.FrmActionType.Create:
-                    return "提交";
-                case BP.CCBill.FrmActionType.BBS:
-                    return "评论";
-                case BP.CCBill.FrmActionType.View:
-                    return "打开";
-                default:
-                    return "信息" + at.ToString();
-            }
-        }
+        
         /// <summary>
         /// 活动名称
         /// </summary>

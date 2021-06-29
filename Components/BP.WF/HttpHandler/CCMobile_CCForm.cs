@@ -445,6 +445,84 @@ namespace BP.WF.HttpHandler
 
             return result;
         }
+
+        public string GetAccessTokenImgs()
+        {
+            //获取 AccessToken
+            return BP.GPM.WeiXin.WeiXinEntity.getAccessToken();
+        }
+
+        /// <summary>
+        /// 下载微信服务器图片，上传到应用服务器
+        /// </summary>
+        /// <param name="mideaid"></param>
+        public string MyFlowGener_SaveUploadeImg()
+        {
+            try
+            {
+                string media_id = this.GetRequestVal("IDs");
+                string athMyPK = this.GetRequestVal("AthMyPK"); //图片组件.
+
+                FrmAttachment athDesc = new FrmAttachment(athMyPK);
+
+                if (string.IsNullOrEmpty(media_id))
+                {
+                    return "media_id为空";
+                }
+                string accessToken = GetAccessTokenImgs();
+                //BP.DA.Log.DebugWriteError("accessToken:" + accessToken);
+                Bitmap img = null;
+                HttpWebRequest req;
+                HttpWebResponse res = null;
+               
+                string url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/media/get?access_token={0}&media_id={1}", accessToken, media_id);
+
+                System.Uri httpUrl = new System.Uri(url);
+                req = (HttpWebRequest)(WebRequest.Create(httpUrl));
+                req.Timeout = 180000; //设置超时值10秒
+                req.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)";
+                req.Method = "GET";
+                res = (HttpWebResponse)(req.GetResponse());
+                img = new Bitmap(res.GetResponseStream());//获取图片流    
+                //BP.DA.Log.DebugWriteError(res.GetResponseHeader("Content-Type"));
+                string fileName = res.GetResponseHeader("Content-Disposition").Replace("attachment; filename=", "").Replace("\"", "");
+                  
+                img.Save(SystemConfig.PathOfTemp + fileName);
+                BP.DA.Log.DebugWriteError(this.FK_Node+":"+this.FK_Flow + ":" + this.WorkID + ":" +
+                    athDesc.NoOfObj + ":" + athDesc.FK_MapData + ":" + SystemConfig.PathOfTemp + fileName + ":" + fileName);
+                BP.WF.CCFormAPI.CCForm_AddAth(this.FK_Node,this.FK_Flow, this.WorkID,
+                    athMyPK, athDesc.FK_MapData, SystemConfig.PathOfTemp + fileName, fileName);
+
+                return "执行成功";
+            }
+            catch (Exception ex)
+            {
+                string msg = "err@GetMedia:" + ex.Message + " -- " + ex.StackTrace;
+                BP.DA.Log.DebugWriteError(msg);
+                return msg;
+
+            }
+        }
+        public static byte[] BitmapToBytes(Bitmap Bitmap)
+        {
+            MemoryStream ms = null;
+            try
+            {
+                ms = new MemoryStream();
+                Bitmap.Save(ms, Bitmap.RawFormat);
+                byte[] byteImage = new Byte[ms.Length];
+                byteImage = ms.ToArray();
+                return byteImage;
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                ms.Close();
+            }
+        }
         /// <summary>
         /// 调用企业号获取地理位置
         /// </summary>

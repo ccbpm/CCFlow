@@ -73,23 +73,39 @@ namespace BP.CCBill
     /// <summary>
     /// 表单活动类型
     /// </summary>
-    public enum FrmActionType
+    public class FrmActionType
     {
         /// <summary>
         /// 创建
         /// </summary>
-        Create = 0,
+        public const string Create = "Create";
         /// <summary>
-        /// 保存
+        ///保存 
         /// </summary>
-        Save = 1,
+        public const string Save = "Save";
         /// <summary>
         /// 评论
         /// </summary>
-        BBS,
+        public const string BBS = "BBS";
         /// <summary>
         /// 打开
         /// </summary>
-        View
+        public const string View = "View";
+        /// <summary>
+        /// 回滚数据
+        /// </summary>
+        public const string DataVerReback = "DataVerReback";
+        /// <summary>
+        /// 发起流程
+        /// </summary>
+        public const string StartFlow = "StartFlow";
+        /// <summary>
+        /// 发起注册流程
+        /// </summary>
+        public const string StartRegFlow = "StartRegFlow";
+        /// <summary>
+        /// 其他
+        /// </summary>
+        public const string Etc = "Etc";
     }
 }

@@ -153,6 +153,7 @@ namespace BP.CCBill
                 this.SetValByKey(TrackAttr.RDT, value);
             }
         }
+         
         /// <summary>
         /// fid
         /// </summary>
@@ -181,18 +182,15 @@ namespace BP.CCBill
                 this.SetValByKey(TrackAttr.WorkID, value);
             }
         }
-        /// <summary>
-        /// 活动类型
-        /// </summary>
-        public BP.CCBill.FrmActionType FrmActionType
+        public string ActionType
         {
             get
             {
-                return (BP.CCBill.FrmActionType)this.GetValIntByKey(TrackAttr.ActionType);
+                return this.GetValStringByKey(TrackAttr.ActionType);
             }
             set
             {
-                this.SetValByKey(TrackAttr.ActionType, (int)value);
+                this.SetValByKey(TrackAttr.ActionType, value);
             }
         }
         /// <summary>
@@ -200,7 +198,7 @@ namespace BP.CCBill
         /// </summary>
         /// <param name="at"></param>
         /// <returns></returns>
-        public static string GetActionTypeT(BP.CCBill.FrmActionType at)
+        public static string GetActionTypeT(string at)
         {
             switch (at)
             {
@@ -382,7 +380,8 @@ namespace BP.CCBill
                 map.AddTBString(TrackAttr.FrmID, null, "表单ID", true, false, 0, 50, 200);
                 map.AddTBString(TrackAttr.FrmName, null, "表单名称(可以为空)", true, false, 0, 200, 200);
 
-                map.AddTBInt(TrackAttr.ActionType, 0, "类型", true, false);
+               // map.AddTBInt(TrackAttr.ActionType, 0, "类型", true, false);
+                map.AddTBString(TrackAttr.ActionType, null, "类型", true, false, 0, 30, 100);
                 map.AddTBString(TrackAttr.ActionTypeText, null, "类型(名称)", true, false, 0, 30, 100);
 
                 map.AddTBInt(TrackAttr.WorkID, 0, "工作ID/OID", true, false);
@@ -418,6 +417,12 @@ namespace BP.CCBill
         /// </summary>
         public Track()
         {
+        }
+        protected override bool beforeInsert()
+        {
+            if (DataType.IsNullOrEmpty(this.MyPK) == true)
+                this.MyPK = DBAccess.GenerGUID();
+            return base.beforeInsert();
         }
         #endregion 构造.
     }

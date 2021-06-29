@@ -24,7 +24,7 @@ namespace BP.WF.DTS
             this.Title = "一键恢复流程模版目录";
             this.Help = "此功能是一键备份流程的逆向操作.";
             this.Help += "@执行时请注意";
-            this.Help += "@1,系统所有的流程数据、模版数据、组织解构数据、将会被删除。";
+            this.Help += "@1,系统所有的流程数据、模版数据、组织结构数据、将会被删除。";
             this.Help += "@2,重新装载C:\\CCFlowTemplete 的数据。";
             this.Help += "@3,此功能一般提供给ccflow的开发者用于不同的数据库之间的移植。";
 

@@ -23,7 +23,7 @@ namespace BP.WF.DTS
         {
             this.Title = "组织结构-部门全路径NameOfPath";
             this.Help = "循环所有部门，重新生成NameOfPath";
-            this.GroupName = "组织解构";
+            this.GroupName = "组织结构";
 
         }
         /// <summary>

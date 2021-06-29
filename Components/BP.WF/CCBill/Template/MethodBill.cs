@@ -43,8 +43,8 @@ namespace BP.CCBill.Template
                 this.SetValByKey(MethodAttr.MethodID, value);
             }
         }
-       
-       
+
+
         #endregion
 
         #region 构造方法
@@ -103,12 +103,23 @@ namespace BP.CCBill.Template
                 map.AddTBString(MethodAttr.FlowNo, null, "流程编号", true, true, 0, 10, 10);
 
                 map.AddTBString(MethodAttr.Icon, null, "图标", true, false, 0, 50, 10, true);
- 
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+
+        public string CreateWorkID(Int64 workid)
+        {
+
+            GEEntity ge = new GEEntity(this.FrmID, workid);
+
+            //创建单据ID.
+            Int64 workID = BP.CCBill.Dev2Interface.CreateBlankBillID(this.FrmID,null, ge.Row, this.FrmID, workid);
+            return workID.ToString();
+        }
 
         #region 执行方法.
         protected override bool beforeInsert()

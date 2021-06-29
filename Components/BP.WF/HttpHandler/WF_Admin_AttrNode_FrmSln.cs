@@ -121,7 +121,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string BatchEditSln_InitDDLData()
         {
-            string fk_frm = GetRequestVal("Fk_Frm");
             DataSet ds = new DataSet();
 
             SysEnums ses = new SysEnums("FrmSln");
@@ -130,7 +129,12 @@ namespace BP.WF.HttpHandler
             SysEnums se1s = new SysEnums("FWCSta");
             ds.Tables.Add(se1s.ToDataTableField("FWCSta"));
 
-            DataTable dt = DBAccess.RunSQLReturnTable(Glo.SQLOfCheckField.Replace("@FK_Frm", fk_frm));
+            //签字类型. @hongyan.
+            SysEnums myses = new SysEnums("SigantureEnabel");
+            ds.Tables.Add(myses.ToDataTableField("SigantureEnabel"));
+
+            string sql = Glo.SQLOfCheckField.Replace("@FK_Frm", this.FrmID);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "CheckFields";
             ds.Tables.Add(dt);
             return BP.Tools.Json.ToJson(ds);

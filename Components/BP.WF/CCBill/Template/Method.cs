@@ -19,6 +19,7 @@ namespace BP.CCBill.Template
         /// 表单ID
         /// </summary>
         public const string FrmID = "FrmID";
+        
         /// <summary>
         /// 分组ID
         /// </summary>

@@ -93,14 +93,14 @@
 
             //  alert("创建成功，您可以在在菜单里执行高级编辑与授权.");
             //  window.location.href = "../Menus.htm";
-           // window.close();
+            // window.close();
         }
 
         function GenerPinYin() {
 
             //是否是全拼.
             var isQuanPin = 0;
-            if (document.getElementById("RB_ZZMM_0").checked == true)
+            if (document.getElementById("RB_PinYinModel_0").checked == true)
                 isQuanPin = 1;
 
             // var name = $('#TB_Nam').val();
@@ -168,8 +168,8 @@
                 <tr>
                     <td> </td>
                     <td>
-                        <input id="RB_ZZMM_0" type="radio" name="RB_ZZMM" value="0" checked="true" onclick="GenerPinYin()" /><label for="RB_ZZMM_0" onclick="GenerPinYin()">全拼</label>
-                        <input id="RB_ZZMM_1" type="radio" name="RB_ZZMM" value="1" onclick="GenerPinYin()" /><label for="RB_ZZMM_1" onclick="GenerPinYin()">简拼</label>
+                        <input id="RB_PinYinModel_0" type="radio" name="RB_PinYinModel" value="0" checked="checked" onclick="GenerPinYin()" /><label for="RB_PinYinModel_0" onclick="GenerPinYin()">全拼</label>
+                        <input id="RB_PinYinModel_1" type="radio" name="RB_PinYinModel" value="1" onclick="GenerPinYin()" /><label for="RB_PinYinModel_1" onclick="GenerPinYin()">简拼</label>
                     </td>
                 </tr>
 
@@ -193,7 +193,7 @@
                 <tr>
                     <td> 列表模式</td>
                     <td>
-                        <input id="RB_ListModel_0" type="radio" name="RB_ListModel" value="0"  /><label for="RB_ListModel_0">编辑模式</label>
+                        <input id="RB_ListModel_0" type="radio" name="RB_ListModel" value="0" /><label for="RB_ListModel_0">编辑模式</label>
                         <input id="RB_ListModel_1" type="radio" name="RB_ListModel" value="1" checked="checked" /><label for="RB_ListModel_1">视图模式</label>
                     </td>
                 </tr>
@@ -204,7 +204,7 @@
                     </td>
                 </tr>
             </table>
-            <input type="button" id="Btn_Save" name="Btn_Save" value="执行创建" onclick="Save();"  />
+            <input type="button" id="Btn_Save" name="Btn_Save" value="执行创建" onclick="Save();" />
             <div id="Msg"></div>
         </fieldset>
 
@@ -218,6 +218,24 @@
                 <li> 1 周例会流程，用户希望每个周都要启动例会通知流程这个启动是让系统自动发起而非人工发起。</li>
 
             </ul>
+
+
+            <legend id="help">实体列表</legend>
+
+            <ul>
+
+                <li> <img src="Dict.png" class="HelpImg" style="width:80%;" /> </li>
+            </ul>
+
+            <legend id="help">实体卡片</legend>
+            <ul>
+
+                <li> <img src="DictEn.png" class="HelpImg" style="width:80%;" /> </li>
+
+
+            </ul>
+
+
         </fieldset>
     </form>
 </body>

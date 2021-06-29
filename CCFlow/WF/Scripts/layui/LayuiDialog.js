@@ -51,30 +51,38 @@ function OpenLayuiDialog(url, title, dlgWidth, dlgHeight, offset, isRefresh, isS
     w.layer.open({
         type: 2 //此处以iframe举例
         , title: title
+        , id:"dlg"
         , area: [dlgWidth + 'px', dlgHeight+'%']
-        , maxmin: true
+        , maxmin: offset=="r"?false:true
         , shadeClose: true
         , offset: offset
         , content: url
         , btn: btn
         , yes: function () {
-            okBtnFunc;
+            if (okBtnFunc)
+                okBtnFunc();
+            layer.closeAll();
         }
         , btn2: function () {
-            dlgClosedFunc
+            if (dlgClosedFunc)
+                dlgClosedFunc();
             layer.closeAll();
         },
         cancel: function (index, layero) {
-            debugger
+            if (dlgClosedFunc)
+                dlgClosedFunc();
             if (isRefresh == true)
                 location.reload();
         },
         end: function () {
-            debugger
+            if (dlgClosedFunc)
+                dlgClosedFunc();
             if (isRefresh == true)
                 location.reload();
         }
     });
+    if (offset == "r")
+        $(".layui-layer-setwin .layui-layer-close2").css("right", "-18px").css("top", "-18px");
 }
 /**
  * 右侧呼出

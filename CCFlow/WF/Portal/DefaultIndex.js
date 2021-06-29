@@ -2,6 +2,8 @@ var currentTopContextMenuNodes = []
 var currentChildContextMenuNodes = []
 var layDropdown = null
 
+
+
 window.onload = function () {
 
     var vm = new Vue({
@@ -46,6 +48,7 @@ window.onload = function () {
             }
         },
         methods: {
+
             openTabDropdownMenu: function (e) {
                 this.tabDropdownVisible = true
                 this.top = e.pageY
@@ -231,7 +234,25 @@ window.onload = function () {
                 //     }
                 // })
             },
+            openTabByMenu: function (menu, alignRight) {
+
+                //写入日志.
+                UserLogInsert("MenuClick", menu.Name + "@" + menu.Icon + "@" + menu.Url);
+
+                this.openTab(menu.Name, menu.Url, alignRight);
+            },
             openTab: function (name, src, alignRight) {
+                debugger;
+
+
+                //如果发起实体类的流程，是通过一个页面中专过去的.
+                /*
+                 *  /WF/CCBill/Opt/StartFlowByNewEntity.htm
+                 *  这里不解析特殊的业务逻辑, 让页面解析。
+                 * 
+                 */
+
+
                 if (this.tabsList.length >= 30) {
                     layer.alert('最多可以打开30个标签页~');
                     return;
@@ -369,11 +390,15 @@ window.onload = function () {
                 clearTimeout(this.closeTimeout)
                 this.closeTimeout = null
             },
-            //退出
             logout: function () {
                 if (!confirm("提示确定需要退出？"))
                     return;
                 window.location.href = "Login.htm?DoType=Logout";
+            },
+            GoToMobile: function () {
+                var webUser = new WebUser();  //退出
+                var url = "../../FastMobilePortal/Login.htm?UserNo=" + webUser.No + "&SID=" + webUser.SID + "&OrgNo=" + webUser.OrgNo;
+                window.location.href = url;
             },
             initMenus: function () {
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
@@ -452,16 +477,16 @@ window.onload = function () {
                         }
                         if (type === 'flow') {
                             var topFlowNodeItems = [
-                                {title: '<i class=icon-plus></i> 新建流程', id: "NewFlow", Icon: "icon-plus"},
-                                {title: '<i class=icon-star></i> 目录属性', id: "EditSort", Icon: "icon-options"},
-                                {title: '<i class=icon-folder></i> 新建目录', id: "NewSort", Icon: "icon-magnifier-add"},
+                                { title: '<i class=icon-plus></i> 新建流程', id: "NewFlow", Icon: "icon-plus" },
+                                { title: '<i class=icon-star></i> 目录属性', id: "EditSort", Icon: "icon-options" },
+                                { title: '<i class=icon-folder></i> 新建目录', id: "NewSort", Icon: "icon-magnifier-add" },
                                 {
                                     title: '<i class=icon-share-alt ></i> 导入流程模版',
                                     id: "ImpFlowTemplate",
                                     Icon: "icon-plus"
                                 },
                                 //{ title: '新建下级目录', id: 5 },
-                                {title: '<i class=icon-close></i> 删除目录', id: "DeleteSort", Icon: "icon-close"}
+                                { title: '<i class=icon-close></i> 删除目录', id: "DeleteSort", Icon: "icon-close" }
                             ]
 
                             var tfOptions = {
@@ -479,11 +504,11 @@ window.onload = function () {
 
 
                             var childFlowNodeItems = [
-                                {title: '<i class=icon-star></i> 流程属性', id: "Attr", Icon: "icon-options"},
-                                {title: '<i class=icon-settings></i> 设计流程', id: "Designer", Icon: "icon-settings"},
-                                {title: '<i class=icon-plane></i> 测试容器', id: "Start", Icon: "icon-paper-plane"},
-                                {title: '<i class=icon-docs></i> 复制流程', id: "Copy", Icon: "icon-docs"},
-                                {title: '<i class=icon-close></i> 删除流程', id: "Delete", Icon: "icon-close"}
+                                { title: '<i class=icon-star></i> 流程属性', id: "Attr", Icon: "icon-options" },
+                                { title: '<i class=icon-settings></i> 设计流程', id: "Designer", Icon: "icon-settings" },
+                                { title: '<i class=icon-plane></i> 测试容器', id: "Start", Icon: "icon-paper-plane" },
+                                { title: '<i class=icon-docs></i> 复制流程', id: "Copy", Icon: "icon-docs" },
+                                { title: '<i class=icon-close></i> 删除流程', id: "Delete", Icon: "icon-close" }
                             ]
                             var cfOptions = {
                                 trigger: 'contextmenu',
@@ -505,16 +530,16 @@ window.onload = function () {
 
                         if (type === 'form') {
                             var topFormNodeItems = [
-                                {title: '<i class=icon-plus></i> 新建表单', id: "NewFlow", Icon: "icon-plus"},
-                                {title: '<i class=icon-star></i> 重命名', id: "EditSort", Icon: "icon-options"},
-                                {title: '<i class=icon-folder></i> 新建目录', id: "NewSort", Icon: "icon-magnifier-add"},
+                                { title: '<i class=icon-plus></i> 新建表单', id: "NewFlow", Icon: "icon-plus" },
+                                { title: '<i class=icon-star></i> 重命名', id: "EditSort", Icon: "icon-options" },
+                                { title: '<i class=icon-folder></i> 新建目录', id: "NewSort", Icon: "icon-magnifier-add" },
                                 {
                                     title: '<i class=icon-share-alt ></i> 导入表单模版',
                                     id: "ImpFlowTemplate",
                                     Icon: "icon-plus"
                                 },
                                 //{ title: '新建下级目录', id: 5 },
-                                {title: '<i class=icon-close></i> 删除目录', id: "DeleteSort", Icon: "icon-close"}
+                                { title: '<i class=icon-close></i> 删除目录', id: "DeleteSort", Icon: "icon-close" }
                             ]
 
                             var tfOptions = {
@@ -533,11 +558,11 @@ window.onload = function () {
 
 
                             var childFormNodeItems = [
-                                {title: '<i class=icon-star></i> 表单属性', id: "Attr", Icon: "icon-options"},
-                                {title: '<i class=icon-settings></i> 设计表单', id: "Designer", Icon: "icon-settings"},
-                                {title: '<i class=icon-plane></i> 运行表单', id: "Start", Icon: "icon-paper-plane"},
-                                {title: '<i class=icon-docs></i> 复制表单', id: "Copy", Icon: "icon-docs"},
-                                {title: '<i class=icon-close></i> 删除表单', id: "Delete", Icon: "icon-close"}
+                                { title: '<i class=icon-star></i> 表单属性', id: "Attr", Icon: "icon-options" },
+                                { title: '<i class=icon-settings></i> 设计表单', id: "Designer", Icon: "icon-settings" },
+                                { title: '<i class=icon-plane></i> 运行表单', id: "Start", Icon: "icon-paper-plane" },
+                                { title: '<i class=icon-docs></i> 复制表单', id: "Copy", Icon: "icon-docs" },
+                                { title: '<i class=icon-close></i> 删除表单', id: "Delete", Icon: "icon-close" }
                             ]
                             var cfOptions = {
                                 trigger: 'contextmenu',
@@ -926,74 +951,3 @@ window.onload = function () {
 }
 
 
-//处理 url 根据 MenuModel 菜单类型 解析url.
-function DealMenuUrl(menu) {
-
-    if (menu.Icon == "" || menu.Icon == null) {
-        menu.Icon = "icon-user";
-    }
-
-    //如果是修改基础数据..
-    if (menu.MenuModel == "FlowBaseData") {
-
-        if (menu.Mark == "Todolist")
-            menu.Url = "../Todolist.htm?FK_Flow=" + menu.Tag1;
-
-        if (menu.Mark == "Runing")
-            menu.Url = "../Runing.htm?FK_Flow=" + menu.Tag1;
-
-        if (menu.Mark == "Start") {
-            menu.Url = "../MyFlow.htm?FK_Flow=" + menu.Tag1;
-            menu.Icon = "icon-planct";
-        }
-
-        if (menu.Mark == "FlowSearch")
-            menu.Url = "../Search.htm?FK_Flow=" + menu.Tag1;
-
-        if (menu.Mark == "FlowGroup")
-            menu.Url = "../Group.htm?FK_Flow=" + menu.Tag1;
-    }
-
-    //新建实体.
-    if (menu.MenuModel == "FlowNewEntity") {
-        if (menu.Mark == "StartFlow")
-            menu.Url = "../CCBill/Opt/StartFlowByNewEntity.htm?FK_Flow=" + menu.Tag1 + "&MenuNo=" + menu.No;
-    }
-
-    if (menu.MenuModel == "FlowSearch") {
-        menu.Url = "../Search.htm?FK_Flow=" + menu.Tag;
-    }
-
-    if (menu.MenuModel === "Dict") {
-
-        if (menu.ListModel === 0) //如果是批量编辑模式.
-            menu.Url = "../CCBill/SearchEditer.htm?FrmID=" + menu.Url;
-        else
-            menu.Url = "../CCBill/SearchDict.htm?FrmID=" + menu.Url;
-        return menu;
-    }
-
-    //流程菜单.
-    if (menu.MenuModel == "FlowUrl") {
-        menu.Url = "../" + menu.Url;
-        return menu;
-    }
-
-    if (menu.MenuModel == "DictTable") {
-        url = "../Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + menu.Url + "&QueryType=Dict";
-        menu.Url = url;
-        return menu;
-    }
-
-    if (menu.MenuModel === "Bill") {
-        menu.Url = "../CCBill/SearchBill.htm?FrmID=" + menu.Url;
-        return menu;
-    }
-
-    //独立功能.
-    if (menu.MenuModel === "Func" || menu.MenuModel === "StandAloneFunc" ) {
-        menu.Url = "../CCBill/Sys/Func.htm?FuncNo=" + menu.Url;
-        return menu;
-    }
-    return menu;
-}

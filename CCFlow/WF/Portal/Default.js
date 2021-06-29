@@ -1,4 +1,4 @@
- // 菜单处理类
+// 菜单处理类
 // 非系统菜单
 var nonSystemItems = ['Forms', 'Frms', 'Flows', 'flows', 'frms', 'forms']
 
@@ -6,6 +6,7 @@ function MenuConvertTools(webUser, data) {
     this.webUser = webUser;
     this.data = data;
 }
+
 
 //流程菜单.
 MenuConvertTools.prototype.getFlowMenu = function () {
@@ -162,7 +163,7 @@ MenuConvertTools.prototype.getSystemMenus = function () {
 }
 MenuConvertTools.prototype.convertToTreeData = function () {
     var topNodes = [];
-    if(this.webUser.No === "admin" || parseInt(this.webUser.IsAdmin) === 1){
+    if (this.webUser.No === "admin" || parseInt(this.webUser.IsAdmin) === 1) {
         if (this.getFlowMenu(this.data).length !== 0)
             topNodes.push(this.getFlowMenu(this.data));
         if (this.getFormMenu(this.data).length !== 0)

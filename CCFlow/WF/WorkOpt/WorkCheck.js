@@ -30,7 +30,7 @@ function IsReadOnly() {
  
 
 //审核组件页面初始化
-$(function() {
+function NodeWorkCheck_Init(){
     var FWCVer = null;
     if (FWCVer == null) {
         var node = new Entity("BP.WF.Node", checkParam.FK_Node);
@@ -51,6 +51,8 @@ $(function() {
 
     var _Html = '';
 
+    if (tracks.length == 0)
+        $("#WorkCheck_Group").hide();
     //轨迹数据
     if (tracks.length != 0) {
         _Html += '<table style="width:100%">';
@@ -64,17 +66,11 @@ $(function() {
 
 
     $("#WorkCheck").html(_Html);
-
-    // $(window.parent.document).find("#FWC").css('height', $("#tbTracks").height() + 5);
-
     if ($("#WorkCheck_Doc").length > 0) {
         if (frmWorkCheck.FWCIsFullInfo == 1 && frmWorkCheck.FWCDefInfo && frmWorkCheck.FWCDefInfo.length > 0) {
             SaveWorkCheck(0);
         }
     }
-
-    //$("textarea").trigger("keydown");
-
     if ($("#uploaddiv").length > 0) {
         var explorer = window.navigator.userAgent;
         if (((explorer.indexOf('MSIE') >= 0) && (explorer.indexOf('Opera') < 0) || (explorer.indexOf('Trident') >= 0)))
@@ -82,9 +78,7 @@ $(function() {
         else
             AddUploafFileHtm("uploaddiv", frmWorkCheck.FWCShowModel);
     }
-    return _Html;
-
-});
+};
 
 function WorkCheck_Init(FWCVer) {
     var data;
@@ -136,44 +130,6 @@ function GetWorkCheck_Node(checkData, keyOfEn, checkField, FWCVer) {
         if ($("#TB_" + keyOfEn).length != 0 && $("#TB_" + keyOfEn).val().indexOf("," + track.NodeID) == -1)
             continue;
         _Html += WorkCheck_Parse(track, aths, frmWorkCheck, SignType, 0, isShowCheck, FWCVer);
-        //var empNo = track.EmpFrom;
-        /*if (ht.包含  key = EmpNo ) //如果ht 有这个empNo.
-          ht.Add(empNo, track.MyPK);
-        else*/
-
-        /* if (i == 0) {
-             map[empNo] = track.MyPk;
-         }
-         //如果遍历map
-         for (var prop in map) {
-             //map.hasOwnProperty(prop) && 
-             if (prop == empNo)
-                 continue;
- 
-             map[empNo] = track.MyPk;
-             break;
-         }
-     }
-     // 根据ht 输出数据。
-     for (var i = 0; i < tracks.length; i++) {
-         var track = tracks[i];
-         if ($("#TB_" + keyOfEn).length != 0 && $("#TB_" + keyOfEn).val().indexOf("," + track.NodeID) == -1)
-             continue;
-         _Html += WorkCheck_Parse(track, aths, frmWorkCheck, SignType, 0, isShowCheck, FWCVer);
-         var mypk = track.MyPk;
- 
-         *//* if (ht 包含 myp == false)
-         continue;*//*
-       // 如果遍历map
-       for (var prop in map) {
-           //map.hasOwnProperty(prop) && 
-           if (map[prop] == mypk || (mypk == null && map[prop] == null)) {
-               _Html += WorkCheck_Parse(track, aths, frmWorkCheck, SignType, 0, isShowCheck, FWCVer);
-               break;
-           } else {
-               continue;
-           }
-       }*/
     }
 
     _Html += "</table>";
@@ -189,12 +145,6 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
     if (frmWorkCheck.FWCMsgShow == "1" && track.NodeID == checkParam.FK_Node && track.IsDoc == false) {
         return true;
     }
-
-    //var fwcs = new Entities("BP.WF.Template.FrmWorkChecks");
-    //fwcs.Retrieve("NodeID", this.NodeID);
-
-    // if (fwcs[0].FWCSta == 2)
-    //   return true;
 
     _Html += "<tr>";
     if (showNodeName == 1) {
@@ -220,9 +170,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
             _Html += "<div style='float:right' id='uploaddiv' data-info='" + frmWorkCheck.FWCShowModel + "' onmouseover='UploadFileChange(this)'></div>";
         }
       
-        if (getConfigByKey("IsShowWorkCheckUsefulExpres", true) == true)
-            _Html += "<div style='float:right'><a onmouseover = 'UsefulExpresFlow(\"WorkCheck\",\"WorkCheck_Doc\");' ><span style='font-size:15px;'>常用短语</span>  <img alt='编辑常用审批语言.' src='../WF/Img/Btn/Edit.gif' /></a></div>";
-
+      
         _Html += "<div style='float:left;width:100%;'>";
         var msg = track.Msg;
         if (msg == null || msg == undefined || msg == "")
@@ -312,8 +260,6 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
                 idx++;
             }
         }
-
-
         _Html += '</td>';
     }
 
@@ -334,11 +280,13 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
     if (SignType == null || SignType == undefined) {
 
         //签名，日期.
-        //_Html += "<tr>";
+        _Html += "<tr>";
         if (track.RDT == "")
             _Html += "<td style='text-align:right;width:100%;border-top-style:none;border-color:#ddd;display:table-cell;' class='only-print-hidden'>";
         else
             _Html += "<td style='text-align:right;border-top-style:none;border-color:#ddd'>";
+        if (isEditWorkCheck == true && getConfigByKey("IsShowWorkCheckUsefulExpres", true) == true)
+                _Html += "<div style='float:left'><a onmouseover = 'UsefulExpresFlow(\"WorkCheck\",\"WorkCheck_Doc\");' ><span style='font-size:15px;'>常用短语</span>  <img alt='编辑常用审批语言.' src='../WF/Img/Btn/Edit.gif' /></a></div>";
 
         if (frmWorkCheck.SigantureEnabel == "0")
             _Html += track.EmpFromT;
@@ -552,7 +500,6 @@ function GetUserSiganture(userNo, userName) {
 
 //签字版
 function GetUserHandWriting(track, isEditWorkCheck, userName, userNo) {
-    //debugger;
     if (isEditWorkCheck == false) {
         if (track.WritImg == null || track.WritImg == "")
             return userName;

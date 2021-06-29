@@ -2836,6 +2836,7 @@ function GetPara(atPara, key) {
 
 //用户处理日志
 function UserLogInsert(logType, logMsg, userNo) {
+
     if (userNo == null || userNo == undefined) {
         if (loadWebUser == null)
             loadWebUser = new WebUser();
@@ -3069,7 +3070,7 @@ function groupBy(array, f) {
  */
 function JumpFlowPage(pageType, title, workid, fk_flow, fk_node, fid, pworkid,isread,paras) {
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-    if (pageType = "MyView")
+    if (pageType == "MyView")
         handler = new HttpHandler("BP.WF.HttpHandler.WF_MyView");
     if (workid != null && workid != undefined)
         handler.AddPara("WorkID",workid);
@@ -3085,7 +3086,7 @@ function JumpFlowPage(pageType, title, workid, fk_flow, fk_node, fid, pworkid,is
     if (paras != null && paras != undefined)
         handler.AddPara("Paras", paras);
     var data = handler.DoMethodReturnString("MyFlow_Init");
-    if (pageType = "MyView")
+    if (pageType == "MyView")
         data = handler.DoMethodReturnString("MyView_Init");
     if (data.indexOf('err@') == 0) {
         alert(data);

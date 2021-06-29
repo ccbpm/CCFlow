@@ -32,6 +32,9 @@
             func.Name = $("#TB_Name").val();
             func.FuncID = $("#TB_No").val();
 
+            //funcdocument.getElementById("RB_FuncSrc_0").checked == true)
+            //     isQuanPin = 1;
+
             if (func.FuncID == "" || func.Name == "") {
                 alert("err@名称与编号不能为空.");
                 return;
@@ -48,9 +51,8 @@
             en.Icon = "icon-energy";
             en.Insert();
 
-            en.UrlExt = "../CCBill/Func/Func.htm?No=" + en.No;
+            en.UrlExt = "../CCBill/Sys/Func.htm?No=" + en.No;
             en.Update();
-
 
             alert("创建成功，您可以在在菜单里执行高级编辑与授权.");
 
@@ -62,7 +64,7 @@
 
             //是否是全拼.
             var isQuanPin = 0;
-            if (document.getElementById("RB_ZZMM_0").checked == true)
+            if (document.getElementById("RB_FuncSrc_0").checked == true)
                 isQuanPin = 1;
 
             // var name = $('#TB_Nam').val();
@@ -89,7 +91,6 @@
             return;
         }
 
-
     </script>
 </head>
 <body>
@@ -107,18 +108,24 @@
             </tr>
 
             <tr>
-                <td>编号 </td>
+                <td>来源 </td>
+                <td>
+                    <input id="RB_FuncSrc_0" type="radio" name="RB_FuncSrc" value="0" checked="true" onclick="GenerPinYin()" /><label for="RB_FuncSrc_0">自定义</label>
+                    <input id="RB_FuncSrc_1" type="radio" name="RB_FuncSrc" value="1" /><label for="RB_FuncSrc_1">内置</label>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>内置功能名称 </td>
                 <td>
                     <input type="text" value="" id="TB_No" style="width:90%;" />
-                    <input type="text" id="TB_No_Org" name="TB_No_Org" style="width: 100%;" hidden=hidden />
                 </td>
             </tr>
 
             <tr>
                 <td> </td>
                 <td>
-                    <input id="RB_ZZMM_0" type="radio" name="RB_ZZMM" value="0" checked="true" onclick="GenerPinYin()" /><label for="RB_ZZMM_0" onclick="GenerPinYin()">全拼</label>
-                    <input id="RB_ZZMM_1" type="radio" name="RB_ZZMM" value="1" onclick="GenerPinYin()" /><label for="RB_ZZMM_1" onclick="GenerPinYin()">简拼</label>
                 </td>
             </tr>
 

@@ -49,22 +49,20 @@
     <fieldset>
         <legend>自定义URL菜单， 您可以使用右上角的下拉框选择自己要定义的菜单类型. </legend>
         <ul>
-            <li>菜单标题,比如:用车申请单 </li>
-            <li> <input type="text" value="" id="TB_Title" placeholder="用车申请,车辆台账..." /> </li>
-            <li>菜单连接： http://xxxx/xxx/xx.htm </li>
-            <li> <input type="text" value="" id="TB_Url" placeholder="/App/xxx.htm" /> </li>
+            <li>菜单标题:</li>
+            <li> <input type="text" value="" id="TB_Title" placeholder="功能页面1" /> </li>
+            <li>菜单连接： http://ccbpm.cn/MyUrl.htm  </li>
+            <li> <input type="text" value="" id="TB_Url" placeholder="/App/MyUrl.htm" /> </li>
         </ul>
-        <input type="button" id="Btn_Save" value="创建：自定义菜单" onclick="Save();" />
-    </fieldset>
 
-    <fieldset>
-        <legend id="help"></legend>
+        <legend>帮助</legend>
         <ul>
-            <li> 定义：自动启动工作流程，一个流程的开始节点的填写与发起是在特定规则的设置下自动发起的流程。</li>
-            <li> 解释：通常模式下的流程启动是手工的启动，就是用户从一个发起列表，点击流程名字，就启动了该流程。但是有的时候，是系统自动发起该流程。</li>
+            <li> 可以使用相对路径，也可以使用绝对路径。</li>
+            <li> 用户输入的Url:  http://ccbpm.cn/MyUrl.htm</li>
+            <li> 打开的Url : http://ccbpm.cn/MyUrl.htm?UserNo=xxxx&SID=xxxx。</li>
+            <li> SID就类似于token, UserNo就是当前登录用户的编号。</li>
 
-            <li>应用场景</li>
-            <li> 1 周例会流程，用户希望每个周都要启动例会通知流程这个启动是让系统自动发起而非人工发起。</li>
+            <li> <img src="SelfUrl.png" class="HelpImg" /></li>
 
         </ul>
     </fieldset>

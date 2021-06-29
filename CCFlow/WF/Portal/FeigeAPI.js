@@ -10,6 +10,7 @@ var feiGe_Host = "http://dev.ccc.com"; //飞鸽的服务器地址. 请登录 htt
 var feiGe_OrgNo = "CCFlowDemo"; //组织账号.
 var feiGe_OrgName = "驰骋软件"; //组织名称.
 var feiGe_OrgKey = "324324234234"; //密钥.
+var feiGe_IsOpenMsgWhenHaveMsg = false; 
 
 // 小， 中，大. 
 var feiGe_MsgShowModel = 0; //消息ICON的风格.
@@ -103,13 +104,14 @@ function OpenMsgPanel() {
 /**
  * 创建一个多会话： 从一个工作上打开会话.
  * @param {密钥} orgSDI
- * @param {多个人用都好分开} userIds
+ * @param {群聊的主键} orgSgroupPKDI
+ * @param {多个人用都好分开} userIds ， "@zhangsan,张三@lisi,李四"
  * @param {标题} title
  * @param {创建后的文字内容:可选} docs
  * @param {url链接：可选} url
  *
  */
-function CreateGroupTalk(orgSDI, userIds, title, docs, url) {
+function CreateGroupTalk(orgSDI, groupPK, userIds, title, docs, url) {
 
 }
 

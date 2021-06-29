@@ -142,11 +142,13 @@ function SetCSS() {
         var _html = $(obj).html();
         if (obj.id.indexOf("help") != -1) {
             $(obj).html("");
-            var div2 = "<div id='help1' class='help-title'> <img src='../Img/ico-help.png' alt='帮助' class='ico-help' />" + _html + " </div>";
-            $($(obj).parent().find("ul").parent()[0]).append(div2)
+
+            var helpImg = basePath + "/WF/Admin/Img/Help.png";
+
+            var div2 = "<div id='help1' class='help-title'> <img src='" + helpImg + "' alt='帮助' class='ico-help' />" + _html + " </div>";
+            $($(obj).parent().find("ul").parent()[0]).append(div2);
         }
     })
-
 
     //bar风格
     $('#bar').attr('class', 'cs-tr cs-bar');
@@ -200,6 +202,11 @@ function HelpDiv() {
 function SetHelpImg() {
     $(function () {
         $(".HelpImg").click(function () {
+            var _this = $(this);//将当前的pimg元素作为_this传入函数  
+            imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
+        });
+
+        $(".Help").click(function () {
             var _this = $(this);//将当前的pimg元素作为_this传入函数  
             imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
         });

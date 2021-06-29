@@ -69,8 +69,11 @@ $(window).load(function () {
 
     }
         
-    if ($("#WorkCheck").length == 1)
-        loadScript(ccbpmPath + "/WF/WorkOpt/WorkCheck.js");
+    if ($("#WorkCheck").length == 1) {
+        Skip.addJs(ccbpmPath + "/WF/WorkOpt/WorkCheck.js");
+        NodeWorkCheck_Init();
+    }
+       
     if ($("#FlowBBS").length == 1)
         loadScript(ccbpmPath + "/WF/WorkOpt/FlowBBS.js");
     if ($("#JobSchedule").length == 1)

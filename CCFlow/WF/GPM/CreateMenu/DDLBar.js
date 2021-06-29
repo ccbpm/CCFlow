@@ -51,10 +51,10 @@ function GetDBDtl() {
         { "No": MenuModel.Bill, "Name": "创建单据", "GroupNo": "B", "Url": "Bill.htm" },
 
         { "No": MenuModel.DictRef, "Name": "引入实体", "GroupNo": "B", "Url": "DictRef.htm" },
-        { "No": MenuModel.BillRef, "Name": "引入单据", "GroupNo": "B", "Url": "BillRef.htm" },
+       /* { "No": MenuModel.BillRef, "Name": "引入单据", "GroupNo": "B", "Url": "BillRef.htm" },*/
 
-        { "No": MenuModel.DictTable, "Name": "创建字典表", "GroupNo": "C", "Url": "DictTable.htm" },
-        { "No": MenuModel.DictTableSpecNo, "Name": "引入字典表", "GroupNo": "C", "Url": "DictTableSpecNo.htm" }
+        { "No": MenuModel.DictTable, "Name": "创建字典表", "GroupNo": "C", "Url": "DictTable.htm" }
+   /*     { "No": MenuModel.DictTableSpecNo, "Name": "引入字典表", "GroupNo": "C", "Url": "DictTableSpecNo.htm" }*/
 
     ];
     return json;

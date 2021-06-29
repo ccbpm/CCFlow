@@ -271,7 +271,7 @@ function GenerFoolFrm(wn) {
                 if (node.FormType == 10 && gf.FrmID != 'ND' + node.NodeID)
                     continue;
 
-                html += "<tr class='FoolFrmFieldTR' >";
+                html += "<tr class='FoolFrmFieldTR' id='WorkCheck_Group'>";
                 html += "  <th colspan='" + tableCol + "'  class='FoolFrmGroupBarTD'>" + gf.Lab + "</th>";
                 html += "</tr>";
 

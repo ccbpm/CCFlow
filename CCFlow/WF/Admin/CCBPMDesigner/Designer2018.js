@@ -165,9 +165,10 @@ function SetNodeFWCSta(nodeID, fwcSta) {
     if (nodeID.indexOf('01') == nodeID.length - 2) {
         //获得nodeID.
         var node = new Entity("BP.WF.Node", nodeID);
-        node.FWCSta = 2;
+
+        node.FWCSta = 2; //只读
         node.Update();
-        alert('开始节点审核组件状态必须为只读,并且不能修改.');
+        alert('开始节点审核组件状态必须为 只读 ,并且不能修改.');
         return;
     }
 

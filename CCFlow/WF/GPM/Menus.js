@@ -48,19 +48,19 @@ new Vue({
         expandAssignMenu: function () {
             var sysNo = GetQueryString('SystemNo')
             var moduleNo = GetQueryString('ModuleNo')
-            if(!sysNo) return
+            if (!sysNo) return
             for (var i = 0; i < this.flowNodes.length; i++) {
                 var system = this.flowNodes[i]
                 if (system.No === sysNo) {
                     system.open = true
-                    if(!moduleNo){
+                    if (!moduleNo) {
                         system.children.forEach(function (item) {
                             item.open = true
                         })
-                    }else{
+                    } else {
                         for (var j = 0; j < system.children.length; j++) {
                             var module = system.children[j]
-                            if(module.No === moduleNo){
+                            if (module.No === moduleNo) {
                                 module.open = true
                             }
                         }
@@ -76,10 +76,10 @@ new Vue({
             layui.use('dropdown', function () {
                 var dropdown = layui.dropdown
                 var systemNodeItems = [
-                    {title: '<i class=icon-plus></i> 新建系统', id: "NewSystem"},
-                    {title: '<i class=icon-star></i> 系统属性', id: "SystemAttr"},
-                    {title: '<i class=icon-plus></i> 新建模块', id: "NewModule"},
-                    {title: '<i class=icon-close></i> 删除系统', id: "DeleteNode"}
+                    { title: '<i class=icon-plus></i> 新建系统', id: "NewSystem" },
+                    { title: '<i class=icon-star></i> 系统属性', id: "SystemAttr" },
+                    { title: '<i class=icon-plus></i> 新建模块', id: "NewModule" },
+                    { title: '<i class=icon-close></i> 删除系统', id: "DeleteNode" }
                 ]
 
                 var systemFunc = function (data, oThis) {
@@ -120,10 +120,10 @@ new Vue({
 
 
                 var moduleNodeItems = [
-                    {title: '<i class=icon-plus></i> 新建菜单', id: "NewMenu",},
-                    {title: '<i class=icon-plus></i> 新建模块', id: "NewModule",},
-                    {title: '<i class=icon-star></i> 模块属性', id: "ModuleAttr",},
-                    {title: '<i class=icon-close></i> 删除模块', id: "DeleteModule",}
+                    { title: '<i class=icon-plus></i> 新建菜单', id: "NewMenu", },
+                    { title: '<i class=icon-plus></i> 新建模块', id: "NewModule", },
+                    { title: '<i class=icon-star></i> 模块属性', id: "ModuleAttr", },
+                    { title: '<i class=icon-close></i> 删除模块', id: "DeleteModule", }
                 ]
                 var moduleFunc = function (data, oThis) {
                     //获得不了当前选择的行的主键了.
@@ -195,10 +195,10 @@ new Vue({
                     }
                 }
                 var menuNodeItems = [
-                    {title: '<i class=icon-menu></i> 新建菜单', id: "NewMenu", Icon: "icon-plus"},
-                    {title: '<i class=icon-star></i> 菜单属性', id: "MenuAttr", Icon: "icon-options"},
-                    {title: '<i class=icon-folder></i> 复制菜单', id: "CopyLink", Icon: "icon-magnifier-add"},
-                    {title: '<i class=icon-close></i> 删除菜单', id: "DeleteNode", Icon: "icon-close"}
+                    { title: '<i class=icon-menu></i> 新建菜单', id: "NewMenu", Icon: "icon-plus" },
+                    { title: '<i class=icon-star></i> 菜单属性', id: "MenuAttr", Icon: "icon-options" },
+                    { title: '<i class=icon-folder></i> 复制菜单', id: "CopyLink", Icon: "icon-magnifier-add" },
+                    { title: '<i class=icon-close></i> 删除菜单', id: "DeleteNode", Icon: "icon-close" }
                 ]
                 var menuOptions = [{
                     elem: '.item-menu-dp',
@@ -291,7 +291,7 @@ new Vue({
         },
         DeleteNode: function (no, enName) {
             console.log(no, enName)
-            layer.confirm('您确定要删除吗？', {icon: 3, title: '提示'}, function (index) {
+            layer.confirm('您确定要删除吗？', { icon: 3, title: '提示' }, function (index) {
                 var en = new Entity(enName, no);
                 en.Delete();
 
@@ -339,7 +339,7 @@ new Vue({
                             return item.dataset.sysid
                         }).join(',');
 
-                       // console.log(currentNodeArrStr);
+                        // console.log(currentNodeArrStr);
 
                         _this.updateSystemSort(currentNodeArrStr);
                     }
@@ -403,7 +403,7 @@ new Vue({
                             var oldModuleIndex = evt.item.dataset.moduleidx;
                             var newSysIndex = evt.to.dataset.sysidx;
                             var newModuleIndex = evt.to.dataset.moduleidx;
-                            if(oldSysIndex === newSysIndex && oldModuleIndex === newModuleIndex) return
+                            if (oldSysIndex === newSysIndex && oldModuleIndex === newModuleIndex) return
                             var item = _this.flowNodes[oldSysIndex].children[oldModuleIndex].children.splice(evt.oldDraggableIndex, 1)[0]
                             _this.flowNodes[newSysIndex].children[newModuleIndex].children.splice(evt.newDraggableIndex, 0, item)
                         }
@@ -538,8 +538,14 @@ new Vue({
                     html += "<a " + btnStyle + " href=\"javascript:addTab('../CCBill/SearchDict.htm?FrmID=" + menu.UrlExt + "','" + menu.Name + "');\"  >列表</a>";
                 //var url = "/Comm/RefFunc/En.htm?EnName=BP.CCBill.FrmDict&PKVal=Dict_CESHI1";
                 // html += "<a class='layui-btn layui-btn-primary layui-border-blue layui-btn-xs' href='../Comm/En.htm?EnName=BP.CCBill.FrmDict&PKVal=" + menu.UrlExt + "' target=_blank >属性</a>";
+
+                var url = "../CCBill/Admin/SearchCond.htm?FrmID=" + menu.UrlExt;
+                //OpenLayuiDialog(url, title, 5000, 0, null, false);
+                //  html += "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','','90000',0,null,false)\" >条件</a>";
+
+
                 html += "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.FrmDict','" + menu.Name + "','" + menu.UrlExt + "')\" >属性</a>";
-                html += "<a " + btnStyle + "  href=\"javascript:addTab('../CCBill/Admin/Method.htm?FrmID=" + menu.UrlExt + "&ModuleNo=" + menu.ModuleNo + "','方法:" + menu.Name + "');\" >方法</a>";
+                html += "<a " + btnStyle + "  href=\"javascript:addTab('../CCBill/Admin/Method.htm?FrmID=" + menu.UrlExt + "&ModuleNo=" + menu.ModuleNo + "','方法:" + menu.Name + "');\" >组件</a>";
 
                 html += "<a " + btnStyle + "  href=\"javascript:GoToFrmDesigner('" + menu.UrlExt + "')\" >表单设计</a>";
                 html += " <span class='layui-badge-rim'>实体:" + menu.UrlExt + "</span>";
@@ -615,9 +621,8 @@ new Vue({
                 if (menu.Mark === "Group") menu.Icon = "icon-chart";
                 if (menu.Mark === "Search") menu.Icon = "icon-grid"; //magnifier
 
-
                 var doc = "<a href=\"javascript:DesignerFlow('" + menu.Tag1 + "','" + menu.Name + "');\" ><i class=icon-heart ></i>设计流程" + menu.Tag1 + "</a>";
-                // var html = "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.Sys.Func','" + menu.Name + "','" + menu.UrlExt + "')\" >功能属性</a>";
+                //var html = "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.Sys.Func','" + menu.Name + "','" + menu.UrlExt + "')\" >功能属性</a>";
                 var html = "<a " + btnStyle + "  href=\"javascript:LayuiPopRight('" + menu.UrlExt + "','" + menu.Name + "','0',false);\" >执行</a>";
                 menu.Docs = html + doc;
             }
@@ -634,8 +639,9 @@ new Vue({
                 if (menu.Mark === "Search") menu.Icon = "icon-grid"; //magnifier
 
                 var doc = "<a " + btnStyle + "  href=\"javascript:DesignerFlow('" + menu.Tag1 + "','" + menu.Name + "');\" >设计流程</a>";
-                var html = "<a " + btnStyle + "  href=\"javascript:LayuiPopRight('" + menu.UrlExt + "','" + menu.Name + "','0',false);\" >执行:" + menu.Tag1 + "</a>";
 
+                //var html = "<a " + btnStyle + "  href=\"javascript:LayuiPopRight('" + menu.UrlExt + "','" + menu.Name + "','0',false);\" >启动流程</a>";
+                var html = "";
                 if (menu.Mark === "StartFlow") {
                     html += "<a " + btnStyle + "  href=\"javascript:EnDotHtml('BP.CCBill.Template.MethodFlowNewEntity','" + menu.No + "','','800');\" >属性</a>";
                 }
@@ -643,10 +649,7 @@ new Vue({
                 menu.Docs = html + doc;
             }
 
-
             // item.Docs = GenerDoc(item);
-
-
             //if (menu.MenuModel == "Dict") menu.MenuModel = "实体";
             //if (menu.MenuModel == "DictTable") menu.MenuModel = "字典表";
             //if (menu.MenuModel == "Bill") menu.MenuModel = "单据";
@@ -705,10 +708,11 @@ function NewSys() {
     // OpenLayuiDialog(url,"新增系统")；
     // this.openLayer(url, '新增系统');
     OpenLayuiDialog(url, "", 0, 0, null, true);
+
 }
 
 function DictCopy(frmID, menuID) {
-    var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_CreateFunc");
+    var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_Method");
     handler.AddPara("FrmID", frmID);
     handler.AddPara("MenuID", menuID);
     handler.DoMethodReturnJSON("");

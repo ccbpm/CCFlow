@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <title></title>
     <!--- 引入代码. -->
     <link rel="stylesheet" type="text/css" href="../Portal/icons/font-icons.min.css">
@@ -24,35 +24,35 @@
             width: 100%;
         }
 
-        .flow .row {
-            display: flex;
-            justify-content: flex-start;
-            flex: 0.2;
-            height: 40px;
-            line-height: 40px;
-            background-color: #FAFAFA;
-        }
+            .flow .row {
+                display: flex;
+                justify-content: flex-start;
+                flex: 0.2;
+                height: 40px;
+                line-height: 40px;
+                background-color: #FAFAFA;
+            }
 
-        /*.flow .row .item {*/
-        /*    box-sizing: border-box;*/
-        /*    flex-shrink: 0;*/
-        /*    text-align: center;*/
-        /*    width: 20%;*/
-        /*    border: 1px solid #eee;*/
-        /*    font-weight: 600;*/
-        /*}*/
+                /*.flow .row .item {*/
+                /*    box-sizing: border-box;*/
+                /*    flex-shrink: 0;*/
+                /*    text-align: center;*/
+                /*    width: 20%;*/
+                /*    border: 1px solid #eee;*/
+                /*    font-weight: 600;*/
+                /*}*/
 
-        .flow .row .item {
-            box-sizing: border-box;
-            flex-shrink: 0;
-            text-align: center;
-            border-right: 1px solid #eee;
-            border-bottom: 1px solid #eee;
-            overflow: hidden;
-        }
+                .flow .row .item {
+                    box-sizing: border-box;
+                    flex-shrink: 0;
+                    text-align: center;
+                    border-right: 1px solid #eee;
+                    border-bottom: 1px solid #eee;
+                    overflow: hidden;
+                }
 
         .item-name {
-            width: 40%;
+            width: 20%;
             text-overflow: ellipsis;
             white-space: nowrap;
             cursor: pointer;
@@ -64,10 +64,15 @@
             max-width: 10%;
         }
 
+        .item-other {
+            width: 10%;
+            max-width: 10%;
+        }
+
         .item-index {
             background-color: #FAFAFA;
-            padding-right: 40px;
-            color: #999999
+            padding-right: 30px;
+            color: #999999;
         }
 
         .flow .row .system-item {
@@ -103,7 +108,7 @@
         }
 
         .item-menu-name {
-            width: 20%;
+            width: 10%;
             padding-left: 12px;
             cursor: pointer;
         }
@@ -125,123 +130,130 @@
 </head>
 
 <body>
-<!--<div id="mymask">
-    正在加载..
-</div>-->
-<div class="flow" id="flow">
-    <div class="row fixed">
-        <div class="item item-other" @click="expandAll = !expandAll">
-            <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs">{{expandAll ? '折叠所有' : '展开所有'}}
-            </button>
-        </div>
-        <div class="item item-other">
-            <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="NewSys()"><i
-                    class="icon-plus" style="margin-right: 6px"></i>创建系统
+    <!--<div id="mymask">
+        正在加载..
+    </div>-->
+    <div class="flow" id="flow">
+        <div class="row fixed">
+            <div class="item item-index" @click="expandAll = !expandAll">
+                <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs">
+                    {{expandAll ? '折叠所有' : '展开所有'}}
+                </button>
             </div>
-        </div>
-        <div class="item item-other">模块</div>
-        <div class="item item-menu-name">菜单</div>
-        <div class="item item-other">菜单类型</div>
-        <div class="item item-content">内容</div>
-        <div class="item item-other">控制方式</div>
-        <div class="item item-op">操作</div>
-    </div>
-    <div id="s-main" ref="container">
-        <div class="wrapper" v-for="(item,index) in flowNodes" :key="index" :data-id="item.No" :data-pid="item.ParentNo"
-             :data-sysid="item.No">
-            <div class="row item-top-dp" @click="item.open = !item.open" :data-sysno="item.No" :data-name="item.Name"
-                 :data-idx="index">
-                <div class="item item-other" style="text-align: center">
-                    <i v-if="item.children.length > 0" class="layui-icon"
-                       :class="item.open ? 'layui-icon-up':'layui-icon-right'"></i>
-                    <i v-else class="layui-icon layui-icon-subtraction"></i>
-                </div>
-                <div class="item system-item " style="text-align: left; background-color:rgba(227, 236, 243, 0.589);"
-                     :data-sysno="item.No" :data-name="item.Name" :data-idx="index">
-                    <!--<i class="layui-icon layui-icon-set" style="margin-right: 8px"></i>-->
-                    <!--<span @click.stop="Edit(item.No,item.Name,'BP.GPM.Menu2020.MySystem')">{{item.Name}}</span>-->
-                    <span><i :class="item.Icon"></i>{{item.Name}}</span>
-                </div>
-                <div class="item item-op">
-                    <button @click.stop :data-sysno="item.No" :data-name="item.Name" :data-idx="index"
-                            class="layui-btn layui-btn-primary layui-border-black layui-btn-sm t-btn">
-                        <i class="layui-icon layui-icon-down layui-font-12"></i>系统
-                    </button>
+            <div class="item item-other">
+                <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="NewSys()">
+                    <i class="icon-plus" style="margin-right: 6px"></i>创建系统
                 </div>
             </div>
+            <div class="item item-other">模块</div>
+            <div class="item item-menu-name" @click="expandAll = !expandAll">
+                菜单
 
-            <div v-show="item.open || item.children.length === 0" :data-id="item.No" ref="sort-main" :data-pid="item.No"
-                 :data-sysidx="index">
-                <div v-for="(module,idx) in item.children" :key="idx" :data-pid="item.No" :data-id="module.No"
-                     :data-moduleid="module.No" :data-sysidx="index">
-                    <div class="row item-module-dp" @click="module.open = !module.open" :data-sysno="item.No"
-                         :data-moduleno="module.No" :data-name="module.Name" :data-pidx="index" :data-idx="idx">
-                        <div class="item item-module item-index" style="text-align: right;">
-                            <i v-if="module.children.length > 0" class="layui-icon"
-                               :class="module.open ? 'layui-icon-up':'layui-icon-right'"></i>
-                            <i v-else class="layui-icon layui-icon-subtraction"></i>
-                        </div>
-                        <div class="item module-name " style="text-align: left" :data-sysno="item.No"
-                             :data-moduleno="module.No" :data-name="module.Name" :data-pidx="index" :data-idx="idx">
-                            <!-- 这里是子菜单的icon -->
-                            <!-- 这里是子菜单的icon -->
-                            <!-- 这里是子菜单的icon -->
-                            <span><i :class="module.Icon"></i> {{module.Name}}</span>
-                            <!--<span @click.stop="Edit(module.No,module.Name,'BP.GPM.Menu2020.Module')">{{module.Name}}</span>-->
-
-                        </div>
-
-                        <div class="item item-op">
-                            <button @click.stop
-                                    class="layui-btn layui-btn-primary layui-border-primary layui-btn-xs module-btn"
-                                    :data-name="module.Name" :data-moduleno="module.No" :data-pidx="index"
-                                    :data-idx="idx"><i class="layui-icon layui-icon-down layui-font-12"></i> 模块
-                            </button>
-                        </div>
+            </div>
+            <div class="item item-other">菜单类型</div>
+            <div class="item item-content">内容</div>
+            <div class="item item-other">控制方式</div>
+            <div class="item item-op">操作</div>
+        </div>
+        <div id="s-main" ref="container">
+            <div class="wrapper" v-for="(item,index) in flowNodes" :key="index" :data-id="item.No" :data-pid="item.ParentNo"
+                 :data-sysid="item.No">
+                <div class="row item-top-dp" @click="item.open = !item.open" :data-sysno="item.No" :data-name="item.Name"
+                     :data-idx="index">
+                    <div class="item item-other" style="text-align: center">
+                        <i v-if="item.children.length > 0" class="layui-icon"
+                           :class="item.open ? 'layui-icon-up':'layui-icon-right'"></i>
+                        <i v-else class="layui-icon layui-icon-subtraction"></i>
                     </div>
-                    <div v-show="module.open || module.children.length === 0" ref="child-row" :data-pid="module.No"
-                         :data-sysidx="index" :data-moduleidx="idx">
-                        <div class="row item-menu-dp" v-for="(menu,menu_idx) in module.children" :key="menu_idx"
-                             :data-menuno="menu.No" :data-pid="module.No" :data-id="menu.No" :data-sysidx="index"
-                             :data-moduleidx="idx">
-                            <div class="item item-menu item-index" style="text-align: right;">
-                                <i class="layui-icon layui-icon-subtraction"></i>
-                            </div>
-                            <div title='menu.UrlExt' class="item item-menu-name " style="text-align: left"
-                                 :data-menuno="menu.No" :data-name="menu.Name" :data-pidx="index" :data-idx="idx">
-                                <!-- 这里是子菜单的icon -->
-                                <!-- 这里是子菜单的icon -->
-                                <!-- 这里是子菜单的icon -->
-                                <!--<span>{{menu.Name}}</span>-->
+                    <div class="item system-item " style="text-align: left; background-color:rgba(227, 236, 243, 0.589);"
+                         :data-sysno="item.No" :data-name="item.Name" :data-idx="index">
+                        <!--<i class="layui-icon layui-icon-set" style="margin-right: 8px"></i>-->
+                        <!--<span @click.stop="Edit(item.No,item.Name,'BP.GPM.Menu2020.MySystem')">{{item.Name}}</span>-->
+                        <span><i :class="item.Icon"></i>{{item.Name}}</span>
+                    </div>
+                    <div class="item item-op">
+                        <button @click.stop :data-sysno="item.No" :data-name="item.Name" :data-idx="index"
+                                class="layui-btn layui-btn-primary layui-border-black layui-btn-sm t-btn">
+                            <i class="layui-icon layui-icon-down layui-font-12"></i>系统
+                        </button>
+                    </div>
+                </div>
 
-                                <span @click.stop="Edit(menu.No,menu.Name,'BP.GPM.Menu2020.Menu')"><i
-                                        :class="menu.Icon"></i> {{menu.Name}}</span>
+                <div v-show="item.open || item.children.length === 0" :data-id="item.No" ref="sort-main" :data-pid="item.No"
+                     :data-sysidx="index">
+                    <div v-for="(module,idx) in item.children" :key="idx" :data-pid="item.No" :data-id="module.No"
+                         :data-moduleid="module.No" :data-sysidx="index">
+                        <div class="row item-module-dp" @click="module.open = !module.open" :data-sysno="item.No"
+                             :data-moduleno="module.No" :data-name="module.Name" :data-pidx="index" :data-idx="idx">
+                            <div class="item item-module item-index" style="text-align: right;">
+                                <i v-if="module.children.length > 0" class="layui-icon"
+                                   :class="module.open ? 'layui-icon-up':'layui-icon-right'"></i>
+                                <i v-else class="layui-icon layui-icon-subtraction"></i>
+                            </div>
+                            <div class="item module-name " style="text-align: left" :data-sysno="item.No"
+                                 :data-moduleno="module.No" :data-name="module.Name" :data-pidx="index" :data-idx="idx">
+                                <!-- 这里是子菜单的icon -->
+                                <!-- 这里是子菜单的icon -->
+                                <!-- 这里是子菜单的icon -->
+                                <span><i :class="module.Icon"></i> {{module.Name}}</span>
+                                <!--<span @click.stop="Edit(module.No,module.Name,'BP.GPM.Menu2020.Module')">{{module.Name}}</span>-->
 
                             </div>
-                            <div class="item item-other" v-html="menu.MenuModel"></div>
-                            <div class="item item-content" v-html="menu.Docs"></div>
-                            <div class="item item-other">{{menu.MenuCtrlWayText}}</div>
 
                             <div class="item item-op">
                                 <button @click.stop
-                                        class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs menu-btn"
-                                        :data-name="menu.Name" :data-menuno="menu.No" :data-pidx="index"
-                                        :data-idx="idx"><i class="layui-icon layui-icon-down layui-font-12"></i> 菜单
+                                        class="layui-btn layui-btn-primary layui-border-primary layui-btn-xs module-btn"
+                                        :data-name="module.Name" :data-moduleno="module.No" :data-pidx="index"
+                                        :data-idx="idx">
+                                    <i class="layui-icon layui-icon-down layui-font-12"></i> 模块
                                 </button>
+                            </div>
+                        </div>
+                        <div v-show="module.open || module.children.length === 0" ref="child-row" :data-pid="module.No"
+                             :data-sysidx="index" :data-moduleidx="idx">
+                            <div class="row item-menu-dp" v-for="(menu,menu_idx) in module.children" :key="menu_idx"
+                                 :data-menuno="menu.No" :data-pid="module.No" :data-id="menu.No" :data-sysidx="index"
+                                 :data-moduleidx="idx">
+                                <div class="item item-menu item-index" style="text-align: right;">
+                                    <i class="layui-icon layui-icon-subtraction"></i>
+                                </div>
+                                <div title='menu.UrlExt' class="item item-menu-name " style="text-align: left"
+                                     :data-menuno="menu.No" :data-name="menu.Name" :data-pidx="index" :data-idx="idx">
+                                    <!-- 这里是子菜单的icon -->
+                                    <!-- 这里是子菜单的icon -->
+                                    <!-- 这里是子菜单的icon -->
+                                    <!--<span>{{menu.Name}}</span>-->
+
+                                    <span @click.stop="Edit(menu.No,menu.Name,'BP.GPM.Menu2020.Menu')">
+                                        <i :class="menu.Icon"></i> {{menu.Name}}
+                                    </span>
+
+                                </div>
+                                <div class="item item-other" v-html="menu.MenuModel"></div>
+                                <div class="item item-content" v-html="menu.Docs"></div>
+                                <div class="item item-other">{{menu.MenuCtrlWayText}}</div>
+
+                                <div class="item item-op">
+                                    <button @click.stop
+                                            class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs menu-btn"
+                                            :data-name="menu.Name" :data-menuno="menu.No" :data-pidx="index"
+                                            :data-idx="idx">
+                                        <i class="layui-icon layui-icon-down layui-font-12"></i> 菜单
+                                    </button>
+                                </div>
+
                             </div>
 
                         </div>
-
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
-<script src="./Menus.js"></script>
+    <script src="./Menus.js"></script>
 </body>
 
 </html>

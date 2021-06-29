@@ -96,7 +96,14 @@
             <div class="item item-other" @click="expandAll = !expandAll">
                 <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs">{{expandAll ? '折叠所有' : '展开所有'}}</button>
             </div>
-            <div class="item item-name">流程名称</div>
+            <!--<div class="item item-name">流程名称</div>-->
+
+            <div class="item item-name">
+                <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="NewFlow()">
+                    <i class="icon-plus" style="margin-right: 6px"></i>创建流程
+                </div>
+            </div>
+
             <div class="item item-other">实例</div>
             <div class="item item-other">运行中</div>
             <div class="item item-other">退回</div>
@@ -152,6 +159,13 @@
     </div>
 
     <script src="Flows.js"></script>
+
+    <script type="text/javascript">
+
+        function NewFlow() {
+            alert("请点击目录，或者在目录上点击右键，创建流程。");
+        }
+    </script>
 
 </body>
 

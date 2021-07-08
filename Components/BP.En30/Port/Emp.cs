@@ -326,19 +326,15 @@ namespace BP.Port
 
                 //如果是集团模式或者是SAAS模式.
                 if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
-                {
                     map.AddTBString(EmpAttr.UserID, null, "用户ID", true, false, 0, 50, 30);
-                    map.AddTBString(EmpAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 30);
-                }
 
+                map.AddTBString(EmpAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 30);
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 30);
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 20, 10);
                 map.AddDDLEntities(EmpAttr.FK_Dept, null, "部门", new Port.Depts(), true);
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Tel, null, "手机号", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Email, null, "邮箱", false, false, 0, 36, 36);
-				
-
 
 
                 // map.AddTBString("docs", null, "安全校33验码", false, false, 0, 4000, 36);

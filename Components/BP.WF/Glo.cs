@@ -2484,7 +2484,7 @@ namespace BP.WF
         /// <returns></returns>
         public static bool IsCanInstall()
         {
-            
+
             if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 throw new Exception("err@初次安装必须设置 CCBPMRunModel=0 为单机版，安装后在修改集团或者saas版.");
 
@@ -2873,8 +2873,8 @@ namespace BP.WF
             #region 5, 初始化数据.
             if (isInstallFlowDemo)
             {
-               // sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitPublicData.sql";
-               // DBAccess.RunSQLScript(sqlscript);
+                // sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitPublicData.sql";
+                // DBAccess.RunSQLScript(sqlscript);
             }
             // else
             // {
@@ -2972,9 +2972,10 @@ namespace BP.WF
             if (isInstallFlowDemo == false)
             {
                 //创建一个空白的流程，不然，整个结构就出问题。
-                FlowSorts fss = new FlowSorts();
-                fss.RetrieveAll();
-                fss.Delete();
+                //    FlowSorts fss = new FlowSorts();
+                // fss.RetrieveAll();
+                //  fss.Delete();
+                DBAccess.RunSQL("DELETE FROM WF_FlowSort ");
 
                 FlowSort fs = new FlowSort();
                 fs.Name = "流程树";
@@ -2992,7 +2993,6 @@ namespace BP.WF
                 Flow fl = new Flow("001");
                 fl.DoCheck(); //做一下检查.
 
-
                 s1 = (FlowSort)fs.DoCreateSubNode();
                 s1.Name = "财务类";
                 s1.Update();
@@ -3003,10 +3003,11 @@ namespace BP.WF
 
 
                 //创建一个空白的流程，不然，整个结构就出问题。
-                BP.Sys.FrmTrees frmTrees = new FrmTrees();
-                frmTrees.RetrieveAll();
-                frmTrees.Delete();
+                //BP.Sys.FrmTrees frmTrees = new FrmTrees();
+                //frmTrees.RetrieveAll();
+                //frmTrees.Delete();
 
+                DBAccess.RunSQL("DELETE FROM Sys_FormTree ");
                 FrmTree ftree = new FrmTree();
                 ftree.Name = "表单树";
                 ftree.No = "1";
@@ -4260,7 +4261,7 @@ namespace BP.WF
             string fk_dbSrc = item.FK_DBSrc;
             //填充方式，0=sql，1=url,2=CCFromRef.js , 3=webapi
             int doWay = item.DoWay;
-             
+
             SFDBSrc sfdb = null;
             //如果是sql方式填充
             if (doWay == 0)
@@ -4312,7 +4313,8 @@ namespace BP.WF
                 }
             }
             //如果是webapi方式填充
-            else if (doWay == 3) {
+            else if (doWay == 3)
+            {
                 //请求地址
                 string apiUrl = sql;
                 //设置请求头
@@ -4328,7 +4330,7 @@ namespace BP.WF
                 //设置返回值格式
                 headerMap.Add("Content-Type", "application/json");
                 //设置token，用于接口校验
-                headerMap.Add("Authorization",token);
+                headerMap.Add("Authorization", token);
 
                 try
                 {
@@ -4463,8 +4465,9 @@ namespace BP.WF
                         }
                     }
                 }
-                catch (Exception ex) {
-                    throw new Exception("接口请求失败,message:"+ex.Message.ToString());
+                catch (Exception ex)
+                {
+                    throw new Exception("接口请求失败,message:" + ex.Message.ToString());
                 }
             }
             if (string.IsNullOrEmpty(item.Tag1)
@@ -6206,7 +6209,7 @@ namespace BP.WF
         private static void InitCH2017(Flow fl, Node nd, Int64 workid, Int64 fid, string title, string prvRDT, string sdt,
             DateTime dtNow, GenerWorkerList gwl)
         {
-           
+
             // 开始节点不考核.
             if (nd.IsStartNode || nd.HisCHWay == CHWay.None)
                 return;
@@ -6557,7 +6560,14 @@ namespace BP.WF
             if (FK_FrmAttachment.Contains("AthMDtl") == true)
                 ctrlWayId = pkval;
             else
-                ctrlWayId = BP.WF.Dev2Interface.GetAthRefPKVal(workid, pworkid, fid, fk_node, fk_mapData, athDesc);
+            {
+                MapData mapData = new MapData(fk_mapData);
+                if (mapData.EntityType == EntityType.FrmDict || mapData.EntityType == EntityType.FrmBill)
+                    ctrlWayId = pkval;
+                else
+                    ctrlWayId = BP.WF.Dev2Interface.GetAthRefPKVal(workid, pworkid, fid, fk_node, fk_mapData, athDesc);
+            }
+
 
             //如果是空的，就返回空数据结构. @lizhen.
             if (ctrlWayId.Equals("0") == true)
@@ -7140,7 +7150,7 @@ namespace BP.WF
             //request.ContentType = "application/x-www-form-urlencoded";
             //请求的身份验证信息为默认
             request.Credentials = CredentialCache.DefaultCredentials;
-           // request.ContentType = "application/x-www-form-urlencoded";
+            // request.ContentType = "application/x-www-form-urlencoded";
             request.ContentType = "application/json";
             //  request.ContentType = "application/x-www-form-urlencoded";
 
@@ -7185,7 +7195,7 @@ namespace BP.WF
         /// <param name="timeOut">超时时间</param>
         /// <param name="encode">text code.</param>
         /// <returns>成功：返回读取内容；失败：0</returns>
-        public static string HttpPostConnect(string serverUrl,Hashtable headerMap, string postData)
+        public static string HttpPostConnect(string serverUrl, Hashtable headerMap, string postData)
         {
             var dataArray = Encoding.UTF8.GetBytes(postData);
             //创建请求
@@ -7201,10 +7211,11 @@ namespace BP.WF
             //  request.ContentType = "application/x-www-form-urlencoded";
 
             //设置请求头
-            if (headerMap.Count > 0) {
+            if (headerMap.Count > 0)
+            {
                 foreach (string key in headerMap.Keys)
                 {
-                    request.Headers.Add(key,headerMap[key].ToString());
+                    request.Headers.Add(key, headerMap[key].ToString());
                 }
             }
 

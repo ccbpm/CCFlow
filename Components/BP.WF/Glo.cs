@@ -3078,7 +3078,13 @@ namespace BP.WF
             #endregion 如果是第一次运行，就执行检查。
 
             #region 增加大文本字段列.
-            DBAccess.GetBigTextFromDB("Sys_MapData", "No", "001", "HtmlTemplateFile");
+            try
+            {
+                DBAccess.GetBigTextFromDB("Sys_MapData", "No", "001", "HtmlTemplateFile");
+            }
+            catch
+            { 
+            }
             #endregion 增加大文本字段列.
         }
         /// <summary>

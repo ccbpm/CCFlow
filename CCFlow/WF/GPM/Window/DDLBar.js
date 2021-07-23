@@ -29,9 +29,9 @@ function InitBar(optionKey) {
 function GetDBGroup() {
 
     var json = [
-        { "No": "A", "Name": "通用功能" },
-        { "No": "B", "Name": "实体单据" },
-        { "No": "C", "Name": "字典表" }
+        { "No": "A", "Name": "文字类型" },
+        { "No": "B", "Name": "图形" },
+        { "No": "C", "Name": "列表" }
     ];
     return json;
 }
@@ -40,27 +40,18 @@ function GetDBDtl() {
 
     var json = [
 
-        { "No": MenuModel.SelfUrl, "Name": "自定义URL菜单", "GroupNo": "A", "Url": "SelfUrl.htm" },
-        { "No": MenuModel.FlowUrl, "Name": "内置流程菜单", "GroupNo": "A", "Url": "FlowUrl.htm" },
-        { "No": MenuModel.Func, "Name": "独立功能(方法)页", "GroupNo": "A", "Url": "Func.htm" },
-        { "No": "Windows", "Name": "信息窗(统计分析图表)", "GroupNo": "A", "Url": "Windows.htm" },
-        { "No": MenuModel.StandAloneFlow, "Name": "创建独立运行的流程", "GroupNo": "A", "Url": "StandAloneFlow.htm" },
+        { "No": "Html", "Name": "Html文本", "GroupNo": "A", "Url": "Html.htm" },
+        { "No": "HtmlVar", "Name": "变量文本", "GroupNo": "A", "Url": "HtmlVar.htm" },
 
-        { "No": MenuModel.Dict, "Name": "创建实体", "GroupNo": "B", "Url": "Dict.htm" },
-      /*    { "No": "DictQRCode", "Name": "表单填报二维码", "GroupNo": "B", "Url": "DictQRCode.htm" },*/
-        { "No": MenuModel.DictCopy, "Name": "复制实体", "GroupNo": "B", "Url": "DictCopy.htm" },
-        { "No": MenuModel.Bill, "Name": "创建单据", "GroupNo": "B", "Url": "Bill.htm" },
-        { "No": MenuModel.DictRef, "Name": "引入实体", "GroupNo": "B", "Url": "DictRef.htm" },
-
-        /* { "No": MenuModel.BillRef, "Name": "引入单据", "GroupNo": "B", "Url": "BillRef.htm" },*/
-
-        { "No": MenuModel.DictTable, "Name": "创建字典表", "GroupNo": "C", "Url": "DictTable.htm" }
-        /*     { "No": MenuModel.DictTableSpecNo, "Name": "引入字典表", "GroupNo": "C", "Url": "DictTableSpecNo.htm" }*/
+        { "No": "ChartLine", "Name": "折线图", "GroupNo": "B", "Url": "ChartLine.htm" },
+        { "No": "ChartPie", "Name": "饼图", "GroupNo": "B", "Url": "ChartPie.htm" },
+        { "No": "ChartZZT", "Name": "柱状图", "GroupNo": "B", "Url": "ChartZZT.htm" },
+         
+        { "No": "Table", "Name": "简单表格", "GroupNo": "C", "Url": "Table.htm" }
 
     ];
     return json;
 }
-
 
 
 function Close() {
@@ -75,7 +66,7 @@ function Back() {
 }
 
 function Adv() {
-    var url = "Adv.htm?ModuleNo=" + GetQueryString("ModuleNo");
+    var url = "Adv.htm?MenuNo=" + GetQueryString("MenuNo");
     OpenEasyUiDialogExt(url, '高级设置', 600, 400, false);
 }
 
@@ -86,7 +77,7 @@ function HelpOnline() {
 
 function changeOption() {
 
-    var flowNo = GetQueryString("ModuleNo");
+    var flowNo = GetQueryString("MenuNo");
     if (flowNo == null)
         flowNo = '001';
 
@@ -96,7 +87,7 @@ function changeOption() {
     var optionKey = optionKey = sele[index].value;
     var url = GetUrl(optionKey);
 
-    window.location.href = url + "?ModuleNo=" + flowNo;
+    window.location.href = url + "?MenuNo=" + flowNo;
 }
 
 function GetUrl(optionKey) {
@@ -107,9 +98,7 @@ function GetUrl(optionKey) {
         if (en.No === optionKey)
             return en.Url;
     }
-
     alert(optionKey);
-
     return "0.QiangBan.htm";
 }
 

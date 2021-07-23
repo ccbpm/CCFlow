@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>自动发起</title>
+    <title>引入实体</title>
     <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -32,48 +32,29 @@
 
             InitBar(MenuModel.DictRef);
             var html = "";
+            var ens = new Entities("BP.Sys.MapDatas");
+            ens.Retrieve("EntityType", 2);
             //创建表单类型.
-            //GenerBindEnumKey("DDL_FrmType", "FrmType", 0);
+            GenerBindDDL("DDL_FormDict", ens, "No","Name");
         });
 
         function Save() {
 
             $("#Msg").html("正在创建,请稍后......");
-
-            var name = document.getElementById("TB_Name").value;
-            var no = document.getElementById("TB_No").value;
-            var noOrg = document.getElementById("TB_No_Org").value;
-            var pTable = document.getElementById("TB_PTable").value;
-
-            if (name == "" || no == "" || pTable == "") {
-                $("#Msg").html("");
-                alert('@请输入必填的字段.');
+            var no = $("#DDL_FormDict").val();
+            if (no == null || no == "") {
+                alert("请选择引入的实体表单");
                 return;
             }
-
-            var handler = new HttpHandler("BP.Cloud.HttpHandler.Admin_CCFormDesigner");
-            handler.AddFormData();
-            handler.AddUrlData();
-            handler.AddPara("FK_FrmSort", module.SystemNo);
-            handler.AddPara("EntityType", entityType);
-
-            var data = handler.DoMethodReturnString("NewFrmGuide_Create");
-
-            if (data.indexOf('err@') >= 0) {
-                $("#Msg").html("<font color=red>" + data + "</font>");
-                return;
-            }
-
-            $("#Msg").html("<font color=green>" + data + "</font>");
-            data = data.replace('url@', '');
+            
 
             //更新节点表单类型.
             var moduleNo = GetQueryString("ModuleNo");
             var en = new Entity("BP.GPM.Menu2020.Menu");
             en.ModuleNo = moduleNo;
             en.SystemNo = module.SystemNo; //系统编号.
-            en.Name = $("#TB_Name").val();
-            en.UrlExt = $("#TB_No").val();
+            en.Name = $("#DDL_FormDict option:selected").text();
+            en.UrlExt = no;
 
             en.MenuModel = MenuModel.Dict; //类型为.
 
@@ -89,7 +70,6 @@
 
             window.location.href = "../../Comm/En.htm?EnName=BP.GPM.Menu2020.Menu&No=" + en.No;
 
-          //  window.location.href = "../Menus.htm";
         }
 
         function GenerPinYin() {
@@ -150,7 +130,7 @@
 
             <h3>请选择要引用的实体.</h3>
 
-
+            <select id="DDL_FormDict"></select>
 
             <table>
 
@@ -169,7 +149,7 @@
                     </td>
                 </tr>
             </table>
-            <input type="button" id="Btn_Save" value="创建" onclick="Save();" />
+            <!--<input type="button" id="Btn_Save" value="创建" onclick="Save();" />-->
 
             <div id="Msg"></div>
         </fieldset>
@@ -177,11 +157,7 @@
         <fieldset>
             <legend id="help"></legend>
             <ul>
-                <li> 定义：自动启动工作流程，一个流程的开始节点的填写与发起是在特定规则的设置下自动发起的流程。</li>
-                <li> 解释：通常模式下的流程启动是手工的启动，就是用户从一个发起列表，点击流程名字，就启动了该流程。但是有的时候，是系统自动发起该流程。</li>
-
-                <li>应用场景</li>
-                <li> 1 周例会流程，用户希望每个周都要启动例会通知流程这个启动是让系统自动发起而非人工发起。</li>
+                
 
             </ul>
         </fieldset>

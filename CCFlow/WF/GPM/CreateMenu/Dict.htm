@@ -31,6 +31,11 @@
 
 
             InitBar(MenuModel.Dict);
+
+            var webUser = new WebUser();
+
+            //    alert(webUser.CCBPMRunModel);
+
             var html = "";
             //创建表单类型.
             //GenerBindEnumKey("DDL_FrmType", "FrmType", 0);
@@ -176,7 +181,7 @@
                 <tr>
                     <td> 表单类型 </td>
                     <td>
-                        <select id="DDL_FrmType">
+                        <select id="DDL_FrmType" name="DDL_FrmType">
                             <option value="0" selected="selected">傻瓜表单</option>
                             <option value="8">开发者表单</option>
                         </select>
@@ -198,44 +203,38 @@
                     </td>
                 </tr>
 
-                <tr>
-                    <td colspan="2">
-                        备注：更多的属性在创建后可以修改，比如：存储表，导入字段，表单模式。
-                    </td>
-                </tr>
+
             </table>
-            <input type="button" id="Btn_Save" name="Btn_Save" value="执行创建" onclick="Save();" />
             <div id="Msg"></div>
         </fieldset>
 
+
         <fieldset>
-            <legend id="help"></legend>
+            <legend id="help">帮助</legend>
             <ul>
                 <li> 定义：自动启动工作流程，一个流程的开始节点的填写与发起是在特定规则的设置下自动发起的流程。</li>
                 <li> 解释：通常模式下的流程启动是手工的启动，就是用户从一个发起列表，点击流程名字，就启动了该流程。但是有的时候，是系统自动发起该流程。</li>
 
                 <li>应用场景</li>
                 <li> 1 周例会流程，用户希望每个周都要启动例会通知流程这个启动是让系统自动发起而非人工发起。</li>
-
+                <li>
+                    备注：更多的属性在创建后可以修改，比如：存储表，导入字段，表单模式。
+                </li>
             </ul>
+        </fieldset>
 
-
-            <legend id="help">实体列表</legend>
-
+        <fieldset>
+            <legend id="helpClose">实体列表</legend>
             <ul>
-
-                <li> <img src="Dict.png" class="HelpImg" style="width:80%;" /> </li>
+                <li> <img src="Dict.png" class="HelpImg"  /> </li>
             </ul>
+        </fieldset>
 
-            <legend id="help">实体卡片</legend>
+        <fieldset>
+            <legend id="helpClose">实体卡片</legend>
             <ul>
-
-                <li> <img src="DictEn.png" class="HelpImg" style="width:80%;" /> </li>
-
-
+                <li> <img src="DictEn.png" class="HelpImg"  /> </li>
             </ul>
-
-
         </fieldset>
     </form>
 </body>

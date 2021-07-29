@@ -27,10 +27,11 @@
 
 0. http://demo.ccflow.org 在线演示.
 1. http://ccflow.org 官方网站
-2. http://doc.ccbbpm.cn  操作手册
-3. http://ccflow.org/ke.htm 视频教程
-4. http://edu.ccflow.org 培训中心
-5. http://app.ccflow.org 案例，appStore.
+2. http://ccfast.cc 低代码开发平台
+3. http://doc.ccbbpm.cn  操作手册
+4. http://ccflow.org/ke.htm 视频教程
+5. http://edu.ccflow.org 培训中心
+6. http://app.ccflow.org 案例，appStore.
 
 ## 后台设计器：
 

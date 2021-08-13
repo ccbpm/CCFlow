@@ -19,7 +19,10 @@
 		    var emp = new Entity("BP.Port.Emp", "liyan");
 		    var name = emp.Name;
 		    var deptNo = emp.FK_Dept;  //部门编号
-		    var deptName = emp.FK_DeptText; //部门名称.
+            var deptName = emp.FK_DeptText; //部门名称.
+            //emp.Delete();
+            //emp.Update();
+            //emp.Insert();
 		    alert("用户编号:" + emp.No + ",名称:" + emp.Name + "部门编号:" + emp.FK_Dept + ",部门名称:" + emp.FK_DeptText);
 		    return;
 
@@ -221,7 +224,7 @@
             //执行提交.
             var result = handler.Login_Submit();
 
-            var resultJSON = handler.DoMethodReturnJSON("Login_Submit");
+            //var resultJSON = handler.DoMethodReturnJSON("Login_Submit");
             var result = handler.DoMethodReturnString("Login_Submit");
 
             //处理结果.

@@ -1,0 +1,50 @@
+
+admin_JS帮助内容的设置规范
+----------------------------------------
+说明：
+1. 我们对 fieldset legend img 增加 class标记让其形成帮助的模式.
+2. 对于img的控制，期望，点击的时候，全屏显示.
+3. 对与内容根据场景，进行隐藏显示，显示.
+
+
+两种模式：
+
+1. 默认打开模式，适用于页面内容较少..
+
+  <fieldset>
+            <legend id="help" >帮助1</legend>
+             <ul>
+                <li>1. xxxxxx</li> 
+               <li>1. xxxxxx</li> 
+              <li><img class=help  /></li> 
+            </ul> 
+         <legend id="help" >帮助2</legend>
+             <ul>
+                <li>1. xxxxxx</li> 
+               <li>1. xxxxxx</li> 
+               <li><img class=helpImg  /></li> 
+            </ul> 
+</fieldset>
+
+
+2. 帮助内容较多，只有点开标题才能的打开.
+  <fieldset>
+            <legend id="helpClose" >帮助1</legend>
+             <ul>
+                <li>1. xxxxxx</li> 
+               <li>1. xxxxxx</li> 
+            </ul> 
+           <legend id="helpClose" >帮助2</legend>         
+             <ul>
+                <li>1. xxxxxx</li> 
+               <li>1. xxxxxx</li> 
+            </ul> 
+</fieldset>
+
+
+
+
+ 
+                </ul>
+            </div>
+        </fieldset>

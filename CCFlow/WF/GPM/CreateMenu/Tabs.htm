@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>标签页</title>
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    <script src="../EnumLab.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            InitBar("Tabs");
+            var html = "";
+
+        });
+
+        function Save() {
+
+            //更新节点表单类型.
+            var moduleNo = GetQueryString("ModuleNo");
+            var en = new Entity("BP.GPM.Menu2020.Menu");
+            en.ModuleNo = moduleNo;
+            en.Name = $("#TB_Title").val();
+            //en.UrlExt = $("#TB_Url").val();
+            en.MenuModel = "Tabs"; //类型为.
+            en.Insert();
+            alert("创建成功，您可以在在菜单里执行高级编辑与授权.");
+
+            window.location.href = "../../Comm/En.htm?EnName=BP.GPM.Menu2020.Tab&No=" + en.No;
+            // window.location.href = "../Menus.htm";
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+    <fieldset>
+        <legend>自定义URL菜单， 您可以使用右上角的下拉框选择自己要定义的菜单类型. </legend>
+        <ul>
+            <li>菜单标题:</li>
+            <li> <input type="text" value="我的tab容器页" id="TB_Title" placeholder="输入菜单标题" /> </li>
+            <!--<li>菜单连接： http://ccbpm.cn/MyUrl.htm  </li>
+            <li> <input type="text" value="" id="TB_Url" placeholder="/App/MyUrl.htm" /> </li>-->
+        </ul>
+
+        <legend>帮助</legend>
+        <ul>
+            <li> 每个tab下面都有一个自定义的url。</li>
+            <!--<li> <img src="SelfUrl.png" class="HelpImg" /></li>-->
+        </ul>
+    </fieldset>
+</body>
+</html>

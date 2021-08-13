@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>扫码填报</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../EnumLab.js"></script>
+    <script src="../../../Admin/Admin.js"></script>
+
+    <script type="text/javascript">
+
+        var pageID = "QRCodeAddDict";
+        $(function () {
+            //  InitBar(0);
+            InitBar(pageID);
+        });
+
+        function Save() {
+
+            $("#Msg").html("正在创建,请稍后......");
+
+            var name = $("#TB_Name").val();
+            if (name == undefined || name == null || name == "") {
+                alert("请输入方法名称.");
+                return;
+            }
+
+            debugger;
+            var en = new Entity("BP.CCBill.Template.Collection");
+            en.FrmID = GetQueryString("FrmID");
+            en.MethodID = pageID;
+            en.Mark = pageID;
+            en.Name = name;
+            en.MethodModel = pageID;
+            //  en.UrlExt = $("#TB_Url").val();
+            //    en.Tag1 = $("#TB_Url").val();
+            en.Icon = "icon-plus";
+            en.Insert();
+
+            var url = "../../../Comm/En.htm?EnName=BP.CCBill.Template.Collection&No=" + en.No;
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>功能 </legend>
+        <ul>
+            <li>标签：<input type="text" value="扫码填报" id="TB_Name" name="TB_Name" /> </li>
+        </ul>
+
+        <div id="Msg"></div>
+        <legend>帮助 </legend>
+        <ul>
+            <li>扫码在手机上新建.</li>
+        </ul>
+    </fieldset>
+
+</body>
+</html>

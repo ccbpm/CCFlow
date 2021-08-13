@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>级联下拉框</title>
+    <script language="JavaScript" src="../../../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        var mapExt;
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            var fk_MapData = GetQueryString("FK_MapData");
+            var keyOfEn = GetQueryString("KeyOfEn");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddPara("FK_MapData", fk_MapData);
+            handler.AddPara("KeyOfEn", keyOfEn);
+            var json = handler.DoMethodReturnString("ActiveDDL_Init_SearchCond");
+
+            if (json.indexOf('err@') == 0) {
+                alert(json);
+                return;
+            }
+
+            json = JSON.parse(json);
+
+            mapExt = json['Sys_MapExt'][0];
+
+            //绑定下拉框.
+            GenerBindDDL("DDL_AttrsOfActive", json['Sys_MapAttr'], "No", "Name", mapExt.AttrsOfActive);
+
+            //绑定数据源.
+            GenerBindDDL("DDL_FK_DBSrc", json['Sys_SFDBSrc'], "No", "Name", mapExt.FK_DBSrc);
+            if (mapExt.DBType == 0)
+                mapExt.Doc = mapExt.Doc.replace(new RegExp("/#", "gm"), "+");
+            //调用公共类库的方法:执行批量主表赋值.
+            GenerFullAllCtrlsVal(mapExt);
+            if (mapExt.DBType != 0)
+                $("#TR_SQL").hide();
+            
+            $("#Msg").html("");
+            return;
+
+        });
+
+        function changeDoc(obj) {
+
+            if (obj.value == 0)
+                $("#TR_SQL").show();
+            else
+                $("#TR_SQL").hide();
+
+            if (obj.value != mapExt.DBType)
+                $("#TB_Doc").val("");
+            else
+                $("#TB_Doc").val(mapExt.Doc);
+        }
+
+        //装载模版.
+        function LoadTemplate() {
+
+            //打开方向条件.
+            var url = "../../SettingTemplate.htm?TemplateType=ActiveDDL";
+            WinOpen(url, 'ss');
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+        <table id="table" style="width: 100%;">
+            <caption>
+                下拉框级联
+            </caption>
+            <tr>
+                <td>
+                    联动下拉框
+                </td>
+                <td>
+                    <select name="DDL_AttrsOfActive" id="DDL_AttrsOfActive">
+                    </select>
+                </td>
+                <td>
+                    要实现联动的菜单
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    数据源类型
+                </td>
+                <td>
+                    <select id="DDL_DBType" name="DDL_DBType" onchange="changeDoc(this)">
+                        <option value="0">执行SQL</option>
+                        <option value="1">执行url返回JSON</option>
+                        <option value="2">执行SFTable.js返回JSON</option>
+                    </select>
+                </td>
+            </tr>
+            <tr id="TR_SQL">
+                <td>
+                    执行SQL的数据源
+                </td>
+                <td>
+                    <select name="DDL_FK_DBSrc" id="DDL_FK_DBSrc">
+                    </select>
+                </td>
+                <td>
+                    ccform允许从其他数据源中取数据,
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    执行数据源
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="width: 100%;">
+                    <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width:98%;"> </textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <input type="button" value="装载模版" onclick="LoadTemplate()" id="Button1" />
+                    <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+                    <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
+                    <a href="javascript:ShowHidden('sqlexp')"> <img src="../../../Img/Btn/Help.gif" />自动级联帮助: </a>
+                </td>
+            </tr>
+            
+        </table>
+        <div id="Msg">
+        </div>
+        <script type="text/javascript">
+
+            function Save() {
+
+                $("#Msg").html("正在保存,请稍后......");
+                //组织主键.
+                if ($("#DDL_AttrsOfActive").val() == "") {
+                    alert("请选择联动下拉框的值");
+                    return;
+                }
+                if ($("#TB_Doc").val() == "") {
+                    alert("请填写执行的数据源");
+                    return;
+                }
+
+                var mypk = "ActiveDDLSearchCond_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+                var en = new Entity("BP.Sys.MapExt");
+                en.MyPK = mypk;
+                en.RetrieveFromDBSources();
+
+                en.CopyForm(); //复制表单数据.
+                if(en.DBType==0)
+                    en.Doc = en.Doc.replace(/[+]/g, "/#");
+                en.FK_MapData = GetQueryString("FK_MapData");
+                en.AttrOfOper = GetQueryString("KeyOfEn");
+                en.ExtType = "ActiveDDLSearchCond";
+                en.MyPK = mypk;
+
+                if (en.Update() == 0)
+                    en.Insert();
+
+                $("#Msg").html("<font color=green>保存成功</font>");
+                return;
+            }
+
+            function Delete() {
+                if (window.confirm('您确定要删除吗？') == false)
+                    return false;
+
+                var mypk = "ActiveDDLSearchCond_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+                var en = new Entity("BP.Sys.MapExt");
+                en.MyPK = mypk;
+                en.RetrieveFromDBSources();
+                en.Delete();
+                window.location.href = window.location.href;
+                return;
+            }
+        </script>
+    </form>
+</body>
+</html>

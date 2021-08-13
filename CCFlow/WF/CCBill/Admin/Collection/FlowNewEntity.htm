@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>新建实体</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../EnumLab.js"></script>
+    <script src="../../../Admin/Admin.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+
+            InitBar("FlowNewEntity");
+
+        });
+
+        function Save() {
+
+            $("#Btn_Save").html('正在创建请稍后...');
+            $("#Btn_Save").attr("disabled", true);
+
+            $("#Msg").html('正在创建请稍后,请您仔细阅读说明...');
+
+
+            var name = $("#TB_Name").val();
+            var frmID = GetQueryString("FrmID");
+            var groupID = GetQueryString("GroupID");
+
+            var html = "操作提示:";
+            html += "<ul>";
+            html += " <li><img src='../../../Img/loading.gif'/>正在创建流程请稍后..</li>";
+            html += " <li>系统会自动创建一个名字为[" + name + "]的流程,放入与系统同名的流程目录下..</li>";
+            html += " <li>该流程的表单字段，是从当前实体表单中复制过去的，您可以删除不需要的字段。</li>";
+            html += "</ul>";
+            $("#Msg").html(html);
+
+            var md = new Entity("BP.Sys.MapData", frmID);
+            //alert(md.FK_FormTree);
+
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_Collection");
+            //handler.AddUrlData();
+            // handler.AddFormData();
+            handler.AddPara("SortNo", md.FK_FormTree); //该实体的类别编号与，流程的类别编号一致.
+            handler.AddPara("FlowName", name);
+            handler.AddPara("Name", name);
+            handler.AddPara("FrmID", frmID);
+            handler.AddPara("FlowDevModel", 1); //设置为极简模式.
+            handler.AddPara("GroupID", groupID); // 方法的的GroupID..
+            handler.AddPara("ModuleNo", GetQueryString("ModuleNo")); // 隶属的方法模板..
+
+            var data = handler.DoMethodReturnString("FlowNewEntity_Save");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                $("#Btn_Save").html('创建');
+                $("#Btn_Save").attr("disabled", false);
+                alert("错误:" + data);
+                return;
+            }
+
+
+
+            alert("创建成功,将要进入菜单属性页面.");
+            var url = "../../../Comm/En.htm?EnName=BP.CCBill.Template.MethodFlowNewEntity&No=" + data;
+            window.location.href = url;
+            return;
+
+        }
+
+        function GenerPinYin() {
+
+            //是否是全拼.
+            var isQuanPin = 0;
+            if (document.getElementById("RB_ZZMM_0").checked == true)
+                isQuanPin = 1;
+
+            // var name = $('#TB_Nam').val();
+            var name = document.getElementById("TB_Name").value;
+            if (name == "")
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.Admin_CCFormDesigner");
+            handler.AddPara("IsQuanPin", isQuanPin);
+            handler.AddPara("TB_Name", encodeURIComponent(name));
+            var data = handler.DoMethodReturnString("NewFrmGuide_GenerPinYin");
+
+            $("#Msg").html("");
+
+            if (data.indexOf('err@') >= 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
+
+            $('#TB_No').val(data);
+
+        }
+    </script>
+</head>
+<body>
+    <div id="bar"> </div>
+
+    <fieldset>
+        <legend>新建实体流程 </legend>
+        <ul>
+            <li> 标签(流程名称)：</li>
+            <li> <input type="text" value="" id="TB_Name" name="TB_Name" placeholder="比如：入党申请" style="width:300px;" /></li>
+
+            <li> <div id="Msg"></div></li>
+        </ul>
+
+        <legend> 帮助 </legend>
+        <ol>
+            <li>比如：xxx登记、供应商申请、xx申请、入党申请、材料入库申请</li>
+            <li>流程运行完毕后，就写入该条数据到实体列表中. </li>
+        </ol>
+
+        <legend> 开发说明 </legend>
+        <ol>
+            <li> 点击确定后，系统自动创建一个流程，并且开流程为绑定表单库的表单模式模式。 </li>
+            <li> 该流程绑定的表单就是该实体表单 </li>
+            <li> 用户发起流程实例就是直接在该表单上增加一笔记录，流程结束后，或者指定的节点结束后，该记录变为提交状态。 </li>
+        </ol>
+    </fieldset>
+</body>
+</html>

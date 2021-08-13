@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>数据快照</title>
+
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Comm/fonts/font-icons.min.css" rel="Stylesheet" />
+
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <link href="../../Scripts/SyntaxHighlighter/Styles/shCoreDefault.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/SyntaxHighlighter/shCore.js" type="text/javascript"></script>
+    <script src="../../Scripts/SyntaxHighlighter/shBrushCSharp.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script type="text/javascript">
+        var workID;
+        $(function () {
+
+            workID = GetQueryString("WorkID");
+
+            $("#docs").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            //获得数数量，并把数量绑定.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_GuestStartFlow");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("GenerCode_Init");
+
+            //里面有三个数据源, 分别绑定前三个chart.
+            // $("#Msg").html("<img src='../../DataUser/Temp/" + workID + ".png'>");
+
+            $("#docs").html("<img style='text-align:center;align-content:center' src='../../../DataUser/Temp/" + workID + ".png'><br>");
+
+            $("#url").html(data); // + "<a href=\"javascript:Copy('" + data + "')\" >复制链接</a>");
+
+            //    $("#url").html(data + "<a href=\"javascript:Copy('" + data + "')\" >复制链接</a>");
+        });
+
+        function CopyIt() {
+
+        }
+
+        function Copy(_sTxt) {
+            try {
+                if (window.clipboardData) {
+                    window.clipboardData.setData("Text", _sTxt);
+                } else if (window.netscape) {
+                    netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+                    var clip =
+                        Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
+                    if (!clip) return;
+                    var trans =
+                        Components.classes['@mozilla.org/widget/transferable;1'].createInstance(Components.interfaces.nsITransferable);
+                    if (!trans) return;
+                    trans.addDataFlavor('text/unicode');
+                    var str =
+                        new Object();
+                    var len = new Object();
+                    var str =
+                        Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
+                    var copytext = _sTxt;
+                    str.data = copytext;
+                    trans.setTransferData("text/unicode", str, copytext.length * 2);
+                    var clipid
+                        = Components.interfaces.nsIClipboard;
+                    if (!clip) return false;
+                    clip.setData(trans, null, clipid.kGlobalClipboard);
+                }
+
+                alert("复制成功，请粘贴到你的QQ/微信上发送出去.");
+            } catch (e) {
+                alert("复制失败，请手工复制.");
+            }
+        }
+
+    </script>
+</head>
+<body>
+    <form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
+
+        <fieldset>
+
+            <legend> 使用时手机扫描下面的二维码，即可查看表单信息.</legend>
+
+            <center>
+                <div id="docs"></div>
+            </center>
+
+            <legend> 移动端链接. </legend>
+            <div id="url"></div>
+            <!--<ul>
+                <li> <input type="text" value="" id="TB_Url" style="width:90%;" /> </li>-->
+            <!--<li> <button  onclick="CopyIt()">复制</button> </li>-->
+            <!--</ul>-->
+
+
+        </fieldset>
+
+
+        <!--<button id="Btn_Crate" onclick="CreateVer()"> 创建新版本</button>
+        <button id="Btn_Crate" onclick="Delete()"> 删除版本</button>
+        <button id="Btn_Crate" onclick="DataCheck()"> 版本对比</button>-->
+    </form>
+</body>
+</html>

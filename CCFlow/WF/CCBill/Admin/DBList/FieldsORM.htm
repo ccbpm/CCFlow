@@ -1,0 +1,303 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>链接</title>
+    <!--<link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />-->
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <script src="../../../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../../Admin/Admin.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_DBList");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnJSON("FieldsORM_Init");
+
+            var frmID = GetQueryString("FrmID");
+
+            var dblist = new Entity("BP.CCBill.DBList", frmID);
+
+            dblist.ExpEn = dblist.ExpEn.replace('~', '\'');
+            dblist.ExpEn = dblist.ExpEn.replace('~', '\'');
+
+
+            $("#TB_DBSrc").val(dblist.ExpEn);
+
+            var bakAttrs = new Entities("BP.Sys.MapAttrs", frmID + "Bak");
+
+            var html = "<table>";
+            html += "<tr>";
+            html += "<th>Idx</th>";
+            html += "<th>字段</th>";
+            html += "<th>字段名</th>";
+            html += "<th>返回类型</th>";
+            html += "<th>映射的类型</th>";
+            html += "<th>业务类型</th>";
+            html += "<th>操作</th>";
+            html += "<th>取消映射</th>";
+            html += "</tr>";
+            
+            for (var i = 0; i < data.length; i++) {
+                var en = data[i];
+
+                var barkEn = null;
+
+                for (var idx = 0; idx < bakAttrs.length; idx++) {
+                    var bakAttr = bakAttrs[idx];
+                    if (en.No === bakAttr.KeyOfEn)
+                        barkEn = bakAttr;
+                }
+
+                //如果集合里没有，创建一个.
+                if (barkEn == null) {
+
+                    barkEn = new Entity("BP.Sys.MapAttr");
+                    barkEn.FK_MapData = frmID + "Bak";
+                    barkEn.KeyOfEn = en.No;
+                    barkEn.Name = en.No;
+
+                    if (en.Name == 'Title')
+                        barkEn.Name = "名称";
+
+                    barkEn.DataType = 1; //string类型.
+
+                    if (en.DBType == "Int32" || en.DBType == "Int64" || en.DBType == "Boolean") {
+                        barkEn.MyDataType = 2; //int类型.
+                    }
+
+                    if (en.DBType == "Decimal" || en.DBType == "Float") {
+                        barkEn.MyDataType = 3; //float 类型.
+                    }
+
+                    barkEn.Insert();
+                }
+                var curIdx = i + 1;
+                html += "<tr>";
+                html += "<td>" + curIdx+ "</td>";
+                html += "<td>" + barkEn.KeyOfEn + "</td>";
+
+                var input = "<input type=text value='" + barkEn.Name + "' id='TB_" + barkEn.KeyOfEn + "' name='TB_" + barkEn.KeyOfEn + "' />";
+
+                html += "<td>" + input + "</td>";
+                html += "<td>" + en.DBType + "</td>";
+                html += "<td>" + GetDataType(barkEn.MyDataType) + "</td>";
+
+                if (barkEn.LGType == 0) html += "<td>普通</td>";
+                if (barkEn.LGType == 1) html += "<td>枚举</td>";
+                if (barkEn.LGType == 2) html += "<td>外键</td>";
+
+
+                var oper = "<a href=\"javascript:Edit('" + barkEn.MyPK + "',"+curIdx+")\">编辑</a>";
+
+                if (barkEn.MyDataType == 1) {
+                    oper += "|<a href=\"javascript:TurnToDataType('" + barkEn.MyPK + "',2)\">转成int类型</a>";
+                    oper += "|<a href=\"javascript:TurnToFK('" + barkEn.KeyOfEn + "','" + barkEn.FK_MapData + "'," + curIdx +")\">转成外键</a>";
+                    oper += "|<a href=\"javascript:TurnToDataType('" + barkEn.MyPK + "',6)\">转成日期</a>";
+                    oper += "|<a href=\"javascript:TurnToDataType('" + barkEn.MyPK + "',7)\">转成日期时间</a>";
+                }
+
+                if (barkEn.MyDataType == 2) {
+                    oper += "|<a href=\"javascript:TurnToDataType('" + barkEn.MyPK + "',4)\">转成boolen类型</a>";
+                    oper += "|<a href=\"javascript:TurnToEnum('" + barkEn.KeyOfEn + "','" + barkEn.FK_MapData + "'," + curIdx+")\">转成枚举类型</a>";
+                }
+
+                html += "<td>" + oper + " </td>";
+
+                if (barkEn.LGType != 0 || barkEn.MyDataType == 4 || barkEn.MyDataType == 6 || barkEn.MyDataType == 7) {
+                    var oper = "<a href=\"javascript:Del('" + barkEn.MyPK + "')\">取消</a>";
+                    html += "<td>" + oper + " </td>";
+                } else {
+                    html += "<td> 无 </td>";
+                }
+
+                html += "</tr>";
+            }
+            html += "</table>";
+
+            $("#docs").html(html);
+
+        });
+
+        function GetDataType(datatype) {
+            if (datatype == 1) return "String";
+            if (datatype == 2) return "Int";
+            if (datatype == 3) return "Float";
+            if (datatype == 4) return "Boolean";
+            if (datatype == 5) return "Double";
+            if (datatype == 6) return "Date";
+            if (datatype == 7) return "DateTime";
+            if (datatype == 8) return "Money";
+        }
+        /**
+         * 转换成外键、外部数据源
+         * @param keyOfEn
+         * @param frmID
+         * @param idx
+         */
+        function TurnToFK(keyOfEn, frmID, idx) {
+            var w = window.innerWidth * 2 / 3;
+            var url = "../../../Admin/FoolFormDesigner/SFList.htm?KeyOfEn=" + keyOfEn + "&FK_MapData=" + frmID;
+            OpenLayuiDialog(url, "绑定外键/外部数据源", w, 70, "auto", false, false, false, null, function () {
+                var en = new Entity("BP.Sys.MapAttr", frmID + "_" + keyOfEn);
+                var lab = en.LGType == 0 ? "外部数据源":"外键";
+                //变更这行的数据信息
+                var tr = $($("tr")[idx]);
+                $(tr.find("td")[5]).html(lab);
+                $(tr.find("td")[7]).html("<a href=\"javascript:Del('" + frmID + "_" + keyOfEn + "')\">取消</a>");
+            });
+        }
+        /**
+         * 转换成枚举
+         * @param mypk
+         */
+        function TurnToEnum(keyOfEn,frmID,idx) {
+            var w = window.innerWidth * 2 / 3;
+            var url = "../../../Admin/FoolFormDesigner/SysEnumList.htm?KeyOfEn=" + keyOfEn + "&FK_MapData=" + frmID;
+            OpenLayuiDialog(url, "绑定枚举", w, 70, "auto", false, false, false, null, function () {
+                //变更这行的数据信息
+                var tr = $($("tr")[idx]);
+                $(tr.find("td")[5]).html("枚举");
+                $(tr.find("td")[7]).html("<a href=\"javascript:Del('" + frmID+"_"+keyOfEn + "')\">取消</a>");
+            });
+        }
+
+        function SaveNames() {
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_DBList");
+            handler.AddUrlData();
+            handler.AddFormData();
+            var data = handler.DoMethodReturnString("FieldsORM_SaveKeysName");
+            if (data.indexOf("err@") != -1)
+                alert(data);
+        }
+        function Del(mypk) {
+
+            if (window.confirm('您确定要取消吗？') == false)
+                return false;
+
+            var en = new Entity("BP.Sys.MapAttr", mypk);
+            en.Delete();
+            SaveNames();
+            window.location.href = window.location.href;
+        }
+        /**
+         * 修改字段类型
+         * @param mypk MapAttr主键
+         * @param dataType 转换的类型
+         */
+        function TurnToDataType(mypk, dataType) {
+            if (window.confirm('您确定要执行吗？如果执行错误，您可以用[取消]来还原。') == false)
+                return false;
+
+            var handler = new HttpHand
+            var en = new Entity("BP.Sys.MapAttr", mypk);
+            en.MyDataType = dataType;
+            en.Update();
+            SaveNames();
+            window.location.href = window.location.href;
+        }
+
+        /**
+         * 编辑
+         * @param mypk
+         */
+        function Edit(mypk,idx) {
+
+            var barkEn = new Entity("BP.Sys.MapAttr", mypk);
+
+            var url = "";
+
+            if (barkEn.MyDataType == 1) {
+                url = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&MyPK=" + mypk;
+                if (barkEn.LGType == "0" && barkEn.UIContralType == 1)
+                    url = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&MyPK=" + mypk;
+                if (barkEn.LGType == "2")
+                    url = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&MyPK=" + mypk;
+            }
+                
+
+            if (barkEn.MyDataType == 2 || barkEn.MyDataType == 3 || barkEn.MyDataType == 5) {
+                if (barkEn.MyDataType == 2 && barkEn.LGType == 1 && (barkEn.UIContralType == 1 || barkEn.UIContralType == 3))
+                     url = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&MyPK=" + mypk;
+                else
+                    url = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&MyPK=" + mypk;
+            }
+
+            if (barkEn.MyDataType == 6 || barkEn.MyDataType == 7)
+                url = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDate&MyPK=" + mypk;
+
+            if (barkEn.MyDataType == 4)
+                url = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&MyPK=" + mypk;
+            var w = window.innerWidth * 2 / 3;
+            OpenLayuiDialog(url, "编辑字段属性", w, 70, "auto", false, false, false, null, function () {
+                var en = new Entity("BP.Sys.MapAttr", mypk);
+                //变更这行的数据信息
+                var tr = $($("tr")[idx]);
+                $(tr.find("td")[7]).html("<a href=\"javascript:Del('" + mypk + "')\">取消</a>");
+            });
+        }
+        /**
+         * 获取数据结构
+         */
+        function Save() {
+            var frmID = GetQueryString("FrmID");
+            var dblist = new Entity("BP.CCBill.DBList", frmID);
+            dblist.ExpEn = $("#TB_DBSrc").val();
+            dblist.Update();
+            SaveNames();
+            window.location.href = window.location.href;
+        }
+        /**
+         *修改字段名称、保存应用
+         */
+        function App() {
+
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_DBList");
+            handler.AddUrlData();
+            handler.AddFormData();
+            var data = handler.DoMethodReturnString("FieldsORM_App");
+            alert(data);
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+    <form id="cc">
+        <fieldset>
+            <legend>单笔记录数据源，必须有：OID,BillNo,Title 字段.</legend>
+            <textarea value="" id="TB_DBSrc" name="TB_DBSrc">
+        </textarea>
+            <input type="button" value="获取数据结构" id="Btn_Save" onclick="Save()" />
+            <legend>
+                字段列表：
+            </legend>
+
+            <div id="docs"></div>
+            <input type="button" value="保存字段名并提交应用" id="Btn_App" onclick="App()" /> .
+
+
+            <legend>
+                说明：
+            </legend>
+            <ul>
+
+                <li> 只有提交应用才能生效 </li>
+                <li> 如果字段类型不匹配，请打开字段属性，进行编辑，然后把string类型的转化为其他类型. </li>
+
+            </ul>
+
+        </fieldset>
+    </form>
+
+</body>
+</html>

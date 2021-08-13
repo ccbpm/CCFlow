@@ -1,0 +1,1151 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>单据</title>
+    <!-- 目前不可以去掉. -->
+    <script src="../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <!--<script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>-->
+    <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
+    <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet"
+          type="text/css" />
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <link rel="stylesheet" type="text/css" href="../Scripts/easyUI/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/icon.css" />
+    <script src="../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
+    <script src="../../DataUser/SFTable.js" type="text/javascript"></script>
+    <!-- 重要的表单3文件. -->
+    <script type="text/javascript" src="../CCForm/FrmGener.js"></script>
+    <script type="text/javascript" src="../CCForm/FrmFool.js"></script>
+    <script type="text/javascript" src="../CCForm/FrmFree.js"></script>
+    <script type="text/javascript" src="../CCForm/FrmDevelop.js"></script>
+
+    <!-- 引入公共的frm加载以后的业务逻辑处理.-->
+    <script src="../CCForm/FrmEnd.js" type="text/javascript"></script>
+    <!-- 引入用户要重写的公共js -->
+
+    <script src="MyFrmGener.js" type="text/javascript"></script>
+    <!-- 表单组件 -->
+    <script src="../CCForm/JS/MultipleChoiceSearch.js" type="text/javascript"></script>
+    <script src="../CCForm/JS/MultipleChoiceSmall.js" type="text/javascript"></script>
+    <script src="../CCForm/JS/Pop.js" type="text/javascript"></script>
+    <link href="../CCForm/JS/mselector.css" rel="stylesheet" type="text/css" />
+    <script src="../CCForm/JS/mselector.js" type="text/javascript"></script>
+    <script src="../CCForm/JS/comboTreePlugin.js" type="text/javascript"></script>
+    <link href="../CCForm/JS/comboTreePlugin.css" rel="stylesheet" />
+    <script src="../CCForm/JS/mtags.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../CCForm/MapExt2019.js"></script>
+    <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/BootstrapUIDialog.js"></script>
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/css.css" type="text/css" rel="stylesheet" media="all" />
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
+    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+    <!--UEditor-->
+    <link href="../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css" type="text/css"
+          rel="stylesheet" />
+    <script type="text/javascript" src="../Comm/umeditor1.2.3-utf8/third-party/template.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../Comm/umeditor1.2.3-utf8/umeditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../Comm/umeditor1.2.3-utf8/umeditor.min.js"></script>
+    <script type="text/javascript" src="../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js"></script>
+    <!-- end UmEditor-->
+    <script src="../../DataUser/JSLibData/CCBillRef.js" type="text/javascript"></script>
+    <!--时间-->
+    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+
+    <!--配置js-->
+    <script src="../../DataUser/JSLibData/CommonShowConfig.js"></script>
+    <script src="../CCForm/OptionLinkOthers.js" type="text/javascript"></script>
+    <script src="../Scripts/download.js"></script>
+    <style type="text/css">
+        @page {
+            size: auto; /* auto is the initial value */
+            margin: 0mm; /* this affects the margin in the printer settings */
+        }
+    </style>
+
+    <script type="text/javascript">
+
+        var frmBill = null;
+        var generBill = null;
+        var webUser = new WebUser();
+        var isReadonly = GetQueryString("IsReadonly");
+        if (isReadonly == null || isReadonly == undefined || isReadonly == "")
+            isReadonly = "0";
+        var pageFrom = GetQueryString("PageFrom");
+        var isShowDelete = false;
+        if (pageFrom == null || pageFrom == undefined || pageFrom == "" || pageFrom != "FrmSearch")
+            isShowDelete = true;
+
+        //初始化函数
+        $(function () {
+            if ("undefined" == typeof UserICon) {
+                UserICon = '../../DataUser/Siganture/';
+            } else {
+                UserICon = UserICon.replace("@basePath", basePath);
+            }
+            if ("undefined" == typeof UserIConExt) {
+                UserIConExt = '.jpg';
+            }
+
+            InitToolbar();
+        });
+
+        function InitToolbar() {
+
+            //判断是否有WorkID.
+            var workID = GetQueryString("WorkID");
+            if (workID == null || workID == undefined)
+                workID = GetQueryString("OID");
+            if (workID == null || workID == undefined)
+                workID = 0;
+
+            if (workID == 0 || workID === "") {
+                var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+                handler.AddUrlData();
+                var workID = handler.DoMethodReturnString("MyBill_CreateBlankBillID");
+                var url = window.location.href;
+                url = url.replace("&WorkID=", "");
+                url = url.replace("&OID=", "");
+                url = url + "&WorkID=" + workID + "&OID=" + workID;
+                window.location.href = url;
+                return;
+            }
+
+            var toolBar = "";
+            var generBill = new Entity("BP.CCBill.GenerBill");
+            generBill.SetPKVal(workID);
+            //if (generBill.RetrieveFromDBSources() == 0)
+            //    var a = 1;
+
+
+
+            //获得单据模版信息.
+            var frmID = GetQueryString("FrmID");
+            var frmBill = new Entity("BP.CCBill.FrmBill", frmID);
+
+            //if (generBill.ret
+            //var i = generBill.ret
+
+            var html = "<table style='width:100%;padding:15px;'>";
+            html += "<tr>";
+            html += "<td><img src='../../DataUser/ICON/LogBig.png' style='width:150px;' /></td>";
+            html += "<td>" + frmBill.Name + "</td>";
+            html += "</tr>";
+            html += "</table>";
+
+            if (i == 0) {
+                $("#toolbar").html(html);
+                return;
+            }
+
+            //获取表单的操作权限
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_API");
+            handler.AddPara("FrmID", frmID);
+            var power = handler.DoMethodReturnString("CCFrom_FrmPower");
+            if (power.indexOf("err@") != -1) {
+                alert(power);
+                return;
+            }
+            power = JSON.parse(power);
+
+            //当前是归档状态.
+            if (generBill.BillState == 2 && power.IsInsert == 1 && isReadonly == 0)
+                toolBar += "<input type=button value='新建' onclick='NewIt();' />";
+
+            if (power.IsSave == 1 && generBill.BillState != 100 && isReadonly == 0) {
+                var btnSave = generBill.BtnSaveLable;
+                if (btnSave == null || btnSave == "" || btnSave == undefined)
+                    btnSave = "保存";
+                toolBar += "<input type=button value='" + btnSave + "' onclick='SaveIt(false);' />";
+
+                //toolBar += "<input type=button value='" + btnSave + "&关闭' onclick='SaveIt(true);' />";
+            }
+
+            //if (power.IsSave == 1 && power.IsInsert == 1) {
+            //   btnSave = "保存&新建";
+            //    toolBar += "<input type=button value='" + btnSave + "' onclick='SaveItAndNew();' />";
+            //}
+
+            if (power.IsSubmit == 1 && generBill.BillState != 100 && isReadonly == 0) {
+                var btnSubmit = generBill.BtnSubmitLable;
+                if (btnSubmit == null || btnSubmit == "" || btnSubmit == undefined)
+                    btnSubmit = "提交";
+                toolBar += "<input type=button value='" + btnSubmit + "' onclick='Submit(false);' />";
+            }
+
+            if (frmBill.BtnSearchLabel == "") frmBill.BtnSearchLabel = "查询";
+            if (frmBill.BtnGroupLabel == "") frmBill.BtnGroupLabel = "分析";
+            if (frmBill.BtnPrintHtml == "") frmBill.BtnPrintHtml = "打印html";
+            if (frmBill.BtnPrintPDF == "") frmBill.BtnPrintPDF = "打印pdf";
+            if (frmBill.BtnPrintRTF == "") frmBill.BtnPrintRTF = "打印rtf";
+            if (frmBill.BtnPrintCCWord == "") frmBill.BtnPrintCCWord = "打印CCWord";
+            if (frmBill.BtnExpZip == "") frmBill.BtnExpZip = "打包zip";
+
+            //是初始化状态.
+            //if (generBill.BillState == 0 && power.IsSave == 1)
+            //    toolBar += "<input type=button value='保存为草稿' id='Btn_SaveAsDraft' onclick='SaveAsDraft();' />";
+
+            if ((generBill.BillState == 1 || generBill.BillState == 2) && isReadonly == 0 && isShowDelete)
+                toolBar += "<input type=button value='删除' onclick='DeleteIt();' />";
+
+            if (frmBill.BtnSearchEnable == 1)
+                toolBar += "<input type='button' value='" + frmBill.BtnSearchLabel + "' id='Btn_Sarch' onclick='SearchBill();' />";
+
+            if (frmBill.BtnGroupEnable == 1)
+                toolBar += "<input type='button' value='" + frmBill.BtnGroupLabel + "' id='Btn_Group' onclick='Group();' />";
+
+            if (frmBill.BtnPrintHtmlEnable == 1)
+                toolBar += "<input type='button' value='" + frmBill.BtnPrintHtml + "' id='Btn_PrintHtml' onclick='PrintHtml();' />";
+
+            if (frmBill.BtnPrintPDFEnable == 1)
+                toolBar += "<input type='button' value='" + frmBill.BtnPrintPDF + "' id='Btn_PrintPdf' onclick='PrintPDF();' />";
+
+            if (frmBill.BtnPrintRTFEnable == 1)
+                toolBar += "<input type='button' value='" + frmBill.BtnPrintRTF + "' id='Btn_PrintRTF' onclick='PrintRTF();' />";
+
+            if (frmBill.BtnPrintCCWordEnable == 1)
+                toolBar += "<input type='button' value='" + frmBill.BtnPrintCCWord + "' id='Btn_PrintRTF' onclick='PrintCCWord();' />";
+
+            if (frmBill.BtnExpZipEnable == 1)
+                toolBar += "<input type='button' value='" + frmBill.BtnExpZip + "' id='Btn_BtnExpZip' onclick='ExpToZip();' />";
+
+            toolBar += "<input type=button value='打印' onclick='wprint();' />";
+
+            if (frmBill.RefBillRole != 0) {
+                if (frmBill.BtnRefBill == "") frmBill.BtnRefBill = "关联单据";
+                toolBar += "<input type='button' value='" + frmBill.BtnRefBill + "' id='Btn_BtnExpZip' onclick='RefBill(\"" + frmBill.RefBill + "\");' />";
+                toolBar += "<input type='button' value='查看关联单据信息' id='Btn_BtnExpZip' onclick='ShowRefBillInfo(\"" + frmBill.RefBill + "\");' />";
+            }
+
+            //获得当前的集合.
+            var fms = new Entities("BP.CCBill.Template.Methods", "FrmID", frmID);
+            for (var i = 0; i < fms.length; i++) {
+                var fm = fms[i];
+
+                if (fm.IsMyBillToolBar != 1)
+                    continue;
+
+                toolBar += "<input type='button' value='" + fm.Name + "' id='Btn_" + fm.MethodID + "' onclick=\"Done('" + fm.WarningMsg + "','" + fm.MyPK + "','" + fm.Name + "'," + fm.WhatAreYouTodo + ",'" + fm.PopWidth + "','" + fm.PopHeight + "'," + fm.RefMethodType + ");\" />";
+            }
+
+            if (webUser.No == 'admin') {
+                toolBar += "<input type='button' value='Setting' id='Btn_OpenSetting' onclick='OpenSetting();' />";
+            }
+
+            $("#toolbar").html(toolBar);
+        }
+
+        function OpenSetting() {
+            var url = "../Comm/RefFunc/En.htm?EnName=BP.CCBill.FrmDict&PKVal=" + GetQueryString("FrmID");
+            WinOpenFull(url);
+        }
+
+        var hkey_root, hkey_path, hkey_key
+        hkey_root = "HKEY_CURRENT_USER";
+        hkey_path = "\\Software\\Microsoft\\Internet Explorer\\PageSetup\\"
+
+        // 设置页眉页脚为空
+        function PageSetup_Null() {
+            try {
+                var RegWsh = CreateObject("WScript.Shell");
+                hkey_key = "header";
+                RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "");
+                hkey_key = "footer";
+                RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "");
+            }
+            catch (e) { }
+        }
+
+        // 设置页眉页脚为默认值
+        function PageSetup_Default() {
+            try {
+                var RegWsh = CreateObject("WScript.Shell");
+                hkey_key = "header";
+                RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "&w&b页码，&p/&P");
+                hkey_key = "footer";
+                RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "&u&b&d");
+            }
+            catch (e) { }
+        }
+        function wprint() {
+            // PageSetup_Null();
+            //var headstr = "<html><head><title></title></head><body>";
+            //var footstr = "</body>";
+            //var printData = document.getElementById("divCurrentForm").innerHTML; //获得 div 里的所有 html 数据
+            //var oldstr = document.body.innerHTML;
+            //document.body.innerHTML = headstr+newstr+footstr;
+            //window.print();
+            //document.body.innerHTML = oldstr;
+            //return false;
+
+
+            window.print();
+
+
+
+        }
+
+        ///执行方法.
+        function Done(msg, funMyPK, methodName, afterOper, w, h, methodType) {
+            //打开链接
+            if (methodType != 0) {
+                var mlink = new Entity("BP.CCBill.Template.MethodLink", funMyPK);
+                var linkUrl = mlink.MethodDoc_Url;
+                if (linkUrl != null && linkUrl != undefined && linkUrl != "") {
+                    linkUrl = linkUrl.replace("@basePath", basePath);
+                    linkUrl = DealJsonExp(frmData.MainTable[0], linkUrl);
+                    var openType = mlink.RefMethodType;
+                    //模态窗口打开
+                    if (openType == 0) {
+                        OpenBootStrapModal(url, "MethodeLink", methodName, w, h, null, true, null, null, null);
+                    }
+                    //新窗口打开
+                    if (openType == 1 || openType == 2) {
+                        window.open(linkUrl);
+                    }
+                }
+                return;
+            }
+            var isHaveAttr = false;
+            var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", funMyPK);
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                isHaveAttr = true;
+            }
+
+            //带有参数的方法.
+            if (isHaveAttr == true) {
+
+                if (w == 0) w = 560;
+                if (h == 0) h = 260;
+
+                var url = "./Opt/DoMethodPara.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID") + "&FrmID=" + GetQueryString("FrmID");
+                //WinOpen(url);
+                OpenBootStrapModal(url, "MethodePara", methodName, w, h, null, false, null, null, function () {
+                    //afterOper=0 关闭提示窗口，不做任何操作
+
+                    //afterOper=1 关闭提示窗口刷新页面
+                    if (afterOper == 1)
+                        window.location.href = window.location.href;
+
+                    //afterOper=2 关闭提示窗口跳转到Search.htm
+                    if (afterOper == 2) {
+
+                        if (window.parent.location.href.indexOf("SearchBill.htm") != -1) {
+                            window.close();
+                        }
+                        else
+                            window.location.href = "./SearchBill.htm?FrmID=" + GetQueryString("FrmID");
+                    }
+                });
+                return;
+            }
+
+            if (w == 0) w = 260;
+            if (h == 0) h = 160;
+
+            //不带有参数的方法.
+            if (msg != '' && msg.length > 5) {
+                if (window.confirm(msg) == false)
+                    return;
+            }
+            var url = "./Opt/DoMethod.htm?MyPK=" + funMyPK + "&WorkID=" + GetQueryString("WorkID") + "&FrmID=" + GetQueryString("FrmID");
+            OpenBootStrapModal(url, "Methode", methodName, w, h, null, true, null, null, function () {
+
+                //afterOper=0 关闭提示窗口，不做任何操作
+
+                //afterOper=1 关闭提示窗口刷新页面
+                if (afterOper == 1)
+                    window.location.href = window.location.href;
+
+                //afterOper=2 关闭提示窗口跳转到Search.htm
+                if (afterOper == 2) {
+
+                    if (window.parent.location.href.indexOf("SearchBill") != -1) {
+                        window.close();
+                    }
+                    else
+                        window.location.href = "./SearchBill.htm?FrmID=" + GetQueryString("FrmID");
+                }
+
+            });
+
+        }
+        //保存为草稿.
+        function SaveAsDraft() {
+
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("MyBill_SaveAsDraft");
+            var url = "Draft.htm?FrmID=" + GetQueryString("FrmID");
+            window.location.href = url;
+        }
+
+        /**
+        * 保存，只有保存后的数据才可以在Search页面显示
+        */
+        function SaveIt(isClose) {
+            //需要验证表单必填，正则表达式，附件
+            if (beforeSaveOrSendDel() == false)
+                return;
+
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+            handler.AddUrlData();
+
+            //组织数据.
+            var dataStrs = getFormData(true, true);
+
+            $.each(dataStrs.split("&"), function (i, o) {
+                var param = o.split("=");
+                if (param.length == 2 && validate(param[1])) {
+                    handler.AddPara(param[0], param[1]);
+                } else {
+                    handler.AddPara(param[0], "");
+                }
+            });
+            var data = handler.DoMethodReturnString("MyBill_SaveIt");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                console.log(data);
+                return;
+            }
+
+            if (isClose == true) {
+                window.close();
+                return;
+            }
+
+            window.location.href = window.location.href;
+        }
+
+        /**
+         * 保存发送前处理的从表保存，附件必填正则表达式的验证
+         */
+        function beforeSaveOrSendDel() {
+            //保存从表数据
+            $("[name=Dtl]").each(function (i, obj) {
+                var contentWidow = obj.contentWindow;
+                if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
+                    IsSaveTrue = contentWidow.SaveAll();
+
+                }
+            });
+
+            //检查附件上传
+            var msg = checkAths();
+            if (msg != "") {
+                alert(msg);
+                return false;
+            }
+
+            //必填项和正则表达式检查
+            var formCheckResult = true;
+
+            //必填
+            if (checkBlanks() == false) {
+                formCheckResult = false;
+            }
+
+            //正则表达式
+            if (checkReg() == false) {
+                formCheckResult = false;
+            }
+
+            if (formCheckResult == false) {
+                alert("请检查表单必填项,正则表达式");
+                return false;
+            }
+            return true;
+        }
+
+
+        /**
+         * 提交，单据结束
+         */
+        function Submit() {
+            //需要验证表单必填，正则表达式，附件
+            if (beforeSaveOrSendDel() == false)
+                return;
+
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+            handler.AddUrlData();
+
+            //组织数据.
+            var dataStrs = getFormData(true, true);
+
+            $.each(dataStrs.split("&"), function (i, o) {
+                var param = o.split("=");
+                if (param.length == 2 && validate(param[1])) {
+                    handler.AddPara(param[0], param[1]);
+                } else {
+                    handler.AddPara(param[0], "");
+                }
+            });
+
+            var data = handler.DoMethodReturnString("MyBill_Submit");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            var url = window.location.href;
+            url = url.replace("IsReadonly=0", "IsReadonly=1");
+            window.location.href = url;
+        }
+
+        //获取表单数据
+        function getFormData(isCotainTextArea, isCotainUrlParam) {
+
+            var formss = $('#divCCForm').serialize();
+
+            var formArr = formss.split('&');
+            var formArrResult = [];
+            var haseExistStr = ",";
+            var mcheckboxs = "";
+            $.each(formArr, function (i, ele) {
+                if (ele.split('=')[0].indexOf('CB_') == 0) {
+                    //如果ID获取不到值，Name获取到值为复选框多选
+                    var targetId = ele.split('=')[0];
+                    if ($('#' + targetId).length == 1) {
+                        if ($('#' + targetId + ':checked').length == 1) {
+                            ele = targetId + '=1';
+                        } else {
+                            ele = targetId + '=0';
+                        }
+                        formArrResult.push(ele);
+                    } else {
+
+                        if (mcheckboxs.indexOf(targetId + ",") == -1) {
+                            mcheckboxs += targetId + ",";
+                            var str = "";
+                            $("input[name='" + targetId + "']:checked").each(function (index, item) {
+                                if ($("input[name='" + targetId + "']:checked").length - 1 == index) {
+                                    str += $(this).val();
+                                } else {
+                                    str += $(this).val() + ",";
+                                }
+                            });
+
+                            formArrResult.push(targetId + '=' + str);
+                        }
+
+
+                    }
+
+                }
+                if (ele.split('=')[0].indexOf('DDL_') == 0) {
+
+                    var ctrlID = ele.split('=')[0];
+
+                    var item = $("#" + ctrlID).children('option:checked').text();
+
+                    var mystr = '';
+                    mystr = ctrlID.replace("DDL_", "TB_") + 'T=' + item;
+                    formArrResult.push(mystr);
+                    formArrResult.push(ele);
+                    haseExistStr += ctrlID.replace("DDL_", "TB_") + "T" + ",";
+                }
+                if (ele.split('=')[0].indexOf('RB_') == 0) {
+                    formArrResult.push(ele);
+                }
+
+            });
+
+
+            $.each(formArr, function (i, ele) {
+                var ctrID = ele.split('=')[0];
+                if (ctrID.indexOf('TB_') == 0) {
+                    if (haseExistStr.indexOf("," + ctrID + ",") == -1) {
+                        formArrResult.push(ele);
+                        haseExistStr += ctrID + ",";
+                    }
+
+
+                }
+            });
+
+
+
+            //获取表单中禁用的表单元素的值
+            var disabledEles = $('#divCCForm :disabled');
+            $.each(disabledEles, function (i, disabledEle) {
+
+                var name = $(disabledEle).attr('id');
+
+                switch (disabledEle.tagName.toUpperCase()) {
+
+                    case "INPUT":
+                        switch (disabledEle.type.toUpperCase()) {
+                            case "CHECKBOX": //复选框
+                                formArrResult.push(name + '=' + encodeURIComponent(($(disabledEle).is(':checked') ? 1 : 0)));
+                                break;
+                            case "TEXT": //文本框
+                            case "HIDDEN":
+                                formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).val()));
+                                break;
+                            case "RADIO": //单选钮
+                                name = $(disabledEle).attr('name');
+                                var eleResult = name + '=' + $('[name="' + name + '"]:checked').val();
+                                if ($.inArray(eleResult, formArrResult) == -1) {
+                                    formArrResult.push(eleResult);
+                                }
+                                break;
+                        }
+                        break;
+                    //下拉框
+                    case "SELECT":
+                        formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).children('option:checked').val()));
+                        var tbID = name.replace("DDL_", "TB_") + 'T';
+                        if ($("#" + tbID).length == 1) {
+                            if (haseExistStr.indexOf("," + tbID + ",") == -1) {
+                                formArrResult.push(tbID + '=' + $(disabledEle).children('option:checked').text());
+                                haseExistStr += tbID + ",";
+                            }
+                        }
+                        break;
+
+                    //文本区域
+                    case "TEXTAREA":
+                        formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).val()));
+                        break;
+                }
+            });
+
+            //获取树形结构的表单值
+            var combotrees = $(".easyui-combotree");
+            $.each(combotrees, function (i, combotree) {
+                var name = $(combotree).attr('id');
+                var tree = $('#' + name).combotree('tree');
+                //获取当前选中的节点
+                var data = tree.tree('getSelected');
+                if (data != null) {
+                    formArrResult.push(name + '=' + data.id);
+                    formArrResult.push(name.replace("DDL_", "TB_") + 'T=' + data.text);
+                }
+            });
+
+            if (!isCotainTextArea) {
+                formArrResult = $.grep(formArrResult, function (value) {
+                    return value.split('=').length == 2 ? value.split('=')[1].length <= 50 : true;
+                });
+            }
+
+            formss = formArrResult.join('&');
+            var dataArr = [];
+            //加上URL中的参数
+            if (pageData != undefined && isCotainUrlParam) {
+                var pageDataArr = [];
+                for (var data in pageData) {
+                    pageDataArr.push(data + '=' + pageData[data]);
+                }
+                dataArr.push(pageDataArr.join('&'));
+            }
+            if (formss != '')
+                dataArr.push(formss);
+            var formData = dataArr.join('&');
+
+            //为了复选框  合并一下值  复选框的值以  ，号分割
+            //用& 符号截取数据
+            var formDataArr = formData.split('&');
+
+            var formDataResultObj = {};
+            $.each(formDataArr, function (i, formDataObj) {
+                //计算出等号的INDEX
+                var indexOfEqual = formDataObj.indexOf('=');
+                var objectKey = formDataObj.substr(0, indexOfEqual);
+                var objectValue = formDataObj.substr(indexOfEqual + 1);
+                if (formDataResultObj[objectKey] == undefined) {
+                    formDataResultObj[objectKey] = objectValue;
+                } else {
+                    formDataResultObj[objectKey] = formDataResultObj[objectKey] + ',' + objectValue;
+                }
+            });
+
+            var formdataResultStr = '';
+            for (var ele in formDataResultObj) {
+                formdataResultStr = formdataResultStr + ele + '=' + formDataResultObj[ele] + '&';
+            }
+
+            // 处理没有选择的文本框.
+            //获得checkBoxIDs 格式为: CB_IsXX,CB_IsYY,
+            var ids = GenerCheckNames();
+
+            if (ids) {
+                var scores = ids.split(",");
+                var arrLength = scores.length;
+                var sum = 0;
+                var average = null;
+                for (var i = 0; i < arrLength; i++) {
+                    var field = scores[i];
+                    var index = formdataResultStr.indexOf(field);
+                    if (index == -1) {
+                        if ($("input[name='" + field + "'").length == 1)
+                            formdataResultStr += '&' + field + '=0';
+                        else
+                            formdataResultStr += '&' + field + '= ';
+                    }
+                }
+            }
+
+            formdataResultStr = formdataResultStr.replace('&&', '&');
+
+            return formdataResultStr;
+        }
+        function isExistArray(arrys, no) {
+            for (var i = 0; i < arrys.length; i++) {
+                if (arrys[i].split('=')[0] == no)
+                    return i;
+            }
+            return -1;
+        }
+
+
+        function DeleteIt() {
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("MyBill_Delete");
+
+            window.location.href = 'SearchBill.htm?FrmID=' + GetQueryString("FrmID");
+
+        }
+
+        //保存并新建.
+        function SaveItAndNew() {
+            Save();
+            NewIt();
+            //window.close();
+        }
+
+        function SaveItAndClose() {
+            Save();
+            window.close();
+        }
+        function NewIt() {
+
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("MyBill_CreateBlankBillID");
+            window.location.href = 'MyBill.htm?FrmID=' + GetQueryString("FrmID") + "&WorkID=" + data;
+
+        }
+
+
+        //初始化退回、移交、加签窗口
+        function initModal(modalType, toNode) {
+
+            //初始化退回窗口的SRC.
+            var html = '<div class="modal fade" id="returnWorkModal" data-backdrop="static">' +
+                '<div class="modal-dialog">'
+                + '<div class="modal-content" style="border-radius:0px;width:900px;text-align:left;">'
+                + '<div class="modal-header">'
+                + '<button type="button" style="color:white;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                + '<h4 class="modal-title" id="modalHeader">提示信息</h4>'
+                + '</div>'
+                + '<div class="modal-body" style="margin:0px;padding:0px">'
+                + '<iframe style="width:100%;border:0px;height:450px;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
+                + '</div>'
+                + '</div><!-- /.modal-content -->'
+                + '</div><!-- /.modal-dialog -->'
+                + '</div>';
+
+            $('body').append($(html));
+
+            $("#returnWorkModal").on('hide.bs.modal', function () {
+                setToobarEnable();
+            });
+
+            var modalIframeSrc = '';
+            if (modalType != undefined) {
+                switch (modalType) {
+                    case "Imp":
+                        $('#modalHeader').text("导入");
+                        modalIframeSrc = "./Opt/Imp.htm?FrmID=" + GetQueryString("FrmID") + "&s=" + Math.random()
+                        break;
+                    case "accpter":
+                        $('#modalHeader').text("工作移交");
+                        modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                        break;
+                    case "shift":
+                        $('#modalHeader').text("工作移交");
+                        modalIframeSrc = "./WorkOpt/Shift.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                        break;
+                    case "askfor":
+                        $('#modalHeader').text("加签");
+                        modalIframeSrc = "./WorkOpt/Askfor.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                        break;
+                    case "Btn_WorkCheck":
+                        $('#modalHeader').text("审核");
+                        modalIframeSrc = "./WorkOpt/WorkCheck.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                        break;
+
+                    case "Track": //轨迹.
+                        $('#modalHeader').text("轨迹");
+                        modalIframeSrc = "./WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                        break;
+                    case "HuiQian":
+
+                        if (toNode != null)
+                            $('#modalHeader').text("先会签，后发送。");
+                        else
+                            $('#modalHeader').text("会签");
+
+                        modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&Info=&s=" + Math.random()
+
+                        break;
+                    case "CC":
+                        $('#modalHeader').text("抄送");
+                        modalIframeSrc = "./WorkOpt/CC.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&Info=&s=" + Math.random()
+                        break;
+                    case "PackUp_zip":
+                    case "PackUp_html":
+                    case "PackUp_pdf":
+                        $('#modalHeader').text("打包下载/打印");
+                        var url = "./WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_', '') + "&FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
+                        // alert(url);
+                        modalIframeSrc = "./WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_', '') + "&FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                        break;
+                    case "accepter":
+                        $('#modalHeader').text("选择下一个节点及下一个节点接受人");
+                        modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
+                        break;
+
+                    //发送选择接收节点和接收人
+                    case "sendAccepter":
+                        $('#modalHeader').text("发送到节点");
+                        modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode + "&s=" + Math.random()
+                        break;
+                    case "DBTemplate":
+                        $('#modalHeader').text("历史发起记录&模版");
+                        modalIframeSrc = "./WorkOpt/DBTemplate.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                        break;
+                    default:
+                        break;
+                }
+            }
+            $('#iframeReturnWorkForm').attr('src', modalIframeSrc);
+        }
+    </script>
+    <style type="text/css">
+        h1 {
+            font-family: "微软雅黑";
+            font-weight: normal;
+        }
+
+        td {
+            border-right-style: none;
+            border-left-style: none;
+            border-style: solid;
+            padding: 4px;
+            text-align: left;
+            color: #333333;
+            font-size: 12px;
+            border-color: lightgrey;
+        }
+
+        .combo {
+            border-color: #d4d4d4;
+            background-color: #ffffff;
+            height: 22px;
+        }
+
+        .combo-arrow {
+            background-color: #E0ECFF;
+        }
+
+        .textbox-text {
+            border: none !important;
+            outline: none !important;
+            height: 28px !important;
+        }
+
+        .combo-arrow {
+            height: 28px !important;
+        }
+
+        .textbox-addon-right {
+            float: right;
+        }
+    </style>
+    <style type="text/css">
+        body {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .nav > li > a {
+            padding: 6px 13px;
+        }
+
+            .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus, .nav > li > a:hover, .nav > li > a:focus {
+                border-radius: 10px 10px 0px 0px;
+            }
+
+        .errorInput {
+            border: 1px red solid !important;
+        }
+
+        li.scrollNav.active a {
+            background: url(../Scripts/bootstrap/css/img/back.png) no-repeat;
+        }
+
+        #nav li {
+            height: 110px;
+        }
+
+            #nav li a > div {
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                background: #CDD2D8;
+                line-height: 25px !important;
+                text-align: center;
+                color: #fff;
+                font: bold 15px "微软雅黑";
+                margin: 0px auto;
+                margin-bottom: 10px;
+            }
+
+            #nav li > a {
+                color: #333;
+                height: 110px;
+                overflow: hidden;
+                text-align: center;
+                background: none;
+                font: bold 14px "微软雅黑";
+            }
+
+                #nav li > a p {
+                    color: #2884fa;
+                    font: normal 12px '微软雅黑';
+                }
+
+        #nav .current a {
+            margin: 0px;
+            color: #333;
+            background: none;
+            box-shadow: none;
+        }
+
+            #nav .current a > div {
+                width: 30px;
+                height: 30px;
+                line-height: 30px !important;
+                background: #7E8DF9;
+                font: bold 18px "微软雅黑";
+            }
+
+        body iframe {
+            border: none;
+        }
+
+        #header > b, .returnTackHeader b {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #fff;
+            margin: 12px;
+            float: left;
+            text-align: center;
+            color: rgb(192, 193, 204);
+            line-height: 25px;
+        }
+
+        #topContentDiv i.topContentDiv-i {
+            display: block;
+            width: 33px;
+            height: 22px;
+            background-size: 80%;
+            position: absolute;
+            top: 56px;
+            left: 50px;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+
+        .navbars {
+            position: fixed;
+            float: left;
+            width: 18%;
+            height: 500px;
+            overflow: hidden;
+        }
+
+            .navbars .s {
+                overflow-y: auto;
+                scrollbar-face-color: #fff;
+            }
+
+            .navbars i {
+                display: block;
+                width: 64px;
+                height: 30px;
+                background: url("../Scripts/bootstrap/css/img/arrow.png") no-repeat -75px 4px;
+                margin: 0px auto;
+            }
+
+                .navbars i:hover {
+                    background: url("../Scripts/bootstrap/css/img/arrow.png") no-repeat 0px 4px;
+                }
+
+                .navbars i.bottom, .navbars i.bottom_disabled {
+                    background: url("../Scripts/bootstrap/css/img/arrow.png") no-repeat -75px -42px;
+                }
+
+                    .navbars i.bottom:hover, .navbars i.bottom_disabled:hover {
+                        background: url("../Scripts/bootstrap/css/img/arrow.png") no-repeat 0px -42px;
+                    }
+
+
+        .input-group .input-group-addon {
+            border: none;
+            background: #F1F1F2;
+        }
+
+        .input-group-addon {
+            <!-- float: left; -->
+            width: 36px;
+            height: 28px;
+            margin-top: 1px;
+        }
+
+        .input-group input {
+            float: left;
+        }
+
+        #divCurrentForm {
+            float: none;
+            width: auto;
+        }
+
+        input[type=text], select, textarea, iframe[src*="AttachmentUpload.aspx"] {
+            margin: 4px 0px !important;
+        }
+    </style>
+    <style type="text/css">
+        div.richText {
+            min-height: 40px;
+            border: 1px solid #d4d4d4;
+            cursor: text;
+            padding: 0 10px 0;
+            overflow: auto;
+            word-wrap: break-word;
+            box-shadow: 2px 2px 5px #d3d6da;
+            background-color: #fff;
+        }
+
+        input.align_cb {
+            padding-left: 4px;
+            cursor: pointer;
+            margin: 0;
+            vertical-align: middle;
+        }
+
+        label.align_cbl {
+            display: inline-block;
+            vertical-align: middle;
+            margin-bottom: 2px;
+        }
+
+        #topContentDiv {
+            background: #fff;
+            border-radius: 5px;
+            padding: 8px 0px 0px 0px;
+            margin: 8px 15px 15px 15px;
+            border: #EFEFEF 1px solid;
+            overflow: hidden;
+        }
+    </style>
+    <!--JS 加载-->
+    <script type="text/javascript">
+
+        function setContentHeight() {
+            $("body").css("overflow", "hidden");
+            $("#divCurrentForm").css("overflow", "hidden");
+            $("#topContentDiv").css("overflow", "hidden");
+            $("#contentDiv").css("overflow", "hidden");
+            $("#divCCForm").css("overflow", "auto");
+            $("#CCForm").css("overflow", "hidden");
+            $("#CCForm").css("overflow-y", "hidden");
+            $("#CCForm").css("height", "auto");
+            var bodyHeight = $("body").height();
+            var bottomHeight = $("#bottomToolBar").height(); // save button
+            if (($("#Btn").css("display") || "") != "block") {
+                bottomHeight = 0;
+            }
+            bottomHeight = 0; // tmp
+            var height = bodyHeight - bottomHeight;
+            $("#divCurrentForm").height(height);
+            $("#topContentDiv").height(height - 45);
+            $("#contentDiv").height(height - 50);
+            $("#divCCForm").height(height - 50);
+        }
+        $(function () {
+            //            $("body").css("overflow", "hidden");
+            //            $("#divCurrentForm").css("overflow", "hidden");
+            //            $("#topContentDiv").css("overflow", "hidden");
+            //            $("#contentDiv").css("overflow", "hidden");
+            //            $("#divCCForm").css("overflow", "auto");
+            //            $("#CCForm").css("overflow", "hidden");
+            //            $("#CCForm").css("overflow-y", "hidden");
+            $("#CCForm").css("height", "auto");
+            $(window).bind("resize", function () {
+                //setTimeout(setContentHeight, 100);
+            });
+
+
+        });
+
+        /**/</script>
+</head>
+<body onclick="hiddenDiv()">
+   
+    <div id="divCurrentForm" style="background: #E3E7F4; position: relative;">
+        <!--底部功能按钮 发送、移交-->
+        <div class="CurrentForm-buttom-bar" style="background-color:white">
+            <div id="toolbar" style="margin-left: 10px;"> </div>
+        </div>
+        <!--上半部分表单-->
+        <div id="topContentDiv" class="row" style="padding: 5px 2px; margin: 0px auto;">
+            <!-- <div id="Title">
+        <div style=" float:right ">
+         <img src="../../DataUser/ICON/LogBig.png" style=" width:100%; text-align:center; height:30px;" />
+        </div>
+         </div>-->
+            <i class="topContentDiv-i" style="display: none;"></i>
+            <div id="contentDiv">
+                <form id="divCCForm" method="post">
+                    <div id="CCForm" style="">
+                        <br />
+                        <img src='./../Img/loading.gif' alt="正在初始化表单模板及数据，请耐心等待。。。" />
+                        ccbpm - 正在初始化表单模板及数据,请耐心等待...
+                        <br />
+                        <br />
+                    </div>
+                    <!--DIVINFO-->
+                    <div id='divinfo' style='width: 155px; position: absolute; display: none; cursor: pointer;
+                    align: left; border-left: 1px solid #336699; border-top: 1px solid #336699; border-right: 1px solid #336699;'>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--图片附件显示大图-->
+    <div id="outerdiv" style="position: fixed; top: 0; left: 0; background: rgba(0,0,0,0.7);
+        z-index: 2; width: 100%; height: 100%; display: none;">
+        <div id="innerdiv" style="position: absolute;">
+            <img id="bigimg" style="border: 5px solid #fff;" src="" />
+        </div>
+    </div>
+</body>
+</html>

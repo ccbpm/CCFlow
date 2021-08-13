@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>链接</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../EnumLab.js"></script>
+    <script src="../../../Admin/Admin.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+
+            //  InitBar(0);
+            InitBar("PrintRTF");
+
+        });
+
+        function Save() {
+
+            alert("请转入属性设置.");
+            return;
+
+            $("#Msg").html("正在创建,请稍后......");
+
+            var name = $("#TB_Name").val();
+            if (name == undefined || name == null || name == "") {
+                alert("请输入方法名称.");
+                return;
+            }
+
+            var en = new Entity("BP.CCBill.Template.Method");
+
+            en.FrmID = GetQueryString("FrmID");
+            en.GroupID = GetQueryString("GroupID"); //分组ID.
+            en.MethodID = "PrintRTF";
+            en.Mark = "PrintRTF";
+
+            en.Name = name;
+            en.MethodModel = "PrintRTF"; //设置为链接按钮.
+            en.RefMethodType = 1;
+            en.UrlExt = $("#TB_Url").val();
+            en.Tag1 = $("#TB_Url").val();
+            en.Icon = "icon-drop";
+            en.IsEnable = 1;
+            en.Insert();
+
+            var url = "../../../Comm/En.htm?EnName=BP.CCBill.Template.MethodLink&No=" + en.No;
+            window.location.href = url;
+        }
+        ///转到bill.
+        function ToBill() {
+            var url = "../../../Admin/AttrNode/Bill.htm?FK_MapData=" + GetQueryString("FrmID") + "&NodeID=0&FK_Node=0";
+            window.open(url);
+        }
+
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>按照模板打印</legend>
+
+        <ul>
+            <li> 该功能出现在工具栏上 </li>
+            <li>
+                <button onclick="ToBill()"> 转到打印模板</button>
+            </li>
+        </ul>
+
+        <legend> 什么是RTF打印？</legend>
+        <ul>
+            <li> 用于模板的打印。 </li>
+        </ul>
+
+        <legend>运行效果</legend>
+
+        <ul>
+            <li> <img src="" class="HelpImp" /> </li>
+        </ul>
+
+
+    </fieldset>
+
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>为下拉框设置显示过滤</title>
+    <script src="../../../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script src="../../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../../Comm/Gener.js" type="text/javascript" ></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
+            var json = handler.DoMethodReturnString("AutoFullDLL_Init_SearchCond");
+
+            if (json.indexOf('err@') == 0) {
+                alert(json);
+                return;
+            }
+
+            json = JSON.parse(json);
+
+            var mapExt = json['Sys_MapExt'];
+
+            //绑定数据源.
+            GenerBindDDL("DDL_FK_DBSrc", json['Sys_SFDBSrc'], "No", "Name", mapExt.FK_DBSrc);
+
+            //调用公共类库的方法:执行批量主表赋值.
+            GenerFullAllCtrlsVal(mapExt);
+            $("#Msg").html("");
+            return;
+
+        });
+
+        //装载模版.
+        function LoadTemplate() {
+            var url = "../../SettingTemplate.htm?TemplateType=AutoFullDLL";
+            WinOpen(url, 'ss');
+        }
+
+    </script>
+</head>
+<body>
+    <form id="cc">
+        <div style="right:10px; position:absolute; z-index:100; top:-3px">
+            <input type="button" value="装载模版" onclick="LoadTemplate()" id="ddd" />
+            <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+            <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
+
+        </div>
+        <table id="table" style="width:99%;">
+            <caption>
+                为下拉框设置显示过滤
+                <a href="javascript:ShowHidden('sqlexp')"> <img src="../../../../Img/Btn/Help.gif" /> 填充SQL帮助:</a>
+            </caption>
+            <tr>
+                <td>
+                    执行SQL的数据源
+                </td>
+                <td>
+                    <select name="DDL_FK_DBSrc" id="DDL_FK_DBSrc">
+                    </select>
+                </td>
+                <td>
+                    ccform允许从其他数据源中取数据
+                    <!--,<a href="../../../Comm/Sys/SFDBSrcNewGuide.aspx" ><img src='/WF/Img/Setting.png' border=0 />设置/新建数据源</a>-->
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    执行的SQL
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="width:95%;">
+                    <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width:98%;"> </textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div id='sqlexp' style='color: Gray; display: none'>
+                        <ul>
+                            <li>该SQL必须返回No,Name 两个列.</li>
+                            <li>至此ccbpm表达式.</li>
+                            <li>比如:该下拉框是一个人员，您需要仅仅显示本部门人员.</li>
+                            <li>SELECT No,Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept' </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div id="Msg">
+        </div>
+        <script type="text/javascript">
+
+            function Save() {
+
+                $("#Msg").html("正在保存,请稍后......");
+
+                var mypk = "AutoFullDLLSearchCond_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+                var en = new Entity("BP.Sys.MapExt");
+                en.MyPK = mypk;
+                en.RetrieveFromDBSources();
+                en.CopyForm(); //复制表单数据.
+                en.Doc = $("#TB_Doc").val();
+                en.FK_MapData = GetQueryString("FK_MapData");
+                en.AttrOfOper = GetQueryString("KeyOfEn");
+                en.ExtType = "AutoFullDLLSearchCond";
+                en.FK_DBSrc = $("#DDL_FK_DBSrc").val(); //  this.GetValFromFrmByKey("FK_DBSrc");
+                en.MyPK = mypk;
+                if (en.Update() == 0)
+                    en.Insert();
+
+                $("#Msg").html("<font color=green>保存成功</font>");
+                return;
+            }
+
+            function Delete() {
+
+                if (window.confirm('您确定要删除吗？') == false)
+                    return false;
+
+                var mypk = "AutoFullDLLSearchCond_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+                var en = new Entity("BP.Sys.MapExt");
+                en.MyPK = mypk;
+                en.Delete();
+
+                window.location.href = window.location.href;
+                return;
+            }
+        </script>
+    </form>
+</body>
+</html>

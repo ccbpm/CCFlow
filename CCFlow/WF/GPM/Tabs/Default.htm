@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Tab页签</title>
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Portal/js/sortjs/Sortable.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../Scripts/layui/LayuiDialog.js"></script>
+    <script src="../../Scripts/vue.js" type="text/javascript"></script>
+    <script src="../../Scripts/layui/LayuiDialog.js"></script>
+    <script src="../../Scripts/layui/layui/layui.js"></script>
+    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <base target="_self" />
+    <style>
+        .myEnParas {
+            width: 100%;
+        }
+
+            .myEnParas .row {
+                display: flex;
+                justify-content: flex-start;
+                flex: 0.2;
+                height: 40px;
+                line-height: 40px;
+                background-color: #FAFAFA;
+            }
+
+                .myEnParas .row .item {
+                    box-sizing: border-box;
+                    flex-shrink: 0;
+                    text-align: center;
+                    border-right: 1px solid #eee;
+                    border-bottom: 1px solid #eee;
+                }
+
+        .item-name {
+            width: 15%;
+            white-space: nowrap;
+            cursor: pointer;
+            padding-left: 30px;
+        }
+
+        .item-other {
+            width: 20%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .item-docs {
+            width: 25%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .item-index {
+            background-color: #FAFAFA;
+            padding-right: 20px;
+            color: #999999;
+            text-align: center;
+        }
+
+        .myEnParas .row .folder-item {
+            box-sizing: border-box;
+            width: 76%;
+            padding-left: 20px;
+            cursor: pointer;
+        }
+
+        .wrapper .row {
+            background-color: #fff;
+        }
+
+        #s-main {
+            transition: all ease .4s;
+            margin-top: 40px;
+        }
+
+        .fixed {
+            position: fixed;
+            top: 25px;
+            left: 0;
+            width: 100%;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .layui-input-block > .layui-form-switch {
+            margin-top: 0 !important;
+        }
+    </style>
+    <script type="text/javascript">
+
+        function ViewIt() {
+            var pageID = GetQueryString("RefMenuNo");
+            var url = "../../Portal/Tabs.htm?PageID=" + pageID;
+            window.open(url);
+        }
+    </script>
+</head>
+<body>
+
+    <span class="layui-breadcrumb">
+        <a>  菜单</a>
+        <a><cite>&nbsp;&nbsp;&nbsp;&nbsp;标签页</cite></a>
+    </span>
+    <div id="myEnParas" class="myEnParas" v-cloak=v-cloak>
+        <div class="row fixed">
+            <div class="item item-index">#</div>
+            <div class="item item-docs">名称</div>
+            <div class="item item-other">链接</div>
+            <div class="item item-docs">
+                模式
+                <!--<div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="ViewIt()">
+                    <i class="icon-plus" style="margin-right: 6px"></i> 预览
+                </div>-->
+            </div>
+
+            <div class="item item-other">
+                <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="NewIt()">
+                    <i class="icon-plus" style="margin-right: 6px"></i>+新建Tab
+                </div>
+            </div>
+        </div>
+
+        <div class="wrapper" id="s-main" ref="child-row">
+            <div v-for="(myEn,index) in myEns" :key="index" :data-id="myEn.No">
+
+                <div class="row item-name-dp" :data-id="myEn.No" :data-idx="index">
+                    <div class="item item-index">  {{index + 1}}</div>
+
+                    <div class="item item-docs" @click.stop="EditIt(myEn.No,myEn.WinDocModel)" style="color:deepskyblue">
+                        {{myEn.Name}}
+                    </div>
+
+                    <div class="item item-other" v-html="myEn.UrlExt"></div>
+                    <div class="item item-docs" v-html="myEn.Model"></div>
+
+                    <div class="item item-other" @click.stop="DeleteIt(myEn.No)">
+                        <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs c-btn">
+                            <i class="layui-icon layui-icon-delete layui-font-12"></i> 删除
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div>
+        风格：
+        <select id="DDL_Style">
+            <option value="0"> 按钮风格 </option>
+            <option value="1"> 简洁tab风格 </option>
+            <option value="2"> 紧凑型tab风格 </option>
+        </select>
+    </div>
+
+    <div>
+        预览效果：
+    </div>
+
+
+
+    <script src="Default.js"></script>
+</body>
+</html>

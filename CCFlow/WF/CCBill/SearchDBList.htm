@@ -1,0 +1,618 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>实体列表</title>
+    <!--jquery-->
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <!--公共JS-->
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+
+    <link href="../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <link href="../Scripts/layui/style/admin.css" rel="stylesheet" />
+    <script src="../Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <script src="../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <script src="Search.js" type="text/javascript"></script>
+    <script src="../../DataUser/JSLibData/SearchSelf.js"></script>
+    <script src="../CCForm/MapExt2021.js"></script>
+    <style id="theme-data"></style>
+    <style type="text/css">
+        .layui-tab-title .layui-this:after {
+            border: 0;
+        }
+
+        .layui-tab-title li {
+            border: 1px solid #eee;
+        }
+
+        .layui-input-span {
+            padding: 3px 10px;
+            border: 1px solid #eee;
+        }
+
+        .layui-date-span {
+            width: 54px;
+            height: 18px;
+            font-family: MicrosoftYaHei;
+            color: rgba(0, 0, 0, 0.85);
+            line-height: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <!-- 内容主体区域 -->
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div id="view"></div>
+                        <table class="layui-hide" id="lay_table_dict" lay-filter="dict"></table>
+                        <div id="page"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script id="toolbar" type="text/html">
+        <div class="layui-form">
+            <div class="layui-form-item">
+                {{# if(d.dateTabSearch.key!=undefined){}}
+                <div class="layui-tab">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this" onclick="SearchByDate('month')">月报</li>
+                        <li onclick="SearchByDate('jidu')">季报</li>
+                        <li onclick="SearchByDate('year')">年报</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item layui-show">
+                            <div>
+                                <span class="layui-date-span">年度:</span>
+                                {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
+                                <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('month','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
+                                {{# }); }}
+                            </div>
+                            <div>
+                                <span class="layui-date-span">月份:</span>
+                                {{# layui.each(d.dateTabSearch.Month,function(month_idx,month){ }}
+                                <a href="javascript:void(0)" class="{{# if(d.dateTabSearch.value[1]==month){}}layui-a-this{{# } }}" onclick="SearchByDate('month','{{month}}','month',this)" style="margin-right:5px">{{month}}</a>
+                                {{# }); }}
+                            </div>
+                        </div>
+                        <div class="layui-tab-item">
+                            <div>
+                                <span class="layui-date-span">年度:</span>
+                                {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
+                                <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('jidu','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
+                                {{# }); }}
+                            </div>
+                            <div>
+                                <span class="layui-date-span">季度:</span>
+                                {{# layui.each(d.dateTabSearch.JiDu,function(JiDu_idx,jidu){ }}
+                                <a href="javascript:void(0)" class="{{# if(d.dateTabSearch.value[2]==jidu){}}layui-a-this{{# } }}" onclick="SearchByDate('jidu','{{jidu}}','jidu',this)" style="margin-right:5px">{{jidu}}</a>
+                                {{# }); }}
+                            </div>
+                        </div>
+                        <div class="layui-tab-item">
+                            <div>
+                                <span class="layui-date-span">年度:</span>
+                                {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
+                                <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('year','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
+                                {{# }); }}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {{# } }}
+                {{#  layui.each(d.inputSearch, function(index, item){ }}
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{item.label}}</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="TB_{{=item.key}}" name="TB_{{=item.key}}" value="{{item.value}}" />
+                    </div>
+                </div>
+
+                {{#  }); }}
+                {{#  layui.each(d.dateSearch, function(index, item){ }}
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{item.dtFromLabel}}</label>
+                    <div class="layui-input-inline">
+                        <i class="input-icon layui-icon layui-icon-date"></i>
+                        <input type="text" class="layui-input ccdate" data-info="{{=item.dtType}}" id="TB_{{=item.dtFromKey}}" name="TB_{{=item.dtFromKey}}" value="{{=item.dtFromValue}}" style="padding-left: 40px;" />
+                    </div>
+                    <label class="layui-form-label" style="width:10px">到</label>
+                    <div class="layui-input-inline">
+                        <i class="input-icon layui-icon layui-icon-date"></i>
+                        <input type="text" class="layui-input ccdate" data-info="{{=item.dtType}}" id="TB_{{=item.dtToKey}}" name="TB_{{=item.dtToKey}}" value="{{=item.dtToValue}}" style="padding-left: 40px;" />
+                    </div>
+                </div>
+                {{#  }); }}
+                {{#  layui.each(d.selectSearch, function(index, item){ }}
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{item.label}}</label>
+                    {{# if(item.showWay==0){ }}
+                    <div class="layui-input-inline">
+                        {{# }else { }}
+                        <div class="layui-input-inline" style="display:none">
+                            {{# } }}
+                            <select class="layui-input" id="DDL_{{=item.key}}" name="DDL_{{=item.key}}" data-info="{{item.ShowWay}}" lay-filter="{{=item.key}}" value="{{item.value}}">
+                                {{#  layui.each(item.operations, function(k, opt){ }}
+                                <option value="{{opt.value}}" selected="{{=opt.selected}}">{{opt.name}}</option>
+                                {{#  }); }}
+                            </select>
+                        </div>
+                        {{# if(item.showWay==1){ }}
+                        <div class="layui-tab" style="width:auto">
+                            <ul class="layui-tab-title" id="Tab_{{=item.key}}" style="margin-left:110px;border:0">
+                                {{#  layui.each(item.operations, function(k, opt){ }}
+                                <li class="layui-input-span {{# if(opt.value==item.value){}} layui-this{{# } }}" id="{{item.key}}_{{opt.value}}" onclick="SearchBySelect('{{item.key}}','{{opt.value}}')">{{opt.name}}</li>
+                                {{#  }); }}
+                            </ul>
+                        </div>
+                        {{# } }}
+                    </div>
+                    {{#  }); }}
+                    <div class="layui-inline">
+                        <div class="layui-btn-container" style="padding-top: 10px;">
+                            {{#  layui.each(d.btns, function(index, item){ }}
+                            <button type="button" class="layui-btn layui-btn-sm" data-type="{{=item.type}}" data-no="{{=item.no}}" data-source="{{=item.source}}">{{item.label}}</button>
+                            {{#  }); }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </script>
+    <script>
+        var frmID = GetQueryString("FrmID");
+        var ur = null;
+        var webUser = new WebUser();
+        var pageIdx = 1;
+        var pageSize = 10;
+        var orderBy = "";
+        var orderWay = "DESC";
+        var isHaveDelOper = false;
+        var isHaveSeachOper = false;
+
+        var frmDict = new Entity("BP.CCBill.FrmDict", frmID);
+        var mapData = frmDict;
+        layui.use(['table', 'laytpl', 'form', 'laydate'], function () {
+            var table = layui.table,
+                laytpl = layui.laytpl,
+                form = layui.form,
+                laydate = layui.laydate;
+            document.title = frmDict.Name;
+
+            //初始化用户查询信息
+            //当前用户查询信息.
+            ur = new Entity("BP.Sys.UserRegedit");
+            ur.MyPK = webUser.No + frmID + "_SearchAttrs";
+            ur.RetrieveFromDBSources();
+
+            //渲染查询条件
+            var getTpl = document.getElementById("toolbar").innerHTML
+                , view = document.getElementById('view');
+            laytpl(getTpl).render(InitToolBar(), function (html) {
+                view.innerHTML = html;
+            });
+            $.each(searchData["selectSearch"], function (i, item) {
+                $("#DDL_" + item.key).val(item.value);
+            })
+
+            if ($(".layui-tab-title").length == 1) {
+                var lis = $(".layui-tab-title li");
+                var width = 0;
+                $.each(lis, function (i, item) {
+                    width += item.offsetWidth;
+                })
+                //设置宽度
+                $(".layui-tab-title").css("width", width + "px");
+            }
+
+            form.render();
+            if (mapExts != null && mapExts != undefined && mapExts.length > 0) {
+                mapExts.forEach(function (mapExt) {
+                    if (mapExt.ExtType == "ActiveDDLSearchCond") {
+                        form.on('select(' + mapExt.AttrOfOper + ')', function (element) {
+                            var ddlParent = $("#DDL_" + mapExt.AttrOfOper);
+                            var showWay = ddlParent.attr("data-info");
+                            var ddlChild = $("#DDL_" + mapExt.AttrsOfActive);
+                            if (ddlParent.length == 1 && ddlChild.length == 1)
+                                DDLAnsc(element.value, "DDL_" + mapExt.AttrsOfActive, mapExt, showWay);
+
+
+                        });
+                        var ddlParent = $("#DDL_" + mapExt.AttrOfOper);
+                        var showWay = ddlParent.attr("data-info");
+                        var ddlChild = $("#DDL_" + mapExt.AttrsOfActive);
+                        if (ddlParent.length == 1 && ddlChild.length == 1)
+                            DDLAnsc(ddlParent.val(), "DDL_" + mapExt.AttrsOfActive, mapExt, showWay);
+                    }
+
+                })
+            }
+            if ($(".ccdate").length > 0) {
+                $.each($(".ccdate"), function (i, item) {
+                    laydate.render({
+                        elem: '#' + item.id //指定元素
+                        , type: $(item).attr("data-info")
+                    });
+                })
+            }
+            //获取列
+            var cols = GetColoums(frmDict.GetPara("MultiTitle1"), frmDict.GetPara("MultiTitle"), frmDict.ColorSet, frmDict.SortColumns, parseInt(frmDict.RowOpenModel), frmDict.Name, 2);
+            if (searchData.dateTabSearch.key != undefined)
+                SearchByDate("month", "1月", "month", null);
+            var tableData = SearchData();
+            //渲染table
+            //主页面数据
+            var vtable = table.render({
+                elem: '#lay_table_dict',
+                id: 'lay_table_dict',
+                data: tableData,
+                title: '数据表',
+                height: $(document).height() - $("#view").height() - 130,
+                cellMinWidth: 120,
+                size: 'lg',
+                cols: cols,
+                page: false
+            });
+            renderLaypage();
+            //触发行双击事件
+            table.on('rowDouble(dict)', function (obj) {
+                var row = obj.data;
+                var pkval = row["OID"];
+
+                var rowstr = JSON.stringify(row);
+                rowstr = encodeURIComponent(rowstr);
+                OpenIt(pkval, 2, row["BillState"], rowstr);
+            });
+
+            table.on('sort(dict)', function (obj) { //注：sort 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                orderBy = obj.field; //当前排序的字段名
+                orderWay = obj.type;//当前排序类型：desc（降序）、asc（升序）、null（空对象，默认排序）
+                //尽管我们的 table 自带排序功能，但并没有请求服务端。
+                //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
+                tableData = SearchData();
+                table.reload('lay_table_dict', tableData);
+
+            });
+
+            //工具栏的操作
+            $('#view .layui-btn').on('click', function () {
+                var type = $(this).data('type');
+                switch (type) {
+                    case "search":
+                        Search();
+                        break;
+
+                    case "add"://新增
+                        var frmID = GetQueryString("FrmID");
+
+                        var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+                        handler.AddUrlData();
+
+                        var data = handler.DoMethodReturnString("MyDict_CreateBlankDictID");
+
+                        if (data.indexOf('err@') == 0) {
+                            alert(data);
+                            return;
+                        }
+
+                        OpenIt(data, 2, 0);
+                        break;
+                    case "delete"://删除数据
+                        var checkStatus = table.checkStatus(vtable.config.id);
+                        if (checkStatus.data.length == 0) {
+                            layer.alert("请选择删除的行");
+                            return;
+                        }
+                        layer.confirm('确定要删除选择的数据吗?', function (index) {
+                            var workid = "";
+                            for (var i = 0; i < checkStatus.data.length; i++) {
+                                workid += "'" + checkStatus.data[i]["OID"] + "',";
+                            }
+                            workid = workid.substring(0, workid.length - 1);
+                            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+                            handler.AddPara("FrmID", GetQueryString("FrmID"));
+                            handler.AddPara("WorkIDs", workid);
+                            var data = handler.DoMethodReturnString("MyDict_Deletes");
+
+                            if (data.indexOf('err@') == 0) {
+                                layer.alert(data);
+                                return;
+                            }
+                            pageIdx = 1;
+                            tableData = SearchData();
+                            table.reload('lay_table_dict', { data: tableData });
+                            layui.laypage.render();
+                            layer.close(index);
+
+                        });
+                        break;
+                    case "imp"://导入
+                        var url = "./Opt/Imp.htm?FrmID=" + GetQueryString("FrmID") + "&EntityType=2";
+                        OpenLayuiDialog(url, "导入模板数据", window.innerWidth / 2, 0, null, true);
+                        break;
+                    case "exp"://导出
+                        table.exportFile(vtable.config.id, tableData, 'xls');
+                        break;
+                    case "group"://跳转到分组页面
+                        url = "Group.htm?FrmID=" + GetQueryString("FrmID");
+                        window.location.href = url;
+                        break;
+                    case "Link"://链接
+                        var no = $(this).data('no');
+                        var source = $(this).data('source');
+                        OpenLink(no, source);
+                        break;
+                    case "Func"://方法
+                        var no = $(this).data('no');
+                        var source = $(this).data('source');
+                        OpenFunc(no, source);
+                        break;
+                    case "Bill"://方法
+                        var no = $(this).data('no');
+                        var source = $(this).data('source');
+                        OpenBill(no, source);
+                        break;
+                    case "FlowEntityBatchStart":
+                        var no = $(this).data('no');
+                        var source = $(this).data('source');
+                        OpenFlow(no, source);
+                        break;
+                    case "FlowNewEntity":
+                        var no = $(this).data('no');
+                        var source = $(this).data('source');
+                        OpenFlowEntity(no, source);
+                        break;
+                    default:
+                        layer.alert(type + "的方法还没有解析");
+                        break;
+                }
+            });
+
+        });
+        function renderLaypage() {
+            //执行一个laypage实例
+            layui.laypage.render({
+                elem: 'page' //注意，这里的 page 是 ID，不用加 # 号
+                , count: ur.GetPara("RecCount") //数据总数，从服务端得到
+                , limits: [5, 10, 15, 20, 25]
+                , layout: ['prev', 'page', 'next', 'limit', 'skip', 'count']
+                , jump: function (obj, first) {
+
+                    if (!first) {
+                        pageIdx = obj.curr;
+                        pageSize = obj.limit;
+                        //刷新数据
+                        var tableData = SearchData();
+                        layui.table.reload('lay_table_dict', { data: tableData });
+                    }
+
+                }
+            });
+            $('#page').css('text-align', 'right');  // 分页右对齐
+            $('.layui-table-page').css('text-align', 'right');  //
+
+        }
+        /**
+         * 初始化查询条件按钮功能
+         */
+        var searchData = {};
+        var mapExts;
+        function InitToolBar() {
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+            handler.AddPara("FrmID", frmID);
+            var data = handler.DoMethodReturnString("Search_ToolBar");
+            if (data.indexOf('err@') == 0) {
+                layer.alert(data);
+                console.log(data);
+                return;
+            }
+            var data = JSON.parse(data);
+            //单据表单属性
+            var mapData = data.Sys_MapData;
+            var attrs = data.Attrs;
+            var atPara = mapData[0].AtPara;
+            mapExts = data.Sys_MapExt;
+
+            var inputSearch = [];
+            var dateTabSearch = {};
+            var dateSearch = [];
+            var selectSearch = [];
+            var btns = [];
+            var stringSearchKeys = GetPara(atPara, "StringSearchKeys");
+            //时间查询展示方式 0 时间从到、 1 table表格查询模式
+            var dateShowType = GetPara(atPara, "DTShowWay");
+            dateShowType = dateShowType == null || dateShowType == undefined || dateShowType == "" ? "0" : dateShowType;
+            if (dateShowType == "1" && GetPara(atPara, "DTSearchWay") != "0") {
+                var beginDate = GetPara(atPara, "DateShowYear");
+                var date = new Date(beginDate);
+                var year = date.getFullYear();
+                var currYear = new Date().getFullYear();
+                var years = [];
+                for (currYear; currYear >= year; currYear--)
+                    years.push(currYear);
+                //需要展示开始时间
+                dateTabSearch = {
+                    key: "Date",
+                    DTSearchKey: GetPara(atPara, "DTSearchKey"),
+                    Year: years,
+                    Month: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+                    JiDu: ["一季度", "二季度", "三季度", "四季度"],
+                    value: ["2021", "1月", "一季度"]
+                }
+            }
+            searchData["dateTabSearch"] = dateTabSearch;
+            if (stringSearchKeys != null && stringSearchKeys != undefined && stringSearchKeys != "") {
+                var strs = stringSearchKeys.split("*");
+                var fieldV = ""
+                $.each(strs, function (i, str) {
+                    if (str != "") {
+                        var item = str.split(",");
+                        fieldV = ur.GetPara(item[0]);
+                        if (fieldV == null || fieldV == undefined)
+                            fieldV = "";
+                        if (item.length == 2) {
+                            inputSearch.push({
+                                key: item[0],
+                                label: item[1],
+                                value: fieldV
+                            })
+                        }
+                    }
+                });
+            } else if (GetPara(atPara, "IsSearchKey") == "1") {
+                var keyLabel = GetPara(atPara, "DTSearchLabel");
+                inputSearch.push({
+                    key: "Key",
+                    label: "关键字",
+                    value: ur.SearchKey
+                })
+            }
+            searchData["inputSearch"] = inputSearch;
+            if (dateShowType == "0" && GetPara(atPara, "DTSearchWay") != "0") {
+                var dtFrom = GetPara(atPara, "DTSearchLabel");
+                if (dtFrom == undefined)
+                    dtFrom = '日期从';
+                dateSearch.push({
+                    dtFromKey: 'DTFrom',
+                    dtToKey: 'DTTo',
+                    dtFromLabel: dtFrom,
+                    dtFromValue: ur.DTFrom,
+                    dtToValue: ur.DTTo,
+                    dtType: GetPara(atPara, "DTSearchWay") == "1" ? "date" : "datetime"
+                })
+            }
+            searchData["dateSearch"] = dateSearch;
+            //格式为: @WFSta=0@FK_Dept=02
+            var json = AtParaToJson(ur.Vals);
+            var ddlShowWays = GetPara(atPara, "DDLShowWays");
+            ddlShowWays = ddlShowWays == null || ddlShowWays == undefined ? "" : ddlShowWays;
+            ddlShowWays = ddlShowWays.replace(/[*]/g, "@");
+            ddlShowWays = AtParaToJson(ddlShowWays);
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                var val = json[attr.Field];
+                val = val == null || val == undefined || val == "" || val == "null" ? "all" : val;
+                /**selectSearch.push({
+                    key: attr.Field,
+                    label: attr.Name,
+                    value: val,
+                    showWay: ddlShowWays[attr.Field], //0下拉 1平铺
+                    operations: []
+                });*/
+                selectSearch = InitDDLOperation(data, attr, val, ddlShowWays, selectSearch);
+
+            }
+            searchData["selectSearch"] = selectSearch;
+            //获得配置的按钮.
+
+            if (frmDict.BtnNewLable == "") frmDict.BtnNewLable = "新建";
+            if (frmDict.BtnDelLable == "") frmDict.BtnDelLable = "删除";
+            if (frmDict.BtnImpExcel == "") frmDict.BtnImpExcel = "导入";
+            if (frmDict.BtnExpExcel == "") frmDict.BtnExpExcel = "导出";
+            if (frmDict.BtnGroupLabel == "") frmDict.BtnGroupLabel = "分析";
+
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_API");
+            handler.AddPara("FrmID", frmID);
+            var powerData = handler.DoMethodReturnString("CCFrom_FrmPower");
+            if (powerData.indexOf("err@") != -1) {
+                alert(powerData);
+                return;
+            }
+            powerData = JSON.parse(powerData);
+            btns.push({
+                label: "查询",
+                type: 'search',
+            })
+            //权限判断按钮.
+            if (parseInt(powerData.IsInsert) == 1)
+                btns.push({
+                    label: frmDict.BtnNewLable,
+                    type: 'add',
+                })
+            if (parseInt(powerData.IsDelete) == 1) {
+                isHaveDelOper = true;
+                btns.push({
+                    label: frmDict.BtnDelLable,
+                    type: 'delete'
+                })
+            }
+
+            if (frmDict.BtnImpExcelEnable == 1)
+                btns.push({
+                    label: frmDict.BtnImpExcel,
+                    type: 'imp'
+                })
+            if (frmDict.BtnExpExcelEnable == 1)
+                btns.push({
+                    label: frmDict.BtnExpExcel,
+                    type: 'exp'
+                })
+            if (frmDict.BtnGroupEnable == 1)
+                btns.push({
+                    label: frmDict.BtnGroupLabel,
+                    type: 'group'
+                })
+            //增加方法.
+            //获得当前的集合.
+            var frms = data["Frm_Method"];
+            var colls = data["Frm_Collection"];
+            //var menus = data["GPM_Menu"];
+            $.each(frms, function (index, frm) {
+                btns.push({
+                    label: frm.Name,
+                    type: frm.MethodModel,
+                    no: frm.No,
+                    source: "Method"
+                })
+            })
+            /**$.each(menus, function (index, menus) {
+                btns.push({
+                    label: menus.Name,
+                    type: menus.MenuModel,
+                    no: menus.No,
+                    source: "Menu"
+                })
+            })**/
+            if (frms.length > 0)
+                isHaveSeachOper = true;
+            $.each(colls, function (index, coll) {
+                if (isHaveSeachOper == false && coll.MethodModel != "FlowNewEntity")
+                    isHaveSeachOper = true;
+                btns.push({
+                    label: coll.Name,
+                    type: coll.MethodModel,
+                    no: coll.No,
+                    source: "Collection"
+
+                })
+            })
+
+            searchData["btns"] = btns;
+
+            return searchData;
+        }
+
+    </script>
+    <script>
+        $(function () {
+            var theme = localStorage.getItem("themeColorInfo");
+            theme = JSON.parse(theme);
+            var styleScope = document.getElementById("theme-data")
+            styleScope.innerHTML = "\n .layui-btn{\n background-color:" + theme.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + theme.selectedMenu + ";\n}";
+            styleScope.innerHTML += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:" + theme.selectedMenu + " !important\n}";
+            styleScope.innerHTML += "\n .layui-form-select dl dd.layui-this{\n background-color:" + theme.selectedMenu + " !important;\n}";
+            styleScope.innerHTML += "\n .layui-tab-title .layui-this{\n background-color:" + theme.selectedMenu + " !important;\n} \n .layui-tab-title>.layui-this{\n color:#fff;\n} \n .layui-tab-title li {border: 1px solid " + theme.selectedMenu + ";}";
+            styleScope.innerHTML += "\n .layui-a-this{\n background-color:" + theme.selectedMenu + ";\n padding: 3px;\n color: #fff;\n}";
+        })
+    </script>
+</body>
+</html>

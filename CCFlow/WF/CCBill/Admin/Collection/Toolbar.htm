@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>链接</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../EnumLab.js"></script>
+    <script src="../../../Admin/Admin.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+
+            //  InitBar(0);
+
+            InitBar("Toolbar");
+
+        });
+
+        function Save() {
+
+            alert("不提供保存");
+
+            Goto();
+
+        }
+        function Goto() {
+            // var url = "../../../Comm/RefFunc/EnOnly.htm?EnName=BP.CCBill.FrmDict&No=" + GetQueryString("FrmID");
+            var url = "../../../Comm/En.htm?EnName=BP.CCBill.FrmDict&No=" + GetQueryString("FrmID");
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+
+
+        <legend> 设置说明</legend>
+        <ul>
+            <li> 1.工具栏按钮权限属于实体组件的一部分。 </li>
+            <li> 2.按照节点属性的设置习惯，我们把其放入了实体属性里设置。 </li>
+            <li> 3.<button onclick="Goto()"> 进入设置实体属性 </button> </li>
+
+        </ul>
+        <legend> 运行效果</legend>
+        <img src="ToolbarRuning.png" class="HelpImg" style="width:60%;" />
+
+        <legend> 设置效果</legend>
+        <img src="ToolbarSetting.png" class="HelpImg" style="width:60%;" />
+        <!--<input type="button" id="Btn_Save" name="Btn_Save" value="执行创建" onclick="Save();" />-->
+        <div id="Msg"></div>
+    </fieldset>
+
+
+</body>
+</html>

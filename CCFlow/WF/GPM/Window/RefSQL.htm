@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>参考SQL</title>
+</head>
+<body>
+
+    <fieldset>
+        <legend> 流程实例的状态分布情况 </legend>
+        <ul>
+            <li>查询整个公司的流程实例分布情况</li>
+            <li>SELECT WFState, count(*) as Num FROM WF_GenerWorkFlow WHERE OrgNo='@WebUser.OrgNo' AND WFState!=0 </li>
+            <li>查询我部门的流程实例分布情况</li>
+            <li>SELECT WFState, count(*) as Num FROM WF_GenerWorkFlow WHERE OrgNo='@WebUser.FK_Dept' AND WFState!=0 </li>
+        </ul>
+
+        <legend> 流程实例发起的情况 </legend>
+        <ul>
+            <li>查询整个公司的流程实例分布情况</li>
+            <li>SELECT FlowName, count(*) as Num FROM WF_GenerWorkFlow WHERE OrgNo='@WebUser.OrgNo' AND WFState!=0 </li>
+            <li>查询我部门的流程实例分布情况</li>
+            <li>SELECT FlowName, count(*) as Num FROM WF_GenerWorkFlow WHERE FK_Dept='@WebUser.FK_Dept' AND WFState!=0 </li>
+        </ul>
+
+    </fieldset>
+
+</body>
+</html>

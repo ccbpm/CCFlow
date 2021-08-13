@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>SQL模式</title>
+
+
+    <link rel="stylesheet" href="../../../Scripts/CodeMirror/doc/docs.css" />
+    <link rel="stylesheet" href="../../../Scripts/CodeMirror/lib/codemirror.css" />
+    <link rel="stylesheet" href="../../../Scripts/CodeMirror/theme/eclipse.css" />
+    <link rel="stylesheet" href="../../../Scripts/CodeMirror/theme/elegant.css" />
+    <link rel="stylesheet" href="../../../Scripts/CodeMirror/theme/erlang-dark.css" />
+    <link rel="stylesheet" href="../../../Scripts/CodeMirror/theme/idea.css" />
+    <script src="../../../Scripts/CodeMirror/lib/codemirror.js"></script>
+    <script src="../../../Scripts/CodeMirror/mode/javascript/javascript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CodeMirror/addon/selection/active-line.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CodeMirror/addon/edit/matchbrackets.js" type="text/javascript"></script>
+
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+
+        //页面启动函数.
+        var en = null;
+        var funcstr = "";
+        $(function () {
+
+            InitBar(0); //SQL模式.
+
+            var no = GetQueryString("No");
+            en = new Entity("BP.CCBill.Sys.Func", no);
+
+            //  GenerBindEnumKey("DDL_WhatAreYouTodo", "WhatAreYouTodo", en.WhatAreYouTodo);
+
+            //给控件赋值.
+            //GenerFullAllCtrlsVal(en);
+
+            //设置内容.
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_MethodDoc");
+            handler.AddPara("TypeOfFunc", 0);
+            handler.AddPara("No", en.No);
+            var data = handler.DoMethodReturnString("MethodDoc_GetScript");
+            editor.setValue(data);
+
+            //生成参数内容.
+            var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", no);
+            var html = "<font color=blue ><b>//自定义方法名:" + en.Name + ",共有:" + attrs.length + "参数;&nbsp;";
+
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                html += "" + attr.Name + "," + attr.KeyOfEn + ";&nbsp;";
+            }
+
+            html += "</b></font>";
+            $("#paras").html(html);
+
+            html = "";
+            html += "<font color=blue ><b> function </b></font> <font color=red ><b>" + en.MethodID + "</b></font> <font color=blue ><b>(</b></font>";
+            funcstr = "function " + en.MethodID + "(";
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                if (i == attrs.length - 1) {
+                    html += "<font color=PINK ><b>&nbsp;" + attr.KeyOfEn + "</b></font>";
+                    funcstr += attr.KeyOfEn;
+                } else {
+                    html += "<font color=PINK ><b>&nbsp;" + attr.KeyOfEn + "</b></font><font color=blue ><b>,</b></font>";
+                    funcstr += attr.KeyOfEn + ",";
+                }
+            }
+            html += "<font color=blue ><b>)</b></font>&nbsp;<font color=blue font-size='12px'><b>{</b></font>";
+            funcstr += "){";
+
+            $("#funcStr").html(html);
+
+        });
+
+        function Save() {
+
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_MethodDoc");
+            handler.AddUrlData();
+            var doc = editor.getValue();
+            doc = doc.replace(/-/g, "/$");
+            doc = doc.replace(/[+]/g, "/#");
+
+            handler.AddPara("doc", doc); //不知道是否可以存储.
+            handler.AddPara("TypeOfFunc", 0);
+            handler.AddPara("funcstr", funcstr + doc + " \r\n }");//拼上function部分
+
+            var data = handler.DoMethodReturnString("MethodDoc_SaveScript");
+
+            window.location.href = window.location.href;
+        }
+        function ToMethodParas() {
+            window.location.href = "MethodParas.htm?No=" + GetQueryString("No");
+        }
+
+        var editor = CodeMirror.fromTextArea(document.getElementById("tb_doc"), {
+            lineNumbers: true,
+            styleActiveLine: true,
+            matchBrackets: true,
+            theme: "erlang-dark"
+        });
+
+        var input = document.getElementById("select");
+        function selectTheme() {
+            var theme = input.options[input.selectedIndex].textContent;
+            editor.setOption("theme", theme);
+            location.hash = "#" + theme;
+        }
+
+
+        window.addEventListener("keydown", function (e) {
+            //可以判断是不是mac，如果是mac,ctrl变为花键
+            //event.preventDefault() 方法阻止元素发生默认的行为。
+            if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+                e.preventDefault();
+                Save();
+                // Process event...
+                //document.getElementById("test").innerHTML = "ctrl+s成功";
+            }
+        }, false);
+
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend> SQL表达式 </legend>
+        <div id="funcStr"> </div>
+        <textarea id="tb_doc" style="width: 90%; height: 80%;" rows="40"> </textarea>
+        <legend> 参数 </legend>
+        <ul>
+            <li> <button id='Btn_Attrs' onclick='Paras()'>设置参数</button> - <button id='Btn_Attrs' onclick='FrmAttrs()'>表单参考字段</button> </li>
+            <li>  <div id="paras"> </div></li>
+        </ul>
+        <legend> 帮助</legend>
+        <ul>
+            <li>您可以编写SQL语句在这个方法里。</li>
+            <li>在SQL的表达式里，有@OID作为参数字段。</li>
+            <li>可以使用参数按钮，为执行该方法增加参数。</li>
+        </ul>
+    </fieldset>
+
+    <script type="text/javascript">
+
+        var editor = CodeMirror.fromTextArea(document.getElementById("tb_doc"), {
+            lineNumbers: true,
+            styleActiveLine: true,
+            matchBrackets: true,
+            theme: "erlang-dark"
+        });
+
+
+        var input = document.getElementById("select");
+        function selectTheme() {
+            var theme = input.options[input.selectedIndex].textContent;
+            editor.setOption("theme", theme);
+            location.hash = "#" + theme;
+        }
+
+        /*
+        var choice = (location.hash && location.hash.slice(1)) ||
+        (document.location.search &&
+        decodeURIComponent(document.location.search.slice(1)));
+        if (choice) {
+        input.value = choice;
+        editor.setOption("theme", choice);
+        }
+        CodeMirror.on(window, "hashchange", function() {
+        var theme = location.hash.slice(1);
+        if (theme) { input.value = theme; selectTheme(); }
+        });*/
+    </script>
+
+</body>
+</html>

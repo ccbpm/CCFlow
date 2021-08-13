@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>内置的DTS</title>
+
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(function () {
+
+            InitBar(3); //url模式.
+
+            var no = GetQueryString("No");
+            en = new Entity("BP.CCBill.Sys.Func", no);
+
+            $("#TB_Url").val(en.Tag1);
+
+            //生成参数内容.
+            var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", no);
+            var html = "<b>共有:" + attrs.length + "参数;&nbsp;";
+
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                html += "【" + attr.Name + "," + attr.KeyOfEn + ";】";
+            }
+            html += "</b></font>";
+            $("#paras").html(html);
+
+        });
+
+        function Save() {
+
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_MethodDoc");
+            handler.AddUrlData();
+
+            var url = $("#TB_Url").val();
+
+            if (url == "" || url == undefined) {
+                alert("请输入方法名.");
+                return;
+            }
+
+            handler.AddPara("TypeOfFunc", 3); //后台方法..
+            handler.AddPara("Tag1", url);
+            var data = handler.DoMethodReturnString("MethodDoc_SaveScript");
+
+            alert(data);
+
+
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend> 参数</legend>
+        <ul>
+            <li> <div id="paras"></div></li>
+            <li> <button id='Btn_Attrs' onclick='Paras()'>设置参数</button> - <button id='Btn_Attrs' onclick='FrmAttrs()'>表单参考字段</button> </li>
+        </ul>
+        <legend> 方法名设置</legend>
+        <ul>
+            <li> 要执行的方法类名:<input type="text" id="TB_Url" name="TB_Url" placeholder="方法类名字" /> </li>
+            <li> 比如:<b> BP.CCBill.Demo.M_ZhuXiaoXueJi </b> </li>
+        </ul>
+
+        <legend>什么是内置的DTS ? </legend>
+        <ul>
+            <li>1. 自己编写一个类，从指定的BP.En.Methond 基类下来，并且这个类需要在BP.*开头，并且能在bin的目录里。 </li>
+            <li>2. 重写Do方法，实现业务代码的承载。 </li>
+            <li>3. 下图是一个代码实例: BP.CCBill.Demo.M_ZhuXiaoXueJi 。 </li>
+        </ul>
+        <legend> 代码 Java </legend>
+        <img src="3.DTS_Java.png" class="HelpImg" />
+        <legend> 代码 C# </legend>
+        <img src="3.DTS.png" class="HelpImg" />
+    </fieldset>
+
+</body>
+</html>

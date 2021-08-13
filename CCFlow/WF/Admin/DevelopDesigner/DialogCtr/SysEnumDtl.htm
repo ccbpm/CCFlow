@@ -1,0 +1,244 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <!-- 增加一个配置  -->
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+    <!--  <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>-->
+
+
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../../Scripts/PinYin.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <style>
+        .ctrform {
+            width: 90%;
+            margin: 0px auto;
+            display: block
+        }
+
+            .ctrform .form-group {
+                margin: 0px 5px;
+            }
+
+                .ctrform .form-group input[type=radio] {
+                    margin: 0px 5px 0px 0px;
+                }
+
+        .ctr-col {
+            line-height: 32px;
+            width: 50%;
+            float: left;
+        }
+
+        .ctr-help {
+            display: block
+        }
+
+        #DivEnumList {
+            clear: both
+        }
+
+            #DivEnumList .col-sm-4 {
+                padding: 5px 0px;
+            }
+
+                #DivEnumList .col-sm-4 span {
+                    display: inline-block;
+                    width: 20px;
+                }
+    </style>
+    <script language="javascript" type="text/javascript">
+
+        //closeWhileEscUp();
+
+        var pageData = {};
+
+        //初始化,信息.
+        $(function () {
+
+            //获得枚举值.
+            var parentKey = GetQueryString('ParentKey');
+            var enumKey = GetQueryString('EnumKey');
+            var enumDtl = new Entity("BP.Sys.SysEnumMain", enumKey);
+
+            $("#TB_EnumName").val(enumDtl.Name);
+            $("#TB_EnumKey").val(enumDtl.EnumKey);
+
+            //获得主表的数据.
+            var dtls = new Entities("BP.Sys.SysEnums");
+            dtls.Retrieve("EnumKey", parentKey);
+
+            var html = "<table>";
+            html += "<tr>";
+            html += "<th>#</th>";
+
+            for (var i = 0; i < dtls.length; i++) {
+                var dtl = dtls[i];
+                html += "<th>" + dtl.Lab + " - [" + dtl.IntKey + "]</th>";
+            }
+            html += "</tr>";
+
+            for (var i = 0; i < 20; i++) {
+
+                html += "<tr>";
+                html += "<th>" + i + "</th>";
+                for (var iDtl = 0; iDtl < dtls.length; iDtl++) {
+
+                    var dtl = dtls[iDtl];
+
+                    var num = dtl.IntKey * 100 + i;
+
+                    html += "<td><input type=text id='TB_Enum_" + num + "'  /></td>";
+                }
+                html += "</tr>";
+            }
+
+            html += "</table>";
+            $("#DivEnumList").html(html);
+
+
+            //获得存储的明细数据.
+            var dtlSubs = new Entities("BP.Sys.SysEnums");
+            dtlSubs.Retrieve("EnumKey", enumKey);
+
+            for (var i = 0; i < dtlSubs.length; i++) {
+                var dtl = dtlSubs[i];
+                $("#TB_Enum_" + dtl.IntKey).val(dtl.Lab);
+            }
+            return;
+
+        });
+
+        function Delete()
+        {
+            if (window.confirm("您确认要删除吗?") == false)
+                return;
+
+            var enumKey = GetQueryString('EnumKey');
+            var enumDtl = new Entity("BP.Sys.SysEnumMain", enumKey);
+            enumDtl.Delete();
+
+            var url = "FrmEnumeration.htm?ParentKey=" + enumDtl.No + "&EnumKey=" + enumDtl.GetPara("DtlEnumKey");
+            url += "&DoType=" + GetQueryString("DoType");
+            url += "&FK_MapData=" + GetQueryString("FK_MapData");
+            url += "&Type=" + GetQueryString("Type");
+            url += "&DataType=" + GetQueryString("DataType");
+            window.location.href = url;
+        }
+
+        //执行保存.
+        function SaveEnum() {
+
+            //组织数据.
+            var name = $("#TB_EnumName").val();
+
+            var enumKey = GetQueryString('EnumKey');
+
+            //删除键值.
+            var dtlSubs = new Entities("BP.Sys.SysEnums");
+            dtlSubs.Delete("EnumKey", enumKey);
+
+
+            //获得所有tb集合.
+            var tbs = $("input");
+
+            var strs = ""; //用于存储到主表上..
+
+            //创建实例.
+            var se = new Entity("BP.Sys.SysEnum");
+
+            for (var i = 0; i < tbs.length; i++) {
+
+                var tb = tbs[i];
+                var id = tb.id;
+
+                if (id == null) continue;
+
+                var idx = id.indexOf('_Enum_');
+
+                if (idx == -1) continue;
+                if (idx == 0) continue;
+                debugger;
+                var val = tb.value;
+                if (val == null || val == '') continue;
+
+                var intkey = tb.id.replace('TB_Enum_', '');
+
+                strs += '@' + intkey + '=' + val; //该变量用于保存sys_EnumMain .
+
+                //给实体的各个属性赋值.
+                se.EnumKey = enumKey;
+                se.Lab = val;
+                se.IntKey = intkey;
+                se.Lang = "CH";
+                se.MyPK = se.EnumKey + '_CH_' + se.IntKey;
+                se.SetPKVal(se.MyPK);
+                se.Insert();
+            }
+
+            //做更新.
+            var enumDtl = new Entity("BP.Sys.SysEnumMain", enumKey);
+            enumDtl.CfgVal = strs;
+            enumDtl.Update();
+
+            $("#Msg").html("保存成功.");
+
+            var url = "FrmEnumeration.htm?ParentKey=" + enumDtl.No + "&EnumKey=" + enumDtl.GetPara("DtlEnumKey");
+            url += "&DoType=" + GetQueryString("DoType");
+            url += "&FK_MapData=" + GetQueryString("FK_MapData");
+            url += "&DataType=" + GetQueryString("DataType");
+            window.location.href = url;
+
+            // window.location.href = "SysEnumList.htm";
+        }
+    </script>
+</head>
+<body class="easyui-layout group-easyui-body">
+    <div data-options="region:'center'">
+        <div id="tabs" class="easyui-tabs" data-options="fit:true ,border:false">
+            <div title="枚举信息" id="tab_Edit">
+                <table>
+                    <tr>
+                        <td>标签 </td>
+                        <td><input id="TB_EnumName" class="cc-input" /> </td>
+                        <td>枚举键值 </td>
+                        <td><input id="TB_EnumKey" class="cc-input" /> </td>
+                        <td>
+
+                            <input type="button" class="cc-btn-tab" value="保存" onclick="SaveEnum()" />
+                            <input type="button" class="cc-btn-tab" value="删除" onclick="Delete()" />
+
+                            <div id="Msg"> </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="container">
+                    <div class="">
+                        <div id='DivEnumList'></div>
+                    </div>
+
+                    <fieldset id="help">
+                        <legend id="help">帮助</legend>
+                        <ul>
+                            <li>1. 请在标签上面输入枚举中文名，比如:"请假类型" </li>
+                            <li>2. 系统自动生成枚举标识字段，QJLX .</li>
+                            <li>3. 请在右边文本框列表，输入枚举值，比如: 病假  事假 婚假 其他</li>
+                            <li>4. 点击保存.</li>
+                        </ul>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

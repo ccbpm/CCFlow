@@ -1,6 +1,4 @@
-﻿
-
-//检查字段,从表名,附件ID,输入是否合法.
+﻿//检查字段,从表名,附件ID,输入是否合法.
 function CheckID(val) {
 
     //首位可以是字母以及下划线。 
@@ -815,31 +813,6 @@ function closeWhileEscUp() {
         }
     });
 }
-function DBAccess() {
-
-    var url = Handler + "?SQL=select * from sss";
-    $.ajax({
-        type: "GET", //使用GET或POST方法访问后台
-        dataType: "json", //返回json格式的数据
-        contentType: "text/plain; charset=utf-8",
-        url: url, //要访问的后台地址
-        async: true,
-        cache: false,
-        xhrFields: {
-            withCredentials: IsIELower10 == true ? false : true
-        },
-        crossDomain: IsIELower10 == true ? false : true,
-        complete: function () { }, //AJAX请求完成时隐藏loading提示
-        error: function (XMLHttpRequest, errorThrown) {
-            callback(XMLHttpRequest);
-        },
-        success: function (data) { //msg为返回的数据，在这里做数据绑定
-            callback(data, scope);
-        }
-    });
-
-}
-
 
 /* 关于实体的类
 GEEntity_Init
@@ -918,8 +891,6 @@ var Entity = (function () {
         });
         return params.join("&");
     }
-
-
 
     if (plant == "CCFlow") {
         // CCFlow
@@ -1188,10 +1159,11 @@ var Entity = (function () {
                         alert(data);
                         return;
                     }
-                    $.each(jsonString, function (n, o) {
-                        jsonString[n] = undefined;
-                    });
-                    setData(self);
+                    //这个位置暂时去掉，保持删除Entity后信息仍然保留
+                    /* $.each(jsonString, function (n, o) {
+                         jsonString[n] = undefined;
+                     });
+                     setData(self);*/
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert("Delete 系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
@@ -1815,7 +1787,21 @@ var Entities = (function () {
                 }
             });
         },
+        TurnToArry: function () {
 
+            var ens = this;
+            delete ens.Paras;
+            delete ens.ensName;
+            delete ens.length;
+            var arr = [];
+            for (var key in ens) {
+                if (Object.hasOwnProperty.call(ens, key)) {
+                    var en = ens[key];
+                    arr.push(en);
+                }
+            }
+            return arr
+        },
         Retrieve: function () {
             var args = [""];
             $.each(arguments, function (i, o) {
@@ -2499,6 +2485,7 @@ var HttpHandler = (function () {
 
 var webUserJsonString = null;
 var WebUser = function () {
+
     if (dynamicHandler == "")
         return;
     if (webUserJsonString != null) {
@@ -2518,26 +2505,19 @@ var WebUser = function () {
         dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
     }
 
-    /*
-    try {
-    if (typeof (eval(webUser)) == "undefined") {
-    console.log("已声明变量,但未初始化");
-    // return false;
-    } else {
-    console.log("已声明变量,且已经初始化");
-    return true;
-    }
-    } catch (e) {
-    console.log("未声明变量");
-    }
+    //获得页面上的token. 在登录信息丢失的时候，用token重新登录.
+    var token = GetQueryString("Token");
+    if (token == null || token == undefined) token = GetQueryString("SID");
+    if (token == null || token == undefined) {
+        var parent = window.parent;
+        if (parent == null || parent == undefined) {
 
-    if (webUser != undefined) {
-    var self = this;
-    $.each(jsonString, function (n, o) {
-    self[n] = o;
-    });
-    return;
-    }*/
+        } else {
+            /*var url = parent.location.href;
+            token = getQueryStringByNameFromUrl(url, "Token");
+            if (token == null || token == undefined) token = getQueryStringByNameFromUrl("SID");*/
+        }
+    }
 
     $.ajax({
         type: 'post',
@@ -2546,7 +2526,7 @@ var WebUser = function () {
             withCredentials: IsIELower10 == true ? false : true
         },
         crossDomain: IsIELower10 == true ? false : true,
-        url: dynamicHandler + "?DoType=WebUser_Init&t=" + new Date().getTime(),
+        url: dynamicHandler + "?DoType=WebUser_Init&Token=" + token + "&t=" + new Date().getTime(),
         dataType: 'html',
         success: function (data) {
 
@@ -2556,6 +2536,8 @@ var WebUser = function () {
                 } else {
                     alert(data);
                 }
+                if (window.top.vm != null)
+                    window.top.vm.logoutExt();
                 return;
             }
 
@@ -2936,17 +2918,21 @@ $(function () {
     //不需要权限信息..
     if (url.indexOf('login.htm') != -1
         || url.indexOf('dbinstall.htm') != -1
+        || url.indexOf('scanguide.htm') != -1
+
         || url.indexOf('qrcodescan.htm') != -1
         || url.indexOf('default.htm') != -1
         || url.indexOf('index.htm') != -1
+        || url.indexOf('gotourl.htm') != -1
+        || url.indexOf('invited.htm') != -1
         || url.indexOf('registerbywebsite.htm') != -1
         || url.indexOf('reqpassword.htm') != -1
         || url.indexOf('reguser.htm') != -1
         || url.indexOf('port.htm') != -1
         || url.indexOf('ccbpm.cn/') != -1
-        || url.lastIndexOf('/') == 0
-        || url.lastIndexOf('.') == -1
-        || url.lastIndexOf('.') >= 4
+        // || url.lastIndexOf('/') == 0
+        //|| url.lastIndexOf('.') == -1  //这个地方不能增加。
+        //|| url.lastIndexOf('.') >= 4
         || url.indexOf('loginwebsite.htm') != -1) {
         return;
     }
@@ -3068,17 +3054,17 @@ function groupBy(array, f) {
  * @param {any} fid
  * @param {any} pworkid
  */
-function JumpFlowPage(pageType, title, workid, fk_flow, fk_node, fid, pworkid,isread,paras) {
+function JumpFlowPage(pageType, title, workid, fk_flow, fk_node, fid, pworkid, isread, paras) {
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
     if (pageType == "MyView")
         handler = new HttpHandler("BP.WF.HttpHandler.WF_MyView");
     if (workid != null && workid != undefined)
-        handler.AddPara("WorkID",workid);
+        handler.AddPara("WorkID", workid);
     handler.AddPara("FK_Flow", fk_flow);
     if (fk_node != null && fk_node != undefined)
-        handler.AddPara("FK_Node",fk_node);
+        handler.AddPara("FK_Node", fk_node);
     if (fid != null && fid != undefined)
-        handler.AddPara("FID",fid);
+        handler.AddPara("FID", fid);
     if (pworkid != null && pworkid != undefined)
         handler.AddPara("PWorkID", pworkid);
     if (isread != null && isread != undefined)

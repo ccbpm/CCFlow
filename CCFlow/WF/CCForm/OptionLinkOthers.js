@@ -212,7 +212,10 @@ function cleanAll(KeyOfEn, frmType) {
 function setEnable(FK_MapData, KeyOfEn, selectVal, frmType) {
     var NDMapAttrs = [];
     var pkval = FK_MapData + "_" + KeyOfEn + "_" + selectVal;
-    var frmRB = new Entity("BP.Sys.FrmRB", pkval);
+    var frmRB = new Entity("BP.Sys.FrmRB");
+    frmRB.SetPKVal(pkval);
+    if (frmRB.RetrieveFromDBSources() == 0)
+        return;
 
     var Script = frmRB.Script;
     //解析执行js脚本

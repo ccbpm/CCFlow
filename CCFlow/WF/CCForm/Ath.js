@@ -11,6 +11,7 @@ var PreviewPathOfAth = getConfigByKey("PreviewPathOfAth", "");
 * @param athchment 附件属性
 * @param athDivID 生成的附件信息追加的位置
 */
+
 function AthTable_Init(athchment, athDivID, refPKVal) {
     if (typeof athchment != "object" && typeof athchment != "String")
         athchment = new Entity("BP.Sys.FrmAttachment", athchment);
@@ -20,9 +21,8 @@ function AthTable_Init(athchment, athDivID, refPKVal) {
         athRefPKVal = refPKVal;
 
     AthParams.FK_MapData = athchment.FK_MapData;
-
-    //2.上传的URL的设置
     var uploadUrl = "";
+    //2.上传的URL的设置
     if (plant == 'CCFlow')
         uploadUrl = basePath + '/WF/CCForm/Handler.ashx?AttachPK=' + athchment.MyPK + '&DoType=MoreAttach&FK_Flow=' + pageData.FK_Flow + '&PKVal=' + athRefPKVal;
     else {
@@ -118,6 +118,22 @@ function InitAthPage(athDivID, uploadUrl) {
     data = JSON.parse(data);
     athDesc = data["AthDesc"][0]; // 附件属性
     var dbs = data["DBAths"];  // 附件列表数据
+    //不显示附件分组
+    if (athDesc.IsVisable == "0") {
+        $("#" + athDivID).hide();
+        //傻瓜表单隐藏分组Lab
+        $("#Group_" + athDesc.MyPK).hide();
+
+        //如果是开发者表单
+        var parent = $("#" + athDivID).parent()[0];
+        if (parent&&parent.tagName.toLowerCase() == "td") {
+           
+            //当前节点的兄弟节点，如果没有input，select,就隐藏
+            var prev = $(parent).prev();
+            if (prev[0].tagName.toLowerCase() == "td" && prev[0].innerText == athDesc.Name)
+                prev.hide();
+        }
+    }
     console.log(dbs);
 
     //2.自定义表单模式.
@@ -147,14 +163,14 @@ function InitAthPage(athDivID, uploadUrl) {
     }
 
     //4.附件列表展示
-
+    debugger
     //4.1.图片的展示方式
     if (athDesc.FileType == 1) {
         $("#" + athDivID).html(FileShowPic(athDesc, dbs, uploadUrl));
         $(".athImg").on("click", function () {
             var _this = $(this); //将当前的pimg元素作为_this传入函数  
             var src = _this.parent().css("background-image").replace("url(\"", "").replace("\")", "")
-            imgShow($("#outerdiv"), $("#innerdiv"), $("#bigimg"), src);
+            imgShow(this, src);
         });
     }
     //4.2 普通附件的展示方式（包含图片，word文档，pdf等）
@@ -166,7 +182,7 @@ function InitAthPage(athDivID, uploadUrl) {
         else
             $("#tbody_" + athDesc.MyPK).html(FileShowWayTable(athDesc, dbs, uploadUrl));
     }
-
+    $("#" + athDivID).show();
 }
 
 
@@ -247,7 +263,7 @@ function FileShowWayTable(athDesc, dbs, uploadUrl) {
     //4.1.存在分组，增加一个空分组主要是为合并解析没有分组的情况
     if (isHaveSort == true && athDesc.Sort.lastIndexOf(",") + 1 != athDesc.Sort.length)
         athDesc.Sort = athDesc.Sort + ",";
-
+    athDesc.Sort = athDesc.Sort == null ? "" : athDesc.Sort;
     var fileSorts = athDesc.Sort.indexOf("@") != -1 ? athDesc.Sort.substring(athDesc.Sort.indexOf('@') + 1).split(',') : athDesc.Sort.split(',');
 
     var athIdx = 0;
@@ -442,6 +458,7 @@ function GFDoDown(mypk) {
 * @param dbs 附件列表
 */
 function FileShowPic(athDesc, dbs, uploadUrl) {
+    debugger
     var exts = athDesc.Exts;
     if (exts != null && exts != undefined && (exts.indexOf("*.*") != -1 || exts == ""))
         exts = "image/gif,image/jpg,image/jepg,image/jpeg,image/bmp,image/png,image/tif,image/gsp";
@@ -451,74 +468,26 @@ function FileShowPic(athDesc, dbs, uploadUrl) {
         var db = dbs[i];
         var url = GetFileStream(db.MyPK, db.FK_FrmAttachment);
         _Html += "<div id='" + db.MyPK + "' class='image-item athInfo' style='background-image: url(&quot;" + url + "&quot;);'>";
-        if ((athDesc.DeleteWay == 1) || ((athDesc.DeleteWay == 2) && (db.Rec == WebUser.No)))
+        if ((athDesc.DeleteWay == 1) || ((athDesc.DeleteWay == 2) && (db.Rec == webUser.No)))
             _Html += "<div class='image-close' onclick='Del(\"" + db.MyPK + "\",\"" + db.FK_FrmAttachment + "\")'>X</div>";
         _Html += "<div style ='width: 100%; height: 100%;' class='athImg' ></div>";
         _Html += "<div class='image-name' id = 'name-0-0' > ";
         if (athDesc.IsDownload == 0)
-            _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0' >" + db.FileName + "</p>";
+            _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0;overflow:hidden;text-overflow: ellipsis;white-space: nowrap' >" + db.FileName + "</p>";
         else
-            _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0' ><a href=\"javascript:Down2018('" + db.MyPK + "');\" >" + db.FileName.split(".")[0] + "</a></p>";
+            _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0;overflow:hidden;text-overflow: ellipsis;white-space: nowrap' ><a href=\"javascript:Down2018('" + db.MyPK + "');\" title='" + db.FileName.split(".")[0] +"'>" + db.FileName.split(".")[0] + "</a></p>";
         _Html += "</div>";
         _Html += "</div>";
     }
     //可以上传附件，增加上传附件按钮
     if (athDesc.IsUpload == true && pageData.IsReadonly != "1") {
 
-        _Html += "<div class='image-item space'><input type='file' id='file_" + athDesc.MyPK + "'name='file_" + athDesc.MyPK + "' accept='" + exts + "' onchange='UploadChange(\"" + uploadUrl + "\",\"" + athDesc.MyPK + "\");'></div>";
+        _Html += "<div class='image-item space'><input type='file' id='file_" + athDesc.MyPK + "'name='file_" + athDesc.MyPK + "' accept='" + exts + "' onchange='UploadChangeAth(\"" + uploadUrl + "\",\"" + athDesc.MyPK + "\");'></div>";
     }
     _Html += "</form>";
 
     return _Html;
 
-}
-
-/**
-* 图片预览
-* @param outerdiv
-* @param innerdiv
-* @param bigimg
-* @param src
-*/
-function imgShow(outerdiv, innerdiv, bigimg, src) {
-    bigimg.attr("src", src); //设置#bigimg元素的src属性  
-
-    /*获取当前点击图片的真实大小，并显示弹出层及大图*/
-    $("<img/>").attr("src", src).load(function () {
-        var windowW = $(window).width(); //获取当前窗口宽度  
-        var windowH = $(window).height(); //获取当前窗口高度  
-        var realWidth = this.width; //获取图片真实宽度  
-        var realHeight = this.height; //获取图片真实高度  
-        var imgWidth, imgHeight;
-        var scale = 0.8; //缩放尺寸，当图片真实宽度和高度大于窗口宽度和高度时进行缩放  
-
-        if (realHeight > windowH * scale) {//判断图片高度  
-            imgHeight = windowH * scale; //如大于窗口高度，图片高度进行缩放  
-            imgWidth = imgHeight / realHeight * realWidth; //等比例缩放宽度  
-            if (imgWidth > windowW * scale) {//如宽度扔大于窗口宽度  
-                imgWidth = windowW * scale; //再对宽度进行缩放  
-            }
-        } else if (realWidth > windowW * scale) {//如图片高度合适，判断图片宽度  
-            imgWidth = windowW * scale; //如大于窗口宽度，图片宽度进行缩放  
-            imgHeight = imgWidth / realWidth * realHeight; //等比例缩放高度  
-        } if (realHeight > windowH * scale) {
-            imgWidth = windowH * scale;
-            imgHeight = windowH * scale;
-        } else {//如果图片真实高度和宽度都符合要求，高宽不变  
-            imgWidth = realWidth;
-            imgHeight = realHeight;
-        }
-        bigimg.css("width", imgWidth); //以最终的宽度对图片缩放  
-
-        var w = (windowW - imgWidth) / 2; //计算图片与窗口左边距  
-        var h = (windowH - imgHeight) / 2; //计算图片与窗口上边距  
-        innerdiv.css({ "top": h, "left": w }); //设置#innerdiv的top和left属性  
-        outerdiv.fadeIn("fast"); //淡入显示#outerdiv及.pimg  
-    });
-
-    outerdiv.click(function () {//再次点击淡出消失弹出层  
-        $(this).fadeOut("fast");
-    });
 }
 
 
@@ -647,22 +616,24 @@ function Del(delPKVal, fk_framAttachment, name) {
         return;
     }
     var opt = AthParams.Opt;
-    var fileListArray = uploadFileList.getFileList(opt);
-    var newFileListArray = [];
-    for (var i = 0; i < fileListArray.length; i++) {
-        if (fileListArray[i].name == name)
-            continue;
-        newFileListArray.push(fileListArray[i]);
-    }
+    if (opt != undefined) {
+        var fileListArray = uploadFileList.getFileList(opt);
+        var newFileListArray = [];
+        for (var i = 0; i < fileListArray.length; i++) {
+            if (fileListArray[i].name == name)
+                continue;
+            newFileListArray.push(fileListArray[i]);
+        }
 
-    uploadFileList.setFileList(newFileListArray, opt);
+        uploadFileList.setFileList(newFileListArray, opt);
+    }
+    
     //获取
     InitAthPage("Div_" + fk_framAttachment);
 }
 
 //在线预览，如果需要连接其他的文件预览查看器，就需要在这里重写该方法.
 function AthView(mypk, filePath) {
-    debugger;
     if (typeof AthViewOverWrite === 'function') {
         AthViewOverWrite(mypk);
         return;
@@ -787,13 +758,13 @@ function SaveUpload(fk_frmAttachment, uploadUrl) {
     }
 
 
-    UploadChange(uploadUrl, fk_frmAttachment);
+    UploadChangeAth(uploadUrl, fk_frmAttachment);
 }
 
 /**
  * 图片附件上传
  */
-function UploadChange(uploadUrl, fk_frmAttachment) {
+function UploadChangeAth(uploadUrl, fk_frmAttachment) {
     if ($("#file_" + fk_frmAttachment).length == 0)
         return;
     var fileObj = $("#file_" + fk_frmAttachment).val();
@@ -804,7 +775,7 @@ function UploadChange(uploadUrl, fk_frmAttachment) {
 
     var file = document.getElementById("file_" + fk_frmAttachment).files[0];
     var fileSize = AthParams.AthInfo[fk_frmAttachment][0][2];
-    if (file.size * 1000 > fileSize) {
+    if (file.size > fileSize * 1000) {
         alert("上传附件大小的最大限制是" + fileSize + "KB");
         return;
     }
@@ -818,12 +789,22 @@ function UploadChange(uploadUrl, fk_frmAttachment) {
         alert("附件上传的格式是" + exts);
         return;
     }
-
+    var uploadUrl = "";
+    if (plant == 'CCFlow')
+        uploadUrl = basePath + '/WF/CCForm/Handler.ashx?AttachPK=' + fk_frmAttachment + '&DoType=MoreAttach&FK_Flow=' + pageData.FK_Flow + '&PKVal=' + athRefPKVal;
+    else {
+        uploadUrl = basePath + "/WF/Ath/AttachmentUploadS.do?FK_FrmAttachment=" + fk_frmAttachment + '&FK_Flow=' + pageData.FK_Flow + "&PKVal=" + athRefPKVal;
+    }
+    uploadUrl += "&WorkID=" + pageData.WorkID;
+    uploadUrl += "&FID=" + pageData.FID;
+    uploadUrl += "&FK_Node=" + pageData.FK_Node;
+    uploadUrl += "&PWorkID=" + GetQueryString("PWorkID");
+    uploadUrl += "&FK_MapData=" + AthParams.FK_MapData;
 
 
 
     //form表单序列话
-    var parasData = $("form").serialize();
+    var parasData = $("#Form_" + fk_frmAttachment).serialize();
     //form表单序列化时调用了encodeURLComponent方法将数据编码了
     parasData = decodeURIComponent(parasData, true);
     parasData = decodeURIComponent(parasData, true);
@@ -832,11 +813,11 @@ function UploadChange(uploadUrl, fk_frmAttachment) {
     parasData = parasData.replace(/RB_/g, '');
     parasData = parasData.replace(/CB_/g, '');
     parasData = parasData.replace(/DDL_/g, '');
-    uploadUrl += "&parasData=" + parasData;
+
 
     //提交数据
     var option = {
-        url: uploadUrl,
+        url: uploadUrl + "&parasData=" + parasData,
         type: 'POST',
         dataType: 'json',
         headers: { "ClientCallMode": "ajax" },
@@ -867,20 +848,6 @@ function UploadChange(uploadUrl, fk_frmAttachment) {
 
 }
 
-
-
-
-////关闭窗口  适用于扩展属性
-//function close() {
-//    if (parent != undefined && parent.SetAth != undefined && typeof (parent.SetAth) == "function") {
-//        var nameTds = $('.Idx').next();
-//        var nameStrs = [];
-//        $.each(nameTds, function (i, nameTd) {
-//            nameStrs.push($(nameTd).children('a').text());
-//        })
-//        parent.SetAth(nameStrs);
-//    }
-//}
 //解析附件扩张字段
 function InitAthMapAttrOfCtrlFool(db, mapAttr) {
     var defValue = "";
@@ -1149,84 +1116,3 @@ function InitRBShowContentAth(mapAttr, defValue, RBShowModel, enableAttr) {
     });
     return rbHtml;
 }
-
-
-////必填项检查   名称最后是*号的必填  如果是选择框，值为'' 或者 显示值为 【*请选择】都算为未填 返回FALSE 检查必填项失败
-//function checkBlanks() {
-//    var checkBlankResult = true;
-//    //获取所有的列名 找到带* 的LABEL mustInput
-//    //var lbs = $('[class*=col-md-1] label:contains(*)');
-//    var lbs = $('.mustInput'); //获得所有的class=mustInput的元素.
-//    $.each(lbs, function (i, obj) {
-//        if ($(obj).parent().css('display') != 'none' && $(obj).parent().next().css('display')) {
-//            var keyofen = $(obj).data().keyofen;
-
-//            var ele = $('[id$=_' + keyofen + ']');
-//            if (ele.length == 1) {
-//                switch (ele[0].tagName.toUpperCase()) {
-//                    case "INPUT":
-//                        if (ele.attr('type') == "text") {
-//                            if (ele.val() == "") {
-//                                checkBlankResult = false;
-//                                ele.addClass('errorInput');
-//                            } else {
-//                                ele.removeClass('errorInput');
-//                            }
-//                        }
-//                        break;
-//                    case "SELECT":
-//                        if (ele.val() == "" || ele.children('option:checked').text() == "*请选择") {
-//                            checkBlankResult = false;
-//                            ele.addClass('errorInput');
-//                        } else {
-//                            ele.removeClass('errorInput');
-//                        }
-//                        break;
-//                    case "TEXTAREA":
-//                        if (ele.val() == "") {
-//                            checkBlankResult = false;
-//                            ele.addClass('errorInput');
-//                        } else {
-//                            ele.removeClass('errorInput');
-//                        }
-//                        break;
-//                }
-//            }
-//        }
-//    });
-
-
-//    //2.对 UMEditor 中的必填项检查
-//    if (document.activeEditor != null && document.activeEditor.$body != null) {
-
-//    }   
-
-//    return checkBlankResult;
-//}
-
-////正则表达式检查
-//function checkReg() {
-//    var checkRegResult = true;
-//    var regInputs = $('.CheckRegInput');
-//    $.each(regInputs, function (i, obj) {
-//        var name = obj.name;
-//        var mapExtData = $(obj).data();
-//        if (mapExtData.Doc != undefined) {
-//            var regDoc = mapExtData.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}').replace(/，/g, ',');
-//            var tag1 = mapExtData.Tag1;
-//            if ($(obj).val() != undefined && $(obj).val() != '') {
-
-//                var result = CheckRegInput(name, regDoc, tag1);
-//                if (!result) {
-//                    $(obj).addClass('errorInput');
-//                    checkRegResult = false;
-//                } else {
-//                    $(obj).removeClass('errorInput');
-//                }
-//            }
-//        }
-//    });
-
-//    return checkRegResult;
-//}
-

@@ -25,7 +25,8 @@
             color: #333333;
         }
         .layui-row {
-            margin-top: 5px;
+            margin: 4px 0px 0px 4px;
+            padding: 8px 10px;
         }
     </style>
     <script type="text/javascript">
@@ -34,6 +35,7 @@
         if (groupID == null)
             groupID = 0;
         var dataType = GetQueryString("DataType");
+        var webUser = new WebUser();
         layui.extend({
             pinyin: "../../Scripts/layui/ext/pinyin"
         });
@@ -123,7 +125,68 @@
             if (str == '合计') return 'HeJi';
             return null;
         }
+        //增加枚举字段
+        function Enum(doType) {
+            if (webUser.CCBPMRunModel == 2) {
+                window.location.href = '../../../Admin/CCFormDesigner/SysEnum/List.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
+            } else {
+                window.location.href = 'SysEnumList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
+            }
+        }
+        //增加外键下拉框
+        function Table(doType) {
+            // SaaS模式下进入SaaS下页面
+            if (webUser.CCBPMRunModel == 2) {
+                window.location.href = '../../../Admin/CCFormDesigner/SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+            } else {
+                window.location.href = 'SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+            }
+        }
 
+        //签批组件
+        function AddWorkCheck() {
+            var pinyin = layui.pinyin;
+            layer.prompt({
+                title: '请输入签批组件的名称:\t\n比如:办公室意见、拟办意见',
+                formType: 0,
+                value: '',
+            }, function (name, index) {
+                layer.close(index);
+                if (name == null || name == undefined || name.trim() == "")
+                    return "";
+                var mapAttrs = new Entities("BP.Sys.MapAttrs");
+                    mapAttrs.Retrieve("FK_MapData", fk_mapdata, "Name", name);
+                if (mapAttrs.length >= 1) {
+                    layer.alert('名称：[' + name + "]已经存在.");
+                    AddWorkCheck(pinyin);
+                    return "";
+                }
+                var keyOfEn = pinyin.makePy(name);
+                var mypk = fk_mapdata + "_" + keyOfEn;
+                var mapAttr = new Entity("BP.Sys.MapAttr");
+                mapAttr.MyPK = mypk;
+                if (mapAttr.IsExits == true) {
+                    layer.alert('名称：[' + name + "]已经存在.");
+                    return "";
+                }
+                mapAttr.FK_MapData = fk_mapdata;
+                mapAttr.KeyOfEn = keyOfEn;
+                mapAttr.Name = name;
+                mapAttr.GroupID = 1;
+                mapAttr.UIContralType = 14; //签批意见
+                mapAttr.MyDataType = 1;
+                mapAttr.LGType = 0;
+                mapAttr.ColSpan = 3; //
+                mapAttr.TextColSpan = 1; //
+                mapAttr.UIWidth = 150;
+                mapAttr.UIHeight = 50;
+                mapAttr.IsEnableInAPP = 1;
+                mapAttr.Insert(); //插入字段.
+                window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrCheck&MyPK=" + mapAttr.MyPK;
+             
+            });
+
+        }
 
         //传入父窗体
         function GetFrmInfo() {
@@ -241,7 +304,7 @@
     </script>
 </head>
 <body>
-    <div class="layui-container">
+    <div class="layui-container" style="width:100%">
         <div class="layui-row layui-th">
             <div class="layui-col-xs6">
                 <div style="float: left">
@@ -255,7 +318,7 @@
                 </div>
             </div>
         </div>
-        <div class="layui-row" >
+        <div class="layui-row">
             <div class="layui-col-xs6">
                 <div class="layui-row">
                     <div class="layui-col-xs2">
@@ -265,7 +328,7 @@
                         <input style="font-weight:bolder;line-height:24px" type="text" name="TB_Name" id="TB_Name" />
                     </div>
                 </div>
-                <div class="layui-row" >
+                <div class="layui-row">
                     <div class="layui-col-xs2">
                         英文名
                     </div>
@@ -283,14 +346,14 @@
                         <label for="RB_JP">
                             简拼
                         </label>
-                        <button class="layui-btn layui-btn-primary layui-border-green layui-btn-sm"  onclick="SelectOne();" title="从数据表里选择字段">更多...</button>
+                        <button class="layui-btn layui-btn-primary layui-border-green layui-btn-sm" onclick="SelectOne();" title="从数据表里选择字段">更多...</button>
                     </div>
 
                 </div>
                 <div class="layui-row">
                     <div class="layui-col-xs12">
-                        <button class="layui-btn layui-border-blue layui-btn-primary layui-btn-sm" onclick="Create(false);" >创建字段</button>
-                       <button class="layui-btn  layui-border-blue layui-btn-primary layui-btn-sm" onclick="Create(true);" >保存+创建</button>
+                        <button class="layui-btn layui-border-blue layui-btn-primary layui-btn-sm" onclick="Create(false);">创建字段</button>
+                        <button class="layui-btn  layui-border-blue layui-btn-primary layui-btn-sm" onclick="Create(true);">保存+创建</button>
                     </div>
 
                 </div>
@@ -312,7 +375,7 @@
                 <label for="RB_Float">
                     浮点型。<font color="Gray">如：身高、体重、长度。</font><br />
                 </label>
-                
+
                 <input type="radio" name="Field_Type" id="RB_Date" value="6" />
                 <label for="RB_Date">
                     日期型。<font color="Gray">如：出生日期、发生日期yyyy-MM-dd。</font><br />
@@ -327,6 +390,24 @@
                 </label>
             </div>
         </div>
+        <div class="layui-row layui-th">
+            新增枚举字段(用来表示，状态、类型...的数据。)
+        </div>
+        <div class="layui-row">
+            <a href="javascript:Enum('AddEnum');"><b>枚举型</b></a> - 比如：性别:男/女。请假类型：事假/病假/婚假/产假/其它。
+        </div>
+        <div class="layui-row layui-th">
+            新增下拉框(外键、外部表、WebServices)字典表字段(通常只有编号名称两个列)
+        </div>
+        <div class="layui-row">
+            <a href="javascript:Table('AddSFTable')"><b>外键、外部数据、webservices数据类型</b></a> - 比如：岗位、税种、行业、科目，本机上一个表组成一个下拉框。
+        </div>
+        <div class="layui-row layui-th">
+            增加签批字段
+        </div>
+        <div class="layui-row">
+            <a href="javascript:AddWorkCheck()"><b>签批字段</b></a>。
+        </div>
     </div>
-  </body>
+</body>
 </html>

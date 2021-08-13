@@ -367,7 +367,10 @@
                                 //表单库增加表单节点
                                 if (typeof window.parent.AppendFrmToFormTree != "undefined") {
                                     // var sort = $("#HD_FK_FormTree").val();
-                                    var sort = GetQueryString("FK_FrmSort"); // $("#HD_FK_FormTree").val();
+                                    var sort = GetQueryString("FK_FrmSort"); 
+                                    var webUser = new WebUser()
+                                    if (webUser.CCBPMRunModel == 2)
+                                        no = no + "_" + webUser.OrgNo;
                                     window.parent.AppendFrmToFormTree(sort, no, name);
                                 }
 

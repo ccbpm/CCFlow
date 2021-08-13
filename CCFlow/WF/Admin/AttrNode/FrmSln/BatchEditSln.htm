@@ -23,6 +23,7 @@
         $(function () {
             if (window.parent.location.href.indexOf("En.htm") != -1)
                 $("#backLink").hide();
+
             $("#sln").html("正在加载表单方案,请稍后...");
 
             //获取节点属性
@@ -32,7 +33,7 @@
             var frmNodes = new Entities("BP.WF.Template.FrmNodes");
             frmNodes.Retrieve("FK_Flow", node.FK_Flow);
 
-            var html = "<table style='width:90%;'>";
+            var html = "<table class='table'>";
             html += "<thead>";
             html += "<tr>";
             html += "<th>#</th>";
@@ -211,6 +212,7 @@
                 }
                 var nd = new Entity("BP.WF.Template.NodeWorkCheck", json.NodeID);
                 nd.FWCSta = IsEnableFWC;
+                nd.SigantureEnabel = $("#DDL_SigantureEnabel_" + json.NodeID).val();
                 nd.Update();
 
             }
@@ -227,12 +229,20 @@
 
     </script>
 </head>
-<body style=" margin:10px; padding:20px;">
+<body>
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <span class="pull-right">
 
-    <center>
-        <h3><a href="javascript:Back()" id="backLink">返回</a> -<a href="javascript:Save()">保存</a>  -  批量编辑节点与表单对应关系</h3>
-        <div id="sln"></div>
-    </center>
+                <button id="Btn_Save" name="Btn_Save" onclick="Save();" class="cc-btn-tab btn-save">保存</button>
+                <button id="Btn_Delete" name="Btn_Delete" onclick="Back();" class="cc-btn-tab btn-save">返回</button>
+            </span>
+            <strong>批量编辑节点与表单对应关系</strong>
+        </div>
+        
+            <div id="sln"></div>
+      
+    </div>
 
 </body>
 </html>

@@ -53,8 +53,7 @@
         }
 
         .item-header .icon-group {
-            max-width: 100px;
-            overflow: hidden;
+            
             white-space: nowrap;
             text-overflow: ellipsis;
         }
@@ -92,6 +91,15 @@
             background: #1296db !important;
             color: white !important;
         }
+        .HtmlVar{ text-align:center;border:0px;}
+        .HtmlVar tr, .HtmlVar td {
+            border: 0px;
+        }
+        .HtmlVar span{ font-size:16px; line-height:30px;}
+        .HtmlVar strong {
+            display: block;
+            font-size: 20px;
+        }
     </style>
 </head>
 
@@ -102,20 +110,23 @@
                 <div class="item-header">
                     <div class="icon-group">
                         <i v-if="!item.Icon" class="layui-icon layui-icon-console" :class="item.Icon"></i>
-                        <i v-else :class="item.Icon"></i> {{item.Name || '未指定标题'}}
+                        <!--<i v-else :class="item.Icon"></i> {{item.Name || '未指定标题'}} {{item.WinDocModel}}-->
+                        <i v-else :class="item.Icon"></i> {{item.Name || '未指定标题'}} 
                     </div>
                     <div class="operate" @click="expand(item)">
                         <span v-if="item.MoreLab">更多</span>
                     </div>
                 </div>
                 <div class="item-body" @click.stop @mousedown.stop.prevent>
-                    <div v-if="parseInt(item.WinDocType) === 0 || parseInt(item.WinDocType) === 1" class='inner-content' :data-cid="item.No">
+                    <div v-if="item.WinDocModel == 'Html' || item.WinDocModel == 'System'  || item.WinDocModel == 'SQLList' || item.WinDocModel == 'HtmlVar'  || item.WinDocModel == 'Table'" class='inner-content' :data-cid="item.No">
                         {{item.Docs}}
                     </div>
-                    <div v-if="parseInt(item.WinDocType) === 2 || parseInt(item.WinDocType) === 3 || parseInt(item.WinDocType) === 4 || parseInt(item.WinDocType) === 5" class='chart-content' :data-cid="item.No">
+                    <div v-if="item.WinDocModel == 'ChartLine' || item.WinDocModel == 'ChartZZT' ||  item.WinDocModel == 'ChartPie'" class='chart-content' :data-cid="item.No">
                         {{item.Docs}}
                     </div>
-
+                    <div v-if="item.WinDocModel == 'ChartRate'||  item.WinDocModel == 'ChartRing'" class='chart-content' :data-cid="item.No">
+                        {{item.Docs}}
+                    </div>
                 </div>
             </div>
         </div>

@@ -29,6 +29,9 @@
     <script src="../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
     <script src="../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
     <script src="../Admin.js"></script>
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../../Scripts/LoadSql.js"></script>
 
     <script type="text/javascript">
@@ -38,12 +41,12 @@
 
             $("#Msg").html("正在加载,请稍后......");
 
-           
+
             var en = null;
             if (mypk != null && mypk != undefined && mypk != "") {
-                en = new Entity("BP.Sys.FrmEvent",mypk);
+                en = new Entity("BP.Sys.FrmEvent", mypk);
             }
-            
+
             //初始化groupID.
             var nodeID = GetQueryString("FK_Node");
 
@@ -74,11 +77,11 @@
                     $("#DBSrc").show();
                     $("#TB_Doc").val(en.DoDoc);
                 }
-                 else
+                else
                     $("#DBSrc").hide();
             }
-               
-           
+
+
 
         });
 
@@ -134,7 +137,7 @@
                 en.SetPKVal(en.FK_Event + Math.random());
                 en.Insert();
             }
-           
+
 
             Back();
 
@@ -171,7 +174,15 @@
         function Help() {
             WinOpen('ActionHelp.htm');
         }
+        function CRUDSFDBSrcs() {
+            var url = "../../Comm/Search.htm?EnsName=BP.Sys.SFDBSrcs";
+            OpenEasyUiDialog(url, null, "维护数据源", 1100, 600, "icon - library", false, null, null, null, dlgClosedFunc);
+        }
+        function dlgClosedFunc() {
+            window.location.reload();
+        }
     </script>
+
 </head>
 <body>
     <div class="container-full">
@@ -222,7 +233,8 @@
                             数据源
                         </td>
                         <td>
-                            <select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc"></select>
+                            <select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc"></select>    
+                            <a href="#" onclick="CRUDSFDBSrcs()">维护数据源</a>
                         </td>
                     </tr>
                     <tr>

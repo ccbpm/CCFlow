@@ -55,6 +55,8 @@
             handler.AddPara("FrmID", frmID);
             handler.AddPara("FlowDevModel", 1); //设置为极简模式.
             handler.AddPara("GroupID", groupID); // 方法的的GroupID..
+            handler.AddPara("ModuleNo", GetQueryString("ModuleNo")); // 隶属的方法模板..
+
             var data = handler.DoMethodReturnString("FlowBaseData_Save");
 
             if (data.indexOf('err@') == 0) {
@@ -69,8 +71,6 @@
             var url = "../../../Comm/En.htm?EnName=BP.CCBill.Template.MethodFlowBaseData&No=" + data;
             window.location.href = url;
             return;
-
-
         }
 
         function GenerPinYin() {
@@ -85,7 +85,7 @@
             if (name == "")
                 return;
 
-            var handler = new HttpHandler("BP.Cloud.HttpHandler.Admin_CCFormDesigner");
+            var handler = new HttpHandler("BP.WF.HttpHandler.Admin_CCFormDesigner");
             handler.AddPara("IsQuanPin", isQuanPin);
             handler.AddPara("TB_Name", encodeURIComponent(name));
             var data = handler.DoMethodReturnString("NewFrmGuide_GenerPinYin");

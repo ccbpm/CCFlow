@@ -25,12 +25,8 @@
             var doType = GetQueryString("DoType");
 
             var url = "";
-            if (doType == "Bill") {
-                //初始化页面
-                var en = new Entity("BP.CCBill.Template.MethodBill", methodNo);
-                var billWorkID = en.DoMethodReturnString("CreateWorkID", workID);
-                url = "../../CCBill/MyBill.htm?FK_Flow=" + en.FlowNo + "&FrmID=" + en.Tag1 + "&WorkID=" + billWorkID+"&FK_Node=0";
-            }
+
+           
 
             if (url == "")
                 alert("没有判断的执行类型:" + doType);

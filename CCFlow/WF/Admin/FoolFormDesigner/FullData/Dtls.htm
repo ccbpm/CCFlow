@@ -55,7 +55,7 @@
 
                 var sql = "";
                 if (tag1 != "" && tag1 != null) {
-                    sql = tag1.split("$")[i + 1].split(":")[1]; //分割字符串，获取sql语句
+                    sql = tag1.split("$")[1].split(":")[1]; //分割字符串，获取sql语句
                 }
 
                 var dtl = mapDtls[i];
@@ -96,6 +96,8 @@
             else {
                 en.AttrOfOper = GetQueryString("KeyOfEn");
                 en.ExtType = "FullData";
+                en.DoWay = "1";
+                en.DBType = "1";
             }
 
             //生成SQL, 执行保存.

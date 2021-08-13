@@ -2,14 +2,11 @@
 //处理 url 根据 MenuModel 菜单类型 解析url.
 function DealMenuUrl(menu) {
 
-    if (menu.Icon == "" || menu.Icon == null) {
-        menu.Icon = "icon-user";
-    }
-
     if (menu.UrlExt == undefined) menu.UrlExt = menu.Url;
 
     var basePath = "";
     if (menu.MenuModel === "" || menu.MenuModel === null) {
+        //alert("没有保存菜单标记 MenuModel  " + menu.MenuModel);
         return menu;
     }
 
@@ -38,6 +35,8 @@ function DealMenuUrl(menu) {
         if (menu.Mark == "FlowGroup")
             menu.Url = basePath + "/WF/Group.htm?FK_Flow=" + menu.Tag1;
 
+        if (menu.Icon == null || menu.Icon == "") menu.Icon = "icon-paper-plane";
+
         return menu;
     }
 
@@ -45,19 +44,29 @@ function DealMenuUrl(menu) {
     if (menu.MenuModel == "FlowNewEntity") {
         if (menu.Mark == "StartFlow")
             menu.Url = basePath + "/WF/CCBill/Opt/StartFlowByNewEntity.htm?FK_Flow=" + menu.Tag1 + "&MenuNo=" + menu.No;
+
+        // alert(menu.Icon);
+        if (menu.Icon === "" || menu.Icon == null) menu.Icon = "icon-paper-plane";
+
         return menu;
     }
 
     if (menu.MenuModel == "FlowSearch") {
         menu.Url = basePath + "/WF/Search.htm?FK_Flow=" + menu.Tag;
+        if (menu.Icon === "" || menu.Icon == null) menu.Icon = "icon-paper-plane";
         return menu;
     }
 
     if (menu.MenuModel === "Dict") {
         if (menu.ListModel === 0) //如果是批量编辑模式.
-            menu.Url = basePath + "/WF/CCBill/SearchEditer.htm?FrmID=" + menu.UrlExt;
+            menu.Url = basePath + "/WF/CCBill/SearchEditer.htm?FrmID=" + menu.UrlExt ;
         else
             menu.Url = basePath + "/WF/CCBill/SearchDict.htm?FrmID=" + menu.UrlExt;
+        return menu;
+    }
+
+    if (menu.MenuModel === "DBList") {
+            menu.Url = basePath + "/WF/CCBill/SearchDBList.htm?FrmID=" + menu.UrlExt;
         return menu;
     }
 
@@ -69,7 +78,7 @@ function DealMenuUrl(menu) {
     }
 
     if (menu.MenuModel == "DictTable") {
-        debugger;
+        
         url = basePath + "/WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + menu.UrlExt + "&QueryType=Dict";
         menu.Url = url;
         return menu;
@@ -83,6 +92,16 @@ function DealMenuUrl(menu) {
     //独立功能.
     if (menu.MenuModel === "Func" || menu.MenuModel === "StandAloneFunc") {
         menu.Url = basePath + "/WF/CCBill/Sys/Func.htm?FuncNo=" + menu.UrlExt;
+        return menu;
+    }
+
+    if (menu.MenuModel === "Windows") {
+        menu.Url = basePath + "/WF/Portal/Home.htm?PageID=" + menu.No;
+        return menu;
+    }
+
+    if (menu.MenuModel === "Tabs") {
+        menu.Url = basePath + "/WF/Portal/Tabs.htm?PageID=" + menu.No;
         return menu;
     }
 

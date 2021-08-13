@@ -63,69 +63,53 @@
 
             //1.1 执行表单的字段Copy. 把实体表的字段copy到新的表单里.
             handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_Method");
-
-            handler.AddPara("FromFrmID", frmID);
-            handler.AddPara("ToFrmID", no);
+            handler.AddPara("DictFrmID", frmID);
+            handler.AddPara("BillFrmID", no);
             var data = handler.DoMethodReturnString("Bill_Save");
             if (data.indexOf('err@') >= 0) {
                 $("#Msg").html("<font color=red>" + data + "</font>");
                 return;
             }
 
-
-            //2. 创建方法分组.
-            var groupMethod = new Entity("BP.CCBill.Template.GroupMethod");
-            groupMethod.Name = name;
-            groupMethod.FrmID = frmID;
-            // groupMethod.No = frmID + "_" + no;
-            groupMethod.Insert();
-
-
             //3. 为单据创建方法. 新建单据
             var method = new Entity("BP.CCBill.Template.MethodBill");
             method.MethodModel = "Bill"; //方法模式.
             //   method.MyPK = frmID + "_" + no; // 单据ID.
-            method.Name = "新建:" + name;
-            method.GroupID = groupMethod.No;
-            method.Mark = "NewBill";
+            method.Name = name;
+            method.GroupID = GetQueryString("GroupID"); //方法分组.
+            method.Mark = "Search"; //标记链接到查询页面.
             method.FrmID = frmID;
             method.UrlExt = no; // "../CCBill/MyBill.htm";
             method.Tag1 = no;
             method.Icon = "icon-note"; //新建icon.
             method.Idx = 0;
+            method.IsEnable = 1;
             method.Insert();
 
             var methodNewNo = method.No;
-
-            //3.1 单据查询.
-            method = new Entity("BP.CCBill.Template.MethodBill");
-            method.MethodModel = "Bill"; //方法模式.
-            method.FrmID = frmID;
-            // method.MyPK = frmID + "_" + no; // 单据ID.
-            method.Name = "查询" + name;
-            method.GroupID = groupMethod.No;
-            method.Mark = "Search";
-            method.Tag1 = no;
-            method.UrlExt = "../CCBill/SearchBill.htm?FrmID=" + no + "&From=Dict";
-            method.Icon = "icon-magnifier"; //查询.
-            method.Idx = 1;
-            method.Insert();
 
 
             //4. 创建菜单.放到与单据的平行的目录下.
             var menu = new Entity("BP.GPM.Menu2020.Menu");
             menu.ModuleNo = moduleNo; //模块编号.
             menu.SystemNo = module.SystemNo; //系统编号.
-            menu.Name = name + "查询";
-            menu.UrlExt = "../CCBill/SearchBill.htm?FrmID=" + no + "&From=Dict";
-            menu.MethodModel = MethodModel.Bill; //类型为
+            menu.Name = name;
+            menu.UrlExt = "../CCBill/SearchBill.htm?FrmID=" + no + "&From=Dict&PFrmID=" + frmID;
+            menu.MenuModel = MethodModel.Bill; //类型为
+            menu.Icon = "icon-note"; //单据ICON.
 
             // 把他们都设置为 dictNo.
-            menu.Mark = no; //单据表单ID。
+            menu.Mark = "BillDictSearch"; //单据表单ID。
             menu.Tag1 = no; //单据表单ID。
             menu.FrmID = frmID;
             method.Idx = 1;
+            menu.IsEnable = 1;
             menu.Insert();
+
+            var msg = "提示:(请仔细阅读)";
+            msg += "\t\n 1. 您创建的是一个单据, fast会您创建一个名为[" + name + "]的链接在实体卡片上。";
+            msg += "\t\n 2. 同时fast也在当前实体的菜单上创建了。";
+
 
             window.location.href = "../../../Comm/En.htm?EnName=BP.CCBill.Template.MethodBill&No=" + methodNewNo;
         }
@@ -142,7 +126,7 @@
             if (name == "")
                 return;
 
-            var handler = new HttpHandler("BP.Cloud.HttpHandler.Admin_CCFormDesigner");
+            var handler = new HttpHandler("BP.WF.HttpHandler.Admin_CCFormDesigner");
             handler.AddPara("IsQuanPin", isQuanPin);
             handler.AddPara("TB_Name", encodeURIComponent(name));
             var data = handler.DoMethodReturnString("NewFrmGuide_GenerPinYin");
@@ -170,21 +154,13 @@
                 <tr>
                     <td>单据名称 </td>
                     <td>  <input type="text" value="" id="TB_Name" name="TB_Name" onblur="GenerPinYin()" /></td>
-                </tr>
-
-                <tr>
                     <td>单据编号 </td>
                     <td>
                         <input type="text" value="" id="TB_No" name="TB_No" />
-                        <!--<input type="text" id="TB_No_Org" name="TB_No_Org" style="width: 100%;" hidden=hidden />-->
-                    </td>
-                </tr>
 
-                <tr>
-                    <td> </td>
-                    <td>
                         <input id="RB_PinYinModel_0" type="radio" name="RB_PinYinModel" value="0" checked="checked" onclick="GenerPinYin()" /><label for="RB_PinYinModel_0" onclick="GenerPinYin()">全拼</label>
                         <input id="RB_PinYinModel_1" type="radio" name="RB_PinYinModel" value="1" onclick="GenerPinYin()" /><label for="RB_PinYinModel_1" onclick="GenerPinYin()">简拼</label>
+
                     </td>
                 </tr>
 
@@ -196,31 +172,37 @@
                             <option value="8">开发者表单</option>
                         </select>
                     </td>
-                </tr>
-                <tr>
                     <td> 存储表</td>
                     <td>
                         <input type="text" value="" id="TB_PTable" name="TB_PTable" />
                         <!--<input type="text" id="TB_PTable_Org" name="TB_PTable_Org" style="width: 100%;" hidden=hidden />-->
                     </td>
                 </tr>
-
                 <tr>
                     <td> 列表模式</td>
-                    <td>
+                    <td colspan="3">
                         <input id="RB_ListModel_0" type="radio" name="RB_ListModel" value="0" /><label for="RB_ListModel_0">编辑模式</label>
                         <input id="RB_ListModel_1" type="radio" name="RB_ListModel" value="1" checked="checked" /><label for="RB_ListModel_1">视图模式</label>
                     </td>
                 </tr>
 
                 <tr>
-                    <td colspan="2">
+                    <td colspan="4">
                         备注：更多的属性在创建后可以修改，比如：存储表，导入字段，表单模式。
                     </td>
                 </tr>
             </table>
+
             <!--<input type="button" id="Btn_Save" name="Btn_Save" value="执行创建" onclick="Save();" />-->
             <div id="Msg"></div>
+
+            <legend> 什么是单据？ </legend>
+            <ul>
+                <li> 单据就是依赖与实体存在流水性质的记账凭证。 </li>
+                <li> 比如：出门证、介绍信、证明函。 </li>
+                <li> 比如：出库单、入库单。 </li>
+                <li> 创建单据后，不需要审批，或者简单的审批就可以设置为入库状态的数据。 </li>
+            </ul>
         </fieldset>
 
     </form>

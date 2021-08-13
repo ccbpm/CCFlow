@@ -87,10 +87,12 @@
                 var num = mapData.Tag2;
                 for (var i = 0; i < num; i++) {
 
-                    _html += "<img src='../../Style/Img/star_2.png'  data-type='Score'  leipiplugins='component'  data-key='" + mapData.MyPK + "'/>";
+                    _html += "<img src='../../Style/Img/star_1.png'  data-type='Score'  leipiplugins='component'  data-key='" + mapData.MyPK + "'/>";
                 }
                 _html += "&nbsp;&nbsp;<span class='score-tips' style='vertical-align: middle;color:#ff6600;font: 12px/1.5 tahoma,arial,\"Hiragino Sans GB\",宋体,sans-serif;'><strong>" + num + "  分</strong></span>";
                 _html += "</span></span>";
+                _Html += "<input type='text' id='TB_" + mapData.KeyOfEn + "' name='TB_" + mapData.KeyOfEn + "' style='display:none'/>"
+
                 break;
             case 110://公文正文组件
                 _html = "<input type='text'  id='TB_" + mapData.KeyOfEn + "' name='TB_" + mapData.KeyOfEn + "' data-key='" + mapData.KeyOfEn + "' data-name='" + mapData.Name + "' data-type='GovDocFile'   leipiplugins='component' style='width:98%' placeholder='公文正文组件'/>";

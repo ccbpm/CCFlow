@@ -25,13 +25,8 @@ $(function () {
 
     $('head').append('<link href="../DataUser/Style/MyFlow.css" rel="Stylesheet" />');
 
-    //$('head').append('<link href="../DataUser/Style/CSS/' + theme + '.css" rel="stylesheet" type="text/css" />');
     $('head').append('<link href="../DataUser/Style/FoolFrmStyle/Default.css" rel="stylesheet" type="text/css" />');
     $('head').append('<link href="../DataUser/Style/GloVarsCSS.css" rel="stylesheet" type="text/css" />');
-
-    //$('head').append('<link href="../DataUser/Style/GloVarsCSS.css" rel="stylesheet" type="text/css" />');
-
-    //<link href="../DataUser/Style/GloVarsCSS.css" rel="stylesheet" />
 
     initPageParam(); //初始化参数
 
@@ -308,6 +303,7 @@ function initPageParam() {
     pageData.IsReadonly = 0;
     pageData.IsStartFlow = GetQueryString("IsStartFlow"); //是否是启动流程页面 即发起流程
     pageData.DoType1 = GetQueryString("DoType")//View
+    
 }
 
 
@@ -500,7 +496,7 @@ function InitDDLOperation(flowData, mapAttr, defVal) {
             });
 
             if (mapAttr.DefVal == -1)
-                operations += "<option " + (obj.IntKey == defVal ? " selected = 'selected' " : "") + " value='" + mapAttr.DefVal + "'>-无(不选择)-</option>";
+                operations += "<option " + (defVal==-1 ? " selected = 'selected' " : "") + " value='" + mapAttr.DefVal + "'>-无(不选择)-</option>";
 
             $.each(enums, function (i, obj) {
                 operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
@@ -1235,7 +1231,6 @@ function GenerWorkNode() {
     //2018.1.1 新增加的类型, 流程独立表单， 为了方便期间都按照自由表单计算了.
     var frmNode = flowData["WF_FrmNode"];
     var flow = flowData["WF_Flow"];
-    debugger
     if ((flow && flow[0].FlowDevModel==1 || node.FormType == 11) && frmNode != null && frmNode != undefined) {
         frmNode = frmNode[0];
         if (frmNode.FrmSln == 1) {

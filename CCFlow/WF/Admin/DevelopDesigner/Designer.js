@@ -352,7 +352,7 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
         CCForm_ShowDialog(url, '字段外键属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
         return;
     }
-    if (shap == 'SQL' || shap == "Handler" || shap == "JQuery") {
+    if (shap == 'SQL' || shap == "Handler" || shap == "JQuery" || shap=="7" || shap=="SFTable" || shap=="WebApi") {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&PKVal=' + fk_mapdata + '_' + mypk;
         CCForm_ShowDialog(url, '字段外部数据源属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
         return;

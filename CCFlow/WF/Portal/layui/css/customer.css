@@ -132,16 +132,16 @@
 }
 
 .sideMenuBar {
-    position: fixed;
+    position: absolute;
     left: 0;
     width: 65px;
-    height: 100%;
+    min-height: 100%;
 }
 
 .sub-menu-divider {
     position: relative;
     width: 220px;
-    top: 50px;
+    top: 55px;
     height: 14px;
     line-height: 14px;
     display: flex;

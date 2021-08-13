@@ -43,11 +43,15 @@ function GetDBDtl() {
         { "No": MenuModel.SelfUrl, "Name": "自定义URL菜单", "GroupNo": "A", "Url": "SelfUrl.htm" },
         { "No": MenuModel.FlowUrl, "Name": "内置流程菜单", "GroupNo": "A", "Url": "FlowUrl.htm" },
         { "No": MenuModel.Func, "Name": "独立功能(方法)页", "GroupNo": "A", "Url": "Func.htm" },
-        { "No": "Windows", "Name": "信息窗(统计分析图表)", "GroupNo": "A", "Url": "Windows.htm" },
+        { "No": "Windows", "Name": "信息窗/大屏(统计分析图表)", "GroupNo": "A", "Url": "Windows.htm" },
+        { "No": "Tabs", "Name": "Tabs页面容器", "GroupNo": "A", "Url": "Tabs.htm" },
+
         { "No": MenuModel.StandAloneFlow, "Name": "创建独立运行的流程", "GroupNo": "A", "Url": "StandAloneFlow.htm" },
 
         { "No": MenuModel.Dict, "Name": "创建实体", "GroupNo": "B", "Url": "Dict.htm" },
-      /*    { "No": "DictQRCode", "Name": "表单填报二维码", "GroupNo": "B", "Url": "DictQRCode.htm" },*/
+        { "No": "DBList", "Name": "数据源实体", "GroupNo": "B", "Url": "DBList.htm" },
+
+        /*    { "No": "DictQRCode", "Name": "表单填报二维码", "GroupNo": "B", "Url": "DictQRCode.htm" },*/
         { "No": MenuModel.DictCopy, "Name": "复制实体", "GroupNo": "B", "Url": "DictCopy.htm" },
         { "No": MenuModel.Bill, "Name": "创建单据", "GroupNo": "B", "Url": "Bill.htm" },
         { "No": MenuModel.DictRef, "Name": "引入实体", "GroupNo": "B", "Url": "DictRef.htm" },

@@ -331,7 +331,9 @@
                 url += "Cond/ConditionLine.htm?FK_Flow=" + flowNo + "&FK_MainNode=" + fromNodeID + "&FK_Node=" + fromNodeID + "&ToNodeID=" + targetId + "&CondType=2&Lang=CH&t=" + new Date().getTime();
                 $("#LineModal").hide();
                 $(".modal-backdrop").hide();
-                OpenEasyUiDialog(url, flowNo + fromNodeID + "DIRECTION" + targetId, "设置方向条件" + fromNodeID + "->" + targetId, 880, 500, "icon-property", true, null, null, null, function () {
+                var w = window.innerWidth - 240;
+                var h = window.innerHeight - 120;
+                OpenEasyUiDialog(url, flowNo + fromNodeID + "DIRECTION" + targetId, "设置方向条件" + fromNodeID + "->" + targetId, w, h, "icon-property", true, null, null, null, function () {
 
                 });
 

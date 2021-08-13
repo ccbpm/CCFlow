@@ -45,8 +45,6 @@ new Vue({
                 })
             }
         },
-
-
         expandAssignMenu: function () {
             var sysNo = GetQueryString('SystemNo')
             var moduleNo = GetQueryString('ModuleNo')
@@ -69,10 +67,7 @@ new Vue({
                     }
                 }
             }
-
         },
-
-
         bindMenu: function () {
             var _this = this
             layui.use('dropdown', function () {
@@ -119,7 +114,6 @@ new Vue({
 
                 dropdown.render(systemOptions[0]);
                 dropdown.render(systemOptions[1]);
-
 
                 var moduleNodeItems = [
                     { title: '<i class=icon-plus></i> 新建菜单', id: "NewMenu", },
@@ -283,7 +277,6 @@ new Vue({
                 return;
             }
 
-
             layer.prompt({
                 value: '',
                 title: '请输入模块名称，比如：车辆报表、统计分析、系统管理',
@@ -292,6 +285,7 @@ new Vue({
                 var en = new Entity("BP.GPM.Menu2020.Module");
                 en.Name = value;
                 en.SystemNo = systemNo;
+                en.IsEnable = 1;
                 en.Insert();
 
                 layer.msg("创建成功");
@@ -482,7 +476,56 @@ new Vue({
             handler.AddPara("EnNos", systemNos); //目录下的 菜单IDs
             var data = handler.DoMethodReturnString("System_Move");
 
+        },
+        // 是否启用
+        changeSystemEnableStatus(system, ctrl) {
+            // 当前启用状态
+
+            var en = new Entity("BP.GPM.Menu2020.MySystems", system.No);
+            if (en.IsEnable == 0)
+                en.IsEnable = 1; // method.IsEnable;
+            else
+                en.IsEnable = 0; // method.IsEnable;
+
+            en.Update();
+
+            console.log("更新成功..");
+
+        },
+        // 是否启用
+        changeMethodEnableStatus(method, ctrl) {
+            // 当前启用状态
+
+            var en = new Entity("BP.GPM.Menu2020.Module", method.No);
+
+            if (en.IsEnable == 0)
+                en.IsEnable = 1; // method.IsEnable;
+            else
+                en.IsEnable = 0; // method.IsEnable;
+
+            // alert(en.IsEnable );
+
+            en.Update();
+
+            console.log("更新成功..");
+
+        },
+        // 是否启用
+        changeMenuEnableStatus(menu, ctrl) {
+            // 当前启用状态
+
+            var en = new Entity("BP.GPM.Menu2020.Menu", menu.No);
+            if (en.IsEnable == 0)
+                en.IsEnable = 1; // method.IsEnable;
+            else
+                en.IsEnable = 0; // method.IsEnable;
+
+            en.Update();
+
+            console.log("更新成功..");
+
         }
+
     },
     mounted: function () {
         // fix firefox bug
@@ -536,9 +579,6 @@ new Vue({
                 if (menu.Mark === "Group") menu.Icon = "icon-chart";
                 if (menu.Mark === "Search") menu.Icon = "icon-grid";
 
-
-              
-
                 var doc = "<a " + btnStyle + "  href=\"javascript:DesignerFlow('" + menu.Tag1 + "','" + menu.Name + "');\" >设计流程</a>";
 
                 //var html = "<a " + btnStyle + "  href=\"javascript:LayuiPopRight('" + menu.UrlExt + "','" + menu.Name + "','0',false);\" >启动流程</a>";
@@ -591,35 +631,42 @@ new Vue({
                 }
             }
 
-            if (menu.MenuModel === "Dict") {
-
-                menu.MenuModel = "实体";
-
-                if (menu.Icon === "") menu.Icon = "icon-notebook";
+            if (menu.MenuModel === "Dict" || menu.MenuModel === "DBList") {
 
                 var html = "";
-                if (menu.ListModel == 333)
-                    html += "<a " + btnStyle + " href=\"javascript:addTab('../CCBill/SearchEditer.htm?FrmID=" + menu.UrlExt + "','" + menu.Name + "');\" >列表</a>";
-                else
-                    html += "<a " + btnStyle + " href=\"javascript:addTab('../CCBill/SearchDict.htm?FrmID=" + menu.UrlExt + "','" + menu.Name + "');\"  >列表</a>";
-                //var url = "/Comm/RefFunc/En.htm?EnName=BP.CCBill.FrmDict&PKVal=Dict_CESHI1";
-                // html += "<a class='layui-btn layui-btn-primary layui-border-blue layui-btn-xs' href='../Comm/En.htm?EnName=BP.CCBill.FrmDict&PKVal=" + menu.UrlExt + "' target=_blank >属性</a>";
 
-                var url = "../CCBill/Admin/SearchCond.htm?FrmID=" + menu.UrlExt;
 
+                if (menu.MenuModel === "DBList") {
+                    html += "<a " + btnStyle + " href=\"javascript:addTab('../CCBill/SearchDBList.htm?FrmID=" + menu.UrlExt + "','" + menu.Name + "');\"  >打开</a>";
+                }
+
+                if (menu.MenuModel === "Dict") {
+                    if (menu.Icon === "") menu.Icon = "icon-notebook";
+
+                    html += "<a " + btnStyle + " href=\"javascript:addTab('../CCBill/SearchDict.htm?FrmID=" + menu.UrlExt + "','" + menu.Name + "');\"  >打开</a>";
+                }
+
+                // var url = "../CCBill/Admin/SearchCond.htm?FrmID=" + menu.UrlExt;
                 //OpenLayuiDialog(url, title, 5000, 0, null, false);
                 //  html += "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','','90000',0,null,false)\" >条件</a>";
                 //html += "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('../CCBill/Admin/Collection/Default.htm?FrmID=" + menu.UrlExt + "&ModuleNo=" + menu.ModuleNo + "','',700,0,null,true);\" >列表组件</a>";
                 //   html += "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('../CCBill/Admin/Collection/Default.htm?FrmID=" + menu.UrlExt + "&ModuleNo=" + menu.ModuleNo + "','列表:" + menu.Name + "');\" >列表组件</a>";
 
-                html += "<a " + btnStyle + "  href=\"javascript:addTab('../CCBill/Admin/Collection.htm?FrmID=" + menu.UrlExt + "&ModuleNo=" + menu.ModuleNo + "','方法:" + menu.Name + "');\" >列表组件</a>";
-                html += "<a " + btnStyle + "  href=\"javascript:addTab('../CCBill/Admin/Method.htm?FrmID=" + menu.UrlExt + "&ModuleNo=" + menu.ModuleNo + "','方法:" + menu.Name + "');\" >实体组件</a>";
-
-
+                html += "<a " + btnStyle + "  href=\"javascript:addTab('../CCBill/Admin/Collection.htm?FrmID=" + menu.UrlExt + "&ModuleNo=" + menu.ModuleNo + "&MenuModel=" + menu.MenuModel + "','方法:" + menu.Name + "');\" >列表组件</a>";
+                html += "<a " + btnStyle + "  href=\"javascript:addTab('../CCBill/Admin/Method.htm?FrmID=" + menu.UrlExt + "&ModuleNo=" + menu.ModuleNo + "&MenuModel=" + menu.MenuModel + "','方法:" + menu.Name + "');\" >实体组件</a>";
                 html += "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.FrmDict','" + menu.Name + "','" + menu.UrlExt + "')\" >属性</a>";
 
-                html += "<a " + btnStyle + "  href=\"javascript:GoToFrmDesigner('" + menu.UrlExt + "')\" >表单设计</a>";
-                html += " <span class='layui-badge-rim'>实体:" + menu.UrlExt + "</span>";
+                if (menu.MenuModel === "DBList") {
+                    menu.MenuModel = "数据源实体";
+                    html += "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.DBList','" + menu.Name + "','" + menu.UrlExt + "')\" >数据源</a>";
+                }
+
+                if (menu.MenuModel === "Dict") {
+                    menu.MenuModel = "实体";
+                    html += "<a " + btnStyle + "  href=\"javascript:GoToFrmDesigner('" + menu.UrlExt + "')\" >表单设计</a>";
+                }
+
+                // html += " <span class='layui-badge-rim'>实体:" + menu.UrlExt + "</span>";
 
                 menu.Docs = html;
 
@@ -644,8 +691,6 @@ new Vue({
                 menu.Docs = html;
             }
 
-
-
             if (menu.MenuModel == "" || menu.MenuModel === "SelfUrl") {
                 menu.MenuModel = "自定义菜单";
 
@@ -660,28 +705,37 @@ new Vue({
                 menu.MenuModel = "字典表";
                 if (menu.Icon === "") menu.Icon = "icon-control-pause";
 
-
                 var url = "../Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + menu.UrlExt + "&QueryType=Dict";
-                var html = "<a " + btnStyle + "  href=\"javascript:LayuiPopRight('" + url + "','" + menu.Name + "','0',false);\" >字典:" + menu.UrlExt + "</a>";
+                var html = "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','" + menu.Name + "','700',0,null,false);\" >打开字典:" + menu.UrlExt + "</a>";
                 menu.Docs = html;
             }
 
             if (menu.MenuModel == "Func") {
                 menu.MenuModel = "独立功能";
-                if (menu.Icon === "") menu.Icon = "icon-energy";
-                var html = "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.Sys.Func','" + menu.Name + "','" + menu.UrlExt + "')\" >功能属性</a>";
+                //if (menu.Icon === "") menu.Icon = "icon-energy";
+                //var html = "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.Sys.Func','" + menu.Name + "','" + menu.UrlExt + "')\" >功能属性</a>";
+                //var url = "../CCBill/Func/Func.htm?MyPK=" + menu.UrlExt + "&From=Desinger";
+                //html += "<a " + btnStyle + "  href=\"javascript:LayuiPopRight('" + url + "','" + menu.Name + "','0',false);\" >功能执行</a>";
+                //  menu.Docs = html;
 
-                var url = "../CCBill/Func/Func.htm?MyPK=" + menu.UrlExt + "&From=Desinger";
-                html += "<a " + btnStyle + "  href=\"javascript:LayuiPopRight('" + url + "','" + menu.Name + "','0',false);\" >功能执行</a>";
-                menu.Docs = html;
+                var url = "../CCBill/Sys/Func.htm?MyPK=" + menu.UrlExt + "&From=Desinger";
+                doc = "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','" + menu.Name + "','700',0,null,false);\" >功能执行</a>";
+                doc += "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.Sys.Func','" + menu.Name + "','" + menu.UrlExt + "')\" >功能属性</a>";
+
+                var url = "../CCBill/Admin/MethodDocSys/Default.htm?No=" + menu.UrlExt;
+                doc += "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','',9000,0,null,false)\" >编写脚本</a>";
+                menu.Docs = doc;
             }
 
             if (menu.MenuModel == "Windows") {
                 menu.MenuModel = "统计分析";
                 if (menu.Icon === "") menu.Icon = "icon-energy";
 
-                var url = "../GPM/Window/Default.htm?PageID=" + menu.No;
-                var html = "<a " + btnStyle + "  href=\"javascript:LayuiPopRight('" + url + "','" + menu.Name + "','700',false);\" >编辑窗体</a>";
+                var url = "../Portal/Home.htm?PageID=" + menu.No;
+                var html = "<a " + btnStyle + " href=\"javascript:addTab('" + url + "','" + menu.Name + "');\"  >打开</a>";
+
+                url = "../GPM/Window/Default.htm?PageID=" + menu.No;
+                html += "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','" + menu.Name + "','900',0,null,false);\" >编辑窗体</a>";
                 menu.Docs = html;
             }
 
@@ -698,7 +752,7 @@ new Vue({
 
                 var doc = "<a href=\"javascript:DesignerFlow('" + menu.Tag1 + "','" + menu.Name + "');\" ><i class=icon-heart ></i>设计流程" + menu.Tag1 + "</a>";
                 //var html = "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.Sys.Func','" + menu.Name + "','" + menu.UrlExt + "')\" >功能属性</a>";
-                var html = "<a " + btnStyle + "  href=\"javascript:LayuiPopRight('" + menu.UrlExt + "','" + menu.Name + "','0',false);\" >执行</a>";
+                var html = "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + menu.UrlExt + "','" + menu.Name + "','700',0,null,false);\" >执行</a>";
                 menu.Docs = html + doc;
             }
 
@@ -706,19 +760,28 @@ new Vue({
             if (menu.MenuModel === "Bill") {
                 menu.MenuModel = "单据";
                 var html = "";
-                html += "<a " + btnStyle + "  href=\"javascript:LayuiPopRight('" + menu.UrlExt + "','" + menu.Name + "','900',false);\" >执行</a>";
+                html += "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + menu.UrlExt + "','" + menu.Name + "','900',0,null,false);\" >执行</a>";
                 html += "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.FrmBill','" + menu.Name + "','" + menu.Tag1 + "')\" >单据属性</a>";
                 html += "<a " + btnStyle + "  href=\"javascript:GoToFrmDesigner('" + menu.Tag1 + "')\" >表单设计</a>";
                 menu.Docs = html;
             }
 
+            if (menu.MenuModel === "Tabs") {
+
+                menu.MenuModel = "标签容器";
+
+                var url = "../Portal/Tabs.htm?PageID=" + menu.No;
+                var html = "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','','900',0,null,false);\" >打开</a>";
+
+                url = "../GPM/Tabs/Default.htm?RefMenuNo=" + menu.No + "&SystemNo=" + menu.SystemNo + "&MoudleNo=" + menu.ModuleNo;
+                html += "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','" + menu.Name + "','900',0,null,false);\" >设计容器</a>";
+
+                menu.Docs = html;
+            }
+
             var url = "../GPM/PowerCenter.htm?CtrlObj=Menu&CtrlPKVal=" + menu.No + "&CtrlGroup=Menu";
 
-            menu.MenuCtrlWayText = "<a " + btnStyle + "  href =\"javascript:LayuiPopRight('" + url + "','" + menu.Name + "','700',false);\" >权限</a>";
-
-
-     
-
+            menu.MenuCtrlWayText = "<a " + btnStyle + "  href =\"javascript:OpenLayuiDialog('" + url + "','" + menu.Name + "','700',0,null,false);\" >权限</a>";
 
             // item.Docs = GenerDoc(item);
             //if (menu.MenuModel == "Dict") menu.MenuModel = "实体";
@@ -728,7 +791,7 @@ new Vue({
             //if (menu.MenuModel == "Search") menu.MenuModel = "查询";
             //if (menu.MenuModel == "Start") menu.MenuModel = "发起";
             //if (menu.MenuModel == "Todolist") menu.MenuModel = "待办";
-            //  item.Doc = "ssssssss";
+            //  item.Doc = "ssssssss";SSS
 
         })
 
@@ -739,7 +802,7 @@ new Vue({
             sys.open = false
             sys.children = [];
             var sysurl = "../GPM/PowerCenter.htm?CtrlObj=MenuSystem&CtrlPKVal=" + sys.No + "&CtrlGroup=Menu";
-            sys.itemCtrlWayText = "<a " + btnStyle + "  href =\"javascript:LayuiPopRight('" + sysurl + "','" + sys.Name + "','700',false);\" >权限</a>";
+            sys.itemCtrlWayText = "<a " + btnStyle + "  href =\"javascript:OpenLayuiDialog('" + sysurl + "','" + sys.Name + "','700',0,null,false);\" >权限</a>";
             var childModules = modules.filter(function (module) {
                 // return module.SystemNo === ''
                 return module.SystemNo === sys.No
@@ -749,7 +812,7 @@ new Vue({
                 module.open = false
                 var moduleurl = "../GPM/PowerCenter.htm?CtrlObj=MenuModule&CtrlPKVal=" + module.No + "&CtrlGroup=Menu";
 
-                module.moduleCtrlWayText = "<a " + btnStyle + "  href =\"javascript:LayuiPopRight('" + moduleurl + "','" + module.Name + "','700',false);\" >权限</a>";
+                module.moduleCtrlWayText = "<a " + btnStyle + "  href =\"javascript:OpenLayuiDialog('" + moduleurl + "','" + module.Name + "','700',0,null,false);\" >权限</a>";
                 module.children = menus.filter(function (menu) {
                     return menu.ModuleNo == module.No
                 })
@@ -775,7 +838,7 @@ function EnDotHtml(enName, pkVal, title, width) {
     if (width == undefined)
         width = 500;
 
-    LayuiPopRight(url, title, width, false);
+    OpenLayuiDialog(url, title, width, 0, null, false);
 
 }
 

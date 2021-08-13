@@ -91,6 +91,8 @@ function valitationBefore(o, validateType) {
                 break;
             case "float":
             case "money":
+                if (validateType == "money")
+                    value = value.replace(/,/g, "");
                 if (value.indexOf("-") == 0 && value.length == 1)
                     break;
                 else {
@@ -107,6 +109,7 @@ function valitationBefore(o, validateType) {
 var idx = 0;
 var oldCount = 0;
 function valitationAfter(o, validateType) {
+    debugger
     idx = getCursortPosition(o);
     oldCount = getStrCount(o.value.toString().substr(0, idx), ',');
     var value = o.value;
@@ -124,6 +127,8 @@ function valitationAfter(o, validateType) {
             break;
         case "float":
         case "money":
+            if (validateType == "money")
+                value = value.replace(/,/g, "");
             if (value.indexOf("-") == 0 && value.length == 1)
                 break;
             else {

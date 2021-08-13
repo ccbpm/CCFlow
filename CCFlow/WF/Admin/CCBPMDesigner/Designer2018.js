@@ -105,7 +105,9 @@ $(function () {
         var url = "../CCBPMDesigner/BatchFWC.htm?FK_Flow=" + GetQueryString("FK_Flow") + "&NodeID=" + nodeID;
         //window.parent.addTab(nodeID, "审核组件状态", url);
         var dgId = "iframDg";
-        OpenEasyUiDialog(url, dgId, '设置审核组件状态', 850, 550, 'icon-new', false)
+        var w = window.innerWidth - 240;
+        var h = window.innerHeight - 120;
+        OpenEasyUiDialog(url, dgId, '设置审核组件状态', w, h, 'icon-new', false)
     });
 
 });
@@ -1205,8 +1207,8 @@ function FlowCheck() {
     }
 
     else {
-        url = "../Admin/AttrFlow/CheckFlow.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
-        LayuiPopRight(url, "检查流程" + flowNo, 600, false);
+        url = "../AttrFlow/CheckFlow.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
+        OpenLayuiDialog(url, "检查流程" + flowNo, window.innerWidth*2/3);
     }
 
 }
@@ -1372,7 +1374,9 @@ function CondDir(fromNodeID) {
     var url = "../Cond/ConditionLine.htm?FK_Flow=" + flowNo + "&FK_MainNode=" + fromNodeID + "&FK_Node=" + fromNodeID + "&ToNodeID=" + targetId + "&CondType=2&Lang=CH&t=" + new Date().getTime();
     $("#LineModal").hide();
     $(".modal-backdrop").hide();
-    OpenEasyUiDialog(url, flowNo + fromNodeID + "DIRECTION" + targetId, "设置方向条件" + fromNodeID + "->" + targetId, 880, 500, "icon-property", true, null, null, null, function () {
+    var w = window.innerWidth - 240;
+    var h = window.innerHeight - 120;
+    OpenEasyUiDialog(url, flowNo + fromNodeID + "DIRECTION" + targetId, "设置方向条件" + fromNodeID + "->" + targetId, w, h, "icon-property", true, null, null, null, function () {
 
     });
 }

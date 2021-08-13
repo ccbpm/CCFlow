@@ -2,7 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>方法参数</title>
-
     <script src="../../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../../Portal/js/sortjs/Sortable.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -19,6 +18,7 @@
         .mapAttrParas {
             width: 100%;
         }
+
             .mapAttrParas .row {
                 display: flex;
                 justify-content: flex-start;
@@ -27,15 +27,6 @@
                 line-height: 40px;
                 background-color: #FAFAFA;
             }
-
-                /*mapAttr .row .item {*/
-                /*    box-sizing: border-box;*/
-                /*    flex-shrink: 0;*/
-                /*    text-align: center;*/
-                /*    width: 20%;*/
-                /*    border: 1px solid #eee;*/
-                /*    font-weight: 600;*/
-                /*}*/
 
                 .mapAttrParas .row .item {
                     box-sizing: border-box;
@@ -47,7 +38,6 @@
 
         .item-name {
             width: 15%;
-            text-overmapAttr: ellipsis;
             white-space: nowrap;
             cursor: pointer;
             padding-left: 30px;
@@ -66,7 +56,6 @@
             align-items: center;
             justify-content: center;
         }
-
 
         .item-index {
             background-color: #FAFAFA;
@@ -106,8 +95,6 @@
         }
     </style>
     <script type="text/javascript">
-      
- 
     </script>
 </head>
 <body>
@@ -141,7 +128,7 @@
                     <div class="item item-docs" v-html="mapAttr.Name"></div>
                     <div class="item item-other" v-html="mapAttr.UIContralType"></div>
 
-                    <div class="item item-other" @click.stop="DeleteSort(mapAttr.MyPK)">
+                    <div class="item item-other" @click.stop="DeleteEn(mapAttr.MyPK)">
                         <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs c-btn">
                             <i class="layui-icon layui-icon-delete layui-font-12"></i> 删除
                         </button>

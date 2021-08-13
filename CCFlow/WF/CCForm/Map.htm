@@ -77,8 +77,8 @@
         var KeyOfEn = GetQueryString("KeyOfEn");
         var FK_Node = GetQueryString("FK_Node");
         var WorkID = GetQueryString("WorkID");
-        var UIIsEnable = GetQueryString("UIIsEnable");//是否可编辑
-        if (UIIsEnable!=1) {
+        var isReadonly = GetQueryString("IsReadonly");//是否可编辑
+        if (isReadonly !== null && isReadonly!=undefined&&isReadonly=="1") {
 
             $("#commit").prop("disabled", true); // 当不可编辑时，提交按钮禁用
         }

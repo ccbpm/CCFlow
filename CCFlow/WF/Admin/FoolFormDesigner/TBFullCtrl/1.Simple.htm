@@ -114,85 +114,84 @@
         #bar {
             text-align: left;
         }
-
-        .cs-content-box {
-            padding: 0 5px;
-        }
+        .expcon{ font-size:14px; color:#0079d4; padding:5px 0px;}
     </style>
 </head>
 <body>
     <div id="bar">
     </div>
     <form id="cc">
-        <table id="table" style="width: 100%;">
-            <tr>
-                <td>
-                    数据源类型
-                </td>
-                <td>
-                    <select id="DDL_DBType" name="DDL_DBType" onchange="DBTypeChange(this)">
-                        <option value="0">执行SQL</option>
-                        <option value="1">执行url返回JSON</option>
-                        <option value="2">执行CCFromRef.js返回JSON</option>
-                    </select>
-                </td>
-            </tr>
-            <tr id="DBSrc">
-                <td>
-                    数据源
-                </td>
-                <td>
-                    <select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc">
-                    </select>
-                </td>
-            </tr>
- 
-            <tr>
-                <td colspan="2">
-                    搜索列表数据源配置:
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" style="width: 100%;">
-                    <textarea rows="4" name="TB_SQL" id="TB_SQL" style="width: 98%;"> </textarea>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" style="width: 100%;">
+        <div class="cs-content-box">
+            <table id="table" style="width: 100%;">
+                <tr>
+                    <td>
+                        数据源类型
+                    </td>
+                    <td>
+                        <select id="DDL_DBType" name="DDL_DBType" onchange="DBTypeChange(this)">
+                            <option value="0">执行SQL</option>
+                            <option value="1">执行url返回JSON</option>
+                            <option value="2">执行CCFromRef.js返回JSON</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr id="DBSrc">
+                    <td>
+                        数据源
+                    </td>
+                    <td>
+                        <select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc">
+                        </select>
+                    </td>
+                </tr>
 
-                    <a href="javascript:ShowHidden('sqlexp')"> <img src="../../../Img/Btn/Help.gif" />表达式填写帮助: </a>
+                <tr>
+                    <td colspan="2">
+                        搜索列表数据源配置:
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="width: 100%;">
+                        <textarea rows="4" name="TB_SQL" id="TB_SQL" style="width: 90%;"> </textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="width: 100%;">
 
-                    <div id='sqlexp' style='color: Gray; display: none'>
-                        <fieldset>
-                            <legend>填充SQL帮助:</legend>
-                            <ul>
-                                <li>1. 设置一个查询的SQL语句，该SQL必须包含 No, Name 列, 用与展示快速补全的部分。</li>
-                                <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
-                                <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
-                                <li>4. 比如: SELECT No,Name FROM WF_Emp WHERE No LIKE '@Key%'</li>
-                                <li>5.为防止URL编码规定like的第一个%写成[%],如果like '%@Key%' 写成'[%]@Key%'</li>
-                            </ul>
+                        <a href="javascript:ShowHidden('sqlexp')" class="expcon"> <img src="../../../Img/Btn/Help.gif" />表达式填写帮助: </a>
 
-                            <legend>填充Url帮助:</legend>
-                            <ul>
-                                <li>1. 设置URL，返回的必须是json格式。</li>
-                                <li>2. 比如: /App/Handler.ashx?DoType=Emps&Key=@Key </li>
-                                <li>3. @Key 是输入的关键字 </li>
-                            </ul>
+                        <div id='sqlexp' style='color: Gray; display: none'>
+                            <fieldset>
+                                <legend>填充SQL帮助:</legend>
+                                <ul>
+                                    <li>1. 设置一个查询的SQL语句，该SQL必须包含 No, Name 列, 用与展示快速补全的部分。</li>
+                                    <li>2. 该SQL必须包含 @Key 关键字，@Key 输入文本框的值. </li>
+                                    <li>3. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
+                                    <li>4. 比如: SELECT No,Name FROM WF_Emp WHERE No LIKE '@Key%'</li>
+                                    <li>5.为防止URL编码规定like的第一个%写成[%],如果like '%@Key%' 写成'[%]@Key%'</li>
+                                </ul>
+
+                                <legend>填充Url帮助:</legend>
+                                <ul>
+                                    <li>1. 设置URL，返回的必须是json格式。</li>
+                                    <li>2. 比如: /App/Handler.ashx?DoType=Emps&Key=@Key </li>
+                                    <li>3. @Key 是输入的关键字 </li>
+                                </ul>
 
 
-                            <legend>主表运行效果</legend>
-                            <img  id="HelpImg" src="1.Simple.png" style="width:90%;" />
-                        </fieldset>
+                                <legend>主表运行效果</legend>
+                                <img id="HelpImg" src="1.Simple.png"  />
+                            </fieldset>
 
-                        <fieldset>
-                            <legend>从表运行效果</legend>
-                            <img  id="HelpImg" src="1.Simple-1.png" style="width:90%;" />
-                        </fieldset>
-                    </div>
-                </td>
-            </tr>
-        </table>
+                            <fieldset>
+                                <legend>从表运行效果</legend>
+                                <img id="HelpImg" src="1.Simple-1.png"/>
+                            </fieldset>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </form>
 </body>
 </html>

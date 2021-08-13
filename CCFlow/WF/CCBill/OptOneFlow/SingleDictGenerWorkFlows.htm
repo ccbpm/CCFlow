@@ -16,34 +16,124 @@
     <script src="../../Scripts/layui/layui/layui.js"></script>
     <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
     <!--    <script type="text/javascript" src="methods.js"></script>-->
+    <style>
+        .method {
+            width: 100%;
+        }
+
+        .method .row {
+            display: flex;
+            justify-content: flex-start;
+            flex: 0.2;
+            height: 40px;
+            line-height: 40px;
+            background-color: #FAFAFA;
+        }
+
+        .method .row .item {
+            box-sizing: border-box;
+            flex-shrink: 0;
+            text-align: center;
+            border-right: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .item-name {
+            width: 32%;
+            text-overmethod: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+            padding-left: 5px;
+            overflow: hidden
+        }
+
+        .item-num {
+            width: 8%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .item-other {
+            width: 12%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .item-docs {
+            width: 30%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .item-index {
+            background-color: #FAFAFA;
+            padding-right: 40px;
+            color: #999999
+        }
+
+        .method .row .folder-item {
+            box-sizing: border-box;
+            width: 80%;
+            padding-left: 20px;
+            cursor: pointer;
+        }
+
+        .wrapper .row {
+            background-color: #fff;
+        }
+
+        #s-main {
+            transition: all ease .4s;
+            margin-top: 40px;
+        }
+
+        .fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .layui-input-block > .layui-form-switch {
+            margin-top: 0 !important;
+        }
+    </style>
 </head>
 
 <body>
 
-    <div id="idcc">
+    <!--div id="idcc">
         <i class="icon-home"></i>\\流程列表
-    </div>
+    </div-->
 
     <div class="method" id="method" v-cloak>
 
-        <div class="row fixed" style="top:25px;">
-            <div class="item item-other" @click="expandAll = !expandAll">
+        <div class="row fixed">
+            <div class="item item-num" @click="expandAll = !expandAll">
                 <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs">
-                    {{expandAll ? '折叠所有' : '展开所有'}}
+                    {{expandAll ? '折叠' : '展开'}}
                 </button>
             </div>
             <div class="item item-name"><i class="icon-app"></i> 标题</div>
             <div class="item item-other">发起人</div>
             <div class="item item-other">发起日期</div>
             <div class="item item-other">停留节点</div>
+            <div class="item item-other">发送人</div>
             <div class="item item-other">状态</div>
-            <div class="item item-other">操作</div>
         </div>
         <div ref="sort-main" id="s-main">
-            <div class="wrapper" v-for="(flow,index) in flowNodes" :key="index" :data-mypk="flow.No"
+            <div class="wrapper" v-for="(flow,index) in flows" :key="index" :data-mypk="flow.No"
                  :data-pid="flow.ParentNo">
                 <div class="row" @click="flow.open = !flow.open">
-                    <div class="item item-other" style="text-align: center">
+                    <div class="item item-num" style="text-align: center">
                         <i v-if="flow.children.length > 0" class="layui-icon"
                            :class="flow.open ? 'layui-icon-up':'layui-icon-right'"></i>
                         <i v-else=v-else class="layui-icon layui-icon-subtraction"></i>
@@ -57,34 +147,34 @@
                     </div>
 
                     <div class="item item-other ">
-                        <button @click.stop :data-mypk="flow.No" :data-name="flow.Name" :data-idx="index"
+
+                        <span @click.stop="StartFlow(flow.No,flow.Name)">查询|发起</span>
+
+                        <!--<button @click.stop="StartFlow(flow.No,flow.Name)" data-mypk="flow.No" :data-name="flow.Name" :data-idx="index"
                                 class="layui-btn layui-btn-primary layui-border-black layui-btn-xs t-btn">
-                            <i class="layui-icon layui-icon-down layui-font-12"></i> 查询
-                        </button>
+                            <i class="layui-icon layui-icon-down layui-font-12">查询|发起</i>
+                        </button>-->
                     </div>
+
                 </div>
-                <div v-show="flow.open" :data-id="flow.MyPK" ref="child-row">
-                    <div class="row" v-for="(method,idx) in flow.children" :key="idx" :data-pid="flow.MyPK"
-                         :data-id="method.MyPK">
-                        <div class="item item-other item-index" style="text-align: right;">{{idx + 1}}</div>
+                <div v-show="flow.open" :data-id="flow.No" ref="child-row">
+                    <div class="row" v-for="(generWorkFlow,idx) in flow.children" :key="idx" :data-pid="flow.No"
+                         :data-id="generWorkFlow.WorkID">
+                        <div class="item item-num item-index" style="text-align: right;">{{idx + 1}}</div>
 
                         <div class="item item-name item-name-dp"
-                             style="text-align: left" :data-mypk="method.MyPK" :data-name="method.Name" :data-pidx="index"
-                             :data-idx="idx" title="{{method.Title}}">
-                            <span>{{method.Title}}</span>
+                             style="text-align: left" :data-mypk="generWorkFlow.WorkID" :data-name="generWorkFlow.Title" :data-pidx="index"
+                             :data-idx="idx" @click.stop="OpenMyView(generWorkFlow.FK_Flow,generWorkFlow.WorkID)">
+                            <span> <font color="blue">{{generWorkFlow.Title}}</font></span>
                         </div>
-                        <div class="item item-other">{{method.StarterName}}</div>
-                        <div class="item item-other">{{method.SendDT}}</div>
+                        <div class="item item-other">{{generWorkFlow.StarterName}}</div>
+                        <div class="item item-other">{{generWorkFlow.RDT}}</div>
                         <div class="item item-other">
-                            {{method.TodoEmps}}
+                            {{generWorkFlow.FK_NodeText}}
                         </div>
-                        <div class="item item-other"><i :class="method.Icon"></i> {{method.Icontitle}}</div>
-                        <div class="item item-other">
-                            <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs c-btn"
-                                    :data-name="method.Name" :data-no="method.MyPK" :data-pidx="index" :data-idx="idx">
-                                <i class="layui-icon layui-icon-down layui-font-12"></i> 操作
-                            </button>
-                        </div>
+                        <div class="item item-other">{{generWorkFlow.Sender}}</div>
+
+                        <div class="item item-other"><i :class="generWorkFlow.Icon"></i> {{generWorkFlow.IconTitle}}</div>
                     </div>
                 </div>
             </div>
@@ -95,87 +185,5 @@
 
 </body>
 
-<style>
-    .method {
-        width: 100%;
-    }
 
-        .method .row {
-            display: flex;
-            justify-content: flex-start;
-            flex: 0.2;
-            height: 40px;
-            line-height: 40px;
-            background-color: #FAFAFA;
-        }
-
-            .method .row .item {
-                box-sizing: border-box;
-                flex-shrink: 0;
-                text-align: center;
-                border-right: 1px solid #eee;
-                border-bottom: 1px solid #eee;
-            }
-
-    .item-name {
-        width: 22%;
-        text-overmethod: ellipsis;
-        white-space: nowrap;
-        cursor: pointer;
-        padding-left: 5px;
-        overflow:hidden
-    }
-
-    .item-other {
-        width: 13%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .item-docs {
-        width: 30%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-
-    .item-index {
-        background-color: #FAFAFA;
-        padding-right: 40px;
-        color: #999999
-    }
-
-    .method .row .folder-item {
-        box-sizing: border-box;
-        width: 74%;
-        padding-left: 20px;
-        cursor: pointer;
-    }
-
-    .wrapper .row {
-        background-color: #fff;
-    }
-
-    #s-main {
-        transition: all ease .4s;
-        margin-top: 40px;
-    }
-
-    .fixed {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-    }
-
-    [v-cloak] {
-        display: none;
-    }
-
-    .layui-input-block > .layui-form-switch {
-        margin-top: 0 !important;
-    }
-</style>
 </html>

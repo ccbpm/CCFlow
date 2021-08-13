@@ -53,7 +53,7 @@
             <input type="button" value="装载模版" onclick="LoadTemplate()" id="ddd" />
             <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
             <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
-            
+
         </div>
         <table id="table" style="width:99%;">
             <caption>
@@ -85,7 +85,6 @@
             </tr>
             <tr>
                 <td colspan="3">
-                    
                 </td>
             </tr>
             <tr>
@@ -109,22 +108,21 @@
 
                 $("#Msg").html("正在保存,请稍后......");
 
-                var frmData = $("#cc").serialize();
+                var mypk = "AutoFullDLL_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+                var en = new Entity("BP.Sys.MapExt");
+                en.MyPK = mypk;
+                en.RetrieveFromDBSources();
+                en.CopyForm(); //复制表单数据.
+                en.Doc = $("#TB_Doc").val();
+                en.FK_MapData = GetQueryString("FK_MapData");
+                en.AttrOfOper = GetQueryString("KeyOfEn");
+                en.ExtType = "AutoFullDLL";
+                en.FK_DBSrc = $("#DDL_FK_DBSrc").val(); //  this.GetValFromFrmByKey("FK_DBSrc");
+                en.MyPK = mypk;
+                if (en.Update() == 0)
+                    en.Insert();
 
-                //        var myurl = Handler + "?DoType=AutoFullDLL_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random();
-
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
-                handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
-                handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
-                handler.AddFormData();
-                var data = handler.DoMethodReturnString("AutoFullDLL_Save");
-                if (data.indexOf('err@') != -1) {
-
-                    $("#Msg").html("<font color=red>" + data + "</font>");
-                    return;
-                }
-
-                $("#Msg").html("<font color=green>" + data + "</font>");
+                $("#Msg").html("<font color=green>保存成功</font>");
                 return;
             }
 
@@ -133,11 +131,11 @@
                 if (window.confirm('您确定要删除吗？') == false)
                     return false;
 
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
-                handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
-                handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
-                var data = handler.DoMethodReturnString("AutoFullDLL_Delete");
-                alert(data);
+                var mypk = "AutoFullDLL_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+                var en = new Entity("BP.Sys.MapExt");
+                en.MyPK = mypk;
+                en.Delete();
+
                 window.location.href = window.location.href;
                 return;
             }

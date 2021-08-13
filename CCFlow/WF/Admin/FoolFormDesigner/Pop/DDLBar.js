@@ -38,7 +38,7 @@ function InitBar(optionKey) {
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-    html += "<input  id='Btn_Gener' type=button onclick=Adv('" + optionKey + "') value='通用' />";
+    html += "<input  id='Btn_Gener' type=button class='cc-btn-tab' onclick=Adv('" + optionKey + "') value='通用' />";
     html += "<input type='button' value='删除' id='Btn_Delete' name='Btn_Delete' onclick='return Delete()' />"
     html += "<input id='Btn_FullData' type=button onclick='FullData()' value='填充' />";
 

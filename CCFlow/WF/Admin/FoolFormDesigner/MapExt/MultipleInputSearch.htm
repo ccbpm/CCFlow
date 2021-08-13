@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>搜索的多选</title>
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Scripts/config.js" type="text/javascript"></script>
@@ -77,97 +78,117 @@
             window.location.href = url;
         }
     </script>
+    <style>
+        .table a {
+            color: #1c60be
+        }
+
+        .table ul {
+            padding: 10px 0px;
+        }
+
+        .table li {
+            list-style-type: none;
+            line-height: 26px;
+        }
+    </style>
 </head>
 <body>
-    <form id="cc">
-
-        <div style="right:10px; position:absolute; z-index:100; top:-3px">
-            <input type="button" value="保存" id="Btn_Save" onclick="Save()" />
-            <input type="button" value="删除" id="Btn_Delete" onclick="Delete()" />
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <span class="pull-right">
+                <input type="button" value="保存" id="Btn_Save" class="cc-btn-tab" onclick="Save()" />
+                <input type="button" value="删除" id="Btn_Delete" class="cc-btn-tab" onclick="Delete()" />
+                <input type="button" value="帮助" id="Btn_Help" class="cc-btn-tab" onclick="ShowHidden('help')" />
+            </span>
+            <strong> 文本框搜索输入多选</strong>
         </div>
-        <table style="width:100%;">
-            <caption>文本框搜索输入多选<a href="javascript:ShowHidden('help')"> <img src="../../../Img/Btn/Help.gif" /> 帮助:</a> </caption>
+        <form id="cc">
+            
+            <table  class="table">
+               
 
-            <tr>
-                <td>数据源类型 </td>
-                <td>
+                <tr>
+                    <td>数据源类型 </td>
+                    <td>
 
-                    <select id="DDL_DBType" name="DDL_DBType">
-                        <option value="0">执行SQL</option>
-                        <option value="1">执行url返回JSON</option>
-                        <option value="2">执行CCFromRef.js返回JSON</option>
-                    </select>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td>
-
-                    <a href="javascript:ShowHidden('SearchTip')">搜索提示</a>
-                    <div id="SearchTip" style="color:Gray; display:none">
-                        <ul>
-                            <li>显示在搜索文本框的背景文字.</li>
-                            <li>输入城市名称,比如:beijing,bj,进行搜索.</li>
-                            <li>人员的编号,名称,拼音,进行模糊搜索.</li>
-                        </ul>
-                    </div>
-
-                </td>
-                <td><input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width:90%;" /> </td>
-            </tr>
-            <tr>
-                <td>
-                    是否显示签名
-                </td>
-                <td> <label> <input type="checkbox" id="CB_Tag" name="CB_Tag" />是否显示签名</label> </label></td>
-            </tr>
-
-            <tr>
-                <td colspan="2">搜索数据源</td>
-            </tr>
-
-            <tr>
-                <td colspan=2>
-                    <textarea rows="3" id="TB_Doc" name="TB_Doc"></textarea>
-                </td>
-            </tr>
-
-            <tr>
-                <td colspan="2">列表数据源</td>
-            </tr>
-
-            <tr>
-                <td colspan=2>
-                    <textarea rows="3" id="TB_Tag1" name="TB_Tag1"></textarea>
-                </td>
-            </tr>
-
-        </table>
+                        <select id="DDL_DBType" name="DDL_DBType">
+                            <option value="0">执行SQL</option>
+                            <option value="1">执行url返回JSON</option>
+                            <option value="2">执行CCFromRef.js返回JSON</option>
+                        </select>
+                    </td>
+                </tr>
 
 
-       
+                <tr>
+                    <td>
 
-        
-        <div id="help" style="color:Gray; display:none">
-            <ul>
-                <li>SQL格式为:</li>
-                <li>SELECT No,Name FROM Port_Emp WHERE PinYin LIKE '@Key%' OR No LIKE '%@Key%' OR Name LIKE '%@Key%' </li>
-                <li>SELECT No,Name FROM CN_City WHERE PinYin LIKE '%@Key%' OR Name LIKE '%@Key%'</li>
-                <li>URL格式为:</li>
-                <li>/DataUser/Handler.ashx?xxx=sss </li>
-                <li>方法的格式为:</li>
-                <li>MyFunName</li>
-            </ul>
-        </div>
+                        <a href="javascript:ShowHidden('SearchTip')">搜索提示</a>
+                        <div id="SearchTip" style="color:Gray; display:none">
+                            <ul>
+                                <li>显示在搜索文本框的背景文字.</li>
+                                <li>输入城市名称,比如:beijing,bj,进行搜索.</li>
+                                <li>人员的编号,名称,拼音,进行模糊搜索.</li>
+                            </ul>
+                        </div>
 
-        <fieldset>
-            <legend>运行效果</legend>
-            <a href="javascript:WinOpen('MultipleInputSearch.png');"> <img src="MultipleInputSearch.png" /> </a>
+                    </td>
+                    <td><input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width:90%;" /> </td>
+                </tr>
+                <tr>
+                    <td>
+                        是否显示签名
+                    </td>
+                    <td> <label> <input type="checkbox" id="CB_Tag" name="CB_Tag" />是否显示签名</label></td>
+                </tr>
 
-        </fieldset>
+                <tr>
+                    <td colspan="2">搜索数据源</td>
+                </tr>
 
-    </form>
+                <tr>
+                    <td colspan=2>
+                        <textarea rows="3" id="TB_Doc" name="TB_Doc"  style="width:90%;" ></textarea>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">列表数据源</td>
+                </tr>
+
+                <tr>
+                    <td colspan=2>
+                        <textarea rows="3" id="TB_Tag1" name="TB_Tag1"  style="width:90%;" ></textarea>
+                    </td>
+                </tr>
+
+            </table>
+
+
+
+
+
+            <div id="help" style="color:Gray; display:none">
+                <ul>
+                    <li>SQL格式为:</li>
+                    <li>SELECT No,Name FROM Port_Emp WHERE PinYin LIKE '@Key%' OR No LIKE '%@Key%' OR Name LIKE '%@Key%' </li>
+                    <li>SELECT No,Name FROM CN_City WHERE PinYin LIKE '%@Key%' OR Name LIKE '%@Key%'</li>
+                    <li>URL格式为:</li>
+                    <li>/DataUser/Handler.ashx?xxx=sss </li>
+                    <li>方法的格式为:</li>
+                    <li>MyFunName</li>
+                </ul>
+            </div>
+            <div class="cs-content-box">
+                <fieldset>
+                    <legend>运行效果</legend>
+                    <a href="javascript:WinOpen('MultipleInputSearch.png');"> <img src="MultipleInputSearch.png" /> </a>
+                </fieldset>
+            </div>
+        </form>
+
+    </div>
 
 </body>
 </html>

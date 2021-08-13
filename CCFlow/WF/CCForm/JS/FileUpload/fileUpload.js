@@ -349,7 +349,6 @@ var uploadTools = {
      */
     "uploadFile":function(opt){
         var uploadUrl = opt.uploadUrl;
-        
         if (uploadUrl != "#" && uploadUrl != "") {
             uploadTools.disableFileUpload(opt);//禁用文件上传
             uploadTools.disableCleanFile(opt);//禁用清除文件
@@ -397,7 +396,7 @@ var uploadTools = {
                 });
             } else {
 
-                UploadChange(uploadUrl, opt.FK_FrmAttachment);
+                UploadChangeAth(uploadUrl, opt.FK_FrmAttachment);
           
                
             }

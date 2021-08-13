@@ -49,7 +49,7 @@
             //    alert('该方法名已经存在，请重新创建');
             //    return;
             //}
-
+            en.IsEnable = 1;
             en.Icon = "icon-drop";
             en.Insert();
 
@@ -69,7 +69,7 @@
             if (name == "")
                 return;
 
-            var handler = new HttpHandler("BP.Cloud.HttpHandler.Admin_CCFormDesigner");
+            var handler = new HttpHandler("BP.WF.HttpHandler.Admin_CCFormDesigner");
             handler.AddPara("IsQuanPin", isQuanPin);
             handler.AddPara("TB_Name", encodeURIComponent(name));
             var data = handler.DoMethodReturnString("NewFrmGuide_GenerPinYin");

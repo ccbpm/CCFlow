@@ -22,8 +22,8 @@ function InitBar(optionKey) {
 
     html += "</select >";
 
-    html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-    html += "<input id='Btn_Advanced' type=button onclick='AdvSetting()' value='更多' />";
+    html += "<input  id='Btn_Save' type=button onclick='Save()' class='cc-btn-tab' value='保存' />";
+    html += "<input id='Btn_Advanced' type=button onclick='AdvSetting()'class='cc-btn-tab' value='更多' />";
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");

@@ -53,8 +53,8 @@
             var index = fileValue.lastIndexOf('.');
             var fileExt = fileValue.substring(index);
             if (fileExt.toLowerCase() != ".xls") {
-                $.messager.alert("提示", "首先,确认您上传的Excel文件,其次此版本仅支持97-2003版的Excel,所以你要确认你上传的文件后缀名为xls");
-                return;
+                //$.messager.alert("提示", "首先,确认您上传的Excel文件,其次此版本仅支持97-2003版的Excel,所以你要确认你上传的文件后缀名为xls");
+               // return;
             }
 
             //提交数据
@@ -66,10 +66,11 @@
                     //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交  
                 },
                 success: function (data) {
+                    //刷新 从表的IFRAME
+                   // parent.location.reload();
                     alert(data);
                     window.close();
-
-                    return;
+                   
                 }
             });
 

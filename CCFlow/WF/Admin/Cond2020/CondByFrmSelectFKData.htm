@@ -69,9 +69,10 @@
         }
         //返回.
         function Back() {
-            var url = window.location.href;
+            /*var url = window.location.href;
             url = url.replace('CondByFrm.htm', 'List.htm');
-            window.location.href = url;
+            window.location.href = url;*/
+            window.parent.Condlist.closeCurrentTabs();
         }
     </script>
 </head>

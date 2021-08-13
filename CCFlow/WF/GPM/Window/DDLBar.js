@@ -46,13 +46,15 @@ function GetDBDtl() {
         { "No": "ChartLine", "Name": "折线图", "GroupNo": "B", "Url": "ChartLine.htm" },
         { "No": "ChartPie", "Name": "饼图", "GroupNo": "B", "Url": "ChartPie.htm" },
         { "No": "ChartZZT", "Name": "柱状图", "GroupNo": "B", "Url": "ChartZZT.htm" },
-         
-        { "No": "Table", "Name": "简单表格", "GroupNo": "C", "Url": "Table.htm" }
+        { "No": "ChartRate", "Name": "百分比扇形图", "GroupNo": "B", "Url": "ChartRate.htm" },
+        { "No": "ChartRing", "Name": "环形图", "GroupNo": "B", "Url": "ChartRing.htm" },
+
+        { "No": "Table", "Name": "简单表格", "GroupNo": "C", "Url": "Table.htm" },
+        { "No": "Tab", "Name": "标签页", "GroupNo": "C", "Url": "Tab.htm" }
 
     ];
     return json;
 }
-
 
 function Close() {
     window.close();
@@ -77,9 +79,9 @@ function HelpOnline() {
 
 function changeOption() {
 
-    var flowNo = GetQueryString("MenuNo");
-    if (flowNo == null)
-        flowNo = '001';
+    var pageID = GetQueryString("MenuNo");
+    if (pageID == null)
+        pageID = GetQueryString("PageID");
 
     var obj = document.getElementById("changBar");
     var sele = obj.options;
@@ -87,7 +89,7 @@ function changeOption() {
     var optionKey = optionKey = sele[index].value;
     var url = GetUrl(optionKey);
 
-    window.location.href = url + "?MenuNo=" + flowNo;
+    window.location.href = url + "?MenuNo=" + pageID + "&PageID=" + pageID;
 }
 
 function GetUrl(optionKey) {

@@ -351,7 +351,10 @@ function LoginOut() {
 
     if (confirm("提示确定需要退出？") == false)
         return;
-    window.location.href = "Login.htm?DoType=Logout";
+
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
+    var data = handler.DoMethodReturnString("Default_LogOut");
+    window.location.href = data;// "Login.htm?DoType=Logout";
 }
 
 var FLOW_TREE = "flowTree";

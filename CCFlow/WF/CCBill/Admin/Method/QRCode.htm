@@ -44,6 +44,7 @@
             en.MethodModel = MethodModel.QRCode; //设置为链接按钮.
             en.RefMethodType = 1;
             en.UrlExt = "./OptComponents/QRCode.htm";
+            en.IsEnable = 1;
             //en.SetPKVal(en.FrmID + "_" + en.MethodID);
             en.Insert();
 
@@ -62,6 +63,9 @@
         <ul>
             <li>标签 </li>
             <li> <input type="text" value="二维码" id="TB_Name" name="TB_Name" /> </li>
+            <li>1. 该二维码是一个用于数据扫描查看的二维码。 </li>
+            <li>2. 用户扫一扫就可以在手机上查看该表单的信息。 </li>
+            <li>3. 如果您需要填报二维码，请在菜单新建【表单填报二维码】。 </li>
         </ul>
 
         <div id="Msg"></div>
@@ -69,8 +73,7 @@
 
 
     <fieldset>
-        <legend>帮助 </legend>
-
+        <legend>运行效果 </legend>
         <ul>
             <li>可以使用手机扫描看到该表单的信息.</li>
             <li><img src="QRCode.png" /></li>

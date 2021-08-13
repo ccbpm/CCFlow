@@ -88,7 +88,7 @@
                     if (GetQueryString('From') != null)
                         nameLink = "<label for='RB" + sfTable.No + "'> <input type=radio id='RB" + sfTable.No + "' name='RB' value='" + sfTable.No + "@" + sfTable.Name + "@" + sfTable.FK_Val + "' /> " + sfTable.No + " </label>";
                     else
-                        nameLink = "<a href=\"javascript:AddSFTable('" + sfTable.No + "')\" class='cc-btn-tab btn-edit'> " + sfTable.No + "</a>";
+                        nameLink = "<a href=\"javascript:AddSFTable('" + sfTable.No + "','" + sfTable.SrcType + "')\" class='cc-btn-tab btn-edit'> " + sfTable.No + "</a>";
                 }
                 else
                     nameLink = sfTable.No;
@@ -145,13 +145,39 @@
             };
         }
 
+        function EditUIBindKeyOfAttr(keyOfEn, fk_mapData, sfTable, srcType) {
+            if (fk_mapData == null || fk_mapData == undefined || fk_mapData == "") {
+                alert("字段" + keyOfEn + "绑定的表单获取到的字段为空")
+            }
+            var attr = new Entity("BP.Sys.MapAttr", fk_mapData + "_" + keyOfEn);
+            attr.UIContralType = 1;
+            attr.MyDataType = 1;
+            attr.UIBindKey = sfTable;
+            if (srcType == "0" || srcType == "1" || srcType == "2")
+                attr.LGType = 2;
+            else
+                 attr.LGType =0;
+            
+            attr.Update();
+            if (attr.LGType==2)
+                window.location.href = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=" + attr.MyPK;
+            else
+                window.location.href = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&PKVal=" + attr.MyPK;
+        }
 
-        function AddSFTable(sfTable) {
+        function AddSFTable(sfTable,srcType) {
 
             var fk_mapData = GetQueryString("FK_MapData");
 
             if (fk_mapData == '' || fk_mapData == null) {
                 window.location.href = 'SFSQLDataView.htm?FK_SFTable=' + sfTable;
+                return;
+            }
+
+            var keyOfEn = GetQueryString("KeyOfEn");
+            keyOfEn = keyOfEn == null || keyOfEn == undefined ? "" : keyOfEn;
+            if (keyOfEn != "") {
+                EditUIBindKeyOfAttr(keyOfEn, fk_mapData, sfTable, srcType);
                 return;
             }
 
@@ -249,8 +275,9 @@
         function New() {
             var url = './SFTable/Default.htm?DoType=New&FromApp=SL&s=' + Math.random();
 
-
-            OpenEasyUiDialog(url, "eudlgframe", "新建字典表", 800, 500, "icon-edit", true, null, null, null, function () {
+            var w = window.innerWidth * 2 / 3;
+            var h = window.innerHeight -80;
+            OpenEasyUiDialog(url, "eudlgframe", "新建字典表", w, h, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }
@@ -266,6 +293,8 @@
         });
         //关键字查询
         function Search() {
+			$('#Table1 tbody').empty();
+			$('#Table1 tr').empty();
             InitPage();
         }
     </script>

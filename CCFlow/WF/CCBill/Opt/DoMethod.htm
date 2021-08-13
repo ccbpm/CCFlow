@@ -19,6 +19,9 @@
         var mypk = GetQueryString("No");//方法的主键
         var frmID = GetQueryString("FrmID");
         var workid = GetQueryString("WorkID");
+        var workids = GetQueryString("WorkIDs");
+        var fromPage = GetQueryString("From");
+        fromPage = fromPage == null || fromPage == undefined ? "" : fromPage;
         var methodFunc = null;
         var isHaveParas = false; //执行的方法是否含有参数
         var attrs = null;       //参数字段集合
@@ -65,6 +68,11 @@
                     return;
                 }
                 doMethod();
+                if (fromPage == "Search") {
+                    //执行完方法后关闭页面
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index); //再执行关闭
+                }
             })
         }
 
@@ -80,21 +88,24 @@
                     handler.AddPara("MyPK", mypk);
                     handler.AddPara("FrmID", frmID);
                     handler.AddPara("WorkID", workid);
+                    handler.AddPara("WorkIDs", workids);
                     data = handler.DoMethodReturnString("DoMethod_ExeSQL"); //执行SQLs
                     layer.alert(data);
                     if (data.indexOf("err@") == -1)
                         $("#Btn_Done").attr('disabled', true);
                     break;
                 case 1://执行JavaScript
-                    data = Skip.addJs('../../../DataUser/JSLibData/Method/' + mypk + '.js');
-                    //layer.alert(data);
+                    Skip.addJs('../../../DataUser/JSLibData/Method/' + mypk + '.js');
+                    DBAccess.RunFunctionReturnStr(methodFunc.MethodID);
+
+                    
                     break;
                 case 2://URL模式
                     debugger
-                    var url = methodFunc.MethodDoc_Url;
+                    var url = methodFunc.Tag1;
                     if (url.indexOf('?') == -1)
                         url += "?1=1";
-                    url += "&MethodName=" + methodFunc.MethodID + "&FrmID=" + frmID + "&WorkID=" + workid;
+                    url += "&MethodName=" + methodFunc.MethodID + "&FrmID=" + frmID + "&WorkID=" + workid+"&WorkIDs="+workids;
                     //执行url返回数据.
                     var data = DBAccess.RunUrlReturnString(url);
                     layer.alert(data);

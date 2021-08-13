@@ -3,29 +3,29 @@
      "title": "基本字段",
     "icon": "iconfont icon-ziduan",
     "child": [
-        {"id":"TextBox","title": "文字文本框", "icon": "icon-user", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        {"id":"TextBoxInt","title": "整数", "icon": "icon-user", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        {"id":"TextBoxFloat","title": "数值", "icon": "icon-user", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "TextBoxMoney", "title": "金额", "icon": "icon-wallet", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "Date", "title": "日期", "icon": "icon-calendar", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "DateTime", "title": "日期时间", "icon": "icon-calendar", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        {"id":"CheckBox", "title": "复选框", "icon": "icon-user", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "TextBox", "title": "文字文本框", "icon": "iconfont icon-fuwenbenkuang", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "TextBoxInt", "title": "整数", "icon": "iconfont icon-zhengshu", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "TextBoxFloat", "title": "数值", "icon": "iconfont icon-ziduanleixing-zhengshu", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "TextBoxMoney", "title": "金额", "icon": "iconfont icon-yifabupiaoju-renminbi-xi", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "Date", "title": "日期", "icon": "iconfont icon-riqiqishu", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "DateTime", "title": "日期时间", "icon": "iconfont icon-shijian1", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "CheckBox", "title": "复选框", "icon": "iconfont icon-fuxuankuang", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
         {type: '-'},
-        { "id": "Radio", "title": "单选按钮", "icon": "icon-menu", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "RadioSelect", "title": "枚举下拉框", "icon": "icon-options", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "RadioCheckBox", "title": "枚举多选按钮", "icon": "icon-list", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "Radio", "title": "单选按钮", "icon": "iconfont icon-danxuan", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "RadioSelect", "title": "枚举下拉框", "icon": "iconfont icon-xialakuang", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "RadioCheckBox", "title": "枚举多选按钮", "icon": "iconfont icon-xialakuangbiaodan", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
         {type: '-'},
-        { "id": "Select", "title": "外键,外部数据源下拉框", "icon": "icon-list", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "WorkCheck", "title": "签批组件", "icon": "icon-check", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 }
+        { "id": "Select", "title": "外键,外部数据源下拉框", "icon": "iconfont icon-xialakuang1", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "WorkCheck", "title": "签批组件", "icon": "iconfont icon-ptkj-lianxuqianpimoshi", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 }
     ]},{
     "id":"Ath",
     "title": "附件",
     "icon": "iconfont icon-fujian",
     "child": [
-        { "id": "FieldAth", "title": "字段附件", "icon": "icon-paper-clip", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        {"id":"TableAth",  "title": "表格附件", "icon": "icon-user", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "ImgAth", "title": "图片附件", "icon": "icon-camera", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "HandlerWriting", "title": "写字板", "icon": "icon-note", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 }
+        { "id": "FieldAth", "title": "字段附件", "icon": "iconfont icon-attach", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "TableAth", "title": "表格附件", "icon": "iconfont icon-biaogefujian", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "ImgAth", "title": "图片附件", "icon": "iconfont icon-tupianfujian", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "HandlerWriting", "title": "写字板", "icon": "iconfont icon-xiezi", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 }
     ]},{
     "id":"Dtl",
     "title": "从表",
@@ -35,31 +35,31 @@
     "title": "字段分组",
     "icon": "iconfont icon-fenzu",
     "child": [
-        { "id": "GroupFWC", "title": "审核字段分组", "icon": "icon-folder-alt", "MethodType": "Func", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "GroupField", "title": "字段分组", "icon": "icon-folder", "MethodType": "Func", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 }
+        { "id": "GroupFWC", "title": "审核字段分组", "icon": "iconfont icon-ziduan1", "MethodType": "Func", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "GroupField", "title": "字段分组", "icon": "iconfont icon-ziduanliebiao", "MethodType": "Func", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 }
     ]},{
     "id":"Component",
     "title": "通用组件",
     "icon": "iconfont icon-zujian",
     "child": [
-        {"id":"IDCard", "title": "身份证上传", "icon": "icon-user", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "Button", "title": "按钮", "icon": "icon-social-youtube", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "Link", "title": "超链接", "icon": "icon-share", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "Score", "title": "评分", "icon": "icon-badge", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "IFrame", "title": "框架", "icon": "icon-frame", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "Map", "title": "地图", "icon": "icon-globe", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "Fiexed", "title": "系统定位", "icon": "icon-location-pin", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "BigText", "title": "大块html说明", "icon": "icon-bag", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 }
+        { "id": "IDCard", "title": "身份证上传", "icon": "iconfont icon-shenfenzheng", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "Button", "title": "按钮", "icon": "iconfont icon-anniu", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "Link", "title": "超链接", "icon": "iconfont icon-chaolianjie", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "Score", "title": "评分", "icon": "iconfont icon-pingfen", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "IFrame", "title": "框架", "icon": "iconfont icon-kuangjia1", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "Map", "title": "地图", "icon": "iconfont icon-jiedianleizhukongzhongxin1", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "Fiexed", "title": "系统定位", "icon": "iconfont icon-dingwei", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "BigText", "title": "大块html说明", "icon": "iconfont icon-html", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 }
     ]},{
     "id":"Node",
     "title": "节点组件",
     "icon": "iconfont icon-jiedian",
     "child": [
-        { "id": "NodeWorkCheck", "title": "审核组件", "icon": "icon-check", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "SubFlow", "title": "父子流程组件", "icon": "icon-shuffle", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "Thread", "title": "子线程组件", "icon": "icon-equalizer", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "Track", "title": "轨迹组件", "icon": "icon-graph", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
-        { "id": "Transfer", "title": "流转自定义组件", "icon": "icon-puzzle", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 }
+        { "id": "NodeWorkCheck", "title": "审核组件", "icon": "iconfont icon-shenhe1", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "SubFlow", "title": "父子流程组件", "icon": "iconfont icon-xianchengzhuizong", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "Thread", "title": "子线程组件", "icon": "iconfont icon-shouye-xiancheng-", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "Track", "title": "轨迹组件", "icon": "iconfont icon-shitujiedianxianshi", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 },
+        { "id": "Transfer", "title": "流转自定义组件", "icon": "iconfont icon-jiedianleizhongxinguanli", "MethodType": "Url", "MethodDoc": "..NewDatype.htm", "H": 400, "W": 300 }
     ]}
 ];
 /*
@@ -149,34 +149,34 @@ function MenuClick(type,pinyin){
             AddBigNoteHtmlText();
             break;
         case "NodeWorkCheck":
-            var url = '../../WF/Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + nodeID + '&tabIndex=0';
+            var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + nodeID + '&tabIndex=0';
             getWindowWH()
-            //OpenLayuiDialog(url, '审核组件', W, H, false, false, true);
-            LayuiPopRight(url, '审核组件', W, true);
+            OpenLayuiDialog(url, '审核组件', W, 0, null, true);
+            //LayuiPopRight(url, '审核组件', W, true);
             break;
         case "SubFlow":
-            var url = '../../WF/Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + nodeID + '&tabIndex=1';
+            var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + nodeID + '&tabIndex=1';
             getWindowWH()
-            //OpenLayuiDialog(url, '父子流程组件', W, H, false, false, true);
-            LayuiPopRight(url, '父子流程组件', W, true);
+            OpenLayuiDialog(url, '父子流程组件', W, 0, null, true);
+            //LayuiPopRight(url, '父子流程组件', W, true);
             break;
         case "Thread":
-            var url = '../../WF/Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + nodeID + '&tabIndex=2';
+            var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + nodeID + '&tabIndex=2';
             getWindowWH()
-            //OpenLayuiDialog(url, '子线程组件', W, H, false, false, true);
-            LayuiPopRight(url, '子线程组件', W, true);
+            OpenLayuiDialog(url, '子线程组件', W, 0, null, true);
+            //LayuiPopRight(url, '子线程组件', W, true);
             break;
         case "Track":
-            var url = '../../WF/Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + nodeID + '&tabIndex=3';
+            var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + nodeID + '&tabIndex=3';
             getWindowWH()
-            //OpenLayuiDialog(url, '轨迹组件', W, H, false, false, true);
-            LayuiPopRight(url, '轨迹组件', W, true);
+            OpenLayuiDialog(url, '轨迹组件', W, 0, null, true);
+            //LayuiPopRight(url, '轨迹组件', W, true);
             break;
         case "Transfer":
-            var url = '../../WF/Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + nodeID + '&tabIndex=4';
+            var url = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + nodeID + '&tabIndex=4';
             getWindowWH()
-            //OpenLayuiDialog(url, '流转自定义', W, H, false, false, true);
-            LayuiPopRight(url, '流转自定义', W, true);
+            OpenLayuiDialog(url, '流转自定义', W, 0, null, true);
+            //LayuiPopRight(url, '流转自定义', W, true);
             break;
         default: break;
     }

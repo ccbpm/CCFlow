@@ -96,7 +96,7 @@
         function BindTable() {
 
             //获取参数，FlowNos，为空时显示所有的待办，否则显示参数中的流程
-            var flowNos = GetQueryString("FlowNos");
+            var flowNos = GetQueryString("FK_Flow");
 
             //获取当前时间.
             var cdt = getNowFormatDate();
@@ -114,6 +114,13 @@
             // title += "<th >优先级</th>";
             tablet += "<th><div style='float:left' >" + window.lang.biaoti + "</div> <div style='float:right' ><img src='./Img/Search.png' style='width:24px;' onclick='SearchIt();' />&nbsp;&nbsp;&nbsp;</div></th>";
 
+            //我的流程分布
+            if (flowNos != null) {
+                tablet += "<th>" + window.lang.liucheng + "</th>";
+                tablet += "<th>" + window.lang.jiedian + "</th>";
+                groupBy = "ByFlowOfMy";
+            }
+
             if (groupBy == "ByNode") {
                 tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByFlow' >" + window.lang.liucheng + "</th>";
                 tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByStarter' >" + window.lang.fqr + "</th>";
@@ -128,6 +135,7 @@
                 tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByFlow' >" + window.lang.liucheng + "</th>";
                 tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByNode' >" + window.lang.jiedian + "</th>";
             }
+           
 
             tablet += "<th>" + window.lang.fqrq + "</th>";
             tablet += "<th>" + window.lang.sdrq + "</th>";
@@ -164,6 +172,13 @@
                             str += "@" + data[i].StarterName + "@";
                     }
                 }
+                if (groupBy == "ByFlowOfMy") {
+                    if (str.indexOf('@' + data[i].FlowName + "@") == -1) {
+                        if (flowNos == null || (flowNos != null && flowNos.indexOf(data[i].FK_Flow) != -1))
+                            str += "@" + data[i].FlowName + "@";
+                    }
+                }
+
             }
             var strs = str.split("@"); //生成数组.
 
@@ -222,7 +237,7 @@
                         if (work.FK_Node != nodeID) {
                             continue;
                         }
-                    } else if (groupBy == "ByFlow") {
+                    } else if (groupBy == "ByFlow" || groupBy == "ByFlowOfMy") {
                         if (work.FlowName != groupName) {
                             continue;
                         }
@@ -318,7 +333,7 @@
                     if (groupBy == "ByNode" || groupBy == "NodeName") {
                         listbox += "<td>" + flowName + "</td>"; //流程类别
                         listbox += "<td>" + starterName + "</td>"; //发起人
-                    } else if (groupBy == "ByFlow") {
+                    } else if (groupBy == "ByFlow" || groupBy == "ByFlowOfMy") {
                         listbox += "<td>" + nodeName + "</td>"; //节点名称
                         listbox += "<td>" + starterName + "</td>"; //发起人
 

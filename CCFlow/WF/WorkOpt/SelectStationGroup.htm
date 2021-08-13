@@ -148,7 +148,7 @@
             //获取选择的岗位
             for (var i = 0; i < Data.length; i++) {
                 $.each($('input:checkbox[name=' + Data[i].No + ']:checked'), function (i, obj) {
-                    returnVal.push({ "No": obj.value, "Name": $(obj).next().text() });
+                    returnVal.push({ "No": obj.value, "Name": $(obj).parent().text() });
                 });
             }
             //No  是返回到别的页面的值

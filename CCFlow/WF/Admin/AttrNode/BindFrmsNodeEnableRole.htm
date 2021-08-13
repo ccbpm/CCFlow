@@ -197,68 +197,72 @@
     </script>
 </head>
 <body>
+    <div class="container-full">
+        <div class="attrnode-bar-header">           
+            <strong>节点绑定表单启用规则</strong>
+        </div>
+        <form action="" id="form1">
+            <table style="width:98%">
+              
+                <tr>
+                    <td valign="top">
+                        <fieldset>
+                            <legend>
+                                <input id="RB_FrmEnableRole_0" type="radio" name="RB_FrmEnableRole" value="0" />
+                                <label for="RB_FrmEnableRole_0">始终启用（默认）</label>
+                            </legend>
+                            <font color="gray">始终启用节点绑定的表单。</font>
+                            <legend>
+                                <input id="RB_FrmEnableRole_1" type="radio" name="RB_FrmEnableRole" value="1" />
+                                <label for="RB_FrmEnableRole_1">有数据时启用</label>
+                            </legend>
+                            <font color="gray">在节点绑定表单的有数据时显示该表单。</font>
+                            <legend>
+                                <input id="RB_FrmEnableRole_2" type="radio" name="RB_FrmEnableRole" value="2" />
+                                <label for="RB_FrmEnableRole_2">有参数时启用</label>
+                            </legend>
+                            <font color="gray">在节点绑定表单，在流程属性里，要设置发起前置导航，按照表单列表的方式设置。</font>
+                            <legend>
+                                <input id="RB_FrmEnableRole_3" type="radio" name="RB_FrmEnableRole" value="3" />
+                                <label for="RB_FrmEnableRole_3">按表单的字段表达式</label>
+                            </legend>
+                            <font color="gray">一个流程开始节点表单输入一些信息，根据这些信息决定以后每个节点上应该绑定什么表单(功能暂未实现)。</font>
+                            <legend>
+                                <input id="RB_FrmEnableRole_4" type="radio" name="RB_FrmEnableRole" value="4" />
+                                <label for="RB_FrmEnableRole_4">按SQL表达式</label>
+                            </legend>
+                            <div name="RB_FrmEnableRole_4">
+                                <textarea id="TB_FrmEnableExp" name="TB_FrmEnableExp" runat="server" style="width:98%; height: 24px"></textarea>
+                                <br />
+                            </div>
+                            <legend>
+                                <input id="RB_FrmEnableRole_6" type="radio" name="RB_FrmEnableRole" value="6" />
+                                <label for="RB_FrmEnableRole_6">按选择的岗位</label> - <a href="javascript:OpenNew(6)">选择岗位</a>
+                            </legend>
 
-    <form action="" id="form1">
-        <table style="width:98%">
-            <caption>节点绑定表单启用规则</caption>
-            <tr>
-                <td valign="top">
-                    <fieldset>
-                        <legend>
-                            <input id="RB_FrmEnableRole_0" type="radio" name="RB_FrmEnableRole" value="0" />
-                            <label for="RB_FrmEnableRole_0">始终启用（默认）</label>
-                        </legend>
-                        <font color="gray">始终启用节点绑定的表单。</font>
-                        <legend>
-                            <input id="RB_FrmEnableRole_1" type="radio" name="RB_FrmEnableRole" value="1" />
-                            <label for="RB_FrmEnableRole_1">有数据时启用</label>
-                        </legend>
-                        <font color="gray">在节点绑定表单的有数据时显示该表单。</font>
-                        <legend>
-                            <input id="RB_FrmEnableRole_2" type="radio" name="RB_FrmEnableRole" value="2" />
-                            <label for="RB_FrmEnableRole_2">有参数时启用</label>
-                        </legend>
-                        <font color="gray">在节点绑定表单，在流程属性里，要设置发起前置导航，按照表单列表的方式设置。</font>
-                        <legend>
-                            <input id="RB_FrmEnableRole_3" type="radio" name="RB_FrmEnableRole" value="3" />
-                            <label for="RB_FrmEnableRole_3">按表单的字段表达式</label>
-                        </legend>
-                        <font color="gray">一个流程开始节点表单输入一些信息，根据这些信息决定以后每个节点上应该绑定什么表单(功能暂未实现)。</font>
-                        <legend>
-                            <input id="RB_FrmEnableRole_4" type="radio" name="RB_FrmEnableRole" value="4" />
-                            <label for="RB_FrmEnableRole_4">按SQL表达式</label>
-                        </legend>
-                        <div name="RB_FrmEnableRole_4">
-                            <textarea id="TB_FrmEnableExp" name="TB_FrmEnableExp" runat="server" style="width:98%; height: 24px"></textarea>
-                            <br />
-                        </div>
-                        <legend>
-                            <input id="RB_FrmEnableRole_6" type="radio" name="RB_FrmEnableRole" value="6" />
-                            <label for="RB_FrmEnableRole_6">按选择的岗位</label> - <a href="javascript:OpenNew(6)">选择岗位</a>
-                        </legend>
+                            <div id="stationDiv"></div>
+                            <legend>
+                                <input id="RB_FrmEnableRole_7" type="radio" name="RB_FrmEnableRole" value="7" />
+                                <label for="RB_FrmEnableRole_7">按选择的部门</label> - <a href="javascript:OpenNew(7)">选择部门</a>
+                            </legend>
 
-                        <div id="stationDiv"></div>
-                        <legend>
-                            <input id="RB_FrmEnableRole_7" type="radio" name="RB_FrmEnableRole" value="7" />
-                            <label for="RB_FrmEnableRole_7">按选择的部门</label> - <a href="javascript:OpenNew(7)">选择部门</a>
-                        </legend>
-
-                        <div id="deptDiv"></div>
-                        <legend>
-                            <input id="RB_FrmEnableRole_5" type="radio" name="RB_FrmEnableRole" value="5" />
-                            <label for="RB_FrmEnableRole_5">不启用</label>
-                        </legend>
-                        <font color="gray">不启用该表单。</font>
-                    </fieldset>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="button" id="Btn_Save" runat="server" value="保存" onclick="SaveEn()" />
-                    <input type="button" id="Button1" runat="server" value="帮助" onclick="Help()" />
-                </td>
-            </tr>
-        </table>
-    </form>
+                            <div id="deptDiv"></div>
+                            <legend>
+                                <input id="RB_FrmEnableRole_5" type="radio" name="RB_FrmEnableRole" value="5" />
+                                <label for="RB_FrmEnableRole_5">不启用</label>
+                            </legend>
+                            <font color="gray">不启用该表单。</font>
+                        </fieldset>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="button" id="Btn_Save" class='cc-btn-tab' value="保存" onclick="SaveEn()" />
+                        <input type="button" id="Button1" class='cc-btn-tab' value="帮助" onclick="Help()" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
 </body>
 </html>

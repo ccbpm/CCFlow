@@ -57,11 +57,11 @@
             // window.open(url, '错误信息', 'height=500,width=600,top=200,left=500,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
             window.close();
         }
-
+        var webUser = new WebUser()
         var orgNo = GetQueryString("OrgNo");
         var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&AdminerSID=" + adminerSID + "&OrgNo=" + orgNo;
         urlEnd += "&Adminer=" + GetQueryString("Adminer");
-
+        urlEnd += "&SID=" + webUser.SID;
         //负责人：@qfl
         $(function () {
             InitPageUserInfo();

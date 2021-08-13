@@ -73,14 +73,9 @@ new Vue({
                     data: childNodeMenuItems,
                     click: function (data, othis) {
                         debugger;
-                        //_this.childNodeOption(data.id, $(this.elem)[0].dataset.No, $(this.elem)[0].dataset.name, $(this.elem)[0].dataset.pidx, $(this.elem)[0].dataset.idx)
-
-                        // var obj = $(this.elem)[0].dataset;
-                        // console.log(obj);
 
                         var obj = $(this.elem)[0].dataset;
                         console.log(obj);
-
 
                         _this.childNodeOption(data.id, $(this.elem)[0].dataset.no, $(this.elem)[0].dataset.name, $(this.elem)[0].dataset.pidx, $(this.elem)[0].dataset.idx)
 
@@ -151,7 +146,7 @@ new Vue({
                 enName = "BP.CCBill.Template.MethodSingleDictGenerWorkFlow";
 
             if (en.MethodModel == "FlowEtc")
-                enName = "BP.CCBill.Template.FlowEtc";
+                enName = "BP.CCBill.Template.MethodFlowEtc";
 
             var url = "../../Comm/En.htm?EnName=" + enName + "&MyPK=" + en.No + "&From=Ver2021";
             OpenLayuiDialog(url, "", 100000, 0, null, false);
@@ -475,6 +470,21 @@ new Vue({
 
             console.log("更新成功..");
 
+        },
+        // 是否启用
+        changeMethodListEnableStatus(method, ctrl) {
+            // 当前启用状态
+
+            var en = new Entity("BP.CCBill.Template.Method", method.No);
+            if (en.IsList == 0)
+                en.IsList = 1; // method.IsEnable;
+            else
+                en.IsList = 0; // method.IsEnable;
+
+            en.Update();
+
+            console.log("更新成功..");
+
         }
     },
     mounted: function () {
@@ -491,7 +501,7 @@ new Vue({
 
         var groups = ds["Groups"];
         var methods = ds["Methods"];
-
+        console.log(groups);
         var nodes = groups;
 
         var btnStyle = "class='layui-btn layui-btn-primary layui-border-blue layui-btn-xs'";
@@ -520,50 +530,52 @@ new Vue({
 
                 if (method.MethodModel == MethodModel.Func) {
 
-                    doc = "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.Template.MethodFunc','" + method.Name + "','" + method.No + "')\" >属性</a>";
+                    doc = "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.Template.MethodFunc','" + method.Name + "','" + method.No + "')\" >功能属性</a>";
                     var url = "./MethodDoc/Default.htm?No=" + method.No;
                     doc += "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','',9000,0,null,false)\" >编写脚本</a>";
                 }
 
+
                 //修改实体资料流程.
                 if (method.MethodModel == MethodModel.FlowBaseData) {
 
-                    if (method.Mark === "StartFlow") {
-                        method.MethodModel = "发起流程:" + method.FlowNo;
-                        doc = "<a  " + btnStyle + "  href=\"javascript:DesignerFlow('" + method.MethodID + "','" + method.Name + "');\" ><i class=icon-heart ></i>设计流程 </a> ";
-                    }
+                    method.MethodModel = "流程:" + method.FlowNo;
+                    doc = "<a  " + btnStyle + "  href=\"javascript:DesignerFlow('" + method.MethodID + "','" + method.Name + "');\" ><i class=icon-heart ></i>设计流程 </a> ";
 
-                    if (method.Mark === "Search") {
-                        method.MethodModel = "流程数据查询:" + method.FlowNo;
-                        //  doc = "<a href='' ><i class=icon-grid >  设置查询内容</a>";
-                        //doc += "<a class='layui-btn layui-btn-primary layui-border-blue layui-btn-xs' href=\"alert();\" >方法</a>";
-                    }
+                    //if (method.Mark === "StartFlow") {
+                    //    method.MethodModel = "发起流程:" + method.FlowNo;
+                    //    doc = "<a  " + btnStyle + "  href=\"javascript:DesignerFlow('" + method.MethodID + "','" + method.Name + "');\" ><i class=icon-heart ></i>设计流程 </a> ";
+                    //}
 
-                    if (method.Mark === "Group") {
-                        method.MethodModel = "流程数据分析:" + + method.FlowNo;
-                        //  doc = "<a href='' ><i class=icon-chart >设置分析内容</a>";
-                    }
+                    //if (method.Mark === "Search") {
+                    //    method.MethodModel = "流程数据查询:" + method.FlowNo;
+                    //    doc = "<a  " + btnStyle + "  href=\"javascript:DesignerFlow('" + method.MethodID + "','" + method.Name + "');\" ><i class=icon-heart ></i>设计流程 </a> ";
+                    //    //  doc = "<a href='' ><i class=icon-grid >  设置查询内容</a>";
+                    //    //doc += "<a class='layui-btn layui-btn-primary layui-border-blue layui-btn-xs' href=\"alert();\" >方法</a>";
+                    //}
+                    //if (method.Mark === "Group") {
+                    //    method.MethodModel = "流程数据分析:" + + method.FlowNo;
+                    //    //  doc = "<a href='' ><i class=icon-chart >设置分析内容</a>";
+                    //}
                 }
 
                 // 流程汇总
                 if (method.MethodModel == MethodModel.SingleDictGenerWorkFlows) {
                     method.MethodModel = "流程汇总";
                     if (method.Icon == "") method.Icon = "icon-layers";
-                    doc = "对该实体所有启动的流程进行列表汇总,固定的功能.";
+                    doc = "所有启动的流程进行列表汇总.";
                 }
 
                 //实体新建流程.
                 if (method.MethodModel == MethodModel.FlowNewEntity) {
-                    method.MethodModel = "新建实体";
-                    //  doc = "<a href=\"javascript:DesignerFlow('" + method.MethodID + "','" + method.Name + "');\" ><i class=icon-heart ></i>设计流程 </a> ";
+                    method.MethodModel = "新建实体流程";
+                    doc = "<a href=\"javascript:DesignerFlow('" + method.MethodID + "','" + method.Name + "');\" ><i class=icon-heart ></i>设计流程 </a> ";
                 }
 
                 //实体其他业务流程.
                 if (method.MethodModel == MethodModel.FlowEtc) {
-                    method.MethodModel = "实体其他业务流程";
-
-                    if (method.Mark === "StartFlow")
-                        doc = "<a  " + btnStyle + " href=\"javascript:DesignerFlow('" + method.MethodID + "','" + method.Name + "');\" ><i class=icon-heart ></i>设计流程 </a> ";
+                    method.MethodModel = "其他业务流程:" + method.FlowNo;
+                    doc = "<a  " + btnStyle + " href=\"javascript:DesignerFlow('" + method.MethodID + "','" + method.Name + "');\" ><i class=icon-heart ></i>设计流程 </a> ";
                 }
 
                 //如果是单据.
@@ -571,32 +583,29 @@ new Vue({
                     method.MethodModel = "单据";
                     var html = "";
 
-                    if (method.Mark === "Group")
-                        html = "分组分析Group";
-
-                    if (method.Mark === "Search")
-                        html = "单据查询Search";
-
-                    if (html === "") {
-
-                        // html += "<a " + btnStyle + " href=\"javascript:addTab('list','" + method.Name + "','../CCBill/SearchBill.htm?FrmID=" + method.Tag1 + "');\"  >列表</a>";
-                        //var url = "/Comm/RefFunc/En.htm?EnName=BP.CCBill.FrmDict&PKVal=Dict_CESHI1";
-                        // html += "<a class='layui-btn layui-btn-primary layui-border-blue layui-btn-xs' href='../Comm/En.htm?EnName=BP.CCBill.FrmDict&PKVal=" + menu.UrlExt + "' target=_blank >属性</a>";
-                        html += "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.FrmBill','" + method.Name + "','" + method.Tag1 + "')\" >单据属性</a>";
-                        //html += "<a " + btnStyle + "  href=\"javascript:addTab('../CCBill/Admin/Method.htm?FrmID=" + menu.UrlExt + "&ModuleNo=" + menu.ModuleNo + "','方法:" + menu.Name + "');\" >方法</a>";
-                        html += "<a " + btnStyle + "  href=\"javascript:GoToFrmDesigner('" + method.Tag1 + "')\" >表单设计</a>";
-                    }
+                    // if (method.Mark === "BillDictSearch") {
+                    html += "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.FrmBill','" + method.Name + "','" + method.Tag1 + "')\" >单据属性</a>";
+                    html += "<a " + btnStyle + "  href=\"javascript:GoToFrmDesigner('" + method.Tag1 + "')\" >表单设计</a>";
+                    //}
 
                     doc = html;
                 }
 
                 //方法内容.
                 method.Docs = doc;
+                var url = "./PowerCenter.htm?CtrlObj=Menu&CtrlPKVal=" + method.No + "&CtrlGroup=Menu";
+
+                method.methodCtrlWayText = "<a " + btnStyle + "  href =\"javascript:OpenLayuiDialog('" + url + "','" + method.Name + "','700',0,null,false);\" >权限</a>";
+                
 
                 if (method.Icon == "") method.Icon = "icon-drop";
 
                 fs.children.push(method);
             }
+            var fsurl = "./PowerCenter.htm?CtrlObj=Menu&CtrlPKVal=" + fs.No + "&CtrlGroup=Menu";
+
+            fs.groupCtrlWayText = "<a " + btnStyle + "  href =\"javascript:OpenLayuiDialog('" + fsurl + "','" + fs.Name + "','700',0,null,false);\" >权限</a>";
+
         }
 
         this.flowNodes = nodes;

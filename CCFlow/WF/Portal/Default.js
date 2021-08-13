@@ -7,13 +7,65 @@ function MenuConvertTools(webUser, data) {
     this.data = data;
 }
 
+var webUser = new WebUser();
+var sid = GetQueryString("SID");
+function Start() {
+    if (webUser.CCBPMRunModel == 2)
+        vm.openTab('发起', '../../App/Start.htm');
+    else
+        vm.openTab('发起', '../Start.htm');
+}
+
+function Todolist() {
+    if (webUser.CCBPMRunModel == 2)
+        vm.openTab('待办', '../../App/Todolist.htm');
+    else
+        vm.openTab('待办', '../Todolist.htm');
+}
+
+function Runing() {
+    if (webUser.CCBPMRunModel == 2)
+        vm.openTab('在途', '../../App/Runing.htm');
+    else
+        vm.openTab('在途', '../Runing.htm');
+}
+
+function Search() {
+    if (webUser.CCBPMRunModel == 2)
+        vm.openTab('查询', '../../App/Search.htm');
+    else
+        vm.openTab('查询', '../Search.htm');
+}
+
+function OpenOrg() {
+
+    if (webUser.CCBPMRunModel == 2)
+        vm.openTab('组织', '../../App/Organization/Organization.htm');
+    else
+        vm.openTab('组织', '../../GPM/Organization.htm');
+}
 
 //流程菜单.
 MenuConvertTools.prototype.getFlowMenu = function () {
+
     var flowTree = this.data['FlowTree'] ? this.data['FlowTree'] : [];
+
+    var ccbpmRunModel = this.webUser.CCBPMRunModel;
+    var orgNo = this.webUser.OrgNo;
+
     var flows = this.data['Flows'] ? this.data['Flows'] : [];
     var topFlowNode = [];
     for (var i = 0; i < flowTree.length; i++) {
+
+        if (ccbpmRunModel == 2) {
+            if (flowTree[i].ParentNo == '100') {
+                flowTree[i].ParentNo = '0';
+                flowTree[i].No = '1';
+            }
+            if (flowTree[i].ParentNo === orgNo)
+                flowTree[i].ParentNo = '1';
+        }
+
         if (flowTree[i].ParentNo != "0")
             continue;
 
@@ -43,7 +95,7 @@ MenuConvertTools.prototype.getFlowMenu = function () {
                     en.type = 'flow'
                     // if (en.WorkType == 1)
                     en.Icon = "icon-heart";
-                    en.Url = "../Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + en.No + "&OrgNo=" + this.webUser.OrgNo + "&SID=" + this.webUser.SID + "&UserNo=" + this.webUser.No;
+                    en.Url = "../Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + en.No + "&OrgNo=" + this.webUser.OrgNo + "&SID=" + sid + "&UserNo=" + this.webUser.No;
                     en.Url = en.Url + "&From=Ver2021";
                     //alert(en.Url);
                     flowTree[j].type = "flow"
@@ -64,15 +116,31 @@ MenuConvertTools.prototype.getFlowMenu = function () {
 // 获取表单菜单
 MenuConvertTools.prototype.getFormMenu = function () {
     var formTree = this.data['FrmTree'] ? this.data['FrmTree'] : [];
+
+
+    var ccbpmRunModel = this.webUser.CCBPMRunModel;
+    var orgNo = this.webUser.OrgNo;
+
     var forms = this.data['Frms'] ? this.data['Frms'] : [];
     var topFormNode = [];
     for (var i = 0; i < formTree.length; i++) {
+
+        if (ccbpmRunModel == 2) {
+            if (formTree[i].ParentNo == '100') {
+                formTree[i].ParentNo = '0';
+                formTree[i].No = '1';
+            }
+            if (formTree[i].ParentNo === orgNo)
+                formTree[i].ParentNo = '1';
+        }
+
         if (formTree[i].ParentNo === "0") {
             formTree[i].Icon = "icon-layers";
             formTree[i].Name = "表单设计";
             topFormNode.push(formTree[i]);
         }
     }
+
     for (var i = 0; i < topFormNode.length; i++) {
         topFormNode[i].children = [];
         topFormNode[i].type = "form"
@@ -90,7 +158,7 @@ MenuConvertTools.prototype.getFormMenu = function () {
                         if (parseInt(frm.FrmType) === 1)
                             frm.Icon = "icon-doc";
 
-                        frm.Url = "../Admin/CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + frm.No + "&From=2021ver";
+                        frm.Url = "../Admin/CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + frm.No + "&From=2021ver&SID=" + sid;
 
                         formTree[j].children.push(frm);
                         formTree[j].type = "form"
@@ -99,7 +167,7 @@ MenuConvertTools.prototype.getFormMenu = function () {
 
                 var en = formTree[j];
                 en.Icon = "icon-layers";
-
+                en.type = 'form';
                 topFormNode[i].children.push(en);
             }
         }
@@ -149,8 +217,12 @@ MenuConvertTools.prototype.getSystemMenus = function () {
                 var menu = menuNode[idxMenu];
                 if (moduleEn.No !== menu.ModuleNo)
                     continue; // 不是本模块的。
-
+                if (menu.MenuModel == "FlowEntityBatchStart")
+                    continue;
                 menu = DealMenuUrl(menu);
+
+                if (menu.Icon === '')
+                    menu.Icon = 'icon-user';
 
                 moduleEn.children.push(menu);
             }
@@ -172,4 +244,17 @@ MenuConvertTools.prototype.convertToTreeData = function () {
     topNodes = topNodes.concat(this.getSystemMenus(this.data))
     // console.log(topNodes)
     return topNodes
+}
+
+function getPortalConfigByKey(key, defVal) {
+
+    if (typeof PortalConfig == "undefined") {
+        PortalConfig = {};
+        PortalConfig[key] = defVal;
+        return defVal;
+    }
+    if (PortalConfig[key] == undefined)
+        PortalConfig[key] = defVal;
+
+    return PortalConfig[key];
 }

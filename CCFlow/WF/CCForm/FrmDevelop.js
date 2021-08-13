@@ -75,7 +75,7 @@ function GenerDevelopFrm(wn, fk_mapData) {
                     mapAttr.UIHeight = 180;
                 }
 
-                document.BindEditorMapAttr.push(mapAttr); //存到全局备用
+                //document.BindEditorMapAttr.push(mapAttr); //存到全局备用
 
                 //设置编辑器的默认样式
                 var styleText = "text-align:left;font-size:12px;";
@@ -971,7 +971,7 @@ function GetFieldAth(mapAttr) {
     var athDesc = data["AthDesc"][0];
     var eleHtml = "";
     if (athDesc.IsUpload == 1 || pageData.IsReadonly == 0) {
-        var btnHtml = "<div style='float:left'><div  onclick='OpenAth(\"" + url + "\",\"" + mapAttr.Name + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.MyPK + "\",\"" + mapAttr.AtPara + "\",\"" + mapAttr.FK_MapData + "\",8)'><div><div style='height: 30px;line-height: 10px;width: 82px;background-color: white!important;color: black!important;border: 1px solid black!important;font-size: 14px!important;font-weight: normal;padding: 10px;font-size: 15px;border-radius: 2px;cursor: pointer;'>上传附件</div></div></div></div>";
+        var btnHtml = "<div style='float:left'><div  onclick='OpenAth(\"" + mapAttr.Name + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.MyPK + "\",\"" + mapAttr.AtPara + "\",\"" + mapAttr.FK_MapData + "\",8)'><div><div style='height: 30px;line-height: 10px;width: 82px;background-color: white!important;color: black!important;border: 1px solid black!important;font-size: 14px!important;font-weight: normal;padding: 10px;font-size: 15px;border-radius: 2px;cursor: pointer;'>上传附件</div></div></div></div>";
         eleHtml += "<div style='text-align:left;padding-left:10px;display:inline' class='only-print-hidden' id='athModel_" + mapAttr.KeyOfEn + "'>" + btnHtml;
 
     }

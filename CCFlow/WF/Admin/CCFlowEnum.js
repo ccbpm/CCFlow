@@ -89,6 +89,8 @@ if (typeof DeliveryWay == "undefined") {
         DeliveryWay.ByDeptLeader = 23,
         //找直属领导.
         DeliveryWay.ByEmpLeader = 50,
+        //找分管领导
+        DeliveryWay.ByDeptShipLeader = 28,
         //按照用户组计算(全集团)
         DeliveryWay.ByTeamOrgOnly = 24,
         //仅按用户组计算.
@@ -103,6 +105,10 @@ if (typeof DeliveryWay == "undefined") {
         DeliveryWay.ByAPIUrl = 45,
         //按照部门人员选择器
         DeliveryWay.ByDeptAndEmpField = 46,
+
+        //外部用户可以发起
+        DeliveryWay.ByGuest = 51,
+
         // 按照ccflow的BPM模式处理
         DeliveryWay.ByCCFlowBPM = 100
 }

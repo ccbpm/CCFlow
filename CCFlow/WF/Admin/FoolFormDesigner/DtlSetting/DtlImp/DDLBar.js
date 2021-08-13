@@ -8,8 +8,8 @@ function InitBar(optionKey) {
     html += "<option value=0 >无,不设置(默认).</option>";
     html += "<option value=1 >表格查询模式（高级）</option>";
     html += "<option value=2 >Excel文件模式</option>";
-    html += "<option value=3 >单据模式</option>";
-    html += "<option value=4 >表格查询模式（简洁）</option>";
+    //html += "<option value=3 >单据模式</option>";
+    //html += "<option value=4 >表格查询模式（简洁）</option>";
 
     html += "</select >";
 

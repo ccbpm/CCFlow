@@ -201,7 +201,7 @@ function InitPage() {
 
 
             doc += "<p>";
-            doc += "<font color=green><br>" + msg + "</font><br>";
+            doc += "<font color=green>" + msg + "</font>";
             doc += "</p>";
         }
 
@@ -252,23 +252,31 @@ function InitPage() {
                     continue;
 
                 var doc = "";
-                doc += "<span>审批人</span>";
-                doc += gwl.FK_EmpText;
-                //判断是否隐藏
                 if (Hide_IsRead == true) {
 
-                    doc += "<br>";
-                    doc += "<span>阅读状态:</span>";
-
+                    doc += "<div class='fright'>";
                     if (gwl.IsRead == "1")
-                        doc += "<span>已阅.</span>";
+                        doc += "<span class='yd'>已阅</span></div>";
                     else
-                        doc += "<span><font color=green>未阅.</font></span>";
+                        doc += "<span class='wd'>未阅</span></div>";
+
+
                 }
-                doc += "<br>";
+
+                doc += "<p><span>审批人:</span><strong>";
+                doc += gwl.FK_EmpText;
+                doc += "</strong></p>";
+                //判断是否隐藏
+               
+                doc += "<p>";
+                doc += "<span class='fright'>应完成日期:";
+                doc += gwl.SDT +'</span>';
+
                 doc += "<span>工作到达日期:</span>";
                 doc += gwl.RDT;
-
+               
+               
+                doc += "</p>";
                 //到达时间.
                 var toTime = gwl.RDT;
                 var toTimeDot = toTime.replace(/\-/g, "/");
@@ -278,13 +286,11 @@ function InitPage() {
                 timeDot = new Date();
 
 
-                doc += "<br>";
-                doc += "<span>已经耗时:</span>";
-                doc += GetSpanTime(toTimeDot, timeDot);
+                doc += "<p>";
+                doc += "<span class='fright'>已经耗时:<font color=red>";
+                doc += GetSpanTime(toTimeDot, timeDot) +'</font></span>';
 
-                doc += "<br>";
-                doc += "<span>应完成日期:</span>";
-                doc += gwl.SDT;
+               
 
 
                 //应该完成日期.
@@ -297,21 +303,23 @@ function InitPage() {
 
                 var timeLeft = GetSpanTime(timeDot, toTimeDot);
 
-                if (timeLeft != 'NaN秒') {
-                    doc += "<br>";
-                    doc += "<span>还剩余:</span>";
-                    doc += timeLeft;
+                if (timeLeft != 'NaN秒') {                  
+                    doc += "<span>还剩余:<font color=green>";
+                    doc += timeLeft+'</font></span>';
                 }
+                doc += "</p>";
                 var nodeSubFlows = $.grep(subFlows, function (subFlow) {
                     return subFlow.FK_Node == gwl.FK_Node && subFlow.SubFlowSta == 1;
                 });
                 if (nodeSubFlows.length != 0)
-                    doc += "<br><p><span><a href=\"javascript:void(0);\" onclick=\"OpenSubFlowTable(this,'" + gwl.WorkID + "','" + gwl.FK_Node + "')\">查看子流程</a></span></p>";
+                    doc += "<p><span><a href=\"javascript:void(0);\" onclick=\"OpenSubFlowTable(this,'" + gwl.WorkID + "','" + gwl.FK_Node + "')\">查看子流程</a></span></p>";
 
 
-                var left = "";
-                left += "<br><img src='../../../DataUser/UserIcon/" + gwl.FK_Emp + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' />";
-                left += "<br>" + gwl.FK_EmpText;
+                var left = "<div class='usernameInfo'>";
+                left += "<span class='uimg'><img src='../../../DataUser/UserIcon/" + gwl.FK_Emp + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' /></span><div class='ut'><span class='uname'>";
+                left += "" + gwl.FK_EmpText;      
+                left += "</span></div></div>";
+               
 
                 var newRow = "";
                 newRow = "<tr  title='等待审批人员' >";
@@ -379,16 +387,18 @@ function OpenSubFlow(workid, flowNo, nodeID, pworkid) {
 //生成左边的icon.
 function GenerLeftIcon(track) {
     //左边的日期点.
-    var left = "<center>";
-    left = track.RDT.substring(5, 16);
-    left = left.replace('-', '月');
-    left = left.replace(' ', '日');
-    left = left.replace(':', '时');
+    var left = "<div class='usernameInfo'>";
+    days = track.RDT.substring(5, 16);
+    days = days.replace('-', '月');
+    days = days.replace(' ', '日');
+    days = days.replace(':', '时');
 
-    left = left + "分";
-    left += "<br><img src='../../../DataUser/UserIcon/" + track.EmpFrom + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' />";
-    left += "<br>" + track.EmpFromT + "&nbsp;&nbsp;&nbsp;";
-    left += "</center>";
+   
+    left += "<span class='uimg'><img src='../../../DataUser/UserIcon/" + track.EmpFrom + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' /></span><div class='ut'><span class='uname'>";
+    left += track.EmpFromT;
+    left += "</span><span class='utime'>" + days + "分";
+    left += "</span></div></div>";
+
     return left;
 }
 

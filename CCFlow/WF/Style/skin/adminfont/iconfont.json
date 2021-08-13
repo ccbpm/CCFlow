@@ -6,6 +6,216 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "304006",
+      "name": "地图",
+      "font_class": "map",
+      "unicode": "e6da",
+      "unicode_decimal": 59098
+    },
+    {
+      "icon_id": "1656345",
+      "name": "人民币",
+      "font_class": "renminbi",
+      "unicode": "e668",
+      "unicode_decimal": 58984
+    },
+    {
+      "icon_id": "2471358",
+      "name": "富文本框",
+      "font_class": "fuwenbenkuang",
+      "unicode": "e66f",
+      "unicode_decimal": 58991
+    },
+    {
+      "icon_id": "3459817",
+      "name": "身份证",
+      "font_class": "shenfenzheng",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
+      "icon_id": "4387824",
+      "name": "字段列表",
+      "font_class": "ziduanliebiao",
+      "unicode": "e67b",
+      "unicode_decimal": 59003
+    },
+    {
+      "icon_id": "4427197",
+      "name": "定位",
+      "font_class": "dingwei",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
+      "icon_id": "6251158",
+      "name": "写字",
+      "font_class": "xiezi",
+      "unicode": "e66c",
+      "unicode_decimal": 58988
+    },
+    {
+      "icon_id": "6335528",
+      "name": "图片附件",
+      "font_class": "tupianfujian",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
+      "icon_id": "6480153",
+      "name": "时间",
+      "font_class": "shijian",
+      "unicode": "e6a8",
+      "unicode_decimal": 59048
+    },
+    {
+      "icon_id": "7088564",
+      "name": "261已发布票据-人民币-细",
+      "font_class": "yifabupiaoju-renminbi-xi",
+      "unicode": "e724",
+      "unicode_decimal": 59172
+    },
+    {
+      "icon_id": "7596638",
+      "name": "html",
+      "font_class": "html",
+      "unicode": "e69b",
+      "unicode_decimal": 59035
+    },
+    {
+      "icon_id": "7603875",
+      "name": "评分",
+      "font_class": "pingfen",
+      "unicode": "e670",
+      "unicode_decimal": 58992
+    },
+    {
+      "icon_id": "8690805",
+      "name": "表格附件",
+      "font_class": "biaogefujian",
+      "unicode": "e6bc",
+      "unicode_decimal": 59068
+    },
+    {
+      "icon_id": "9120438",
+      "name": "附件",
+      "font_class": "attach",
+      "unicode": "e671",
+      "unicode_decimal": 58993
+    },
+    {
+      "icon_id": "9144401",
+      "name": "复选框",
+      "font_class": "fuxuankuang",
+      "unicode": "e73d",
+      "unicode_decimal": 59197
+    },
+    {
+      "icon_id": "9144404",
+      "name": "单选按钮",
+      "font_class": "danxuananniu",
+      "unicode": "e73e",
+      "unicode_decimal": 59198
+    },
+    {
+      "icon_id": "9468080",
+      "name": "下拉框 表单",
+      "font_class": "xialakuangbiaodan",
+      "unicode": "e672",
+      "unicode_decimal": 58994
+    },
+    {
+      "icon_id": "9856182",
+      "name": "审核",
+      "font_class": "shenhe1",
+      "unicode": "e67e",
+      "unicode_decimal": 59006
+    },
+    {
+      "icon_id": "9980399",
+      "name": "下拉框",
+      "font_class": "xialakuang",
+      "unicode": "e6c9",
+      "unicode_decimal": 59081
+    },
+    {
+      "icon_id": "10176557",
+      "name": "时间",
+      "font_class": "shijian1",
+      "unicode": "e6ef",
+      "unicode_decimal": 59119
+    },
+    {
+      "icon_id": "10885920",
+      "name": "按钮",
+      "font_class": "anniu",
+      "unicode": "e8c5",
+      "unicode_decimal": 59589
+    },
+    {
+      "icon_id": "10904768",
+      "name": "字段类型-整数",
+      "font_class": "ziduanleixing-zhengshu",
+      "unicode": "e675",
+      "unicode_decimal": 58997
+    },
+    {
+      "icon_id": "10907065",
+      "name": "下拉框",
+      "font_class": "xialakuang1",
+      "unicode": "e8ca",
+      "unicode_decimal": 59594
+    },
+    {
+      "icon_id": "11052280",
+      "name": "字段",
+      "font_class": "ziduan1",
+      "unicode": "e6bf",
+      "unicode_decimal": 59071
+    },
+    {
+      "icon_id": "17834746",
+      "name": "日期 期数",
+      "font_class": "riqiqishu",
+      "unicode": "e678",
+      "unicode_decimal": 59000
+    },
+    {
+      "icon_id": "19243466",
+      "name": "ptkj-连续签批模式",
+      "font_class": "ptkj-lianxuqianpimoshi",
+      "unicode": "e984",
+      "unicode_decimal": 59780
+    },
+    {
+      "icon_id": "19313106",
+      "name": "整数",
+      "font_class": "zhengshu",
+      "unicode": "e877",
+      "unicode_decimal": 59511
+    },
+    {
+      "icon_id": "20798269",
+      "name": "超链接",
+      "font_class": "chaolianjie",
+      "unicode": "e6a7",
+      "unicode_decimal": 59047
+    },
+    {
+      "icon_id": "21125186",
+      "name": "单选",
+      "font_class": "danxuan",
+      "unicode": "e679",
+      "unicode_decimal": 59001
+    },
+    {
+      "icon_id": "21853002",
+      "name": "超链接",
+      "font_class": "chaolianjie1",
+      "unicode": "e6c0",
+      "unicode_decimal": 59072
+    },
+    {
       "icon_id": "9943725",
       "name": "双箭头",
       "font_class": "double-extend-left",

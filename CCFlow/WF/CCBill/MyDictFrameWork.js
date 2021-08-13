@@ -101,17 +101,12 @@ window.onload = function () {
 
                 if (method.MethodModel === "Bill") {
 
-                    if (method.Mark == "NewBill")
-                        method.Docs = "./Opt/GotoLink.htm?FrmID=" + method.FrmID + "&MethodNo=" + method.No + "&WorkID=" + GetQueryString("WorkID") + "&DoType=Bill";
+                    method.Docs = "./Opt/Bill.htm?FrmID=" + method.Tag1 + "&MethodNo=" + method.No + "&WorkID=" + GetQueryString("WorkID") + "&From=Dict";
 
-                    if (method.Mark == "Search")
-                        method.Docs = "./SearchBill.htm?FrmID=" + method.Tag1 + "&PWorkID=" + GetQueryString("WorkID") + "&DoType=Bill";
-
-                    if (method.Docs == "") {
-                        alert("没有解析的mark=" + method.Mark);
-                        return;
-                    }
-
+                    //if (method.Docs == "") {
+                    //    alert("没有解析的mark=" + method.Mark);
+                    //    return;
+                    //}
                     //   alert(method.Docs);
                     //alert(method.Docs);
                 }
@@ -132,25 +127,38 @@ window.onload = function () {
 
                 //单个实体发起的流程汇总.
                 if (method.MethodModel === "SingleDictGenerWorkFlows") {
-                    method.Docs = "./OptOneFlow/SingleDictGenerWorkFlows.htm?FrmID=" + method.FrmID + "&No=" + method.No + "&WorkID=" + GetQueryString("WorkID");
+                    method.Docs = "./OptOneFlow/SingleDictGenerWorkFlows.htm?FrmID=" + method.FrmID + "&No=" + method.No + "&MethodNo=" + method.No + "&WorkID=" + GetQueryString("WorkID");
                 }
 
                 //修改基础数据的的流程.
                 if (method.MethodModel === "FlowBaseData") {
                     //通过找个方法 window.open(method.Docs);
 
-                    var myurl = DoFlow(method);
-                    if (!myurl) return;
-                    method.Docs = myurl;
+                    var url = "./OptOneFlow/FlowBaseData.htm?WorkID=" + GetQueryString("WorkID");
+                    url += "&FrmID=" + GetQueryString("FrmID");
+                    url += "&MethodNo=" + method.No;
+                    url += "&FlowNo=" + method.FlowNo;
+
+                    //  var myurl = DoFlowBaseData(method);
+                    // if (!myurl) return;
+                    method.Docs = url;
                 }
 
                 //其他业务流程.
                 if (method.MethodModel == "FlowEtc") {
-                    //通过找个方法 window.open(method.Docs);
 
-                    var myurl = DoFlowEtc(method);
-                    if (myurl == null) return;
-                    method.Docs = myurl;
+                    var url = "./OptOneFlow/FlowEtc.htm?WorkID=" + GetQueryString("WorkID");
+                    url += "&FrmID=" + GetQueryString("FrmID");
+                    url += "&MethodNo=" + method.No; // GetQueryString("MethodNo");
+                    url += "&FlowNo=" + method.FlowNo;
+                    //  var myurl = DoFlowBaseData(method);
+                    // if (!myurl) return;
+                    method.Docs = url;
+
+                    //通过找个方法 window.open(method.Docs);
+                    // var myurl = DoFlowEtc(method);
+                    //  if (myurl == null) return;
+                    // method.Docs = myurl;
                 }
 
                 //数据版本.
@@ -257,3 +265,10 @@ window.onload = function () {
         }
     })
 }
+$(function () {
+    var theme = localStorage.getItem("themeColorInfo");
+    theme = JSON.parse(theme);
+    var styleScope = document.getElementById("theme-data")
+    styleScope.innerHTML = "\n .sidebar .group .group-items .active{\n background-color:" + theme.selectedMenu + ";\n}";
+
+})

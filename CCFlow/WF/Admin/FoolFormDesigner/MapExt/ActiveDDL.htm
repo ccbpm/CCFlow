@@ -31,26 +31,29 @@
 
             json = JSON.parse(json);
 
-            mapExt = json['Sys_MapExt'];
+            mapExt = json['Sys_MapExt'][0];
 
             //绑定下拉框.
             GenerBindDDL("DDL_AttrsOfActive", json['Sys_MapAttr'], "No", "Name", mapExt.AttrsOfActive);
 
             //绑定数据源.
             GenerBindDDL("DDL_FK_DBSrc", json['Sys_SFDBSrc'], "No", "Name", mapExt.FK_DBSrc);
-
+            if (mapExt.DBType == 0)
+                mapExt.Doc = mapExt.Doc.replace(new RegExp("/#", "gm"), "+");
             //调用公共类库的方法:执行批量主表赋值
             GenerFullAllCtrlsVal(mapExt);
             if (mapExt.DBType != 0)
                 $("#TR_SQL").hide();
-
+            
             $("#Msg").html("");
+            
             return;
 
 
         });
 
         function changeDoc(obj) {
+
             if (obj.value == 0)
                 $("#TR_SQL").show();
             else
@@ -78,21 +81,15 @@
                 下拉框级联
             </caption>
             <tr>
-                <td>
-                    联动下拉框
-                </td>
+                <td>  联动下拉框</td>
                 <td>
                     <select name="DDL_AttrsOfActive" id="DDL_AttrsOfActive">
                     </select>
                 </td>
-                <td>
-                    要实现联动的菜单
-                </td>
+                <td>  要实现联动的菜单 </td>
             </tr>
             <tr>
-                <td>
-                    数据源类型
-                </td>
+                <td> 数据源类型  </td>
                 <td>
                     <select id="DDL_DBType" name="DDL_DBType" onchange="changeDoc(this)">
                         <option value="0">执行SQL</option>
@@ -109,9 +106,7 @@
                     <select name="DDL_FK_DBSrc" id="DDL_FK_DBSrc">
                     </select>
                 </td>
-                <td>
-                    ccform允许从其他数据源中取数据,
-                </td>
+                <td>ccform允许从其他数据源中取数据, </td>
             </tr>
             <tr>
                 <td colspan="3">
@@ -179,7 +174,8 @@
                 en.RetrieveFromDBSources();
 
                 en.CopyForm(); //复制表单数据.
-
+                if(en.DBType==0)
+                    en.Doc = en.Doc.replace(/[+]/g, "/#");
                 en.FK_MapData = GetQueryString("FK_MapData");
                 en.AttrOfOper = GetQueryString("KeyOfEn");
                 en.ExtType = "ActiveDDL";
@@ -197,11 +193,11 @@
                 if (window.confirm('您确定要删除吗？') == false)
                     return false;
 
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
-                handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
-                handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
-                var data = handler.DoMethodReturnString("ActiveDDL_Delete");
-                alert(data);
+                var mypk = "ActiveDDL_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+                var en = new Entity("BP.Sys.MapExt");
+                en.MyPK = mypk;
+                en.RetrieveFromDBSources();
+                en.Delete();
                 window.location.href = window.location.href;
                 return;
             }

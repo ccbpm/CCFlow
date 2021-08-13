@@ -25,7 +25,7 @@ function InitBar(optionKey) {
     var from = GetQueryString("From");
 
     if (from == "Flows.htm")
-        html += "<input  id='Btn_Save' type=button onclick='Save()' value='创建流程' />";
+        html += "<input  id='Btn_Save'class='cc-btn-tab' type=button onclick='Save()' value='创建流程' />";
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
@@ -35,21 +35,21 @@ function InitBar(optionKey) {
 function Save() {
 
     var newFlowInfo = getNewFlowInfo();
+    $("#Btn_Save").val("正在创建,请稍后");
+    setTimeout(function () {
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner_FlowDevModel");
+        handler.AddPara("SortNo", newFlowInfo.FlowSort);
+        handler.AddPara("FlowName", newFlowInfo.FlowName);
+        handler.AddPara("FlowDevModel", newFlowInfo.FlowFrmModel);
+        handler.AddPara("FrmUrl", newFlowInfo.FrmUrl);
+        handler.AddPara("FrmID", newFlowInfo.FrmID);
+        var data = handler.DoMethodReturnString("FlowDevModel_Save");
 
-    $("#Btn_Save").val("正在创建,");
-
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner_FlowDevModel");
-    handler.AddPara("SortNo", newFlowInfo.FlowSort);
-    handler.AddPara("FlowName", newFlowInfo.FlowName);
-    handler.AddPara("FlowDevModel", newFlowInfo.FlowFrmModel);
-    handler.AddPara("FrmUrl", newFlowInfo.FrmUrl);
-    handler.AddPara("FrmID", newFlowInfo.FrmID);
-    var data = handler.DoMethodReturnString("FlowDevModel_Save");
-
-    var webUser = new WebUser();
-    var url = "../Designer.htm?FK_Flow=" + data + "&OrgNo=" + webUser.OrgNo + "&SID=" + webUser.SID + "&UserNo=" + webUser.No + "&From=Ver2021";
-    //  var url = "";
-    window.location.href = url;
+        var webUser = new WebUser();
+        var url = "../Designer.htm?FK_Flow=" + data + "&OrgNo=" + webUser.OrgNo + "&SID=" + webUser.SID + "&UserNo=" + webUser.No + "&From=Ver2021";
+        //  var url = "";
+        window.location.href = url;
+    }, 1000);
 
 }
 

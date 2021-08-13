@@ -22,7 +22,7 @@ function IsReadOnly() {
     //如果是MyFlowView 或者是MyCC 就把该控件设置为只读的.
     var url = window.location.href;
     if (url.indexOf('MyViewGener') != -1 || url.indexOf('MyCC') != -1 || url.indexOf('MyFrm') != -1) {
-        return true;
+        return 1;
     }
     var val = GetQueryString("IsReadOnly") != null && GetQueryString("IsReadOnly") != undefined && GetQueryString("IsReadOnly") == "1" ? true : false;
     return val;
@@ -30,7 +30,11 @@ function IsReadOnly() {
  
 
 //审核组件页面初始化
-function NodeWorkCheck_Init(){
+function NodeWorkCheck_Init() {
+    if ($("#WorkCheck_Doc").length == 1) {
+        $("#Group_FWC").hide();
+        return;
+    }
     var FWCVer = null;
     if (FWCVer == null) {
         var node = new Entity("BP.WF.Node", checkParam.FK_Node);
@@ -517,12 +521,12 @@ function GetUserHandWriting(track, isEditWorkCheck, userName, userNo) {
         //将二进制流存入缓存中
         window.localStorage.setItem("writeImg", writeImg);
     }
-    return "<img id='Img_WorkCheck' src='" + writeImg + "' onclick='openHandWriting()' onerror=\"this.src='../DataUser/Siganture/UnSiganture.jpg'\"  style='border:0px;height:40px;'  />";
+    return "<img id='Img_WorkCheck' src='" + writeImg + "' onclick='openHandWriting()' onerror=\"this.src='../DataUser/Siganture/siganture.jpg'\"  style='border:0px;height:40px;'  />";
 }
 
 function openHandWriting() {
     var url = "CCForm/HandWriting.htm?WorkID=" + checkParam.WorkID + "&FK_Flow=" + checkParam.FK_Flow + "&FK_Node=" + checkParam.FK_Node + "&WritType=WorkCheck";
-    OpenEasyUiDialogExt(url, '签字板', 400, 300, false);
+    OpenLayuiDialog(url, '签字板', 400, 60,"auto", false);
 }
 
 /**
@@ -585,7 +589,7 @@ function AddUploadify(divid, fwcShowModel) {
 
 
         $('#file_upload').uploadify({
-            'swf': '../Scripts/Jquery-plug/fileupload/uploadify.swf',
+            'swf': '../Scripts/fileupload/uploadify.swf',
             'uploader': url,
             'auto': true,
             'fileTypeDesc': '请选择上传文件',
@@ -756,15 +760,18 @@ function WorkCheck_CheckPass() {
     //签名成功后，就需要把图片显示出来.
 
 }
+
+
 function unique(arr) {
     var tracksArr = arr;
+
     for (var i = 0, len = tracksArr.length; i < len; i++) {
         for (var j = i + 1, len = tracksArr.length; j < len; j++) {
-            if (tracksArr[i].EmpFrom === tracksArr[j].EmpFrom) {
-                tracksArr.splice(j, 1);
-                j--;        // 每删除一个数j的值就减1
-                len--;      // j值减小时len也要相应减1（减少循环次数，节省性能）   
-                // console.log(j,len)
+            if (tracksArr[i].EmpFrom === tracksArr[j].EmpFrom
+                && tracksArr[i].NodeID === tracksArr[j].NodeID) {
+                tracksArr.splice(i, 1);
+                j--; // 每删除一个数j的值就减1
+                len--; // j值减小时len也要相应减1（减少循环次数，节省性能）
             }
         }
     }

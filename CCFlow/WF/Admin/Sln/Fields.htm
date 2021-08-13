@@ -33,7 +33,7 @@
             //判断节点表单类型,如果是树节点，就显示写入NDxxRpt列.
             var isShowNDRpt = false;
             var node = new Entity("BP.WF.Node", nodeID);
-            if (node.FormType == 5 || node.FormType == 6)
+            if (node.FormType == 5 || node.FormType == 11)
                 isShowNDRpt = true;
 
             if (isShowNDRpt == false) {
@@ -96,7 +96,7 @@
                         html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsSigan' id='" + en.KeyOfEn + "_IsSigan" + "' type='checkbox' " + (en.IsSigan ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsSigan" + "'style='padding-left:20px;'>签名</div></label></td>";
                         html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsNotNull' id='" + en.KeyOfEn + "_IsNotNull" + "' type='checkbox' " + (en.UIIsInput ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsNotNull" + "'style='padding-left:20px;'>必填</div></label></td>";
                         if (isShowNDRpt == true)
-                            html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + en.KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (en.IsWriteToFlowTable ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToFlowTable" + "'style='padding-left:20px;'>写入ND" + parseInt(flowNo) + "Rpt</div></label></td>";
+                            html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToFlowTable' id='" + en.KeyOfEn + "_IsWriteToFlowTable" + "' type='checkbox' " + (en.IsWriteToFlowTable ? "checked" : "") + " style='margin-left:-45px'><div id='lab_" + en.KeyOfEn + "_IsWriteToFlowTable" + "'style='padding-left:20px;'>写入ND" + parseInt(flowNo) + "Rpt</div></label></td>";
 
                     }
                     //html += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='IsWriteToGenerWorkFlow' id='" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "' type='checkbox' " + (en.IsWriteToGenerWorkFlow ? "checked" : "") + "><div id='lab_" + en.KeyOfEn + "_IsWriteToGenerWorkFlow" + "'>写入WF_GernrWorkFlow</div></label></td>";

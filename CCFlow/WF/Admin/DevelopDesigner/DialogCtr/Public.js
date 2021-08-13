@@ -41,7 +41,7 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr,uicontrolT
         _Html = '<input type="text" value= ""  id="TB_' + keyOfEn + '" name="TB_' + keyOfEn + '" data-key="' + keyOfEn + '" data-name="' + name + '" data-type="' + dataType + '"  class="form-control Wdate"  leipiplugins="text" style="width:160px"/>' + fieldName;
     //复选框
     if (dataType == "CheckBox")
-        _Html = "<label><input type='CheckBox' value= '' id='CB_" + keyOfEn + "' name='CB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  leipiplugins='text' style='margin: 4px 0px;vertical-align:middle'/>&nbsp;" + name + "</label>" + fieldName;
+        _Html = "<input type='CheckBox' value= '' id='CB_" + keyOfEn + "' name='CB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'  leipiplugins='text' style='margin: 4px 0px;vertical-align:middle'/>&nbsp;" + name + " " + fieldName;
 
     if (dataType == "Radio") {
         //获取枚举值
@@ -85,8 +85,12 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr,uicontrolT
             srcType = "Handler"; //Handler
         if (srcType == 6)
             srcType = "JQuery";//JQuery
+        if (srcType == 7)
+            srcType = "SFTable";
+        if (srcType == 8)
+            srcType = "WebApi";
         _Html += "<span leipiplugins='select' id='SS_" + keyOfEn + "' title='下拉框' name='leipiNewField'   data-sfTable='" + uiBindKey + "'>";
-        _Html += "<select id='DDL_" + keyOfEn + "' name='DDL_" + keyOfEn + "' data-type='" + srcType + "'  data-key='" + keyOfEn + "'   class='form-control'>";
+        _Html += "<select id='DDL_" + keyOfEn + "' name='DDL_" + keyOfEn + "' data-type='" + srcType + "'  data-key='" + keyOfEn + "'   class='form-control'  style='width:80%'>";
         _Html += "<option value=''>" + keyOfEn + "</option>";
         _Html += "</select>";
         _Html += "</span>";
@@ -99,7 +103,7 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr,uicontrolT
         if (enums.length == 0)
             return;
         _Html += "<span leipiplugins='enum' id='SS_" + keyOfEn + "' title='下拉框' name='leipiNewField' data-type='EnumSelect'   data-bindKey='" + uiBindKey + "'>";
-        _Html += "<select id='DDL_" + keyOfEn + "' name='DDL_" + keyOfEn + "' data-type='EnumSelect' data-key='" + keyOfEn + "' class='form-control' >";
+        _Html += "<select id='DDL_" + keyOfEn + "' name='DDL_" + keyOfEn + "' data-type='EnumSelect' data-key='" + keyOfEn + "' class='form-control'  style='width:80%'>";
         for (var i = 0; i < enums.length; i++) {
                 _Html += "<option value='" + enums[i].IntKey + "'>" + enums[i].Lab + "</option>";
         }
@@ -126,10 +130,11 @@ function InsertHtmlToEditor(dataType, keyOfEn, name,uiBindKey,mapAttr,uicontrolT
         var num = mapAttr.Tag2;
         for (var i = 0; i < num; i++) {
 
-            _Html += "<img src='../../Style/Img/star_2.png'  data-type='Score'  leipiplugins='component'  data-key='" + mapAttr.MyPK + "'/>";
+            _Html += "<img src='../../Style/Img/star_1.png'  data-type='Score'  leipiplugins='component'  data-key='" + mapAttr.MyPK + "'/>";
         }
         _Html += "&nbsp;&nbsp;<span class='score-tips' style='vertical-align: middle;color:#ff6600;font: 12px/1.5 tahoma,arial,\"Hiragino Sans GB\",宋体,sans-serif;'><strong>" + num + "  分</strong></span>";
         _Html += "</span></span>";
+        _Html +="<input type='text' id='TB_"+keyOfEn+"' name='TB_"+keyOfEn+"' style='display:none'/>"
     }
     if (dataType == "SignCheck")
         _Html = "<input type='text'  id='TB_" + keyOfEn + "' name='TB_" + keyOfEn + "' data-key='" + keyOfEn + "' data-name='" + name + "' data-type='" + dataType + "'   leipiplugins='text' style='width:98%' placeholder='签批组件'/>";
@@ -160,6 +165,8 @@ function InsertHtmlToEditorByMapAttr(mapAttr)
 function GetDataType(mapAttr) {
 
     var ctType = "";
+    if (mapAttr.UIContralType == 2 && mapAttr.MyDataType == "4")
+        return "CheckBox";
     if (mapAttr.UIContralType == 0) {
         //控件数据类型
         if (mapAttr.MyDataType == "1") {

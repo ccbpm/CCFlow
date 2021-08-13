@@ -132,6 +132,7 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             handler.AddPara("IsContainFuture", isContainFuture);
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
             var data = handler.DoMethodReturnString("Runing_Init");
 
             if (data.indexOf('err@') == 0) {

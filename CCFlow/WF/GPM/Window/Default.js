@@ -34,14 +34,13 @@ new Vue({
             }, 2000)
         },
         EditIt: function (no, docModel) {
-            var url = "../../Comm/EnOnly.htm?EnName=BP.GPM.Home.WindowExt." + docModel + "&No=" + no;
+            var url = "../../Comm/En.htm?EnName=BP.GPM.Home.WindowExt." + docModel + "&No=" + no;
             OpenLayuiDialog(url, '', 900, 80, "auto", false);
         },
         MoveItem(pastNodeArrStr, pastNodeId, currentNodeArrStr, currentNodeId) {
             // todo 需要重新实现接口
 
             var no = GetQueryString("PageID");
-
             // debugger;
             // 方法排序..
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_GPM_Window");
@@ -113,7 +112,7 @@ new Vue({
         var ens = new Entities("BP.GPM.Home.WindowTemplates");
         ens.Retrieve("PageID", PageID);
 
-        this.myEns = obj2arr(ens);
+        this.myEns = ens.TurnToArry(); 
 
         console.log(this.myEns);
         this.initSortArea();
@@ -132,22 +131,10 @@ new Vue({
         }, 300)
     }
 })
-
-function obj2arr(obj) {
-
-    delete obj.Paras
-    delete obj.ensName
-    delete obj.length
-    var arr = []
-    for (var key in obj) {
-        if (Object.hasOwnProperty.call(obj, key)) {
-            arr.push(obj[key]);
-        }
-    }
-    return arr
-}
+ 
 function NewIt() {
+
     var no = GetQueryString("PageID");
-    var url = "Html.htm?PageID=" + no;
+    var url = "Html.htm?PageID=" + no + "&MenuNo=" + no;
     OpenLayuiDialog(url, '', 900, 80, "auto", true);
 }

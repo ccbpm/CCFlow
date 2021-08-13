@@ -25,7 +25,6 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             handler.AddUrlData();
-
             var data = handler.DoMethodReturnString("Port_Init");
 
             if (data.indexOf('err@') == 0) {

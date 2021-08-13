@@ -140,10 +140,15 @@
         },
 
         copyFrm: function(no) {
-            if (window.confirm("确定要执行表单复制吗?") == false)
-                return;
+           /* if (window.confirm("确定要执行表单复制吗?") == false)
+                return;*/
             var flow = new Entity("BP.Sys.MapData", no);
-            var data = flow.DoMethodReturnString("DoCopy");
+            var frmID = window.prompt("表单ID:" + no + "Copy");
+            if (frmID == undefined || frmID == null || frmID == '') return;
+
+            var frmName = window.prompt("表单名称:" + flow.Name + "Copy");
+            if (frmName == undefined || frmName == null || frmName == '') return;
+            var data = flow.DoMethodReturnString("DoCopy", frmID + '~' + frmName);
             layer.msg(data);
             setTimeout(function() {
                 window.location.reload();

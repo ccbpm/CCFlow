@@ -174,12 +174,15 @@
         }
         //返回.
         function Back() {
-            var url = window.location.href;
+           /* var url = window.location.href;
 
             url = url.replace('CondByWebApi.htm', 'List.htm');
 
 
-            window.location.href = url;
+            window.location.href = url;*/
+            /*parent.location.reload();
+            window.close();*/
+            window.parent.Condlist.closeCurrentTabs();
         }
     </script>
 </head>

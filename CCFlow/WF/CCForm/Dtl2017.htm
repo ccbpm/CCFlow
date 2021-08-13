@@ -4,25 +4,18 @@
     <title>从表</title>
     <meta charset="UTF-8" />
     <base target="_self" />
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <link href="../../DataUser/Style/Dtl.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="../Scripts/jquery-1.11.0.min.js"></script>
-    <!--<link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/default/easyui.css" />
-    <link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/icon.css" />
-    <script type="text/javascript" src="../Scripts/easyUI145/jquery.min.js"></script>
-    <script type="text/javascript" src="../Scripts/easyUI145/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>-->
 
+    <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" />
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/BootstrapUIDialog.js"></script>
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
-    <!--<script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
 
-    <link href="../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />-->
     <script src="../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
 
     <!-- 通用的为二次开发函数. -->
@@ -54,6 +47,9 @@
     <style>
         th, td {
             white-space: normal;
+        }
+        .pagination-detail{
+            color:black !important;
         }
     </style>
 
@@ -1462,8 +1458,20 @@
                 });
                 return;
             }
+            
+            //window.location.href = url;
+            WinOpenIt(url);
+        }
 
-            window.location.href = url;
+        function WinOpenIt(url) {
+            var self = window.open(url, 'newwindow', 'height=500, width=700, top=150, left=150, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');//window.open(url);
+            var loop = setInterval(function () {
+                if (self.closed) {
+                    clearInterval(loop);
+                    InitPage();
+                    InitHomeCount();
+                }
+            }, 1);
         }
         //选项 导出功能.
         function ExpOption() {
@@ -2544,7 +2552,32 @@
 
                         }
                         break;
+                    case "ReqDays": //配置自动计算日期天数lz
+                        //获取配置的字段
 
+                        var ResRDT = mapExt.AttrOfOper;//接收计算天数结果
+                        var StarRDT = mapExt.Tag1;//开始日期
+                        var EndRDT = mapExt.Tag2;//结束日期
+                        var RDTRadio = mapExt.Tag3;//是否包含节假日 0包含，1不包含
+                        var res = "";
+                        var result = $(tr).find("[name=TB_" + mapExt.AttrOfOper + ']');
+                        var end = $(tr).find("[name=TB_" + EndRDT + ']');
+                        var start = $(tr).find("[name=TB_" + StarRDT + ']');
+                        if (end == null || start == null)
+                            continue;
+                        end.focus(function () {
+                            result.val("");
+                        });
+                        //当结束日期文本框失去焦点时
+                        end.blur(function () {
+                            //计算量日期天数
+                            res = CalculateRDT(start.val(), end.val(), RDTRadio);
+                            if (res == "" || res == "NaN")
+                                end.val("");
+                            result.val(res);
+                        });
+
+                        break;
                     case "ActiveDDL": /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
                         var ddlParent = $(tr).find("[name=DDL_" + mapExt.AttrOfOper + ']');
                         var ddlChild = $(tr).find("[name=DDL_" + mapExt.AttrsOfActive + ']');

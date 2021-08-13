@@ -6,7 +6,7 @@
 FK_Flow,FlowName,PWorkID,PFlowNo,FK_Node,NodeName,Title,
 RDT,ADT,SDT,FK_Emp,FID,FK_FlowSort,SysType,SDTOfNode,PressTimes,
 GuestNo,GuestName,BillNo,FlowNote,TodoEmps,TodoEmpsNum,TodoSta,TaskSta,
-ListType,Sender,AtPara,Domain)
+ListType,Sender,AtPara,Domain,OrgNo)
 AS
 
 SELECT A.PRI,A.WorkID,B.IsRead, A.Starter,
@@ -19,7 +19,7 @@ B.SDT, B.FK_Emp,B.FID ,A.FK_FlowSort,A.SysType,A.SDTOfNode,B.PressTimes,
 A.GuestNo,
 A.GuestName,A.BillNo,A.FlowNote,A.TodoEmps,A.TodoEmpsNum,A.TodoSta,
 A.TaskSta,0 as ListType,A.Sender,A.AtPara,
-A.Domain
+A.Domain,A.OrgNo
 FROM  WF_GenerWorkFlow A, WF_GenerWorkerlist B
 WHERE     (B.IsEnable = 1) AND (B.IsPass = 0)
  AND A.WorkID = B.WorkID AND A.FK_Node = B.FK_Node AND A.WFState!=0 AND WhoExeIt!=1
@@ -38,7 +38,7 @@ A.GuestName,A.BillNo,A.FlowNote,A.TodoEmps,A.TodoEmpsNum,
 1 as ListType,
 B.Rec as Sender,
 '@IsCC=1'+A.AtPara as AtPara,
-A.Domain 
+A.Domain,A.OrgNo
   FROM WF_GenerWorkFlow A, WF_CCList B WHERE A.WorkID=B.WorkID 
   AND  B.Sta <=1 AND B.InEmpWorks = 1 AND A.WFState!=0;
   
@@ -79,4 +79,4 @@ WF_NodeDept B, WF_NodeStation C,  Port_DeptEmpStation E
  SELECT  A.FK_Flow, A.FlowName, C.No as FK_Emp, B.OrgNo FROM WF_Node A, 
  WF_FlowOrg B, Port_Emp C
  WHERE A.FK_Flow=B.FlowNo AND B.OrgNo=C.OrgNo
- AND  A.DeliveryWay=22;
+ AND  (A.DeliveryWay=22 OR A.DeliveryWay=51);

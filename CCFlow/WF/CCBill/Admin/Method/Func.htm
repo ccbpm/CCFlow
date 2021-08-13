@@ -44,6 +44,9 @@
 
             en.RefMethodType = 1;
 
+            //是否可以选择.
+          //  en.IsCanBatch = $("#CB_IsCanBatch").val();
+
             en.Icon = "icon-energy";
             //en.Icon = "icon-control-play";
             en.Insert();
@@ -66,7 +69,7 @@
             if (name == "")
                 return;
 
-            var handler = new HttpHandler("BP.Cloud.HttpHandler.Admin_CCFormDesigner");
+            var handler = new HttpHandler("BP.WF.HttpHandler.Admin_CCFormDesigner");
             handler.AddPara("IsQuanPin", isQuanPin);
             handler.AddPara("TB_Name", encodeURIComponent(name));
             var data = handler.DoMethodReturnString("NewFrmGuide_GenerPinYin");
@@ -86,7 +89,6 @@
     <div id="bar">
     </div>
 
-
     <fieldset>
         <legend> 方法 </legend>
 
@@ -104,6 +106,10 @@
                     <input id="RB_ZZMM_1" type="radio" name="RB_ZZMM" value="1" onclick="GenerPinYin()" /><label for="RB_ZZMM_1" onclick="GenerPinYin()">简拼</label>
                 </td>
             </tr>
+            <!--<tr>
+                <td> <label><input type="checkbox" id="CB_IsCanBatch" value="1" /> 是否可以批处理？</label> </td>
+                <td colspan="4"> 如果可以批处理，就可显示在查询组件上。 </td>
+            </tr>-->
         </table>
 
         <legend> 帮助 </legend>

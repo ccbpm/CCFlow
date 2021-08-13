@@ -76,7 +76,7 @@
             atParas = GetQueryString("AtParas");
             //获取列表的数据源
             var tableUrl = mapExt.Tag2;
-            if (atParas.indexOf('@') == 0) {
+            if (atParas && atParas.indexOf('@') == 0) {
                 var paras = atParas.split('@');
                 for (i = 0, len = paras.length; i < len; i++) {
                     var key = paras[i];

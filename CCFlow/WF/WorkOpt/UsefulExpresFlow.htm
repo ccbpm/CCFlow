@@ -223,7 +223,8 @@
         }
         //关闭主窗体
         function btnClose() {
-            window.parent.$('#bootStrapdlg').modal('hide');;
+            var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+            parent.layer.close(index);	
         }
         //返回数据
         function btnOk() {
@@ -252,8 +253,10 @@
                 alert("1.没有选中项<br />2.选中的文件不包含任何数据!");
                 return;
             }
-
-            window.parent.ChangeWorkCheck(elementID, str);
+            parent.$("#" + elementID).val(str);
+            var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+            parent.layer.close(index);	
+            //window.parent.ChangeWorkCheck(elementID, str);
 
         }
     </script>

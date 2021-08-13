@@ -118,7 +118,7 @@
                 //展现方式,0平铺、1下拉
                 var selectType = mapExt.GetPara("SelectType");
                 if (selectType == "0") {
-                    height = height - 50;
+                    height = height + 50;
                 }
                 if (condtionsArry.length >= 3) {
                     var TB_Key = $("#TB_Key");
@@ -547,6 +547,7 @@
             if (window.parent && window.parent.CloseBootstrapDialog) {
                 window.parent.CloseBootstrapDialog("取消");
             }
+            window.close();
         }
     </script>
 </head>

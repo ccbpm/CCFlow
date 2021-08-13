@@ -8,9 +8,9 @@ function InitBar(optionKey) {
     html += " <option value='Table' >表格模式</option>";
     html += "</select>";
 
-    html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-    html += "<input  id='Btn_FullData' type=button onclick='FullData()' value='填充' />";
-    html += "<input  id='Btn_Delete' type=button onclick='Delete()' value='删除' />";
+    html += "<input  id='Btn_Save' class='cc-btn-tab' type=button onclick='Save()' value='保存' />";
+    html += "<input  id='Btn_FullData' class='cc-btn-tab' type=button onclick='FullData()' value='填充' />";
+    html += "<input  id='Btn_Delete' class='cc-btn-tab'  type=button onclick='Delete()' value='删除' />";
 
     //html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";
 

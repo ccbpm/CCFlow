@@ -117,8 +117,8 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                     bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
                 else
                     bit = 2;
-                if (bit == 2)
-                    val = formatNumber(val, 2, ",");
+               // if (bit == 2)
+               //     val = formatNumber(val, 2, ",");
             }
 
             $('#TB_' + mapAttr.KeyOfEn).attr("value", val);

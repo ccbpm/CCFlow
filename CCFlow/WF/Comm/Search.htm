@@ -108,6 +108,7 @@
         //用户查询信息的主键
         var urMyPK = webUser.No + "_" + ensName + "_SearchAttrs";
 
+
         //页面设置信息
         var cfg = new Entity("BP.Sys.EnCfg");
         cfg.No = ensName;
@@ -115,6 +116,7 @@
 
         //当前用户查询信息.
         var ur = GetUserRegedit();
+     
 
         //页面分页信息显示
         var count = ur.GetPara("RecCount");//查询总条数
@@ -795,9 +797,19 @@
                 id = id.replace("DDL_", "");
                 str += "@" + id + "=" + $(this).val();
             });
+
+            var flowno = GetQueryString("FK_Flow");
+            var str2 = "@FK_Flow=" + flowno;
+
+            if (flowno == "" || flowno == undefined) {
+                ur.Vals = str;
+                ur.Update();
+            } else {
+                ur.Vals = str + str2; 
+                ur.Update();
+            }
+                
             ur = GetUserRegedit()
-            ur.Vals = str;
-            ur.Update();
             //获取页面的高度
             var H = document.body.clientHeight;
             var tableH = H - $("#toolbar").outerHeight() - $("#page-nav").outerHeight() - 70;

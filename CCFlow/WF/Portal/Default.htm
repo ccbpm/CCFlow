@@ -9,9 +9,11 @@
           content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <title></title>
-    <link rel="stylesheet" type="text/css" href="./icons/font-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="../Comm/fonts/font-icons.min.css">
     <link rel="stylesheet" type="text/css" href="./icons/icons.css">
     <link rel="stylesheet" type="text/css" href="./layui/css/layui.css">
+    <link href="../../DataUser/Style/Portal.css" rel="stylesheet" type="text/css" />
+
     <link rel="stylesheet" type="text/css" href="./layui/css/customer.css">
     <script src="../Scripts/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="./js/vue/vue.js"></script>
@@ -19,8 +21,8 @@
     <!--- 引入代码. -->
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
-    <script type="text/javascript" src="./js/sortjs/Sortable.min.js"></script>
-
+    <script src="./js/sortjs/Sortable.min.js" type="text/javascript"></script>
+    <script src="../../DataUser/JSLibData/PortalConfig.js" type="text/javascript"></script>
     <script type="text/javascript">
         //初始化页面函数.....
         $(function () {
@@ -31,6 +33,7 @@
         [v-cloak] {
             display: none;
         }
+
         .drag-class {
             border: 1px solid #2D93CA !important;
             background: white !important;
@@ -51,13 +54,13 @@
                 <!-- header -->
                 <div class="layui-header">
                     <ul class="layui-nav g-layout-left">
-                        <li class="layui-nav-item g-admin-flexible" @click="resizeSideBar">
+                        <li class="layui-nav-item g-admin-flexible" v-if="IsShowFlexible==true" @click="resizeSideBar">
                             <a href="javascript:void(0)" title="侧边栏"
                                :style="'transform: rotate(' + sideBarOpen?'0':'180deg' + ')'">
                                 <i class="layui-icon layui-icon-shrink-right"></i>
                             </a>
                         </li>
-                        <li class="layui-nav-item layui-hide-xs">
+                        <li class="layui-nav-item layui-hide-xs" v-if="IsShowFast==true">
                             <a href="javascript:void(0)" title="快捷" @mouseover.stop="showShortCut = true"
                                @mouseenter="stopTimeout" @mouseleave="closeDropdown">
                                 快捷
@@ -65,22 +68,22 @@
 
                             <dl class="layui-nav-child drop-down" :class="{'layui-show':showShortCut}" style='width: 72px;'
                                 @click.stop="showShortCut = false" @mouseenter="stopTimeout" @mouseleave="closeDropdown">
-                                <dd @click='openTab("发起","../Start.htm")'>
+                                <dd onclick="Start()" >
                                     <a class="drop-down-item">
                                         <i class="icon-share-alt"></i>发起
                                     </a>
                                 </dd>
-                                <dd @click='openTab("待办","../Todolist.htm")'>
+                                <dd onclick='Todolist()'>
                                     <a class="drop-down-item">
                                         <i class="icon-bell"></i>待办
                                     </a>
                                 </dd>
-                                <dd @click='openTab("在途","../Runing.htm")'>
+                                <dd onclick='Runing()'>
                                     <a class="drop-down-item">
                                         <i class="icon-clock"></i>在途
                                     </a>
                                 </dd>
-                                <dd @click='openTab("查询","../Search.htm")'>
+                                <dd  onclick='Search()'>
                                     <a class="drop-down-item">
                                         <i class="icon-magnifier"></i>查询
                                     </a>
@@ -92,13 +95,26 @@
                                 {/volist}
                             </dl> -->
                         </li>
-                        <li class="layui-nav-item" @click="reLoadCurrentPage">
+                        <li v-if="IsShowRefresh"class="layui-nav-item" @click="reLoadCurrentPage">
                             <a href="javascript:void(0)">
                                 <i class="layui-icon layui-icon-refresh-3"></i>
                             </a>
                         </li>
                     </ul>
+
+
                     <ul class="layui-nav g-layout-right">
+                        <li v-if="isAdmin" id="iconMenu" class="layui-nav-item layui-hide-xs"
+                            @click="openTab('低代码','../GPM/Menus.htm')">
+                            <a href="javascript:void(0)" class="flex-item">
+                                <!--<i class="layui-icon layui-icon-engine"></i>-->
+                                <i class="icon-menu"></i>
+                                <!--<i class="layui-icon layui-icon-form"></i>-->
+                                <span>低代码</span>
+                            </a>
+                        </li>
+
+
                         <li v-if="isAdmin" id="iconFlow" class="layui-nav-item layui-hide-xs"
                             @click="openTab('流程','Flows.htm')">
                             <a href="javascript:void(0)" class="flex-item">
@@ -116,30 +132,16 @@
                             </a>
                         </li>
 
-                        <li v-if="isAdmin" id="iconMenu" class="layui-nav-item layui-hide-xs"
-                            @click="openTab('菜单','../GPM/Menus.htm')">
-                            <a href="javascript:void(0)" class="flex-item">
-                                <!--<i class="layui-icon layui-icon-engine"></i>-->
-                                <i class="icon-menu"></i>
-                                <!--<i class="layui-icon layui-icon-form"></i>-->
-                                <span>菜单</span>
-                            </a>
-                        </li>
 
                         <li v-if="isAdmin" id="iconOrg" class="layui-nav-item layui-hide-xs"
-                            @click="openTab('组织','../../GPM/Organization.htm')">
+                            onclick="OpenOrg()">
                             <a href="javascript:void(0)" class="flex-item">
                                 <i class="icon-people"></i>
                                 <span>组织</span>
                             </a>
                         </li>
 
-                        <!--<li class="layui-nav-item layui-hide-xs" onClick='layer_show("桌面个性化设计","",500,400)'>
-                            <a href="javascript:void(0)">
-                                <i class="layui-icon layui-icon-component"></i>
-                            </a>
-                        </li>-->
-
+                  
                         <li id="iconIM" class="layui-nav-item layui-hide-xs" onclick="OpenMsgPanel()">
                             <a href="javascript:void(0)">
                                 <i class="icon-bubbles"></i> 消息
@@ -147,13 +149,13 @@
                         </li>
 
 
-                        <li class="layui-nav-item layui-hide-xs" @click="openThemePicker">
+                        <li v-if="IsShowTheme" class="layui-nav-item layui-hide-xs" @click="openThemePicker">
                             <a href="javascript:void(0)">
                                 <i class="layui-icon layui-icon-theme"></i>
                             </a>
                         </li>
 
-                        <li class="layui-nav-item layui-hide-xs" @click="changeFullScreenStatus">
+                        <li v-if="IsShowFullScreen" class="layui-nav-item layui-hide-xs" @click="changeFullScreenStatus">
                             <a href="javascript:void(0)">
                                 <i class="layui-icon "
                                    :class="inFullScreenMode ? 'layui-icon-screen-restore':'layui-icon-screen-full'"></i>
@@ -184,9 +186,9 @@
                 <!-- menus -->
                 <div v-if="classicalLayout" class="layui-side layui-side-menu">
                     <div class="layui-side-scroll">
-                        <div class="layui-logo" v-if="sideBarOpen">驰骋BPM</div>
+                        <div class="layui-logo" v-if="sideBarOpen">{{SystemName}}</div>
                         <div class="layui-logo" v-else style="display: flex;align-items: center; justify-content: center;">
-                            <img src="image/logo.png" style="width: 32px;height:32px;" alt="logo">
+                            <img :src="SystemLog" style="width: 32px;height:32px;" alt="logo">
                         </div>
                         <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
                         <ul class="layui-nav layui-nav-tree">
@@ -241,20 +243,20 @@
                     <div class="layui-side-scroll">
                         <div class="sideMenuBar">
                             <li class="top-menu-item" @click="initMenus">
-                                <img src="./image/logo.png" alt="logo">
+                                <img :src="SystemLogo" alt="logo">
                                 <!-- <p>LOGO</p> -->
                             </li>
                             <li v-for="(item,index) in menuTreeData" :key="index" class="top-menu-item"
                                 :class="{'selected-top-menu':selectedTopMenuIndex === index}" @click="selectTopMenu(index)">
                                 <i :class="item.Icon"></i>
-                                <span>{{item.Name}}</span>
+                                <span class="top-menu-item-span">{{item.Name}}</span>
                             </li>
                         </div>
                         <div class="menus-wrapper">
-                            <div class="layui-logo">驰骋BPM</div>
+                            <div class="layui-logo">{{SystemName}}</div>
                             <div class="sub-menu-divider">
                                 <div class="line"></div>
-                                <span>{{subMenuTitle}}</span>
+                                <span class="sub-menu-title">{{subMenuTitle}}</span>
                                 <div class="line"></div>
                             </div>
                             <ul class="layui-nav layui-nav-tree" ref="sort-tree" :style="sideBarOpen?'':'display:none'">
@@ -262,23 +264,18 @@
                                     :data-no="item.No"
                                     :data-idx="index" :data-name="item.Name" :class="calcClassList(item,1)">
                                     <!--                                <a href="javascript:void(0)" @click="foldMenus(subMenuData.children,item,$event)">-->
-                                    <a href="javascript:void(0)" @click="item.open = !item.open">
+                                    <a href="javascript:void(0)"  :class="{'layui-nav-this':item.open === true}" @click="item.open = !item.open">
                                         <i :class="item.Icon"></i>
                                         <cite style="margin-left:8px">{{item.Name}}</cite>
                                         <span class="layui-nav-more"></span>
                                     </a>
-                                    <!--                                <a v-else href="javascript:void(0)" :class="{'layui-this' : item.No === selectedId}"-->
-                                    <!--                                   @click="openTab(item.Name,item.Url),selectedId = item.No">-->
-                                    <!--                                    <i :class="item.Icon"></i>-->
-                                    <!--                                    <cite style="margin-left:8px">{{item.Name}}</cite>-->
-                                    <!--                                </a>-->
                                     <dl v-show="Array.isArray(item.children) && item.children.length > 0 && item.open"
                                         ref="sort-tree-child">
                                         <dd v-for="(it,idx) in item.children" :data-id="it.No" :data-pid="item.No"
                                             :data-no="it.No" :data-name="it.Name" :data-pidx="index" :data-idx="idx"
                                             :class="calcClassList(item,2)" @click.right.stop>
                                             <a @click="openTabByMenu(it),selectedId = it.No"
-                                               :class="{'layui-this': it.No === selectedId}"
+                                               :class="{'layui-this': it.No === selectedId,'sub-menu-a ':true}"
                                                style="padding-left: 45px;cursor: pointer;">
                                                 <i :class="it.Icon"></i>
                                                 <span style="margin-left: 8px;">{{it.Name}}</span>
@@ -366,11 +363,11 @@
     <script src="./layui/layui.js" type="text/javascript"></script>
 
     <script type="text/javascript">
-        layui.config({
+      /**layui.config({
             base: '../Scripts/layui/' //静态资源所在路径
         }).extend({
             index: 'lib/index' //主入口模块
-        }).use('index');
+        }).use('index');*/
         var loading = layer.load(2, {
             shade: false,
             time: 2000

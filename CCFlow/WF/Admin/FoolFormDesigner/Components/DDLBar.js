@@ -122,6 +122,9 @@ function changeOption() {
         case FrmComponents.SignCheck:
             roleName = "14.SignCheck.htm";
             break;
+        case FrmComponents.WorkCheck:
+            roleName = "140.WorkCheck.htm";
+            break;
         case FrmComponents.FlowBBS:
             roleName = "15.FlowBBS.htm";
             break;
@@ -197,6 +200,24 @@ function Save() {
             return ExtIDCard();
         case 14://签批组件
             return ExtWorkCheck();
+        case 140://审核组件
+            var mypk = GetQueryString("FK_Node");
+            if (frmType != 8 && (mypk == null || mypk == undefined)) {
+                window.location.href = '../../Comm/EnOnly.htm?EnName=BP.WF.Template.NodeWorkCheck&PKVal=' + mypk + '&tab=审核组件';
+                return;
+            }
+
+            if (mypk == null || mypk == undefined) {
+                var _html = "<img src='../CCFormDesigner/Controls/DataView/FrmCheck.png' style='width:67%;height:200px'  leipiplugins='component'  data-type='WorkCheck'/>"
+                editor.execCommand('insertHtml', _html);
+                return;
+            }
+            var node = new Entity("BP.WF.WF_Node", mypk);
+            node.FWCSta = 1;
+            node.Update;
+            var _html = "<img src='../CCFormDesigner/Controls/DataView/FrmCheck.png' style='width:67%;height:200px'  leipiplugins='component'  data-type='WorkCheck'/>"
+            editor.execCommand('insertHtml', _html);
+            return;
         case 15://评论组件
             return ExtFlowBBS();
         case 16://系统定位
@@ -818,8 +839,8 @@ function ExtHandWriting() {
     mapAttr.MyDataType = 1;
     mapAttr.LGType = 0;
     mapAttr.ColSpan = 1; //
-    mapAttr.UIWidth = 150;
-    mapAttr.UIHeight = 170;
+    mapAttr.UIWidth = 70;
+    mapAttr.UIHeight = 50;
     mapAttr.Insert(); //插入字段.
     mapAttr.Retrieve();
     if (frmType != 8)

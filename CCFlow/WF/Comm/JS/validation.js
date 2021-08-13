@@ -23,7 +23,34 @@ function createCode() {
     context.font = '16px sans-serif';
     context.fillStyle = '#4B4B4B';
     context.fillText(code, 12, 18);
+    context.lineWidth = 3;
+
+    
+    for (var i = 0; i < 4; i++) {
+        context.beginPath();
+        context.strokeStyle = getRandomColor(120, 220);
+        context.moveTo(Mathrandom(0, 30), Mathrandom(0, 40));
+        context.lineTo(Mathrandom(90, 110), Mathrandom(0, 40));
+        context.stroke();
+    }
+    for (var i = 0; i < 25; i++) {
+        context.beginPath();
+        context.fillStyle = getRandomColor(120, 220);
+        context.arc(Mathrandom(5, 110), Mathrandom(5, 35), 1, 0, Math.PI * 2);
+        context.fill();
+    }
+    
 }
+function getRandomColor(min, max) {
+    var r = Mathrandom(min, max);
+    var g = Mathrandom(min, max);
+    var b = Mathrandom(min, max);
+    return "rgb(" + r + "," + g + "," + b + ")";
+}
+function Mathrandom(min, max) {
+    return parseInt(Math.random() * (max - min + 1) + min);
+}
+
 
 function validateCode() {
 

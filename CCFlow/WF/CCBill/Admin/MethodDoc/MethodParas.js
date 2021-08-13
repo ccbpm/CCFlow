@@ -20,365 +20,9 @@ new Vue({
         bindMenu: function () {
             var _this = this
             layui.use('dropdown', function () {
-                var dropdown = layui.dropdown
-                var topNodeItems = [
-                    { title: '<i class=icon-plus></i> 新建方法', id: "NewmapAttrByGroup" },
-                    { title: '<i class=icon-star></i> 目录属性', id: "EditSort" },
-                    { title: '<i class=icon-folder></i> 新建目录', id: "NewSort" },
-                    { title: '<i class=icon-pencil></i> 修改名称', id: "EditSortName" },
-                    { title: '<i class=icon-close></i> 删除目录', id: "DeleteSort" }
-                ]
-                var tRenderOptions = [{
-                    elem: '.item-top-dp',
-                    trigger: 'contextmenu',
-                    data: topNodeItems,
-                    click: function (data, oThis) {
-
-                        var obj = $(this.elem)[0].dataset;
-                        console.log(obj);
-
-                        //    var obj = $(this.elem)[0].dataset;
-                        //    debugger;
-
-                        _this.topNodeOption(data.id, obj.no, obj.name, obj.idx);
-                    }
-                }, {
-                    elem: '.t-btn',
-                    trigger: 'click',
-                    data: topNodeItems,
-                    click: function (data, oThis) {
-
-                        var obj = $(this.elem)[0].dataset;
-                        console.log(obj);
-                        //  debugger;
-
-                        _this.topNodeOption(data.id, obj.no, obj.name, obj.idx);
-                    }
-                }]
-
-                dropdown.render(tRenderOptions[0]);
-                dropdown.render(tRenderOptions[1]);
-
-                var childNodeMenuItems = [
-                    { title: '<i class=icon-star></i> 方法属性', id: "Attr" },
-                    { title: '<i class=icon-plus ></i> 新建方法', id: "NewmapAttr" },
-                    /*    { title: '<i class=icon-settings></i> 设计方法', id: "Designer" },*/
-                    /*    { title: '<i class=icon-docs></i> 复制方法', id: "Copy" },*/
-                    { title: '<i class=icon-pencil></i> 修改名称', id: "EditmapAttrName" },
-                    { title: '<i class=icon-close></i> 删除方法', id: "Delete" }
-                ]
-                var cRenderOptions = [{
-                    elem: '.item-name-dp',
-                    trigger: 'contextmenu',
-                    data: childNodeMenuItems,
-                    click: function (data, othis) {
-                        debugger;
-                        //_this.childNodeOption(data.id, $(this.elem)[0].dataset.No, $(this.elem)[0].dataset.name, $(this.elem)[0].dataset.pidx, $(this.elem)[0].dataset.idx)
-
-                        // var obj = $(this.elem)[0].dataset;
-                        // console.log(obj);
-
-                        var obj = $(this.elem)[0].dataset;
-                        console.log(obj);
-
-
-                        _this.childNodeOption(data.id, $(this.elem)[0].dataset.no, $(this.elem)[0].dataset.name, $(this.elem)[0].dataset.pidx, $(this.elem)[0].dataset.idx)
-
-                    }
-                }, {
-                    elem: '.c-btn',
-                    trigger: 'click',
-                    data: childNodeMenuItems,
-                    click: function (data, othis) {
-
-                        debugger;
-
-                        var obj = $(this.elem)[0].dataset;
-                        var no = obj.No;
-                        if (no == undefined)
-                            no = obj.no;
-
-                        var idx = obj.idx;
-
-                        //console.log(obj);
-
-                        _this.childNodeOption(data.id, no, $(this.elem)[0].dataset.name, $(this.elem)[0].dataset.pidx, idx)
-                    }
-                }]
-                dropdown.render(cRenderOptions[0]);
-                dropdown.render(cRenderOptions[1]);
             })
         },
-
-        //如果w=0 则是100%的宽度.
-        /* openLayer: function (uri, name, w, h) {
-             //console.log(uri, name);
- 
-             if (w == 0)
-                 w = window.innerWidth;
- 
-             if (w == undefined)
-                 w = window.innerWidth / 2;
- 
-             if (h == undefined)
-                 h = window.innerHeight;
- 
-             layer.open({
-                 type: 2,
-                 title: name,
-                 content: [uri, 'no'],
-                 area: [w + 'px', h + 'px'],
-                 offset: 'rb',
-                 shadeClose: true
-             })
-         },
- 
-         mapAttrAttr: function (no) {
- 
-             console.log(en);
- 
-             var en = new Entity("BP.CCBill.Template.mapAttr", no);
- 
-             var enName = "BP.CCBill.Template.mapAttr";
- 
- 
-             if (en.mapAttrModel == "Func") enName = "BP.CCBill.Template.mapAttrFunc";
-             if (en.mapAttrModel == "Link") enName = "BP.CCBill.Template.mapAttrLink";
-             if (en.mapAttrModel == "QRCode") enName = "BP.CCBill.Template.mapAttrQRCode";
-             if (en.mapAttrModel == "FlowBaseData") enName = "BP.CCBill.Template.mapAttrFlowBaseData";
-             if (en.mapAttrModel == "FlowNewEntity") enName = "BP.CCBill.Template.FlowNewEntity";
- 
-             if (en.mapAttrModel === "SingleDictGenerWorkFlows" || en.mapAttrModel === "SingleDictGenerWorkFlow")
-                 enName = "BP.CCBill.Template.mapAttrSingleDictGenerWorkFlow";
- 
-             if (en.mapAttrModel == "FlowEtc")
-                 enName = "BP.CCBill.Template.FlowEtc";
- 
-             var url = "../../Comm/En.htm?EnName=" + enName + "&MyPK=" + en.No + "&From=Ver2021";
-             OpenLayuiDialog(url, "", 100000, 0, null, false);
- 
-         },
-         EditSort: function (no, name) {
-             var url = "../../Comm/En.htm?EnName=BP.CCBill.Template.GroupmapAttr&No=" + no;
-             //  alert(url);
-             OpenLayuiDialog(url, "", 0, 0, null, true);
-             //this.openLayer(url, "目录:" + name);
-         },
-         testFlow: function (no, name) {
-             var url = "../Admin/TestingContainer/TestFlow2020.htm?FK_Flow=" + no;
-             window.top.vm.fullScreenOpen(url, name);
-             // this.openLayer(url, name);
-         },
-         flowAttr: function (no, name) {
-             var url = "../Comm/En.htm?EnName=BP.WF.Template.FlowExt&No=" + no;
-             window.top.vm.openTab(name, url);
-             //this.openLayer(url, name,900);
-         },
- 
-         CopymapAttr: function (no) {
-             if (window.confirm("确定要执行方法复制吗?") == false)
-                 return;
-             var flow = new Entity("BP.WF.Flow", no);
-             var data = flow.DoMethodReturnString("DoCopy");
-             layer.msg(data);
-             setTimeout(function () {
-                 window.location.reload();
-             }, 2000);
-         },
-         DeleteMethon: function (no, pidx, idx) {
- 
-             var msg = "提示: 确定要删除【" + no + "】方法吗?";
-             msg += "\t\n1.如果该方法下有实例，您不能删除。";
-             msg += "\t\n2.该方法为子方法的时候，被引用也不能删除.";
-             if (window.confirm(msg) == false)
-                 return;
- 
-             var load = layer.msg("正在处理,请稍候...", {
-                 icon: 16,
-                 anim: 5
-             })
- 
-             //开始执行删除.
-             var flow = new Entity("BP.CCBill.Template.mapAttr", no);
-             flow.Delete();
- 
-             // var data = flow.DoMethodReturnString("DoDelete");
-             // layer.msg(data);
-             //  if (data.indexOf("err@") == 0)
-             //   return;
- 
-             layer.close(load)
- 
-             this.mapAttrs[pidx].children.splice(idx, 1)
-             var leaveItems = this.mapAttrs[pidx].children
-             this.$set(this.mapAttrs[pidx], 'children', leaveItems)
-         },
- 
-         childNodeOption: function (key, mapAttrNo, name, pidx, idx) {
- 
-             // key=菜单标记, data 行的主键, name = 行的名称, pIdx=父级的编号, idx=当前的idx.
-             switch (key) {
-                 case "Attr": //方法的属性.
-                     this.mapAttrAttr(mapAttrNo);
-                     break;
-                 case "Designer":
-                     this.Designer(mapAttrNo, name);
-                     break;
-                 case "NewmapAttr":
- 
-                     var enmapAttr = new Entity("BP.CCBill.Template.mapAttr", mapAttrNo);
-                     //  NewFlow(dat)
-                     this.NewmapAttrByGroup(enmapAttr.GroupID);
-                     break;
-                 case "Copy":
-                     this.CopymapAttr(mapAttrNo);
-                     break;
-                 case "EditmapAttrName":
-                     this.EditmapAttrName(mapAttrNo, name, pidx, idx);
-                     break;
-                 case "Delete":
-                     this.DeleteMethon(mapAttrNo, pidx, idx);
-                     break;
-             }
-         },  //分组上的事件.
-         topNodeOption: function (key, groupID, name, idx) {
- 
-             switch (key) {
-                 case "EditSort":
-                     this.EditSort(groupID, name);
-                     break;
-                 case "EditSortName":
-                     this.EditSortName(groupID, name, idx); //修改名字.
-                     break;
-                 case "ImpFlowTemplate":
-                     this.ImpFlowTemplate(groupID);
-                     break;
-                 case "NewSort":
-                     this.NewSort(groupID, true);
-                     break;
-                 case "DeleteSort":
-                     this.DeleteSort(groupID);
-                     break;
-                 case "NewmapAttrByGroup": //新建方法.
-                     this.NewmapAttrByGroup(groupID, name);
-                     break;
-                 default:
-                     alert("没有判断的命令" + key);
-                     break;
-             }
-         },
-         EditSortName(id, name, idx) {
- 
-             var val = prompt("新名称", name);
-             if (val == null || val == undefined) return;
- 
-             var en = new Entity("BP.CCBill.Template.GroupmapAttr", id);
-             en.Name = val;
-             en.Update();
- 
-             //修改名称.
-             this.mapAttrs[idx].Name = val;
-             layer.msg("目录修改成功.");
- 
-         },
-         NewmapAttrByGroup: function (groupID, name) {
- 
-             var moduleNo = GetQueryString("ModuleNo");
-             var frmID = GetQueryString("FrmID");
- 
-             url = "./Method/Func.htm?GroupID=" + groupID + "&FrmID=" + frmID + "&ModuleNo=" + moduleNo + "&s=" + Math.random();
- 
-             //新建方法.
-             OpenLayuiDialog(url, '', 9000, 0, null, true);
-         },
-         EditmapAttrName(id, name, pidx, idx) {
- 
- 
-             var en = new Entity("BP.CCBill.Template.mapAttr", id);
- 
-             //Todo: wanglu , 这里没有获取到名字，name的参数，也没有更新到数据。
-             var val = prompt("新名称:", en.Name);
- 
-             if (val == null || val == undefined)
-                 return;
- 
-             en.Name = val;
-             en.Update();
-             // console.log(this.mapAttrs[pidx].children[idx])
-             this.mapAttrs[pidx].children[idx].Name = val;
-             // this.$set(this.mapAttrs[pidx].children[idx],'Name',val)
-             //Todo:wanglu , 修改名称.
-             // $("#" + id).val(val);
-             // var ctl = $("#" + id);
-             layer.msg("修改成功.");
- 
-         },
-         ImpFlowTemplate: function (data) {
-             var fk_flow = data;
-             url = "./../Admin/AttrFlow/Imp.htm?FK_Flow=" + fk_flow + "&Lang=CH";
-             addTab("ImpFlowTemplate", "导入方法模版", url);
-         },
-         
- 
-         NewSort: function (currentElem, sameLevel) {
- 
-             //只能创建同级.
-             sameLevel = true;
- 
-             //例子2
-             layer.prompt({
-                 value: '',
-                 title: '新建目录',
-             }, function (value, index, elem) {
-                 layer.close(index);
- 
-                 var en = new Entity("BP.CCBill.Template.GroupmapAttr");
-                 en.FrmID = GetQueryString("FrmID");
-                 en.mapAttrType = "Self";
-                 en.mapAttrID = "Self";
-                 en.Icon = "icon-folder";
-                 en.Name = value;
-                 en.Insert();
- 
-                 layer.msg("创建成功");
-                 //this.EditSort(data, "编辑");
-                 //return;
- 
-                 setTimeout(function () {
-                     window.location.reload();
-                 }, 2000);
-             });
-         },
-         updateSort(rootNo, sortNos) {
- 
-             console.log("sortNo:" + sortNos);
- 
-             // 目录排序..
-             var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin");
-             handler.AddPara("FrmID", GetQueryString("FrmID"));
-             handler.AddPara("GroupIDs", sortNos);
-             var data = handler.DoMethodReturnString("mapAttr_MoverGroup");
-             layer.msg(data)
-         },
-         MoveItem(pastNodeArrStr, pastNodeId, currentNodeArrStr, currentNodeId) {
-             // todo 需要重新实现接口
- 
-             if (currentNodeId == undefined) {
-                 alert("没有获得当前分组的ID");
-                 return;
-             }
- 
-             // debugger;
-             // 方法排序..
-             var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin");
-             handler.AddPara("GroupID", currentNodeId);
-             handler.AddPara("mapAttrIDs", currentNodeArrStr);
-             var data = handler.DoMethodReturnString("mapAttr_MovermapAttr");
-             layer.msg(data)
-         },
-        */
-        DeleteSort: function (no) {
-
+        DeleteEn: function (no) {
             if (window.confirm("确定要删除吗?") == false)
                 return;
             var en = new Entity("BP.Sys.MapAttr", no);
@@ -404,9 +48,7 @@ new Vue({
             handler.AddPara("FrmID", frmID);
             handler.AddPara("MyPKs", currentNodeArrStr);
             var data = handler.DoMethodReturnString("MethodParas_Mover");
-
             layer.msg(data);
-
         },
         initSortArea: function () {
             var _this = this
@@ -452,7 +94,6 @@ new Vue({
         // 是否启用
         changemapAttrEnableStatus(mapAttr, ctrl) {
             // 当前启用状态
-
             //var en = new Entity("BP.CCBill.Template.mapAttr", mapAttr.No);
             //if (en.IsEnable == 0)
             //    en.IsEnable = 1; // mapAttr.IsEnable;
@@ -471,18 +112,12 @@ new Vue({
             event.stopPropagation();
         }
 
-        //获得数据源.
-        /*var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin");
-        handler.AddUrlData();
-        var ds = handler.DomapAttrReturnJSON("mapAttr_Init");
-        var groups = ds["Groups"];
-        var mapAttrs = ds["mapAttrs"];*/
-
         var frmID = GetQueryString("FrmID");
         var no = GetQueryString("No"); //方法的编号.
         var mapAttrs = new Entities("BP.Sys.MapAttrs");
         mapAttrs.Retrieve("FK_MapData", no, "Idx");
         mapAttrs = obj2arr(mapAttrs);
+
         var btnStyle = "class='layui-btn layui-btn-primary layui-border-blue layui-btn-xs'";
         mapAttrs.forEach(function (mapAttr) {
 
@@ -541,6 +176,13 @@ new Vue({
         })
 
         this.mapAttrs = mapAttrs;
+        var en = new Entity("BP.CCBill.Template.Method", GetQueryString("No"));
+        if (mapAttrs.length > 0)
+            en.IsHavePara = 1;
+        else
+            en.IsHavePara = 0;
+        en.Update();
+       
 
         console.log(this.mapAttrs);
         this.initSortArea();
@@ -600,27 +242,27 @@ function Edit(mypk, ftype, gf, fk_mapdtl) {
     var title = '';
     if (ftype == 1) {
         title = '字段String属性';
-        url = '../../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
+        url = '../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
     }
 
     if (ftype == 2 || ftype == 3 || ftype == 5 || ftype == 8) {
         title = '字段Num属性';
-        url = '../../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PKVal=' + mypk + '&s=' + Math.random();
+        url = '../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PKVal=' + mypk + '&s=' + Math.random();
     }
 
     if (ftype == 6 || ftype == 7) {
         title = '字段 date 属性';
-        url = '../../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + mypk + '&s=' + Math.random();
+        url = '../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + mypk + '&s=' + Math.random();
     }
 
     if (ftype == 6 || ftype == 7) {
         title = '字段 datetime 属性';
-        url = '../../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + mypk + '&s=' + Math.random();
+        url = '../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + mypk + '&s=' + Math.random();
     }
 
     if (ftype == 4) {
         title = '字段 boolen 属性';
-        url = '../../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&PKVal=' + mypk + '&s=' + Math.random();
+        url = '../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&PKVal=' + mypk + '&s=' + Math.random();
     }
 
     /*OpenLayuiDialog(url, "eudlgframe", title, 800, 500, "icon-edit", true, null, null, null, function () {
@@ -634,7 +276,7 @@ function Edit(mypk, ftype, gf, fk_mapdtl) {
 
 function EditEnum(fk_mapdata, mypk, keyOfEn) {
 
-    var url = '../../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=' + mypk + '&s=' + Math.random();
+    var url = '../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=' + mypk + '&s=' + Math.random();
 
     /*OpenLayuiDialog(url, "eudlgframe", '枚举' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -644,7 +286,7 @@ function EditEnum(fk_mapdata, mypk, keyOfEn) {
 
 function EditTableSQL(mypk, keyOfEn) {
 
-    var url = '../../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&PKVal=' + mypk + '&s=' + Math.random();
+    var url = '../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&PKVal=' + mypk + '&s=' + Math.random();
 
     /* OpenLayuiDialog(url, "eudlgframe", '外键SQL字段:' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
          window.location.href = window.location.href;
@@ -654,7 +296,7 @@ function EditTableSQL(mypk, keyOfEn) {
 
 function EditTable(fk_mapData, mypk, keyOfEn) {
 
-    var url = '../../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=' + mypk + '&s=' + Math.random();
+    var url = '../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=' + mypk + '&s=' + Math.random();
 
     /* OpenLayuiDialog(url, "eudlgframe", '外键字段:' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
          window.location.href = window.location.href;

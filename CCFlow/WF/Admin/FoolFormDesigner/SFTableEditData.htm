@@ -34,8 +34,12 @@
                 $("#Btns").hide();
             }
             var sfTable = new Entity("BP.Sys.SFTable", fk_sftable);
-            var ens = sfTable.DoMethodReturnJSON("GenerDataOfJson");
-
+            var ens = sfTable.DoMethodReturnString("GenerDataOfJson");
+            if (ens.indexOf("err@") != -1) {
+                alert(ens);
+                return;
+            }
+            ens = JSON.parse(ens);
             maxIndx = ens.length;
             var html = "<table class='layui-table' layui-skin='line'>";
             html += "<tr>";
@@ -49,7 +53,7 @@
                 var No = ens[i].No;
                 //系统字典表时查的是BH
                 if (QueryType == "Dict") {
-                    No = ens[i].BH;
+                    No = ens[i].No;
                 }
                 html += "<tr>";
                 html += "<td align='center'><input id='IDX_" + No + "'  type='checkbox' name='IDX_" + No + "' /></td>";

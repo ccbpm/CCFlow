@@ -49,7 +49,12 @@
                 return;
             }
 
-            var handler = new HttpHandler("BP.Cloud.HttpHandler.Admin_CCFormDesigner");
+            var str = "BP.WF.HttpHandler.Admin_CCFormDesigner";
+            var webUser = new WebUser();
+            if (webUser.CCBPMRunModel == 2)
+                str = "BP.Cloud.HttpHandler.Admin_CCFormDesigner";
+
+            var handler = new HttpHandler(str);
             handler.AddFormData();
             handler.AddUrlData();
             handler.AddPara("FK_FrmSort", module.SystemNo);
@@ -102,7 +107,7 @@
             if (name == "")
                 return;
 
-            var handler = new HttpHandler("BP.Cloud.HttpHandler.Admin_CCFormDesigner");
+            var handler = new HttpHandler("BP.WF.HttpHandler.Admin_CCFormDesigner");
             handler.AddPara("IsQuanPin", isQuanPin);
             handler.AddPara("TB_Name", encodeURIComponent(name));
             var data = handler.DoMethodReturnString("NewFrmGuide_GenerPinYin");

@@ -2,9 +2,9 @@
 <html>
 
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <title>业务流程列表</title>
-    <link rel="stylesheet" type="text/css" href="../../Portal/icons/font-icons.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../Portal/icons/font-icons.min.css" />
     <script type="text/javascript" src="../../Portal/js/sortjs/Sortable.min.js"></script>
     <!--- 引入代码. -->
     <script src="../../Scripts/jquery/jquery.min.js"></script>
@@ -14,74 +14,390 @@
     <script type="text/javascript" src="../../Portal/js/vue/vue.js"></script>
     <script src="../../Scripts/layui/LayuiDialog.js"></script>
     <script src="../../Scripts/layui/layui/layui.js"></script>
-    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet"/>
-    <link href="./FrmBBS.css" rel="stylesheet"/>
+    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <link href="./FrmBBS.css" rel="stylesheet" />
+    <style>
+        .pl .plul {
+            word-wrap: break-word;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            font-size: 14px;
+            background-color: #fafafa;
+        }
+
+        .project-header p {
+            line-height: 30px
+        }
+
+        .project-header h1 {
+            line-height: 50px
+        }
+
+        .project-content {
+            padding-right: 3.1%;
+            padding-left: 3.1%;
+            background-color: #fff;
+            padding-top: 10px;
+        }
+
+        z13 {
+            font-size: 13px
+        }
+
+        .plbg {
+            background-color: #fafafa;
+            border-bottom: 1px dotted #DCDCDC;
+        }
+
+        .pl {
+            width: 90%;
+            border: 1px solid #e8e8e8;
+            padding: 4px;
+            border-radius: 5px;
+            margin-left: 8%;
+            position: relative;
+            margin-top: 20px;
+            padding: 0px;
+        }
+
+            .pl ul {
+                padding: 0px 20px;
+                line-height: 26px;
+            }
+
+        .f {
+            float: left;
+        }
+
+        .r {
+            float: right
+        }
+
+        .dr {
+            clear: right
+        }
+
+        .tx {
+            position: absolute;
+            top: 0px;
+            left: -55px;
+            width: 55px;
+            height: 50px;
+            //background-image: url(../img/tx.png);
+            background-repeat: no-repeat;
+            background-position: right 10px;
+            padding-right: 12px;
+        }
+
+        .project-content img {
+            max-width: 100%;
+        }
+
+        .tx:after {
+            width: 0;
+            height: 0;
+            border-top: 5px solid transparent;
+            border-right: 10px solid #DCDCDC;
+            border-bottom: 5px solid transparent;
+            content: '';
+            position: absolute;
+            right: 12px;
+            top: 15px;
+        }
+
+        .tx span {
+            width: 45px;
+            height: 45px;
+            border-radius: 45px;
+            background: #337ab7;
+            color: #fff;
+            display: block;
+            text-align: center;
+            line-height: 44px;
+            font-size: 12px;
+            overflow: hidden;
+        }
+
+        .hf {
+            float: right;
+            font-size: 12px;
+            line-height: 26px;
+            padding: 5px 10px;
+        }
+
+        .huif {
+            width: 716px;
+            border-top: 1px solid #ebebeb;
+            padding-top: 10px;
+            position: absolute;
+            left: 130px;
+            display: none;
+        }
+
+        a {
+            color: #000;
+            text-decoration: none;
+        }
+
+            a:hover {
+                color: #337ab7;
+                text-decoration: none;
+            }
+
+        .project-header .yw {
+            color: #009ade
+        }
+
+        .in100, .in2, .huif {
+            border-top: 0px
+        }
+
+        .huif {
+            padding-top: 0px
+        }
+
+        .y {
+            animation-delay: 2s;
+            animation: move 3s infinite;
+        }
+
+        @keyframes move {
+            0% {
+                border: 1px solid #e8e8e8;
+            }
+
+            50% {
+                border: 1px solid #f96c65;
+            }
+
+            100% {
+                border: 1px solid #e8e8e8;
+            }
+        }
+
+        .zuo h4 {
+            line-height: 36px;
+            font-size: 16px;
+            font-weight: bold
+        }
+
+        .zuo a {
+            display: block;
+            line-height: 26px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .project-header2 {
+            width: 921px;
+            border-bottom: 1px solid #e8e8e8;
+            border-radius: 3px 3px 0 0;
+            border-top: 1px solid #fff;
+            height: auto;
+            margin: auto;
+            padding: 20px 25px 0;
+            z-index: 9;
+            background-color: #fff
+        }
+
+        .affix-top {
+            top: 121px
+        }
+
+        .adcssb {
+            border: 1px solid #93d0a8
+        }
+
+        .foot a {
+            color: #337ab7
+        }
+
+        textarea {
+            outline: none;
+            border: 0px;
+            transition: 1s;
+            border: 1px solid #DDDDDD;
+            -moz-box-shadow: 2px 2px 4px #f5f5f5 inset;
+            -webkit-box-shadow: 2px 2px 4px #f5f5f5 inset;
+            box-shadow: 2px 2px 4px #f5f5f5 inset;
+            padding: 10px
+        }
+
+            textarea:focus {
+                outline: none !important;
+                background-color: #fafbf5;
+                border: 1px solid #4ca957;
+                -moz-box-shadow: 2px 2px 4px #e8e9e4 inset;
+                -webkit-box-shadow: 2px 2px 4px #e8e9e4 inset;
+                box-shadow: 2px 2px 4px #e8e9e4 inset;
+            }
+
+            textarea::-webkit-input-placeholder {
+                color: #A4A4A4;
+            }
+
+            textarea::-moz-placeholder {
+                color: #A4A4A4;
+            }
+
+            textarea:-moz-placeholder {
+                color: #A4A4A4;
+            }
+
+            textarea:-ms-input-placeholder {
+                color: #A4A4A4;
+            }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #3ab143;
+            border-color: #399c3f;
+        }
+
+        .project-content h4 {
+            font-size: 16px;
+            border-left: 2px solid #c7c7c7;
+            padding-left: 10px;
+            line-height: 18px;
+            margin-top: 20px;
+        }
+
+        .in2 {
+            padding: 20px 25px;
+        }
+
+        .top10 {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
 
-<!--<div id="idcc">
-    <i class="icon-home"></i>\\流程列表
-</div>-->
+    <!--<div id="idcc">
+        <i class="icon-home"></i>\\流程列表
+    </div>-->
+    <div class="wapper" id="FrmBBSlist">
+        <div class="project-content">
 
-<div class="wrapper">
-    <div class="ph" style="text-align: center">FrmBBS</div>
-    <div class="form-head">
-        <div class="item">
-            编号：<span id="TB_No"></span>
-        </div>
-        <div class="item">
-            名称：<span id="TB_Name"></span>
+
+            <div class="pl" v-for="(item,index) in flowNodes">
+                <div class="tx">
+                    <span>{{item.Rec}}</span>
+                </div>
+                <ul class="plbg">
+                    <div class="f z13">{{item.RecName}}</div>
+                    <div class="r"><span class="z13">{{item.RDT}}</span></div>
+                    <div class="dr"></div>
+                </ul>
+                <ul class="plul">
+                    {{item.Name}}
+
+                    <ul v-for="(it,key) in item.children">
+                        <div class="pl ">
+                            <div class="tx tx2">
+                                <span>{{it.Rec}}</span>
+                            </div>
+                            <ul class="plbg plbg2">
+                                <div class="f">{{it.RecName}}</div>
+                                <div class="r"><span class="z12">{{item.RDT}}</span> <span v-if="it.Rec==webuser" @click="Delete(it.No)">删除</span></div>
+                                <div class="dr"></div>
+                            </ul>
+                            <ul style="padding-top: 10px; padding-bottom: 10px; word-wrap: break-word; width: 100%">
+                                {{item.Name}}
+                            </ul>
+                        </div>
+                    </ul>
+
+                    <a class="hf" @click="Repay(index,item.No)">回复</a>
+                    <a class="hf" v-if="item.Rec==webuser" @click="Delete(item.No)">删除</a>
+                    <div class="huifu" :data-No="item.No"></div>
+                    <div class="dr"></div>
+                </ul>
+            </div>
+
+
+            <h4 name="a1">发表评论</h4>
+            <div class="in2">
+                <textarea id='reply-input' style='height: 90px; width: 98%;' placeholder="您有什么想法要说的吗？" spellcheck="false"></textarea>
+                <div class="l top10">
+                    <button @click="Save()" type="button" id="myButton" data-loading-text="Loading..." class="layui-btn" autocomplete="off">
+                        发表评论
+                    </button>
+
+                </div>
+                <div class="dr"></div>
+            </div>
+
+            <div class="huif">
+
+                <textarea id='textarea2' style='height: 90px; width: 100%;' placeholder="期待您的回复！" spellcheck="false"></textarea>
+                <button onclick="hftj()" type="button" class="layui-btn top10">回复</button>
+                <a class="qxhf" onclick="qx()">取消回复</a>
+            </div>
+
         </div>
     </div>
-    <div class="ph">回复列表</div>
-    <div class="form-body">
-        <div class="reply-item">
-            <div class="info">
-                <div class="left">
-                    <span class="reply-user">张三</span>
-                    <span class="reply-date">2021-06-12</span>
-                </div>
-                <div class="operate-list">
-                    <div class="reply-btn" onclick="replayItem()">回复</div>
-                    <div class="del-btn">删除回复</div>
-                </div>
-            </div>
-            <div class="content"></div>
-        </div>
-        <div class="reply-item">
-            <div class="info">
-                <div class="left">
-                    <span class="reply-user">张三</span>
-                    <span class="reply-date">2021-06-12</span>
-                </div>
 
-                <div class="del-btn">删除回复</div>
-            </div>
-            <div class="content">aaaaaaaaaaaaaaaa</div>
-        </div>
-    </div>
-    <div class="submit-area">
-        <div class="ph divider">发表评论</div>
-        <div class="form-textarea">
-            <label>
-                <textarea id="reply-input" class="area" cols="108" rows="14" placeholder="请输入要回复的内容"></textarea>
-            </label>
-            <div class="reply-info">
 
-                <p>
-                    日期：<span id="r-date" class="reply-date">2021-06-2</span>
-                    填写人：<span id="r-user" class="reply-user">张三</span>
-                </p>
-                <p id="reply-tips"></p>
+    <!-- <div class="wrapper">
+         <div class="form-head">
+             <div class="item">
+                 编号：<span id="TB_No"></span>
+             </div>
+             <div class="item">
+                 名称：<span id="TB_Name"></span>
+             </div>
+         </div>
+         <div class="ph">回复列表</div>
+         <div class="form-body">
+             <div class="reply-item">
+                 <div class="info">
+                     <div class="left">
+                         <span class="reply-user">张三</span>
+                         <span class="reply-date">2021-06-12</span>
+                     </div>
+                     <div class="operate-list">
+                         <div class="reply-btn" onclick="replayItem()">回复</div>
+                         <div class="del-btn">删除回复</div>
+                     </div>
+                 </div>
+                 <div class="content"></div>
+             </div>
+             <div class="reply-item">
+                 <div class="info">
+                     <div class="left">
+                         <span class="reply-user">张三</span>
+                         <span class="reply-date">2021-06-12</span>
+                     </div>
 
-                <button onclick="Save()">提交</button>
-            </div>
-        </div>
-    </div>
-</div>
+                     <div class="del-btn">删除回复</div>
+                 </div>
+                 <div class="content">aaaaaaaaaaaaaaaa</div>
+             </div>
+         </div>
+         <div class="submit-area">
+             <div class="ph divider">发表评论</div>
+             <div class="form-textarea">
+                 <label>
+                     <textarea id="reply-input" class="area" cols="108" rows="14" placeholder="请输入要回复的内容"></textarea>
+                 </label>
+                 <div class="reply-info">
 
-<script src="FrmBBS.js"></script>
+                     <p>
+                         日期：<span id="r-date" class="reply-date">2021-06-2</span>
+                         填写人：<span id="r-user" class="reply-user">张三</span>
+                     </p>
+                     <p id="reply-tips"></p>
+
+                     <button onclick="Save()">提交</button>
+                 </div>
+             </div>
+         </div>
+     </div>
+        -->
+    <script src="FrmBBS.js"></script>
 
 </body>
 

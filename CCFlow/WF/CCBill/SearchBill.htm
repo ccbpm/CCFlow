@@ -18,14 +18,7 @@
     <script src="../Scripts/layui/layui/layui.js" type="text/javascript"></script>
     <script src="../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
     <script src="Search.js" type="text/javascript"></script>
-    <style type="text/css">
-        .layui-btn {
-            height: 35px;
-            margin-top: 5px;
-            margin-bottom: 5px !important;
-        }
-    </style>
-   
+    <style id="theme-data"></style>
 </head>
 <body>
     <div class="layui-fluid">
@@ -80,9 +73,9 @@
                 </div>
                 {{#  }); }}
                 <div class="layui-inline">
-                    <div class="layui-btn-container">
+                    <div class="layui-btn-container" style=" padding-top: 10px; ">
                         {{#  layui.each(d.btns, function(index, item){ }}
-                        <button type="button" class="layui-btn" data-type="{{=item.type}}" data-params="{{=item.params}}">{{item.label}}</button>
+                        <button type="button" class="layui-btn layui-btn-sm" data-type="{{=item.type}}" data-params="{{=item.params}}">{{item.label}}</button>
                         {{#  }); }}
                     </div>
                 </div>
@@ -97,13 +90,16 @@
         var pageSize = 10;
         var orderBy = "";
         var orderWay = "DESC";
+        var frmBill = new Entity("BP.CCBill.FrmBill", frmID);
+        var mapData = frmBill;
+        var isHaveDelOper = false;
+        var isHaveSeachOper = false;
         layui.use(['table', 'laytpl', 'form', 'laydate'], function () {
             var table = layui.table,
                 laytpl = layui.laytpl,
                 form = layui.form,
                 laydate = layui.laydate;
 
-            var frmBill = new Entity("BP.CCBill.FrmBill", frmID);
             document.title = frmBill.Name;
 
             //初始化用户查询信息
@@ -153,7 +149,7 @@
                 var pkval = row["OID"];
 
 
-                OpenIt(pkval, frmID, parseInt(frmBill.RowOpenModel), frmBill.Name, 1);
+                OpenIt(pkval, frmID, parseInt(frmBill.RowOpenModel), frmBill.Name, 1, row["BillState"]);
             });
 
             table.on('sort(bill)', function (obj) { //注：sort 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
@@ -174,6 +170,15 @@
                         Search();
                         break;
                     case "add"://新增
+                        var methodNo = GetQueryString("MethodNo");
+                        methodNo = methodNo == null || methodNo == undefined ? "" : methodNo;
+                        var pworkid = GetQueryString("PWorkID");
+                        pworkid = pworkid == null || pworkid == undefined ? 0 : pworkid;
+                        if (methodNo != "" && pworkid != 0) {
+                            window.location.href = "./Opt/GotoLink.htm?FrmID=" + GetQueryString("FrmID") + "&MethodNo=" + methodNo + "&WorkID=" + pworkid + "&DoType=Bill";
+                            return;
+                        }
+
                         var frmID = GetQueryString("FrmID");
 
                         var handler = new HttpHandler("BP.CCBill.WF_CCBill");
@@ -186,7 +191,7 @@
                             return;
                         }
 
-                        OpenIt(data, frmID, 0, "新增",1);
+                        OpenIt(data, frmID, 0, "新增", 1);
                         break;
                     case "delete"://删除数据
                         var checkStatus = table.checkStatus(vtable.config.id);
@@ -367,11 +372,14 @@
                     label: fb.BtnNewLable,
                     type: 'add',
                 })
-            if (parseInt(powerData.IsDelete) == 1)
+            if (parseInt(powerData.IsDelete) == 1) {
+                isHaveDelOper = true;
                 btns.push({
                     label: fb.BtnDelLable,
                     type: 'delete'
                 })
+            }
+              
             if (fb.BtnImpExcelEnable == 1)
                 btns.push({
                     label: fb.BtnImpExcel,
@@ -404,6 +412,16 @@
             return searchData;
         }
 
+    </script>
+    <script>
+        $(function () {
+            var theme = localStorage.getItem("themeColorInfo");
+            theme = JSON.parse(theme);
+            var styleScope = document.getElementById("theme-data")
+            styleScope.innerHTML = "\n .layui-btn{\n background-color:" + theme.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + theme.selectedMenu + ";\n}";
+            styleScope.innerHTML += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:" + theme.selectedMenu + " !important\n}";
+            styleScope.innerHTML += "\n .layui-form-select dl dd.layui-this{\n background-color:" + theme.selectedMenu + " !important;\n}";
+        })
     </script>
 </body>
 </html>

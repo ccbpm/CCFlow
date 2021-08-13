@@ -1,313 +1,104 @@
 ﻿
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="cn">
 <head>
     <meta charset="utf-8" />
+    <meta name="renderer" content="webkit" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <title>ccform正在加载请稍候...</title>
-    <script src="../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
-    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../Scripts/config.js"></script>
-    <script type="text/javascript" src="../Comm/Gener.js"></script>
-    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <!--表单样式-->
+    <link href="../Admin/CSS/FoolFrmBody.css" rel="stylesheet" />
+    <!-- layui -->
+    <link href="../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <link href="../Scripts/layui/style/admin.css" rel="stylesheet" />
+    <link href="../Scripts/layui/layui/css/autocomplete.css" rel="stylesheet" />
+    <script src="../Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <script src="../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <!--通用的JS-->
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/DealErrInfo.js" type="text/javascript"></script>
+    <script src="./FrmEnd2021.js?ver=1" type="text/javascript"></script>
+    <script src="../Comm/JScript.js" type="text/javascript"></script>
 
-    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
-    <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
-
-    <script src="../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
-
+    <!--用户可配置的文件，内容可修改-->
     <script src="../../DataUser/SFTable.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/commonYangYH.js"></script>
-    <script type="text/javascript" src="../Scripts/Cookie.js"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.nav.js"></script>
-
-    <!-- 重要的表单3文件. -->
-    <script type="text/javascript" src="DtlFrm.js"></script>
-    <script type="text/javascript" src="FrmFool.js"></script>
-    <script type="text/javascript" src="FrmFree.js"></script>
-    <script type="text/javascript" src="mapExt2019.js"></script>
-    <!-- 引入公共的frm加载以后的业务逻辑处理.-->
-    <script src="FrmEnd.js" type="text/javascript"></script>
-
-    <!-- 引入用户要重写的公共js -->
+    <script src="../../DataUser/JSLibData/CommonShowConfig.js"></script>
+    <script src="../../DataUser/JSLibData/MyFlowPublic.js?v=20200609001" type="text/javascript"></script>
     <script src="../../DataUser/JSLibData/CCFormRef.js" type="text/javascript"></script>
-
-
-    <!-- 表单组件 -->
-    <script src="./JS/MultipleChoiceSearch.js" type="text/javascript"></script>
-    <script src="JS/MultipleChoiceSmall.js" type="text/javascript"></script>
-    <script src="JS/Pop.js" type="text/javascript"></script>
-    <link href="JS/mselector.css" rel="stylesheet" type="text/css" />
-    <script src="JS/mselector.js" type="text/javascript"></script>
-    <script src="JS/mtags.js" type="text/javascript"></script>
-
-    <script type="text/javascript" src="MapExt2019.js"></script>
-
-
-    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
-    <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-
-    <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="../Scripts/bootstrap/css/css.css" type="text/css" media="all" />
-    <!--下拉框多选-->
-    <link href="../Scripts/bootstrap/bootstrap-select-1.12.4/css/bootstrap-select.css" rel="stylesheet" />
-    <script src="../Scripts/bootstrap/bootstrap-select-1.12.4/js/bootstrap-select.min.js"></script>
-    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
-    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
-    <script src="../Scripts/jBox/jquery.jBox-2.3.min.js" type="text/javascript"></script>
-    <link href="../Scripts/jBox/Skins/Blue/jbox.css" rel="stylesheet" type="text/css" />
-
-    <!--UEditor-->
-    <link href="../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="../Comm/umeditor1.2.3-utf8/third-party/template.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../Comm/umeditor1.2.3-utf8/umeditor.config.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../Comm/umeditor1.2.3-utf8/umeditor.min.js"></script>
-    <script type="text/javascript" src="../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js"></script>
-    <!--UmEditor-->
+    <script src="DtlFrm.js" type="text/javascript"></script>
     <style type="text/css">
-        h1 {
-            font-family: "微软雅黑";
-            font-weight: normal;
-        }
-    </style>
-
-    <style type="text/css">
-        body {
-            padding: 0px;
-            margin: 0px;
+        .layui-btn-primary {
+            border-radius: 6px !important
         }
 
-
-
-            body iframe {
-                border: none;
-            }
-
-        #header > b, .returnTackHeader b {
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            background: #fff;
-            margin: 12px;
-            float: left;
-            text-align: center;
-            color: rgb(192, 193, 204);
-            line-height: 25px;
-        }
-
-        #topContentDiv i.topContentDiv-i {
-            display: block;
-            width: 33px;
-            height: 22px;
-            background-size: 80%;
+        .input-icon {
             position: absolute;
-            top: 56px;
-            left: 50px;
-            margin-left: auto !important;
-            margin-right: auto !important;
+            left: 1px;
+            top: 1px;
+            width: 38px;
+            line-height: 36px;
+            text-align: center;
+            color: #d2d2d2;
         }
 
-
-        ::-webkit-scrollbar-thumb {
-            background-color: #fff;
-            border: none;
+        .ccdate {
+            padding-left: 40px;
         }
 
-        ::-webkit-scrollbar {
-            width: 0px;
-            height: 0px;
+        .layui-row {
+            margin-bottom: 3px;
         }
 
-        .input-group .input-group-addon {
-            border: none;
-            background: #F1F1F2;
-        }
-
-        .input-group-addon {
-            float: left;
-            width: 36px;
-            height: 28px;
-            margin-top: 1px;
-        }
-
-        .input-group input {
-            float: left;
-        }
-
-        #divCurrentForm {
-            float: none;
+        .layui-form-label {
             width: auto;
         }
 
-        input[type=text], select, textarea, iframe[src*="AttachmentUpload.aspx"] {
-            margin: 4px 0px !important;
+        input[type=checkbox]:disabled {
+            display: none !important;
         }
     </style>
 
-    <style type="text/css">
-        div.richText {
-            min-height: 40px;
-            border: 1px solid #d4d4d4;
-            cursor: text;
-            padding: 0 10px 0;
-            overflow: auto;
-            word-wrap: break-word;
-            box-shadow: 2px 2px 5px #d3d6da;
-            background-color: #fff;
-        }
-    </style>
 
     <!--JS 加载-->
     <script type="text/javascript">
-        var load = {};
-        /*JS 动态加载js 文件*/
-        load.LoadJs = function (jsPath, chartset, callbackfun) {
+       
 
-            try {
-                var head = document.getElementsByTagName('head')[0];
-                var script = document.createElement('script');
-                script.src = jsPath + "?Version=" + Math.random();
-                script.type = 'text/javascript';
-                if (chartset != undefined) {
-                    script.chartset = chartset;
-                }
-
-                if (script.readyState) {
-                    script.onreadystatechange = function () {
-                        if (script.readyState == "loaded" || script.readyState == "complete") {
-                            script.onreadystatechange = null;
-                            if (callbackfun != undefined && typeof (callbackfun) == 'function') {
-                                callbackfun();
-                            }
-                        }
-                    }
-                } else {
-                    script.onload = function () {
-                        if (callbackfun != undefined && typeof (callbackfun) == 'function') {
-                            callbackfun();
-                        }
-                    }
-                }
-                head.appendChild(script);
-            }
-            catch (err) {
-                alert(err)
-            }
-            //$.getScript(jsPath, callbackfun);
-        }
-
-
-        //新建.
-        function New() {
-            var url = '';
-            url = 'DtlFrm.htm?EnsName=' + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&OID=0&FrmType=" + GetQueryString("FrmType");
-            window.location.href = url;
-        }
-
-        function closeIt() {
-            if (IsSave == false) {
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-                handler.AddPara("EnsName", GetQueryString("EnsName"));
-                handler.AddPara("RefPKVal", GetQueryString("RefPKVal"));
-                handler.AddPara("OID", GetQueryString("OID"));
-                handler.AddPara("FK_Node", GetQueryString("FK_Node"));
-                var data = handler.DoMethodReturnString("DtlFrm_Delete");
-                if (data.indexOf('err@') == 0) {
-                    alert(data);
-                    return;
-                }
-            }
-
-            if (typeof ((parent && parent.doCloseDialog) || doCloseDialog) === "function") {
-                ((parent && parent.doCloseDialog) || doCloseDialog)();
-                window.parent.$('#editSubGridDiv').modal('hide');
-            } else {
-                window.close();
-            }
-        }
-
-
-/**/</script>
-</head>
-<body>
-
-<!--<input type="button" value="新建" id="Btn_New" onclick="New()" />-->
-<input type="button" value="保存" id="Btn_Save" onclick="Save(false)" />
-<input type="button" value="保存并新建" id="Btn_SaveAndNew" onclick="Save(true)" />
-<input type="button" value="删除" id="Btn_Delete" onclick="DeleteDtlFrm()" />
-<input type="button" value="关闭" id="Btn_Close" onclick="closeIt()" />
-
-   
-    <div id="divCurrentForm" style="background: #E3E7F4; position: relative;overflow-y:auto;">
         
-        <!--上半部分表单-->
-        <div id="topContentDiv" class="row" style="padding: 20px 5px;margin:0px auto;overflow-y:auto;">
-            <i class="topContentDiv-i" style="display:none;"></i>
-            <div id="contentDiv">
-                <form id="divCCForm"  method="post" style="overflow-y:auto;">
-                    
-                    <div id="CCForm" style="">
-                        <br />
-                        <img src='./../Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
-                        <br />
-                        <br />
-                    </div>
-                     <!--DIVINFO-->
-                <div id='divinfo' style='width: 155px; position: absolute; display: none; cursor: pointer;
-                    align: left; border-left: 1px solid #336699; border-top: 1px solid #336699; border-right: 1px solid #336699;'>
+
+        /**/</script>
+</head>
+<body style="background-color:#f2f2f2">
+    <div id="DtlFrm" class="layui-layout layui-layout-admin">
+        <form id="divCCForm" enctype="multipart/form-data" method="post" class="layui-form">
+            <!--头部按钮-->
+            <div class="layui-header" style="background-color: white">
+                <div class="layui-btn-container" id="ToolBar" style="margin:10px 10px 0px 10px">
+                    <button type="button" class="layui-btn layui-btn-sm" name="Save"  id="Save" lay-submit="" lay-filter="Save"><i class="iconfont icon-baocun"></i>保存</button>
+                    <button type="button" class="layui-btn layui-btn-sm" name="SaveAndAdd"  id="SaveAndAdd" lay-submit="" lay-filter="Save"><i class="iconfont icon-save-close"></i>保存并新建</button>
+                    <button type="button" class="layui-btn layui-btn-sm" name="Delete"><i class="iconfont icon-delete2"></i>删除</button>
+                    <button type="button" class="layui-btn layui-btn-sm" name="Close"><i class="iconfont icon-close"></i>关闭</button>
                 </div>
-                </form>
             </div>
-        </div>
-        <!--底部功能按钮 发送、移交-->
-        <div id="bottomToolBar" style="display: none;height:50px;width:100%;background:rgb(157, 159, 175);padding-top:5px;" class="Bar">
-        </div>
-    </div>
-    <!--杨玉慧加 暂时解决POP窗不好用的问题-->
-    <div class="modal fade" id="returnPopValModal">
-        <div class="modal-dialog" style="margin-left: auto; margin-right: auto;">
-            <div class="modal-content" style="border-radius: 0px;">
-                <div class="modal-header">
-                    <button type="button" data-dismiss="modal" aria-hidden="true" style="background: none;border: none; float: right;">×</button>
-                    <h4 class="modal-title">选择提出人</h4>
-                </div>
-                <div class="modal-body">
-                    <iframe style="width: 100%; border: 0px; height: 400px;" id="iframePopModalForm"
-                        name="iframePopModalForm"></iframe>
-                    <div style="text-align: right;">
-                        <button type="button" id="btnPopValCancel" class="btn" data-dismiss="modal">取消</button>
-                        <button type="button" id="btnPopValOK" class="btn" data-dismiss="modal">确定</button>
+            <!--表单内部信息-->
+            <div class="layui-fluid" style="padding-top:65px">
+                <div class="layui-row layui-col-space15">
+                    <!-- 内容主体区域 -->
+                    <div class="layui-col-md12">
+                        <div class="layui-card">
+                            <div class="layui-card-body">
+                                <div id="CCForm">
+                                    <!--加载表单的信息-->
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
+        </form>
     </div>
-    <!--下拉框选项提示信息-->
-    <div class="popover fade top in" role="tooltip" id="div_NoticeInfo" style="top: 24.01042366027832px; left: 304.98961639404297px; display: none;">
-        <div class="arrow" style="left: 50.22522522522522%;"></div>
-        <h3 class="popover-title"><span> title</span><span style="color: white; opacity: 1; float: right; cursor: pointer;" id="span_CloseNoticeInfo">×</span></h3>
-        <div class="popover-content">顶部的 Popover 中的一些内容</div>
-    </div>
-    <!--杨玉慧加  附件弹出窗口-->
-    <div class="modal fade" id="athModal">
-        <div class="modal-dialog">
-            <div class="modal-content" style="border-radius:0px;">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color:white;opacity:1; display:none;">×</button>
-                    <h4 class="modal-title">选择附件</h4>
-                </div>
-                <div class="modal-body">
-                    <iframe style="width:100%;border:0px;height:400px;" id="iframeAthForm" name="iframeAthForm"></iframe>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-      
 </body>
 </html>
-
-  

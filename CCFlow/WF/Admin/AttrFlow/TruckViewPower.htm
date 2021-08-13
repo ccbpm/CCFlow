@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8" />
     <title>流程轨迹查看权限</title>
-    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
-    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <base target="_self" />
+    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script src="../Admin.js"></script>
- <style>
-     .cs-bar{ padding:5px 0px;}
- </style>
+    <script src="../../Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <style>
+        .cs-bar {
+            padding: 5px 0px;
+        }
+    </style>
     <script language="javascript" type="text/javascript">
         /* ESC Key Down */
         function Esc() {
@@ -27,10 +27,14 @@
             window.open(url, name, 'height=600, width=800, top=0, left=0, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
 
         }
+        var webUser = new WebUser();
+        var rootNo = 0;
+        if (webUser.CCBPMRunModel == 2)
+            rootNo = webUser.OrgNo;
 
-        //页面启动函数.
-        $(function () {
-
+        layui.config({
+            base: '../../Scripts/layui/ext/'
+        }).use('xmSelect', function () {
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
             var fk_flow = GetQueryString("FK_Flow");
@@ -38,11 +42,224 @@
             en.PAnyOne = 1;
             //给页面元素赋值.
             GenerFullAllCtrlsVal(en);
-
             $("#Msg").html("");
+
+            var xmSelect = layui.xmSelect;
+
+            //绑定部门
+            var deptExt = en.PSpecDeptExt;
+            deptExt = deptExt == null || deptExt == undefined ? "" : deptExt;
+            xmSelectTree("PSpecDeptExt", xmSelect, deptExt, "dept");
+            
+
+            //绑定岗位分组
+            var staExt = en.PSpecStaExt;
+            staExt = staExt == null || staExt == undefined ? "" : staExt + ",";
+            var stas = new Entities("BP.Port.Stations");
+            stas.RetrieveAll();
+            var staTypes = new Entities("BP.Port.StationTypes");
+            staTypes.RetrieveAll();
+            xmSelectGroup("PSpecStaExt", staTypes, stas, "FK_StationType", staExt, xmSelect);
+
+            //绑定分组
+            var groupExt = en.PSpecGroupExt;
+            groupExt = groupExt == null || groupExt == undefined ? "" : groupExt + ",";
+            var teams = new Entities("BP.Port.Teams");
+            teams.RetrieveAll();
+            var teamTypes = new Entities("BP.Port.TeamTypes");
+            teamTypes.RetrieveAll();
+            xmSelectGroup("PSpecGroupExt", teamTypes, teams, "FK_TeamType", groupExt, xmSelect);
+
+            //指定人员编码
+            var empExt = en.PSpecEmpExt;
+            empExt = empExt == null || empExt == undefined ? "" : empExt;
+            xmSelectTree("PSpecEmpExt", xmSelect, empExt, "emp"); 
         });
+        function xmSelectTree(eleID, xmSelect, selectVal, type) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+            handler.AddPara("ParentNo", rootNo);
+            var ens = null;
+            if(type=="dept")
+                ens = handler.DoMethodReturnJSON("Organization_Init");
+            if (type == "emp")
+                ens = handler.DoMethodReturnJSON("DeptEmp_Init");
+            var data = TreeJson(ens, rootNo);
+            var tree = xmSelect.render({
+                el: '#Div_' + eleID,
+                autoRow: true,
+                tree: {
+                    show: true,
+                    showFolderIcon: true,
+                    showLine: true,
+                    lazy: true,
+                    strict: false,
+                    clickCheck: false,
+                    load: function (item, cb) {
+                        setTimeout(function () {
+                            var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+                            handler.AddPara("ParentNo", item.value);
+                            var ens = null;
+                            if (type == "dept")
+                                ens = handler.DoMethodReturnJSON("Organization_Init");
+                            if (type == "emp")
+                                ens = handler.DoMethodReturnJSON("DeptEmp_Init");
+                            var data = findChildren(ens, item.value);
+                            cb(data);
+                        }, 500)
+                    }
+                },
+                on: function (data) {
+                    var arr = data.arr;
+                    var vals = [];
+                    $.each(arr, function (i, obj) {
+                        vals[i] = obj.value;
+                    })
+                    $("#TB_" + eleID).val(vals.join(","));
+                },
+                height: 'auto',
+                data() {
+                    return data;
+                }
+            });
+            if (type == "dept" && selectVal != "") {
+                selectVal = "('" + selectVal.replace(/,/g, "','") + "')";
+                var depts = new Entities("BP.Port.Depts");
+                depts.RetrieveCond("No", "IN", selectVal);
+                var vals = [];
+                $.each(depts, function (i, dept) {
+                    vals.push({
+                        name: dept.Name,
+                        value:dept.No
+                    })
+                })
+                tree.setValue(vals);
+            } else if (type == "emp" && selectVal != ""){
+                selectVal = "('" + selectVal.replace(/,/g, "','") + "')";
+                var depts = new Entities("BP.Port.Emps");
+                depts.RetrieveCond("No", "IN", selectVal);
+                var vals = [];
+                $.each(depts, function (i, dept) {
+                    vals.push({
+                        name: dept.Name,
+                        value: dept.No
+                    })
+                })
+                tree.setValue(vals);
+            }
+           
+        }
+        function xmSelectGroup(eleID, groups,ens,refPK,selectVal, xmSelect) {
+            var data = [];
+            $.each(groups, function (i, group) {
+                var children = [];
+                $.each(ens, function (idx, en) {
+                    if (en[refPK] == group.No) {
+                        children.push({
+                            No: en.No,
+                            Name: en.Name,
+                            selected: selectVal.indexOf(en.No + ",") != -1 ? true : false
+                        })
+                    }
+                });
 
+                data.push({
+                    Name: group.Name,
+                    No: group.No,
+                    children: children,
+                    disabled: children.length == 0 ? true : false
+                })
+            });
+            xmSelect.render({
+                el: "#Div_"+eleID,
+                prop: {
+                    name: 'Name',
+                    value: 'No',
+                },
+                paging: ens.length > 15 ? true : false,
+                data: data,
+                autoRow: true,
+                radio: false,
+                clickClose: false,
+                on: function (data) {
+                    var arr = data.arr;
+                    var vals = [];
+                    $.each(arr, function (i, obj) {
+                        vals[i] = obj.No;
+                    })
+                    $("#TB_" + eleID).val(vals.join(","));
+                }
+            })
+        }
 
+        //树形结构
+        function TreeJson(jsonArray, parentNo) {
+            var depts = [];
+            var emps = [];
+            var isDisabled = false;
+            if (typeof jsonArray.Depts == "undefined")
+                depts = jsonArray;
+            else {
+                depts = jsonArray.Depts;
+                emps = jsonArray.Emps;
+                isDisabled = true;
+            }
+            var jsonTree = [];
+            if (depts.length > 0) {
+                $.each(depts, function (i, o) {
+                    if (o.ParentNo == parentNo && parentNo=="0") {
+                        jsonTree.push({
+                            "value": o.No,
+                            "name": o.Name,
+                            disabled: isDisabled,
+                            "children": findChildren(jsonArray, o.No)
+                        });
+                        return false;
+                    }
+                    if (o.No == parentNo ) {
+                        jsonTree.push({
+                            "value": o.No,
+                            "name": o.Name,
+                            disabled: isDisabled,
+                            "children": findChildren(jsonArray, o.No)
+                        });
+                        return false;
+                    }
+                })
+            }
+            return jsonTree;
+        }
+        function findChildren(jsonArray, parentNo) {
+            var depts = [];
+            var emps = [];
+            var isDisabled = false;
+            if (typeof jsonArray.Depts == "undefined")
+                depts = jsonArray;
+            else {
+                depts = jsonArray.Depts;
+                emps = jsonArray.Emps;
+                isDisabled = true;
+            }
+            var children = [];
+            $.each(depts, function (i, child) {
+                if (parentNo == child.ParentNo)
+                    children.push({
+                        "value": child.No,
+                        "name": child.Name,
+                        disabled: isDisabled,
+                        "children": []
+                    });
+            });
+            if (emps.length > 0) {
+                $.each(emps, function (i, child) {
+                    if (child.FK_Dept == parentNo)
+                        children.push({
+                            "value": child.No,
+                            "name": child.Name,
+                        });
+                });
+            }
+            return children;
+        }
         function Save() {
 
             var fk_flow = GetQueryString("FK_Flow");
@@ -115,7 +332,8 @@
                             <label for="CB_PSpecDept"> <input type="checkbox" ID="CB_PSpecDept" name="CB_PSpecDept" />指定的部门可见</label>
                         </td>
                         <td colspan="3">
-                            部门编号&nbsp&nbsp<input type=text ID="TB_PSpecDeptExt" name="TB_PSpecDeptExt" />
+                            <div style="float:left;height:36px;text-align: center;"><label style="padding-top:10px;font-weight:100">部门编号</label><input type=text ID="TB_PSpecDeptExt" name="TB_PSpecDeptExt" style="display:none" /></div>
+                            <div  ID="Div_PSpecDeptExt" name="Div_PSpecDeptExt" class="xm-select-demo" style="width:80%;float:left"></div>
                         </td>
                     </tr>
 
@@ -127,21 +345,24 @@
                     <tr>
                         <td> <label for="CB_PSpecSta"><input type="checkbox" ID="CB_PSpecSta" name="CB_PSpecSta" /> 指定的岗位可见 </label></td>
                         <td colspan="3">
-                            岗位编号&nbsp&nbsp<input type=text ID="TB_PSpecStaExt" name="TB_PSpecStaExt" />
+                            <div style="float:left;height:36px;text-align: center;"><label style="padding-top:10px;font-weight:100">岗位编号</label><input type=text ID="TB_PSpecStaExt" name="TB_PSpecStaExt" style="display:none" /></div>
+                            <div ID="Div_PSpecStaExt" name="Div_PSpecStaExt" class="xm-select-demo" style="width:80%;float:left"></div>
                         </td>
                     </tr>
 
                     <tr>
                         <td>  <label for="CB_PSpecGroup"><input type="checkbox" ID="CB_PSpecGroup" name="CB_PSpecGroup" /> 指定的权限组可看</label> </td>
                         <td colspan="3">
-                            权限组&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type=text ID="TB_PSpecGroupExt" name="TB_PSpecGroupExt" />
+                            <div style="float:left;height:36px;text-align: center;"><label style="padding-top:10px;font-weight:100">权限组</label><input type=text ID="TB_PSpecGroupExt" name="TB_PSpecGroupExt" style="display:none" /></div>
+                            <div ID="Div_PSpecGroupExt" name="Div_PSpecGroupExt" class="xm-select-demo" style="width:80%;float:left"></div>
                         </td>
                     </tr>
 
                     <tr>
                         <td><label for="CB_PSpecEmp"> <input type="checkbox" ID="CB_PSpecEmp" name="CB_PSpecEmp" /> 指定的人员可看 </label></td>
                         <td colspan="3">
-                            指定人员编号&nbsp&nbsp&nbsp<input type=text ID="TB_PSpecEmpExt" name="TB_PSpecEmpExt" />
+                            <div style="float:left;height:36px;text-align: center;"><label style="padding-top:10px;font-weight:100">指定人员编号</label><input type=text ID="TB_PSpecEmpExt" name="TB_PSpecEmpExt" style="display:none" /></div>
+                            <div ID="Div_PSpecEmpExt" name="Div_PSpecEmpExt" class="xm-select-demo" style="width:80%;float:left"></div>
                         </td>
                     </tr>
                 </table>

@@ -61,12 +61,7 @@ function changeOption() {
     var url = GetUrl(optionKey);
     window.location.href = url + "?FK_Node=" + nodeID;
 }
-//高级设置.
-function AdvSetting() {
-    var nodeID = GetQueryString("FK_Node");
-    var url = "7.ByOtherBlock.htm?FK_Node=" + nodeID + "&M=" + Math.random();
-    OpenEasyUiDialogExt(url, "高级设置", 600, 500, false);
-}
+ 
 function GetUrl(optionKey) {
     var json = GetDBDtl();
     for (var i = 0; i < json.length; i++) {

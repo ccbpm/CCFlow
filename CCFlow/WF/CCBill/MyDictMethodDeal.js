@@ -61,61 +61,7 @@ function DoLink(en) {
         }
     }
 }
-
-//其他业务流程.
-function DoFlowEtc(en)
-{
-    console.log(en);
-
-    if (en.Mark === "Search")
-        return "../../App/OneFlow/RptSearch.htm?SearchType=My&FK_Flow=" + en.FlowNo;
-
-    if (en.Mark === "Group")
-        return "../../App/OneFlow/RptGroup.htm?SearchType=My&FK_Flow=" + en.FlowNo;
-
-    if (en.Mark === "StartFlow") {
-        var handler = new HttpHandler("BP.CCBill.WF_CCBill");
-        handler.AddPara("MethodID", en.No);
-        handler.AddPara("WorkID", GetQueryString("WorkID"));
-        var data = handler.DoMethodReturnString("MyDict_DoFlowEtc_StartFlow");
-        if (data.indexOf('err@') == 0) {
-            alert(data);
-            return null;
-        }
-        //  alert(data);
-        return data;
-    }
-    alert("没有解析的标记:" + en.Mark);
-}
-
-///发起流程的方法.
-function DoFlow(en) {
-
-    console.log(en);
-
-    if (en.Mark === "Search")
-        return "../../App/OneFlow/RptSearch.htm?SearchType=My&FK_Flow=" + en.FlowNo;
-
-    if (en.Mark === "Group")
-        return "../../App/OneFlow/RptGroup.htm?SearchType=My&FK_Flow=" + en.FlowNo;
-
-    if (en.Mark === "StartFlow") {
-
-        var handler = new HttpHandler("BP.CCBill.WF_CCBill");
-        handler.AddPara("MethodID", en.No);
-        handler.AddPara("WorkID", GetQueryString("WorkID"));
-        var data = handler.DoMethodReturnString("MyDict_DoFlowBaseData_StartFlow");
-        if (data.indexOf('err@') == 0) {
-            alert(data);
-            return null;
-        }
-        //  alert(data);
-        return data;
-    }
-    alert("没有解析的标记:" + en.Mark);
-
-    //window.location.href = data;
-}
+ 
 String.prototype.replaceAll = function (FindText, RepText) {
     return this.replace(new RegExp(FindText, "g"), RepText);
 }

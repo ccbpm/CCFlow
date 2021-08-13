@@ -188,9 +188,6 @@
 
         function NewVer() {
 
-            if (window.confirm("您确定要创建 数据快照 吗？") == false)
-                return;
-
             var val = window.prompt("备注*", "");
             if (val == null || val == undefined) return;
             if (val == "") val = "无";
@@ -200,7 +197,6 @@
             handler.AddPara("MyNote", val);
 
             var data = handler.DoMethodReturnString("DataVer_NewVer");
-            alert(data);
             if (data.indexOf("err@") == 0) {
                 return;
             }

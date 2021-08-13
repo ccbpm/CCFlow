@@ -24,9 +24,7 @@
             var en = new Entity("BP.CCBill.Template.MethodFlowNewEntity", menuNo);
             var workID = en.DoMethodReturnString("CreateWorkID");
             var url = "../../MyFlowGener.htm?FK_Flow=" + en.FlowNo + "&FrmID=" + en.FrmID + "&WorkID=" + workID + "&FK_Node=" + en.FlowNo + "01";
-
             //  alert(url);
-
             window.location.href = url;
         });
 

@@ -24,6 +24,9 @@
         var mypk = GetQueryString("No");//方法的主键
         var frmID = GetQueryString("FrmID");
         var workid = GetQueryString("WorkID");
+        var workids = GetQueryString("WorkIDs");
+        var fromPage = GetQueryString("From");
+        fromPage = fromPage == null || fromPage == undefined ? "" : fromPage;
         var methodFunc = null;
         var attrs = null; //参数的属性.
         var frmData = null;
@@ -61,6 +64,7 @@
                 methodFunc.WarningMsg = "确定要执行吗";
             layer.confirm(methodFunc.WarningMsg, function (index) {
                 layer.close(index);
+                var data;
                 switch (methodFunc.MethodDocTypeOfFunc) {
                     case 0://执行SQL
                         var handler = new HttpHandler("BP.CCBill.WF_CCBill");
@@ -71,43 +75,50 @@
                             layer.alert('系统错误:' + data);
                             return;
                         }
-                        layer.alert("执行成功");
+                       
                         break;
                     case 1: 
                         Skip.addJs('../../../DataUser/JSLibData/Method/' + mypk + '.js');
-                        ExecScript(methodFunc)
+                        data = ExecScript(methodFunc)
                         break;
                     case 2://执行URL
                         var handler = new HttpHandler("BP.CCBill.WF_CCBill");
                         handler.AddUrlData();
                         handler.AddFormData();
-                        debugger
                         data = handler.DoMethodReturnString("DoMethodPara_ExeUrl");
-                        layer.alert(data);
-                      
                         break;
+                }
+
+                //执行的结果. 根据执行成功后的配置，来处理“  执行完毕后干啥？”
+
+                //直接关闭窗口.
+                if (methodFunc.WhatAreYouTodo == 0 || fromPage == "Search") {
+                    layer.alert(data, function (index) {
+                        //执行完方法后关闭页面
+                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭
+
+                        layer.close(index);
+                    });    
+                  
+                    return;
+                }
+                layer.alert(data);
+                //关闭提示窗口并刷新.
+                if (methodFunc.WhatAreYouTodo == 1) {
+                    //$("#Msg").html(data);
+                    window.location.href = window.location.href;
+                    return;
+                }
+                //转入到Search.htm页面上去.
+                if (methodFunc.WhatAreYouTodo == 2) {
+                    window.location.href = "SearchDict.htm?FrmID=" + GetQueryString("FrmID");
+                    return;
                 }
             })
 
 
-            //执行的结果. 根据执行成功后的配置，来处理“  执行完毕后干啥？”
-
-            //直接关闭窗口.
-            if (methodFunc.WhatAreYouTodo == 0) {
-                //$("#Msg").html(data);
-                return;
-            }
-            //关闭提示窗口并刷新.
-            if (methodFunc.WhatAreYouTodo == 1) {
-                //$("#Msg").html(data);
-                window.location.href = window.location.href;
-                return;
-            }
-            //转入到Search.htm页面上去.
-            if (methodFunc.WhatAreYouTodo == 2) {
-                window.location.href = "SearchDict.htm?FrmID=" + GetQueryString("FrmID");
-                return;
-            }
+            
         }
 
         //执行的SCRIPT.

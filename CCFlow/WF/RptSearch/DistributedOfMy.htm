@@ -119,7 +119,7 @@
             okhtml = "<ul>";
             for (var idx = 0; idx < dtOK.length; idx++) {
                 var en = dtOK[idx];
-                okhtml += "<li><a href='../Comm/Search.htm?EnsName=BP.WF.Data.MyStartFlows&FK_Flow=" + en.FK_Flow + "&WFSta=1&TSpan=All' >" + en.FlowName + "(" + en.Num + ")</a></li>";
+                okhtml += "<li><a href='../Comm/Search.htm?EnsName=BP.WF.Data.MyJoinFlows&FK_Flow=" + en.FK_Flow + "&WFSta=1&TSpan=All' >" + en.FlowName + "(" + en.Num + ")</a></li>";
             }
             okhtml += "</ul>";
             $('#OK').html(okhtml);

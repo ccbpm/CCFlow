@@ -88,51 +88,56 @@
     </script>
 </head>
 <body>
-    <form id="cc">
-        <div style="right:10px; position:absolute; z-index:100; top:-3px">
-            <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
-            <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <span class="pull-right">
 
+                <button id="Btn_Save" name="Btn_Save" onclick="Save();" class="cc-btn-tab btn-save">保存</button>
+                <button id="Btn_Delete" name="Btn_Delete" onclick="Delete();" class="cc-btn-tab btn-save">删除</button>
+            </span>
+            <strong>快速输入</strong>
         </div>
-        <table id="table" style="width: 98%;">
-            <caption>快速输入 </caption>
-            <tr>
-                <td colspan="3">
-                    快速输入内容，多行用@分开。
-                </td>
-            </tr>
+        <form id="cc">
+           
+            <table id="table" style="width: 98%;">               
+                <tr>
+                    <td colspan="3">
+                        快速输入内容，多行用@分开。
+                    </td>
+                </tr>
 
-            <tr>
-                <td colspan="3" style="width: 100%;">
-                    <textarea rows="4" name="TB_Doc" id="TB_Doc"> </textarea>
-                </td>
-            </tr>
+                <tr>
+                    <td colspan="3">
+                        <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width:95%"> </textarea>
+                    </td>
+                </tr>
 
-            <tr>
-                <td colspan="2">
-                    历史词汇启用字段
-                </td>
-                <td>
-                    <select id="DDL_Tag1" value="0">
-                        <option value="0">不启用</option>
-                        <option value="1">启用</option>
-                    </select>
-                </td>
-            </tr>
-        </table>
-       
-        <fieldset>
-            <legend id="">帮助</legend>
-            <ul>
-                <li>快速录入是为了解决重复数据相同内容的填写.</li>
-                <li>能够减轻输入人员的劳动，并大幅度提高使用体验。</li>
-                <li><a href="FastInput.png" target=_blank> <img src="FastInput.png" style="width:400px;" border=0 /> </a> </li>
+                <tr>
+                    <td colspan="2">
+                        历史词汇启用字段
+                    </td>
+                    <td>
+                        <select id="DDL_Tag1" value="0">
+                            <option value="0">不启用</option>
+                            <option value="1">启用</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
 
-            </ul>
-        </fieldset>
+            <fieldset>
+                <legend id=""><label>帮助</label></legend>
+                <ul>
+                    <li>快速录入是为了解决重复数据相同内容的填写.</li>
+                    <li>能够减轻输入人员的劳动，并大幅度提高使用体验。</li>
+                    <li><a href="FastInput.png" target=_blank> <img src="FastInput.png" style="width:400px;" border=0 /> </a> </li>
 
-        <div id="Msg">
-        </div>
-    </form>
+                </ul>
+            </fieldset>
+
+            <div id="Msg">
+            </div>
+        </form>
+    </div>
 </body>
 </html>

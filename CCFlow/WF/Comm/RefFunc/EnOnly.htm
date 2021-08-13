@@ -146,7 +146,7 @@
                 $("#Btns").remove();
 
             } else {
-                $("#CCFormTabs").css("top", "35px");
+                $("#CCFormTabs").css("top", "45px");
             }
         })
 
@@ -451,7 +451,7 @@
         //解析表单字段 MapAttr.
         function InitMapAttr(Sys_MapAttr, mainData, groupID, userRegedit) {
 
-            var html = "<table border='0' style='width:99%;' >";
+            var html = "<table border='0' style='width:100%;' >";
             var isDropTR = true;
             var isExitMyNum = false;
             var fileDesc = "";
@@ -518,7 +518,7 @@
                 }
 
                 //线性展示并且colspan=3
-                if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40) || attr.UIHeight > 40) {
+                if ((attr.ColSpan == 3 || attr.ColSpan == 4) && attr.UIHeight <= 40) {
                     isDropTR = true;
                     html += "<tr>";
                     if (attr.UIContralType == 2) {
@@ -549,11 +549,13 @@
                 }
 
                 //线性展示并且colspan=4
-                if (attr.ColSpan == 4) {
+                if ((attr.ColSpan == 4 || attr.ColSpan == 3)&& attr.UIHeight >40 ) {
                     isDropTR = true;
                     html += "<tr>";
-                    html += "<td colspan='4'>" + lab + "</br>";
+                    html += "<td colspan='4'>";
+                    html += "<div style='margin-left:15%'>" + lab + "</br > ";
                     html += InitMapAttrOfCtrl(attr);
+                    html += "</div>";
                     html += "</td>";
                     html += "</tr>";
 
@@ -1181,14 +1183,14 @@
                 }
             }
             en = new Entity(enName, GetPKVal());
-            en.Delete();
+            var rs = en.Delete();
+            if (rs != null && rs != undefined && rs != ''&&rs.indexOf("err@")==-1) {
+                $("#Btns").html("");
+                $("#Left").html("");
+                $("#CCFormTabs").html("删除成功..");
 
-            $("#Btns").html("");
-            $("#Left").html("");
-            $("#CCFormTabs").html("删除成功..");
-
-            alert("删除成功.");
-
+                alert("删除成功.");
+            }
             window.close();
             CloseIt();
         }
@@ -1510,12 +1512,11 @@
     <div class="easyui-layout" data-options="region:'center'" style="margin: 0px;overflow: auto;">
         <div class="easyui-layout enonly-center" id="CCFormTabs" data-options="region:'center',noheader:true,border:false,fit:true" style="margin: 0px;
                     padding: 0px; overflow: auto;">
-            <br />
-            <br />
+         
             <center>
                 <img src='./../../Img/loading.gif' />正在初始化，请耐心等待。。。
             </center>
-            <br />
+            
         </div>
     </div>
     <!--</div>-->

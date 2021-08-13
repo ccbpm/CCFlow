@@ -2,9 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-
-   
-
     <script type="text/javascript" src="../../../Scripts/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="../../../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
@@ -108,172 +105,172 @@
     </style>
 </head>
 <body>
-    <form id="cc">
-        <div style="right:10px; position:absolute; z-index:100; top:-3px">
-            <input type="button" id="Btn_Save" name="Btn_Save" value="保存" onclick="Save()" />
-            <input type="button" id="Btn_LoadTemplate" name="Btn_LoadTemplate" value="加载模版" onclick="LoadTemplate()" />
-            <input type="button" value="返回" id="Back" name="Back" onclick="BackTo();" />
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <span class="pull-right">
+                <input type="button" id="Btn_Save" name="Btn_Save" class="cc-btn-tab" value="保存" onclick="Save()" />
+                <input type="button" id="Btn_LoadTemplate" name="Btn_LoadTemplate" class="cc-btn-tab" value="加载模版" onclick="LoadTemplate()" />
+                <input type="button" value="返回" id="Back" name="Back" class="cc-btn-tab" onclick="BackTo();" />
+                <a href="http://ccform.mydoc.io/?v=5769&t=36728" target="_blank" class="cc-btn-tab" style="padding:6px 10px "> 帮助</a>
+            </span>
+            <strong>为字段设置正则表达式</strong>
         </div>
-        <table class='Table' cellpadding='0' cellspacing='0' border='0' style='width: 100%'>
-            <caption>
-                为字段设置正则表达式.
-                    <a style="margin-right:180px;" href='http://ccform.mydoc.io/?v=5769&t=36728' target="_blank">
-                        <img src='../../../Img/Help.gif' />-帮助
-                    </a>
-            </caption>
-            <tr>
-                <td class='GroupTitle'>
-                    序
-                </td>
-                <td class='style1'>
-                    事件
-                </td>
-                <td class='GroupTitle'>
-                    事件内容
-                </td>
-                <td class='GroupTitle'>
-                    提示信息
-                </td>
-            </tr>
-            <tr class="event" id="onblur">
-                <td class='Idx'>
-                    1
-                </td>
-                <td style='font-size: 12px' class="style2">
-                    <a href="javascript:alert('元素失去焦点')">onblur</a>
-                </td>
-                <td>
-                    <textarea name="TB_Doc_onblur" rows="1" cols="50" id="TB_Doc_onblur" style="width: 93%;"></textarea>
-                </td>
-                <td>
-                    <input name="TB_Tag1_onblur" type="text" value="" size="20" id="TB_Tag1_onblur" style="width: 99%;" />
-                </td>
-            </tr>
-            <tr class="event" id="onchange">
-                <td class='Idx'>
-                    2
-                </td>
-                <td style='font-size: 12px' class="style2">
-                    <a href="javascript:alert('用户改变域的内容')">onchange</a>
-                </td>
-                <td>
-                    <textarea name="TB_Doc_onchange" rows="1" cols="50" id="TB_Doc_onchange" style="width: 93%;">
-</textarea>
-                </td>
-                <td>
-                    <input name="TB_Tag1_onchange" type="text" size="20" id="TB_Tag1_onchange" style="width: 99%;" />
-                </td>
-            </tr>
-            <tr class="event" id="onclick">
-                <td class='Idx'>
-                    3
-                </td>
-                <td style='font-size: 12px' class="style2">
-                    <a href="javascript:alert('鼠标点击某个对象')">onclick</a>
-                </td>
-                <td>
-                    <textarea name="TB_Doc_onclick" rows="1" cols="50" id="TB_Doc_onclick" style="width: 93%;">
-</textarea>
-                </td>
-                <td>
-                    <input name="TB_Tag1_onclick" type="text" size="20" id="TB_Tag1_onclick" style="width: 99%;" />
-                </td>
-            </tr>
-            <tr class="event" id="ondblclick">
-                <td class='Idx'>
-                    4
-                </td>
-                <td style='font-size: 12px' class="style2">
-                    <a href="javascript:alert('鼠标双击某个对象')">
-                        ondblclick
-                    </a>
-                </td>
-                <td>
-                    <textarea name="TB_Doc_ondblclick" rows="1" cols="50" id="TB_Doc_ondblclick" style="width: 93%;">
-</textarea>
-                </td>
-                <td>
-                    <input name="TB_Tag1_ondblclick" type="text" size="20" id="TB_Tag1_ondblclick" style="width: 99%;" />
-                </td>
-            </tr>
-            <tr class="event" id="onkeypress">
-                <td class='Idx'>
-                    5
-                </td>
-                <td style='font-size: 12px' class="style2">
-                    <a href="javascript:alert('某个键盘的键被按下或按住')">
-                        onkeypress
-                    </a>
-                </td>
-                <td>
-                    <textarea name="TB_Doc_onkeypress" rows="1" cols="50" id="TB_Doc_onkeypress" style="width: 93%;">
-</textarea>
-                </td>
-                <td>
-                    <input name="TB_Tag1_onkeypress" type="text" size="20" id="TB_Tag1_onkeypress" style="width: 99%;" />
-                </td>
-            </tr>
-            <tr class="event" id="onkeyup">
-                <td class='Idx'>
-                    6
-                </td>
-                <td style='font-size: 12px' class="style2">
-                    <a href="javascript:alert('某个键盘的键被松开')">
-                        onkeyup
-                    </a>
-                </td>
-                <td>
-                    <textarea name="TB_Doc_onkeyup" rows="1" cols="50" id="TB_Doc_onkeyup" style="width: 93%;">
-</textarea>
-                </td>
-                <td>
-                    <input name="TB_Tag1_onkeyup" type="text" size="20" id="TB_Tag1_onkeyup" style="width: 99%;" />
-                </td>
-            </tr>
-            <tr class="event" id="onsubmit">
-                <td class='Idx'>
-                    7
-                </td>
-                <td style='font-size: 12px' class="style2">
-                    <a href="javascript:alert('提交按钮被点击')">
-                        onsubmit
-                    </a>
-                </td>
-                <td>
-                    <textarea name="TB_Doc_onsubmit" rows="1" cols="50" id="TB_Doc_onsubmit" style="width: 93%;">
-                </textarea>
-                </td>
-                <td>
-                    <input name="TB_Tag1_onsubmit" type="text" value="" size="20" id="TB_Tag1_onsubmit"
-                           style="width: 99%;" />
-                </td>
-            </tr>
-        </table>
-        
-        <script type="text/javascript">
-            //加载模板
-            function LoadTemplate() {
-                var Table1 = $("#Btn_LoadTemplate").val();
-
-                if (Table1 == "加载模版") {
-                    $("#Table1").show();
-                    $("#Btn_LoadTemplate").val("关闭模板");
-                } else {
-                    $("#Table1").hide();
-                    $("#Btn_LoadTemplate").val("加载模版");
-                }
-            }
-        </script>
-        <div id="div01">
-            <table id="Table1" class='Table' cellpadding='0' cellspacing='0' border='0' style="width: 80%;
-            display: none">
+        <form id="cc">   
+            <table class='table'>
+                
                 <tr>
-                    <th># </th>
-                    <th>名称 </th>
-                    <th>内容 </th>
+                    <th>
+                        序
+                    </th>
+                    <th >
+                        事件
+                    </th>
+                    <th>
+                        事件内容
+                    </th>
+                    <th >
+                        提示信息
+                    </th>
+                </tr>
+                <tr class="event" id="onblur">
+                    <td class='Idx'>
+                        1
+                    </td>
+                    <td style='font-size: 12px' class="style2">
+                        <a href="javascript:alert('元素失去焦点')">onblur</a>
+                    </td>
+                    <td>
+                        <textarea name="TB_Doc_onblur" rows="1" cols="50" id="TB_Doc_onblur" style="width: 93%;"></textarea>
+                    </td>
+                    <td>
+                        <input name="TB_Tag1_onblur" type="text" value="" size="20" id="TB_Tag1_onblur" style="width: 99%;" />
+                    </td>
+                </tr>
+                <tr class="event" id="onchange">
+                    <td class='Idx'>
+                        2
+                    </td>
+                    <td style='font-size: 12px' class="style2">
+                        <a href="javascript:alert('用户改变域的内容')">onchange</a>
+                    </td>
+                    <td>
+                        <textarea name="TB_Doc_onchange" rows="1" cols="50" id="TB_Doc_onchange" style="width: 93%;">
+</textarea>
+                    </td>
+                    <td>
+                        <input name="TB_Tag1_onchange" type="text" size="20" id="TB_Tag1_onchange" style="width: 99%;" />
+                    </td>
+                </tr>
+                <tr class="event" id="onclick">
+                    <td class='Idx'>
+                        3
+                    </td>
+                    <td style='font-size: 12px' class="style2">
+                        <a href="javascript:alert('鼠标点击某个对象')">onclick</a>
+                    </td>
+                    <td>
+                        <textarea name="TB_Doc_onclick" rows="1" cols="50" id="TB_Doc_onclick" style="width: 93%;">
+</textarea>
+                    </td>
+                    <td>
+                        <input name="TB_Tag1_onclick" type="text" size="20" id="TB_Tag1_onclick" style="width: 99%;" />
+                    </td>
+                </tr>
+                <tr class="event" id="ondblclick">
+                    <td class='Idx'>
+                        4
+                    </td>
+                    <td style='font-size: 12px' class="style2">
+                        <a href="javascript:alert('鼠标双击某个对象')">
+                            ondblclick
+                        </a>
+                    </td>
+                    <td>
+                        <textarea name="TB_Doc_ondblclick" rows="1" cols="50" id="TB_Doc_ondblclick" style="width: 93%;">
+</textarea>
+                    </td>
+                    <td>
+                        <input name="TB_Tag1_ondblclick" type="text" size="20" id="TB_Tag1_ondblclick" style="width: 99%;" />
+                    </td>
+                </tr>
+                <tr class="event" id="onkeypress">
+                    <td class='Idx'>
+                        5
+                    </td>
+                    <td style='font-size: 12px' class="style2">
+                        <a href="javascript:alert('某个键盘的键被按下或按住')">
+                            onkeypress
+                        </a>
+                    </td>
+                    <td>
+                        <textarea name="TB_Doc_onkeypress" rows="1" cols="50" id="TB_Doc_onkeypress" style="width: 93%;">
+</textarea>
+                    </td>
+                    <td>
+                        <input name="TB_Tag1_onkeypress" type="text" size="20" id="TB_Tag1_onkeypress" style="width: 99%;" />
+                    </td>
+                </tr>
+                <tr class="event" id="onkeyup">
+                    <td class='Idx'>
+                        6
+                    </td>
+                    <td style='font-size: 12px' class="style2">
+                        <a href="javascript:alert('某个键盘的键被松开')">
+                            onkeyup
+                        </a>
+                    </td>
+                    <td>
+                        <textarea name="TB_Doc_onkeyup" rows="1" cols="50" id="TB_Doc_onkeyup" style="width: 93%;">
+</textarea>
+                    </td>
+                    <td>
+                        <input name="TB_Tag1_onkeyup" type="text" size="20" id="TB_Tag1_onkeyup" style="width: 99%;" />
+                    </td>
+                </tr>
+                <tr class="event" id="onsubmit">
+                    <td class='Idx'>
+                        7
+                    </td>
+                    <td style='font-size: 12px' class="style2">
+                        <a href="javascript:alert('提交按钮被点击')">
+                            onsubmit
+                        </a>
+                    </td>
+                    <td>
+                        <textarea name="TB_Doc_onsubmit" rows="1" cols="50" id="TB_Doc_onsubmit" style="width: 93%;">
+                </textarea>
+                    </td>
+                    <td>
+                        <input name="TB_Tag1_onsubmit" type="text" value="" size="20" id="TB_Tag1_onsubmit"
+                               style="width: 99%;" />
+                    </td>
                 </tr>
             </table>
-        </div>
-    </form>
+
+            <script type="text/javascript">
+                //加载模板
+                function LoadTemplate() {
+                    var Table1 = $("#Btn_LoadTemplate").val();
+
+                    if (Table1 == "加载模版") {
+                        $("#Table1").show();
+                        $("#Btn_LoadTemplate").val("关闭模板");
+                    } else {
+                        $("#Table1").hide();
+                        $("#Btn_LoadTemplate").val("加载模版");
+                    }
+                }
+            </script>
+            <div id="div01">
+                <table id="Table1" class='table' style=" display: none">
+                    <tr>
+                        <th># </th>
+                        <th>名称 </th>
+                        <th>内容 </th>
+                    </tr>
+                </table>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

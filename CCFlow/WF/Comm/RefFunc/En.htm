@@ -1,354 +1,252 @@
-﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!DOCTYPE html>
+<html>
+
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>ccform</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../Portal/icons/font-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="../../Portal/icons/icons.css">
+    <link rel="stylesheet" type="text/css" href="../../Portal/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../../Portal/layui/css/customer.css">
+    <script src="../../Scripts/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Portal/js/vue/vue.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/gray/easyui.css" />
-    <link rel="stylesheet" type="text/css" href="../../Scripts/easyUI/themes/icon.css" />
+    <!--- 引入代码. -->
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Portal/js/sortjs/Sortable.min.js"></script>
 
-    <link href="../Style/CommStyle.css" rel="stylesheet" type="text/css" />
-    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
-    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
-
-    <!-- 样式风格 icon.. -->
-    <link href="../fonts/simple-line-icons.css" rel="stylesheet" />
-    <link href="../fonts/font-icons.min.css" rel="stylesheet" />
-    <link href="../fonts/font-awesome.css" rel="stylesheet" />
-
-    <link href="En.css" rel="stylesheet" type="text/css" />
-    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
-    <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
     <style>
-        html {
-            background: #f1f1f1
+        body {
+            margin: 10px;
         }
 
-        .en-main {
-            margin: 10px !important;
+        [v-cloak] {
+            display: none;
+        }
+
+        .drag-class {
+            border: 1px solid #2D93CA !important;
+            background: white !important;
+        }
+
+        .menus-wrapper {
+            left: 0px;
+        }
+
+        .layui-side-menu .layui-nav {
+            margin-top: 0px;
+        }
+
+        .g-admin-pagetabs {
+            top: 0px;
+        }
+
+        .g-admin-layout .layui-body {
+            top: 40px;
+        }
+
+        .layui-side-menu .layui-side-scroll {
+            background-color: white;
+        }
+
+        .layui-side-menu .layui-nav .layui-nav-item a {
+            color: #5f626e;
+            height: 30px;
+            line-height: 30px;
+            display: flex;
+            align-items: center;
+        }
+
+        .ocside {
+            position: absolute;
+            left: 200px;
+            top: 50%;
+            transition: all .1s ease-in 0ms;
+            z-index: 9999
+        }
+
+        .ocside a {
+            display: block;
+            border-radius: 50%;
+            text-align: center;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            border: 1px solid #efefef;
+            background: #fff;
+        }
+        .ocside a:hover {
+            background: #009688;
+            color: #fff;
+            border-color: #009688
+        }
+        .g-admin-sidebar-fold .g-admin-pagetabs, .g-admin-sidebar-fold .g-admin-layout .layui-body, .g-admin-sidebar-fold .g-admin-layout .layui-footer, .g-admin-sidebar-fold .g-admin-layout .g-layout-left{
+            left:15px;
         }
     </style>
+ 
+    <style id="theme-data">
+    </style>
+    <style id="layout-data">
+    </style>
 </head>
-<body class="easyui-layout en-main" data-options="fit:true">
 
-    <div id="EnLayout" class="easyui-layout" data-options="region:'center'" border="false">
-
-        <div id="Left" data-options="region:'west',split:true,collapsible:false" style="width:200px;">
-
-        </div>
-
-        <div id="rightFrame" class="cs-function-main" data-options="region:'center',noheader:true">
-            <div class="easyui-layout" data-options="fit:true">
-                <div id="Btns" data-options="region:'north',noheader:true,split:false,border:false" class="cs-btn-group" style="height: 30px;padding: 2px; background-color: #E0ECFF">
-                    <a id="Btn_New" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'" onclick="New()">新建</a>
-                    <a id="Btn_Save" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'" onclick="Update()">保存</a>
-                    <a id="Btn_Delete" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-delete'" onclick="Delete()">删除</a>
-                    <a id="Btn_Close" href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-no'" onclick="CloseIt()">关闭</a>
+<body class="layui-layout-body">
+   
+    <div id="g-app-main" v-cloak>
+        <div :class="sideBarOpen?'':'g-admin-sidebar-fold'">
+            <!--layUi layout start-->
+            <div class="layui-layout g-admin-layout">
+                <!-- header -->
+                <div class="ocside" :style="sideBarOpen?'':'left:15px;transition: all .1s ease-in 0ms;'">
+                    <a href="javascript:void(0)" title="侧边栏" @click="resizeSideBar">
+                        <i :class="sideBarOpen?'layui-icon layui-icon-left':'layui-icon layui-icon-right'"></i>
+                    </a>
                 </div>
-                <div data-options="region:'center',noheader:true,border:false" style="margin:0px">
-                    <div id="CCFormTabs" data-options="region:'center',noheader:true,border:false" style="margin:0px;padding:0px;overflow:auto">
+                <div class="layui-side layui-side-menu" :style="sideBarOpen?'':'width:15px'">
+                    <div class="layui-side-scroll">
+                        <div class="menus-wrapper">
+                            
+                            <ul class="layui-nav layui-nav-tree" ref="sort-tree" :style="sideBarOpen?'':'width:15px'">
 
-                        <br />
-                        <img src='./../../Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
-                        <br />
+                                <li v-for="(item,index) in menuTreeData" class="layui-nav-item" :data-id="item.No"
+                                    :data-no="item.No"
+                                    :data-idx="index" :data-name="item.Name" :class="calcClassList(item,1)">
+                                    <!--                                <a href="javascript:void(0)" @click="foldMenus(subMenuData.children,item,$event)">-->
+                                    <a href="javascript:void(0)" @click="item.open = !item.open"  style="font-weight:700">
+                                        <i :class="item.Icon"></i>
+                                        <cite style="margin-left:8px">{{item.Name}}</cite>
+                                        <span class="layui-nav-more">
+                                            <i :class="item.open?'fa fa-angle-down':'fa fa-angle-right'"></i>
+                                        </span>
+                                    </a>
+
+
+
+
+
+
+
+                                    <!--                                <a v-else href="javascript:void(0)" :class="{'layui-this' : item.No === selectedId}"-->
+                                    <!--                                   @click="openTab(item.Name,item.Url),selectedId = item.No">-->
+                                    <!--                                    <i :class="item.Icon"></i>-->
+                                    <!--                                    <cite style="margin-left:8px">{{item.Name}}</cite>-->
+                                    <!--                                </a>-->
+                                    <dl v-show="Array.isArray(item.children) &&  item.open"
+                                        ref="sort-tree-child" style=" background:#fbf9f9">
+                                        <dd v-for="(it,idx) in item.children" :data-id="it.No" :data-pid="item.No"
+                                            :data-no="it.No" :data-name="it.Title" :data-pidx="index" :data-idx="idx"
+                                            :class="calcClassList(item,2)" @click.right.stop>
+                                            
+                                            <a @click="openTabByMenu(it),selectedId = it.No"
+                                               :class="{'layui-this': it.No === selectedId}"
+                                               style="padding-left: 45px;cursor: pointer;">
+                                                <i :class="it.Icon"></i>
+                                                <span style="margin-left: 8px;">{{it.Title}}</span>
+                                            </a>
+                                        </dd>
+                                    </dl>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- tabs -->
+                <div class="g-admin-pagetabs" @click.right.prevent="openTabDropdownMenu" @mouseleave="closeDropdown">
+                    <div class="layui-icon g-admin-tabs-control layui-icon-prev" @click="toLeftPage"></div>
+                    <div class="layui-icon g-admin-tabs-control layui-icon-next" @click="toRightPage"></div>
+                    <div class="layui-icon g-admin-tabs-control layui-icon-down"
+                         @click="showPagesAction = !showPagesAction">
+                        <ul class="layui-nav g-admin-tabs-select">
+                            <li class="layui-nav-item">
+                                <a href="javascript:void(0)"><span class="layui-nav-more"></span></a>
+                                <dl class="layui-nav-child layui-anim-fadein layui-anim layui-anim-upbit"
+                                    :class="{'layui-show': showPagesAction}" @mouseleave="showPagesAction = false">
+                                    <dd @click="closeCurrentTabs(selectedTabsIndex)">
+                                        <a href="javascript:void(0)">
+                                            <i class="icon-check"></i>关闭当前标签页
+                                        </a>
+                                    </dd>
+                                    <dd @click="closeOtherTabs">
+                                        <a href="javascript:void(0)"><i class="icon-minus"></i>关闭其它标签页</a>
+                                    </dd>
+                                    <dd @click="closeAllTabs">
+                                        <a href="javascript:void(0)"><i class="icon-exclamation"></i>关闭全部标签页</a>
+                                    </dd>
+                                    <dd @click="reLoadCurrentPage">
+                                        <a href="javascript:void(0)"><i class='icon-reload'></i>刷新</a>
+                                    </dd>
+
+                                </dl>
+                            </li>
+                            <span class="layui-nav-bar" style="left: 20px; top: 35px; width: 0; opacity: 0;"></span>
+                        </ul>
+                    </div>
+
+                    <dl v-if="tabDropdownVisible" :style="contextMenuStyle" @mouseleave="tabDropdownVisible = false"
+                        @click.stop="tabDropdownVisible = false">
+                        <dd @click="closeCurrentTabs(selectedTabsIndex)">
+                            <a href="javascript:void(0)"><i class="icon-check"></i>关闭当前标签页</a>
+                        </dd>
+                        <dd @click="closeOtherTabs"><a href="javascript:void(0)"><i class="icon-minus"></i>关闭其它标签页</a></dd>
+                        <dd @click="closeAllTabs">
+                            <a href="javascript:void(0)"><i class="icon-exclamation"></i>关闭全部标签页</a>
+                        </dd>
+                        <dd @click="reLoadCurrentPage"><a href="javascript:void(0)"><i class='icon-reload'></i>刷新</a></dd>
+                    </dl>
+
+                    <div class="layui-tab" lay-allowclose="true" lay-filter="g-admin-layout-tabs">
+                        <ul class="layui-tab-title" ref="iframe-tabs">
+                            <li @click="selectedTabsIndex = -1" :class="{'layui-this':selectedTabsIndex === -1}">
+                                <i class="layui-icon layui-icon-home"></i><i class="layui-icon layui-unselect layui-tab-close">ဆ</i><span>基本信息</span>
+                            </li>
+                            <li v-for="(item,index) in tabsList" @click="selectedTabsIndex = index"
+                                :class="{'layui-this':selectedTabsIndex === index}">
+                                <span>{{item.name}}</span><i class="layui-icon layui-unselect layui-tab-close"
+                                                             @click="closeCurrentTabs(index)">ဆ</i>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- body -->
+                <div class="layui-body">
+                    <div :class="{'layui-show':selectedTabsIndex === -1}" class="g-admin-tabsbody-item">
+                        <iframe :src="selectedTabsIndexUrl" frameborder="0" ref="iframe-home" class="g-admin-iframe"></iframe>
+                    </div>
+                    <div v-for="(item,index) in tabsList" class="g-admin-tabsbody-item"
+                         :class="{'layui-show':index === selectedTabsIndex}">
+                        <iframe :src="item.src" frameborder="0" :ref="'iframe-'+index" class="g-admin-iframe"></iframe>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-    <script type="text/javascript" src="../../Scripts/easyUI/jquery-1.8.0.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/easyUI/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/easyUI/locale/easyui-lang-zh_CN.js"></script>
-    <script type="text/javascript" src="../../Scripts/EasyUIUtility.js"></script>
-
-    <script src="../JS/Calendar/WdatePicker.js" type="text/javascript"></script>
-    <link href="../JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
-
-    <script type="text/javascript" src="../../Scripts/Cookie.js"></script>
-    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
-    <!-- 位置必须放在 jquery 之后. -->
-    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
-    <script type="text/javascript" src="../../Scripts/config.js"></script>
-    <script type="text/javascript" src="../Gener.js"></script>
-
-    <!--UEditor-->
-    <link href="../../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="../../Comm/umeditor1.2.3-utf8/third-party/template.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.config.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.min.js"></script>
-    <script type="text/javascript" src="../../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js"></script>
-    <script src="../../Admin/CCFlowEnum.js" type="text/javascript"></script>
-    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <!--layUi layout end-->
+    <script src="ThemeData.js"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Portal/layui/layui.js" type="text/javascript"></script>
 
     <script type="text/javascript">
-
-        var frmData;
-
-        var dtM; //方法集合.
-        var url;
-        $(function () {
-
-            var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
-            var enName = GetQueryString("EnName");
-            var type = GetQueryString("type");
-            var pkVal = GetPKVal();
-            var isTree = GetQueryString("isTree");
-            var isReadonly = GetQueryString("isReadonly");
-            httpHandler.AddPara("EnName", enName);
-
-
-            //获取URL的参数问题
-            var param = document.location.search.substr(1);
-
-
-            url = "../RefFunc/EnOnly.htm?" + param;
-            if (pkVal != null) {
-                httpHandler.AddPara("PKVal", pkVal);
-            }
-
-            var data = httpHandler.DoMethodReturnString("Entity_Init");
-            if (data.indexOf('err@') == 0) {
-                $("#CCFormTabs").html(data);
-                return;
-            }
-
-            //解析json.
-            frmData = JSON.parse(data);
-            dtM = frmData["dtM"];
-            RefMethod(); //初始化菜单.
-
-            //生成傻瓜表单.
-            OpenUrlInRightFrame(this, url);
-
-
-        })
-
-        function RefMethod() {
-
-            if (dtM.length == 0)
-                return;
-            //用户设置
-            var mypk = new WebUser().No + "_Funcs_HS_" + GetQueryString("EnName");
-            var userRegedit = new Entity("BP.Sys.UserRegedit");
-            userRegedit.SetPKVal(mypk);
-            userRegedit.RetrieveFromDBSources();
-
-            //求出所有的分组名称.
-            var groupName = "@基本信息";
-            for (var i = 0; i < dtM.length; i++) {
-                var en = dtM[i];
-                if (en.GroupName == null)
-                    continue;
-                if (groupName.indexOf('@' + en.GroupName) == -1)
-                    groupName += "@" + en.GroupName;
-            }
-
-            var gNames = groupName.split('@');
-
-            var mainData = frmData.MainTable[0];
-            var title = "主页";
-            if (mainData.Name != null && mainData.Name != "undefined" && mainData.Name != "")
-                title = mainData.Name;
-
-            //生成菜单.
-            var html = "<div class='easyui-accordion cc-tree-menu' data-options='fit:true' id='accordion'>";
-            html += "";
-            for (var i = 0; i < gNames.length; i++) {
-                var gName = gNames[i];
-                if (gName == "")
-                    continue;
-                if (userRegedit != null && userRegedit != undefined && userRegedit.MVals.indexOf(",dtM_" + gName + ",") != -1)
-                    continue;
-                if (gNames.length == 2 && gName.indexOf('基本信息') != -1)
-                    html += "";
-                else
-                    html += "<div title='" + gName + "' style='overflow:auto;'>";
-
-
-                //填入菜单内容.
-                html += "<ul class='navlist' >";
-                if (gName == "基本信息") {
-                    html += "<li><a href='javascript:OpenUrlInRightFrame(this,\"" + url + "\")'><span class='pull-right'><i class='iconfont icon-weimingmingwenjianjia_jiantou'></i></span> <i class='iconfont icon-shouye'></i> " + title + "</a></li>";
-                }
-
-                for (var idx = 0; idx < dtM.length; idx++) {
-
-                    var en = dtM[idx];
-                    var myName = en.GroupName;
-                    if (myName == null || myName == "")
-                        myName = "基本信息";
-
-                    if (gName != myName)
-                        continue;
-
-                    if ((en.RefAttrKey != null && en.RefAttrKey != "") || en.IsCanBatch == "1" || en.Visable == "0")
-                        continue;
-
-                    if (userRegedit != null && userRegedit != undefined && userRegedit.Vals.indexOf("," + en.No + ",") != -1)
-                        continue;
-
-                    html += "<li>" + GenerRM(en) + "</li>";
-                }
-                html += "</ul>";   //end填入菜单内容.
-                html += "</div>";
-            }
-            html += "</div>";
-
-            $("#Left").append(html);
-            $.parser.parse("#Left");
-        }
-
-        function GenerRM(rm) {
-
-            var icon = rm.Icon;
-            if (rm.Icon == "" || rm.Icon == null) {
-                icon = "../../Img/New.gif";
-                // icon = "../../Img/dot.png";
-            }
-
-            html = "<a href='javascript:OPenFun(\"" + rm.Url + "\",\"" + rm.Warning + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",\"" + rm.FunPara + "\")'><span class='pull-right'><i class='iconfont icon-weimingmingwenjianjia_jiantou'></i></span> ";
-            if (icon.indexOf('/') > 0) {
-                //这是url模式.
-                //   html += "<img src='" + icon + "'/>";
-            } else {
-                //  html += "<i class='iconfont icon-user'></i>";
-            }
-
-            html += rm.Title + "</a>";
-            var html = "";
-
-            //icon 有两种模式，1. 路径模式.  2. BS模式.
-            var iconHtml = "";
-
-            if (icon.indexOf('/') >= 0) {
-
-                iconHtml = "<img src='" + "../" + icon + "' onerror=\"javascript:this.src='../../Img/New.gif'\" style='width:17px;height:17px;' /> ";
-            }
-            else {
-                iconHtml = "<i class='" + icon + "'> </i>";
-            }
-
-            // alert(iconHtml);
-
-            if (parseInt(rm.RefMethodType) == RefMethodType.LinkeWinOpen) {
-
-                html = "<a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",false)'><span class='pull-right'><i class='iconfont icon-weimingmingwenjianjia_jiantou'></i></span> ";
-
-                html += iconHtml + rm.Title + "</a>";
-            }
-
-            if (parseInt(rm.RefMethodType) == RefMethodType.Func) {
-                html = "<a href='javascript:OPenFun(\"" + rm.Url + "\",\"" + rm.Warning + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",\"" + rm.FunPara + "\")'><span class='pull-right'><i class='iconfont icon-weimingmingwenjianjia_jiantou'></i></span> ";
-
-                html += iconHtml + rm.Title + "</a>";
-
-                // html = "<a href='javascript:OPenFun(\"" + rm.Url + "\",\"" + rm.Warning + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\",\"" + rm.FunPara + "\")'><i class='iconfont icon-weimingmingwenjianjia_jiantou'></i> " + rm.Title + "</a>";
-            }
-
-            if (parseInt(rm.RefMethodType) == RefMethodType.LinkModel) {
-                html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",540,450,true)'><span class='pull-right'><i class='iconfont icon-weimingmingwenjianjia_jiantou'></i></span> ";
-
-                html += iconHtml + rm.Title + "</a>";
-            }
-            if (html == "" || parseInt(rm.RefMethodType) == RefMethodType.RightFrameOpen) {
-                html = "<a href='javascript:OpenUrlInRightFrame(this,\"" + rm.Url + "\")'><span class='pull-right'><i class='iconfont icon-weimingmingwenjianjia_jiantou'></i></span> ";
-
-                html += iconHtml + rm.Title + "</a>";
-                //html = "<a href='javascript:OpenUrlInRightFrame(this,\"" + rm.Url + "\")'><i class='iconfont icon-weimingmingwenjianjia_jiantou'></i> " + rm.Title + "</a>";
-            }
-
-            return html;
-        }
-        function OPenFun(url, warning, title, w, h, FunPara) {
-            if (title == "轨迹")
-                url = url + "&title=轨迹";
-
-            if (w == null || w == undefined)
-                w = document.body.clientWidth - 200;
-            if (h == null || h == undefined)
-                h = document.body.clientHeight - 140;
-
-            var W = document.body.clientWidth - 40;
-            var H = document.body.clientHeight - 40;
-            if (w > W)
-                w = W;
-            if (h > H)
-                h = H;
-            if (FunPara == true || FunPara == "true")
-                OpenEasyUiDialogExt(url, title, w, h, false);
-            else {
-                if (warning == "null" || warning == "")
-                    warning = "确定要执行吗？";
-                else {
-                    warning = warning.replace(/,\s+/g, ",");
-                    warning = warning.replace(/\s+/g, "\r\n");
-                }
-                if (confirm("\"" + warning + "\"")) {
-                    OpenEasyUiDialogExt(url, title, w, h, false);
-                }
-            }
-        }
-
-        function OpenIt(url, title, w, h) {
-            window.open(url);
-        }
-
-        //在右侧框架中显示指定url的页面
-        function OpenUrlInRightFrame(ele, url) {
-            if (ele != null && ele != undefined) {
-
-                currShow = $(ele).parents('li').text(); //有回车符
-
-                $.each($(ele).parents('ul').children('li'), function (i, e) {
-                    $(e).children('div').css('font-weight', $(e).text() == currShow ? 'bold' : 'normal');
-                });
-
-                if (url.indexOf('?') == -1)
-                    url += '?1=1';
-
-                $('#rightFrame').empty();
-                $('#rightFrame').append('<iframe scrolling="auto" frameborder="0"  src="' + url + '&s=' + Math.random() + '" style="width:100%;height:100%;fit:true"></iframe>');
-            }
-        }
-
-
-        function CloseIt() {
-            if (window.parent && window.parent.CloseBootstrapDialog) {
-                window.parent.CloseBootstrapDialog("取消");
-            } else {
-                window.close();
-            }
-        }
-
-        $(function () {
-            var Accordion = function (el, multiple) {
-                this.el = el || {};
-                this.multiple = multiple || false;
-
-                // Variables privadas
-                var links = this.el.find('.link');
-                // Evento
-                links.on('click', { el: this.el, multiple: this.multiple }, this.dropdown)
-            }
-
-            Accordion.prototype.dropdown = function (e) {
-                var $el = e.data.el;
-                $this = $(this),
-                    $next = $this.next();
-
-                $next.slideToggle();
-                $this.parent().toggleClass('open');
-
-                if (!e.data.multiple) {
-                    $el.find('.submenu').not($next).slideUp().parent().removeClass('open');
-                };
-            }
-
-            var accordion = new Accordion($('#accordion'), false);
-
+        layui.config({
+            base: '../../Scripts/layui/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use('index');
+        var loading = layer.load(2, {
+            shade: false,
+            time: 2000
         });
     </script>
+    <script src="Ents.js"></script>
+    <script src="EntsIndex.js"></script>
+    <script src="EntsMenuGlo.js"></script>
+
 </body>
+
 </html>

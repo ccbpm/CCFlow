@@ -14,6 +14,7 @@ if (typeof FrmComponents == "undefined") {
         FrmComponents.FrmImgAth = 12,//图片附件
         FrmComponents.IDCard = 13,//身份证
         FrmComponents.SignCheck = 14,//签批组件
+        FrmComponents.WorkCheck = 140,//审核组件
         FrmComponents.FlowBBS = 15,//评论组件
         FrmComponents.Fiexed = 16,//系统定位
         FrmComponents.DocWord = 17,// 公文收文字号

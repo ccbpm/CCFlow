@@ -24,11 +24,12 @@
         .table > thead > tr > th {
             border-top: 1px solid #dbe3e6 !important
         }
+
         .table-striped > tbody > tr:nth-of-type(odd) {
             background: #f9f9f9
         }
     </style>
-  
+
     <script language="javascript" type="text/javascript">
 
         closeWhileEscUp();
@@ -37,14 +38,6 @@
         $(function () {
 
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
-
-            InitPage();
-
-            $("#Msg").html("");
-        });
-
-        //初始化数据.
-        function InitPage() {
 
             var sysEnumMains = new Entities("BP.Sys.SysEnumMains");
             sysEnumMains.RetrieveAll();
@@ -56,10 +49,17 @@
             for (var i = 0; i < sysEnumMains.length; i++) {
 
                 var sysEnumMain = sysEnumMains[i];
+                var atPara = sysEnumMain.AtPara;
+                atPara = atPara == null || atPara == undefined ? "" : atPara;
+                var idx = atPara.indexOf("ParentKey");
+                if (idx == 0 || idx == -1) {
+
+                } else {
+                    continue;
+                }
 
                 //如果需要字段从集合里选择，排除没有的字段.
                 if (fields != null) {
-
                     var isHave = false; //是否存在.
                     for (var idx = 0; idx < fields.length; idx++) {
 
@@ -87,33 +87,119 @@
                 newRow += "<td style='width:50px;' class=Idx>" + i + "</td>";
 
                 if (fk_mapData != null)
-                    newRow += "<td style='width:100px;'><a href=\"javascript:AddFrm('" + sysEnumMain.No + "','" + fk_mapData + "');\" >" + sysEnumMain.No + "</a></td>";
+                    newRow += "<td style='width:100px;'><a href=\"javascript:AddFrm('" + sysEnumMain.No + "','" + fk_mapData + "','" + sysEnumMain.Name + "',"+sysEnumMain.IsHaveDtl+");\" >" + sysEnumMain.No + "</a></td>";
                 else
                     newRow += "<td style='width:100px;'>" + sysEnumMain.No + "</td>";
 
                 newRow += "<td style='width:100px;'>" + sysEnumMain.Name + "</td>";
 
-                //newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >编辑</a></td>";
-                //newRow += "<td><a href=\"javascript:Ref('" + sysEnumMain.No + "');\" >引用</a></td>";
-
                 newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >" + sysEnumMain.CfgVal + "</a></td>";
+
+                if (sysEnumMain.IsHaveDtl === 1) {
+                    newRow += "<td><a href=\"javascript:EditDtl('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >编辑</a></td>";
+                }
+                else {
+                    newRow += "<td><a href=\"javascript:CrateDtl('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >+创建</a></td>";
+                }
+
                 newRow += "<td style='width:50px;'><a href=\"javascript:Del('" + sysEnumMain.No + "','" + sysEnumMain.Name + "');\" >删除</a></td>";
-
                 newRow += "</tr>";
-
                 $("#Table1 tr:last").after(newRow);
             }
+            $("#Msg").html("");
+
+        });
+
+        function CrateDtl(enumNo, enumName) {
+
+            var no = window.prompt("枚举子项编号:", enumNo + "Dtl");
+            if (no == null || no == undefined) return;
+            var name = window.prompt("枚举子项名称:", enumName + "Dtl");
+            if (name == null || name == undefined) return;
+
+            //插入数据.
+            var en = new Entity("BP.Sys.SysEnumMain");
+            en.EnumKey = no;
+            en.No = no;
+            en.Name = name;
+            en.IsHaveDtl = 0;
+
+            en.SetPara("ParentKey", enumNo);
+            en.SetPara("ParentName", enumName);
+
+            try {
+                en.Insert();
+            } catch (e) {
+                alert("编号已经存在");
+                return;
+            }
+
+            //更新main信息.
+            var en = new Entity("BP.Sys.SysEnumMain", enumNo);
+            en.IsHaveDtl = 1;
+            en.SetPara("DtlEnumKey", no);
+            en.SetPara("DtlName", name);
+            en.Update();
+
+
+            //调用转向.
+            EditDtl(en.No, enumNo)
 
         }
+        function EditDtl(parentKey, enumKey) {
 
-        function AddFrm(enumID, fk_mapdata) {
-            
+            var en = new Entity("BP.Sys.SysEnumMain", parentKey);
 
+            var url = "SysEnumDtl.htm?ParentKey=" + en.No + "&EnumKey=" + en.GetPara("DtlEnumKey");
+            url += "&DoType=" + GetQueryString("DoType");
+            url += "&FK_MapData=" + GetQueryString("FK_MapData");
+            url += "&KeyOfEn=" + GetQueryString("KeyOfEn");
+            url += "&Type=" + GetQueryString("Type");
+            window.location.href = url;
+
+        }
+        function EditUIBindKeyOfAttr(enumID, keyOfEn, fk_mapData) {
+            if (fk_mapData == null || fk_mapData == undefined || fk_mapData == "") {
+                alert("字段"+keyOfEn+"绑定的表单获取到的字段为空")
+            }
+            var attr = new Entity("BP.Sys.MapAttr", fk_mapData + "_" + keyOfEn);
+            attr.LGType = 1;
+            attr.UIContralType = 1;
+            attr.MyDataType = 2;
+            attr.UIBindKey = enumID;
+            attr.RBShowModel = 3; //横向展示.
+
+            attr.Update();
+            url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=" + attr.MyPK;
+            window.location.href = url;
+
+        }
+        function AddFrm(enumID, fk_mapdata,enumName,isHaveDtl) {
+
+            var keyOfEn = GetQueryString("KeyOfEn");
+            keyOfEn = keyOfEn == null || keyOfEn == undefined ? "" : keyOfEn;
+            if (keyOfEn != "") {
+                EditUIBindKeyOfAttr(enumID,keyOfEn,fk_mapData);
+                return;
+            }
             var url = '';
             var str = prompt("请输入字段名(必须为字母开头、数字或者下划线组合):", enumID);
 
             if (str == null)
                 return;
+            var dtlKey=""
+            if (isHaveDtl == 1) {
+                var v = window.confirm("您需要创建枚举值[" + enumName + "]的关联枚举字段吗？");
+                if (v == false)
+                    dtlKey = "";
+                else {
+                    dtlKey = prompt("请输入字段名(必须为字母开头、数字或者下划线组合):", enumID + "dtl");
+                    if (dtlKey == null)
+                        return;
+                }
+                
+            }
+
 
             var groupField = GetQueryString("GroupField");
             if (groupField == null)
@@ -121,10 +207,11 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
             handler.AddPara("KeyOfEn", str);
+            handler.AddPara("DtlKeyOfEn", dtlKey);
             handler.AddPara("FK_MapData", fk_mapdata);
             handler.AddPara("GroupFeid", groupField);
             handler.AddPara("EnumKey", enumID);
-            handler.AddPara("UIContralType",GetQueryString("Type"))
+            handler.AddPara("UIContralType", GetQueryString("Type"))
             var data = handler.DoMethodReturnString("SysEnumList_SaveEnumField");
             if (data.indexOf("err@") >= 0) {
                 alert(data);
@@ -150,20 +237,27 @@
             var EnumName = document.getElementById("EnumValue").value;
             var sysEnumMains = new Entities("BP.Sys.SysEnumMains");
             sysEnumMains.Retrieve("Name", EnumName);
-            for (var i=0; i < sysEnumMains.length; i++) {
+            for (var i = 0; i < sysEnumMains.length; i++) {
                 sysEnumMain = sysEnumMains[i];
-                
+
                 var newRow = "";
                 newRow += "<tr>";
                 newRow += "<td style='width:50px;' class=Idx>" + i + "</td>";
 
                 if (fk_mapData != null)
-                    newRow += "<td style='width:100px;'><a href=\"javascript:AddFrm('" + sysEnumMain.No + "','" + fk_mapData + "');\" >" + sysEnumMain.No + "</a></td>";
+                    newRow += "<td style='width:100px;'><a href=\"javascript:AddFrm('" + sysEnumMain.No + "','" + fk_mapData+"','"+sysEnumMains.Name + "'," + sysEnumMain.IsHaveDtl+");\" >" + sysEnumMain.No + "</a></td>";
                 else
                     newRow += "<td style='width:100px;'>" + sysEnumMain.No + "</td>";
 
                 newRow += "<td style='width:100px;'>" + sysEnumMain.Name + "</td>";
                 newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >" + sysEnumMain.CfgVal + "</a></td>";
+
+                if (sysEnumMain.IsHaveDtl === 1)
+                    newRow += "<td style='width:50px;'>有</td>";
+                else
+                    newRow += "<td style='width:50px;'>无</td>";
+
+
                 newRow += "<td style='width:50px;'><a href=\"javascript:Del('" + sysEnumMain.No + "','" + sysEnumMain.Name + "');\" ><img src='../../Img/Btn/Delete.gif' alt='删除' ></a></td>";
 
                 newRow += "</tr>";
@@ -175,7 +269,7 @@
             var url = '../CCFormDesigner/DialogCtr/EnumerationNew.htm?EnumKey=' + enumKey + '&Name=' + name + '&CfgKeys=' + cfgKeys + '&DoType=FrmEnumeration_SaveEnum&s=' + Math.random();
             var W = document.body.clientWidth - 120;
             var H = document.documentElement.clientHeight - 10;
-            OpenEasyUiDialog(url, "eudlgframe", "修改枚举值", W, H, "icon-edit", true, null, null, null, function () {
+            OpenEasyUiDialog(url, "eudlgframe", "", W, H, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }
@@ -233,15 +327,16 @@
             </div>
             <strong>枚举值列表</strong>
         </div>
-      
+
         <div class="table-body">
             <table id="Table1" class="table table-striped">
                 <thead>
                     <tr>
-                        <th style='width:53px;'>序</th>
+                        <th style='width:53px;'>#</th>
                         <th style='width:103px;'>枚举值</th>
                         <th style='width:103px;'>名称</th>
                         <th>枚举信息</th>
+                        <th style='width:30px;'>子项？</th>
                         <th style='width:53px;'>操作</th>
                     </tr>
                 </thead>
@@ -249,7 +344,7 @@
                 </tr>
             </table>
         </div>
-
+        
         <div id="Msg"></div>
     </div>
 </body>

@@ -19,6 +19,38 @@
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <style>
+        #state {
+            top: 40px;
+            position: absolute;
+            right: 30px;
+            background: #fff;
+            border: 1px solid #009688;
+            padding: 0px;
+        }
+
+        #state ul {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #state li {
+            list-style-type: none;
+            padding: 0px;
+        }
+
+        #state li a {
+            color: #000000;
+            display: block;
+            line-height: 28px;
+            padding: 0px 10px;
+        }
+
+        #state li a:hover {
+            color: #fff;
+            background: #009688
+        }
+    </style>
     <base target="_self" />
     <script type="text/javascript">
         function Esc() {
@@ -55,7 +87,7 @@
                 newRow += "<td><a href='RegularExpressionEn.htm?&FK_Event=" + en.Tag + "&FK_MapData=" + en.FK_MapData + "&MyPK=" + en.MyPK + "&KeyOfEn=" + en.AttrOfOper + "'>" + en.Tag + "</a></td>";
                 newRow += "<td>" + en.Doc + "</td>";
                 newRow += "<td>" + en.Tag1 + "</td>";
-                newRow += "<td><a href=\"javascript:Delete('" + en.MyPK + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
+                newRow += "<td><a href=\"javascript:Delete('" + en.MyPK + "')\"><i class='iconfont icon-shanchu1'></i> 删除</a>";
                 newRow += "</td>";
                 newRow += "</tr>";
 
@@ -120,7 +152,7 @@
             var url = 'RegularExpressionEn.htm?FK_MapData=' + GetQueryString('FK_MapData');
             url += '&FK_Event=' + eventType;
             url += '&KeyOfEn=' + GetQueryString("KeyOfEn");
-            url += '&MyPK=' + GetQueryString('FK_MapData')+"_"+GetQueryString("KeyOfEn");
+            url += '&MyPK=' + GetQueryString('FK_MapData') + "_" + GetQueryString("KeyOfEn");
             url += '&tk=' + Math.random();
             window.location.href = url;
         }
@@ -135,55 +167,54 @@
         }
     </style>
 </head>
-<body onkeypress="Esc();" >
-    <form method="post" id="form1">
-        <div style="right:10px; position:absolute; z-index:100; top:-3px">
-            <input type="button" value="新建" id="Btn_Save" onclick="ShowHidden('state')" />
+<body onkeypress="Esc();">
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <span class="pull-right">
+                <input type="button" value="新建" id="Btn_Save"  class="cc-btn-tab"  onclick="ShowHidden('state')" />
+                <a href="http://doc.ccbpm.cn" target="_blank" class="cc-btn-tab" style="padding:6px 10px "> 帮助</a>
+            </span>
+            <strong> 为字段设置正则表达式</strong>
         </div>
-        <div style="margin: 8px">
-            <table id="Table1" style="width: 100%">
-                <caption>
-                    <div style="float: left">
-                        为字段设置正则表达式
-                        <a href="http://doc.ccbpm.cn" target="_blank"> <img src="../../../Img/Btn/Help.gif" />帮助</a>
-                    </div>
+        <form method="post" id="form1">
 
-                </caption>
-                <tr>
-                    <th>
-                        序
-                    </th>
-                    <th>
-                        事件
-                    </th>
-                    <th>
-                        事件内容
-                    </th>
-                    <th>
-                        提示信息
-                    </th>
-                    <th>
-                        操作
-                    </th>
-                </tr>
-            </table>
-            <fieldset style="border: 0px;">
-                &nbsp;&nbsp;
-                <div id="state" style="display: none; color: Gray">
-                    <ul>
-                        <li><a href="javascript:RegularExpressionEn('onblur');">onblur - 失去焦点</a> </li>
-                        <li><a href="javascript:RegularExpressionEn('onchange');">onchange - 内容变化</a> </li>
-                        <li><a href="javascript:RegularExpressionEn('onclick');">onclick - 单击</a> </li>
-                        <li><a href="javascript:RegularExpressionEn('ondblclick');">ondblclick - 双击</a> </li>
-                        <li><a href="javascript:RegularExpressionEn('onkeypress');">onkeypress - 按下键盘</a> </li>
-                        <li><a href="javascript:RegularExpressionEn('onkeyup');">onkeyup - 按上键盘</a> </li>
-                        <li>
-                            <a href="javascript:RegularExpressionEn('onsubmit');">onsubmit - 表单提交</a>
-                        </li>
-                    </ul>
-                </div>
-            </fieldset>
-        </div>
-    </form>
+            <div>
+                <table id="Table1" style="width: 100%">
+
+                    <tr>
+                        <th>
+                            序
+                        </th>
+                        <th>
+                            事件
+                        </th>
+                        <th>
+                            事件内容
+                        </th>
+                        <th>
+                            提示信息
+                        </th>
+                        <th>
+                            操作
+                        </th>
+                    </tr>
+                </table>
+
+            </div>
+        </form>
+    </div>
+    <div id="state" style="display: none; color: Gray">
+        <ul>
+            <li><a href="javascript:RegularExpressionEn('onblur');">onblur - 失去焦点</a> </li>
+            <li><a href="javascript:RegularExpressionEn('onchange');">onchange - 内容变化</a> </li>
+            <li><a href="javascript:RegularExpressionEn('onclick');">onclick - 单击</a> </li>
+            <li><a href="javascript:RegularExpressionEn('ondblclick');">ondblclick - 双击</a> </li>
+            <li><a href="javascript:RegularExpressionEn('onkeypress');">onkeypress - 按下键盘</a> </li>
+            <li><a href="javascript:RegularExpressionEn('onkeyup');">onkeyup - 按上键盘</a> </li>
+            <li>
+                <a href="javascript:RegularExpressionEn('onsubmit');">onsubmit - 表单提交</a>
+            </li>
+        </ul>
+    </div>
 </body>
 </html>

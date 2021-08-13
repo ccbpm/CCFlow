@@ -1391,3 +1391,22 @@ body .layer-class .layui-layer-setwin{ color:#fff;}
 .userbox .box1{ border: 1px solid #ccc; min-height: 36px; line-height: 36px;}
 .userbox .box2{ line-height: 30px;}
 .userbox a:hover{text-decoration: underline;}
+
+
+.cs-content-box fieldset {padding:0px;margin:0px 0px 18px;font-size:14px;border-bottom:1px solid #2f4050;}
+.cs-content-box fieldset:last-child {border-bottom:0px;}
+.cs-content-box legend {position:relative;margin-bottom:0px;font-size:15px;font-weight:bold;line-height:45px; padding:0px 10px; background: #f3f7ff; color: #009688; width:  calc(100% - 16px);}
+.cs-content-box legend label{ }
+.cs-content-box fieldset li {line-height:24px;font-size:13px;}
+.cs-content-box fieldset a {color:#009688;text-decoration:none;}
+.cs-content-box fieldset a:hover{color:#428dff;}
+.cs-content-box .fieldset-main {padding:0 23px;}
+.cs-content-box .cs-help {position:relative;margin-top:0;padding:10px 10px 10px;}
+.cs-content-box  #help {border-bottom:0px;}
+.cs-content-box .cs-help ul {margin:15px 0px 5px;padding:0px;}
+.cs-content-box .cs-help ul li {list-style-type:none;padding:2px 0px;}
+.cs-content-box .help-title {position:absolute;top:0px;font-weight:bold;color:#009688;font-size:15px;line-height:45px;background: #f3f7ff;width:100%;left: 0px;}
+.cs-content-box fieldset  input[type="radio"] {border-color:#009688;}
+.cs-content-box fieldset legend input[type="radio"] {vertical-align:middle;margin:0px;}
+.cs-content-box .ico-help {margin:0px 10px;vertical-align:middle; width:0px;}
+.cs-content-box .form-instructor img {margin-right:6px;vertical-align:-5px;}

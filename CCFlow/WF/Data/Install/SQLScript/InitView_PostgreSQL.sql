@@ -40,7 +40,7 @@ TaskSta,
 ListType,
 Sender,
 AtPara,
-Domain
+Domain,OrgNo
 )
 AS
 
@@ -62,7 +62,7 @@ A.TaskSta,
 0 as ListType,
 A.Sender,
 A.AtPara,
-A.Domain
+A.Domain,A.OrgNo
 FROM  WF_GenerWorkFlow A, WF_GenerWorkerlist B
 WHERE     (B.IsEnable = 1) AND (B.IsPass = 0)
  AND A.WorkID = B.WorkID AND A.FK_Node = B.FK_Node AND A.WFState!=0 AND WhoExeIt!=1
@@ -85,7 +85,7 @@ A.TodoEmpsNum,
 1 as ListType,
 B.Rec as Sender,
 '@IsCC=1'||A.AtPara as AtPara,
-A.Domain
+A.Domain,A.OrgNo
   FROM WF_GenerWorkFlow A, WF_CCList B WHERE A.WorkID=B.WorkID AND  B.Sta <=1 AND B.InEmpWorks = 1 AND A.WFState!=0;
   
    

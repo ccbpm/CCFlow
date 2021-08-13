@@ -64,6 +64,7 @@
             $("#Msg").html("");
         });
         var fk_MapData = GetQueryString("FK_MapData");
+        var idx = 0;
         function InitPage() {
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
             mapAttrs.Retrieve("FK_MapData", fk_MapData, "Idx");
@@ -76,55 +77,85 @@
                     || attr.KeyOfEn == "FK_NY" || attr.KeyOfEn == "MyNum"|| attr.KeyOfEn == "AtPara"|| attr.KeyOfEn == "BillState"|| attr.KeyOfEn == "Starter"|| attr.KeyOfEn == "StarterName") {
                     continue;
                 }
-               
+                idx++;
+
                 var str = "<tr>";
-                str += "<td style='display:none'><input type='hidden' value='" + attr.MyPK + "'></input></td>";
-                //判断是否string
-                if (attr.MyDataType == 1 || attr.MyDataType == '1') {
-                    str += "<td><a href='javascript:void(0)' onclick=setWidth('" + attr.MyPK + "')>" + attr.KeyOfEn + "</a><input type='hidden' value='" + attr.KeyOfEn + "'/></td>";
-                } else {
-                    str += "<td>" + attr.KeyOfEn + "<input type='hidden' value='" + attr.KeyOfEn + "'></input></td>";
-                }
-                str += "<td ><input name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + attr.Name + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:100px;' /></td>";
-
-                str += "<td ><select disabled='true' id=\"TB_MyDataType_" + (i + 1) + "\"   style='width:80px;'><option value ='1'>字符型</option><option value ='2'>整数型</option><option value ='3'>浮点型</option><option value ='4'>Boolean型(是/否)</option>";
-                str += "<option value = '5'>双精度型</option><option value='6'>日期型</option><option value='7'>日期时间型</option> <option value='8'>金额型</option></select ></td > ";
-
-                if (attr.MyDataType == '1') {
-
-                    str += "<td ><input name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + attr.MaxLen + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:60px;' /></td>";
-                } else {
-                    str += "<td ><input disabled='true' name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:60px;' /></td>";
-                
-                }
-                str += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIIsEnable' id='TB_UIIsEnable_" + (i + 1) + "' type='checkbox' />只读</label></td>";
-                str += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIVisible' id='TB_UIVisible_" + (i + 1) + "' type='checkbox' />可见</label></td>";
-                str += "<td><label class='checkbox' ><input onclick='checkclick(this," + i + ");' class='UIIsInput' id='TB_UIIsInput_" + (i + 1) +  "' type='checkbox' />必填</label></td>";
-
-                str += "<td ><input name=\"TB_" + attr.KeyOfEn + "_Idx\" type=\"text\" value=\"" + attr.Idx + "\" id=\"TB_" + attr.KeyOfEn + "_Idx\"   style='width:30px;' /></td>";
-
-                str +="<td><a class='easyui-linkbutton' data-options='iconCls:&#39;icon-delete&#39;' href=\"javascript:Delete('" + attr.MyPK + "');\" >删除</a></td>";
-                //str += "<td><a href='javascript:void(0)' onclick='up(this, 3)' class='up'>上移</a> <a href='javascript:void(0)' onclick='down(this, 3)' class='down'>下移</a> - " + del;
-
-                //str += "</td>";
+                str += TrRow(attr, idx);
                 str += "</tr>";
                 $("table").append(str);
                 //给select框赋值
-                $("#TB_MyDataType_" + (i + 1)).val(attr.MyDataType);
-                $("#TB_UIIsEnable_" + (i + 1)).val(attr.UIIsEnable);
-                $("#TB_UIVisible_"+ (i + 1) ).val(attr.UIVisible);
-                $("#TB_UIIsInput_" + (i + 1)).val(attr.UIIsInput);
+                $("#TB_MyDataType_" + (idx + 1)).val(attr.MyDataType);
+                $("#TB_UIIsEnable_" + (idx + 1)).val(attr.UIIsEnable);
+                $("#TB_UIVisible_" + (idx + 1) ).val(attr.UIVisible);
+                $("#TB_UIIsInput_" + (idx + 1)).val(attr.UIIsInput);
                 if (attr.UIIsEnable == 1) {
-                    $("#TB_UIIsEnable_" + (i + 1)).prop("checked", "true");
+                    $("#TB_UIIsEnable_" + (idx + 1)).prop("checked", "true");
                 }
                 if (attr.UIVisible == 1) {
-                    $("#TB_UIVisible_" + (i + 1)).prop("checked", "true");
+                    $("#TB_UIVisible_" + (idx + 1)).prop("checked", "true");
                 }
                 if (attr.UIIsInput == 1) {
-                    $("#TB_UIIsInput_" + (i + 1)).prop("checked", "true");
+                    $("#TB_UIIsInput_" + (idx + 1)).prop("checked", "true");
                 }
             }
             
+        }
+
+        function TrRow(attr,idx) {
+            var str = "";
+            str += "<td style='text-align:center'>" + idx + "</td>";
+            str += "<td style='display:none'><input type='hidden' value='" + attr.MyPK + "'></input></td>";
+            //判断是否string
+            if (attr.MyDataType == 1 || attr.MyDataType == '1') {
+                str += "<td><a href='javascript:void(0)' onclick=setWidth('" + attr.MyPK + "')>" + attr.KeyOfEn + "</a><input type='hidden' value='" + attr.KeyOfEn + "'/></td>";
+            } else {
+                str += "<td>" + attr.KeyOfEn + "<input type='hidden' value='" + attr.KeyOfEn + "'></input></td>";
+            }
+            str += "<td ><input name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + attr.Name + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:100px;' /></td>";
+
+            str += "<td ><select disabled='true' id=\"TB_MyDataType_" + (idx + 1) + "\"   style='width:80px;'><option value ='1'>字符型</option><option value ='2'>整数型</option><option value ='3'>浮点型</option><option value ='4'>Boolean型(是/否)</option>";
+            str += "<option value = '5'>双精度型</option><option value='6'>日期型</option><option value='7'>日期时间型</option> <option value='8'>金额型</option></select ></td > ";
+
+            if (attr.MyDataType == '1') {
+
+                str += "<td ><input name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + attr.MaxLen + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:60px;' /></td>";
+            } else {
+                str += "<td ><input disabled='true' name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:60px;' /></td>";
+
+            }
+            str += "<td><label class='checkbox' ><input onclick='checkclick(this," + idx + ");' class='UIIsEnable' id='TB_UIIsEnable_" + (idx + 1) + "' type='checkbox' />只读</label></td>";
+            str += "<td><label class='checkbox' ><input onclick='checkclick(this," + idx + ");' class='UIVisible' id='TB_UIVisible_" + (idx + 1) + "' type='checkbox' />可见</label></td>";
+            str += "<td><label class='checkbox' ><input onclick='checkclick(this," + idx + ");' class='UIIsInput' id='TB_UIIsInput_" + (idx + 1) + "' type='checkbox' />必填</label></td>";
+
+            str += "<td ><input name=\"TB_" + attr.KeyOfEn + "_Idx\" type=\"text\" value=\"" + attr.Idx + "\" id=\"TB_" + attr.KeyOfEn + "_Idx\"   style='width:30px;' /></td>";
+
+            str += "<td><a class='easyui-linkbutton' data-options='iconCls:&#39;icon-delete&#39;' href=\"javascript:Delete('" + attr.MyPK + "');\" >删除</a>";
+            str += "<a style='padding-left:10px' class='easyui-linkbutton' data-options='iconCls:&#39;icon-delete&#39;' href=\"javascript:ReField('" + attr.MyPK + "','" + attr.KeyOfEn + "','" + attr.Name + "'," + idx + ");\" >重命名</a></td>";
+
+            return str;
+        }
+        function ReField(mypk,keyOfEn,name,idx,) {
+            if (window.confirm('您确定重新命名改字段吗？') == false)
+                return;
+            var newKeyOfEn = window.prompt("请输入新的字段英文名称", keyOfEn);
+            if (newKeyOfEn.trim() == "" || newKeyOfEn == keyOfEn) {
+                alert("新字段名称不能为空或者未发生变化");
+                return;
+            }
+            var newName = window.prompt("请输入新的字段中文名称", name);
+            if (newName.trim() == "")
+                newName = name;
+            var fk_mapData = GetQueryString("FK_MapData");
+            var mapFool = new Entity("BP.WF.Template.MapFrmFool", fk_mapData);
+            var data = mapFool.DoMethodReturnString("DoChangeFieldName",keyOfEn, newKeyOfEn, newName);
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+            var tr = $("#table1").find("tr").eq(idx);
+            //重新设置改行信息
+            var attr = new Entity("BP.Sys.MapAttr", fk_mapData + "_" + newKeyOfEn);
+            tr.html("").append(TrRow(attr, idx));
         }
         //已经存表的删除
         function Delete(mypk) {
@@ -161,9 +192,9 @@
             });
 
             if (ischeckedall)
-                $('#KeyOfEn_' + rowstype)[0].checked = true;
+                $('#KeyOfEn_' + rowstype + "_" + index)[0].checked = true;
             else
-                $('#KeyOfEn_' + rowstype)[0].checked = false;
+                $('#KeyOfEn_' + rowstype + "_" + index)[0].checked = false;
         }
         function Btn_Save_Click() {
 
@@ -172,58 +203,58 @@
             $.each(trs, function (i, tr) {
                 if (i > 0) {
                     var tdArr = $(this).children();
-                    var myPK = tdArr.eq(0).find('input').val();
+                    var myPK = tdArr.eq(1).find('input').val();
                     if (myPK != undefined) {//mypk有值，则更新
                         var mapAttr = new Entity("BP.Sys.MapAttr", myPK);
-                        mapAttr.Name = tdArr.eq(2).find('input').val();
-                        mapAttr.MyDataType = tdArr.eq(3).find('select').val();
-                        mapAttr.MaxLen = tdArr.eq(4).find('input').val();
-                        if (tdArr.eq(5).find("input:checkbox:checked").prop('checked')==true) {
+                        mapAttr.Name = tdArr.eq(3).find('input').val();
+                        mapAttr.MyDataType = tdArr.eq(4).find('select').val();
+                        mapAttr.MaxLen = tdArr.eq(5).find('input').val();
+                        if (tdArr.eq(6).find("input:checkbox:checked").prop('checked')==true) {
                             mapAttr.UIIsEnable = 1;
                         } else {
                             mapAttr.UIIsEnable = 0;
                         }
-                        if (tdArr.eq(6).find("input:checkbox:checked").prop('checked')==true) {
+                        if (tdArr.eq(7).find("input:checkbox:checked").prop('checked')==true) {
                             mapAttr.UIVisible = 1;
                         } else {
                             mapAttr.UIVisible = 0;
                         }
-                        if (tdArr.eq(7).find("input:checkbox:checked").prop('checked')==true) {
+                        if (tdArr.eq(8).find("input:checkbox:checked").prop('checked')==true) {
                             mapAttr.UIIsInput = 1;
                         } else {
                             mapAttr.UIIsInput = 0;
                         }
                         
-                        mapAttr.Idx = tdArr.eq(8).find('input').val();
+                        mapAttr.Idx = tdArr.eq(9).find('input').val();
                         mapAttr.Update();
                         
                     } else {//mypk没有值，则新增
                         var mapAttr = new Entity("BP.Sys.MapAttr");
                         mapAttr.MyPK = fk_MapData + "_" + tdArr.eq(1).find('input').val();
                         if (mapAttr.IsExits() == true) {
-                            alert('字段[' + tdArr.eq(1).find('input').val() + "]已经存在");
+                            alert('字段[' + tdArr.eq(2).find('input').val() + "]已经存在");
                             return;
                         }
-                        mapAttr.KeyOfEn = tdArr.eq(1).find('input').val();
-                        mapAttr.Name = tdArr.eq(2).find('input').val();
-                        mapAttr.MyDataType = tdArr.eq(3).find('select').val();
-                        mapAttr.MaxLen = tdArr.eq(4).find('input').val();
-                        if (tdArr.eq(5).find("input:checkbox:checked").prop('checked')==true) {
+                        mapAttr.KeyOfEn = tdArr.eq(2).find('input').val();
+                        mapAttr.Name = tdArr.eq(3).find('input').val();
+                        mapAttr.MyDataType = tdArr.eq(4).find('select').val();
+                        mapAttr.MaxLen = tdArr.eq(5).find('input').val();
+                        if (tdArr.eq(6).find("input:checkbox:checked").prop('checked')==true) {
                             mapAttr.UIIsEnable = 1;
                         } else {
                             mapAttr.UIIsEnable = 0;
                         }
-                        if (tdArr.eq(6).find("input:checkbox:checked").prop('checked')==true) {
+                        if (tdArr.eq(7).find("input:checkbox:checked").prop('checked')==true) {
                             mapAttr.UIVisible = 1;
                         } else {
                             mapAttr.UIVisible = 0;
                         }
-                        if (tdArr.eq(7).find("input:checkbox:checked").prop('checked')==true) {
+                        if (tdArr.eq(8).find("input:checkbox:checked").prop('checked')==true) {
                             mapAttr.UIIsInput = 1;
                         } else {
                             mapAttr.UIIsInput = 0;
                         }
-                        mapAttr.Idx = tdArr.eq(8).find('input').val();
+                        mapAttr.Idx = tdArr.eq(9).find('input').val();
                         mapAttr.FK_MapData = fk_MapData;
                         mapAttr.UIWidth = 100;
                         mapAttr.UIHeight = 23;
@@ -300,7 +331,7 @@
         </div>
         <Table id="table1" class='Table' border='1' cellspacing='0' cellpadding='0' style='width:100%'>
             <TR>
-                <!--<TD class='GroupTitle' style='text-align:center;width:50px'>序</TD>-->
+                <th style='text-align:center;width:50px'>序</th>
                 <th >字段</th>
                 <th >中文名</th>
                 <th >类型</th>

@@ -24,7 +24,6 @@
 
         function InitPage() {
 
-
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
             mapAttrs.Retrieve("FK_MapData", frmID);
 
@@ -34,8 +33,6 @@
             document.getElementById("CB_Key_0").checked = isSearchKey;
 
             document.getElementById("CB_Key_1").checked = isSearchKey == true ? false : true;
-
-
 
             var StringSearchKeys = mapData.GetPara("StringSearchKeys");
             var RptSearchKeys = mapData.GetPara("RptSearchKeys");
@@ -233,11 +230,11 @@
             </tr>
             <tr>
                 <th>
-                    增加隐藏查询条件以;符号分割
+                    增加隐藏查询条件and,or
                 </th>
             </tr>
             <tr>
-                <th> <input id="TB_HidenField" name="TB_HidenField" type="text" value="" placeholder="例如:Age,=,18;Sex,=,0" style="width:98%" /></th>
+                <th> <input id="TB_HidenField" name="TB_HidenField" type="text" value="" placeholder="例如:Age=18 AND Name like '%XX%'" style="width:98%" /></th>
             </tr>
         </table>
         <input type="button" value="保存" onclick="Save();" />

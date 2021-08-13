@@ -65,7 +65,7 @@
         }
 
         .item-other {
-            width: 10%;
+            width: 8%;
             max-width: 10%;
         }
 
@@ -77,7 +77,7 @@
 
         .flow .row .system-item {
             box-sizing: border-box;
-            width: 70%;
+            width: 66%;
             padding-left: 20px;
             cursor: pointer;
         }
@@ -92,7 +92,7 @@
         }
 
         .item-menu {
-            width: 30%;
+            width: 26%;
             cursor: pointer;
         }
 
@@ -114,7 +114,7 @@
         }
 
         .module-name {
-            width: 60%;
+            width: 54%;
             padding-left: 12px;
             cursor: pointer;
         }
@@ -140,8 +140,8 @@
                     {{expandAll ? '折叠' : '展开'}}
                 </button>
                 <!--<div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="NewSys()">
-                    <i class="icon-plus" style="margin-right: 6px"></i>创建系统
-                </div>-->
+            <i class="icon-plus" style="margin-right: 6px"></i>创建系统
+        </div>-->
             </div>
             <div class="item item-other">
                 <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="NewSys()">
@@ -153,14 +153,12 @@
             </div>
             <div class="item item-other">菜单类型</div>
             <div class="item item-content">
-
-             
-
                 <!--<div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="ManageSys()">
-                    <i class="icon-plus" style="margin-right: 6px"></i>系统管理
-                </div>-->
+            <i class="icon-plus" style="margin-right: 6px"></i>系统管理
+        </div>-->
 
             </div>
+            <div class="item item-other">启用？</div>
             <div class="item item-op">权限</div>
             <div class="item item-op">操作</div>
         </div>
@@ -168,20 +166,31 @@
             <div class="wrapper" v-for="(item,index) in flowNodes" :key="index" :data-id="item.No" :data-pid="item.ParentNo"
                  :data-sysid="item.No">
                 <div class="row item-top-dp" @click="item.open = !item.open" :data-sysno="item.No" :data-name="item.Name"
-                     :data-idx="index">
+                     :data-idx="index" style="background-color: rgba(227, 236, 243, 0.589);">
                     <div class="item item-other" style="text-align: center">
                         <i v-if="item.children.length > 0" class="layui-icon"
                            :class="item.open ? 'layui-icon-up':'layui-icon-right'"></i>
                         <i v-else class="layui-icon layui-icon-subtraction"></i>
                     </div>
-                    <div class="item system-item " style="text-align: left; background-color:rgba(227, 236, 243, 0.589);"
+                    <div class="item system-item " style="text-align: left;background-color: rgba(227, 236, 243, 0.589);"
                          :data-sysno="item.No" :data-name="item.Name" :data-idx="index">
                         <!--<i class="layui-icon layui-icon-set" style="margin-right: 8px"></i>-->
                         <!--<span @click.stop="Edit(item.No,item.Name,'BP.GPM.Menu2020.MySystem')">{{item.Name}}</span>-->
                         <span><i :class="item.Icon"></i>{{item.Name}}</span>
                     </div>
-                    <div class="item item-op" @click.stop v-html="item.itemCtrlWayText"></div>
-                    <div class="item item-op">
+                    <div class="item item-other" style="background-color: rgba(227, 236, 243, 0.589);">
+                        <form class="layui-form" action="">
+                            <div class="layui-form-item" style="margin: 0">
+                                <div class="layui-input-block" style="margin: 0" :data-id="item.No"
+                                     @click="changeSystemEnableStatus(item,this)">
+                                    <input type="checkbox" lay-skin="switch" lay-text="ON|OFF"
+                                           :checked="parseInt(item.IsEnable) == 1" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="item item-op" @click.stop v-html="item.itemCtrlWayText" style="background-color: rgba(227, 236, 243, 0.589);"></div>
+                    <div class="item item-op" style="background-color: rgba(227, 236, 243, 0.589);">
                         <button @click.stop :data-sysno="item.No" :data-name="item.Name" :data-idx="index"
                                 class="layui-btn layui-btn-primary layui-border-black layui-btn-sm t-btn">
                             <i class="layui-icon layui-icon-down layui-font-12"></i>系统
@@ -209,6 +218,17 @@
                                 <!--<span @click.stop="Edit(module.No,module.Name,'BP.GPM.Menu2020.Module')">{{module.Name}}</span>-->
 
                             </div>
+                            <div class="item item-other">
+                                <form class="layui-form" action="">
+                                    <div class="layui-form-item" style="margin: 0">
+                                        <div class="layui-input-block" style="margin: 0" :data-id="module.No"
+                                             @click="changeMethodEnableStatus(module,this)">
+                                            <input type="checkbox" lay-skin="switch" lay-text="ON|OFF"
+                                                   :checked="parseInt(module.IsEnable) == 1" />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                             <div class="item item-op" v-html="module.moduleCtrlWayText"></div>
                             <div class="item item-op">
                                 <button @click.stop
@@ -217,6 +237,7 @@
                                         :data-idx="idx">
                                     <i class="layui-icon layui-icon-down layui-font-12"></i> 模块
                                 </button>
+                                
                             </div>
                         </div>
                         <div v-show="module.open || module.children.length === 0" ref="child-row" :data-pid="module.No"
@@ -241,6 +262,17 @@
                                 </div>
                                 <div class="item item-other" v-html="menu.MenuModel"></div>
                                 <div class="item item-content" v-html="menu.Docs"></div>
+                                <div class="item item-other">
+                                    <form class="layui-form" action="">
+                                        <div class="layui-form-item" style="margin: 0">
+                                            <div class="layui-input-block" style="margin: 0" :data-id="menu.No"
+                                                 @click="changeMenuEnableStatus(menu,this)">
+                                                <input type="checkbox" lay-skin="switch" lay-text="ON|OFF"
+                                                       :checked="parseInt(menu.IsEnable) == 1" />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                                 <div class="item item-op" v-html="menu.MenuCtrlWayText"></div>
 
                                 <div class="item item-op">

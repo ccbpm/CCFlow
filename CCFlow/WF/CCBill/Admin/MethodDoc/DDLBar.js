@@ -33,10 +33,7 @@ function InitBar(optionKey) {
      html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";*/
 
 
-    html += "<button  id='Btn_Save' class='cc-btn-tab btn-save'  onclick='Save()' >保存</button>";
-
-    html += "nbsp;nbsp;";
-
+    html += "<button  id='Btn_Save' class='cc-btn-tab btn-save'  style='margin-right:50px;' onclick='Save()' >保存</button>";
 
     //html += "更换主题：";
     //html += " <select onchange=selectTheme() id=select>";

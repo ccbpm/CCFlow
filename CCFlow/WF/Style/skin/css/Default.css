@@ -188,7 +188,7 @@ a.ablue{ color:#134da5;text-decoration: none;}a.ablue:hover{color:#009688}
 .btn-light-red{background-color:#9d0e29}
 .btn-light-red:active,.btn-light-red:focus,.btn-light-red:hover{background-color:#f03256}
 
-.cs-main-box{position:absolute;top:50px;left:0px;width:100%;height:calc(100% - 50px); background:url(../images/dian.jpg);}
+.cs-main-box{position:absolute;top:50px;left:0px;width:100%;height:calc(100% - 50px); background:url(../images/dian.jpg);overflow: scroll;}
 .cs-main-box .process-step{background-image:linear-gradient( #fefefe, #e1e3e9);border-color: #565656; height:32px; line-height:32px;}
 .cs-main-box .process-step:hover{background-image:linear-gradient(#e1e3e9, #e1e3e9);}
 .cs-main-box .process-lab span{color:#4e7cba;font-size: 12px;}

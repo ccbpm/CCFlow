@@ -121,179 +121,193 @@
         .cs-content-box {
             padding: 0 5px;
         }
+        .table a {
+            color: #1c60be
+        }
+
+        .table ul {
+            padding: 10px 0px;
+        }
+
+        .table li {
+            list-style-type: none;
+            line-height: 26px;
+        }
     </style>
 </head>
 <body>
-    <div id="bar">
+    <div class="container-full">
+        <div id="bar">
+        </div>
+        <form id="cc">
+            <table id="Table1" class="table">
+                <tr>
+                    <th colspan="2">
+                        基本信息
+                    </th>
+                </tr>
+                <!--<tr>
+                    <td>
+                        <a href="javascript:alert('显示在窗口的文字，比如:搜索单据.')">标题</a>
+                    </td>
+                    <td>
+                        <input type="text" id="TBPara_Title" name="TBPara_Title" style="width: 99%;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        弹窗属性
+                    </td>
+                    <td>
+                        高度:<input type="text" id="TB_H" name="TB_H" style="width: 80px; text-align: right" />
+                        宽度:<input type="text" id="TB_W" name="TB_W" style="width: 80px; text-align: right" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        高级设置
+                    </td>
+                    <td>
+                        数据源类型
+                        <select id="DDL_DBType" name="DDL_DBType">
+                            <option value="0">执行SQL</option>
+                            <option value="1">执行url返回JSON</option>
+                            <option value="2">执行CCFromRef.js返回JSON</option>
+                        </select>
+                        选择类型:
+                        <input type="radio" id="RBPara_SelectType_0" name="RBPara_SelectType" value="0" />
+                        <label for="RBPara_SelectType_0">
+                            单选
+                        </label>
+                        <input type="radio" id="RBPara_SelectType_1" name="RBPara_SelectType" value="1" />
+                        <label for="RBPara_SelectType_1">
+                            多选
+                        </label>
+                    </td>
+                </tr>-->
+                <tr>
+                    <td>
+                        <a href="javascript:alert('显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.')">搜索提示</a>
+                    </td>
+                    <td>
+                        <input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width: 99%;" />
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2">
+                        <a href="javascript:ShowHidden('PopValSearchCond')">查询条件设置</a>
+                        <div id="PopValSearchCond" style="color: Gray; display: none">
+                            <ul>
+                                <li>该设置对table查询有效,(可以为空)：日期的默认值是JS函数表达式.</li>
+                                <li>SQL格式为:</li>
+                                <li>$Para=Dept#Label=所在班级#ListSQL=Select No,Name FROM Demo_BanJi </li>
+                                <li>$Para=XB#Label=性别#EnumKey=XB</li>
+                                <li>$Para=DTFrom#Label=注册日期从#DefVal=(new Date( (new Date().setDate(-30 + new Date().getDate()))))</li>
+                                <li>$Para=DTTo#Label=到#DefVal=(new Date())</li>
+                                <li>URL格式为:</li>
+                                <li>$Para=Dept#Label=所在班级#ListURL=/DataUser/Handler.ashx?xxx=sss </li>
+                                <li>执行CCFromRef.js返回JSON格式为:</li>
+                                <li>$Para=Dept#Label=所在班级#ListFuncName=MyFunc </li>
+                            </ul>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <textarea id="TB_Tag1" name="TB_Tag1" style="width: 98%; height: 60px;">
+                </textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2">
+                        <a href="javascript:ShowHidden('TablePage')">数据源</a>
+                        <div id="TablePage" style="color: Gray; display: none">
+                            <ul>
+                                <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
+                                <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM WF_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+                                <li>必须有：@PageCount @PageSize @Key 三个参数,分别标识:@PageCount =第几页, @PageSize=每页大小. @Key=关键字</li>
+                                <li>
+                                    比如For SQLServer: SELECT TOP @PageSize * FROM ( SELECT row_number() over(order by
+                                    t.No) as rownumber,No,Name,Tel,Email FROM Demo_Student WHERE Name LIKE '%@Key%'
+                                    ) A WHERE rownumber > @PageCount
+                                    <br />
+                                    总条数: SELECT COUNT(no) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%')
+                                </li>
+                                <li>
+                                    比如For Oracle: SELECT No,Name,Email,Tel FROM Demo_Student WHERE (Name LIKE '%@Key%'
+                                    OR No LIKE '%@Key%')
+                                </li>
+                                <li>
+                                    比如For MySQL: SELECT No,Name,Email,Tel FROM Demo_Student WHERE (Name LIKE '%@Key%'
+                                    OR No LIKE '%@Key%')
+                                </li>
+                                <li>添加的查询条件在为执行SQL查询时SQL语句后面不添加，解析的时候自动添加，其余的查询方式需要包含添加的查询条件</li>
+                            </ul>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <textarea id="TB_Tag2" name="TB_Tag2" style="width: 98%; height: 23px;">
+                </textarea>
+                    </td>
+                </tr>
+                <!--
+                <tr>
+                <th colspan="2">
+                <a href="javascript:ShowHidden('TablePage_Count')">总条数</a>
+                 <br />
+                 <div id="TablePage_Count" style="color:Gray; display:none">
+                 <ul>
+                 <li>比如For SQLServer: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB  </li>
+                 <li>比如For Oracle: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB  </li>
+                 <li>比如For MySQL: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB  </li>
+                 </ul>
+                 </div></th>
+                </tr>
+                <tr>
+                <td colspan="2">
+                <textarea id="TB_Tag3" name="TB_Tag3" style="width:99%; height: 23px;">
+                </textarea>
+
+                </td>
+                </tr>
+                -->
+                <tr>
+                    <th colspan="2">
+                        <a href="javascript:ShowHidden('divTag')">数据列名与中文意思对照</a>
+                        <div id="divTag" style="color: Gray; display: none">
+                            <ul>
+                                <li>该选项可以为空,在右上角的列表里查询或点树树干的数据源出现的列表,需要用中文显示列头..</li>
+                                <li>格式为:</li>
+                                <li>例如: No=编号,Name=名称,Addr=地址,Tel=电话,Email=邮件</li>
+                            </ul>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="text" id="TB_Tag" name="TB_Tag" style="width: 99%;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <a href="javascript:ShowHidden('backFunction')">确定后执行的JS</a>,可以为空.
+                        <div id="backFunction" style="color: Gray; display: none">
+                            <ul>
+                                <li>该选项可以为空,弹出框确定后执行的JS，可以直接写方法名或者方法. </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="text" id="TB_Tag5" name="TB_Tag5" style="width: 99%;" />
+                    </td>
+                </tr>
+            </table>
+        </form>
     </div>
-    <form id="cc">
-        <table id="Table1" style="width: 99%;">
-            <tr>
-                <th colspan="2">
-                    基本信息
-                </th>
-            </tr>
-            <!--<tr>
-        <td>
-            <a href="javascript:alert('显示在窗口的文字，比如:搜索单据.')">标题</a>
-        </td>
-        <td>
-            <input type="text" id="TBPara_Title" name="TBPara_Title" style="width: 99%;" />
-        </td>
-    </tr>
-    <tr>
-        <td>
-            弹窗属性
-        </td>
-        <td>
-            高度:<input type="text" id="TB_H" name="TB_H" style="width: 80px; text-align: right" />
-            宽度:<input type="text" id="TB_W" name="TB_W" style="width: 80px; text-align: right" />
-        </td>
-    </tr>
-
-    <tr>
-        <td>
-            高级设置
-        </td>
-        <td>
-            数据源类型
-            <select id="DDL_DBType" name="DDL_DBType">
-                <option value="0">执行SQL</option>
-                <option value="1">执行url返回JSON</option>
-                <option value="2">执行CCFromRef.js返回JSON</option>
-            </select>
-            选择类型:
-            <input type="radio" id="RBPara_SelectType_0" name="RBPara_SelectType" value="0" />
-            <label for="RBPara_SelectType_0">
-                单选
-            </label>
-            <input type="radio" id="RBPara_SelectType_1" name="RBPara_SelectType" value="1" />
-            <label for="RBPara_SelectType_1">
-                多选
-            </label>
-        </td>
-    </tr>-->
-            <tr>
-                <td>
-                    <a href="javascript:alert('显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.')">搜索提示</a>
-                </td>
-                <td>
-                    <input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width: 99%;" />
-                </td>
-            </tr>
-            <tr>
-                <th colspan="2">
-                    <a href="javascript:ShowHidden('PopValSearchCond')">查询条件设置</a>
-                    <div id="PopValSearchCond" style="color: Gray; display: none">
-                        <ul>
-                            <li>该设置对table查询有效,(可以为空)：日期的默认值是JS函数表达式.</li>
-                            <li>SQL格式为:</li>
-                            <li>$Para=Dept#Label=所在班级#ListSQL=Select No,Name FROM Demo_BanJi </li>
-                            <li>$Para=XB#Label=性别#EnumKey=XB</li>
-                            <li>$Para=DTFrom#Label=注册日期从#DefVal=(new Date( (new Date().setDate(-30 + new Date().getDate()))))</li>
-                            <li>$Para=DTTo#Label=到#DefVal=(new Date())</li>
-                            <li>URL格式为:</li>
-                            <li>$Para=Dept#Label=所在班级#ListURL=/DataUser/Handler.ashx?xxx=sss </li>
-                            <li>执行CCFromRef.js返回JSON格式为:</li>
-                            <li>$Para=Dept#Label=所在班级#ListFuncName=MyFunc </li>
-                        </ul>
-                    </div>
-                </th>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <textarea id="TB_Tag1" name="TB_Tag1" style="width: 98%; height: 60px;">
-                </textarea>
-                </td>
-            </tr>
-            <tr>
-                <th colspan="2">
-                    <a href="javascript:ShowHidden('TablePage')">数据源</a>
-                    <div id="TablePage" style="color: Gray; display: none">
-                        <ul>
-                            <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
-                            <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM WF_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
-                            <li>必须有：@PageCount @PageSize @Key 三个参数,分别标识:@PageCount =第几页, @PageSize=每页大小. @Key=关键字</li>
-                            <li>
-                                比如For SQLServer: SELECT TOP @PageSize * FROM ( SELECT row_number() over(order by
-                                t.No) as rownumber,No,Name,Tel,Email FROM Demo_Student WHERE Name LIKE '%@Key%'
-                                ) A WHERE rownumber > @PageCount
-                                <br />
-                                总条数: SELECT COUNT(no) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%')
-                            </li>
-                            <li>
-                                比如For Oracle: SELECT No,Name,Email,Tel FROM Demo_Student WHERE (Name LIKE '%@Key%'
-                                OR No LIKE '%@Key%')
-                            </li>
-                            <li>
-                                比如For MySQL: SELECT No,Name,Email,Tel FROM Demo_Student WHERE (Name LIKE '%@Key%'
-                                OR No LIKE '%@Key%')
-                            </li>
-                            <li>添加的查询条件在为执行SQL查询时SQL语句后面不添加，解析的时候自动添加，其余的查询方式需要包含添加的查询条件</li>
-                        </ul>
-                    </div>
-                </th>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <textarea id="TB_Tag2" name="TB_Tag2" style="width: 98%; height: 23px;">
-                </textarea>
-                </td>
-            </tr>
-            <!--
-    <tr>
-    <th colspan="2">
-    <a href="javascript:ShowHidden('TablePage_Count')">总条数</a>
-     <br />
-     <div id="TablePage_Count" style="color:Gray; display:none">
-     <ul>
-     <li>比如For SQLServer: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB  </li>
-     <li>比如For Oracle: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB  </li>
-     <li>比如For MySQL: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB  </li>
-     </ul>
-     </div></th>
-    </tr>
-    <tr>
-    <td colspan="2">
-    <textarea id="TB_Tag3" name="TB_Tag3" style="width:99%; height: 23px;">
-    </textarea>
-
-    </td>
-    </tr>
-    -->
-            <tr>
-                <th colspan="2">
-                    <a href="javascript:ShowHidden('divTag')">数据列名与中文意思对照</a>
-                    <div id="divTag" style="color: Gray; display: none">
-                        <ul>
-                            <li>该选项可以为空,在右上角的列表里查询或点树树干的数据源出现的列表,需要用中文显示列头..</li>
-                            <li>格式为:</li>
-                            <li>例如: No=编号,Name=名称,Addr=地址,Tel=电话,Email=邮件</li>
-                        </ul>
-                    </div>
-                </th>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <input type="text" id="TB_Tag" name="TB_Tag" style="width: 99%;" />
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <a href="javascript:ShowHidden('backFunction')">确定后执行的JS</a>,可以为空.
-                    <div id="backFunction" style="color: Gray; display: none">
-                        <ul>
-                            <li>该选项可以为空,弹出框确定后执行的JS，可以直接写方法名或者方法. </li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <input type="text" id="TB_Tag5" name="TB_Tag5" style="width: 99%;" />
-                </td>
-            </tr>
-        </table>
-    </form>
 </body>
 </html>

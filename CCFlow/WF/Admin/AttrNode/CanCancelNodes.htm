@@ -68,16 +68,16 @@
                 newRow = "<tr style='width:100%'><td class=Idx style='width:10%'>" + i + "</td>";
                 newRow += "<td style='width:40%'>第" + nd.Step + "步</td>";
                 if ($.inArray(nd.NodeID, rndsArr) > -1) {
-                    newRow += "<td style='width:50%'>" + "<input id='CB_" + nd.NodeID + "' name='CB_" + nd.NodeID + "' type='checkbox' value='" + nd.Name + "' checked='checked' /><label for='CB_" + nd.NodeID + "' >" + nd.Name + "</label></td>";
+                    newRow += "<td style='width:50%'>" + "<input id='CB_" + nd.NodeID + "' name='CB_" + nd.NodeID + "' type='checkbox' value='" + nd.Name + "' checked='checked' /><label for='CB_" + nd.NodeID + "' style='margin-bottom:-2px'>" + nd.Name + "</label></td>";
                 } else {
-                    newRow += "<td style='width:50%'>" + "<input id='CB_" + nd.NodeID + "' name='CB_" + nd.NodeID + "' type='checkbox' value='" + nd.Name + "' /><label for='CB_" + nd.NodeID + "' >" + nd.Name + "</label></td>";
+                    newRow += "<td style='width:50%'>" + "<input id='CB_" + nd.NodeID + "' name='CB_" + nd.NodeID + "' type='checkbox' value='" + nd.Name + "' /><label for='CB_" + nd.NodeID + "' style='margin-bottom:-2px'>" + nd.Name + "</label></td>";
                 }
                 newRow += "</tr>";
                 $("#table1 tr:last").after(newRow);
 
             }
 
-            $("#table1 tr:last").after(newBtn);
+            //$("#table1 tr:last").after(newBtn);
             return;
         }
 

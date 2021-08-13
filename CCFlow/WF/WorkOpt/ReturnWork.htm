@@ -191,11 +191,11 @@
 
             //获取当前节点属性,是否可以执行退回并原路返回的按钮？
             var node = new Entity("BP.WF.Node", pageData.FK_Node)
-            if (node.IsBackTracking == "0")
-                $('#btnIsBackTracking').css('display', 'block');
+            if (node.IsBackTracking == "1")
+                $('#btnIsBackTracking').show();
 
-            if (node.IsKillEtcThread == "0")
-                $('#btnIsKillEtcThread').css('display', 'block');
+            if (node.IsKillEtcThread == "1")
+                $('#btnIsKillEtcThread').show();
 
             $("section").show();
             $(".wait").hide();
@@ -358,7 +358,7 @@
 
         <div id="DIV_Doc">
             <textarea id="TB_Doc" name="TB_Doc" placeholder="请输入退回原因..."
-                      style="width: 100%; height:150px;border:solid 1px #ccc"
+                      style="width: 100%; height:100px;border:solid 1px #ccc"
                       maxlength="500" class="layui-textarea"></textarea>
         </div>
     </div>
@@ -367,16 +367,16 @@
         <div style="height:100px;">上传附件预留：该功能正在建设中</div>
     -->
 
-    <div class="form-inline" style="position: fixed;right: 10px;bottom: 40px;">
+    <div class="form-inline" style="position: fixed;right: 10px;bottom: 20px;">
 
-        <div id="btnIsBackTracking" style="margin-top:6px;float:left; display:none;">
+        <div id="btnIsBackTracking" style="margin-top:6px;float:left;display:none">
             <label>
                 <input type="checkbox" id="CB_IsBackTracking" style="float:left;margin-top:3px;" />
                 退回后并发送给我&nbsp;&nbsp;
             </label>
         </div>
 
-        <div id="btnIsKillEtcThread" style="margin-top:6px;float:left; display:none;">
+        <div id="btnIsKillEtcThread" style="margin-top: 6px;float: left;display: none">
             <label>
                 <input type="checkbox" id="CB_IsKillEtcThread" style="float:left;margin-top:3px;" />
                 全部子线程退回&nbsp;&nbsp;

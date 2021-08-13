@@ -303,7 +303,7 @@
 
         //返回.
         function Back() {
-            var url = window.location.href;
+           /* var url = window.location.href;
             if (GetQueryString("CondOrAnd") == null)
                 url = url.replace('CondDept.htm', 'List.htm');
             else {
@@ -311,7 +311,10 @@
                 url = url.replace('&CondOrAnd=' + GetQueryString("CondOrAnd"), '  ');
 
             }
-            window.location.href = url;
+            window.location.href = url;*/
+            /*parent.location.reload();
+           window.close();*/
+            window.parent.Condlist.closeCurrentTabs();
         }
     </script>
     <style type="text/css">

@@ -70,36 +70,41 @@
     </script>
 </head>
 <body>
-    <form id="cc">
-        <div style="right:10px; position:absolute; z-index:100; top:-3px">
-
-            <input type="button" value="保存" onclick="Save()" id="Btn_Save" =/ />
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <span class="pull-right">
+                <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+            </span>
+            <strong> 自动计算日期天数</strong>
         </div>
-        <table id="table" style="width: 100%;">
-            <caption>
-                自动计算日期天数
-            </caption>
-            <tr>
-                <td colspan="3" style="width: 95%;">
-                    选择开始日期:<select id="DDL_StarRDT" name="DDL_StarRDT"> </select>
-                    选择结束日期:<select id="DDL_EndRDT" name="DDL_EndRDT"> </select>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3" style="width: 95%;">
-                    <label> <input type="radio" value="0" name="RDTRadio" =/ /> 包含节假日</label>
-                    <label> <input type="radio" value="1" name="RDTRadio" =/ /> 不包含节假日</label>
-                    <label> <input type="button" value="节假日维护" target="_parent" onclick="window.location.href='../../../Comm/Sys/Holiday.htm'" /> </label>
-                </td>
-            </tr>
-        </table>
+        <form id="cc">
+           
+            <table id="table" class="table">
+               
+                <tr>
+                    <td colspan="3" style="width: 95%;">
+                        选择开始日期:<select id="DDL_StarRDT" name="DDL_StarRDT"> </select>
+                        选择结束日期:<select id="DDL_EndRDT" name="DDL_EndRDT"> </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="width: 95%;">
+                        <div class="form-group">
+                            <label> <input type="radio" value="0" name="RDTRadio" =/ /> 包含节假日</label>
+                            <label> <input type="radio" value="1" name="RDTRadio" =/ /> 不包含节假日</label>
+                        </div>
+                        <div class="form-group"> <input type="button" value="节假日维护" class="cc-btn-tab" target="_parent" onclick="window.location.href='../../../Comm/Sys/Holiday.htm'" />
+                        </div></td>
+                </tr>
+            </table>
 
 
-        <div id="Msg">
-        </div>
+            <div id="Msg">
+            </div>
 
 
-    </form>
+        </form>
+    </div>
 </body>
 </html>
     </style>

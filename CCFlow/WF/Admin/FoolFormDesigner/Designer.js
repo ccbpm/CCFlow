@@ -624,7 +624,7 @@ function GenerGroupContext(groupEn, data, tableCol) {
                 var frameUrl = "<iframe ID='F" + dtl[0].No + "' frameborder=0 style='padding:0px;border:0px;width:100%;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
                 _html += "<div id='Dtl_" + dtl[0].No + "'>" + frameUrl + "</div>";
             } else {
-                _html += "<div  id='Dtl_" + dtl[0].No + "'> 从表[" + groupEn.CtrlID + "]丢失</div>";
+                _html += "<div  id='Dtl_" + groupEn.CtrlID + "'> 从表[" + groupEn.CtrlID + "]丢失</div>";
             }
             break;
         default:
@@ -1125,8 +1125,8 @@ function getTextColSpanClass(textColSpan, tabCol) {
  */
 function EditBigText(mypk, frmID) {
     getWindowWH();
-    url = '../Admin/FoolFormDesigner/EditFExtContral/60.BigNoteHtmlText.htm?FrmID=' + frmID + '&MyPK=' + mypk;
-    LayuiPopRight(url, '大文本编辑', W, true);
+    url = './EditFExtContral/60.BigNoteHtmlText.htm?FrmID=' + frmID + '&MyPK=' + mypk;
+    OpenLayuiDialog(url, '大文本编辑', W, 0, null, true);
 }
 /**
  * 编辑字段属性
@@ -1419,7 +1419,9 @@ function AddEnum(typeName) {
         url = './SysEnumList.htm?DoType=AddEnum&FK_MapData=' + frmID + '&GroupField=' + groupID + "&Type=" + type;
     }
 
-    OpenLayuiDialog(url, '新建枚举', W, 0, null, true);
+    OpenLayuiDialog(url, '', W, 0, null, true);
+  //  OpenLayuiDialog(url, '新建枚举', W, 0, null, true);
+
 
 }
 /**

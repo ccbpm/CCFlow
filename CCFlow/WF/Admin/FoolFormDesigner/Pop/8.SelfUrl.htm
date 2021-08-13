@@ -106,54 +106,68 @@
         .cs-content-box {
             padding: 0 5px;
         }
+        .table a {
+            color: #1c60be
+        }
+
+        .table ul {
+            padding: 10px 0px;
+        }
+
+        .table li {
+            list-style-type: none;
+            line-height: 26px;
+        }
     </style>
 </head>
 <body>
-    <div id="bar">
-    </div>
-    <form id="cc">
-        <table id="Table1" style="width: 99%;">
+    <div class="container-full">
+        <div id="bar">
+        </div>
+        <form id="cc">
+            <table id="Table1"  class="table">
 
-            <!--<tr>
-                <th colspan="2">
-                    基本信息
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    <a href="javascript:alert('显示在窗口的文字，比如:搜索单据.')">标题</a>
-                </td>
-                <td>
-                    <input type="text" id="TBPara_Title" name="TBPara_Title" style="width: 99%;" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    弹窗属性
-                </td>
-                <td>
-                    高度:<input type="text" id="TB_H" name="TB_H" style="width: 80px; text-align: right" />
-                    宽度:<input type="text" id="TB_W" name="TB_W" style="width: 80px; text-align: right" />
-                </td>
-            </tr>-->
-            <tr>
-                <th colspan="2">
-                    <a href="javascript:ShowHidden('divTag')">自定义的URL</a>
-                    <div id="divTag" style="color: Gray; display: none">
-                        <ul>
-                            <li>您选择了使用外部的URL. </li>
-                            <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
-                            <li>该demo的位置 /SDKFlowDemo/PopSelectVal.htm </li>
-                        </ul>
-                    </div>
-                </th>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <input type="text" id="TB_Tag" name="TB_Tag" style="width: 99%;" />
-                </td>
-            </tr>
-        </table>
-    </form>
+                <!--<tr>
+                    <th colspan="2">
+                        基本信息
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="javascript:alert('显示在窗口的文字，比如:搜索单据.')">标题</a>
+                    </td>
+                    <td>
+                        <input type="text" id="TBPara_Title" name="TBPara_Title" style="width: 99%;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        弹窗属性
+                    </td>
+                    <td>
+                        高度:<input type="text" id="TB_H" name="TB_H" style="width: 80px; text-align: right" />
+                        宽度:<input type="text" id="TB_W" name="TB_W" style="width: 80px; text-align: right" />
+                    </td>
+                </tr>-->
+                <tr>
+                    <th colspan="2">
+                        <a href="javascript:ShowHidden('divTag')">自定义的URL</a>
+                        <div id="divTag" style="color: Gray; display: none">
+                            <ul>
+                                <li>您选择了使用外部的URL. </li>
+                                <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
+                                <li>该demo的位置 /SDKFlowDemo/PopSelectVal.htm </li>
+                            </ul>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="text" id="TB_Tag" name="TB_Tag" style="width: 99%;" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
 </body>
 </html>

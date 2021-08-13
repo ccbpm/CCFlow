@@ -2,8 +2,6 @@ var currentTopContextMenuNodes = []
 var currentChildContextMenuNodes = []
 var layDropdown = null
 
-
-
 window.onload = function () {
 
     var vm = new Vue({
@@ -31,7 +29,14 @@ window.onload = function () {
                 tabDropdownVisible: false,
                 top: 0,
                 left: 0,
-                closeTimeout: null
+                closeTimeout: null,
+                SystemName: "驰骋BPM",
+                SystemLogo: "./image/logo.png",
+                IsShowFast: true,
+                IsShowRefresh: true,
+                IsShowFullScreen: true,
+                IsShowTheme: true,
+                IsShowFlexible: true
             }
         },
         computed: {
@@ -58,10 +63,16 @@ window.onload = function () {
                 if (this.classicalLayout) return
                 this.selectedTopMenuIndex = index
                 this.selectedSubIndex = -1
-                this.subMenuData = this.menuTreeData[index]
-                this.subMenuTitle = this.menuTreeData[index].Name
+                if (this.menuTreeData.length > 0) {
+                    this.subMenuData = this.menuTreeData[index]
+                    this.subMenuTitle = this.menuTreeData[index].Name
+                    if (this.subMenuTitle.length > 4)
+                        $(".line").css("width", (70 - (this.subMenuTitle.length - 4) * 8) + "px");
+                    this.bindDropdown(this.subMenuData.type)
+                }
+
+
                 this.sideBarOpen = true
-                this.bindDropdown(this.subMenuData.type)
                 this.initChildContextMenu()
 
             },
@@ -242,7 +253,7 @@ window.onload = function () {
                 this.openTab(menu.Name, menu.Url, alignRight);
             },
             openTab: function (name, src, alignRight) {
-                debugger;
+                
 
 
                 //如果发起实体类的流程，是通过一个页面中专过去的.
@@ -360,7 +371,7 @@ window.onload = function () {
             },
             refreshMenuTree: function (data) {
                 this.menuTreeData = new MenuConvertTools(this.webUser, data).convertToTreeData()
-                layer.close(loading)
+                layer.close(loading);
                 // var color = localStorage.getItem("themeColor")
                 // chooseTheme(color)
                 this.classicalLayout = parseInt(localStorage.getItem('classicalLayout')) === 1
@@ -391,9 +402,23 @@ window.onload = function () {
                 this.closeTimeout = null
             },
             logout: function () {
-                if (!confirm("提示确定需要退出？"))
+
+                if (confirm("提示确定需要退出？") == false)
                     return;
-                window.location.href = "Login.htm?DoType=Logout";
+
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
+                var data = handler.DoMethodReturnString("Default_LogOut");
+                window.location.href = data;// "Login.htm?DoType=Logout";
+
+                //  win
+                //  var url = getPortalConfigByKey("LogoutPath", "./") + data;
+                //window.location.href = url;// "Login.htm?DoType=Logout";
+            },
+            logoutExt: function () {
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
+                var data = handler.DoMethodReturnString("Default_LogOut");
+                var url = getPortalConfigByKey("LogoutPath", "./") + data;
+                window.location.href = url;// "Login.htm?DoType=Logout";
             },
             GoToMobile: function () {
                 var webUser = new WebUser();  //退出
@@ -530,9 +555,9 @@ window.onload = function () {
 
                         if (type === 'form') {
                             var topFormNodeItems = [
-                                { title: '<i class=icon-plus></i> 新建表单', id: "NewFlow", Icon: "icon-plus" },
+                                { title: '<i class=icon-plus></i> 新建表单', id: "NewFrm", Icon: "icon-plus" },
                                 { title: '<i class=icon-star></i> 重命名', id: "EditSort", Icon: "icon-options" },
-                                { title: '<i class=icon-folder></i> 新建目录', id: "NewSort", Icon: "icon-magnifier-add" },
+                                { title: '<i class=icon-folder></i> 新建目录', id: "NewFrmSort", Icon: "icon-magnifier-add" },
                                 {
                                     title: '<i class=icon-share-alt ></i> 导入表单模版',
                                     id: "ImpFlowTemplate",
@@ -580,11 +605,8 @@ window.onload = function () {
                             currentTopContextMenuNodes = topFormNodeItems
                             currentChildContextMenuNodes = childFormNodeItems
                         }
-
                     })
-
                 })
-
             },
             NewSort: function (currentElem, sameLevel) {
                 //只能创建同级.
@@ -631,14 +653,24 @@ window.onload = function () {
                 url = "./../Admin/Template/ImpFrmLocal.htm?SortNo=" + sortNo + "&Lang=CH";
                 this.openTab("导入表单模版", url);
             },
+
             NewFlow: function (data, name) {
 
                 ////  if (runModelType == 0)
                 //   url = "../CCBPMDesigner/FlowDevModel/Default.htm?SortNo=" + flowSort + "&s=" + Math.random();
                 //else
                 url = "../Admin/CCBPMDesigner/FlowDevModel/Default.htm?SortNo=" + data + "&From=Flows.htm&RunModel=1&s=" + Math.random();
+                url += "&UserNo=" + webUser.No;
+                url += "&SID=" + webUser.SID;
+
                 this.openTab("新建流程", url);
 
+            },
+            NewFrm: function (data, name) {
+                url = "../Admin/FoolFormDesigner/NewFrmGuide.htm?SortNo=" + data + "&From=Frms.htm&RunModel=1&s=" + Math.random();
+                url += "&UserNo=" + webUser.No;
+                url += "&SID=" + webUser.SID;
+                this.openTab("新建表单", url);
             },
             childFormNodeOption: function (key, data, name, pidx, idx) {
 
@@ -653,7 +685,7 @@ window.onload = function () {
                         this.StartFrm(data, name);
                         break;
                     case "Copy":
-                        this.copyFrm(data);
+                        this.copyFrm(data, pidx);
                         break;
                     case "Delete":
                         this.DeleteFlow(data, pidx, idx);
@@ -677,6 +709,9 @@ window.onload = function () {
                         break;
                     case "NewFlow":
                         this.NewFlow(data, name);
+                        break;
+                    case "NewFrm":
+                        this.NewFrm(data, name);
                         break;
                     default:
                         alert("没有判断的命令" + key);
@@ -870,7 +905,7 @@ window.onload = function () {
             Designer: function (no, name) {
                 var sid = GetQueryString("SID");
                 var webUser = new WebUser();
-                var url = "../Admin/CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&SID=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
+                var url = "../Admin/CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&SID=" + webUser.SID + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
                 this.openTab(name, url);
             },
             EditSort: function (no, name) {
@@ -895,11 +930,30 @@ window.onload = function () {
                 var url = "../Admin/CCFormDesigner/GoToFrmAttr.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&SID=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
                 this.openTab(name, url);
             },
-            copyFrm: function (no) {
-                if (window.confirm("确定要执行表单复制吗?") == false)
-                    return;
-                var flow = new Entity("BP.Sys.MapData", no);
-                var data = flow.DoMethodReturnString("DoCopy");
+            copyFrm: function (no, moduleNo, systemNo) {
+
+
+                var frm = new Entity("BP.Sys.MapData", no);
+
+                var frmID = window.prompt("表单ID:" + no + "Copy");
+                if (frmID == undefined || frmID == null || frmID == '') return;
+
+                var frmName = window.prompt("表单名称:" + frm.Name + "Copy");
+                if (frmName == undefined || frmName == null || frmName == '') return;
+
+                var data = frm.DoMethodReturnString("DoCopy", frmID + '~' + frmName);
+
+                //var en = new Entity("BP.GPM.Menu2020.Menu");
+                //en.ModuleNo = moduleNo;
+                //en.SystemNo = systemNo; //系统编号.
+                //en.Name = frmName;
+                //en.UrlExt = frmID;
+                //en.MenuModel = "Dict"; //类型为.
+                //en.ListModel = 1;
+                //en.Icon = "icon-user";
+                //en.Insert();
+
+
                 layer.msg(data);
                 setTimeout(function () {
                     window.location.reload();
@@ -936,10 +990,18 @@ window.onload = function () {
             }
         },
         mounted: function () {
+            this.SystemName = getPortalConfigByKey("SystemName", "驰骋BPM");
+            this.SystemLogo = getPortalConfigByKey("SystemLogo", "./image/logo.png");
+            this.IsShowFast = getPortalConfigByKey("IsShowFast", true);
+            this.IsShowRefresh = getPortalConfigByKey("IsShowRefresh", true);
+            this.IsShowFullScreen = getPortalConfigByKey("IsShowFullScreen", true);
+            this.IsShowTheme = getPortalConfigByKey("IsShowTheme", true);
+            this.IsShowFlexible = getPortalConfigByKey("IsShowFlexible", true);
             this.webUser = new WebUser();
             this.isAdmin = this.webUser.No === "admin" || parseInt(this.webUser.IsAdmin) === 1;
-            this.initMenus()
-            var _this = this
+            this.initMenus();
+            var _this = this;
+
             setTimeout(function () {
                 _this.bindDropdown('flow')
             }, 500)

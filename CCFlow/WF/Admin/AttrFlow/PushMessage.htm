@@ -42,6 +42,7 @@
             } else {
                 ctrl.style.display = 'block';
             }
+            return false;
         }
     </script>
     <script type="text/javascript" language="javascript">
@@ -154,7 +155,7 @@
 
             <div id="titleH4" class="attrnode-bar-header">
                 <div class="pull-right">
-                    <button  id="Btn_New" class="cc-btn-tab btn-new" onclick="ShowHidden('state')" >新建消息</button>
+                    <button  type="button" id="Btn_New" class="cc-btn-tab btn-new" onclick="ShowHidden('state')" >新建消息</button>
                     <div id="state" style="width:200px;height:auto; position:absolute; z-index:10;background-color:white; border:1px outset black; display: none; color: bl">
                         <ul>
                             <li><a href="javascript:PushMessageEntity('FlowOver');">流程结束后</a> </li>

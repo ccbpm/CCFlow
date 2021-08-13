@@ -83,6 +83,8 @@ function Handler_AjaxQueryData(param, callback, scope, method, showErrMsg) {
 * @param {any} callback 加载完成后的回调函数
 */
 function loadScript(url, callback, scriptID) {
+    if (Exists(url) == false)
+        return;
     var script = document.createElement("script");
     script.type = "text/javascript";
     if (typeof (callback) != "undefined") {
@@ -134,7 +136,9 @@ Skip.includeJsSrc = function (rootObject, fileUrl) {
     }
 },
 //同步加载
-Skip.addJs = function (url,rootObject) {
+Skip.addJs = function (url, rootObject) {
+    if (Exists(url) == false)
+        return;
     var oXmlHttp = Skip.getXmlHttpRequest();
     oXmlHttp.onreadystatechange = function () {//其实当在第二次调用导入js时,因为在浏览器当中存在这个*.js文件了,它就不在访问服务器,也就不在执行这个方法了,这个方法也只有设置成异步时才用到
         if (oXmlHttp.readyState == 4) { //当执行完成以后(返回了响应)所要执行的
@@ -154,6 +158,38 @@ Skip.addJs = function (url,rootObject) {
     Skip.includeJsText(rootObject, oXmlHttp.responseText);
 }
 
+function Exists(url) {
+    var isExists;
+    $.ajax({
+        url: url,
+        type: 'HEAD',
+        async:false,
+        error: function () {
+            isExists = 0;
+        },
+        success: function () {
+            isExists = 1;
+        }
+    });
+    if (isExists == 1) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+/**
+ *判断是不是移动端 
+ */
+function IsMobile() {
+    let info = navigator.userAgent;
+    let agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPod", "iPad"];
+    for (let i = 0; i < agents.length; i++) {
+        if (info.indexOf(agents[i]) >= 0) return true;
+    }
+    return false;
+}
 
 function IEVersion() {
     var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
@@ -171,6 +207,5 @@ function IEVersion() {
     }
 }
 
- 
 
 

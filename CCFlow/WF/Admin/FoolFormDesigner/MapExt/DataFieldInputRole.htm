@@ -118,61 +118,52 @@
     </script>
 </head>
 <body>
-    <form id="cc">
-        <div style="right:30px; position:absolute; z-index:100; ">
-            <input type="button" value="保存" id="Btn_Save" onclick="Save()" />
-            <input type="button" value="删除" id="Btn_Delete" onclick="Delete()" />
-            <input type="button" value="帮助" id="Btn_Help" onclick="ShowHidden('help')" />
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <span class="pull-right">
+                <input type="button" value="保存" id="Btn_Save" class="cc-btn-tab" onclick="Save()" />
+                <input type="button" value="删除" id="Btn_Delete" class="cc-btn-tab" onclick="Delete()" />
+                <input type="button" value="帮助" id="Btn_Help" class="cc-btn-tab" onclick="ShowHidden('help')" />
+            </span>
+            <strong> 日期字段输入控制</strong>
         </div>
-        <table style="width: 99%;">
-            <caption>
-                日期字段输入控制
-            </caption>
-            <tr>
-                <td>
-                    <fieldset>
-                        <legend>
-                            <input type="radio" value="0" id="RB_0" name="RB" /><label for="RB_0">无，不设置</label>
-                        </legend>
-                        <br />不做任何设置.
-                    </fieldset>
-                    <fieldset>
-                        <legend>
-                            <input type="radio" value="1" id="RB_1" name="RB" /><label for="RB_1">启用设置</label>
-                        </legend>
-                        <br />
-                        <label>
-                            <input type="radio" id="CB_History" name="CB_RDT" />
-                            不能输入历史日期，只能输入当前日期以及未来日期。
-                        </label>
-                        <br />
-                        <label>
-                            <input type="radio" id="CB_Impose" name="CB_RDT" />
-                            不能输入大于等于指定字段的日期。
-                        </label>
-                        <br />
-                        运算符：<select id="DDL_Condition">
-                            <option value="dayu">大于 </option>
-                            <option value="dayudengyu">大于等于 </option>
-                            <option value="xiaoyu">小于 </option>
-                            <option value="xiaoyudengyu">小于等于 </option>
-                            <option value="budengyu">不等于 </option>
-                        </select>
-                        指定的:<select id="DDL_DT">
-                            <option></option>
-                        </select>字段日期
-                        <br />
-                    </fieldset>
-                </td>
-            </tr>
-        </table>
-        <div id="help" style="color: Gray; display: none">
-            <ul>
-                <li>该功能提供了简单的、常用的日期输入判断限制规则。</li>
-                <li>如果需要更复杂高级的判断请使用事件绑定函数，把业务逻辑写入到函数里面判定。</li>
-                <li>如果要启用日期输入不能为空的限制，请到该字段基本信息里设置。</li>
-            </ul>
-        </div>
-    </form>
+        <form id="cc">
+            <div class="form-group">
+                <label for="RB_0" class="radio-inline"> <input type="radio" value="0" id="RB_0" name="RB" /> 无，不做任何设置.</label>
+
+                <label for="RB_1" class="radio-inline"> <input type="radio" value="1" id="RB_1" name="RB" />启用设置</label>
+            </div>
+            <div class="form-group">&nbsp; </div>
+            <div class="form-group">
+                <input type="radio" id="CB_History" name="CB_RDT" />
+                不能输入历史日期，只能输入当前日期以及未来日期。
+            </div>
+            <div class="form-group">
+                <input type="radio" id="CB_Impose" name="CB_RDT" />
+                不能输入大于等于指定字段的日期。
+            </div>
+            <div class="form-group">
+                运算符：<select id="DDL_Condition" >
+                    <option value="dayu">大于 </option>
+                    <option value="dayudengyu">大于等于 </option>
+                    <option value="xiaoyu">小于 </option>
+                    <option value="xiaoyudengyu">小于等于 </option>
+                    <option value="budengyu">不等于 </option>
+                </select>
+                指定的:<select id="DDL_DT">
+                    <option></option>
+                </select>字段日期
+            </div>
+          
+
+            <div id="help" style="color: Gray; display: none">
+                <ul>
+                    <li>该功能提供了简单的、常用的日期输入判断限制规则。</li>
+                    <li>如果需要更复杂高级的判断请使用事件绑定函数，把业务逻辑写入到函数里面判定。</li>
+                    <li>如果要启用日期输入不能为空的限制，请到该字段基本信息里设置。</li>
+                </ul>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

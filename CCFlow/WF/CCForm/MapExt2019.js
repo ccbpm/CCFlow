@@ -134,7 +134,13 @@ function showDataGrid(sender, tbid, dataObj, mapExt) {
 
             });
         });
+        var ispagination = dataObj.length > 20 ? true : false;
+        var data = [];
+        if (ispagination) {
+
+        }
         var options = {
+            locale: 'zh-CN',
             striped: true,
             cache: false,
             showHeader: true,
@@ -147,12 +153,23 @@ function showDataGrid(sender, tbid, dataObj, mapExt) {
             sortable: false,
             cardView: false,
             detailView: false,
+            sidePagination:"client",
             uniqueId: "No",
+            pageNumber: 1, //初始化加载第一页
+            pageSize:10,
+            pagination: ispagination,
             columns: searchTableColumns,
             rowStyle: function () {
                 var style = {};
                 style = 'active';
                 return { classes: style };
+            },
+            formatShowingRows: function (pageFrom, pageTo, totalRows) {
+                return "第" + pageFrom + "-" + pageTo + "行，总共" + totalRows + "";
+            },
+            //自定义分页字符串显示为中文
+            formatRecordsPerPage: function (pageNumber) {
+                return pageNumber + '行每页';
             }
         };
         options.onClickRow = function (row, element) {

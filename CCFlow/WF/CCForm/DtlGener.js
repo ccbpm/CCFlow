@@ -70,3 +70,79 @@ function SetDtlCtrlVal(ctrlID, val) {
         ctrl.prop('checked', false);
     return;
 }
+//計算日期間隔
+function CalculateRDT(StarRDT, EndRDT, RDTRadio) {
+
+    var res = "";
+    var demoRDT;
+    demoRDT = StarRDT.split("-");
+    StarRDT = new Date(demoRDT[0] + '-' + demoRDT[1] + '-' + demoRDT[2]);  //转换为yyyy-MM-dd格式
+    demoRDT = EndRDT.split("-");
+    EndRDT = new Date(demoRDT[0] + '-' + demoRDT[1] + '-' + demoRDT[2]);
+    res = parseInt((EndRDT - StarRDT) / 1000 / 60 / 60 / 24); //把相差的毫秒数转换为天数
+    res = res + 1;
+    //判断结束日期是否早于开始日期
+    if (parseInt(EndRDT / 1000 / 60 / 60 / 24) < parseInt(StarRDT / 1000 / 60 / 60 / 24)) {
+        alert("结束日期不能早于开始日期");
+        res = "";
+    }
+    else {
+        //当包含节假日的时候
+        if (RDTRadio == 0) {
+            var holidayEn = new Entity("BP.Sys.GloVar");
+            holidayEn.No = "Holiday";
+            if (holidayEn.RetrieveFromDBSources() == 1) {
+                var holidays = holidayEn.Val.split(",");
+                res = res - (holidays.length - 1);
+                //检查计算的天数
+                if (res <= 0) {
+                    alert("请假时间内均为节假日");
+                    res = "";
+                }
+            }
+        }
+    }
+    return res;
+
+}
+
+function GetMapExtsGroup(mapExts) {
+    var map = {};
+    var mypk = "";
+    //对mapExt进行分组，根据AttrOfOper
+    $.each(mapExts, function (i, mapExt) {
+        //不是操作字段不解析
+        if (mapExt.AttrOfOper == "")
+            return true;
+        if (mapExt.ExtType == "DtlImp"
+            || mapExt.MyPK.indexOf(mapExt.FK_MapData + '_Table') >= 0
+            || mapExt.MyPK.indexOf('PageLoadFull') >= 0
+            || mapExt.ExtType == 'StartFlow'
+            || mapExt.ExtType == 'AutoFullDLL'
+            || mapExt.ExtType == 'ActiveDDLSearchCond'
+            || mapExt.ExtType == 'AutoFullDLLSearchCond')
+            return true;
+
+        mypk = mapExt.FK_MapData + "_" + mapExt.AttrOfOper;
+
+        /*if (isFirstXmSelect == true) {
+            layui.config({
+                base: laybase + 'Scripts/layui/ext/'
+            });
+            isFirstXmSelect = false;
+        }*/
+        if (!map[mypk])
+            map[mypk] = [mapExt];
+        else
+            map[mypk].push(mapExt);
+    });
+    var res = [];
+    Object.keys(map).forEach(key => {
+        res.push({
+            attrKey: key,
+            data: map[key],
+        })
+    });
+    console.log(res);
+    return map;
+}

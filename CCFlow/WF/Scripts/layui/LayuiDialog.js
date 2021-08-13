@@ -11,7 +11,7 @@
  * @param {any} okBtnFunc 确定执行的方法
  * @param {any} dlgClosedFunc 关闭执行的方法
  */
-function OpenLayuiDialog(url, title, dlgWidth, dlgHeight, offset, isRefresh, isShowOkBtn, IsShowCloseBtn, okBtnFunc, dlgClosedFunc) {
+function OpenLayuiDialog(url, title, dlgWidth, dlgHeight, offset, isRefresh, isShowOkBtn, IsShowCloseBtn, okBtnFunc, dlgClosedFunc,reloadUrl) {
 
     title = title == null || title == undefined ? "" : title;
     var btn = [];
@@ -72,13 +72,25 @@ function OpenLayuiDialog(url, title, dlgWidth, dlgHeight, offset, isRefresh, isS
             if (dlgClosedFunc)
                 dlgClosedFunc();
             if (isRefresh == true)
+{
+            if (reloadUrl==null || reloadUrl=='' )
                 location.reload();
+else
+                location.href= reloadUrl;
+}
+
+
         },
         end: function () {
             if (dlgClosedFunc)
                 dlgClosedFunc();
             if (isRefresh == true)
+{
+if (reloadUrl==null || reloadUrl=='' )
                 location.reload();
+else
+                location.href= reloadUrl;
+}
         }
     });
     if (offset == "r")
@@ -117,4 +129,79 @@ function LayuiPopRight(url, title, dlgWidth, isRefresh) {
         }
 
     });
+}
+
+/**
+ * 居中弹出
+ * @param {any} content 请求的内容
+ * @param {any} title 标题,标题为空时，这弹出框不显示title
+ * @param {any} dlgWidth 弹出框宽度
+ * @param {any} dlgHeight 弹出框高度
+ * @param {any} isRefresh 是否刷新父页面
+ * @param {any} isShowOkBtn 是否显示确定按钮
+ * @param {any} IsShowCloseBtn 是否显示关闭按钮
+ * @param {any} okBtnFunc 确定执行的方法
+ * @param {any} dlgClosedFunc 关闭执行的方法
+ */
+function OpenOtherLayuiDialog(content,title, dlgWidth, dlgHeight,divID, isRefresh, isShowOkBtn, IsShowCloseBtn, okBtnFunc, dlgClosedFunc) {
+
+    title = title == null || title == undefined ? "" : title;
+    var btn = [];
+    if (isShowOkBtn != undefined && isShowOkBtn == true)
+        btn[0] = "确定";
+    if (IsShowCloseBtn != undefined && IsShowCloseBtn == true) {
+        btn.length == 1 ? btn[1] = "取消" : btn[0] = "取消";
+    }
+    dlgHeight = dlgHeight == null || dlgHeight == undefined || dlgHeight == 0 ? 100 : dlgHeight;
+
+    if (dlgWidth == null || dlgWidth == 0) {
+        if (window.innerWidth)
+            dlgWidth = window.innerWidth;
+        else if ((document.body) && (document.body.clientWidth))
+            dlgWidth = document.body.clientWidth;
+        dlgWidth = dlgWidth / 2;
+    }
+
+    //如果超过屏幕的宽度，就按屏幕宽度计算。
+    if (dlgWidth > window.innerWidth) dlgWidth = window.innerWidth - 150;
+
+    var w = window;
+ 
+    w.layer.open({
+        type: 1 //此处以iframe举例
+        , title: title
+        , id: divID == null || divID == undefined ? "dlg" : divID
+        , area: [dlgWidth + 'px', dlgHeight + '%']
+        , maxmin: true
+        , shadeClose: true
+        , content: ""
+        , btn: btn
+        ,success: function (layero, index) {
+            eval(content);
+            $("#" + this.id).show();
+        }
+        , yes: function () {
+            if (okBtnFunc)
+                okBtnFunc();
+            layer.closeAll();
+        }
+        , btn2: function () {
+            if (dlgClosedFunc)
+                dlgClosedFunc();
+            layer.closeAll();
+        },
+        cancel: function (index, layero) {
+            if (dlgClosedFunc)
+                dlgClosedFunc();
+            if (isRefresh == true)
+                location.reload();
+        },
+        end: function () {
+            if (dlgClosedFunc)
+                dlgClosedFunc();
+            if (isRefresh == true)
+                location.reload();
+        }
+    });
+   
 }

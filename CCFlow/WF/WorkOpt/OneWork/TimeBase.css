@@ -5,31 +5,39 @@
 
 .TDDay
 {
-    text-align: right;
+   
     width: 20%;
     border-bottom-style: dotted;
     border-bottom-width: thin;
-    border-bottom-color: #008000;
+    border-bottom-color: #efefef;
     text-align: left;
-    background-color:InfoBackground;
+    background-color:#efefef;
 }
-
+.TDDay span{ display:inline-block;padding-right:20px;}
+.TDDay b{ color:#ff0000}
 tr
 {
     border-bottom-style: dotted;
     border-bottom-width: thin;
-    border-bottom-color: #008000;
+    border-bottom-color: #efefef;
 }
 
 .TDTime
  {
-    text-align:right;
     width:20%;
     vertical-align: middle;
     border-bottom-style: dotted;
     border-bottom-width: thin;
-    border-bottom-color: #3399FF;
+    border-bottom-color: #efefef;
 }
+.TDTime img{ border-radius:50%}
+.TDTime .usernameInfo{}
+.TDTime .usernameInfo .uimg{display:inline-block;float:left; padding:0px 10px; }
+.TDTime .usernameInfo .ut{  padding-top:10px;}
+.TDTime .usernameInfo .ut span{  display:block;}
+.TDTime .usernameInfo .ut .uname{ font-size:14px; font-weight:700;}
+.TDTime .usernameInfo .ut .utime{ color:#808080}
+.fright{ float:right}
 
 .UserIcon
 {
@@ -37,20 +45,17 @@ tr
     height:auto;
 }
 
+
 /*中间数据*/
 .TDBase
 {
     background-position: right center;
     text-align: right;
-    width: 1%;
-    background-image: url('../../Img/BlueLine.gif');
-    background-repeat: repeat-y;
-    background-attachment: scroll;
-     margin:139px;
-         vertical-align:middle;
-    border-bottom-style: dotted;
-    border-bottom-width: thin;
-    border-bottom-color: #3399FF;
+    width: 1px;  
+ 
+    border-left:1px solid #efefef; 
+    padding:0px !important;
+   
 }
 
 /* 内容信息 */
@@ -62,8 +67,11 @@ tr
     vertical-align: top;
     border-bottom-style: dotted;
     border-bottom-width: thin;
-    border-bottom-color: #3399FF;
+    border-bottom-color: #efefef;
+    color:#808080
 }
+.TDDoc .wd{ background:#ff0000; color:#fff; font-size:12px; padding:3px 5px; border-radius:3px;}
+.TDDoc .yd{ background:#0094ff; color:#fff; font-size:12px; padding:3px 5px; border-radius:3px;}
 
 /* 事件图片. */
 .ImgOfAC         
@@ -75,5 +83,7 @@ tr
 
 th
 {
-    background-color: #CCCCFF;
+    background-color: #f5f5f5;
+    padding:10px 10px !important;
 }
+td{ padding:10px 10px !important;}

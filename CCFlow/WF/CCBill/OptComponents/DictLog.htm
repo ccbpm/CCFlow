@@ -24,7 +24,9 @@
 
             //获得所有的日志信息.
             var ens = new Entities("BP.CCBill.Tracks");
-            ens.Retrieve("FrmID", frmID, "WorkID", workID, "RDT");
+            ens.Retrieve("WorkID", WorkID, "RDT");
+
+            alert(ens.length);
 
             //输出日志.
 
@@ -37,7 +39,6 @@
             html += "<th>操作人</th>";
             html += "<th>内容</th>";
             html += "</tr>";
-
 
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
@@ -74,8 +75,10 @@
     </script>
     <style>
         .diclog-timeline {
-          width:90%; margin:20px auto 0px;
+            width: 90%;
+            margin: 20px auto 0px;
         }
+
         .diclog-timeline-item {
             position: relative;
             padding-bottom: 20px;
@@ -92,13 +95,13 @@
             top: 10px;
             z-index: 10;
             width: 20px;
-            height: 20px;       
+            height: 20px;
             background: #1ce9c0;
             color: #fff;
             border-radius: 50%;
             text-align: center;
             cursor: pointer;
-            line-height:20px;
+            line-height: 20px;
         }
 
         .diclog-timeline-item:before {
@@ -119,13 +122,20 @@
         .diclog-timeline-item:last-child:before {
             display: none
         }
+
         .diclog-item-date {
-        float:left;width:140px; text-align:center;}
+            float: left;
+            width: 140px;
+            text-align: center;
+        }
+
         .diclog-item-time {
             float: left;
             width: 100px;
-            text-align: center;color:#a1a1a1
+            text-align: center;
+            color: #a1a1a1
         }
+
         .diclog-item-act {
             float: left;
             width: 40px;
@@ -134,28 +144,30 @@
             color: #fff;
             border-radius: 50%;
             text-align: center;
-            
         }
+
         .diclog-item-name {
             float: left;
             width: 120px;
             text-align: center;
         }
+
         .diclog-time-content {
             float: left;
             line-height: 24px;
-            margin-top:10px;
+            margin-top: 10px;
         }
+
         .no-data {
-            font-size:24px;
-            text-align:center;
-            color:#a1a1a1;
-            padding-top:30px;
+            font-size: 24px;
+            text-align: center;
+            color: #a1a1a1;
+            padding-top: 30px;
         }
     </style>
 </head>
 <body>
-   
+
     <div id="Dictlog-list">
         <div v-if="list.length > 0">
             <ul class="diclog-timeline">
@@ -172,14 +184,12 @@
 
             </ul>
         </div>
-        <div v-else class="no-data">
+        <div v-else=v-else class="no-data">
             暂无数据
         </div>
 
     </div>
-  
-    <script src="DictLog.js">
 
-    </script>
+    <script src="DictLog.js"></script>
 </body>
 </html>

@@ -33,9 +33,47 @@
 
             $("#docs").html("<img style='text-align:center;align-content:center' src='../../../DataUser/Temp/" + workID + ".png'><br>");
 
-            $("#url").html(data);
+            $("#url").html(data); // + "<a href=\"javascript:Copy('" + data + "')\" >复制链接</a>");
 
+            //    $("#url").html(data + "<a href=\"javascript:Copy('" + data + "')\" >复制链接</a>");
         });
+
+        function CopyIt() {
+
+        }
+
+        function Copy(_sTxt) {
+            try {
+                if (window.clipboardData) {
+                    window.clipboardData.setData("Text", _sTxt);
+                } else if (window.netscape) {
+                    netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+                    var clip =
+                        Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
+                    if (!clip) return;
+                    var trans =
+                        Components.classes['@mozilla.org/widget/transferable;1'].createInstance(Components.interfaces.nsITransferable);
+                    if (!trans) return;
+                    trans.addDataFlavor('text/unicode');
+                    var str =
+                        new Object();
+                    var len = new Object();
+                    var str =
+                        Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
+                    var copytext = _sTxt;
+                    str.data = copytext;
+                    trans.setTransferData("text/unicode", str, copytext.length * 2);
+                    var clipid
+                        = Components.interfaces.nsIClipboard;
+                    if (!clip) return false;
+                    clip.setData(trans, null, clipid.kGlobalClipboard);
+                }
+
+                alert("复制成功，请粘贴到你的QQ/微信上发送出去.");
+            } catch (e) {
+                alert("复制失败，请手工复制.");
+            }
+        }
 
     </script>
 </head>
@@ -50,8 +88,13 @@
                 <div id="docs"></div>
             </center>
 
-            <legend> 移动端链接.</legend>
+            <legend> 移动端链接. </legend>
             <div id="url"></div>
+            <!--<ul>
+                <li> <input type="text" value="" id="TB_Url" style="width:90%;" /> </li>-->
+            <!--<li> <button  onclick="CopyIt()">复制</button> </li>-->
+            <!--</ul>-->
+
 
         </fieldset>
 

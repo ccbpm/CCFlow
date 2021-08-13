@@ -9,6 +9,7 @@
     <script src="../../../Scripts/CodeMirror/addon/comment/continuecomment.js"></script>
     <script src="../../../Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
     <!-- 引用通用的js文件. -->
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -79,41 +80,38 @@
             window.location.href = window.location.href;
             return;
         }
+        function BackTo() {
+            var FK_MapData = GetQueryString("FK_MapData");
+            var AttrOfOper = GetQueryString("KeyOfEn");
+            window.location.href = "BindFunction.htm?FK_MapData=" + FK_MapData + "&KeyOfEn=" + AttrOfOper;
+        }
     </script>
 </head>
 <body onload="Load()">
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <span class="pull-right">
+                <input type="button" value="保存"  class="cc-btn-tab" onclick="Save()" id="Btn_Save" />
+                <input type="button" value="删除"  class="cc-btn-tab" onclick="Delete()" id="Btn_Delete" />
+                <input type="button" value="返回" id="Back" class="cc-btn-tab" name="Back" onclick="BackTo();" />
 
-    <form id="cc">
-        <table id="table" style="width: 100%;">
-            <tr>
-                <td colspan="1">
-                    <h3>JS脚本，该数据将要保存到\DataUser\JSLab\*.js下。</h3>
-                </td>
-                <td colspan="2">
-                    <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
-                    <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
-                </td>
-            </tr>
+            </span>
+            <strong> JS脚本，该数据将要保存到\DataUser\JSLab\*.js下。</strong>
+        </div>
 
-            <tr>
-                <td colspan="3" style="width: 100%;">
-                    <textarea rows="20" name="code" id="code" style="width:100%;"> </textarea>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <fieldset id="help">
-                        <legend>帮助</legend>
-                        <ul>
-                            <li> xxx </li>
-                        </ul>
-                    </fieldset>
+        <form id="cc">
+            <table id="table" style="width: 100%;">
+               
+                <tr>
+                    <td>
+                        <textarea rows="20" name="code" id="code" style="width:100%; height:200px"> </textarea>
+                    </td>
+                </tr>               
+            </table>
+            <p><font color="red">帮助:</font> XXX</p>
+        </form>
 
-                </td>
-            </tr>
-        </table>
-       
-    </form>
+    </div>
 
 </body>
 </html>

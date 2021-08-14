@@ -546,7 +546,7 @@ namespace BP.WF.HttpHandler
                 nd.DirectUpdate();
 
                 md.HisFrmType = BP.Sys.FrmType.Url;  //同时更新表单表住表.
-                md.Url = this.GetValFromFrmByKey("TB_CustomURL");
+                md.UrlExt = this.GetValFromFrmByKey("TB_CustomURL");
                 md.Update();
 
             }
@@ -558,7 +558,7 @@ namespace BP.WF.HttpHandler
                 nd.DirectUpdate();
 
                 md.HisFrmType = BP.Sys.FrmType.Url;
-                md.Url = this.GetValFromFrmByKey("TB_FormURL");
+                md.UrlExt = this.GetValFromFrmByKey("TB_FormURL");
                 md.Update();
 
             }

@@ -55,6 +55,12 @@ namespace BP.WF.HttpHandler
             return ccform.Frm_Init();
         }
 
+        public string FrmGener_Init()
+        {
+            WF_CCForm ccform = new WF_CCForm();
+            return ccform.FrmGener_Init();
+        }
+
         public string Dtl_Init()
         {
             WF_CCForm ccform = new WF_CCForm();

@@ -1039,7 +1039,7 @@ namespace BP.WF.HttpHandler
         {
             DataTable dt = null;
             bool isContainFuture = this.GetRequestValBoolen("IsContainFuture");
-            dt = BP.WF.Dev2Interface.DB_GenerRuning(null, isContainFuture, this.Domain); //获得指定域的在途.
+            dt = BP.WF.Dev2Interface.DB_GenerRuning(WebUser.No,this.FK_Flow,false,this.Domain, isContainFuture); //获得指定域的在途.
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -1503,11 +1503,10 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Todolist_Init()
         {
-            string fk_node = this.GetRequestVal("FK_Node");
             string wfState = this.GetRequestVal("ShowWhat"); //比如：WFSTate=1,状态.
 
             DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node,
-                wfState, this.Domain);
+                wfState, this.Domain,this.FK_Flow);
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -2172,22 +2171,16 @@ namespace BP.WF.HttpHandler
             if (this.DoWhat.Equals(DoWhatList.Start) == true)
             {
                 if (this.FK_Flow == null)
-                {
                     return "url@Start.htm";
-                }
                 else
-                {
                     return "url@MyFlow.htm?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + nodeID;
-                }
             }
 
             //处理工作.
             if (this.DoWhat.Equals(DoWhatList.DealWork) == true)
             {
                 if (DataType.IsNullOrEmpty(this.FK_Flow) || this.WorkID == 0)
-                {
                     return "err@参数 FK_Flow 或者 WorkID 为Null 。";
-                }
                 return "url@MyFlow.htm?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&o2=1" + paras;
             }
 
@@ -2276,7 +2269,7 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            return "err@没有判断的标记.";
+            //  return "err@没有判断的标记.";
             return "err@没有约定的标记:DoWhat=" + this.DoWhat;
         }
         #endregion 处理page接口.

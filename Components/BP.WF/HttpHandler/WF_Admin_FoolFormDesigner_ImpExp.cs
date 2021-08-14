@@ -274,7 +274,7 @@ namespace BP.WF.HttpHandler
         public string Imp_CopyFromFlow()
         {
             string ndfrm = "ND" + int.Parse(this.FK_Flow) + "01";
-            return Imp_CopyFrm(ndfrm);
+            return Imp_CopyFrm(null,ndfrm);
         }
         /// <summary>
         /// 从表单库导入

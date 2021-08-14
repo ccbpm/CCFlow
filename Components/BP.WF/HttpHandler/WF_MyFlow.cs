@@ -297,6 +297,16 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
+                if (ex.Message.Contains("外部用户") == true)
+                {
+                    //判断是否是开始节点？这里要发起流程.
+                    Node nd = new Node(this.FK_Node);
+                    if (nd.IsStartNode == true && nd.HisDeliveryWay == DeliveryWay.ByGuest)
+                        return "url@./WorkOpt/GuestStartFlow/GenerCode.htm";
+
+
+                }
+
                 throw new Exception("err@" + ex.Message);
             }
 
@@ -482,8 +492,6 @@ namespace BP.WF.HttpHandler
             else
             {
                 isCanDo = todEmps.Contains(";" + WebUser.No + ",");
-                if(WebUser.No.Equals("Guest") == true)
-                    isCanDo = todEmps.Contains(";" + GuestUser.No + ",");
                 if (isCanDo == false)
                     isCanDo = Dev2Interface.Flow_IsCanDoCurrentWork(this.WorkID, BP.Web.WebUser.No);
             }
@@ -1040,7 +1048,7 @@ namespace BP.WF.HttpHandler
                             dr = dt.NewRow();
                             dr["No"] = "Send";
                             dr["Name"] = btnLab.SendLab;
-                            dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send(false, " + (int)nd.FormType + ");";
+                            dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;Send(false, " + (int)nd.FormType + ");";
                             dt.Rows.Add(dr);
                         }
                     }
@@ -1054,7 +1062,7 @@ namespace BP.WF.HttpHandler
                             dr = dt.NewRow();
                             dr["No"] = "Send";
                             dr["Name"] = btnLab.SendLab;
-                            dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send(false, " + (int)nd.FormType + ");";
+                            dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;Send(false, " + (int)nd.FormType + ");";
                             dt.Rows.Add(dr);
                         }
                     }
@@ -1132,7 +1140,7 @@ namespace BP.WF.HttpHandler
                     dt.Rows.Add(dr);
                 }
 
-                if (btnLab.JumpWayEnum!=JumpWay.CanNotJump)
+                if (btnLab.JumpWayEnum != JumpWay.CanNotJump)
                 {
                     /*跳转*/
                     dr = dt.NewRow();
@@ -1435,11 +1443,11 @@ namespace BP.WF.HttpHandler
                     dt.Rows.Add(dr);
                 }
                 bool isMobile = this.GetRequestValBoolen("IsMobile");
-                if(isMobile == false && btnLab.QRCodeRole!= 0)
+                if (isMobile == false && btnLab.QRCodeRole != 0)
                 {
                     dr = dt.NewRow();
                     dr["No"] = "QRCode";
-                    dr["Name"] = DataType.IsNullOrEmpty(btnLab.QRCodeLab)==true?"生成二维码": btnLab.QRCodeLab;
+                    dr["Name"] = DataType.IsNullOrEmpty(btnLab.QRCodeLab) == true ? "生成二维码" : btnLab.QRCodeLab;
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
                 }
@@ -1548,7 +1556,7 @@ namespace BP.WF.HttpHandler
             GenerWorkFlow gwf = new GenerWorkFlow();
             Node nd = new Node(this.FK_Node);
             gwf.TodoEmps = WebUser.No + ",";
-            DataTable mydt = GenerDTOfToNodes(gwf,nd);
+            DataTable mydt = GenerDTOfToNodes(gwf, nd);
             return BP.Tools.Json.ToJson(mydt);
         }
 
@@ -1783,7 +1791,7 @@ namespace BP.WF.HttpHandler
                 {
                     dr["No"] = "Send";
                     dr["Name"] = "确定/完成";
-                    dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAllSend()";
+                    dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;";
                     dt.Rows.Add(dr);
                     if (btnLab.PrintZipEnable == true)
                     {
@@ -1897,7 +1905,7 @@ namespace BP.WF.HttpHandler
                             dr = dt.NewRow();
                             dr["No"] = "Send";
                             dr["Name"] = btnLab.SendLab;
-                            dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send();";
+                            dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;Send();";
                             dt.Rows.Add(dr);
 
                         }
@@ -1912,7 +1920,7 @@ namespace BP.WF.HttpHandler
                             dr = dt.NewRow();
                             dr["No"] = "Send";
                             dr["Name"] = btnLab.SendLab;
-                            dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send();";
+                            dr["Oper"] = btnLab.SendJS + " if(SysCheckFrm()==false) return false;Send();";
                             dt.Rows.Add(dr);
                         }
                     }
@@ -2902,7 +2910,7 @@ namespace BP.WF.HttpHandler
                         {
                             //非主持人.
                             string empStr = BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";";
-                            if (this.HisGenerWorkFlow.TodoEmps.Contains(empStr) == false)
+                            if (this.HisGenerWorkFlow.TodoEmps.Contains(empStr) == false && WebUser.No.Equals("Guest") == false)
                             {
                                 this.HisGenerWorkFlow.TodoEmps += empStr; // BP.Web.WebUser.No +","+BP.Web.WebUser.Name + ";";
                                 this.HisGenerWorkFlow.Update();
@@ -3149,6 +3157,233 @@ namespace BP.WF.HttpHandler
         }
 
         #region 表单树操作
+        public string FlowFormTree2021_Init()
+        {
+            //树形表单的类别
+            FlowFormTrees formTree = new FlowFormTrees();
+
+            //表单
+            FlowFormTrees forms = new FlowFormTrees();
+
+            FlowFormTree root = new FlowFormTree();
+            root.No = "1";
+            root.ParentNo = "0";
+            root.Name = "目录";
+            root.NodeType = "root";
+           
+
+            #region 添加表单及文件夹
+            //当前节点绑定的表单集合
+            FrmNodes frmNodes = new FrmNodes();
+            frmNodes.Retrieve(FrmNodeAttr.FK_Node, this.FK_Node, FrmNodeAttr.Idx);
+            //所有表单集合信息
+            MapDatas mds = new MapDatas();
+            mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node);
+
+            #region 检查是否有没有目录的表单?
+            bool isHave = false;
+            string treeNo = "";
+            foreach (MapData md in mds)
+            {
+                if (DataType.IsNullOrEmpty(md.FK_FormTree)==true)
+                    isHave = true;
+                if (DataType.IsNullOrEmpty(md.FK_FormTree) == false)
+                    treeNo = md.FK_FormTree;
+            }
+            if(isHave == true && DataType.IsNullOrEmpty(treeNo) == true)
+            {
+                treeNo = "1";
+                formTree.AddEntity(root);
+            }
+                
+           
+
+            #endregion 检查是否有没有目录的表单?
+
+            string frms = HttpContextHelper.RequestParams("Frms");
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            if (DataType.IsNullOrEmpty(frms) == true)
+                frms = gwf.Paras_Frms;
+            else
+            {
+                gwf.Paras_Frms = frms;
+                gwf.Update();
+            }
+
+            foreach (FrmNode frmNode in frmNodes)
+            {
+                #region 增加判断是否启用规则.
+                switch (frmNode.FrmEnableRole)
+                {
+                    case FrmEnableRole.Allways:
+                        break;
+                    case FrmEnableRole.WhenHaveData: //判断是否有数据.
+                        MapData mapData = mds.GetEntityByKey(frmNode.FK_Frm) as MapData;
+                        if (mapData == null)
+                            continue;
+                        Int64 pk = this.WorkID;
+                        switch (frmNode.WhoIsPK)
+                        {
+                            case WhoIsPK.FID:
+                                pk = this.FID;
+                                break;
+                            case WhoIsPK.PWorkID:
+                                pk = this.PWorkID;
+                                break;
+                            case WhoIsPK.CWorkID:
+                                pk = this.CWorkID;
+                                break;
+                            case WhoIsPK.OID:
+                            default:
+                                pk = this.WorkID;
+                                break;
+                        }
+                        if (DBAccess.RunSQLReturnValInt("SELECT COUNT(*) as Num FROM " + mapData.PTable + " WHERE OID=" + pk) == 0)
+                            continue;
+                        break;
+                    case FrmEnableRole.WhenHaveFrmPara: //判断是否有参数.
+                        frms = frms.Trim();
+                        frms = frms.Replace(" ", "").Replace(" ", "");
+                        if (DataType.IsNullOrEmpty(frms) == true)
+                            continue;
+                        if (frms.Contains(",") == false && frms.Equals(frmNode.FK_Frm) == false)
+                            continue;
+                        if (frms.Contains(",") == true && frms.Contains(frmNode.FK_Frm + ",") == false)
+                            continue;
+                        break;
+                    case FrmEnableRole.ByFrmFields:
+                        throw new Exception("@这种类型的判断，ByFrmFields 还没有完成。");
+
+                    case FrmEnableRole.BySQL: // 按照SQL的方式.
+                        string mysql = frmNode.FrmEnableExp.Clone() as string;
+                        if (DataType.IsNullOrEmpty(mysql) == true)
+                        {
+                            MapData FrmMd = mds.GetEntityByKey(frmNode.FK_Frm) as MapData;
+                            return "err@表单" + frmNode.FK_Frm + ",[" + FrmMd.Name + "]在节点[" + frmNode.FK_Node + "]启用方式按照sql启用但是您没有给他设置sql表达式.";
+                        }
+
+                        mysql = mysql.Replace("@OID", this.WorkID.ToString());
+                        mysql = mysql.Replace("@WorkID", this.WorkID.ToString());
+
+                        mysql = mysql.Replace("@NodeID", this.FK_Node.ToString());
+                        mysql = mysql.Replace("@FK_Node", this.FK_Node.ToString());
+
+                        mysql = mysql.Replace("@FK_Flow", this.FK_Flow);
+
+                        mysql = mysql.Replace("@WebUser.No", WebUser.No);
+                        mysql = mysql.Replace("@WebUser.Name", WebUser.Name);
+                        mysql = mysql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+
+                        //替换特殊字符.
+                        mysql = mysql.Replace("~", "'");
+
+                        if (DBAccess.RunSQLReturnValFloat(mysql) <= 0)
+                            continue;
+                        break;
+
+                    case FrmEnableRole.ByStation://当前人员包含这个岗位
+                        string exp = frmNode.FrmEnableExp.Clone() as string;
+                        string Sql = "SELECT FK_Station FROM Port_DeptEmpStation where FK_Emp='" + WebUser.No + "'";
+                        string station = DBAccess.RunSQLReturnString(Sql);
+                        if (DataType.IsNullOrEmpty(station) == true)
+                            continue;
+                        string[] stations = station.Split(';');
+                        bool isExit = false;
+                        foreach (string s in stations)
+                        {
+                            if (exp.Contains(s) == true)
+                            {
+                                isExit = true;
+                                break;
+                            }
+                        }
+                        if (isExit == false)
+                            continue;
+                        break;
+
+                    case FrmEnableRole.ByDept:
+                        exp = frmNode.FrmEnableExp.Clone() as string;
+                        Sql = "SELECT FK_Dept FROM Port_DeptEmp where FK_Emp='" + WebUser.No + "'";
+                        string dept = DBAccess.RunSQLReturnString(Sql);
+                        if (DataType.IsNullOrEmpty(dept) == true)
+                            continue;
+                        string[] depts = dept.Split(';');
+                        isExit = false;
+                        foreach (string s in depts)
+                        {
+                            if (exp.Contains(s) == true)
+                            {
+                                isExit = true;
+                                break;
+                            }
+                        }
+                        if (isExit == false)
+                            continue;
+
+                        break;
+                    case FrmEnableRole.Disable: // 如果禁用了，就continue出去..
+                        continue;
+                    default:
+                        throw new Exception("err@没有判断的规则." + frmNode.FrmEnableRole);
+                }
+                #endregion
+                MapData md = mds.GetEntityByKey(frmNode.FK_Frm) as MapData;
+                if(DataType.IsNullOrEmpty(md.FK_FormTree) == true)
+                    md.FK_FormTree = treeNo;
+                
+                //增加目录.
+                if (formTree.Contains("Name", md.FK_FormTreeText) == false)
+                {
+                    BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();
+                    nodeFolder.No = md.FK_FormTree;
+                    nodeFolder.ParentNo = "1";
+                    nodeFolder.Name = md.FK_FormTreeText;
+                    nodeFolder.NodeType = "folder";
+                    formTree.AddEntity(nodeFolder);
+                }
+
+                //检查必填项.
+                bool IsNotNull = false;
+                FrmFields formFields = new FrmFields();
+                QueryObject obj = new QueryObject(formFields);
+                obj.AddWhere(FrmFieldAttr.FK_Node, this.FK_Node);
+                obj.addAnd();
+                obj.AddWhere(FrmFieldAttr.FK_MapData, md.No);
+                obj.addAnd();
+                obj.AddWhere(FrmFieldAttr.IsNotNull, 1);
+                obj.DoQuery();
+                if (formFields != null && formFields.Count > 0)
+                    IsNotNull = true;
+
+                BP.WF.Template.FlowFormTree nodeForm = new BP.WF.Template.FlowFormTree();
+                nodeForm.No = md.No;
+                nodeForm.ParentNo = md.FK_FormTree;
+
+                //设置他的表单显示名字. 2019.09.30
+                string frmName = md.Name;
+                FrmNode fn = frmNodes.GetEntityByKey(FrmNodeAttr.FK_Frm, md.No) as FrmNode;
+                if (fn != null)
+                {
+                    string str = fn.FrmNameShow;
+                    if (DataType.IsNullOrEmpty(str) == false)
+                        frmName = str;
+                }
+                nodeForm.Name = frmName;
+                nodeForm.NodeType = IsNotNull ? "form|1" : "form|0";
+                nodeForm.IsEdit = frmNode.IsEditInt.ToString();// Convert.ToString(Convert.ToInt32(frmNode.IsEdit));
+                nodeForm.IsCloseEtcFrm = frmNode.IsCloseEtcFrmInt.ToString();
+                forms.AddEntity(nodeForm);
+            }
+            #endregion
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(formTree.ToDataTableField("FormTree"));
+            ds.Tables.Add(forms.ToDataTableField("Forms"));
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+
+
         /// <summary>
         /// 获取表单树数据
         /// </summary>
@@ -3196,9 +3431,7 @@ namespace BP.WF.HttpHandler
             string frms = HttpContextHelper.RequestParams("Frms");
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             if (DataType.IsNullOrEmpty(frms) == true)
-            {
                 frms = gwf.Paras_Frms;
-            }
             else
             {
                 gwf.Paras_Frms = frms;
@@ -3243,22 +3476,13 @@ namespace BP.WF.HttpHandler
                         frms = frms.Replace(" ", "");
 
                         if (DataType.IsNullOrEmpty(frms) == true)
-                        {
                             continue;
-                            //return "err@当前表单设置为仅有参数的时候启用,但是没有传递来参数.";
-                        }
 
-                        if (frms.Contains(",") == false)
-                        {
-                            if (frms != frmNode.FK_Frm)
-                                continue;
-                        }
+                        if (frms.Contains(",") == false && frms.Equals(frmNode.FK_Frm) == false)
+                            continue;
 
-                        if (frms.Contains(",") == true)
-                        {
-                            if (frms.Contains(frmNode.FK_Frm + ",") == false)
-                                continue;
-                        }
+                        if (frms.Contains(",") == true && frms.Contains(frmNode.FK_Frm + ",") == false)
+                            continue;
 
                         break;
                     case FrmEnableRole.ByFrmFields:
@@ -3424,39 +3648,6 @@ namespace BP.WF.HttpHandler
                 }
             }
             #endregion
-
-            //扩展工具，显示位置为表单树类型. 
-#warning 不再支持工具栏的连接，可以使用表单来完成，实现该功能。
-            //NodeToolbars extToolBars = new NodeToolbars();
-            //extToolBars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node, NodeToolbarAttr.ShowWhere, (int)ShowWhere.Tree);
-
-            //foreach (NodeToolbar item in extToolBars)
-            //{
-            //    string url = "";
-            //    if (DataType.IsNullOrEmpty(item.Url))
-            //        continue;
-
-            //    url = item.Url;
-
-            //    BP.WF.Template.FlowFormTree formTree = new BP.WF.Template.FlowFormTree();
-            //    formTree.No = item.OID.ToString();
-            //    formTree.ParentNo = "1";
-            //    formTree.Name = item.Title;
-            //    formTree.NodeType = "tools|0";
-            //    if (!DataType.IsNullOrEmpty(item.Target) && item.Target.ToUpper() == "_BLANK")
-            //    {
-            //        formTree.NodeType = "tools|1";
-            //    }
-
-            //    formTree.Url = url;
-            //    appFlowFormTree.AddEntity(formTree);
-            //}]]
-
-            //if (appFlowFormTree.Count==1 && nd.FormType== NodeFormType.Tab)
-            //{
-            //    //nd.FormType
-            //}
-
             //增加到数据结构上去.
             TansEntitiesToGenerTree(appFlowFormTree, root.No, "");
 

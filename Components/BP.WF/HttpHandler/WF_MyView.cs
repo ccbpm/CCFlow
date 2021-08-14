@@ -562,8 +562,9 @@ namespace BP.WF.HttpHandler
             if (viewEn.PAnyOne == true)
                 return true;
 
-            if (viewEn.PSpecDept == true || DataType.IsNullOrEmpty(viewEn.PSpecDeptExt))
+            if (viewEn.PSpecDept == true && DataType.IsNullOrEmpty(viewEn.PSpecDeptExt)==false)
             {
+                viewEn.PSpecDeptExt += ",";
                 if (viewEn.PSpecDeptExt.Equals(WebUser.FK_Dept + ",") == true)
                     return true;
             }
@@ -606,7 +607,30 @@ namespace BP.WF.HttpHandler
                     return true;
             }
             #endregion 按照部门控制.
+            if (viewEn.PSpecSta == true && DataType.IsNullOrEmpty(viewEn.PSpecStaExt)==false)
+            {
+                string sql = "Select FK_Station From Port_DeptEmpStation Where FK_Emp='" + WebUser.No + "'";
+                string stas = DBAccess.RunSQLReturnStringIsNull(sql, "");
+                if (DataType.IsNullOrEmpty(stas) == false)
+                {
+                    viewEn.PSpecStaExt += ",";
+                    foreach (string sta in stas.Split(','))
+                    if (viewEn.PSpecStaExt.Equals(sta + ",") == true)
+                        return true;
+                }
+               
+            }
+            #region 指定岗位可见
+            #endregion 指定岗位可见
 
+            #region 指定人员可见
+            if (viewEn.PSpecEmp == true && DataType.IsNullOrEmpty(viewEn.PSpecEmpExt)==false)
+            {
+                viewEn.PSpecEmpExt += ",";
+                if (viewEn.PSpecEmpExt.Equals(WebUser.No + ",") == true)
+                    return true;
+            }
+            #endregion 指定人员可见
 
             return false;
         }

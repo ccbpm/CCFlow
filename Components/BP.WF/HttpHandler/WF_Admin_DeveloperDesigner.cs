@@ -59,29 +59,8 @@ namespace BP.WF.HttpHandler
                 return "err@错误" + htmlCode;
 
             htmlCode = HttpUtility.UrlDecode(htmlCode, Encoding.UTF8);
-            //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
-            string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
-            if (Directory.Exists(filePath) == false)
-                Directory.CreateDirectory(filePath);
-
-            filePath = filePath + this.FK_MapData + ".htm";
-            //写入到html 中
-            DataType.WriteFile(filePath, htmlCode);
-
-            //保存类型。
-            MapData md = new MapData(this.FK_MapData);
-            if (md.HisFrmType != FrmType.Develop)
-            {
-                md.HisFrmType = FrmType.Develop;
-                md.Update();
-            }
-            // HtmlTemplateFile 保存到数据库中
-            DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", this.FK_MapData, "HtmlTemplateFile");
-
-            //检查数据完整性
-            GEEntity en = new GEEntity(this.FK_MapData);
-            en.CheckPhysicsTable();
-            return "保存成功";
+            
+            return BP.WF.Dev2Interface.SaveDevelopForm(htmlCode,this.FK_MapData);
 
         }
         #endregion

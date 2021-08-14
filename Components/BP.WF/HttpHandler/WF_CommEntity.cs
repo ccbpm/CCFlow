@@ -628,9 +628,22 @@ namespace BP.WF.HttpHandler
                 if (enumKeys.Length > 2)
                 {
                     enumKeys = enumKeys.Substring(0, enumKeys.Length - 1);
-                    // Sys_Enum
-                    string sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
-                    DataTable dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
+                    DataTable dtEnum = new DataTable();
+                    string sqlEnum = "";
+                    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    {
+                        string sqlWhere = " EnumKey IN (" + enumKeys + ") AND OrgNo='" + WebUser.OrgNo + "'";
+
+                        sqlEnum = "SELECT * FROM Sys_Enum WHERE "+ sqlWhere;
+                        sqlEnum += " UNION ";
+                        sqlEnum += "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ") AND EnumKey NOT IN (SELECT EnumKey FROM Sys_Enum WHERE " + sqlWhere+") AND (OrgNo Is Null Or OrgNo='')";
+                        dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
+                    }
+                    else
+                    {
+                       sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
+                       dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
+                    }
                     dtEnum.TableName = "Sys_Enum";
 
                     if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)

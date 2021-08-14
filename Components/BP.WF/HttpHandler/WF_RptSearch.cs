@@ -33,7 +33,7 @@ namespace BP.WF.HttpHandler
 
             //我发起的流程.
             Paras ps = new Paras();
-            ps.SQL = "select FK_Flow, FlowName,Count(WorkID) as Num FROM WF_GenerWorkFlow  WHERE Starter=" + SystemConfig.AppCenterDBVarStr + "Starter GROUP BY FK_Flow, FlowName ";
+            ps.SQL = "select FK_Flow, FlowName,Count(WorkID) as Num FROM WF_GenerWorkFlow  WHERE WFState >1 And Starter=" + SystemConfig.AppCenterDBVarStr + "Starter GROUP BY FK_Flow, FlowName ";
             ps.Add("Starter", BP.Web.WebUser.No);
             
             //string sql = "";

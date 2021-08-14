@@ -3113,7 +3113,7 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(empStr) == true)
                     continue;
 
-                BP.GPM.Emp emp = new GPM.Emp(empStr);
+                BP.GPM.Emp emp = new BP.GPM.Emp(empStr);
 
                 CCList cc = new CCList();
                 cc.FK_Flow = this.FK_Flow;

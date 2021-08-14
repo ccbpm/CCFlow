@@ -297,7 +297,6 @@ namespace BP.WF.HttpHandler
                 if (DBAccess.TestIsConnection() == false)
                     return "err@数据库连接配置错误,请参考手册查看数据库配置连接.";
 
-
                 //   DBAccess.IsCaseSensitive
 
                 //判断是否可以安装,不能安装就抛出异常.
@@ -306,7 +305,6 @@ namespace BP.WF.HttpHandler
                 //判断是不是有.
                 if (DBAccess.IsExitsObject("WF_Flow") == true)
                     return "err@info数据库已经安装上了，您不必在执行安装. 点击:<a href='./CCBPMDesigner/Login.htm' >这里直接登录流程设计器</a>";
-
 
                 Hashtable ht = new Hashtable();
                 ht.Add("OSModel", 1); //组织结构类型.

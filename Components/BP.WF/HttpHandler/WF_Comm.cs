@@ -463,7 +463,8 @@ namespace BP.WF.HttpHandler
             {
                 string pkval = this.PKVal;
                 Entity en = ClassFactory.GetEn(this.EnName);
-
+                if (en == null)
+                    return "err@类" + this.EnName + "不存在,请检查是不是拼写错误";
                 if (DataType.IsNullOrEmpty(pkval) == true || pkval.Equals("0") || pkval.Equals("undefined"))
                 {
                     Map map = en.EnMap;
@@ -498,7 +499,8 @@ namespace BP.WF.HttpHandler
             try
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
-
+                if (en == null)
+                    return "err@类" + this.EnName + "不存在,请检查是不是拼写错误";
                 #region 首先判断参数删除.
                 string key1 = this.GetRequestVal("Key1");
                 string val1 = this.GetRequestVal("Val1");
@@ -562,6 +564,8 @@ namespace BP.WF.HttpHandler
             try
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
+                if (en == null)
+                    return "err@类" + this.EnName + "不存在,请检查是不是拼写错误";
                 en.PKVal = this.PKVal;
                 en.RetrieveFromDBSources();
 
@@ -588,6 +592,8 @@ namespace BP.WF.HttpHandler
             try
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
+                if (en == null)
+                    return "err@类" + this.EnName + "不存在,请检查是不是拼写错误";
                 en.PKVal = this.PKVal;
                 int i = en.RetrieveFromDBSources();
 
@@ -618,6 +624,9 @@ namespace BP.WF.HttpHandler
             try
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
+                if (en == null)
+                    return "err@类" + this.EnName + "不存在,请检查是不是拼写错误";
+
                 en = en.CreateInstance();
                 en.PKVal = this.PKVal;
                 en.Retrieve();
@@ -643,6 +652,9 @@ namespace BP.WF.HttpHandler
             try
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
+                if (en == null)
+                    return "err@类" + this.EnName + "不存在,请检查是不是拼写错误";
+
                 en.PKVal = this.PKVal;
                 bool isExit = en.IsExits;
                 if (isExit == true)
@@ -732,7 +744,8 @@ namespace BP.WF.HttpHandler
             try
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
-
+                if (en == null)
+                    return "err@类" + this.EnName + "不存在,请检查是不是拼写错误";
                 //遍历属性，循环赋值.
                 foreach (Attr attr in en.EnMap.Attrs)
                 {
@@ -760,6 +773,8 @@ namespace BP.WF.HttpHandler
         {
             //创建类实体.
             BP.En.Entity en = ClassFactory.GetEn(this.EnName);
+            if (en == null)
+                return "err@类" + this.EnName + "不存在,请检查是不是拼写错误";
             en.PKVal = this.PKVal;
             en.RetrieveFromDBSources();
 
@@ -779,12 +794,12 @@ namespace BP.WF.HttpHandler
             {
                 string[] str = paras.Split('~');
                 myparas = new object[str.Length];
-               
+
                 int idx = 0;
                 ParameterInfo[] paramInfos = mp.GetParameters();
-                foreach(ParameterInfo paramInfo in paramInfos)
+                foreach (ParameterInfo paramInfo in paramInfos)
                 {
-                        myparas[idx] = str[idx];
+                    myparas[idx] = str[idx];
                     try
                     {
                         if (paramInfo.ParameterType.Name.Equals("Single"))
@@ -806,14 +821,14 @@ namespace BP.WF.HttpHandler
                         }
 
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
-                        throw new Exception("err@类[" + this.EnName + "]方法[" + methodName + "]值"+ str[idx]+"转换成"+ paramInfo.ParameterType.Name+"失败");
+                        throw new Exception("err@类[" + this.EnName + "]方法[" + methodName + "]值" + str[idx] + "转换成" + paramInfo.ParameterType.Name + "失败");
                     }
-                    
+
                     idx++;
                 }
-                
+
 
             }
 
@@ -844,6 +859,8 @@ namespace BP.WF.HttpHandler
             try
             {
                 Entities ens = ClassFactory.GetEns(this.EnsName);
+                if (ens == null)
+                    return "err@类" + this.EnsName + "不存在,请检查是不是拼写错误";
                 ens.RetrieveAll();
                 return ens.ToJson();
             }
@@ -861,6 +878,8 @@ namespace BP.WF.HttpHandler
             try
             {
                 Entities ens = ClassFactory.GetEns(this.EnsName);
+                if (ens == null)
+                    return "err@类" + this.EnsName + "不存在,请检查是不是拼写错误";
                 if (this.Paras == null)
                     return "0";
 
@@ -954,6 +973,8 @@ namespace BP.WF.HttpHandler
             try
             {
                 Entities ens = ClassFactory.GetEns(this.EnsName);
+                if (ens == null)
+                    return "err@类" + this.EnsName + "不存在,请检查是不是拼写错误";
                 if (this.Paras == null)
                     return "0";
 
@@ -1546,10 +1567,17 @@ namespace BP.WF.HttpHandler
 
                 if (DataType.IsNullOrEmpty(orderBy) == false)
                 {
-                    if (isDesc)
-                        qo.addOrderByDesc(orderBy);
-                    else
-                        qo.addOrderBy(orderBy);
+                    try
+                    {
+                        if (isDesc)
+                            qo.addOrderByDesc(orderBy);
+                        else
+                            qo.addOrderBy(orderBy);
+                    }
+                    catch (Exception ex)
+                    {
+                        encfg.SetValByKey("OrderBy", orderBy);
+                    }
                 }
             }
 
@@ -2929,7 +2957,8 @@ namespace BP.WF.HttpHandler
                 string[] myparas = this.Paras.Split('@');
 
                 Entities ens = ClassFactory.GetEns(this.EnsName);
-
+                if (ens == null)
+                    return "err@类" + this.EnsName + "不存在,请检查是不是拼写错误";
                 List<string[]> paras = new List<string[]>();
                 int idx = 0;
                 for (int i = 0; i < myparas.Length; i++)
@@ -2975,11 +3004,12 @@ namespace BP.WF.HttpHandler
             {
                 #region  查询出来s实体数据.
                 Entities dtls = BP.En.ClassFactory.GetEns(this.EnsName);
+                if (dtls == null)
+                    return "err@类" + this.EnsName + "不存在,请检查是不是拼写错误";
+               
                 dtls.RetrieveAll();
                 Entity en = dtls.GetNewEntity;
-                //QueryObject qo = new QueryObject(dtls);
-                ////qo.DoQuery(en.PK, SystemConfig.PageSize, this.PageIdx, false);
-                //qo.DoQuery();
+              
                 Map map = en.EnMap;
                 foreach (Entity item in dtls)
                 {
@@ -3567,17 +3597,17 @@ namespace BP.WF.HttpHandler
             headerMap.Add("Authorization", token);
 
             string url = this.GetRequestVal("url");
-            string postData = BP.WF.Glo.HttpPostConnect(url, headerMap,null);
+            string postData = BP.WF.Glo.HttpPostConnect(url, headerMap, null);
             var res = postData.ToJObject();
             if (res["code"].ToString() == "200")
                 return res["data"].ToString();
             else
                 return "[]";
         }
-    #endregion
+        #endregion
 
-    //执行方法.
-    public string HttpHandler()
+        //执行方法.
+        public string HttpHandler()
         {
             //@樊雷伟 , 这个方法需要同步.
 
@@ -3632,22 +3662,30 @@ namespace BP.WF.HttpHandler
         {
             Hashtable ht = new Hashtable();
 
+
+            //@hongyan. 需要同步.
             string userNo = Web.WebUser.No;
             if (DataType.IsNullOrEmpty(userNo) == true)
             {
-                ht.Add("No", "");
-                ht.Add("Name", "");
-                ht.Add("FK_Dept", "");
-                ht.Add("FK_DeptName", "");
-                ht.Add("FK_DeptNameOfFull", "");
-                ht.Add("Tel", "");
+                string token = this.GetRequestVal("Token");
+                if (DataType.IsNullOrEmpty(token) == true)
+                {
+                    ht.Add("No", "");
+                    ht.Add("Name", "");
+                    ht.Add("FK_Dept", "");
+                    ht.Add("FK_DeptName", "");
+                    ht.Add("FK_DeptNameOfFull", "");
+                    ht.Add("Tel", "");
 
-                ht.Add("CustomerNo", SystemConfig.CustomerNo);
-                ht.Add("CustomerName", SystemConfig.CustomerName);
-                ht.Add("IsAdmin", 0);
-                ht.Add("OrgNo", "");
-                ht.Add("OrgName", "");
-                return BP.Tools.Json.ToJson(ht);
+                    ht.Add("CustomerNo", SystemConfig.CustomerNo);
+                    ht.Add("CustomerName", SystemConfig.CustomerName);
+                    ht.Add("IsAdmin", 0);
+                    ht.Add("OrgNo", "");
+                    ht.Add("OrgName", "");
+                    return BP.Tools.Json.ToJson(ht);
+                }
+
+                BP.WF.Dev2Interface.Port_LoginByToken(token);
             }
 
             ht.Add("No", WebUser.No);

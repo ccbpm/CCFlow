@@ -140,6 +140,8 @@ namespace BP.WF.HttpHandler
 
             MapData md = new MapData();
             md.No = str;
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                md.No = str + "_" + WebUser.OrgNo;
             if (md.RetrieveFromDBSources() == 0)
                 return str;
 
@@ -163,6 +165,57 @@ namespace BP.WF.HttpHandler
 
         }
         /// <summary>
+        /// 创建一个DBList.
+        /// </summary>
+        /// <returns></returns>
+        public string NewFrmGuide_Create_DBList()
+        {
+            BP.Sys.MapData md = new BP.Sys.MapData();
+            md.Name = this.GetRequestVal("TB_Name");
+
+            md.No = DataType.ParseStringForNo(this.GetRequestVal("TB_No"), 100);
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                md.No = md.No + "_" + BP.Web.WebUser.OrgNo;
+
+            //表单类型.
+            md.HisFrmTypeInt = this.GetRequestValInt("DDL_FrmType");
+            md.EntityType = EntityType.DBList;
+            string sort = this.GetRequestVal("FK_FrmSort");
+            if (DataType.IsNullOrEmpty(sort) == true)
+                sort = this.GetRequestVal("DDL_FrmTree");
+
+            //    md.FK_FrmSort = sort;
+            md.FK_FormTree = sort;
+
+            //类型.
+            md.AppType = "100";//独立表单.
+            md.DBSrc = this.GetRequestVal("DDL_DBSrc");
+            if (md.IsExits == true)
+                return "err@表单ID:" + md.No + "已经存在.";
+
+            //没有设置表，保存不上.
+            md.PTable = this.No;
+            md.Insert();
+
+            //增加上OID字段.
+            BP.Sys.CCFormAPI.RepareCCForm(md.No);
+
+
+            BP.CCBill.FrmDict entityDict = new FrmDict(md.No);
+            entityDict.BillNoFormat = "3"; //编码格式.001,002,003.
+            entityDict.BtnNewModel = 0;
+
+            //设置默认的查询条件.
+            entityDict.SetPara("IsSearchKey", 1);
+            entityDict.SetPara("DTSearchWay", 0);
+
+            entityDict.EntityType = EntityType.FrmDict;
+            entityDict.Update();
+            entityDict.CheckEnityTypeAttrsFor_EntityNoName();
+
+            return "创建成功...";
+        }
+        /// <summary>
         /// 创建表单
         /// </summary>
         /// <returns></returns>
@@ -173,11 +226,11 @@ namespace BP.WF.HttpHandler
             try
             {
                 md.Name = this.GetRequestVal("TB_Name");
-                md.No =   DataType.ParseStringForNo(this.GetRequestVal("TB_No"), 100);
-
+                md.No = DataType.ParseStringForNo(this.GetRequestVal("TB_No"), 100);
                 md.HisFrmTypeInt = this.GetRequestValInt("DDL_FrmType");
-
                 string ptable = this.GetRequestVal("TB_PTable");
+
+              
 
                 md.PTable = ptable;
                 //   md.PTable = DataType.ParseStringForNo(this.GetRequestVal("TB_PTable"), 100);
@@ -206,7 +259,7 @@ namespace BP.WF.HttpHandler
                         break;
                     case BP.Sys.FrmType.Url:
                     case BP.Sys.FrmType.Entity:
-                        md.Url = md.PTable;
+                        md.UrlExt = md.PTable;
                         md.PTable = "";
                         break;
                     //如果是以下情况，导入模式
@@ -236,7 +289,10 @@ namespace BP.WF.HttpHandler
                     bill.SetPara("DTSearchWay", 0);
 
                     bill.Update();
-                    bill.CheckEnityTypeAttrsFor_Bill();
+                    bool isHavePFrmID = false;
+                    if (DataType.IsNullOrEmpty(this.GetRequestVal("FrmID")) == false)
+                        isHavePFrmID = true;
+                    bill.CheckEnityTypeAttrsFor_Bill(isHavePFrmID);
                 }
                 #endregion 如果是单据.
 
@@ -293,7 +349,7 @@ namespace BP.WF.HttpHandler
             WebUser.SignInOfGener(emp);
             return "登录成功.";
         }
-        
+
         /// <summary>
         /// 表单属性
         /// </summary>
@@ -320,12 +376,12 @@ namespace BP.WF.HttpHandler
                 return "url@../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFool&No=" + this.FK_MapData;
             }
 
-            if (md.EntityType ==  EntityType.FrmDict)
+            if (md.EntityType == EntityType.FrmDict)
                 return "url@../../Comm/En.htm?EnName=BP.CCBill.FrmDict&No=" + this.FK_MapData;
 
             if (md.EntityType == EntityType.EntityTree)
                 return "url@../../Comm/En.htm?EnName=BP.CCBill.FrmBill&No=" + this.FK_MapData;
-             
+
 
             return "err@没有判断的表单转入类型" + md.HisFrmType.ToString();
         }

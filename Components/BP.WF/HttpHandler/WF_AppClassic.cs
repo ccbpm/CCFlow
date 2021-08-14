@@ -311,6 +311,9 @@ namespace BP.WF.HttpHandler
                 {
                     string sid = DBAccess.GenerGUID();
                     DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.UserID + "'");
+
+                    DBAccess.RunSQL("UPDATE WF_Emp SET Token='" + sid + "' WHERE No='" + emp.UserID + "'");
+
                     WebUser.SID = sid;
                     emp.SID = sid;
                 }

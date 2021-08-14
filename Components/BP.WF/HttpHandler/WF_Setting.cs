@@ -256,7 +256,7 @@ namespace BP.WF.HttpHandler
         public string ChangeDept_Submit()
         {
             string deptNo = this.GetRequestVal("DeptNo");
-            BP.GPM.Dept dept = new GPM.Dept(deptNo);
+            BP.GPM.Dept dept = new BP.GPM.Dept(deptNo);
 
             BP.Web.WebUser.FK_Dept = dept.No;
             BP.Web.WebUser.FK_DeptName = dept.Name;

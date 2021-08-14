@@ -103,8 +103,8 @@ namespace BP.WF.HttpHandler
                     if (md.RetrieveFromDBSources() == 1)
                         return "err@表单编号为:" + md.No + "已存在.";
                     frmID = frmID + "" + WebUser.OrgNo;
+                    md.No = frmID;
                 }
-
                 md = BP.Sys.CCFormAPI.Template_LoadXmlTemplateAsSpecFrmID(frmID, ds, frmSort);  // MapData.ImpMapData(ds);
             }
 
@@ -115,7 +115,6 @@ namespace BP.WF.HttpHandler
                 md.No = frmID;
                 if (md.RetrieveFromDBSources() == 1)
                     return "err@您输入的表单编号为:" + md.No + "已存在.";
-
                 md = BP.Sys.CCFormAPI.Template_LoadXmlTemplateAsSpecFrmID(frmID, ds, frmSort);  // MapData.ImpMapData(ds);
             }
             if (impType == "3ftp")
@@ -123,7 +122,6 @@ namespace BP.WF.HttpHandler
                 md.No = frmID;
                 if (md.RetrieveFromDBSources() == 1)
                     return "err@您输入的表单编号为:" + md.No + "已存在.";
-
                 md = BP.Sys.CCFormAPI.Template_LoadXmlTemplateAsSpecFrmID(frmID, ds, frmSort);  // MapData.ImpMapData(ds);
             }
 

@@ -333,14 +333,14 @@ namespace BP.WF.HttpHandler
             switch (DBAccess.AppCenterDBType)
             {
                 case DBType.Oracle:
-                    currNode = "(SELECT FK_Node FROM (SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC ) WHERE rownum=1)";
+                    currNode = "SELECT FK_Node FROM (SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' AND WorkID=" + this.WorkID + "  Order by RDT DESC ) WHERE rownum=1";
                     break;
                 case DBType.MySQL:
                 case DBType.PostgreSQL:
-                    currNode = "(SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC LIMIT 1)";
+                    currNode = "SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' AND WorkID=" + this.WorkID + "  Order by RDT DESC LIMIT 1";
                     break;
                 case DBType.MSSQL:
-                    currNode = "(SELECT TOP 1 FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC)";
+                    currNode = "SELECT TOP 1 FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' AND WorkID="+this.WorkID+" Order by RDT DESC";
                     break;
                 default:
                     break;

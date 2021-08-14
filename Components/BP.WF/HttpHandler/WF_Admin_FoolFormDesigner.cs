@@ -305,11 +305,20 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string SysEnumList_SaveEnumField()
         {
+            string dtlKey = this.GetRequestVal("DtlKeyOfEn");
             MapAttr attr = new Sys.MapAttr();
             attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
             if (attr.RetrieveFromDBSources() != 0)
                 return "err@字段名[" + this.KeyOfEn + "]已经存在.";
 
+            if (DataType.IsNullOrEmpty(dtlKey) == false)
+            {
+                attr = new Sys.MapAttr();
+                attr.MyPK = this.FK_MapData + "_" + dtlKey;
+                if (attr.RetrieveFromDBSources() != 0)
+                    return "err@字段名[" + dtlKey + "]已经存在.";
+            }
+            attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
             attr.FK_MapData = this.FK_MapData;
             attr.KeyOfEn = this.KeyOfEn;
             attr.UIBindKey = this.GetRequestVal("EnumKey");
@@ -348,7 +357,28 @@ namespace BP.WF.HttpHandler
             ps.Add("FrmID", this.FK_MapData);
             attr.GroupID = DBAccess.RunSQLReturnValInt(ps, 0);
             attr.Insert();
-            return attr.MyPK;
+            if (DataType.IsNullOrEmpty(dtlKey) == false)
+            {
+                attr.MyPK = this.FK_MapData + "_" + dtlKey;
+                attr.KeyOfEn = dtlKey;
+                string uiBindKey = sem.GetParaString("DtlEnumKey");
+                attr.UIBindKey = uiBindKey;
+                attr.Name = sem.GetParaString("DtlName");
+                attr.Insert();
+                //创建联动关系
+                MapExt ext = new MapExt();
+                string mypk = "ActiveDDL_" + this.FK_MapData + "_" + this.KeyOfEn;
+                ext.MyPK = mypk;
+                ext.AttrsOfActive = dtlKey;
+                ext.DBType = "0";
+                ext.FK_DBSrc = "local";
+                ext.Doc = "Select IntKey as No, Lab as Name From Sys_Enum Where EnumKey='"+ uiBindKey + "' AND IntKey>=@Key*100 AND IntKey< (@Key*100/#100)";
+                ext.FK_MapData = this.FK_MapData;
+                ext.AttrOfOper = this.KeyOfEn;
+                ext.ExtType = "ActiveDDL";
+                ext.Insert();
+            }
+            return this.FK_MapData + "_" + this.KeyOfEn;
         }
 
         public string Designer_NewMapDtl()

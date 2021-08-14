@@ -55,23 +55,20 @@ namespace BP.WF.HttpHandler
 
             return cds.ToJson();
         }
+        /// <summary>
+        /// 移动.
+        /// </summary>
+        /// <returns></returns>
         public string CondPRI_Move()
         {
-            string mtype = this.GetRequestVal("MoveType");
-            if (mtype.Equals("Up"))
+            string[] ens = this.GetRequestVal("MyPKs").Split(',');
+            for (int i = 0; i < ens.Length; i++)
             {
-                Direction dir = new Direction(this.MyPK);
-                dir.DoUp();
+                var enNo = ens[i];
+                string sql = "UPDATE WF_Direction SET Idx=" + i + " WHERE MyPK='" + enNo + "'";
+                DBAccess.RunSQL(sql);
             }
-
-            if (mtype.Equals("Down"))
-            {
-                Direction dir = new Direction(this.MyPK);
-                dir.DoDown();
-            }
-
-
-            return "移动成功.";
+            return "顺序移动成功..";
         }
         #endregion 方向优先级.
 

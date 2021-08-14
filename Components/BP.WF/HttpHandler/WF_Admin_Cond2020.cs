@@ -36,6 +36,17 @@ namespace BP.WF.HttpHandler
             // condes.RetrieveAll();
             return "";
         }
+        public string List_Move()
+        {
+            string[] ens = this.GetRequestVal("MyPKs").Split(',');
+            for (int i = 0; i < ens.Length; i++)
+            {
+                var enNo = ens[i];
+                string sql = "UPDATE WF_Cond SET Idx=" + i + " WHERE MyPK='" + enNo + "'";
+                DBAccess.RunSQL(sql);
+            }
+            return "顺序移动成功..";
+        }
         /// <summary>
         /// 校验是否正确
         /// </summary>
@@ -55,7 +66,8 @@ namespace BP.WF.HttpHandler
                 toNodeID, CondAttr.CondType, this.GetRequestValInt("CondType"), CondAttr.Idx);
 
             if (conds.Count == 0)
-                return "";
+                return " 没有条件. ";
+
             if (conds.Count == 1)
             {
                 foreach (Cond item in conds)

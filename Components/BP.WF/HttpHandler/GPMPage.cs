@@ -29,6 +29,8 @@ namespace BP.WF.HttpHandler
         }
         #endregion 构造函数
 
+ 
+
         #region 签名.
         /// <summary>
         /// 图片签名初始化
@@ -92,30 +94,70 @@ namespace BP.WF.HttpHandler
         public string Organization_Init()
         {
         
-            BP.GPM.Depts depts = new GPM.Depts();
+            BP.GPM.Depts depts = new BP.GPM.Depts();
 			string parentNo = this.GetRequestVal("ParentNo");
 			QueryObject qo = new QueryObject(depts);
             if (DataType.IsNullOrEmpty(parentNo) == false)
             {
                 if (parentNo.Equals("0") == true)
                 {
-                    qo.AddWhere(GPM.DeptAttr.ParentNo, parentNo);
+                    qo.AddWhere(BP.GPM.DeptAttr.ParentNo, parentNo);
                     qo.addOr();
-                    qo.AddWhereInSQL(GPM.DeptAttr.ParentNo, "SELECT No From Port_Dept Where ParentNo='0'");
+                    qo.AddWhereInSQL(BP.GPM.DeptAttr.ParentNo, "SELECT No From Port_Dept Where ParentNo='0'");
                 }
-                    
+
                 else
-                    qo.AddWhere(GPM.DeptAttr.ParentNo, parentNo);
+                {
+                    qo.AddWhere(BP.GPM.DeptAttr.ParentNo, parentNo);
+                    qo.addOr();
+                    qo.AddWhere(BP.GPM.DeptAttr.No, parentNo);
+                }
+                   
             }
-			qo.addOrderBy(GPM.DeptAttr.Idx);
+			qo.addOrderBy(BP.GPM.DeptAttr.Idx);
 			qo.DoQuery();
 
 			return depts.ToJson();
-            //}
+   
+        }
+        /// <summary>
+        /// 获取本部门及人员信息
+        /// </summary>
+        /// <returns></returns>
+        public string DeptEmp_Init()
+        {
 
-            //depts.RetrieveAll();
+            BP.GPM.Depts depts = new BP.GPM.Depts();
+            BP.GPM.Emps emps = new BP.GPM.Emps();
+            string parentNo = this.GetRequestVal("ParentNo");
+            QueryObject qo = new QueryObject(depts);
+            if (DataType.IsNullOrEmpty(parentNo) == false)
+            {
+                if (parentNo.Equals("0") == true)
+                {
+                    emps.RetrieveIn(EmpAttr.FK_Dept, "SELECT No From Port_Dept Where ParentNo='0'");
+                    qo.AddWhere(BP.GPM.DeptAttr.ParentNo, parentNo);
+                    qo.addOr();
+                    qo.AddWhereInSQL(BP.GPM.DeptAttr.ParentNo, "SELECT No From Port_Dept Where ParentNo='0'");
 
-            //return depts.ToJson();
+                }
+                else
+                {
+                    emps.Retrieve(EmpAttr.FK_Dept, parentNo);
+                    qo.AddWhere(BP.GPM.DeptAttr.ParentNo, parentNo);
+                    qo.addOr();
+                    qo.AddWhere(BP.GPM.DeptAttr.No, parentNo);
+                }
+                   
+
+            }
+            qo.addOrderBy(BP.GPM.DeptAttr.Idx);
+            qo.DoQuery();
+            DataSet ds = new DataSet();
+            ds.Tables.Add(depts.ToDataTableField("Depts"));
+            ds.Tables.Add(emps.ToDataTableField("Emps"));
+            return BP.Tools.Json.ToJson(ds);
+
         }
 
         /// <summary>

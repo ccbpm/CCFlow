@@ -597,10 +597,10 @@ namespace BP.WF.HttpHandler
 
                 string url = "";
                 /*如果是URL.*/
-                if (md.Url.Contains("?") == true)
-                    url = md.Url + "&" + urlParas;
+                if (md.UrlExt.Contains("?") == true)
+                    url = md.UrlExt + "&" + urlParas;
                 else
-                    url = md.Url + "?" + urlParas;
+                    url = md.UrlExt + "?" + urlParas;
 
                 return "url@" + url;
             }
@@ -662,7 +662,7 @@ namespace BP.WF.HttpHandler
                         continue;
                     urlParas += "&" + kvs[0] + "=" + kvs[1];
                 }
-                if (md.Url.Contains("?") == true)
+                if (md.UrlExt.Contains("?") == true)
                     return "url@FrmWord.htm?1=2" + "&" + urlParas;
                 else
                     return "url@FrmWord.htm" + "?" + urlParas;
@@ -892,9 +892,9 @@ namespace BP.WF.HttpHandler
                 imgAthDB.Rec = BP.Web.WebUser.No;
                 imgAthDB.RecName = BP.Web.WebUser.Name;
                 imgAthDB.Save();
-                return "{SourceImage:\"" + webPath + "\"}";
+                return "{\"SourceImage\":\"" + webPath + "\"}";
             }
-            return "{err:\"没有选择文件\"}";
+            return "{\"err\":\"没有选择文件\"}";
         }
         public string ImgUpload_Del()
         {

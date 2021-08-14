@@ -64,7 +64,7 @@ namespace BP.WF.HttpHandler
 
             me.ExtType = MapExtXmlList.AutoFullDtlField;
 
-            me.Tag1= this.GetValFromFrmByKey("TB_Tag1");
+            me.Tag1 = this.GetValFromFrmByKey("TB_Tag1");
             me.Tag2 = this.GetValFromFrmByKey("TB_Tag2");
 
             string Tag = "0";
@@ -147,8 +147,8 @@ namespace BP.WF.HttpHandler
             //把从表的字段放入.
             foreach (MapDtl dtl in dtls)
             {
-                string sql = "SELECT KeyOfEn as \"No\",Name as \"Name\" FROM Sys_MapAttr WHERE FK_MapData='"+dtl.No+"' AND (MyDataType=2 OR MyDataType=3 OR MyDataType=5 OR MyDataType=8)  ";  
-                sql+=" AND KeyOfEn !='OID' AND KeyOfEn!='FID' AND KeyOfEn!='RefPK' ";
+                string sql = "SELECT KeyOfEn as \"No\",Name as \"Name\" FROM Sys_MapAttr WHERE FK_MapData='" + dtl.No + "' AND (MyDataType=2 OR MyDataType=3 OR MyDataType=5 OR MyDataType=8)  ";
+                sql += " AND KeyOfEn !='OID' AND KeyOfEn!='FID' AND KeyOfEn!='RefPK' ";
 
                 //把从表增加里面去.
                 DataTable mydt = DBAccess.RunSQLReturnTable(sql);
@@ -157,13 +157,13 @@ namespace BP.WF.HttpHandler
             }
 
             //把主表的字段放入
-             string mainsql = "SELECT KeyOfEn as \"No\",Name as \"Name\" FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "' AND MyDataType=1 AND UIIsEnable = 0 ";
-             mainsql += " AND KeyOfEn !='OID' AND KeyOfEn!='FID' AND KeyOfEn!='WorkID' AND KeyOfEn!='NodeID' AND KeyOfEn!='RefPK'  AND KeyOfEn!='RDT' AND KeyOfEn!='Rec' ";
+            string mainsql = "SELECT KeyOfEn as \"No\",Name as \"Name\" FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "' AND MyDataType=1 AND UIIsEnable = 0 ";
+            mainsql += " AND KeyOfEn !='OID' AND KeyOfEn!='FID' AND KeyOfEn!='WorkID' AND KeyOfEn!='NodeID' AND KeyOfEn!='RefPK'  AND KeyOfEn!='RDT' AND KeyOfEn!='Rec' ";
 
             //把从表增加里面去.
-             DataTable maindt = DBAccess.RunSQLReturnTable(mainsql);
-             maindt.TableName = "main_Attr";
-             ds.Tables.Add(maindt);
+            DataTable maindt = DBAccess.RunSQLReturnTable(mainsql);
+            maindt.TableName = "main_Attr";
+            ds.Tables.Add(maindt);
 
             return BP.Tools.Json.ToJson(ds);
         }
@@ -188,13 +188,13 @@ namespace BP.WF.HttpHandler
             me.ExtType = MapExtXmlList.AutoFull;
 
             //执行保存.
-            me.MyPK = MapExtXmlList.AutoFull + "_" + me.FK_MapData + "_" + me.AttrOfOper ;
+            me.MyPK = MapExtXmlList.AutoFull + "_" + me.FK_MapData + "_" + me.AttrOfOper;
             if (me.Update() == 0)
                 me.Insert();
 
             return "保存成功.";
         }
-       
+
         public string AutoFull_Init()
         {
             DataSet ds = new DataSet();
@@ -360,15 +360,15 @@ namespace BP.WF.HttpHandler
             string str = "";
             foreach (MapDtl dtl in dtls)
             {
-                string sql =  this.GetRequestVal("TB_" + dtl.No);
+                string sql = this.GetRequestVal("TB_" + dtl.No);
                 sql = sql.Trim();
                 if (DataType.IsNullOrEmpty(sql) == true)
                     continue;
 
-                if (sql.Contains("@Key")==false)
-                    return "err@在配置从表:"+dtl.No+" sql填写错误, 必须包含@Key列, @Key就是当前文本框输入的值. ";
+                if (sql.Contains("@Key") == false)
+                    return "err@在配置从表:" + dtl.No + " sql填写错误, 必须包含@Key列, @Key就是当前文本框输入的值. ";
 
-                str += "$" + dtl.No + ":" +sql; 
+                str += "$" + dtl.No + ":" + sql;
             }
             me.Tag1 = str;
             me.Update();
@@ -406,7 +406,7 @@ namespace BP.WF.HttpHandler
         {
             MapExt me = new MapExt();
             me.MyPK = this.MyPK;
-            if(me.RetrieveFromDBSources() == 0)
+            if (me.RetrieveFromDBSources() == 0)
             {
                 me.MyPK = this.MyPK;
                 me.AttrOfOper = GetRequestVal("AttrOfOper");
@@ -415,7 +415,7 @@ namespace BP.WF.HttpHandler
                 //me.DoWay = this.GetRequestVal("DDL_" + attr.KeyOfEn);
                 me.Insert();
             }
-               
+
 
             MapAttrs attrs = new MapAttrs(me.FK_MapData);
             attrs.Retrieve(MapAttrAttr.FK_MapData, me.FK_MapData,
@@ -444,40 +444,7 @@ namespace BP.WF.HttpHandler
         #endregion TBFullCtrl 功能界面.
 
         #region AutoFullDLL 功能界面 .
-        /// <summary>
-        /// 保存
-        /// </summary>
-        /// <returns></returns>
-        public string AutoFullDLL_Save()
-        {
-            MapExt me = new MapExt();
-            int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL,
-                MapExtAttr.FK_MapData, this.FK_MapData,
-                MapExtAttr.AttrOfOper, this.KeyOfEn);
 
-            me.FK_MapData = this.FK_MapData;
-            me.AttrOfOper = this.KeyOfEn;
-            me.FK_DBSrc = this.GetValFromFrmByKey("FK_DBSrc");
-            me.Doc = this.GetValFromFrmByKey("TB_Doc"); //要执行的SQL.
-            me.ExtType = MapExtXmlList.AutoFullDLL;
-
-            //执行保存.
-            me.InitPK();
-
-            if (me.Update() == 0)
-                me.Insert();
-
-            return "保存成功.";
-        }
-        public string AutoFullDLL_Delete()
-        {
-            MapExt me = new MapExt();
-            me.Delete(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL,
-                MapExtAttr.FK_MapData, this.FK_MapData,
-                MapExtAttr.AttrOfOper, this.KeyOfEn);
-
-            return "删除成功.";
-        }
         public string AutoFullDLL_Init()
         {
             DataSet ds = new DataSet();
@@ -502,7 +469,7 @@ namespace BP.WF.HttpHandler
                 me.FK_DBSrc = "local";
             }
 
-            if (me.FK_DBSrc == "")
+            if (DataType.IsNullOrEmpty(me.FK_DBSrc) == true)
                 me.FK_DBSrc = "local";
 
             //去掉 ' 号.
@@ -511,7 +478,46 @@ namespace BP.WF.HttpHandler
             DataTable dt = me.ToDataTableField();
             dt.TableName = "Sys_MapExt";
             ds.Tables.Add(dt);
+            return BP.Tools.Json.ToJson(ds);
+        }
 
+        /// <summary>
+        /// 查询条件的自动填充
+        /// </summary>
+        /// <returns></returns>
+        public string AutoFullDLL_Init_SearchCond()
+        {
+            DataSet ds = new DataSet();
+
+            //加载数据源.
+            SFDBSrcs srcs = new SFDBSrcs();
+            srcs.RetrieveAll();
+            DataTable dtSrc = srcs.ToDataTableField();
+            dtSrc.TableName = "Sys_SFDBSrc";
+            ds.Tables.Add(dtSrc);
+
+            // 加载 mapext 数据.
+            MapExt me = new MapExt();
+            int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLLSearchCond,
+                MapExtAttr.FK_MapData, this.FK_MapData,
+                MapExtAttr.AttrOfOper, this.KeyOfEn);
+
+            if (i == 0)
+            {
+                me.FK_MapData = this.FK_MapData;
+                me.AttrOfOper = this.KeyOfEn;
+                me.FK_DBSrc = "local";
+            }
+
+            if (DataType.IsNullOrEmpty(me.FK_DBSrc) == true)
+                me.FK_DBSrc = "local";
+
+            //去掉 ' 号.
+            me.SetValByKey("Doc", me.Doc);
+
+            DataTable dt = me.ToDataTableField();
+            dt.TableName = "Sys_MapExt";
+            ds.Tables.Add(dt);
             return BP.Tools.Json.ToJson(ds);
         }
         #endregion AutoFullDLL 功能界面.
@@ -592,39 +598,7 @@ namespace BP.WF.HttpHandler
         #endregion DDLFullCtrl 功能界面.
 
         #region ActiveDDL 功能界面 .
-        /// <summary>
-        /// 保存
-        /// </summary>
-        /// <returns></returns>
-        public string ActiveDDL_Save()
-        {
-            MapExt me = new MapExt();
-            me.Delete(MapExtAttr.ExtType, MapExtXmlList.ActiveDDL,
-                MapExtAttr.FK_MapData, this.FK_MapData,
-                MapExtAttr.AttrOfOper, this.KeyOfEn);
 
-            me.FK_MapData = this.FK_MapData;
-            me.AttrOfOper = this.KeyOfEn;
-            me.AttrsOfActive = this.GetValFromFrmByKey("DDL_AttrsOfActive");
-            me.FK_DBSrc = this.GetValFromFrmByKey("FK_DBSrc");
-            me.Doc = this.GetValFromFrmByKey("TB_Doc"); //要执行的SQL.
-            me.ExtType = MapExtXmlList.ActiveDDL;
-
-            //执行保存.
-            me.MyPK = MapExtXmlList.ActiveDDL + "_" + me.FK_MapData + "_" + me.AttrOfOper + "_" + me.AttrOfOper;
-            me.Save();
-
-            return "保存成功.";
-        }
-        public string ActiveDDL_Delete()
-        {
-            MapExt me = new MapExt();
-            me.Delete(MapExtAttr.ExtType, MapExtXmlList.ActiveDDL,
-                MapExtAttr.FK_MapData, this.FK_MapData,
-                MapExtAttr.AttrOfOper, this.KeyOfEn);
-
-            return "删除成功.";
-        }
         public string ActiveDDL_Init()
         {
             DataSet ds = new DataSet();
@@ -633,9 +607,9 @@ namespace BP.WF.HttpHandler
             Paras ps = new Paras();
             ps.SQL = "SELECT KeyOfEn AS No, Name FROM Sys_MapAttr WHERE UIContralType=1 AND FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData AND KeyOfEn!=" + SystemConfig.AppCenterDBVarStr + "KeyOfEn";
             ps.Add("FK_MapData", this.FK_MapData);
-            ps.Add("KeyOfEn",this.KeyOfEn);
+            ps.Add("KeyOfEn", this.KeyOfEn);
             //var sql = "SELECT KeyOfEn AS No, Name FROM Sys_MapAttr WHERE UIContralType=1 AND FK_MapData='" + this.FK_MapData + "' AND KeyOfEn!='" + this.KeyOfEn + "'";
-            DataTable dt=DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "Sys_MapAttr";
 
             dt.Columns[0].ColumnName = "No";
@@ -644,7 +618,7 @@ namespace BP.WF.HttpHandler
 
             if (dt.Rows.Count == 0)
                 return "err@表单中没有要级联的下拉框.";
-           
+
             //加载数据源.
             SFDBSrcs srcs = new SFDBSrcs();
             srcs.RetrieveAll();
@@ -654,7 +628,7 @@ namespace BP.WF.HttpHandler
 
             // 加载mapext 数据.
             MapExt me = new MapExt();
-            int i= me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.ActiveDDL,
+            int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.ActiveDDL,
                 MapExtAttr.FK_MapData, this.FK_MapData,
                 MapExtAttr.AttrOfOper, this.KeyOfEn);
             if (i == 0)
@@ -669,7 +643,61 @@ namespace BP.WF.HttpHandler
 
             //去掉 ' 号.
             me.SetValByKey("Doc", me.Doc);
-                 
+
+            dt = me.ToDataTableField();
+            dt.TableName = "Sys_MapExt";
+            ds.Tables.Add(dt);
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        /// <summary>
+        /// 查询条件
+        /// </summary>
+        /// <returns></returns>
+        public string ActiveDDL_Init_SearchCond()
+        {
+            DataSet ds = new DataSet();
+
+            //加载外键字段.
+            Paras ps = new Paras();
+            ps.SQL = "SELECT KeyOfEn AS No, Name FROM Sys_MapAttr WHERE UIContralType=1 AND FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData AND KeyOfEn!=" + SystemConfig.AppCenterDBVarStr + "KeyOfEn";
+            ps.Add("FK_MapData", this.FK_MapData);
+            ps.Add("KeyOfEn", this.KeyOfEn);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
+            dt.TableName = "Sys_MapAttr";
+
+            dt.Columns[0].ColumnName = "No";
+            dt.Columns[1].ColumnName = "Name";
+            ds.Tables.Add(dt);
+
+            if (dt.Rows.Count == 0)
+                return "err@表单中没有要级联的下拉框.";
+
+            //加载数据源.
+            SFDBSrcs srcs = new SFDBSrcs();
+            srcs.RetrieveAll();
+            DataTable dtSrc = srcs.ToDataTableField();
+            dtSrc.TableName = "Sys_SFDBSrc";
+            ds.Tables.Add(dtSrc);
+
+            // 加载mapext 数据.
+            MapExt me = new MapExt();
+            int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.ActiveDDLSearchCond,
+                MapExtAttr.FK_MapData, this.FK_MapData,
+                MapExtAttr.AttrOfOper, this.KeyOfEn);
+            if (i == 0)
+            {
+                me.FK_MapData = this.FK_MapData;
+                me.AttrOfOper = this.KeyOfEn;
+                me.FK_DBSrc = "local";
+            }
+
+            if (me.FK_DBSrc == "")
+                me.FK_DBSrc = "local";
+
+            //去掉 ' 号.
+            me.SetValByKey("Doc", me.Doc);
+
             dt = me.ToDataTableField();
             dt.TableName = "Sys_MapExt";
             ds.Tables.Add(dt);
@@ -718,7 +746,7 @@ namespace BP.WF.HttpHandler
             string RDTRadio = GetRequestVal("RDTRadio");//是否包含节假日 
 
             MapExt mapExt = new MapExt();
-            mapExt.MyPK = "ReqDays_"+ FK_MapData+"_"+ KeyOfEn;
+            mapExt.MyPK = "ReqDays_" + FK_MapData + "_" + KeyOfEn;
             if (mapExt.RetrieveFromDBSources() == 0)
             {
                 mapExt.FK_MapData = FK_MapData;
@@ -818,7 +846,7 @@ namespace BP.WF.HttpHandler
                         FrmRB rb = new FrmRB();
                         rb.FK_MapData = this.FK_MapData;
                         rb.KeyOfEn = this.KeyOfEn;
-                        rb.IntKey = int.Parse( row["No"].ToString());
+                        rb.IntKey = int.Parse(row["No"].ToString());
                         rb.Lab = row["Name"].ToString();
                         rb.EnumKey = attr.UIBindKey;
                         rb.Insert(); //插入数据.
@@ -826,7 +854,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //如果是复选框
-                if(attr.MyDataType == DataType.AppBoolean && attr.UIContralType == UIContralType.CheckBok)
+                if (attr.MyDataType == DataType.AppBoolean && attr.UIContralType == UIContralType.CheckBok)
                 {
                     FrmRB rb = new FrmRB();
                     rb.FK_MapData = this.FK_MapData;
@@ -923,9 +951,9 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             Paras ps = new Paras();
-            ps.SQL="SELECT * FROM Sys_MapExt WHERE AttrOfOper=" + SystemConfig.AppCenterDBVarStr + "AttrOfOper AND FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData";
-            ps.Add("AttrOfOper",this.KeyOfEn);
-            ps.Add("FK_MapData",this.FK_MapData);
+            ps.SQL = "SELECT * FROM Sys_MapExt WHERE AttrOfOper=" + SystemConfig.AppCenterDBVarStr + "AttrOfOper AND FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData";
+            ps.Add("AttrOfOper", this.KeyOfEn);
+            ps.Add("FK_MapData", this.FK_MapData);
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "Sys_MapExt";
             ds.Tables.Add(dt);
@@ -1064,7 +1092,7 @@ namespace BP.WF.HttpHandler
             ext.MyPK = this.MyPK;
             if (ext.RetrieveFromDBSources() == 0)
             {
-               // throw new Exception("err@主键=" + ext.MyPK + "的配置数据丢失");
+                // throw new Exception("err@主键=" + ext.MyPK + "的配置数据丢失");
                 ext.PopValSelectModel = PopValSelectModel.One;
                 ext.PopValWorkModel = PopValWorkModel.TableOnly;
             }
@@ -1384,16 +1412,19 @@ namespace BP.WF.HttpHandler
         #region 杨玉慧  表单设计--表单属性   JS编程 
         public string InitScript_Init()
         {
-            try {
+            try
+            {
                 //2019-07-26 zyt改造
                 //String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
                 String webPath = SystemConfig.PathOfWebApp.Replace("\\", "/");
                 String filePath = webPath + @"/DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
                 String content = "";
-                if (!File.Exists(filePath)) {
+                if (!File.Exists(filePath))
+                {
                     content = "";
                 }
-                else {
+                else
+                {
                     content = File.ReadAllText(filePath);
                 }
                 return content;
@@ -1428,7 +1459,8 @@ namespace BP.WF.HttpHandler
 
         public string InitScript_Delete()
         {
-            try {
+            try
+            {
                 //2019-07-26 zyt改造
                 //String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
                 String webPath = SystemConfig.PathOfWebApp.Replace("\\", "/");
@@ -1452,10 +1484,10 @@ namespace BP.WF.HttpHandler
         {
             string fk_Template = this.GetRequestVal("FK_Template");
             string workid = this.GetRequestVal("WorkId");
-            string sql= "SELECT * FROM STARCO_TemplateNRCMaterielDtl WHERE FK_Template='" + fk_Template + "'";
+            string sql = "SELECT * FROM STARCO_TemplateNRCMaterielDtl WHERE FK_Template='" + fk_Template + "'";
             DataTable dt = new DataTable();
             dt = DBAccess.RunSQLReturnTable(sql);
-            if(dt != null && dt.Rows.Count > 0)
+            if (dt != null && dt.Rows.Count > 0)
             {
                 //string sql1 = "SELECT * FROM ND105Dtl1 WHERE RefPK='" + workid + "'";
                 //DataTable dt1 = new DataTable();

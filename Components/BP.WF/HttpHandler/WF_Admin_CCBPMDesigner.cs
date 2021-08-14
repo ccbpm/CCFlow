@@ -663,6 +663,9 @@ namespace BP.WF.HttpHandler
                     string sid = DBAccess.GenerGUID();
                     string sql = "UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.No + "'";
                     DBAccess.RunSQL(sql);
+
+                    sql = "UPDATE WF_Emp SET Token='" + sid + "' WHERE No='" + emp.No + "'";
+                    DBAccess.RunSQL(sql);
                     emp.SID = sid;
                 }
 

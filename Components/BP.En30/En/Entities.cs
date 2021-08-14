@@ -507,6 +507,25 @@ namespace BP.En
             }
             return null;
         }
+        /// <summary>
+        /// 获得entis
+        /// </summary>
+        /// <param name="attr"></param>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public Entities GetEntitiesByKey(string attr, string val)
+        {
+            Entities ens = this.GetNewEntity.GetNewEntities; 
+            foreach (Entity en in this)
+            {
+                if (en.GetValStrByKey(attr).Equals(val) == false)
+                    continue;
+                ens.AddEntity(en);
+            }
+            if (ens.Count == 0)
+                return null;
+            return ens;
+        }
         #endregion
 
         #region  对一个属性操作
@@ -1094,7 +1113,7 @@ namespace BP.En
         /// <param name="key"></param>
         /// <param name="vals"></param>
         /// <returns></returns>
-        public virtual int RetrieveIn(string key, string vals, string orderby=null)
+        public virtual int RetrieveIn(string key, string vals, string orderby = null)
         {
             QueryObject qo = new QueryObject(this);
 
@@ -1109,8 +1128,8 @@ namespace BP.En
             return qo.DoQuery();
         }
 
-       
-            
+
+
         public virtual int RetrieveInSQL(string attr, string sql)
         {
             QueryObject qo = new QueryObject(this);
@@ -1441,7 +1460,7 @@ namespace BP.En
                         continue;
 
                     var val = myen.Row[attr.Key];
-                   // var val = myen myen.GetValByKey(attr.Key);
+                    // var val = myen myen.GetValByKey(attr.Key);
                     if (val == null)
                         continue;
 

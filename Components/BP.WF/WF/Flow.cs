@@ -903,7 +903,7 @@ namespace BP.WF
                 this.CheckRpt();
                 //int i = wk.DirectInsert();
                 //if (i == 0)
-                    throw new Exception("@创建工作失败：请您刷新一次，如果问题仍然存在请反馈给管理员，技术信息：" + ex.StackTrace + " @ 技术信息:" + ex.Message);
+                throw new Exception("@创建工作失败：请您刷新一次，如果问题仍然存在请反馈给管理员，技术信息：" + ex.StackTrace + " @ 技术信息:" + ex.Message);
             }
 
             //在创建WorkID的时候调用的事件.
@@ -1072,29 +1072,31 @@ namespace BP.WF
                 //rpt.Copy(wkFrom);
                 SubFlows subFlows = new SubFlows();
                 subFlows.Retrieve(SubFlowAttr.SubFlowNo, this.No, SubFlowAttr.FK_Node, int.Parse(PNodeIDStr));
-                if (subFlows.Count == 0)
-                    throw new Exception("err@没有查询到WF_NodeSubFlow中SubFlowNo=" + this.No + "对应的父子流程信息");
-                SubFlow subFlow = subFlows[0] as SubFlow;
-                if (DataType.IsNullOrEmpty(subFlow.SubFlowCopyFields) == false)
+                if (subFlows.Count != 0)
                 {
-                    Attrs attrs = wkFrom.EnMap.Attrs;
-                    //父流程把子流程不同字段进行匹配赋值
-                    AtPara ap = new AtPara(subFlow.SubFlowCopyFields);
-                    foreach (String str in ap.HisHT.Keys)
+                    SubFlow subFlow = subFlows[0] as SubFlow;
+                    if (DataType.IsNullOrEmpty(subFlow.SubFlowCopyFields) == false)
                     {
-                        Object val = ap.GetValStrByKey(str);
-                        if (DataType.IsNullOrEmpty(val.ToString()) == true)
-                            continue;
-
-                        wk.SetValByKey(val.ToString(), wkFrom.GetValByKey(str));
-                        rpt.SetValByKey(val.ToString(), wkFrom.GetValByKey(str));
-                        if (dt.Columns.Contains(str))
+                        Attrs attrs = wkFrom.EnMap.Attrs;
+                        //父流程把子流程不同字段进行匹配赋值
+                        AtPara ap = new AtPara(subFlow.SubFlowCopyFields);
+                        foreach (String str in ap.HisHT.Keys)
                         {
-                            wk.SetValByKey(val.ToString(), dt.Rows[0][str]);
-                            rpt.SetValByKey(val.ToString(), dt.Rows[0][str]);
+                            Object val = ap.GetValStrByKey(str);
+                            if (DataType.IsNullOrEmpty(val.ToString()) == true)
+                                continue;
+
+                            wk.SetValByKey(val.ToString(), wkFrom.GetValByKey(str));
+                            rpt.SetValByKey(val.ToString(), wkFrom.GetValByKey(str));
+                            if (dt.Columns.Contains(str))
+                            {
+                                wk.SetValByKey(val.ToString(), dt.Rows[0][str]);
+                                rpt.SetValByKey(val.ToString(), dt.Rows[0][str]);
+                            }
                         }
                     }
                 }
+                
                 #endregion 从调用的节点上copy.
 
                 #region 获取web变量.
@@ -1376,7 +1378,7 @@ namespace BP.WF
             gwf.FK_FlowSort = this.FK_FlowSort;
             gwf.SysType = this.SysType;
             gwf.FK_Node = nd.NodeID;
-            gwf.WorkID = wk.OID;
+            //gwf.WorkID = wk.OID;
             gwf.WFState = WFState.Blank;
             gwf.FlowName = this.Name;
 
@@ -1401,6 +1403,7 @@ namespace BP.WF
                 gwf.PWorkID = rpt.PWorkID;
             }
             gwf.OrgNo = WebUser.OrgNo;
+
             if (gwf.WorkID == 0)
             {
                 gwf.WorkID = wk.OID;
@@ -1729,7 +1732,7 @@ namespace BP.WF
                 DBAccess.RunSQL(sql);
 
                 foreach (Node nd in nds)
-                { 
+                {
                     //设置它的位置类型.
                     // nd.RetrieveFromDBSources();
                     nd.SetValByKey(NodeAttr.NodePosType, (int)nd.GetHisNodePosType());
@@ -1901,7 +1904,7 @@ namespace BP.WF
                         GEEntity geEn = new GEEntity(md.No);
                         geEn.CheckPhysicsTable();
                     }
-                   
+
                 }
                 #endregion
 
@@ -2030,7 +2033,7 @@ namespace BP.WF
                 }
                 #endregion 检查如果是合流节点必须不能是由上一个节点指定接受人员。
 
-           
+
 
                 //如果协作模式的节点，方向条件规则是下拉框的，修改为按线的.
                 sql = "UPDATE WF_Node SET CondModel = 2 WHERE CondModel = 1 AND TodolistModel = 1";
@@ -2043,7 +2046,7 @@ namespace BP.WF
                 Node.CheckFlow(nds, this.No);
                 foreach (Node nd in nds)
                 {
-                   
+
                     nd.ClearAutoNumCash();
                     nd.Row = null;
                     BP.DA.Cash2019.DeleteRow("BP.WF.Node", nd.NodeID + "");
@@ -3020,15 +3023,15 @@ namespace BP.WF
             {
                 //如果是枚举，外键字段，判断是否判定了对应的枚举和外键
                 Int32 lgType = Int32.Parse(dr["LGType"].ToString());
-                Int32 contralType  = Int32.Parse(dr["UIContralType"].ToString());
+                Int32 contralType = Int32.Parse(dr["UIContralType"].ToString());
 
-                if((lgType == 2 && contralType==1) || (lgType==0 &&contralType == 1 && Int32.Parse(dr["MyDataType"].ToString())==1))
+                if ((lgType == 2 && contralType == 1) || (lgType == 0 && contralType == 1 && Int32.Parse(dr["MyDataType"].ToString()) == 1))
                 {
                     if (dr["UIBindKey"] == null || DataType.IsNullOrEmpty(dr["UIBindKey"].ToString()) == true)
-                        msg += "表单" + dr["FK_MapData"].ToString() + "中,外键/外部数据源字段:" + dr["Name"].ToString() +"("+ dr["KeyOfEn"].ToString() + ");";
+                        msg += "表单" + dr["FK_MapData"].ToString() + "中,外键/外部数据源字段:" + dr["Name"].ToString() + "(" + dr["KeyOfEn"].ToString() + ");";
                 }
-                if(lgType==1&&(dr["UIBindKey"] == null || DataType.IsNullOrEmpty(dr["UIBindKey"].ToString()) == true))
-                    msg += "表单"+dr["FK_MapData"].ToString()+"中,枚举字段:"+ dr["Name"].ToString() + "(" + dr["KeyOfEn"].ToString() + ");";
+                if (lgType == 1 && (dr["UIBindKey"] == null || DataType.IsNullOrEmpty(dr["UIBindKey"].ToString()) == true))
+                    msg += "表单" + dr["FK_MapData"].ToString() + "中,枚举字段:" + dr["Name"].ToString() + "(" + dr["KeyOfEn"].ToString() + ");";
 
                 if (pks.Contains("@" + dr["KeyOfEn"].ToString() + "@") == true)
                     continue;

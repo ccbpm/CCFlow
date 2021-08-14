@@ -105,7 +105,23 @@ namespace BP.CCBill
         {
 
         }
-       
+
+        /// <summary>
+        /// 集合方法的移动.
+        /// </summary>
+        /// <returns></returns>
+        public string Collection_Mover()
+        {
+            string[] ens = this.GetRequestVal("MyPKs").Split(',');
+            for (int i = 0; i < ens.Length; i++)
+            {
+                var enNo = ens[i];
+                string sql = "UPDATE Frm_Collection SET Idx=" + i + " WHERE No='" + enNo + "'";
+                DBAccess.RunSQL(sql);
+            }
+            return "顺序移动成功..";
+        }
+
         #region 执行父类的重写方法.
         /// <summary>
         /// 默认执行的方法

@@ -26,7 +26,14 @@ namespace BP.GPM
 
             //返回部门信息，用与绑定部门.
             Depts ens = new Depts();
-            ens.RetrieveAll();
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+            {
+                ens.RetrieveAll();
+            }
+            else
+            {
+                ens.Retrieve("OrgNo", this.OrgNo);
+            }
             return ens.ToJson();
         }
         /// <summary>

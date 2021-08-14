@@ -226,7 +226,12 @@ namespace BP.CCBill
 
                 map.AddDDLSysEnum(FrmAttr.RowOpenModel, 0, "行记录打开模式", true, true,
                 "RowOpenMode", "@0=新窗口打开@1=在本窗口打开@2=弹出窗口打开,关闭后不刷新列表@3=弹出窗口打开,关闭后刷新列表");
-
+                string cfg = "@0=MyDictFrameWork.htm 实体与实体相关功能编辑器";
+                cfg += "@1=MyDict.htm 实体编辑器";
+                cfg += "@2=MyBill.htm 单据编辑器";
+                cfg += "@9=自定义URL";
+                map.AddDDLSysEnum("SearchDictOpenType", 0, "双击行打开内容", true, true, "SearchDictOpenType", cfg);
+                map.AddTBString(EnCfgAttr.UrlExt, null, "要打开的Url", true, false, 0, 500, 60, true);
                 #endregion 基本属性.
 
                 #region 单据属性.
@@ -669,7 +674,7 @@ namespace BP.CCBill
         /// <summary>
         /// 检查检查实体类型
         /// </summary>
-        public void CheckEnityTypeAttrsFor_Bill()
+        public void CheckEnityTypeAttrsFor_Bill(bool isHavePFrmID=false)
         {
             //取出来全部的属性.
             MapAttrs attrs = new MapAttrs(this.No);
@@ -865,6 +870,47 @@ namespace BP.CCBill
                 attr.Idx = -1;
                 attr.Insert();
             }
+            if(isHavePFrmID == true )
+            {
+                if(attrs.Contains(this.No + "_PWorkID") == false)
+                {
+                    MapAttr attr = new MapAttr();
+                    attr.FK_MapData = this.No;
+                    attr.HisEditType = EditType.UnDel;
+                    attr.KeyOfEn = "PWorkID";
+                    attr.Name = "实体发起的单据"; //  
+                    attr.MyDataType = DataType.AppInt;
+                    attr.UIContralType = UIContralType.TB;
+                    attr.LGType = FieldTypeS.Normal;
+
+                    attr.UIVisible = false;
+                    attr.UIIsEnable = false;
+                    attr.MinLen = 0;
+                    attr.MaxLen = 50;
+                    attr.Idx = -1;
+                    attr.Insert();
+                }
+
+                if (attrs.Contains(this.No + "_PFrmID") == false)
+                {
+                    MapAttr attr = new MapAttr();
+                    attr.FK_MapData = this.No;
+                    attr.HisEditType = EditType.UnDel;
+                    attr.KeyOfEn = "PFrmID";
+                    attr.Name = "实体名称"; //  
+                    attr.MyDataType = DataType.AppString;
+                    attr.UIContralType = UIContralType.TB;
+                    attr.LGType = FieldTypeS.Normal;
+
+                    attr.UIVisible = false;
+                    attr.UIIsEnable = false;
+                    attr.MinLen = 0;
+                    attr.MaxLen = 200;
+                    attr.Idx = -1;
+                    attr.Insert();
+                }
+
+            }
             #endregion 补充上流程字段。
         }
         /// <summary>
@@ -898,7 +944,7 @@ namespace BP.CCBill
         /// <returns></returns>
         public string DoOpenBill()
         {
-            return "../../CCBill/Search.htm?FrmID=" +
+            return "../../CCBill/SearchBill.htm?FrmID=" +
               this.No + "&t=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff");
         }
         public string DoAPI()

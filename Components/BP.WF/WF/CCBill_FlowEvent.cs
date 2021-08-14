@@ -85,7 +85,7 @@ namespace BP.WF
                 myparas += "@PWorkID=" + wn.WorkID;
                 myparas += "@PFlowNo=" + wn.HisFlow.No;
                 myparas += "@PNodeID=" + wn.HisNode.NodeID;
-                BP.CCBill.Dev2Interface.Dict_AddTrack(menu.FrmID, null, wn.WorkID, CCBill.FrmActionType.StartRegFlow, "流程创建实体",
+                BP.CCBill.Dev2Interface.Dict_AddTrack(menu.FrmID,  wn.WorkID, CCBill.FrmActionType.StartRegFlow, "流程创建实体",
                     myparas, wn.HisFlow.No, wn.HisFlow.Name, wn.HisNode.NodeID, wn.WorkID);
             }
             #endregion 如果是新建实体流程.

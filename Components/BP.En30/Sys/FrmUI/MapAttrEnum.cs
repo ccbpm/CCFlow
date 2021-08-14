@@ -137,8 +137,13 @@ namespace BP.Sys.FrmUI
 
                 if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                     sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey'";
-                else
-                    sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey' ";
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                {
+                    sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey' AND OrgNo='" + BP.Web.WebUser.OrgNo + "' ";
+                    sql += " union ";
+                    sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey' AND EnumKey NOT IN(Select EnumKey FROM Sys_Enum WHERE EnumKey='@UIBindKey' AND OrgNo='" + BP.Web.WebUser.OrgNo + "') AND (OrgNo IS NULL OR OrgNo='')  ";
+
+                }
 
                 //默认值.
                 map.AddDDLSQL(MapAttrAttr.DefVal, "0", "默认值(选中)", sql, true);
@@ -148,7 +153,7 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSysEnum(MapAttrAttr.UIContralType, 0, "控件类型", true, true, "EnumUIContralType",
                  "@1=下拉框@2=复选框@3=单选按钮");
 
-                map.AddDDLSysEnum("RBShowModel", 0, "单选按钮的展现方式", true, true, "RBShowModel",
+                map.AddDDLSysEnum("RBShowModel", 3, "单选按钮的展现方式", true, true, "RBShowModel",
             "@0=竖向@3=横向");
 
                 //map.AddDDLSysEnum(MapAttrAttr.LGType, 0, "逻辑类型", true, false, MapAttrAttr.LGType, 

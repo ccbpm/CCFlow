@@ -129,18 +129,6 @@ namespace BP.GPM
                 this.SetValByKey(MenuAttr.MenuType, (int)value);
             }
         }
-        public MenuCtrlWay MenuCtrlWay
-        {
-            get
-            {
-                return (MenuCtrlWay)this.GetValIntByKey(MenuAttr.MenuCtrlWay);
-            }
-            set
-            {
-                this.SetValByKey(MenuAttr.MenuCtrlWay, (int)value);
-            }
-        }
-
         /// <summary>
         /// 是否启用
         /// </summary>

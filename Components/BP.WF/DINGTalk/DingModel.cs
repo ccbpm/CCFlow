@@ -89,7 +89,38 @@ namespace BP.GPM.DTalk.DINGTalk
         /// </summary>
         public string userid { get; set; }
     }
-
+    public class DingUserInfo
+    {
+        /// <summary>
+        /// 返回码
+        /// </summary>
+        public string errcode { get; set; }
+        /// <summary>
+        /// 对返回码的文本描述内容
+        /// </summary>
+        public string errmsg { get; set; }
+        public UserInfoResult result { get; set; }
+    }
+    public class UserInfoResult
+    { 
+        public string admin { get; set; }
+        public string remark { get; set; }
+        public string email { get; set; }
+        public string mobile { get; set; }
+    }
+    public class DingAccessToken
+    {
+        /// <summary>
+        /// 返回码
+        /// </summary>
+        public string errcode { get; set; }
+        /// <summary>
+        /// 对返回码的文本描述内容
+        /// </summary>
+        public string errmsg { get; set; }
+        public string access_token { get; set; }
+        public string expires_in { get; set; }
+    }
     /// <summary>
     /// 部门人员列表
     /// </summary>

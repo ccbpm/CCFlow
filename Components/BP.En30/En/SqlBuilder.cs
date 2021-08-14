@@ -1153,8 +1153,8 @@ namespace BP.En
                         }
                         break;
                     case DataType.AppInt:
-                        if (attr.DefValType == 0 && attr.DefaultVal == "10002" || attr.DefaultVal == "10002.00")
-                            val = val + ", " + attr.Key;
+                        if (attr.DefValType == 0)
+                            val = val + ", " +mainTable + attr.Key;
                         else
                             val = val + ",NVL(" + mainTable + attr.Field + "," + attr.DefaultVal + ")   " + attr.Key + "";
 
@@ -1516,43 +1516,43 @@ namespace BP.En
                             val = val + ", ISNULL(" + mainTable + attr.Field + ",1) " + attr.Key;
                         break;
                     case DataType.AppDate:
-                        if (attr.DefaultVal == null || attr.DefaultVal.ToString() == "")
+                        if (SystemConfig.DateType.Equals("datetime") == true)
                         {
-                            if (SystemConfig.CustomerNo == "ASSET")
+                            if (attr.DefaultVal == null || attr.DefaultVal.ToString() == "")
                                 val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 23),'" +
-                                                        "CONVERT(varchar(100),  getdate(), 23)') " + attr.Key;
+                                                       "CONVERT(varchar(100),  getdate(), 23)') " + attr.Key;
                             else
-                                val = val + "," + mainTable + attr.Field + " " + attr.Key;
+                                val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 23),'" +
+                                                        "CONVERT(varchar(100), " + attr.DefaultVal.ToString() + ", 23)') " + attr.Key;
                         }
                         else
                         {
-                            if (SystemConfig.CustomerNo == "ASSET")
-                                val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 23),'" +
-                                                         "CONVERT(varchar(100), " + attr.DefaultVal.ToString() + ", 23)') " + attr.Key;
+                            if (attr.DefaultVal == null || attr.DefaultVal.ToString() == "")
+
+                                val = val + "," + mainTable + attr.Field + " " + attr.Key;
                             else
                                 val = val + ",ISNULL(" + mainTable + attr.Field + ", '" + attr.DefaultVal + "') " + attr.Key;
-
-
                         }
+                           
                         break;
                     case DataType.AppDateTime:
-                        if (attr.DefaultVal == null || attr.DefaultVal.ToString() == "")
+                        if (SystemConfig.DateType.Equals("datetime") == true)
                         {
-                            if (SystemConfig.CustomerNo == "ASSET")
+                            if (attr.DefaultVal == null || attr.DefaultVal.ToString() == "")
                                 val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 20),'" +
-                                                          "CONVERT(varchar(100), getdate(), 20)') " + attr.Key;
-
+                                                         "CONVERT(varchar(100), getdate(), 20)') " + attr.Key;
                             else
-                                val = val + "," + mainTable + attr.Field + " " + attr.Key;
+                                val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 20),'" +
+                                                         "CONVERT(varchar(100), " + attr.DefaultVal.ToString() + ", 20)') " + attr.Key;
                         }
                         else
                         {
-                            if (SystemConfig.CustomerNo == "ASSET")
-                                val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 20),'" +
-                                                          "CONVERT(varchar(100), " + attr.DefaultVal.ToString() + ", 20)') " + attr.Key;
+                            if (attr.DefaultVal == null || attr.DefaultVal.ToString() == "")
+                                val = val + "," + mainTable + attr.Field + " " + attr.Key;
                             else
                                 val = val + ",ISNULL(" + mainTable + attr.Field + ", '" + attr.DefaultVal + "') " + attr.Key;
                         }
+                        
                         break;
                     default:
                         throw new Exception("@没有定义的数据类型! attr=" + attr.Key + " MyDataType =" + attr.MyDataType);
@@ -1613,7 +1613,7 @@ namespace BP.En
                         }
                         break;
                     case DataType.AppInt:
-                        if (attr.IsNull || attr.DefValType == 0 && attr.DefaultVal == "10002" || attr.DefaultVal == "10002.00")
+                        if (attr.IsNull || attr.DefValType == 0 )
                             val = val + "," + mainTable + attr.Field + " " + attr.Key + "";
                         else
                             val = val + ",COALESCE(" + mainTable + attr.Field + "," + attr.DefaultVal + ")  AS " + attr.Key + "";
@@ -1705,8 +1705,8 @@ namespace BP.En
                         }
                         break;
                     case DataType.AppInt:
-                        if (attr.DefValType == 0 && attr.DefaultVal == "10002" || attr.DefaultVal == "10002.00")
-                            val = val + ", " + attr.Key;
+                        if (attr.DefValType == 0 )
+                            val = val + ", "+ mainTable + attr.Key;
                         else
                             val = val + ",IFNULL(" + mainTable + attr.Field + "," +
                                 attr.DefaultVal + ")   " + attr.Key + "";
@@ -1755,13 +1755,26 @@ namespace BP.En
                         break;
                     case DataType.AppDate:
                     case DataType.AppDateTime:
-                        if (attr.DefaultVal == null || attr.DefaultVal.ToString() == "")
-                            val = val + "," + mainTable + attr.Field + " " + attr.Key;
+                        if (SystemConfig.DateType.Equals("datetime") == true)
+                        {
+                            string format = GetDataTypeFormt(attr.IsSupperText);
+                           
+
+                            if (attr.DefaultVal == null || attr.DefaultVal.ToString() == "")
+                                val = val + ",IFNULL(DATE_FORMAT(" + mainTable + attr.Field + ",'" + format + "'),DATE_FORMAT(now(),'" + format + "')) " + attr.Key;
+                            else
+                                val = val + ",IFNULL(DATE_FORMAT(" + mainTable + attr.Field + ",'" + format + "'),DATE_FORMAT('" + attr.DefaultVal.ToString() + "','" + format + "')) " + attr.Key;
+
+                        }
                         else
                         {
-                            val = val + ",IFNULL(" + mainTable + attr.Field + ",'" +
-                                                         attr.DefaultVal.ToString() + "') " + attr.Key;
+                            if (attr.DefaultVal == null || attr.DefaultVal.ToString() == "")
+                                val = val + "," + mainTable + attr.Field + " " + attr.Key;
+                            else
+                                val = val + ",IFNULL(" + mainTable + attr.Field + ",'" +
+                                                             attr.DefaultVal.ToString() + "') " + attr.Key;
                         }
+                       
                         break;
                     default:
                         throw new Exception("@没有定义的数据类型! attr=" + attr.Key + " MyDataType =" + attr.MyDataType);
@@ -2569,18 +2582,18 @@ namespace BP.En
                             break;
                         case DataType.AppDate: // 如果是日期类型。
                             string da = en.GetValStrByKey(attr.Key);
-                            if (SystemConfig.CustomerNo == "ASSET" && DataType.IsNullOrEmpty(da) == true)
+                            if (SystemConfig.DateType.Equals("datetime") && DataType.IsNullOrEmpty(da) == true)
                             {
-                                da = DataType.CurrentData;
+                                da = GetDefValByDataType(attr.IsSupperText);
                             }
                             ps.Add(attr.Key, da);
 
                             break;
                         case DataType.AppDateTime:
                             string datime = en.GetValStrByKey(attr.Key);
-                            if (SystemConfig.CustomerNo == "ASSET" && DataType.IsNullOrEmpty(datime) == true)
+                            if (SystemConfig.DateType.Equals("datetime") && DataType.IsNullOrEmpty(datime) == true)
                             {
-                                datime = DataType.CurrentDataTimess;
+                                datime = GetDefValByDataType(attr.IsSupperText);
                             }
                             ps.Add(attr.Key, datime);
                             break;
@@ -2817,10 +2830,16 @@ namespace BP.En
                     case DataType.AppDate:
                     case DataType.AppDateTime:
                         string da = en.GetValStringByKey(attr.Key);
+                        if (SystemConfig.DateType.Equals("datetime")==true && DataType.IsNullOrEmpty(da) == true)
+                        {
+                                da = GetDefValByDataType(attr.IsSupperText); ;
+                        }
+                            
                         if (da.IndexOf("_DATE") == -1)
                             val = val + ",'" + da + "'";
                         else
                             val = val + "," + da;
+
                         break;
                     default:
                         throw new Exception("@bulider insert sql error: 没有这个数据类型");
@@ -2898,6 +2917,71 @@ namespace BP.En
                 default:
                     throw new Exception("GetIsNullInSQL未涉及的数据库类型");
             }
+        }
+
+        private static string GetDataTypeFormt(int dataType)
+        {
+            string format = "%Y-%m-%d";
+            switch (dataType)
+            {
+                case 0:
+                    format = "%Y-%m-%d";
+                    break;
+                case 1:
+                    format = "%Y-%m-%d %H:%i";
+                    break;
+                case 2:
+                    format = "%Y-%m-%d %T";
+                    break;
+                case 3:
+                    format = "%Y-%m";
+                    break;
+                case 4:
+                    format = "%H:%i";
+                    break;
+                case 5:
+                    format = "%H:%i:%s";
+                    break;
+                case 6:
+                    format = "%m-%d";
+                    break;
+                default:
+                    format = "%Y-%m-%d";
+                    break;
+            }
+            return format;
+        }
+        private static string GetDefValByDataType(int dataType)
+        {
+            string format = "yyyy-MM-dd";
+            switch (dataType)
+            {
+                case 0:
+                    format = "yyyy-MM-dd";
+                    break;
+                case 1:
+                    format = "yyyy-MM-dd HH:mm";
+                    break;
+                case 2:
+                    format = "yyyy-MM-dd HH:mm:ss";
+                    break;
+                case 3:
+                    format = "yyyy-MM";
+                    break;
+                case 4:
+                    format = "HH:mm";
+                    break;
+                case 5:
+                    format = "HH:mm:ss";
+                    break;
+                case 6:
+                    format = "MM-dd";
+                    break;
+                default:
+                    format = "yyyy-MM-dd";
+                    break;
+            }
+            return DataType.CurrentDateByFormart(format);
         }
     }
 

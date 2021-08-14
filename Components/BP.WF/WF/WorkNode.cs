@@ -253,18 +253,13 @@ namespace BP.WF
 
 
             /*如果设置了安ccbpm的BPM模式*/
-            while (true)
-            {
-                FindWorker fw = new FindWorker();
-                dt = fw.DoIt(this.HisFlow, this, town);
-                if (dt == null)
-                    throw new Exception(BP.WF.Glo.multilingual("@没有找到接收人.", "WorkNode", "not_found_receiver"));
 
-                return InitWorkerLists(town, dt);
-            }
+            FindWorker fw = new FindWorker();
+            dt = fw.DoIt(this.HisFlow, this, town);
+            if (dt == null)
+                throw new Exception(BP.WF.Glo.multilingual("@没有找到接收人.", "WorkNode", "not_found_receiver"));
 
-
-            throw new Exception("@此部分代码已经移除了.");
+            return InitWorkerLists(town, dt);
         }
         #endregion GenerWorkerList 相关方法.
 
@@ -576,8 +571,8 @@ namespace BP.WF
                 {
                     string[] para = new string[1];
                     para[0] = wl.FK_Emp;
-                   string str= BP.WF.Glo.multilingual("@设置接收人规则错误, 接收人[{0}]不存在或者被停用。", "WorkNode", "invalid_setting_receiver", para);
-                    throw new Exception("err@"+str);
+                    string str = BP.WF.Glo.multilingual("@设置接收人规则错误, 接收人[{0}]不存在或者被停用。", "WorkNode", "invalid_setting_receiver", para);
+                    throw new Exception("err@" + str);
                 }
 
                 wl.FK_EmpText = emp.Name;
@@ -4852,7 +4847,8 @@ namespace BP.WF
             qo.addAnd();
             qo.AddWhere(FrmFieldAttr.IsWriteToFlowTable, 1);
             qo.DoQuery();
-
+            if (ffs.Count == 0)
+                return null;
             BP.WF.Template.FrmNodes frmNDs = new FrmNodes(this.HisNode.FK_Flow, this.HisNode.NodeID);
             string err = "";
             foreach (FrmNode item in frmNDs)
@@ -5205,10 +5201,10 @@ namespace BP.WF
 
                         if (num == 1)
                         {
-                            this.HisGenerWorkFlow.Sender=BP.WF.Glo.DealUserInfoShowModel(WebUser.No, WebUser.Name);
-                            this.HisGenerWorkFlow.HuiQianTaskSta=HuiQianTaskSta.None;
-                            this.HisGenerWorkFlow.HuiQianZhuChiRen="";
-                            this.HisGenerWorkFlow.HuiQianZhuChiRenName="";
+                            this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(WebUser.No, WebUser.Name);
+                            this.HisGenerWorkFlow.HuiQianTaskSta = HuiQianTaskSta.None;
+                            this.HisGenerWorkFlow.HuiQianZhuChiRen = "";
+                            this.HisGenerWorkFlow.HuiQianZhuChiRenName = "";
                             return false; /* 只有一个待办,说明自己就是最后的一个人. */
                         }
 
@@ -5221,14 +5217,14 @@ namespace BP.WF
                 if (this.HisNode.HuiQianLeaderRole == HuiQianLeaderRole.EveryOneMain)
                 {
                     /* 当前人是组长，检查是否可以可以发送,检查自己是不是最后一个待办处理人 ？*/
-                    if (this.HisGenerWorkFlow.TodoEmps.Contains(WebUser.No + ",") == true 
+                    if (this.HisGenerWorkFlow.TodoEmps.Contains(WebUser.No + ",") == true
                         && (DataType.IsNullOrEmpty(myhqzcr) == true || myhqType.Equals("AddLeader") == true))
                     {
                         String todoEmps = ""; // 记录没有处理的人.
                         String hqzcr = "";
                         String hqType = "";
                         int num = 0;
-                        foreach(GenerWorkerList item in gwls)
+                        foreach (GenerWorkerList item in gwls)
                         {
                             //主持人
                             hqzcr = item.GetParaString("HuiQianZhuChiRen");
@@ -5269,7 +5265,7 @@ namespace BP.WF
                 if (this.HisNode.HuiQianLeaderRole == HuiQianLeaderRole.LastOneMain)
                 {
                     /* 当前人是组长，检查是否可以可以发送,检查自己加签的人是否都已经处理完成 ？*/
-                    if (this.HisGenerWorkFlow.TodoEmps.Contains(WebUser.No+ ",") == true
+                    if (this.HisGenerWorkFlow.TodoEmps.Contains(WebUser.No + ",") == true
                             && (DataType.IsNullOrEmpty(myhqzcr) == true || myhqType.Equals("AddLeader") == true))
                     {
                         String todoEmps = ""; // 记录没有处理的人.
@@ -5349,7 +5345,7 @@ namespace BP.WF
                                     this.HisNode.Name, "协作发送");
                             String emps = this.HisGenerWorkFlow.TodoEmps;
                             emps = emps.Replace(WebUser.Name + ";", "");
-                            this.HisGenerWorkFlow.TodoEmps=emps;
+                            this.HisGenerWorkFlow.TodoEmps = emps;
                             this.HisGenerWorkFlow.DirectUpdate();
                             this.addMsg(SendReturnMsgFlag.CondInfo, "@当前工作未处理的会签人有: " + todohqzcrEmps, null,
                                     SendReturnMsgType.Info);
@@ -5375,9 +5371,9 @@ namespace BP.WF
                     //主持人
                     string hqzcr = item.GetParaString("HuiQianZhuChiRen");
                     hqzcr = DataType.IsNullOrEmpty(hqzcr) == true ? "" : hqzcr;
-                    if (item.IsPassInt== 0 || item.IsPassInt == 90)
+                    if (item.IsPassInt == 0 || item.IsPassInt == 90)
                     {
-                        if (item.FK_Emp.Equals(WebUser.No) == false)
+                        if (item.FK_Emp.Equals(Execer) == false)
                             todoEmps1 += BP.WF.Glo.DealUserInfoShowModel(item.FK_Emp, item.FK_EmpText) + " ";
                         if (myhqzcr.Equals(hqzcr) || item.FK_Emp.Equals(myhqzcr))
                             cnum++;
@@ -5398,7 +5394,7 @@ namespace BP.WF
                 //把当前的待办设置已办，并且提示未处理的人。
                 foreach (GenerWorkerList gwl in gwls)
                 {
-                    if (gwl.FK_Emp != WebUser.No)
+                    if (gwl.FK_Emp != Execer)
                         continue;
 
                     //设置当前已经完成.
@@ -5679,7 +5675,7 @@ namespace BP.WF
 
                 if (this.HisNode.BlockModel == BlockModel.BySQL)
                 {
-                    
+
                     string sql = this.HisNode.BlockExp;
                     sql = Glo.DealExp(sql, this.rptGe);
 
@@ -5999,10 +5995,10 @@ namespace BP.WF
             catch (Exception ex)
             {
 
-               //  throw ex;
-                
+                //  throw ex;
+
                 //正确的提示: 宜昌的需要这样的明确的提示信息.
-                throw new Exception("设置的阻塞规则错误:"+this.HisNode.BlockModel +",exp:"+ this.HisNode.BlockExp + "异常信息"+ex.Message);
+                throw new Exception("设置的阻塞规则错误:" + this.HisNode.BlockModel + ",exp:" + this.HisNode.BlockExp + "异常信息" + ex.Message);
             }
         }
         /// <summary>
@@ -7047,16 +7043,16 @@ namespace BP.WF
 
                     //判断当前流程是子流程，并且启用运行到该节点时主流程自动运行到下一个节点@yuan
                     this.HisMsgObjs = WorkNodePlus.SubFlowEvent(this);
-                   /* if (this.HisGenerWorkFlow.PWorkID != 0 && this.HisNode.IsToParentNextNode == true)
-                    {
-                        GenerWorkFlow pgwf = new GenerWorkFlow(this.HisGenerWorkFlow.PWorkID);
-                        if (pgwf.FK_Node == this.HisGenerWorkFlow.PNodeID)
-                        {
-                            SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PWorkID);
-                            string sendSuccess = "父流程自动运行到下一个节点，" + returnObjs.ToMsgOfHtml();
-                            this.HisMsgObjs.AddMsg("info", sendSuccess, sendSuccess, SendReturnMsgType.Info);
-                        }
-                    }*/
+                    /* if (this.HisGenerWorkFlow.PWorkID != 0 && this.HisNode.IsToParentNextNode == true)
+                     {
+                         GenerWorkFlow pgwf = new GenerWorkFlow(this.HisGenerWorkFlow.PWorkID);
+                         if (pgwf.FK_Node == this.HisGenerWorkFlow.PNodeID)
+                         {
+                             SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PWorkID);
+                             string sendSuccess = "父流程自动运行到下一个节点，" + returnObjs.ToMsgOfHtml();
+                             this.HisMsgObjs.AddMsg("info", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+                         }
+                     }*/
 
                     if (town != null && town.HisNode.HisBatchRole == BatchRole.Group)
                     {

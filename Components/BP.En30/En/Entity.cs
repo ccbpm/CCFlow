@@ -109,7 +109,6 @@ namespace BP.En
         }
         #endregion 自动标记获取属性实体方法.
 
-
         #region mapInfotoJson
 
         #endregion

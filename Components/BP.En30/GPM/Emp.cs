@@ -35,6 +35,7 @@ namespace BP.GPM
         /// 直属部门领导
         /// </summary>
         public const string Leader = "Leader";
+        public const string LeaderName = "LeaderName";
         /// <summary>
         /// 邮箱
         /// </summary>
@@ -301,9 +302,9 @@ namespace BP.GPM
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Tel, null, "电话", true, false, 0, 20, 130);
 
-                map.AddTBString(EmpAttr.Leader, null, "直属部门领导", true, false, 0, 20, 130);
+                map.AddTBString(EmpAttr.Leader, null, "直属部门领导", false, false, 0, 20, 130);
                 map.SetHelperAlert(EmpAttr.Leader, "这里是领导的登录帐号，不是中文名字，用于流程的接受人规则中。");
-
+                map.AddTBString(EmpAttr.LeaderName, null, "直属部门领导", true, true, 0, 20, 130);
 
                 map.AddTBString(EmpAttr.Email, null, "邮箱", true, false, 0, 100, 132, true);
                 map.AddTBString(EmpAttr.PinYin, null, "拼音", true, false, 0, 500, 132, true);
@@ -356,6 +357,13 @@ namespace BP.GPM
                 rm.RefMethodType = RefMethodType.LinkModel;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "设置部门直属领导";
+                rm.ClassMethodName = this.ToString() + ".DoEditLeader";
+                rm.RefAttrKey = EmpAttr.LeaderName;
+                rm.RefMethodType = RefMethodType.LinkModel;
+                map.AddRefMethod(rm);
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -364,6 +372,11 @@ namespace BP.GPM
         public string DoEditMainDept()
         {
             return SystemConfig.CCFlowWebPath + "GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
+        }
+
+        public string DoEditLeader()
+        {
+            return SystemConfig.CCFlowWebPath + "GPM/EmpLeader.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
         }
 
         public string DoEmpDepts()
@@ -389,6 +402,8 @@ namespace BP.GPM
             if (DataType.IsNullOrEmpty(this.Name) == true)
                 throw new Exception("err@名称不能为空.");
 
+            if (BP.Web.WebUser.IsAdmin == false)
+                throw new Exception("err@非管理员无法操作.");
 
             if (DataType.IsNullOrEmpty(this.Email) == false)
             {
@@ -434,6 +449,13 @@ namespace BP.GPM
                 depts += "@" + dept.NameOfPath;
             }
             return base.beforeUpdateInsertAction();
+        }
+        protected override bool beforeDelete()
+        {
+            if (this.No.ToLower().Equals("admin")==true)
+                throw new Exception("err@管理员账号不能删除.");
+
+            return base.beforeDelete();
         }
 
         /// <summary>

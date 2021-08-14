@@ -367,6 +367,16 @@ namespace BP.Sys.FrmUI
                 rm.Icon = "icon-refresh";
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.GroupName = "高级设置";
+                rm.Title = "字段类型转换";
+                rm.ClassMethodName = this.ToString() + ".DoTurnFieldType()";
+                rm.HisAttrs.AddTBString("key1", "int", "输入类型，格式:int,float,double,date,datetime,boolean", true, false, 0, 100, 100);
+                rm.RefMethodType = RefMethodType.Func;
+                rm.Warning = "string类型转化为枚举，请先转为int,由int转枚举.";
+                rm.Icon = "icon-refresh";
+                map.AddRefMethod(rm);
+
 
                 rm = new RefMethod();
                 rm.Title = "批处理";
@@ -374,7 +384,6 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "高级设置";
                 rm.Icon = "icon-calculator";
-
                 map.AddRefMethod(rm);
 
 
@@ -508,6 +517,59 @@ namespace BP.Sys.FrmUI
         public string DoStyleEditer()
         {
             return "../../Admin/FoolFormDesigner/StyletDfine/GloValStyles.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+        public string DoTurnFieldType(string type)
+        {
+            if (type.ToLower().Equals("int")==true)
+            {
+                this.SetValByKey(MapAttrAttr.MyDataType, DataType.AppInt);
+                this.SetValByKey(MapAttrAttr.LGType, 0); //设置成普通类型的.
+                this.Update();
+                return "转换为 int 类型执行成功，请您手工修改字段类型，以防止cc不能自动转换过来.";
+            }
+            if (type.ToLower().Equals("float") == true)
+            {
+                this.SetValByKey(MapAttrAttr.MyDataType, DataType.AppFloat);
+                this.SetValByKey(MapAttrAttr.LGType, 0); //设置成普通类型的.
+                this.Update();
+                return "转换为 float 类型执行成功，请您手工修改字段类型，以防止cc不能自动转换过来.";
+            }
+
+            if (type.ToLower().Equals("double") == true)
+            {
+                this.SetValByKey(MapAttrAttr.MyDataType, DataType.AppDouble);
+                this.SetValByKey(MapAttrAttr.LGType, 0); //设置成普通类型的.
+                this.Update();
+                return "转换为 double 类型执行成功，请您手工修改字段类型，以防止cc不能自动转换过来.";
+            }
+
+
+            if (type.ToLower().Equals("date") == true)
+            {
+                this.SetValByKey(MapAttrAttr.MyDataType, DataType.AppDate);
+                this.SetValByKey(MapAttrAttr.LGType, 0); //设置成普通类型的.
+                this.Update();
+                return "转换为 date 类型执行成功.";
+            }
+
+            if (type.ToLower().Equals("datetime") == true)
+            {
+                this.SetValByKey(MapAttrAttr.MyDataType, DataType.AppDateTime);
+                this.SetValByKey(MapAttrAttr.LGType, 0); //设置成普通类型的.
+                this.Update();
+                return "转换为 AppDateTime 类型执行成功.";
+            }
+
+            if (type.ToLower().Equals("boolean") == true)
+            {
+                this.SetValByKey(MapAttrAttr.MyDataType, DataType.AppBoolean);
+                this.SetValByKey(MapAttrAttr.LGType, 0); //设置成普通类型的.
+                this.Update();
+                return "转换为 boolean 类型执行成功，请您手工修改字段类型int，以防止cc不能自动转换过来.";
+            }
+
+
+            return "err@输入的类型错误:" +type;
         }
 
         public string DoRenameField(string newField)

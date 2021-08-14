@@ -89,6 +89,10 @@ namespace BP.CCBill
         /// 节点名字
         /// </summary>
         public const string NodeName = "NodeName";
+        /// <summary>
+        /// 流程的WorkID.
+        /// </summary>
+        public const string WorkIDOfFlow = "WorkIDOfFlow";
         #endregion 流程相关信息.
     }
     /// <summary>
@@ -153,7 +157,7 @@ namespace BP.CCBill
                 this.SetValByKey(TrackAttr.RDT, value);
             }
         }
-         
+
         /// <summary>
         /// fid
         /// </summary>
@@ -280,6 +284,17 @@ namespace BP.CCBill
                 return this.GetValHtmlStringByKey(TrackAttr.Msg);
             }
         }
+        public Int64 WorkIDOfFlow
+        {
+            get
+            {
+                return this.GetValInt64ByKey(TrackAttr.WorkIDOfFlow);
+            }
+            set
+            {
+                this.SetValByKey(TrackAttr.WorkIDOfFlow, value);
+            }
+        }
         #endregion attrs
 
         #region 流程属性.
@@ -380,7 +395,7 @@ namespace BP.CCBill
                 map.AddTBString(TrackAttr.FrmID, null, "表单ID", true, false, 0, 50, 200);
                 map.AddTBString(TrackAttr.FrmName, null, "表单名称(可以为空)", true, false, 0, 200, 200);
 
-               // map.AddTBInt(TrackAttr.ActionType, 0, "类型", true, false);
+                // map.AddTBInt(TrackAttr.ActionType, 0, "类型", true, false);
                 map.AddTBString(TrackAttr.ActionType, null, "类型", true, false, 0, 30, 100);
                 map.AddTBString(TrackAttr.ActionTypeText, null, "类型(名称)", true, false, 0, 30, 100);
 
@@ -404,6 +419,8 @@ namespace BP.CCBill
 
                 map.AddTBInt(TrackAttr.NodeID, 0, "节点ID", true, false);
                 map.AddTBString(TrackAttr.NodeName, null, "节点名称", true, false, 0, 200, 200);
+                map.AddTBInt(TrackAttr.WorkIDOfFlow, 0, "工作ID/OID", true, false);
+
                 #endregion 流程信息.
 
                 map.AddTBAtParas(3999); //参数.

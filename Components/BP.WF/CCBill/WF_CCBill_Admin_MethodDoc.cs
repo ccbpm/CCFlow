@@ -47,8 +47,8 @@ namespace BP.CCBill
         /// </summary>
         public WF_CCBill_Admin_MethodDoc()
         {
-        }
 
+        }
         /// <summary>
         /// 移动方法.
         /// </summary>
@@ -97,7 +97,11 @@ namespace BP.CCBill
             string funcstr = this.GetRequestVal("funcstr");
             //sql模式.
             if (type == 0)
+            {
+                doc = doc.Replace("/#", "+");
+                doc = doc.Replace("/$", "-");
                 en.MethodDoc_SQL = doc;
+            }
 
             //script.
             if (type == 1)
@@ -109,6 +113,8 @@ namespace BP.CCBill
                     System.IO.Directory.CreateDirectory(path);
                 //写入文件.
                 string file = path + en.No + ".js";
+                funcstr = funcstr.Replace("/#", "+");
+                funcstr = funcstr.Replace("/$", "-");
                 DataType.WriteFile(file, funcstr);
             }
 

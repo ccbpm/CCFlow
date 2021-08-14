@@ -336,7 +336,6 @@ namespace BP.Port
                 map.AddTBString(EmpAttr.Tel, null, "手机号", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Email, null, "邮箱", false, false, 0, 36, 36);
 
-
                 // map.AddTBString("docs", null, "安全校33验码", false, false, 0, 4000, 36);
                 #endregion 字段
 
@@ -360,6 +359,8 @@ namespace BP.Port
         #region 重写方法
         protected override bool beforeDelete()
         {
+            if (this.No.Equals("admin") == true)
+                throw new Exception("err@管理员账号不能删除.");
 
             return base.beforeDelete();
         }

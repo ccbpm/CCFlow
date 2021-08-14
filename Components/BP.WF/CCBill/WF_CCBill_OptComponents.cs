@@ -218,7 +218,7 @@ namespace BP.CCBill
 
                 string msg= "字段：[" + dtl.AttrKey + "],已经修改为:" + dtl.MyVal;
 
-                BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, null, this.WorkID, FrmActionType.DataVerReback, msg);
+                BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, this.WorkID, FrmActionType.DataVerReback, msg);
                 return msg;
             }
             catch (Exception ex)
@@ -255,7 +255,7 @@ namespace BP.CCBill
 
             // BP.CCBill.Dev2Interface.MyEntityTree_Delete
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, null, this.WorkID, FrmActionType.DataVerReback, "数据回滚");
+            BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID,  this.WorkID, FrmActionType.DataVerReback, "数据回滚");
 
             return "已经成功还原...";
         }
@@ -333,8 +333,7 @@ namespace BP.CCBill
                 dtl.Insert();
             }
 
-
-            BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, null, this.WorkID, FrmActionType.DataVerReback, "创建数据版本.");
+            BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, this.WorkID, FrmActionType.DataVerReback, "创建数据版本.");
 
             return "版本创建成功.";
         }

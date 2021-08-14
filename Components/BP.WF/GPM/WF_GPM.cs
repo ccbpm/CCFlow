@@ -28,6 +28,28 @@ namespace BP.WF.HttpHandler
         }
 
         /// <summary>
+        /// 清除缓存
+        /// </summary>
+        /// <returns></returns>
+        public string PowerCenter_DoClearCash()
+        {
+            string ctrlGroup = this.GetRequestVal("CtrlGroup");
+
+            string sql = "";
+            if (ctrlGroup.Equals("Menu") == true)
+            {
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    sql = "DELETE FROM Sys_UserRegedit WHERE OrgNo='" + BP.Web.WebUser.OrgNo + "' AND CfgKey='" + ctrlGroup + "' ";
+                else
+                    sql = "DELETE FROM Sys_UserRegedit WHERE  CfgKey='" + ctrlGroup + "' ";
+                DBAccess.RunSQL(sql);
+            }
+
+            return "清除成功.";
+        }
+
+
+        /// <summary>
         /// 模块移动.
         /// </summary>
         /// <returns></returns>

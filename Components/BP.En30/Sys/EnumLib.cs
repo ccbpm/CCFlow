@@ -25,7 +25,11 @@ namespace BP.Sys
         /// <summary>
         /// 实体树
         /// </summary>
-        EntityTree = 3
+        EntityTree = 3,
+        /// <summary>
+        /// 数据源类型
+        /// </summary>
+        DBList = 100
     }
     /// <summary>
     /// 数据源类型

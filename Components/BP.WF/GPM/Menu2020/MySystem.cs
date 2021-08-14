@@ -33,29 +33,9 @@ namespace BP.GPM.Menu2020
         /// </summary>
         public const string IsEnable = "IsEnable";
         /// <summary>
-        /// FK_MySystemSort
-        /// </summary>
-        public const string FK_MySystemSort = "FK_MySystemSort";
-        /// <summary>
         /// 关联菜单编号
         /// </summary>
         public const string RefMenuNo = "RefMenuNo";
-        /// <summary>
-        /// 用户控件ID
-        /// </summary>
-        public const string UidControl = "UidControl";
-        /// <summary>
-        /// 密码控件ID
-        /// </summary>
-        public const string PwdControl = "PwdControl";
-        /// <summary>
-        /// 提交方式
-        /// </summary>
-        public const string ActionType = "ActionType";
-        /// <summary>
-        /// 登录方式
-        /// </summary>
-        public const string SSOType = "SSOType";
         public const string Icon = "Icon";
     }
     /// <summary>
@@ -136,48 +116,8 @@ namespace BP.GPM.Menu2020
                 this.SetValByKey(MySystemAttr.Icon, value);
             }
         }
-        /// <summary>
-        /// 密码控件ID
-        /// </summary>
-        public string PwdControl
-        {
-            get
-            {
-                return this.GetValStrByKey(MySystemAttr.PwdControl);
-            }
-            set
-            {
-                this.SetValByKey(MySystemAttr.PwdControl, value);
-            }
-        }
-        /// <summary>
-        /// 提交方式
-        /// </summary>
-        public string ActionType
-        {
-            get
-            {
-                return this.GetValStrByKey(MySystemAttr.ActionType);
-            }
-            set
-            {
-                this.SetValByKey(MySystemAttr.ActionType, value);
-            }
-        }
-        /// <summary>
-        /// 登录方式@0=SID验证@1=连接@2=表单提交
-        /// </summary>
-        public string SSOType
-        {
-            get
-            {
-                return this.GetValStrByKey(MySystemAttr.SSOType);
-            }
-            set
-            {
-                this.SetValByKey(MySystemAttr.SSOType, value);
-            }
-        }
+
+
         public string OrgNo
         {
             get
@@ -208,7 +148,8 @@ namespace BP.GPM.Menu2020
             get
             {
                 UAC uac = new UAC();
-                uac.OpenAll();
+                uac.OpenForSysAdmin();
+                uac.IsInsert = false;
                 return uac;
             }
         }
@@ -246,35 +187,30 @@ namespace BP.GPM.Menu2020
                 map.AddTBString(MySystemAttr.Name, null, "名称", true, false, 0, 300, 150, true);
                 map.AddBoolean(MySystemAttr.IsEnable, true, "启用?", true, true);
                 map.AddTBString(MySystemAttr.Icon, null, "图标", true, false, 0, 50, 150, true);
+
+                map.AddTBString(MenuAttr.OrgNo, null, "组织编号", true, false, 0, 50, 20);
                 map.AddTBInt(MySystemAttr.Idx, 0, "显示顺序", true, false);
 
-                if (Sys.SystemConfig.CCBPMRunModel != Sys.CCBPMRunModel.Single)
-                    map.AddTBString(MenuAttr.OrgNo, null, "组织编号", true, false, 0, 50, 20);
-
                 //RefMethod rm = new RefMethod();
-                //rm.Title = "编辑菜单";
-                //rm.ClassMethodName = this.ToString() + ".DoMenu";
+                //rm.Title = "权限控制";
+                //rm.ClassMethodName = this.ToString() + ".DoPowerCenter";
                 //rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 //map.AddRefMethod(rm);
 
-                //rm = new RefMethod();
-                //rm.Title = "查看可访问该系统的人员";
-                //rm.ClassMethodName = this.ToString() + ".DoWhoCanUseMySystem";
-
-                //rm = new RefMethod();
-                //rm.Title = "刷新设置";
-                //rm.ClassMethodName = this.ToString() + ".DoRef";
-
-                //rm = new RefMethod();
-                //rm.Title = "第二连接";
-                ////rm.Title = "第二连接：登录方式为不传值、连接不设置用户名密码转为第二连接。";
-                //rm.ClassMethodName = this.ToString() + ".About";
-                //// map.AddRefMethod(rm);
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        /// <summary>
+        /// 权限控制
+        /// </summary>
+        /// <returns></returns>
+        public string DoPowerCenter()
+        {
+            return "../../GPM/PowerCenter.htm?CtrlObj=System&CtrlPKVal=" + this.No + "&CtrlGroup=System";
+        }
 
         /// <summary>
         /// 业务处理.
@@ -302,7 +238,7 @@ namespace BP.GPM.Menu2020
                 DBAccess.RunSQL("DELETE FROM Sys_FormTree WHERE No='" + this.No + "' ");
 
             //看看这个类别下是否有流程，如果有就删除掉.
-              sql = "SELECT COUNT(No) AS No FROM WF_Flow WHERE FK_FlowSort='" + this.No + "'";
+            sql = "SELECT COUNT(No) AS No FROM WF_Flow WHERE FK_FlowSort='" + this.No + "'";
             if (DBAccess.RunSQLReturnValInt(sql) == 0)
                 DBAccess.RunSQL("DELETE FROM WF_FlowSort WHERE No='" + this.No + "' ");
 
@@ -404,8 +340,6 @@ namespace BP.GPM.Menu2020
                     en.ModuleNo = dr["ModuleNo"].ToString();
                     en.UrlExt = dr["Url"].ToString();
                     en.Icon = dr["Icon"].ToString();
-                    en.MenuCtrlWay = MenuCtrlWay.Anyone;
-                    //en.IsEnable = true;
                     en.Insert();
                 }
 

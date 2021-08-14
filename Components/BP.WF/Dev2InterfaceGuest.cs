@@ -227,10 +227,17 @@ namespace BP.WF
         /// </summary>
         /// <param name="guestNo">客户编号</param>
         /// <param name="guestName">客户名称</param>
-        public static void Port_Login(string guestNo,string guestName)
+        public static void Port_Login(string guestNo,string guestName, string orgNo="Guest")
         {
+            BP.Web.WebUser.No = guestNo;
+            BP.Web.WebUser.Name = guestName;
+
+            BP.Web.WebUser.FK_Dept = "Guest";
+            BP.Web.WebUser.FK_DeptName = "Guest";
+            BP.Web.WebUser.OrgNo = orgNo;
+
             //登陆.
-            BP.Web.GuestUser.SignInOfGener(guestNo, guestName, "CH", true);
+            //  BP.Web.GuestUser.SignInOfGener(guestNo, guestName, "CH", true);
         }
         /// <summary>
         /// 登陆

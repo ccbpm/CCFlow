@@ -279,6 +279,11 @@ namespace BP.CCBill.Template
                 map.AddTBString(MethodAttr.Mark, null, "功能说明", true, false, 0, 900, 10, true);
                 map.SetHelperAlert(MethodAttr.Mark, "对于该功能的描述.");
 
+
+                //是否显示到列表.
+                map.AddBoolean(MethodAttr.IsList, false, "是否显示在列表?", true, true);
+
+
                 // map.AddTBStringDoc(MethodAttr.Docs, null, "功能说明", true, false, true);
 
                 //    map.AddDDLSysEnum(MethodAttr.WhatAreYouTodo, 0, "执行完毕后干啥？", true, true, MethodAttr.WhatAreYouTodo,

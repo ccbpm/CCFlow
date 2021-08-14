@@ -140,6 +140,7 @@ namespace BP.CCBill
         /// <returns></returns>
         public string Default_MenusOfFlag()
         {
+          
             string sql = "";
             int top = GetRequestValInt("Top");
             if (top == 0) top = 8;

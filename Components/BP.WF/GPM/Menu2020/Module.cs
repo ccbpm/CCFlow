@@ -27,6 +27,10 @@ namespace BP.GPM.Menu2020
         /// Icon
         /// </summary>
         public const string Icon = "Icon";
+        /// <summary>
+        /// 是否启用？
+        /// </summary>
+        public const string IsEnable = "IsEnable";
     }
     /// <summary>
     /// 模块
@@ -141,22 +145,12 @@ namespace BP.GPM.Menu2020
 
                 map.AddTBStringPK(ModuleAttr.No, null, "编号", true, true, 1, 200, 20);
                 map.AddTBString(ModuleAttr.Name, null, "名称", true, false, 0, 300, 20);
-                //map.AddTBString(ModuleAttr.SystemNo, null, "系统", false, false, 0, 50, 20);
-                //map.AddTBString(ModuleAttr.SystemNo, null, "系统编号", false, false, 0, 30, 20);
                 map.AddDDLEntities(ModuleAttr.SystemNo, null, "隶属系统", new MySystems(), true);
-                //map.AddTBString(ModuleAttr.Remark, null, "标记", true, false, 0, 300, 20);
-                //map.AddBoolean(MenuAttr.IsEnable, true, "是否启用?", true, true);
                 map.AddTBString(MenuAttr.Icon, null, "Icon", true, false, 0, 500, 50, true);
-
-                //map.AddDDLSysEnum(MenuAttr.MenuCtrlWay, 0, "控制方式", true, true, MenuAttr.MenuCtrlWay,
-                //  "@0=按照设置的控制@1=任何人都可以使用@2=Admin用户可以使用");
                 map.AddTBInt(ModuleAttr.Idx, 0, "显示顺序", true, false);
+                map.AddTBInt(ModuleAttr.IsEnable, 1, "IsEnable", true, false);
 
-                if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
-                    map.AddTBString(ModuleAttr.OrgNo, null, "组织编号", true, false, 0, 50, 20);
-
-                // @0=自定义菜单. @1=系统菜单.
-                map.AddTBInt(MenuAttr.WorkType, 0, "工作类型", false, false);
+                map.AddTBString(ModuleAttr.OrgNo, null, "组织编号", true, false, 0, 50, 20);
 
                 this._enMap = map;
                 return this._enMap;

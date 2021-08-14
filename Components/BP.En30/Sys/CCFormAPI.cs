@@ -817,7 +817,7 @@ namespace BP.Sys
             JsonData form_Controls = formData["s"]["figures"];
             if (form_Controls.IsArray == false || form_Controls.Count == 0)
             {
-                /*画布里没有任何东西, 清楚所有的元素.*/
+                /*画布里没有任何东西, 清除所有的元素.*/
                 string delSqls = "";
                 delSqls += "@DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapdata + "' AND KeyOfEn NOT IN ('OID')";
                 delSqls += "@DELETE FROM Sys_FrmRB WHERE FK_MapData='" + fk_mapdata + "'"; //枚举值的相关rb. 

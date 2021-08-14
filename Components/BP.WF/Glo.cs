@@ -2509,6 +2509,18 @@ namespace BP.WF
                 sql = "INSERT INTO AA (OID) VALUES(100)";
                 DBAccess.RunSQL(sql);
 
+                try
+                {
+                    //检查是否可以批量执行sql.
+                    sql = "UPDATE AA SET OID=0 WHERE OID=1;UPDATE AA SET OID=0 WHERE OID=1;";
+                    DBAccess.RunSQL(sql);
+                }
+                catch
+                {
+                    throw new Exception("err@需要让数据库链接支持批量执行SQL语句，请修改数据库链接配置：&allowMultiQueries=true");
+                }
+
+
                 errInfo = " 当前用户没有[update 表数据]的权限. ";
                 sql = "UPDATE AA SET OID=101";
                 DBAccess.RunSQL(sql);
@@ -2558,6 +2570,9 @@ namespace BP.WF
 
                 if (SystemConfig.AppCenterDBDatabase.Contains("-") == true)
                     throw new Exception("err@数据库名称不能包含 '-' 号，您可以使用 '_' .");
+
+
+
 
                 return true;
             }
@@ -2630,13 +2645,13 @@ namespace BP.WF
             StationType myStaType = new StationType();
             myStaType.CheckPhysicsTable();
 
-            BP.GPM.DeptEmp myde = new GPM.DeptEmp();
+            BP.GPM.DeptEmp myde = new BP.GPM.DeptEmp();
             myde.CheckPhysicsTable();
 
-            BP.GPM.DeptEmpStation mydes = new GPM.DeptEmpStation();
+            BP.GPM.DeptEmpStation mydes = new BP.GPM.DeptEmpStation();
             mydes.CheckPhysicsTable();
 
-            BP.GPM.DeptStation mydeptSta = new GPM.DeptStation();
+            BP.GPM.DeptStation mydeptSta = new BP.GPM.DeptStation();
             mydeptSta.CheckPhysicsTable();
 
             BP.Sys.FrmRB myrb = new BP.Sys.FrmRB();
@@ -3083,7 +3098,7 @@ namespace BP.WF
                 DBAccess.GetBigTextFromDB("Sys_MapData", "No", "001", "HtmlTemplateFile");
             }
             catch
-            { 
+            {
             }
             #endregion 增加大文本字段列.
         }
@@ -4243,9 +4258,7 @@ namespace BP.WF
                 default:
                     break;
             }
-
             return null;
-
         }
         /// <summary>
         /// 执行PageLoad装载数据
@@ -6567,7 +6580,7 @@ namespace BP.WF
                 ctrlWayId = pkval;
             else
             {
-                MapData mapData = new MapData(fk_mapData);
+                MapData mapData = new MapData(athDesc.FK_MapData);
                 if (mapData.EntityType == EntityType.FrmDict || mapData.EntityType == EntityType.FrmBill)
                     ctrlWayId = pkval;
                 else

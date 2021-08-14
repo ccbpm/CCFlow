@@ -13,30 +13,6 @@ using System.IO;
 
 namespace BP.WF.Port
 {
-
-    public enum AlertWay
-    {
-        /// <summary>
-        /// 不提示
-        /// </summary>
-        None,
-        /// <summary>
-        /// 手机短信
-        /// </summary>
-        SMS,
-        /// <summary>
-        /// 邮件
-        /// </summary>
-        Email,
-        /// <summary>
-        /// 手机短信+邮件
-        /// </summary>
-        SMSAndEmail,
-        /// <summary>
-        /// 内部消息
-        /// </summary>
-        AppSystemMsg
-    }
     /// <summary>
     /// 操作员
     /// </summary>
@@ -70,6 +46,10 @@ namespace BP.WF.Port
         /// 图片签名密码
         /// </summary>
         public const string SPass = "SPass";
+        /// <summary>
+        /// token.
+        /// </summary>
+        public const string Token = "Token";
         #endregion
     }
     /// <summary>
@@ -110,15 +90,15 @@ namespace BP.WF.Port
                 return this.GetValRefTextByKey(WFEmpAttr.AlertWay);
             }
         }
-        public AlertWay HisAlertWay
+        public string Token
         {
             get
             {
-                return (AlertWay)this.GetValIntByKey(WFEmpAttr.AlertWay);
+                return this.GetValStringByKey(WFEmpAttr.Token);
             }
             set
             {
-                SetValByKey(WFEmpAttr.AlertWay, (int)value);
+                SetValByKey(WFEmpAttr.Token, value);
             }
         }
         /// <summary>
@@ -297,6 +277,9 @@ namespace BP.WF.Port
                 map.AddTBString("OrgNo", null, "OrgNo", true, true, 0, 100, 20);
 
                 map.AddTBString(WFEmpAttr.SPass, null, "图片签名密码", true, true, 0, 200, 20);
+
+                map.AddTBString(WFEmpAttr.Token, null, "token", true, true, 0, 200, 20);
+
 
                 map.AddTBInt(WFEmpAttr.Idx, 0, "Idx", false, false);
 

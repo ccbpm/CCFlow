@@ -104,7 +104,7 @@ namespace BP.Web
             WebUser.No = em.UserID;
             WebUser.Name = em.Name;
 
-          
+
             if (DataType.IsNullOrEmpty(authNo) == false)
             {
                 WebUser.Auth = authNo; //被授权人，实际工作的执行者.
@@ -129,8 +129,21 @@ namespace BP.Web
                 string deptNo = DBAccess.RunSQLReturnString(sql);
                 if (DataType.IsNullOrEmpty(deptNo) == true)
                 {
-                    if (DataType.IsNullOrEmpty(deptNo) == true)
-                        throw new Exception("@登录人员(" + em.UserID + "," + em.Name + ")没有维护部门."+sql);
+                    if (em.No.Equals("Guest") == true)
+                    {
+                        if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                        {
+                            BP.GPM.DeptEmp de = new GPM.DeptEmp();
+                            de.FK_Dept = "ccs";
+                            de.FK_Emp = "Guest";
+                            de.Insert();
+                        }
+                    }
+                    else
+                    {
+                        if (DataType.IsNullOrEmpty(deptNo) == true)
+                            throw new Exception("@登录人员(" + em.UserID + "," + em.Name + ")没有维护部门." + sql);
+                    }
                 }
                 else
                 {
@@ -167,7 +180,7 @@ namespace BP.Web
                 cookieValues.Add("FK_DeptName", HttpUtility.UrlEncode(em.FK_DeptText));
 
                 //设置组织编号.
-                if (SystemConfig.CCBPMRunModel!= CCBPMRunModel.Single)
+                if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                     cookieValues.Add("OrgNo", em.OrgNo);
 
 
@@ -599,7 +612,7 @@ namespace BP.Web
                 if (WebUser.No == null)
                     return false;
 
-                if ( BP.Web.WebUser.No.Equals("admin") == true)
+                if (BP.Web.WebUser.No.Equals("admin") == true)
                     return true;
 
                 if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
@@ -677,6 +690,9 @@ namespace BP.Web
             {
                 string sql = "UPDATE Port_Emp SET SID='" + WebUser.SID + "',OrgNo='" + WebUser.OrgNo + "', FK_Dept='" + WebUser.FK_Dept + "' WHERE No='" + WebUser.No + "'";
                 DBAccess.RunSQL(sql);
+
+                sql = "UPDATE WF_Emp SET Token='" + WebUser.SID + "',OrgNo='" + WebUser.OrgNo + "', FK_Dept='" + WebUser.FK_Dept + "' WHERE No='" + WebUser.No + "'";
+                DBAccess.RunSQL(sql);
             }
             else
             {
@@ -702,7 +718,7 @@ namespace BP.Web
                     return "";
 
                 string val = GetValFromCookie("OrgNo", null, true);
-                if (val==null)
+                if (val == null)
                     val = GetSessionByKey("OrgNo", null);
 
                 if (val == null)

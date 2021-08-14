@@ -24,6 +24,29 @@ namespace BP.CCBill
     public class WF_CCBill_Admin_Method : DirectoryPageBase
     {
         #region 属性.
+        /// <summary>
+        /// 模块编号
+        /// </summary>
+        public string ModuleNo
+        {
+            get
+            {
+                string str = this.GetRequestVal("ModuleNo");
+                return str;
+            }
+        }
+        /// <summary>
+        /// 菜单ID.
+        /// </summary>
+        public string MenuNo
+        {
+            get
+            {
+                string str = this.GetRequestVal("MenuNo");
+                return str;
+            }
+        }
+
         public string GroupID
         {
             get
@@ -45,8 +68,9 @@ namespace BP.CCBill
 
         public string Bill_Save()
         {
-            string fromFrmID = this.GetRequestVal("FromFrmID");
-            string toFrmID = this.GetRequestVal("ToFrmID");
+            string fromFrmID = this.GetRequestVal("DictFrmID");
+            string toFrmID = this.GetRequestVal("BillFrmID");
+
 
             //这里仅仅复制主表的字段.
             MapAttrs attrsFrom = new MapAttrs();
@@ -57,7 +81,7 @@ namespace BP.CCBill
                     continue;
 
                 attr.FK_MapData = toFrmID;
-                attr.MyPK = attr.FK_MapData + "_" + toFrmID;
+                attr.MyPK = attr.FK_MapData + "_" +attr.KeyOfEn;
                 attr.Insert();
             }
             return "复制成功.";
@@ -82,7 +106,9 @@ namespace BP.CCBill
         /// </summary>
         /// <returns></returns>
         public string FlowEtc_Save()
-        {
+        { 
+            //当前表单的信息
+            MapData mapData = new MapData(this.FrmID);
             #region 第1步: 创建一个流程.
             //首先创建流程. 参数都通过 httrp传入了。
             BP.WF.HttpHandler.WF_Admin_CCBPMDesigner_FlowDevModel handler = new WF_Admin_CCBPMDesigner_FlowDevModel();
@@ -92,6 +118,20 @@ namespace BP.CCBill
             BP.WF.Flow fl = new WF.Flow(flowNo);
             fl.IsCanStart = false;
             fl.Update();
+
+            //更新开始节点.
+            BP.WF.Node nd = new WF.Node(int.Parse(flowNo + "01"));
+            nd.Name = this.Name;
+            if (mapData.HisFrmType == FrmType.Develop)
+            {
+                nd.FormType = NodeFormType.Develop;
+                MapData map = new MapData(nd.NodeFrmID);
+                map.HisFrmType = FrmType.Develop;
+                map.Update();
+            }
+
+            nd.Update();
+
             #endregion 创建一个流程.
 
             #region 第2步 把表单导入到流程上去.
@@ -100,82 +140,51 @@ namespace BP.CCBill
             //   handler.AddPara
             handlerFrm.Imp_CopyFrm("ND" + int.Parse(flowNo + "01"), this.FrmID);
 
-            //更新开始节点.
-            BP.WF.Node nd = new WF.Node(int.Parse(flowNo + "01"));
-            nd.Name = this.Name;
-            nd.Update();
+            
             #endregion 把表单导入到流程上去.
 
-
-            // 第4步: 创建实体分组的方法.
-            CrateFlowMenu_4_GroupMethod(MethodModelClass.FlowEtc, flowNo);
-
-            //创建流程目录与流程菜单.
-            CrateFlow_5_Module(MethodModelClass.FlowEtc, flowNo);
-
-            return this.FrmID + "_" + flowNo; //返回的方法ID;
-        }
-        /// <summary>
-        /// 新建实体流程
-        /// </summary>
-        /// <returns></returns>
-        public string FlowNewEntity_Save()
-        {
-            #region 第1步: 创建一个流程.
-            //首先创建流程. 参数都通过 httrp传入了。
-            BP.WF.HttpHandler.WF_Admin_CCBPMDesigner_FlowDevModel handler = new WF_Admin_CCBPMDesigner_FlowDevModel();
-            string flowNo = handler.FlowDevModel_Save();
-
-            //执行更新. 设置为不能独立启动.
-            BP.WF.Flow fl = new WF.Flow(flowNo);
-            fl.IsCanStart = false;
-            fl.TitleRole = "@WebUser.No 在@RDT 发起【@DictName】";
-            fl.Update();
-            #endregion 创建一个流程.
-
-            #region 第2步 把表单导入到流程上去.
-            //如果是发起流程的方法，就要表单的字段复制到，流程的表单上去.
-            BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp handlerFrm = new WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp();
-            //   handler.AddPara
-            string ndFrmID = "ND" + int.Parse(flowNo + "01");
-            handlerFrm.Imp_CopyFrm(ndFrmID, this.FrmID);
-
-            MapAttr attr = new MapAttr(ndFrmID + "_Title");
-            attr.UIVisible = false;
-            attr.Name = "流程标题";
-            attr.Update();
-
-            //生成名称字段.
-            attr.KeyOfEn = "DictName";
-            attr.Name = "名称";
-            attr.UIVisible = true;
-            attr.MyPK = attr.FK_MapData + "_" + attr.KeyOfEn;
-            attr.DirectInsert();
-
-            //更新开始节点.
-            BP.WF.Node nd = new WF.Node(int.Parse(flowNo + "01"));
-            nd.Name = this.Name;
-            nd.Update();
-            #endregion 把表单导入到流程上去.
-
-            // 第4步: 创建实体分组的方法.
-            //   CrateFlowMenu_4_GroupMethod(MethodModelClass.FlowNewEntity, flowNo);
-
-            //创建流程目录与流程菜单.
-            CrateFlow_5_Module(MethodModelClass.FlowNewEntity, flowNo);
-
-            string pkval = this.FrmID + "_" + flowNo;
-
-            //处理启动此流程后与实体的关系设计.
-            MethodFlowNewEntity en = new MethodFlowNewEntity(pkval);
-            en.FlowNo = flowNo;
+            //创建方法.
+            BP.CCBill.Template.Method en = new Template.Method();
             en.FrmID = this.FrmID;
-            en.DTSWhenFlowOver = true; // 是否在流程结束后同步?
-            en.DTSDataWay = 1; // 同步所有相同的字段.
-            en.UrlExt = "../CCBill/Opt/StartFlowByNewEntity.htm?FlowNo=" + en.FlowNo + "&FrmID=" + this.FrmID + "&MenuNo=" + pkval;
-            en.Update();
+            en.No = en.FrmID + "_" + flowNo;
+            en.Name = this.Name;
+            en.GroupID = this.GroupID; //分组的编号.
+            en.FlowNo = flowNo;
+            en.Icon = "icon-paper-plane";
+            en.RefMethodType = RefMethodType.LinkeWinOpen; // = 1;
+            en.MethodModel = MethodModelClass.FlowEtc; //类型.
+            en.Mark = "Search"; //发起流程.
+            en.Tag1 = flowNo; //标记为空.
+            en.MethodID = flowNo; // 就是流程编号.
+            en.FlowNo = flowNo;
+            en.Insert();
 
-            return pkval; //返回的方法ID;
+
+         //   //创建查询菜单.放入到与该实体平行的位置.
+         //   BP.GPM.Menu2020.Menu menu = new BP.GPM.Menu2020.Menu();
+         //   menu.ModuleNo = this.ModuleNo; //隶属与实体一个模块.
+         //   menu.Name = this.Name;
+         //   menu.Idx = 0;
+         ////   menu.MenuModel = "FlowEtc"; //
+         //   menu.MenuModel = MethodModelClass.FlowEtc; //其他类型的业务流程..
+
+         //   menu.Mark = "Search"; //流程查询.
+         //   menu.Tag1 = flowNo; //流程编号.
+         //   menu.No = this.FrmID + "_" + flowNo;
+         //   menu.Icon = "icon-paper-plane";
+         //   menu.Insert();
+
+            //返回方法编号。
+            return en.No;
+
+
+            //// 第4步: 创建实体分组的方法.
+            //CrateFlowMenu_4_GroupMethod(MethodModelClass.FlowEtc, flowNo);
+
+            ////创建流程目录与流程菜单.
+            //CrateFlow_5_Module(MethodModelClass.FlowEtc, flowNo);
+
+            //return this.FrmID + "_" + flowNo; //返回的方法ID;
         }
         /// <summary>
         /// 创建基础信息变更流程
@@ -183,7 +192,7 @@ namespace BP.CCBill
         /// <returns></returns>
         public string FlowBaseData_Save()
         {
-
+           
             #region 第1步: 创建一个流程.
             //首先创建流程. 参数都通过 httrp传入了。
             BP.WF.HttpHandler.WF_Admin_CCBPMDesigner_FlowDevModel handler = new WF_Admin_CCBPMDesigner_FlowDevModel();
@@ -193,18 +202,22 @@ namespace BP.CCBill
             BP.WF.Flow fl = new WF.Flow(flowNo);
             fl.IsCanStart = false;
             fl.Update();
+
+            //更新开始节点.
+            BP.WF.Node nd = new WF.Node(int.Parse(flowNo + "01"));
+            nd.Name = this.Name;
+            
+            nd.Update();
+
             #endregion 创建一个流程.
 
             #region 第2步 把表单导入到流程上去.
             //如果是发起流程的方法，就要表单的字段复制到，流程的表单上去.
             BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp handlerFrm = new WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp();
-            //   handler.AddPara
+           
             handlerFrm.Imp_CopyFrm("ND" + int.Parse(flowNo + "01"), this.FrmID);
 
-            //更新开始节点.
-            BP.WF.Node nd = new WF.Node(int.Parse(flowNo + "01"));
-            nd.Name = this.Name;
-            nd.Update();
+           
             #endregion 把表单导入到流程上去.
 
             #region 第3步： 处理流程的业务表单 - 字段增加一个影子字段.
@@ -260,17 +273,45 @@ namespace BP.CCBill
             }
             #endregion 处理流程的业务表单 - 字段增加一个影子字段..
 
+            //创建方法.
+            BP.CCBill.Template.Method en = new Template.Method();
+            en.FrmID = this.FrmID;
+            en.No = en.FrmID + "_" + flowNo;
+            en.Name = this.Name;
+            en.GroupID = this.GroupID; //分组的编号.
+            en.FlowNo = flowNo;
+            en.Icon = "icon-paper-plane";
+            en.RefMethodType = RefMethodType.LinkeWinOpen; // = 1;
+            en.MethodModel = MethodModelClass.FlowBaseData; //类型.
+            en.Mark = "Search"; //发起流程.
+            en.Tag1 = flowNo; //标记为空.
+            en.MethodID = flowNo; // 就是流程编号.
+            
+            en.FlowNo = flowNo;
+            en.Insert();
+
+            
+            ////创建查询菜单.放入到与该实体平行的位置.
+            //BP.GPM.Menu2020.Menu menu = new BP.GPM.Menu2020.Menu();
+            //menu.ModuleNo = this.ModuleNo; //隶属与实体一个模块.
+            //menu.Name = this.Name;
+            //menu.Idx = 0;
+            //menu.MenuModel = "FlowBaseData"; //修改基础数据流程.
+            //menu.Mark = "Search"; //流程查询.
+            //menu.Tag1 = flowNo; //流程编号.
+            //menu.No = this.FrmID + "_" + flowNo;
+            //menu.Icon = "icon-paper-plane";
+            //menu.Insert();
+
+
+            //返回方法编号。
+            return en.No;
+
             // 第4步: 创建实体分组的方法.
-            CrateFlowMenu_4_GroupMethod(MethodModelClass.FlowBaseData, flowNo);
-
-
-            // 创建流程目录与流程菜单.
-            CrateFlow_5_Module(MethodModelClass.FlowBaseData, flowNo);
-
-
-
-            return this.FrmID + "_" + flowNo; //返回的方法ID;
+            //   CrateFlowMenu_4_GroupMethod(MethodModelClass.FlowBaseData, flowNo);
         }
+
+        
         /// <summary>
         /// 创建方法分组.
         /// </summary>
@@ -295,7 +336,7 @@ namespace BP.CCBill
             en.Name = this.Name;
             en.GroupID = gm.No; //分组的编号.
             en.FlowNo = flowNo;
-            en.Icon = "icon-plane";
+            en.Icon = "icon-paper-plane";
 
             en.RefMethodType = RefMethodType.LinkeWinOpen; // = 1;
             en.MethodModel = menuModel; //类型.
@@ -318,16 +359,16 @@ namespace BP.CCBill
             en.Insert();
 
 
-            // 增加内置流程方法:流程分析.
-            en.Name = "流程分析";
-            en.Icon = "icon-chart";
-            en.MethodModel = menuModel; //类型.
-            en.Mark = "Group"; //流程分析.
-            en.Tag1 = flowNo; //标记为空.
-            en.MethodID = flowNo; // 就是流程编号.
-            en.FlowNo = flowNo;
-            en.No = DBAccess.GenerGUID();
-            en.Insert();
+            //// 增加内置流程方法:流程分析.
+            //en.Name = "流程分析";
+            //en.Icon = "icon-chart";
+            //en.MethodModel = menuModel; //类型.
+            //en.Mark = "Group"; //流程分析.
+            //en.Tag1 = flowNo; //标记为空.
+            //en.MethodID = flowNo; // 就是流程编号.
+            //en.FlowNo = flowNo;
+            //en.No = DBAccess.GenerGUID();
+            //en.Insert();
             #endregion 第4步 创建方法.
         }
         /// <summary>
@@ -351,7 +392,6 @@ namespace BP.CCBill
             //流程查询.
             menu = new BP.GPM.Menu2020.Menu();
             menu.ModuleNo = mmodule.No;
-            menu.MenuCtrlWay = GPM.Menu2020.MenuCtrlWay.Anyone;
             menu.Name = "发起流程";
             menu.Idx = 0;
 
@@ -366,7 +406,6 @@ namespace BP.CCBill
             //待办.
             menu = new BP.GPM.Menu2020.Menu();
             menu.ModuleNo = mmodule.No;
-            menu.MenuCtrlWay = GPM.Menu2020.MenuCtrlWay.Anyone;
             menu.Name = "待办";
 
             menu.MenuModel = menuModel;
@@ -381,7 +420,6 @@ namespace BP.CCBill
             menu = new BP.GPM.Menu2020.Menu();
             menu.MenuModel = menuModel; //模式.
             menu.ModuleNo = mmodule.No;
-            menu.MenuCtrlWay = GPM.Menu2020.MenuCtrlWay.Anyone;
             menu.Name = "未完成(在途)";
             menu.Mark = "Runing"; //未完成.
             menu.Tag1 = flowNo; //流程编号.
@@ -393,7 +431,6 @@ namespace BP.CCBill
             //流程查询.
             menu = new BP.GPM.Menu2020.Menu();
             menu.ModuleNo = mmodule.No;
-            menu.MenuCtrlWay = GPM.Menu2020.MenuCtrlWay.Anyone;
             menu.Name = "流程查询";
 
             menu.MenuModel = menuModel; //模式.
@@ -408,7 +445,6 @@ namespace BP.CCBill
             menu = new BP.GPM.Menu2020.Menu();
             menu.MenuModel = menuModel; //模式.
             menu.ModuleNo = mmodule.No;
-            menu.MenuCtrlWay = GPM.Menu2020.MenuCtrlWay.Anyone;
             menu.Name = "流程分析";
 
             menu.MenuModel = menuModel; //模式.

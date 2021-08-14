@@ -60,6 +60,7 @@ namespace BP.Sys
                 this.SetValByKey(SysEnumAttr.OrgNo, value);
             }
         }
+      
         /// <summary>
         /// 标签
         /// </summary>
@@ -195,8 +196,6 @@ namespace BP.Sys
                 map.AddTBString(SysEnumAttr.Lang, "CH", "语言", true, false, 0, 10, 8);
 
                 map.AddTBString(SysEnumMainAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 8);
-
-
 
                 this._enMap = map;
                 return this._enMap;

@@ -80,6 +80,11 @@ namespace BP.Sys
         /// <summary>
         /// 开发者表单
         /// </summary>
-        Develop = 8
+        Develop = 8,
+        /// <summary>
+        /// 外部数据源列表
+        /// </summary>
+        DBList = 100
+
     }
 }

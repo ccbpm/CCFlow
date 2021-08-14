@@ -89,9 +89,9 @@ namespace BP.WF.Template
                 map.DepositaryOfEntity= Depositary.Application;
 
 
-                map.AddTBStringPK(FlowFormTreeAttr.No, null, "编号", true, true, 1, 10, 20);
+                map.AddTBStringPK(FlowFormTreeAttr.No, null, "编号", true, true, 1, 10, 40);
                 map.AddTBString(FlowFormTreeAttr.Name, null, "名称", true, false, 0, 100, 30);
-                map.AddTBString(FlowFormTreeAttr.ParentNo, null, "父节点No", false, false, 0, 100, 30);
+                map.AddTBString(FlowFormTreeAttr.ParentNo, null, "父节点No", false, false, 0, 100, 40);
                 map.AddTBInt(FlowFormTreeAttr.Idx, 0, "Idx", false, false);
 
                 // 隶属的流程编号.

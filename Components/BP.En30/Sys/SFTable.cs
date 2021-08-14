@@ -453,7 +453,7 @@ namespace BP.Sys
 
             if (this.SrcType == Sys.SrcType.SysDict)
             {
-                string sql = "SELECT MyPK, BH, Name FROM Sys_SFTableDtl where FK_SFTable='" + this.No + "'";
+                string sql = "SELECT MyPK, BH AS No, Name FROM Sys_SFTableDtl where FK_SFTable='" + this.No + "'";
                 return src.RunSQLReturnTable(sql);
             }
             #endregion

@@ -156,7 +156,6 @@ namespace BP.GPM.WeiXin
         }
         #endregion
 
-        
         /// <summary>
         /// 算法加密
         /// </summary>
@@ -164,8 +163,7 @@ namespace BP.GPM.WeiXin
         /// <returns></returns>
         public static string Sha1Signature(string str)
         {
-            string s = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(str, "SHA1").ToString();
-            return s.ToLower();
+            return BP.WF.Difference.Glo.Sha1Signature(str);
         }
     }
 }

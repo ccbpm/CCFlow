@@ -26,9 +26,19 @@ namespace BP.GPM.DTalk
 
         public static string getAccessToken()
         {
-            if (DataType.IsNullOrEmpty(AccessToken_Ding.Value) || AccessToken_Ding.Begin.AddSeconds(ConstVars.CACHE_TIME) < DateTime.Now)
-                UpdateAccessToken(true);
-            return AccessToken_Ding.Value;
+            //if (DataType.IsNullOrEmpty(AccessToken_Ding.Value) || AccessToken_Ding.Begin.AddSeconds(ConstVars.CACHE_TIME) < DateTime.Now)
+            //    UpdateAccessToken(true);
+            //return AccessToken_Ding.Value;
+            string url = "https://oapi.dingtalk.com/gettoken?appkey="+SystemConfig.Ding_AppKey + "&appsecret="+SystemConfig.Ding_AppSecret;
+            string str = new HttpWebResponseUtility().HttpResponseGet(url);
+            Log.DefaultLogWriteLineError(str);
+            DingAccessToken token = new DingAccessToken();
+            token = FormatToJson.ParseFromJson<DingAccessToken>(str);
+            if (token.errcode == "0")
+                return token.access_token;
+            else
+                return "";
+            
         }
 
         /// <summary>
@@ -40,15 +50,29 @@ namespace BP.GPM.DTalk
         public string GetUserID(string code)
         {
             string access_token = getAccessToken();
+            Log.DefaultLogWriteLineError(access_token);
+            Log.DefaultLogWriteLineError(code);
             string url = "https://oapi.dingtalk.com/user/getuserinfo?access_token=" + access_token + "&code=" + code;
             try
             {
                 string str = new HttpWebResponseUtility().HttpResponseGet(url);
+                Log.DefaultLogWriteLineError(str);
                 CreateUser_PostVal user = new CreateUser_PostVal();
                 user = FormatToJson.ParseFromJson<CreateUser_PostVal>(str);
+                Log.DefaultLogWriteLineError(user.userid);
                 //Log.DefaultLogWriteLineError(access_token + "code:" + code + "1." + user.userid + "2." + user.errcode + "3." + user.errmsg);
-                if (!DataType.IsNullOrEmpty(user.userid))
-                    return user.userid;
+                if (!DataType.IsNullOrEmpty(user.userid)) {
+                    string userUrl = "https://oapi.dingtalk.com/topapi/v2/user/get?access_token=" + access_token+"&userid="+ user.userid;
+                    
+
+                    string json= new HttpWebResponseUtility().HttpResponseGet(userUrl);
+                    Log.DefaultLogWriteLineError(json);
+                    DingUserInfo userinfo = new DingUserInfo();
+                    userinfo= FormatToJson.ParseFromJson<DingUserInfo>(json);
+
+                    UserInfoResult result = userinfo.result;
+                    return result.mobile;
+                }
             }
             catch (Exception ex)
             {

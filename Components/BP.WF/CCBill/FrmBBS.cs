@@ -68,6 +68,10 @@ namespace BP.CCBill
         /// </summary>
         public const string FrmName = "FrmName";
 
+        public const string Docs = "Docs";
+
+        
+
     }
     /// <summary>
     /// 评论组件
@@ -78,15 +82,15 @@ namespace BP.CCBill
         /// <summary>
         /// 参数数据.
         /// </summary>
-        public string Tag
+        public string Docs
         {
             get
             {
-                return this.GetValStringByKey(FrmBBSAttr.Tag);
+                return this.GetValStringByKey(FrmBBSAttr.Docs);
             }
             set
             {
-                this.SetValByKey(FrmBBSAttr.Tag, value);
+                this.SetValByKey(FrmBBSAttr.Docs, value);
             }
         }
         /// <summary>
@@ -146,7 +150,7 @@ namespace BP.CCBill
                 this.SetValByKey(FrmBBSAttr.WorkID, value);
             }
         }
-        
+
         /// <summary>
         /// 活动名称
         /// </summary>
@@ -260,8 +264,8 @@ namespace BP.CCBill
                 map.AddTBString(FrmBBSAttr.ParentNo, null, "父节点", true, false, 0, 50, 200);
                 map.AddTBInt(FrmBBSAttr.WorkID, 0, "工作ID/OID", true, false);
 
-                //map.AddTBString(FrmBBSAttr.FrmID, null, "表单ID", true, false, 0, 50, 200);
-                //map.AddTBString(FrmBBSAttr.FrmName, null, "表单名称(可以为空)", true, false, 0, 200, 200);
+                map.AddTBString(FrmBBSAttr.Docs, null, "内容", true, false, 0, 50, 200);
+
                 //map.AddTBInt(FrmBBSAttr.ActionType, 0, "类型", true, false);
                 // map.AddTBString(FrmBBSAttr.ActionTypeText, null, "类型(名称)", true, false, 0, 30, 100);
 
@@ -272,6 +276,10 @@ namespace BP.CCBill
                 map.AddTBString(FrmBBSAttr.DeptNo, null, "部门编号", true, false, 0, 200, 100);
                 map.AddTBString(FrmBBSAttr.DeptName, null, "名称", true, false, 0, 200, 100);
                 #endregion 基本字段
+
+
+                map.AddTBString(FrmBBSAttr.FrmID, null, "表单ID", true, false, 0, 50, 200);
+                map.AddTBString(FrmBBSAttr.FrmName, null, "表单名称(可以为空)", true, false, 0, 200, 200);
 
                 this._enMap = map;
                 return this._enMap;
@@ -287,17 +295,22 @@ namespace BP.CCBill
 
         protected override bool beforeInsert()
         {
-
             this.No = DBAccess.GenerGUID();
 
             this.SetValByKey(FrmBBSAttr.Rec, BP.Web.WebUser.No);
             this.SetValByKey(FrmBBSAttr.RecName, BP.Web.WebUser.Name);
-            this.SetValByKey(FrmBBSAttr.RDT,  DataType.CurrentDataTime);
+            this.SetValByKey(FrmBBSAttr.RDT, DataType.CurrentDataTime);
 
             this.SetValByKey(FrmBBSAttr.DeptNo, BP.Web.WebUser.FK_Dept);
             this.SetValByKey(FrmBBSAttr.DeptName, BP.Web.WebUser.FK_DeptName);
 
             return base.beforeInsert();
+        }
+        protected override void afterDelete()
+        {
+            FrmBBSs ens = new FrmBBSs();
+            ens.Delete(FrmBBSAttr.ParentNo, this.No);
+            base.afterDelete();
         }
     }
     /// <summary>

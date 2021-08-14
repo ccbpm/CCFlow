@@ -9,33 +9,48 @@ namespace BP.GPM.Home
     /// <summary>
     /// 内容类型
     /// </summary>
-    public enum WinDocType
+    public class WinDocModel
     {
         /// <summary>
         /// Html
         /// </summary>
-        Html = 0,
+        public const string Html = "Html";
+        /// <summary>
+        /// 文本变量
+        /// </summary>
+        public const string HtmlVar = "HtmlVar";
         /// <summary>
         /// 系统内置
         /// </summary>
-        System = 1,
+        public const string System = "System";
         /// <summary>
         /// SQL列表
         /// </summary>
-        SQLList = 2,
+        public const string Table = "Table";
         /// <summary>
         /// 折线图
         /// </summary>
-        ChatZheXian = 3,
+        public const string ChartZZT = "ChartZZT";
         /// <summary>
         /// 柱状图
         /// </summary>
-        ChatZhuZhuang = 4,
+        public const string ChartLine = "ChartLine";
         /// <summary>
         /// 饼图
         /// </summary>
-        ChatPie = 5 
-
+        public const string ChartPie = "ChartPie";
+        /// <summary>
+        /// 扇形图
+        /// </summary>
+        public const string ChartRate = "ChartRate";
+        /// <summary>
+        /// 环形图
+        /// </summary>
+        public const string ChartRing = "ChartRing";
+        /// <summary>
+        /// 标签页
+        /// </summary>
+        public const string Tab = "Tab";
     }
 
 }

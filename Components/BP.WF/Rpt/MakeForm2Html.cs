@@ -2169,7 +2169,7 @@ namespace BP.WF
 
                 if (mapData.HisFrmType == FrmType.Url)
                 {
-                    string url = mapData.Url;
+                    string url = mapData.UrlExt;
                     //替换系统参数
                     url = url.Replace("@WebUser.No", WebUser.No);
                     url = url.Replace("@WebUser.Name;", WebUser.Name);

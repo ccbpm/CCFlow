@@ -14,10 +14,6 @@ namespace BP.GPM.Menu2020
     public class MenuAttr : EntityTreeAttr
     {
         /// <summary>
-        /// 控制方法
-        /// </summary>
-        public const string MenuCtrlWay = "MenuCtrlWay";
-        /// <summary>
         /// 系统
         /// </summary>
         public const string ModuleNo = "ModuleNo";
@@ -41,10 +37,6 @@ namespace BP.GPM.Menu2020
         /// 连接（移动端）
         /// </summary>
         public const string MobileUrlExt = "MobileUrlExt";
-        /// <summary>
-        /// 控制内容
-        /// </summary>
-        public const string CtrlObjs = "CtrlObjs";
         /// <summary>
         /// 是否启用
         /// </summary>
@@ -80,6 +72,11 @@ namespace BP.GPM.Menu2020
 
         public const string FrmID = "FrmID";
         public const string FlowNo = "FlowNo";
+
+        /// <summary>
+        /// 风格:比如Tab,的风格.
+        /// </summary>
+        public const string Style = "Style";
 
     }
     /// <summary>
@@ -188,17 +185,7 @@ namespace BP.GPM.Menu2020
                 this.SetValByKey(MenuAttr.MenuType, (int)value);
             }
         }
-        public MenuCtrlWay MenuCtrlWay
-        {
-            get
-            {
-                return (MenuCtrlWay)this.GetValIntByKey(MenuAttr.MenuCtrlWay);
-            }
-            set
-            {
-                this.SetValByKey(MenuAttr.MenuCtrlWay, (int)value);
-            }
-        }
+     
         /// <summary>
         /// 是否启用
         /// </summary>
@@ -345,26 +332,10 @@ namespace BP.GPM.Menu2020
                 this.No = DBAccess.GenerGUID();
             this.OrgNo = BP.Web.WebUser.OrgNo;
 
-            this.InitIcon();
             return base.beforeInsert();
-        }
-        /// <summary>
-        /// 初始化icon.
-        /// </summary>
-        private void InitIcon()
-        {
-            if (this.Mark.Equals("StartFlow") == true) this.Icon = "icon-paper-plane";
-            if (this.Mark.Equals("Todolist") == true) this.Icon = "icon-bell";
-            if (this.Mark.Equals("Runing") == true) this.Icon = "icon-clock";
-            if (this.Mark.Equals("Group") == true) this.Icon = "icon-chart";
-            if (this.Mark.Equals("Search") == true) this.Icon = "icon-grid";
-
         }
         protected override bool beforeDelete()
         {
-            if (this.WorkType == 1)
-                throw new Exception("@删除失败,此项为系统菜单，不能删除只能隐藏。");
-
             return base.beforeDelete();
         }
         /// <summary>
@@ -380,7 +351,7 @@ namespace BP.GPM.Menu2020
                 Map map = new Map("GPM_Menu");  // 类的基本属性.
                 map.DepositaryOfEntity = Depositary.None;
                 map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "系统菜单";
+                map.EnDesc = "菜单";
                 map.EnType = EnType.Sys;
                 map.CodeStruct = "4";
 
@@ -391,10 +362,8 @@ namespace BP.GPM.Menu2020
                 map.AddTBString(MenuAttr.Mark, null, "标记", true, false, 0, 300, 200, false);
                 map.AddTBString(MenuAttr.Tag1, null, "Tag1", true, false, 0, 300, 200, false);
 
-
                 map.AddTBString(MenuAttr.FrmID, null, "FrmID", false, false, 0, 300, 200, false);
                 map.AddTBString(MenuAttr.FlowNo, null, "FlowNo", false, false, 0, 300, 200, false);
-
 
                 // @0=系统根目录@1=系统类别@2=系统.
                 map.AddDDLSysEnum(MenuAttr.OpenWay, 1, "打开方式", true, true, MenuAttr.OpenWay,
@@ -403,13 +372,9 @@ namespace BP.GPM.Menu2020
                 map.AddTBString(MenuAttr.UrlExt, null, "PC端连接", true, false, 0, 500, 200, true);
                 map.AddTBString(MenuAttr.MobileUrlExt, null, "移动端连接", true, false, 0, 500, 200, true);
 
-                map.AddDDLSysEnum(MenuAttr.MenuCtrlWay, 0, "控制方式", true, true, MenuAttr.MenuCtrlWay,
-                    "@0=按照设置的控制@1=任何人都可以使用@2=Admin用户可以使用");
                 map.AddBoolean(MenuAttr.IsEnable, true, "是否启用?", true, true);
 
                 map.AddTBString(MenuAttr.Icon, null, "Icon", true, false, 0, 50, 50, true);
-
-
                 //  map.AddTBString(MenuAttr.ModuleNo, null, "ModuleNo", false, false, 0, 50, 50);
                 map.AddTBString(MenuAttr.SystemNo, null, "SystemNo", false, false, 0, 50, 50);
 
@@ -426,76 +391,7 @@ namespace BP.GPM.Menu2020
 
                 map.AddTBInt(MenuAttr.Idx, 0, "顺序号", true, false);
 
-                // @0=自定义菜单. @1=系统菜单.  系统菜单不可以删除.
-                map.AddTBInt(MenuAttr.WorkType, 0, "工作类型", false, false);
-
-
-                if (Sys.SystemConfig.CCBPMRunModel != Sys.CCBPMRunModel.Single)
-                    map.AddTBString(MenuAttr.OrgNo, null, "组织编号", true, false, 0, 50, 20);
-
-                //查询条件.
-                //map.AddSearchAttr(MenuAttr.MenuType);
-                //map.AddSearchAttr(MenuAttr.OpenWay);
-
-                //map.AddDDLSysEnum(AppAttr.CtrlWay, 1, "控制方式", true, true, AppAttr.CtrlWay,
-                //    "@0=游客@1=所有人员@2=按岗位@3=按部门@4=按人员@5=按SQL");
-                // map.AddTBString(MenuAttr.CtrlObjs, null, "控制内容", false, false, 0, 4000, 20);
-                //// 一对多的关系.
-                //map.AttrsOfOneVSM.Add(new ByStations(), new Stations(), ByStationAttr.RefObj, ByStationAttr.FK_Station,
-                //    StationAttr.Name, StationAttr.No, "可访问的岗位");
-                //map.AttrsOfOneVSM.Add(new ByDepts(), new Depts(), ByStationAttr.RefObj, ByDeptAttr.FK_Dept,
-                //    DeptAttr.Name, DeptAttr.No, "可访问的部门");
-                //map.AttrsOfOneVSM.Add(new ByEmps(), new Emps(), ByStationAttr.RefObj, ByEmpAttr.FK_Emp,
-                //    EmpAttr.Name, EmpAttr.No, "可访问的人员");
-
-                #region 基本功能.
-                //可以访问的权限组.
-                map.AttrsOfOneVSM.Add(new GroupMenus(), new Groups(),
-                    GroupMenuAttr.FK_Menu, GroupMenuAttr.FK_Group, EmpAttr.Name, EmpAttr.No, "绑定到权限组");
-
-                //可以访问的权限组.
-                map.AttrsOfOneVSM.Add(new StationMenus(), new BP.Port.Stations(),
-                    StationMenuAttr.FK_Menu, StationMenuAttr.FK_Station, EmpAttr.Name, EmpAttr.No, "绑定到岗位-列表模式");
-
-                //可以访问的权限组.
-                map.AttrsOfOneVSM.AddGroupListModel(new StationMenus(), new BP.Port.Stations(),
-                    StationMenuAttr.FK_Menu, StationMenuAttr.FK_Station, "绑定到岗位-分组模式", BP.Port.StationAttr.FK_StationType, "Name", EmpAttr.No);
-                //可以访问的权限组.(岗位)
-                map.AttrsOfOneVSM.Add(new DeptMenus(), new BP.Port.Depts(),
-                    DeptMenuAttr.FK_Menu, DeptMenuAttr.FK_Dept, DeptAttr.Name, DeptAttr.No, "绑定到部门-列表模式");
-
-                map.AttrsOfOneVSM.AddBranches(new DeptMenus(), new Depts(),
-                   DeptMenuAttr.FK_Menu, DeptMenuAttr.FK_Dept, "部门(树)", EmpAttr.Name, EmpAttr.No);
-
-                //节点绑定人员. 使用树杆与叶子的模式绑定.
-                map.AttrsOfOneVSM.AddBranchesAndLeaf(new EmpMenus(), new BP.Port.Emps(),
-                   EmpMenuAttr.FK_Menu,
-                   EmpMenuAttr.FK_Emp, "绑定人员-树结构", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
-
-                //不带有参数的方法.
-                RefMethod rm = new RefMethod();
-                rm.Title = "增加(增删改查)功能权限";
-                rm.Warning = "确定要增加吗？";
-                rm.ClassMethodName = this.ToString() + ".DoAddRight3";
-                rm.IsForEns = true;
-                rm.IsCanBatch = true; //是否可以批处理？
-                                      // map.AddRefMethod(rm);
-                #endregion 基本功能.
-
-                #region 创建菜单.
-                rm = new RefMethod();
-                rm.GroupName = "创建菜单";
-                rm.Title = "创建单据";
-                rm.Warning = "您确定要创建吗？";
-
-                rm.HisAttrs.AddTBString("No", null, "单据编号", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBString("Name", null, "单据名称", true, false, 0, 100, 400);
-                rm.HisAttrs.AddTBString("PTable", null, "存储表(为空则为编号相同)", true, false, 0, 100, 100);
-                rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "单据模式", true, true, "BillFrmType", "@0=傻瓜表单@1=自由表单");
-                rm.HisAttrs.AddDDLSQL("Sys_FormTree", "", "选择表单树", "SELECT No,Name FROM Sys_FormTree WHERE ParentNo='1'");
-                rm.ClassMethodName = this.ToString() + ".DoAddCCBill";
-                // map.AddRefMethod(rm);
-                #endregion 创建菜单.
+                map.AddTBString(MenuAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 20);
 
                 this._enMap = map;
                 return this._enMap;

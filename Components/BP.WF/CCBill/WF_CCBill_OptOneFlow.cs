@@ -33,6 +33,15 @@ namespace BP.CCBill
         #endregion 构造方法.
 
         /// <summary>
+        /// 基础资料修改流程
+        /// </summary>
+        /// <returns></returns>
+        public string FlowBaseData_Init()
+        {
+            BP.CCBill.Template.MethodFlowBaseData method = new MethodFlowBaseData();
+            return "";
+        }
+        /// <summary>
         /// 单个实体流程记录.
         /// </summary>
         /// <returns></returns>
@@ -40,14 +49,16 @@ namespace BP.CCBill
         {
             DataSet ds = new DataSet();
 
-            string sql = "SELECT DISTINCT FK_Flow as No, FlowName as Name, '' as Icon  FROM WF_GenerWorkFlow WHERE PFlowNo='"+this.PFlowNo+"' AND PWorkID="+this.WorkID;
+            string sql = "SELECT DISTINCT A.FK_Flow as No, A.FlowName as Name, B.Icon  FROM WF_GenerWorkFlow A, WF_Flow B  WHERE  A.FK_Flow=B.No AND A.PWorkID=" + this.WorkID;
             DataTable dtGroup = DBAccess.RunSQLReturnTable(sql);
             dtGroup.TableName = "Flows";
-            if (SystemConfig.AppCenterDBFieldCaseModel== FieldCaseModel.UpperCase)
+            if (SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dtGroup.Columns[0].ColumnName = "No";
-                dtGroup.Columns[0].ColumnName = "Name";
+                dtGroup.Columns[1].ColumnName = "Name";
+                dtGroup.Columns[2].ColumnName = "Icon";
             }
+
             ds.Tables.Add(dtGroup);
 
             //获得所有的子流程数据.

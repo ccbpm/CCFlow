@@ -102,7 +102,7 @@ namespace BP.Port
                 map.CodeStruct = "2";
 
 
-                map.AddTBStringPK(StationTypeAttr.No, null, "编号", true, true, 1, 5, 5);
+                map.AddTBStringPK(StationTypeAttr.No, null, "编号", true, true, 1, 5, 40);
                 map.AddTBString(StationTypeAttr.Name, null, "名称", true, false, 1, 50, 20);
                 map.AddTBInt(StationTypeAttr.Idx, 0, "顺序", true, false);
 

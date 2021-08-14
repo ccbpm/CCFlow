@@ -27,6 +27,10 @@ namespace BP.Sys
         /// </summary>
         public const string ActiveDDL = "ActiveDDL";
         /// <summary>
+        /// 查询条件级联关系.
+        /// </summary>
+        public const string ActiveDDLSearchCond = "ActiveDDLSearchCond";
+        /// <summary>
         /// 输入验证
         /// </summary>
         public const string InputCheck = "InputCheck";
@@ -46,6 +50,10 @@ namespace BP.Sys
         /// (动态的)填充下拉框
         /// </summary>
         public const string AutoFullDLL = "AutoFullDLL";
+        /// <summary>
+        /// 查询条件的自动填充
+        /// </summary>
+        public const string AutoFullDLLSearchCond = "AutoFullDLLSearchCond";
         /// <summary>
         /// 下拉框自动填充
         /// </summary>

@@ -124,10 +124,10 @@ namespace BP.WF.DTS
                     string agentId = BP.Sys.SystemConfig.WX_AgentID ?? null;
                     if (agentId != null)
                     {
-                        string accessToken = GPM.WeiXin.WeiXinEntity.getAccessToken();//获取 AccessToken
+                        string accessToken = BP.GPM.WeiXin.WeiXinEntity.getAccessToken();//获取 AccessToken
 
                         BP.GPM.Emp emp = new BP.GPM.Emp(empNo);
-                        BP.GPM.WeiXin.MsgText msgText = new GPM.WeiXin.MsgText();
+                        BP.GPM.WeiXin.MsgText msgText = new BP.GPM.WeiXin.MsgText();
                         msgText.content = docs;
                         msgText.Access_Token = accessToken;
                         msgText.agentid = BP.Sys.SystemConfig.WX_AgentID;

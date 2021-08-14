@@ -30,6 +30,10 @@ namespace BP.CCBill
         /// </summary>
         public const string FlowNewEntity = "FlowNewEntity";
         /// <summary>
+        /// 实体批量发起流程
+        /// </summary>
+        public const string FlowEntityBatchStart = "FlowEntityBatchStart";
+        /// <summary>
         /// 新建实体流程
         /// </summary>
         public const string FlowEtc = "FlowEtc";

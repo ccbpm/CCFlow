@@ -147,6 +147,7 @@ namespace BP.GPM.Home
                 map.AddTBString(WindowAttr.Docs, null, "内容", true, false, 0, 4000, 20);
 
                 map.AddTBInt(WindowAttr.IsEnable, 0, "是否可见?", false, true);
+
                 map.AddTBInt(WindowAttr.Idx, 0, "排序", false, true);
                 map.AddTBString(WindowTemplateAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 20);
 

@@ -341,7 +341,6 @@ namespace BP.WF.Port
                 map.AddTBString(UserAttr.OpenID, null, "小程序的OpenID", true, false, 0, 500, 132, true);
                 map.AddTBString(UserAttr.OpenID2, null, "公众号的OpenID", true, false, 0, 500, 132, true);
 
-
                 map.AddTBInt(UserAttr.Idx, 0, "序号", true, false);
                 #endregion 字段
 

@@ -105,8 +105,8 @@ namespace BP.Tools
                         }
                         else
                         {
-                            double f =(double)((float)v);
-                            strValue = Convert.ToString(f);
+                            //double f =(double)((float)v);
+                            strValue = ((float)v).ToString("0." + new string('#', 339));
                         }
 
                         //strValue = v == null ? "0" : v;

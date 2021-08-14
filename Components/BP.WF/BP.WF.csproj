@@ -159,21 +159,30 @@
   <ItemGroup>
     <Compile Include="AppClass.cs" />
     <Compile Include="CCBill\Demo\M_ZhuXiaoXueJi.cs" />
+    <Compile Include="CCBill\Template\CollectionFlowBatch.cs" />
+    <Compile Include="CCBill\Template\CollectionFlowNewEntity.cs" />
+    <Compile Include="CCBill\Template\CollectionFunc.cs" />
     <Compile Include="CCBill\Template\DictFlow.cs" />
+    <Compile Include="CCBill\DBList.cs" />
     <Compile Include="CCBill\Template\GroupMethod.cs" />
+    <Compile Include="CCBill\Template\Collection.cs" />
     <Compile Include="CCBill\Template\MethodBill.cs" />
     <Compile Include="CCBill\Sys\Func.cs" />
     <Compile Include="CCBill\Template\MethodFlowEtc.cs" />
     <Compile Include="CCBill\Template\MethodFlowNewEntity.cs" />
     <Compile Include="CCBill\Template\MethodFlowBaseData.cs" />
     <Compile Include="CCBill\Template\MethodFlow.cs" />
+    <Compile Include="CCBill\Template\CollectionLink.cs" />
     <Compile Include="CCBill\Template\MethodQRCode.cs" />
     <Compile Include="CCBill\Template\MethodSingleDictGenerWorkFlow.cs" />
     <Compile Include="CCBill\FrmBBS.cs" />
     <Compile Include="CCBill\Track.cs" />
+    <Compile Include="CCBill\WF_CCBill_Admin_Collection.cs" />
+    <Compile Include="CCBill\WF_CCBill_Admin_DBList.cs" />
     <Compile Include="CCBill\WF_CCBill_Admin_MethodDoc.cs" />
     <Compile Include="CCBill\WF_CCBill_Admin_Method.cs" />
     <Compile Include="CCBill\WF_CCBill_OptComponents.cs" />
+    <Compile Include="CCBill\WF_CCBill_OptOneFlow_FlowCenter.cs" />
     <Compile Include="CCBill\WF_CCBill_OptOneFlow.cs" />
     <Compile Include="CCBill\WF_Methd.cs" />
     <Compile Include="Data\AutoRptDtl.cs" />
@@ -182,7 +191,7 @@
     <Compile Include="Data\CHNode.cs" />
     <Compile Include="Data\MyAuthto.cs" />
     <Compile Include="Difference\CCInterface.cs" />
-    <Compile Include="Difference\Cloud.cs" />
+    <Compile Include="Difference\Glo.cs" />
     <Compile Include="Difference\WF.cs" />
     <Compile Include="Difference\WF_DynamicWebService.cs" />
     <Compile Include="Difference\WF_File.cs" />
@@ -282,6 +291,22 @@
     <Compile Include="CCBill\WF_CCBill_Opt.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="GloSQL.cs" />
+    <Compile Include="GPM\Home\WindowExt\ChartRate.cs" />
+    <Compile Include="GPM\Home\WindowExt\ChartRing.cs" />
+    <Compile Include="GPM\Home\WindowExt\Glo.cs" />
+    <Compile Include="GPM\Home\WindowExt\Tab.cs" />
+    <Compile Include="GPM\Home\WindowExt\TabDtl.cs" />
+    <Compile Include="GPM\Home\WindowExt\Table.cs" />
+    <Compile Include="GPM\Home\WindowExt\ChartLine.cs" />
+    <Compile Include="GPM\Home\WindowExt\ChartPie.cs" />
+    <Compile Include="GPM\Home\WindowExt\ChartZZT.cs" />
+    <Compile Include="GPM\Home\WindowExt\HtmlVar.cs" />
+    <Compile Include="GPM\Home\WindowExt\Html.cs" />
+    <Compile Include="GPM\Home\WindowExt\Dtl.cs" />
+    <Compile Include="GPM\Home\WindowExt\HtmlVarDtl.cs" />
+    <Compile Include="GPM\Menu2020\TabDtl.cs" />
+    <Compile Include="GPM\Menu2020\Tab.cs" />
+    <Compile Include="GPM\PowerCenter.cs" />
     <Compile Include="GPM\Home\EnumLab.cs" />
     <Compile Include="GPM\Home\WindowTemplate.cs" />
     <Compile Include="GPM\Menu2020\DeptMenu.cs" />
@@ -294,6 +319,7 @@
     <Compile Include="GPM\Menu2020\GroupStation.cs" />
     <Compile Include="GPM\Menu2020\StationMenu.cs" />
     <Compile Include="GPM\Home\Window.cs" />
+    <Compile Include="GPM\WF_GPM_Window.cs" />
     <Compile Include="GPM\WF_GPM_CreateMenu.cs" />
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>
@@ -330,6 +356,7 @@
     <Compile Include="HttpHandler\WF_Admin_MobileFrmDesigner.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner_FlowDevModel.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_StyletDfine.cs" />
+    <Compile Include="HttpHandler\WF_WorkOpt_GuestStartFlow.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_QRCode.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_Batch.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_StartGuide.cs" />
@@ -651,11 +678,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="GPM\Menu2020\readme.txt" />
-    <Content Include="Readme.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

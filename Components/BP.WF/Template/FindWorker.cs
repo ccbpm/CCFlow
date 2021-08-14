@@ -250,6 +250,12 @@ namespace BP.WF.Template
 
             #endregion .按照部门负责人计算
 
+            #region 按照部门分管领导计算. @hongyan 翻译过去.
+            if (town.HisNode.HisDeliveryWay == DeliveryWay.ByDeptShipLeader)
+                return ByDeptShipLeader();
+
+            #endregion .按照部门负责人计算
+
             #region 按照选择的人员处理。
             if (town.HisNode.HisDeliveryWay == DeliveryWay.BySelected || town.HisNode.HisDeliveryWay == DeliveryWay.BySelectedForPrj
                 || town.HisNode.HisDeliveryWay == DeliveryWay.ByFEE)
@@ -1279,7 +1285,7 @@ namespace BP.WF.Template
                 if (dt.Rows.Count == 0)
                     throw new Exception("err@不符合常理，没有找到数据");
                 ht.Add("EmpNo", dt.Rows[0][0].ToString());
-                ht.Add("DeptNo", dt.Rows[0][0].ToString());
+                ht.Add("DeptNo", dt.Rows[0][1].ToString());
             }
 
             //按照 字段的值的人员编号作为身份计算.
@@ -1343,6 +1349,49 @@ namespace BP.WF.Template
 
             throw new Exception("err@没有判断的身份模式.");
         }
+        /// <summary>
+        /// 找部门的分管领导
+        /// </summary>
+        /// <returns></returns>
+        private DataTable ByDeptShipLeader()
+        {
+
+            Node nd = town.HisNode;
+
+            //身份模式.
+            var sfModel = nd.GetParaInt("ShenFenModel");
+
+            //身份参数.
+            var sfVal = nd.GetParaString("ShenFenVal");
+
+            //按照当前节点的身份计算
+            if (sfModel == 0)
+                return ByDeptShipLeader_Nodes(currWn.HisNode.NodeID.ToString());
+
+            //按照指定节点的身份计算.
+            if (sfModel == 1)
+                return ByDeptShipLeader_Nodes(sfVal);
+
+            //按照 字段的值的人员编号作为身份计算.
+            if (sfModel == 2)
+            {
+                //获得字段的值.
+                string empNo = "";
+                if (currWn.HisNode.HisFormType == NodeFormType.RefOneFrmTree)
+                    empNo = currWn.HisWork.GetValStrByKey(sfVal);
+                else
+                    empNo = currWn.rptGe.GetValStrByKey(sfVal);
+                BP.Port.Emp emp = new BP.Port.Emp();
+                emp.UserID = empNo;
+                if (emp.RetrieveFromDBSources() == 0)
+                {
+                    throw new Exception("err@根据字段值:" + sfVal + "在Port_Emp中没有找到人员信息");
+                }
+                return ByDeptShipLeader_Fields(emp.No, emp.FK_Dept);
+            }
+
+            throw new Exception("err@没有判断的身份模式.");
+        }
         private DataTable ByDeptLeader_Nodes(string nodes)
         {
             DataTable dt = null;
@@ -1362,6 +1411,25 @@ namespace BP.WF.Template
             string deptNo = dt.Rows[0][1].ToString();
             return ByDeptLeader_Fields(empNo, deptNo);
         }
+        private DataTable ByDeptShipLeader_Nodes(string nodes)
+        {
+            DataTable dt = null;
+            //查找指定节点的人员， 如果没有节点，就是当前的节点.
+            if (DataType.IsNullOrEmpty(nodes) == true)
+                nodes = this.currWn.HisNode.NodeID.ToString();
+
+            Paras ps = new Paras();
+            ps.SQL = "SELECT FK_Emp,FK_Dept FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node Order By RDT DESC";
+            ps.Add("OID", this.WorkID);
+            ps.Add("FK_Node", int.Parse(nodes));
+
+            dt = DBAccess.RunSQLReturnTable(ps);
+            if (dt.Rows.Count == 0)
+                throw new Exception("err@不符合常理，没有找到数据");
+            string empNo = dt.Rows[0][0].ToString();
+            string deptNo = dt.Rows[0][1].ToString();
+            return ByDeptShipLeader_Fields(empNo, deptNo);
+        }
         private DataTable ByDeptLeader_Fields(string empNo, string empDept)
         {
             BP.Port.Dept mydept = new BP.Port.Dept(empDept);
@@ -1370,8 +1438,20 @@ namespace BP.WF.Template
             ps.SQL = "SELECT Leader FROM Port_Dept WHERE No='" + empDept + "'";
 
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
-            if (dt.Rows.Count == 0)
-                throw new Exception("@流程设计错误:下一个节点(" + town.HisNode.Name + ")设置的按照部门负责人计算，当前您的部门(" + mydept.No + "," + mydept.Name + ")没有维护负责人 . ");
+            if (dt.Rows.Count!= 0 && dt.Rows[0][0]!=null && DataType.IsNullOrEmpty(dt.Rows[0][0].ToString()) == true)
+            {
+                //如果部门的负责人为空，则查找Port_Emp中的Learder信息
+                ps.Clear();
+                if(SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    ps.SQL = "SELECT Leader FROM Port_Emp WHERE UserID='" + empNo + "' AND OrgNo='"+WebUser.OrgNo+"'";
+                else
+                    ps.SQL = "SELECT Leader FROM Port_Emp WHERE No='" + empNo + "'";
+
+                dt = DBAccess.RunSQLReturnTable(ps);
+                if(dt.Rows.Count != 0 && dt.Rows[0][0] != null && DataType.IsNullOrEmpty(dt.Rows[0][0].ToString()) == true)
+                    throw new Exception("@流程设计错误:下一个节点(" + town.HisNode.Name + ")设置的按照部门负责人计算，当前您的部门(" + mydept.No + "," + mydept.Name + ")没有维护负责人 . ");
+            }
+                
                
 
             //如果有这个人,并且是当前人员，说明他本身就是经理或者部门负责人.
@@ -1379,6 +1459,41 @@ namespace BP.WF.Template
             {
                 
                 ps.SQL = "SELECT Leader FROM Port_Dept WHERE No=(SELECT PARENTNO FROM PORT_DEPT WHERE NO='" + empDept + "')";
+                dt = DBAccess.RunSQLReturnTable(ps);
+                if (dt.Rows.Count == 0)
+                    throw new Exception("@流程设计错误:下一个节点(" + town.HisNode.Name + ")设置的按照部门负责人计算，当前您的部门(" + mydept.Name + ")上级没有维护负责人 . ");
+            }
+            return dt;
+        }
+        private DataTable ByDeptShipLeader_Fields(string empNo, string empDept)
+        {
+            BP.Port.Dept mydept = new BP.Port.Dept(empDept);
+            Paras ps = new Paras();
+            ps.Add("No", empDept);
+            ps.SQL = "SELECT ShipLeader FROM Port_Dept WHERE No='" + empDept + "'";
+
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
+            if (dt.Rows.Count != 0 && dt.Rows[0][0] != null && DataType.IsNullOrEmpty(dt.Rows[0][0].ToString()) == true)
+            {
+                //如果部门的负责人为空，则查找Port_Emp中的Learder信息
+                ps.Clear();
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    ps.SQL = "SELECT ShipLeader FROM Port_Emp WHERE UserID='" + empNo + "' AND OrgNo='" + WebUser.OrgNo + "'";
+                else
+                    ps.SQL = "SELECT ShipLeader FROM Port_Emp WHERE No='" + empNo + "'";
+
+                dt = DBAccess.RunSQLReturnTable(ps);
+                if (dt.Rows.Count != 0 && dt.Rows[0][0] != null && DataType.IsNullOrEmpty(dt.Rows[0][0].ToString()) == true)
+                    throw new Exception("@流程设计错误:下一个节点(" + town.HisNode.Name + ")设置的按照部门负责人计算，当前您的部门(" + mydept.No + "," + mydept.Name + ")没有维护负责人 . ");
+            }
+
+
+
+            //如果有这个人,并且是当前人员，说明他本身就是经理或者部门负责人.
+            if (dt.Rows[0][0].ToString().Equals(empNo) == true)
+            {
+
+                ps.SQL = "SELECT ShipLeader FROM Port_Dept WHERE No=(SELECT PARENTNO FROM PORT_DEPT WHERE NO='" + empDept + "')";
                 dt = DBAccess.RunSQLReturnTable(ps);
                 if (dt.Rows.Count == 0)
                     throw new Exception("@流程设计错误:下一个节点(" + town.HisNode.Name + ")设置的按照部门负责人计算，当前您的部门(" + mydept.Name + ")上级没有维护负责人 . ");

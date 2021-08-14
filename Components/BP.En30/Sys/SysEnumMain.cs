@@ -27,13 +27,32 @@ namespace BP.Sys
         /// 真实的编号
         /// </summary>
         public const string EnumKey = "EnumKey";
+        /// <summary>
+        /// 有没有明细？
+        /// </summary>
+        public const string IsHaveDtl = "IsHaveDtl";
+        /// <summary>
+        /// 是否有参数.
+        /// </summary>
+        public const string AtPara = "AtPara";
     }
     /// <summary>
     /// SysEnumMain
     /// </summary>
     public class SysEnumMain : EntityNoName
     {
-        #region 实现基本的方方法
+        #region 实现基本的方法
+        public int IsHaveDtl
+        {
+            get
+            {
+                return this.GetValIntByKey(SysEnumMainAttr.IsHaveDtl);
+            }
+            set
+            {
+                this.SetValByKey(SysEnumMainAttr.IsHaveDtl, value);
+            }
+        }
         /// <summary>
         /// 组织编号
         /// </summary>
@@ -148,7 +167,7 @@ namespace BP.Sys
             }
             return base.beforeDelete();
         }
-        
+
         /// <summary>
         /// Map
         /// </summary>
@@ -156,7 +175,7 @@ namespace BP.Sys
         {
             get
             {
-                if (this._enMap != null) 
+                if (this._enMap != null)
                     return this._enMap;
 
                 Map map = new Map("Sys_EnumMain", "枚举");
@@ -178,17 +197,47 @@ namespace BP.Sys
                 //组织编号.
                 map.AddTBString(SysEnumMainAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 8);
 
+                map.AddTBInt(SysEnumMainAttr.IsHaveDtl, 0, "是否有子集?", true, false);
+
+                //参数.
+                map.AddTBString(SysEnumMainAttr.AtPara, null, "AtPara", true, false, 0, 200, 8);
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
-        
+        protected override void afterDelete()
+        {
+            //检查是否有，父表？
+            string parentKey = this.GetParaString("ParentKey");
+            if (DataType.IsNullOrEmpty(parentKey) == false)
+            {
+                SysEnumMain en = new SysEnumMain(parentKey);
+                en.IsHaveDtl = 0;
+                en.SetValByKey(SysEnumMainAttr.AtPara, "");
+                en.Update();
+            }
+
+            base.afterDelete();
+        }
+        protected override bool beforeInsert()
+        {
+            if (DataType.IsNullOrEmpty(this.No) == true)
+            {
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                    this.No = this.EnumKey;
+                else
+                    this.No = BP.Web.WebUser.OrgNo + "_" + this.EnumKey;
+            }
+
+            return base.beforeInsert();
+        }
+
 
         protected override bool beforeUpdateInsertAction()
         {
             if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
-
 
             return base.beforeUpdateInsertAction();
         }
@@ -218,7 +267,7 @@ namespace BP.Sys
                 se.Lab = kvs[1].Trim();
                 se.Lang = "CH";
                 se.Insert();
-             //   se.MyPK = this.No+"_"+se
+                //   se.MyPK = this.No+"_"+se
             }
 
             return "执行成功.";
@@ -254,7 +303,7 @@ namespace BP.Sys
             // 获取平台的类型. 0=单机版, 1=集团版，2=SAAS。
             int val = SystemConfig.GetValByKeyInt("CCBPMRunModel", 0);
             if (val != 2)
-                return base.RetrieveAll(); 
+                return base.RetrieveAll();
 
             // 返回他组织下的数据.
             return this.Retrieve(SysEnumMainAttr.OrgNo, BP.Web.WebUser.FK_Dept);

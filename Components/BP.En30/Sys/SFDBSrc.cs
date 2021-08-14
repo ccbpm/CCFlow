@@ -145,6 +145,100 @@ namespace BP.Sys
                 return isNullAsVal;
             return int.Parse(dt.Rows[0][0].ToString());
         }
+
+        public DataTable DoQuery(string sql,int count,string pk, int pageSize, int pageIdx, string orderBy, bool isDesc=false)
+        {
+            DataTable dt = new DataTable();
+            if (count == 0)
+                return dt;
+            int pageNum = 0;
+            string orderBySQL = "";
+            //如果没有加入排序字段，使用主键
+            if (DataType.IsNullOrEmpty(orderBy)==false)
+            {
+                orderBy = pk;
+                string isDescStr = "";
+                if (isDesc)
+                    isDescStr = " DESC ";
+                orderBySQL = orderBy + isDescStr;
+            }
+            sql = sql + " " + orderBySQL;
+            try
+            {
+                if (pageSize == 0)
+                    pageSize = 10;
+                if (pageIdx == 0)
+                    pageIdx = 1;
+                int top = pageSize * (pageIdx - 1)+1;
+                int max = pageSize * pageIdx;
+                int myleftCount = count - (pageNum * pageSize);
+                string mysql = "";
+                switch (this.DBSrcType)
+                {
+                    case DBSrcType.Oracle:
+                        mysql = "SELECT * FROM (" + sql + " AND ROWNUM<=" + max + ") temp WHERE temp.rn>=" + top;
+                        break;
+                    case DBSrcType.MySQL:
+                        mysql = sql + " LIMIT " + pageSize * (pageIdx - 1) + "," + pageSize;
+                        break;
+                    case DBSrcType.PostgreSQL:    
+                    case DBSrcType.SQLServer:
+                    default:
+                        mysql = sql;
+                        mysql = mysql.Substring(mysql.IndexOf("FROM "));
+                        mysql = "SELECT OID" + mysql;
+                        string pks = this.GenerPKsByTableWithPara(pk, sql, top, max,null);
+
+                        if (pks == null)
+                            sql += " AND 1=2";
+                        else
+                            sql += " AND pk in(" + pks + ")";
+                        break;
+                }
+                return this.RunSQLReturnTable(sql);
+               
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("err@执行外部数据源执行分页SQL出现错误");
+            }
+        }
+
+        public string GenerPKsByTableWithPara(string pk, string sql, int from, int to,Paras paras)
+        {
+            DataTable dt = this.RunSQLReturnTable(sql, paras);
+            string pks = "";
+            int i = 0;
+            int paraI = 0;
+
+            string dbStr = SystemConfig.AppCenterDBVarStr;
+            foreach (DataRow dr in dt.Rows)
+            {
+                i++;
+                if (i > from)
+                {
+                    paraI++;
+                    if (dbStr == "?")
+                        pks += "?,";
+                    else
+                        pks += SystemConfig.AppCenterDBVarStr + "R" + paraI + ",";
+
+                    if (pk.Equals("OID") || pk.Equals("WorkID") || pk.Equals("NodeID"))
+                        paras.Add("R" + paraI, int.Parse(dr[0].ToString()));
+                    else
+                        paras.Add("R" + paraI, dr[0].ToString());
+
+
+                    if (i >= to)
+                        return pks.Substring(0, pks.Length - 1);
+                }
+            }
+            if (pks == "")
+            {
+                return null;
+            }
+            return pks.Substring(0, pks.Length - 1);
+        }
         /// <summary>
         /// 运行SQL
         /// </summary>

@@ -66,22 +66,4 @@ namespace BP.GPM
         /// </summary>
         Function
     }
-    /// <summary>
-    /// 菜单控制类型
-    /// </summary>
-    public enum MenuCtrlWay
-    {
-        /// <summary>
-        /// 按照设置的控制
-        /// </summary>
-        BySetting,
-        /// <summary>
-        /// 任何人
-        /// </summary>
-        Anyone,
-        /// <summary>
-        /// 仅仅管理员
-        /// </summary>
-        AdminOnly
-    }
 }

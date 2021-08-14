@@ -196,6 +196,14 @@ namespace BP.GPM
             }
         }
 
+        protected override bool beforeDelete()
+        {
+            if (this.No.Equals("admin") == true)
+                throw new Exception("err@管理员账号不能删除.");
+
+            return base.beforeDelete();
+        }
+
 
         public string DoUnEnable()
         {

@@ -92,6 +92,18 @@ namespace BP.WF.Template
             }
         }
 
+        public FrmType HisFrmType
+        {
+            get
+            {
+                return (FrmType)this.GetValIntByKey(MapDataAttr.FrmType);
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.FrmType, (int)value);
+            }
+        }
+
         #endregion
 
         #region 权限控制.
@@ -747,6 +759,71 @@ namespace BP.WF.Template
                 item.AtPara = item.AtPara.Replace(fieldOld, newField);
                 item.Doc = item.Doc.Replace(fieldOld, newField);
                 item.Save();
+            }
+            
+            //如果是开发者表单需要替换开发者表单的Html
+            if(this.HisFrmType == FrmType.Develop)
+            {
+                string devHtml = DBAccess.GetBigTextFromDB("Sys_MapData", "No",this.No, "HtmlTemplateFile");
+                if (DataType.IsNullOrEmpty(devHtml) == true)
+                    return "执行成功";
+                string prefix = "TB_";
+                //外部数据源、外键、枚举下拉框
+                if ((attrNew.LGType == FieldTypeS.Normal && attrNew.MyDataType == DataType.AppString && attrNew.UIContralType == UIContralType.DDL)
+                    || (attrNew.LGType == FieldTypeS.FK && attrNew.MyDataType == DataType.AppString)
+                    || (attrNew.LGType == FieldTypeS.Enum&& attrNew.UIContralType == UIContralType.DDL))
+                {
+                    devHtml = devHtml.Replace("id=\"DDL_" + attrOld.KeyOfEn+ "\"", "id=\"DDL_" + attrNew.KeyOfEn + "\"")
+                                .Replace("id=\"SS_" + attrOld.KeyOfEn + "\"", "id=\"SS_" + attrNew.KeyOfEn + "\"")
+                               .Replace("name=\"DDL_" + attrOld.KeyOfEn + "\"", "name=\"DDL_" + attrNew.KeyOfEn + "\"")
+                               .Replace("data-key=\"" + attrOld.KeyOfEn + "\"", "data-key=\"" + attrNew.KeyOfEn + "\"")
+                               .Replace(">" + attrOld.KeyOfEn + "</option>", ">" + attrNew.KeyOfEn + "</option>");
+
+                    //保存开发者表单数据
+                    BP.WF.Dev2Interface.SaveDevelopForm(devHtml, this.No);
+                    return "执行成功";
+                }
+                //枚举
+                if (attrNew.LGType == FieldTypeS.Enum)
+                {
+                    if (DataType.IsNullOrEmpty(attrNew.UIBindKey) == true)
+                        throw new Exception("err@" + attrNew.Name + "枚举字段绑定的枚举为空,请检查该字段信息是否发生变更");
+                    //根据绑定的枚举获取枚举值
+                    SysEnums enums = new SysEnums(attrNew.UIBindKey);
+                    if (attrNew.UIContralType == UIContralType.CheckBok)
+                    {
+                        prefix = "CB_";
+                        devHtml = devHtml.Replace("id=\"SC_" + attrOld.KeyOfEn + "\"", "id=\"SC_" + attrNew.KeyOfEn + "\"");                        
+                    }
+                    if (attrNew.UIContralType == UIContralType.RadioBtn)
+                    {
+                        prefix = "RB_";
+                        devHtml = devHtml.Replace("id=\"SR_" + attrOld.KeyOfEn + "\"", "id=\"SR_" + attrNew.KeyOfEn + "\"");  
+                    }
+                    foreach (SysEnum item in enums)
+                    {
+                        devHtml = devHtml.Replace("id=\""+ prefix + attrOld.KeyOfEn + "_" + item.IntKey + "\"", "id=\""+ prefix + attrNew.KeyOfEn + "_" + item.IntKey + "\"")
+                            .Replace("name=\""+ prefix + attrOld.KeyOfEn + "\"", "name=\""+ prefix + attrNew.KeyOfEn + "\"")
+                            .Replace("data-key=\"" + attrOld.KeyOfEn + "\"", "data-key=\"" + attrNew.KeyOfEn + "\"");
+                    }
+                    //保存开发者表单数据
+                    BP.WF.Dev2Interface.SaveDevelopForm(devHtml, this.No);
+                    return "执行成功";
+                }
+                //普通字段
+                if (attrNew.LGType == FieldTypeS.Normal)
+                {
+                    prefix = "TB_";
+                    if (attrNew.MyDataType == DataType.AppBoolean)
+                        prefix = "CB_";
+                    devHtml = devHtml.Replace("id=\""+prefix + attrOld.KeyOfEn + "\"", "id=\"" + prefix + attrNew.KeyOfEn + "\"")
+                                .Replace("name=\"" + prefix + attrOld.KeyOfEn + "\"", "name=\"" + prefix + attrNew.KeyOfEn + "\"")
+                                .Replace("data-key=\"" + attrOld.KeyOfEn + "\"", "data-key=\"" + attrNew.KeyOfEn + "\"")
+                                .Replace("data-name=\"" + attrOld.Name + "\"", "data-name=\"" + attrNew.Name + "\"");
+                }
+                //保存开发者表单数据
+                BP.WF.Dev2Interface.SaveDevelopForm(devHtml, this.No);
+                return "执行成功";
             }
             return "执行成功";
         }

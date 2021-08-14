@@ -242,6 +242,7 @@ namespace BP.WF.Template
                 this.SetValByKey(BtnAttr.AddLeaderEnable, value);
             }
         }
+
         /// <summary>
         /// 主键
         /// </summary>
@@ -468,13 +469,11 @@ namespace BP.WF.Template
                     "@0=不能抄送@1=手工抄送@2=自动抄送@3=手工与自动@4=按表单SysCCEmps字段计算@5=在发送前打开抄送窗口");
                 map.SetHelperUrl(BtnAttr.CCLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3579867&doc_id=31094"); //增加帮助.
 
-
                 map.AddTBString(BtnAttr.QRCodeLab, "二维码", "二维码标签", true, false, 0, 50, 10);
+                map.SetHelperUrl(BtnAttr.QRCodeLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=4275245&doc_id=31094"); //增加帮助.
+
                 map.AddDDLSysEnum(BtnAttr.QRCodeRole, 0, "二维码规则", true, true, BtnAttr.QRCodeRole,
                     "@0=无@1=查看流程表单-无需权限@2=查看流程表单-需要登录@3=外部账户协作模式处理工作");
-
-                // map.SetHelperUrl(BtnAttr.QRCodeLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3579867&doc_id=31094"); //增加帮助.
-
 
 
                 // add 2014-04-05.
@@ -550,7 +549,7 @@ namespace BP.WF.Template
 
                 // add 2020.5.25 for 交投集团.
                 map.AddBoolean(BtnAttr.PrintZipMyView, false, "(打包下载zip)显示在查看器工具栏?", true, true);
-                map.AddBoolean(BtnAttr.PrintZipMyCC, false, "(打包下载zip)显示在抄送工具栏?", true, true, false);
+                map.AddBoolean(BtnAttr.PrintZipMyCC, false, "(打包下载zip)显示在抄送工具栏?", true, true, true);
 
                 map.AddTBString(BtnAttr.PrintDocLab, "打印单据", "打印单据按钮标签", true, false, 0, 50, 10);
                 //map.AddDDLSysEnum(BtnAttr.PrintDocEnable, 0, "打印方式", true,
@@ -707,7 +706,7 @@ namespace BP.WF.Template
                 map.SetHelperUrl(NodeAttr.IsBackTracking, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3579850&doc_id=31094"); //增加帮助.
 
                 //add for guangxi.
-                map.AddBoolean(NodeAttr.IsKillEtcThread, true, "是否全部子线程退回(子线程退回到分流节点有效)", true, true, true);
+                map.AddBoolean(NodeAttr.IsKillEtcThread, false, "是否全部子线程退回(子线程退回到分流节点有效)", true, true, true);
                 map.SetHelperAlert(NodeAttr.IsKillEtcThread, "子线程退回到分流节点是，是否允许全部退回。");
 
                 map.AddBoolean(NodeAttr.ReturnCHEnable, false, "是否启用退回考核规则", true, true);

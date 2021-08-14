@@ -77,7 +77,7 @@ namespace BP.Sys
         /// <summary>
         /// Url(对于嵌入式表单有效)
         /// </summary>
-        public const string Url = "Url";
+        public const string UrlExt = "UrlExt";
         /// <summary>
         /// Tag
         /// </summary>
@@ -98,10 +98,7 @@ namespace BP.Sys
         /// 版本号
         /// </summary>
         public const string Ver = "Ver";
-        /// <summary>
-        /// 数据源
-        /// </summary>
-        public const string DBSrc = "DBSrc";
+     
         /// <summary>
         /// 应用类型
         /// </summary>
@@ -120,7 +117,32 @@ namespace BP.Sys
         public const string OrgNo = "OrgNo";
         public const string Icon = "Icon";
 
-        
+        #region DBList类型的实体.
+        /// <summary>
+        /// 数据源
+        /// </summary>
+        public const string DBSrc = "DBSrc";
+        /// <summary>
+        /// 数据源类型
+        /// </summary>
+        public const string DBType = "DBType";
+        /// <summary>
+        /// 单行
+        /// </summary>
+        public const string ExpEn = "ExpEn";
+        /// <summary>
+        /// 列表
+        /// </summary>
+        public const string ExpList = "ExpList";
+        /// <summary>
+        /// 表达式
+        /// </summary>
+        public const string ExpCount = "ExpCount";
+        #endregion DBList类型的实体.
+
+
+
+
 
         #region 报表属性(参数的方式存储).
         /// <summary>
@@ -544,19 +566,15 @@ namespace BP.Sys
                     {
                         if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                         {
-                            QueryObject qo = new QueryObject(obj);
-
-                            qo.AddWhereInSQL(SysEnumAttr.EnumKey, "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND LGType=1 ");
-                            qo.addAnd();
-
-                            qo.addLeftBracket();
-                            qo.AddWhere(SysEnumAttr.OrgNo, BP.Web.WebUser.OrgNo);
-                            qo.addOr();
-                            qo.AddWhereIsNull(SysEnumAttr.OrgNo);
-                            qo.addRightBracket();
-
-                            qo.addOrderBy(SysEnumAttr.IntKey);
-                            qo.DoQuery();
+                          
+                            string enumKeySQL = "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData = '" + this.No + "' AND LGType = 1 ";
+                            string sqlWhere = " EnumKey IN (" + enumKeySQL + ") AND OrgNo='" + BP.Web.WebUser.OrgNo + "'";
+                            string sqlEnum = "SELECT * FROM Sys_Enum WHERE " + sqlWhere;
+                            sqlEnum += " UNION ";
+                            sqlEnum += "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeySQL + ") AND EnumKey NOT IN (SELECT EnumKey FROM Sys_Enum WHERE " + sqlWhere + ") AND (OrgNo Is Null Or OrgNo='')";
+                            sqlEnum += "Order By IntKey";
+                            DataTable dt = DBAccess.RunSQLReturnTable(sqlEnum);
+                            QueryObject.InitEntitiesByDataTable(obj, dt, null);
                         }
                         else
                         {
@@ -868,15 +886,15 @@ namespace BP.Sys
         /// <summary>
         /// URL
         /// </summary>
-        public string Url
+        public string UrlExt
         {
             get
             {
-                return this.GetValStrByKey(MapDataAttr.Url);
+                return this.GetValStrByKey(MapDataAttr.UrlExt);
             }
             set
             {
-                this.SetValByKey(MapDataAttr.Url, value);
+                this.SetValByKey(MapDataAttr.UrlExt, value);
             }
         }
         public DBUrlType HisDBUrl
@@ -1328,7 +1346,7 @@ namespace BP.Sys
                 map.AddTBInt(MapDataAttr.PTableModel, 0, "表存储模式", true, true);
 
 
-                map.AddTBString(MapDataAttr.Url, null, "连接(对嵌入式表单有效)", true, false, 0, 500, 20);
+                map.AddTBString(MapDataAttr.UrlExt, null, "连接(对嵌入式表单有效)", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.Dtls, null, "从表", true, false, 0, 500, 20);
 
                 //格式为: @1=方案名称1@2=方案名称2@3=方案名称3
@@ -1398,9 +1416,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoCopy(string copyToFrmID, string frmName)
         {
-
             BP.Sys.CCFormAPI.CopyFrm(this.No, copyToFrmID, frmName, this.FK_FormTree);
-
             return "执行成功";
         }
 
@@ -1687,6 +1703,7 @@ namespace BP.Sys
 
             MapData mdOld = new MapData();
             mdOld.No = specFrmID;
+            int count =  mdOld.RetrieveFromDBSources();
             mdOld.Delete();
 
 
@@ -1707,13 +1724,8 @@ namespace BP.Sys
                     oldMapID = dtMap.Rows[0]["No"].ToString();
             }
 
-            //检查是否存在OID字段.
-            mdOld.No = oldMapID;
-            int count = mdOld.RetrieveFromDBSources();
-
             //现在表单的类型
             FrmType frmType = mdOld.HisFrmType;
-
             //业务类型
             int entityType = mdOld.HisEntityType;
 
@@ -1769,32 +1781,26 @@ namespace BP.Sys
                                 md.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
 
+                            //表单类别编号不为空，则用原表单类别编号
+                            md.FK_FormTree = mdOld.FK_FormTree;
+                            
+                            if (DataType.IsNullOrEmpty(mdOld.PTable) == false)
+                                md.PTable = mdOld.PTable;
                             //如果物理表为空，则使用编号为物理数据表
                             if (DataType.IsNullOrEmpty(md.PTable.Trim()) == true)
                                 md.PTable = md.No;
 
-                            //表单类别编号不为空，则用原表单类别编号
-                            if (DataType.IsNullOrEmpty(md.FK_FormTree) == true)
-                                md.FK_FormTree = mdOld.FK_FormTree;
-
-                            ////表单类别编号不为空，则用原表单类别编号
-                            //if (DataType.IsNullOrEmpty(mdOld.f) == false)
-                            //    md.FK_FrmSort = mdOld.FK_FrmSort;
-
-                            if (DataType.IsNullOrEmpty(mdOld.PTable) == false)
-                                md.PTable = mdOld.PTable;
                             if (DataType.IsNullOrEmpty(mdOld.Name) == false)
                                 md.Name = mdOld.Name;
 
-                            if (count != 0)
-                            {
+                            if(count==1)
                                 md.HisFrmType = mdOld.HisFrmType;
-                                if (frmType == FrmType.Develop)
-                                    md.HisFrmType = FrmType.Develop;
+                            if (frmType == FrmType.Develop)
+                                md.HisFrmType = FrmType.Develop;
 
-                                if (entityType != md.HisEntityType)
-                                    md.HisEntityType = entityType;
-                            }
+                            if (entityType != md.HisEntityType)
+                                md.HisEntityType = entityType;
+                           
 
 
                             //表单应用类型保持不变

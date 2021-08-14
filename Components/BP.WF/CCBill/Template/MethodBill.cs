@@ -44,6 +44,15 @@ namespace BP.CCBill.Template
             }
         }
 
+        public string Tag1
+        {
+            get
+            {
+                string tag1 = this.GetValStringByKey(MethodAttr.Tag1);
+                return tag1;
+            }
+        }
+
 
         #endregion
 
@@ -110,14 +119,18 @@ namespace BP.CCBill.Template
         }
         #endregion
 
-
+        /// <summary>
+        /// 新建工作
+        /// </summary>
+        /// <param name="workid">实体的实例ID</param>
+        /// <returns></returns>
         public string CreateWorkID(Int64 workid)
         {
-
+            //获得当前的实体.
             GEEntity ge = new GEEntity(this.FrmID, workid);
 
             //创建单据ID.
-            Int64 workID = BP.CCBill.Dev2Interface.CreateBlankBillID(this.FrmID,null, ge.Row, this.FrmID, workid);
+            Int64 workID = BP.CCBill.Dev2Interface.CreateBlankBillID(this.Tag1, null, ge.Row, this.FrmID, workid);
             return workID.ToString();
         }
 

@@ -667,7 +667,7 @@ namespace BP.WF.Template
                     emp.UserID = this.SpecOper;
                     if (emp.RetrieveFromDBSources() == 1)
                     {
-                        BP.GPM.DeptEmp de = new GPM.DeptEmp();
+                        BP.GPM.DeptEmp de = new BP.GPM.DeptEmp();
                         de.FK_Dept = emp.FK_Dept;
                         sts.AddEntity(de);
                     }
@@ -1085,10 +1085,8 @@ namespace BP.WF.Template
 
                 map.AddMyPK();
 
-
                 //用于整体流程的删除，导入，导出.
                 map.AddTBString(CondAttr.RefFlowNo, null, "流程编号", true, true, 0, 5, 20);
-
 
                 //@0=节点完成条件@1=流程条件@2=方向条件@3=启动子流程
                 map.AddTBInt(CondAttr.CondType, 0, "条件类型", true, true);

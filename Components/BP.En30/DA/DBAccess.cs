@@ -3534,7 +3534,7 @@ namespace BP.DA
                 case DBType.Oracle:
                     sql = "Select count(*) as nm From user_objects Where object_type='VIEW' and object_name=:v";
                     DataTable Oracledt = DBAccess.RunSQLReturnTable(sql, "v", tabelOrViewName.ToUpper());
-                    if (Oracledt.Rows[0]["nm"] == "1")
+                    if (Oracledt.Rows[0]["nm"].ToString() == "1")
                         return true;
                     else
                         return false;

@@ -10,7 +10,7 @@ using BP.Sys;
 namespace BP.CCBill.Template
 {
     /// <summary>
-    /// 表单方法属性
+    /// 实体方法属性
     /// </summary>
     public class MethodAttr : EntityNoNameAttr
     {
@@ -19,7 +19,7 @@ namespace BP.CCBill.Template
         /// 表单ID
         /// </summary>
         public const string FrmID = "FrmID";
-        
+
         /// <summary>
         /// 分组ID
         /// </summary>
@@ -64,7 +64,7 @@ namespace BP.CCBill.Template
         /// 处理内容s
         /// </summary>
         public const string Docs = "Docs";
-      
+
         /// <summary>
         /// 执行警告信息-对功能方法有效
         /// </summary>
@@ -125,9 +125,17 @@ namespace BP.CCBill.Template
         #endregion 流程方法相关.
 
         public const string IsEnable = "IsEnable";
+        /// <summary>
+        /// 是否显示在列表？
+        /// </summary>
+        public const string IsList = "IsList";
+        /// <summary>
+        /// 是否含有参数
+        /// </summary>
+        public const string IsHavePara = "IsHavePara";
     }
     /// <summary>
-    /// 表单方法
+    /// 实体方法
     /// </summary>
     public class Method : EntityNoName
     {
@@ -186,7 +194,7 @@ namespace BP.CCBill.Template
                 this.SetValByKey(MethodAttr.MethodID, value);
             }
         }
-        
+
         public string FlowNo
         {
             get
@@ -259,13 +267,13 @@ namespace BP.CCBill.Template
 
         #region 构造方法
         /// <summary>
-        /// 表单方法
+        /// 实体方法
         /// </summary>
         public Method()
         {
         }
         /// <summary>
-        /// 表单方法
+        /// 实体方法
         /// </summary>
         /// <param name="no"></param>
         public Method(string no)
@@ -283,7 +291,7 @@ namespace BP.CCBill.Template
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Frm_Method", "表单方法");
+                Map map = new Map("Frm_Method", "实体方法");
 
                 //主键.
                 map.AddTBStringPK(MethodAttr.No, null, "编号", true, true, 0, 50, 10);
@@ -300,18 +308,18 @@ namespace BP.CCBill.Template
                 map.AddTBString(MethodAttr.FrmID, null, "表单ID", true, true, 0, 300, 10);
                 map.AddTBString(MethodAttr.FlowNo, null, "流程编号", true, true, 0, 10, 10);
 
-
                 map.AddTBString(MethodAttr.Icon, null, "图标", true, false, 0, 50, 10, true);
 
-             
+                ////批处理的方法，显示到集合上.
+                //map.AddBoolean(MethodAttr.IsCanBatch, false, "是否可以批处理?", true, false);
 
                 //临时存储.
                 map.AddTBString(MethodAttr.Docs, null, "方法内容", true, false, 0, 300, 10);
 
                 map.AddDDLSysEnum(MethodAttr.RefMethodType, 0, "方法类型", true, false, MethodAttr.RefMethodType,
                 "@0=功能@1=模态窗口打开@2=新窗口打开@3=右侧窗口打开");
-            
-                 
+
+
                 #region 显示位置控制.
                 map.AddBoolean(MethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);
                 map.AddBoolean(MethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
@@ -322,7 +330,6 @@ namespace BP.CCBill.Template
                 map.AddTBInt(MethodAttr.PopHeight, 0, "弹窗高度", true, false);
                 map.AddTBInt(MethodAttr.PopWidth, 0, "弹窗宽度", true, false);
                 #endregion 外观.
-
 
                 #region 对功能有效
                 //对功能有效.
@@ -345,8 +352,11 @@ namespace BP.CCBill.Template
                 #endregion (流程)相同字段数据同步方式.
 
                 //是否启用？
-                map.AddBoolean(MethodAttr.IsEnable, true, "是否启用？", true, true, true);
+                map.AddTBInt(MethodAttr.IsEnable, 1, "是否启用？", true, true);
+                map.AddTBInt(MethodAttr.IsList, 0, "是否显示在列表?", true, false);
+                map.AddTBInt(MethodAttr.IsHavePara, 0, "是否含有参数?", true, false);
                 map.AddTBInt(MethodAttr.Idx, 0, "Idx", true, false);
+                
                 this._enMap = map;
                 return this._enMap;
             }
@@ -373,16 +383,16 @@ namespace BP.CCBill.Template
 
     }
     /// <summary>
-    /// 表单方法
+    /// 实体方法
     /// </summary>
     public class Methods : EntitiesNoName
     {
         /// <summary>
-        /// 表单方法
+        /// 实体方法
         /// </summary>
         public Methods() { }
         /// <summary>
-        /// 表单方法
+        /// 实体方法
         /// </summary>
         /// <param name="nodeid">方法IDID</param>
         public Methods(int nodeid)

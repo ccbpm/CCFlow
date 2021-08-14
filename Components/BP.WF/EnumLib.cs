@@ -1053,6 +1053,10 @@ namespace BP.WF
         /// </summary>
         ByDeptLeader = 23,
         /// <summary>
+        /// 按照部门分管领导计算
+        /// </summary>
+        ByDeptShipLeader = 28,
+        /// <summary>
         /// 找自己的直属领导.
         /// </summary>
         ByEmpLeader = 50,
@@ -1084,6 +1088,10 @@ namespace BP.WF
         /// 按照设置的WebAPI接口获取的数据计算
         /// </summary>
         ByAPIUrl = 45,
+        /// <summary>
+        /// 外部用户
+        /// </summary>
+        ByGuest = 51,
         /// <summary>
         /// 按照ccflow的BPM模式处理
         /// </summary>

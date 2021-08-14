@@ -199,15 +199,15 @@ namespace BP.WF.Template
         /// <summary>
         /// URL
         /// </summary>
-        public string Url
+        public string UrlExt
         {
             get
             {
-                return this.GetValStrByKey(MapDataAttr.Url);
+                return this.GetValStrByKey(MapDataAttr.UrlExt);
             }
             set
             {
-                this.SetValByKey(MapDataAttr.Url, value);
+                this.SetValByKey(MapDataAttr.UrlExt, value);
             }
         }
         public DBUrlType HisDBUrl
@@ -414,7 +414,7 @@ namespace BP.WF.Template
                 //表单的运行类型.
                 map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型",true, true, MapDataAttr.FrmType);
 
-                map.AddTBString(MapDataAttr.Url, null, "URL连接(对嵌入式表单有效)", true, false, 0, 500, 20, true);
+                map.AddTBString(MapDataAttr.UrlExt, null, "URL连接(对嵌入式表单有效)", true, false, 0, 500, 20, true);
                 //数据源.
                 map.AddDDLEntities(MapDataAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
 

@@ -214,33 +214,57 @@ namespace BP.WF.Template
                 }
             }
             /**按照表单字段抄送*/
-            if(this.CCIsAttr == true)
+            if (this.CCIsAttr == true)
             {
                 if (DataType.IsNullOrEmpty(this.CCFormAttr) == true)
                     throw new Exception("抄送规则自动抄送选择按照表单字段抄送没有设置抄送人员字段");
 
-                string ccers = rpt.GetValStrByKey(this.CCFormAttr);
-                if (DataType.IsNullOrEmpty(ccers) == false)
-                {
-                    string[] emps = ccers.Split(',');
-                    foreach(string empNo in emps)
+                string[] attrs = this.CCFormAttr.Split(',');
+                foreach (string attr in attrs)
+               {
+                    string ccers = rpt.GetValStrByKey(attr);
+                    if (DataType.IsNullOrEmpty(ccers) == false)
                     {
-                        if (DataType.IsNullOrEmpty(empNo) == true)
-                            continue;
-                        Emp emp = new Emp();
-                        emp.UserID = empNo;
-                        if (emp.RetrieveFromDBSources() == 1)
+                        //判断该字段是否启用了pop返回值？
+                        sql = "SELECT  Tag1 AS VAL FROM Sys_FrmEleDB WHERE RefPKVal=" + workid + " AND EleID='" + attr + "'";
+                        DataTable dtVals = DBAccess.RunSQLReturnTable(sql);
+                        string emps = "";
+                        //获取接受人并格式化接受人, 
+                        if (dtVals.Rows.Count > 0)
                         {
-                            DataRow dr = dt.NewRow();
-                            dr["No"] = empNo;
-                            dr["Name"] = emp.Name;
-                            dt.Rows.Add(dr);
+                            foreach (DataRow dr in dtVals.Rows)
+                                emps += dr[0].ToString() + ",";
                         }
-                        
+                        else
+                        {
+                            emps = ccers;
+                        }
+                        //end判断该字段是否启用了pop返回值
+
+                        emps = emps.Replace(" ", ""); //去掉空格.
+                        if (DataType.IsNullOrEmpty(emps) == false)
+                        {
+                            /*如果包含,; 例如 zhangsan,张三;lisi,李四;*/
+                            string[] ccemp = emps.Split(',');
+                            foreach (string empNo in ccemp)
+                            {
+                                if (DataType.IsNullOrEmpty(empNo) == true)
+                                    continue;
+                                Emp emp = new Emp();
+                                emp.UserID = empNo;
+                                if (emp.RetrieveFromDBSources() == 1)
+                                {
+                                    DataRow dr = dt.NewRow();
+                                    dr["No"] = empNo;
+                                    dr["Name"] = emp.Name;
+                                    dt.Rows.Add(dr);
+                                }
+
+                            }
+                        }
+
                     }
                 }
-                   
-
             }
             //将dt中的重复数据过滤掉  
             DataView myDataView = new DataView(dt);

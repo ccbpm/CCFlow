@@ -377,7 +377,7 @@ namespace BP.CCBill
                 dr["Icon"] = "shezhi";
                 dt.Rows.Add(dr);
             }
-            if (WebUser.No.Equals("admin"))
+            if (WebUser.No.Equals("admin") && this.IsMobile == false)
             {
                 dr = dt.NewRow();
                 dr["No"] = "Setting";

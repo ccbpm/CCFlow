@@ -806,13 +806,13 @@ namespace BP.WF
             {
                 if (fk_flow == null)
                 {
-                    ps.SQL = "SELECT * FROM WF_CCList WHERE Sta=" + dbStr + "Sta AND CCTo=" + dbStr + "CCTo ";
+                    ps.SQL = "SELECT * FROM WF_CCList WHERE Sta=" + dbStr + "Sta AND CCTo=" + dbStr + "CCTo  ORDER BY RDT DESC";
                     ps.Add("Sta", (int)sta);
                     ps.Add("CCTo", WebUser.No);
                 }
                 else
                 {
-                    ps.SQL = "SELECT * FROM WF_CCList WHERE Sta=" + dbStr + "Sta AND CCTo=" + dbStr + "CCTo  AND FK_Flow=" + dbStr + "FK_Flow";
+                    ps.SQL = "SELECT * FROM WF_CCList WHERE Sta=" + dbStr + "Sta AND CCTo=" + dbStr + "CCTo  AND FK_Flow=" + dbStr + "FK_Flow  ORDER BY RDT DESC";
                     ps.Add("Sta", (int)sta);
                     ps.Add("CCTo", WebUser.No);
                     ps.Add("FK_Flow", fk_flow);
@@ -823,14 +823,14 @@ namespace BP.WF
             {
                 if (fk_flow == null)
                 {
-                    ps.SQL = "SELECT * FROM WF_CCList WHERE Sta=" + dbStr + "Sta AND CCTo=" + dbStr + "CCTo AND Domain=" + dbStr + "Domain";
+                    ps.SQL = "SELECT * FROM WF_CCList WHERE Sta=" + dbStr + "Sta AND CCTo=" + dbStr + "CCTo AND Domain=" + dbStr + "Domain  ORDER BY RDT DESC";
                     ps.Add("Sta", (int)sta);
                     ps.Add("CCTo", WebUser.No);
                     ps.Add("Domain", domain);
                 }
                 else
                 {
-                    ps.SQL = "SELECT * FROM WF_CCList WHERE Sta=" + dbStr + "Sta AND CCTo=" + dbStr + "CCTo AND Domain=" + dbStr + "Domain AND FK_Flow=" + dbStr + "FK_Flow";
+                    ps.SQL = "SELECT * FROM WF_CCList WHERE Sta=" + dbStr + "Sta AND CCTo=" + dbStr + "CCTo AND Domain=" + dbStr + "Domain AND FK_Flow=" + dbStr + "FK_Flow  ORDER BY RDT DESC";
                     ps.Add("Sta", (int)sta);
                     ps.Add("CCTo", WebUser.No);
                     ps.Add("Domain", domain);
@@ -1439,9 +1439,9 @@ namespace BP.WF
             else
             {
                 if (BP.WF.Glo.IsEnableTaskPool == true)
-                    sql = "SELECT  *, null as Auther FROM WF_EmpWorks A WHERE  TaskSta=0 AND A.FK_Emp='" + userNo + "' " + whereSQL + "";
+                    sql = "SELECT  A.*, null as Auther FROM WF_EmpWorks A WHERE  TaskSta=0 AND A.FK_Emp='" + userNo + "' " + whereSQL + "";
                 else
-                    sql = "SELECT  *, null as Auther FROM WF_EmpWorks A WHERE  A.FK_Emp='" + userNo + "' " + whereSQL + "";
+                    sql = "SELECT  A.*, null as Auther FROM WF_EmpWorks A WHERE  A.FK_Emp='" + userNo + "' " + whereSQL + "";
 
                 foreach (Auth ath in aths)
                 {
@@ -2711,7 +2711,7 @@ namespace BP.WF
             switch (DBAccess.AppCenterDBType)
             {
                 case DBType.Oracle:
-                    currNode = "(SELECT FK_Node FROM (SELECT FK_Node FROM WF_GenerWorkerlist G WHERE G.WorkID = A.WorkID AND FK_Emp='" + WebUser.No + "' Order by RDT DESC ) WHERE RowNum=1)";
+                    currNode = "(SELECT FK_Node FROM (SELECT G.FK_Node FROM WF_GenerWorkFlow A,WF_GenerWorkerlist G WHERE G.WorkID = A.WorkID AND G.FK_Emp='" + WebUser.No + "' Order by G.RDT DESC ) WHERE RowNum=1)";
                     break;
                 case DBType.MySQL:
                 case DBType.PostgreSQL:
@@ -2839,9 +2839,7 @@ namespace BP.WF
             string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
 
-            ps.SQL = "SELECT a.FK_Flow,a.FlowName, Count(a.WorkID) as Num FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0)  GROUP BY A.FK_Flow, A.FlowName";
-            ps.Add("FK_Emp", WebUser.No);
-
+            ps.SQL = "SELECT FK_Flow,FlowName, Count(WorkID) as Num FROM WF_GenerWorkFlow WHERE Emps like '%@" + WebUser.No+","+WebUser.Name+"@%' AND TodoEmps NOT like '%"+WebUser.No+","+WebUser.Name+";%' AND WFState != 3  GROUP BY FK_Flow, FlowName";
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             {
@@ -3105,6 +3103,29 @@ namespace BP.WF
                 // BP.WF.Dev2Interface.Port_Login(myEmp, myEmp.OrgNo);
             }
             return;
+        }
+        /// <summary>
+        /// 按照token登录 2021.07.01 采用新方式.
+        /// @hongyan 新增的方法.
+        /// </summary>
+        /// <param name="token"></param>
+        public static void Port_LoginByToken(string token)
+        {
+            if (DataType.IsNullOrEmpty(token))
+                throw new Exception("err@SID不能为空.");
+
+            token = token.Trim();
+
+            if (DataType.IsNullOrEmpty(token) == true)
+                throw new Exception("err@非法的Token.");
+
+            BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp();
+            int i = emp.Retrieve(BP.WF.Port.WFEmpAttr.Token, token);
+            if (i == 0)
+                throw new Exception("err@非法或者失效的token:" + token);
+
+            //执行登录.
+            BP.WF.Dev2Interface.Port_Login(emp.No);
         }
 
         /// <summary>
@@ -4900,14 +4921,14 @@ namespace BP.WF
         public static bool Flow_IsCanStartThisFlow(string flowNo, string userNo, string pFlowNo = null, int pNodeID = 0, Int64 pworkID = 0)
         {
             if (DataType.IsNullOrEmpty(WebUser.No))
-                throw new Exception("err@没有获取到用户的登录信息，请重新登录。");
+                throw new Exception("err@在判断是否可以发起该流程是出现错误，没有获取到用户的登录信息，请重新登录。");
 
-            #region 判断开始节点是否可以发起.
+            #region 判断开始节点是否可以发起. @hongyan
             Node nd = new Node(int.Parse(flowNo + "01"));
-            if (nd.IsGuestNode == true)
+            if (nd.HisDeliveryWay== DeliveryWay.ByGuest ||  nd.IsGuestNode == true)
             {
-                if (BP.Web.WebUser.No != "Guest")
-                    throw new Exception("@当前节点是来宾处理节点，但是目前您{" + BP.Web.WebUser.No + "}不是来宾帐号。");
+                if (BP.Web.WebUser.No.Equals("Guest")==false)
+                    throw new Exception("err@当前节点是外部用户处理节点，但是目前您{" + BP.Web.WebUser.No + "}不是外部用户帐号。");
                 return true;
             }
 
@@ -7306,6 +7327,12 @@ namespace BP.WF
             WorkNode wn = new WorkNode(sw, nd);
             wn.Execer = execUserNo;
             wn.ExecerName = execUserName;
+            if (execUserNo.Equals("Guest") == true)
+            {
+                wn.Execer = GuestUser.No;
+                wn.ExecerName = GuestUser.Name;
+            }
+           
             wn.title = title; // 设置标题，有可能是从外部传递过来的标题.
             wn.SendHTOfTemp = htWork;
 
@@ -10058,7 +10085,7 @@ namespace BP.WF
             tk.DeptNo = WebUser.FK_Dept;
             tk.DeptName = WebUser.FK_DeptName;
 
-            tk.MyPK = tk.FrmID + "_" + tk.WorkID + "_" + tk.Rec + "_100" ;
+            tk.MyPK = tk.FrmID + "_" + tk.WorkID + "_" + tk.Rec + "_100";
             tk.Msg = msg;
             tk.RDT = DataType.CurrentDataTime;
 
@@ -11173,7 +11200,7 @@ namespace BP.WF
             }
 
             //根据控制权限获取RefPK的值
-            if (athCtrlWay == AthCtrlWay.WorkID)
+            if (athCtrlWay == AthCtrlWay.WorkID || athCtrlWay == AthCtrlWay.PK)
                 pkval = workid;
 
             if (athCtrlWay == AthCtrlWay.FID)
@@ -11282,6 +11309,39 @@ namespace BP.WF
 
 
             return pkval.ToString();
+        }
+
+        /// <summary>
+        /// 保存开发者表单的数据
+        /// </summary>
+        /// <param name="htmlCode"></param>
+        /// <param name="fk_mapData"></param>
+        /// <returns></returns>
+        public static string SaveDevelopForm(string htmlCode, string fk_mapData)
+        {
+            //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
+            string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
+            if (Directory.Exists(filePath) == false)
+                Directory.CreateDirectory(filePath);
+
+            filePath = filePath + fk_mapData + ".htm";
+            //写入到html 中
+            DataType.WriteFile(filePath, htmlCode);
+
+            //保存类型。
+            MapData md = new MapData(fk_mapData);
+            if (md.HisFrmType != FrmType.Develop)
+            {
+                md.HisFrmType = FrmType.Develop;
+                md.Update();
+            }
+            // HtmlTemplateFile 保存到数据库中
+            DBAccess.SaveBigTextToDB(htmlCode, "Sys_MapData", "No", fk_mapData, "HtmlTemplateFile");
+
+            //检查数据完整性
+            GEEntity en = new GEEntity(fk_mapData);
+            en.CheckPhysicsTable();
+            return "保存成功";
         }
     }
 

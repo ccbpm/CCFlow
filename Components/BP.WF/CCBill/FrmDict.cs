@@ -353,8 +353,14 @@ namespace BP.CCBill
                 #endregion 基本属性.
 
                 #region 外观.
-                map.AddDDLSysEnum(FrmAttr.RowOpenModel, 0, "行记录打开模式", true, true,
+                map.AddDDLSysEnum(FrmAttr.RowOpenModel, 2, "行记录打开模式", true, true,
                   "RowOpenMode", "@0=新窗口打开@1=在本窗口打开@2=弹出窗口打开,关闭后不刷新列表@3=弹出窗口打开,关闭后刷新列表");
+                string cfg = "@0=MyDictFrameWork.htm 实体与实体相关功能编辑器";
+                cfg += "@1=MyDict.htm 实体编辑器";
+                cfg += "@2=MyBill.htm 单据编辑器";
+                cfg += "@9=自定义URL";
+                map.AddDDLSysEnum("SearchDictOpenType", 0, "双击行打开内容", true, true, "SearchDictOpenType", cfg);
+                map.AddTBString(EnCfgAttr.UrlExt, null, "要打开的Url", true, false, 0, 500, 60, true);
                 map.AddTBInt(FrmAttr.PopHeight, 500, "弹窗高度", true, false);
                 map.AddTBInt(FrmAttr.PopWidth, 760, "弹窗宽度", true, false);
 
@@ -375,6 +381,14 @@ namespace BP.CCBill
                 map.AddTBString(FrmBillAttr.SortColumns, null, "排序字段", true, false, 0, 100, 20, true);
                 map.AddTBString(FrmBillAttr.ColorSet, null, "颜色设置", true, false, 0, 100, 20, true);
                 map.AddTBString(FrmBillAttr.FieldSet, null, "字段求和求平均设置", true, false, 0, 100, 20, true);
+                //字段格式化函数.
+                map.AddTBString("ForamtFunc", null, "字段格式化函数", true, false, 0, 200, 60, true);
+                string msg = "对字段的显示使用函数进行处理";
+                msg += "\t\n 1. 对于字段内容需要处理后在输出出来.";
+                msg += "\t\n 2. 比如：原字段内容 @zhangsa,张三@lisi,李四 显示的内容为 张三,李四";
+                msg += "\t\n 3. 配置格式: 字段名@函数名; 比如:  FlowEmps@DealFlowEmps; ";
+                msg += "\t\n 4. 函数写入到 \\DataUser\\JSLibData\\SearchSelf.js";
+                map.SetHelperAlert("ForamtFunc", msg);
                 #endregion 实体表单.
 
                 #region MyBill - 按钮权限.
@@ -400,7 +414,7 @@ namespace BP.CCBill
                 //map.AddBoolean(FrmDictAttr.BtnSearchEnable, true, "是否可用？", true, true);
 
                 map.AddTBString(FrmDictAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
-                map.AddBoolean(FrmDictAttr.BtnGroupEnable, false, "是否可用？", true, true);
+                map.AddBoolean(FrmDictAttr.BtnGroupEnable, true, "是否可用？", true, true);
 
                 map.AddTBString(FrmDictAttr.BtnPrintHtml, "打印Html", "打印Html", true, false, 0, 50, 20);
                 map.AddBoolean(FrmDictAttr.BtnPrintHtmlEnable, false, "是否可用？", true, true);
@@ -840,7 +854,6 @@ namespace BP.CCBill
                 attr.Idx = -1;
                 attr.Insert();
             }
-
 
             if (attrs.Contains(this.No + "_" + GERptAttr.AtPara) == false)
             {

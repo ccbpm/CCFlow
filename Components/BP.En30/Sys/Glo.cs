@@ -71,7 +71,7 @@ namespace BP.Sys
             return str;
         }
         /// <summary>
-        /// 清楚设置的缓存.
+        /// 清除设置的缓存.
         /// </summary>
         /// <param name="frmID"></param>
         public static void ClearMapDataAutoNum(string frmID)

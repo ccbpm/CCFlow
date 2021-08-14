@@ -1077,6 +1077,20 @@ namespace BP.Sys
                 return AppSettings["Ding_AgentID"];
             }
         }
+        public static string Ding_AppKey
+        {
+            get
+            {
+                return AppSettings["Ding_AppKey"];
+            }
+        }
+        public static string Ding_AppSecret
+        {
+            get
+            {
+                return AppSettings["Ding_AppSecret"];
+            }
+        }
         #endregion
 
         #region 百度云配置相关
@@ -1580,6 +1594,14 @@ namespace BP.Sys
                     return false;
                 else
                     return true;
+            }
+        }
+
+        public static string DateType
+        {
+            get
+            {
+                return SystemConfig.GetValByKey("DateType", "varchar");
             }
         }
     }

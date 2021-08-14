@@ -430,7 +430,6 @@ namespace BP.GPM
             dir.FK_App = this.No;
             dir.Name = "流程管理";
             dir.MenuType = MenuType.Dir;
-            dir.MenuCtrlWay = MenuCtrlWay.Anyone;
             dir.Update();
 
             menu = dir.DoCreateSubNode() as Menu;
@@ -439,7 +438,6 @@ namespace BP.GPM
             menu.MenuType = MenuType.Menu;
             menu.UrlExt = "/WF/Start.htm";
             menu.ParentNo = dir.No;
-            menu.MenuCtrlWay = MenuCtrlWay.Anyone;
             menu.Update();
 
             menu = dir.DoCreateSubNode() as Menu;
@@ -448,7 +446,6 @@ namespace BP.GPM
             menu.MenuType = MenuType.Menu;
             menu.UrlExt = "/WF/Todolist.htm";
             menu.ParentNo = dir.No;
-            menu.MenuCtrlWay = MenuCtrlWay.Anyone;
             menu.Update();
 
             menu = dir.DoCreateSubNode() as Menu;
@@ -456,7 +453,6 @@ namespace BP.GPM
             menu.FK_App = this.No;
             menu.MenuType = MenuType.Menu;
             menu.UrlExt = "/WF/Runing.htm";
-            menu.MenuCtrlWay = MenuCtrlWay.Anyone;
             menu.ParentNo = dir.No;
 
             menu.Update();
@@ -465,7 +461,6 @@ namespace BP.GPM
             Menu dir2 = appMenu.DoCreateSubNode() as Menu;
             dir2.FK_App = this.No;
             dir2.Name = "系统管理";
-            dir2.MenuCtrlWay = MenuCtrlWay.AdminOnly;
             dir2.MenuType = MenuType.Dir;
             dir2.Update();
 
@@ -475,7 +470,6 @@ namespace BP.GPM
             menu.MenuType = MenuType.Menu;
             menu.UrlExt = "/WF/Comm/Tree.htm?EnsName=BP.GPM.Depts";
             menu.ParentNo = dir2.No;
-            menu.MenuCtrlWay = MenuCtrlWay.AdminOnly;
             menu.Update();
 
             menu = dir2.DoCreateSubNode() as Menu;
@@ -484,7 +478,6 @@ namespace BP.GPM
             menu.MenuType = MenuType.Menu;
             menu.UrlExt = "/WF/Comm/Search.htm?EnsName=BP.GPM.Emps";
             menu.ParentNo = dir2.No;
-            menu.MenuCtrlWay = MenuCtrlWay.AdminOnly;
             menu.Update();
 
             menu = dir2.DoCreateSubNode() as Menu;
@@ -493,7 +486,6 @@ namespace BP.GPM
             menu.MenuType = MenuType.Menu;
             menu.UrlExt = "/WF/Comm/Search.htm?EnsName=BP.Port.Stations";
             menu.ParentNo = dir2.No;
-            menu.MenuCtrlWay = MenuCtrlWay.AdminOnly;
             menu.Update();
 
             return base.beforeInsert();

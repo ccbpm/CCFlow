@@ -175,11 +175,11 @@ namespace BP.CCBill
         /// <summary>
         /// 工作ID
         /// </summary>
-        public Int64 WorkID
+        public string WorkID
         {
             get
             {
-                return this.GetValInt64ByKey(TrackAttr.WorkID);
+                return this.GetValStringByKey(TrackAttr.WorkID);
             }
             set
             {
@@ -399,7 +399,9 @@ namespace BP.CCBill
                 map.AddTBString(TrackAttr.ActionType, null, "类型", true, false, 0, 30, 100);
                 map.AddTBString(TrackAttr.ActionTypeText, null, "类型(名称)", true, false, 0, 30, 100);
 
-                map.AddTBInt(TrackAttr.WorkID, 0, "工作ID/OID", true, false);
+              //  map.AddTBInt(TrackAttr.WorkID, 0, "工作ID/OID", true, false);
+                map.AddTBString(TrackAttr.WorkID, null, "工作ID/OID", true, false, 0, 100, 100);
+
                 map.AddTBString(TrackAttr.Msg, null, "消息", true, false, 0, 300, 3000);
 
                 map.AddTBString(TrackAttr.Rec, null, "记录人", true, false, 0, 200, 100);

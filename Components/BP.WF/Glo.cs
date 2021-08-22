@@ -4795,6 +4795,8 @@ namespace BP.WF
             exp = exp.Replace("@WebUser.Name", WebUser.Name);
             exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
             exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+            exp = exp.Replace("@WebUser.OrgNo", WebUser.OrgNo);
+
 
             if (exp.Contains("@") == false)
                 return exp;

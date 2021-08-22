@@ -31,7 +31,7 @@ namespace BP.CCBill
             string flowNo = null, string flowName = null, int nodeID = 0, Int64 workIDOfFlow = 0, string frmName = "")
         {
             BP.CCBill.Track tk = new BP.CCBill.Track();
-            tk.WorkID = frmWorkID;
+            tk.WorkID = frmWorkID.ToString();
             tk.FrmID = frmID;
             tk.FrmName = frmName;
             tk.ActionType = at;
@@ -105,7 +105,10 @@ namespace BP.CCBill
             int i = gb.Retrieve(GenerBillAttr.FrmID, frmID, GenerBillAttr.Starter, userNo, GenerBillAttr.BillState, 0);
             if (i == 1)
             {
-                GERpt rpt1 = new GERpt(frmID, gb.WorkID);
+                GERpt rpt1 = new GERpt(frmID);
+                rpt1.OID = gb.WorkID;
+                int count = rpt1.RetrieveFromDBSources();
+               
                 if (htParas != null)
                     rpt1.Copy(htParas);
 
@@ -121,8 +124,10 @@ namespace BP.CCBill
                     rpt1.SetValByKey("PWorkID", pDictWorkID);
                     rpt1.SetValByKey("PFrmID", pDictFrmID);
                 }
-
-                rpt1.Update();
+                if(count == 0)
+                    rpt1.InsertAsOID(gb.WorkID);
+                else
+                    rpt1.Update();
                 return gb.WorkID;
             }
 
@@ -202,7 +207,7 @@ namespace BP.CCBill
             rpt.OID = gb.WorkID;
             rpt.InsertAsOID(gb.WorkID);
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, rpt.OID, "创建", "创建记录");
+            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, rpt.OID, FrmActionType.Create, "创建记录");
 
             return gb.WorkID;
         }
@@ -255,7 +260,7 @@ namespace BP.CCBill
             rpt.InsertAsOID(rpt.OID);
 
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, rpt.OID, "创建", "创建记录");
+            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, rpt.OID, FrmActionType.Create, "创建记录");
 
             return rpt.OID;
         }
@@ -297,7 +302,7 @@ namespace BP.CCBill
             rpt.SetValByKey("RDT", DataType.CurrentData);
             rpt.Update();
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, workid, "保存", "执行保存");
+            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, workid, FrmActionType.Save, "执行保存");
 
         }
 
@@ -355,7 +360,7 @@ namespace BP.CCBill
             rpt.BillNo = gb.BillNo;
             rpt.Update();
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, rpt.OID, "保存", "保存");
+            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, rpt.OID, FrmActionType.Save, "保存");
 
             return "保存成功...";
         }
@@ -414,7 +419,7 @@ namespace BP.CCBill
             rpt.BillNo = gb.BillNo;
             rpt.Update();
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, workID, "提交表单", "执行提交.");
+            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, workID, FrmActionType.Submit, "执行提交.");
 
 
             return "提交成功...";

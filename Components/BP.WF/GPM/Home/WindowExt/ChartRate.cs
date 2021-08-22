@@ -89,6 +89,7 @@ namespace BP.GPM.Home.WindowExt
 
                 map.AddTBString(WindowTemplateAttr.LabOfFM, null, "分母标签", true, false, 0, 100, 20);
                 map.AddTBStringDoc(WindowTemplateAttr.SQLOfFM, null, "分子表达式", true, false, true);
+
                 map.AddTBString(WindowTemplateAttr.LabOfRate, null, "率标签", true, false, 0, 100, 20);
 
                 #endregion 数据源.

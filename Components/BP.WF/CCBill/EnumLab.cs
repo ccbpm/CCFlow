@@ -88,6 +88,10 @@ namespace BP.CCBill
         /// </summary>
         public const string Save = "Save";
         /// <summary>
+        /// 提交
+        /// </summary>
+        public const string Submit = "Submit";
+        /// <summary>
         /// 评论
         /// </summary>
         public const string BBS = "BBS";

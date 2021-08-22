@@ -532,7 +532,7 @@ namespace BP.CCBill
 
                 #region 报表定义.
                 rm = new RefMethod();
-                rm.GroupName = "报表定义";
+                rm.GroupName = "查询定义";
                 rm.Title = "设置显示的列"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoRpt_ColsChose";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -540,7 +540,7 @@ namespace BP.CCBill
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "报表定义";
+                rm.GroupName = "查询定义";
                 rm.Title = "设置多表头"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoRptMTitle";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -548,7 +548,7 @@ namespace BP.CCBill
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "报表定义";
+                rm.GroupName = "查询定义";
                 rm.Title = "列的顺序"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoRpt_ColsIdxAndLabel";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -556,7 +556,7 @@ namespace BP.CCBill
                 //   map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "报表定义";
+                rm.GroupName = "查询定义";
                 rm.Title = "查询条件"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoRpt_SearchCond";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -978,7 +978,8 @@ namespace BP.CCBill
         /// <returns></returns>
         public string DoRpt_SearchCond()
         {
-            return "../../CCBill/Admin/SearchCond.htm?FrmID=" + this.No;
+            //  http://localhost:2296/WF/CCBill/Admin/Collection/SearchCond.htm?FrmID=Dict_XueShengTaiZhang&ModuleNo=0d5b6b0b-9051-44cf-b989-7e9d802f01af
+            return "../../CCBill/Admin/Collection/SearchCond.htm?FrmID=" + this.No;
         }
         #endregion 报表定义.
 

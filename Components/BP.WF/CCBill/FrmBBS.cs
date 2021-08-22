@@ -69,9 +69,6 @@ namespace BP.CCBill
         public const string FrmName = "FrmName";
 
         public const string Docs = "Docs";
-
-        
-
     }
     /// <summary>
     /// 评论组件
@@ -260,9 +257,10 @@ namespace BP.CCBill
                 #region 基本字段.
 
                 map.AddTBStringPK(FrmBBSAttr.No, null, "No", true, false, 0, 50, 200);
+
                 map.AddTBString(FrmBBSAttr.Name, null, "标题", true, false, 0, 4000, 200);
                 map.AddTBString(FrmBBSAttr.ParentNo, null, "父节点", true, false, 0, 50, 200);
-                map.AddTBInt(FrmBBSAttr.WorkID, 0, "工作ID/OID", true, false);
+                map.AddTBString(FrmBBSAttr.WorkID, null, "工作ID/OID", true, false, 0, 50, 200);
 
                 map.AddTBString(FrmBBSAttr.Docs, null, "内容", true, false, 0, 50, 200);
 

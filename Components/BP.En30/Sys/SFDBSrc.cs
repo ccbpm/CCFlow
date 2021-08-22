@@ -146,11 +146,11 @@ namespace BP.Sys
             return int.Parse(dt.Rows[0][0].ToString());
         }
 
-        public DataTable DoQuery(string sql,int count,string pk, int pageSize, int pageIdx, string orderBy, bool isDesc=false)
+        public Entities DoQuery(Entities ens,string sql,string countSql, int count,string mainTable,string pk, int pageSize, int pageIdx, string orderBy, bool isDesc=false)
         {
             DataTable dt = new DataTable();
             if (count == 0)
-                return dt;
+                return null;
             int pageNum = 0;
             string orderBySQL = "";
             //如果没有加入排序字段，使用主键
@@ -184,24 +184,106 @@ namespace BP.Sys
                     case DBSrcType.PostgreSQL:    
                     case DBSrcType.SQLServer:
                     default:
-                        mysql = sql;
-                        mysql = mysql.Substring(mysql.IndexOf("FROM "));
-                        mysql = "SELECT OID" + mysql;
-                        string pks = this.GenerPKsByTableWithPara(pk, sql, top, max,null);
+                        mysql = countSql;
+                        mysql = mysql.Substring(mysql.ToUpper().IndexOf("FROM "));
+                        mysql = "SELECT  "+ mainTable+pk + " "  + mysql;
+                        string pks = this.GenerPKsByTableWithPara(pk, mysql, pageSize * (pageIdx - 1), max,null);
 
                         if (pks == null)
                             sql += " AND 1=2";
                         else
-                            sql += " AND pk in(" + pks + ")";
+                            sql += " AND "+ mainTable+ pk +" in(" + pks + ")";
                         break;
                 }
-                return this.RunSQLReturnTable(sql);
-               
+                dt = this.RunSQLReturnTable(sql);
+                return InitEntitiesByDataTable(ens, dt, null);
+
             }
             catch (Exception ex)
             {
-                throw new Exception("err@执行外部数据源执行分页SQL出现错误");
+                throw new Exception("err@数据源执行分页SQL出现错误");
             }
+        }
+
+        public  Entities InitEntitiesByDataTable(Entities ens, DataTable dt, string[] fullAttrs)
+        {
+            bool isUpper = false;
+            if (this.DBSrcType == DBSrcType.Oracle
+            || this.DBSrcType == DBSrcType.KingBase)
+                isUpper = true;
+
+            if (fullAttrs == null)
+            {
+                Map enMap = ens.GetNewEntity.EnMap;
+                Attrs attrs = enMap.Attrs;
+                try
+                {
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        Entity en = ens.GetNewEntity;
+                        foreach (Attr attr in attrs)
+                        {
+                            if (dt.Columns.Contains(attr.Key) == false
+                                && dt.Columns.Contains(attr.Key.ToUpper()) == false)
+                                continue;
+                            if (isUpper == true)
+                            {
+                                if ((SystemConfig.AppCenterDBType == DBType.KingBase
+                                    || SystemConfig.AppCenterDBType == DBType.Oracle)
+                                    && attr.MyFieldType == FieldType.RefText)
+                                    en.SetValByKey(attr.Key, dr[attr.Key]);
+                                else
+                                    en.SetValByKey(attr.Key, dr[attr.Key.ToUpper()]);
+                            }
+
+                            else
+                                en.SetValByKey(attr.Key, dr[attr.Key]);
+                        }
+                        ens.AddEntity(en);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // warning 不应该出现的错误. 2011-12-03 add
+                    String cols = "";
+                    foreach (DataColumn dc in dt.Columns)
+                    {
+                        cols += " , " + dc.ColumnName;
+                    }
+                    throw new Exception("Columns=" + cols + "@Ens=" + ens.ToString() + " @异常信息:" + ex.Message);
+                }
+
+                return ens;
+            }
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                Entity en = ens.GetNewEntity;
+                foreach (String str in fullAttrs)
+                {
+                    if (dt.Columns.Contains(str) == false
+                                && dt.Columns.Contains(str.ToUpper()) == false)
+                        continue;
+                    if (isUpper == true)
+                    {
+                        if ((SystemConfig.AppCenterDBType == DBType.KingBase
+                                    || SystemConfig.AppCenterDBType == DBType.Oracle)
+                            && dt.Columns.Contains(str) == true)
+                            en.SetValByKey(str, dr[str]);
+                        else
+                            en.SetValByKey(str, dr[str.ToUpper()]);
+                    }
+
+                    else
+                        en.SetValByKey(str, dr[str]);
+
+                }
+                ens.AddEntity(en);
+            }
+
+            return ens;
+
         }
 
         public string GenerPKsByTableWithPara(string pk, string sql, int from, int to,Paras paras)
@@ -217,18 +299,12 @@ namespace BP.Sys
                 i++;
                 if (i > from)
                 {
-                    paraI++;
-                    if (dbStr == "?")
-                        pks += "?,";
-                    else
-                        pks += SystemConfig.AppCenterDBVarStr + "R" + paraI + ",";
-
+       
+                 
                     if (pk.Equals("OID") || pk.Equals("WorkID") || pk.Equals("NodeID"))
-                        paras.Add("R" + paraI, int.Parse(dr[0].ToString()));
+                        pks+=int.Parse(dr[pk].ToString())+",";
                     else
-                        paras.Add("R" + paraI, dr[0].ToString());
-
-
+                        pks += "'"+ dr[pk].ToString() + "',";
                     if (i >= to)
                         return pks.Substring(0, pks.Length - 1);
                 }

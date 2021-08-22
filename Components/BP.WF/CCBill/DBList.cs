@@ -18,7 +18,8 @@ namespace BP.CCBill
     /// </summary>
     public class DBListAttr : FrmAttr
     {
-
+        public const string MainTable = "MainTable";
+        public const string MainTablePK = "MainTablePK";
     }
     /// <summary>
     /// 数据源实体
@@ -308,12 +309,20 @@ namespace BP.CCBill
             {
                 return this.GetValStrByKey(MapDataAttr.DBSrc);
             }
+            set
+            {
+                this.SetValByKey(MapDataAttr.DBSrc, value);
+            }
         }
         public string ExpEn
         {
             get
             {
                 return this.GetValStrByKey(MapDataAttr.ExpEn);
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.ExpEn, value);
             }
         }
         public string ExpList
@@ -322,12 +331,42 @@ namespace BP.CCBill
             {
                 return this.GetValStrByKey(MapDataAttr.ExpList);
             }
+            set
+            {
+                this.SetValByKey(MapDataAttr.ExpList, value);
+            }
         }
         public string ExpCount
         {
             get
             {
                 return this.GetValStrByKey(MapDataAttr.ExpCount);
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.ExpCount, value);
+            }
+        }
+        public string MainTable
+        {
+            get
+            {
+                return this.GetValStrByKey(DBListAttr.MainTable);
+            }
+            set
+            {
+                this.SetValByKey(DBListAttr.MainTable, value);
+            }
+        }
+        public string MainTablePK
+        {
+            get
+            {
+                return this.GetValStrByKey(DBListAttr.MainTablePK);
+            }
+            set
+            {
+                this.SetValByKey(DBListAttr.MainTablePK, value);
             }
         }
         #endregion
@@ -372,15 +411,17 @@ namespace BP.CCBill
                 #endregion 基本属性.
 
                 #region 数据源.
-                map.AddDDLSysEnum(MapDataAttr.DBType, 0, "数据源类型", true, true, "WindowsDBType",
-         "@0=数据库查询SQL@1=执行Url返回Json@2=执行\\DataUser\\JSLab\\Windows.js的函数.");
-                map.AddDDLEntities(MapDataAttr.DBSrc, null, "数据源", new BP.Sys.SFDBSrcs(), true);
+                map.AddTBInt(MapDataAttr.DBType, 0, "数据源类型", true, true);
+                map.AddTBString(MapDataAttr.DBSrc, null, "数据源", false, false, 0, 600, 20);
 
-                map.AddTBString(MapDataAttr.ExpEn, null, "实体数据源", true, false, 0, 600, 20, true);
-                map.AddTBString(MapDataAttr.ExpList, null, "列表数据源", true, false, 0, 600, 20, true);
-                map.AddTBString(MapDataAttr.ExpCount, null, "列表总数", true, false, 0, 600, 20, true);
+                map.AddTBString(MapDataAttr.ExpEn, null, "实体数据源", false, false, 0, 600, 20, true);
+                map.AddTBString(MapDataAttr.ExpList, null, "列表数据源", false, false, 0, 600, 20, true);
+
+                map.AddTBString(DBListAttr.MainTable, null, "列表数据源主表", false, false, 0, 50, 20, false);
+                map.AddTBString(DBListAttr.MainTablePK, null, "列表数据源主表主键", false, false, 0, 50, 20, false);
+                map.AddTBString(MapDataAttr.ExpCount, null, "列表总数", false, false, 0, 600, 20, true);
+
                 #endregion 数据源.
-
 
                 #region 外观.
                 map.AddDDLSysEnum(FrmAttr.RowOpenModel, 2, "行记录打开模式", true, true,
@@ -428,8 +469,18 @@ namespace BP.CCBill
                 RefMethod rm = new RefMethod();
 
                 rm = new RefMethod();
-                rm.Title = "字段匹配"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoMethod";
+                rm.Title = "步骤1: 设置数据源."; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoDBSrc";
+                rm.Icon = "../../WF/Img/Event.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "步骤2: 实体数据"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoExpEn";
                 rm.Icon = "../../WF/Img/Event.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -437,7 +488,28 @@ namespace BP.CCBill
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "步骤3: 列表数据"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoExpList";
+                rm.Icon = "../../WF/Img/Event.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "步骤4: 测试"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoDBList";
+                rm.Icon = "../../WF/Img/Event.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+
+
+                rm = new RefMethod();
                 rm.Title = "查询条件"; // "设计表单";
+                                   //   rm.GroupName = "高级选项";
                 rm.ClassMethodName = this.ToString() + ".DoSearch";
                 rm.Icon = "../../WF/Img/Event.png";
                 rm.Visable = true;
@@ -452,9 +524,22 @@ namespace BP.CCBill
         }
         #endregion
 
-        public string DoMethod()
+        public string DoDBSrc()
+        {
+            return "../../Comm/RefFunc/EnOnly.htm?EnName=BP.CCBill.DBListDBSrc&No=" + this.No;
+        }
+
+        public string DoExpEn()
         {
             return "../../CCBill/Admin/DBList/FieldsORM.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=ss3";
+        }
+        public string DoExpList()
+        {
+            return "../../CCBill/Admin/DBList/ListDBSrc.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=ss3";
+        }
+        public string DoDBList()
+        {
+            return "../../CCBill/SearchDBList.htm?FrmID=" + this.No;
         }
         public string DoSearch()
         {

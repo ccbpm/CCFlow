@@ -150,7 +150,7 @@ namespace BP.CCBill
             Attrs attrs = en.EnMap.Attrs;
             foreach (Attr item in attrs)
             {
-                if (BP.WF.Glo.FlowFields.Contains("," + item.Key + ",") == true)
+                if (item.Key.Equals("BillNo")==false &&BP.WF.Glo.FlowFields.Contains("," + item.Key + ",") == true)
                     continue;
 
                 var val = en.GetValStrByKey(item.Key);
@@ -687,8 +687,19 @@ namespace BP.CCBill
             if (md.DTSearchWay != DTSearchWay.None && md.GetParaInt("DTShowWay") == 1)
             {
                 GEEntity en = new GEEntity(this.FrmID);
-                string sql = "SELECT min(" + md.DTSearchKey + ") From " + en.EnMap.PhysicsTable ;
-                md.SetPara("DateShowYear", DBAccess.RunSQLReturnStringIsNull(sql, ""));
+                try
+                {
+                    string sql = "SELECT min(" + md.DTSearchKey + ") From " + en.EnMap.PhysicsTable;
+                    md.SetPara("DateShowYear", DBAccess.RunSQLReturnStringIsNull(sql, ""));
+                }
+                catch(Exception e)
+                {
+                    GEEntity rpt = new GEEntity(this.FrmID);
+                    rpt.CheckPhysicsTable();
+                    string sql = "SELECT min(" + md.DTSearchKey + ") From " + en.EnMap.PhysicsTable;
+                    md.SetPara("DateShowYear", DBAccess.RunSQLReturnStringIsNull(sql, ""));
+                }
+               
             }
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
             //获取字段属性
@@ -838,7 +849,7 @@ namespace BP.CCBill
             catch(Exception e)
             {
                 methods.GetNewEntity.CheckPhysicsTable();
-                methods.Retrieve(MethodAttr.FrmID, this.FrmID, MethodAttr.IsSearchBar, 1, MethodAttr.Idx);
+                methods.Retrieve(MethodAttr.FrmID, this.FrmID, MethodAttr.IsSearchBar, 1,MethodAttr.IsEnable,1, MethodAttr.Idx);
 
             }
             ds.Tables.Add(methods.ToDataTableField("Frm_Method"));
@@ -934,12 +945,121 @@ namespace BP.CCBill
 
             }
         }
+        public string Search_TreeData()
+        {
+            MapData mapData = new MapData(this.FrmID);
+            int listShowWay = mapData.GetParaInt("ListShowWay");
+            string listShowWayKey = mapData.GetParaString("ListShowWayKey");
+            if (DataType.IsNullOrEmpty(listShowWayKey) == true)
+                return "err@树形结构展示的字段不存在，请检查查询条件设置中展示方式配置是否正确";
+            MapAttr mapAttr = new MapAttr(this.FrmID + "_" + listShowWayKey);
+              //获取绑定的数据源
+            if (DataType.IsNullOrEmpty(mapAttr.UIBindKey) == true)
+                return "err@字段" + mapAttr.Name + "绑定的外键或者外部数据源不存在,请检查字段属性[外键SFTable]是否为空";
+            DataTable dt = BP.Pub.PubClass.GetDataTableByUIBineKey(mapAttr.UIBindKey);
+            return BP.Tools.Json.ToJson(dt);
+            
+        }
 
+        /// <summary>
+        /// 实体、单据列表显示的字段
+        /// </summary>
+        /// <returns></returns>
         public string Search_MapAttr()
         {
+            DBList dblist = new DBList(this.FrmID);
+            if (dblist.EntityType == EntityType.DBList)
+                return Search_MapAttrForDB();
             #region 查询显示的列
             MapAttrs mapattrs = new MapAttrs();
             mapattrs.Retrieve(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.Idx);
+            MapExts mapExts = new MapExts();
+            QueryObject qo = new QueryObject(mapExts);
+            qo.AddWhere(MapExtAttr.FK_MapData, this.FrmID);
+            qo.addAnd();
+            qo.AddWhereIn(MapExtAttr.ExtType, "('MultipleChoiceSmall','SingleChoiceSmall')");
+            qo.DoQuery();
+            foreach(MapExt mapExt in mapExts)
+            {
+                //获取mapAttr
+                MapAttr mapAttr = mapattrs.GetEntityByKey(this.FrmID + "_" + mapExt.AttrOfOper) as MapAttr;
+                string searchVisable = mapAttr.atPara.GetValStrByKey("SearchVisable");
+                if (searchVisable == "0")
+                    continue;
+                mapAttr.SetPara("SearchVisable", 0);
+                mapAttr.Update();
+                mapAttr = mapattrs.GetEntityByKey(this.FrmID + "_" + mapExt.AttrOfOper+"T") as MapAttr;
+                mapAttr.SetPara("SearchVisable", 1);
+                mapAttr.Update();
+            }
+            DataRow row = null;
+            DataTable dt = new DataTable("Attrs");
+            dt.Columns.Add("KeyOfEn", typeof(string));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Width", typeof(int));
+            dt.Columns.Add("UIContralType", typeof(int));
+            dt.Columns.Add("LGType", typeof(int));
+            dt.Columns.Add("MyDataType", typeof(int));
+            dt.Columns.Add("UIBindKey", typeof(string));
+            dt.Columns.Add("AtPara", typeof(string));
+
+            //设置标题、单据号位于开始位置
+            foreach (MapAttr attr in mapattrs)
+            {
+                string searchVisable = attr.atPara.GetValStrByKey("SearchVisable");
+                if (searchVisable == "0")
+                    continue;
+                if (DataType.IsNullOrEmpty(searchVisable)==true && attr.UIVisible == false)
+                    continue;
+                row = dt.NewRow();
+                row["KeyOfEn"] = attr.KeyOfEn;
+                row["Name"] = attr.Name;
+                row["Width"] = attr.UIWidthInt;
+                row["UIContralType"] = attr.UIContralType;
+                row["LGType"] = attr.LGType;
+                row["MyDataType"] = attr.MyDataType;
+                row["UIBindKey"] = attr.UIBindKey;
+                row["AtPara"] = attr.GetValStringByKey("AtPara");
+                dt.Rows.Add(row);
+            }
+
+            #endregion 查询显示的列
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dt);
+            //增加枚举
+            MapData mapData = new MapData(this.FK_MapData);
+            ds.Tables.Add(mapData.SysEnums.ToDataTableField("Sys_Enum"));
+            //查询一行数据的操作
+            Methods methods = new Methods();
+            methods.Retrieve(MethodAttr.FrmID, this.FrmID, MethodAttr.IsList, 1, MethodAttr.Idx);
+
+            ds.Tables.Add(methods.ToDataTableField("Frm_Method"));
+            
+            return BP.Tools.Json.ToJson(ds);
+        }
+        /// <summary>
+        /// 获取数据源实体列表显示的列及操作列方法
+        /// </summary>
+        /// <returns></returns>
+        public string Search_MapAttrForDB()
+        {
+            DBList dblist = new DBList(this.FrmID);
+            #region 查询显示的列
+            MapAttrs mapattrs = new MapAttrs();
+            mapattrs.Retrieve(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.Idx);
+            if (dblist.DBType == 1)
+                return "err@数据源实体执行URL返回的JSON暂未支持";
+            //查询列表数据源显示的列
+            if (DataType.IsNullOrEmpty(dblist.ExpList) == true)
+                return "err@数据源实体的列表数据源不能为空，请联系设计人员，检查错误原因.";
+            //替换@
+            string explist = dblist.ExpList;
+            if (explist.ToUpper().Contains("WHERE") == false)
+                explist += " WHERE 1=2";
+            if (DataType.IsNullOrEmpty(dblist.DBSrc) == true)
+                dblist.DBSrc = "local";
+            SFDBSrc dbSrc = new SFDBSrc(dblist.DBSrc);
+            DataTable listDT = dbSrc.RunSQLReturnTable(explist);
 
             DataRow row = null;
             DataTable dt = new DataTable("Attrs");
@@ -953,15 +1073,13 @@ namespace BP.CCBill
             dt.Columns.Add("AtPara", typeof(string));
 
             //设置标题、单据号位于开始位置
-
-
-            foreach (MapAttr attr in mapattrs)
+            foreach (DataColumn col in listDT.Columns)
             {
-                string searchVisable = attr.atPara.GetValStrByKey("SearchVisable");
-                if (searchVisable == "0")
+                //获取key
+                string key = col.ColumnName;
+                if (DataType.IsNullOrEmpty(key) == true)
                     continue;
-                if (attr.UIVisible == false)
-                    continue;
+                MapAttr attr = mapattrs.GetEntityByKey(this.FrmID + "_" + key) as MapAttr;
                 row = dt.NewRow();
                 row["KeyOfEn"] = attr.KeyOfEn;
                 row["Name"] = attr.Name;
@@ -988,6 +1106,7 @@ namespace BP.CCBill
 
             return BP.Tools.Json.ToJson(ds);
         }
+
 
         public string Search_Init()
         {
@@ -1535,7 +1654,10 @@ namespace BP.CCBill
             #endregion
             if (md.DBType == 0)
             {
-                
+                string mainTable = md.MainTable;
+                if (DataType.IsNullOrEmpty(mainTable) == false)
+                    mainTable = mainTable + ".";
+                string mainTablePK = md.MainTablePK;
                 if (expList.ToUpper().IndexOf("WHERE") == -1)
                     expList += " WHERE 1=1 ";
                 if (expCount.ToUpper().IndexOf("WHERE") == -1)
@@ -1543,6 +1665,7 @@ namespace BP.CCBill
                 string whereSQL = "";
                 bool isFirstSearchKey = true;
                 bool isFirstDateKey = true;
+
                 foreach (DataRow dataRow in whereDT.Rows)
                 {
                     string key = dataRow["Key"].ToString();
@@ -1562,13 +1685,13 @@ namespace BP.CCBill
                         if (isFirstSearchKey)
                         {
                             isFirstSearchKey = false;
-                            whereSQL += " AND (" + key + " like %" + dataRow["Value"].ToString() + "% ";
+                            whereSQL += " AND (" + mainTable+ key + " like %" + dataRow["Value"].ToString() + "% ";
                         }
                         else
-                            whereSQL += " OR " + key + " like %" + dataRow["Value"].ToString() + "% ";
+                            whereSQL += " OR " + mainTable + key + " like %" + dataRow["Value"].ToString() + "% ";
                     }
                     if (type.Equals("StringKey") == true)
-                        whereSQL += " AND " + key + " like %" + dataRow["Value"].ToString() + "% ";
+                        whereSQL += " AND " + mainTable + key + " like %" + dataRow["Value"].ToString() + "% ";
                     //时间解析
                     if (type.Equals("Date") == true)
                     {
@@ -1581,11 +1704,11 @@ namespace BP.CCBill
                         if (isFirstDateKey == true)
                         {
                             isFirstDateKey = false;
-                            whereSQL += " AND (" + key + " " + dataRow["Oper"].ToString() + " '" + dataRow["Value"].ToString() + "' ";
+                            whereSQL += " AND (" + mainTable + key + " " + dataRow["Oper"].ToString() + " '" + dataRow["Value"].ToString() + "' ";
                             continue;
                         }
                         if (isFirstDateKey == false)
-                            whereSQL += " AND " + key + " " + dataRow["Oper"].ToString() + " '" + dataRow["Value"].ToString() + "')";
+                            whereSQL += " AND " + mainTable + key + " " + dataRow["Oper"].ToString() + " '" + dataRow["Value"].ToString() + "')";
                     }
                     if (type.Equals("Select") == true || type.Equals("Normal") == true)
                     {
@@ -1594,32 +1717,22 @@ namespace BP.CCBill
                             isFirstSearchKey = true;
                             whereSQL += ")";
                         }
-                        whereSQL += " AND " + key + " " + dataRow["Oper"].ToString() + " '" + dataRow["Value"].ToString() + "'";
+                        whereSQL += " AND " + mainTable + key + " " + dataRow["Oper"].ToString() + " '" + dataRow["Value"].ToString() + "'";
 
                     }
                 }
 
                 expCount = expCount + whereSQL;
-                DataTable dt = null;
 
-                //本机数据库查询
-                if (md.DBSrc == "local" || DataType.IsNullOrEmpty(md.DBSrc) == true)
-                {
-                    QueryObject qo = new QueryObject();
-                    qo.SQL = expList+ whereSQL;
-                    qo.DoQuery("OID", this.PageSize, this.PageIdx);
-                    ur.SetPara("RecCount", DBAccess.RunSQLReturnValInt(expCount));
-                    ur.Save();
-                }
-                else
-                {
-                    SFDBSrc dbsrc = new SFDBSrc(md.DBSrc);
-                    int count = dbsrc.RunSQLReturnInt(expCount, 0);
-                    dt = dbsrc.DoQuery(expList, count, "OID", this.PageSize, this.PageIdx, ur.OrderBy);
-                    ur.SetPara("RecCount", count);
-                    ur.Save();
-                }
-                dt.TableName = "DT";
+                if (DataType.IsNullOrEmpty(md.DBSrc) == true)
+                    md.DBSrc = "local";
+                
+                SFDBSrc dbsrc = new SFDBSrc(md.DBSrc);
+                int count = dbsrc.RunSQLReturnInt(expCount, 0);
+                dbsrc.DoQuery(rpts,expList, expCount, count, mainTable, md.MainTablePK, this.PageSize, this.PageIdx, ur.OrderBy);
+                ur.SetPara("RecCount", count);
+                ur.Save();
+                DataTable dt = rpts.ToDataTableField("DT");
                 ds.Tables.Add(dt); //把数据加入里面.
 
             }

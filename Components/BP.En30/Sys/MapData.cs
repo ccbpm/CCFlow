@@ -98,7 +98,6 @@ namespace BP.Sys
         /// 版本号
         /// </summary>
         public const string Ver = "Ver";
-     
         /// <summary>
         /// 应用类型
         /// </summary>
@@ -115,6 +114,9 @@ namespace BP.Sys
         ///组织结构.
         /// </summary>
         public const string OrgNo = "OrgNo";
+        /// <summary>
+        /// Icon.
+        /// </summary>
         public const string Icon = "Icon";
 
         #region DBList类型的实体.
@@ -138,6 +140,10 @@ namespace BP.Sys
         /// 表达式
         /// </summary>
         public const string ExpCount = "ExpCount";
+        /// <summary>
+        /// 分页的模式
+        /// </summary>
+        public const string ExpListPageModel = "ExpListPageModel";
         #endregion DBList类型的实体.
 
 
@@ -566,7 +572,7 @@ namespace BP.Sys
                     {
                         if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                         {
-                          
+
                             string enumKeySQL = "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData = '" + this.No + "' AND LGType = 1 ";
                             string sqlWhere = " EnumKey IN (" + enumKeySQL + ") AND OrgNo='" + BP.Web.WebUser.OrgNo + "'";
                             string sqlEnum = "SELECT * FROM Sys_Enum WHERE " + sqlWhere;
@@ -1177,7 +1183,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetValByKey(MapDataAttr.EntityType, (EntityType)value);
+                this.SetValByKey(MapDataAttr.EntityType, (int)value);
             }
         }
         #endregion
@@ -1703,7 +1709,7 @@ namespace BP.Sys
 
             MapData mdOld = new MapData();
             mdOld.No = specFrmID;
-            int count =  mdOld.RetrieveFromDBSources();
+            int count = mdOld.RetrieveFromDBSources();
             mdOld.Delete();
 
 
@@ -1783,7 +1789,7 @@ namespace BP.Sys
 
                             //表单类别编号不为空，则用原表单类别编号
                             md.FK_FormTree = mdOld.FK_FormTree;
-                            
+
                             if (DataType.IsNullOrEmpty(mdOld.PTable) == false)
                                 md.PTable = mdOld.PTable;
                             //如果物理表为空，则使用编号为物理数据表
@@ -1793,14 +1799,14 @@ namespace BP.Sys
                             if (DataType.IsNullOrEmpty(mdOld.Name) == false)
                                 md.Name = mdOld.Name;
 
-                            if(count==1)
+                            if (count == 1)
                                 md.HisFrmType = mdOld.HisFrmType;
                             if (frmType == FrmType.Develop)
                                 md.HisFrmType = FrmType.Develop;
 
                             if (entityType != md.HisEntityType)
                                 md.HisEntityType = entityType;
-                           
+
 
 
                             //表单应用类型保持不变
@@ -2117,7 +2123,7 @@ namespace BP.Sys
                             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                             {
                                 se.OrgNo = BP.Web.WebUser.OrgNo;
-                              //  se.RefPK = se.OrgNo + "_" + se.EnumKey;
+                                //  se.RefPK = se.OrgNo + "_" + se.EnumKey;
                                 se.MyPK = se.EnumKey + "_" + se.Lang + "_" + se.IntKey + "_" + se.OrgNo;
                                 if (se.IsExits)
                                     continue;
@@ -2534,12 +2540,29 @@ namespace BP.Sys
         {
             string sql = "";
             // 检查该表单是否可以被删除?
-            if (DBAccess.IsExitsObject("GPM_Menu") == true)
+            if ( DBAccess.IsExitsObject("GPM_Menu") == true)
             {
-                // 是否有菜单引用?
-                sql = "SELECT  COUNT(*) AS Num   FROM GPM_Menu WHERE UrlExt='" + this.No + "'";
-                if (DBAccess.RunSQLReturnValInt(sql) > 0)
-                    throw new Exception("err@该表单已经被菜单引用，您不能删除.");
+                //// 是否有菜单引用?
+                //sql = "SELECT  COUNT(*) AS Num FROM GPM_Menu WHERE Mark='" + this.No + "'";
+                //if (DBAccess.RunSQLReturnValInt(sql) > 0)
+                //    throw new Exception("err@该表单已经被菜单引用，您不能删除.");
+
+                //删除菜单.
+                sql = "DELETE FROM GPM_Menu WHERE Mark='"+this.No+"' OR URLExt='"+this.No+"'";
+                DBAccess.RunSQL(sql);
+
+                //删除集合方法.
+                sql = "DELETE FROM Frm_Collection WHERE FrmID='" + this.No + "'";
+                DBAccess.RunSQL(sql);
+
+                //删除实体组件.
+                sql = "DELETE FROM Frm_Method WHERE FrmID='" + this.No + "'";
+                DBAccess.RunSQL(sql);
+
+                //删除实体组件.
+                sql = "DELETE FROM Frm_Method WHERE FrmID='" + this.No + "'";
+                DBAccess.RunSQL(sql);
+
             }
 
             sql = "";
@@ -2617,6 +2640,10 @@ namespace BP.Sys
                     item.Delete();
             }
             #endregion 删除注册到的外检表.
+
+            #region 属性.
+            #endregion 属性.
+
 
             return base.beforeDelete();
         }

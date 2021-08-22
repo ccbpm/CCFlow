@@ -338,6 +338,8 @@ namespace BP.CCBill.Template
                 map.AddTBString(MethodAttr.MsgErr, null, "失败提示信息", true, false, 0, 300, 10, true);
                 map.AddDDLSysEnum(MethodAttr.WhatAreYouTodo, 0, "执行完毕后干啥？", true, true, MethodAttr.WhatAreYouTodo,
                 "@0=关闭提示窗口@1=关闭提示窗口并刷新@2=转入到Search.htm页面上去");
+                map.AddDDLSysEnum(MethodAttr.MethodDocTypeOfFunc, 0, "内容类型", true, false, "MethodDocTypeOfFunc",
+                "@0=SQL@1=URL@2=JavaScript@3=业务单元");
                 #endregion 对功能有效
 
 

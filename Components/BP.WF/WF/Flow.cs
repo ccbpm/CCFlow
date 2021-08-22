@@ -887,9 +887,12 @@ namespace BP.WF
                 {
                     rpt.OID = wk.OID;
                     int i = rpt.RetrieveFromDBSources();
-                    if (i == 0)
+                    if (i == 0) {
+                        GenerWorkFlow gwfw = new GenerWorkFlow();
+                        gwfw.WorkID = wk.OID;
+                        gwfw.Delete();
                         throw new Exception("err@没有保存到流程表单数据" + rpt.EnMap.PhysicsTable + ",表单表" + wk.EnMap.PhysicsTable + " 系统错误." + rpt.OID + ",请联系管理员.");
-
+                    }
                     rpt.FID = 0;
                     rpt.FlowStartRDT = DataType.CurrentDataTime;
                     rpt.FlowEnderRDT = DataType.CurrentDataTime;

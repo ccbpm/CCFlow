@@ -382,6 +382,7 @@ namespace BP.GPM.Home
 
                 // map.AddDDLSysEnum(WindowTemplateAttr.ColSpan, 1, "占的列数", true, true, WindowTemplateAttr.ColSpan,
                 //  "@1=1列@2=2列@3=覆盖新窗口");
+
                 #region 更多的信息定义.
                 map.AddTBString(WindowTemplateAttr.MoreLab, null, "更多标签", false, false, 0, 300, 20, true);
                 map.AddTBString(WindowTemplateAttr.MoreUrl, null, "更多链接", false, false, 0, 300, 20, true);
@@ -432,7 +433,6 @@ namespace BP.GPM.Home
             this.No = DBAccess.GenerGUID();
             if (DataType.IsNullOrEmpty(this.PageID) == true)
                 this.PageID = "Home";
-
             return base.beforeInsert();
         }
 
@@ -536,7 +536,7 @@ namespace BP.GPM.Home
                 }
 
                 //tab 标签页.
-                if ( item.WinDocModel.Equals(WinDocModel.Tab))
+                if (item.WinDocModel.Equals(WinDocModel.Tab))
                 {
                     TabDtls dtls = new TabDtls();
                     dtls.Retrieve(DtlAttr.RefWindowTemplate, item.No);
@@ -548,7 +548,8 @@ namespace BP.GPM.Home
                         sql = BP.WF.Glo.DealExp(sql, null);
                         try
                         {
-                            dtl.Exp0 = DBAccess.RunSQLReturnStringIsNull(sql, "0");
+                            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                            dtl.Exp0 = BP.Tools.Json.ToJson(dt); // DBAccess.RunSQLReturnStringIsNull(sql, "0");
                         }
                         catch (Exception ex)
                         {
@@ -586,7 +587,6 @@ namespace BP.GPM.Home
                     }
                 }
                 #endregion 扇形百分比.
-
 
 
                 //SQL列表. 

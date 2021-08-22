@@ -202,16 +202,38 @@ namespace BP.WF.HttpHandler
 
 
             BP.CCBill.FrmDict entityDict = new FrmDict(md.No);
-            entityDict.BillNoFormat = "3"; //编码格式.001,002,003.
-            entityDict.BtnNewModel = 0;
 
-            //设置默认的查询条件.
-            entityDict.SetPara("IsSearchKey", 1);
-            entityDict.SetPara("DTSearchWay", 0);
-
-            entityDict.EntityType = EntityType.FrmDict;
-            entityDict.Update();
+            BP.CCBill.Template.CtrlModel ctrl = new BP.CCBill.Template.CtrlModel();
+            ctrl.FrmID = this.No;
+            ctrl.CtrlObj = "BtnSearch";
+            ctrl.IsEnableAll = true;
+            ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
+            if (ctrl.RetrieveFromDBSources() == 0)
+                ctrl.Insert();
             entityDict.CheckEnityTypeAttrsFor_EntityNoName();
+
+
+            #region 初始化数据.
+            DBList db = new DBList(md.No);
+            db.MainTable = "A";
+            db.MainTablePK = "No";
+
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+            {
+                db.ExpEn = "SELECT A.No as OID, A.No as BillNo, a.Name AS Title, A.Tel, A.PinYin,A.Email , A.FK_Dept as DeptNo, B.Name AS DeptT FROM Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No AND A.No='@Key' ";
+                db.ExpList = "SELECT A.No as OID, A.No as BillNo, a.Name AS Title, A.Tel, A.PinYin,A.Email, B.No as Dept, B.Name AS DeptT FROM Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No ";
+                db.ExpCount = "SELECT  count(a.No) as Num FROM Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No ";
+            }
+            else
+            {
+                db.ExpEn = "SELECT A.No as OID, A.No as BillNo, a.Name AS Title, A.Tel, A.PinYin,A.Email , A.FK_Dept as DeptNo, B.Name AS DeptT FROM Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No AND A.No='@Key' AND A.OrgNo='@WebUser.OrgNo' ";
+                db.ExpList = "SELECT A.No as OID, A.No as BillNo, a.Name AS Title, A.Tel, A.PinYin,A.Email, B.No as Dept, B.Name AS DeptT FROM Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No AND A.OrgNo='@WebUser.OrgNo'  ";
+                db.ExpCount = "SELECT  count(a.No) as Num FROM Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No AND A.OrgNo='@WebUser.OrgNo'  ";
+            }
+
+            db.Update();
+            #endregion  初始化数据.
+
 
             return "创建成功...";
         }

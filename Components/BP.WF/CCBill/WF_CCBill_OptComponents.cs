@@ -337,7 +337,6 @@ namespace BP.CCBill
 
             return "版本创建成功.";
         }
-
         #endregion 数据版本.
 
         #region 二维码.
@@ -347,18 +346,20 @@ namespace BP.CCBill
         /// <returns></returns>
         public string QRCode_Init()
         {
-            string url = SystemConfig.HostURL + "/WF/CCBill/OptComponents/QRCode.htm?DoType=MyDict&WorkID=" + this.WorkID + "&FrmID=" + this.FrmID + "&MethodNo=" + this.GetRequestVal("MethodNo");
+            string workIDStr = this.GetRequestVal("WorkID");
+
+            string url = SystemConfig.HostURL + "/WF/CCBill/OptComponents/QRCode.htm?DoType=MyDict&WorkID=" + workIDStr + "&FrmID=" + this.FrmID + "&MethodNo=" + this.GetRequestVal("MethodNo");
             QRCodeEncoder encoder = new QRCodeEncoder();
             encoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;//编码方式(注意：BYTE能支持中文，ALPHA_NUMERIC扫描出来的都是数字)
-            encoder.QRCodeScale = 4;//大小(值越大生成的二维码图片像素越高)
-            encoder.QRCodeVersion = 0;//版本(注意：设置为0主要是防止编码的字符串太长时发生错误)
+            encoder.QRCodeScale = 4; //大小(值越大生成的二维码图片像素越高).
+            encoder.QRCodeVersion = 0; //版本(注意：设置为0主要是防止编码的字符串太长时发生错误)
             encoder.QRCodeErrorCorrect = QRCodeEncoder.ERROR_CORRECTION.H;//错误效验、错误更正(有4个等级)
             encoder.QRCodeBackgroundColor = Color.White;
             encoder.QRCodeForegroundColor = Color.Black;
 
             //生成临时文件.
             System.Drawing.Image image = encoder.Encode(url, Encoding.UTF8);
-            string tempPath = SystemConfig.PathOfTemp + "\\" + this.WorkID + ".png";
+            string tempPath = SystemConfig.PathOfTemp + "\\" + workIDStr + ".png";
             image.Save(tempPath, ImageFormat.Png);
             image.Dispose();
 

@@ -32,7 +32,7 @@ namespace BP.WF.HttpHandler
         {
             //当前的MyPK.
             string mypk = this.MyPK; //当前的主键.
-
+        
             //获得当前分组下的字段集合.
             string mypks = this.GetRequestVal("MyPKs"); //字段集合.
             int groupID = this.GetRequestValInt("GroupID");
@@ -40,20 +40,15 @@ namespace BP.WF.HttpHandler
             GroupField gf = new GroupField(groupID);
             if (gf.CtrlType.Equals("") == false)
                 return "err@你不能移动到【" + gf.Lab + "】它是非字段分组，您不能移动。";
-
-            //MapAttr attr = new MapAttr(mypk);
-            //if (attr.GroupID != gf.OID)
-            //{
-            //    // if（ attr.KeyOfEn.LastIndexOf("_RDT")!=0 || attr.KeyOfEn.LastIndexOf("_Checker") != 0
-            //    //   || attr.KeyOfEn.LastIndexOf("_Checker") != 0
-            //}
-
+            string sql = "";
             string[] strs = mypks.Split(',');
             for (int i = 0; i < strs.Length; i++)
             {
                 var str = strs[i];
-                // string sql = "UPDATE Sys_MapAttr SET FK_FormTree ='" + sortNo + "',Idx=" + i + " WHERE MyPK='" + str + "'";
-                string sql = "UPDATE Sys_MapAttr SET GroupID=" + groupID + ", Idx=" + i + " WHERE MyPK='" + str + "'";
+                if(str.Equals(mypk))
+                    sql = "UPDATE Sys_MapAttr SET GroupID=" + groupID + ", Idx=" + i + " WHERE MyPK='" + str + "'";
+                else
+                    sql = "UPDATE Sys_MapAttr SET Idx=" + i + " WHERE MyPK='" + str + "'";
                 DBAccess.RunSQL(sql);
             }
             return "表单顺序移动成功..";

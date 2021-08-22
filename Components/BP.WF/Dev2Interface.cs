@@ -10074,7 +10074,7 @@ namespace BP.WF
             Int64 fid = 0, string flowNo = "", string flowName = "", int nodeID = 0, string nodeName = "")
         {
             BP.CCBill.Track tk = new BP.CCBill.Track();
-            tk.WorkID = workID;
+            tk.WorkID = workID.ToString();
             tk.FrmID = frmID;
             tk.FrmName = frmName;
             tk.ActionType = "BBS";
@@ -10099,7 +10099,7 @@ namespace BP.WF
             tk.Save();
 
             //修改抄送状态
-            BP.WF.Dev2Interface.Node_CC_SetCheckOver(workID);
+            BP.WF.Dev2Interface.Node_CC_SetCheckOver(  workID );
         }
         #endregion 写入轨迹.
 

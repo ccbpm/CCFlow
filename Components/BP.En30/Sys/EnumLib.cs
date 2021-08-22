@@ -61,6 +61,10 @@ namespace BP.Sys
         /// </summary>
         PostgreSQL = 5,
         /// <summary>
+        /// 人大金仓
+        /// </summary>
+        KingBase=6,
+        /// <summary>
         /// WebService数据源
         /// </summary>
         WebServices = 100,

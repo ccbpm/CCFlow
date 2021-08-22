@@ -185,7 +185,7 @@ namespace BP.GPM.Menu2020
                 this.SetValByKey(MenuAttr.MenuType, (int)value);
             }
         }
-     
+
         /// <summary>
         /// 是否启用
         /// </summary>
@@ -336,6 +336,27 @@ namespace BP.GPM.Menu2020
         }
         protected override bool beforeDelete()
         {
+            //如果是数据源列表.
+            if (this.MenuModel.Equals("DBList") == true)
+            {
+                MapData md = new MapData(this.UrlExt);
+                md.Delete();
+
+                MapAttrs attrs = new MapAttrs();
+                attrs.Delete(MapAttrAttr.FK_MapData, this.Mark + "Bak");
+            }
+
+            //删除窗体信息.
+            if (this.MenuModel.Equals("Windows") == true)
+            {
+                BP.GPM.Home.WindowTemplates ens = new Home.WindowTemplates();
+                ens.Delete(BP.GPM.Home.WindowTemplateAttr.PageID, this.No);
+
+                // BP.GPM.Home.WindowExt.HtmlVarDtls dtls = new Home.WindowExt.HtmlVarDtls();
+                // dtls.Delete(BP.GPM.Home.WindowTemplateAttr.PageID, this.No);
+            }
+
+
             return base.beforeDelete();
         }
         /// <summary>

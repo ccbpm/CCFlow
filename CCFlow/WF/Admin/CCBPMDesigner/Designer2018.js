@@ -1231,7 +1231,7 @@ function FlowRun2020() {
 
     var baseurl = "";
     if (ccbpmRunModel == 2) {
-        baseurl = "../../Admin/";
+        baseurl = "../../../Admin/";
     } else {
         baseurl = "../";
     }

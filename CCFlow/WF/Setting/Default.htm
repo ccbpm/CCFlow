@@ -54,10 +54,6 @@
                                     <a href="Author.htm">设置委托</a>
                                 </div>
                             </div>
- 
-
-
-
                         </div>
                     </td>
 
@@ -116,6 +112,16 @@
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
+
+            var webUser = new WebUser();
+
+            if (webUser.CCBPMRunModel == 2)
+            {
+                window.location.href = "../App/Setting/Default.htm";
+                return;
+            }
+
+
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
             var data = handler.DoMethodReturnString("Default_Init");

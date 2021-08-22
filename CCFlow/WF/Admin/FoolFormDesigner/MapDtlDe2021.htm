@@ -454,8 +454,7 @@
         function Edit(mypk, ftype, gf, fk_mapdata, uiControlType) {
             var parentwin = parent.window;
             if (parentwin) {
-
-                var iFrame = parentwin.document.getElementById("F");
+                var iFrame = parentwin.document.getElementById("F" + fk_mapdata);
                 if (iFrame!=null && iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {
                     parentwin.Edit(mypk, ftype, gf, fk_mapdata, uiControlType);
                     return;
@@ -530,7 +529,7 @@
 
             var parentwin = parent.window;
             if (parentwin) {
-                var iFrame = parentwin.document.getElementById("F");
+                var iFrame = parentwin.document.getElementById("F" + fk_mapdata);
 
                 if (iFrame!=null && iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {
                     parentwin.EditEnum(fk_mapdata, mypk, enumKey);
@@ -551,7 +550,7 @@
 
             if (parentwin) {
 
-                var iFrame = parentwin.document.getElementById("F");
+                var iFrame = parentwin.document.getElementById("F"  + fk_mapdata);
 
 
                 if (iFrame!=null && iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {

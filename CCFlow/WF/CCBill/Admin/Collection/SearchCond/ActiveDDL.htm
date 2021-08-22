@@ -162,6 +162,8 @@
                 en.FK_MapData = GetQueryString("FK_MapData");
                 en.AttrOfOper = GetQueryString("KeyOfEn");
                 en.ExtType = "ActiveDDLSearchCond";
+                en.Tag5 = GetQueryString("Name")
+
                 en.MyPK = mypk;
 
                 if (en.Update() == 0)

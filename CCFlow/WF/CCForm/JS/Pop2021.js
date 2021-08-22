@@ -226,15 +226,18 @@ function CommPopDialog(poptype, mapAttr, mapExt, pkval, frmData, baseUrl, mapExt
                     mtags.mtags("loadData", selectedRows);
                     target.val(mtags.mtags("getText"));
                     // 单选复制当前表单
-                    if (selectType == "0" && selectedRows.length == 1) {
-                        FullIt(selectedRows[0].No, mapExt.MyPK, targetId);
-                    }
+                    //if (selectType == "0" && selectedRows.length == 1) {
+                    //    FullIt(selectedRows[0].No, mapExt.MyPK, targetId);
+                    //}
                     var No = "";
                     if (selectedRows != null && $.isArray(selectedRows))
                         $.each(selectedRows, function (i, selectedRow) {
-                            No += selectedRow.No + ",";
+                            if (i == 0)
+                                No += selectedRow.No;
+                            else
+                                No += "," + selectedRow.No;
                         });
-
+                    FullIt(No, mapExt.MyPK, "TB_"+mapExt.AttrOfOper);
                     var attrMyPK = mapExt.FK_MapData + "_" + mapExt.AttrOfOper;
                     if (mapExts[attrMyPK] == undefined || mapExts[attrMyPK].length == 0) {
                         //执行JS

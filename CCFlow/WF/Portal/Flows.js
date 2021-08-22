@@ -128,7 +128,7 @@
             layer.msg(data);
             setTimeout(function() {
                 window.location.reload();
-            }, 2000);
+            }, 800);
         },
         DeleteFlow: function(no, pidx, idx) {
             var msg = "提示: 确定要删除该流程吗?";
@@ -296,7 +296,7 @@
 
                 setTimeout(function() {
                     window.location.reload();
-                }, 2000);
+                }, 800);
             });
         },
         updateSort(rootNo, sortNos) {

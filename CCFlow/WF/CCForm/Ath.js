@@ -4,7 +4,7 @@
 var AthParams = {};
 var athRefPKVal = 0;
 AthParams.AthInfo = {};
-var IsOnlinePreviewOfAth = getConfigByKey("IsOnlinePreviewOfAth", true);
+var IsOnlinePreviewOfAth = getConfigByKey("IsOnlinePreviewOfAth", false);
 var PreviewPathOfAth = getConfigByKey("PreviewPathOfAth", "");
 /**
 * 附件初始化

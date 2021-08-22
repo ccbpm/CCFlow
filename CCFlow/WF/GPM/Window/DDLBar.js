@@ -1,6 +1,6 @@
 ﻿
 function InitBar(optionKey) {
-
+    console.log(optionKey)
     var html = "菜单类型:";
     html += "<select id='changBar' onchange='changeOption()'>";
 

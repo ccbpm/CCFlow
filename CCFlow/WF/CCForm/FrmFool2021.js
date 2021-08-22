@@ -282,8 +282,10 @@ function InitMapAttr(frmData,tableCol,groupID) {
                 isDropTR = true;
             }
             useColSpan = 0;
-            colWidth = textWidth.replace("layui-col-md", "").replace(" layui-col-xs4");
-            colWidth = "layui-col-md" + (12 - parseInt(colWidth)) +" layui-col-xs8" ;
+            if (sumColSpan > tableCol)
+                colWidth = getColSpanClass(tableCol-textColSpan, tableCol)
+            //colWidth = textWidth.replace("layui-col-md", "").replace(" layui-col-xs4");
+            //colWidth = "layui-col-md" + (12 - parseInt(colWidth)) +" layui-col-xs8" ;
             html += "<div class='layui-row FoolFrmFieldRow'>";
             html += "<div  class='" + textWidth + " FoolFrmFieldLabel'>" + GetLab(attr, frmData) + "</div>";
             html += "<div  class='" + colWidth + " FoolFrmFieldInput' id='TD_" + attr.KeyOfEn + "'>" + InitMapAttrOfCtrlFool(frmData,attr) + "</div>";
@@ -469,7 +471,8 @@ function InitMapAttrOfCtrlFool(frmData,mapAttr) {
                         eleHtml += "</div>";
                         return eleHtml;
                     case 18://按钮
-                        return "<input type='button' class='" + ccsCtrl + "'  id='Btn_" + mapAttr.KeyOfEn + "' name='Btn_" + mapAttr.KeyOfEn + "' value='" + mapAttr.Name + "' onclick=''/>";
+                        return Gener_Btn(frmData, mapAttr);
+                        //return "<input type='button' class='" + ccsCtrl + "'  id='Btn_" + mapAttr.KeyOfEn + "' name='Btn_" + mapAttr.KeyOfEn + "' value='" + mapAttr.Name + "' onclick=''/>";
                     case 50://工作进度
                         return "<img  src='./Img/JobSchedule.png'  " + ccsCtrl + " style='border:0px;height:" + mapAttr.UIHeight + "px;width:100%;' id='Img" + mapAttr.KeyOfEn + "' />";
                     case 101://评分标准
@@ -869,7 +872,55 @@ function Ele_Dtl(frmDtl) {
     
     return "<iframe style='width:100%;height:100%' name='Dtl' ID='Frame_" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
 }
-   
+/**
+ * 按钮组件的解析
+ * @param {any} frmData
+ * @param {any} mapAttr
+ */
+function Gener_Btn(frmData, mapAttr) {
+    var btnId = mapAttr.KeyOfEn;
+    if (btnId == null || btnId == undefined || btnId == "")
+        btnId = mapAttr.MyPK;
+
+    var doc = mapAttr.Tag;
+    doc = doc.replace("~", "'");
+    var eventType = mapAttr.UIIsEnable;
+    var onclick = "";
+    if (eventType == 0) //禁用
+        onclick = "disabled='disabled' style='background:gray;'";
+  
+    if (eventType == 1) { //运行URL
+        var attrs = frmData.Sys_MapAttr;
+        for (var i = 0; i < attrs.length; i++) {
+            var attr = attrs[i];
+            if (doc.indexOf('@' + attr.KeyOfEn) > 0)
+                doc = doc.replace('@' + attr.KeyOfEn, frmData.MainTable[0][obj.KeyOfEn]);
+        }
+
+        var oid = GetQueryString("OID");
+        if (oid == undefined || oid == "");
+        oid = GetQueryString("WorkID");
+        var FK_Node = GetQueryString("FK_Node");
+        var FK_Flow = GetQueryString("FK_Flow");
+        var userNo = webUser.No;
+        var SID = webUser.SID;
+        if (SID == undefined)
+            SID = "";
+        if (doc.indexOf("?") == -1)
+            doc = doc + "?1=1";
+        doc = doc + "&OID=" + oid + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
+        onclick = "onclick='window.open(\"" + doc + ")'";
+    }
+
+    ////运行URL
+    if (eventType == 2) {
+        if (doc.indexOf("(") == -1)
+            doc = doc + "()";
+        doc = doc.replace(/~/g, "'");
+        onclick = 'onclick="' + doc + '"';
+    }
+    return "<button type='button' class='layui-btn layui-btn-sm' id='" + btnId + "' type='button' " + onclick + ">" + mapAttr.Name+"</button>";
+}
 /**
     * 获取表单显示的列数
     * @param {any} tableColType

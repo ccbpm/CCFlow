@@ -38,9 +38,11 @@ new Vue({
                 var systemFunc = function (data, oThis) {
                     var url = window.location.href;
                     url = url.replace('List.htm', data.id + '.htm');
-                    
-                    window.parent.Condlist.openTab(data.title, url);
-                   // OpenLayuiDialog(url, "", 0, 0, null, true);
+
+                    window.location.href = url;
+
+                    // window.parent.Condlist.openTab(data.title, url);
+                    // OpenLayuiDialog(url, "", 0, 0, null, true);
 
                 }
                 var systemOptions = [{
@@ -123,7 +125,7 @@ new Vue({
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond2020");
             handler.AddPara("MyPKs", currentNodeArrStr);
             var data = handler.DoMethodReturnString("List_Move");
-          //  layer.msg(data);
+            //  layer.msg(data);
             //设置tonodeID.
             // handler.AddPara("ToNodeID", GetQueryString("ToNodeID"));
 

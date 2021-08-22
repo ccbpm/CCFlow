@@ -24,6 +24,81 @@ function GetDataTableByDB(dbSrc, dbType, dbSource, keyVal) {
     return dataObj;
 }
 /**
+* 文本自动完成表格展示
+*/
+function showDataGrid(tbid, selectVal, mapExtMyPK) {
+    var mapExt = new Entity("BP.Sys.MapExt", mapExtMyPK);
+    var dataObj = GetDataTableByDB(mapExt.Tag4, mapExt.DBType, mapExt.FK_DBSrc, selectVal );
+    var columns = mapExt.Tag3;
+    $("#divInfo").remove();
+    $("#" + tbid).after("<div style='position:absolute;z-index:999;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);width:100%' id='divInfo'><table class='layui-hide' id='autoTable' lay-filter='autoTable'></table></div>");
+   
+    var searchTableColumns = [{
+        field: "",
+        title: "序号",
+        templet: function (d) {
+            return d.LAY_TABLE_INDEX + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
+
+        }
+
+    }];
+
+    //显示列的中文名称.
+    if (typeof columns == "string" && columns!="") {
+        $.each(columns.split(","), function (i, o) {
+            var exp = o.split("=");
+            var field;
+            var title;
+            if (exp.length == 1) {
+                field = title = exp[0];
+            } else if (exp.length == 2) {
+                field = exp[0];
+                title = exp[1];
+            }
+            if (!isLegalName(field)) {
+                return true;
+            }
+            searchTableColumns.push({
+                field: field,
+                title: title
+
+            });
+        });
+    } else {
+        searchTableColumns.push({
+            field: "No",
+            title: "编号"
+
+        });
+        searchTableColumns.push({
+            field: "Name",
+            title: "名称"
+
+        });
+    }
+    debugger
+        var ispagination = dataObj.length > 20 ? true : false;
+        layui.use('table', function () {
+            var table = layui.table;
+            table.render({
+                elem: "#autoTable",
+                id: "autoTable",
+                cols: [searchTableColumns],
+                data:dataObj
+            })
+            //监听行单击事件（双击事件为：rowDouble）
+            table.on('row(autoTable)', function (obj) {
+                var data = obj.data;
+                $("#" + tbid).val(data.No);
+                $("#divInfo").remove();
+                FullIt(data.No, mapExt.MyPK, tbid);
+                
+            });
+        })
+   
+}
+
+/**
  * 获取文本字段的小范围多选或者单选的数据
  * @param {any} mapExt
  * @param {any} frmData
@@ -286,8 +361,6 @@ function FullIt(selectVal, refPK, elementId) {
     //没有填充其他控件
     if (i == 0)
         return;
-
-
     //执行填充主表的控件.
     FullCtrl(selectVal, elementId, mapExt);
 
@@ -463,6 +536,8 @@ function FullCtrlDDL(selectVal, ctrlID, mapExt) {
         return;
 
     var dbSrcs = doc.split('$'); //获得集合.
+    if(selectVal.indexOf(",")!=-1)
+            selectVal = "'"+selectVal.replace(/,/g,"','")+"'";
     for (var i = 0; i < dbSrcs.length; i++) {
 
         var dbSrc = dbSrcs[i];
@@ -470,7 +545,7 @@ function FullCtrlDDL(selectVal, ctrlID, mapExt) {
             continue;
         var ctrlID = dbSrc.substring(0, dbSrc.indexOf(':'));
         var src = dbSrc.substring(dbSrc.indexOf(':') + 1);
-
+       
         var db = GetDataTableByDB(src, mapExt.DBType, mapExt.FK_DBSrc, selectVal); //获得数据源.
         //重新绑定下拉框.
         GenerBindDDL("DDL_" + ctrlID, db);
@@ -487,8 +562,11 @@ function FullDtl(selectVal, mapExt,oid) {
     var url = GetLocalWFPreHref();
     var dataObj;
 
-    if (dbType == 1) {
-
+    if (dbType == 3) {
+        if(selectVal.indexOf(",")!=-1)
+            selectVal = "'"+selectVal.replace(/,/g,"','")+"'";
+        var dtls = dbSrc.Split('$');
+      
         dbSrc = DealSQL(DealExp(dbSrc), selectVal, kvs);
         dataObj = DBAccess.RunDBSrc(dbSrc, 1);
 
@@ -565,5 +643,12 @@ function DealSQL(dbSrc, key, kvs) {
     }
 
     return dbSrc;
+}
+
+function isLegalName(name) {
+    if (!name) {
+        return false;
+    }
+    return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
 }
 

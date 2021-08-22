@@ -78,8 +78,10 @@
             en.ModuleNo = moduleNo;
             en.SystemNo = module.SystemNo; //系统编号.
             en.Name = name;
-            en.UrlExt = $("#TB_No").val();
+
             en.MenuModel = "DBList"; //类型为
+            en.UrlExt = $("#TB_No").val();
+            en.Mark = $("#TB_No").val();
 
             en.Icon = "icon-book-open";
 
@@ -87,8 +89,12 @@
             en.ListModel = 1;
             en.Insert();
 
-            window.location.href = "../../Comm/En.htm?EnName=BP.GPM.Menu2020.Menu&No=" + en.No;
+            //window.location.href = "../../Comm/En.htm?EnName=BP.GPM.Menu2020.Menu&No=" + en.No;
 
+            window.location.href = "../../Comm/En.htm?EnName=BP.CCBill.DBList&No=" + en.UrlExt;
+
+
+            BP.CCBill.DBList
             //  alert("创建成功，您可以在在菜单里执行高级编辑与授权.");
             //  window.location.href = "../Menus.htm";
             // window.close();

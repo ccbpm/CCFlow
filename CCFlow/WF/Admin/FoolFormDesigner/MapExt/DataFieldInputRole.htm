@@ -33,18 +33,6 @@
 
             //设置文本框选择的值.
             $("#RB_" + en.DoWay).attr("checked", true);
-
-            if (en.Tag1 == 1)
-                document.getElementById("CB_History").checked = true;
-            else
-                document.getElementById("CB_History").checked = false;
-            if (en.Tag2 == 1) {
-                document.getElementById("CB_Impose").checked = true;
-                $("#DDL_Condition option[value='" + en.Tag3 + "']").attr("selected", "selected");
-                $("#DDL_DT option[value='" + en.Tag4 + "']").attr("selected", "selected");
-            }
-            else
-                document.getElementById("CB_Impose").checked = false;
             //绑定外键.
             var tables = new Entities("BP.Sys.MapAttrs");
             tables.Retrieve("FK_MapData", frmID, "MyDataType", 6);
@@ -54,6 +42,18 @@
             tables = new Entities("BP.Sys.MapAttrs");
             tables.Retrieve("FK_MapData", frmID, "MyDataType", 7);
             GenerBindDDLAppend("DDL_DT", tables, "KeyOfEn", "Name");
+            if (en.Tag1 == 1)
+                document.getElementById("CB_History").checked = true;
+            else
+                document.getElementById("CB_History").checked = false;
+            if (en.Tag2 == 1) {
+                document.getElementById("CB_Impose").checked = true;
+                $("#DDL_Condition").val(en.Tag3);
+                $("#DDL_DT").val(en.Tag4);
+            }
+            else
+                document.getElementById("CB_Impose").checked = false;
+            
         });
 
         //执行保存
@@ -133,14 +133,14 @@
 
                 <label for="RB_1" class="radio-inline"> <input type="radio" value="1" id="RB_1" name="RB" />启用设置</label>
             </div>
-            <div class="form-group">&nbsp; </div>
+            <div class="form-group" style="border-bottom: 1px solid #eee;">&nbsp; </div>
             <div class="form-group">
                 <input type="radio" id="CB_History" name="CB_RDT" />
                 不能输入历史日期，只能输入当前日期以及未来日期。
             </div>
             <div class="form-group">
                 <input type="radio" id="CB_Impose" name="CB_RDT" />
-                不能输入大于等于指定字段的日期。
+                只能输入指定运算符(如大于等于)指定字段的日期。
             </div>
             <div class="form-group">
                 运算符：<select id="DDL_Condition" >

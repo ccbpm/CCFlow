@@ -20638,7 +20638,7 @@ UE.plugins['table'] = function () {
             if (dragOver)return;
             dragButtonTimer = setTimeout(function () {
                 !dragOver && dragButton && dragButton.parentNode && dragButton.parentNode.removeChild(dragButton);
-            }, 2000);
+            }, 800);
         } else {
             createDragButton(table, editor);
         }

@@ -47,8 +47,16 @@
 <body>
     <div class="layui-fluid">
         <div class="layui-row layui-col-space15">
+            <!-- 左树 -->
+            <div class="layui-col-sm12 layui-col-md4 layui-col-lg3">
+                <div class="layui-card" id="treediv">
+                    <div class="layui-card-body mini-bar" id="ltTree" style="overflow: scroll;">
+
+                    </div>
+                </div>
+            </div>
             <!-- 内容主体区域 -->
-            <div class="layui-col-md12">
+            <div class="layui-col-sm12 layui-col-md8 layui-col-lg9">
                 <div class="layui-card">
                     <div class="layui-card-body">
                         <div id="view"></div>
@@ -181,13 +189,18 @@
 
         var frmDict = new Entity("BP.CCBill.FrmDict", frmID);
         var mapData = frmDict;
-        layui.use(['table', 'laytpl', 'form', 'laydate'], function () {
+        var listShowWayKey = mapData.GetPara("ListShowWayKey");
+        listShowWayKey = listShowWayKey == null || listShowWayKey == undefined ? "" : listShowWayKey;
+        var listShowWay = mapData.GetPara("ListShowWay");
+        layui.use(['table', 'laytpl', 'form', 'laydate', 'tree'], function () {
             var table = layui.table,
                 laytpl = layui.laytpl,
                 form = layui.form,
-                laydate = layui.laydate;
+                laydate = layui.laydate,
+                tree = layui.tree;
             document.title = frmDict.Name;
-
+            $("#treediv").css("height", (window.innerHeight - 40) + "px");
+            $("#ltTree").css("height", (window.innerHeight - 40) + "px");
             //初始化用户查询信息
             //当前用户查询信息.
             ur = new Entity("BP.Sys.UserRegedit");
@@ -245,7 +258,7 @@
                 })
             }
             //获取列
-            var cols = GetColoums(frmDict.GetPara("MultiTitle1"), frmDict.GetPara("MultiTitle"), frmDict.ColorSet, frmDict.SortColumns, parseInt(frmDict.RowOpenModel), frmDict.Name, 100);
+            var cols = GetColoums(frmDict.GetPara("MultiTitle1"), frmDict.GetPara("MultiTitle"), frmDict.ColorSet, frmDict.SortColumns, parseInt(frmDict.RowOpenModel), frmDict.Name, 2);
             if (searchData.dateTabSearch.key != undefined)
                 SearchByDate("month", "1月", "month", null);
             var tableData = SearchData();
@@ -283,6 +296,97 @@
 
             });
 
+
+            
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+            handler.AddUrlData();
+            var treeData = handler.DoMethodReturnString("Search_TreeData");
+            if (treeData.indexOf("err@") != -1) {
+                alert(treeData);
+                return;
+            }
+            treeData = JSON.parse(treeData);
+            treeData = getTreeJSON(treeData, listShowWay);
+
+            // 树形渲染
+            var dictTree = tree.render({
+                elem: '#ltTree',
+                id: 'ltTree',
+                data: treeData,
+                onlyIconControl: true,
+                click: function (obj) {
+                    var nodes = $(".layui-tree-txt");
+                    $.each(nodes, function (idx, node) {
+                        var theme = localStorage.getItem("themeColorInfo");
+                        theme = JSON.parse(theme);
+                        if (node.innerHTML == obj.data.title)
+                            $(node).css("color", theme.selectedMenu);
+                        else
+                            $(node).css("color", "#555");
+                    })
+                    tableData = SearchData(listShowWayKey, obj.data.id);
+                    layui.table.reload('lay_table_dict', { data: tableData });
+                    renderLaypage();
+                }
+            });
+            function getTreeJSON(jsonArray) {
+                var treeJSON = [];
+                if (listShowWay == "2") {
+                    var en = new Entity("BP.Sys.MapExt", "ActiveDDLSearchCond_" + frmID + "_" + listShowWayKey);
+                    var doc = en.Doc;
+                    var child = [];
+                    $.each(jsonArray, function (idx, item) {
+                        child = [];
+                        if (doc != "") {
+                            var data = GetDataTableByDB(doc, en.DBType, en.FK_DBSrc, item.No);
+                            $.each(data, function (idx, obj) {
+                                child.push({
+                                    title: obj.Name,
+                                    id: obj.No,
+                                    children: []
+                                })
+                            })
+                        }
+                        treeJSON.push({
+                            title: item.Name,
+                            id: item.No,
+                            children: child
+                        })
+                    })
+                    return treeJSON;
+                }
+                //获取parentNo为0的数据
+                var data = $.grep(jsonArray, function (item) {
+                    return item.ParentNo == 0;
+                });
+                if (data.length == 0)
+                    return treeJSON;
+                data = data[0];
+                treeJSON.push({
+                    title: data.Name,
+                    id: data.No,
+                    spread: true,
+                    children: getChildren(jsonArray, data.No)
+                })
+                return treeJSON;
+            }
+            
+            function getChildren(jsonArray, parentNo) {
+                var childJson = [];
+                var data = $.grep(jsonArray, function (item) {
+                    return item.ParentNo == parentNo;
+                });
+                if (data.length == 0)
+                    return childJson;
+                $.each(data, function (idx, item) {
+                    childJson.push({
+                        title: item.Name,
+                        id: item.No,
+                        children: getChildren(jsonArray, item.No)
+                    })
+                })
+                return childJson;
+            }
             //工具栏的操作
             $('#view .layui-btn').on('click', function () {
                 var type = $(this).data('type');
@@ -439,6 +543,8 @@
                 var years = [];
                 for (currYear; currYear >= year; currYear--)
                     years.push(currYear);
+                if (years.length == 0)
+                    years.push(currYear);
                 //需要展示开始时间
                 dateTabSearch = {
                     key: "Date",
@@ -508,6 +614,8 @@
                     showWay: ddlShowWays[attr.Field], //0下拉 1平铺
                     operations: []
                 });*/
+                if (attr.Field == listShowWayKey)
+                    continue;
                 selectSearch = InitDDLOperation(data, attr, val, ddlShowWays, selectSearch);
 
             }

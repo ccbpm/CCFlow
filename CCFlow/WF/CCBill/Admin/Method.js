@@ -177,7 +177,7 @@ new Vue({
             layer.msg(data);
             setTimeout(function () {
                 window.location.reload();
-            }, 2000);
+            }, 800);
         },
         DeleteMethon: function (no, pidx, idx) {
 
@@ -356,7 +356,7 @@ new Vue({
 
                 setTimeout(function () {
                     window.location.reload();
-                }, 2000);
+                }, 800);
             });
         },
         updateSort(rootNo, sortNos) {

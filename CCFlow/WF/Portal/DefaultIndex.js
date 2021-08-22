@@ -627,7 +627,7 @@ window.onload = function () {
                     layer.msg("创建成功" + data);
                     setTimeout(function () {
                         window.location.reload();
-                    }, 2000);
+                    }, 800);
                 });
             },
             DeleteSort: function (no) {
@@ -818,7 +818,7 @@ window.onload = function () {
 
                     setTimeout(function () {
                         window.location.reload();
-                    }, 2000);
+                    }, 800);
                 });
             },
 
@@ -884,7 +884,7 @@ window.onload = function () {
                 layer.msg(data);
                 setTimeout(function () {
                     window.location.reload();
-                }, 2000);
+                }, 800);
             },
             fDesigner: function (no, name) {
                 var sid = GetQueryString("SID");
@@ -957,7 +957,7 @@ window.onload = function () {
                 layer.msg(data);
                 setTimeout(function () {
                     window.location.reload();
-                }, 2000);
+                }, 800);
             },
             DeleteFlow: function (no, pidx, idx) {
                 var msg = "提示: 确定要删除该表单吗?";

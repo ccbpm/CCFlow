@@ -18,6 +18,25 @@ function isHaveAutoFull(mapAttr) {
     return false;
 }
 /**
+ * 是否有联动数据
+ * @param {any} mapAttr
+ */
+function isHaveActiveDDLSearchCond(mapAttr) {
+    if (mapExts == null || mapExts == undefined)
+        return false;
+    var isHave = false;
+    $.each(mapExts, function (idex, mapExt) {
+        if (mapExt.AttrOfOper == mapAttr.Field
+            && mapExt.ExtType == "ActiveDDLSearchCond") {
+            isHave = true;
+            return false;
+        }
+    })
+    if (isHave)
+        return true;
+    return false;
+}
+/**
 * 配置下拉框数据
 * @param frmData
 * @param mapAttr
@@ -26,13 +45,14 @@ function isHaveAutoFull(mapAttr) {
 function InitDDLOperation(frmData, mapAttr, defVal, ddlShowWays, selectSearch) {
     var operations = [];
     var isAutoFull = isHaveAutoFull(mapAttr);
-    if (isAutoFull==false)
+    var isActiveDDL = isHaveActiveDDLSearchCond(mapAttr);
+    if (isAutoFull == false && isActiveDDL==false )
         operations.push({
             name: "全部",
             value: "all"
         });
     var ens = frmData[mapAttr.Field];
-    if (ens == null) {
+    if (ens == null || ens == undefined) {
         operations.push({
             name: "否",
             value: "0"
@@ -41,32 +61,34 @@ function InitDDLOperation(frmData, mapAttr, defVal, ddlShowWays, selectSearch) {
             name: "是",
             value: "1"
         });
-    }
-    
-    ens.forEach(function (en) {
-        if (en.No == undefined)
-            if (en.IntKey == undefined) {
+    } else {
+        ens.forEach(function (en) {
+            if (en.No == undefined)
+                if (en.IntKey == undefined) {
+                    operations.push({
+                        name: en.Name,
+                        value: en.BH,
+                        selected: en.BH == defVal ? true : false
+                    });
+                } else {
+                    operations.push({
+                        name: en.Lab,
+                        value: en.IntKey,
+                        selected: en.IntKey == defVal ? true : false
+                    });
+                }
+
+            else
                 operations.push({
                     name: en.Name,
-                    value: en.BH,
-                    selected: en.BH == defVal ? true : false
+                    value: en.No,
+                    selected: en.No == defVal ? true : false
                 });
-            } else {
-                operations.push({
-                    name: en.Lab,
-                    value: en.IntKey,
-                    selected: en.IntKey == defVal ? true : false
-                });
-            }
-           
-        else
-            operations.push({
-                name: en.Name,
-                value: en.No,
-                selected: en.No == defVal ? true : false
-            });
-    })
-    if (isAutoFull == true && defVal == 'all') {
+        })
+    }
+    
+    
+    if ((isAutoFull == true || isActiveDDL==true) && defVal == 'all') {
         defVal = operations[0].value;
 
     }
@@ -383,16 +405,16 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
             var _html = "";
             var rowstr = JSON.stringify(row);
             rowstr = encodeURIComponent(rowstr);
-            if (row.BillState == 100)
-                _html += "<a href='javascript:void(0)'onclick='OpenIt(" + row.OID + "," + entityType + "," + row.BillState + ",\"" + rowstr+"\")'style='color:blue'>详情</a>";
+            if (row.BillState == 100 || entityType==100)
+                _html += "<a href='javascript:void(0)'onclick='OpenIt(\"" + row.OID + "\"," + entityType + "," + row.BillState + ",\"" + rowstr+"\")'style='color:blue'>详情</a>";
             else
-                _html += "<a href='javascript:void(0)'onclick='OpenIt(" + row.OID + "," + entityType + "," + row.BillState +")'style='color:blue'>编辑</a>";
+                _html += "<a href='javascript:void(0)'onclick='OpenIt(\"" + row.OID + "\"," + entityType + "," + row.BillState +")'style='color:blue'>编辑</a>";
             //增加其他的方法
             $.each(methods, function (idx,method) {
                 _html += "<span style='padding: 0px 3px; color:#ccc'>|</span><a href='javascript:void(0)'onclick='DoMethod(\""+method.No+"\","+row.OID+")'style='color:blue'>" + method.Name+"</a>";
             })
             if(isHaveDelOper == true)
-                _html += "<span style='padding: 0px 3px; color:#ccc'>|</span><a href='javascript:void(0)'onclick='DeleteIt("+row.OID+","+entityType+")' style='color:red'>删除</a>";
+                _html += "<span style='padding: 0px 3px; color:#ccc'>|</span><a href='javascript:void(0)'onclick='DeleteIt(\""+row.OID+"\","+entityType+")' style='color:red'>删除</a>";
             return _html;
         }
     };
@@ -420,12 +442,13 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
 /**
  * 查询数据
  */
-function SearchData() {
+function SearchData(key,val) {
     var handler = new HttpHandler("BP.CCBill.WF_CCBill");
     handler.AddUrlData()
     handler.AddPara("PageIdx", pageIdx);
     handler.AddPara("PageSize", pageSize);
-
+    if (key != null && key != undefined && key != "")
+        handler.AddPara(key, val);
     if (orderBy != null && orderBy != undefined)
         ur.OrderBy = orderBy;
     if (orderWay != null && orderWay != undefined)

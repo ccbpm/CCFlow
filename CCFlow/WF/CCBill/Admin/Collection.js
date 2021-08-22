@@ -237,7 +237,7 @@ new Vue({
         var btnStyle = "class='layui-btn layui-btn-primary layui-border-blue layui-btn-xs'";
         ens.forEach(function (en) {
 
-            if (en.Mark === "FlowNewEntity") {
+            if (en.Mark === "FlowNewEntity" || en.Mark === "FlowEntityBatchStart"  ) {
                 var doc = "<a " + btnStyle + "  href=\"javascript:DesignerFlow('" + en.FlowNo + "','" + en.Name + "');\" >设计流程</a>";
                 en.Docs = doc;
             }

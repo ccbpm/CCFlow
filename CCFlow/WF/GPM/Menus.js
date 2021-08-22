@@ -719,8 +719,8 @@ new Vue({
                 //  menu.Docs = html;
 
                 var url = "../CCBill/Sys/Func.htm?MyPK=" + menu.UrlExt + "&From=Desinger";
-                doc = "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','" + menu.Name + "','700',0,null,false);\" >功能执行</a>";
-                doc += "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.Sys.Func','" + menu.Name + "','" + menu.UrlExt + "')\" >功能属性</a>";
+                doc = "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','" + menu.Name + "','700',0,null,false);\" >打开</a>";
+                //    doc += "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.Sys.Func','" + menu.Name + "','" + menu.UrlExt + "')\" >功能属性</a>";
 
                 var url = "../CCBill/Admin/MethodDocSys/Default.htm?No=" + menu.UrlExt;
                 doc += "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','',9000,0,null,false)\" >编写脚本</a>";
@@ -734,8 +734,11 @@ new Vue({
                 var url = "../Portal/Home.htm?PageID=" + menu.No;
                 var html = "<a " + btnStyle + " href=\"javascript:addTab('" + url + "','" + menu.Name + "');\"  >打开</a>";
 
-                url = "../GPM/Window/Default.htm?PageID=" + menu.No;
-                html += "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','" + menu.Name + "','900',0,null,false);\" >编辑窗体</a>";
+                // url = "../GPM/Window/Default.htm?PageID=" + menu.No;
+                //  WF / Portal / Home.htm ? PageID = 48339c5c - a264 - 43d4 - 841c - 79b46fbfda3d & viewid=Edit
+                url = "../Portal/Home.htm?viewid=Edit&PageID=" + menu.No;
+
+                html += "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','" + menu.Name + "','1500',0,null,false);\" >编辑窗体</a>";
                 menu.Docs = html;
             }
 

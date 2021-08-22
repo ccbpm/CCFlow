@@ -1,4 +1,4 @@
-﻿
+﻿    
 new Vue({
     el: '#myEnParas',
     data: {
@@ -35,7 +35,7 @@ new Vue({
         },
         EditIt: function (no, docModel) {
             var url = "../../Comm/En.htm?EnName=BP.GPM.Home.WindowExt." + docModel + "&No=" + no;
-            OpenLayuiDialog(url, '', 900, 80, "auto", false);
+            OpenLayuiDialog(url, '', 1100, 89, "auto", false);
         },
         MoveItem(pastNodeArrStr, pastNodeId, currentNodeArrStr, currentNodeId) {
             // todo 需要重新实现接口

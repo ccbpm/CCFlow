@@ -27,7 +27,7 @@
         }
 
         .layui-tab-title li {
-            border: 1px solid #eee;
+            margin-top: 3px;
         }
 
         .layui-input-span {
@@ -41,6 +41,18 @@
             color: rgba(0, 0, 0, 0.85);
             line-height: 18px;
         }
+        .layui-form-label{ color:#808080}
+        .layui-a-this {
+            line-height: 30px;
+            height: 30px;
+            padding: 0px 10px;
+        }
+        .dateChoose .layui-tab-title {border:0px;
+        }
+        .dateChoose .layui-tab-title li{ height:30px; line-height:30px; border:0px; padding:0px;}
+        .dateChoose .layui-tab-content{ padding:5px 0px;}
+        .dateChoose .layui-tab-content a{ display:inline-block;  height:30px; line-height:30px; margin-top:3px; padding:0px 10px;}
+        .dateChoose .layui-tab-content a.layui-a-this:hover{ color:#eeeeee}
     </style>
 </head>
 <body>
@@ -61,54 +73,6 @@
     <script id="toolbar" type="text/html">
         <div class="layui-form">
             <div class="layui-form-item">
-                {{# if(d.dateTabSearch.key!=undefined){}}
-                <div class="layui-tab">
-                    <ul class="layui-tab-title">
-                        <li class="layui-this" onclick="SearchByDate('month')">月报</li>
-                        <li onclick="SearchByDate('jidu')">季报</li>
-                        <li onclick="SearchByDate('year')">年报</li>
-                    </ul>
-                    <div class="layui-tab-content">
-                        <div class="layui-tab-item layui-show">
-                            <div>
-                                <span class="layui-date-span">年度:</span>
-                                {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
-                                <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('month','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
-                                {{# }); }}
-                            </div>
-                            <div>
-                                <span class="layui-date-span">月份:</span>
-                                {{# layui.each(d.dateTabSearch.Month,function(month_idx,month){ }}
-                                <a href="javascript:void(0)" class="{{# if(d.dateTabSearch.value[1]==month){}}layui-a-this{{# } }}" onclick="SearchByDate('month','{{month}}','month',this)" style="margin-right:5px">{{month}}</a>
-                                {{# }); }}
-                            </div>
-                        </div>
-                        <div class="layui-tab-item">
-                            <div>
-                                <span class="layui-date-span">年度:</span>
-                                {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
-                                <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('jidu','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
-                                {{# }); }}
-                            </div>
-                            <div>
-                                <span class="layui-date-span">季度:</span>
-                                {{# layui.each(d.dateTabSearch.JiDu,function(JiDu_idx,jidu){ }}
-                                <a href="javascript:void(0)" class="{{# if(d.dateTabSearch.value[2]==jidu){}}layui-a-this{{# } }}" onclick="SearchByDate('jidu','{{jidu}}','jidu',this)" style="margin-right:5px">{{jidu}}</a>
-                                {{# }); }}
-                            </div>
-                        </div>
-                        <div class="layui-tab-item">
-                            <div>
-                                <span class="layui-date-span">年度:</span>
-                                {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
-                                <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('year','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
-                                {{# }); }}
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                {{# } }}
                 {{#  layui.each(d.inputSearch, function(index, item){ }}
                 <div class="layui-inline">
                     <label class="layui-form-label">{{item.label}}</label>
@@ -133,39 +97,99 @@
                 </div>
                 {{#  }); }}
                 {{#  layui.each(d.selectSearch, function(index, item){ }}
-            <div class="layui-inline">
-                <label class="layui-form-label">{{item.label}}</label>
-                {{# if(item.showWay==0){ }}
-                <div class="layui-input-inline">
-                {{# }else { }}
-                <div class="layui-input-inline" style="display:none">
-                {{# } }}
-                    <select class="layui-input" id="DDL_{{=item.key}}" name="DDL_{{=item.key}}" data-info="{{item.ShowWay}}" lay-filter="{{=item.key}}" value="{{item.value}}">
-                        {{#  layui.each(item.operations, function(k, opt){ }}
-                        <option value="{{opt.value}}" selected="{{=opt.selected}}">{{opt.name}}</option>
-                        {{#  }); }}
-                    </select>
-                </div>
-                {{# if(item.showWay==1){ }}
-                <div class="layui-tab" style="width:auto">
-                    <ul class="layui-tab-title" id="Tab_{{=item.key}}"style="margin-left:110px;border:0">
-                        {{#  layui.each(item.operations, function(k, opt){ }}
-                        <li class="layui-input-span {{# if(opt.value==item.value){}} layui-this{{# } }}" id="{{item.key}}_{{opt.value}}" onclick="SearchBySelect('{{item.key}}','{{opt.value}}')">{{opt.name}}</li>
-                        {{#  }); }}
-                    </ul>
-                </div>
-                {{# } }}
-            </div>
-                {{#  }); }}
                 <div class="layui-inline">
-                    <div class="layui-btn-container" style="padding-top: 10px;">
-                        {{#  layui.each(d.btns, function(index, item){ }}
-                        <button type="button" class="layui-btn layui-btn-sm" data-type="{{=item.type}}" data-no="{{=item.no}}" data-source="{{=item.source}}">{{item.label}}</button>
-                        {{#  }); }}
+                    <label class="layui-form-label">{{item.label}}</label>
+                    {{# if(item.showWay==0){ }}
+                    <div class="layui-input-inline">
+                        {{# }else { }}
+                        <div class="layui-input-inline" style="display:none">
+                            {{# } }}
+                            <select class="layui-input" id="DDL_{{=item.key}}" name="DDL_{{=item.key}}" data-info="{{item.ShowWay}}" lay-filter="{{=item.key}}" value="{{item.value}}">
+                                {{#  layui.each(item.operations, function(k, opt){ }}
+                                <option value="{{opt.value}}" selected="{{=opt.selected}}">{{opt.name}}</option>
+                                {{#  }); }}
+                            </select>
+                        </div>
+                        {{# if(item.showWay==1){ }}
+                        <div class="layui-tab" style="width:auto">
+                            <ul class="layui-tab-title" id="Tab_{{=item.key}}" style="margin-left:110px;border:0">
+                                {{#  layui.each(item.operations, function(k, opt){ }}
+                                <li class="layui-input-span {{# if(opt.value==item.value){}} layui-this{{# } }}" id="{{item.key}}_{{opt.value}}" onclick="SearchBySelect('{{item.key}}','{{opt.value}}')">{{opt.name}}</li>
+                                {{#  }); }}
+                            </ul>
+                        </div>
+                        {{# } }}
+                    </div>
+
+                </div>
+                {{#  }); }}
+                <div class="layui-form-item">
+                    {{# if(d.dateTabSearch.key!=undefined){}}
+                    <div class="layui-tab  dateChoose">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类别</label>
+                            <ul class="layui-tab-title">
+                                <li class="layui-this" onclick="SearchByDate('month')">月报</li>
+                                <li onclick="SearchByDate('jidu')">季报</li>
+                                <li onclick="SearchByDate('year')">年报</li>
+                            </ul>
+                        </div>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-inline">
+
+                                    <label class="layui-form-label">年度</label>
+                                    {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
+                                    <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('month','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
+                                    {{# }); }}
+                                </div>
+                                <div class="layui-inline">
+
+                                    <label class="layui-form-label">月份</label>
+                                    {{# layui.each(d.dateTabSearch.Month,function(month_idx,month){ }}
+                                    <a href="javascript:void(0)" class="{{# if(d.dateTabSearch.value[1]==month){}}layui-a-this{{# } }}" onclick="SearchByDate('month','{{month}}','month',this)" style="margin-right:5px">{{month}}</a>
+                                    {{# }); }}
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-inline">
+
+                                    <label class="layui-form-label">年度</label>
+                                    {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
+                                    <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('jidu','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
+                                    {{# }); }}
+                                </div>
+                                <div class="layui-inline">
+
+                                    <label class="layui-form-label">季度</label>
+                                    {{# layui.each(d.dateTabSearch.JiDu,function(JiDu_idx,jidu){ }}
+                                    <a href="javascript:void(0)" class="{{# if(d.dateTabSearch.value[2]==jidu){}}layui-a-this{{# } }}" onclick="SearchByDate('jidu','{{jidu}}','jidu',this)" style="margin-right:5px">{{jidu}}</a>
+                                    {{# }); }}
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-inline">
+
+                                    <label class="layui-form-label">年度</label>
+                                    {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
+                                    <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('year','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
+                                    {{# }); }}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    {{# } }}
+
+                    <div class="layui-inline">
+                        <div class="layui-btn-container" style="padding-left: 60px;">
+                            {{#  layui.each(d.btns, function(index, item){ }}
+                            <button type="button" class="layui-btn layui-btn-sm" data-type="{{=item.type}}" data-no="{{=item.no}}" data-source="{{=item.source}}">{{item.label}}</button>
+                            {{#  }); }}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     </script>
     <script>
         var frmID = GetQueryString("FrmID");
@@ -180,6 +204,11 @@
        
         var frmDict = new Entity("BP.CCBill.FrmDict", frmID);
         var mapData = frmDict;
+        var listShowWay = mapData.GetPara("ListShowWay");
+        listShowWay = listShowWay == null || listShowWay == undefined || listShowWay == "" ? "0": listShowWay;
+        if (listShowWay != "0") {
+            window.location.href = window.location.href.replace("SearchDict.htm", "SearchTree.htm");
+        }
         layui.use(['table', 'laytpl', 'form', 'laydate'], function () {
             var table = layui.table,
                 laytpl = layui.laytpl,
@@ -438,6 +467,8 @@
                 var years = [];
                 for (currYear; currYear >= year; currYear--)
                     years.push(currYear);
+                if (years.length == 0)
+                    years.push(currYear);
                 //需要展示开始时间
                 dateTabSearch={
                     key: "Date",
@@ -610,7 +641,7 @@
             styleScope.innerHTML += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:" + theme.selectedMenu + " !important\n}";
             styleScope.innerHTML += "\n .layui-form-select dl dd.layui-this{\n background-color:" + theme.selectedMenu + " !important;\n}";
             styleScope.innerHTML += "\n .layui-tab-title .layui-this{\n background-color:" + theme.selectedMenu + " !important;\n} \n .layui-tab-title>.layui-this{\n color:#fff;\n} \n .layui-tab-title li {border: 1px solid " + theme.selectedMenu + ";}";
-            styleScope.innerHTML += "\n .layui-a-this{\n background-color:" + theme.selectedMenu + ";\n padding: 3px;\n color: #fff;\n}";
+            styleScope.innerHTML += "\n .layui-a-this{\n background-color:" + theme.selectedMenu + ";\n color: #fff;\n}";
         })
     </script>
 </body>

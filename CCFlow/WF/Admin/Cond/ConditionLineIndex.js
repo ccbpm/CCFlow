@@ -115,8 +115,7 @@ window.onload = function () {
                         this.$refs['iframe-home'].contentWindow.location.reload();
                         return
                     }
-                    this.$refs['iframe-' + this.selectedTabsIndex][0].contentWindow.location
-                        .reload()
+                    this.$refs['iframe-' + this.selectedTabsIndex][0].contentWindow.location.reload()
                 })
             },
             // 关闭当前标签页

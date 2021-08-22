@@ -36,6 +36,16 @@
                 return;
             }
 
+            var intdocs = "";
+            intdocs += "<b>欢迎使用驰骋轻量级BI.</b>";
+            intdocs += "<ul>";
+            intdocs += "<li> 1. 驰骋轻量级BI可以实现一般的，常用的查询分析功能。 </li>";
+            intdocs += "<li> 2. 支持多种图标展示。 </li>";
+            intdocs += "<li> 3. 支持变量文本输出，支持自定义的html代码的输出。 </li>";
+            intdocs += "<li> 4. 简单易用，容易操作，需要有一定的SQL基础知识，就可以完成。 </li>";
+            intdocs += "</ul>";
+
+
             //更新节点表单类型.
             var menuNo = GetQueryString("MenuNo");
             var en = new Entity("BP.GPM.Home.WindowTemplate");
@@ -43,6 +53,7 @@
             en.Name = name;
             en.WinDocModel = winDocModel; //窗口内容模式.
             en.Icon = "icon-fire";
+            en.Docs = intdocs;
             en.Insert();
 
             window.location.href = "../../Comm/En.htm?EnName=BP.GPM.Home.WindowExt." + winDocModel + "&No=" + en.No;

@@ -100,7 +100,7 @@
         function ViewIt()
         {
             var pageID = GetQueryString("PageID");
-            var url = "../../Portal/Home.htm?PageID=" + pageID;
+            var url = "../../Portal/Home.htm?PageID=" + pageID+"&viewid=Edit";
             window.open(url);
         }
     </script>
@@ -119,7 +119,7 @@
             <div class="item item-docs">
                 模式 - 
                 <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="ViewIt()">
-                    <i class="icon-plus" style="margin-right: 6px"></i> 预览
+                    <i class="icon-plus" style="margin-right: 6px"></i> 视图编辑
                 </div>
 
             </div>

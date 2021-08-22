@@ -2873,7 +2873,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 								mui.toast('再按一次退出应用');
 								setTimeout(function() {
 									$.__back__first = null;
-								}, 2000);
+								}, 800);
 							} else {
 								if (new Date().getTime() - $.__back__first < 2000) {
 									plus.runtime.quit();

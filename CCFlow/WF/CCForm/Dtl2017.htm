@@ -35,7 +35,7 @@
     <script src="../Comm/JS/TBHelpDiv.js" type="text/javascript"></script>
 
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
-    <link href="../Comm/JS/Calendar/My97DatePicker.htm" rel="stylesheet" type="text/css" />
+    <!--<link href="../Comm/JS/Calendar/My97DatePicker.htm" rel="stylesheet" type="text/css" />-->
 
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
 
@@ -59,8 +59,8 @@
         var mapExts;  //mapExts扩展
         var isEditable;
         var ensName = GetQueryString("EnsName");
-        var frmType = GetQueryString("FrmType");
-        frmType = frmType == null || frmType == undefined ? "" : frmType;
+        //var frmType = GetQueryString("FrmType");
+        //frmType = frmType == null || frmType == undefined ? "" : frmType;
         var isShowFull = GetQueryString("IsShowFull");
         isShowFull = isShowFull == null || isShowFull == undefined || isShowFull == "" ? "0 " : isShowFull;
 
@@ -807,7 +807,7 @@
 
                     imgStr += '<img title="选项" style="width: 40px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option(' + impModel + ');" />';
                 }
-                if (frmType != "0" && isShowFull != "1")
+                if (isShowFull != "1")
                     imgStr += '<img title="全屏显示" style="width: 30px;padding: 0px 5px;cursor:pointer;" src="../Img/Full.png" onclick="WindowOpenDtl()" />'
                 var delTh = $($(th).append(imgStr));
 
@@ -859,10 +859,10 @@
                 if (isMulti == true)
                     $('#dtlDiv div table thead').append(secondTr);
             }
-            if (frmType != "0" && isShowFull != "1")
-                $('#dtlDiv div table thead tr').bind("dblclick", function () {
-                    WindowOpenDtl();
-                });
+            //if (isShowFull != "1")
+                //$('#dtlDiv div table thead tr').bind("dblclick", function () {
+                //    WindowOpenDtl();
+                //});
             // 表头over --------------------
 
             //如果不能新增，就把新增按钮去掉.
@@ -3001,9 +3001,7 @@
             //获取屏幕的长宽
             var W = window.parent.document.body.clientWidth-40;
             var H = window.parent.document.body.clientHeight-40;
-            window.parent.OpenBootStrapModal(url+"&IsShowFull=1", "dtlFrame", '编辑', W, H, "icon-property", false, function () { }, null, function () {
-                window.location.href = url;
-            });
+            window.parent.OpenLayuiDialog(url + "&IsShowFull=1", '编辑', W, 80, 'auto', true);
             return;
 
             var self = window.open(url);

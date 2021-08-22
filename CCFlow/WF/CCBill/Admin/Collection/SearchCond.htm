@@ -18,7 +18,8 @@
     <script language="javascript" type="text/javascript">
 
         var frmID = GetQueryString("FrmID");
-
+        var ddlkeys = "";
+        var mapAttrs = "";
         //页面启动函数.
         $(function () {
 
@@ -34,7 +35,7 @@
 
         function InitPage() {
 
-            var mapAttrs = new Entities("BP.Sys.MapAttrs");
+            mapAttrs = new Entities("BP.Sys.MapAttrs");
             mapAttrs.Retrieve("FK_MapData", frmID,"GroupID,Idx");
 
             var mapData = new Entity("BP.Sys.MapData", frmID);
@@ -48,7 +49,9 @@
             var RptSearchKeys = mapData.GetPara("RptSearchKeys");
             var DTSearchWay = mapData.GetPara("DTSearchWay");
             var DTSearchKey = mapData.GetPara("DTSearchKey");
-
+            var DDLShowWays = mapData.GetPara("DDLShowWays"); //下拉框展示模式
+           
+           
             //绑定外键字段.
             var dateMapAttrs = [];
             var count = 0;
@@ -80,7 +83,7 @@
                         flag = (StringSearchKeys.indexOf("*" + attr.KeyOfEn + ",") != -1);
                     }
 
-                    $("#StringKeys").append("<input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "'  data-name='" + attr.Name + "'/><label for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</label>&nbsp;&nbsp;&nbsp;");
+                    $("#StringKeys").append("<input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "'  data-name='" + attr.Name + "'style='margin-right:3px'/><span for='" + attr.KeyOfEn + "' style='margin-right:3px'>" + attr.Name + "(" + attr.KeyOfEn + ")</span>&nbsp;&nbsp;&nbsp;");
                     if (count == 3) {
                         $("#StringKeys").append("<br/>");
                         count = 0;
@@ -91,38 +94,61 @@
                     continue;
                 }
 
+                ddlkeys += "'" + attr.UIBindKey + "',";
                 flag = false;
                 if (RptSearchKeys) {
                     flag = (RptSearchKeys.indexOf("*" + attr.KeyOfEn + "*") != -1);
                 }
 
+               
+
                 htmlFKeys += "<tr>";
                 htmlFKeys += "<td>";
-                htmlFKeys += "   <input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "' /><label for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</label>";
+                htmlFKeys += "   <input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "' style='margin-right:3px'/><span for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</span>";
                 htmlFKeys += "</td>";
 
                 htmlFKeys += "<td>";
-                htmlFKeys += "<select id=''>";
+                htmlFKeys += "<select id='"+attr.KeyOfEn+"_ShowWay'>";
                 htmlFKeys += "<option value=0>下拉框展示</option>";
                 htmlFKeys += "<option value=1>平铺展示</option>";
                 htmlFKeys += "</select>";
                 htmlFKeys += "</td>";
 
                 htmlFKeys += "<td>";
-                htmlFKeys += "<a href=\"javascript:ActiveDDLFull('" + attr.KeyOfEn + "');\" >数据权限</a>";
+                htmlFKeys += "<a href=\"javascript:AutoFullDLL('" + attr.KeyOfEn + "');\" >数据权限</a>";
                 htmlFKeys += "</td>";
 
                 htmlFKeys += "<td>";
-                htmlFKeys += "<a href=\"javascript:ActiveDDL('" + attr.KeyOfEn + "');\" >级联关系</a>";
+                htmlFKeys += "<a href=\"javascript:ActiveDDL('" + attr.KeyOfEn + "','"+attr.Name+"');\" >级联关系</a>";
 
                 htmlFKeys += "</td>";
 
                 htmlFKeys += "</tr>";
 
-                //   $("#FKeys").append("<input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "' /><label for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</label></br>");
             }
+            if (ddlkeys!="")
+                ddlkeys = ddlkeys.substring(0, ddlkeys.length - 1);
             $("#FKeys").html(htmlFKeys); //("<input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "' /><label for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</label></br>");
 
+            //列表展示方式
+            var listShowWay = mapData.GetPara("ListShowWay");
+            listShowWay = listShowWay == null || listShowWay == undefined || listShowWay == "" ? 0 : listShowWay;
+            var listShowWayKey = mapData.GetPara("ListShowWayKey");
+            $("#DDL_ListShowWay").val(listShowWay);
+            ChageOption(listShowWay);
+            $("#DDL_ListShowWayKey").val(listShowWayKey);
+
+            if (DDLShowWays) {
+                var ddls = DDLShowWays.split("*");
+                $.each(ddls, function (i, item) {
+                    if (item == "")
+                        return true;
+                    var strs = item.split("=");
+                    if (strs.length == 2) {
+                        $("#" + strs[0] + "_ShowWay").val(strs[1]);
+                    }
+                })
+            }
 
             $("#DDL_DTSearchWay").val(DTSearchWay);
 
@@ -139,12 +165,12 @@
             $("#DDL_DTShowWay").val(DTShowWay);
         }
 
-        function ActiveDDL(key) {
-            var url = "./SearchCond/ActiveDDL.htm?FK_MapData=" + GetQueryString("FrmID") + "&KeyOfEn=" + key;
+        function ActiveDDL(key,name) {
+            var url = "./SearchCond/ActiveDDL.htm?FK_MapData=" + GetQueryString("FrmID") + "&KeyOfEn=" + key+"&Name="+name;
             window.open(url);
         }
-        function ActiveDDLFull(key) {
-            var url = "./SearchCond/ActiveDDLFull.htm?FK_MapData=" + GetQueryString("FrmID") + "&KeyOfEn=" + key;
+        function AutoFullDLL(key) {
+            var url = "./SearchCond/AutoFullDLL.htm?FK_MapData=" + GetQueryString("FrmID") + "&KeyOfEn=" + key;
             window.open(url);
         }
 
@@ -162,12 +188,16 @@
             hidenField = hidenField.replace(/%/g, '[%]');
             mapData.SetPara("HidenField", hidenField);
 
+            var DDLShowWays = "";
             var fields = "";
             var oChecks = document.getElementById("FKeys").getElementsByTagName("input");
             for (var i = 0, len = oChecks.length; i < len; i++) {
                 var item = oChecks[i];
                 if (item.checked) {
+                    //获取展示方式
+                    var showWay = $("#" + item.id + "_ShowWay").val();
                     fields += "*" + item.id;
+                    DDLShowWays += "*" + item.id + "=" + showWay;
                 }
             }
 
@@ -175,6 +205,11 @@
                 mapData.SetPara("RptSearchKeys", "");
             } else {
                 mapData.SetPara("RptSearchKeys", fields + "*");
+            }
+            if (DDLShowWays == "") {
+                mapData.SetPara("DDLShowWays", "");
+            } else {
+                mapData.SetPara("DDLShowWays", DDLShowWays + "*");
             }
 
             fields = "";
@@ -192,6 +227,9 @@
                 mapData.SetPara("StringSearchKeys", fields + "*");
             }
             mapData.SetPara("DTShowWay", $("#DDL_DTShowWay").val());
+            mapData.SetPara("ListShowWay", $("#DDL_ListShowWay").val());
+            mapData.SetPara("ListShowWayKey", $("#DDL_ListShowWayKey").val());
+
             mapData.Update();
             window.location.href = window.location.href;
         }
@@ -203,6 +241,46 @@
             }
             if (val == 1) {
                 $("#StringKeys input[type=checkbox]").removeAttr("disabled");
+            }
+        }
+        function ChageOption(val) {
+            $("#DDL_ListShowWayKey").empty();
+            $("#DDL_ListShowWayKey").val("");
+            //列表展示
+            if (val == 0) {
+                $("#DDL_ListShowWayKey").append("<option value=''>不设置</option>");
+            }
+            //树形结构的展示
+            if (val == 1) {
+                //获取当前是树形结构的外键或者外部数据源
+                var ens = new Entities("BP.Sys.SFTables");
+                ens.RetrieveCond("No", "IN", "(" + ddlkeys + ")");
+                if (ens.length == 0) {
+                    $("#DDL_ListShowWay").val(0);
+                    return;
+                }
+                 
+                $.each(ens, function (i, en) {
+                    var attrs = $.grep(mapAttrs, function (mapAttr) {
+                        return mapAttr.UIBindKey == en.No;
+                    });
+                    $.each(attrs, function (idx, attr) {
+                        $("#DDL_ListShowWayKey").append("<option value='" + attr.KeyOfEn + "'>" + attr.Name + "</option>");
+                    })
+                    
+                })
+            }
+            //级联的下拉框
+            if (val == 2) {
+                var ens = new Entities("BP.Sys.MapExts");
+                ens.Retrieve("FK_MapData", frmID, "ExtType", "ActiveDDLSearchCond");
+                if (ens.length == 0) {
+                    $("#DDL_ListShowWay").val(0);
+                    return;
+                }
+                $.each(ens, function (i, en) {
+                    $("#DDL_ListShowWayKey").append("<option value='" + en.AttrOfOper+"'>"+en.Tag5+"</option>");
+                })
             }
         }
     </script>
@@ -236,11 +314,29 @@
             <div id="StringKeys" style="margin-left:15px"> </div>
 
             <legend>  外键与枚举 </legend>
-
             <div id="FKeys"></div>
 
-            <legend>  时间段的查询</legend>
+            <legend>  展现方式</legend>
+            <table>
+                <tr>
+                    <td> 选择方式</td>
+                    <td>
+                        <select name="DDL_ListShowWay" id="DDL_ListShowWay" onchange="ChageOption(this.value)">
+                            <option selected="selected" value="0">经典列表结构</option>
+                            <option value="1">树干叶子模式</option>
+                            <option value="2">级联模式</option>
+                        </select>
+                    </td>
+                    <td> 字段</td>
+                    <td>
+                        <select name="DDL_ListShowWayKey" id="DDL_ListShowWayKey">
+                        </select>
+                    </td>
+                </tr>
+            </table>
 
+
+            <legend>  时间段的查询</legend>
             <table>
                 <tr>
                     <td> 选择方式</td>

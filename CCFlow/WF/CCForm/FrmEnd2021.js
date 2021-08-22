@@ -470,26 +470,36 @@ function AfterBindEn_DealMapExt(frmData) {
             if (TBModel != undefined && TBModel != "" && TBModel != "None" && (mapExt.ExtType == "FullData")) {
                 if (mapAttr.UIIsEnable == 0 || isReadonly == true || $("#TB_" + mapExt.AttrOfOper).length == 0)
                     return true;
-                if (isFirstTBFull == true) {
-                    layui.config({
-                        base: laybase +'Scripts/layui/ext/'
+                if (TBModel == "Simple") {
+                    if (isFirstTBFull == true) {
+                        layui.config({
+                            base: laybase + 'Scripts/layui/ext/'
+                        });
+                        isFirstTBFull = false;
+                    }
+                    //判断时简洁模式还是表格模式
+                    layui.use('autocomplete', function () {
+                        var autocomplete = layui.autocomplete;
+                        autocomplete.render({
+                            elem: "#TB_" + mapAttr.KeyOfEn,
+                            url: mapExt.MyPK,
+                            response: { code: 'code', data: 'data' },
+                            template_val: '{{d.No}}',
+                            template_txt: '{{d.Name}} <span class=\'layui-badge layui-bg-gray\'>{{d.No}}</span>',
+                            onselect: function (data) {
+                                FullIt(data.No, this.url, this.elem[0].id);
+                            }
+                        })
                     });
-                    isFirstTBFull = false;
+                    return true;
                 }
-                layui.use('autocomplete', function () {
-                    var autocomplete = layui.autocomplete;
-                    autocomplete.render({
-                        elem: "#TB_" + mapAttr.KeyOfEn,
-                        url: mapExt.MyPK,
-                        response: { code: 'code', data: 'data' },
-                        template_val: '{{d.No}}',
-                        template_txt: '{{d.Name}} <span class=\'layui-badge layui-bg-gray\'>{{d.No}}</span>',
-                        onselect: function (data) {
-                            FullIt(data.No, this.url, this.elem[0].id);
-                        }
-                    })
-                });
-                return true;
+                if (TBModel == "Table") {
+                    var obj = $("#TB_" + mapAttr.KeyOfEn);
+                    obj.attr("onkeyup", "showDataGrid(\'TB_"+mapAttr.KeyOfEn+"\',this.value, \'" + mapExt.MyPK + "\');");
+                    //showDataGrid("TB_" + mapAttr.KeyOfEn, $("#TB_" + mapAttr.KeyOfEn).val(), mapExt);
+                }
+                    
+                
             }
 
             switch (mapExt.ExtType) {
@@ -501,7 +511,7 @@ function AfterBindEn_DealMapExt(frmData) {
                         //只显示
                         $("#TB_" + mapAttr.KeyOfEn).hide();
                         var val = frmData.MainTable[0][mapAttr.KeyOfEn + "T"];
-                        $("#TB_" + mapAttr.KeyOfEn).after("<div style='border:1px solid #eee;line-height:36px;padding-left:10px'>"+val+"</div>");
+                        $("#TB_" + mapAttr.KeyOfEn).after("<div style='border:1px solid #eee;line-height:36px;width:100%;height:36px'>"+val+"</div>");
                         break;
                     }
                     
@@ -783,18 +793,41 @@ function SetDateExt(mapExts,mapAttr) {
             }
         }
         if (roleExt.Tag2 == 1) {
-            //比对的时间字段值
-            var operVal = $('#TB_' + roleExt.Tag4).val();
             //根据选择的条件进行日期限制
+            var isHaveOper = $("#TB_" + roleExt.Tag4).is(".ccdate");
+            var startOper = "";
             switch (roleExt.Tag3) {
                 case "dayu":
                 case "dayudengyu":
+                    startOper = {
+                        elem: '#TB_' + roleExt.Tag4,
+                        format: format, //可任意组合
+                        type: type,
+                        operKey: mapAttr.KeyOfEn,
+                        done: function (value, date, endDate) {
+                            //比对的时间字段值
+                            var operVal = $('#TB_' + this.operKey).val();
+                            if (value > operVal) {
+                                layer.alert("所选日期不能大于" + this.operKey + "对应的日期时间")
+                                $(this.elem).val("");
+                                return;
+                            }
+                            $(this.elem).val(value);
+                        }
+                    }
                     dateOper = {
                         elem: '#TB_' + mapAttr.KeyOfEn,
                         format: format, //可任意组合
                         type: type,
-                        min: operVal,
+                        operKey: roleExt.Tag4,
                         done: function (value, date, endDate) {
+                            //比对的时间字段值
+                            var operVal = $('#TB_' + this.operKey).val();
+                            if (value < operVal) {
+                                layer.alert("所选日期不能小于" + this.operKey + "对应的日期时间")
+                                $(this.elem).val("");
+                                return;
+                            }
                             $(this.elem).val(value);
                             if (funcDoc != "")
                                 DBAccess.RunFunctionReturnStr(funcDoc);
@@ -806,12 +839,34 @@ function SetDateExt(mapExts,mapAttr) {
                     break;
                 case "xiaoyu":
                 case "xiaoyudengyu":
+                    startOper = {
+                        elem: '#TB_' + roleExt.Tag4,
+                        format: format, //可任意组合
+                        type: type,
+                        operKey: mapAttr.KeyOfEn,
+                        done: function (value, date, endDate) {
+                            //比对的时间字段值
+                            var operVal = $('#TB_' + this.operKey).val();
+                            if (value< operVal) {
+                                layer.alert("所选日期不能小于" + this.operKey + "对应的日期时间")
+                                $(this.elem).val("");
+                                return;
+                            }
+                            $(this.elem).val(value);
+                        }
+                    }
                     dateOper = {
                         elem: '#TB_' + mapAttr.KeyOfEn,
                         format: format, //可任意组合
                         type: type,
-                        max: operVal,
+                        operKey: roleExt.Tag4,
                         done: function (value, date, endDate) {
+                            var operVal = $('#TB_' + this.operKey).val();
+                            if (value > operVal) {
+                                layer.alert("所选日期不能大于" + this.operKey + "对应的日期时间")
+                                $(this.elem).val("");
+                                return;
+                            }
                             $(this.elem).val(value);
                             if (funcDoc != "")
                                 DBAccess.RunFunctionReturnStr(funcDoc);
@@ -823,15 +878,32 @@ function SetDateExt(mapExts,mapAttr) {
 
                     break;
                 case "budengyu":
+                    startOper = {
+                        elem: '#TB_' + roleExt.Tag4,
+                        format: format, //可任意组合
+                        type: type,
+                        operKey: mapAttr.KeyOfEn,
+                        done: function (value, date, endDate) {
+                            //比对的时间字段值
+                            var operVal = $('#TB_' + this.operKey).val();
+                            if (value== operVal) {
+                                layer.alert("所选日期不能等于" + this.operKey + "对应的日期时间")
+                                $(this.elem).val("");
+                                return;
+                            }
+                            $(this.elem).val(value);
+                        }
+                    }
                     dateOper = {
                         elem: '#TB_' + mapAttr.KeyOfEn,
                         format: format, //可任意组合
                         type: type,
-                        max: operVal,
+                        operKey: roleExt.Tag4,
                         done: function (value, date, endDate) {
+                            var operVal = $('#TB_' + this.operKey).val();
                             if (value == operVal) {
-                                layer.alert("所选日期不能等于" + mapExt.Tag4 + "对应的日期时间")
-                                this.elem.value = "";
+                                layer.alert("所选日期不能等于" + this.operKey + "对应的日期时间")
+                                $(this.elem).val("");
                                 return;
                             }
                             $(this.elem).val(value);
@@ -845,6 +917,8 @@ function SetDateExt(mapExts,mapAttr) {
                     }
                     break;
             }
+            if (isHaveOper == true && startOper != "")
+                layui.laydate.render(startOper);
         }
 
     } else {
@@ -862,6 +936,7 @@ function SetDateExt(mapExts,mapAttr) {
             }
         }
     }
+    
     layui.laydate.render(dateOper);
     $("#TB_" + mapAttr.KeyOfEn).removeClass(".ccdate");
 }
@@ -1335,7 +1410,7 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
         return operations;
 
     }
-
+    //operations += "<option  value=''>请选择</option>";
     $.each(data, function (i, obj) {
         operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
     });
@@ -1520,7 +1595,7 @@ function checkBlanks() {
     var checkBlankResult = true;
     //获得所有的class=mustInput的元素.
     var lbs = $('.mustInput');
-
+    var msg="";
     $.each(lbs, function (i, obj) {
 
         if ($(obj).parent().css('display') != 'none' && (($(obj).parent().next().css('display')) != 'none' || ($(obj).siblings("textarea").css('display')) != 'none')) {
@@ -1536,21 +1611,58 @@ function checkBlanks() {
             ele = $("#DDL_" + keyofen);
         if (ele.length == 0)
             ele = $("#CB_" + keyofen);
-        if (ele.length == 0)
-            ele = $("input[name='RB_" + keyofen + "']");
         if (ele.length == 0) {
             ele = $("input[name='CB_" + keyofen + "']");
             if (ele.length != 0) {
                 var val = $("input[name='CB_" + keyofen + "']:checked").val();
-                if (val == -1 || val == undefined)
+                if (val == -1 || val == undefined) {
                     checkBlankResult = false;
+                    $("input[name$='CB_" + keyofen + "']").parent().addClass('errorInput');
+                } else {
+                    $("input[name$='CB_" + keyofen + "']").parent().removeClass('errorInput');
+                }
+                return;
+            } else {
+                var val = $("input[name='RB_" + keyofen + "']:checked").val();
+                if (val == -1 || val == undefined) {
+                    checkBlankResult = false;
+                    $("input[name$='RB_" + keyofen + "']").parent().addClass('errorInput');
+                } else {
+                    $("input[name$='RB_" + keyofen + "']").parent().removeClass('errorInput');
+                }
+                   
                 return;
             }
-        } else {
-            var val = $("input[name='RB_" + keyofen + "']:checked").val();
-            if (val == -1 || val == undefined)
-                checkBlankResult = false;
-            return;
+        }
+        switch (ele[0].tagName.toUpperCase()) {
+            case "INPUT":
+                if (ele.attr('type') == "text") {
+                    if (ele.val() == "") {
+                        checkBlankResult = false;
+                        ele.addClass('errorInput');
+                    } else {
+                        ele.removeClass('errorInput');
+                    }
+                }
+
+
+                break;
+            case "SELECT":
+                if (ele.val() == "" || ele.val() == -1 || ele.children('option:checked').text() == "*请选择") {
+                    checkBlankResult = false;
+                    ele.parent().addClass('errorInput');
+                } else {
+                    ele.parent().removeClass('errorInput');
+                }
+                break;
+            case "TEXTAREA":
+                if (ele.val() == "") {
+                    checkBlankResult = false;
+                    ele.addClass('errorInput');
+                } else {
+                    ele.removeClass('errorInput');
+                }
+                break;
         }
 
     });

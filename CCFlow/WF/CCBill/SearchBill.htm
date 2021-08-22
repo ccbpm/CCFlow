@@ -148,8 +148,9 @@
                 var row = obj.data;
                 var pkval = row["OID"];
 
-
-                OpenIt(pkval, frmID, parseInt(frmBill.RowOpenModel), frmBill.Name, 1, row["BillState"]);
+                var rowstr = JSON.stringify(row);
+                rowstr = encodeURIComponent(rowstr);
+                OpenIt(pkval, 1, row["BillState"], rowstr);
             });
 
             table.on('sort(bill)', function (obj) { //注：sort 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
@@ -191,7 +192,7 @@
                             return;
                         }
 
-                        OpenIt(data, frmID, 0, "新增", 1);
+                        OpenIt(data, 1, 0);
                         break;
                     case "delete"://删除数据
                         var checkStatus = table.checkStatus(vtable.config.id);

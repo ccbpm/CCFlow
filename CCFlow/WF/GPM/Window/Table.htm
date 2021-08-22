@@ -43,6 +43,16 @@
             en.Name = name;
             en.WinDocModel = winDocModel; //窗口内容模式.
             en.Icon = "icon-fire";
+
+            var sql = "";
+            var webUser = new WebUser();
+            if (webUser.CCBPMRunModel == 0)
+                sql = "SELECT FlowName as '流程名称', Count(*) as '流程数' FROM WF_GenerWorkFlow WHERE WFState >1 GROUP BY FlowName ";
+            else
+                sql = "SELECT FlowName as '流程名称', Count(*) as '流程数' FROM WF_GenerWorkFlow WHERE WFState >1 AND OrgNo='@WebUser.OrgNo'  GROUP BY FlowName ";
+
+            en.Docs = sql;
+
             en.Insert();
 
             window.location.href = "../../Comm/En.htm?EnName=BP.GPM.Home.WindowExt." + winDocModel + "&No=" + en.No;

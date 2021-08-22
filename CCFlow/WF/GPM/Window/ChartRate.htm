@@ -45,6 +45,31 @@
             en.Icon = "icon-fire";
             en.Insert();
 
+
+            en.Docs = sql;
+            var en = new Entity("BP.GPM.Home.WindowTemplate", en.No);
+
+            //处理分子.
+            en.LabOfFZ = "退回数";
+            var sql = "";
+            var webUser = new WebUser();
+            if (webUser.CCBPMRunModel == 0)
+                sql = "SELECT Count(*) as '退回数' FROM WF_GenerWorkFlow WHERE WFState=5 GROUP BY FlowName ";
+            else
+                sql = "SELECT Count(*) as '退回数' FROM WF_GenerWorkFlow WHERE WFState=5 AND OrgNo='@WebUser.OrgNo'  ";
+            en.SQLOfFZ = sql;
+
+            //分母.
+            en.LabOfFM = "运行数";
+            if (webUser.CCBPMRunModel == 0)
+                sql = "SELECT Count(*) as '退回数' FROM WF_GenerWorkFlow WHERE WFState!=5 GROUP BY FlowName ";
+            else
+                sql = "SELECT Count(*) as '退回数' FROM WF_GenerWorkFlow WHERE WFState!=5 AND OrgNo='@WebUser.OrgNo'  ";
+            en.SQLOfFM = sql;
+            en.LabOfRate = "退回率";
+            en.Update();
+
+
             window.location.href = "../../Comm/EnOnly.htm?EnName=BP.GPM.Home.WindowExt." + winDocModel + "&No=" + en.No;
 
         }

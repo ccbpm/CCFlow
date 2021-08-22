@@ -41,7 +41,7 @@
 .cs-content-box .cs-help {
     position: relative;
     margin-top: 0;
-    padding: 45px 25px 10px;
+    padding: 10px 10px 10px;
 }
 
 .cs-content-box #help {
@@ -131,4 +131,11 @@
     font-size: 14px;
     font-weight: 400;
     text-overflow: ellipsis;
+}
+.errorInput {
+    border: 1px red solid !important;
+}
+
+.mustInput:after {
+    color: Red;
 }

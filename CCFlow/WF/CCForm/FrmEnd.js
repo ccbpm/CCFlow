@@ -611,25 +611,24 @@ function AfterBindEn_DealMapExt(frmData) {
                             dateFmt = "MM-dd";
                         }
 
-                        var mapextDoc = mapExt.Doc;
                         $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
+                            var mypk = $(this).attr("data-funcionPK");
+                            var en = new Entity("BP.Sys.MapExt", mypk);
                             if (minDate == "" || minDate == undefined)
                                 WdatePicker({
                                     dateFmt: dateFmt, onpicked: function (dp) {
                                         $(this).blur(); //失去焦点 
-                                        DBAccess.RunFunctionReturnStr(mapextDoc);
+                                        DBAccess.RunFunctionReturnStr(en.Doc);
                                     }
                                 });
                             else
                                 WdatePicker({
                                     dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
                                         $(this).blur(); //失去焦点 
-                                        DBAccess.RunFunctionReturnStr(mapextDoc);
+                                        DBAccess.RunFunctionReturnStr(en.Doc);
                                     }
                                 });
-
                         });
-
                     }
                     break;
                 }
@@ -656,7 +655,6 @@ function AfterBindEn_DealMapExt(frmData) {
                 break;
             case "ReqDays": //配置自动计算日期天数lz
                 //获取配置的字段
-
                 var ResRDT = mapExt.AttrOfOper;//接收计算天数结果
                 var StarRDT = mapExt.Tag1;//开始日期
                 var EndRDT = mapExt.Tag2;//结束日期
@@ -676,17 +674,13 @@ function AfterBindEn_DealMapExt(frmData) {
 
                 break;
             case "RegularExpression": //正则表达式  统一在保存和提交时检查
-
-
                 var tb = $('#TB_' + mapExt.AttrOfOper);
-
                 if (tb.attr('class') != undefined && tb.attr('class').indexOf('CheckRegInput') > 0) {
                     break;
                 } else {
                     tb.addClass("CheckRegInput");
                     tb.data(mapExt)
                     tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('name') + "','','" + mapExt.Tag1 + "')");
-
                 }
                 break;
             case "InputCheck": //输入检查
@@ -853,12 +847,10 @@ function AfterBindEn_DealMapExt(frmData) {
                             $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
                                 WdatePicker({ dateFmt: dateFmt, minDate: minDate });
                             });
-
                         } else {
                             $('#TB_' + mapExt.AttrOfOper).unbind("focus");
                             var bindFunctionExt = new Entity("BP.Sys.MapExt", functionPK);
                             $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
-
                                 WdatePicker({
                                     dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
                                         $(this).blur(); //失去焦点 

@@ -25,12 +25,14 @@
         });
 
         function Save() {
+            var name = $("#TB_Name").val();
+            var id = $("#TB_No").val();
 
             var func = new Entity("BP.CCBill.Sys.Func");
             var webUser = new WebUser();
 
-            func.Name = $("#TB_Name").val();
-            func.FuncID = $("#TB_No").val();
+            func.Name = name;
+            func.FuncID = id;
 
             //funcdocument.getElementById("RB_FuncSrc_0").checked == true)
             //     isQuanPin = 1;
@@ -54,6 +56,16 @@
            // en.UrlExt = "../CCBill/Sys/Func.htm?No=" + en.No;
             en.Update();
 
+            
+            var enmethod = new Entity("BP.CCBill.Template.Method");
+            enmethod.MethodID = id;
+            enmethod.Name = name;
+            enmethod.MethodModel = "Func"; 
+            enmethod.RefMethodType = 1;
+            enmethod.Icon = "icon-energy";
+            enmethod.No = func.No;
+            enmethod.Insert();
+
             alert("创建成功，您可以在在菜单里执行高级编辑与授权.");
 
             // window.location.href = "Default.htm";
@@ -72,7 +84,7 @@
             if (name == "")
                 return;
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.Admin_CCFormDesigner");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
             handler.AddPara("IsQuanPin", isQuanPin);
             handler.AddPara("TB_Name", encodeURIComponent(name));
             var data = handler.DoMethodReturnString("NewFrmGuide_GenerPinYin");

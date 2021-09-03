@@ -84,19 +84,8 @@ function Paras() {
 
     var url = "MethodParas.htm?No=" + GetQueryString("No");
     window.location.href = url;
-    // OpenEasyUiDialogExt(url, '参数', 600, 400, false);
 }
 
-function FrmAttrs() {
-
-    var no = GetQueryString("No");
-    var en = new Entity("BP.CCBill.Sys.Func", no);
-
-    var url = "Attrs.htm?No=" + GetQueryString("No") + "&FrmID=" + en.FrmID;
-    window.open(url);
-    // window.location.href = url;
-    // OpenEasyUiDialogExt(url, '参数', 600, 400, false);
-}
 
 
 function HelpOnline() {

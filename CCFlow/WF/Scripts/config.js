@@ -83,30 +83,32 @@ function Handler_AjaxQueryData(param, callback, scope, method, showErrMsg) {
 * @param {any} callback 加载完成后的回调函数
 */
 function loadScript(url, callback, scriptID) {
-    if (Exists(url) == false)
-        return;
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    if (typeof (callback) != "undefined") {
-        if (script.readyState) {
-            script.onreadystatechange = function () {
-                if (script.readyState == "loaded" || script.readyState == "complete") {
-                    script.onreadystatechange = null;
+    try {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        if (typeof (callback) != "undefined") {
+            if (script.readyState) {
+                script.onreadystatechange = function () {
+                    if (script.readyState == "loaded" || script.readyState == "complete") {
+                        script.onreadystatechange = null;
+                        callback();
+                    }
+                };
+            } else {
+                script.onload = function () {
                     callback();
-                }
-            };
-        } else {
-            script.onload = function () {
-                callback();
-            };
+                };
+            }
         }
+        script.src = url;
+        if (scriptID != null && scriptID != undefined)
+            script.id = scriptID;
+        var tmp = document.getElementsByTagName('script')[0];
+        tmp.parentNode.insertBefore(script, tmp);
+    } catch (e) {
+        alert(url + "文件不存在");
     }
-    script.src = url;
-    if (scriptID != null && scriptID != undefined)
-        script.id = scriptID;
-    // document.head.appendChild(script);
-    var tmp = document.getElementsByTagName('script')[0];
-    tmp.parentNode.insertBefore(script, tmp);
+    
 }
 
 var Skip = {};
@@ -163,7 +165,7 @@ function Exists(url) {
     $.ajax({
         url: url,
         type: 'HEAD',
-        async:false,
+        async: false,
         error: function () {
             isExists = 0;
         },
@@ -178,6 +180,7 @@ function Exists(url) {
         return false;
     }
 }
+
 
 /**
  *判断是不是移动端 

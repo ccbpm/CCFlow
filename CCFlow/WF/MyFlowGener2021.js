@@ -322,6 +322,28 @@ function BindFrm() {
                 elem: '#' + item.id,
                 format: $(item).attr("data-info"), //可任意组合
                 type: type,
+                trigger: 'click',
+                ready: function (date) {
+                    var now = new Date();
+                    var mm = "";
+                    if (now.getMinutes() < 10)
+                        mm = "0" + now.getMinutes();
+                    else
+                        mm = now.getMinutes();
+
+                    var ss = "";
+                    if (now.getSeconds() < 10)
+                        ss = "0" + now.getSeconds();
+                    else
+                        ss = now.getSeconds();
+
+                    this.dateTime.hours = now.getHours();
+                    this.dateTime.minutes = mm;
+                    this.dateTime.seconds = ss;
+                },
+                change: function (value, date, endDate) {
+                    $('.laydate-btns-confirm').click();
+                },
                 done: function (value, date, endDate) {
                     var data = $(this.elem).data();
                     $(this.elem).val(value);
@@ -350,6 +372,7 @@ function BindFrm() {
  *保存表单数据 
  */
 function Save(saveType) {
+   
     //正在保存弹出层
     var index = layer.msg('正在保存，请稍后..', {
         icon: 16
@@ -394,7 +417,10 @@ function Save(saveType) {
         if (data.indexOf("err@") != -1) {
             layer.alert(data);
         }
-        layer.alert("数据保存成功");
+        if (typeof isSaveOnly != undefined && isSaveOnly == true) {
+
+        }else
+            layer.alert("数据保存成功");
         
         return false;
     });

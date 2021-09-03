@@ -1915,9 +1915,16 @@ var Entities = (function () {
             return this;
         },
 
-        DoMethodReturnJSON: function (methodName, params) {
-
-            var jsonString = this.DoMethodReturnString(methodName);
+        DoMethodReturnJSON: function (methodName) {
+            if (dynamicHandler == "")
+                return;
+            var params = "";
+            $.each(arguments, function (i, o) {
+                if (i != 0)
+                    params += o + "~";
+            });
+            params = params.substr(0, params.length - 1);
+            var jsonString = this.DoMethodReturnString(methodName, params);
 
             if (jsonString.indexOf("err@") != -1) {
                 alert(jsonString);
@@ -1926,8 +1933,6 @@ var Entities = (function () {
 
             try {
                 jsonString = ToJson(jsonString);
-
-                //jsonString = JSON.parse(jsonString);
             } catch (e) {
                 jsonString = "err@json解析错误: " + jsonString;
                 alert(jsonString);

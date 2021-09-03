@@ -883,38 +883,51 @@ function AfterBindEn_DealMapExt(frmData) {
                             dateFmt = "MM-dd";
                         }
                         var RDTVal = "";
+                        $('#TB_' + mapExt.AttrOfOper).attr("operKey", mapExt.Tag4);
+                        $('#TB_' + mapExt.AttrOfOper).removeAttr("onfocus");
+                        $('#TB_' + mapExt.AttrOfOper).unbind("focus");
                         //根据选择的条件进行日期限制
                         switch (mapExt.Tag3) {
                             case "dayu":
-                                RDTVal = $('#TB_' + mapExt.Tag4);
                                 $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
-                                    WdatePicker({ dateFmt: dateFmt, maxDate: RDTVal.val() });
+                                    var operKey = $(this).attr("operKey");
+                                    WdatePicker({
+                                        dateFmt: dateFmt, minDate: '#F{$dp.$D(\'TB_' + operKey+'\')}'
+                                    });
                                 });
                                 break;
                             case "dayudengyu":
-                                RDTVal = $('#TB_' + mapExt.Tag4);
                                 $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
-                                    WdatePicker({ dateFmt: dateFmt, maxDate: RDTVal.val() });
+                                    var operKey = $(this).attr("operKey");
+                                    WdatePicker({ dateFmt: dateFmt, minDate: '#F{$dp.$D(\'TB_' + operKey + '\')}' });
                                 });
                                 break;
                             case "xiaoyu":
-                                RDTVal = $('#TB_' + mapExt.Tag4);
                                 $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
-                                    WdatePicker({ dateFmt: dateFmt, minDate: RDTVal.val() });
+                                    var operKey = $(this).attr("operKey");
+                                    WdatePicker({ dateFmt: dateFmt, maxDate: '#F{$dp.$D(\'TB_' + operKey + '\')}' });
                                 });
                                 break;
                             case "xiaoyudengyu":
-                                RDTVal = $('#TB_' + mapExt.Tag4);
                                 $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
-                                    WdatePicker({ dateFmt: dateFmt, minDate: RDTVal.val() });
+                                    var operKey = $(this).attr("operKey");
+                                    WdatePicker({ dateFmt: dateFmt, maxDate: '#F{$dp.$D(\'TB_' + operKey + '\')}' });
                                 });
                                 break;
                             case "budengyu":
-                                if ($('#TB_' + mapExt.AttrOfOper).val() == $('#TB_' + mapExt.Tag4).val()) {
-                                    alert("所选日期不能等于" + $('#TB_' + mapExt.Tag4).val());
-                                    $('#TB_' + mapExt.AttrOfOper).val("");
+                                $('#TB_' + mapExt.AttrOfOper).bind("focus", function () {
+                                    WdatePicker({
+                                        dateFmt: dateFmt, onpicked: function (dp) {
+                                            $(this).blur(); //失去焦点 
+                                            var operKey = $(this).attr("operKey");
+                                            if ($("#TB_" + operKey).val() != "" && $(this).val() == $("#TB_" + operKey).val()) {
+                                                alert("所选日期不能等于" + operKey + "对应的日期时间");
+                                                $(this).val("");
+                                            }
 
-                                }
+                                        }
+                                    });
+                                });
                                 break;
                         }
                     }

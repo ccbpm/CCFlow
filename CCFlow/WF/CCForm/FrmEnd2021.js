@@ -419,10 +419,19 @@ function AfterBindEn_DealMapExt(frmData) {
                 layui.form.on('select(' + mapAttr.KeyOfEn + ')', function (element) {
                     SetRadioSelectMapExt(data.mapExts, data.mapAttr, element.value, data.isEnableJS, "select", frmType,true);
                 });
-            }else if (model == "checkbox"){
-                layui.form.on('checkbox(' + mapAttr.KeyOfEn + ')', function (element) {
-                    SetRadioSelectMapExt(data.mapExts, data.mapAttr, element.value, data.isEnableJS, "select", frmType,true);
-                });
+            } else if (model == "checkbox") {
+                var obj = $("#CB_" + mapAttr.KeyOfEn);
+                var sky = obj.attr("lay-skin");
+                sky = sky == null || sky == undefined ? "" : sky;
+                if (sky == "switch")
+                    layui.form.on('switch(' + mapAttr.KeyOfEn + ')', function (element) {
+                        SetRadioSelectMapExt(data.mapExts, data.mapAttr, element.value, data.isEnableJS, "select", frmType, true);
+                    });
+                else
+                    layui.form.on('checkbox(' + mapAttr.KeyOfEn + ')', function (element) {
+                        SetRadioSelectMapExt(data.mapExts, data.mapAttr, element.value, data.isEnableJS, "select", frmType,true);
+                    });
+                
             }
             var data = {
                 mapAttr: mapAttr,
@@ -782,6 +791,30 @@ function SetDateExt(mapExts,mapAttr) {
                 format: format, //可任意组合
                 type: type,
                 min: 0,
+                ready: function (date) {
+                    if (this.format.indexOf("HH") != -1) {
+                        var now = new Date();
+                        var mm = "";
+                        if (now.getMinutes() < 10)
+                            mm = "0" + now.getMinutes();
+                        else
+                            mm = now.getMinutes();
+
+                        var ss = "";
+                        if (now.getSeconds() < 10)
+                            ss = "0" + now.getSeconds();
+                        else
+                            ss = now.getSeconds();
+
+                        this.dateTime.hours = now.getHours();
+                        this.dateTime.minutes = mm;
+                        this.dateTime.seconds = ss;
+                    }
+                    
+                },
+                change: function (value, date, endDate) {
+                    $('.laydate-btns-confirm').click();
+                },
                 done: function (value, date, endDate) {
                     $(this.elem).val(value);
                     if (funcDoc != "")
@@ -796,127 +829,153 @@ function SetDateExt(mapExts,mapAttr) {
             //根据选择的条件进行日期限制
             var isHaveOper = $("#TB_" + roleExt.Tag4).is(".ccdate");
             var startOper = "";
-            switch (roleExt.Tag3) {
-                case "dayu":
-                case "dayudengyu":
-                    startOper = {
-                        elem: '#TB_' + roleExt.Tag4,
-                        format: format, //可任意组合
-                        type: type,
-                        operKey: mapAttr.KeyOfEn,
-                        done: function (value, date, endDate) {
-                            //比对的时间字段值
-                            var operVal = $('#TB_' + this.operKey).val();
-                            if (value > operVal) {
-                                layer.alert("所选日期不能大于" + this.operKey + "对应的日期时间")
-                                $(this.elem).val("");
-                                return;
-                            }
-                            $(this.elem).val(value);
-                        }
-                    }
-                    dateOper = {
-                        elem: '#TB_' + mapAttr.KeyOfEn,
-                        format: format, //可任意组合
-                        type: type,
-                        operKey: roleExt.Tag4,
-                        done: function (value, date, endDate) {
-                            //比对的时间字段值
-                            var operVal = $('#TB_' + this.operKey).val();
-                            if (value < operVal) {
-                                layer.alert("所选日期不能小于" + this.operKey + "对应的日期时间")
-                                $(this.elem).val("");
-                                return;
-                            }
-                            $(this.elem).val(value);
-                            if (funcDoc != "")
-                                DBAccess.RunFunctionReturnStr(funcDoc);
-                            var data = $(this.elem).data();
-                            if (data && data.ReqDay != null && data.ReqDay != undefined)
-                                ReqDays(data.ReqDay);
-                        }
-                    }
-                    break;
-                case "xiaoyu":
-                case "xiaoyudengyu":
-                    startOper = {
-                        elem: '#TB_' + roleExt.Tag4,
-                        format: format, //可任意组合
-                        type: type,
-                        operKey: mapAttr.KeyOfEn,
-                        done: function (value, date, endDate) {
-                            //比对的时间字段值
-                            var operVal = $('#TB_' + this.operKey).val();
-                            if (value< operVal) {
-                                layer.alert("所选日期不能小于" + this.operKey + "对应的日期时间")
-                                $(this.elem).val("");
-                                return;
-                            }
-                            $(this.elem).val(value);
-                        }
-                    }
-                    dateOper = {
-                        elem: '#TB_' + mapAttr.KeyOfEn,
-                        format: format, //可任意组合
-                        type: type,
-                        operKey: roleExt.Tag4,
-                        done: function (value, date, endDate) {
-                            var operVal = $('#TB_' + this.operKey).val();
-                            if (value > operVal) {
-                                layer.alert("所选日期不能大于" + this.operKey + "对应的日期时间")
-                                $(this.elem).val("");
-                                return;
-                            }
-                            $(this.elem).val(value);
-                            if (funcDoc != "")
-                                DBAccess.RunFunctionReturnStr(funcDoc);
-                            var data = $(this.elem).data();
-                            if (data && data.ReqDay != null && data.ReqDay != undefined)
-                                ReqDays(data.ReqDay);
-                        }
+            startOper = {
+                elem: '#TB_' + roleExt.Tag4,
+                format: format, //可任意组合
+                type: type,
+                operKey: mapAttr.KeyOfEn,
+                oper: roleExt.Tag3,
+                ready: function (date) {
+                    if (this.format.indexOf("HH") != -1) {
+                        var now = new Date();
+                        var mm = "";
+                        if (now.getMinutes() < 10)
+                            mm = "0" + now.getMinutes();
+                        else
+                            mm = now.getMinutes();
+
+                        var ss = "";
+                        if (now.getSeconds() < 10)
+                            ss = "0" + now.getSeconds();
+                        else
+                            ss = now.getSeconds();
+
+                        this.dateTime.hours = now.getHours();
+                        this.dateTime.minutes = mm;
+                        this.dateTime.seconds = ss;
                     }
 
-                    break;
-                case "budengyu":
-                    startOper = {
-                        elem: '#TB_' + roleExt.Tag4,
-                        format: format, //可任意组合
-                        type: type,
-                        operKey: mapAttr.KeyOfEn,
-                        done: function (value, date, endDate) {
-                            //比对的时间字段值
-                            var operVal = $('#TB_' + this.operKey).val();
-                            if (value== operVal) {
-                                layer.alert("所选日期不能等于" + this.operKey + "对应的日期时间")
-                                $(this.elem).val("");
-                                return;
-                            }
-                            $(this.elem).val(value);
-                        }
+                },
+                change: function (value, date, endDate) {
+                    $('.laydate-btns-confirm').click();
+                },
+                done: function (value, date, endDate) {
+                    //比对的时间字段值
+                    var operVal = $('#TB_' + this.operKey).val();
+                    var oper = this.oper;
+                    var msg = true;
+                    switch (oper) {
+                        case "dayu":
+                            if (value >= operVal && operVal!="")
+                                msg = "所选日期不能大于等于" + this.operKey + "对应的日期时间";
+                            break;
+                        case "dayudengyu":
+                            if (value > operVal && operVal != "")
+                                msg = "所选日期不能大于" + this.operKey + "对应的日期时间";
+                            break;
+                        case "xiaoyu":
+                            if (value <= operVal && operVal != "")
+                                msg = "所选日期不能小于等于" + this.operKey + "对应的日期时间";
+                            break;
+                        case "xiaoyudengyu":
+                            if (value < operVal && operVal != "")
+                                msg = "所选日期不能小于" + this.operKey + "对应的日期时间";
+                            break;
+                        case "budengyu":
+                            if (value == operVal && operVal != "")
+                                msg = "所选日期不能等于" + this.operKey + "对应的日期时间";
+                            break;
                     }
-                    dateOper = {
-                        elem: '#TB_' + mapAttr.KeyOfEn,
-                        format: format, //可任意组合
-                        type: type,
-                        operKey: roleExt.Tag4,
-                        done: function (value, date, endDate) {
-                            var operVal = $('#TB_' + this.operKey).val();
-                            if (value == operVal) {
-                                layer.alert("所选日期不能等于" + this.operKey + "对应的日期时间")
-                                $(this.elem).val("");
-                                return;
-                            }
-                            $(this.elem).val(value);
-                            if (funcDoc != "")
-                                DBAccess.RunFunctionReturnStr(funcDoc);
-                            var data = $(this.elem).data();
-                            if (data && data.ReqDay != null && data.ReqDay != undefined)
-                                ReqDays(data.ReqDay);
+                    if (msg != "")
+                        value = "";
+                    $(this.elem).val(value);
+                    if (msg != "")
+                        layer.alert(msg);
 
-                        }
-                    }
-                    break;
+
+                }
             }
+            dateOper = {
+                elem: '#TB_' + mapAttr.KeyOfEn,
+                format: format, //可任意组合
+                type: type,
+                operKey: roleExt.Tag4,
+                oper: roleExt.Tag3,
+                ready: function (date) {
+                    if (this.format.indexOf("HH") != -1) {
+                        var now = new Date();
+                        var mm = "";
+                        if (now.getMinutes() < 10)
+                            mm = "0" + now.getMinutes();
+                        else
+                            mm = now.getMinutes();
+
+                        var ss = "";
+                        if (now.getSeconds() < 10)
+                            ss = "0" + now.getSeconds();
+                        else
+                            ss = now.getSeconds();
+
+                        this.dateTime.hours = now.getHours();
+                        this.dateTime.minutes = mm;
+                        this.dateTime.seconds = ss;
+                    }
+
+                },
+                change: function (value, date, endDate) {
+                    $('.laydate-btns-confirm').click();
+                },
+                done: function (value, date, endDate) {
+                    //比对的时间字段值
+                    var operVal = $('#TB_' + this.operKey).val();
+                    var oper = this.oper;
+                    switch (oper) {
+                        case "dayu":
+                            if (value <= operVal && operVal != "") {
+                                layer.alert("所选日期不能小于等于" + this.operKey + "对应的日期时间")
+                                $(this.elem).val("");
+                                return;
+                            }
+                            break;
+                        case "dayudengyu":
+                            if (value < operVal && operVal != "") {
+                                layer.alert("所选日期不能小于" + this.operKey + "对应的日期时间")
+                                $(this.elem).val("");
+                                return;
+                            }
+                            break;
+                        case "xiaoyu":
+                            if (value >= operVal && operVal != "") {
+                                layer.alert("所选日期不能大于等于" + this.operKey + "对应的日期时间")
+                                $(this.elem).val("");
+                                return;
+                            }
+                            break;
+                        case "xiaoyudengyu":
+                            if (value > operVal && operVal != "") {
+                                layer.alert("所选日期不能大于" + this.operKey + "对应的日期时间")
+                                $(this.elem).val("");
+                                return;
+                            }
+                            break;
+                        case "budengyu":
+                            if (value == operVal && operVal != "") {
+                                layer.alert("所选日期不能等于" + this.operKey + "对应的日期时间")
+                                $(this.elem).val("");
+                                return;
+                            }
+                            break;
+                    }
+                   
+                    $(this.elem).val(value);
+                    if (funcDoc != "")
+                        DBAccess.RunFunctionReturnStr(funcDoc);
+                    var data = $(this.elem).data();
+                    if (data && data.ReqDay != null && data.ReqDay != undefined)
+                        ReqDays(data.ReqDay);
+                }
+            }
+           
             if (isHaveOper == true && startOper != "")
                 layui.laydate.render(startOper);
         }
@@ -926,6 +985,30 @@ function SetDateExt(mapExts,mapAttr) {
             elem: '#TB_' + mapAttr.KeyOfEn,
             format: format, //可任意组合
             type: type,
+            ready: function (date) {
+                if (this.format.indexOf("HH") != -1) {
+                    var now = new Date();
+                    var mm = "";
+                    if (now.getMinutes() < 10)
+                        mm = "0" + now.getMinutes();
+                    else
+                        mm = now.getMinutes();
+
+                    var ss = "";
+                    if (now.getSeconds() < 10)
+                        ss = "0" + now.getSeconds();
+                    else
+                        ss = now.getSeconds();
+
+                    this.dateTime.hours = now.getHours();
+                    this.dateTime.minutes = mm;
+                    this.dateTime.seconds = ss;
+                }
+
+            },
+            change: function (value, date, endDate) {
+                $('.laydate-btns-confirm').click();
+            },
             done: function (value, date, endDate) {
                 $(this.elem).val(value);
                 if (funcDoc != "")
@@ -1054,6 +1137,27 @@ function SetNumberMapExt(mapExts, mapAttr) {
     });
 
 }
+
+function DynamicBind(mapExt, ctrlType) {
+
+    if (ctrlType == "RB_") {
+        $('input[name="' + ctrlType + mapExt.AttrOfOper + '"]').on(mapExt.Tag, function () {
+            DBAccess.RunFunctionReturnStr(mapExt.Doc);
+        });
+    } else if (ctrlType == "CB_") {
+        $('input[name="' + ctrlType + mapExt.AttrOfOper + '"]').on(mapExt.Tag, function () {
+            DBAccess.RunFunctionReturnStr(mapExt.Doc);
+        });
+    }
+    else {
+        $('#' + ctrlType + mapExt.AttrOfOper).on(mapExt.Tag, function () {
+            DBAccess.RunFunctionReturnStr(mapExt.Doc);
+        });
+    }
+
+
+}
+
 /**
  * 自动计算两个日期的天数
  * @param {any} mapExt
@@ -1482,7 +1586,7 @@ function setScore(isReadonly) {
  * @param {any} UIIsEnable
  */
 function figure_Template_Map(MapID, UIIsEnable) {
-    var mainTable = flowData.MainTable[0];
+    var mainTable = frmData.MainTable[0];
     var AtPara = "";
     //通过MAINTABLE返回的参数
     for (var ele in mainTable) {
@@ -1491,8 +1595,12 @@ function figure_Template_Map(MapID, UIIsEnable) {
             break;
         }
     }
-    
-    var url = "CCForm/Map.htm?WorkID=" + pageData.WorkID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + MapID + "&IsReadonly=" + isReadonly + "&Paras=" + AtPara;
+    var baseUrl = "./CCForm/";
+    if (currentURL.indexOf("CCForm") != -1)
+        baseUrl = "./";
+    if (currentURL.indexOf("CCBill") != -1)
+        baseUrl = "../CCForm/";
+    var url = baseUrl+"Map.htm?WorkID=" + pageData.WorkID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + MapID + "&IsReadonly=" + isReadonly + "&Paras=" + AtPara;
     OpenLayuiDialog(url, "地图", window.innerWidth/2, 80, "auto");
 }
 

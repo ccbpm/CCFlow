@@ -128,6 +128,28 @@
                 GenerFullAllCtrlsVal(currCondStation);
         }
 
+        function selChange() {
+            //01.如果 文本框 有初始值就赋初值
+            var idx = document.getElementById("DDL_SpecOperWay").value;
+            var idxinit = document.getElementById("initDDL_SpecOperWay").value;
+            if (idx == idxinit) {
+                document.getElementById("TB_SpecOperPara").value = document.getElementById("initTB_SpecOperPara").value;
+            }
+            else {
+                document.getElementById("TB_SpecOperPara").value = "";
+            }
+
+            //02.处理文本框样式
+            if (idx == 0) {
+                document.getElementById("TB_SpecOperPara").disabled = "disabled";
+            } else {
+                document.getElementById("TB_SpecOperPara").disabled = "";
+            }
+            //03.处理标签
+            $("#span" + idx).css("display", "inline-block");
+            $("#span" + idx).siblings().css("display", "none");
+        }
+
         function InitStation(CheckStations) {
 
             var showCondition = new Array();

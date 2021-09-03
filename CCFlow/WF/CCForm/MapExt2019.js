@@ -3,12 +3,12 @@ var oldValue = "";
 var oid;
 var highlightindex = -1;
 function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, TBModel) {
-    openDiv(sender, tbid);
+    //openDiv(sender, tbid);
     var mapExt = new Entity("BP.Sys.MapExt", fk_mapExt);
     var myEvent = window.event || arguments[0];
     var myKeyCode = myEvent.keyCode;
     // 获得ID为divinfo里面的DIV对象 .  
-    var autoNodes = $("#divinfo").children("div");
+    var autoNodes = $("#autoComplete").children("div");
     if (myKeyCode == 38) {
         if (highlightindex != -1) {
             autoNodes.eq(highlightindex).css("background-color", "white");
@@ -52,7 +52,7 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, TBModel) {
             var strs = textInputText.split('|');
             autoNodes.eq(highlightindex).css("background-color", "white");
             $("#" + tbid).val(strs[0]);
-            $("#divinfo").hide();
+            $("#autodiv").remove();
             oldValue = strs[0];
 
             // 填充.
@@ -62,11 +62,11 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, TBModel) {
     }
     else {
         if (selectVal != oldValue) {
-            $("#divinfo").empty();
+            $("#autodiv").remove();
             //获得对象.
             var dataObj = GenerDB(mapExt.Tag4, selectVal, mapExt.DBType, mapExt.FK_DBSrc);
             if ($.isEmptyObject(dataObj)) {
-                $("#divinfo").hide();
+                //$("#divinfo").hide();
                 return;
             }
 
@@ -82,8 +82,10 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, TBModel) {
                     if (name == undefined)
                         name = item.NAME;
 
-
-                    $("#divinfo").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + no + "','" + tbid + "','" + fk_mapExt + "');\" value='" + no + "'>" + no + '|' + name + "</div>");
+                    $("#" + tbid).after("<div id='autodiv' style=''><div id='autoComplete' style='position:absolute;z-index:999'></div></div>");
+                    var left = $("#autodiv").offset().left;
+                    $("#autoComplete").css("left", left + "px");
+                    $("#autoComplete").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + no + "','" + tbid + "','" + fk_mapExt + "');\" value='" + no + "'>" + no + '|' + name + "</div>");
                 });
 
             }
@@ -101,10 +103,13 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, TBModel) {
 //文本自动填充 表格模式
 function showDataGrid(sender, tbid, dataObj, mapExt) {
     var columns = mapExt.Tag3;
-    $("#divinfo").append(" <table id='viewGrid'></table>");
+    $("#autodiv").remove();
+    $("#" + tbid).after("<div id='autodiv' style=''><div id='autoComplete' style='position:absolute;z-index:999'></div></div>");
+    $("#autoComplete").append(" <table id='viewGrid'></table>");
     //取消DIV的宽度
-    document.getElementById("divinfo").style.width = "";
-
+    //document.getElementById("divinfo").style.width = "";
+    var left = $("#autodiv").offset().left;
+    $("#autoComplete").css("left", left + "px");
     var searchTableColumns = [{
         //title: 'Number',//标题  可不加  
         formatter: function (value, row, index) {
@@ -173,8 +178,7 @@ function showDataGrid(sender, tbid, dataObj, mapExt) {
             }
         };
         options.onClickRow = function (row, element) {
-            $("#divinfo").empty();
-            $("#divinfo").css("display", "none");
+            $("#autodiv").remove();
             highlightindex = -1;
             $("#" + tbid).val(row.No);
 
@@ -183,6 +187,8 @@ function showDataGrid(sender, tbid, dataObj, mapExt) {
         };
         $('#viewGrid').bootstrapTable(options);
         $('#viewGrid').bootstrapTable("load", dataObj);
+
+       
     }
 
 
@@ -570,13 +576,14 @@ function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
 function hiddenDiv() {
     $("#divinfo").empty();
     $("#divinfo").css("display", "none");
+    $("#autodiv").remove();
 }
 var itemStyle = 'padding:2px;color: #000000;background-color:white;width:100%;border-bottom: 1px solid #336699;';
 var itemStyleOfS = 'padding:2px;color: #000000;background-color:green;width:100%';
 function ItemClick(sender, val, tbid, fk_mapExt) {
 
-    $("#divinfo").empty();
-    $("#divinfo").css("display", "none");
+    $("#autodiv").remove();
+    //$("#divinfo").css("display", "none");
     highlightindex = -1;
     oldValue = val;
 
@@ -588,7 +595,7 @@ function ItemClick(sender, val, tbid, fk_mapExt) {
 
 function MyOver(sender) {
     if (highlightindex != -1) {
-        $("#divinfo").children("div").eq(highlightindex).css("background-color", "white");
+        $("#autoComplete").children("div").eq(highlightindex).css("background-color", "white");
     }
 
     highlightindex = $(sender).attr("name");
@@ -1003,7 +1010,7 @@ function FullDtl(selectVal, mapExt) {
     var url = GetLocalWFPreHref();
     var dataObj;
 
-    if (dbType == 1) {
+    if (dbType == 3) {
 
         dbSrc = DealSQL(DealExp(dbSrc), e, kvs);
         dataObj = DBAccess.RunDBSrc(dbSrc, 1);

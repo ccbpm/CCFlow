@@ -35,6 +35,10 @@ function InitBar(optionKey) {
 function Save() {
 
     var newFlowInfo = getNewFlowInfo();
+    if (newFlowInfo.FlowFrmModel == FlowDevModel.RefOneFrmTree && newFlowInfo.FrmID == "") {
+        alert("请选择绑定的表单");
+        return;
+    }
     $("#Btn_Save").val("正在创建,请稍后");
     setTimeout(function () {
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner_FlowDevModel");

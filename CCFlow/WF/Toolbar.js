@@ -243,7 +243,7 @@ function SaveOnly() {
     $("button[name=Save]").html("<img src='./Img/Btn/Save.png' width='22px' height='22px'>&nbsp;正在保存...");
 
     try {
-        Save();
+        Save(0);
     } catch (e) {
         alert(e);
         return;
@@ -299,7 +299,7 @@ function initModal(modalType, toNode, url) {
                     if (info == undefined)
                         info = "";
                 }
-                modalIframeSrc = "./WorkOpt/ReturnWork.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=" + info + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/ReturnWork.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=" + info + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "Send":
                 SetChildPageSize(80, 80);
@@ -308,57 +308,57 @@ function initModal(modalType, toNode, url) {
                 title = "流转自定义";
                 width = window.innerWidth * 3/5; 
                 height = 60;
-                modalIframeSrc ="./WorkOpt/TransferCustom.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/TransferCustom.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "accpter":
                 title = "工作移交";
                 width = window.innerWidth * 4/5;
                 height = 80;
-                modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "Thread":
             case "thread":
                 title = "子线程";
                 width = window.innerWidth * 4/5;
                 height =80;
-                modalIframeSrc ="./WorkOpt/ThreadDtl.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/ThreadDtl.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "shift":
                 title = "工作移交";
                 width = window.innerWidth * 4/5; 
                 height = 80;
-                modalIframeSrc = "./WorkOpt/Shift.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Shift.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "GovDocFile":
                 title = "公文正文";
                 width = window.innerWidth * 2/5; 
                 height = 40;
-                modalIframeSrc ="./CCForm/GovDocFile.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/CCForm/GovDocFile.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "DocWord":
                 title = "公文";
                 width = window.innerWidth * 2/5; 
                 height = 40;
-                modalIframeSrc = "./WorkOpt/DocWord.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/DocWord.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "askfor":
                 title = "加签";
                 width = window.innerWidth * 4/5; 
                 height = 80;
-                modalIframeSrc = "./WorkOpt/Askfor.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Askfor.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "Btn_WorkCheck":
                 title = "审核";
                 width = window.innerWidth * 4/5; 
                 height = 80;
-                modalIframeSrc ="./WorkOpt/WorkCheck.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/WorkCheck.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
 
             case "Track": //轨迹.
                 title = "处理记录、轨迹";
                 width = window.innerWidth * 4/5; 
                 height = 80;
-                modalIframeSrc = "./WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "HuiQian":
                 width = window.innerWidth * 4/5; 
@@ -367,27 +367,27 @@ function initModal(modalType, toNode, url) {
                     title = "先会签，后发送。";
                 else
                     title = "会签";
-                modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNode + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/HuiQian.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNode + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
 
                 break;
             case "AddLeader":
                 title = "加主持人";
                 width = window.innerWidth * 4/5; 
                 height = 80;
-                modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNode + "&HuiQianType=AddLeader&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/HuiQian.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNode + "&HuiQianType=AddLeader&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
 
                 break;
             case "CC":
                 title = "抄送";
                 width = window.innerWidth * 4/5; 
                 height = 80;
-                modalIframeSrc = "./WorkOpt/CC.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNode + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/CC.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNode + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "PackUp_zip":
             case "PackUp_html":
             case "PackUp_pdf":
                 title = "打包下载/打印";
-                modalIframeSrc = "./WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_', '') + "&FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_', '') + "&FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "Press":
                 //$('#modalHeader').text("催办");
@@ -395,7 +395,7 @@ function initModal(modalType, toNode, url) {
                 break;
             case "accepter":
                 title = "选择下一个节点及下一个节点接受人";
-                modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
 
             //发送选择接收节点和接收人                
@@ -405,7 +405,7 @@ function initModal(modalType, toNode, url) {
                 title = "选择接受人(到达节点:" + nodeOne.Name + ")";
                 width = window.innerWidth * 4/5; 
                 height = 80;
-                modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "SelectNodeUrl":
                 title ="请选择到达的节点";
@@ -454,44 +454,44 @@ function initModal(modalType, toNode, url) {
                 title ="选择接受人";
                 width = window.innerWidth *4/5; 
                 height = 80;
-                modalIframeSrc = "./WorkOpt/AccepterOfOrg.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/AccepterOfOrg.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "AccepterOfDept":
                 title ="选择接受人";
                 width = window.innerWidth * 4/5; 
                 height = 80;
-                modalIframeSrc = "./WorkOpt/AccepterOfDept.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/AccepterOfDept.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "DBTemplate":
                 title ="历史发起记录&模版";
-                modalIframeSrc = "./WorkOpt/DBTemplate.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/DBTemplate.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "CH":
                 title ="节点时限";
-                modalIframeSrc ="./WorkOpt/CH.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/CH.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "Note":
                 title ="备注";
-                modalIframeSrc = "./WorkOpt/Note.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Note.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
             case "PR":
                 title ="重要性设置";
                 width = window.innerWidth * 1/2; 
-                modalIframeSrc = "./WorkOpt/PRI.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PRIEnable=" + node.PRIEnable + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/PRI.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PRIEnable=" + node.PRIEnable + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "Rollback":
                 title ="流程回滚";
                 width = window.innerWidth/2; 
-                modalIframeSrc = "./WorkOpt/Rollback.htm?WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random();
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Rollback.htm?WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random();
                 break;
             case "JumpWay":
                 title ="流程节点跳转";
                 width =window.innerWidth/2; 
-                modalIframeSrc = "./WorkOpt/JumpWay.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/JumpWay.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "QRCode":
                 title = "二维码扫描";
                 width = window.innerWidth / 2;
-                modalIframeSrc = "./WorkOpt/QRCode/GenerCode.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&FID=" + paramData.FID + "&PWorkID=" + paramData.PWorkID + "&Info=&s=" + Math.random();
+                modalIframeSrc = ccbpmPath+"/WF/WorkOpt/QRCode/GenerCode.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&FID=" + paramData.FID + "&PWorkID=" + paramData.PWorkID + "&Info=&s=" + Math.random();
                 break;
             default:
                 break;
@@ -546,21 +546,25 @@ function InitToNodeDDL(JSonData, wf_node) {
     var data = [];
     var isSelected = false;
     $.each(JSonData.ToNodes, function (i, toNode) {
-        data.push({
+        var item = {
             id: toNode.No,
-            title: toNode.Name
-        })
-        if (toNode.IsSelected == "1") {
+            title: toNode.Name,
+            DeliveryParas: toNode.DeliveryParas,
+            IsSelectEmps: toNode.IsSelectEmps,
+            IsSelected: toNode.IsSelected
+        }
+        data.push(item)
+        if (item.IsSelected == "1") {
             isSelected = true;
-            $("#DDL_ToNode").html(toNode.Name);
-            $("#TB_ToNode").data(toNode);
+            $("#DDL_ToNode").html(item.title);
+            $("#TB_ToNode").data(item);
         }
             
     })
 
     if (isSelected == false) {
-        $("#DDL_ToNode").html(JSonData.ToNodes[0].Name);
-        $("#TB_ToNode").data(JSonData.ToNodes[0]);
+        $("#DDL_ToNode").html(data[0].title);
+        $("#TB_ToNode").data(data[0]);
     }
        
     layui.dropdown.render({
@@ -594,6 +598,7 @@ function ChangeToNodeState(toNode) {
  * @param {formType} formType 表单方案模式
  */
 var IsRecordUserLog = getConfigByKey("IsRecordUserLog", false);
+var isSaveOnly = false;
 function Send(isHuiQian, formType) {
 
 
@@ -640,8 +645,9 @@ function Send(isHuiQian, formType) {
                 isShowToNode = false;
         }
         if (isShowToNode == true) {
+            isSaveOnly = true;
             $('[name=SaveBtn]').trigger("click");
-            Save(1); //执行保存.
+            isSaveOnly = false;
             var url = ccbpmPath + "/WF/WorkOpt/ToNodes.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&IsSend=0" + "&s=" + Math.random();
 
             initModal("SelectNodeUrl", null, url);
@@ -670,12 +676,13 @@ function Send(isHuiQian, formType) {
         }
   
         var selectToNode = $('#TB_ToNode').data();
-        toNodeID = selectToNode.No;
+        toNodeID = selectToNode.id;
         if (selectToNode.IsSelected == 2)
             isReturnNode = 1;
         if (selectToNode.IsSelectEmps == "1" && isLastHuiQian == true) { //跳到选择接收人窗口
+            isSaveOnly = true;
             $('[name=SaveBtn]').trigger("click");
-            //Save(1); //执行保存.
+            isSaveOnly = false;
             if (isHuiQian == true) {
                 initModal("HuiQian", toNodeID);
             } else {
@@ -684,7 +691,9 @@ function Send(isHuiQian, formType) {
             return false;
         }
         if (selectToNode.IsSelectEmps == "2") {
+            isSaveOnly = true;
             $('[name=SaveBtn]').trigger("click");
+            isSaveOnly = false;
             //Save(1); //执行保存.
             if (isHuiQian == true) {
                 initModal("HuiQian", toNodeID);
@@ -698,7 +707,9 @@ function Send(isHuiQian, formType) {
             }
         }
         if (selectToNode.IsSelectEmps == "3") {
+            isSaveOnly = true;
             $('[name=SaveBtn]').trigger("click");
+            isSaveOnly = false;
             //Save(1); //执行保存.
             if (isHuiQian == true) {
                 initModal("HuiQian", toNodeID);
@@ -709,8 +720,10 @@ function Send(isHuiQian, formType) {
         }
 
         if (selectToNode.IsSelectEmps == "4") {
+            isSaveOnly = true;
             $('[name=SaveBtn]').trigger("click");
-            //Save(1); //执行保存.
+            isSaveOnly = false;
+          
             if (isHuiQian == true) {
                 initModal("HuiQian", toNodeID);
             } else {
@@ -719,8 +732,9 @@ function Send(isHuiQian, formType) {
             return false;
         }
         if (isHuiQian == true) {
+            isSaveOnly = true;
             $('[name=SaveBtn]').trigger("click");
-            //Save(1); //执行保存.
+            isSaveOnly = false;
             initModal("HuiQian", toNodeID);
             return false;
         }
@@ -755,7 +769,7 @@ function execSend(toNodeID, formType, isReturnNode) {
         var data = handler.DoMethodReturnString("Send"); //执行保存方法.
         layer.close(index);//关闭正在发送
         if (data.indexOf('err@') == 0) { //发送时发生错误
-
+            
             var reg = new RegExp('err@', "g")
             var data = data.replace(reg, '');
             layer.alert(data);

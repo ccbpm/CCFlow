@@ -18,7 +18,7 @@
     <script type="text/javascript">
 
         var attrs = null;       //参数字段集合
-        var enFunc = nulll;
+        var enFunc = null;
         $(function () {
 
             var funcNo = GetQueryString("FuncNo");
@@ -26,7 +26,7 @@
             enFunc = new Entity("BP.CCBill.Sys.Func", funcNo);
 
             attrs = new Entities("BP.Sys.MapAttrs");
-            attrs.Retrieve("FK_MapData", mypk);
+            attrs.Retrieve("FK_MapData", funcNo);
             var isHaveParas = attrs.length > 0 ? true : false;
 
             if (isHaveParas == true)

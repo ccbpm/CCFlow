@@ -139,8 +139,8 @@
                     {{expandAll ? '折叠' : '展开'}}
                 </button>
                 <!--<div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="NewSys()">
-            <i class="icon-plus" style="margin-right: 6px"></i>创建系统
-        </div>-->
+                    <i class="icon-plus" style="margin-right: 6px"></i>创建系统
+                </div>-->
             </div>
             <div class="item item-other">
                 <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="NewSys()">
@@ -152,10 +152,7 @@
             </div>
             <div class="item item-other">菜单类型</div>
             <div class="item item-content">
-                <!--<div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="ManageSys()">
-            <i class="icon-plus" style="margin-right: 6px"></i>系统管理
-        </div>-->
-
+                <a href="https://www.bilibili.com/video/BV12P4y1p74h/" target="_blank" class="icon-camrecorder"><font color="blue">&nbsp;菜单体系</font></a>
             </div>
             <div class="item item-other">启用？</div>
             <div class="item item-op">权限</div>
@@ -236,7 +233,7 @@
                                         :data-idx="idx">
                                     <i class="layui-icon layui-icon-down layui-font-12"></i> 模块
                                 </button>
-                                
+
                             </div>
                         </div>
                         <div v-show="module.open || module.children.length === 0" ref="child-row" :data-pid="module.No"

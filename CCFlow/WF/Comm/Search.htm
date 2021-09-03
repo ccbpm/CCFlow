@@ -811,8 +811,8 @@
                 
             ur = GetUserRegedit()
             //获取页面的高度
-            var H = document.body.clientHeight;
-            var tableH = H - $("#toolbar").outerHeight() - $("#page-nav").outerHeight() - 70;
+            var H = window.innerHeight;
+            var tableH = H - $("#toolbar").outerHeight() - 200;
 
             if (pageIdx == "" || pageIdx == undefined)
                 pageIdx = "1";
@@ -1713,11 +1713,11 @@
                     </table>
                 </div>
                 <!-- 显示分页信息 -->
-                <div style="padding:0px 20px;">
-                    <div class="row cs-pagination" style="float:left;width:65%;text-align: left;">
+                <div>
+                    <div class="row cs-pagination" style="float:left;width:35%;text-align: left;">
                         <ul class="pagination  controls" style="margin-left:20px"><li class=" controls" id="JsResult"></li></ul>
                     </div>
-                    <div class="row cs-pagination" style="float:right;width:35%">
+                    <div class="row cs-pagination" style="float:right;width:65%">
                         <ul class="pagination" id="page_nav"></ul>
                         <ul class="pagination controls" id="page_info"></ul>
                         <div style="clear: both;">

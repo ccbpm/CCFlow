@@ -11,7 +11,7 @@ function DealMenuUrl(menu) {
     }
 
     if (menu.MenuModel === "SelfUrl") {
-        menu.Url = basePath + + menu.UrlExt;
+        menu.Url = basePath +menu.UrlExt;
         return menu;
     }
 
@@ -59,14 +59,14 @@ function DealMenuUrl(menu) {
 
     if (menu.MenuModel === "Dict") {
         if (menu.ListModel === 0) //如果是批量编辑模式.
-            menu.Url = basePath + "/WF/CCBill/SearchEditer.htm?FrmID=" + menu.UrlExt ;
+            menu.Url = basePath + "/WF/CCBill/SearchEditer.htm?FrmID=" + menu.UrlExt;
         else
             menu.Url = basePath + "/WF/CCBill/SearchDict.htm?FrmID=" + menu.UrlExt;
         return menu;
     }
 
     if (menu.MenuModel === "DBList") {
-            menu.Url = basePath + "/WF/CCBill/SearchDBList.htm?FrmID=" + menu.UrlExt;
+        menu.Url = basePath + "/WF/CCBill/SearchDBList.htm?FrmID=" + menu.UrlExt;
         return menu;
     }
 
@@ -78,7 +78,7 @@ function DealMenuUrl(menu) {
     }
 
     if (menu.MenuModel == "DictTable") {
-        
+
         url = basePath + "/WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + menu.UrlExt + "&QueryType=Dict";
         menu.Url = url;
         return menu;
@@ -105,6 +105,14 @@ function DealMenuUrl(menu) {
         return menu;
     }
 
-    alert('没有判断的模式:' + menu.MenuModel);
+    if (menu.Url != "") {
+        if (menu.Url.indexOf("?") != -1)
+            menu.Url = basePath + menu.Url + "&PageID=" + menu.No;
+        else
+            menu.Url = basePath + menu.Url + "?PageID=" + menu.No;
+    }
+        
+    else
+        alert('没有判断的模式:' + menu.MenuModel + "  urlExt:" + menu.UrlExt);
     return menu;
 }

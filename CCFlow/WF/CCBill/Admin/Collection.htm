@@ -176,9 +176,15 @@
         <div class="row fixed">
             <div class="item item-name">序</div>
             <div class="item item-other">名称</div>
-            <div class="item item-other">类型</div>
+            <div class="item item-other">
+                类型&nbsp;&nbsp;
+                <div class="item item-content">
+                    <a href="https://www.bilibili.com/video/BV15P4y1p7Sj" target="_blank" class="icon-camrecorder"><font color="blue">&nbsp;集合组件</font></a>
+                </div>
+
+            </div>
             <div class="item item-docs">
-                <div style="margin-right: 6px" > 内容</div>
+                <div style="margin-right: 6px"> 内容</div>
                 <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="NewMethod()">
                     <i class="icon-plus" style="margin-right: 6px"></i>+新建组件
                 </div>
@@ -200,12 +206,8 @@
                          style="text-align: left" :data-no="en.No" :data-name="en.Name">
                         <span><i :class="en.Icon" style="margin-right: 8px"> </i> {{en.Name}}</span>
                     </div>
-
                     <!--<div class="item item-other ">{{en.Name}} </div>
-
                     <span><i :class="method.Icon" style="margin-right: 8px"> </i> {{method.Name}}</span>-->
-
-
                     <div class="item item-other" v-html="en.MethodModel"></div>
                     <div class="item item-docs" v-html="en.Docs"></div>
                     <div class="item item-other">
@@ -231,6 +233,34 @@
         </div>
     </div>
 
+    <hr />
+
+    <fieldset>
+        <legend>其他设置 </legend>
+        <div id="Btns">
+
+            <ul>
+                <li> <a href="javascript:SearchCond()">查询条件定义 </a></li>
+                <li>  <a href="javascript:SearchCond()">多表头定义 </a></li>
+                <li> <a href="javascript:SearchCond()">设置显示的列 </a></li>
+                <li> <a href="javascript:SearchCond()">表单事件 </a></li>
+                <li> <a href="javascript:SearchCond()">数据查询权限 </a></li>
+                <li> <a href="javascript:SearchCond()">数据查询权限 </a></li>
+                <li> <a href="javascript:SearchCond()">颜色设置 </a></li>
+                <li> <a href="javascript:SearchCond()">字段求和求平均设置 </a></li>
+            </ul>
+
+        </div>
+
+    </fieldset>
+
+
     <script src="Collection.js"></script>
+
+    <script type="text/javascript">
+        function SearchCond() {
+            //xxx..x
+        }
+    </script>
 </body>
 </html>

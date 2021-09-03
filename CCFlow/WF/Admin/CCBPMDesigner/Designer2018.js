@@ -1414,9 +1414,10 @@ function NodeFrmD(nodeID) {
 
 //表单的权限.
 function FrmPower(nodeID) {
-
+    debugger
     var frmID = "ND" + parseInt(flowNo + "01");
-    //var en = new Entity("BP.WF.Template.FrmNodeJiJian");
+    if (flowDevModel == FlowDevModel.RefOneFrmTree)
+        frmID = flow.FrmUrl;
     var en = new Entity("BP.WF.Template.FrmNodeExt");
 
     var mypk = frmID + "_" + nodeID + "_" + flowNo;

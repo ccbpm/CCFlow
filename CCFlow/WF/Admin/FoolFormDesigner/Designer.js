@@ -139,9 +139,30 @@ layui.use(['dropdown', 'util', 'layer', 'table', 'form', 'pinyin', 'laydate'], f
         if (format.indexOf("HH") != -1) {
             laydate.render({
                 elem: '#' + item.id,
-                format: $(item).attr("data-info") //可任意组合
-                ,
-                type: 'datetime'
+                format: $(item).attr("data-info"), //可任意组合
+                type: 'datetime',
+                trigger: 'click',
+                ready: function (date) {
+                    var now = new Date();
+                    var mm = "";
+                    if (now.getMinutes() < 10)
+                        mm = "0" + now.getMinutes();
+                    else
+                        mm = now.getMinutes();
+
+                    var ss = "";
+                    if (now.getSeconds() < 10)
+                        ss = "0" + now.getSeconds();
+                    else
+                        ss = now.getSeconds();
+
+                    this.dateTime.hours = now.getHours();
+                    this.dateTime.minutes = mm;
+                    this.dateTime.seconds = ss;
+                },
+                change: function (value, date, endDate) {
+                    $('.laydate-btns-confirm').click();
+                }
             });
         } else {
             laydate.render({

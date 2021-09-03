@@ -47,10 +47,10 @@
             //GenerFullAllCtrlsVal(en);
 
             //设置内容.
-            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_MethodDoc");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_MethodDocSys");
             handler.AddPara("TypeOfFunc", 1);
             handler.AddPara("No", en.No);
-            var data = handler.DoMethodReturnString("MethodDoc_GetScript");
+            var data = handler.DoMethodReturnString("MethodDocSys_GetScript");
             editor.setValue(data);
 
             //生成参数内容.
@@ -66,8 +66,8 @@
 
 
             html = "";
-            html += "<br><font color=blue ><b> function </b></font> <font color=red ><b>" + en.MethodID + "</b></font> <font color=blue ><b>(</b></font>";
-            funcstr = "function " + en.MethodID + "(";
+            html += "<br><font color=blue ><b> function </b></font> <font color=red ><b>" + en.FuncID+ "</b></font> <font color=blue ><b>(</b></font>";
+            funcstr = "function " + en.Name + "(";
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
                 if (i == attrs.length - 1) {
@@ -87,7 +87,7 @@
 
         function Save() {
 
-            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_MethodDoc");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_MethodDocSys");
             handler.AddUrlData();
             var doc = editor.getValue();
             doc = doc.replace(/-/g, "/$");
@@ -97,7 +97,7 @@
             handler.AddPara("TypeOfFunc", 1);
             handler.AddPara("funcstr", funcstr + doc + " \r\n }");//拼上function部分
 
-            var data = handler.DoMethodReturnString("MethodDoc_SaveScript");
+            var data = handler.DoMethodReturnString("MethodDocSys_SaveScript");
 
             window.location.href = window.location.href;
         }
@@ -143,7 +143,7 @@
         <textarea id="tb_doc" style="width: 90%; height: 80%;" rows="40"> </textarea>
         <legend> 参数 </legend>
         <ul>
-            <li> <button id='Btn_Attrs' onclick='Paras()'>设置参数</button> - <button id='Btn_Attrs' onclick='FrmAttrs()'>表单参考字段</button> </li>
+            <li> <button id='Btn_Attrs' onclick='Paras()'>设置参数</button></li>
             <li>  <div id="paras"> </div></li>
         </ul>
         <legend> 帮助</legend>

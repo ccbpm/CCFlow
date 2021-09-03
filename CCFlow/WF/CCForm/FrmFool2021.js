@@ -1,8 +1,10 @@
 ﻿/**
  * 傻瓜表单的解析
- * @param {any} frmData
+ * @param {any} wn
  */
-function GenerFoolFrm(frmData) {
+var frmData;
+function GenerFoolFrm (wn) {
+    frmData = wn;
     var mapData = frmData.Sys_MapData[0];           //表单属性
     var tableCol = getTableCol(mapData.TableCol);   //表单列数
     var frmShowType = mapData.FrmShowType;          //表单展示方式 普通方式、页签方式

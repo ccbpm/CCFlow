@@ -44,10 +44,10 @@ new Vue({
 
             // debugger;
             // 方法排序..
-            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_MethodDoc");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_MethodDocSys");
             handler.AddPara("FrmID", frmID);
             handler.AddPara("MyPKs", currentNodeArrStr);
-            var data = handler.DoMethodReturnString("MethodParas_Mover");
+            var data = handler.DoMethodReturnString("MethodParasSys_Mover");
             layer.msg(data);
         },
         initSortArea: function () {
@@ -176,6 +176,13 @@ new Vue({
         })
 
         this.mapAttrs = mapAttrs;
+
+        var en = new Entity("BP.CCBill.Sys.Func", GetQueryString("No"));
+        if (mapAttrs.length > 0)
+            en.IsHavePara = 1;
+        else
+            en.IsHavePara = 0;
+        en.Update();
 
         console.log(this.mapAttrs);
         this.initSortArea();

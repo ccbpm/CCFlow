@@ -1128,10 +1128,10 @@ function DoMethod(methodNo,workid) {
 
     //超链接.
     if (method.MethodModel == "Link") {
-        if (method.UrlExt.indexOf('?') > 0)
-            method.Docs = method.UrlExt + "&FrmID=" + method.FrmID + "&WorkID=" + workid;
+        if (method.Tag1.indexOf('?') > 0)
+            method.Docs = method.Tag1 + "&FrmID=" + method.FrmID + "&WorkID=" + workid;
         else
-            method.Docs = method.UrlExt + "?FrmID=" + method.FrmID + "&WorkID=" + workid;
+            method.Docs = method.Tag1 + "?FrmID=" + method.FrmID + "&WorkID=" + workid;
     }
 
     if (method.Docs === "") {
@@ -1147,8 +1147,9 @@ function DoMethod(methodNo,workid) {
             method.Docs = url + "?FrmID=" + method.FrmID+ "&WorkID=" + workid;
     }
 
-    if (method.MethodModel === "Func")
+    if (method.MethodModel === "Func") 
         OpenLayuiDialog(method.Docs, method.Name, window.innerWidth / 2, 50, "auto");
     else
-        window.vm.openTab(method.Name, method.Docs);
+        window.top.vm.openTab(method.Name, method.Docs);
+    
 }

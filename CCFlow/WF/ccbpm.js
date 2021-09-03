@@ -7,10 +7,9 @@
 */
 var isEqualsDomain = false;  //调用ccbpm.js的页面和ccbpm.js域是否相同
 var ccbpmPath = GetPath();
-//var ccbpmPath = remotePath;
 var paramData = {};
 var writeImg = "";//审核写字板
-var FWCVer=0;
+var FWCVer = 0;
 $(function () {
     if (window.location.href.indexOf(ccbpmPath) == -1)
         isEqualsDomain = true;
@@ -70,8 +69,10 @@ $(window).load(function () {
     }
         
     if ($("#WorkCheck").length == 1) {
-        Skip.addJs(ccbpmPath + "/WF/WorkOpt/WorkCheck.js");
-        NodeWorkCheck_Init();
+        jQuery.getScript(ccbpmPath + "/WF/WorkOpt/WorkCheck.js", function () {
+            NodeWorkCheck_Init();
+        });
+        
     }
        
     if ($("#FlowBBS").length == 1)

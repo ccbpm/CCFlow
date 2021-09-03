@@ -13,7 +13,7 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " class='layui-input'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+        return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " class='layui-input'>" + InitDDLOperation(mapAttr, defValue) + "</select>";
     }
 
     //外键类型.
@@ -36,7 +36,7 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
             }
         }
 
-        return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " class='layui-input'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+        return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " class='layui-input'>" + InitDDLOperation(mapAttr, defValue) + "</select>";
     }
 
     //外部数据类型.
@@ -49,7 +49,7 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
             enableAttr = "disabled='disabled'";
 
         if (mapAttr.UIContralType == 1)
-            return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " class='layui-input'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+            return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " class='layui-input'>" + InitDDLOperation(mapAttr, defValue) + "</select>";
         if (mapAttr.UIContralType == 3) {
             //横向排列
             var RBShowModel = 3;
@@ -146,7 +146,7 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<input " + enableAttr + " style='width:120px;' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' class='Wdate'   placeholder='" + (mapAttr.Tip || '') + "' class='layui-input'/>";
+        return "<input " + enableAttr + " style='width:120px;' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text' class='layui-input Wdate'   placeholder='" + (mapAttr.Tip || '') + "' class='layui-input'/>";
     }
 
     //时期时间类型.
@@ -158,7 +158,7 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<input id='TB_" + mapAttr.KeyOfEn + "' class='Wdate'  type='text'  style='width:160px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "' class='layui-input'/>";
+        return "<input id='TB_" + mapAttr.KeyOfEn + "' class='layui-input Wdate'  type='text'  style='width:160px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "' class='layui-input'/>";
     }
 
     // boolen 类型.
@@ -189,7 +189,7 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
             enableAttr = "disabled='disabled'";
 
         if (mapAttr.UIContralType == 1)
-            return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " class='layui-input'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+            return "<select id='DDL_" + mapAttr.KeyOfEn + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " class='layui-input'>" + InitDDLOperation(mapAttr, defValue) + "</select>";
         if (mapAttr.UIContralType == 3) {
             //横向排列
             var RBShowModel = 3;
@@ -203,7 +203,7 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
         else
         enableAttr = "disabled='disabled'";
 
-        return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+        return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(mapAttr, defValue) + "</select>";
         */
     }
 
@@ -255,4 +255,35 @@ function InitMapAttrOfCtrl(mapAttr, frmData) {
 
     alert(mapAttr.Name + "的类型没有判断.");
     return;
+}
+
+/**
+ * 初始化获取下拉框字段的选项
+ * @param {any} frmData
+ * @param {any} mapAttr
+ * @param {any} defVal
+ */
+function InitDDLOperation(mapAttr, defVal) {
+    var operations = '';
+    
+    //枚举类型的.
+    if (mapAttr.LGType == 1) {
+        var enums = new Entities("BP.Sys.SysEnums");
+        enums.Retrieve("EnumKey", mapAttr.UIBindKey);
+        if (mapAttr.DefVal == -1)
+            operations += "<option " + (mapAttr.DefVal == defVal ? " selected = 'selected' " : "") + " value='" + mapAttr.DefVal + "'>-无(不选择)-</option>";
+
+        $.each(enums, function (i, obj) {
+            operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+        });
+        return operations;
+    }
+    var sfTable = new Entity("BP.Sys.SFTable", mapAttr.UIBindKey);
+    var data = sfTable.DoMethodReturnJSON("GenerDataOfJson");
+    
+    //operations += "<option  value=''>请选择</option>";
+    $.each(data, function (i, obj) {
+        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+    });
+    return operations;
 }

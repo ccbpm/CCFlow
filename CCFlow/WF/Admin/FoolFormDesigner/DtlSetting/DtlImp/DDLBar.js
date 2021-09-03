@@ -23,7 +23,7 @@ function InitBar(optionKey) {
 
 
 function HelpOnline() {
-    var url = "http://ccform.mydoc.io";
+    var url = "https://gitee.com/opencc/JFlow/wikis/%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%85%A5?sort_id=3942532";
     window.open(url);
 }
 

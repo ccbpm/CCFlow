@@ -25,7 +25,7 @@
             var no = GetQueryString("No");
             en = new Entity("BP.CCBill.Sys.Func", no);
 
-            $("#TB_Url").val(en.Tag1);
+            $("#TB_Url").val(en.MethodDoc_Url);
 
             //生成参数内容.
             var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", no);
@@ -42,7 +42,7 @@
 
         function Save() {
 
-            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_MethodDoc");
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_MethodDocSys");
             handler.AddUrlData();
 
             var url = $("#TB_Url").val();
@@ -54,7 +54,7 @@
 
             handler.AddPara("TypeOfFunc", 3); //后台方法..
             handler.AddPara("Tag1", url);
-            var data = handler.DoMethodReturnString("MethodDoc_SaveScript");
+            var data = handler.DoMethodReturnString("MethodDocSys_SaveScript");
 
             alert(data);
 
@@ -71,7 +71,7 @@
         <legend> 参数</legend>
         <ul>
             <li> <div id="paras"></div></li>
-            <li> <button id='Btn_Attrs' onclick='Paras()'>设置参数</button> - <button id='Btn_Attrs' onclick='FrmAttrs()'>表单参考字段</button> </li>
+            <li> <button id='Btn_Attrs' onclick='Paras()'>设置参数</button></li>
         </ul>
         <legend> 方法名设置</legend>
         <ul>

@@ -101,7 +101,20 @@
                 height: '300px',
                 margin: '6px 6px 6px 6px'
             }
-        },
+            },
+       itemadd: function () {
+                colspan =  1
+                return {
+                    width: 'calc(' + colspan / 4 * 100 + '%' + ' - 14px)',
+                    height: '300px',
+                    margin: '6px 6px 6px 6px'
+                }
+            },
+       addfile: function () {
+           var no = GetQueryString("PageID");
+           var url = "../GPM/Window/Html.htm?PageID=" + no + "&MenuNo=" + no;
+           OpenLayuiDialog(url, '', 900, 80, "auto", true);
+            },
         expand: function (item) {
             try {
                 var URI = item.ModrLink

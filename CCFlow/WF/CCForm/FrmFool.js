@@ -926,7 +926,6 @@ function InitMapAttrOfCtrl(mapAttr) {
     if (mapAttr.UIContralType == 18)
         return Gener_Btn(mapAttr);
 
-
     var str = '';
     var defValue = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
 

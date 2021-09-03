@@ -300,7 +300,7 @@ new Vue({
             console.log(no, enName)
             layer.confirm('您确定要删除吗？', { icon: 3, title: '提示' }, function (index) {
 
-                debugger;
+                //debugger;
                 var en = new Entity(enName, no);
                 en.Delete();
 
@@ -664,6 +664,9 @@ new Vue({
                 if (menu.MenuModel === "Dict") {
                     menu.MenuModel = "实体";
                     html += "<a " + btnStyle + "  href=\"javascript:GoToFrmDesigner('" + menu.UrlExt + "')\" >表单设计</a>";
+
+                    html += "&nbsp; <a href='https://www.bilibili.com/video/BV1sy4y157ac/' target='_blank' class='icon-camrecorder'></a>";
+
                 }
 
                 // html += " <span class='layui-badge-rim'>实体:" + menu.UrlExt + "</span>";
@@ -751,11 +754,17 @@ new Vue({
                 if (menu.Mark === "Todolist") menu.Icon = "icon-bell";
                 if (menu.Mark === "Runing") menu.Icon = "icon-clock";
                 if (menu.Mark === "Group") menu.Icon = "icon-chart";
-                if (menu.Mark === "Search") menu.Icon = "icon-grid"; //magnifier
+                if (menu.Mark === "Search") menu.Icon = "icon-grid";  //magnifier
 
-                var doc = "<a href=\"javascript:DesignerFlow('" + menu.Tag1 + "','" + menu.Name + "');\" ><i class=icon-heart ></i>设计流程" + menu.Tag1 + "</a>";
                 //var html = "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.Sys.Func','" + menu.Name + "','" + menu.UrlExt + "')\" >功能属性</a>";
                 var html = "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + menu.UrlExt + "','" + menu.Name + "','700',0,null,false);\" >执行</a>";
+
+                var url = basePath + "/CCFast/StandAloneFlow/Admin/Default.htm?FlowNo=" + menu.Mark;
+                html += "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','" + menu.Name + "','700',0,null,false);\" >设置</a>";
+                // html += "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCFast.StandAloneFlow','" + menu.Name + "','" + menu.Tag1 + "')\" >设置</a>";
+
+                var doc = "  <a href=\"javascript:DesignerFlow('" + menu.Tag1 + "','" + menu.Name + "');\" ><i class=icon-heart ></i>设计流程" + menu.Tag1 + "</a>";
+
                 menu.Docs = html + doc;
             }
 

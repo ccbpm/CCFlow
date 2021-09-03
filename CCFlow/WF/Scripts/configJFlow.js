@@ -4,42 +4,48 @@ var uiPlant = 'BS'; //风格文件.
 //当前项目路径
 var basePath = basePath();
 
-function basePath()
-{
-                 //jflow下常用目录
-                 var dir=['/WF','/DataUser','GPM','App','Portal','CCMobile'];
-	 //获取当前网址，如： http://localhost:80/jflow-web/index.jsp  
-	 var curPath=window.document.location.href;  
-	 //获取主机地址之后的目录，如： jflow-web/index.jsp  
-	 var pathName=window.document.location.pathname;  
-	 var pos=curPath.indexOf(pathName);  
-	 //获取主机地址，如： http://localhost:80  
-	 var localhostPaht=curPath.substring(0,pos);  
-	//获取带"/"的项目名，如：/jflow-web
-	var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);  
+function basePath() {
+    //jflow下常用目录
+    var dirs = ['/WF', '/DataUser', 'GPM', 'App', 'Portal', 'CCMobile'];
+    //获取当前网址，如： http://localhost:80/jflow-web/index.jsp
 
-	for (var i = 0;i <dir.length;i++) {
-                    if(projectName==dir[i]){
-                    projectName="";
-                    break;
-                  }
-              }	
-             return localhostPaht+projectName;
+    var curPath = window.document.location.href;
+    //获取主机地址之后的目录，如： jflow-web/index.jsp  
+    var pathName = window.document.location.pathname;
+    var pos = curPath.indexOf(pathName);
+    //获取主机地址，如： http://localhost:80  
+    var localhostPaht = curPath.substring(0, pos);
+    //获取带"/"的项目名，如：/jflow-web
+    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+
+    $.each(dirs, function (i, dir) {
+        if (projectName == dir[i]) {
+            projectName = "";
+            return false;
+        }
+    })
+
+    var path = localhostPaht + projectName;
+    if ("undefined" != typeof ccbpmPath && ccbpmPath != null && ccbpmPath != "") {
+        if (ccbpmPath != path)
+            return ccbpmPath;
+    }
+    return path
 }
 
 /**
  * 获取项目路径
  * @returns
  */
-function getContextPath(){
-	return basePath.substring(basePath.lastIndexOf("/"));
+function getContextPath() {
+    return basePath.substring(basePath.lastIndexOf("/"));
 }
 
 //For .net 后台的调用的url ,  java的与.net的不同.
 var plant = "JFlow";
 var url = window.location.href;
-var Handler =  url.substring(0,url.lastIndexOf('/')+1)+"ProcessRequest.do";
-var MyFlow = url.substring(0,url.lastIndexOf('/')+1)+"MyFlow/ProcessRequest.do";
+var Handler = url.substring(0, url.lastIndexOf('/') + 1) + "ProcessRequest.do";
+var MyFlow = url.substring(0, url.lastIndexOf('/') + 1) + "MyFlow/ProcessRequest.do";
 var webUser = null; //定义通用变量用户信息
 var IsIELower10 = false;
 var ver = IEVersion();
@@ -82,28 +88,32 @@ function Handler_AjaxPostData(param, callback, scope) {
 * @param {any} callback 加载完成后的回调函数
 */
 function loadScript(url, callback, scriptID) {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    if (typeof (callback) != "undefined") {
-        if (script.readyState) {
-            script.onreadystatechange = function () {
-                if (script.readyState == "loaded" || script.readyState == "complete") {
-                    script.onreadystatechange = null;
+    try {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        if (typeof (callback) != "undefined") {
+            if (script.readyState) {
+                script.onreadystatechange = function () {
+                    if (script.readyState == "loaded" || script.readyState == "complete") {
+                        script.onreadystatechange = null;
+                        callback();
+                    }
+                };
+            } else {
+                script.onload = function () {
                     callback();
-                }
-            };
-        } else {
-            script.onload = function () {
-                callback();
-            };
+                };
+            }
         }
+        script.src = url;
+        if (scriptID != null && scriptID != undefined)
+            script.id = scriptID;
+        var tmp = document.getElementsByTagName('script')[0];
+        tmp.parentNode.insertBefore(script, tmp);
+    } catch (e) {
+        alert(url + "文件不存在");
     }
-    script.src = url;
-    if (scriptID != null && scriptID != undefined)
-        script.id = scriptID;
-    // document.head.appendChild(script);
-    var tmp = document.getElementsByTagName('script')[0];
-    tmp.parentNode.insertBefore(script, tmp);
+
 }
 
 var Skip = {};
@@ -134,6 +144,8 @@ Skip.getXmlHttpRequest = function () {
     },
     //同步加载
     Skip.addJs = function (url) {
+    if (Exists(url) == false)
+        return;
         var oXmlHttp = Skip.getXmlHttpRequest();
         oXmlHttp.onreadystatechange = function () {//其实当在第二次调用导入js时,因为在浏览器当中存在这个*.js文件了,它就不在访问服务器,也就不在执行这个方法了,这个方法也只有设置成异步时才用到
             if (oXmlHttp.readyState == 4) { //当执行完成以后(返回了响应)所要执行的
@@ -152,7 +164,17 @@ Skip.getXmlHttpRequest = function () {
         Skip.includeJsText(rootObject, oXmlHttp.responseText);
     }
 
-
+/**
+ *判断是不是移动端 
+ */
+function IsMobile() {
+    let info = navigator.userAgent;
+    let agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPod", "iPad"];
+    for (let i = 0; i < agents.length; i++) {
+        if (info.indexOf(agents[i]) >= 0) return true;
+    }
+    return false;
+}
 function IEVersion() {
     var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
     var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE<11浏览器  

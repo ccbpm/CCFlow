@@ -18,9 +18,8 @@
     <script type="text/javascript">
         $(function () {
 
-            InitBar(MenuModel.SelfUrl);
+            InitBar("Calendar");
             var html = "";
-
         });
 
         function Save() {
@@ -30,8 +29,10 @@
             var en = new Entity("BP.GPM.Menu2020.Menu");
             en.ModuleNo = moduleNo;
             en.Name = $("#TB_Title").val();
-            en.UrlExt = $("#TB_Url").val();
-            en.MenuModel = "SelfUrl"; //类型为.
+            en.UrlExt ="/CCFast/Calendar/Month.htm";
+            en.MenuModel = "Calendar"; //类型为.
+            en.Mark = "Calendar"; //类型为.
+            en.Icon = "icon-calendar";
             en.Insert();
 
             alert("创建成功，您可以在在菜单里执行高级编辑与授权.");
@@ -45,22 +46,15 @@
     <div id="bar">
     </div>
     <fieldset>
-        <legend>自定义URL菜单， 您可以使用右上角的下拉框选择自己要定义的菜单类型. </legend>
+        <legend> 日历日程 </legend>
         <ul>
             <li>菜单标题:</li>
-            <li> <input type="text" value="" id="TB_Title" placeholder="功能页面1" /> </li>
-            <li>菜单连接： http://ccbpm.cn/MyUrl.htm  </li>
-            <li> <input type="text" value="" id="TB_Url" placeholder="/App/MyUrl.htm" /> </li>
+            <li> <input type="text" value="日历&日程" id="TB_Title" placeholder="日历&日程"   /> </li>
         </ul>
 
         <legend>帮助</legend>
         <ul>
-            <li> 可以使用相对路径，也可以使用绝对路径。</li>
-            <li> 用户输入的Url:  http://ccbpm.cn/MyUrl.htm</li>
-            <li> 打开的Url : http://ccbpm.cn/MyUrl.htm?UserNo=xxxx&SID=xxxx。</li>
-            <li> SID就类似于token, UserNo就是当前登录用户的编号。</li>
-
-            <li> <img src="SelfUrl.png" class="HelpImg" /></li>
+            <li> <img src="Calendar.png" class="HelpImg" /></li>
 
         </ul>
     </fieldset>

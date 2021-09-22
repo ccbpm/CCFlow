@@ -23,7 +23,7 @@ var CommonConfig = {
 
    //附件信息配置
    IsOnlinePreviewOfAth:true, //是否在线预览
-    PreviewPathOfAth: "http://140.143.236.168:8012",//预览地址
+    PreviewPathOfAth: "http://doc.ccbpm.cn",//预览地址
    IsHideMobileBack:false//是否隐藏移动端返回标签
 
 

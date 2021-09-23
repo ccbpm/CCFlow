@@ -64,6 +64,10 @@ namespace BP.WF.HttpHandler
             ht.Add("UserName", WebUser.Name);
 
             BP.Port.Emp emp = new Emp();
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                emp.No = BP.Web.WebUser.OrgNo + "_" + WebUser.No;
+            else
+                emp.No = WebUser.No;
             emp.UserID = WebUser.No;
             emp.Retrieve();
 

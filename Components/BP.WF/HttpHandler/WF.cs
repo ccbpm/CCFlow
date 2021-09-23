@@ -1382,7 +1382,9 @@ namespace BP.WF.HttpHandler
         {
             DataTable dt = null;
             string domain = this.GetRequestVal("Domain");
-            dt = BP.WF.Dev2Interface.DB_GenerDraftDataTable(domain);
+            string flowNo = this.GetRequestVal("FK_Flow");
+
+            dt = BP.WF.Dev2Interface.DB_GenerDraftDataTable(flowNo,domain);
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>

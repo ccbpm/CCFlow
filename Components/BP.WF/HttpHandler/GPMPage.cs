@@ -103,14 +103,13 @@ namespace BP.WF.HttpHandler
                 {
                     qo.AddWhere(BP.GPM.DeptAttr.ParentNo, parentNo);
                     qo.addOr();
-                    qo.AddWhereInSQL(BP.GPM.DeptAttr.ParentNo, "SELECT No From Port_Dept Where ParentNo='0'");
+                    qo.AddWhereInSQL(BP.GPM.DeptAttr.ParentNo, "SELECT No From Port_Dept WHERE ParentNo='0'");
                 }
-
                 else
                 {
                     qo.AddWhere(BP.GPM.DeptAttr.ParentNo, parentNo);
-                    qo.addOr();
-                    qo.AddWhere(BP.GPM.DeptAttr.No, parentNo);
+                    //qo.addOr();
+                    //qo.AddWhere(BP.GPM.DeptAttr.No, parentNo);
                 }
                    
             }

@@ -338,6 +338,11 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
             string sql = "";
 
+            string sqlOrgNoWhere = "";
+            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                sqlOrgNoWhere = " AND OrgNo='" + BP.Web.WebUser.OrgNo + "'";
+
+
             string tSpan = this.GetRequestVal("TSpan");
             if (tSpan == "")
                 tSpan = null;
@@ -349,9 +354,9 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtTSpan);
 
             if (this.FK_Flow == null)
-                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "') AND WFState > 1 GROUP BY TSpan";
+                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "') AND WFState > 1 "+ sqlOrgNoWhere + "  GROUP BY TSpan";
             else
-                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "')  AND WFState > 1 GROUP BY TSpan";
+                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "')  AND WFState > 1  " + sqlOrgNoWhere + " GROUP BY TSpan";
 
             DataTable dtTSpanNum = DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow drEnum in dtTSpan.Rows)
@@ -370,9 +375,9 @@ namespace BP.WF.HttpHandler
 
             #region 2、处理流程类别列表.
             if (tSpan == "-1")
-                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE (Emps LIKE '%" + WebUser.No + "%' OR TodoEmps LIKE '%" + BP.Web.WebUser.No + ",%' OR Starter='" + WebUser.No + "')  AND WFState > 1 AND FID = 0 GROUP BY FK_Flow, FlowName";
+                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE (Emps LIKE '%" + WebUser.No + "%' OR TodoEmps LIKE '%" + BP.Web.WebUser.No + ",%' OR Starter='" + WebUser.No + "')  AND WFState > 1 AND FID = 0  " + sqlOrgNoWhere + " GROUP BY FK_Flow, FlowName";
             else
-                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan=" + tSpan + " AND (Emps LIKE '%" + WebUser.No + "%' OR TodoEmps LIKE '%" + BP.Web.WebUser.No + ",%' OR Starter='" + WebUser.No + "')  AND WFState > 1 AND FID = 0 GROUP BY FK_Flow, FlowName";
+                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan=" + tSpan + " AND (Emps LIKE '%" + WebUser.No + "%' OR TodoEmps LIKE '%" + BP.Web.WebUser.No + ",%' OR Starter='" + WebUser.No + "')  AND WFState > 1 AND FID = 0  " + sqlOrgNoWhere + " GROUP BY FK_Flow, FlowName";
 
             DataTable dtFlows = DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
@@ -387,8 +392,8 @@ namespace BP.WF.HttpHandler
 
             #region 3、处理流程实例列表.
             GenerWorkFlows gwfs = new GenerWorkFlows();
-            String sqlWhere = "";
-            sqlWhere = "(1 = 1)AND (((Emps LIKE '%" + WebUser.No + "%')OR(TodoEmps LIKE '%" + WebUser.No + "%')OR(Starter = '" + WebUser.No + "')) AND (WFState > 1)";
+            string  sqlWhere = "";
+            sqlWhere = "(1 = 1)AND (((Emps LIKE '%" + WebUser.No + "%')OR(TodoEmps LIKE '%" + WebUser.No + "%')OR(Starter = '" + WebUser.No + "')) AND (WFState > 1) " + sqlOrgNoWhere;
             if (tSpan != "-1")
             {
                 sqlWhere += "AND (TSpan = '" + tSpan + "') ";
@@ -429,8 +434,6 @@ namespace BP.WF.HttpHandler
                 mydt.Columns[11].ColumnName = "FK_Node";
                 mydt.Columns[12].ColumnName = "NodeName";
                 mydt.Columns[13].ColumnName = "TodoEmps";
-
-
             }
             mydt.TableName = "WF_GenerWorkFlow";
             if (mydt != null)

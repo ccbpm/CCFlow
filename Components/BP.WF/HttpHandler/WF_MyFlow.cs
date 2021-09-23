@@ -1245,7 +1245,7 @@ namespace BP.WF.HttpHandler
                     dr = dt.NewRow();
                     dr["No"] = "Search";
                     dr["Name"] = btnLab.SearchLab;
-                    dr["Oper"] = "WinOpen('./RptDfine/Default.htm?RptNo=ND" + int.Parse(this.FK_Flow) + "MyRpt&FK_Flow=" + this.FK_Flow + "&SearchType=My)";
+                    dr["Oper"] = "WinOpen('./RptDfine/Default.htm?RptNo=ND" + int.Parse(this.FK_Flow) + "MyRpt&FK_Flow=" + this.FK_Flow + "&SearchType=My')";
                     dt.Rows.Add(dr);
                 }
 

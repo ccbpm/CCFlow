@@ -35,7 +35,7 @@ namespace BP.WF.HttpHandler
             Paras ps = new Paras();
             ps.SQL = "select FK_Flow, FlowName,Count(WorkID) as Num FROM WF_GenerWorkFlow  WHERE WFState >1 And Starter=" + SystemConfig.AppCenterDBVarStr + "Starter GROUP BY FK_Flow, FlowName ";
             ps.Add("Starter", BP.Web.WebUser.No);
-            
+
             //string sql = "";
             //sql = "select FK_Flow, FlowName,Count(WorkID) as Num FROM WF_GenerWorkFlow  WHERE Starter='" + BP.Web.WebUser.No + "' GROUP BY FK_Flow, FlowName ";
             System.Data.DataTable dt = DBAccess.RunSQLReturnTable(ps);
@@ -140,7 +140,9 @@ namespace BP.WF.HttpHandler
                 return "@err:请输入正确字符！";
 
             Paras ps = new Paras();
-            ps.SQL = "SELECT A.FlowName,A.NodeName,A.FK_Flow,A.FK_Node,A.WorkID,A.FID,A.Title,A.StarterName,A.RDT,A.WFSta,A.Emps, A.TodoEmps, A.WFState "
+
+            string sql = "";
+            sql = "SELECT A.FlowName,A.NodeName,A.FK_Flow,A.FK_Node,A.WorkID,A.FID,A.Title,A.StarterName,A.RDT,A.WFSta,A.Emps, A.TodoEmps, A.WFState "
                     + " FROM WF_GenerWorkFlow A "
                     + " WHERE (A.Title LIKE '%" + keywords + "%' "
                     + " or A.Starter LIKE '%" + keywords + "%' "
@@ -148,6 +150,12 @@ namespace BP.WF.HttpHandler
                     + " AND (A.Emps LIKE '@%" + WebUser.No + "%' "
                     + " or A.TodoEmps LIKE '%" + WebUser.No + "%') "
                     + " AND A.WFState!=0 ";
+
+            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                sql += " AND A.OrgNo='" + BP.Web.WebUser.OrgNo + "' ";
+
+            ps.SQL = sql;
+
 
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "WF_GenerWorkFlow";
@@ -189,7 +197,7 @@ namespace BP.WF.HttpHandler
             else
                 return "0";
         }
-       
+
         #endregion
 
     }

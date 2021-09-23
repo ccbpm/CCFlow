@@ -45,10 +45,10 @@ $(function () {
         var Oper = "";
     
         if (toolBar.Oper != ""){
-            if (wf_node&&(wf_node.FormType == 3 || wf_node.FormType == 2) && toolBar.No=="Send")
-				Oper = "onclick=\"" + toolBar.Oper.replace("SaveDtlAll();","") + "\""; 
-			else
+            if (toolBar.No == "Send" || toolBar.No =="SendBtn" || toolBar.No=="Save")
                 Oper = "onclick=\"" + toolBar.Oper + "\"";
+            else
+                Oper = "data-info=\"" + toolBar.Oper + "\"";
             if (toolBar.No == "Send")
                 sendBtnOper = Oper;
 		}
@@ -72,24 +72,35 @@ $(function () {
                 img = "<img src='" + Icon + "' width='22px' height='22px'>&nbsp;";
             }
 
-            _html += "<button type='button' class='layui-btn layui-btn-primary' name='" + toolBar.No + "' enable=true " + Oper + ">" + img + toolBar.Name + "</button>";
+            _html += "<button type='button' class='layui-bar layui-btn layui-btn-primary' name='" + toolBar.No + "' enable=true " + Oper + ">" + img + toolBar.Name + "</button>";
 
         }
         else {
             if (toolBar.No == "Send")
                 _html += "<button type='button' class='layui-btn layui-btn-primary' name='" + toolBar.No + "Btn' enable=true " + Oper + " lay-submit lay-filter='Send'><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='22px' height='22px'>&nbsp;" + toolBar.Name + "</button>";
-            else
-                _html += "<button type='button' class='layui-btn layui-btn-primary' name='" + toolBar.No + "' enable=true " + Oper + "><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='22px' height='22px'>&nbsp;" + toolBar.Name + "</button>";
+            else {
+                
+                _html += "<button type='button' class='layui-bar layui-btn layui-btn-primary' name='" + toolBar.No + "' enable=true " + Oper + " ><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='22px' height='22px'>&nbsp;" + toolBar.Name + "</button>";
+
+            }
         }
     });
     $('#ToolBar').html(_html);
 	$('#Toolbar').html(_html);
 
+   
+   
     //按钮旁的下来框
     if (wf_node != null && wf_node.IsBackTrack == 0)
         InitToNodeDDL(data, wf_node);
 
-
+    $('.layui-bar').on('click', function () {
+        var oper = $(this).data("info");
+       if (oper != null && oper != undefined && oper != "")
+            eval(oper);
+        
+       
+    });
     if ($('[name=Return]').length > 0) {
         $('[name=Return]').bind('click', function () {
             //增加退回前的事件
@@ -217,10 +228,7 @@ $(function () {
         $('[name=DocWord').bind('click', function () { initModal("DocWord"); });
     }
 
-    if ($('[name=Press]').length > 0) {
-       // $('[name=Press]').bind('click', function () { initModal("Press"); $('#returnWorkModal').modal().show(); });
-    }
-
+   
     //回滚 Rollback
     if ($('[name=Rollback]').length > 0) {
         $('[name=Rollback]').bind('click', function () { initModal("Rollback");});
@@ -999,13 +1007,24 @@ function SDKSend() {
  * 节点表单发送前的验证
  */
 function NodeFormSend() {
-    //保存从表信息
-    $("[name=Dtl]").each(function (i, obj) {
-        var contentWidow = obj.contentWindow;
-        if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
-            IsSaveTrue = contentWidow.SaveAll();
-        }
-    });
+    //检查，保存从表
+    if ($("[name=Dtl]").length > 0) {
+        var formCheckResult = true;
+        $("[name=Dtl]").each(function (i, obj) {
+            var contentWidow = obj.contentWindow;
+            if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
+                contentWidow.SaveAll();
+            }
+            if (contentWidow.SaveAll() == false) {
+                formCheckResult = false
+                return false;
+            }
+
+        });
+        if (formCheckResult == false)
+            return false;
+
+    }
 
     //发送前事件
     if (typeof beforeSend != 'undefined' && beforeSend instanceof Function)
@@ -1315,6 +1334,30 @@ function UnSendAllThread() {
         var url = data.replace("url@", "");
         window.location.href = url;
     }
+}
+
+//催办
+function Press() {
+    window.prompt('请输入催办信息', '该工作因为xxx原因，需要您优先处理.', function (e) {
+        if (e.index == 1) {
+            if (e.value == "")
+                return;
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddUrlData();
+            handler.AddPara("Msg", e.value);
+            var data = handler.DoMethodReturnString("Runing_Press");
+
+            if (data.indexOf('err@') == 0) {
+                console.log(data);
+                mui.alert(data);
+                return;
+            }
+
+            mui.alert(data);
+            return;
+        }
+    });
+
 }
 
 /***

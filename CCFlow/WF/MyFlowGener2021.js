@@ -127,7 +127,7 @@ function GenerWorkNode() {
 function BindFrm() {
     var node = flowData.WF_Node[0];
     var flow = flowData.WF_Flow[0];
-    var flowDevModel = flow.FlowDevModel;
+    var flowDevModel = GetPara(flow.AtPara,"FlowDevModel");
     flowDevModel = flowDevModel == null || flowDevModel == undefined || flowDevModel == "" ? 0 : parseInt(flowDevModel);
     var isFool = true;
     var frmNode = flowData["WF_FrmNode"];

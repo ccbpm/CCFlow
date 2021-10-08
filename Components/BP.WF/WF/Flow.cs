@@ -3355,7 +3355,7 @@ namespace BP.WF
                 attr.UIIsEnable = false;
                 attr.UIIsLine = true;
                 attr.MinLen = 0;
-                attr.MaxLen = 3;
+                attr.MaxLen = 50;
                 attr.Idx = -100;
                 attr.Insert();
             }

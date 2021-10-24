@@ -10,11 +10,11 @@
  font-style:normal !important;	
  font-height:px !important;	
  border-style:none !important;	
- font-family:SimSun !important;	
+ font-family:MicrosoftYaHei !important;	
  color: !important;	
  selfbody-width:200px !important;	
  font-weight:normal !important;	
- font-size:21px !important;	
+ font-size:18px !important;	
  }	
 /* 标题图标:FoolFrmIcon */	
 .FoolFrmTitleIcon	
@@ -27,7 +27,7 @@
  font-style:normal !important;	
  font-height:px !important;	
  border-style:solid !important;	
- font-family:SimSun !important;	
+ font-family:MicrosoftYaHei !important;	
  color: !important;	
  selfbody-width:px !important;	
  font-weight:normal !important;	
@@ -44,42 +44,47 @@
  font-style:normal !important;	
  font-height:35px !important;	
  border-style:none !important;	
- font-family:SimSun !important;	
- color:#666699 !important;	
+ font-family:MicrosoftYaHei !important;	
+ color:#414141 !important;	
  selfbody-width:px !important;	
  font-weight:bold !important;	
- font-size:14px !important;	
+ font-size:18px !important;	
  }	
 /* 分组字段:FoolFrmGroupBar */	
 .FoolFrmGroupBar	
 { 	
- border-color: !important;	
+ border-color:#d4d6d9 !important;	
  selfbody-hight:px !important;	
- border-width:px !important;	
- background-color:#FF0033 !important;	
+ border-width:1px !important;	
+ padding-left:15px !important;	
+ background-color:#f7f7f7 !important;	
  border-which:bottom !important;	
  font-style:normal !important;	
  font-height:px !important;	
- border-style:none !important;	
- font-family:SimSun !important;	
- color:#FFFFFF !important;	
+ border-style:solid !important;	
+ font-family:MicrosoftYaHei !important;	
+ margin-bottom:0px !important;	
+ color:#636363 !important;	
  selfbody-width:200px !important;	
- font-weight:normal !important;	
- font-size:18px !important;	
+ line-height:35px !important;	
+ font-weight:bold !important;	
+ font-size:14px !important;	
  }	
 /* 字段行:FoolFrmFieldRow */	
 .FoolFrmFieldRow	
 { 	
- border-color: !important;	
+ border-color:#d4d6d9 !important;	
  selfbody-hight:px !important;	
- border-width:px !important;	
+ border-width:1px !important;	
  background-color: !important;	
  border-which:bottom !important;	
  font-style:normal !important;	
+ border-top:0px !important;	
  font-height:px !important;	
  font-color:red !important;	
- border-style:none !important;	
- font-family:SimSun !important;	
+ border-style:solid !important;	
+ font-family:MicrosoftYaHei !important;	
+ margin-bottom:0px !important;	
  selfbody-width:px !important;	
  font-weight:normal !important;	
  font-size:px !important;	
@@ -87,19 +92,20 @@
 /* 字段名:FoolFrmFieldLabel */	
 .FoolFrmFieldLabel	
 { 	
- border-color:#FFFFFF !important;	
+ border-color:#d4d6d9 !important;	
  selfbody-hight:23pt !important;	
- border-width:0px !important;	
- background-color:#FFFFFF !important;	
+ border-width:1px !important;	
+ background-color:#f7f7f7 !important;	
  border-which:all !important;	
  font-style:normal !important;	
  font-height:px !important;	
  border-style:none !important;	
- font-family:SimHei !important;	
- color:#666699 !important;	
+ font-family:MicrosoftYaHei !important;	
+ color:#666666 !important;	
  selfbody-width:200in !important;	
- font-weight:bold !important;	
- font-size:16px !important;	
+ line-height:36px !important;	
+ font-weight:normal !important;	
+ font-size:14px !important;	
  }	
 /* 控件:FoolFrmFieldInput */	
 .FoolFrmFieldInput	
@@ -112,9 +118,9 @@
  font-style:normal !important;	
  font-height:px !important;	
  border-style:solid !important;	
- font-family:SimHei !important;	
- color:#666699 !important;	
+ font-family:MicrosoftYaHei !important;	
+ color:#333333 !important;	
  selfbody-width:200em !important;	
- font-weight:bold !important;	
- font-size:16px !important;	
+ font-weight:normal !important;	
+ font-size:14px !important;	
  }

@@ -1,0 +1,60 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <dt>
+    <No>FoolFrmTitle</No>
+    <Name>标题表头:FoolFrmTitle</Name>
+    <Val>@background-color=@selfbody-width_Temp=200@selfbody-width-unit_Temp=px@selfbody-width=200 px@selfbody-hight_Temp=@selfbody-hight-unit_Temp=px@selfbody-hight= px@font-size_Temp=18@font-size-unit_Temp=px@font-size=18 px@font-weight=normal@font-style=normal@font-height_Temp=@font-height-unit_Temp=px@font-height= px@font-family=Microsoft YaHei @color=@border-which=all@border-width_Temp=@border-width-unit_Temp=px@border-width= px@border-color=@border-style=none</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>1</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmTitleIcon</No>
+    <Name>标题图标:FoolFrmIcon</Name>
+    <Val>@background-color=#FFFFFF@selfbody-width_Temp=@selfbody-width-unit_Temp=px@selfbody-width= px@selfbody-hight_Temp=@selfbody-hight-unit_Temp=px@selfbody-hight= px@font-size_Temp=@font-size-unit_Temp=px@font-size= px@font-weight=normal@font-style=normal@font-height_Temp=@font-height-unit_Temp=px@font-height= px@font-family=Microsoft YaHei @color=@border-which=all@border-width_Temp=0@border-width-unit_Temp=px@border-width=0 px@border-color=#666666@border-style=solid</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>2</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmTitleLable</No>
+    <Name>标题:FoolFrmTitleLable</Name>
+    <Val>@background-color=none@selfbody-width_Temp=@selfbody-width-unit_Temp=px@selfbody-width= px@selfbody-hight_Temp=@selfbody-hight-unit_Temp=px@selfbody-hight= px@font-size_Temp=18@font-size-unit_Temp=px@font-size=18px@font-weight=bold@font-style=normal@font-height_Temp=35@font-height-unit_Temp=px@font-height=35px@font-family=Microsoft YaHei @color=#414141@border-which=bottom@border-width_Temp=5@border-width-unit_Temp=px@border-width=5px@border-color=#FFFF00@border-style=none</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>3</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmGroupBar</No>
+    <Name>分组字段:FoolFrmGroupBar</Name>
+    <Val>@background-color=#f7f7f7@selfbody-width_Temp=200@selfbody-width-unit_Temp=px@selfbody-width=200 px@selfbody-hight_Temp=@selfbody-hight-unit_Temp=px@selfbody-hight= px@font-size_Temp=14@font-size-unit_Temp=px@font-size=14 px@padding-left=15px@line-height=35px@font-weight=bold@font-style=normal@font-height_Temp=@font-height-unit_Temp=px@font-height= px@font-family=Microsoft YaHei @color=#636363@border-which=bottom@border-width_Temp=@border-width-unit_Temp=px@border-width= 1px@border-color=#d4d6d9@border-style=solid@margin-bottom=0px</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>4</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmFieldRow</No>
+    <Name>字段行:FoolFrmFieldRow</Name>
+    <Val>@background-color=@selfbody-width_Temp=@selfbody-width-unit_Temp=px@selfbody-width= px@selfbody-hight_Temp=@selfbody-hight-unit_Temp=px@selfbody-hight= px@font-size_Temp=@font-size-unit_Temp=px@font-size= px@font-weight=normal@font-style=normal@font-height_Temp=@font-height-unit_Temp=px@font-height= px@font-family=Microsoft YaHei @font-color=red@border-which=bottom@border-width_Temp=@border-width-unit_Temp=px@border-width= 1px@border-color=#d4d6d9@border-style=solid@margin-bottom=0px@border-top=0px</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>5</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmFieldLabel</No>
+    <Name>字段名:FoolFrmFieldLabel</Name>
+    <Val>@background-color=#f7f7f7@line-height=36px@selfbody-width_Temp=200@selfbody-width-unit_Temp=in@selfbody-width=200 in@selfbody-hight_Temp=23@selfbody-hight-unit_Temp=pt@selfbody-hight=23 pt@font-size_Temp=14@font-size-unit_Temp=px@font-size=14 px@font-weight=normal@font-style=normal@font-height_Temp=@font-height-unit_Temp=px@font-height= px@font-family=Microsoft YaHei@color=#666666@border-which=all@border-width_Temp=1@border-width-unit_Temp=px@border-width=1 px@border-color=#d4d6d9@border-style=none</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>6</Idx>
+  </dt>
+  <dt>
+    <No>FoolFrmFieldInput</No>
+    <Name>控件:FoolFrmFieldInput</Name>
+    <Val>@background-color=#FFFFFF@selfbody-width_Temp=200@selfbody-width-unit_Temp=em@selfbody-width=200 em@selfbody-hight_Temp=@selfbody-hight-unit_Temp=px@selfbody-hight= px@font-size_Temp=14@font-size-unit_Temp=px@font-size=14 px@font-weight=normal@font-style=normal@font-height_Temp=@font-height-unit_Temp=px@font-height= px@font-family=Microsoft YaHei@color=#333333@border-which=bottom@border-width_Temp=0@border-width-unit_Temp=px@border-width=0 px@border-color=#FFFFFF@border-style=solid</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>7</Idx>
+  </dt>
+  
+</NewDataSet>

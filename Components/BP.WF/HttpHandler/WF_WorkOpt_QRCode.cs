@@ -125,9 +125,9 @@ namespace BP.WF.HttpHandler
             string tempPath = "";
 
             if (this.WorkID == 0)
-                tempPath = SystemConfig.PathOfTemp + "\\" + this.FK_Flow + ".png";
+                tempPath = SystemConfig.PathOfTemp + this.FK_Flow + ".png";
             else
-                tempPath = SystemConfig.PathOfTemp + "\\" + this.WorkID + ".png";
+                tempPath = SystemConfig.PathOfTemp + this.WorkID + ".png";
 
             image.Save(tempPath, ImageFormat.Png);
             image.Dispose();

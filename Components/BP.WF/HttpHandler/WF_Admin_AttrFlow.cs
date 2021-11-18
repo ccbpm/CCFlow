@@ -57,9 +57,9 @@ namespace BP.WF.HttpHandler
             string tmpPath = "";
 
             if (BP.WF.Glo.Platform == Platform.CCFlow)
-                tmpPath = SystemConfig.PathOfWebApp + @"\WF\Admin\AttrFlow\APICodeFEE.txt.CCFlow";
+                tmpPath = SystemConfig.PathOfWebApp + @"WF/Admin/AttrFlow/APICodeFEE.txt.CCFlow";
             else
-                tmpPath = SystemConfig.PathOfWebApp + @"\WF\Admin\AttrFlow\APICodeFEE.txt.JFlow";
+                tmpPath = SystemConfig.PathOfWebApp + @"WF/Admin/AttrFlow/APICodeFEE.txt.JFlow";
 
             if (System.IO.File.Exists(tmpPath) == false)
                 return string.Format(@"未找到事件编写模板文件“{0}”，请联系管理员！", tmpPath);
@@ -536,7 +536,7 @@ namespace BP.WF.HttpHandler
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(files[0].FileName);
 
             //文件存放路径
-            string filePath = SystemConfig.PathOfTemp + "\\" + fileNewName;
+            string filePath = SystemConfig.PathOfTemp + "" + fileNewName;
             //files[0].SaveAs(filePath);
             HttpContextHelper.UploadFile(files[0], filePath);
 
@@ -583,7 +583,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
 
             //把文件放入ds.
-            string path = SystemConfig.PathOfWebApp + "WF\\Admin\\ClientBin\\NodeIcon\\";
+            string path = SystemConfig.PathOfWebApp + "WF/Admin/ClientBin/NodeIcon/";
             string[] strs = System.IO.Directory.GetFiles(path);
             DataTable dtIcon = new System.Data.DataTable();
             dtIcon.Columns.Add("No");

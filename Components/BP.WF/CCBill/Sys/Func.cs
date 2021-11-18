@@ -80,6 +80,7 @@ namespace BP.CCBill.Sys
         {
             get
             {
+
                 string s = this.GetValStringByKey(MethodAttr.MethodDoc_Url);
                 if (DataType.IsNullOrEmpty(s) == true)
                     s = "http://192.168.0.100/MyPath/xxx.xx";
@@ -114,7 +115,7 @@ namespace BP.CCBill.Sys
         {
             get
             {
-                string file = SystemConfig.CCFlowAppPath + "WF\\CCBill\\Admin\\MethodDoc\\MethodDocDemoJS.txt";
+                string file = SystemConfig.CCFlowAppPath + "WF/CCBill/Admin/MethodDoc/MethodDocDemoJS.txt";
                 string doc = DataType.ReadTextFile(file); //读取文件.
                 doc = doc.Replace("/#", "+"); //为什么？
                 doc = doc.Replace("/$", "-"); //为什么？
@@ -128,7 +129,7 @@ namespace BP.CCBill.Sys
         {
             get
             {
-                string file = SystemConfig.CCFlowAppPath + "WF\\CCBill\\Admin\\MethodDoc\\MethodDocDemoSQL.txt";
+                string file = SystemConfig.CCFlowAppPath + "WF/CCBill/Admin/MethodDoc/MethodDocDemoSQL.txt";
                 string doc = DataType.ReadTextFile(file); //读取文件.
                                                           //  doc = doc.Replace("@FrmID", this.FrmID);
                 return doc;
@@ -282,13 +283,14 @@ namespace BP.CCBill.Sys
                 map.AddTBString(FuncAttr.MethodDoc_Url, null, "URL执行内容", false, false, 0, 300, 10);
                 map.AddTBString(FuncAttr.MsgSuccess, null, "成功提示信息", true, false, 0, 300, 10, true);
                 map.AddTBString(FuncAttr.MsgErr, null, "失败提示信息", true, false, 0, 300, 10, true);
+                map.AddTBInt(FuncAttr.IsHavePara, 0, "是否含有参数?", true, false);
 
                 RefMethod rm = new RefMethod();
-                rm.Title = "方法参数"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoParas";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
+                //rm.Title = "方法参数"; // "设计表单";
+                //rm.ClassMethodName = this.ToString() + ".DoParas";
+                //rm.Visable = true;
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.Target = "_blank";
                 //rm.GroupName = "开发接口";
                 //  map.AddRefMethod(rm);
 
@@ -327,7 +329,7 @@ namespace BP.CCBill.Sys
         /// <returns></returns>
         public string DoDocs()
         {
-            return "../../CCBill/Admin/MethodDoc.htm?No=" + this.No;
+            return "../../CCBill/Admin/MethodDocSys/Default.htm?No=" + this.No;
         }
         #endregion 执行方法.
     }

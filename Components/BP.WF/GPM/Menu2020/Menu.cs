@@ -380,6 +380,7 @@ namespace BP.GPM.Menu2020
                 map.AddTBString(MenuAttr.Name, null, "名称", true, false, 0, 300, 200, true);
 
                 map.AddTBString(MenuAttr.MenuModel, null, "菜单模式", true, true, 0, 50, 50);
+
                 map.AddTBString(MenuAttr.Mark, null, "标记", true, false, 0, 300, 200, false);
                 map.AddTBString(MenuAttr.Tag1, null, "Tag1", true, false, 0, 300, 200, false);
 

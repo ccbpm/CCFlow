@@ -178,7 +178,7 @@ namespace BP.Sys
             get
             {
 
-                return this.FileFullName.Substring(this.FileFullName.LastIndexOf('\\') + 1);
+                return this.FileFullName.Substring(this.FileFullName.LastIndexOf('/') + 1);
             }
         }
         /// <summary>

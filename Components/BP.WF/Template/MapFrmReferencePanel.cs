@@ -122,7 +122,7 @@ namespace BP.WF.Template
                 //map.AddTBString(MapFrmReferencePanelAttr.TemplaterVer, null, "模版编号", true, false, 0, 30, 20);
                 #endregion 设计者信息.
 
-                //  map.AddMyFile("表单模版", null, SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\");
+                //  map.AddMyFile("表单模版", null, SystemConfig.PathOfDataUser + "FrmOfficeTemplate/");
 
                 this._enMap = map;
                 return this._enMap;

@@ -39,7 +39,7 @@ namespace BP.WF.HttpHandler
             string frmSort = this.GetRequestVal("FrmSort");
 
             //创建临时文件.
-            string temp = SystemConfig.PathOfTemp + "\\" + Guid.NewGuid() + ".xml";
+            string temp = SystemConfig.PathOfTemp + "" + Guid.NewGuid() + ".xml";
             HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), temp);
 
             //获得数据类型.
@@ -299,7 +299,7 @@ namespace BP.WF.HttpHandler
 
                 #region 下载文件.
                 //设置要到的路径.
-                string tempfile = SystemConfig.PathOfTemp + "\\" + str;
+                string tempfile = SystemConfig.PathOfTemp +  str;
                 FtpStatus fs;
                 try
                 {
@@ -389,7 +389,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //设置要到的路径.
-                string tempfile = SystemConfig.PathOfTemp + "\\" + fileName;
+                string tempfile = SystemConfig.PathOfTemp + "" + fileName;
 
                 //下载目录下
                 FtpStatus fs = conn.DownloadFile(tempfile, "/Form" + remotePath + "/" + fileName, FtpLocalExists.Overwrite);

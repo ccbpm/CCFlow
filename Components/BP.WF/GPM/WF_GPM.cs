@@ -100,7 +100,7 @@ namespace BP.WF.HttpHandler
 
         public string Home_Init()
         {
-            string str = SystemConfig.PathOfData + "\\XML\\BarTemp.xml";
+            string str = SystemConfig.PathOfData + "XML/BarTemp.xml";
             DataSet ds = new DataSet();
             ds.ReadXml(str);
 

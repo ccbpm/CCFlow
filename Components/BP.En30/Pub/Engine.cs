@@ -402,7 +402,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                 {
                     if (strs[1].Trim() == "ImgAth")
                     {
-                        string path1 = SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[0].Trim() + "_" + en.PKVal + ".png";
+                        string path1 = SystemConfig.PathOfDataUser + "ImgAth/Data/" + strs[0].Trim() + "_" + en.PKVal + ".png";
                         //定义rtf中图片字符串.
                         StringBuilder mypict = new StringBuilder();
                         //获取要插入的图片
@@ -444,7 +444,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                         case "RMBDX":
                             return DataType.ParseFloatToCash(float.Parse(val));
                         case "ImgAth":
-                            string path1 = SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
+                            string path1 = SystemConfig.PathOfDataUser + "ImgAth/Data/" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
 
                             //定义rtf中图片字符串.
                             StringBuilder mypict = new StringBuilder();
@@ -465,7 +465,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                             mypict.AppendLine();
                             return mypict.ToString();
                         case "Siganture":
-                            string path = SystemConfig.PathOfDataUser + "Siganture\\" + val + ".jpg";
+                            string path = SystemConfig.PathOfDataUser + "Siganture/" + val + ".jpg";
                             //定义rtf中图片字符串.
                             StringBuilder pict = new StringBuilder();
                             //获取要插入的图片
@@ -700,7 +700,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                     return this.GetCode(StrNohtml);
 
 
-                    string htmlpath = SystemConfig.PathOfDataUser + "Bill\\Temp\\EditorHtm.html";
+                    string htmlpath = SystemConfig.PathOfDataUser + "Bill/Temp/EditorHtm.html";
                     if (File.Exists(htmlpath) == false)
                         File.Create(htmlpath);
                     using (StreamWriter sw = new StreamWriter(htmlpath))
@@ -728,7 +728,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
 
                 if (strs[1].Trim() == "ImgAth")
                 {
-                    string path1 = SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
+                    string path1 = SystemConfig.PathOfDataUser + "ImgAth/Data/" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
                     if (!File.Exists(path1))
                     {
                         FrmImgAthDB dbImgAth = new FrmImgAthDB();
@@ -736,7 +736,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                         int count = dbImgAth.RetrieveFromDBSources();
                         if (count == 1)
                         {
-                            path1 = SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + dbImgAth.FileName + ".png";
+                            path1 = SystemConfig.PathOfDataUser + "ImgAth/Data/" + dbImgAth.FileName + ".png";
                             if (!File.Exists(path1))
                                 return this.GetCode(key);
                         }
@@ -835,7 +835,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                         case "RMBDX":
                             return this.GetCode(DataType.ParseFloatToCash(float.Parse(val)));
                         case "Siganture":
-                            string path = SystemConfig.PathOfDataUser + "Siganture\\" + val + ".jpg";
+                            string path = SystemConfig.PathOfDataUser + "Siganture/" + val + ".jpg";
                             //获取要插入的图片
                             if (File.Exists(path) == true)
                             {
@@ -918,7 +918,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                 {
                     if (strs[2].Trim() == "ImgAth")
                     {
-                        string path1 = SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[1].Trim() + "_" + en.PKVal + ".png";
+                        string path1 = SystemConfig.PathOfDataUser + "ImgAth/Data/" + strs[1].Trim() + "_" + en.PKVal + ".png";
                         //定义rtf中图片字符串.
                         StringBuilder mypict = new StringBuilder();
                         //获取要插入的图片
@@ -961,7 +961,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                         case "RMBDX":
                             return DataType.ParseFloatToCash(float.Parse(val));
                         case "ImgAth":
-                            string path1 = SystemConfig.PathOfDataUser + "ImgAth\\Data\\" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
+                            string path1 = SystemConfig.PathOfDataUser + "ImgAth/Data/" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
 
                             //定义rtf中图片字符串.
                             StringBuilder mypict = new StringBuilder();
@@ -982,7 +982,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                             mypict.AppendLine();
                             return mypict.ToString();
                         case "Siganture":
-                            string path = SystemConfig.PathOfDataUser + "Siganture\\" + val + ".jpg";
+                            string path = SystemConfig.PathOfDataUser + "Siganture/" + val + ".jpg";
                             //定义rtf中图片字符串.
                             StringBuilder pict = new StringBuilder();
                             //获取要插入的图片
@@ -1307,7 +1307,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                         if (str.Contains(wkKey) == true)
                         {
                             wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "EmpFrom"));
-                            String filePath = SystemConfig.PathOfDataUser + "\\Siganture\\" + wkVal + ".jpg";
+                            String filePath = SystemConfig.PathOfDataUser + "/Siganture/" + wkVal + ".jpg";
                             //定义rtf中图片字符串.
                             StringBuilder mypict = new StringBuilder();
                             //获取要插入的图片
@@ -1405,7 +1405,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                             if (tag == "Siganture") {
                                 string empNo = this.GetCode(this.GetValueCheckWorkByKey(row, "Siganture"));
 
-                                String filePath = SystemConfig.PathOfDataUser + "\\Siganture\\" + empNo + ".jpg";
+                                String filePath = SystemConfig.PathOfDataUser + "/Siganture/" + empNo + ".jpg";
                                 //定义rtf中图片字符串.
                                 StringBuilder mypict = new StringBuilder();
                                 //获取要插入的图片
@@ -1500,7 +1500,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                 {  // 异常可能与单据的配置有关系。
                     try
                     {
-                        this.CyclostyleFilePath = SystemConfig.PathOfDataUser + "CyclostyleFile\\" + templateRtfFile;
+                        this.CyclostyleFilePath = SystemConfig.PathOfDataUser + "CyclostyleFile/" + templateRtfFile;
                         str = Cash.GetBillStr(templateRtfFile, false);
                         msg = "@已经成功的执行修复线  RepairLineV2，您重新发送一次或者，退后重新在发送一次，是否可以解决此问题";
                     }

@@ -142,15 +142,15 @@ namespace BP.WF.XML
             get
             {
                 if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-                    return SystemConfig.PathOfWebApp + "DataUser\\XML\\AdminMenuCloud.xml";
+                    return SystemConfig.PathOfWebApp + "DataUser/XML/AdminMenuCloud.xml";
 
                 if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
-                    return SystemConfig.PathOfWebApp + "DataUser\\XML\\AdminMenu.xml";
+                    return SystemConfig.PathOfWebApp + "DataUser/XML/AdminMenu.xml";
 
                 if (BP.Web.WebUser.No.Equals("admin")==true)
-                    return SystemConfig.PathOfWebApp + "DataUser\\XML\\AdminMenu.xml";
+                    return SystemConfig.PathOfWebApp + "DataUser/XML/AdminMenu.xml";
 
-                return SystemConfig.PathOfWebApp + "DataUser\\XML\\Admin2Menu.xml";
+                return SystemConfig.PathOfWebApp + "DataUser/XML/Admin2Menu.xml";
             }
         }
         /// <summary>

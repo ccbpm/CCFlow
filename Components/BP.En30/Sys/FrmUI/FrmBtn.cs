@@ -157,7 +157,7 @@ namespace BP.Sys.FrmUI
                 #endregion 傻瓜表单的属性.
 
 
-                map.AddTBStringDoc(MapAttrAttr.Tag, null, "事件内容", true, false);
+                map.AddTBStringDoc(MapAttrAttr.Tag, null, "事件内容", true, false,true);
                 map.SetHelperAlert(MapAttrAttr.Tag, "可以写JS，js可以调用在DataUser下JSLab下xxx_Self.js 函数.");
 
                 //map.AddTBString(FrmBtnAttr.MsgOK, null, "运行成功提示", true, false, 0, 500, 20);

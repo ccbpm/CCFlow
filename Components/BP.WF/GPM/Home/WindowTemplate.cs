@@ -515,7 +515,7 @@ namespace BP.GPM.Home
                 if (item.WinDocModel.Equals(WinDocModel.HtmlVar))
                 {
                     HtmlVarDtls dtls = new HtmlVarDtls();
-                    dtls.Retrieve(DtlAttr.RefWindowTemplate, item.No);
+                    dtls.Retrieve(DtlAttr.RefPK, item.No);
 
                     foreach (HtmlVarDtl dtl in dtls)
                     {
@@ -539,7 +539,7 @@ namespace BP.GPM.Home
                 if (item.WinDocModel.Equals(WinDocModel.Tab))
                 {
                     TabDtls dtls = new TabDtls();
-                    dtls.Retrieve(DtlAttr.RefWindowTemplate, item.No);
+                    dtls.Retrieve(DtlAttr.RefPK, item.No);
 
                     foreach (TabDtl dtl in dtls)
                     {
@@ -634,6 +634,7 @@ namespace BP.GPM.Home
         /// </summary>
         public string InitHomePageData()
         {
+
             WindowTemplate en = new WindowTemplate();
 
             #region 关于我们.
@@ -643,11 +644,11 @@ namespace BP.GPM.Home
             en.Name = "关于我们";
             string html = "";
             html += "<ul>";
-            html += "<li>ccbpm是一个100%的开源软件,包含工作流程引擎、表单引擎、组织结构管理、菜单管理等敏捷开发的基础模块。</li>";
-            html += "<li>该开源软件由驰骋公司从2003年开始研发到至今，经过多个版本迭代，并历经数千个项目于用户需求场景完成。</li>";
-            html += "<li>设计严谨、考究抽象程度高、覆盖大部分客户应用需求，属于一款不可多得的应用国产的敏捷开发工具。</li>";
-            html += "<li>源代码都发布在giee上，采用GPL开源协议进行开源，遵守GPL开源协议使用ccbpm合法有效。</li>";
-            html += "<li>驰骋公司对外提供现场培训、技术支持、协助集成、协助项目落地服务，对小微企业，小企业，中等企业，大企业收费8,12,18,23三个等级的付费。</li>";
+            html += " <li>ccbpm是一个100%的开源软件,包含工作流程引擎、表单引擎、组织结构管理、菜单管理等敏捷开发的基础模块。</li>";
+            html += " <li>该开源软件由驰骋公司从2003年开始研发到至今，经过多个版本迭代，并历经数千个项目于用户需求场景完成。</li>";
+            html += " <li>设计严谨、考究抽象程度高、覆盖大部分客户应用需求，属于一款不可多得的应用国产的敏捷开发工具。</li>";
+            html += " <li>源代码都发布在giee上，采用GPL开源协议进行开源，遵守GPL开源协议使用ccbpm合法有效。</li>";
+            html += " <li>驰骋公司对外提供现场培训、技术支持、协助集成、协助项目落地服务，对小微企业，小企业，中等企业，大企业收费8,12,18,23三个等级的付费。</li>";
             html += "</ul>";
             en.Docs = html;
             en.MoreLinkModel = 1;
@@ -690,7 +691,7 @@ namespace BP.GPM.Home
             en.Name = "我的待办";
             en.WinDocModel = WinDocModel.ChartLine; //柱状图.
 
-            html = "SELECT FK_NodeText AS FlowName, COUNT(WorkID) as Num ";
+            html = "SELECT FK_NodeText AS '流程名', COUNT(WorkID) as '数量' ";
             html += " FROM WF_GenerWorkerlist WHERE FK_Emp = '@WebUser.No' AND IsPass=0 GROUP BY FK_NodeText ";
             en.Docs = html;
             en.MoreLinkModel = 1;
@@ -706,9 +707,9 @@ namespace BP.GPM.Home
             en.WinDocModel = WinDocModel.ChartLine; //柱状图.
 
             if (Sys.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.Single)
-                en.Docs = "SELECT FlowName, COUNT(WorkID) AS Num  FROM WF_GenerWorkFlow WHERE WFState !=0 GROUP BY FlowName";
+                en.Docs = "SELECT FlowName AS '流程名', COUNT(WorkID) AS '数量'  FROM WF_GenerWorkFlow WHERE WFState !=0 GROUP BY FlowName";
             else
-                en.Docs = "SELECT FlowName, COUNT(WorkID) AS Num  FROM WF_GenerWorkFlow WHERE WFState !=0 AND OrgNo='@WebUser.OrgNo' GROUP BY FlowName";
+                en.Docs = "SELECT FlowName AS '流程名', COUNT(WorkID) AS '数量'  FROM WF_GenerWorkFlow WHERE WFState !=0 AND OrgNo='@WebUser.OrgNo' GROUP BY FlowName";
 
             en.MoreLinkModel = 1;
             en.ColSpan = 2;
@@ -722,7 +723,7 @@ namespace BP.GPM.Home
             en.WinDocModel = WinDocModel.ChartLine;  //.
             en.No = "005";
             en.Name = "未完成";
-            html = "SELECT FlowName, COUNT(WorkID) AS Num FROM WF_GenerWorkFlow  WHERE WFState = 2 ";
+            html = "SELECT FlowName AS '流程名', COUNT(WorkID) AS '数量' FROM WF_GenerWorkFlow  WHERE WFState = 2 ";
             html += "and Emps like '%@WebUser.No%' GROUP BY FlowName";
             en.Docs = html;
             en.MoreLinkModel = 1;
@@ -739,9 +740,9 @@ namespace BP.GPM.Home
             en.WinDocModel = WinDocModel.ChartPie; //柱状图.
 
             if (Sys.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.Single)
-                en.Docs = "SELECT FlowName, COUNT(WorkID) AS Num  FROM WF_GenerWorkFlow WHERE WFState !=0 AND Starter='@WebUser.No'  GROUP BY FlowName";
+                en.Docs = "SELECT FlowName AS '流程名', COUNT(WorkID) AS '数量'  FROM WF_GenerWorkFlow WHERE WFState !=0 AND Starter='@WebUser.No'  GROUP BY FlowName";
             else
-                en.Docs = "SELECT FlowName, COUNT(WorkID) AS Num  FROM WF_GenerWorkFlow WHERE WFState !=0 AND Starter='@WebUser.No' AND OrgNo='@WebUser.OrgNo' GROUP BY FlowName";
+                en.Docs = "SELECT FlowName AS '流程名', COUNT(WorkID) AS '数量'  FROM WF_GenerWorkFlow WHERE WFState !=0 AND Starter='@WebUser.No' AND OrgNo='@WebUser.OrgNo' GROUP BY FlowName";
 
             en.MoreLinkModel = 1;
             en.ColSpan = 1;
@@ -756,9 +757,9 @@ namespace BP.GPM.Home
             en.WinDocModel = WinDocModel.ChartZZT; //柱状图.
 
             if (Sys.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.Single)
-                en.Docs = "SELECT FlowName, COUNT(WorkID) AS Num  FROM WF_GenerWorkFlow WHERE WFState !=0 AND Emps LIKE  '%@WebUser.No,%'  GROUP BY FlowName";
+                en.Docs = "SELECT FlowName AS '流程名', COUNT(WorkID) AS '数量'  FROM WF_GenerWorkFlow WHERE WFState !=0 AND Emps LIKE  '%@WebUser.No,%'  GROUP BY FlowName";
             else
-                en.Docs = "SELECT FlowName, COUNT(WorkID) AS Num  FROM WF_GenerWorkFlow WHERE WFState !=0 AND Emps LIKE '%@WebUser.No,%' AND OrgNo='@WebUser.OrgNo' GROUP BY FlowName";
+                en.Docs = "SELECT FlowName AS '流程名', COUNT(WorkID) AS '数量'  FROM WF_GenerWorkFlow WHERE WFState !=0 AND Emps LIKE '%@WebUser.No,%' AND OrgNo='@WebUser.OrgNo' GROUP BY FlowName";
 
             en.MoreLinkModel = 1;
             en.ColSpan = 4;
@@ -772,7 +773,7 @@ namespace BP.GPM.Home
             en.No = "008";
             en.Name = "月统计发起";
             en.WinDocModel = WinDocModel.ChartLine;
-            html = "SELECT FK_NY AS FlowName, COUNT(WorkID) AS Num  FROM WF_GenerWorkFlow WHERE WFState !=0 GROUP BY FK_NY";
+            html = "SELECT FK_NY  AS '月份', COUNT(WorkID) AS '数量'  FROM WF_GenerWorkFlow WHERE WFState !=0 GROUP BY FK_NY";
             en.Docs = html;
             en.MoreLinkModel = 1;
             en.ColSpan = 4;

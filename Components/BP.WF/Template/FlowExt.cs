@@ -411,12 +411,13 @@ namespace BP.WF.Template
                 // add 2013-02-05.
                 map.AddTBString(FlowAttr.TitleRole, null, "标题生成规则", true, false, 0, 150, 10, true);
                 map.SetHelperUrl(FlowAttr.TitleRole, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661872&doc_id=31094");
+
                 map.AddTBString(FlowAttr.TitleRoleNodes, null, "生成标题的节点", true, false, 0, 300, 10);
                 string msg = "设置帮助";
                 //msg += "\r\n 1. 如果为空表示只在开始节点生成标题.";
                 //msg += "\r\n 2. * 表示在任意节点可生成标题.";
                 //msg += "\r\n 3. 要在指定的节点重新生成标题用逗号分开,比如: 102,105,109";
-                map.SetHelperAlert(FlowAttr.TitleRoleNodes, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661873&doc_id=31094");
+                map.SetHelperUrl(FlowAttr.TitleRoleNodes, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661873&doc_id=31094");
 
 
 
@@ -843,9 +844,9 @@ namespace BP.WF.Template
 
 
                 //设置相关字段.
-                rm.RefAttrKey = FlowAttr.TitleRoleNodes;
+               /* rm.RefAttrKey = FlowAttr.TitleRoleNodes;
                 rm.RefAttrLinkLabel = "重新生成流程标题";
-                rm.Target = "_blank";
+                rm.Target = "_blank";*/
                 map.AddRefMethod(rm);
                  
 
@@ -903,8 +904,8 @@ namespace BP.WF.Template
                 rm.Title = "删除指定日期范围内的流程";
                 rm.Warning = "您确定要删除吗？";
                 rm.Icon = "../../WF/Img/Btn/Delete.gif";
-                rm.HisAttrs.AddTBDateTime("DTFrom", null, "时间从", true, true);
-                rm.HisAttrs.AddTBDateTime("DTTo", null, "时间到", true, true);
+                rm.HisAttrs.AddTBDateTime("DTFrom", null, "时间从", true, false);
+                rm.HisAttrs.AddTBDateTime("DTTo", null, "时间到", true, false);
                 rm.HisAttrs.AddBoolen("thisFlowOnly", true, "仅仅当前流程");
                 rm.Icon = "icon-briefcase";
                 rm.ClassMethodName = this.ToString() + ".DoDelFlows";
@@ -1206,13 +1207,15 @@ namespace BP.WF.Template
         /// <param name="dtTo">日期到</param>
         /// <param name="isOk">仅仅删除当前流程？1=删除当前流程, 0=删除全部流程.</param>
         /// <returns></returns>
-        public string DoDelFlows(string dtFrom, string dtTo, string isDelCurrFlow)
+        public string DoDelFlows(string dtFrom, string dtTo, Boolean isDelCurrFlow)
         {
-            if (BP.Web.WebUser.No != "admin")
-                return "非admin用户，不能删除。";
-
+            //if (BP.Web.WebUser.No != "admin")
+             if (BP.Web.WebUser.IsAdmin == false)
+                    return "非管理员用户，不能删除。";
+            
+             
             string sql = "";
-            if (isDelCurrFlow == "1")
+            if (isDelCurrFlow == true )
                 sql = "SELECT WorkID, FK_Flow FROM WF_GenerWorkFlow  WHERE RDT >= '" + dtFrom + "' AND RDT <= '" + dtTo + "'  AND FK_Flow='" + this.No + "' ";
             else
                 sql = "SELECT WorkID, FK_Flow FROM WF_GenerWorkFlow  WHERE RDT >= '" + dtFrom + "' AND RDT <= '" + dtTo + "' ";
@@ -1224,10 +1227,93 @@ namespace BP.WF.Template
             {
                 Int64 workid = Int64.Parse(dr["WorkID"].ToString());
                 string fk_flow = dr["FK_Flow"].ToString();
-                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(workid, false);
+                DoDelFlowByWorkID(workid, fk_flow);
                 msg += " " + workid;
             }
             return msg;
+        }
+        public void DoDelFlowByWorkID(Int64 workid,string fk_flow)
+        {
+            Flow flow = new Flow(fk_flow);
+            #region 删除独立表单数据
+            FrmNodes fns = new FrmNodes();
+            fns.Retrieve(FrmNodeAttr.FK_Flow, fk_flow);
+            string strs = "";
+            foreach(FrmNode frmNode in fns)
+            {
+                if (strs.Contains("@" + frmNode.FK_Frm) == true)
+                    continue;
+                strs += "@" + frmNode.FK_Frm + "@";
+                try
+                {
+                    MapData md = new MapData(frmNode.FK_Frm);
+                    DBAccess.RunSQL("DELETE FROM " + md.PTable + " WHERE OID=" + workid);
+                }
+                catch
+                {
+
+                }
+            }
+            #endregion 删除独立表单数据
+
+            //流程运行信息
+            DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList Where (WorkID=" + workid + " OR FID=" + workid + ")");
+            //删除退回信息
+            DBAccess.RunSQL("DELETE FROM WF_ReturnWork Where WorkID=" + workid );
+            //考核信息
+            DBAccess.RunSQL("DELETE FROM WF_CH Where (WorkID=" + workid + " OR FID=" + workid + ")");
+            DBAccess.RunSQL("DELETE FROM WF_CHEval Where WorkID=" + workid);
+
+            //接收人信息删除
+            DBAccess.RunSQL("DELETE FROM WF_SelectAccper Where WorkID=" + workid );
+            //流程信息流转自定义
+            DBAccess.RunSQL("DELETE FROM WF_TransferCustom Where WorkID=" + workid);
+
+            //流程remberme的信息
+            DBAccess.RunSQL("DELETE FROM WF_RememberMe Where FK_Node IN(SELECT NodeID From WF_Node WHERE FK_Flow='" + fk_flow + "')");
+            //删除流程的抄送信息
+            DBAccess.RunSQL("DELETE FROM WF_CCList WHERE WorkID=" + workid);
+            //删除单据信息
+            DBAccess.RunSQL("DELETE FROM WF_Bill WHERE WorkID=" + workid);
+
+            //删除流程实例的信息
+            DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow Where (WorkID=" + workid + " OR FID=" + workid + ")");
+
+            //删除track信息
+            if(DBAccess.IsExitsObject("ND"+int.Parse(fk_flow)+"Track")==true)
+                DBAccess.RunSQL("DELETE FROM ND"+ int.Parse(fk_flow)+"Track Where (WorkID=" + workid + " OR FID=" + workid + ")");
+
+            //删除表单信息
+            if (DataType.IsNullOrEmpty(flow.PTable)==false && DBAccess.IsExitsObject(flow.PTable) == true)
+                DBAccess.RunSQL("DELETE FROM " + flow.PTable + " Where OID="+workid);
+            //删除节点信息
+            Nodes nds = new Nodes(fk_flow);
+            foreach(Node nd in nds)
+            {
+                try
+                {
+                    Work wk = nd.HisWork;
+                    DBAccess.RunSQL("DELETE FROM" + wk.EnMap.PhysicsTable + " Where OID=" + workid);
+                }
+                catch
+                {
+
+                }
+                MapDtls dtls = new MapDtls("ND" + nd.NodeID);
+                foreach(MapDtl dtl in dtls)
+                {
+                    try
+                    {
+                        DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + workid);
+                    }
+                    catch
+                    {
+
+                    }
+                    
+                }
+            }
+
         }
         /// <summary>
         /// 批量重命名字段.
@@ -1979,7 +2065,7 @@ namespace BP.WF.Template
             fl.RetrieveFromDBSources();
 
             #region StartFlows的清缓存
-            if (fl.IsStartInMobile != this.IsStartInMobile || fl.IsCanStart != this.IsCanStart)
+            if (fl.IsStartInMobile != this.IsStartInMobile || fl.IsCanStart != this.IsCanStart || fl.Name.Equals(this.Name)==false)
             {
                 //清空WF_Emp 的StartFlows
                 DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
@@ -2101,6 +2187,9 @@ namespace BP.WF.Template
 
             #region 为systype设置，当前所在节点的第2级别目录。
             FlowSort fs = new FlowSort(fl.FK_FlowSort);
+            if (DataType.IsNullOrEmpty(fs.ParentNo) == true)
+                fs.ParentNo = "0";
+
             if(SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
                 if (fs.ParentNo.Equals(WebUser.OrgNo) == true || fs.ParentNo.Equals("100") == true)

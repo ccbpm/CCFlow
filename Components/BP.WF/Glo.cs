@@ -854,7 +854,7 @@ namespace BP.WF
 
             if (_Multilingual_Cache.ContainsKey(className) == false)
             {
-                DataSet ds = DataType.CXmlFileToDataSet(SystemConfig.PathOfData + "lang\\xml\\" + className + ".xml");
+                DataSet ds = DataType.CXmlFileToDataSet(SystemConfig.PathOfData + "lang/xml/" + className + ".xml");
                 DataTable dt = ds.Tables[0];
 
                 _Multilingual_Cache.Add(className, dt);
@@ -1149,17 +1149,17 @@ namespace BP.WF
             string sqlscript = "";
             //MSSQL_GPM_VIEW 语法有所区别
             if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                sqlscript = SystemConfig.PathOfWebApp + "GPM\\SQLScript\\MSSQL_GPM_VIEW.sql";
+                sqlscript = SystemConfig.PathOfWebApp + "GPM/SQLScript/MSSQL_GPM_VIEW.sql";
 
             //MySQL 语法有所区别
             if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                sqlscript = SystemConfig.PathOfWebApp + "GPM\\SQLScript\\MySQL_GPM_VIEW.sql";
+                sqlscript = SystemConfig.PathOfWebApp + "GPM/SQLScript/MySQL_GPM_VIEW.sql";
 
             //Oracle 语法有所区别
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                sqlscript = SystemConfig.PathOfWebApp + "GPM\\SQLScript\\Oracle_GPM_VIEW.sql";
+                sqlscript = SystemConfig.PathOfWebApp + "GPM/SQLScript/Oracle_GPM_VIEW.sql";
             if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                sqlscript = SystemConfig.PathOfWebApp + "GPM\\SQLScript\\PostgreSQL_GPM_VIEW.sql";
+                sqlscript = SystemConfig.PathOfWebApp + "GPM/SQLScript/PostgreSQL_GPM_VIEW.sql";
 
             if (DataType.IsNullOrEmpty(sqlscript) == true)
                 throw new Exception("err@没有判断的数据库类型:" + SystemConfig.AppCenterDBType.ToString());
@@ -1543,8 +1543,8 @@ namespace BP.WF
 
             if (DBAccess.IsExitsObject("V_WF_AuthTodolist") == false)
             {
-                BP.WF.Auth Auth = new Auth();
-                Auth.CheckPhysicsTable();
+                BP.WF.Auth en = new Auth();
+                en.CheckPhysicsTable();
 
                 sql = "CREATE VIEW V_WF_AuthTodolist ";
                 sql += " AS ";
@@ -2200,17 +2200,17 @@ namespace BP.WF
                     switch (SystemConfig.AppCenterDBType)
                     {
                         case DBType.Oracle:
-                            sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitView_Ora.sql";
+                            sqlscript = SystemConfig.PathOfData + "Install/SQLScript/InitView_Ora.sql";
                             break;
                         case DBType.MSSQL:
                         case DBType.Informix:
-                            sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitView_SQL.sql";
+                            sqlscript = SystemConfig.PathOfData + "Install/SQLScript/InitView_SQL.sql";
                             break;
                         case DBType.MySQL:
-                            sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitView_MySQL.sql";
+                            sqlscript = SystemConfig.PathOfData + "Install/SQLScript/InitView_MySQL.sql";
                             break;
                         case DBType.PostgreSQL:
-                            sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitView_PostgreSQL.sql";
+                            sqlscript = SystemConfig.PathOfData + "Install/SQLScript/InitView_PostgreSQL.sql";
                             break;
                         default:
                             break;
@@ -2694,7 +2694,7 @@ namespace BP.WF
             BP.GPM.Emp empGPM = new BP.GPM.Emp();
             empGPM.CheckPhysicsTable();
 
-            sqlscript = SystemConfig.CCFlowAppPath + "WF\\Data\\Install\\SQLScript\\Port_Inc_CH_BPM.sql";
+            sqlscript = SystemConfig.CCFlowAppPath + "WF/Data/Install/SQLScript/Port_Inc_CH_BPM.sql";
             DBAccess.RunSQLScript(sqlscript);
 
             BP.Port.Emp empAdmin = new Emp("admin");
@@ -2867,17 +2867,17 @@ namespace BP.WF
             switch (SystemConfig.AppCenterDBType)
             {
                 case DBType.Oracle:
-                    sqlscript = SystemConfig.CCFlowAppPath + "WF\\Data\\Install\\SQLScript\\InitView_Ora.sql";
+                    sqlscript = SystemConfig.CCFlowAppPath + "WF/Data/Install/SQLScript/InitView_Ora.sql";
                     break;
                 case DBType.MSSQL:
                 case DBType.Informix:
-                    sqlscript = SystemConfig.CCFlowAppPath + "WF\\Data\\Install\\SQLScript\\InitView_SQL.sql";
+                    sqlscript = SystemConfig.CCFlowAppPath + "WF/Data/Install/SQLScript/InitView_SQL.sql";
                     break;
                 case DBType.MySQL:
-                    sqlscript = SystemConfig.CCFlowAppPath + "WF\\Data\\Install\\SQLScript\\InitView_MySQL.sql";
+                    sqlscript = SystemConfig.CCFlowAppPath + "WF/Data/Install/SQLScript/InitView_MySQL.sql";
                     break;
                 case DBType.PostgreSQL:
-                    sqlscript = SystemConfig.CCFlowAppPath + "WF\\Data\\Install\\SQLScript\\InitView_PostgreSQL.sql";
+                    sqlscript = SystemConfig.CCFlowAppPath + "WF/Data/Install/SQLScript/InitView_PostgreSQL.sql";
                     break;
                 default:
                     break;
@@ -2888,7 +2888,7 @@ namespace BP.WF
             #region 5, 初始化数据.
             if (isInstallFlowDemo)
             {
-                // sqlscript = SystemConfig.PathOfData + "Install\\SQLScript\\InitPublicData.sql";
+                // sqlscript = SystemConfig.PathOfData + "Install/SQLScript/InitPublicData.sql";
                 // DBAccess.RunSQLScript(sqlscript);
             }
             // else
@@ -3003,7 +3003,7 @@ namespace BP.WF
                 s1.Update();
 
                 //加载一个模版,不然用户不知道如何新建流程.
-                BP.WF.Template.TemplateGlo.LoadFlowTemplate(s1.No, SystemConfig.PathOfData + "Install\\QingJiaFlowDemoInit.xml",
+                BP.WF.Template.TemplateGlo.LoadFlowTemplate(s1.No, SystemConfig.PathOfData + "Install/QingJiaFlowDemoInit.xml",
                     ImpFlowTempleteModel.AsTempleteFlowNo);
                 Flow fl = new Flow("001");
                 fl.DoCheck(); //做一下检查.
@@ -3501,7 +3501,7 @@ namespace BP.WF
             //                            newTable.Cell(groupIdx, 1).Range.Text = attr.Name;
             //                            if (attr.IsSigan)
             //                            {
-            //                                string path = SystemConfig.PathOfDataUser + "\\Siganture\\" + s + ".jpg";
+            //                                string path = SystemConfig.PathOfDataUser + "/Siganture/" + s + ".jpg";
             //                                if (System.IO.File.Exists(path))
             //                                {
             //                                    System.Drawing.Image img = System.Drawing.Image.FromFile(path);
@@ -3539,7 +3539,7 @@ namespace BP.WF
             //                            newTable.Cell(groupIdx, 3).Range.Text = attr.Name;
             //                            if (attr.IsSigan)
             //                            {
-            //                                string path = SystemConfig.PathOfDataUser + "\\Siganture\\" + s + ".jpg";
+            //                                string path = SystemConfig.PathOfDataUser + "/Siganture/" + s + ".jpg";
             //                                if (System.IO.File.Exists(path))
             //                                {
             //                                    System.Drawing.Image img = System.Drawing.Image.FromFile(path);
@@ -4509,7 +4509,7 @@ namespace BP.WF
                         continue;
 
                     #region 处理sql.
-                    sql = Glo.DealExp(mysql.Replace(dtl.No + ":", "").ToString(), en, null);
+                    sql = Glo.DealSQLExp(mysql.Replace(dtl.No + ":", "").ToString(), en, null);
                     #endregion 处理sql.
 
                     if (string.IsNullOrEmpty(sql))
@@ -4719,6 +4719,13 @@ namespace BP.WF
                     else
                         return false;
                 }
+                if (oper == "!=")
+                {
+                    if (valPara != val)
+                        return true;
+                    else
+                        return false;
+                }
 
 
                 if (DataType.IsNumStr(valPara) == false)
@@ -4775,7 +4782,7 @@ namespace BP.WF
         /// <param name="exp"></param>
         /// <param name="en"></param>
         /// <returns></returns>
-        public static string DealExp(string exp, Entity en)
+        public static string DealExp(string exp, Entity en, string errInfo = "")
         {
             //替换字符
             exp = exp.Replace("~", "'");
@@ -4796,7 +4803,6 @@ namespace BP.WF
             exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
             exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
             exp = exp.Replace("@WebUser.OrgNo", WebUser.OrgNo);
-
 
             if (exp.Contains("@") == false)
                 return exp;
@@ -4826,7 +4832,16 @@ namespace BP.WF
                         if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum
                             || attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
-                            exp = exp.Replace("@" + key, row[key + "Text"].ToString());
+
+                            //这个写法是错误的.
+                            //  exp = exp.Replace("@" + key, row[key + "Text"].ToString());
+
+                            //先替换有单引号的.
+                            exp = exp.Replace("'@" + key + "'", "'" + row[key].ToString() + "'");
+
+                            //在更新没有单引号的.
+                            exp = exp.Replace("@" + key , row[key].ToString());
+
                         }
                         else
                         {
@@ -4836,15 +4851,11 @@ namespace BP.WF
                                 exp = exp.Replace("@" + key, row[key].ToString());
                             ;
                         }
-
-
                     }
-
                     //不包含@则返回SQL语句
                     if (exp.Contains("@") == false)
                         return exp;
                 }
-
             }
 
             if (exp.Contains("@") && SystemConfig.IsBSsystem == true)
@@ -4870,7 +4881,7 @@ namespace BP.WF
         /// <param name="en">数据源</param>
         /// <param name="errInfo">错误</param>
         /// <returns></returns>
-        public static string DealExp(string exp, Entity en, string errInfo)
+        public static string DealSQLExp(string exp, Entity en, string errInfo)
         {
             //替换字符
             exp = exp.Replace("~", "'");
@@ -5227,7 +5238,7 @@ namespace BP.WF
             DataTable dt = DBLoad.ReadExcelFileToDataTable(xlsFile);
             DataSet ds = new DataSet();
             ds.Tables.Add(dt);
-            ds.WriteXml("C:\\已完成.xml");
+            ds.WriteXml("C:/已完成.xml");
 
             string err = "";
             string info = "";
@@ -5573,7 +5584,7 @@ namespace BP.WF
         {
             get
             {
-                return Glo.IntallPath + "\\Data\\Node\\";
+                return Glo.IntallPath + "Data/Node/";
             }
         }
 
@@ -5589,7 +5600,7 @@ namespace BP.WF
         public static string OEM_Flag = "CCS";
         public static string FlowFileBill
         {
-            get { return Glo.IntallPath + "\\DataUser\\Bill\\"; }
+            get { return Glo.IntallPath + "DataUser/Bill/"; }
         }
         private static string _IntallPath = null;
         public static string IntallPath
@@ -6555,7 +6566,7 @@ namespace BP.WF
                 System.IO.Directory.CreateDirectory(temp);
 
                 //删除pdf 目录.
-                temp = SystemConfig.PathOfDataUser + "InstancePacketOfData\\";
+                temp = SystemConfig.PathOfDataUser + "InstancePacketOfData/";
                 System.IO.DirectoryInfo info = new System.IO.DirectoryInfo(temp);
                 System.IO.DirectoryInfo[] dirs = info.GetDirectories();
                 foreach (System.IO.DirectoryInfo dir in dirs)
@@ -6673,7 +6684,7 @@ namespace BP.WF
                 {
                     //根据sql判断.
                     string sql = me.Tag2.Clone() as string;
-                    sql = BP.WF.Glo.DealExp(sql, en, null);
+                    sql = BP.WF.Glo.DealExp(sql, en);
                     if (DBAccess.RunSQLReturnValFloat(sql) > 0)
                         isCando = true;
                 }
@@ -6722,7 +6733,7 @@ namespace BP.WF
                 {
                     //根据sql判断.
                     string sql = me.Tag2.Clone() as string;
-                    sql = BP.WF.Glo.DealExp(sql, en, null);
+                    sql = BP.WF.Glo.DealExp(sql, en);
                     if (DBAccess.RunSQLReturnValFloat(sql) > 0)
                         isCando = true;
                 }
@@ -6933,7 +6944,7 @@ namespace BP.WF
                 // 配置的sql,执行后,返回结果是 0 .
                 if (role == StartLimitRole.ResultIsZero)
                 {
-                    sql = BP.WF.Glo.DealExp(flow.StartLimitPara, null, null);
+                    sql = BP.WF.Glo.DealExp(flow.StartLimitPara, null);
                     if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                         return true;
                     else
@@ -6946,7 +6957,7 @@ namespace BP.WF
                     if (DataType.IsNullOrEmpty(flow.StartLimitPara) == true)
                         return true;
 
-                    sql = BP.WF.Glo.DealExp(flow.StartLimitPara, null, null);
+                    sql = BP.WF.Glo.DealExp(flow.StartLimitPara, null);
                     if (DBAccess.RunSQLReturnValInt(sql, 0) != 0)
                         return true;
                     else

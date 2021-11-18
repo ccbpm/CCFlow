@@ -75,7 +75,7 @@ namespace BP.DA
                 if (cfile.Contains(":"))
                     file = cfile;
                 else
-                    file = SystemConfig.PathOfDataUser + "CyclostyleFile\\" + cfile;
+                    file = SystemConfig.PathOfDataUser + "CyclostyleFile/" + cfile;
 
                 try
                 {
@@ -162,7 +162,7 @@ namespace BP.DA
                     #endregion 首先解决空格的问题.
 
                     #region 解决特殊符号
-                    if (attrs != null && real.Contains("\\") && real.Contains("ND") == false)
+                    if (attrs != null && real.Contains("/") && real.Contains("ND") == false)
                     {
                         haveError = true;
                         string findKey = null;

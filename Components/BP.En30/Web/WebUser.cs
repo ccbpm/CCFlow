@@ -116,6 +116,19 @@ namespace BP.Web
                 WebUser.AuthName = null;
             }
 
+            //解决没有部门编号的问题.
+            if (DataType.IsNullOrEmpty(em.OrgNo) == false && DataType.IsNullOrEmpty(em.FK_Dept) == true)
+            {
+                BP.GPM.DeptEmp de = new BP.GPM.DeptEmp();
+                de.FK_Dept = em.OrgNo;
+                de.FK_Emp = em.No;
+                de.OrgNo = em.OrgNo;
+                de.Insert();
+
+                // em.FK_Dept = em.OrgNo;
+            }
+
+
             #region 解决部门的问题.
             if (DataType.IsNullOrEmpty(em.FK_Dept) == true)
             {
@@ -274,6 +287,9 @@ namespace BP.Web
         /// </summary>
         public static void Exit()
         {
+            string guid = DBAccess.GenerGUID();
+            DBAccess.RunSQL("UPDATE WF_Emp SET SID='" + guid + "',Token='" + guid + "' WHERE No='" + BP.Web.WebUser.No + "'");
+
             if (IsBSMode == false)
             {
                 HttpContextHelper.ResponseCookieDelete(new string[] {
@@ -282,6 +298,7 @@ namespace BP.Web
 
                 return;
             }
+
 
             try
             {

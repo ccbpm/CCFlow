@@ -94,8 +94,15 @@ namespace BP.WF.Template
                 return this._enMap;
             }
 		}
-		#endregion
-	}
+        #endregion
+        protected override bool beforeInsert()
+        {
+            if (Sys.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.SAAS)
+                this.FK_Emp = Web.WebUser.OrgNo + "_" + this.FK_Emp;
+            return base.beforeInsert();
+        }
+
+    }
 	/// <summary>
 	/// 节点人员
 	/// </summary>

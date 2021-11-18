@@ -1417,7 +1417,7 @@ namespace BP.WF.HttpHandler
                 //2019-07-26 zyt改造
                 //String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
                 String webPath = SystemConfig.PathOfWebApp.Replace("\\", "/");
-                String filePath = webPath + @"/DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
+                String filePath = webPath + @"DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
                 String content = "";
                 if (!File.Exists(filePath))
                 {
@@ -1442,7 +1442,7 @@ namespace BP.WF.HttpHandler
                 //2019-07-26 zyt改造
                 //String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
                 String webPath = SystemConfig.PathOfWebApp.Replace("\\", "/");
-                String filePath = webPath + @"/DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
+                String filePath = webPath + @"DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
                 String content = HttpContextHelper.RequestParams("JSDoc"); // this.context.Request.Params["JSDoc"];
 
                 //在应用程序当前目录下的File1.txt文件中追加文件内容，如果文件不存在就创建，默认编码
@@ -1464,7 +1464,7 @@ namespace BP.WF.HttpHandler
                 //2019-07-26 zyt改造
                 //String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
                 String webPath = SystemConfig.PathOfWebApp.Replace("\\", "/");
-                String filePath = webPath + @"/DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
+                String filePath = webPath + @"DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
 
                 if (File.Exists(filePath))
                 {

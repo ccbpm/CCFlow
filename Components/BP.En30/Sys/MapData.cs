@@ -819,13 +819,13 @@ namespace BP.Sys
         /// <returns></returns>
         public string GenerHisFrm()
         {
-            string body = DataType.ReadTextFile(SystemConfig.PathOfWebApp + "WF\\Admin\\CCFormDesigner\\EleTemplate\\Body.txt");
+            string body = DataType.ReadTextFile(SystemConfig.PathOfWebApp + "WF/Admin/CCFormDesigner/EleTemplate/Body.txt");
 
             //替换高度宽度.
             body = body.Replace("@FrmH", this.FrmH.ToString());
             body = body.Replace("@FrmW", this.FrmW.ToString());
 
-            string labTemplate = DataType.ReadTextFile(SystemConfig.PathOfWebApp + "WF\\Admin\\CCFormDesigner\\EleTemplate\\Label.txt");
+            string labTemplate = DataType.ReadTextFile(SystemConfig.PathOfWebApp + "WF/Admin/CCFormDesigner/EleTemplate/Label.txt");
             string myLabs = "";
             FrmLabs labs = new FrmLabs(this.No);
             foreach (FrmLab lab in labs)
@@ -1672,6 +1672,11 @@ namespace BP.Sys
         public static MapData ImpMapData(string specFrmID, DataSet ds)
         {
 
+            if (DataType.IsNullOrEmpty(specFrmID) == true)
+                ImpMapData(ds);
+
+            //    throw new Exception("err@指定的表单ID - specFrmID 是空.");
+
             #region 检查导入的数据是否完整.
             string errMsg = "";
             //if (ds.Tables[0].TableName != "Sys_MapData")
@@ -1824,7 +1829,7 @@ namespace BP.Sys
                                     htmlCode = htmlCode.Replace(oldMapID, specFrmID);
                                     //保存到数据库，存储html文件
                                     //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
-                                    string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
+                                    string filePath = SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/";
                                     if (Directory.Exists(filePath) == false)
                                         Directory.CreateDirectory(filePath);
                                     filePath = filePath + md.No + ".htm";
@@ -1836,7 +1841,7 @@ namespace BP.Sys
                                 else
                                 {
                                     //如果htmlCode是空的需要删除当前节点的html文件
-                                    string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\" + md.No + ".htm";
+                                    string filePath = SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/" + md.No + ".htm";
                                     if (File.Exists(filePath) == true)
                                         File.Delete(filePath);
                                     DBAccess.SaveBigTextToDB("", "Sys_MapData", "No", md.No, "HtmlTemplateFile");
@@ -2069,11 +2074,11 @@ namespace BP.Sys
                                 if (en.UIContralType == UIContralType.BigText)
                                 {
                                     //判断原文件是否存在
-                                    string file = SystemConfig.PathOfDataUser + "CCForm\\BigNoteHtmlText\\" + oldMapID + ".htm";
+                                    string file = SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + oldMapID + ".htm";
                                     //若文件存在，则复制                                  
                                     if (System.IO.File.Exists(file) == true)
                                     {
-                                        string newFile = SystemConfig.PathOfDataUser + "CCForm\\BigNoteHtmlText\\" + specFrmID + ".htm";
+                                        string newFile = SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + specFrmID + ".htm";
                                         if (System.IO.File.Exists(newFile) == true)
                                             System.IO.File.Delete(newFile);
                                         System.IO.File.Copy(file, newFile);
@@ -2481,7 +2486,9 @@ namespace BP.Sys
             this.ClearAutoNumCash(false);
 
             this.PTable = PubClass.DealToFieldOrTableNames(this.PTable);
-            MapAttrs.Retrieve(MapAttrAttr.FK_MapData, PTable);
+
+            //修改2021-09-04 注释，不知道这个代码的作用
+            //MapAttrs.Retrieve(MapAttrAttr.FK_MapData, PTable);
 
             //更新版本号.
             this.Ver = DataType.CurrentDataTimess;
@@ -2540,7 +2547,7 @@ namespace BP.Sys
         {
             string sql = "";
             // 检查该表单是否可以被删除?
-            if ( DBAccess.IsExitsObject("GPM_Menu") == true)
+            if (DBAccess.IsExitsObject("GPM_Menu") == true)
             {
                 //// 是否有菜单引用?
                 //sql = "SELECT  COUNT(*) AS Num FROM GPM_Menu WHERE Mark='" + this.No + "'";
@@ -2548,21 +2555,22 @@ namespace BP.Sys
                 //    throw new Exception("err@该表单已经被菜单引用，您不能删除.");
 
                 //删除菜单.
-                sql = "DELETE FROM GPM_Menu WHERE Mark='"+this.No+"' OR URLExt='"+this.No+"'";
+                sql = "DELETE FROM GPM_Menu WHERE Mark='" + this.No + "' OR URLExt='" + this.No + "'";
                 DBAccess.RunSQL(sql);
 
-                //删除集合方法.
-                sql = "DELETE FROM Frm_Collection WHERE FrmID='" + this.No + "'";
-                DBAccess.RunSQL(sql);
+                if (DBAccess.IsExitsObject("Frm_Collection") == true)
+                {
+                    //删除集合方法.
+                    sql = "DELETE FROM Frm_Collection WHERE FrmID='" + this.No + "'";
+                    DBAccess.RunSQL(sql);
+                }
 
-                //删除实体组件.
-                sql = "DELETE FROM Frm_Method WHERE FrmID='" + this.No + "'";
-                DBAccess.RunSQL(sql);
-
-                //删除实体组件.
-                sql = "DELETE FROM Frm_Method WHERE FrmID='" + this.No + "'";
-                DBAccess.RunSQL(sql);
-
+                if (DBAccess.IsExitsObject("Frm_Method") == true)
+                {
+                    //删除实体组件.
+                    sql = "DELETE FROM Frm_Method WHERE FrmID='" + this.No + "'";
+                    DBAccess.RunSQL(sql);
+                }
             }
 
             sql = "";
@@ -2667,7 +2675,7 @@ namespace BP.Sys
                 }
                 else //说明当前excel文件没有生成.
                 {
-                    string tempExcel = SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\" + this.No + ".xlsx";
+                    string tempExcel = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + this.No + ".xlsx";
                     if (System.IO.File.Exists(tempExcel) == true)
                     {
                         bytes = DataType.ConvertFileToByte(tempExcel);
@@ -2712,10 +2720,10 @@ namespace BP.Sys
             }
             else //说明当前excel文件没有生成.
             {
-                string tempExcel = SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\" + this.No + ".docx";
+                string tempExcel = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + this.No + ".docx";
 
                 if (System.IO.File.Exists(tempExcel) == false)
-                    tempExcel = SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\NDxxxRpt.docx";
+                    tempExcel = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/NDxxxRpt.docx";
 
                 bytes = DataType.ConvertFileToByte(tempExcel);
                 return;

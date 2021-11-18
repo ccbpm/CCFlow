@@ -17,7 +17,7 @@ namespace BP.GPM.Home.WindowExt
         public const string Exp0 = "Exp0";
         public const string Exp1 = "Exp1";
 
-        public const string RefWindowTemplate = "RefWindowTemplate";
+        public const string RefPK = "RefPK";
 
         /// <summary>
         /// 显示类型

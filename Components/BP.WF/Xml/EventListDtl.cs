@@ -121,7 +121,7 @@ namespace BP.WF.XML
         {
             get
             {
-                return SystemConfig.PathOfXML + "\\EventList.xml";
+                return SystemConfig.PathOfXML + "EventList.xml";
             }
         }
         /// <summary>

@@ -285,7 +285,7 @@ namespace BP.Sys
             {
                 string str = this.GetValStringByKey(EnCfgAttr.FJSavePath);
                 if (DataType.IsNullOrEmpty(str) == true)
-                    return SystemConfig.PathOfDataUser + this.No + "\\";
+                    return SystemConfig.PathOfDataUser + this.No + "/";
                 return str;
             }
             set
@@ -501,7 +501,7 @@ namespace BP.Sys
 
                 #region 按钮配置信息 - 自定义按钮.
                 map.AddTBString("BtnLab1", null, "自定义按钮标签1", true, false, 0, 70, 60, false);
-                map.SetHelperAlert("BtnLab1", "自定义按钮与标签,函数可以写入到\\DataUser\\JSLabData\\SearchSelf.js里面.");
+                map.SetHelperAlert("BtnLab1", "自定义按钮与标签,函数可以写入到/DataUser/JSLabData/SearchSelf.js里面.");
                 map.AddTBString("BtnJS1", null, "Url/Javasccript", true, false, 0, 300, 60, false);
 
                 map.AddTBString("BtnLab2", null, "自定义按钮标签2", true, false, 0, 70, 60, false);

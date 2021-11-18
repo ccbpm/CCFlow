@@ -21,7 +21,7 @@ namespace BP.WF.DTS
         {
             this.Title = "生成流程模板与表单模板";
             this.Help = "把系统中的流程与表单转化成模板放在指定的目录下。";
-            this.HisAttrs.AddTBString("Path", "C:\\ccflow.Template", "生成的路径", true, false, 1, 1900, 200);
+            this.HisAttrs.AddTBString("Path", "C:/ccflow.Template", "生成的路径", true, false, 1, 1900, 200);
         }
         /// <summary>
         /// 设置执行变量
@@ -51,8 +51,8 @@ namespace BP.WF.DTS
                 return "系统正在执行中，请稍后。";
 
             System.IO.Directory.CreateDirectory(path);
-            System.IO.Directory.CreateDirectory(path + "\\Flow.流程模板");
-            System.IO.Directory.CreateDirectory(path + "\\Frm.表单模板");
+            System.IO.Directory.CreateDirectory(path + "/Flow.流程模板");
+            System.IO.Directory.CreateDirectory(path + "/Frm.表单模板");
 
             Flows fls = new Flows();
             fls.RetrieveAll();
@@ -62,7 +62,7 @@ namespace BP.WF.DTS
             // 生成流程模板。
             foreach (FlowSort sort in sorts)
             {
-                string pathDir = path + "\\Flow.流程模板\\" + sort.No + "." + sort.Name;
+                string pathDir = path + "/Flow.流程模板/" + sort.No + "." + sort.Name;
                 System.IO.Directory.CreateDirectory(pathDir);
                 foreach (Flow fl in fls)
                 {
@@ -73,18 +73,18 @@ namespace BP.WF.DTS
             // 生成表单模板。
             foreach (FlowSort sort in sorts)
             {
-                string pathDir = path + "\\Frm.表单模板\\" + sort.No + "." + sort.Name;
+                string pathDir = path + "/Frm.表单模板/" + sort.No + "." + sort.Name;
                 System.IO.Directory.CreateDirectory(pathDir);
                 foreach (Flow fl in fls)
                 {
-                    string pathFlowDir = pathDir + "\\" + fl.No + "." + fl.Name;
+                    string pathFlowDir = pathDir + "/" + fl.No + "." + fl.Name;
                     System.IO.Directory.CreateDirectory(pathFlowDir);
                     Nodes nds = new Nodes(fl.No);
                     foreach (Node nd in nds)
                     {
                         MapData md = new MapData("ND" + nd.NodeID);
                         System.Data.DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
-                        ds.WriteXml(pathFlowDir + "\\" + nd.NodeID + "." + nd.Name + ".Frm.xml");
+                        ds.WriteXml(pathFlowDir + "/" + nd.NodeID + "." + nd.Name + ".Frm.xml");
                     }
                 }
             }
@@ -94,7 +94,7 @@ namespace BP.WF.DTS
             frmSorts.RetrieveAll();
             foreach (SysFormTree sort in frmSorts)
             {
-                string pathDir = path + "\\Frm.表单模板\\" + sort.No + "." + sort.Name;
+                string pathDir = path + "/Frm.表单模板/" + sort.No + "." + sort.Name;
                 System.IO.Directory.CreateDirectory(pathDir);
 
                 MapDatas mds = new MapDatas();
@@ -102,7 +102,7 @@ namespace BP.WF.DTS
                 foreach (MapData md in mds)
                 {
                     System.Data.DataSet ds =BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
-                    ds.WriteXml(pathDir + "\\" + md.No + "." + md.Name + ".Frm.xml");
+                    ds.WriteXml(pathDir + "/" + md.No + "." + md.Name + ".Frm.xml");
                 }
             }
             return "生成成功，请打开" + path + "。<br>如果您想共享出来请压缩后发送到template＠ccflow.org";

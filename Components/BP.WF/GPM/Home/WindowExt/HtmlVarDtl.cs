@@ -14,9 +14,21 @@ namespace BP.GPM.Home.WindowExt
     /// </summary>
     public class HtmlVarDtl : EntityMyPK
     {
+        #region 属性.
         /// <summary>
         /// 表达式
         /// </summary>
+        public string RefPK
+        {
+            get
+            {
+                return this.GetValStrByKey(DtlAttr.RefPK);
+            }
+            set
+            {
+                this.SetValByKey(DtlAttr.RefPK, value);
+            }
+        }
         public string Exp0
         {
             get
@@ -25,9 +37,32 @@ namespace BP.GPM.Home.WindowExt
             }
             set
             {
-                this.SetValByKey(DtlAttr.Exp0,value);
+                this.SetValByKey(DtlAttr.Exp0, value);
             }
         }
+        public int DBType
+        {
+            get
+            {
+                return this.GetValIntByKey(DtlAttr.DBType);
+            }
+            set
+            {
+                this.SetValByKey(DtlAttr.DBType, value);
+            }
+        }
+        public string FontColor
+        {
+            get
+            {
+                return this.GetValStrByKey(DtlAttr.FontColor);
+            }
+            set
+            {
+                this.SetValByKey(DtlAttr.FontColor, value);
+            }
+        }
+        #endregion 属性.
 
         #region 权限控制.
         /// <summary>
@@ -71,8 +106,7 @@ namespace BP.GPM.Home.WindowExt
                 Map map = new Map("GPM_WindowTemplateDtl", "数据项");
 
                 map.AddMyPK(false);
-                map.AddTBString(DtlAttr.RefWindowTemplate, null, "RefWindowTemplate", false, false, 0, 40, 20, false);
-
+                map.AddTBString(DtlAttr.RefPK, null, "RefPK", false, false, 0, 40, 20, false);
                 map.AddTBString(DtlAttr.Name, null, "标签", true, false, 0, 300, 70, true);
 
                 map.AddDDLSysEnum(DtlAttr.DBType, 0, "数据源类型", true, true, "WindowsDBType",
@@ -80,7 +114,6 @@ namespace BP.GPM.Home.WindowExt
                 map.AddDDLEntities(DtlAttr.DBSrc, null, "数据源", new BP.Sys.SFDBSrcs(), true);
 
                 map.AddTBString(DtlAttr.Exp0, null, "表达式", true, false, 0, 300, 700, true);
-
                 map.AddTBString(DtlAttr.FontColor, null, "字体风格", true, false, 0, 300, 100, true);
 
                 this._enMap = map;
@@ -139,7 +172,6 @@ namespace BP.GPM.Home.WindowExt
             for (int i = 0; i < this.Count; i++)
             {
                 list.Add((HtmlVarDtl)this[i]);
-
             }
             return list;
         }

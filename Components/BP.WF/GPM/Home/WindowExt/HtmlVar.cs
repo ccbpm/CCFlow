@@ -37,6 +37,34 @@ namespace BP.GPM.Home.WindowExt
         #endregion 权限控制.
 
         #region 属性
+        /// <summary>
+        /// 跨度
+        /// </summary>
+        public int ColSpan
+        {
+            get
+            {
+                return this.GetValIntByKey(WindowTemplateAttr.ColSpan);
+            }
+            set
+            {
+                this.SetValByKey(WindowTemplateAttr.ColSpan,value);
+            }
+        }
+        /// <summary>
+        /// 页面ID
+        /// </summary>
+        public string PageID
+        {
+            get
+            {
+                return this.GetValStringByKey(WindowTemplateAttr.PageID);
+            }
+            set
+            {
+                this.SetValByKey(WindowTemplateAttr.PageID, value);
+            }
+        }
         #endregion 属性
 
         #region 构造方法
@@ -82,7 +110,7 @@ namespace BP.GPM.Home.WindowExt
                 map.AddTBString(WindowTemplateAttr.MoreLab, null, "更多标签", true, false, 0, 300, 20);
                 #endregion 更多链接.
 
-                map.AddDtl(new HtmlVarDtls(), DtlAttr.RefWindowTemplate);
+                map.AddDtl(new HtmlVarDtls(), DtlAttr.RefPK);
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "样例";

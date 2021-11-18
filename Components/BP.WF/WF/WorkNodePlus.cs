@@ -126,7 +126,7 @@ namespace BP.WF
                         billInfo += "<img src='./Img/FileType/doc.gif' /><a href='" + billUrl + "' target=_blank >" + func.Name + "</a>";
                     }
 
-                    path = BP.WF.Glo.FlowFileBill + year + "\\" + wn.ExecerDeptNo + "\\" + func.No + "\\";
+                    path = BP.WF.Glo.FlowFileBill + year + "/" + wn.ExecerDeptNo + "/" + func.No + "/";
                     // path = AppDomain.CurrentDomain.BaseDirectory + path;
                     if (System.IO.Directory.Exists(path) == false)
                         System.IO.Directory.CreateDirectory(path);
@@ -185,7 +185,7 @@ namespace BP.WF
                 {
                     BP.WF.DTS.InitBillDir dir = new BP.WF.DTS.InitBillDir();
                     dir.Do();
-                    path = BP.WF.Glo.FlowFileBill + year + "\\" + wn.ExecerDeptNo + "\\" + func.No + "\\";
+                    path = BP.WF.Glo.FlowFileBill + year + "/" + wn.ExecerDeptNo + "/" + func.No + "/";
 
                     string[] para1 = new string[4];
                     para1[0] = BP.WF.Glo.FlowFileBill;

@@ -166,9 +166,9 @@ namespace BP.WF.HttpHandler
                     case DeliveryWay.ByBindEmp:
                         //sql = "SELECT No,Name from Port_Emp where No in (select FK_Emp from WF_NodeEmp where FK_Node='" + nodeid + "') ";
                         if (CCBPMRunModel.SAAS == SystemConfig.CCBPMRunModel)
-                            sql = "SELECT UserID,Name FROM Port_Emp A, WF_NodeEmp B WHERE A.UserID=B.FK_Emp AND B.FK_Node=" +nodeid;
+                            sql = "SELECT UserID,Name FROM Port_Emp A, WF_NodeEmp B WHERE A.UserID=B.FK_Emp AND B.FK_Node=" + nodeid;
                         else
-                            sql = "SELECT No,Name FROM Port_Emp A, WF_NodeEmp B WHERE A.No=B.FK_Emp AND  B.FK_Node=" + nodeid ;
+                            sql = "SELECT No,Name FROM Port_Emp A, WF_NodeEmp B WHERE A.No=B.FK_Emp AND  B.FK_Node=" + nodeid;
 
                         //emps.RetrieveInSQL("select fk_emp from wf_NodeEmp WHERE fk_node=" + int.Parse(this.FK_Flow + "01") + " ");
                         break;
@@ -187,29 +187,28 @@ namespace BP.WF.HttpHandler
                               + "        pdes.FK_Emp";
                         break;
                     case DeliveryWay.BySelected: //所有的人员多可以启动, 2016年11月开始约定此规则.
-
-                        sql = "SELECT COUNT(*) as Num  FROM Port_Emp ";
-
-                        if (DBAccess.RunSQLReturnValInt(sql) > 300)
+                        switch (SystemConfig.AppCenterDBType)
                         {
-                            switch (SystemConfig.AppCenterDBType)
-                            {
-                                case DBType.MSSQL:
+                            case DBType.MSSQL:
+                                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                                     sql = "SELECT top 300 No as FK_Emp FROM Port_Emp ";
-                                    break;
-                                case DBType.Oracle:
-                                    sql = "SELECT  No as FK_Emp FROM Port_Emp WHERE ROWNUM <300 ";
-                                    break;
-                                case DBType.MySQL:
+                                else
+                                    sql = "SELECT top 300 No as FK_Emp FROM Port_Emp WHERE OrgNo='" + WebUser.OrgNo + "' ";
+                                break;
+                            case DBType.Oracle:
+                                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                                    sql = "SELECT  No as FK_Emp FROM Port_Emp WHERE ROWNUM < 300 ";
+                                else
+                                    sql = "SELECT  No as FK_Emp FROM Port_Emp WHERE ROWNUM < 300 AND OrgNo='" + WebUser.OrgNo + "'";
+                                break;
+                            case DBType.MySQL:
+                                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                                     sql = "SELECT  No as FK_Emp FROM Port_Emp limit 0,300 ";
-                                    break;
-                                default:
-                                    return "err@没有判断的数据库类型.";
-                            }
-                        }
-                        else
-                        {
-                            sql = "SELECT No as FK_Emp FROM Port_Emp ";
+                                else
+                                    sql = "SELECT  No as FK_Emp FROM Port_Emp limit 0,300 WHERE   OrgNo='" + WebUser.OrgNo + "' ";
+                                break;
+                            default:
+                                return "err@没有判断的数据库类型.";
                         }
                         break;
                     case DeliveryWay.BySQL:
@@ -235,6 +234,7 @@ namespace BP.WF.HttpHandler
 
                 //处理发起人数据.
                 string emps = "";
+                BP.Port.Emp emp = new Emp();
                 foreach (DataRow dr in dt.Rows)
                 {
                     string myemp = dr[0].ToString();
@@ -242,7 +242,19 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     emps += "," + myemp + ",";
-                    BP.Port.Emp emp = new Emp(myemp);
+
+                    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    {
+                        emp = new Emp();
+                        emp.No = myemp;
+                        emp.Retrieve();
+                    }
+                    else
+                    {
+                        emp = new Emp(myemp);
+                    }
+
+
 
                     DataRow drNew = dtMyEmps.NewRow();
 
@@ -253,19 +265,12 @@ namespace BP.WF.HttpHandler
                     dtMyEmps.Rows.Add(drNew);
                 }
 
-                //检查物理表,避免错误.
-                Nodes nds = new Nodes(this.FK_Flow);
-                foreach (Node mynd in nds)
-                {
-                    mynd.HisWork.CheckPhysicsTable();
-                }
-
                 //返回数据源.
                 return BP.Tools.Json.ToJson(dtMyEmps);
             }
             catch (Exception ex)
             {
-                return "err@<h2>您没有正确的设置开始节点的访问规则，这样导致没有可启动的人员，<a href='http://bbs.ccflow.org/showtopic-4103.aspx' target=_blank ><font color=red>点击这查看解决办法</font>.</a>。</h2> 系统错误提示:" + ex.Message + "<br><h3>也有可能你你切换了OSModel导致的，什么是OSModel,请查看在线帮助文档 <a href='http://ccbpm.mydoc.io' target=_blank>http://ccbpm.mydoc.io</a>  .</h3>";
+                return "err@<h3>您没有正确的设置开始节点的访问规则，这样导致没有可启动的人员，请在开始节点上右键设置接受人 </h3> 详细的错误信息：" + ex.Message;
             }
         }
 
@@ -283,7 +288,6 @@ namespace BP.WF.HttpHandler
             return "url@" + url;
         }
         #endregion 测试页面.
-
 
         #region 安装.
         /// <summary>
@@ -339,7 +343,6 @@ namespace BP.WF.HttpHandler
             // this.Response.Redirect("DBInstall.aspx?DoType=OK", true);
         }
         #endregion
-
 
         public string ReLoginSubmit()
         {

@@ -227,30 +227,30 @@ namespace BP.GPM.DTalk
                                 if (DataType.IsNullOrEmpty(userInfo.avatar))
                                 {
                                     //大图标
-                                    string UserIcon = savePath + "\\" + userInfo.userid + "Biger.png";
-                                    File.Copy(savePath + "\\DefaultBiger.png", UserIcon, true);
+                                    string UserIcon = savePath + "/" + userInfo.userid + "Biger.png";
+                                    File.Copy(savePath + "/DefaultBiger.png", UserIcon, true);
 
                                     //小图标
-                                    UserIcon = savePath + "\\" + userInfo.userid + "Smaller.png";
-                                    File.Copy(savePath + "\\DefaultSmaller.png", UserIcon, true);
+                                    UserIcon = savePath + "/" + userInfo.userid + "Smaller.png";
+                                    File.Copy(savePath + "/DefaultSmaller.png", UserIcon, true);
 
                                     //正常图标
-                                    UserIcon = savePath + "\\" + userInfo.userid + ".png";
-                                    File.Copy(savePath + "\\Default.png", UserIcon, true);
+                                    UserIcon = savePath + "/" + userInfo.userid + ".png";
+                                    File.Copy(savePath + "/Default.png", UserIcon, true);
                                 }
                                 else
                                 {
                                     //大图标
                                     string headimgurl = userInfo.avatar;
-                                    string UserIcon = savePath + "\\" + userInfo.userid + "Biger.png";
+                                    string UserIcon = savePath + "/" + userInfo.userid + "Biger.png";
                                     DataType.HttpDownloadFile(headimgurl, UserIcon);
 
                                     //小图标
-                                    UserIcon = savePath + "\\" + userInfo.userid + "Smaller.png";
+                                    UserIcon = savePath + "/" + userInfo.userid + "Smaller.png";
                                     DataType.HttpDownloadFile(headimgurl, UserIcon);
 
                                     //正常图标
-                                    UserIcon = savePath + "\\" + userInfo.userid + ".png";
+                                    UserIcon = savePath + "/" + userInfo.userid + ".png";
                                     DataType.HttpDownloadFile(headimgurl, UserIcon);
                                 }
                             }

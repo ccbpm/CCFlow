@@ -49,7 +49,7 @@ namespace BP.WF.HttpHandler
             System.Drawing.Image image = encoder.Encode(url, Encoding.UTF8);
 
             string tempPath = "";
-            tempPath = SystemConfig.PathOfTemp + "\\" + this.FK_Flow + ".png";
+            tempPath = SystemConfig.PathOfTemp + this.FK_Flow + ".png";
 
             image.Save(tempPath, ImageFormat.Png);
             image.Dispose();

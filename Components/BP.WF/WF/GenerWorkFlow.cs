@@ -1231,8 +1231,8 @@ namespace BP.WF
                 map.AddTBInt(GenerWorkFlowAttr.WFState, 0, "状态", true, false);
 
 
-           //     map.AddDDLSysEnum(GenerWorkFlowAttr.WFSta, 0, "状态", true, false, GenerWorkFlowAttr.WFSta, "@0=运行中@1=已完成@2=其他");
-             //   map.AddDDLSysEnum(GenerWorkFlowAttr.WFState, 0, "流程状态", true, false, GenerWorkFlowAttr.WFState);
+                //  map.AddDDLSysEnum(GenerWorkFlowAttr.WFSta, 0, "状态", true, false, GenerWorkFlowAttr.WFSta, "@0=运行中@1=已完成@2=其他");
+                //  map.AddDDLSysEnum(GenerWorkFlowAttr.WFState, 0, "流程状态", true, false, GenerWorkFlowAttr.WFState);
 
                 map.AddTBString(GenerWorkFlowAttr.Starter, null, "发起人", true, false, 0, 200, 10);
                 map.AddTBString(GenerWorkFlowAttr.StarterName, null, "发起人名称", true, false, 0, 200, 10);
@@ -1383,6 +1383,19 @@ namespace BP.WF
         public string DoRpt()
         {
             return "WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
+        }
+        /// <summary>
+        /// 增加子线程
+        /// </summary>
+        /// <param name="empStrs">要增加的人员多个用都好分开.</param>
+        /// <returns></returns>
+        public string DoSubFlowAddEmps(string empStrs)
+        {
+            //获得当前的干流程的gwf.
+            long workID = this.FID;
+            if (workID == 0)
+                workID = this.WorkID;
+            return BP.WF.Dev2Interface.Node_FHL_AddSubThread(workID, empStrs);
         }
         /// <summary>
         /// 执行修复

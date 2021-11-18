@@ -937,6 +937,7 @@ namespace BP.WF.HttpHandler
             {
                 em.FK_Dept = BP.Web.WebUser.FK_Dept;
                 em.Name = Web.WebUser.Name;
+              //  em.OrgNo = Web.WebUser.OrgNo;
                 em.Insert();
             }
 
@@ -1799,7 +1800,7 @@ namespace BP.WF.HttpHandler
         {
             string sta = this.GetRequestVal("Sta");
             if (sta == null || sta == "")
-                sta = "0";
+                sta = "-1";
 
             int pageSize = 6; // int.Parse(pageSizeStr);
 

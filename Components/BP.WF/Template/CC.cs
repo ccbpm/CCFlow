@@ -78,6 +78,7 @@ namespace BP.WF.Template
             if (this.CCIsDepts == true)
             {
                 /*如果抄送到部门. */
+
                     sql = "SELECT A." + BP.Sys.Glo.UserNo + ", A.Name FROM Port_Emp A, WF_CCDept B  WHERE  B.FK_Dept=A.FK_Dept AND B.FK_Node=" + this.NodeID;
 
                 mydt = DBAccess.RunSQLReturnTable(sql);
@@ -93,7 +94,7 @@ namespace BP.WF.Template
             if (this.CCIsEmps == true)
             {
                 /*如果抄送到人员. */
-                sql = "SELECT A." +BP.Sys.Glo.UserNo + ", A.Name FROM Port_Emp A, WF_CCEmp B WHERE A." + BP.Sys.Glo.UserNo + "=B.FK_Emp AND B.FK_Node=" + this.NodeID;
+                sql = "SELECT A." +BP.Sys.Glo.UserNo + ", A.Name FROM Port_Emp A, WF_CCEmp B WHERE A." + BP.Sys.Glo.UserNoWhitOutAS + "=B.FK_Emp AND B.FK_Node=" + this.NodeID;
                 mydt = DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow mydr in mydt.Rows)
                 {
@@ -109,7 +110,7 @@ namespace BP.WF.Template
                 if (this.CCStaWay == WF.CCStaWay.StationOnly)
                 {
                   
-                        sql = "SELECT No,Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C  WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Node=" + this.NodeID;
+                        sql = "SELECT " + BP.Sys.Glo.UserNo+",Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C  WHERE A." + BP.Sys.Glo.UserNoWhitOutAS + "= B.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Node=" + this.NodeID;
 
                     mydt = DBAccess.RunSQLReturnTable(sql);
                     foreach (DataRow mydr in mydt.Rows)
@@ -131,7 +132,7 @@ namespace BP.WF.Template
                         deptNo = DBAccess.RunSQLReturnStringIsNull("SELECT FK_Dept FROM WF_GenerWorkerlist WHERE WorkID=" + workid + " AND IsEnable=1 AND IsPass=0", BP.Web.WebUser.FK_Dept);
 
                  
-                        sql = "SELECT No,Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station  AND C.FK_Node=" + this.NodeID + " AND B.FK_Dept='" + deptNo + "'";
+                        sql = "SELECT " + BP.Sys.Glo.UserNo + ",Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C WHERE A." + BP.Sys.Glo.UserNoWhitOutAS + "=B.FK_Emp AND B.FK_Station=C.FK_Station  AND C.FK_Node=" + this.NodeID + " AND B.FK_Dept='" + deptNo + "'";
 
                     mydt = DBAccess.RunSQLReturnTable(sql);
                     foreach (DataRow mydr in mydt.Rows)
@@ -146,7 +147,7 @@ namespace BP.WF.Template
                 if (this.CCStaWay == WF.CCStaWay.StationAdndDept)
                 {
                   
-                        sql = "SELECT No,Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C, WF_CCDept D WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station AND A.FK_Dept=D.FK_Dept AND B.FK_Dept=D.FK_Dept AND C.FK_Node="+this.NodeID+" AND D.FK_Node="+this.NodeID;
+                        sql = "SELECT " + BP.Sys.Glo.UserNo + ",Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C, WF_CCDept D WHERE A." + BP.Sys.Glo.UserNoWhitOutAS + "=B.FK_Emp AND B.FK_Station=C.FK_Station AND A.FK_Dept=D.FK_Dept AND B.FK_Dept=D.FK_Dept AND C.FK_Node=" + this.NodeID+" AND D.FK_Node="+this.NodeID;
 
                     mydt = DBAccess.RunSQLReturnTable(sql);
                     foreach (DataRow mydr in mydt.Rows)
@@ -175,7 +176,7 @@ namespace BP.WF.Template
                         BP.Port.Dept dept = new Dept(deptNo);
 
                       
-                            sql = "SELECT No,Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station  AND C.FK_Node="+this.NodeID+" AND B.FK_Dept='"+deptNo+"'";
+                            sql = "SELECT " + BP.Sys.Glo.UserNo + ",Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C WHERE A." + BP.Sys.Glo.UserNoWhitOutAS + "=B.FK_Emp AND B.FK_Station=C.FK_Station  AND C.FK_Node=" + this.NodeID+" AND B.FK_Dept='"+deptNo+"'";
 
                         mydt = DBAccess.RunSQLReturnTable(sql);
                         foreach (DataRow mydr in mydt.Rows)
@@ -296,7 +297,8 @@ namespace BP.WF.Template
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No != "admin")
+
+                if (BP.Web.WebUser.IsAdmin==false )
                 {
                     uac.IsView = false;
                     return uac;
@@ -488,8 +490,8 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("WF_Node", "抄送规则");
+               
 
-                
 
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10, false);
@@ -576,8 +578,14 @@ namespace BP.WF.Template
 		/// <summary>
         /// 抄送
 		/// </summary>
-		public CCs(){} 		 
-		#endregion
+		public CCs(){}
+        public CCs(string fk_flow)
+        {
+            this.Retrieve(NodeAttr.FK_Flow, fk_flow, NodeAttr.Step);
+            return;
+        }
+
+        #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

@@ -887,7 +887,8 @@ namespace BP.WF
                 {
                     rpt.OID = wk.OID;
                     int i = rpt.RetrieveFromDBSources();
-                    if (i == 0) {
+                    if (i == 0)
+                    {
                         GenerWorkFlow gwfw = new GenerWorkFlow();
                         gwfw.WorkID = wk.OID;
                         gwfw.Delete();
@@ -1099,7 +1100,7 @@ namespace BP.WF
                         }
                     }
                 }
-                
+
                 #endregion 从调用的节点上copy.
 
                 #region 获取web变量.
@@ -1886,9 +1887,10 @@ namespace BP.WF
                             mattr.Name = "FID(自动增加)";
                             mattr.Insert();
 
-                            GEEntity en = new GEEntity(nd.NodeFrmID);
-                            en.CheckPhysicsTable();
+                           
                         }
+                        GEEntity en = new GEEntity(nd.NodeFrmID);
+                        en.CheckPhysicsTable();
                     }
                     #endregion 如果是引用的表单库的表单，就要检查该表单是否有FID字段，没有就自动增加.
 
@@ -2179,7 +2181,7 @@ namespace BP.WF
         readonly static string PathFlowDesc;
         static Flow()
         {
-            PathFlowDesc = SystemConfig.PathOfDataUser + "FlowDesc\\";
+            PathFlowDesc = SystemConfig.PathOfDataUser + "FlowDesc/";
         }
         /// <summary>
         /// 生成流程模板
@@ -2191,7 +2193,7 @@ namespace BP.WF
             name = BP.Tools.StringExpressionCalculate.ReplaceBadCharOfFileName(name);
 
             string path = this.No + "." + name;
-            path = PathFlowDesc + path + "\\";
+            path = PathFlowDesc + path + "/";
 
             this.DoExpFlowXmlTemplete(path);
 
@@ -2223,7 +2225,7 @@ namespace BP.WF
                 string name = this.Name;
                 name = BP.Tools.StringExpressionCalculate.ReplaceBadCharOfFileName(name);
                 name = name + ".xml";
-                string filePath = path + name;
+                string filePath = path + "\\" + name;
                 ds.WriteXml(filePath);
             }
             return ds;
@@ -2242,14 +2244,14 @@ namespace BP.WF
             {
                 string name = this.No + "." + this.Name;
                 name = BP.Tools.StringExpressionCalculate.ReplaceBadCharOfFileName(name);
-                string path = PathFlowDesc + name + "\\";
+                string path = PathFlowDesc + name + "/";
                 DataSet ds = GetFlow(path);
                 if (ds == null)
                     return;
 
                 string directory = this.No + "." + this.Name;
                 directory = BP.Tools.StringExpressionCalculate.ReplaceBadCharOfFileName(directory);
-                path = PathFlowDesc + directory + "\\";
+                path = PathFlowDesc + directory + "/";
                 string xmlName = path + "Flow" + ".xml";
 
                 if (!isXmlLocked)
@@ -2324,7 +2326,7 @@ namespace BP.WF
                 try
                 {
                     if (path != null)
-                        System.IO.File.Copy(SystemConfig.PathOfDataUser + @"\CyclostyleFile\" + tmp.No + ".rtf", path + "\\" + tmp.No + ".rtf", true);
+                        System.IO.File.Copy(SystemConfig.PathOfDataUser + @"/CyclostyleFile/" + tmp.No + ".rtf", path + "/" + tmp.No + ".rtf", true);
                 }
                 catch
                 {
@@ -2390,6 +2392,10 @@ namespace BP.WF
             nes.RetrieveInSQL(NodeEmpAttr.FK_Node, sqlin);
             ds.Tables.Add(nes.ToDataTableField("WF_NodeEmp"));
 
+            //抄送规则
+            CCs ccs = new CCs(this.No);
+            DataTable dtNodeCC = ccs.ToDataTableField("WF_NodeCC");
+            ds.Tables.Add(dtNodeCC);
             // 抄送人员。
             CCEmps ces = new CCEmps();
             ces.RetrieveInSQL(CCEmpAttr.FK_Node, sqlin);
@@ -2399,6 +2405,11 @@ namespace BP.WF
             CCDepts cdds = new CCDepts();
             cdds.RetrieveInSQL(CCDeptAttr.FK_Node, sqlin);
             ds.Tables.Add(cdds.ToDataTableField("WF_CCDept"));
+
+            // 抄送部门。
+            CCStations ccstaions = new CCStations();
+            ccstaions.RetrieveInSQL(CCDeptAttr.FK_Node, sqlin);
+            ds.Tables.Add(ccstaions.ToDataTableField("WF_CCStation"));
 
             //子流程。
             SubFlows fls = new SubFlows();
@@ -2557,7 +2568,7 @@ namespace BP.WF
                 try
                 {
                     if (path != null)
-                        System.IO.File.Copy(SystemConfig.PathOfDataUser + @"\CyclostyleFile\" + tmp.No + ".rtf", path + "\\" + tmp.No + ".rtf", true);
+                        System.IO.File.Copy(SystemConfig.PathOfDataUser + @"/CyclostyleFile/" + tmp.No + ".rtf", path + "/" + tmp.No + ".rtf", true);
                 }
                 catch
                 {
@@ -3570,7 +3581,11 @@ namespace BP.WF
             GERpt gerpt = this.HisGERpt;
             gerpt.CheckPhysicsTable();  //让报表重新生成.
 
-            DBAccess.RunSQL("DELETE FROM Sys_GroupField WHERE FrmID='" + fk_mapData + "' AND OID NOT IN (SELECT GroupID FROM Sys_MapAttr WHERE FK_MapData = '" + fk_mapData + "')");
+            if (DBAccess.AppCenterDBType == DBType.PostgreSQL)
+                DBAccess.RunSQL("DELETE FROM Sys_GroupField WHERE FrmID='" + fk_mapData + "' AND  ''||OID NOT IN (SELECT GroupID FROM Sys_MapAttr WHERE FK_MapData = '" + fk_mapData + "')");
+            else
+                DBAccess.RunSQL("DELETE FROM Sys_GroupField WHERE FrmID='" + fk_mapData + "' AND  OID NOT IN (SELECT GroupID FROM Sys_MapAttr WHERE FK_MapData = '" + fk_mapData + "')");
+
 
             DBAccess.RunSQL("UPDATE Sys_MapAttr SET Name='活动时间' WHERE FK_MapData='ND" + flowId + "Rpt' AND KeyOfEn='CDT'");
             DBAccess.RunSQL("UPDATE Sys_MapAttr SET Name='参与者' WHERE FK_MapData='ND" + flowId + "Rpt' AND KeyOfEn='Emps'");
@@ -4349,7 +4364,7 @@ namespace BP.WF
             DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE FK_Flow='" + this.No + "'");
             DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.No + "'");
 
-            DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.No + "'");
+            DBAccess.RunSQL("DELETE FROM WF_CCList WHERE FK_Flow='" + this.No + "'");
 
             string sqlIn = " WHERE ReturnNode IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
             DBAccess.RunSQL("DELETE FROM WF_ReturnWork " + sqlIn);
@@ -4361,10 +4376,17 @@ namespace BP.WF
             if (DBAccess.IsExitsObject("ND" + int.Parse(this.No) + "Track"))
                 DBAccess.RunSQL("DELETE FROM ND" + int.Parse(this.No) + "Track ");
 
+            if (DBAccess.IsExitsObject("ND" + int.Parse(this.No) + "Rpt"))
+                DBAccess.RunSQL("DELETE FROM ND" + int.Parse(this.No) + "Rpt ");
+
+            DBAccess.RunSQL("DELETE FROM WF_CCList WHERE FK_Flow='" + this.No + "'");
+
+
             if (DBAccess.IsExitsObject(this.PTable))
                 DBAccess.RunSQL("DELETE FROM " + this.PTable);
 
             DBAccess.RunSQL("DELETE FROM WF_CH WHERE FK_Flow='" + this.No + "'");
+
             //DBAccess.RunSQL("DELETE FROM Sys_MapExt WHERE FK_MapData LIKE 'ND"+int.Parse(this.No)+"%'" );
 
             //删除节点数据。
@@ -4570,6 +4592,10 @@ namespace BP.WF
             if (DBAccess.IsExitsObject("ND" + int.Parse(this.No) + "Track") == true)
                 DBAccess.RunSQL("DROP TABLE ND" + int.Parse(this.No) + "Track ");
 
+            //删除存储表
+            //if (DBAccess.IsExitsObject("ND" + int.Parse(this.No) + "Rpt") == true)
+            //    DBAccess.RunSQL("DROP TABLE ND" + int.Parse(this.No) + "Rpt ");
+
             #endregion 删除流程报表,删除轨迹.
 
             // 执行录制的sql scripts.
@@ -4700,7 +4726,7 @@ namespace BP.WF
                 dr["No"] = item.No;
                 dr["Name"] = item.Name;
 
-                if (DataType.IsNullOrEmpty(item.FK_FlowSort) == true)
+                if (item.IsCanStart==false)
                     dr["IsRel"] = "0";
                 else
                     dr["IsRel"] = "1";
@@ -4733,7 +4759,7 @@ namespace BP.WF
             }
 
             // 生成索引界面
-            string path = SystemConfig.PathOfWorkDir + @"\VisualFlow\DataUser\FlowDesc\";
+            string path = SystemConfig.PathOfWorkDir + @"/VisualFlow/DataUser/FlowDesc/";
             string msg = "";
             msg += "<html>";
             msg += "\r\n<title>.net工作流程引擎设计，流程模板</title>";
@@ -4759,12 +4785,12 @@ namespace BP.WF
 
             try
             {
-                string pathDef = SystemConfig.PathOfWorkDir + "\\VisualFlow\\DataUser\\FlowDesc\\" + SystemConfig.CustomerNo + "_index.htm";
+                string pathDef = SystemConfig.PathOfWorkDir + "VisualFlow/DataUser/FlowDesc/" + SystemConfig.CustomerNo + "_index.htm";
                 DataType.WriteFile(pathDef, msg);
 
-                pathDef = SystemConfig.PathOfWorkDir + "\\VisualFlow\\DataUser\\FlowDesc\\index.htm";
+                pathDef = SystemConfig.PathOfWorkDir + "VisualFlow/DataUser/FlowDesc/index.htm";
                 DataType.WriteFile(pathDef, msg);
-                System.Diagnostics.Process.Start(SystemConfig.PathOfWorkDir + "\\VisualFlow\\DataUser\\FlowDesc\\");
+                System.Diagnostics.Process.Start(SystemConfig.PathOfWorkDir + "VisualFlow/DataUser/FlowDesc/");
             }
             catch
             {

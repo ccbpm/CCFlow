@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Data;
+using System.IO;
 using BP.Sys;
 using BP.DA;
 using BP.En;
+using BP.CCBill.Template;
+using BP.WF;
+using BP.WF.Template;
 
 namespace BP.GPM.Menu2020
 {
@@ -191,11 +195,11 @@ namespace BP.GPM.Menu2020
                 map.AddTBString(MenuAttr.OrgNo, null, "组织编号", true, false, 0, 50, 20);
                 map.AddTBInt(MySystemAttr.Idx, 0, "显示顺序", true, false);
 
-                //RefMethod rm = new RefMethod();
-                //rm.Title = "权限控制";
-                //rm.ClassMethodName = this.ToString() + ".DoPowerCenter";
+                RefMethod rm = new RefMethod();
+                rm.Title = "导出应用模板";
+                rm.ClassMethodName = this.ToString() + ".DoExpAppModel";
                 //rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                //map.AddRefMethod(rm);
+                map.AddRefMethod(rm);
 
                 this._enMap = map;
                 return this._enMap;
@@ -204,10 +208,166 @@ namespace BP.GPM.Menu2020
         #endregion
 
         /// <summary>
-        /// 权限控制
+        /// 导出
         /// </summary>
         /// <returns></returns>
-        public string DoPowerCenter()
+        public string DoExp()
+        {
+            string path = BP.Sys.SystemConfig.PathOfWebApp + "\\CCFast\\SystemTemplete\\" + this.Name + "\\";
+            if (System.IO.Directory.Exists(path) == false)
+                System.IO.Directory.CreateDirectory(path);
+
+            //系统属性.
+            DataSet ds = new DataSet();
+            ds.Tables.Add(this.ToDataTableField("MySystem"));
+
+            //模块.
+            Modules ens = new Modules();
+            ens.Retrieve(ModuleAttr.SystemNo, this.No);
+            ds.Tables.Add(ens.ToDataTableField("Modules"));
+
+            //菜单.
+            Menus menus = new Menus();
+            menus.Retrieve(MenuAttr.SystemNo, this.No);
+            ds.Tables.Add(menus.ToDataTableField("Menus"));
+
+            string file = path + "Menus.xml"; //默认的页面.
+            ds.WriteXml(file);
+
+            //遍历菜单.
+            foreach (Menu en in menus)
+            {
+                ////常规的功能，不需要备份.
+                //if (en.Mark.Equals("WorkRec") == true
+                //    || en.Mark.Equals("Calendar") == true
+                //    || en.Mark.Equals("Notepad") == true)
+                //    continue;
+                switch (en.MenuModel)
+                {
+                    case "WorkRec":
+                    case "Calendar":
+                    case "Notepad":
+                    case "Task":
+                    case "KnowledgeManagement":
+                        break;
+                    case "Dict": //如果是实体.
+                        Dict(en, path);
+                        break;
+                    case "DictTable":  //如果是字典.
+                        DictTable(en, path);
+                        break;
+                    default:
+                        //    throw new Exception("err@没有判断的应用类型:" + en.Mark);
+                        break;
+                }
+            }
+
+            return "执行成功. 导出到：" + path;
+        }
+        public string DictTable(Menu en, string path)
+        {
+            DataSet ds = new DataSet();
+
+            SFTable sf = new SFTable(en.UrlExt);
+
+            ds.Tables.Add(sf.ToDataTableField("SFTable"));
+
+            DataTable dt = sf.GenerHisDataTable();
+            dt.TableName = "Data";
+            ds.Tables.Add(dt);
+
+            ds.WriteXml(path + en.UrlExt + ".xml");
+            return "";
+        }
+        /// <summary>
+        /// 导出字典.
+        /// </summary>
+        /// <returns></returns>
+        public string Dict(Menu en, string path)
+        {
+            //获得表单的ID.
+            string frmID = en.UrlExt;
+
+            DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(frmID);
+            string file = path + "\\" + frmID + ".xml"; //实体方法.
+            ds.WriteXml(file);
+
+            #region 导出实体的方法 .
+            //获得方法分组
+            BP.CCBill.Template.GroupMethods ensGroup = new CCBill.Template.GroupMethods();
+            ensGroup.Retrieve(MethodAttr.FrmID, frmID);
+
+            //获得方法.
+            BP.CCBill.Template.Methods ens = new CCBill.Template.Methods();
+            ens.Retrieve(MethodAttr.FrmID, frmID);
+
+            //保存方法.
+            ds = new DataSet();
+            ds.Tables.Add(ensGroup.ToDataTableField("GroupMethods"));
+            ds.Tables.Add(ens.ToDataTableField("Methods"));
+
+            file = path + frmID + "_GroupMethods.xml"; //实体方法.
+            ds.WriteXml(file);
+
+            //循环单实体方法集合.
+            foreach (BP.CCBill.Template.Method method in ens)
+            {
+                switch (method.MethodModel)
+                {
+                    case "FlowEtc": //流程
+                        BP.WF.Flow f2l1 = new WF.Flow(method.MethodID);
+                        f2l1.DoExpFlowXmlTemplete(path + method.MethodID + "_Flow");
+                        break;
+                    case "FlowBaseData": //流程
+                        BP.WF.Flow fl1 = new WF.Flow(method.MethodID);
+                        fl1.DoExpFlowXmlTemplete(path + method.MethodID + "_Flow");
+                        break;
+                    case "Func": //功能导出？
+                        break;
+                    default:
+                        break;
+                }
+            }
+            #endregion 导出实体的方法 .
+
+            #region 导出集合 .
+            //获得方法分组
+            CCBill.Template.Collections ensCollts = new CCBill.Template.Collections();
+            ensCollts.Retrieve(CollectionAttr.FrmID, frmID);
+
+            //保存方法.
+            ds = new DataSet();
+            ds.Tables.Add(ensCollts.ToDataTableField("Collections"));
+
+            file = path + "\\" + frmID + "_Collections.xml"; //实体方法.
+            ds.WriteXml(file);
+
+            //循环单实体方法集合.
+            foreach (BP.CCBill.Template.Collection method in ensCollts)
+            {
+                switch (method.MethodModel)
+                {
+                    case "FlowEntityBatchStart": //流程
+                        BP.WF.Flow fC1 = new WF.Flow(method.FlowNo);
+                        fC1.DoExpFlowXmlTemplete(path + method.FlowNo + "_Flow");
+                        break;
+                    case "FlowNewEntity": //流程
+                        BP.WF.Flow fc2 = new WF.Flow(method.FlowNo);
+                        fc2.DoExpFlowXmlTemplete(path + method.FlowNo + "_Flow");
+                        break;
+                    default:
+                        break;
+                }
+            }
+            #endregion 导出实体的方法 .
+
+            return "实体导出成功";
+        }
+        /// <summary>
+        /// 导出应用模板
+        /// </summary>
+        /// <returns></returns>
+        public string DoExpAppModel()
         {
             return "../../GPM/PowerCenter.htm?CtrlObj=System&CtrlPKVal=" + this.No + "&CtrlGroup=System";
         }
@@ -301,7 +461,7 @@ namespace BP.GPM.Menu2020
 
                 #region 初始化菜单.
 
-                string file = SystemConfig.PathOfData + "\\XML\\AppFlowMenu.xml";
+                string file = SystemConfig.PathOfData + "XML/AppFlowMenu.xml";
                 DataSet ds = new DataSet();
                 ds.ReadXml(file);
 
@@ -357,6 +517,280 @@ namespace BP.GPM.Menu2020
         }
         #endregion
 
+        /// <summary>
+        /// 获得系统列表
+        /// </summary>
+        /// <returns></returns>
+        public string ImpSystem_Init()
+        {
+            string path = BP.Sys.SystemConfig.PathOfWebApp + "\\CCFast\\SystemTemplete\\";
+            string[] strs = System.IO.Directory.GetDirectories(path);
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("No");
+            dt.Columns.Add("Name");
+
+            foreach (string str in strs)
+            {
+                System.IO.DirectoryInfo en = new System.IO.DirectoryInfo(str);
+                DataRow dc = dt.NewRow();
+                dc[0] = en.Name;
+                dc[1] = en.Name;
+                dt.Rows.Add(dc);
+            }
+            return BP.Tools.Json.ToJson(dt);
+        }
+        public string DealGUIDNo(string no)
+        {
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                return no;
+
+            if (no.Contains("_") == true)
+                no = no.Substring(no.IndexOf('_'));
+
+            return BP.Web.WebUser.OrgNo + "_" + no;
+        }
+        /// <summary>
+        /// 导入系统
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string ImpSystem_Imp(string name)
+        {
+            string path = BP.Sys.SystemConfig.PathOfWebApp + "\\CCFast\\SystemTemplete\\" + name;
+            string pathOfMenus = path + "\\Menus.xml";
+            if (File.Exists(pathOfMenus) == false)
+                return "err@系统错误，目录里缺少文件:" + pathOfMenus;
+
+            DataSet ds = new DataSet();
+            ds.ReadXml(pathOfMenus);
+
+            //创建系统.
+            DataTable dt = ds.Tables["MySystem"];
+            MySystem system = new MySystem();
+            Row row = system.Row;
+            row.LoadDataTable(dt, dt.Rows[0]);
+
+            //旧的orgNo.
+            string oldOrgNo = system.OrgNo;
+
+            system.No = this.DealGUIDNo(system.No);
+            if (system.IsExits == true)
+                return "err@系统:" + name + ",已经存在.您不能在导入.";
+
+            system.OrgNo = BP.Web.WebUser.OrgNo;
+            system.DirectInsert();
+
+            //创建流程目录..
+            FlowSort fs = new FlowSort();
+            fs.No = system.No;
+            fs.Name = system.Name;
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                fs.ParentNo = "100";
+            else
+            {
+                fs.OrgNo = BP.Web.WebUser.OrgNo;
+                fs.ParentNo = system.No;
+            }
+            if (fs.IsExits == true)
+                fs.DirectUpdate();
+            else
+                fs.DirectInsert();
+
+            //创建model.
+            dt = ds.Tables["Modules"];
+            Modules modules = new Modules();
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                Module en = new Module();
+                en.Row.LoadDataTable(dt, dr);
+                en.OrgNo = BP.Web.WebUser.OrgNo;
+                en.SystemNo = system.No; //重新赋值，有可能这个编号有变化。
+                en.No = this.DealGUIDNo(en.No);  //修改编号格式，防止重复导入，在saas模式下，可以重复导入。
+                en.DirectInsert();
+                modules.AddEntity(en);
+            }
+
+            //创建menus.
+            dt = ds.Tables["Menus"];
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                BP.GPM.Menu2020.Menu en = new BP.GPM.Menu2020.Menu();
+                en.Row.LoadDataTable(dt, dr);
+                en.OrgNo = BP.Web.WebUser.OrgNo;
+
+                en.SystemNo = system.No; //重新赋值，有可能这个编号有变化。
+                                         //en.ModuleNo = "";
+
+                int idx = en.ModuleNo.IndexOf('_');
+                if (idx > 0)
+                    en.ModuleNo = en.ModuleNo.Substring(idx);
+
+                Module myModule = null;
+
+                //解决对应的模块编号变化的问题.
+                foreach (Module item in modules)
+                {
+                    if (en.ModuleNo.Contains(item.No) == true)
+                    {
+                        en.ModuleNo = item.No;
+                        myModule = item;
+                        continue;
+                    }
+                }
+
+                //设置模块编号.
+                en.ModuleNo = myModule.No; //
+
+                en.No = this.DealGUIDNo(en.No);  //修改编号格式，防止重复导入，在saas模式下，可以重复导入。
+
+                switch (en.MenuModel)
+                {
+                    case "Dict":
+                        ImpSystem_Imp_Dict(en, path, system, myModule, oldOrgNo);
+                        break;
+                    case "DictTable":
+                        ImpSystem_Imp_DictTable(en, path);
+                        break;
+                    default:
+                        break;
+                }
+                en.DirectInsert();
+            }
+
+            return "执行成功.";
+        }
+        private void ImpSystem_Imp_DictTable(Menu en, string path)
+        {
+
+        }
+        /// <summary>
+        /// 导入实体
+        /// </summary>
+        /// <param name="en"></param>
+        /// <param name="path"></param>
+        private void ImpSystem_Imp_Dict(Menu en, string path, MySystem system, Module module, string oldOrgNo)
+        {
+            string frmID = en.UrlExt;
+
+            //导入表单.
+            string file = path + "\\" + frmID + ".xml";
+            DataSet ds = new DataSet();
+            ds.ReadXml(file);
+
+            //旧的OrgNo 替换为新的orgNo.
+            string realFrmID = en.UrlExt;
+            if (DataType.IsNullOrEmpty(oldOrgNo) == false)
+                realFrmID = frmID.Replace(oldOrgNo, BP.Web.WebUser.OrgNo);
+
+            MapData.ImpMapData(realFrmID, ds);
+            MapData md = new MapData(realFrmID);
+
+            if (DataType.IsNullOrEmpty(oldOrgNo) == false)
+                md.PTable = md.PTable.Replace(oldOrgNo, BP.Web.WebUser.OrgNo);
+
+            md.Update();
+
+            file = path + "\\" + frmID + "_GroupMethods.xml";
+
+            //导入单个实体的方法分组.
+            ds = new DataSet();
+            ds.ReadXml(file);
+            DataTable dt = ds.Tables["GroupMethods"];
+            foreach (DataRow dr in dt.Rows)
+            {
+                GroupMethod gm = new GroupMethod();
+                gm.Row.LoadDataTable(dt, dr);
+                gm.OrgNo = Web.WebUser.OrgNo;
+                gm.FrmID = realFrmID;
+                gm.No = DBAccess.GenerGUID();
+                gm.DirectInsert();
+            }
+
+            dt = ds.Tables["Methods"];
+            foreach (DataRow dr in dt.Rows)
+            {
+                BP.CCBill.Template.Method myen = new BP.CCBill.Template.Method();
+                myen.Row.LoadDataTable(dt, dr);
+
+                myen.FrmID = realFrmID;
+
+                switch (myen.MethodModel)
+                {
+                    case "FlowEtc": //其他业务流程.
+                        myen.FlowNo = ImpSystem_Imp_Dict_FlowEtc(myen.FlowNo, myen.Name, path, system);
+                        break;
+                    case "FlowBaseData": //修改基础资料流程
+                        myen.FlowNo = ImpSystem_Imp_Dict_FlowEtc(myen.FlowNo, myen.Name, path, system);
+                        break;
+                    case "Func": //功能.
+                        break;
+                    default:
+                        break;
+                }
+                //    en.OrgNo = Web.WebUser.OrgNo;
+                myen.No = DBAccess.GenerGUID();
+                myen.DirectInsert();
+            }
+
+            //导入实体集合.
+            file = path + "\\" + frmID + "_Collections.xml";
+            ds.ReadXml(file);
+            dt = ds.Tables["GroupMethods"];
+            foreach (DataRow dr in dt.Rows)
+            {
+                BP.CCBill.Template.Collection myen = new BP.CCBill.Template.Collection();
+                myen.Row.LoadDataTable(dt, dr);
+                myen.FrmID = realFrmID;
+
+                switch (myen.MethodModel)
+                {
+                    case "FlowEntityBatchStart": //批量发起流程.
+                        ImpSystem_Imp_Dict_FlowEtc(myen.FlowNo, myen.Name, path, system);
+                        break;
+                    case "FlowNewEntity": //新建流程
+                        ImpSystem_Imp_Dict_FlowEtc(myen.FlowNo, myen.Name, path, system);
+                        break;
+                    case "Func": //功能.
+                        break;
+                    default:
+                        break;
+                }
+                myen.DirectInsert();
+            }
+        }
+        /// <summary>
+        /// 导入流程.
+        /// </summary>
+        /// <param name="en"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private string ImpSystem_Imp_Dict_FlowEtc(string tempFlowNo, string tempFlowName, string path, MySystem mysystem)
+        {
+            //导入模式
+            BP.WF.ImpFlowTempleteModel model = ImpFlowTempleteModel.AsNewFlow;
+
+            path = path + "\\" + tempFlowNo + "_Flow\\" + tempFlowName + ".xml";
+            //   if (model == ImpFlowTempleteModel.AsSpecFlowNo)
+            //     flowNo = this.GetRequestVal("SpecFlowNo");
+
+            //执行导入
+            BP.WF.Flow flow = BP.WF.Template.TemplateGlo.LoadFlowTemplate(mysystem.No, path, model, null);
+            flow.FK_FlowSort = mysystem.No;
+            flow.DoCheck(); //要执行一次检查.
+
+            return flow.No;
+
+
+            //Hashtable ht = new Hashtable();
+            //ht.Add("FK_Flow", flow.No); //流程编号.
+            //ht.Add("FlowName", flow.Name); //名字.
+            //ht.Add("FK_FlowSort", flow.FK_FlowSort); //类别.
+            //ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name);
+            //return BP.Tools.Json.ToJson(ht);
+        }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

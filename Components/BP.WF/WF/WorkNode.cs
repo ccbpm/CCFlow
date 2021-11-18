@@ -643,7 +643,7 @@ namespace BP.WF
                         if (town.HisNode.HisDeliveryWay == DeliveryWay.BySQL)
                         {
                             string mysql = town.HisNode.DeliveryParas.Clone() as string;
-                            DataTable mydt = DBAccess.RunSQLReturnTable(Glo.DealExp(mysql, this.rptGe, null));
+                            DataTable mydt = DBAccess.RunSQLReturnTable(Glo.DealExp(mysql, this.rptGe));
 
                             wl.GuestNo = mydt.Rows[0][0].ToString();
                             wl.GuestName = mydt.Rows[0][1].ToString();
@@ -1271,8 +1271,10 @@ namespace BP.WF
 
                 dt = fw.DoIt(this.HisFlow, this, toWn); // 找到下一步骤的接收人.
                 Executor = "";//实际执行人
-                ExecutorName = "";//实际执行人名称
+                ExecutorName = "";//  实际执行人名称
                 Emp emp = new Emp();
+                if (dt != null && dt.Rows.Count > 0 && nd.HisWhenNoWorker == true)
+                    return nd;
                 if (dt == null || dt.Rows.Count == 0)
                 {
                     if (nd.HisWhenNoWorker == true)
@@ -1607,7 +1609,7 @@ namespace BP.WF
 
                         /*如果仍然有没有替换下来的变量.*/
                         if (mytemp.Contains("@") == true)
-                            mytemp = BP.WF.Glo.DealExp(mytemp, this.rptGe, null);
+                            mytemp = BP.WF.Glo.DealExp(mytemp, this.rptGe);
                     }
 
                     string atParas = "@FK_Flow=" + node.FK_Flow + "@WorkID=" + this.WorkID + "@NodeID=" + node.NodeID + "@FK_Node=" + node.NodeID;
@@ -1720,7 +1722,16 @@ namespace BP.WF
 
             //定义没有条件的节点集合.
             Directions dirs0Cond = new Directions();
-
+            if (this.SendHTOfTemp != null)
+            {
+                foreach (string key in this.SendHTOfTemp.Keys)
+                {
+                    if (rptGe.Row.ContainsKey(key) == true)
+                        this.rptGe.Row[key] = this.SendHTOfTemp[key] as string;
+                    else
+                        this.rptGe.Row.Add(key, this.SendHTOfTemp[key] as string);
+                }
+            }
             foreach (Direction dir in dirs)
             {
                 //查询出来他的条件.
@@ -1736,6 +1747,7 @@ namespace BP.WF
                     dirs0Cond.AddEntity(dir); //把他加入到里面.
                     continue;
                 }
+
 
                 //按条件计算.
                 if (conds.GenerResult(this.rptGe) == true)
@@ -2144,6 +2156,7 @@ namespace BP.WF
             }
 
             #region 处理审核问题,更新审核组件插入的审核意见中的 到节点，到人员。
+
             try
             {
                 Paras ps = new Paras();
@@ -2159,33 +2172,41 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                #region  如果更新失败，可能是由于数据字段大小引起。
-                Flow flow = new Flow(toND.FK_Flow);
 
-                string updateLengthSql = string.Format("  alter table {0} alter column {1} varchar(2000) ", "ND" + int.Parse(toND.FK_Flow) + "Track", "EmpFromT");
-                DBAccess.RunSQL(updateLengthSql);
+                try
+                {
+                    #region  如果更新失败，可能是由于数据字段大小引起。
+                    Flow flow = new Flow(toND.FK_Flow);
 
-                updateLengthSql = string.Format("  alter table {0} alter column {1} varchar(2000) ", "ND" + int.Parse(toND.FK_Flow) + "Track", "EmpFrom");
-                DBAccess.RunSQL(updateLengthSql);
+                    string updateLengthSql = string.Format("  alter table {0} alter column {1} varchar(2000) ", "ND" + int.Parse(toND.FK_Flow) + "Track", "EmpFromT");
+                    DBAccess.RunSQL(updateLengthSql);
 
-                updateLengthSql = string.Format("  alter table {0} alter column {1} varchar(2000) ", "ND" + int.Parse(toND.FK_Flow) + "Track", "EmpTo");
-                DBAccess.RunSQL(updateLengthSql);
-                updateLengthSql = string.Format("  alter table {0} alter column {1} varchar(2000) ", "ND" + int.Parse(toND.FK_Flow) + "Track", "EmpToT");
-                DBAccess.RunSQL(updateLengthSql);
+                    updateLengthSql = string.Format("  alter table {0} alter column {1} varchar(2000) ", "ND" + int.Parse(toND.FK_Flow) + "Track", "EmpFrom");
+                    DBAccess.RunSQL(updateLengthSql);
+
+                    updateLengthSql = string.Format("  alter table {0} alter column {1} varchar(2000) ", "ND" + int.Parse(toND.FK_Flow) + "Track", "EmpTo");
+                    DBAccess.RunSQL(updateLengthSql);
+                    updateLengthSql = string.Format("  alter table {0} alter column {1} varchar(2000) ", "ND" + int.Parse(toND.FK_Flow) + "Track", "EmpToT");
+                    DBAccess.RunSQL(updateLengthSql);
 
 
-                Paras ps = new Paras();
-                ps.SQL = "UPDATE ND" + int.Parse(toND.FK_Flow) + "Track SET NDTo=" + dbStr + "NDTo,NDToT=" + dbStr + "NDToT,EmpTo=" + dbStr + "EmpTo,EmpToT=" + dbStr + "EmpToT WHERE NDFrom=" + dbStr + "NDFrom AND EmpFrom=" + dbStr + "EmpFrom AND WorkID=" + dbStr + "WorkID AND ActionType=" + (int)ActionType.WorkCheck;
-                ps.Add(TrackAttr.NDTo, toND.NodeID);
-                ps.Add(TrackAttr.NDToT, toND.Name);
-                ps.Add(TrackAttr.EmpTo, this.HisRememberMe.EmpsExt);
-                ps.Add(TrackAttr.EmpToT, this.HisRememberMe.EmpsExt);
-                ps.Add(TrackAttr.NDFrom, this.HisNode.NodeID);
-                ps.Add(TrackAttr.EmpFrom, WebUser.No);
-                ps.Add(TrackAttr.WorkID, this.WorkID);
-                DBAccess.RunSQL(ps);
+                    Paras ps = new Paras();
+                    ps.SQL = "UPDATE ND" + int.Parse(toND.FK_Flow) + "Track SET NDTo=" + dbStr + "NDTo,NDToT=" + dbStr + "NDToT,EmpTo=" + dbStr + "EmpTo,EmpToT=" + dbStr + "EmpToT WHERE NDFrom=" + dbStr + "NDFrom AND EmpFrom=" + dbStr + "EmpFrom AND WorkID=" + dbStr + "WorkID AND ActionType=" + (int)ActionType.WorkCheck;
+                    ps.Add(TrackAttr.NDTo, toND.NodeID);
+                    ps.Add(TrackAttr.NDToT, toND.Name);
+                    ps.Add(TrackAttr.EmpTo, this.HisRememberMe.EmpsExt);
+                    ps.Add(TrackAttr.EmpToT, this.HisRememberMe.EmpsExt);
+                    ps.Add(TrackAttr.NDFrom, this.HisNode.NodeID);
+                    ps.Add(TrackAttr.EmpFrom, WebUser.No);
+                    ps.Add(TrackAttr.WorkID, this.WorkID);
+                    DBAccess.RunSQL(ps);
 
-                #endregion
+                    #endregion
+                }
+                catch (Exception myex)
+                {
+                    throw new Exception("err@处理track表出现错误:" + myex.Message);
+                }
             }
             #endregion 处理审核问题.
 
@@ -2514,7 +2535,7 @@ namespace BP.WF
             {
                 /*如果是按照查询ＳＱＬ，确定明细表的接收人与子线程的数据。*/
                 string sql = toNode.DeliveryParas;
-                sql = Glo.DealExp(sql, this.HisWork, null);
+                sql = Glo.DealExp(sql, this.HisWork);
                 dtWork = DBAccess.RunSQLReturnTable(sql);
             }
             if (toNode.HisDeliveryWay == DeliveryWay.ByDtlAsSubThreadEmps)
@@ -3588,7 +3609,7 @@ namespace BP.WF
         public void CopyData(Work toWK, Node toND, bool isSamePTable)
         {
             //如果存储模式为, 合并模式.
-            if (this.HisFlow.HisDataStoreModel == DataStoreModel.SpecTable)
+            if (this.HisFlow.HisDataStoreModel == DataStoreModel.SpecTable && toND.HisRunModel != RunModel.SubThread)
                 return;
 
             string errMsg = "如果两个数据源不想等，就执行 copy - 期间出现错误.";
@@ -5127,7 +5148,7 @@ namespace BP.WF
             if (this.HisNode.TeamLeaderConfirmRole == TeamLeaderConfirmRole.BySQL)
             {
                 string sql = this.HisNode.TeamLeaderConfirmDoc;
-                sql = Glo.DealExp(sql, this.HisWork, null);
+                sql = Glo.DealExp(sql, this.HisWork);
                 sql = sql.Replace("~", "'");
                 sql = sql.Replace("@WorkID", this.WorkID.ToString());
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
@@ -5580,7 +5601,7 @@ namespace BP.WF
                     foreach (GenerWorkFlow gwf in gwls)
                         err += wf_id + gwf.WorkID + wf_title + gwf.Title + wf_operator + gwf.TodoEmps + wf_step + gwf.NodeName;
 
-                    err = Glo.DealExp(blockMsg, this.rptGe, null) + err;
+                    err = Glo.DealExp(blockMsg, this.rptGe) + err;
                     throw new Exception(err);
                 }
 
@@ -5669,7 +5690,7 @@ namespace BP.WF
                     if (DataType.IsNullOrEmpty(err) == true)
                         return;
 
-                    err = Glo.DealExp(blockMsg, this.rptGe, null) + err;
+                    err = Glo.DealExp(blockMsg, this.rptGe) + err;
                     throw new Exception(err);
                 }
 
@@ -5683,10 +5704,11 @@ namespace BP.WF
                     sql = sql.Replace("@OID", this.WorkID.ToString());
 
                     /*按 sql 判断阻塞*/
-                    decimal d = DBAccess.RunSQLReturnValDecimal(Glo.DealExp(sql, this.rptGe, null), 0, 1);
+                    decimal d = DBAccess.RunSQLReturnValDecimal(Glo.DealExp(sql, this.rptGe), 0, 1);
                     //如果值大于0进行阻塞
                     if (d > 0)
-                        throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe, null));
+
+                        throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe));
                     return;
                 }
 
@@ -5746,7 +5768,7 @@ namespace BP.WF
                         if (valPara != val)
                             return;
 
-                        throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe, null));
+                        throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe));
                     }
 
                     if (oper.ToUpper() == "LIKE")
@@ -5754,13 +5776,13 @@ namespace BP.WF
                         if (valPara.Contains(val) == false)
                             return;
 
-                        throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe, null));
+                        throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe));
                     }
 
                     if (oper == ">")
                     {
                         if (float.Parse(valPara) > float.Parse(val))
-                            throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe, null));
+                            throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe));
 
                         return;
                     }
@@ -5768,7 +5790,7 @@ namespace BP.WF
                     if (oper == ">=")
                     {
                         if (float.Parse(valPara) >= float.Parse(val))
-                            throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe, null));
+                            throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe));
 
                         return;
                     }
@@ -5776,7 +5798,7 @@ namespace BP.WF
                     if (oper == "<")
                     {
                         if (float.Parse(valPara) < float.Parse(val))
-                            throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe, null));
+                            throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe));
 
                         return;
                     }
@@ -5784,7 +5806,7 @@ namespace BP.WF
                     if (oper == "<=")
                     {
                         if (float.Parse(valPara) <= float.Parse(val))
-                            throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe, null));
+                            throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe));
 
                         return;
                     }
@@ -5792,7 +5814,7 @@ namespace BP.WF
                     if (oper == "!=")
                     {
                         if (float.Parse(valPara) != float.Parse(val))
-                            throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe, null));
+                            throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe));
 
                         return;
                     }
@@ -5926,7 +5948,7 @@ namespace BP.WF
                     if (DataType.IsNullOrEmpty(err) == true)
                         return;
 
-                    err = Glo.DealExp(blockMsg, this.rptGe, null) + err;
+                    err = Glo.DealExp(blockMsg, this.rptGe) + err;
                     throw new Exception(err);
                 }
 
@@ -5987,7 +6009,7 @@ namespace BP.WF
                     if (DataType.IsNullOrEmpty(err) == true)
                         return;
 
-                    err = Glo.DealExp(blockMsg, this.rptGe, null) + err;
+                    err = Glo.DealExp(blockMsg, this.rptGe) + err;
                     throw new Exception(err);
                 }
                 throw new Exception("@该阻塞模式没有实现...");
@@ -5997,8 +6019,14 @@ namespace BP.WF
 
                 //  throw ex;
 
+                //提示：宜昌的友好提示 211102
+                if(this.HisNode.BlockModel == BlockModel.BySQL)
+                    throw new Exception("阻塞原因：" + this.HisNode.BlockAlert );
+
+
                 //正确的提示: 宜昌的需要这样的明确的提示信息.
                 throw new Exception("设置的阻塞规则错误:" + this.HisNode.BlockModel + ",exp:" + this.HisNode.BlockExp + "异常信息" + ex.Message);
+                
             }
         }
         /// <summary>
@@ -6299,7 +6327,7 @@ namespace BP.WF
         {
             //判断 guest 节点.
             if (this.HisNode.IsGuestNode)
-                if (this.Execer != "Guest")
+                if (this.Execer.Equals("Guest") == false)
                     throw new Exception(BP.WF.Glo.multilingual("@当前节点({0})是客户执行节点,所以当前登录人员应当是Guest,现在是:{1}.", "WorkNode", "should_gust", this.HisNode.Name, this.Execer));
 
             //int toNodeID = 0;
@@ -6440,7 +6468,7 @@ namespace BP.WF
             {
                 if (WorkNodePlus.CheckIsCanStartFlow_SendStartFlow(this.HisFlow, this.HisWork) == false)
                 {
-                    string er = Glo.DealExp(this.HisFlow.StartLimitAlert, this.HisWork, null);
+                    string er = Glo.DealExp(this.HisFlow.StartLimitAlert, this.HisWork);
                     throw new Exception(BP.WF.Glo.multilingual("@违反了流程发起限制条件:{0}.", "WorkNode", "error_send", er));
                 }
             }
@@ -7312,6 +7340,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
+                //当下一个节点的接收人规则为上一个人员选择的时候，就会抛出人员选择器链接,让其选择人员.
                 if (ex.Message.IndexOf("url@") == 0)
                     throw new Exception(ex.Message);
 
@@ -7846,6 +7875,8 @@ namespace BP.WF
                         mwk.DirectDelete();
                     }
                 }
+
+                //执行发送失败事件，让开发人员回滚相关数据.
                 ExecEvent.DoNode(EventListNode.SendError, this);
 
             }
@@ -7856,7 +7887,7 @@ namespace BP.WF
 
                 if (this.rptGe != null)
                     this.rptGe.CheckPhysicsTable();
-                string er1 = BP.WF.Glo.multilingual("@回滚发送失败数据出现错误:{0}.", "WorkNode", "wf_eng_error_4", ex1.StackTrace);
+                string er1 = BP.WF.Glo.multilingual("@发送失败后,回滚发送失败数据出现错误:{0}.", "WorkNode", "wf_eng_error_4", ex1.StackTrace);
                 string er2 = BP.WF.Glo.multilingual("@回滚发送失败数据出现错误:{0}.", "WorkNode", "wf_eng_error_3");
                 throw new Exception(ex.Message + er1 + er2);
             }
@@ -7935,6 +7966,7 @@ namespace BP.WF
             }
 
             /* 产生开始工作流程记录. */
+
             #region 设置流程标题.
             if (this.title == null)
             {
@@ -8258,9 +8290,9 @@ namespace BP.WF
                     {
                         string exp = this.HisNode.FocusField;
                         if (this.rptGe != null)
-                            exp = Glo.DealExp(exp, this.rptGe, null);
+                            exp = Glo.DealExp(exp, this.rptGe);
                         else
-                            exp = Glo.DealExp(exp, this.HisWork, null);
+                            exp = Glo.DealExp(exp, this.HisWork);
 
                         t.Msg += exp;
                         if (t.Msg.Contains("@"))
@@ -8409,9 +8441,9 @@ namespace BP.WF
                     {
                         string exp = this.HisNode.FocusField;
                         if (this.rptGe != null)
-                            exp = Glo.DealExp(exp, this.rptGe, null);
+                            exp = Glo.DealExp(exp, this.rptGe);
                         else
-                            exp = Glo.DealExp(exp, this.HisWork, null);
+                            exp = Glo.DealExp(exp, this.HisWork);
 
                         t.Msg += exp;
                         if (t.Msg.Contains("@"))
@@ -8472,9 +8504,6 @@ namespace BP.WF
             {
                 if (this.HisNode.IsFL)
                     at = ActionType.ForwardFL;
-
-
-
                 // 
                 t.FrmDB = this.HisWork.ToJson();
             }
@@ -8486,8 +8515,9 @@ namespace BP.WF
             }
             catch
             {
-                t.CheckPhysicsTable();
-
+                Track.CreateOrRepairTrackTable(t.FK_Flow);
+                t.Insert();
+                //    t.CheckPhysicsTable();
             }
 
             if (at == ActionType.SubThreadForward
@@ -8511,8 +8541,6 @@ namespace BP.WF
                 gwl.CDT = DataType.CurrentDataTimess;
                 gwl.Update();
             }
-
-
 
         }
         /// <summary>
@@ -8630,7 +8658,7 @@ namespace BP.WF
 
 
             if (exp.Contains("@") == true)
-                exp = Glo.DealExp(exp, this.HisWork, null);
+                exp = Glo.DealExp(exp, this.HisWork);
 
             if (exp.Contains("@") == true)
                 throw new Exception(BP.WF.Glo.multilingual("@您配置的表达式没有没被完全的解析下来:{0}.", "WorkNode", "wf_eng_error_5", exp));

@@ -413,7 +413,7 @@ namespace BP.WF.Template
 
                             try
                             {
-                                File.Copy(info.DirectoryName + "\\" + no + ".rtf", SystemConfig.PathOfWebApp + @"\DataUser\CyclostyleFile\" + bt.No + ".rtf", true);
+                                File.Copy(info.DirectoryName + "/" + no + ".rtf", SystemConfig.PathOfWebApp + @"/DataUser/CyclostyleFile/" + bt.No + ".rtf", true);
                             }
                             catch (Exception ex)
                             {
@@ -590,6 +590,7 @@ namespace BP.WF.Template
                             }
                         }
                         break;
+                    
                     case "WF_NodeReturn"://可退回的节点。
                         foreach (DataRow dr in dt.Rows)
                         {
@@ -880,7 +881,7 @@ namespace BP.WF.Template
                                 }
                                 nd.SetValByKey(dc.ColumnName, val);
                             }
-
+                            nd.FK_Flow = fl.No;
                             nd.DirectUpdate();
                         }
                         break;
@@ -1044,7 +1045,7 @@ namespace BP.WF.Template
                                     htmlCode = htmlCode.Replace("ND" + oldFlowID, "ND" + int.Parse(fl.No));
                                     //保存到数据库，存储html文件
                                     //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
-                                    string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
+                                    string filePath = SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/";
                                     if (Directory.Exists(filePath) == false)
                                         Directory.CreateDirectory(filePath);
                                     filePath = filePath + md.No + ".htm";
@@ -1056,7 +1057,7 @@ namespace BP.WF.Template
                                 else
                                 {
                                     //如果htmlCode是空的需要删除当前节点的html文件
-                                    string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\" + md.No + ".htm";
+                                    string filePath = SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/" + md.No + ".htm";
                                     if (File.Exists(filePath) == true)
                                         File.Delete(filePath);
                                     DBAccess.SaveBigTextToDB("", "Sys_MapData", "No", md.No, "HtmlTemplateFile");
@@ -1309,7 +1310,7 @@ namespace BP.WF.Template
                                 }
                                 ne.SetValByKey(dc.ColumnName, val);
                             }
-                            ne.Insert();
+                            ne.DirectInsert();
                         }
                         break;
                     case "Sys_GroupField": //这里需要对比一下翻译.
@@ -1346,6 +1347,35 @@ namespace BP.WF.Template
                             int oid = DBAccess.GenerOID();
                             DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID='" + oid + "' WHERE FK_MapData='" + gf.FrmID + "' AND GroupID='" + gf.OID + "'");
                             gf.InsertAsOID(oid); */
+                        }
+                        break;
+                    case "WF_NodeCC":
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            CC cc = new CC();
+                            cc.NodeID = int.Parse(flowID + dr[NodeAttr.NodeID].ToString().Substring(iOldFlowLength));
+                            cc.RetrieveFromDBSources();
+                            foreach (DataColumn dc in dt.Columns)
+                            {
+
+                                string val = dr[dc.ColumnName] as string;
+                                if (val == null)
+                                    continue;
+
+                                if (dc.ColumnName.ToLower().Equals("nodeid"))
+                                {
+                                    if (val.Length < iOldFlowLength)
+                                    {
+                                        // 节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                        throw new Exception("@导入模板名称：" + oldFlowName + "；节点WF_Node下FK_Node值错误:" + val);
+                                    }
+                                    val = flowID + val.Substring(iOldFlowLength);
+                                }
+
+                                cc.SetValByKey(dc.ColumnName, val);
+                            }
+                            cc.SetValByKey("FK_Flow",fl.No);
+                            cc.DirectUpdate();
                         }
                         break;
                     case "WF_CCEmp": // 抄送.
@@ -1551,7 +1581,7 @@ namespace BP.WF.Template
             nd.Insert();
 
             //为创建节点设置默认值  @sly 部分方法
-            string file = SystemConfig.PathOfDataUser + "XML\\DefaultNewNodeAttr.xml";
+            string file = SystemConfig.PathOfDataUser + "XML/DefaultNewNodeAttr.xml";
             DataSet ds = new DataSet();
             if (System.IO.File.Exists(file) == true)
             {
@@ -1783,7 +1813,7 @@ namespace BP.WF.Template
                 nd = new BP.WF.Node();
 
                 //为创建节点设置默认值 
-                string fileNewNode = SystemConfig.PathOfDataUser + "XML\\DefaultNewNodeAttr.xml";
+                string fileNewNode = SystemConfig.PathOfDataUser + "XML/DefaultNewNodeAttr.xml";
                 if (System.IO.File.Exists(fileNewNode) == true)
                 {
                     DataSet myds = new DataSet();
@@ -1840,7 +1870,7 @@ namespace BP.WF.Template
                 md.Save();
 
                 // 装载模版.
-                string file = SystemConfig.PathOfDataUser + "XML\\TempleteSheetOfStartNode.xml";
+                string file = SystemConfig.PathOfDataUser + "XML/TempleteSheetOfStartNode.xml";
                 if (System.IO.File.Exists(file) == false)
                     throw new Exception("@开始节点表单模版丢失" + file);
 

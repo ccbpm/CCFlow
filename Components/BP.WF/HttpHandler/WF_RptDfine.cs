@@ -285,7 +285,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
 
             //判断是否含有导出至模板的模板文件，如果有，则显示导出至模板按钮RptExportToTmp
-            string tmpDir = SystemConfig.PathOfDataUser + @"TempleteExpEns\" + rptNo;
+            string tmpDir = SystemConfig.PathOfDataUser + @"TempleteExpEns/" + rptNo;
             if (System.IO.Directory.Exists(tmpDir))
             {
                 if (System.IO.Directory.GetFiles(tmpDir, "*.xls*").Length > 0)
@@ -899,7 +899,7 @@ namespace BP.WF.HttpHandler
             }
 
             //判断是否含有导出至模板的模板文件，如果有，则显示导出至模板按钮RptExportToTmp
-            string tmpDir = SystemConfig.PathOfDataUser + @"TempleteExpEns\" + rptNo;
+            string tmpDir = SystemConfig.PathOfDataUser + @"TempleteExpEns/" + rptNo;
             if (System.IO.Directory.Exists(tmpDir))
             {
                 if (System.IO.Directory.GetFiles(tmpDir, "*.xls*").Length > 0)

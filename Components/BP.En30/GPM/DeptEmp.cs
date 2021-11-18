@@ -72,7 +72,18 @@ namespace BP.GPM
                 SetValByKey(DeptEmpAttr.FK_Dept, value);
                 this.MyPK = this.FK_Dept + "_" + this.FK_Emp;
             }
-        } 
+        }
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStringByKey(DeptEmpAttr.OrgNo);
+            }
+            set
+            {
+                SetValByKey(DeptEmpAttr.OrgNo, value);
+            }
+        }
         #endregion
 
         #region 扩展属性

@@ -387,7 +387,7 @@ namespace BP.CCBill
                 msg += "\t\n 1. 对于字段内容需要处理后在输出出来.";
                 msg += "\t\n 2. 比如：原字段内容 @zhangsa,张三@lisi,李四 显示的内容为 张三,李四";
                 msg += "\t\n 3. 配置格式: 字段名@函数名; 比如:  FlowEmps@DealFlowEmps; ";
-                msg += "\t\n 4. 函数写入到 \\DataUser\\JSLibData\\SearchSelf.js";
+                msg += "\t\n 4. 函数写入到 /DataUser/JSLibData/SearchSelf.js";
                 map.SetHelperAlert("ForamtFunc", msg);
                 #endregion 实体表单.
 

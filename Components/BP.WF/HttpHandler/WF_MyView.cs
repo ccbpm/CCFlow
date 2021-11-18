@@ -38,7 +38,7 @@ namespace BP.WF.HttpHandler
             // return DBAccess.RunSQLReturnStringIsNull(sql,"err@没有获得数据.");
             return DBAccess.GetBigTextFromDB("ND" + int.Parse(this.FK_Flow) + "Track", "MyPK", this.MyPK, "FrmDB");
         }
-        
+
         #endregion 表单查看.
 
 
@@ -219,10 +219,16 @@ namespace BP.WF.HttpHandler
 
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
+                Node nd = null;
+
+                if (gwf.WFState == WFState.Runing)
+                    nd = new Node(gwf.FK_Node);
+
+
                 #region 根据流程权限控制规则获取可以操作的按钮功能
                 string sql = "SELECT A.PowerFlag,A.EmpNo,A.EmpName FROM WF_PowerModel A WHERE PowerCtrlType =1"
                     + " UNION "
-                    + "SELECT A.PowerFlag,B."+ BP.Sys.Glo.UserNo+ ",B.Name FROM WF_PowerModel A, Port_Emp B, Port_Deptempstation C WHERE A.PowerCtrlType = 0 AND B.No = C.FK_Emp AND A.StaNo = C.FK_Station";
+                    + "SELECT A.PowerFlag,B." + BP.Sys.Glo.UserNo + ",B.Name FROM WF_PowerModel A, Port_Emp B, Port_Deptempstation C WHERE A.PowerCtrlType = 0 AND B.No = C.FK_Emp AND A.StaNo = C.FK_Station";
                 sql = "SELECT PowerFlag From(" + sql + ")D WHERE  D.EmpNo='" + WebUser.No + "'";
 
                 string powers = DBAccess.RunSQLReturnStringIsNull(sql, "");
@@ -263,9 +269,9 @@ namespace BP.WF.HttpHandler
                         QueryObject info = new QueryObject(workerlists);
                         info.AddWhere(GenerWorkerListAttr.FK_Emp, WebUser.No);
                         info.addAnd();
-                        info.AddWhere(GenerWorkerListAttr.IsPass, "1");
+                        info.AddWhere(GenerWorkerListAttr.IsPass, 1);
                         info.addAnd();
-                        info.AddWhere(GenerWorkerListAttr.IsEnable, "1");
+                        info.AddWhere(GenerWorkerListAttr.IsEnable, 1);
                         info.addAnd();
                         info.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
 
@@ -298,7 +304,6 @@ namespace BP.WF.HttpHandler
                             dr["Oper"] = "Press();";
                             dt.Rows.Add(dr);
                         }
-
                         break;
                     case WFState.Complete: // 完成.
                     case WFState.Delete:   // 逻辑删除..
@@ -330,6 +335,19 @@ namespace BP.WF.HttpHandler
                 #endregion 根据流程权限控制规则获取可以操作的按钮功能
 
                 #region 加载流程查看器 - 按钮
+
+                /* 判断是否是分合流？ 从而增加子线程按钮. @hongyan */
+                if (gwf.WFState == WFState.Runing)
+                {
+                    if (nd.IsFLHL == true)
+                    {
+                        dr = dt.NewRow();
+                        dr["No"] = "Thread";
+                        dr["Name"] = btnLab.ThreadLab;
+                        dr["Oper"] = "";
+                        dt.Rows.Add(dr);
+                    }
+                }
 
                 /* 打包下载zip */
                 if (btnLab.PrintZipMyView == true)
@@ -427,7 +445,7 @@ namespace BP.WF.HttpHandler
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
                 #region 根据流程权限控制规则获取可以操作的按钮功能
-               
+
                 dr = dt.NewRow();
                 dr["No"] = "Track";
                 dr["Name"] = "轨迹";
@@ -545,13 +563,13 @@ namespace BP.WF.HttpHandler
             if (DataType.IsNullOrEmpty(emps) == false)
                 emps += "@";
             bool isWorker = gwf.Emps.Contains("@" + WebUser.No + "," + WebUser.Name);
-            if (isWorker == true || emps.Contains("@" + WebUser.No+"@") == true)
+            if (isWorker == true || emps.Contains("@" + WebUser.No + "@") == true)
                 return true;
 
             if (WebUser.No.Equals("admin") == true)
                 return true;
 
-            if (WebUser.IsAdmin  == true &&  gwf.OrgNo.Equals(WebUser.OrgNo)==true)
+            if (WebUser.IsAdmin == true && gwf.OrgNo.Equals(WebUser.OrgNo) == true)
                 return true;
 
             //处理流程控制权限.
@@ -562,7 +580,7 @@ namespace BP.WF.HttpHandler
             if (viewEn.PAnyOne == true)
                 return true;
 
-            if (viewEn.PSpecDept == true && DataType.IsNullOrEmpty(viewEn.PSpecDeptExt)==false)
+            if (viewEn.PSpecDept == true && DataType.IsNullOrEmpty(viewEn.PSpecDeptExt) == false)
             {
                 viewEn.PSpecDeptExt += ",";
                 if (viewEn.PSpecDeptExt.Equals(WebUser.FK_Dept + ",") == true)
@@ -573,7 +591,7 @@ namespace BP.WF.HttpHandler
 
             #region 按照部门控制.
             //本部门可见.
-            if (viewEn.PMyDept==true)
+            if (viewEn.PMyDept == true)
             {
                 if (gwf.FK_Dept.Equals(WebUser.FK_Dept) == true)
                     return true;
@@ -598,7 +616,7 @@ namespace BP.WF.HttpHandler
             }
 
             //同级部门可见.
-            if (viewEn.PSameDept==true)
+            if (viewEn.PSameDept == true)
             {
                 //如果发起人的部门，与当前人员的部门是同一级部门.
                 Dept dept = new Dept(gwf.FK_Dept);
@@ -607,7 +625,7 @@ namespace BP.WF.HttpHandler
                     return true;
             }
             #endregion 按照部门控制.
-            if (viewEn.PSpecSta == true && DataType.IsNullOrEmpty(viewEn.PSpecStaExt)==false)
+            if (viewEn.PSpecSta == true && DataType.IsNullOrEmpty(viewEn.PSpecStaExt) == false)
             {
                 string sql = "Select FK_Station From Port_DeptEmpStation Where FK_Emp='" + WebUser.No + "'";
                 string stas = DBAccess.RunSQLReturnStringIsNull(sql, "");
@@ -615,16 +633,16 @@ namespace BP.WF.HttpHandler
                 {
                     viewEn.PSpecStaExt += ",";
                     foreach (string sta in stas.Split(','))
-                    if (viewEn.PSpecStaExt.Equals(sta + ",") == true)
-                        return true;
+                        if (viewEn.PSpecStaExt.Equals(sta + ",") == true)
+                            return true;
                 }
-               
+
             }
             #region 指定岗位可见
             #endregion 指定岗位可见
 
             #region 指定人员可见
-            if (viewEn.PSpecEmp == true && DataType.IsNullOrEmpty(viewEn.PSpecEmpExt)==false)
+            if (viewEn.PSpecEmp == true && DataType.IsNullOrEmpty(viewEn.PSpecEmpExt) == false)
             {
                 viewEn.PSpecEmpExt += ",";
                 if (viewEn.PSpecEmpExt.Equals(WebUser.No + ",") == true)
@@ -656,13 +674,13 @@ namespace BP.WF.HttpHandler
             //是否可以处理当前工作？
             bool isCanDoCurrWorker = false;
 
-            string toDoEmps = ";"+gwf.TodoEmps;
+            string toDoEmps = ";" + gwf.TodoEmps;
 
             //当前的流程还是运行中的，并且可以执行当前工作,如果是，就直接转到工作处理器.
             if (gwf.FID != 0)
             {
                 Node nd = new Node(gwf.FK_Node);
-                if (nd.HisRunModel == RunModel.SubThread && toDoEmps.Contains(";" + WebUser.No+ ","))
+                if (nd.HisRunModel == RunModel.SubThread && toDoEmps.Contains(";" + WebUser.No + ","))
                 {
                     WF_MyFlow handler = new WF_MyFlow();
                     return handler.MyFlow_Init();
@@ -760,7 +778,7 @@ namespace BP.WF.HttpHandler
                     toUrl += "&" + key + "=" + HttpContextHelper.RequestParams(key);
                 }
                 #endregion 开始组合url.
-                 
+
                 //增加fk_node
                 if (toUrl.Contains("&FK_Node=") == false)
                     toUrl += "&FK_Node=" + this.currND.NodeID;
@@ -860,7 +878,7 @@ namespace BP.WF.HttpHandler
 
             return "url@" + myurl;
         }
-        private string MyView_Init_DealUrl(BP.WF.Node currND,   string url = null)
+        private string MyView_Init_DealUrl(BP.WF.Node currND, string url = null)
         {
             if (url == null)
                 url = currND.FormUrl;
@@ -887,7 +905,7 @@ namespace BP.WF.HttpHandler
             if (urlExt.Contains("FK_Node") == false)
                 urlExt += "&FK_Node=" + currND.NodeID;
 
-            if (urlExt.Contains("&FID") == false )
+            if (urlExt.Contains("&FID") == false)
                 urlExt += "&FID=" + this.FID;
 
             if (urlExt.Contains("&UserNo") == false)
@@ -903,7 +921,7 @@ namespace BP.WF.HttpHandler
 
             foreach (string str in HttpContextHelper.RequestParamKeys)
             {
-                if (DataType.IsNullOrEmpty(str) == true || str.ToLower().Equals("t")==true)
+                if (DataType.IsNullOrEmpty(str) == true || str.ToLower().Equals("t") == true)
                     continue;
                 if (url.Contains(str + "=") == true)
                     continue;
@@ -915,7 +933,7 @@ namespace BP.WF.HttpHandler
             return url;
         }
 
-     
+
         #region 表单树操作
         /// <summary>
         /// 获取表单树数据
@@ -1061,7 +1079,7 @@ namespace BP.WF.HttpHandler
                         if (DBAccess.RunSQLReturnValFloat(mysql) <= 0)
                             continue;
                         break;
-                  
+
                     case FrmEnableRole.ByStation:
                         string exp = frmNode.FrmEnableExp.Clone() as string;
                         string Sql = "SELECT FK_Station FROM Port_DeptEmpStation where FK_Emp='" + WebUser.No + "'";
@@ -1081,7 +1099,7 @@ namespace BP.WF.HttpHandler
                         if (isExit == false)
                             continue;
                         break;
-                  
+
                     case FrmEnableRole.ByDept:
                         exp = frmNode.FrmEnableExp.Clone() as string;
                         Sql = "SELECT FK_Dept FROM Port_DeptEmp where FK_Emp='" + WebUser.No + "'";
@@ -1347,7 +1365,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.currND, workID,
-                    this.FID, BP.Web.WebUser.No,this.WorkID, "1", true);
+                    this.FID, BP.Web.WebUser.No, this.WorkID, "1", true);
 
                 #region 如果是移动应用就考虑多表单的问题.
                 if (currND.HisFormType == NodeFormType.SheetTree && this.IsMobile == true)

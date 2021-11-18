@@ -392,7 +392,7 @@ namespace BP.WF.Template
                 return obj;
             }
         }
-      
+
         /// <summary>
         /// 线
         /// </summary>
@@ -900,7 +900,7 @@ namespace BP.WF.Template
                     return this._enMap;
                 Map map = new Map("Sys_MapDtl", "明细");
 
-                map.DepositaryOfEntity= Depositary.Application;
+                map.DepositaryOfEntity = Depositary.Application;
                 map.IndexField = MapDtlAttr.FK_MapData;
 
                 #region 基础信息.
@@ -957,14 +957,19 @@ namespace BP.WF.Template
 
                 //map.AddTBFloat(MapDtlAttr.X, 5, "距左", false, false);
                 //map.AddTBFloat(MapDtlAttr.Y, 5, "距上", false, false);
-                //  map.AddTBFloat(MapDtlAttr.W, 200, "宽度", true, false);
+                //map.AddTBFloat(MapDtlAttr.W, 200, "宽度", true, false);
 
                 //map.AddTBFloat(MapDtlAttr.FrmW, 900, "表单宽度", true, true);
                 //map.AddTBFloat(MapDtlAttr.FrmH, 1200, "表单高度", true, true);
 
                 //对显示的结果要做一定的限制.
                 map.AddTBString(MapDtlAttr.FilterSQLExp, null, "过滤数据SQL表达式", true, false, 0, 200, 20, true);
-                map.SetHelperAlert(MapDtlAttr.FilterSQLExp, "格式为:WFState=1 过滤WFState=1的数据");
+                map.SetHelperUrl(MapDtlAttr.FilterSQLExp, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=4711478&doc_id=31094");
+                // map.SetHelperAlert(MapDtlAttr.FilterSQLExp, "格式为:WFState=1 过滤WFState=1的数据");
+
+                //对显示的结果要做一定的限制.
+                map.AddTBString(MapDtlAttr.OrderBySQLExp, null, "排序字段", true, false, 0, 200, 20, true);
+                map.SetHelperAlert(MapDtlAttr.OrderBySQLExp, "格式1: MyFile1,MyField2 ,格式2: MyFile1 DESC  就是SQL语句的 Ordery By 后面的字符串，默认按照 OID (输入的顺序)排序.");
 
                 //列自动计算表达式.
                 //map.AddTBString(MapDtlAttr.ColAutoExp, null, "列自动计算", true, false, 0, 200, 20, true);
@@ -985,13 +990,13 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(MapDtlAttr.ImpModel, 0, "导入方式", false, false, MapDtlAttr.ImpModel,
                     "@0=不导入@1=按配置模式导入@2=按照xls文件模版导入");
                 //string strs = "如果是按照xls导入,请做一个从表ID.xls的模版文件放在:/DataUser/DtlTemplate/ 下面. 目前仅仅支持xls文件.";
-               // map.SetHelperAlert(MapDtlAttr.ImpModel, strs);
+                // map.SetHelperAlert(MapDtlAttr.ImpModel, strs);
 
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLInit, null, "初始化SQL(初始化表格的时候的SQL数据,可以为空)", false, false, true);
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLSearch, null, "查询SQL(SQL里必须包含@Key关键字.)", false, false, true);
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充一行数据的SQL(必须包含@Key关键字,为选择的主键)", false, false, true);
                 map.AddTBString(MapDtlAttr.ImpSQLNames, null, "列的中文名称", false, false, 0, 900, 20, true);
-                
+
                 #endregion 导入导出填充.
 
                 #region 超链接.
@@ -1002,7 +1007,7 @@ namespace BP.WF.Template
                 map.AddTBString(MapDtlAttr.LinkTarget, null, "LinkTarget", true, false, 0, 10, 100);
                 map.AddTBString(MapDtlAttr.LinkUrl, null, "连接/函数", true, false, 0, 200, 200, true);
 
-                
+
                 map.AddBoolean(MapDtlAttr.IsEnableLink2, false, "相关功能2", true, true);
                 map.AddTBString(MapDtlAttr.LinkLabel2, "", "超连接/功能标签", true, false, 0, 50, 100);
                 map.AddDDLSysEnum(MapDtlAttr.ExcType2, 0, "执行类型", true, true, "ExcType",
@@ -1029,7 +1034,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".HidAttr";
                 //rm.Icon = "../Img/Setting.png";
                 rm.Icon = "icon-ghost";
-                
+
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -1056,7 +1061,7 @@ namespace BP.WF.Template
                 rm.Icon = "icon-credit-card";
                 rm.Title = "多表头"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoMultiTitle";
-               // rm.Icon = "../Img/AttachmentM.png";
+                // rm.Icon = "../Img/AttachmentM.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -1108,7 +1113,7 @@ namespace BP.WF.Template
                 rm.GroupName = "实验中的功能";
                 rm.Title = "列自动计算"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".ColAutoExp";
-               // rm.Icon = "../Img/Setting.png";
+                // rm.Icon = "../Img/Setting.png";
                 rm.Icon = "icon-pin";
 
                 rm.Visable = true;
@@ -1145,9 +1150,9 @@ namespace BP.WF.Template
                 rm.GroupName = "实验中的功能";
                 rm.Title = "事件"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoAction";
-              //  rm.Icon = "../Img/Setting.png";
+                //  rm.Icon = "../Img/Setting.png";
                 rm.Icon = "icon-energy";
-                
+
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -1177,12 +1182,10 @@ namespace BP.WF.Template
             if (dtl.RetrieveFromDBSources() == 0)
                 return "err@" + dtlId + "输入错误.";
 
-
-            MapDtl dtlOfThis = new MapDtl(this.No);
-            dtlOfThis.Copy(dtl);
-            dtlOfThis.FK_MapData = this.FK_MapData;
-            dtlOfThis.Update();
-
+            //MapDtl dtlOfThis = new MapDtl(this.No);
+            //dtlOfThis.Copy(dtl);
+            //dtlOfThis.FK_MapData = this.FK_MapData;
+            //dtlOfThis.Update();
 
             //删除当前从表Attrs.
             MapAttrs attrs = new MapAttrs();
@@ -1197,8 +1200,6 @@ namespace BP.WF.Template
                 item.FK_MapData = this.No;
                 item.Save();
             }
-
-
 
             //删除当前从表 exts .
             MapExts exts = new MapExts();
@@ -1234,7 +1235,7 @@ namespace BP.WF.Template
         public string DtlImp()
         {
             string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + SystemConfig.CustomerNo;
-           // string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp/Default.htm?FK_MapDtl=" + this.No + "&FromDtl=1";
+            // string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp/Default.htm?FK_MapDtl=" + this.No + "&FromDtl=1";
             return url;
         }
         /// <summary>
@@ -1387,7 +1388,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/FoolFormDesigner/ActionForDtl.htm?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDataTime;
         }
-       
+
         public string HidAttr()
         {
             return "../../Admin/FoolFormDesigner/HidAttr.htm?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDataTime;
@@ -1474,7 +1475,7 @@ namespace BP.WF.Template
             {
                 mapExt = new MapExt();
                 mapExt = ext;
-                mapExt.MyPK = ext.ExtType + "_" + this.No+"_"+ ext.AttrOfOper;
+                mapExt.MyPK = ext.ExtType + "_" + this.No + "_" + ext.AttrOfOper;
                 mapExt.FK_MapData = this.No;
                 mapExt.Insert();
             }
@@ -1602,7 +1603,7 @@ namespace BP.WF.Template
             //更新分组标签.  @fanleiwei. 代码有变化.
             BP.Sys.GroupField gf = new GroupField();
             int i = gf.Retrieve(GroupFieldAttr.CtrlType, "Dtl", GroupFieldAttr.CtrlID, this.No);
-            if (i == 0 && this.FK_Node ==0)
+            if (i == 0 && this.FK_Node == 0)
             {
                 gf.CtrlID = this.No;
                 gf.CtrlType = "Dtl";
@@ -1673,7 +1674,7 @@ namespace BP.WF.Template
             return DBAccess.RunSQLReturnValInt("SELECT COUNT(OID) from " + this.PTable + " WHERE " + f1 + "=" + val1 + " AND " + f2 + "='" + val2 + "'");
         }
         #endregion
-       
+
     }
     /// <summary>
     /// 明细s

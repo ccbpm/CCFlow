@@ -32,7 +32,7 @@ namespace BP.WF.HttpHandler
         {
             //当前的MyPK.
             string mypk = this.MyPK; //当前的主键.
-        
+
             //获得当前分组下的字段集合.
             string mypks = this.GetRequestVal("MyPKs"); //字段集合.
             int groupID = this.GetRequestValInt("GroupID");
@@ -45,7 +45,7 @@ namespace BP.WF.HttpHandler
             for (int i = 0; i < strs.Length; i++)
             {
                 var str = strs[i];
-                if(str.Equals(mypk))
+                if (str.Equals(mypk))
                     sql = "UPDATE Sys_MapAttr SET GroupID=" + groupID + ", Idx=" + i + " WHERE MyPK='" + str + "'";
                 else
                     sql = "UPDATE Sys_MapAttr SET Idx=" + i + " WHERE MyPK='" + str + "'";
@@ -322,16 +322,21 @@ namespace BP.WF.HttpHandler
             int uiContralType = this.GetRequestValInt("UIContralType");
 
             if (uiContralType != 0)
+            {
                 attr.UIContralType = (UIContralType)uiContralType;
+                if (attr.UIContralType == UIContralType.RadioBtn)
+                    attr.SetPara("RBShowModel", 3); //设置模式.
+            }
             else
                 attr.UIContralType = En.UIContralType.DDL;
+
             if (attr.UIContralType == UIContralType.CheckBok)
                 attr.MyDataType = DataType.AppString;
             else
                 attr.MyDataType = DataType.AppInt;
             attr.LGType = En.FieldTypeS.Enum;
 
-            
+
             SysEnumMain sem = new Sys.SysEnumMain();
             sem.No = attr.UIBindKey;
             if (sem.RetrieveFromDBSources() != 0)
@@ -339,12 +344,12 @@ namespace BP.WF.HttpHandler
             else
             {
                 Int32 count = sem.Retrieve("EnumKey", attr.UIBindKey, "OrgNo", WebUser.OrgNo);
-                if(count!=0)
+                if (count != 0)
                     attr.Name = sem.Name;
                 else
                     attr.Name = "枚举" + attr.UIBindKey;
             }
-               
+
 
             //paras参数
             Paras ps = new Paras();
@@ -367,7 +372,7 @@ namespace BP.WF.HttpHandler
                 ext.AttrsOfActive = dtlKey;
                 ext.DBType = "0";
                 ext.FK_DBSrc = "local";
-                ext.Doc = "Select IntKey as No, Lab as Name From Sys_Enum Where EnumKey='"+ uiBindKey + "' AND IntKey>=@Key*100 AND IntKey< (@Key*100/#100)";
+                ext.Doc = "Select IntKey as No, Lab as Name From Sys_Enum Where EnumKey='" + uiBindKey + "' AND IntKey>=@Key*100 AND IntKey< (@Key*100/#100)";
                 ext.FK_MapData = this.FK_MapData;
                 ext.AttrOfOper = this.KeyOfEn;
                 ext.ExtType = "ActiveDDL";
@@ -1329,7 +1334,7 @@ namespace BP.WF.HttpHandler
                 return "url@../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
-            return "err@没有判断的数据类型." + attr.MyDataTypeStr;
+            return "err@没有判断的字段数据类型." + attr.MyDataTypeStr;
         }
         /// <summary>
         /// 字段初始化数据.
@@ -1870,7 +1875,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public void DownTempFrm()
         {
-            string fileFullName = SystemConfig.PathOfWebApp + "Temp\\" + this.FK_MapData + ".xml";
+            string fileFullName = SystemConfig.PathOfWebApp + "Temp/" + this.FK_MapData + ".xml";
 
             HttpContextHelper.ResponseWriteFile(fileFullName, this.FK_MapData + ".xml");
         }
@@ -1922,7 +1927,7 @@ namespace BP.WF.HttpHandler
                 /*初始化默认值.*/
                 ath.NoOfObj = "Ath1";
                 ath.Name = "我的附件";
-                // ath.SaveTo = SystemConfig.PathOfDataUser + "\\UploadFile\\" + this.FK_MapData + "\\";
+                // ath.SaveTo = SystemConfig.PathOfDataUser + "/UploadFile/" + this.FK_MapData + "/";
                 ath.W = 150;
                 ath.H = 40;
                 ath.Exts = "*.*";

@@ -278,17 +278,12 @@ namespace BP.Pub
             foreach (char c in cc)
                 fd = fd.Replace(c.ToString(), "");
             if (fd.Length <= 0)
-                throw new Exception("存储表PTable为"+ptable+",不合法");
-            string s = fd.Substring(0, 1);
-            try
-            {
-                
-                int a = int.Parse(s);
+                throw new Exception("存储表PTable为" + ptable + ",不合法");
+
+            char c1c = fd.ToCharArray()[0];
+            if (char.IsLetter(c1c) == false)
                 fd = "F" + fd;
-            }
-            catch
-            {
-            }
+
             return fd;
         }
         private static string _KeyFields = null;
@@ -297,7 +292,7 @@ namespace BP.Pub
             get
             {
                 if (_KeyFields == null)
-                    _KeyFields = DataType.ReadTextFile(SystemConfig.PathOfWebApp + SystemConfig.CCFlowWebPath + "WF\\Data\\Sys\\FieldKeys.txt");
+                    _KeyFields = DataType.ReadTextFile(SystemConfig.PathOfWebApp + SystemConfig.CCFlowWebPath + "WF/Data/Sys/FieldKeys.txt");
                 return _KeyFields;
             }
         }
@@ -432,11 +427,11 @@ namespace BP.Pub
                 sql += "";
             }
         }
-      
+
         /// <summary>
         /// 检查所有的物理表(java上不用了，不用翻译)
         /// </summary>
-        public static void CheckAllPTable(string nameS=null)
+        public static void CheckAllPTable(string nameS = null)
         {
             ArrayList al = BP.En.ClassFactory.GetObjects("BP.En.Entities");
             foreach (Entities ens in al)
@@ -465,7 +460,7 @@ namespace BP.Pub
         /// </summary>
         /// <param name="uiBindKey"></param>
         /// <returns></returns>
-        public static System.Data.DataTable GetDataTableByUIBineKey(string uiBindKey,Hashtable ht=null)
+        public static System.Data.DataTable GetDataTableByUIBineKey(string uiBindKey, Hashtable ht = null)
         {
             DataTable dt = new DataTable();
             if (uiBindKey.Contains("."))
@@ -521,7 +516,7 @@ namespace BP.Pub
             dt.TableName = uiBindKey;
             return dt;
         }
-       
+
 
         #region 系统调度
         public static string GenerDBOfOreacle()
@@ -907,7 +902,7 @@ namespace BP.Pub
                 switch (attr.MyFieldType)
                 {
                     case FieldType.PK:
-                        AddColNote(en, en.EnMap.PhysicsTable, attr.Field, attr.Desc+"(主键)");
+                        AddColNote(en, en.EnMap.PhysicsTable, attr.Field, attr.Desc + "(主键)");
                         //en.RunSQL("comment on table "+ en.EnMap.PhysicsTable+"."+attr.Field +" IS '"+en.EnDesc+"'");
                         break;
                     case FieldType.Normal:
@@ -965,7 +960,7 @@ namespace BP.Pub
             return "";
 
             string msg = "";
-          
+
             string table = en.EnMap.PhysicsTable;
             Attrs fkAttrs = en.EnMap.HisFKAttrs;
             if (fkAttrs.Count == 0)
@@ -1205,7 +1200,7 @@ namespace BP.Pub
 
                 //如果是数值类型的值.
                 if (attr.IsNum && DataType.IsNumStr(val.ToString()) == false)
-                    throw new Exception( "err@["+en.ToString()+","+en.EnDesc+"]输入错误:" + attr.Key + "," + attr.Desc + ",应该是数值类型，但是输入了[" + val.ToString() + "]");
+                    throw new Exception("err@[" + en.ToString() + "," + en.EnDesc + "]输入错误:" + attr.Key + "," + attr.Desc + ",应该是数值类型，但是输入了[" + val.ToString() + "]");
 
                 //设置他的属性.
                 en.SetValByKey(attrKey, val);
@@ -1227,7 +1222,7 @@ namespace BP.Pub
                     if (str.Contains("CBPara"))
                     {
                         /*如果是参数字段.*/
-                        en.Row[str.Replace("CBPara_", "")]= 0;
+                        en.Row[str.Replace("CBPara_", "")] = 0;
                     }
                     else
                     {
@@ -1359,7 +1354,7 @@ namespace BP.Pub
             return en;
         }
         #endregion
-         
+
         /// <summary>
         /// 外部参数.
         /// </summary>

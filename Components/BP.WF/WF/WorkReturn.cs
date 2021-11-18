@@ -69,7 +69,7 @@ namespace BP.WF
         /// <param name="reutrnToEmp">退回到人</param>
         /// <param name="isBackTrack">是否需要原路返回？</param>
         /// <param name="returnInfo">退回原因</param>
-        public WorkReturn(string fk_flow, Int64 workID, Int64 fid, int currNodeID, int returnToNodeID, string reutrnToEmp, bool isBackTrack, string returnInfo, string pageData = null)
+        public WorkReturn(string fk_flow, Int64 workID, Int64 fid, int currNodeID, int returnToNodeID, string returnToEmp, bool isBackTrack, string returnInfo, string pageData = null)
         {
             this.HisNode = new Node(currNodeID);
 
@@ -84,6 +84,8 @@ namespace BP.WF
                     throw new Exception("err@当前节点可以退回的节点有[" + dt.Rows.Count + "]个，您需要指定要退回的节点才能退回。");
 
                 returnToNodeID = int.Parse(dt.Rows[0][0].ToString());
+                if (DataType.IsNullOrEmpty(returnToEmp) == true)
+                    returnToEmp = dt.Rows[0][2].ToString();
             }
 
             this.ReturnToNode = new Node(returnToNodeID);
@@ -91,7 +93,7 @@ namespace BP.WF
             this.FID = fid;
             this.IsBackTrack = isBackTrack;
             this.Msg = returnInfo;
-            this.ReturnToEmp = reutrnToEmp;
+            this.ReturnToEmp = returnToEmp;
 
             //当前工作.
             this.HisWork = this.HisNode.HisWork;
@@ -447,8 +449,7 @@ namespace BP.WF
             gwfs.Retrieve(GenerWorkFlowAttr.FID, this.FID);
             foreach (GenerWorkFlow mygwf in gwfs)
             {
-                BP.WF.Dev2Interface.Node_FHL_KillSubFlow(this.HisNode.FK_Flow,
-                    this.FID, mygwf.WorkID);
+                BP.WF.Dev2Interface.Node_FHL_KillSubFlow( mygwf.WorkID);
             }
 
             //更新状态.
@@ -1301,7 +1302,7 @@ namespace BP.WF
         private string infoLog = "";
         private void ReorderLog(Node fromND, Node toND, ReturnWork rw)
         {
-            string filePath = SystemConfig.PathOfDataUser + "ReturnLog\\" + this.HisNode.FK_Flow + "\\";
+            string filePath = SystemConfig.PathOfDataUser + "ReturnLog/" + this.HisNode.FK_Flow + "/";
             if (System.IO.Directory.Exists(filePath) == false)
                 System.IO.Directory.CreateDirectory(filePath);
 

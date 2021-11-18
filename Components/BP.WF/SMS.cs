@@ -564,11 +564,17 @@ namespace BP.WF
                 //邮件地址.
                 string emailAddr = SystemConfig.GetValByKey("SendEmailAddress", null);
                 if (emailAddr == null)
-                    emailAddr = "ccbpmtester@tom.com";
+                {
+                    return false;
+                    //emailAddr = "ccbpmtester@tom.com";
+                }
 
                 string emailPassword = SystemConfig.GetValByKey("SendEmailPass", null);
                 if (emailPassword == null)
+                {
+                    return false;
                     emailPassword = "ccbpm123";
+                }
 
                 mailDoc = DataType.ParseText2Html(mailDoc);
 
@@ -654,9 +660,13 @@ namespace BP.WF
             }
 
 
-
-            //注册到url里面去.
-            BP.WF.Glo.HttpPostConnect(httpUrl, json);
+            //微信
+            if (this.PushModel.Contains("WeiXin") == true)
+            {
+                //注册到url里面去.
+                BP.WF.Glo.HttpPostConnect(httpUrl, json);
+            }
+           
         }
         public void DealYuTong()
         {
@@ -708,8 +718,6 @@ namespace BP.WF
                     DealYuTong();
                     return;
                 }
-                
-
 
 
                 if (this.HisEmailSta != MsgSta.UnRun)

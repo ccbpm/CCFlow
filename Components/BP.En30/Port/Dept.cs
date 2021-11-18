@@ -114,8 +114,8 @@ namespace BP.Port
 
                 #region 增加点对多属性
                 //他的部门权限
-               // map.AttrsOfOneVSM.Add(new DeptStations(), new Stations(), DeptStationAttr.FK_Dept, DeptStationAttr.FK_Station, StationAttr.Name, StationAttr.No, "岗位权限");
-                #endregion 
+                // map.AttrsOfOneVSM.Add(new DeptStations(), new Stations(), DeptStationAttr.FK_Dept, DeptStationAttr.FK_Station, StationAttr.Name, StationAttr.No, "岗位权限");
+                #endregion
 
                 this._enMap = map;
                 return this._enMap;
@@ -123,9 +123,28 @@ namespace BP.Port
         }
         #endregion
 
+        /// <summary>
+        /// 执行排序
+        /// </summary>
+        /// <param name="deptIDs"></param>
+        /// <returns></returns>
+        public string DoOrder(string deptIDs)
+        {
+            string[] ids = deptIDs.Split(',');
+
+            for (int i = 0; i < ids.Length; i++)
+            {
+                var id = ids[i];
+                if (DataType.IsNullOrEmpty(id) == true)
+                    continue;
+                DBAccess.RunSQL("UPDATE Port_Dept SET Idx=" + i + " WHERE No='" + id + "'");
+            }
+            return "排序成功.";
+        }
+
         public string History()
         {
-            return "EnVerDtl.htm?EnName="+this.ToString()+"&PK="+this.No;
+            return "EnVerDtl.htm?EnName=" + this.ToString() + "&PK=" + this.No;
         }
 
         #region 重写查询. 2015.09.31 为适应ws的查询.
@@ -135,9 +154,9 @@ namespace BP.Port
         /// <returns></returns>
         public override int Retrieve()
         {
-            
-                return base.Retrieve();
-             
+
+            return base.Retrieve();
+
         }
         /// <summary>
         /// 查询.
@@ -145,9 +164,9 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveFromDBSources()
         {
-           
-                return base.RetrieveFromDBSources();
-             
+
+            return base.RetrieveFromDBSources();
+
         }
         #endregion
 
@@ -181,9 +200,9 @@ namespace BP.Port
         /// <param name="parentNo">父部门No</param>
         public Depts(string parentNo)
         {
-           
-                this.Retrieve(DeptAttr.ParentNo, parentNo);
-             
+
+            this.Retrieve(DeptAttr.ParentNo, parentNo);
+
         }
         #endregion 初始化实体.
 
@@ -194,11 +213,11 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveAll()
         {
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single || WebUser.No=="admin")
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single || WebUser.No == "admin")
                 return base.RetrieveAll();
 
             //按照orgNo查询.
-           return this.Retrieve("OrgNo", WebUser.OrgNo);
+            return this.Retrieve("OrgNo", WebUser.OrgNo);
         }
         /// <summary>
         /// 重写重数据源查询全部适应从WS取数据需要
@@ -211,7 +230,7 @@ namespace BP.Port
                 return base.RetrieveAllFromDBSource();
 
             //按照orgNo查询.
-           return this.Retrieve("OrgNo", WebUser.OrgNo);
+            return this.Retrieve("OrgNo", WebUser.OrgNo);
         }
         #endregion 重写查询.
 

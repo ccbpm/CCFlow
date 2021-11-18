@@ -42,10 +42,9 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Home_Init()
         {
-
             BP.GPM.Home.WindowTemplates ens = new BP.GPM.Home.WindowTemplates();
             ens.Retrieve(WindowTemplateAttr.PageID, this.PageID, "Idx");
-            if (ens.Count == 0)
+            if (ens.Count == 0 && this.PageID.Equals("Home") == true)
             {
                 ens.InitHomePageData(); //初始化数据.
                 ens.Retrieve(WindowTemplateAttr.PageID, this.PageID, "Idx");
@@ -195,6 +194,7 @@ namespace BP.WF.HttpHandler
                 string pass = this.GetRequestVal("TB_PW");
                 if (pass == null)
                     pass = this.GetRequestVal("TB_Pass");
+                //pass = HttpUtility.UrlDecode(pass,Encoding.UTF8);
 
                 if (DataType.IsNullOrEmpty(userNo) == false && userNo.Equals("admin"))
                 {
@@ -271,6 +271,7 @@ namespace BP.WF.HttpHandler
                     return "err@用户名或者密码错误.";
                 }
 
+
                 if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                 {
                     //调用登录方法.
@@ -282,13 +283,15 @@ namespace BP.WF.HttpHandler
                     WebUser.SID = sid;
                     emp.SID = sid;
 
-                    //if (DBAccess.IsView("Port_Emp") == false)
-                    //{
-                    //    string sid = DBAccess.GenerGUID();
-                    //    DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.UserID + "'");
-                    //    WebUser.SID = sid;
-                    //    emp.SID = sid;
-                    //}
+                    BP.WF.Port.WFEmp em = new BP.WF.Port.WFEmp();
+                    em.No = emp.No;
+                    
+                    if (em.RetrieveFromDBSources() == 0)
+                    {
+                        em.FK_Dept = BP.Web.WebUser.FK_Dept;
+                        em.Name = Web.WebUser.Name;
+                        em.Insert();
+                    }
 
                     return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.UserID;
                 }
@@ -670,6 +673,7 @@ namespace BP.WF.HttpHandler
 
             #region 1.0 首先解决系统权限问题.
             //首先解决系统的权限.
+            string ids = "";
             foreach (MySystem item in systems)
             {
                 //找到关于系统的控制权限集合.
@@ -700,8 +704,8 @@ namespace BP.WF.HttpHandler
                         systemsCopy.AddEntity(item);
                         break;
                     }
-
-                    if (pc.CtrlModel.Equals("Emps") == true && pc.IDs.Contains("," + BP.Web.WebUser.No + ",") == true)
+                    ids = "," + pc.IDs + ",";
+                    if (pc.CtrlModel.Equals("Emps") == true && ids.Contains(","+BP.Web.WebUser.No+"," ) == true)
                     {
                         systemsCopy.AddEntity(item);
                         break;
@@ -760,7 +764,8 @@ namespace BP.WF.HttpHandler
                             break;
                         }
 
-                        if (pc.CtrlModel.Equals("Emps") == true && pc.IDs.Contains("," + BP.Web.WebUser.No + ",") == true)
+                        ids = "," + pc.IDs + ",";
+                        if (pc.CtrlModel.Equals("Emps") == true && ids.Contains("," + BP.Web.WebUser.No + ",") == true)
                         {
                             modulesCopy.AddEntity(module);
                             break;
@@ -820,7 +825,8 @@ namespace BP.WF.HttpHandler
                             break;
                         }
 
-                        if (pc.CtrlModel.Equals("Emps") == true && pc.IDs.Contains("," + BP.Web.WebUser.No + ",") == true)
+                        ids = "," + pc.IDs + ",";
+                        if (pc.CtrlModel.Equals("Emps") == true && ids.Contains("," + BP.Web.WebUser.No + ",") == true)
                         {
                             menusCopy.AddEntity(menu);
                             break;
@@ -1135,7 +1141,7 @@ namespace BP.WF.HttpHandler
                 DataSet dsAdminMenus = new DataSet();
 
                 //模版
-                string file = SystemConfig.PathOfWebApp + "DataUser\\XML\\AdminMenu2021.xml";
+                string file = SystemConfig.PathOfWebApp + "DataUser/XML/AdminMenu2021.xml";
 
                 //获得文件.
                 dsAdminMenus.ReadXml(file);
@@ -1167,7 +1173,7 @@ namespace BP.WF.HttpHandler
             }
             #endregion 如果是admin.
 
-            //   myds.WriteXml("c:\\11.xml");
+            //   myds.WriteXml("c:/11.xml");
 
             return BP.Tools.Json.ToJson(myds);
         }

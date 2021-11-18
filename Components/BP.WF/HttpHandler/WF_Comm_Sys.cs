@@ -128,7 +128,7 @@ namespace BP.WF.HttpHandler
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + ext;
 
             //文件存放路径
-            string filePath = SystemConfig.PathOfTemp + "\\" + fileNewName;
+            string filePath = SystemConfig.PathOfTemp + "/" + fileNewName;
             //files[0].SaveAs(filePath);
             HttpContextHelper.UploadFile(files[0], filePath);
             //从excel里面获得数据表.
@@ -354,7 +354,7 @@ namespace BP.WF.HttpHandler
             string expFileName = "all-wcprops,dir-prop-base,entries";
             string expDirName = ".svn";
 
-            string pathDir = SystemConfig.PathOfData + "JSLib\\";
+            string pathDir = SystemConfig.PathOfData + "JSLib/";
 
             string html = "";
             html += "<fieldset>";
@@ -383,7 +383,7 @@ namespace BP.WF.HttpHandler
             }
             html += "</fieldset>";
 
-            pathDir = SystemConfig.PathOfDataUser + "JSLib\\";
+            pathDir = SystemConfig.PathOfDataUser + "JSLib/";
             html += "<fieldset>";
             html += "<legend>" + "用户自定义函数. 位置:" + pathDir + "</legend>";
 
@@ -710,7 +710,7 @@ namespace BP.WF.HttpHandler
             if (files.Count == 0)
                 return "err@请选择要上传的流程模版。";
             string fileName = files[0].FileName;
-            string savePath = SystemConfig.PathOfDataUser + "JSLibData" + "\\" + fileName;
+            string savePath = SystemConfig.PathOfDataUser + "JSLibData" + "/" + fileName;
 
             //存在文件则删除
             if (System.IO.Directory.Exists(savePath) == true)
@@ -730,12 +730,12 @@ namespace BP.WF.HttpHandler
             //获取文件存放目录
             string directory = this.GetRequestVal("Directory");
             string fileName = files[0].FileName;
-            string savePath = SystemConfig.PathOfDataUser + "RichTextFile" + "\\" + directory;
+            string savePath = SystemConfig.PathOfDataUser + "RichTextFile" + "/" + directory;
 
             if (System.IO.Directory.Exists(savePath) == false)
                 System.IO.Directory.CreateDirectory(savePath);
 
-            savePath = savePath + "\\" + fileName;
+            savePath = savePath + "/" + fileName;
             //存在文件则删除
             if (System.IO.Directory.Exists(savePath) == true)
                 System.IO.Directory.Delete(savePath);

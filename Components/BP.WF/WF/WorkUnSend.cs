@@ -216,7 +216,7 @@ namespace BP.WF
                     // 调用撤消发送前事件。
                     ExecEvent.DoNode(EventListNode.UndoneBefore, nd, wn.HisWork, null);
 
-                    BP.WF.Dev2Interface.Node_FHL_KillSubFlow(cancelToNode.FK_Flow, this.FID, this.WorkID); //杀掉子线程.
+                    BP.WF.Dev2Interface.Node_FHL_KillSubFlow( this.WorkID); //杀掉子线程.
 
                     // 调用撤消发送前事件。
                     ExecEvent.DoNode(EventListNode.UndoneAfter, nd, wn.HisWork, null);
@@ -445,7 +445,7 @@ namespace BP.WF
                         // 调用撤消发送前事件。
                         ExecEvent.DoNode(EventListNode.UndoneBefore, nd, nd.HisWork, null);
 
-                        BP.WF.Dev2Interface.Node_FHL_KillSubFlow(threadnd.FK_Flow, this.WorkID, long.Parse(dr["WorkID"].ToString())); //杀掉子线程.
+                        BP.WF.Dev2Interface.Node_FHL_KillSubFlow( long.Parse(dr["WorkID"].ToString())); //杀掉子线程.
 
                         // 调用撤消发送前事件。
                         Work work = nd.HisWork;

@@ -459,10 +459,11 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Entity_Init()
         {
+            Entity en = ClassFactory.GetEn(this.EnName);
             try
             {
                 string pkval = this.PKVal;
-                Entity en = ClassFactory.GetEn(this.EnName);
+                
                 if (en == null)
                     return "err@类" + this.EnName + "不存在,请检查是不是拼写错误";
                 if (DataType.IsNullOrEmpty(pkval) == true || pkval.Equals("0") || pkval.Equals("undefined"))
@@ -487,6 +488,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
+                en.CheckPhysicsTable();
                 return "err@" + ex.Message;
             }
         }
@@ -534,9 +536,9 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
-                    //string pkval = en.PKVal.ToString(); 
-                    //if (DataType.IsNullOrEmpty(pkval) == false)
-                    //    en.PKVal = this.PKVal;
+                    string pkval = en.PKVal.ToString(); 
+                    if (DataType.IsNullOrEmpty(pkval) == true)
+                        en.PKVal = this.PKVal;
 
                     int num = en.RetrieveFromDBSources();
                     en.Delete();
@@ -1107,7 +1109,7 @@ namespace BP.WF.HttpHandler
 
             }
 
-            string result = mp.Invoke(ens, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
+           string result = mp.Invoke(ens, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
             return result;
 
         }
@@ -1193,7 +1195,7 @@ namespace BP.WF.HttpHandler
                                     rm.SetValByKey(attr.Key, myBool);
                                     break;
                                 default:
-                                    return "err@没有判断的数据类型．";
+                                    return "err@没有判断的字段数据类型．";
                             }
                             break;
                         case UIContralType.DDL:
@@ -1947,11 +1949,13 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-
+            List<string> keys = new List<string>();
             #region 普通属性
             string opkey = ""; // 操作符号。
             foreach (AttrOfSearch attr in en.EnMap.AttrsOfSearch)
             {
+               
+
                 if (attr.IsHidden)
                 {
                     if (isFirst == false)
@@ -1972,6 +1976,8 @@ namespace BP.WF.HttpHandler
                         qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, attr.DefaultValRun);
                     }
                     qo.addRightBracket();
+                    if (keys.Contains(attr.RefAttrKey) == false)
+                        keys.Add(attr.RefAttrKey);
                     continue;
                 }
 
@@ -2020,6 +2026,8 @@ namespace BP.WF.HttpHandler
                     qo.AddWhere(attr.RefAttrKey, opkey, ap.GetValStrByKey("TB_" + attr.Key));
                 }
                 qo.addRightBracket();
+                if (keys.Contains(attr.RefAttrKey) == false)
+                    keys.Add(attr.RefAttrKey);
             }
             #endregion
 
@@ -2045,6 +2053,63 @@ namespace BP.WF.HttpHandler
 
                 qo.AddWhere(str, valType);
                 qo.addRightBracket();
+
+                if (keys.Contains(str) == false)
+                    keys.Add(str);
+            }
+
+
+           
+            foreach (Attr attr in map.Attrs)
+            {
+                if (DataType.IsNullOrEmpty(HttpContextHelper.RequestParams(attr.Field)))
+                    continue;
+
+                if (keys.Contains(attr.Field))
+                    continue;
+
+                string val = HttpContextHelper.RequestParams(attr.Field);
+
+                switch (attr.MyDataType)
+                {
+                    case DataType.AppBoolean:
+                        qo.addAnd();
+                        qo.addLeftBracket();
+                        qo.AddWhere(attr.Field, Convert.ToBoolean(int.Parse(val)));
+                        qo.addRightBracket();
+                        break;
+                    case DataType.AppDate:
+                    case DataType.AppDateTime:
+                    case DataType.AppString:
+                        qo.addAnd();
+                        qo.addLeftBracket();
+                        qo.AddWhere(attr.Field, val);
+                        qo.addRightBracket();
+                        break;
+                    case DataType.AppDouble:
+                    case DataType.AppFloat:
+                    case DataType.AppMoney:
+                        qo.addAnd();
+                        qo.addLeftBracket();
+                        qo.AddWhere(attr.Field, double.Parse(val));
+                        qo.addRightBracket();
+                        break;
+                    case DataType.AppInt:
+                        if (val == "all" || val == "-1")
+                            continue;
+                        qo.addAnd();
+                        qo.addLeftBracket();
+                        qo.AddWhere(attr.Field, int.Parse(val));
+                        qo.addRightBracket();
+                        break;
+                    default:
+                        break;
+                }
+
+
+
+                if (keys.Contains(attr.Field) == false)
+                    keys.Add(attr.Field);
             }
 
             return qo;
@@ -3303,7 +3368,7 @@ namespace BP.WF.HttpHandler
                                 attr.DefaultVal = false;
                                 break;
                             default:
-                                throw new Exception("没有判断的数据类型．");
+                                throw new Exception("没有判断的字段 - 数据类型．");
 
                         }
                         break;
@@ -3714,8 +3779,9 @@ namespace BP.WF.HttpHandler
             }
 
             //每次访问表很消耗资源.
-            Port.WFEmp emp = new Port.WFEmp(WebUser.No);
-            ht.Add("Theme", emp.GetParaString("Theme"));
+            //Port.WFEmp emp = new Port.WFEmp(WebUser.No);
+            //ht.Add("Theme", emp.GetParaString("Theme"));
+
 
             //增加运行模式. add by zhoupeng 2020.03.10 适应saas模式.
             ht.Add("CCBPMRunModel", SystemConfig.GetValByKey("CCBPMRunModel", "0"));
@@ -3760,8 +3826,8 @@ namespace BP.WF.HttpHandler
 
             //获取文件的名称
             string fileName = files[0].FileName;
-            if (fileName.IndexOf("\\") >= 0)
-                fileName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
+            if (fileName.IndexOf("/") >= 0)
+                fileName = fileName.Substring(fileName.LastIndexOf("/") + 1);
             fileName = fileName.Substring(0, fileName.LastIndexOf('.'));
             //文件后缀
             string ext = System.IO.Path.GetExtension(files[0].FileName);
@@ -3822,7 +3888,7 @@ namespace BP.WF.HttpHandler
                 System.IO.File.Delete(temp);
 
                 //设置路径.
-                filepath = ny + "//Helper//" + guid + "." + ext;
+                filepath = ny + "/Helper/" + guid + "." + ext;
 
             }
             else
@@ -3835,7 +3901,7 @@ namespace BP.WF.HttpHandler
                 if (System.IO.Directory.Exists(fileSavePath) == false)
                     System.IO.Directory.CreateDirectory(fileSavePath);
 
-                filepath = fileSavePath + "\\" + this.PKVal + "." + ext;
+                filepath = fileSavePath + "/" + this.PKVal + "." + ext;
 
                 //存在文件则删除
                 if (System.IO.File.Exists(filepath) == true)
@@ -3885,8 +3951,8 @@ namespace BP.WF.HttpHandler
 
             //获取文件的名称
             string fileName = files[0].FileName;
-            if (fileName.IndexOf("\\") >= 0)
-                fileName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
+            if (fileName.IndexOf("/") >= 0)
+                fileName = fileName.Substring(fileName.LastIndexOf("/") + 1);
             fileName = fileName.Substring(0, fileName.LastIndexOf('.'));
             //文件后缀
             string ext = System.IO.Path.GetExtension(files[0].FileName);
@@ -3945,7 +4011,7 @@ namespace BP.WF.HttpHandler
                 System.IO.File.Delete(temp);
 
                 //设置路径.
-                filepath = ny + "//Helper//" + guid + ext;
+                filepath = ny + "/Helper/" + guid + ext;
 
             }
             else
@@ -3955,7 +4021,7 @@ namespace BP.WF.HttpHandler
 
                 if (System.IO.Directory.Exists(savePath) == false)
                     System.IO.Directory.CreateDirectory(savePath);
-                filepath = savePath + "\\" + fileName + ext;
+                filepath = savePath + "/" + fileName + ext;
                 //存在文件则删除
                 if (System.IO.Directory.Exists(filepath) == true)
                     System.IO.Directory.Delete(filepath);
@@ -4710,7 +4776,7 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                string path = SystemConfig.PathOfDataUser + "Fastenter\\" + FK_MapData + "\\" + GetRequestVal("AttrKey"); ;
+                string path = SystemConfig.PathOfDataUser + "Fastenter/" + FK_MapData + "/" + GetRequestVal("AttrKey"); ;
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
 

@@ -259,6 +259,17 @@ namespace BP.WF.Template
                 this.SetValByKey(CondAttr.CondType, (int)value);
             }
         }
+        public int CondTypeInt
+        {
+            get
+            {
+                return this.GetValIntByKey(CondAttr.CondType);
+            }
+            set
+            {
+                this.SetValByKey(CondAttr.CondType, value);
+            }
+        }
         /// <summary>
         /// 节点ID
         /// </summary>
@@ -698,8 +709,10 @@ namespace BP.WF.Template
                     sql = sql.Replace("~", "'");
                     sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
                     sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                    sql = sql.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
                     sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-
+                   
+                    sql = sql.Replace("@WebUser.OrgNo", BP.Web.WebUser.OrgNo);
                     //获取参数值
                     //System.Collections.Specialized.NameValueCollection urlParams = HttpContextHelper.RequestParams; // System.Web.HttpContext.Current.Request.Form;
                     foreach (string key in HttpContextHelper.RequestParamKeys)
@@ -727,7 +740,7 @@ namespace BP.WF.Template
 
                     int result = 0;
                     //如果是本地数据源
-                    if (this.FK_DBSrc == "local")
+                    if (DataType.IsNullOrEmpty(this.FK_DBSrc) == true || this.FK_DBSrc == "local")
                         result = DBAccess.RunSQLReturnValInt(sql, -1);
                     else {
                         SFDBSrc dbSrc = new SFDBSrc(this.FK_DBSrc);
@@ -774,7 +787,7 @@ namespace BP.WF.Template
 
                     int result = 0;
                     //如果是本地数据源
-                    if (this.FK_DBSrc == "local")
+                    if (DataType.IsNullOrEmpty(this.FK_DBSrc) == true || this.FK_DBSrc == "local")
                         result = DBAccess.RunSQLReturnValInt(sql, -1);
                     else
                     {
@@ -1111,7 +1124,7 @@ namespace BP.WF.Template
 
                 map.AddTBString(CondAttr.Note, null, "备注", true, true, 0, 500, 20);
                 map.AddTBInt(CondAttr.Idx, 1, "优先级", true, true);
-
+                map.AddTBString(CondAttr.FK_DBSrc, "local", "SQL的数据来源", false, true, 0, 50, 20);
                 //参数 for wangrui add 2015.10.6. 条件为station,depts模式的时候，需要指定人员。
                 map.AddTBAtParas(2000);
 

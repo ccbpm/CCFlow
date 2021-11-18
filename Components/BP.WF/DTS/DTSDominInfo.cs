@@ -24,7 +24,7 @@ namespace BP.WF.DTS
 
             this.GroupName = "AD数据管理";
 
-            // this.HisAttrs.AddTBString("Path", "C:\\ccflow.Template", "生成的路径", true, false, 1, 1900, 200);
+            // this.HisAttrs.AddTBString("Path", "C:/ccflow.Template", "生成的路径", true, false, 1, 1900, 200);
         }
         /// <summary>
         /// 设置执行变量

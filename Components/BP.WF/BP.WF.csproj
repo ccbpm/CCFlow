@@ -158,6 +158,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppClass.cs" />
+    <Compile Include="CCBill\Sys\Func.cs" />
+    <Compile Include="CCFast\KnowledgeManagement\KMDtl.cs" />
+    <Compile Include="CCFast\KnowledgeManagement\Knowledge.cs" />
+    <Compile Include="CCFast\StandAloneFlow.cs" />
+    <Compile Include="CCFast\Notepad.cs" />
+    <Compile Include="CCFast\KnowledgeManagement\KMTree.cs" />
+    <Compile Include="CCFast\Task.cs" />
+    <Compile Include="CCFast\WorkShare.cs" />
+    <Compile Include="CCFast\WorkRecDtl.cs" />
+    <Compile Include="CCFast\WorkChecker.cs" />
+    <Compile Include="CCFast\WorkRec.cs" />
+    <Compile Include="CCFast\Schedule.cs" />
     <Compile Include="CCBill\DBListDBSrc.cs" />
     <Compile Include="CCBill\Demo\M_ZhuXiaoXueJi.cs" />
     <Compile Include="CCBill\Template\CollectionFlowBatch.cs" />
@@ -168,7 +180,6 @@
     <Compile Include="CCBill\Template\GroupMethod.cs" />
     <Compile Include="CCBill\Template\Collection.cs" />
     <Compile Include="CCBill\Template\MethodBill.cs" />
-    <Compile Include="CCBill\Sys\Func.cs" />
     <Compile Include="CCBill\Template\MethodFlowEtc.cs" />
     <Compile Include="CCBill\Template\MethodFlowNewEntity.cs" />
     <Compile Include="CCBill\Template\MethodFlowBaseData.cs" />
@@ -180,12 +191,15 @@
     <Compile Include="CCBill\Track.cs" />
     <Compile Include="CCBill\WF_CCBill_Admin_Collection.cs" />
     <Compile Include="CCBill\WF_CCBill_Admin_DBList.cs" />
+    <Compile Include="CCBill\WF_CCBill_Admin_MethodDocSys.cs" />
     <Compile Include="CCBill\WF_CCBill_Admin_MethodDoc.cs" />
     <Compile Include="CCBill\WF_CCBill_Admin_Method.cs" />
     <Compile Include="CCBill\WF_CCBill_OptComponents.cs" />
-    <Compile Include="CCBill\WF_CCBill_OptOneFlow_FlowCenter.cs" />
     <Compile Include="CCBill\WF_CCBill_OptOneFlow.cs" />
     <Compile Include="CCBill\WF_Methd.cs" />
+    <Compile Include="CCFast\ZuPu\JiaPu.cs" />
+    <Compile Include="CCFast\ZuPu\People.cs" />
+    <Compile Include="CCFast\ZuPu\ZuPuTree.cs" />
     <Compile Include="Data\AutoRptDtl.cs" />
     <Compile Include="Data\AutoRpt.cs" />
     <Compile Include="Data\CCListExt.cs" />
@@ -357,7 +371,6 @@
     <Compile Include="HttpHandler\WF_Admin_MobileFrmDesigner.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner_FlowDevModel.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_StyletDfine.cs" />
-    <Compile Include="HttpHandler\WF_WorkOpt_GuestStartFlow.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_QRCode.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_Batch.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_StartGuide.cs" />
@@ -397,6 +410,7 @@
     <Compile Include="Port\Admin2\User.cs" />
     <Compile Include="Port\DeptFlowSearch.cs" />
     <Compile Include="Port\User.cs" />
+    <Compile Include="Template\FlowTab.cs" />
     <Compile Include="Template\CondEnum.cs" />
     <Compile Include="Template\EnumLab.cs" />
     <Compile Include="Template\FlowOrg.cs" />

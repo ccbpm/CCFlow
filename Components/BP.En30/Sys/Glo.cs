@@ -423,7 +423,7 @@ namespace BP.Sys
             //求出保存路径.
             string path = en.EnMap.FJSavePath;
             if (path == "" || path == null || path == string.Empty)
-                path = SystemConfig.PathOfDataUser + en.ToString() + "\\";
+                path = SystemConfig.PathOfDataUser + en.ToString() + "/";
 
             if (System.IO.Directory.Exists(path) == false)
                 System.IO.Directory.CreateDirectory(path);
@@ -446,7 +446,7 @@ namespace BP.Sys
 
             /* 如果包含这二个字段。*/
             string fileName = myfileName;
-            fileName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
+            fileName = fileName.Substring(fileName.LastIndexOf("/") + 1);
 
             en.SetValByKey("MyFilePath", path);
 

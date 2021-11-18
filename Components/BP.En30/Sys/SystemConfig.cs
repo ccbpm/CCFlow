@@ -358,7 +358,7 @@ namespace BP.Sys
         {
             get
             {
-                return PathOfDataUser + "Temp\\";
+                return PathOfDataUser + "Temp/";
             }
         }
         public static string PathOfWorkDir
@@ -367,13 +367,13 @@ namespace BP.Sys
             {
                 if (SystemConfig.IsBSsystem)
                 {
-                    string path1 = HttpContextHelper.PhysicalApplicationPath + "\\..\\";
+                    string path1 = HttpContextHelper.PhysicalApplicationPath + "/../";
                     System.IO.DirectoryInfo info1 = new DirectoryInfo(path1);
                     return info1.FullName;
                 }
                 else
                 {
-                    string path = AppDomain.CurrentDomain.BaseDirectory + "\\..\\..\\..\\";
+                    string path = AppDomain.CurrentDomain.BaseDirectory + "/../../../";
                     System.IO.DirectoryInfo info = new DirectoryInfo(path);
                     return info.FullName;
                 }
@@ -385,7 +385,7 @@ namespace BP.Sys
             {
                 string s = SystemConfig.AppSettings["FDB"];
                 if (DataType.IsNullOrEmpty(s) == true)
-                    return PathOfWebApp + "\\DataUser\\FDB\\";
+                    return PathOfWebApp + "DataUser/FDB/";
                 return s;
             }
         }
@@ -396,7 +396,7 @@ namespace BP.Sys
         {
             get
             {
-                return PathOfWebApp + "\\WF\\Data\\";
+                return PathOfWebApp + "WF/Data/";
             }
         }
         public static string PathOfDataUser
@@ -406,13 +406,13 @@ namespace BP.Sys
                 string tmp = SystemConfig.AppSettings["DataUserDirPath"];
                 if (DataType.IsNullOrEmpty(tmp))
                 {
-                    tmp = PathOfWebApp + "DataUser\\";
+                    tmp = PathOfWebApp + "DataUser/";
                 }
                 else
                 {
-                    if (tmp.Contains("\\"))
-                        tmp.Replace("\\", "");
-                    tmp = PathOfWebApp + tmp + "\\DataUser\\";
+                    if (tmp.Contains("/"))
+                        tmp.Replace("/", "");
+                    tmp = PathOfWebApp + tmp + "/DataUser/";
                 }
                 return tmp;
             }
@@ -424,7 +424,7 @@ namespace BP.Sys
         {
             get
             {
-                return PathOfWebApp + "\\WF\\Data\\XML\\";
+                return PathOfWebApp + "WF/Data/XML/";
             }
         }
 
@@ -432,7 +432,7 @@ namespace BP.Sys
         {
             get
             {
-                return PathOfWebApp + "\\DataUser\\CyclostyleFile\\";
+                return PathOfWebApp + "DataUser/CyclostyleFile/";
             }
         }
         /// <summary>
@@ -524,7 +524,7 @@ namespace BP.Sys
                 if (SystemConfig.IsBSsystem)
                     return HttpContextHelper.PhysicalApplicationPath;
 
-                return AppDomain.CurrentDomain.BaseDirectory + "..\\..\\";
+                return AppDomain.CurrentDomain.BaseDirectory + "../../";
             }
         }
         #endregion
@@ -616,7 +616,7 @@ namespace BP.Sys
         /// </summary>
         public static string PathOfLog
         {
-            get { return PathOfWebApp + "\\DataUser\\Log\\"; }
+            get { return PathOfWebApp + "DataUser/Log/"; }
         }
 
         /// <summary>
@@ -842,7 +842,7 @@ namespace BP.Sys
                 return SystemConfig.GetValByKeyInt("GroupStationModel", 0);
             }
         }
-        
+
         /// <summary>
         /// 客户名称
         /// </summary>
@@ -1179,7 +1179,7 @@ namespace BP.Sys
             try
             {
                 DataSet ds = new DataSet("dss");
-                ds.ReadXml(SystemConfig.PathOfXML + "\\KeyVal.xml");
+                ds.ReadXml(SystemConfig.PathOfXML + "KeyVal.xml");
                 DataTable dt = ds.Tables[0];
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -1197,7 +1197,7 @@ namespace BP.Sys
         {
             try
             {
-                string file = SystemConfig.PathOfXML + "\\Node\\" + fk_Breed + ".xml";
+                string file = SystemConfig.PathOfXML + "Node/" + fk_Breed + ".xml";
                 DataSet ds = new DataSet("dss");
                 try
                 {
@@ -1243,7 +1243,7 @@ namespace BP.Sys
                 if (dt == null)
                 {
                     DataSet ds = new DataSet("dss");
-                    ds.ReadXml(SystemConfig.PathOfXML + "\\Ens\\ConfigEns.xml");
+                    ds.ReadXml(SystemConfig.PathOfXML + "Ens/ConfigEns.xml");
                     dt = ds.Tables[0];
                     Cash.AddObj("TConfigEns", Depositary.Application, dt);
                 }
@@ -1265,7 +1265,7 @@ namespace BP.Sys
             try
             {
                 DataSet ds = new DataSet("dss");
-                ds.ReadXml(SystemConfig.PathOfXML + "\\SQL\\" + SystemConfig.ThirdPartySoftWareKey + ".xml");
+                ds.ReadXml(SystemConfig.PathOfXML + "SQL/" + SystemConfig.ThirdPartySoftWareKey + ".xml");
                 DataTable dt = ds.Tables[0];
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -1284,7 +1284,7 @@ namespace BP.Sys
             try
             {
                 DataSet ds = new DataSet("dss");
-                ds.ReadXml(SystemConfig.PathOfXML + "\\SQL\\App.xml");
+                ds.ReadXml(SystemConfig.PathOfXML + "SQL/App.xml");
                 DataTable dt = ds.Tables[0];
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -1487,6 +1487,16 @@ namespace BP.Sys
                         MySqlConnection connMySQL = new MySqlConnection(SystemConfig.AppCenterDSN);
                         _AppCenterDBDatabase = connMySQL.Database;
                         break;
+                    case DA.DBType.PostgreSQL:
+
+                        Npgsql.NpgsqlConnection myconn =new Npgsql.NpgsqlConnection()  ;
+                        myconn.ConnectionString = SystemConfig.AppCenterDSN;
+                        myconn.Open();
+                        _AppCenterDBDatabase = myconn.Database;
+                        // PostgreSQL.my
+                        //PostgreSQL  SqlConnection connMySQL = new MySqlConnection(SystemConfig.AppCenterDSN);
+                        // _AppCenterDBDatabase = connMySQL.Database;
+                        break;
                     //From Zhou IBM 删除
                     //case DA.DBType.Informix:
                     //    IfxConnection connIFX = new IfxConnection(SystemConfig.AppCenterDSN);
@@ -1495,7 +1505,7 @@ namespace BP.Sys
                     //    _AppCenterDBDatabase = connIFX.Database;
                     //    break;
                     default:
-                        throw new Exception("@没有判断的数据类型.");
+                        throw new Exception("@没有判断的数据类型AppCenterDBDatabase.");
                         break;
                 }
 

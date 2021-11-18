@@ -28,21 +28,6 @@ namespace BP.WF.HttpHandler
         {
         }
 
-        #region 执行父类的重写方法.
-        /// <summary>
-        /// 默认执行的方法
-        /// </summary>
-        /// <returns></returns>
-        protected override string DoDefaultMethod()
-        {
-
-            return "err@没有判断的标记:" + this.DoType;
-        }
-        #endregion 执行父类的重写方法.
-          
-
-         
-
         #region 节点相关 Nodes
         /// <summary>
         /// 创建流程节点并返回编号

@@ -57,13 +57,13 @@ namespace BP.WF.Template
             get
             {
                 return (StartGuideWay)this.GetValIntByKey(FlowAttr.StartGuideWay);
-                
+
             }
             set
             {
                 this.SetValByKey(FlowAttr.StartGuideWay, (int)value);
             }
-        
+
         }
         /// <summary>
         /// 前置导航参数1
@@ -72,14 +72,14 @@ namespace BP.WF.Template
         {
             get
             {
-                string str= this.GetValStringByKey(FlowAttr.StartGuidePara1);
+                string str = this.GetValStringByKey(FlowAttr.StartGuidePara1);
                 return str.Replace("~", "'");
             }
             set
             {
                 this.SetValByKey(FlowAttr.StartGuidePara1, value);
             }
-             
+
         }
         /// <summary>
         /// 前置导航参数2
@@ -234,7 +234,7 @@ namespace BP.WF.Template
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No.Equals("admin")==true || this.DesignerNo == WebUser.No)
+                if (BP.Web.WebUser.No.Equals("admin") == true || this.DesignerNo == WebUser.No)
                 {
                     uac.IsUpdate = true;
                 }
@@ -308,11 +308,11 @@ namespace BP.WF.Template
                 map.AddBoolean(FlowAttr.IsCanStart, true, "可以独立启动否？(独立启动的流程可以显示在发起流程列表里)", true, true, true);
                 map.SetHelperUrl(FlowAttr.IsCanStart, "http://ccbpm.mydoc.io/?v=5404&t=17027");
 
-             
+
 
                 map.AddBoolean(FlowAttr.IsMD5, false, "是否是数据加密流程(MD5数据加密防篡改)", true, true, true);
                 map.SetHelperUrl(FlowAttr.IsMD5, "http://ccbpm.mydoc.io/?v=5404&t=17028");
-                
+
                 map.AddBoolean(FlowAttr.IsFullSA, false, "是否自动计算未来的处理人？", true, true, true);
                 map.SetHelperUrl(FlowAttr.IsFullSA, "http://ccbpm.mydoc.io/?v=5404&t=17034");
 
@@ -329,7 +329,7 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(FlowAttr.FlowAppType, (int)FlowAppType.Normal, "流程应用类型",
                   true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
                 map.SetHelperUrl(FlowAttr.FlowAppType, "http://ccbpm.mydoc.io/?v=5404&t=17035");
-                 
+
                 // 草稿
                 map.AddDDLSysEnum(FlowAttr.Draft, (int)DraftRole.None, "草稿规则",
                true, true, FlowAttr.Draft, "@0=无(不设草稿)@1=保存到待办@2=保存到草稿箱");
@@ -382,8 +382,8 @@ namespace BP.WF.Template
         {
             return "../../Comm/Sys/SFDBSrcNewGuide.htm";
         }
-       
-    
+
+
         public string DoBindFlowSheet()
         {
             return "../../Admin/Sln/BindFrms.htm?s=d34&ShowType=FlowFrms&FK_Node=0&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
@@ -433,19 +433,16 @@ namespace BP.WF.Template
             // 最后一个节点.
             Node endN = new Node(backToNodeID);
             GenerWorkFlow gwf = null;
-            bool isHaveGener = false;
             try
             {
                 #region 创建流程引擎主表数据.
                 gwf = new GenerWorkFlow();
                 gwf.WorkID = workid;
-                if (gwf.RetrieveFromDBSources() == 1)
-                {
-                    isHaveGener = true;
-                    //判断状态
-                    //  if (gwf.WFState != WFState.Complete)
-                    //  throw new Exception("@当前工作ID为:" + workid + "的流程没有结束,不能采用此方法恢复。");
-                }
+                if (gwf.RetrieveFromDBSources() == 0)
+                    return "err@丢失了 GenerWorkFlow 数据,无法回滚.";
+
+                if (gwf.WFState != WFState.Complete)
+                    return "err@仅仅能对已经完成的流程才能回滚,当前流程走到了["+gwf.NodeName+"]工作人员["+gwf.TodoEmps+"].";
 
                 gwf.FK_Flow = this.No;
                 gwf.FlowName = this.Name;
@@ -477,7 +474,7 @@ namespace BP.WF.Template
 
                 gwf.SDTOfNode = dttime.ToString("yyyy-MM-dd HH:mm:ss");
                 gwf.SDTOfFlow = dttime.ToString("yyyy-MM-dd HH:mm:ss");
-              
+
 
                 #endregion 创建流程引擎主表数据
 
@@ -491,7 +488,7 @@ namespace BP.WF.Template
                 string starter = "";
                 bool isMeetSpecNode = false;
                 GenerWorkerList currWl = new GenerWorkerList();
-                string todoEmps="";
+                string todoEmps = "";
                 int num = 0;
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -527,8 +524,7 @@ namespace BP.WF.Template
 
 
                     todoEmps += emp.UserID + "," + emp.Name + ";";
-                    num++; 
-
+                    num++;
 
                     gwl.SDT = dr["RDT"].ToString();
                     gwl.DTOfWarning = gwf.SDTOfNode;
@@ -539,13 +535,10 @@ namespace BP.WF.Template
                 }
 
                 //设置当前处理人员.
-                gwf.SetValByKey(GenerWorkFlowAttr.TodoEmps,  todoEmps);
+                gwf.SetValByKey(GenerWorkFlowAttr.TodoEmps, todoEmps);
                 gwf.TodoEmpsNum = num;
 
-                if (isHaveGener)
-                    gwf.Update();
-                else
-                    gwf.Insert(); /*插入流程引擎数据.*/
+                gwf.Update();
 
 
                 #region 加入退回信息, 让接受人能够看到退回原因.
@@ -593,7 +586,7 @@ namespace BP.WF.Template
                 return "<font color=red>会滚期间出现错误</font><hr>" + ex.Message;
             }
         }
-         /// <summary>
+        /// <summary>
         /// 重新产生标题，根据新的规则.
         /// </summary>
         public string DoGenerFlowEmps()
@@ -614,7 +607,7 @@ namespace BP.WF.Template
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in dt.Rows)
                 {
-                    if (emps.Contains("," + dr[0].ToString()+","))
+                    if (emps.Contains("," + dr[0].ToString() + ","))
                         continue;
                 }
 
@@ -660,14 +653,14 @@ namespace BP.WF.Template
                 ps.SQL = "UPDATE WF_GenerWorkFlow SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);
 
-               
+
             }
             Emp emp1 = new Emp("admin");
             BP.Web.WebUser.SignInOfGener(emp1);
 
             return "全部生成成功,影响数据(" + wks.Count + ")条";
         }
-        
+
         /// <summary>
         /// 重新产生标题，根据新的规则.
         /// </summary>
@@ -712,7 +705,7 @@ namespace BP.WF.Template
                 ps.SQL = "UPDATE WF_GenerWorkFlow SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);
 
-          
+
             }
             Emp emp1 = new Emp("admin");
             BP.Web.WebUser.SignInOfGener(emp1);
@@ -728,7 +721,7 @@ namespace BP.WF.Template
             //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/Rpt/OneFlow.htm?FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=", 700, 500);
             return "../../Comm/Search.htm?s=d34&EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=";
         }
-        
+
         /// <summary>
         /// 定义报表
         /// </summary>
@@ -750,16 +743,16 @@ namespace BP.WF.Template
         {
             try
             {
-                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  workid, true);
+                BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(workid, true);
                 return "删除成功 workid=" + workid + "  理由:" + note;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return "删除失败:"+ex.Message;
+                return "删除失败:" + ex.Message;
             }
         }
-        
-        
+
+
         /// <summary>
         /// 执行运行
         /// </summary>
@@ -782,7 +775,7 @@ namespace BP.WF.Template
 
             //return fl.DoCheck();
         }
-        
+
         /// <summary>
         /// 删除数据.
         /// </summary>

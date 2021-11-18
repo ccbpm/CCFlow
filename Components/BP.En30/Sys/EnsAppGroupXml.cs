@@ -110,7 +110,7 @@ namespace BP.Sys.XML
         {
             get
             {
-                return SystemConfig.PathOfXML + "\\Ens\\EnsAppXml\\";
+                return SystemConfig.PathOfXML + "Ens/EnsAppXml/";
             }
         }
         /// <summary>

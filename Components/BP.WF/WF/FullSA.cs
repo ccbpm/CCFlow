@@ -158,7 +158,7 @@ namespace BP.WF
                 #region 仅按组织计算 
                 if (item.HisDeliveryWay == DeliveryWay.ByTeamOnly)
                 {
-                    string sql = "SELECT DISTINCT c." + BP.Sys.Glo.UserNo + ",c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C." + BP.Sys.Glo.UserNoWhitOutAS + " AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY A.FK_Emp";
+                    string sql = "SELECT DISTINCT c." + BP.Sys.Glo.UserNo + ",c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C." + BP.Sys.Glo.UserNoWhitOutAS + " AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY C." + BP.Sys.Glo.UserNoWhitOutAS;
                     Paras ps = new Paras();
                     ps.Add("FK_Node", item.NodeID);
                     ps.SQL = sql;
@@ -191,7 +191,7 @@ namespace BP.WF
                 #region 本组织计算 
                 if (item.HisDeliveryWay == DeliveryWay.ByTeamOrgOnly)
                 {
-                    string sql = "SELECT DISTINCT c." + BP.Sys.Glo.UserNo + ",c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C." + BP.Sys.Glo.UserNoWhitOutAS + " AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND C.OrgNo=" + SystemConfig.AppCenterDBVarStr + "OrgNo ORDER BY A.FK_Emp";
+                    string sql = "SELECT DISTINCT c." + BP.Sys.Glo.UserNo + ",c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C." + BP.Sys.Glo.UserNoWhitOutAS + " AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND C.OrgNo=" + SystemConfig.AppCenterDBVarStr + "OrgNo ORDER BY C." + BP.Sys.Glo.UserNoWhitOutAS;
                     Paras ps = new Paras();
                     ps.Add("FK_Node", item.NodeID);
                     ps.Add("OrgNo", BP.Web.WebUser.OrgNo);
@@ -226,7 +226,7 @@ namespace BP.WF
                 #region 本组织计算 
                 if (item.HisDeliveryWay == DeliveryWay.ByTeamDeptOnly)
                 {
-                    string sql = "SELECT DISTINCT c.No,c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND C.FK_Dept=" + SystemConfig.AppCenterDBVarStr + "FK_Dept ORDER BY A.FK_Emp";
+                    string sql = "SELECT DISTINCT A.FK_Emp AS No,c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND C.FK_Dept=" + SystemConfig.AppCenterDBVarStr + "FK_Dept ORDER BY A.FK_Emp";
                     Paras ps = new Paras();
                     ps.Add("FK_Node", item.NodeID);
                     ps.Add("FK_Dept", BP.Web.WebUser.FK_Dept);
@@ -261,7 +261,7 @@ namespace BP.WF
                 #region 2019-09-25 byzhoupeng, 仅按岗位计算 
                 if (item.HisDeliveryWay == DeliveryWay.ByStationOnly)
                 {
-                   string sql = "SELECT DISTINCT c." + BP.Sys.Glo.UserNo + ",c.Name FROM Port_DeptEmpStation A, WF_NodeStation B, Port_Emp C WHERE A.FK_Emp=C." + BP.Sys.Glo.UserNoWhitOutAS + " AND A.FK_Station=B.FK_Station AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY C.No";
+                   string sql = "SELECT DISTINCT c." + BP.Sys.Glo.UserNo + ",c.Name FROM Port_DeptEmpStation A, WF_NodeStation B, Port_Emp C WHERE A.FK_Emp=C." + BP.Sys.Glo.UserNoWhitOutAS + " AND A.FK_Station=B.FK_Station AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY C."+ BP.Sys.Glo.UserNoWhitOutAS;
                     Paras ps = new Paras();
                     ps.Add("FK_Node", item.NodeID);
                     ps.SQL = sql;
@@ -412,14 +412,14 @@ namespace BP.WF
                         case DBType.MSSQL:
                             sql = "select DISTINCT x." + BP.Sys.Glo.UserNo + " from Port_Emp x inner join (select FK_Emp from Port_DeptEmpStation a inner join WF_NodeStation b ";
                             sql += " on a.FK_Station=b.FK_Station where FK_Node=" + dbStr + "FK_Node) as y on x." + BP.Sys.Glo.UserNoWhitOutAS + "=y.FK_Emp inner join Port_DeptEmp z on";
-                            sql += " x." + BP.Sys.Glo.UserNoWhitOutAS + "=z.FK_Emp where z.FK_Dept =" + dbStr + "FK_Dept order by x.No";
+                            sql += " x." + BP.Sys.Glo.UserNoWhitOutAS + "=z.FK_Emp where z.FK_Dept =" + dbStr + "FK_Dept order by x."+ BP.Sys.Glo.UserNoWhitOutAS;
                             break;
                         default:
                             sql = "SELECT DISTINCT " + BP.Sys.Glo.UserNo + " FROM Port_Emp WHERE " + BP.Sys.Glo.UserNoWhitOutAS + " IN "
                         + "(SELECT  FK_Emp  FROM Port_DeptEmpStation WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node) )"
                         + " AND  " + BP.Sys.Glo.UserNoWhitOutAS + " IN "
                         + "(SELECT  FK_Emp  FROM Port_DeptEmp WHERE FK_Dept =" + dbStr + "FK_Dept)";
-                            sql += " ORDER BY No ";
+                            sql += " ORDER BY  "+ BP.Sys.Glo.UserNoWhitOutAS;
                             break;
                     }
 

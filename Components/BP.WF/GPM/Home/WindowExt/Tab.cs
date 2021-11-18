@@ -82,7 +82,7 @@ namespace BP.GPM.Home.WindowExt
                 map.AddTBString(WindowTemplateAttr.MoreLab, null, "更多标签", true, false, 0, 300, 20);
                 #endregion 更多链接.
 
-                map.AddDtl(new TabDtls(), DtlAttr.RefWindowTemplate);
+                map.AddDtl(new TabDtls(), DtlAttr.RefPK);
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "样例";

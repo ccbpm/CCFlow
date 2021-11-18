@@ -154,7 +154,7 @@ namespace BP.Sys
             if (i == 0)
             {
                 // if (!SystemConfig.CustomerNo.Equals("Factory5_mobile"))
-                //ath.SaveTo = SystemConfig.PathOfDataUser + "\\UploadFile\\" + fk_mapdata + "\\";
+                //ath.SaveTo = SystemConfig.PathOfDataUser + "/UploadFile/" + fk_mapdata + "/";
                 // ath.SaveTo = "/DataUser/UploadFile/" + fk_mapdata + "/";
                 if (fk_mapdata.Contains("ND") == true)
                     ath.HisCtrlWay = AthCtrlWay.WorkID;
@@ -695,7 +695,7 @@ namespace BP.Sys
         /// <param name="jsonStrOfH5Frm"></param>
         public static void SaveFrm(string fk_mapdata, string jsonStrOfH5Frm)
         {
-            // DataType.WriteFile("D:\\AAAAAA.JSON", jsonStrOfH5Frm);
+            // DataType.WriteFile("D:/AAAAAA.JSON", jsonStrOfH5Frm);
             //return;
             JsonData jd = JsonMapper.ToObject(jsonStrOfH5Frm);
             if (jd.IsObject == false)

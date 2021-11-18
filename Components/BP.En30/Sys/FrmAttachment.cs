@@ -556,7 +556,7 @@ namespace BP.Sys
                 {
                     //string s = this.GetValStringByKey(FrmAttachmentAttr.SaveTo);
                     //if (s == "" || s == null)
-                    return SystemConfig.PathOfDataUser + @"\UploadFile\" + this.FK_MapData + "\\";
+                    return SystemConfig.PathOfDataUser + @"/UploadFile/" + this.FK_MapData + "/";
                     // return s;
                 }
 

@@ -77,8 +77,8 @@ namespace BP.WF.HttpHandler
             Flow fl = new Flow(flowNo);
             fl.FlowDevModel = this.FlowDevModel; //流程开发模式.
             fl.HisDataStoreModel = DataStoreModel.SpecTable;
-            fl.FrmUrl = url;
-            if (FrmID.Equals("")|| FrmID.Equals("undefined"))
+            fl.FrmUrl = FrmUrl;
+            if (DataType.IsNullOrEmpty(FrmID) == true|| FrmID.Equals("undefined"))
                 fl.FrmUrl = FrmUrl;
             else
                 fl.FrmUrl = FrmID;

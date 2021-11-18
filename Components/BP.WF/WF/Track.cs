@@ -607,6 +607,9 @@ namespace BP.WF
 
             //创建主键.  这里创建主键的时候提示错误。提示该主键应存在.
             DBAccess.CreatePK(ptable, TrackAttr.MyPK, tk.EnMap.EnDBUrl.DBType);
+
+            //增加frmDB字段.
+
         }
         /// <summary>
         /// 插入
@@ -721,21 +724,18 @@ namespace BP.WF
             if (this.FrmDB != null)
                 DBAccess.SaveBigTextToDB(this.FrmDB, ptable, "MyPK", this.MyPK, "FrmDB");
 
-            if (DataType.IsNullOrEmpty(this.WriteDB ) == false && DBAccess.IsExitsTableCol(ptable, "WriteDB") == true)
+            if (DataType.IsNullOrEmpty(this.WriteDB) == false && DBAccess.IsExitsTableCol(ptable, "WriteDB") == true)
             {
-                if(this.WriteDB.Contains("data:image/png;base64,")==true)
+                if (this.WriteDB.Contains("data:image/png;base64,") == true)
                     DBAccess.SaveBigTextToDB(this.WriteDB, ptable, "MyPK", this.MyPK, "WriteDB");
                 else
                 {
-
                     sql = "SELECT WriteDB From " + ptable + " WHERE MyPK='" + this.WriteDB + "'";
-                    DBAccess.SaveBigTextToDB(DBAccess.RunSQLReturnStringIsNull(sql,""), ptable, "MyPK", this.MyPK, "WriteDB");
+                    DBAccess.SaveBigTextToDB(DBAccess.RunSQLReturnStringIsNull(sql, ""), ptable, "MyPK", this.MyPK, "WriteDB");
                 }
-               
-                //DBAccess.SaveBigTextToDB(this.WriteDB, ptable, "MyPK", this.MyPK, "WriteDB");
 
+                //DBAccess.SaveBigTextToDB(this.WriteDB, ptable, "MyPK", this.MyPK, "WriteDB");
             }
-                
 
             #endregion 执行保存
 

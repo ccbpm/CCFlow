@@ -212,9 +212,9 @@ namespace BP.WF.Template
                 return bytes;
 
             //如果没有找到，就看看默认的文件是否有.
-            string tempExcel = SystemConfig.PathOfDataUser + "CyclostyleFile\\" + this.No + ".rtf";
+            string tempExcel = SystemConfig.PathOfDataUser + "CyclostyleFile/" + this.No + ".rtf";
             if (System.IO.File.Exists(tempExcel) == false)
-                tempExcel = SystemConfig.PathOfDataUser + "CyclostyleFile\\Word单据模版定义演示.docx";
+                tempExcel = SystemConfig.PathOfDataUser + "CyclostyleFile/Word单据模版定义演示.docx";
 
             bytes = DataType.ConvertFileToByte(tempExcel);
             return bytes;

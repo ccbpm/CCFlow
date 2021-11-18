@@ -104,17 +104,7 @@ namespace BP.GPM
                 this.SetValByKey(MenuAttr.CtrlObjs, value);
             }
         }
-        //public CtrlWay HisCtrlWay
-        //{
-        //    get
-        //    {
-        //        return (CtrlWay)this.GetValIntByKey(MenuAttr.CtrlWay);
-        //    }
-        //    set
-        //    {
-        //        this.SetValByKey(MenuAttr.CtrlWay, (int)value);
-        //    }
-        //}
+     
         /// <summary>
         /// 功能
         /// </summary>

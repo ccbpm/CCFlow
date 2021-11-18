@@ -497,14 +497,22 @@ namespace BP.CCBill
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "步骤4: 测试"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoDBList";
+                rm.Title = "步骤4: 总数数据"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoExpCount";
                 rm.Icon = "../../WF/Img/Event.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "步骤5: 测试"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoDBList";
+                rm.Icon = "../../WF/Img/Event.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
 
 
                 rm = new RefMethod();
@@ -516,6 +524,15 @@ namespace BP.CCBill
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "视频教程"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoVideo";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
                 #endregion 基本功能.
 
                 this._enMap = map;
@@ -523,6 +540,12 @@ namespace BP.CCBill
             }
         }
         #endregion
+
+        public string DoVideo()
+        {
+            return "https://www.bilibili.com/video/BV15P4y1p7Sj";
+        }
+
 
         public string DoDBSrc()
         {
@@ -536,6 +559,10 @@ namespace BP.CCBill
         public string DoExpList()
         {
             return "../../CCBill/Admin/DBList/ListDBSrc.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=ss3";
+        }
+        public string DoExpCount()
+        {
+            return "../../CCBill/Admin/DBList/ListDBCount.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=ss3";
         }
         public string DoDBList()
         {

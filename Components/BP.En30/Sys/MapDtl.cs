@@ -133,6 +133,11 @@ namespace BP.Sys
         /// </summary>
         public const string FilterSQLExp = "FilterSQLExp";
         /// <summary>
+        /// 排序表达式.
+        /// </summary>
+        public const string OrderBySQLExp = "OrderBySQLExp";
+
+        /// <summary>
         /// 列自动计算表达式
         /// </summary>
         public const string ColAutoExp = "ColAutoExp";
@@ -920,28 +925,18 @@ namespace BP.Sys
                 this.SetPara(MapDtlAttr.IsFLDtl, value);
             }
         }
-        public int _IsReadonly = 2;
+        /// <summary>
+        /// 是否只读？
+        /// </summary>
         public bool IsReadonly
         {
             get
             {
-                if (_IsReadonly != 2)
-                {
-                    if (_IsReadonly == 1)
-                        return true;
-                    else
-                        return false;
-                }
 
-                if (this.IsDelete || this.IsInsert || this.IsUpdate)
-                {
-                    _IsReadonly = 0;
-                    return false;
-                }
-                _IsReadonly = this.GetValIntByKey(MapDtlAttr.IsReadonly);
+                if (this.IsInsert==false && this.IsUpdate== false && this.IsDelete== false)
+                    return true;
 
                 return this.GetValBooleanByKey(MapDtlAttr.IsReadonly);
-
             }
             set
             {
@@ -1218,6 +1213,24 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        /// 排序字段
+        /// </summary>
+        public string OrderBySQLExp
+        {
+            get
+            {
+                string s = this.GetValStrByKey(MapDtlAttr.OrderBySQLExp);
+                if (DataType.IsNullOrEmpty(s) == true)
+                    return "";
+                s = s.Replace("~", "'");
+                return s.Trim();
+            }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.OrderBySQLExp, value);
+            }
+        }
+        /// <summary>
         /// 多表头
         /// </summary>
         //public string MTR
@@ -1299,7 +1312,7 @@ namespace BP.Sys
         public MapDtl(string no)
         {
             this.No = no;
-            this._IsReadonly = 2;
+         //   this.IsReadonly = 2;
             this.Retrieve();
         }
         /// <summary>
@@ -1393,7 +1406,9 @@ namespace BP.Sys
                 #endregion 超链接.
 
                 //SQL过滤表达式.
-                map.AddTBString(MapDtlAttr.FilterSQLExp, null, "过滤SQL表达式", true, false, 0, 200, 20, true);
+                map.AddTBString(MapDtlAttr.FilterSQLExp, null, "过滤SQL表达式", true, false, 0, 70, 20, true);
+                map.AddTBString(MapDtlAttr.OrderBySQLExp, null, "排序字段", true, false, 0, 70, 20, true);
+
 
                 //add 2014-02-21.
                 map.AddTBInt(MapDtlAttr.FK_Node, 0, "节点(用户独立表单权限控制)", false, false);

@@ -83,7 +83,7 @@ namespace BP.GPM.WeiXin
                         headimgurl = userInfo.avatar + "64";
                     else
                         headimgurl = userInfo.avatar.Substring(0, headimgurl.LastIndexOf('/')) + "64";
-                    UserIcon = savePath + "\\" + userInfo.userid + "Smaller.png";
+                    UserIcon = savePath + "/" + userInfo.userid + "Smaller.png";
                     DataType.HttpDownloadFile(headimgurl, UserIcon);
                 }
             }

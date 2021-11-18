@@ -359,7 +359,7 @@ namespace BP.CCBill
 
             //生成临时文件.
             System.Drawing.Image image = encoder.Encode(url, Encoding.UTF8);
-            string tempPath = SystemConfig.PathOfTemp + "\\" + workIDStr + ".png";
+            string tempPath = SystemConfig.PathOfTemp + "/" + workIDStr + ".png";
             image.Save(tempPath, ImageFormat.Png);
             image.Dispose();
 
@@ -384,7 +384,7 @@ namespace BP.CCBill
 
             //生成临时文件.
             System.Drawing.Image image = encoder.Encode(url, Encoding.UTF8);
-            string tempPath = SystemConfig.PathOfTemp + "\\" + this.WorkID + ".png";
+            string tempPath = SystemConfig.PathOfTemp + "/" + this.WorkID + ".png";
             image.Save(tempPath, ImageFormat.Png);
             image.Dispose();
 

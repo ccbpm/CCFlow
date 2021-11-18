@@ -50,6 +50,10 @@ namespace BP.WF.Port
         /// token.
         /// </summary>
         public const string Token = "Token";
+
+        public const string OrgNo = "OrgNo";
+
+        public const string UserID = "UserID";
         #endregion
     }
     /// <summary>
@@ -61,7 +65,8 @@ namespace BP.WF.Port
         /// <summary>
 		/// 编号
 		/// </summary>
-		public new string No
+		
+        public new string No
         {
             get
             {
@@ -69,18 +74,43 @@ namespace BP.WF.Port
             }
             set
             {
-                if (BP.Sys.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.SAAS)
-                {
-                    string val = value;
-                    if (val.Contains(BP.Web.WebUser.OrgNo+"_")==false)
-                        val = BP.Web.WebUser.OrgNo + "_" + value;
+                this.SetValByKey(EmpAttr.No, value);
+            }
+        }
+        /// <summary>
+        /// 用户ID:SAAS模式下UserID是可以重复的.
+        /// </summary>
+        public string UserID
+        {
+            get
+            {
+                if (BP.Sys.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
+                    return this.GetValStringByKey(WFEmpAttr.UserID);
 
-                    this.SetValByKey(EntityNoNameAttr.No, val);
-                    return;
-                }
+                return this.GetValStringByKey(WFEmpAttr.No);
+            }
+            set
+            {
+                this.SetValByKey(WFEmpAttr.UserID, value);
 
-                this.SetValByKey(EntityNoNameAttr.No, value);
-
+                if (BP.Sys.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
+                    this.SetValByKey(WFEmpAttr.No, BP.Web.WebUser.OrgNo + "_" + value);
+                else
+                    this.SetValByKey(WFEmpAttr.No, value);
+            }
+        }
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStringByKey(WFEmpAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(WFEmpAttr.OrgNo, value);
             }
         }
         public string HisAlertWayT
@@ -220,27 +250,31 @@ namespace BP.WF.Port
         /// <summary>
         /// 操作员
         /// </summary>
-        /// <param name="no"></param>
-        public WFEmp(string no)
+        /// <param name="userID"></param>
+        public WFEmp(string userID)
         {
 
-            if (BP.Sys.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.SAAS)
-                this.No = WebUser.OrgNo + "_" + no;
-            else
-                this.No = no;
+            if (userID == null || userID.Length == 0)
+                throw new Exception("@要查询的操作员编号为空。");
 
-            try
+            userID = userID.Trim();
+            if (BP.Sys.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
             {
-                if (this.RetrieveFromDBSources() == 0)
-                {
-                    Emp emp = new Emp(no);
-                    this.Copy(emp);
-                    this.Insert();
-                }
+                if (userID.Equals("admin") == true)
+                    this.SetValByKey("No", userID);
+                else
+                    this.SetValByKey("No", BP.Web.WebUser.OrgNo + "_" + userID);
             }
-            catch
+            else
             {
-                this.CheckPhysicsTable();
+                this.SetValByKey("No", userID);
+            }
+
+            if (this.RetrieveFromDBSources() == 0)
+            {
+                BP.Port.Emp emp = new BP.Port.Emp(userID);
+                this.Row = emp.Row;
+                this.Insert();
             }
         }
         /// <summary>
@@ -271,10 +305,11 @@ namespace BP.WF.Port
                 map.AddTBString(WFEmpAttr.Msg, null, "Msg", true, true, 0, 4000, 20);
                 map.AddTBString(WFEmpAttr.Style, null, "Style", true, true, 0, 30, 20);
 
-                //map.AddTBStringDoc(WFEmpAttr.StartFlows, null, "可以发起的流程", true, true);
-
+                //如果是集团模式或者是SAAS模式.
+                if (BP.Sys.SystemConfig.CCBPMRunModel != BP.Sys.CCBPMRunModel.Single)
+                    map.AddTBString(WFEmpAttr.UserID, null, "用户ID", true, false, 0, 50, 30);
                 //隶属组织.
-                map.AddTBString("OrgNo", null, "OrgNo", true, true, 0, 100, 20);
+                map.AddTBString(WFEmpAttr.OrgNo, null, "OrgNo", true, true, 0, 100, 20);
 
                 map.AddTBString(WFEmpAttr.SPass, null, "图片签名密码", true, true, 0, 200, 20);
 

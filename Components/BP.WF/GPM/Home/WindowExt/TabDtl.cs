@@ -71,7 +71,7 @@ namespace BP.GPM.Home.WindowExt
                 Map map = new Map("GPM_WindowTemplateDtl", "Tab页数据项");
 
                 map.AddMyPK(false);
-                map.AddTBString(DtlAttr.RefWindowTemplate, null, "RefWindowTemplate", false, false, 0, 40, 20, false);
+                map.AddTBString(DtlAttr.RefPK, null, "RefPK", false, false, 0, 40, 20, false);
 
                 map.AddDDLSysEnum(DtlAttr.DBType, 0, "数据源类型", true, true, "WindowsDBType",
           "@0=数据库查询SQL@1=执行Url返回Json@2=执行\\DataUser\\JSLab\\Windows.js的函数.");

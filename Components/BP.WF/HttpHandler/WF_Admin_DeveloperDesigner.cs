@@ -35,7 +35,7 @@ namespace BP.WF.HttpHandler
             string htmlCode = DBAccess.GetBigTextFromDB("Sys_MapData", "No", this.FK_MapData,
                 "HtmlTemplateFile");
             //把数据同步到DataUser/CCForm/HtmlTemplateFile/文件夹下
-            string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\";
+            string filePath = SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/";
             if (Directory.Exists(filePath) == false)
                 Directory.CreateDirectory(filePath);
             filePath = filePath + this.FK_MapData + ".htm";
@@ -73,7 +73,7 @@ namespace BP.WF.HttpHandler
         public string Template_Init()
         {
             DataSet ds = new DataSet();
-            string path = SystemConfig.PathOfDataUser + "Style\\TemplateFoolDevelopDesigner\\";
+            string path = SystemConfig.PathOfDataUser + "Style/TemplateFoolDevelopDesigner/";
             //var tmps = new DirectoryInfo(path).GetFiles("*.htm");
             string[] files = System.IO.Directory.GetDirectories(path);//获取子文件夹
             //模版类型
@@ -123,7 +123,7 @@ namespace BP.WF.HttpHandler
         {
             var fileName = this.GetRequestVal("DevTempName");
             var fielDir= this.GetRequestVal("DevTempDir");
-            string path = SystemConfig.PathOfDataUser + "Style\\TemplateFoolDevelopDesigner\\\\"+ fielDir+"\\\\";
+            string path = SystemConfig.PathOfDataUser + "Style/TemplateFoolDevelopDesigner/"+ fielDir+"/";
 
             string filePath = path + fileName;
 
@@ -165,7 +165,7 @@ namespace BP.WF.HttpHandler
         public string ResetFrm_Init()
         {
             //删除html
-            string filePath = SystemConfig.PathOfDataUser + "CCForm\\HtmlTemplateFile\\" + this.FK_MapData + ".htm";
+            string filePath = SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/" + this.FK_MapData + ".htm";
             if (File.Exists(filePath) == true)
                 File.Delete(filePath);
 

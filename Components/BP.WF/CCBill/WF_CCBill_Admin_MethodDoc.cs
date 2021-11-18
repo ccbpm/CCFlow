@@ -108,7 +108,7 @@ namespace BP.CCBill
             {
                 en.MethodDoc_JavaScript = doc;
 
-                string path = SystemConfig.PathOfDataUser + "JSLibData\\Method\\";
+                string path = SystemConfig.PathOfDataUser + "JSLibData/Method/";
                 if (System.IO.Directory.Exists(path) == false)
                     System.IO.Directory.CreateDirectory(path);
                 //写入文件.

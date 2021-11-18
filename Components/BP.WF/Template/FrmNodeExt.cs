@@ -304,6 +304,7 @@ namespace BP.WF.Template
         }
         #endregion
 
+
         public string DoBatchSetting()
         {
             //return "../../Admin/Sln/BindFrms.htm?FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow;

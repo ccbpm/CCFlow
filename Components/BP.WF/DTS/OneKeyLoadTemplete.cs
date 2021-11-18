@@ -25,7 +25,7 @@ namespace BP.WF.DTS
             this.Help = "此功能是一键备份流程的逆向操作.";
             this.Help += "@执行时请注意";
             this.Help += "@1,系统所有的流程数据、模版数据、组织结构数据、将会被删除。";
-            this.Help += "@2,重新装载C:\\CCFlowTemplete 的数据。";
+            this.Help += "@2,重新装载C:/CCFlowTemplete 的数据。";
             this.Help += "@3,此功能一般提供给ccflow的开发者用于不同的数据库之间的移植。";
 
             this.GroupName = "数据备份/恢复";
@@ -57,29 +57,29 @@ namespace BP.WF.DTS
             string msg = "";
 
             #region 检查数据文件是否完整.
-            string path = "C:\\CCFlowTemplete";
+            string path = "C:/CCFlowTemplete";
             if (System.IO.Directory.Exists(path) == false)
                 msg += "@错误：约定的目录不存在服务器" + path + ",请把从ccflow备份的文件放入" + path;
 
             //PortTables.
-            string file = path + "\\PortTables.xml";
+            string file = path + "/PortTables.xml";
             if (System.IO.File.Exists(file) == false)
                 msg += "@错误：约定的文件不存在，" + file;
 
             //SysTables.
-            file = path + "\\SysTables.xml";
+            file = path + "/SysTables.xml";
             if (System.IO.File.Exists(file) == false)
                 msg += "@错误：约定的文件不存在，" + file;
 
             //FlowTables.
-            file = path + "\\FlowTables.xml";
+            file = path + "/FlowTables.xml";
             if (System.IO.File.Exists(file) == false)
                 msg += "@错误：约定的文件不存在，" + file;
             #endregion 检查数据文件是否完整.
 
             #region 1 装载流程基础表数据.
             DataSet ds = new DataSet();
-            ds.ReadXml(path + "\\FlowTables.xml");
+            ds.ReadXml(path + "/FlowTables.xml");
 
             //流程类别.
             FlowSorts sorts = new FlowSorts();
@@ -94,7 +94,7 @@ namespace BP.WF.DTS
 
             #region 2 组织结构.
             ds = new DataSet();
-            ds.ReadXml(path + "\\PortTables.xml");
+            ds.ReadXml(path + "/PortTables.xml");
 
             //Port_Emp.
             Emps emps = new Emps();
@@ -138,7 +138,7 @@ namespace BP.WF.DTS
 
             #region 3 恢复系统数据.
             ds = new DataSet();
-            ds.ReadXml(path + "\\SysTables.xml");
+            ds.ReadXml(path + "/SysTables.xml");
 
             //枚举Main.
             SysEnumMains sems = new SysEnumMains();
@@ -180,7 +180,7 @@ namespace BP.WF.DTS
             #region 4.备份表单相关数据.
             if (1 == 2)
             {
-                string pathOfTables = path + "\\SFTables";
+                string pathOfTables = path + "/SFTables";
                 System.IO.Directory.CreateDirectory(pathOfTables);
                 SFTables tabs = new SFTables();
                 tabs.RetrieveAll();
@@ -192,7 +192,7 @@ namespace BP.WF.DTS
                     string sql = "SELECT * FROM " + item.No;
                     ds = new DataSet();
                     ds.Tables.Add(DBAccess.RunSQLReturnTable(sql));
-                    ds.WriteXml(pathOfTables + "\\" + item.No + ".xml");
+                    ds.WriteXml(pathOfTables + "/" + item.No + ".xml");
                 }
             }
             #endregion 4 备份表单相关数据.
@@ -213,7 +213,7 @@ namespace BP.WF.DTS
             fss.ClearTable();
 
             // 调度表单文件。         
-            string frmPath = path + "\\Form";
+            string frmPath = path + "/Form";
             DirectoryInfo dirInfo = new DirectoryInfo(frmPath);
             DirectoryInfo[] dirs = dirInfo.GetDirectories();
             foreach (DirectoryInfo item in dirs)
@@ -264,7 +264,7 @@ namespace BP.WF.DTS
                 fl.DoDelete(); //删除流程.
             }
 
-            dirInfo = new DirectoryInfo(path + "\\Flow\\");
+            dirInfo = new DirectoryInfo(path + "/Flow/");
             dirs = dirInfo.GetDirectories();
 
             //删除数据.

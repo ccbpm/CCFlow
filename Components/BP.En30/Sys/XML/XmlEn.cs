@@ -251,7 +251,7 @@ namespace BP.Sys.XML
             get
             {
                 string tname = this.File.Replace(".TXT", "").Replace(".txt", "");
-                tname = tname.Substring(tname.LastIndexOf("\\") + 1) + this.TableName + "_X";
+                tname = tname.Substring(tname.LastIndexOf("/") + 1) + this.TableName + "_X";
                 return tname;
             }
         }

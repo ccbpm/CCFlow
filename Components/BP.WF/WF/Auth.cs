@@ -171,6 +171,9 @@ namespace BP.WF
                     return this._enMap;
 
                 Map map = new Map("WF_Auth", "授权");
+                //map.IsView = true;
+             //   map.EnType = EnType.View;
+                //为啥设置为视图？导致创建表出错.
 
                 map.AddMyPK();
 

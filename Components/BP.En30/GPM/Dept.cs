@@ -17,6 +17,7 @@ namespace BP.GPM
         /// 单位全名
         /// </summary>
         public const string NameOfPath = "NameOfPath";
+        public const string Leader = "Leader";
     }
     /// <summary>
     /// 部门
@@ -111,7 +112,7 @@ namespace BP.GPM
                 map.AddTBString(DeptAttr.NameOfPath, null, "部门路径", true, true, 0, 300, 30, true);
 
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 100, 30);
-              
+                map.AddTBString(DeptAttr.Leader, null, "部门领导", true, false, 0, 50, 30);
                 //顺序号.
                 map.AddTBInt(DeptAttr.Idx, 0, "顺序号", true, false);
 

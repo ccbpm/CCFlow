@@ -215,11 +215,11 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
-                    savePath = athDesc.SaveTo + "\\" + pkVal;
+                    savePath = athDesc.SaveTo + "/" + pkVal;
                 }
 
                 //替换关键的字串.
-                savePath = savePath.Replace("\\\\", "\\");
+                savePath = savePath.Replace("\\\\", "/");
                 try
                 {
                     if (savePath.Contains(SystemConfig.PathOfWebApp) == false)
@@ -227,7 +227,7 @@ namespace BP.WF.HttpHandler
                 }
                 catch (Exception ex)
                 {
-                    savePath = SystemConfig.PathOfDataUser + "UploadFile\\" + mapData.No + "\\";
+                    savePath = SystemConfig.PathOfDataUser + "UploadFile/" + mapData.No + "/";
                     //return "err@获取路径错误" + ex.Message + ",配置的路径是:" + savePath + ",您需要在附件属性上修改该附件的存储路径.";
                 }
 
@@ -246,7 +246,7 @@ namespace BP.WF.HttpHandler
 
 
 
-                string realSaveTo = savePath + "\\" + guid + "." + fileName;
+                string realSaveTo = savePath + "/" + guid + "." + fileName;
 
                 realSaveTo = realSaveTo.Replace("~", "-");
                 realSaveTo = realSaveTo.Replace("'", "-");

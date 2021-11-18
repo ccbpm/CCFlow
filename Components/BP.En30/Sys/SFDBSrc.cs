@@ -146,7 +146,7 @@ namespace BP.Sys
             return int.Parse(dt.Rows[0][0].ToString());
         }
 
-        public Entities DoQuery(Entities ens,string sql,string countSql, int count,string mainTable,string pk, int pageSize, int pageIdx, string orderBy, bool isDesc=false)
+        public Entities DoQuery(Entities ens,string sql,string expPageSize,string pk,Attrs attrs, int count, int pageSize, int pageIdx, string orderBy, bool isDesc=false)
         {
             DataTable dt = new DataTable();
             if (count == 0)
@@ -184,18 +184,21 @@ namespace BP.Sys
                     case DBSrcType.PostgreSQL:    
                     case DBSrcType.SQLServer:
                     default:
-                        mysql = countSql;
-                        mysql = mysql.Substring(mysql.ToUpper().IndexOf("FROM "));
-                        mysql = "SELECT  "+ mainTable+pk + " "  + mysql;
-                        string pks = this.GenerPKsByTableWithPara(pk, mysql, pageSize * (pageIdx - 1), max,null);
+                        //获取主键的类型
+                        Attr attr = attrs.GetAttrByKeyOfEn(pk);
+                       
+                        //mysql = countSql;
+                        //mysql = mysql.Substring(mysql.ToUpper().IndexOf("FROM "));
+                        // mysql = "SELECT  "+ mainTable+pk + " "  + mysql;
+                        string pks = this.GenerPKsByTableWithPara(pk, attr.IsNum, expPageSize, pageSize * (pageIdx - 1), max,null);
 
                         if (pks == null)
-                            sql += " AND 1=2";
+                            mysql =sql+ " AND 1=2";
                         else
-                            sql += " AND "+ mainTable+ pk +" in(" + pks + ")";
+                            mysql =sql+ " AND OID in(" + pks + ")";
                         break;
                 }
-                dt = this.RunSQLReturnTable(sql);
+                dt = this.RunSQLReturnTable(mysql);
                 return InitEntitiesByDataTable(ens, dt, null);
 
             }
@@ -286,7 +289,7 @@ namespace BP.Sys
 
         }
 
-        public string GenerPKsByTableWithPara(string pk, string sql, int from, int to,Paras paras)
+        public string GenerPKsByTableWithPara(string pk,bool isNum, string sql, int from, int to,Paras paras)
         {
             DataTable dt = this.RunSQLReturnTable(sql, paras);
             string pks = "";
@@ -301,7 +304,7 @@ namespace BP.Sys
                 {
        
                  
-                    if (pk.Equals("OID") || pk.Equals("WorkID") || pk.Equals("NodeID"))
+                    if (isNum==true)
                         pks+=int.Parse(dr[pk].ToString())+",";
                     else
                         pks += "'"+ dr[pk].ToString() + "',";

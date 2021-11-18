@@ -1746,7 +1746,11 @@ namespace BP.En
         /// <returns>查询出来的个数</returns>
         public DataTable RetrieveNotSetValues()
         {
-            return this.RunSQLReturnTable(SqlBuilder.Retrieve(this));
+            Paras ps = new Paras();
+            ps.SQL = SqlBuilder.Retrieve(this);
+            ps.Add(this.PK, this.PKVal);
+
+            return this.RunSQLReturnTable(ps.SQL,ps);
         }
         /// <summary>
         /// 这个表里是否存在
@@ -3402,10 +3406,18 @@ namespace BP.En
                 {
                     dr["ftype"] = "char";
 
+                    if (type.Contains("(") == false)
+                    {
+                        dr["flen"] = 0;
+                        continue;
+                    }
+
                     int start = type.IndexOf('(') + 1;
                     int end = type.IndexOf(')');
                     string len = type.Substring(start, end - start);
-                    dr["flen"] = int.Parse(len);
+                    //dr["flen"] = int.Parse(len);
+                   // dr["flen"] = 1; // int.Parse(len);
+
                 }
                 else
                 {

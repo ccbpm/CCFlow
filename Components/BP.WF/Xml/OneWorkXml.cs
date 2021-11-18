@@ -90,7 +90,7 @@ namespace BP.WF.XML
         {
             get
             {
-                return SystemConfig.PathOfDataUser + "XML\\OneWork.xml";
+                return SystemConfig.PathOfDataUser + "XML/OneWork.xml";
             }
         }
         /// <summary>

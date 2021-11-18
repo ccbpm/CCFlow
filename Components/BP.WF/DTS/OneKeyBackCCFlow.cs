@@ -21,7 +21,7 @@ namespace BP.WF.DTS
         public OneKeyBackCCFlow()
         {
             this.Title = "一键备份流程与表单。";
-            this.Help = "把流程、表单、组织结构数据都生成xml文档备份到C:\\CCFlowTemplete下面。";
+            this.Help = "把流程、表单、组织结构数据都生成xml文档备份到C:/CCFlowTemplete下面。";
             this.GroupName = "数据备份/恢复";
 
         }
@@ -52,7 +52,7 @@ namespace BP.WF.DTS
         /// <returns>返回执行结果</returns>
         public override object Do()
         {
-            string path = "C:\\CCFlowTemplete" + DateTime.Now.ToString("yy年MM月dd日HH时mm分ss秒");
+            string path = "C:/CCFlowTemplete" + DateTime.Now.ToString("yy年MM月dd日HH时mm分ss秒");
             if (System.IO.Directory.Exists(path) == false)
                 System.IO.Directory.CreateDirectory(path);
 
@@ -62,7 +62,7 @@ namespace BP.WF.DTS
             DataTable dt = DBAccess.RunSQLReturnTable("SELECT * FROM WF_FlowSort");
             dt.TableName = "WF_FlowSort";
             dsFlows.Tables.Add(dt);
-            dsFlows.WriteXml(path + "\\FlowTables.xml");
+            dsFlows.WriteXml(path + "/FlowTables.xml");
             #endregion 备份流程类别信息.
 
             #region 2.备份组织结构.
@@ -88,7 +88,7 @@ namespace BP.WF.DTS
             dsPort.Tables.Add(dt);
             
 
-            dsPort.WriteXml(path + "\\PortTables.xml");
+            dsPort.WriteXml(path + "/PortTables.xml");
             #endregion 备份表单相关数据.
 
             #region 3.备份系统数据
@@ -108,11 +108,11 @@ namespace BP.WF.DTS
             dt = DBAccess.RunSQLReturnTable("SELECT * FROM Sys_FormTree");
             dt.TableName = "Sys_FormTree";
             dsSysTables.Tables.Add(dt);
-            dsSysTables.WriteXml(path + "\\SysTables.xml");
+            dsSysTables.WriteXml(path + "/SysTables.xml");
             #endregion 备份系统数据.
 
             #region 4.备份表单相关数据.
-            string pathOfTables = path + "\\SFTables";
+            string pathOfTables = path + "/SFTables";
             System.IO.Directory.CreateDirectory(pathOfTables);
             SFTables tabs = new SFTables();
             tabs.RetrieveAll();
@@ -129,7 +129,7 @@ namespace BP.WF.DTS
                     string sql = "SELECT * FROM " + item.No + " ";
                     DataSet ds = new DataSet();
                     ds.Tables.Add(DBAccess.RunSQLReturnTable(sql));
-                    ds.WriteXml(pathOfTables + "\\" + item.No + ".xml");
+                    ds.WriteXml(pathOfTables + "/" + item.No + ".xml");
                 }
                 catch
                 {
@@ -147,7 +147,7 @@ namespace BP.WF.DTS
                 fs.No = fl.FK_FlowSort;
                 fs.RetrieveFromDBSources();
 
-                string pathDir = path + "\\Flow\\" + fs.No + "." + fs.Name+"\\";
+                string pathDir = path + "/Flow/" + fs.No + "." + fs.Name+"/";
                 if (System.IO.Directory.Exists(pathDir) == false)
                     System.IO.Directory.CreateDirectory(pathDir);
 
@@ -167,11 +167,11 @@ namespace BP.WF.DTS
                 fs.No = md.FK_FormTree;
                 fs.RetrieveFromDBSources();
 
-                string pathDir = path + "\\Form\\" + fs.No + "." + fs.Name;
+                string pathDir = path + "/Form/" + fs.No + "." + fs.Name;
                 if (System.IO.Directory.Exists(pathDir) == false)
                     System.IO.Directory.CreateDirectory(pathDir);
                 DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
-                ds.WriteXml(pathDir + "\\" + md.Name + ".xml");
+                ds.WriteXml(pathDir + "/" + md.Name + ".xml");
             }
             #endregion 备份表单.
 

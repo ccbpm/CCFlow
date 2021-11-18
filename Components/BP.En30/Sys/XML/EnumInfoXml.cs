@@ -110,7 +110,7 @@ namespace BP.Sys.XML
         {
             get
             {
-                return SystemConfig.PathOfXML + "Enum\\";
+                return SystemConfig.PathOfXML + "Enum/";
             }
         }
 		/// <summary>

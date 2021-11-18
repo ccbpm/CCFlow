@@ -121,10 +121,12 @@ namespace BP.DA
         /// </summary> 
         /// <param name="dtime">给定的日期</param> 
         /// <returns>数字 一年中的第几周</returns> 
-        public static int WeekOfYear(DateTime dtime)
+        public static int WeekOfYear(DateTime dtime )
         {
             int weeknum = 0;
             DateTime tmpdate = DateTime.Parse(dtime.Year.ToString() + "-1" + "-1");
+
+
             DayOfWeek firstweek = tmpdate.DayOfWeek;
             //if(firstweek) 
             int i = dtime.DayOfYear - 1 + (int)firstweek;
@@ -403,8 +405,8 @@ namespace BP.DA
             }
 
 
-            string filePath = fileName.Substring(0, fileName.LastIndexOf('\\'));
-            string fName = fileName.Substring(fileName.LastIndexOf('\\'));
+            string filePath = fileName.Substring(0, fileName.LastIndexOf('/'));
+            string fName = fileName.Substring(fileName.LastIndexOf('/'));
 
             fName = PraseStringToUrlFileNameExt(fName, "%", "%25");
             fName = PraseStringToUrlFileNameExt(fName, "+", "%2B");

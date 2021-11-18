@@ -340,7 +340,7 @@ namespace BP.Sys.FrmUI
 
                 rm = new RefMethod();
                 rm.GroupName = "输入内容多选";
-                rm.Title = "搜索多选";
+                rm.Title = "搜索选择";
                 rm.ClassMethodName = this.ToString() + ".DoMultipleChoiceSearch()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "icon-magnifier";

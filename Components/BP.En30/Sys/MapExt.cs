@@ -695,10 +695,10 @@ namespace BP.Sys
             {
                 string s= this.GetValStrByKey("Tag").Replace("~", "'");
 
-                s = s.Replace("\\\\", "\\");
-                s = s.Replace("\\\\", "\\");
+                s = s.Replace("\\\\", "/");
+                s = s.Replace("\\\\", "/");
 
-                s = s.Replace(@"CCFlow\Data\", @"CCFlow\WF\Data\");
+                s = s.Replace(@"CCFlow/Data/", @"CCFlow/WF/Data/");
 
                 return s;
             }

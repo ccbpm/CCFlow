@@ -2,22 +2,22 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
-using System.Data; 
+using System.Data;
 using System.Web;
 using System.Reflection;
 using System.IO;
 using BP.DA;
-using BP.En;   
+using BP.En;
 using BP.Sys;
 using BP.Pub;
 using BP.Sys.XML;
- 
+
 namespace BP.En
-{ 
-	/// <summary>
-	/// ClassFactory 的摘要说明。
-	/// </summary>
-    public class ClassFactory 
+{
+    /// <summary>
+    /// ClassFactory 的摘要说明。
+    /// </summary>
+    public class ClassFactory
     {
         #region public moen
         /// <summary>
@@ -42,7 +42,7 @@ namespace BP.En
             ds.ReadXml(path);
 
             DataTable dt = ds.Tables[tableName];
-          //  SystemConfig.CS_AppSettings = new System.Collections.Specialized.NameValueCollection();
+            //  SystemConfig.CS_AppSettings = new System.Collections.Specialized.NameValueCollection();
             SystemConfig.CS_DBConnctionDic.Clear();
             foreach (DataRow row in dt.Rows)
             {
@@ -180,15 +180,15 @@ namespace BP.En
         static ClassFactory()
         {
             string path = AppDomain.CurrentDomain.BaseDirectory;
-            if (Directory.Exists(path + "bin\\"))
+            if (Directory.Exists(path + "bin/"))
             {
-                if (!DataType.IsNullOrEmpty(SystemConfig.AppSettings["CCFlowAppPath"]) && Directory.Exists(path + SystemConfig.AppSettings["CCFlowAppPath"] + "bin\\"))
+                if (!DataType.IsNullOrEmpty(SystemConfig.AppSettings["CCFlowAppPath"]) && Directory.Exists(path + SystemConfig.AppSettings["CCFlowAppPath"] + "bin/"))
                 {
-                    _BasePath = path + SystemConfig.AppSettings["CCFlowAppPath"] + "bin\\";
+                    _BasePath = path + SystemConfig.AppSettings["CCFlowAppPath"] + "bin/";
                 }
                 else
                 {
-                    _BasePath = path + "bin\\";
+                    _BasePath = path + "bin/";
                 }
             }
             else
@@ -204,7 +204,7 @@ namespace BP.En
                 if (_BasePath == null)
                 {
                     if (SystemConfig.AppSettings["InstallPath"] == null)
-                        _BasePath = "D:\\";
+                        _BasePath = "D:/";
                     else
                         _BasePath = SystemConfig.AppSettings["InstallPath"];
                 }
@@ -491,7 +491,7 @@ namespace BP.En
         #endregion 实例
 
         #region 其他
-       
+
         #region 获取 en
         private static Hashtable Htable_En;
         /// <summary>
@@ -528,11 +528,11 @@ namespace BP.En
 
             Entity tmp = Htable_En[className] as Entity;
             if (tmp != null)
-                tmp.Row=null;
+                tmp.Row = null;
             return tmp;
         }
         #endregion
-       
+
 
         #region 获取 GetMethod
         private static Hashtable Htable_Method;
@@ -580,16 +580,15 @@ namespace BP.En
                 Htable_Ens.Clear();
                 foreach (Entities en in al)
                 {
-                    if (en.ToString() == null)
+                    if (en == null)
+                        continue;
+                    string str = en.ToString();
+                    if (str == null)
+                        continue;
+                    if (Htable_Ens.ContainsKey(str) == true)
                         continue;
 
-                    try
-                    {
-                        Htable_Ens.Add(en.ToString(), en);
-                    }
-                    catch
-                    {
-                    }
+                    Htable_Ens.Add(str, en);
                 }
             }
             Entities ens = Htable_Ens[className] as Entities;

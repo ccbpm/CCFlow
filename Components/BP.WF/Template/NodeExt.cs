@@ -1038,7 +1038,7 @@ namespace BP.WF.Template
                     rm.Title = "设置为模版";
 
                     string info = "如果把这个节点设置为模版,以后在新建节点的时候,就会按照当前的属性初始化节点数据.";
-                    info += "\t\n产生的数据文件存储在\\DataUser\\Xml\\下.";
+                    info += "\t\n产生的数据文件存储在/DataUser/Xml/下.";
                     rm.Warning = info;
 
                     //  rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
@@ -1103,6 +1103,8 @@ namespace BP.WF.Template
                 return this._enMap;
             }
         }
+
+
 
         #region 考核规则.
         /// <summary>
@@ -1241,7 +1243,7 @@ namespace BP.WF.Template
         {
             DataTable dt = this.ToDataTableField();
             dt.TableName = "Node";
-            dt.WriteXml(SystemConfig.PathOfDataUser + "XML\\DefaultNewNodeAttr.xml");
+            dt.WriteXml(SystemConfig.PathOfDataUser + "XML/DefaultNewNodeAttr.xml");
             return "执行成功.";
         }
         /// <summary>
@@ -1305,6 +1307,50 @@ namespace BP.WF.Template
             return "../../Admin/AttrNode/SubFlow/SubFlowYanXu.htm?FK_Node=" + this.NodeID + "&tk=" + new Random().NextDouble();
         }
         #endregion 子流程。
+
+
+        /// <summary>
+        /// 更新节点名称
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string Do_SaveAndUpdateNodeName(string name)
+        {
+            //更新节点名称.
+            DBAccess.RunSQL("UPDATE  WF_Node SET Name='" + name + "' WHERE NodeID=" + this.NodeID);
+
+            //修改表单名称.
+            DBAccess.RunSQL("UPDATE  Sys_MapData SET Name='" + name + "' WHERE No='ND" + this.NodeID + "'");
+
+            //修改分组名称.
+            string oid = DBAccess.RunSQLReturnString("SELECT OID FROM Sys_GroupField WHERE FrmID='ND" + this.NodeID + "' ORDER BY Idx  ", null);
+            if (oid == null)
+                return "更新成功.";
+
+            DBAccess.RunSQL("UPDATE   Sys_GroupField SET Lab='" + name + "' WHERE OID=" + oid);
+            return "执行成功";
+        }
+        /// <summary>
+        /// 简单的更新节点名称
+        /// </summary>
+        /// <param name="name">要更新的节点名称</param>
+        /// <returns></returns>
+        public string Do_SaveNodeName(string name)
+        {
+            //更新节点名称.
+            DBAccess.RunSQL("UPDATE WF_Node SET Name='" + name + "' WHERE NodeID=" + this.NodeID);
+
+            // //修改表单名称.
+            //     DBAccess.RunSQL("UPDATE SET Sys_MapDate SET Name='" + name + "' WHERE No='ND" + this.NodeID + "'");
+
+            //修改分组名称.
+            //  string oid = DBAccess.RunSQLReturnString("SELECT OID FROM Sys_GroupField WHERE FrmID='ND" + this.NodeID + "' ORDER BY Idx  ", null);
+            //  if (oid == null)
+            //     return "更新成功.";
+
+            //  DBAccess.RunSQL("UPDATE SET Sys_GroupField SET Lab='" + name + "' WHERE OID=" + oid);
+            return "执行成功";
+        }
 
 
         public string DoTurn()
@@ -1453,7 +1499,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string SaveHelpAlert(string text)
         {
-            string file = SystemConfig.PathOfDataUser + "CCForm\\HelpAlert\\" + this.NodeID + ".htm";
+            string file = SystemConfig.PathOfDataUser + "CCForm/HelpAlert/" + this.NodeID + ".htm";
             string folder = System.IO.Path.GetDirectoryName(file);
             //若文件夹不存在，则创建
             if (System.IO.Directory.Exists(folder) == false)
@@ -1469,7 +1515,7 @@ namespace BP.WF.Template
         public string ReadHelpAlert()
         {
             string doc = "";
-            string file = SystemConfig.PathOfDataUser + "CCForm\\HelpAlert\\" + this.NodeID + ".htm";
+            string file = SystemConfig.PathOfDataUser + "CCForm/HelpAlert/" + this.NodeID + ".htm";
             string folder = System.IO.Path.GetDirectoryName(file);
             if (System.IO.Directory.Exists(folder) != false)
             {

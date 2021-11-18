@@ -125,19 +125,19 @@ namespace BP.WF.DTS
             if (System.IO.Directory.Exists(path) == false)
                 System.IO.Directory.CreateDirectory(path);
 
-            if (System.IO.Directory.Exists(path + "\\\\" + year) == false)
-                System.IO.Directory.CreateDirectory(path + "\\\\" + year);
+            if (System.IO.Directory.Exists(path + "/" + year) == false)
+                System.IO.Directory.CreateDirectory(path + "/" + year);
 
 
             foreach (Dept Dept in Depts)
             {
-                if (System.IO.Directory.Exists(path + "\\\\" + year + "\\\\" + Dept.No) == false)
-                    System.IO.Directory.CreateDirectory(path + "\\\\" + year + "\\\\" + Dept.No);
+                if (System.IO.Directory.Exists(path + "/" + year + "/" + Dept.No) == false)
+                    System.IO.Directory.CreateDirectory(path + "/" + year + "/" + Dept.No);
 
                 foreach (BillTemplate func in funcs)
                 {
-                    if (System.IO.Directory.Exists(path + "\\\\" + year + "\\\\" + Dept.No + "\\\\" + func.No) == false)
-                        System.IO.Directory.CreateDirectory(path + "\\\\" + year + "\\\\" + Dept.No + "\\\\" + func.No);
+                    if (System.IO.Directory.Exists(path + "/" + year + "/" + Dept.No + "/" + func.No) == false)
+                        System.IO.Directory.CreateDirectory(path + "/" + year + "/" + Dept.No + "/" + func.No);
                 }
             }
         }

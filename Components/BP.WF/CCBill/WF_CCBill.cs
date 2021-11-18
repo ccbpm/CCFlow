@@ -1058,7 +1058,12 @@ namespace BP.CCBill
                 explist += " WHERE 1=2";
             if (DataType.IsNullOrEmpty(dblist.DBSrc) == true)
                 dblist.DBSrc = "local";
-            SFDBSrc dbSrc = new SFDBSrc(dblist.DBSrc);
+
+            string sql = dblist.DBSrc;
+            sql = BP.WF.Glo.DealExp(sql, null) ;
+            explist = BP.WF.Glo.DealExp(explist, null);
+
+            SFDBSrc dbSrc = new SFDBSrc(sql);
             DataTable listDT = dbSrc.RunSQLReturnTable(explist);
 
             DataRow row = null;
@@ -1081,11 +1086,24 @@ namespace BP.CCBill
                     continue;
                 MapAttr attr = mapattrs.GetEntityByKey(this.FrmID + "_" + key) as MapAttr;
                 row = dt.NewRow();
+                if (attr == null)
+                {
+                    row["KeyOfEn"] = key;
+                    row["Name"] = key;
+                    row["Width"] = 120;
+                    row["UIContralType"] = UIContralType.TB ;
+                    row["LGType"] = FieldTypeS.Normal;
+                    row["MyDataType"] = DataType.AppString;
+                    row["UIBindKey"] = "";
+                    row["AtPara"] = "";
+                    dt.Rows.Add(row);
+                    continue;
+                }
                 row["KeyOfEn"] = attr.KeyOfEn;
                 row["Name"] = attr.Name;
                 row["Width"] = attr.UIWidthInt;
                 row["UIContralType"] = attr.UIContralType;
-                row["LGType"] = attr.LGType;
+                row["LGType"] =attr.LGType;
                 row["MyDataType"] = attr.MyDataType;
                 row["UIBindKey"] = attr.UIBindKey;
                 row["AtPara"] = attr.GetValStringByKey("AtPara");
@@ -1453,12 +1471,10 @@ namespace BP.CCBill
             DataSet ds = new DataSet();
             #region 查询语句
             DBList md = new DBList(this.FrmID);
-            if (DataType.IsNullOrEmpty(md.ExpList) == true
-                || DataType.IsNullOrEmpty(md.ExpCount) == true)
-                return "err@列表数据源和列表总数的查询不能为空";
+            if (DataType.IsNullOrEmpty(md.ExpList) == true)
+                return "err@列表数据源和的查询不能为空";
+
             string expList = md.ExpList;
-            string expCount = md.ExpCount;
-          
 
             //取出来查询条件.
             UserRegedit ur = new UserRegedit();
@@ -1468,6 +1484,8 @@ namespace BP.CCBill
             GEEntitys rpts = new GEEntitys(this.FrmID);
 
             Attrs attrs = rpts.GetNewEntity.EnMap.Attrs;
+            string systemKeys = "BillState,RDT,Starter,StarterName,OrgNo,AtPara,";//创建表单时的系统字段
+
             //获取查询条件
             DataTable whereDT = new DataTable();
             whereDT.Columns.Add("Key");
@@ -1493,6 +1511,8 @@ namespace BP.CCBill
                 string enumKey = ","; //求出枚举值外键.
                 foreach (Attr attr in attrs)
                 {
+                    if (systemKeys.IndexOf(attr.Key + ",") != -1)
+                        continue;
                     switch (attr.MyFieldType)
                     {
                         case FieldType.Enum:
@@ -1654,14 +1674,10 @@ namespace BP.CCBill
             #endregion
             if (md.DBType == 0)
             {
-                string mainTable = md.MainTable;
-                if (DataType.IsNullOrEmpty(mainTable) == false)
-                    mainTable = mainTable + ".";
+                
+                string mainTable = "A.";
                 string mainTablePK = md.MainTablePK;
-                if (expList.ToUpper().IndexOf("WHERE") == -1)
-                    expList += " WHERE 1=1 ";
-                if (expCount.ToUpper().IndexOf("WHERE") == -1)
-                    expCount += " WHERE 1=1 ";
+               
                 string whereSQL = "";
                 bool isFirstSearchKey = true;
                 bool isFirstDateKey = true;
@@ -1669,11 +1685,7 @@ namespace BP.CCBill
                 foreach (DataRow dataRow in whereDT.Rows)
                 {
                     string key = dataRow["Key"].ToString();
-                    if (expCount.IndexOf("@" + Key) != -1)
-                    {
-                        expCount = expCount.Replace("@" + Key, dataRow["Value"].ToString());
-                        continue;
-                    }
+                   
                     if (expList.IndexOf("@" + Key) != -1)
                     {
                         expList = expList.Replace("@" + Key, dataRow["Value"].ToString());
@@ -1685,22 +1697,23 @@ namespace BP.CCBill
                         if (isFirstSearchKey)
                         {
                             isFirstSearchKey = false;
-                            whereSQL += " AND (" + mainTable+ key + " like %" + dataRow["Value"].ToString() + "% ";
+                            whereSQL += " AND (" + mainTable+ key + " like '%" + dataRow["Value"].ToString() + "%' ";
                         }
                         else
-                            whereSQL += " OR " + mainTable + key + " like %" + dataRow["Value"].ToString() + "% ";
+                            whereSQL += " OR " + mainTable + key + " like '%" + dataRow["Value"].ToString() + "%' ";
                     }
+                    if (isFirstSearchKey == false && type.Equals("SearchKey") == false)
+                    {
+                        whereSQL += ")";
+                        isFirstSearchKey = true;
+                    }
+                       
                     if (type.Equals("StringKey") == true)
-                        whereSQL += " AND " + mainTable + key + " like %" + dataRow["Value"].ToString() + "% ";
+                        whereSQL += " AND " + mainTable + key + " like '%" + dataRow["Value"].ToString() + "%' ";
                     //时间解析
                     if (type.Equals("Date") == true)
                     {
-                        if (isFirstSearchKey == false)
-                        {
-                            isFirstSearchKey = true;
-                            expList += ")";
-                        }
-
+                        
                         if (isFirstDateKey == true)
                         {
                             isFirstDateKey = false;
@@ -1712,24 +1725,33 @@ namespace BP.CCBill
                     }
                     if (type.Equals("Select") == true || type.Equals("Normal") == true)
                     {
-                        if (isFirstSearchKey == false)
-                        {
-                            isFirstSearchKey = true;
-                            whereSQL += ")";
-                        }
                         whereSQL += " AND " + mainTable + key + " " + dataRow["Oper"].ToString() + " '" + dataRow["Value"].ToString() + "'";
 
                     }
                 }
 
-                expCount = expCount + whereSQL;
+                if(isFirstSearchKey == false)
+                    whereSQL += ")";
+                //expCount = expCount + whereSQL;
+                //expList = expList + whereSQL;
+               
+
+                expList = "SELECT * From(" + expList + ") AS A WHERE 1=1 " + whereSQL;//查询列数的
+                string expCount = "SELECT Count(*) From(" + expList + ") AS A WHERE 1=1 " + whereSQL;//查询总条数的
+                string expPageSize = "SELECT A.OID  From(" + expList + ") AS A WHERE 1=1 " + whereSQL;//查询分页使用的SQL语句
 
                 if (DataType.IsNullOrEmpty(md.DBSrc) == true)
                     md.DBSrc = "local";
-                
+
+                expCount = BP.WF.Glo.DealExp(expCount, null, null);
+                expPageSize = BP.WF.Glo.DealExp(expPageSize, null, null);
+
+
                 SFDBSrc dbsrc = new SFDBSrc(md.DBSrc);
                 int count = dbsrc.RunSQLReturnInt(expCount, 0);
-                dbsrc.DoQuery(rpts,expList, expCount, count, mainTable, md.MainTablePK, this.PageSize, this.PageIdx, ur.OrderBy);
+
+
+                dbsrc.DoQuery(rpts,expList, expPageSize,"OID",attrs,count, this.PageSize, this.PageIdx, ur.OrderBy);
                 ur.SetPara("RecCount", count);
                 ur.Save();
                 DataTable dt = rpts.ToDataTableField("DT");
@@ -2187,7 +2209,7 @@ namespace BP.CCBill
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + ext;
 
             //文件存放路径
-            string filePath = SystemConfig.PathOfTemp + "\\" + fileNewName;
+            string filePath = SystemConfig.PathOfTemp + "/" + fileNewName;
             HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), filePath);
 
             //从excel里面获得数据表.
@@ -2463,7 +2485,7 @@ namespace BP.CCBill
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + ext;
 
             //文件存放路径
-            string filePath = SystemConfig.PathOfTemp + "\\" + fileNewName;
+            string filePath = SystemConfig.PathOfTemp + "/" + fileNewName;
             HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), filePath);
 
             //从excel里面获得数据表.
@@ -3117,8 +3139,8 @@ namespace BP.CCBill
             rpt.SetValByKey("BillState", (int)gb.BillState);
             rpt.Update();
             return workID.ToString();
-
         }
+
         #region 外部流程网页授权URL
         public string DictFlow_Qcode()
         {

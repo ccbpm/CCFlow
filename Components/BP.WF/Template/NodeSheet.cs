@@ -125,7 +125,6 @@ namespace BP.WF.Template
                    EmpAttr.No, defDeptVal, "@No=编号@Name=名称@FK_Dept=部门");
 
 
-
                 map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node);
 
                 // 傻瓜表单可以调用的子流程. 2014.10.19 去掉.

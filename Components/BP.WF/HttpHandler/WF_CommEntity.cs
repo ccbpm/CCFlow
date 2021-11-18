@@ -321,7 +321,7 @@ namespace BP.WF.HttpHandler
 
             filePath = SystemConfig.PathOfTemp + filename;
 
-            string tempPath = SystemConfig.PathOfTemp + refPKVal+"\\";
+            string tempPath = SystemConfig.PathOfTemp + refPKVal+"/";
             if (System.IO.Directory.Exists(tempPath) == false)
                 System.IO.Directory.CreateDirectory(tempPath);
 
@@ -333,7 +333,7 @@ namespace BP.WF.HttpHandler
                 string ext =  string.IsNullOrWhiteSpace(dt.GetValByKey("MyFileExt") as string) ? "" : dt.GetValByKey("MyFileExt").ToString(); 
                 if (DataType.IsNullOrEmpty(ext) == true)
                     continue;
-                myFilePath = myFilePath + "\\" + pkval + "." + ext;
+                myFilePath = myFilePath + "/" + pkval + "." + ext;
                 if(System.IO.File.Exists(myFilePath) == true)
                     System.IO.File.Copy(myFilePath, tempPath + pkval + "." + ext, true);
             }

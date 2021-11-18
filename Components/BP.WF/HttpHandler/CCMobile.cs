@@ -342,7 +342,6 @@ namespace BP.WF.HttpHandler
             if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 sqlOrgNoWhere = " AND OrgNo='" + BP.Web.WebUser.OrgNo + "'";
 
-
             string tSpan = this.GetRequestVal("TSpan");
             if (tSpan == "")
                 tSpan = null;

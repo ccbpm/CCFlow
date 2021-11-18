@@ -53,6 +53,10 @@ namespace BP.CCBill.Template
         /// Icon
         /// </summary>
         public const string Icon = "Icon";
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public const string OrgNo = "OrgNo";
     }
     /// <summary>
     /// 分组
@@ -95,6 +99,17 @@ namespace BP.CCBill.Template
             set
             {
                 this.SetValByKey(GroupMethodAttr.FrmID, value);
+            }
+        }
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStrByKey(GroupMethodAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(GroupMethodAttr.OrgNo, value);
             }
         }
         public string MethodType
@@ -176,6 +191,9 @@ namespace BP.CCBill.Template
                 map.AddTBString(GroupMethodAttr.Name, null, "标签", true, false, 0, 500, 20, true);
                 map.AddTBString(GroupMethodAttr.Icon, null, "Icon", true, true, 0, 200, 20, true);
 
+                map.AddTBString(GroupMethodAttr.OrgNo, null, "OrgNo", true, true, 0, 40, 20, true);
+
+
                 map.AddTBInt(GroupMethodAttr.Idx, 0, "顺序号", true, false);
                 map.AddTBAtParas(3000);
                 #endregion 字段.
@@ -215,6 +233,8 @@ namespace BP.CCBill.Template
             //设置主键.
             if (DataType.IsNullOrEmpty(this.No) == true)
                 this.No = DBAccess.GenerGUID();
+
+            this.OrgNo = BP.Web.WebUser.OrgNo;
 
             return base.beforeInsert();
         }

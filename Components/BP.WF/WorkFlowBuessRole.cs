@@ -1483,10 +1483,10 @@ namespace BP.WF
 
                 //生成标题与内容.
                 string ccTitle = ccEn.CCTitle.Clone() as string;
-                ccTitle = BP.WF.Glo.DealExp(ccTitle, rpt, null);
+                ccTitle = BP.WF.Glo.DealExp(ccTitle, rpt);
 
                 string ccDoc = ccEn.CCDoc.Clone() as string;
-                ccDoc = BP.WF.Glo.DealExp(ccDoc, rpt, null);
+                ccDoc = BP.WF.Glo.DealExp(ccDoc, rpt);
 
                 ccDoc = ccDoc.Replace("@Accepter", toUserNo);
                 ccTitle = ccTitle.Replace("@Accepter", toUserNo);
@@ -1602,7 +1602,7 @@ namespace BP.WF
             PushMsgs pms = new PushMsgs();
             pms.Retrieve(PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Event, EventListNode.CCAfter);
 
-            string mailTemp = DataType.ReadTextFile2Html(SystemConfig.PathOfDataUser + "EmailTemplete\\CC_" + WebUser.SysLang + ".txt");
+            string mailTemp = DataType.ReadTextFile2Html(SystemConfig.PathOfDataUser + "EmailTemplete/CC_" + WebUser.SysLang + ".txt");
             foreach (DictionaryEntry item in ht)
             {
                 ccDoc = ccDoc.Replace("@Accepter", item.Value.ToString());

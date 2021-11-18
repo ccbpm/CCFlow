@@ -229,12 +229,10 @@ namespace BP.WF
                             string cType = dr["CtrlType"] as string;
                             if (cType == null)
                                 continue;
-
                             if (cType.Equals("FWC") == true)
                                 isHave = true;
                             if (cType.Equals("SubFlow") == true)
                                 isHaveSubFlow = true;
-
                         }
 
                         if (isHave == false)
@@ -261,7 +259,7 @@ namespace BP.WF
                 }
                 #endregion 没有审核组件分组就增加上审核组件分组.
                 #region 增加父子流程组件
-                if (nd.HisFormType == NodeFormType.RefOneFrmTree &&DataType.IsNullOrEmpty(frmNode.MyPK) == false && frmNode.SFSta != FrmSubFlowSta.Disable)
+                if (nd.HisFormType == NodeFormType.RefOneFrmTree && DataType.IsNullOrEmpty(frmNode.MyPK) == false && frmNode.SFSta != FrmSubFlowSta.Disable)
                 {
                     DataTable gf = myds.Tables["Sys_GroupField"];
                    
@@ -372,8 +370,6 @@ namespace BP.WF
                     myds.Tables.Remove("Sys_GroupField");
                     myds.Tables.Add(dtGF);
                     #endregion 处理字段分组排序. groupfields
-
-                    
 
                     #region 处理 mapattrs
                     //求当前表单的字段集合.
@@ -901,7 +897,7 @@ namespace BP.WF
                 }
                 #endregion 增加流程节点表单绑定信息.
 
-                // myds.WriteXml("c:\\11.xml");
+                // myds.WriteXml("c:/11.xml");
 
                 return myds;
             }

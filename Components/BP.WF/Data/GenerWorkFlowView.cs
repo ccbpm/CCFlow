@@ -755,13 +755,13 @@ namespace BP.WF.Data
 
                 RefMethod rm = new RefMethod();
 
-
                 rm = new RefMethod();
-                //rm.Icon = "../../WF/Img/Btn/CC.gif";
-                rm.Icon = "icon-key";
-                rm.Title = "移交";
-
-                rm.ClassMethodName = this.ToString() + ".DoFlowShift";
+                rm.Title = "轨迹查看";
+                rm.ClassMethodName = this.ToString() + ".DoTrack";
+                // rm.Icon = "../../WF/Img/Track.png";
+                rm.Icon = "icon-graph";
+        //        rm.IsForEns = true;
+                rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
@@ -776,40 +776,21 @@ namespace BP.WF.Data
                 rm.HisAttrs.AddTBString("Note", null, "回滚原因", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                //rm.Icon = "../../WF/Img/Btn/CC.gif";
-                rm.Icon = "icon-social-tumblr";
-                rm.Title = "跳转";
-                rm.IsForEns = false;
-                rm.ClassMethodName = this.ToString() + ".DoFlowSkip";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                ////rm.Icon = "../../WF/Img/Btn/CC.gif";
+                //rm.Icon = "icon-social-tumblr";
+                //rm.Title = "跳转";
+                //rm.IsForEns = false;
+                //rm.ClassMethodName = this.ToString() + ".DoFlowSkip";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                //rm.Icon = "../../WF/Img/Btn/CC.gif";
-                rm.Icon = "icon-wrench";
-                rm.Title = "修复数据";
-                //  rm.Title = "修复该流程数据实例";
-
-                rm.IsForEns = false;
-                rm.ClassMethodName = this.ToString() + ".RepairDataIt";
-                rm.RefMethodType = RefMethodType.Func;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "轨迹查看";
-                rm.ClassMethodName = this.ToString() + ".DoTrack";
-                // rm.Icon = "../../WF/Img/Track.png";
-                rm.Icon = "icon-graph";
-                rm.IsForEns = true;
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+            
 
                 rm = new RefMethod();
                 rm.Title = "轨迹修改";
                 rm.Icon = "icon-graph";
-                rm.IsForEns = false;
+             //   rm.IsForEns = false;
                 rm.ClassMethodName = this.ToString() + ".DoEditTrack";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -851,6 +832,31 @@ namespace BP.WF.Data
                 rm.Icon = "icon-close";
                 rm.IsForEns = false;
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                //rm.Icon = "../../WF/Img/Btn/CC.gif";
+                rm.Icon = "icon-wrench";
+                rm.Title = "修复数据";
+                //  rm.Title = "修复该流程数据实例";
+
+                rm.IsForEns = false;
+                rm.ClassMethodName = this.ToString() + ".RepairDataIt";
+                rm.RefMethodType = RefMethodType.Func;
+                map.AddRefMethod(rm);
+
+
+
+                rm = new RefMethod();
+                //rm.Icon = "../../WF/Img/Btn/CC.gif";
+                rm.Icon = "icon-key";
+                rm.Title = "移交";
+
+                rm.ClassMethodName = this.ToString() + ".DoFlowShift";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
+
 
                 this._enMap = map;
                 return this._enMap;
@@ -915,7 +921,7 @@ namespace BP.WF.Data
             wk.OID = this.WorkID;
             wk.RetrieveFromDBSources();
 
-            string file = "c:\\temp\\" + this.WorkID + ".txt";
+            string file = "c:/temp/" + this.WorkID + ".txt";
             try
             {
                 DBAccess.GetFileFromDB(file, trackTable, "MyPK", mypk, "FrmDB");
@@ -980,7 +986,7 @@ namespace BP.WF.Data
                     wk.OID = workid;
                     wk.RetrieveFromDBSources();
 
-                    string file = "c:\\temp\\" + mypk + ".txt";
+                    string file = "c:/temp/" + mypk + ".txt";
                     try
                     {
                         DBAccess.GetFileFromDB(file, trackTable, "MyPK", mypk, "FrmDB");

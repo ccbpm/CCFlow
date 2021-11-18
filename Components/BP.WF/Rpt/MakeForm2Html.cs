@@ -699,8 +699,8 @@ namespace BP.WF
                     sb.Append("<ul>");
 
                     //判断是否有这个目录.
-                    if (System.IO.Directory.Exists(path + "\\pdf\\") == false)
-                        System.IO.Directory.CreateDirectory(path + "\\pdf\\");
+                    if (System.IO.Directory.Exists(path + "/pdf/") == false)
+                        System.IO.Directory.CreateDirectory(path + "/pdf/");
 
                     //文件加密
                     bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
@@ -714,7 +714,7 @@ namespace BP.WF
                         {
                             try
                             {
-                                string toFile = path + "\\pdf\\" + item.FileName;
+                                string toFile = path + "/pdf/" + item.FileName;
                                 if (System.IO.File.Exists(toFile) == false)
                                 {
                                     //把文件copy到,
@@ -745,7 +745,7 @@ namespace BP.WF
                         {
                             try
                             {
-                                string toFile = path + "\\pdf\\" + item.FileName;
+                                string toFile = path + "/pdf/" + item.FileName;
                                 if (System.IO.File.Exists(toFile) == false)
                                 {
                                     //把文件copy到,
@@ -758,7 +758,7 @@ namespace BP.WF
                                     }
 
                                     //把文件copy到,
-                                    System.IO.File.Copy(fileTempDecryPath, path + "\\pdf\\" + item.FileName, true);
+                                    System.IO.File.Copy(fileTempDecryPath, path + "/pdf/" + item.FileName, true);
                                 }
                                 sb.Append("<li><a href='" + item.FileName + "'>" + item.FileName + "</a></li>");
                             }
@@ -1224,12 +1224,12 @@ namespace BP.WF
                         sb.Append("<ul>");
 
                         //判断是否有这个目录.
-                        if (System.IO.Directory.Exists(path + "\\pdf\\") == false)
-                            System.IO.Directory.CreateDirectory(path + "\\pdf\\");
+                        if (System.IO.Directory.Exists(path + "/pdf/") == false)
+                            System.IO.Directory.CreateDirectory(path + "/pdf/");
 
                         foreach (FrmAttachmentDB item in athDBs)
                         {
-                            String fileTo = path + "\\pdf\\" + item.FileName;
+                            String fileTo = path + "/pdf/" + item.FileName;
                             //加密信息
                             bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
                             bool isEncrypt = item.GetParaBoolen("IsEncrypt");
@@ -1539,8 +1539,8 @@ namespace BP.WF
 
 
                 //判断是否有这个目录.
-                if (System.IO.Directory.Exists(path + "\\pdf\\") == false)
-                    System.IO.Directory.CreateDirectory(path + "\\pdf\\");
+                if (System.IO.Directory.Exists(path + "/pdf/") == false)
+                    System.IO.Directory.CreateDirectory(path + "/pdf/");
 
                 //文件加密
                 bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
@@ -1566,7 +1566,7 @@ namespace BP.WF
                     {
                         try
                         {
-                            string toFile = path + "\\pdf\\" + item.FileName;
+                            string toFile = path + "/pdf/" + item.FileName;
                             if (System.IO.File.Exists(toFile) == false)
                             {
                                 //获取文件是否加密
@@ -1594,7 +1594,7 @@ namespace BP.WF
                     {
                         try
                         {
-                            string toFile = path + "\\pdf\\" + item.FileName;
+                            string toFile = path + "/pdf/" + item.FileName;
                             if (System.IO.File.Exists(toFile) == false)
                             {
                                 //把文件copy到,
@@ -1607,7 +1607,7 @@ namespace BP.WF
                                 }
 
                                 //把文件copy到,
-                                System.IO.File.Copy(fileTempDecryPath, path + "\\pdf\\" + item.FileName, true);
+                                System.IO.File.Copy(fileTempDecryPath, path + "/pdf/" + item.FileName, true);
                             }
                             sb.Append("<td>"+item.FileName + "</td>");
                         }
@@ -1648,7 +1648,7 @@ namespace BP.WF
 
             //存放信息地址
             string hostURL = SystemConfig.GetValByKey("HostURL", "");
-            string path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + "ND" + node.NodeID + "\\" + workid;
+            string path = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid;
             string frmID = node.NodeFrmID;
 
             //处理正确的文件名.
@@ -1675,7 +1675,7 @@ namespace BP.WF
                 if (resultMsg.IndexOf("err@") != -1)
                     return resultMsg;
 
-                string billUrl = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + "ND" + node.NodeID + "\\" + workid + "\\index.htm";
+                string billUrl = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/index.htm";
 
                 resultMsg = MakeHtmlDocument(frmID, workid, flowNo, fileNameFormat, urlIsHostUrl, path, billUrl, "ND" + node.NodeID, basePath, htmlString);
 
@@ -1686,13 +1686,13 @@ namespace BP.WF
 
                 //#region 把所有的文件做成一个zip文件.
                 //生成pdf文件
-                string pdfPath = path + "\\pdf";
+                string pdfPath = path + "/pdf";
 
                 if (System.IO.Directory.Exists(pdfPath) == false)
                     System.IO.Directory.CreateDirectory(pdfPath);
 
-                string pdfFile = pdfPath + "\\" + fileNameFormat + ".pdf";
-                string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware\\wkhtmltox\\wkhtmltopdf.exe";
+                string pdfFile = pdfPath + "/" + fileNameFormat + ".pdf";
+                string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware/wkhtmltox/wkhtmltopdf.exe";
                 try
                 {
                     Html2Pdf(pdfFileExe, billUrl, pdfFile);
@@ -1707,7 +1707,7 @@ namespace BP.WF
                 }
 
                 //生成压缩文件
-                string zipFile = path + "\\..\\" + fileNameFormat + ".zip";
+                string zipFile = path + "/../" + fileNameFormat + ".zip";
 
                 System.IO.FileInfo finfo = new FileInfo(zipFile);
                 ZipFilePath = finfo.FullName; //文件路径.
@@ -1732,8 +1732,8 @@ namespace BP.WF
             {
 
                 //生成pdf文件
-                string pdfPath = path + "\\pdf";
-                string pdfTempPath = path + "\\pdfTemp";
+                string pdfPath = path + "/pdf";
+                string pdfTempPath = path + "/pdfTemp";
 
                 DataRow dr = null;
                 resultMsg = setPDFPath("ND" + node.NodeID, workid, flowNo, gwf);
@@ -1752,7 +1752,7 @@ namespace BP.WF
                     if (flowNo != null && item.WhoIsPK == WhoIsPK.PWorkID) //如果是父子流程
                         workid = gwf.PWorkID;
                     //获取表单的信息执行打印
-                    string billUrl = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + "ND" + node.NodeID + "\\" + workid + "\\" + item.FK_Frm + "index.htm";
+                    string billUrl = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/" + item.FK_Frm + "index.htm";
                     resultMsg = MakeHtmlDocument(item.FK_Frm, workid, flowNo, fileNameFormat, urlIsHostUrl, path, billUrl, "ND" + node.NodeID, basePath);
 
                     if (resultMsg.IndexOf("err@") != -1)
@@ -1765,8 +1765,8 @@ namespace BP.WF
                         System.IO.Directory.CreateDirectory(pdfTempPath);
 
                     fileNameFormat = fileNameFormat.Substring(0, fileNameFormat.Length - 1);
-                    string pdfFormFile = pdfTempPath + "\\" + item.FK_Frm + ".pdf";
-                    string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware\\wkhtmltox\\wkhtmltopdf.exe";
+                    string pdfFormFile = pdfTempPath + "/" + item.FK_Frm + ".pdf";
+                    string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware/wkhtmltox/wkhtmltopdf.exe";
                     try
                     {
                         Html2Pdf(pdfFileExe, resultMsg, pdfFormFile);
@@ -1781,7 +1781,7 @@ namespace BP.WF
                 }
 
                 //pdf合并
-                string pdfFile = pdfPath + "\\" + fileNameFormat + ".pdf";
+                string pdfFile = pdfPath + "/" + fileNameFormat + ".pdf";
                 //开始合并处理
                 if (System.IO.Directory.Exists(pdfPath) == false)
                     System.IO.Directory.CreateDirectory(pdfPath);
@@ -1796,7 +1796,7 @@ namespace BP.WF
                     ht.Add("pdf", SystemConfig.GetValByKey("HostURL", "") + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
 
                 //生成压缩文件
-                string zipFile = path + "\\..\\" + fileNameFormat + ".zip";
+                string zipFile = path + "/../" + fileNameFormat + ".zip";
 
                 System.IO.FileInfo finfo = new FileInfo(zipFile);
                 ZipFilePath = finfo.FullName; //文件路径.
@@ -1830,7 +1830,7 @@ namespace BP.WF
             string fileNameFormat = null;
 
             //存放信息地址
-            string path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + bill.No + "\\" + workid;
+            string path = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + bill.No + "/" + workid;
 
             //处理正确的文件名.
             if (fileNameFormat == null)
@@ -1845,7 +1845,7 @@ namespace BP.WF
             Hashtable ht = new Hashtable();
 
             //生成pdf文件
-            string pdfPath = path + "\\pdf";
+            string pdfPath = path + "/pdf";
 
 
             DataRow dr = null;
@@ -1854,7 +1854,7 @@ namespace BP.WF
                 return resultMsg;
 
             //获取表单的信息执行打印
-            string billUrl = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + bill.No + "\\" + workid + "\\" + "index.htm";
+            string billUrl = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + bill.No + "/" + workid + "/" + "index.htm";
             resultMsg = MakeHtmlDocument(bill.No, workid, null, fileNameFormat, urlIsHostUrl, path, billUrl, frmId, basePath, htmlString);
 
             if (resultMsg.IndexOf("err@") != -1)
@@ -1867,8 +1867,8 @@ namespace BP.WF
                 System.IO.Directory.CreateDirectory(pdfPath);
 
             fileNameFormat = fileNameFormat.Substring(0, fileNameFormat.Length - 1);
-            string pdfFormFile = pdfPath + "\\" + bill.Name + ".pdf";  //生成的路径.
-            string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware\\wkhtmltox\\wkhtmltopdf.exe";
+            string pdfFormFile = pdfPath + "/" + bill.Name + ".pdf";  //生成的路径.
+            string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware/wkhtmltox/wkhtmltopdf.exe";
             try
             {
                 Html2Pdf(pdfFileExe, resultMsg, pdfFormFile);
@@ -1881,14 +1881,14 @@ namespace BP.WF
             {
                 /*有可能是因为文件路径的错误， 用补偿的方法在执行一次, 如果仍然失败，按照异常处理. */
                 fileNameFormat = DBAccess.GenerGUID();
-                pdfFormFile = pdfPath + "\\" + fileNameFormat + ".pdf";
+                pdfFormFile = pdfPath + "/" + fileNameFormat + ".pdf";
 
                 Html2Pdf(pdfFileExe, resultMsg, pdfFormFile);
                 ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS", "") + "/InstancePacketOfData/" + frmId + "/" + workid + "/pdf/" + bill.Name + ".pdf");
             }
 
             //生成压缩文件
-            string zipFile = path + "\\..\\" + fileNameFormat + ".zip";
+            string zipFile = path + "/../" + fileNameFormat + ".zip";
 
             System.IO.FileInfo finfo = new FileInfo(zipFile);
             ZipFilePath = finfo.FullName; //文件路径.
@@ -1919,7 +1919,7 @@ namespace BP.WF
 
             //存放信息地址
             string hostURL = SystemConfig.GetValByKey("HostURL", "");
-            string path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + "ND" + node.NodeID + "\\" + workid;
+            string path = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid;
 
             //处理正确的文件名.
             if (fileNameFormat == null)
@@ -1938,7 +1938,7 @@ namespace BP.WF
             Hashtable ht = new Hashtable();
 
             //生成pdf文件
-            string pdfPath = path + "\\pdf";
+            string pdfPath = path + "/pdf";
 
 
             DataRow dr = null;
@@ -1959,7 +1959,7 @@ namespace BP.WF
                 workid = gwf.PWorkID;
 
             //获取表单的信息执行打印
-            string billUrl = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + "ND" + node.NodeID + "\\" + workid + "\\" + frmNode.FK_Frm + "index.htm";
+            string billUrl = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/" + frmNode.FK_Frm + "index.htm";
             resultMsg = MakeHtmlDocument(frmNode.FK_Frm, workid, flowNo, fileNameFormat, urlIsHostUrl, path, billUrl, "ND" + node.NodeID, basePath);
 
             if (resultMsg.IndexOf("err@") != -1)
@@ -1972,8 +1972,8 @@ namespace BP.WF
                 System.IO.Directory.CreateDirectory(pdfPath);
 
             fileNameFormat = fileNameFormat.Substring(0, fileNameFormat.Length - 1);
-            string pdfFormFile = pdfPath + "\\" + frmNode.FK_Frm + ".pdf";
-            string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware\\wkhtmltox\\wkhtmltopdf.exe";
+            string pdfFormFile = pdfPath + "/" + frmNode.FK_Frm + ".pdf";
+            string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware/wkhtmltox/wkhtmltopdf.exe";
             try
             {
                 Html2Pdf(pdfFileExe, resultMsg, pdfFormFile);
@@ -1988,7 +1988,7 @@ namespace BP.WF
             {
                 /*有可能是因为文件路径的错误， 用补偿的方法在执行一次, 如果仍然失败，按照异常处理. */
                 fileNameFormat = DBAccess.GenerGUID();
-                pdfFormFile = pdfPath + "\\" + fileNameFormat + ".pdf";
+                pdfFormFile = pdfPath + "/" + fileNameFormat + ".pdf";
 
                 Html2Pdf(pdfFileExe, resultMsg, pdfFormFile);
                 ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS", "") + "/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + frmNode.FK_Frm + ".pdf");
@@ -2012,7 +2012,7 @@ namespace BP.WF
             BubbleSort(ff2);
             foreach (FileInfo temp in ff2)
             {
-                filelist2.Add(Directorypath + "\\" + temp.Name);
+                filelist2.Add(Directorypath + "/" + temp.Name);
             }
 
             PdfReader reader;
@@ -2060,20 +2060,20 @@ namespace BP.WF
         private static string setPDFPath(string frmID, long workid, string flowNo, GenerWorkFlow gwf)
         {
             //准备目录文件.
-            string path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + frmID + "\\";
+            string path = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + frmID + "/";
             try
             {
 
-                path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + frmID + "\\";
+                path = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + frmID + "/";
                 if (System.IO.Directory.Exists(path) == false)
                     System.IO.Directory.CreateDirectory(path);
 
-                path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + frmID + "\\" + workid;
+                path = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + frmID + "/" + workid;
                 if (System.IO.Directory.Exists(path) == false)
                     System.IO.Directory.CreateDirectory(path);
 
                 //把模版文件copy过去.
-                string templateFilePath = SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\";
+                string templateFilePath = SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/";
                 System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(templateFilePath);
                 System.IO.FileInfo[] finfos = dir.GetFiles();
                 if (finfos.Length == 0)
@@ -2085,9 +2085,9 @@ namespace BP.WF
 
                     if (fl.Name.Contains("htm"))
                         continue;
-                    if (System.IO.File.Exists(path + "\\" + fl.FullName) == true)
-                        System.IO.File.Delete(path + "\\" + fl.FullName);
-                    System.IO.File.Copy(fl.FullName, path + "\\" + fl.Name, true);
+                    if (System.IO.File.Exists(path + "/" + fl.FullName) == true)
+                        System.IO.File.Delete(path + "/" + fl.FullName);
+                    System.IO.File.Copy(fl.FullName, path + "/" + fl.Name, true);
                 }
 
             }
@@ -2100,7 +2100,7 @@ namespace BP.WF
             string billUrl = hostURL + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/index.htm";
 
             // begin生成二维码.
-            string pathQR = path + "\\QR.png"; // key.Replace("OID.Img@AppPath", SystemConfig.PathOfWebApp);
+            string pathQR = path + "/QR.png"; // key.Replace("OID.Img@AppPath", SystemConfig.PathOfWebApp);
             if (SystemConfig.GetValByKeyBoolen("IsShowQrCode", false) == true)
             {
                 /*说明是图片文件.*/
@@ -2204,7 +2204,7 @@ namespace BP.WF
 
 
                     string str = "<iframe style='width:100%;height:auto;' ID='" + mapData.No + "'    src='" + url + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe></div>";
-                    string docs1 = DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\indexUrl.htm");
+                    string docs1 = DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/indexUrl.htm");
                     //docs1 = docs1.Replace("@Docs", DownLoadFielToMemoryStream(url));
 
                     string url1 = "http://www.baidu.com";
@@ -2227,7 +2227,7 @@ namespace BP.WF
                     return indexFile;
                 }else if(mapData.HisFrmType == FrmType.Develop)
                 {
-                    string ddocs = DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\indexDevelop.htm");
+                    string ddocs = DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/indexDevelop.htm");
 
                     //获取附件
 
@@ -2290,9 +2290,9 @@ namespace BP.WF
                     if (words.Contains("@") == true)
                         words = Glo.DealExp(words, en);
 
-                    string templateFilePathMy = SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\";
+                    string templateFilePathMy = SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/";
                     WaterImageManage wim = new WaterImageManage();
-                    wim.DrawWords(templateFilePathMy + "ShuiYin.png", words, float.Parse("0.15"), ImagePosition.Center, path + "\\ShuiYin.png");
+                    wim.DrawWords(templateFilePathMy + "ShuiYin.png", words, float.Parse("0.15"), ImagePosition.Center, path + "/ShuiYin.png");
                 }
                
                 #endregion
@@ -2303,7 +2303,7 @@ namespace BP.WF
                 #region 替换模版文件..
                 //首先判断是否有约定的文件.
                 string docs = "";
-                string tempFile = SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\" + mapData.No + ".htm";
+                string tempFile = SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/" + mapData.No + ".htm";
                 if (System.IO.File.Exists(tempFile) == false)
                 {
                     if (gwf != null)
@@ -2319,13 +2319,13 @@ namespace BP.WF
 
                     if (mapData.HisFrmType == FrmType.FoolForm)
                     {
-                        docs = DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\indexFool.htm");
+                        docs = DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/indexFool.htm");
                         sb = BP.WF.MakeForm2Html.GenerHtmlOfFool(mapData, frmID, workid, en, path, flowNo, nodeID, basePath, nd.HisFormType);
                         docs = docs.Replace("@Width", mapData.FrmW.ToString() + "px");
                     }
                     else if (mapData.HisFrmType == FrmType.FreeFrm)
                     {
-                        docs = DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\indexFree.htm");
+                        docs = DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/indexFree.htm");
                         sb = BP.WF.MakeForm2Html.GenerHtmlOfFree(mapData, frmID, workid, en, path, flowNo, nodeID, basePath);
                         docs = docs.Replace("@Width", (mapData.FrmW * 1.5).ToString() + "px");
                     }
@@ -2363,14 +2363,14 @@ namespace BP.WF
                     }
 
                     //替换模版尾部的打印说明信息.
-                    String pathInfo = SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\EndInfo\\" + flowNo + ".txt";
+                    String pathInfo = SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/EndInfo/" + flowNo + ".txt";
                     if (System.IO.File.Exists(pathInfo) == false)
-                        pathInfo = SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\EndInfo\\Default.txt";
+                        pathInfo = SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/EndInfo/Default.txt";
 
                     docs = docs.Replace("@EndInfo", DataType.ReadTextFile(pathInfo));
                 }
 
-                //indexFile = SystemConfig.getPathOfDataUser() + "\\InstancePacketOfData\\" + frmID + "\\" + workid + "\\index.htm";
+                //indexFile = SystemConfig.getPathOfDataUser() + "/InstancePacketOfData/" + frmID + "/" + workid + "/index.htm";
                 DataType.WriteFile(indexFile, docs);
 
                 return indexFile;

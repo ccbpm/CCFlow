@@ -34,8 +34,11 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             string sql = "";
-            sql = "SELECT 'F' + No as No,Name, 'F' + ParentNo as ParentNo FROM WF_FlowSort WHERE No='" + fk_flowsort + "' OR ParentNo='" + fk_flowsort + "' ORDER BY Idx";
-
+            if (DBAccess.AppCenterDBType == DBType.MySQL)
+                sql = "SELECT CONCAT('F' , No) as No,Name, CONCAT('F' ,ParentNo) as ParentNo FROM WF_FlowSort WHERE No='" + fk_flowsort + "' OR ParentNo='" + fk_flowsort + "' ORDER BY Idx";
+            else 
+                sql = "SELECT 'F' + No as No,Name, 'F' + ParentNo as ParentNo FROM WF_FlowSort WHERE No='" + fk_flowsort + "' OR ParentNo='" + fk_flowsort + "' ORDER BY Idx";
+            
             DataTable dtFlowSorts = DBAccess.RunSQLReturnTable(sql);
             //if (dtFlowSort.Rows.Count == 0)
             //{
@@ -55,9 +58,15 @@ namespace BP.WF.HttpHandler
             }
 
             //sql = "SELECT No,Name, FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' ";
-            sql = "SELECT  No,(NO + '.' + NAME) as Name, 'F' + FK_FlowSort as ParentNo, Idx FROM WF_Flow where FK_FlowSort='" + fk_flowsort + "' ";
-            sql += " ORDER BY Idx ";
 
+            if (DBAccess.AppCenterDBType == DBType.MySQL)
+            
+                sql = "SELECT  No,CONCAT(NO ,'.',NAME) as Name, CONCAT('F',FK_FlowSort) as ParentNo, Idx FROM WF_Flow where FK_FlowSort='" + fk_flowsort + "' ";
+            else
+                sql = "SELECT  No,(NO + '.' + NAME) as Name, 'F' + FK_FlowSort as ParentNo, Idx FROM WF_Flow where FK_FlowSort='" + fk_flowsort + "' ";
+            
+            sql += " ORDER BY Idx ";
+            
             DataTable dtFlows = DBAccess.RunSQLReturnTable(sql);
             dtFlows.TableName = "Flows";
             ds.Tables.Add(dtFlows);
@@ -118,65 +127,6 @@ namespace BP.WF.HttpHandler
         public WF_Admin_CCBPMDesigner()
         {
         }
-        /// <summary>
-        /// 保存节点名字.
-        /// </summary>
-        /// <returns>返回保存方法</returns>
-        public string Designer_SaveNodeName()
-        { 
-            string sql = "UPDATE WF_Node SET Name='" + this.Name + "' WHERE NodeID=" + this.FK_Node;
-            DBAccess.RunSQL(sql);
-
-            //表单ID.
-            string frmID = "ND" + this.FK_Node;
-            sql = "UPDATE Sys_MapData SET Name='" + this.Name + "' WHERE No='" + frmID + "'  AND ( Name='' OR Name IS Null) ";
-            DBAccess.RunSQL(sql);
-
-            // BP.WF.Template.Cond
-            //Node nd = new Node();
-            //nd.NodeID = this.FK_Node;
-            //nd.RetrieveFromDBSources();
-
-            //MapData md = new MapData();
-            //md.No = frmID;
-            //md.RetrieveFromDBSources();
-
-            //BP.WF.Template.NodeExt nodeExt = new BP.WF.Template.NodeExt(this.FK_Node);
-            //nodeExt.Name = this.Name;
-            //nodeExt.Update();
-
-            //BP.WF.Node node = new BP.WF.Node(this.FK_Node);
-            //node.Name = this.Name;
-            //node.Update();
-
-            //MapData mapData = new MapData("ND"+this.FK_Node);
-            //if ( DataType.IsNullOrEmpty(mapData.Name)==true)
-            //{
-            //    mapData.Name = this.Name;
-            //    mapData.Update();
-            //}
-
-            //修改分组名称.
-            var groups = new BP.Sys.GroupFields();
-            groups.Retrieve("FrmID", "ND" + this.FK_Node);
-            if (groups.Count == 1)
-            {
-                var group = groups[0] as BP.Sys.GroupField;
-                group.Lab = this.Name;
-                group.Update();
-            }
-
-            //清除指定的名字.
-            // Cash2019.ClearCashSpecEnName("BP.WF.Template.NodeExt");
-            // Cash2019.ClearCashSpecEnName("BP.WF.Node");
-            // Cash2019.ClearCashSpecEnName("BP.Sys.GroupField");
-
-            //清楚缓存.
-            Cash.ClearCash();
-
-            return "更新成功.";
-        }
-
         /// <summary>
         /// 执行流程设计图的保存.
         /// </summary>
@@ -310,17 +260,6 @@ namespace BP.WF.HttpHandler
             //return file;
             //return docs;
         }
-
-        #region 执行父类的重写方法.
-        /// <summary>
-        /// 默认执行的方法
-        /// </summary>
-        /// <returns></returns>
-        protected override string DoDefaultMethod()
-        {
-            return "err@没有判断的标记:" + this.DoType;
-        }
-        #endregion 执行父类的重写方法.
 
         /// <summary>
         /// 使管理员登录使管理员登录    /// </summary>
@@ -649,9 +588,9 @@ namespace BP.WF.HttpHandler
             //如果是单机版本，仅仅admin登录. 
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
             {
-                string adminer = SystemConfig.GetValByKey("Adminer","admin");
+                string adminer = SystemConfig.GetValByKey("Adminer", "admin");
 
-                if (adminer.IndexOf( emp.UserID)  ==-1 )
+                if (adminer.IndexOf(emp.UserID) == -1)
                     return "err@非admin，管理员账号不能登录.";
 
                 //让其登录.
@@ -1578,70 +1517,6 @@ namespace BP.WF.HttpHandler
             return treeJson;
         }
         /// <summary>
-        /// 创建一个新流程模版2019版本.
-        /// </summary>
-        /// <returns></returns>
-        public string Defualt_NewFlow_Del()
-        {
-            try
-            {
-                int runModel = this.GetRequestValInt("RunModel");
-                string FlowName = this.GetRequestVal("FlowName");
-                string FlowSort = this.GetRequestVal("FlowSort").Trim();
-                FlowSort = FlowSort.Trim();
-
-                int DataStoreModel = this.GetRequestValInt("DataStoreModel");
-                string PTable = this.GetRequestVal("PTable");
-                string FlowMark = this.GetRequestVal("FlowMark");
-                int FlowFrmModel = this.GetRequestValInt("FlowFrmModel");
-                string FrmUrl = this.GetRequestVal("FrmUrl");
-                string FlowVersion = this.GetRequestVal("FlowVersion");
-
-                string flowNo = BP.WF.Template.TemplateGlo.NewFlow(FlowSort, FlowName,
-                        Template.DataStoreModel.SpecTable, PTable, FlowMark);
-
-                Flow fl = new Flow(flowNo);
-
-                #region 对极简版特殊处理. @liuqiang
-                //如果是简洁版.
-                if (runModel == 1)
-                {
-                    fl.FlowFrmModel = (BP.WF.FlowFrmModel)FlowFrmModel;
-                    fl.Update(); //更新表单类型.
-
-                    //预制权限数据.
-                    int nodeID = int.Parse(fl.No + "01");
-                    FrmNode fn = new FrmNode();
-                    fn.FK_Frm = "ND" + nodeID;
-                    fn.IsEnableFWC = FrmWorkCheckSta.Disable;
-                    fn.FK_Node = nodeID;
-                    fn.FK_Flow = flowNo;
-                    fn.FrmSln = FrmSln.Default;
-                    fn.Insert();
-
-                    nodeID = int.Parse(fl.No + "02");
-                    fn = new FrmNode();
-                    fn.FK_Frm = "ND" + nodeID;
-                    fn.IsEnableFWC = FrmWorkCheckSta.Disable;
-                    fn.FK_Node = nodeID;
-                    fn.FK_Flow = flowNo;
-                    fn.FrmSln = FrmSln.Default;
-                    fn.Insert();
-
-                }
-                #endregion 对极简版特殊处理. @liuqiang
-
-
-                //清空WF_Emp 的StartFlows ,让其重新计算.
-                DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
-                return flowNo;
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
-        }
-        /// <summary>
         /// 上移流程类别
         /// </summary>
         /// <returns></returns>
@@ -1775,26 +1650,23 @@ namespace BP.WF.HttpHandler
             formTree.Delete();
             return "删除成功";
         }
-
-        /// <summary>
-        /// 表单树 - 删除表单
-        /// </summary>
-        /// <returns></returns>
-        public string CCForm_DeleteCCFormMapData()
+        public string LetAdminLoginByToken()
         {
             try
             {
-                MapData mapData = new MapData(this.FK_MapData);
-                mapData.Delete();
-                return "删除成功.";
+                string userNo = this.GetRequestVal("UserNo");
+                string sid = this.GetRequestVal("SID");
+                if (BP.Web.WebUser.No.Equals(userNo) == true)
+                    return "info@已经成功登录.";
+
+                BP.WF.Dev2Interface.Port_Login(userNo, sid, BP.Web.WebUser.OrgNo);
+                return "info@登录成功";
             }
             catch (Exception ex)
             {
-                return "err@" + ex.Message;
+                return "err@登录失败:" + ex.Message;
             }
         }
-
-
         /// <summary>
         /// 让admin 登陆
         /// </summary>

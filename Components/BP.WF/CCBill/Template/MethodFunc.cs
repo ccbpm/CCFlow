@@ -115,7 +115,7 @@ namespace BP.CCBill.Template
         {
             get
             {
-                string file = SystemConfig.CCFlowAppPath + "WF\\CCBill\\Admin\\MethodDoc\\MethodDocDemoJS.txt";
+                string file = SystemConfig.CCFlowAppPath + "WF/CCBill/Admin/MethodDoc/MethodDocDemoJS.txt";
                 string doc = DataType.ReadTextFile(file); //读取文件.
                 doc = doc.Replace("/#", "+"); //为什么？
                 doc = doc.Replace("/$", "-"); //为什么？
@@ -129,7 +129,7 @@ namespace BP.CCBill.Template
         {
             get
             {
-                string file = SystemConfig.CCFlowAppPath + "WF\\CCBill\\Admin\\MethodDoc\\MethodDocDemoSQL.txt";
+                string file = SystemConfig.CCFlowAppPath + "WF/CCBill/Admin/MethodDoc/MethodDocDemoSQL.txt";
                 string doc = DataType.ReadTextFile(file); //读取文件.
                 doc = doc.Replace("@FrmID", this.FrmID);
                 return doc;

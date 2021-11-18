@@ -219,8 +219,8 @@ namespace BP.WF.HttpHandler
             //上传附件.
             var file = HttpContextHelper.RequestFiles(0);
             var fileName = file.FileName;
-            string path = SystemConfig.PathOfDataUser + "DocTemplate\\" + nd.FK_Flow;
-            string fileFullPath = path + "\\" + fileName;
+            string path = SystemConfig.PathOfDataUser + "DocTemplate/" + nd.FK_Flow;
+            string fileFullPath = path + "/" + fileName;
 
             //上传文件.
             if (System.IO.Directory.Exists(path)==false)
@@ -262,7 +262,7 @@ namespace BP.WF.HttpHandler
             fileName = fileName.Substring(fileName.IndexOf(this.GetRequestVal("TB_Name")));
             fileName = fileName.ToLower();
 
-            filepath = SystemConfig.PathOfDataUser + "CyclostyleFile\\" + fileName;
+            filepath = SystemConfig.PathOfDataUser + "CyclostyleFile/" + fileName;
             //file.SaveAs(filepath);
             HttpContextHelper.UploadFile(file, filepath);
 
@@ -313,13 +313,13 @@ namespace BP.WF.HttpHandler
             //response.Clear();
             //response.Buffer = true;
             //response.Charset = "utf-8";
-            //response.AppendHeader("Content-Disposition", string.Format("attachment;filename={0}", en.TempFilePath.Substring(MyFilePath.LastIndexOf('\\') + 1)));
+            //response.AppendHeader("Content-Disposition", string.Format("attachment;filename={0}", en.TempFilePath.Substring(MyFilePath.LastIndexOf('/') + 1)));
             //response.ContentEncoding = System.Text.Encoding.UTF8;
             //response.BinaryWrite(System.IO.File.ReadAllBytes(MyFilePath));
             //response.End();
 
             HttpContextHelper.ResponseWrite("Charset");
-            HttpContextHelper.ResponseWriteHeader("Content-Disposition", string.Format("attachment;filename={0}", en.TempFilePath.Substring(MyFilePath.LastIndexOf('\\') + 1)));
+            HttpContextHelper.ResponseWriteHeader("Content-Disposition", string.Format("attachment;filename={0}", en.TempFilePath.Substring(MyFilePath.LastIndexOf('/') + 1)));
             HttpContextHelper.Response.ContentType = "application/octet-stream;charset=utf-8";
             HttpContextHelper.ResponseWriteFile(MyFilePath);
         }

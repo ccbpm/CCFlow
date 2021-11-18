@@ -193,7 +193,7 @@ namespace BP.WF.HttpHandler
                         {
                             BP.WF.DTS.InitBillDir dir = new BP.WF.DTS.InitBillDir();
                             dir.Do();
-                            path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "\\" + WebUser.FK_Dept + "\\" + func.No + "\\";
+                            path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "/" + WebUser.FK_Dept + "/" + func.No + "/";
                             string msgErr = "@" + string.Format("生成单据失败，请让管理员检查目录设置") + "[" + BP.WF.Glo.FlowFileBill + "]。@Err：" + ex.Message + " @File=" + file + " @Path:" + path;
                             billInfo += "@<font color=red>" + msgErr + "</font>";
                             throw new Exception(msgErr + "@其它信息:" + ex.Message);
@@ -242,7 +242,7 @@ namespace BP.WF.HttpHandler
                 if (func.HisBillFileType == BillFileType.PDF)
                     billUrl = billUrl.Replace(".doc", ".pdf");
 
-                path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "\\" + WebUser.FK_Dept + "\\" + func.No + "\\";
+                path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "/" + WebUser.FK_Dept + "/" + func.No + "/";
                 //  path = Server.MapPath(path);
                 if (System.IO.Directory.Exists(path) == false)
                     System.IO.Directory.CreateDirectory(path);
@@ -311,7 +311,7 @@ namespace BP.WF.HttpHandler
             {
                 BP.WF.DTS.InitBillDir dir = new BP.WF.DTS.InitBillDir();
                 dir.Do();
-                path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "\\" + WebUser.FK_Dept + "\\" + func.No + "\\";
+                path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "/" + WebUser.FK_Dept + "/" + func.No + "/";
                 string msgErr = "@" + string.Format("生成单据失败，请让管理员检查目录设置") + "[" + BP.WF.Glo.FlowFileBill + "]。@Err：" + ex.Message + " @File=" + file + " @Path:" + path;
                 return "err@<font color=red>" + msgErr + "</font>" + ex.Message;
             }
@@ -390,7 +390,7 @@ namespace BP.WF.HttpHandler
                         {
                             BP.WF.DTS.InitBillDir dir = new BP.WF.DTS.InitBillDir();
                             dir.Do();
-                            path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "\\" + WebUser.FK_Dept + "\\" + func.No + "\\";
+                            path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "/" + WebUser.FK_Dept + "/" + func.No + "/";
                             string msgErr = "@" + string.Format("生成单据失败，请让管理员检查目录设置") + "[" + BP.WF.Glo.FlowFileBill + "]。@Err：" + ex.Message + " @File=" + file + " @Path:" + path;
                             billInfo += "@<font color=red>" + msgErr + "</font>";
                             throw new Exception(msgErr + "@其它信息:" + ex.Message);
@@ -453,7 +453,7 @@ namespace BP.WF.HttpHandler
                 if (func.HisBillFileType == BillFileType.PDF)
                     billUrl = billUrl.Replace(".doc", ".pdf");
 
-                path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "\\" + WebUser.FK_Dept + "\\" + func.No + "\\";
+                path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "/" + WebUser.FK_Dept + "/" + func.No + "/";
                 //  path = Server.MapPath(path);
                 if (System.IO.Directory.Exists(path) == false)
                     System.IO.Directory.CreateDirectory(path);
@@ -529,7 +529,7 @@ namespace BP.WF.HttpHandler
             {
                 BP.WF.DTS.InitBillDir dir = new BP.WF.DTS.InitBillDir();
                 dir.Do();
-                path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "\\" + WebUser.FK_Dept + "\\" + func.No + "\\";
+                path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "/" + WebUser.FK_Dept + "/" + func.No + "/";
                 string msgErr = "@" + string.Format("生成单据失败，请让管理员检查目录设置") + "[" + BP.WF.Glo.FlowFileBill + "]。@Err：" + ex.Message + " @File=" + file + " @Path:" + path;
                 return "err@<font color=red>" + msgErr + "</font>" + ex.Message;
             }
@@ -706,7 +706,7 @@ namespace BP.WF.HttpHandler
 
             //如果没有模版就给他一个默认的模版.
             if (ens.Count == 0)
-                en.FilePath = SystemConfig.PathOfDataUser + "DocTemplete\\Default.docx";
+                en.FilePath = SystemConfig.PathOfDataUser + "DocTemplete/Default.docx";
 
             if (ens.Count == 1)
                 en = ens[0] as DocTemplate;
@@ -777,12 +777,15 @@ namespace BP.WF.HttpHandler
         {
             /* 获得上一次发送的人员列表. */
             int toNodeID = this.GetRequestValInt("ToNode");
+            Selector selector = new Selector(toNodeID);
+            
 
             //查询出来,已经选择的人员.
             SelectAccpers sas = new SelectAccpers();
             int i = sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID,
                 this.WorkID, SelectAccperAttr.Idx);
-
+            if (selector.IsAutoLoadEmps == false)
+                return sas.ToJson(); 
             if (i == 0)
             {
                 //获得最近的一个workid.
@@ -1256,12 +1259,16 @@ namespace BP.WF.HttpHandler
             string str = gwf.TodoEmps;
             str = str.Replace(myemp.UserID + "," + myemp.Name + ";", "");
             str = str.Replace(myemp.Name + ";", "");
-
-
             addLeader = addLeader.Replace(this.FK_Emp + ",", "");
             gwf.SetPara("AddLeader", addLeader);
             gwf.TodoEmps = str;
             gwf.Update();
+
+            //删除该人员的审核信息
+            string sql = "DELETE FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE WorkID = " + this.WorkID +
+                         " AND ActionType = " + (int)ActionType.WorkCheck + " AND NDFrom = " + this.FK_Node +
+                         " AND NDTo = " + this.FK_Node + " AND EmpFrom = '" + this.FK_Emp + "'";
+            DBAccess.RunSQL(sql);
 
             return HuiQian_Init();
         }
@@ -2672,7 +2679,7 @@ namespace BP.WF.HttpHandler
 
             string str = BP.Tools.Json.ToJson(ds);
             //用于jflow数据输出格式对比.
-            //  DataType.WriteFile("c:\\WorkCheck_Init_ccflow.txt", str);
+            //  DataType.WriteFile("c:/WorkCheck_Init_ccflow.txt", str);
             return str;
         }
         /// <summary>

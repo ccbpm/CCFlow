@@ -404,7 +404,7 @@ namespace BP.DA
                     string sql = "ALTER TABLE " + tableName + " ADD " + saveToFileField + " text ";
                     DBAccess.RunSQL(sql);
 
-                    //在执行一遍.
+                    //在执行一遍，存储数据.
                     DBAccess.RunSQL(ps);
                     return;
                 }
@@ -476,7 +476,7 @@ namespace BP.DA
             {
                 byte[] byteFile = GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
                 if (byteFile == null)
-                    return null;
+                    return "";
 
                 string strs = System.Text.Encoding.UTF8.GetString(byteFile);
                 int idx = strs.IndexOf('$');
@@ -489,7 +489,7 @@ namespace BP.DA
             try
             {
                 string getSql = "SELECT " + fileSaveField + " FROM " + tableName + " WHERE " + tablePK + " = '" + pkVal + "'";
-                return DBAccess.RunSQLReturnString(getSql);
+                return DBAccess.RunSQLReturnStringIsNull(getSql, "");
             }
             catch (Exception ex)
             {
@@ -974,7 +974,7 @@ namespace BP.DA
             while (true)
             {
                 string str = Guid.NewGuid().ToString().Substring(0, length);
-                string sql = "SELECT COUNT(" + colName + ") as Num FROM " + ptable+" WHERE "+colName+" ='"+str+"'";
+                string sql = "SELECT COUNT(" + colName + ") as Num FROM " + ptable + " WHERE " + colName + " ='" + str + "'";
                 if (DBAccess.RunSQLReturnValInt(sql) == 0)
                     return str;
             }
@@ -1567,31 +1567,16 @@ namespace BP.DA
         public static void CreatIndex(string table, string fields)
         {
             string idxName = table + "_" + fields;
-            if (DBAccess.IsExitsObject(idxName) == true)
-                return;
 
             string sql = "";
-            try
-            {
-                sql = "DROP INDEX " + idxName + " ON " + table;
-                DBAccess.RunSQL(sql);
-            }
-            catch
-            {
-            }
+            if (DBAccess.IsExitsTableIndex(table, idxName) == true)
+                return;
 
-            try
-            {
-                sql = "CREATE INDEX " + idxName + " ON " + table + " (" + fields + ")";
-                DBAccess.RunSQL(sql);
-            }
-            catch
-            {
-            }
+            sql = "CREATE INDEX " + idxName + " ON " + table + " (" + fields + ")";
+            DBAccess.RunSQL(sql);
         }
         public static void CreatIndex(string table, string pk1, string pk2)
         {
-
             try
             {
                 DBAccess.RunSQL("CREATE INDEX " + table + "ID ON " + table + " (" + pk1 + "," + pk2 + ")");
@@ -3028,7 +3013,7 @@ namespace BP.DA
         /// <returns>返回执行结果</returns>
         public static DataTable RunSQLReturnTable(string sql, Paras paras)
         {
-           if (DataType.IsNullOrEmpty(sql))
+            if (DataType.IsNullOrEmpty(sql))
                 throw new Exception("要执行的 sql = null ");
 
             try
@@ -3672,6 +3657,53 @@ namespace BP.DA
                     throw new Exception("没有识别的数据库编号");
             }
 
+        }
+        /// <summary>
+        ///是否存在索引？
+        /// </summary>
+        /// <param name="table">表名称</param>
+        /// <param name="indexName">索引名称</param>
+        /// <returns>是否存在索引？</returns>
+        public static bool IsExitsTableIndex(string table, string indexName)
+        {
+            string sql = "";
+
+            int i = 0;
+            switch (DBAccess.AppCenterDBType)
+            {
+                case DBType.MSSQL:
+                    i = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM sys.indexes  WHERE object_id=OBJECT_ID('" + table + "', N'U') and NAME='" + indexName + "'", 0);
+                    break;
+                case DBType.MySQL:
+                    sql = "SELECT count(*) FROM information_schema.statistics WHERE table_schema='" + SystemConfig.AppCenterDBDatabase + "' AND table_name = '" + table + "' AND index_name = '" + indexName + "' ";
+                    i = DBAccess.RunSQLReturnValInt(sql);
+                    break;
+                case DBType.PostgreSQL:
+                    sql = "SELECT count(*) FROM pg_indexes WHERE  tablename = '" + table.ToLower() + "' ";
+                    //string sql1 = "select count(*) from information_schema.statistics where   table_name ='" + table.ToLower() + "' and  index_name='" + indexName.ToLower() + "'";
+                    i = DBAccess.RunSQLReturnValInt(sql);
+                   
+                    break;
+                case DBType.Oracle:
+                case DBType.DM:
+                    if (table.IndexOf(".") != -1)
+                        table = table.Split('.')[1];
+                    i = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) from user_indexes   WHERE table= upper('" + table + "') ");
+                    break;
+                //case DBType.Informix:
+                //    i = DBAccess.RunSQLReturnValInt("select count(*) from syscolumns c where tabid in (select tabid	from systables	where tabname = lower('" + table + "')) and c.colname = lower('" + col + "')", 0);
+                //    break;
+                //case DBType.Access:
+                //    return false;
+                //    break;
+                default:
+                    throw new Exception("err@IsExitsTableCol没有判断的数据库类型.");
+            }
+
+            if (i >= 1)
+                return true;
+            else
+                return false;
         }
         /// <summary>
         /// 表中是否存在指定的列

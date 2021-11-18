@@ -554,6 +554,30 @@ namespace BP.WF
                 {
                     msg += "@ delete data error " + ex.Message;
                 }
+
+                MapDtls dtls = new MapDtls("ND" + node.NodeID);
+                foreach (MapDtl dtl in dtls)
+                {
+                    try
+                    {
+                        DBAccess.RunSQL("DELETE FROM " + dtl.PTable);
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+
+            MapDtls mydtls = new MapDtls("ND" + int.Parse(gwf.FK_Flow) + "Rpt");
+            foreach (MapDtl dtl in mydtls)
+            {
+                try
+                {
+                    DBAccess.RunSQL("DELETE FROM " + dtl.PTable);
+                }
+                catch
+                {
+                }
             }
 
             if (msg != "")
@@ -847,6 +871,17 @@ namespace BP.WF
                 Nodes nds = this.HisFlow.HisNodes;
                 foreach (Node nd in nds)
                 {
+                    MapDtls dtls = new MapDtls("ND" + nd.NodeID);
+                    foreach (MapDtl dtl in dtls)
+                    {
+                        try
+                        {
+                            DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPk = " + this.WorkID);
+                        }
+                        catch
+                        {
+                        }
+                    }
                     try
                     {
                         if (DBAccess.IsExitsObject("ND" + nd.NodeID) == false)
@@ -858,6 +893,8 @@ namespace BP.WF
                     {
                         msg += "@ delete data error " + ex.Message;
                     }
+                   
+
                 }
                 if (msg != "")
                 {
@@ -1226,11 +1263,17 @@ namespace BP.WF
                 return "@在最后一个子流程完成后，让父流程的节点自动发送时，出现错误:" + ex.Message;
             }
         }
+
         /// <summary>
         /// 执行流程完成
         /// </summary>
         /// <param name="at"></param>
         /// <param name="stopMsg"></param>
+        /// <param name="currNode"></param>
+        /// <param name="rpt"></param>
+        /// <param name="stopFlowType">结束类型:自定义参数</param>
+        /// <param name="empNo"></param>
+        /// <param name="empName"></param>
         /// <returns></returns>
         public string DoFlowOver(ActionType at, string stopMsg, Node currNode, GERpt rpt, int stopFlowType = 0,string empNo="",string empName="")
         {

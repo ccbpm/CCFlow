@@ -566,12 +566,19 @@ namespace BP.WF
                 }
 
                 //条件过滤.
-                if (dtl.FilterSQLExp != "")
+                if ( DataType.IsNullOrEmpty( dtl.FilterSQLExp)==false)
                 {
                     string[] strs = dtl.FilterSQLExp.Split('=');
                     qo.addAnd();
                     qo.AddWhere(strs[0], strs[1]);
                 }
+
+                //排序.
+                if (DataType.IsNullOrEmpty(dtl.OrderBySQLExp)==false)
+                {
+                    qo.addOrderBy(dtl.OrderBySQLExp);
+                }
+
 
                 //从表
                 DataTable dtDtl = qo.DoQueryToTable();
@@ -852,75 +859,8 @@ namespace BP.WF
             MapAttrs dtlAttrs = new MapAttrs(dtl.No);
             foreach (MapAttr attr in dtlAttrs)
             {
-                /*#region 修改区分大小写. Oracle
-                if (DBType.Oracle == SystemConfig.AppCenterDBType)
-                {
-                    foreach (DataColumn dr in dtDtl.Columns)
-                    {
-                        var a = attr.KeyOfEn;
-                        var b = dr.ColumnName;
-                        if (attr.KeyOfEn.ToUpper().Equals(dr.ColumnName))
-                        {
-                            dr.ColumnName = attr.KeyOfEn;
-                            continue;
-                        }
-
-                        if (attr.LGType == FieldTypeS.Enum || attr.LGType == FieldTypeS.FK)
-                        {
-                            if (dr.ColumnName.Equals(attr.KeyOfEn.ToUpper() + "TEXT"))
-                            {
-                                dr.ColumnName = attr.KeyOfEn + "Text";
-                            }
-                        }
-                    }
-                    foreach (DataRow dr in dtDtl.Rows)
-                    {
-                        //本身是大写的不进行修改
-                        if (DataType.IsNullOrEmpty(dr[attr.KeyOfEn] + ""))
-                        {
-                            dr[attr.KeyOfEn] = dr[attr.KeyOfEn.ToUpper()];
-                            dr[attr.KeyOfEn.ToUpper()] = null;
-                        }
-                    }
-                }
-                #endregion 修改区分大小写.
-
-                #region 修改区分大小写. PostgreSQL
-                if (DBType.PostgreSQL == SystemConfig.AppCenterDBType)
-                {
-                    foreach (DataColumn dr in dtDtl.Columns)
-                    {
-                        var a = attr.KeyOfEn;
-                        var b = dr.ColumnName;
-                        if (attr.KeyOfEn.ToLower().Equals(dr.ColumnName))
-                        {
-                            dr.ColumnName = attr.KeyOfEn;
-                            continue;
-                        }
-
-                        if (attr.LGType == FieldTypeS.Enum || attr.LGType == FieldTypeS.FK)
-                        {
-                            if (dr.ColumnName.Equals(attr.KeyOfEn.ToLower() + "TEXT"))
-                            {
-                                dr.ColumnName = attr.KeyOfEn + "Text";
-                            }
-                        }
-                    }
-                    foreach (DataRow dr in dtDtl.Rows)
-                    {
-                        //本身是大写的不进行修改
-                        if (DataType.IsNullOrEmpty(dr[attr.KeyOfEn] + ""))
-                        {
-                            dr[attr.KeyOfEn] = dr[attr.KeyOfEn.ToLower()];
-                            dr[attr.KeyOfEn.ToLower()] = null;
-                        }
-                    }
-                }
-                #endregion 修改区分大小写.*/
-
                 if (attr.UIContralType == UIContralType.TB)
                     continue;
-
 
                 //处理它的默认值.
                 if (attr.DefValReal.Contains("@") == false)
@@ -931,7 +871,6 @@ namespace BP.WF
                     if(dr[attr.KeyOfEn] == null || DataType.IsNullOrEmpty(dr[attr.KeyOfEn].ToString())==true)
                         dr[attr.KeyOfEn] = attr.DefVal;
                 }
-                    
             }
 
             dtDtl.TableName = "DBDtl"; //修改明细表的名称.
@@ -945,7 +884,7 @@ namespace BP.WF
 
             myds.Tables.Add(dtlBlank.ToDataTableField("Blank"));
 
-            // myds.WriteXml("c:\\xx.xml");
+           //  myds.WriteXml("c:/xx.xml");
 
             return myds;
         }
@@ -963,30 +902,41 @@ namespace BP.WF
                         qo.AddWhere(GEDtlAttr.Rec, WebUser.No);
                         break;
                     case DtlOpenType.ForWorkID: // 按工作ID来控制
-                        qo.addLeftBracket();
-                        qo.AddWhere(GEDtlAttr.RefPK, dtlRefPKVal);
-                        qo.addOr();
-                        qo.AddWhere(GEDtlAttr.FID, dtlRefPKVal);
-                        qo.addRightBracket();
 
+                        qo.AddWhere(GEDtlAttr.RefPK, dtlRefPKVal);
+
+                        break;
+                    case DtlOpenType.ForFID: // 按工作ID来控制
+                        qo.AddWhere(GEDtlAttr.FID, dtlRefPKVal);
                         break;
                     default:
                         qo.AddWhere(GEDtlAttr.RefPK, dtlRefPKVal);
                         break;
                 }
+
                 //条件过滤.
-                if (dtl.FilterSQLExp != "")
+                string exp = dtl.FilterSQLExp;
+                if (DataType.IsNullOrEmpty(exp) == false)
                 {
-                    string[] strs = dtl.FilterSQLExp.Split('=');
-                    if (strs.Length == 2)
-                    {
-                        qo.addAnd();
-                        qo.AddWhere(strs[0], Glo.DealExp(strs[1], en));
-                    }
+                    exp = Glo.DealExp(exp, en);
+                    exp = exp.Replace("''", "'");
+
+                    if (exp.Substring(0, 5).ToLower().Contains("and") == false)
+                        exp = " AND " + exp;
+                    qo.SQL = exp;
                 }
 
-                //增加排序.
-                qo.addOrderBy(GEDtlAttr.OID);
+                //排序.
+                if (DataType.IsNullOrEmpty(dtl.OrderBySQLExp) == false)
+                {
+                    qo.addOrderBy(dtl.OrderBySQLExp);
+                }
+                else
+                {
+                    //增加排序.
+                    qo.addOrderBy(GEDtlAttr.OID);
+                }
+
                 qo.DoQuery();
                 return dtls.ToDataTableField();
             }

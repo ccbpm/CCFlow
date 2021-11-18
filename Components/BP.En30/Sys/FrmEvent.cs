@@ -10,7 +10,7 @@ using BP.Web;
 
 namespace BP.Sys
 {
-   
+
     /// <summary>
     /// 事件属性
     /// </summary>
@@ -690,7 +690,7 @@ namespace BP.Sys
             if (this.FK_Node != 0)
                 this.RefFlowNo = DBAccess.RunSQLReturnString("SELECT FK_Flow FROM WF_Node WHERE NodeID=" + this.FK_Node);
 
-            if (this.FK_MapData.StartsWith("ND")==true)
+            if (this.FK_MapData.StartsWith("ND") == true)
             {
                 int nodeid = int.Parse(this.FK_MapData.Replace("ND", ""));
                 this.RefFlowNo = DBAccess.RunSQLReturnString("SELECT FK_Flow FROM WF_Node WHERE NodeID=" + nodeid);
@@ -702,16 +702,16 @@ namespace BP.Sys
         protected override bool beforeInsert()
         {
             //在属性实体集合插入前，clear父实体的缓存.
-            if (DataType.IsNullOrEmpty(this.FK_MapData)==false)
-               BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
-             
+            if (DataType.IsNullOrEmpty(this.FK_MapData) == false)
+                BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
+
 
             return base.beforeInsert();
         }
 
         protected override void afterInsertUpdateAction()
         {
-             base.afterInsertUpdateAction();
+            base.afterInsertUpdateAction();
         }
         protected override void afterDelete()
         {
@@ -731,7 +731,7 @@ namespace BP.Sys
         /// <returns>null 没有事件，其他为执行了事件。</returns>
         public string DoEventNode(string dotype, Entity en)
         {
-           // return null; // 2019-08-27 取消节点事件 zl 
+            // return null; // 2019-08-27 取消节点事件 zl 
             return DoEventNode(dotype, en, null);
         }
         /// <summary>
@@ -781,7 +781,7 @@ namespace BP.Sys
             if (nev.HisDoType == EventDoType.BuessUnit)
             {
                 /* 获得业务单元，开始执行他 */
-                BuessUnitBase enBuesss = BP.Sys.Glo.GetBuessUnitEntityByEnName(nev.DoDoc) ;
+                BuessUnitBase enBuesss = BP.Sys.Glo.GetBuessUnitEntityByEnName(nev.DoDoc);
                 enBuesss.WorkID = Int64.Parse(en.PKVal.ToString());
                 return enBuesss.DoIt();
             }
@@ -814,9 +814,9 @@ namespace BP.Sys
                     doc = doc.Replace("@" + attr.Key, en.GetValStrByKey(attr.Key));
                 }
             }
-           
 
-            
+
+
 
             //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上. 
             doc = doc.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
@@ -828,7 +828,7 @@ namespace BP.Sys
                     /*如果是 bs 系统, 有可能参数来自于url ,就用url的参数替换它们 .*/
                     //string url = BP.Sys.Glo.Request.RawUrl;
                     //2019-07-25 zyt改造
-                    string url = HttpContextHelper.RequestRawUrl ;
+                    string url = HttpContextHelper.RequestRawUrl;
                     if (url.IndexOf('?') != -1)
                         url = url.Substring(url.IndexOf('?')).TrimStart('?');
 
@@ -942,7 +942,7 @@ namespace BP.Sys
                         }
                         else
                         {
-                           // 允许执行带有GO的sql.
+                            // 允许执行带有GO的sql.
                             DBAccess.RunSQLs(doc);
                         }
                         return nev.MsgOK(en);
@@ -969,7 +969,7 @@ namespace BP.Sys
                         }
                         else
                         {
-                            string cfgBaseUrl =  SystemConfig.HostURL;
+                            string cfgBaseUrl = SystemConfig.HostURL;
                             if (DataType.IsNullOrEmpty(cfgBaseUrl))
                             {
                                 string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
@@ -1127,16 +1127,16 @@ namespace BP.Sys
                         //处理参数.
                         string[] paraKeys = str.Split(',');
 
-                        if (paraKeys[3] == "Int")
+                        if (paraKeys[3].Equals("Int"))
                             paras.Add(paraKeys[0], int.Parse(paraKeys[1]));
 
-                        if (paraKeys[3] == "String")
+                        if (paraKeys[3].Equals("String"))
                             paras.Add(paraKeys[0], paraKeys[1]);
 
-                        if (paraKeys[3] == "Float")
+                        if (paraKeys[3].Equals("Float"))
                             paras.Add(paraKeys[0], float.Parse(paraKeys[1]));
 
-                        if (paraKeys[3] == "Double")
+                        if (paraKeys[3].Equals("Double"))
                             paras.Add(paraKeys[0], double.Parse(paraKeys[1]));
                     }
                     return null;
@@ -1150,24 +1150,20 @@ namespace BP.Sys
                     if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
                         apiUrl = apiUrl.Replace("@WebApiHost", SystemConfig.AppSettings["WebApiHost"]);
 
-                    //如果有参数
-                    if (apiUrl.Contains("?"))
-                    {
-                        //api接口地址
-                        string apiHost = apiUrl.Split('?')[0];
-                        //api参数
-                        string apiParams = apiUrl.Split('?')[1];
-                        //参数替换
-                        apiParams = BP.Tools.PubGlo.DealExp(apiParams, en);
-                        //执行POST
-                        postData = BP.Tools.PubGlo.HttpPostConnect(apiHost, apiParams);
+                    if (apiUrl.Contains("?") == true)
+                        apiUrl += "&WorkID=" + en.PKVal + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + WebUser.SID;
+                    else
+                        apiUrl += "?WorkID=" + en.PKVal + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + WebUser.SID;
 
-                    }
-                    else//如果没有参数，执行GET
-                        postData = BP.Tools.PubGlo.HttpGet(apiUrl);
+                    //api接口地址
+                    string apiHost = apiUrl.Split('?')[0];
+                    //api参数
+                    string apiParams = apiUrl.Split('?')[1];
+                    //参数替换
+                    apiParams = BP.Tools.PubGlo.DealExp(apiParams, en);
+                    //执行POST
+                    postData = BP.Tools.PubGlo.HttpPostConnect(apiHost, apiParams);
                     return postData;
-
-                    break;
                 case EventDoType.SpecClass:
                     #region //执行dll文件中指定类的指定方法，added by liuxc,2016-01-16
                     string evdll = nev.MonthedDLL;
@@ -1265,10 +1261,10 @@ namespace BP.Sys
                         string val;
 
                         //将参数中的名称与值分开
-                        foreach(string p in pdsArr)
+                        foreach (string p in pdsArr)
                         {
                             pidx = p.IndexOf('=');
-                            if(pidx==-1) continue;
+                            if (pidx == -1) continue;
 
                             pds.Add(p.Substring(0, pidx), p.Substring(pidx + 1));
                         }
@@ -1294,7 +1290,7 @@ namespace BP.Sys
                                     }
 
                                     //替换@属性
-                                    val = val.Replace("`" + attr.Key + "`", (en.Row[attr.Key]??string.Empty).ToString());
+                                    val = val.Replace("`" + attr.Key + "`", (en.Row[attr.Key] ?? string.Empty).ToString());
                                 }
 
                                 //转换参数类型，从字符串转换到参数的实际类型，NOTE:此处只列出了简单类型的转换，其他类型暂未考虑
@@ -1348,7 +1344,7 @@ namespace BP.Sys
 
                     //非静态方法
                     return (md.Invoke(abl.CreateInstance(evclass), pvs) ?? string.Empty).ToString();
-                    #endregion
+                #endregion
                 default:
                     throw new Exception("@no such way." + nev.HisDoType.ToString());
             }
@@ -1379,7 +1375,7 @@ namespace BP.Sys
             qo.AddWhere(FrmEventAttr.FK_Node, nodeID);
             qo.DoQuery();
         }
-        public FrmEvents(int nodeID,string fk_flow)
+        public FrmEvents(int nodeID, string fk_flow)
         {
             QueryObject qo = new QueryObject(this);
             qo.AddWhere(FrmEventAttr.FK_Node, nodeID);

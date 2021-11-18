@@ -76,6 +76,7 @@
 
                 if (expStrs.indexOf(attr.KeyOfEn) != -1)
                     return;
+
                 showMapAttr.push(attr);
 
                 myIdx++;
@@ -86,7 +87,10 @@
                 //mapAttrHtml += '<td>' + attr.Name + '</td>';
                 mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '0" name="' + attr.KeyOfEn + '" value="0"/><label for="' + attr.KeyOfEn + '0" >不设置</label></td>';
                 mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '1" name="' + attr.KeyOfEn + '" value="1"/><label for="' + attr.KeyOfEn + '1" >可用</label></td>';
-                mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '4" name="' + attr.KeyOfEn + '" value="4"/><label for="' + attr.KeyOfEn + '4" >可用且必填</label></td>';
+                if (attr.UIContralType == 6)
+                    mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '4" name="' + attr.KeyOfEn + '" value="4" disabled=disabled/><label for="' + attr.KeyOfEn + '4" >可用且必填</label></td>';
+                else
+                    mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '4" name="' + attr.KeyOfEn + '" value="4" /><label for="' + attr.KeyOfEn + '4" >可用且必填</label></td>';
                 mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '2" name="' + attr.KeyOfEn + '" value="2"/><label for="' + attr.KeyOfEn + '2" >可见</label></td>';
                 mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '3" name="' + attr.KeyOfEn + '" value="3"/><label for="' + attr.KeyOfEn + '3" >不可见</label></td>';
 

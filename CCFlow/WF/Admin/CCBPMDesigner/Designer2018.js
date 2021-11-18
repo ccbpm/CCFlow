@@ -7,7 +7,22 @@ var webUser = new WebUser();
 var basepath = "";
 var flowDevModel = flow.GetPara("FlowDevModel"); //设计模式.
 var pageFrom = GetQueryString("From");
-pageFrom = pageFrom == null || pageFrom == undefined ? "" : pageFrom
+pageFrom = pageFrom == null || pageFrom == undefined ? "" : pageFrom;
+
+
+//让管理员重新登录一次.在切换用户的时候经常丢失.管理员身份.
+function LetAdminReLogin() {
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+    handler.AddUrlData();
+    var data = handler.DoMethodReturnString("LetAdminLoginByToken");
+    if (data.indexOf('err@') == 0) {
+        alert(data);
+        return false;
+    }
+    return true;
+}
+
+
 $(function () {
 
     if (flowDevModel == null || flowDevModel == undefined)
@@ -25,6 +40,7 @@ $(function () {
     //}
     //设置状态. 根据不同的模式来设计.
     SetState();
+
     ShowFlowDevModelText();
 
     $("#pmfun,#nodeMenu").hover(function () {
@@ -40,6 +56,7 @@ $(function () {
 
     //节点类型--普通
     $('#Node_Ordinary').on('click', function () {
+        LetAdminReLogin();
         var nodeID = document.getElementById("leipi_active_id");
 
         SetNodeRunModel(nodeID.value, 0);
@@ -47,33 +64,45 @@ $(function () {
     });
     //节点类型--分流
     $('#Node_FL').on('click', function () {
+        LetAdminReLogin();
+
         var nodeID = document.getElementById("leipi_active_id");
         SetNodeRunModel(nodeID.value, 2);
     });
     //节点类型--合流
     $('#Node_HL').on('click', function () {
+        LetAdminReLogin();
+
         var nodeID = document.getElementById("leipi_active_id");
         SetNodeRunModel(nodeID.value, 1);
     });
     //节点类型--分合流
     $('#Node_FHL').on('click', function () {
+        LetAdminReLogin();
+
         var nodeID = document.getElementById("leipi_active_id");
         SetNodeRunModel(nodeID.value, 3);
     });
     //节点类型--同表单的子线程
     $('#Node_SubThread0').on('click', function () {
+        LetAdminReLogin();
+
         var nodeID = document.getElementById("leipi_active_id");
         SetNodeRunModel(nodeID.value, 4, 0);
     });
 
     //节点类型--异表单子线程
     $('#Node_SubThread1').on('click', function () {
+        LetAdminReLogin();
+
         var nodeID = document.getElementById("leipi_active_id");
         SetNodeRunModel(nodeID.value, 4, 1);
     });
 
     //begin 审核组件状态的设置
     $("#pmWorkCheck,#fwcMenu").hover(function () {
+        LetAdminReLogin();
+
         var mLeft = $("#jqContextMenu").css("left").replace('px', '');
         var mTop = $("#jqContextMenu").css("top").replace('px', '');
         $("#fwcMenu").css({ "left": parseInt(mLeft) + 148 + "px", "top": parseInt(mTop) + 62 + "px" });
@@ -84,25 +113,33 @@ $(function () {
 
     //审核状态---禁用
     $('#FWC_Disable').on('click', function () {
+        LetAdminReLogin();
+
         var nodeID = document.getElementById("leipi_active_id");
         SetNodeFWCSta(nodeID.value, 0);
     });
     //审核状态---启用
     $('#FWC_Enable').on('click', function () {
+        LetAdminReLogin();
+
         var nodeID = document.getElementById("leipi_active_id");
         SetNodeFWCSta(nodeID.value, 1);
     });
 
     //审核状态--只读
     $('#FWC_ReadOnly').on('click', function () {
+        LetAdminReLogin();
+
         var nodeID = document.getElementById("leipi_active_id");
         SetNodeFWCSta(nodeID.value, 2);
     });
 
     //批量设置
     $('#FWC_Batch').on('click', function () {
+        LetAdminReLogin();
+
         var nodeID = document.getElementById("leipi_active_id").value;
-        var url = "../CCBPMDesigner/BatchFWC.htm?FK_Flow=" + GetQueryString("FK_Flow") + "&NodeID=" + nodeID;
+        var url = "../AttrFlow/BatchFWC.htm?FK_Flow=" + GetQueryString("FK_Flow") + "&NodeID=" + nodeID;
         //window.parent.addTab(nodeID, "审核组件状态", url);
         var dgId = "iframDg";
         var w = window.innerWidth - 240;
@@ -113,6 +150,8 @@ $(function () {
 });
 
 function EidtFrm() {
+    LetAdminReLogin();
+
     var flowNo = GetQueryString("FK_Flow");
     var flow = new Entity("BP.WF.Flow", flowNo);
 
@@ -151,9 +190,7 @@ function EidtFrm() {
 
     }
 }
-function AddTab(windowPK, title, url) {
 
-}
 /**
  * 设置审核组件的状态
  * @param {any} nodeID 节点ID
@@ -161,8 +198,8 @@ function AddTab(windowPK, title, url) {
  */
 function SetNodeFWCSta(nodeID, fwcSta) {
 
-    // alert(nodeID.indexOf('01'));
-    // alert(nodeID.length );
+    LetAdminReLogin();
+
 
     if (nodeID.indexOf('01') == nodeID.length - 2) {
         //获得nodeID.
@@ -340,16 +377,6 @@ function Frm() {
 
 var the_flow_id = '4';
 
-/*页面回调执行    callbackSuperDialog
-if(window.ActiveXObject){ //IE
-    window.returnValue = globalValue
-}else{ //非IE
-if(window.opener) {
-    window.opener.callbackSuperDialog(globalValue) ;
-}
-}
-window.close();
-*/
 function callbackSuperDialog(selectValue) {
     var aResult = selectValue.split('@leipi@');
     $('#' + window._viewField).val(aResult[0]);
@@ -433,7 +460,6 @@ $(function () {
 
         alert('请在流程树的节点上点击右键.');
         return;
-
 
         if (!s) s = 200000;
 
@@ -912,40 +938,9 @@ function SaveNodeName(activeId) {
     handler.AddPara("NodeID", activeId);
     handler.AddPara("Name", text);
     var data = handler.DoMethodReturnString("Designer_SaveNodeName");
+    $("#span_" + activeId).text(text); //更新节点名称与显示
     return;
 
-    //alert(text);
-
-    var node = new Entity("BP.WF.Template.NodeExt", activeId);
-    node.Name = text;
-    node.Update();
-
-    //修改表单名称.
-    var mapData = new Entity("BP.Sys.MapData", "ND" + activeId);
-    if (mapData.Name == null || mapData.Name == undefined || mapData.Name == "") {
-        mapData.Name = text;
-        mapData.Update();
-    }
-
-
-    //修改分组名称.
-    var groups = new Entities("BP.Sys.GroupFields");
-    groups.Retrieve("FrmID", "ND" + activeId);
-
-    //  alert(groups.length);
-
-    if (groups.length == 1) {
-
-        var group = groups[0];
-
-        var groupEn = new Entity("BP.Sys.GroupField", group.OID);
-        groupEn.Lab = text;
-        groupEn.Update();
-    }
-
-
-    //更新节点名称与显示
-    $("#span_" + activeId).text(text);
 }
 
 //修改并更新节点表单名称
@@ -958,31 +953,7 @@ function SaveAndUpdateNodeName(activeId) {
     //alert(text);
 
     var node = new Entity("BP.WF.Template.NodeExt", activeId);
-    node.Name = text;
-    node.Update();
-
-    //修改表单名称.
-    var mapData = new Entity("BP.Sys.MapData", "ND" + activeId);
-    mapData.Name = text;
-    mapData.Update();
-
-
-
-    //修改分组名称.
-    var groups = new Entities("BP.Sys.GroupFields");
-    groups.Retrieve("FrmID", "ND" + activeId);
-
-    //  alert(groups.length);
-
-    if (groups.length == 1) {
-
-        var group = groups[0];
-
-        var groupEn = new Entity("BP.Sys.GroupField", group.OID);
-        groupEn.Lab = text;
-        groupEn.Update();
-    }
-
+    node.DoMethodReturnString("Do_SaveAndUpdateNodeName", text);
 
     //更新节点名称与显示
     $("#span_" + activeId).text(text);
@@ -1050,7 +1021,15 @@ function GenerDrowFlowData() {
         if (str == "01") {
             // strs += "'icon':'icon-ok',";
         } else if (toNodes == "") {
-            strs += "'icon':'icon-ok',";
+
+            //为中科软修改：发送并返回节点的样式改变.
+            if (node.AtPara.indexOf('IsSendBackNode=1') >= 0) {
+                strs += "'icon':'icon-reload',";
+            }
+            else {
+                strs += "'icon':'icon-ok',";
+            }
+            // strs += "'icon':'icon-ok',";
         } else {
             /* 如果是其他的情况,就要考虑分合流 */
         }
@@ -1208,7 +1187,7 @@ function FlowCheck() {
 
     else {
         url = "../AttrFlow/CheckFlow.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
-        OpenLayuiDialog(url, "检查流程" + flowNo, window.innerWidth*2/3);
+        OpenLayuiDialog(url, "检查流程" + flowNo, window.innerWidth * 2 / 3);
     }
 
 }
@@ -1287,8 +1266,8 @@ function Help() {
     msg += "<li>开发者:济南驰骋信息技术有限公司.</li>";
     msg += "<li>官方网站: <a href='http://www.ccflow.org?Ref=ccbpmApp' target=_blank>http://ccflow.org</a></li>";
     msg += "<li>商务联系:0531-82374939, 微信:18660153393 QQ:793719823</li>";
-    msg += "<li>地址:济南是高新区齐鲁软件园C座B301室.</li>";
-    msg += "<li>公众帐号<img src='' border=0/></li>";
+    msg += "<li>地址:济南.高新区.碧桂园凤凰中心F19.</li>";
+    // msg += "<li>公众帐号<img src='' border=0/></li>";
     msg += "</ul>";
     mAlert(msg, 20000);
 }
@@ -1497,6 +1476,7 @@ function NodeFrmFree(nodeID) {
     ///CCFormDesigner/FormDesigner.htm?FK_Node=9502&FK_MapData=ND9502&FK_Flow=095&UserNo=admin&SID=c3466cb7-edbe-4cdc-92df-674482182d01
     //WinOpen(url);
 }
+
 
 function NodeFrmDeveloper(nodeID) {
     //开发者表单.

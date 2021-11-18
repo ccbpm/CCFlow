@@ -19,7 +19,7 @@ function basePath() {
     var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
 
     $.each(dirs, function (i, dir) {
-        if (projectName == dir[i]) {
+        if (projectName == dir) {
             projectName = "";
             return false;
         }

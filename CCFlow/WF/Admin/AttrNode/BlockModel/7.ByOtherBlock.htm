@@ -25,13 +25,13 @@
             InitBar(BlockModel.ByOtherBlock);
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            $("#TB_Alert").val(node.BlockExp);
+            $("#TB_Alert").val(node.BlockAlert);
         });
         function Save() {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
             node.BlockModel = BlockModel.ByOtherBlock;
-            node.BlockExp = $("#TB_Alert").val();
+            node.BlockAlert = $("#TB_Alert").val();
 
             node.Update();
             alert("保存完毕");

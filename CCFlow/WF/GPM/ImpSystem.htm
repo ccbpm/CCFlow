@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>新建系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="../Portal/layui/css/layui.css">
+    <!--- 引入代码. -->
+    <!--<script src="../Scripts/jquery/jquery.min.js"></script>-->
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <style>
+        .td-required-next:after {
+            top: 17px;
+            right: 5px;
+            color: red;
+            content: '*';
+            position: absolute;
+            margin-left: 4px;
+            font-weight: 700;
+            line-height: 1.8em;
+        }
+    </style>
+
+    <script type="text/javascript">
+        $(function () {
+
+            var ens = new Entities("BP.GPM.Menu2020.MySystems");
+            var data = ens.DoMethodReturnJSON("ImpSystem_Init");
+            console.log(data);
+
+            var html = "<ul>";
+            for (var i = 0; i < data.length; i++) {
+                var da = data[i];
+                html += "<li> *** <a href=\"javascript:Imp('" + da.No + "')\" >" + da.Name + "</a> *** </li>";
+            }
+            html += "</ul>";
+
+            $("#docs").html(html);
+
+        });
+
+        function Imp(name) {
+
+            if (window.confirm('您确定要导入吗？') == false)
+                return;
+
+            var ens = new Entities("BP.GPM.Menu2020.MySystems");
+            var data = ens.DoMethodReturnString("ImpSystem_Imp", name);
+            alert(data);
+            window.close();
+        }
+    </script>
+</head>
+<body>
+    <div class="layui-container">
+        <form id="CCForm" name="CCForm">
+
+            <h3 style=" margin-top:15px;">选择要导入的系统</h3>
+
+
+            <div id="docs"></div>
+
+        </form>
+    </div>
+</body>
+</html>

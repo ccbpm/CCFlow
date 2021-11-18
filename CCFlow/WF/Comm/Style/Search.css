@@ -97,8 +97,9 @@ table > td {
 }
 
 .bootstrap-table .table, .table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
-    border: 0;
-    border-right: 1px solid #ddd;
+    /*border: 0;
+    border-right: 1px solid #ddd;*/
+    border-bottom: 1px solid #ddd;
     font-size: 13px;
 }
 

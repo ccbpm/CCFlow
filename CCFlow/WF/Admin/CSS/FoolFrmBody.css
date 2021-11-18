@@ -99,11 +99,12 @@ textarea:focus {
   margin-left:10px;
 }
 #contentTable input, textarea {
-    border: 1px solid #b9b9b9;
+    border: 0px solid #b9b9b9;
     border-radius: 5px;
     padding: 8px 8px;
    /* width: 100%;*/
     box-sizing: border-box;
+    background:#fff;
 }
 .FoolFrmFieldTR select {
     border: 1px solid #b9b9b9;

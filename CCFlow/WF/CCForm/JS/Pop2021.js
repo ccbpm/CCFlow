@@ -5,17 +5,18 @@
  * @param {any} mapExt 扩展属性
  * @param {any} frmData 表单数据
  */
-function CommPop(popType, mapAttr, mapExt, frmData, mapExts) {
-  
+function CommPop(popType, mapAttr, mapExt, frmData, mapExts, targetID, pkVal) {
+
+    targetID = targetID == null || targetID == undefined ? mapAttr.KeyOfEn : targetID;
     if (mapAttr.UIIsEnable == 0 || isReadonly == true) {
         //只显示
         return;
     }
     //单选还是多选
-    var selectType = mapExt.SelectType;
+    var selectType = mapExt.GetPara("SelectType");
     selectType = selectType == null || selectType == undefined || selectType == "" ? 1 : selectType;
-    var pkVal = pageData.WorkID;
-    pkVal = pkVal == undefined || pkVal == 0 ? pageData.OID : pkVal;
+   
+    pkVal =  pkVal==null||pkVal == undefined || pkVal == 0 ? pageData.OID : pkVal;
 
     //选中的值
     var selects = new Entities("BP.Sys.FrmEleDBs");
@@ -24,9 +25,9 @@ function CommPop(popType, mapAttr, mapExt, frmData, mapExts) {
     //获取实体信息
     var ens = [];
     if (popType == "PopBranches") {
-        $("#TB_" + mapAttr.KeyOfEn).hide();
-        $("#TB_" + mapAttr.KeyOfEn).after("<div id='mapExt_" + mapAttr.KeyOfEn + "' style='width:99%'></div>")
-        xmSelectTree("mapExt_" + mapAttr.KeyOfEn, mapExt, selects, popType, selectType);
+        $("#TB_" + targetID).hide();
+        $("#TB_" + targetID).after("<div id='mapExt_" + targetID + "' style='width:99%'></div>")
+        xmSelectTree("mapExt_" + targetID, mapExt, selects, popType, selectType);
         return;
     }
     if (popType == "PopBindEnum") {
@@ -91,7 +92,7 @@ function CommPop(popType, mapAttr, mapExt, frmData, mapExts) {
             })
         })
     } else {
-        if(data.length==0)
+        if(data.length!=0)
             $.each(ens, function (i, item) {
                 data.push({
                     No: item.No,
@@ -102,12 +103,12 @@ function CommPop(popType, mapAttr, mapExt, frmData, mapExts) {
       
     }
     data = data == null ? [] : data;
-    $("#TB_" + mapAttr.KeyOfEn).hide();
-    $("#TB_" + mapAttr.KeyOfEn).after("<div id='mapExt_" + mapAttr.KeyOfEn + "' style='width:99%'></div>")
+    $("#TB_" + targetID).hide();
+    $("#TB_" + targetID).after("<div id='mapExt_" + targetID + "' style='width:99%'></div>")
     layui.use('xmSelect', function () {
         var xmSelect = layui.xmSelect;
         xmSelect.render({
-            el: "#mapExt_" + mapAttr.KeyOfEn,
+            el: "#mapExt_" + targetID,
             prop: {
                 name: 'Name',
                 value: 'No',
@@ -117,6 +118,7 @@ function CommPop(popType, mapAttr, mapExt, frmData, mapExts) {
             autoRow:true,
             radio: selectType==1 ? false : true,
             clickClose: selectType == 1 ? false : true,
+            toolbar: { show: selectType == 1 ? true : false },
             click: function () {
                 alert("sdfdf");
             },
@@ -155,16 +157,17 @@ function CommPop(popType, mapAttr, mapExt, frmData, mapExts) {
  * @param {any} mapExt  扩展属性
  * @param {any} frmData 表单数据
  */
-function CommPopDialog(poptype, mapAttr, mapExt, pkval, frmData, baseUrl, mapExts) {
+function CommPopDialog(poptype, mapAttr, mapExt, pkval, frmData, baseUrl, mapExts, targetID) {
+    targetID = targetID == null || targetID == undefined ? mapAttr.KeyOfEn : targetID;
     if (pkval == null || pkval == undefined) {
         pkval = GetQueryString("WorkID");
         if (pkval == null || pkval == undefined)
             pkval = GetQueryString("OID");
     }
-    var target = $("#TB_" + mapAttr.KeyOfEn);
+    var target = $("#TB_" + targetID);
     target.hide();
     var container = $("<div class='mtags-container'style='width:99%'></div>");
-    var mtagsId = mapExt.AttrOfOper + "_mtags";
+    var mtagsId = targetID + "_mtags";
     container.attr("id", mtagsId);
     target.after(container);
     $("#" + mtagsId).mtags({
@@ -182,7 +185,6 @@ function CommPopDialog(poptype, mapAttr, mapExt, pkval, frmData, baseUrl, mapExt
     target.val($("#" + mtagsId).mtags("getText"));
 
     $("#" + mtagsId).on('dblclick', function () {
-        debugger;
         var url = "";
         switch (poptype) {
             case "PopBranchesAndLeaf": //树干叶子模式.
@@ -209,65 +211,72 @@ function CommPopDialog(poptype, mapAttr, mapExt, pkval, frmData, baseUrl, mapExt
             dlgHeight = 50;
         else
             dlgHeight = dlgHeight / window.innerHeight *100;
-
+        if (window.parent && window.parent.OpenLayuiDialog)
+            window.OpenLayuiDialog(url, mapExt.Title, dlgWidth, dlgHeight, "auto", false, true, true, function () {
+                CloseLayuiDialogFunc(mapExt, mapExts, mtagsId, target, targetID, pkval);
+            })
+       else
         OpenLayuiDialog(url, mapExt.Title, dlgWidth, dlgHeight, "auto", false, true, true,function () {
-            //获取选择的值，存储展示
-            var selectType = mapExt.GetPara("SelectType");
-            var iframe = $(window.frames["dlg"]).find("iframe");
-            if (iframe.length > 0) {
-                debugger
-                var selectedRows = iframe[0].contentWindow.selectedRows;
-                if (selectedRows == undefined || selectedRows.length==0)
-                    selectedRows =iframe[0].contentWindow.GetCheckNodes()
-                if ($.isArray(selectedRows)) {
-                    //保存selectedRows的信息
-                    SaveFrmEleDBs(selectedRows, mapExt.AttrOfOper, mapExt);
-                    var mtags = $("#" + mtagsId);
-                    mtags.mtags("loadData", selectedRows);
-                    target.val(mtags.mtags("getText"));
-                    // 单选复制当前表单
-                    //if (selectType == "0" && selectedRows.length == 1) {
-                    //    FullIt(selectedRows[0].No, mapExt.MyPK, targetId);
-                    //}
-                    var No = "";
-                    if (selectedRows != null && $.isArray(selectedRows))
-                        $.each(selectedRows, function (i, selectedRow) {
-                            if (i == 0)
-                                No += selectedRow.No;
-                            else
-                                No += "," + selectedRow.No;
-                        });
-                    FullIt(No, mapExt.MyPK, "TB_"+mapExt.AttrOfOper);
-                    var attrMyPK = mapExt.FK_MapData + "_" + mapExt.AttrOfOper;
-                    if (mapExts[attrMyPK] == undefined || mapExts[attrMyPK].length == 0) {
-                        //执行JS
-                        var backFunc = mapExt.Tag5;
-                        if (backFunc != null && backFunc != "" && backFunc != undefined)
-                            DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
-                    }
-                    else {
-                        $.each(mapExts[attrMyPK], function (idx, mapExt1) {
-                            var mapExtN = new Entity("BP.Sys.MapExt", mapExt1);
-                            mapExtN.MyPK = mapExt1.MyPK;
-                            //填充其他控件
-                            switch (mapExtN.ExtType) {
-                                case "FullData": //填充其他控件
-                                    DDLFullCtrl(No.substring(0, No.length - 1), mapExtN.AttrOfOper, mapExtN.MyPK);
-                                        
-                                    break;
-                            }
-                        });
-                        //执行JS
-                        var backFunc = mapExt.Tag5;
-                        if (backFunc != null && backFunc != "" && backFunc != undefined)
-                            DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
-                    }
-                }
-            }
+            CloseLayuiDialogFunc(mapExt, mapExts, mtagsId, target, targetID, pkval);
         })
     })
 }
 
+function CloseLayuiDialogFunc(mapExt, mapExts, mtagsId, target, targetID, pkval) {
+    //获取选择的值，存储展示
+    var selectType = mapExt.GetPara("SelectType");
+    var iframe = $(window.frames["dlg"]).find("iframe");
+    if (iframe.length > 0) {
+        debugger
+        var selectedRows = iframe[0].contentWindow.selectedRows;
+        if (selectedRows == undefined || selectedRows.length == 0)
+            selectedRows = iframe[0].contentWindow.GetCheckNodes()
+        if ($.isArray(selectedRows)) {
+            //保存selectedRows的信息
+            SaveFrmEleDBs(selectedRows, mapExt.AttrOfOper, mapExt, pkval);
+            var mtags = $("#" + mtagsId);
+            mtags.mtags("loadData", selectedRows);
+            target.val(mtags.mtags("getText"));
+            // 单选复制当前表单
+            //if (selectType == "0" && selectedRows.length == 1) {
+            //    FullIt(selectedRows[0].No, mapExt.MyPK, targetId);
+            //}
+            var No = "";
+            if (selectedRows != null && $.isArray(selectedRows))
+                $.each(selectedRows, function (i, selectedRow) {
+                    if (i == 0)
+                        No += selectedRow.No;
+                    else
+                        No += "," + selectedRow.No;
+                });
+            FullIt(No, mapExt.MyPK, "TB_" + targetID);
+            var attrMyPK = mapExt.FK_MapData + "_" + mapExt.AttrOfOper;
+            if (mapExts[attrMyPK] == undefined || mapExts[attrMyPK].length == 0) {
+                //执行JS
+                var backFunc = mapExt.Tag5;
+                if (backFunc != null && backFunc != "" && backFunc != undefined)
+                    DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
+            }
+            else {
+                $.each(mapExts[attrMyPK], function (idx, mapExt1) {
+                    var mapExtN = new Entity("BP.Sys.MapExt", mapExt1);
+                    mapExtN.MyPK = mapExt1.MyPK;
+                    //填充其他控件
+                    switch (mapExtN.ExtType) {
+                        case "FullData": //填充其他控件
+                            DDLFullCtrl(No.substring(0, No.length - 1), mapExtN.AttrOfOper, mapExtN.MyPK);
+
+                            break;
+                    }
+                });
+                //执行JS
+                var backFunc = mapExt.Tag5;
+                if (backFunc != null && backFunc != "" && backFunc != undefined)
+                    DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
+            }
+        }
+    }
+}
 function xmSelectTree(eleID, mapExt, frmEleDBs, type, selectType) {
 
     //获取根目录
@@ -378,40 +387,7 @@ function xmSelectTree(eleID, mapExt, frmEleDBs, type, selectType) {
     });
 }
 
-/**
- * 保存EleDB
- * @param {any} rows
- */
-function SaveFrmEleDBs(rows,keyOfEn,mapExt) {
-  debugger
-    var pkVal = pageData.WorkID;
-    pkVal = pkVal == undefined || pkVal == 0 ? pageData.OID : pkVal;
-    //删除
-    var ens = new Entities("BP.Sys.FrmEleDBs");
-    ens.Delete("FK_MapData", mapExt.FK_MapData, "EleID", keyOfEn, "RefPKVal", pkVal);
-    //保存
-    $.each(rows, function (i, row) {
-        var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-        frmEleDB.MyPK = keyOfEn + "_" + pkVal + "_" + row.No;
-        frmEleDB.FK_MapData = mapExt.FK_MapData;
-        frmEleDB.EleID = keyOfEn;
-        frmEleDB.RefPKVal = pkVal;
-        frmEleDB.Tag1 = row.No;
-        frmEleDB.Tag2 = row.Name;
-        frmEleDB.Insert();
-    })
-}
-/**
- * 删除保存的数据
- * @param {any} keyOfEn
- * @param {any} oid
- * @param {any} No
- */
-function Delete_FrmEleDB(keyOfEn, oid, No) {
-    var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-    frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + No;
-    frmEleDB.Delete();
-}
+
 
 function GetInitJsonData(mapExt, refPKVal, val) {
     var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");

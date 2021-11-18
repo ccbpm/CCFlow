@@ -1,7 +1,7 @@
 ﻿
 
 function GenerFoolFrm(wn) {
-    debugger 
+   // debugger 
     flowData = wn;
 
     //初始化Sys_MapData
@@ -1774,7 +1774,7 @@ function InitRBShowContent(flowData, mapAttr, defValue, RBShowModel, enableAttr)
         else
             rbHtml += "<label><input " + enableAttr + " " + (obj.IntKey == defValue ? "checked='checked' " : "") + " type='radio' name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "' " + onclickEvent + "/>&nbsp;" + obj.Lab + "</label><br/>";
     });
-    return rbHtml;
+    return "<div style='text-align:left'>" + rbHtml + "</div>";
 }
 
 

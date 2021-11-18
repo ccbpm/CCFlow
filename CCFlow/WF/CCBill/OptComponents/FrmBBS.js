@@ -45,6 +45,14 @@ new Vue({
         }      
     },
     mounted: function () {
+
+        // fix firefox bug
+        document.body.ondrop = function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+
         var workID = GetQueryString("WorkID");
         var frmID = GetQueryString("FrmID");
 

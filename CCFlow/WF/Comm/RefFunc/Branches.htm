@@ -110,7 +110,7 @@
         function createJsonToTree(jsonArray, parentNo) {
             for (var i = 0; i < jsonArray.length; i++) {
                 var data = jsonArray[i];
-                if (data.ParentNo == parentNo) {
+                if (data.ParentNo.trim() == parentNo) {
                     var checked = false;
                     var selectedNodes = window.selectedNodes;
                     var sel = $.grep(selectedNodes, function (obj) {

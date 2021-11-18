@@ -190,7 +190,7 @@
             $('#DDL_Nodes').html(nodeListHtml);
 
             //获取当前节点属性,是否可以执行退回并原路返回的按钮？
-            var node = new Entity("BP.WF.Node", pageData.FK_Node)
+            //var node = new Entity("BP.WF.Node", pageData.FK_Node)
             if (node.IsBackTracking == "1")
                 $('#btnIsBackTracking').css("display","inline");
 

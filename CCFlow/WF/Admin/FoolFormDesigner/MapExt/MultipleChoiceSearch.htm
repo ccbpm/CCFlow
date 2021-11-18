@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>搜索多选</title>
+    <title>搜索选择</title>
     <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
@@ -55,6 +55,7 @@
             en.FK_MapData = GetQueryString("FK_MapData");
             en.AttrOfOper = GetQueryString("KeyOfEn");
             en.ExtType = "MultipleChoiceSearch";
+
             en.MyPK = mypk;
 
             if (en.Update() == 0)
@@ -89,12 +90,12 @@
                 <input type="button" value="删除" id="Btn_Delete" class="cc-btn-tab" onclick="Delete()" />
                 <input type="button" value="帮助" id="Btn_Help" class="cc-btn-tab" onclick="ShowHidden('help')" />
             </span>
-            <strong> 文本框搜索多选</strong>
+            <strong> 文本框搜索多选/单选</strong>
         </div>
-        <form id="cc">           
+        <form id="cc">
 
             <table class="table">
-               
+
                 <tr>
                     <td>
 
@@ -108,7 +109,7 @@
                         </div>
 
                     </td>
-                    <td><input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip"  /> </td>
+                    <td colspan="3"><input type="text" value="请输入编号、拼音、关键字." placeholder="请输入编号、拼音、关键字." id="TBPara_SearchTip" name="TBPara_SearchTip" style="width:90%;" /> </td>
                 </tr>
 
                 <tr>
@@ -121,40 +122,52 @@
                             <option value="2">执行CCFromRef.js返回JSON</option>
                         </select>
                     </td>
+                    <td>选择类型</td>
+                    <td>
+                        <input type="radio" id="RBPara_SelectType_0" name="RBPara_SelectType" value="0" />
+                        <label for="RBPara_SelectType_0">
+                            单选
+                        </label>
+                        <input type="radio" id="RBPara_SelectType_1" name="RBPara_SelectType" checked="checked" value="1" />
+                        <label for="RBPara_SelectType_1">
+                            多选
+                        </label>
+                    </td>
+
                 </tr>
 
 
                 <tr>
-                    <td colspan="2">数据源</td>
+                    <td colspan="4">数据源</td>
                 </tr>
 
                 <tr>
-                    <td colspan=2>
+                    <td colspan=4>
 <textarea rows="3" id="TB_Doc" name="TB_Doc" style="width:90%;"></textarea>
                     </td>
                 </tr>
             </table>
 
-                <fieldset>
-                    <legend>设置帮助</legend>
-                    <ul>
-                        <li>SQL格式为:</li>
-                        <li>SELECT No,Name FROM Port_Emp WHERE PinYin LIKE '@Key%' OR No LIKE '%@Key%' OR Name LIKE '%@Key%' </li>
-                        <li>SELECT No,Name FROM CN_City WHERE PinYin LIKE '%@Key%' OR Name LIKE '%@Key%'</li>
-                        <li>URL格式为:</li>
-                        <li>/DataUser/Handler.ashx?xxx=sss </li>
-                        <li>方法的格式为:</li>
-                        <li>MyFunName</li>
-                    </ul>
+            <fieldset>
+                <legend>设置帮助</legend>
+                <ul>
+                    <li>SQL格式为:</li>
+                    <li>SELECT No,Name FROM Port_Emp WHERE PinYin LIKE '@Key%' OR No LIKE '%@Key%' OR Name LIKE '%@Key%' </li>
+                    <li>SELECT No,Name FROM CN_City WHERE PinYin LIKE '%@Key%' OR Name LIKE '%@Key%'</li>
+                    <li>URL格式为:</li>
+                    <li>/DataUser/Handler.ashx?xxx=sss </li>
+                    <li>方法的格式为:</li>
+                    <li>MyFunName</li>
+                </ul>
 
-                    <legend>运行效果</legend>
-                    <ul>
-                        <li> 适用于数据量比较大，内容比较多。 </li>
-                        <li> 需要搜索到要选择的内容，然后放入到文本框里去。 </li>
-                    </ul>
-                    <img src="MultipleChoiceSearch.png" class="HelpImg" />
-                </fieldset>
-         
+                <legend>运行效果</legend>
+                <ul>
+                    <li> 适用于数据量比较大，内容比较多。 </li>
+                    <li> 需要搜索到要选择的内容，然后放入到文本框里去。 </li>
+                </ul>
+                <img src="MultipleChoiceSearch.png" class="HelpImg" />
+            </fieldset>
+
         </form>
 
     </div>

@@ -403,7 +403,7 @@
                     });
                 }
                 $.each(jsonArray, function (i, o) {
-                    if (o.ParentNo == parentNo) {
+                    if (o.ParentNo.trim() == parentNo) {
                         var checked = false;
                         var selectedNodes = window.selectedNodes;
                         var sel = $.grep(selectedNodes, function (obj) {

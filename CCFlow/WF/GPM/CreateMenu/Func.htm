@@ -34,9 +34,6 @@
             func.Name = name;
             func.FuncID = id;
 
-            //funcdocument.getElementById("RB_FuncSrc_0").checked == true)
-            //     isQuanPin = 1;
-
             if (func.FuncID == "" || func.Name == "") {
                 alert("err@名称与编号不能为空.");
                 return;
@@ -49,22 +46,20 @@
             en.ModuleNo = moduleNo;
             en.Name = func.Name;
             en.MenuModel = MenuModel.Func; //独立功能菜单.
-            //en.Icon = "icon-control-play";
             en.Icon = "icon-energy";
             en.Insert();
             en.UrlExt = func.No;
-           // en.UrlExt = "../CCBill/Sys/Func.htm?No=" + en.No;
             en.Update();
 
             
-            var enmethod = new Entity("BP.CCBill.Template.Method");
-            enmethod.MethodID = id;
-            enmethod.Name = name;
-            enmethod.MethodModel = "Func"; 
-            enmethod.RefMethodType = 1;
-            enmethod.Icon = "icon-energy";
-            enmethod.No = func.No;
-            enmethod.Insert();
+        //var enmethod = new Entity("BP.CCBill.Template.Method");
+        //enmethod.MethodID = id;
+        //enmethod.Name = name;
+        //enmethod.MethodModel = "Func"; 
+        //enmethod.RefMethodType = 1;
+        //enmethod.Icon = "icon-energy";
+        //enmethod.No = func.No;
+        //enmethod.Insert();
 
             alert("创建成功，您可以在在菜单里执行高级编辑与授权.");
 

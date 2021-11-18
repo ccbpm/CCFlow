@@ -31,6 +31,7 @@ if (currentURL.indexOf("CCForm") != -1 || currentURL.indexOf("CCBill") != -1)
     laybase = "../";
 if (currentURL.indexOf("AdminFrm.htm") != -1)
     laybase = "../../";
+var frmMapAttrs;
 function LoadFrmDataAndChangeEleStyle(frmData) {
 
     //加入隐藏控件.
@@ -451,12 +452,17 @@ function AfterBindEn_DealMapExt(frmData) {
       
         //如果是日期型或者时间型
         if (mapAttr.MyDataType == 6 || mapAttr.MyDataType == 7) {
+            if (mapAttr.UIIsEnable == 0 || isReadonly == true)
+                return true;
             SetDateExt(mapExts[mapAttr.MyPK], mapAttr)
             return true;
         }
 
         //如果是整数，浮点型，金额类型的扩展属性
         if (mapAttr.MyDataType == 2 || mapAttr.MyDataType == 3 || mapAttr.MyDataType == 5 || mapAttr.MyDataType == 8) {
+            if (mapAttr.UIIsEnable == 0 || isReadonly == true)
+                return true;
+
             SetNumberMapExt(mapExts[mapAttr.MyPK], mapAttr);
             return true;
         }
@@ -468,7 +474,9 @@ function AfterBindEn_DealMapExt(frmData) {
             //处理Pop弹出框的问题
             var PopModel = GetPara(mapAttr.AtPara,"PopModel");
 
-            if (PopModel != undefined && PopModel != "" && mapExt.ExtType == PopModel && PopModel != "None") {
+            if (PopModel != undefined && PopModel != "" && PopModel != "None") {
+                if (mapExt.ExtType != PopModel)
+                    return true;
                 if (mapAttr.UIIsEnable == 0 || isReadonly == true || $("#TB_" + mapAttr.KeyOfEn).length == 0)
                     return true;
                 PopMapExt(PopModel, mapAttr, mapExt, frmData, baseUrl, mapExts);
@@ -561,6 +569,9 @@ function AfterBindEn_DealMapExt(frmData) {
                     var isLoad = true;
                     $("#TB_" + mapAttr.KeyOfEn).hide();
                     $("#TB_" + mapAttr.KeyOfEn).after("<div id='mapExt_" + mapAttr.KeyOfEn + "' style='width:99%'></div>")
+                    //单选还是多选
+                    var selectType = mapExt.GetPara("SelectType");
+                    selectType = selectType == null || selectType == undefined || selectType == "" ? 1 : selectType;
                     layui.use('xmSelect', function () {
                         var xmSelect = layui.xmSelect;
                         xmSelect.render({
@@ -570,7 +581,9 @@ function AfterBindEn_DealMapExt(frmData) {
                                 name: 'Name',
                                 value: 'No',
                             },
-                            toolbar: { show: true },
+                            radio: selectType == 1 ? false : true,
+                            clickClose: selectType == 1 ? false : true,
+                            toolbar: { show: selectType == 1 ? true : false },
                             filterable: true,
                             remoteSearch: true,
                             mapExt: mapExt.MyPK,
@@ -768,6 +781,7 @@ function SetRadioSelectMapExt(mapExts, mapAttr, selectVal, isEnableJS, model, fr
  * 时间字段扩展属性的解析
  * @param {any} mapExts
  * @param {any} mapAttr
+ * @param {any} targetID
  */
 function SetDateExt(mapExts,mapAttr) {
     var funcDoc = "";
@@ -1096,9 +1110,14 @@ function SetNumberMapExt(mapExts, mapAttr) {
                 if (mapExt.Tag1 == null || mapExt.Tag1 == "" ||
                     mapExt.Tag2 == null || mapExt.Tag2 == "")
                     break;
-                ReqDays(mapExt);
-                $('#TB_' + mapExt.Tag1).data({ "ReqDay": mapExt })
-                $('#TB_' + mapExt.Tag2).data({ "ReqDay": mapExt });
+                if (isReadonly == true)
+                    break;
+                if ($('#TB_' + mapExt.AttrOfOper).val() == "0") {
+                    ReqDays(mapExt);
+                    $('#TB_' + mapExt.Tag1).data({ "ReqDay": mapExt })
+                    $('#TB_' + mapExt.Tag2).data({ "ReqDay": mapExt });
+                }
+               
                 break;
             case "RMBDaXie"://转金额大写
                 if (mapExt.Doc == undefined || mapExt.Doc == '')
@@ -1175,7 +1194,11 @@ function ReqDays(mapExt) {
     StarRDT = new Date(demoRDT[0] + '-' + demoRDT[1] + '-' + demoRDT[2]);  //转换为yyyy-MM-dd格式
     demoRDT = EndRDT.split("-");
     EndRDT = new Date(demoRDT[0] + '-' + demoRDT[1] + '-' + demoRDT[2]);
-    res = parseInt((EndRDT - StarRDT) / 1000 / 60 / 60 / 24); //把相差的毫秒数转换为天数
+    var countH = parseInt((EndRDT - StarRDT) / 1000 / 60 / 60);//总共的小时数
+    res = parseInt(countH/ 24); //把相差的毫秒数转换为天数
+    //var day = res;
+   // var h = (countH - day * 24)/24;
+    //res = day + h;
     //判断结束日期是否早于开始日期
     if (parseInt(EndRDT / 1000 / 60 / 60 / 24) < parseInt(StarRDT / 1000 / 60 / 60 / 24)) {
         layer.alert("结束日期不能早于开始日期");
@@ -1198,7 +1221,7 @@ function ReqDays(mapExt) {
         }
     }
 
-    if (res == "" || res == "NaN" || Object.is(res, NaN)) {
+    if (res === "" || res == "NaN" || Object.is(res, NaN)) {
         $('#TB_' + endField).val("");
         res = 0;
     }
@@ -1401,7 +1424,7 @@ function calculator(mapExt) {
         expression.execute_judgement.push("!isNaN(parseFloat(" + element + ".val().replace(/,/g,'')))");
         expression.calculate = expression.calculate.replace(o, "parseFloat(" + element + ".val().replace(/,/g,''))");
     });
-    (function (targets, expression, resultTarget, pk, expDefined) {
+    (function (targets, expression, resultTarget, pk, expDefined,fk_mapData) {
         $.each(targets, function (i, o) {
             if (o.indexOf("@") == -1)
                 return true;
@@ -1429,10 +1452,18 @@ function calculator(mapExt) {
                 eval(evalExpression);
 
                 if (typeof result != "undefined") {
-                    result = numberFormat(result, 2);
+                    var mapAttr = $.grep(frmMapAttrs, function (item) {
+                        return item.MyPK == fk_mapData + "_" + resultTarget;
+                    });
+                    if (mapAttr[0].MyDataType == 2)
+                        result = parseInt(result);
+                    else
+                        result = numberFormat(result, 2);
                 } else {
-                    result = "";
+                    result =0;
                 }
+
+
                 $(":input[name=TB_" + resultTarget + "]").val(result);
                 var daXie = $(":input[name=TB_" + resultTarget + "]").data("daxie");
                 if (daXie != null && daXie != undefined && daXie != "")
@@ -1442,7 +1473,7 @@ function calculator(mapExt) {
                 $(":input[name=TB_" + target + "]").trigger("change");
             }
         });
-    })(targets, expression, mapExt.AttrOfOper, mapExt.MyPK, mapExt.Doc);
+    })(targets, expression, mapExt.AttrOfOper, mapExt.MyPK, mapExt.Doc,mapExt.FK_MapData);
     $(":input[name=TB_" + mapExt.AttrOfOper + "]").attr("disabled", true);
 }
 
@@ -1673,6 +1704,22 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
  * 检查上传附件的数量
  */
 function checkAths() {
+    //获取字段附件
+    var msg = "";
+    $.each(FiledFJ, function (i, item) {
+        if ($("#athModel_" + item.key).length != 0) {
+            var athNum = $("#athModel_" + item.key).find("a").length;
+            var minNum = item.info.minNum;
+            var maxNum = item.info.maxNum;
+            if (athNum < minNum)
+                msg+= item.name + "上传附件数量不能小于" + minNum+";";
+            if (athNum > maxNum)
+                msg += item.name + "您最多上传[" + maxNum + "]个附件" + ";";
+        }
+    })
+    if (msg != "")
+        return msg;
+
     // 不支持火狐浏览器。
     if ("undefined" != typeof AthParams && AthParams.AthInfo != undefined) {
         var aths = document.getElementsByName("Ath");
@@ -1887,7 +1934,9 @@ function ReqAthFileName(athID) {
  * 字段附件的解析
  * @param {any} mapAttr
  */
+var FiledFJ = [];
 function getFieldAth(mapAttr) {
+    var Obj = {};
     //获取上传附件列表的信息及权限信息
     var nodeID = pageData.FK_Node;
     var no = nodeID.toString().substring(nodeID.toString().length - 2);
@@ -1936,8 +1985,18 @@ function getFieldAth(mapAttr) {
     var athDesc = data["AthDesc"][0];
     var css = "style='text-align:left;padding-left:10px;border:1px solid #eee'";
     var clickEvent = "";
-    if (athDesc.IsUpload == 1 && isReadonly == false)
+    if (athDesc.IsUpload == 1 && isReadonly == false) {
         clickEvent = "<button type='button' class='layui-btn layui-btn-sm' style='margin:5px' onclick='OpenAth(\"" + mapAttr.Name + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.MyPK + "\",\"" + mapAttr.AtPara + "\",\"" + mapAttr.FK_MapData + "\",0)'><i class='layui-icon layui-icon-upload'></i>上传文件</button>";
+        FiledFJ.push({
+            key: mapAttr.KeyOfEn,
+            name:mapAttr.Name,
+            info: {
+                minNum: athDesc.NumOfUpload,
+                maxNum: athDesc.TopNumOfUpload
+            }
+        })
+        
+    }
     if (dbs.length == 0) {
         if (athDesc.IsUpload == 1 && isReadonly == false)
             return "<div " + css + " id='athModel_" + mapAttr.KeyOfEn + "'>" + clickEvent + "</div>";

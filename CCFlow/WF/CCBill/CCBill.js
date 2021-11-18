@@ -66,10 +66,10 @@ function CCFrom_FrmPower(frmID) {
 /**
  * 获得表单的Url.
  * @param {表单ID} frmID
- * @param {主键} pkval
+ * @param {主键} oid
  */
-function CCFrom_FrmOptionUrlByOID(frmID, pkval) {
-    return "../WF/CCBill/MyBill.htm?FrmID=" + frmID + "&OID=" + pkval;
+function CCFrom_FrmOptionUrlByOID(frmID, oid) {
+    return "../WF/CCBill/MyBill.htm?FrmID=" + frmID + "&OID=" + oid;
 }
 
 /**

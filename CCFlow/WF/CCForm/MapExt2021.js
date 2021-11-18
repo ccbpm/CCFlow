@@ -6,6 +6,7 @@
  * @param {any} keyVal 选择替换的值
  */
 function GetDataTableByDB(dbSrc, dbType, dbSource, keyVal) {
+    debugger
     if (dbSrc == null || dbSrc == undefined || dbSrc == "")
         return null;
     //处理sql，url参数.
@@ -27,6 +28,7 @@ function GetDataTableByDB(dbSrc, dbType, dbSource, keyVal) {
 * 文本自动完成表格展示
 */
 function showDataGrid(tbid, selectVal, mapExtMyPK) {
+    debugger
     var mapExt = new Entity("BP.Sys.MapExt", mapExtMyPK);
     var dataObj = GetDataTableByDB(mapExt.Tag4, mapExt.DBType, mapExt.FK_DBSrc, selectVal );
     var columns = mapExt.Tag3;
@@ -347,17 +349,28 @@ function FullIt(selectVal, refPK, elementId) {
         oid = 0;
         return;
     }
+    if (selectVal == null || selectVal == undefined)
+        return;
+    //执行确定后执行的JS
+    var mapExt = new Entity("BP.Sys.MapExt");
+    mapExt.SetPKVal(refPK);
+    var i = mapExt.RetrieveFromDBSources();
+
+    var backFunc = mapExt.Tag5;
+    if (backFunc != null && backFunc != "" && backFunc != undefined)
+        DBAccess.RunFunctionReturnStr(DealSQL(backFunc, selectVal));
+
     var mypk = "";
     if (refPK.indexOf("FullData") != -1)
         mypk = refPK;
-    else
+    else {
         mypk = refPK + "_FullData";
+        mapExt.SetPKVal(mypk);
+        i = mapExt.RetrieveFromDBSources();
+    }
+        
 
     //获得对象.
-    var mapExt = new Entity("BP.Sys.MapExt");
-    mapExt.SetPKVal(mypk);
-    var i = mapExt.RetrieveFromDBSources();
-
     //没有填充其他控件
     if (i == 0)
         return;
@@ -645,6 +658,38 @@ function DealSQL(dbSrc, key, kvs) {
     return dbSrc;
 }
 
+/**
+ * 保存EleDB
+ * @param {any} rows
+ */
+function SaveFrmEleDBs(rows, keyOfEn, mapExt, pkval) {
+    pkval = pkval == null || pkval == undefined || pkval == 0 ? pageData.OID : pkval;
+    //删除
+    var ens = new Entities("BP.Sys.FrmEleDBs");
+    ens.Delete("FK_MapData", mapExt.FK_MapData, "EleID", keyOfEn, "RefPKVal", pkval);
+    //保存
+    $.each(rows, function (i, row) {
+        var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+        frmEleDB.MyPK = keyOfEn + "_" + pkval + "_" + row.No;
+        frmEleDB.FK_MapData = mapExt.FK_MapData;
+        frmEleDB.EleID = keyOfEn;
+        frmEleDB.RefPKVal = pkval;
+        frmEleDB.Tag1 = row.No;
+        frmEleDB.Tag2 = row.Name;
+        frmEleDB.Insert();
+    })
+}
+/**
+ * 删除保存的数据
+ * @param {any} keyOfEn
+ * @param {any} oid
+ * @param {any} No
+ */
+function Delete_FrmEleDB(keyOfEn, oid, No) {
+    var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+    frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + No;
+    frmEleDB.Delete();
+}
 function isLegalName(name) {
     if (!name) {
         return false;

@@ -22,10 +22,7 @@
             handler.AddUrlData();
             var data = handler.DoMethodReturnJSON("FieldsORM_Init");
 
-
-
             var frmID = GetQueryString("FrmID");
-
             var dblist = new Entity("BP.CCBill.DBList", frmID);
 
             dblist.ExpEn = dblist.ExpEn.replace('~', '\'');
@@ -50,12 +47,13 @@
             html += "<th>业务类型</th>";
             html += "<th>操作</th>";
             html += "<th>取消映射</th>";
-            html += "<th>显示隐藏?</th>";
+            html += "<th>显示?</th>";
             html += "</tr>";
 
             for (var i = 0; i < data.length; i++) {
                 var en = data[i];
                 var barkEn = null;
+
                 for (var idx = 0; idx < bakAttrs.length; idx++) {
                     var bakAttr = bakAttrs[idx];
                     if (en.No === bakAttr.KeyOfEn)
@@ -84,10 +82,25 @@
                     }
                     barkEn.Insert();
                 }
+
                 var curIdx = i + 1;
                 html += "<tr>";
                 html += "<td>" + curIdx + "</td>";
                 html += "<td>" + barkEn.KeyOfEn + "</td>";
+
+
+                //把常用的字段转化为 中文.
+                if (barkEn.KeyOfEn == barkEn.Name) {
+                    if (barkEn.KeyOfEn == 'OID') barkEn.Name = "内部OID";
+                    if (barkEn.KeyOfEn == 'BillNo') barkEn.Name = "编号";
+                    if (barkEn.KeyOfEn == 'Title') barkEn.Name = "标题";
+                    if (barkEn.KeyOfEn == 'Tel') barkEn.Name = "电话";
+                    if (barkEn.KeyOfEn == 'Email') barkEn.Name = "邮件";
+                    if (barkEn.KeyOfEn == 'Addr') barkEn.Name = "地址";
+                    if (barkEn.KeyOfEn == 'RDT') barkEn.Name = "记录日期";
+                    if (barkEn.KeyOfEn == 'DeptNo') barkEn.Name = "部门编号";
+                    if (barkEn.KeyOfEn == 'DeptT') barkEn.Name = "部门名称";
+                }
 
                 var input = "<input type=text value='" + barkEn.Name + "' id='TB_" + barkEn.KeyOfEn + "' name='TB_" + barkEn.KeyOfEn + "' />";
 
@@ -102,7 +115,7 @@
 
                 var oper = "<a href=\"javascript:Edit('" + barkEn.MyPK + "'," + curIdx + ")\">编辑</a>";
 
-                if (barkEn.MyDataType == 1) {
+                if (barkEn.MyDataType == 1 && IsSysField(en) == false) {
                     oper += " - <a href=\"javascript:TurnToDataType('" + barkEn.MyPK + "',2)\">转成int类型</a>";
                     oper += " - <a href=\"javascript:TurnToFK('" + barkEn.KeyOfEn + "','" + barkEn.FK_MapData + "'," + curIdx + ")\">转成外键</a>";
                     oper += " - <a href=\"javascript:TurnToDataType('" + barkEn.MyPK + "',6)\">转成日期</a>";
@@ -137,8 +150,23 @@
             html += "</table>";
 
             $("#docs").html(html);
-
         });
+
+
+
+        ///转化为name.
+        function IsSysField(en) {
+
+            if (en.KeyOfEn == 'RDT') return true;
+            if (en.KeyOfEn == 'OID') return true;
+            if (en.KeyOfEn == 'BillNo') return true;
+            if (en.KeyOfEn == 'Title') return true;
+            if (en.KeyOfEn == 'Tel') return true;
+            if (en.KeyOfEn == 'Email') return true;
+            if (en.KeyOfEn == 'Addr') return true;
+            return false;
+        }
+
         function CheckDT(dt) {
             var err = "";
 
@@ -312,7 +340,7 @@
         }
         function ViewFrm() {
             var frmID = GetQueryString("FrmID");
-            var url = "../../../CCForm/FrmGener.htm?FrmID=" + frmID + "&FK_MapData=" + frmID;
+            var url = "../../../CCForm/FrmGener.htm?FrmID=" + frmID + "&FK_MapData=" + frmID + "&WorkID=0";
             window.open(url);
         }
     </script>
@@ -352,7 +380,7 @@
                 <li> 如果字段类型不匹配，请打开字段属性，进行编辑，然后把string类型的转化为其他类型. </li>
 
                 <li>
-                    SELECT A.No as OID, A.No as BillNo, a.Name AS Title, A.Tel, A.PinYin,A.Email , B.No as FK_Dept, B.Name AS FK_DeptText
+                    SELECT A.No as OID, A.No as BillNo, a.Name AS Title, A.Tel,A.Email , B.No as FK_Dept, B.Name AS FK_DeptText
                     FROM Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No AND A.No='@Key'
                 </li>
                 <li>

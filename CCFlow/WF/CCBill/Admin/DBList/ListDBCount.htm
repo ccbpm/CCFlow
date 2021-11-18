@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>数据源-数据count</title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <script src="../../../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../../Admin/Admin.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+
+            var frmID = GetQueryString("FrmID");
+
+            var dblist = new Entity("BP.CCBill.DBList", frmID);
+            if (dblist.ExpList == null || dblist.ExpList == "") {
+                dblist.ExpList = dblist.ExpEn.replace('~', '\'');
+                dblist.ExpList = dblist.ExpEn.replace('~', '\'');
+            }
+            if (dblist.ExpCount == null || dblist.ExpCount == "")
+                dblist.ExpCount = dblist.ExpList;
+
+            $("#TB_DBSrc").val(dblist.ExpList);
+            $("#TB_ExpCount").val(dblist.ExpCount);
+            $("#TB_MainTable").val(dblist.MainTable);
+            $("#TB_MainTablePK").val(dblist.MainTablePK);
+
+        });
+
+        function GetDataType(datatype) {
+            if (datatype == 1) return "String";
+            if (datatype == 2) return "Int";
+            if (datatype == 3) return "Float";
+            if (datatype == 4) return "Boolean";
+            if (datatype == 5) return "Double";
+            if (datatype == 6) return "Date";
+            if (datatype == 7) return "DateTime";
+            if (datatype == 8) return "Money";
+        }
+        /**
+         * 获取数据结构
+         */
+        function Save() {
+
+            var frmID = GetQueryString("FrmID");
+            var dblist = new Entity("BP.CCBill.DBList", frmID);
+            dblist.ExpList = $("#TB_DBSrc").val();
+            if (dblist.ExpList == "") {
+                alert("列表数据源不能为空");
+                return;
+            }
+            dblist.ExpCount = $("#TB_ExpCount").val();
+            if (dblist.ExpCount == "") {
+                alert("列表总数数据源不能为空");
+                return;
+            }
+            dblist.MainTable = $("#TB_MainTable").val();
+            dblist.MainTablePK = $("#TB_MainTablePK").val();
+            if (dblist.MainTablePK == "") {
+                alert("查询语句中主表的主键不能为空");
+                return;
+            }
+            /**if (dblist.ExpList.indexOf('@Key') == -1) {
+                alert("数据源里必须包含@Key参数.");
+                return;
+            }*/
+
+            dblist.Update();
+            window.location.href = window.location.href;
+        }
+
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+    <form id="cc">
+        <fieldset>
+            <legend>列表数据源数量.</legend>
+
+            <textarea value="" id="TB_DBSrc" name="TB_DBSrc" rows="5">
+             </textarea>
+
+            <input type="button" value="保存并检查" id="Btn_Save" onclick="Save()" />
+
+            <legend> 帮助： </legend>
+            <ul>
+
+                <li>该数据源是获取数据源的数量</li>
+                <li>比如:</li>
+                <li>
+                    SELECT  count(a.No) as Num FROM Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No AND A.OrgNo='@WebUser.OrgNo'
+                </li>
+
+            </ul>
+
+        </fieldset>
+    </form>
+
+</body>
+</html>

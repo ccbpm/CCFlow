@@ -228,13 +228,14 @@
             });
 
             $('#toPrevDept').bind('click', function () {
-                if (pageData.ParentFlowSort == 'null' || pageData.ParentFlowSort == 'F0') {
+                //判断最高级别.
+                var user = new WebUser();
+                if (pageData.ParentFlowSort == 'null' || pageData.ParentFlowSort == 'F0' || (user.CCBPMRunModel == 2 && pageData.ParentFlowSort == 'F100')) {
                     alert("已到第一级机构");
                     return;
                 }
 
-                //判断最高级别.
-                var user = new WebUser();
+                
                 if (user.CustomerNo == 'TianYe') {
                     if (user.FK_Dept.indexOf('18099') == 0) {
                         if (pageData.ParentFlowSort.indexOf('18099') != 0) {

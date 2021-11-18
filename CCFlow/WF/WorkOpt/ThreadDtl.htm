@@ -24,6 +24,7 @@
 
             var nodeID = GetQueryString("FK_Node");
             var workID = GetQueryString("WorkID");
+
             var fid = GetQueryString("FID");
             fid = fid == null || fid == undefined || fid == "" ? 0 : fid;
 
@@ -31,17 +32,11 @@
 
             //子线程流程引擎注册表.
             var gwfs = new Entities("BP.WF.GenerWorkFlows");
-            if (fid != 0)
-                gwfs.Retrieve("FID", fid);
-            else
-                gwfs.Retrieve("FID", workID);
+            gwfs.Retrieve("FID", workID);
 
             //工作人员表.
             var gwls = new Entities("BP.WF.GenerWorkerLists");
-            if (fid != 0)
-                gwls.Retrieve("FID", fid);
-            else
-                gwls.Retrieve("FID", workID);
+            gwls.Retrieve("FID", workID);
 
             //获得子线节点的数量,如果1个，就用单独列表的模式展现，多个就用多列表模式展现.
             var numOfSubNods = 0;
@@ -59,13 +54,40 @@
             }
 
             //只有一个子线程，就是用列表模式.
-            if (numOfSubNods == 1) {
+            if (numOfSubNods == 1 && 1 == 2) {
                 BindModelOne(gwfs, gwls, fid == 0 ? false : true);
             } else {
                 //使用分组列表的模式.
                 BindModelMore(gwfs, gwls, fid == 0 ? false : true);
             }
+
+            if (fid == 0)
+                $("#addEmp").html("<center><a href='javascript:AddEmp()'><img src='./../Img/Auth.png'  />增加人员(线程)</a></center>");
         })
+
+        function AddEmp() {
+
+            if (node.RunModel == 2 || node.RunModel == 1) {
+
+                var msg = "说明：";
+                msg += "\t\n 1. 新增加的人员，从分流节点的下一个节点开始执行.";
+                msg += "\t\n 2. 输入人员账号，点击确定后，系统就会自动为该人员分配一个任务.";
+
+                var empNo = window.prompt(msg + ' 请输入要增加的人员账号，多个人员用逗号分开(比如:zhangsan,lisi):');
+                if (empNo == null || empNo == '')
+                    return;
+                //  var empNo = 'zhoupeng';
+
+                var workid = GetQueryString("WorkID");
+                var en = new Entity("BP.WF.GenerWorkFlow", workid);
+                var data = en.DoMethodReturnString("DoSubFlowAddEmps", empNo);
+                alert(data);
+                window.location.href = window.location.href;
+                return;
+            }
+
+            alert('您没有权限增加人员.');
+        }
 
         var webUser = new WebUser();
         function BindModelOne(gwfs, gwls, isThread) {
@@ -81,7 +103,7 @@
             strs += "<th>表单</th>";
             if (node.ThreadKillRole == 1)
                 strs += "<th>终止</th>";
-            if (isThread==false)
+            if (isThread == false)
                 strs += "<th>操作</th>";
             strs += "</tr>";
 
@@ -133,28 +155,28 @@
 
             //判断有几个子子线程ID, 如果只有一个，就用列表模式展现.
             var html = "<table style='width:100%;' >";
-            html += "<tr>";
-            html += "<th>标题</th>";
-            html += "<th>停留节点</th>";
-            html += "<th>状态</th>";
-            html += "<th>处理人</th>";
-            html += "<th>发起日期</th>";
-            html += "</tr>";
+            //    html += "<tr>";
+            //    html += "<th >标题</th>";
+            //    html += "<th>停留节点</th>";
+            ////    html += "<th>状态</th>";
+            //    html += "<th>处理人</th>";
+            //    html += "<th>发起日期</th>";
+            //    html += "</tr>";
 
             for (var i = 0; i < gwfs.length; i++) {
 
                 var gwf = gwfs[i];
 
                 html += "<tr class=Sum >";
-                html += "<td>" + gwf.Title + "</td>";
-                html += "<td>" + gwf.NodeName + "</td>";
-                html += "<td>" + gwf.WFStateText + "</td>";
+                html += "<td> <img src='./../Img/Auth.png' style='width:20px;' /> <font color=green>#" + (i + 1) + "，标题：" + gwf.Title + "</font></td>";
+                //  html += "<td>" + gwf.NodeName + "</td>";
+                //  html += "<td>sss</td>";
                 html += "<td>" + gwf.TodoEmps + "</td>";
                 html += "<td>" + gwf.RDT + "</td>";
                 html += "</tr>";
 
                 html += "<tr>";
-                html += "<td colspan=5 > " + GenerHtml(gwf, gwls, isThread) + " </td>";
+                html += "<td colspan=4 > " + GenerHtml(gwf, gwls, isThread) + " </td>";
                 html += "</tr>";
             }
 
@@ -166,14 +188,13 @@
             var strs = "<table style='width:100%;'>";
 
             strs += "<tr>";
-            strs += "<td>序</td>";
-            strs += "<td>节点</td>";
-            strs += "<td>处理人</td>";
+            strs += "<th>节点</th>";
+            strs += "<th>处理人</th>";
             // strs += "<td>名称</td>";
-            strs += "<td>状态</td>";
-            strs += "<td>应完成日期</td>";
-            strs += "<td>实际完成日期</td>";
-            strs += "<td>操作</td>";
+            strs += "<th>状态</th>";
+            strs += "<th>应完成日期</th>";
+            strs += "<th>实际完成日期</th>";
+            strs += "<th>操作</th>";
             strs += "</tr>";
 
             for (var i = 0; i < gwls.length; i++) {
@@ -191,7 +212,6 @@
                     continue;
 
                 strs += "<tr>";
-                strs += "<td>" + i + "</td>";
                 strs += "<td>" + gwl.FK_NodeText + "</td>";
                 strs += "<td>" + gwl.FK_Emp + " " + gwl.FK_EmpText + "</td>";
 
@@ -290,6 +310,8 @@
                 <img src='../Img/loading.gif' alt="" />正在加载，请稍后。。。
             </div>
         </center>
+
+        <div id="addEmp"></div>
     </form>
 </body>
 </html>

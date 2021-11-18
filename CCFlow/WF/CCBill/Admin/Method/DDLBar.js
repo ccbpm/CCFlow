@@ -34,7 +34,8 @@ function GetDBGroup() {
 
         { "No": "A", "Name": "常规组件" },
         { "No": "B", "Name": "实体组件" },
-        { "No": "C", "Name": "流程类" }
+        { "No": "C", "Name": "打印组件" },
+        { "No": "D", "Name": "流程类" }
 
         /*  { "No": "C", "Name": "工具栏按钮" },*/
         /*  { "No": "D", "Name": "流程组件" },*/
@@ -56,15 +57,19 @@ function GetDBDtl() {
         { "No": MethodModel.DictLog, "Name": "操作日志", "GroupNo": "B", "Url": "DictLog.htm" },
         { "No": MethodModel.QRCode, "Name": "二维码(扫码手机上查看)", "GroupNo": "B", "Url": "QRCode.htm" },
         { "No": "Toolbar", "Name": "工具栏按钮组件(打印、导出)", "GroupNo": "B", "Url": "Toolbar.htm" },
-        { "No": "PrintRTF", "Name": "RTF模板打印", "GroupNo": "B", "Url": "PrintRTF.htm" },
         { "No": MethodModel.ImpFromFile, "Name": "从文件里导入数据", "GroupNo": "B", "Url": "ImpFromFile.htm" },
 
+        { "No": "PrintRTF", "Name": "RTF模板打印", "GroupNo": "C", "Url": "PrintRTF.htm" },
+        { "No": "PrintHtml", "Name": "html打印", "GroupNo": "C", "Url": "PrintHtml.htm" },
+        { "No": "PrintPDF", "Name": "PDF打印", "GroupNo": "C", "Url": "PrintRTF.htm" },
+        { "No": "PrintZip", "Name": "打包下载", "GroupNo": "C", "Url": "PrintZip.htm" },
 
-        { "No": MethodModel.FlowBaseData, "Name": "(新建)修改基础数据流程", "GroupNo": "C", "Url": "FlowBaseData.htm" },
-        { "No": MethodModel.FlowEtc, "Name": "(新建)其他业务流程", "GroupNo": "C", "Url": "FlowEtc.htm" },
-        //{ "No": MethodModel.FlowNewEntity, "Name": "(新建)实体(注册)流程", "GroupNo": "C", "Url": "FlowNewEntity.htm" },
-        //{ "No": MethodModel.FlowEntityBatchStart, "Name": "(新建)批量发起", "GroupNo": "C", "Url": "FlowEntityBatchStart.htm" },
-        { "No": MethodModel.SingleDictGenerWorkFlows, "Name": "实体流程汇总列表(综合流程列表)", "GroupNo": "C", "Url": "SingleDictGenerWorkFlows.htm" }
+
+        { "No": MethodModel.FlowBaseData, "Name": "(新建)修改基础数据流程", "GroupNo": "D", "Url": "FlowBaseData.htm" },
+        { "No": MethodModel.FlowEtc, "Name": "(新建)其他业务流程", "GroupNo": "D", "Url": "FlowEtc.htm" },
+        //{ "No": MethodModel.FlowNewEntity, "Name": "(新建)实体(注册)流程", "GroupNo": "D", "Url": "FlowNewEntity.htm" },
+        //{ "No": MethodModel.FlowEntityBatchStart, "Name": "(新建)批量发起", "GroupNo": "D", "Url": "FlowEntityBatchStart.htm" },
+        { "No": MethodModel.SingleDictGenerWorkFlows, "Name": "实体流程汇总列表(综合流程列表)", "GroupNo": "D", "Url": "SingleDictGenerWorkFlows.htm" }
          
 
 

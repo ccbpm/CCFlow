@@ -217,6 +217,13 @@
 
             },
             mounted: function () {
+
+                // fix firefox bug
+                document.body.ondrop = function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
                 //debugger;
                 //获得数据源.
                 var fk_flow = GetQueryString("FK_Flow");

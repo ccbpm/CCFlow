@@ -10,7 +10,7 @@ var webUser = new WebUser();
 
 //处理，表单没有加载完，就可以点击发送按钮.
 var isLoadOk = false;
-debugger
+//debugger
 var UserICon = getConfigByKey("UserICon", '../DataUser/Siganture/'); //获取签名图片的地址
 var UserIConExt = getConfigByKey("UserIConExt", '.jpg');  //签名图片的默认后缀
 $(function () {

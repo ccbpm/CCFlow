@@ -166,9 +166,16 @@
                         var cssID = this.elem.replace("#div_", "");
                         //给当前页面头部和左侧设置主题色
                         var changeobj = $('#DDL_Style').val();//要改变的对象.
+                        console.log(changeobj)
                         if (changeobj) { //判断是否有选中对象
-                            var cssText = $("." + changeobj).attr("style") + cssID + ":" + color + " !important";
-                            $("." + changeobj).css(cssID, color);
+                            /*var cssText = $("." + changeobj).attr("style") + cssID + ":" + color + " !important";
+                            //$("." + changeobj).css(cssID, color);
+                            $("." + changeobj).css("cssText", cssText);
+                            setTimeout(function () { }, 500);*/
+                            var cssText = $("." + changeobj).attr("style")
+                            cssText = cssText == null || cssText == undefined ? "" : cssText;
+                            cssText = cssText + cssID + ":" + color + " !important";
+                            $("." + changeobj).css("cssText", cssText);
                             setTimeout(function () { }, 500);
                         }
                     }
@@ -557,8 +564,9 @@
                             <div class="layui-card-body">
                                 <div class="layui-row FoolFrmTitle">
                                     <div class="layui-col-xs12">
-                                        <div class="FoolFrmTitleLable" style='float:left;margin-top:8px'>傻瓜表单样式定义器</div>
-                                        <div class="FoolFrmTitleIcon" style='float:right;margin-top:1px'><img src='../../../../DataUser/ICON/LogBiger.png' style='height:40px;' /></div>
+                                        <div class="FoolFrmTitleIcon pull-right"><img src='../../../../DataUser/ICON/LogBiger.png' style='height:40px;' /></div>
+                                        <div class="FoolFrmTitleLable">傻瓜表单样式定义器</div>
+
                                     </div>
                                 </div>
                                 <div class="layui-row FoolFrmGroupBar">
@@ -567,32 +575,29 @@
                                 <div class="layui-row FoolFrmFieldRow">
 
                                     <div class="layui-col-xs2 FoolFrmFieldLabel">申请人</div>
-                                    <div class="layui-col-xs4 FoolFrmFieldInput">
-                                        <div class="layui-form-item">
-                                            <input class="layui-input" type="text" id="TB_SQR" value="驰骋工作流" />
-                                        </div>
-
+                                    <div class="layui-col-xs4">
+                                            <input class="layui-input FoolFrmFieldInput" type="text" id="TB_SQR" value="驰骋工作流" />
                                     </div>
                                     <div class="layui-col-xs2 FoolFrmFieldLabel">申请日期</div>
-                                    <div class="layui-col-xs4 FoolFrmFieldInput"><input class="layui-input" type="text" id="TB_SQRQ" value="2003-02-23" /></div>
+                                    <div class="layui-col-xs4"><input class="layui-input FoolFrmFieldInput" type="text" id="TB_SQRQ" value="2003-02-23" /></div>
                                 </div>
                                 <div class="layui-row FoolFrmFieldRow">
                                     <div class="layui-col-xs2 FoolFrmFieldLabel">地址</div>
-                                    <div class="layui-col-xs10 FoolFrmFieldInput">
-                                        <input class="layui-input" type="text" id="TB_Addr" value="济南市.高新区.碧桂园凤凰中心19层" />
+                                    <div class="layui-col-xs10">
+                                        <input class="layui-input  FoolFrmFieldInput" type="text" id="TB_Addr" value="济南市.高新区.碧桂园凤凰中心19层" />
                                     </div>
                                 </div>
                                 <div class="layui-row FoolFrmFieldRow">
                                     <div class="layui-col-xs12 FoolFrmFieldLabel"><span style="color:red">*</span>申请原因</div>
-                                    <div class="layui-col-xs12FoolFrmFieldInput">
-                                        <textarea class="layui-textarea" id="TB_SQYY" placeholder="不少于50字，请仔细填写" cols="10"></textarea>
+                                    <div class="layui-col-xs12">
+                                        <textarea class="layui-textarea  FoolFrmFieldInput" id="TB_SQYY" placeholder="不少于50字，请仔细填写" cols="10"></textarea>
                                     </div>
                                 </div>
                                 <div class="layui-row FoolFrmFieldRow">
                                     <div class="layui-col-xs2 FoolFrmFieldLabel">电话</div>
-                                    <div class="layui-col-xs4 FoolFrmFieldInput"><input class="layui-input" type="text" id="TB_Tel" value="0531-82374939" /></div>
+                                    <div class="layui-col-xs4"><input class="layui-input FoolFrmFieldInput" type="text" id="TB_Tel" value="0531-82374939" /></div>
                                     <div class="layui-col-xs2 FoolFrmFieldLabel">邮件</div>
-                                    <div class="layui-col-xs4 FoolFrmFieldInput"><input class="layui-input" type="text" id="TB_Email" value="ccs@ccflow.org" /></div>
+                                    <div class="layui-col-xs4"><input class="layui-input FoolFrmFieldInput" type="text" id="TB_Email" value="ccs@ccflow.org" /></div>
                                 </div>
                                 <div class="layui-row FoolFrmFieldRow">
                                     <div class="layui-col-xs2 FoolFrmFieldLabel"> 是否执行到位？</div>

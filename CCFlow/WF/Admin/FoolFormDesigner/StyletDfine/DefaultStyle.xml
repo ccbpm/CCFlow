@@ -10,5 +10,5 @@
   <Item No="FoolFrmFieldRow" Name="字段行:FoolFrmFieldRow" Val="@font-color=red@font-size=24" />
   <Item No="FoolFrmFieldLabel" Name="标签:FoolFrmFieldLabel" Val="@font-color=red@font-size=24" />
   <Item No="FoolFrmFieldInput" Name="控件:FoolFrmFieldInput" Val="@font-color=red@font-size=24" />
-
+  <Item No="input-icon" Name="控件:input-icon" Val="@font-color=red@font-size=24" />
 </Table>

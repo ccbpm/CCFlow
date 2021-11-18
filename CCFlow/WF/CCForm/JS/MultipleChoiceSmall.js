@@ -43,7 +43,7 @@ function MultipleChoiceSmall(mapExt, mapAttr, frmData, tbID, rowIndex, OID) {
                     data = en.DoMethodReturnJSON("GenerDataOfJson");
                     if (data.length > 400)
                     {
-                        alert("数据量太大，请检查配置是否有逻辑问题，或者您可以使用搜索多选或者pop弹出窗选择:" + mapExt.Tag3);
+                        alert("数据量太大，请检查配置是否有逻辑问题，或者您可以使用搜索选择或者pop弹出窗选择:" + mapExt.Tag3);
                         return;
                     }
 
@@ -54,7 +54,7 @@ function MultipleChoiceSmall(mapExt, mapAttr, frmData, tbID, rowIndex, OID) {
                 data = en.DoMethodReturnJSON("GenerDataOfJson");
 
                 if (data.length > 400) {
-                    alert("数据量太大，请检查配置是否有逻辑问题，或者您可以使用搜索多选或者pop弹出窗选择:" + mapExt.Tag3);
+                    alert("数据量太大，请检查配置是否有逻辑问题，或者您可以使用搜索选择或者pop弹出窗选择:" + mapExt.Tag3);
                     return;
                 }
             }
@@ -71,7 +71,7 @@ function MultipleChoiceSmall(mapExt, mapAttr, frmData, tbID, rowIndex, OID) {
 
             data = DBAccess.RunSQLReturnTable(tag4SQL);
             if (data.length > 400) {
-                alert("数据量太大，请检查配置是否有逻辑问题，或者您可以使用搜索多选或者pop弹出窗选择:" + mapExt.Tag3);
+                alert("数据量太大，请检查配置是否有逻辑问题，或者您可以使用搜索选择或者pop弹出窗选择:" + mapExt.Tag3);
                 return;
             }
             break;

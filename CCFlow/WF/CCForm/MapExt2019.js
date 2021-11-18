@@ -72,6 +72,7 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, TBModel) {
 
             //简洁模式
             if (TBModel == "Simple") {
+                $("#" + tbid).after("<div id='autodiv'><div id='autoComplete' style='position:absolute;z-index:999'></div>");
                 $.each(dataObj, function (idx, item) {
 
                     var no = item.No;
@@ -82,10 +83,10 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, TBModel) {
                     if (name == undefined)
                         name = item.NAME;
 
-                    $("#" + tbid).after("<div id='autodiv' style=''><div id='autoComplete' style='position:absolute;z-index:999'></div></div>");
+                   
                     var left = $("#autodiv").offset().left;
                     $("#autoComplete").css("left", left + "px");
-                    $("#autoComplete").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + no + "','" + tbid + "','" + fk_mapExt + "');\" value='" + no + "'>" + no + '|' + name + "</div>");
+                    $("#autoComplete").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + no + "','" + tbid + "','" + fk_mapExt + "');\" value='" + no + "'>" + no + '|' + name + "</div></div>");
                 });
 
             }
@@ -96,12 +97,20 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, TBModel) {
 
             oldValue = selectVal;
 
+            document.onclick = function () {
+                $("#autodiv").remove();
+            }
+        
         }
+       
     }
 }
 
+
+
 //文本自动填充 表格模式
 function showDataGrid(sender, tbid, dataObj, mapExt) {
+    debugger
     var columns = mapExt.Tag3;
     $("#autodiv").remove();
     $("#" + tbid).after("<div id='autodiv' style=''><div id='autoComplete' style='position:absolute;z-index:999'></div></div>");
@@ -591,6 +600,7 @@ function ItemClick(sender, val, tbid, fk_mapExt) {
 
     // 填充.
     FullIt(oldValue, fk_mapExt, tbid);
+
 }
 
 function MyOver(sender) {

@@ -253,6 +253,12 @@
             },
             mounted: function () {
 
+                // fix firefox bug
+                document.body.ondrop = function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
 
                 this.startList();
                 //layui.use('form', function () {

@@ -76,6 +76,7 @@ new Vue({
                     { title: '<i class=icon-plus></i> 新建系统', id: "NewSystem" },
                     { title: '<i class=icon-star></i> 系统属性', id: "SystemAttr" },
                     { title: '<i class=icon-plus></i> 新建模块', id: "NewModule" },
+                    { title: '<i class=icon-plus></i> 导出模板', id: "Exp" },
                     { title: '<i class=icon-close></i> 删除系统', id: "DeleteNode" }
                 ]
 
@@ -90,6 +91,9 @@ new Vue({
                             break;
                         case 'NewModule':
                             _this.NewModule(no);
+                            break;
+                        case 'Exp':
+                            _this.Exp(no);
                             break;
                         case 'DeleteNode':
                             _this.DeleteNode(no, 'BP.GPM.Menu2020.MySystem');
@@ -270,6 +274,49 @@ new Vue({
 
             alert("您可以把如下链接绑定您的菜单上. \t\n" + url);
         },
+        Exp: function (systemNo) {
+
+            if (systemNo == "" || systemNo == undefined) {
+                alert("系统编号错误，无法创建模块:" + systemNo);
+                return;
+            }
+
+            var webUser = new WebUser();
+            if (webUser.No != 'admin')
+            {
+                alert("只有超级用户才能执行此操作.");
+                return;
+            }
+
+            if (window.confirm("您确定要导出吗？ 导出到xml需要一定的时间，请耐心等待.") == false)
+                return;
+
+            var ens = new Entity("BP.GPM.Menu2020.MySystem", systemNo );
+            var data = ens.DoMethodReturnString("DoExp");
+            alert(data);
+
+            //  var url = menu.UrlExt;
+
+            //layer.prompt({
+            //    value: '',
+            //    title: '请输入模块名称，比如：车辆报表、统计分析、系统管理',
+            //}, function (value, index, elem) {
+            //    layer.close(index);
+
+            //    var en = new Entity("BP.GPM.Menu2020.Module");
+            //    en.Name = value;
+            //    en.SystemNo = systemNo;
+            //    en.IsEnable = 1;
+            //    en.Insert();
+
+            //    layer.msg("创建成功");
+
+            //    setTimeout(function () {
+            //        window.location.href = "Menus.htm?SystemNo=" + en.No + "&ModuleNo=" + en.No;
+            //        // window.location.reload();
+            //    }, 1000);
+            //});
+        },
         NewModule: function (systemNo) {
 
             if (systemNo == "" || systemNo == undefined) {
@@ -340,8 +387,6 @@ new Vue({
 
             var reoadUrl = "Menus.htm?SystemNo=" + systemNo;
 
-
-
             OpenLayuiDialog(url, "", 90000, false, false, true, false, true, false, false, reoadUrl);
 
             //  this.openLayer(url, );
@@ -371,7 +416,7 @@ new Vue({
                             return item.dataset.sysid
                         }).join(',');
 
-                        // console.log(currentNodeArrStr);
+                        console.log(currentNodeArrStr);
 
                         _this.updateSystemSort(currentNodeArrStr);
                     }
@@ -391,6 +436,7 @@ new Vue({
                             })
                         },
                         onEnd: function (evt) {
+
                             layer.close(_this.loadingDialog)
                             var currentNodeArrStr = Array.from(evt.to.querySelectorAll('div[data-moduleid]')).map(function (item) {
                                 return item.dataset.moduleid
@@ -430,6 +476,8 @@ new Vue({
                                 return item.dataset.id
                             }).join(',')
                             var currentNodeId = evt.to.dataset.pid;
+
+
                             _this.updateMenuSort(pastNodeArrStr, pastNodeId, currentNodeArrStr, currentNodeId)
                             var oldSysIndex = evt.item.dataset.sysidx;
                             var oldModuleIndex = evt.item.dataset.moduleidx;
@@ -564,6 +612,10 @@ new Vue({
                 menu.MenuModel = "单实体流程列表";
                 if (menu.Icon === "") menu.Icon = "icon-notebook";
                 menu.Docs = "一个实体所有发起的流程列表.";
+            }
+
+            if (menu.Mark === "WorkRec") {
+                menu.Docs = "<a " + btnStyle + " href=\"javascript:addTab('../../../CCFast/WorkRec/Default.htm?typeid=0&x=x','" + menu.Name + "');\"  >打开</a>";
             }
 
             //独立流程
@@ -759,8 +811,8 @@ new Vue({
                 //var html = "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.Sys.Func','" + menu.Name + "','" + menu.UrlExt + "')\" >功能属性</a>";
                 var html = "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + menu.UrlExt + "','" + menu.Name + "','700',0,null,false);\" >执行</a>";
 
-                var url = basePath + "/CCFast/StandAloneFlow/Admin/Default.htm?FlowNo=" + menu.Mark;
-                html += "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','" + menu.Name + "','700',0,null,false);\" >设置</a>";
+                var url = basePath + "/CCFast/StandAloneFlow/Admin/Default.htm?FlowNo=" + menu.Tag1;
+                html += "<a " + btnStyle + "  href=\"javascript:OpenLayuiDialog('" + url + "','" + menu.Name + "','900',0,null,false);\" >设置</a>";
                 // html += "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCFast.StandAloneFlow','" + menu.Name + "','" + menu.Tag1 + "')\" >设置</a>";
 
                 var doc = "  <a href=\"javascript:DesignerFlow('" + menu.Tag1 + "','" + menu.Name + "');\" ><i class=icon-heart ></i>设计流程" + menu.Tag1 + "</a>";
@@ -861,6 +913,16 @@ function NewSys() {
     // this.openLayer(url, '新增系统');
     OpenLayuiDialog(url, "", 0, 0, null, true);
 }
+
+
+function ImpSys() {
+
+    var url = "ImpSystem.htm";
+    // OpenLayuiDialog(url,"新增系统")；
+    // this.openLayer(url, '新增系统');
+    OpenLayuiDialog(url, "", 0, 0, null, true);
+}
+
 
 function ManageSys() {
 

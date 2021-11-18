@@ -208,6 +208,14 @@
             },
             mounted: function () {
 
+                // fix firefox bug
+                document.body.ondrop = function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+
+
                 var frmID = GetQueryString("FrmID");
                 var workID = GetQueryString("WorkID");
                 var flowNo = GetQueryString("FlowNo");

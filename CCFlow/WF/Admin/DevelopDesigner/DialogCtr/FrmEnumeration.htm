@@ -7,89 +7,56 @@
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
-    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-
+    <!--<link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />-->
+    <link href="../../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-
-   <script src="../js/ueditor/dialogs/internal.js"></script>
+    <link href="../../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <script src="../js/ueditor/dialogs/internal.js"></script>
     <script src="../../../Scripts/vue.js"></script>
     <style type="text/css">
+        body{ font-size:15px;}
         .trSP {
             background-color: #B9D3EE
         }
 
-        .table-head {
-            padding-right: 17px;
-            background-color: #999;
-            color: #000;
+        .table-head {           
+           padding:10px 15px;
         }
-
-        .table-body {
-            width: 100%;
-            height: 390px;
-            overflow-y: scroll;
-        }
-
-            .table-head table, .table-body table {
-                width: 100%;
-            }
-
-            .table-head tr, .table-body tr {
-                line-height: 35px;
-            }
-
-            .table-head th, .table-body td {
-                text-align: center;
-            }
-
-            .table-body table tr:nth-child(2n+1) {
-                background-color: #f2f2f2;
-            }
-
-        .total {
-            float: right;
-            padding-right: 20px;
-            margin-top: 5px;
-        }
+        .table-head .form-group{ padding-right:15px;}
+        .table-head .form-group label{ padding-right:8px;}
+        .table-head .form-group .btn{ margin:0px 5px;}
+       
     </style>
 
-    
+
 </head>
 <body>
     <div id="App">
-        <div class="table-head">
-            <table style="width:100%;">
-                <tr class="Sum">
-                    <td>
-                        中文名
-                        <input id="TB_Name" class="easyui-textbox" style="width: 150px" />
-                    </td>
-                    <td>字段英文名   <input id="TB_KeyOfEn"  class="easyui-textbox" style="width: 150px" /> </td>
-                    <td><input id="CB_Generate_Tags" type="checkbox" checked="checked" /><label for="CB_Generate_Tags">生成标签</label> </td>
-                    <td> <input type="button" id="Btn_New" @click="NewEnum" value="新建" /> </td>
-
-                    <td>关键字 </td>
-                    <td><input id="EnumValue" class="easyui-textbox" style="width:100px" /> </td>
-                    <td><input type="button" id="Btn_New" @click="SelectEnum" value="查询" /> </td>
-
-                </tr>
-            </table>
+        <div class="form-inline table-head">
+           
+                        <div class="form-group">
+                            <label>中文名</label>
+                            <input id="TB_Name" class="form-control"/>
+                        </div>
+                   <div class="form-group">
+    <label>字段英文名</label>   <input id="TB_KeyOfEn" class="form-control" />
+</div><div class="form-group"><label for="CB_Generate_Tags"><input id="CB_Generate_Tags" type="checkbox" checked="checked" />生成标签</label> </div> <div class="form-group"><label>关键字</label><input id="EnumValue" class="form-control" /> </div><div class="form-group"><input type="button" class="btn btn-primary  btn-sm" id="Btn_New" @click="SelectEnum" value="查询" /> <input type="button" class="btn btn-success btn-sm" id="Btn_New" @click="NewEnum" value="新建" /> </div>
         </div>
         <div class="table-body">
             <div style="position:relative">
-                <table id="Table1" class="table table-striped">
+                <table id="Table1" class="table table-hover">
                     <thead>
-                        <tr>
+                        <tr class="active">
                             <th style='width:53px;'>#</th>
                             <th style='width:103px;'>枚举值</th>
                             <th style='width:103px;'>名称</th>
                             <th>枚举信息</th>
-                            <th style='width:30px;'>子项？</th>
-                            <th style='width:53px;'>操作</th>
+                            <th>子项？</th>
+                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -100,7 +67,7 @@
                                 <template v-if="sysEnumMain.EnumKey!=''">
                                     {{sysEnumMain.EnumKey}}
                                 </template>
-                               
+
                                 <template v-else=v-else>
                                     {{sysEnumMain.No}}
                                 </template>
@@ -118,6 +85,11 @@
                     </tbody>
                 </table>
             </div>
+            <nav>
+                <ul class="pagination">                  
+                    <li  v-for="k in pages" :class="pagesactive==k+1?'active':''" @click.stop="pageFenye(k)"><a href="#">{{k+1}}</a></li>                                 
+                </ul>
+            </nav>
         </div>
     </div>
     <script language="javascript" type="text/javascript">
@@ -137,9 +109,27 @@
                     IsHaveDtl: false,
                     AtPara:"",
                 },
+                pagenum: 15,
+                pages: [],
+                pagesactive: 1,
+                sysList:[]
+
 
             },
             methods: {
+                pageFenye: function (num) {
+                    this.pagesactive = num + 1;
+                    var sysData = []
+                    var pn = num * this.pagenum
+                    for (i = pn; i < this.sysList.length; i++) {
+                        var en = this.sysList[i]
+                        if (i < this.pagenum+pn) {
+                            sysData.push(en)
+                        }
+
+                    }
+                    this.sysEnumMains = sysData
+                },
                 ChangeEnum: function (sysEnumMain) {
                     this.SelectEnum = sysEnumMain;
                     if (this.SelectEnum.EnumKey != "")
@@ -164,13 +154,35 @@
                         sql = "SELECT * FROM Sys_EnumMain";
                     else
                         sql = "SELECT * FROM Sys_EnumMain WHERE (No like '%" + EnumName + "%') OR (Name like '%" + EnumName + "%')";
-                    var sysEnumMains = DBAccess.RunSQLReturnTable(sql);
-                    this.sysEnumMains = $.grep(sysEnumMains, function (item) {
+                    var sysList = DBAccess.RunSQLReturnTable(sql);
+                    this.sysList = $.grep(sysList, function (item) {
                         var atPara = item.AtPara;
                         atPara = atPara == null || atPara == undefined ? "" : atPara;
                         var idx = atPara.indexOf("ParentKey");
                         return idx == 0 || idx == -1;
                     })
+                    var pn = Math.ceil(this.sysList.length / this.pagenum)
+                    
+                    this.pages = []
+                    for (p = 0; p < pn; p++) {
+                        this.pages.push(p)
+                    }
+                    var sysData = []
+
+                    for (i = 0; i < this.sysList.length; i++) {
+                        var en = this.sysList[i]
+                        if (i < this.pagenum) {
+							en.EnumKey=en.enumkey;
+							en.Name=en.name;
+							en.CfgVal=en.cfgval;
+							en.No=en.no;
+							en.Lang=en.lang;
+                            sysData.push(en)
+                        }
+
+                    }
+					console.log(sysData)
+                    this.sysEnumMains = sysData
                 },
                 Edit: function (sysEnumMain) {
                     var url = "EnumerationNew.htm?DoType=FrmEnumeration_SaveEnum&EnumKey=" + sysEnumMain.No;
@@ -265,12 +277,30 @@
                 InitData() {
                     var enumMains = new Entities("BP.Sys.SysEnumMains");
                     enumMains.RetrieveAll();
-                    this.sysEnumMains = $.grep(enumMains, function (item) {
+                    this.sysList = $.grep(enumMains, function (item) {
                         var atPara = item.AtPara;
                         atPara = atPara == null || atPara == undefined ? "" : atPara;
                         var idx = atPara.indexOf("ParentKey");
                         return idx == 0 || idx == -1;
                     })
+                    var pn = Math.ceil(this.sysList.length / this.pagenum)
+                    console.log(pn)
+                    this.pages = []
+                    for (p = 0; p < pn; p++) {
+                        this.pages.push(p)
+                    }
+                    var sysData = []
+
+                    for (i = 0; i < this.sysList.length; i++) {
+                        var en = this.sysList[i]
+                        if (i < this.pagenum) {
+                            sysData.push(en)
+                        }
+                      
+                    }
+                    this.sysEnumMains=sysData
+                  
+                   
                 },
             },
             created() {

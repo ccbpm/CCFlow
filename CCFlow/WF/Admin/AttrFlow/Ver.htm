@@ -90,15 +90,34 @@
             $("#docs").html(html);
         }
 
+
+        //已知URL,在右侧打开页面
+        function OpenWindowRight(url, title) {
+            if (top.layui.index) {
+                top.layui.index.openTabsPage(url, title)
+            } else {
+                window.open(url)
+            }
+        }
+
+
         function changeOrOpenTab(flowName, flowNo) {
             //"&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1", node.iconCls
             var webUser = new WebUser();
             var url = "../CCBPMDesigner/Designer.htm?FK_Flow=" + flowNo;
 
             url += "&UserNo=" + webUser.No + "&SID=" + webUser.SID + "&Flow_V=1&OrgNo=" + webUser.OrgNo;
+            if (top.layui.index) {
+                url = "../FlowDesigner/Designer.htm?FK_Flow=" + flowNo;
 
-            window.parent.parent.addTab(flowNo, flowNo + "." + flowName, url,
-                "icon-flow1");
+                url += "&UserNo=" + webUser.No + "&SID=" + webUser.SID + "&Flow_V=1&OrgNo=" + webUser.OrgNo;
+                top.layui.index.openTabsPage(url, flowNo + "." + flowName);
+            } else {
+                window.parent.parent.addTab(flowNo, flowNo + "." + flowName, url,
+                    "icon-flow1");
+            }
+            
+
         }
 
         function Del(no) {

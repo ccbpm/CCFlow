@@ -295,7 +295,7 @@ function InitPage() {
     var _html = '<form class="layui-form " lay-filter="designer" >';
     _html += "<div class='layui-row wapper'>";
     //表头
-    _html += '<div class="layui-col-xs12 FoolFrmTitle" style="margin-bottom: 6px;">';
+    _html += '<div class="layui-col-xs12 FoolFrmTitle">';
     _html += '<div class="layui-col-xs12">'
     _html += "   <div class='FoolFrmTitleIcon' style='float:left;margin-top:1px'  > <img src='../../../DataUser/ICON/LogBiger.png' style='height:50px;' /></div >";
     _html += "   <div class='FoolFrmTitleLable' style='float:right;margin-top:8px' >" + frmName + "</div>";
@@ -551,7 +551,7 @@ function GenerGroupTR(groupEn, tabCol, data) {
         rightBtn += "<a href=\"javascript:GroupFieldDoDown('" + groupEn.OID + "');\"><i class='layui-icon layui-icon-triangle-d'></i></a>";
         rightBtn += "</div>";
         console.log(groupEn)
-        var html = "<div class='layui-col-xs12 FoolFrmGroupBar' style='margin-bottom: 6px;' data-id='" + groupEn.OID + "'>";
+        var html = "<div class='layui-col-xs12 FoolFrmGroupBar'  data-id='" + groupEn.OID + "'>";
         html += "<div class='layui-col-xs12'>";
         html += leftBtn + rightBtn;
         html += "</div>";
@@ -586,7 +586,7 @@ function GroupFieldDoDown(refoid) {
  * @param {any} tableCol
  */
 function GenerGroupContext(groupEn, data, tableCol) {
-    var _html = '<div class="layui-col-xs12 FoolFrmFieldTR" style="margin-bottom: 6px;">';
+    var _html = '<div class="layui-col-xs12 FoolFrmFieldTR">';
     _html += '<div class="layui-col-xs12">'
     switch (groupEn.CtrlType) {
 
@@ -609,12 +609,28 @@ function GenerGroupContext(groupEn, data, tableCol) {
             var flowNo = GetQueryString("FK_Flow");
             var nodeID = GetQueryString("FK_Node");
 
-            var src = "../../WorkOpt/SubFlow.htm?WorkID=0&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+            Skip.addJs("../../WorkOpt/SubFlow.js");
+           // _html += gfLabHtml;
+            _html += "<div class='layui-row'>"
+            _html += "<div class='layui-col-xs12'>";
+            //说明是累加表单.
+            if (groupEn.FrmID.indexOf(nodeID) == -1) {
+
+                var myNodeID = groupEn.FrmID.substring(2);
+                var myNode = new Entity("BP.WF.Node", myNodeID);
+                _html += "<div id='SubFlow'>" + SubFlow_Init(myNode) + "</div>";
+            }
+            else {
+                var node = new Entity("BP.WF.Node", nodeID);
+                _html += "<div id='SubFlow'>" + SubFlow_Init(node) + "</div>";
+            }
+
+           /* var src = "../../WorkOpt/SubFlow.htm?WorkID=0&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
 
             var compent = new Entity("BP.WF.Template.FrmSubFlow", nodeID);
 
             var frameDocs = "<iframe ID='F_SubFlow_" + nodeID + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + compent.SF_H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
-            _html += "<div  id='SubFlow" + nodeID + "' style='width:300px;'>" + frameDocs + "</div>";
+            _html += "<div  id='SubFlow" + nodeID + "'>" + frameDocs + "</div>";*/
 
             break;
         case "Frame":
@@ -1170,7 +1186,7 @@ function Edit(mypk, ftype, gf, fk_mapdtl, uiContralType) {
                     break;
                 case 4:
                     title = '地图';
-                    url = '../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtMap&PKVal=' + mypk + '&s=' + Math.random();
+                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtMap&PKVal=' + mypk + '&s=' + Math.random();
                     break;
                 case 6:
                     title = '附件组件';

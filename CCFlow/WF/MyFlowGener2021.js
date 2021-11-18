@@ -203,7 +203,7 @@ function BindFrm() {
             break;
         case FlowDevModel.RefOneFrmTree://表单库单表单
             if (frmNode != null && frmNode != undefined) {
-                frmNode = frmNode[0];
+               // frmNode = frmNode[0];
                 if (frmNode.FrmType == 0) { //傻瓜表单
                     Skip.addJs("./CCForm/FrmFool2021.js?ver=" + Math.random());
                     GenerFoolFrm(flowData);
@@ -510,11 +510,12 @@ function ShowWorkReturnTip() {
             _html += item.Msg;
             _html += "</div>";
         });
+        var h = window.innerHeight - 240;
         //退回消息
         layer.open({
             type: 1,
             skin: '', //加上边框
-            area: ['420px', 'auto'], //宽高
+            area: ['420px', h+'px'], //宽高
             content: _html
         });
     }
@@ -522,6 +523,73 @@ function ShowWorkReturnTip() {
 
 function SaveDtlAll() {
     return true;
+}
+
+//必填项检查   名称最后是*号的必填  如果是选择框，值为'' 或者 显示值为 【*请选择】都算为未填 返回FALSE 检查必填项失败
+function checkBlanks() {
+    var checkBlankResult = true;
+    //获取所有的列名 找到带* 的LABEL mustInput
+
+    var lbs = $('.mustInput');
+    $.each(lbs, function (i, obj) {
+        var parentObj = $(obj).parent().parent();
+        if (parentObj && parentObj.css('display') != 'none') {
+            var keyOfEn = $(obj).attr("data-keyofen");
+            if (keyOfEn != null) {
+                var item = $("#TB_" + keyOfEn);
+                if (item.length != 0) {
+                    if (item.val() == "") {
+                        checkBlankResult = false;
+                        item.addClass('errorInput');
+                    } else {
+                        item.removeClass('errorInput');
+                    }
+                    return true;
+                }
+
+                item = $("#DDL_" + keyOfEn);
+                if (item.length != 0) {
+                    if (item.val() == "" || item.val() == -1 || item.children('option:checked').text() == "*请选择") {
+                        checkBlankResult = false;
+                        item.addClass('errorInput');
+                    } else {
+                        item.removeClass('errorInput');
+                    }
+                    return true;
+                }
+
+            }
+
+        }
+    });
+
+    return checkBlankResult;
+}
+
+//正则表达式检查
+function checkReg() {
+    var checkRegResult = true;
+    var regInputs = $('.CheckRegInput');
+    $.each(regInputs, function (i, obj) {
+        var name = obj.name;
+        var mapExtData = $(obj).data();
+        if (mapExtData.Doc != undefined) {
+            var regDoc = mapExtData.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}').replace(/，/g, ',');
+            var tag1 = mapExtData.Tag1;
+            if ($(obj).val() != undefined && $(obj).val() != '') {
+
+                var result = CheckRegInput(name, regDoc, tag1);
+                if (!result) {
+                    $(obj).addClass('errorInput');
+                    checkRegResult = false;
+                } else {
+                    $(obj).removeClass('errorInput');
+                }
+            }
+        }
+    });
+
+    return checkRegResult;
 }
 
 function SetFrmReadonly() {

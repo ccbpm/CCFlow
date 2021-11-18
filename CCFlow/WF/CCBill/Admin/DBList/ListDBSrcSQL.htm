@@ -47,6 +47,7 @@
          * 获取数据结构
          */
         function Save() {
+
             var frmID = GetQueryString("FrmID");
             var dblist = new Entity("BP.CCBill.DBList", frmID);
             dblist.ExpList = $("#TB_DBSrc").val();
@@ -73,7 +74,7 @@
             dblist.Update();
             window.location.href = window.location.href;
         }
-      
+
     </script>
 </head>
 <body>
@@ -81,37 +82,32 @@
     </div>
     <form id="cc">
         <fieldset>
-            <legend>列表数据源: 必须有：OID,BillNo,Title 字段.</legend>
+            <legend>列表数据源: 必须有：OID,BillNo,Title,RDT 字段.</legend>
 
-            <textarea value="" id="TB_DBSrc" name="TB_DBSrc"  rows="5">
+            <textarea value="" id="TB_DBSrc" name="TB_DBSrc" rows="5">
              </textarea>
 
             <!--数据源主表别名(如果没有别名请填写主表的名字)：
             <input type="text" id="TB_MainTable" value="" />
             数据源主键：
             <input type="text" id="TB_MainTablePK" value="" />
-
             <br />
-
             <legend>总数数据源.</legend>
-
-
             <textarea value="" id="TB_ExpCount" name="TB_ExpCount" rows="3">
              </textarea>-->
 
             <input type="button" value="保存并检查" id="Btn_Save" onclick="Save()" />
 
-            <legend>
-                说明：
-            </legend>
+            <legend> 帮助： </legend>
             <ul>
+
+                <li>OID是内置主键，BillNo是编号, Title 是名称， RDT是创建时间(如果没有就 '' as RDT) </li>
 
                 <li> 如果是多表关联查询时需要设置对应主表的别名，便于查询条件的拼接。 </li>
                 <li> 列表数据源和列表总数数据源不能为空。 </li>
-
                 <li>
-                    SELECT A.No as OID, A.No as BillNo, a.Name AS Title, A.Tel, A.PinYin,A.Email , B.No as Dept, B.Name AS DeptT
-                    FROM Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No 
+                    SELECT A.No as OID, A.No as BillNo, a.Name AS Title, A.Tel,A.Email , B.No as Dept, B.Name AS DeptT, '' as RDT
+                    FROM Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No
                 </li>
 
             </ul>

@@ -236,10 +236,10 @@
             });
 
 
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddUrlData();
             handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            handler.AddPara("CondType", GetQueryString("CondType"));
             handler.AddPara("depts", depts);
             handler.AddPara("CondOrAnd", GetQueryString("CondOrAnd"));
             handler.AddFormData();

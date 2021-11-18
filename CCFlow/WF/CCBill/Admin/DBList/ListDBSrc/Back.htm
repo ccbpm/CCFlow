@@ -118,7 +118,7 @@
                 <li> 如果字段类型不匹配，请打开字段属性，进行编辑，然后把string类型的转化为其他类型. </li>
 
                 <li>
-                    SELECT A.No as OID, A.No as BillNo, a.Name AS Title, A.Tel, A.PinYin,A.Email , B.No as Dept, B.Name AS DeptT
+                    SELECT A.No as OID, A.No as BillNo, a.Name AS Title, A.Tel,A.Email , B.No as Dept, B.Name AS DeptT
                     FROM Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No AND A.No='@Key'
                 </li>
 

@@ -233,7 +233,7 @@
                             数据源
                         </td>
                         <td>
-                            <select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc"></select>    
+                            <select id="DDL_FK_DBSrc" name="DDL_FK_DBSrc"></select>
                             <a href="#" onclick="CRUDSFDBSrcs()">维护数据源</a>
                         </td>
                     </tr>
@@ -272,6 +272,7 @@
                 <br />
 
                 <fieldset>
+
                     <legend id="help"></legend>
                     <ul>
                         <li>执行的结果如果返回的err@ 系统就会认为您要抛出异常了.</li>
@@ -280,16 +281,33 @@
                         <li>执行的内容,支持ccbpm的表达式.比如: UPDATE XXX SET xxxx=@MyFiledName </li>
 
                     </ul>
+                    <legend>关于url</legend>
+                    <ul>
+                        <li>请正确的配置一个url地址 </li>
+                        <li>如果该url地址在本机上，您需要配置绝对路径就好,比如：  /DataUser/xxx.jsp </li>
+                        <li>如果是另外的服务器，请使用绝对的路径，比如 : http://192.168.1.111/xxx.jsp  </li>
+                        <li> 系统会在您的url上面增加WorkID, UserNo, SID 等参数.  </li>
+                        <li> 比如1：您配置的是 /DataUser/xxx.jsp 系统解析执行的时候会是 /DataUser/xxx.jsp?WorkID=1101&UserNo=zhangsan&SID=xxxxxxxx </li>
+                        <li> 比如：您配置的是 /DataUser/xxx.jsp?DoType=xxx 系统解析执行的时候会是 /DataUser/xxx.jsp?DoType=xxx&WorkID=1101&UserNo=zhangsan&SID=xxxxxxxx </li>
+                        <li>根据WorkID您可以获取您所需要的其他参数。  </li>
+                    </ul>
+
+                    <legend>关于EventBase类</legend>
+                    <ul>
+                        <li>它是一个子类，按照要求，从基类上集成下来并且写入到与bp的包名或者命名空间里，如下图：</li>
+                        <li>java 与.net 一样语法与基类名称：</li>
+                        <li><img src="ActionDtl.png" id="HelpImg" class="HelpImg" /></li>
+                    </ul>
+
                 </fieldset>
             </div>
 
-            </span>
 
         </form>
 
     </div>
 
-        </form>
+    </form>
 
     </div>
 

@@ -63,6 +63,17 @@
         input[type=checkbox]:disabled {
             display: none !important;
         }
+        th {
+            /*background-color: InfoBackground;*/
+            background-color: #f1f1f1;
+        }
+       #SubFlow td {
+            padding: 8px 10px;
+            border: 1px solid #eeeeee;
+        }
+        .layui-footer {
+            text-align: left !important;
+        }
     </style>
     <style id="theme-data"></style>
 
@@ -90,7 +101,9 @@
                 </div>
             </div>
             <!--底部信息-->
-            <div class="layui-footer" style="left:0px;display:none"></div>
+            <div class="layui-footer" style="left:0px;display:none">
+                <div class="layui-btn-container" id="bottomToolBar" style="margin:10px 10px 0px 10px"></div>
+            </div>
         </form>
     </div>
 </body>

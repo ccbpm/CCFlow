@@ -48,7 +48,6 @@ $(window).load(function () {
         IsReadonly: GetQueryString("IsReadonly")
     }
 
-
     
     if ($("#ToolBar").length == 1 || $("#Toolbar").length == 1) {
         if ($('#ccbpmJS').length == 1) {
@@ -69,7 +68,7 @@ $(window).load(function () {
     }
         
     if ($("#WorkCheck").length == 1) {
-        jQuery.getScript(ccbpmPath + "/WF/WorkOpt/WorkCheck.js", function () {
+        loadScript(ccbpmPath + "/WF/WorkOpt/WorkCheck.js", function () {
             NodeWorkCheck_Init();
         });
         

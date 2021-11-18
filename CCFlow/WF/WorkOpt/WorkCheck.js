@@ -64,7 +64,6 @@ function NodeWorkCheck_Init() {
             _Html += WorkCheck_Parse(item, aths, frmWorkCheck, SignType, 1, true, FWCVer);
         });
         _Html += "</table>";
-
     }
 
 

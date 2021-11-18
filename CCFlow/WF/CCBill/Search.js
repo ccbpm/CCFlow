@@ -576,7 +576,11 @@ function Search() {
     ur.Update();
     pageIdx = 1;
     tableData = SearchData();
-    layui.table.reload('lay_table_dict', { data: tableData });
+
+    if ($("#lay_table_bill").length != 0)
+        layui.table.reload('lay_table_bill', { data: tableData });
+    else
+        layui.table.reload('lay_table_dict', { data: tableData });
     renderLaypage();
 }
 /**
@@ -1152,4 +1156,20 @@ function DoMethod(methodNo,workid) {
     else
         window.top.vm.openTab(method.Name, method.Docs);
     
+}
+
+function GetBillState(BillState) {
+    if (BillState == 0)
+        return "空白";
+
+    if (BillState == 1)
+        return "草稿";
+
+    if (BillState == 2)
+        return "编辑中";
+
+    if (BillState == 100)
+        return "归档";
+
+    return BillState;
 }

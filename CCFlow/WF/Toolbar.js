@@ -1,6 +1,7 @@
 ﻿
 var wf_node = null;
 var webUser = new WebUser();
+var toolbarPos = getConfigByKey("ToolbarPos", '0');  //签名图片的默认后缀
 $(function () {
 
     var barHtml = "";
@@ -85,9 +86,20 @@ $(function () {
             }
         }
     });
-    $('#ToolBar').html(_html);
-	$('#Toolbar').html(_html);
 
+    if (toolbarPos == "0") {
+        $('#ToolBar').html(_html);
+        $('#Toolbar').html(_html);
+        $(".layui-header").show();
+    }
+
+    if (toolbarPos == "1") {
+        $('#bottomToolBar').html(_html);
+        $('#bottomToolBar').html(_html);
+        $(".layui-footer").show();
+        $(".layui-header").hide();
+        $(".layui-fluid").css("padding-top", "0px");
+    }
    
    
     //按钮旁的下来框
@@ -97,10 +109,10 @@ $(function () {
     $('.layui-bar').on('click', function () {
         var oper = $(this).data("info");
        if (oper != null && oper != undefined && oper != "")
-            eval(oper);
-        
+            eval(oper);       
        
     });
+
     if ($('[name=Return]').length > 0) {
         $('[name=Return]').bind('click', function () {
             //增加退回前的事件
@@ -120,7 +132,7 @@ $(function () {
             initModal("TransferCustom");
         });
     }
-
+    
 
     if ($('[name=Thread]').length > 0) {
         $('[name=Thread]').bind('click', function () {
@@ -289,7 +301,7 @@ function initModal(modalType, toNode, url) {
     var height = 50;
     var title = "";
     if (modalType != undefined) {
-       
+        var isShowColseBtn = 1;
 
         switch (modalType) {
             case "returnBack":
@@ -323,6 +335,7 @@ function initModal(modalType, toNode, url) {
                 width = window.innerWidth * 4/5;
                 height = 80;
                 modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                isShowColseBtn = 0;
                 break;
             case "Thread":
             case "thread":
@@ -336,6 +349,7 @@ function initModal(modalType, toNode, url) {
                 width = window.innerWidth * 4/5; 
                 height = 80;
                 modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Shift.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                isShowColseBtn = 0;
                 break;
             case "GovDocFile":
                 title = "公文正文";
@@ -361,7 +375,6 @@ function initModal(modalType, toNode, url) {
                 height = 80;
                 modalIframeSrc = ccbpmPath +"/WF/WorkOpt/WorkCheck.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
-
             case "Track": //轨迹.
                 title = "处理记录、轨迹";
                 width = window.innerWidth * 4/5; 
@@ -376,7 +389,7 @@ function initModal(modalType, toNode, url) {
                 else
                     title = "会签";
                 modalIframeSrc = ccbpmPath +"/WF/WorkOpt/HuiQian.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNode + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
-
+                isShowColseBtn = 0;
                 break;
             case "AddLeader":
                 title = "加主持人";
@@ -404,6 +417,7 @@ function initModal(modalType, toNode, url) {
             case "accepter":
                 title = "选择下一个节点及下一个节点接受人";
                 modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                isShowColseBtn = 0;
                 break;
 
             //发送选择接收节点和接收人                
@@ -414,6 +428,7 @@ function initModal(modalType, toNode, url) {
                 width = window.innerWidth * 4/5; 
                 height = 80;
                 modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                isShowColseBtn = 0;
                 break;
             case "SelectNodeUrl":
                 title ="请选择到达的节点";
@@ -505,11 +520,12 @@ function initModal(modalType, toNode, url) {
                 break;
         }
     }
-    OpenLayuiDialog(modalIframeSrc, title, width, height, "auto");
+    if (isShowColseBtn == 0)
+        OpenLayuiDialog(modalIframeSrc, title, width, height, "auto", false, false, false, null, null, null, 0);
+    else
+        OpenLayuiDialog(modalIframeSrc, title, width, height, "auto");
     return false;
 }
-
-
 
 //禁用按钮功能
 function setToobarDisiable() {
@@ -609,6 +625,25 @@ var IsRecordUserLog = getConfigByKey("IsRecordUserLog", false);
 var isSaveOnly = false;
 function Send(isHuiQian, formType) {
 
+    //如果启用了流程流转自定义，必须设置选择的游离态节点
+    if ($('[name=TransferCustom]').length > 0) {
+        var ens = new Entities("BP.WF.TransferCustoms");
+        ens.Retrieve("WorkID", pageData.WorkID, "IsEnable", 1);
+        if (ens.length == 0) {
+            alert("该节点启用了流程流转自定义，但是没有设置流程流转的方向，请点击流转自定义按钮进行设置");
+            return false;
+        }
+        msg = "";
+        $.each(ens, function (i, en) {
+            if (en.Worker == null || en.Worker == "")
+                msg += "节点[" + en.NodeName + "],";
+        })
+        if (msg != "") {
+            msg += "没有设置接收人。";
+            alert(msg);
+            return false;
+        }
+    }
 
     /**发送前处理的信息 Start**/
     //SDK表单
@@ -639,7 +674,8 @@ function Send(isHuiQian, formType) {
         else
             UserLogInsert("TodoList", "处理待办");
     }
-        
+
+    
 
     /**发送前处理的信息 End**/
     var isShowToNode = true;
@@ -1053,15 +1089,7 @@ function NodeFormSend() {
         alert(msg);
         return false;
     }
-    //如果启用了流程流转自定义，必须设置选择的游离态节点
-    if ($('[name=TransferCustom]').length > 0) {
-        var ens = new Entities("BP.WF.TransferCustoms");
-        ens.Retrieve("WorkID", pageData.WorkID, "IsEnable", 1);
-        if (ens.length == 0) {
-            alert("该节点启用了流程流转自定义，但是没有设置流程流转的方向，请点击流转自定义按钮进行设置");
-            return false;
-        }
-    }
+   
 
     return true;
 }
@@ -1174,7 +1202,7 @@ function ConfirmBtn(btn, workid) {
 }
 //结束流程.
 function DoStop(msg, flowNo, workid) {
-    layui.confirm('您确定要执行 [' + msg + '] ?', function (index) {
+    layui.layer.confirm('您确定要执行 [' + msg + '] ?', function (index) {
         layer.close(index);
         //流程结束前
         if (typeof beforeStopFow != 'undefined' && beforeStopFow instanceof Function)

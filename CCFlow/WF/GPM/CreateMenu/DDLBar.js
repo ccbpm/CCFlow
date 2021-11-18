@@ -59,9 +59,10 @@ function GetDBDtl() {
 
         { "No": MenuModel.DictTable, "Name": "创建字典表", "GroupNo": "C", "Url": "DictTable.htm" },
 
-
+        { "No": "Task", "Name": "任务", "GroupNo": "D", "Url": "Task.htm" },
         { "No": "Calendar", "Name": "日历日程", "GroupNo": "D", "Url": "Calendar.htm" },
         { "No": "Notepad", "Name": "记事本", "GroupNo": "D", "Url": "Notepad.htm" },
+        { "No": "KnowledgeManagement", "Name": "知识库", "GroupNo": "D", "Url": "KnowledgeManagement.htm" },
         { "No": "WorkRec", "Name": "工作日志", "GroupNo": "D", "Url": "WorkRec.htm" }
 
 

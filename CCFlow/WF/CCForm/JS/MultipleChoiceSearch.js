@@ -1,17 +1,19 @@
 ﻿/*大范围，查询模式的多选. */
-function MultipleChoiceSearch(mapExt) {
+function MultipleChoiceSearch(mapExt, mapAttr, tbID, rowIndex, OID) {
 
     mapExt = new Entity("BP.Sys.MapExt", mapExt);
 
-
-	var tb = $("#TB_" + mapExt.AttrOfOper);
+    if (tbID == null || tbID == undefined) {
+        tbID = "TB_" + mapExt.AttrOfOper;
+    }
+    var tb = $("#" + tbID);
 	var width = tb.width();
 	var height = tb.height();
 	tb.hide();
 
 	var container = $("<div></div>");
 	tb.before(container);
-	container.attr("id", mapExt.AttrOfOper + "_mselector");
+    container.attr("id", tbID.replace("TB_","") + "_mselector");
 	container.width(width);
 	container.height(height);
 
@@ -20,19 +22,20 @@ function MultipleChoiceSearch(mapExt) {
 	var dbSrc = mapExt.Doc;
      
 
-    (function (FK_MapData, AttrOfOper, oid, tip, dbSrc) {
-        var mselector = $("#" + AttrOfOper + "_mselector");
+    (function (FK_MapData, AttrOfOper, oid, tip, dbSrc, tbID) {
+        var objID = tbID.replace("TB_", "");
+        var mselector = $("#" + objID + "_mselector");
         mselector.mselector({
             "fit": true,
             "filter": false,
 			"tip" : tip,
 			"dbSrc": dbSrc,
             "onSelect": function (record) {
-                $("#TB_" + AttrOfOper).val(mselector.mselector("getText"));
+                $("#TB_" + objID).val(mselector.mselector("getText"));
 				msSaveVal(FK_MapData, AttrOfOper, oid, record.No, record.Name);
             },
             "onUnselect": function (record) {
-                $("#TB_" + AttrOfOper).val(mselector.mselector("getText"));
+                $("#TB_" + objID).val(mselector.mselector("getText"));
                 msDelete(AttrOfOper, oid, record.No);
             }
         });
@@ -48,7 +51,7 @@ function MultipleChoiceSearch(mapExt) {
 		});
 		mselector.mselector("loadData", initJsonData);
 		//
-    })(mapExt.FK_MapData, mapExt.AttrOfOper, (pageData.WorkID || pageData.OID || ""), tip, dbSrc);
+    })(mapExt.FK_MapData, mapExt.AttrOfOper, (pageData.WorkID || pageData.OID || ""), tip, dbSrc, tbID);
 }
 
 //删除数据.
@@ -70,4 +73,47 @@ function msSaveVal(fk_mapdata, keyOfEn, oid, val1, val2) {
     if (frmEleDB.Update() == 0) {
         frmEleDB.Insert();
     }
+}
+
+function parseOptions(target, properties) {
+    var t = $(target);
+    var options = {};
+
+    var s = $.trim(t.attr('data-options'));
+    if (s) {
+        if (s.substring(0, 1) != '{') {
+            s = '{ ' + s + ' } ';
+        }
+        options = (new Function('return ' + s))();
+    }
+    $.map(['width', 'height', 'left', 'top', 'minWidth', 'maxWidth', 'minHeight', 'maxHeight'], function (p) {
+        var pv = $.trim(target.style[p] || '');
+        if (pv) {
+            if (pv.indexOf('%') == -1) {
+                pv = parseInt(pv) || undefined;
+            }
+            options[p] = pv;
+        }
+    });
+
+    if (properties) {
+        var opts = {};
+        for (var i = 0; i < properties.length; i++) {
+            var pp = properties[i];
+            if (typeof pp == 'string') {
+                opts[pp] = t.attr(pp);
+            } else {
+                for (var name in pp) {
+                    var type = pp[name];
+                    if (type == 'boolean') {
+                        opts[name] = t.attr(name) ? (t.attr(name) == 'true') : undefined;
+                    } else if (type == 'number') {
+                        opts[name] = t.attr(name) == '0' ? 0 : parseFloat(t.attr(name)) || undefined;
+                    }
+                }
+            }
+        }
+        $.extend(options, opts);
+    }
+    return options;
 }

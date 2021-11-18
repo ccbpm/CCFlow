@@ -113,8 +113,6 @@ function InitPage() {
         var doc = "";
         doc += img + track.NDFromT + " - " + track.ActionTypeText;
 
-
-
         if (at == ActionType.Return) {
             doc += "<p><span>退回到:</span><font color=green>" + track.NDToT + "</font><span>退回给:</span><font color=green>" + track.EmpToT + "</font></p>";
             doc += "<p><span>退回意见如下</span>  </p>";

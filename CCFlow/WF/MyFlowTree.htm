@@ -146,7 +146,7 @@
                 display: flex;
                 flex-direction: row;
                 align-items: center;
-                padding-left: 75px;
+               
                 overflow-x: auto;
                 overflow-y: hidden;
             }
@@ -264,7 +264,7 @@
                        <div class="tab-page" @click.right="openTabDropdownMenu">
                           
                            <template v-for="(item,index) in iframes">
-                               <div v-if="index==0" class="tab fixed" @click="activeItem =0" :class="{'active':0 === activeItem}">
+                               <div v-if="index==0" class="tab" @click="activeItem =0" :class="{'active':0 === activeItem}">
                                    <i class="layui-icon layui-icon-home"></i>{{frmGenerName}}
                                </div>
                                <div v-else class="tab" :class="{'active':index === activeItem}" @click="activeItem=index">

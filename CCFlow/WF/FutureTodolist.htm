@@ -103,8 +103,6 @@
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("FutureTodolist_Init");
 
-
-
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;

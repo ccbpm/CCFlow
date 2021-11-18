@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../WF/Style/skin/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="../WF/Style/skin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="../WF/Style/skin/js/appnew.js?v=4.1.0"></script>
+    <script type="text/javascript" src="../WF/Style/skin/js/index.js"></script>
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="../WF/Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+            var data = handler.DoMethodReturnJSON("Invited_Init");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            data = JSON.parse(data);
+            //调用公共类库的方法:执行批量主表赋值
+            GenerFullAllCtrlsVal(data);
+
+            var flowNo = GetQueryString("FK_Flow");
+
+            if (flowNo != null) {
+                window.open('../WF/MyFlow.htm?FK_Flow=' + flowNo);
+                return;
+            }
+            return;
+        });
+    </script>
+</head>
+<body>
+
+    欢迎加入: ________________________
+
+    <fieldset>
+
+        <table>
+            <tr>
+                <td>手机号</td>
+                <td><input type="text" id="TB_No" placeholder="手机号，账号" /></td>
+            </tr>
+            <tr>
+                <td>姓名</td>
+                <td><input type="text" id="TB_Name" placeholder="手机号，账号" /></td>
+            </tr>
+            <tr>
+                <td>密码</td>
+                <td><input type="password" id="TB_Pass1" placeholder="请输入密码" /></td>
+            </tr>
+            <tr>
+                <td>重复密码</td>
+                <td><input type="password" id="TB_Pass2" placeholder="确认密码" /></td>
+            </tr>
+        </table>
+    </fieldset>
+
+</body>
+</html>

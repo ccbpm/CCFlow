@@ -41,10 +41,10 @@
             html += "<th>名称</th>";
             html += "<th>表单ID</th>";
             html += "<th>控制方案</th>";
-            html += "<th>审核组件状态</th>";
             html += "<th>签批组件</th>";
+            html += "<th>组件状态</th>";
             html += "<th>签名类型</th>";
-            // html += "<th>元素权限</th>";
+            html += "<th>元素权限</th>";
             html += "<th>详情</th>";
             html += "</tr>";
             html += "</thead>";
@@ -74,31 +74,32 @@
 
                     //控制方案
                     html += "<td><select id='DDL_FrmSln_" + json.NodeID + "' ></select></td>";
-                    //审核组件.
-                    html += "<td><select id='DDL_FWCSta_" + json.NodeID + "' ></select></td>";
 
                     //签批组件.
                     html += "<td><select id='DDL_CheckField_" + json.NodeID + "' ></select></td>";
 
+                    //审核组件.
+                    html += "<td><select id='DDL_FWCSta_" + json.NodeID + "' ></select></td>";
 
                     //签批组件.
                     html += "<td><select id='DDL_SigantureEnabel_" + json.NodeID + "' ></select></td>";
 
-                    //元素权限.
-                    //    html += "<td><a href='' >编辑</a></td>"; //
+                    // 元素权限.
+                    html += "<td>";
+                    html += "[<a href=\"javascript:Fields('" + json.NodeID + "','" + frmNode.FK_Frm + "')\" >字段</a>]"; //
+                    html += "[<a href=\"javascript:Aths('" + json.NodeID + "','" + frmNode.FK_Frm + "')\" >附件</a>]"; //
+                    html += "[<a href=\"javascript:Dtls('" + json.NodeID + "','" + frmNode.FK_Frm + "')\" >从表</a>]"; //
+                    html += "</td>"; //
 
                     html += "<td><a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "');\" >详情</a></td>";
                     html += "</tr>";
                     break;
                 }
-
                 //if (frmNode == null) {
                 //    html += "<td colspan=3></td>";
                 //    html += "</tr>";
                 //    continue;
                 //}
-
-
             }
             html += "</table>";
             $("#sln").html(html);
@@ -134,25 +135,36 @@
                     continue;
                 }
 
-
                 //绑定方案.
                 GenerBindDDL("DDL_FrmSln_" + json.NodeID, frmSln, "IntKey", "Lab", frmNode.FrmSln);
 
                 //绑定状态.
                 GenerBindDDL("DDL_FWCSta_" + json.NodeID, fwcSta, "IntKey", "Lab", frmNode.IsEnableFWC);
 
-
                 //绑定字段.
                 GenerBindDDL("DDL_CheckField_" + json.NodeID, cfs, "No", "Name", frmNode.CheckField);
 
                 $("#DDL_CheckField_" + json.NodeID + " option:first").remove();//有两个“请选择”，移除一个
-
 
                 //签字类型.
                 GenerBindDDL("DDL_SigantureEnabel_" + json.NodeID, SigantureEnabel, "IntKey", "Lab", json.SigantureEnabel);
 
             }
         });
+
+        function Fields(nodeID, frmID)
+        {
+            var url = "../../Sln/Fields.htm?FK_MapData=" + frmID + "&FK_Node=" + nodeID + "&FK_Flow=" + GetQueryString("FK_Flow") + "&DoType=Field";
+            WinOpen(url);
+        }
+        function Aths(nodeID, frmID) {
+            var url = "../../Sln/Aths.htm?FK_MapData=" + frmID + "&FK_Node=" + nodeID + "&FK_Flow=" + GetQueryString("FK_Flow") + "&DoType=Field";
+            WinOpen(url);
+        }
+        function Dtls(nodeID, frmID) {
+            var url = "../../Sln/Dtls.htm?FK_MapData=" + frmID + "&FK_Node=" + nodeID + "&FK_Flow=" + GetQueryString("FK_Flow") + "&DoType=Field";
+            WinOpen(url);
+        }
 
         // 绑定表单信息.
         function EditFrm(frmID) {
@@ -239,9 +251,9 @@
             </span>
             <strong>批量编辑节点与表单对应关系</strong>
         </div>
-        
-            <div id="sln"></div>
-      
+
+        <div id="sln"></div>
+
     </div>
 
 </body>

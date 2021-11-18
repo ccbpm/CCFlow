@@ -158,6 +158,8 @@
             $.each(processData.list, function (i, row) {
                 var nodeDiv = document.createElement('div');
                 var nodeId = "window" + row.id, badge = 'badge-inverse', icon = 'icon-star';
+                
+
                 if (lastProcessId == 0)//第一步
                 {
                     badge = 'badge-info';

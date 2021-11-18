@@ -193,13 +193,16 @@ new Vue({
         }
     },
     mounted: function () {
-
-
+        document.body.ondrop = function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
 
         var dir = null;
-
         var conds = new Entities("BP.WF.Template.Conds");
         conds.Retrieve("FK_Node", nodeID, "ToNodeID", toNodeID, "CondType", condType, "Idx");
+
+
         //输出条件类型.
         var Eventtitle = '';
         if (condType == 0)
@@ -208,7 +211,6 @@ new Vue({
         if (condType == 2) {
             var toNode = new Entity("BP.WF.Node", toNodeID);
             Eventtitle = '到达节点[<font color=green>' + toNode.NodeID + " " + toNode.Name + '</font>]的方向条件';
-
         }
 
         if (condType == 1)

@@ -61,7 +61,12 @@ function SubFlow_Init(node) {
 
 //自定义展示子流程
 function ShowBtnListSubFlow(subFlows, fsf, node, workID, pworkID, flowNo, nodeID) {
-    var _Html = ""
+    var _Html = "";
+    var basePath = "./";
+    var currUrl = window.location.href;
+
+    if (currUrl.indexOf("Admin/FoolFormDesigner/Designer.htm") != -1)
+        basePath = "../../";
     for (var i = 0; i < subFlows.length; i++) {
         var subFlow = subFlows[i];
 
@@ -106,7 +111,7 @@ function ShowBtnListSubFlow(subFlows, fsf, node, workID, pworkID, flowNo, nodeID
                 continue;
             }
            
-            var url = "./MyView.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "&IsCheckGuide=1&Frms=" + item.Paras_Frms + "&FK_Node=" + item.FK_Node + "&PNodeID=" + item.PNodeID + "&PWorkID=" + item.PWorkID;
+            var url = basePath+"MyView.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "&IsCheckGuide=1&Frms=" + item.Paras_Frms + "&FK_Node=" + item.FK_Node + "&PNodeID=" + item.PNodeID + "&PWorkID=" + item.PWorkID;
             _Html += "<div style='line-height: 30px;padding-left: 6px;' id='" + item.WorkID + "'>" + item.Title + "<span class='glyphicon glyphicon-folder-open' style='margin-left:3px' onclick='OpenIt(\"" + url + "\")'></span></div>";
 
         }
@@ -177,6 +182,11 @@ function ShowTableSubFlow(subFlows, sf, node, workID, pworkID, flowNo, nodeID) {
         }
     }
     var tdHtml = "";
+    var imgbasePath = "./";
+    var currUrl = window.location.href;
+
+    if (currUrl.indexOf("Admin/FoolFormDesigner/Designer.htm") != -1)
+        imgbasePath = "../../";
     for (var i = 0; i < subFlows.length; i++) {
 
         var subFlow = subFlows[i];
@@ -187,7 +197,7 @@ function ShowTableSubFlow(subFlows, sf, node, workID, pworkID, flowNo, nodeID) {
         if (sf.SFSta == FrmSubFlowSta.Enable && subFlow.SubFlowSta == 1 && GetQueryString("DoType") != "View") {
 
             if (subFlow.SubFlowModel == 0 || subFlow.SubFlowModel == null) { //下级子流程.
-                tdHtml = "<div style='float:left'><img src='./Img/Max.gif' />&nbsp;" + subFlow.SubFlowName + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('./MyFlow.htm?IsStartSameLevelFlow=0&FK_Flow=" + subFlow.SubFlowNo + "&PWorkID=" + workID + "&PNodeID=" + nodeID + "&PFlowNo=" + flowNo + "&PFID=" + GetQueryString("FID") + "')\"  >" + sf.SFCaption + "</a>]</style>";
+                tdHtml = "<div style='float:left'><img src='" + imgbasePath + "Img/Max.gif' />&nbsp;" + subFlow.SubFlowName + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('" + imgbasePath +"MyFlow.htm?IsStartSameLevelFlow=0&FK_Flow=" + subFlow.SubFlowNo + "&PWorkID=" + workID + "&PNodeID=" + nodeID + "&PFlowNo=" + flowNo + "&PFID=" + GetQueryString("FID") + "')\"  >" + sf.SFCaption + "</a>]</style>";
             }
 
             if (subFlow.SubFlowModel == 1) { //平级子流程.
@@ -197,17 +207,17 @@ function ShowTableSubFlow(subFlows, sf, node, workID, pworkID, flowNo, nodeID) {
 
                 //如果当前的流程不是子流程，就不处理.
                 if (gwf.PWorkID == 0) {
-                    tdHtml = "<div style='float:left'><img src='./Img/Max.gif' />&nbsp;" + subFlow.SubFlowName + "</div> <div style='float:right'>为子流程的时候才能启动(" + subFlow.SubFlowName + ")]</style>";
+                    tdHtml = "<div style='float:left'><img src='" + imgbasePath +"Img/Max.gif' />&nbsp;" + subFlow.SubFlowName + "</div> <div style='float:right'>为子流程的时候才能启动(" + subFlow.SubFlowName + ")]</style>";
                 } else {
                     pworkID = gwf.PWorkID;
                     //传递启动该子流程的流程的信息 IsSameLevel = 1;SLWorkID=workId 
-                    tdHtml = "<div style='float:left'><img src='./Img/Max.gif' />&nbsp;" + subFlow.SubFlowName + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('./MyFlow.htm?FK_Flow=" + subFlow.SubFlowNo + "&PWorkID=" + gwf.PWorkID + "&PNodeID=" + gwf.PNodeID + "&PFlowNo=" + gwf.PFlowNo + "&PFID=" + gwf.PFID + "&IsStartSameLevelFlow=1&SLWorkID=" + workID + "&SLNodeID=" + nodeID + "&SLFlowNo=" + flowNo + "')\"  >" + sf.SFCaption + "</a>]</style>";
+                    tdHtml = "<div style='float:left'><img src='" + imgbasePath + "Img/Max.gif' />&nbsp;" + subFlow.SubFlowName + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('" + imgbasePath +"MyFlow.htm?FK_Flow=" + subFlow.SubFlowNo + "&PWorkID=" + gwf.PWorkID + "&PNodeID=" + gwf.PNodeID + "&PFlowNo=" + gwf.PFlowNo + "&PFID=" + gwf.PFID + "&IsStartSameLevelFlow=1&SLWorkID=" + workID + "&SLNodeID=" + nodeID + "&SLFlowNo=" + flowNo + "')\"  >" + sf.SFCaption + "</a>]</style>";
                 }
             }
         }
 
         if (sf.SFSta == FrmSubFlowSta.Readonly || subFlow.SubFlowSta == 2 || GetQueryString("DoType") == "View")
-            tdHtml = "<div style='float:left'><img src='./Img/Max.gif' />&nbsp;" + subFlow.SubFlowName + "</div></style>";
+            tdHtml = "<div style='float:left'><img src='" + imgbasePath +"Img/Max.gif' />&nbsp;" + subFlow.SubFlowName + "</div></style>";
 
         _Html += "<tr>";
         _Html += "<td class='TRSum' colspan=7 >" + tdHtml + "</td>";
@@ -238,14 +248,14 @@ function ShowTableSubFlow(subFlows, sf, node, workID, pworkID, flowNo, nodeID) {
 
             if (item.TodoEmps.indexOf( webUser.No + "," + webUser.Name + ";" ) >= 0) {
                 _Html += "<td  style='word-break:break-all;' title='" + item.Title + "'>";
-                _Html += "<a href=\"javascript:OpenIt('./MyView.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "&IsCheckGuide=1&Frms=" + item.Paras_Frms + "&FK_Node=" + item.FK_Node + "&PNodeID=" + item.PNodeID + "&PWorkID=" + item.PWorkID + "')\" ><img src='./Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a></td>";
+                _Html += "<a href=\"javascript:OpenIt('" + imgbasePath + "MyView.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "&IsCheckGuide=1&Frms=" + item.Paras_Frms + "&FK_Node=" + item.FK_Node + "&PNodeID=" + item.PNodeID + "&PWorkID=" + item.PWorkID + "')\" ><img src='" + imgbasePath + "Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a></td>";
             } else {
                 if (sf.SFOpenType == 0) {
                     _Html += "<td  style='word-break:break-all;' title='" + item.Title + "'>";
-                    _Html += "<a href=\"javascript:OpenIt('./WFRpt.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "&PWorkID=" + item.PWorkID + "&PFlowNo=" + item.PFlowNo + "&PNodeID=" + item.PNodeID + "')\" ><img src='./Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a></td>";
+                    _Html += "<a href=\"javascript:OpenIt('" + imgbasePath + "WFRpt.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "&PWorkID=" + item.PWorkID + "&PFlowNo=" + item.PFlowNo + "&PNodeID=" + item.PNodeID + "')\" ><img src='" + imgbasePath + "Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a></td>";
                 } else {
                     _Html += "<td style='word-break:break-all;' title='" + item.Title + "'>";
-                    _Html += "<a href=\"javascript:OpenIt('./MyView.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='./Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a></td>";
+                    _Html += "<a href=\"javascript:OpenIt('" + imgbasePath + "MyView.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='" + imgbasePath + "Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a></td>";
                 }
             }
             //到达节点名称.
@@ -326,6 +336,11 @@ function InsertSubFlows(flowNo, fid, workid, layer, html) {
     if (gwfs.Count == 0)
         return;
 
+    var currUrl = window.location.href;
+
+    if (currUrl.indexOf("Admin/FoolFormDesigner/Designer.htm") != -1)
+        imgbasePath = "../../";
+
     var myFlowNo = "";
     var item = null;
     for (var i = 0; i < gwfs.length; i++) {
@@ -338,7 +353,7 @@ function InsertSubFlows(flowNo, fid, workid, layer, html) {
 
             //输出流程.
             var fl = new Entity("BP.WF.Flow", item.FK_Flow);
-            var tdhtml = "<div style='float:left'>" + GenerSpace(layer * 2) + "<img src='./Img/Max.gif' />&nbsp;" + fl.Name + "</div>";
+            var tdhtml = "<div style='float:left'>" + GenerSpace(layer * 2) + "<img src='" + imgbasePath + "Img/Max.gif' />&nbsp;" + fl.Name + "</div>";
             html += "<tr>";
             html += "<td class='TRSum' colspan=6>" + tdhtml + "</td>";
             html += "</tr>";
@@ -346,7 +361,7 @@ function InsertSubFlows(flowNo, fid, workid, layer, html) {
 
         html += "<tr>";
         html += "<td style='word-break:break-all;' title='" + item.Title + "'> ";
-        html += GenerSpace(layer * 2) + "<a href=\"javascript:OpenIt('./WFRpt.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='./Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a></td>";
+        html += GenerSpace(layer * 2) + "<a href=\"javascript:OpenIt('" + imgbasePath + "WFRpt.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "')\" ><img src='" + imgbasePath + "Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a></td>";
 
         //到达节点名称.
         if (item.NodeName == null || item.NodeName == "")

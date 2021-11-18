@@ -1,7 +1,10 @@
 ﻿
 //阅读并关闭.
 function Close() {
-    window.close();
+    if (window.top.vm && typeof window.top.vm.closeCurrentTabs == "function")
+        window.top.vm.closeCurrentTabs(window.top.vm.selectedTabsIndex);
+    else
+        window.close();
 }
 
 

@@ -50,48 +50,53 @@
             padding: 0px 10px !important;
         }
 
-            .modal-header .modal-title {
-                color: #009688 !important;
-                font-weight: bold !important;
-                line-height: 38px !important;
-                height: 38px !important;
-                margin-top: 0px !important;
-            }
+        .modal-header .modal-title {
+            color: #009688 !important;
+            font-weight: bold !important;
+            line-height: 38px !important;
+            height: 38px !important;
+            margin-top: 0px !important;
+        }
 
-            .modal-header h3 {
-                font-size: 16px;
-                color: #414141;
-            }
+        .modal-header h3 {
+            font-size: 16px;
+            color: #414141;
+        }
 
-            .modal-header #closeModal {
-                background: #f7941f !important;
-                font-size: 14px !important;
-                width: 16px !important;
-                height: 16px !important;
-                line-height: 16px !important;
-                text-align: center !important;
-                border-radius: 50% !important;
-                color: #fff !important;
-                padding: 0px !important;
-                margin: 10px !important;
-            }
+        .modal-header #closeModal {
+            background: #f7941f !important;
+            font-size: 14px !important;
+            width: 16px !important;
+            height: 16px !important;
+            line-height: 16px !important;
+            text-align: center !important;
+            border-radius: 50% !important;
+            color: #fff !important;
+            padding: 0px !important;
+            margin: 10px !important;
+        }
 
-                .modal-header #closeModal:hover {
-                    color: #fff !important;
-                    background: #009688 !important;
-                }
+        .modal-header #closeModal:hover {
+            color: #fff !important;
+            background: #009688 !important;
+        }
 
         .pagination > li > a {
             color: #565656;
-            background: #f5f5ff;
-            border-color: #fefefe;
+            background: white;
+            border-color: #eee;
         }
 
-            .pagination > li > a:hover {
-                color: #fff;
-                background: #009688;
-                border-color: #fefefe;
-            }
+        .pagination > li > a:hover {
+            color: #fff;
+            background: #009688;
+            border-color: #fefefe;
+        }
+        .pagination > .active > a {
+            color: #fff;
+            background: #009688;
+            border-color: #fefefe;
+        }
     </style>
     <script language="javascript" type="text/javascript">
         var ensName = GetQueryString("EnsName");
@@ -850,7 +855,7 @@
                 title: '序',
                 field: '',
                 align: 'center',
-                width: 25,
+                width: 50,
                 rowspan: isThrHeader == true ? 3 : isSecHeader == true ? 2 : 1,
                 formatter: function (value, row, index) {
                     return pageSize * (pageIdx - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
@@ -1330,17 +1335,32 @@
                 onPageClicked: function (event, originalEvent, type, page) {
                     pageIdx = page;
                     SearchData(page);
-                    $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pages +
-                        "页,总共" + count + "条记录。</li>");
+                    $('#page_info .pageIdx').text(pageIdx);
+                    ///$('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，共" + pages +
+                    //    "页,共" + count + "条</li>");
                 }
             };
+            
             $('#page_nav').bootstrapPaginator(options);
-            $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pages +
-                "页,总共" + count + "条记录。</li>");
+            var selects = "<Select id='DDL_PageSize' onchange='changePageSie()' style='min-width: 70px !important; width: 50px;margin-top:5px;display:inline;height:15px' class='form-control'><option value=5>5条/页</option><option value=10>10条/页</option><option value=15>15条/页</option><option value=20>20条/页</option><option value=25>25条/页</option></select>&nbsp;&nbsp;";
+            $('#page_info').html("").append("<li class='disabled controls'>" + selects + "当前第<i class='pageIdx' style='font-style:none;'>" + pageIdx + "</i>页，共" + pages +
+                "页,共" + count + "条</li>");
+            $("#DDL_PageSize").val(pageSize);
 
         }
 
+        function changePageSie() {
+            pageSize = $("#DDL_PageSize").val();
+            ur = new Entity("BP.Sys.UserRegedit");
+            ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
+            ur.RetrieveFromDBSources();
+            ur.SetPara("PageSize", pageSize);
+            ur.Update();
 
+            pageIdx = 1;
+            SearchData();
+            Paginator(pages, pageIdx);
+        }
         function operate(value, row, index) {
             return '<a href="#" onclick="editUser(' + index + ')">查看明细</a>';
         }
@@ -1717,8 +1737,9 @@
                     <div class="row cs-pagination" style="float:left;width:35%;text-align: left;">
                         <ul class="pagination  controls" style="margin-left:20px"><li class=" controls" id="JsResult"></li></ul>
                     </div>
-                    <div class="row cs-pagination" style="float:right;width:65%">
+                    <div class="row cs-pagination" style="float:right;margin-right:10px;width:65%">
                         <ul class="pagination" id="page_nav"></ul>
+                        <ul class="pagination controls" id="page_select"></ul>
                         <ul class="pagination controls" id="page_info"></ul>
                         <div style="clear: both;">
                         </div>

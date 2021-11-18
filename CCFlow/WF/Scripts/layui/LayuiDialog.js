@@ -11,7 +11,7 @@
  * @param {any} okBtnFunc 确定执行的方法
  * @param {any} dlgClosedFunc 关闭执行的方法
  */
-function OpenLayuiDialog(url, title, dlgWidth, dlgHeight, offset, isRefresh, isShowOkBtn, IsShowCloseBtn, okBtnFunc, dlgClosedFunc,reloadUrl) {
+function OpenLayuiDialog(url, title, dlgWidth, dlgHeight, offset, isRefresh, isShowOkBtn, IsShowCloseBtn, okBtnFunc, dlgClosedFunc,reloadUrl,showCloseBtn) {
 
     title = title == null || title == undefined ? "" : title;
     var btn = [];
@@ -35,26 +35,16 @@ function OpenLayuiDialog(url, title, dlgWidth, dlgHeight, offset, isRefresh, isS
     if (dlgWidth > window.innerWidth)  dlgWidth=window.innerWidth -150;
 
     var w = window;
-   /* if (window.parent) {
-        w = window.parent;
-        if (url.indexOf("../../../") != -1)
-            url = url.replace("../../../", "../../");
-        else if (url.indexOf("../../") != -1)
-            url = url.replace("../../", "../");
-        else if (url.indexOf("../") != -1) {
-            w = window;
-        }
-        else if (url.indexOf("./") != -1)
-            w = window;
-    }
-        */
+
+    showCloseBtn = showCloseBtn == null || showCloseBtn == undefined || showCloseBtn === "" ? 1 : showCloseBtn;
     w.layer.open({
         type: 2 //此处以iframe举例
         , title: title
         , id:"dlg"
         , area: [dlgWidth + 'px', dlgHeight+'%']
-        , maxmin: offset=="r"?false:true
+        , maxmin: showCloseBtn==0?false:offset=="r"?false:true
         , shadeClose: true
+        , closeBtn: showCloseBtn
         , offset: offset
         , content: url
         , btn: btn
@@ -72,12 +62,12 @@ function OpenLayuiDialog(url, title, dlgWidth, dlgHeight, offset, isRefresh, isS
             if (dlgClosedFunc)
                 dlgClosedFunc();
             if (isRefresh == true)
-{
+            {
             if (reloadUrl==null || reloadUrl=='' )
                 location.reload();
-else
+            else
                 location.href= reloadUrl;
-}
+            }
 
 
         },

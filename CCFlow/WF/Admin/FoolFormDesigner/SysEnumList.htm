@@ -185,8 +185,8 @@
             var url = '';
             var str = prompt("请输入字段名(必须为字母开头、数字或者下划线组合):", enumID);
 
-            if (str == null)
-                return;
+            if (str == null) return;
+
             var dtlKey=""
             if (isHaveDtl == 1) {
                 var v = window.confirm("您需要创建枚举值[" + enumName + "]的关联枚举字段吗？");
@@ -197,9 +197,7 @@
                     if (dtlKey == null)
                         return;
                 }
-                
             }
-
 
             var groupField = GetQueryString("GroupField");
             if (groupField == null)
@@ -266,7 +264,7 @@
         }
         function Edit(enumKey, name, cfgKeys) {
 
-            var url = '../CCFormDesigner/DialogCtr/EnumerationNew.htm?EnumKey=' + enumKey + '&Name=' + name + '&CfgKeys=' + cfgKeys + '&DoType=FrmEnumeration_SaveEnum&s=' + Math.random();
+            var url = '../CCFormDesigner/DialogCtr/EnumerationNew.htm?EnumKey=' + enumKey + '&Name=' + name + '&DoType=FrmEnumeration_SaveEnum&s=' + Math.random();
             var W = document.body.clientWidth - 120;
             var H = document.documentElement.clientHeight - 10;
             OpenEasyUiDialog(url, "eudlgframe", "", W, H, "icon-edit", true, null, null, null, function () {

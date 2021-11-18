@@ -49,7 +49,7 @@
 
             //从表信息.
             var enDtl = new Entity("BP.GPM.Home.WindowExt.TabDtl");
-            enDtl.RefWindowTemplate = en.No;
+            enDtl.RefPK = en.No;
             enDtl.Name = "待办";
             enDtl.Exp0 = "SELECT FK_NodeText AS '节点名', COUNT(*) as '数量' FROM WF_GenerWorkerList WHERE FK_Emp='@WebUser.No' AND IsPass=0 GROUP BY FK_NodeText";
             enDtl.FontColor = "Yellow";
@@ -57,7 +57,7 @@
             enDtl.Insert();
 
             enDtl = new Entity("BP.GPM.Home.WindowExt.TabDtl");
-            enDtl.RefWindowTemplate = en.No;
+            enDtl.RefPK = en.No;
             enDtl.Name = "在途";
             enDtl.Exp0 = "SELECT FK_NodeText AS '节点名', COUNT(*) as '数量' FROM WF_GenerWorkerList WHERE FK_Emp='@WebUser.No' AND IsPass=1 GROUP BY FK_NodeText";
             enDtl.FontColor = "Blue";
@@ -65,7 +65,7 @@
             enDtl.Insert();
 
             enDtl = new Entity("BP.GPM.Home.WindowExt.TabDtl");
-            enDtl.RefWindowTemplate = en.No;
+            enDtl.RefPK = en.No;
             enDtl.Name = "退回";
             enDtl.Exp0 = "SELECT FlowName AS '流程名', COUNT(*) as '数量' FROM  WF_GenerWorkFlow A,  WF_GenerWorkerList B WHERE B.FK_Emp='@WebUser.No' AND B.IsPass=0 AND A.WorkID=B.WorkID AND A.WFState=5  GROUP BY FlowName";
             enDtl.FontColor = "Red";
@@ -73,7 +73,7 @@
             enDtl.Insert();
 
             enDtl = new Entity("BP.GPM.Home.WindowExt.TabDtl");
-            enDtl.RefWindowTemplate = en.No;
+            enDtl.RefPK = en.No;
             enDtl.Name = "已完成";
             enDtl.Exp0 = "SELECT FlowName AS '流程名', COUNT(*) as '数量'  FROM  WF_GenerWorkFlow  WHERE Emps LIKE '@WebUser.No' AND WFState=3  GROUP BY FlowName";
             enDtl.FontColor = "#8c531b";

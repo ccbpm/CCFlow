@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../WF/Style/skin/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="../WF/Style/skin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="../WF/Style/skin/js/appnew.js?v=4.1.0"></script>
+    <script type="text/javascript" src="../WF/Style/skin/js/index.js"></script>
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="../WF/Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+            var data = handler.DoMethodReturnJSON("InvitedQRCode_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            $("#img").src = data;
+            return;
+        });
+    </script>
+</head>
+<body>
+
+    邀请人员。
+    <fieldset>
+        <legend>请把下面的二维码发到您的部门群里，或者发给您部门的同事.</legend>
+
+        <img  id="img" src=""  />
+
+    </fieldset>
+
+</body>
+</html>

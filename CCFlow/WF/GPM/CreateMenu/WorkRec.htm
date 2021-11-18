@@ -30,7 +30,7 @@
             var en = new Entity("BP.GPM.Menu2020.Menu");
             en.ModuleNo = moduleNo;
             en.Name = $("#TB_Title").val();
-            en.UrlExt = "/AppFast/WorkRec/Default.htm";
+            en.UrlExt = "/CCFast/WorkRec/Default.htm";
             en.MenuModel = "WorkRec"; //类型为.
             en.Mark = "WorkRec"; //类型为.
             en.Icon = "icon-doc";
@@ -38,7 +38,12 @@
 
             // alert("创建成功，您可以在在菜单里执行高级编辑与授权.");
 
-            window.location.href = "../../Comm/En.htm?EnName=BP.GPM.Menu2020.Menu&No=" + en.No;
+
+
+            // window.location.href = "../../Comm/En.htm?EnName=BP.GPM.Menu2020.Menu&No=" + en.No;
+
+            window.location.href = "../../../CCFast/WorkRec/Default.htm?typeid=0&x=" + en.No;
+
             // window.location.href = "../Menus.htm";
         }
     </script>

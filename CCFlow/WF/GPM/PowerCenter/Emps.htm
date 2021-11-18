@@ -48,8 +48,8 @@
             if (returnVal.No == undefined || returnVal.No == '') {
                 alert("未选择人员");
                 return;
-            }           
-               
+            }
+
             var en = new Entity("BP.GPM.PowerCenter");
             en.CopyURL();
             en.CtrlModel = "Emps";
@@ -62,11 +62,11 @@
             url += "?CtrlObj=" + GetQueryString("CtrlObj") + "&CtrlPKVal=" + GetQueryString("CtrlPKVal") + "&CtrlGroup=" + GetQueryString("CtrlGroup");
             window.location.href = url;
 
-                window.parent.selectEmpsWindowClose("确定");
-            
+            window.parent.selectEmpsWindowClose("确定");
+
         }
 
-        var pageData = { IsSelectMore:true, FK_Dept: 100 || '', ParentDept: '' };
+        var pageData = { IsSelectMore: true, FK_Dept: 100 || '', ParentDept: '' };
         var returnVal = {};
         var isFirst = true;
 
@@ -95,6 +95,14 @@
                 var fkDeptObj = $.grep(data.Depts, function (value) {
                     return value.No == fk_dept;
                 });
+                if (fkDeptObj != undefined && fkDeptObj.length == 0) {
+                    var newUser = new WebUser();
+                    fk_dept = newUser.FK_Dept;
+
+                    fkDeptObj = $.grep(data.Depts, function (value) {
+                        return value.No == fk_dept;
+                    });
+                }
                 if (fkDeptObj != undefined && fkDeptObj.length == 1) {
                     parentNo = fkDeptObj[0].ParentNo;
                 }
@@ -174,7 +182,7 @@
                         if (node.id == "#") {
 
                             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-                            handler.AddPara("FK_Node",0);
+                            handler.AddPara("FK_Node", 0);
                             if (pageData.FK_Dept != undefined)
                                 handler.AddPara("FK_Dept", pageData.FK_Dept);
                             var data = handler.DoMethodReturnString("SelectEmps_Init");
@@ -185,7 +193,7 @@
 
                             var fk_dept2 = pageData.FK_Dept;
                             cb(initNodeData(data, fk_dept2));
-                            
+
 
                         }
                         else {
@@ -197,10 +205,10 @@
                                 pageData.FK_Dept = node.id;
 
                                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-                                handler.AddPara("FK_Node",0);
+                                handler.AddPara("FK_Node", 0);
                                 handler.AddPara("FK_Dept", node.id);
                                 var data = handler.DoMethodReturnString("SelectEmps_Init");
-                                
+
                                 if (data.indexOf('err@') == 0) {
                                     alert(data);
                                     return;
@@ -261,7 +269,7 @@
                     alert("已到第一级机构");
                     return;
                 }
-             
+
 
                 pageData.FK_Dept = pageData.ParentDept;
 

@@ -30,7 +30,7 @@ UE.plugins['impfrmfields'] = function () {
                 iframeUrl: './Fields.html?FrmID=' + frmID,
                 name: thePlugins,
                 editor: this,
-                title: '回收站字段',
+                title: '未用(备用)字段',
                 cssRules: "width:" + W + "px;height:" + H + "px;",
 
             });
@@ -2265,7 +2265,8 @@ function ExtMap() {
     mapAttr1.Insert(); //插入字段
 
     mapAttr.Retrieve();
-    var url = './../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtMap&MyPK=' + mapAttr.MyPK;
+    var url = './../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtMap&MyPK=' + mapAttr.MyPK;
+
     OpenLayuiDialog(url, '地图', innerWidth / 2, 0, "r", false, false, false, null, function () {
         var _html = "<div style='text-align:left;padding-left:0px' id='Map_" + mapAttr.KeyOfEn + "' data-type='Map' data-key='" + mapAttr.MyPK + "' leipiplugins='component'>";
         _html += "<input type='button' name='select' value='选择'  style='background: #fff;color: #545454;font - size: 12px;padding: 4px 15px;margin: 5px 3px 5px 3px;border - radius: 3px;border: 1px solid #d2cdcd;'/>";

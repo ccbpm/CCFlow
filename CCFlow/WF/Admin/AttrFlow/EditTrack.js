@@ -245,8 +245,8 @@ function Edit(mypk) {
 
     OpenBootStrapModal(url, "DocWordIFrame", "修改轨迹", 600, 200, "icon-property", false, function () { }, null, function () {
         location.reload();
-    });
-
+    }, 'divID', true, true);
+    //OpenBootStrapModal(url, iframeId, dlgTitle, dlgWidth, dlgHeight, dlgIcon, showBtns, okBtnFunc, okBtnFuncArgs, dlgClosedFunc, divId, closeBtnColor, showCloseBtn)
     // window.OpenBootStrapModal(url, "DocWordIFrame", "修改轨迹", 600, 200,
     //   "icon-edit", false);
 }

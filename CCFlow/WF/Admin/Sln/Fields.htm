@@ -15,8 +15,9 @@
         th, td {
             text-align: center;
         }
+
         input[type=checkbox], input[type=radio] {
-            margin-top:0px;
+            margin-top: 0px;
         }
     </style>
     <script type="text/javascript">
@@ -127,7 +128,26 @@
                 SetCheckBox(ff, "IsWriteToGenerWorkFlow", ff.IsWriteToGenerWorkFlow, '写入WF_GernrWorkFlow');
             }
 
+            //绑定节点: 为海事局处理.
+            var ffs = new Entities("BP.WF.Template.FrmNodes");
+            ffs.Retrieve("FK_Frm", frmID, "FK_Flow", node.FK_Flow);
 
+            var html = "<table>";
+            //    html += "<caption>请选择节点</caption>";
+            html += "<tr>";
+            html += "<td>请选择节点:</td>";
+            for (var i = 0; i < ffs.length; i++) {
+                var en = ffs[i];
+                var mynd = new Entity("BP.WF.Node", en.FK_Node);
+                if (en.FK_Node == node.NodeID)
+                    html += "<td><b>" + mynd.Name + "</b></td>";
+                else
+                    html += "<td><a href='?FK_MapData=" + frmID + "&FK_Node=" + mynd.NodeID + "' >" + mynd.Name + "</a></td>";
+            }
+            html += "</tr>";
+            html += "</table>";
+
+            $("#NDs").html(html);
 
         });
         function AddDefVal(no, id) {
@@ -277,11 +297,9 @@
 
                 ff.Insert();
             }
-
             $("#Btn_Save").text(" 保 存 ");
 
             window.location.href = window.location.href;
-
         }
 
         function replaceTrim(val) {//去除空格
@@ -340,7 +358,9 @@
             <strong> 节点-表单-字段权限</strong>
         </div>
         <table id="Table1" class="table">
-          
+            <caption>
+                <div id="NDs"></div>
+            </caption>
             <tr>
                 <th width="60">
                     序
@@ -360,10 +380,11 @@
                 <th>
                     默认值
                 </th>
-                <th><label for="KeyOfEn_UIVisible">
-    <input onclick="CheckAll('UIVisible');" id='KeyOfEn_UIVisible' type="checkbox" />
-    可见
-</label>
+                <th>
+                    <label for="KeyOfEn_UIVisible">
+                        <input onclick="CheckAll('UIVisible');" id='KeyOfEn_UIVisible' type="checkbox" />
+                        可见
+                    </label>
                 </th>
                 <th>
                     <label for="KeyOfEn_UIIsEnable">
@@ -397,7 +418,8 @@
                 </th>-->
             </tr>
         </table>
-       
+
+
     </div>
 
 </body>

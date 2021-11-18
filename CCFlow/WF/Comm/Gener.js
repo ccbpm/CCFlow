@@ -1574,10 +1574,10 @@ var Entity = (function () {
                 var value;
                 if (name.match(/^TBPara_/)) {
                     value = target.val();
-                    value = value.replace('@', ''); //替换掉@符号.
+                   // value = value.replace('@', ''); //替换掉@符号.
                 } else if (name.match(/^DDLPara_/)) {
                     value = target.val();
-                    value = value.replace('@', ''); //替换掉@符号.
+                    //value = value.replace('@', ''); //替换掉@符号.
                 } else if (name.match(/^CBPara_/)) {
                     if (target.length == 1) {	// 仅一个复选框
                         if (target.is(":checked")) {
@@ -2403,7 +2403,6 @@ var HttpHandler = (function () {
 
             return params;
         },
-
         DoMethodReturnString: function (methodName) {
             if (dynamicHandler == "")
                 return;
@@ -2935,9 +2934,8 @@ $(function () {
         || url.indexOf('reguser.htm') != -1
         || url.indexOf('port.htm') != -1
         || url.indexOf('ccbpm.cn/') != -1
-        // || url.lastIndexOf('/') == 0
-        //|| url.lastIndexOf('.') == -1  //这个地方不能增加。
-        //|| url.lastIndexOf('.') >= 4
+        || url== basePath
+     
         || url.indexOf('loginwebsite.htm') != -1) {
         return;
     }
@@ -3096,7 +3094,7 @@ function JumpFlowPage(pageType, title, workid, fk_flow, fk_node, fid, pworkid, i
             var url = "../" + data;
             window.top.vm.openTab(title, url);
             return;
-        } catch
+        } catch(e)
         {
             window.open(data); //打开流程.
             return;

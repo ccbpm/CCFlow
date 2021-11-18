@@ -42,11 +42,9 @@
 <body>
     <div class="container-full">
         <div class="attrnode-bar-header">
-
             <strong>API </strong>
         </div>
      
-
         <fieldset>
             <legend>
                 登录与门户API
@@ -222,7 +220,7 @@
                 *撤销失败的原因多种，最有可能的是因为当前活动节点不允许撤销规则决定的。<br />
                 */<br />
                 <br />
-                <font color=blue>string</font> msg= BP.WF.<font color=blue>Dev2Interface</font>.Flow_DoUnSend(<font color=red>"001"</font>, workID);
+                <font color=blue>string</font> msg= BP.WF.<font color=blue>Dev2Interface</font>.Flow_DoUnSend( workID);
 
             </font>
             <br />
@@ -348,7 +346,7 @@
                 */<br />
             </font>
 
-            <font color="blue">string</font>  overInfo = BP.WF.<font color="blue">Dev2Interface</font> .Flow_DoFlowOver(<font color="red">"001" </font>, workID, <font color="red">"该供应商找不到了，要结束掉该流程。"</font>);
+            <font color="blue">string</font>  overInfo = BP.WF.<font color="blue">Dev2Interface</font> .Flow_DoFlowOver( workID, <font color="red">"该供应商找不到了，要结束掉该流程。"</font>);
 
 
             <br />
@@ -360,10 +358,10 @@
             <br />
 
             <font color="green">//按照标记删除流程</font><br />
-            <font color="blue">string</font> delInfo0 = BP.WF.<font color="blue">Dev2Interface</font> .Flow_DoDeleteFlowByFlag(<font color="red">"001"</font>, workID, <font color="red">"我不需要请假了"</font>, <font color="blue">true</font>);<br /><br />
+            <font color="blue">string</font> delInfo0 = BP.WF.<font color="blue">Dev2Interface</font> .Flow_DoDeleteFlowByFlag( workID, <font color="red">"我不需要请假了"</font>, <font color="blue">true</font>);<br /><br />
 
             <font color="green">//彻底的删除流程，无日志记录.</font><br />
-            <font color="blue">string</font> delInfo1 = BP.WF.<font color="blue">Dev2Interface</font> .Flow_DoDeleteFlowByReal(<font color="red">"001"</font>, workID, <font color="red">"我不需要请假了"</font>, <font color="blue">true</font>);<br />
+            <font color="blue">string</font> delInfo1 = BP.WF.<font color="blue">Dev2Interface</font> .Flow_DoDeleteFlowByReal( workID, <font color="red">"我不需要请假了"</font>, <font color="blue">true</font>);<br />
 
 
             <br />

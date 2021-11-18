@@ -59,8 +59,8 @@
         }
 
         .item-other {
-            width: 10%;
-            max-width: 10%;
+            width: 20%;
+            max-width: 20%;
         }
 
         .item-other {
@@ -146,12 +146,20 @@
                 <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="NewSys()">
                     <i class="icon-plus" style="margin-right: 6px"></i>创建系统
                 </div>
+
             </div>
-            <div class="item item-name" @click="expandAll = !expandAll">
+            <!--<div class="item item-name" @click="expandAll = !expandAll">-->
+            <div class="item item-name" >
+
+                <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="ImpSys()">
+                    <i class="icon-plus" style="margin-right: 6px"></i>导入系统
+                </div>
+
                 模块 / 菜单
             </div>
             <div class="item item-other">菜单类型</div>
             <div class="item item-content">
+                <a href="https://www.bilibili.com/video/BV1eU4y137XU/" target="_blank" class="icon-camrecorder"><font color="blue">&nbsp;CCFast介绍</font></a>
                 <a href="https://www.bilibili.com/video/BV12P4y1p74h/" target="_blank" class="icon-camrecorder"><font color="blue">&nbsp;菜单体系</font></a>
             </div>
             <div class="item item-other">启用？</div>
@@ -210,6 +218,11 @@
                                 <!-- 这里是子菜单的icon -->
                                 <!-- 这里是子菜单的icon -->
                                 <!-- 这里是子菜单的icon -->
+                                <span class="pull-right" style="margin-right:15px;">
+                                    <button @click.stop="NewMenu(module.No)" class="layui-btn layui-btn-primary layui-border-primary layui-btn-xs">
+                                        新建菜单
+                                    </button>
+                                </span>
                                 <span><i :class="module.Icon"></i> {{module.Name}}</span>
                                 <!--<span @click.stop="Edit(module.No,module.Name,'BP.GPM.Menu2020.Module')">{{module.Name}}</span>-->
 

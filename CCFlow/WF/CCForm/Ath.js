@@ -347,7 +347,7 @@ function FileShowWayTable(athDesc, dbs, uploadUrl) {
             //⑦操作列的增加.
             _html += "<td class='operate'>";
             if (athDesc.IsDownload == 1)
-                _html += "<a href=\"javascript:Down2018('" + db.MyPK + "')\"><img src=\"" + imgUrl +"/WF/\Img/\Btn/\Down.gif\"/></a>&nbsp;&nbsp;&nbsp;&nbsp;";
+                _html += "<a href=\"javascript:Down2018('" + db.MyPK + "')\"><img src=\"" + imgUrl +"/WF/\Img/\Btn/\Exp.png\" style='width:16px'/></a>&nbsp;&nbsp;&nbsp;&nbsp;";
             if (pageData.IsReadonly != 1) {
                 if (athDesc.DeleteWay == 1)//删除所有
                     _html += "<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "','" + db.FileName + "')\"><img src=\"" + imgUrl +"WF/\Img/\Btn/\Delete.gif\"/></a>";
@@ -458,7 +458,6 @@ function GFDoDown(mypk) {
 * @param dbs 附件列表
 */
 function FileShowPic(athDesc, dbs, uploadUrl) {
-    debugger
     var exts = athDesc.Exts;
     if (exts != null && exts != undefined && (exts.indexOf("*.*") != -1 || exts == ""))
         exts = "image/gif,image/jpg,image/jepg,image/jpeg,image/bmp,image/png,image/tif,image/gsp";

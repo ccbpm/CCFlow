@@ -1,19 +1,19 @@
 
-    var vm = new Vue({
-        el: '#v-db',
-        data: {
-            boxes: [],
-            sortObj: null,
-            loadingDialog: null,
-            Veiwit: null,
-            windowlist: [],
-        },
-        methods: {
-            bindMenu: function () {
-                var _this = this
-                layui.use('dropdown', function () {
-                    var dropdown = layui.dropdown
-                    var menuFunc = function (data) {
+var vm = new Vue({
+    el: '#v-db',
+    data: {
+        boxes: [],
+        sortObj: null,
+        loadingDialog: null,
+        Veiwit: null,
+        windowlist: [],
+    },
+    methods: {
+        bindMenu: function () {
+            var _this = this
+            layui.use('dropdown', function () {
+                var dropdown = layui.dropdown
+                var menuFunc = function (data) {
 
                     var nameNo = $(this.elem)[0].dataset.nameno;
                     var WinDocModel = $(this.elem)[0].dataset.windocmodel;
@@ -101,20 +101,20 @@
                 height: '300px',
                 margin: '6px 6px 6px 6px'
             }
-            },
-       itemadd: function () {
-                colspan =  1
-                return {
-                    width: 'calc(' + colspan / 4 * 100 + '%' + ' - 14px)',
-                    height: '300px',
-                    margin: '6px 6px 6px 6px'
-                }
-            },
-       addfile: function () {
-           var no = GetQueryString("PageID");
-           var url = "../GPM/Window/Html.htm?PageID=" + no + "&MenuNo=" + no;
-           OpenLayuiDialog(url, '', 900, 80, "auto", true);
-            },
+        },
+        itemadd: function () {
+            colspan = 1
+            return {
+                width: 'calc(' + colspan / 4 * 100 + '%' + ' - 14px)',
+                height: '300px',
+                margin: '6px 6px 6px 6px'
+            }
+        },
+        addfile: function () {
+            var no = GetQueryString("PageID");
+            var url = "../GPM/Window/Html.htm?PageID=" + no + "&MenuNo=" + no;
+            OpenLayuiDialog(url, '', 900, 80, "auto", true);
+        },
         expand: function (item) {
             try {
                 var URI = item.ModrLink
@@ -189,7 +189,7 @@
 
         initTable: function () {
             var neededList = this.boxes.filter(function (item) {
-                return item.WinDocModel === "Html" || item.WinDocModel === "System" || item.WinDocModel === "SQLList" || item.WinDocModel === "Table" ||  item.WinDocModel === "HtmlVar"
+                return item.WinDocModel === "Html" || item.WinDocModel === "System" || item.WinDocModel === "SQLList" || item.WinDocModel === "Table" || item.WinDocModel === "HtmlVar"
             })
             var _this = this
             this.$nextTick(function () {
@@ -241,25 +241,25 @@
                                 }
                                 table += "</div>"
                                 el.innerHTML = table
-                                break                            
+                                break
                         }
                     })(i)
 
                 }
             })
 
-            },
-    
+        },
+
         initCharts: function () {
             var neededList = this.boxes.filter(function (item) {
-                return item.WinDocModel !== "Html" && item.WinDocModel !== "System" && item.WinDocModel !== "SQLList" && item.WinDocModel !== "Table"  && item.WinDocModel !== "HtmlVar"
+                return item.WinDocModel !== "Html" && item.WinDocModel !== "System" && item.WinDocModel !== "SQLList" && item.WinDocModel !== "Table" && item.WinDocModel !== "HtmlVar"
             })
             var _this = this
             this.$nextTick(function () {
                 for (var i = 0; i < neededList.length; i++) {
                     (function (i) {
                         var item = neededList[i];
-                        var el = document.querySelector('div[data-cid="' + item.No + '"]');                        
+                        var el = document.querySelector('div[data-cid="' + item.No + '"]');
                         switch (item.WinDocModel) {
                             case "ChartLine":
                                 _this.initLineChart(el, item);
@@ -278,83 +278,83 @@
                                 return
                             default:
                                 break;
-                         
+
                         }
                     })(i)
 
                 }
             })
-            },
+        },
         initTab: function () {
-                var neededList = this.boxes.filter(function (item) {
-                    return item.WinDocModel === "Tab"
-                })
-                var _this = this
-                this.$nextTick(function () {
-                    for (var i = 0; i < neededList.length; i++) {
-                        (function (i) {
-                            var tab = neededList[i].children; 
-                            for (var i = 0; i < tab.length; i++) {
-                                var tabinfo = tab[i]
-                                tabinfo.Docs = tabinfo.Exp0
-                                //console.log(tabinfo)
-                                var els = document.querySelector('div[data-mypk="' + tabinfo.MyPK + '"]');
-                                //console.log(tabinfo.WindowsShowType)
-                                if (i == 0) {
-                                    var width = $('#' + tabinfo.MyPK).width();
-                                    var height = $('#' + tabinfo.MyPK).height();
-                                }
-                              
-                                $('#'+tabinfo.MyPK).css("width", width).css("height", height);
-
-                                
-                                if (tabinfo.WindowsShowType == 0) {
-                                    _this.initPieChart(els, tabinfo);
-                                    
-                                }
-                               if (tabinfo.WindowsShowType == 1) {
-                                    _this.initLineChart(els, tabinfo);
-                                }
-                                if (tabinfo.WindowsShowType == 2) {
-                                    _this.initHistogram(els, tabinfo);
-                                }
-                                //表格
-                                if (tabinfo.WindowsShowType == 4) {
-                                    var dataExp = JSON.parse(tabinfo.Docs);
-                                   // console.log(dataExp)
-                                    var tabhtml = '<table class="layui-table">';
-                                    var startnum = dataExp[0];
-                                    tabhtml += '<thead><tr>';
-                                    $.each(startnum, function (i) {
-                                        tabhtml += '<th>' + i + '</th>';
-                                    });
-                                    tabhtml += '</tr></thead>';
-                                    tabhtml += '<tbody>';
-                                    for (var j = 0; j < dataExp.length; j++) {
-                                        var col = dataExp[j]
-                                        tabhtml += "<tr>"
-                                        $.each(startnum, function (i) {
-
-                                            tabhtml += "<td>" + col[i] + "</td>"
-                                        });
-                                        tabhtml += "</tr>"
-                                    }
-                                    tabhtml += "</tbody></table>"
-                                    els.innerHTML = tabhtml
-                                }
-                                
+            var neededList = this.boxes.filter(function (item) {
+                return item.WinDocModel === "Tab"
+            })
+            var _this = this
+            this.$nextTick(function () {
+                for (var i = 0; i < neededList.length; i++) {
+                    (function (i) {
+                        var tab = neededList[i].children;
+                        for (var i = 0; i < tab.length; i++) {
+                            var tabinfo = tab[i]
+                            tabinfo.Docs = tabinfo.Exp0
+                            //console.log(tabinfo)
+                            var els = document.querySelector('div[data-mypk="' + tabinfo.MyPK + '"]');
+                            //console.log(tabinfo.WindowsShowType)
+                            if (i == 0) {
+                                var width = $('#' + tabinfo.MyPK).width();
+                                var height = $('#' + tabinfo.MyPK).height();
                             }
-                       
-                        })(i)
 
-                    }
-                })
-            },
+                            $('#' + tabinfo.MyPK).css("width", width).css("height", height);
+
+
+                            if (tabinfo.WindowsShowType == 0) {
+                                _this.initPieChart(els, tabinfo);
+
+                            }
+                            if (tabinfo.WindowsShowType == 1) {
+                                _this.initLineChart(els, tabinfo);
+                            }
+                            if (tabinfo.WindowsShowType == 2) {
+                                _this.initHistogram(els, tabinfo);
+                            }
+                            //表格
+                            if (tabinfo.WindowsShowType == 4) {
+                                var dataExp = JSON.parse(tabinfo.Docs);
+                                // console.log(dataExp)
+                                var tabhtml = '<table class="layui-table">';
+                                var startnum = dataExp[0];
+                                tabhtml += '<thead><tr>';
+                                $.each(startnum, function (i) {
+                                    tabhtml += '<th>' + i + '</th>';
+                                });
+                                tabhtml += '</tr></thead>';
+                                tabhtml += '<tbody>';
+                                for (var j = 0; j < dataExp.length; j++) {
+                                    var col = dataExp[j]
+                                    tabhtml += "<tr>"
+                                    $.each(startnum, function (i) {
+
+                                        tabhtml += "<td>" + col[i] + "</td>"
+                                    });
+                                    tabhtml += "</tr>"
+                                }
+                                tabhtml += "</tbody></table>"
+                                els.innerHTML = tabhtml
+                            }
+
+                        }
+
+                    })(i)
+
+                }
+            })
+        },
         // 初始化折线图
-            initLineChart: function (el, item) {
-             
+        initLineChart: function (el, item) {
+
             var lineChart = echarts.init(el)
-            var data = JSON.parse(item.Docs);              
+            var data = JSON.parse(item.Docs);
             var startnum = data[0];
             if (startnum) {
                 var inf = [];
@@ -396,8 +396,8 @@
                 };
                 lineChart.setOption(option)
                 lineChart.resize();
-                }
-              
+            }
+
         },
         // 初始化饼图
         initPieChart: function (el, item) {
@@ -409,22 +409,22 @@
             var jsonKey = [];
             for (var jsonVal in data[0]) {
                 jsonKey.push(jsonVal);
-            }           
+            }
             var oldkey = {
-                    [jsonKey[0]]: "name",
-                    [jsonKey[1]]: "value",                   
-                };
-           
+                [jsonKey[0]]: "name",
+                [jsonKey[1]]: "value",
+            };
+
             for (var i = 0; i < data.length; i++) {
                 var obj = data[i];
-                    for (var key in obj) {
-                        var newKey = oldkey[key];
-                        if (newKey) {
-                            obj[newKey] = obj[key];
-                            delete obj[key];
-                        }
+                for (var key in obj) {
+                    var newKey = oldkey[key];
+                    if (newKey) {
+                        obj[newKey] = obj[key];
+                        delete obj[key];
                     }
                 }
+            }
             //console.log(data);
             var option = {
                 tooltip: {
@@ -562,8 +562,8 @@
             GChart.resize();
         },
         //环形
-            initAnnular: function (el, item) {
-           
+        initAnnular: function (el, item) {
+
             var AnnularChart = echarts.init(el);
             var name = item.Name
             var data = JSON.parse(item.Docs)
@@ -620,11 +620,11 @@
             };
             AnnularChart.setOption(option);
 
-                AnnularChart.resize();
+            AnnularChart.resize();
         }
 
     },
-        mounted: function () {
+    mounted: function () {
 
         // fix firefox bug
         document.body.ondrop = function (event) {
@@ -633,28 +633,29 @@
         }
 
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
-        handler.AddUrlData();
-
+        var pageID = GetQueryString("PageID");
+        handler.AddPara("PageID", pageID);
+        //handler.AddUrlData();
         var windows = handler.DoMethodReturnJSON("Home_Init");
-       // console.log(windows);
-            if (!windows) {
-                var no = GetQueryString("PageID");
-                var url = "../GPM/Window/Html.htm?PageID=" + no + "&MenuNo=" + no;
-                OpenLayuiDialog(url, '', 900, 80, "auto", true);
-               
+        // console.log(windows);
+        if (!windows) {
+            var no = GetQueryString("PageID");
+            var url = "../GPM/Window/Html.htm?PageID=" + no + "&MenuNo=" + no;
+            OpenLayuiDialog(url, '', 900, 80, "auto", true);
 
-            } else {
-              
-                for (var j = 0; j < windows.length; j++) {
-                    var win = windows[j];
-                    if (win.WinDocModel == 'Tab') {
-                        win.children = JSON.parse(win.Docs);
 
-                        
-                    }
+        } else {
+
+            for (var j = 0; j < windows.length; j++) {
+                var win = windows[j];
+                if (win.WinDocModel == 'Tab') {
+                    win.children = JSON.parse(win.Docs);
+
+
                 }
-               
             }
+
+        }
         //console.log(windows);
         var viewid = GetQueryString("viewid");
         if (viewid) {

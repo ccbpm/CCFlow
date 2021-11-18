@@ -25,6 +25,7 @@ window.onload = function () {
                 webUser: new WebUser(),
                 isAdmin: false,
                 showShortCut: false,
+                showShortOA: false,
                 showUserActions: false,
                 tabDropdownVisible: false,
                 top: 0,
@@ -33,6 +34,7 @@ window.onload = function () {
                 SystemName: "驰骋BPM",
                 SystemLogo: "./image/logo.png",
                 IsShowFast: true,
+                IsShowOA: true,
                 IsShowRefresh: true,
                 IsShowFullScreen: true,
                 IsShowTheme: true,
@@ -370,6 +372,7 @@ window.onload = function () {
 
             },
             refreshMenuTree: function (data) {
+                console.log(data)
                 this.menuTreeData = new MenuConvertTools(this.webUser, data).convertToTreeData()
                 layer.close(loading);
                 // var color = localStorage.getItem("themeColor")
@@ -390,11 +393,12 @@ window.onload = function () {
                 }
                 _this.closeTimeout = setTimeout(function () {
                     _this.showShortCut = false
+                    _this.showShortOA = false
                     _this.showUserActions = false
                     _this.tabDropdownVisible = false
                     clearTimeout(_this.closeTimeout)
                     _this.closeTimeout = null
-                }, 300)
+                }, 30)
 
             },
             stopTimeout: function () {
@@ -990,9 +994,18 @@ window.onload = function () {
             }
         },
         mounted: function () {
+
+            // fix firefox bug
+            document.body.ondrop = function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+
             this.SystemName = getPortalConfigByKey("SystemName", "驰骋BPM");
             this.SystemLogo = getPortalConfigByKey("SystemLogo", "./image/logo.png");
             this.IsShowFast = getPortalConfigByKey("IsShowFast", true);
+            this.IsShowOA = getPortalConfigByKey("IsShowOA", true);
             this.IsShowRefresh = getPortalConfigByKey("IsShowRefresh", true);
             this.IsShowFullScreen = getPortalConfigByKey("IsShowFullScreen", true);
             this.IsShowTheme = getPortalConfigByKey("IsShowTheme", true);

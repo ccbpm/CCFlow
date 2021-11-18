@@ -104,6 +104,14 @@
             }
         },
         mounted: function () {
+
+            // fix firefox bug
+            document.body.ondrop = function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+
             var pageID = GetQueryString("PageID");
 
             //给标题赋值.

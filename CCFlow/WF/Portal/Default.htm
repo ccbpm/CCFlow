@@ -26,13 +26,33 @@
     <script type="text/javascript">
         //初始化页面函数.....
         $(function () {
-
             var webUser = new WebUser();
-
             document.getElementsByTagName("title")[0].innerText = '您好：' + webUser.Name + ", 来自：" + webUser.FK_DeptName;
-
-
         });
+        function GoToFunc(funcName) {
+            if (funcName === 'Calendar') {
+                vm.openTab('日历', '/CCFast/Calendar/Month.htm');
+                return;
+            }
+            if (funcName === 'WorkRec') {
+                vm.openTab('日志', '/CCFast/WorkRec/Default.htm');
+                return;
+            }
+            if (funcName === 'Notepad') {
+                vm.openTab('记事本', '/CCFast/Notepad/Notepad.htm');
+                return;
+            }
+            if (funcName === 'Task') {
+                vm.openTab('任务', '/CCFast/Task/Task.htm');
+                return;
+            }
+            if (funcName === 'KnowledgeManagement') {
+                vm.openTab('知识库', '/CCFast/KnowledgeManagement/Default.htm');
+                return;
+            }
+            
+        }
+
     </script>
     <style>
         [v-cloak] {
@@ -65,10 +85,12 @@
                                 <i class="layui-icon layui-icon-shrink-right"></i>
                             </a>
                         </li>
+
                         <li class="layui-nav-item layui-hide-xs" v-if="IsShowFast==true">
-                            <a href="javascript:void(0)" title="快捷" @mouseover.stop="showShortCut = true"
+
+                            <a href="javascript:void(0)" title="流程" @mouseover.stop="showShortCut = true"
                                @mouseenter="stopTimeout" @mouseleave="closeDropdown">
-                                快捷
+                                流程
                             </a>
 
                             <dl class="layui-nav-child drop-down" :class="{'layui-show':showShortCut}" style='width: 72px;'
@@ -91,6 +113,49 @@
                                 <dd onclick='Search()'>
                                     <a class="drop-down-item">
                                         <i class="icon-magnifier"></i>查询
+                                    </a>
+                                </dd>
+                            </dl>
+                            <!-- <dl class="layui-nav-child drop-down" style='text-align: center;'>
+                                {volist name='quick' id='k'}
+                                <dd @click='openTab("{$k.title}","{$k.data}")'><a>{$k.title}</a></dd>
+                                {/volist}
+                            </dl> -->
+                        </li>
+
+
+                        <li class="layui-nav-item layui-hide-xs" v-if="IsShowOA==true">
+
+                            <a href="javascript:void(0)" title="OA" @mouseover.stop="showShortOA = true"
+                               @mouseenter="stopTimeout" @mouseleave="closeDropdown">
+                                OA
+                            </a>
+
+                            <dl class="layui-nav-child drop-down" :class="{'layui-show':showShortOA}" style='width: 72px;'
+                                @click.stop="showShortOA = false" @mouseenter="stopTimeout" @mouseleave="closeDropdown">
+                                <dd onclick="GoToFunc('Calendar')">
+                                    <a class="drop-down-item">
+                                        <i class="icon-calendar"></i>日历
+                                    </a>
+                                </dd>
+                                <dd onclick="GoToFunc('WorkRec')">
+                                    <a class="drop-down-item">
+                                        <i class="icon-bell"></i>日志
+                                    </a>
+                                </dd>
+                                <dd onclick="GoToFunc('Notepad')">
+                                    <a class="drop-down-item">
+                                        <i class="icon-note"></i>&nbsp;&nbsp;记事本
+                                    </a>
+                                </dd>
+                                <dd onclick="GoToFunc('Task')">
+                                    <a class="drop-down-item">
+                                        <i class="icon-note"></i>任务
+                                    </a>
+                                </dd>
+                                <dd onclick="GoToFunc('KnowledgeManagement')">
+                                    <a class="drop-down-item">
+                                        <i class="icon-eyeglass"></i>&nbsp;知识库
                                     </a>
                                 </dd>
                             </dl>

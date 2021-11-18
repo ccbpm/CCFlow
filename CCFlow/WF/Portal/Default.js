@@ -40,7 +40,7 @@ function Search() {
 function OpenOrg() {
 
     if (webUser.CCBPMRunModel == 2)
-        vm.openTab('组织', '../../App/Organization/Organization.htm');
+        vm.openTab('组织', '../../App/App/Organization.htm');
     else
         vm.openTab('组织', '../../GPM/Organization.htm');
 }

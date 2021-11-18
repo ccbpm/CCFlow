@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../WF/Portal/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../WF/Portal/layui/layui.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <script src="../../WF/Portal/js/vue/vue.js" type="text/javascript"></script>
+    <script src="Toolbar.js"></script>
+    <style>
+        #toolbar a {
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-fluid" id="workRec-Default" style="margin-top:15px">
+
+        <div id="toolbar"> </div>
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <td>父亲</td>
+                    <td> <div id="TB_Father"></div> </td>
+
+                    <td>母亲</td>
+                    <td> <div id="TB_Monther"></div> </td>
+                </tr>
+
+                <tr>
+                    <td>我姓名</td>
+                    <td> <div id="TB_Father"></div> </td>
+
+                    <td>性别</td>
+                    <td> <div id="TB_XB"></div> </td>
+                </tr>
+
+                <tr>
+                    <td colspan="4">
+                        兄妹
+                        <div id="Docs"></div>
+                    </td>
+                </tr>
+
+            </thead>
+        </table>
+
+        <button onclick="Bind()">以上信息确认是我，我要绑定微信</button>
+
+    </div>
+    <script>
+        new Vue({
+            el: '#workRec-Default',
+            data: {
+                list: []
+            },
+            methods: {
+                Bind: function () {
+                    //执行绑定.
+                    //alert('打开' + mypk)
+                    var peopleNo = GetQueryString("PeopleNo");
+                    var en = new Entities("BP.ZHOU.People", peopleNo);
+
+                },
+                //审核处理
+                CheckRz: function (mypk) {
+                    var enck = new Entity("BP.CCFast.WorkRec");
+                    alert('审核' + mypk)
+                },
+            },
+            mounted: function () {
+                //要绑定的编号.
+                var peopleNo = GetQueryString("PeopleNo");
+                var en = new Entities("BP.ZHOU.People", peopleNo);
+
+                /*var data = ens.DoMethodReturnJSON("Default_Init");*/
+                //console.log(data);
+            }
+
+        })
+    </script>
+
+</body>
+</html>

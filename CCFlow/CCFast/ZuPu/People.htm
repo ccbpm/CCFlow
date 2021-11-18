@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+    <script type="text/javascript">
+
+        function Save() {
+
+            var enParentNo = GetQueryString("ParentNo"); //父节点编号.
+            var currNo = GetQueryString("CurrNo"); //当前选择的实体编号.
+
+            var doType = GetQueryString("DoType"); //执行类型.
+
+            var en = new Entity("BP.ZHOU.People");
+            en.CopyFrom();
+
+            //增加下级.
+            if (doType == "AddSub")
+                en.ParentNo = currNo;
+
+            //增加同级.
+            if (doType == "AddSameLevel")
+                en.ParentNo = enParentNo;
+            en.Insert();
+
+            window.location.href = 'TreeEdit.htm?JiaPuNo=' + en.No + "&PeopleNo=" + en.PeopleNo;
+        }
+    </script>
+</head>
+<body>
+
+    <form id="cc">
+
+        <table>
+            <caption>新建谱系</caption>
+            <tr>
+                <td>大名  </td>
+                <td> <input type="text" id="TB_Name" /> </td>
+                <td>曾用名  </td>
+                <td> <input type="text" id="TB_PeopleName" /> </td>
+            </tr>
+
+            <tr>
+                <td>代 </td>
+                <td> <input type="text" id="TB_TangHao" /> </td>
+                <td>世  </td>
+                <td> <input type="text" id="TB_DTEdit" /> </td>
+            </tr>
+
+            <tr>
+                <td>地址  </td>
+                <td> <input type="text" id="TB_Addr" /> </td>
+                <td>联系电话  </td>
+                <td> <input type="text" id="TB_Tel" /> </td>
+            </tr>
+
+            <tr>
+                <td>简洁  </td>
+                <td colspan="3"> <input type="text" id="TB_Name" /> </td>
+            </tr>
+        </table>
+
+        <button onclick="Save();" id="Btn_Save">创建</button>
+
+    </form>
+
+
+</body>
+</html>

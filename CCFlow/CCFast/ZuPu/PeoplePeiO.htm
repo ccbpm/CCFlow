@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+    <script type="text/javascript">
+
+        function Save() {
+
+            var currNo = GetQueryString("CurrNo"); //当前选择的实体编号.
+
+            var en = new Entity("BP.ZHOU.People", currNo);
+            en.CopyFrom();
+            en.Update();
+
+            window.location.href = 'TreeEdit.htm?JiaPuNo=' + en.No + "&PeopleNo=" + en.PeopleNo;
+        }
+    </script>
+</head>
+<body>
+
+    <form id="cc">
+
+        <table>
+            <caption>增加配偶</caption>
+            <tr>
+                <td>大名  </td>
+                <td> <input type="text" id="TB_PeiOName" /> </td>
+                <td>曾用名  </td>
+                <td> <input type="text" id="TB_PeiOTel" /> </td>
+            </tr>
+
+            <tr>
+                <td>地址  </td>
+                <td colspan="3"> <input type="text" id="TB_PeiOAddr" /> </td>
+            </tr>
+
+            <tr>
+                <td>简介  </td>
+                <td colspan="3"> <input type="text" id="TB_PeiONote" /> </td>
+            </tr>
+        </table>
+
+        <button onclick="Save();" id="Btn_Save">创建</button>
+
+    </form>
+
+
+</body>
+</html>

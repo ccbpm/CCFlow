@@ -1,0 +1,639 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../WF/Portal/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../layuiadmin/layui/lay/modules/layer.js"></script>
+    <script src="../../WF/Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <script src="../../WF/Portal/js/vue/vue.js" type="text/javascript"></script>
+    
+    <style>
+        html,body {
+         padding:10px;
+         height:100%;
+         box-sizing:border-box;
+        }
+
+        .taskWindows {
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            position: fixed;
+            top: 0px;
+            z-index:9;
+        }
+
+        .taskForm {
+            width: 80%;
+            box-shadow: 0px 0px 8px #eee;
+            height: 80%;
+            margin: 5% auto;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .pull-right {
+            float: right;
+        }
+        .KnowBoxs, .KnowBoxAdd {
+            background: #f7f7f7;
+            border-radius: 5px;
+            border: 1px solid #e6e6e6;
+            height: 120px;
+            overflow:hidden;
+            box-sizing: border-box;
+            cursor: pointer;
+            width: 100%;
+            position:relative
+        }
+        .KnowBoxs img{ width:100%;
+                       opacity:1
+        }
+        .KnowBoxs .boxTop {
+            position: absolute;
+            z-index: 1;
+            width: 100%;
+            color: #fff;
+            padding: 10px 10px 0px;
+            box-sizing: border-box;
+            background-image: linear-gradient( 180deg,rgba(0,0,0,.5),transparent);
+            height:100%;
+        }
+        .boxTop>.title {
+        font-weight:bold;
+        
+        }
+        .KnowBoxAdd {
+            text-align: center;
+            padding-top: 11%;
+            font-size: 20px;
+        }
+            .KnowBoxAdd:hover {
+            background:#e5f3fe;
+            color:#5196d8;
+            }
+            .KnowBoxAdd i {
+            font-weight:bold}
+            .KnowBoxAdd span {
+                display: block;
+                font-size: 14px;
+            }
+            .KnowImg-box img {
+                width: 100%;
+                border-radius: 5px;
+                margin-right: 10px;
+            }
+        .KnowImg-Bigs {
+            width: 120px;
+            float: left;
+            margin-right: 10px;
+        }
+        .KnowImg-Small {
+            float: left;
+        }
+            .KnowImg-Small li {
+                width: 40px;
+                float: left;
+                margin-right: 10px;
+                cursor:pointer
+            }
+        .nyellow i {
+            color: #ffd800 !important
+        }
+        .know{ border:1px solid #e6e6e6; background:#fff; padding-bottom:10px; height:100%;}
+
+        .know-tab {
+            padding:0px 15px;
+            border-bottom: 1px solid #e6e6e6;
+        }
+        .know-tab span {
+            line-height: 40px;
+            display:inline-block;
+            margin-right:15px;
+            padding:0px 10px;
+            cursor:pointer
+        }
+        .tabActive {
+            border-bottom: 2px solid #2362fb;
+            color: #2362fb;
+        }
+        .know-box{ padding:0px 10px;}
+        .know-box .layui-col-sm2{ min-width:260px;}
+        .TaskDepts {
+            width: 300px;
+            position: absolute;
+            z-index: 999;
+            background: #fff;
+            border: 1px solid #e6e6e6;
+            border-radius: 5px;
+            box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+        }
+
+            .TaskDepts .TaskDepts-title {
+                border-bottom: 1px solid #e6e6e6;
+                padding: 10px 15px;
+            }
+
+            .TaskDepts .TaskDepts-box {
+                padding: 10px 15px;
+                height: 248px;
+                overflow: auto
+            }
+        .taskForm > .tf-title {
+            padding: 10px 0px;
+        }
+
+        .taskForm > .tf-title > .title {
+            font-size: 16px;
+            font-weight: bold
+        }
+
+        .tf-colse {
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold
+        }
+
+        .tf-colse:hover {
+            color: #1E9FFF;
+        }
+
+        .Depts li {
+            line-height: 26px;
+        }
+
+            .Depts li .Depts-Emps {
+                padding-left: 20px
+            }
+        .Empsdata-list {
+            display: inline-block;
+            background: #cce7fe;
+            padding: 2px 5px 4px 15px;
+            margin: 9px 5px 0px;
+            cursor: pointer
+        }
+
+        .Empsdata-list sup {
+            opacity: 0;
+        }
+
+       .Empsdata-list:hover sup {
+            opacity: 1;
+            color: #f94e4e;
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="know" id="know-Default">
+        <div class="know-tab" style="margin-bottom:15px;">
+
+            <span @click.stop="Tabnum=1,Refresh()" :class="{tabActive:Tabnum==1}">全部</span>
+            <span @click.stop="Tabnum=2,Refresh()" :class="{tabActive:Tabnum==2}">我关注的</span>
+
+        </div>
+
+        <div class="know-box">
+            <div v-if="Tabnum==1">
+                <div class="layui-row  layui-col-space10">
+                    <div class="layui-col-sm2" v-for="(item,index) in knowList">
+                        <div class="KnowBoxs" @click.stop="KnowCateShow(item.No)">
+                            <div class="boxTop">
+                                <div class="pull-right">
+                                    <div :class="item.gz ? 'tt nyellow':'tt'" :id="'gz'+item.No">
+                                        <i class="layui-icon layui-icon-star-fill" @click.stop="StarType(item.gz,item.No,index)"></i>
+
+                                    </div>
+                                </div>
+
+                                <div class="title">{{item.Title}}</div>
+                            </div>
+                            <div class="imgsrc">
+                                <img :src="item.ImgUrl" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-sm2">
+                        <div class="KnowBoxAdd" @click.stop="Addshow=true"><i class="layui-icon layui-icon-addition"></i><span>添加知识点</span></div>
+                    </div>
+                </div>
+            </div>
+            <div v-if="Tabnum==2">
+                <div class="layui-row  layui-col-space10">
+                    <div class="layui-col-sm2" v-for="(item,index) in myknowList">
+                        <div class="KnowBoxs" @click.stop="KnowCateShow(item.No)">
+                            <div class="boxTop">
+                                <div class="pull-right">
+                                    <div :class="item.gz ? 'tt nyellow':'tt'" :id="'gz'+item.No">
+                                        <i class="layui-icon layui-icon-star-fill" @click.stop="myStarType(item.gz,item.No,index)"></i>
+
+                                    </div>
+                                </div>
+
+                                <div class="title">{{item.Title}}</div>
+                            </div>
+                            <div class="imgsrc">
+                                <img :src="item.ImgUrl" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-sm2">
+                        <div class="KnowBoxAdd" @click.stop="Addshow=true"><i class="layui-icon layui-icon-addition"></i><span>添加知识点</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="taskWindows" v-if="Addshow" @click.stop="Deptshow=false">
+            <div class="taskForm">
+                <div class="tf-title">
+                    <span class="pull-right tf-colse" @click.stop="Addshow=false,Deptshow=false"><i class="layui-icon layui-icon-close"></i></span>
+                    <div class="title">新建知识库</div>
+                </div>
+                <form class="layui-form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">知识库名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="TB_Title" id="TB_Title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="height:auto">
+                        <label class="layui-form-label">知识库封面</label>
+                        <div class="layui-input-block">
+                            <div class="KnowImg-box">
+                                <div class="KnowImg-Bigs"><img :src="ImgUrl" /></div>
+                                <div class="KnowImg-Small">
+                                    <ul>
+                                        <li v-for="(imgt,im) in KnowImgData">
+                                            <img :src="imgt.imgurl" :title="imgt.title" @click.stop="ChooseImg(imgt.imgurl)" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <input id="TB_ImgUrl" name="TB_ImgUrl" type="hidden" :value="ImgUrl" />
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">知识库描述</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="请输入内容" name="TB_Docs" id="TB_Docs" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">可见范围</label>
+                        <div class="layui-input-block" style="width:300px;">
+                            <select name="TB_KnowledgeSta" id="TB_KnowledgeSta" style="display:block" class="layui-input">
+                                <option value="2">公开：企业所有成员都可以看见此项目</option>
+                                <option value="1">私有：只有加入的成员才能看见此项目</option>
+
+                            </select>
+
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">参与人</label>
+                            <div class="layui-input-inline" style="width:auto;">
+                                <div class="Empsdata-list" v-for="(citem,lk) in EmpsData">
+                                    {{citem.name}}
+                                    <sup @click.stop="DelEmps(citem.no,citem.name,lk)">X</sup>
+                                </div>
+                                <div class="Empsdata-list">                                   
+                                    <div id="TB_RefEmpsNo" @click.stop="selectRefShow($event)" class="selectRefShow" ref="RefBox">+人员</div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <span type="submit" class="layui-btn layui-btn-normal" @click.stop="SaveKnow()">保存</span>
+                            <button @click.stop="Addshow=false" class="layui-btn layui-btn-primary">取消</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        
+        <div class="TaskDepts" v-if="Deptshow" :style="{'left':DeptshowLeft,'top':Deptshowtop}">
+            <div class="TaskDepts-title">人员</div>
+            <div class="TaskDepts-box">
+                <div class="TaskDepts-input">
+                    <input type="text" class="layui-input" placeholder="请输入内容" id="SearchEmpsKey" @input="selectHandle($event)" placeholder="搜索参与人" />
+                </div>
+                <div class="Depts">
+                    <ul>
+                        <li class="" v-for="(Ditem,dk) in DeptsData" v-if="Ditem.Num > 0">
+                            <p @click.stop="Ditem.open = !Ditem.open">
+                                <i v-if="Ditem.Empslist.length > 0" class="layui-icon"
+                                   :class="Ditem.open ? 'layui-icon-down':'layui-icon-right'"></i> {{Ditem.Name}} {{Ditem.Num}}人
+                            </p>
+                            <div class="Depts-Emps" v-for="(Eitem,dk) in Ditem.Empslist" v-if="Ditem.open || Ditem.Num === 0">
+                                <input type="checkbox" :value="Eitem.No" @click.stop="SelEmpno(Eitem.No,Eitem.Name,Eitem.status)" v-model="Eitem.status" /> {{Eitem.Name}}
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>    
+    <script>
+        var editPK = '';
+        new Vue({
+            el: '#know-Default',
+            data: {
+                list: [],
+                ens: [],              
+                Addshow: false,               
+                Deptshow: false,
+                Tabnum:1,
+                knowList: [],
+                myknowList: [],
+                IsStar:0,
+                ImgUrl: 'img/1.png',
+                KnowImgData: [{ 'id': 1, 'imgurl': 'img/1.png' }, { 'id': 2, 'imgurl': 'img/2.png' }, { 'id': 3, 'imgurl': 'img/3.png' }, { 'id': 4, 'imgurl': 'img/4.png' }, { 'id': 5, 'imgurl': 'img/5.png' }, { 'id': 6, 'imgurl': 'img/7.png' }, { 'id': 8, 'imgurl': 'img/8.png' }], 
+                DeptshowLeft: 0,
+                Deptshowtop: 0,
+                DeptsData: [],//人员信息
+                DeptsDatas: [],
+                EmpsData: [],
+                EmpsRaw:'',
+            },
+            methods: {
+                SaveKnow: function () {
+                    
+                    var Empsstr = ''
+                    for (s = 0; s < this.EmpsData.length; s++) {
+                        var de = this.EmpsData[s]                        
+                        Empsstr += de.no+'@'+de.name+';'
+                    }
+                  
+                    var en = new Entity("BP.CCFast.KnowledgeManagement.Knowledge");                  
+                    en.CopyForm();
+                    en.Emps = Empsstr;
+                    en.Insert();
+                    layer.msg('添加成功', { time: 1000 }, function () {
+                        location.href = "Knowledge.htm?No=" + en.No;
+                        return;
+                        //window.location.href = "Defaut";
+                        //location.reload();
+                    })
+
+                },
+
+                ChooseImg: function (imgurl) {
+                    this.ImgUrl = imgurl
+                },
+                KnowCateShow: function (no) {
+                    location.href = "Knowledge.htm?no=" + no
+                },
+                StarType: function (status,no,index) {                  
+                    var en = new Entity("BP.CCFast.KnowledgeManagement.Knowledge", no);
+                    en.Retrieve();
+                 
+                    var Foucs=en.Foucs
+                    var webUser = new WebUser();
+                    if (status) {
+                        Foucs = Foucs.replace(webUser.Name + ';', "")
+                        $('#gz' + no).removeClass('nyellow')
+                        this.knowList[index].gz = 0                      
+                    } else {
+                        Foucs += webUser.Name+';'
+                        $('#gz' + no).addClass('nyellow')
+                        this.knowList[index].gz = 1                     
+                    }
+                   
+                    en.Foucs = Foucs; // 0=未完成， 1=完成.
+                    en.Update();
+                },
+                myStarType: function (status, no, index) {
+                    var en = new Entity("BP.CCFast.KnowledgeManagement.Knowledge", no);
+                    en.Retrieve();
+                    var Foucs = en.Foucs
+                    var webUser = new WebUser();
+                    if (status) {
+                        Foucs = Foucs.replace(webUser.Name + ';', "")
+                        this.myknowList.splice(index, 1)
+                    } 
+
+                    en.Foucs = Foucs; // 0=未完成， 1=完成.
+                    en.Update();
+                },
+
+                selectHandle: function (event) {
+
+                    var key = event.currentTarget.value;
+                    console.log(key);
+                    var Depts = this.DeptsDatas;
+                    if (key != null) {
+                        var des = []
+                        for (d = 0; d < Depts.length; d++) {
+                            var de = Depts[d]
+                            de.open = false
+                            var childModules = de.Empslist
+                            de.Num = 0
+                            for (c = 0; c < childModules.length; c++) {
+                                var ce = childModules[c]
+
+                                if (ce.Name.indexOf(key) != -1) {
+                                    de.open = true
+                                    de.Num += 1
+                                }
+                            }
+                            if (de.Num) des.push(de)
+                            de.Num = childModules.length
+                        }
+
+                        this.DeptsData = des
+                    } else {
+                        for (d = 0; d < Depts.length; d++) {
+                            var de = Depts[d]
+                            de.open = false
+                            var childModules = de.Empslist
+                            de.Num = childModules.length
+                        }
+
+                        this.DeptsData = Depts
+                        console.log(this.DeptsData);
+                    }
+
+
+                },
+                selectRefShow: function (e) {               
+                    this.Deptshow = true;    
+                    var Depts = this.DeptsDatas;
+                    for (d = 0; d < Depts.length; d++) {
+                        var de = Depts[d]
+                        de.open = false
+                        var childModules = de.Empslist
+                        for (c = 0; c < childModules.length; c++) {
+                            var ce = childModules[c]
+                            var splitDate = this.EmpsRaw
+                            ce.status = 0
+                            if (splitDate.indexOf(ce.Name) != -1) {
+                                ce.status = 1
+                                de.open = true
+                            }
+                        }
+                    }
+                    
+                    this.DeptsData = Depts;
+
+                    //this.selectRefShow=true
+                    const $circle = this.$refs.RefBox                   
+                    this.DeptshowLeft = this.getParentLeft($circle) + 'px'
+                    this.Deptshowtop = this.getParentTop($circle) + 30 + 'px'
+                },
+                SelEmpno: function (no, name,  status) {                   
+                    if (status == 1) {
+                        status = 0;
+                    } else {
+                        status = 1;
+                    }
+                   
+                    var splitDate = this.EmpsRaw;
+                        if (splitDate) {
+                            if (status == 1) {
+                                if (splitDate.indexOf(name) != -1)
+                                    return
+                                this.EmpsRaw += name + ';'
+                               
+                                this.EmpsData.push({ 'no': no, 'name': name })
+                            } else {
+                                
+                                this.EmpsRaw = this.EmpsRaw.replace(name + ';', "")
+                                var newArr = new Array();
+                                for (var i = 0; i < this.EmpsData.length; i++) {
+                                    var j = this.EmpsData[i];
+                                    if (j.no != no) {
+                                        newArr.push(j);
+                                    }
+                                }
+                                this.EmpsData=newArr
+                                
+                            }
+                        } else {
+                            this.EmpsRaw += name + ';'
+                           
+                            this.EmpsData.push({ 'no': no, 'name': name })
+                        }
+                  
+                },
+                DelEmps: function (no, name, index) {
+                    var _this = this
+                    this.EmpsRaw = this.EmpsRaw.replace(name + ';', "")
+                    var newArr = new Array();
+                    for (var i = 0; i < this.EmpsData.length; i++) {
+                        var j = this.EmpsData[i];
+                        if (j.no != no) {
+                            newArr.push(j);
+                        }
+                    }
+                    console.log(newArr)
+                    this.EmpsData = newArr
+                },
+            /**
+            * 获取顶部div的距离
+            */
+                getParentTop: function (e) {
+                    var offset = e.offsetTop
+                    if (e.offsetParent != null) {
+                        offset += this.getParentTop(e.offsetParent)
+                    }
+                    return offset
+                },
+                /**
+                 * 获取左侧div的距离
+                 */
+                getParentLeft(e) {
+                    var offset = e.offsetLeft
+                    if (e.offsetParent != null) {
+                        offset += this.getParentLeft(e.offsetParent)
+                    }
+                    return offset
+                },
+                Refresh: function () {
+                    var ens = new Entities("BP.CCFast.KnowledgeManagement.Knowledges");
+                    ens = ens.DoMethodReturnJSON("Default_Init");
+                    var webUser = new WebUser();
+                    var myknow = []
+                    for (i = 0; i < ens.length; i++) {
+                        var en = ens[i];
+                        var FoucsDate = en.Foucs
+                        if (FoucsDate.indexOf(webUser.Name)) {
+                            en.gz = 0
+                        } else {
+                            en.gz = 1
+                            myknow.push(en)
+                        }
+
+                    }
+                    this.knowList = ens;
+                    this.myknowList = myknow;
+                }
+            },
+            mounted: function () {
+
+                var ens = new Entities("BP.CCFast.KnowledgeManagement.Knowledges");
+                ens = ens.DoMethodReturnJSON("Default_Init");
+                var webUser = new WebUser();
+                var myknow=[]
+                for (i = 0; i < ens.length; i++) {
+                    var en = ens[i];
+                    var FoucsDate = en.Foucs
+                    if (FoucsDate.indexOf(webUser.Name)) {
+                        en.gz=0
+                    } else {
+                        en.gz = 1
+                        myknow.push(en)
+                    }
+
+                }
+
+                this.knowList = ens;
+                this.myknowList = myknow;
+                //人员信息
+                var ensD = new Entities("BP.CCFast.KnowledgeManagement.Knowledges");
+                var DeptEmps = ensD.DoMethodReturnJSON("Selecter_DeptEmps");
+                var Depts = DeptEmps.Depts
+                var Emps = DeptEmps.Emps
+                for (d = 0; d < Depts.length; d++) {
+                    var de = Depts[d]
+                    de.Empslist = []
+                    de.open = false
+                    var childModules = Emps.filter(function (module) {
+                        // return module.SystemNo === ''                 
+                        return module.FK_Dept === de.No
+                    })
+                    de.Num = childModules.length
+                    for (c = 0; c < childModules.length; c++) {
+                        var ce = childModules[c]
+                        ce.status = 0
+                    }
+                    de.Empslist = childModules
+
+                }
+
+
+                this.DeptsDatas = Depts;
+
+               
+                this.EmpsRaw = webUser.Name+';'
+                this.EmpsData.push({ 'no': webUser.No, 'name': webUser.Name })
+            }
+
+        });
+        
+    </script>
+
+</body>
+</html>

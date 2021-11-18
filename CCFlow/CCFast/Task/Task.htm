@@ -1,0 +1,1444 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../WF/Portal/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/layui/laydate/laydate.js"></script>
+
+    <script src="../layuiadmin/layui/lay/modules/layer.js"></script>
+
+    <script src="../../WF/Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <script src="../../WF/Portal/js/vue/vue.js" type="text/javascript"></script>
+
+    <style>
+        body {
+            background: #fff;
+        }
+
+        .taskWindows {
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            position: fixed;
+            top: 0px;
+        }
+
+        .taskForm {
+            width: 80%;
+            box-shadow: 0px 0px 8px #eee;
+            height: 80%;
+            margin: 5% auto;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .pull-right {
+            float: right;
+        }
+
+        .taskForm > .tf-title {
+            padding: 10px 0px;
+        }
+
+        .taskForm > .tf-title > .title {
+            font-size: 16px;
+            font-weight: bold
+        }
+
+        .tf-colse {
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold
+        }
+
+        .tf-colse:hover {
+            color: #1E9FFF;
+        }
+
+        .taskeidt {
+            width: 70%;
+            height: 100%;
+            position: fixed;
+            top: 0px;
+            right: 0px;
+            transform: translateX(100%);
+            transition: all 0.8s;
+            box-shadow: 0px 0px 8px #ccc;
+        }
+
+        .in {
+            transform: translateX(0)
+        }
+
+        .closeEdit {
+            position: absolute;
+            top: 50%;
+            background: #ff6a00;
+            left: -40px;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 5px 0px 0px 5px;
+            cursor: pointer
+        }
+
+        .editTaskWindow {
+            background: #fff;
+            height: 100%;
+            box-shadow: 0px 0px 8px #eee;
+        }
+
+        .editTk-header {
+            border-bottom: 15px solid #efefef;
+            padding: 15px;
+        }
+
+        .editTk-nav {
+            font-size: 12px;
+            color: #808080;
+            line-height: 32px;
+        }
+
+        .editTk-title {
+            font-size: 20px;
+            font-weight: bold;
+            padding: 15px 0px;
+        }
+
+        .editTk-colinfo {
+            color: #808080
+        }
+
+        .editTk-colinfo .bg {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            display: inline-block;
+            color: #fff;
+            float: left;
+            margin-right: 10px;
+        }
+
+        .editTk-colinfo .bg0 {
+            background: #1E9FFF
+        }
+
+        .editTk-colinfo .bg1 {
+            background: #ff6a00
+        }
+
+        .editTk-colinfo .bg2 {
+            background: #009688
+        }
+        .editTk-colinfo .bg3 {
+            background: #02b436
+        }
+        .editTk-colinfo .bg4 {
+            background: #a33de1
+        }
+
+        .editTk-colinfo .coltxto {
+            line-height: 40px;
+        }
+
+        .editTk-colinfo .coltxt strong {
+            display: block;
+            color: #000000
+        }
+
+        .PRI {
+            position: relative
+        }
+
+        .PRIab {
+            position: absolute;
+            top: 42px;
+            left: 6px;
+            background: #fff;
+            border: 1px solid #efefef;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .PRIab span {
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+            border-radius: 50%;
+            margin: 5px;
+            text-align: center;
+            line-height: 30px;
+            color: #fff;
+        }
+
+        .PRIab .bg0 {
+            background: #1E9FFF
+        }
+
+        .PRIab .bg1 {
+            background: #ff6a00
+        }
+
+        .PRIab .bg2 {
+            background: #009688
+        }
+        .task-table-pri{ text-align:center}
+        .task-table-pri .bg {
+            font-size: 12px;
+            color: #fff;
+            display: inline-block;
+            padding: 2px 5px;
+        }
+        .task-table-pri .bg0 {
+            background: #1E9FFF
+        }
+
+        .task-table-pri .bg1 {
+            background: #ff6a00
+        }
+
+        .task-table-pri .bg2 {
+            background: #009688
+        }
+        .task-fixed {
+            position: fixed;
+            bottom: 10px;
+            width: 88%;
+            left: 5%;
+            border: 1px solid #efefef;
+            padding: 10px 1%;
+            border-radius: 5px;
+            background: #fff;
+        }
+
+        .editTk-body {
+            padding: 15px;
+            max-height:600px;
+            overflow:auto
+        }
+
+        .editTk-body .TK-panel {
+            padding: 5px 0px;
+        }
+
+        .TK-panel .TK-panel-title {
+            font-weight: bold;
+            line-height: 30px;
+        }
+
+        .TK-panel .TK-panel-body {
+            padding: 5px 0px;
+        }
+
+        .task-fixed-bottom {
+            line-height: 38px;
+            color: #808080
+        }
+
+        .task-foot-icon {
+            cursor: pointer
+        }
+
+        .task-foot-icon span {
+            display: block
+        }
+
+        .task-foot-icon i:hover {
+            color: #1E9FFF;
+        }
+
+        .gray {
+            color: #808080
+        }
+
+        .input-select_pop {
+            position: absolute;
+            z-index: 9;
+            background-color: white;
+            border: 1px solid #E4E7ED;
+            border-radius: 4px;
+            max-height: 274px;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+            margin-top: 5px;
+            padding: 5px 10px;
+            box-sizing: border-box;
+        }
+
+        .input-select_options {
+            line-height: 26px;
+            width: 160px;
+        }
+
+        .selectRefShow {
+            border: 1px solid #eee;
+            line-height: 38px;
+            height: 38px;
+            position:relative
+        }
+           
+            .selectRefHide {
+                padding-top: 10px;
+                border-top: 1px solid #efefef;
+                margin-top: 5px;
+                display: block
+            }
+
+        .sub-task {
+            display: flex;
+            margin: 4px 0px;
+            background: #f8faff;
+            padding: 8px;
+            font-size: 14px
+        }
+
+        .edit-del-box {
+            white-space: nowrap;
+            opacity: 0
+        }
+
+        .edit-dtto {
+            white-space: nowrap;
+            color: #b2b1b1
+        }
+
+        .edit-del-box:hover {
+            opacity: 1
+        }
+
+        .xr-text-btn {
+            font-size: 12px;
+            cursor: pointer;
+            margin: 0px 5px;
+        }
+
+        .xr-text-btn.primary {
+            color: #2362fb;
+        }
+
+        .xr-text-btn.delete {
+            color: #f94e4e;
+        }
+
+        .task-sub {
+            border: 1px solid #2362fb;
+            border-radius: 3px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: row;
+            flex-direction: row;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            padding: 5px;
+        }
+
+        .subtasks-content {
+            width: 100%
+        }
+
+        .subtasks-content .layui-input {
+            border: 0px;
+            height: 30px;
+        }
+
+        .childDTTo {
+            width: auto;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .editRefdata {
+            display: inline-block;
+            background: #f8faff;
+            padding: 2px 5px 4px 15px;
+            margin: 0px 5px;
+        }
+
+        .editRefdata sup {
+            opacity: 0;
+        }
+
+        .editRefdata:hover sup {
+            opacity: 1;
+            color: #f94e4e;
+            cursor: pointer
+        }
+        .TaskDepts {
+            width: 300px;
+            position: absolute;
+            z-index: 999;
+            background: #fff;
+            border: 1px solid #e6e6e6;
+            border-radius: 5px;
+            box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+        }
+            .TaskDepts .TaskDepts-title {
+                border-bottom: 1px solid #e6e6e6;
+                padding:10px 15px;
+            }
+            .TaskDepts .TaskDepts-box {
+                padding: 10px 15px;
+                height: 248px;
+                overflow:auto
+            }
+            .Depts li{
+                line-height:26px;
+            }
+        .Depts li .Depts-Emps {
+            padding-left:20px
+        }
+        .txtu {
+            text-decoration: line-through;
+            color:#808080;
+            background:#f8faff
+        }
+    </style>
+</head>
+<body>
+   
+    <div class="layui-fluid" id="workRec-Default" style="margin-top:15px">
+
+        <div class="TaskDepts" v-if="Deptshow" :style = "{'left':DeptshowLeft,'top':Deptshowtop}">
+            <div class="TaskDepts-title">人员</div>
+            <div class="TaskDepts-box">
+                <div class="TaskDepts-input">
+                    <input type="text" class="layui-input" placeholder="请输入内容"  id="SearchRefKey" @input="selectRefHandle($event)" placeholder="搜索参与人"/>
+                </div>
+                <div class="Depts">
+                    <ul>
+                        <li class="" v-for="(Ditem,dk) in DeptsData" v-if="Ditem.Num > 0">
+                            <p @click="Ditem.open = !Ditem.open"><i v-if="Ditem.Empslist.length > 0" class="layui-icon"
+   :class="Ditem.open ? 'layui-icon-down':'layui-icon-right'"></i> {{Ditem.Name}} {{Ditem.Num}}人</p>
+                            <div class="Depts-Emps" v-for="(Eitem,dk) in Ditem.Empslist" v-if="Ditem.open || Ditem.Num === 0">
+                                <input type="checkbox" :value="Eitem.No" @click.stop="SelRefEmpno(Eitem.No,Eitem.Name,ChoosePeoTpye,Eitem.status)" v-model="Eitem.status"/> {{Eitem.Name}}
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-row">
+            <span class="pull-right layui-btn layui-btn-normal layui-btn-sm" @click.stop="AddTask()">添加任务</span>
+            <span @click.stop="AllTasks(1)" class="layui-btn layui-btn-sm" :class="{'layui-btn-normal':1===activeIndex}">全部</span>
+            <span @click.stop="MyTasks(2)" class="layui-btn layui-btn-sm" :class="{'layui-btn-normal':2===activeIndex}">我负责的</span>
+            <span @click.stop="RefTasks(3)" class="layui-btn layui-btn-sm" :class="{'layui-btn-normal':3===activeIndex}">我参与的</span>
+        </div>
+        <table class="layui-table">
+            <thead>
+                <tr align="center">
+                    <th width="40">#</th>
+                    <th width="40">-</th>
+                    <th>任务名称</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    <th>负责人</th>
+                    <th>参与人</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item,index) in list" @click.stop="editTask(item.MyPK)" :id="'title'+item.MyPK" :class="item.TaskSta ?'txtu':''">
+                    <td align="center"><input type="checkbox" :value="item.TaskSta" @click.stop="checkboxI(item.MyPK,item.TaskSta)" v-model="item.TaskSta" /></td>
+                    <td class="task-table-pri"><div class="bg" :class="'bg'+item.TaskPRI">{{item.TaskPRIText}}</div></td>
+                    <td><div >{{item.Title}}</div></td>
+                    <td>{{item.DTFrom}}</td>
+                    <td>{{item.DTTo}}</td>
+                    <td>{{item.ManagerEmpName}}</td>
+                    <td>{{item.RefEmpsName}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="taskWindows" v-if="show" @click.stop="isShowRefPop=false,Deptshow=false">
+            <div class="taskForm">
+                <div class="tf-title">
+                    <span class="pull-right tf-colse" @click.stop="closeTask(),Deptshow=false"><i class="layui-icon layui-icon-close"></i></span>
+                    <div class="title">新建任务</div>
+                </div>
+                <form class="layui-form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">任务名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="TB_Title" id="TB_Title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">开始时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="TB_DTFrom" id="TB_DTFrom" autocomplete="off" placeholder="请输入开始时间" class="layui-input" v-on:focus="Dtime('TB_DTFrom')">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">结束时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="TB_DTTo" id="TB_DTTo" autocomplete="off" placeholder="请输入结束时间" class="layui-input" v-on:focus="Dtime('TB_DTTo')">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">负责人</label>
+                            <div class="layui-input-inline" style="width:auto;min-width:190px">
+                                <div id="TB_RefEmpsNo" @click.stop="selectEmpShow($event)" class="selectRefShow" v-html="EmpHtmlraw" ref="EmpBox"></div>
+
+                                <!--<div class="input-select_pop" v-if="isShowEmpPop">
+                                    <input type="text" name="TB_ManagerEmpName" id="TB_ManagerEmpName" @input="selectEmpHandle($event)" autocomplete="off" placeholder="请输入负责人" class="layui-input">
+        <ul class="input-select_options">
+            <li v-for="(option,index) in optionsList" @click.stop="SelEmpno(option.No,option.Name)">
+                {{option.Name}}
+            </li>
+        </ul>
+
+    </div>-->
+                            </div>
+
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">参与人</label>
+                            <div class="layui-input-inline" style="width:auto;min-width:190px">
+                                <div id="TB_RefEmpsNo" @click.stop="selectRefShow($event)" class="selectRefShow" v-html="RefHtmlraw" ref="RefBox">请选择</div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">优先级</label>
+                            <div class="layui-input-inline">
+                                <select name="TB_TaskPRI" id="TB_TaskPRI" class="layui-input" style="display:block">
+                                    <option value="0">高</option>
+                                    <option value="1">中</option>
+                                    <option value="2">低</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">描述</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="请输入内容" name="TB_Docs" id="TB_Docs" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <span type="submit" class="layui-btn layui-btn-normal" @click.stop="SaveTask()">保存</span>
+                            <button @click.stop="closeTask()" class="layui-btn layui-btn-primary">取消</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <div :class="editshow ? 'taskeidt in':'taskeidt'" v-if="editshow" @click.stop="addChildSave(edittaskdata.MyPK),showAddChildbox=false,showAddChild=true,prisshow=false,isShowEmpPop=false,isShowRefPop=false,Deptshow=false">
+            <div class="closeEdit" @click.top="closeEditTask()">
+                <i class="layui-icon layui-icon-close"></i>
+            </div>
+            <div class="editTaskWindow">
+                <div class="editTk-header">
+                    <div class="editTk-nav">
+                        <div class="pull-right"><span class="layui-btn layui-btn-xs layui-btn-primary" @click.stop="delTask(edittaskdata.MyPK)">删除</span></div>
+                        <div class="navinfo">{{edittaskdata.RecName}} 创建于 {{edittaskdata.RDT}}</div>
+                    </div>
+                    <div class="editTk-title" v-if="edittitle==1" @click.stop="editTasktitle()">{{edittaskdata.Title}}</div>
+                    <div class="editTk-title" v-if="edittitle==0">
+
+                        <input :value="edittaskdata.Title" id="edittitle" class="layui-input" style="margin-bottom:8px" />
+                        <button class="layui-btn layui-btn-sm layui-btn-normal" @click.stop="editTasktitleSave(edittaskdata.MyPK)">确认</button>
+                        <button class="layui-btn layui-btn-sm layui-btn-primary" @click.stop="editTasktitleC()">取消</button>
+                    </div>
+                    <div class="layui-row editTk-colinfo">
+                        <div class="layui-col-sm3 PRI" @click.stop="PRIbtn">
+                            <div class="bg" :class="'bg'+edittaskdata.TaskPRI">{{edittaskdata.TaskPRIText}}</div>
+                            <div class="coltxto">
+                                优先级
+                            </div>
+                            <div class="PRIab" id="PRIab" v-show="prisshow">
+                                <span class="bg0" @click.stop="PRIshowBtn(edittaskdata.MyPK,0)">高</span><span class="bg1" @click.stop="PRIshowBtn(edittaskdata.MyPK,1)">中</span><span @click.stop="PRIshowBtn(edittaskdata.MyPK,2)" class="bg2">低</span>
+                            </div>
+                        </div>
+                        <div class="layui-col-sm3">
+                            <div class="bg2 bg">In</div>
+                            <div :class="edittaskdata.ManagerEmpNo ? 'coltxt':'coltxto'" @click.stop="selectEmpEShow(edittaskdata.ManagerEmpName)"   ref="EmpBoxE">
+                                <strong id="EditEmpName">{{edittaskdata.ManagerEmpName}}</strong>负责人
+
+                                
+
+                            </div>
+                        </div>
+                        <div class="layui-col-sm3" id="chStartDate" :date-Start="edittaskdata.MyPK">
+                            <div class="bg3 bg">开</div><div :class="edittaskdata.DTFrom ? 'coltxt':'coltxto'" id="nDTFrom" v-bind:click="Dtime('nDTFrom')">
+                                <strong>{{edittaskdata.DTFrom}}</strong>开始时间
+                            </div>
+                        </div>
+                        <div class="layui-col-sm3" id="chEndDate" :date-End="edittaskdata.MyPK">
+                            <div class="bg4 bg">终</div><div :class="edittaskdata.DTTo ? 'coltxt':'coltxto'" id="nDTTo" v-bind:click="Dtime('nDTTo')"><strong>{{edittaskdata.DTTo}}</strong>结束时间</div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="editTk-body">
+                    <div class="TK-panel">
+                        <div class="TK-panel-title">参与人</div>
+                        <div class="TK-panel-body">
+                            <div class="editRefdata" v-for="(ritem,lk) in RefEmpsData">
+                                {{ritem.name}}
+                                <sup @click.stop="DelRef(edittaskdata.MyPK,lk)">X</sup>
+                            </div>
+                            <div class="editRefdata">
+                                <span @click.stop="selectRefEShow()"  ref="RefBoxE">+ 添加参与人</span>
+                                
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="TK-panel">
+                        <div class="TK-panel-title">描述</div>
+
+                        <div class="TK-panel-body gray" v-if="editdocs==1" @click.stop="editTaskDocs()">{{edittaskdata.Docs}}</div>
+                        <div class="TK-panel-body" v-if="editdocs==0">
+                            <textarea class="layui-textarea" id="editDocs" style="margin-bottom:8px">{{edittaskdata.Docs}}</textarea>
+                            <button class="layui-btn layui-btn-sm layui-btn-normal" @click.stop="editTaskDocsSave(edittaskdata.MyPK)">确认</button>
+                            <button class="layui-btn layui-btn-sm layui-btn-primary" @click.stop="editTaskDocsC()">取消</button>
+                        </div>
+                    </div>
+                    <div class="TK-panel">
+                        <div class="TK-panel-title" id="tst">子任务</div>
+                        <div class="TK-panel-body">
+                            <div id="TKchild_id">
+                                <div v-for="(childs,index) in taskChildData">
+                                    <div class="sub-task" v-if="!showEditChild[index]">
+                                        <div class="subtasks-content">
+                                            <input type="checkbox" :value="childs.TaskSta" @click.stop="checkboxI(childs.MyPK,childs.TaskSta)" v-model="childs.TaskSta" /> {{childs.Title}}
+                                        </div>
+                                        <div class="edit-del-box">
+
+                                            <span @click.stop="editChildTask(childs.MyPK,index)" class="xr-text-btn primary">编辑</span>
+                                            <span @click.stop="delChildTask(childs.MyPK,index)" class="xr-text-btn delete">删除</span>
+                                        </div>
+                                        <div class="edit-dtto" :id="'s'+index+'1a'">{{childs.DTTo}}</div>
+                                    </div>
+                                    <div v-if="showEditChild[index]" class="task-sub" @click.stop="showEditChild[index]=true">
+                                        <div class="subtasks-content">
+                                            <input class="layui-input" id="TaskchildTitle" :value="childs.Title" @keyup.enter="addChildSave(edittaskdata.MyPK)" />
+                                            <input class="layui-input" type="hidden" id="TaskchildStart" value="edit" :data-childmpyk="childs.MyPK" />
+                                        </div>
+                                        <div class="childDTTo"><i class="layui-icon layui-icon-date" :id="'s'+index+1" @click.stop="choosetimeC('s'+index+1,childs.MyPK)">{{childs.DTTo}}</i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <span @click.stop="addChild(edittaskdata.MyPK)" v-if="showAddChild">+ 添加子任务</span>
+                            <div v-if="showAddChildbox" class="task-sub" @click.stop="showAddChildbox=true">
+                                <div class="subtasks-content">
+                                    <input class="layui-input" id="TaskchildTitle" @keyup.enter="addChildSave(edittaskdata.MyPK)" />
+                                    <input class="layui-input" type="hidden" id="TaskchildStart" value="add" />
+                                </div>
+                                <div class="childDTTo"><i class="layui-icon layui-icon-date" id="ccdate" @click.stop="choosetime('ccdate')"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <script>
+        var editPK = '';
+        var laydates = laydate;
+        new Vue({
+            el: '#workRec-Default',
+            data: {
+                list: [],//
+                tasklist: [],//任务列表
+                ens: [],
+                activebtn: 1,
+                showfixed: true,
+                show: false,//添加显示
+                editshow: false,//编辑显示
+                addshowTask: false,
+                addshowBtn: true,
+                addshowFull: false,
+                edittaskdata: [],
+                edittitle: 1,
+                editdocs: 1,
+                prisshow: false,
+                optionsList: [],
+                isShowEmpPop: false,
+                optionsRefList: [],
+                isShowRefPop: false,
+                taskChildData: [],
+                htmlraw: '',
+                EmpHtmlraw: '请选择',
+                RefHtmlraw: '',
+                activeIndex: 0,
+                showAddChildbox: false,
+                showAddChild: true,
+                showEditChild: [],
+                ManagerEmpName: '',
+                ManagerEmpNo: '',
+                RefEmpsNo: '',
+                RefEmpsName: '',
+                RefEmpsData: [],
+                Deptshow: false,
+                DeptshowLeft: 0,
+                Deptshowtop: 0,
+                DeptsData: [],//人员信息
+                DeptsDatas:[],
+                EmpsData: [],
+                ChoosePeoTpye: '',
+                key:''
+               
+            },
+
+            methods: {
+                selectEmpHandle: function (event) {
+                    var key = event.currentTarget.value;
+                    //console.log(event.currentTarget.value);
+                    if (key) {
+                        var ens = new Entities("BP.CCFast.Tasks");
+                        var data = ens.DoMethodReturnJSON("TextBox_EmpPinYin", key);
+                       // console.log(data);
+                        if (data.length) {
+                            this.isShowEmpPop = true;
+                            this.optionsList = data;
+                        } else {
+                            this.optionsList = '';
+                            this.isShowEmpPop = false;
+                        }
+                    } else {
+                        this.optionsList = '';
+                        this.isShowEmpPop = false;
+                    }
+                },
+               
+                selectRefShow: function (e) {
+                    console.log(this.RefHtmlraw)
+                    this.Deptshow = true;
+                    this.ChoosePeoTpye = 1
+
+                    var Depts = this.DeptsDatas;
+                    for (d = 0; d < Depts.length; d++) {
+                        var de = Depts[d]
+                        de.open = false
+                        var childModules = de.Empslist
+                        for (c = 0; c < childModules.length; c++) {
+                            var ce = childModules[c]
+                            var splitDate = this.RefHtmlraw
+                            ce.status = 0
+                            if (splitDate.indexOf(ce.Name) != -1 ) {
+                                ce.status = 1
+                                de.open = true
+                            }
+
+                        }
+
+                    }
+                    console.log(Depts)
+                    this.DeptsData = Depts;
+                
+                    //this.selectRefShow=true
+                    const $circle = this.$refs.RefBox
+                    this.DeptshowLeft = this.getParentLeft($circle) + 'px'
+                    this.Deptshowtop = this.getParentTop($circle) + 30 + 'px'                    
+                },
+
+                selectEmpShow: function (e) {
+                
+                    this.Deptshow = true;
+                    this.ChoosePeoTpye = 2
+                    var Depts = this.DeptsDatas;
+                    for (d = 0; d < Depts.length; d++) {
+                        var de = Depts[d]                        
+                        de.open = false
+                        var childModules = de.Empslist
+                        for (c = 0; c < childModules.length; c++) {
+                            var ce = childModules[c]
+                            ce.status = 0
+                            if (ce.Name == this.EmpHtmlraw) {
+                                ce.status = 1
+                                de.open = true
+                            }
+
+                        }                        
+
+                    }
+                
+                    this.DeptsData = Depts;
+                    //this.selectRefShow=true
+                    const $circle = this.$refs.EmpBox
+                    this.DeptshowLeft = this.getParentLeft($circle) + 'px'
+                    this.Deptshowtop = this.getParentTop($circle) + 30 + 'px'
+                },
+                selectEmpEShow: function (e) {
+                    this.Deptshow = true;
+                    this.ChoosePeoTpye = 3
+                    var Depts = this.DeptsDatas;
+                    for (d = 0; d < Depts.length; d++) {
+                        var de = Depts[d]
+                        de.open = false
+                        var childModules = de.Empslist
+                        for (c = 0; c < childModules.length; c++) {
+                            var ce = childModules[c]
+                            ce.status = 0
+                            if (ce.Name == e) {
+                                ce.status = 1
+                                de.open = true
+                            }
+                        }
+                    }
+
+                    this.DeptsData = Depts;
+                    //this.selectRefShow=true
+                    const $circle = this.$refs.EmpBoxE
+                    this.DeptshowLeft = this.getParentLeft($circle) + 'px'
+                    this.Deptshowtop = this.getParentTop($circle) + 30 + 'px'
+                },
+                selectRefEShow: function (e) {
+                    this.Deptshow = true;
+                    this.ChoosePeoTpye = 4
+
+                    var Depts = this.DeptsDatas;
+                    for (d = 0; d < Depts.length; d++) {
+                        var de = Depts[d]
+                        de.open = false
+                        var childModules = de.Empslist
+                        for (c = 0; c < childModules.length; c++) {
+                            var ce = childModules[c]
+                            var splitDate = this.edittaskdata.RefEmpsName
+                            ce.status = 0
+                            if (splitDate.indexOf(ce.Name) != -1) {
+                                ce.status = 1
+                                de.open = true
+                            }
+
+                        }
+
+                    }
+                    console.log(Depts)
+                    this.DeptsData = Depts;
+
+
+                    //this.selectRefShow=true
+                    const $circle = this.$refs.RefBoxE
+                    this.DeptshowLeft = this.getParentLeft($circle) + 'px'
+                    this.Deptshowtop = this.getParentTop($circle) + 30 + 'px'
+                },
+                
+
+                getParentTop: function (e)  {
+                    var offset = e.offsetTop
+                    if (e.offsetParent != null) {
+                        offset += this.getParentTop(e.offsetParent)
+                    }
+                    return offset
+                },
+                /**
+                 * 获取左侧div的距离
+                 */
+                getParentLeft(e) {
+                    var offset = e.offsetLeft
+                    if (e.offsetParent != null) {
+                        offset += this.getParentLeft(e.offsetParent)
+                    }
+                    return offset
+                },
+                selectRefHide: function () {
+                    this.isShowRefPop = false;
+                },
+                selectRefHandle: function (event) {
+                    var key = event.currentTarget.value;
+                    console.log(key);
+                    var Depts = this.DeptsDatas;
+
+                    if (key) {                      
+                        var des=[]
+                        for (d = 0; d < Depts.length; d++) {
+                            var de = Depts[d]
+                            de.open = false
+                            var childModules = de.Empslist
+                            de.Num = 0
+                            for (c = 0; c < childModules.length; c++) {
+                                var ce = childModules[c]
+
+                                if (ce.Name.indexOf(key) != -1) {
+
+                                    de.open = true
+                                    de.Num += 1
+                                }
+                            }
+                            if (de.Num) des.push(de)
+                        }
+                     
+                        this.DeptsData = des
+                    } else {
+                        for (d = 0; d < Depts.length; d++) {
+                            var de = Depts[d]
+                            de.open = false
+                            var childModules = de.Empslist
+                            de.Num = childModules.length
+                        }
+
+                        this.DeptsData = Depts
+                        console.log(this.DeptsData);
+                    }
+                   
+               
+                },
+                SelRefEmpno: function (no, name, Peotype, status) {
+                    console.log(Peotype)
+                    if (status==1) {
+                        status = 0;
+                    } else {
+                        status = 1;
+                    }
+                    console.log(status)
+                    if (Peotype == 4) {
+                        var _this = this
+                        var emypk = this.edittaskdata.MyPK
+                        var splitDate = this.edittaskdata.RefEmpsName
+                        var RefEmpsNo = this.edittaskdata.RefEmpsNo
+                        if (status == 1) {
+                            if (splitDate.indexOf(name) != -1)
+                                return
+                            splitDate += name + ';'
+                            RefEmpsNo += no + ';'
+                           
+                        } else {
+                           
+                            splitDate = splitDate.replace(name + ';', "")
+                            RefEmpsNo = RefEmpsNo.replace(no + ';', "")
+                           
+                        }
+                    
+                        //参与人处理
+                        if (splitDate) {
+                            var NameDataFg = splitDate.split(';')
+
+                            var NoDataFg = RefEmpsNo.split(';')
+                            this.RefEmpsData=[]
+                            for (l = 0; l < NameDataFg.length - 1; l++) {
+
+                                this.RefEmpsData.push({ 'no': NoDataFg[l], 'name': NameDataFg[l] })
+                            }
+                        }
+                        this.edittaskdata.RefEmpsName = splitDate
+                        this.edittaskdata.RefEmpsNo = RefEmpsNo
+                        console.log(this.edittaskdata.MyPK)
+                        _this.AddRefSave(this.edittaskdata.MyPK, RefEmpsNo, splitDate);
+                       // this.Deptshow = false
+                    }
+                    if (Peotype == 3) {
+                        var _this = this                        
+                        var emypk = this.edittaskdata.MyPK
+                        if (status == 1) {
+                            this.edittaskdata.ManagerEmpName = name
+                            this.edittaskdata.ManagerEmpNo = no
+                        } else {
+                            this.edittaskdata.ManagerEmpName =''
+                            name = ''
+                            no = ''
+                            // this.Deptshow = false
+                        }
+
+                        _this.editTaskEmpSave(emypk, no, name)
+                        this.Deptshow = false
+                    }
+                    if (Peotype == 2) {
+                        if (status == 1) {
+                            this.EmpHtmlraw = name
+                            this.ManagerEmpName = name
+                            this.ManagerEmpNo = no
+                            this.Deptshow = false
+                        } else {
+                            this.EmpHtmlraw = ''
+                            this.ManagerEmpName = ''
+                            this.ManagerEmpNo = ''
+                           // this.Deptshow = false
+                        }
+
+                    }
+                    if (Peotype == 1) { 
+                        var splitDate = this.RefHtmlraw;
+                        if (splitDate) {   
+                            if (status == 1) {
+                                if (splitDate.indexOf(name) != -1)
+                                    return
+                                this.RefEmpsName += name + ';'
+                                this.RefEmpsNo += no + ';'
+                                this.RefHtmlraw += name + ';'
+                            } else {
+                                console.log(splitDate)
+                                this.RefEmpsName = this.RefEmpsName.replace(name + ';', "")
+                                this.RefEmpsNo = this.RefEmpsName.replace(no + ';', "")
+                                this.RefHtmlraw = this.RefEmpsName.replace(name + ';', "")
+                            }
+                        } else {
+                            this.RefEmpsName += name + ';'
+                            this.RefEmpsNo += no + ';'
+                            this.RefHtmlraw += name + ';'
+                        }
+                    }
+                },
+
+                checkboxI: function (mypk, taskState) {
+                    if (taskState) {
+                        taskState = 0;
+                        $('#title' + mypk).removeClass('textu')
+                    } else {
+                        taskState = 1;
+                        $('#title' + mypk).addClass('textu')
+                    }
+                    var task = new Entity("BP.CCFast.Task", mypk);
+                    task.TaskSta = taskState; // 0=未完成， 1=完成.
+                    task.Update();
+                },
+                addChild: function (mypk) {
+                    this.showAddChildbox = true
+                    this.showAddChild = false
+                    this.showEditChild = []
+                },
+                choosetime: function (value) {
+                   // console.log(value)
+                    laydate.render({
+                        elem: '#'+value //指定元素
+                    });
+                },
+                choosetimeC: function (id,mypk) {
+                 
+                    laydate.render({
+                        elem: '#' + id //指定元素
+                        , done: function (value, date, endDate) {
+                            $('#' + id+'a').html(value)
+                            var task = new Entity("BP.CCFast.Task", mypk);
+                            task.DTTo = value;
+                            task.Update();
+                        }
+                    });
+
+                },
+                addChildSave: function (mypk) {
+                    var cTitle = $('#TaskchildTitle').val();
+                    var childstart = $('#TaskchildStart').val();
+                    var childDTTo = $('#ccdate').html();
+
+                    //console.log(cTitle);
+                    if (cTitle) {
+                        if (childstart == 'add') {
+                            var task = new Entity("BP.CCFast.Task");
+                            task.Title = cTitle;
+                            task.DTTo = childDTTo;
+                            task.ParentNo = mypk;
+                            task.IsSubTask = 1;
+                            task.Insert();
+                        }
+                        if (childstart == 'edit') {
+                            var chmpyk = $('#TaskchildStart').data('childmpyk');
+                            var task = new Entity("BP.CCFast.Task", chmpyk);
+                            task.Title = cTitle;                           
+                            task.Update();
+                            this.showEditChild = [];
+                        }
+                    }
+                    var edChildTk = new Entities("BP.CCFast.Tasks");
+                    edChildTk.Retrieve("ParentNo", mypk);
+                    var edChildTkdata = edChildTk.TurnToArry()
+                    this.taskChildData = edChildTkdata;
+                    $('#TaskchildTitle').val('');
+                    $('#childDTTo').html('');
+
+                },
+                editChildTask: function (mypk, index) {
+                    this.showEditChild = [];
+                    this.showAddChildbox = false
+                    this.showAddChild = true
+                    this.$set(this.showEditChild, index, true)
+                    //console.log(this.showEditChild[index]);
+
+                },
+                delChildTask: function (mypk, index) {
+
+                    if (confirm('您确定想删除子任务吗?')) {
+                        var endel = new Entity('BP.CCFast.Task', mypk);
+                        endel.Delete();
+                        this.taskChildData.splice(index, 1);
+                    }
+                },
+                DelRef: function (mypk, index) {
+                    var _this = this
+                    this.RefEmpsData.splice(index, 1);
+                    //console.log(this.RefEmpsData);
+                    var delEno = ''
+                    var delEname = ''
+                    for (y = 0; y < this.RefEmpsData.length; y++) {
+                        var ref = this.RefEmpsData[y]
+                        delEname += ref.name + ';'
+                        delEno += ref.no + ';'
+                    }
+                    this.edittaskdata.RefEmpsName = delEname
+                    this.edittaskdata.RefEmpsNo = delEno
+                    _this.AddRefSave(mypk, delEno, delEname);
+                },
+
+                EditRefAdd: function (mypk, no, name) {
+                    var _this = this
+                  
+                    this.RefEmpsData.push({ 'no': no, 'name': name })                   
+               
+                    var Eno = ''
+                    var Ename = ''
+                    for (y = 0; y < this.RefEmpsData.length; y++) {                      
+                        var ref = this.RefEmpsData[y]                       
+                            Ename += ref.name + ';'
+                            Eno += ref.no + ';'                       
+                    }
+                    _this.AddRefSave(mypk, Eno, Ename);
+                },
+
+
+                AddRefSave: function (mypk,no,name) {
+
+                    var task = new Entity("BP.CCFast.Task", mypk);
+                    task.RefEmpsNo = no;
+                    task.RefEmpsName = name;
+                    task.Update();
+                },
+                AddTask: function () { // 新建任务.
+                    this.show = true
+                    this.showfixed = false
+                    hTitle = $('#addInputTask').val();
+                    $('#TB_Title').val(hTitle)
+                },
+                closeTask: function () {
+                    this.show = false
+                    this.showfixed = true
+                },
+                PRIbtn: function () {
+                    this.prisshow = true
+                },
+                PRIshowBtn: function (mypk, pri) {
+
+                    this.prisshow = false
+                    var task = new Entity("BP.CCFast.Task", mypk);
+                    task.TaskPRI = pri;
+                    task.Update();
+
+                    var edtask = new Entity("BP.CCFast.Task", mypk);
+                    edtask.Retrieve();
+                    this.edittaskdata = edtask
+                },
+
+                editTask: function (mypk) {
+                    this.editshow = true
+                    this.showfixed = false
+                    var edtask = new Entity("BP.CCFast.Task", mypk);
+                    edtask.Retrieve();
+                   
+                    var edChildTk = new Entities("BP.CCFast.Tasks");
+                    edChildTk.Retrieve("ParentNo", mypk);
+                    var edChildTkdata = edChildTk.TurnToArry()
+
+                  
+                    this.taskChildData = edChildTkdata;
+                    console.log(edChildTkdata)
+
+                    var NameData = edtask.RefEmpsName
+                    var NoData = edtask.RefEmpsNo
+                    //参与人处理
+                    if (NameData) {
+                    var NameDataFg = NameData.split(';')
+                        this.RefEmpsData=[]
+                    var NoDataFg = NoData.split(';')
+                    for (l = 0; l < NameDataFg.length-1; l++){
+                       
+                        this.RefEmpsData.push({ 'no': NoDataFg[l], 'name': NameDataFg[l]})
+                    }
+                    }
+
+                    if (!edtask.Docs) edtask.Docs = '添加描述'
+                    this.edittaskdata = edtask
+                    editPK = edtask.MyPK
+                    console.log(edtask)
+                },
+                closeEditTask: function () {
+                    this.editshow = false
+                    this.showfixed = true
+                    location.reload();
+                },
+                addBtn: function () {
+                    this.addshowBtn = false
+                    this.addshowTask = true
+                    this.addshowFull = true
+                },
+                closeAddTask: function () {
+                    this.addshowBtn = true
+                    this.addshowTask = false
+                    this.addshowFull = false
+                },
+                SaveTask: function () { // 新建任务.
+                    var title = $('#TB_Title').val();
+                    if (title) {
+                        var task = new Entity("BP.CCFast.Task");
+                        task.ManagerEmpName = this.ManagerEmpName;
+                        task.ManagerEmpNo = this.ManagerEmpNo;
+                        task.RefEmpsName = this.RefEmpsName;
+                        task.RefEmpsNo = this.RefEmpsNo;
+                        task.CopyForm();
+                        task.Insert();
+                        layer.msg('添加成功', { time: 1000 }, function () {
+                            location.reload();
+                        })
+                      
+                    }
+                    else {
+                        layer.msg('请输入标题', {time:1000})
+                        
+                       
+                    }
+                },
+                SaveSimpleTask: function () { // 新建任务.
+
+                    var task = new Entity("BP.CCFast.Task");
+                    task.Title = $('#addInputTask').val();
+                    task.DTFrom = $('#icon-date').html();
+                    task.Insert();
+                    location.reload();
+                    this.addshowBtn = true
+                    this.addshowTask = false
+                    this.addshowFull = false
+                },
+                delTask: function (mypk) { //设置任务完成.
+                    if (confirm('您确定想删除该任务吗?')) {
+                        var endel = new Entity('BP.CCFast.Task', mypk);
+                        endel.Delete();
+                        location.reload();
+                    }
+                },
+                editTasktitle: function (mypk) { //设置任务完成.
+                    this.edittitle = 0;
+
+                },
+                editTasktitleC: function () { //设置任务完成.
+                    this.edittitle = 1;
+                },
+                editTasktitleSave: function (mypk) { //设置任务完成.
+                    this.edittitle = 1;
+                    var Newtitle = $('#edittitle').val();
+                    var task = new Entity("BP.CCFast.Task", mypk);
+                    task.Title = Newtitle;
+
+                    task.Update();
+                    var edtask = new Entity("BP.CCFast.Task", mypk);
+                    edtask.Retrieve();
+
+                    this.edittaskdata = edtask
+                },
+                editTaskDocs: function (mypk) { //设置任务完成.
+                    this.editdocs = 0;
+
+                },
+                editTaskDocsC: function () { //设置任务完成.
+                    this.editdocs = 1;
+                },
+                editTaskDocsSave: function (mypk) { //设置任务完成.
+                    this.editdocs = 1;
+                    var NewDocs = $('#editDocs').val();
+                    var task = new Entity("BP.CCFast.Task", mypk);
+                    task.Docs = NewDocs;
+                    task.Update();
+                    var edtask = new Entity("BP.CCFast.Task", mypk);
+                    edtask.Retrieve();
+
+                    this.edittaskdata = edtask
+                },
+                editTaskEmpSave: function (mypk,no,name) { //设置任务完成.
+                    this.editdocs = 1;
+                    
+                    var task = new Entity("BP.CCFast.Task", mypk);
+                    task.ManagerEmpNo = no;
+                    task.ManagerEmpName = name;
+                    task.Update();
+                    this.isShowRefPop = false
+                    $('#EditEmpName').html(name);
+                    
+                   
+                },
+
+                AllTasks: function () {
+                    //所有的任务都已经取出来了，不用过滤.
+                    this.list = this.tasklist;
+                    this.activeIndex = 1
+                },
+                MyTasks: function () {
+
+                    //我是负责人任务s. 字段: ManagerEmpNo  =  webUse.No 就是我负责的任务.
+                    this.activeIndex = 2
+                    var tasklist = this.tasklist;
+                    var webUser = new WebUser();
+
+                    var myens = [];
+                    for (var i = 0; i < tasklist.length; i++) {
+                        var en = tasklist[i];
+                        if (en.ManagerEmpNo != webUser.No)
+                            continue;
+                        myens.push(en);
+                    }
+                    this.list = myens
+                    //this.list = myens;
+                },
+                RefTasks: function () {
+                    this.activeIndex = 3
+                    //我参与的任务. 字段: RefEmpsNo = 包含 webUse.No 就是我负责的任务.
+                    var tasklist = this.tasklist;
+                    var webUser = new WebUser();
+
+                    var myens = [];
+                    for (var i = 0; i < tasklist.length; i++) {
+                        var en = tasklist[i];
+                        if (en.RefEmpsNo.indexOf(webUser.No) == -1)
+                            continue;
+
+                        myens.push(en);
+                    }
+
+                    this.list = myens;
+                },
+                Dtime: function (event) {
+                    if (event == 'nDTFrom') {
+                    laydates.render({
+                        elem: '#chStartDate'
+                        , done: function (value, date, endDate) {
+                            $('#nDTFrom strong').html(value)
+                            $('#nDTFrom').addClass('coltxt')
+                            $('#nDTFrom').removeClass('coltxto')
+                            var task = new Entity("BP.CCFast.Task", editPK);
+                            task.DTFrom = value;
+                            task.Update();
+                        }
+                    });
+                    }
+                    if (event == 'nDTTo') {
+                        laydates.render({
+                            elem: '#chEndDate'
+                            , done: function (value, date, endDate) {
+                                $('#nDTTo strong').html(value)
+                                $('#nDTTo').addClass('coltxt')
+                                $('#nDTTo').removeClass('coltxto')
+                                var task = new Entity("BP.CCFast.Task", editPK);
+                                task.DTTo = value;
+                                task.Update();
+                            }
+                        });
+                    }
+                    laydates.render({
+                        elem: '#'+event
+                    });
+
+
+                   
+                }
+            },
+            mounted: function () {
+                var ens = new Entities("BP.CCFast.Tasks");
+                ens = ens.DoMethodReturnJSON("Task_AllTasks");
+                this.tasklist = ens;
+                this.list = ens;
+               // console.log(ens);
+                this.activeIndex = 1
+
+                var ensD = new Entities("BP.CCFast.Tasks");
+                var DeptEmps = ensD.DoMethodReturnJSON("Selecter_DeptEmps");            
+                var Depts = DeptEmps.Depts
+                var Emps = DeptEmps.Emps
+                for (d = 0; d < Depts.length; d++) {
+                    var de = Depts[d]                   
+                    de.Empslist = []
+                    de.open = false
+                    var childModules = Emps.filter(function (module) {
+                        // return module.SystemNo === ''                 
+                        return module.FK_Dept === de.No
+                    })
+                    de.Num = childModules.length
+                    for (c = 0; c < childModules.length; c++) {
+                        var ce = childModules[c]  
+                        ce.status = 0
+                    }
+                    de.Empslist = childModules
+
+                }
+               
+                
+                this.DeptsDatas = Depts
+                //this.EmpsData = DeptEmps.Emps
+
+               
+            }
+
+        });
+
+
+       
+      
+           
+
+            //日期
+
+
+  
+
+        function TextBox_Emp(ctrl) {
+
+
+
+        }
+
+        function getSubTask(mypk) {
+            var ens = new Entities("BP.CCFast.Tasks");
+            ens.Retrieve("ParentNo", mypk);
+            return ens;
+        }
+        function Save() {
+            var mypk = GetQueryString("MyPK");
+            var en = new Entity("BP.CCFast.Task", mypk);
+            en.CopyForm();
+            en.Update();
+
+            //en.Title = $("#TB_Ttile").val();
+            //en.DTFrom = $("#TB_DTFrom").val();
+            //en.DTTo = $("#TB_DTTo").val();
+            //en.Docs = $("#TB_Docs").val();
+            //en.Update();
+        }
+
+        function AddSubTask(title, endDate) {
+            var mypk = GetQueryString("MyPK");
+            var en = new Entity("BP.CCFast.Task");
+            en.Title = title;
+            en.DTTo = endDate; //结束日期.
+            en.ParentNo = mypk;
+            en.Insert();
+        }
+    </script>
+
+</body>
+</html>

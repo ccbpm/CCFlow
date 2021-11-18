@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../WF/Portal/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../WF/Portal/layui/layui.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <script src="../../WF/Portal/js/vue/vue.js" type="text/javascript"></script>
+    <script src="Toolbar.js"></script>
+    <style>
+        #toolbar a {
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-fluid" id="workRec-Default" style="margin-top:15px">
+
+        <div id="toolbar"> </div>
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>提交人</th>
+                    <th>日期</th>
+                    <th>工作时长</th>
+                    <th>项目数</th>
+                    <th>提交日期</th>
+                    <th>日志类型</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item,index) in list" @click="openRz(item.MyPK)">
+                    <td>{{item.RecName}}</td>
+
+                    <td>{{item.RDT}}</td>
+
+                    <td>{{item.HeiJiHour}}</td>
+                    <td>{{item.NumOfItem}}</td>
+                    <td>{{item.RiQi}}</td>
+                    <td>{{item.WorkRecModel}}</td>
+                    <td><span @click.stop="CheckRz(item.MyPK)" class="layui-btn layui-btn-xs">审核</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        new Vue({
+            el: '#workRec-Default',
+            data: {
+                list: []
+            },
+            methods: {
+                openRz: function (mypk) {
+                    alert('打开' + mypk)
+                },
+                //审核处理
+                CheckRz: function (mypk) {
+                    var enck = new Entity("BP.CCFast.WorkRec");
+                    alert('审核' + mypk)
+                },
+            },
+            mounted: function () {
+                var ens = new Entities("BP.CCFast.WorkRecs");
+                ens = ens.DoMethodReturnJSON("CheckRZ_Init");
+                console.log(ens);
+                this.list = ens
+                /*var data = ens.DoMethodReturnJSON("Default_Init");*/
+                //console.log(data);
+            }
+
+        })
+    </script>
+
+</body>
+</html>

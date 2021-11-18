@@ -1,0 +1,1472 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>新建</title>
+    <link href="../../WF/Portal/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../WF/Portal/layui/layui.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <script src="../../WF/Portal/js/vue/vue.js" type="text/javascript"></script>
+    <link href="../../WF/Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <script src="wangeditor/wangEditor.min.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        .pull-right {
+            float: right
+        }
+        .tblue {
+            color: #2362fb
+        }
+        .tred{ color:#ce0404}
+        .nyellow i {
+            color: #ffd800 !important
+        }
+
+        #Know-cate {
+            height: calc(100% - 15px);
+            padding: 0px 20px 15px;
+        }
+
+        .knowH1 {
+            height: 20px;
+            line-height: 20px;
+            font-size: 16px;
+            font-weight: bold
+        }
+
+        .knowH1 .H1a {
+            background: #ee7604;
+            color: #fff;
+            border-radius: 2px;
+            padding: 3px;
+        }
+
+        .know-side {
+            width: 300px;
+            height: calc(100% - 50px);
+            background: #fff;
+            border: 1px solid #e6e6e6;
+            float: left;
+            margin-right: 20px;
+            box-sizing: border-box;
+            padding: 20px 0px;
+        }
+
+        .sideHover:hover {
+            background: #f6f6f6;
+            border-left: 1px solid #2362fb;
+            cursor: pointer;
+            margin-left: -1px;
+        }
+
+        .cateSideActive {
+            background: #f6f6f6;
+            border-left: 1px solid #2362fb;
+            cursor: pointer;
+            margin-left: -1px;
+        }
+
+        .know-side .know-side-nav {
+            line-height: 36px;
+            padding: 0px 15px 0px;
+        }
+
+        .know-side .know-side-nav span {
+            padding: 3px;
+            background: #2362fb;
+            color: #fff;
+            border-radius: 3px;
+            margin-right: 8px;
+        }
+
+        .know-side .know-side-menu {
+            padding: 0px 0px;
+            line-height: 36px;
+            color: #666
+        }
+
+        .know-side .know-side-menu .menu-system {
+            line-height: 36px;
+            padding: 0px 15px;
+        }
+
+        .know-side .know-side-menu .menu-list .tree-box .tree-box-info {
+            padding: 0px 15px;
+        }
+
+        .know-side .know-side-menu .menu-list .tree-box .tree-box-info .tree-right-icon {
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .know-side .know-side-menu .menu-list .in {
+            padding-left: 10px;
+        }
+
+        .know-side .know-side-menu .menu-list .tree-box .tree-box-info:hover .tree-right-icon {
+            opacity: 1
+        }
+
+        .know-side .know-side-menu .menu-list .tree-box .tree-right-icon i {
+            padding: 0px 0px 0px 10px;
+        }
+
+        .know-side .know-side-del {
+            padding: 0px 15px;
+            line-height: 36px;
+        }
+
+        .know-main {
+            float: left;
+            background: #fff;
+            border: 1px solid #e6e6e6;
+            width: calc(100% - 325px);
+            height: calc(100% - 50px);
+            box-sizing: border-box;
+            padding: 10px 15px;
+        }
+
+        .know-main .nav {
+            height: 46px;
+            line-height: 46px;
+            color: #666;
+            font-size: 12px;
+            padding-bottom: 10px;
+        }
+
+        .navleft {
+        }
+
+        .navleft span {
+            padding-left: 20px;
+            font-size: 12px;
+        }
+
+        .cate-info {
+            width: 100%;
+            display: block;
+            float: left;
+            padding: 10px 0px 20px;
+        }
+
+        .cate-info .cate-info-img {
+            width: 120px;
+            float: left;
+            margin-right: 15px;
+        }
+
+        .cate-info .cate-info-icon {
+            display: inline-block;
+            float: left;
+            padding-right: 10px;
+        }
+
+        .cate-info .cate-info-icon i {
+            font-size: 24px;
+            color: #2362fb
+        }
+
+        .cate-info .cate-info-img img {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .cate-info .cate-info-text .title {
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 24px;
+        }
+
+        .cate-info .cate-info-text .docs {
+            font-size: 12px;
+            line-height: 14px;
+            color: #777
+        }
+
+        .cate-list {
+            clear: both
+        }
+
+        .cate-list .list-tab {
+            border-bottom: 1px solid #e1e1e1;
+            height: 40px;
+        }
+
+        .cate-list .list-tab li {
+            float: left;
+            margin-right: 20px;
+            line-height: 40px;
+            cursor: pointer;
+            letter-spacing: 2px
+        }
+
+        .cate-list .list-tab .active {
+            border-bottom: 2px solid #2362fb;
+            color: #2362fb
+        }
+
+        .cate-list .list-box {
+            clear: both
+        }
+
+        .cate-list .list-box li {
+            line-height: 50px;
+            border-bottom: 1px solid #e1e1e1;
+            padding: 0px 10px;
+        }
+
+        .cate-list .list-box li:hover {
+            background: #f7f7f7;
+        }
+
+        .cate-list .list-box .pull-right {
+            color: #777;
+            font-size: 12px;
+        }
+
+        .cate-btn {
+            background: none;
+            border: 0px;
+            color: #666;
+            margin-left: 15px;
+            cursor: pointer
+        }
+
+        .know-page-main .contact .title {
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: bold
+        }
+
+        .know-page-main .contact .docs {
+            line-height: 36px;
+            color: #666
+        }
+
+        .know-del-main .del-list {
+            clear: both
+        }
+
+        .know-del-main .del-list .list-tab {
+            border-bottom: 1px solid #e1e1e1;
+            height: 40px;
+        }
+
+        .know-del-main .del-list .list-tab li {
+            float: left;
+            margin-right: 20px;
+            line-height: 40px;
+            cursor: pointer;
+            letter-spacing: 2px
+        }
+
+        .know-del-main .del-list .list-tab .active {
+            border-bottom: 2px solid #2362fb;
+            color: #2362fb
+        }
+
+        .know-del-main .del-list .list-box {
+            clear: both
+        }
+
+        .know-del-main .del-list .list-box li {
+            line-height: 50px;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        .know-del-main .del-list .list-box li:hover {
+            background: #e6e6e6;
+        }
+
+        .cateDialog .cateTree-box {
+            width: 700px;
+            margin: 20vh auto 0;
+            height: 360px;
+            background: #fff;
+            border: 1px solid #e1e1e1;
+            border-radius: 3px;
+        }
+
+        .cateDialog .cateTree-box .CD-title {
+            line-height: 40px;
+            height: 40px;
+            padding: 0px 15px;
+            font-weight: bold;
+        }
+
+        .cateDialog .cateTree-box .CD-title i {
+            cursor: pointer
+        }
+
+        .cateDialog .cateTree-box .CD-title i:hover {
+            color: #2362fb
+        }
+
+        .cateDialog .cateTree-box .CD-box {
+            padding: 20px 50px;
+        }
+
+        .cateDialog {
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            position: fixed;
+            top: 0px;
+            left: 0px;
+        }
+
+        .cateDialog .cateDialog-box {
+            width: 700px;
+            margin: 15vh auto;
+            height: 560px;
+            background: #fff;
+            border: 1px solid #e1e1e1;
+            border-radius: 3px;
+        }
+
+        .cateDialog .cateDialog-box .CD-title {
+            line-height: 40px;
+            height: 40px;
+            padding: 0px 15px;
+            font-weight: bold;
+            border-bottom: 1px solid #e1e1e1
+        }
+
+        .cateDialog .cateDialog-box .CD-title i {
+            cursor: pointer
+        }
+
+        .cateDialog .cateDialog-box .CD-title i:hover {
+            color: #2362fb
+        }
+
+        .cateDialog .cateDialog-box .CD-box {
+            height: 520px;
+        }
+
+
+        .cateDialog .cateDialog-box .CD-box .CD-box-side {
+            width: 150px;
+            border-right: 1px solid #e1e1e1;
+            float: left;
+            height: 100%
+        }
+
+        .CD-box-side li {
+            line-height: 40px;
+            padding: 0px 10px;
+        }
+
+        .cateDialog .cateDialog-box .CD-box .CD-box-main {
+           
+            width: 100%;
+        }
+
+        .CD-know-cateEdit {
+            padding-top: 20px;
+        }
+
+        .cdactive {
+            color: #2362fb
+        }
+
+        .KnowImg-box img {
+            width: 100%;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .KnowImg-Bigs {
+            width: 120px;
+            float: left;
+            margin-right: 10px;
+        }
+
+        .KnowImg-Small {
+        }
+
+        .KnowImg-Small li {
+            width: 40px;
+            float: left;
+            margin-right: 10px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .kndelbtn{ color:#777}
+        .kndelbtn span {
+            padding-left: 10px;
+            cursor: pointer
+        }
+        .Empsdata-list {
+            display: inline-block;
+            background: #cce7fe;
+            padding: 2px 5px 4px 15px;
+            margin: 9px 5px 0px;
+            cursor: pointer
+        }
+
+        .Empsdata-list sup {
+            opacity: 0;
+        }
+
+        .Empsdata-list:hover sup {
+            opacity: 1;
+            color: #f94e4e;
+        }
+        .TaskDepts {
+            width: 300px;
+            position: absolute;
+            z-index: 999;
+            background: #fff;
+            border: 1px solid #e6e6e6;
+            border-radius: 5px;
+            box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+        }
+
+        .TaskDepts .TaskDepts-title {
+            border-bottom: 1px solid #e6e6e6;
+            padding: 10px 15px;
+        }
+
+        .TaskDepts .TaskDepts-box {
+            padding: 10px 15px;
+            height: 248px;
+            overflow: auto
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-fluid" id="Know-cate">
+        <div class="knowH1"></div>
+        <div class="know-side">
+            <div class="know-side-nav ">
+                <div class="pull-right"><a href="Default.htm"><i class="iconfont icon-fanhui"></i></a></div>
+                <span><i class="iconfont icon-shouye"></i></span><strong>{{cateinfoData.Title}}</strong>
+            </div>
+            <div class="know-side-menu">
+                <div class="menu-system sideHover">
+                    <span class="pull-right"><i class="iconfont icon-add t-btn"></i></span>
+                    <span @click.stop="cateShow=true,pageShow=false,delShow=false,cateSideActive=0" data-sysno="" ><i class="iconfont icon-anli"></i> 目录</span>
+                </div>
+                <div class="menu-list">
+                    <div class="tree-box" v-for="(item,ink) in TreeData" :class="cateSideActive==item.No?'cateSideActive':''">
+                        <div class="tree-box-info sideHover" @click.stop="item.open = !item.open,pageInfo(item.No,1)">
+                            <span class="pull-right tree-right-icon">
+                                <i class="iconfont icon-pingfen menu-btn" :data-name="item.Name" :data-treeno="item.No" :data-flietype="1" @click.stop=""></i>
+                                <i class="iconfont icon-jia module-btn" :data-name="item.Name" :data-parentno="item.No" :data-flietype="1" @click.stop=""></i>
+                            </span>
+                            <span>
+                                <i :class="item.open?'iconfont icon-iconfontjiantou':'iconfont icon-arrow-right'"></i> <i class="iconfont icon-wenjianjia2"></i>{{item.Name}}
+                            </span>
+                        </div>
+
+                        <div class="tree-box" v-show="item.children.length > 0,item.open" v-for="(citem,ink) in item.children" :class="cateSideActive==citem.No?'cateSideActive':''">
+                            <div class="tree-box-info sideHover" style="padding-left:35px;" @click.stop="pageInfo(citem.No,2)">
+                                <span class="pull-right tree-right-icon">
+                                    <i class="iconfont icon-arrow-right"></i>
+                                </span>
+                                <span>
+                                    <i class="iconfont icon-wenjian1"></i>{{citem.Name}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tree-box" v-for="(ritem,ink) in TreeFile">
+
+                        <div class="tree-box-info sideHover" @click.stop="pageInfo(ritem.No,2)" :class="cateSideActive==ritem.No?'cateSideActive':''">
+                            <span class="pull-right tree-right-icon">
+                                <i class="iconfont icon-arrow-right" ></i>
+                            </span>
+                            <span>
+                                <i class="iconfont icon-arrow-right"></i> <i class="iconfont icon-wenjian1"></i>{{ritem.Name}}
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="know-side-del sideHover" @click.stop="cateShow=false,pageShow=false,delShow=true,DtlDel()" :class="cateSideActive==1?'cateSideActive':''">
+                <span><i class="iconfont icon-shanchu1"></i> 最近删除</span>
+            </div>
+        </div>
+        <div class="know-main">
+            <div class="know-main-cate" v-if="cateShow">
+                <div class="nav">
+                    <div class="pull-right"><button class="cate-btn" @click.stop="cateEdit=true"><i class="layui-icon layui-icon-set-sm"></i>设置</button><button class="cate-btn" @click.stop="cateDel(cateinfoData.No)"><i class="layui-icon layui-icon-delete"></i>删除</button></div>
+                </div>
+                <div class="cate-info">
+                    <div class="cate-info-img">
+                        <img :src="cateinfoData.ImgUrl" />
+                    </div>
+                    <div class="cate-info-text">
+                        <div class="title">{{cateinfoData.Title}}</div>
+                        <div class="docs">{{cateinfoData.Docs}}</div>
+                    </div>
+                </div>
+                <div class="cate-list">
+                    <div class="list-tab">
+                        <ul>
+                            <li :class="{active:Tabnum==1}" @click.stop="Tabnum=1">全部文档</li>
+                            <li :class="{active:Tabnum==2}" @click.stop="Tabnum=2">我关注的</li>
+                        </ul>
+                    </div>
+                    <div class="list-box">
+                        <ul v-if="Tabnum==1">
+                            <li @click.stop="pageInfo(reitem.No,2),cateShow=false,pageShow=true" v-for="(reitem,rin) in RefTreeData">
+                                <div class="pull-right">
+                                    <span>创建于{{reitem.RDT}}</span> <span :class="reitem.gz ? 'tt nyellow':'tt'" :id="'gz'+reitem.No"> <i class="layui-icon layui-icon-star-fill" @click.stop="StarType(reitem.gz,reitem.No,rin)"></i></span>
+                                </div>
+                                <div class="list-title">
+                                    <i class="iconfont icon-wenjian1"></i>{{reitem.Name}}
+                                </div>
+                            </li>
+                        </ul>
+                        <ul v-if="Tabnum==2">
+                            <li @click.stop="pageInfo(Mitem.No,2),cateShow=false,pageShow=true" v-for="(Mitem,rin) in myDtlgzList">
+                                <div class="pull-right">
+                                    <span>创建于{{Mitem.RDT}}</span> <span :class="Mitem.gz ? 'tt nyellow':'tt'" :id="'gz'+Mitem.No"> <i class="layui-icon layui-icon-star-fill" @click.stop="myStarType(Mitem.gz,Mitem.No,rin)"></i></span>
+                                </div>
+                                <div class="list-title">
+                                    <i class="layui-icon layui-icon-file"></i>{{Mitem.Name}}
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <div class="know-page-main" v-if="pageShow">
+                <div v-if="flieType==1">
+                    <div class="nav">
+                        <div class="pull-right"> <button class="cate-btn" @click.stop="knowDel(TreeInfoDate.No,1)"><i class="layui-icon layui-icon-delete"></i>删除</button></div>
+                        <div class="navleft"><strong>{{TreeInfoDate.Name}}</strong><span class="gray">{{TreeInfoDate.RecName}} 创建于 {{TreeInfoDate.RDT}}</span></div>
+                    </div>
+                    <div class="cate-info">
+                        <div class="cate-info-icon">
+                            <i class="iconfont icon-wenjianjia2"></i>
+                        </div>
+                        <div class="cate-info-text">                          
+                            <div class="title">{{TreeInfoDate.Name}}</div>
+                        </div>
+                    </div>
+                    <div class="cate-list">
+                        <div class="list-tab">
+                            <ul>
+                                <li :class="{active:Tabnum==1}" @click.stop="Tabnum=1">全部文档</li>
+                                <li :class="{active:Tabnum==2}" @click.stop="Tabnum=2">我关注的</li>
+                            </ul>
+                        </div>
+                        <div class="list-box">
+                            <ul v-if="Tabnum==1">
+                                <li @click.stop="pageInfo(pitem.No,2),cateShow=false,pageShow=true" v-for="(pitem,rin) in TreePageList">
+                                    <div class="pull-right">
+                                        <span>创建于{{pitem.RDT}}</span> <span :class="pitem.gz ? 'tt nyellow':'tt'" :id="'gz'+pitem.No"> <i class="layui-icon layui-icon-star-fill" @click.stop="chStarType(pitem.gz,pitem.No,rin)"></i></span>
+                                    </div>
+                                    <div class="list-title">
+                                        <i class="iconfont icon-wenjian1"></i>{{pitem.Name}}
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul v-if="Tabnum==2">
+                                <li @click.stop="pageInfo(Mitem.No,2),cateShow=false,pageShow=true" v-for="(Mitem,rin) in mypageDtlgzList">
+                                    <div class="pull-right">
+                                        <span>创建于{{Mitem.RDT}}</span> <span :class="Mitem.gz ? 'tt nyellow':'tt'" :id="'gz'+Mitem.No"> <i class="layui-icon layui-icon-star-fill" @click.stop="mychStarType(Mitem.gz,Mitem.No,rin)"></i></span>
+                                    </div>
+                                    <div class="list-title">
+                                        <i class="layui-icon layui-icon-file"></i>{{Mitem.Name}}
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="flieType==2">
+                    <div class="nav">
+                        <div class="pull-right"><span class="cate-btn" @click.stop="editPage(pageinfoData.No)"><i class="layui-icon layui-icon-edit"></i>编辑</span> <span class="cate-btn" @click.stop="gzPage(pageinfoData.No,pageinfoData.gz)" :class="pageinfoData.gz ? 'tt nyellow':'tt'" :id="'gzp'+pageinfoData.No"><i class="layui-icon layui-icon-star-fill" ></i>关注</span> <span class="cate-btn" @click.stop="knowDel(pageinfoData.No,2)"><i class="layui-icon layui-icon-delete"></i>删除</span></div>
+                        <div class="navleft"><strong>{{pageinfoData.Name}}</strong><span class="gray">{{pageinfoData.RecName}} 创建于 {{pageinfoData.RDT}}</span></div>
+                    </div>
+                    <div class="contact">
+                        <h1 class="title">{{pageinfoData.Name}}</h1>
+                        <div class="docs" v-html="pageinfoData.Docs"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="know-del-main" v-if="delShow" @click.stop="delShow=true">
+                <div class="del-list">
+                    <div class="list-tab">
+                        <ul>
+                            <li class="active">文档</li>
+                        </ul>
+                    </div>
+                    <div class="list-box">
+                        <ul>
+                            <li v-for="(ditem,din) in delList">
+                                <div class="pull-right kndelbtn">
+                                    <span class="tgray">创建于{{ditem.RDT}}</span> <span class="tblue" @click.stop="Redtl(ditem.No,din,1)">恢复</span> <span class="tred" @click.stop="Redtl(ditem.No,din,2)">永久删除</span>
+                                </div>
+                                <div class="list-title">
+                                    <i class="layui-icon layui-icon-file"></i>{{ditem.Name}}
+                                </div>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cateDialog" v-if="cateEdit" @click.stop="cateEdit=false,Deptshow=false">
+            <div class="cateDialog-box" @click.stop="cateEdit=true,Deptshow=false">
+                <div class="CD-title">
+                    <span class="pull-right"><i class="iconfont icon-guanbi" @click.stop="cateEdit=false,Deptshow=false"></i></span>
+                    知识库设置
+                </div>
+                <div class="CD-box">
+                   
+                    <div class="CD-box-main">
+                        
+                            <div class="CD-know-cateEdit">
+                                <form class="layui-form">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">知识库名称</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="TB_Title" id="TB_Title" :value="cateinfoData.Title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item" style="height:auto">
+                                        <label class="layui-form-label">知识库封面</label>
+                                        <div class="layui-input-block">
+                                            <div class="KnowImg-box">
+                                                <div class="KnowImg-Bigs"><img :src="ImgUrl" /></div>
+                                                <div class="KnowImg-Small">
+                                                    <ul>
+                                                        <li v-for="(imgt,im) in KnowImgData">
+                                                            <img :src="imgt.imgurl" :title="imgt.title" @click.stop="ChooseImg(imgt.imgurl)" />
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <input id="TB_ImgUrl" name="TB_ImgUrl" type="hidden" :value="ImgUrl" />
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">知识库描述</label>
+                                        <div class="layui-input-block">
+                                            <textarea placeholder="请输入内容" name="TB_Docs" id="TB_Docs" class="layui-textarea">{{cateinfoData.Docs}}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">可见范围</label>
+                                        <div class="layui-input-block" style="width:300px;">
+                                            <select name="TB_KnowledgeSta" id="TB_KnowledgeSta" style="display:block" class="layui-select" v-model="cateinfoData.KnowledgeSta">
+                                                <option value="2">公开：企业所有成员都可以看见此项目</option>
+                                                <option value="1">私有：只有加入的成员才能看见此项目</option>
+                                                
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label">参与人</label>
+                                            <div class="layui-input-inline" style="width:auto;">
+                                                <div class="Empsdata-list" v-for="(citem,lk) in EmpsData">
+                                                    {{citem.name}}
+                                                    <sup @click.stop="DelEmps(citem.no,citem.name,lk)">X</sup>
+                                                </div>
+                                                <div class="Empsdata-list">
+                                                    <div id="TB_RefEmpsNo" @click.stop="selectRefShow($event)" class="selectRefShow" ref="RefBox">+人员</div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block">
+                                            <span type="submit" class="layui-btn layui-btn-normal" @click.stop="SaveKnow()">保存</span>
+                                            <button @click.stop="cateEdit=false" class="layui-btn layui-btn-primary">取消</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                       
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="cateDialog" v-if="cateTreeShow" @click.stop="cateTreeShow=false">
+            <div class="cateTree-box" @click.stop="cateTreeShow=true">
+                <div class="CD-title">
+                    <span class="pull-right"><i class="iconfont icon-guanbi" @click.stop="cateTreeShow=false"></i></span>
+                    {{DTreeTitle}}
+                </div>
+                <div class="CD-box">
+                    <div class="layui-form-item">
+                        <input class="layui-input" id="TB_KnowTree_title" name="TB_KnowTree_title" :value="KnowTreetitle" />
+                    </div>
+                    <div class="layui-form-item">
+                        <button class="layui-btn layui-btn-normal" @click.stop="addTreeCate()" v-if="AddEdit==1"> 提交</button>
+                        <button class="layui-btn layui-btn-normal" @click.stop="knowEditName()" v-if="AddEdit==2"> 修改</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cateDialog" v-if="dtlEditShow" @click.stop="dtlEditShow=false">
+            <div class="cateTree-box" @click.stop="dtlEditShow=true">
+                <div class="CD-title">
+                    <span class="pull-right"><i class="iconfont icon-guanbi" @click.stop="dtlEditShow=false"></i></span>
+                    文档编辑
+                </div>
+                <div class="CD-box">
+                    <form>
+                        <div class="layui-form-item">                            
+                                <input placeholder="请输入内容" name="TB_Name" id="TB_Name" class="layui-input" :value="knowInfo.Name">                           
+                        </div>
+                        <div class="layui-form-item"> 
+                                <div ref="editor" class="editor">
+                                    123213
+                                </div>
+                           
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <span type="submit" class="layui-btn layui-btn-normal" @click.stop="SaveKnowDtl()">立即修改</span>
+                               
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="TaskDepts" v-if="Deptshow" :style="{'left':DeptshowLeft,'top':Deptshowtop}">
+            <div class="TaskDepts-title">人员</div>
+            <div class="TaskDepts-box">
+                <div class="TaskDepts-input">
+                    <input type="text" class="layui-input" placeholder="请输入内容" id="SearchEmpsKey" @input="selectHandle($event)" placeholder="搜索参与人" />
+                </div>
+                <div class="Depts">
+                    <ul>
+                        <li class="" v-for="(Ditem,dk) in DeptsData" v-if="Ditem.Num > 0">
+                            <p @click.stop="Ditem.open = !Ditem.open">
+                                <i v-if="Ditem.Empslist.length > 0" class="layui-icon"
+                                   :class="Ditem.open ? 'layui-icon-down':'layui-icon-right'"></i> {{Ditem.Name}} {{Ditem.Num}}人
+                            </p>
+                            <div class="Depts-Emps" v-for="(Eitem,dk) in Ditem.Empslist" v-if="Ditem.open || Ditem.Num === 0">
+                                <input type="checkbox" :value="Eitem.No" @click.stop="SelEmpno(Eitem.No,Eitem.Name,Eitem.status)" v-model="Eitem.status" /> {{Eitem.Name}}
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var editPK = '';
+        var knno = GetQueryString("no");
+        var webUser = new WebUser();
+        new Vue({
+            el: '#Know-cate',
+            data: {
+                cateShow: true,
+                delShow: false,
+                pageShow: false,
+                cateEdit: false,
+                cateTreeShow: false,
+                Tabnum: 1, delTabnum: 1,
+                delTab: 0,
+                tabClass: 'active',
+                tabNction: '',
+                cdtab: 1,
+                cateinfoData: '',
+                cateTreeD: false,
+                DTreeTitle: '',
+                TreeData: [],
+                TreeFile:[],
+                TreeParentNo: '',
+                RefTreeData: [],
+                pageinfoData: '',
+                flieType: '',
+                TreeInfoDate:'',
+                TreePageList: [],
+                mypageDtlgzList:[],
+                AddEdit: 1,
+                KnowTreetitle: '',
+                ImgUrl: '',
+                KnowImgData: [{ 'id': 1, 'imgurl': 'img/1.png' }, { 'id': 2, 'imgurl': 'img/2.png' }, { 'id': 3, 'imgurl': 'img/3.png' }, { 'id': 4, 'imgurl': 'img/4.png' }, { 'id': 5, 'imgurl': 'img/5.png' }, { 'id': 6, 'imgurl': 'img/7.png' }, { 'id': 8, 'imgurl': 'img/8.png' }],
+                cateSideActive: '',
+                myDtlgzList: [],
+                delList: [],
+                dtlEditShow: false,
+                DeptshowLeft: 0,
+                Deptshowtop: 0,
+                DeptsData: [],//人员信息
+                DeptsDatas: [],
+                EmpsData: [],
+                Deptshow: false,
+                knowInfo: '',
+                editor: null
+            },
+            methods: {
+                inte: function () {
+                    //树结构
+                    var ens = new Entities("BP.CCFast.KnowledgeManagement.KMTrees");
+
+                    ens.Retrieve("ParentNo", knno);
+                    var enData = ens.TurnToArry();
+
+                    //文档
+                    var enDtl = new Entities("BP.CCFast.KnowledgeManagement.KMDtls");
+                    enDtl.Retrieve("KnowledgeNo", knno, "IsDel", 0);
+
+                    // ens.Retrieve("ParentNo", knno);
+                    var enDtlData = enDtl.TurnToArry();
+
+                    var myknow = [];
+                    for (i = 0; i < enDtlData.length; i++) {
+                        var en = enDtlData[i];
+                        var FoucsDate = en.Foucs
+                        if (FoucsDate.indexOf(webUser.Name)) {
+                            en.gz = 0
+                        } else {
+                            en.gz = 1
+                            myknow.push(en)
+                        }
+
+                    }
+
+                    this.RefTreeData = enDtlData
+                    this.myDtlgzList = myknow;
+                    //console.log(this.RefTreeData)
+
+                    for (i = 0; i < enData.length; i++) {
+                        var enT = enData[i];
+                        enT.open = false;
+                        enT.children = [];
+                        for (j = 0; j < enDtlData.length; j++) {
+                            var enD = enDtlData[j];
+
+                            if (enD.RefTreeNo == enT.No) {
+                                enT.children.push(enD)
+                            }
+                        }
+                    }
+                    var treeF = [];
+                    for (j = 0; j < enDtlData.length; j++) {
+                        var enD = enDtlData[j];
+                        if (enD.RefTreeNo == knno)
+                            treeF.push(enD)
+                    }
+                    this.TreeFile = treeF
+
+                    this.TreeData = enData;
+                },
+                Redtl: function (no, index, status) {
+                    var _this=this
+                    var str = status == 1 ? '您确定想恢复该记事吗?' :'您确定想删除该记事吗?'
+                    if (confirm(str)) {
+                        var en = new Entity("BP.CCFast.KnowledgeManagement.KMDtl", no);
+                        if (status == 1) {
+                            en.IsDel = 0;
+                            en.Update();
+                            _this.inte()
+                        }
+                        if (status == 2) {
+                            en.Delete();
+                        }
+                        this.delList.splice(index, 1)
+                    }
+                    
+                },
+                StarType: function (status, no, index) {
+                    var en = new Entity("BP.CCFast.KnowledgeManagement.KMDtl", no);
+                    en.Retrieve();
+
+                    var Foucs = en.Foucs
+                    var webUser = new WebUser();
+                    if (status) {
+                        Foucs = Foucs.replace(webUser.Name + ';', "")
+                        $('#gz' + no).removeClass('nyellow')
+                        this.RefTreeData[index].gz = 0
+                    } else {
+                        Foucs += webUser.Name + ';'
+                        $('#gz' + no).addClass('nyellow')
+                        this.RefTreeData[index].gz = 1
+                    }
+
+                    en.Foucs = Foucs; // 0=未完成， 1=完成.
+                    en.Update();
+                    this.inte()
+                },
+                myStarType: function (status, no, index) {
+                    var en = new Entity("BP.CCFast.KnowledgeManagement.KMDtl", no);
+                    en.Retrieve();
+                    var Foucs = en.Foucs
+                    var webUser = new WebUser();
+                    if (status) {
+                        Foucs = Foucs.replace(webUser.Name + ';', "")
+                        this.myDtlgzList.splice(index, 1)
+                    }
+
+                    en.Foucs = Foucs; // 0=未完成， 1=完成.
+                    en.Update();
+                    this.inte()
+                },
+                //目录下关注
+                chStarType: function (status, no, index) {
+                    var en = new Entity("BP.CCFast.KnowledgeManagement.KMDtl", no);
+                    en.Retrieve();
+
+                    var Foucs = en.Foucs
+                    var webUser = new WebUser();
+                    if (status) {
+                        Foucs = Foucs.replace(webUser.Name + ';', "")
+                        $('#gz' + no).removeClass('nyellow')
+                        this.TreePageList[index].gz = 0
+                    } else {
+                        Foucs += webUser.Name + ';'
+                        $('#gz' + no).addClass('nyellow')
+                        this.TreePageList[index].gz = 1
+                    }
+
+                    en.Foucs = Foucs; // 0=未完成， 1=完成.
+                    en.Update();
+                    this.pageInfo(en.RefTreeNo, 1)
+                },
+                chmyStarType: function (status, no, index) {
+                    var en = new Entity("BP.CCFast.KnowledgeManagement.KMDtl", no);
+                    en.Retrieve();
+                    var Foucs = en.Foucs
+                    var webUser = new WebUser();
+                    if (status) {
+                        Foucs = Foucs.replace(webUser.Name + ';', "")
+                        this.mypageDtlgzList.splice(index, 1)
+                    }
+
+                    en.Foucs = Foucs; // 0=未完成， 1=完成.
+                    en.Update();
+                  
+                    this.pageInfo(en.RefTreeNo, 1)
+                },
+                //
+                SaveKnow: function () {
+                    var Empsstr = ''
+                    for (s = 0; s < this.EmpsData.length; s++) {
+                        var de = this.EmpsData[s]
+                        Empsstr += de.no + '@' + de.name + ';'
+                    }
+
+                    var en = new Entity("BP.CCFast.KnowledgeManagement.Knowledge", knno);
+                    en.Emps = Empsstr;
+                    en.CopyForm();
+                    en.Update();
+                    layer.msg('修改成功', { time: 1000 }, function () {
+                        location.reload()
+                        return;
+                    
+                    })
+
+                },
+
+                pageInfo: function (no, type) {
+                    this.pageShow = true
+                    this.cateShow = false
+                    this.delShow = false
+                    this.cateSideActive = no
+                    if (type == 1) {
+                        var enTree = new Entity("BP.CCFast.KnowledgeManagement.KMTree", no);
+                        //ens.Retrieve("KnowledgeNo", knno);
+                        this.TreeInfoDate = enTree;                      
+
+
+                        var ens = new Entities("BP.CCFast.KnowledgeManagement.KMDtls");
+                        //ens.Retrieve("IsDel", 0);
+                        ens.Retrieve("RefTreeNo", no, "IsDel", 0);
+                      
+
+                        var pageList = ens.TurnToArry();
+                        this.TreePageList = pageList
+                        var myknow = []
+                        for (i = 0; i < pageList.length; i++) {
+                            var en = pageList[i];
+                            var FoucsDate = en.Foucs
+                            if (FoucsDate.indexOf(webUser.Name)) {
+                                en.gz = 0
+                            } else {
+                                en.gz = 1
+                                myknow.push(en)
+                            }
+
+                        }
+                        this.mypageDtlgzList = myknow;
+                     
+                        this.flieType=1
+                    }
+                    if (type == 2) {
+                        var pageData = new Entity("BP.CCFast.KnowledgeManagement.KMDtl", no);
+                        var FoucsDate = pageData.Foucs
+                        if (FoucsDate.indexOf(webUser.Name)) {
+                            pageData.gz = 0
+                        } else {
+                            pageData.gz = 1                           
+                        }
+                        this.pageinfoData = pageData;
+                        this.flieType = 2
+                    }
+                },
+                addTreeCate: function () {
+                    var _this = this
+                    if (this.TreeType==1) {
+                        var en = new Entity("BP.CCFast.KnowledgeManagement.KMTree");                   
+                        en.ParentNo = this.TreeParentNo;                   
+                        en.KnowledgeNo = knno;
+                    } else {
+                        var en = new Entity("BP.CCFast.KnowledgeManagement.KMDtl");                        
+                        en.RefTreeNo = this.TreeParentNo;
+                    }
+                    en.Name = $("#TB_KnowTree_title").val();
+                    en.KnowledgeNo = knno;
+                    en.Insert();
+
+                    layer.msg('添加成功', { time: 1000 })
+                    this.cateTreeShow = false
+
+                    _this.refTreecate(this.TreeParentNo);
+                    _this.editPage(en.No)
+                },
+              
+                knowEditName: function () {
+                    var _this = this
+                    var treeno = ''
+                    if (this.TreeType == 1) {
+                        var en = new Entity("BP.CCFast.KnowledgeManagement.KMTree", this.TreeParentNo);
+                        treeno = this.TreeParentNo
+                       
+                    } else {
+                        var en = new Entity("BP.CCFast.KnowledgeManagement.KMDtl", this.TreeParentNo);
+                        treeno = en.RefTreeNo
+                     
+                    }
+                    en.Name = $("#TB_KnowTree_title").val();
+                   
+                    en.Update();
+
+                    layer.msg('修改成功', { time: 1000 })
+                    this.cateTreeShow = false
+
+                    _this.refTreecate(treeno);
+                },
+                refTreecate: function (TreeParentNo) {
+                    var _this = this
+                    _this.inte();
+                    var treedata = this.TreeData;
+                    for (i = 0; i < treedata.length; i++) {
+                        var tree = treedata[i];
+                        if (tree.No == TreeParentNo) {
+                            tree.open = true;
+                        }
+
+                    }
+
+                },
+
+                editPage: function (no) {
+                   this.dtlEditShow = true
+
+                    var pageData = new Entity("BP.CCFast.KnowledgeManagement.KMDtl", no);
+                    this.KnowledgeNo = pageData.KnowledgeNo
+                    this.knowInfo = pageData;
+
+                    const E = window.wangEditor;
+                    this.editor = new E(this.$refs.editor);
+                    console.log(this.editor);
+                    this.editor.config.menus = [
+                        'bold',
+                        'head',
+                        'link',
+                        'italic',
+                        'underline'
+                    ]
+                    this.editor.create();
+                    this.editor.txt.html(this.knowInfo.Docs)
+                    /*var reoadUrl = 'KnowPageEdit.htm?no=' + no
+                    OpenLayuiDialog(reoadUrl, "", 90000, false, false, true, false, false, false, false);*/
+
+                },
+                SaveKnowDtl: function () {
+                    console.log(this.editor.txt.html());
+                    var en = new Entity("BP.CCFast.KnowledgeManagement.KMDtl", knno);
+                    en.Docs = this.editor.txt.html()
+                    en.CopyForm();
+                    en.Update();
+                    this.knowInfo.Docs = this.editor.txt.html()
+                    this.knowInfo.Name=$('#TB_Name').val();
+                    layer.msg('修改成功', { time: 1000 }, function () {
+                        this.dtlEditShow = false
+                        return;
+                        //window.location.href = "Defaut";
+                        //location.reload();
+                    })
+
+                },
+                NewTree: function (title, no, stauts, type, Name) {
+                   // console.log(Name)
+                    this.cateTreeShow = true
+                    this.DTreeTitle = title
+                    this.TreeParentNo = no
+                    this.TreeType = stauts
+                    this.AddEdit = type
+                    this.KnowTreetitle=Name
+                },
+                bindMenu: function () {
+                    var _this = this
+                    layui.use('dropdown', function () {
+                        var dropdown = layui.dropdown
+                        var systemNodeItems = [                           
+                            { title: '<i class="iconfont icon-wenjianjia1"></i> 新建文件夹', id: "NewFile", name: '新建文件夹', type: '1' },
+                            { title: '<i class="iconfont icon-wenjian"></i> 新建文档', id: "NewPage", name: '新建文档', type: '2' },
+                        ]
+
+                        var systemFunc = function (data, oThis) {
+                            this.cateTreeD = true
+                            var no = knno;
+                            var name = "";// $(this.elem)[0].dataset.sysname;
+                            _this.NewTree(data.name, no, data.type,1);                          
+                            // _this.topNodeOption(data.id, $(this.elem)[0].dataset.no, $(this.elem)[0].dataset.name, $(this.elem)[0].dataset.idx)
+                        }
+                        var systemOptions = [{
+                            elem: '.t-btn',
+                            trigger: 'click',
+                            data: systemNodeItems,
+                            click: systemFunc
+                        }]
+
+                        dropdown.render(systemOptions[0]);
+                        dropdown.render(systemOptions[1]);
+
+                        var moduleNodeItems = [
+                            { title: '<i class="iconfont icon-wenjian"></i> 新建文档', id: "NewPage", name: '新建文档', type: '2' },
+                        ]
+                        var moduleFunc = function (data, oThis) {
+                            //获得不了当前选择的行的主键了.
+                            var parentno = $(this.elem)[0].dataset.parentno;
+                            //console.log(parentno)
+                            switch (data.id) {
+                                case 'NewPage':
+                                    _this.NewTree(data.name, parentno, data.type, 1);
+                                    break;
+                              
+                            }
+                        }
+                        var moduleOptions = [{
+                            elem: '.module-btn',
+                            trigger: 'click',
+                            data: moduleNodeItems,
+                            click: moduleFunc
+                        }]
+
+                        dropdown.render(moduleOptions[0]);
+                        dropdown.render(moduleOptions[1]);
+
+                        var menuFunc = function (data, oThis) {
+
+                            var No = $(this.elem)[0].dataset.treeno;
+                            var Name = $(this.elem)[0].dataset.name
+                            var type = $(this.elem)[0].dataset.flietype
+
+                            //todo:如何获得菜单的模块编号?
+                            //  var moduleNo = $(this.elem)[0].dataset.ModuleNo;
+
+                            switch (data.id) {
+                                case 'EeditPage':
+                                    _this.NewTree(data.name, No, type, 2, Name);
+                                    break;
+                                case 'DelFile':
+                                    this.cateTreeShow = true
+                                    _this.knowDel(No,type);
+                                    break;
+                            }
+                        }
+                        var menuNodeItems = [
+                            { title: '<i class="iconfont icon-pingfen"></i> 重命名', id: "EeditPage", name: '重命名' },
+                            { title: '<i class="iconfont icon-shanchu1"></i> 删除', id: "DelFile", name: '删除' },
+                        ]
+                        var menuOptions = [{
+                            elem: '.menu-btn',
+                            trigger: 'click',
+                            data: menuNodeItems,
+                            click: menuFunc
+                        }]
+
+                        dropdown.render(menuOptions[0]);
+                        dropdown.render(menuOptions[1]);
+
+                      
+                    })
+                },
+
+                cateDel: function (no) {
+                    if (confirm('您确定想删除该知识吗?')) {
+                        var kncateDel = new Entity("BP.CCFast.KnowledgeManagement.Knowledge", no);
+                        kncateDel.Delete();                        
+                    }                   
+                    window.location.href = 'Default.htm';
+                },
+                knowDel: function (no, tpye) {
+                    var _this=this
+                    if (confirm('您确定想删除该文档吗?')) {
+                        if (tpye == 1) {
+
+                            //判断是否有文件？
+
+                            var ens = new Entities("BP.CCFast.KnowledgeManagement.KMDtls");
+                            ens.Retrieve("RefTreeNo", no);
+                            if (ens.length != 0) {
+                                layer.msg('该目录下存在文档');
+                                return;
+                            }
+                            var knDel = new Entity("BP.CCFast.KnowledgeManagement.KMTree", no);
+                            knDel.Delete();
+                            _this.inte()
+                        }
+                        else {
+                            var knDel = new Entity("BP.CCFast.KnowledgeManagement.KMDtl", no);
+                            knDel.IsDel = 1;
+                            knDel.Update();
+                            this.flieType=1
+                            _this.refTreecate(knDel.RefTreeNo)
+                            _this.pageInfo(knDel.RefTreeNo, 1)
+                        }
+                    }
+                },
+               
+                ChooseImg: function (imgurl) {
+                    this.ImgUrl = imgurl
+                },
+                gzPage: function (dtlno, status) {
+                    var en = new Entity("BP.CCFast.KnowledgeManagement.KMDtl", dtlno);
+                    en.Retrieve();
+                    var Foucs = en.Foucs
+                 
+                    if (status) {
+                        Foucs = Foucs.replace(webUser.Name + ';', "")
+                        $('#gzp' + dtlno).removeClass('nyellow')
+                        this.pageinfoData.gz = 0
+                    } else {
+                        Foucs += webUser.Name + ';'
+                        $('#gzp' + dtlno).addClass('nyellow')
+                        this.pageinfoData.gz = 1
+                    }
+
+                    en.Foucs = Foucs; // 0=未完成， 1=完成.
+                    en.Update();
+
+                   // this.inte()
+                },
+                DtlDel: function () {
+                    var enDtl = new Entities("BP.CCFast.KnowledgeManagement.KMDtls");
+                    enDtl.Retrieve("KnowledgeNo", knno, "IsDel", 1);
+
+                    // ens.Retrieve("ParentNo", knno);
+                    var enDtlData = enDtl.TurnToArry();
+                    this.delList = enDtlData
+                },
+                selectHandle: function (event) {
+                    var key = event.currentTarget.value;
+                    console.log(key);
+                    var Depts = this.DeptsDatas;
+                    if (key != null) {
+                        var des = []
+                        for (d = 0; d < Depts.length; d++) {
+                            var de = Depts[d]
+                            de.open = false
+                            var childModules = de.Empslist
+                            de.Num = 0
+                            for (c = 0; c < childModules.length; c++) {
+                                var ce = childModules[c]
+
+                                if (ce.Name.indexOf(key) != -1) {
+                                    de.open = true
+                                    de.Num += 1
+                                }
+                            }
+                            if (de.Num) des.push(de)
+                            de.Num = childModules.length
+                        }
+
+                        this.DeptsData = des
+                    } else {
+                        for (d = 0; d < Depts.length; d++) {
+                            var de = Depts[d]
+                            de.open = false
+                            var childModules = de.Empslist
+                            de.Num = childModules.length
+                        }
+
+                        this.DeptsData = Depts
+                        console.log(this.DeptsData);
+                    }
+
+
+                },
+                selectRefShow: function (e) {
+                    this.Deptshow = true;
+                    var Depts = this.DeptsDatas;
+                    for (d = 0; d < Depts.length; d++) {
+                        var de = Depts[d]
+                        de.open = false
+                        var childModules = de.Empslist
+                        for (c = 0; c < childModules.length; c++) {
+                            var ce = childModules[c]
+                            var splitDate = this.EmpsRaw
+                            ce.status = 0
+                            if (splitDate.indexOf(ce.Name) != -1) {
+                                ce.status = 1
+                                de.open = true
+                            }
+                        }
+                    }
+
+                    this.DeptsData = Depts;
+
+                    //this.selectRefShow=true
+                    const $circle = this.$refs.RefBox
+                    this.DeptshowLeft = this.getParentLeft($circle) + 'px'
+                    this.Deptshowtop = this.getParentTop($circle) + 30 + 'px'
+                },
+                SelEmpno: function (no, name, status) {
+                    if (status == 1) {
+                        status = 0;
+                    } else {
+                        status = 1;
+                    }
+
+                    var splitDate = this.EmpsRaw;
+                    if (splitDate) {
+                        if (status == 1) {
+                            if (splitDate.indexOf(name) != -1)
+                                return
+                            this.EmpsRaw += name + ';'
+
+                            this.EmpsData.push({ 'no': no, 'name': name })
+                        } else {
+
+                            this.EmpsRaw = this.EmpsRaw.replace(name + ';', "")
+                            var newArr = new Array();
+                            for (var i = 0; i < this.EmpsData.length; i++) {
+                                var j = this.EmpsData[i];
+                                if (j.no != no) {
+                                    newArr.push(j);
+                                }
+                            }
+                            this.EmpsData = newArr
+
+                        }
+                    } else {
+                        this.EmpsRaw += name + ';'
+
+                        this.EmpsData.push({ 'no': no, 'name': name })
+                    }
+
+                },
+                DelEmps: function (no, name, index) {
+                    var _this = this
+                    this.EmpsRaw = this.EmpsRaw.replace(name + ';', "")
+                    var newArr = new Array();
+                    for (var i = 0; i < this.EmpsData.length; i++) {
+                        var j = this.EmpsData[i];
+                        if (j.no != no) {
+                            newArr.push(j);
+                        }
+                    }
+                    console.log(newArr)
+                    this.EmpsData = newArr
+                },
+                /**
+                * 获取顶部div的距离
+                */
+                getParentTop: function (e) {
+                    var offset = e.offsetTop
+                    if (e.offsetParent != null) {
+                        offset += this.getParentTop(e.offsetParent)
+                    }
+                    return offset
+                },
+                /**
+                 * 获取左侧div的距离
+                 */
+                getParentLeft(e) {
+                    var offset = e.offsetLeft
+                    if (e.offsetParent != null) {
+                        offset += this.getParentLeft(e.offsetParent)
+                    }
+                    return offset
+                },
+            },
+            mounted: function () {
+                //树信息
+                var kncateInfo = new Entity("BP.CCFast.KnowledgeManagement.Knowledge", knno);
+               
+                this.cateinfoData = kncateInfo;
+                
+                this.ImgUrl = kncateInfo.ImgUrl
+
+                this.inte();
+                this.bindMenu();
+
+                
+                //人员信息
+                var ensD = new Entities("BP.CCFast.KnowledgeManagement.Knowledges");
+                var DeptEmps = ensD.DoMethodReturnJSON("Selecter_DeptEmps");
+                var Depts = DeptEmps.Depts
+                var Emps = DeptEmps.Emps
+                for (d = 0; d < Depts.length; d++) {
+                    var de = Depts[d]
+                    de.Empslist = []
+                    de.open = false
+                    var childModules = Emps.filter(function (module) {
+                        // return module.SystemNo === ''                 
+                        return module.FK_Dept === de.No
+                    })
+                    de.Num = childModules.length
+                    for (c = 0; c < childModules.length; c++) {
+                        var ce = childModules[c]
+                        ce.status = 0
+                    }
+                    de.Empslist = childModules
+
+                }
+
+
+                this.DeptsDatas = Depts;
+
+                var EmpsRaw = kncateInfo.Emps
+                var Empsd=EmpsRaw.split(';')
+                for (e = 0; e < Empsd.length-1; e++) {
+                    var EmpsFg = Empsd[e].split('@')
+                    this.EmpsData.push({ 'no': EmpsFg[0], 'name': EmpsFg[1] })
+                    this.EmpsRaw += EmpsFg[0]
+                }
+                console.log(this.EmpsData)
+                
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>

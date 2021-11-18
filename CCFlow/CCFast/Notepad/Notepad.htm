@@ -1,0 +1,398 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>记事本</title>
+    <link href="/WF/Portal/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="/WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="/WF/Portal/layui/layui.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <script src="/WF/Portal/js/vue/vue.js" type="text/javascript"></script>
+    <style>
+        body {
+            background: #fff
+        }
+
+        .note-header {
+            padding: 15px 0px;
+        }
+
+        .note-nav {
+        }
+
+        .note-nav h2 {
+            border-left: 2px solid #009688;
+            display: inline-block;
+            padding-left: 10px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .note-nav p {
+            line-height: 24px;
+            color: #808080;
+            margin-top: 10px;
+        }
+
+        .nyellow {
+            color: #ef9411;
+
+        }
+
+        .note-form {
+            border: 2px solid #009688;
+            border-left: 0px;
+            border-right: 0px;
+            margin-bottom: 15px;
+            background: #f6fefd;
+            padding: 0px 10px;
+        }
+
+        .form-title {
+            line-height: 30px;
+            font-size: 16px;
+            padding: 10px 0px;
+        }
+
+        .form-title span {
+            float: right;
+        }
+
+        .note-footer {
+            padding: 15px;
+            background: #efefef
+        }
+        .note-footer .layui-card-body li span{ font-size:12px; color:#808080; font-style:italic
+        }
+        .fr {
+            float: right
+        }
+        .note-list {
+           max-height:360px;
+           overflow-y:auto
+        }
+        .note-box {
+            border: 1px solid #d6fcf8;
+            margin: 10px 0px;
+            box-shadow: 0px 2px 2px #d3eeeb;
+            padding: 6px 11px;
+        }
+            .note-box .fr {
+            opacity:0;}
+            .note-box:hover .fr {
+            opacity:1}
+
+            .note-box:hover {
+                border: 2px solid #009688;
+                padding: 10px;
+                opacity: 1;
+            }
+
+            .note-box > .title {
+                line-height: 32px;
+            }
+
+                .note-box > .title > .tt {
+                    font-size: 16px;
+                    
+                }
+
+                    .note-box > .title > .tt i {
+                        cursor: pointer;
+                        color: #808080
+                    }
+
+            .note-box > .nav {
+                color: #808080;
+                padding: 0px 0px 0px 20px;
+                font-size:12px;
+            }
+
+            .note-box > .info {
+                padding: 0px 10px 10px 20px;
+                font-size: 14px;
+            }
+
+        .nyellow i {
+            color: #ffd800 !important
+        }
+
+        .editWindows {
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            position: fixed;
+            top: 0px;
+            left:0px;
+        }
+
+        .editbox {
+            background: #fff;
+            width: 80%;
+            height: 60%;
+            padding: 0 5%;
+            margin: 10% 0 0 5%
+        }
+
+        .editTitle {
+            line-height: 32px;
+            font-weight: bold;
+            border-bottom: 1px solid #efefef;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-fluid" id="notevue">
+        <div class="note-header">
+            <div class="note-nav">
+               
+                <h2>记事本</h2>
+                <p>记录想法、文章、心情。</p>
+
+            </div>
+        </div>
+        <div class="note-form">
+            <div class="form-title">写记事</div>
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+
+                    <textarea name="TB_Docs" id="TB_Docs" placeholder="请输入记事内容..." class="layui-textarea"></textarea>
+
+                </div>
+                <div class="layui-form-item">
+                    <button class="layui-btn" lay-submit lay-filter="formNote">保存</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </form>
+        </div>
+        <div class="note-footer">
+            <div class="layui-row layui-col-space10">
+                <div class="layui-col-sm6 ">
+                    <div class="layui-card">
+                        <div class="layui-card-header"><strong>最近记事</strong></div>
+                        <div class="layui-card-body">                        
+                            <div class="note-list"  >
+                                <div class="note-box" v-for="(item,index) in notelist">
+                                    <div class="title">
+                                        <div class="fr">
+                                            <span @click.stop="EidtNote(item.MyPK),Isedit=true" class="layui-btn layui-btn-xs">编辑</span>
+                                            <span @click.stop="Delnote(item.MyPK)" class="layui-btn layui-btn-danger  layui-btn-xs">删除</span>
+                                        </div>
+                                        <div :class="item.IsStar ? 'tt nyellow':'tt'" :id="item.MyPK">
+                                            <i class="layui-icon layui-icon-star-fill" @click.stop="StarType(item.MyPK)"></i>
+                                            {{item.Name}}
+                                        </div>
+                                    </div>
+                                    <div class="nav">
+                                        <span>{{item.RDT}}</span>
+                                    </div>
+                                    <div class="info">
+                                        {{item.Docs}}
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-sm6">
+                    <div class="layui-card">
+                        <div class="layui-card-header"><strong><i class="layui-icon layui-icon-star-fill nyellow"></i> 星标记事</strong></div>
+                        <div class="layui-card-body">
+                            <div class="note-list">
+                                <div class="note-box" v-for="(item,index) in noteStar">
+                                    <div class="title">
+                                        <div class="fr">
+                                            <span @click.stop="EidtNote(item.MyPK),Isedit=true" class="layui-btn layui-btn-xs">编辑</span>
+                                            <span @click.stop="Delnote(item.MyPK)" class="layui-btn layui-btn-danger  layui-btn-xs">删除</span>
+                                        </div>
+                                        <div :class="item.IsStar ? 'tt nyellow':'tt'" :id="item.MyPK">
+                                            <i class="layui-icon layui-icon-star-fill" @click.stop="StarType(item.MyPK)"></i>
+                                            {{item.Name}}
+                                        </div>
+                                    </div>
+                                    <div class="nav">
+                                        <span>{{item.RDT}}</span>
+                                    </div>
+                                    <div class="info">
+                                        {{item.Docs}}
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="editWindows" v-if="Isedit"  @click.stop="Isedit=false">
+            <div class="editbox" @click.stop="Isedit=true">
+                <div class="editTitle">编辑记事本</div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">主题</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="TB_Name" id="TB_Name" v-model="editdata.Name" autocomplete="off" placeholder="请输入标题" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">正文</label>
+                    <div class="layui-input-block">
+                        <textarea name="TB_Docs" id="TB_Docs" placeholder="请输入记事内容..." class="layui-textarea">{{editdata.Docs}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+
+                        <input type="checkbox" name="IsStar" id="IsStar" :value="editdata.IsStar" v-model="editdata.IsStar" />{{editdata.star}}星标记事
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <span class="layui-btn" @click.stop="editSave(editdata.MyPK);">保存</span>
+                        <span class="layui-btn layui-btn-danger"  @click.stop="Isedit=false">取消</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#notevue',
+            data: {
+                notelist: [],//记事 
+                Isedit: false,
+                editdata: [],
+                noteStar:[],
+            },
+
+            methods: {
+                StarType: function (MyPK) {
+                    var en = new Entity("BP.CCFast.Notepad", MyPK);
+                    en.Retrieve();
+
+                    if (en.IsStar == 0) {
+                        $("#" + MyPK).addClass('nyellow')
+                        var ens = new Entity("BP.CCFast.Notepad", MyPK);
+                        ens.IsStar = 1;
+                        ens.Update();
+
+                    } else {
+                        $("#" + MyPK).removeClass('nyellow')
+                        var ens = new Entity("BP.CCFast.Notepad", MyPK);
+                        ens.IsStar = 0;
+                        ens.Update();
+                    }
+
+
+                },
+                Delnote: function (MyPK) {
+                    if (confirm('您确定想删除该记事吗?')) {
+                        var endel = new Entity('BP.CCFast.Notepad', MyPK);
+                        endel.Delete();
+                        location.reload();
+                    }
+                },
+                EidtNote: function (MyPK) {
+                    var en = new Entity("BP.CCFast.Notepad", MyPK);
+                    console.log(en);
+                    this.editdata = en;
+                    /*var notelisturl = 'form.htm?MyPK='+ MyPK
+                    OpenLayuiDialog(notelisturl, "", 400, false, false, true, false);*/
+                },
+                editSave: function (MyPK) {
+
+                    var IsStar = 0
+                    if ($('#IsStar').val() == 'true' || $('#IsStar').val() == 1) {
+                        IsStar = 1
+                    }
+                    // console.log(IsStar)
+                    var ens = new Entity("BP.CCFast.Notepad", MyPK);
+                    ens.IsStar = IsStar;
+                    ens.CopyForm();
+                    ens.Update();
+                    this.Isedit = false
+                    var en = new Entities("BP.CCFast.Notepads");
+                    en.Retrieve();
+                    en = en.TurnToArry();
+                    this.notelist = en;
+                    layer.msg('保存成功')
+
+                },
+                openList: function () {
+                    var notelisturl = 'list.htm'
+                    OpenLayuiDialog(notelisturl, "", 800, false, false, true, false);
+                },
+                
+                See: function (MyPK) {
+                    var enSee = new Entity("BP.CCFast.Notepad", MyPK);
+                    enSee.Retrieve();
+                        layer.open({
+                            type: 1
+                            , title: enSee.Name //不显示标题栏
+                            , closeBtn: false
+                            , area: '50%;'
+                            , shade: 0.8
+                            , id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                            , btn: ['关闭']
+                            , btnAlign: 'c'
+                            , moveType: 1 //拖拽模式，0或者1
+                            , content: '<div style="padding: 15px; line-height: 24px; color: #393D49; font-weight: 500;font-size:14px"><p style="padding: 0px 0px 5px;color: #666; font-weight: 400; font-size:12px;"><i class="layui-icon layui-icon-time"></i> ' + enSee.RDT+'</p>' + enSee.Docs+'</div>'
+                       
+                        });
+                }
+            },
+            mounted: function () {
+
+                // fix firefox bug
+                document.body.ondrop = function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+
+                var ens = new Entities("BP.CCFast.Notepads");
+                ens= ens.DoMethodReturnJSON("RetrieveTop30");
+
+                
+                var ensStars = new Entities("BP.CCFast.Notepads");
+                ensStars = ensStars.DoMethodReturnJSON("RetrieveTop30Stars");
+                console.log(ensStars);
+
+                /*var en = new Entities("BP.CCFast.Notepads");
+                en.Retrieve();
+                en = en.TurnToArry();
+                console.log(en);*/
+                var notelist = ''
+                var noteStar = ''
+                this.notelist = ens;
+                this.noteStar = ensStars;
+
+
+            }
+        })
+        layui.use(['form', 'layer', 'laydate'], function () {
+            var form = layui.form, $ = layui.jquery, laydate = layui.laydate;
+            form.on('submit(formNote)', function (data) {
+
+                //console.log(data.field);
+                var str = $('#TB_Docs').val()
+                var en = new Entity("BP.CCFast.Notepad");
+                en.CopyForm();
+                if (en.Docs == "")
+                    return;
+
+                en.Name = str.substr(0, 16)
+                en.Insert();
+
+            });
+        })
+    </script>
+
+</body>
+</html>

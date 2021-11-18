@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../WF/Portal/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../WF/Portal/layui/layui.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <script src="../../WF/Portal/js/vue/vue.js" type="text/javascript"></script>
+    <link href="../../WF/Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <script src="Toolbar.js"></script>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+    <style>
+        #toolbar a {
+        }
+
+        .openRz-box {
+            padding: 15px;
+            min-width: 350px;
+            min-height: 240px;
+            max-width: 500px;
+        }
+
+        .openRz-box strong {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .openRz-box strong > span {
+            color: #c1c1c1;
+            font-weight: 500
+        }
+
+        .pull-right {
+            float: right;
+        }
+
+        .Rec-list {
+            width: 100%;
+            float: left;
+            border-bottom: 1px solid #efefef;
+        }
+
+        .Rec-list div {
+            float: left;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box; /* Firefox */
+            -webkit-box-sizing: border-box; /* Safari */
+        }
+
+        .Rec-list .col1 {
+            padding: 8px 10px;
+            width: 18%;
+        }
+
+        .Rec-list .child-list {
+            width: 100%;
+            background: #f9f9f9;
+            padding: 5px 20px;
+            line-height:26px;
+        }
+        .Rec-list .doc{ font-weight:bold}
+    </style>
+</head>
+<body>
+    <div class="layui-fluid" id="workRec-Default" style="margin-top:15px">
+       
+        <div id="toolbar"> </div>
+        <div class="Rec-list" style="background:#efefef; margin-top:15px;font-size:14px;font-weight:bold">
+            <div class="col1">日期</div>
+            <div class="col1">时长</div>
+            <div class="col1">数量</div>
+            <div class="col1">添加时间</div>
+            <div class="col1">日记类型</div>
+        </div>
+                <div v-for="(item,index) in list"  @click.stop="item.open = !item.open,ShowChild(item.MyPK,index,item.open)" class="Rec-list">
+                    <div class="col1"><i :class="item.open?'iconfont icon-iconfontjiantou':'iconfont icon-arrow-right'" ></i>{{item.RDT}}</div>
+                    <div class="col1">{{item.HeiJiHour}}</div>
+                    <div class="col1">{{item.NumOfItem}}</div>
+                    <div class="col1">{{item.RiQi}}</div>
+                    <div class="col1">{{item.WorkRecModel}}</div>     
+                    <div class="child-list" v-if="showEditChild[index]">
+                        <div class="doc" v-html="item.Doc1"></div>
+                        <ul>
+                            <li v-for="(citem,c) in RecChildData">项目名称：{{citem.PrjName}}</li>
+                        </ul>
+                      
+                    </div>
+                </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#workRec-Default',
+            data: {
+                list: [],
+                showEditChild: [],
+                RecChildData:[]
+            },
+            methods: {
+
+                ShowChild: function (mypk, index,type) {               
+                    if (type) {
+                        this.showEditChild = [];
+                        this.RecChildData = []
+                        this.$set(this.showEditChild, index, true)
+                        //console.log(this.showEditChild[index]);
+                        var enDtls = new Entities("BP.CCFast.WorkRecDtls");
+                        enDtls.Retrieve("RefPK", mypk);
+                        data = enDtls.TurnToArry();
+                        this.RecChildData = data                       
+                    } else {
+                        this.showEditChild = []; 
+                    }
+                    for (i = 0; i < this.list.length; i++) {
+                        var ln = this.list[i]
+                        ln.open = false;
+                        if (i==index) {
+                            ln.open = type
+                        }
+
+                    }
+
+                },
+                CloseChild: function (index) {
+                  
+                  
+                },
+
+                openRz: function (mypk) {
+                    var enwk = new Entity("BP.CCFast.WorkRec", mypk);
+                    console.log(enwk);
+
+                    var enDtls = new Entities("BP.CCFast.WorkRecDtls");
+                    enDtls.Retrieve("RefPK", mypk);
+
+                    console.log(enDtls);
+
+                    layer.open({
+                        type: 1,
+                        title: '日志内容',
+                        closeBtn: 1,
+                        shadeClose: true,                        
+                        content: '<div class="openRz-box"><strong><span class="pull-right">' + enwk.RDT +'</span>' + enwk.RecName + '</strong><p>' + enwk.Doc1 + '</p></div>'
+                    });
+                   // alert('打开' + mypk)
+                },
+                //审核处理
+            },
+            mounted: function () {
+                var ens = new Entities("BP.CCFast.WorkRecs");
+                ens = ens.DoMethodReturnJSON("Default_Init");// ens.RetrieveA(ll);
+               
+                //ens = ens.TurnToArry();
+               
+                for (var i = 0; i < ens.length; i++) {
+
+                    var en = ens[i];
+                    en.open = false
+                    en.children = [];
+                    if (en.WorkRecModel == 0) en.WorkRecModel = '本日日志';
+                    if (en.WorkRecModel == 1) en.WorkRecModel = '补充日志';
+                    if (en.WorkRecModel == 2) en.WorkRecModel = '加班日志';
+                    if (en.WorkRecModel == 3) en.WorkRecModel = '本日请假';
+
+                }
+         
+
+                this.list = ens
+
+                /*var data = ens.DoMethodReturnJSON("Default_Init");*/
+                //console.log(data);
+            }
+
+        })
+ 
+    </script>
+
+</body>
+</html>

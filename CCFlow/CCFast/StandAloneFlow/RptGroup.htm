@@ -1,0 +1,748 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>单流程查询</title>
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script src="/WF/Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <!--layui-->
+    <link href="../layuiadmin/layui/css/modules/layer/default/layer.css" rel="stylesheet" />
+    <link href="../layuiadmin/layui/css/layui.css" rel="stylesheet" />
+    <script src="../layuiadmin/layui/layui.js" type="text/javascript"></script>
+    <script src="../layuiadmin/layui/lay/modules/layer.js" type="text/javascript"></script>
+   
+    <!--通用的JS-->
+    <script src="/WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="/WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="/WF/Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <link href="/WF/Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .layui-input, .layui-select, .layui-textarea {
+            height: 28px !important;
+        }
+
+        .layui-form-label {
+            padding: 3px 8px !important;
+        }
+
+        .layui-btn {
+            height: 28px !important;
+            line-height: 28px !important;
+        }
+
+        .layui-table-tool {
+            background-color: white !important;
+        }
+        .layui-layer-content{
+            overflow:hidden;
+        }
+        .layui-inline{
+            margin-bottom:5px;
+        }
+    </style>
+
+
+    <script type="text/javascript">
+        var searchFields = new Array(); //DDL的查询条件
+        var fields = []; //字符型字段查询的集合
+
+        var webUser = new WebUser();
+
+        //当前用户查询信息.
+        var ur;
+
+        var count;
+        var pageIdx = 1;
+        var pageSize = 10;
+        var pages = 1;//总页数;
+        var param = {
+            SearchType: GetQueryString("SearchType"),
+            FK_Flow: GetQueryString("FK_Flow"),
+            pageSize: pageSize,
+            pageIdx: pageIdx
+        };
+        var rptNo = "ND" + parseInt(param.FK_Flow) + "Rpt";
+
+        var firstLoadTable = true;
+        layui.use(['table','laypage'], function () {
+            var table = layui.table
+            laypage = layui.laypage;
+            //工具栏
+            InitToolBar();
+            Search_MapAttr();
+            FlowSearch_Init();
+            renderLaypage();
+
+            function FlowSearch_Data(isNextPage) {
+                var handler = new HttpHandler("BP.Cloud.HttpHandler.App_OneFlow_RptSearch");
+                handler.AddPara("PageSize", pageSize);
+                handler.AddPara("PageIdx", pageIdx);
+                if (firstLoadTable == false) {
+                    //增加字段查询
+                    if ($(".layui-table-view #TB_Key") != null && $(".layui-table-view #TB_Key").val() != "" && fields.length == 0) {
+                        ur.SearchKey = $(".layui-table-view #TB_Key").val();
+                    }
+                    else
+                        ur.SearchKey = "";
+
+                    for (var i = 0; i < fields.length; i++) {
+                        var field = fields[i];
+                        var strs = $(".layui-table-view").find("input[name=TB_" + field + "]");
+                        if (strs.length == 1) {
+                            ur.SetPara(field, $(".layui-table-view #TB_" + field).val());
+                        } else {
+                            if ($(".layui-table-view #TB_" + field + "_0").val() == "" && $(".layui-table-view #TB_" + field + "_1").val() == "")
+                                ur.SetPara(field, "");
+                            else
+                                ur.SetPara(field, $(".layui-table-view #TB_" + field + "_0").val() + "," + $(".layui-table-view #TB_" + field + "_1").val());
+                        }
+                    }
+                    //增加时间条件的查询
+                    if ($(".layui-table-view #TB_DTFrom").length > 0) {
+                        ur.DTFrom = $(".layui-table-view #TB_DTFrom").val();
+                        ur.DTTo = $(".layui-table-view #TB_DTTo").val();
+                    }
+                    //增加下拉框的查询条件
+                    var vals = "";
+                    $.each(searchFields, function () {
+                        var select = "select[id=DDL_" + this.id + "]";
+                        var val = $($(".layui-table-view").find(select)[0]).val();
+                        //val = $("#DDL_" + this.id).next().find("dd.layui-this").attr("lay-value");
+                        vals += "@" + this.id + "=" + val;
+                    });
+                    ur.Vals = vals;
+                    ur.Update();
+                }
+
+
+                handler.AddUrlData();  //增加参数.
+
+                var data = handler.DoMethodReturnString("FlowSearch_Data");
+                if (data.indexOf("err@") != -1) {
+                    layer.alert(data);
+                    console.log(data);
+                    return;
+                }
+                data = JSON.parse(data);
+                if (firstLoadTable == false) {
+                    var tableIn = layui.table.render({
+                        elem: '#searchTable'
+                        , data: data
+                        , cellMinWidth: 80
+                        , toolbar: '#toolBar' //开启头部工具栏，并为其绑定左侧模板
+                        , title: '用户数据表'
+                        , cols: [columns]
+                        , page: false
+                        , height: $(document).height() - $("#toolBar").height() - 100
+                        , done: function (res, curr, count) {
+                            //字符型字段赋值
+                            if (fields.length == 0)
+                                $(".layui-table-view  #TB_Key").val(ur.SearchKey);
+                            else {
+                                for (var i = 0; i < fields.length; i++) {
+                                    var field = fields[i];
+                                    var strs = $(".layui-table-view").find("input[name=TB_" + field + "]");
+                                    var val = ur.GetPara(field);
+
+                                    if (strs.length == 1)
+                                        $(".layui-table-view  #TB_" + field).val(val);
+                                    else {
+                                        $(".layui-table-view  #TB_" + field + "_0").val(val.split(',')[0]);
+                                        $(".layui-table-view  #TB_" + field + "_1").val(val.split(',')[1]);
+                                    }
+
+
+                                }
+                            }
+                            //时间赋值
+                            if ($(".layui-table-view  #TB_DTFrom").length > 0) {
+                                $(".layui-table-view  #TB_DTFrom").val(ur.DTFrom);
+                                $(".layui-table-view  #TB_DTTo").val(ur.DTTo);
+                            }
+                            //下拉框赋值
+                            if (ur.Vals != "") {
+                                var vals = ur.Vals.split('@');
+
+                                $.each(vals, function (i, item) {
+                                    if (item != "") {
+                                        var objId = "DDL_" + item.split('=')[0]
+                                        var select = "select[id=" + objId + "]";
+                                        $($(".layui-table-view").find(select)[0]).val(item.split('=')[1]);
+                                        var select1 = "dd[lay-value='" + item.split('=')[1] + "']";
+                                        $(".layui-table-view").find(select).siblings("div.layui-form-select").find('dl').find(select1).click();
+
+
+                                    }
+
+                                    // $("#DDL_" + item.split('=')[0]).find("option[value=" + item.split('=')[1] + "]").prop("selected", true);
+
+                                });
+                            }
+
+                        }
+
+
+                    });
+
+                    tableIn.reload({ data: data });
+                    if (isNextPage == false) {
+                        ur = new Entity("BP.Sys.UserRegedit");
+                        ur.MyPK = webUser.No + rptNo + "_SearchAttrs";
+                        ur.RetrieveFromDBSources();
+                        renderLaypage();
+                    }
+                   
+
+                    return;
+                }
+                return data;
+            }
+            /**
+             * 查询数据
+             */
+
+            function FlowSearch_Init() {
+
+                var data = FlowSearch_Data(false);
+
+
+
+                table.render({
+                    elem: '#searchTable'
+                    , data: data
+                    , cellMinWidth: 80
+                    , toolbar: '#toolBar' //开启头部工具栏，并为其绑定左侧模板
+                    , title: '用户数据表'
+                    , cols: [columns]
+                    , page: false
+                    , height: $(document).height() - $("#toolBar").height() - 100
+
+
+                });
+
+                //监听排序信息
+                table.on('sort(searchTable)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                    ur.OrderBy = obj.field; //当前排序的字段名
+                    ur.OrderWay = obj.type; //当前排序类型：desc（降序）、asc（升序）、null（空对象，默认排序）
+                    firstLoadTable = false;
+                    pageIdx = 1;
+                    FlowSearch_Data(false);
+
+                });
+
+
+                //头工具栏事件
+                table.on('toolbar(searchTable)', function (obj) {
+                    switch (obj.event) {
+                        case 'LAYTABLE_COLS': //筛选列
+                            $(".layui-table-tool-panel li").find($("input[name='Title']")).attr("disabled", "disabled");
+                            $(".layui-table-tool-panel").find("div").bind("click", function (event) {
+                                var inputCheck = $(this).prev();
+                                var name = inputCheck.attr("name");
+                                var isCheck = $(this).hasClass("layui-form-checked");
+                                var selectFields = ur.GetPara("SelectFields");
+                                if (isCheck == false)
+                                    selectFields = selectFields.replace(name + ",", "");
+                                else
+                                    selectFields = selectFields + name + ",";
+                                ur.SetPara("SelectFields", selectFields);
+                                ur.Update();
+                            });
+                            break;
+                        case 'FlowSearch_Data'://查询
+                            pageIdx = 1;
+                            FlowSearch_Data(false);
+                            break;
+                        case 'SelectChange':
+
+                            break;
+                    };
+                });
+
+                //双击一行的事件
+                table.on('rowDouble(searchTable)', function (obj) {
+                    var data = obj.data;
+                    var width = $(document).width() * 2 / 3;
+                    // var url = '/WF/MyView.htm?WorkID=' + data.OID + '&FK_Flow=' + GetQueryString("FK_Flow") + '&FK_Node=' + data.FlowEndNode + '&FID=' + (data.FID ? data.FID : 0) + '&t=' + Math.random();
+                    top.layui.admin.popupRight({
+                        id: 'Lay_Flow'
+                        , area: ["300px", '100%']
+
+                        , success: function () {
+                            top.layui.view(this.id).render('system/comm', {
+                                url: '/WF/MyView.htm',
+                                WorkID: data.OID,
+                                FK_Flow: GetQueryString("FK_Flow"),
+                                FK_Node: data.FlowEndNode,
+                                FID: data.FID ? data.FID : 0
+
+                            });
+                        }
+                    });
+                    //layer.open({
+                    //    type: 2,
+                    //    title: "流程表单信息",
+                    //    shade: false,
+                    //    maxmin: true,
+                    //    area: ['80%', '90%'],
+                    //    content: url
+                    //});
+
+
+                });
+                ur.RetrieveFromDBSources();
+            }
+        //
+            function renderLaypage() {
+                //执行一个laypage实例
+                laypage.render({
+                    elem: 'page' //注意，这里的 page 是 ID，不用加 # 号
+                    , count: ur.GetPara("Count") //数据总数，从服务端得到
+                    , limits: [5, 10, 15, 20, 25]
+                    , layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+                    , jump: function (obj, first) {
+
+                        if (!first) {
+                            pageIdx = obj.curr;
+                            pageSize = obj.limit;
+                            //刷新数据
+                            FlowSearch_Data(true);
+                        }
+                        if (firstLoadTable = true)
+                            firstLoadTable = false;
+
+                    }
+                });
+                $('#page').css('text-align', 'right');  // 分页右对齐
+                $('.layui-table-page').css('text-align', 'right');  //
+              
+            }
+        })
+       
+        /**
+         * 查询条件
+         */
+        var searchAttrs;
+        function InitToolBar() {
+            //创建处理器.
+            var handler = new HttpHandler("BP.Cloud.HttpHandler.App_OneFlow_RptSearch");
+            handler.AddUrlData();  //增加参数.
+
+            //获取查询条件
+            var data = handler.DoMethodReturnString("FlowSearch_InitToolBar");
+            if (data.indexOf("err@") != -1) {
+                layer.alert(data);
+                console.log(data);
+                return;
+            }
+            data = JSON.parse(data);
+            //绑定外键枚举查询条件.
+            searchAttrs = data["Attrs"];
+
+            //格式为: @WFSta=0@FK_Dept=02
+            var mapBase = data.Sys_MapData[0];
+
+            //用户查询注册信息
+            ur = new Entity("BP.Sys.UserRegedit");
+            ur.MyPK = webUser.No + rptNo + "_SearchAttrs";
+            ur.RetrieveFromDBSources();
+
+
+            var _html = "<form class='layui-form'>";
+
+            //指定的文本字段查询
+            var StringSearchKeys = mapBase.StringSearchKeys;
+            if (StringSearchKeys == null || StringSearchKeys == undefined || StringSearchKeys == "") {
+                if (mapBase.IsSearchKey == "1") {
+                    _html += '<div class="layui-inline">';
+                    _html += '<label class="layui-form-label">关键字:</label>';
+                    _html += '<div class="layui-input-inline" style="width:120px">';
+                    _html += '<input type="text" id="TB_Key" name="TB_Key" value="' + ur.SearchKey + '"  autocomplete="off" class="layui-input" />';
+                    _html += '</div>';
+                    _html += '</div>';
+                }
+            } else {
+                //按照指定的string字段查询.
+                var strs = StringSearchKeys.split("*");
+                var fieldV = ""
+                $.each(strs, function (i, str) {
+                    if (str != "") {
+                        var item = str.split(",");
+                        fieldV = ur.GetPara(item[0]);
+                        if (fieldV == null || fieldV == undefined)
+                            fieldV = "";
+                        if (item.length == 2) {
+
+                            fields.push(item[0]);
+                            _html += '<div class="layui-inline">';
+                            _html += '<label class="layui-form-label">' + item[1] + ':</label>';
+                            _html += '<div class="layui-input-inline">';
+                            _html += '<input type="text" id="TB_' + item[0] + '" name="TB_' + item[0] + '" value="' + fieldV + '"  autocomplete="off" class="layui-input" />';
+                            _html += '</div>';
+                            _html += '</div>';
+
+
+                        }
+                    }
+                });
+            }
+
+
+            if (mapBase.DTSearchWay && mapBase.DTSearchWay != "0") {
+                _html += '<div class="layui-inline">';
+                _html += '<label class="layui-form-label">' + mapBase.DTSearchLable + ':</label>';
+                var onfocus = "onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\"";
+                if (mapBase.DTSearchWay != "1")
+                    onfocus = " onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})\"";
+
+                _html += '<div class="layui-input-inline" style="width:145px">';
+                _html += '<input type="text" id="TB_DTFrom" name="TB_DTFrom" value="' + ur.DTFrom + '"' + onfocus + '   class="layui-input" />';
+                _html += '</div>';
+                _html += '</div>';
+                _html += '<div class="layui-inline" ">';
+                _html += '<label class="layui-form-label" style="width:30px">到:</label>';
+                _html += '<div class="layui-input-inline" style="width:145px">';
+                _html += '<input type="text" id="TB_DTTo" name="TB_DTTo" value="' + ur.DTTo + '"' + onfocus + ' class="layui-input" />';
+                _html += '</div>';
+                _html += '</div>';
+            }
+            
+            //$("#toolBar").html(_html);
+
+            //外键、枚举、外部数据源
+            var json = AtParaToJson(ur.Vals);
+            for (var i = 0; i < searchAttrs.length; i++) {
+
+                var attr = searchAttrs[i];
+                var selectVal = json[attr.Field];
+                if (selectVal == undefined || selectVal == "")
+                    selectVal = "all";
+
+                _html += '<div class="layui-inline ">';
+                _html += '<label class="layui-form-label">' + attr.Name + ':</label>';
+                _html += '<div class="layui-input-inline" style="width:145px">';
+                _html += '<select name="DDL_' + attr.Field + '" ID="DDL_' + attr.Field + '" lay-filter="' + attr.Field + 'M">' + InitDDLOperation(data, attr, "all", selectVal) + '</select>';
+
+                _html += '</div>';
+                _html += '</div>';
+
+                searchFields.push({ type: "select", id: attr.Field });
+
+                //$("#toolBar").append(_html);
+                
+                //$("#DDL_" + attr.Field).val(selectVal);
+            }
+
+            //增加操作按钮
+            //_html = "";
+            _html += '<div class="layui-inline">';
+            _html += '<div class="layui-input-inline">';
+            _html += '<input type="button" class="layui-btn" id="searchBtn" lay-event="FlowSearch_Data"  style="margin-left: 15px" value="查询"/>';
+            _html += '<input type="button" class="layui-btn" id="searchBtn" onclick="FlowSearch_Set()"  style="margin-left: 15px" value="设置"/>';
+
+            //_html += '<input type="button" class="layui-btn layui-btn-primary" onclick="Exp()" value="导出全部"/>';
+
+            _html += '</div>';
+            _html += "</form>";
+            $(".layui-card").append('<script type="text/html" id="toolBar">' + _html );
+            //$("#toolBar").append(_html);
+            var json = AtParaToJson(ur.Vals);
+            for (var i = 0; i < searchAttrs.length; i++) {
+                var attr = searchAttrs[i];
+                var selectVal = json[attr.Field];
+                if (selectVal == undefined || selectVal == "")
+                    selectVal = "all";
+                $("#DDL_" + attr.Field).val(selectVal);
+                   
+            }
+             
+                
+               
+                
+            
+           
+        }
+
+
+        /**
+         * 设置显示的列
+         * @return Cols的集合
+         */
+        var columns = new Array();;
+        function Search_MapAttr() {
+            var handler = new HttpHandler("BP.Cloud.HttpHandler.App_OneFlow_RptSearch");
+            handler.AddUrlData();  //增加参数.
+
+            //获取查询条件
+            var data = handler.DoMethodReturnString("FlowSearch_MapAttrs");
+            if (data.indexOf("err@") != -1) {
+                layer.alert(data);
+                console.log(data);
+                return;
+            }
+            data = JSON.parse(data);
+
+            //系统字段
+            var mapAttrOfSys = data["Sys_MapAttrOfSystem"];
+            //流程所有字段
+            var mapAttrOfAll = data["Sys_MapAttr"];
+
+            //系统字段字符串
+            var sysFields = data["Sys_Fields"][0].Field;
+
+            //表单字段
+            var mapAttrOfFrm = $.grep(mapAttrOfAll, function (item) {
+                if (item.UIContralType != 0 && item.UIContralType != 1 && item.UIContralType != 2 && item.UIContralType != 3)
+                    return true;
+                if (sysFields.indexOf("," + item.KeyOfEn + ",") != -1)
+                    return true;
+
+                return false;
+
+            }, true);
+
+            //用户选择显示的字段
+            var selectFields = ur.GetPara("SelectFields");
+
+            //生成表格的Cols数组
+            columns.push({
+                title: '序',
+                field: '',
+                align: 'center',
+                width: 50,
+                templet: function (d) {
+                    return pageSize * (pageIdx - 1) + d.LAY_TABLE_INDEX + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
+
+                }
+
+            });
+            var keyOfEn = "";
+            for (var i = 0; i < mapAttrOfSys.length; i++) {
+                keyOfEn = mapAttrOfSys[i].KeyOfEn;
+                if (keyOfEn == "WFState")
+                    continue;
+                if (selectFields.indexOf("," + keyOfEn + ",") != -1 || selectFields.indexOf("," + keyOfEn + "T" + ",") != -1 || selectFields.indexOf("," + keyOfEn + "Text" + ",") != -1)
+                    columns.push(GenerColumn(mapAttrOfSys[i], false));
+                else
+                    columns.push(GenerColumn(mapAttrOfSys[i], true));
+
+                
+            }
+
+          
+            for (var i = 0; i < mapAttrOfFrm.length; i++) {
+                keyOfEn = mapAttrOfFrm[i].KeyOfEn;
+                if (selectFields.indexOf("," + keyOfEn + ",") != -1 || selectFields.indexOf("," + keyOfEn + "T" + ",") != -1 || selectFields.indexOf("," + keyOfEn + "Text" + ",") != -1)
+                    columns.push(GenerColumn(mapAttrOfFrm[i], false));
+                else
+                    columns.push(GenerColumn(mapAttrOfFrm[i], true));
+            }
+            //流程状态
+            columns.push({
+                field: "WFState",
+                title: "状态",
+                minWidth: "100",
+                sort: true,
+                templet: function (data) {
+                    return data["WFStateText"];
+                }
+            });
+        }
+
+       
+        function FlowSearch_Set() {
+            top.layui.admin.popupRight({
+                id: 'Lay_Flow_Set'
+                , area: ['40%', '100%']
+                , success: function () {
+                    top.layui.view(this.id).render('system/comm', {
+                        url: '/App/OneFlow/RptSearchSet.htm',
+                        FK_Flow: param.FK_Flow,
+                        SearchType:param.SearchType
+                    });
+                }
+                , end: function () {
+                    window.location.reload();
+                }
+            });
+        }
+
+        /**
+       * 根据字段属性生成列属性
+       * @param attr
+       */
+        function GenerColumn(attr, isHide) {
+            var field = attr.KeyOfEn;
+            var title = attr.Name;
+            var width = attr.Width;
+
+            if (field == "Title") {
+                width = 230;
+            }
+
+            if (attr.UIContralType == 1) {
+                if (width == null || width == "" || width == undefined)
+                    width = 180;
+
+                return {
+                    field: field, //字段名
+                    title: title, //标题名称
+                    minWidth: width, //宽度
+                    hide: isHide, //是否隐藏
+                    sort: true,
+                    templet: function (data) {
+                        var val = data[this.field + "Text"];
+                        if (val == null && val == undefined)
+                            val = data[this.field + "T"];
+                        if (val == null && val == undefined)
+                            val = data[this.field];
+                        return val;
+                    }
+                };
+            }
+            if (attr.UIContralType == 2) {
+                if (width == null || width == "" || width == undefined) {
+                    width = 60;
+                }
+
+                return {
+                    field: field,
+                    title: title,
+                    minWidth: width,
+                    hide: isHide, //是否隐藏
+                    sort: true,
+                    templet: function (data) {
+                        if (data[this.field] == "0") return "否";
+                        if (data[this.field] == "1") return "是";
+                    }
+                };
+            }
+            if (width == null || width == "" || width == undefined)
+                width = 100;
+            if (field == "FlowStartRDT")
+                width = 160;
+            return {
+                field: field,
+                title: title,
+                minWidth: width,
+                hide: isHide, //是否隐藏
+                sort: true,
+                templet: function (data) {
+                    if (this.field == "Title") {
+                        return "<a style='color:#1e9fff' href='javaScript:void(0)' onclick='WindowOpen(" + data.OID + "," + data.FlowEndNode+","+data.FID+")'>" + data[this.field] + "</a>";
+                    }
+                    return data[this.field];
+                }
+
+            };
+        }
+
+        function WindowOpen(workid,fk_node,fid) {
+            var data = obj.data;
+            var width = $(document).width() * 2 / 3;
+            // var url = '/WF/MyView.htm?WorkID=' + data.OID + '&FK_Flow=' + GetQueryString("FK_Flow") + '&FK_Node=' + data.FlowEndNode + '&FID=' + (data.FID ? data.FID : 0) + '&t=' + Math.random();
+            top.layui.admin.popupRight({
+                id: 'Lay_Flow'
+                , area: [width + "px", '100%']
+
+                , success: function () {
+                    top.layui.view(this.id).render('system/comm', {
+                        url: '/WF/MyView.htm',
+                        WorkID: workid,
+                        FK_Flow: GetQueryString("FK_Flow"),
+                        FK_Node: fk_node,
+                        FID: fid ? fid : 0
+
+                    });
+                }
+
+            });
+        }
+        //初始化下拉列表框的OPERATION
+        function InitDDLOperation(frmData, mapAttr, defVal,selectVal) {
+
+            var operations = "";
+            operations += "<option value='all' >全部</option>";
+
+            var ens = frmData[mapAttr.Field];
+            if (ens == null) {
+                ens = [{ 'IntKey': 0, 'Lab': '否' }, { 'IntKey': 1, 'Lab': '是' }];
+            }
+            for (var i = 0; i < ens.length; i++) {
+
+                var en = ens[i];
+
+                if (en.No == undefined)
+                    if(en.IntKey == selectVal)
+                        operations += "<option  selected value='" + en.IntKey + "'>" + en.Lab + "</option>";
+                    else
+                        operations += "<option  value='" + en.IntKey + "'>" + en.Lab + "</option>";
+                else
+                    if (en.No == selectVal)
+                        operations += "<option  selected value='" + en.No + "'>" + en.Name + "</option>";
+                    else
+                        operations += "<option value='" + en.No + "'>" + en.Name + "</option>";
+            }
+            return operations;
+        }
+
+
+
+        function Reset() {
+            if (md.IsSearchKey) {
+                $("#tb_key").textbox("clear");
+            }
+
+            if (md.DTSearchWay != 0) {
+                $("#tb_dtFrom").datebox("clear");
+                $("#tb_dtTo").datebox("clear");
+            }
+
+            $.each(FilterCtrls, function () {
+                switch (this.type) {
+                    case "date":
+                        $("#" + this.id).datebox("clear");
+                        break;
+                    case "datetime":
+                        $("#" + this.id).datetimebox("clear");
+                        break;
+                    case "text":
+                        $("#" + this.id).textbox("clear");
+                        break;
+                    case "combo":
+                    case "combotree":
+                        $("#" + this.id).combobox("setValue", "all");
+                        break;
+                    case "checkbox":
+                        $("#" + this.id)[0].checked = false;
+                        break;
+                }
+            });
+        }
+
+      
+    </script>
+
+</head>
+<body style="background-color:white">
+    <div class="layui-card" style="margin:10px">
+        <!--<form class="layui-form">
+        <div id="toolBar"></div>
+    </form>-->
+
+        <!--<script type="text/html" id="toolBar">
+            
+        </script>-->
+       
+        <table class="layui-hide" id="searchTable" lay-filter="searchTable"></table>
+        <div id="page"></div>
+
+    </div>
+
+</body>
+
+</html>

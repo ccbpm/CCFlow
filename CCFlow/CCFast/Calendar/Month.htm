@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>日历</title>
+
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="/WF/Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/WF/Portal/layui/layui.js"></script>
+    <script src="/WF/Scripts/layui/LayuiDialog.js"></script>
+    <link href='fullcalendar/lib/main.css' rel='stylesheet' />
+    <script src='fullcalendar/lib/main.js'></script>
+    <script src='fullcalendar/lib/locales-all.js'></script>
+    <style>
+        body {
+            background: #fff
+        }
+    </style>
+    <script>
+        function get_height() {
+            var sHeight = $(window).height();
+            sHeight = sHeight - 20
+            return sHeight;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+
+            var ens = new Entities("BP.CCFast.");
+
+
+            var calendarEl = document.getElementById('calendar');
+
+            var _this = this
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,listMonth'
+                },
+                views: 'month',
+                //timeZone: 'Asia/Shanghai',
+                height: get_height(),
+                timeZone: 'local',
+                themeSystem:'cosmo',
+                //showNonCurrentDates:false,
+                initialDate: new Date,
+                locale: 'zh-cn',
+                displayEventEnd: true, //所有视图显示结束时间
+
+                eventTimeFormat: { // like '14:30:00'
+
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    meridiem: false,
+                    hour12: true //设置时间为24小时
+
+                },
+           
+                navLinks: true, // can click day/week names to navigate views
+                selectable: true,
+                businessHours: true,
+                selectMirror: true,
+                dateClick: function (arg) {
+                    console.log(arg);
+                    var url = 'ScheduleCard.htm?startStr=' + arg.dateStr
+                    OpenLayuiDialog(url, "", 800, false, false, true, false);
+                    calendar.unselect()
+                },
+                eventClick: function (event, element) {
+                    element.bind('dblclick', function () {
+                        console.log('dbl clicked');
+                    });
+                    element.draggable = false;
+                    event.editable = false;
+
+                },
+                eventClick: function (arg) {
+                    console.log(arg)
+                    var mypk = arg.event.groupId                    
+                    var url = 'ScheduleCardEdit.htm?mypk=' + mypk
+                    OpenLayuiDialog(url, "", 800, false, false, true, false);
+                    /*if (confirm('您确定想删除这个吗?')) {                      
+                        var en = new Entity('BP.CCFast.Schedule', moduleNo);
+                        en.Delete();
+                        arg.event.remove()
+                    }*/
+                },
+                eventDrop: function (info) {
+                    var a = info.event.startStr;
+                    var mypk = info.event.groupId;
+                    var startDate = a.split('T');
+                    console.log(info.event);
+                    if (startDate[0]) {
+
+                    var en = new Entity('BP.CCFast.Schedule', mypk);
+                    en.DTStart = startDate[0];
+                    en.Update();
+                    }
+                   // alert(info.event.title + " was dropped on " + info.event.start.toISOString());
+
+                    /*if (!confirm("Are you sure about this change?")) {
+                        info.revert();
+                    }*/
+                },
+                editable: true,
+                dayMaxEvents: true, // allow "more" link when too many events
+                //events: cdata()
+                events: function (info, successCallback, failureCallback) {
+                    successCallback(cdata(info))
+                },
+
+            });
+
+            calendar.render();
+        });
+        function cdata(info) {
+           
+            var a = info.startStr
+            var b = info.endStr
+            var startDate = a.split('T');
+            var endDate = b.split('T'); 
+            var ens = new Entities("BP.CCFast.Schedules");
+            ens = ens.DoMethodReturnString("DTFromTo", startDate[0], endDate[0]);
+            ens = JSON.parse(ens);
+            //ens = ens.DoMethodReturnString("DTFromTo", "xxxx", "xxx");
+
+            //ens.Retrieve();
+            //  ens = ens.TurnToArry();
+           
+           
+          
+            var data = []
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+           
+             
+                
+               /* if (en.DTStart == 'undefined') {
+                    en.DTStart = '2021-08-31'
+                }*/
+                var st = en.DTStart + ' ' + en.TimeStart
+                var ed = en.DTEnd + ' ' + en.TimeEnd
+               
+                data[i] = {
+                    groupId: en.MyPK,
+                    title: en.Name,
+                    start: st,
+                    end: ed
+                }
+            }
+             console.log(data);
+            return data
+        }
+    </script>
+</head>
+<body>
+    <div id='calendar'></div>
+
+</body>
+</html>

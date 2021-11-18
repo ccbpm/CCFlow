@@ -1,0 +1,598 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主页</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <script src="../../WF/Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+
+    <link href="../layuiadmin/layui/css/layui.css" rel="stylesheet" />
+    <link href="../layuiadmin/style/admin.css" rel="stylesheet" />
+    <script src="../layuiadmin/layui/layui.js"></script>
+
+    <link href="../layuiadmin/layui/css/modules/layer/default/layer.css" rel="stylesheet" />
+    <script src="../layuiadmin/layui/lay/modules/layer.js"></script>
+
+    <!-- 引用通用的js文件. -->
+    <script src="/WF/Scripts/config.js?v=1.0" type="text/javascript"></script>
+    <script src="/WF/Comm/Gener.js?v=1.0" type="text/javascript"></script>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/echartsjs/echarts.min.js" type="text/javascript"></script>
+    <style type="text/css">
+        .au-but {
+            font-size: 0.6rem;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            border: 1px solid #E59C26;
+            padding: 0 0.25rem;
+            color: #E59C26;
+            border-radius: 0.125rem;
+        }
+
+        .but-color1 {
+            border-color: #0F81EC;
+            color: #0F81EC;
+        }
+
+        .but-color2 {
+            border-color: #FF4E00;
+            color: #FF4E00;
+        }
+
+        .but-color3 {
+            border-color: #3c763d;
+            color: #3c763d;
+        }
+
+        .layuiadmin-card-status dd div a {
+            color: #2f4050 !important;
+        }
+    </style>
+    <script type="text/javascript">
+        var fk_flow = GetQueryString("FK_Flow");
+        $(function () {
+            //数据分析-总的概况
+            GetGenerWorksByDept();
+
+            //分析项
+            GetAnalyseGroupByRpt();
+
+            //按月份/按人员统计
+            FlowAnalyse_DataSet();
+
+        });
+        /**
+         * 获取本部门的数据统计
+         */
+        function GetGenerWorksByDept() {
+            var handler = new HttpHandler("BP.Cloud.HttpHandler.App_OneFlow");
+            handler.AddPara("FK_Flow", fk_flow);
+            var data = handler.DoMethodReturnString("DataPanelOrg_GetGenerWorksByFlowNo");
+            if (data.indexOf("err@") != -1) {
+                layer.alert(data);
+                console.log(data);
+                return;
+            }
+            data = JSON.parse(data);
+            //部门
+            $("#GWF_Counts").html(data.GWF_Counts);
+            $("#GWF_RuningCounts").html(data.GWF_RuningCounts == undefined ? 0 : data.GWF_RuningCounts);
+            $("#GWF_CompleteCounts").html(data.GWF_CompleteCounts == undefined ? 0 : data.GWF_CompleteCounts);
+            $("#GWF_ReturnCounts").html(data.GWF_ReturnCounts == undefined ? 0 : data.GWF_ReturnCounts);
+            $("#GWF_OverCounts").html(data.GWF_OverCounts == undefined ? 0 : data.GWF_OverCounts);
+            $("#GWF_DeleteCounts").html(data.GWF_DeleteCounts == undefined ? 0 : data.GWF_DeleteCounts);
+        }
+
+        /**
+         *
+         * 分析项的解析
+         */
+        function GetAnalyseGroupByRpt() {
+            var handler = new HttpHandler("BP.Cloud.HttpHandler.App_OneFlow");
+            handler.AddPara("FK_Flow", fk_flow);
+            var data = handler.DoMethodReturnString("DataPanelDept_GetAnalyseGroupByRpt");
+            if (data.indexOf("err@") != -1) {
+                layer.alert(data);
+                console.log(data);
+                return;
+            }
+            data = JSON.parse(data);
+            var _html = "";
+            $.each(data, function (idx, item) {
+                if (item.KeyOfEn != "WorkID" && item.KeyOfEn != "OID" && item.KeyOfEn != "PWorkID"
+                    && item.KeyOfEn != "FID" && item.KeyOfEn != "PNodeID" && item.KeyOfEn != "FlowEndNode") {
+                    _html += '<li>';
+                    _html += '<input type="checkbox" name="' + item.KeyOfEn + '" id="' + item.KeyOfEn + '" checked=""  style="display:none">';
+                    _html += '<div class="layui-unselect layui-form-checkbox" lay-skin="primary" onclick="CheckedState(\'' + item.KeyOfEn + '\',this)">';
+                    _html += '<span>' + item.Name + '</span>';
+                    _html += '<i class="layui-icon layui-icon-ok"></i>';
+                    _html += '</div>';
+                    _html += '</li>';
+                }
+
+            });
+            $("#flowByNYPanel").html(_html);
+
+        }
+
+        function ShowPanel(panelId) {
+
+            $("#" + panelId).show();
+        }
+
+        function hidePanel() {
+            $(".layui-table-tool-panel").hide();
+        }
+        function CheckedState(key, obj) {
+            if ($(obj).hasClass("layui-form-checked") == true) {
+                $(obj).removeClass("layui-form-checked");
+                $("#" + key).removeAttr("checked");
+            } else {
+                $(obj).addClass("layui-form-checked");
+                $("#" + key).attr("checked", "checked");
+            }
+        }
+
+        /**
+         * 流程数据分析
+         */
+        var flowData;
+        function FlowAnalyse_DataSet() {
+            var handler = new HttpHandler("BP.Cloud.HttpHandler.App_OneFlow");
+            handler.AddPara("FK_Flow", fk_flow);
+            var data = handler.DoMethodReturnString("DataPanelOrg_GetAnalyseByFlowNo_DataSet");
+            if (data.indexOf("err@") != -1) {
+                layer.alert(data);
+                console.log(data);
+                return;
+            }
+            flowData = JSON.parse(data);
+            var _html = "";
+
+            //按月份分析 发起的数量，完成的数量
+            queryFlowAnalyse("FlowByNY", "流程-月", true, false, false);
+
+            //按人员分析
+            queryFlowAnalyse("FlowByDept", "流程-部门", false, false, true);
+        }
+
+
+        function queryFlowAnalyse(flowType, title, isLineShow, isPieShow, isBarShow) {
+            var Flow_X = [];
+            var Pie_Flow_X = [];
+            if (flowType == "FlowByNY") {
+                if (isPieShow == true)
+                    Pie_Flow_X = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+
+                Flow_X = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+            }
+            if (flowType == "FlowByDept")
+                $.each(flowData.FlowStartByDept, function (i, item) {
+                    Flow_X[i] = item.DeptName;
+                });
+
+            var startFlow = [];
+            var startFlowPie = [];
+            var completeFlow = [];
+            if (flowType == "FlowByNY") {
+                for (var i = 0; i < Flow_X.length; i++) {
+                    var isHave = false;
+                    for (var k = 0; k < flowData.FlowStartByNY.length; k++) {
+                        if (Flow_X[i] == flowData.FlowStartByNY[k].FK_NY) {
+                            isHave = true;
+                            startFlow[i] = flowData.FlowStartByNY[k].Num;
+                            startFlowPie[i] = { name: Pie_Flow_X[i], value: flowData.FlowStartByNY[k].Num };
+                            break;
+                        }
+                    }
+                    if (isHave == false)
+                        startFlow[i] = 0;
+                    isHave = false;
+                    for (var k = 0; k < flowData.FlowCompleteByNY.length; k++) {
+                        if (Flow_X[i] == flowData.FlowCompleteByNY[k].FK_NY) {
+                            isHave = true;
+                            completeFlow[i] = flowData.FlowCompleteByNY[k].Num;
+                            break;
+                        }
+                    }
+                    if (isHave == false)
+                        completeFlow[i] = 0;
+
+                }
+                if (isPieShow == true)
+                    Flow_X = Pie_Flow_X;
+
+            }
+            if (flowType == "FlowByDept") {
+
+                for (var k = 0; k < flowData.FlowStartByDept.length; k++) {
+                    startFlow[k] = flowData.FlowStartByDept[k].Num;
+                    startFlowPie[k] = { name: Flow_X[k], value: flowData.FlowStartByDept[k].Num };
+
+                }
+
+                for (var k = 0; k < flowData.FlowCompleteByDept.length; k++) {
+                    completeFlow[k] = flowData.FlowCompleteByDept[k].Num;
+
+                }
+
+
+            }
+
+            //$.each(flowData.FlowStartByNY, function (i, item) {
+            //    startFlow[i] = item.Num;
+            //});
+            //$.each(flowData.FlowCompleteByNY, function (i, item) {
+            //    completeFlow[i] = item.Num;
+            //});
+
+            /*********************************************折线图*****************************************************/
+            // 基于准备好的dom，初始化echarts实例
+            if (isLineShow) {
+                var myChart = echarts.init(document.getElementById(flowType + '_Line'));
+
+                // 指定图表的配置项和数据
+                var option = {
+                    grid: {
+                        top: '5%',
+                        right: '1%',
+                        left: '1%',
+                        bottom: '10%',
+                        containLabel: true
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: Flow_X
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        name: '发起流程数',
+                        data: startFlow,
+                        type: 'line',
+                        smooth: true,
+                        symbol: 'emptydiamond',
+                        itemStyle: {
+                            normal: {
+                                color: '#8cd5c2', //改变折线点的颜色
+                                lineStyle: {
+                                    color: '#8cd5c2' //改变折线颜色
+                                }
+                            }
+                        },
+                        areaStyle: {
+                            normal: {}
+                        },
+                    }, {
+                        name: '完成流程数',
+                        data: completeFlow,
+                        type: 'line',
+                        smooth: true,
+                        symbol: 'emptydiamond',
+
+                        areaStyle: {
+                            normal: {}
+                        },
+                    }]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            }
+
+            /*********************************************饼状图*****************************************************/
+            // 基于准备好的dom，初始化echarts实例
+            if (isPieShow) {
+                var myChart = echarts.init(document.getElementById(flowType + '_Pie'));
+
+                // 指定图表的配置项和数据
+                var option = {
+
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{a} <br/>{b} : {c} ({d}%)'
+                    },
+                    legend: {
+                        // orient 设置布局方式，默认水平布局，可选值：'horizontal'（水平） ¦ 'vertical'（垂直）
+                        orient: 'vertical',
+                        // x 设置水平安放位置，默认全图居中，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
+                        x: 'left',
+                        // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
+                        y: 'center',
+                        //itemWidth: 24,   // 设置图例图形的宽
+                        //itemHeight: 18,  // 设置图例图形的高
+                        //textStyle: {
+                        //    color: '#666'  // 图例文字颜色
+                        //},
+                        //// itemGap设置各个item之间的间隔，单位px，默认为10，横向布局时为水平间隔，纵向布局时为纵向间隔
+                        //itemGap: 10,
+                        //backgroundColor: '#f8f8f8',  // 设置整个图例区域背景颜色
+                        data: Flow_X
+                    },
+                    series: [{
+                        type: 'pie',
+                        name: '',
+                        radius: '60%',
+                        center: ['60%', '50%'],
+                        data: startFlowPie,
+                        //itemStyle: {
+                        //    // emphasis：英文意思是 强调;着重;（轮廓、图形等的）鲜明;突出，重读
+                        //    // emphasis：设置鼠标放到哪一块扇形上面的时候，扇形样式、阴影
+                        //    emphasis: {
+                        //        shadowBlur: 10,
+                        //        shadowOffsetX: 0,
+                        //        shadowColor: 'rgba(30, 144, 255，0.5)'
+                        //    }
+                        //},
+
+                    }]
+                };
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            }
+
+            /*********************************************柱状图*****************************************************/
+            // 基于准备好的dom，初始化echarts实例
+            if (isBarShow) {
+                var myChart = echarts.init(document.getElementById(flowType + '_Bar'));
+                ////设计显示的颜色
+                //var colorList = [];
+                //for (var i = 0; i < Flow_X.length; i++) {
+                //    if (i % 3 == 0)
+                //        colorList[i] = '#ff4844';
+                //    if (i % 3 == 1)
+                //        colorList[i] = '#9ac3e5';
+                //    if (i % 3 == 2)
+                //        colorList[i] = '#66ac52';
+                //}
+                // 指定图表的配置项和数据
+                var option = {
+                    grid: {
+                        top: '5%',
+                        right: '1%',
+                        left: '1%',
+                        bottom: '10%',
+                        containLabel: true
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data: ['流程个数']
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: Flow_X
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        name: '发起数量',
+                        data: startFlow,
+                        type: 'bar',
+                        smooth: true,
+                        itemStyle: {
+                            normal: {
+                                color: 'red'
+                            }
+                        }
+                    }, {
+                        name: '完成数量',
+                        data: completeFlow,
+                        type: 'bar',
+                        smooth: true,
+                        itemStyle: {
+                            normal: {
+                                color: 'blue'
+                            }
+                        }
+                    }]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            }
+
+        }
+
+        function ChangeShowDiv(flowType, chartType, obj) {
+            $(obj).addClass("layui-this");
+            if (chartType == "Line") {
+                $("#" + flowType + "_Pie").removeClass("layui-this");
+                $("#" + flowType + "_Bar").removeClass("layui-this");
+                $("#" + flowType + "_Line").addClass("layui-this");
+                $("#" + flowType + "_Pie_i").removeClass("layui-this");
+                $("#" + flowType + "_Bar_i").removeClass("layui-this");
+                queryFlowAnalyse(flowType, "", true, false, false);
+            }
+            if (chartType == "Pie") {
+                $("#" + flowType + "_Pie").addClass("layui-this");
+                $("#" + flowType + "_Bar").removeClass("layui-this");
+                $("#" + flowType + "_Line").removeClass("layui-this");
+                $("#" + flowType + "_Line_i").removeClass("layui-this");
+                $("#" + flowType + "_Bar_i").removeClass("layui-this");
+                queryFlowAnalyse(flowType, "", false, true, false);
+            }
+            if (chartType == "Bar") {
+                $("#" + flowType + "_Pie").removeClass("layui-this");
+                $("#" + flowType + "_Bar").addClass("layui-this");
+                $("#" + flowType + "_Line").removeClass("layui-this");
+                $("#" + flowType + "_Pie_i").removeClass("layui-this");
+                $("#" + flowType + "_Line_i").removeClass("layui-this");
+                queryFlowAnalyse(flowType, "", false, false, true);
+            }
+
+
+        }
+        //已知URL,在右侧打开页面
+        function OpenWindowRight(url, title) {
+            if (top.layui.index) {
+                top.layui.index.openTabsPage(url, title)
+            } else {
+                window.open(url)
+            }
+        }
+    </script>
+</head>
+<body layadmin-themealias="coffee">
+
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-md12">
+                        <div class="layui-card">
+                            <div class="layui-card-header">数据统计（本流程,本组织）<font color="red">只能显示不能查看本组织数据</font></div>
+                            <div class="layui-card-body">
+
+                                <div class="layui-carousel layadmin-carousel layadmin-backlog" lay-anim="" lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 280px;">
+                                    <div carousel-item="">
+                                        <ul class="layui-row layui-col-space10 layui-this">
+                                            <li class="layui-col-xs4">
+                                                <a href="javascript:void(0);" class="layadmin-backlog-body">
+                                                    <h3>总数</h3>
+                                                    <p><cite id="GWF_Counts">66</cite></p>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs4">
+                                                <a href="javascript:void(0);" class="layadmin-backlog-body">
+                                                    <h3>运行中</h3>
+                                                    <p><cite id="GWF_RuningCounts">12</cite></p>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs4">
+                                                <a href="javascript:void(0);" class="layadmin-backlog-body">
+                                                    <h3>已完成</h3>
+                                                    <p><cite id="GWF_CompleteCounts">99</cite></p>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs4">
+                                                <a href="javascript:void(0);" class="layadmin-backlog-body">
+                                                    <h3>退回</h3>
+                                                    <p><cite id="GWF_ReturnCounts">20</cite></p>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs4">
+                                                <a href="javascript:void(0);" class="layadmin-backlog-body">
+                                                    <h3>逾期</h3>
+                                                    <p><cite id="GWF_OverCounts">20</cite></p>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs4">
+                                                <a href="javascript:void(0);" class="layadmin-backlog-body">
+                                                    <h3>已删除</h3>
+                                                    <p><cite id="GWF_DeleteCounts">20</cite></p>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md12">
+                        <div class="layui-card">
+                            <div class="layui-card-header">流程-按月份统计</div>
+                            <div class="layui-card-body">
+                                <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-dataview" lay-anim="fade" lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 280px;">
+                                    <div carousel-item id="MyJoinlow">
+                                        <div id="FlowByNY_Line" class="layui-this"></div>
+                                        <div id="FlowByNY_Bar"></div>
+                                        <div id="FlowByNY_Pie"></div>
+
+                                    </div>
+                                    <div class="layui-carousel-ind">
+                                        <!--<div class="layui-inline" title="筛选列" onclick="ShowPanel('flowByNYPanel')">
+                                            <i class="layui-icon layui-icon-cols"></i>
+                                            <ul class="layui-table-tool-panel" style="display:none;" id="flowByNYPanel">
+                                                <li>
+                                                    <input type="checkbox" name="id" checked="" title="ID" style="display:none">
+                                                    <div class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary">
+                                                        <span>ID</span>
+                                                        <i class="layui-icon layui-icon-ok"></i>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>-->
+                                        <ul>
+                                            <li class="layui-this" id="FlowByNY_Line_i" onclick="ChangeShowDiv('FlowByNY','Line',this)"></li>
+                                            <li class="" id="FlowByNY_Bar_i" onclick="ChangeShowDiv('FlowByNY','Bar',this)"></li>
+                                            <li class="" id="FlowByNY_Pie_i" onclick="ChangeShowDiv('FlowByNY','Pie',this)"></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-card">
+                            <div class="layui-card-header">流程-按部门统计</div>
+                            <div class="layui-card-body">
+                                <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-dataview">
+                                    <div carousel-item id="FlowByDept">
+                                        <div id="FlowByDept_Bar" class="layui-this"></div>
+                                        <div id="FlowByDept_Line"></div>
+                                        <div id="FlowByDept_Pie"></div>
+
+                                    </div>
+                                    <div class="layui-carousel-ind">
+                                        <ul>
+                                            <li class="layui-this" id="FlowByDept_Bar_i" onclick="ChangeShowDiv('FlowByDept','Bar',this)"></li>
+                                            <li class="" id="FlowByDept_Line_i" onclick="ChangeShowDiv('FlowByDept','Line',this)"></li>
+                                            <li class="" id="FlowByDept_Pie_i" onclick="ChangeShowDiv('FlowByDept','Pie',this)"></li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style type="text/css">
+        .layui-table-tool-panel {
+            position: absolute;
+            top: 29px;
+            left: auto !important;
+            right: -1px !important;
+            min-width: 150px;
+            min-height: 40px;
+            text-align: left;
+            overflow-y: auto;
+            background-color: rgb(255, 255, 255) !important;
+            box-shadow: rgba(0, 0, 0, 0.12) 0px 2px 4px;
+            padding: 5px 0px;
+            border-width: 1px;
+            border-style: solid;
+            border-color: rgb(210, 210, 210);
+            border-image: initial;
+            border-radius: 0px !important;
+        }
+
+            .layui-table-tool-panel li {
+                padding: 0 10px;
+                line-height: 30px;
+                -webkit-transition: .5s all;
+                transition: .5s all;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                width: auto !important;
+                height: auto !important;
+                border-radius: 0px !important;
+                background-color: white !important;
+            }
+    </style>
+
+</body>
+</html>

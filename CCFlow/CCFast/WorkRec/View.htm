@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../WF/Portal/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../WF/Portal/layui/layui.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <script src="../../WF/Portal/js/vue/vue.js" type="text/javascript"></script>
+    <script src="Toolbar.js"></script>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+    <script type="text/javascript">
+
+    </script>
+</head>
+<body>
+
+    <div id="toolbar"> </div>
+
+    <form>
+        <table style="width:90%;">
+            <tr>
+                <td> 日志类型 </td>
+                <td>
+                    <label>
+                        <input type="radio" value="0" id="RB_WorkRecModel_0" name="RB_WorkRecModel" checked="checked" /> 本日日志
+                    </label>
+                    <label>
+                        <input type="radio" value="1" id="RB_WorkRecModel_1" name="RB_WorkRecModel" /> 补充日志
+                    </label>
+                    <label>
+                        <input type="radio" value="2" id="RB_WorkRecModel_2" name="RB_WorkRecModel" /> 加班日志
+                    </label>
+                    <label>
+                        <input type="radio" value="3" id="RB_WorkRecModel_3" name="RB_WorkRecModel" /> 本日请假
+                    </label>
+                </td>
+
+                <td> 日志日期 </td>
+                <td>
+                    <input type="text" value="2021-01-01" id="TB_RiQi" name="TB_RiQi" />
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="1"> 备注 </td>
+                <td colspan="3">
+                    <input type="text" value="" id="TB_Doc1" name="TB_Doc1" />
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="4">
+
+                    <table style="width:90%;">
+                        <tr>
+                            <td>项目 </td>
+                            <td>内容 </td>
+                            <td>小时 </td>
+                            <td>分钟 </td>
+                            <td>结果 </td>
+                        </tr>
+
+                        <tr>
+                            <td>xxx </td>
+                            <td>xx </td>
+                            <td>xx </td>
+                            <td>xx </td>
+                            <td>xx </td>
+                        </tr>
+
+                        <tr>
+                            <td>xxx </td>
+                            <td>xx </td>
+                            <td>xx </td>
+                            <td>xx </td>
+                            <td>xx </td>
+                        </tr>
+
+                        <tr>
+                            <td>xxx </td>
+                            <td>xx </td>
+                            <td>xx </td>
+                            <td>xx </td>
+                            <td>xx </td>
+                        </tr>
+
+                        <tr>
+                            <td>xxx </td>
+                            <td>xx </td>
+                            <td>xx </td>
+                            <td>xx </td>
+                            <td>xx </td>
+                        </tr>
+                    </table>
+
+                </td>
+            </tr>
+        </table>
+        <input type="button" value="提交" onclick="Save();" />
+    </form>
+
+</body>
+</html>

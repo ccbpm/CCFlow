@@ -1,0 +1,185 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <MySystem>
+    <No>ee5c529b-2</No>
+    <Name>学生管理系统-广州</Name>
+    <IsEnable>1</IsEnable>
+    <Icon>icon-briefcase</Icon>
+    <OrgNo />
+    <Idx>0</Idx>
+  </MySystem>
+  <Modules>
+    <No>40bc0bbb-f14f-467c-9efa-78633ac832a7</No>
+    <Name>其他管理</Name>
+    <SystemNo>ee5c529b-2</SystemNo>
+    <SystemNoText>学生管理系统-广州</SystemNoText>
+    <Icon>icon-folder</Icon>
+    <Idx>0</Idx>
+    <IsEnable>1</IsEnable>
+    <OrgNo />
+  </Modules>
+  <Modules>
+    <No>f1e2c3a2-a7c2-4e40-b042-fa338773ce37</No>
+    <Name>学籍管理</Name>
+    <SystemNo>ee5c529b-2</SystemNo>
+    <SystemNoText>学生管理系统-广州</SystemNoText>
+    <Icon>icon-folder</Icon>
+    <Idx>0</Idx>
+    <IsEnable>1</IsEnable>
+    <OrgNo />
+  </Modules>
+  <Menus>
+    <No>04cbe9fa-0a3e-43ba-89bd-e8570f45a196</No>
+    <Name>知识管理</Name>
+    <MenuModel>KnowledgeManagement</MenuModel>
+    <Mark>KnowledgeManagement</Mark>
+    <Tag1 />
+    <FrmID />
+    <FlowNo />
+    <OpenWay>1</OpenWay>
+    <OpenWayText>本窗口</OpenWayText>
+    <UrlExt>/CCFast/KnowledgeManagement/Default.htm</UrlExt>
+    <MobileUrlExt />
+    <IsEnable>1</IsEnable>
+    <Icon>icon-eyeglass</Icon>
+    <SystemNo>ee5c529b-2</SystemNo>
+    <ModuleNo>f1e2c3a2-a7c2-4e40-b042-fa338773ce37</ModuleNo>
+    <ModuleNoText />
+    <ListModel>0</ListModel>
+    <ListModelText>编辑模式</ListModelText>
+    <Idx>1</Idx>
+    <OrgNo />
+  </Menus>
+  <Menus>
+    <No>1a0ad6ed-16e9-41e3-9e2a-53559b555593</No>
+    <Name>任务</Name>
+    <MenuModel>Task</MenuModel>
+    <Mark>Task</Mark>
+    <Tag1 />
+    <FrmID />
+    <FlowNo />
+    <OpenWay>1</OpenWay>
+    <OpenWayText>本窗口</OpenWayText>
+    <UrlExt>/CCFast/Task/Task.htm</UrlExt>
+    <MobileUrlExt />
+    <IsEnable>1</IsEnable>
+    <Icon>icon-note</Icon>
+    <SystemNo>ee5c529b-2</SystemNo>
+    <ModuleNo>f1e2c3a2-a7c2-4e40-b042-fa338773ce37</ModuleNo>
+    <ModuleNoText />
+    <ListModel>0</ListModel>
+    <ListModelText>编辑模式</ListModelText>
+    <Idx>3</Idx>
+    <OrgNo />
+  </Menus>
+  <Menus>
+    <No>38f211b6-9159-488b-975b-d71eb988ec52</No>
+    <Name>统计分析</Name>
+    <MenuModel>Windows</MenuModel>
+    <Mark />
+    <Tag1 />
+    <FrmID />
+    <FlowNo />
+    <OpenWay>1</OpenWay>
+    <OpenWayText>本窗口</OpenWayText>
+    <UrlExt />
+    <MobileUrlExt />
+    <IsEnable>1</IsEnable>
+    <Icon />
+    <SystemNo>ee5c529b-2</SystemNo>
+    <ModuleNo>f1e2c3a2-a7c2-4e40-b042-fa338773ce37</ModuleNo>
+    <ModuleNoText />
+    <ListModel>0</ListModel>
+    <ListModelText>编辑模式</ListModelText>
+    <Idx>5</Idx>
+    <OrgNo />
+  </Menus>
+  <Menus>
+    <No>864975d7-f6bd-4d5e-9fb5-a32b5728b194</No>
+    <Name>学生学籍管理</Name>
+    <MenuModel>Dict</MenuModel>
+    <Mark />
+    <Tag1 />
+    <FrmID />
+    <FlowNo />
+    <OpenWay>1</OpenWay>
+    <OpenWayText>本窗口</OpenWayText>
+    <UrlExt>Dict_XueShengXueJiGuanLi</UrlExt>
+    <MobileUrlExt />
+    <IsEnable>1</IsEnable>
+    <Icon />
+    <SystemNo>ee5c529b-2</SystemNo>
+    <ModuleNo>f1e2c3a2-a7c2-4e40-b042-fa338773ce37</ModuleNo>
+    <ModuleNoText />
+    <ListModel>1</ListModel>
+    <ListModelText>视图模式</ListModelText>
+    <Idx>7</Idx>
+    <OrgNo />
+  </Menus>
+  <Menus>
+    <No>9f1826e2-25ba-42a5-9f79-d78bbd5dfff8</No>
+    <Name>日历&amp;日程</Name>
+    <MenuModel>Calendar</MenuModel>
+    <Mark>Calendar</Mark>
+    <Tag1 />
+    <FrmID />
+    <FlowNo />
+    <OpenWay>1</OpenWay>
+    <OpenWayText>本窗口</OpenWayText>
+    <UrlExt>/CCFast/Calendar/Month.htm</UrlExt>
+    <MobileUrlExt />
+    <IsEnable>1</IsEnable>
+    <Icon>icon-calendar</Icon>
+    <SystemNo>ee5c529b-2</SystemNo>
+    <ModuleNo>f1e2c3a2-a7c2-4e40-b042-fa338773ce37</ModuleNo>
+    <ModuleNoText />
+    <ListModel>0</ListModel>
+    <ListModelText>编辑模式</ListModelText>
+    <Idx>9</Idx>
+    <OrgNo />
+  </Menus>
+  <Menus>
+    <No>d7558357-0c90-4abf-8531-93bfe8dbad2f</No>
+    <Name>记事本</Name>
+    <MenuModel>Notepad</MenuModel>
+    <Mark>Notepad</Mark>
+    <Tag1 />
+    <FrmID />
+    <FlowNo />
+    <OpenWay>1</OpenWay>
+    <OpenWayText>本窗口</OpenWayText>
+    <UrlExt>/CCFast/Notepad/Notepad.htm</UrlExt>
+    <MobileUrlExt />
+    <IsEnable>1</IsEnable>
+    <Icon>icon-note</Icon>
+    <SystemNo>ee5c529b-2</SystemNo>
+    <ModuleNo>f1e2c3a2-a7c2-4e40-b042-fa338773ce37</ModuleNo>
+    <ModuleNoText />
+    <ListModel>0</ListModel>
+    <ListModelText>编辑模式</ListModelText>
+    <Idx>11</Idx>
+    <OrgNo />
+  </Menus>
+  <Menus>
+    <No>Dict_XueShengXueJiGuanLi_020</No>
+    <Name>新生入校流程</Name>
+    <MenuModel>FlowNewEntity</MenuModel>
+    <Mark>Search</Mark>
+    <Tag1>020</Tag1>
+    <FrmID>Dict_XueShengXueJiGuanLi</FrmID>
+    <FlowNo>020</FlowNo>
+    <OpenWay>1</OpenWay>
+    <OpenWayText>本窗口</OpenWayText>
+    <UrlExt>../CCBill/Opt/StartFlowByNewEntity.htm?FlowNo=020&amp;FrmID=Dict_XueShengXueJiGuanLi&amp;MenuNo=Dict_XueShengXueJiGuanLi_020</UrlExt>
+    <MobileUrlExt />
+    <IsEnable>1</IsEnable>
+    <Icon>icon-paper-plane</Icon>
+    <SystemNo>ee5c529b-2</SystemNo>
+    <ModuleNo>f1e2c3a2-a7c2-4e40-b042-fa338773ce37</ModuleNo>
+    <ModuleNoText />
+    <ListModel>0</ListModel>
+    <ListModelText>编辑模式</ListModelText>
+    <Idx>13</Idx>
+    <OrgNo />
+  </Menus>
+</NewDataSet>

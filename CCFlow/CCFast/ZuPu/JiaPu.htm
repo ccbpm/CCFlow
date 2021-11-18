@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+    <script type="text/javascript">
+
+        function Save() {
+            var en = new Entity("BP.ZHOU.JiaPu");
+            en.CopyFrom();
+            en.Insert();
+
+            window.location.href = 'TreeEdit.htm?JiaPuNo=' + en.No + "&PeopleNo=" + en.PeopleNo;
+
+        }
+    </script>
+</head>
+<body>
+
+    <form id="cc">
+
+        <table>
+            <caption>新建谱系</caption>
+            <tr>
+                <td>家谱名称  </td>
+                <td> <input type="text" id="TB_Name" /> </td>
+            </tr>
+
+            <tr>
+                <td>开基祖  </td>
+                <td> <input type="text" id="TB_PeopleName" /> </td>
+            </tr>
+
+
+            <tr>
+                <td>堂号  </td>
+                <td> <input type="text" id="TB_TangHao" /> </td>
+            </tr>
+
+
+            <tr>
+                <td>编修日期  </td>
+                <td> <input type="text" id="TB_DTEdit" /> </td>
+            </tr>
+
+            <tr>
+                <td>地址  </td>
+                <td> <input type="text" id="TB_Addr" /> </td>
+            </tr>
+
+            <tr>
+                <td>联系电话  </td>
+                <td> <input type="text" id="TB_Tel" /> </td>
+            </tr>
+
+
+            <tr>
+                <td>家谱简介  </td>
+                <td> <input type="text" id="TB_Name" /> </td>
+            </tr>
+        </table>
+
+        <button>创建</button>
+
+    </form>
+
+
+</body>
+</html>

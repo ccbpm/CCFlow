@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../WF/Portal/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../WF/Portal/layui/layui.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <script src="../../WF/Portal/js/vue/vue.js" type="text/javascript"></script>
+    <script src="Toolbar.js"></script>
+    <style>
+        .pull-right {
+            float: right
+        }
+
+        .text-center {
+        }
+
+        .bg {
+            background: #f1f1f1;
+            font-weight: bold;
+            line-height: 28px;
+        }
+
+            .bg .layui-col-sm2 {
+                border-right: 1px solid #fff
+            }
+
+        #GiveGroup_Basics {
+            margin-left: 110px;
+        }
+    </style>
+    <script type="text/javascript">
+
+        function Save() {
+
+            //保存主表数据.
+            var enMain = new Entity("BP.CCFast.WorkRec");
+            enMain.CopyForm();
+            enMain.Insert();
+
+            var enDtl = new Entity("BP.CCFast.WorkRecDtl");
+            for (var i = 0; i < 15; i++) {
+
+                var prjName = $("TB_PrjName_" + i).val();
+                if (prjName == "" || prjName == null)
+                    continue;
+
+                //保存从表.
+                enDtl.PrjName = prjName;
+                enDtl.Doc = $("TB_Doc_" + i).val();
+
+
+                enDtl.Hour = $("TB_Hour_" + i).val();
+                enDtl.Minute = $("TB_Minute_" + i).val();
+                enDtl.Result = $("TB_Result_" + i).val();
+
+                enDtl.RiQi = enMain.RiQi; //隶属日期.
+
+                en.RefPK = enMain.MyPK;
+                en.Insert();
+
+            }
+
+
+            window.location.href = "Default.htm";
+        }
+    </script>
+</head>
+<body>
+    <div class="layui-fluid" id="workRec-Write" style="margin-top:15px">
+        <div id="toolbar"> </div>
+
+        <form class="layui-form " style="margin-top:15px">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">日志类型</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="RB_WorkRecModel" id="RB_WorkRecModel_0" value="0" title="本日日志" checked="checked">
+                        <input type="radio" name="RB_WorkRecModel" id="RB_WorkRecModel_1" value="1" title="补充日志">
+                        <input type="radio" name="RB_WorkRecModel" id="RB_WorkRecModel_2" value="2" title="加班日志">
+                        <input type="radio" name="RB_WorkRecModel" id="RB_WorkRecModel_3" value="3" title="本日请假">
+                    </div>
+                </div>
+
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">日志日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="TB_RiQi" id="TB_RiQi" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <textarea id="TB_Doc1" name="TB_Doc1" wrap="soft" rows="4" class="layui-textarea">
+今日遇到的问题：
+明日计划：
+需要协调的内容：
+                      </textarea>
+                </div>
+            </div>
+            <div id="GiveGroup_Basics">
+                <div class="layui-row layui-col-space10 bg">
+                    <div class="layui-col-sm2 ">项目</div>
+                    <div class="layui-col-sm2">内容</div>
+                    <div class="layui-col-sm2">结果</div>
+                    <div class="layui-col-sm2">小时</div>
+                    <div class="layui-col-sm2">分钟</div>
+                </div>
+            </div>
+
+            评分： <select id="DDL_Center">
+                <option value="0"> 0分 </option>
+                <option value="1"> 1分 </option>
+                <option value="2"> 2分 </option>
+                <option value="3"> 3分 </option>
+                <option value="4"> 4分 </option>
+                <option value="5" selected="selected"> 5分 </option>
+                <option value="6"> 6分 </option>
+                <option value="7"> 7分 </option>
+                <option value="8"> 8分 </option>
+                <option value="9"> 9分 </option>
+                <option value="10"> 10分 </option>
+            </select>
+            <textarea id="TB_Doc"></textarea>
+            <button onclick="Save();"> 通过 </button>
+
+        </form>
+    </div>
+    <script>
+        layui.use(['form', 'layer', 'laydate', 'element'], function () {
+            var form = layui.form, $ = layui.jquery, element = layui.element, laydate = layui.laydate;
+            laydate.render({
+                elem: '#TB_RiQi'
+            });
+        });
+        //添加
+        $("#addItems_Basics").on("click", function () {
+            var len = $("#GiveGroup_Basics").find("div[id^='role_']").length;
+            console.log(len);
+            if (len < 2) {
+                $("#GiveGroup_Basics").append('<div id="role_(' + (len + 1) + ')" class="layui-row  layui-col-space10"><div  class= "layui-col-sm2"> <input type="text" class="layui-input" autocomplete="off" /></div><div  class= "layui-col-sm2" ><input type = "text" class= "layui-input" autocomplete = "off" /></div><div  class= "layui-col-sm2" ><input type = "text" class= "layui-input" autocomplete = "off" /></div><div  class= "layui-col-sm2"><input type = "text" class= "layui-input" autocomplete = "off" /></div><div  class= "layui-col-sm2" ><input type = "text" class= "layui-input" autocomplete = "off" /></div ><div class="layui-col-sm1 layui-btn  layui-btn-danger  layui-btn-sm removeGive_Basics" style="margin-top:8px;"><i class="layui-icon layui-icon-delete"></i></div >');
+            } else {
+                layer.msg('最大添加15行');
+            }
+        })
+
+        function Save() {
+
+            var en = new Entity("BP.CCFast.WorkChecker");
+            en.Cent = $("DDL_Cent").val();
+            en.Doc = $("TB_Doc").val();
+            en.RefPK = GetQueryString("MyPK");
+            en.Insert();
+            window.close();
+        }
+        //保存
+        function GroupJson_Basics() {
+            var items = "";
+            $("#GiveGroup_Basics").find(".form-inline").each(function () {
+                var Low = $(this).find(".Basics_Star").val().length > 0 ? $(this).find(".Basics_Star").val() : "0";
+                var High = $(this).find(".Basics_End").val().length > 0 ? $(this).find(".Basics_End").val() : "0";
+                var price = $(this).find(".Basics_Price").val().length > 0 ? $(this).find(".Basics_Price").val() : "0";
+                if (items.length > 0) {
+                    items += ",";
+                }
+                items += '{"low":"' + Low + '","high":"' + High + '","price":"' + price + '"}';
+            })
+            var json = '{"role_ct":"' + $("#GiveTimeGroup_Basics").find("div[id^='role_']").length + '","roles":[' + items + ']}';
+            $("#H_Basics").val(json);
+        }
+        $(document).on("click", ".removeGive_Basics", function () {
+            var obj = $(this).parent();
+            var index = layer.confirm('你确定要删除此条配置么？', {
+                btn: ['确认', '取消'] //按钮
+            }, function () {
+                layer.close(index);
+                obj.remove();
+            });
+        })
+    </script>
+</body>
+</html>

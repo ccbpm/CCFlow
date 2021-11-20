@@ -305,10 +305,12 @@
 ![如图](https://images.gitee.com/uploads/images/2021/1120/114802_d4a8c2f9_5090226.png "微信图片_20211120113547.png")
 
 解决方式：在web.config里的<system.webServer>中添加如下内容就可以正常显示。
+```
    <staticContent>
       <remove fileExtension=".woff2" />
       <mimeMap fileExtension=".woff2" mimeType="font/woff2" />
    </staticContent>
+```
 
 
 

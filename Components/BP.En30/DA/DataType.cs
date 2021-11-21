@@ -2336,14 +2336,7 @@ namespace BP.DA
        static TimeSpan ts = new TimeSpan(0, 1, 0);
 #endif
 
-        /// <summary>
-        /// 得到WebService对象
-        /// </summary>
-        /// <returns></returns>
-        public static BP.En30.ccportal.PortalInterfaceSoapClient GetPortalInterfaceSoapClientInstance()
-        {
-            return Difference.DA_DataType.GetPortalInterfaceSoapClientInstance();
-        }
+       
         private static string _BPMHost = null;
         /// <summary>
         /// 当前BPMHost 

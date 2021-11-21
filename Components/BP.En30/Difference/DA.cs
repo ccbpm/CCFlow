@@ -10,45 +10,9 @@ using System.Data.Odbc;
 using System.Data.OleDb;
 using System.IO;
 using System.Text;
-using BP.En30.ccportal;
 
 namespace BP.Difference
-{
-    public class DA_DataType
-    {
-        public static PortalInterfaceSoapClient GetPortalInterfaceSoapClientInstance()
-        {
-#if DEBUG
-            TimeSpan ts = new TimeSpan(0, 10, 0);
-#else
-            TimeSpan ts = new TimeSpan(0, 1, 0);
-#endif
-            var basicBinding = new BasicHttpBinding()
-            {
-                //CloseTimeout = ts,
-                //OpenTimeout = ts,
-                ReceiveTimeout = ts,
-                SendTimeout = ts,
-                MaxBufferSize = 2147483647,
-                MaxReceivedMessageSize = 2147483647,
-                Name = "PortalInterfaceSoapClient"
-            };
-            basicBinding.Security.Mode = BasicHttpSecurityMode.None;
-
-            //url.
-            string url = DataType.BPMHost + "/DataUser/PortalInterface.asmx";
-
-            var endPoint = new EndpointAddress(url);
-            var ctor =
-                typeof(BP.En30.ccportal.PortalInterfaceSoapClient).GetConstructor(
-                new Type[] {
-                    typeof(Binding),
-                    typeof(EndpointAddress)
-                });
-            return (BP.En30.ccportal.PortalInterfaceSoapClient)ctor.Invoke(new object[] { basicBinding, endPoint });
-        }
-    }
-
+{ 
     public class DA_DbLoad
     {
         public static string GenerFirstTableName(string fileName)

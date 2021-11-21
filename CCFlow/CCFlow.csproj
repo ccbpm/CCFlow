@@ -14,7 +14,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CCFlow</RootNamespace>
     <AssemblyName>CCFlow</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <SilverlightApplicationList>
     </SilverlightApplicationList>
     <UseIISExpress>true</UseIISExpress>
@@ -511,13 +511,6 @@
     <Content Include="GPM\themes\icons\up.gif" />
     <Content Include="GPM\themes\icons\xitong.png" />
     <Content Include="GPM\themes\icons\xitongleibie.png" />
-    <Content Include="Service References\CloundWS\configuration.svcinfo" />
-    <Content Include="Service References\CloundWS\configuration91.svcinfo" />
-    <Content Include="Service References\CloundWS\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference1.cs</LastGenOutput>
-    </Content>
-    <Content Include="Service References\CloundWS\WS.disco" />
     <Content Include="DataUser\Do.aspx" />
     <Content Include="DataUser\Event.asmx" />
     <Content Include="DataUser\IndustrialAutomationWorkflowAPI.asmx" />
@@ -7838,7 +7831,6 @@
     <None Include="DataUser\TempleteOfImp\ND7401Dtl1.xls" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
-    <None Include="Service References\CloundWS\WS.wsdl" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -7906,12 +7898,6 @@
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service References\CloundWS\Reference.cs" />
-    <Compile Include="Service References\CloundWS\Reference1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="WF\CCForm\CCFormAPI.asmx.cs">
       <DependentUpon>CCFormAPI.asmx</DependentUpon>
       <SubType>Component</SubType>

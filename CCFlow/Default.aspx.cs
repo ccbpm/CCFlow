@@ -16,7 +16,6 @@ using BP.Sys;
 using BP.WF;
 using BP.Web;
 using BP.Port;
-using BP.Demo.BPFramework;
 using ThoughtWorks.QRCode.Codec;
 
 namespace CCFlow

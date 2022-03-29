@@ -7958,10 +7958,6 @@
       <Project>{04147518-e5e6-4b01-a797-094b8ba9cfd5}</Project>
       <Name>BP.WF</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DemoAndTesting\BP.Demo\BP.Demo.csproj">
-      <Project>{8e48d1df-ceed-4f0c-b863-3359b2a99134}</Project>
-      <Name>BP.Demo</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

@@ -17,23 +17,24 @@
             $("#Msg").html("正在加载,请稍后......");
              
 
-            //创建实体.
             var no = GetQueryString("No");
 
+            //创建实体.
             var en = new Entity("BP.Demo.BPFramework.Student");
             if (no != null) {
                 en.SetPKVal(no);
                 en.RetrieveFromDBSources();
             }
 
-            //增加的节点值 
+            //绑定下拉框. 
             GenerBindEntities("DDL_FK_BanJi", "BP.Demo.BPFramework.BanJis");
             //绑定枚举.
             GenerBindEnumKey("DDL_XB", "XB");
-            //政治面貌.
+
+            //政治面貌,参数类型的值.
             GenerBindEnumKey("DDLPara_ZZMM", "ZZMM");
 
-            //调用公共类库的方法:执行批量主表赋值
+            //调用公共类库的方法:执行批量主表赋值,前提是控件都是按照约定的规则赋值的.
             GenerFullAllCtrlsVal(en);
 
             //设置信息为空.
@@ -48,6 +49,7 @@
 
             if (no == null) {
 
+                //把整个表单的控件数据复制到Entity里面去，前提按照约定的规则赋值。
                 en.CopyForm();
 
                 if (en.IsExits() == true) {

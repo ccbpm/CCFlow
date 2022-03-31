@@ -23,7 +23,7 @@ namespace BP.Demo.FlowEvent
         /// </summary>
         public override string FlowMark
         {
-            get { return "001,002,"; }
+            get { return "009"; }
         }
         #endregion 属性.
 
@@ -71,7 +71,6 @@ namespace BP.Demo.FlowEvent
         /// <returns></returns>
         public override string SendWhen()
         {
-
             ///  throw new Exception("err@不符合流程发送条件。");
             if (SystemConfig.CustomerNo != "CCFlow")
                 return null;
@@ -86,11 +85,18 @@ namespace BP.Demo.FlowEvent
             if (1 == 2)
             {
                 var qingjiaTianshu = this.GetValInt("QingJiaTianshu");
+
+                //var wd = this.GetValInt("Wendu");
+                //if (wd <= 0)
+                //    throw new Exception("err@sdsdfsdfsdfsdfsdfds");
+               
+
                 if (qingjiaTianshu == 1 && 1 == 1)
                 {
                     this.JumpToNodeID = 109;
                     this.JumpToEmps = "zhangsan";
                 }
+               // throw new Exception("ddffss");
             }
 
 
@@ -213,6 +219,8 @@ namespace BP.Demo.FlowEvent
                 if (this.HisNode.NodeID == 102)
                 {
                     /*根据不同的节点，执行不同的业务逻辑*/
+
+
                 }
 
                 //返回.

@@ -369,6 +369,8 @@ namespace BP.Demo.BPFramework
                 rm.Title = "缴纳班费";
                 rm.HisAttrs.AddTBDecimal("JinE", 100, "缴纳金额", true, false);
                 rm.HisAttrs.AddTBString("Note", null, "备注", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("ddd", null, "isss", true, false, 0, 100, 100);
+
                 rm.ClassMethodName = this.ToString() + ".DoJiaoNaBanFei";
                 rm.GroupName = "功能执行测试";
                 //  rm.IsCanBatch = false; //是否可以批处理？
@@ -431,13 +433,13 @@ namespace BP.Demo.BPFramework
         protected override bool beforeInsert()
         {
             //在插入之前设置注册时间.
-            this.RegDate = DataType.CurrentDataTime;
+            this.RegDate = DataType.CurrentDateTime;
             return base.beforeInsert();
         }
         protected override bool beforeUpdateInsertAction()
         {
             if (this.Email.Length == 0)
-                throw new Exception("@email 不能为空.");
+                throw new Exception("@Email 不能为空.");
 
             return base.beforeUpdateInsertAction();
         }
@@ -479,7 +481,7 @@ namespace BP.Demo.BPFramework
         /// 说明：都要返回string类型.
         /// </summary>
         /// <returns></returns>
-        public string DoJiaoNaBanFei(decimal jine, string note)
+        public string DoJiaoNaBanFei(decimal jine, string note, string sss)
         {
             return "学号:" + this.No + ",姓名:" + this.Name + ",缴纳了:" + jine + "元,说明:" + note;
         }

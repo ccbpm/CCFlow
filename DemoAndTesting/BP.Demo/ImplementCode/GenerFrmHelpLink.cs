@@ -58,17 +58,17 @@ namespace BP.Demo
                 float y = float.Parse(dt.Rows[0][0].ToString());
                 float x = float.Parse(dt.Rows[0][1].ToString());
 
-                FrmLink lk = new FrmLink();
-                lk.MyPK = "ND" + nd.NodeID;
-                lk.Delete();
+                //FrmLink lk = new FrmLink();
+                //lk.MyPK = "ND" + nd.NodeID;
+                //lk.Delete();
 
-                lk.X = x - 50;
-                lk.Y = y - 20;
-                lk.FK_MapData = "ND" + nd.NodeID;
-                lk.Lab = "办事指南";
-                lk.Target = "_blank";
-                lk.URLExt = "/App/GovService/FlowHelp.htm?FK_Flow=" + nd.FK_Flow;
-                lk.Insert();
+                //lk.X = x - 50;
+                //lk.Y = y - 20;
+                //lk.FK_MapData = "ND" + nd.NodeID;
+                //lk.Lab = "办事指南";
+                //lk.Target = "_blank";
+                //lk.URLExt = "/App/GovService/FlowHelp.htm?FK_Flow=" + nd.FK_Flow;
+                //lk.Insert();
             }
             return "执行成功...";
         }

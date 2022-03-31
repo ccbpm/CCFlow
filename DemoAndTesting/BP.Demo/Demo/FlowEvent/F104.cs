@@ -6,7 +6,7 @@ namespace BP.Demo.FlowEvent
     /// <summary>
     /// 报销流程001
     /// </summary>
-    public class F104:BP.Sys.EventBase
+    public class F104:BP.Sys.Base.EventBase
     {
         #region 属性.
         #endregion 属性.

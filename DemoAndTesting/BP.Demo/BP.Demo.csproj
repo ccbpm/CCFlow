@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CallCenter\ND018Rpt.cs" />
     <Compile Include="Demo\BPFramework\School.cs" />
     <Compile Include="Demo\BPFramework\BPUser.cs">
       <SubType>Code</SubType>
@@ -67,8 +68,6 @@
     <Compile Include="Demo\FormEventDtl\Demo_TastCaseEventFrmDtl2.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Demo\FormEvent\FromEvent_Demo_01.cs" />
-    <Compile Include="Demo\FormEvent\CCFrm_ZhuBiaoShiJianCeShi.cs" />
     <Compile Include="Demo\License\License.cs" />
     <Compile Include="Demo\License\People.cs" />
     <Compile Include="HandlerInterfaceAPI.cs" />
@@ -86,23 +85,24 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Components\BP.En30\BP.En30.csproj">
-      <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
-      <Name>BP.En30</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Components\BP.WF\BP.WF.csproj">
-      <Project>{04147518-E5E6-4B01-A797-094B8BA9CFD5}</Project>
-      <Name>BP.WF</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Demo\BPFramework\Readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Demo\CRM\" />
+    <Folder Include="Demo\FormEvent\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\CCFlow2021\Components\BP.En30\BP.En30.csproj">
+      <Project>{f9d27bab-758d-4205-bfc8-76b49a4c87f1}</Project>
+      <Name>BP.En30</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\CCFlow2021\Components\BP.WF\BP.WF.csproj">
+      <Project>{04147518-e5e6-4b01-a797-094b8ba9cfd5}</Project>
+      <Name>BP.WF</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

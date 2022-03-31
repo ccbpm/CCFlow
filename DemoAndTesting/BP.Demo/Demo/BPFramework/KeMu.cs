@@ -45,6 +45,7 @@ namespace BP.Demo.BPFramework
         /// <param name="no">±àºÅ</param>
 		public KeMu(string no):base(no)
 		{
+
 		}
 		/// <summary>
 		/// Map

@@ -104,9 +104,10 @@ namespace BP.Demo.BPFramework
                 map.AddTBString(BanJiAttr.BZR, null, "班主任", true, false, 0, 50, 200);
                 map.AddTBString(BanJiAttr.Tel, null, "班主任电话", true, false, 0, 50, 200);
                 map.AddTBString(BanJiAttr.WZ, null, "位置", true, false, 0, 50, 200);
-                #endregion
 
-                this._enMap=map;
+				#endregion
+
+				this._enMap=map;
 				return this._enMap;
 			}
 		}

@@ -15,7 +15,7 @@ namespace BP.Demo.FormEvent
     /// <summary>
     /// 从表的表单事件 demo.
     /// </summary>
-    public class Demo_TastCaseEventFrmDtl2 : BP.Sys.FormEventBaseDtl
+    public class Demo_TastCaseEventFrmDtl2 : BP.Sys.Base.FormEventBaseDtl
     {
         /// <summary>
         /// 标记(多个从表的ID，可以用逗号分开比如: "ABCDtl1,ABCDtl1" )

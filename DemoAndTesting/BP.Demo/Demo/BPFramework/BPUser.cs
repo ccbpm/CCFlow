@@ -228,7 +228,7 @@ namespace BP.Demo.BPFramework
         protected override bool beforeInsert()
         {
             //在插入之前设置注册时间.
-            this.RegDate = DataType.CurrentDataTime;
+            this.RegDate = DataType.CurrentDateTime;
 
             return base.beforeInsert();
         }

@@ -8,7 +8,6 @@ namespace BP.Demo.BuessUnit
     /// <summary>
     /// 该类为业务单元子类.
     /// 1. 该子类必须放入到BP.*.dll 里面.
-    /// 2. 
     /// </summary>
     public class BuessUnitDemo : BP.Sys.BuessUnitBase
     {
@@ -17,7 +16,8 @@ namespace BP.Demo.BuessUnit
         /// </summary>
         public override string Title
         {
-            get {
+            get
+            {
                 return "业务单元测试";
             }
         }

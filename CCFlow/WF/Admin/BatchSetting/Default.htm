@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="DDLBar.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+            var url = GetUrl("Accepter");
+            var flowNo = GetQueryString("FK_Flow");
+            if (flowNo == null)
+                flowNo = GetQueryString("FlowNo");
+
+            var nodeID = GetQueryString("NodeID");
+            if (nodeID == null)
+                nodeID = GetQueryString("FK_Node");
+            if (nodeID == null)
+                nodeID = flowNo + "01";
+
+            document.location.href = url + "?FlowNo=" + GetQueryString("FK_Flow") + "&NodeID=" + nodeID;
+        });
+
+    </script>
+</head>
+<body>
+    <div id="bar"></div>
+</body>
+</html>

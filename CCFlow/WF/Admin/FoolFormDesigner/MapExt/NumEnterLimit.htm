@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>输入值限制</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        var en = null;
+        $(function () {
+
+            var frmID = GetQueryString("FrmID");
+            var myPK = GetQueryString("MyPK");
+
+            //下拉框填充
+            en = new Entity("BP.Sys.MapAttr", myPK);
+
+            //设置列显示模式.
+            if (en.GetPara("IsEnableNumEnterLimit") == 1) {
+                $("#RB_IsEnable_1").attr("checked", "checked");
+            }
+            else {
+                $("#RB_IsEnable_0").attr("checked", "checked");
+            }
+
+            var min = en.GetPara("MinNum");
+            if (min == null || min == '')
+                min = 0;
+
+            var max = en.GetPara("MaxNum");
+            if (max == null || max == '')
+                max = 100000;
+
+            $("#TB_Min").val(min);
+            $("#TB_Max").val(max);
+
+        });
+
+        //保存
+        function Save() {
+            en.SetPara("MinNum", $("#TB_Min").val());
+            en.SetPara("MaxNum", $("#TB_Max").val());
+            en.SetPara("IsEnableNumEnterLimit", $("input[name=RB_IsEnable]:checked").val());
+            en.Update();
+            alert("保存成功...");
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+        <table id="table" style="width: 100%;">
+            <caption>
+                输入值限制：
+            </caption>
+            <tr>
+                <td colspan="3" style="width: 95%;">
+                    <label>
+                        <input type="radio" id="RB_IsEnable_0" value="0" name="RB_IsEnable" />
+                        禁用
+                    </label>
+
+                    <label>
+                        <input type="radio" id="RB_IsEnable_1" value="1" name="RB_IsEnable" />
+                        启用
+                    </label>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3" style="width: 95%;">
+                    最小值:<input type="text" value="0" id="TB_Min" name="TB_Min" />
+                    最大值:<input type="text" value="100000" id="TB_Max" name="TB_Max" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="width: 95%;">
+                    <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+                </td>
+            </tr>
+        </table>
+
+
+        <div id="Msg">
+        </div>
+
+
+    </form>
+</body>
+</html>

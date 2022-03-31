@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>上传模板</title>
+    <link href="../../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+
+    <script src="../../../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../../Comm/Gener.js"></script>
+    <script type="text/javascript" src="../../../../Scripts/QueryString.js"></script>
+    <base target="_self" />
+    <script type="text/javascript">
+        //页面启动函数
+        var ens = null;
+        $(function () {
+            var frmID = GetQueryString("FrmID");
+
+            var mypk = GetQueryString("MyPK");
+            var en = new Entity("BP.Sys.FrmUI.FrmAttachmentSingle", mypk);
+
+            //判断是否存在.
+            if (en.Exts == null || en.Exts == "") {
+                //   $("#down").hid();
+            } else {
+                // $("#down").show();
+            }
+
+        });
+
+        //下载
+        function Down() {
+
+        }
+
+        //保存.
+        function Save() {
+
+            var frmID = GetQueryString("FrmID");
+            var myPK = GetQueryString("MyPK");
+
+            //检查模板是否存在.
+            if (1 == 0) {
+                alert("请上传模板文件...");
+                return;
+            }
+
+            //执行模板保存.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_Template_FrmAttachmentSingle");
+            handler.AddFormData();
+            handler.AddFileData();
+            handler.AddPara("FrmID", frmID);
+            handler.AddPara("MyPK", myPK);
+            var data = handler.DoMethodReturnString("UploadAthTemplateWPS_Save");
+
+            alert(data);
+
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+    <form method="post" action="" id="form1">
+
+        <h3>请上传模板文件</h3>
+
+        <input type="file" id="file" />
+        <input type="button" value="上传wps模板文件" onclick="Save();" />
+
+        <div id="down"> <a href="javascript:Down()"> 下载</a> </div>
+
+        <fieldset>
+            <legend> 帮助</legend>
+            <ul>
+                <li> 模板文件里可以有变量,多用于公文字段替换. </li>
+                <li> 上传模板后，请设置附件模板使用规则. </li>
+                <li> 未完待续. </li>
+            </ul>
+        </fieldset>
+    </form>
+
+
+</body>
+</html>

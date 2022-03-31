@@ -1,0 +1,253 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReSend</title>
+  <link href="../../Scripts/element/element.css" rel="stylesheet" />
+  <style>
+    #app {
+      padding: 20px;
+      background-color: #fff;
+    }
+
+    .el-cascader {
+      width: 100%;
+    }
+
+    .el-table .cell span {
+      margin-right: 5px;
+    }
+
+    .el-table .cell span:last-child {
+      margin-right: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column prop="nodeId" label="节点ID" width="80"></el-table-column>
+      <el-table-column prop="nodeName" label="节点名称"></el-table-column>
+      <el-table-column prop="status" label="状态" width="80">
+        <template slot-scope="{row}">
+          <div :style="{color:row.status=='已通过'?'#67C23A':'#C0C4CC'}">{{row.status}}</div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="handler" label="相关人员">
+        <template slot-scope="{row}">
+          <!-- <div :style="{color:row.handler=='未处理'?'#C0C4CC':'#000000'}">{{row.handler}}</div> -->
+          <template v-for="item of row.handler.split(',')">
+            <el-tag :type="row.handler=='未处理'?'info':''">{{item}}</el-tag>
+          </template>
+        </template>
+      </el-table-column>
+      <el-table-column prop="dateTime" label="日期" width="180"></el-table-column>
+      <el-table-column fixed="right" label="操作" width="60">
+        <template slot-scope="scope,index">
+          <el-button type="text" @click="onToNode(scope,index)" >跳转</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-dialog style="min-width:440px;" :visible.sync="visible" :title=`您确认要调整到【${toNode.nodeId}，${toNode.nodeName}】吗？`>
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+        <el-form-item label="调整到人员：" prop="people" required>
+          <el-cascader :props="cascader" :show-all-levels="false" ref="cascader" clearable />
+        </el-form-item>
+        <el-form-item label="调整原因：" prop="desc">
+          <el-input type="textarea" :rows="3" placeholder="请输入调整原因" v-model="form.desc">
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">确定调整</el-button>
+          <el-button @click="visible=false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+  </div>
+</body>
+<script type="text/javascript" src="../../Scripts/vue.js"></script>
+<script type="text/javascript" src="../../Scripts/element/element.js"></script>
+<script type="text/javascript" src="../../Scripts/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+<script type="text/javascript" src="../../Scripts/config.js"></script>
+<script type="text/javascript" src="../../Comm/Gener.js"></script>
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+      var checkCascader = (rule, value, callback) => {
+        const nodes = this.$refs.cascader.getCheckedNodes(true)
+        if (nodes && nodes.length <= 0) {
+          callback(new Error('请选择调整人员'));
+        } else {
+          callback();
+        }
+      };
+      return {
+        visible: false,
+        tableData: [],
+        toNode: {},
+        form: {
+          desc: '',
+          people: 'people',
+        },
+        rules: {
+          desc: [
+            { required: true, message: '请输入调整原因', trigger: 'blur' }
+          ],
+          people: [
+            { validator: checkCascader, trigger: 'blur' }
+          ]
+        },
+        cascader: {
+          lazy: true,
+          multiple: true,
+          lazyLoad(node, resolve) {
+            const handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            node?.data?.No && handler.AddPara("FK_Dept", node.data.No);
+            const datajson = handler.DoMethodReturnString("SelectEmps_Init");
+            if (datajson.indexOf('err@') == 0) {
+              alert(datajson);
+              return;
+            }
+            const data = JSON.parse(datajson);
+            const nodes = data.Emps.map(item => ({
+              value: item.No,
+              label: item.Name,
+              leaf: true,
+              ...item
+            }));
+            if (node.level == 0 || node?.data?.No) {
+              data.Depts.filter(item => {
+                if (item.No == "100") return true;
+                if (item.No == node?.value) return true;
+                const index = nodes.findIndex(node => node.FK_Dept == item.No)
+                if (!!~index) return true;
+                nodes.push({
+                  value: item.No,
+                  label: item.Name,
+                  leaf: false,
+                  ...item
+                })
+              });
+            }
+            resolve(nodes)
+          }
+        }
+      }
+    },
+    methods: {
+      init() {
+        const gwf = new Entity("BP.WF.GenerWorkFlow", GetQueryString("WorkID"));
+        //流程运行结束后,需要查询Track表的数据信息
+        if (gwf.WFState == 3) {
+          const handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_FlowOperation");
+          handler.AddPara("FK_Flow", gwf.FK_Flow);
+          handler.AddPara("WorkID", GetQueryString("WorkID"));
+          var data = handler.DoMethodReturnString("FlowTrackDateByWorkID");
+          if (data.indexOf("err@") != -1) {
+            alert(data);
+            return;
+          }
+          data = JSON.parse(data);
+          var nodeIDs = "";
+          for (let i = 0; i < data.length; i++) {
+            var nodeID = data[i]['NDFrom'];
+            if (nodeIDs.indexOf(nodeID + ",") == -1) {
+              data[i]['nodeId'] = nodeID;
+              data[i]['nodeName'] = data[i]['NDFromT'];
+              data[i]['handler'] = data[i]['EmpFromT'];
+              data[i]['dateTime'] = data[i]['RDT'];
+              item = data[i];
+              this.tableData.push(data[i]);
+              nodeIDs += nodeID + ",";
+            }
+
+          }
+
+        } else {
+          this.getGwls();
+          this.getNds();
+        }
+
+      },
+      getGwls() {
+        const workID = GetQueryString("WorkID");
+        const gwls = new Entities("BP.WF.GenerWorkerLists");
+        gwls.Retrieve("WorkID", workID, "FK_Node");
+        for (let i = 0; i < gwls.length; i++) {
+          const index = this.tableData.findIndex(item => item.nodeId == gwls[i]['FK_Node'])
+          if (!!~index) {
+            this.tableData[index].handler += `,${gwls[i]['FK_EmpText']}`
+            continue;
+          }
+          gwls[i]['nodeId'] = gwls[i]['FK_Node']
+          gwls[i]['nodeName'] = gwls[i]['FK_NodeText']
+          if (gwls[i].IsPass) {
+            gwls[i]['status'] = '已通过'
+          } else {
+            gwls[i]['status'] = '未通过'
+          }
+          gwls[i]['handler'] = gwls[i]['FK_EmpText']
+          gwls[i]['dateTime'] = gwls[i]['RDT']
+          item = gwls[i];
+          this.tableData.push(gwls[i])
+        }
+      },
+      getNds() {
+        const flowNo = GetQueryString("FK_Flow");
+        const nds = new Entities("BP.WF.Nodes");
+        nds.Retrieve("FK_Flow", flowNo, "Step");
+        for (let i = 0; i < nds.length; i++) {
+          const index = this.tableData.findIndex(item => item.nodeId == nds[i]['NodeID'])
+          if (!!~index) continue;
+          nds[i]['nodeId'] = nds[i]['NodeID']
+          nds[i]['nodeName'] = nds[i]['Name']
+          nds[i]['handler'] = '未处理'
+          nds[i]['status'] = '未通过'
+          nds[i]['dateTime'] = '- - - -'
+          this.tableData.push(nds[i])
+        }
+      },
+      onToNode({ row, $index }) {
+        this.toNode = row;
+        this.visible = true;
+      },
+      onSubmit() {
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            const handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_FlowOperation");
+            handler.AddPara("FK_Flow", this.toNode.FK_Flow);
+            handler.AddPara("ToNodeID", this.toNode.NodeID);
+            handler.AddPara("WorkID", GetQueryString("WorkID"));
+            handler.AddPara("Emps", this.$refs.cascader.getCheckedNodes(true).map(item => item.data.No));
+            handler.AddPara("Note", this.form.desc);
+            var data = handler.DoMethodReturnString("ReSend");
+            if (data.indexOf("err@") != -1) {
+              this.$message.error(data);
+              return;
+            }
+            this.visible = false;
+            this.$refs.cascader.$refs.panel.clearCheckedNodes()
+            this.form.desc = ''
+            this.$message.success('成功');
+            location.reload();
+          } else {
+            this.$message.error('请正确填写表单');
+            return false;
+          }
+        });
+      }
+    },
+    mounted() {
+      this.init();
+    }
+  })
+</script>
+
+</html>

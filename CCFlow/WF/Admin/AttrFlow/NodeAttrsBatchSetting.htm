@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>流程[{flow name}]-节点属性面板</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../Comm/JScript.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script type="text/javascript" src="../../Scripts/jquery-1.7.2.min.js"></script>
+    <base target="_self" />
+    <script type="text/javascript">
+        //! TODO: 1.显示流程名称？	2.JS方法中的页面路径
+
+        /* ESC Key Down */
+        function Esc() {
+            if (event.keyCode === 27)
+                window.close();
+            return true;
+        }
+
+        //页面启动函数.
+        $(function () {
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+            InitPage();
+            $("#Msg").html("");
+        });
+
+        var flowNo; 	//流程id
+        var selectNodeId; //要突出选择的节点
+        var nds = null;
+        //初始化数据.
+        function InitPage() {
+
+            flowNo = GetQueryString("FK_Flow");
+
+            nds = new Entities("BP.WF.Nodes");
+            nds.Retrieve("FK_Flow", flowNo, "NodeID");
+
+            //增加处理.
+            var newRow;
+            for (var i = 0; i < nds.length; i++) {
+
+                var nd = nds[i];
+
+                newRow = "";
+                newRow += "<tr >";
+
+                newRow += "<td class=Idx>" + i + "</td>";
+                newRow += "<td >" + nd.NodeID + "</td>";
+                newRow += "<td >" + nd.Name + "</td>";
+
+                //是否是发送并返回节点.
+                if (nd.AtPara.indexOf('IsSendBackNode=1') >= 1)
+                    newRow += "<td ><label><input type=checkbox checked id='CB_IsSendBackNode_" + nd.NodeID + "' name='CB_IsSendBackNode_" + nd.NodeID + "' />是否发送并返回节点？</label></td>";
+                else
+                    newRow += "<td ><label><input type=checkbox  id='CB_IsSendBackNode_" + nd.NodeID + "'  name='CB_IsSendBackNode_" + nd.NodeID + "'/>是否发送并返回节点？</label></td>";
+
+                //是否包含上一步接受人?
+                if (nd.IsExpSender == 1)
+                    newRow += "<td ><label><input type=checkbox checked  id='CB_IsExpSender_" + nd.NodeID + "' name='CB_IsExpSender_" + nd.NodeID + "' />是否包含上一步发送人？</label></td>";
+                else
+                    newRow += "<td ><label><input type=checkbox   id='CB_IsExpSender_" + nd.NodeID + "'  name='CB_IsExpSender_" + nd.NodeID + "'/>是否包含上一步发送人？</label></td>";
+
+                newRow += "</tr>";
+
+                $("#Table1 tr:last").after(newRow);
+            }
+        }
+
+        function Save() {
+
+
+            for (var i = 0; i < nds.length; i++) {
+                var mynd = nds[i];
+
+                var nd = new Entity("BP.WF.Node", mynd.NodeID);
+                var checkBack = document.getElementsByName("CB_IsSendBackNode_" + nd.NodeID);
+               
+                //参数模式的.
+                var check = $("#CB_IsSendBackNode_" + nd.NodeID).attr("checked");
+                if (checkBack[0].checked == true)
+                    nd.SetPara("IsSendBackNode", 1);
+                else
+                    nd.SetPara("IsSendBackNode", 0);
+
+                //字段模式的
+                var check = $("#CB_IsExpSender_" + nd.NodeID).attr("checked");
+                var checkSend = document.getElementsByName("CB_IsExpSender_" + nd.NodeID);
+                if (checkSend[0].checked == true)
+                    nd.IsExpSender = 1;
+                else
+                    nd.IsExpSender = 0;
+
+                nd.Update();
+            }
+            alert("保存成功。");
+
+        }
+
+        function Refurbish() {
+            window.location.href = window.location.href;
+        }
+    </script>
+    <style>
+        th {
+            background-color: #F5F5F5;
+        }
+    </style>
+</head>
+<body onkeypress="Esc()">
+
+    <div style="right:30px; position:absolute; z-index:100;">
+        <input type="button" value="保存" id="Btn_Save" onclick="Save()" />
+        <input type="button" value="刷新" id="Btn_ref" onclick="Refurbish()" />
+
+    </div>
+    <div style="position:relative;top:10px; margin: 8px">
+        <table class="table table-bordered table-hover table-condensed" id="Table1" style="width: 100%">
+            <caption style="margin-bottom:5px; border-bottom:none">
+                <img style="margin-bottom:8px;" align="middle" src='../../Img/Event.png' />节点属性面板
+            </caption>
+            <tr>
+                <th>
+                    序
+                </th>
+                <th>
+                    节点ID
+                </th>
+                <th>
+                    名称
+                </th>
+                <th>
+                    是否发送并返回节点?
+                </th>
+                <th>
+                    是否包含上一步发送人?
+                </th>
+            </tr>
+        </table>
+    </div>
+    <div id="Msg">
+    </div>
+</body>
+</html>

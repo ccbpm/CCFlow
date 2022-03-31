@@ -1,0 +1,69 @@
+<!doctype html><html><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>联信网格嵌入式即时通讯tinyIM</title><link rel="stylesheet" href="./static/css/umgrid.tinyim.css"><style>.big_box {
+      width: calc(100% - 400px);
+      padding: 30px;
+      color: #333;
+    }
+    .pdl20 {
+      padding-left: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    h3 {
+      color: #2e9cf1;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .b_li {
+      margin-top: 15px;
+    }
+    .b_li:first-child {
+      margin-top: 0;
+    }
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .doc_text {
+      width: 100%;
+      background-color: #f1f1f1;
+      padding: 15px;
+      border-left: 5px solid #2e9cf3;
+      font-size: 16px;
+    }
+    pre {
+      width: 65%;
+      background: #fafafa;
+      margin-top: 10px;
+      border-radius: 5px;
+      word-break: break-all;
+      word-wrap: break-word;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      border: 1px solid #ededed;
+    }
+    pre code {
+      letter-spacing: 0;
+      color: #000;
+      font-size: 13px;
+      padding: 12px 10px;
+      line-height: 18px;
+    }
+    .demo {
+      display: flex;
+    }
+    .demo .try {
+      font-size: 18px;
+      font-weight: bold;
+    }</style><script defer="defer" src="umgrid.tinyim.js"></script></head><body><div class="big_box"><h1>联信网格嵌入式即时通讯tinyIM</h1><ul><li class="b_li"><div class="title">概况</div><div class="doc_text">联信网格嵌入式即时通讯tinyIM是一款纯JavaScript原生开发的带UI界面的即时通讯系统，一行代码嵌入第三方应用中，即可拥有即时通讯能力。</div></li><li class="b_li"><div class="title">快速开始</div><div>在页面中引入umgrid.tinyim.js<pre>
+            <code>&lt;script type=&quot;text/javascript&quot;src=&quot;umgrid.tinyim.js&quot;&gt;&lt;/script&gt;</code>
+          </pre></div></li><li class="b_li"><div class="title">使用说明</div><div class="pdl20"><h3>初始化</h3><div>首先，需要初始化即时通讯系统，需要传入第三方应用中，登录者的帐号、密码等信息。</div><pre>
+            <code>umclient.init({<br/>   No: '用户ID', <br/>   name: '用户名字',<br/>   Password: '用户密码',<br/>   FG_OrgNo: '组织ID',<br/>   FG_OrgName: '组织名字',<br/>   FG_DeptNo: '部门ID',<br/>   FG_DeptName: '部门名字' <br/>}, '红泡标记的class或者id名')</code>
+          </pre></div><div class="pdl20"><h3>打开消息面板</h3><pre>
+            <code>umclient.OpenMsgPanel()</code>
+          </pre></div><div class="pdl20"><h3>发送消息进行对话</h3><pre>
+            <code>umclient.OpenChat({<br/>   FG_OrgNo: '组织ID', <br/>   No: '用户ID',<br/>   toNo: '对方ID', <br/>   toName: '对方名字',<br/>   msg: '消息内容'<br/>})</code>
+          </pre></div></li></ul><div class="demo"><div class="try">试用请点击：</div><button id="iconIM" onclick="umclient.OpenMsgPanel()">消息列表</button> <button style="margin-left: 10px;" onclick="umclient.OpenChat({'FG_OrgNo':'1638841445388-2', 'No':'18600000000', 'toNo':'18600000125', 'toName':'对方1', 'msg':'弹窗发送的消息内容111'})">消息对话1</button> <button style="margin-left: 10px;" onclick="umclient.OpenChat({'FG_OrgNo':'1638841445388-2', 'No':'18600000000', 'toNo':'18600000126', 'toName':'对方2', 'msg':'弹窗发送的消息内容222'})">消息对话2</button></div></div></body><script src="./userdemo.js"></script></html>

@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>切换实例</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+
+        var flowNo = GetQueryString("FK_Flow");
+        var workID = GetQueryString("WorkID");
+        var adminer = GetQueryString("Adminer");
+        var adminerSID = GetQueryString("AdminerSID");
+        var SID = GetQueryString("SID");
+
+        //页面启动函数.
+        $(function () {
+
+            //获得当前用户发起的流程列表，并且没有完成的.
+            var gwfs = new Entities("BP.WF.GenerWorkFlows");
+            gwfs.Retrieve("Starter", GetQueryString("UserNo"), "WFState", 2, "FK_Flow", GetQueryString("FK_Flow"), "WorkID DESC");
+
+          //  var html = "<table style='width:900px;' >";
+            var html = "<table class='table table-bordered table - hover' style='width:900px;' >";
+            html += "<caption>切换测试实例</caption>";
+            html += "<tr>";
+            html += "<th>Idx</th>";
+            html += "<th>WorkID</th>";
+            html += "<th>标题</th>";
+            html += "<th>停留节点</th>";
+            html += "<th>当前人员</th>";
+            html += "<th>发起日期</th>";
+            html += "<th>最后处理日期</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < gwfs.length; i++) {
+                var en = gwfs[i];
+                if (en.FID != 0) continue;
+
+                html += "<tr>";
+                html += "<td>" + i + "</td>";
+                html += "<td>" + en.WorkID + "</td>";
+                html += "<td><a href=\"javascript:GoTo('" + en.WorkID + "')\" >" + en.Title + "</a></td>";
+                html += "<td>" + en.FK_Node + " - " + en.NodeName + "</td>";
+                html += "<td>" + en.TodoEmps + "</td>";
+                html += "<td>" + en.RDT + "</td>";
+                html += "<td>" + en.SendDT + "</td>";
+                html += "</tr>";
+            }
+            html += "</table>";
+            $("#gwls").html(html);
+        });
+        function GoTo(workID)
+        {
+            var urlParams = "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + workID + "&UserNo=" + GetQueryString("UserNo") + "&AdminerSID=" + GetQueryString("AdminerSID") + "&OrgNo=" + GetQueryString("OrgNo") + "&Adminer=" + GetQueryString("Adminer") + "&SID=" + GetQueryString("SID");
+            var url = "SelectOneUser.html?1=2" + urlParams;
+            window.parent.urlEnd = urlParams;
+
+            window.parent.InitPageUserInfo();
+
+            //改变他的workid.
+            window.parent.workID = workID;
+
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body>
+    <div id="userInfo"></div>
+
+    <center>
+
+        <div id="gwls"></div>
+
+    </center>
+
+
+
+
+</body>
+</html>

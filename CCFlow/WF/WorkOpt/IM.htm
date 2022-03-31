@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>即时通讯</title>
+    <script src="../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+    <script src="https://sdk.umnet.cn/umviewsdk/umgrid.tinyim.js"></script>
+    <link href="https://sdk.umnet.cn/umviewsdk/static/css/umgrid.tinyim.css" rel="stylesheet" />
+
+    <script src="../Portal/FeigeAPI_1.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready((async () => {
+
+            var workID = GetQueryString("WorkID");
+
+            var en = new Entity("BP.WF.GenerWorkFlow", workID);
+
+            var FG_OrgNo = '', FG_OrgName = ''; //全局变量.
+            var userID = "", userName = "", deptNo, DeptName; //当前用户登录信息.
+
+            // 开发者需要提供的接口: 给当前登录人员的信息赋值.
+            var webUser = new WebUser();
+            userID = webUser.No;
+            userName = webUser.Name;
+            deptNo = webUser.FK_Dept;
+            deptName = webUser.FK_DeptName;
+
+            //如果是saas版本.
+            if (webUser.CCBPMRunModel == 2) {
+                FG_OrgNo = webUser.OrgNo;      //为全局变量赋值.
+                FG_OrgName = webUser.OrgName;  //为全局变量赋值.
+            }
+
+            //如果.
+            if (FG_OrgNo == "") {
+                FG_OrgNo = window.location.host;
+            }
+
+            await initSDK({
+                No: webUser.No,
+                Name: webUser.Name,
+                Password: webUser.Password || undefined,
+                FG_DeptNo: webUser.FK_Dept,
+                FG_DeptName: webUser.FK_DeptName,
+                FG_OrgNo,
+                FG_OrgName
+            });
+            OpenGroupTalk("WID" + workID, en.Title, en.Emps, "大家好，我们一起讨论[" + en.Title + "]", false);
+        })())
+    </script>
+
+</head>
+<body>
+
+    <div id="iconIM"></div>
+
+
+</body>
+</html>

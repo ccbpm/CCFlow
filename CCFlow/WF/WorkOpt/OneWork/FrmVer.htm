@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>表单版本</title>
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="PubliceTrack.js" type="text/javascript"></script>
+    <script src="TimeBase.js?s=xxx" type="text/javascript"></script>
+    <link href="TimeBase.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        span {
+            color: Gray;
+            margin: 10px;
+        }
+    </style>
+    <script type="text/javascript">
+
+    </script>
+</head>
+<body>
+    <script type="text/javascript">
+
+        var nodeID = GetQueryString("FK_Node");
+        var flowNo = GetQueryString("FK_Flow");
+        var workID = GetQueryString("WorkID");
+        var fid = GetQueryString("FID");
+        $(function () {
+
+            //   InitPage();
+
+        });
+
+    </script>
+</body>
+
+ <div id="toolbar">
+
+    当前版本：<select id="DDL_Ver">
+        <option value="11111"> 2022.02.23 23:01 /节点名称/处理人 </option>
+        <option value="11111"> 2022.02.23 20:01 /节点名称/处理人 </option>
+        <option value="11111"> 2022.02.23 09:01 /节点名称/处理人 </option>
+    </select>
+
+    对比版本：
+    <select id="DDL_Ver2">
+        <option value="11111"> 2022.02.23 23:01 /节点名称/处理人 </option>
+        <option value="11111"> 2022.02.23 20:01 /节点名称/处理人 </option>
+        <option value="11111"> 2022.02.23 09:01 /节点名称/处理人 </option>
+    </select>
+
+</div>
+
+</html>

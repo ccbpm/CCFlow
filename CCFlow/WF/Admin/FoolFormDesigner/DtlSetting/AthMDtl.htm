@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>表格条件查询</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            var ath = new Entity("BP.Sys.FrmUI.FrmAttachmentExt");
+            ath.MyPK = "" + GetQueryString("FK_MapData") + "_AthMDtl";
+            var idx = ath.RetrieveFromDBSources(); //从数据库来查询.
+
+            if (idx == 0) {
+                $("#docs").html("目前没有启用从表附件，如果启用请参考以下说明.");
+            } else {
+                $("#docs").html("<a href='javascript:Go();' >编辑从表附件属性</a>");
+            }
+        });
+        function Go() {
+            var url = "../../../Comm/RefFunc/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&PKVal=" + GetQueryString("FK_MapData") + "_AthMDtl";
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+
+        <h4>
+            <div id="docs"></div>
+        </h4>
+
+        <fieldset>
+            <legend>说明：</legend>
+            <ul>
+                <li>从表的附件，是对一行记录上的多附件，运行效果如下图。 </li>
+                <li><img src="AthMDtlRuning.png" class="help" /> </li>
+                <li>如果要启用从表附件，请在从表属性里设置，如下图。 </li>
+                <li><img style="width:80%;" src="AthMDtlSetting.png" class="help" /> </li>
+            </ul>
+        </fieldset>
+
+    </form>
+</body>
+</html>

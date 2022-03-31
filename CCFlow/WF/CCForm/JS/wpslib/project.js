@@ -1,0 +1,1 @@
+var projInfo = {"name":"HelloWps","type":"wps"}

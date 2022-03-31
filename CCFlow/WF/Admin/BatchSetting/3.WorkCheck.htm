@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>批处理</title>
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <!-- 自己的系统风格统一. -->
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../Admin.js"></script>
+    <script src="DDLBar.js"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../Scripts/vue.js"></script>
+
+    <script type="text/javascript">
+
+        var flowNo = GetQueryString("FlowNo");
+        $(function () {
+
+            InitBar("WorkCheck");
+
+            //获取节点属性
+            html = "";
+            html += "<tr>";
+            html += "<th>#</th>";
+            html += "<th>节点ID</th>";
+            html += "<th>名称</th>";
+            html += "<th>审核组件状态</th>";
+            html += "</tr>";
+
+            //获得节点s.
+            var nodes = new Entities("BP.WF.Nodes");
+            nodes.Retrieve("FK_Flow", flowNo);
+            var frmNode = null;
+
+            for (var i = 0; i < nodes.length; i++) {
+
+                var json = nodes[i];
+
+                $("<tr><td>" + (i + 1) + "</td><td>" + json.NodeID + "</td><td>" + json.Name + "</td><td><select id='DDL_FWC_" + json.NodeID + "' onchange=SetNodeFWCSta('" + json.NodeID + "')></select></td></tr>").appendTo($("#sln"));
+                InitBarExt(json.NodeID);
+            }
+
+            return;
+
+        });
+        function InitBarExt(nodeID) {
+            html = "";
+
+            html += "<option id='" + nodeID + "' value='0' >&nbsp;&nbsp;&nbsp;&nbsp;禁用&nbsp;&nbsp;&nbsp;&nbsp;</option>";
+            html += "<option id='" + nodeID + "' value='1' >&nbsp;&nbsp;&nbsp;&nbsp;启用&nbsp;&nbsp;&nbsp;&nbsp;</option>";
+            html += "<option id='" + nodeID + "' value='2' >&nbsp;&nbsp;&nbsp;&nbsp;只读&nbsp;&nbsp;&nbsp;&nbsp;</option>";
+
+            var selid = "DDL_FWC_" + nodeID;
+            //加载保存的下拉选项
+            document.getElementById(selid).innerHTML = html;
+            var en = new Entity("BP.WF.Node", nodeID);
+            $("#" + selid + " option[value='" + en.FWCSta + "']").attr("selected", "selected");
+        }
+
+        //下拉列表选择的时候自动保存
+        function SetNodeFWCSta(nodeID) {
+
+            var fwcSta = $("#DDL_FWC_" + nodeID + " option:selected").val();
+
+            if (nodeID.indexOf('01') == nodeID.length - 2) {
+                //获得nodeID.
+                var node = new Entity("BP.WF.Node", nodeID);
+                node.FWCSta = 2;
+                node.Update();
+                alert('开始节点审核组件状态必须为只读,并且不能修改.');
+                window.location.reload();
+                return;
+            }
+
+            //获得nodeID.
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.FWCSta = fwcSta;
+            node.Update();
+
+        }
+    </script>
+</head>
+<body>
+    <div id="bar"> </div>
+    <form id="cc">
+
+        <fieldset>
+            <legend>
+                <label>审核组件</label>
+            </legend>
+
+            <center>
+                <div>
+                    <table id="sln" style="width:60%;" class="table table-bordered table-hover table-condensed">
+                        <tr>
+                            <th> # </th>
+                            <th> ID </th>
+                            <th> 名称 </th>
+                            <th> 状态 </th>
+                        </tr>
+                    </table>
+                </div>
+                <fieldset>
+                    <legend> 样式 </legend>
+                    <img src="BatchFWC.png" style="width:90%;" class="HelpImg" />
+                </fieldset>
+            </center>
+        </fieldset>
+    </form>
+
+</body>
+</html>

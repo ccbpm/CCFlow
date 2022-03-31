@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>wps表单222</title>
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <!--通用的JS-->
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="JS/wpslib/project.js"></script>
+    <script src="JS/wpslib/wpsjsrpcsdk.js"></script>
+
+    <script type="text/javascript">
+        var wpsData = [];
+        var wpsTempURL = "";
+        var childDatas = [];
+        var frmID = GetQueryString("FrmID");
+        var oid = GetQueryString("WorkID");
+        //初始化函数
+        $(function () {
+
+            
+
+            webUser = new WebUser();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("WpsFrm_Init");
+            if (data.indexOf('err@') == 0) {
+                alert('装载表单出错,请查看控制台console,或者反馈给管理员.' + data);
+                console.log(data);
+                return;
+            }
+            var url1 = document.location.host;
+
+            wpsTempURL = document.location.protocol + "//" + url1 + data;
+            $("#docs").html("模板路径：" + data);
+
+            //表单模板与表单数据.
+            var data = handler.DoMethodReturnString("FrmGener_Init");
+            if (data.indexOf('err@') == 0) {
+                alert('装载表单出错,请查看控制台console,或者反馈给管理员.' + data);
+                console.log(data);
+                return;
+            }
+            var frmData;
+            try {
+                frmData = JSON.parse(data);
+            }
+            catch (err) {
+                alert(" frmData数据转换JSON失败:" + data);
+                console.log(data);
+                return;
+            }
+
+            //所有的数据，都在 frmData里面，MainTable 是主表的数据.
+            console.log(frmData);
+            var dataMain = frmData.MainTable[0];
+            for (var i in dataMain) {
+                var json =
+                {
+                    "name": i,
+                    "text": dataMain[i],
+                    "type": "text"
+                };
+                var textV = getFiledValue(frmData.Sys_MapAttr, i, dataMain[i]);
+                if (textV) {
+                    json.text = textV;
+                }
+
+                wpsData.push(json);
+                //json.name=
+                console.log(i, ":", json.text);
+            }
+            // $("#docs").html("数据：" + data);
+              frmID = GetQueryString("FrmID");
+            if (frmID == null)
+                frmID = GetQueryString("FK_MapData");
+              oid = GetQueryString("OID");
+            if (oid == 0)
+                oid = GetQueryString("WorkID");
+
+            //生成从表数据.
+            GenerMapDtls(frmData, oid, frmID);
+
+            var paras = "";
+            paras += "&FID=" + GetQueryString("FID");
+            paras += "&FK_Flow=" + GetQueryString("FK_Flow");
+            paras += "&FK_Node=" + GetQueryString("FK_Node");
+            paras += "&PWorkID=" + GetQueryString("PWorkID");
+            paras += "&WorkID=" + oid;
+            paras += "&OID=" + oid;
+            paras += "&FrmID=" + frmID;
+            paras += "&FK_MapData=" + frmID;
+
+            var html = "<a href='FrmGener.htm?1=1" + paras + "' >打开原始数据傻瓜表单</a>";
+            $("#url").html(html);
+
+            html = "在线打开-张关勇解析.";
+            $("#onlineOpen").html(html);
+
+            if (data.indexOf('err@') == 0) {
+                alert('装载表单出错,请查看控制台console,或者反馈给管理员.' + data);
+                console.log(data);
+                return;
+            }
+            //打开文件.
+            fillTemplate();
+        });
+
+        //替换从表数据.
+        function GenerMapDtls(frmData, oid, frmID) {
+
+            var paras = "";
+            paras += "&RefPKVal=" + oid;
+            paras += "&IsReadonly=" + GetQueryString("IsReadonly");
+            paras += "&FrmType=" + GetQueryString("FrmType");
+            paras += "&FK_MapData=" + frmID;
+            paras += "&WorkID=" + oid;
+            paras += "&FK_Flow=" + GetQueryString("FK_Flow");
+            paras += "&FK_Node=" + GetQueryString("FK_Node");
+            paras += "&FID=" + GetQueryString("FID");
+            paras += "&PWorkID=" + GetQueryString("PWorkID");
+
+            //Dtl2017.htm?EnsName=Frm_CeShiShaGuaBiaoDANDtl1&RefPKVal=100&FK_MapData=Frm_CeShiShaGuaBiaoDAN&IsReadonly=0
+            // & 1=2 & t=0.687951661159741 & FK_MapData=Frm_CeShiShaGuaBiaoDAN & WorkID=100 & FK_Flow=001 & FK_Node=101 & FID=0 &
+            //   PWorkID=0 & Version=1 & FrmType=0
+
+            //获得从表数据集合.
+            var mapDtls = frmData["Sys_MapDtl"];
+
+            for (var i = 0; i < mapDtls.length; i++) {
+                var mapDtl = mapDtls[i];
+
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+                handler.AddUrlData(paras);
+                handler.AddPara("EnsName", mapDtl.No);
+
+                var data = handler.DoMethodReturnString("Dtl_Init");
+                if (data.indexOf('err@') == 0) {
+                    alert('装载表单出错,请查看控制台console,或者反馈给管理员.' + data);
+                    console.log(data);
+                    return;
+                }
+                var frmDtlData;
+                try {
+                    frmDtlData = JSON.parse(data);
+                   // childDatas.push(frmDtlData.DBDtl);
+                    var json =
+                    {
+                        "name": "NianFen",
+                        "data": frmDtlData.DBDtl,
+                        "type": "table"
+                    };
+
+                    wpsData.push(json);
+                  //  groupArr(frmDtlData.DBDtl, "NianFen");
+                }
+                catch (err) {
+                    alert(" frmData数据转换JSON失败:" + data);
+                    console.log(data);
+                    return;
+                }
+                console.log(frmDtlData);
+                //handler.AddPara(paras, mapDtl.No);
+            }
+
+        }
+        function groupArr(list, field) {
+           // debugger;
+            var fieldList = [], att = [];
+            list.map((e) => {
+                fieldList.push(e[field])
+            })
+            //数组去重
+            fieldList = fieldList.filter((e, i, self) => {
+                return self.indexOf(e) == i
+            })
+            for (var j = 0; j < fieldList.length; j++) {
+                //过滤出匹配到的数据
+                var arr = list.filter((e) => {
+                    return e[field] == fieldList[j];
+                })
+                att.push({
+                    type: arr[0][field],
+                    list: arr
+                })
+            }
+            return att;
+        }
+        /* 处理值方法 */
+        function getFiledValue(Sys_MapAttr, filedName, rvalue) {
+            var value;
+            for (var i in Sys_MapAttr) {
+                if (filedName == Sys_MapAttr[i].KeyOfEn) {
+                    if (Sys_MapAttr[i].MyDataType == "4") {//布尔
+                        if (rvalue == "1") {//是
+                            value = "是";
+                        } else if (rvalue == "0") {//否
+                            value = "否";
+                        }
+                    }
+                }
+            }
+            return value;
+        }
+        /* 调用的方法 */
+        function fillTemplate() {
+            // var filePath = GetDemoPath("样章2.docx");
+
+            //var filePath = prompt("请输入打开文件路径（本地或是url）：", GetDemoPath("样章.docx"))
+            // var uploadPath = "BP.WF.Dev2Interface.UploadFile"
+
+            var uploadPath = dynamicHandler + "?DoType=HttpHandler&DoMethod=WpsFrm_SaveFile&HttpHandlerName=BP.WF.HttpHandler.WF_CCForm&FrmID=" + frmID + "&WorkID=" + oid;
+            var uploadFieldName = "fileField";
+
+            var invokeParam = {
+                "fileName": wpsTempURL,
+                "templateDataUrl": wpsData,
+                "childDatas": childDatas,
+
+                "uploadPath": uploadPath, // 保存文档上传接口
+                //"fileName": filePath,
+                "uploadFieldName": uploadFieldName,
+                "userName": "东方不败"
+
+            }; //根据需求任意定义
+            WpsInvoke.InvokeAsHttp(
+                projInfo.type,
+                projInfo.name, //wps加载项的名字，在实际项目中写上对应的名字
+                "OpenDoc", //要调用的在wps加载项中的函数名
+                JSON.stringify(invokeParam), //调用的在wps加载项中的函数要传递的数据，是一个json对象，根据业务系统需求任意定义
+                callbackFunc, //回调函数，wps加载项中InvokeFromSystemDemo这个函数的返回值作为这个函数的参数
+                true) //设置wps是否显示到最前面来
+
+            //OpenDoc(param);
+        }
+
+        var callbackFunc = function (result) {
+            if (result.status == 0) {
+                //下面这行代码用来注册从wps加载项返回的消息的接收函数
+                WpsInvoke.RegWebNotify(projInfo.type, projInfo.name, function (messageText) {
+                    var span = document.getElementById("webnotifyspan")
+                    span.innerHTML = "(次数：" + ++WebNotifycount + ")：" + messageText;
+                })
+                // alert(result.response)
+            }
+
+        }
+
+        function SaveFile()
+        {
+            var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=WpsFrm_SaveFile&HttpHandlerName=BP.WF.HttpHandler.WF_CCForm&FrmID=xxx&WorkID=xxx";
+             
+        }
+    </script>
+
+</head>
+<body>
+
+    <br />
+    <br />
+
+    <form id="cc">
+        <fieldset>
+            <legend>处理表单</legend>
+            <ul>
+                <li> <div id="url" name="url" /></li>
+                <li> <div id="onlineOpen" name="onlineOpen" /></li>
+                <li> <div id="docs" name="docs" /></li>
+            </ul>
+
+            <legend>Wps插件安装说明</legend>
+            <ul>
+                <li>该插件是一个ccflow开发的wps插件。</li>
+            </ul>
+            <li><a href="#" onclick="fillTemplate()">模板</a></li>
+        </fieldset>
+    </form>
+</body>
+</html>

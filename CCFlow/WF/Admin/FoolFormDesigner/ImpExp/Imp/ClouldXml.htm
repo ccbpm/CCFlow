@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>驰骋表单设计器\\导入导出\\本地文件导入</title>
+    <link href="../../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../../Scripts/easyUI145/jquery.min.js"></script>
+    <script src="../../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../../CCFlowEnum.js"></script>
+    <script type="text/javascript">
+
+        var frmID = null;
+        $(function () {
+            InitBar("ClouldXml");
+        });
+        //从xml文件导入
+        function SaveImpFromLocalXML() {
+
+            if (confirm('您确定要执行导入吗？导入后会清空当前的设计的元素。') == false)
+                return;
+
+            var formData = new FormData();
+            var name = $("input").val();
+            formData.append("file", $("#localXmlFile")[0].files[0]);
+            formData.append("name", name);
+
+            var doMethod = "Imp_LoadFrmTempleteFromLocalFile";
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp";
+            $.ajax({
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
+                type: 'POST',
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                data: formData,
+                // 告诉jQuery不要去处理发送的数据
+                processData: false,
+                dataType: 'html',
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType: false,
+                beforeSend: function () {
+
+                },
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
+                    window.parent.location.href = window.parent.location.href;
+                },
+                error: function (data) {
+                    alert("系统错误:" + data);
+                    return;
+                }
+            });
+
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>选择表单模板文件(*.xml),然后按确定按钮 </legend>
+        <ul>
+            <li>选择的模版文件必须是本机导出的，格式为 .xml 的文件. </li>
+        </ul>
+        <label style="padding-left: 8px;">
+        </label>
+        <br />
+        <br />
+        <input type="file" id="localXmlFile" name="localXmlFile" />
+        <input type="button" value="模板导入" onclick="SaveImpFromLocalXML()" />
+    </fieldset>
+</body>
+</html>

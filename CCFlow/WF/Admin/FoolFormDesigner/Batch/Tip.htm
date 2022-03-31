@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>修改字段名</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var frmID = "";
+        //页面启动函数.
+        $(function () {
+
+            InitBar("Tip");
+
+            frmID = GetQueryString("FrmID");
+
+            //所有的字段.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_Batch");
+            handler.AddPara("FrmID", frmID);
+            var data = handler.DoMethodReturnJSON("KeyOfEn_Init");
+
+            console.log(data);
+
+            //返回的列请参考：BatchFieldName_Init
+
+            //字段分组.
+            var gfs = new Entities("BP.Sys.GroupFields");
+            gfs.Retrieve("FrmID", frmID, "Idx");
+            //生成列表.
+
+        });
+
+        //保存方法.
+        function Save() {
+
+        }
+        //单行的保存。
+        function SaveOne(oldName, newName) {
+            if (oldName == newName)
+                return "";
+
+            var en = new Entities("BP.Sys.FrmUI.MapAttrString", frmID + "_" + oldName);
+
+            var data = en.DoMethodReturnString("DoRenameField", newName);
+
+            return data;
+        }
+
+    </script>
+</head>
+<body>
+
+    <div id="bar"></div>
+
+    <table>
+        <tr>
+            <th>Idx</th>
+            <th>名称</th>
+            <th>字段类型</th>
+            <th>字段名</th>
+            <th>目前名称</th>
+            <th>建议名称1</th>
+            <th>建议名称2</th>
+            <th>修改名称</th>
+            <th>其他</th>
+        </tr>
+    </table>
+    <button onclick="Save()">保存</button>
+
+</body>
+</html>

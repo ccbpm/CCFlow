@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>驰骋表单设计器\\导入导出\\本地文件导入</title>
+    <link href="../../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../../Scripts/easyUI145/jquery.min.js"></script>
+    <script src="../../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../../CCFlowEnum.js"></script>
+    <script type="text/javascript">
+
+        var frmID = null;
+        $(function () {
+            InitBar("FrmEnsName");
+        });
+
+        //导入
+        function Save() {
+
+            if (confirm('您确定要执行导入吗？') == false)
+                return;
+
+            var ensName = $("#TB_EnsName").val();
+
+            var frmID = GetQueryString("FrmID");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+            handler.AddPara("FrmID", frmID);
+            handler.AddPara("EnsName", ensName);
+            var data = handler.DoMethodReturnString("Imp_FrmEnsName");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
+            window.parent.location.href = window.parent.location.href;
+
+
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+
+    <fieldset>
+        <legend>请输入类名.</legend>
+        <ul>
+            <li>系统将根据实体的类map里面的字段，生成数据. </li>
+        </ul>
+        <input type="text" id="TB_EnsName" name="TB_EnsName" style="width:200px;" placeholder="比如,BP.Port.Emps" />
+        <input type="button" value="导入" onclick="Save()" />
+
+    </fieldset>
+</body>
+</html>
+

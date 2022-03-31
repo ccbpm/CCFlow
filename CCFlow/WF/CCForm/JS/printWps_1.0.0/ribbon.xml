@@ -1,0 +1,16 @@
+<customUI xmlns="http://schemas.microsoft.com/office/2006/01/customui" onLoad="OnAddinLoad">
+    <ribbon startFromScratch="false">
+        <tabs>
+            <tab id="wpsAddinTab" label="数据打印">
+				<group id="btnDemoGroup" label="group1">
+                    <button id="btnShowMsg" label="弹出消息框" onAction="OnAction" getEnabled="OnGetEnabled"  getImage="GetImage" visible="true" size="large"/>
+                    <button id="btnIsEnbable" getLabel="OnGetLabel" onAction="OnAction" enabled="true"  getImage="GetImage" visible="true" size="large"/>
+                    <button id="btnShowDialog" label="弹对话框网页" onAction="OnAction" getEnabled="OnGetEnabled"  getImage="GetImage" getVisible="OnGetVisible" size="large"/>
+                    <button id="btnShowTaskPane" label="弹任务窗格网页" onAction="OnAction" getEnabled="OnGetEnabled"  getImage="GetImage" getVisible="OnGetVisible" size="large"/>
+                    <button id="btnApiEvent" getLabel="OnGetLabel" onAction="OnAction" getEnabled="OnGetEnabled"  getImage="GetImage" getVisible="OnGetVisible" size="large"/>
+                    <button id="btnWebNotify" label="给业务系统发通知" onAction="OnAction" enabled="true"  getImage="GetImage" getVisible="OnGetVisible" size="large"/>
+				</group>
+            </tab>
+        </tabs>
+    </ribbon>
+</customUI>

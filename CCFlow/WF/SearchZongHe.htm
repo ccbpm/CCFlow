@@ -1,0 +1,218 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <title>流程综合查询</title>
+    <script src="./Scripts/vue.js"></script>
+    <!-- Element Ui -->
+    <link rel="stylesheet" href="./Scripts/element/element.css">
+    <link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <script src="./Scripts/element/element.js"></script>
+    <script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="Scripts/QueryString.js"></script>
+    <script src="Scripts/config.js" type="text/javascript"></script>
+    <script type="text/javascript" src="Comm/Gener.js"></script>
+    <script type="text/javascript" src="Scripts/dayjs/dayjs.min.js"></script>
+    <script type="text/javascript" src="Scripts/dayjs/duration.js"></script>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        #app {
+            background-color: white;
+        }
+
+        /* 样式覆盖 */
+        .el-table__header {
+            width: 100% !important;
+        }
+
+        .el-table__body {
+            width: 100% !important;
+        }
+
+        /* 自定义 */
+        .box {
+            margin: 20px 10px;
+        }
+
+        .box .content {
+            padding-right: 40px;
+        }
+
+        .f-left {
+            float: left;
+        }
+
+        .title {
+            line-height: 40px;
+        }
+
+        .search-box {
+            margin: 15px 0;
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+    <div id="app" class="wrapper wrapper-content animated fadeInRight">
+        <div class="box ibox-content">
+            <div>
+                <div class="f-left title">关键字：</div>
+                <div class="f-left content">
+                    <el-input v-model="keyWord" placeholder="请输入内容"></el-input>
+                </div>
+            </div>
+            <div>
+                <div class="f-left title">日期从：</div>
+                <div class="f-left content">
+                    <el-date-picker v-model="date" type="daterange" range-separator="至" start-placeholder="开始日期"
+                        end-placeholder="结束日期" value-format="yyyy-MM-dd">
+                    </el-date-picker>
+                </div>
+            </div>
+            <div>
+                <div class="f-left title">状态：</div>
+                <div class="f-left content">
+                    <el-select v-model="status" placeholder="请选择">
+                        <el-option v-for="item in statusOpt" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
+                </div>
+            </div>
+            <div>
+                <el-button type="primary" icon="el-icon-search" @click="onSearch">搜索</el-button>
+            </div>
+        </div>
+        <el-table :data="tableData" border style="width: 100%;">
+            <el-table-column prop="no" label="序号" type="index" />
+            </el-table-column>
+            <el-table-column prop="Title" label="标题" />
+            </el-table-column>
+            <el-table-column prop="flow" label="流程/停留节点" />
+            </el-table-column>
+            <el-table-column prop="StarterName" label="发起人" />
+            </el-table-column>
+            <el-table-column prop="initiateDate" label="发起日期" />
+            </el-table-column>
+            <el-table-column prop="lastDate" label="最后日期" />
+            </el-table-column>
+            <el-table-column prop="time" label="耗时" />
+            </el-table-column>
+            <el-table-column prop="status" label="状态" />
+            </el-table-column>
+        </el-table>
+    </div>
+</body>
+<script type="text/javascript">
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                tableData: [
+                    {
+                        Title: '标题',
+                        flow: '流程/停留节点',
+                        StarterName: '发起人',
+                        initiateDate: '发起日期',
+                        lastDate: '最后日期',
+                        time: '耗时',
+                        status: '状态'
+                    }
+                ],
+                statusOpt: [{
+                    value: 'all',
+                    label: '全部'
+                }, {
+                    value: '0',
+                    label: '运行中'
+                }, {
+                    value: '1',
+                    label: '退回'
+                }, {
+                    value: '2',
+                    label: '已完成'
+                }],
+                status: 'all',
+                date: '', // element用户点击清除会置为null
+                keyWord: ''
+            }
+        },
+        methods: {
+            onSearch: function () {
+                this.search(
+                    this.keyWord,
+                    this.date ? this.date[0] + ' 00:00:00' : '',
+                    this.date ? this.date[1] + ' 23:59:59' : '',
+                    "",
+                    this.status
+                );
+            },
+            search: function (
+                Key = "",
+                DTFrom = "",
+                DTTo = "",
+                FlowNo = "",
+                WFState = ""
+            ) {
+                //执行查询.
+                const handler = new HttpHandler("BP.WF.HttpHandler.WF");
+                handler.AddPara("Key", Key);
+                handler.AddPara("DTFrom", DTFrom);
+                handler.AddPara("DTTo", DTTo);
+                handler.AddPara("FlowNo", FlowNo);
+                handler.AddPara("WFState", WFState);
+                const data = handler.DoMethodReturnJSON("SearchZongHe_Init");
+                console.log(`🚀 :: data`, data);
+                this.handleData(data);
+            },
+            handleData: function (data) {
+                const now = dayjs();
+                this.tableData = data.map(item => {
+                    item.flow = `${item.FlowName}/${item.NodeName}`;
+                    item.initiateDate = item.RDT.substring(0, 16);
+                    item.lastDate = item.SendDT.substring(0, 16);
+                    // 耗时 已完成 按照 RDT , Send DT两个时间差计算
+                    let diffm;
+                    if (item.WFState == 3) {
+                        diffm = dayjs(item.SendDT).diff(dayjs(item.RDT));
+                    } else {
+                        diffm = dayjs.duration(dayjs().diff(dayjs(item.RDT)))
+                    }
+                    const dayObj = dayjs.duration(diffm).$d.$ds;
+                    item.time = `${dayObj.days}天${dayObj.hours}时${dayObj.minutes}分`
+                    /*
+                        dayjs diff
+                        now > SendDT 正
+                        now < SendDT 负
+                    */
+                    if (item.WFState == 2) {
+                        item.status = now.diff(dayjs(item.SendDT)) <= 0 ? '运行中' : '已逾期';
+                    } else if (item.WFState == 3) {
+                        item.status = '已完成'
+                    } else if (item.WFState == 5) {
+                        item.status = '退回'
+                    } else {
+                        item.status = '其他'
+                    }
+
+                    return item;
+                })
+                console.log(`🚀 :: this.tableData`, this.tableData);
+            }
+        },
+        created() {
+            dayjs.extend(dayjs_plugin_duration);
+        },
+        mounted() {
+            this.search();
+        }
+    })
+</script>
+
+</html>

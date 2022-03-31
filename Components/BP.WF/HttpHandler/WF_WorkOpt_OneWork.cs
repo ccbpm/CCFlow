@@ -48,7 +48,7 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Track";
             //把列名转化成区分大小写.
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || DBAccess.AppCenterDBType == DBType.UX)
             {
                 dt.Columns["MYPK"].ColumnName = "MyPK";
                 dt.Columns["ACTIONTYPE"].ColumnName = "ActionType";
@@ -149,7 +149,7 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             //获取干流程和子线程中的Track信息
-            DataTable dt = BP.WF.Dev2Interface.DB_GenerTrackTable(this.FK_Flow, this.WorkID, this.FID);
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerTrackTable(this.FK_Flow, this.WorkID, this.FID,false);
             ds.Tables.Add(dt);
 
 
@@ -337,6 +337,7 @@ namespace BP.WF.HttpHandler
                     break;
                 case DBType.MySQL:
                 case DBType.PostgreSQL:
+                case DBType.UX:
                     currNode = "SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' AND WorkID=" + this.WorkID + "  Order by RDT DESC LIMIT 1";
                     break;
                 case DBType.MSSQL:
@@ -367,17 +368,17 @@ namespace BP.WF.HttpHandler
             return "流程已经被重新启用.";
         }
 
-        public string OP_UnHungUp()
+        public string OP_UnHungup()
         {
             WorkFlow wf2 = new WorkFlow( WorkID);
-            //  wf2.DoUnHungUp();
+            //  wf2.DoUnHungup();
             return "流程已经被解除挂起.";
         }
 
-        public string OP_HungUp()
+        public string OP_Hungup()
         {
             WorkFlow wf1 = new WorkFlow( WorkID);
-            //wf1.DoHungUp()
+            //wf1.DoHungup()
             return "流程已经被挂起.";
         }
 
@@ -402,7 +403,7 @@ namespace BP.WF.HttpHandler
             #region  PowerModel权限的解析
             string psql = "SELECT A.PowerFlag,A.EmpNo,A.EmpName FROM WF_PowerModel A WHERE PowerCtrlType =1"
              + " UNION "
-             + "SELECT A.PowerFlag,B.No,B.Name FROM WF_PowerModel A, Port_Emp B, Port_DeptEmpStation C WHERE A.PowerCtrlType = 0 AND B.No = C.FK_Emp AND A.StaNo = C.FK_Station";
+             + "SELECT A.PowerFlag,B.No,B.Name FROM WF_PowerModel A, Port_Emp B, Port_DeptEmpStation C WHERE A.PowerCtrlType = 0 AND B.No=C.FK_Emp AND A.StaNo = C.FK_Station";
             psql = "SELECT PowerFlag From(" + psql + ")D WHERE  D.EmpNo='" + WebUser.No + "'";
 
             string powers = DBAccess.RunSQLReturnStringIsNull(psql, "");
@@ -559,12 +560,12 @@ namespace BP.WF.HttpHandler
 
                     //判断是否可以打印.
                     break;
-                case WFState.HungUp: // 挂起.
+                case WFState.Hungup: // 挂起.
                     /*撤销挂起*/
                     if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(WorkID, WebUser.No) == false)
-                        ht.Add("CanUnHungUp", 0);
+                        ht.Add("CanUnHungup", 0);
                     else
-                        ht.Add("CanUnHungUp", 1);
+                        ht.Add("CanUnHungup", 1);
                     break;
                 default:
                     break;
@@ -606,36 +607,6 @@ namespace BP.WF.HttpHandler
             }
             return false;
         }
-
-
-        /// <summary>
-        /// 获取附件列表及单据列表
-        /// </summary>
-        /// <returns></returns>
-        public string GetAthsAndBills()
-        {
-            string sql = "";
-            string json = "{\"Aths\":";
-
-            if (FK_Node == 0)
-                sql = "SELECT fadb.*,wn.Name NodeName FROM Sys_FrmAttachmentDB fadb INNER JOIN WF_Node wn ON wn.NodeID = fadb.NodeID WHERE fadb.FK_FrmAttachment IN (SELECT MyPK FROM Sys_FrmAttachment WHERE  " + BP.WF.Glo.MapDataLikeKey(this.FK_Flow, "FK_MapData") + "  AND IsUpload=1) AND fadb.RefPKVal='" + this.WorkID + "' ORDER BY fadb.RDT";
-            else
-                sql = "SELECT fadb.*,wn.Name NodeName FROM Sys_FrmAttachmentDB fadb INNER JOIN WF_Node wn ON wn.NodeID = fadb.NodeID WHERE fadb.FK_FrmAttachment IN (SELECT MyPK FROM Sys_FrmAttachment WHERE  FK_MapData='ND" + FK_Node + "' ) AND fadb.RefPKVal='" + this.WorkID + "' ORDER BY fadb.RDT";
-
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-
-            foreach (DataColumn col in dt.Columns)
-                col.ColumnName = col.ColumnName.ToUpper();
-
-            json += BP.Tools.Json.ToJson(dt) + ",\"Bills\":";
-
-            Bills bills = new Bills();
-            bills.Retrieve(BillAttr.WorkID, this.WorkID);
-
-            json += bills.ToJson() + ",\"AppPath\":\"" + BP.WF.Glo.CCFlowAppPath + "\"}";
-
-            return json;
-        }
         /// <summary>
         /// 获取OneWork页面的tabs集合
         /// </summary>
@@ -647,7 +618,7 @@ namespace BP.WF.HttpHandler
 
             OneWorkXmls xmls = new OneWorkXmls();
             if ( System.IO.File.Exists( xmls.File)==false)
-                System.IO.File.Copy(SystemConfig.PathOfData + "Xml\\OneWorkCopy.xml", xmls.File, true);
+                System.IO.File.Copy(SystemConfig.PathOfData + "Xml/OneWorkCopy.xml", xmls.File, true);
             xmls.RetrieveAll();
 
             int nodeID = this.FK_Node;
@@ -860,7 +831,7 @@ namespace BP.WF.HttpHandler
                 #endregion 如果流程没有完成,就把工作人员列表返回过去.
 
                 string str= BP.Tools.Json.DataSetToJson(ds);
-                 DataType.WriteFile("c:\\GetFlowTrackJsonData_CCflow.txt", str);
+                 //DataType.WriteFile("c:\\GetFlowTrackJsonData_CCflow.txt", str);
                  return str;
             }
             catch (Exception ex)
@@ -950,7 +921,7 @@ namespace BP.WF.HttpHandler
                           + "        wf.Name  as   \"FlowName\""
                           + " FROM   WF_GenerWorkFlow wgwf"
                           + "        INNER JOIN WF_Flow wf"
-                          + "             ON  wf.No = wgwf.FK_Flow"
+                          + "             ON  wf.No=wgwf.FK_Flow"
                           + "        INNER JOIN Sys_Enum se"
                           + "             ON  se.IntKey = wgwf.WFSta"
                           + "             AND se.EnumKey = 'WFSta'"
@@ -1174,7 +1145,7 @@ namespace BP.WF.HttpHandler
                           + "        wf.Name  as   \"FlowName\""
                           + " FROM   WF_GenerWorkFlow wgwf"
                           + "        INNER JOIN WF_Flow wf"
-                          + "             ON  wf.No = wgwf.FK_Flow"
+                          + "             ON  wf.No=wgwf.FK_Flow"
                           + "        INNER JOIN Sys_Enum se"
                           + "             ON  se.IntKey = wgwf.WFSta"
                           + "             AND se.EnumKey = 'WFSta'"
@@ -1330,8 +1301,8 @@ namespace BP.WF.HttpHandler
         {
             SMS sms = new SMS();
             sms.RetrieveByAttr(SMSAttr.MyPK, MyPK);
-            sms.MyPK = DBAccess.GenerGUID();
-            sms.RDT = DataType.CurrentDataTime;
+            sms.setMyPK(DBAccess.GenerGUID());
+            sms.RDT = DataType.CurrentDateTime;
             sms.SendToEmpNo = this.UserName;
             sms.Sender = WebUser.No;
             sms.Title = this.Title;

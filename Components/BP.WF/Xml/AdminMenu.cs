@@ -141,16 +141,25 @@ namespace BP.WF.XML
         {
             get
             {
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-                    return SystemConfig.PathOfWebApp + "DataUser/XML/AdminMenuCloud.xml";
-
                 if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                     return SystemConfig.PathOfWebApp + "DataUser/XML/AdminMenu.xml";
 
-                if (BP.Web.WebUser.No.Equals("admin")==true)
-                    return SystemConfig.PathOfWebApp + "DataUser/XML/AdminMenu.xml";
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                {
+                    if (BP.Web.WebUser.No.Equals("admin") == true)
+                        return SystemConfig.PathOfWebApp + "DataUser/XML/AdminMenuSAAS.xml";
+                    else
+                        return SystemConfig.PathOfWebApp + "DataUser/XML/Admin2MenuSAAS.xml";
+                }
 
-                return SystemConfig.PathOfWebApp + "DataUser/XML/Admin2Menu.xml";
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
+                {
+                    if (BP.Web.WebUser.No.Equals("admin") == true)
+                        return SystemConfig.PathOfWebApp + "DataUser/XML/AdminMenuGroup.xml";
+                    else
+                        return SystemConfig.PathOfWebApp + "DataUser/XML/Admin2MenuGroup.xml";
+                }
+                throw new Exception("err@系统错误....");
             }
         }
         /// <summary>

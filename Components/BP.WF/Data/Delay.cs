@@ -496,7 +496,9 @@ namespace BP.WF.Data
                     return this._enMap;
 
                 Map map = new Map("V_WF_Delay", "逾期流程");
-                map.EnType = En.EnType.View;
+                map.setEnType(EnType.View);
+
+                
 
                 map.AddMyPK();
 
@@ -537,7 +539,7 @@ namespace BP.WF.Data
                 RefMethod rm = new En.RefMethod();
                 rm.Title = "打开轨迹";
                 rm.ClassMethodName = this.ToString() + ".DoOpenTrack";
-                rm.RefMethodType = En.RefMethodType.LinkeWinOpen;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
                 this._enMap = map;

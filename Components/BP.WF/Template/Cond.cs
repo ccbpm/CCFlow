@@ -6,6 +6,8 @@ using BP.Sys;
 using BP.En;
 using BP.WF.Data;
 using BP.Web;
+using BP.Difference;
+
 
 namespace BP.WF.Template
 {
@@ -132,11 +134,11 @@ namespace BP.WF.Template
             get
             {
                 var way = this.SpecOperWay;
-                if (way == Template.SpecOperWay.CurrOper)
+                if (way == SpecOperWay.CurrOper)
                     return BP.Web.WebUser.No;
 
 
-                if (way == Template.SpecOperWay.SpecNodeOper)
+                if (way == SpecOperWay.SpecNodeOper)
                 {
                     string sql = "SELECT FK_Emp FROM WF_GenerWorkerlist WHERE FK_Node=" + this.SpecOperPara + " AND WorkID=" + this.WorkID;
                     string fk_emp = DBAccess.RunSQLReturnStringIsNull(sql, null);
@@ -145,7 +147,7 @@ namespace BP.WF.Template
                     return fk_emp;
                 }
 
-                if (way == Template.SpecOperWay.SpecSheetField)
+                if (way == SpecOperWay.SpecSheetField)
                 {
                     if (this.en.Row.ContainsKey(this.SpecOperPara.Replace("@", "")) == false)
                         throw new Exception("@您在配置方向条件时错误，求指定的人员的时候，按照指定的字段[" + this.SpecOperPara + "]作为处理人，但是该字段不存在。");
@@ -153,7 +155,7 @@ namespace BP.WF.Template
                     return this.en.GetValStringByKey(this.SpecOperPara.Replace("@", ""));
                 }
 
-                if (way == Template.SpecOperWay.CurrOper)
+                if (way == SpecOperWay.CurrOper)
                 {
                     if (this.en.Row.ContainsKey(this.SpecOperPara.Replace("@", "")) == false)
                         throw new Exception("@您在配置方向条件时错误，求指定的人员的时候，按照指定的字段[" + this.SpecOperPara + "]作为处理人，但是该字段不存在。");
@@ -161,7 +163,7 @@ namespace BP.WF.Template
                     return this.en.GetValStringByKey(this.SpecOperPara.Replace("@", ""));
                 }
 
-                if (way == Template.SpecOperWay.SpenEmpNo)
+                if (way == SpecOperWay.SpenEmpNo)
                 {
                     if (DataType.IsNullOrEmpty(this.SpecOperPara) == false)
                         throw new Exception("@您在配置方向条件时错误，求指定的人员的时候，按照指定的人员[" + this.SpecOperPara + "]作为处理人，但是人员参数没有设置。");
@@ -303,7 +305,7 @@ namespace BP.WF.Template
         protected override bool beforeInsert()
         {
             //设置他的主键。
-            this.MyPK = DBAccess.GenerGUID();
+            this.setMyPK(DBAccess.GenerGUID());
             return base.beforeInsert();
         }
        /// <summary>
@@ -465,6 +467,19 @@ namespace BP.WF.Template
             {
                 string s = this.GetValStringByKey(CondAttr.OperatorValue);
                 s = s.Replace("~", "'");
+
+                if (s.Contains("@") == true)
+                {
+                    if (s.Equals("@WebUser.No") == true)
+                        return WebUser.No;
+                    if (s.Equals("@WebUser.Name") == true)
+                        return WebUser.Name;
+                    if (s.Equals("@WebUser.FK_Dept") == true)
+                        return WebUser.FK_Dept;
+                    if (s.Equals("@WebUser.FK_DeptName") == true)
+                        return WebUser.FK_DeptName;
+                }
+
                 return s;
             }
             set
@@ -603,7 +618,7 @@ namespace BP.WF.Template
         /// <param name="mypk"></param>
         public Cond(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         #endregion
@@ -839,7 +854,7 @@ namespace BP.WF.Template
                     if (SystemConfig.IsBSsystem)
                     {
                         /*是bs系统，并且是url参数执行类型.*/
-                        string myurl = HttpContextHelper.RequestRawUrl;// BP.Sys.Glo.Request.RawUrl;
+                        string myurl = HttpContextHelper.RequestRawUrl;// BP.Sys.Base.Glo.Request.RawUrl;
                         if (myurl.IndexOf('?') != -1)
                             myurl = myurl.Substring(myurl.IndexOf('?'));
 
@@ -875,10 +890,10 @@ namespace BP.WF.Template
                         if (SystemConfig.IsBSsystem)
                         {
                             /*在cs模式下自动获取*/
-                            string host = HttpContextHelper.RequestUrlHost;//BP.Sys.Glo.Request.Url.Host;
+                            string host = HttpContextHelper.RequestUrlHost;//BP.Sys.Base.Glo.Request.Url.Host;
                             if (url.Contains("@AppPath"))
-                                url = url.Replace("@AppPath", "http://" + host + HttpContextHelper.RequestApplicationPath);//BP.Sys.Glo.Request.ApplicationPath
-                            else//BP.Sys.Glo.Request.Url.Authority
+                                url = url.Replace("@AppPath", "http://" + host + HttpContextHelper.RequestApplicationPath);//BP.Sys.Base.Glo.Request.ApplicationPath
+                            else//BP.Sys.Base.Glo.Request.Url.Authority
                                 url = "http://" + HttpContextHelper.RequestUrlAuthority + url;
                         }
 
@@ -889,7 +904,7 @@ namespace BP.WF.Template
                             if (DataType.IsNullOrEmpty(cfgBaseUrl))
                             {
                                 string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
-                                Log.DefaultLogWriteLineError(err);
+                                BP.DA.Log.DebugWriteError(err);
                                 throw new Exception(err);
                             }
                             url = cfgBaseUrl + url;
@@ -1005,7 +1020,7 @@ namespace BP.WF.Template
                 if (this.HisDataFrom == ConnDataFrom.StandAloneFrm)
                 {
                     MapAttr attr = new MapAttr(this.FK_Attr);
-                    attr.MyPK = this.FK_Attr;
+                    attr.setMyPK(this.FK_Attr);
                     if (attr.RetrieveFromDBSources() == 0)
                         throw new Exception("err@到达【"+this.ToNodeID+"】方向条件设置错误,原来做方向条件的字段:"+this.FK_Attr+",已经不存在了.");
 
@@ -1186,68 +1201,76 @@ namespace BP.WF.Template
         /// <param name="runModel">模式</param>
         /// <returns></returns>
         public bool GenerResult(GERpt en = null)
-        {   
-            if (this.Count == 0)
-                throw new Exception("err@没有要计算的条件，无法计算.");
+        {
 
-            //给条件赋值.
-            if (en != null)
+            try
             {
-                foreach (Cond cd in this)
+                if (this.Count == 0)
+                    throw new Exception("err@没有要计算的条件，无法计算.");
+
+                //给条件赋值.
+                if (en != null)
                 {
-                    cd.WorkID = en.OID;
-                    cd.en = en;
-                }
-            }
-
-            #region 首先计算简单的.
-            //如果只有一个条件,就直接范围该条件的执行结果.
-            if (this.Count == 1)
-            {
-                Cond cond = this[0] as Cond;
-                return cond.IsPassed;
-            }
-            #endregion 首先计算简单的.
-
-            #region 处理混合计算。
-            string exp = "";
-            foreach (Cond item in this)
-            {
-                if (item.HisDataFrom == ConnDataFrom.CondOperator)
-                {
-                    exp += " " + item.OperatorValue;
-                    continue;
+                    foreach (Cond cd in this)
+                    {
+                        cd.WorkID = en.OID;
+                        cd.en = en;
+                    }
                 }
 
-                if (item.IsPassed)
-                    exp += " 1=1 ";
-                else
-                    exp += " 1=2 ";
-            }
+                #region 首先计算简单的.
+                //如果只有一个条件,就直接范围该条件的执行结果.
+                if (this.Count == 1)
+                {
+                    Cond cond = this[0] as Cond;
+                    return cond.IsPassed;
+                }
+                #endregion 首先计算简单的.
 
-            //如果是混合计算.
-            string sql = "";
-            switch (SystemConfig.AppCenterDBType)
+                #region 处理混合计算。
+                string exp = "";
+                foreach (Cond item in this)
+                {
+                    if (item.HisDataFrom == ConnDataFrom.CondOperator)
+                    {
+                        exp += " " + item.OperatorValue;
+                        continue;
+                    }
+
+                    if (item.IsPassed)
+                        exp += " 1=1 ";
+                    else
+                        exp += " 1=2 ";
+                }
+
+                //如果是混合计算.
+                string sql = "";
+                switch (SystemConfig.AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                        sql = " SELECT TOP 1 No FROM WF_Emp WHERE " + exp;
+                        break;
+                    case DBType.MySQL:
+                        sql = " SELECT No FROM WF_Emp WHERE " + exp + "    limit 1 ";
+                        break;
+                    case DBType.Oracle:
+                    case DBType.DM:
+                        sql = " SELECT No FROM WF_Emp WHERE " + exp + "    rownum <=1 ";
+                        break;
+                    default:
+                        throw new Exception("err@没有做的数据库类型判断.");
+                }
+
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                if (dt.Rows.Count == 0)
+                    return false;
+                return true;
+                #endregion 处理混合计算。
+            }
+            catch (Exception ex)
             {
-                case DBType.MSSQL:
-                    sql = " SELECT TOP 1 No FROM WF_Emp WHERE " + exp;
-                    break;
-                case DBType.MySQL:
-                    sql = " SELECT No FROM WF_Emp WHERE " + exp + "    limit 1 ";
-                    break;
-                case DBType.Oracle:
-                case DBType.DM:
-                    sql = " SELECT No FROM WF_Emp WHERE " + exp + "    rownum <=1 ";
-                    break;
-                default:
-                    throw new Exception("err@没有做的数据库类型判断.");
+                throw new Exception("err@计算条件出现错误:"+this.NodeID+" - "+ex.Message);
             }
-
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count == 0)
-                return false;
-            return true;
-            #endregion 处理混合计算。
         }
         /// <summary>
         /// 描述

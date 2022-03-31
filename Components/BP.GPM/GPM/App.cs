@@ -280,7 +280,7 @@ namespace BP.GPM
         /// <summary>
         /// 系统
         /// </summary>
-        /// <param name="mypk"></param>
+        /// <param name="no"></param>
         public App(string no)
         {
             this.No = no;
@@ -555,7 +555,7 @@ namespace BP.GPM
                 me.Copy(this);
                 me.FK_Emp = emp.No;
                 me.FK_App = this.No;
-                me.MyPK = this.No + "_" + me.FK_Emp;
+                me.setMyPK(this.No + "_" + me.FK_Emp);
                 me.Insert();
                 #endregion 初始化系统访问权限.
             }

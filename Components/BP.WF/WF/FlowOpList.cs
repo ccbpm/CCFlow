@@ -28,10 +28,10 @@ namespace BP.WF
         /// <summary>
         /// 撤销挂起
         /// </summary>
-        public const string UnHungUp = "UnHungUp";
+        public const string UnHungup = "UnHungup";
         /// <summary>
         /// 挂起
         /// </summary>
-        public const string HungUp = "HungUp";
+        public const string Hungup = "Hungup";
     }
 }

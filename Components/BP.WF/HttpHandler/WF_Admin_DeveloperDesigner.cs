@@ -12,6 +12,8 @@ using BP.En;
 using BP.WF.Template;
 using BP.CCBill;
 using System.Text;
+using BP.Difference;
+
 
 namespace BP.WF.HttpHandler
 {
@@ -34,6 +36,10 @@ namespace BP.WF.HttpHandler
             //获取htmlfrom 信息.
             string htmlCode = DBAccess.GetBigTextFromDB("Sys_MapData", "No", this.FK_MapData,
                 "HtmlTemplateFile");
+
+            if (DataType.IsNullOrEmpty(htmlCode) == true)
+                htmlCode = "<h3>请插入表单模板.</h3>";
+
             //把数据同步到DataUser/CCForm/HtmlTemplateFile/文件夹下
             string filePath = SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/";
             if (Directory.Exists(filePath) == false)
@@ -136,6 +142,30 @@ namespace BP.WF.HttpHandler
             stream.Close();
             return strHtml;
         }
+
+        public string Template_Imp()
+        {
+            var files = HttpContextHelper.RequestFiles();  //context.Request.Files;
+            if (files.Count == 0)
+                return "err@请选择要上传的流程模版。";
+
+            //设置文件名
+            string fileNewName = System.IO.Path.GetFileName(files[0].FileName);// DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(files[0].FileName);
+
+            //文件存放路径
+            string filePath = SystemConfig.PathOfDataUser + "Style/TemplateFoolDevelopDesigner/" + "" + fileNewName;
+            HttpContextHelper.UploadFile(files[0], filePath);
+
+            Stream stream = new FileStream(filePath, FileMode.Open);
+            Encoding encode = System.Text.Encoding.GetEncoding("UTF-8");
+            StreamReader reader = new StreamReader(stream, encode);
+            string strHtml = reader.ReadToEnd();
+
+            reader.Close();
+            stream.Close();
+            return strHtml;
+        }
+   
         #endregion 插入模版.
 
         public string Fields_Init()
@@ -183,11 +213,7 @@ namespace BP.WF.HttpHandler
         }
 
         #region 复制表单
-        /// <summary>
-        /// 复制表单属性和表单内容
-        /// </summary>
-        /// <param name="frmId">新表单ID</param>
-        /// <param name="frmName">新表单内容</param>
+        
         public void DoCopyFrm()
         {
             string fromFrmID = GetRequestVal("FromFrmID");

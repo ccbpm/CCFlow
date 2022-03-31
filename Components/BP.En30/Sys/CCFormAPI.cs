@@ -53,16 +53,15 @@ namespace BP.Sys
                     break;
                 case "iFrame": //框架.
                     MapFrame mapFrame = new MapFrame();
-                    mapFrame.MyPK = fk_mapdata + "_" + no;
+                    mapFrame.setMyPK(fk_mapdata + "_" + no);
                     if (mapFrame.RetrieveFromDBSources() != 0)
                         throw new Exception("@创建失败，已经有同名元素[" + no + "]的控件.");
-                    mapFrame.FK_MapData = fk_mapdata;
-                    mapFrame.EleType = "iFrame";
-                    mapFrame.Name = name;
-                    mapFrame.FrmID = no;
+                    mapFrame.setFK_MapData(fk_mapdata);
+                    mapFrame.setEleType("iFrame");
+                    mapFrame.setName(name);
+                    mapFrame.setFrmID(no);
                     mapFrame.URL = "http://ccflow.org";
-                    mapFrame.X = x;
-                    mapFrame.Y = y;
+                 
                     mapFrame.W = 400;
                     mapFrame.H = 600;
                     mapFrame.Insert();
@@ -74,17 +73,16 @@ namespace BP.Sys
                     md.CheckPTableSaveModel(no);
 
                     MapAttr ma = new MapAttr();
-                    ma.FK_MapData = fk_mapdata;
-                    ma.KeyOfEn = no;
-                    ma.Name = name;
-                    ma.MyDataType = DataType.AppString;
-                    ma.UIContralType = UIContralType.HandWriting;
-                    ma.X = x;
-                    ma.Y = y;
+                    ma.setFK_MapData(fk_mapdata);
+                    ma.setKeyOfEn(no);
+                    ma.setName(name);
+                    ma.setMyDataType(DataType.AppString);
+                    ma.setUIContralType(UIContralType.HandWriting);
+                   
                     //frmID设置字段所属的分组
                     GroupField groupField = new GroupField();
                     groupField.Retrieve(GroupFieldAttr.FrmID, fk_mapdata, GroupFieldAttr.CtrlType, "");
-                    ma.GroupID = groupField.OID;
+                    ma.setGroupID(groupField.OID);
                     ma.Insert();
                     break;
                 default:
@@ -105,12 +103,12 @@ namespace BP.Sys
             name = name.Trim();
 
             FrmImgAth ath = new FrmImgAth();
-            ath.FK_MapData = fk_mapdata;
+            ath.setFK_MapData(fk_mapdata);
             ath.CtrlID = no;
-            ath.MyPK = fk_mapdata + "_" + no;
+            ath.setMyPK(fk_mapdata + "_" + no);
 
-            ath.X = x;
-            ath.Y = y;
+            //ath.X = x;
+            //ath.Y = y;
             ath.Insert();
         }
         /// <summary>
@@ -124,10 +122,10 @@ namespace BP.Sys
         public static void CreateOrSaveAthSingle(string fk_mapdata, string no, string name, float x, float y)
         {
             FrmAttachment ath = new FrmAttachment();
-            ath.FK_MapData = fk_mapdata;
+            ath.setFK_MapData(fk_mapdata);
             ath.NoOfObj = no;
 
-            ath.MyPK = ath.FK_MapData + "_" + ath.NoOfObj;
+            ath.setMyPK(ath.FK_MapData + "_" + ath.NoOfObj);
             ath.RetrieveFromDBSources();
             ath.UploadType = AttachmentUploadType.Single;
             ath.Name = name;
@@ -146,9 +144,9 @@ namespace BP.Sys
         public static void CreateOrSaveAthMulti(string fk_mapdata, string no, string name, float x, float y)
         {
             FrmAttachment ath = new FrmAttachment();
-            ath.FK_MapData = fk_mapdata;
+            ath.setFK_MapData(fk_mapdata);
             ath.NoOfObj = no;
-            ath.MyPK = ath.FK_MapData + "_" + ath.NoOfObj;
+            ath.setMyPK(ath.FK_MapData + "_" + ath.NoOfObj);
             int i = ath.RetrieveFromDBSources();
 
             if (i == 0)
@@ -196,7 +194,7 @@ namespace BP.Sys
             dtl.X = x;
             dtl.Y = y;
             dtl.Name = dtlName;
-            dtl.FK_MapData = fk_mapdata;
+            dtl.setFK_MapData(fk_mapdata);
 
             dtl.Save();
 
@@ -228,24 +226,23 @@ namespace BP.Sys
                 fieldDesc = sf.Name;
 
             MapAttr attr = new MapAttr();
-            attr.MyPK = fk_mapdata + "_" + fieldName;
+            attr.setMyPK(fk_mapdata + "_" + fieldName);
             attr.RetrieveFromDBSources();
 
             //基本属性赋值.
-            attr.FK_MapData = fk_mapdata;
-            attr.KeyOfEn = fieldName;
-            attr.Name = fieldDesc;
-            attr.MyDataType = DataType.AppString;
+            attr.setFK_MapData(fk_mapdata);
+            attr.setKeyOfEn(fieldName);
+            attr.setName(fieldDesc);
+            attr.setMyDataType(DataType.AppString);
 
-            attr.UIContralType = BP.En.UIContralType.DDL;
+            attr.setUIContralType(BP.En.UIContralType.DDL);
             attr.UIBindKey = fk_SFTable; //绑定信息.
             //如果绑定的外键是树形结构的，在AtPara中增加标识
             if (sf.CodeStruct == CodeStruct.Tree)
                 attr.SetPara("CodeStruct", 1);
             if (DataType.IsNullOrEmpty(sf.RootVal) == false)
                 attr.SetPara("ParentNo", sf.RootVal);
-            attr.X = x;
-            attr.Y = y;
+           
 
             //根据外键表的类型不同，设置它的LGType.
             switch (sf.SrcType)
@@ -253,18 +250,18 @@ namespace BP.Sys
                 case SrcType.CreateTable:
                 case SrcType.TableOrView:
                 case SrcType.BPClass:
-                    attr.LGType = FieldTypeS.FK;
+                    attr.setLGType(FieldTypeS.FK);
                     break;
                 case SrcType.SQL: //是sql模式.
                 default:
-                    attr.LGType = FieldTypeS.Normal;
+                    attr.setLGType(FieldTypeS.Normal);
                     break;
             }
 
             //frmID设置字段所属的分组
             GroupField groupField = new GroupField();
             groupField.Retrieve(GroupFieldAttr.FrmID, fk_mapdata, GroupFieldAttr.CtrlType, "");
-            attr.GroupID = groupField.OID;
+            attr.setGroupID(groupField.OID);
             if (attr.RetrieveFromDBSources() == 0)
                 attr.Insert();
             else
@@ -275,18 +272,20 @@ namespace BP.Sys
             {
                 MapAttr attrH = new MapAttr();
                 attrH.Copy(attr);
-                attrH.UIBindKey = "";
+
+                attrH.SetValByKey(MapAttrAttr.UIBindKey,"");
                 attrH.SetPara("CodeStruct", "");
                 attrH.SetPara("ParentNo", "");
-                attrH.KeyOfEn = attr.KeyOfEn + "T";
-                attrH.Name = attr.Name;
-                attrH.UIContralType = BP.En.UIContralType.TB;
-                attrH.MinLen = 0;
-                attrH.MaxLen = 500;
-                attrH.MyDataType = DataType.AppString;
-                attrH.UIVisible = false;
-                attrH.UIIsEnable = false;
-                attrH.MyPK = attrH.FK_MapData + "_" + attrH.KeyOfEn;
+                attrH.SetValByKey(MapAttrAttr.KeyOfEn, attr.KeyOfEn + "T");
+                attrH.SetValByKey(MapAttrAttr.Name ,attr.Name);
+                attrH.SetValByKey(MapAttrAttr.UIContralType , (int)BP.En.UIContralType.TB);
+                attrH.SetValByKey(MapAttrAttr.MinLen ,0);
+                attrH.SetValByKey(MapAttrAttr.MaxLen ,500);
+                attrH.SetValByKey(MapAttrAttr.MyDataType , DataType.AppString);
+                attrH.SetValByKey(MapAttrAttr.UIVisible ,false);
+                attrH.SetValByKey(MapAttrAttr.UIIsEnable , false);
+                attrH.SetValByKey(MapAttrAttr.MyPK , attrH.FK_MapData + "_" + attrH.KeyOfEn);
+
                 if (attrH.RetrieveFromDBSources() == 0)
                     attrH.Insert();
                 else
@@ -308,23 +307,22 @@ namespace BP.Sys
             float x, float y, int colSpan = 1)
         {
             MapAttr ma = new MapAttr();
-            ma.FK_MapData = fk_mapdata;
-            ma.KeyOfEn = fieldName;
+            ma.setFK_MapData(fk_mapdata);
+            ma.setKeyOfEn(fieldName);
 
             //赋值主键。
-            ma.MyPK = ma.FK_MapData + "_" + ma.KeyOfEn;
+            ma.setMyPK(ma.FK_MapData + "_" + ma.KeyOfEn);
 
             //先查询赋值.
             ma.RetrieveFromDBSources();
 
-            ma.Name = fieldDesc;
-            ma.MyDataType = DataType.AppInt;
-            ma.X = x;
-            ma.Y = y;
-            ma.UIIsEnable = true;
-            ma.LGType = FieldTypeS.Enum;
+            ma.setName(fieldDesc);
+            ma.setMyDataType(DataType.AppInt);
+           
+            ma.setUIIsEnable(true);
+            ma.setLGType(FieldTypeS.Enum);
 
-            ma.UIContralType = ctrlType;
+            ma.setUIContralType(ctrlType);
             ma.UIBindKey = enumKey;
 
             if (ma.UIContralType == UIContralType.RadioBtn)
@@ -335,25 +333,25 @@ namespace BP.Sys
                 {
                     idx++;
                     FrmRB rb = new FrmRB();
-                    rb.FK_MapData = ma.FK_MapData;
-                    rb.KeyOfEn = ma.KeyOfEn;
-                    rb.IntKey = item.IntKey;
-                    rb.MyPK = rb.FK_MapData + "_" + rb.KeyOfEn + "_" + rb.IntKey;
+                    rb.setFK_MapData(ma.FK_MapData);
+                    rb.setKeyOfEn(ma.KeyOfEn);
+                    rb.setIntKey(item.IntKey);
+                    rb.setMyPK(rb.FK_MapData + "_" + rb.KeyOfEn + "_" + rb.IntKey);
                     rb.RetrieveFromDBSources();
 
-                    rb.EnumKey = ma.UIBindKey;
-                    rb.Lab = item.Lab;
-                    rb.X = ma.X;
+                    rb.setEnumKey(ma.UIBindKey);
+                    rb.setLab(item.Lab);
+                    //rb.X = ma.X;
 
-                    //让其变化y值.
-                    rb.Y = ma.Y + idx * 30;
+                    ////让其变化y值.
+                    //rb.Y = ma.Y + idx * 30;
                     rb.Save();
                 }
             }
             //frmID设置字段所属的分组
             GroupField groupField = new GroupField();
             groupField.Retrieve(GroupFieldAttr.FrmID, fk_mapdata, GroupFieldAttr.CtrlType, "");
-            ma.GroupID = groupField.OID;
+            ma.setGroupID(groupField.OID);
 
             ma.Save();
         }
@@ -364,8 +362,8 @@ namespace BP.Sys
             //imgPKs = imgPKs.Replace(ctrlID + "@", "@");
 
             FrmImg img = new FrmImg();
-            img.MyPK = keyOfEn;
-            img.FK_MapData = frmID;
+            img.setMyPK(keyOfEn);
+            img.setFK_MapData(frmID);
             img.Name = name;
             img.IsEdit = 1;
             img.HisImgAppType = ImgAppType.Img;
@@ -383,19 +381,19 @@ namespace BP.Sys
             md.CheckPTableSaveModel(field);
 
             MapAttr ma = new MapAttr();
-            ma.FK_MapData = frmID;
-            ma.KeyOfEn = field;
-            ma.Name = fieldDesc;
-            ma.MyDataType = mydataType;
+            ma.setFK_MapData(frmID);
+            ma.setKeyOfEn(field);
+            ma.setName(fieldDesc);
+            ma.setMyDataType(mydataType);
             if (mydataType == 7)
                 ma.IsSupperText = 1;
-            ma.X = x;
-            ma.Y = y;
+            //ma.X = x;
+            //ma.Y = y;
 
             //frmID设置字段所属的分组
             GroupField groupField = new GroupField();
             groupField.Retrieve(GroupFieldAttr.FrmID, frmID, GroupFieldAttr.CtrlType, "");
-            ma.GroupID = groupField.OID;
+            ma.setGroupID(groupField.OID);
 
             ma.Insert();
         }
@@ -407,21 +405,21 @@ namespace BP.Sys
             md.CheckPTableSaveModel(field);
 
             MapAttr ma = new MapAttr();
-            ma.FK_MapData = fk_mapdata;
-            ma.KeyOfEn = field;
-            ma.Name = fieldDesc;
-            ma.MyDataType = DataType.AppInt;
-            ma.X = x;
-            ma.Y = y;
-            ma.UIIsEnable = true;
-            ma.LGType = FieldTypeS.Enum;
-            ma.UIContralType = ctrlType;
+            ma.setFK_MapData(fk_mapdata);
+            ma.setKeyOfEn(field);
+            ma.setName(fieldDesc);
+            ma.setMyDataType(DataType.AppInt);
+            //ma.X = x;
+            //ma.Y = y;
+            ma.setUIIsEnable(true);
+            ma.setLGType(FieldTypeS.Enum);
+            ma.setUIContralType(ctrlType);
             ma.UIBindKey = enumKey;
 
             //frmID设置字段所属的分组
             GroupField groupField = new GroupField();
             groupField.Retrieve(GroupFieldAttr.FrmID, fk_mapdata, GroupFieldAttr.CtrlType, "");
-            ma.GroupID = groupField.OID;
+            ma.setGroupID(groupField.OID);
             ma.Insert();
 
             if (ma.UIContralType != UIContralType.RadioBtn)
@@ -436,16 +434,15 @@ namespace BP.Sys
             {
                 idx++;
                 FrmRB rb = new FrmRB();
-                rb.FK_MapData = ma.FK_MapData;
-                rb.KeyOfEn = ma.KeyOfEn;
-                rb.EnumKey = ma.UIBindKey;
+                rb.setFK_MapData(ma.FK_MapData);
+                rb.setKeyOfEn(ma.KeyOfEn);
+                rb.setEnumKey(ma.UIBindKey);
 
-                rb.Lab = item.Lab;
-                rb.IntKey = item.IntKey;
-                rb.X = ma.X;
-
-                //让其变化y值.
-                rb.Y = ma.Y + idx * 30;
+                rb.setLab(item.Lab);
+                rb.setIntKey(item.IntKey);
+                //rb.X = ma.X;
+                ////让其变化y值.
+                //rb.Y = ma.Y + idx * 30;
                 rb.Insert();
             }
         }
@@ -475,48 +472,47 @@ namespace BP.Sys
             gf.Insert();
 
             attrN = new MapAttr();
-            attrN.FK_MapData = frmID;
-            attrN.KeyOfEn = gKey + "_Note";
-            attrN.Name = "审核意见";
-            attrN.MyDataType = DataType.AppString;
-            attrN.UIContralType = UIContralType.TB;
-            attrN.UIIsEnable = true;
-            attrN.UIIsLine = true;
-            attrN.MaxLen = 4000;
-            attrN.GroupID = gf.OID;
-            attrN.UIHeight = 23 * 3;
-            attrN.Idx = 1;
+            attrN.SetValByKey(MapAttrAttr.FK_MapData, frmID);
+            attrN.SetValByKey(MapAttrAttr.KeyOfEn, gKey + "_Note");
+            attrN.SetValByKey(MapAttrAttr.Name, "审核意见");
+            attrN.SetValByKey(MapAttrAttr.MyDataType, DataType.AppString);
+            attrN.setUIContralType(UIContralType.TB);
+            attrN.SetValByKey(MapAttrAttr.UIIsEnable, true);
+            attrN.SetValByKey(MapAttrAttr.UIIsLine, false);
+            //attrN.SetValByKey(MapAttrAttr.DefVal, "@WebUser.Name");
+            attrN.SetValByKey(MapAttrAttr.GroupID, gf.OID);
+            attrN.SetValByKey(MapAttrAttr.MaxLen, 4000);
+            attrN.SetValByKey(MapAttrAttr.UIHeight, 23 * 3);
+            attrN.SetValByKey(MapAttrAttr.Idx, 1);
             attrN.Insert();
 
-            attrN = new MapAttr();
-            attrN.FK_MapData = frmID;
-            attrN.KeyOfEn = gKey + "_Checker";
-            attrN.Name = "审核人";// "审核人";
-            attrN.MyDataType = DataType.AppString;
-            attrN.UIContralType = UIContralType.TB;
-            attrN.MaxLen = 50;
-            attrN.MinLen = 0;
-            attrN.UIIsEnable = true;
-            attrN.UIIsLine = false;
-            attrN.DefVal = "@WebUser.Name";
-            attrN.UIIsEnable = false;
-            attrN.GroupID = gf.OID;
-            attrN.IsSigan = true;
-            attrN.Idx = 2;
-            attrN.Insert();
 
             attrN = new MapAttr();
-            attrN.FK_MapData = frmID;
-            attrN.KeyOfEn = gKey + "_RDT";
-            attrN.Name = "审核日期"; // "审核日期";
-            attrN.MyDataType = DataType.AppDateTime;
-            attrN.UIContralType = UIContralType.TB;
-            attrN.UIIsEnable = true;
-            attrN.UIIsLine = false;
-            attrN.DefVal = "@RDT";
-            attrN.UIIsEnable = false;
-            attrN.GroupID = gf.OID;
-            attrN.Idx = 3;
+            attrN.SetValByKey(MapAttrAttr.FK_MapData, frmID);
+            attrN.SetValByKey(MapAttrAttr.KeyOfEn, gKey + "_Checker");
+            attrN.SetValByKey(MapAttrAttr.Name, "审核人");
+            attrN.SetValByKey(MapAttrAttr.MyDataType, DataType.AppString);
+            attrN.setUIContralType(UIContralType.TB);
+            attrN.SetValByKey(MapAttrAttr.UIIsEnable, true);
+            attrN.SetValByKey(MapAttrAttr.UIIsLine, false);
+            attrN.SetValByKey(MapAttrAttr.DefVal, "@WebUser.Name");
+            attrN.SetValByKey(MapAttrAttr.GroupID, gf.OID);
+            attrN.SetValByKey(MapAttrAttr.IsSigan,true);
+            attrN.SetValByKey(MapAttrAttr.Idx, 2);
+            attrN.Insert();
+
+
+            attrN = new MapAttr();
+            attrN.SetValByKey(MapAttrAttr.FK_MapData,frmID);
+            attrN.SetValByKey(MapAttrAttr.KeyOfEn, gKey + "_RDT");
+            attrN.SetValByKey(MapAttrAttr.Name,"审核日期");
+            attrN.SetValByKey(MapAttrAttr.MyDataType, DataType.AppDateTime);
+            attrN.setUIContralType(UIContralType.TB);
+            attrN.SetValByKey(MapAttrAttr.UIIsEnable, true);
+            attrN.SetValByKey(MapAttrAttr.UIIsLine, false);
+            attrN.SetValByKey(MapAttrAttr.DefVal, "@RDT");
+            attrN.SetValByKey(MapAttrAttr.GroupID, gf.OID);
+            attrN.SetValByKey(MapAttrAttr.Idx, 3);
             attrN.Insert();
 
             /*
@@ -564,52 +560,52 @@ namespace BP.Sys
                 gf.Insert();
 
             MapAttr attr = new MapAttr();
-            attr.FK_MapData = frmID;
-            attr.KeyOfEn = prx + "_Note";
-            attr.Name = "审核意见"; // sta;  // this.ToE("CheckNote", "审核意见");
-            attr.MyDataType = DataType.AppString;
-            attr.UIContralType = UIContralType.TB;
-            attr.UIIsEnable = true;
-            attr.UIIsLine = true;
-            attr.MaxLen = 4000;
+            attr.setFK_MapData(frmID);
+            attr.setKeyOfEn( prx + "_Note");
+            attr.setName("审核意见"); // sta;  // this.ToE("CheckNote", "审核意见");
+            attr.setMyDataType(DataType.AppString);
+            attr.setUIContralType(UIContralType.TB);
+            attr.setUIIsEnable(true);
+            attr.setUIIsLine(true);
+            attr.setMaxLen(4000);
             attr.SetValByKey(MapAttrAttr.ColSpan, 4);
             // attr.ColSpan = 4;
-            attr.GroupID = gf.OID;
-            attr.UIHeight = 23 * 3;
-            attr.Idx = 1;
+            attr.setGroupID(gf.OID);
+            attr.setUIHeight( 23 * 3);
+            attr.setIdx(1);
             attr.Insert();
             attr.Update("Idx", 1);
 
 
             attr = new MapAttr();
-            attr.FK_MapData = frmID;
-            attr.KeyOfEn = prx + "_Checker";
-            attr.Name = "审核人";// "审核人";
-            attr.MyDataType = DataType.AppString;
-            attr.UIContralType = UIContralType.TB;
-            attr.MaxLen = 50;
-            attr.MinLen = 0;
-            attr.UIIsEnable = true;
-            attr.UIIsLine = false;
-            attr.DefVal = "@WebUser.No";
-            attr.UIIsEnable = false;
-            attr.GroupID = gf.OID;
-            attr.IsSigan = true;
+            attr.setFK_MapData(frmID);
+            attr.setKeyOfEn(prx + "_Checker");
+            attr.setName("审核人");// "审核人";
+            attr.setMyDataType(DataType.AppString);
+            attr.setUIContralType(UIContralType.TB);
+            attr.setMaxLen(50);
+            attr.setMinLen(0);
+            attr.setUIIsEnable(true);
+            attr.setUIIsLine(false);
+            attr.setDefVal("@WebUser.No");
+            attr.setUIIsEnable(false);
+            attr.setGroupID(gf.OID);
+            attr.IsSigan=true;
             attr.Idx = 2;
             attr.Insert();
             attr.Update("Idx", 2);
 
             attr = new MapAttr();
-            attr.FK_MapData = frmID;
-            attr.KeyOfEn = prx + "_RDT";
-            attr.Name = "审核日期"; // "审核日期";
-            attr.MyDataType = DataType.AppDateTime;
-            attr.UIContralType = UIContralType.TB;
-            attr.UIIsEnable = true;
-            attr.UIIsLine = false;
-            attr.DefVal = "@RDT";
-            attr.UIIsEnable = false;
-            attr.GroupID = gf.OID;
+            attr.setFK_MapData(frmID);
+            attr.setKeyOfEn(prx + "_RDT");
+            attr.setName("审核日期"); // "审核日期";
+            attr.setMyDataType(DataType.AppDateTime);
+            attr.setUIContralType(UIContralType.TB);
+            attr.setUIIsEnable(true);
+            attr.setUIIsLine(false);
+            attr.setDefVal("@RDT");
+            attr.setUIIsEnable(false);
+            attr.setGroupID(gf.OID);
             attr.Idx = 3;
             attr.Insert();
             attr.Update("Idx", 3);
@@ -621,7 +617,7 @@ namespace BP.Sys
         /// <param name="frmName">表单名称</param>
         /// <param name="frmTreeID">表单类别编号（表单树ID）</param>
         /// <param name="frmType">表单类型</param>
-        public static void CreateFrm(string frmID, string frmName, string frmTreeID, FrmType frmType = FrmType.FreeFrm)
+        public static void CreateFrm(string frmID, string frmName, string frmTreeID, FrmType frmType = FrmType.FoolForm)
         {
             MapData md = new MapData();
             md.No = frmID;
@@ -674,549 +670,40 @@ namespace BP.Sys
             MapAttr attr = new MapAttr();
             if (attr.IsExit(MapAttrAttr.KeyOfEn, "OID", MapAttrAttr.FK_MapData, frmID) == false)
             {
-                attr.FK_MapData = frmID;
-                attr.KeyOfEn = "OID";
-                attr.Name = "主键";
-                attr.MyDataType = DataType.AppInt;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.DefVal = "0";
-                attr.HisEditType = BP.En.EditType.Readonly;
+                attr.SetValByKey(MapAttrAttr.FK_MapData,   frmID);
+                attr.SetValByKey(MapAttrAttr.KeyOfEn , "OID");
+                attr.SetValByKey(MapAttrAttr.Name ,"主键");
+                attr.SetValByKey(MapAttrAttr.MyDataType , DataType.AppInt);
+                attr.SetValByKey(MapAttrAttr.UIContralType,(int)UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
+                attr.SetValByKey(MapAttrAttr.DefVal ,"0");
+                attr.SetValByKey(MapAttrAttr.EditType, (int)EditType.Readonly);
+                 
+                attr.Insert();
+            }
+            if (attr.IsExit(MapAttrAttr.KeyOfEn, "AtPara", MapAttrAttr.FK_MapData, frmID) == false)
+            {
+                attr.setFK_MapData(frmID);
+                attr.HisEditType = EditType.UnDel;
+                attr.setKeyOfEn("AtPara");
+                attr.setName("参数"); // 单据编号
+                attr.setMyDataType(DataType.AppString);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
+                attr.UIIsLine = false;
+                attr.setMinLen(0);
+                attr.setMaxLen(4000);
+                attr.Idx = -100;
                 attr.Insert();
             }
 
         }
-        /// <summary>
-        /// 执行保存
-        /// </summary>
-        /// <param name="fk_mapdata"></param>
-        /// <param name="jsonStrOfH5Frm"></param>
-        public static void SaveFrm(string fk_mapdata, string jsonStrOfH5Frm)
-        {
-            // DataType.WriteFile("D:/AAAAAA.JSON", jsonStrOfH5Frm);
-            //return;
-            JsonData jd = JsonMapper.ToObject(jsonStrOfH5Frm);
-            if (jd.IsObject == false)
-                throw new Exception("err@表单格式不正确，保存失败。");
-
-            JsonData form_MapData = jd["c"];
-
-            //直接保存表单图信息.
-            MapData mapData = new MapData(fk_mapdata);
-            mapData.FrmW = float.Parse(form_MapData["width"].ToJson());
-            mapData.FrmH = float.Parse(form_MapData["height"].ToJson());
-            //   mapData.DesignerTool = "Html5";
-            mapData.Update();
-
-            //执行保存.
-            SaveFrm(fk_mapdata, jd);
-
-            //一直没有找到设置3列，自动回到四列的情况.
-            DBAccess.RunSQL("UPDATE Sys_MapAttr SET ColSpan=3 WHERE  UIHeight<=23 AND ColSpan=4");
-        }
-        /// <summary>
-        /// 将表单设计串格式化为Json.
-        /// </summary>
-        /// <param name="formData"></param>
-        /// <returns></returns>
-        private static void SaveFrm(string fk_mapdata, LitJson.JsonData formData)
-        {
-            #region 求 PKs.
-            //标签.
-            string labelPKs = "@";
-            FrmLabs labs = new FrmLabs();
-            labs.Retrieve(FrmLabAttr.FK_MapData, fk_mapdata);
-            foreach (FrmLab item in labs)
-                labelPKs += item.MyPK + "@";
-
-            //超链接.
-            string linkPKs = "@";
-            FrmLinks links = new FrmLinks();
-            links.Retrieve(FrmLabAttr.FK_MapData, fk_mapdata);
-            foreach (FrmLink item in links)
-                linkPKs += item.MyPK + "@";
-
-            //按钮.
-            string btnsPKs = "@";
-            FrmBtns btns = new FrmBtns();
-            btns.Retrieve(FrmLabAttr.FK_MapData, fk_mapdata);
-            foreach (FrmBtn item in btns)
-                btnsPKs += item.MyPK + "@";
-
-            //图片.
-            string imgPKs = "@";
-            FrmImgs imgs = new FrmImgs();
-            imgs.Retrieve(FrmLabAttr.FK_MapData, fk_mapdata);
-            foreach (FrmImg item in imgs)
-                imgPKs += item.MyPK + "@";
-
-            //求已经存在的字段.
-            string attrPKs = "@";
-            MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
-            foreach (MapAttr item in attrs)
-            {
-                if (item.KeyOfEn == "OID")
-                    continue;
-                if (item.UIVisible == false)
-                    continue;
-
-                attrPKs += item.KeyOfEn + "@";
-            }
-            attrPKs += "@";
-
-
-            //求明细表.
-            string dtlPKs = "@";
-            MapDtls dtls = new MapDtls();
-            dtls.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
-            foreach (MapDtl item in dtls)
-                dtlPKs += item.No + "@";
-            dtlPKs += "@";
-
-            //求附件.
-            string athMultis = "@";
-            FrmAttachments aths = new FrmAttachments();
-            aths.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
-            foreach (FrmAttachment item in aths)
-            {
-                athMultis += item.NoOfObj + "@";
-            }
-            athMultis += "@";
-
-            //图片附件.
-            string athImgs = "@";
-            FrmImgAths fias = new FrmImgAths(); ;
-            fias.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
-            foreach (FrmImgAth item in fias)
-            {
-                athImgs += item.CtrlID + "@";
-            }
-            athImgs += "@";
-
-
-            //框架
-            string frameIDs = "@";
-            MapFrames frames = new MapFrames();
-            frames.Retrieve(MapDtlAttr.FK_MapData, fk_mapdata);
-            foreach (MapFrame item in frames)
-            {
-                frameIDs += item.MyPK + "@";
-            }
-            frameIDs += "@";
-            #endregion 求PKs.
-
-
-            // 保存线.
-            JsonData form_Lines = formData["m"]["connectors"];
-            BP.Sys.CCFormParse.SaveLine(fk_mapdata, form_Lines);
-
-            //其他控件，Label,Img,TextBox
-            JsonData form_Controls = formData["s"]["figures"];
-            if (form_Controls.IsArray == false || form_Controls.Count == 0)
-            {
-                /*画布里没有任何东西, 清除所有的元素.*/
-                string delSqls = "";
-                delSqls += "@DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapdata + "' AND KeyOfEn NOT IN ('OID')";
-                delSqls += "@DELETE FROM Sys_FrmRB WHERE FK_MapData='" + fk_mapdata + "'"; //枚举值的相关rb. 
-                delSqls += "@DELETE FROM Sys_MapDtl WHERE FK_MapData='" + fk_mapdata + "'";
-                delSqls += "@DELETE FROM Sys_FrmBtn WHERE FK_MapData='" + fk_mapdata + "'";
-                delSqls += "@DELETE FROM Sys_FrmLine WHERE FK_MapData='" + fk_mapdata + "'";
-                delSqls += "@DELETE FROM Sys_FrmLab WHERE FK_MapData='" + fk_mapdata + "'";
-                delSqls += "@DELETE FROM Sys_FrmLink WHERE FK_MapData='" + fk_mapdata + "'";
-                delSqls += "@DELETE FROM Sys_FrmImg WHERE FK_MapData='" + fk_mapdata + "'";
-                delSqls += "@DELETE FROM Sys_FrmAttachment WHERE FK_MapData='" + fk_mapdata + "'";
-                delSqls += "@DELETE FROM Sys_FrmEle WHERE FK_MapData='" + fk_mapdata + "'";
-                delSqls += "@DELETE FROM Sys_FrmImgAth WHERE FK_MapData='" + fk_mapdata + "'";
-                delSqls += "@DELETE FROM Sys_MapFrame WHERE FK_MapData='" + fk_mapdata + "'";
-
-                DBAccess.RunSQLs(delSqls);
-                return;
-            }
-
-            string flowEle = "";
-            string sqls = "";
-
-            string nodeIDStr = fk_mapdata.Replace("ND", "");
-            int nodeID = 0;
-            if (DataType.IsNumStr(nodeIDStr) == true)
-                nodeID = int.Parse(nodeIDStr);
-
-            //流程控件.
-            string flowCtrls = "";
-
-            //循环元素.
-            for (int idx = 0, jControl = form_Controls.Count; idx < jControl; idx++)
-            {
-                JsonData control = form_Controls[idx];  //不存在控件类型不进行处理，继续循环.
-                if (control == null || control["CCForm_Shape"] == null)
-                    continue;
-
-                string shape = control["CCForm_Shape"].ToString();
-
-                if (control.Keys.Contains("CCForm_MyPK") == false)
-                    continue;
-
-                if (control["CCForm_MyPK"] == null)
-                    continue;
-
-                string ctrlID = control["CCForm_MyPK"].ToString();
-
-                JsonData properties = control["properties"];  //属性集合.
-
-                #region 装饰类控件.
-                switch (shape)
-                {
-                    case "Label": //保存标签.
-                        if (ctrlID.IndexOf("RB_") == 0)
-                        {
-                            /*让其向下运行.*/
-                            shape = "RadioButtonItem";
-                        }
-                        else
-                        {
-                            BP.Sys.CCFormParse.SaveLabel(fk_mapdata, control, properties, labelPKs, ctrlID);
-                            labelPKs = labelPKs.Replace(ctrlID + "@", "@");
-                        }
-                        continue;
-                    case "Button": //保存Button.
-                        BP.Sys.CCFormParse.SaveButton(fk_mapdata, control, properties, btnsPKs, ctrlID);
-                        btnsPKs = btnsPKs.Replace(ctrlID + "@", "@");
-                        continue;
-                    case "HyperLink": //保存link.
-                        BP.Sys.CCFormParse.SaveHyperLink(fk_mapdata, control, properties, linkPKs, ctrlID);
-                        linkPKs = linkPKs.Replace(ctrlID + "@", "@");
-                        continue;
-                    case "Image": //保存Img.
-                        BP.Sys.CCFormParse.SaveImage(fk_mapdata, control, properties, imgPKs, ctrlID);
-                        imgPKs = imgPKs.Replace(ctrlID + "@", "@");
-                        continue;
-                    default:
-                        break;
-                }
-                #endregion 装饰类控件.
-
-                #region 数据类控件.
-                if (shape.Contains("TextBox") == true
-                    || shape.Contains("DropDownList") == true)
-                {
-                    BP.Sys.CCFormParse.SaveMapAttr(fk_mapdata, ctrlID, shape, control, properties, attrPKs);
-                    attrPKs = attrPKs.Replace("@" + ctrlID + "@", "@");
-                    continue;
-                }
-
-                //求出公共的属性-坐标.
-                JsonData style = control["style"];
-                JsonData vector = style["gradientBounds"];
-                float x = float.Parse(vector[0].ToJson());
-                float y = float.Parse(vector[1].ToJson());
-                float maxX = float.Parse(vector[2].ToJson());
-                float maxY = float.Parse(vector[3].ToJson());
-                float width = maxX - x;
-                float height = maxY - y;
-
-                if (shape == "Dtl")
-                {
-                    //记录已经存在的ID， 需要当时保存.
-                    BP.Sys.CCFormParse.SaveDtl(fk_mapdata, ctrlID, x, y, height, width);
-                    dtlPKs = dtlPKs.Replace("@" + ctrlID + "@", "@");
-                    continue;
-                }
-                #endregion 数据类控件.
-
-                #region 附件.
-                if (shape == "AthMulti" || shape == "AthSingle")
-                {
-                    //记录已经存在的ID， 需要当时保存.
-                    BP.Sys.CCFormParse.SaveAthMulti(fk_mapdata, ctrlID, x, y, height, width);
-                    athMultis = athMultis.Replace("@" + ctrlID + "@", "@");
-                    continue;
-                }
-                if (shape == "AthImg")
-                {
-                    //记录已经存在的ID， 需要当时保存.
-                    BP.Sys.CCFormParse.SaveAthImg(fk_mapdata, ctrlID, x, y, height, width);
-                    athImgs = athImgs.Replace("@" + ctrlID + "@", "@");
-                    continue;
-                }
-
-                if (shape == "iFrame")
-                {
-                    //记录已经存在的ID， 需要当时保存.
-                    BP.Sys.CCFormParse.SaveMapFrame(fk_mapdata, shape, ctrlID, x, y, height, width);
-                    frameIDs = frameIDs.Replace("@" + ctrlID + "@", "@");
-                    continue;
-                }
-
-
-                if (shape == "RadioButton")
-                {
-                    if (ctrlID.Contains("=") == true)
-                        continue;
-
-                    //记录已经存在的ID， 需要当时保存.
-                    if (ctrlID.Contains("RB_") == true)
-                        ctrlID = ctrlID.Substring(3);
-
-                    string str = BP.Sys.CCFormParse.SaveFrmRadioButton(fk_mapdata, ctrlID, x, y);
-                    if (str == null)
-                        continue;
-
-                    attrPKs = attrPKs.Replace("@" + str + "@", "@");
-                    continue;
-                }
-
-                if (shape == "RadioButton")
-                {
-                    continue;
-                }
-                #endregion 附件.
-
-                #region 处理流程组件, 如果已经传来节点ID,说明是节点表单.
-                //流程类的组件,都记录下来放入到Sys_MapData.FlowCtrls 字段里. 记录控件的位置，原来记录到节点里的都要取消掉.
-                //@zhoupeng
-                if (shape == "FlowChart" || shape == "FrmCheck" || shape == "SubFlowDtl" || shape == "ThreadDtl")
-                {
-                    if (flowCtrls.Contains(shape) == false)
-                        flowCtrls += "@Ctrl=" + shape + ",X=" + x + ",Y=" + y + ",H=" + height + ",W=" + width;
-                }
-
-                if (nodeID != 0)
-                {
-                    sqls = "";
-                    switch (shape)
-                    {
-                        case "FlowChart":
-                            if (DBAccess.RunSQLReturnString("SELECT FrmTrackSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
-                            {
-                                /*状态是 0 就把他启用起来. */
-                                sqls += "@UPDATE WF_Node SET FrmTrackSta=1,FrmTrack_X=" + x + ",FrmTrack_Y=" + y + ",FrmTrack_H=" + height + ", FrmTrack_W=" + width + " WHERE NodeID=" + nodeIDStr;
-                            }
-                            else
-                            {
-                                /* 仅仅更新位置与高度。*/
-                                sqls += "@UPDATE WF_Node SET FrmTrack_X=" + x + ",FrmTrack_Y=" + y + ",FrmTrack_H=" + height + ", FrmTrack_W=" + width + " WHERE NodeID=" + nodeIDStr;
-                            }
-                            flowEle += shape + ",";
-                            continue;
-                        case "FrmCheck":
-                            if (DBAccess.RunSQLReturnString("SELECT FWCSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
-                            {
-                                /*状态是 0 就把他启用起来. */
-                                sqls += "@UPDATE WF_Node SET FWCSta=1,FWC_X=" + x + ",FWC_Y=" + y + ",FWC_H=" + height + ", FWC_W=" + width + " WHERE NodeID=" + nodeIDStr;
-                            }
-                            else
-                            {
-                                /* 仅仅更新位置与高度。*/
-                                sqls += "@UPDATE WF_Node SET FWC_X=" + x + ",FWC_Y=" + y + ",FWC_H=" + height + ", FWC_W=" + width + " WHERE NodeID=" + nodeIDStr;
-                            }
-                            flowEle += shape + ",";
-                            continue;
-                        case "SubFlowDtl": //子流程
-                            if (DBAccess.RunSQLReturnString("SELECT SFSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
-                            {
-                                /*状态是 0 就把他启用起来. */
-                                sqls += "@UPDATE WF_Node SET SFSta=1,SF_X=" + x + ",SF_Y=" + y + ",SF_H=" + height + ", SF_W=" + width + " WHERE NodeID=" + nodeIDStr;
-                            }
-                            else
-                            {
-                                /* 仅仅更新位置与高度。*/
-                                sqls += "@UPDATE WF_Node SET SF_X=" + x + ",SF_Y=" + y + ",SF_H=" + height + ", SF_W=" + width + " WHERE NodeID=" + nodeIDStr;
-                            }
-                            flowEle += shape + ",";
-                            continue;
-                        case "ThreadDtl": //子线程
-                            if (DBAccess.RunSQLReturnString("SELECT FrmThreadSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
-                            {
-                                /*状态是 0 就把他启用起来. */
-                                sqls += "@UPDATE WF_Node SET FrmThreadSta=1,FrmThread_X=" + x + ",FrmThread_Y=" + y + ",FrmThread_H=" + height + ",FrmThread_W=" + width + " WHERE NodeID=" + nodeIDStr;
-                            }
-                            else
-                            {
-                                /* 仅仅更新位置与高度。*/
-                                sqls += "@UPDATE WF_Node SET FrmThread_X=" + x + ",FrmThread_Y=" + y + ",FrmThread_H=" + height + ", FrmThread_W=" + width + " WHERE NodeID=" + nodeIDStr;
-                            }
-                            flowEle += shape + ",";
-                            continue;
-                        case "FrmTransferCustom": //流转自定义
-                            if (DBAccess.RunSQLReturnString("SELECT FTCSta FROM WF_Node WHERE NodeID=" + nodeID) == "0")
-                            {
-                                /*状态是 0 就把他启用起来. */
-                                sqls += "@UPDATE WF_Node SET FTCSta=1,FTC_X=" + x + ",FTC_Y=" + y + ",FTC_H=" + height + ",FTC_W=" + width + " WHERE NodeID=" + nodeIDStr;
-                            }
-                            else
-                            {
-                                /* 仅仅更新位置与高度。*/
-                                sqls += "@UPDATE WF_Node SET FTC_X=" + x + ",FTC_Y=" + y + ",FrmThread_H=" + height + ",FTC_W=" + width + " WHERE NodeID=" + nodeIDStr;
-                            }
-                            flowEle += shape + ",";
-                            continue;
-                        default:
-                            break;
-                    }
-                }
-                #endregion 处理流程组件.
-
-                if (shape == "FlowChart" || shape == "FrmCheck" || shape == "SubFlowDtl" || shape == "ThreadDtl")
-                    continue;
-
-                throw new Exception("@没有判断的ccform保存控件的类型:shape = " + shape);
-            }
-
-
-            #region 处理节点表单。
-            if (nodeID != 0)
-            {
-                //轨迹组件.
-                if (flowEle.Contains("FlowChart") == false)
-                    sqls += "@UPDATE WF_Node SET FrmTrackSta=0 WHERE NodeID=" + nodeID;
-
-                //审核组件.
-                if (flowEle.Contains("FrmCheck") == false)
-                    sqls += "@UPDATE WF_Node SET FWCSta=0 WHERE NodeID=" + nodeID;
-
-                //子流程组件.
-                if (flowEle.Contains("SubFlowDtl") == false)
-                    sqls += "@UPDATE WF_Node SET SFSta=0 WHERE NodeID=" + nodeID;
-
-                //子线城组件.
-                if (flowEle.Contains("ThreadDtl") == false)
-                    sqls += "@UPDATE WF_Node SET FrmThreadSta=0 WHERE NodeID=" + nodeID;
-
-                //自定义流程组件.
-                if (flowEle.Contains("FrmTransferCustom") == false)
-                    sqls += "@UPDATE WF_Node SET FTCSta=0 WHERE NodeID=" + nodeID;
-            }
-
-            //执行要更新的sql.
-            if (sqls != "")
-            {
-                DBAccess.RunSQLs(sqls);
-                sqls = "";
-            }
-
-            //更新组件. @zhoupeng.
-            DBAccess.RunSQL("UPDATE Sys_MapData SET FlowCtrls='" + flowCtrls + "' WHERE No='" + fk_mapdata + "'");
-            #endregion 处理节点表单。
-
-            #region 删除没有替换下来的 PKs, 说明这些都已经被删除了.
-            string[] pks = labelPKs.Split('@');
-            sqls = "";
-            foreach (string pk in pks)
-            {
-                if (DataType.IsNullOrEmpty(pk))
-                    continue;
-                sqls += "@DELETE FROM Sys_FrmLab WHERE MyPK='" + pk + "'";
-            }
-
-            pks = btnsPKs.Split('@');
-            foreach (string pk in pks)
-            {
-                if (DataType.IsNullOrEmpty(pk))
-                    continue;
-                sqls += "@DELETE FROM Sys_FrmBtn WHERE MyPK='" + pk + "'";
-            }
-
-            pks = linkPKs.Split('@');
-            foreach (string pk in pks)
-            {
-                if (DataType.IsNullOrEmpty(pk))
-                    continue;
-
-                sqls += "@DELETE FROM Sys_FrmLink WHERE MyPK='" + pk + "'";
-            }
-
-            pks = imgPKs.Split('@');
-            foreach (string pk in pks)
-            {
-                if (DataType.IsNullOrEmpty(pk))
-                    continue;
-
-                sqls += "@DELETE FROM Sys_FrmImg WHERE MyPK='" + pk + "'";
-            }
-
-            pks = attrPKs.Split('@');
-            foreach (string pk in pks)
-            {
-                if (DataType.IsNullOrEmpty(pk))
-                    continue;
-
-                if (pk == "OID")
-                    continue;
-
-                sqls += "@DELETE FROM Sys_MapAttr WHERE KeyOfEn='" + pk + "' AND FK_MapData='" + fk_mapdata + "'";
-                sqls += "@DELETE FROM Sys_FrmRB WHERE KeyOfEn='" + pk + "' AND FK_MapData='" + fk_mapdata + "'";
-            }
-
-            pks = dtlPKs.Split('@');
-            foreach (string pk in pks)
-            {
-                if (DataType.IsNullOrEmpty(pk))
-                    continue;
-
-                //调用删除逻辑.
-                MapDtl dtl = new MapDtl();
-                dtl.No = pk;
-                dtl.RetrieveFromDBSources();
-                dtl.Delete();
-
-                // sqls += "@DELETE FROM Sys_MapDtl WHERE No='" + pk + "'";
-            }
-
-
-            pks = athMultis.Split('@');
-            foreach (string pk in pks)
-            {
-                if (DataType.IsNullOrEmpty(pk))
-                    continue;
-                sqls += "@DELETE FROM Sys_FrmAttachment WHERE NoOfObj='" + pk + "' AND FK_MapData='" + fk_mapdata + "'";
-            }
-
-            //删除图片附件.
-            pks = athImgs.Split('@');
-            foreach (string pk in pks)
-            {
-                if (DataType.IsNullOrEmpty(pk))
-                    continue;
-
-                sqls += "@DELETE FROM Sys_FrmImgAth WHERE CtrlID='" + pk + "' AND FK_MapData='" + fk_mapdata + "'";
-            }
-
-            //删除这些，没有替换下来的数据.
-            DBAccess.RunSQLs(sqls);
-            #endregion 删除没有替换下来的 PKs, 说明这些都已经被删除了.
-
-            //清空缓存
-            MapData mymd = new MapData(fk_mapdata);
-            mymd.RepairMap();
-            SystemConfig.DoClearCash();
-        }
-        /// <summary>
-        /// 同步时间的影子字段
-        /// </summary>
-        /// <param name="frmID">表单ID</param>
-        /// <param name="pkval">主键值</param>
-        public static void DTS_DateTimeFieds(string frmID, object pkval)
-        {
-        }
-        /// <summary>
-        /// 同步时间的影子字段
-        /// </summary>
-        /// <param name="frmID"></param>
-        /// <param name="specPKVals">多个用逗号分开</param>
-        public static void DTS_DateTimeFieds(string frmID, string specPKVals)
-        {
-        }
-        /// <summary>
-        /// 同步时间的影子字段（所有的影子字段）
-        /// </summary>
-        /// <param name="frmID">表单ID</param>
-        public static void DTS_DateTimeFieds(string frmID)
-        {
-
-        }
+        
+         
         /// <summary>
         /// 复制表单
         /// </summary>
@@ -1231,7 +718,7 @@ namespace BP.Sys
                 throw new Exception("@目标表单ID:" + copyToFrmID + "已经存在，位于:" + mymd.FK_FormTreeText + "目录下.");
 
             //获得源文件信息.
-            DataSet ds = GenerHisDataSet(srcFrmID);
+            DataSet ds = GenerHisDataSet_AllEleInfo(srcFrmID);
 
             //导入表单文件.
             ImpFrmTemplate(copyToFrmID, ds, false);
@@ -1242,16 +729,16 @@ namespace BP.Sys
             if (mdCopyTo.HisFrmType == FrmType.ExcelFrm)
             {
                 /*如果是excel表单，那就需要复制excel文件.*/
-                string srcFile = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + srcFrmID + ".xls";
-                string toFile = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + copyToFrmID + ".xls";
+                string srcFile = SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + srcFrmID + ".xls";
+                string toFile = SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + copyToFrmID + ".xls";
                 if (System.IO.File.Exists(srcFile) == true)
                 {
                     if (System.IO.File.Exists(toFile) == false)
                         System.IO.File.Copy(srcFile, toFile, false);
                 }
 
-                srcFile = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + srcFrmID + ".xlsx";
-                toFile = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + copyToFrmID + ".xlsx";
+                srcFile = SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + srcFrmID + ".xlsx";
+                toFile = SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + copyToFrmID + ".xlsx";
                 if (System.IO.File.Exists(srcFile) == true)
                 {
                     if (System.IO.File.Exists(toFile) == false)
@@ -1301,7 +788,7 @@ namespace BP.Sys
         /// </summary>
         /// <param name="frmID">表单</param>
         /// <returns></returns>
-        public static System.Data.DataSet GenerHisDataSet(string frmID, string frmName = null, MapData md = null)
+        public static DataSet GenerHisDataSet(string frmID, string frmName = null, MapData md = null)
         {
             //首先从缓存获取数据.
             DataSet dsFrm = CashFrmTemplate.GetFrmDataSetModel(frmID);
@@ -1344,27 +831,7 @@ namespace BP.Sys
             //Sys_FrmRB.
             DataTable Sys_FrmRB = md.FrmRBs.ToDataTableField("Sys_FrmRB");
             ds.Tables.Add(Sys_FrmRB);
-
-            #region 如果是 自由表单类型，就把自由表单的元素加上.
-            if (md.HisFrmType == FrmType.FreeFrm)
-            {
-                //线.
-                DataTable Sys_FrmLine = md.FrmLines.ToDataTableField("Sys_FrmLine");
-                ds.Tables.Add(Sys_FrmLine);
-
-                //link.
-                DataTable Sys_FrmLink = md.FrmLinks.ToDataTableField("Sys_FrmLink");
-                ds.Tables.Add(Sys_FrmLink);
-
-                //btn.
-                DataTable Sys_FrmBtn = md.FrmBtns.ToDataTableField("Sys_FrmBtn");
-                ds.Tables.Add(Sys_FrmBtn);
-
-                //Sys_FrmLab.
-                DataTable Sys_FrmLab = md.FrmLabs.ToDataTableField("Sys_FrmLab");
-                ds.Tables.Add(Sys_FrmLab);
-            }
-            #endregion 如果是 自由表单类型，就把自由表单的元素加上.
+             
 
             //img.
             DataTable Sys_FrmImg = md.FrmImgs.ToDataTableField("Sys_FrmImg");
@@ -1392,7 +859,7 @@ namespace BP.Sys
         /// </summary>
         /// <param name="fk_mapdata"></param>
         /// <returns></returns>
-        public static System.Data.DataSet GenerHisDataSet_AllEleInfo(string fk_mapdata)
+        public static DataSet GenerHisDataSet_AllEleInfo(string fk_mapdata)
         {
             MapData md = new MapData(fk_mapdata);
 
@@ -1445,30 +912,11 @@ namespace BP.Sys
             exts.RetrieveIn(MapAttrAttr.FK_MapData, frmIDs);
             DataTable Sys_MapExt = exts.ToDataTableField("Sys_MapExt");
             ds.Tables.Add(Sys_MapExt);
-
-            //线.
-            DataTable Sys_FrmLine = md.FrmLines.ToDataTableField("Sys_FrmLine");
-            ds.Tables.Add(Sys_FrmLine);
-
-            //link.
-            DataTable Sys_FrmLink = md.FrmLinks.ToDataTableField("Sys_FrmLink");
-            ds.Tables.Add(Sys_FrmLink);
-
-            //btn.
-            DataTable Sys_FrmBtn = md.FrmBtns.ToDataTableField("Sys_FrmBtn");
-            ds.Tables.Add(Sys_FrmBtn);
-
-            //Sys_FrmLab.
-            FrmLabs frmlabs = new FrmLabs();
-            frmlabs.RetrieveIn(MapAttrAttr.FK_MapData, frmIDs);
-            DataTable Sys_FrmLab = frmlabs.ToDataTableField("Sys_FrmLab");
-            ds.Tables.Add(Sys_FrmLab);
-
+ 
             //img.
             //Sys_FrmLab.
             FrmImgs frmImgs = new FrmImgs();
             frmImgs.RetrieveIn(MapAttrAttr.FK_MapData, frmIDs);
-            // DataTable Sys_FrmImg = md.FrmImgs.ToDataTableField("Sys_FrmImg");
             ds.Tables.Add(frmImgs.ToDataTableField("Sys_FrmImg"));
 
             //Sys_FrmRB.
@@ -1496,7 +944,7 @@ namespace BP.Sys
         /// <param name="fk_mapdata">表单ID</param>
         /// <param name="isCheckFrmType">是否检查表单类型</param>
         /// <returns>DataSet</returns>
-        public static System.Data.DataSet GenerHisDataSet_AllEleInfo2017(string fk_mapdata, bool isCheckFrmType = false)
+        public static DataSet GenerHisDataSet_AllEleInfo2017(string fk_mapdata, bool isCheckFrmType = false)
         {
             MapData md = new MapData(fk_mapdata);
 
@@ -1556,9 +1004,9 @@ namespace BP.Sys
             //if (isCheckFrmType == true && md.HisFrmType == FrmType.FreeFrm)
             //{
             // line.
-            listNames.Add("Sys_FrmLine");
-            sql = "@SELECT * FROM Sys_FrmLine WHERE " + where;
-            sqls += sql;
+          //  listNames.Add("Sys_FrmLine");
+         //   sql = "@SELECT * FROM Sys_FrmLine WHERE " + where;
+           // sqls += sql;
 
             // link.
             listNames.Add("Sys_FrmLink");
@@ -1750,7 +1198,7 @@ namespace BP.Sys
                     kvsValues[i] = kvs[i + 1];
                 }
                 se.Lab = string.Join("=", kvsValues);
-                se.MyPK = se.EnumKey + "_" + se.Lang + "_" + se.IntKey;
+                se.setMyPK(se.EnumKey + "_" + se.Lang + "_" + se.IntKey);
                 se.Save();
             }
             return "保存成功.";

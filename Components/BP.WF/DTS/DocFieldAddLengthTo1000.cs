@@ -50,15 +50,15 @@ namespace BP.WF.DTS
         public override object Do()
         {
             string strs = "开始执行....";
-            MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapAttrAttr.MyDataType, DataType.AppString, MapAttrAttr.FK_MapData);
+            MapAttrs mattrs = new MapAttrs();
+            mattrs.Retrieve(MapAttrAttr.MyDataType, DataType.AppString, MapAttrAttr.FK_MapData);
             strs += "<br>@如下字段受到了影响。";
-            foreach (MapAttr attr in attrs)
+            foreach (MapAttr attr in mattrs)
             {
                 if (attr.UIHeightInt > 50 && attr.MaxLen < 1000 )
                 {
                     strs += " @ 类:" + attr.FK_MapData + " 字段:" + attr.KeyOfEn + " , " + attr.Name + " "; 
-                    attr.MaxLen = 1000;
+                    attr.setMaxLen(1000);
                     attr.Update();
                 }
             }

@@ -163,7 +163,7 @@ namespace BP.WF.Data
 
         public string DoIt()
         {
-            BP.WF.DTS.Auto_Rpt_Dtl_DTS dts = new DTS.Auto_Rpt_Dtl_DTS();
+            BP.WF.DTS.Auto_Rpt_Dtl_DTS dts = new BP.WF.DTS.Auto_Rpt_Dtl_DTS();
             string str=dts.Do() as string;
 
             BP.WF.Dev2Interface.Port_Login("admin");

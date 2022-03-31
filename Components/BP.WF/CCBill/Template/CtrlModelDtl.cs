@@ -131,13 +131,13 @@ namespace BP.CCBill.Template
 
         protected override bool beforeInsert()
         {
-            this.MyPK = this.FrmID + "_" + this.CtrlObj + "_" + this.OrgType;
+            this.setMyPK(this.FrmID + "_" + this.CtrlObj + "_" + this.OrgType);
             return base.beforeInsert();
         }
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.MyPK = this.FrmID + "_" + this.CtrlObj + "_" + this.OrgType;
+            this.setMyPK(this.FrmID + "_" + this.CtrlObj + "_" + this.OrgType);
             return base.beforeUpdateInsertAction();
         }
 
@@ -145,7 +145,7 @@ namespace BP.CCBill.Template
         {
             //修改CtrlModel中的数据
             CtrlModel ctrlM = new CtrlModel();
-            ctrlM.MyPK = this.FrmID + "_" + this.CtrlObj;
+            ctrlM.setMyPK(this.FrmID + "_" + this.CtrlObj);
             if(ctrlM.RetrieveFromDBSources() == 0)
             {
                 ctrlM.FrmID = this.FrmID;

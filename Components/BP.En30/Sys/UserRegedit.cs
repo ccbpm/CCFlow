@@ -150,10 +150,7 @@ namespace BP.Sys
             {
                 return this.GetValStringByKey(UserRegeditAttr.OrderWay);
             }
-            set
-            {
-                this.SetValByKey(UserRegeditAttr.OrderWay, value);
-            }
+            
         }
         public string OrderBy
         {
@@ -161,10 +158,7 @@ namespace BP.Sys
             {
                 return this.GetValStringByKey(UserRegeditAttr.OrderBy);
             }
-            set
-            {
-                this.SetValByKey(UserRegeditAttr.OrderBy, value);
-            }
+           
         }
         /// <summary>
         /// FK_Emp
@@ -175,10 +169,7 @@ namespace BP.Sys
             {
                 return this.GetValStringByKey(UserRegeditAttr.FK_Emp);
             }
-            set
-            {
-                this.SetValByKey(UserRegeditAttr.FK_Emp, value);
-            }
+          
         }
         /// <summary>
         /// 查询时间从
@@ -195,10 +186,7 @@ namespace BP.Sys
                 }
                 return s.Substring(0, 10);
             }
-            set
-            {
-                this.SetValByKey(UserRegeditAttr.DTFrom, value);
-            }
+            
         }
         /// <summary>
         /// 到
@@ -215,10 +203,7 @@ namespace BP.Sys
                 }
                 return s.Substring(0, 10);
             }
-            set
-            {
-                this.SetValByKey(UserRegeditAttr.DTTo, value);
-            }
+            
         }
 
         /// <summary>
@@ -237,10 +222,7 @@ namespace BP.Sys
                 //}
                 //return s.Substring(0, 10);
             }
-            set
-            {
-                this.SetValByKey(UserRegeditAttr.DTFrom, value);
-            }
+            
         }
         /// <summary>
         /// 到
@@ -271,7 +253,7 @@ namespace BP.Sys
                 if (DataType.IsNullOrEmpty(s))
                 {
                     DateTime dt = DateTime.Now.AddDays(-14);
-                    return dt.ToString(DataType.SysDataTimeFormat);
+                    return dt.ToString(DataType.SysDateTimeFormat);
                 }
                 return s;
             }
@@ -291,7 +273,7 @@ namespace BP.Sys
                 if (DataType.IsNullOrEmpty(s))
                 {
                     DateTime dt = DateTime.Now;
-                    return dt.ToString(DataType.SysDataTimeFormat);
+                    return dt.ToString(DataType.SysDateTimeFormat);
                 }
                 return s;
             }
@@ -309,10 +291,7 @@ namespace BP.Sys
             {
                 return this.GetValStringByKey(UserRegeditAttr.CfgKey);
             }
-            set
-            {
-                this.SetValByKey(UserRegeditAttr.CfgKey, value);
-            }
+           
         }
         public string SearchKey
         {
@@ -334,10 +313,7 @@ namespace BP.Sys
             {
                 return this.GetValStringByKey(UserRegeditAttr.Vals);
             }
-            set
-            {
-                this.SetValByKey(UserRegeditAttr.Vals, value);
-            }
+            
         }
         public string MVals
         {
@@ -345,10 +321,7 @@ namespace BP.Sys
             {
                 return this.GetValStringByKey(UserRegeditAttr.MVals);
             }
-            set
-            {
-                this.SetValByKey(UserRegeditAttr.MVals, value);
-            }
+            
         }
         public string MyPK
         {
@@ -356,10 +329,7 @@ namespace BP.Sys
             {
                 return this.GetValStringByKey(UserRegeditAttr.MyPK);
             }
-            set
-            {
-                this.SetValByKey(UserRegeditAttr.MyPK, value);
-            }
+            
         }
         #endregion
 
@@ -371,6 +341,19 @@ namespace BP.Sys
         {
             AutoMyPK = true;
         }
+        public void setMyPK(string val)
+        {
+            this.SetValByKey("MyPK", val);
+        }
+        public void setFK_Emp(string val)
+        {
+            this.SetValByKey("FK_Emp", val);
+        }
+        public void setCfgKey(string val)
+        {
+            this.SetValByKey("CfgKey", val);
+        }
+        
         /// <summary>
         /// 用户注册表
         /// </summary>
@@ -379,14 +362,17 @@ namespace BP.Sys
         public UserRegedit(string fk_emp, string cfgkey)
             : this()
         {
-            this.MyPK = fk_emp + cfgkey;
-            this.CfgKey = cfgkey;
-            this.FK_Emp = fk_emp;
+            this.SetValByKey("MyPK", fk_emp + cfgkey);
+            this.SetValByKey("CfgKey", cfgkey);
+            this.SetValByKey("FK_Emp", fk_emp);
+             
             int i = this.RetrieveFromDBSources();
             if (i == 0)
             {
-                this.CfgKey = cfgkey;
-                this.FK_Emp = fk_emp;
+                this.SetValByKey("CfgKey", cfgkey);
+                this.SetValByKey("FK_Emp", fk_emp);
+                //this.CfgKey = cfgkey;
+                //this.FK_Emp = fk_emp;
                 this.DirectInsert();
                 // this.DirectInsert();
             }
@@ -401,7 +387,7 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_UserRegedit", "用户注册表");
-                map.EnType = EnType.Sys; 
+                map.setEnType(EnType.Sys);
 
                 map.AddMyPK();
                 map.AddTBString(UserRegeditAttr.FK_Emp, null, "用户", false, false, 0, 30, 20);
@@ -419,6 +405,9 @@ namespace BP.Sys
                 map.AddTBString(UserRegeditAttr.DTFrom, null, "查询时间从", true, false, 0, 20, 20);
                 map.AddTBString(UserRegeditAttr.DTTo, null, "到", true, false, 0, 20, 20);
 
+                map.AddTBString("OrgNo", null, "OrgNo", true, false, 0, 32, 32);
+
+
                 //增加属性.
                 map.AddTBAtParas(4000);
 
@@ -435,6 +424,7 @@ namespace BP.Sys
         }
         protected override bool beforeUpdateInsertAction()
         {
+            this.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
             return base.beforeUpdateInsertAction();
         }
         #endregion 重写

@@ -71,9 +71,9 @@ namespace BP.CCBill
             if (flowNo != null)
                 tk.FlowNo = flowNo;
 
-            //tk.MyPK = tk.FrmID + "_" + tk.WorkID + "_" + tk.Rec + "_" + (int)BP.CCBill.FrmActionType.BBS;
+            //tk.setMyPK(tk.FrmID + "_" + tk.WorkID + "_" + tk.Rec + "_" + (int)BP.CCBill.FrmActionType.BBS;
             tk.Msg = msg;
-            tk.RDT = DataType.CurrentDataTime;
+            tk.RDT = DataType.CurrentDateTime;
 
             ////流程信息.
             //tk.NodeID = nodeID;
@@ -145,7 +145,7 @@ namespace BP.CCBill
             gb.FK_Dept = BP.Web.WebUser.FK_Dept;
             gb.DeptName = BP.Web.WebUser.FK_DeptName;
             gb.FK_FrmTree = fb.FK_FormTree; //单据类别.
-            gb.RDT = DataType.CurrentDataTime;
+            gb.RDT = DataType.CurrentDateTime;
             gb.NDStep = 1;
             gb.NDStepName = "启动";
 
@@ -231,7 +231,7 @@ namespace BP.CCBill
                 if (htParas != null)
                     rpt.Copy(htParas);
 
-                rpt.SetValByKey("RDT", DataType.CurrentData);
+                rpt.SetValByKey("RDT", DataType.CurrentDate);
                 rpt.Update();
                 return rpt.OID; //如果有空白的数据，就返回给他.
             }
@@ -249,7 +249,7 @@ namespace BP.CCBill
             rpt.SetValByKey("Starter", WebUser.No);
             rpt.SetValByKey("StarterName", WebUser.Name);
             rpt.SetValByKey("FK_Dept", WebUser.FK_Dept);
-            rpt.SetValByKey("RDT", DataType.CurrentData);
+            rpt.SetValByKey("RDT", DataType.CurrentDate);
 
             //设置编号生成规则.
             rpt.EnMap.CodeStruct = fb.BillNoFormat;
@@ -299,7 +299,7 @@ namespace BP.CCBill
             rpt.SetValByKey("Starter", WebUser.No);
             rpt.SetValByKey("StarterName", WebUser.Name);
             rpt.SetValByKey("FK_Dept", WebUser.FK_Dept);
-            rpt.SetValByKey("RDT", DataType.CurrentData);
+            rpt.SetValByKey("RDT", DataType.CurrentDate);
             rpt.Update();
 
             BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, workid, FrmActionType.Save, "执行保存");
@@ -521,7 +521,7 @@ namespace BP.CCBill
             gb.FrmID = fb.No; //单据ID
 
             gb.FK_FrmTree = fb.FK_FormTree; //单据类别.
-            gb.RDT = DataType.CurrentDataTime;
+            gb.RDT = DataType.CurrentDateTime;
             gb.NDStep = 1;
             gb.NDStepName = "启动";
 
@@ -582,7 +582,7 @@ namespace BP.CCBill
                                 newDB.Copy(db);
                                 newDB.RefPKVal = dtlData.OID.ToString();
                                 newDB.FID = dtlData.OID;
-                                newDB.MyPK = DBAccess.GenerGUID();
+                                newDB.setMyPK(DBAccess.GenerGUID());
                                 newDB.Insert();
                             }
                         }
@@ -606,7 +606,7 @@ namespace BP.CCBill
                         FrmAttachmentDB athDB_N = new FrmAttachmentDB();
                         athDB_N.Copy(athDB);
                         athDB_N.RefPKVal = rpt.OID.ToString();
-                        athDB_N.MyPK = DBAccess.GenerGUID();
+                        athDB_N.setMyPK(DBAccess.GenerGUID());
                         athDB_N.Insert();
                     }
                 }

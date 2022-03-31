@@ -72,6 +72,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string IsBackTracking = "IsBackTracking";
         /// <summary>
+        /// 是否重新计算接受人？
+        /// </summary>
+        public const string IsBackResetAccepter = "IsBackResetAccepter";
+        /// <summary>
         /// 是否删除其他的子线程?
         /// </summary>
         public const string IsKillEtcThread = "IsKillEtcThread";
@@ -117,10 +121,6 @@ namespace BP.WF.Template
         /// 退回规则
         /// </summary>
         public const string ReturnRole = "ReturnRole";
-        /// <summary>
-        /// 可触发子流程
-        /// </summary>
-        public const string SFActiveFlows = "SFActiveFlows";
         /// <summary>
         /// 转向处理
         /// </summary>
@@ -349,7 +349,7 @@ namespace BP.WF.Template
         /// </summary>
         public const string BatchRole = "BatchRole";
         ///// <summary>
-        ///// 批处理参数 @hongyan
+        ///// 批处理参数 
         ///// </summary>
         //public const string BatchParas = "BatchParas";
         ///// <summary>

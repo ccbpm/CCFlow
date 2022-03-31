@@ -25,16 +25,17 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string AutoTask_Init()
         {
-            BP.WF.DTS.ccbpmServices dts = new DTS.ccbpmServices();
+            BP.WF.DTS.ccbpmServices dts = new BP.WF.DTS.ccbpmServices();
             dts.Do();
 
-            return "执行成功:"+DataType.CurrentDataCNOfLong;
+            return "执行成功:"+DataType.CurrentDateCNOfLong;
         }
         /// <summary>
         /// 构造函数
         /// </summary>
         public DataUser_AppCoder()
         {
+
         }
 
         #region 欢迎页面初始化.
@@ -59,7 +60,7 @@ namespace BP.WF.HttpHandler
             ht.Add("FlowNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(No) FROM WF_Flow " + whereStr)); //流程数
 
 
-            //获得节点的数量 @hongyan.
+            //获得节点的数量
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                 ht.Add("NodeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(NodeID) FROM WF_Node " + whereStr)); //节点数据
             else

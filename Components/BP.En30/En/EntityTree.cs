@@ -211,7 +211,7 @@ namespace BP.En
         /// <returns></returns>
         public EntityTree DoCreateSameLevelNode(string name = null)
         {
-            //@hongyan
+            
             EntityTree en = this.CreateInstance() as EntityTree;
             en.No = DBAccess.GenerOID(this.ToString()).ToString(); // en.GenerNewNoByKey(EntityTreeAttr.No);
             if (name == null)
@@ -230,29 +230,18 @@ namespace BP.En
         /// <returns></returns>
         public EntityTree DoCreateSubNode(string name=null)
         {
-            //@hongyan
+            
             EntityTree en = this.CreateInstance() as EntityTree;
-            en.No = DBAccess.GenerOID(this.ToString()).ToString(); // en.GenerNewNoByKey(EntityTreeAttr.No);
+            en.Copy(this);
+            en.No = DBAccess.GenerOID(this.ToString()).ToString();  
             if (name == null)
                 en.Name = "新建节点" + en.No;
             else
                 en.Name = name;
 
             en.ParentNo = this.No;
-            //  en.MenuType = this.MenuType + 1;
-            //en.IsDir = false;
-            //en.TreeNo = this.GenerNewNoByKey(EntityTreeAttr.TreeNo, EntityTreeAttr.ParentNo, this.No);
-            //if (en.TreeNo.Substring(en.TreeNo.Length - 2) == "01")
-            //    en.TreeNo = this.TreeNo + "10";
             en.Insert();
 
-            //// 设置此节点是目录
-            //if (this.IsDir == false)
-            //{
-            //    this.Retrieve();
-            //    this.IsDir = true;
-            //    this.Update();
-            //}
             return en;
         }
         /// <summary>

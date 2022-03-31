@@ -65,7 +65,7 @@ namespace BP.WF.DTS
                 string incName = dr["Name"].ToString();
 
                 //检查该公司是否创建了树节点, 如果没有就插入一个.
-                BP.WF.Template.FlowSort fs = new Template.FlowSort();
+                BP.WF.Template.FlowSort fs = new BP.WF.Template.FlowSort();
                 fs.No = incNo;
                 if (fs.RetrieveFromDBSources() == 0)
                 {

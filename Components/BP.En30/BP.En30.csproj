@@ -29,7 +29,7 @@
     </UpgradeBackupLocation>
     <SignAssembly>true</SignAssembly>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <PublishUrl>http://localhost/BP.En30/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -124,6 +124,10 @@
     <Reference Include="Microsoft.Expression.Interactions">
       <HintPath>..\..\RefDLL\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RefDLL\Mono.Security.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=8.0.25.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\MySql.Data.dll</HintPath>
@@ -131,8 +135,20 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\RefDLL\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\..\RefDLL\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog.Extensions.Logging">
+      <HintPath>..\..\RefDLL\NLog.Extensions.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog.Web.AspNetCore">
+      <HintPath>..\..\RefDLL\NLog.Web.AspNetCore.dll</HintPath>
+    </Reference>
     <Reference Include="Npgsql">
       <HintPath>..\..\RefDLL\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="Nuxsql">
+      <HintPath>..\..\RefDLL\Nuxsql.dll</HintPath>
     </Reference>
     <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
       <HintPath>..\..\RefDLL\Oracle.ManagedDataAccess.dll</HintPath>
@@ -194,8 +210,6 @@
     <Compile Include="DA\Cash.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DA\DBAccessOfMSSQL1.cs" />
-    <Compile Include="DA\DBAccessOfMSSQL2.cs" />
     <Compile Include="DA\DBLoad.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -257,16 +271,17 @@
     <Compile Include="Sys\EvenListFlow.cs" />
     <Compile Include="Sys\EvenListFrm.cs" />
     <Compile Include="Sys\EvenListNode.cs" />
-    <Compile Include="Sys\FormEventBase.cs" />
+    <Compile Include="Sys\Base\FormEventBase.cs" />
     <Compile Include="Sys\FrmEvent.cs" />
     <Compile Include="Sys\FrmEventBase.cs" />
     <Compile Include="Sys\FrmUI\ComponentsFieldList.cs" />
+    <Compile Include="Sys\FrmUI\ExtAthSingle.cs" />
     <Compile Include="Sys\FrmUI\ExtMap.cs" />
     <Compile Include="Sys\FrmUI\ExtScore.cs" />
-    <Compile Include="Sys\FrmUI\FrmBtn.cs" />
     <Compile Include="Sys\FrmUI\ExtImg.cs" />
+    <Compile Include="Sys\FrmUI\FrmAttachmentSingle.cs" />
+    <Compile Include="Sys\FrmUI\FrmBtn.cs" />
     <Compile Include="Sys\FrmUI\FrmImgAth.cs" />
-    <Compile Include="Sys\FrmUI\FrmLink.cs" />
     <Compile Include="Sys\FrmUI\MapAttrGovDocFile.cs" />
     <Compile Include="Sys\FrmUI\MapAttrDocWordReceive.cs" />
     <Compile Include="Sys\FrmUI\MapAttrDocWord.cs" />
@@ -274,6 +289,8 @@
     <Compile Include="Sys\FrmUI\MapAttrCard.cs" />
     <Compile Include="Sys\FrmUI\MapAttrCheck.cs" />
     <Compile Include="Sys\FrmUI\MapAttrFlowBBS.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrDataView.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrPrint.cs" />
     <Compile Include="Sys\FrmUI\MapAttrSFTable.cs" />
     <Compile Include="Sys\FrmUI\MapAttrString.cs" />
     <Compile Include="Sys\FrmUI\SFTableClass.cs" />
@@ -284,6 +301,7 @@
     <Compile Include="Sys\FrmUI\ExtHandWriting.cs" />
     <Compile Include="Sys\GloVarExt.cs" />
     <Compile Include="Sys\MapAttrEnum.cs" />
+    <Compile Include="Sys\MapDataVer.cs" />
     <Compile Include="Sys\MapExtXml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -294,7 +312,7 @@
     <Compile Include="Sys\SFTableDict.cs" />
     <Compile Include="Sys\GEEntityExcelFrm.cs" />
     <Compile Include="Sys\GEEntityWordFrm.cs" />
-    <Compile Include="Sys\Glo.cs">
+    <Compile Include="Sys\Base\Glo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Sys\GloVar.cs">
@@ -316,7 +334,8 @@
     <Compile Include="Sys\FrmUI\MapAttrDT.cs" />
     <Compile Include="Sys\FrmUI\MapAttrBoolen.cs" />
     <Compile Include="Sys\GEEntityMyPK.cs" />
-    <Compile Include="Sys\FormEventBaseDtl.cs" />
+    <Compile Include="Sys\Base\FormEventBaseDtl.cs" />
+    <Compile Include="Sys\FrmDBVer.cs" />
     <Compile Include="Sys\UserLog.cs" />
     <Compile Include="Sys\XML\ChMulTone.cs" />
     <Compile Include="Sys\MapDataTemplate.cs" />
@@ -362,6 +381,7 @@
     <Compile Include="Tools\Entitis2Json.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tools\ExportExcelUtil.cs" />
     <Compile Include="Tools\FTP\FtpConnection.cs" />
     <Compile Include="Tools\FTP\FtpException.cs" />
     <Compile Include="Tools\FTP\FtpStream.cs" />
@@ -381,6 +401,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tools\Luban.cs" />
+    <Compile Include="Tools\NLogUtil.cs" />
     <Compile Include="Tools\NPinyin\Pinyin.cs" />
     <Compile Include="Tools\NPinyin\PyCode.cs" />
     <Compile Include="Tools\NPinyin\PyHash.cs" />
@@ -418,7 +439,7 @@
     <Compile Include="En\Map.cs" />
     <Compile Include="En\Row.cs" />
     <Compile Include="En\EntityTree.cs" />
-    <Compile Include="Sys\EventBase.cs" />
+    <Compile Include="Sys\Base\EventBase.cs" />
     <Compile Include="Sys\EventDemo.cs" />
     <Compile Include="GPM\Dept.cs" />
     <Compile Include="GPM\DeptEmp.cs" />
@@ -475,9 +496,6 @@
     <Compile Include="Sys\MapDtl.cs" />
     <Compile Include="Sys\GEEntity.cs" />
     <Compile Include="Sys\MapExt.cs" />
-    <Compile Include="Sys\FrmLine.cs" />
-    <Compile Include="Sys\FrmLab.cs" />
-    <Compile Include="Sys\FrmLink.cs" />
     <Compile Include="Sys\FrmRB.cs" />
     <Compile Include="Sys\FrmImg.cs" />
     <Compile Include="Sys\FrmAttachment.cs" />
@@ -529,9 +547,6 @@
     <None Include="packages.config" />
     <None Include="Properties\DataSources\System.Data.DataTable.datasource" />
     <None Include="Properties\DataSources\System.Data.DataTable1.datasource" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

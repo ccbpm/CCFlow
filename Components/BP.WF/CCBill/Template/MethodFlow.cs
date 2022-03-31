@@ -345,7 +345,7 @@ namespace BP.CCBill.Template
         public string ReSetFrm()
         {
             //如果是发起流程的方法，就要表单的字段复制到，流程的表单上去.
-            BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp handler = new WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp();
+            BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp handler = new BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp();
             //   handler.AddPara
             handler.Imp_CopyFrm("ND" + int.Parse(this.MethodID + "01"), this.FrmID);
             return "执行成功，您需要转入流程设计器查看表单.";

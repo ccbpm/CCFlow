@@ -59,7 +59,7 @@ namespace BP.GPM
             set
             {
                 SetValByKey(DeptEmpStationAttr.FK_Emp, value);
-                this.MyPK = this.FK_Dept + "_" + this.FK_Emp+"_"+this.FK_Station;
+                this.setMyPK(this.FK_Dept + "_" + this.FK_Emp+"_"+this.FK_Station);
             }
         }
         /// <summary>
@@ -74,7 +74,7 @@ namespace BP.GPM
             set
             {
                 SetValByKey(DeptEmpStationAttr.FK_Dept, value);
-                this.MyPK = this.FK_Dept + "_" + this.FK_Emp + "_" + this.FK_Station;
+                this.setMyPK(this.FK_Dept + "_" + this.FK_Emp + "_" + this.FK_Station);
             }
         }
         public string FK_StationT
@@ -98,7 +98,7 @@ namespace BP.GPM
             set
             {
                 SetValByKey(DeptEmpStationAttr.FK_Station, value);
-                this.MyPK = this.FK_Dept + "_" + this.FK_Emp + "_" + this.FK_Station;
+                this.setMyPK(this.FK_Dept + "_" + this.FK_Emp + "_" + this.FK_Station);
             }
         }
         #endregion
@@ -118,8 +118,7 @@ namespace BP.GPM
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Port_DeptEmpStation");
-                map.EnDesc = "部门岗位人员对应";
+                Map map = new Map("Port_DeptEmpStation", "部门岗位人员对应");
 
 
                 map.AddTBStringPK("MyPK", null, "主键MyPK", false, true, 1, 150, 10);
@@ -141,7 +140,7 @@ namespace BP.GPM
         /// <returns></returns>
         protected override bool beforeUpdateInsertAction()
         {
-            this.MyPK = this.FK_Dept + "_" + this.FK_Emp + "_" + this.FK_Station;
+            this.setMyPK(this.FK_Dept + "_" + this.FK_Emp + "_" + this.FK_Station);
             return base.beforeUpdateInsertAction();
         }
     }

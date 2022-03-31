@@ -35,7 +35,7 @@ namespace BP.Pub
 
         public string GetCode(string str)
         {
-            if (str == null || str == "")
+            if (DataType.IsNullOrEmpty(str) )
                 return "";
 
             string rtn = "";
@@ -657,7 +657,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                     return row["Msg"].ToString();
                 case "Siganture":
                     string empNo = row["EmpFrom"].ToString(); //记录人.
-                    //审核人的签名. @yln
+                    //审核人的签名.
 
 
                     return empNo;
@@ -732,7 +732,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                     if (!File.Exists(path1))
                     {
                         FrmImgAthDB dbImgAth = new FrmImgAthDB();
-                        dbImgAth.MyPK = strs[0].Trim() + "_" + this.HisGEEntity.PKVal;
+                        dbImgAth.setMyPK(strs[0].Trim() + "_" + this.HisGEEntity.PKVal);
                         int count = dbImgAth.RetrieveFromDBSources();
                         if (count == 1)
                         {
@@ -1076,7 +1076,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                 #region 替换主表标记
                 foreach (string para in paras)
                 {
-                    if (para == null || para == "")
+                    if (DataType.IsNullOrEmpty(para ) )
                         continue;
 
                     //如果包含,时间表.
@@ -1146,7 +1146,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                         error += "@替换主表标记取参数[" + para + "]出现错误：有以下情况导致此错误;1你用Text取值时间，此属性不是外键。2,类无此属性。3,该字段是明细表字段但是丢失了明细表标记.<br>更详细的信息：<br>" + ex.Message;
                         if (SystemConfig.IsDebug)
                             throw new Exception(error);
-                        Log.DebugWriteError(error);
+                        BP.DA.Log.DebugWriteError(error);
                     }
                 }
                 #endregion 替换主表标记
@@ -1302,7 +1302,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                         wkVal = this.GetValueCheckWorkByKey(row, "RDT-NYR");
                         str = str.Replace(wkKey, wkVal);
 
-                        //审核人的签名. 2020.11.28 by zhoupeng @yln
+                        //审核人的签名. 2020.11.28 by zhoupeng 
                         wkKey = "<WorkCheck.Siganture." + nfFrom + ">";
                         if (str.Contains(wkKey) == true)
                         {
@@ -1328,7 +1328,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                             str = str.Replace(wkKey, mypict.ToString()); ;
                         }
 
-                        //审核人的手写签名. 2020.11.28 by zhoupeng  @yln
+                        //审核人的手写签名. 2020.11.28 by zhoupeng  
                         wkKey = "<WorkCheck.WriteDB." + nfFrom + ">";
                         if (str.Contains(wkKey) == true)
                         {

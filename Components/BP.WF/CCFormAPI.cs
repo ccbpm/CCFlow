@@ -10,6 +10,7 @@ using BP.Web;
 using BP.WF.Template;
 using BP.En;
 using BP.Sys;
+using BP.Difference;
 
 namespace BP.WF
 {
@@ -25,7 +26,7 @@ namespace BP.WF
         /// <param name="ds">数据源</param>
         /// <returns>生成单据的路径</returns>
         public static void Frm_GenerBill(string templeteFullFile, string saveToDir, string saveFileName,
-            BillFileType fileType, DataSet ds, string fk_mapData)
+            PrintFileType fileType, DataSet ds, string fk_mapData)
         {
             MapData md = new MapData(fk_mapData);
             GEEntity entity = md.GenerGEEntityByDataSet(ds);
@@ -318,7 +319,7 @@ namespace BP.WF
             {
                 //实体.
                 GEEntityMyPK wk = new GEEntityMyPK(frmID);
-                wk.MyPK = pkval.ToString();
+                wk.setMyPK(pkval.ToString());
                 if (wk.RetrieveFromDBSources() == 0)
                     wk.Insert();
                 ExecEvent.DoFrm(md,EventListFrm.FrmLoadBefore, wk, null);
@@ -584,8 +585,8 @@ namespace BP.WF
                 DataTable dtDtl = qo.DoQueryToTable();
 
                 // 为明细表设置默认值.
-                MapAttrs dtlAttrs = new MapAttrs(dtl.No);
-                foreach (MapAttr attr in dtlAttrs)
+                MapAttrs mattrs = new MapAttrs(dtl.No);
+                foreach (MapAttr attr in mattrs)
                 {
                     //处理它的默认值.
                     if (attr.DefValReal.Contains("@") == false)
@@ -673,7 +674,7 @@ namespace BP.WF
         /// <param name="atParas">参数</param>
         /// <param name="specDtlFrmID">指定明细表的参数，如果为空就标识主表数据，否则就是从表数据.</param>
         /// <returns>数据</returns>
-        public static DataSet GenerDBForCCFormDtl(string frmID, MapDtl dtl, int pkval, string atParas,string dtlRefPKVal)
+        public static DataSet GenerDBForCCFormDtl(string frmID, MapDtl dtl, int pkval, string atParas,string dtlRefPKVal,Int64 fid)
         {
             //数据容器,就是要返回的对象.
             DataSet myds = new DataSet();
@@ -719,7 +720,8 @@ namespace BP.WF
             myds.Tables.Add(Sys_MapDtl);
 
             //明细表的表单描述
-            DataTable Sys_MapAttr = dtl.MapAttrs.ToDataTableField("Sys_MapAttr");
+            MapAttrs attrs = dtl.MapAttrs;
+            DataTable Sys_MapAttr = attrs.ToDataTableField("Sys_MapAttr");
             myds.Tables.Add(Sys_MapAttr);
 
             //明细表的配置信息.
@@ -737,25 +739,20 @@ namespace BP.WF
 
             DataTable ddlTable = new DataTable();
             ddlTable.Columns.Add("No");
-            foreach (DataRow dr in Sys_MapAttr.Rows)
+            foreach (MapAttr attr in attrs)
             {
-                string lgType = dr["LGType"].ToString();
-                string ctrlType = dr[MapAttrAttr.UIContralType].ToString();
-
+               
                 //没有绑定外键
-                string uiBindKey = dr["UIBindKey"].ToString();
+                string uiBindKey = attr.UIBindKey;
                 if (DataType.IsNullOrEmpty(uiBindKey) == true)
                     continue;
 
-                var mypk = dr["MyPK"].ToString();
-
                 #region 枚举字段
-                if (lgType.Equals("1") == true)
+                if (attr.LGType == FieldTypeS.Enum)
                 {
                     // 如果是枚举值, 判断是否存在.
                     if (myds.Tables.Contains(uiBindKey) == true)
                         continue;
-
                     string mysql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + uiBindKey + "' ORDER BY IntKey ";
                     DataTable dtEnum = DBAccess.RunSQLReturnTable(mysql);
                     dtEnum.TableName = uiBindKey;
@@ -768,9 +765,8 @@ namespace BP.WF
                 }
                 #endregion
 
-                string UIIsEnable = dr["UIIsEnable"].ToString();
                 // 检查是否有下拉框自动填充。
-                string keyOfEn = dr["KeyOfEn"].ToString();
+                string keyOfEn = attr.KeyOfEn;
 
                 #region 处理下拉框数据范围. for 小杨.
                 me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL,
@@ -798,7 +794,7 @@ namespace BP.WF
                             dt.Columns["PARENTNO"].ColumnName = "ParentNo";
                     }
 
-                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                     {
                         if (dt.Columns.Contains("no") == true)
                             dt.Columns["no"].ColumnName = "No";
@@ -851,13 +847,49 @@ namespace BP.WF
             #endregion 把主表数据放入.
 
             #region  把从表的数据放入.
-            GEDtls dtls = new GEDtls(dtl.No);
-            DataTable dtDtl = GetDtlInfo(dtl,dtls,en, dtlRefPKVal);
-       
+            DataTable dtDtl = GetDtlInfo(dtl,en, dtlRefPKVal);
+            //从表数据的填充
+            if (dtDtl.Rows.Count == 0 && DataType.IsNullOrEmpty(dtl.InitDBAttrs) == false)
+            {
+                string[] keys = dtl.InitDBAttrs.Split(',');
+                GEDtl endtl = null;
+                MapAttr attr = null;
+                foreach (string keyOfEn in keys)
+                {
+                    Entity ent  = dtl.MapAttrs.GetEntityByKey(dtl.No + "_" + keyOfEn);
+                    if (ent == null)
+                        continue;
+                    attr = ent as MapAttr;
+                    if (DataType.IsNullOrEmpty(attr.UIBindKey) == true)
+                        continue;
+                    DataTable dt = null;
+                    //枚举字段
+                    if(attr.LGType == FieldTypeS.Enum && attr.MyDataType == DataType.AppInt)
+                        dt = myds.Tables[attr.UIBindKey];
+                    //外键、外部数据源
+                    if ((attr.LGType == FieldTypeS.FK && attr.MyDataType == DataType.AppString)
+                        || (attr.LGType == FieldTypeS.Normal && attr.MyDataType == DataType.AppString && attr.UIContralType == UIContralType.DDL))
+                        dt = myds.Tables[attr.UIBindKey];
+                    if (dt == null)
+                        continue;
+                    foreach(DataRow dr in dt.Rows)
+                    {
+                        endtl = new GEDtl(dtl.No);
+                        endtl.ResetDefaultVal();
+                        endtl.SetValByKey(keyOfEn, dr[0]);
+                        endtl.RefPK = dtlRefPKVal;
+                        endtl.FID = fid;
+                        endtl.Insert();
+                    }   
+
+                }
+                dtDtl = GetDtlInfo(dtl, en, dtlRefPKVal);
+            }
+
 
             // 为明细表设置默认值.
-            MapAttrs dtlAttrs = new MapAttrs(dtl.No);
-            foreach (MapAttr attr in dtlAttrs)
+            MapAttrs mattrs = new MapAttrs(dtl.No);
+            foreach (MapAttr attr in mattrs)
             {
                 if (attr.UIContralType == UIContralType.TB)
                     continue;
@@ -879,7 +911,7 @@ namespace BP.WF
 
 
             //放入一个空白的实体，用与获取默认值.
-            GEDtl dtlBlank = dtls.GetNewEntity as GEDtl;
+            GEDtl dtlBlank = new GEDtl(dtl.No);
             dtlBlank.ResetDefaultVal();
 
             myds.Tables.Add(dtlBlank.ToDataTableField("Blank"));
@@ -888,9 +920,10 @@ namespace BP.WF
 
             return myds;
         }
-        private static  DataTable GetDtlInfo(MapDtl dtl, GEDtls dtls,  GEEntity en,string dtlRefPKVal)
+        public static  DataTable GetDtlInfo(MapDtl dtl,GEEntity en,string dtlRefPKVal)
         {
             QueryObject qo = null;
+            GEDtls dtls = new GEDtls(dtl.No);
             try
             {
                 qo = new QueryObject(dtls);
@@ -938,12 +971,13 @@ namespace BP.WF
                 }
 
                 qo.DoQuery();
+               
                 return dtls.ToDataTableField();
             }
             catch (Exception ex)
             {
                 dtls.GetNewEntity.CheckPhysicsTable();
-                return GetDtlInfo(dtl, dtls,en,dtlRefPKVal);
+                return GetDtlInfo(dtl, en,dtlRefPKVal);
             }
  
         }

@@ -321,12 +321,12 @@ namespace BP.WF.Port
                     return this._enMap;
 
                 Map map = new Map("Port_User", "用户");
-                map.EnType = EnType.App;
+              // map.setEnType(EnType.App);
                 map.IndexField = UserAttr.FK_Dept;
 
                 #region 字段。
                 /*关于字段属性的增加 */
-                map.AddTBStringPK(UserAttr.No, null, "手机号/ID", true, false, 1, 500, 90);
+                map.AddTBStringPK(UserAttr.No, null, "手机号/ID", true, false, 1, 150, 90);
                 map.AddTBString(UserAttr.Name, null, "姓名", true, false, 0, 500, 130);
                 map.AddTBString(UserAttr.Pass, null, "密码", false, false, 0, 100, 10);
                 map.AddTBString(UserAttr.FK_Dept, null, "部门", false, false, 0, 100, 10);
@@ -416,7 +416,7 @@ namespace BP.WF.Port
             //    //给拼音重新定义值,让其加上部门的信息.
             //    py = py + pinyinJX + "/" + BP.DA.DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
 
-            //    BP.Port.Station sta = new Port.Station();
+            //    BP.Port.Station sta = new BP.Port.Station();
             //    sta.No = item.FK_Station;
             //    if (sta.RetrieveFromDBSources() == 0)
             //    {

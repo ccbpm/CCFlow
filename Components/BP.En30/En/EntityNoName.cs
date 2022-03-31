@@ -46,6 +46,10 @@ namespace BP.En
                 this.SetValByKey(EntityNoNameAttr.Name, value);
             }
         }
+        public void setName(string val)
+        {
+            this.SetValByKey(EntityNoNameAttr.Name, val);
+        }
         //public string NameE
         //{
         //    get

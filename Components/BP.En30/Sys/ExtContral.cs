@@ -149,12 +149,12 @@ namespace BP.Sys
         }
         public ExtContral(string fk_mapdata, string keyofEn)
         {
-            this.MyPK = fk_mapdata + "_" + keyofEn;
+            this.setMyPK(fk_mapdata + "_" + keyofEn);
             this.Retrieve();
         }
         public ExtContral(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>

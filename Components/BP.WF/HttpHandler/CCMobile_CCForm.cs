@@ -19,6 +19,7 @@ using System.Net;
 using System.Security.Cryptography;
 using BP.Tools;
 using System.Drawing;
+using BP.Difference;
 
 namespace BP.WF.HttpHandler
 {
@@ -130,7 +131,7 @@ namespace BP.WF.HttpHandler
                         break;
                     case DtlOpenType.ForWorkID: // 按工作ID来控制
                         item.RefPK = this.RefPKVal;
-                        item.FID = long.Parse(this.RefPKVal);
+                        item.FID = this.FID;
                         break;
                     case DtlOpenType.ForFID: // 按流程ID来控制.
                         item.RefPK = this.RefPKVal;
@@ -182,7 +183,7 @@ namespace BP.WF.HttpHandler
                 if (fn.FrmSln == FrmSln.Self)
                 {
                     BP.Sys.FrmAttachment myathDesc = new FrmAttachment();
-                    myathDesc.MyPK = attachPk + "_" + this.FK_Node;
+                    myathDesc.setMyPK(attachPk + "_" + this.FK_Node);
                     if (myathDesc.RetrieveFromDBSources() != 0)
                         athDesc.HisCtrlWay = myathDesc.HisCtrlWay;
                 }
@@ -269,17 +270,17 @@ namespace BP.WF.HttpHandler
                 msg = ExecEvent.DoFrm(mapData, EventListFrm.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + realSaveTo);
                 if (!DataType.IsNullOrEmpty(msg))
                 {
-                    BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + fileName + "，" + msg);
+                    BP.Sys.Base.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + fileName + "，" + msg);
                     File.Delete(realSaveTo);
                    
                 }
 
                 FileInfo info = new FileInfo(realSaveTo);
                 FrmAttachmentDB dbUpload = new FrmAttachmentDB();
-                dbUpload.MyPK = guid; 
+                dbUpload.setMyPK(guid); 
                 dbUpload.NodeID = this.FK_Node;
                 dbUpload.Sort = sort;
-                dbUpload.FK_MapData = athDesc.FK_MapData;
+                dbUpload.setFK_MapData(athDesc.FK_MapData);
                 dbUpload.FK_FrmAttachment = attachPk;
                 dbUpload.FileExts = info.Extension;
                 dbUpload.FID = this.FID;
@@ -288,7 +289,7 @@ namespace BP.WF.HttpHandler
                 dbUpload.FileFullName = realSaveTo;
                 dbUpload.FileName = fileName;
                 dbUpload.FileSize = (float)info.Length;
-                dbUpload.RDT = DataType.CurrentDataTimess;
+                dbUpload.RDT = DataType.CurrentDateTimess;
                 dbUpload.Rec = BP.Web.WebUser.No;
                 dbUpload.RecName = BP.Web.WebUser.Name;
                 dbUpload.FK_Dept = WebUser.FK_Dept;
@@ -301,7 +302,7 @@ namespace BP.WF.HttpHandler
                 //执行附件上传后事件，added by liuxc,2017-7-15
                 msg = ExecEvent.DoFrm(mapData, EventListFrm.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + dbUpload.FileFullName);
                 if (!DataType.IsNullOrEmpty(msg))
-                    BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
+                    BP.Sys.Base.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
             }
             #endregion 文件上传的iis服务器上 or db数据库里.
 
@@ -330,7 +331,7 @@ namespace BP.WF.HttpHandler
                 msg = ExecEvent.DoFrm(mapData, EventListFrm.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + temp);
                 if (DataType.IsNullOrEmpty(msg) == false)
                 {
-                    BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" +fileName + "，" + msg);
+                    BP.Sys.Base.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" +fileName + "，" + msg);
                     File.Delete(temp);
 
                     throw new Exception("err@上传附件错误：" + msg);
@@ -338,21 +339,21 @@ namespace BP.WF.HttpHandler
 
                 FileInfo info = new FileInfo(temp);
                 FrmAttachmentDB dbUpload = new FrmAttachmentDB();
-                dbUpload.MyPK = DBAccess.GenerGUID();
+                dbUpload.setMyPK(DBAccess.GenerGUID());
                 dbUpload.Sort = sort;
                 dbUpload.NodeID = FK_Node;
-                dbUpload.FK_MapData = athDesc.FK_MapData;
+                dbUpload.setFK_MapData(athDesc.FK_MapData);
                 dbUpload.FK_FrmAttachment = athDesc.MyPK;
                 dbUpload.FID = this.FID; //流程id.
                 if (fileEncrypt == true)
                     dbUpload.SetPara("IsEncrypt", 1);
 
                 dbUpload.RefPKVal = pkVal.ToString();
-                dbUpload.FK_MapData = athDesc.FK_MapData;
+                dbUpload.setFK_MapData(athDesc.FK_MapData);
                 dbUpload.FK_FrmAttachment = athDesc.MyPK;
                 dbUpload.FileName = fileName;
                 dbUpload.FileSize = (float)info.Length;
-                dbUpload.RDT = DataType.CurrentDataTimess;
+                dbUpload.RDT = DataType.CurrentDateTimess;
                 dbUpload.Rec = BP.Web.WebUser.No;
                 dbUpload.RecName = BP.Web.WebUser.Name;
                 dbUpload.FK_Dept = WebUser.FK_Dept;
@@ -403,7 +404,7 @@ namespace BP.WF.HttpHandler
                 //执行附件上传后事件，added by liuxc,2017-7-15
                 msg = ExecEvent.DoFrm(mapData, EventListFrm.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
                 if (DataType.IsNullOrEmpty(msg) == false)
-                    BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
+                    BP.Sys.Base.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
 
             }
             #endregion 保存到数据库.

@@ -18,6 +18,10 @@ namespace BP.WF
         /// </summary>
         public const string WorkID = "WorkID";
         /// <summary>
+        /// fid
+        /// </summary>
+        public const string FID = "FID";
+        /// <summary>
         /// 工作人员
         /// </summary>
         public const string Worker = "Worker";
@@ -81,6 +85,20 @@ namespace BP.WF
             set
             {
                 SetValByKey(ReturnWorkAttr.WorkID, value);
+            }
+        }
+        /// <summary>
+        /// FID
+        /// </summary>
+        public Int64 FID
+        {
+            get
+            {
+                return this.GetValInt64ByKey(ReturnWorkAttr.FID);
+            }
+            set
+            {
+                SetValByKey(ReturnWorkAttr.FID, value);
             }
         }
         /// <summary>
@@ -229,6 +247,7 @@ namespace BP.WF
                 map.AddMyPK();
 
                 map.AddTBInt(ReturnWorkAttr.WorkID, 0, "WorkID", true, true);
+                map.AddTBInt(ReturnWorkAttr.FID, 0, "FID", true, true);
 
                 map.AddTBInt(ReturnWorkAttr.ReturnNode, 0, "退回节点", true, true);
                 map.AddTBString(ReturnWorkAttr.ReturnNodeName, null, "退回节点名称", true, true, 0, 100, 10);
@@ -236,14 +255,15 @@ namespace BP.WF
                 map.AddTBString(ReturnWorkAttr.Returner, null, "退回人", true, true, 0, 50, 10);
                 map.AddTBString(ReturnWorkAttr.ReturnerName, null, "退回人名称", true, true, 0, 100, 10);
 
-                map.AddTBInt(ReturnWorkAttr.ReturnToNode, 0, "ReturnToNode", true, true);
+                map.AddTBInt(ReturnWorkAttr.ReturnToNode, 0, "退回到的节点", true, true);
                 map.AddTBString(ReturnWorkAttr.ReturnToEmp, null, "退回给", true, true, 0, 4000, 10);
 
                 //如果是frm类型，就是格式化的json数据.
                 map.AddTBString(ReturnWorkAttr.BeiZhu, null, "退回原因", true, true, 0, 4000, 10);
-
                 map.AddTBDateTime(ReturnWorkAttr.RDT, null, "退回日期", true, true);
-                map.AddTBInt(ReturnWorkAttr.IsBackTracking, 0, "是否要原路返回?", true, true);
+
+                map.AddTBInt(ReturnWorkAttr.IsBackTracking, 0, "是否要原路返回", true, true);
+            //    map.AddTBInt(ReturnWorkAttr.IsBackResetAccepter, 0, "是否要原路返回", true, true);
 
                 // map.AddTBString(ReturnWorkAttr.FrmDB, null, "退回的Frm格式化数据", true, true, 0, 3999, 10);
                 // map.AddAttrsFromMapData("BP.WF.ReturnWorks");
@@ -253,13 +273,12 @@ namespace BP.WF
         }
         #endregion
 
-
         protected override bool beforeInsert()
         {
             this.Returner = BP.Web.WebUser.No;
             this.ReturnerName = BP.Web.WebUser.Name;
 
-            this.RDT = DataType.CurrentDataTime;
+            this.RDT = DataType.CurrentDateTime;
             return base.beforeInsert();
         }
     }

@@ -14,6 +14,17 @@ namespace BP.Sys.FrmUI
     public class MapAttrBoolen : EntityMyPK
     {
         #region 文本字段参数属性.
+        public string DefVal
+        {
+            get
+            {
+                return this.GetValStringByKey(MapAttrAttr.DefVal);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.DefVal, value);
+            }
+        }
         /// <summary>
         /// 表单ID
         /// </summary>
@@ -180,12 +191,27 @@ namespace BP.Sys.FrmUI
         protected override void afterInsertUpdateAction()
         {
             MapAttr mapAttr = new MapAttr();
-            mapAttr.MyPK = this.MyPK;
+            mapAttr.setMyPK(this.MyPK);
             mapAttr.RetrieveFromDBSources();
             mapAttr.Update();
 
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+
+
+
+            #region 修改默认值.
+            //如果没默认值.
+            if (DataType.IsNullOrEmpty(this.DefVal)==true)
+                this.DefVal = "0";
+            MapData md = new MapData();
+            md.No = this.FK_MapData;
+            if (md.RetrieveFromDBSources() == 1)
+            {
+                BP.DA.DBAccess.UpdateTableColumnDefaultVal(md.PTable, this.KeyOfEn, int.Parse(this.DefVal));
+            }
+            #endregion 修改默认值.
+
 
             base.afterInsertUpdateAction();
         }

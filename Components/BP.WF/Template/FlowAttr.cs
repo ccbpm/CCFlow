@@ -104,10 +104,7 @@ namespace BP.WF.Template
         /// 类型
         /// </summary>
         public const string FlowAppType = "FlowAppType";
-        /// <summary>
-        /// HelpUrl帮助.
-        /// </summary>
-        public const string HelpUrl = "HelpUrl";
+        
         /// <summary>
         /// 图像类型
         /// </summary>
@@ -297,14 +294,7 @@ namespace BP.WF.Template
         #endregion 开始节点数据导入规则.
 
         #region 父子流程
-        /// <summary>
-        /// (当前节点为子流程时)是否检查所有子流程完成后父流程自动发送
-        /// </summary>
-        public const string IsAutoSendSubFlowOver = "IsAutoSendSubFlowOver";
-        /// <summary>
-        /// 当前节点为子流程时，所有子流程完成后启动他的同级子流程自动运行或者结束
-        /// </summary>
-        public const string IsAutoSendSLSubFlowOver = "IsAutoSendSLSubFlowOver";
+       
         /// <summary>
         /// 版本号
         /// </summary>

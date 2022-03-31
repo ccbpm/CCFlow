@@ -223,7 +223,7 @@ namespace BP.CCFast.KnowledgeManagement
                 this.OrgNo = WebUser.OrgNo;
 
             //设置日期.
-            this.SetValByKey(KMDtlAttr.RDT, DataType.CurrentDataTime);
+            this.SetValByKey(KMDtlAttr.RDT, DataType.CurrentDateTime);
 
             return base.beforeInsert();
         }

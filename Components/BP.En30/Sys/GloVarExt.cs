@@ -141,7 +141,7 @@ namespace BP.Sys
         /// <summary>
         /// 全局变量
         /// </summary>
-        /// <param name="mypk"></param>
+        /// <param name="no"></param>
         public GloVarExt(string no)
         {
             this.No = no;

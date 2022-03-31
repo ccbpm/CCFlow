@@ -628,7 +628,7 @@ namespace BP.WF.Data
                         return "已完成";
                     case WF.WFState.Runing:
                         return "在运行";
-                    case WF.WFState.HungUp:
+                    case WF.WFState.Hungup:
                         return "挂起";
                     case WF.WFState.Askfor:
                         return "加签";
@@ -708,7 +708,7 @@ namespace BP.WF.Data
                     return this._enMap;
 
                 Map map = new Map("WF_GenerWorkFlow", "我发起的流程");
-                map.EnType = EnType.View;
+                map.setEnType(EnType.View);
 
                 map.AddTBIntPK(MyStartFlowAttr.WorkID, 0, "WorkID", false, false);
                 map.AddTBString(MyStartFlowAttr.Title, null, "标题", true, false, 0, 300, 200, true);

@@ -169,7 +169,7 @@ namespace BP.GPM.Menu2020
         /// <summary>
         /// 系统
         /// </summary>
-        /// <param name="mypk"></param>
+        /// <param name="no"></param>
         public MySystem(string no)
         {
             this.No = no;
@@ -184,7 +184,7 @@ namespace BP.GPM.Menu2020
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_System", "系统");
+                Map map = new Map("GPM_System", "系统"); 
                 map.DepositaryOfEntity = Depositary.None;
 
                 map.AddTBStringPK(MySystemAttr.No, null, "编号", true, false, 2, 100, 100);
@@ -213,7 +213,7 @@ namespace BP.GPM.Menu2020
         /// <returns></returns>
         public string DoExp()
         {
-            string path = BP.Sys.SystemConfig.PathOfWebApp + "\\CCFast\\SystemTemplete\\" + this.Name + "\\";
+            string path = BP.Sys.SystemConfig.PathOfWebApp + "CCFast/SystemTemplete/" + this.Name + "/";
             if (System.IO.Directory.Exists(path) == false)
                 System.IO.Directory.CreateDirectory(path);
 
@@ -289,16 +289,16 @@ namespace BP.GPM.Menu2020
             string frmID = en.UrlExt;
 
             DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(frmID);
-            string file = path + "\\" + frmID + ".xml"; //实体方法.
+            string file = path + "/" + frmID + ".xml"; //实体方法.
             ds.WriteXml(file);
 
             #region 导出实体的方法 .
             //获得方法分组
-            BP.CCBill.Template.GroupMethods ensGroup = new CCBill.Template.GroupMethods();
+            BP.CCBill.Template.GroupMethods ensGroup = new BP.CCBill.Template.GroupMethods();
             ensGroup.Retrieve(MethodAttr.FrmID, frmID);
 
             //获得方法.
-            BP.CCBill.Template.Methods ens = new CCBill.Template.Methods();
+            BP.CCBill.Template.Methods ens = new BP.CCBill.Template.Methods();
             ens.Retrieve(MethodAttr.FrmID, frmID);
 
             //保存方法.
@@ -315,11 +315,11 @@ namespace BP.GPM.Menu2020
                 switch (method.MethodModel)
                 {
                     case "FlowEtc": //流程
-                        BP.WF.Flow f2l1 = new WF.Flow(method.MethodID);
+                        BP.WF.Flow f2l1 = new BP.WF.Flow(method.MethodID);
                         f2l1.DoExpFlowXmlTemplete(path + method.MethodID + "_Flow");
                         break;
                     case "FlowBaseData": //流程
-                        BP.WF.Flow fl1 = new WF.Flow(method.MethodID);
+                        BP.WF.Flow fl1 = new BP.WF.Flow(method.MethodID);
                         fl1.DoExpFlowXmlTemplete(path + method.MethodID + "_Flow");
                         break;
                     case "Func": //功能导出？
@@ -332,14 +332,14 @@ namespace BP.GPM.Menu2020
 
             #region 导出集合 .
             //获得方法分组
-            CCBill.Template.Collections ensCollts = new CCBill.Template.Collections();
+            CCBill.Template.Collections ensCollts = new BP.CCBill.Template.Collections();
             ensCollts.Retrieve(CollectionAttr.FrmID, frmID);
 
             //保存方法.
             ds = new DataSet();
             ds.Tables.Add(ensCollts.ToDataTableField("Collections"));
 
-            file = path + "\\" + frmID + "_Collections.xml"; //实体方法.
+            file = path + "/" + frmID + "_Collections.xml"; //实体方法.
             ds.WriteXml(file);
 
             //循环单实体方法集合.
@@ -348,11 +348,11 @@ namespace BP.GPM.Menu2020
                 switch (method.MethodModel)
                 {
                     case "FlowEntityBatchStart": //流程
-                        BP.WF.Flow fC1 = new WF.Flow(method.FlowNo);
+                        BP.WF.Flow fC1 = new BP.WF.Flow(method.FlowNo);
                         fC1.DoExpFlowXmlTemplete(path + method.FlowNo + "_Flow");
                         break;
                     case "FlowNewEntity": //流程
-                        BP.WF.Flow fc2 = new WF.Flow(method.FlowNo);
+                        BP.WF.Flow fc2 = new BP.WF.Flow(method.FlowNo);
                         fc2.DoExpFlowXmlTemplete(path + method.FlowNo + "_Flow");
                         break;
                     default:
@@ -508,9 +508,9 @@ namespace BP.GPM.Menu2020
                 return RetrieveAll();
             }
 
-            //集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
-            if (BP.Sys.SystemConfig.GroupStationModel == 1)
-                return base.RetrieveAll("Idx");
+            ////集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
+            //if (BP.Sys.SystemConfig.GroupStationModel == 1)
+            //    return base.RetrieveAll("Idx");
 
             //按照orgNo查询.
             return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, "Idx");
@@ -523,7 +523,7 @@ namespace BP.GPM.Menu2020
         /// <returns></returns>
         public string ImpSystem_Init()
         {
-            string path = BP.Sys.SystemConfig.PathOfWebApp + "\\CCFast\\SystemTemplete\\";
+            string path = BP.Sys.SystemConfig.PathOfWebApp + "CCFast/SystemTemplete/";
             string[] strs = System.IO.Directory.GetDirectories(path);
 
             DataTable dt = new DataTable();
@@ -557,8 +557,8 @@ namespace BP.GPM.Menu2020
         /// <returns></returns>
         public string ImpSystem_Imp(string name)
         {
-            string path = BP.Sys.SystemConfig.PathOfWebApp + "\\CCFast\\SystemTemplete\\" + name;
-            string pathOfMenus = path + "\\Menus.xml";
+            string path = BP.Sys.SystemConfig.PathOfWebApp + "CCFast/SystemTemplete/" + name;
+            string pathOfMenus = path + "/Menus.xml";
             if (File.Exists(pathOfMenus) == false)
                 return "err@系统错误，目录里缺少文件:" + pathOfMenus;
 
@@ -676,7 +676,7 @@ namespace BP.GPM.Menu2020
             string frmID = en.UrlExt;
 
             //导入表单.
-            string file = path + "\\" + frmID + ".xml";
+            string file = path + "/" + frmID + ".xml";
             DataSet ds = new DataSet();
             ds.ReadXml(file);
 
@@ -693,7 +693,7 @@ namespace BP.GPM.Menu2020
 
             md.Update();
 
-            file = path + "\\" + frmID + "_GroupMethods.xml";
+            file = path + "/" + frmID + "_GroupMethods.xml";
 
             //导入单个实体的方法分组.
             ds = new DataSet();
@@ -736,7 +736,7 @@ namespace BP.GPM.Menu2020
             }
 
             //导入实体集合.
-            file = path + "\\" + frmID + "_Collections.xml";
+            file = path + "/" + frmID + "_Collections.xml";
             ds.ReadXml(file);
             dt = ds.Tables["GroupMethods"];
             foreach (DataRow dr in dt.Rows)
@@ -772,7 +772,7 @@ namespace BP.GPM.Menu2020
             //导入模式
             BP.WF.ImpFlowTempleteModel model = ImpFlowTempleteModel.AsNewFlow;
 
-            path = path + "\\" + tempFlowNo + "_Flow\\" + tempFlowName + ".xml";
+            path = path + "/" + tempFlowNo + "_Flow/" + tempFlowName + ".xml";
             //   if (model == ImpFlowTempleteModel.AsSpecFlowNo)
             //     flowNo = this.GetRequestVal("SpecFlowNo");
 

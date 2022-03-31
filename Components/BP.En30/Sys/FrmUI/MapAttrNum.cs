@@ -141,8 +141,8 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSysEnum(MapAttrAttr.MyDataType, 2, "数据类型", true, false);
 
                 map.AddTBString(MapAttrAttr.DefVal, MapAttrAttr.DefaultVal, "默认值/小数位数", true, false, 0, 200, 20);
- 
-                map.AddDDLSysEnum(MapAttrAttr.DefValType,1,"默认值选择方式",true,true,"DefValType","@0=默认值为空@1=按照设置的默认值设置",false);
+
+                map.AddDDLSysEnum(MapAttrAttr.DefValType, 1, "默认值选择方式", true, true, "DefValType", "@0=默认值为空@1=按照设置的默认值设置", false);
                 string help = "给该字段设置默认值:\t\r";
 
                 help += "\t\r 1. 如果是整形就设置一个整形的数字作为默认值.";
@@ -172,7 +172,7 @@ namespace BP.Sys.FrmUI
                 //文本跨行
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID,0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+                map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
 
                 map.AddDDLSQL(MapAttrAttr.CSSCtrl, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
@@ -219,8 +219,16 @@ namespace BP.Sys.FrmUI
                 rm.Title = "设置文本框RMB大写";
                 rm.ClassMethodName = this.ToString() + ".DoRMBDaXie()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Icon = "icon-wrench";  
+                rm.Icon = "icon-wrench";
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "输入范围限制";
+                rm.ClassMethodName = this.ToString() + ".DoLimit()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-wrench";
+                map.AddRefMethod(rm);
+
 
                 rm = new RefMethod();
                 rm.Title = "全局风格定义";
@@ -235,20 +243,40 @@ namespace BP.Sys.FrmUI
                 return this._enMap;
             }
         }
-      
+
+
+
+
         protected override bool beforeUpdateInsertAction()
         {
+            #region 修改默认值.
             //如果没默认值.
-            if (this.DefVal == "" && this.DefValType==0)
-                this.DefVal =MapAttrAttr.DefaultVal;
+            if (DataType.IsNullOrEmpty(this.DefVal) && this.DefValType == 0)
+                this.DefVal = MapAttrAttr.DefaultVal;
+
+            MapData md = new MapData();
+            md.No = this.FK_MapData;
+            if (md.RetrieveFromDBSources() == 1)
+            {
+                //修改默认值.
+                if (this.MyDataType == BP.DA.DataType.AppInt)
+                    BP.DA.DBAccess.UpdateTableColumnDefaultVal(md.PTable, this.KeyOfEn, int.Parse(this.DefVal));
+                if (this.MyDataType == BP.DA.DataType.AppDouble)
+                    BP.DA.DBAccess.UpdateTableColumnDefaultVal(md.PTable, this.KeyOfEn, double.Parse(this.DefVal));
+                if (this.MyDataType == BP.DA.DataType.AppFloat)
+                    BP.DA.DBAccess.UpdateTableColumnDefaultVal(md.PTable, this.KeyOfEn, float.Parse(this.DefVal));
+                if (this.MyDataType == BP.DA.DataType.AppMoney)
+                    BP.DA.DBAccess.UpdateTableColumnDefaultVal(md.PTable, this.KeyOfEn, decimal.Parse(this.DefVal));
+            }
+            #endregion 修改默认值.
+
 
             MapAttr attr = new MapAttr();
-            attr.MyPK = this.MyPK;
+            attr.setMyPK(this.MyPK);
             attr.RetrieveFromDBSources();
 
             //是否显示合计
             attr.IsSum = this.GetValBooleanByKey("ExtIsSum");
-
             attr.Update();
 
             return base.beforeUpdateInsertAction();
@@ -257,7 +285,7 @@ namespace BP.Sys.FrmUI
         protected override void afterInsertUpdateAction()
         {
             MapAttr mapAttr = new MapAttr();
-            mapAttr.MyPK = this.MyPK;
+            mapAttr.setMyPK(this.MyPK);
             mapAttr.RetrieveFromDBSources();
             mapAttr.Update();
 
@@ -314,6 +342,12 @@ namespace BP.Sys.FrmUI
         #endregion
 
         #region 方法执行.
+
+        public string DoLimit()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/NumEnterLimit.htm?&MyPK=" + this.MyPK + "&FrmID=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+
         public string DoAutoFullDtlField()
         {
             return "../../Admin/FoolFormDesigner/MapExt/AutoFullDtlField.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
@@ -332,7 +366,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoPopVal()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/PopVal.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn  + "&MyPK=" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/MapExt/PopVal.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
         }
         /// <summary>
         /// 正则表达式
@@ -340,7 +374,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoRegularExpression()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/RegularExpressionNum.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" +  this.MyPK;
+            return "../../Admin/FoolFormDesigner/MapExt/RegularExpressionNum.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
         }
         /// <summary>
         /// 文本框自动完成
@@ -348,7 +382,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoTBFullCtrl()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/TBFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" +  this.KeyOfEn + "&MyPK=" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/MapExt/TBFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
         }
         /// <summary>
         /// 扩展控件
@@ -356,11 +390,11 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoEditFExtContral()
         {
-            return "../../Admin/FoolFormDesigner/EditFExtContral.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" +  this.KeyOfEn + "&MyPK=" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/EditFExtContral.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
         }
         public string DoGloValStyles()
         {
-            return "../../Admin/FoolFormDesigner/StyletDfine/GloValStyles.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" +  this.KeyOfEn + "&MyPK=" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/StyletDfine/GloValStyles.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
         }
         #endregion 方法执行.
     }

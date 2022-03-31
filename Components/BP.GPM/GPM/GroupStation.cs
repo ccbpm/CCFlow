@@ -58,14 +58,7 @@ namespace BP.GPM
         public GroupStation()
         {
         }
-        /// <summary>
-        /// 权限组岗位
-        /// </summary>
-        /// <param name="mypk"></param>
-        public GroupStation(string no)
-        {
-            this.Retrieve();
-        }
+       
         /// <summary>
         /// 权限组岗位
         /// </summary>
@@ -75,11 +68,7 @@ namespace BP.GPM
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_GroupStation");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "权限组岗位";
-                map.EnType = EnType.Sys;
+                Map map = new Map("GPM_GroupStation", "权限组岗位");
 
                 map.AddTBStringPK(GroupStationAttr.FK_Group, null, "权限组", false, false, 0, 50, 20);
                 map.AddDDLEntitiesPK(GroupStationAttr.FK_Station, null, "岗位", new BP.Port.Stations(), true);

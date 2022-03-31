@@ -360,71 +360,7 @@ namespace BP.WF.Template
                 return obj;
             }
         }
-        /// <summary>
-        /// 超连接
-        /// </summary>
-        public FrmLinks FrmLinks
-        {
-            get
-            {
-                FrmLinks obj = this.GetRefObject("FrmLinks") as FrmLinks;
-                if (obj == null)
-                {
-                    obj = new FrmLinks(this.No);
-                    this.SetRefObject("FrmLinks", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 按钮
-        /// </summary>
-        public FrmBtns FrmBtns
-        {
-            get
-            {
-                FrmBtns obj = this.GetRefObject("FrmLinks") as FrmBtns;
-                if (obj == null)
-                {
-                    obj = new FrmBtns(this.No);
-                    this.SetRefObject("FrmBtns", obj);
-                }
-                return obj;
-            }
-        }
 
-        /// <summary>
-        /// 线
-        /// </summary>
-        public FrmLines FrmLines
-        {
-            get
-            {
-                FrmLines obj = this.GetRefObject("FrmLines") as FrmLines;
-                if (obj == null)
-                {
-                    obj = new FrmLines(this.No);
-                    this.SetRefObject("FrmLines", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 标签
-        /// </summary>
-        public FrmLabs FrmLabs
-        {
-            get
-            {
-                FrmLabs obj = this.GetRefObject("FrmLabs") as FrmLabs;
-                if (obj == null)
-                {
-                    obj = new FrmLabs(this.No);
-                    this.SetRefObject("FrmLabs", obj);
-                }
-                return obj;
-            }
-        }
         /// <summary>
         /// 图片
         /// </summary>
@@ -939,13 +875,25 @@ namespace BP.WF.Template
                 map.AddBoolean(MapDtlAttr.IsUpdate, true, "是否可以更新？", true, true);
                 map.AddBoolean(MapDtlAttr.IsEnableAthM, false, "是否启用多附件", true, true);
                 map.AddBoolean(MapDtlAttr.IsImp, false, "是否可以导出？", true, true);
+                map.AddBoolean(MapDtlAttr.IsCopyFirstData, false, "是否复制第一行数据？", true, true);
+
+
+                map.AddTBString(MapDtlAttr.InitDBAttrs, null, "行初始化字段", true, false, 0, 40, 20, false);
+                map.SetHelperAlert(MapDtlAttr.InitDBAttrs, "格式为:F1,F2,按照枚举外键字段的合集初始化行数据，一般用于不让其新增行。比如：为每个房间都要初始化一笔观测数据。.");
+
+
                 map.AddDDLSysEnum(MapDtlAttr.WhenOverSize, 0, "超出行数", true, true, MapDtlAttr.WhenOverSize, "@0=不处理@1=向下顺增行@2=次页显示");
 
                 // 为浙商银行设置从表打开.翻译.
-                map.AddDDLSysEnum(MapDtlAttr.ListShowModel, 0, "列表数据显示格式", true, true, MapDtlAttr.ListShowModel, "@0=表格@1=卡片");
+                map.AddDDLSysEnum(MapDtlAttr.ListShowModel, 0, "列表数据显示格式", true, true, MapDtlAttr.ListShowModel, "@0=表格@1=卡片@2=自定义Url");
 
-                map.AddDDLSysEnum(MapDtlAttr.EditModel, 0, "编辑数据方式", true, true, MapDtlAttr.EditModel, "@0=表格模式@1=傻瓜表单@2=自由表单");
+                map.AddDDLSysEnum(MapDtlAttr.EditModel, 0, "编辑数据方式", true, true, MapDtlAttr.EditModel, "@0=表格模式@1=傻瓜表单@2=开发者表单");
                 map.SetHelperAlert(MapDtlAttr.EditModel, "格式为:第1种类型就要新建行,其他类型新建的时候弹出卡片.");
+                map.AddTBString(MapDtlAttr.UrlDtl, null, "自定义Url", true, false, 0, 200, 20, true);
+
+
+                map.AddTBInt(MapDtlAttr.NumOfDtl, 0, "最小从表集合", true, false);
+                map.SetHelperAlert(MapDtlAttr.NumOfDtl, "用于控制输入的行数据最小值，比如：从表不能为空，就是用这个模式。");
 
                 //用于控制傻瓜表单.
                 map.AddTBFloat(MapDtlAttr.H, 350, "高度", true, false);
@@ -1078,15 +1026,6 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "设计自由表单"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DFreeFrm";
-                rm.Icon = "../Img/Setting.png";
-                rm.Icon = "icon-screen-desktop";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "从表附件"; // "设计表单";
@@ -1184,7 +1123,7 @@ namespace BP.WF.Template
 
             //MapDtl dtlOfThis = new MapDtl(this.No);
             //dtlOfThis.Copy(dtl);
-            //dtlOfThis.FK_MapData = this.FK_MapData;
+            //dtlOfThis.setFK_MapData(this.FK_MapData);
             //dtlOfThis.Update();
 
             //删除当前从表Attrs.
@@ -1197,7 +1136,7 @@ namespace BP.WF.Template
             //执行字段导入.
             foreach (MapAttr item in attrs)
             {
-                item.FK_MapData = this.No;
+                item.setFK_MapData(this.No);
                 item.Save();
             }
 
@@ -1211,7 +1150,7 @@ namespace BP.WF.Template
             //执行字段导入.
             foreach (MapExt item in exts)
             {
-                item.FK_MapData = this.No;
+                item.setFK_MapData(this.No);
                 item.Save();
             }
 
@@ -1223,7 +1162,9 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string OpenAthAttr()
         {
-            string url = "../../Comm/RefFunc/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&PKVal=" + this.No + "_AthMDtl";
+            string url = "../../Admin/FoolFormDesigner/DtlSetting/AthMDtl.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + SystemConfig.CustomerNo;
+
+            // string url = "../../Comm/RefFunc/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&PKVal=" + this.No + "_AthMDtl";
             // string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + SystemConfig.CustomerNo;
             return url;
         }
@@ -1285,94 +1226,7 @@ namespace BP.WF.Template
         {
             return "../../Comm/Sys/MultiTitle.htm?EnsName=" + this.No + "&DoType=Dtl";
         }
-        /// <summary>
-        /// 设计自由表单
-        /// </summary>
-        /// <returns></returns>
-        public string DFreeFrm()
-        {
-            FrmLabs labs = new Sys.FrmLabs(this.No);
-            if (labs.Count == 0)
-            {
-                //进行初始化控件位置及标签
-                MapData md = new MapData();
-                md.No = this.No;
-                md.RetrieveFromDBSources();
-                float maxEnd = 200;
-                bool isLeft = true;
 
-                #region 字段顺序调整
-                MapAttrs mapAttrs = new Sys.MapAttrs(md.No);
-                foreach (MapAttr attr in mapAttrs)
-                {
-                    if (attr.UIVisible == false)
-                        continue;
-
-                    //生成lab.
-                    FrmLab lab = null;
-                    if (isLeft == true)
-                    {
-                        maxEnd = maxEnd + 40;
-                        /* 是否是左边 */
-                        lab = new FrmLab();
-                        lab.MyPK = DBAccess.GenerGUID();
-                        lab.FK_MapData = attr.FK_MapData;
-                        lab.Lab = attr.Name;
-                        lab.FontName = "Arial";
-                        lab.X = 40;
-                        lab.Y = maxEnd;
-                        lab.Insert();
-
-                        attr.X = lab.X + 80;
-                        attr.Y = maxEnd;
-                        attr.Update();
-                    }
-                    else
-                    {
-                        lab = new FrmLab();
-                        lab.MyPK = DBAccess.GenerGUID();
-                        lab.FK_MapData = attr.FK_MapData;
-                        lab.Lab = attr.Name;
-                        lab.FontName = "Arial";
-                        lab.X = 350;
-                        lab.Y = maxEnd;
-                        lab.Insert();
-
-                        attr.X = lab.X + 80;
-                        attr.Y = maxEnd;
-                        attr.Update();
-                    }
-                    isLeft = !isLeft;
-                }
-                #endregion
-
-                #region 明细表重置排序
-                MapDtls mapDtls = new Sys.MapDtls(this.No);
-                foreach (MapDtl dtl in mapDtls)
-                {
-                    maxEnd = maxEnd + 40;
-                    /* 是否是左边 */
-                    FrmLab lab = new FrmLab();
-                    lab.MyPK = DBAccess.GenerGUID();
-                    lab.FK_MapData = dtl.FK_MapData;
-                    lab.Lab = dtl.Name;
-                    lab.FontName = "Arial";
-                    lab.X = 40;
-                    lab.Y = maxEnd;
-                    lab.Insert();
-
-                    dtl.X = lab.X + 80;
-                    dtl.Y = maxEnd;
-                    dtl.Update();
-                    maxEnd = maxEnd + dtl.H;
-                }
-                #endregion
-
-                md.ResetMaxMinXY();
-            }
-            string url = "../../Admin/CCFormDesigner/FormDesigner.htm?FK_MapData=" + this.No + "&FromDtl=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + SystemConfig.CustomerNo;
-            return url;
-        }
 
         public string GenerAttrs()
         {
@@ -1386,12 +1240,12 @@ namespace BP.WF.Template
         }
         public string DoAction()
         {
-            return "../../Admin/FoolFormDesigner/ActionForDtl.htm?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDataTime;
+            return "../../Admin/FoolFormDesigner/ActionForDtl.htm?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDateTime;
         }
 
         public string HidAttr()
         {
-            return "../../Admin/FoolFormDesigner/HidAttr.htm?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDataTime;
+            return "../../Admin/FoolFormDesigner/HidAttr.htm?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDateTime;
         }
 
         #region 基本属性.
@@ -1461,8 +1315,8 @@ namespace BP.WF.Template
             attrs.Retrieve(MapAttrAttr.FK_MapData, refDtl);
             foreach (MapAttr attr in attrs)
             {
-                attr.MyPK = this.No + "_" + attr.KeyOfEn;
-                attr.FK_MapData = this.No;
+                attr.setMyPK(this.No + "_" + attr.KeyOfEn);
+                attr.setFK_MapData(this.No);
                 attr.Insert();
             }
 
@@ -1475,8 +1329,8 @@ namespace BP.WF.Template
             {
                 mapExt = new MapExt();
                 mapExt = ext;
-                mapExt.MyPK = ext.ExtType + "_" + this.No + "_" + ext.AttrOfOper;
-                mapExt.FK_MapData = this.No;
+                mapExt.setMyPK(ext.ExtType + "_" + this.No + "_" + ext.AttrOfOper);
+                mapExt.setFK_MapData(this.No);
                 mapExt.Insert();
             }
 
@@ -1487,17 +1341,17 @@ namespace BP.WF.Template
                 BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
                 //获取原始附件的属性
 
-                athDesc.MyPK = this.No + "_AthMDtl";
+                athDesc.setMyPK(this.No + "_AthMDtl");
                 if (athDesc.RetrieveFromDBSources() == 0)
                 {
                     //获取原来附件的属性
                     BP.Sys.FrmAttachment oldAthDesc = new BP.Sys.FrmAttachment();
-                    oldAthDesc.MyPK = refDtl + "_AthMDtl";
+                    oldAthDesc.setMyPK(refDtl + "_AthMDtl");
                     if (oldAthDesc.RetrieveFromDBSources() == 0)
                         return "原始从表的附件属性不存在，请联系管理员";
                     athDesc = oldAthDesc;
-                    athDesc.MyPK = this.No + "_AthMDtl";
-                    athDesc.FK_MapData = this.No;
+                    athDesc.setMyPK(this.No + "_AthMDtl");
+                    athDesc.setFK_MapData(this.No);
                     athDesc.NoOfObj = "AthMDtl";
                     athDesc.Name = this.Name;
                     athDesc.IsVisable = false;
@@ -1514,18 +1368,18 @@ namespace BP.WF.Template
 
                 //判断是否有隐藏的AthNum 字段
                 MapAttr attr = new MapAttr();
-                attr.MyPK = this.No + "_AthNum";
+                attr.setMyPK(this.No + "_AthNum");
                 int count = attr.RetrieveFromDBSources();
                 if (count == 0)
                 {
-                    attr.FK_MapData = this.No;
-                    attr.KeyOfEn = "AthNum";
-                    attr.Name = "附件数量";
+                    attr.setFK_MapData(this.No);
+                    attr.setKeyOfEn("AthNum");
+                    attr.setName("附件数量");
                     attr.DefVal = "0";
-                    attr.UIContralType = UIContralType.TB;
-                    attr.MyDataType = DataType.AppInt;
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
+                    attr.setUIContralType(UIContralType.TB);
+                    attr.setMyDataType(DataType.AppInt);
+                    attr.setUIVisible(false);
+                    attr.setUIIsEnable(false);
                     attr.DirectInsert();
                 }
 
@@ -1551,10 +1405,10 @@ namespace BP.WF.Template
             if (this.IsEnableAthM == true)
             {
                 BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
-                athDesc.MyPK = this.No + "_AthMDtl";
+                athDesc.setMyPK(this.No + "_AthMDtl");
                 if (athDesc.RetrieveFromDBSources() == 0)
                 {
-                    athDesc.FK_MapData = this.No;
+                    athDesc.setFK_MapData(this.No);
                     athDesc.NoOfObj = "AthMDtl";
                     athDesc.Name = this.Name;
                     athDesc.IsVisable = false;
@@ -1571,18 +1425,18 @@ namespace BP.WF.Template
 
                 //判断是否有隐藏的AthNum 字段
                 MapAttr attr = new MapAttr();
-                attr.MyPK = this.No + "_AthNum";
+                attr.setMyPK(this.No + "_AthNum");
                 int count = attr.RetrieveFromDBSources();
                 if (count == 0)
                 {
-                    attr.FK_MapData = this.No;
-                    attr.KeyOfEn = "AthNum";
-                    attr.Name = "附件数量";
+                    attr.setFK_MapData(this.No);
+                    attr.setKeyOfEn("AthNum");
+                    attr.setName("附件数量");
                     attr.DefVal = "0";
-                    attr.UIContralType = UIContralType.TB;
-                    attr.MyDataType = DataType.AppInt;
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
+                    attr.setUIContralType(UIContralType.TB);
+                    attr.setMyDataType(DataType.AppInt);
+                    attr.setUIVisible(false);
+                    attr.setUIIsEnable(false);
                     attr.DirectInsert();
                     string a = "13";
                 }
@@ -1590,7 +1444,7 @@ namespace BP.WF.Template
 
 
             //获得事件实体.
-            var febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(this.No);
+            var febd = BP.Sys.Base.Glo.GetFormDtlEventBaseByEnName(this.No);
             if (febd == null)
                 this.FEBD = "";
             else
@@ -1630,7 +1484,7 @@ namespace BP.WF.Template
         {
             MapDtl dtl = new MapDtl();
             dtl.No = this.No;
-            dtl.FK_MapData = this.FK_MapData;
+            dtl.setFK_MapData(this.FK_MapData);
             dtl.Delete();
 
             //删除分组

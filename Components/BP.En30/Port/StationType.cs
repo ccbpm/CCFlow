@@ -101,17 +101,11 @@ namespace BP.Port
                 Map map = new Map("Port_StationType", "岗位类型");
                 map.CodeStruct = "2";
 
-
-                map.AddTBStringPK(StationTypeAttr.No, null, "编号", true, true, 1, 5, 40);
+                map.AddTBStringPK(StationTypeAttr.No, null, "编号", true, true, 1, 40, 40);
                 map.AddTBString(StationTypeAttr.Name, null, "名称", true, false, 1, 50, 20);
                 map.AddTBInt(StationTypeAttr.Idx, 0, "顺序", true, false);
 
-                if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
-                {
-                    map.AddHidden(StationTypeAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);
-                    map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
-                }
-
+                map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
 
                 this._enMap = map;
                 return this._enMap;
@@ -171,7 +165,7 @@ namespace BP.Port
             return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
         }
 
-       
+
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
         /// 转化成 java list,C#不能调用.

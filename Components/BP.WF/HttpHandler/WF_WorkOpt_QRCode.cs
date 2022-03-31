@@ -78,7 +78,7 @@ namespace BP.WF.HttpHandler
                     return "err@二维码过期";
 
                 //使用内部用户登录.
-                BP.WF.Port.User user = new Port.User();
+                BP.WF.Port.User user = new BP.WF.Port.User();
                 user.No = this.No;
                 if (user.RetrieveFromDBSources() == 0)
                     return "err@用户名账号错误.";
@@ -233,7 +233,7 @@ namespace BP.WF.HttpHandler
                     DateTime dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, nd.TimeLimit,
                          nd.TimeLimitHH, nd.TimeLimitMM, nd.TWay);
                     //应完成日期.
-                    gwlZCR.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat + ":ss");
+                    gwlZCR.SDT = dtOfShould.ToString(DataType.SysDateTimeFormat + ":ss");
                 }
 
                 //求警告日期.
@@ -241,9 +241,9 @@ namespace BP.WF.HttpHandler
                 //计算警告日期。
                 // 增加小时数. 考虑到了节假日.
                 if (nd.WarningDay != 0)
-                    dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, nd.WarningDay, 0, 0, nd.TWay);
+                    dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, (int)nd.WarningDay, 0, 0, nd.TWay);
 
-                gwlZCR.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
+                gwlZCR.DTOfWarning = dtOfWarning.ToString(DataType.SysDateTimeFormat);
                 #endregion 计算会签时间.
 
                 gwlZCR.Sender = gwlZCR.FK_Emp + "," + gwlZCR.FK_EmpText; //发送人为当前人.

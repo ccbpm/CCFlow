@@ -273,7 +273,7 @@ namespace BP.GPM
         /// <summary>
         /// 菜单
         /// </summary>
-        /// <param name="mypk"></param>
+        /// <param name="no"></param>
         public Menu(string no)
         {
             this.No = no;
@@ -308,12 +308,10 @@ namespace BP.GPM
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_Menu");  // 类的基本属性.
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "系统菜单";
-                map.EnType = EnType.Sys;
-                map.CodeStruct = "4";
+
+                Map map = new Map("GPM_Menu", "系统菜单");  // 类的基本属性.
+                map.setEnType( BP.En.EnType.Sys);
+                map.setCodeStruct("4");
 
                 #region 与树有关的必备属性.
                 map.AddTBStringPK(MenuAttr.No, null, "功能编号", true, true, 1, 90, 50);
@@ -447,7 +445,7 @@ namespace BP.GPM
                 if (frmType == 0)
                     BP.Sys.CCFormAPI.CreateFrm(no, name, formTree, Sys.FrmType.FoolForm);
                 else
-                    BP.Sys.CCFormAPI.CreateFrm(no, name, formTree, Sys.FrmType.FreeFrm);
+                    BP.Sys.CCFormAPI.CreateFrm(no, name, formTree, Sys.FrmType.Develop);
 
                 //更改单据属性.
                 BP.CCBill.FrmBill fb = new BP.CCBill.FrmBill(no);

@@ -78,14 +78,14 @@ namespace BP.WF.DTS
                 MapAttr attr = new MapAttr();
                 if (attr.IsExit(MapAttrAttr.KeyOfEn, "OID", MapAttrAttr.FK_MapData, md.No) == false)
                 {
-                    attr.FK_MapData = md.No;
-                    attr.KeyOfEn = "OID";
-                    attr.Name = "OID";
-                    attr.MyDataType = DataType.AppInt;
-                    attr.UIContralType = UIContralType.TB;
-                    attr.LGType = FieldTypeS.Normal;
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
+                    attr.setFK_MapData(md.No);
+                    attr.setKeyOfEn("OID");
+                    attr.setName("OID");
+                    attr.setMyDataType(DataType.AppInt);
+                    attr.setUIContralType(UIContralType.TB);
+                    attr.setLGType(FieldTypeS.Normal);
+                    attr.setUIVisible(false);
+                    attr.setUIIsEnable(false);
                     attr.DefVal = "0";
                     attr.HisEditType = BP.En.EditType.Readonly;
                     attr.Insert();

@@ -30,7 +30,7 @@ namespace BP.GPM.Home
         /// <summary>
         /// 折线图
         /// </summary>
-        public const string ChartZZT = "ChartZZT";
+        public const string ChartChina = "ChartChina";
         /// <summary>
         /// 柱状图
         /// </summary>

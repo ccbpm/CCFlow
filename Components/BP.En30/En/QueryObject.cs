@@ -1245,6 +1245,7 @@ namespace BP.En
                             this.Top = pageSize;
                             return this.doEntitiesQuery();
                         case DBType.PostgreSQL:
+                        case DBType.UX:
                             toIdx = top + pageSize;
                             if (DataType.IsNullOrEmpty(this._sql) == true)
                             {

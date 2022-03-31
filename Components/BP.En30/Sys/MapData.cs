@@ -2,6 +2,7 @@
 using System.Data;
 using System.Collections;
 using BP.DA;
+using BP.Sys.Base;
 using BP.En;
 using System.Collections.Generic;
 using System.IO;
@@ -26,9 +27,21 @@ namespace BP.Sys
         /// 表存储格式0=自定义表,1=指定表,可以修改字段2=执行表不可以修改字段.
         /// </summary>
         public const string PTableModel = "PTableModel";
+        /// <summary>
+        /// 从表数量
+        /// </summary>
         public const string Dtls = "Dtls";
+        /// <summary>
+        /// 实体主键
+        /// </summary>
         public const string EnPK = "EnPK";
+        /// <summary>
+        /// 宽度
+        /// </summary>
         public const string FrmW = "FrmW";
+        /// <summary>
+        /// 高度
+        /// </summary>
         public const string FrmH = "FrmH";
         /// <summary>
         /// 表格列(对傻瓜表单有效)
@@ -146,10 +159,6 @@ namespace BP.Sys
         public const string ExpListPageModel = "ExpListPageModel";
         #endregion DBList类型的实体.
 
-
-
-
-
         #region 报表属性(参数的方式存储).
         /// <summary>
         /// 是否关键字查询
@@ -187,69 +196,6 @@ namespace BP.Sys
         /// </summary>
         public const string MaxEnd = "MaxEnd";
         #endregion 其他计算属性，参数存储.
-
-        #region weboffice属性。
-        /// <summary>
-        /// 是否启用锁定行
-        /// </summary>
-        public const string IsRowLock = "IsRowLock";
-        /// <summary>
-        /// 是否启用weboffice
-        /// </summary>
-        public const string IsWoEnableWF = "IsWoEnableWF";
-        /// <summary>
-        /// 是否启用保存
-        /// </summary>
-        public const string IsWoEnableSave = "IsWoEnableSave";
-        /// <summary>
-        /// 是否只读
-        /// </summary>
-        public const string IsWoEnableReadonly = "IsWoEnableReadonly";
-        /// <summary>
-        /// 是否启用修订
-        /// </summary>
-        public const string IsWoEnableRevise = "IsWoEnableRevise";
-        /// <summary>
-        /// 是否查看用户留痕
-        /// </summary>
-        public const string IsWoEnableViewKeepMark = "IsWoEnableViewKeepMark";
-        /// <summary>
-        /// 是否打印
-        /// </summary>
-        public const string IsWoEnablePrint = "IsWoEnablePrint";
-        /// <summary>
-        /// 是否启用签章
-        /// </summary>
-        public const string IsWoEnableSeal = "IsWoEnableSeal";
-        /// <summary>
-        /// 是否启用套红
-        /// </summary>
-        public const string IsWoEnableOver = "IsWoEnableOver";
-        /// <summary>
-        /// 是否启用公文模板
-        /// </summary>
-        public const string IsWoEnableTemplete = "IsWoEnableTemplete";
-        /// <summary>
-        /// 是否自动写入审核信息
-        /// </summary>
-        public const string IsWoEnableCheck = "IsWoEnableCheck";
-        /// <summary>
-        /// 是否插入流程
-        /// </summary>
-        public const string IsWoEnableInsertFlow = "IsWoEnableInsertFlow";
-        /// <summary>
-        /// 是否插入风险点
-        /// </summary>
-        public const string IsWoEnableInsertFengXian = "IsWoEnableInsertFengXian";
-        /// <summary>
-        /// 是否启用留痕模式
-        /// </summary>
-        public const string IsWoEnableMarks = "IsWoEnableMarks";
-        /// <summary>
-        /// 是否启用下载
-        /// </summary>
-        public const string IsWoEnableDown = "IsWoEnableDown";
-        #endregion weboffice属性。
 
         #region 参数属性.
         public const string EnsName = "EnsName";
@@ -294,53 +240,6 @@ namespace BP.Sys
             }
         }
         #endregion entity 相关操作.
-
-        #region 自动计算属性.
-        public float MaxLeft
-        {
-            get
-            {
-                return this.GetParaFloat(MapDataAttr.MaxLeft);
-            }
-            set
-            {
-                this.SetPara(MapDataAttr.MaxLeft, value);
-            }
-        }
-        public float MaxRight
-        {
-            get
-            {
-                return this.GetParaFloat(MapDataAttr.MaxRight);
-            }
-            set
-            {
-                this.SetPara(MapDataAttr.MaxRight, value);
-            }
-        }
-        public float MaxTop
-        {
-            get
-            {
-                return this.GetParaFloat(MapDataAttr.MaxTop);
-            }
-            set
-            {
-                this.SetPara(MapDataAttr.MaxTop, value);
-            }
-        }
-        public float MaxEnd
-        {
-            get
-            {
-                return this.GetParaFloat(MapDataAttr.MaxEnd);
-            }
-            set
-            {
-                this.SetPara(MapDataAttr.MaxEnd, value);
-            }
-        }
-        #endregion 自动计算属性.
 
         #region 报表属性(参数方式存储).
         /// <summary>
@@ -403,17 +302,17 @@ namespace BP.Sys
 
         #region 外键属性
         /// <summary>
-        ///版本号.
+        /// 版本号
         /// </summary>
-        public string Ver
+        public int Ver2022
         {
             get
             {
-                return this.GetValStringByKey(MapDataAttr.Ver);
+                return this.GetParaInt(MapDataAttr.Ver, 1);
             }
             set
             {
-                this.SetValByKey(MapDataAttr.Ver, value);
+                this.SetPara(MapDataAttr.Ver, value);
             }
         }
         public string OrgNo
@@ -594,60 +493,7 @@ namespace BP.Sys
             }
         }
 
-        /// <summary>
-        /// 超连接
-        /// </summary>
-        public FrmLinks FrmLinks
-        {
-            get
-            {
-                FrmLinks obj = this.GetRefObject("FrmLinks") as FrmLinks;
-                if (obj == null)
-                {
-                    obj = new FrmLinks(this.No);
-                    this.SetRefObject("FrmLinks", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 按钮
-        /// </summary>
-        public FrmBtns FrmBtns
-        {
-            get
-            {
-                var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmBtns(),
-         FrmBtnAttr.FK_MapData, this.No);
-                return ens as FrmBtns;
-            }
-        }
-        /// <summary>
-        /// 线
-        /// </summary>
-        public FrmLines FrmLines
-        {
-            get
-            {
-                var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmLines(),
-         FrmLineAttr.FK_MapData, this.No);
-                return ens as FrmLines;
 
-            }
-        }
-        /// <summary>
-        /// 标签
-        /// </summary>
-        public FrmLabs FrmLabs
-        {
-            get
-            {
-                var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmLabs(),
-         FrmLabAttr.FK_MapData, this.No);
-                return ens as FrmLabs;
-
-            }
-        }
         /// <summary>
         /// 图片
         /// </summary>
@@ -658,7 +504,6 @@ namespace BP.Sys
                 var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmImgs(),
        FrmImgAttr.FK_MapData, this.No);
                 return ens as FrmImgs;
-
             }
         }
         /// <summary>
@@ -717,6 +562,7 @@ namespace BP.Sys
         }
         #endregion
 
+        #region 缓存方法.
         public void CleanObject()
         {
             this.Row.SetValByKey("FrmEles", null);
@@ -730,23 +576,13 @@ namespace BP.Sys
             this.Row.SetValByKey("FrmLinks", null);
             this.Row.SetValByKey("FrmBtns", null);
             this.Row.SetValByKey("FrmEles", null);
-            this.Row.SetValByKey("FrmLines", null);
-            this.Row.SetValByKey("FrmLabs", null);
+            // this.Row.SetValByKey("FrmLines", null);
+            // this.Row.SetValByKey("FrmLabs", null);
             this.Row.SetValByKey("FrmAttachments", null);
             this.Row.SetValByKey("FrmImgAthDBs", null);
             this.Row.SetValByKey("FrmRBs", null);
             this.Row.SetValByKey("MapAttrs", null);
             return;
-        }
-        /// <summary>
-        /// 格式
-        /// </summary>
-        public string FoolStyleJSON
-        {
-            get
-            {
-                return "";
-            }
         }
         /// <summary>
         /// 清空缓存
@@ -758,6 +594,7 @@ namespace BP.Sys
             CleanObject();
             Cash.SQL_Cash.Remove(this.No);
         }
+        #endregion 缓存方法.
 
         #region 基本属性.
         /// <summary>
@@ -790,71 +627,15 @@ namespace BP.Sys
                 BP.Web.WebUser.SetSessionByKey("IsEditDtlModel", "1");
             }
         }
-        #endregion 基本属性.
 
-        #region 表单结构数据json
-        /// <summary>
-        /// 表单图数据
-        /// </summary>
-        //public string FormJson
-        //{
-        //    get
-        //    {
-        //        // return this.GenerHisFrm();
-        //        string str = this.GetBigTextFromDB("FormJson");
-        //        if (str == null || str == "")
-        //        {
-        //            return "";
-        //        }
-        //        return str;
-        //    }
-        //    set
-        //    {
-        //        this.SaveBigTxtToDB("FormJson", value);
-        //    }
-        //}
-        /// <summary>
-        /// 生成Frm
-        /// </summary>
-        /// <returns></returns>
-        public string GenerHisFrm()
+        public  string ICON
         {
-            string body = DataType.ReadTextFile(SystemConfig.PathOfWebApp + "WF/Admin/CCFormDesigner/EleTemplate/Body.txt");
-
-            //替换高度宽度.
-            body = body.Replace("@FrmH", this.FrmH.ToString());
-            body = body.Replace("@FrmW", this.FrmW.ToString());
-
-            string labTemplate = DataType.ReadTextFile(SystemConfig.PathOfWebApp + "WF/Admin/CCFormDesigner/EleTemplate/Label.txt");
-            string myLabs = "";
-            FrmLabs labs = new FrmLabs(this.No);
-            foreach (FrmLab lab in labs)
+            get
             {
-                string labTxt = labTemplate.Clone() as string;
-
-                labTxt = labTxt.Replace("@MyPK", lab.MyPK);
-
-                labTxt = labTxt.Replace("@Label", lab.Lab);
-                labTxt = labTxt.Replace("@X", lab.X.ToString());
-                labTxt = labTxt.Replace("@Y", lab.Y.ToString());
-
-                float y1 = lab.Y - 20;
-                labTxt = labTxt.Replace("@Y1", y1.ToString());
-                myLabs += labTxt + ",";
+                return this.GetValStringByKey(MapDataAttr.Icon);
             }
-
-            if (myLabs == "")
-            {
-                body = body.Replace("@Labels", myLabs);
-            }
-            else
-            {
-                myLabs = myLabs.Substring(0, myLabs.Length - 1);
-                body = body.Replace("@Labels", myLabs);
-            }
-            return body;
         }
-        #endregion
+        #endregion 基本属性.
 
         #region 属性
         /// <summary>
@@ -1218,7 +999,7 @@ namespace BP.Sys
             map.DTSearchWay = this.DTSearchWay; //日期查询方式.
             map.DTSearchKey = this.DTSearchKey; //日期字段.
 
-            //是否是加密 @yln.
+            //是否是加密 
             map.IsJM = this.IsJM;
 
             //加入外键查询字段.
@@ -1338,7 +1119,6 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_MapData", "表单注册表");
-                map.CodeStruct = "4";
 
                 #region 基础信息.
                 map.AddTBStringPK(MapDataAttr.No, null, "编号", true, false, 1, 200, 100);
@@ -1372,13 +1152,15 @@ namespace BP.Sys
                 map.AddTBString(MapDataAttr.FK_FormTree, null, "表单树类别", true, false, 0, 500, 20);
 
                 // enumFrmType  @自由表单，@傻瓜表单，@嵌入式表单.  
-                map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型", true, false, MapDataAttr.FrmType);
+                map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FoolForm, "表单类型", true, false, MapDataAttr.FrmType);
 
                 map.AddTBInt(MapDataAttr.FrmShowType, 0, "表单展示方式", true, true);
 
                 map.AddDDLSysEnum(MapDataAttr.EntityType, 0, "业务类型", true, false, MapDataAttr.EntityType,
                   "@0=独立表单@1=单据@2=编号名称实体@3=树结构实体");
                 map.SetHelperAlert(MapDataAttr.EntityType, "该实体的类型,@0=单据@1=编号名称实体@2=树结构实体.");
+
+                map.AddBoolean("IsEnableJs", false, "是否启用自定义js函数？", true, true, true);
 
                 // 应用类型.  0独立表单.1节点表单
                 map.AddTBInt(MapDataAttr.AppType, 0, "应用类型", true, false);
@@ -1398,7 +1180,6 @@ namespace BP.Sys
 
                 map.AddTBString(MapDataAttr.Icon, null, "Icon", true, false, 0, 500, 20, true);
 
-
                 //流程控件.
                 map.AddTBString(MapDataAttr.FlowCtrls, null, "流程控件", true, true, 0, 200, 20);
 
@@ -1407,7 +1188,6 @@ namespace BP.Sys
                 #endregion
 
                 map.AddTBString(MapDataAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 20);
-
 
                 this._enMap = map;
                 return this._enMap;
@@ -1451,7 +1231,6 @@ namespace BP.Sys
                     throw new Exception("@表单的表存储模式不允许您创建不存在的字段(" + filed + ")，不允许修改表结构.");
             }
         }
-
         /// <summary>
         /// 获得PTableModel=2模式下的表单，没有被使用的字段集合.
         /// </summary>
@@ -1520,7 +1299,7 @@ namespace BP.Sys
                     return null;
 
                 if (_HisFEB == null)
-                    _HisFEB = BP.Sys.Glo.GetFormEventBaseByEnName(this.No);
+                    _HisFEB = BP.Sys.Base.Glo.GetFormEventBaseByEnName(this.No);
 
                 return _HisFEB;
             }
@@ -1532,13 +1311,12 @@ namespace BP.Sys
         {
             string sql = "";
             #region 升级ccform控件.
-            if (DBAccess.IsExitsObject("Sys_FrmLine") == true)
-            {
-                //重命名.
-                BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
-                dbsrc.Rename("Table", "Sys_FrmLine", "Sys_FrmLineBak");
-
-            }
+            //if (DBAccess.IsExitsObject("Sys_FrmLine") == true)
+            //{
+            //    //重命名.
+            //    BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
+            //    dbsrc.Rename("Table", "Sys_FrmLine", "Sys_FrmLineBak");
+            //}
             if (DBAccess.IsExitsObject("Sys_FrmLab") == true)
             {
                 //重命名.
@@ -1601,8 +1379,8 @@ namespace BP.Sys
             {
                 if (attr.DefValReal.Contains("@"))
                 {
-                    attr.UIIsEnable = false;
-                    attr.DefValReal = ""; //清空默认值.
+                    attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
+                    attr.setDefValReal(""); //清空默认值.
                     attr.SetValByKey("ExtDefVal", ""); //设置默认值.
                     attr.Update();
                     continue;
@@ -1610,7 +1388,7 @@ namespace BP.Sys
 
                 if (attr.UIIsEnable == true)
                 {
-                    attr.UIIsEnable = false;
+                    attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
                     attr.Update();
                     continue;
                 }
@@ -1630,15 +1408,15 @@ namespace BP.Sys
                 {
                     if (attr.DefValReal.Contains("@"))
                     {
-                        attr.UIIsEnable = false;
-                        attr.DefValReal = ""; //清空默认值.
+                        attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
+                        attr.setDefValReal(""); //清空默认值.
                         attr.SetValByKey("ExtDefVal", ""); //设置默认值.
                         attr.Update();
                     }
 
                     if (attr.UIIsEnable == true)
                     {
-                        attr.UIIsEnable = false;
+                        attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
                         attr.Update();
                         continue;
                     }
@@ -1865,65 +1643,8 @@ namespace BP.Sys
                                 en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
 
-                            //en.MyPK = "Btn_" + idx + "_" + fk_mapdata;
-                            en.MyPK = DBAccess.GenerGUID();
-                            en.Insert();
-                        }
-                        break;
-                    case "Sys_FrmLine":
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            idx++;
-                            FrmLine en = new FrmLine();
-                            foreach (DataColumn dc in dt.Columns)
-                            {
-                                object val = dr[dc.ColumnName] as object;
-                                if (val == null)
-                                    continue;
-
-
-
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
-                            }
-                            //en.MyPK = "LE_" + idx + "_" + fk_mapdata;
-                            en.MyPK = DBAccess.GenerGUID();
-                            en.Insert();
-                        }
-                        break;
-                    case "Sys_FrmLab":
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            idx++;
-                            FrmLab en = new FrmLab();
-                            foreach (DataColumn dc in dt.Columns)
-                            {
-                                object val = dr[dc.ColumnName] as object;
-                                if (val == null)
-                                    continue;
-
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
-                            }
-                            en.MyPK = DBAccess.GenerGUID();
-                            en.Insert();
-                        }
-                        break;
-                    case "Sys_FrmLink":
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            idx++;
-                            FrmLink en = new FrmLink();
-                            foreach (DataColumn dc in dt.Columns)
-                            {
-                                object val = dr[dc.ColumnName] as object;
-                                if (val == null)
-                                    continue;
-
-
-
-                                en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
-                            }
-                            //en.MyPK = "LK_" + idx + "_" + fk_mapdata;
-                            en.MyPK = DBAccess.GenerGUID();
+                            //en.setMyPK("Btn_" + idx + "_" + fk_mapdata;
+                            en.setMyPK(DBAccess.GenerGUID());
                             en.Insert();
                         }
                         break;
@@ -1941,7 +1662,7 @@ namespace BP.Sys
                                 en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
                             if (DataType.IsNullOrEmpty(en.KeyOfEn) == true)
-                                en.MyPK = DBAccess.GenerGUID();
+                                en.setMyPK(DBAccess.GenerGUID());
 
                             en.Insert();
                         }
@@ -2002,7 +1723,7 @@ namespace BP.Sys
 
                                 en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
-                            en.MyPK = specFrmID + "_" + en.GetValByKey("NoOfObj");
+                            en.setMyPK(specFrmID + "_" + en.GetValByKey("NoOfObj"));
 
 
                             try
@@ -2064,7 +1785,7 @@ namespace BP.Sys
                                 en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                             }
 
-                            en.MyPK = en.FK_MapData + "_" + en.KeyOfEn;
+                            en.setMyPK(en.FK_MapData + "_" + en.KeyOfEn);
 
                             //直接插入.
                             try
@@ -2119,7 +1840,7 @@ namespace BP.Sys
                     case "Sys_Enum":
                         foreach (DataRow dr in dt.Rows)
                         {
-                            Sys.SysEnum se = new Sys.SysEnum();
+                            SysEnum se = new Sys.SysEnum();
                             foreach (DataColumn dc in dt.Columns)
                             {
                                 string val = dr[dc.ColumnName] as string;
@@ -2129,13 +1850,13 @@ namespace BP.Sys
                             {
                                 se.OrgNo = BP.Web.WebUser.OrgNo;
                                 //  se.RefPK = se.OrgNo + "_" + se.EnumKey;
-                                se.MyPK = se.EnumKey + "_" + se.Lang + "_" + se.IntKey + "_" + se.OrgNo;
+                                se.setMyPK(se.EnumKey + "_" + se.Lang + "_" + se.IntKey + "_" + se.OrgNo);
                                 if (se.IsExits)
                                     continue;
                             }
                             else
                             {
-                                se.MyPK = se.EnumKey + "_" + se.Lang + "_" + se.IntKey;
+                                se.setMyPK(se.EnumKey + "_" + se.Lang + "_" + se.IntKey);
                                 if (se.IsExits)
                                     continue;
                             }
@@ -2145,7 +1866,7 @@ namespace BP.Sys
                     case "Sys_EnumMain":
                         foreach (DataRow dr in dt.Rows)
                         {
-                            Sys.SysEnumMain sem = new Sys.SysEnumMain();
+                            SysEnumMain sem = new Sys.SysEnumMain();
                             foreach (DataColumn dc in dt.Columns)
                             {
                                 string val = dr[dc.ColumnName] as string;
@@ -2247,14 +1968,14 @@ namespace BP.Sys
             {
                 if (attr.IsExit(MapAttrAttr.KeyOfEn, "OID", MapAttrAttr.FK_MapData, this.No) == false)
                 {
-                    attr.FK_MapData = this.No;
-                    attr.KeyOfEn = "OID";
-                    attr.Name = "OID";
-                    attr.MyDataType = DataType.AppInt;
-                    attr.UIContralType = UIContralType.TB;
-                    attr.LGType = FieldTypeS.Normal;
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
+                    attr.setFK_MapData(this.No);
+                    attr.setKeyOfEn("OID");
+                    attr.setName("OID");
+                    attr.setMyDataType(DataType.AppInt);
+                    attr.setUIContralType(UIContralType.TB);
+                    attr.setLGType(FieldTypeS.Normal);
+                    attr.SetValByKey(MapAttrAttr.UIVisible, false);
+                    attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
                     attr.DefVal = "0";
                     attr.HisEditType = BP.En.EditType.Readonly;
                     attr.Insert();
@@ -2264,14 +1985,14 @@ namespace BP.Sys
             {
                 if (attr.IsExit(MapAttrAttr.KeyOfEn, this.EnPK, MapAttrAttr.FK_MapData, this.No) == false)
                 {
-                    attr.FK_MapData = this.No;
-                    attr.KeyOfEn = this.EnPK;
+                    attr.setFK_MapData(this.No);
+                    attr.setKeyOfEn(this.EnPK);
                     attr.Name = this.EnPK;
-                    attr.MyDataType = DataType.AppInt;
-                    attr.UIContralType = UIContralType.TB;
-                    attr.LGType = FieldTypeS.Normal;
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
+                    attr.setMyDataType(DataType.AppInt);
+                    attr.setUIContralType(UIContralType.TB);
+                    attr.setLGType(FieldTypeS.Normal);
+                    attr.SetValByKey(MapAttrAttr.UIVisible, false);
+                    attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
                     attr.DefVal = "0";
                     attr.HisEditType = BP.En.EditType.Readonly;
                     attr.Insert();
@@ -2281,16 +2002,16 @@ namespace BP.Sys
             if (attr.IsExit(MapAttrAttr.KeyOfEn, "RDT", MapAttrAttr.FK_MapData, this.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = this.No;
-                attr.HisEditType = BP.En.EditType.UnDel;
-                attr.KeyOfEn = "RDT";
-                attr.Name = "更新时间";
-                attr.GroupID = 0;
-                attr.MyDataType = DataType.AppDateTime;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
+                attr.setFK_MapData(this.No);
+                attr.setEditType(EditType.UnDel);
+                attr.setKeyOfEn("RDT");
+                attr.setName("更新时间");
+                attr.setGroupID(0);
+                attr.setMyDataType(DataType.AppDateTime);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.SetValByKey(MapAttrAttr.UIVisible, false);
+                attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
                 attr.DefVal = "@RDT";
                 attr.Tag = "1";
                 attr.Insert();
@@ -2305,8 +2026,8 @@ namespace BP.Sys
                 {
                     if (DataType.IsNullOrEmpty(item.UIBindKey) == true)
                     {
-                        item.LGType = FieldTypeS.Normal;
-                        item.UIContralType = UIContralType.TB;
+                        item.setLGType(FieldTypeS.Normal);
+                        item.setUIContralType(UIContralType.TB);
                         item.Update();
                     }
                 }
@@ -2323,160 +2044,46 @@ namespace BP.Sys
             {
                 this.PTable = BP.Pub.PubClass.DealToFieldOrTableNames(this.PTable);
             }
+
+
+            //写入日志.
+            if (this.No.StartsWith("ND") == false)
+                BP.Sys.Base.Glo.WriteUserLog("新建表单：" + this.No + " - " + this.Name);
+
+            this.Ver2022 = 1; 
             return base.beforeInsert();
         }
         /// <summary>
-        /// 设置Para 参数.
+        /// 创建MapData后插入一条版本数据
         /// </summary>
-        public void ResetMaxMinXY()
+        protected override void afterInsert()
         {
-            if (this.HisFrmType != FrmType.FreeFrm)
+            if (DataType.IsNullOrEmpty(this.FK_FormTree) == true)
+            {
+                base.afterInsert();
                 return;
-            return;
-
-            #region 计算最左边,与最右边的值。
-            // 求最左边.
-            float i1 = DBAccess.RunSQLReturnValFloat("SELECT MIN(X1) FROM Sys_FrmLine WHERE FK_MapData='" + this.No + "'", 0);
-            if (i1 == 0) /*没有线，只有图片的情况下。*/
-                i1 = DBAccess.RunSQLReturnValFloat("SELECT MIN(X) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
-
-            float i2 = DBAccess.RunSQLReturnValFloat("SELECT MIN(X)  FROM Sys_FrmLab  WHERE FK_MapData='" + this.No + "'", 0);
-            if (i1 > i2)
-                this.MaxLeft = i2;
-            else
-                this.MaxLeft = i1;
-
-            // 求最右边.
-            i1 = DBAccess.RunSQLReturnValFloat("SELECT Max(X2) FROM Sys_FrmLine WHERE FK_MapData='" + this.No + "'", 0);
-            if (i1 == 0)
-            {
-                /*没有线的情况，按照图片来计算。*/
-                i1 = DBAccess.RunSQLReturnValFloat("SELECT Max(X+UIWidth) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
             }
-            this.MaxRight = i1;
+               
+            MapDataVer ver = new MapDataVer();
+            ver.MyPK = this.No + ".1";
 
-            // 求最top.
-            i1 = DBAccess.RunSQLReturnValFloat("SELECT MIN(Y1) FROM Sys_FrmLine WHERE FK_MapData='" + this.No + "'", 0);
-            i2 = DBAccess.RunSQLReturnValFloat("SELECT MIN(Y)  FROM Sys_FrmLab  WHERE FK_MapData='" + this.No + "'", 0);
+            ver.Ver = 1; //设置当前为主版本.
+            ver.FrmID = this.No; //设置表单ID.
+            ver.IsRel = 1; //设置为主版本.
 
-            if (i1 > i2)
-                this.MaxTop = i2;
-            else
-                this.MaxTop = i1;
+            ver.Rec = Web.WebUser.No;
+            ver.RecName = Web.WebUser.Name;
+            ver.RDT = DataType.CurrentDateTime;
 
-            // 求最end.
-            i1 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y1) FROM Sys_FrmLine WHERE FK_MapData='" + this.No + "'", 0);
-            /*小周鹏添加2014/10/23-----------------------START*/
-            if (i1 == 0) /*没有线，只有图片的情况下。*/
-                i1 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+UIHeight) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
-
-            /*小周鹏添加2014/10/23-----------------------END*/
-            i2 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y)  FROM Sys_FrmLab  WHERE FK_MapData='" + this.No + "'", 0);
-            if (i2 == 0)
-                i2 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+UIHeight) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
-            //求出最底部的 附件
-            float endFrmAtt = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+H)  FROM Sys_FrmAttachment  WHERE FK_MapData='" + this.No + "'", 0);
-            //求出最底部的明细表
-            float endFrmDtl = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+H)  FROM Sys_MapDtl  WHERE FK_MapData='" + this.No + "'", 0);
-
-            //求出最底部的textbox
-            float endFrmAttr = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+UIHeight)  FROM  Sys_MapAttr  WHERE FK_MapData='" + this.No + "' and UIVisible='1'", 0);
-
-            if (i1 > i2)
-                this.MaxEnd = i1;
-            else
-                this.MaxEnd = i2;
-
-            float endFrmEle = 0;
-
-            this.MaxEnd = this.MaxEnd > endFrmAtt ? this.MaxEnd : endFrmAtt;
-            this.MaxEnd = this.MaxEnd > endFrmDtl ? this.MaxEnd : endFrmDtl;
-            this.MaxEnd = this.MaxEnd > endFrmEle ? this.MaxEnd : endFrmEle;
-            this.MaxEnd = this.MaxEnd > endFrmAtt ? this.MaxEnd : endFrmAttr;
-
-            #endregion
-
-            this.DirectUpdate();
+            //设置数量.
+            ver.AttrsNum =0;
+            ver.AthsNum = 0;
+            ver.DtlsNum =0;
+            ver.ExtsNum =0;
+            ver.Insert();
+            base.afterInsert();
         }
-        /// <summary>
-        /// 求位移.
-        /// </summary>
-        /// <param name="md"></param>
-        /// <param name="scrWidth"></param>
-        /// <returns></returns>
-        public static float GenerSpanWeiYi(MapData md, float scrWidth)
-        {
-            if (scrWidth == 0)
-                scrWidth = 900;
 
-            float left = md.MaxLeft;
-            if (left == 0)
-            {
-                md.ResetMaxMinXY();
-                md.RetrieveFromDBSources();
-                md.Retrieve();
-
-                left = md.MaxLeft;
-            }
-            //取不到左侧参考值，则不进行位移
-            if (left == 0)
-                return left;
-
-            float right = md.MaxRight;
-            float withFrm = right - left;
-            if (withFrm >= scrWidth)
-            {
-                /* 如果实际表单宽度大于屏幕宽度 */
-                return -left;
-            }
-
-            //计算位移大小
-            float space = (scrWidth - withFrm) / 2; //空白的地方.
-
-            return -(left - space);
-        }
-        /// <summary>
-        /// 求屏幕宽度
-        /// </summary>
-        /// <param name="md"></param>
-        /// <param name="scrWidth"></param>
-        /// <returns></returns>
-        public static float GenerSpanWidth(MapData md, float scrWidth)
-        {
-            if (scrWidth == 0)
-                scrWidth = 900;
-            float left = md.MaxLeft;
-            if (left == 0)
-            {
-                md.ResetMaxMinXY();
-                left = md.MaxLeft;
-            }
-
-            float right = md.MaxRight;
-            float withFrm = right - left;
-            if (withFrm >= scrWidth)
-            {
-                return withFrm;
-            }
-            return scrWidth;
-        }
-        /// <summary>
-        /// 求屏幕高度
-        /// </summary>
-        /// <param name="md"></param>
-        /// <param name="scrWidth"></param>
-        /// <returns></returns>
-        public static float GenerSpanHeight(MapData md, float scrHeight)
-        {
-            if (scrHeight == 0)
-                scrHeight = 1200;
-
-            float end = md.MaxEnd;
-            if (end > scrHeight)
-                return end + 10;
-            else
-                return scrHeight;
-        }
         protected override bool beforeUpdateInsertAction()
         {
             if (this.HisFrmType == FrmType.Url || this.HisFrmType == FrmType.Entity)
@@ -2489,10 +2096,7 @@ namespace BP.Sys
 
             //修改2021-09-04 注释，不知道这个代码的作用
             //MapAttrs.Retrieve(MapAttrAttr.FK_MapData, PTable);
-
-            //更新版本号.
-            this.Ver = DataType.CurrentDataTimess;
-
+             
             //设置OrgNo. 如果是管理员，就设置他所在的部门编号。
             if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
@@ -2540,36 +2144,31 @@ namespace BP.Sys
         /// </summary>
         public void UpdateVer()
         {
-            string sql = "UPDATE Sys_MapData SET VER='" + DataType.CurrentDataTimess + "' WHERE No='" + this.No + "'";
+            string sql = "UPDATE Sys_MapData SET VER='" + DataType.CurrentDateTimess + "' WHERE No='" + this.No + "'";
             DBAccess.RunSQL(sql);
         }
         protected override bool beforeDelete()
         {
             string sql = "";
-            // 检查该表单是否可以被删除?
-            if (DBAccess.IsExitsObject("GPM_Menu") == true)
+            //如果存在版本就不能删除
+            sql = "SELECT Count(*) From Sys_MapDataVer Where FrmID='" + this.No + "' AND Ver!="+this.Ver2022;
+
+            try
             {
-                //// 是否有菜单引用?
-                //sql = "SELECT  COUNT(*) AS Num FROM GPM_Menu WHERE Mark='" + this.No + "'";
-                //if (DBAccess.RunSQLReturnValInt(sql) > 0)
-                //    throw new Exception("err@该表单已经被菜单引用，您不能删除.");
-
-                //删除菜单.
-                sql = "DELETE FROM GPM_Menu WHERE Mark='" + this.No + "' OR URLExt='" + this.No + "'";
-                DBAccess.RunSQL(sql);
-
-                if (DBAccess.IsExitsObject("Frm_Collection") == true)
+                if (DBAccess.RunSQLReturnValInt(sql) > 0)
                 {
-                    //删除集合方法.
-                    sql = "DELETE FROM Frm_Collection WHERE FrmID='" + this.No + "'";
-                    DBAccess.RunSQL(sql);
+                    throw new Exception("表单存在其他的版本,请删除其他版本后再删除表单");
+                    return false;
                 }
-
-                if (DBAccess.IsExitsObject("Frm_Method") == true)
+            }
+            catch (Exception ex)
+            {
+                MapDataVer mv = new MapDataVer();
+                mv.CheckPhysicsTable();
+                if (DBAccess.RunSQLReturnValInt(sql) > 0)
                 {
-                    //删除实体组件.
-                    sql = "DELETE FROM Frm_Method WHERE FrmID='" + this.No + "'";
-                    DBAccess.RunSQL(sql);
+                    throw new Exception("表单存在其他的版本,请删除其他版本后再删除表单");
+                    return false;
                 }
             }
 
@@ -2593,11 +2192,11 @@ namespace BP.Sys
 
             #region 删除相关的数据。
             sql = "DELETE FROM Sys_MapDtl WHERE FK_MapData='" + this.No + "'";
-            sql += "@DELETE FROM Sys_FrmLine WHERE " + whereFK_MapData;
+            //  sql += "@DELETE FROM Sys_FrmLine WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_FrmEvent WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_FrmBtn WHERE " + whereFK_MapData;
-            sql += "@DELETE FROM Sys_FrmLab WHERE " + whereFK_MapData;
-            sql += "@DELETE FROM Sys_FrmLink WHERE " + whereFK_MapData;
+            // sql += "@DELETE FROM Sys_FrmLab WHERE " + whereFK_MapData;
+            //sql += "@DELETE FROM Sys_FrmLink WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_FrmImg WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_FrmImgAth WHERE " + whereFK_MapData;
             sql += "@DELETE FROM Sys_FrmRB WHERE " + whereFK_MapData;
@@ -2652,6 +2251,9 @@ namespace BP.Sys
             #region 属性.
             #endregion 属性.
 
+            //写入日志.
+            if (this.No.StartsWith("ND") == false)
+                BP.Sys.Base.Glo.WriteUserLog("删除表单：" + this.No + " - " + this.Name);
 
             return base.beforeDelete();
         }
@@ -2675,7 +2277,7 @@ namespace BP.Sys
                 }
                 else //说明当前excel文件没有生成.
                 {
-                    string tempExcel = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + this.No + ".xlsx";
+                    string tempExcel = SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + this.No + ".xlsx";
                     if (System.IO.File.Exists(tempExcel) == true)
                     {
                         bytes = DataType.ConvertFileToByte(tempExcel);
@@ -2689,7 +2291,7 @@ namespace BP.Sys
             }
             catch (Exception ex)
             {
-                Log.DebugWriteError("读取excel失败：" + ex.Message);
+                BP.DA.Log.DebugWriteError("读取excel失败：" + ex.Message);
                 return false;
             }
         }
@@ -2720,10 +2322,10 @@ namespace BP.Sys
             }
             else //说明当前excel文件没有生成.
             {
-                string tempExcel = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + this.No + ".docx";
+                string tempExcel = SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + this.No + ".docx";
 
                 if (System.IO.File.Exists(tempExcel) == false)
-                    tempExcel = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/NDxxxRpt.docx";
+                    tempExcel = SystemConfig.PathOfDataUser + "FrmVSTOTemplate/NDxxxRpt.docx";
 
                 bytes = DataType.ConvertFileToByte(tempExcel);
                 return;
@@ -2740,6 +2342,134 @@ namespace BP.Sys
         }
         #endregion 与Excel相关的操作 .
 
+        /// <summary>
+        /// 创建版本
+        /// </summary>
+        public string CreateMapDataVer()
+        {
+            MapDataVer ver = new MapDataVer();
+
+            MapDataVers vers = new MapDataVers();
+            vers.Retrieve("FrmID", this.No);
+            if (vers.Count == 0)
+            {
+                ver.MyPK = this.No + ".1";
+
+                ver.Ver=1; //设置当前为主版本.
+                ver.FrmID=this.No; //设置表单ID.
+                ver.IsRel=1; //设置为主版本.
+
+                ver.Rec=Web.WebUser.No;
+                ver.RecName=Web.WebUser.Name;
+                ver.RDT=DataType.CurrentDateTime;
+
+                //设置数量.
+                ver.AttrsNum=DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'");
+                ver.AthsNum=DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_Frmattachment WHERE FK_MapData='" + this.No + "'");
+                ver.DtlsNum=DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapDtl WHERE FK_MapData='" + this.No + "'");
+                ver.ExtsNum=DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapExt WHERE FK_MapData='" + this.No + "'");
+                ver.Insert();
+
+                this.Ver2022 = ver.Ver; //更新当前的版本.
+                this.Update();
+
+                //执行复制,表单.
+                BP.Sys.CCFormAPI.CopyFrm(this.No, this.No + "." + this.Ver2022, this.Name + "." + ver.Ver, this.FK_FormTree);
+                return "创建成功." + ver.GetValByKey(MapDataVerAttr.Ver);
+            }
+
+            //缺少AtPara字段
+            MapAttr mattr = new MapAttr();
+            mattr.setMyPK(this.No + "_AtPara");
+            if (mattr.RetrieveFromDBSources() == 0)
+            {
+                mattr.setFK_MapData(this.No);
+                mattr.HisEditType = EditType.UnDel;
+                mattr.setKeyOfEn("AtPara");
+                mattr.setName("参数"); // 单据编号
+                mattr.setMyDataType(DataType.AppString);
+                mattr.setUIContralType(UIContralType.TB);
+                mattr.setLGType(FieldTypeS.Normal);
+                mattr.setUIVisible(false);
+                mattr.setUIIsEnable(false);
+                mattr.UIIsLine = false;
+                mattr.setMinLen(0);
+                mattr.setMaxLen(4000);
+                mattr.Idx = -100;
+                mattr.Insert();
+                GEEntity en = new GEEntity(this.No);
+                en.CheckPhysicsTable();
+
+            }
+            //设置所有的版本为 0 .
+            string sql = "UPDATE Sys_MapDataVer SET IsRel=0 WHERE FrmID='" + this.No + "'";
+            DBAccess.RunSQL(sql);
+
+            #region 1. 创建新版本 执行复制,表单.
+
+            int maxVer = DBAccess.RunSQLReturnValInt("SELECT MAX(ver) FROM Sys_MapDataVer WHERE FrmID='" + this.No + "'",0);
+            //执行复制,表单，创建新版本.
+            ver.Ver = maxVer + 1;
+            ver.MyPK = this.No + "." + ver.Ver;
+            ver.FrmID= this.No; //设置表单ID.
+            ver.IsRel=1; //设置为主版本.
+            ver.Rec=Web.WebUser.No;
+            ver.RecName= Web.WebUser.Name;
+            ver.RDT=DataType.CurrentDateTime;
+
+            //设置数量.
+            ver.AttrsNum=DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'");
+            ver.AthsNum=DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_Frmattachment WHERE FK_MapData='" + this.No + "'");
+            ver.DtlsNum= DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapDtl WHERE FK_MapData='" + this.No + "'");
+            ver.ExtsNum= DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapExt WHERE FK_MapData='" + this.No + "'");
+            ver.Insert(); //创建新版本.
+
+            //生成新的表单.
+            BP.Sys.CCFormAPI.CopyFrm(this.No, this.No + "." + ver.Ver, this.Name + "(Ver" + ver.Ver + ".0)", this.FK_FormTree);
+            //把版本的FK_FormTree清空
+            MapData md = new MapData(this.No + "." + ver.Ver);
+            md.FK_FormTree = "";
+            md.Update();
+            
+            #endregion 1. 创建新版本 执行复制,表单.
+
+
+            #region 2. 覆盖旧版本.
+            string currVer = this.No + "." + this.Ver2022.ToString(); // this.No + "." + vers.Count;
+            md = new MapData();
+            md.No = currVer;
+            if (md.RetrieveFromDBSources() == 1)
+                md.Delete();
+            //把表单属性的FK_FormTree清空
+            BP.Sys.CCFormAPI.CopyFrm(this.No, currVer, this.Name + "(Ver" + currVer + ".0)", this.FK_FormTree);
+            md.FK_FormTree = "";
+            md.PTable = this.PTable;
+            md.Update();
+            //修改从表的存储表
+            MapDtls dtls = md.MapDtls;
+            foreach(MapDtl dtl in dtls)
+            {
+                if (dtl.PTable.Equals(dtl.No) == true)
+                {
+                    dtl.PTable = dtl.PTable.Replace(currVer, this.No);
+                    dtl.Update();
+                    continue;
+
+                } 
+            }
+            //把当前表单对应数据改成当前的版本
+             DBAccess.RunSQL("UPDATE " + md.PTable +" SET AtPara=CONCAT(AtPara,'@FrmVer=" + this.Ver2022 + "') WHERE AtPara NOT LIKE '%@FrmVer=%'");
+            
+            #endregion 2. 覆盖旧版本.
+
+            #region 3. 更新当前版本号.
+            this.Ver2022 = ver.Ver; //更新当前的版本.
+            this.Update();
+            #endregion 3. 更新当前版本号.
+
+            return "创建成功，版本号:" + ver.Ver; ;
+
+        }
     }
     /// <summary>
     /// 映射基础s

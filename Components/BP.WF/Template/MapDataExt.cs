@@ -412,7 +412,7 @@ namespace BP.WF.Template
                 map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 500, 20);
 
                 //表单的运行类型.
-                map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型",true, true, MapDataAttr.FrmType);
+                map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FoolForm, "表单类型",true, true, MapDataAttr.FrmType);
 
                 map.AddTBString(MapDataAttr.UrlExt, null, "URL连接(对嵌入式表单有效)", true, false, 0, 500, 20, true);
                 //数据源.
@@ -660,8 +660,8 @@ namespace BP.WF.Template
 
             string sqls = "";
             sqls += "@UPDATE Sys_MapData SET No='" + frmID1 + "' WHERE No='" + frmIDOld + "'";
-            sqls += "UPDATE Sys_FrmLine SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
-            sqls += "UPDATE Sys_FrmLab SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+           // sqls += "UPDATE Sys_FrmLine SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+           // sqls += "UPDATE Sys_FrmLab SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
             sqls += "UPDATE Sys_FrmBtn SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
             sqls += "UPDATE Sys_MapAttr SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
             sqls += "UPDATE Sys_MapExt SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
@@ -686,17 +686,17 @@ namespace BP.WF.Template
         public string DoChangeFieldName(string fieldOld, string newField, string newFieldName)
         {
             MapAttr attrOld = new MapAttr();
-            attrOld.KeyOfEn = fieldOld;
-            attrOld.FK_MapData = this.No;
-            attrOld.MyPK = attrOld.FK_MapData + "_" + attrOld.KeyOfEn;
+            attrOld.setKeyOfEn(fieldOld);
+            attrOld.setFK_MapData(this.No);
+            attrOld.setMyPK(attrOld.FK_MapData + "_" + attrOld.KeyOfEn);
             if (attrOld.RetrieveFromDBSources() == 0)
                 return "@旧字段输入错误[" + attrOld.KeyOfEn + "].";
 
             //检查是否存在该字段？
             MapAttr attrNew = new MapAttr();
-            attrNew.KeyOfEn = newField;
-            attrNew.FK_MapData = this.No;
-            attrNew.MyPK = attrNew.FK_MapData + "_" + attrNew.KeyOfEn;
+            attrNew.setKeyOfEn(newField);
+            attrNew.setFK_MapData(this.No);
+            attrNew.setMyPK(attrNew.FK_MapData + "_" + attrNew.KeyOfEn);
             if (attrNew.RetrieveFromDBSources() == 1)
                 return "@该字段[" + attrNew.KeyOfEn + "]已经存在.";
 
@@ -705,8 +705,8 @@ namespace BP.WF.Template
 
             //copy这个数据,增加上它.
             attrNew.Copy(attrOld);
-            attrNew.KeyOfEn = newField;
-            attrNew.FK_MapData = this.No;
+            attrNew.setKeyOfEn(newField);
+            attrNew.setFK_MapData(this.No);
 
             if (newFieldName != "")
                 attrNew.Name = newFieldName;
@@ -717,7 +717,7 @@ namespace BP.WF.Template
             MapExts exts = new MapExts(this.No);
             foreach (MapExt item in exts)
             {
-                item.MyPK = item.MyPK.Replace("_" + fieldOld, "_" + newField);
+                item.setMyPK(item.MyPK.Replace("_" + fieldOld, "_" + newField));
 
                 if (item.AttrOfOper == fieldOld)
                     item.AttrOfOper = newField;
@@ -744,7 +744,7 @@ namespace BP.WF.Template
         public string DoCheckFrm()
         {
             return "../../Admin/AttrNode/CheckFrm.htm?FK_MapData=" +
-                   this.No + "&t=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff");
+                   this.No + "&t=" + BP.DA.DataType.CurrentDateTime;
         }
       
        
@@ -755,7 +755,7 @@ namespace BP.WF.Template
         public string DoRegularExpressionBatch()
         {
             return "../../Admin/FoolFormDesigner/MapExt/RegularExpressionBatch.htm?FK_Flow=&FK_MapData=" +
-                   this.No + "&t=" + DataType.CurrentDataTime;
+                   this.No + "&t=" + DataType.CurrentDateTime;
         }
         /// <summary>
         /// 排序字段顺序
@@ -764,7 +764,7 @@ namespace BP.WF.Template
         public string MobileFrmDesigner()
         {
             return "../../Admin/MobileFrmDesigner/Default.htm?FK_Flow=&FK_MapData=" +
-                   this.No + "&t=" + DataType.CurrentDataTime;
+                   this.No + "&t=" + DataType.CurrentDateTime;
         }
           /// <summary>
         /// 设计表单

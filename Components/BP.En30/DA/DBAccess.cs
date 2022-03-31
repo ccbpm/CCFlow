@@ -29,6 +29,7 @@ using MySql;
 using MySql.Data.MySqlClient;
 using BP.Sys;
 using Npgsql;
+using Nuxsql;
 using Dm;
 
 namespace BP.DA
@@ -39,6 +40,46 @@ namespace BP.DA
     /// </summary>
     public class DBAccess
     {
+        public static void UpdateTableColumnDefaultVal(string table, string colName, object defaultVal)
+        {
+            string sql = "";
+
+            //是否存在该列?
+            if (DBAccess.IsExitsTableCol(table, colName) == false)
+                return;
+
+            switch (SystemConfig.AppCenterDBType)
+            {
+                case DBType.MySQL:
+                    if (defaultVal.GetType() == typeof(int) || defaultVal.GetType() == typeof(float) || defaultVal.GetType() == typeof(decimal))
+                        sql = "ALTER TABLE " + table + " ALTER COLUMN " + colName + " SET DEFAULT " + defaultVal.ToString();
+                    else
+                        sql = "ALTER TABLE " + table + " ALTER COLUMN " + colName + " SET DEFAULT '" + defaultVal.ToString() + "'";
+                    break;
+                case DBType.MSSQL:
+                    sql = "SELECT  b.name FROM sysobjects b join syscolumns a on b.id = a.cdefault WHERE a.id = object_id('"+table+"') AND a.name = '"+colName+"'";
+                    string yueShu = DBAccess.RunSQLReturnStringIsNull(sql, null);
+                    if (yueShu != null)
+                    {
+                        sql = "ALTER TABLE " + table + " DROP constraint " + yueShu;
+                        DBAccess.RunSQL(sql); //删除约束.
+                    }
+                   // alter table 表名 add default 默认值 for 字段名
+                    if (defaultVal.GetType() == typeof(int) || defaultVal.GetType() == typeof(float) || defaultVal.GetType() == typeof(decimal))
+                        sql = "ALTER TABLE " + table + " ADD DEFAULT " + defaultVal.ToString()+ " FOR  " + colName ;
+                    else
+                        sql = "ALTER TABLE " + table + " ADD DEFAULT '" + defaultVal.ToString() + "' FOR  " + colName;
+                    break;
+                default:
+                    break;
+            }
+
+            if (DataType.IsNullOrEmpty(sql) == true)
+                throw new Exception("err@没有判断的数据库类型.");
+
+            //设置默认值.
+            BP.DA.DBAccess.RunSQL(sql);
+        }
         /// <summary>
         /// 获得数据表字段描述的SQL
         /// </summary>
@@ -47,20 +88,6 @@ namespace BP.DA
             if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                 return "SELECT column_name as FName,data_type as FType,CHARACTER_MAXIMUM_LENGTH as FLen from information_schema.columns where table_name='" + table + "'";
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle
-                || SystemConfig.AppCenterDBType == DBType.DM)
-            {
-            }
-
-            if (SystemConfig.AppCenterDBType == DBType.MySQL)
-            {
-
-            }
-
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-            {
-
-            }
             throw new Exception("@没有涉及到的数据库类型");
         }
         /// <summary>
@@ -101,21 +128,7 @@ namespace BP.DA
             if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                 return "SELECT b.name, a.name FName from sysobjects b join syscolumns a on b.id = a.cdefault where a.id = object_id('" + table + "') ";
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle
-                || SystemConfig.AppCenterDBType == DBType.DM)
-            {
 
-            }
-
-            if (SystemConfig.AppCenterDBType == DBType.MySQL)
-            {
-
-            }
-
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-            {
-
-            }
             throw new Exception("@没有涉及到的数据库类型");
 
         }
@@ -263,7 +276,7 @@ namespace BP.DA
             }
 
             //add by zhoupeng
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.UX || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 Npgsql.NpgsqlConnection cn = DBAccess.GetAppCenterDBConn as Npgsql.NpgsqlConnection;
                 if (cn.State != ConnectionState.Open)
@@ -434,26 +447,34 @@ namespace BP.DA
             SaveBytesToDB(bytes, tableName, tablePK, pkVal, saveToFileField);
         }
         /// <summary>
-        /// 获得从数据库的字段获取数据，存储到一个执行的文件里.
+        /// 获得从数据库的字段获取数据，存储到一个文件里.
         /// </summary>
         /// <param name="fileFullName">指定的存储文件全路径</param>
         /// <param name="tableName"></param>
         /// <param name="tablePK"></param>
-        /// <param name="pkVal"></param>
-        /// <param name="fileSaveField"></param>
-        public static void GetFileFromDB(string fileFullName, string tableName, string tablePK, string pkVal, string fileSaveField)
+        /// <param name="pkVal">主键值</param>
+        /// <param name="fileSaveField">文件保存路径</param>
+        public static byte[] GetFileFromDB(string fileFullName, string tableName, string tablePK, string pkVal, string fileSaveField)
         {
             byte[] byteFile = GetByteFromDB(tableName, tablePK, pkVal, fileSaveField);
+
             FileStream fs;
             //如果文件不为空,就把流数据保存一个文件.
             if (fileFullName != null)
             {
                 FileInfo fi = new System.IO.FileInfo(fileFullName);
                 fs = fi.OpenWrite();
-                fs.Write(byteFile, 0, byteFile.Length);
+
+                if (byteFile != null)
+                    fs.Write(byteFile, 0, byteFile.Length);
+
                 fs.Close();
                 fs.Dispose();
             }
+            if (byteFile == null)
+                return null;
+
+            return byteFile;
         }
         /// <summary>
         /// 从数据库里获得文本
@@ -600,6 +621,55 @@ namespace BP.DA
                     {
                         /*如果没有此列，就自动创建此列.*/
                         string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " blob ";
+                        DBAccess.RunSQL(sql);
+                    }
+                    throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
+                }
+                finally
+                {
+                    dr.Close();
+                    cm.Dispose();
+                    cn.Dispose();
+                }
+            }
+
+            if (SystemConfig.AppCenterDBType == DBType.UX)
+            {
+                NuxsqlConnection cn = DBAccess.GetAppCenterDBConn as NuxsqlConnection;
+                if (cn.State != ConnectionState.Open)
+                    cn.Open();
+
+                string strSQL = "SELECT " + fileSaveField + " FROM " + tableName + " WHERE " + tablePK + "='" + pkVal + "'";
+
+                NuxsqlDataReader dr = null;
+                NuxsqlCommand cm = new NuxsqlCommand();
+                cm.Connection = cn;
+                cm.CommandText = strSQL;
+                cm.CommandType = CommandType.Text;
+
+                // 执行它.
+                try
+                {
+                    dr = cm.ExecuteReader();
+
+                    byte[] byteFile = null;
+                    if (dr.Read())
+                    {
+                        if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
+                            return null;
+
+                        byteFile = dr[0] as byte[];
+                        //System.Text.Encoding.Default.GetBytes(dr[0].ToString());
+                    }
+
+                    return byteFile;
+                }
+                catch (Exception ex)
+                {
+                    if (DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
+                    {
+                        /*如果没有此列，就自动创建此列.*/
+                        string sql = "ALTER TABLE " + tableName + " ADD " + fileSaveField + " LONGBLOB NULL ";
                         DBAccess.RunSQL(sql);
                     }
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
@@ -819,6 +889,7 @@ namespace BP.DA
                 {
                     case DBType.MSSQL:
                     case DBType.PostgreSQL:
+                    case DBType.UX:
                         DBAccess.RunSQLReturnString("SELECT 1+2 ");
                         break;
                     case DBType.Oracle:
@@ -1223,8 +1294,9 @@ namespace BP.DA
                         return new MySqlConnection(connstr);
                     case DBType.PostgreSQL:
                         return new Npgsql.NpgsqlConnection(connstr);
-                    //case DBType.Informix: net core 无法支持
-                    //    return new IfxConnection(connstr);
+                    case DBType.UX:
+                        return new Nuxsql.NuxsqlConnection(connstr);
+
                     case DBType.Access:
                     default:
                         throw new Exception("err@GetAppCenterDBConn发现未知的数据库连接类型！");
@@ -1247,6 +1319,8 @@ namespace BP.DA
                         return new MySqlDataAdapter();
                     case DBType.PostgreSQL:
                         return new NpgsqlDataAdapter();
+                    case DBType.UX:
+                        return new Nuxsql.NuxsqlDataAdapter();
                     //case DBType.Informix: net core 无法支持
                     //    return new IfxDataAdapter();
                     case DBType.Access:
@@ -1271,6 +1345,8 @@ namespace BP.DA
                         return new MySqlCommand();
                     case DBType.PostgreSQL:
                         return new NpgsqlCommand();
+                    case DBType.UX:
+                        return new Nuxsql.NuxsqlCommand();
                     //case DBType.Informix:
                     //    return new IfxCommand();
                     case DBType.Access:
@@ -1375,7 +1451,7 @@ namespace BP.DA
             }
             catch (System.Exception ex)
             {
-                Log.DebugWriteInfo(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
                 throw new Exception("RunSQL2 step=" + ex.Message + " 设置连接时间=" + conn.ConnectionTimeout);
             }
             finally
@@ -1414,7 +1490,7 @@ namespace BP.DA
             }
             catch (System.Exception ex)
             {
-                Log.DebugWriteInfo(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
                 throw new Exception("RunSQL2" + ex.Message);
             }
             finally
@@ -1436,7 +1512,6 @@ namespace BP.DA
             try
             {
                 DBAccess.DropConstraintOfSQL(table, columnName);
-
                 string sql = "ALTER TABLE " + table + " DROP COLUMN " + columnName;
                 DBAccess.RunSQL(sql);
             }
@@ -1445,7 +1520,6 @@ namespace BP.DA
 
             }
         }
-
         /// <summary>
         /// 删除表的主键
         /// </summary>
@@ -1465,6 +1539,7 @@ namespace BP.DA
                     sql = "ALTER TABLE " + table + " DROP CONSTRAINT " + pkName;
                     break;
                 case DBType.PostgreSQL:
+                case DBType.UX:
                     sql = "ALTER TABLE " + table.ToLower() + " DROP CONSTRAINT " + pkName.ToLower();
                     break;
                 case DBType.MySQL:
@@ -1770,7 +1845,7 @@ namespace BP.DA
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineInfo("MidStrEx Err:" + ex.Message);
+                BP.DA.Log.DebugWriteError("MidStrEx Err:" + ex.Message);
             }
             return tmpstr;
         }
@@ -1890,6 +1965,9 @@ namespace BP.DA
                     case DBType.PostgreSQL:
                         result = RunSQL_201902_PSQL(sql, paras);
                         break;
+                    case DBType.UX:
+                        result = RunSQL_201902_UXQL(sql, paras);
+                        break;
                     case DBType.DM: //为中国电子支持dm.
                         result = RunSQL_20191230_DM(sql, paras);
                         break;
@@ -1941,6 +2019,16 @@ namespace BP.DA
                 return _conn;
             }
         }
+
+        private static Nuxsql.NuxsqlConnection connOfUXSQL
+        {
+            get
+            {
+                return new Nuxsql.NuxsqlConnection(SystemConfig.AppCenterDSN);
+            }
+        }
+
+
         /// <summary>
         /// 运行sql返回结果
         /// </summary>
@@ -1989,7 +2077,60 @@ namespace BP.DA
                 else
                     msg = "SQL=" + paras.SQLNoPara + ",异常信息:" + ex.Message;
 
-                Log.DefaultLogWriteLineInfo(msg);
+                BP.DA.Log.DebugWriteError(msg);
+                throw new Exception(msg);
+            }
+            finally
+            {
+                if (cmd != null)
+                    conn.Dispose();
+                if (cmd != null)
+                    conn.Dispose();
+            }
+        }
+        private static int RunSQL_201902_UXQL(string sql, Paras paras)
+        {
+            if (1 == 1)
+            {
+                if (paras == null)
+                    paras = new Paras();
+                paras.SQL = sql;
+            }
+
+            Nuxsql.NuxsqlConnection conn = DBAccess.connOfUXSQL;
+            if (conn.State != System.Data.ConnectionState.Open)
+            {
+                conn.ConnectionString = SystemConfig.AppCenterDSN;
+                conn.Open();
+            }
+
+            Nuxsql.NuxsqlCommand cmd = new Nuxsql.NuxsqlCommand(sql, conn);
+            cmd.CommandType = CommandType.Text;
+
+            try
+            {
+                foreach (Para para in paras)
+                {
+                    Nuxsql.NuxsqlParameter oraP = new Nuxsql.NuxsqlParameter(para.ParaName, para.val);
+                    cmd.Parameters.Add(oraP);
+                }
+                int i = cmd.ExecuteNonQuery();
+                cmd.Dispose();
+
+                if (isCloseConn == true)
+                    conn.Close();
+                return i;
+            }
+            catch (System.Exception ex)
+            {
+                paras.SQL = sql;
+                string msg = "";
+                if (paras.Count == 0)
+                    msg = "SQL=" + sql + ",异常信息:" + ex.Message;
+                else
+                    msg = "SQL=" + paras.SQLNoPara + ",异常信息:" + ex.Message;
+
+                BP.DA.Log.DebugWriteError(msg);
                 throw new Exception(msg);
             }
             finally
@@ -2041,7 +2182,7 @@ namespace BP.DA
                 else
                     msg = "SQL=" + paras.SQLNoPara + ",异常信息:" + ex.Message;
 
-                Log.DefaultLogWriteLineInfo(msg);
+                BP.DA.Log.DebugWriteError(msg);
                 throw new Exception(msg);
             }
             finally
@@ -2083,7 +2224,7 @@ namespace BP.DA
                 else
                     msg = "SQL=" + paras.SQLNoPara + ",异常信息:" + ex.Message;
 
-                Log.DefaultLogWriteLineInfo(msg);
+                BP.DA.Log.DebugWriteError(msg);
                 throw new Exception(msg);
             }
             finally
@@ -2420,7 +2561,7 @@ namespace BP.DA
             catch (System.Exception ex)
             {
                 lock_msSQL_ReturnTable = false;
-                Log.DebugWriteError(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
                 throw new Exception("[RunSQLReturnTable on SqlConnection 1]" + "<BR>" + ex.Message + " sql=" + msSQL);
             }
             finally
@@ -2474,7 +2615,7 @@ namespace BP.DA
                 {
                     msg += "@" + pa.ParaName + "=" + pa.val;
                 }
-                Log.DebugWriteError(msg);
+                BP.DA.Log.DebugWriteError(msg);
                 throw new Exception(msg);
             }
             finally
@@ -2520,7 +2661,7 @@ namespace BP.DA
                 {
                     msg += "@" + pa.ParaName + "=" + pa.val;
                 }
-                Log.DebugWriteError(msg);
+                BP.DA.Log.DebugWriteError(msg);
                 throw new Exception(msg);
             }
             finally
@@ -2549,7 +2690,7 @@ namespace BP.DA
             {
                 string msgErr = ex.Message;
                 string msg = "@运行查询在(RunSQLReturnTable_200705_SQL)出错 sql=" + selectSQL + " @异常信息：" + msgErr;
-                Log.DebugWriteError(msg);
+                BP.DA.Log.DebugWriteError(msg);
                 throw new Exception(msg);
             }
             finally
@@ -2588,7 +2729,50 @@ namespace BP.DA
             }
             catch (Exception ex)
             {
-                Log.DebugWriteError(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
+                throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
+            }
+            finally
+            {
+                if (ada != null)
+                    ada.Dispose();
+                if (conn != null)
+                    conn.Dispose();
+            }
+        }
+        private static DataTable RunSQLReturnTable_201902_UXQL(string sql, Paras paras)
+        {
+            Nuxsql.NuxsqlConnection conn = DBAccess.connOfUXSQL; // new Nuxsql.NuxsqlConnection(SystemConfig.AppCenterDSN);
+            if (conn.State != ConnectionState.Open)
+                conn.Open();
+
+            Nuxsql.NuxsqlDataAdapter ada = new Nuxsql.NuxsqlDataAdapter(sql, conn);
+            ada.SelectCommand.CommandType = CommandType.Text;
+
+            // 加入参数
+            if (paras != null)//qin 解决为null时的异常
+            {
+                foreach (Para para in paras)
+                {
+                    // 2019-8-8 zl 适配postgreSql新版驱动，要求数据类型一致
+                    object valObj = para.val;
+
+                    Nuxsql.NuxsqlParameter myParameter = new Nuxsql.NuxsqlParameter(para.ParaName, valObj);
+                    myParameter.Size = para.Size;
+                    ada.SelectCommand.Parameters.Add(myParameter);
+                }
+            }
+
+            try
+            {
+                DataTable oratb = new DataTable("otb");
+                ada.Fill(oratb);
+
+                return oratb;
+            }
+            catch (Exception ex)
+            {
+                BP.DA.Log.DebugWriteError(ex.Message);
                 throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
             }
             finally
@@ -2637,7 +2821,7 @@ namespace BP.DA
             }
             catch (Exception ex)
             {
-                Log.DebugWriteError(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
                 throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
             }
             finally
@@ -2881,6 +3065,7 @@ namespace BP.DA
                 case DBType.MySQL:
                     return RunSQLReturnTable_201612_MySql(sql, pageSize, pageIdx, key, orderKey, orderType);
                 case DBType.PostgreSQL:
+                case DBType.UX:
                     return RunSQLReturnTable_201612_PostgreSQL(sql, pageSize, pageIdx, key, orderKey, orderType);
                 default:
                     throw new Exception("@未涉及的数据库类型！");
@@ -2902,6 +3087,7 @@ namespace BP.DA
                      + " LIMIT " + ((pageIdx - 1) * pageSize + 1) + " offset 1) LIMIT " + pageSize;
             return RunSQLReturnTable(sqlstr);
         }
+
         /// <summary>
         /// 通用SqlServer查询分页返回DataTable
         /// </summary>
@@ -3033,6 +3219,9 @@ namespace BP.DA
                     case DBType.PostgreSQL:
                         dt = RunSQLReturnTable_201902_PSQL(sql, paras);
                         break;
+                    case DBType.UX:
+                        dt = RunSQLReturnTable_201902_UXQL(sql, paras);
+                        break;
                     case DBType.MySQL:
                         dt = RunSQLReturnTable_200705_MySQL(sql, paras);
                         break;
@@ -3043,7 +3232,7 @@ namespace BP.DA
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineError(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
                 throw ex;
             }
         }
@@ -3363,6 +3552,9 @@ namespace BP.DA
                 case DBType.PostgreSQL:
                     dt = DBAccess.RunSQLReturnTable_201902_PSQL(sql, paras);
                     break;
+                case DBType.UX:
+                    dt = DBAccess.RunSQLReturnTable_201902_UXQL(sql, paras);
+                    break;
                 default:
                     throw new Exception("@没有判断的数据库类型");
             }
@@ -3392,6 +3584,9 @@ namespace BP.DA
                     break;
                 case DBType.PostgreSQL:
                     dt = DBAccess.RunSQLReturnTable_201902_PSQL(sql, new Paras());
+                    break;
+                case DBType.UX:
+                    dt = DBAccess.RunSQLReturnTable_201902_UXQL(sql, new Paras());
                     break;
                 //case DBType.Informix:
                 //    dt = DBAccess.RunSQLReturnTable_201205_Informix(sql, new Paras());
@@ -3463,6 +3658,7 @@ namespace BP.DA
                     ps.Add("Tab", table);
                     break;
                 case DBType.PostgreSQL:
+                case DBType.UX:
                     sql = " SELECT ";
                     sql += " pg_constraint.conname AS pk_name ";
                     sql += " FROM ";
@@ -3545,6 +3741,7 @@ namespace BP.DA
                     else
                         return false;
                 case DBType.PostgreSQL:
+                case DBType.UX:
                     sql = "select relkind from pg_class WHERE relname ='" + tabelOrViewName + "'";
                     DataTable dt3 = DBAccess.RunSQLReturnTable(sql);
                     if (dt3.Rows.Count == 0)
@@ -3638,6 +3835,7 @@ namespace BP.DA
                 case DBType.MSSQL:
                     return IsExits("SELECT name FROM sysobjects WHERE name = '" + obj + "'");
                 case DBType.PostgreSQL:
+                case DBType.UX:
                     return IsExits("SELECT relname FROM pg_class WHERE relname = '" + obj.ToLower() + "'");
                 case DBType.Informix:
                     return IsExits("select tabname from systables where tabname = '" + obj.ToLower() + "'");
@@ -3679,10 +3877,11 @@ namespace BP.DA
                     i = DBAccess.RunSQLReturnValInt(sql);
                     break;
                 case DBType.PostgreSQL:
+                case DBType.UX:
                     sql = "SELECT count(*) FROM pg_indexes WHERE  tablename = '" + table.ToLower() + "' ";
                     //string sql1 = "select count(*) from information_schema.statistics where   table_name ='" + table.ToLower() + "' and  index_name='" + indexName.ToLower() + "'";
                     i = DBAccess.RunSQLReturnValInt(sql);
-                   
+
                     break;
                 case DBType.Oracle:
                 case DBType.DM:
@@ -3728,6 +3927,7 @@ namespace BP.DA
                     i = DBAccess.RunSQLReturnValInt(sql);
                     break;
                 case DBType.PostgreSQL:
+                case DBType.UX:
                     string sql1 = "select count(*) from information_schema.columns where   table_name ='" + table.ToLower() + "' and  column_name='" + col.ToLower() + "'";
                     i = DBAccess.RunSQLReturnValInt(sql1);
                     break;

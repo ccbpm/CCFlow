@@ -30,7 +30,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 月份
         /// </summary>
-        /// <param name="mypk"></param>
+        /// <param name="no"></param>
         public GenerWorkFlowViewNY(string no)
         {
             this.No = no;
@@ -46,7 +46,7 @@ namespace BP.WF.Data
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Pub_NY", "月份");
-                map.EnType = EnType.App;
+                map.setEnType(EnType.App);
 
                 map.AddTBStringPK(GenerWorkFlowViewNYAttr.No, null, "编号", true, false, 2, 30, 20);
                 map.AddTBString(GenerWorkFlowViewNYAttr.Name, null, "名称", true, false, 0, 3900, 20);

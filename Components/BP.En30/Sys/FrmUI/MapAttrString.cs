@@ -25,17 +25,7 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.IsSupperText, value);
             }
         }
-        public int IsSigan
-        {
-            get
-            {
-                return this.GetValIntByKey(MapAttrAttr.IsSigan);
-            }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.IsSigan, value);
-            }
-        }
+
         public bool IsRichText
         {
             get
@@ -60,6 +50,10 @@ namespace BP.Sys.FrmUI
             {
                 this.SetValByKey(MapAttrAttr.FK_MapData, value);
             }
+        }
+        public void setFK_MapData(string val)
+        {
+            this.SetValByKey(MapAttrAttr.FK_MapData, val);
         }
         /// <summary>
         /// 最大长度
@@ -118,6 +112,10 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.UIVisible, value);
             }
         }
+        public void setUIVisible(bool val)
+        {
+            this.SetValByKey(MapAttrAttr.UIVisible, val);
+        }
         /// <summary>
         /// 是否可编辑
         /// </summary>
@@ -127,10 +125,10 @@ namespace BP.Sys.FrmUI
             {
                 return this.GetValBooleanByKey(MapAttrAttr.UIIsEnable);
             }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.UIIsEnable, value);
-            }
+        }
+        public void setUIIsEnable(bool val)
+        {
+            this.SetValByKey(MapAttrAttr.UIIsEnable, val);
         }
         #endregion
 
@@ -160,7 +158,7 @@ namespace BP.Sys.FrmUI
         /// </summary>
         public MapAttrString(string myPK)
         {
-            this.MyPK = myPK;
+            this.setMyPK(myPK);
             this.Retrieve();
 
         }
@@ -235,10 +233,6 @@ namespace BP.Sys.FrmUI
                 //显示的分组.
                 map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
 
-                map.AddDDLSysEnum(MapAttrAttr.IsSigan, 0, "签名模式", true, true,
-                    MapAttrAttr.IsSigan, "@0=无@1=图片签名@2=山东CA@3=广东CA@4=图片盖章@5=手写签名");
-                map.SetHelperAlert(MapAttrAttr.IsSigan, "图片签名,需要的是当前是只读的并且默认值为@WebUser.No,其他签名需要个性化的编写数字签章的集成代码.");
-
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false);
                 map.SetHelperAlert(MapAttrAttr.Idx, "对傻瓜表单有效:用于调整字段在同一个分组中的顺序.");
 
@@ -246,6 +240,11 @@ namespace BP.Sys.FrmUI
 
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
                 map.SetHelperAlert(MapAttrAttr.Tip, "在文本框输入的时候显示在文本框背景的提示文字,也就是文本框的 placeholder 的值.");
+
+
+                map.AddDDLSysEnum(MapAttrAttr.IsSigan, 0, "签名模式", true, true,
+                 MapAttrAttr.IsSigan, "@0=无@1=图片签名@2=山东CA@3=广东CA@4=图片盖章");
+                map.SetHelperAlert(MapAttrAttr.IsSigan, "图片签名,需要的是当前是只读的并且默认值为@WebUser.No,其他签名需要个性化的编写数字签章的集成代码.");
 
                 //map.AddTBString("CSSLabel", null, "标签样式css", true, false, 0, 400, 20, true);
                 //map.AddTBString("CSSCtrl", null, "控件样式css", true, false, 0, 400, 20, true);
@@ -325,7 +324,6 @@ namespace BP.Sys.FrmUI
                 rm.ClassMethodName = this.ToString() + ".DoMultipleChoiceSmall()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "icon-equalizer";
-
                 map.AddRefMethod(rm);
 
 
@@ -354,6 +352,14 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "icon-magnifier";
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "移动端扫码录入";
+                rm.ClassMethodName = this.ToString() + ".DoQRCode()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-energy";
+                map.AddRefMethod(rm);
+
                 #endregion 输入多选
 
                 #region 高级设置.
@@ -415,7 +421,14 @@ namespace BP.Sys.FrmUI
                 this._enMap = map;
                 return this._enMap;
             }
-
+        }
+        /// <summary>
+        /// 移动端扫码录入
+        /// </summary>
+        /// <returns></returns>
+        public string DoQRCode()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/QRCode.htm?FrmID=" + this.FK_MapData + "&MyPK=" + this.MyPK;
         }
         public string DoGloValStyles()
         {
@@ -446,6 +459,7 @@ namespace BP.Sys.FrmUI
                         break;
                     case DBType.Oracle:
                     case DBType.PostgreSQL:
+                    case DBType.UX:
                         sql = "SELECT '' AS No, '默认风格' as Name FROM DUAL ";
                         break;
                     default:
@@ -497,7 +511,7 @@ namespace BP.Sys.FrmUI
         protected override void afterInsertUpdateAction()
         {
             MapAttr mapAttr = new MapAttr();
-            mapAttr.MyPK = this.MyPK;
+            mapAttr.setMyPK(this.MyPK);
             mapAttr.RetrieveFromDBSources();
             mapAttr.Update();
 
@@ -520,7 +534,7 @@ namespace BP.Sys.FrmUI
         }
         public string DoTurnFieldType(string type)
         {
-            if (type.ToLower().Equals("int")==true)
+            if (type.ToLower().Equals("int") == true)
             {
                 this.SetValByKey(MapAttrAttr.MyDataType, DataType.AppInt);
                 this.SetValByKey(MapAttrAttr.LGType, 0); //设置成普通类型的.
@@ -568,34 +582,43 @@ namespace BP.Sys.FrmUI
                 return "转换为 boolean 类型执行成功，请您手工修改字段类型int，以防止cc不能自动转换过来.";
             }
 
-
-            return "err@输入的类型错误:" +type;
+            return "err@输入的类型错误:" + type;
         }
-
+        /// <summary>
+        /// 字段重命名
+        /// </summary>
+        /// <param name="newField"></param>
+        /// <returns></returns>
         public string DoRenameField(string newField)
         {
-            string sql = "";
-            if (this.FK_MapData.IndexOf("ND") == 0)
-            {
-                string strs = this.FK_MapData.Replace("ND", "");
-                strs = strs.Substring(0, strs.Length - 2);
+            if (this.KeyOfEn.Equals(newField) == true)
+                return "err@与现在的名字相同.";
 
-                string rptTable = "ND" + strs + "Rpt";
-                MapDatas mds = new MapDatas();
-                mds.Retrieve(MapDataAttr.PTable, rptTable);
+            string sql = "SELECT COUNT(MyPK) as Num FROM Sys_MapAttr WHERE MyPK='" + this.KeyOfEn + "_" + newField + "'";
+            if (DBAccess.RunSQLReturnValInt(sql) >= 1)
+                return "err@该字段已经存在[" + newField + "].";
 
-                foreach (MapData item in mds)
-                {
-                    sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "',  MyPK='" + item.No + "_" + newField + "' WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + item.No + "'";
-                    DBAccess.RunSQL(sql);
-                }
-            }
-            else
+            //修改字段名.
+            sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "', MyPK='" + this.FK_MapData + "_" + newField + "'  WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
+            DBAccess.RunSQL(sql);
+
+            //如果是节点表单，就修改其他的字段.
+            if (this.FK_MapData.IndexOf("ND") != 0)
+                return "重名称成功,如果是自由表单，请关闭表单设计器重新打开.";
+
+            string strs = this.FK_MapData.Replace("ND", "");
+            strs = strs.Substring(0, strs.Length - 2);
+            string rptTable = "ND" + strs + "Rpt";
+            MapDatas mds = new MapDatas();
+            mds.Retrieve(MapDataAttr.PTable, rptTable);
+
+            foreach (MapData item in mds)
             {
-                sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "', MyPK='" + this.FK_MapData + "_" + newField + "'  WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
+                sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "',  MyPK='" + item.No + "_" + newField + "' WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + item.No + "'";
                 DBAccess.RunSQL(sql);
             }
 
+            //自由表单模板的替换 
             return "重名称成功,如果是自由表单，请关闭表单设计器重新打开.";
         }
         /// <summary>
@@ -667,8 +690,8 @@ namespace BP.Sys.FrmUI
         public string DoSetCheck()
         {
             this.UIContralType = UIContralType.SignCheck;
-            this.UIIsEnable = false;
-            this.UIVisible = false;
+            this.setUIIsEnable(false);
+            this.setUIVisible(false);
             this.Update();
             return "设置成功,当前文本框已经是签批组件了,请关闭掉当前的窗口.";
         }
@@ -680,8 +703,8 @@ namespace BP.Sys.FrmUI
             if (mapAttrs.Count == 0)
             {
                 this.UIContralType = UIContralType.FlowBBS;
-                this.UIIsEnable = false;
-                this.UIVisible = false;
+                this.setUIIsEnable(false);
+                this.setUIVisible(false);
                 this.Update();
                 return "设置成功,当前文本框已经是评论组件了,请关闭掉当前的窗口.";
             }
@@ -790,7 +813,7 @@ namespace BP.Sys.FrmUI
         protected override bool beforeUpdateInsertAction()
         {
             MapAttr attr = new MapAttr();
-            attr.MyPK = this.MyPK;
+            attr.setMyPK(this.MyPK);
             attr.RetrieveFromDBSources();
 
             //高度.
@@ -801,7 +824,7 @@ namespace BP.Sys.FrmUI
 
             if (attr.IsRichText || attr.IsSupperText == 1)
             {
-                attr.MaxLen = 4000;
+                attr.setMaxLen(4000);
                 this.SetValByKey(MapAttrAttr.MaxLen, 4000);
             }
 
@@ -809,7 +832,7 @@ namespace BP.Sys.FrmUI
             #region 自动扩展字段长度. 需要翻译.
             if (attr.MaxLen < this.MaxLen)
             {
-                attr.MaxLen = this.MaxLen;
+                attr.setMaxLen(this.MaxLen);
 
                 string sql = "";
                 MapData md = new MapData();
@@ -818,25 +841,39 @@ namespace BP.Sys.FrmUI
                 {
                     if (DBAccess.IsExitsTableCol(md.PTable, this.KeyOfEn) == true)
                     {
-                        if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                            sql = "ALTER TABLE " + md.PTable + " ALTER column " + this.KeyOfEn + " NVARCHAR(" + attr.MaxLen + ")";
-
-                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                            sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
-
-                        if (SystemConfig.AppCenterDBType == DBType.Oracle
-                            || SystemConfig.AppCenterDBType == DBType.DM)
-                            sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR2(" + attr.MaxLen + ")";
-
-                        if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                            sql = "ALTER table " + md.PTable + " alter " + attr.Field + " type character varying(" + attr.MaxLen + ")";
-
+                        switch (SystemConfig.AppCenterDBType)
+                        {
+                            case DBType.MSSQL:
+                                sql = "ALTER TABLE " + md.PTable + " ALTER column " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
+                                break;
+                            case DBType.MySQL:
+                                sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
+                                break;
+                            case DBType.Oracle:
+                            case DBType.DM:
+                                sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR2(" + attr.MaxLen + ")";
+                                break;
+                            case DBType.PostgreSQL:
+                            case DBType.UX:
+                                sql = "ALTER table " + md.PTable + " alter " + attr.Field + " type character varying(" + attr.MaxLen + ")";
+                                break;
+                            default:
+                                throw new Exception("err@没有判断的数据库类型.");
+                        }                        
                         DBAccess.RunSQL(sql); //如果是oracle如果有nvarchar与varchar类型，就会出错.
                     }
                 }
             }
+
+            //设置默认值.
             #endregion 自动扩展字段长度.
 
+            #region 设置默认值.
+            MapData mymd = new MapData();
+            mymd.No = this.FK_MapData;
+            if (mymd.RetrieveFromDBSources() == 1)
+                BP.DA.DBAccess.UpdateTableColumnDefaultVal(mymd.PTable, attr.Field, attr.DefVal);
+            #endregion 设置默认值.
 
             //默认值.
             string defval = this.GetValStrByKey("ExtDefVal");

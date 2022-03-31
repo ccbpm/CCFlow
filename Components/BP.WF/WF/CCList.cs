@@ -115,7 +115,7 @@ namespace BP.WF
             {
                 //@sly 这里去掉了业务逻辑.
                 if (value == CCSta.Read)
-                    this.ReadDT = DataType.CurrentDataTime;
+                    this.ReadDT = DataType.CurrentDateTime;
                 this.SetValByKey(CCListAttr.Sta, (int)value);
             }
         }

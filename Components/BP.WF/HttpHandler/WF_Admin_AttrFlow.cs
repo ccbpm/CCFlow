@@ -6,6 +6,7 @@ using BP.Sys;
 using BP.DA;
 using BP.WF.Template;
 using BP.WF.HttpHandler;
+using BP.Difference;
 
 namespace BP.WF.HttpHandler
 {
@@ -233,7 +234,7 @@ namespace BP.WF.HttpHandler
             //获得数据源的表.
             BP.Sys.SFDBSrc src = new SFDBSrc(fl.DTSDBSrc);
             DataTable dt = src.GetTables();
-            if (src.DBSrcType == Sys.DBSrcType.Oracle || src.DBSrcType == Sys.DBSrcType.PostgreSQL)
+            if (src.DBSrcType == BP.Sys.DBSrcType.Oracle || src.DBSrcType == BP.Sys.DBSrcType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -292,7 +293,7 @@ namespace BP.WF.HttpHandler
             //绑定表. 
             BP.Sys.SFDBSrc src = new SFDBSrc(dbsrc);
             DataTable dt = src.GetTables();
-            if (src.DBSrcType == Sys.DBSrcType.Oracle || src.DBSrcType == Sys.DBSrcType.PostgreSQL)
+            if (src.DBSrcType == BP.Sys.DBSrcType.Oracle || src.DBSrcType == BP.Sys.DBSrcType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -312,7 +313,7 @@ namespace BP.WF.HttpHandler
 
             DataTable dtColms = src.GetColumns(this.GetRequestVal("TableName"));
             dtColms.TableName = "Cols";
-            if (src.DBSrcType == Sys.DBSrcType.Oracle || src.DBSrcType == Sys.DBSrcType.PostgreSQL)
+            if (src.DBSrcType == BP.Sys.DBSrcType.Oracle || src.DBSrcType == BP.Sys.DBSrcType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dtColms.Columns["NO"].ColumnName = "No";
                 dtColms.Columns["NAME"].ColumnName = "Name";
@@ -336,7 +337,7 @@ namespace BP.WF.HttpHandler
         {
             string rpt = "ND" + int.Parse(this.FK_Flow) + "Rpt";
             Flow fl = new Flow(this.FK_Flow);
-            MapAttrs attrs = new MapAttrs(rpt);
+            MapAttrs mattrs = new MapAttrs(rpt);
 
             string pk = this.GetRequestVal("DDL_OID");
             if (DataType.IsNullOrEmpty(pk) == true)
@@ -346,7 +347,7 @@ namespace BP.WF.HttpHandler
             string lcStr = "";//要同步的流程字段
             string ywStr = "";//第三方字段
             string err = "";
-            foreach (MapAttr attr in attrs)
+            foreach (MapAttr attr in mattrs)
             {
                 int val = this.GetRequestValChecked("CB_" + attr.KeyOfEn);
                 if (val == 0)
@@ -432,19 +433,19 @@ namespace BP.WF.HttpHandler
 
                 //en.SetValByKey(BP.WF.Template.FlowAttr.StartGuideWay, val);
 
-                //if (en.StartGuideWay == Template.StartGuideWay.None)
+                //if (en.StartGuideWay == StartGuideWay.None)
                 //{
                 //    en.StartGuideWay = BP.WF.Template.StartGuideWay.None;
                 //}
 
-                //if (en.StartGuideWay == Template.StartGuideWay.ByHistoryUrl)
+                //if (en.StartGuideWay == StartGuideWay.ByHistoryUrl)
                 //{
                 //    en.StartGuidePara1 = this.GetRequestVal("TB_ByHistoryUrl");
                 //    en.StartGuidePara2 = "";
                 //    en.StartGuideWay = BP.WF.Template.StartGuideWay.ByHistoryUrl;
                 //}
 
-                //if (en.StartGuideWay == Template.StartGuideWay.BySelfUrl)
+                //if (en.StartGuideWay == StartGuideWay.BySelfUrl)
                 //{
                 //    en.StartGuidePara1 = this.GetRequestVal("TB_SelfURL");
                 //    en.StartGuidePara2 = "";
@@ -452,7 +453,7 @@ namespace BP.WF.HttpHandler
                 //}
 
                 ////单条模式.
-                //if (en.StartGuideWay == Template.StartGuideWay.BySQLOne)
+                //if (en.StartGuideWay == StartGuideWay.BySQLOne)
                 //{
                 //    en.StartGuidePara1 = this.GetRequestVal("TB_BySQLOne1");  //查询语句.
                 //    en.StartGuidePara2 = this.GetRequestVal("TB_BySQLOne2");  //列表语句.
@@ -462,14 +463,14 @@ namespace BP.WF.HttpHandler
                 //    en.StartGuideWay = BP.WF.Template.StartGuideWay.BySQLOne;
                 //}
                 ////多条模式
-                //if (en.StartGuideWay == Template.StartGuideWay.BySQLMulti)
+                //if (en.StartGuideWay == StartGuideWay.BySQLMulti)
                 //{
                 //    en.StartGuidePara1 = this.GetRequestVal("TB_BySQLMulti1");  //查询语句.
                 //    en.StartGuidePara2 = this.GetRequestVal("TB_BySQLMulti2");  //列表语句.
                 //    en.StartGuideWay = BP.WF.Template.StartGuideWay.BySQLMulti;
                 //}
                 ////多条-子父流程-合卷审批.
-                //if (en.StartGuideWay == Template.StartGuideWay.SubFlowGuide)
+                //if (en.StartGuideWay == StartGuideWay.SubFlowGuide)
                 //{
                 //    en.StartGuidePara1 = this.GetRequestVal("TB_SubFlow1");  //查询语句.
                 //    en.StartGuidePara2 = this.GetRequestVal("TB_SubFlow2");  //列表语句.
@@ -479,7 +480,7 @@ namespace BP.WF.HttpHandler
                 //BP.WF.Template.FrmNodes fns = new BP.WF.Template.FrmNodes(int.Parse(this.FK_Flow + "01"));
                 //if (fns.Count >= 2)
                 //{
-                //    if (en.StartGuideWay == Template.StartGuideWay.ByFrms)
+                //    if (en.StartGuideWay == StartGuideWay.ByFrms)
                 //        en.StartGuideWay = BP.WF.Template.StartGuideWay.ByFrms;
                 //}
 
@@ -542,15 +543,22 @@ namespace BP.WF.HttpHandler
 
             string flowNo = this.FK_Flow;
             string FK_FlowSort = this.GetRequestVal("FK_Sort");
+
             //检查流程编号
             if (DataType.IsNullOrEmpty(flowNo) == false)
             {
                 Flow fl = new Flow(flowNo);
                 FK_FlowSort = fl.FK_FlowSort;
             }
+
             //检查流程类别编号
-            if (DataType.IsNullOrEmpty(FK_FlowSort))
-                return "err@所选流程类别编号不存在。";
+            if (DataType.IsNullOrEmpty(FK_FlowSort) == true)
+            {
+                if (BP.Sys.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                    FK_FlowSort = BP.Web.WebUser.OrgNo;
+                else
+                    return "err@所选流程类别编号不存在。";
+            }
 
             //导入模式
             BP.WF.ImpFlowTempleteModel model = (BP.WF.ImpFlowTempleteModel)this.GetRequestValInt("ImpWay");
@@ -577,7 +585,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string NodesIcon_Init()
         {
-            DataSet ds = new System.Data.DataSet();
+            DataSet ds = new DataSet();
             Nodes nds = new Nodes(this.FK_Flow);
             DataTable dt = nds.ToDataTableField("Nodes");
             ds.Tables.Add(dt);
@@ -585,7 +593,7 @@ namespace BP.WF.HttpHandler
             //把文件放入ds.
             string path = SystemConfig.PathOfWebApp + "WF/Admin/ClientBin/NodeIcon/";
             string[] strs = System.IO.Directory.GetFiles(path);
-            DataTable dtIcon = new System.Data.DataTable();
+            DataTable dtIcon = new DataTable();
             dtIcon.Columns.Add("No");
             dtIcon.Columns.Add("Name");
             foreach (string str in strs)
@@ -625,7 +633,7 @@ namespace BP.WF.HttpHandler
 
             //mypk
             BP.WF.Template.PushMsg msg = new BP.WF.Template.PushMsg();
-            msg.MyPK = this.MyPK;
+            msg.setMyPK(this.MyPK);
             msg.RetrieveFromDBSources();
             ds.Tables.Add(msg.ToDataTableField("PushMsgEntity"));
 
@@ -639,7 +647,7 @@ namespace BP.WF.HttpHandler
         public string PushMsg_Save()
         {
             BP.WF.Template.PushMsg msg = new BP.WF.Template.PushMsg();
-            msg.MyPK = this.MyPK;
+            msg.setMyPK(this.MyPK);
             msg.RetrieveFromDBSources();
 
             msg.FK_Event = this.FK_Event;  //流程时限规则
@@ -678,7 +686,7 @@ namespace BP.WF.HttpHandler
             //保存.
             if (DataType.IsNullOrEmpty(msg.MyPK) == true)
             {
-                msg.MyPK = DBAccess.GenerGUID();
+                msg.setMyPK(DBAccess.GenerGUID());
                 msg.Insert();
             }
             else

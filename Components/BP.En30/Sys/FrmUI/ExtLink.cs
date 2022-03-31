@@ -98,7 +98,7 @@ namespace BP.Sys.FrmUI
         /// <param name="mypk"></param>
         public ExtLink(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>

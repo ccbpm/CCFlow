@@ -184,7 +184,7 @@ namespace BP.Sys.FrmUI
         /// <param name="mypk"></param>
         public FrmImgAth(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -235,17 +235,17 @@ namespace BP.Sys.FrmUI
 
         protected override bool beforeUpdateInsertAction()
         {
-            //this.MyPK = this.FK_MapData + "_" + this.CtrlID;
+            //this.setMyPK(this.FK_MapData + "_" + this.CtrlID;
             return base.beforeUpdateInsertAction();
         }
 
         protected override void afterInsertUpdateAction()
         {
             //在属性实体集合插入前，clear父实体的缓存.
-            BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
 
             BP.Sys.FrmImgAth imgAth = new BP.Sys.FrmImgAth();
-            imgAth.MyPK = this.MyPK;
+            imgAth.setMyPK(this.MyPK);
             imgAth.RetrieveFromDBSources();
             imgAth.Update();
 
@@ -253,17 +253,17 @@ namespace BP.Sys.FrmUI
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
 
             MapAttr attr = new MapAttr();
-            attr.MyPK = this.FK_MapData + "_" + imgAth.CtrlID;
+            attr.setMyPK(this.FK_MapData + "_" + imgAth.CtrlID);
             if (attr.RetrieveFromDBSources() == 0)
             {
-                attr.FK_MapData = this.FK_MapData;
+                attr.setFK_MapData(this.FK_MapData);
                 attr.Name = this.Name;
-                attr.KeyOfEn = imgAth.CtrlID;
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.FrmImgAth;
+                attr.setKeyOfEn(imgAth.CtrlID);
+                attr.setMyDataType(DataType.AppString);
+                attr.setUIContralType(UIContralType.FrmImgAth);
                 attr.GroupID = this.GroupID;
                 attr.IsEnableInAPP = true;
-                attr.UIVisible = true;
+                attr.setUIVisible(true);
                 attr.DirectInsert();
             }
             else
@@ -283,8 +283,8 @@ namespace BP.Sys.FrmUI
         {
             //把相关的字段也要删除.
             MapAttrString attr = new MapAttrString();
-            attr.MyPK = this.MyPK;
-            attr.FK_MapData = this.FK_MapData;
+            attr.setMyPK(this.MyPK);
+            attr.setFK_MapData(this.FK_MapData);
             attr.Delete();
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
@@ -311,9 +311,9 @@ namespace BP.Sys.FrmUI
         public FrmImgAths(string fk_mapdata)
         {
             if (SystemConfig.IsDebug)
-                this.Retrieve(FrmLineAttr.FK_MapData, fk_mapdata);
+                this.Retrieve(MapAttrAttr.FK_MapData, fk_mapdata);
             else
-                this.RetrieveFromCash(FrmLineAttr.FK_MapData, (object)fk_mapdata);
+                this.RetrieveFromCash(MapAttrAttr.FK_MapData, (object)fk_mapdata);
         }
         /// <summary>
         /// 得到它的 Entity

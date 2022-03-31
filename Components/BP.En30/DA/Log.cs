@@ -13,7 +13,7 @@ namespace BP.DA
         /// <summary>
         /// Bug.
         /// </summary>
-        Debug=0,
+        Debug = 0,
         /// <summary>
         /// 提示
         /// </summary>
@@ -32,235 +32,46 @@ namespace BP.DA
     /// </summary>
     public class Log
     {
-        #region 在测试状态下
-        public static void DebugWriteInfo(string msg)
+        private static NLog.Logger _logger = null;
+        private static NLog.Logger logger
         {
-            //	if (SystemConfig.IsDebug)
-            DefaultLogWriteLine(LogType.Info, msg);
-        }
-        public static void DebugWriteWarning(string msg)
-        {
-            //if (SystemConfig.IsDebug)
-            DefaultLogWriteLine(LogType.Warning, msg);
-        }
-        public static void DebugWriteError(string msg)
-        {
-            //  if (SystemConfig.IsDebug)
-            DefaultLogWriteLine(LogType.Error, msg);
-        }
-        #endregion
-
-        /// <summary>
-        /// 写入异常
-        /// </summary>
-        /// <param name="ex">写入异常</param>
-        public static void DefaultLogWriteLineError(Exception ex)
-        {
-            DefaultLogWriteLine(LogType.Error, ex.Message);
-            DefaultLogWriteLine(LogType.Error, ex.StackTrace);
-        }
-        /// <summary>
-        /// 写入错误
-        /// </summary>
-        /// <param name="msg">错误消息</param>
-        /// <param name="isOutDos">是否输出到dos</param>
-        public static void DefaultLogWriteLineError(string msg, bool isOutDos=false)
-        {
-            DefaultLogWriteLine(LogType.Error, msg);
-            if (isOutDos)
-                System.Console.WriteLine(msg);
-        }
-        /// <summary>
-        /// 写入信息
-        /// </summary>
-        /// <param name="msg">信息</param>
-        /// <param name="isoutDos">是否输出到dos</param>
-        public static void DefaultLogWriteLineInfo(string msg, bool isoutDos=false)
-        {
-            DefaultLogWriteLine(LogType.Info, msg);
-            if (isoutDos)
-                System.Console.WriteLine(msg);
-        }
-        /// <summary>
-        /// 写入警告
-        /// </summary>
-        /// <param name="msg">信息</param>
-        /// <param name="isOutdoc">是否输出到dos</param>
-        public static void DefaultLogWriteLineWarning(string msg, bool isOutdoc=false)
-        {
-            DefaultLogWriteLine(LogType.Warning, msg);
-            if (isOutdoc)
-                System.Console.WriteLine(msg);
-        }
-
-        #region 经常使用的静态方法
-        private static Log _log = new Log(Log.GetLogFileName());
-        public static void DefaultLogWriteLine(LogType type, string info)
-        {
-            _log.WriteLine(type, info);
-        }
-        public static void DefaultLogWriteLineWithOutUseInfo(string info)
-        {
-            _log.openFile();
-            _log.writelog(info);
-            _log.closeFile();
-        }
-        #endregion
-
-        private bool isReady = false;
-        private StreamWriter swLog;
-        private string strLogFile;
-        private string userName = "System";
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="LogFileName"></param>
-        public Log(string LogFileName)
-        {
-            this.strLogFile = LogFileName;
-            try
-            {
-                openFile();
-                writelog("-----------------------------------------------------------------------------------------------------");
-            }
-            finally
-            {
-                closeFile();
-            }
-        }
-        /// <summary>
-        /// 用户
-        /// </summary>
-        public string UserName
-        {
-            set { this.userName = value; }
-        }
-        private void writelog(string msg)
-        {
-            if (isReady)
-            {
-                swLog.WriteLine(msg);
-            }
-            else
-            {
-                Console.WriteLine("Error Cannot write to log file.");
-            }
-        }
-        public static void ClearLog()
-        {
-            try
-            {
-                File.Delete(SystemConfig.PathOfLog + DateTime.Now.ToString("\\yyyy_MM_dd.log"));
-            }
-            catch
-            {
-            }
-        }
-        private void openFile()
-        {
-            try
-            {
-                swLog = File.AppendText(strLogFile);
-                isReady = true;
-            }
-            catch
-            {
-                isReady = false;
-            }
-        }
-        private void closeFile()
-        {
-            if (isReady)
+            get
             {
                 try
                 {
-                    swLog.Flush();
-                    swLog.Close();
+                    if (_logger != null)
+                        return _logger;
+                    _logger = NLog.LogManager.GetCurrentClassLogger();
+                    return _logger;
                 }
-                catch
+                catch (Exception ex)
                 {
+                    return null;
                 }
             }
         }
-        /// <summary>
-        /// 取得Log的文件路径和文件名
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static string GetLogFileName()
+        #region 在测试状态下
+        public static void DebugWriteInfo(string msg)
         {
-            string filepath = SystemConfig.PathOfLog;
+            if (logger != null)
+                logger.Info(msg);
 
-            //如果目录没有建立，则建立.
-            if (Directory.Exists(filepath) == false)
-                Directory.CreateDirectory(filepath);
-
-            return filepath + "\\" + DateTime.Now.ToString("yyyy_MM_dd") + ".log";
         }
-        /// <summary>
-        /// 写一行日志
-        /// </summary>
-        /// <param name="message"></param>
-        public void WriteLine(string message)
+        public static void DebugWriteWarning(string msg)
         {
-            WriteLine(LogType.Info, message);
+            if (logger != null)
+                logger.Warn(msg);
         }
-        /// <summary>
-        /// 写一行日志
-        /// </summary>
-        /// <param name="logtype"></param>
-        /// <param name="message"></param>
-        public void WriteLine(LogType logtype, string message)
+        public static void DebugWriteError(string msg)
         {
-            //			string stub = DateTime.Now.ToString("@HH:MM:ss") ;
-            string stub = DateTime.Now.ToString("dd日HH时mm分ss秒");
-            switch (logtype)
-            {
-                case LogType.Info:
-                    stub += "Info:";
-                    break;
-                case LogType.Warning:
-                    stub += "Warning:";
-                    break;
-                case LogType.Error:
-                    stub += "Fatal:";
-                    break;
-            }
-            stub = stub + userName + "');\"" + message;
-            openFile();
-            writelog(stub);
-            closeFile();
-            //Console.WriteLine(stub);
+            if (logger != null)
+                logger.Error(msg);
         }
-        /// <summary>
-        /// 打开日志目录
-        /// </summary>
-        public static void OpenLogDir()
+        public static void DebugWriteError(Exception ex)
         {
-            string file = SystemConfig.PathOfLog;
-            try
-            {
-                System.Diagnostics.Process.Start(file);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("@打开日志目录出现错误。" + ex.Message);
-            }
+            if (logger != null)
+                logger.Error(ex.Message);
         }
-        /// <summary>
-        /// 打开今天的日志
-        /// </summary>
-        public static void OpeLogToday()
-        {
-            string file = SystemConfig.PathOfLog + DateTime.Now.ToString("yyyy_MM_dd") + ".log";
-            try
-            {
-                System.Diagnostics.Process.Start(file);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("@打开日志文件出现错误。" + ex.Message);
-            }
-        }
+        #endregion
     }
 }

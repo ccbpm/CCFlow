@@ -331,7 +331,7 @@ namespace BP.WF.Template
             get
             {
                 UAC uac = new UAC();
-                
+
                 if (WebUser.IsAdmin == false)
                     throw new Exception("err@管理员登录用户信息丢失,当前会话[" + WebUser.No + "," + WebUser.Name + "]");
                 uac.IsUpdate = true;
@@ -382,7 +382,7 @@ namespace BP.WF.Template
                 map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 4, 3);
                 map.SetHelperUrl(FlowAttr.No, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661868&doc_id=31094"); //使用alert的方式显示帮助信息.
 
-               // map.AddDDLEntities(FlowAttr.FK_FlowSort, null, "类别", new FlowSorts(), true);
+                // map.AddDDLEntities(FlowAttr.FK_FlowSort, null, "类别", new FlowSorts(), true);
 
                 //处理流程类别.
                 string sql = "";
@@ -435,7 +435,7 @@ namespace BP.WF.Template
                  true, true, "GuestFlowRole", "@0=不参与@1=开始节点参与@2=中间节点参与");
                 map.SetHelperUrl(FlowAttr.GuestFlowRole, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661876&doc_id=31094");
 
-                map.AddDDLSysEnum(FlowAttr.FlowAppType, (int)FlowAppType.Normal, "流程应用类型",true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
+               // map.AddDDLSysEnum(FlowAttr.FlowAppType, 0, "流程应用类型", true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
                 //map.SetHelperUrl(FlowAttr.FlowAppType, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661877&doc_id=31094");
 
                 //map.AddDDLSysEnum(FlowAttr.SDTOfFlow, (int)TimelineRole.ByNodeSet, "时效性规则",
@@ -448,19 +448,19 @@ namespace BP.WF.Template
                 map.SetHelperUrl(FlowAttr.Draft, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661878&doc_id=31094");
 
                 // add for 华夏银行.
-                map.AddDDLSysEnum(FlowAttr.FlowDeleteRole, (int)FlowDeleteRole.AdminOnly, "流程实例删除规则",true, true, FlowAttr.FlowDeleteRole,
+                map.AddDDLSysEnum(FlowAttr.FlowDeleteRole, (int)FlowDeleteRole.AdminOnly, "流程实例删除规则", true, true, FlowAttr.FlowDeleteRole,
             "@0=超级管理员可以删除@1=分级管理员可以删除@2=发起人可以删除@3=节点启动删除按钮的操作员");
                 map.SetHelperUrl(FlowAttr.FlowDeleteRole, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661879&doc_id=31094");
 
 
                 //子流程结束时，让父流程自动运行到下一步。
-                map.AddBoolean(FlowAttr.IsToParentNextNode, false, "子流程结束时，让父流程自动运行到下一步", true, true,true);
-                map.SetHelperUrl(FlowAttr.IsToParentNextNode, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661880&doc_id=31094");
+                //map.AddBoolean(FlowAttr.IsToParentNextNode, false, "子流程结束时，让父流程自动运行到下一步", true, true, true);
+                //map.SetHelperUrl(FlowAttr.IsToParentNextNode, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661880&doc_id=31094");
 
                 //map.AddDDLSysEnum(FlowAttr.FlowAppType, (int)FlowAppType.Normal, "流程应用类型", true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
                 //map.SetHelperUrl(FlowAttr.FlowAppType, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661877&doc_id=31094");
 
-                map.AddTBString(FlowAttr.HelpUrl, null, "帮助文档", true, false, 0, 100, 10, true);
+            //    map.AddTBString(FlowAttr.HelpUrl, null, "帮助文档", true, false, 0, 100, 10, true);
 
 
                 //为 莲荷科技增加一个系统类型, 用于存储当前所在流程树的第2级流程树编号.
@@ -475,7 +475,7 @@ namespace BP.WF.Template
 
                 // add 2014-10-19.
                 map.AddDDLSysEnum(FlowAttr.ChartType, (int)FlowChartType.Icon, "节点图形类型", true, true,
-                    "ChartType", "@0=几何图形@1=肖像图片"); 
+                    "ChartType", "@0=几何图形@1=肖像图片");
                 map.SetHelperUrl(FlowAttr.ChartType, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661883&doc_id=31094");
 
                 map.AddTBString(FlowAttr.HostRun, null, "运行主机(IP+端口)", true, false, 0, 40, 10, true);
@@ -527,7 +527,7 @@ namespace BP.WF.Template
                 msg += "\t\n 2. 用于待办的列表信息显示.";
                 msg += "\t\n 3. 配置格式为. Tel,Addr,Email  这些字段区分大小写并且是节点表单字段.";
                 msg += "\t\n 4. 数据存储在WF_GenerWorkFlow.AtPara里面.";
-                msg += "\t\n 5. 存储格式为: @BuessFields = 电话^Tel^18992323232;地址^Addr^山东济南;";
+                msg += "\t\n 5. 存储格式为: @BuessFields = 电话^Tel^18992323232;地址^Addr^山东成都;";
                 map.SetHelperAlert(FlowAttr.BuessFields, msg);
 
                 //表单URL. //@liuqiang 把他翻译到java里面去.
@@ -576,7 +576,7 @@ namespace BP.WF.Template
                 map.AddBoolean(FlowAttr.IsOPEnable, true, "是否显示操作", true, true, false);
 
                 map.AddBoolean(FlowAttr.IsOPEnable, true, "是否显示操作", true, true, false);
-                map.AddDDLSysEnum(FlowAttr.TrackOrderBy, 0, "排序方式", true, true, FlowAttr.TrackOrderBy,"@0=按照时间先后顺序@1=倒序(新发生的在前面)");
+                map.AddDDLSysEnum(FlowAttr.TrackOrderBy, 0, "排序方式", true, true, FlowAttr.TrackOrderBy, "@0=按照时间先后顺序@1=倒序(新发生的在前面)");
                 #endregion 轨迹信息
 
                 #region 开发者信息.
@@ -731,7 +731,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoCheck2018Url";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "icon-paper-plane";
-               // map.AddRefMethod(rm);
+                // map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.GroupName = "模拟测试";
@@ -775,7 +775,7 @@ namespace BP.WF.Template
                 #region 开发接口.
                 rm = new RefMethod();
                 rm.Title = "与业务表数据同步";
-               // rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/DTS.png";
+                // rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/DTS.png";
 
                 rm.ClassMethodName = this.ToString() + ".DoDTSBTable()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -803,7 +803,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "代码事件开发接口";
-               // rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/API.png";
+                // rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/API.png";
                 rm.ClassMethodName = this.ToString() + ".DoAPICodeFEE()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "开发接口";
@@ -844,11 +844,11 @@ namespace BP.WF.Template
 
 
                 //设置相关字段.
-               /* rm.RefAttrKey = FlowAttr.TitleRoleNodes;
-                rm.RefAttrLinkLabel = "重新生成流程标题";
-                rm.Target = "_blank";*/
+                /* rm.RefAttrKey = FlowAttr.TitleRoleNodes;
+                 rm.RefAttrLinkLabel = "重新生成流程标题";
+                 rm.Target = "_blank";*/
                 map.AddRefMethod(rm);
-                 
+
 
 
                 rm = new RefMethod();
@@ -1046,6 +1046,17 @@ namespace BP.WF.Template
                 #endregion 流程监控.
 
                 #region 实验中的功能
+
+                rm = new RefMethod();
+                rm.Title = "节点属性批量设置";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/RptOrder.png";
+                rm.ClassMethodName = this.ToString() + ".DoNodeAttrsBatchSetting()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "实验中的功能";
+                rm.Visable = false;
+                rm.Icon = "icon-briefcase";
+                map.AddRefMethod(rm);
+
                 rm = new RefMethod();
                 rm.Title = "数据订阅-实验中";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/RptOrder.png";
@@ -1210,12 +1221,12 @@ namespace BP.WF.Template
         public string DoDelFlows(string dtFrom, string dtTo, Boolean isDelCurrFlow)
         {
             //if (BP.Web.WebUser.No != "admin")
-             if (BP.Web.WebUser.IsAdmin == false)
-                    return "非管理员用户，不能删除。";
-            
-             
+            if (BP.Web.WebUser.IsAdmin == false)
+                return "非管理员用户，不能删除。";
+
+
             string sql = "";
-            if (isDelCurrFlow == true )
+            if (isDelCurrFlow == true)
                 sql = "SELECT WorkID, FK_Flow FROM WF_GenerWorkFlow  WHERE RDT >= '" + dtFrom + "' AND RDT <= '" + dtTo + "'  AND FK_Flow='" + this.No + "' ";
             else
                 sql = "SELECT WorkID, FK_Flow FROM WF_GenerWorkFlow  WHERE RDT >= '" + dtFrom + "' AND RDT <= '" + dtTo + "' ";
@@ -1232,14 +1243,14 @@ namespace BP.WF.Template
             }
             return msg;
         }
-        public void DoDelFlowByWorkID(Int64 workid,string fk_flow)
+        public void DoDelFlowByWorkID(Int64 workid, string fk_flow)
         {
             Flow flow = new Flow(fk_flow);
             #region 删除独立表单数据
             FrmNodes fns = new FrmNodes();
             fns.Retrieve(FrmNodeAttr.FK_Flow, fk_flow);
             string strs = "";
-            foreach(FrmNode frmNode in fns)
+            foreach (FrmNode frmNode in fns)
             {
                 if (strs.Contains("@" + frmNode.FK_Frm) == true)
                     continue;
@@ -1259,13 +1270,13 @@ namespace BP.WF.Template
             //流程运行信息
             DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList Where (WorkID=" + workid + " OR FID=" + workid + ")");
             //删除退回信息
-            DBAccess.RunSQL("DELETE FROM WF_ReturnWork Where WorkID=" + workid );
+            DBAccess.RunSQL("DELETE FROM WF_ReturnWork Where WorkID=" + workid);
             //考核信息
             DBAccess.RunSQL("DELETE FROM WF_CH Where (WorkID=" + workid + " OR FID=" + workid + ")");
             DBAccess.RunSQL("DELETE FROM WF_CHEval Where WorkID=" + workid);
 
             //接收人信息删除
-            DBAccess.RunSQL("DELETE FROM WF_SelectAccper Where WorkID=" + workid );
+            DBAccess.RunSQL("DELETE FROM WF_SelectAccper Where WorkID=" + workid);
             //流程信息流转自定义
             DBAccess.RunSQL("DELETE FROM WF_TransferCustom Where WorkID=" + workid);
 
@@ -1273,22 +1284,20 @@ namespace BP.WF.Template
             DBAccess.RunSQL("DELETE FROM WF_RememberMe Where FK_Node IN(SELECT NodeID From WF_Node WHERE FK_Flow='" + fk_flow + "')");
             //删除流程的抄送信息
             DBAccess.RunSQL("DELETE FROM WF_CCList WHERE WorkID=" + workid);
-            //删除单据信息
-            DBAccess.RunSQL("DELETE FROM WF_Bill WHERE WorkID=" + workid);
-
+           
             //删除流程实例的信息
             DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow Where (WorkID=" + workid + " OR FID=" + workid + ")");
 
             //删除track信息
-            if(DBAccess.IsExitsObject("ND"+int.Parse(fk_flow)+"Track")==true)
-                DBAccess.RunSQL("DELETE FROM ND"+ int.Parse(fk_flow)+"Track Where (WorkID=" + workid + " OR FID=" + workid + ")");
+            if (DBAccess.IsExitsObject("ND" + int.Parse(fk_flow) + "Track") == true)
+                DBAccess.RunSQL("DELETE FROM ND" + int.Parse(fk_flow) + "Track Where (WorkID=" + workid + " OR FID=" + workid + ")");
 
             //删除表单信息
-            if (DataType.IsNullOrEmpty(flow.PTable)==false && DBAccess.IsExitsObject(flow.PTable) == true)
-                DBAccess.RunSQL("DELETE FROM " + flow.PTable + " Where OID="+workid);
+            if (DataType.IsNullOrEmpty(flow.PTable) == false && DBAccess.IsExitsObject(flow.PTable) == true)
+                DBAccess.RunSQL("DELETE FROM " + flow.PTable + " Where OID=" + workid);
             //删除节点信息
             Nodes nds = new Nodes(fk_flow);
-            foreach(Node nd in nds)
+            foreach (Node nd in nds)
             {
                 try
                 {
@@ -1300,7 +1309,7 @@ namespace BP.WF.Template
 
                 }
                 MapDtls dtls = new MapDtls("ND" + nd.NodeID);
-                foreach(MapDtl dtl in dtls)
+                foreach (MapDtl dtl in dtls)
                 {
                     try
                     {
@@ -1310,7 +1319,7 @@ namespace BP.WF.Template
                     {
 
                     }
-                    
+
                 }
             }
 
@@ -1469,7 +1478,7 @@ namespace BP.WF.Template
         }
         public string DoBTable()
         {
-            return "../../Admin/AttrFlow/DTSBTable.htm?s=d34&ShowType=FlowFrms&FK_Node=" + int.Parse(this.No) + "01&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
+            return "../../Admin/AttrFlow/DTSBTable.htm?s=d34&ShowType=FlowFrms&FK_Node=" + int.Parse(this.No) + "01&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDateTime;
         }
         /// <summary>
         /// 批量发起
@@ -1477,7 +1486,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBatchStart()
         {
-            return "../../Admin/AttrFlow/BatchStart.htm?s=d34&ShowType=FlowFrms&FK_Node=" + int.Parse(this.No) + "01&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
+            return "../../Admin/AttrFlow/BatchStart.htm?s=d34&ShowType=FlowFrms&FK_Node=" + int.Parse(this.No) + "01&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDateTime;
         }
         /// <summary>
         /// 批量修改节点属性
@@ -1596,9 +1605,9 @@ namespace BP.WF.Template
 
                 #endregion 创建流程引擎主表数据
                 string ndTrack = "ND" + int.Parse(this.No) + "Track";
-                string actionType = (int)ActionType.Forward + "," + (int)ActionType.FlowOver+"," + (int)ActionType.ForwardFL + "," + (int)ActionType.ForwardHL+","+(int)ActionType.Skip;
+                string actionType = (int)ActionType.Forward + "," + (int)ActionType.FlowOver + "," + (int)ActionType.ForwardFL + "," + (int)ActionType.ForwardHL + "," + (int)ActionType.Skip;
                 string sql = "SELECT  * FROM " + ndTrack + " WHERE   ActionType IN (" + actionType + ")  and WorkID=" + workid + " ORDER BY RDT DESC, NDFrom ";
-                System.Data.DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0)
                     throw new Exception("@工作ID为:" + workid + "的数据不存在.");
 
@@ -1659,9 +1668,9 @@ namespace BP.WF.Template
                 rw.ReturnToNode = currWl.FK_Node;
                 rw.ReturnToEmp = currWl.FK_Emp;
                 rw.BeiZhu = note;
-                rw.RDT = DataType.CurrentDataTime;
+                rw.RDT = DataType.CurrentDateTime;
                 rw.IsBackTracking = false;
-                rw.MyPK = DBAccess.GenerGUID();
+                rw.setMyPK(DBAccess.GenerGUID());
                 rw.Insert();
                 #endregion   加入退回信息, 让接受人能够看到退回原因.
 
@@ -1692,6 +1701,15 @@ namespace BP.WF.Template
                 DBAccess.RunSQLs(sqls);
                 return "<font color=red>会滚期间出现错误</font><hr>" + ex.Message;
             }
+        }
+        /// <summary>
+        /// 重新生成报表数据
+        /// </summary>
+        /// <returns></returns>
+        public string DoReloadRptData()
+        {
+            Flow fl = new Flow(this.No);
+            return fl.DoReloadRptData();
         }
         /// <summary>
         /// 重新产生标题，根据新的规则.
@@ -1734,12 +1752,13 @@ namespace BP.WF.Template
             Sys.MapData md = new Sys.MapData(tableRpt);
             foreach (Work wk in wks)
             {
-                if (wk.Rec != WebUser.No)
+                GERpt rpt = new GERpt(tableRpt, wk.OID);
+                if (rpt.FlowStarter != WebUser.No)
                 {
                     BP.Web.WebUser.Exit();
                     try
                     {
-                        Emp emp = new Emp(wk.Rec);
+                        Emp emp = new Emp(rpt.FlowStarter);
                         BP.Web.WebUser.SignInOfGener(emp);
                     }
                     catch
@@ -1804,13 +1823,13 @@ namespace BP.WF.Template
                 Paras ps = new Paras();
                 ps.Add("Title", title);
                 ps.Add("OID", wk.OID);
-                if(DBAccess.IsExitsTableCol(md.PTable,"Title") == true)
+                if (DBAccess.IsExitsTableCol(md.PTable, "Title") == true)
                 {
                     ps.SQL = "UPDATE " + md.PTable + " SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + SystemConfig.AppCenterDBVarStr + "OID";
                     DBAccess.RunSQL(ps);
                 }
-               
-                if(table.Equals(md.PTable)==false && DBAccess.IsExitsTableCol(table, "Title") == true)
+
+                if (table.Equals(md.PTable) == false && DBAccess.IsExitsTableCol(table, "Title") == true)
                 {
                     ps.SQL = "UPDATE " + table + " SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + SystemConfig.AppCenterDBVarStr + "OID";
                     DBAccess.RunSQL(ps);
@@ -1826,7 +1845,7 @@ namespace BP.WF.Template
             return "全部生成成功,影响数据(" + wks.Count + ")条";
         }
 
-        
+
         /// <summary>
         /// 定义报表
         /// </summary>
@@ -1987,14 +2006,14 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrFlow/StartGuide/Default.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
-         
+
         /// <summary>
         /// 导入
         /// </summary>
         /// <returns></returns>
         public string DoImp()
         {
-            return "../../Admin/AttrFlow/Imp.htm?FK_Flow=" + this.No + "&Lang=CH";
+            return "../../Admin/AttrFlow/Imp.htm?FK_Flow=" + this.No + "&Lang=CH&FK_FlowSort="+this.FK_FlowSort;
         }
 
         /// <summary>
@@ -2032,6 +2051,9 @@ namespace BP.WF.Template
         /// </summary>
         protected override void afterUpdate()
         {
+            //写入日志.
+            BP.Sys.Base.Glo.WriteUserLog("更新流程属性：" + this.Name + " - " + this.No);
+
             // Flow fl = new Flow();
             // fl.No = this.No;
             // fl.RetrieveFromDBSources();
@@ -2065,7 +2087,7 @@ namespace BP.WF.Template
             fl.RetrieveFromDBSources();
 
             #region StartFlows的清缓存
-            if (fl.IsStartInMobile != this.IsStartInMobile || fl.IsCanStart != this.IsCanStart || fl.Name.Equals(this.Name)==false)
+            if (fl.IsStartInMobile != this.IsStartInMobile || fl.IsCanStart != this.IsCanStart || fl.Name.Equals(this.Name) == false)
             {
                 //清空WF_Emp 的StartFlows
                 DBAccess.RunSQL("UPDATE  WF_Emp Set StartFlows =''");
@@ -2152,8 +2174,6 @@ namespace BP.WF.Template
             }
             #endregion 检查数据完整性. - 同步业务表数据。
 
-
-
             return base.beforeUpdate();
         }
         protected override void afterInsertUpdateAction()
@@ -2190,7 +2210,7 @@ namespace BP.WF.Template
             if (DataType.IsNullOrEmpty(fs.ParentNo) == true)
                 fs.ParentNo = "0";
 
-            if(SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
                 if (fs.ParentNo.Equals(WebUser.OrgNo) == true || fs.ParentNo.Equals("100") == true)
                     this.SysType = fl.FK_FlowSort;
@@ -2210,7 +2230,7 @@ namespace BP.WF.Template
             }
             else
             {
-                if (fs.ParentNo.Equals( "99") || fs.ParentNo.Equals("0") )
+                if (fs.ParentNo.Equals("99") || fs.ParentNo.Equals("0"))
                 {
                     this.SysType = fl.FK_FlowSort;
                 }
@@ -2246,6 +2266,11 @@ namespace BP.WF.Template
         #endregion
 
         #region 实验中的功能.
+        public string DoNodeAttrsBatchSetting()
+        {
+            return "../../Admin/AttrFlow/NodeAttrsBatchSetting.htm?FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
+
+        }
         /// <summary>
         /// 删除多余的字段.
         /// </summary>

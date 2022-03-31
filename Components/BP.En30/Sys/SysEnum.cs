@@ -2,6 +2,7 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
+using System.Data;
 
 namespace BP.Sys
 {
@@ -117,6 +118,10 @@ namespace BP.Sys
                 this.SetValByKey(SysEnumAttr.EnumKey, value);
             }
         }
+        public void setEnumKey(string val)
+        {
+            this.SetValByKey(SysEnumAttr.EnumKey, val);
+        }
         #endregion
 
         #region 构造方法
@@ -133,7 +138,7 @@ namespace BP.Sys
             this.EnumKey = enumKey;
             this.Lang = BP.Web.WebUser.SysLang;
             this.IntKey = val;
-            this.MyPK = this.EnumKey + "_" + this.Lang + "_" + this.IntKey;
+            this.setMyPK(this.EnumKey + "_" + this.Lang + "_" + this.IntKey);
             int i = this.RetrieveFromDBSources();
             if (i == 0)
             {
@@ -154,7 +159,7 @@ namespace BP.Sys
             this.EnumKey = enumKey;
             this.Lang = Lang;
             this.IntKey = val;
-            this.MyPK = this.EnumKey + "_" + this.Lang + "_" + this.IntKey;
+            this.setMyPK(this.EnumKey + "_" + this.Lang + "_" + this.IntKey);
             int i = this.RetrieveFromDBSources();
             if (i == 0)
             {
@@ -209,10 +214,10 @@ namespace BP.Sys
                 this.Lang = BP.Web.WebUser.SysLang;
 
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-                this.MyPK = this.EnumKey + "_" + this.Lang + "_" + this.IntKey + "_" + BP.Web.WebUser.OrgNo; //关联的主键.
+                this.setMyPK(this.EnumKey + "_" + this.Lang + "_" + this.IntKey + "_" + BP.Web.WebUser.OrgNo); //关联的主键.
 
             if (SystemConfig.CCBPMRunModel != CCBPMRunModel.SAAS)
-                this.MyPK = this.EnumKey + "_" + this.Lang + "_" + this.IntKey;
+                this.setMyPK(this.EnumKey + "_" + this.Lang + "_" + this.IntKey);
         }
 
         protected override bool beforeUpdateInsertAction()
@@ -229,7 +234,7 @@ namespace BP.Sys
         {
             //获取引用枚举的表单
             string sql = " select  distinct(FK_MapData)from Sys_FrmRB where EnumKey='" + this.EnumKey + "'";
-            System.Data.DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
             {
                 base.afterInsert();
@@ -245,37 +250,26 @@ namespace BP.Sys
                 FrmRB frmrb = new FrmRB();
                 if (frmrb.IsExit("MyPK", mypk) == true)
                 {
-                    frmrb.Lab = this.Lab;
+                    frmrb.setLab(this.Lab);
                     frmrb.Update();
                     continue;
                 }
                 //获取mapAttr 
                 MapAttr mapAttr = new MapAttr();
-                mapAttr.MyPK = fk_mapdata + "_" + this.EnumKey;
+                mapAttr.setMyPK(fk_mapdata + "_" + this.EnumKey);
                 int i = mapAttr.RetrieveFromDBSources();
                 if (i != 0)
                 {
 
                     int RBShowModel = mapAttr.GetParaInt("RBShowModel");
                     FrmRB frmrb1 = new FrmRB();
-                    frmrb1.MyPK = fk_mapdata + "_" + this.EnumKey + "_" + this.IntKey;
+                    frmrb1.setMyPK(fk_mapdata + "_" + this.EnumKey + "_" + this.IntKey);
 
-
-                    frmrb.FK_MapData = fk_mapdata;
-                    frmrb.KeyOfEn = this.EnumKey;
-                    frmrb.EnumKey = this.EnumKey;
-                    frmrb.Lab = this.Lab;
-                    frmrb.IntKey = this.IntKey;
-                    if (RBShowModel == 0)
-                    {
-                        frmrb.X = frmrb1.X;
-                        frmrb.Y = frmrb1.Y + 40;
-                    }
-                    if (RBShowModel == 3)
-                    {
-                        frmrb.X = frmrb1.X + 100;
-                        frmrb.Y = frmrb1.Y;
-                    }
+                    frmrb.setFK_MapData(fk_mapdata);
+                    frmrb.setKeyOfEn(this.EnumKey);
+                    frmrb.setEnumKey(this.EnumKey);
+                    frmrb.setLab(this.Lab);
+                    frmrb.setIntKey(this.IntKey);
                     frmrb.Insert();
                 }
 
@@ -434,7 +428,7 @@ namespace BP.Sys
                     se.Lab = string.Join("=", kvsValues);
                     se.EnumKey = EnumKey;
                     se.Lang = BP.Web.WebUser.SysLang;
-                    se.MyPK = EnumKey + "_" + se.Lang + "_" + se.IntKey;
+                    se.setMyPK(EnumKey + "_" + se.Lang + "_" + se.IntKey);
                     se.DirectInsert();
                     this.AddEntity(se);
                 }
@@ -487,7 +481,7 @@ namespace BP.Sys
 
             qo.AddWhere(SysEnumAttr.EnumKey, enumKey);
             qo.addAnd();
-            qo.AddWhere(SysEnumAttr.Lang, Web.WebUser.SysLang);
+            qo.AddWhere(SysEnumAttr.Lang, BP.Web.WebUser.SysLang);
             qo.addOrderBy(SysEnumAttr.IntKey);
             if (qo.DoQuery() == 0)
             {

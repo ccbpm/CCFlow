@@ -10,6 +10,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Text;
 using BP.En;
+using BP.Difference;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
@@ -60,210 +61,6 @@ namespace BP.Pub
             {
                 return "black";
             }
-        }
-        public static void InitFrm(string fk_mapdata)
-        {
-            // 删除数据.
-            FrmLabs labs = new FrmLabs();
-            labs.Delete(FrmLabAttr.FK_MapData, fk_mapdata);
-
-            FrmLines lines = new FrmLines();
-            lines.Delete(FrmLabAttr.FK_MapData, fk_mapdata);
-
-            MapData md = new MapData();
-            md.No = fk_mapdata;
-            if (md.RetrieveFromDBSources() == 0)
-            {
-                MapDtl mdtl = new MapDtl();
-                mdtl.No = fk_mapdata;
-                if (mdtl.RetrieveFromDBSources() == 0)
-                {
-                    throw new Exception("@对:" + fk_mapdata + "的映射信息不存在.");
-                }
-                else
-                {
-                    md.Copy(mdtl);
-                }
-            }
-
-            MapAttrs mattrs = new MapAttrs(fk_mapdata);
-            GroupFields gfs = new GroupFields(fk_mapdata);
-
-            int tableW = 700;
-            int padingLeft = 3;
-            int leftCtrlX = 700 / 100 * 20;
-            int rightCtrlX = 700 / 100 * 60;
-
-            string keyID = DateTime.Now.ToString("yyMMddhhmmss");
-            // table 标题。
-            int currX = 0;
-            int currY = 0;
-            FrmLab lab = new FrmLab();
-            lab.Lab = md.Name;
-            lab.FontSize = 20;
-            lab.X = 200;
-            currY += 30;
-            lab.Y = currY;
-            lab.FK_MapData = fk_mapdata;
-            lab.FontWeight = "Bold";
-            lab.MyPK = "Lab" + keyID + "1";
-            lab.Insert();
-
-            // 表格头部的横线.
-            currY += 20;
-            FrmLine lin = new FrmLine();
-            lin.X1 = 0;
-            lin.X2 = tableW;
-            lin.Y1 = currY;
-            lin.Y2 = currY;
-            lin.BorderWidth = 2;
-            lin.FK_MapData = fk_mapdata;
-            lin.MyPK = "Lin" + keyID + "1";
-            lin.Insert();
-            currY += 5;
-
-            bool isLeft = false;
-            int i = 2;
-            foreach (GroupField gf in gfs)
-            {
-                i++;
-                lab = new FrmLab();
-                lab.X = 0;
-                lab.Y = currY;
-                lab.Lab = gf.Lab;
-                lab.FK_MapData = fk_mapdata;
-                lab.FontWeight = "Bold";
-                lab.MyPK = "Lab" + keyID + i.ToString();
-                lab.Insert();
-
-                currY += 15;
-                lin = new FrmLine();
-                lin.X1 = padingLeft;
-                lin.X2 = tableW;
-                lin.Y1 = currY;
-                lin.Y2 = currY;
-                lin.FK_MapData = fk_mapdata;
-                lin.BorderWidth = 3;
-                lin.MyPK = "Lin" + keyID + i.ToString();
-                lin.Insert();
-
-                isLeft = true;
-                int idx = 0;
-                foreach (MapAttr attr in mattrs)
-                {
-                    if (gf.OID != attr.GroupID || attr.UIVisible == false)
-                        continue;
-
-                    idx++;
-                    if (isLeft)
-                    {
-                        lin = new FrmLine();
-                        lin.X1 = 0;
-                        lin.X2 = tableW;
-                        lin.Y1 = currY;
-                        lin.Y2 = currY;
-                        lin.FK_MapData = fk_mapdata;
-                        lin.MyPK = "Lin" + keyID + i.ToString() + idx;
-                        lin.Insert();
-                        currY += 14; /* 画一横线 .*/
-
-                        lab = new FrmLab();
-                        lab.X = lin.X1 + padingLeft;
-                        lab.Y = currY;
-                        lab.Lab = attr.Name;
-                        lab.FK_MapData = fk_mapdata;
-                        lab.MyPK = "Lab" + keyID + i.ToString() + idx;
-                        lab.Insert();
-
-                        lin = new FrmLine();
-                        lin.X1 = leftCtrlX;
-                        lin.Y1 = currY - 14;
-
-                        lin.X2 = leftCtrlX;
-                        lin.Y2 = currY;
-                        lin.FK_MapData = fk_mapdata;
-                        lin.MyPK = "Lin" + keyID + i.ToString() + idx + "R";
-                        lin.Insert(); /*画一 竖线 */
-
-                        attr.X = leftCtrlX + padingLeft;
-                        attr.Y = currY - 3;
-                        attr.UIWidth = 150;
-                        attr.Update();
-                        currY += 14;
-                    }
-                    else
-                    {
-                        currY = currY - 14;
-                        lab = new FrmLab();
-                        lab.X = tableW / 2 + padingLeft;
-                        lab.Y = currY;
-                        lab.Lab = attr.Name;
-                        lab.FK_MapData = fk_mapdata;
-                        lab.MyPK = "Lab" + keyID + i.ToString() + idx;
-                        lab.Insert();
-
-                        lin = new FrmLine();
-                        lin.X1 = tableW / 2;
-                        lin.Y1 = currY - 14;
-
-                        lin.X2 = tableW / 2;
-                        lin.Y2 = currY;
-                        lin.FK_MapData = fk_mapdata;
-                        lin.MyPK = "Lin" + keyID + i.ToString() + idx;
-                        lin.Insert(); /*画一 竖线 */
-
-                        lin = new FrmLine();
-                        lin.X1 = rightCtrlX;
-                        lin.Y1 = currY - 14;
-                        lin.X2 = rightCtrlX;
-                        lin.Y2 = currY;
-                        lin.FK_MapData = fk_mapdata;
-                        lin.MyPK = "Lin" + keyID + i.ToString() + idx + "R";
-                        lin.Insert(); /*画一 竖线 */
-
-                        attr.X = rightCtrlX + padingLeft;
-                        attr.Y = currY - 3;
-                        attr.UIWidth = 150;
-                        attr.Update();
-                        currY += 14;
-                    }
-                    isLeft = !isLeft;
-                }
-            }
-            // table bottom line.
-            lin = new FrmLine();
-            lin.X1 = 0;
-            lin.Y1 = currY;
-
-            lin.X2 = tableW;
-            lin.Y2 = currY;
-            lin.FK_MapData = fk_mapdata;
-            lin.BorderWidth = 3;
-            lin.MyPK = "Lin" + keyID + "eR";
-            lin.Insert();
-
-            currY = currY - 28 - 18;
-            // 处理结尾. table left line
-            lin = new FrmLine();
-            lin.X1 = 0;
-            lin.Y1 = 50;
-            lin.X2 = 0;
-            lin.Y2 = currY;
-            lin.FK_MapData = fk_mapdata;
-            lin.BorderWidth = 3;
-            lin.MyPK = "Lin" + keyID + "eRr";
-            lin.Insert();
-
-            // table right line.
-            lin = new FrmLine();
-            lin.X1 = tableW;
-            lin.Y1 = 50;
-            lin.X2 = tableW;
-            lin.Y2 = currY;
-            lin.FK_MapData = fk_mapdata;
-            lin.BorderWidth = 3;
-            lin.MyPK = "Lin" + keyID + "eRr4";
-            lin.Insert();
         }
         /// <summary>
         /// 处理字段
@@ -367,29 +164,7 @@ namespace BP.Pub
             }
         }
 
-        /// <summary>
-        /// 按照比例数小
-        /// </summary>
-        /// <param name="ObjH">目标高度</param>
-        /// <param name="factH">实际高度</param>
-        /// <param name="factW">实际宽度</param>
-        /// <returns>目标宽度</returns>
-        public static int GenerImgH(int ObjW, int factH, int factW, int isZeroAsWith)
-        {
-            if (factH == 0 || factW == 0)
-                return isZeroAsWith;
-
-            decimal d = decimal.Parse(ObjW.ToString()) / decimal.Parse(factW.ToString()) * decimal.Parse(factH.ToString());
-
-            try
-            {
-                return int.Parse(d.ToString("0"));
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(d.ToString() + ex.Message);
-            }
-        }
+        
         /// <summary>
         /// 产生临时文件名称
         /// </summary>
@@ -460,8 +235,9 @@ namespace BP.Pub
         /// </summary>
         /// <param name="uiBindKey"></param>
         /// <returns></returns>
-        public static System.Data.DataTable GetDataTableByUIBineKey(string uiBindKey, Hashtable ht = null)
+        public static DataTable GetDataTableByUIBineKey(string uiBindKey, Hashtable ht = null)
         {
+           
             DataTable dt = new DataTable();
             if (uiBindKey.Contains("."))
             {
@@ -479,7 +255,6 @@ namespace BP.Pub
                 return dt;
             }
 
-            //added by liuxc,2017-09-11,增加动态SQL查询类型的处理，此种类型没有固定的数据表或视图
             SFTable sf = new SFTable();
             sf.No = uiBindKey;
             if (sf.RetrieveFromDBSources() != 0)
@@ -661,7 +436,7 @@ namespace BP.Pub
         {
             string tableId = DBAccess.RunSQLReturnVal("select ID from sysobjects WHERE name='" + en.EnMap.PhysicsTable + "' AND xtype='U'").ToString();
 
-            if (tableId == null || tableId == "")
+            if (DataType.IsNullOrEmpty(tableId) )
                 return;
 
             foreach (Attr attr in en.EnMap.Attrs)
@@ -1107,7 +882,7 @@ namespace BP.Pub
             Hashtable htMain = new Hashtable();
             foreach (string key in HttpContextHelper.RequestParamKeys)
             {
-                if (key == null || key == "")
+                if (DataType.IsNullOrEmpty(key) )
                     continue;
                 string mykey = key.Replace("TB_", "");
                 mykey = key.Replace("DDL_", "");
@@ -1156,10 +931,9 @@ namespace BP.Pub
                 string[] strs = checkBoxIDs.Split(',');
                 foreach (string str in strs)
                 {
-                    if (str == null || str == "")
+                    if (DataType.IsNullOrEmpty(str) )
                         continue;
 
-                    //@hongyan
                     string key = str.Replace("CB_", "");
                     if (en.Row.ContainsKey(key) == false)
                         continue; //判断是否存在?
@@ -1173,7 +947,7 @@ namespace BP.Pub
             /*说明已经找到了这个字段信息。*/
             foreach (string key in HttpContextHelper.RequestParamKeys)
             {
-                if (key == null || key == "")
+                if (DataType.IsNullOrEmpty(key) )
                     continue;
 
                 //获得实际的值, 具有特殊标记的，系统才赋值.
@@ -1189,7 +963,6 @@ namespace BP.Pub
                 else
                     continue;
 
-                //@hongyan
                 if (en.Row.ContainsKey(attrKey) == false)
                     continue; //判断是否存在?
 
@@ -1216,7 +989,7 @@ namespace BP.Pub
                 string[] strs = checkBoxIDs.Split(',');
                 foreach (string str in strs)
                 {
-                    if (str == null || str == "")
+                    if (DataType.IsNullOrEmpty(str) )
                         continue;
 
                     if (str.Contains("CBPara"))
@@ -1238,7 +1011,7 @@ namespace BP.Pub
             /*说明已经找到了这个字段信息。*/
             foreach (string key in HttpContextHelper.RequestParamKeys)
             {
-                if (key == null || key == "")
+                if (DataType.IsNullOrEmpty(key) )
                     continue;
 
                 //获得实际的值, 具有特殊标记的，系统才赋值.
@@ -1288,7 +1061,7 @@ namespace BP.Pub
         public static Entity CopyDtlFromRequests11(Entity en, string pk, Map map)
         {
             string allKeys = ";";
-            if (pk == null || pk == "")
+            if (DataType.IsNullOrEmpty(pk) )
                 pk = "";
             else
                 pk = "_" + pk;
@@ -1329,7 +1102,7 @@ namespace BP.Pub
                     /*说明已经找到了这个字段信息。*/
                     foreach (string myK in HttpContextHelper.RequestParamKeys)
                     {
-                        if (myK == null || myK == "")
+                        if (DataType.IsNullOrEmpty(myK) )
                             continue;
 
                         if (myK.EndsWith(relKey))

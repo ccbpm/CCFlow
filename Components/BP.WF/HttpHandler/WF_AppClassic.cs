@@ -15,6 +15,8 @@ using BP.WF.Data;
 using LitJson;
 using System.Net;
 using System.IO;
+using BP.Difference;
+
 
 
 namespace BP.WF.HttpHandler
@@ -375,6 +377,188 @@ namespace BP.WF.HttpHandler
         }
         #endregion 登录界面.
 
+        #region Welcome.htm 欢迎页面.
+        public string Welcome_Init()
+        {
+
+            Hashtable ht = new Hashtable();
+            // 待办.
+            ht.Add("Todlist", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) as Num FROM WF_GenerWorkerList WHERE IsPass=0 AND FK_Emp='" + BP.Web.WebUser.No + "'")); //流程数
+
+            //发起.
+            ht.Add("Start", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState > 1  AND Starter='" + BP.Web.WebUser.No + "'")); //实例数.
+
+            //逾期.
+            ht.Add("OverTime", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=3 AND WFSta=1 ")); //实例数.
+
+            //退回数
+            ht.Add("ReturnNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState = 5  AND TodoEmps LIKE '%" + BP.Web.WebUser.No + ",%'"));
+
+            //草稿.
+            ht.Add("Darft", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=1  AND Starter='" + BP.Web.WebUser.No + "'"));
+
+            //运行中.
+            ht.Add("Runing", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) as Num FROM WF_GenerWorkerList WHERE IsPass!=0 AND FK_Emp='" + BP.Web.WebUser.No + "'"));
+
+            return BP.Tools.Json.ToJson(ht);
+        }
+        /// <summary>
+        /// 流程监控折线图数据获取
+        /// </summary>
+        /// <returns></returns>
+        public string Welcome_EchartDataSet()
+        {
+            DataSet ds = new DataSet();
+
+            string whereStr = "";
+            string whereStrPuls = "";
+
+            if (Glo.CCBPMRunModel != CCBPMRunModel.GroupInc)
+            {
+                whereStr += " WHERE OrgNo = '" + WebUser.OrgNo + "'";
+                whereStrPuls += " AND OrgNo = '" + WebUser.OrgNo + "'";
+            }
+
+            #region 完成的流程-按月分析
+            //按期完成
+            string sql = "SELECT FK_NY, count(WorkID) as Num FROM WF_GenerWorkFlow WHERE WFState=3 AND SendDT<=SDTOfNode And WFSta=1 " + whereStrPuls + " GROUP BY FK_NY ";
+            DataTable ComplateFlowsByNY = DBAccess.RunSQLReturnTable(sql);
+            ComplateFlowsByNY.TableName = "ComplateFlowsByNY";
+            ds.Tables.Add(ComplateFlowsByNY);
+
+            //逾期完成
+            sql = "SELECT FK_NY, count(WorkID) as Num FROM WF_GenerWorkFlow WHERE WFState=3 AND SendDT>SDTOfNode And WFSta=1 " + whereStrPuls + " GROUP BY FK_NY ";
+            DataTable OverComplateFlowsByNY = DBAccess.RunSQLReturnTable(sql);
+            OverComplateFlowsByNY.TableName = "OverComplateFlowsByNY";
+            ds.Tables.Add(OverComplateFlowsByNY);
+            #endregion 完成的流程-按月分析
+
+            #region 运行中的流程
+            //按部门
+            //1.全部待办
+            if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                sql = "SELECT B.Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B WHERE A.FK_Dept=B.No GROUP BY B.Name";
+            else
+                sql = "SELECT B.Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B WHERE A.FK_Dept=B.No AND B.OrgNo='" + WebUser.OrgNo + "' GROUP BY B.Name";
+            DataTable TodoListAllByDept = DBAccess.RunSQLReturnTable(sql);
+            TodoListAllByDept.TableName = "TodoListAllByDept";
+            ds.Tables.Add(TodoListAllByDept);
+
+            //2.退回的数据
+            if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                sql = "SELECT B.Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B,WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID AND C.WFState=5 GROUP BY B.Name";
+            else
+                sql = "SELECT B.Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B,WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID AND C.WFState=5 AND B.OrgNo='" + WebUser.OrgNo + "' GROUP BY B.Name";
+            DataTable TodoListReturnByDept = DBAccess.RunSQLReturnTable(sql);
+            TodoListReturnByDept.TableName = "TodoListReturnByDept";
+            ds.Tables.Add(TodoListReturnByDept);
+
+            //3.逾期的数据
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                sql = "SELECT B.Name, count(DISTINCT C.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B,WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID  and STR_TO_DATE(A.SDT,'%Y-%m-%d %H:%i') <STR_TO_DATE(C.SDTOfNode,'%Y-%m-%d %H:%i') GROUP BY B.Name";
+
+            }
+            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                sql = "SELECT  B.Name, count(DISTINCT C.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B,WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(TO_DATE(C.SDTOfNode, 'yyyy-mm-dd hh24:mi:ss') - TO_DATE(A.SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 GROUP BY B.Name ";
+                sql += "UNION SELECT  B.Name, count(DISTINCT C.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B,WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (TO_DATE(SDTOfNode, 'yyyy-mm-dd') - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 GROUP BY B.Name";
+            }
+            else
+            {
+                sql = "SELECT  B.Name, count(DISTINCT C.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B,WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID  and convert(varchar(100),A.SDT,120) < CONVERT(varchar(100), C.SDTOfNode, 120) GROUP BY B.Name";
+            }
+
+            DataTable TodoListOverTByDept = DBAccess.RunSQLReturnTable(sql);
+            TodoListOverTByDept.TableName = "TodoListOverTByDept";
+            ds.Tables.Add(TodoListOverTByDept);
+
+            //4.预警的数据
+            //按流程
+
+            //1.全部待办
+            if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                sql = "SELECT B.Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,WF_Flow B WHERE A.FK_Flow=B.No GROUP BY B.Name";
+            else
+                sql = "SELECT B.Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,WF_Flow B WHERE A.FK_Flow=B.No AND B.OrgNo='" + WebUser.OrgNo + "' GROUP BY B.Name";
+            DataTable TodoListAllByFlow = DBAccess.RunSQLReturnTable(sql);
+            TodoListAllByFlow.TableName = "TodoListAllByFlow";
+            ds.Tables.Add(TodoListAllByFlow);
+
+            //2.退回的数据
+            if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                sql = "SELECT B.FlowName AS Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE A.FK_Flow=B.FK_Flow AND A.WorkID=B.WorkID AND B.WFState=5 GROUP BY B.FlowName";
+            else
+                sql = "SELECT B.FlowName AS Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE A.FK_Flow=B.FK_Flow AND A.WorkID=B.WorkID AND B.WFState=5 AND B.OrgNo='" + WebUser.OrgNo + "' GROUP BY B.FlowName";
+            DataTable TodoListReturnByFlow = DBAccess.RunSQLReturnTable(sql);
+            TodoListReturnByFlow.TableName = "TodoListReturnByFlow";
+            ds.Tables.Add(TodoListReturnByFlow);
+
+            //3.逾期的数据
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                sql = "SELECT B.FlowName AS Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE A.FK_Flow=B.FK_Flow AND A.WorkID=B.WorkID  and STR_TO_DATE(A.SDT,'%Y-%m-%d %H:%i') <STR_TO_DATE(B.SDTOfNode,'%Y-%m-%d %H:%i') GROUP BY B.FlowName";
+
+            }
+            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                sql = "SELECT  B.FlowName AS Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE A.FK_Flow=B.FK_Flow AND A.WorkID=B.WorkID  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(TO_DATE(B.SDTOfNode, 'yyyy-mm-dd hh24:mi:ss') - TO_DATE(A.SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 GROUP BY B.FlowName ";
+                sql += "UNION SELECT  B.FlowName AS Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE A.FK_Flow=B.FK_Flow AND A.WorkID=B.WorkID and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (TO_DATE(B.SDTOfNode, 'yyyy-mm-dd') - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 GROUP BY B.FlowName";
+            }
+            else
+            {
+                sql = "SELECT B.FlowName AS Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE A.FK_Flow=B.FK_Flow AND A.WorkID=B.WorkID  and convert(varchar(100),A.SDT,120) < CONVERT(varchar(100), B.SDTOfNode, 120) GROUP BY B.FlowName";
+            }
+
+            DataTable TodoListOverTByFlow = DBAccess.RunSQLReturnTable(sql);
+            TodoListOverTByFlow.TableName = "TodoListOverTByFlow";
+            ds.Tables.Add(TodoListOverTByFlow);
+
+
+            //按人员(仅限一个部门中的人员）
+            //获取当前人员所在部门的所有人员
+            sql = "SELECT A.No,A.Name From Port_Emp A,Port_DeptEmp B Where A.No=B.FK_Emp AND B.FK_Dept='" + WebUser.FK_Dept + "' order By A.Idx";
+            DataTable Emps = DBAccess.RunSQLReturnTable(sql);
+            Emps.TableName = "Emps";
+            ds.Tables.Add(Emps);
+
+            //1.全部待办
+            sql = "SELECT FK_EmpText AS Name, count(WorkID) as Num FROM WF_GenerWorkerList WHERE FK_Dept='" + WebUser.FK_Dept + "' GROUP BY FK_EmpText";
+            DataTable TodoListAllByEmp = DBAccess.RunSQLReturnTable(sql);
+            TodoListAllByEmp.TableName = "TodoListAllByEmp";
+            ds.Tables.Add(TodoListAllByEmp);
+
+            //2.退回的数据
+            sql = "SELECT A.FK_EmpText AS Name, count( A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE  A.FK_Dept='" + WebUser.FK_Dept + "' AND A.WorkID=B.WorkID AND B.WFState=5 GROUP BY A.FK_EmpText";
+            DataTable TodoListReturnByEmp = DBAccess.RunSQLReturnTable(sql);
+            TodoListReturnByEmp.TableName = "TodoListReturnByEmp";
+            ds.Tables.Add(TodoListReturnByEmp);
+
+            //3.逾期的数据
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                sql = "SELECT A.FK_EmpText AS Name, count( A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE  A.FK_Dept='" + WebUser.FK_Dept + "' AND A.WorkID=B.WorkID  and STR_TO_DATE(A.SDT,'%Y-%m-%d %H:%i') <STR_TO_DATE(B.SDTOfNode,'%Y-%m-%d %H:%i') GROUP BY A.FK_EmpText";
+
+            }
+            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                sql = "SELECT  A.FK_EmpText AS Name, count( A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE  A.FK_Dept='" + WebUser.FK_Dept + "' AND A.WorkID=B.WorkID  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(TO_DATE(B.SDTOfNode, 'yyyy-mm-dd hh24:mi:ss') - TO_DATE(A.SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 GROUP BY A.FK_EmpText ";
+                sql += "UNION SELECT A.FK_EmpText AS Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE A.FK_Dept='" + WebUser.FK_Dept + "' AND A.WorkID=B.WorkID and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (TO_DATE(B.SDTOfNode, 'yyyy-mm-dd') - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 GROUP BY A.FK_EmpText";
+            }
+            else
+            {
+                sql = "SELECT A.FK_EmpText AS Name, count( A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE A.FK_Dept='" + WebUser.FK_Dept + "' AND A.WorkID=B.WorkID  and convert(varchar(100),A.SDT,120) < CONVERT(varchar(100), B.SDTOfNode, 120) GROUP BY A.FK_EmpText";
+            }
+
+            DataTable TodoListOverTByEmp = DBAccess.RunSQLReturnTable(sql);
+            TodoListOverTByEmp.TableName = "TodoListOverTByEmp";
+            ds.Tables.Add(TodoListOverTByEmp);
+            #endregion 运行中的流程
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        #endregion
+
 
         #region 流程监控
         /// <summary>
@@ -396,7 +580,7 @@ namespace BP.WF.HttpHandler
 
             Hashtable ht = new Hashtable();
             ht.Add("FlowNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(No) FROM WF_Flow " + whereStr)); //流程数
-  
+
             //所有的实例数量.
             ht.Add("FlowInstaceNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState >1 " + whereStrPuls)); //实例数.
 
@@ -526,13 +710,13 @@ namespace BP.WF.HttpHandler
 
             //按人员(仅限一个部门中的人员）
             //获取当前人员所在部门的所有人员
-            sql = "SELECT A.No,A.Name From Port_Emp A,Port_DeptEmp B Where A.No = B.FK_Emp AND B.FK_Dept='" + WebUser.FK_Dept + "' order By A.Idx";
+            sql = "SELECT A.No,A.Name From Port_Emp A,Port_DeptEmp B Where A.No=B.FK_Emp AND B.FK_Dept='" + WebUser.FK_Dept + "' order By A.Idx";
             DataTable Emps = DBAccess.RunSQLReturnTable(sql);
             Emps.TableName = "Emps";
             ds.Tables.Add(Emps);
 
             //1.全部待办
-            sql = "SELECT FK_EmpText AS Name, count(WorkID) as Num FROM WF_GenerWorkerList WHERE FK_Dept='"+WebUser.FK_Dept+ "' GROUP BY FK_EmpText";
+            sql = "SELECT FK_EmpText AS Name, count(WorkID) as Num FROM WF_GenerWorkerList WHERE FK_Dept='" + WebUser.FK_Dept + "' GROUP BY FK_EmpText";
             DataTable TodoListAllByEmp = DBAccess.RunSQLReturnTable(sql);
             TodoListAllByEmp.TableName = "TodoListAllByEmp";
             ds.Tables.Add(TodoListAllByEmp);

@@ -11,6 +11,8 @@ using BP.Port;
 using BP.Sys;
 using BP.Pub;
 using System.Collections.Generic;
+using BP.Difference;
+
 
 namespace BP.Web
 {
@@ -146,7 +148,7 @@ namespace BP.Web
                     {
                         if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                         {
-                            BP.GPM.DeptEmp de = new GPM.DeptEmp();
+                            BP.GPM.DeptEmp de = new BP.GPM.DeptEmp();
                             de.FK_Dept = "ccs";
                             de.FK_Emp = "Guest";
                             de.Insert();
@@ -420,7 +422,7 @@ namespace BP.Web
                 {
                     if (IsBSMode)
                     {
-                        // HttpCookie hc1 = BP.Sys.Glo.Request.Cookies["CCS"];
+                        // HttpCookie hc1 = BP.Sys.Base.Glo.Request.Cookies["CCS"];
                         string lang = HttpContextHelper.RequestCookieGet("Lang", "CCS");
                         if (String.IsNullOrEmpty(lang))
                             return "CH";
@@ -521,7 +523,7 @@ namespace BP.Web
                     if (BP.Web.WebUser.FK_Dept == null)
                         throw new Exception("@err-001 DeptParentNo, FK_Dept 登录信息丢失。");
 
-                    BP.Port.Dept dept = new Port.Dept(BP.Web.WebUser.FK_Dept);
+                    BP.Port.Dept dept = new BP.Port.Dept(BP.Web.WebUser.FK_Dept);
                     BP.Web.WebUser.DeptParentNo = dept.ParentNo;
                     return dept.ParentNo;
                 }
@@ -531,21 +533,6 @@ namespace BP.Web
             {
                 SetSessionByKey("DeptParentNo", value);
             }
-        }
-        /// <summary>
-        /// 检查权限控制
-        /// </summary>
-        /// <param name="sid"></param>
-        /// <returns></returns>
-        public static bool CheckSID(string userNo, string sid)
-        {
-
-
-            Paras paras = new Paras();
-            paras.SQL = "SELECT SID FROM Port_Emp WHERE No=" + SystemConfig.AppCenterDBVarStr + "No";
-            paras.Add("No", userNo);
-            string mysid = DBAccess.RunSQLReturnStringIsNull(paras, null);
-            return sid.Equals(mysid);
         }
         public static string NoOfRel
         {
@@ -602,9 +589,9 @@ namespace BP.Web
                 return;
 
             /* 2019-7-25 张磊 如下代码没有作用，删除
-            HttpCookie hc = BP.Sys.Glo.Request.Cookies["CCS"];
+            HttpCookie hc = BP.Sys.Base.Glo.Request.Cookies["CCS"];
             if (hc != null)
-                BP.Sys.Glo.Request.Cookies.Remove("CCS");
+                BP.Sys.Base.Glo.Request.Cookies.Remove("CCS");
             HttpCookie cookie = new HttpCookie("CCS");
             cookie.Expires = DateTime.Now.AddMinutes(SystemConfig.SessionLostMinute);
             */
@@ -635,7 +622,7 @@ namespace BP.Web
                 if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                     return false; //单机版.
 
-                //SAAS版本. 集团版 @hongyan 需要翻译.
+                //SAAS版本. 集团版
                 if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 {
                     string sql = "SELECT FK_Emp FROM Port_OrgAdminer WHERE FK_Emp='" + WebUser.No + "' AND OrgNo='" + WebUser.OrgNo + "'";
@@ -713,7 +700,8 @@ namespace BP.Web
             }
             else
             {
-                string sql = Glo.UpdateSIDAndOrgNoSQL;
+                //比如: UPDATE XXX SET bumenbianao='@FK_Dept', zhizhibianhao='@OrgNo',  SID='@SID'  WHERE bianhao='@No' 
+                string sql = BP.Sys.Base.Glo.UpdateSIDAndOrgNoSQL;
                 if (DataType.IsNullOrEmpty(sql) == true)
                     throw new Exception("err@系统管理员缺少全局配置变量 UpdateSIDAndOrgNoSQL ");
 
@@ -883,7 +871,7 @@ namespace BP.Web
             {
                 string val = GetValFromCookie("SID", null, true);
                 if (val == null)
-                    return "";
+                    return "";  
                 return val;
             }
             set

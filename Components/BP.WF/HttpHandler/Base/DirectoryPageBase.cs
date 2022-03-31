@@ -1,22 +1,11 @@
 ﻿using System;
-using System.IO;
 using System.Collections;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Web;
-using System.Collections.Generic;
-using System.Collections;
-using System.Data;
-using System.Web;
-using BP.WF;
+using BP.Difference;
 using BP.Web;
 using BP.Sys;
 using BP.DA;
-using BP.En;
 using System.Reflection;
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
 
 
 namespace BP.WF.HttpHandler
@@ -115,9 +104,8 @@ namespace BP.WF.HttpHandler
 
                 //if (methodName.Contains("WebUser") == true)
                 //    isCanDealToken = false;
-
                 //if (isCanDealToken == true)
-                //   this.DealToken(myEn, myEn.DoType);
+                   this.DealToken(myEn, myEn.DoType);
             }
 
             //string token=myEn.ToString
@@ -181,11 +169,11 @@ namespace BP.WF.HttpHandler
                 return HttpUtility.UrlDecode(myval, System.Text.Encoding.UTF8);
             }
 
-            string val = HttpContextHelper.Current.Request.QueryString[key];
+            string val = HttpContextHelper.RequestQueryString(key);
             if (val == null)
             {
                 val = HttpContextHelper.RequestParams(key);
-                //@hongyan.
+                
                 if (val == null)
                     return null;
             }
@@ -719,8 +707,6 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-
-                //@hongyan
                 string str = this.GetRequestVal("FrmID");
 
                 if (DataType.IsNullOrEmpty(str) == true)
@@ -756,6 +742,13 @@ namespace BP.WF.HttpHandler
                 return nodeID;
             }
         }
+        public int NodeID
+        {
+            get
+            {
+                return this.FK_Node;
+            }
+        }
         public Int64 FID
         {
             get
@@ -775,17 +768,14 @@ namespace BP.WF.HttpHandler
             get
             {
                 if (_workID != 0)
-                    return _workID;
+                    return _workID; 
                 string str = this.GetRequestVal("WorkID");
                 if (DataType.IsNullOrEmpty(str) == true)
                 {
-                    str = this.GetRequestVal("PKVal");
-                    if (DataType.IsNumStr(str) == false)
-                        return 0;
+                    str = this.GetRequestVal("PKVal"); //@hontyan. 这个方法都要修改.
+                    if (DataType.IsNullOrEmpty(str) == true)
+                        str = this.GetRequestVal("OID");
                 }
-
-                if (DataType.IsNullOrEmpty(str) == true)
-                    str = this.GetRequestVal("OID");
 
                 if (DataType.IsNullOrEmpty(str) == true)
                     return 0;
@@ -884,7 +874,10 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                return this.GetRequestValInt("PageIdx");
+                int i = this.GetRequestValInt("PageIdx");
+                if (i == 0)
+                    return 1;
+                return i;
             }
         }
         /// <summary>
@@ -1012,685 +1005,6 @@ namespace BP.WF.HttpHandler
             }
         }
         #endregion 父子流程相关的属性.
-
-
-        protected string ExportGroupExcel(System.Data.DataSet ds, string title, string paras)
-        {
-            DataTable dt = ds.Tables["GroupSearch"];
-            DataTable AttrsOfNum = ds.Tables["AttrsOfNum"];
-            DataTable AttrsOfGroup = ds.Tables["AttrsOfGroup"];
-
-            title = title.Trim();
-            string filename = title + "Ep" + title + ".xls";
-            string file = filename;
-            bool flag = true;
-            string filepath = SystemConfig.PathOfTemp;
-
-            #region 参数及变量设置
-
-            if (Directory.Exists(filepath) == false)
-                Directory.CreateDirectory(filepath);
-
-
-
-            filename = filepath + filename;
-
-            //filename = HttpUtility.UrlEncode(filename);
-
-            FileStream objFileStream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write);
-            StreamWriter objStreamWriter = new StreamWriter(objFileStream, System.Text.Encoding.Unicode);
-            #endregion
-
-            #region 生成导出文件
-            try
-            {
-                objStreamWriter.WriteLine(Convert.ToChar(9) + title + Convert.ToChar(9));
-                string strLine = "序号" + Convert.ToChar(9);
-                //生成文件标题
-                foreach (DataRow attr in AttrsOfGroup.Rows)
-                {
-                    strLine = strLine + attr["Name"] + Convert.ToChar(9);
-                }
-                foreach (DataRow attr in AttrsOfNum.Rows)
-                {
-                    strLine = strLine + attr["Name"] + Convert.ToChar(9);
-                }
-
-                objStreamWriter.WriteLine(strLine);
-                strLine = "";
-                foreach (DataRow dr in dt.Rows)
-                {
-                    strLine = strLine + dr["IDX"] + Convert.ToChar(9);
-                    foreach (DataRow attr in AttrsOfGroup.Rows)
-                    {
-                        strLine = strLine + dr[attr["KeyOfEn"] + "T"] + Convert.ToChar(9);
-
-                    }
-                    foreach (DataRow attr in AttrsOfNum.Rows)
-                    {
-
-                        strLine = strLine + dr[attr["KeyOfEn"].ToString()] + Convert.ToChar(9);
-                    }
-
-                    objStreamWriter.WriteLine(strLine);
-                    strLine = "";
-                }
-
-                strLine = "汇总" + Convert.ToChar(9);
-                foreach (DataRow attr in AttrsOfGroup.Rows)
-                {
-
-                    strLine = strLine + "" + Convert.ToChar(9);
-                }
-
-                foreach (DataRow attr in AttrsOfNum.Rows)
-                {
-                    double d = 0;
-                    foreach (DataRow dtr in dt.Rows)
-                    {
-                        d += Double.Parse(dtr[attr["KeyOfEn"].ToString()].ToString());
-                    }
-                    if (paras.Contains(attr["KeyOfEn"] + "=AVG"))
-                    {
-                        if (dt.Rows.Count != 0)
-                        {
-                            d = Double.Parse((d / dt.Rows.Count).ToString("0.0000"));
-                        }
-
-                    }
-
-                    if (Int32.Parse(attr["MyDataType"].ToString()) == DataType.AppInt)
-                    {
-                        if (paras.Contains(attr["KeyOfEn"] + "=AVG"))
-                            strLine = strLine + d + Convert.ToChar(9);
-                        else
-                            strLine = strLine + (Int32)d + Convert.ToChar(9);
-                    }
-                    else
-                    {
-                        strLine = strLine + d + Convert.ToChar(9); ;
-                    }
-
-                }
-
-                objStreamWriter.WriteLine(strLine);
-                strLine = "";
-            }
-            catch
-            {
-                flag = false;
-            }
-            finally
-            {
-                objStreamWriter.Close();
-                objFileStream.Close();
-            }
-            #endregion
-
-            #region 删除掉旧的文件
-            //DelExportedTempFile(filepath);
-            #endregion
-
-            if (flag)
-            {
-                file = "/DataUser/Temp/" + file;
-
-            }
-
-            return file;
-        }
-        protected string ExportDGToExcel(System.Data.DataTable dt, Entity en, string title, Attrs mapAttrs = null, string filename = null)
-        {
-            if (filename == null)
-                filename = title + "_" + DataType.CurrentDataCNOfLong + "_" + WebUser.No + ".xls";//"Ep" + this.Session.SessionID + ".xls";
-            string file = filename;
-            bool flag = true;
-            string filepath = SystemConfig.PathOfTemp;
-
-            #region 参数及变量设置
-
-
-            //如果导出目录没有建立，则建立.
-            if (Directory.Exists(filepath) == false)
-                Directory.CreateDirectory(filepath);
-
-            filename = filepath + filename;
-
-            if (File.Exists(filename))
-                File.Delete(filename);
-
-            FileStream objFileStream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write);
-            StreamWriter objStreamWriter = new StreamWriter(objFileStream, System.Text.Encoding.Unicode);
-            #endregion
-
-            #region 生成导出文件
-            try
-            {
-                Attrs attrs = null;
-                if (mapAttrs != null)
-                    attrs = mapAttrs;
-                else
-                    attrs = en.EnMap.Attrs;
-
-                Attrs selectedAttrs = null;
-                BP.Sys.UIConfig cfg = new UIConfig(en);
-
-                if (cfg.ShowColumns.Length == 0)
-                    selectedAttrs = attrs;
-                else
-                {
-                    selectedAttrs = new Attrs();
-
-                    foreach (Attr attr in attrs)
-                    {
-                        bool contain = false;
-
-                        foreach (string col in cfg.ShowColumns)
-                        {
-                            if (col == attr.Key)
-                            {
-                                contain = true;
-                                break;
-                            }
-                        }
-
-                        if (contain)
-                            selectedAttrs.Add(attr);
-                    }
-                }
-
-                objStreamWriter.WriteLine();
-                objStreamWriter.WriteLine(Convert.ToChar(9) + title + Convert.ToChar(9));
-                objStreamWriter.WriteLine();
-                string strLine = "";
-
-                //添加标签，解决数字在excel中变为科学计数法问题
-                strLine = "<table cellspacing=\"0\" cellpadding=\"5\" rules=\"all\" border=\"1\"> ";
-                strLine += "<tr>";
-                //生成文件标题
-                foreach (Attr attr in selectedAttrs)
-                {
-                    if (attr.Key.Equals("OID"))
-                        continue;
-
-                    if (attr.Key.Equals("WorkID"))
-                        continue;
-
-                    if (attr.Key.Equals("MyNum"))
-                        continue;
-
-                    if (attr.IsFKorEnum)
-                        continue;
-
-                    if (attr.UIVisible == false && attr.MyFieldType != FieldType.RefText)
-                        continue;
-
-                    if (attr.Key.Equals("MyFilePath") || attr.Key.Equals("MyFileExt")
-                        || attr.Key.Equals("WebPath") || attr.Key.Equals("MyFileH")
-                        || attr.Key.Equals("MyFileW") || attr.Key.Equals("MyFileSize")
-                        || attr.Key.Equals("RefPK"))
-                        continue;
-
-                    if (attr.MyFieldType == FieldType.RefText)
-                        strLine += "<td>" + attr.Desc.Replace("名称", "") + Convert.ToChar(9) + "</td>";
-                    else
-                        strLine += "<td>" + attr.Desc + Convert.ToChar(9) + "</td>";
-                }
-                strLine += "</tr>";
-                objStreamWriter.WriteLine(strLine);
-                strLine = "";
-
-                foreach (DataRow dr in dt.Rows)
-                {
-                    strLine = "</tr>";
-                    foreach (Attr attr in selectedAttrs)
-                    {
-                        if (attr.IsFKorEnum)
-                            continue;
-
-                        if (attr.UIVisible == false && attr.MyFieldType != FieldType.RefText)
-                            continue;
-
-                        if (attr.Key.Equals("OID"))
-                            continue;
-
-                        if (attr.Key.Equals("MyNum"))
-                            continue;
-
-                        if (attr.Key.Equals("WorkID") == true)
-                            continue;
-
-                        if (attr.Key.Equals("MyFilePath") || attr.Key.Equals("MyFileExt")
-                            || attr.Key.Equals("WebPath") || attr.Key.Equals("MyFileH")
-                            || attr.Key.Equals("MyFileW") || attr.Key.Equals("MyFileSize")
-                            || attr.Key.Equals("RefPK"))
-                            continue;
-                        if (dt.Columns.Contains(attr.Key) == false)
-                            continue;
-
-
-                        if (attr.MyDataType == DataType.AppBoolean)
-                        {
-                            strLine += "<td>" + (dr[attr.Key].Equals(1) ? "是" : "否") + Convert.ToChar(9) + "</td>";
-                        }
-                        else
-                        {
-                            string text = "";
-                            if (attr.IsFKorEnum || attr.IsFK)
-                                text = dr[attr.Key + "Text"].ToString();
-                            else if (dt.Columns.Contains(attr.Key + "T") == true)
-                                text = dr[attr.Key + "T"].ToString();
-                            else
-                                text = dr[attr.Key].ToString();
-
-                            if (attr.Key == "FK_NY" && DataType.IsNullOrEmpty(text) == true)
-                            {
-                                text = dr[attr.Key].ToString();
-                            }
-                            if (DataType.IsNullOrEmpty(text) == false && (text.Contains("\n") == true || text.Contains("\r") == true))
-                            {
-                                text = text.Replace("\n", " ");
-                                text = text.Replace("\r", " ");
-                            }
-                            strLine += "<td style=\"vnd.ms-excel.numberformat:@\">" + text + " " + Convert.ToChar(9) + "</td>";
-                        }
-                    }
-                    strLine += "</tr>";
-                    objStreamWriter.WriteLine(strLine);
-                    strLine = "";
-                }
-
-
-                objStreamWriter.WriteLine();
-                objStreamWriter.WriteLine(Convert.ToChar(9) + " 制表人：" + Convert.ToChar(9) + WebUser.Name + Convert.ToChar(9) + "日期：" + Convert.ToChar(9) + DateTime.Now.ToShortDateString());
-
-            }
-            catch (Exception e)
-            {
-                flag = false;
-                throw new Exception("数据导出有问题," + e.Message);
-            }
-            finally
-            {
-                objStreamWriter.Close();
-                objFileStream.Close();
-            }
-            #endregion
-
-            #region 删除掉旧的文件
-            //DelExportedTempFile(filepath);
-            #endregion
-
-            if (flag)
-            {
-                file = "/DataUser/Temp/" + file;
-                //this.Write_Javascript(" window.open('"+ Request.ApplicationPath + @"/Report/Exported/" + filename +"'); " );
-                //this.Write_Javascript(" window.open('"+Request.ApplicationPath+"/Temp/" + file +"'); " );
-            }
-
-            return file;
-        }
-
-        public static string DataTableToExcel(DataTable dt, string filename, string header = null,
-            string creator = null, bool date = false, bool index = true, bool download = false)
-        {
-
-            string file = SystemConfig.PathOfTemp + filename;
-            bool flag = true;
-
-            string dir = Path.GetDirectoryName(file);
-            string name = Path.GetFileName(filename);
-            long len = 0;
-            IRow row = null, headerRow = null, dateRow = null, sumRow = null, creatorRow = null;
-            ICell cell = null;
-            int r = 0;
-            int c = 0;
-            int headerRowIndex = 0; //文件标题行序
-            int dateRowIndex = 0;   //日期行序
-            int titleRowIndex = 0;  //列标题行序
-            int sumRowIndex = 0;    //合计行序
-            int creatorRowIndex = 0;    //创建人行序
-            float DEF_ROW_HEIGHT = 20;  //默认行高
-            float charWidth = 0;    //单个字符宽度
-            int columnWidth = 0;    //列宽，像素
-            bool isDate;    //是否是日期格式，否则是日期时间格式
-            int decimalPlaces = 2;  //小数位数
-            bool qian;  //是否使用千位分隔符
-            List<int> sumColumns = new List<int>();   //合计列序号集合
-
-            if (Directory.Exists(dir) == false)
-                Directory.CreateDirectory(dir);
-
-
-            //一个字符的像素宽度，以Arial，10磅，i进行测算
-            using (Bitmap bmp = new Bitmap(10, 10))
-            {
-                using (Graphics g = Graphics.FromImage(bmp))
-                {
-                    charWidth = g.MeasureString("i", new Font("Arial", 10)).Width;
-                }
-            }
-            //序
-            if (index && dt.Columns.Contains("序") == false)
-            {
-                dt.Columns.Add("序", typeof(int)).ExtendedProperties.Add("width", 50);
-                dt.Columns["序"].SetOrdinal(0);
-
-                for (int i = 0; i < dt.Rows.Count; i++)
-                    dt.Rows[i]["序"] = i + 1;
-            }
-            //合计列
-            foreach (DataColumn col in dt.Columns)
-            {
-                if (col.ExtendedProperties.ContainsKey("sum") == false)
-                    continue;
-
-                sumColumns.Add(col.Ordinal);
-            }
-
-            headerRowIndex = string.IsNullOrWhiteSpace(header) ? -1 : 0;
-            dateRowIndex = date ? (headerRowIndex + 1) : -1;
-            titleRowIndex = date
-                                        ? dateRowIndex + 1
-                                        : headerRowIndex == -1 ? 0 : 1;
-            sumRowIndex = sumColumns.Count == 0 ? -1 : titleRowIndex + dt.Rows.Count + 1;
-            creatorRowIndex = string.IsNullOrWhiteSpace(creator)
-                                  ? -1
-                                  : sumRowIndex == -1 ? titleRowIndex + dt.Rows.Count + 1 : sumRowIndex + 1;
-
-            using (FileStream fs = new FileStream(file, FileMode.Create))
-            {
-                HSSFWorkbook wb = new HSSFWorkbook();
-                ISheet sheet = wb.CreateSheet("Sheet1");
-                sheet.DefaultRowHeightInPoints = DEF_ROW_HEIGHT;
-                IFont font = null;
-                IDataFormat fmt = wb.CreateDataFormat();
-
-                if (headerRowIndex != -1)
-                    headerRow = sheet.CreateRow(headerRowIndex);
-                if (date)
-                    dateRow = sheet.CreateRow(dateRowIndex);
-                if (sumRowIndex != -1)
-                    sumRow = sheet.CreateRow(sumRowIndex);
-                if (creatorRowIndex != -1)
-                    creatorRow = sheet.CreateRow(creatorRowIndex);
-
-                #region 单元格样式定义
-                //列标题单元格样式设定
-                ICellStyle titleStyle = wb.CreateCellStyle();
-                titleStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
-                titleStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-                titleStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
-                titleStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
-                titleStyle.VerticalAlignment = VerticalAlignment.Center;
-                font = wb.CreateFont();
-                font.IsBold = true;
-                titleStyle.SetFont(font);
-
-                //“序”列标题样式设定
-                ICellStyle idxTitleStyle = wb.CreateCellStyle();
-                idxTitleStyle.CloneStyleFrom(titleStyle);
-                idxTitleStyle.Alignment = HorizontalAlignment.Center;
-
-                //文件标题单元格样式设定
-                ICellStyle headerStyle = wb.CreateCellStyle();
-                headerStyle.Alignment = HorizontalAlignment.Center;
-                headerStyle.VerticalAlignment = VerticalAlignment.Center;
-                font = wb.CreateFont();
-                font.FontHeightInPoints = 12;
-                font.IsBold = true;
-                headerStyle.SetFont(font);
-
-                //制表人单元格样式设定
-                ICellStyle userStyle = wb.CreateCellStyle();
-                userStyle.Alignment = HorizontalAlignment.Right;
-                userStyle.VerticalAlignment = VerticalAlignment.Center;
-
-                //单元格样式设定
-                ICellStyle cellStyle = wb.CreateCellStyle();
-                cellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
-                cellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-                cellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
-                cellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
-                cellStyle.VerticalAlignment = VerticalAlignment.Center;
-
-                //数字单元格样式设定
-                ICellStyle numCellStyle = wb.CreateCellStyle();
-                numCellStyle.CloneStyleFrom(cellStyle);
-                numCellStyle.Alignment = HorizontalAlignment.Right;
-
-                //“序”列单元格样式设定
-                ICellStyle idxCellStyle = wb.CreateCellStyle();
-                idxCellStyle.CloneStyleFrom(cellStyle);
-                idxCellStyle.Alignment = HorizontalAlignment.Center;
-
-                //日期单元格样式设定
-                ICellStyle dateCellStyle = wb.CreateCellStyle();
-                dateCellStyle.CloneStyleFrom(cellStyle);
-                dateCellStyle.DataFormat = fmt.GetFormat("yyyy-m-d;@");
-
-                //日期时间单元格样式设定
-                ICellStyle timeCellStyle = wb.CreateCellStyle();
-                timeCellStyle.CloneStyleFrom(cellStyle);
-                timeCellStyle.DataFormat = fmt.GetFormat("yyyy-m-d h:mm;@");
-
-                //千分位单元格样式设定
-                ICellStyle qCellStyle = wb.CreateCellStyle();
-                qCellStyle.CloneStyleFrom(cellStyle);
-                qCellStyle.Alignment = HorizontalAlignment.Right;
-                qCellStyle.DataFormat = fmt.GetFormat("#,##0_ ;@");
-
-                //小数点、千分位单元格样式设定
-                Dictionary<string, ICellStyle> cstyles = new Dictionary<string, ICellStyle>();
-                ICellStyle cstyle = null;
-                #endregion
-
-                //输出列标题
-                row = sheet.CreateRow(titleRowIndex);
-                row.HeightInPoints = DEF_ROW_HEIGHT;
-
-                foreach (DataColumn col in dt.Columns)
-                {
-                    cell = row.CreateCell(c++);
-                    cell.SetCellValue(col.ColumnName);
-                    cell.CellStyle = col.ColumnName == "序" ? idxTitleStyle : titleStyle;
-
-                    columnWidth = col.ExtendedProperties.ContainsKey("width")
-                                      ? (int)col.ExtendedProperties["width"]
-                                      : 100;
-                    sheet.SetColumnWidth(c - 1, (int)(Math.Ceiling(columnWidth / charWidth) + 0.72) * 256);
-
-                    if (headerRow != null)
-                        headerRow.CreateCell(c - 1);
-                    if (dateRow != null)
-                        dateRow.CreateCell(c - 1);
-                    if (sumRow != null)
-                        sumRow.CreateCell(c - 1);
-                    if (creatorRow != null)
-                        creatorRow.CreateCell(c - 1);
-
-                    //定义数字列单元格样式
-                    switch (col.DataType.Name)
-                    {
-                        case "Single":
-                        case "Double":
-                        case "Decimal":
-                            decimalPlaces = col.ExtendedProperties.ContainsKey("dots")
-                                                ? (int)col.ExtendedProperties["dots"]
-                                                : 2;
-                            qian = col.ExtendedProperties.ContainsKey("k")
-                                       ? (bool)col.ExtendedProperties["k"]
-                                       : false;
-
-                            if (decimalPlaces > 0 && !qian)
-                            {
-                                cstyle = wb.CreateCellStyle();
-                                cstyle.CloneStyleFrom(qCellStyle);
-                                cstyle.DataFormat = fmt.GetFormat("0." + string.Empty.PadLeft(decimalPlaces, '0') + "_ ;@");
-                            }
-                            else if (decimalPlaces == 0 && qian)
-                            {
-                                cstyle = wb.CreateCellStyle();
-                                cstyle.CloneStyleFrom(qCellStyle);
-                            }
-                            else if (decimalPlaces > 0 && qian)
-                            {
-                                cstyle = wb.CreateCellStyle();
-                                cstyle.CloneStyleFrom(qCellStyle);
-                                cstyle.DataFormat = fmt.GetFormat("#,##0." + string.Empty.PadLeft(decimalPlaces, '0') + "_ ;@");
-                            }
-
-                            cstyles.Add(col.ColumnName, cstyle);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                //输出文件标题
-                if (headerRow != null)
-                {
-                    sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(headerRowIndex, headerRowIndex, 0,
-                                                                            dt.Columns.Count - 1));
-                    cell = headerRow.GetCell(0);
-                    cell.SetCellValue(header);
-                    cell.CellStyle = headerStyle;
-                    headerRow.HeightInPoints = 26;
-                }
-                //输出日期
-                if (dateRow != null)
-                {
-                    sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(dateRowIndex, dateRowIndex, 0,
-                                                                            dt.Columns.Count - 1));
-                    cell = dateRow.GetCell(0);
-                    cell.SetCellValue("日期：" + DateTime.Today.ToString("yyyy-MM-dd"));
-                    cell.CellStyle = userStyle;
-                    dateRow.HeightInPoints = DEF_ROW_HEIGHT;
-                }
-                //输出制表人
-                if (creatorRow != null)
-                {
-                    sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(creatorRowIndex, creatorRowIndex, 0,
-                                                                            dt.Columns.Count - 1));
-                    cell = creatorRow.GetCell(0);
-                    cell.SetCellValue("制表人：" + creator);
-                    cell.CellStyle = userStyle;
-                    creatorRow.HeightInPoints = DEF_ROW_HEIGHT;
-                }
-
-                r = titleRowIndex + 1;
-                //输出查询结果
-                foreach (DataRow dr in dt.Rows)
-                {
-                    row = sheet.CreateRow(r++);
-                    row.HeightInPoints = DEF_ROW_HEIGHT;
-                    c = 0;
-
-                    foreach (DataColumn col in dt.Columns)
-                    {
-                        cell = row.CreateCell(c++);
-
-                        switch (col.DataType.Name)
-                        {
-                            case "Boolean":
-                                cell.CellStyle = cellStyle;
-                                cell.SetCellValue(Equals(dr[col.ColumnName], true) ? "是" : "否");
-                                break;
-                            case "DateTime":
-                                isDate = col.ExtendedProperties.ContainsKey("isdate")
-                                             ? (bool)col.ExtendedProperties["isdate"]
-                                             : false;
-
-                                cell.CellStyle = isDate ? dateCellStyle : timeCellStyle;
-                                cell.SetCellValue(dr[col.ColumnName] as string);
-                                break;
-                            case "Int16":
-                            case "Int32":
-                            case "Int64":
-                                qian = col.ExtendedProperties.ContainsKey("k")
-                                               ? (bool)col.ExtendedProperties["k"]
-                                               : false;
-
-                                cell.CellStyle = col.ColumnName == "序"
-                                                     ? idxCellStyle
-                                                     : qian ? qCellStyle : numCellStyle;
-                                cell.SetCellValue(Convert.ToInt64(dr[col.ColumnName]));
-                                break;
-                            case "Single":
-                            case "Double":
-                            case "Decimal":
-                                cell.CellStyle = cstyles[col.ColumnName];
-                                cell.SetCellValue((Convert.ToDouble(dr[col.ColumnName])));
-                                break;
-                            default:
-                                cell.CellStyle = cellStyle;
-                                cell.SetCellValue(dr[col.ColumnName] as string);
-                                break;
-                        }
-                    }
-                }
-                //合计
-                if (sumRow != null)
-                {
-                    sumRow.HeightInPoints = DEF_ROW_HEIGHT;
-
-                    for (c = 0; c < dt.Columns.Count; c++)
-                    {
-                        cell = sumRow.GetCell(c);
-                        cell.CellStyle = cellStyle;
-
-                        if (sumColumns.Contains(c) == false)
-                            continue;
-
-                        cell.SetCellFormula(string.Format("SUM({0}:{1})",
-                                                          GetCellName(c, titleRowIndex + 1),
-                                                          GetCellName(c, titleRowIndex + dt.Rows.Count)));
-                    }
-                }
-
-                wb.Write(fs);
-                len = fs.Length;
-            }
-
-
-            return null;
-        }
-
-        /// <summary>
-        /// 获取单元格的显示名称，格式如A1,B2
-        /// </summary>
-        /// <param name="columnIdx">单元格列号</param>
-        /// <param name="rowIdx">单元格行号</param>
-        /// <returns></returns>
-        public static string GetCellName(int columnIdx, int rowIdx)
-        {
-            int[] maxs = new[] { 26, 26 * 26 + 26, 26 * 26 * 26 + (26 * 26 + 26) + 26 };
-            int col = columnIdx + 1;
-            int row = rowIdx + 1;
-
-            if (col > maxs[2])
-                throw new Exception("列序号不正确，超出最大值");
-
-            int alphaCount = 1;
-
-            foreach (int m in maxs)
-            {
-                if (m < col)
-                    alphaCount++;
-            }
-
-            switch (alphaCount)
-            {
-                case 1:
-                    return (char)(col + 64) + "" + row;
-                case 2:
-                    return (char)((col / 26) + 64) + "" + (char)((col % 26) + 64) + row;
-                case 3:
-                    return (char)((col / 26 / 26) + 64) + "" + (char)(((col - col / 26 / 26 * 26 * 26) / 26) + 64) + "" + (char)((col % 26) + 64) + row;
-            }
-
-            return "Unkown";
-        }
-
     }
 
 

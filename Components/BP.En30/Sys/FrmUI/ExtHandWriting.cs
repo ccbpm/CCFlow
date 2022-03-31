@@ -110,7 +110,7 @@ namespace BP.Sys.FrmUI
         /// <param name="mypk"></param>
         public ExtHandWriting(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>

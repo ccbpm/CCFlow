@@ -181,7 +181,7 @@ namespace BP.CCFast
         }
         public WorkRec(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -256,13 +256,13 @@ namespace BP.CCFast
                 throw new Exception("err@日期为[" + this.RiQi + "]的日志已经存在");
             //   }
 
-            this.MyPK = DBAccess.GenerGUID();
+            this.setMyPK(DBAccess.GenerGUID());
             this.Rec = WebUser.No;
             this.RecName = WebUser.Name;
             this.OrgNo = WebUser.OrgNo;
 
-            this.RDT = DataType.CurrentDataTime;
-            this.RiQi = DataType.CurrentData;
+            this.RDT = DataType.CurrentDateTime;
+            this.RiQi = DataType.CurrentDate;
 
             this.NianYue = DataType.CurrentYearMonth; //隶属年月.
             this.NianDu = DataType.CurrentYear; //年度.
@@ -418,7 +418,7 @@ namespace BP.CCFast
         public string FenXi_Init()
         {
             // HtmlVar信息块 ， 本周完成数， 本月完成数，
-            BP.GPM.Home.WindowExt.HtmlVar html = new GPM.Home.WindowExt.HtmlVar();
+            BP.GPM.Home.WindowExt.HtmlVar html = new BP.GPM.Home.WindowExt.HtmlVar();
             html.GetValDocHtml();
             html.Insert();
 

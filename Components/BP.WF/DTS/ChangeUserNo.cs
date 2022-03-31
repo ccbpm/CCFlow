@@ -65,8 +65,8 @@ namespace BP.WF.DTS
 
             foreach (MapData md in mds)
             {
-                MapAttrs attrs = new MapAttrs(md.No);
-                foreach (MapAttr attr in attrs)
+                MapAttrs mattrs = new MapAttrs(md.No);
+                foreach (MapAttr attr in mattrs)
                 {
                     if (attr.UIIsEnable == false && attr.DefValReal == "@WebUser.No")
                     {

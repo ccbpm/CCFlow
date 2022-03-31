@@ -11,6 +11,7 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
+using BP.Difference;
 
 namespace BP.WF.HttpHandler
 {
@@ -34,9 +35,11 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string MyFrm_Init_Data()
         {
-            //string sql = "SELECT FrmDB FROM ND" + int.Parse(this.FK_Flow)+ "Track WHERE MyPK='" + this.MyPK + "'";
-            // return DBAccess.RunSQLReturnStringIsNull(sql,"err@没有获得数据.");
-            return DBAccess.GetBigTextFromDB("ND" + int.Parse(this.FK_Flow) + "Track", "MyPK", this.MyPK, "FrmDB");
+            string trackID = this.GetRequestVal("TrackID");
+            if (DataType.IsNullOrEmpty(trackID) == true)
+                return "";
+            //根据TrackID从Track表中获取历史数据
+            return DBAccess.GetBigTextFromDB("ND" + int.Parse(this.FK_Flow) + "Track", "MyPK", trackID, "FrmDB");
         }
 
         #endregion 表单查看.
@@ -211,11 +214,16 @@ namespace BP.WF.HttpHandler
             string toolbar = "";
             try
             {
+
                 DataRow dr = dt.NewRow();
-                dr["No"] = "Close";
-                dr["Name"] = "关闭";
-                dr["Oper"] = "Close();";
-                dt.Rows.Add(dr);
+                if (this.IsMobile == false)
+                {
+                    dr["No"] = "Close";
+                    dr["Name"] = "关闭";
+                    dr["Oper"] = "Close();";
+                    dt.Rows.Add(dr);
+                }
+
 
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
@@ -228,7 +236,7 @@ namespace BP.WF.HttpHandler
                 #region 根据流程权限控制规则获取可以操作的按钮功能
                 string sql = "SELECT A.PowerFlag,A.EmpNo,A.EmpName FROM WF_PowerModel A WHERE PowerCtrlType =1"
                     + " UNION "
-                    + "SELECT A.PowerFlag,B." + BP.Sys.Glo.UserNo + ",B.Name FROM WF_PowerModel A, Port_Emp B, Port_Deptempstation C WHERE A.PowerCtrlType = 0 AND B.No = C.FK_Emp AND A.StaNo = C.FK_Station";
+                    + "SELECT A.PowerFlag,B." + BP.Sys.Base.Glo.UserNo + ",B.Name FROM WF_PowerModel A, Port_Emp B, Port_Deptempstation C WHERE A.PowerCtrlType = 0 AND B.No=C.FK_Emp AND A.StaNo = C.FK_Station";
                 sql = "SELECT PowerFlag From(" + sql + ")D WHERE  D.EmpNo='" + WebUser.No + "'";
 
                 string powers = DBAccess.RunSQLReturnStringIsNull(sql, "");
@@ -292,7 +300,6 @@ namespace BP.WF.HttpHandler
                             dr["Name"] = btnLab.EndFlowLab;
                             dr["Oper"] = "DoStop('" + btnLab.EndFlowLab + "','" + this.FK_Flow + "','" + this.WorkID + "');";
                             dt.Rows.Add(dr);
-
                         }
 
                         //催办
@@ -318,10 +325,10 @@ namespace BP.WF.HttpHandler
                         }
 
                         break;
-                    //case WFState.HungUp: // 挂起.
+                    //case WFState.Hungup: // 挂起.
                     //    /*撤销挂起*/
                     //    if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(WorkID, WebUser.No) == true)
-                    //        toolbar += "<input name='UnHungUp' type='button' value='撤销挂起' enable='true'  onclick='UnHungUp()'/>";
+                    //        toolbar += "<input name='UnHungup' type='button' value='撤销挂起' enable='true'  onclick='UnHungup()'/>";
                     //    break;
                     default:
                         break;
@@ -336,7 +343,7 @@ namespace BP.WF.HttpHandler
 
                 #region 加载流程查看器 - 按钮
 
-                /* 判断是否是分合流？ 从而增加子线程按钮. @hongyan */
+                /* 判断是否是分合流？ 从而增加子线程按钮.*/
                 if (gwf.WFState == WFState.Runing)
                 {
                     if (nd.IsFLHL == true)
@@ -378,6 +385,25 @@ namespace BP.WF.HttpHandler
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
                 }
+                /**数据库版本*/
+                if (btnLab.FrmDBVerMyView == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "FrmDBVer";
+                    dr["Name"] = btnLab.FrmDBVerLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+                //评论
+                if (btnLab.FlowBBSRole != 0)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "FlowBBS";
+                    dr["Name"] = btnLab.FlowBBSLab;
+                    dr["Oper"] = btnLab.FlowBBSRole;
+                    dt.Rows.Add(dr);
+                }
+
                 /* 公文标签 */
                 if (btnLab.OfficeBtnEnable == true && btnLab.OfficeBtnLocal == 0)
                 {
@@ -418,7 +444,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineError(ex);
+                BP.DA.Log.DebugWriteError(ex);
                 toolbar = "err@" + ex.Message;
             }
             return BP.Tools.Json.ToJson(dt);
@@ -497,7 +523,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineError(ex);
+                BP.DA.Log.DebugWriteError(ex);
                 toolbar = "err@" + ex.Message;
             }
             return BP.Tools.Json.ToJson(dt);
@@ -519,6 +545,7 @@ namespace BP.WF.HttpHandler
                     break;
                 case DBType.MySQL:
                 case DBType.PostgreSQL:
+                case DBType.UX:
                     currNode = "SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC LIMIT 1";
                     break;
                 case DBType.MSSQL:
@@ -547,6 +574,8 @@ namespace BP.WF.HttpHandler
         {
             //是否可以处理当前工作？
             bool isCanDoCurrWorker = gwf.TodoEmps.Contains(WebUser.No + "," + WebUser.Name + ";");
+            //   bool isCanDoCurrWorker = gwf.TodoEmps.Contains(WebUser.No + ",");
+
             if (isCanDoCurrWorker)
                 return true;
 
@@ -1106,9 +1135,9 @@ namespace BP.WF.HttpHandler
                         string dept = DBAccess.RunSQLReturnString(Sql);
                         if (DataType.IsNullOrEmpty(dept) == true)
                             continue;
-                        string[] depts = dept.Split(';');
+                        string[] deptStrs = dept.Split(';');
                         isExit = false;
-                        foreach (string s in depts)
+                        foreach (string s in deptStrs)
                         {
                             if (exp.Contains(s) == true)
                             {
@@ -1406,7 +1435,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineError(ex);
+                BP.DA.Log.DebugWriteError(ex);
                 return "err@" + ex.Message;
             }
         }

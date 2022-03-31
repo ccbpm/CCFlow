@@ -52,15 +52,15 @@ namespace BP.WF.DTS
                 {
                     foreach (DataRow row in dt.Rows)
                     {
-                        MapAttrs attrs = new MapAttrs();
-                        QueryObject qo = new QueryObject(attrs);
+                        MapAttrs mattrs = new MapAttrs();
+                        QueryObject qo = new QueryObject(mattrs);
                         qo.AddWhere(MapAttrAttr.FK_MapData, row["NO"].ToString());
                         qo.addAnd();
                         qo.AddWhere(MapAttrAttr.UIVisible, true);
                         qo.addOrderBy(MapAttrAttr.Y, MapAttrAttr.X);
                         qo.DoQuery();
                         int rowIdx = 0;
-                        foreach (MapAttr mapAttr in attrs)
+                        foreach (MapAttr mapAttr in mattrs)
                         {
                             mapAttr.Idx = rowIdx;
                             mapAttr.DirectUpdate();

@@ -343,7 +343,7 @@ namespace BP.Sys
         /// <param name="mypk"></param>
         public FrmBtn(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -409,8 +409,7 @@ namespace BP.Sys
         /// <param name="fk_mapdata">s</param>
         public FrmBtns(string fk_mapdata)
         {
-            this.Retrieve(FrmLineAttr.FK_MapData, fk_mapdata);
-
+            this.Retrieve(FrmBtnAttr.FK_MapData, fk_mapdata);
         }
         /// <summary>
         /// 得到它的 Entity

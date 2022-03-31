@@ -28,7 +28,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <TargetFrameworkProfile />
     <SccProjectName>
@@ -111,22 +111,42 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\FluentFTP.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=1.0.0.999, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+    <Reference Include="HtmlAgilityPack, Version=1.11.42.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RefDLL\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.3.1.9, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp">
       <HintPath>..\..\RefDLL\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NPOI">
+    <Reference Include="NPOI, Version=2.2.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\..\RefDLL\NPOI.OpenXml4Net.dll</HintPath>
     </Reference>
     <Reference Include="Oracle.ManagedDataAccess">
       <HintPath>..\..\RefDLL\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Doc, Version=9.12.12.0, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\CCFlowCloud\packages\Spire.Doc.9.12.12\lib\net40\Spire.Doc.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.License, Version=1.4.0.40, Culture=neutral, PublicKeyToken=b1144360237c8b3f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\CCFlowCloud\packages\Spire.Doc.9.12.12\lib\net40\Spire.License.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Pdf, Version=7.12.1.0, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\CCFlowCloud\packages\Spire.Doc.9.12.12\lib\net40\Spire.Pdf.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -157,8 +177,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppClass.cs" />
     <Compile Include="CCBill\Sys\Func.cs" />
+    <Compile Include="CCBill\Template\ToolBarBtn.cs" />
     <Compile Include="CCFast\KnowledgeManagement\KMDtl.cs" />
     <Compile Include="CCFast\KnowledgeManagement\Knowledge.cs" />
     <Compile Include="CCFast\StandAloneFlow.cs" />
@@ -200,10 +220,14 @@
     <Compile Include="CCFast\ZuPu\JiaPu.cs" />
     <Compile Include="CCFast\ZuPu\People.cs" />
     <Compile Include="CCFast\ZuPu\ZuPuTree.cs" />
+    <Compile Include="Data\Admin2Group\CHExt.cs" />
+    <Compile Include="Data\Admin2Group\GenerWorkFlowView.cs" />
+    <Compile Include="Data\AdminGroup\CHExt.cs" />
     <Compile Include="Data\AutoRptDtl.cs" />
     <Compile Include="Data\AutoRpt.cs" />
     <Compile Include="Data\CCListExt.cs" />
     <Compile Include="Data\CHNode.cs" />
+    <Compile Include="Data\Flow.cs" />
     <Compile Include="Data\MyAuthto.cs" />
     <Compile Include="Difference\CCInterface.cs" />
     <Compile Include="Difference\Glo.cs" />
@@ -281,7 +305,6 @@
     <Compile Include="Dev2InterfaceGuest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Dev2InterfaceHtml.cs" />
     <Compile Include="DTS\Service\AutoRunOverTimeFlow.cs" />
     <Compile Include="DTS\Service\AutoRunWF_Task.cs" />
     <Compile Include="DTS\ChangeUserNo.cs" />
@@ -305,7 +328,6 @@
     <Compile Include="DTS\GenerDeptTree.cs" />
     <Compile Include="CCBill\WF_CCBill_Opt.cs" />
     <Compile Include="Glo.cs" />
-    <Compile Include="GloSQL.cs" />
     <Compile Include="GPM\Home\WindowExt\ChartRate.cs" />
     <Compile Include="GPM\Home\WindowExt\ChartRing.cs" />
     <Compile Include="GPM\Home\WindowExt\Glo.cs" />
@@ -314,11 +336,13 @@
     <Compile Include="GPM\Home\WindowExt\Table.cs" />
     <Compile Include="GPM\Home\WindowExt\ChartLine.cs" />
     <Compile Include="GPM\Home\WindowExt\ChartPie.cs" />
-    <Compile Include="GPM\Home\WindowExt\ChartZZT.cs" />
+    <Compile Include="GPM\Home\WindowExt\ChartChina.cs" />
     <Compile Include="GPM\Home\WindowExt\HtmlVar.cs" />
     <Compile Include="GPM\Home\WindowExt\Html.cs" />
     <Compile Include="GPM\Home\WindowExt\Dtl.cs" />
     <Compile Include="GPM\Home\WindowExt\HtmlVarDtl.cs" />
+    <Compile Include="GPM\Menu2020\Rpt3D.cs" />
+    <Compile Include="GPM\Menu2020\SearchAttr.cs" />
     <Compile Include="GPM\Menu2020\TabDtl.cs" />
     <Compile Include="GPM\Menu2020\Tab.cs" />
     <Compile Include="GPM\PowerCenter.cs" />
@@ -350,6 +374,7 @@
     <Compile Include="HttpHandler\WF_Admin_Cond2020.cs" />
     <Compile Include="HttpHandler\WF_Admin_DeveloperDesigner.cs" />
     <Compile Include="GPM\WF_GPM.cs" />
+    <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_Batch.cs" />
     <Compile Include="HttpHandler\WF_Portal.cs" />
     <Compile Include="HttpHandler\WF_CCForm_Components.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_Components.cs.cs" />
@@ -371,6 +396,9 @@
     <Compile Include="HttpHandler\WF_Admin_MobileFrmDesigner.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner_FlowDevModel.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_StyletDfine.cs" />
+    <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_Template_FrmAttachmentSingle.cs" />
+    <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_PrintTemplate.cs" />
+    <Compile Include="HttpHandler\WF_WorkOpt_FlowOperation.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_QRCode.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_Batch.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_StartGuide.cs" />
@@ -394,7 +422,6 @@
     <Compile Include="HttpHandler\CCMobile_RptSearch.cs" />
     <Compile Include="HttpHandler\CCMobile_CCForm.cs" />
     <Compile Include="HttpHandler\WF_Setting.cs" />
-    <Compile Include="HttpHandler\WF_FlowFormTree.cs" />
     <Compile Include="HttpHandler\WF_Admin_Sln.cs" />
     <Compile Include="HttpHandler\WF_Admin_Cond.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner2018.cs" />
@@ -405,9 +432,14 @@
     <Compile Include="GPM\Menu2020\Module.cs" />
     <Compile Include="GPM\Menu2020\MySystem.cs" />
     <Compile Include="GPM\Menu2020\PortPage.cs" />
-    <Compile Include="OverrideFile.cs" />
-    <Compile Include="Port\Admin2\OrgAdminer.cs" />
-    <Compile Include="Port\Admin2\User.cs" />
+    <Compile Include="Port\Admin2Group\Dept.cs" />
+    <Compile Include="Data\AdminGroup\GenerWorkFlowView.cs" />
+    <Compile Include="Port\Admin2Group\OAFlowSort.cs" />
+    <Compile Include="Port\Admin2Group\OAFrmTree.cs" />
+    <Compile Include="Port\Admin2Group\Org.cs" />
+    <Compile Include="Port\Admin2Group\OrgAdminer.cs" />
+    <Compile Include="Port\Admin2Group\User.cs" />
+    <Compile Include="Port\AdminGroup\Org.cs" />
     <Compile Include="Port\DeptFlowSearch.cs" />
     <Compile Include="Port\User.cs" />
     <Compile Include="Template\FlowTab.cs" />
@@ -415,7 +447,6 @@
     <Compile Include="Template\EnumLab.cs" />
     <Compile Include="Template\FlowOrg.cs" />
     <Compile Include="Port\Dept.cs" />
-    <Compile Include="Port\Admin2\Org.cs" />
     <Compile Include="Rpt\MapRpt.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -424,7 +455,6 @@
     <Compile Include="Rpt\RptExportTemplate.cs" />
     <Compile Include="Rpt\RptDfine.cs" />
     <Compile Include="Template\DocTemplate.cs" />
-    <Compile Include="Template\BillTemplate2019.cs" />
     <Compile Include="Template\Direction.cs" />
     <Compile Include="Template\ExtJobSchedule.cs" />
     <Compile Include="Template\FindWorkerRole.cs">
@@ -437,11 +467,15 @@
     </Compile>
     <Compile Include="Data\FastInput.cs" />
     <Compile Include="Template\FrmNodeExt.cs" />
+    <Compile Include="Template\FrmNodeFieldRemove.cs" />
+    <Compile Include="Template\FrmNodeJiJian.cs" />
+    <Compile Include="Template\FrmPrintTemplate.cs" />
     <Compile Include="Template\MapDataURL.cs" />
     <Compile Include="Template\MapDtlExt.cs" />
     <Compile Include="Template\MapFrmReferencePanel.cs" />
     <Compile Include="Template\MapFrmWord.cs" />
     <Compile Include="Template\FrmOrg.cs" />
+    <Compile Include="Template\MapFrmWps.cs" />
     <Compile Include="Template\NodeExt.cs" />
     <Compile Include="Template\MapFrmFool.cs" />
     <Compile Include="Template\FrmTrack.cs" />
@@ -471,6 +505,7 @@
     <Compile Include="Template\SubFlow\SubFlowHand.cs" />
     <Compile Include="Template\SubFlow\SubFlowAuto.cs" />
     <Compile Include="Template\SubFlow\SubFlow.cs" />
+    <Compile Include="Template\FrmPrintDB.cs" />
     <Compile Include="Template\TemplateGlo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -492,7 +527,6 @@
     <Compile Include="WF\CCBill_FlowEvent.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
     <Compile Include="DTS\GenerTitle.cs" />
-    <Compile Include="DTS\ClearRepLineLab.cs" />
     <Compile Include="DTS\UpTrack.cs" />
     <Compile Include="DTS\OneKeyLoadTemplete.cs" />
     <Compile Include="DTS\LoadNDxxRpt2GernerWorkFlow.cs" />
@@ -528,18 +562,11 @@
     <Compile Include="Template\SysForm.cs" />
     <Compile Include="Template\NodeToolbar.cs" />
     <Compile Include="Template\FrmField.cs" />
-    <Compile Include="Template\HungUp.cs" />
     <Compile Include="Dev2Interface.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\Bill.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DTS\LoadTemplete.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DTS\WFDTS.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DTS\ToImplement\ClearDB.cs" />
@@ -583,7 +610,6 @@
     <Compile Include="WF\Node.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Port\Admin2\Dept.cs" />
     <Compile Include="Port\Emp.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -600,16 +626,12 @@
     <Compile Include="WF\ShiftWork.cs" />
     <Compile Include="WF\TransferCustom.cs" />
     <Compile Include="WF.cs" />
-    <Compile Include="WFEnum.cs" />
     <Compile Include="WF\GenerWorkFlow.cs" />
     <Compile Include="Template\SubFlow\FrmSubFlow.cs" />
     <Compile Include="WF\FlowEventBase.cs" />
     <Compile Include="WF\FlowOpList.cs" />
     <Compile Include="Template\NodeWorkCheck.cs" />
     <Compile Include="Data\GERpt.cs" />
-    <Compile Include="Template\BillTemplate.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DTS\ToImplement\RepariDB.cs" />
     <Compile Include="WF\SendReturnObj.cs" />
     <Compile Include="WF\WorkCheck.cs" />
@@ -641,16 +663,10 @@
     <Compile Include="Data\NDXRptBase.cs" />
     <Compile Include="WF\AthUnReadLog.cs" />
     <Compile Include="WorkFlowBuessRole.cs" />
-    <Compile Include="Xml\AdminMenuCloud.cs" />
-    <Compile Include="Xml\Admin2Menu.cs" />
-    <Compile Include="Xml\AdminMenuCloudGroup.cs" />
     <Compile Include="Xml\AdminMenu.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Dev2InterfaceAnonymous.cs" />
-    <Compile Include="PortalInterface.cs" />
-    <Compile Include="Xml\Admin2MenuGroup.cs" />
-    <Compile Include="Xml\AdminMenuGroup.cs" />
     <Compile Include="Xml\EventList.cs">
       <SubType>Code</SubType>
     </Compile>

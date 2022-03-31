@@ -86,13 +86,13 @@ namespace BP.CCBill
             string flowNo = handler.FlowDevModel_Save();
 
             //执行更新. 设置为不能独立启动.
-            BP.WF.Flow fl = new WF.Flow(flowNo);
+            BP.WF.Flow fl = new BP.WF.Flow(flowNo);
             fl.IsCanStart = false;
             fl.TitleRole = "@WebUser.No 在@RDT 发起【@DictName】";
             fl.Update();
 
             //更新开始节点.
-            BP.WF.Node nd = new WF.Node(int.Parse(flowNo + "01"));
+            BP.WF.Node nd = new BP.WF.Node(int.Parse(flowNo + "01"));
             nd.Name = this.Name;
             if (mapData.HisFrmType == FrmType.Develop)
             {
@@ -107,21 +107,21 @@ namespace BP.CCBill
 
             #region 第2步 把表单导入到流程上去.
             //如果是发起流程的方法，就要表单的字段复制到，流程的表单上去.
-            BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp handlerFrm = new WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp();
+            BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp handlerFrm = new BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp();
             //   handler.AddPara
             string ndFrmID = "ND" + int.Parse(flowNo + "01");
             handlerFrm.Imp_CopyFrm(ndFrmID, this.FrmID);
 
             MapAttr attr = new MapAttr(ndFrmID + "_Title");
-            attr.UIVisible = false;
-            attr.Name = "流程标题";
+            attr.setUIVisible(false);
+            attr.setName("流程标题");
             attr.Update();
 
             //生成名称字段.
-            attr.KeyOfEn = "DictName";
-            attr.Name = "名称";
-            attr.UIVisible = true;
-            attr.MyPK = attr.FK_MapData + "_" + attr.KeyOfEn;
+            attr.setKeyOfEn("DictName");
+            attr.setName("名称");
+            attr.setUIVisible(true);
+            attr.setMyPK(attr.FK_MapData + "_" + attr.KeyOfEn);
             attr.DirectInsert();
 
             
@@ -180,7 +180,7 @@ namespace BP.CCBill
 
             //创建从表
             MapDtl mapDtl = new MapDtl();
-            mapDtl.FK_MapData = toFrmID;
+            mapDtl.setFK_MapData(toFrmID);
             mapDtl.No = toFrmID + "Dtl1";
             mapDtl.FK_Node = 0;
             mapDtl.Name = "从表";
@@ -200,21 +200,21 @@ namespace BP.CCBill
                 if (attr.IsExit(MapAttrAttr.FK_MapData, mapDtl.No, MapAttrAttr.KeyOfEn, attr.KeyOfEn) == true)
                     continue;
 
-                attr.FK_MapData = mapDtl.No;
-                attr.MyPK = attr.FK_MapData + "_" + attr.KeyOfEn;
+                attr.setFK_MapData(mapDtl.No);
+                attr.setMyPK(attr.FK_MapData + "_" + attr.KeyOfEn);
                 attr.Insert();
             }
             //增加一个关联的实体字段的OID
             MapAttr mapAttr = new BP.Sys.MapAttr();
-            mapAttr.FK_MapData = mapDtl.No;
-            mapAttr.HisEditType = EditType.Readonly;
-            mapAttr.KeyOfEn = "DictOID";
-            mapAttr.Name = "关联实体的OID";
-            mapAttr.MyDataType = DataType.AppInt;
-            mapAttr.UIContralType = UIContralType.TB;
-            mapAttr.LGType = FieldTypeS.Normal;
-            mapAttr.UIVisible = false;
-            mapAttr.UIIsEnable = false;
+            mapAttr.setFK_MapData(mapDtl.No);
+            mapAttr.setEditType(EditType.Readonly);
+            mapAttr.setKeyOfEn("DictOID");
+            mapAttr.setName("关联实体的OID");
+            mapAttr.setMyDataType(DataType.AppInt);
+            mapAttr.setUIContralType(UIContralType.TB);
+            mapAttr.setLGType(FieldTypeS.Normal);
+            mapAttr.setUIVisible(false);
+            mapAttr.setUIIsEnable(false);
             mapAttr.DefVal = "0";
             mapAttr.Insert();
             return "复制成功.";
@@ -243,7 +243,7 @@ namespace BP.CCBill
             //如果是发起流程的方法，就要表单的字段复制到，流程的表单上去.
             string frmID = "ND" + int.Parse(fl.No) + "01";
             MapDtl mapDtl = new MapDtl();
-            mapDtl.FK_MapData = frmID;
+            mapDtl.setFK_MapData(frmID);
             mapDtl.No = frmID + "Dtl1";
             mapDtl.FK_Node = 0;
             mapDtl.Name = "从表";
@@ -264,32 +264,32 @@ namespace BP.CCBill
                 if (attr.IsExit(MapAttrAttr.FK_MapData, mapDtl.No, MapAttrAttr.KeyOfEn, attr.KeyOfEn) == true)
                     continue;
 
-                attr.FK_MapData = mapDtl.No;
-                attr.MyPK = attr.FK_MapData + "_" + attr.KeyOfEn;
+                attr.setFK_MapData(mapDtl.No);
+                attr.setMyPK(attr.FK_MapData + "_" + attr.KeyOfEn);
                 attr.Insert();
             }
             //增加一个关联的实体字段的OID
             MapAttr mapAttr = new BP.Sys.MapAttr();
-            mapAttr.FK_MapData = mapDtl.No;
-            mapAttr.HisEditType = EditType.Readonly;
-            mapAttr.KeyOfEn = "DictOID";
-            mapAttr.Name = "关联实体的OID";
-            mapAttr.MyDataType = DataType.AppInt;
-            mapAttr.UIContralType = UIContralType.TB;
-            mapAttr.LGType = FieldTypeS.Normal;
-            mapAttr.UIVisible = false;
-            mapAttr.UIIsEnable = false;
+            mapAttr.setFK_MapData(mapDtl.No);
+            mapAttr.setEditType(EditType.Readonly);
+            mapAttr.setKeyOfEn("DictOID");
+            mapAttr.setName("关联实体的OID");
+            mapAttr.setMyDataType(DataType.AppInt);
+            mapAttr.setUIContralType(UIContralType.TB);
+            mapAttr.setLGType(FieldTypeS.Normal);
+            mapAttr.setUIVisible(false);
+            mapAttr.setUIIsEnable(false);
             mapAttr.DefVal = "0";
             mapAttr.Insert();
             //更新开始节点.
-            BP.WF.Node nd = new WF.Node(int.Parse(flowNo + "01"));
+            BP.WF.Node nd = new BP.WF.Node(int.Parse(flowNo + "01"));
             nd.Name = this.Name;
             nd.Update();
             #endregion 把表单导入到流程上去.
 
 
             //创建方法.
-            BP.CCBill.Template.Method en = new Template.Method();
+            BP.CCBill.Template.Method en = new BP.CCBill.Template.Method();
             en.FrmID = this.FrmID;
             en.No = en.FrmID + "_" + flowNo;
             en.Name = this.Name;

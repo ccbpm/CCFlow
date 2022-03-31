@@ -9,6 +9,7 @@ using BP.Sys;
 using BP.DA;
 using BP.En;
 using BP.WF.Template;
+using BP.Difference;
 using BP.WF.XML;
 using System.IO;
 using BP.Tools;
@@ -103,7 +104,7 @@ namespace BP.WF.HttpHandler
             //}
             //dtf.WorkID = workId;
             //dtf.TempNo = docTempNo;
-            //dtf.MyPK = workId + "_" + docTempNo;
+            //dtf.setMyPK(workId + "_" + docTempNo;
             //dtf.Insert();
 
             return "模板导入成功.";
@@ -242,88 +243,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-        #region  单据模版维护
-        /// <summary>
-        /// @李国文.
-        /// </summary>
-        /// <returns></returns>
-        public string Bill_Save()
-        {
-            BillTemplate bt = new BillTemplate();
-            if (HttpContextHelper.RequestFilesCount == 0)
-                return "err@请上传模版.";
-
-            //上传附件
-            string filepath = "";
-            //HttpPostedFile file = HttpContext.Current.Request.Files[0];
-            //HttpPostedFile file = HttpContextHelper.RequestFiles(0);
-            var file = HttpContextHelper.RequestFiles(0);
-            string fileName = file.FileName;
-            fileName = fileName.Substring(fileName.IndexOf(this.GetRequestVal("TB_Name")));
-            fileName = fileName.ToLower();
-
-            filepath = SystemConfig.PathOfDataUser + "CyclostyleFile/" + fileName;
-            //file.SaveAs(filepath);
-            HttpContextHelper.UploadFile(file, filepath);
-
-            bt.NodeID = this.FK_Node;
-            bt.FK_MapData = this.FK_MapData;
-            bt.No = this.GetRequestVal("TB_No");
-
-            if (DataType.IsNullOrEmpty(bt.No))
-                bt.No = DBAccess.GenerOID("Template").ToString();
-
-            bt.Name = this.GetRequestVal("TB_Name");
-            bt.TempFilePath = fileName; //文件.
-
-            //打印的文件类型.
-            bt.HisBillFileType = (BillFileType)this.GetRequestValInt("DDL_BillFileType");
-
-            //打开模式.
-            bt.BillOpenModel = (BillOpenModel)this.GetRequestValInt("DDL_BillOpenModel");
-
-            //二维码模式.
-            bt.QRModel = (QRModel)this.GetRequestValInt("DDL_BillOpenModel");
-
-            //模版类型.rtf / VSTOForWord / VSTOForExcel .
-            if (fileName.Contains(".doc"))
-                bt.TemplateFileModel = TemplateFileModel.VSTOForWord;
-
-            if (fileName.Contains(".xls"))
-                bt.TemplateFileModel = TemplateFileModel.VSTOForExcel;
-
-            if (fileName.Contains(".rtf"))
-                bt.TemplateFileModel = TemplateFileModel.RTF;
-
-            bt.Save();
-
-            bt.SaveFileToDB("DBFile", filepath); //把文件保存到数据库里. 
-
-            return "保存成功.";
-        }
-        /// <summary>
-        /// 下载文件.
-        /// </summary>
-        public void Bill_Download()
-        {
-            BillTemplate en = new BillTemplate(this.No);
-            string MyFilePath = en.TempFilePath;
-            //HttpResponse response = context.Response;
-
-            //response.Clear();
-            //response.Buffer = true;
-            //response.Charset = "utf-8";
-            //response.AppendHeader("Content-Disposition", string.Format("attachment;filename={0}", en.TempFilePath.Substring(MyFilePath.LastIndexOf('/') + 1)));
-            //response.ContentEncoding = System.Text.Encoding.UTF8;
-            //response.BinaryWrite(System.IO.File.ReadAllBytes(MyFilePath));
-            //response.End();
-
-            HttpContextHelper.ResponseWrite("Charset");
-            HttpContextHelper.ResponseWriteHeader("Content-Disposition", string.Format("attachment;filename={0}", en.TempFilePath.Substring(MyFilePath.LastIndexOf('/') + 1)));
-            HttpContextHelper.Response.ContentType = "application/octet-stream;charset=utf-8";
-            HttpContextHelper.ResponseWriteFile(MyFilePath);
-        }
-        #endregion
+        
 
         #region  节点消息
         public string PushMsg_Init()
@@ -336,7 +256,7 @@ namespace BP.WF.HttpHandler
         public string PushMsg_Save()
         {
             BP.WF.Template.PushMsg msg = new BP.WF.Template.PushMsg();
-            msg.MyPK = this.MyPK;
+            msg.setMyPK(this.MyPK);
             msg.RetrieveFromDBSources();
 
             msg.FK_Event = this.FK_Event;
@@ -404,7 +324,7 @@ namespace BP.WF.HttpHandler
             //保存.
             if (DataType.IsNullOrEmpty(msg.MyPK) == true)
             {
-                msg.MyPK = DBAccess.GenerGUID();
+                msg.setMyPK(DBAccess.GenerGUID());
                 msg.Insert();
             }
             else
@@ -434,7 +354,7 @@ namespace BP.WF.HttpHandler
 
             //mypk
             BP.WF.Template.PushMsg msg = new BP.WF.Template.PushMsg();
-            msg.MyPK = this.MyPK;
+            msg.setMyPK(this.MyPK);
             msg.RetrieveFromDBSources();
             ds.Tables.Add(msg.ToDataTableField("PushMsgEntity"));
 
@@ -497,10 +417,10 @@ namespace BP.WF.HttpHandler
                 if (frmModel == "0")
                 {
                     //自由表单
-                    nd.FormType = NodeFormType.FreeForm;
+                    nd.FormType = NodeFormType.Develop;
                     nd.DirectUpdate();
 
-                    md.HisFrmType = BP.Sys.FrmType.FreeFrm;
+                    md.HisFrmType = BP.Sys.FrmType.Develop;
                     md.Update();
                 }
                 else
@@ -573,7 +493,7 @@ namespace BP.WF.HttpHandler
                     nd.FormType = NodeFormType.SheetTree;
                     nd.DirectUpdate();
 
-                    md.HisFrmType = BP.Sys.FrmType.FreeFrm; //同时更新表单表住表.
+                    md.HisFrmType = BP.Sys.FrmType.FoolForm; //同时更新表单表住表.
                     md.Update();
                 }
                 else
@@ -581,7 +501,7 @@ namespace BP.WF.HttpHandler
                     nd.FormType = NodeFormType.DisableIt;
                     nd.DirectUpdate();
 
-                    md.HisFrmType = BP.Sys.FrmType.FreeFrm; //同时更新表单表住表.
+                    md.HisFrmType = BP.Sys.FrmType.FoolForm; //同时更新表单表住表.
                     md.Update();
                 }
             }

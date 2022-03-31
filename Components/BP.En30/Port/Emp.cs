@@ -78,7 +78,16 @@ namespace BP.Port
                 this.SetValByKey(EmpAttr.UserID, value);
 
                 if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-                    this.SetValByKey(EmpAttr.No, BP.Web.WebUser.OrgNo + "_" + value);
+                {
+                    if (value.StartsWith(BP.Web.WebUser.OrgNo + "_") == true)
+                    {
+                        this.SetValByKey(EmpAttr.UserID, value.Replace(BP.Web.WebUser.OrgNo+"_",""));
+                        this.SetValByKey(EmpAttr.No, value);
+                    }
+                    else
+                        this.SetValByKey(EmpAttr.No, BP.Web.WebUser.OrgNo + "_" + value);
+                }
+                   
                 else
                     this.SetValByKey(EmpAttr.No, value);
             }
@@ -331,7 +340,7 @@ namespace BP.Port
                 map.AddTBString(EmpAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 30);
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 30);
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 20, 10);
-                map.AddDDLEntities(EmpAttr.FK_Dept, null, "部门", new Port.Depts(), true);
+                map.AddDDLEntities(EmpAttr.FK_Dept, null, "部门", new BP.Port.Depts(), true);
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Tel, null, "手机号", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Email, null, "邮箱", false, false, 0, 36, 36);

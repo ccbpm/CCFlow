@@ -770,12 +770,14 @@ namespace BP.WF.Template
 
                 map.AddTBString(NodeWorkCheckAttr.FWCOpLabel, "审核", "操作名词(审核/审阅/批示)", true, false, 0, 50, 10);
                 map.AddTBString(NodeWorkCheckAttr.FWCDefInfo, "", "默认审核信息", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(NodeWorkCheckAttr.SigantureEnabel, 0, "操作人显示方式", true, true, NodeWorkCheckAttr.SigantureEnabel,"@0=不签名@1=图片签名@2=写字板");
+
+                map.AddDDLSysEnum(NodeWorkCheckAttr.SigantureEnabel, 0, "签名方式", true, true, NodeWorkCheckAttr.SigantureEnabel,"@0=不签名@1=图片签名@2=写字板");
+                map.SetHelperUrl(NodeWorkCheckAttr.SigantureEnabel, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3577079&doc_id=31094");
+
                 map.AddBoolean(NodeWorkCheckAttr.FWCIsFullInfo, true, "如果用户未审核是否按照默认意见填充？", true, true, true);
 
-
-                map.AddTBFloat(NodeWorkCheckAttr.FWC_X, 300, "位置X", true, false);
-                map.AddTBFloat(NodeWorkCheckAttr.FWC_Y, 500, "位置Y", true, false);
+                map.AddTBFloat(NodeWorkCheckAttr.FWC_X, 300, "位置X", false, false);
+                map.AddTBFloat(NodeWorkCheckAttr.FWC_Y, 500, "位置Y", false, false);
 
                 map.AddTBFloat(NodeWorkCheckAttr.FWC_H, 300, "高度(0=100%)", true, false);
                 map.AddTBFloat(NodeWorkCheckAttr.FWC_W, 400, "宽度(0=100%)", true, false);
@@ -829,8 +831,8 @@ namespace BP.WF.Template
                 {
                     workCheckAth = new FrmAttachment();
                     /*如果没有查询到它,就有可能是没有创建.*/
-                    workCheckAth.MyPK = "ND" + this.NodeID + "_FrmWorkCheck";
-                    workCheckAth.FK_MapData = "ND" + this.NodeID.ToString();
+                    workCheckAth.setMyPK("ND" + this.NodeID + "_FrmWorkCheck");
+                    workCheckAth.setFK_MapData("ND" + this.NodeID.ToString());
                     workCheckAth.NoOfObj = "FrmWorkCheck";
                     workCheckAth.Exts = "*.*";
 

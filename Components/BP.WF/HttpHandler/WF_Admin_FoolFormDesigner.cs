@@ -19,6 +19,7 @@ using BP.WF;
 using BP.Web;
 using BP.Sys;
 using BP.WF.Template;
+using BP.Difference;
 
 namespace BP.WF.HttpHandler
 {
@@ -68,6 +69,37 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// 检查表单
+        /// </summary>
+        /// <returns></returns>
+        public string Designer_CheckFrm()
+        {
+            #region  检查完整性.
+            if (this.FK_MapData.ToUpper().Contains("BP.") == true)
+            {
+                /*如果是类的实体.*/
+                Entities ens = ClassFactory.GetEns(this.FK_MapData);
+                Entity en = ens.GetNewEntity;
+
+                MapData mymd = new MapData();
+                mymd.No = this.FK_MapData;
+                mymd.ClearCash(); //清除缓存。
+
+                int i = mymd.RetrieveFromDBSources();
+                if (i == 0)
+                    en.DTSMapToSys_MapData(this.FK_MapData); //调度数据到
+
+                mymd.RetrieveFromDBSources();
+                mymd.HisFrmType = FrmType.FoolForm;
+                mymd.Update();
+            }
+            #endregion
+
+            MapFrmFool cols = new MapFrmFool(this.FK_MapData);
+            cols.DoCheckFixFrmForUpdateVer();
+            return "url@Designer.htm?FK_MapData=" + this.FK_MapData + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+        }
+        /// <summary>
         ///  设计器初始化.
         /// </summary>
         /// <returns></returns>
@@ -77,31 +109,9 @@ namespace BP.WF.HttpHandler
             //如果是第一次进入，就执行旧版本的升级检查.
             if (this.IsFirst == true)
             {
-                #region  检查完整性.
-                if (this.FK_MapData.ToUpper().Contains("BP.") == true)
-                {
-                    /*如果是类的实体.*/
-                    Entities ens = ClassFactory.GetEns(this.FK_MapData);
-                    Entity en = ens.GetNewEntity;
-
-                    MapData mymd = new MapData();
-                    mymd.No = this.FK_MapData;
-                    mymd.ClearCash(); //清除缓存。
-
-                    int i = mymd.RetrieveFromDBSources();
-                    if (i == 0)
-                        en.DTSMapToSys_MapData(this.FK_MapData); //调度数据到
-
-                    mymd.RetrieveFromDBSources();
-                    mymd.HisFrmType = FrmType.FoolForm;
-                    mymd.Update();
-                }
-                #endregion
-
-                MapFrmFool cols = new MapFrmFool(this.FK_MapData);
-                cols.DoCheckFixFrmForUpdateVer();
-                return "url@Designer.htm?FK_MapData=" + this.FK_MapData + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+                return Designer_CheckFrm();
             }
+
             //把表单属性放入里面去.
             MapData md = new MapData(this.FK_MapData);
             //清缓存
@@ -109,11 +119,11 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(md.ToDataTableField("Sys_MapData").Copy());
 
             // 字段属性.
-            MapAttrs attrs = new MapAttrs(this.FK_MapData);
-            foreach (MapAttr item in attrs)
+            MapAttrs mattrs = new MapAttrs(this.FK_MapData);
+            foreach (MapAttr item in mattrs)
                 item.DefVal = item.DefValReal;
 
-            ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
+            ds.Tables.Add(mattrs.ToDataTableField("Sys_MapAttr"));
 
             GroupFields gfs = new GroupFields(this.FK_MapData);
             ds.Tables.Add(gfs.ToDataTableField("Sys_GroupField"));
@@ -170,6 +180,25 @@ namespace BP.WF.HttpHandler
         #endregion
 
         /// <summary>
+        /// 生成随机的字段ID.
+        /// </summary>
+        /// <returns></returns>
+        public string GenerRandomFieldID()
+        {
+            string sql = "SELECT count(MyPK) as MyNum FROM Sys_MapAttr WHERE FK_MapData='" + this.FrmID + "'";
+            int idx = DBAccess.RunSQLReturnValInt(sql);
+            for (int i = idx; i < 999; i++)
+            {
+                string str= "F" + i.ToString().PadLeft(3, '0');
+                sql = "SELECT count(MyPK) as MyNum FROM Sys_MapAttr WHERE FK_MapData='" + this.FrmID + "' AND KeyOfEn='" + str + "'";
+                var num = DBAccess.RunSQLReturnValInt(sql);
+                if (num == 0)
+                    return str;
+            }
+            return "err@系统错误.";
+        }
+
+        /// <summary>
         /// 初始化
         /// </summary>
         /// <returns></returns>
@@ -195,7 +224,7 @@ namespace BP.WF.HttpHandler
                 if (dtl.RetrieveFromDBSources() == 0)
                 {
                     // 开始复制它的属性.
-                    MapAttrs attrs = new MapAttrs(this.FK_MapDtl);
+                    MapAttrs mattrs = new MapAttrs(this.FK_MapDtl);
                     MapDtl odtl = new Sys.MapDtl();
                     odtl.No = this.FK_MapDtl;
                     int i = odtl.RetrieveFromDBSources();
@@ -211,7 +240,7 @@ namespace BP.WF.HttpHandler
 
                     //让其直接保存.
                     dtl.No = this.FK_MapDtl + "_" + this.FK_Node;
-                    dtl.FK_MapData = "Temp";
+                    dtl.setFK_MapData("Temp");
                     dtl.DirectInsert(); //生成一个明细表属性的主表.
 
                     //字段的分组也要一同复制
@@ -219,7 +248,7 @@ namespace BP.WF.HttpHandler
 
                     //循环保存字段.
                     int idx = 0;
-                    foreach (MapAttr item in attrs)
+                    foreach (MapAttr item in mattrs)
                     {
                         if (item.GroupID != 0)
                         {
@@ -247,8 +276,8 @@ namespace BP.WF.HttpHandler
                             }
                         }
 
-                        item.FK_MapData = this.FK_MapDtl + "_" + this.FK_Node;
-                        item.MyPK = item.FK_MapData + "_" + item.KeyOfEn;
+                        item.setFK_MapData(this.FK_MapDtl + "_" + this.FK_Node);
+                        item.setMyPK(item.FK_MapData + "_" + item.KeyOfEn);
                         item.Save();
                         idx++;
                         item.Idx = idx;
@@ -302,20 +331,20 @@ namespace BP.WF.HttpHandler
         {
             string dtlKey = this.GetRequestVal("DtlKeyOfEn");
             MapAttr attr = new Sys.MapAttr();
-            attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+            attr.setMyPK(this.FK_MapData + "_" + this.KeyOfEn);
             if (attr.RetrieveFromDBSources() != 0)
                 return "err@字段名[" + this.KeyOfEn + "]已经存在.";
 
             if (DataType.IsNullOrEmpty(dtlKey) == false)
             {
                 attr = new Sys.MapAttr();
-                attr.MyPK = this.FK_MapData + "_" + dtlKey;
+                attr.setMyPK(this.FK_MapData + "_" + dtlKey);
                 if (attr.RetrieveFromDBSources() != 0)
                     return "err@字段名[" + dtlKey + "]已经存在.";
             }
-            attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
-            attr.FK_MapData = this.FK_MapData;
-            attr.KeyOfEn = this.KeyOfEn;
+            attr.setMyPK(this.FK_MapData + "_" + this.KeyOfEn);
+            attr.setFK_MapData(this.FK_MapData);
+            attr.setKeyOfEn(this.KeyOfEn);
             attr.UIBindKey = this.GetRequestVal("EnumKey");
 
             attr.GroupID = this.GetRequestValInt("GroupFeid");
@@ -323,18 +352,18 @@ namespace BP.WF.HttpHandler
 
             if (uiContralType != 0)
             {
-                attr.UIContralType = (UIContralType)uiContralType;
+                attr.setUIContralType((UIContralType)uiContralType);
                 if (attr.UIContralType == UIContralType.RadioBtn)
                     attr.SetPara("RBShowModel", 3); //设置模式.
             }
             else
-                attr.UIContralType = En.UIContralType.DDL;
+                attr.setUIContralType(UIContralType.DDL);
 
             if (attr.UIContralType == UIContralType.CheckBok)
-                attr.MyDataType = DataType.AppString;
+                attr.setMyDataType(DataType.AppString);
             else
-                attr.MyDataType = DataType.AppInt;
-            attr.LGType = En.FieldTypeS.Enum;
+                attr.setMyDataType(DataType.AppInt);
+            attr.setLGType(FieldTypeS.Enum);
 
 
             SysEnumMain sem = new Sys.SysEnumMain();
@@ -347,7 +376,7 @@ namespace BP.WF.HttpHandler
                 if (count != 0)
                     attr.Name = sem.Name;
                 else
-                    attr.Name = "枚举" + attr.UIBindKey;
+                    attr.setName("枚举" + attr.UIBindKey);
             }
 
 
@@ -359,8 +388,8 @@ namespace BP.WF.HttpHandler
             attr.Insert();
             if (DataType.IsNullOrEmpty(dtlKey) == false)
             {
-                attr.MyPK = this.FK_MapData + "_" + dtlKey;
-                attr.KeyOfEn = dtlKey;
+                attr.setMyPK(this.FK_MapData + "_" + dtlKey);
+                attr.setKeyOfEn(dtlKey);
                 string uiBindKey = sem.GetParaString("DtlEnumKey");
                 attr.UIBindKey = uiBindKey;
                 attr.Name = sem.GetParaString("DtlName");
@@ -368,12 +397,12 @@ namespace BP.WF.HttpHandler
                 //创建联动关系
                 MapExt ext = new MapExt();
                 string mypk = "ActiveDDL_" + this.FK_MapData + "_" + this.KeyOfEn;
-                ext.MyPK = mypk;
+                ext.setMyPK(mypk);
                 ext.AttrsOfActive = dtlKey;
                 ext.DBType = "0";
                 ext.FK_DBSrc = "local";
                 ext.Doc = "Select IntKey as No, Lab as Name From Sys_Enum Where EnumKey='" + uiBindKey + "' AND IntKey>=@Key*100 AND IntKey< (@Key*100/#100)";
-                ext.FK_MapData = this.FK_MapData;
+                ext.setFK_MapData(this.FK_MapData);
                 ext.AttrOfOper = this.KeyOfEn;
                 ext.ExtType = "ActiveDDL";
                 ext.Insert();
@@ -384,7 +413,7 @@ namespace BP.WF.HttpHandler
         public string Designer_NewMapDtl()
         {
             MapDtl en = new MapDtl();
-            en.FK_MapData = this.FK_MapData;
+            en.setFK_MapData(this.FK_MapData);
             en.No = this.GetRequestVal("DtlNo");
 
             if (en.RetrieveFromDBSources() == 1)
@@ -413,9 +442,9 @@ namespace BP.WF.HttpHandler
         public string Designer_AthNew()
         {
             FrmAttachment ath = new FrmAttachment();
-            ath.FK_MapData = this.FK_MapData;
+            ath.setFK_MapData(this.FK_MapData);
             ath.NoOfObj = this.GetRequestVal("AthNo");
-            ath.MyPK = ath.FK_MapData + "_" + ath.NoOfObj;
+            ath.setMyPK(ath.FK_MapData + "_" + ath.NoOfObj);
             if (ath.RetrieveFromDBSources() == 1)
                 return "err@附件ID:" + ath.NoOfObj + "已经存在.";
             BP.Sys.CCFormAPI.CreateOrSaveAthMulti(this.FK_MapData, this.GetRequestVal("AthNo"), "我的附件", 100, 200);
@@ -530,9 +559,9 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GroupField_DeleteAllCheck()
         {
-            MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapAttrAttr.GroupID, this.GetRequestValInt("GroupField"));
-            foreach (MapAttr attr in attrs)
+            MapAttrs mattrs = new MapAttrs();
+            mattrs.Retrieve(MapAttrAttr.GroupID, this.GetRequestValInt("GroupField"));
+            foreach (MapAttr attr in mattrs)
             {
                 if (attr.HisEditType != EditType.Edit)
                     continue;
@@ -635,9 +664,13 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJson(ds);
         }
-
+        /// <summary>
+        /// 列
+        /// </summary>
         private List<string> sCols = null;
-
+        /// <summary>
+        /// 列
+        /// </summary>
         public List<string> SColumns
         {
             get
@@ -660,7 +693,10 @@ namespace BP.WF.HttpHandler
                 return sCols;
             }
         }
-
+        /// <summary>
+        /// 导入步骤
+        /// </summary>
+        /// <returns></returns>
         public string ImpTableField_Step3()
         {
             DataSet ds = new DataSet();
@@ -694,7 +730,7 @@ namespace BP.WF.HttpHandler
 
             string msg = md.Name + "导入字段信息:" + this.FK_MapData;
             bool isLeft = true;
-            float maxEnd = md.MaxEnd;
+           // float maxEnd = md.MaxEnd;
 
             Int32 iGroupID = 0;
 
@@ -707,7 +743,6 @@ namespace BP.WF.HttpHandler
                 iGroupID = Int32.Parse(dt.Rows[0][0].ToString());
             }
 
-
             foreach (string name in HttpContextHelper.RequestParamKeys)
             {
                 if (name.StartsWith("HID_Idx_") == false)
@@ -716,9 +751,9 @@ namespace BP.WF.HttpHandler
                 string columnName = name.Substring("HID_Idx_".Length);
 
                 MapAttr ma = new MapAttr();
-                ma.KeyOfEn = columnName;
-                ma.FK_MapData = this.FK_MapData;
-                ma.MyPK = this.FK_MapData + "_" + ma.KeyOfEn;
+                ma.setKeyOfEn(columnName);
+                ma.setFK_MapData(this.FK_MapData);
+                ma.setMyPK(this.FK_MapData + "_" + ma.KeyOfEn);
                 if (ma.IsExits)
                 {
                     msg += "\t\n字段:" + ma.KeyOfEn + " - " + ma.Name + "已存在.";
@@ -731,7 +766,7 @@ namespace BP.WF.HttpHandler
 
                 ma.MyDataType = this.GetValIntFromFrmByKey("DDL_DBType_" + columnName);
 
-                //@hongyan 翻译过去.
+                //翻译过去.
                 string len = this.GetValFromFrmByKey("TB_Len_" + columnName);
                 if (len.Equals("null") || DataType.IsNullOrEmpty(len) == true)
                     len = "20";
@@ -746,11 +781,11 @@ namespace BP.WF.HttpHandler
                     }
 
 
-                    ma.MaxLen = mylen;
+                    ma.setMaxLen(mylen);
                 }
                 catch (Exception)
                 {
-                    ma.MaxLen = 0;
+                    ma.setMaxLen(0);
                     //throw new Exception("err@转化为最大长度的时候错误:" + ma.KeyOfEn + " len:" + len);
                 }
 
@@ -765,17 +800,17 @@ namespace BP.WF.HttpHandler
                     se.Retrieve(SysEnumAttr.EnumKey, ma.UIBindKey);
                     if (se.Count > 0)
                     {
-                        ma.MyDataType = DataType.AppInt;
+                        ma.setMyDataType(DataType.AppInt);
                         ma.LGType = BP.En.FieldTypeS.Enum;
-                        ma.UIContralType = BP.En.UIContralType.DDL;
+                        ma.setUIContralType(BP.En.UIContralType.DDL);
                     }
                     SFTable tb = new SFTable();
                     tb.No = ma.UIBindKey;
                     if (tb.IsExits == true)
                     {
-                        ma.MyDataType = DataType.AppString;
+                        ma.setMyDataType(DataType.AppString);
                         ma.LGType = BP.En.FieldTypeS.FK;
-                        ma.UIContralType = BP.En.UIContralType.DDL;
+                        ma.setUIContralType(BP.En.UIContralType.DDL);
                     }
                 }
 
@@ -786,45 +821,12 @@ namespace BP.WF.HttpHandler
 
                 msg += "\t\n字段:" + ma.KeyOfEn + " - " + ma.Name + "加入成功.";
 
-                //生成lab.
-                FrmLab lab = null;
-                if (isLeft == true)
-                {
-                    maxEnd = maxEnd + 40;
-                    /* 是否是左边 */
-                    lab = new FrmLab();
-                    lab.MyPK = DBAccess.GenerGUID();
-                    lab.FK_MapData = this.FK_MapData;
-                    lab.Lab = ma.Name;
-                    lab.X = 40;
-                    lab.Y = maxEnd;
-                    lab.Insert();
 
-                    ma.X = lab.X + 80;
-                    ma.Y = maxEnd;
-                    ma.Update();
-                }
-                else
-                {
-                    lab = new FrmLab();
-                    lab.MyPK = DBAccess.GenerGUID();
-                    lab.FK_MapData = this.FK_MapData;
-                    lab.Lab = ma.Name;
-                    lab.X = 350;
-                    lab.Y = maxEnd;
-                    lab.Insert();
-
-                    ma.X = lab.X + 80;
-                    ma.Y = maxEnd;
-                    ma.Update();
-                }
                 isLeft = !isLeft;
             }
 
             //更新名称.
             DBAccess.RunSQL("UPDATE Sys_MapAttr SET Name=KeyOfEn WHERE Name=NULL OR Name='' ");
-
-            md.ResetMaxMinXY();
             return msg;
         }
         /// <summary>
@@ -834,20 +836,20 @@ namespace BP.WF.HttpHandler
         public string MapFrame_Init()
         {
             MapFrame mf = new MapFrame();
-            mf.FK_MapData = this.FK_MapData;
+            mf.setFK_MapData(this.FK_MapData);
 
             if (this.MyPK == null)
             {
                 mf.URL = "http://ccflow.org";
                 mf.W = 400;
                 mf.H = 300;
-                mf.Name = "我的框架.";
-                mf.FK_MapData = this.FK_MapData;
-                mf.MyPK = DBAccess.GenerGUID();
+                mf.setName("我的框架.");
+                mf.setFK_MapData(this.FK_MapData);
+                mf.setMyPK(DBAccess.GenerGUID());
             }
             else
             {
-                mf.MyPK = this.MyPK;
+                mf.setMyPK(this.MyPK);
                 mf.RetrieveFromDBSources();
             }
             return mf.ToJson();
@@ -860,7 +862,7 @@ namespace BP.WF.HttpHandler
         {
             MapFrame mf = new MapFrame();
             mf = BP.Pub.PubClass.CopyFromRequestByPost(mf) as MapFrame;
-            mf.FK_MapData = this.FK_MapData;
+            mf.setFK_MapData(this.FK_MapData);
 
             mf.Save(); //执行保存.
             return "保存成功..";
@@ -951,7 +953,7 @@ namespace BP.WF.HttpHandler
         public string SFList_SaveSFField()
         {
             MapAttr attr = new Sys.MapAttr();
-            attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+            attr.setMyPK(this.FK_MapData + "_" + this.KeyOfEn);
             if (attr.RetrieveFromDBSources() != 0)
                 return "err@字段名[" + this.KeyOfEn + "]已经存在.";
 
@@ -973,9 +975,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion 外键表列表.
 
-
-
-
         /// <summary>
         /// 初始化表.
         /// </summary>
@@ -983,25 +982,25 @@ namespace BP.WF.HttpHandler
         public string EditTableField_Init()
         {
             MapAttr attr = new MapAttr();
-            attr.KeyOfEn = this.KeyOfEn;
-            attr.FK_MapData = this.FK_MapData;
+            attr.setKeyOfEn(this.KeyOfEn);
+            attr.setFK_MapData(this.FK_MapData);
 
             if (DataType.IsNullOrEmpty(this.MyPK) == false)
             {
-                attr.MyPK = this.MyPK;
+                attr.setMyPK(this.MyPK);
                 attr.RetrieveFromDBSources();
             }
             else
             {
                 SFTable sf = new SFTable(this.FK_SFTable);
                 attr.Name = sf.Name;
-                attr.KeyOfEn = sf.No;
+                attr.setKeyOfEn(sf.No);
             }
 
             //第1次加载.
-            attr.UIContralType = UIContralType.DDL;
+            attr.setUIContralType(UIContralType.DDL);
 
-            attr.FK_MapData = this.FK_MapData;
+            attr.setFK_MapData(this.FK_MapData);
 
             //字体大小.
             int size = attr.Para_FontSize;
@@ -1075,9 +1074,9 @@ namespace BP.WF.HttpHandler
             string frmID = this.GetRequestVal("FK_MapData");
 
             MapAttr attr = new MapAttr();
-            attr.FK_MapData = frmID;
-            attr.KeyOfEn = keyOfEn;
-            attr.MyPK = attr.FK_MapData + "_" + keyOfEn;
+            attr.setFK_MapData(frmID);
+            attr.setKeyOfEn(keyOfEn);
+            attr.setMyPK(attr.FK_MapData + "_" + keyOfEn);
             if (attr.IsExits)
                 return "err@该字段[" + keyOfEn + "]已经加入里面了.";
 
@@ -1085,9 +1084,9 @@ namespace BP.WF.HttpHandler
             attr.MyDataType = dataType;
 
             if (DataType.AppBoolean == dataType)
-                attr.UIContralType = UIContralType.CheckBok;
+                attr.setUIContralType(UIContralType.CheckBok);
             else
-                attr.UIContralType = UIContralType.TB;
+                attr.setUIContralType(UIContralType.TB);
 
             //Paras ps = new Paras();
             //ps.SQL = "SELECT OID FROM Sys_GroupField A WHERE A.FrmID=" + SystemConfig.AppCenterDBVarStr + "FrmID AND  ( CtrlType='' OR CtrlType= NULL ) ";
@@ -1153,10 +1152,10 @@ namespace BP.WF.HttpHandler
             //求出选择的字段类型.
             MapAttr attr = new MapAttr();
             attr.Name = newName;
-            attr.KeyOfEn = newNo;
-            attr.FK_MapData = this.FK_MapData;
-            attr.LGType = FieldTypeS.Normal;
-            attr.MyPK = this.FK_MapData + "_" + newNo;
+            attr.setKeyOfEn(newNo);
+            attr.setFK_MapData(this.FK_MapData);
+            attr.setLGType(FieldTypeS.Normal);
+            attr.setMyPK(this.FK_MapData + "_" + newNo);
             attr.GroupID = iGroupID;
             attr.MyDataType = fType;
 
@@ -1176,20 +1175,20 @@ namespace BP.WF.HttpHandler
                 attr.UIHeight = 23;
                 if (uiContralType == UIContralType.SignCheck || uiContralType == UIContralType.FlowBBS)
                 {
-                    attr.UIIsEnable = false;
-                    attr.UIVisible = true;
+                    attr.setUIIsEnable(false);
+                    attr.setUIVisible(true);
                 }
                 else
                 {
-                    attr.UIVisible = true;
-                    attr.UIIsEnable = true;
+                    attr.setUIVisible(true);
+                    attr.setUIIsEnable(true);
                 }
 
                 attr.ColSpan = 1;
-                attr.MinLen = 0;
-                attr.MaxLen = 50;
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = uiContralType;
+                attr.setMinLen(0);
+                attr.setMaxLen(50);
+                attr.setMyDataType(DataType.AppString);
+                attr.setUIContralType(uiContralType);
                 attr.Insert();
 
                 if (isSupperText == true)
@@ -1205,13 +1204,13 @@ namespace BP.WF.HttpHandler
             {
                 attr.UIWidth = 100;
                 attr.UIHeight = 23;
-                attr.UIVisible = true;
-                attr.UIIsEnable = true;
+                attr.setUIVisible(true);
+                attr.setUIIsEnable(true);
                 attr.ColSpan = 1;
-                attr.MinLen = 0;
-                attr.MaxLen = 50;
-                attr.MyDataType = DataType.AppInt;
-                attr.UIContralType = UIContralType.TB;
+                attr.setMinLen(0);
+                attr.setMaxLen(50);
+                attr.setMyDataType(DataType.AppInt);
+                attr.setUIContralType(UIContralType.TB);
                 attr.DefVal = "0";
                 attr.Insert();
 
@@ -1222,13 +1221,13 @@ namespace BP.WF.HttpHandler
             {
                 attr.UIWidth = 100;
                 attr.UIHeight = 23;
-                attr.UIVisible = true;
-                attr.UIIsEnable = true;
+                attr.setUIVisible(true);
+                attr.setUIIsEnable(true);
                 attr.ColSpan = 1;
-                attr.MinLen = 0;
-                attr.MaxLen = 50;
-                attr.MyDataType = DataType.AppMoney;
-                attr.UIContralType = UIContralType.TB;
+                attr.setMinLen(0);
+                attr.setMaxLen(50);
+                attr.setMyDataType(DataType.AppMoney);
+                attr.setUIContralType(UIContralType.TB);
                 attr.DefVal = "0.00";
                 attr.Insert();
                 return "url@../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
@@ -1238,13 +1237,13 @@ namespace BP.WF.HttpHandler
             {
                 attr.UIWidth = 100;
                 attr.UIHeight = 23;
-                attr.UIVisible = true;
-                attr.UIIsEnable = true;
+                attr.setUIVisible(true);
+                attr.setUIIsEnable(true);
                 attr.ColSpan = 1;
-                attr.MinLen = 0;
-                attr.MaxLen = 50;
-                attr.MyDataType = DataType.AppFloat;
-                attr.UIContralType = UIContralType.TB;
+                attr.setMinLen(0);
+                attr.setMaxLen(50);
+                attr.setMyDataType(DataType.AppFloat);
+                attr.setUIContralType(UIContralType.TB);
 
                 attr.DefVal = "0";
                 attr.Insert();
@@ -1256,13 +1255,13 @@ namespace BP.WF.HttpHandler
             {
                 attr.UIWidth = 100;
                 attr.UIHeight = 23;
-                attr.UIVisible = true;
-                attr.UIIsEnable = true;
+                attr.setUIVisible(true);
+                attr.setUIIsEnable(true);
                 attr.ColSpan = 1;
-                attr.MinLen = 0;
-                attr.MaxLen = 50;
+                attr.setMinLen(0);
+                attr.setMaxLen(50);
                 attr.MyDataType = DataType.AppDouble;
-                attr.UIContralType = UIContralType.TB;
+                attr.setUIContralType(UIContralType.TB);
                 attr.DefVal = "0";
                 attr.Insert();
 
@@ -1276,17 +1275,17 @@ namespace BP.WF.HttpHandler
 
                 attr.UIWidth = 100;
                 attr.UIHeight = 23;
-                attr.UIVisible = true;
-                attr.UIIsEnable = true;
+                attr.setUIVisible(true);
+                attr.setUIIsEnable(true);
                 attr.ColSpan = 1;
-                attr.MinLen = 0;
-                attr.MaxLen = 50;
-                attr.UIContralType = UIContralType.TB;
-                attr.MyDataType = DataType.AppDate;
+                attr.setMinLen(0);
+                attr.setMaxLen(50);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setMyDataType(DataType.AppDate);
                 attr.Insert();
 
                 BP.Sys.FrmUI.MapAttrDT dt = new Sys.FrmUI.MapAttrDT();
-                dt.MyPK = attr.MyPK;
+                dt.setMyPK(attr.MyPK);
                 dt.RetrieveFromDBSources();
                 dt.Format = 0;
                 dt.Update();
@@ -1299,17 +1298,17 @@ namespace BP.WF.HttpHandler
             {
                 attr.UIWidth = 100;
                 attr.UIHeight = 23;
-                attr.UIVisible = true;
-                attr.UIIsEnable = true;
+                attr.setUIVisible(true);
+                attr.setUIIsEnable(true);
                 attr.ColSpan = 1;
-                attr.MinLen = 0;
-                attr.MaxLen = 50;
-                attr.UIContralType = UIContralType.TB;
-                attr.MyDataType = DataType.AppDateTime;
+                attr.setMinLen(0);
+                attr.setMaxLen(50);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setMyDataType(DataType.AppDateTime);
                 attr.Insert();
 
                 BP.Sys.FrmUI.MapAttrDT dt = new Sys.FrmUI.MapAttrDT();
-                dt.MyPK = attr.MyPK;
+                dt.setMyPK(attr.MyPK);
                 dt.RetrieveFromDBSources();
                 dt.Format = 1;
                 dt.Update();
@@ -1321,13 +1320,13 @@ namespace BP.WF.HttpHandler
             {
                 attr.UIWidth = 100;
                 attr.UIHeight = 23;
-                attr.UIVisible = true;
-                attr.UIIsEnable = true;
+                attr.setUIVisible(true);
+                attr.setUIIsEnable(true);
                 attr.ColSpan = 1;
-                attr.MinLen = 0;
-                attr.MaxLen = 50;
-                attr.UIContralType = UIContralType.CheckBok;
-                attr.MyDataType = DataType.AppBoolean;
+                attr.setMinLen(0);
+                attr.setMaxLen(50);
+                attr.setUIContralType(UIContralType.CheckBok);
+                attr.setMyDataType(DataType.AppBoolean);
                 attr.DefVal = "0";
                 attr.Insert();
 
@@ -1343,12 +1342,12 @@ namespace BP.WF.HttpHandler
         public string EditF_FieldInit()
         {
             MapAttr attr = new MapAttr();
-            attr.KeyOfEn = this.KeyOfEn;
-            attr.FK_MapData = this.FK_MapData;
+            attr.setKeyOfEn(this.KeyOfEn);
+            attr.setFK_MapData(this.FK_MapData);
 
             if (DataType.IsNullOrEmpty(this.MyPK) == false)
             {
-                attr.MyPK = this.MyPK;
+                attr.setMyPK(this.MyPK);
                 attr.RetrieveFromDBSources();
             }
             else
@@ -1356,7 +1355,7 @@ namespace BP.WF.HttpHandler
                 attr.GroupID = this.GroupField;
             }
 
-            attr.FK_MapData = this.FK_MapData;
+            attr.setFK_MapData(this.FK_MapData);
 
             //字体大小.
             int size = attr.Para_FontSize;
@@ -1373,27 +1372,27 @@ namespace BP.WF.HttpHandler
         public string FieldInitEnum()
         {
             MapAttr attr = new MapAttr();
-            attr.KeyOfEn = this.KeyOfEn;
-            attr.FK_MapData = this.FK_MapData;
+            attr.setKeyOfEn(this.KeyOfEn);
+            attr.setFK_MapData(this.FK_MapData);
 
             if (DataType.IsNullOrEmpty(this.MyPK) == false)
             {
-                attr.MyPK = this.MyPK;
+                attr.setMyPK(this.MyPK);
                 attr.RetrieveFromDBSources();
             }
             else
             {
                 SysEnumMain sem = new SysEnumMain(this.EnumKey);
                 attr.Name = sem.Name;
-                attr.KeyOfEn = sem.No;
+                attr.setKeyOfEn(sem.No);
                 attr.DefVal = "0";
             }
 
             //第1次加载.
             if (attr.UIContralType == UIContralType.TB)
-                attr.UIContralType = UIContralType.DDL;
+                attr.setUIContralType(UIContralType.DDL);
 
-            attr.FK_MapData = this.FK_MapData;
+            attr.setFK_MapData(this.FK_MapData);
 
             //字体大小.
             int size = attr.Para_FontSize;
@@ -1458,7 +1457,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 MapAttr attr = new MapAttr();
-                attr.MyPK = this.MyPK;
+                attr.setMyPK(this.MyPK);
                 attr.RetrieveFromDBSources();
                 attr.Delete();
                 return "删除成功...";
@@ -1489,11 +1488,11 @@ namespace BP.WF.HttpHandler
 
                 //赋值.
                 MapAttr attr = new MapAttr();
-                attr.KeyOfEn = this.KeyOfEn;
-                attr.FK_MapData = this.FK_MapData;
+                attr.setKeyOfEn(this.KeyOfEn);
+                attr.setFK_MapData(this.FK_MapData);
                 if (DataType.IsNullOrEmpty(this.MyPK) == false)
                 {
-                    attr.MyPK = this.MyPK;
+                    attr.setMyPK(this.MyPK);
                     attr.RetrieveFromDBSources();
                 }
                 else
@@ -1503,17 +1502,17 @@ namespace BP.WF.HttpHandler
                         return "err@字段名:" + this.KeyOfEn + "已经存在.";
                 }
 
-                attr.KeyOfEn = this.KeyOfEn;
-                attr.FK_MapData = this.FK_MapData;
-                attr.LGType = FieldTypeS.Enum;
+                attr.setKeyOfEn(this.KeyOfEn);
+                attr.setFK_MapData(this.FK_MapData);
+                attr.setLGType(FieldTypeS.Enum);
                 attr.UIBindKey = this.EnumKey;
-                attr.MyDataType = DataType.AppInt;
+                attr.setMyDataType(DataType.AppInt);
 
                 //控件类型.
-                attr.UIContralType = UIContralType.DDL;
+                attr.setUIContralType(UIContralType.DDL);
 
                 attr.Name = this.GetValFromFrmByKey("TB_Name");
-                attr.KeyOfEn = this.GetValFromFrmByKey("TB_KeyOfEn");
+                attr.setKeyOfEn(this.GetValFromFrmByKey("TB_KeyOfEn"));
                 attr.ColSpan = this.GetValIntFromFrmByKey("DDL_ColSpan");
                 if (attr.ColSpan == 0)
                     attr.ColSpan = 1;
@@ -1547,18 +1546,18 @@ namespace BP.WF.HttpHandler
                 //是否可用？所有类型的属性，都需要。
                 int isEnable = this.GetValIntFromFrmByKey("RB_UIIsEnable");
                 if (isEnable == 0)
-                    attr.UIIsEnable = false;
+                    attr.setUIIsEnable(false);
                 else
-                    attr.UIIsEnable = true;
+                    attr.setUIIsEnable(true);
 
                 //是否可见?
                 int visable = this.GetValIntFromFrmByKey("RB_UIVisible");
                 if (visable == 0)
-                    attr.UIVisible = false;
+                    attr.setUIVisible(false);
                 else
-                    attr.UIVisible = true;
+                    attr.setUIVisible(true);
 
-                attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+                attr.setMyPK(this.FK_MapData + "_" + this.KeyOfEn);
 
                 attr.Save();
 
@@ -1583,11 +1582,11 @@ namespace BP.WF.HttpHandler
 
                 //赋值.
                 MapAttr attr = new MapAttr();
-                attr.KeyOfEn = this.KeyOfEn;
-                attr.FK_MapData = this.FK_MapData;
+                attr.setKeyOfEn(this.KeyOfEn);
+                attr.setFK_MapData(this.FK_MapData);
                 if (DataType.IsNullOrEmpty(this.MyPK) == false)
                 {
-                    attr.MyPK = this.MyPK;
+                    attr.setMyPK(this.MyPK);
                     attr.RetrieveFromDBSources();
                 }
                 else
@@ -1597,17 +1596,17 @@ namespace BP.WF.HttpHandler
                         return "err@字段名:" + this.KeyOfEn + "已经存在.";
                 }
 
-                attr.KeyOfEn = this.KeyOfEn;
-                attr.FK_MapData = this.FK_MapData;
-                attr.LGType = FieldTypeS.FK;
+                attr.setKeyOfEn(this.KeyOfEn);
+                attr.setFK_MapData(this.FK_MapData);
+                attr.setLGType(FieldTypeS.FK);
                 attr.UIBindKey = this.FK_SFTable;
-                attr.MyDataType = DataType.AppString;
+                attr.setMyDataType(DataType.AppString);
 
                 //控件类型.
-                attr.UIContralType = UIContralType.DDL;
+                attr.setUIContralType(UIContralType.DDL);
 
                 attr.Name = this.GetValFromFrmByKey("TB_Name");
-                attr.KeyOfEn = this.GetValFromFrmByKey("TB_KeyOfEn");
+                attr.setKeyOfEn(this.GetValFromFrmByKey("TB_KeyOfEn"));
                 attr.ColSpan = this.GetValIntFromFrmByKey("DDL_ColSpan");
                 if (attr.ColSpan == 0)
                     attr.ColSpan = 1;
@@ -1633,18 +1632,18 @@ namespace BP.WF.HttpHandler
                 //是否可用？所有类型的属性，都需要。
                 int isEnable = this.GetValIntFromFrmByKey("RB_UIIsEnable");
                 if (isEnable == 0)
-                    attr.UIIsEnable = false;
+                    attr.setUIIsEnable(false);
                 else
-                    attr.UIIsEnable = true;
+                    attr.setUIIsEnable(true);
 
                 //是否可见?
                 int visable = this.GetValIntFromFrmByKey("RB_UIVisible");
                 if (visable == 0)
-                    attr.UIVisible = false;
+                    attr.setUIVisible(false);
                 else
-                    attr.UIVisible = true;
+                    attr.setUIVisible(true);
 
-                attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+                attr.setMyPK(this.FK_MapData + "_" + this.KeyOfEn);
                 attr.Save();
 
                 return "保存成功.";
@@ -1669,23 +1668,23 @@ namespace BP.WF.HttpHandler
 
                 //赋值.
                 MapAttr attr = new MapAttr();
-                attr.KeyOfEn = this.KeyOfEn;
-                attr.FK_MapData = this.FK_MapData;
+                attr.setKeyOfEn(this.KeyOfEn);
+                attr.setFK_MapData(this.FK_MapData);
                 attr.LGType = lgType; //逻辑类型.
                 attr.UIBindKey = uiBindKey; //绑定的枚举或者外键.
                 attr.MyDataType = fType; //物理类型.
 
                 if (DataType.IsNullOrEmpty(this.MyPK) == false)
                 {
-                    attr.MyPK = this.MyPK;
+                    attr.setMyPK(this.MyPK);
                     attr.RetrieveFromDBSources();
                 }
 
-                attr.FK_MapData = this.FK_MapData;
+                attr.setFK_MapData(this.FK_MapData);
                 attr.MyDataType = fType; //数据类型.
                 attr.Name = this.GetValFromFrmByKey("TB_Name");
 
-                attr.KeyOfEn = this.GetValFromFrmByKey("TB_KeyOfEn");
+                attr.setKeyOfEn(this.GetValFromFrmByKey("TB_KeyOfEn"));
                 attr.ColSpan = this.GetValIntFromFrmByKey("DDL_ColSpan");
 
                 if (attr.ColSpan == 0)
@@ -1724,8 +1723,8 @@ namespace BP.WF.HttpHandler
                     attr.UIHeightInt = this.GetValIntFromFrmByKey("DDL_Rows") * 23;
 
                     //最大最小长度.
-                    attr.MaxLen = this.GetValIntFromFrmByKey("TB_MaxLen");
-                    attr.MinLen = this.GetValIntFromFrmByKey("TB_MinLen");
+                    attr.setMaxLen(this.GetValIntFromFrmByKey("TB_MaxLen"));
+                    attr.setMinLen(this.GetValIntFromFrmByKey("TB_MinLen"));
 
                     attr.UIWidth = this.GetValIntFromFrmByKey("TB_UIWidth"); //宽度.
                 }
@@ -1753,9 +1752,9 @@ namespace BP.WF.HttpHandler
                 //是否可用？所有类型的属性，都需要。
                 int isEnable = this.GetValIntFromFrmByKey("RB_UIIsEnable");
                 if (isEnable == 0)
-                    attr.UIIsEnable = false;
+                    attr.setUIIsEnable(false);
                 else
-                    attr.UIIsEnable = true;
+                    attr.setUIIsEnable(true);
 
                 //仅仅对普通类型的字段需要.
                 if (lgType == FieldTypeS.Normal)
@@ -1763,12 +1762,12 @@ namespace BP.WF.HttpHandler
                     //是否可见?
                     int visable = this.GetValIntFromFrmByKey("RB_UIVisible");
                     if (visable == 0)
-                        attr.UIVisible = false;
+                        attr.setUIVisible(false);
                     else
-                        attr.UIVisible = true;
+                        attr.setUIVisible(true);
                 }
 
-                attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+                attr.setMyPK(this.FK_MapData + "_" + this.KeyOfEn);
                 attr.Save();
 
                 return "保存成功.";
@@ -1790,7 +1789,7 @@ namespace BP.WF.HttpHandler
             dtl.No = this.FK_MapDtl;
             if (dtl.RetrieveFromDBSources() == 0)
             {
-                dtl.FK_MapData = this.FK_MapData;
+                dtl.setFK_MapData(this.FK_MapData);
                 dtl.Name = this.FK_MapData;
                 dtl.Insert();
                 dtl.IntMapAttrs();
@@ -1806,19 +1805,19 @@ namespace BP.WF.HttpHandler
                 {
 
                     // 开始复制它的属性.
-                    MapAttrs attrs = new MapAttrs(this.FK_MapDtl);
+                    MapAttrs mattrs = new MapAttrs(this.FK_MapDtl);
 
                     //让其直接保存.
                     dtl.No = this.FK_MapDtl + "_" + this.FK_Node;
-                    dtl.FK_MapData = "Temp";
+                    dtl.setFK_MapData("Temp");
                     dtl.DirectInsert(); //生成一个明细表属性的主表.
 
                     //循环保存字段.
                     int idx = 0;
-                    foreach (MapAttr item in attrs)
+                    foreach (MapAttr item in mattrs)
                     {
-                        item.FK_MapData = this.FK_MapDtl + "_" + this.FK_Node;
-                        item.MyPK = item.FK_MapData + "_" + item.KeyOfEn;
+                        item.setFK_MapData(this.FK_MapDtl + "_" + this.FK_Node);
+                        item.setMyPK(item.FK_MapData + "_" + item.KeyOfEn);
                         item.Save();
                         idx++;
                         item.Idx = idx;
@@ -1906,19 +1905,19 @@ namespace BP.WF.HttpHandler
         public string Attachment_Init()
         {
             FrmAttachment ath = new FrmAttachment();
-            ath.FK_MapData = this.FK_MapData;
+            ath.setFK_MapData(this.FK_MapData);
             ath.NoOfObj = this.Ath;
             ath.FK_Node = this.FK_Node;
             if (this.MyPK == null)
             {
                 if (this.FK_Node == 0)
-                    ath.MyPK = this.FK_MapData + "_" + this.Ath;
+                    ath.setMyPK(this.FK_MapData + "_" + this.Ath);
                 else
-                    ath.MyPK = this.FK_MapData + "_" + this.Ath + "_" + this.FK_Node;
+                    ath.setMyPK(this.FK_MapData + "_" + this.Ath + "_" + this.FK_Node);
             }
             else
             {
-                ath.MyPK = this.MyPK;
+                ath.setMyPK(this.MyPK);
 
             }
             int i = ath.RetrieveFromDBSources();
@@ -1949,13 +1948,13 @@ namespace BP.WF.HttpHandler
                     }
                 }
                 if (this.FK_Node == 0)
-                    ath.MyPK = this.FK_MapData + "_" + this.Ath;
+                    ath.setMyPK(this.FK_MapData + "_" + this.Ath);
                 else
-                    ath.MyPK = this.FK_MapData + "_" + this.Ath + "_" + this.FK_Node;
+                    ath.setMyPK(this.FK_MapData + "_" + this.Ath + "_" + this.FK_Node);
 
                 //插入一个新的.
                 ath.FK_Node = this.FK_Node;
-                ath.FK_MapData = this.FK_MapData;
+                ath.setFK_MapData(this.FK_MapData);
                 ath.NoOfObj = this.Ath;
                 //  ath.DirectInsert();
             }
@@ -1969,10 +1968,10 @@ namespace BP.WF.HttpHandler
         public string Attachment_Save()
         {
             FrmAttachment ath = new FrmAttachment();
-            ath.FK_MapData = this.FK_MapData;
+            ath.setFK_MapData(this.FK_MapData);
             ath.NoOfObj = this.Ath;
             ath.FK_Node = this.FK_Node;
-            ath.MyPK = this.FK_MapData + "_" + this.Ath;
+            ath.setMyPK(this.FK_MapData + "_" + this.Ath);
 
             int i = ath.RetrieveFromDBSources();
             ath = BP.Pub.PubClass.CopyFromRequestByPost(ath) as FrmAttachment;
@@ -1985,7 +1984,7 @@ namespace BP.WF.HttpHandler
         public string Attachment_Delete()
         {
             FrmAttachment ath = new FrmAttachment();
-            ath.MyPK = this.MyPK;
+            ath.setMyPK(this.MyPK);
             ath.Delete();
             return "删除成功.." + ath.MyPK;
         }

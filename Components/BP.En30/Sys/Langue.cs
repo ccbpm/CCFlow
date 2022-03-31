@@ -187,7 +187,7 @@ namespace BP.Sys
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.MyPK = this.Lang + "_" + this.Model + "_" + this.ModelKey + "_" + this.Sort + "_" + this.SortKey;
+            this.setMyPK(this.Lang + "_" + this.Model + "_" + this.ModelKey + "_" + this.Sort + "_" + this.SortKey);
             return base.beforeUpdateInsertAction();
         }
     }

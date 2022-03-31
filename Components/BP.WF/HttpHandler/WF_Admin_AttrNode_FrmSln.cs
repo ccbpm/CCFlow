@@ -83,7 +83,7 @@ namespace BP.WF.HttpHandler
                     continue; //已经存在就不处理.
 
                 FrmNode frmNode = new FrmNode();
-                frmNode.MyPK = jsNode.NodeFrmID + "_" + jsNode.NodeID + "_" + jsNode.FK_Flow;
+                frmNode.setMyPK(jsNode.NodeFrmID + "_" + jsNode.NodeID + "_" + jsNode.FK_Flow);
                 frmNode.FK_Node = jsNode.NodeID;
                 frmNode.FK_Flow = jsNode.FK_Flow;
                 frmNode.FK_Frm = jsNode.NodeFrmID;
@@ -104,12 +104,12 @@ namespace BP.WF.HttpHandler
                 BP.WF.Template.FrmField ff = new FrmField();
                 foreach (MapAttr attr in attrOfCommpents)
                 {
-                    ff.UIVisible = true;
-                    ff.KeyOfEn = attr.KeyOfEn;
+                    ff.setUIVisible(true);
+                    ff.setKeyOfEn(attr.KeyOfEn);
                     ff.FK_Flow = currNode.FK_Flow;
                     ff.FK_Node = jsNode.NodeID;
-                    ff.FK_MapData = jsNode.NodeFrmID; //表单ID.
-                    ff.MyPK = ff.FK_MapData + "_" + ff.FK_Node + "_" + ff.KeyOfEn;
+                    ff.setFK_MapData(jsNode.NodeFrmID); //表单ID.
+                    ff.setMyPK(ff.FK_MapData + "_" + ff.FK_Node + "_" + ff.KeyOfEn);
                     if (ff.IsExits == false)
                         ff.Insert();
                 }
@@ -129,7 +129,7 @@ namespace BP.WF.HttpHandler
             SysEnums se1s = new SysEnums("FWCSta");
             ds.Tables.Add(se1s.ToDataTableField("FWCSta"));
 
-            //签字类型. @hongyan.
+            //签字类型.
             SysEnums myses = new SysEnums("SigantureEnabel");
             ds.Tables.Add(myses.ToDataTableField("SigantureEnabel"));
 
@@ -218,7 +218,7 @@ namespace BP.WF.HttpHandler
             #warning 需要判断不同的数据库类型
             if (SystemConfig.AppCenterDBType == DBType.Oracle
                 || SystemConfig.AppCenterDBType == DBType.DM
-                || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dt.Columns["SORTNAME"].ColumnName = "SortName";
                 dt.Columns["NO"].ColumnName = "No";

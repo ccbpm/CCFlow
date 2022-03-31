@@ -434,8 +434,8 @@ namespace BP.WF.Rpt
                 if (PublicFiels.Contains("," + attr.KeyOfEn + ",") == false)
                     continue;
 
-                attr.FK_MapData = md.No;
-                attr.UIIsEnable = false;
+                attr.setFK_MapData(md.No);
+                attr.setUIIsEnable(false);
                 attr.Idx = 0;
 
                 #region 判断特殊的字段.
@@ -443,68 +443,68 @@ namespace BP.WF.Rpt
                 {
                     case GERptAttr.WFSta:
                         attr.UIBindKey = "WFSta";
-                        attr.UIContralType = UIContralType.DDL;
-                        attr.LGType = FieldTypeS.Enum;
-                        attr.UIVisible = false;
+                        attr.setUIContralType(UIContralType.DDL);
+                        attr.setLGType(FieldTypeS.Enum);
+                        attr.setUIVisible(false);
                         attr.DefVal = "0";
-                        attr.MaxLen = 100;
-                        attr.UIVisible = true;
+                        attr.setMaxLen(100);
+                        attr.setUIVisible(true);
                         attr.Update();
                         break;
                     case GERptAttr.FK_Dept:
                         attr.UIBindKey = "";
                         //attr.UIBindKey = "BP.Port.Depts";
-                        attr.UIContralType = UIContralType.TB;
-                        attr.LGType = FieldTypeS.Normal;
-                        attr.UIVisible = false;
+                        attr.setUIContralType(UIContralType.TB);
+                        attr.setLGType(FieldTypeS.Normal);
+                        attr.setUIVisible(false);
                         attr.DefVal = "";
-                        attr.MaxLen = 100;
-                        attr.UIVisible = false;
+                        attr.setMaxLen(100);
+                        attr.setUIVisible(false);
                         attr.Update();
                         break;
                     case GERptAttr.FK_NY:
                         attr.UIBindKey = "BP.Pub.NYs";
-                        attr.UIContralType = UIContralType.DDL;
-                        attr.LGType = FieldTypeS.FK;
-                        attr.UIVisible = true;
-                        attr.UIIsEnable = false;
+                        attr.setUIContralType(UIContralType.DDL);
+                        attr.setLGType(FieldTypeS.FK);
+                        attr.setUIVisible(true);
+                        attr.setUIIsEnable(false);
                         //attr.GroupID = groupID;
                         attr.Update();
                         break;
                     case GERptAttr.Title:
                         attr.UIWidth = 120;
-                        attr.UIVisible = true;
+                        attr.setUIVisible(true);
                         attr.Idx = 0;
                         break;
                     case GERptAttr.FlowStarter:
-                        attr.UIIsEnable = false;
-                        attr.UIVisible = false;
+                        attr.setUIIsEnable(false);
+                        attr.setUIVisible(false);
                         attr.UIBindKey = "";
                         //attr.UIBindKey = "BP.Port.Depts";
-                        attr.UIContralType = UIContralType.TB;
-                        attr.LGType = FieldTypeS.Normal;
+                        attr.setUIContralType(UIContralType.TB);
+                        attr.setLGType(FieldTypeS.Normal);
                         break;
                     case GERptAttr.FlowEmps:
-                        attr.UIIsEnable = false;
-                        attr.UIVisible = false;
+                        attr.setUIIsEnable(false);
+                        attr.setUIVisible(false);
                         attr.UIBindKey = "";
                         //attr.UIBindKey = "BP.Port.Depts";
-                        attr.UIContralType = UIContralType.TB;
-                        attr.LGType = FieldTypeS.Normal;
+                        attr.setUIContralType(UIContralType.TB);
+                        attr.setLGType(FieldTypeS.Normal);
                         break;
                     case GERptAttr.WFState:
-                        attr.UIIsEnable = false;
-                        attr.UIVisible = false;
+                        attr.setUIIsEnable(false);
+                        attr.setUIVisible(false);
                         attr.UIBindKey = "";
                         //attr.UIBindKey = "BP.Port.Depts";
-                        attr.UIContralType = UIContralType.TB;
-                        attr.LGType = FieldTypeS.Normal;
-                        attr.MyDataType = BP.DA.DataType.AppInt;
+                        attr.setUIContralType(UIContralType.TB);
+                        attr.setLGType(FieldTypeS.Normal);
+                        attr.setMyDataType(BP.DA.DataType.AppInt);
                         break;
                     case GERptAttr.FlowEndNode:
-                        //attr.LGType = FieldTypeS.FK;
+                        //attr.setLGType(FieldTypeS.FK);
                         //attr.UIBindKey = "BP.WF.Template.NodeExts";
-                        //attr.UIContralType = UIContralType.DDL;
+                        //attr.setUIContralType(UIContralType.DDL);
                         break;
                     case "FK_Emp":
                         break;

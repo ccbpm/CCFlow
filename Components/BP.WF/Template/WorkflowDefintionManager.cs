@@ -59,8 +59,8 @@ namespace BP.WF.Template
                 #endregion 处理方向.
 
                 #region 保存节点
-                string[] nds = nodes.Split('~');
-                foreach (string nd in nds)
+                string[] ndStrs = nodes.Split('~');
+                foreach (string nd in ndStrs)
                 {
                     if (DataType.IsNullOrEmpty(nd))
                         continue;
@@ -84,7 +84,7 @@ namespace BP.WF.Template
 
                     AtPara ap = new AtPara(lab);
                     LabNote ln = new LabNote();
-                    ln.MyPK = DBAccess.GenerGUID();  // ap.GetValStrByKey("MyPK");
+                    ln.setMyPK(DBAccess.GenerGUID());  // ap.GetValStrByKey("MyPK");
                     ln.FK_Flow = fk_flow;
                     ln.Name = ap.GetValStrByKey("Label");
                     ln.X = ap.GetValIntByKey("X");
@@ -139,7 +139,7 @@ namespace BP.WF.Template
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineError("Do Method DelFlow Branch has a error , para:\t" + flowNo + ex.Message);
+                BP.DA.Log.DebugWriteError("Do Method DelFlow Branch has a error , para:\t" + flowNo + ex.Message);
                 return "err@" + ex.Message;
             }
         }

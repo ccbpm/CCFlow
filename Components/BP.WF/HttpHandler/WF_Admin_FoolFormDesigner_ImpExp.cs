@@ -11,6 +11,8 @@ using BP.En;
 using BP.CCBill;
 using System.IO;
 using System.Text;
+using BP.Difference;
+
 
 namespace BP.WF.HttpHandler
 {
@@ -45,7 +47,7 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             string sql = "";
-            System.Data.DataTable dt;
+            DataTable dt;
 
             if (this.FK_Flow != null)
             {
@@ -58,7 +60,7 @@ namespace BP.WF.HttpHandler
 
                 dt.TableName = "WF_Node";
 
-                if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                 {
                     dt.Columns["NODEID"].ColumnName = "NodeID";
                     dt.Columns["NAME"].ColumnName = "Name";
@@ -75,7 +77,7 @@ namespace BP.WF.HttpHandler
 
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_FormTree";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -88,7 +90,7 @@ namespace BP.WF.HttpHandler
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapData";
             ds.Tables.Add(dt);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX )
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -101,7 +103,7 @@ namespace BP.WF.HttpHandler
 
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "WF_FlowSort";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -114,7 +116,7 @@ namespace BP.WF.HttpHandler
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "WF_Flow";
             ds.Tables.Add(dt);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -151,7 +153,7 @@ namespace BP.WF.HttpHandler
                     return "err@请上传导入的模板文件.";
 
                 //创建临时文件.
-                string temp = SystemConfig.PathOfTemp + "\\" + Guid.NewGuid() + ".xml";
+                string temp = SystemConfig.PathOfTemp + Guid.NewGuid() + ".xml";
                 HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), temp);
                 string fk_mapData = this.FK_MapData;
                 MapData mapData = new MapData(fk_mapData);
@@ -274,8 +276,30 @@ namespace BP.WF.HttpHandler
         public string Imp_CopyFromFlow()
         {
             string ndfrm = "ND" + int.Parse(this.FK_Flow) + "01";
-            return Imp_CopyFrm(null,ndfrm);
+            return Imp_CopyFrm(null, ndfrm);
         }
+        public string Imp_FrmEnsName()
+        {
+
+            MapData md = new MapData(this.FrmID);
+
+            Entity en = BP.En.ClassFactory.GetEns(this.EnsName).GetNewEntity;
+
+            Attrs attrs = en.EnMap.Attrs;
+            foreach (Attr item in attrs)
+            {
+                if (item.IsPK == true)
+                    continue;
+
+                MapAttr mapAttr = item.ToMapAttr;
+                mapAttr.setMyPK(this.FrmID + "_" + item.Key);
+                mapAttr.setFK_MapData(this.FrmID);
+                mapAttr.Save();
+            }
+
+            return this.EnsName+"的属性导入["+this.FrmID+"]成功.";
+        }
+
         /// <summary>
         /// 从表单库导入
         /// 从节点导入
@@ -293,7 +317,7 @@ namespace BP.WF.HttpHandler
         /// <param name="isClear">是否清楚现有的元素？</param>
         /// <param name="isSetReadonly">是否设置为只读？</param>
         /// <returns>执行结果</returns>
-        public string Imp_CopyFrm(string toFrmID = null, string fromFrmID=null)
+        public string Imp_CopyFrm(string toFrmID = null, string fromFrmID = null)
         {
             try
             {
@@ -315,7 +339,7 @@ namespace BP.WF.HttpHandler
 
                 MapData mdFrom = new MapData(fromMapData);
                 DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(mdFrom.No);
-                
+
                 MapData.ImpMapData(toFrmID, ds);
 
                 //设置为只读模式.
@@ -338,7 +362,7 @@ namespace BP.WF.HttpHandler
                     mymd.Update();
 
                     //如果包含ND，就保持附件的从表一致.
-                    if (fromMapData.IndexOf("ND") ==0)
+                    if (fromMapData.IndexOf("ND") == 0)
                     {
                         MapDtls dtls = new MapDtls(fromMapData);
 
@@ -473,19 +497,18 @@ namespace BP.WF.HttpHandler
 
             string msg = "导入字段信息:";
             bool isLeft = true;
-            float maxEnd = md.MaxEnd; //底部.
             for (int i = 0; i < fields.Length; i++)
             {
                 string colname = fields[i];
 
                 MapAttr ma = new MapAttr();
-                ma.KeyOfEn = colname;
+                ma.setKeyOfEn(colname);
                 ma.Name = this.GetRequestVal("TB_Desc_" + colname);
-                ma.FK_MapData = this.FK_MapData;
+                ma.setFK_MapData(this.FK_MapData);
                 ma.MyDataType = int.Parse(this.GetRequestVal("DDL_DBType_" + colname));
-                ma.MaxLen = int.Parse(this.GetRequestVal("TB_Len_" + colname));
+                ma.setMaxLen(int.Parse(this.GetRequestVal("TB_Len_" + colname)));
                 ma.UIBindKey = this.GetRequestVal("TB_BindKey_" + colname);
-                ma.MyPK = this.FK_MapData + "_" + ma.KeyOfEn;
+                ma.setMyPK(this.FK_MapData + "_" + ma.KeyOfEn);
                 ma.LGType = BP.En.FieldTypeS.Normal;
 
                 if (ma.UIBindKey != "")
@@ -494,18 +517,18 @@ namespace BP.WF.HttpHandler
                     se.Retrieve(SysEnumAttr.EnumKey, ma.UIBindKey);
                     if (se.Count > 0)
                     {
-                        ma.MyDataType = DataType.AppInt;
+                        ma.setMyDataType(DataType.AppInt);
                         ma.LGType = BP.En.FieldTypeS.Enum;
-                        ma.UIContralType = BP.En.UIContralType.DDL;
+                        ma.setUIContralType(BP.En.UIContralType.DDL);
                     }
 
                     SFTable tb = new SFTable();
                     tb.No = ma.UIBindKey;
                     if (tb.IsExits == true)
                     {
-                        ma.MyDataType = DataType.AppString;
+                        ma.setMyDataType(DataType.AppString);
                         ma.LGType = BP.En.FieldTypeS.FK;
-                        ma.UIContralType = BP.En.UIContralType.DDL;
+                        ma.setUIContralType(BP.En.UIContralType.DDL);
                     }
                 }
 
@@ -516,42 +539,10 @@ namespace BP.WF.HttpHandler
                 ma.Insert();
 
                 msg += "\t\n字段:" + ma.KeyOfEn + "" + ma.Name + "加入成功.";
-                FrmLab lab = null;
-                if (isLeft == true)
-                {
-                    maxEnd = maxEnd + 40;
-                    /* 是否是左边 */
-                    lab = new FrmLab();
-                    lab.MyPK = DBAccess.GenerGUID();
-                    lab.FK_MapData = this.FK_MapData;
-                    lab.Lab = ma.Name;
-                    lab.X = 40;
-                    lab.Y = maxEnd;
-                    lab.Insert();
 
-                    ma.X = lab.X + 80;
-                    ma.Y = maxEnd;
-                    ma.Update();
-                }
-                else
-                {
-                    lab = new FrmLab();
-                    lab.MyPK = DBAccess.GenerGUID();
-                    lab.FK_MapData = this.FK_MapData;
-                    lab.Lab = ma.Name;
-                    lab.X = 350;
-                    lab.Y = maxEnd;
-                    lab.Insert();
-
-                    ma.X = lab.X + 80;
-                    ma.Y = maxEnd;
-                    ma.Update();
-                }
                 isLeft = !isLeft;
             }
 
-            //重新设置.
-            md.ResetMaxMinXY();
 
             return msg;
 

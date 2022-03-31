@@ -29,8 +29,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion 构造函数
 
- 
-
         #region 签名.
         /// <summary>
         /// 图片签名初始化

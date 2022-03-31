@@ -12,7 +12,7 @@ using System.IO;
 using System.Text;
 
 namespace BP.Difference
-{ 
+{
     public class DA_DbLoad
     {
         public static string GenerFirstTableName(string fileName)

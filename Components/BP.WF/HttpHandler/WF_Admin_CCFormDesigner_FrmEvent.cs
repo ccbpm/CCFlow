@@ -112,7 +112,7 @@ namespace BP.WF.HttpHandler
         {
             //事件实体.
             FrmEvent en = new FrmEvent();
-            en.MyPK = this.MyPK;
+            en.setMyPK(this.MyPK);
             en.Delete();
             return "删除成功.";
         }
@@ -124,7 +124,7 @@ namespace BP.WF.HttpHandler
             en.FK_Node = this.FK_Node;
             en.FK_Event = this.GetRequestVal("FK_Event"); //事件类型.
             en.HisDoTypeInt = this.GetValIntFromFrmByKey("EventDoType"); //执行类型.
-            en.MyPK = this.FK_Node + "_" + en.FK_Event + "_" + en.HisDoTypeInt; //组合主键.
+            en.setMyPK(this.FK_Node + "_" + en.FK_Event + "_" + en.HisDoTypeInt); //组合主键.
             en.RetrieveFromDBSources();
 
             en.MsgOKString = this.GetValFromFrmByKey("MsgOK"); //成功的消息.

@@ -85,12 +85,12 @@ namespace BP.Sys
         /// <returns></returns>
         protected override bool beforeDelete()
         {
-            MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapAttrAttr.UIBindKey, this.No);
-            if (attrs.Count != 0)
+            MapAttrs mattrs = new MapAttrs();
+            mattrs.Retrieve(MapAttrAttr.UIBindKey, this.No);
+            if (mattrs.Count != 0)
             {
                 string err = "";
-                foreach (MapAttr item in attrs)
+                foreach (MapAttr item in mattrs)
                     err += " @ " + item.MyPK + " " + item.Name;
                 throw new Exception("@如下实体字段在引用:" + err + "。您不能删除该表。");
             }

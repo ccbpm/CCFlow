@@ -609,7 +609,7 @@ namespace BP.WF.Data
                         return "已完成";
                     case WF.WFState.Runing:
                         return "在运行";
-                    case WF.WFState.HungUp:
+                    case WF.WFState.Hungup:
                         return "挂起";
                     case WF.WFState.Askfor:
                         return "加签";
@@ -668,7 +668,7 @@ namespace BP.WF.Data
                     return this._enMap;
 
                 Map map = new Map("WF_EmpWorks", "我部门的待办");
-                map.EnType = EnType.View;
+                map.setEnType(EnType.View);
 
                 map.AddTBInt(MyDeptTodolistAttr.FID, 0, "FID", false, false);
                 map.AddTBString(MyDeptTodolistAttr.Title, null, "流程标题", true, false, 0, 300, 10, true);
@@ -786,7 +786,7 @@ namespace BP.WF.Data
         /// <returns>回滚的结果</returns>
         public string DoComeBack(int nodeid, string note)
         {
-            BP.WF.Template.FlowSheet fl = new Template.FlowSheet(this.FK_Flow);
+            BP.WF.Template.FlowSheet fl = new BP.WF.Template.FlowSheet(this.FK_Flow);
             return fl.DoRebackFlowData(this.WorkID, nodeid, note);
         }
         #endregion

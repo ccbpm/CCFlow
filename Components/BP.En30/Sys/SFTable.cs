@@ -11,6 +11,8 @@ using BP.DA;
 using BP.En;
 using Microsoft.CSharp;
 using BP.Web;
+using BP.Difference;
+
 
 namespace BP.Sys
 {
@@ -199,13 +201,13 @@ namespace BP.Sys
         /// <summary>
         /// 获得外部数据表
         /// </summary>
-        public System.Data.DataTable GenerHisDataTable(Hashtable ht = null)
+        public DataTable GenerHisDataTable(Hashtable ht = null)
         {
             //创建数据源.
             SFDBSrc src = new SFDBSrc(this.FK_SFDBSrc);
 
             #region BP类
-            if (this.SrcType == Sys.SrcType.BPClass)
+            if (this.SrcType == BP.Sys.SrcType.BPClass)
             {
                 Entities ens = ClassFactory.GetEns(this.No);
                 return ens.RetrieveAllToTable();
@@ -213,9 +215,9 @@ namespace BP.Sys
             #endregion
 
             #region  WebServices
-            // this.SrcType == Sys.SrcType.WebServices，by liuxc 
+            // this.SrcType == BP.Sys.SrcType.WebServices，by liuxc 
             //暂只考虑No,Name结构的数据源，2015.10.04，added by liuxc
-            if (this.SrcType == Sys.SrcType.WebServices)
+            if (this.SrcType == BP.Sys.SrcType.WebServices)
             {
                 var td = this.TableDesc.Split(','); //接口名称,返回类型
                 var ps = (this.SelectStatement ?? string.Empty).Split('&');
@@ -315,7 +317,7 @@ namespace BP.Sys
             #endregion
 
             #region WebApi接口
-            if (this.SrcType == Sys.SrcType.WebApi)
+            if (this.SrcType == BP.Sys.SrcType.WebApi)
             {
                 //返回值
                 string postData = "";
@@ -345,10 +347,10 @@ namespace BP.Sys
             #endregion WebApi接口
 
             #region SQL查询.外键表/视图，edited by liuxc,2016-12-29
-            if (this.SrcType == Sys.SrcType.TableOrView)
+            if (this.SrcType == BP.Sys.SrcType.TableOrView)
             {
                 string sql = "SELECT " + this.ColumnValue + " No, " + this.ColumnText + " Name";
-                if (this.CodeStruct == Sys.CodeStruct.Tree)
+                if (this.CodeStruct == BP.Sys.CodeStruct.Tree)
                     sql += ", " + this.ParentValue + " ParentNo";
 
                 sql += " FROM " + this.SrcTable;
@@ -358,7 +360,7 @@ namespace BP.Sys
                     dt.Columns["NO"].ColumnName = "No";
                     dt.Columns["NAME"].ColumnName = "Name";
                 }
-                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                 {
                     dt.Columns["no"].ColumnName = "No";
                     dt.Columns["name"].ColumnName = "Name";
@@ -369,7 +371,7 @@ namespace BP.Sys
             #endregion SQL查询.外键表/视图，edited by liuxc,2016-12-29
 
             #region 动态SQL，edited by liuxc,2016-12-29
-            if (this.SrcType == Sys.SrcType.SQL)
+            if (this.SrcType == BP.Sys.SrcType.SQL)
             {
                 string runObj = this.SelectStatement;
 
@@ -434,7 +436,7 @@ namespace BP.Sys
                     dt.Columns["NO"].ColumnName = "No";
                     dt.Columns["NAME"].ColumnName = "Name";
                 }
-                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                 {
                     dt.Columns["no"].ColumnName = "No";
                     dt.Columns["name"].ColumnName = "Name";
@@ -445,13 +447,13 @@ namespace BP.Sys
             #endregion
 
             #region 自定义表.
-            if (this.SrcType == Sys.SrcType.CreateTable)
+            if (this.SrcType == BP.Sys.SrcType.CreateTable)
             {
                 string sql = "SELECT No, Name FROM " + this.No;
                 return src.RunSQLReturnTable(sql);
             }
 
-            if (this.SrcType == Sys.SrcType.SysDict)
+            if (this.SrcType == BP.Sys.SrcType.SysDict)
             {
                 string sql = "SELECT MyPK, BH AS No, Name FROM Sys_SFTableDtl where FK_SFTable='" + this.No + "'";
                 return src.RunSQLReturnTable(sql);
@@ -468,7 +470,7 @@ namespace BP.Sys
         public void UpdateData(string No, string Name, string FK_SFTable)
         {
             var sql = "";
-            if (this.SrcType == Sys.SrcType.SysDict)
+            if (this.SrcType == BP.Sys.SrcType.SysDict)
                 sql = "update Sys_SFTableDtl set Name = '" + Name + "' where MyPK='" + FK_SFTable + "_" + No + "'";
             else
                 sql = "update " + FK_SFTable + " set Name = '" + Name + "' where No = '" + No + "'";
@@ -481,7 +483,7 @@ namespace BP.Sys
         public void InsertData(string No, string Name, string FK_SFTable)
         {
             var sql = "";
-            if (this.SrcType == Sys.SrcType.SysDict)
+            if (this.SrcType == BP.Sys.SrcType.SysDict)
                 sql = "insert into  Sys_SFTableDtl(MyPK,FK_SFTable,BH,Name) values('" + FK_SFTable + "_" + No + "','" + FK_SFTable + "','" + No + "','" + Name + "')";
             else
                 sql = "insert into  " + FK_SFTable + "(No,Name) values('" + No + "','" + Name + "')";
@@ -494,7 +496,7 @@ namespace BP.Sys
         public void DeleteData(string No, string FK_SFTable)
         {
             var sql = "";
-            if (this.SrcType == Sys.SrcType.SysDict)
+            if (this.SrcType == BP.Sys.SrcType.SysDict)
                 sql = "delete from Sys_SFTableDtl where MyPK='" + FK_SFTable + "_" + No + "'";
             else
                 sql = "delete from " + FK_SFTable + " where No = '" + No + "'";
@@ -531,6 +533,7 @@ namespace BP.Sys
                                 sql = "SELECT CONVERT(INT, MAX(CAST(" + field + " as int)) )+1 AS No FROM Sys_SFTableDtl where FK_SFTable='" + table + "'";
                                 break;
                             case DBType.PostgreSQL:
+                            case DBType.UX:
                                 sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM Sys_SFTableDtl where FK_SFTable='" + table + "'";
                                 break;
                             case DBType.Oracle:
@@ -569,6 +572,7 @@ namespace BP.Sys
                             sql = "SELECT CONVERT(INT, MAX(CAST(" + field + " as int)) )+1 AS No FROM " + table;
                             break;
                         case DBType.PostgreSQL:
+                        case DBType.UX:
                             sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM " + table;
                             break;
                         case DBType.Oracle:
@@ -849,7 +853,7 @@ namespace BP.Sys
         {
             get
             {
-                if (this.CodeStruct == Sys.CodeStruct.NoName)
+                if (this.CodeStruct == BP.Sys.CodeStruct.NoName)
                     return false;
                 return true;
             }
@@ -866,7 +870,7 @@ namespace BP.Sys
                 else
                 {
                     SrcType src = (SrcType)this.GetValIntByKey(SFTableAttr.SrcType);
-                    if (src == Sys.SrcType.BPClass)
+                    if (src == BP.Sys.SrcType.BPClass)
                         return Sys.SrcType.CreateTable;
                     return src;
                 }
@@ -1183,12 +1187,12 @@ namespace BP.Sys
         /// <returns></returns>
         public string IsCanDelete()
         {
-            MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapAttrAttr.UIBindKey, this.No);
-            if (attrs.Count != 0)
+            MapAttrs mattrs = new MapAttrs();
+            mattrs.Retrieve(MapAttrAttr.UIBindKey, this.No);
+            if (mattrs.Count != 0)
             {
                 string err = "";
-                foreach (MapAttr item in attrs)
+                foreach (MapAttr item in mattrs)
                     err += " @ " + item.MyPK + " " + item.Name;
                 return "err@如下实体字段在引用:" + err + "。您不能删除该表。";
             }
@@ -1208,29 +1212,29 @@ namespace BP.Sys
                 this.OrgNo = BP.Web.WebUser.OrgNo;
 
             //利用这个时间串进行排序.
-            this.RDT = DataType.CurrentDataTime;
+            this.RDT = DataType.CurrentDateTime;
 
             #region  如果是 系统字典表.
-            if (this.SrcType == Sys.SrcType.SysDict && SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (this.SrcType == BP.Sys.SrcType.SysDict && SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
                 if (this.CodeStruct == CodeStruct.NoName)
                 {
                     DictDtl dtl = new DictDtl();
-                    dtl.MyPK = this.No + "_001";
+                    dtl.setMyPK(this.No + "_001");
                     dtl.BH = "001";
                     dtl.Name = "Item1";
                     dtl.FK_SFTable = this.No;
                     dtl.Insert();
 
                     dtl = new DictDtl();
-                    dtl.MyPK = this.No + "_002";
+                    dtl.setMyPK(this.No + "_002");
                     dtl.BH = "002";
                     dtl.Name = "Item2";
                     dtl.FK_SFTable = this.No;
                     dtl.Insert();
 
                     dtl = new DictDtl();
-                    dtl.MyPK = this.No + "_003";
+                    dtl.setMyPK(this.No + "_003");
                     dtl.BH = "003";
                     dtl.Name = "Item3";
                     dtl.FK_SFTable = this.No;
@@ -1240,7 +1244,7 @@ namespace BP.Sys
                 if (this.CodeStruct == CodeStruct.Tree)
                 {
                     DictDtl dtl = new DictDtl();
-                    dtl.MyPK = this.No + "_001";
+                    dtl.setMyPK(this.No + "_001");
                     dtl.BH = "001";
                     dtl.Name = "Item1";
                     dtl.FK_SFTable = this.No;
@@ -1248,7 +1252,7 @@ namespace BP.Sys
                     dtl.Insert();
 
                     dtl = new DictDtl();
-                    dtl.MyPK = this.No + "_002";
+                    dtl.setMyPK(this.No + "_002");
                     dtl.BH = "002";
                     dtl.Name = "Item2";
                     dtl.FK_SFTable = this.No;
@@ -1256,7 +1260,7 @@ namespace BP.Sys
                     dtl.Insert();
 
                     dtl = new DictDtl();
-                    dtl.MyPK = this.No + "_003";
+                    dtl.setMyPK(this.No + "_003");
                     dtl.BH = "003";
                     dtl.Name = "Item3";
                     dtl.FK_SFTable = this.No;
@@ -1267,7 +1271,7 @@ namespace BP.Sys
             #endregion  如果是 系统字典表.
 
             #region 如果是本地类. 
-            if (this.SrcType == Sys.SrcType.BPClass)
+            if (this.SrcType == BP.Sys.SrcType.BPClass)
             {
                 Entities ens = ClassFactory.GetEns(this.No);
                 Entity en = ens.GetNewEntity;
@@ -1275,14 +1279,14 @@ namespace BP.Sys
 
                 //检查是否是树结构.
                 if (en.IsTreeEntity == true)
-                    this.CodeStruct = Sys.CodeStruct.Tree;
+                    this.CodeStruct = BP.Sys.CodeStruct.Tree;
                 else
-                    this.CodeStruct = Sys.CodeStruct.NoName;
+                    this.CodeStruct = BP.Sys.CodeStruct.NoName;
             }
             #endregion 如果是本地类.
 
             #region 本地类，物理表..
-            if (this.SrcType == Sys.SrcType.CreateTable)
+            if (this.SrcType == BP.Sys.SrcType.CreateTable)
             {
                 if (DBAccess.IsExitsObject(this.No) == true)
                 {
@@ -1291,7 +1295,7 @@ namespace BP.Sys
                 }
 
                 string sql = "";
-                if (this.CodeStruct == Sys.CodeStruct.NoName || this.CodeStruct == Sys.CodeStruct.GradeNoName)
+                if (this.CodeStruct == BP.Sys.CodeStruct.NoName || this.CodeStruct == BP.Sys.CodeStruct.GradeNoName)
                 {
                     sql = "CREATE TABLE " + this.No + " (";
                     sql += "No varchar(30) NOT NULL,";
@@ -1299,7 +1303,7 @@ namespace BP.Sys
                     sql += ")";
                 }
 
-                if (this.CodeStruct == Sys.CodeStruct.Tree)
+                if (this.CodeStruct == BP.Sys.CodeStruct.Tree)
                 {
                     sql = "CREATE TABLE " + this.No + " (";
                     sql += "No varchar(30) NOT NULL,";
@@ -1322,15 +1326,15 @@ namespace BP.Sys
         {
             try
             {
-                if (this.SrcType == Sys.SrcType.TableOrView)
+                if (this.SrcType == BP.Sys.SrcType.TableOrView)
                 {
                     //暂时这样处理
                     string sql = "CREATE VIEW " + this.No + " (";
                     sql += "[No],";
                     sql += "[Name]";
-                    sql += (this.CodeStruct == Sys.CodeStruct.Tree ? ",[ParentNo])" : ")");
+                    sql += (this.CodeStruct == BP.Sys.CodeStruct.Tree ? ",[ParentNo])" : ")");
                     sql += " AS ";
-                    sql += "SELECT " + this.ColumnValue + " No," + this.ColumnText + " Name" + (this.CodeStruct == Sys.CodeStruct.Tree ? ("," + this.ParentValue + " ParentNo") : "") + " FROM " + this.SrcTable + (string.IsNullOrWhiteSpace(this.SelectStatement) ? "" : (" WHERE " + this.SelectStatement));
+                    sql += "SELECT " + this.ColumnValue + " No," + this.ColumnText + " Name" + (this.CodeStruct == BP.Sys.CodeStruct.Tree ? ("," + this.ParentValue + " ParentNo") : "") + " FROM " + this.SrcTable + (string.IsNullOrWhiteSpace(this.SelectStatement) ? "" : (" WHERE " + this.SelectStatement));
 
                     if (SystemConfig.AppCenterDBType == DBType.MySQL)
                     {
@@ -1361,13 +1365,13 @@ namespace BP.Sys
         {
             string sql = "";
             DataTable dt = null;
-            if (this.SrcType == Sys.SrcType.CreateTable)
+            if (this.SrcType == BP.Sys.SrcType.CreateTable)
             {
                 sql = "SELECT No,Name FROM " + this.SrcTable;
                 dt = this.RunSQLReturnTable(sql);
             }
 
-            if (this.SrcType == Sys.SrcType.TableOrView)
+            if (this.SrcType == BP.Sys.SrcType.TableOrView)
             {
                 sql = "SELECT No,Name FROM " + this.SrcTable;
                 dt = this.RunSQLReturnTable(sql);
@@ -1400,7 +1404,7 @@ namespace BP.Sys
             if (dt.Rows.Count == 0)
             {
                 /*初始化数据.*/
-                if (this.CodeStruct == Sys.CodeStruct.Tree)
+                if (this.CodeStruct == BP.Sys.CodeStruct.Tree)
                 {
                     sql = "INSERT INTO " + this.SrcTable + " (No,Name,ParentNo) VALUES('1','" + this.Name + "','0') ";
                     this.RunSQL(sql);
@@ -1415,7 +1419,7 @@ namespace BP.Sys
                     }
                 }
 
-                if (this.CodeStruct == Sys.CodeStruct.NoName)
+                if (this.CodeStruct == BP.Sys.CodeStruct.NoName)
                 {
                     for (int i = 1; i < 4; i++)
                     {

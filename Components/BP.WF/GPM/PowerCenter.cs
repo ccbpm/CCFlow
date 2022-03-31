@@ -119,9 +119,9 @@ namespace BP.GPM
         /// 权限中心
         /// </summary>
         /// <param name="mypk"></param>
-        public PowerCenter(string no)
+        public PowerCenter(string mypk)
         {
-            this.MyPK = no;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -134,10 +134,7 @@ namespace BP.GPM
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("GPM_PowerCenter");
-                map.DepositaryOfEntity = Depositary.None;
-                map.EnDesc = "权限中心";
-                map.EnType = EnType.Sys;
+                Map map = new Map("GPM_PowerCenter", "权限中心");
 
                 map.AddMyPK();
 
@@ -172,7 +169,7 @@ namespace BP.GPM
 
         protected override bool beforeInsert()
         {
-            this.MyPK = DBAccess.GenerGUID();
+            this.setMyPK(DBAccess.GenerGUID());
             return base.beforeInsert();
         }
     }

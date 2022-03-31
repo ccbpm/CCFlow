@@ -241,7 +241,7 @@ namespace BP.En
             }
             catch (Exception ex)
             {
-                Log.DebugWriteWarning("@ ToJson " + ex.Message);
+                BP.DA.Log.DebugWriteError("@ ToJson " + ex.Message);
             }
 
             return BP.Tools.Json.ToJson(ht);
@@ -423,16 +423,7 @@ namespace BP.En
             {
                 case DBUrlType.AppCenterDSN:
                     return DBAccess.RunSQL(ps);
-                case DBUrlType.DBAccessOfMSSQL1:
-                    return DBAccessOfMSSQL1.RunSQL(ps.SQL);
-                case DBUrlType.DBAccessOfMSSQL2:
-                    return DBAccessOfMSSQL2.RunSQL(ps.SQL);
-                //case DBUrlType.DBAccessOfOracle1:
-                //    return DBAccessOfOracle1.RunSQL(ps.SQL);
-                //case DBUrlType.DBAccessOfOracle2:
-                //    return DBAccessOfOracle2.RunSQL(ps.SQL);
-                case DBUrlType.DBSrc:
-                    return this.EnMap.EnDBUrl.HisDBSrc.RunSQL(ps.SQL, ps);
+
                 default:
                     throw new Exception("@没有设置类型。");
             }
@@ -443,17 +434,7 @@ namespace BP.En
             {
                 case DBUrlType.AppCenterDSN:
                     return DBAccess.RunSQL(sql, paras);
-                case DBUrlType.DBAccessOfMSSQL1:
-                    return DBAccessOfMSSQL1.RunSQL(sql, paras);
 
-                //case DBUrlType.DBAccessOfMSSQL2:
-                //    return DBAccessOfMSSQL2.RunSQL(sql, paras);
-                //case DBUrlType.DBAccessOfOracle1:
-                //    return DBAccessOfOracle1.RunSQL(sql);
-                //case DBUrlType.DBAccessOfOracle2:
-                //    return DBAccessOfOracle2.RunSQL(sql);
-                case DBUrlType.DBSrc:
-                    return this.EnMap.EnDBUrl.HisDBSrc.RunSQL(sql, paras);
                 default:
                     throw new Exception("@没有设置类型。");
             }
@@ -469,16 +450,7 @@ namespace BP.En
             {
                 case DBUrlType.AppCenterDSN:
                     return DBAccess.RunSQLReturnTable(sql, paras);
-                case DBUrlType.DBAccessOfMSSQL1:
-                    return DBAccessOfMSSQL1.RunSQLReturnTable(sql, paras);
-                //case DBUrlType.DBAccessOfMSSQL2:
-                //    return DBAccessOfMSSQL2.RunSQLReturnTable(sql);
-                //case DBUrlType.DBAccessOfOracle1:
-                //    return DBAccessOfOracle1.RunSQLReturnTable(sql);
-                //case DBUrlType.DBAccessOfOracle2:
-                //    return DBAccessOfOracle2.RunSQLReturnTable(sql);
-                case DBUrlType.DBSrc:
-                    return this.EnMap.EnDBUrl.HisDBSrc.RunSQLReturnTable(sql);
+
                 default:
                     throw new Exception("@没有设置类型。");
             }
@@ -500,16 +472,7 @@ namespace BP.En
             {
                 case DBUrlType.AppCenterDSN:
                     return DBAccess.RunSQLReturnValInt(paras, 0);
-                case DBUrlType.DBAccessOfMSSQL1:
-                    return DBAccessOfMSSQL1.RunSQLReturnInt(paras);
-                //case DBUrlType.DBAccessOfMSSQL2:
-                //    return DBAccessOfMSSQL2.RunSQLReturnTable(sql);
-                //case DBUrlType.DBAccessOfOracle1:
-                //    return DBAccessOfOracle1.RunSQLReturnTable(sql);
-                //case DBUrlType.DBAccessOfOracle2:
-                //    return DBAccessOfOracle2.RunSQLReturnTable(sql);
-                case DBUrlType.DBSrc:
-                    return this.EnMap.EnDBUrl.HisDBSrc.RunSQLReturnValInt(sql);
+
                 default:
                     throw new Exception("@没有设置类型。");
             }
@@ -746,6 +709,7 @@ namespace BP.En
                         sql = "SELECT CONVERT(INT, MAX(CAST(" + field + " as int)) )+1 AS No FROM " + this._enMap.PhysicsTable;
                         break;
                     case DBType.PostgreSQL:
+                    case DBType.UX:
                         sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM " + this._enMap.PhysicsTable;
                         break;
                     case DBType.Oracle:
@@ -1622,8 +1586,8 @@ namespace BP.En
                         msg += "[ 主键=" + key + " 值=" + ht[key] + " ]";
                     break;
             }
-            Log.DefaultLogWriteLine(LogType.Error, "@没有[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", 类[" + this.ToString() + "], 物理表[" + this.EnMap.PhysicsTable + "] 实例。PK = " + this.GetValByKey(this.PK));
-            throw new Exception("@记录[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", " + msg + "不存在.");
+            BP.DA.Log.DebugWriteError("@没有[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", 类[" + this.ToString() + "], 物理表[" + this.EnMap.PhysicsTable + "] 实例。PK = " + this.GetValByKey(this.PK));
+            throw new Exception("@记录[" + this.EnMap.EnDesc + "  " + this.EnMap.PhysicsTable + ", " + msg + "不存在. 类：" + this.ToString());
         }
         /// <summary>
         /// 判断是不是存在的方法.
@@ -1700,6 +1664,7 @@ namespace BP.En
                         case DBType.Oracle:
                         case DBType.DM:
                         case DBType.PostgreSQL:
+                        case DBType.UX:
                             selectSQL += SqlBuilder.GetKeyConditionOfOraForPara(this);
                             break;
                         case DBType.Informix:
@@ -1750,7 +1715,7 @@ namespace BP.En
             ps.SQL = SqlBuilder.Retrieve(this);
             ps.Add(this.PK, this.PKVal);
 
-            return this.RunSQLReturnTable(ps.SQL,ps);
+            return this.RunSQLReturnTable(ps.SQL, ps);
         }
         /// <summary>
         /// 这个表里是否存在
@@ -1900,7 +1865,7 @@ namespace BP.En
             }
             catch (Exception ex)
             {
-                Log.DebugWriteInfo(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
                 throw ex;
             }
 
@@ -1939,9 +1904,9 @@ namespace BP.En
         {
             Paras ps = new Paras();
             ps.Add(attr, val);
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
-                ps.Add(attr, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr, val));
+                ps.Add(attr, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr, val));
             }
             else
             {
@@ -1954,10 +1919,10 @@ namespace BP.En
         {
             Paras ps = new Paras();
 
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
-                ps.Add(attr1, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr1, val1));
-                ps.Add(attr2, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr2, val2));
+                ps.Add(attr1, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr1, val1));
+                ps.Add(attr2, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr2, val2));
 
             }
             else
@@ -1972,11 +1937,11 @@ namespace BP.En
         {
             Paras ps = new Paras();
 
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
-                ps.Add(attr1, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr1, val1));
-                ps.Add(attr2, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr2, val2));
-                ps.Add(attr3, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr3, val3));
+                ps.Add(attr1, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr1, val1));
+                ps.Add(attr2, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr2, val2));
+                ps.Add(attr3, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr3, val3));
             }
             else
             {
@@ -1991,12 +1956,12 @@ namespace BP.En
         {
             Paras ps = new Paras();
 
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
-                ps.Add(attr1, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr1, val1));
-                ps.Add(attr2, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr2, val2));
-                ps.Add(attr3, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr3, val3));
-                ps.Add(attr4, BP.Sys.Glo.GenerRealType(this.EnMap.Attrs, attr4, val4));
+                ps.Add(attr1, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr1, val1));
+                ps.Add(attr2, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr2, val2));
+                ps.Add(attr3, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr3, val3));
+                ps.Add(attr4, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr4, val4));
 
             }
             else
@@ -2015,6 +1980,8 @@ namespace BP.En
                 return;
             ///删除缓存。
             CashEntity.Delete(this.ToString(), this.PKVal.ToString());
+
+
             return;
         }
         #endregion
@@ -2266,11 +2233,11 @@ namespace BP.En
             {
                 //增加版本为1的版本历史记录
                 string enName = this.ToString();
-                string rdt = DataType.CurrentDataTime;
+                string rdt = DataType.CurrentDateTime;
 
                 //edited by liuxc,2017-03-24,增加判断，如果相同主键的数据曾被删除掉，再次被增加时，会延续被删除时的版本，原有逻辑报错
                 EnVer ver = new EnVer();
-                ver.MyPK = enName + "_" + this.PKVal;
+                ver.setMyPK(enName + "_" + this.PKVal);
 
                 if (ver.RetrieveFromDBSources() == 0)
                 {
@@ -2304,7 +2271,7 @@ namespace BP.En
                     //dtl.RDT = rdt;
                     //dtl.Rec = BP.Web.WebUser.Name;
                     //dtl.NewVal = this.GetValStrByKey(attr.Key);
-                    //dtl.MyPK = ver.MyPK + "_" + attr.Key + "_" + dtl.EnVer;
+                    //dtl.setMyPK(ver.MyPK + "_" + attr.Key + "_" + dtl.EnVer;
                     //dtl.Insert();
                 }
             }
@@ -2654,10 +2621,9 @@ namespace BP.En
             }
             catch (System.Exception ex)
             {
-                //@hongyan. 需要翻.
                 string msg = ex.Message;
 
-                if (msg.Contains("列名") || msg.Contains("将截断字符串") || msg.Contains("缺少") || msg.Contains("的值太大") || msg.Contains("too long")==true)
+                if (msg.Contains("列名") || msg.Contains("将截断字符串") || msg.Contains("缺少") || msg.Contains("的值太大") || msg.Contains("too long") == true)
                 {
                     /*说明字符串长度有问题.*/
                     this.CheckPhysicsTable();
@@ -2666,27 +2632,9 @@ namespace BP.En
                     bool isCheck = CheckPhysicsTableAutoExtFieldLength(ex);
                     if (isCheck == true)
                         return this.Update();
-
-                    ///*比较参数那个字段长度有问题*/
-                    //string errs = "";
-                    //foreach (Attr attr in this.EnMap.Attrs)
-                    //{
-                    //    if (attr.MyDataType != DataType.AppString)
-                    //        continue;
-
-                    //    if (attr.MaxLength < this.GetValStrByKey(attr.Key).Length)
-                    //    {
-                    //        errs += "@映射里面的" + attr.Key + "," + attr.Desc + ", 相对于输入的数据:{" + this.GetValStrByKey(attr.Key) + "}, 太长。";
-                    //    }
-                    //}
-
-                    //if (errs != "")
-                    //    throw new Exception("@执行更新[" + this.ToString() + "]出现错误@错误字段:" + errs + " <br>清你在提交一次。" + ex.Message);
-                    //else
-                    //    throw ex;
                 }
 
-                Log.DefaultLogWriteLine(LogType.Error, ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
                 if (SystemConfig.IsDebug)
                     throw new Exception("@[" + this.EnDesc + "]更新期间出现错误:" + str + ex.Message);
                 else
@@ -2719,7 +2667,7 @@ namespace BP.En
             catch (System.Exception ex)
             {
                 string msg = "@[" + this.EnDesc + "]UpdateOfDebug更新期间出现错误:" + str + ex.Message;
-                Log.DefaultLogWriteLine(LogType.Error, msg);
+                BP.DA.Log.DebugWriteError(msg);
 
                 if (SystemConfig.IsDebug)
                     throw new Exception(msg);
@@ -2736,7 +2684,7 @@ namespace BP.En
                 // 取出来原来最后的版本数据.
 
                 string enName = this.ToString();
-                string rdt = DataType.CurrentDataTime;
+                string rdt = DataType.CurrentDateTime;
 
                 EnVer ver = new EnVer();
                 ver.Retrieve(EnVerAttr.MyPK, enName + "_" + this.PKVal);
@@ -2770,7 +2718,7 @@ namespace BP.En
                     //    dtl.Rec = BP.Web.WebUser.Name;
                     //    dtl.NewVal = this.GetValStrByKey(attr.Key);
 
-                    //    dtl.MyPK = ver.MyPK + "_" + attr.Key + "_" + dtl.EnVer;
+                    //    dtl.setMyPK(ver.MyPK + "_" + attr.Key + "_" + dtl.EnVer;
                     //    dtl.Insert();
                     //}
                     return;
@@ -2810,7 +2758,7 @@ namespace BP.En
                 //    dtl.Rec = BP.Web.WebUser.Name;
                 //    dtl.NewVal = this.GetValStrByKey(attr.Key);
 
-                //    dtl.MyPK = ver.MyPK + "_" + attr.Key + "_" + dtl.EnVer;
+                //    dtl.setMyPK(ver.MyPK + "_" + attr.Key + "_" + dtl.EnVer;
                 //    dtl.Insert();
                 //}
             }
@@ -2991,6 +2939,7 @@ namespace BP.En
                         sql = SqlBuilder.GenerCreateTableSQLOfInfoMix(this);
                         break;
                     case DBType.PostgreSQL:
+                    case DBType.UX:
                         sql = SqlBuilder.GenerCreateTableSQLOfPostgreSQL(this);
                         break;
                     case DBType.MSSQL:
@@ -3011,33 +2960,6 @@ namespace BP.En
                 return;
             }
 
-
-            if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.DBAccessOfMSSQL1)
-            {
-                DBAccessOfMSSQL1.RunSQL(SqlBuilder.GenerCreateTableSQLOfMS(this));
-                this.CreateIndexAndPK();
-                return;
-            }
-
-            if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.DBAccessOfMSSQL2)
-            {
-                DBAccessOfMSSQL2.RunSQL(SqlBuilder.GenerCreateTableSQLOfMS(this));
-                this.CreateIndexAndPK();
-                return;
-            }
-
-            //if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.DBAccessOfOracle1)
-            //{
-            //    DBAccessOfOracle1.RunSQL(SqlBuilder.GenerCreateTableSQLOfOra(this));
-            //    this.CreateIndexAndPK();
-            //    return;
-            //}
-            //if (this._enMap.EnDBUrl.DBUrlType == DBUrlType.DBAccessOfOracle2)
-            //{
-            //    DBAccessOfOracle2.RunSQL(SqlBuilder.GenerCreateTableSQLOfOra(this));
-            //    this.CreateIndexAndPK();
-            //    return;
-            //}
 
         }
         private void CreateIndexAndPK()
@@ -3214,7 +3136,7 @@ namespace BP.En
                         else
                         {
                             string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
-                            Log.DebugWriteWarning(err);
+                            BP.DA.Log.DebugWriteInfo(err);
 
                             // throw new Exception();
 
@@ -3235,7 +3157,7 @@ namespace BP.En
                         if (FType.Contains("int") == false)
                         {
                             string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
-                            Log.DebugWriteWarning(err);
+                            BP.DA.Log.DebugWriteInfo(err);
                             ///*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
                             //foreach (DataRow dr in dtYueShu.Rows)
                             //{
@@ -3253,7 +3175,7 @@ namespace BP.En
                         if (FType.Contains("float") == false)
                         {
                             string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
-                            Log.DebugWriteWarning(err);
+                            BP.DA.Log.DebugWriteInfo(err);
 
                             ///*如果类型不匹配，就删除它在重新建, 先删除约束，在删除列，在重建。*/
                             //foreach (DataRow dr in dtYueShu.Rows)
@@ -3307,7 +3229,7 @@ namespace BP.En
                         SysEnum se = new SysEnum();
                         se.IntKey = int.Parse(vk[0]);
                         se.Lab = vk[1];
-                        se.EnumKey = attr.UIBindKey;
+                        se.setEnumKey(attr.UIBindKey);
                         se.Insert();
                     }
                 }
@@ -3415,9 +3337,8 @@ namespace BP.En
                     int start = type.IndexOf('(') + 1;
                     int end = type.IndexOf(')');
                     string len = type.Substring(start, end - start);
-                    //dr["flen"] = int.Parse(len);
-                   // dr["flen"] = 1; // int.Parse(len);
-
+                    dr["flen"] = int.Parse(len);
+                    // dr["flen"] = 1; // int.Parse(len);
                 }
                 else
                 {
@@ -3543,7 +3464,7 @@ namespace BP.En
                         else
                         {
                             string err = "err@字段类型不匹配,表[" + this.EnMap.PhysicsTable + "]字段[" + attr.Key + "]名称[" + attr.Desc + "]映射类型为[" + attr.MyDataTypeStr + "],数据类型为[" + FType + "]";
-                            Log.DebugWriteWarning(err);
+                            BP.DA.Log.DebugWriteInfo(err);
 
                             // throw new Exception();
 
@@ -3636,7 +3557,7 @@ namespace BP.En
                         SysEnum se = new SysEnum();
                         se.IntKey = int.Parse(vk[0]);
                         se.Lab = vk[1];
-                        se.EnumKey = attr.UIBindKey;
+                        se.setEnumKey(attr.UIBindKey);
                         se.Insert();
                     }
                 }
@@ -3732,6 +3653,7 @@ namespace BP.En
                 case DBType.Informix:
                     break;
                 case DBType.PostgreSQL:
+                case DBType.UX:
                     break;
                 default:
                     throw new Exception("@没有涉及到的数据库类型");
@@ -3830,8 +3752,15 @@ namespace BP.En
             //检查是否有对应的主键.
             string pk = this.PK;
             if (pk.Contains(",") == false)
+            {
                 if (this.EnMap.Attrs.Contains(pk) == false)
-                    throw new Exception("err@Entity" + this.ToString() + "," + this.EnMap.EnDesc + "的Map设置错误主键为【" + pk + "】但是没有" + pk + "的属性.");
+                {
+                    if (this.ToString().Contains(".") == true)
+                        throw new Exception("err@Entity " + this.ToString() + "," + this.EnMap.EnDesc + "的Map设置错误主键为【" + pk + "】但是没有这个字段，请检查Map。");
+                    else
+                        throw new Exception("err@Entity " + this.ToString() + "," + this.EnMap.EnDesc + "的Map设置错误主键为【" + pk + "】但是没有这个字段，请检查:  SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + this.ToString() + "'");
+                }
+            }
 
             DBType dbtype = this._enMap.EnDBUrl.DBType;
 
@@ -3855,6 +3784,7 @@ namespace BP.En
                     this.CheckPhysicsTable_Informix();
                     break;
                 case DBType.PostgreSQL:
+                case DBType.UX:
                     this.CheckPhysicsTable_PostgreSQL();
                     break;
                 default:
@@ -3953,7 +3883,7 @@ namespace BP.En
                     }
                     catch (Exception ex)
                     {
-                        Log.DebugWriteWarning(ex.Message);
+                        BP.DA.Log.DebugWriteInfo(ex.Message);
                     }
                 }
             }
@@ -3971,7 +3901,7 @@ namespace BP.En
                 sql = "SELECT DATA_TYPE FROM ALL_TAB_COLUMNS WHERE  TABLE_NAME='" + this.EnMap.PhysicsTableExt.ToLower() + "' AND COLUMN_NAME='" + attr.Field.ToLower() + "'";
                 string val = DBAccess.RunSQLReturnString(sql);
                 if (val == null)
-                    Log.DefaultLogWriteLineError("@没有检测到字段:" + attr.Key);
+                    BP.DA.Log.DebugWriteError("@没有检测到字段:" + attr.Key);
 
                 if (val.IndexOf("CHAR") != -1)
                 {
@@ -3984,7 +3914,7 @@ namespace BP.En
                     }
                     catch (Exception ex)
                     {
-                        Log.DefaultLogWriteLineError("运行sql 失败:alter table  " + this.EnMap.PhysicsTableExt + " modify " + attr.Field + " NUMBER " + ex.Message);
+                        BP.DA.Log.DebugWriteError("运行sql 失败:alter table  " + this.EnMap.PhysicsTableExt + " modify " + attr.Field + " NUMBER " + ex.Message);
                     }
                 }
             }
@@ -4018,7 +3948,7 @@ namespace BP.En
                     SysEnum se = new SysEnum();
                     se.IntKey = int.Parse(vk[0]);
                     se.Lab = vk[1];
-                    se.EnumKey = attr.UIBindKey;
+                    se.setEnumKey(attr.UIBindKey);
                     se.Insert();
                 }
             }
@@ -4115,7 +4045,7 @@ namespace BP.En
                     }
                     catch (Exception ex)
                     {
-                        Log.DebugWriteWarning(ex.Message);
+                        BP.DA.Log.DebugWriteError(ex.Message);
                     }
                 }
             }
@@ -4132,7 +4062,7 @@ namespace BP.En
                 string val = DBAccess.RunSQLReturnString(sql);
                 if (val == null)
                 {
-                    Log.DefaultLogWriteLineError("@没有检测到字段eunm" + attr.Key);
+                    BP.DA.Log.DebugWriteError("@没有检测到字段eunm" + attr.Key);
                     continue;
                 }
 
@@ -4147,7 +4077,7 @@ namespace BP.En
                     }
                     catch (Exception ex)
                     {
-                        Log.DefaultLogWriteLineError("运行sql 失败:alter table  " + this._enMap.PhysicsTableExt + " modify " + attr.Field + " NUMBER " + ex.Message);
+                        BP.DA.Log.DebugWriteError("运行sql 失败:alter table  " + this._enMap.PhysicsTableExt + " modify " + attr.Field + " NUMBER " + ex.Message);
                     }
                 }
             }
@@ -4181,7 +4111,7 @@ namespace BP.En
                     SysEnum se = new SysEnum();
                     se.IntKey = int.Parse(vk[0]);
                     se.Lab = vk[1];
-                    se.EnumKey = attr.UIBindKey;
+                    se.setEnumKey(attr.UIBindKey);
                     se.Insert();
                 }
             }
@@ -4296,7 +4226,7 @@ namespace BP.En
                 sql = "SELECT DATA_TYPE FROM ALL_TAB_COLUMNS WHERE upper(TABLE_NAME)='" + this.EnMap.PhysicsTableExt.ToUpper() + "' AND UPPER(COLUMN_NAME)='" + attr.Field.ToUpper() + "' ";
                 string val = DBAccess.RunSQLReturnString(sql);
                 if (val == null)
-                    Log.DefaultLogWriteLineError("@没有检测到字段eunm" + attr.Key);
+                    BP.DA.Log.DebugWriteError("@没有检测到字段eunm" + attr.Key);
 
                 if (val.IndexOf("CHAR") != -1)
                 {
@@ -4309,7 +4239,7 @@ namespace BP.En
                     }
                     catch (Exception ex)
                     {
-                        Log.DefaultLogWriteLineError("运行sql 失败:alter table  " + this.EnMap.PhysicsTableExt + " modify " + attr.Field + " NUMBER " + ex.Message);
+                        BP.DA.Log.DebugWriteError("运行sql 失败:alter table  " + this.EnMap.PhysicsTableExt + " modify " + attr.Field + " NUMBER " + ex.Message);
                     }
                 }
             }
@@ -4343,7 +4273,7 @@ namespace BP.En
                     SysEnum se = new SysEnum();
                     se.IntKey = int.Parse(vk[0]);
                     se.Lab = vk[1];
-                    se.EnumKey = attr.UIBindKey;
+                    se.setEnumKey(attr.UIBindKey);
                     se.Insert();
                 }
             }
@@ -4403,7 +4333,7 @@ namespace BP.En
                     mdtl.Insert();
 
                 mdtl.Name = enDtl.EnDesc;
-                mdtl.FK_MapData = fk_mapdata;
+                mdtl.setFK_MapData(fk_mapdata);
                 mdtl.PTable = enDtl.EnMap.PhysicsTable;
 
                 mdtl.RefPK = dtl.RefKey; //关联的主键.
@@ -4430,31 +4360,31 @@ namespace BP.En
                     continue;
 
                 MapAttr mattr = new MapAttr();
-                mattr.KeyOfEn = attr.Key;
-                mattr.FK_MapData = fk_mapdata;
-                mattr.MyPK = mattr.FK_MapData + "_" + mattr.KeyOfEn;
+                mattr.setKeyOfEn(attr.Key);
+                mattr.setFK_MapData(fk_mapdata);
+                mattr.setMyPK(mattr.FK_MapData + "_" + mattr.KeyOfEn);
                 mattr.RetrieveFromDBSources();
 
-                mattr.Name = attr.Desc;
-                mattr.DefVal = attr.DefaultVal.ToString();
-                mattr.KeyOfEn = attr.Field;
+                mattr.setName(attr.Desc);
+                mattr.setDefVal(attr.DefaultVal.ToString());
+                mattr.setKeyOfEn(attr.Field);
 
-                mattr.MaxLen = attr.MaxLength;
-                mattr.MinLen = attr.MinLength;
+                mattr.setMaxLen(attr.MaxLength);
+                mattr.setMinLen(attr.MinLength);
                 mattr.UIBindKey = attr.UIBindKey;
-                mattr.UIIsLine = attr.UIIsLine;
-                mattr.UIHeight = 0;
+                mattr.setUIIsLine(attr.UIIsLine);
+                mattr.setUIHeight(0);
 
                 if (attr.MaxLength > 3000)
-                    mattr.UIHeight = 10;
+                    mattr.setUIHeight(10);
 
                 mattr.UIWidth = attr.UIWidth;
-                mattr.MyDataType = attr.MyDataType;
+                mattr.setMyDataType(attr.MyDataType);
 
                 mattr.UIRefKey = attr.UIRefKeyValue;
 
                 mattr.UIRefKeyText = attr.UIRefKeyText;
-                mattr.UIVisible = attr.UIVisible;
+                mattr.setUIVisible(attr.UIVisible);
 
                 //设置显示与隐藏，按照默认值.
                 if (mattr.GetParaString("SearchVisable") == "")
@@ -4470,36 +4400,36 @@ namespace BP.En
                 {
                     case FieldType.Enum:
                     case FieldType.PKEnum:
-                        mattr.UIContralType = attr.UIContralType;
-                        mattr.LGType = FieldTypeS.Enum;
-                        mattr.UIIsEnable = attr.UIIsReadonly;
+                        mattr.setUIContralType(attr.UIContralType);
+                        mattr.setLGType(FieldTypeS.Enum);
+                        mattr.setUIIsEnable(attr.UIIsReadonly);
                         break;
                     case FieldType.FK:
                     case FieldType.PKFK:
-                        mattr.UIContralType = attr.UIContralType;
-                        mattr.LGType = FieldTypeS.FK;
+                        mattr.setUIContralType(attr.UIContralType);
+                        mattr.setLGType(FieldTypeS.FK);
                         //attr.MyDataType = (int)FieldType.FK;
                         mattr.UIRefKey = "No";
                         mattr.UIRefKeyText = "Name";
-                        mattr.UIIsEnable = attr.UIIsReadonly;
+                        mattr.setUIIsEnable(attr.UIIsReadonly);
                         break;
                     default:
-                        mattr.UIContralType = UIContralType.TB;
-                        mattr.LGType = FieldTypeS.Normal;
-                        mattr.UIIsEnable = !attr.UIIsReadonly;
+                        mattr.setUIContralType(UIContralType.TB);
+                        mattr.setLGType(FieldTypeS.Normal);
+                        mattr.setUIIsEnable(!attr.UIIsReadonly);
                         switch (attr.MyDataType)
                         {
                             case DataType.AppBoolean:
-                                mattr.UIContralType = UIContralType.CheckBok;
-                                mattr.UIIsEnable = attr.UIIsReadonly;
+                                mattr.setUIContralType(UIContralType.CheckBok);
+                                mattr.setUIIsEnable(attr.UIIsReadonly);
                                 break;
                             case DataType.AppDate:
                                 //if (this.Tag == "1")
-                                //    attr.DefaultVal = DataType.CurrentData;
+                                //    attr.DefaultVal = DataType.CurrentDate;
                                 break;
                             case DataType.AppDateTime:
                                 //if (this.Tag == "1")
-                                //    attr.DefaultVal = DataType.CurrentData;
+                                //    attr.DefaultVal = DataType.CurrentDate;
                                 break;
                             default:
                                 break;

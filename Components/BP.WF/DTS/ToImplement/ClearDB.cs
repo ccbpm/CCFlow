@@ -55,9 +55,6 @@ namespace BP.WF.DTS
             if (BP.Web.WebUser.No != "admin")
                 return "非法的用户执行。";
 
-            //DBAccess.RunSQL("DELETE FROM WF_CHOfFlow");
-
-            DBAccess.RunSQL("DELETE FROM WF_Bill");
             DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist");
             DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow");
             DBAccess.RunSQL("DELETE FROM WF_ReturnWork");

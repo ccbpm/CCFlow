@@ -38,7 +38,7 @@ namespace BP.Sys.FrmUI
         /// <param name="mypk"></param>
         public ExtImg(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
 
@@ -127,11 +127,11 @@ namespace BP.Sys.FrmUI
         protected override void afterInsertUpdateAction()
         {
             //在属性实体集合插入前，clear父实体的缓存.
-            BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
 
 
             BP.Sys.FrmImg imgAth = new BP.Sys.FrmImg();
-            imgAth.MyPK = this.MyPK;
+            imgAth.setMyPK(this.MyPK);
             imgAth.RetrieveFromDBSources();
             imgAth.Update();
 
@@ -148,20 +148,20 @@ namespace BP.Sys.FrmUI
                 attr.SetValByKey(MapAttrAttr.X, this.GetValStrByKey(FrmImgAttr.X)); 
                 attr.SetValByKey(MapAttrAttr.Y, this.GetValStrByKey(FrmImgAttr.Y));
 
-                //@hongyan .
                 attr.SetValByKey(MapAttrAttr.UIWidth, this.GetValStrByKey(MapAttrAttr.UIWidth));
                 attr.SetValByKey(MapAttrAttr.UIHeight, this.GetValStrByKey(MapAttrAttr.UIHeight));
                 attr.Update();
             }
 
             base.afterInsertUpdateAction();
+
         }
         protected override void afterDelete()
         {
             //把相关的字段也要删除.
             MapAttrString attr = new MapAttrString();
-            attr.MyPK = this.MyPK;
-            attr.FK_MapData = this.FK_MapData;
+            attr.setMyPK(this.MyPK);
+            attr.setFK_MapData(this.FK_MapData);
             attr.Delete();
 
             base.afterDelete();
@@ -188,9 +188,9 @@ namespace BP.Sys.FrmUI
         public ExtImgs(string fk_mapdata)
         {
             if (SystemConfig.IsDebug)
-                this.Retrieve(FrmLineAttr.FK_MapData, fk_mapdata);
+                this.Retrieve(MapAttrAttr.FK_MapData, fk_mapdata);
             else
-                this.RetrieveFromCash(FrmLineAttr.FK_MapData, (object)fk_mapdata);
+                this.RetrieveFromCash(MapAttrAttr.FK_MapData, (object)fk_mapdata);
         }
         /// <summary>
         /// 得到它的 Entity

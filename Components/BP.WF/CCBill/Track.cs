@@ -440,7 +440,7 @@ namespace BP.CCBill
         protected override bool beforeInsert()
         {
             if (DataType.IsNullOrEmpty(this.MyPK) == true)
-                this.MyPK = DBAccess.GenerGUID();
+                this.setMyPK(DBAccess.GenerGUID());
             return base.beforeInsert();
         }
         #endregion 构造.

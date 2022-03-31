@@ -29,20 +29,6 @@ namespace BP.Sys
     {
         #region 属性.
         /// <summary>
-        /// 序号
-        /// </summary>
-        public int Idx
-        {
-            get
-            {
-                return this.GetValIntByKey(FrmTreeAttr.Idx);
-            }
-            set
-            {
-                this.SetValByKey(FrmTreeAttr.Idx, value);
-            }
-        }
-        /// <summary>
         /// 父节点编号
         /// </summary>
         public string OrgNo
@@ -132,6 +118,15 @@ namespace BP.Sys
             en.Insert();
             return en;
         }
+        public FrmTree DoCreateSameLevelNodeMy(string dirName)
+        {
+            FrmTree en = new FrmTree();
+            en.Copy(this);
+            en.No = DBAccess.GenerOID().ToString();
+            en.Name = dirName;
+            en.Insert();
+            return en;
+        }
         public FrmTree DoCreateSubNode()
         {
             FrmTree en = new FrmTree();
@@ -198,6 +193,9 @@ namespace BP.Sys
         }
         public override int RetrieveAll()
         {
+            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
+
             int i = base.RetrieveAll();
             if (i == 0)
             {

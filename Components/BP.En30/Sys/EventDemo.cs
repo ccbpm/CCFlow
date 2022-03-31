@@ -6,6 +6,7 @@ using BP.DA;
 using BP.DTS;
 using BP.En;
 using BP.Web;
+using BP.Sys.Base;
 
 namespace BP.Sys
 {

@@ -27,6 +27,8 @@ namespace BP.WF
                 throw new ArgumentNullException("url");
 
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+            //由于远程方已关闭传输流,身份验证失败  加这行
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11;
             request.Method = "GET";
             request.UserAgent = DefaultUserAgent;
             if (!DataType.IsNullOrEmpty(userAgent))
@@ -76,6 +78,8 @@ namespace BP.WF
             {
                 request = WebRequest.Create(url) as HttpWebRequest;
             }
+            //由于远程方已关闭传输流,身份验证失败  加这行
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11;
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";
 

@@ -60,7 +60,7 @@ namespace BP.Sys
         /// 设置的值
         /// </summary>
         public const string SetVal = "SetVal";
-        
+
     }
     /// <summary>
     /// 单选框
@@ -111,7 +111,7 @@ namespace BP.Sys
                 this.SetValByKey(FrmRBAttr.Script, value);
             }
         }
-        
+
         /// <summary>
         /// 字段-配置信息
         /// </summary>
@@ -132,10 +132,11 @@ namespace BP.Sys
             {
                 return this.GetValStringByKey(FrmRBAttr.Lab);
             }
-            set
-            {
-                this.SetValByKey(FrmRBAttr.Lab, value);
-            }
+
+        }
+        public void setLab(string val)
+        {
+            this.SetValByKey(FrmRBAttr.Lab, val);
         }
         public string KeyOfEn
         {
@@ -148,52 +149,32 @@ namespace BP.Sys
                 this.SetValByKey(FrmRBAttr.KeyOfEn, value);
             }
         }
+        public void setKeyOfEn(string val)
+        {
+            this.SetValByKey(FrmRBAttr.KeyOfEn, val);
+        }
         public int IntKey
         {
             get
             {
                 return this.GetValIntByKey(FrmRBAttr.IntKey);
             }
-            set
-            {
-                this.SetValByKey(FrmRBAttr.IntKey, value);
-            }
         }
-        /// <summary>
-        ///  Y
-        /// </summary>
-        public float Y
+        public void setIntKey(int val)
         {
-            get
-            {
-                return this.GetValFloatByKey(FrmRBAttr.Y);
-            }
-            set
-            {
-                this.SetValByKey(FrmRBAttr.Y, value);
-            }
+            this.SetValByKey(FrmRBAttr.IntKey, val);
         }
-        public float X
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmRBAttr.X);
-            }
-            set
-            {
-                this.SetValByKey(FrmRBAttr.X, value);
-            }
-        }
+
         public string FK_MapData
         {
             get
             {
                 return this.GetValStrByKey(FrmRBAttr.FK_MapData);
             }
-            set
-            {
-                this.SetValByKey(FrmRBAttr.FK_MapData, value);
-            }
+        }
+        public void setFK_MapData(string val)
+        {
+            this.SetValByKey(FrmRBAttr.FK_MapData, val);
         }
         public string EnumKey
         {
@@ -201,10 +182,10 @@ namespace BP.Sys
             {
                 return this.GetValStrByKey(FrmRBAttr.EnumKey);
             }
-            set
-            {
-                this.SetValByKey(FrmRBAttr.EnumKey, value);
-            }
+        }
+        public void setEnumKey(string val)
+        {
+            this.SetValByKey(FrmRBAttr.EnumKey, val);
         }
         public int FontSize
         {
@@ -228,7 +209,7 @@ namespace BP.Sys
         }
         public FrmRB(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -241,16 +222,16 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_FrmRB", "单选框");
-          //      map.EnDBUrl = new DBUrl(DBUrlType.DBAccessOfMSSQL1);
+                //      map.EnDBUrl = new DBUrl(DBUrlType.DBAccessOfMSSQL1);
 
-                map.IndexField = FrmImgAthDBAttr.FK_MapData ; 
+                map.IndexField = FrmImgAthDBAttr.FK_MapData;
 
                 map.AddMyPK();
                 map.AddTBString(FrmRBAttr.FK_MapData, null, "表单ID", true, false, 0, 300, 20);
                 map.AddTBString(FrmRBAttr.KeyOfEn, null, "字段", true, false, 0, 300, 20);
                 map.AddTBString(FrmRBAttr.EnumKey, null, "枚举值", true, false, 0, 30, 20);
                 map.AddTBString(FrmRBAttr.Lab, null, "标签", true, false, 0, 500, 20);
-                
+
                 map.AddTBInt(FrmRBAttr.IntKey, 0, "IntKey", true, false);
 
 
@@ -277,13 +258,13 @@ namespace BP.Sys
 
         protected override bool beforeInsert()
         {
-            this.MyPK = this.FK_MapData + "_" + this.KeyOfEn + "_" + this.IntKey;
+            this.setMyPK(this.FK_MapData + "_" + this.KeyOfEn + "_" + this.IntKey);
             return base.beforeInsert();
         }
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.MyPK = this.FK_MapData + "_" + this.KeyOfEn + "_" + this.IntKey;
+            this.setMyPK(this.FK_MapData + "_" + this.KeyOfEn + "_" + this.IntKey);
             return base.beforeUpdateInsertAction();
         }
     }
@@ -305,8 +286,8 @@ namespace BP.Sys
         /// <param name="fk_mapdata">s</param>
         public FrmRBs(string fk_mapdata)
         {
-           this.Retrieve(FrmLineAttr.FK_MapData, fk_mapdata);
-           
+            this.Retrieve(MapAttrAttr.FK_MapData, fk_mapdata);
+
         }
         /// <summary>
         /// 单选框s

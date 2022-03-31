@@ -169,7 +169,7 @@ namespace BP.WF.Template
             return base.beforeUpdate();
         }
         /// <summary>
-        /// 删除之前的逻辑  @hongyan
+        /// 删除之前的逻辑
         /// </summary>
         /// <returns></returns>
         protected override bool beforeDelete()
@@ -213,7 +213,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// @hongyan.
+        /// 
         /// </summary>
         /// <returns></returns>
         public override int RetrieveAll()

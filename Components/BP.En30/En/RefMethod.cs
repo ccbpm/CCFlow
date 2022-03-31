@@ -119,7 +119,7 @@ namespace BP.En
         /// <summary>
         /// 操作前提示信息
         /// </summary>
-        public string Warning = null;
+        public string Warning = "您确定要执行吗？";
         /// <summary>
         /// 连接
         /// </summary>

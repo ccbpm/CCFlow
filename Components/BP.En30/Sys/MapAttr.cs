@@ -189,7 +189,6 @@ namespace BP.Sys
 
         public const string CSSLabel = "CSSLabel";
 
-
         #region 参数属性.
         /// <summary>
         /// 是否必填
@@ -212,12 +211,10 @@ namespace BP.Sys
         public const string IsSupperText = "IsSupperText";
         public const string IsRichText = "IsRichText";
         public const string IsSecret = "IsSecret";
-
         /// <summary>
         /// 默认值设置方式
         /// </summary>
         public const string DefValType = "DefValType";
-
         public const string DefaultVal = "";
     }
     /// <summary>
@@ -500,11 +497,11 @@ namespace BP.Sys
                                 break;
                             case DataType.AppDate:
                                 if (this.Tag == "1")
-                                    attr.DefaultVal = DataType.CurrentData;
+                                    attr.DefaultVal = DataType.CurrentDate;
                                 break;
                             case DataType.AppDateTime:
                                 if (this.Tag == "1")
-                                    attr.DefaultVal = DataType.CurrentData;
+                                    attr.DefaultVal = DataType.CurrentDate;
                                 break;
                             default:
                                 attr.UIContralType = this.UIContralType;
@@ -512,8 +509,6 @@ namespace BP.Sys
                         }
                         break;
                 }
-
-
                 return attr;
             }
         }
@@ -546,10 +541,13 @@ namespace BP.Sys
             {
                 return (EditType)this.GetValIntByKey(MapAttrAttr.EditType);
             }
-            set
-            {
+            set {
                 this.SetValByKey(MapAttrAttr.EditType, (int)value);
             }
+        }
+        public void setEditType(EditType val)
+        {
+            this.SetValByKey(MapAttrAttr.EditType, (int)val);
         }
         /// <summary>
         /// 表单ID
@@ -560,10 +558,11 @@ namespace BP.Sys
             {
                 return this.GetValStrByKey(MapAttrAttr.FK_MapData);
             }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.FK_MapData, value);
-            }
+        }
+        public void setFK_MapData(string val)
+        {
+
+            this.SetValByKey(MapAttrAttr.FK_MapData, val);
         }
         /// <summary>
         /// 字段名
@@ -574,10 +573,11 @@ namespace BP.Sys
             {
                 return this.GetValStrByKey(MapAttrAttr.KeyOfEn);
             }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.KeyOfEn, value);
-            }
+        }
+        public void setKeyOfEn(string val)
+        {
+
+            this.SetValByKey(MapAttrAttr.KeyOfEn, val);
         }
         public FieldTypeS LGType
         {
@@ -589,6 +589,10 @@ namespace BP.Sys
             {
                 this.SetValByKey(MapAttrAttr.LGType, (int)value);
             }
+        }
+        public void setLGType(FieldTypeS val)
+        {
+            this.SetValByKey(MapAttrAttr.LGType, (int)val);
         }
         public string LGTypeT
         {
@@ -614,6 +618,11 @@ namespace BP.Sys
                 this.SetValByKey(MapAttrAttr.Name, value);
             }
         }
+        public void setName(string val)
+        {
+            this.SetValByKey(MapAttrAttr.Name, val);
+        }
+
         public bool IsNum
         {
             get
@@ -643,12 +652,11 @@ namespace BP.Sys
             {
                 return this.GetValStrByKey(MapAttrAttr.DefVal);
             }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.DefVal, value);
-            }
         }
-
+        public void setDefValReal(string val)
+        {
+            this.SetValByKey(MapAttrAttr.DefVal, val);
+        }
         public int DefValType
         {
             get
@@ -659,6 +667,10 @@ namespace BP.Sys
             {
                 this.SetValByKey(MapAttrAttr.DefValType, value);
             }
+        }
+        public void setDefValType(int val)
+        {
+            this.SetValByKey(MapAttrAttr.DefValType, val);
         }
         /// <summary>
         /// 合并单元格数
@@ -697,13 +709,13 @@ namespace BP.Sys
                 {
                     case DataType.AppDate:
                         if (this.Tag == "1" || s == "@RDT")
-                            return DataType.CurrentData;
+                            return DataType.CurrentDate;
                         else
                             return "          ";
                         break;
                     case DataType.AppDateTime:
                         if (this.Tag == "1" || s == "@RDT")
-                            return DataType.CurrentDataTime;
+                            return DataType.CurrentDateTime;
                         else
                             return "               ";
                         //return "    -  -    :  ";
@@ -735,20 +747,20 @@ namespace BP.Sys
                         return DataType.CurrentMonth;
                     case "@rdt":
                         if (this.MyDataType == DataType.AppDate)
-                            return DataType.CurrentData;
+                            return DataType.CurrentDate;
                         else
-                            return DataType.CurrentDataTime;
+                            return DataType.CurrentDateTime;
                     case "@rd":
                         if (this.MyDataType == DataType.AppDate)
-                            return DataType.CurrentData;
+                            return DataType.CurrentDate;
                         else
-                            return DataType.CurrentDataTime;
+                            return DataType.CurrentDateTime;
                     case "@yyyy年MM月dd日":
-                        return DataType.CurrentDataCNOfLong;
+                        return DataType.CurrentDateCNOfLong;
                     case "@yyyy年MM月dd日hh时mm分":
                         return DateTime.Now.ToString("yyyy年MM月dd日HH时mm分");
                     case "@yy年MM月dd日":
-                        return DataType.CurrentDataCNOfShort;
+                        return DataType.CurrentDateCNOfShort;
                     case "@yy年MM月dd日hh时mm分":
                         return DateTime.Now.ToString("yy年MM月dd日HH时mm分");
                     default:
@@ -759,8 +771,12 @@ namespace BP.Sys
             }
             set
             {
-                this.SetValByKey(MapAttrAttr.DefVal, value);
+                this.GetValStrByKey(MapAttrAttr.DefVal, value);
             }
+        }
+        public void setDefVal(object val)
+        {
+            this.GetValStrByKey(MapAttrAttr.DefVal, val.ToString());
         }
         public bool DefValOfBool
         {
@@ -768,10 +784,7 @@ namespace BP.Sys
             {
                 return this.GetValBooleanByKey(MapAttrAttr.DefVal, false);
             }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.DefVal, value);
-            }
+
         }
         /// <summary>
         /// 字段
@@ -790,10 +803,13 @@ namespace BP.Sys
             {
                 return this.GetValIntByKey(MapAttrAttr.MyDataType);
             }
-            set
-            {
+            set {
                 this.SetValByKey(MapAttrAttr.MyDataType, value);
             }
+        }
+        public void setMyDataType(int val)
+        {
+            this.SetValByKey(MapAttrAttr.MyDataType, val);
         }
         public string MyDataTypeS
         {
@@ -882,10 +898,10 @@ namespace BP.Sys
                     return 50;
                 return i;
             }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.MaxLen, value);
-            }
+        }
+        public void setMaxLen(int val)
+        {
+            this.SetValByKey(MapAttrAttr.MaxLen, val);
         }
         /// <summary>
         /// 最小长度
@@ -896,10 +912,10 @@ namespace BP.Sys
             {
                 return this.GetValIntByKey(MapAttrAttr.MinLen);
             }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.MinLen, value);
-            }
+        }
+        public void setMinLen(int val)
+        {
+            this.SetValByKey(MapAttrAttr.MinLen, val);
         }
         /// <summary>
         /// 是否可以为空, 对数值类型的数据有效.
@@ -930,6 +946,10 @@ namespace BP.Sys
             {
                 this.SetValByKey(MapAttrAttr.GroupID, value);
             }
+        }
+        public void setGroupID(int val)
+        {
+            this.SetValByKey(MapAttrAttr.GroupID, val);
         }
         /// <summary>
         /// 是否是大块文本？
@@ -970,9 +990,10 @@ namespace BP.Sys
             }
             set
             {
-                this.SetValByKey(MapAttrAttr.UIHeight, value);
+                this.UIHeight = value;
             }
         }
+
         /// <summary>
         /// 高度
         /// </summary>
@@ -982,10 +1003,13 @@ namespace BP.Sys
             {
                 return this.GetValFloatByKey(MapAttrAttr.UIHeight);
             }
-            set
-            {
+            set {
                 this.SetValByKey(MapAttrAttr.UIHeight, value);
             }
+        }
+        public void setUIHeight(float val)
+        {
+            this.SetValByKey(MapAttrAttr.UIHeight, val);
         }
         /// <summary>
         /// 宽度
@@ -996,10 +1020,6 @@ namespace BP.Sys
             {
                 return (int)this.UIWidth;
             }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.UIWidth, value);
-            }
         }
         /// <summary>
         /// 宽度
@@ -1008,28 +1028,16 @@ namespace BP.Sys
         {
             get
             {
-                //switch (this.MyDataType)
-                //{
-                //    case DataType.AppString:
-                //        return this.GetValFloatByKey(MapAttrAttr.UIWidth);
-                //    case DataType.AppFloat:
-                //    case DataType.AppInt:
-                //    case DataType.AppMoney:
-                //    case DataType.AppRate:
-                //    case DataType.AppDouble:
-                //        return 80;
-                //    case DataType.AppDate:
-                //        return 75;
-                //    case DataType.AppDateTime:
-                //        return 112;
-                //    default:
-                //        return 70;
                 return this.GetValFloatByKey(MapAttrAttr.UIWidth);
             }
             set
             {
                 this.SetValByKey(MapAttrAttr.UIWidth, value);
             }
+        }
+        public void setUIWidth(float val)
+        {
+            this.SetValByKey(MapAttrAttr.UIWidth, val);
         }
         public int UIWidthOfLab
         {
@@ -1047,10 +1055,13 @@ namespace BP.Sys
             {
                 return this.GetValBooleanByKey(MapAttrAttr.UIVisible);
             }
-            set
-            {
+            set {
                 this.SetValByKey(MapAttrAttr.UIVisible, value);
             }
+        }
+        public void setUIVisible(bool val)
+        {
+            this.SetValByKey(MapAttrAttr.UIVisible, val);
         }
         /// <summary>
         /// 是否可用
@@ -1061,10 +1072,10 @@ namespace BP.Sys
             {
                 return this.GetValBooleanByKey(MapAttrAttr.UIIsEnable);
             }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.UIIsEnable, value);
-            }
+        }
+        public void setUIIsEnable(bool val)
+        {
+            this.SetValByKey(MapAttrAttr.UIIsEnable, val);
         }
         /// <summary>
         /// 是否单独行显示
@@ -1075,10 +1086,13 @@ namespace BP.Sys
             {
                 return this.GetValBooleanByKey(MapAttrAttr.UIIsLine);
             }
-            set
-            {
+            set {
                 this.SetValByKey(MapAttrAttr.UIIsLine, value);
             }
+        }
+        public void setUIIsLine(bool val)
+        {
+            this.SetValByKey(MapAttrAttr.UIIsLine, val);
         }
         /// <summary>
         /// 是否数字签名
@@ -1132,11 +1146,15 @@ namespace BP.Sys
             {
                 return this.GetParaInt("RBShowModel");
             }
-            set
-            {
+            set {
                 this.SetPara("RBShowModel", value);
             }
         }
+        public void setRBShowModel(int val)
+        {
+            this.SetPara("RBShowModel", val);
+        }
+
         /// <summary>
         /// 操作提示
         /// </summary>
@@ -1208,9 +1226,14 @@ namespace BP.Sys
             }
             set
             {
-                string val = Glo.DealClassEntityName(value);
+                string val = BP.Sys.Base.Glo.DealClassEntityName(value);
                 this.SetValByKey(MapAttrAttr.UIBindKey, val);
             }
+        }
+        public void setUIBindKey(string val)
+        {
+            string myval = BP.Sys.Base.Glo.DealClassEntityName(val);
+            this.SetValByKey(MapAttrAttr.UIBindKey, myval);
         }
         /// <summary>
         /// 关联的表的Key
@@ -1269,11 +1292,16 @@ namespace BP.Sys
             {
                 return (UIContralType)this.GetValIntByKey(MapAttrAttr.UIContralType);
             }
-            set
-            {
+            set {
                 this.SetValByKey(MapAttrAttr.UIContralType, (int)value);
+
             }
         }
+        public void setUIContralType(UIContralType val)
+        {
+            this.SetValByKey(MapAttrAttr.UIContralType, (int)val);
+        }
+
         public string F_Desc
         {
             get
@@ -1327,28 +1355,9 @@ namespace BP.Sys
                 this.SetValByKey(MapAttrAttr.Idx, value);
             }
         }
-
-        public float X
+        public void setIdx(int val)
         {
-            get
-            {
-                return this.GetValFloatByKey(MapAttrAttr.X);
-            }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.X, value);
-            }
-        }
-        public float Y
-        {
-            get
-            {
-                return this.GetValFloatByKey(MapAttrAttr.Y);
-            }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.Y, value);
-            }
+            this.SetValByKey(MapAttrAttr.Idx, val);
         }
         #endregion
 
@@ -1361,13 +1370,13 @@ namespace BP.Sys
         }
         public MapAttr(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         public MapAttr(string fk_mapdata, string key)
         {
-            this.FK_MapData = fk_mapdata;
-            this.KeyOfEn = key;
+            this.SetValByKey(MapAttrAttr.FK_MapData, fk_mapdata);
+            this.SetValByKey(MapAttrAttr.KeyOfEn, key);
             this.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, this.KeyOfEn);
         }
         /// <summary>
@@ -1421,8 +1430,6 @@ namespace BP.Sys
                 // 是否是签字，操作员字段有效。2010-09-23 增加。 @0=无@1=图片签名@2=CA签名.
                 map.AddTBInt(MapAttrAttr.IsSigan, 0, "签字？", true, false);
 
-                map.AddTBFloat(MapAttrAttr.X, 5, "X", true, false);
-                map.AddTBFloat(MapAttrAttr.Y, 5, "Y", false, false);
                 map.AddTBString(MapAttrAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
                 map.AddTBInt(MapAttrAttr.EditType, 0, "编辑类型", true, false);
@@ -1536,7 +1543,7 @@ namespace BP.Sys
             this.DoOrderUp(MapAttrAttr.GroupID, this.GroupID.ToString(), MapAttrAttr.Idx);
 
             MapAttr attr = new MapAttr();
-            attr.MyPK = this.FK_MapData + "_Title";
+            attr.setMyPK(this.FK_MapData + "_Title");
             if (attr.RetrieveFromDBSources() == 1)
             {
                 //  attr.Idx = -1;
@@ -1550,7 +1557,7 @@ namespace BP.Sys
             this.DoOrderInsertTo(MapAttrAttr.Idx, entityPK, MapAttrAttr.GroupID);
 
             MapAttr attr = new MapAttr();
-            attr.MyPK = this.FK_MapData + "_Title";
+            attr.setMyPK(this.FK_MapData + "_Title");
             if (attr.RetrieveFromDBSources() == 1)
             {
                 attr.Update("Idx", -1);
@@ -1575,7 +1582,7 @@ namespace BP.Sys
             this.DoOrderDown(MapAttrAttr.GroupID, this.GroupID.ToString(), MapAttrAttr.Idx);
 
             MapAttr attr = new MapAttr();
-            attr.MyPK = this.FK_MapData + "_Title";
+            attr.setMyPK(this.FK_MapData + "_Title");
             if (attr.RetrieveFromDBSources() == 1)
             {
                 attr.Update("Idx", -1);
@@ -1595,7 +1602,7 @@ namespace BP.Sys
             this.DoOrderUp(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
 
             MapAttr attr = new MapAttr();
-            attr.MyPK = this.FK_MapData + "_Title";
+            attr.setMyPK(this.FK_MapData + "_Title");
             if (attr.RetrieveFromDBSources() == 1)
             {
                 //  attr.Idx = -1;
@@ -1616,7 +1623,7 @@ namespace BP.Sys
             this.DoOrderDown(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
 
             MapAttr attr = new MapAttr();
-            attr.MyPK = this.FK_MapData + "_Title";
+            attr.setMyPK(this.FK_MapData + "_Title");
             if (attr.RetrieveFromDBSources() == 1)
             {
                 attr.Update("Idx", -1);
@@ -1636,7 +1643,8 @@ namespace BP.Sys
             string sql = "UPDATE Sys_MapAttr SET Idx=Idx+1 WHERE Idx <=" + attrTo.Idx + " AND FK_MapData='" + this.FK_MapData + "' AND GroupID=" + this.GroupID;
             DBAccess.RunSQL(sql);
             this.Idx = attrTo.Idx - 1;
-            this.GroupID = attrTo.GroupID;
+            this.SetValByKey(MapAttrAttr.GroupID, attrTo.GroupID);
+
             this.Update();
             return null;
         }
@@ -1645,7 +1653,8 @@ namespace BP.Sys
             string sql = "UPDATE Sys_MapAttr SET Idx=Idx-1 WHERE Idx <=" + attrTo.Idx + " AND FK_MapData='" + this.FK_MapData + "' AND GroupID=" + this.GroupID;
             DBAccess.RunSQL(sql);
             this.Idx = attrTo.Idx + 1;
-            this.GroupID = attrTo.GroupID;
+            this.SetValByKey(MapAttrAttr.GroupID, attrTo.GroupID);
+
             this.Update();
             return null;
         }
@@ -1664,7 +1673,8 @@ namespace BP.Sys
                 GroupField group = new GroupField();
                 if (group.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData) > 0)
                 {
-                    this.GroupID = group.OID;
+                    this.SetValByKey(MapAttrAttr.GroupID, group.OID);
+
                 }
                 else
                 {
@@ -1673,11 +1683,11 @@ namespace BP.Sys
                     group.Idx = 1;
                     group.Insert();
 
-                    this.GroupID = group.OID;
+                    this.SetValByKey(MapAttrAttr.GroupID, group.OID);
                 }
             }
 
-            if (this.LGType == FieldTypeS.Enum && this.UIContralType == En.UIContralType.RadioBtn)
+            if (this.LGType == FieldTypeS.Enum && this.UIContralType == UIContralType.RadioBtn)
             {
                 string sql = "UPDATE Sys_FrmRB SET UIIsEnable=" + this.GetValIntByKey(MapAttrAttr.UIIsEnable) + " WHERE FK_MapData='" + this.FK_MapData + "' AND KeyOfEn='" + this.KeyOfEn + "'";
                 DBAccess.RunSQL(sql);
@@ -1696,19 +1706,19 @@ namespace BP.Sys
             switch (this.MyDataType)
             {
                 case DataType.AppDateTime:
-                    this.MaxLen = 20;
+                    this.SetValByKey(MapAttrAttr.MaxLen, 20);
                     break;
                 case DataType.AppDate:
-                    this.MaxLen = 10;
+                    this.SetValByKey(MapAttrAttr.MaxLen, 10);
                     break;
                 default:
                     break;
             }
 
             if (string.IsNullOrWhiteSpace(this.KeyOfEn))
-                this.MyPK = this.FK_MapData;
+                this.setMyPK(this.FK_MapData);
             else
-                this.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+                this.setMyPK(this.FK_MapData + "_" + this.KeyOfEn);
 
             return base.beforeUpdate();
         }
@@ -1725,10 +1735,10 @@ namespace BP.Sys
             {
                 try
                 {
-                    this.KeyOfEn = CCFormAPI.ParseStringToPinyinField(this.Name, true, true, 100);
+                    this.SetValByKey(MapAttrAttr.KeyOfEn, CCFormAPI.ParseStringToPinyinField(this.Name, true, true, 100));
 
                     if (this.KeyOfEn.Length > 20)
-                        this.KeyOfEn = CCFormAPI.ParseStringToPinyinField(this.Name, false, true, 20);
+                        this.SetValByKey(MapAttrAttr.KeyOfEn, CCFormAPI.ParseStringToPinyinField(this.Name, false, true, 20));
 
                     if (this.KeyOfEn == null || this.KeyOfEn.Trim() == "")
                         throw new Exception("@请输入字段描述或者字段名称。");
@@ -1740,7 +1750,7 @@ namespace BP.Sys
             }
             else
             {
-                this.KeyOfEn = BP.Pub.PubClass.DealToFieldOrTableNames(this.KeyOfEn);
+                this.SetValByKey(MapAttrAttr.KeyOfEn, BP.Pub.PubClass.DealToFieldOrTableNames(this.KeyOfEn));
             }
 
             string keyofenC = this.KeyOfEn.Clone() as string;
@@ -1757,8 +1767,13 @@ namespace BP.Sys
             }
 
             if (this.Idx == 0)
-                this.Idx = DBAccess.RunSQLReturnValInt(string.Format("SELECT {0} FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'", SqlBuilder.GetIsNullInSQL("MAX(Idx)", "0"))) + 1;
-            this.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+                this.Idx = DBAccess.RunSQLReturnValInt("SELECT MAX(Idx) FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'",0) + 1;
+
+            //@hongyan
+            if (this.GroupID==0)
+                this.GroupID = DBAccess.RunSQLReturnValInt("SELECT MAX(GroupID) FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'" ,0);
+
+            this.setMyPK(this.FK_MapData + "_" + this.KeyOfEn);
 
             return base.beforeInsert();
         }
@@ -1796,7 +1811,7 @@ namespace BP.Sys
             sqls += "@DELETE FROM Sys_FrmSln WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
 
             //如果外部数据，或者ws数据，就删除其影子字段.
-            if (this.UIContralType == En.UIContralType.DDL && this.LGType == FieldTypeS.Normal)
+            if (this.UIContralType == UIContralType.DDL && this.LGType == FieldTypeS.Normal)
                 sqls += "@DELETE FROM Sys_MapAttr WHERE KeyOfEn='" + this.KeyOfEn + "T' AND FK_MapData='" + this.FK_MapData + "'";
 
             DBAccess.RunSQLs(sqls);
@@ -1808,7 +1823,7 @@ namespace BP.Sys
             {
                 //删除附件
                 FrmAttachment ath = new FrmAttachment();
-                ath.MyPK = this.MyPK;
+                ath.setMyPK(this.MyPK);
                 ath.Delete();
             }
             base.afterDelete();
@@ -1842,7 +1857,7 @@ namespace BP.Sys
             qo.AddWhere(MapAttrAttr.FK_MapData, fk_map);
             qo.addAnd();
             qo.AddWhere(MapAttrAttr.UIVisible, 1);
-            qo.addOrderBy( MapAttrAttr.Idx);
+            qo.addOrderBy(MapAttrAttr.Idx);
             // qo.addOrderBy(MapAttrAttr.Idx);
             return qo.DoQuery();
         }

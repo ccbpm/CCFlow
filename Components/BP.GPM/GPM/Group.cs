@@ -39,7 +39,7 @@ namespace BP.GPM
         /// <summary>
         /// 权限组
         /// </summary>
-        /// <param name="mypk"></param>
+        /// <param name="no"></param>
         public Group(string no)
         {
             this.No = no;
@@ -55,11 +55,9 @@ namespace BP.GPM
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("GPM_Group");
-                map.DepositaryOfEntity = Depositary.None;
-                map.EnDesc = "权限组";
-                map.EnType = EnType.Sys;
-                map.IsAutoGenerNo = true;
+                Map map = new Map("GPM_Group", "权限组");
+                map.setEnType(EnType.Sys);
+                map.setIsAutoGenerNo( true);
 
                 map.AddTBStringPK(GroupAttr.No, null, "编号", true, true, 3, 3, 3);
                 map.AddTBString(GroupAttr.Name, null, "名称", true, false, 0, 300, 20);

@@ -70,12 +70,12 @@ namespace BP.WF.DTS
                     
                     GenerWorkerList gwl = new GenerWorkerList();
                     gwl.WorkID = workid;
-                    string[] emps = str.Split(',');
+                    string[] empStrs = str.Split(',');
 
-                    gwl.FK_Emp = emps[0];
+                    gwl.FK_Emp = empStrs[0];
                     gwl.FK_Node = gwf.FK_Node;
-                    if (emps.Length == 2)
-                        gwl.FK_EmpText = emps[1];
+                    if (empStrs.Length == 2)
+                        gwl.FK_EmpText = empStrs[1];
                     gwl.FK_Flow = gwf.FK_Flow;
                     gwl.RDT = gwf.SDTOfNode;
                     gwl.CDT = gwf.SDTOfNode;

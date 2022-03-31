@@ -121,7 +121,7 @@ namespace BP.Sys
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.MyPK = this.EnsName + "_" + this.FK_Emp;
+            this.setMyPK(this.EnsName + "_" + this.FK_Emp);
             return base.beforeUpdateInsertAction();
         }
 	

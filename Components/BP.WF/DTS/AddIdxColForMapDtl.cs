@@ -59,17 +59,17 @@ namespace BP.WF.DTS
             foreach (MapDtl item in dtls)
             {
                 MapAttr ma = new MapAttr();
-                ma.MyPK = item.No + "_Idx";
+                ma.setMyPK(item.No + "_Idx");
                 if (ma.IsExits == true)
                     continue;
 
-                ma.FK_MapData = item.No;
-                ma.KeyOfEn = "Idx";
+                ma.setFK_MapData(item.No);
+                ma.setKeyOfEn("Idx");
                 ma.Name = "Idx";
-                ma.LGType = FieldTypeS.Normal;
-                ma.UIVisible = false;
+                ma.setLGType(FieldTypeS.Normal);
+                ma.setUIVisible(false);
                 ma.DefVal = "0";
-                ma.MyDataType = DataType.AppInt;
+                ma.setMyDataType(DataType.AppInt);
                 ma.Insert();
 
                 GEDtl dtl = new GEDtl(item.No);

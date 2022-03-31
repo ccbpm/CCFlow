@@ -157,7 +157,7 @@ namespace BP.Sys.FrmUI
                 #endregion 傻瓜表单的属性.
 
 
-                map.AddTBStringDoc(MapAttrAttr.Tag, null, "事件内容", true, false,true);
+                map.AddTBStringDoc(MapAttrAttr.Tag, null, "事件内容", true, false);
                 map.SetHelperAlert(MapAttrAttr.Tag, "可以写JS，js可以调用在DataUser下JSLab下xxx_Self.js 函数.");
 
                 //map.AddTBString(FrmBtnAttr.MsgOK, null, "运行成功提示", true, false, 0, 500, 20);
@@ -172,7 +172,7 @@ namespace BP.Sys.FrmUI
         protected override void afterInsertUpdateAction()
         {
             //在属性实体集合插入前，clear 父实体的缓存.
-            BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
 
 
             //调用frmEditAction, 完成其他的操作.

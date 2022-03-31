@@ -11,6 +11,8 @@ using BP.En;
 using BP.Sys;
 using BP.Pub;
 using BP.Sys.XML;
+using BP.Sys.Base;
+
 
 namespace BP.En
 {
@@ -441,7 +443,7 @@ namespace BP.En
         public static ArrayList GetObjects(string baseEnsName)
         {
             //处理类名.
-            baseEnsName = BP.Sys.Glo.DealClassEntityName(baseEnsName);
+            baseEnsName = BP.Sys.Base.Glo.DealClassEntityName(baseEnsName);
 
             ArrayList arr = new ArrayList();
             Type baseClass = null;
@@ -605,12 +607,12 @@ namespace BP.En
         /// </summary>
         /// <param name="className">类名称</param>
         /// <returns>BP.Sys.EventBase</returns>
-        public static BP.Sys.EventBase GetEventBase(string className)
+        public static BP.Sys.Base.EventBase GetEventBase(string className)
         {
             if (Htable_Evbase == null || Htable_Evbase.Count == 0)
             {
                 Htable_Evbase = new Hashtable();
-                string cl = "BP.Sys.EventBase";
+                string cl = "BP.Sys.Base.EventBase";
                 ArrayList al = ClassFactory.GetObjects(cl);
                 Htable_Evbase.Clear();
                 foreach (EventBase en in al)
@@ -626,7 +628,7 @@ namespace BP.En
                     }
                 }
             }
-            BP.Sys.EventBase ens = Htable_Evbase[className] as EventBase;
+            BP.Sys.Base.EventBase ens = Htable_Evbase[className] as EventBase;
             return ens;
         }
         #endregion

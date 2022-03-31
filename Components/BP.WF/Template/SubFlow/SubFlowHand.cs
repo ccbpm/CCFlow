@@ -235,7 +235,7 @@ namespace BP.WF.Template
 
         public SubFlowHand(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -263,19 +263,24 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowSta, 1, "状态", true, true, SubFlowYanXuAttr.SubFlowSta,
             "@0=禁用@1=启用@2=只读");
-                //@yln
+               
                 map.AddTBString(SubFlowHandAttr.SubFlowLab, null, "启动文字标签", true, false, 0, 20, 150);
 
 
                 map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowModel, 0, "子流程模式", true, true, SubFlowYanXuAttr.SubFlowModel,
                 "@0=下级子流程@1=同级子流程");
 
-                map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "子流程结束规则", true, true,
-                 FlowAttr.IsAutoSendSubFlowOver, "@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
+                map.AddDDLSysEnum(SubFlowAutoAttr.ParentFlowSendNextStepRole, 0, "父流程自动运行到下一步规则", true, true,
+               SubFlowAutoAttr.ParentFlowSendNextStepRole, "@0=不处理@1=该子流程运行结束@2=该子流程运行到指定节点");
 
 
-                map.AddDDLSysEnum(FlowAttr.IsAutoSendSLSubFlowOver, 0, "同级子流程结束规则", true, true,
-               FlowAttr.IsAutoSendSLSubFlowOver, "@0=不处理@1=让同级子流程自动运行下一步@2=结束同级子流程");
+                map.AddDDLSysEnum(SubFlowAutoAttr.ParentFlowOverRole, 0, "父流程结束规则", true, true,
+                SubFlowAutoAttr.ParentFlowSendNextStepRole, "@0=不处理@1=该子流程运行结束@2=该子流程运行到指定节点");
+                map.AddTBInt(SubFlowAutoAttr.SubFlowNodeID, 0, "指定子流程节点ID", true, false);
+
+
+                map.AddDDLSysEnum(SubFlowAutoAttr.IsAutoSendSLSubFlowOver, 0, "同级子流程结束规则", true, true,
+               SubFlowAutoAttr.IsAutoSendSLSubFlowOver, "@0=不处理@1=让同级子流程自动运行下一步@2=结束同级子流程");
 
                 map.AddBoolean(SubFlowHandAttr.StartOnceOnly, false, "仅能被调用1次(不能被重复调用).",
                     true, true, true);
@@ -358,7 +363,7 @@ namespace BP.WF.Template
 
         protected override bool beforeInsert()
         {
-            this.MyPK = this.FK_Node + "_" + this.SubFlowNo + "_0";
+            this.setMyPK(this.FK_Node + "_" + this.SubFlowNo + "_0");
             return base.beforeInsert();
         }
 

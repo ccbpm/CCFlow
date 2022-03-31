@@ -65,10 +65,10 @@ namespace BP.Sys
             {
                 return this.GetValStringByKey(FrmImgAthAttr.Name);
             }
-            set
-            {
-                this.SetValByKey(FrmImgAthAttr.Name, value);
-            }
+        }
+        public void setName(bool val)
+        {
+            this.SetValByKey(FrmImgAthAttr.Name, val);
         }
         /// <summary>
         /// 控件ID
@@ -79,42 +79,14 @@ namespace BP.Sys
             {
                 return this.GetValStringByKey(FrmImgAthAttr.CtrlID);
             }
-            set
-            {
+            set {
                 this.SetValByKey(FrmImgAthAttr.CtrlID, value);
             }
         }
-        /// <summary>
-        /// Y
-        /// </summary>
-        public float Y
+        public void setCtrlID(string val)
         {
-            get
-            {
-                return this.GetValFloatByKey(FrmImgAthAttr.Y);
-            }
-            set
-            {
-                this.SetValByKey(FrmImgAthAttr.Y, value);
-            }
+            this.SetValByKey(FrmImgAthAttr.CtrlID, val);
         }
-        /// <summary>
-        /// X
-        /// </summary>
-        public float X
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmImgAthAttr.X);
-            }
-            set
-            {
-                this.SetValByKey(FrmImgAthAttr.X, value);
-            }
-        }
-        /// <summary>
-        /// H
-        /// </summary>
         public float H
         {
             get
@@ -126,9 +98,11 @@ namespace BP.Sys
                 this.SetValByKey(FrmImgAthAttr.H, value);
             }
         }
-        /// <summary>
-        /// W
-        /// </summary>
+        public void setH(float val)
+        {
+            this.SetValByKey(FrmImgAthAttr.H, val);
+        }
+
         public float W
         {
             get
@@ -140,6 +114,11 @@ namespace BP.Sys
                 this.SetValByKey(FrmImgAthAttr.W, value);
             }
         }
+        public void setW(float val)
+        {
+            this.SetValByKey(FrmImgAthAttr.W, val);
+        }
+
         /// <summary>
         /// FK_MapData
         /// </summary>
@@ -149,10 +128,10 @@ namespace BP.Sys
             {
                 return this.GetValStrByKey(FrmImgAthAttr.FK_MapData);
             }
-            set
-            {
-                this.SetValByKey(FrmImgAthAttr.FK_MapData, value);
-            }
+        }
+        public void setFK_MapData(string val)
+        {
+            this.SetValByKey(FrmImgAthAttr.FK_MapData, val);
         }
         /// <summary>
         /// 是否可编辑
@@ -163,10 +142,10 @@ namespace BP.Sys
             {
                 return this.GetValBooleanByKey(FrmImgAthAttr.IsEdit);
             }
-            set
-            {
-                this.SetValByKey(FrmImgAthAttr.IsEdit, value);
-            }
+        }
+        public void setIsEdit(bool val)
+        {
+            this.SetValByKey(FrmImgAthAttr.IsEdit, val);
         }
         /// <summary>
         /// 是否必填，2016-11-1
@@ -177,10 +156,10 @@ namespace BP.Sys
             {
                 return this.GetValBooleanByKey(FrmImgAthAttr.IsRequired);
             }
-            set
-            {
-                this.SetValByKey(FrmImgAthAttr.IsRequired, value);
-            }
+        }
+        public void setIsRequired(bool val)
+        {
+            this.SetValByKey(FrmImgAthAttr.IsRequired, val);
         }
         #endregion
 
@@ -197,7 +176,7 @@ namespace BP.Sys
         /// <param name="mypk"></param>
         public FrmImgAth(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -210,7 +189,7 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_FrmImgAth", "图片附件");
-                map.IndexField = FrmImgAttr.FK_MapData; 
+                map.IndexField = FrmImgAttr.FK_MapData;
 
                 map.AddMyPK();
 
@@ -218,12 +197,6 @@ namespace BP.Sys
                 map.AddTBString(FrmImgAthAttr.CtrlID, null, "控件ID", true, false, 0, 200, 20);
                 map.AddTBString(FrmImgAthAttr.Name, null, "中文名称", true, false, 0, 200, 20);
 
-
-                map.AddTBFloat(FrmImgAthAttr.X, 5, "X", true, false);
-                map.AddTBFloat(FrmImgAthAttr.Y, 5, "Y", false, false);
-
-                map.AddTBFloat(FrmImgAthAttr.H, 200, "H", true, false);
-                map.AddTBFloat(FrmImgAthAttr.W, 160, "W", false, false);
 
                 map.AddTBInt(FrmImgAthAttr.IsEdit, 1, "是否可编辑", true, true);
                 map.AddTBInt(FrmImgAthAttr.IsRequired, 0, "是否必填项", true, true);
@@ -237,13 +210,13 @@ namespace BP.Sys
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.MyPK = this.FK_MapData +"_"+ this.CtrlID;
+            this.setMyPK(this.FK_MapData + "_" + this.CtrlID);
 
             MapAttr attr = new MapAttr();
-            attr.MyPK = this.MyPK;
+            attr.setMyPK(this.MyPK);
             if (attr.RetrieveFromDBSources() == 1)
             {
-                attr.Name = this.Name;
+                attr.setName(this.Name);
                 attr.Update();
             }
 
@@ -268,7 +241,7 @@ namespace BP.Sys
         /// <param name="fk_mapdata">s</param>
         public FrmImgAths(string fk_mapdata)
         {
-            this.Retrieve(FrmLineAttr.FK_MapData, fk_mapdata);
+            this.Retrieve(MapAttrAttr.FK_MapData, fk_mapdata);
         }
         /// <summary>
         /// 得到它的 Entity

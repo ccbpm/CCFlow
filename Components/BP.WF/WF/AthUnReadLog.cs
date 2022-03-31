@@ -289,7 +289,7 @@ namespace BP.WF
                  
                 // 流程基础数据。
                 map.AddMyPK(false);
-                map.AddDDLEntities(GenerWorkFlowAttr.FK_Dept, null, "部门", new Port.Depts(), false);
+                map.AddDDLEntities(GenerWorkFlowAttr.FK_Dept, null, "部门", new BP.Port.Depts(), false);
                 map.AddTBString(GenerWorkFlowAttr.Title, null, "标题", true, true, 0, 100, 100);
                 map.AddTBInt(GenerWorkFlowAttr.WorkID, 0, "WorkID", false, false);
                 map.AddTBString(GERptAttr.FlowStarter, null, "发起人", true, true, 0, 100, 100);

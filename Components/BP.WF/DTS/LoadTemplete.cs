@@ -89,7 +89,7 @@ namespace BP.WF.DTS
                         continue;
 
                     msg += "@开始调度表单模板文件:" + f;
-                    Log.DefaultLogWriteLineInfo("@开始调度表单模板文件:" + f);
+                    BP.DA.Log.DebugWriteInfo("@开始调度表单模板文件:" + f);
 
                     DataSet ds = new DataSet();
                     ds.ReadXml(f);
@@ -104,7 +104,7 @@ namespace BP.WF.DTS
                     }
                     catch(Exception ex)
                     {
-                        Log.DefaultLogWriteLineInfo("err@装载表单模版文件:" + f + "出现错误," + ex.Message + " <br> " + ex.StackTrace);
+                        BP.DA.Log.DebugWriteError("err@装载表单模版文件:" + f + "出现错误," + ex.Message + " <br> " + ex.StackTrace);
 
                         throw new Exception("err@装载模版文件:"+f+"出现错误,"+ex.Message+" <br> "+ex.StackTrace);
                     }
@@ -142,7 +142,7 @@ namespace BP.WF.DTS
                 foreach (string filePath in fls)
                 {
                     msg += "\t\n@开始调度流程模板文件:" + filePath;
-                    Log.DefaultLogWriteLineInfo("@开始调度流程模板文件:" + filePath);
+                    BP.DA.Log.DebugWriteInfo("@开始调度流程模板文件:" + filePath);
 
                     Flow myflow = BP.WF.Template.TemplateGlo.LoadFlowTemplate(fs.No, filePath, ImpFlowTempleteModel.AsNewFlow);
                     msg += "\t\n@流程:[" + myflow.Name + "]装载成功。";
@@ -175,7 +175,7 @@ namespace BP.WF.DTS
                     foreach (string filePath in myfls)
                     {
                         msg += "\t\n@开始调度流程模板文件:" + filePath;
-                        Log.DefaultLogWriteLineInfo("@开始调度流程模板文件:" + filePath);
+                        BP.DA.Log.DebugWriteInfo("@开始调度流程模板文件:" + filePath);
 
                         Flow myflow = BP.WF.Template.TemplateGlo.LoadFlowTemplate(subFlowSort.No, filePath, ImpFlowTempleteModel.AsTempleteFlowNo);
                         msg += "\t\n@流程:" + myflow.Name + "装载成功。";
@@ -200,7 +200,7 @@ namespace BP.WF.DTS
 
 
 
-            Log.DefaultLogWriteLineInfo(msg);
+            BP.DA.Log.DebugWriteInfo(msg);
 
             //删除多余的空格.
             BP.WF.DTS.DeleteBlankGroupField dts = new DeleteBlankGroupField();

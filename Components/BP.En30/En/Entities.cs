@@ -647,7 +647,7 @@ namespace BP.En
             /* 把查询个数加入内存 */
             Entity en = this.GetNewEntity;
             CashEntity.PubEns(en.ToString(), this, en.PK);
-            Log.DefaultLogWriteLineInfo("成功[" + en.ToString() + "-" + num + "]放入缓存。");
+            BP.DA.Log.DebugWriteInfo("成功[" + en.ToString() + "-" + num + "]放入缓存。");
             return num;
         }
         /// <summary>
@@ -1170,8 +1170,8 @@ namespace BP.En
         {
             QueryObject qo = new QueryObject(this);
 
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                qo.AddWhere(key, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key, val));
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+                qo.AddWhere(key, BP.Sys.Base.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key, val));
             else
                 qo.AddWhere(key, val);
 
@@ -1183,11 +1183,11 @@ namespace BP.En
         {
             QueryObject qo = new QueryObject(this);
 
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
-                qo.AddWhere(key, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key, val));
+                qo.AddWhere(key, BP.Sys.Base.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key, val));
                 qo.addAnd();
-                qo.AddWhere(key2, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key2, val2));
+                qo.AddWhere(key2, BP.Sys.Base.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key2, val2));
             }
             else
             {
@@ -1204,15 +1204,15 @@ namespace BP.En
         {
             QueryObject qo = new QueryObject(this);
 
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
-                qo.AddWhere(key, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key, val));
+                qo.AddWhere(key, BP.Sys.Base.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key, val));
                 qo.addAnd();
-                qo.AddWhere(key2, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key2, val2));
+                qo.AddWhere(key2, BP.Sys.Base.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key2, val2));
                 qo.addAnd();
-                qo.AddWhere(key3, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key3, val3));
+                qo.AddWhere(key3, BP.Sys.Base.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key3, val3));
                 qo.addAnd();
-                qo.AddWhere(key4, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key4, val4));
+                qo.AddWhere(key4, BP.Sys.Base.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key4, val4));
             }
             else
             {
@@ -1233,13 +1233,13 @@ namespace BP.En
         {
             QueryObject qo = new QueryObject(this);
 
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
-                qo.AddWhere(key, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key, val));
+                qo.AddWhere(key, BP.Sys.Base.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key, val));
                 qo.addAnd();
-                qo.AddWhere(key2, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key2, val2));
+                qo.AddWhere(key2, BP.Sys.Base.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key2, val2));
                 qo.addAnd();
-                qo.AddWhere(key3, BP.Sys.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key3, val3));
+                qo.AddWhere(key3, BP.Sys.Base.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key3, val3));
             }
             else
             {

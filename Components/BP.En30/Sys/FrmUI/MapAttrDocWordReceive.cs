@@ -85,7 +85,7 @@ namespace BP.Sys.FrmUI
         /// </summary>
         public MapAttrDocWordReceive(string myPK)
         {
-            this.MyPK = myPK;
+            this.setMyPK(myPK);
             this.Retrieve();
 
         }
@@ -176,7 +176,7 @@ namespace BP.Sys.FrmUI
         protected override void afterInsertUpdateAction()
         {
             MapAttr mapAttr = new MapAttr();
-            mapAttr.MyPK = this.MyPK;
+            mapAttr.setMyPK(this.MyPK);
             mapAttr.RetrieveFromDBSources();
             mapAttr.Update();
 

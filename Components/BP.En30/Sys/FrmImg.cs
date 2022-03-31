@@ -3,6 +3,7 @@ using System.Collections;
 using BP.DA;
 using BP.En;
 using BP.Sys.FrmUI;
+using BP.Difference;
 using BP.Web;
 
 namespace BP.Sys
@@ -299,6 +300,10 @@ namespace BP.Sys
                 this.SetValByKey(FrmImgAttr.FK_MapData, value);
             }
         }
+        public void setFK_MapData(string val)
+        {
+            this.SetValByKey(FrmImgAttr.FK_MapData, val);
+        }
         public float UIWidth
         {
             get
@@ -339,7 +344,7 @@ namespace BP.Sys
         /// <param name="mypk"></param>
         public FrmImg(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -397,7 +402,7 @@ namespace BP.Sys
         protected override bool beforeInsert()
         {
             if(DataType.IsNullOrEmpty(this.KeyOfEn) == false)
-                this.MyPK = this.FK_MapData + "_" + this.KeyOfEn ;
+                this.setMyPK(this.FK_MapData + "_" + this.KeyOfEn );
             return base.beforeInsert();
         }
 
@@ -432,7 +437,7 @@ namespace BP.Sys
         public FrmImgs(string fk_mapdata)
         {
            
-           this.Retrieve(FrmLineAttr.FK_MapData, fk_mapdata);
+           this.Retrieve(MapAttrAttr.FK_MapData, fk_mapdata);
            
         }
         /// <summary>

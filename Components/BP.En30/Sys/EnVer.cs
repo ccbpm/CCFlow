@@ -179,7 +179,7 @@ namespace BP.Sys
         public EnVer() { }
         public EnVer(string mypk) 
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
 

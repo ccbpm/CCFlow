@@ -253,10 +253,10 @@ namespace BP.WF
                         obj.RetrieveIn("NodeID", inStrs);
 
                         //@101@102@103.
-                        string[] nds = this.HisToNDs.Split('@');
+                        string[] ndStrs = this.HisToNDs.Split('@');
 
                         NodeSimples myobjs = new NodeSimples();
-                        foreach (string nd in nds)
+                        foreach (string nd in ndStrs)
                         {
                             if (DataType.IsNullOrEmpty(nd) == true)
                                 continue;
@@ -336,8 +336,8 @@ namespace BP.WF
                     //设置成不可以用.
                     foreach (MapAttr item in attrs)
                     {
-                        item.UIIsEnable = false; //设置为只读的.
-                        item.DefValReal = "";    //设置默认值为空.
+                        item.setUIIsEnable(false); //设置为只读的.
+                        item.setDefValReal("");    //设置默认值为空.
 
                         ma.Attrs.Add(item.HisAttr);
                     }
@@ -475,19 +475,7 @@ namespace BP.WF
                 return obj;
             }
         }
-        public BillTemplates BillTemplates
-        {
-            get
-            {
-                BillTemplates obj = this.GetRefObject("BillTemplates") as BillTemplates;
-                if (obj == null)
-                {
-                    obj = new BillTemplates(this.NodeID);
-                    this.SetRefObject("BillTemplates", obj);
-                }
-                return obj;
-            }
-        }
+      
         public NodeStations NodeStations
         {
             get
@@ -656,12 +644,6 @@ namespace BP.WF
                     strs += "@" + dir.ToNode;
                 nd.HisToNDs = strs;
 
-                // 单据
-                strs = "";
-                BillTemplates temps = new BillTemplates(nd);
-                foreach (BillTemplate temp in temps)
-                    strs += "@" + temp.No;
-                nd.HisBillIDs = strs;
 
                 // 检查节点的位置属性。
                 nd.HisNodePosType = nd.GetHisNodePosType();
@@ -738,7 +720,7 @@ namespace BP.WF
                             if (SystemConfig.AppCenterDBType == DBType.Oracle)
                                 sql = "ALTER TABLE WF_Emp ADD StartFlows blob";
 
-                            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                                 sql = "ALTER TABLE  WF_Emp ADD StartFlows bytea NULL ";
 
                             DBAccess.RunSQL(sql);
@@ -824,8 +806,8 @@ namespace BP.WF
             {
                 workCheckAth = new FrmAttachment();
                 /*如果没有查询到它,就有可能是没有创建.*/
-                workCheckAth.MyPK = "ND" + this.NodeID + "_FrmWorkCheck";
-                workCheckAth.FK_MapData = "ND" + this.NodeID.ToString();
+                workCheckAth.setMyPK("ND" + this.NodeID + "_FrmWorkCheck");
+                workCheckAth.setFK_MapData("ND" + this.NodeID.ToString());
                 workCheckAth.NoOfObj = "FrmWorkCheck";
                 workCheckAth.Exts = "*.*";
 
@@ -874,14 +856,14 @@ namespace BP.WF
                 if (this.HisRunModel == RunModel.SubThread && en.EnMap.Attrs.Contains("FID") == false)
                 {
                     MapAttr attr = new BP.Sys.MapAttr();
-                    attr.FK_MapData = this.NodeFrmID;
-                    attr.KeyOfEn = "FID";
-                    attr.Name = "干流程ID";
-                    attr.MyDataType = DataType.AppInt;
-                    attr.UIContralType = UIContralType.TB;
-                    attr.LGType = FieldTypeS.Normal;
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
+                    attr.setFK_MapData(this.NodeFrmID);
+                    attr.setKeyOfEn("FID");
+                    attr.setName("干流程ID");
+                    attr.setMyDataType(DataType.AppInt);
+                    attr.setUIContralType(UIContralType.TB);
+                    attr.setLGType(FieldTypeS.Normal);
+                    attr.setUIVisible(false);
+                    attr.setUIIsEnable(false);
                     attr.DefVal = "0";
                     attr.HisEditType = BP.En.EditType.Readonly;
                     attr.Insert();
@@ -889,14 +871,14 @@ namespace BP.WF
                 if (en.EnMap.Attrs.Contains("Rec") == false)
                 {
                     MapAttr attr = new BP.Sys.MapAttr();
-                    attr.FK_MapData = this.NodeFrmID;
-                    attr.KeyOfEn = "Rec";
-                    attr.Name = "记录人";
-                    attr.MyDataType = DataType.AppString;
-                    attr.UIContralType = UIContralType.TB;
-                    attr.LGType = FieldTypeS.Normal;
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = false;
+                    attr.setFK_MapData(this.NodeFrmID);
+                    attr.setKeyOfEn("Rec");
+                    attr.setName("记录人");
+                    attr.setMyDataType(DataType.AppString);
+                    attr.setUIContralType(UIContralType.TB);
+                    attr.setLGType(FieldTypeS.Normal);
+                    attr.setUIVisible(false);
+                    attr.setUIIsEnable(false);
                     attr.DefVal = "0";
                     attr.HisEditType = BP.En.EditType.Readonly;
                     attr.Insert();
@@ -990,7 +972,7 @@ namespace BP.WF
                 }
                 catch (Exception ex)
                 {
-                    Log.DefaultLogWriteLineInfo(ex.Message + " - " + this.NodeID);
+                    BP.DA.Log.DebugWriteError(ex.Message + " - " + this.NodeID);
                     throw new Exception("@没有获取到它的NodeID = " + this.NodeID);
                 }
             }
@@ -1096,8 +1078,8 @@ namespace BP.WF
                     return "傻瓜轨迹表单";
 
 
-                if (this.HisFormType == NodeFormType.FreeForm)
-                    return "自由表单";
+                if (this.HisFormType == NodeFormType.Develop)
+                    return "开发者表单";
 
                 if (this.HisFormType == NodeFormType.SDKForm)
                     return "SDK表单";
@@ -1289,11 +1271,11 @@ namespace BP.WF
         /// <summary>
         /// 预警天
         /// </summary>
-        public int WarningDay
+        public float WarningDay
         {
             get
             {
-                int i = this.GetValIntByKey(NodeAttr.WarningDay);
+                float i = this.GetValFloatByKey(NodeAttr.WarningDay);
                 if (i == 0)
                     return 1;
                 return i;
@@ -1391,20 +1373,7 @@ namespace BP.WF
             }
         }
 
-        /// <summary>
-        /// 是否启用子流程运行当前节点，主流程自动运行到下一节点
-        /// </summary>
-        public bool IsToParentNextNode
-        {
-            get
-            {
-                return this.GetValBooleanByKey(NodeAttr.IsToParentNextNode);
-            }
-            set
-            {
-                this.SetValByKey(NodeAttr.IsToParentNextNode, value);
-            }
-        }
+        
         /// <summary>
         /// 是否是开始节点
         /// </summary>
@@ -1666,7 +1635,7 @@ namespace BP.WF
                 //与指定的节点相同 =  Pri 
                 if (str.Equals("Pri") == true &&
                     (this.HisFormType == NodeFormType.FoolForm
-                    || this.HisFormType == NodeFormType.FreeForm))
+                    || this.HisFormType == NodeFormType.Develop))
                 {
                     if (this.WorkID == 0)
                         return "ND" + this.NodeID;
@@ -1694,20 +1663,6 @@ namespace BP.WF
             set
             {
                 SetValByKey(NodeAttr.NodeFrmID, value);
-            }
-        }
-        /// <summary>
-        /// 要启动的子流程
-        /// </summary>
-        public string SFActiveFlows
-        {
-            get
-            {
-                return this.GetValStrByKey(NodeAttr.SFActiveFlows);
-            }
-            set
-            {
-                SetValByKey(NodeAttr.SFActiveFlows, value);
             }
         }
 
@@ -1956,7 +1911,7 @@ namespace BP.WF
                 return null;
             else
                 return wk;
-            return wk;
+            
         }
         #endregion
 
@@ -2205,6 +2160,16 @@ namespace BP.WF
             get
             {
                 return this.GetValBooleanByKey(NodeAttr.IsBackTracking);
+            }
+        }
+        /// <summary>
+        /// 原路返回后是否自动计算接收人
+        /// </summary>
+        public bool IsBackResetAccepter
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeAttr.IsBackResetAccepter);
             }
         }
         public bool IsSendDraftSubFlow
@@ -2808,9 +2773,8 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.IsGuestNode, 0, "是否是客户执行节点", false, false);
 
                 map.AddTBString(NodeAttr.FlowName, null, "流程名", false, true, 0, 200, 10);
-                map.AddTBInt(NodeAttr.IsToParentNextNode, 0, "子流程运行到该节点时，让父流程自动运行到下一步", false, false);
 
-                //为铁路局,会签子流程. 增加 @yln. 
+                //为铁路局,会签子流程. 增加
                 map.AddTBInt(NodeAttr.IsSendDraftSubFlow, 0, "是否发送草稿子流程？", false, false);
 
 
@@ -2908,8 +2872,11 @@ namespace BP.WF
                 map.AddTBString(NodeAttr.TeamLeaderConfirmDoc, null, "组长确认设置内容", true, false, 0, 100, 10);
                 map.AddTBInt(BtnAttr.HuiQianLeaderRole, 0, "组长会签规则", true, true);
 
+                map.AddTBInt(BtnAttr.ScripRole, 0, "小纸条规则", true, true);
+
                 map.AddTBInt(NodeAttr.IsAllowRepeatEmps, 0, "是否允许子线程接受人员重复(对子线程点有效)?", true, true);
                 map.AddTBInt(NodeAttr.IsBackTracking, 1, "是否可以在退回后原路返回(只有启用退回功能才有效)", true, true);
+                map.AddTBInt(NodeAttr.IsBackResetAccepter, 0, "原路返回后是否自动计算接收人", true, true);
                 map.AddTBInt(NodeAttr.IsKillEtcThread, 1, "是否允许删除所有的子线程(对于子线程向分流节点退回有效)", true, true);
 
                 map.AddTBInt(NodeAttr.IsRM, 1, "是否启用投递路径自动记忆功能?", true, true);
@@ -2929,10 +2896,7 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.AutoJumpRole0, 0, "处理人就是提交人0", false, false);
                 map.AddTBInt(NodeAttr.AutoJumpRole1, 0, "处理人已经出现过1", false, false);
                 map.AddTBInt(NodeAttr.AutoJumpRole2, 0, "处理人与上一步相同2", false, false);
-
-                //父子流程.
-                map.AddTBString(NodeAttr.SFActiveFlows, null, "启动的子流程", true, false, 0, 100, 10);
-
+                 
                 // 批处理规则， 2021.1.20 为福建人寿重构.
                 // @0=不启用，1=审核组件模式，2=审核分组字段模式,3=自定义url模式.
                 map.AddTBInt(NodeAttr.BatchRole, 0, "批处理", true, true);
@@ -3084,200 +3048,14 @@ namespace BP.WF
             //删除节点后，把关联该节点表单的ID也要删除掉. 同步过去.
             DBAccess.RunSQL("UPDATE WF_Node SET NodeFrmID='' WHERE NodeFrmID='ND" + this.NodeID + "' AND FK_Flow='" + this.FK_Flow + "'");
 
+
+            //写入日志.
+            BP.Sys.Base.Glo.WriteUserLog("删除节点：" + this.Name + " - " + this.NodeID);
+
+
             return base.beforeDelete();
         }
-        /// <summary>
-        /// 文书流程
-        /// </summary>
-        /// <param name="md"></param>
-        private void AddDocAttr(BP.Sys.MapData md)
-        {
-            /*如果是单据流程？ */
-            BP.Sys.MapAttr attr = new BP.Sys.MapAttr();
-
-            //attr = new BP.Sys.MapAttr();
-            //attr.FK_MapData = md.No;
-            //attr.HisEditType = BP.En.EditType.UnDel;
-            //attr.KeyOfEn = "Title";
-            //attr.Name = "标题";
-            //attr.MyDataType = DataType.AppString;
-            //attr.UIContralType = UIContralType.TB;
-            //attr.LGType = FieldTypeS.Normal;
-            //attr.UIVisible = true;
-            //attr.UIIsEnable = true;
-            //attr.MinLen = 0;
-            //attr.MaxLen = 300;
-            //attr.Idx = 1;
-            //attr.UIIsLine = true;
-            //attr.Idx = -100;
-            //attr.Insert();
-
-            attr = new BP.Sys.MapAttr();
-            attr.FK_MapData = md.No;
-            attr.KeyOfEn = "KeyWord";
-            attr.Name = "主题词";
-            attr.MyDataType = DataType.AppString;
-            attr.UIContralType = UIContralType.TB;
-            attr.LGType = FieldTypeS.Normal;
-            attr.UIVisible = true;
-            attr.UIIsEnable = true;
-            attr.UIIsLine = true;
-            attr.MinLen = 0;
-            attr.MaxLen = 300;
-            attr.Idx = -99;
-            attr.HisEditType = BP.En.EditType.UnDel;
-            attr.Insert();
-
-
-            attr = new BP.Sys.MapAttr();
-            attr.FK_MapData = md.No;
-            attr.KeyOfEn = "FZ";
-            attr.Name = "附注";
-            attr.MyDataType = DataType.AppString;
-            attr.UIContralType = UIContralType.TB;
-            attr.LGType = FieldTypeS.Normal;
-            attr.UIVisible = true;
-            attr.UIIsEnable = true;
-            attr.MinLen = 0;
-            attr.MaxLen = 300;
-            attr.UIIsLine = true;
-            attr.Idx = 1;
-            attr.HisEditType = BP.En.EditType.UnDel;
-            attr.Idx = -98;
-            attr.Insert();
-
-
-            attr = new BP.Sys.MapAttr();
-            attr.FK_MapData = md.No;
-            attr.HisEditType = BP.En.EditType.UnDel;
-            attr.KeyOfEn = "DW_SW";
-            attr.Name = "收文单位";
-            attr.MyDataType = DataType.AppString;
-            attr.UIContralType = UIContralType.TB;
-            attr.LGType = FieldTypeS.Normal;
-            attr.UIVisible = true;
-            attr.UIIsEnable = true;
-            attr.MinLen = 0;
-            attr.MaxLen = 300;
-            attr.UIIsLine = true;
-            attr.Idx = 1;
-            attr.Insert();
-
-            attr = new BP.Sys.MapAttr();
-            attr.FK_MapData = md.No;
-            attr.KeyOfEn = "DW_FW";
-            attr.Name = "发文单位";
-            attr.MyDataType = DataType.AppString;
-            attr.UIContralType = UIContralType.TB;
-            attr.LGType = FieldTypeS.Normal;
-            attr.UIVisible = true;
-            attr.UIIsEnable = true;
-            attr.MinLen = 0;
-            attr.MaxLen = 300;
-            attr.Idx = 1;
-            attr.HisEditType = BP.En.EditType.UnDel;
-            attr.UIIsLine = true;
-            attr.Insert();
-
-            attr = new BP.Sys.MapAttr();
-            attr.FK_MapData = md.No;
-            attr.KeyOfEn = "DW_BS";
-            attr.Name = "主报(送)单位";
-            attr.MyDataType = DataType.AppString;
-            attr.UIContralType = UIContralType.TB;
-            attr.LGType = FieldTypeS.Normal;
-            attr.UIVisible = true;
-            attr.UIIsEnable = true;
-            attr.MinLen = 0;
-            attr.MaxLen = 300;
-            attr.Idx = 1;
-            attr.HisEditType = BP.En.EditType.UnDel;
-            attr.UIIsLine = true;
-            attr.Insert();
-
-
-            attr = new BP.Sys.MapAttr();
-            attr.FK_MapData = md.No;
-            attr.KeyOfEn = "DW_CS";
-            attr.Name = "抄报(送)单位";
-            attr.MyDataType = DataType.AppString;
-            attr.UIContralType = UIContralType.TB;
-            attr.LGType = FieldTypeS.Normal;
-            attr.UIVisible = true;
-            attr.UIIsEnable = true;
-            attr.MinLen = 0;
-            attr.MaxLen = 300;
-            attr.Idx = 1;
-            attr.HisEditType = BP.En.EditType.UnDel;
-            attr.UIIsLine = true;
-            attr.Insert();
-
-            attr = new BP.Sys.MapAttr();
-            attr.FK_MapData = md.No;
-            attr.KeyOfEn = "NumPrint";
-            attr.Name = "印制份数";
-            attr.MyDataType = DataType.AppInt;
-            attr.UIContralType = UIContralType.TB;
-            attr.LGType = FieldTypeS.Normal;
-            attr.UIVisible = true;
-            attr.UIIsEnable = true;
-            attr.MinLen = 0;
-            attr.MaxLen = 10;
-            attr.Idx = 1;
-            attr.HisEditType = BP.En.EditType.UnDel;
-            attr.UIIsLine = false;
-            attr.Insert();
-
-            attr = new BP.Sys.MapAttr();
-            attr.FK_MapData = md.No;
-            attr.KeyOfEn = "JMCD";
-            attr.Name = "机密程度";
-            attr.MyDataType = DataType.AppInt;
-            attr.UIContralType = UIContralType.DDL;
-            attr.LGType = FieldTypeS.Enum;
-            attr.UIVisible = true;
-            attr.UIIsEnable = true;
-            attr.MinLen = 0;
-            attr.MaxLen = 300;
-            attr.Idx = 1;
-            attr.HisEditType = BP.En.EditType.UnDel;
-            attr.UIIsLine = false;
-            attr.UIBindKey = "JMCD";
-            attr.Insert();
-
-            attr = new BP.Sys.MapAttr();
-            attr.FK_MapData = md.No;
-            attr.HisEditType = BP.En.EditType.UnDel;
-            attr.KeyOfEn = "PRI";
-            attr.Name = "紧急程度";
-            attr.MyDataType = DataType.AppInt;
-            attr.UIContralType = UIContralType.DDL;
-            attr.LGType = FieldTypeS.Enum;
-            attr.UIVisible = true;
-            attr.UIIsEnable = true;
-            attr.MinLen = 0;
-            attr.MaxLen = 300;
-            attr.Idx = 1;
-            attr.UIIsLine = false;
-            attr.UIBindKey = "PRI";
-            attr.Insert();
-
-            attr = new BP.Sys.MapAttr();
-            attr.FK_MapData = md.No;
-            attr.KeyOfEn = "GWWH";
-            attr.Name = "公文文号";
-            attr.MyDataType = DataType.AppString;
-            attr.UIContralType = UIContralType.TB;
-            attr.LGType = FieldTypeS.Normal;
-            attr.UIVisible = true;
-            attr.UIIsEnable = true;
-            attr.MinLen = 0;
-            attr.MaxLen = 300;
-            attr.Idx = 1;
-            attr.HisEditType = BP.En.EditType.UnDel;
-            attr.UIIsLine = false;
-            attr.Insert();
-        }
+        
         /// <summary>
         /// 修复map
         /// </summary>
@@ -3298,14 +3076,14 @@ namespace BP.WF
             BP.Sys.MapAttr attr = new BP.Sys.MapAttr();
             if (attrs.Contains(MapAttrAttr.KeyOfEn, "OID", MapAttrAttr.FK_MapData, md.No) == false)
             {
-                attr.FK_MapData = md.No;
-                attr.KeyOfEn = "OID";
-                attr.Name = "WorkID";
-                attr.MyDataType = DataType.AppInt;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
+                attr.setFK_MapData(md.No);
+                attr.setKeyOfEn("OID");
+                attr.setName("WorkID");
+                attr.setMyDataType(DataType.AppInt);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
                 attr.DefVal = "0";
                 attr.HisEditType = BP.En.EditType.Readonly;
                 attr.Insert();
@@ -3318,15 +3096,15 @@ namespace BP.WF
             if (attrs.Contains(MapAttrAttr.KeyOfEn, "FID", MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = md.No;
-                attr.KeyOfEn = "FID";
-                attr.Name = "FID";
-                attr.MyDataType = DataType.AppInt;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.HisEditType = BP.En.EditType.UnDel;
+                attr.setFK_MapData(md.No);
+                attr.setKeyOfEn("FID");
+                attr.setName("FID");
+                attr.setMyDataType(DataType.AppInt);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
+                attr.setEditType(EditType.UnDel);
                 attr.DefVal = "0";
                 attr.Insert();
             }
@@ -3334,15 +3112,15 @@ namespace BP.WF
             if (attrs.Contains(MapAttrAttr.KeyOfEn, GERptAttr.RDT, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = md.No;
-                attr.HisEditType = BP.En.EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.RDT;
-                attr.Name = "接受时间";  //"接受时间";
-                attr.MyDataType = DataType.AppDateTime;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
+                attr.setFK_MapData(md.No);
+                attr.setEditType(EditType.UnDel);
+                attr.setKeyOfEn(GERptAttr.RDT);
+                attr.setName("接受时间");  //"接受时间";
+                attr.setMyDataType(DataType.AppDateTime);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
                 attr.Tag = "1";
                 attr.Insert();
             }
@@ -3350,19 +3128,19 @@ namespace BP.WF
             if (attrs.Contains(MapAttrAttr.KeyOfEn, GERptAttr.CDT, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = md.No;
-                attr.HisEditType = BP.En.EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.CDT;
+                attr.setFK_MapData(md.No);
+                attr.setEditType(EditType.UnDel);
+                attr.setKeyOfEn(GERptAttr.CDT);
                 if (this.IsStartNode)
-                    attr.Name = "发起时间"; //"发起时间";
+                    attr.setName("发起时间"); //"发起时间";
                 else
-                    attr.Name = "完成时间"; //"完成时间";
+                    attr.setName("完成时间"); //"完成时间";
 
-                attr.MyDataType = DataType.AppDateTime;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
+                attr.setMyDataType(DataType.AppDateTime);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
                 attr.DefVal = "@RDT";
                 attr.Tag = "1";
                 attr.Insert();
@@ -3371,21 +3149,21 @@ namespace BP.WF
             if (attrs.Contains(MapAttrAttr.KeyOfEn, WorkAttr.Rec, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = md.No;
-                attr.HisEditType = BP.En.EditType.UnDel;
-                attr.KeyOfEn = WorkAttr.Rec;
+                attr.setFK_MapData(md.No);
+                attr.setEditType(EditType.UnDel);
+                attr.setKeyOfEn(WorkAttr.Rec);
                 if (this.IsStartNode == false)
-                    attr.Name = "记录人"; // "记录人";
+                    attr.setName("记录人"); // "记录人";
                 else
-                    attr.Name = "发起人"; //"发起人";
+                    attr.setName("发起人"); //"发起人";
 
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.MaxLen = 32;
-                attr.MinLen = 0;
+                attr.setMyDataType(DataType.AppString);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
+                attr.setMaxLen(32);
+                attr.setMinLen(0);
                 attr.DefVal = "@WebUser.No";
                 attr.Insert();
             }
@@ -3393,35 +3171,35 @@ namespace BP.WF
             if (attrs.Contains(MapAttrAttr.KeyOfEn, WorkAttr.Emps, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = md.No;
-                attr.HisEditType = BP.En.EditType.UnDel;
-                attr.KeyOfEn = WorkAttr.Emps;
+                attr.setFK_MapData(md.No);
+                attr.setEditType(EditType.UnDel);
+                attr.setKeyOfEn(WorkAttr.Emps);
                 attr.Name = WorkAttr.Emps;
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.MaxLen = 8000;
-                attr.MinLen = 0;
+                attr.setMyDataType(DataType.AppString);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
+                attr.setMaxLen(8000);
+                attr.setMinLen(0);
                 attr.Insert();
             }
 
             if (attrs.Contains(MapAttrAttr.KeyOfEn, GERptAttr.FK_Dept, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = md.No;
-                attr.HisEditType = BP.En.EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.FK_Dept;
-                attr.Name = "操作员部门"; //"操作员部门";
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.DDL;
-                attr.LGType = FieldTypeS.FK;
+                attr.setFK_MapData(md.No);
+                attr.setEditType(EditType.UnDel);
+                attr.setKeyOfEn(GERptAttr.FK_Dept);
+                attr.setName("操作员部门"); //"操作员部门";
+                attr.setMyDataType(DataType.AppString);
+                attr.setUIContralType(UIContralType.DDL);
+                attr.setLGType(FieldTypeS.FK);
                 attr.UIBindKey = "BP.Port.Depts";
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.MinLen = 0;
-                attr.MaxLen = 50;
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
+                attr.setMinLen(0);
+                attr.setMaxLen(50);
                 attr.Insert();
             }
 
@@ -3430,19 +3208,19 @@ namespace BP.WF
             {
                 /* 如果是MD5加密流程. */
                 attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = md.No;
-                attr.HisEditType = BP.En.EditType.UnDel;
-                attr.KeyOfEn = WorkAttr.MD5;
+                attr.setFK_MapData(md.No);
+                attr.setEditType(EditType.UnDel);
+                attr.setKeyOfEn(WorkAttr.MD5);
                 attr.UIBindKey = attr.KeyOfEn;
-                attr.Name = "MD5";
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIIsEnable = false;
+                attr.setName("MD5");
+                attr.setMyDataType(DataType.AppString);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIIsEnable(false);
                 attr.UIIsLine = false;
-                attr.UIVisible = false;
-                attr.MinLen = 0;
-                attr.MaxLen = 40;
+                attr.setUIVisible(false);
+                attr.setMinLen(0);
+                attr.setMaxLen(40);
                 attr.Idx = -100;
                 attr.Insert();
             }
@@ -3453,23 +3231,23 @@ namespace BP.WF
                 if (attrs.Contains(MapAttrAttr.KeyOfEn, GERptAttr.Title, MapAttrAttr.FK_MapData, md.No) == false)
                 {
                     attr = new BP.Sys.MapAttr();
-                    attr.FK_MapData = md.No;
-                    attr.HisEditType = BP.En.EditType.UnDel;
-                    attr.KeyOfEn = GERptAttr.Title;
-                    attr.Name = "标题"; // "流程标题";
-                    attr.MyDataType = DataType.AppString;
-                    attr.UIContralType = UIContralType.TB;
-                    attr.LGType = FieldTypeS.Normal;
-                    attr.UIVisible = false;
-                    attr.UIIsEnable = true;
+                    attr.setFK_MapData(md.No);
+                    attr.setEditType(EditType.UnDel);
+                    attr.setKeyOfEn(GERptAttr.Title);
+                    attr.setName("标题"); // "流程标题";
+                    attr.setMyDataType(DataType.AppString);
+                    attr.setUIContralType(UIContralType.TB);
+                    attr.setLGType(FieldTypeS.Normal);
+                    attr.setUIVisible(false);
+                    attr.setUIIsEnable(true);
                     attr.UIIsLine = true;
                     attr.UIWidth = 251;
 
-                    attr.MinLen = 0;
-                    attr.MaxLen = 200;
+                    attr.setMinLen(0);
+                    attr.setMaxLen(200);
                     attr.Idx = -100;
-                    attr.X = (float)171.2;
-                    attr.Y = (float)68.4;
+                    //attr.X = (float)171.2;
+                    //attr.Y = (float)68.4;
                     attr.Insert();
                 }
             }
@@ -3502,161 +3280,159 @@ namespace BP.WF
             if (this.HisFormType == NodeFormType.FoolForm || this.HisFormType == NodeFormType.FoolTruck)
                 md.HisFrmType = FrmType.FoolForm;
 
-            if (this.HisFormType == NodeFormType.FreeForm)
-                md.HisFrmType = FrmType.FreeFrm;
+            if (this.HisFormType == NodeFormType.Develop)
+                md.HisFrmType = FrmType.Develop;
 
             if (this.HisFlow.HisDataStoreModel == DataStoreModel.SpecTable)
                 md.PTable = this.HisFlow.PTable;
             md.Insert();
 
             BP.Sys.MapAttr attr = new BP.Sys.MapAttr();
-            attr.FK_MapData = md.No;
-            attr.KeyOfEn = "OID";
-            attr.Name = "WorkID";
-            attr.MyDataType = DataType.AppInt;
-            attr.UIContralType = UIContralType.TB;
-            attr.LGType = FieldTypeS.Normal;
-            attr.UIVisible = false;
-            attr.UIIsEnable = false;
+            attr.setFK_MapData(md.No);
+            attr.setKeyOfEn("OID");
+            attr.setName("WorkID");
+            attr.setMyDataType(DataType.AppInt);
+            attr.setUIContralType(UIContralType.TB);
+            attr.setLGType(FieldTypeS.Normal);
+            attr.setUIVisible(false);
+            attr.setUIIsEnable(false);
             attr.DefVal = "0";
             attr.HisEditType = BP.En.EditType.Readonly;
             attr.Insert();
-
-            if (this.HisFlow.FlowAppType == FlowAppType.DocFlow)
-            {
-                this.AddDocAttr(md);
-            }
+          
 
             attr = new BP.Sys.MapAttr();
-            attr.FK_MapData = md.No;
-            attr.KeyOfEn = "FID";
-            attr.Name = "FID";
-            attr.MyDataType = DataType.AppInt;
-            attr.UIContralType = UIContralType.TB;
-            attr.LGType = FieldTypeS.Normal;
-            attr.UIVisible = false;
-            attr.UIIsEnable = false;
-            attr.HisEditType = BP.En.EditType.UnDel;
+            attr.setFK_MapData(md.No);
+            attr.setKeyOfEn("FID");
+            attr.setName("FID");
+            attr.setMyDataType(DataType.AppInt);
+            attr.setUIContralType(UIContralType.TB);
+            attr.setLGType(FieldTypeS.Normal);
+            attr.setUIVisible(false);
+            attr.setUIIsEnable(false);
+            attr.setEditType(EditType.UnDel);
             attr.DefVal = "0";
             attr.Insert();
 
             attr = new BP.Sys.MapAttr();
-            attr.FK_MapData = md.No;
-            attr.HisEditType = BP.En.EditType.UnDel;
-            attr.KeyOfEn = GERptAttr.RDT;
-            attr.Name = "接受时间";  //"接受时间";
-            attr.MyDataType = DataType.AppDateTime;
-            attr.IsSupperText = 1;
-            attr.UIContralType = UIContralType.TB;
-            attr.LGType = FieldTypeS.Normal;
-            attr.UIVisible = false;
-            attr.UIIsEnable = false;
-            attr.Tag = "1";
+            attr.SetValByKey(MapAttrAttr.FK_MapData, md.No);
+            attr.setEditType(BP.En.EditType.UnDel);
+            attr.SetValByKey(MapAttrAttr.KeyOfEn, "RDT");
+                attr.SetValByKey(MapAttrAttr.Name, "接受时间");
+            attr.SetValByKey(MapAttrAttr.MyDataType, DataType.AppDateTime);
+            attr.setUIContralType(UIContralType.TB);
+            attr.SetValByKey(MapAttrAttr.UIVisible, false);
+            attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
+            attr.setLGType(FieldTypeS.Normal);
+            attr.SetValByKey(MapAttrAttr.MinLen, 0);
+            attr.SetValByKey(MapAttrAttr.MaxLen, 40);
+            attr.SetValByKey(MapAttrAttr.DefVal, "@RDT");
+            attr.SetValByKey(MapAttrAttr.Tag, "1");
             attr.Insert();
 
             attr = new BP.Sys.MapAttr();
-            attr.FK_MapData = md.No;
-            attr.HisEditType = BP.En.EditType.UnDel;
-            attr.KeyOfEn = GERptAttr.CDT;
-            if (this.IsStartNode)
-                attr.Name = "发起时间"; //"发起时间";
-            else
-                attr.Name = "完成时间"; //"完成时间";
+            attr.SetValByKey(MapAttrAttr.FK_MapData, md.No);
+            attr.setEditType(BP.En.EditType.UnDel);
+            attr.SetValByKey(MapAttrAttr.KeyOfEn, "Rec");
 
-            attr.MyDataType = DataType.AppDateTime;
-            attr.IsSupperText = 1;
-            attr.UIContralType = UIContralType.TB;
-            attr.LGType = FieldTypeS.Normal;
-            attr.UIVisible = false;
-            attr.UIIsEnable = false;
-            attr.DefVal = "@RDT";
-            attr.Tag = "1";
-            attr.Insert();
-
-            attr = new BP.Sys.MapAttr();
-            attr.FK_MapData = md.No;
-            attr.HisEditType = BP.En.EditType.UnDel;
-            attr.KeyOfEn = WorkAttr.Rec;
             if (this.IsStartNode == false)
-                attr.Name = "记录人"; // "记录人";
+                attr.SetValByKey(MapAttrAttr.Name, "发起时间");
             else
-                attr.Name = "发起人"; //"发起人";
+                attr.SetValByKey(MapAttrAttr.Name, "完成时间");
 
-            attr.MyDataType = DataType.AppString;
-            attr.UIContralType = UIContralType.TB;
-            attr.LGType = FieldTypeS.Normal;
-            attr.UIVisible = false;
-            attr.UIIsEnable = false;
-            attr.MaxLen = 32;
-            attr.MinLen = 0;
-            attr.DefVal = "@WebUser.No";
+            attr.SetValByKey(MapAttrAttr.MyDataType, DataType.AppDateTime);
+            attr.setUIContralType(UIContralType.TB);
+            attr.SetValByKey(MapAttrAttr.UIVisible, false);
+            attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
+            attr.setLGType(FieldTypeS.Normal);
+            attr.SetValByKey(MapAttrAttr.MinLen, 0);
+            attr.SetValByKey(MapAttrAttr.MaxLen, 40);
+            attr.SetValByKey(MapAttrAttr.DefVal, "@RDT");
+            attr.SetValByKey(MapAttrAttr.Tag, "1");
             attr.Insert();
 
             attr = new BP.Sys.MapAttr();
-            attr.FK_MapData = md.No;
-            attr.HisEditType = BP.En.EditType.UnDel;
-            attr.KeyOfEn = WorkAttr.Emps;
-            attr.Name = "Emps";
-            attr.MyDataType = DataType.AppString;
-            attr.UIContralType = UIContralType.TB;
-            attr.LGType = FieldTypeS.Normal;
-            attr.UIVisible = false;
-            attr.UIIsEnable = false;
-            attr.MaxLen = 8000;
-            attr.MinLen = 0;
+            attr.SetValByKey(MapAttrAttr.FK_MapData, md.No);
+            attr.setEditType(BP.En.EditType.UnDel);
+            attr.SetValByKey(MapAttrAttr.KeyOfEn, "Rec");
+
+            if (this.IsStartNode == false)
+                attr.SetValByKey(MapAttrAttr.Name, "记录人");
+            else
+                attr.SetValByKey(MapAttrAttr.Name, "发起人");
+
+            attr.SetValByKey(MapAttrAttr.MyDataType, DataType.AppString);
+            attr.setUIContralType(UIContralType.TB);
+            attr.SetValByKey(MapAttrAttr.UIVisible, false);
+            attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
+            attr.setLGType(FieldTypeS.Normal);
+            attr.SetValByKey(MapAttrAttr.MinLen, 0);
+            attr.SetValByKey(MapAttrAttr.MaxLen, 8000);
+            attr.SetValByKey(MapAttrAttr.DefVal, "@WebUser.No");
             attr.Insert();
 
+
             attr = new BP.Sys.MapAttr();
-            attr.FK_MapData = md.No;
-            attr.HisEditType = BP.En.EditType.UnDel;
-            attr.KeyOfEn = GERptAttr.FK_Dept;
-            attr.Name = "操作员部门"; //"操作员部门";
-            attr.MyDataType = DataType.AppString;
-            attr.UIContralType = UIContralType.TB;
-            attr.LGType = FieldTypeS.Normal;
-            attr.UIVisible = false;
-            attr.UIIsEnable = false;
-            attr.MinLen = 0;
-            attr.MaxLen = 50;
+            attr.SetValByKey(MapAttrAttr.FK_MapData, md.No);
+            attr.setEditType(BP.En.EditType.UnDel);
+            attr.SetValByKey(MapAttrAttr.KeyOfEn, "Emps");
+            attr.SetValByKey(MapAttrAttr.Name, "Emps");
+            attr.SetValByKey(MapAttrAttr.MyDataType, DataType.AppString);
+            attr.setUIContralType(UIContralType.TB);
+            attr.SetValByKey(MapAttrAttr.UIVisible, false);
+            attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
+            attr.setLGType(FieldTypeS.Normal);
+            attr.SetValByKey(MapAttrAttr.MinLen, 0);
+            attr.SetValByKey(MapAttrAttr.MaxLen, 8000);
+            attr.Insert();
+
+
+
+            attr = new BP.Sys.MapAttr();
+            attr.SetValByKey(MapAttrAttr.FK_MapData, md.No);
+            attr.setEditType(BP.En.EditType.UnDel);
+            attr.SetValByKey(MapAttrAttr.KeyOfEn, "FK_Dept");
+            attr.SetValByKey(MapAttrAttr.Name, "操作员部门");
+            attr.SetValByKey(MapAttrAttr.MyDataType, DataType.AppString);
+            attr.setUIContralType(UIContralType.TB);
+            attr.SetValByKey(MapAttrAttr.UIVisible, false);
+            attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
+            attr.setLGType(FieldTypeS.Normal);
+            attr.SetValByKey(MapAttrAttr.MinLen, 0);
+            attr.SetValByKey(MapAttrAttr.MaxLen, 50);
             attr.Insert();
 
             if (this.NodePosType == NodePosType.Start)
             {
                 //开始节点信息.
                 attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = md.No;
-                attr.HisEditType = BP.En.EditType.Edit;
-                //   attr.edit
-                attr.KeyOfEn = "Title";
-                attr.Name = "标题"; // "流程标题";
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.UIIsLine = true;
-                attr.UIWidth = 251;
-                attr.MinLen = 0;
-                attr.MaxLen = 200;
-                attr.Idx = -100;
-                attr.X = (float)174.83;
-                attr.Y = (float)54.4;
+
+                attr.SetValByKey(MapAttrAttr.FK_MapData, md.No);
+                attr.setEditType(BP.En.EditType.Edit);
+
+                attr.SetValByKey(MapAttrAttr.KeyOfEn, "Title");
+                attr.SetValByKey(MapAttrAttr.Name, "标题");
+                attr.SetValByKey(MapAttrAttr.MyDataType, DataType.AppString);
+                attr.setUIContralType(UIContralType.TB);
+                attr.SetValByKey(MapAttrAttr.UIVisible, false);
+                attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.SetValByKey(MapAttrAttr.MinLen, 0);
+                attr.SetValByKey(MapAttrAttr.MaxLen, 200);
                 attr.Insert();
 
                 attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = md.No;
-                attr.HisEditType = BP.En.EditType.UnDel;
-                attr.KeyOfEn = "FK_NY";
-                attr.Name = "年月"; //"年月";
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.MinLen = 0;
-                attr.MaxLen = 7;
+                attr.SetValByKey(MapAttrAttr.FK_MapData, md.No);
+                attr.setEditType(BP.En.EditType.UnDel);
+                attr.SetValByKey(MapAttrAttr.KeyOfEn, "FK_NY");
+                attr.SetValByKey(MapAttrAttr.Name, "年月");
+                attr.SetValByKey(MapAttrAttr.MyDataType, DataType.AppString);
+                attr.setUIContralType(UIContralType.TB);
+                attr.SetValByKey(MapAttrAttr.UIVisible, false);
+                attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.SetValByKey(MapAttrAttr.MinLen, 0);
+                attr.SetValByKey(MapAttrAttr.MaxLen, 7);
                 attr.Insert();
             }
         }

@@ -309,7 +309,7 @@ namespace BP.WF.DTS
             }
             #endregion 6.恢复流程数据.
 
-            Log.DefaultLogWriteLineInfo(msg);
+            BP.DA.Log.DebugWriteInfo(msg);
 
             //删除多余的空格.
             BP.WF.DTS.DeleteBlankGroupField dts = new DeleteBlankGroupField();

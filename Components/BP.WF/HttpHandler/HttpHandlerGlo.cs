@@ -5,17 +5,18 @@ using System.IO;
 using BP.Sys;
 using BP.Web;
 using System.Collections.Generic;
+using BP.Difference;
+
 
 namespace BP.WF.HttpHandler
 {
     public class HttpHandlerGlo
     {
         #region 转化格式  chen
-
         public static void DownloadFile(string filepath, string tempName)
         {
-            if (String.Compare("firefox", HttpContextHelper.RequestBrowser, StringComparison.OrdinalIgnoreCase)!=0)
-                tempName = HttpUtility.UrlEncode(tempName);
+            //if (String.Compare("firefox", HttpContextHelper.RequestBrowser, StringComparison.OrdinalIgnoreCase)!=0)
+            //    tempName = HttpUtility.UrlEncode(tempName);
 
             HttpContextHelper.ResponseWriteFile(filepath, tempName);
         }

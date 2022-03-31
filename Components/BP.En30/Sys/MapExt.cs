@@ -4,6 +4,7 @@ using BP.DA;
 using BP.Web;
 using BP.En;
 using System.Data;
+using BP.Difference;
 
 namespace BP.Sys
 {
@@ -590,6 +591,11 @@ namespace BP.Sys
                 this.SetValByKey(MapExtAttr.FK_MapData, value);
             }
         }
+        public void setFK_MapData(string val)
+        {
+            this.SetValByKey(MapExtAttr.FK_MapData, val);
+
+        }
         /// <summary>
         /// Doc
         /// </summary>
@@ -788,7 +794,7 @@ namespace BP.Sys
         /// <param name="no"></param>
         public MapExt(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -856,47 +862,47 @@ namespace BP.Sys
                 case MapExtXmlList.FullDataDtl:
                     break;
                 case MapExtXmlList.ActiveDDL:
-                    this.MyPK = MapExtXmlList.ActiveDDL + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    this.setMyPK(MapExtXmlList.ActiveDDL + "_" + this.FK_MapData + "_" + this.AttrOfOper);
                     break;
                 case MapExtXmlList.DDLFullCtrl:
-                    this.MyPK = MapExtXmlList.DDLFullCtrl + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    this.setMyPK(MapExtXmlList.DDLFullCtrl + "_" + this.FK_MapData + "_" + this.AttrOfOper);
                     break;
                 case MapExtXmlList.PopVal:
-                    this.MyPK = MapExtXmlList.PopVal + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    this.setMyPK(MapExtXmlList.PopVal + "_" + this.FK_MapData + "_" + this.AttrOfOper);
                     break;
                 case MapExtXmlList.TBFullCtrl:
-                    this.MyPK = MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    this.setMyPK(MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.AttrOfOper);
                     break;
                 case MapExtXmlList.PopFullCtrl:
-                    this.MyPK = MapExtXmlList.PopFullCtrl + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    this.setMyPK(MapExtXmlList.PopFullCtrl + "_" + this.FK_MapData + "_" + this.AttrOfOper);
                     break;
                 case MapExtXmlList.AutoFull:
-                    this.MyPK = MapExtXmlList.AutoFull + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    this.setMyPK(MapExtXmlList.AutoFull + "_" + this.FK_MapData + "_" + this.AttrOfOper);
                     break;
                 case MapExtXmlList.AutoFullDLL:
-                    this.MyPK = MapExtXmlList.AutoFullDLL + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    this.setMyPK(MapExtXmlList.AutoFullDLL + "_" + this.FK_MapData + "_" + this.AttrOfOper);
                     break;
                 case MapExtXmlList.InputCheck:
-                    this.MyPK = MapExtXmlList.InputCheck + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    this.setMyPK(MapExtXmlList.InputCheck + "_" + this.FK_MapData + "_" + this.AttrOfOper);
                     break;
                 case MapExtXmlList.PageLoadFull:
-                    this.MyPK = MapExtXmlList.PageLoadFull + "_" + this.FK_MapData;
+                    this.setMyPK(MapExtXmlList.PageLoadFull + "_" + this.FK_MapData);
                     break;
                 case MapExtXmlList.RegularExpression:
-                    this.MyPK = MapExtXmlList.RegularExpression + "_" + this.FK_MapData + "_" + this.AttrOfOper + "_" + this.Tag;
+                    this.setMyPK(MapExtXmlList.RegularExpression + "_" + this.FK_MapData + "_" + this.AttrOfOper + "_" + this.Tag);
                     break;
                 case MapExtXmlList.BindFunction:
-                    this.MyPK = MapExtXmlList.BindFunction + "_" + this.FK_MapData + "_" + this.AttrOfOper + "_" + this.Tag;
+                    this.setMyPK(MapExtXmlList.BindFunction + "_" + this.FK_MapData + "_" + this.AttrOfOper + "_" + this.Tag);
                     break;
                 case MapExtXmlList.Link:
-                    this.MyPK = MapExtXmlList.Link + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    this.setMyPK(MapExtXmlList.Link + "_" + this.FK_MapData + "_" + this.AttrOfOper);
                     break;
                 default:
                     //这里要去掉，不然组合组主键，会带来错误.
                     if (DataType.IsNullOrEmpty(this.AttrOfOper) == true)
-                        this.MyPK = this.ExtType + "_" + this.FK_MapData;
+                        this.setMyPK(this.ExtType + "_" + this.FK_MapData);
                     else
-                        this.MyPK = this.ExtType + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                        this.setMyPK(this.ExtType + "_" + this.FK_MapData + "_" + this.AttrOfOper);
                     break;
             }
         }
@@ -904,9 +910,9 @@ namespace BP.Sys
         protected override bool beforeInsert()
         {
             if (this.MyPK == "")
-                this.MyPK = DBAccess.GenerGUID(); //@李国文
+                this.setMyPK(DBAccess.GenerGUID()); //@李国文
 
-            BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
 
             return base.beforeInsert();
         }
@@ -947,20 +953,20 @@ namespace BP.Sys
                 //给该字段增加一个KeyOfEnT
                 string mypk = this.FK_MapData + "_" + this.AttrOfOper + "T";
                 MapAttr attrH = new MapAttr();
-                attrH.MyPK = mypk;
+                attrH.setMyPK(mypk);
                 if (attrH.RetrieveFromDBSources() == 0)
                 {
                     MapAttr attr = new MapAttr(this.FK_MapData + "_" + this.AttrOfOper);
                     attrH.Copy(attr);
-                    attrH.KeyOfEn = attr.KeyOfEn + "T";
-                    attrH.Name = attr.Name;
-                    attrH.UIContralType = BP.En.UIContralType.TB;
-                    attrH.MinLen = 0;
-                    attrH.MaxLen = 500;
-                    attrH.MyDataType = DataType.AppString;
-                    attrH.UIVisible = false;
-                    attrH.UIIsEnable = true;
-                    attrH.MyPK = attrH.FK_MapData + "_" + attrH.KeyOfEn;
+                    attrH.setKeyOfEn(attr.KeyOfEn + "T");
+                    attrH.setName(attr.Name);
+                    attrH.setUIContralType(UIContralType.TB);
+                    attrH.setMinLen(0);
+                    attrH.setMaxLen(500);
+                    attrH.setMyDataType(DataType.AppString);
+                    attrH.setUIVisible(false);
+                    attrH.setUIIsEnable(true);
+                    attrH.setMyPK(attrH.FK_MapData + "_" + attrH.KeyOfEn);
                     attrH.Save();
                     attr.SetPara("MultipleChoiceSmall", "1");
                 }
@@ -989,13 +995,13 @@ namespace BP.Sys
                     }
 
                     MapAttr attr = new MapAttr();
-                    attr.MyPK = ext.AttrOfOper;
+                    attr.setMyPK(ext.AttrOfOper);
                     if (attr.IsExits == true)
                     {
                         ext.AttrOfOper = attr.KeyOfEn;
                         ext.Delete();
 
-                        ext.MyPK = ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive;
+                        ext.setMyPK(ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
                         ext.Save();
                     }
 
@@ -1003,7 +1009,7 @@ namespace BP.Sys
                     {
                         ext.Delete(); //直接删除.
 
-                        ext.MyPK = ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive;
+                        ext.setMyPK(ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
                         ext.Save();
                         continue;
                     }
@@ -1011,7 +1017,7 @@ namespace BP.Sys
                     if (ext.MyPK == ext.ExtType + "_" + ext.FK_MapData + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive)
                     {
                         ext.Delete(); //直接删除.
-                        ext.MyPK = ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive;
+                        ext.setMyPK(ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
                         ext.Save();
                         continue;
                     }
@@ -1019,7 +1025,7 @@ namespace BP.Sys
                     if (ext.MyPK == ext.ExtType + "_" + ext.FK_MapData + "_" + ext.FK_MapData + "_" + ext.AttrsOfActive + "_" + ext.AttrOfOper)
                     {
                         ext.Delete(); //直接删除.
-                        ext.MyPK = ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive;
+                        ext.setMyPK(ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
                         ext.Save();
                         continue;
                     }
@@ -1029,7 +1035,7 @@ namespace BP.Sys
                     if (ext.MyPK == ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper )
                     {
                         ext.Delete();
-                        ext.MyPK = ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive;
+                        ext.setMyPK(ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
                         ext.Save();
                         continue;
                     }
@@ -1038,7 +1044,7 @@ namespace BP.Sys
                     if (ext.MyPK == ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrsOfActive)
                     {
                         ext.Delete();
-                        ext.MyPK = ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive;
+                        ext.setMyPK(ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
                         ext.Save();
                         continue;
                     }
@@ -1086,14 +1092,14 @@ namespace BP.Sys
                 }
                 else
                     dt = DBAccess.RunSQLReturnTable(sql);
-                if (SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle || SystemConfig.AppCenterDBType == BP.DA.DBType.PostgreSQL)
+
+                if (SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle || SystemConfig.AppCenterDBType == BP.DA.DBType.PostgreSQL || SystemConfig.AppCenterDBType == BP.DA.DBType.UX)
                 {
                     dt.Columns["NO"].ColumnName = "No";
                     dt.Columns["NAME"].ColumnName = "Name";
 
                     //判断是否存在PARENTNO列，避免转换失败
-                    bool ishave = dt.Columns.Contains("PARENTNO");
-                    if(ishave)
+                    if(dt.Columns.Contains("PARENTNO")==true)
                         dt.Columns["PARENTNO"].ColumnName = "ParentNo";
                 }
                 return BP.Tools.Json.ToJson(dt);

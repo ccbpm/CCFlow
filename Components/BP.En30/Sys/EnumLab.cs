@@ -52,11 +52,7 @@ namespace BP.Sys
         /// <summary>
         /// 傻瓜表单
         /// </summary>
-        FoolForm = 0,
-        /// <summary>
-        /// 自由表单
-        /// </summary>
-        FreeFrm = 1,
+        FoolForm = 0,        
         /// <summary>
         /// URL表单(自定义)
         /// </summary>
@@ -81,6 +77,10 @@ namespace BP.Sys
         /// 开发者表单
         /// </summary>
         Develop = 8,
+        /// <summary>
+        /// WPS表单
+        /// </summary>
+        WPSFrm = 9,
         /// <summary>
         /// 外部数据源列表
         /// </summary>

@@ -295,7 +295,7 @@ namespace BP.WF.Template
         /// <param name="_oid">配件ID</param>	
         public Part(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>

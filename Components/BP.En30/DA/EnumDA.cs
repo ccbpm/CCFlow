@@ -90,7 +90,11 @@ namespace BP.DA
         /// <summary>
         /// 人大金仓
         /// </summary>
-        KingBase=8
+        KingBase=8,
+        /// <summary>
+        /// 优炫
+        /// </summary>
+        UX=9
     }
     /// <summary>
     /// 保管位置

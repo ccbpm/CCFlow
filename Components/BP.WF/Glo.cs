@@ -20,6 +20,8 @@ using BP.Sys.FrmUI;
 using System.Linq;
 using System.Text.RegularExpressions;
 using BP.Tools;
+using BP.Difference;
+
 
 namespace BP.WF
 {
@@ -43,7 +45,7 @@ namespace BP.WF
             DBAccess.RunSQLs(sqls);
 
             // 删除垃圾数据. 
-            DBAccess.RunSQL("DELETE FROM WF_NodeEmp WHERE FK_Emp  NOT IN (SELECT " + BP.Sys.Glo.UserNoWhitOutAS + " FROM Port_Emp )");
+            DBAccess.RunSQL("DELETE FROM WF_NodeEmp WHERE FK_Emp  NOT IN (SELECT " + BP.Sys.Base.Glo.UserNoWhitOutAS + " FROM Port_Emp )");
             DBAccess.RunSQL("DELETE FROM WF_Emp WHERE NO NOT IN (SELECT No FROM Port_Emp )");
 
             DBAccess.RunSQL("UPDATE WF_Emp SET Name=(SELECT Name From Port_Emp WHERE Port_Emp.No=WF_Emp.No),FK_Dept=(select FK_Dept from Port_Emp where Port_Emp.No=WF_Emp.No)");
@@ -72,6 +74,7 @@ namespace BP.WF
                         sql = "SELECT '' AS No, '-请选择-' as Name FROM DUAL ";
                         break;
                     case DBType.PostgreSQL:
+                    case DBType.UX:
                     default:
                         sql = "SELECT '' AS No, '-请选择-' as Name FROM Port_Emp WHERE 1=2 ";
                         break;
@@ -99,6 +102,7 @@ namespace BP.WF
                         sql = "SELECT '' AS No, '-请选择-' as Name FROM DUAL ";
                         break;
                     case DBType.PostgreSQL:
+                    case DBType.UX:
                     default:
                         sql = "SELECT '' AS No, '-请选择-' as Name FROM Port_Emp WHERE 1=2 ";
                         break;
@@ -365,8 +369,8 @@ namespace BP.WF
                     {
                         json += "{ ";
                         json += " name: '" + sub.SubFlowNo + " - " + sub.SubFlowName + "', ";
-                        json += " start:  " + ToData(DataType.CurrentData) + ", ";
-                        json += " end:  " + ToData(DataType.CurrentData) + ", ";
+                        json += " start:  " + ToData(DataType.CurrentDate) + ", ";
+                        json += " end:  " + ToData(DataType.CurrentDate) + ", ";
                         json += " TodoSta: -1, ";
                         json += " color: 'brue' ";
                         json += "}";
@@ -544,8 +548,8 @@ namespace BP.WF
                 {
                     json.Append("{ ");
                     json.Append(" name: '" + ssub.SubFlowNo + " - " + ssub.SubFlowName + "', ");
-                    json.Append(" start:  " + ToData(DataType.CurrentData) + ", ");
-                    json.Append(" end:  " + ToData(DataType.CurrentData) + ", ");
+                    json.Append(" start:  " + ToData(DataType.CurrentDate) + ", ");
+                    json.Append(" end:  " + ToData(DataType.CurrentDate) + ", ");
                     json.Append(" TodoSta: -1, ");
                     json.Append(" color: 'brue' ");
                     json.Append("}");
@@ -960,7 +964,7 @@ namespace BP.WF
             {
                 string s = SystemConfig.AppSettings["PrintBackgroundWord"];
                 if (string.IsNullOrEmpty(s))
-                    s = "驰骋工作流引擎@开源驰骋 - ccflow@openc";
+                    s = "高凌工作流引擎@开源高凌 - ccflow@openc";
                 return s;
             }
         }
@@ -1125,7 +1129,7 @@ namespace BP.WF
                 }
                 catch (Exception ex)
                 {
-                    Log.DebugWriteWarning(ex.Message);
+                    BP.DA.Log.DebugWriteError(ex.Message);
                     en.CheckPhysicsTable();
                 }
             }
@@ -1140,7 +1144,6 @@ namespace BP.WF
 
             if (DBAccess.IsExitsObject("V_GPM_EmpGroup") == true)
                 DBAccess.RunSQL("DROP VIEW V_GPM_EmpGroup");
-
 
             if (DBAccess.IsExitsObject("V_GPM_EmpStationMenu") == true)
                 DBAccess.RunSQL("DROP VIEW V_GPM_EmpStationMenu");
@@ -1158,7 +1161,7 @@ namespace BP.WF
             //Oracle 语法有所区别
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 sqlscript = SystemConfig.PathOfWebApp + "GPM/SQLScript/Oracle_GPM_VIEW.sql";
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                 sqlscript = SystemConfig.PathOfWebApp + "GPM/SQLScript/PostgreSQL_GPM_VIEW.sql";
 
             if (DataType.IsNullOrEmpty(sqlscript) == true)
@@ -1193,7 +1196,7 @@ namespace BP.WF
         /// 当前版本号-为了升级使用.
         /// 20200602:升级方向条件.
         /// </summary>
-        public static int Ver = 20210211;
+        public static int Ver = 20220316;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -1245,12 +1248,6 @@ namespace BP.WF
                 CheckGPM();
 
 
-            MapAttr attr = new MapAttr();
-            attr.CheckPhysicsTable();
-
-            FlowExt fe = new FlowExt();
-            fe.CheckPhysicsTable();
-
             MapData mapData = new MapData();
             mapData.CheckPhysicsTable();
 
@@ -1276,26 +1273,18 @@ namespace BP.WF
 
                 DBAccess.DropTableColumn("WF_NodeToolbar", "ShowWhere");
             }
-            //--2020.11.30 FrmLab中Text字段在人大金仓是关键字
-            if (DBAccess.IsExitsTableCol("Sys_FrmLab", "Lab") == false)
-            {
-                DBAccess.RunSQL("ALTER TABLE Sys_FrmLab ADD Lab NVARCHAR(100) DEFAULT  NULL");
-                DBAccess.RunSQL("UPDATE Sys_FrmLab SET Lab=Text WHERE Lab='' AND  Text!='' ");
-                DBAccess.DropTableColumn("Sys_FrmLab", "Text");
-            }
 
-            if (DBAccess.IsExitsTableCol("Sys_FrmBtn", "Lab") == false)
-            {
-                DBAccess.RunSQL("ALTER TABLE Sys_FrmBtn ADD Lab NVARCHAR(100) DEFAULT  NULL");
-                DBAccess.RunSQL("UPDATE Sys_FrmBtn SET Lab=Text ");
-                DBAccess.DropTableColumn("Sys_FrmBtn", "Text");
-            }
-            if (DBAccess.IsExitsTableCol("Sys_FrmLink", "Lab") == false)
-            {
-                DBAccess.RunSQL("ALTER TABLE Sys_FrmLink ADD Lab NVARCHAR(100) DEFAULT  NULL");
-                DBAccess.RunSQL("UPDATE Sys_FrmLink SET Lab=Text ");
-                DBAccess.DropTableColumn("Sys_FrmLink", "Text");
-            }
+            MapAttr myattr = new MapAttr();
+            myattr.CheckPhysicsTable();
+
+            MapDtlExt mde = new MapDtlExt();
+            mde.CheckPhysicsTable();
+
+            NodeExt ne = new NodeExt();
+            ne.CheckPhysicsTable();
+
+            FlowExt fe = new FlowExt();
+            fe.CheckPhysicsTable();
 
             //检查frmTrack.
             BP.CCBill.Track tk = new BP.CCBill.Track();
@@ -1310,7 +1299,7 @@ namespace BP.WF
             BP.GPM.Emp emp1 = new BP.GPM.Emp();
             emp1.CheckPhysicsTable();
 
-            BP.WF.Port.Admin2.Org org = new BP.WF.Port.Admin2.Org();
+            BP.WF.Port.Admin2Group.Org org = new BP.WF.Port.Admin2Group.Org();
             org.CheckPhysicsTable();
 
             BP.WF.Template.FlowSort fs = new BP.WF.Template.FlowSort();
@@ -1324,6 +1313,10 @@ namespace BP.WF
 
             BP.Sys.SysEnum myse = new SysEnum();
             myse.CheckPhysicsTable();
+
+            //检查表.
+            BP.WF.ReturnWork rw = new ReturnWork();
+            rw.CheckPhysicsTable();
 
             //检查表.
             BP.Sys.GloVar gv = new GloVar();
@@ -1350,50 +1343,6 @@ namespace BP.WF
             BP.Sys.GroupField gf = new GroupField();
             gf.CheckPhysicsTable();
 
-            //if (DBAccess.IsExitsObject("V_FlowStarterBPM") == true)
-            //    DBAccess.RunSQL("DROP VIEW V_FlowStarterBPM");
-
-            //sql = " ";
-            //sql += "CREATE VIEW V_FlowStarterBPM (FK_Flow,FlowName,FK_Emp,OrgNo)";
-            //sql += " AS ";
-
-            ////--按照绑定的岗位计算
-            //sql += " SELECT A.FK_Flow, a.FlowName, C.FK_Emp,C.OrgNo FROM WF_Node a, WF_NodeStation b, Port_DeptEmpStation c  ";
-            //sql += " WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 )  ";
-            //sql += " AND  a.NodeID=b.FK_Node AND B.FK_Station=C.FK_Station   AND (A.DeliveryWay=0 OR A.DeliveryWay=14) ";
-
-            //sql += " UNION ";
-
-            ////--按绑定的部门
-            //sql += " SELECT A.FK_Flow, a.FlowName, C.FK_Emp,C.OrgNo FROM WF_Node a, WF_NodeDept b, Port_DeptEmp c  ";
-            //sql += " WHERE a.NodePosType=0 AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 ) ";
-            //sql += " AND  a.NodeID=b.FK_Node AND B.FK_Dept=C.FK_Dept   AND A.DeliveryWay=1 ";
-
-
-            //sql += " UNION ";
-            ////--按本节点绑定的人员
-            //sql += " SELECT A.FK_Flow, a.FlowName, B.FK_Emp, '' as OrgNo FROM WF_Node A, WF_NodeEmp B  ";
-            //sql += " WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 )  ";
-            //sql += " AND A.NodeID=B.FK_Node  AND A.DeliveryWay=3 ";
-
-            //sql += " UNION ";
-            ////--所有人都可以发起.
-            //sql += " SELECT A.FK_Flow, A.FlowName, B.No AS FK_Emp, B.OrgNo FROM WF_Node A, Port_Emp B  ";
-            //sql += " WHERE A.NodePosType=0 AND ( A.WhoExeIt=0 OR A.WhoExeIt=2 )  AND A.DeliveryWay=4 ";
-            //sql += " UNION ";
-
-            ////-- 按岗位与部门交集计算
-            //sql += " SELECT A.FK_Flow, a.FlowName, E.FK_Emp,E.OrgNo FROM WF_Node A, WF_NodeDept ";
-            //sql += " B, WF_NodeStation C,  Port_DeptEmpStation E ";
-            //sql += " WHERE a.NodePosType=0  AND ( a.WhoExeIt=0 OR a.WhoExeIt=2 )  AND  A.NodeID=B.FK_Node  ";
-            //sql += " AND A.NodeID=C.FK_Node  AND B.FK_Dept=E.FK_Dept  AND C.FK_Station=E.FK_Station AND A.DeliveryWay=9 ";
-
-            //sql += " UNION ";
-            ////--按照设置的组织计算
-            //sql += " SELECT  A.FK_Flow, A.FlowName, C.No as FK_Emp, B.OrgNo FROM WF_Node A, WF_FlowOrg B, Port_Emp C ";
-            //sql += " WHERE A.FK_Flow=B.FlowNo AND B.OrgNo=C.OrgNo ";
-            //sql += " AND  A.DeliveryWay=22 ";
-            //DBAccess.RunSQL(sql); //创建视图.
             #endregion 升级优化集团版的应用
 
 
@@ -1463,7 +1412,7 @@ namespace BP.WF
 
                         Cond operCond = new Cond();
                         operCond.Copy(item);
-                        operCond.MyPK = DBAccess.GenerGUID();
+                        operCond.setMyPK(DBAccess.GenerGUID());
                         operCond.HisDataFrom = ConnDataFrom.CondOperator;
 
                         if (OrAndType == 0)
@@ -1578,7 +1527,7 @@ namespace BP.WF
                 sql = "UPDATE    F SET IsEnableFWC = N. FWCSta  FROM WF_FrmNode F,WF_Node N    WHERE F.FK_Node = N.NodeID AND F.IsEnableFWC =1";
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 sql = "UPDATE WF_FrmNode F  SET (IsEnableFWC)=(SELECT FWCSta FROM WF_Node N WHERE F.FK_Node = N.NodeID AND F.IsEnableFWC =1)";
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                 sql = "UPDATE WF_FrmNode SET IsEnableFWC=(SELECT FWCSta FROM WF_Node N Where N.NodeID=WF_FrmNode.FK_Node AND WF_FrmNode.IsEnableFWC=1)";
 
             DBAccess.RunSQL(sql);
@@ -1594,7 +1543,7 @@ namespace BP.WF
             {
                 string mypk = ext.FK_MapData + "_" + ext.AttrOfOper;
                 MapAttr ma = new MapAttr();
-                ma.MyPK = mypk;
+                ma.setMyPK(mypk);
                 if (ma.RetrieveFromDBSources() == 0)
                 {
                     ext.Delete();
@@ -1611,13 +1560,13 @@ namespace BP.WF
                     continue;
 
                 MapExt extP = new MapExt();
-                extP.MyPK = ext.MyPK + "_FullData";
+                extP.setMyPK(ext.MyPK + "_FullData");
                 int i = extP.RetrieveFromDBSources();
                 if (i == 1)
                     continue;
 
                 extP.ExtType = "FullData";
-                extP.FK_MapData = ext.FK_MapData;
+                extP.setFK_MapData(ext.FK_MapData);
                 extP.AttrOfOper = ext.AttrOfOper;
                 extP.DBType = ext.DBType;
                 extP.Doc = ext.Tag4;
@@ -1632,7 +1581,7 @@ namespace BP.WF
             {
                 string mypk = ext.FK_MapData + "_" + ext.AttrOfOper;
                 MapAttr ma = new MapAttr();
-                ma.MyPK = mypk;
+                ma.setMyPK(mypk);
                 if (ma.RetrieveFromDBSources() == 0)
                 {
                     ext.Delete();
@@ -1653,13 +1602,13 @@ namespace BP.WF
                     continue;
 
                 MapExt extP = new MapExt();
-                extP.MyPK = ext.MyPK + "_FullData";
+                extP.setMyPK(ext.MyPK + "_FullData");
                 int i = extP.RetrieveFromDBSources();
                 if (i == 1)
                     continue;
 
                 extP.ExtType = "FullData";
-                extP.FK_MapData = ext.FK_MapData;
+                extP.setFK_MapData(ext.FK_MapData);
                 extP.AttrOfOper = ext.AttrOfOper;
                 extP.DBType = ext.DBType;
                 extP.Doc = ext.Tag4;
@@ -1680,7 +1629,7 @@ namespace BP.WF
             {
                 string mypk = ext.FK_MapData + "_" + ext.AttrOfOper;
                 MapAttr ma = new MapAttr();
-                ma.MyPK = mypk;
+                ma.setMyPK(mypk);
                 if (ma.RetrieveFromDBSources() == 0)
                 {
                     ext.Delete();
@@ -1696,13 +1645,13 @@ namespace BP.WF
 
 
                 MapExt extP = new MapExt();
-                extP.MyPK = ext.MyPK + "_FullData";
+                extP.setMyPK(ext.MyPK + "_FullData");
                 int i = extP.RetrieveFromDBSources();
                 if (i == 1)
                     continue;
 
                 extP.ExtType = "FullData";
-                extP.FK_MapData = ext.FK_MapData;
+                extP.setFK_MapData(ext.FK_MapData);
                 extP.AttrOfOper = ext.AttrOfOper;
                 extP.DBType = ext.DBType;
                 extP.Doc = ext.Doc;
@@ -1755,22 +1704,6 @@ namespace BP.WF
             string msg = "";
             try
             {
-                #region 升级菜单.
-                //if (DBAccess.IsExitsTableCol("GPM_Menu","UrlExt")==false)
-                //{
-                //}
-                #endregion
-
-                #region 创建缺少的视图 Port_Inc.  @fanleiwei 需要翻译.
-                if (DBAccess.IsExitsObject("Port_Inc") == false)
-                {
-                    sql = "CREATE VIEW Port_Inc AS SELECT * FROM Port_Dept WHERE (No='100' OR No='1060' OR No='1070') ";
-                    DBAccess.RunSQL(sql);
-                }
-
-
-
-                #endregion 创建缺少的视图 Port_Inc.
 
                 #region 升级事件.
                 if (DBAccess.IsExitsTableCol("Sys_FrmEvent", "DoType") == true)
@@ -1825,7 +1758,7 @@ namespace BP.WF
                 #endregion 给city 设置拼音.
 
                 //增加列FlowStars
-                BP.WF.Port.WFEmp wfemp = new Port.WFEmp();
+                BP.WF.Port.WFEmp wfemp = new BP.WF.Port.WFEmp();
                 wfemp.CheckPhysicsTable();
 
                 #region 更新wf_emp. 的字段类型. 2019.06.19
@@ -1860,10 +1793,10 @@ namespace BP.WF
                 //SysEnum se = new SysEnum("FrmType", 1);//NOTE:此处升级时报错，2017-06-13，liuxc
 
                 //2017.5.19 打印模板字段修复
-                BP.WF.Template.BillTemplate bt = new BillTemplate();
+                BP.WF.Template.FrmPrintTemplate bt = new FrmPrintTemplate();
                 bt.CheckPhysicsTable();
-                if (DBAccess.IsExitsTableCol("WF_BillTemplate", "url") == true)
-                    DBAccess.RunSQL("UPDATE WF_BillTemplate SET TempFilePath = Url WHERE TempFilePath IS null");
+                if (DBAccess.IsExitsTableCol("Sys_FrmPrintTemplate", "url") == true)
+                    DBAccess.RunSQL("UPDATE Sys_FrmPrintTemplate SET TempFilePath = Url WHERE TempFilePath IS null");
 
                 //规范升级根目录.
                 DataTable dttree = DBAccess.RunSQLReturnTable("SELECT No FROM Sys_FormTree WHERE ParentNo='-1' ");
@@ -1874,8 +1807,7 @@ namespace BP.WF
                     DBAccess.RunSQL("UPDATE Sys_FormTree SET ParentNo='0' WHERE No='1'");
                 }
 
-                MapAttr myattr = new MapAttr();
-                myattr.CheckPhysicsTable();
+              
 
                 //删除垃圾数据.
                 BP.Sys.MapExt.DeleteDB();
@@ -1945,6 +1877,7 @@ namespace BP.WF
                             case DBType.Oracle:
                             case DBType.Informix:
                             case DBType.PostgreSQL:
+                            case DBType.UX:
                                 DBAccess.RunSQL("ALTER TABLE WF_Node ADD FWCIsShowReturnMsg INTEGER NULL");
                                 break;
                             case DBType.MySQL:
@@ -1981,6 +1914,7 @@ namespace BP.WF
                                 DBAccess.RunSQL("ALTER TABLE Sys_FrmRB ADD AtPara NVARCHAR2(1000) NULL");
                                 break;
                             case DBType.PostgreSQL:
+                            case DBType.UX:
                                 DBAccess.RunSQL("ALTER TABLE Sys_FrmRB ADD AtPara VARCHAR2(1000) NULL");
                                 break;
                             case DBType.MySQL:
@@ -2025,7 +1959,7 @@ namespace BP.WF
                 {
                     string sqls = "";
 
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                     {
                         sqls += "UPDATE Sys_MapExt SET MyPK= ExtType||'_'||FK_Mapdata||'_'||AttrOfOper WHERE ExtType='" + MapExtXmlList.TBFullCtrl + "'";
                         sqls += "@UPDATE Sys_MapExt SET MyPK= ExtType||'_'||FK_Mapdata||'_'||AttrOfOper WHERE ExtType='" + MapExtXmlList.PopVal + "'";
@@ -2051,7 +1985,7 @@ namespace BP.WF
                 }
                 catch (Exception ex)
                 {
-                    Log.DebugWriteError(ex.Message);
+                    BP.DA.Log.DebugWriteError(ex.Message);
                 }
                 #endregion
 
@@ -2099,7 +2033,7 @@ namespace BP.WF
                 #endregion 基础数据更新.
 
                 #region 把节点的toolbarExcel, word 信息放入mapdata 
-                //BP.WF.Template.NodeSheets nss = new Template.NodeSheets();
+                //BP.WF.Template.NodeSheets nss = new NodeSheets();
                 //nss.RetrieveAll();
                 //foreach (BP.WF.Template.NodeSheet ns in nss)
                 //{
@@ -2122,8 +2056,6 @@ namespace BP.WF
                 ff.CheckPhysicsTable();
 
 
-
-
                 SysForm ssf = new SysForm();
                 ssf.CheckPhysicsTable();
 
@@ -2138,13 +2070,13 @@ namespace BP.WF
                 #endregion
 
                 #region 执行sql．
-                DBAccess.RunSQL("delete  from Sys_Enum WHERE EnumKey in ('BillFileType','EventDoType','FormType','BatchRole','StartGuideWay','NodeFormType')");
+                DBAccess.RunSQL("delete  from Sys_Enum WHERE EnumKey in ('PrintFileType','EventDoType','FormType','BatchRole','StartGuideWay','NodeFormType')");
                 DBAccess.RunSQL("UPDATE Sys_FrmSln SET FK_Flow =(SELECT FK_FLOW FROM WF_Node WHERE NODEID=Sys_FrmSln.FK_Node) WHERE FK_Flow IS NULL");
 
                 if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                     DBAccess.RunSQL("UPDATE WF_FrmNode SET MyPK=FK_Frm+'_'+convert(varchar,FK_Node )+'_'+FK_Flow");
 
-                if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                     DBAccess.RunSQL("UPDATE WF_FrmNode SET MyPK=FK_Frm||'_'||FK_Node||'_'||FK_Flow");
 
                 if (SystemConfig.AppCenterDBType == DBType.MySQL)
@@ -2210,6 +2142,7 @@ namespace BP.WF
                             sqlscript = SystemConfig.PathOfData + "Install/SQLScript/InitView_MySQL.sql";
                             break;
                         case DBType.PostgreSQL:
+                        case DBType.UX:
                             sqlscript = SystemConfig.PathOfData + "Install/SQLScript/InitView_PostgreSQL.sql";
                             break;
                         default:
@@ -2424,7 +2357,7 @@ namespace BP.WF
             catch (Exception ex)
             {
                 string err = "问题出处:" + ex.Message + "<hr>" + msg + "<br>详细信息:@" + ex.StackTrace + "<br>@<a href='../DBInstall.htm' >点这里到系统升级界面。</a>";
-                Log.DebugWriteError("系统升级错误:" + err);
+                BP.DA.Log.DebugWriteError("系统升级错误:" + err);
                 return err;
             }
         }
@@ -2479,7 +2412,7 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 检查是否可以安装驰骋BPM系统
+        /// 检查是否可以安装高凌BPM系统
         /// </summary>
         /// <returns></returns>
         public static bool IsCanInstall()
@@ -2590,7 +2523,7 @@ namespace BP.WF
                     DBAccess.RunSQL(sql);
                 }
 
-                string info = "驰骋工作流引擎 - 检查数据库安装权限出现错误:";
+                string info = "高凌工作流引擎 - 检查数据库安装权限出现错误:";
                 info += "\t\n1. 当前登录的数据库帐号，必须有创建、删除视图或者table的权限。";
                 info += "\t\n2. 必须对表有增、删、改、查的权限。 ";
                 info += "\t\n3. 必须有删除创建索引主键的权限。 ";
@@ -2679,6 +2612,7 @@ namespace BP.WF
                         sql = "ALTER TABLE WF_Emp ADD StartFlows VARCHAR(4000) DEFAULT  NULL";
                         break;
                     case DBType.PostgreSQL:
+                    case DBType.UX:
                         sql = "ALTER TABLE WF_Emp ADD StartFlows Text DEFAULT  NULL";
                         break;
                     default:
@@ -2736,6 +2670,8 @@ namespace BP.WF
 
             BP.WF.Data.CH ch = new CH();
             ch.CheckPhysicsTable();
+
+            
             #endregion 先创建表，否则列的顺序就会变化.
 
             #region 1, 创建or修复表
@@ -2877,6 +2813,7 @@ namespace BP.WF
                     sqlscript = SystemConfig.CCFlowAppPath + "WF/Data/Install/SQLScript/InitView_MySQL.sql";
                     break;
                 case DBType.PostgreSQL:
+                case DBType.UX:
                     sqlscript = SystemConfig.CCFlowAppPath + "WF/Data/Install/SQLScript/InitView_PostgreSQL.sql";
                     break;
                 default:
@@ -2934,7 +2871,7 @@ namespace BP.WF
                     {
                         string sql = "";
                         sql = "INSERT INTO Demo_Resume (OID,RefPK,NianYue,GongZuoDanWei,ZhengMingRen,BeiZhu,QT) ";
-                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + emp.UserID + "','200" + myIdx + "-01','济南.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
+                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + emp.UserID + "','200" + myIdx + "-01','成都.高凌" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
                         DBAccess.RunSQL(sql);
                     }
                 }
@@ -2947,7 +2884,7 @@ namespace BP.WF
                     {
                         string sql = "";
                         sql = "INSERT INTO Demo_Resume (OID,RefPK,NianYue,GongZuoDanWei,ZhengMingRen,BeiZhu,QT) ";
-                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + no + "','200" + myIdx + "-01','济南.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
+                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + no + "','200" + myIdx + "-01','成都.高凌" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
                         DBAccess.RunSQL(sql);
                     }
                 }
@@ -2970,7 +2907,7 @@ namespace BP.WF
             {
                 BP.Port.Emp emp = new BP.Port.Emp("admin");
                 BP.Web.WebUser.SignInOfGener(emp);
-                BP.Sys.Glo.WriteLineInfo("开始装载模板...");
+                BP.Sys.Base.Glo.WriteLineInfo("开始装载模板...");
                 string msg = "";
 
                 //装载数据模版.
@@ -2978,10 +2915,10 @@ namespace BP.WF
                 msg = l.Do() as string;
 
 
-                BP.Sys.Glo.WriteLineInfo("装载模板完成。开始修复视图...");
+                BP.Sys.Base.Glo.WriteLineInfo("装载模板完成。开始修复视图...");
 
 
-                BP.Sys.Glo.WriteLineInfo("视图修复完成。");
+                BP.Sys.Base.Glo.WriteLineInfo("视图修复完成。");
             }
 
             if (isInstallFlowDemo == false)
@@ -3060,7 +2997,7 @@ namespace BP.WF
             #endregion 增加图片签名.
 
             //生成拼音，以方便关键字查找.
-            BP.WF.DTS.GenerPinYinForEmp pinyin = new DTS.GenerPinYinForEmp();
+            BP.WF.DTS.GenerPinYinForEmp pinyin = new BP.WF.DTS.GenerPinYinForEmp();
             pinyin.Do();
 
             #region 执行补充的sql, 让外键的字段长度都设置成100.
@@ -3086,7 +3023,7 @@ namespace BP.WF
                     }
                     catch (Exception ex)
                     {
-                        Log.DebugWriteError(ex.Message);
+                        BP.DA.Log.DebugWriteError(ex.Message);
                     }
                 }
             }
@@ -3140,7 +3077,7 @@ namespace BP.WF
                 }
                 catch (Exception ex)
                 {
-                    Log.DefaultLogWriteLineWarning("@尝试向port_dept插入数据失败，应该是视图问题. 技术信息:" + ex.Message);
+                    BP.DA.Log.DebugWriteError("@尝试向port_dept插入数据失败，应该是视图问题. 技术信息:" + ex.Message);
                 }
                 throw new Exception("@没有找到部门树为0个根节点, 有可能是因为您在集成cc的时候，没有遵守cc的规则，部门树的根节点必须是ParentNo=0。");
             }
@@ -3282,7 +3219,7 @@ namespace BP.WF
             //        //    WordDoc.Application.ActiveDocument.InlineShapes[1].Width = img.Width; // 图片宽度
             //        //    WordDoc.Application.ActiveDocument.InlineShapes[1].Height = img.Height; // 图片高度
             //    }
-            //    WordApp.ActiveWindow.ActivePane.Selection.InsertAfter("[驰骋业务流程管理系统 http://ccFlow.org]");
+            //    WordApp.ActiveWindow.ActivePane.Selection.InsertAfter("[高凌业务流程管理系统 http://ccFlow.org]");
             //    WordApp.Selection.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft; // 设置右对齐
             //    WordApp.ActiveWindow.View.SeekView = Word.WdSeekView.wdSeekMainDocument; // 跳出页眉设置
             //    WordApp.Selection.ParagraphFormat.LineSpacing = 15f; // 设置文档的行间距
@@ -3711,6 +3648,8 @@ namespace BP.WF
                 ArrayList al = BP.En.ClassFactory.GetObjects(name);
                 foreach (FlowEventBase en in al)
                 {
+                    if (Htable_FlowFEE.ContainsKey(en.ToString()) == true)
+                        continue;
                     Htable_FlowFEE.Add(en.ToString(), en);
                 }
             }
@@ -3718,7 +3657,7 @@ namespace BP.WF
             if (myen == null)
             {
                 //throw new Exception("@根据类名称获取流程事件实体实例出现错误:" + enName + ",没有找到该类的实体.");
-                Log.DefaultLogWriteLineError("@根据类名称获取流程事件实体实例出现错误:" + enName + ",没有找到该类的实体.");
+                BP.DA.Log.DebugWriteError("@根据类名称获取流程事件实体实例出现错误:" + enName + ",没有找到该类的实体.");
                 return null;
             }
             return myen;
@@ -3756,7 +3695,9 @@ namespace BP.WF
                 Htable_FlowFEE.Clear();
                 foreach (FlowEventBase en in al)
                 {
-                    Htable_FlowFEE.Add(en.ToString(), en);
+                    if (Htable_FlowFEE.Contains(en.ToString()) == true)
+                        continue;
+                    Htable_FlowFEE.Add(en.ToString(), en); 
                 }
             }
 
@@ -4064,7 +4005,7 @@ namespace BP.WF
             Track t = new Track();
             t.WorkID = workID;
             t.FID = fid;
-            t.RDT = DataType.CurrentDataTimess;
+            t.RDT = DataType.CurrentDateTimess;
             t.HisActionType = at;
 
             t.NDFrom = fromNodeID;
@@ -4121,6 +4062,10 @@ namespace BP.WF
             exp = exp.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
             exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
             exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+
+            exp = exp.Replace("@RDT", DataType.CurrentDate);
+            exp = exp.Replace("@DateTime", DataType.CurrentDateTime);
+
 
             string[] strs = exp.Split(' ');
             bool isPass = false;
@@ -4305,6 +4250,9 @@ namespace BP.WF
                             dt = sfdb.RunSQLReturnTable(sql);
                         else
                             dt = DBAccess.RunSQLReturnTable(sql);
+
+                        Attrs attrs = en.EnMap.Attrs;
+
                         if (dt.Rows.Count == 1)
                         {
                             DataRow dr = dt.Rows[0];
@@ -4317,6 +4265,14 @@ namespace BP.WF
                                     case WorkAttr.FID:
                                     case WorkAttr.Rec:
                                     case WorkAttr.MD5:
+                                    case NDXRptBaseAttr.FlowEnder:
+                                    case NDXRptBaseAttr.FlowEnderRDT:
+                                    case NDXRptBaseAttr.AtPara:
+                                    case NDXRptBaseAttr.PFlowNo:
+                                    case NDXRptBaseAttr.PWorkID:
+                                    case NDXRptBaseAttr.PNodeID:
+                                    case NDXRptBaseAttr.BillNo:
+                                    case NDXRptBaseAttr.FlowDaySpan:
                                     case "RefPK":
                                     case WorkAttr.RecText:
                                         continue;
@@ -4324,8 +4280,30 @@ namespace BP.WF
                                         break;
                                 }
 
+                                //如果不包含数据库.
+                                if (attrs.Contains(dc.ColumnName) == false)
+                                    continue;
+
+                                //开始赋值.
                                 if (string.IsNullOrEmpty(en.GetValStringByKey(dc.ColumnName)) || en.GetValStringByKey(dc.ColumnName) == "0")
+                                {
                                     en.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
+                                    continue;
+                                }
+
+                                //获取attr
+                                Entity entity = mattrs.GetEntityByKey("KeyOfEn", dc.ColumnName);
+                                if (entity != null)
+                                {
+                                    MapAttr attr = (MapAttr)entity;
+                                    if (attr.LGType == FieldTypeS.Enum && en.GetValStringByKey(dc.ColumnName).Equals("-1"))
+                                    {
+                                        en.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
+                                        continue;
+                                    }
+                                    continue;
+                                }
+
                             }
                         }
                     }
@@ -4392,9 +4370,9 @@ namespace BP.WF
 
                             //插入数据
                             FrmAttachmentDB attachmentDB = new FrmAttachmentDB();
-                            attachmentDB.MyPK = guid;
+                            attachmentDB.setMyPK(guid);
                             attachmentDB.FK_FrmAttachment = FK_FrmAttachment;
-                            attachmentDB.FK_MapData = attachment.FK_MapData;
+                            attachmentDB.setFK_MapData(attachment.FK_MapData);
                             attachmentDB.RefPKVal = workID.ToString();
                             attachmentDB.FID = 0;//先默认为0
                             attachmentDB.Rec = athData["rec"].ToString();//执行人
@@ -4477,7 +4455,7 @@ namespace BP.WF
                                         gedtl.FID = long.Parse(en.PKVal.ToString());
                                         break;
                                 }
-                                gedtl.RDT = DataType.CurrentDataTime;
+                                gedtl.RDT = DataType.CurrentDateTime;
                                 gedtl.Rec = WebUser.No;
                                 gedtl.Insert();
                             }
@@ -4592,7 +4570,7 @@ namespace BP.WF
                                 gedtl.FID = long.Parse(en.PKVal.ToString());
                                 break;
                         }
-                        gedtl.RDT = DataType.CurrentDataTime;
+                        gedtl.RDT = DataType.CurrentDateTime;
                         gedtl.Rec = WebUser.No;
                         gedtl.Insert();
                     }
@@ -4796,7 +4774,6 @@ namespace BP.WF
             exp = exp.Replace("@WebUser.FK_DeptName;", WebUser.FK_DeptName);
             exp = exp.Replace("@WebUser.FK_Dept;", WebUser.FK_Dept);
 
-
             // 替换没有 ; 的 .
             exp = exp.Replace("@WebUser.No", WebUser.No);
             exp = exp.Replace("@WebUser.Name", WebUser.Name);
@@ -4819,38 +4796,28 @@ namespace BP.WF
                 if (exp.Contains("@") == false)
                     return exp;
 
+
+                bool isHaveFenHao = exp.Contains(';');
+
+
                 foreach (string key in row.Keys)
                 {
                     //值为空或者null不替换
                     if (row[key] == null || row[key].Equals("") == true)
                         continue;
-
+                    if (exp.Contains("@" + key + ";"))
+                    {
+                        //先替换有单引号的.
+                        exp = exp.Replace("'@" + key + ";'", "'" + row[key].ToString() + "'");
+                        //在更新没有单引号的.
+                        exp = exp.Replace("@" + key + ";", row[key].ToString());
+                    }
                     if (exp.Contains("@" + key))
                     {
-                        Attr attr = attrs.GetAttrByKeyOfEn(key);
-                        //是枚举或者外键替换成文本
-                        if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum
-                            || attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
-                        {
-
-                            //这个写法是错误的.
-                            //  exp = exp.Replace("@" + key, row[key + "Text"].ToString());
-
-                            //先替换有单引号的.
-                            exp = exp.Replace("'@" + key + "'", "'" + row[key].ToString() + "'");
-
-                            //在更新没有单引号的.
-                            exp = exp.Replace("@" + key , row[key].ToString());
-
-                        }
-                        else
-                        {
-                            if (attr.MyDataType == DataType.AppString && attr.UIContralType == UIContralType.DDL && attr.MyFieldType == FieldType.Normal)
-                                exp = exp.Replace("@" + key, row[key + "T"].ToString());
-                            else
-                                exp = exp.Replace("@" + key, row[key].ToString());
-                            ;
-                        }
+                        //先替换有单引号的.
+                        exp = exp.Replace("'@" + key + "'", "'" + row[key].ToString() + "'");
+                        //在更新没有单引号的.
+                        exp = exp.Replace("@" + key, row[key].ToString());
                     }
                     //不包含@则返回SQL语句
                     if (exp.Contains("@") == false)
@@ -5460,7 +5427,7 @@ namespace BP.WF
                         return;
 
                     /*如果没有更新到.*/
-                    BP.WF.Port.WFEmp myemp = new Port.WFEmp();
+                    BP.WF.Port.WFEmp myemp = new BP.WF.Port.WFEmp();
                     //myemp.No = mypk;
 
                     myemp.SetValByKey("No", mypk);
@@ -5485,7 +5452,7 @@ namespace BP.WF
                     return;
 
                 /*如果没有更新到.*/
-                BP.WF.Port.WFEmp emp = new Port.WFEmp();
+                BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp();
                 emp.No = BP.Web.WebUser.No;
                 emp.Name = BP.Web.WebUser.Name;
                 emp.FK_Dept = BP.Web.WebUser.FK_Dept;
@@ -6275,6 +6242,7 @@ namespace BP.WF
                         ps.SQL = "SELECT SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID  ";
                         break;
                     case DBType.PostgreSQL:
+                    case DBType.UX:
                         ps.SQL = "SELECT SDTOfNode, TodoEmps FROM WF_GenerWorkFlow  WHERE WorkID=" + dbstr + "WorkID  ";
                         break;
                     default:
@@ -6379,7 +6347,7 @@ namespace BP.WF
             ch.GroupEmps = empids;
 
             // mypk.
-            ch.MyPK = nd.NodeID + "_" + workid + "_" + fid + "_" + WebUser.No;
+            ch.setMyPK(nd.NodeID + "_" + workid + "_" + fid + "_" + WebUser.No);
             #endregion 初始化基础数据.
 
             #region 求计算属性.
@@ -6441,7 +6409,7 @@ namespace BP.WF
                 else
                 {
                     //如果遇到退回的情况就可能涉及到主键重复的问题.
-                    ch.MyPK = DBAccess.GenerGUID();
+                    ch.setMyPK(DBAccess.GenerGUID());
                     ch.Insert();
                 }
             }
@@ -6772,7 +6740,7 @@ namespace BP.WF
                 if (role == StartLimitRole.Day)
                 {
                     /* 仅允许一天发起一次 */
-                    sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE RDT LIKE '" + DataType.CurrentData + "%' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
+                    sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE RDT LIKE '" + DataType.CurrentDate + "%' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
                     if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                     {
                         if (DataType.IsNullOrEmpty(flow.StartLimitPara))
@@ -6992,7 +6960,7 @@ namespace BP.WF
             //开始复制.
             foreach (FrmField item in frms)
             {
-                item.MyPK = frmID + "_" + fk_flow + "_" + currNodeID + "_" + item.KeyOfEn;
+                item.setMyPK(frmID + "_" + fk_flow + "_" + currNodeID + "_" + item.KeyOfEn);
                 item.FK_Node = currNodeID;
                 item.Insert(); // 插入数据库.
             }
@@ -7010,7 +6978,7 @@ namespace BP.WF
             //复制权限
             foreach (FrmAttachment fa in fas)
             {
-                fa.MyPK = fa.FK_MapData + "_" + fa.NoOfObj + "_" + currNodeID;
+                fa.setMyPK(fa.FK_MapData + "_" + fa.NoOfObj + "_" + currNodeID);
                 fa.FK_Node = currNodeID;
                 fa.Insert();
             }

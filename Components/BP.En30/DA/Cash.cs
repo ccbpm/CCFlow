@@ -6,6 +6,7 @@ using BP.En;
 using BP.Pub;
 using BP.Sys;
 using BP.Web;
+using BP.Difference;
 
 namespace BP.DA
 {	 
@@ -230,7 +231,7 @@ namespace BP.DA
                 }
                 else
                 {
-                    if (c.ToString() == "")
+                    if (DataType.IsNullOrEmpty(c.ToString()) )
                         continue;
                     para += c.ToString();
                 }

@@ -137,7 +137,7 @@ namespace BP.Sys
         /// <summary>
         /// 通用从表
         /// </summary>
-        /// <param name="nodeid">节点ID</param>
+        /// <param name="fk_mapdtl">节点ID</param>
         public GEDtl(string fk_mapdtl)
         {
             this.FK_MapDtl = fk_mapdtl;
@@ -145,7 +145,7 @@ namespace BP.Sys
         /// <summary>
         /// 通用从表
         /// </summary>
-        /// <param name="nodeid">节点ID</param>
+        /// <param name="fk_mapdtl">节点ID</param>
         /// <param name="_oid">OID</param>
         public GEDtl(string fk_mapdtl, int _oid)
         {
@@ -253,7 +253,7 @@ namespace BP.Sys
                 return false;
 
             this.Rec = BP.Web.WebUser.No;
-            this.RDT = DataType.CurrentDataTime;
+            this.RDT = DataType.CurrentDateTime;
 
             return base.beforeInsert();
         }

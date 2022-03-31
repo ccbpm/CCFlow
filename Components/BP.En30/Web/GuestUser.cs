@@ -11,6 +11,8 @@ using System.Configuration;
 using BP.Port;
 using BP.Pub;
 using BP.Sys;
+using BP.Difference;
+
 using System.Collections.Generic;
 
 namespace BP.Web
@@ -68,8 +70,10 @@ namespace BP.Web
 
             if (SystemConfig.IsBSsystem)
             {
-                HttpContextHelper.AddCookie("CCS", "GuestNo", guestNo);
-                HttpContextHelper.AddCookie("CCS", "GuestName", HttpUtility.UrlEncode(guestName));
+                Dictionary<string, string> cookieValues = new Dictionary<string, string>();
+                cookieValues.Add("GuestNo", guestNo);
+                cookieValues.Add("GuestName", HttpUtility.UrlEncode(guestName));
+                HttpContextHelper.ResponseCookieAdd(cookieValues, null, "CCS");
             }
 
             return;

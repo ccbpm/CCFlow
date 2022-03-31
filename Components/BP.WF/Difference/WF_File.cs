@@ -4,6 +4,8 @@ using System.IO;
 using System.Text;
 using System.Web;
 using BP.Web;
+using BP.Difference;
+
 
 namespace BP.WF.Difference
 {

@@ -148,7 +148,7 @@ namespace BP.CCBill.Template
             Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FlowNo);
 
             //给当前的流程实例做标记.
-            BP.WF.GenerWorkFlow gwf = new WF.GenerWorkFlow(workid);
+            BP.WF.GenerWorkFlow gwf = new BP.WF.GenerWorkFlow(workid);
             gwf.PFlowNo = this.FrmID;
             gwf.SetPara("FlowNewEntity", "1"); //设置标记，等到流程结束后，自动写入到Dict一笔记录.
             gwf.SetPara("MenuNo", this.No); //菜单编号.
@@ -175,7 +175,7 @@ namespace BP.CCBill.Template
         public string ReSetFrm()
         {
             //如果是发起流程的方法，就要表单的字段复制到，流程的表单上去.
-            BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp handler = new WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp();
+            BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp handler = new BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp();
             //   handler.AddPara
             handler.Imp_CopyFrm("ND" + int.Parse(this.FlowNo + "01"), this.FrmID);
             return "执行成功，您需要转入流程设计器查看表单.";

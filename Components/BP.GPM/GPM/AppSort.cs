@@ -61,7 +61,7 @@ namespace BP.GPM
         /// <summary>
         /// 系统类别
         /// </summary>
-        /// <param name="mypk"></param>
+        /// <param name="no"></param>
         public AppSort(string no)
         {
             this.No = no;
@@ -76,11 +76,9 @@ namespace BP.GPM
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_AppSort");
-                map.DepositaryOfEntity = Depositary.None;
-                map.EnDesc = "系统类别";
-                map.EnType = EnType.App;
-                map.IsAutoGenerNo = false;
+                Map map = new Map("GPM_AppSort", "系统类别");
+                map.setEnType(EnType.App);
+                map.setIsAutoGenerNo(false);
 
                 map.AddTBStringPK(AppSortAttr.No, null, "编号", true, true, 1, 200, 20);
                 map.AddTBString(AppSortAttr.Name, null, "名称", true, false, 0, 300, 20);

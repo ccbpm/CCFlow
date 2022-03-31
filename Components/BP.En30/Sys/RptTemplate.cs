@@ -125,7 +125,11 @@ namespace BP.Sys
 			{
 				this.SetValByKey(RptTemplateAttr.MyPK,value) ; 
 			}
-		}		 
+		}
+		public void setMyPK(string val)
+		{
+			this.SetValByKey(RptTemplateAttr.MyPK, val);
+		}
 		/// <summary>
 		/// D1
 		/// </summary>
@@ -293,7 +297,7 @@ namespace BP.Sys
         {
             this.EnsName = ensName;
             this.FK_Emp = Web.WebUser.No;
-            this.MyPK = Web.WebUser.No + "@" + EnsName;
+            this.setMyPK(Web.WebUser.No + "@" + EnsName);
             try
             {
                 this.Retrieve();

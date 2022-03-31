@@ -140,7 +140,7 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("WF_DocTemplate", "公文模板");
-                //map.Java_SetCodeStruct("6");
+                //map.setCodeStruct("6");
 
                 map.AddTBStringPK(DocTemplateAttr.No, null, "No", true, true, 1, 50, 20);
                 map.AddTBString(DocTemplateAttr.Name, null, "名称", true, false, 0, 200, 20);

@@ -135,7 +135,7 @@ namespace BP.WF.Template
         /// <param name="mypk"></param>
         public FlowTab(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>

@@ -46,11 +46,15 @@ namespace BP.WF
         /// <summary>
         /// 挂起消息
         /// </summary>
-        public const string HungUp = "HangUp";
+        public const string Hungup = "HangUp";
         /// <summary>
         /// 催办消息
         /// </summary>
         public const string DoPress = "DoPress";
+        /// <summary>
+        /// 拒绝挂起的信息
+        /// </summary>
+        public const string RejectHungup = "RejectHungup";
         /// <summary>
         /// 错误信息
         /// </summary>
@@ -180,7 +184,7 @@ namespace BP.WF
         {
 
             SMS sms = new SMS();
-            sms.MyPK = DBAccess.GenerGUID();
+            sms.setMyPK(DBAccess.GenerGUID());
             sms.HisEmailSta = MsgSta.UnRun;
 
             sms.Sender = WebUser.No;
@@ -191,7 +195,7 @@ namespace BP.WF
             sms.MobileInfo = msgDoc;
 
             sms.Sender = BP.Web.WebUser.No;
-            sms.RDT = DataType.CurrentDataTime;
+            sms.RDT = DataType.CurrentDateTime;
 
             sms.MsgFlag = msgFlag; // 消息标志.
             sms.MsgType = msgType; // 消息类型.'
@@ -578,7 +582,7 @@ namespace BP.WF
 
                 mailDoc = DataType.ParseText2Html(mailDoc);
 
-                string displayName = SystemConfig.GetValByKey("SendEmailDisplayName", "驰骋BPM");
+                string displayName = SystemConfig.GetValByKey("SendEmailDisplayName", "高凌BPM");
                 myEmail.From = new System.Net.Mail.MailAddress(emailAddr, displayName, System.Text.Encoding.UTF8);
 
                 myEmail.To.Add(mail);
@@ -610,7 +614,7 @@ namespace BP.WF
             }
             catch (Exception e)
             {
-                Log.DebugWriteError(e.Message);
+                BP.DA.Log.DebugWriteError(e.Message);
                 return false;
             }
 
@@ -719,7 +723,6 @@ namespace BP.WF
                     return;
                 }
 
-
                 if (this.HisEmailSta != MsgSta.UnRun)
                     return;
 
@@ -811,7 +814,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                Log.DebugWriteError("@消息机制没有配置成功." + ex.Message);
+                BP.DA.Log.DebugWriteError("@消息机制没有配置成功." + ex.Message);
             }
             base.afterInsert();
         }

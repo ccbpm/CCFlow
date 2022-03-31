@@ -102,7 +102,7 @@ namespace BP.WF.HttpHandler
                         fn.FK_Node = nd.NodeID;
                         fn.FK_Flow = flowNo;
                         fn.FrmSln = FrmSln.Readonly;
-                        fn.MyPK = fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow;
+                        fn.setMyPK(fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow);
                         //执行保存.
                         fn.Save();
                     }
@@ -124,7 +124,7 @@ namespace BP.WF.HttpHandler
                     fn.FK_Node = nd.NodeID;
                     fn.FK_Flow = flowNo;
                     fn.FrmSln = FrmSln.Readonly;
-                    fn.MyPK = fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow;
+                    fn.setMyPK(fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow);
                     //执行保存.
                     fn.Save();
                     nd.HisFormType = NodeFormType.FoolTruck;
@@ -150,13 +150,21 @@ namespace BP.WF.HttpHandler
                     FrmNode fn = new FrmNode();
                     fn.FK_Frm = nd.NodeFrmID;
                     if (nd.IsStartNode == true)
+                    {
                         fn.IsEnableFWC = FrmWorkCheckSta.Disable;
+                        fn.FrmSln = FrmSln.Default;
+                    }
+                       
                     else
+                    {
                         fn.IsEnableFWC = FrmWorkCheckSta.Enable;
+                        fn.FrmSln = FrmSln.Readonly;
+                    }
+                        
                     fn.FK_Node = nd.NodeID;
                     fn.FK_Flow = flowNo;
                     fn.FrmSln = FrmSln.Readonly;
-                    fn.MyPK = fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow;
+                    fn.setMyPK(fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow);
                     //执行保存.
                     fn.Save(); 
                 }

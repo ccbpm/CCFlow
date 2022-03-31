@@ -6,6 +6,7 @@ using BP.Web;
 using BP.Sys;
 using System.Text;
 using System.Security.Cryptography;
+using BP.Difference;
 
 
 namespace BP.Tools

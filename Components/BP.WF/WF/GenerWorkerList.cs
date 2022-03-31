@@ -118,15 +118,15 @@ namespace BP.WF
         /// <summary>
         /// 挂起时间
         /// </summary>
-        public const string DTOfHungUp = "DTOfHungUp";
+        public const string DTOfHungup = "DTOfHungup";
         /// <summary>
         /// 解除挂起时间
         /// </summary>
-        public const string DTOfUnHungUp = "DTOfUnHungUp";
+        public const string DTOfUnHungup = "DTOfUnHungup";
         /// <summary>
         /// 挂起次数
         /// </summary>
-        public const string HungUpTimes = "HungUpTimes";
+        public const string HungupTimes = "HungupTimes";
         /// <summary>
         /// 外部用户编号
         /// </summary>
@@ -443,7 +443,7 @@ namespace BP.WF
             set
             {
                 //this.SetValByKey(GenerWorkerListAttr.RDT, value);
-                this.SetValByKey(GenerWorkerListAttr.RDT, DataType.CurrentDataTimess);
+                this.SetValByKey(GenerWorkerListAttr.RDT, DataType.CurrentDateTimess);
 
             }
         }
@@ -560,43 +560,43 @@ namespace BP.WF
         /// <summary>
         /// 挂起时间
         /// </summary>
-        public string DTOfHungUp
+        public string DTOfHungup
         {
             get
             {
-                return this.GetValStringByKey(GenerWorkerListAttr.DTOfHungUp);
+                return this.GetValStringByKey(GenerWorkerListAttr.DTOfHungup);
             }
             set
             {
-                this.SetValByKey(GenerWorkerListAttr.DTOfHungUp, value);
+                this.SetValByKey(GenerWorkerListAttr.DTOfHungup, value);
             }
         }
         /// <summary>
         /// 解除挂起时间
         /// </summary>
-        public string DTOfUnHungUp
+        public string DTOfUnHungup
         {
             get
             {
-                return this.GetValStringByKey(GenerWorkerListAttr.DTOfUnHungUp);
+                return this.GetValStringByKey(GenerWorkerListAttr.DTOfUnHungup);
             }
             set
             {
-                this.SetValByKey(GenerWorkerListAttr.DTOfUnHungUp, value);
+                this.SetValByKey(GenerWorkerListAttr.DTOfUnHungup, value);
             }
         }
         /// <summary>
         /// 挂起次数
         /// </summary>
-        public int HungUpTimes
+        public int HungupTimes
         {
             get
             {
-                return this.GetValIntByKey(GenerWorkerListAttr.HungUpTimes);
+                return this.GetValIntByKey(GenerWorkerListAttr.HungupTimes);
             }
             set
             {
-                this.SetValByKey(GenerWorkerListAttr.HungUpTimes, value);
+                this.SetValByKey(GenerWorkerListAttr.HungupTimes, value);
             }
         }
         #endregion 
@@ -680,14 +680,13 @@ namespace BP.WF
                 //优先级，2012-06-15 为青岛用户增加。
                 map.AddTBInt(GenerWorkFlowAttr.PRI, 1, "优先级", true, true);
 
-
                 //催办次数. 为亿阳信通加.
                 map.AddTBInt(GenerWorkerListAttr.PressTimes, 0, "催办次数", true, false);
 
                 // 挂起
-                map.AddTBDateTime(GenerWorkerListAttr.DTOfHungUp,null, "挂起时间", false, false);
-                map.AddTBDateTime(GenerWorkerListAttr.DTOfUnHungUp,null, "预计解除挂起时间", false, false);
-                map.AddTBInt(GenerWorkerListAttr.HungUpTimes, 0, "挂起次数", true, false);
+                map.AddTBDateTime(GenerWorkerListAttr.DTOfHungup,null, "挂起时间", false, false);
+                map.AddTBDateTime(GenerWorkerListAttr.DTOfUnHungup,null, "预计解除挂起时间", false, false);
+                map.AddTBInt(GenerWorkerListAttr.HungupTimes, 0, "挂起次数", true, false);
 
                 //外部用户. 203-08-30
                 map.AddTBString(GenerWorkerListAttr.GuestNo, null, "外部用户编号", true, false, 0, 30, 100);
@@ -722,7 +721,7 @@ namespace BP.WF
             //this.Sender = BP.Web.WebUser.No;
 
             //增加记录日期.
-            this.SetValByKey(GenerWorkerListAttr.RDT,  DataType.CurrentDataTimess);
+            this.SetValByKey(GenerWorkerListAttr.RDT,  DataType.CurrentDateTimess);
 
             return base.beforeInsert();
         }
@@ -813,8 +812,8 @@ namespace BP.WF
                 return;
 
             GenerWorkerList wl = (GenerWorkerList)this[0];
-            string[] emps = rm.Emps.Split('@');
-            foreach (string emp in emps)
+            string[] myEmpStrs = rm.Emps.Split('@');
+            foreach (string emp in myEmpStrs)
             {
                 if (emp==null || emp=="")
                     continue;
@@ -826,7 +825,7 @@ namespace BP.WF
                 mywl.Copy(wl);
                 mywl.IsEnable = false;
                 mywl.FK_Emp = emp;
-                WF.Port.WFEmp myEmp = new Port.WFEmp(emp);
+                WF.Port.WFEmp myEmp = new BP.WF.Port.WFEmp(emp);
                 mywl.FK_EmpText = myEmp.Name;
                 try
                 {

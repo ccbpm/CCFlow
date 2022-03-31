@@ -131,6 +131,25 @@ namespace BP.WF.Template
                 return this._enMap;
             }
         }
+        public string DoCreateSameLevelFormNodeMy(string name)
+        {
+            EntityTree en = this.DoCreateSameLevelNode(name);
+            en.Name = name;
+            en.Update();
+            return en.No;
+        }
+        /// <summary>
+        /// 创建下级目录.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string DoCreateSubFormNodeMy(string name)
+        {
+            EntityTree en = this.DoCreateSubNode(name);
+            en.Name = name;
+            en.Update();
+            return en.No;
+        }
         #endregion 系统方法.
 
         /// <summary>

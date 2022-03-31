@@ -98,7 +98,7 @@ namespace BP.WF.Template
         /// <param name="mypk"></param>
         public ExtJobSchedule(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>

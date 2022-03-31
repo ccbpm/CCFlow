@@ -295,12 +295,12 @@ namespace BP.WF.HttpHandler
             var atts = this.GetRequestVal("attrs");
             try
             {
-                MapAttrs attrs = new MapAttrs(FK_MapData);
+                MapAttrs mattrs = new MapAttrs(FK_MapData);
                 MapAttr att = null;
                 //更新每个字段的显示属性
-                foreach (MapAttr attr in attrs)
+                foreach (MapAttr attr in mattrs)
                 {
-                    att = attrs.GetEntityByKey(MapAttrAttr.FK_MapData, FK_MapData, MapAttrAttr.KeyOfEn, attr.KeyOfEn) as MapAttr;
+                    att = mattrs.GetEntityByKey(MapAttrAttr.FK_MapData, FK_MapData, MapAttrAttr.KeyOfEn, attr.KeyOfEn) as MapAttr;
                     if (atts.Contains("," + attr.KeyOfEn + ","))
                         att.IsEnableInAPP = true;
                     else
@@ -341,8 +341,8 @@ namespace BP.WF.HttpHandler
                 obj.addOrderBy(MapDataAttr.Idx);
                 obj.DoQuery();
 
-                MapAttrs attrs = new MapAttrs();
-                obj = new QueryObject(attrs);
+                MapAttrs mattrs = new MapAttrs();
+                obj = new QueryObject(mattrs);
                 obj.AddWhere(MapAttrAttr.FK_MapData, FK_MapData);
                 obj.addAnd();
                 obj.AddWhere(MapAttrAttr.UIVisible, true);
@@ -437,7 +437,7 @@ namespace BP.WF.HttpHandler
                     #endregion
 
                     #region //字段排序复制
-                    foreach (MapAttr attr in attrs)
+                    foreach (MapAttr attr in mattrs)
                     {
                         //排除主键
                         if (attr.IsPK == true)
@@ -452,7 +452,7 @@ namespace BP.WF.HttpHandler
                         if (group == null)
                         {
                             //源字段分组为空，则目标字段分组置为0
-                            tattr.GroupID = 0;
+                            tattr.setGroupID(0);
                         }
                         else
                         {
@@ -483,7 +483,7 @@ namespace BP.WF.HttpHandler
                         idxAttrs.Add(attr.KeyOfEn);
                     }
 
-                    foreach (MapAttr attr in tattrs)
+                    foreach (MapAttr attr in mattrs)
                     {
                         //排除主键
                         if (attr.IsPK == true)
@@ -623,7 +623,7 @@ namespace BP.WF.HttpHandler
                             if (group == null)
                             {
                                 //源字段分组为空，则目标字段分组置为0
-                                tattr.GroupID = 0;
+                                tattr.setGroupID(0);
                             }
                             else
                             {
@@ -732,10 +732,10 @@ namespace BP.WF.HttpHandler
                 string frmModel = this.GetValFromFrmByKey("RB_Frm");
                 if (frmModel == "0")
                 {
-                    nd.FormType = NodeFormType.FreeForm;
+                    nd.FormType = NodeFormType.Develop;
                     nd.DirectUpdate();
 
-                    md.HisFrmType = BP.Sys.FrmType.FreeFrm;
+                    md.HisFrmType = BP.Sys.FrmType.Develop;
                     md.Update();
                 }
                 else
@@ -806,7 +806,7 @@ namespace BP.WF.HttpHandler
                     nd.FormType = NodeFormType.SheetTree;
                     nd.DirectUpdate();
 
-                    md.HisFrmType = BP.Sys.FrmType.FreeFrm; //同时更新表单表住表.
+                    md.HisFrmType = BP.Sys.FrmType.FoolForm; //同时更新表单表住表.
                     md.Update();
                 }
                 else
@@ -814,7 +814,7 @@ namespace BP.WF.HttpHandler
                     nd.FormType = NodeFormType.DisableIt;
                     nd.DirectUpdate();
 
-                    md.HisFrmType = BP.Sys.FrmType.FreeFrm; //同时更新表单表住表.
+                    md.HisFrmType = BP.Sys.FrmType.FoolForm; //同时更新表单表住表.
                     md.Update();
                 }
             }
@@ -828,8 +828,8 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                MapAttrs attrs = new MapAttrs();
-                QueryObject qo = new QueryObject(attrs);
+                MapAttrs mattrs = new MapAttrs();
+                QueryObject qo = new QueryObject(mattrs);
                 qo.AddWhere(MapAttrAttr.FK_MapData, FK_MapData);//添加查询条件
                 qo.addAnd();
                 qo.AddWhere(MapAttrAttr.UIVisible, true);
@@ -837,7 +837,7 @@ namespace BP.WF.HttpHandler
                 qo.DoQuery();//执行查询
                 int rowIdx = 0;
                 //执行更新
-                foreach (MapAttr mapAttr in attrs)
+                foreach (MapAttr mapAttr in mattrs)
                 {
                     mapAttr.Idx = rowIdx;
                     mapAttr.DirectUpdate();

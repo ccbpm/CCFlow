@@ -241,6 +241,14 @@ namespace BP.WF
                 this.SetValByKey(WorkAttr.Rec, value);
             }
         }
+
+        public int FrmVer
+        {
+            get
+            {
+                return this.GetParaInt("FrmVer");
+            }
+        }
         private Node _HisNode = null;
         /// <summary>
         /// 工作的节点.
@@ -271,7 +279,7 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 从表.
+        /// 附件.
         /// </summary>
         public FrmAttachments HisFrmAttachments
         {

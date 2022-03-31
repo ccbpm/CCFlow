@@ -72,7 +72,7 @@ namespace BP.WF.DTS
             #region 向预警人员发消息.
             // 向预警的人员发消息.
             Node nd = new Node();
-            BP.WF.Port.WFEmp emp = new Port.WFEmp();
+            BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp();
             foreach (DataRow dr in dt.Rows)
             {
                 Int64 workid = Int64.Parse(dr["WorkID"].ToString());

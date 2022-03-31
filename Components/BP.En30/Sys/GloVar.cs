@@ -174,7 +174,7 @@ namespace BP.Sys
         /// <summary>
         /// 全局变量
         /// </summary>
-        /// <param name="mypk"></param>
+        /// <param name="no"></param>
         public GloVar(string no)
         {
             this.No = no;
@@ -400,9 +400,9 @@ namespace BP.Sys
         public GloVars(string fk_mapdata)
         {
             if (SystemConfig.IsDebug)
-                this.Retrieve(FrmLineAttr.FK_MapData, fk_mapdata);
+                this.Retrieve(MapAttrAttr.FK_MapData, fk_mapdata);
             else
-                this.RetrieveFromCash(FrmLineAttr.FK_MapData, (object)fk_mapdata);
+                this.RetrieveFromCash(MapAttrAttr.FK_MapData, (object)fk_mapdata);
         }
         /// <summary>
         /// 得到它的 Entity

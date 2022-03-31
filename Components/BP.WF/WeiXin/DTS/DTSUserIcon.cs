@@ -74,7 +74,7 @@ namespace BP.GPM.WeiXin
 
                     //大图标
                     string headimgurl = userInfo.avatar;
-                    string UserIcon = savePath + "\\" + userInfo.userid + "Biger.png";
+                    string UserIcon = savePath + "/" + userInfo.userid + "Biger.png";
                     DataType.HttpDownloadFile(headimgurl, UserIcon);
 
                     //小图标

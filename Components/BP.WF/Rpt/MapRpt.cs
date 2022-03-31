@@ -168,22 +168,7 @@ namespace BP.WF.Rpt
             }
         }
    
-        /// <summary>
-        /// 标签
-        /// </summary>
-        public FrmLabs FrmLabs
-        {
-            get
-            {
-                FrmLabs obj = this.GetRefObject("FrmLabs") as FrmLabs;
-                if (obj == null)
-                {
-                    obj = new FrmLabs(this.No);
-                    this.SetRefObject("FrmLabs", obj);
-                }
-                return obj;
-            }
-        }
+      
         /// <summary>
         /// 图片
         /// </summary>

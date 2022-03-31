@@ -177,7 +177,7 @@ namespace BP.Sys
                     return this._enMap;
 
                 Map map = new Map("Sys_EnVerDtl", "版本明细");
-                map.EnType = EnType.Dot2Dot; //实体类型，admin 系统管理员表，PowerAble 权限管理表,也是用户表,你要想把它加入权限管理里面请在这里设置。。
+                map.setEnType(EnType.Dot2Dot); //实体类型，admin 系统管理员表，PowerAble 权限管理表,也是用户表,你要想把它加入权限管理里面请在这里设置。。
                 map.IndexField = EnVerDtlAttr.FrmID;
 
                 map.AddMyPK();

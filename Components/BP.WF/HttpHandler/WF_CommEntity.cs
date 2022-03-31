@@ -81,7 +81,7 @@ namespace BP.WF.HttpHandler
                             if (val == "-1")
                                 item.SetValByKey(attr.Key, 0);
                             else
-                                item.SetValByKey(attr.Key, 1);
+                                item.SetValByKey(attr.Key, val);
                             continue;
                         }
                     }
@@ -198,6 +198,7 @@ namespace BP.WF.HttpHandler
                 md.SetPara("IsDelete", "1");
             if (dtl.HisUAC.IsImp)
                 md.SetPara("IsImp", "1");
+         
             #endregion 加入权限信息.
 
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
@@ -209,29 +210,16 @@ namespace BP.WF.HttpHandler
             #endregion 字段属性.
 
             #region 把外键与枚举放入里面去.
-            foreach (DataRow dr in sys_MapAttrs.Rows)
+            foreach (MapAttr mapAttr in attrs)
             {
-                string uiBindKey = dr["UIBindKey"].ToString();
-                string lgType = dr["LGType"].ToString();
-                if (lgType.Equals("2")==false)
+                string uiBindKey = mapAttr.UIBindKey;
+                if (mapAttr.LGType!=FieldTypeS.FK)
                     continue;
-
-                string UIIsEnable = dr["UIVisible"].ToString();
-                if (UIIsEnable == "0")
+                if (mapAttr.UIIsEnable==false)
                     continue;
 
                 if (DataType.IsNullOrEmpty(uiBindKey) == true)
-                {
-                    string myPK = dr["MyPK"].ToString();
-                    /*如果是空的*/
-                    //   throw new Exception("@属性字段数据不完整，流程:" + fl.No + fl.Name + ",节点:" + nd.NodeID + nd.Name + ",属性:" + myPK + ",的UIBindKey IsNull ");
-                }
-
-                // 检查是否有下拉框自动填充。
-                string keyOfEn = dr["KeyOfEn"].ToString();
-                string fk_mapData = dr["FK_MapData"].ToString();
-
-
+                    continue;
                 // 判断是否存在.
                 if (ds.Tables.Contains(uiBindKey) == true)
                     continue;
@@ -264,11 +252,23 @@ namespace BP.WF.HttpHandler
                     DataTable dt = DBAccess.RunSQLReturnTable(sqlBindKey);
                     dt.TableName = attr.Key;
 
-                    //@杜. 翻译当前部分.
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    if (SystemConfig.AppCenterDBFieldCaseModel!= FieldCaseModel.None)
                     {
-                        dt.Columns["NO"].ColumnName = "No";
-                        dt.Columns["NAME"].ColumnName = "Name";
+                        foreach (DataColumn col in dt.Columns)
+                        {
+                            string colName = col.ColumnName.ToLower();
+                            switch (colName)
+                            {
+                                case "no":
+                                    col.ColumnName = "No";
+                                    break;
+                                case "name":
+                                    col.ColumnName = "Name";
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
                     }
 
                     ds.Tables.Add(dt);
@@ -291,14 +291,32 @@ namespace BP.WF.HttpHandler
                 string sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
                 DataTable dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
                 dtEnum.TableName = "Sys_Enum";
-
-                if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
                 {
-                    dtEnum.Columns["MYPK"].ColumnName = "MyPK";
-                    dtEnum.Columns["LAB"].ColumnName = "Lab";
-                    dtEnum.Columns["ENUMKEY"].ColumnName = "EnumKey";
-                    dtEnum.Columns["INTKEY"].ColumnName = "IntKey";
-                    dtEnum.Columns["LANG"].ColumnName = "Lang";
+                    foreach (DataColumn col in dtEnum.Columns)
+                    {
+                        string colName = col.ColumnName.ToLower();
+                        switch (colName)
+                        {
+                            case "mypk":
+                                col.ColumnName = "MyPK";
+                                break;
+                            case "lab":
+                                col.ColumnName = "Lab";
+                                break;
+                            case "enumkey":
+                                col.ColumnName = "EnumKey";
+                                break;
+                            case "intkey":
+                                col.ColumnName = "IntKey";
+                                break;
+                            case "lang":
+                                col.ColumnName = "Lang";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                 }
                 ds.Tables.Add(dtEnum);
             }
@@ -316,8 +334,8 @@ namespace BP.WF.HttpHandler
             string name = "数据导出";
             if (refPKVal.Contains("/") == true)
                 refPKVal = refPKVal.Replace("/", "_");
-            string filename = refPKVal + "_" + en.ToString() +"_"+DataType.CurrentData+ "_" + name  +".xls";
-            string filePath = ExportDGToExcel(dtls.ToDataTableField(), en, name,null,filename);
+            string filename = refPKVal + "_" + en.ToString() +"_"+DataType.CurrentDate+ "_" + name  +".xls";
+            string filePath = BP.Tools.ExportExcelUtil.ExportDGToExcel(dtls.ToDataTableField(), en, name,null,filename);
 
             filePath = SystemConfig.PathOfTemp + filename;
 
@@ -340,13 +358,13 @@ namespace BP.WF.HttpHandler
             System.IO.File.Copy(filePath, tempPath + filename, true);
 
             //生成压缩文件
-            string zipFile = SystemConfig.PathOfTemp + refPKVal + "_" + en.ToString() + "_" + DataType.CurrentData + "_" + name + ".zip";
+            string zipFile = SystemConfig.PathOfTemp + refPKVal + "_" + en.ToString() + "_" + DataType.CurrentDate + "_" + name + ".zip";
 
             System.IO.FileInfo finfo = new System.IO.FileInfo(zipFile);
 
             (new FastZip()).CreateZip(finfo.FullName, tempPath, true, "");
 
-            return "/DataUser/Temp/" + refPKVal + "_" + en.ToString() + "_" + DataType.CurrentData + "_" + name + ".zip";
+            return "/DataUser/Temp/" + refPKVal + "_" + en.ToString() + "_" + DataType.CurrentDate + "_" + name + ".zip";
         }
         #endregion 从表.
 
@@ -605,7 +623,7 @@ namespace BP.WF.HttpHandler
                         dt.TableName = attr.Key;
 
                         //@杜. 翻译当前部分.
-                        if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                        if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                         {
                             dt.Columns["NO"].ColumnName = "No";
                             dt.Columns["NAME"].ColumnName = "Name";
@@ -646,7 +664,7 @@ namespace BP.WF.HttpHandler
                     }
                     dtEnum.TableName = "Sys_Enum";
 
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                     {
                         dtEnum.Columns["MYPK"].ColumnName = "MyPK";
                         dtEnum.Columns["LAB"].ColumnName = "Lab";
@@ -1047,16 +1065,16 @@ namespace BP.WF.HttpHandler
             string ensOfM = this.GetRequestVal("EnsOfM"); //多的实体.
 
             //如果是部门人员信息，关联的有兼职部门.
-            string emp1s = BP.Sys.Glo.DealClassEntityName("BP.Port.Emps");
-            string emp2s = BP.Sys.Glo.DealClassEntityName("BP.GPM.Emps");
+            string emp1s = BP.Sys.Base.Glo.DealClassEntityName("BP.Port.Emps");
+            string emp2s = BP.Sys.Base.Glo.DealClassEntityName("BP.GPM.Emps");
 
             if ((ensOfM.Equals(emp1s) == true ||ensOfM.Equals(emp2s) ==true) 
                 && defaultGroupAttrKey.Equals("FK_Dept") == true)
             {
-                string sql = "Select  E." + BP.Sys.Glo.UserNo + " , E.Name ,D.Name AS FK_DeptText,-1 AS TYPE  From Port_DeptEmp DE, Port_Emp E,Port_Dept D Where DE.FK_Emp = E.No And DE.FK_Dept = D.No AND  D.No='" + key+"'";
+                string sql = "Select  E." + BP.Sys.Base.Glo.UserNo + " , E.Name ,D.Name AS FK_DeptText,-1 AS TYPE  From Port_DeptEmp DE, Port_Emp E,Port_Dept D Where DE.FK_Emp = E.No And DE.FK_Dept = D.No AND  D.No='" + key+"'";
                 
                 sql += " union ";
-                sql += "select  E."+ BP.Sys.Glo.UserNo+ " , E.Name ,D.Name AS FK_DeptText,0 AS TYPE From Port_Emp E,Port_Dept D Where E.Fk_Dept = D.No AND  D.No='" + key + "' ORDER BY TYPE DESC";
+                sql += "select  E."+ BP.Sys.Base.Glo.UserNo+ " , E.Name ,D.Name AS FK_DeptText,0 AS TYPE From Port_Emp E,Port_Dept D Where E.Fk_Dept = D.No AND  D.No='" + key + "' ORDER BY TYPE DESC";
                 DataTable dtt = DBAccess.RunSQLReturnTable(sql);
                 DataTable dt = dtt.Clone();
                 string emps = "";
@@ -1149,7 +1167,7 @@ namespace BP.WF.HttpHandler
         {
             string dot2DotEnsName = this.GetRequestVal("Dot2DotEnsName");
             string defaultGroupAttrKey = this.GetRequestVal("DefaultGroupAttrKey");
-            dot2DotEnsName = BP.Sys.Glo.DealClassEntityName(dot2DotEnsName);
+            dot2DotEnsName = BP.Sys.Base.Glo.DealClassEntityName(dot2DotEnsName);
             //string enName = this.GetRequestVal("EnName");
             Entity en = ClassFactory.GetEn(this.EnName);
             en.PKVal = this.PKVal;
@@ -1196,6 +1214,9 @@ namespace BP.WF.HttpHandler
                 rootNo = WebUser.FK_Dept;
             if (rootNo.Equals("@WebUser.OrgNo") || rootNo.Equals("WebUser.OrgNo"))
                 rootNo = WebUser.OrgNo;
+
+            if (DataType.IsNullOrEmpty(rootNo) == true)
+                rootNo = "0";
 
             #region 生成树目录.
             string ensOfM = this.GetRequestVal("EnsOfM"); //多的实体.

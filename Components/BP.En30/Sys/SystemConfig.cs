@@ -35,6 +35,8 @@ using MySql.Data.MySqlClient;
 //using IBM.Data.Informix;
 using BP.DA;
 using BP.Web;
+using BP.Difference;
+
 
 namespace BP.Sys
 {
@@ -112,7 +114,7 @@ namespace BP.Sys
             get
             {
                 string str = SystemConfig.AppSettings["FTPServerType"];
-                return BP.Sys.Glo.String_JieMi(str);
+                return BP.Sys.Base.Glo.String_JieMi(str);
             }
         }
         /// <summary>
@@ -123,7 +125,7 @@ namespace BP.Sys
             get
             {
                 string str = SystemConfig.AppSettings["FTPServerIP"];
-                return BP.Sys.Glo.String_JieMi(str);
+                return BP.Sys.Base.Glo.String_JieMi(str);
             }
         }
         /// <summary>
@@ -134,7 +136,7 @@ namespace BP.Sys
             get
             {
                 string str = SystemConfig.AppSettings["FTPPort"];
-                return BP.Sys.Glo.String_JieMi(str);
+                return BP.Sys.Base.Glo.String_JieMi(str);
             }
         }
         /// <summary>
@@ -145,7 +147,7 @@ namespace BP.Sys
             get
             {
                 string str = SystemConfig.AppSettings["FTPUserNo"];
-                return BP.Sys.Glo.String_JieMi(str);
+                return BP.Sys.Base.Glo.String_JieMi(str);
             }
         }
         /// <summary>
@@ -156,7 +158,7 @@ namespace BP.Sys
             get
             {
                 string str = SystemConfig.AppSettings["FTPUserPassword"];
-                return BP.Sys.Glo.String_JieMi(str);
+                return BP.Sys.Base.Glo.String_JieMi(str);
             }
         }
         /// <summary>
@@ -169,7 +171,7 @@ namespace BP.Sys
                 string str = SystemConfig.AppSettings["FTPServerPort"];
                 if (DataType.IsNullOrEmpty(str) == true)
                     str = "21";
-                str = BP.Sys.Glo.String_JieMi(str);
+                str = BP.Sys.Base.Glo.String_JieMi(str);
                 return int.Parse(str);
             }
         }
@@ -205,7 +207,7 @@ namespace BP.Sys
         /// <summary>
         /// 运行的平台为转换java平台使用.
         /// </summary>
-        public static Plant Plant = Sys.Plant.CSharp;
+        public static Plant Plant = BP.Sys.Plant.CSharp;
         /// <summary>
         /// 读取配置文件
         /// </summary>
@@ -861,6 +863,13 @@ namespace BP.Sys
                 return AppSettings["CustomerURL"];
             }
         }
+        public static string Domain
+        {
+            get
+            {
+                return AppSettings["Domain"];
+            }
+        }
         /// <summary>
         /// 客户简称
         /// </summary>
@@ -1412,7 +1421,8 @@ namespace BP.Sys
                     case DBType.Oracle:
                         return FieldCaseModel.UpperCase;
                     case DBType.PostgreSQL:
-                        return FieldCaseModel.Lowercase;
+                    case DBType.UX:
+                        return FieldCaseModel.Lowercase; //小写的.
                     default:
                         return FieldCaseModel.None;
                 }
@@ -1442,6 +1452,8 @@ namespace BP.Sys
                         return DBType.Access;
                     case "Informix":
                         return DBType.Informix;
+                    case "UX":
+                        return DBType.UX;
                     default:
                         return DBType.Oracle;
                 }
@@ -1493,6 +1505,16 @@ namespace BP.Sys
                         myconn.ConnectionString = SystemConfig.AppCenterDSN;
                         myconn.Open();
                         _AppCenterDBDatabase = myconn.Database;
+                        // PostgreSQL.my
+                        //PostgreSQL  SqlConnection connMySQL = new MySqlConnection(SystemConfig.AppCenterDSN);
+                        // _AppCenterDBDatabase = connMySQL.Database;
+                        break;
+                    case DA.DBType.UX:
+
+                        Nuxsql.NuxsqlConnection mycon2n = new Nuxsql.NuxsqlConnection();
+                        mycon2n.ConnectionString = SystemConfig.AppCenterDSN;
+                        mycon2n.Open();
+                        _AppCenterDBDatabase = mycon2n.Database;
                         // PostgreSQL.my
                         //PostgreSQL  SqlConnection connMySQL = new MySqlConnection(SystemConfig.AppCenterDSN);
                         // _AppCenterDBDatabase = connMySQL.Database;

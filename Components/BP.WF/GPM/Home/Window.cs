@@ -122,7 +122,7 @@ namespace BP.GPM.Home
         /// <param name="mypk"></param>
         public Window(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -134,11 +134,8 @@ namespace BP.GPM.Home
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_Window");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "信息块";
-                map.EnType = EnType.Sys;
+                Map map = new Map("GPM_Window", "信息块");
+                map.setEnType(EnType.Sys);
 
                 //主键.
                 map.AddMyPK(false);
@@ -257,7 +254,7 @@ namespace BP.GPM.Home
                 {
                     /*不存在，就Insrt.*/
                     window = new Window();
-                    window.MyPK = en.No + "_" + BP.Web.WebUser.No;
+                    window.setMyPK(en.No + "_" + BP.Web.WebUser.No);
                     window.EmpNo = BP.Web.WebUser.No;
                     window.WindowTemplateNo = en.No;
                     window.IsEnable = true;

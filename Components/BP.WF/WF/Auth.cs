@@ -172,7 +172,7 @@ namespace BP.WF
 
                 Map map = new Map("WF_Auth", "授权");
                 //map.IsView = true;
-             //   map.EnType = EnType.View;
+             //   map.setEnType(EnType.View;
                 //为啥设置为视图？导致创建表出错.
 
                 map.AddMyPK();
@@ -197,7 +197,7 @@ namespace BP.WF
 
         protected override bool beforeInsert()
         {
-            //this.MyPK = this.Auther + "_" + this.AuthType + "_" + this.AutherToEmpNo;
+            //this.setMyPK(this.Auther + "_" + this.AuthType + "_" + this.AutherToEmpNo;
             return base.beforeInsert();
         }
     }

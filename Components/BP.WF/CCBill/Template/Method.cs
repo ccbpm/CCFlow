@@ -319,7 +319,6 @@ namespace BP.CCBill.Template
                 map.AddDDLSysEnum(MethodAttr.RefMethodType, 0, "方法类型", true, false, MethodAttr.RefMethodType,
                 "@0=功能@1=模态窗口打开@2=新窗口打开@3=右侧窗口打开");
 
-
                 #region 显示位置控制.
                 map.AddBoolean(MethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);
                 map.AddBoolean(MethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
@@ -341,7 +340,6 @@ namespace BP.CCBill.Template
                 map.AddDDLSysEnum(MethodAttr.MethodDocTypeOfFunc, 0, "内容类型", true, false, "MethodDocTypeOfFunc",
                 "@0=SQL@1=URL@2=JavaScript@3=业务单元");
                 #endregion 对功能有效
-
 
                 #region (流程)相同字段数据同步方式.
                 map.AddDDLSysEnum(MethodAttr.DTSDataWay, 0, "同步相同字段数据方式", true, true, MethodAttr.DTSDataWay,
@@ -382,7 +380,6 @@ namespace BP.CCBill.Template
                 this.No = DBAccess.GenerGUID();
             return base.beforeInsert();
         }
-
     }
     /// <summary>
     /// 实体方法

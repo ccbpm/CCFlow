@@ -147,7 +147,7 @@ namespace BP.WF
 
             /*找到发送到退回的时间点，把从这个时间点以来的数据都要删除掉.*/
             ps.Clear();
-            //@yln
+
             ps.SQL = "SELECT RDT,ActionType,NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE  NDFrom=" + dbStr + "NDFrom AND WorkID=" + dbStr + "WorkID AND ActionType=" + (int)ActionType.Forward + " ORDER BY RDT desc ";
             ps.Add("NDFrom", this.ReturnToNode.NodeID);
             ps.Add("WorkID", this.WorkID);
@@ -157,7 +157,7 @@ namespace BP.WF
                 string rdt = dt.Rows[0][0].ToString();
 
                 ps.Clear();
-                ps.SQL = "SELECT ActionType,NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE   RDT >=" + dbStr + "RDT AND (WorkID=" + dbStr + "WorkID OR FID=" + dbStr + "FID) AND NDFrom NOT IN(SELECT NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE   RDT <" + dbStr + "RDT And ActionType IN ("+(int)ActionType.Forward + "," + (int)ActionType.ForwardFL + "," + (int)ActionType.ForwardHL+")) ORDER BY RDT ";
+                ps.SQL = "SELECT ActionType,NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE   RDT >=" + dbStr + "RDT AND (WorkID=" + dbStr + "WorkID OR FID=" + dbStr + "FID) AND NDFrom NOT IN(SELECT NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE   RDT <" + dbStr + "RDT And ActionType IN (" + (int)ActionType.Forward + "," + (int)ActionType.ForwardFL + "," + (int)ActionType.ForwardHL + ")) ORDER BY RDT ";
                 ps.Add("RDT", rdt);
                 ps.Add("WorkID", this.WorkID);
                 ps.Add("FID", this.WorkID);
@@ -217,7 +217,7 @@ namespace BP.WF
             //执行退回的考核.
             Glo.InitCH(this.HisNode.HisFlow, this.HisNode, this.WorkID, this.FID, this.HisNode.Name + ":退回考核.");
 
-            if (this.HisNode.FocusField != "")
+            if (DataType.IsNullOrEmpty(this.HisNode.FocusField) == false)
             {
                 try
                 {
@@ -235,7 +235,7 @@ namespace BP.WF
                 }
                 catch (Exception ex)
                 {
-                    Log.DefaultLogWriteLineError("退回时更新焦点字段错误:" + ex.Message);
+                    BP.DA.Log.DebugWriteError("退回时更新焦点字段错误:" + ex.Message);
                 }
             }
 
@@ -292,7 +292,7 @@ namespace BP.WF
             rw.ReturnToEmp = this.ReturnToEmp; //退回给。
             rw.BeiZhu = Msg;
 
-            rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
+            rw.setMyPK(DBAccess.GenerOIDByGUID().ToString());
             if (DataType.IsNullOrEmpty(this.ReturnCHDatas) == false)
             {
                 string[] strs = this.ReturnCHDatas.Split('&');
@@ -316,7 +316,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                Log.DebugWriteWarning(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
             }
 
             // 以退回到的节点向前数据用递归删除它。
@@ -392,7 +392,7 @@ namespace BP.WF
 
             // 去掉了 else .
             rw.IsBackTracking = this.IsBackTrack;
-            rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
+            rw.setMyPK(DBAccess.GenerOIDByGUID().ToString());
 
             if (DataType.IsNullOrEmpty(this.ReturnCHDatas) == false)
             {
@@ -444,12 +444,23 @@ namespace BP.WF
             if (nd.IsFLHL == false)
                 throw new Exception("err@系统已经运行到合流节点，您不能在执行退回.");
 
+            //退回前事件
+            string atPara = "@ToNode=" + this.ReturnToNode.NodeID;
+            //如果事件返回的信息不是 null，就终止执行。 @hongyan.
+            string msg = ExecEvent.DoNode(EventListNode.ReturnBefore, this.HisNode, this.HisWork, null,
+                atPara);
+            if (String.IsNullOrEmpty(msg) == false) // 2019-08-28 zl 返回空字符串表示执行成功，不应该终止。
+                return msg;
+
             //查询出来所有的子线程,并删除他.
             GenerWorkFlows gwfs = new GenerWorkFlows();
             gwfs.Retrieve(GenerWorkFlowAttr.FID, this.FID);
+
+            string delSubThreadInfo = "\t\n";
             foreach (GenerWorkFlow mygwf in gwfs)
             {
-                BP.WF.Dev2Interface.Node_FHL_KillSubFlow( mygwf.WorkID);
+                BP.WF.Dev2Interface.Node_FHL_KillSubFlow(mygwf.WorkID);
+                delSubThreadInfo += mygwf.Title + "\t\n";
             }
 
             //更新状态.
@@ -470,7 +481,32 @@ namespace BP.WF
             gwf.TodoEmps = todoEmps;
             gwf.TodoEmpsNum = gwls.Count;
             gwf.Update();
-            return "退回成功.";
+
+            //记录退回轨迹. @hongyan
+            ReturnWork rw = new ReturnWork();
+            rw.WorkID = gwf.WorkID;
+
+            rw.ReturnNode = this.HisNode.NodeID;
+            rw.ReturnNodeName = this.HisNode.Name;
+
+            rw.Returner = WebUser.No;
+            rw.ReturnerName = WebUser.Name;
+
+            rw.ReturnToNode = this.ReturnToNode.NodeID;
+            rw.ReturnToEmp = gwf.TodoEmps;
+            //主键.
+            rw.MyPK = BP.DA.DBAccess.GenerGUID();
+            rw.Insert(); 
+
+            //设置return记录. 加入track.
+            this.AddToTrack(ActionType.Return, WebUser.No, WebUser.Name, this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
+
+            //如果事件返回的信息不是 null，就终止执行。@hongyan.
+            msg = ExecEvent.DoNode(EventListNode.ReturnAfter, this.HisNode, this.HisWork, null,atPara);
+            if (String.IsNullOrEmpty(msg) == false) //  如果有消息，就返回消息.
+                return msg;
+
+            return "子线程退回成功, 一共删除了(" + gwfs.Count + ")个其他的子线程:" + delSubThreadInfo;
         }
         /// <summary>
         /// 执行退回.
@@ -549,7 +585,7 @@ namespace BP.WF
             }
 
             //删除.
-            Template.NodeWorkCheck fwc = new Template.NodeWorkCheck(this.HisNode.NodeID);
+            Template.NodeWorkCheck fwc = new NodeWorkCheck(this.HisNode.NodeID);
             if (fwc.FWCIsShowReturnMsg == false)
                 BP.WF.Dev2Interface.DeleteCheckInfo(this.HisNode.FK_Flow, this.WorkID, this.HisNode.NodeID);
 
@@ -721,7 +757,7 @@ namespace BP.WF
                 }
             }
 
-            rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
+            rw.setMyPK(DBAccess.GenerOIDByGUID().ToString());
             rw.BeiZhu = Msg;
             rw.IsBackTracking = this.IsBackTrack;
             rw.Insert();
@@ -750,7 +786,7 @@ namespace BP.WF
             gwf.FK_Node = this.ReturnToNode.NodeID;
             string info = "@工作已经成功的退回到（" + ReturnToNode.Name + "）退回给：";
 
-            //子线程退回应该是单线退回到干流程
+            //子线程退回应该是单线退回到干流程.
             //GenerWorkerLists gwls = new GenerWorkerLists();
             //gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FID, this.FID, GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
 
@@ -779,60 +815,11 @@ namespace BP.WF
                 /*有可能多次退回的情况，表示曾经退回过n次。*/
 
             }
-            //if (gwls.Count == 1)
-            //{
-            //    /*有可能多次退回的情况，表示曾经退回过n次。*/
-            //    foreach (GenerWorkerList item in gwls)
-            //    {
-            //        item.IsPass = false; // 显示待办, 这个是合流节点的工作人员.
-            //        item.IsRead = false; //
-            //        item.Update();
-            //        info += item.FK_Emp + "," + item.FK_EmpText;
-            //        toEmp = item.FK_Emp;
-            //        toEmpName = item.FK_EmpText;
-            //        info += "(" + item.FK_Emp + "," + item.FK_EmpText + ")";
-            //    }
-            //}
-            //else
-            //{
-            //    // 找到合流点的发送人.
-            //    Nodes nds = this.HisNode.FromNodes;
-            //    gwls = new GenerWorkerLists();
-            //    GenerWorkerList gwl = new GenerWorkerList();
-            //    foreach (Node nd in nds)
-            //    {
-            //        gwls.Retrieve(GenerWorkerListAttr.WorkID, this.FID,
-            //            GenerWorkerListAttr.FK_Node, nd.NodeID,
-            //            GenerWorkerListAttr.IsPass, 1);
-            //        if (gwls.Count == 0)
-            //            continue;
-
-            //        if (gwls.Count != 1)
-            //            throw new Exception("@应该只有一个记录，现在有多个，可能错误。");
-
-            //        //求出分流节点的发送人.
-            //        gwl = (GenerWorkerList)gwls[0];
-            //        toEmp = gwl.FK_Emp;
-            //        toEmpName = gwl.FK_EmpText;
-            //        info += "(" + toEmp + "," + toEmpName + ")";
-            //    }
-
-            //    if (DataType.IsNullOrEmpty(toEmp) == true)
-            //        throw new Exception("@在退回时出现错误，没有找到分流节点的发送人。");
-
-            //    // 插入一条数据, 行程一个工作人员记录,这个记录就是子线程的延长点. 给合流点上的接受人设置待办.
-            //    gwl.WorkID = this.WorkID;
-            //    gwl.FID = this.FID;
-            //    gwl.IsPass = false;
-            //    if (gwl.IsExits == false)
-            //        gwl.Insert();
-            //    else
-            //        gwl.Update();
-            //}
-
+           
             // 记录退回轨迹。
             ReturnWork rw = new ReturnWork();
             rw.WorkID = this.WorkID;
+            rw.FID = this.FID;
             rw.ReturnToNode = this.ReturnToNode.NodeID;
             rw.ReturnNodeName = this.ReturnToNode.Name + "-" + this.HisNode.Name;
 
@@ -850,7 +837,7 @@ namespace BP.WF
                 }
             }
 
-            rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
+            rw.setMyPK(DBAccess.GenerOIDByGUID().ToString());
             rw.BeiZhu = Msg;
             rw.IsBackTracking = this.IsBackTrack;
             rw.Insert();
@@ -875,6 +862,12 @@ namespace BP.WF
             }
             gwf.Emps = emps;
             gwf.Update();
+
+            //更新主流程的状态
+            GenerWorkFlow mainGwf = new GenerWorkFlow(gwf.FID);
+            mainGwf.WFState = WFState.ReturnSta;
+            mainGwf.FK_Node = this.ReturnToNode.NodeID;
+            mainGwf.Update();
 
             //找到当前的工作数据.
             GenerWorkerList currWorker = new GenerWorkerList();
@@ -956,7 +949,7 @@ namespace BP.WF
                 }
             }
 
-            rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
+            rw.setMyPK(DBAccess.GenerGUID());
             rw.BeiZhu = Msg;
             rw.IsBackTracking = this.IsBackTrack;
             rw.Insert();
@@ -1072,7 +1065,7 @@ namespace BP.WF
                 }
                 catch (Exception ex)
                 {
-                    Log.DefaultLogWriteLineError("退回时更新焦点字段错误:" + ex.Message);
+                    BP.DA.Log.DebugWriteError("退回时更新焦点字段错误:" + ex.Message);
                 }
             }
 
@@ -1086,7 +1079,7 @@ namespace BP.WF
                 this.ReturnToNode.TimeLimitHH, this.ReturnToNode.TimeLimitMM, this.ReturnToNode.TWay);
 
             // 应完成日期.
-            string sdt = dtOfShould.ToString(DataType.SysDataTimeFormat + ":ss");
+            string sdt = dtOfShould.ToString(DataType.SysDateTimeFormat + ":ss");
 
             // 改变当前待办工作节点
             gwf.WFState = WFState.ReturnSta;
@@ -1102,11 +1095,11 @@ namespace BP.WF
 
             //获得所有的人员集合，退回到节点的.
             GenerWorkerLists gwls = new GenerWorkerLists();
-             gwls.Retrieve(GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID,
-                GenerWorkerListAttr.WorkID, this.WorkID);
+            gwls.Retrieve(GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID,
+               GenerWorkerListAttr.WorkID, this.WorkID);
 
             if (gwls.Count == 0)
-                throw new Exception("err@没有找到要退回到节点的数据,请与管理员联系[WorkID="+this.WorkID+ ",ReturnToNode.NodeID="+this.ReturnToNode.NodeID+"]");
+                throw new Exception("err@没有找到要退回到节点的数据,请与管理员联系[WorkID=" + this.WorkID + ",ReturnToNode.NodeID=" + this.ReturnToNode.NodeID + "]");
 
             //退回到人.
             Emp empReturn = new Emp(this.ReturnToEmp);
@@ -1129,14 +1122,14 @@ namespace BP.WF
                 item.IsPassInt = 0;
                 item.IsRead = false;
                 item.SDT = sdt;
-                item.RDT = DataType.CurrentDataTimess;
+                item.RDT = DataType.CurrentDateTimess;
                 item.Sender = WebUser.No + "," + WebUser.Name;
                 item.Update();
                 isHave = true;
             }
 
             //这里做了补偿的措施，否则就会出现异常数据. for:计算中心.
-            if (isHave ==false)
+            if (isHave == false)
             {
                 mygwl.FK_Dept = WebUser.FK_Dept;
                 mygwl.FK_DeptT = WebUser.FK_DeptName;
@@ -1147,11 +1140,10 @@ namespace BP.WF
                 mygwl.IsPassInt = 0;
                 mygwl.IsRead = false;
                 mygwl.SDT = sdt;
-                mygwl.RDT = DataType.CurrentDataTimess;
+                mygwl.RDT = DataType.CurrentDateTimess;
                 mygwl.Sender = WebUser.No + "," + WebUser.Name;
                 mygwl.Insert();
             }
-
 
             //更新流程报表数据.
             ps = new Paras();
@@ -1208,7 +1200,7 @@ namespace BP.WF
                         rw.SetValByKey(param[0].Replace("TB_", "").Replace("DDL_", "").Replace("CB_", ""), param[1]);
                 }
             }
-            rw.MyPK = DBAccess.GenerGUID();
+            rw.setMyPK(DBAccess.GenerGUID());
             rw.Insert();
 
             // 为电建增加一个退回并原路返回的日志类型.
@@ -1232,9 +1224,8 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                Log.DebugWriteWarning(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
             }
-
 
             //把退回原因加入特殊变量里. 为软通小杨处理rpt变量不能替换的问题.
             // string text = fl.DoFlowEventEntity(EventListNode.ReturnAfter, this.HisNode, rpt,atPara, null, gwl.FK_Emp);
@@ -1274,7 +1265,7 @@ namespace BP.WF
             t.WorkID = this.WorkID;
             t.FK_Flow = this.HisNode.FK_Flow;
             t.FID = this.FID;
-            t.RDT = DataType.CurrentDataTimess;
+            t.RDT = DataType.CurrentDateTimess;
             t.HisActionType = at;
 
             t.NDFrom = this.HisNode.NodeID;
@@ -1306,9 +1297,9 @@ namespace BP.WF
             if (System.IO.Directory.Exists(filePath) == false)
                 System.IO.Directory.CreateDirectory(filePath);
 
-            string file = filePath + "\\" + rw.MyPK;
+            string file = filePath + "/" + rw.MyPK;
             infoLog = "\r\n退回人:" + WebUser.No + "," + WebUser.Name + " \r\n退回节点:" + fromND.Name + " \r\n退回到:" + toND.Name;
-            infoLog += "\r\n退回时间:" + DataType.CurrentDataTime;
+            infoLog += "\r\n退回时间:" + DataType.CurrentDateTime;
             infoLog += "\r\n原因:" + rw.BeiZhu;
 
             ReorderLog(fromND, toND);
@@ -1339,9 +1330,9 @@ namespace BP.WF
                     qo.AddWhere(GenerWorkerListAttr.FID, this.WorkID);
                     qo.addAnd();
 
-                    string[] ndsStrs = nd.HisToNDs.Split('@');
+                    string[] ndStrs = nd.HisToNDs.Split('@');
                     string inStr = "";
-                    foreach (string s in ndsStrs)
+                    foreach (string s in ndStrs)
                     {
                         if (DataType.IsNullOrEmpty(s) == true)
                             continue;
@@ -1448,9 +1439,9 @@ namespace BP.WF
                     qo.AddWhere(GenerWorkerListAttr.FID, this.WorkID);
                     qo.addAnd();
 
-                    string[] ndsStrs = nd.HisToNDs.Split('@');
+                    string[] ndStrs = nd.HisToNDs.Split('@');
                     string inStr = "";
-                    foreach (string s in ndsStrs)
+                    foreach (string s in ndStrs)
                     {
                         if (DataType.IsNullOrEmpty(s) == true)
                             continue;
@@ -1521,7 +1512,7 @@ namespace BP.WF
             DateTime dtNew = DateTime.Now;
             // dtNew = dtNew.AddDays(nd.WarningHour);
 
-            wl.SDT = dtNew.ToString(DataType.SysDataTimeFormat + ":ss"); // DataType.CurrentDataTime;
+            wl.SDT = dtNew.ToString(DataType.SysDateTimeFormat + ":ss"); // DataType.CurrentDateTime;
             wl.FK_Flow = this.HisNode.FK_Flow;
             wl.Insert();
 
@@ -1546,12 +1537,12 @@ namespace BP.WF
             rw.BeiZhu = msg;
             try
             {
-                rw.MyPK = rw.ReturnToNode + "_" + rw.WorkID + "_" + DateTime.Now.ToString("yyyyMMddhhmmss");
+                rw.setMyPK(rw.ReturnToNode + "_" + rw.WorkID + "_" + DateTime.Now.ToString("yyyyMMddhhmmss"));
                 rw.Insert();
             }
             catch
             {
-                rw.MyPK = rw.ReturnToNode + "_" + rw.WorkID + "_" + DBAccess.GenerOID();
+                rw.setMyPK(rw.ReturnToNode + "_" + rw.WorkID + "_" + DBAccess.GenerOID());
                 rw.Insert();
             }
 
@@ -1561,7 +1552,7 @@ namespace BP.WF
             WorkNode wn = new WorkNode(this.HisWork.FID, backtoNodeID);
             if (Glo.IsEnableSysMessage)
             {
-                //  WF.Port.WFEmp wfemp = new Port.WFEmp(wn.HisWork.Rec);
+                //  WF.Port.WFEmp wfemp = new BP.Port.WFEmp(wn.HisWork.Rec);
                 string title = string.Format("工作退回：流程:{0}.工作:{1},退回人:{2},需您处理",
                       wn.HisNode.FlowName, wn.HisNode.Name, WebUser.Name);
 

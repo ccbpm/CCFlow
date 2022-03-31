@@ -82,14 +82,7 @@ namespace BP.GPM
         public DeptMenu()
         {
         }
-        /// <summary>
-        /// 部门菜单
-        /// </summary>
-        /// <param name="mypk"></param>
-        public DeptMenu(string no)
-        {
-            this.Retrieve();
-        }
+        
         /// <summary>
         /// 部门菜单
         /// </summary>
@@ -99,11 +92,8 @@ namespace BP.GPM
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_DeptMenu");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "部门菜单";
-                map.EnType = EnType.Sys;
+                Map map = new Map("GPM_DeptMenu", "部门菜单");
+                map.setEnType(EnType.Sys);
 
                 //map.AddTBStringPK(DeptMenuAttr.FK_Station, null, "部门", false, false, 0, 50, 20);
                 map.AddDDLEntitiesPK(DeptMenuAttr.FK_Dept, null, " 部门", new BP.Port.Stations(), true);

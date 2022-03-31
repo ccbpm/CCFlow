@@ -55,7 +55,7 @@ namespace BP.WF.DTS
             }
             catch (Exception ex)
             {
-                Log.DebugWriteWarning("删除临时文件错误:" + ex.Message);
+                BP.DA.Log.DebugWriteError("删除临时文件错误:" + ex.Message);
                 return "err@"+ex.Message;
             }
             return "删除成功.";

@@ -158,7 +158,7 @@ namespace BP.WF.Template
         public SubFlowHandGuide() { }
         public SubFlowHandGuide(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
 
@@ -202,7 +202,7 @@ namespace BP.WF.Template
                 map.AddTBInt(SubFlowHandAttr.SubFlowShowModel, 0, "展现模式", false, false);
                 //  map.Add(SubFlowHandAttr.IsTreeConstruct, 0, "是否是树结构", false, true);
 
-                //批量发送后，是否隐藏父流程的待办. @yln.
+                //批量发送后，是否隐藏父流程的待办. 
                 map.AddBoolean(SubFlowAttr.SubFlowHidTodolist, false, "发送后是否隐藏父流程待办",false,false);
 
                 this._enMap = map;

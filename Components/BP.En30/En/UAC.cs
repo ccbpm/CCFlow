@@ -58,7 +58,7 @@ namespace BP.En
         public void OpenAllForStation(string fk_station)
         {
             Paras ps = new Paras();
-            ps.Add("FK_Emp", Web.WebUser.No);
+            ps.Add("FK_Emp",BP.Web.WebUser.No);
             ps.Add("st", fk_station);
 
             bool bl;

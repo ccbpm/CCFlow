@@ -400,7 +400,7 @@ namespace BP.Sys.XML
                 DataSet ds = new DataSet("myds");
                 try
                 {
-                    ds.ReadXml(this.File + "\\" + fi.Name);
+                    ds.ReadXml(this.File + fi.Name);
                 }
                 catch (Exception ex)
                 {
@@ -721,7 +721,7 @@ namespace BP.Sys.XML
 				catch(Exception ex)
 				{
                     en.CheckPhysicsTable();
-					Log.DebugWriteError(ex.Message);
+                    BP.DA.Log.DebugWriteError(ex.Message);
 				}
 
 

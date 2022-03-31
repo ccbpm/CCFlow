@@ -11,6 +11,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Xml;
 using BP.Web;
+using BP.Difference;
 
 namespace BP.DA
 {
@@ -21,8 +22,8 @@ namespace BP.DA
     {
         public static bool IsNullOrEmpty(string s)
         {
-              
-            if (s == null || s.Equals("") == true || s.Equals("null") == true || s.Equals("undefined") ==true)
+
+            if (s == null || s.Equals("") == true || s.Equals("null") == true || s.Equals("undefined") == true)
                 return true;
             return false;
         }
@@ -86,7 +87,7 @@ namespace BP.DA
                 return dt.AddDays(days);
 
             //没有设置节假日.
-            if (BP.Sys.GloVar.Holidays == "")
+            if (DataType.IsNullOrEmpty(BP.Sys.GloVar.Holidays) )
             {
                 // 2015年以前的算法.
                 dt = dt.AddDays(days);
@@ -121,7 +122,7 @@ namespace BP.DA
         /// </summary> 
         /// <param name="dtime">给定的日期</param> 
         /// <returns>数字 一年中的第几周</returns> 
-        public static int WeekOfYear(DateTime dtime )
+        public static int WeekOfYear(DateTime dtime)
         {
             int weeknum = 0;
             DateTime tmpdate = DateTime.Parse(dtime.Year.ToString() + "-1" + "-1");
@@ -137,7 +138,7 @@ namespace BP.DA
             }
             return weeknum;
         }
-        public static string TurnToJiDuByDataTime(string dt)
+        public static string TurnToJiDuByDateTime(string dt)
         {
             if (dt.Length <= 6)
                 throw new Exception("@要转化季度的日期格式不正确:" + dt);
@@ -534,7 +535,7 @@ namespace BP.DA
         public static void WriteFile(string file, string Doc)
         {
             System.IO.StreamWriter sr;
-           
+
             try
             {
                 if (System.IO.File.Exists(file))
@@ -644,15 +645,8 @@ namespace BP.DA
             }
             catch (Exception ex)
             {
-                try
-                {
-                    Log.DefaultLogWriteLineWarning("@读取URL出现错误:URL=" + url + "@错误信息：" + ex.Message);
-                    return null;
-                }
-                catch
-                {
-                    return ex.Message;
-                }
+                BP.DA.Log.DebugWriteError("@读取URL出现错误:URL=" + url + "@错误信息：" + ex.Message);
+                return null;
             }
             //	因为它返回的实例类型是WebRequest而不是HttpWebRequest,因此记得要进行强制类型转换
             //  接下来建立一个HttpWebResponse以便接收服务器发送的信息，它是调用HttpWebRequest.GetResponse来获取的：
@@ -666,7 +660,7 @@ namespace BP.DA
                 try
                 {
                     // 如果出现死连接。
-                    Log.DefaultLogWriteLineWarning("@获取url=" + url + "失败。异常信息:" + ex.Message, true);
+                    BP.DA.Log.DebugWriteError("@获取url=" + url + "失败。异常信息:" + ex.Message);
                     return null;
                 }
                 catch
@@ -1357,7 +1351,7 @@ namespace BP.DA
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineInfo(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
                 /* 如果抛出异常就按 0  计算。 */
                 return 0;
             }
@@ -1445,7 +1439,7 @@ namespace BP.DA
         /// </summary>
         /// <param name="dataStr">日期字符串</param>
         /// <returns>标准的日期类型</returns>
-        public static string FormatDataTime(string dataStr)
+        public static string FormatDateTime(string dataStr)
         {
 
             return dataStr;
@@ -1458,11 +1452,18 @@ namespace BP.DA
         /// <summary>
         /// 当前的日期
         /// </summary>
-        public static string CurrentData
+        public static string CurrentDate
         {
             get
             {
                 return DateTime.Now.ToString(DataType.SysDataFormat);
+            }
+        }
+        public static string CurrentDateTime
+        {
+            get
+            {
+                return DateTime.Now.ToString(DataType.SysDatatimeFormat);
             }
         }
         public static string CurrentTime
@@ -1657,17 +1658,8 @@ namespace BP.DA
                 return DateTime.Now.ToString("yyyy");
             }
         }
-        /// <summary>
-        /// 当前的日期时间
-        /// </summary>
-        public static string CurrentDataTime
-        {
-            get
-            {
-                return DateTime.Now.ToString(DataType.SysDataTimeFormat);
-            }
-        }
-        public static string CurrentDataTimeOfDef
+       
+        public static string CurrentDateTimeOfDef
         {
             get
             {
@@ -1675,37 +1667,37 @@ namespace BP.DA
                 {
                     case "CH":
                     case "B5":
-                        return CurrentDataTimeCNOfShort;
+                        return CurrentDateTimeCNOfShort;
                     case "EN":
                         return DateTime.Now.ToString("MM/DD/YYYY");
                     default:
                         break;
                 }
-                return CurrentDataTimeCNOfShort;
+                return CurrentDateTimeCNOfShort;
             }
         }
-        public static string CurrentDataTimeCNOfShort
+        public static string CurrentDateTimeCNOfShort
         {
             get
             {
                 return DateTime.Now.ToString("yy年MM月dd日 HH时mm分");
             }
         }
-        public static string CurrentDataTimeCNOfLong
+        public static string CurrentDateTimeCNOfLong
         {
             get
             {
                 return DateTime.Now.ToString("yy年MM月dd日 HH时mm分ss秒");
             }
         }
-        public static string CurrentDataCNOfShort
+        public static string CurrentDateCNOfShort
         {
             get
             {
                 return DateTime.Now.ToString("yy年MM月dd日");
             }
         }
-        public static string CurrentDataCNOfLong
+        public static string CurrentDateCNOfLong
         {
             get
             {
@@ -1715,7 +1707,7 @@ namespace BP.DA
         /// <summary>
         /// 当前的日期时间
         /// </summary>
-        public static string CurrentDataTimeCN
+        public static string CurrentDateTimeCN
         {
             get
             {
@@ -1747,10 +1739,11 @@ namespace BP.DA
         /// <summary>
         /// 当前的日期时间
         /// </summary>
-        public static string CurrentDataTimess{
+        public static string CurrentDateTimess
+        {
             get
             {
-                return DateTime.Now.ToString(DataType.SysDataTimeFormat + ":ss");
+                return DateTime.Now.ToString(DataType.SysDateTimeFormat + ":ss");
             }
         }
         public static string ParseSysDateTime2SysDate(string sysDateformat)
@@ -1893,7 +1886,7 @@ namespace BP.DA
         /// <returns></returns>
         public static float GeTimeLimits(string dtoffrom)
         {
-            return GeTimeLimits(dtoffrom, DataType.CurrentDataTime);
+            return GeTimeLimits(dtoffrom, DataType.CurrentDateTime);
         }
         public static float GetSpanMinute(string fromdatetim, string toDateTime)
         {
@@ -1918,7 +1911,7 @@ namespace BP.DA
         /// <summary>
         /// 系统定义日期时间格式 yyyy-MM-dd hh:mm
         /// </summary>
-        public static string SysDataTimeFormat
+        public static string SysDateTimeFormat
         {
             get
             {
@@ -1930,6 +1923,13 @@ namespace BP.DA
             get
             {
                 return "yyyy年MM月dd日";
+            }
+        }
+        public static string SysDatatimeFormat
+        {
+            get
+            {
+                return "yyyy-MM-dd HH:mm";
             }
         }
         public static string SysDatatimeFormatCN
@@ -1944,19 +1944,7 @@ namespace BP.DA
             switch (strDBUrl)
             {
                 case "AppCenterDSN":
-                    return DBUrlType.AppCenterDSN;
-                case "DBAccessOfOracle1":
-                    return DBUrlType.DBAccessOfOracle1;
-                case "DBAccessOfOracle2":
-                    return DBUrlType.DBAccessOfOracle2;
-                case "DBAccessOfMSSQL1":
-                    return DBUrlType.DBAccessOfMSSQL1;
-                case "DBAccessOfMSSQL2":
-                    return DBUrlType.DBAccessOfMSSQL2;
-                case "DBAccessOfOLE":
-                    return DBUrlType.DBAccessOfOLE;
-                case "DBAccessOfODBC":
-                    return DBUrlType.DBAccessOfODBC;
+                    return DBUrlType.AppCenterDSN;      
                 default:
                     throw new Exception("@没有此类型[" + strDBUrl + "]");
             }
@@ -1987,7 +1975,7 @@ namespace BP.DA
         }
         public static string GetDataTypeDese(int datatype)
         {
-            if (Web.WebUser.SysLang == "CH")
+            if (BP.Web.WebUser.SysLang == "CH")
             {
                 switch (datatype)
                 {
@@ -2227,7 +2215,7 @@ namespace BP.DA
         }
         public static bool IsMobile(string input)
         {
-            if (input.Length == 11 && input.Substring(0,1).Equals("1") )
+            if (input.Length == 11 && input.Substring(0, 1).Equals("1"))
                 return true;
 
             if (input.Length < 11)
@@ -2247,7 +2235,7 @@ namespace BP.DA
             return false;
         }
         /// <summary>
-        /// 判断是否是数值类型@hongyan
+        /// 判断是否是数值类型
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -2336,7 +2324,7 @@ namespace BP.DA
        static TimeSpan ts = new TimeSpan(0, 1, 0);
 #endif
 
-       
+        
         private static string _BPMHost = null;
         /// <summary>
         /// 当前BPMHost 

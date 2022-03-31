@@ -114,7 +114,7 @@ namespace BP.WF.Template
         public Direction() { }
         public Direction(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -161,7 +161,7 @@ namespace BP.WF.Template
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.MyPK = this.FK_Flow + "_" + this.Node + "_" + this.ToNode;
+            this.setMyPK(this.FK_Flow + "_" + this.Node + "_" + this.ToNode);
             return base.beforeUpdateInsertAction();
         }
         /// <summary>
@@ -170,12 +170,12 @@ namespace BP.WF.Template
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            this.MyPK = this.FK_Flow + "_" + this.Node + "_" + this.ToNode;
+            this.setMyPK(this.FK_Flow + "_" + this.Node + "_" + this.ToNode);
             return base.beforeInsert();
         }
         protected override bool beforeDelete()
         {
-            this.MyPK = this.FK_Flow + "_" + this.Node + "_" + this.ToNode;
+            this.setMyPK(this.FK_Flow + "_" + this.Node + "_" + this.ToNode);
             return base.beforeDelete();
         }
         /// <summary>
@@ -215,7 +215,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 节点方向
     /// </summary>
-    public class Directions : En.Entities
+    public class Directions : Entities
     {
         /// <summary>
         /// 节点方向

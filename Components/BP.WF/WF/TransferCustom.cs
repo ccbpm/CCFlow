@@ -274,7 +274,7 @@ namespace BP.WF
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.MyPK = this.FK_Node + "_" + this.WorkID;
+            this.setMyPK(this.FK_Node + "_" + this.WorkID);
             return base.beforeInsert();
         }
 
@@ -334,7 +334,7 @@ namespace BP.WF
                    
                     TransferCustom en = new TransferCustom();
                     en.FK_Node = nd.NodeID;
-                    //更改流程的运行状态@yuan
+                    //更改流程的运行状态
                     GenerWorkFlow gwf = new GenerWorkFlow(workid);
                     gwf.TransferCustomType = TransferCustomType.ByCCBPMDefine;
                     gwf.Update();

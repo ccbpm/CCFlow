@@ -48,6 +48,10 @@ namespace BP.WF
         /// </summary>
         public const string CDT = "CDT";
         /// <summary>
+        /// 挂起时间
+        /// </summary>
+        public const string HungupTime = "HungupTime";
+        /// <summary>
         /// 得分
         /// </summary>
         public const string Cent = "Cent";
@@ -318,15 +322,18 @@ namespace BP.WF
                 if (DataType.IsNullOrEmpty(value) == true)
                     throw new Exception("err@设置的人员不能为空.");
 
+                if (value.Contains(";") == false)
+                    value = value + ";";
+
                 //检查数据正确性.
                 if (value.Contains(",") == false || value.Contains(";") == false)
-                    throw new Exception("err@设置的Sender人员格式不正确，请联系管理员,格式为:No,Name;" + value);
+                    throw new Exception("err@设置的Sender人员格式不正确，请联系管理员,格式为:No,Name; 您设置的值为:" + value);
 
                 //发送人.
                 this.SetValByKey(GenerWorkFlowAttr.Sender, value);
 
                 //当前日期.
-                this.SetValByKey(GenerWorkFlowAttr.SendDT, DataType.CurrentDataTime);
+                this.SetValByKey(GenerWorkFlowAttr.SendDT, DataType.CurrentDateTime);
             }
         }
         /// <summary>
@@ -566,6 +573,17 @@ namespace BP.WF
             {
                 this.SetValByKey(GenerWorkFlowAttr.RDT, value);
                 this.FK_NY = value.Substring(0, 7);
+            }
+        }
+        public string HungupTime
+        {
+            get
+            {
+                return this.GetValStrByKey(GenerWorkFlowAttr.HungupTime);
+            }
+            set
+            {
+                this.SetValByKey(GenerWorkFlowAttr.HungupTime, value);
             }
         }
         /// <summary>
@@ -881,7 +899,7 @@ namespace BP.WF
                         return "已完成";
                     case WF.WFState.Runing:
                         return "在运行";
-                    case WF.WFState.HungUp:
+                    case WF.WFState.Hungup:
                         return "挂起";
                     case WF.WFState.Askfor:
                         return "加签";
@@ -1167,6 +1185,25 @@ namespace BP.WF
                 this.SetPara("HuiQianZhuChiRenName", value);
             }
         }
+
+        public int ScripNodeID
+        {
+            get
+            {
+                return this.GetParaInt("ScripNodeID");
+            }
+            set
+            {
+                this.SetPara("ScripNodeID", value);
+            }
+        }
+        public string ScripMsg
+        {
+            set
+            {
+                this.SetPara("ScripMsg", value);
+            }
+        }
         #endregion 参数属性.
 
         #region 构造函数
@@ -1223,7 +1260,7 @@ namespace BP.WF
 
                 map.AddTBString(GenerWorkFlowAttr.FK_Flow, null, "流程", true, false, 0, 5, 10);
                 map.AddTBString(GenerWorkFlowAttr.FlowName, null, "流程名称", true, false, 0, 100, 10);
-                map.AddTBString(GenerWorkFlowAttr.Title, null, "标题", true, false, 0, 1000, 10);
+                map.AddTBString(GenerWorkFlowAttr.Title, null, "标题", true, false, 0, 300, 10);
 
                 //两个状态，在不同的情况下使用. WFState状态 可以查询到SELECT  * FROM sys_enum WHERE EnumKey='WFState'
                 // WFState 的状态  @0=空白@1=草稿@2=运行中@3=已经完成@4=挂起@5=退回.
@@ -1239,6 +1276,7 @@ namespace BP.WF
                 map.AddTBString(GenerWorkFlowAttr.Sender, null, "发送人", true, false, 0, 200, 10);
 
                 map.AddTBDateTime(GenerWorkFlowAttr.RDT, "记录日期", true, true);
+                map.AddTBString(GenerWorkFlowAttr.HungupTime, null, "挂起日期", true, false, 0, 50, 10);
                 map.AddTBDateTime(GenerWorkFlowAttr.SendDT, "流程活动时间", true, true);
                 map.AddTBInt(GenerWorkFlowAttr.FK_Node, 0, "节点", true, false);
                 map.AddTBString(GenerWorkFlowAttr.NodeName, null, "节点名称", true, false, 0, 100, 10);
@@ -1330,6 +1368,7 @@ namespace BP.WF
                     DBAccess.RunSQL("DELETE A FROM WF_GenerWorkerlist A, WF_GenerWorkerlist B WHERE A.WorkID = B.WorkID And B.WorkID Not IN(select WorkID from WF_GenerWorkFlow)");
                     break;
                 case DBType.PostgreSQL:
+                case DBType.UX:
                     DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist A USING WF_GenerWorkerlist B WHERE A.WorkID = B.WorkID And B.WorkID Not IN(select WorkID from WF_GenerWorkFlow)");
                     break;
                 default: break;

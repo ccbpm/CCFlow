@@ -41,14 +41,24 @@ namespace BP.WF.Port
                 this.SetValByKey(DeptAttr.ParentNo, value);
             }
         }
-         
-		#endregion
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStrByKey(DeptAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(DeptAttr.OrgNo, value);
+            }
+        }
+        #endregion
 
-		#region 构造函数
-		/// <summary>
-		/// 部门
-		/// </summary>
-		public Dept(){}
+        #region 构造函数
+        /// <summary>
+        /// 部门
+        /// </summary>
+        public Dept(){}
 		/// <summary>
 		/// 部门
 		/// </summary>

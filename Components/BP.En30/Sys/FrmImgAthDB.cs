@@ -228,10 +228,14 @@ namespace BP.Sys
                 this.SetValByKey(FrmImgAthDBAttr.FK_MapData, value);
             }
         }
-        /// <summary>
-        /// 文件大小
-        /// </summary>
-        public float FileSize
+        public void setFK_MapData(string val)
+        { 
+                this.SetValByKey(FrmImgAthDBAttr.FK_MapData, val);
+        }
+    /// <summary>
+    /// 文件大小
+    /// </summary>
+    public float FileSize
         {
             get
             {
@@ -257,7 +261,7 @@ namespace BP.Sys
         /// <param name="mypk"></param>
         public FrmImgAthDB(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -303,7 +307,7 @@ namespace BP.Sys
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            this.MyPK = this.FK_FrmImgAth + "_" + this.RefPKVal;
+            this.setMyPK(this.FK_FrmImgAth + "_" + this.RefPKVal);
             return base.beforeInsert();
         }
         /// <summary>
@@ -312,7 +316,7 @@ namespace BP.Sys
         /// <returns></returns>
         protected override bool beforeUpdate()
         {
-            this.MyPK = this.FK_FrmImgAth + "_" + this.RefPKVal;
+            this.setMyPK(this.FK_FrmImgAth + "_" + this.RefPKVal);
             return base.beforeUpdate();
         }
         #endregion

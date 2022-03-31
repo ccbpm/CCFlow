@@ -390,6 +390,30 @@ namespace BP.WF.Template
         /// 是否启用-列表
         /// </summary>
         public const string ListEnable = "ListEnable";
+        /// <summary>
+        /// 数据版本的控制
+        /// </summary>
+        public const string FrmDBVerLab = "FrmDBVerLab";
+        public const string FrmDBVerEnable = "FrmDBVerEnable";
+        public const string FrmDBVerMyView = "FrmDBVerMyView";
+        public const string FrmDBVerMyCC = "FrmDBVerMyCC";
+
+        /// <summary>
+        /// 小纸条
+        /// </summary>
+        public const string ScripLab = "ScripLab";
+        public const string ScripRole = "ScripRole";
+        /// <summary>
+        /// 评论
+        /// </summary>
+        public const string FlowBBSLab = "FlowBBSLab";
+        public const string FlowBBSRole = "FlowBBSRole";
+        /// <summary>
+        /// 即时通讯
+        /// </summary>
+        public const string IMLab = "IMLab";
+        public const string IMEnable = "IMEnable";
+
     }
     /// <summary>
     /// 按钮列表
@@ -432,5 +456,7 @@ namespace BP.WF.Template
         /// Btn_Search
         /// </summary>
         public const string Btn_Search = "Btn_Search";
+
+       
     }
 }

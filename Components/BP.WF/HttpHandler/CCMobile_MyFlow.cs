@@ -10,6 +10,7 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
+using BP.Difference;
 
 namespace BP.WF.HttpHandler
 {
@@ -73,14 +74,14 @@ namespace BP.WF.HttpHandler
             #endregion 获取节点表单的数据
             //节点表单字段
             MapData md = new MapData(nd.NodeFrmID);
-            MapAttrs attrs = md.MapAttrs;
+            MapAttrs mattrs = md.MapAttrs;
             DataTable dt = new DataTable();
             dt.TableName = "Node_Note";
             dt.Columns.Add("KeyOfEn", typeof(string));
             dt.Columns.Add("NoteVal", typeof(string));
             string nodeNote = nd.GetParaString("NodeNote");
 
-            foreach (MapAttr attr in attrs)
+            foreach (MapAttr attr in mattrs)
             {
                 if (nodeNote.Contains("," + attr.KeyOfEn + ",") == false)
                     continue;
@@ -91,10 +92,10 @@ namespace BP.WF.HttpHandler
                         if (attr.MyDataType == 1 && (int)attr.UIContralType == DataType.AppString)
                         {
 
-                            if (attrs.Contains(attr.KeyOfEn + "Text") == true)
+                            if (mattrs.Contains(attr.KeyOfEn + "Text") == true)
                                 text = wk.GetValRefTextByKey(attr.KeyOfEn);
                             if (DataType.IsNullOrEmpty(text))
-                                if (attrs.Contains(attr.KeyOfEn + "T") == true)
+                                if (mattrs.Contains(attr.KeyOfEn + "T") == true)
                                     text = wk.GetValStrByKey(attr.KeyOfEn + "T");
                         }
                         else
@@ -242,7 +243,7 @@ namespace BP.WF.HttpHandler
                             mysql = "SELECT * FROM ( SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
                         else if (SystemConfig.AppCenterDBType == DBType.MySQL)
                             mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1";
-                        else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                        else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                             mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1";
 
                         //获得上一次发送到的节点.
@@ -347,7 +348,7 @@ namespace BP.WF.HttpHandler
 
         public string MyFlowGener_Delete()
         {
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByWriteLog(this.FK_Flow, this.WorkID, Web.WebUser.Name + "用户删除", true);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByWriteLog(this.FK_Flow, this.WorkID, WebUser.Name + "用户删除", true);
             return "删除成功...";
         }
 

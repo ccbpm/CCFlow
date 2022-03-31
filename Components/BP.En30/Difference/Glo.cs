@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BP.Difference;
 
 namespace BP.Difference
 {
@@ -17,7 +18,7 @@ namespace BP.Difference
         {
             get
             {
-                return Web.HttpContextHelper.Request.ServerVariables["REMOTE_ADDR"].ToString();
+                return HttpContextHelper.Request.ServerVariables["REMOTE_ADDR"].ToString();
             }
         }
         public static string RequestParas

@@ -11,6 +11,7 @@ using BP.En;
 using BP.WF;
 using BP.WF.Template;
 using System.IO;
+using BP.Difference;
 
 namespace BP.WF.HttpHandler
 {
@@ -58,7 +59,7 @@ namespace BP.WF.HttpHandler
                 MapExtAttr.FK_MapData, this.FK_MapData,
                 MapExtAttr.AttrOfOper, this.KeyOfEn);
 
-            me.FK_MapData = this.FK_MapData;
+            me.setFK_MapData(this.FK_MapData);
             me.AttrOfOper = this.KeyOfEn;
             me.Doc = this.GetValFromFrmByKey("DDL_Dtl") + "." + this.GetValFromFrmByKey("DDL_Field") + "." + this.GetValFromFrmByKey("DDL_JSFS"); //要执行的表达式.
 
@@ -98,7 +99,7 @@ namespace BP.WF.HttpHandler
             me.Tag4 = this.GetValFromFrmByKey("DDL_Fileds");
 
             //执行保存.
-            me.MyPK = MapExtXmlList.AutoFullDtlField + "_" + me.FK_MapData + "_" + me.AttrOfOper;
+            me.setMyPK(MapExtXmlList.AutoFullDtlField + "_" + me.FK_MapData + "_" + me.AttrOfOper);
             if (me.Update() == 0)
                 me.Insert();
 
@@ -124,7 +125,7 @@ namespace BP.WF.HttpHandler
                 MapExtAttr.AttrOfOper, this.KeyOfEn);
             if (i == 0)
             {
-                me.FK_MapData = this.FK_MapData;
+                me.setFK_MapData(this.FK_MapData);
                 me.AttrOfOper = this.KeyOfEn;
                 me.FK_DBSrc = "local";
             }
@@ -181,14 +182,14 @@ namespace BP.WF.HttpHandler
                 MapExtAttr.FK_MapData, this.FK_MapData,
                 MapExtAttr.AttrOfOper, this.KeyOfEn);
 
-            me.FK_MapData = this.FK_MapData;
+            me.setFK_MapData(this.FK_MapData);
             me.AttrOfOper = this.KeyOfEn;
             me.Doc = this.GetValFromFrmByKey("TB_Doc"); //要执行的表达式.
 
             me.ExtType = MapExtXmlList.AutoFull;
 
             //执行保存.
-            me.MyPK = MapExtXmlList.AutoFull + "_" + me.FK_MapData + "_" + me.AttrOfOper;
+            me.setMyPK(MapExtXmlList.AutoFull + "_" + me.FK_MapData + "_" + me.AttrOfOper);
             if (me.Update() == 0)
                 me.Insert();
 
@@ -206,7 +207,7 @@ namespace BP.WF.HttpHandler
                 MapExtAttr.AttrOfOper, this.KeyOfEn);
             if (i == 0)
             {
-                me.FK_MapData = this.FK_MapData;
+                me.setFK_MapData(this.FK_MapData);
                 me.AttrOfOper = this.KeyOfEn;
                 me.FK_DBSrc = "local";
             }
@@ -239,7 +240,7 @@ namespace BP.WF.HttpHandler
                     MapExtAttr.FK_MapData, this.FK_MapData,
                     MapExtAttr.AttrOfOper, this.KeyOfEn);
 
-                me.FK_MapData = this.FK_MapData;
+                me.setFK_MapData(this.FK_MapData);
                 me.AttrOfOper = this.KeyOfEn;
                 me.FK_DBSrc = this.GetValFromFrmByKey("FK_DBSrc");
                 me.Doc = this.GetValFromFrmByKey("TB_Doc"); //要执行的SQL.
@@ -287,7 +288,7 @@ namespace BP.WF.HttpHandler
 
             if (i == 0)
             {
-                me.FK_MapData = this.FK_MapData;
+                me.setFK_MapData(this.FK_MapData);
                 me.AttrOfOper = this.KeyOfEn;
                 me.FK_DBSrc = "local";
             }
@@ -339,8 +340,8 @@ namespace BP.WF.HttpHandler
             foreach (MapDtl dtl in dtls)
             {
                 string cols = "";
-                MapAttrs attrs = new MapAttrs(dtl.No);
-                foreach (MapAttr item in attrs)
+                MapAttrs mattrs = new MapAttrs(dtl.No);
+                foreach (MapAttr item in mattrs)
                 {
                     if (item.KeyOfEn == "OID" || item.KeyOfEn == "RefPKVal" || item.KeyOfEn == "RefPK")
                         continue;
@@ -379,14 +380,14 @@ namespace BP.WF.HttpHandler
         public string TBFullCtrlDDL_Init()
         {
             MapExt myme = new MapExt();
-            myme.MyPK = this.MyPK;
+            myme.setMyPK(this.MyPK);
             myme.RetrieveFromDBSources();
-            MapAttrs attrs = new MapAttrs(myme.FK_MapData);
-            attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData,
+            MapAttrs mattrs = new MapAttrs(myme.FK_MapData);
+            mattrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData,
                 MapAttrAttr.UIIsEnable, 1, MapAttrAttr.UIContralType, (int)UIContralType.DDL);
 
             string[] strs = myme.Tag.Split('$');
-            foreach (MapAttr attr in attrs)
+            foreach (MapAttr attr in mattrs)
             {
                 foreach (string s in strs)
                 {
@@ -400,17 +401,17 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            return attrs.ToJson();
+            return mattrs.ToJson();
         }
         public string TBFullCtrlDDL_Save()
         {
             MapExt me = new MapExt();
-            me.MyPK = this.MyPK;
+            me.setMyPK(this.MyPK);
             if (me.RetrieveFromDBSources() == 0)
             {
-                me.MyPK = this.MyPK;
+                me.setMyPK(this.MyPK);
                 me.AttrOfOper = GetRequestVal("AttrOfOper");
-                me.FK_MapData = this.FK_MapData;
+                me.setFK_MapData(this.FK_MapData);
                 me.ExtType = MapExtXmlList.FullData;
                 //me.DoWay = this.GetRequestVal("DDL_" + attr.KeyOfEn);
                 me.Insert();
@@ -464,7 +465,7 @@ namespace BP.WF.HttpHandler
 
             if (i == 0)
             {
-                me.FK_MapData = this.FK_MapData;
+                me.setFK_MapData(this.FK_MapData);
                 me.AttrOfOper = this.KeyOfEn;
                 me.FK_DBSrc = "local";
             }
@@ -504,7 +505,7 @@ namespace BP.WF.HttpHandler
 
             if (i == 0)
             {
-                me.FK_MapData = this.FK_MapData;
+                me.setFK_MapData(this.FK_MapData);
                 me.AttrOfOper = this.KeyOfEn;
                 me.FK_DBSrc = "local";
             }
@@ -534,7 +535,7 @@ namespace BP.WF.HttpHandler
                 MapExtAttr.FK_MapData, this.FK_MapData,
                 MapExtAttr.AttrOfOper, this.KeyOfEn);
 
-            me.FK_MapData = this.FK_MapData;
+            me.setFK_MapData(this.FK_MapData);
             me.AttrOfOper = this.KeyOfEn;
             me.FK_DBSrc = this.GetValFromFrmByKey("FK_DBSrc");
             me.Doc = this.GetValFromFrmByKey("TB_Doc"); //要执行的SQL.
@@ -576,7 +577,7 @@ namespace BP.WF.HttpHandler
 
             if (i == 0)
             {
-                me.FK_MapData = this.FK_MapData;
+                me.setFK_MapData(this.FK_MapData);
                 me.AttrOfOper = this.KeyOfEn;
                 me.FK_DBSrc = "local";
             }
@@ -633,7 +634,7 @@ namespace BP.WF.HttpHandler
                 MapExtAttr.AttrOfOper, this.KeyOfEn);
             if (i == 0)
             {
-                me.FK_MapData = this.FK_MapData;
+                me.setFK_MapData(this.FK_MapData);
                 me.AttrOfOper = this.KeyOfEn;
                 me.FK_DBSrc = "local";
             }
@@ -687,7 +688,7 @@ namespace BP.WF.HttpHandler
                 MapExtAttr.AttrOfOper, this.KeyOfEn);
             if (i == 0)
             {
-                me.FK_MapData = this.FK_MapData;
+                me.setFK_MapData(this.FK_MapData);
                 me.AttrOfOper = this.KeyOfEn;
                 me.FK_DBSrc = "local";
             }
@@ -746,10 +747,10 @@ namespace BP.WF.HttpHandler
             string RDTRadio = GetRequestVal("RDTRadio");//是否包含节假日 
 
             MapExt mapExt = new MapExt();
-            mapExt.MyPK = "ReqDays_" + FK_MapData + "_" + KeyOfEn;
+            mapExt.setMyPK("ReqDays_" + FK_MapData + "_" + KeyOfEn);
             if (mapExt.RetrieveFromDBSources() == 0)
             {
-                mapExt.FK_MapData = FK_MapData;
+                mapExt.setFK_MapData(FK_MapData);
                 mapExt.ExtType = "ReqDays";
                 mapExt.AttrOfOper = KeyOfEn;
                 mapExt.Tag1 = StarRDT;
@@ -759,7 +760,7 @@ namespace BP.WF.HttpHandler
             }
             else
             {
-                mapExt.FK_MapData = FK_MapData;
+                mapExt.setFK_MapData(FK_MapData);
                 mapExt.ExtType = "ReqDays";
                 mapExt.AttrOfOper = KeyOfEn;
                 mapExt.Tag1 = StarRDT;
@@ -785,7 +786,7 @@ namespace BP.WF.HttpHandler
 
             //属性.
             MapAttr attr = new MapAttr();
-            attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+            attr.setMyPK(this.FK_MapData + "_" + this.KeyOfEn);
             attr.Retrieve();
 
             //加入从表组件
@@ -802,7 +803,7 @@ namespace BP.WF.HttpHandler
 
             //获取外键值
             DataTable dt = BP.Pub.PubClass.GetDataTableByUIBineKey(attr.UIBindKey);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -819,36 +820,36 @@ namespace BP.WF.HttpHandler
                     /*初始枚举值变化.
                      */
                     FrmRB rb = new FrmRB();
-                    rb.FK_MapData = this.FK_MapData;
-                    rb.KeyOfEn = this.KeyOfEn;
-                    rb.IntKey = -1;
-                    rb.Lab = "--无(不选择)--";
-                    rb.EnumKey = attr.UIBindKey;
+                    rb.setFK_MapData(this.FK_MapData);
+                    rb.setKeyOfEn(this.KeyOfEn);
+                    rb.setIntKey( -1);
+                    rb.setLab("--无(不选择)--");
+                    rb.setEnumKey(attr.UIBindKey);
                     rb.Insert(); //插入数据.
 
                     SysEnums ses = new SysEnums(attr.UIBindKey);
                     foreach (SysEnum se in ses)
                     {
                         rb = new FrmRB();
-                        rb.FK_MapData = this.FK_MapData;
-                        rb.KeyOfEn = this.KeyOfEn;
-                        rb.IntKey = se.IntKey;
-                        rb.Lab = se.Lab;
-                        rb.EnumKey = attr.UIBindKey;
+                        rb.setFK_MapData(this.FK_MapData);
+                        rb.setKeyOfEn(this.KeyOfEn);
+                        rb.setIntKey(se.IntKey);
+                        rb.setLab(se.Lab);
+                        rb.setEnumKey(attr.UIBindKey);
                         rb.Insert(); //插入数据.
                     }
                 }
                 //如果是外键类型
-                if (attr.LGType == FieldTypeS.Normal)
+                if (attr.LGType == FieldTypeS.FK)
                 {
                     foreach (DataRow row in dt.Rows)
                     {
                         FrmRB rb = new FrmRB();
-                        rb.FK_MapData = this.FK_MapData;
-                        rb.KeyOfEn = this.KeyOfEn;
-                        rb.IntKey = int.Parse(row["No"].ToString());
-                        rb.Lab = row["Name"].ToString();
-                        rb.EnumKey = attr.UIBindKey;
+                        rb.setFK_MapData(this.FK_MapData);
+                        rb.setKeyOfEn(this.KeyOfEn);
+                        rb.setIntKey(int.Parse(row["No"].ToString()));
+                        rb.setLab( row["Name"].ToString());
+                        rb.setEnumKey(attr.UIBindKey);
                         rb.Insert(); //插入数据.
                     }
                 }
@@ -857,19 +858,19 @@ namespace BP.WF.HttpHandler
                 if (attr.MyDataType == DataType.AppBoolean && attr.UIContralType == UIContralType.CheckBok)
                 {
                     FrmRB rb = new FrmRB();
-                    rb.FK_MapData = this.FK_MapData;
-                    rb.KeyOfEn = this.KeyOfEn;
-                    rb.IntKey = 0;
-                    rb.Lab = "否";
-                    rb.EnumKey = attr.UIBindKey;
+                    rb.setFK_MapData(this.FK_MapData);
+                    rb.setKeyOfEn(this.KeyOfEn);
+                    rb.setIntKey(0);
+                    rb.setLab("否");
+                    rb.setEnumKey(attr.UIBindKey);
                     rb.Insert(); //插入数据.
 
                     rb = new FrmRB();
-                    rb.FK_MapData = this.FK_MapData;
-                    rb.KeyOfEn = this.KeyOfEn;
-                    rb.IntKey = 1;
-                    rb.Lab = "是";
-                    rb.EnumKey = attr.UIBindKey;
+                    rb.setFK_MapData(this.FK_MapData);
+                    rb.setKeyOfEn(this.KeyOfEn);
+                    rb.setIntKey(1);
+                    rb.setLab("是");
+                    rb.setEnumKey(attr.UIBindKey);
                     rb.Insert(); //插入数据.
 
                 }
@@ -896,7 +897,7 @@ namespace BP.WF.HttpHandler
 
             //属性.
             MapAttr attr = new MapAttr();
-            attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+            attr.setMyPK(this.FK_MapData + "_" + this.KeyOfEn);
             attr.Retrieve();
 
             //把分组加入里面.
@@ -925,7 +926,7 @@ namespace BP.WF.HttpHandler
             foreach (DataRow dr in dt.Rows)
             {
                 FrmRB rb = new FrmRB();
-                rb.MyPK = dr["MyPK"].ToString();
+                rb.setMyPK(dr["MyPK"].ToString());
                 rb.Retrieve();
 
                 rb.Script = dr["Script"].ToString();
@@ -978,13 +979,9 @@ namespace BP.WF.HttpHandler
         {
             DataSet ds = new DataSet();
 
-            Paras ps = new Paras();
-            ps.SQL = "SELECT * FROM Sys_MapExt WHERE AttrOfOper=" + SystemConfig.AppCenterDBVarStr + "AttrOfOper AND FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData";
-            ps.Add("AttrOfOper", this.KeyOfEn);
-            ps.Add("FK_MapData", this.FK_MapData);
-            DataTable dt = DBAccess.RunSQLReturnTable(ps);
-            dt.TableName = "Sys_MapExt";
-            ds.Tables.Add(dt);
+            MapExts mes = new MapExts();
+            mes.Retrieve("AttrOfOper", this.KeyOfEn, "FK_MapData", this.FK_MapData);
+            ds.Tables.Add( mes.ToDataTableField("Sys_MapExt"));
 
             BP.Sys.XML.RegularExpressions res = new BP.Sys.XML.RegularExpressions();
             res.Retrieve("ForCtrl", "TBNum");
@@ -1009,8 +1006,8 @@ namespace BP.WF.HttpHandler
                 return;
 
             MapExt me = new MapExt();
-            me.MyPK = MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.KeyOfEn + "_" + tagID;
-            me.FK_MapData = this.FK_MapData;
+            me.setMyPK(MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.KeyOfEn + "_" + tagID);
+            me.setFK_MapData(this.FK_MapData);
             me.AttrOfOper = this.KeyOfEn;
             me.ExtType = "RegularExpression";
             me.Tag = tagID;
@@ -1040,7 +1037,6 @@ namespace BP.WF.HttpHandler
             RegularExpression_Save_Tag("onkeypress");
             RegularExpression_Save_Tag("onkeyup");
             RegularExpression_Save_Tag("onsubmit");
-
 
             return "保存成功...";
         }
@@ -1089,7 +1085,7 @@ namespace BP.WF.HttpHandler
         public string PopVal_Init()
         {
             MapExt ext = new MapExt();
-            ext.MyPK = this.MyPK;
+            ext.setMyPK(this.MyPK);
             if (ext.RetrieveFromDBSources() == 0)
             {
                 // throw new Exception("err@主键=" + ext.MyPK + "的配置数据丢失");
@@ -1109,8 +1105,8 @@ namespace BP.WF.HttpHandler
             try
             {
                 MapExt me = new MapExt();
-                me.MyPK = this.FK_MapExt;
-                me.FK_MapData = this.FK_MapData;
+                me.setMyPK(this.FK_MapExt);
+                me.setFK_MapData(this.FK_MapData);
                 me.ExtType = "PopVal";
                 me.AttrOfOper = this.KeyOfEn;
                 me.RetrieveFromDBSources();
@@ -1216,7 +1212,7 @@ namespace BP.WF.HttpHandler
                     MapExtAttr.FK_MapData, this.FK_MapData,
                     MapExtAttr.AttrOfOper, this.KeyOfEn);
 
-                me.FK_MapData = this.FK_MapData;
+                me.setFK_MapData(this.FK_MapData);
                 me.AttrOfOper = this.KeyOfEn;
                 me.FK_DBSrc = this.GetValFromFrmByKey("FK_DBSrc");
                 me.Doc = this.GetValFromFrmByKey("TB_Doc"); //要执行的SQL.
@@ -1264,7 +1260,7 @@ namespace BP.WF.HttpHandler
 
             if (i == 0)
             {
-                me.FK_MapData = this.FK_MapData;
+                me.setFK_MapData(this.FK_MapData);
                 me.AttrOfOper = this.KeyOfEn;
                 me.FK_DBSrc = "local";
             }
@@ -1316,8 +1312,8 @@ namespace BP.WF.HttpHandler
             foreach (MapDtl dtl in dtls)
             {
                 string cols = "";
-                MapAttrs attrs = new MapAttrs(dtl.No);
-                foreach (MapAttr item in attrs)
+                MapAttrs mattrs = new MapAttrs(dtl.No);
+                foreach (MapAttr item in mattrs)
                 {
                     if (item.KeyOfEn == "OID" || item.KeyOfEn == "RefPKVal" || item.KeyOfEn == "RefPK")
                         continue;
@@ -1356,12 +1352,12 @@ namespace BP.WF.HttpHandler
         public string PopFullCtrlDDL_Init()
         {
             MapExt myme = new MapExt(this.MyPK);
-            MapAttrs attrs = new MapAttrs(myme.FK_MapData);
-            attrs.Retrieve(MapAttrAttr.FK_MapData, myme.FK_MapData,
+            MapAttrs mattrs = new MapAttrs(myme.FK_MapData);
+            mattrs.Retrieve(MapAttrAttr.FK_MapData, myme.FK_MapData,
                 MapAttrAttr.UIIsEnable, 1, MapAttrAttr.UIContralType, (int)UIContralType.DDL);
 
             string[] strs = myme.Tag.Split('$');
-            foreach (MapAttr attr in attrs)
+            foreach (MapAttr attr in mattrs)
             {
                 foreach (string s in strs)
                 {
@@ -1375,20 +1371,20 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            return attrs.ToJson();
+            return mattrs.ToJson();
         }
         public string PopFullCtrlDDL_Save()
         {
             MapExt myme = new MapExt(this.MyPK);
 
-            MapAttrs attrs = new MapAttrs(myme.FK_MapData);
-            attrs.Retrieve(MapAttrAttr.FK_MapData, myme.FK_MapData,
+            MapAttrs mattrs = new MapAttrs(myme.FK_MapData);
+            mattrs.Retrieve(MapAttrAttr.FK_MapData, myme.FK_MapData,
                 MapAttrAttr.UIIsEnable, 1, MapAttrAttr.UIContralType, (int)UIContralType.DDL);
 
             MapExt me = new MapExt(this.MyPK);
 
             string str = "";
-            foreach (MapAttr attr in attrs)
+            foreach (MapAttr attr in mattrs)
             {
 
                 string sql = this.GetRequestVal("TB_" + attr.KeyOfEn);

@@ -16,6 +16,8 @@ using BP.Difference;
 using System.Text;
 using BP.Tools;
 using System.Reflection;
+using BP.Difference;
+
 
 namespace BP.WF.HttpHandler
 {
@@ -226,7 +228,7 @@ namespace BP.WF.HttpHandler
                     //如果用户多项选择了，就要找到它的选择项目.
 
                     UserRegedit sUr = new UserRegedit();
-                    sUr.MyPK = WebUser.No + this.EnsName + "_SearchAttrs";
+                    sUr.setMyPK(WebUser.No + this.EnsName + "_SearchAttrs");
                     sUr.RetrieveFromDBSources();
 
                     /* 如果是多选值 */
@@ -363,7 +365,7 @@ namespace BP.WF.HttpHandler
         //            //如果用户多项选择了，就要找到它的选择项目.
 
         //            UserRegedit sUr = new UserRegedit();
-        //            sUr.MyPK = WebUser.No + this.EnsName + "_SearchAttrs";
+        //            sUr.setMyPK(WebUser.No + this.EnsName + "_SearchAttrs";
         //            sUr.RetrieveFromDBSources();
 
         //            /* 如果是多选值 */
@@ -463,7 +465,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 string pkval = this.PKVal;
-                
+
                 if (en == null)
                     return "err@类" + this.EnName + "不存在,请检查是不是拼写错误";
                 if (DataType.IsNullOrEmpty(pkval) == true || pkval.Equals("0") || pkval.Equals("undefined"))
@@ -536,7 +538,7 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
-                    string pkval = en.PKVal.ToString(); 
+                    string pkval = en.PKVal.ToString();
                     if (DataType.IsNullOrEmpty(pkval) == true)
                         en.PKVal = this.PKVal;
 
@@ -942,8 +944,8 @@ namespace BP.WF.HttpHandler
 
                     object valObj = val;
 
-                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                        valObj = BP.Sys.Glo.GenerRealType(en.EnMap.Attrs, key, val);
+                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+                        valObj = BP.Sys.Base.Glo.GenerRealType(en.EnMap.Attrs, key, val);
 
                     if (idx == 0)
                     {
@@ -1005,8 +1007,8 @@ namespace BP.WF.HttpHandler
 
                     //获得真实的数据类型.
                     object typeVal = val;
-                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                        typeVal = BP.Sys.Glo.GenerRealType(attrs, key, val);
+                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+                        typeVal = BP.Sys.Base.Glo.GenerRealType(attrs, key, val);
 
                     string[] keys = key.Trim().Split(',');
                     int count = 0;
@@ -1065,12 +1067,15 @@ namespace BP.WF.HttpHandler
 
             //执行该方法.
             object[] myparas = new object[0];
-
+            string atPara = GetRequestVal("atPara");
 
             if (DataType.IsNullOrEmpty(paras) == false)
             {
                 string[] str = paras.Split('~');
-                myparas = new object[str.Length];
+                if (DataType.IsNullOrEmpty(atPara) == true)
+                    myparas = new object[str.Length];
+                else
+                    myparas = new object[str.Length + 1];
 
                 int idx = 0;
                 ParameterInfo[] paramInfos = mp.GetParameters();
@@ -1109,7 +1114,19 @@ namespace BP.WF.HttpHandler
 
             }
 
-           string result = mp.Invoke(ens, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
+            if (DataType.IsNullOrEmpty(atPara) == false)
+            {
+                if (myparas.Length == 0)
+                {
+                    myparas = new object[1];
+                    myparas[0] = atPara;
+                }
+                else
+                    myparas[myparas.Length - 1] = atPara;
+            }
+
+
+            string result = mp.Invoke(ens, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
             return result;
 
         }
@@ -1324,7 +1341,7 @@ namespace BP.WF.HttpHandler
             //把实体类中的主键放在hashtable中
             ht.Add("EntityPK", en.PKField);
 
-            //#region 把配置的信息增加里面去. @yln
+            //#region 把配置的信息增加里面去.
             //EnCfg cfg = new EnCfg();
             //cfg.No = this.EnsName;
             //if (cfg.RetrieveFromDBSources() == 0)
@@ -1338,7 +1355,7 @@ namespace BP.WF.HttpHandler
             //    //设置值.
             //    ht.Add(key, cfg.GetValByKey(key));
             //}
-            //#endregion 把配置的信息增加里面去. @yln
+            //#endregion 把配置的信息增加里面去. 
 
 
 
@@ -1446,7 +1463,7 @@ namespace BP.WF.HttpHandler
         {
             //取出来查询条件.
             BP.Sys.UserRegedit ur = new UserRegedit();
-            ur.MyPK = WebUser.No + "_" + this.EnsName + "_SearchAttrs";
+            ur.setMyPK(WebUser.No + "_" + this.EnsName + "_SearchAttrs");
             ur.RetrieveFromDBSources();
 
             DataSet ds = new DataSet();
@@ -1886,7 +1903,7 @@ namespace BP.WF.HttpHandler
                 //    return "err@查询日期错误，查询到的日期不能小于从日期.";
 
                 if (DataType.IsNullOrEmpty(dtTo) == true)
-                    dtTo = DataType.CurrentData;
+                    dtTo = DataType.CurrentDate;
 
 
                 //按日期查询
@@ -1954,7 +1971,7 @@ namespace BP.WF.HttpHandler
             string opkey = ""; // 操作符号。
             foreach (AttrOfSearch attr in en.EnMap.AttrsOfSearch)
             {
-               
+
 
                 if (attr.IsHidden)
                 {
@@ -1963,11 +1980,18 @@ namespace BP.WF.HttpHandler
                     else
                         isFirst = false;
                     qo.addLeftBracket();
+                    if (attr.DefaultSymbol.Equals("exp") == true)
+                    {
+                        qo.addSQL(BP.WF.Glo.DealExp(attr.RefAttrKey,null));
+                        qo.addRightBracket();
+                        continue;
+
+                    }
 
                     //获得真实的数据类型.
-                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                     {
-                        var valType = BP.Sys.Glo.GenerRealType(en.EnMap.Attrs,
+                        var valType = BP.Sys.Base.Glo.GenerRealType(en.EnMap.Attrs,
                             attr.RefAttrKey, attr.DefaultValRun);
                         qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, valType);
                     }
@@ -2048,7 +2072,7 @@ namespace BP.WF.HttpHandler
                 qo.addLeftBracket();
 
                 //获得真实的数据类型.
-                var valType = BP.Sys.Glo.GenerRealType(en.EnMap.Attrs,
+                var valType = BP.Sys.Base.Glo.GenerRealType(en.EnMap.Attrs,
                     str, ap.GetValStrByKey(str));
 
                 qo.AddWhere(str, valType);
@@ -2059,7 +2083,7 @@ namespace BP.WF.HttpHandler
             }
 
 
-           
+
             foreach (Attr attr in map.Attrs)
             {
                 if (DataType.IsNullOrEmpty(HttpContextHelper.RequestParams(attr.Field)))
@@ -2140,7 +2164,7 @@ namespace BP.WF.HttpHandler
             MapAttrs attrs = map.Attrs.ToMapAttrs;
             //取出来查询条件.
             BP.Sys.UserRegedit ur = new UserRegedit();
-            ur.MyPK = WebUser.No + "_" + this.EnsName + "_SearchAttrs";
+            ur.setMyPK(WebUser.No + "_" + this.EnsName + "_SearchAttrs");
             ur.RetrieveFromDBSources();
 
             //获得关键字.
@@ -2358,7 +2382,7 @@ namespace BP.WF.HttpHandler
                 string dtTo = ur.DTTo; // this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
 
                 if (DataType.IsNullOrEmpty(dtTo) == true)
-                    dtTo = DataType.CurrentData;
+                    dtTo = DataType.CurrentDate;
 
                 //按日期查询
                 if (map.DTSearchWay == DTSearchWay.ByDate)
@@ -2413,9 +2437,9 @@ namespace BP.WF.HttpHandler
                     qo.addLeftBracket();
 
                     //获得真实的数据类型.
-                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                     {
-                        var valType = BP.Sys.Glo.GenerRealType(en.EnMap.Attrs,
+                        var valType = BP.Sys.Base.Glo.GenerRealType(en.EnMap.Attrs,
                             attr.RefAttrKey, attr.DefaultValRun);
                         qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, valType);
                     }
@@ -2490,7 +2514,7 @@ namespace BP.WF.HttpHandler
                 qo.addLeftBracket();
 
                 //获得真实的数据类型.
-                var valType = BP.Sys.Glo.GenerRealType(en.EnMap.Attrs,
+                var valType = BP.Sys.Base.Glo.GenerRealType(en.EnMap.Attrs,
                     str, ap.GetValStrByKey(str));
 
                 qo.AddWhere(str, valType);
@@ -2522,7 +2546,7 @@ namespace BP.WF.HttpHandler
         {
 
             BP.Sys.UserRegedit ur = new UserRegedit();
-            ur.MyPK = WebUser.No + "_" + this.EnsName + "_SearchAttrs";
+            ur.setMyPK(WebUser.No + "_" + this.EnsName + "_SearchAttrs");
             ur.RetrieveFromDBSources();
 
             string url = "?EnsName=" + this.EnsName;
@@ -2623,8 +2647,8 @@ namespace BP.WF.HttpHandler
 
             }
 
-            string filename = name + "_" + DataType.CurrentDataTimeCNOfLong + "_" + WebUser.Name + ".xls";
-            string filePath = ExportDGToExcel(Search_Data(ens, en), en, name, attrs);
+            string filename = name + "_" + DataType.CurrentDateTimeCNOfLong + "_" + WebUser.Name + ".xls";
+            string filePath = BP.Tools.ExportExcelUtil.ExportDGToExcel(Search_Data(ens, en), en, name, attrs);
 
             return filePath;
         }
@@ -2640,8 +2664,8 @@ namespace BP.WF.HttpHandler
             string workId = this.GetRequestVal("WorkId");
             string fid = this.GetRequestVal("FID");
             string name = "从表数据导出";
-            string filename = name + "_" + DataType.CurrentDataTimeCNOfLong + "_" + WebUser.Name + ".xls";
-            string filePath = ExportDGToExcel(SearchDtl_Data(ens, en, workId, fid), en, name);
+            string filename = name + "_" + DataType.CurrentDateTimeCNOfLong + "_" + WebUser.Name + ".xls";
+            string filePath = BP.Tools.ExportExcelUtil.ExportDGToExcel(SearchDtl_Data(ens, en, workId, fid), en, name);
 
             return filePath;
         }
@@ -2762,9 +2786,9 @@ namespace BP.WF.HttpHandler
                     else if (v.Equals("@RDT"))
                     {
                         if (item.MyDataType == DataType.AppDate)
-                            mydrMain[item.KeyOfEn] = DataType.CurrentData;
+                            mydrMain[item.KeyOfEn] = DataType.CurrentDate;
                         if (item.MyDataType == DataType.AppDateTime)
-                            mydrMain[item.KeyOfEn] = DataType.CurrentDataTime;
+                            mydrMain[item.KeyOfEn] = DataType.CurrentDateTime;
                     }
                     else
                     {
@@ -2833,7 +2857,7 @@ namespace BP.WF.HttpHandler
                     dt1.TableName = attr.Key;
 
                     //@杜. 翻译当前部分.
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                     {
                         dt1.Columns["NO"].ColumnName = "No";
                         dt1.Columns["NAME"].ColumnName = "Name";
@@ -2945,33 +2969,40 @@ namespace BP.WF.HttpHandler
             #endregion 字段属性.
 
             #region 把外键与枚举放入里面去.
-            foreach (DataRow dr in sys_MapAttrs.Rows)
+            foreach (MapAttr mapAttr in attrs)
             {
-                string uiBindKey = dr["UIBindKey"].ToString();
-                string lgType = dr["LGType"].ToString();
-                if (lgType.Equals("2") == false)
+                string uiBindKey = mapAttr.UIBindKey;
+
+                if (DataType.IsNullOrEmpty(uiBindKey) == true || mapAttr.UIIsEnable == false)
                     continue;
-
-                string UIIsEnable = dr["UIVisible"].ToString();
-                if (UIIsEnable == "0")
-                    continue;
-
-                if (DataType.IsNullOrEmpty(uiBindKey) == true)
-                {
-                    string myPK = dr["MyPK"].ToString();
-                    /*如果是空的*/
-                    //   throw new Exception("@属性字段数据不完整，流程:" + fl.No + fl.Name + ",节点:" + nd.NodeID + nd.Name + ",属性:" + myPK + ",的UIBindKey IsNull ");
-                }
-
-                // 检查是否有下拉框自动填充。
-                string keyOfEn = dr["KeyOfEn"].ToString();
-                string fk_mapData = dr["FK_MapData"].ToString();
-
 
                 // 判断是否存在.
                 if (ds.Tables.Contains(uiBindKey) == true)
                     continue;
+                if (uiBindKey.ToUpper().Trim().StartsWith("SELECT") == true)
+                {
+                    string sqlBindKey = BP.WF.Glo.DealExp(uiBindKey, en, null);
 
+                    DataTable dt = DBAccess.RunSQLReturnTable(sqlBindKey);
+                    dt.TableName = mapAttr.KeyOfEn;
+                    if (SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+                    {
+                        dt.Columns["NO"].ColumnName = "No";
+                        dt.Columns["NAME"].ColumnName = "Name";
+                    }
+                    if (SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+                    {
+                        dt.Columns["no"].ColumnName = "No";
+                        dt.Columns["name"].ColumnName = "Name";
+                    }
+
+                    ds.Tables.Add(dt);
+                    continue;
+                }
+
+                if (mapAttr.LGType != FieldTypeS.FK)
+                    continue;
+ 
                 ds.Tables.Add(BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey));
             }
 
@@ -2993,7 +3024,7 @@ namespace BP.WF.HttpHandler
 
                 dtEnum.TableName = "Sys_Enum";
 
-                if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                 {
                     dtEnum.Columns["MYPK"].ColumnName = "MyPK";
                     dtEnum.Columns["LAB"].ColumnName = "Lab";
@@ -3071,10 +3102,10 @@ namespace BP.WF.HttpHandler
                 Entities dtls = BP.En.ClassFactory.GetEns(this.EnsName);
                 if (dtls == null)
                     return "err@类" + this.EnsName + "不存在,请检查是不是拼写错误";
-               
+
                 dtls.RetrieveAll();
                 Entity en = dtls.GetNewEntity;
-              
+
                 Map map = en.EnMap;
                 foreach (Entity item in dtls)
                 {
@@ -3084,37 +3115,34 @@ namespace BP.WF.HttpHandler
                     {
                         if (attr.IsRefAttr == true)
                             continue;
-                        if (attr.UIVisible == false)
+                        if (attr.UIVisible == false || attr.UIIsReadonly == true)
                             continue;
-
+                        string key = pkval + "_" + attr.Key;
                         if (attr.MyDataType == DataType.AppDateTime || attr.MyDataType == DataType.AppDate)
                         {
-                            if (attr.UIIsReadonly == false)
-                                continue;
-
-                            string val = this.GetValFromFrmByKey("TB_" + pkval + "_" + attr.Key, null);
+                            string val = this.GetValFromFrmByKey("TB_" + key, null);
                             item.SetValByKey(attr.Key, val);
                             continue;
                         }
 
 
-                        if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
+                        if (attr.UIContralType == UIContralType.TB)
                         {
-                            string val = this.GetValFromFrmByKey("TB_" + pkval + "_" + attr.Key, null);
+                            string val = this.GetValFromFrmByKey("TB_" + key, null);
                             item.SetValByKey(attr.Key, val);
                             continue;
                         }
 
-                        if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == true)
+                        if (attr.UIContralType == UIContralType.DDL )
                         {
-                            string val = this.GetValFromFrmByKey("DDL_" + pkval + "_" + attr.Key);
+                            string val = this.GetValFromFrmByKey("DDL_" + key);
                             item.SetValByKey(attr.Key, val);
                             continue;
                         }
 
                         if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == true)
                         {
-                            string val = this.GetValFromFrmByKey("CB_" + pkval + "_" + attr.Key, "-1");
+                            string val = this.GetValFromFrmByKey("CB_" + key, "-1");
                             if (val == "-1")
                                 item.SetValByKey(attr.Key, 0);
                             else
@@ -3193,7 +3221,7 @@ namespace BP.WF.HttpHandler
                 catch (Exception ex)
                 {
                     //异常处理..
-                    Log.DebugWriteInfo(ex.Message);
+                    BP.DA.Log.DebugWriteError(ex.Message);
                     return ex.Message;
                 }
 
@@ -3504,7 +3532,7 @@ namespace BP.WF.HttpHandler
             if (clsName.ToUpper().Contains(".HttpHandler.") == true)
             {
                 //创建类实体.
-                string baseName = BP.Sys.Glo.DealClassEntityName("BP.WF.HttpHandler.DirectoryPageBase");
+                string baseName = BP.Sys.Base.Glo.DealClassEntityName("BP.WF.HttpHandler.DirectoryPageBase");
 
                 DirectoryPageBase ctrl = Activator.CreateInstance(System.Type.GetType(baseName)) as DirectoryPageBase;
                 //ctrl.context = this.context;
@@ -3611,7 +3639,7 @@ namespace BP.WF.HttpHandler
                 dt = DBAccess.RunSQLReturnTable(sql);
 
             //暂定
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 //获取SQL的字段
                 //获取 from 的位置
@@ -3727,8 +3755,7 @@ namespace BP.WF.HttpHandler
         {
             Hashtable ht = new Hashtable();
 
-
-            //@hongyan. 需要同步.
+            //需要同步.
             string userNo = Web.WebUser.No;
             if (DataType.IsNullOrEmpty(userNo) == true)
             {
@@ -3779,7 +3806,7 @@ namespace BP.WF.HttpHandler
             }
 
             //每次访问表很消耗资源.
-            //Port.WFEmp emp = new Port.WFEmp(WebUser.No);
+            //Port.WFEmp emp = new BP.Port.WFEmp(WebUser.No);
             //ht.Add("Theme", emp.GetParaString("Theme"));
 
 
@@ -4461,9 +4488,9 @@ namespace BP.WF.HttpHandler
                     // 加入组里面。
                     mapAttrOfShows.Add(map.GetAttrByKey(key));
 
-                    selectSQL += key + " \"" + key + "\",";
+                    selectSQL += map.PhysicsTable + "." + key + " \"" + key + "\",";
 
-                    groupBySQL += key + ",";
+                    groupBySQL += map.PhysicsTable + "." + key + ",";
 
                     if (attr.MyFieldType == FieldType.FK)
                     {
@@ -4527,7 +4554,7 @@ namespace BP.WF.HttpHandler
                             selectSQL += " SUM(" + strs[0] + ") \"" + strs[0] + "\",";
                         else
                         {
-                            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                                 selectSQL += " round ( cast (SUM(" + strs[0] + ") as  numeric), 4)  \"" + strs[0] + "\",";
                             else
                                 selectSQL += " round ( SUM(" + strs[0] + "), 4) \"" + strs[0] + "\",";
@@ -4536,7 +4563,7 @@ namespace BP.WF.HttpHandler
 
                         break;
                     case "AVG":
-                        if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                        if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                             selectSQL += " round ( cast (AVG(" + strs[0] + ") as  numeric), 4)  \"" + strs[0] + "\",";
                         else
                             selectSQL += " round (AVG(" + strs[0] + "), 4)  \"" + strs[0] + "\",";
@@ -4547,7 +4574,7 @@ namespace BP.WF.HttpHandler
                             selectSQL += " SUM(" + strs[0] + ") \"" + strs[0] + "\",";
                         else
                         {
-                            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                                 selectSQL += " round ( cast (SUM(" + strs[0] + ") as  numeric), 4)  \"" + strs[0] + "\",";
                             else
                                 selectSQL += " round ( SUM(" + strs[0] + "), 4) \"" + strs[0] + "\",";
@@ -4571,7 +4598,7 @@ namespace BP.WF.HttpHandler
 
             //获取查询的注册表
             BP.Sys.UserRegedit searchUr = new UserRegedit();
-            searchUr.MyPK = WebUser.No + "_" + this.EnsName + "_SearchAttrs";
+            searchUr.setMyPK(WebUser.No + "_" + this.EnsName + "_SearchAttrs");
             searchUr.RetrieveFromDBSources();
 
             QueryObject qo = Search_Data(ens, en, map, searchUr);
@@ -4603,9 +4630,6 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(mapAttrOfShows.ToMapAttrs.ToDataTableField("Sys_MapAttr"));
             ds.Tables.Add(AttrsOfNum.ToMapAttrs.ToDataTableField("AttrsOfNum"));
 
-
-
-
             return ds;
         }
         public string ParseExpToDecimal()
@@ -4620,33 +4644,33 @@ namespace BP.WF.HttpHandler
         /// 执行导出
         /// </summary>
         /// <returns></returns>
-        public string Group_Exp()
-        {
-            //获得
-            Entities ens = ClassFactory.GetEns(this.EnsName);
-            if (ens == null)
-                return "err@类名错误:" + this.EnsName;
+        //public string Group_Exp()
+        //{
+        //    //获得
+        //    Entities ens = ClassFactory.GetEns(this.EnsName);
+        //    if (ens == null)
+        //        return "err@类名错误:" + this.EnsName;
 
-            Entity en = ens.GetNewEntity;
-            Map map = ens.GetNewEntity.EnMapInTime;
-            DataSet ds = new DataSet();
+        //    Entity en = ens.GetNewEntity;
+        //    Map map = ens.GetNewEntity.EnMapInTime;
+        //    DataSet ds = new DataSet();
 
-            //获取注册信息表
-            UserRegedit ur = new UserRegedit(WebUser.No, this.EnsName + "_Group");
+        //    //获取注册信息表
+        //    UserRegedit ur = new UserRegedit(WebUser.No, this.EnsName + "_Group");
 
-            // 查询出来关于它的活动列配置.
-            ActiveAttrs aas = new ActiveAttrs();
-            aas.RetrieveBy(ActiveAttrAttr.For, this.EnsName);
+        //    // 查询出来关于它的活动列配置.
+        //    ActiveAttrs aas = new ActiveAttrs();
+        //    aas.RetrieveBy(ActiveAttrAttr.For, this.EnsName);
 
-            ds = GroupSearchSet(ens, en, map, ur, ds, aas);
-            if (ds == null)
-                return "err@您没有选择分析的数据";
+        //    ds = GroupSearchSet(ens, en, map, ur, ds, aas);
+        //    if (ds == null)
+        //        return "err@您没有选择分析的数据";
 
-            string filePath = ExportGroupExcel(ds, en.EnDesc, ur.Vals);
+        //    string filePath = BP.Tools.ExportExcelUtil.ExportGroupExcel(ds, en.EnDesc, ur.Vals);
 
 
-            return filePath;
-        }
+        //    return filePath;
+        //}
 
         public bool IsContainsNDYF
         {

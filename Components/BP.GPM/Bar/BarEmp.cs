@@ -104,15 +104,7 @@ namespace BP.GPM
         public BarEmp()
         {
         }
-        /// <summary>
-        /// 人员信息块
-        /// </summary>
-        /// <param name="mypk"></param>
-        public BarEmp(string no)
-        {
-          //  this.No = no;
-            this.Retrieve();
-        }
+       
         /// <summary>
         /// EnMap
         /// </summary>
@@ -122,11 +114,8 @@ namespace BP.GPM
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_BarEmp");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "人员信息块";
-                map.EnType = EnType.Sys;
+                Map map = new Map("GPM_BarEmp", "人员信息块");
+                map.setEnType(EnType.Sys);
 
                 map.AddMyPK(); // 主键是由:  FK_Bar+"_"+FK_Emp 组成的，它是一个复合主键.
                 map.AddTBString(BarEmpAttr.FK_Bar, null, "信息块编号", true, false, 0, 90, 20);
@@ -191,7 +180,7 @@ namespace BP.GPM
             foreach (Bar b in bars)
             {
                 BarEmp be = new BarEmp();
-                be.MyPK =  b.No + "_" + BP.Web.WebUser.No;
+                be.setMyPK( b.No + "_" + BP.Web.WebUser.No);
                 if (be.RetrieveFromDBSources() == 1)
                     continue;
 

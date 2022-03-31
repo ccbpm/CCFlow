@@ -115,10 +115,7 @@ namespace BP.WF.Template
         /// 默认审核信息
         /// </summary>
         public const string SFDefInfo = "SFDefInfo";
-        /// <summary>
-        /// 触发的流程
-        /// </summary>
-        public const string SFActiveFlows = "SFActiveFlows";
+
         /// <summary>
         /// 标题
         /// </summary>
@@ -147,6 +144,10 @@ namespace BP.WF.Template
         /// 查看类型
         /// </summary>
         public const string SFOpenType = "SFOpenType";
+        /// <summary>
+        /// 所有子流程完成后父流程自动发送
+        /// </summary>
+        public const string AllSubFlowOverRole = "AllSubFlowOverRole";
     }
     /// <summary>
     /// 父子流程
@@ -179,6 +180,14 @@ namespace BP.WF.Template
                 this.NodeID = int.Parse(nodeID);
             }
         }
+
+        public AllSubFlowOverRole AllSubFlowOverRole
+        {
+            get
+            {
+                return (AllSubFlowOverRole)this.GetValIntByKey(FrmSubFlowAttr.AllSubFlowOverRole);
+            }
+        }
         /// <summary>
         /// 节点ID
         /// </summary>
@@ -193,20 +202,7 @@ namespace BP.WF.Template
                 this.SetValByKey(NodeAttr.NodeID, value);
             }
         }
-        /// <summary>
-        /// 可触发的子流程
-        /// </summary>
-        public string SFActiveFlows
-        {
-            get
-            {
-                return this.GetValStringByKey(NodeAttr.SFActiveFlows);
-            }
-            set
-            {
-                this.SetValByKey(NodeAttr.SFActiveFlows, value);
-            }
-        }
+
         /// <summary>
         /// 字段列
         /// </summary>
@@ -595,45 +591,55 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(FrmSubFlowAttr.SFSta, (int)FrmSubFlowSta.Disable, "组件状态",
                    true, true, FrmSubFlowAttr.SFSta, "@0=禁用@1=启用@2=只读");
+                map.SetHelperUrl(FrmSubFlowAttr.SFSta, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3982372&doc_id=31094");
 
                 map.AddDDLSysEnum(FrmSubFlowAttr.SFShowModel, (int)FrmWorkShowModel.Free, "显示方式",
                     true, true, FrmSubFlowAttr.SFShowModel, "@0=表格方式@1=自由模式"); //此属性暂时没有用.
 
+                map.AddDDLSysEnum(FrmSubFlowAttr.SFShowCtrl, (int)SFShowCtrl.All, "显示控制方式",
+                 true, true, FrmSubFlowAttr.SFShowCtrl, "@0=可以看所有的子流程@1=仅仅可以看自己发起的子流程"); //此属性暂时没有用.
+                map.SetHelperAlert(FrmSubFlowAttr.SFShowCtrl, "是对当前节点，一个流程实例下启动的所有子流程的数据权限查看控制。");
+
+                map.AddDDLSysEnum(FrmSubFlowAttr.AllSubFlowOverRole, 0, "所有子流程结束规则", true, true,
+                FrmSubFlowAttr.AllSubFlowOverRole, "@0=不处理@1=当前流程自动运行下一步@2=结束当前流程");
+
                 map.AddTBString(FrmSubFlowAttr.SFCaption, "启动子流程", "连接标题", true, false, 0, 100, 10, true);
+
                 map.AddTBString(FrmSubFlowAttr.SFDefInfo, null, "可启动的子流程编号(多个用逗号分开)", false, false, 0, 50, 10, true);
-                map.AddTBString(FrmSubFlowAttr.SFActiveFlows, null, "可触发的子流程编号(多个用逗号分开)", false, false, 0, 50, 10, true);
 
-                map.AddTBFloat(FrmSubFlowAttr.SF_X, 5, "位置X", true, false);
-                map.AddTBFloat(FrmSubFlowAttr.SF_Y, 5, "位置Y", true, false);
+                map.AddTBFloat(FrmSubFlowAttr.SF_X, 5, "位置X", false, false);
+                map.AddTBFloat(FrmSubFlowAttr.SF_Y, 5, "位置Y", false, false);
 
-                map.AddTBFloat(FrmSubFlowAttr.SF_H, 300, "高度", true, false);
-                map.AddTBFloat(FrmSubFlowAttr.SF_W, 400, "宽度", true, false);
 
                 map.AddTBString(FrmSubFlowAttr.SFFields, null, "审批格式字段", true, false, 0, 50, 10, true);
 
-                map.AddDDLSysEnum(FrmSubFlowAttr.SFShowCtrl, (int)SFShowCtrl.All, "显示控制方式",
-                  true, true, FrmSubFlowAttr.SFShowCtrl, "@0=可以看所有的子流程@1=仅仅可以看自己发起的子流程"); //此属性暂时没有用.
+               
+
 
                 map.AddDDLSysEnum(FrmSubFlowAttr.SFOpenType, 0, "打开子流程显示",
-                 true, true, FrmSubFlowAttr.SFOpenType, "@0=工作查看器@1=傻瓜表单轨迹查看器"); //此属性暂时没有用.
+                 true, true, FrmSubFlowAttr.SFOpenType, "@0=工作查看器@1=流程轨迹"); //此属性暂时没有用.
+                map.SetHelperAlert(FrmSubFlowAttr.SFOpenType, "点击子流程（一个子流程实例）的时候要打开的页面。\t\n1.工作查看器可以看到表单. \t\n2.流程轨迹看到流程运行图，时间轴. ");
 
 
+
+                map.AddTBFloat(FrmSubFlowAttr.SF_H, 300, "高度", true, false);
+                map.AddTBFloat(FrmSubFlowAttr.SF_W, 400, "宽度", true, false);
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
                 RefMethod rm = new RefMethod();
-                rm.Title = "手动启动子流程"; 
+                rm.Title = "手动启动子流程";
                 rm.ClassMethodName = this.ToString() + ".DoSubFlowHand";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "自动触发子流程"; 
+                rm.Title = "自动触发子流程";
                 rm.ClassMethodName = this.ToString() + ".DoSubFlowAuto";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "延续子流程";  
+                rm.Title = "延续子流程";
                 rm.ClassMethodName = this.ToString() + ".DoSubFlowYanXu";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -682,7 +688,7 @@ namespace BP.WF.Template
             //清空缓存，重新查数据
             Node nd = new Node(this.NodeID);
             nd.RetrieveFromDBSources();
-            Cash2019.UpdateRow(nd.ToString(),this.NodeID.ToString(),nd.Row);
+            Cash2019.UpdateRow(nd.ToString(), this.NodeID.ToString(), nd.Row);
 
             GroupField gf = new GroupField();
             if (this.SFSta == FrmSubFlowSta.Disable)

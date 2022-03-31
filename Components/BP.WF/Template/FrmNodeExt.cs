@@ -116,7 +116,7 @@ namespace BP.WF.Template
         /// <param name="mypk"></param>
         public FrmNodeExt(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -133,7 +133,10 @@ namespace BP.WF.Template
 
                 #region 基本信息.
                 map.AddMyPK();
-                map.AddDDLEntities(FrmNodeAttr.FK_Frm, null, "表单", new MapDatas(), false);
+                //map.AddTBString(FrmNodeAttr.FK_Frm, null, "表单", true, true, 0, 300, 20);
+                 map.AddDDLEntities(FrmNodeAttr.FK_Frm, null, "表单", new MapDatas(), false);
+                map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点ID", true, true);
+
 
                 map.AddBoolean(FrmNodeAttr.IsPrint, false, "是否可以打印", true, true);
                 map.AddBoolean(FrmNodeAttr.IsEnableLoadData, false, "是否启用装载填充事件", true, true);
@@ -169,9 +172,7 @@ namespace BP.WF.Template
                 map.AddTBString(FrmNodeAttr.TempleteFile, null, "模版文件", true, false, 0, 500, 20);
 
                 //是否显示.
-              //  map.AddTBString(FrmNodeAttr.GuanJianZiDuan, null, "关键字段", true, false, 0, 20, 20);
-
-                
+                //  map.AddTBString(FrmNodeAttr.GuanJianZiDuan, null, "关键字段", true, false, 0, 20, 20);
 
                 //显示的
                 map.AddTBInt(FrmNodeAttr.Idx, 0, "顺序号", true, false);
@@ -197,7 +198,6 @@ namespace BP.WF.Template
                 map.AddTBInt(FrmNodeAttr.FrmEnableRole, 0, "启用规则", false, false);
                 map.AddTBString(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", true, false, 0, 900, 20);
                 map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程编号", false, false, 0, 4, 20);
-                map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点ID", false, false);
                 #endregion 隐藏字段.
 
                 #region 相关功能..
@@ -259,13 +259,13 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.GroupName = "表单元素权限";
-                rm.Title = "组件权限";
-                rm.ClassMethodName = this.ToString() + ".DoComponents()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Visable = false;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.GroupName = "表单元素权限";
+                //rm.Title = "组件权限";
+                //rm.ClassMethodName = this.ToString() + ".DoComponents()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.Visable = false;
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.GroupName = "表单元素权限";
@@ -334,7 +334,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFrmNodeWorkCheck()
         {
-            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmWorkCheck&PKVal=" + this.FK_Node + "&CheckField=" + this.CheckField + "&FK_Frm=" + this.FK_Frm + "&t=" + DataType.CurrentDataTime;
+            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmWorkCheck&PKVal=" + this.FK_Node + "&CheckField=" + this.CheckField + "&FK_Frm=" + this.FK_Frm + "&t=" + DataType.CurrentDateTime;
         }
 
         /// <summary>

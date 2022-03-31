@@ -136,7 +136,7 @@ namespace BP.WF.Data
         protected override bool beforeUpdateInsertAction()
         {
             if (DataType.IsNullOrEmpty(this.MyPK) == true)
-                this.MyPK = DBAccess.GenerGUID();
+                this.setMyPK(DBAccess.GenerGUID());
 
             return base.beforeUpdateInsertAction();
         }
@@ -244,31 +244,31 @@ namespace BP.WF.Data
             if (val==0)
             {
                 FastInput en = new FastInput();
-                en.MyPK = DBAccess.GenerGUID();
+                en.setMyPK(DBAccess.GenerGUID());
                 en.Vals = "同意";
                 en.FK_Emp = WebUser.No;
                 en.Insert();
 
                 en = new FastInput();
-                en.MyPK = DBAccess.GenerGUID();
+                en.setMyPK(DBAccess.GenerGUID());
                 en.Vals = "不同意";
                 en.FK_Emp = WebUser.No;
                 en.Insert();
 
                 en = new FastInput();
-                en.MyPK = DBAccess.GenerGUID();
+                en.setMyPK(DBAccess.GenerGUID());
                 en.Vals = "同意，请领导批示";
                 en.FK_Emp = WebUser.No;
                 en.Insert();
 
                 en = new FastInput();
-                en.MyPK = DBAccess.GenerGUID();
+                en.setMyPK(DBAccess.GenerGUID());
                 en.Vals = "同意办理";
                 en.FK_Emp = WebUser.No;
                 en.Insert();
 
                 en = new FastInput();
-                en.MyPK = DBAccess.GenerGUID();
+                en.setMyPK(DBAccess.GenerGUID());
                 en.Vals = "情况属实报领导批准";
                 en.FK_Emp = WebUser.No;
                 en.Insert();

@@ -87,20 +87,17 @@ namespace BP.Port
                     return this._enMap;
 
                 Map map = new Map("Port_Station", "岗位");
-                map.CodeStruct = "3";
-                map.IsAutoGenerNo = true;
+                map.setCodeStruct("3");
+                map.setIsAutoGenerNo(true);
 
                 map.AddTBStringPK(StationAttr.No, null, "编号", true, true, 1, 50, 200);
                 map.AddTBString(StationAttr.Name, null, "名称", true, false, 0, 100, 200);
                 map.AddDDLEntities(StationAttr.FK_StationType, null, "类型", new StationTypes(), true);
+
+                map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
+
                 map.AddSearchAttr(StationAttr.FK_StationType);
 
-                if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
-                {
-                    map.AddHidden(StationTypeAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);
-                    
-                }
-                map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
 
                 this._enMap = map;
                 return this._enMap;

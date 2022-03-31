@@ -2,7 +2,6 @@
 using System;
 using System.DirectoryServices;
 using System.Runtime.InteropServices;   //必要引用
-using System.Security.Principal;    //必要引用
 
 
 namespace BP.GPM.AD
@@ -110,7 +109,6 @@ namespace BP.GPM.AD
                                           ref IntPtr hNewToken);
         private const int LOGON32_LOGON_INTERACTIVE = 2;
         private const int LOGON32_PROVIDER_DEFAULT = 0;
-        private static WindowsImpersonationContext impersonationContext = null;
         /// <summary>
         /// 执行登录
         /// </summary>

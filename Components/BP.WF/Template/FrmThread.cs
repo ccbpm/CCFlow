@@ -287,8 +287,8 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(FrmThreadAttr.FrmThreadSta, (int)FrmThreadSta.Disable, "组件状态",
                    true, true, FrmThreadAttr.FrmThreadSta, "@0=禁用@1=启用");
 
-                map.AddTBFloat(FrmThreadAttr.FrmThread_X, 5, "位置X", true, false);
-                map.AddTBFloat(FrmThreadAttr.FrmThread_Y, 5, "位置Y", true, false);
+                map.AddTBFloat(FrmThreadAttr.FrmThread_X, 5, "位置X", false, false);
+                map.AddTBFloat(FrmThreadAttr.FrmThread_Y, 5, "位置Y", false, false);
 
                 map.AddTBFloat(FrmThreadAttr.FrmThread_H, 300, "高度", true, false);
                 map.AddTBFloat(FrmThreadAttr.FrmThread_W, 400, "宽度", true, false);

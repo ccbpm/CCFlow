@@ -56,8 +56,7 @@ namespace BP.En
                     return this._enMap;
 
                 Map map = new Map(this.PhysicsTable,this.Desc);
-                map.IsAutoGenerNo = true;
-                map.IsAutoGenerNo = true;
+                map.setIsAutoGenerNo(true);
 
                 map.AddTBStringPK(GENoNameAttr.No, null, "编号", true, true, 1, 30, 3);
                 map.AddTBString(GENoNameAttr.Name, null, "名称", true, false, 1, 60, 500);

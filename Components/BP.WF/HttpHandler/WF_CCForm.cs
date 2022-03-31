@@ -19,7 +19,8 @@ using BP.Difference;
 using BP.Sys;
 using System.Net;
 using System.Drawing;
-using BP.En30.Tools;
+using BP.Tools;
+using BP.Sys.FrmUI;
 
 namespace BP.WF.HttpHandler
 {
@@ -104,9 +105,9 @@ namespace BP.WF.HttpHandler
                         FrmAttachmentDB dbUpload = new FrmAttachmentDB();
 
                         //dbUpload.CheckPhysicsTable();
-                        dbUpload.MyPK = athDesc.FK_MapData + oid.ToString();
+                        dbUpload.setMyPK(athDesc.FK_MapData + oid.ToString());
                         dbUpload.NodeID = FK_Node;
-                        dbUpload.FK_MapData = athDesc.FK_MapData;
+                        dbUpload.setFK_MapData(athDesc.FK_MapData);
 
                         dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
 
@@ -128,7 +129,7 @@ namespace BP.WF.HttpHandler
                             dbUpload.RefPKVal = pWorkID;
                         }
 
-                        dbUpload.FK_MapData = athDesc.FK_MapData;
+                        dbUpload.setFK_MapData(athDesc.FK_MapData);
                         dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
 
                         dbUpload.FileExts = info.Extension;
@@ -136,7 +137,7 @@ namespace BP.WF.HttpHandler
                         dbUpload.FileName = fl.Name;
                         dbUpload.FileSize = (float)info.Length;
 
-                        dbUpload.RDT = DataType.CurrentDataTime;
+                        dbUpload.RDT = DataType.CurrentDateTime;
                         dbUpload.Rec = BP.Web.WebUser.No;
                         dbUpload.RecName = BP.Web.WebUser.Name;
                         dbUpload.FK_Dept = WebUser.FK_Dept;
@@ -648,7 +649,8 @@ namespace BP.WF.HttpHandler
                 return "url@" + url;
             }
 
-            if (md.HisFrmType == FrmType.WordFrm)
+            //@hongyan.
+            if (md.HisFrmType == FrmType.WordFrm || md.HisFrmType == FrmType.WPSFrm)
             {
                 string no = this.GetRequestVal("NO");
                 string urlParas = "OID=" + this.RefOID + "&NO=" + no + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + this.SID + "&FK_MapData=" + this.FK_MapData + "&OIDPKVal=" + this.OID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
@@ -664,10 +666,15 @@ namespace BP.WF.HttpHandler
                         continue;
                     urlParas += "&" + kvs[0] + "=" + kvs[1];
                 }
+
+                //@hongyan.
+                string frm = "FrmWord";
+                if (md.HisFrmType == FrmType.WPSFrm) frm = "WpsFrm";
+
                 if (md.UrlExt.Contains("?") == true)
-                    return "url@FrmWord.htm?1=2" + "&" + urlParas;
+                    return "url@" + frm + ".htm?1=2" + "&" + urlParas;
                 else
-                    return "url@FrmWord.htm" + "?" + urlParas;
+                    return "url@" + frm + ".htm" + "?" + urlParas;
             }
 
             if (md.HisFrmType == FrmType.ExcelFrm)
@@ -732,7 +739,8 @@ namespace BP.WF.HttpHandler
                         paras = paras.Replace("&PKVal=" + this.WorkID, "&PKVal=" + this.FID);
                     }
 
-                    if ((this.GetRequestVal("ShowFrmType") != null && this.GetRequestVal("ShowFrmType").Equals("FrmFool") == true) || md.HisFrmType == FrmType.FreeFrm || md.HisFrmType == FrmType.FoolForm)
+                    if ((this.GetRequestVal("ShowFrmType") != null && this.GetRequestVal("ShowFrmType").Equals("FrmFool") == true)
+                        || md.HisFrmType == FrmType.Develop || md.HisFrmType == FrmType.FoolForm)
                     {
                         if (IsMobile == true)
                             return "url@../FrmView.htm?1=2" + paras;
@@ -764,7 +772,7 @@ namespace BP.WF.HttpHandler
 
             #region 非流程的独立运行的表单.
 
-            if (md.HisFrmType == FrmType.FreeFrm)
+            if (md.HisFrmType == FrmType.FoolForm)
             {
                 if (IsMobile == true)
                     return "url@../FrmView.htm?1=2" + paras;
@@ -882,8 +890,8 @@ namespace BP.WF.HttpHandler
 
                 ////更新数据表                
                 FrmImgAthDB imgAthDB = new FrmImgAthDB();
-                imgAthDB.MyPK = myName;
-                imgAthDB.FK_MapData = this.FK_MapData;
+                imgAthDB.setMyPK(myName);
+                imgAthDB.setFK_MapData(this.FK_MapData);
                 imgAthDB.FK_FrmImgAth = CtrlID;
                 imgAthDB.RefPKVal = this.RefPKVal;
                 imgAthDB.FileFullName = webPath;
@@ -904,7 +912,7 @@ namespace BP.WF.HttpHandler
             string delPK = this.GetRequestVal("DelPKVal");
 
             FrmImgAthDB delDB = new FrmImgAthDB();
-            delDB.MyPK = delPK == null ? this.MyPK : delPK;
+            delDB.setMyPK(delPK == null ? this.MyPK : delPK);
             delDB.RetrieveFromDBSources();
             delDB.Delete(); //删除上传的文件.
 
@@ -1382,6 +1390,62 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// 表单打开
+        /// </summary>
+        /// <returns></returns>
+        public string WpsFrm_Init()
+        {
+            Int64 workID = this.WorkID;
+
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            if (gwf.PWorkID != 0)
+                workID = gwf.PWorkID;
+            ///获得表单wps.
+            MapFrmWps md = new MapFrmWps(this.FrmID);
+
+            //首先从数据表里获取二进制表单实例.
+            string file = SystemConfig.PathOfTemp + "\\" + workID + "." + this.FrmID + ".docx";
+
+            string templateFilePath = SystemConfig.PathOfCyclostyleFile + md.No + "." + md.MyFileExt;
+
+            //生成文件.
+            var val = BP.DA.DBAccess.GetFileFromDB(file, md.PTable, "OID", workID.ToString(), "DBFile");
+            if (val == null)
+                System.IO.File.Copy(templateFilePath, file, true);
+
+            return "/DataUser/Temp/" + workID + "." + this.FrmID + ".docx";
+        }
+        /// <summary>
+        /// 保存文件
+        /// </summary>
+        /// <returns></returns>
+        public string WpsFrm_SaveFile()
+        {
+            // string fileName = "c:\\xxxx\temp.px";
+            Int64 workID = this.WorkID;
+
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            if (gwf.PWorkID != 0)
+                workID = gwf.PWorkID;
+
+            string fileName = SystemConfig.PathOfTemp + "\\" + workID + "." + this.FrmID + ".docx";
+
+
+            MapData md = new MapData(this.FrmID);
+
+            ///     string strs = this.RequestParas;
+
+            HttpPostedFile file = HttpContextHelper.RequestFiles()[0];  //context.Request.Files;
+            file.SaveAs(fileName);
+
+            //保存文件.
+            DBAccess.SaveFileToDB(fileName, md.PTable, "OID", workID.ToString(), "DBFile");
+
+
+            return "上传成功.";
+        }
+        
+        /// <summary>
         /// 执行数据初始化
         /// </summary>
         /// <returns></returns>
@@ -1392,6 +1456,7 @@ namespace BP.WF.HttpHandler
             MapData md = new MapData(this.EnsName);
             if (md.EntityType == EntityType.DBList)
                 return FrmGener_Init_ForDBList();
+
             #region 定义流程信息的所用的 配置entity.
             //节点与表单的权限控制.
             FrmNode fn = null;
@@ -1429,8 +1494,7 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 特殊判断.适应累加表单.
 
-
-                DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
+               
 
                 //主表实体.
                 GEEntity en = new GEEntity(this.EnsName);
@@ -1452,7 +1516,42 @@ namespace BP.WF.HttpHandler
                     if (en.RetrieveFromDBSources() == 0)
                         en.Insert();
                 }
+                #endregion 根据who is pk 获取数据.
+                string frmID = md.No;
+                //根据表单存储的数据获取获取使用表单的版本号
+                int frmVer = 0;
+                if (en.EnMap.Attrs.Contains("AtPara") == true)
+                {
+                    frmVer = en.GetParaInt("FrmVer");
+                    if (frmVer != 0)
+                    {
+                        frmID = md.No + "." + frmVer;
+                        if (nd.FormType != NodeFormType.FoolTruck)
+                        {
+                            en = new GEEntity(frmID);
+                            en.OID = pk;
+                            en.RetrieveFromDBSources();
+                        }
 
+                    }
+                }
+
+                DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(frmID);
+
+                DataTable athdt = ds.Tables["Sys_FrmAttachment"];
+                if (frmVer != 0 && athdt.Rows.Count != 0)
+                {
+                    DataTable gfdt = ds.Tables["Sys_GroupField"];
+                    foreach (DataRow dr in athdt.Rows)
+                    {
+                        DataRow[] gfr = gfdt.Select("CtrlID='" + dr["MyPK"] + "'");
+                        if (gfr.Length != 0)
+                            gfr[0]["CtrlID"] = md.No + "_" + dr["NoOfObj"];
+                        dr["MyPK"] = md.No + "_" + dr["NoOfObj"];
+
+                    }
+
+                }
                 //如果有框架
                 if (ds.Tables["Sys_MapFrame"].Rows.Count > 0)
                 {
@@ -1462,8 +1561,6 @@ namespace BP.WF.HttpHandler
                     gwf.RetrieveFromDBSources();
                     ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
                 }
-
-                #endregion 根据who is pk 获取数据.
 
                 #region 附加参数数据.
                 if (SystemConfig.IsBSsystem == true)
@@ -1566,7 +1663,7 @@ namespace BP.WF.HttpHandler
                                 dt.Columns["PARENTNO"].ColumnName = "ParentNo";
                         }
 
-                        if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                        if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                         {
                             if (dt.Columns.Contains("no") == true)
                                 dt.Columns["no"].ColumnName = "No";
@@ -1683,7 +1780,7 @@ namespace BP.WF.HttpHandler
                     if (fn.IsEnableFWC != FrmWorkCheckSta.Disable)
                     {
                         //如果启用了审核组件，并且 节点表单与当前一致。
-                        if (md.HisFrmType == FrmType.FoolForm)
+                        if (md.HisFrmType == FrmType.FoolForm || md.HisFrmType == FrmType.WPSFrm)
                         {
                             //判断是否是傻瓜表单，如果是，就要判断该傻瓜表单是否有审核组件groupfield ,没有的话就增加上.
                             DataTable gf = ds.Tables["Sys_GroupField"];
@@ -1806,76 +1903,76 @@ namespace BP.WF.HttpHandler
                                     case "@WebUser.No":
                                         if (attr.UIIsReadonly == true)
                                         {
-                                            en.SetValByKey(attr.Key, Web.WebUser.No);
+                                            en.SetValByKey(attr.Key, WebUser.No);
                                         }
                                         else
                                         {
                                             if (DataType.IsNullOrEmpty(myval) || myval.Equals(v))
-                                                en.SetValByKey(attr.Key, Web.WebUser.No);
+                                                en.SetValByKey(attr.Key, WebUser.No);
                                         }
                                         continue;
                                     case "@WebUser.Name":
                                         if (attr.UIIsReadonly == true)
                                         {
-                                            en.SetValByKey(attr.Key, Web.WebUser.Name);
+                                            en.SetValByKey(attr.Key, WebUser.Name);
                                         }
                                         else
                                         {
                                             if (DataType.IsNullOrEmpty(myval) || myval.Equals(v))
-                                                en.SetValByKey(attr.Key, Web.WebUser.Name);
+                                                en.SetValByKey(attr.Key, WebUser.Name);
                                         }
                                         continue;
                                     case "@WebUser.FK_Dept":
                                         if (attr.UIIsReadonly == true)
                                         {
-                                            en.SetValByKey(attr.Key, Web.WebUser.FK_Dept);
+                                            en.SetValByKey(attr.Key, WebUser.FK_Dept);
                                         }
                                         else
                                         {
                                             if (DataType.IsNullOrEmpty(myval) || myval.Equals(v))
-                                                en.SetValByKey(attr.Key, Web.WebUser.FK_Dept);
+                                                en.SetValByKey(attr.Key, WebUser.FK_Dept);
                                         }
                                         continue;
                                     case "@WebUser.FK_DeptName":
                                         if (attr.UIIsReadonly == true)
                                         {
-                                            en.SetValByKey(attr.Key, Web.WebUser.FK_DeptName);
+                                            en.SetValByKey(attr.Key, WebUser.FK_DeptName);
                                         }
                                         else
                                         {
                                             if (DataType.IsNullOrEmpty(myval) || myval.Equals(v))
-                                                en.SetValByKey(attr.Key, Web.WebUser.FK_DeptName);
+                                                en.SetValByKey(attr.Key, WebUser.FK_DeptName);
                                         }
                                         continue;
                                     case "@WebUser.FK_DeptNameOfFull":
                                     case "@WebUser.FK_DeptFullName":
                                         if (attr.UIIsReadonly == true)
                                         {
-                                            en.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
+                                            en.SetValByKey(attr.Key, WebUser.FK_DeptNameOfFull);
                                         }
                                         else
                                         {
                                             if (DataType.IsNullOrEmpty(myval) || myval.Equals(v))
-                                                en.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
+                                                en.SetValByKey(attr.Key, WebUser.FK_DeptNameOfFull);
                                         }
                                         continue;
                                     case "@RDT":
                                         if (attr.UIIsReadonly == true)
                                         {
                                             if (attr.MyDataType == DataType.AppDate || myval.Equals(v))
-                                                en.SetValByKey(attr.Key, DataType.CurrentData);
+                                                en.SetValByKey(attr.Key, DataType.CurrentDate);
 
                                             if (attr.MyDataType == DataType.AppDateTime || myval.Equals(v))
-                                                en.SetValByKey(attr.Key, DataType.CurrentDataTime);
+                                                en.SetValByKey(attr.Key, DataType.CurrentDateTime);
                                         }
                                         else
                                         {
                                             if (DataType.IsNullOrEmpty(myval) || myval.Equals(v))
                                             {
                                                 if (attr.MyDataType == DataType.AppDate)
-                                                    en.SetValByKey(attr.Key, DataType.CurrentData);
+                                                    en.SetValByKey(attr.Key, DataType.CurrentDate);
                                                 else
-                                                    en.SetValByKey(attr.Key, DataType.CurrentDataTime);
+                                                    en.SetValByKey(attr.Key, DataType.CurrentDateTime);
                                             }
                                         }
                                         continue;
@@ -2062,7 +2159,7 @@ namespace BP.WF.HttpHandler
                 // 处理表单保存前事件.
                 MapData md = new MapData(this.EnsName);
 
-                #region 调用事件.  @李国文.
+                #region 调用事件. 
                 //是不是从表的保存.
                 if (this.GetRequestValInt("IsForDtl") == 1)
                 {
@@ -2081,7 +2178,7 @@ namespace BP.WF.HttpHandler
                     if (mdtl.FEBD.Length != 0)
                     {
                         string str = mdtl.FEBD;
-                        BP.Sys.FormEventBaseDtl febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
+                        BP.Sys.Base.FormEventBaseDtl febd = BP.Sys.Base.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
 
                         if (febd != null)
                         {
@@ -2097,8 +2194,7 @@ namespace BP.WF.HttpHandler
                 {
                     ExecEvent.DoFrm(md, EventListFrm.SaveBefore, en);
                 }
-                #endregion 调用事件.  @李国文.
-
+                #endregion 调用事件
                 if (i == 0)
                     en.Insert();
                 else
@@ -2123,7 +2219,7 @@ namespace BP.WF.HttpHandler
                     if (mdtl.FEBD.Length != 0)
                     {
                         string str = mdtl.FEBD;
-                        BP.Sys.FormEventBaseDtl febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
+                        BP.Sys.Base.FormEventBaseDtl febd = BP.Sys.Base.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
 
                         if (febd != null)
                         {
@@ -2139,7 +2235,7 @@ namespace BP.WF.HttpHandler
                 {
                     ExecEvent.DoFrm(md, EventListFrm.SaveAfter, en);
                 }
-                #endregion 调用事件.  @李国文.
+                #endregion 调用事件
 
                 return "保存成功.";
             }
@@ -2192,7 +2288,9 @@ namespace BP.WF.HttpHandler
 
                 BP.WF.Template.FrmNode fn = new BP.WF.Template.FrmNode(nd.NodeID, frmID);
 
-                if (flow.FlowDevModel == FlowDevModel.JiJian || nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree || nd.HisFormType == NodeFormType.FoolTruck)
+                if (flow.FlowDevModel == FlowDevModel.JiJian || nd.HisFormType == NodeFormType.SheetTree
+                    || nd.HisFormType == NodeFormType.RefOneFrmTree
+                    || nd.HisFormType == NodeFormType.FoolTruck)
                 {
                     /*如果
                      * 1,传来节点ID, 不等于0.
@@ -2238,7 +2336,7 @@ namespace BP.WF.HttpHandler
             #endregion 组织参数.
 
             //获得他的描述,与数据.
-            DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(frmID, mdtl, int.Parse(this.RefPKVal), strs, dtlRefPKVal);
+            DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(frmID, mdtl, int.Parse(this.RefPKVal), strs, dtlRefPKVal,this.FID);
             return ds;
         }
         /// <summary>
@@ -2340,7 +2438,9 @@ namespace BP.WF.HttpHandler
             {
                 //关联主赋值.
                 dtl.RefPK = dtlRefPKVal;
-                if (this.FID != 0)
+                if (this.FID == 0)
+                    dtl.FID = Int64.Parse(dtl.RefPK);
+                else
                     dtl.FID = this.FID;
 
                 //如果是新建，并且里面是ForFID的模式.
@@ -2373,7 +2473,7 @@ namespace BP.WF.HttpHandler
             if (mdtl.FEBD.Length != 0)
             {
                 string str = mdtl.FEBD;
-                BP.Sys.FormEventBaseDtl febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
+                BP.Sys.Base.FormEventBaseDtl febd = BP.Sys.Base.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
 
                 febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
                 febd.HisEnDtl = dtl;
@@ -2412,8 +2512,8 @@ namespace BP.WF.HttpHandler
                     foreach (FrmEleDB FrmEleDB in FrmEleDBs)
                     {
                         FrmEleDB athDB_N = new FrmEleDB();
-                        athDB_N.MyPK = attr.Key + "_" + dtl.OID + "_" + FrmEleDB.Tag1;
-                        athDB_N.FK_MapData = FrmEleDB.FK_MapData;
+                        athDB_N.setMyPK(attr.Key + "_" + dtl.OID + "_" + FrmEleDB.Tag1);
+                        athDB_N.setFK_MapData(FrmEleDB.FK_MapData);
                         athDB_N.EleID = FrmEleDB.EleID;
                         athDB_N.RefPKVal = dtl.OID.ToString();
                         athDB_N.FID = FrmEleDB.FID;
@@ -2445,7 +2545,7 @@ namespace BP.WF.HttpHandler
             if (mdtl.FEBD.Length != 0)
             {
                 string str = mdtl.FEBD;
-                BP.Sys.FormEventBaseDtl febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
+                BP.Sys.Base.FormEventBaseDtl febd = BP.Sys.Base.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
 
                 febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
                 febd.HisEnDtl = dtl;
@@ -2480,7 +2580,7 @@ namespace BP.WF.HttpHandler
             if (mdtl.FEBD.Length != 0)
             {
                 string str = mdtl.FEBD;
-                BP.Sys.FormEventBaseDtl febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
+                BP.Sys.Base.FormEventBaseDtl febd = BP.Sys.Base.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
                 if (febd != null)
                 {
                     febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
@@ -2506,7 +2606,7 @@ namespace BP.WF.HttpHandler
             if (mdtl.FEBD.Length != 0)
             {
                 string str = mdtl.FEBD;
-                BP.Sys.FormEventBaseDtl febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
+                BP.Sys.Base.FormEventBaseDtl febd = BP.Sys.Base.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
                 if (febd != null)
                 {
                     febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
@@ -2785,7 +2885,7 @@ namespace BP.WF.HttpHandler
             string mypk = this.GetRequestVal("FK_MapExt");
 
             MapExt me = new MapExt();
-            me.MyPK = mypk;
+            me.setMyPK(mypk);
             me.Retrieve();
 
             //获得配置信息.
@@ -2808,7 +2908,7 @@ namespace BP.WF.HttpHandler
             dt.TableName = "DTObjs";
 
             //判断是否是oracle.
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -2832,7 +2932,7 @@ namespace BP.WF.HttpHandler
 
 
                 //判断是否是oracle.
-                if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                 {
                     entityDt.Columns["NO"].ColumnName = "No";
                     entityDt.Columns["NAME"].ColumnName = "Name";
@@ -2876,7 +2976,7 @@ namespace BP.WF.HttpHandler
         public string PopVal_Init()
         {
             MapExt me = new MapExt();
-            me.MyPK = this.FK_MapExt;
+            me.setMyPK(this.FK_MapExt);
             me.Retrieve();
 
             //数据对象，将要返回的.
@@ -3107,7 +3207,7 @@ namespace BP.WF.HttpHandler
         public string PopVal_InitTablePageCount()
         {
             MapExt me = new MapExt();
-            me.MyPK = this.FK_MapExt;
+            me.setMyPK(this.FK_MapExt);
             me.Retrieve();
 
             //数据对象，将要返回的.
@@ -3271,7 +3371,7 @@ namespace BP.WF.HttpHandler
         public string PopVal_InitTablePageList()
         {
             MapExt me = new MapExt();
-            me.MyPK = this.FK_MapExt;
+            me.setMyPK(this.FK_MapExt);
             me.Retrieve();
 
             //数据对象，将要返回的.
@@ -3439,7 +3539,7 @@ namespace BP.WF.HttpHandler
         private void SingleAttach(string attachPk, Int64 workid, Int64 fid, int fk_node, string ensName)
         {
             FrmAttachment frmAth = new FrmAttachment();
-            frmAth.MyPK = attachPk;
+            frmAth.setMyPK(attachPk);
             frmAth.RetrieveFromDBSources();
 
             string athDBPK = attachPk + "_" + workid;
@@ -3478,12 +3578,12 @@ namespace BP.WF.HttpHandler
             FileInfo info = new FileInfo(saveTo);
 
             FrmAttachmentDB dbUpload = new FrmAttachmentDB();
-            dbUpload.MyPK = athDBPK;
-            dbUpload.FK_MapData = frmAth.FK_MapData;
+            dbUpload.setMyPK(athDBPK);
+            dbUpload.setFK_MapData(frmAth.FK_MapData);
             dbUpload.FK_FrmAttachment = attachPk;
             dbUpload.RefPKVal = this.WorkID.ToString();
             dbUpload.FID = fid;
-            dbUpload.FK_MapData = ensName;
+            dbUpload.setFK_MapData(ensName);
 
             dbUpload.FileExts = info.Extension;
 
@@ -3508,7 +3608,7 @@ namespace BP.WF.HttpHandler
             dbUpload.RecName = WebUser.Name;
             dbUpload.FK_Dept = WebUser.FK_Dept;
             dbUpload.FK_DeptName = WebUser.FK_DeptName;
-            dbUpload.RDT = DataType.CurrentDataTime;
+            dbUpload.RDT = DataType.CurrentDateTime;
 
             dbUpload.NodeID = fk_node;
             dbUpload.Save();
@@ -3523,6 +3623,12 @@ namespace BP.WF.HttpHandler
         //多附件上传方法
         public string MoreAttach()
         {
+            string empNo = this.GetRequestVal("UserNo");
+            if (string.IsNullOrEmpty(empNo) == false)
+            {
+                BP.WF.Dev2Interface.Port_Login(empNo);
+            }
+
             string uploadFileM = ""; //上传附件数据的MyPK,用逗号分开
             string pkVal = this.GetRequestVal("PKVal");
             string attachPk = this.GetRequestVal("AttachPK");
@@ -3566,7 +3672,7 @@ namespace BP.WF.HttpHandler
                 if (fn.FrmSln == FrmSln.Self)
                 {
                     BP.Sys.FrmAttachment myathDesc = new FrmAttachment();
-                    myathDesc.MyPK = attachPk + "_" + this.FK_Node;
+                    myathDesc.setMyPK(attachPk + "_" + this.FK_Node);
                     if (myathDesc.RetrieveFromDBSources() != 0)
                         athDesc.HisCtrlWay = myathDesc.HisCtrlWay;
                 }
@@ -3682,7 +3788,7 @@ namespace BP.WF.HttpHandler
                     msg = ExecEvent.DoFrm(mapData, EventListFrm.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + realSaveTo);
                     if (!DataType.IsNullOrEmpty(msg))
                     {
-                        BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + file.FileName + "，" + msg);
+                        BP.Sys.Base.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + file.FileName + "，" + msg);
 
                         try
                         {
@@ -3695,10 +3801,10 @@ namespace BP.WF.HttpHandler
 
                     FileInfo info = new FileInfo(realSaveTo);
                     FrmAttachmentDB dbUpload = new FrmAttachmentDB();
-                    dbUpload.MyPK = guid; // athDesc.FK_MapData + oid.ToString();
+                    dbUpload.setMyPK(guid); // athDesc.FK_MapData + oid.ToString();
                     dbUpload.NodeID = this.FK_Node;
                     dbUpload.Sort = sort;
-                    dbUpload.FK_MapData = athDesc.FK_MapData;
+                    dbUpload.setFK_MapData(athDesc.FK_MapData);
                     dbUpload.FK_FrmAttachment = attachPk;
                     dbUpload.FileExts = info.Extension;
                     dbUpload.FID = this.FID;
@@ -3732,7 +3838,7 @@ namespace BP.WF.HttpHandler
 
                     dbUpload.FileName = fileName;
                     dbUpload.FileSize = (float)info.Length;
-                    dbUpload.RDT = DataType.CurrentDataTimess;
+                    dbUpload.RDT = DataType.CurrentDateTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
                     dbUpload.RecName = BP.Web.WebUser.Name;
                     dbUpload.FK_Dept = WebUser.FK_Dept;
@@ -3754,7 +3860,7 @@ namespace BP.WF.HttpHandler
                     //执行附件上传后事件，added by liuxc,2017-7-15
                     msg = ExecEvent.DoFrm(mapData, EventListFrm.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + dbUpload.FileFullName);
                     if (!DataType.IsNullOrEmpty(msg))
-                        BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
+                        BP.Sys.Base.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
                 }
                 #endregion 文件上传的iis服务器上 or db数据库里.
 
@@ -3784,7 +3890,7 @@ namespace BP.WF.HttpHandler
                     msg = ExecEvent.DoFrm(mapData, EventListFrm.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + temp);
                     if (DataType.IsNullOrEmpty(msg) == false)
                     {
-                        BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + file.FileName + "，" + msg);
+                        BP.Sys.Base.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + file.FileName + "，" + msg);
 
                         try
                         {
@@ -3799,21 +3905,21 @@ namespace BP.WF.HttpHandler
 
                     FileInfo info = new FileInfo(temp);
                     FrmAttachmentDB dbUpload = new FrmAttachmentDB();
-                    dbUpload.MyPK = DBAccess.GenerGUID();
+                    dbUpload.setMyPK(DBAccess.GenerGUID());
                     dbUpload.Sort = sort;
                     dbUpload.NodeID = FK_Node;
-                    dbUpload.FK_MapData = athDesc.FK_MapData;
+                    dbUpload.setFK_MapData(athDesc.FK_MapData);
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
                     dbUpload.FID = this.FID; //流程id.
                     if (fileEncrypt == true)
                         dbUpload.SetPara("IsEncrypt", 1);
 
                     dbUpload.RefPKVal = pkVal.ToString();
-                    dbUpload.FK_MapData = athDesc.FK_MapData;
+                    dbUpload.setFK_MapData(athDesc.FK_MapData);
                     dbUpload.FK_FrmAttachment = athDesc.MyPK;
                     dbUpload.FileName = fileName;
                     dbUpload.FileSize = (float)info.Length;
-                    dbUpload.RDT = DataType.CurrentDataTimess;
+                    dbUpload.RDT = DataType.CurrentDateTimess;
                     dbUpload.Rec = BP.Web.WebUser.No;
                     dbUpload.RecName = BP.Web.WebUser.Name;
                     dbUpload.FK_Dept = WebUser.FK_Dept;
@@ -3890,7 +3996,7 @@ namespace BP.WF.HttpHandler
                     //执行附件上传后事件，added by liuxc,2017-7-15
                     msg = ExecEvent.DoFrm(mapData, EventListFrm.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
                     if (DataType.IsNullOrEmpty(msg) == false)
-                        BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
+                        BP.Sys.Base.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
 
                 }
                 #endregion 保存到数据库.
@@ -3903,13 +4009,16 @@ namespace BP.WF.HttpHandler
                 en.Row["AthNum"] = athNum + 1;
                 en.Update();
             }
-            return uploadFileM;
+            //return uploadFileM;
+            if (string.IsNullOrEmpty(empNo))
+                return uploadFileM;
+            else
+                return "{\"msg\":\"上传成功\"}";
         }
 
         /// <summary>
         /// 删除附件
         /// </summary>
-        /// <param name="MyPK"></param>
         /// <returns></returns>
         public string DelWorkCheckAttach()
         {
@@ -4169,7 +4278,7 @@ namespace BP.WF.HttpHandler
                         dtlEn.SetValByKey("FID", fid);
                         break;
                 }
-                dtlEn.SetValByKey("RDT", DataType.CurrentData);
+                dtlEn.SetValByKey("RDT", DataType.CurrentDate);
                 dtlEn.SetValByKey("Rec", this.GetRequestVal("UserNo"));
                 //dtlEn.OID = (int)DBAccess.GenerOID(ensName);
 
@@ -4218,7 +4327,7 @@ namespace BP.WF.HttpHandler
                 //files[0].SaveAs(file);
                 HttpContextHelper.UploadFile(files[0], file);
 
-                System.Data.DataTable dt = DBLoad.ReadExcelFileToDataTable(file);
+                DataTable dt = DBLoad.ReadExcelFileToDataTable(file);
 
                 string FK_MapDtl = this.FK_MapDtl;
                 if (FK_MapDtl.Contains("BP") == true)
@@ -4285,7 +4394,7 @@ namespace BP.WF.HttpHandler
 
                 int i = 0;
                 Int64 oid = DBAccess.GenerOID("Dtl", dt.Rows.Count);
-                string rdt = DataType.CurrentData;
+                string rdt = DataType.CurrentDate;
 
                 string errMsg = "";
                 foreach (DataRow dr in dt.Rows)
@@ -4443,7 +4552,7 @@ namespace BP.WF.HttpHandler
 
                 int i = 0;
                 Int64 oid = DBAccess.GenerOID(dtlEn.EnMap.PhysicsTable, dt.Rows.Count);
-                string rdt = DataType.CurrentData;
+                string rdt = DataType.CurrentDate;
 
                 string errMsg = "";
                 foreach (DataRow dr in dt.Rows)
@@ -4578,151 +4687,8 @@ namespace BP.WF.HttpHandler
 
                 dt.Rows.Add(dr);
             }
-
             //返回json.
             return BP.Tools.Json.ToJson(dt);
-        }
-        public string Print_Done()
-        {
-            int billIdx = this.GetValIntFromFrmByKey("BillIdx");
-
-            string ApplicationPath = "";
-            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
-            string path = ApplicationPath + "/DataUser/CyclostyleFile/FlowFrm/" + nd.FK_Flow + "/" + nd.NodeID + "/";
-            if (System.IO.Directory.Exists(path) == false)
-            {
-                return "err@模版文件没有找到。" + path;
-            }
-
-            string[] fls = System.IO.Directory.GetFiles(path);
-            string file = fls[billIdx];
-            file = file.Replace(ApplicationPath + @"DataUser/CyclostyleFile", "");
-
-            FileInfo finfo = new FileInfo(file);
-            string tempName = finfo.Name.Split('.')[0];
-            string tempNameChinese = finfo.Name.Split('.')[1];
-
-            string toPath = ApplicationPath + @"DataUser/Bill/FlowFrm/" + DateTime.Now.ToString("yyyyMMdd") + "/";
-            if (System.IO.Directory.Exists(toPath) == false)
-                System.IO.Directory.CreateDirectory(toPath);
-
-            // string billFile = toPath + "/" + tempName + "." + this.FID + ".doc";
-            string billFile = toPath + "/" + tempNameChinese + "." + this.WorkID + ".doc";
-
-            BP.Pub.RTFEngine engine = new BP.Pub.RTFEngine();
-            if (tempName.ToLower() == "all")
-            {
-                /* 说明要从所有的独立表单上取数据. */
-                FrmNodes fns = new FrmNodes(this.FK_Flow, this.FK_Node);
-                foreach (FrmNode fn in fns)
-                {
-                    GEEntity ge = new GEEntity(fn.FK_Frm, this.WorkID);
-                    engine.AddEn(ge);
-                    MapDtls mdtls = new MapDtls(fn.FK_Frm);
-                    foreach (MapDtl dtl in mdtls)
-                    {
-                        GEDtls enDtls = dtl.HisGEDtl.GetNewEntities as GEDtls;
-                        enDtls.Retrieve(GEDtlAttr.RefPK, this.WorkID);
-                        engine.EnsDataDtls.Add(enDtls);
-                    }
-                }
-
-                // 增加主表.
-                GEEntity myge = new GEEntity("ND" + nd.NodeID, this.WorkID);
-                engine.AddEn(myge);
-
-                //增加从表
-                MapDtls mymdtls = new MapDtls(tempName);
-                foreach (MapDtl dtl in mymdtls)
-                {
-                    GEDtls enDtls = dtl.HisGEDtl.GetNewEntities as GEDtls;
-                    enDtls.Retrieve(GEDtlAttr.RefPK, this.WorkID);
-                    engine.EnsDataDtls.Add(enDtls);
-                }
-
-                //增加多附件数据
-                FrmAttachments aths = new FrmAttachments(tempName);
-                foreach (FrmAttachment athDesc in aths)
-                {
-                    FrmAttachmentDBs athDBs = new FrmAttachmentDBs();
-                    if (athDBs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, athDesc.MyPK, FrmAttachmentDBAttr.RefPKVal, this.WorkID, "RDT") == 0)
-                        continue;
-
-                    engine.EnsDataAths.Add(athDesc.NoOfObj, athDBs);
-                }
-                // engine.MakeDoc(file, toPath, tempName + "." + this.WorkID + ".doc", null, false);
-                engine.MakeDoc(file, toPath, tempNameChinese + "." + this.WorkID + ".doc");
-            }
-            else
-            {
-                // 增加主表.
-                GEEntity myge = new GEEntity(tempName, this.WorkID);
-                engine.HisGEEntity = myge;
-                engine.AddEn(myge);
-
-                //增加从表.
-                MapDtls mymdtls = new MapDtls(tempName);
-                foreach (MapDtl dtl in mymdtls)
-                {
-                    GEDtls enDtls = dtl.HisGEDtl.GetNewEntities as GEDtls;
-                    enDtls.Retrieve(GEDtlAttr.RefPK, this.WorkID);
-                    engine.EnsDataDtls.Add(enDtls);
-                }
-
-                //增加轨迹表.
-                Paras ps = new Paras();
-                ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
-                ps.Add(TrackAttr.ActionType, (int)ActionType.WorkCheck);
-                ps.Add(TrackAttr.WorkID, this.WorkID);
-                engine.dtTrack = DBAccess.RunSQLReturnTable(ps);
-
-                engine.MakeDoc(file, toPath, tempNameChinese + "." + this.WorkID + ".doc");
-            }
-
-            #region 保存单据，以方便查询.
-            Bill bill = new Bill();
-            bill.MyPK = this.FID + "_" + this.WorkID + "_" + this.FK_Node + "_" + billIdx;
-            bill.WorkID = this.WorkID;
-            bill.FK_Node = this.FK_Node;
-            bill.FK_Dept = WebUser.FK_Dept;
-            bill.FK_Emp = WebUser.No;
-
-            bill.Url = "/DataUser/Bill/FlowFrm/" + DateTime.Now.ToString("yyyyMMdd") + "/" + tempNameChinese + "." + this.WorkID + ".doc";
-            bill.FullPath = toPath + file;
-
-            bill.RDT = DataType.CurrentDataTime;
-            bill.FK_NY = DataType.CurrentYearMonth;
-            bill.FK_Flow = this.FK_Flow;
-            if (this.WorkID != 0)
-            {
-                GenerWorkFlow gwf = new GenerWorkFlow();
-                gwf.WorkID = this.WorkID;
-                if (gwf.RetrieveFromDBSources() == 1)
-                {
-                    bill.Emps = gwf.Emps;
-                    bill.FK_Starter = gwf.Starter;
-                    bill.StartDT = gwf.RDT;
-                    bill.Title = gwf.Title;
-                    bill.FK_Dept = gwf.FK_Dept;
-                }
-            }
-
-            try
-            {
-                bill.Insert();
-            }
-            catch
-            {
-                bill.Update();
-            }
-            #endregion
-
-            BillTemplates templates = new BillTemplates();
-            int iHave = templates.Retrieve(BillTemplateAttr.NodeID, this.FK_Node, BillTemplateAttr.BillOpenModel, (int)BillOpenModel.WebOffice);
-
-            return "url@../WebOffice/PrintOffice.htm?MyPK=" + bill.MyPK;
-
-
         }
         #endregion 打印.
 
@@ -4737,7 +4703,7 @@ namespace BP.WF.HttpHandler
             string delPK = this.GetRequestVal("DelPKVal");
 
             FrmAttachmentDB delDB = new FrmAttachmentDB();
-            delDB.MyPK = delPK == null ? this.MyPK : delPK;
+            delDB.setMyPK(delPK == null ? this.MyPK : delPK);
             delDB.RetrieveFromDBSources();
             delDB.Delete(); //删除上传的文件.
             return "删除成功.";
@@ -4753,36 +4719,87 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string AttachmentUpload_Down()
         {
+            //获取文件是否加密
+            bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
             FrmAttachmentDB downDB = new FrmAttachmentDB();
+
             downDB.MyPK = this.MyPK;
             downDB.Retrieve();
-
             FrmAttachment dbAtt = new FrmAttachment();
             dbAtt.MyPK = downDB.FK_FrmAttachment;
             dbAtt.Retrieve();
 
+            if (dbAtt.ReadRole != 0 && this.FK_Node != 0)
+            {
+                //标记已经阅读了.
+                GenerWorkerList gwf = new GenerWorkerList();
+                int count = gwf.Retrieve(GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No,
+                    GenerWorkerListAttr.FK_Node, this.FK_Node, GenerWorkerListAttr.WorkID, this.WorkID);
+                if (count != 0)
+                {
+                    string str = gwf.GetParaString(dbAtt.NoOfObj);
+                    str += "," + downDB.MyPK;
+                    gwf.SetPara(dbAtt.NoOfObj, str);
+                    gwf.Update();
+                }
+            }
+
+            bool isEncrypt = downDB.GetParaBoolen("IsEncrypt");
+            string filepath = "";
             if (dbAtt.AthSaveWay == AthSaveWay.IISServer)
             {
-                return "url@" + DataType.PraseStringToUrlFileName(downDB.FileFullName);
+                #region 解密下载
+                //1、先解密到本地
+                filepath = downDB.FileFullName + ".tmp";
+                if (fileEncrypt == true && isEncrypt == true)
+                {
+                    if (File.Exists(filepath) == true)
+                        File.Delete(filepath);
+                    EncHelper.DecryptDES(downDB.FileFullName, filepath);
+                }
+                else
+                {
+                    filepath = downDB.FileFullName;
+                }
+                #endregion
             }
 
             if (dbAtt.AthSaveWay == AthSaveWay.FTPServer)
             {
-                string fileFullName = downDB.GenerTempFile(dbAtt.AthSaveWay);
-                return "url@" + DataType.PraseStringToUrlFileName(fileFullName);
+                //下载文件的临时位置
+                string tempFile = downDB.GenerTempFile(dbAtt.AthSaveWay);
+                filepath = tempFile + ".temp";
+                if (fileEncrypt == true && isEncrypt == true)
+                    EncHelper.DecryptDES(tempFile, filepath);
+                else
+                    filepath = tempFile;
             }
 
             if (dbAtt.AthSaveWay == AthSaveWay.DB)
             {
-                return "fromdb";
+                string downpath = downDB.FileFullName;
+                filepath = downpath + ".tmp";
+                if (fileEncrypt == true && isEncrypt == true)
+                {
+                    if (File.Exists(filepath) == true)
+                        File.Delete(filepath);
+                    EncHelper.DecryptDES(downpath, filepath);
+                }
+                else
+                    filepath = downpath;
+
+
             }
-            return "正在下载.";
+            BP.WF.HttpHandler.HttpHandlerGlo.DownloadFile(filepath, downDB.FileName);
+            return DataType.PraseStringToUrlFileName(filepath);
         }
+
+
 
         public void AttachmentDownFromByte()
         {
             FrmAttachmentDB downDB = new FrmAttachmentDB();
-            downDB.MyPK = this.MyPK;
+            downDB.setMyPK(this.MyPK);
             downDB.Retrieve();
             downDB.FileName = HttpUtility.UrlEncode(downDB.FileName);
             byte[] byteList = downDB.GetFileFromDB("FileDB", null);
@@ -4812,10 +4829,10 @@ namespace BP.WF.HttpHandler
             FoolTruckNodeFrm sln = new FoolTruckNodeFrm();
             sln.FrmSln = -1;
             string fromFrm = this.GetRequestVal("FromFrm");
-            sln.MyPK = fromFrm + "_" + this.FK_Node + "_" + this.FK_Flow;
+            sln.setMyPK(fromFrm + "_" + this.FK_Node + "_" + this.FK_Flow);
             int result = sln.RetrieveFromDBSources();
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
-            athDesc.MyPK = this.FK_FrmAttachment;
+            athDesc.setMyPK(this.FK_FrmAttachment);
             athDesc.RetrieveFromDBSources();
 
             /*没有查询到解决方案, 就是只读方案 */
@@ -4834,7 +4851,7 @@ namespace BP.WF.HttpHandler
             if (sln.FrmSln == 2)
             {
                 BP.Sys.FrmAttachment athDescNode = new BP.Sys.FrmAttachment();
-                athDescNode.MyPK = this.FK_FrmAttachment + "_" + this.FK_Node;
+                athDescNode.setMyPK(this.FK_FrmAttachment + "_" + this.FK_Node);
                 if (athDescNode.RetrieveFromDBSources() == 0)
                 {
                     //没有设定附件权限，保持原来的附件权限模式
@@ -4860,21 +4877,21 @@ namespace BP.WF.HttpHandler
             #endregion
 
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
-            athDesc.MyPK = this.FK_FrmAttachment;
+            athDesc.setMyPK(this.FK_FrmAttachment);
             if (this.FK_Node == 0 || this.FK_Flow == null)
             {
                 athDesc.RetrieveFromDBSources();
                 return athDesc;
             }
 
-            athDesc.MyPK = this.FK_FrmAttachment;
+            athDesc.setMyPK(this.FK_FrmAttachment);
             int result = athDesc.RetrieveFromDBSources();
 
             #region 判断是否是明细表的多附件.
             if (result == 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false
                && this.FK_FrmAttachment.Contains("AthMDtl"))
             {
-                athDesc.FK_MapData = this.FK_MapData;
+                athDesc.setFK_MapData(this.FK_MapData);
                 athDesc.NoOfObj = "AthMDtl";
                 athDesc.Name = "我的从表附件";
                 athDesc.UploadType = AttachmentUploadType.Multi;
@@ -4887,9 +4904,9 @@ namespace BP.WF.HttpHandler
                 && this.FK_FrmAttachment.Contains("DocMultiAth"))
             {
                 /*如果没有查询到它,就有可能是公文多附件被删除了.*/
-                athDesc.MyPK = this.FK_FrmAttachment;
+                athDesc.setMyPK(this.FK_FrmAttachment);
                 athDesc.NoOfObj = "DocMultiAth";
-                athDesc.FK_MapData = this.FK_MapData;
+                athDesc.setFK_MapData(this.FK_MapData);
                 athDesc.Exts = "*.*";
 
                 //存储路径.
@@ -4914,8 +4931,8 @@ namespace BP.WF.HttpHandler
                 BP.WF.Nodes nds = new BP.WF.Nodes(this.FK_Flow);
                 foreach (BP.WF.Node nd in nds)
                 {
-                    athDesc.FK_MapData = "ND" + nd.NodeID;
-                    athDesc.MyPK = athDesc.FK_MapData + "_" + athDesc.NoOfObj;
+                    athDesc.setFK_MapData("ND" + nd.NodeID);
+                    athDesc.setMyPK(athDesc.FK_MapData + "_" + athDesc.NoOfObj);
                     if (athDesc.IsExits == true)
                         continue;
 
@@ -4940,10 +4957,11 @@ namespace BP.WF.HttpHandler
 
 
                 Node nd = new Node(this.FK_Node);
-                if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
+                Flow flow = new Flow(nd.FK_Flow);
+                if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree || flow.FlowDevModel == FlowDevModel.JiJian)
                 {
                     //如果是绑定表单树中的表单，重新赋值绑定表单的名字
-                    if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+                    if (nd.HisFormType == NodeFormType.RefOneFrmTree || flow.FlowDevModel == FlowDevModel.JiJian)
                     {
                         fk_mapdata = nd.NodeFrmID;
                     }
@@ -4968,7 +4986,7 @@ namespace BP.WF.HttpHandler
                         athDesc.HisDeleteWay = AthDeleteWay.None;
                         athDesc.IsUpload = false;
                         athDesc.IsDownload = true;
-                        athDesc.MyPK = this.FK_FrmAttachment;
+                        athDesc.setMyPK(this.FK_FrmAttachment);
                         return athDesc;
                     }
 
@@ -4976,15 +4994,15 @@ namespace BP.WF.HttpHandler
                     {
                         if (this.FK_FrmAttachment.Contains("AthMDtl") == true)
                         {
-                            athDesc.MyPK = this.FK_MapData + "_" + nd.NodeID + "_AthMDtl";
+                            athDesc.setMyPK(this.FK_MapData + "_" + nd.NodeID + "_AthMDtl");
                             athDesc.RetrieveFromDBSources();
                         }
                         else
                         {
-                            athDesc.MyPK = this.FK_FrmAttachment + "_" + nd.NodeID;
+                            athDesc.setMyPK(this.FK_FrmAttachment + "_" + nd.NodeID);
                             athDesc.RetrieveFromDBSources();
                         }
-                        athDesc.MyPK = this.FK_FrmAttachment;
+                        athDesc.setMyPK(this.FK_FrmAttachment);
                         return athDesc;
                     }
                 }
@@ -5108,8 +5126,149 @@ namespace BP.WF.HttpHandler
 
             string url = HttpContextHelper.RequestApplicationPath + "DataUser/Temp/" + WebUser.No + "/" + zipName + ".zip";
             return "url@" + url;
+        }
+
+        public string AthSingle_Init()
+        {
+            string mypk = this.GetRequestVal("AthMyPK");
+            if (DataType.IsNullOrEmpty(mypk) == true)
+                return "err@请求参数MyPK的值不能为空";
+            //PKVal
+            string pkVal = DataType.IsNullOrEmpty(this.PKVal) == true ? null : this.PKVal;
+            FrmAttachmentSingle ath = new FrmAttachmentSingle(mypk);
+            //设计器中的预览。
+            if (pkVal == null)
+            {
+                string file = SystemConfig.PathOfTemp + "/" + mypk + ".docx";
+                if (ath.AthSingleRole != 0)
+                {
+                    DBAccess.GetFileFromDB(file, ath.EnMap.PhysicsTable, "MyPK", mypk, "TemplateFile");
+                    ath.SetPara("IsHaveFile", 0);
+                }
+                if (File.Exists(file) == false)
+                    CreateDocFile(file);
+                return ath.ToJson(false);
+            }
+            //获取athDB的数据
+            FrmAttachmentDBs dbs = new FrmAttachmentDBs();
+            dbs.Retrieve(FrmAttachmentDBAttr.FK_MapData, ath.FK_MapData, FrmAttachmentDBAttr.FK_FrmAttachment, ath.MyPK, FrmAttachmentDBAttr.RefPKVal, pkVal);
+            FrmAttachmentDB db = null;
+            string filePath = "";
+            if (dbs.Count != 0)
+            {
+                db = dbs[0] as FrmAttachmentDB;
+                filePath = db.FileFullName;
+            }
+            bool isReadonly = this.GetRequestValBoolen("IsReadonly");
+            if (isReadonly == false && ath.AthSingleRole != 0 && File.Exists(filePath) == false)
+            {
+                if (System.IO.Directory.Exists(ath.SaveTo + pkVal) == false)
+                    System.IO.Directory.CreateDirectory(ath.SaveTo + pkVal);
+                string file = SystemConfig.PathOfTemp + "/" + mypk + ".docx";
+                DBAccess.GetFileFromDB(file, ath.EnMap.PhysicsTable, "MyPK", mypk, "TemplateFile");
+                File.Copy(file, ath.SaveTo + pkVal + "/" + ath.MyPK + ".docx");
+            }
+
+            //判断公文文件是否存在
+            if (File.Exists(db.FileFullName) == false)
+                ath.SetPara("IsHaveFile", 0);
+            else
+                ath.SetPara("IsHaveFile", 1);
+            return ath.ToJson(false);
+        }
+
+        public string AthSingle_Upload()
+        {
+            string mypk = this.GetRequestVal("AthMyPK");
+            FrmAttachmentSingle ath = new FrmAttachmentSingle(mypk);
+            FrmAttachmentDBs dbs = new FrmAttachmentDBs();
+            string pkVal = DataType.IsNullOrEmpty(this.PKVal) == true ? null : this.PKVal;
+            string fileName = mypk + ".docx";
+            string filePath = ath.SaveTo + pkVal + "/" + fileName;
+            if (HttpContextHelper.RequestFilesCount > 0)
+            {
+                //HttpPostedFile file = context.Request.Files[i];
+                HttpPostedFile file = HttpContextHelper.RequestFiles(0);
+                //文件大小，单位字节
+                int fileContentLength = file.ContentLength;
+                //上传路径
+                string savePath = ath.SaveTo + pkVal;
+                //二进制数组
+                byte[] fileBytes = null;
+                fileBytes = new byte[fileContentLength];
+                //创建Stream对象，并指向上传文件
+                Stream fileStream = file.InputStream;
+                //从当前流中读取字节，读入字节数组中
+                fileStream.Read(fileBytes, 0, fileContentLength);
+
+                if (System.IO.Directory.Exists(savePath) == false)
+                    System.IO.Directory.CreateDirectory(savePath);
+                //创建文件，返回一个 FileStream，它提供对 path 中指定的文件的读/写访问。
+                using (FileStream stream = File.Create(filePath))
+                {
+                    //将字节数组写入流
+                    stream.Write(fileBytes, 0, fileBytes.Length);
+                    stream.Close();
+                }
+                //HttpContextHelper.UploadFile(file, filePath);
+
+            }
+            dbs.Retrieve(FrmAttachmentDBAttr.FK_MapData, ath.FK_MapData, FrmAttachmentDBAttr.FK_FrmAttachment, ath.MyPK, FrmAttachmentDBAttr.RefPKVal, pkVal);
+            if (dbs.Count == 0 && ath.AthEditModel != 0)
+            {
+                //增加一条数据
+                FrmAttachmentDB db = new FrmAttachmentDB();
+                db.setMyPK(DBAccess.GenerGUID());
+                db.NodeID = FK_Node;
+                db.setFK_MapData(ath.FK_MapData);
+                db.FK_FrmAttachment = ath.MyPK;
+                db.FID = this.FID; //流程id.
+                db.RefPKVal = pkVal;
+                db.FileExts = "docx";
+                db.FileName = ath.MyPK + "." + db.FileExts;
+                db.RDT = DataType.CurrentDateTimess;
+                db.Rec = BP.Web.WebUser.No;
+                db.RecName = BP.Web.WebUser.Name;
+                db.FK_Dept = WebUser.FK_Dept;
+                //设置路径.
+                db.FileFullName = ath.SaveTo + db.RefPKVal + "/" + db.FileName;
+                db.Insert();
+            }
+            return "";
+        }
+
+        public string AthSingle_TemplateData()
+        {
+            //获取表单数据
+            string pkVal = DataType.IsNullOrEmpty(this.PKVal) == true ? null : this.PKVal;
+            if (this.FK_Node == 0)
+                return "err@没有获取到FK_Node的值";
+            if (pkVal == null)
+                return "err@没有获取到OID的值";
+            Node nd = new Node(this.FK_Node);
+            Work wk = nd.HisWork;
+            wk.OID = Int64.Parse(pkVal);
+            wk.RetrieveFromDBSources();
+            Attrs attrs = wk.EnMap.Attrs;
+            DataTable dt = new DataTable();
+            dt.Columns.Add("name");
+            dt.Columns.Add("text");
+            dt.Columns.Add("type");
+            DataRow dr = null;
+            foreach (Attr attr in attrs)
+            {
+                dr = dt.NewRow();
+                dr["name"] = attr.Key;
+                dr["text"] = wk.GetValByKey(attr.Key);
+                dr["type"] = "text";
+                dt.Rows.Add(dr);
+            }
+            return BP.Tools.Json.ToJson(dt);
 
         }
+
+
+
         public string DearFileName(string fileName)
         {
             fileName = DearFileNameExt(fileName, "+", "%2B");
@@ -5121,6 +5280,13 @@ namespace BP.WF.HttpHandler
             fileName = DearFileNameExt(fileName, "&", "%26");
             fileName = DearFileNameExt(fileName, "=", "%3D");
             return fileName;
+        }
+
+        private void CreateDocFile(string filePath)
+        {
+            //Spire.Doc.Document doc = new Spire.Doc.Document();
+
+            //doc.SaveToFile(filePath, Spire.Doc.FileFormat.Docx2013);
         }
         public string DearFileNameExt(string fileName, string val, string replVal)
         {
@@ -5249,6 +5415,223 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(dt);
         }
         #endregion
+
+        #region 表单数据版本比对
+        public string FrmDBVer_Init()
+        {
+            FrmNodeExts frmNodes = null;
+            string frmID = this.FrmID;
+            string verFrmID = frmID;
+            if (this.WorkID == 0)
+                return "err@参数WorkID传递不正确";
+
+            if (DataType.IsNullOrEmpty(frmID) == false && DataType.IsNullOrEmpty(this.FK_Flow) == false)
+            {
+                if (frmID.StartsWith("ND") == true)
+                    verFrmID = "ND" + Int32.Parse(this.FK_Flow) + "Rpt";
+            }
+            //获取FrmID的值
+            if (DataType.IsNullOrEmpty(frmID) == true)
+            {
+                if (this.FK_Node == 0)
+                    return "err@参数传递不正确，不能进行表单版本的比对";
+                Node nd = new Node(this.FK_Node);
+                if (nd.HisFormType == NodeFormType.FoolForm || nd.HisFormType == NodeFormType.Develop
+                    || nd.HisFormType == NodeFormType.RefOneFrmTree)
+                {
+                    frmID = nd.NodeFrmID;
+                    verFrmID = frmID;
+                    if (nd.HisFormType == NodeFormType.FoolForm || nd.HisFormType == NodeFormType.Develop)
+                        verFrmID = "ND" + Int32.Parse(nd.FK_Flow) + "Rpt";
+                }
+
+                if (nd.HisFormType == NodeFormType.SheetTree)
+                {
+                    //获取节点绑定的表单
+                    frmNodes = new FrmNodeExts();
+                    frmNodes.Retrieve("FK_Flow", nd.FK_Flow, "FK_Node", nd.NodeID);
+                    if (frmNodes.Count == 0)
+                        return "err@节点" + nd.Name + "的表单方案是绑定多表单，但实际上没有找打绑定的表单。";
+                    FrmNodeExt frmNode = frmNodes[0] as FrmNodeExt;
+                    frmID = frmNode.FK_Frm;
+                    verFrmID = frmID;
+                }
+            }
+
+
+            MapData md = new MapData();
+            md.No = frmID;
+            if (md.RetrieveFromDBSources() == 0)
+                return "err@表单" + frmID + "在数据库中不存在";
+
+            //获取版本数据
+            BP.Sys.FrmDBVers vers = new BP.Sys.FrmDBVers();
+            vers.Retrieve(FrmDBVerAttr.PKVal, this.PKVal, FrmDBVerAttr.FrmID, verFrmID, "RDT");
+
+            //获取表单内容
+            DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No, md.Name);
+            if (frmNodes != null)
+                ds.Tables.Add(frmNodes.ToDataTableField("WF_FrmNode"));
+
+
+            //表单版本信息
+            ds.Tables.Add(vers.ToDataTableField("Sys_FrmDBVer"));
+
+            if (vers.Count != 0)
+            {
+                FrmDBVer ver = vers[vers.Count - 1] as FrmDBVer;
+                string mainData = BP.DA.DBAccess.GetBigTextFromDB("Sys_FrmDBVer", "MyPK", ver.MyPK, "FrmDB");
+                DataTable dt = BP.Tools.Json.ToDataTable(mainData);
+                dt.TableName = "mainData";
+                ds.Tables.Add(dt);
+
+            }
+            else
+            {
+                GEEntity en = new GEEntity(frmID, this.WorkID);
+                en.ResetDefaultVal();
+                ds.Tables.Add(en.ToDataTableField("mainData"));
+            }
+
+            return BP.Tools.Json.ToJson(ds);
+
+        }
+
+        public string FrmDBVer_ChangeFrm()
+        {
+            FrmNodeExts frmNodes = null;
+            string frmID = this.FrmID;
+
+            MapData md = new MapData();
+            md.No = frmID;
+            if (md.RetrieveFromDBSources() == 0)
+                return "err@表单" + frmID + "在数据库中不存在";
+
+            //获取版本数据
+            BP.Sys.FrmDBVers vers = new BP.Sys.FrmDBVers();
+            vers.Retrieve(FrmDBVerAttr.PKVal, this.PKVal, FrmDBVerAttr.FrmID, frmID, "RDT");
+
+            //获取表单内容
+            DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No, md.Name);
+            if (frmNodes != null)
+                ds.Tables.Add(frmNodes.ToDataTableField("WF_FrmNode"));
+
+
+            //表单版本信息
+            ds.Tables.Add(vers.ToDataTableField("Sys_FrmDBVer"));
+
+            if (vers.Count != 0)
+            {
+                FrmDBVer ver = vers[vers.Count - 1] as FrmDBVer;
+                string mainData = BP.DA.DBAccess.GetBigTextFromDB("Sys_FrmDBVer", "MyPK", ver.MyPK, "FrmDB");
+                DataTable dt = BP.Tools.Json.ToDataTable(mainData);
+                dt.TableName = "mainData";
+                ds.Tables.Add(dt);
+
+            }
+            else
+            {
+                GEEntity en = new GEEntity(frmID, this.WorkID);
+                en.ResetDefaultVal();
+                ds.Tables.Add(en.ToDataTableField("mainData"));
+
+            }
+            return BP.Tools.Json.ToJson(ds);
+        }
+        public string FrmDB_DoCompareVer()
+        {
+            string mainVer = this.GetRequestVal("MainVer");
+            string compareVer = this.GetRequestVal("CompareVer");
+            //获取主版本的数据
+            string mainData = BP.DA.DBAccess.GetBigTextFromDB("Sys_FrmDBVer", "MyPK", mainVer, "FrmDB");
+            string compareData = BP.DA.DBAccess.GetBigTextFromDB("Sys_FrmDBVer", "MyPK", compareVer, "FrmDB");
+            //获取表单的MapAttr
+            MapData mapData = new MapData(this.FrmID);
+            DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(mapData.No, mapData.Name);
+
+            //主版本的主表数据
+            DataTable dt = BP.Tools.Json.ToDataTable(mainData);
+            dt.TableName = "mainData";
+            ds.Tables.Add(dt);
+            //主版本的从表数据
+            string mainDtls = BP.DA.DBAccess.GetBigTextFromDB("Sys_FrmDBVer", "MyPK", mainVer, "FrmDtlDB");
+            DataSet dtlds = BP.Tools.Json.ToDataSet(mainDtls);
+            foreach(DataTable dtt in dtlds.Tables)
+            {
+                dt = dtt.Copy();
+                dt.TableName = "Main_" + dtt.TableName;
+                ds.Tables.Add(dt);
+            }
+            
+
+            //比对的主表数据
+            dt = BP.Tools.Json.ToDataTable(compareData);
+            dt.TableName = "compareData";
+            ds.Tables.Add(dt);
+
+            //比对的从表数据
+            string compareDtls = BP.DA.DBAccess.GetBigTextFromDB("Sys_FrmDBVer", "MyPK", compareVer, "FrmDtlDB");
+            dtlds = BP.Tools.Json.ToDataSet(compareDtls);
+            foreach (DataTable dtt in dtlds.Tables)
+            {
+                dt = dtt.Copy();
+                dt.TableName = "Compare_" + dtt.TableName;
+                ds.Tables.Add(dt);
+            }
+
+            return BP.Tools.Json.ToJson(ds);
+
+        }
+
+        /// <summary>
+        /// 从表数据的比对
+        /// </summary>
+        /// <returns></returns>
+        public string FrmDB_DtlCompare()
+        {
+            DataSet myds = new DataSet();
+            #region 加载从表表单模版信息.
+            MapDtl dtl = new MapDtl(this.FK_MapDtl);
+            DataTable Sys_MapDtl = dtl.ToDataTableField("Sys_MapDtl");
+            myds.Tables.Add(Sys_MapDtl);
+
+            //明细表的表单描述
+            MapAttrs attrs = dtl.MapAttrs;
+            DataTable Sys_MapAttr = attrs.ToDataTableField("Sys_MapAttr");
+            myds.Tables.Add(Sys_MapAttr);
+
+            //明细表的配置信息.
+            DataTable Sys_MapExt = dtl.MapExts.ToDataTableField("Sys_MapExt");
+            myds.Tables.Add(Sys_MapExt);
+
+            //启用附件，增加附件信息
+            DataTable Sys_FrmAttachment = dtl.FrmAttachments.ToDataTableField("Sys_FrmAttachment");
+            myds.Tables.Add(Sys_FrmAttachment);
+            #endregion 加载从表表单模版信息.
+
+            #region  把从表的数据放入.
+            string mainVer = this.GetRequestVal("MainVer");
+            string compareVer = this.GetRequestVal("CompareVer");
+
+            //主版本的从表数据
+            string mainDtls = BP.DA.DBAccess.GetBigTextFromDB("Sys_FrmDBVer", "MyPK", mainVer, "FrmDtlDB");
+            DataTable dtt = BP.Tools.Json.ToDataSet(mainDtls).Tables[dtl.PTable];
+           
+            DataTable dt = dtt.Copy();
+            dt.TableName = "Main_" + dtt.TableName;
+            myds.Tables.Add(dt);
+           
+
+            //比对的从表数据
+            string compareDtls = BP.DA.DBAccess.GetBigTextFromDB("Sys_FrmDBVer", "MyPK", compareVer, "FrmDtlDB");
+            dtt = BP.Tools.Json.ToDataSet(compareDtls).Tables[dtl.PTable];
+            dt = dtt.Copy();
+            dt.TableName = "Compare_" + dtt.TableName;
+            myds.Tables.Add(dt);
+            #endregion  把从表的数据放入.
+            return BP.Tools.Json.ToJson(myds);
+        }
+        #endregion 表单数据版本比对
 
     }
 }

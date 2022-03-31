@@ -265,7 +265,7 @@ namespace BP.WF
                 // 流程基础数据。
                 map.AddTBIntPKOID(); 
                 map.AddTBInt(GenerWorkFlowAttr.FID, 0, "FID", false, false);
-                map.AddDDLEntities(GenerWorkFlowAttr.FK_Dept, null, "部门", new Port.Depts(), false);
+                map.AddDDLEntities(GenerWorkFlowAttr.FK_Dept, null, "部门", new BP.Port.Depts(), false);
                 map.AddTBString(GenerWorkFlowAttr.Title, null, "标题", true, true, 0, 100, 100);
                 map.AddTBString(GERptAttr.FlowStarter, null, "发起人", true, true, 0, 100, 100);
                 map.AddTBDateTime(GERptAttr.FlowStartRDT, null, "发起时间", true, true);

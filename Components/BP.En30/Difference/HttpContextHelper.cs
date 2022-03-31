@@ -7,7 +7,7 @@ using System.Web.SessionState;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace BP.Web
+namespace BP.Difference
 {
     public static class HttpContextHelper
     {
@@ -111,7 +111,7 @@ namespace BP.Web
             var contentDisposition = "attachment;" + "filename=" + HttpUtility.UrlEncode(fileName, Encoding.UTF8);
             // Response.Headers.Add("Content-Disposition", contentDisposition); IIS 7之前的版本可能不支持此写法
             Response.AddHeader("Content-Disposition", contentDisposition);
-
+            Response.AddHeader("Code", "OK");
             // 在Response的Header中设置下载文件的大小，这样客户端浏览器才能正确显示下载的进度
             Response.AddHeader("Content-Length", fileData.Length.ToString());
 
@@ -131,6 +131,7 @@ namespace BP.Web
                 clientFileName = Path.GetFileName(filePath);
 
             Response.AppendHeader("Content-Disposition", "attachment;filename=" + clientFileName);
+            Response.AddHeader("Code", "OK");
             Response.ContentEncoding = Encoding.UTF8;
             Response.ContentType = String.Format("{0};charset=utf8", contentType);
 

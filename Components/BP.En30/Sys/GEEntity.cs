@@ -82,13 +82,13 @@ namespace BP.Sys
             this._enMap = null;
         }
         /// <summary>
-        /// 通用OID实体
+        /// 
         /// </summary>
-        /// <param name="nodeid">节点ID</param>
-        /// <param name="_oid">OID</param>
-        public GEEntity(string fk_mapdata, object pk)
+        /// <param name="frmID"></param>
+        /// <param name="pk"></param>
+        public GEEntity(string frmID, object pk)
         {
-            this.FK_MapData = fk_mapdata;
+            this.FK_MapData = frmID; 
             this.PKVal = pk;
             this._enMap = null;
             this.Retrieve();
@@ -192,8 +192,8 @@ namespace BP.Sys
                     athDBsFrom.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, athFrom.MyPK, FrmAttachmentDBAttr.RefPKVal, en.OID.ToString());
                     foreach (FrmAttachmentDB athDBFrom in athDBsFrom)
                     {
-                        athDBFrom.MyPK = DBAccess.GenerGUID();
-                        athDBFrom.FK_MapData = this.FK_MapData;
+                        athDBFrom.setMyPK(DBAccess.GenerGUID());
+                        athDBFrom.setFK_MapData(this.FK_MapData);
                         athDBFrom.FK_FrmAttachment = ath.MyPK;
                         athDBFrom.RefPKVal = this.OID.ToString();
                         athDBFrom.Insert();
@@ -222,7 +222,7 @@ namespace BP.Sys
 
                 GEDtls ensDtl = new GEDtls(dtl.No);
 
-             //   var typeVal = BP.Sys.Glo.GenerRealType( ensDtl.GetNewEntity.EnMap.Attrs, GEDtlAttr.RefPK, this.OID);
+             //   var typeVal = BP.Sys.Base.Glo.GenerRealType( ensDtl.GetNewEntity.EnMap.Attrs, GEDtlAttr.RefPK, this.OID);
 
                 ensDtl.Retrieve(GEDtlAttr.RefPK, this.OID.ToString() );
 
@@ -247,13 +247,13 @@ namespace BP.Sys
                     FrmAttachmentDB athDB_N = new FrmAttachmentDB();
                     athDB_N.Copy(athDB);
 
-                    athDB_N.FK_MapData = this.FK_MapData;
+                    athDB_N.setFK_MapData(this.FK_MapData);
                     athDB_N.RefPKVal =this.OID.ToString();
 
                     if (athDB_N.HisAttachmentUploadType == AttachmentUploadType.Single)
                     {
                         /*如果是单附件.*/
-                        athDB_N.MyPK = athDB_N.FK_FrmAttachment + "_" + this.OID;
+                        athDB_N.setMyPK(athDB_N.FK_FrmAttachment + "_" + this.OID);
                         if (athDB_N.IsExits == true)
                             continue;  /*说明上一个节点或者子线程已经copy过了, 但是还有子线程向合流点传递数据的可能，所以不能用break.*/
 
@@ -261,7 +261,7 @@ namespace BP.Sys
                     }
                     else
                     {
-                        athDB_N.MyPK = DBAccess.GenerGUID(); 
+                        athDB_N.setMyPK(DBAccess.GenerGUID()); 
                         athDB_N.Insert();
                     }
                 }
@@ -277,6 +277,88 @@ namespace BP.Sys
                 return _Dtls;
             }
         }
+
+
+        #region public 方法
+        protected virtual string SerialKey
+        {
+            get
+            {
+                return "OID";
+            }
+        }
+        /// <summary>
+        /// 作为一个新的实体保存。
+        /// </summary>
+        public void SaveAsNew()
+        {
+            try
+            {
+                this.OID = DBAccess.GenerOIDByKey32(this.SerialKey);
+                this.RunSQL(SqlBuilder.Insert(this));
+            }
+            catch (System.Exception ex)
+            {
+                this.CheckPhysicsTable();
+                throw ex;
+            }
+        }
+        /// <summary>
+        /// 按照指定的OID Insert.
+        /// </summary>
+        public void InsertAsOID(int oid)
+        {
+            this.SetValByKey("OID", oid);
+            try
+            {
+                this.RunSQL(SqlBuilder.Insert(this));
+            }
+            catch (Exception ex)
+            {
+                this.CheckPhysicsTable();
+                throw ex;
+            }
+        }
+        public void InsertAsOID(Int64 oid)
+        {
+            try
+            {
+                //先设置一个标记值，为的是不让其在[beforeInsert]产生oid.
+                this.SetValByKey("OID", -999);
+
+                //调用方法.
+                this.beforeInsert();
+
+                //设置主键.
+                this.SetValByKey("OID", oid);
+
+                this.RunSQL(SqlBuilder.Insert(this));
+
+                this.afterInsert();
+            }
+            catch (Exception ex)
+            {
+                this.CheckPhysicsTable();
+                throw ex;
+            }
+        }
+        /// <summary>
+        /// 按照指定的OID 保存
+        /// </summary>
+        /// <param name="oid"></param>
+        public void SaveAsOID(int oid)
+        {
+            this.SetValByKey("OID", oid);
+            if (this.Update() == 0)
+                this.InsertAsOID(oid);
+
+            //         this.SetValByKey("OID",oid);
+            // if (this.IsExits==false)
+            //	this.InsertAsOID(oid);
+            //this.Update();
+        }
+        #endregion
+
     }
     /// <summary>
     /// 通用OID实体s
@@ -318,13 +400,9 @@ namespace BP.Sys
         public GEEntitys()
         {
         }
-        /// <summary>
-        /// 通用OID实体ID
-        /// </summary>
-        /// <param name="fk_mapdtl"></param>
-        public GEEntitys(string fk_mapdata)
+        public GEEntitys(string frmID)
         {
-            this.FK_MapData = fk_mapdata;
+            this.FK_MapData = frmID;
         }
         #endregion
 

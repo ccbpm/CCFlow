@@ -53,17 +53,17 @@ namespace BP.WF.DTS
                 DBAccess.RunSQL("update sys_mapattr set keyofen=REPLACE(keyofen,'" + c + "' , '')");
             }
 
-            BP.Sys.MapAttrs attrs = new Sys.MapAttrs();
-            attrs.RetrieveAll();
+            BP.Sys.MapAttrs mattrs = new Sys.MapAttrs();
+            mattrs.RetrieveAll();
             int idx = 0;
             string msg = "";
-            foreach (BP.Sys.MapAttr item in attrs)
+            foreach (BP.Sys.MapAttr item in mattrs)
             {
-                string f = item.KeyOfEn.Clone().ToString();
+                string f = item.KeyOfEn;
                 try
                 {
                     int i = int.Parse( item.KeyOfEn.Substring(0, 1) );
-                    item.KeyOfEn = "F" + item.KeyOfEn;
+                    item.setKeyOfEn("F" + item.KeyOfEn);
                     try
                     {
                         MapAttr itemCopy = new MapAttr();

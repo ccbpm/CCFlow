@@ -317,9 +317,9 @@ namespace BP.CCBill
             #region 替换参数变量.
             if (doc.Contains("@") == true)
             {
-                MapAttrs attrs = new MapAttrs();
-                attrs.Retrieve(MapAttrAttr.FK_MapData, this.PKVal);
-                foreach (MapAttr item in attrs)
+                MapAttrs mattrs = new MapAttrs();
+                mattrs.Retrieve(MapAttrAttr.FK_MapData, this.PKVal);
+                foreach (MapAttr item in mattrs)
                 {
                     if (doc.Contains("@") == false)
                         break;
@@ -398,9 +398,9 @@ namespace BP.CCBill
             #region 替换参数变量.
             if (doc.Contains("@") == true)
             {
-                MapAttrs attrs = new MapAttrs();
-                attrs.Retrieve(MapAttrAttr.FK_MapData, this.PKVal);
-                foreach (MapAttr item in attrs)
+                MapAttrs mattrs = new MapAttrs();
+                mattrs.Retrieve(MapAttrAttr.FK_MapData, this.PKVal);
+                foreach (MapAttr item in mattrs)
                 {
                     if (doc.Contains("@") == false)
                         break;
@@ -466,7 +466,11 @@ namespace BP.CCBill
         public string MyBill_CreateBlankBillID()
         {
             string billNo = this.GetRequestVal("BillNo");
-            return BP.CCBill.Dev2Interface.CreateBlankBillID(this.FrmID, BP.Web.WebUser.No, null, billNo).ToString();
+            string PFrmID = this.GetRequestVal("PFrmID");
+            string PWorkID = this.GetRequestVal("PWorkID");
+            if (DataType.IsNullOrEmpty(PWorkID) == true)
+                PWorkID = "0";
+            return BP.CCBill.Dev2Interface.CreateBlankBillID(this.FrmID, BP.Web.WebUser.No, null, PFrmID, long.Parse(PWorkID)).ToString();
         }
         /// <summary>
         /// 创建空白的DictID.
@@ -477,7 +481,7 @@ namespace BP.CCBill
             return BP.CCBill.Dev2Interface.CreateBlankDictID(this.FrmID, null, null).ToString();
         }
         /// <summary>
-        /// 执行保存 @hongyan
+        /// 执行保存
         /// </summary>
         /// <returns></returns>
         public string MyBill_SaveIt()
@@ -971,8 +975,9 @@ namespace BP.CCBill
             if (dblist.EntityType == EntityType.DBList)
                 return Search_MapAttrForDB();
             #region 查询显示的列
-            MapAttrs mapattrs = new MapAttrs();
-            mapattrs.Retrieve(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.Idx);
+            MapAttrs mattrs = new MapAttrs();
+            mattrs.Retrieve(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.Idx);
+
             MapExts mapExts = new MapExts();
             QueryObject qo = new QueryObject(mapExts);
             qo.AddWhere(MapExtAttr.FK_MapData, this.FrmID);
@@ -982,13 +987,13 @@ namespace BP.CCBill
             foreach(MapExt mapExt in mapExts)
             {
                 //获取mapAttr
-                MapAttr mapAttr = mapattrs.GetEntityByKey(this.FrmID + "_" + mapExt.AttrOfOper) as MapAttr;
+                MapAttr mapAttr = mattrs.GetEntityByKey(this.FrmID + "_" + mapExt.AttrOfOper) as MapAttr;
                 string searchVisable = mapAttr.atPara.GetValStrByKey("SearchVisable");
                 if (searchVisable == "0")
                     continue;
                 mapAttr.SetPara("SearchVisable", 0);
                 mapAttr.Update();
-                mapAttr = mapattrs.GetEntityByKey(this.FrmID + "_" + mapExt.AttrOfOper+"T") as MapAttr;
+                mapAttr = mattrs.GetEntityByKey(this.FrmID + "_" + mapExt.AttrOfOper+"T") as MapAttr;
                 mapAttr.SetPara("SearchVisable", 1);
                 mapAttr.Update();
             }
@@ -1004,7 +1009,7 @@ namespace BP.CCBill
             dt.Columns.Add("AtPara", typeof(string));
 
             //设置标题、单据号位于开始位置
-            foreach (MapAttr attr in mapattrs)
+            foreach (MapAttr attr in mattrs)
             {
                 string searchVisable = attr.atPara.GetValStrByKey("SearchVisable");
                 if (searchVisable == "0")
@@ -1135,7 +1140,7 @@ namespace BP.CCBill
 
             //取出来查询条件.
             UserRegedit ur = new UserRegedit();
-            ur.MyPK = WebUser.No + this.FrmID + "_SearchAttrs";
+            ur.setMyPK( WebUser.No + this.FrmID + "_SearchAttrs");
             ur.RetrieveFromDBSources();
 
             GEEntitys rpts = new GEEntitys(this.FrmID);
@@ -1325,9 +1330,9 @@ namespace BP.CCBill
                 qo.addLeftBracket();
 
 
-                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                 {
-                    var typeVal = BP.Sys.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
+                    var typeVal = BP.Sys.Base.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
                     qo.AddWhere(str, typeVal);
 
                 }
@@ -1478,7 +1483,7 @@ namespace BP.CCBill
 
             //取出来查询条件.
             UserRegedit ur = new UserRegedit();
-            ur.MyPK = WebUser.No + this.FrmID + "_SearchAttrs";
+            ur.setMyPK(WebUser.No + this.FrmID + "_SearchAttrs");
             ur.RetrieveFromDBSources();
 
             GEEntitys rpts = new GEEntitys(this.FrmID);
@@ -1821,7 +1826,7 @@ namespace BP.CCBill
             sql += "  GROUP BY A.BillState, B.Lab  ";
 
             DataTable dtFlows = DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dtFlows.Columns[0].ColumnName = "No";
                 dtFlows.Columns[1].ColumnName = "Name";
@@ -1855,11 +1860,11 @@ namespace BP.CCBill
                 sql = "SELECT " + fields + " FROM (SELECT * FROM Frm_GenerBill WHERE " + sqlWhere + ") WHERE rownum <= 50";
             else if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                 sql = "SELECT  TOP 50 " + fields + " FROM Frm_GenerBill WHERE " + sqlWhere;
-            else if (SystemConfig.AppCenterDBType == DBType.MySQL || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            else if (SystemConfig.AppCenterDBType == DBType.MySQL || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                 sql = "SELECT  " + fields + " FROM Frm_GenerBill WHERE " + sqlWhere + " LIMIT 50";
 
             DataTable mydt = DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 mydt.Columns[0].ColumnName = "WorkID";
                 mydt.Columns[1].ColumnName = "FrmID";
@@ -1896,8 +1901,8 @@ namespace BP.CCBill
             GEEntitys rpts = new GEEntitys(this.FrmID);
 
             string name = "数据导出";
-            string filename = frmBill.Name + "_" + DataType.CurrentDataTimeCNOfLong + ".xls";
-            string filePath = ExportDGToExcel(Search_Data(), rpts.GetNewEntity, null, null, filename);
+            string filename = frmBill.Name + "_" + DataType.CurrentDateTimeCNOfLong + ".xls";
+            string filePath = BP.Tools.ExportExcelUtil.ExportDGToExcel(Search_Data(), rpts.GetNewEntity, null, null, filename);
             return filePath;
         }
 
@@ -1912,7 +1917,7 @@ namespace BP.CCBill
 
             //取出来查询条件.
             UserRegedit ur = new UserRegedit();
-            ur.MyPK = WebUser.No + this.FrmID + "_SearchAttrs";
+            ur.setMyPK(WebUser.No + this.FrmID + "_SearchAttrs");
             ur.RetrieveFromDBSources();
 
             GEEntitys rpts = new GEEntitys(this.FrmID);
@@ -2103,9 +2108,9 @@ namespace BP.CCBill
                 qo.addLeftBracket();
 
 
-                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                 {
-                    var typeVal = BP.Sys.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
+                    var typeVal = BP.Sys.Base.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
                     qo.AddWhere(str, typeVal);
 
                 }
@@ -2144,9 +2149,9 @@ namespace BP.CCBill
                     val = val.Replace("WebUser.FK_Dept", WebUser.FK_Dept);
 
                     //获得真实的数据类型.
-                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                     {
-                        var valType = BP.Sys.Glo.GenerRealType(attrs,
+                        var valType = BP.Sys.Base.Glo.GenerRealType(attrs,
                             str[0], val);
                         qo.AddWhere(str[0], str[1], valType);
                     }
@@ -2444,7 +2449,7 @@ namespace BP.CCBill
                 if (en.Row.ContainsKey("BillNo") == true)
                     gb.BillNo = en.GetValStringByKey("BillNo");
                 gb.FK_FrmTree = fbill.FK_FormTree; //单据类别.
-                gb.RDT = DataType.CurrentDataTime;
+                gb.RDT = DataType.CurrentDateTime;
                 gb.NDStep = 1;
                 gb.NDStepName = "启动";
                 gb.Insert();
@@ -2804,7 +2809,7 @@ namespace BP.CCBill
                     {
                         string mypk = "MultipleChoiceSmall_" + fbill.No + "_" + item.Key;
                         MapExt mapExt = new MapExt();
-                        mapExt.MyPK = mypk;
+                        mapExt.setMyPK(mypk);
                         if (mapExt.RetrieveFromDBSources() == 1 && mapExt.DoWay == 3 && DataType.IsNullOrEmpty(mapExt.Tag3) == false)
                         {
                             string newVal = "," + val + ",";
@@ -2865,7 +2870,7 @@ namespace BP.CCBill
                 if (en.Row.ContainsKey("BillNo") == true)
                     gb.BillNo = en.GetValStringByKey("BillNo");
                 gb.FK_FrmTree = fbill.FK_FormTree; //单据类别.
-                gb.RDT = DataType.CurrentDataTime;
+                gb.RDT = DataType.CurrentDateTime;
                 gb.NDStep = 1;
                 gb.NDStepName = "启动";
                 gb.Insert();
@@ -2962,7 +2967,7 @@ namespace BP.CCBill
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineInfo("MidStrEx Err:" + ex.Message);
+                BP.DA.Log.DebugWriteError("MidStrEx Err:" + ex.Message);
             }
             return tmpstr;
         }
@@ -2975,10 +2980,10 @@ namespace BP.CCBill
             string fk_mapData = "ND" + int.Parse(this.FK_Flow) + "01";
 
             //查询出单流程的所有字段
-            MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapAttrAttr.FK_MapData, fk_mapData, MapAttrAttr.Idx);
+            MapAttrs mattrs = new MapAttrs();
+            mattrs.Retrieve(MapAttrAttr.FK_MapData, fk_mapData, MapAttrAttr.Idx);
 
-            ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
+            ds.Tables.Add(mattrs.ToDataTableField("Sys_MapAttr"));
 
             MapAttrs mattrsOfSystem1 = new MapAttrs();
             //判断表单中是否存在默认值@WebUser.No,@WebUser.FK_Dept,@RDT
@@ -2988,7 +2993,7 @@ namespace BP.CCBill
 
             //系统字段字符串
             string sysFields = "";
-            foreach (MapAttr mapAttr in attrs)
+            foreach (MapAttr mapAttr in mattrs)
             {
 
                 if (mapAttr.KeyOfEn.Equals(GERptAttr.Rec) || mapAttr.KeyOfEn.Equals(GERptAttr.RDT) || mapAttr.KeyOfEn.Equals(GERptAttr.CDT))

@@ -174,7 +174,6 @@ namespace BP.CCBill.Template
                 #region 字段
                 map.AddMyPK();  //增加一个自动增长的列.
 
-
                 map.AddTBString(CtrlModelAttr.FrmID, null, "表单ID", true, false, 0, 300, 100);
                 //BtnNew,BtnSave,BtnSubmit,BtnDelete,BtnSearch
                 map.AddTBString(CtrlModelAttr.CtrlObj, null, "控制权限", true, false, 0, 20, 100);
@@ -214,7 +213,7 @@ namespace BP.CCBill.Template
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            this.MyPK = this.FrmID + "_" + CtrlObj;
+            this.setMyPK(this.FrmID + "_" + CtrlObj);
             return base.beforeInsert();
         }
 

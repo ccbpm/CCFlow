@@ -107,10 +107,10 @@ namespace BP.GPM
         /// <summary>
         /// 个人设置
         /// </summary>
-        /// <param name="mypk"></param>
+        /// <param name="no"></param>
         public PerSetting(string no)
         {
-            this.MyPK = no;
+            this.setMyPK(no);
             this.Retrieve();
         }
         /// <summary>
@@ -123,11 +123,8 @@ namespace BP.GPM
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("GPM_PerSetting");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "个人设置";
-                map.EnType = EnType.Sys;
+                Map map = new Map("GPM_PerSetting", "个人设置");
+                map.setEnType(EnType.Sys);
                 map.AddMyPK();
 
                 map.AddTBString(PerSettingAttr.FK_Emp, null, "人员", true, false, 0, 200, 20);
@@ -145,7 +142,7 @@ namespace BP.GPM
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.MyPK = this.FK_Emp + "_" + this.FK_App;
+            this.setMyPK(this.FK_Emp + "_" + this.FK_App);
             return base.beforeUpdateInsertAction();
         }
     }

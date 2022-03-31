@@ -169,12 +169,7 @@ namespace BP.WF.Template
                 map.AddTBString(SubFlowYanXuAttr.SubFlowNo, null, "子流程编号", true, true, 0, 10, 150, false);
                 map.AddTBString(SubFlowYanXuAttr.SubFlowName, null, "子流程名称", true, true, 0, 200, 150, false);
 
-                map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "子流程结束规则", true, true,
-               FlowAttr.IsAutoSendSubFlowOver, "@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
-
-
-                map.AddDDLSysEnum(FlowAttr.IsAutoSendSLSubFlowOver, 0, "同级子流程结束规则", true, true,
-               FlowAttr.IsAutoSendSLSubFlowOver, "@0=不处理@1=让同级子流程自动运行下一步@2=结束同级子流程");
+                
 
                 map.AddDDLSysEnum(SubFlowYanXuAttr.ExpType, 3, "表达式类型", true, true, SubFlowYanXuAttr.ExpType,
                    "@3=按照SQL计算@4=按照参数计算");
@@ -197,7 +192,7 @@ namespace BP.WF.Template
 
                 // map.AddTBString(SubFlowYanXuAttr.ReturnToNode, null, "要退回的节点", true, false, 0, 200, 150, true);
                 map.AddDDLSQL(SubFlowYanXuAttr.ReturnToNode, "0", "要退回的节点",
-                    "SELECT NodeID AS No, Name FROM WF_Node WHERE FK_Flow IN (SELECT FK_Flow FROM WF_Node WHERE NodeID=@FK_Node; )", true);
+                    "SELECT NodeID AS No, Name FROM WF_Node WHERE FK_Flow IN (SELECT FK_Flow FROM WF_Node WHERE NodeID=@FK_Node) ", true);
 
                 map.AddTBInt(SubFlowYanXuAttr.Idx, 0, "显示顺序", true, false);
                 this._enMap = map;
@@ -212,7 +207,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            this.MyPK = this.FK_Node + "_" + this.SubFlowNo + "_2";
+            this.setMyPK(this.FK_Node + "_" + this.SubFlowNo + "_2");
             return base.beforeInsert();
         }
 

@@ -259,7 +259,10 @@ namespace BP.DA
             en.DAType = System.Data.DbType.String;
             en.val = _val;
             en.ParaName = _name;
-            en.Size = _val.Length;
+            if (DataType.IsNullOrEmpty(_val) == true)
+                en.Size = 0;
+            else
+                en.Size = _val.Length;
             en.IsBigText = isBigTxt; //是否是大块文本.
             this.Add(en);
         }

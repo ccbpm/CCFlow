@@ -47,7 +47,7 @@ namespace BP.Sys.FrmUI
             get
             {
                 UAC uac = new UAC();
-                //if (Web.WebUser.No.Equals("admin"))
+                //if (BP.Web.WebUser.No.Equals("admin"))
                 //{
                 uac.IsUpdate = true;
                 uac.IsDelete = true;
@@ -69,7 +69,7 @@ namespace BP.Sys.FrmUI
         /// <param name="mypk"></param>
         public MapFrameExt(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -152,7 +152,7 @@ namespace BP.Sys.FrmUI
         protected override bool beforeUpdateInsertAction()
         {
             //在属性实体集合插入前，clear父实体的缓存.
-            BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
 
             int val = this.GetValIntByKey(MapFrameAttr.UrlSrcType, 0);
             if (val == 1)
@@ -182,7 +182,7 @@ namespace BP.Sys.FrmUI
         protected override void afterInsertUpdateAction()
         {
             MapFrame mapframe = new MapFrame();
-            mapframe.MyPK = this.MyPK;
+            mapframe.setMyPK(this.MyPK);
             mapframe.RetrieveFromDBSources();
             mapframe.Update();
 

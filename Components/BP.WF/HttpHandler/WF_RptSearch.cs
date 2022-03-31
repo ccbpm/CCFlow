@@ -11,6 +11,7 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
+using BP.Difference;
 
 namespace BP.WF.HttpHandler
 {
@@ -38,9 +39,9 @@ namespace BP.WF.HttpHandler
 
             //string sql = "";
             //sql = "select FK_Flow, FlowName,Count(WorkID) as Num FROM WF_GenerWorkFlow  WHERE Starter='" + BP.Web.WebUser.No + "' GROUP BY FK_Flow, FlowName ";
-            System.Data.DataTable dt = DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "Start";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
                 dt.Columns["FLOWNAME"].ColumnName = "FlowName";
@@ -53,9 +54,9 @@ namespace BP.WF.HttpHandler
             ps.SQL = "select FK_Flow, FlowName,Count(WorkID) as Num FROM wf_empworks  WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp GROUP BY FK_Flow, FlowName ";
             ps.Add("FK_Emp", BP.Web.WebUser.No);
             //sql = "select FK_Flow, FlowName,Count(WorkID) as Num FROM wf_empworks  WHERE FK_Emp='" + BP.Web.WebUser.No + "' GROUP BY FK_Flow, FlowName ";
-            System.Data.DataTable dtTodolist = DBAccess.RunSQLReturnTable(ps);
+            DataTable dtTodolist = DBAccess.RunSQLReturnTable(ps);
             dtTodolist.TableName = "Todolist";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dtTodolist.Columns["FK_FLOW"].ColumnName = "FK_Flow";
                 dtTodolist.Columns["FLOWNAME"].ColumnName = "FlowName";
@@ -65,13 +66,12 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtTodolist);
 
             //正在运行的流程.
-            System.Data.DataTable dtRuning = BP.WF.Dev2Interface.DB_TongJi_Runing();
+            DataTable dtRuning = BP.WF.Dev2Interface.DB_TongJi_Runing();
             dtRuning.TableName = "Runing";
             ds.Tables.Add(dtRuning);
 
-
             //归档的流程.
-            System.Data.DataTable dtOK = BP.WF.Dev2Interface.DB_TongJi_FlowComplete();
+            DataTable dtOK = BP.WF.Dev2Interface.DB_TongJi_FlowComplete();
             dtOK.TableName = "OK";
             ds.Tables.Add(dtOK);
 
@@ -160,7 +160,7 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "WF_GenerWorkFlow";
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dt.Columns["FLOWNAME"].ColumnName = "FlowName";
                 dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";

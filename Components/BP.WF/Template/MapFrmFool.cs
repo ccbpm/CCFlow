@@ -165,7 +165,9 @@ namespace BP.WF.Template
                     map.SetHelperAlert(MapDataAttr.PTable, msg);
                 }
 
+                //map.AddTBStringDoc(MapDataAttr.Name, null, "表单名称", true, false);
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20, true);
+
 
                 map.AddTBInt(MapDataAttr.TableCol, 0, "显示列数", false, false);
 
@@ -183,17 +185,21 @@ namespace BP.WF.Template
                 else
                 {
                     map.AddTBString(MapDataAttr.DBSrc, null, "数据源", false, false, 0, 500, 20);
-                   // map.AddDDLEntities(MapDataAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
+                    // map.AddDDLEntities(MapDataAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
                     map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
                 }
 
                 //表单的运行类型.
-                map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型",
+                map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FoolForm, "表单类型",
                     true, true, MapDataAttr.FrmType);
 
                 //表单解析 0 普通 1 页签展示
                 map.AddDDLSysEnum(MapDataAttr.FrmShowType, 0, "表单展示方式", true, true, "表单展示方式",
                     "@0=普通方式@1=页签方式");
+
+                map.AddTBString(MapDataAttr.Icon, "icon-doc", "图标", true, false, 0, 100, 100);
+
+                map.AddBoolean("IsEnableJs", false, "是否启用自定义js函数？", true, true, true);
                 #endregion 基本属性.
 
                 #region 设计者信息.
@@ -231,7 +237,6 @@ namespace BP.WF.Template
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-
 
                 rm = new RefMethod();
                 rm.Title = "批量修改字段"; // "设计表单";
@@ -279,7 +284,6 @@ namespace BP.WF.Template
                 rm.Icon = "icon-social-spotify";
                 map.AddRefMethod(rm);
 
-
                 //带有参数的方法.
                 rm = new RefMethod();
                 rm.Title = "重命名字段";
@@ -324,8 +328,7 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Img/FileType/doc.gif";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "icon-printer";
-                map.AddRefMethod(rm);
-
+                //  map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "参考面板";
@@ -336,6 +339,17 @@ namespace BP.WF.Template
                 #endregion 方法 - 基本功能.
 
                 #region 高级功能.
+                rm = new RefMethod();
+                rm.Title = "版本管理"; // "设计表单";
+                rm.GroupName = "高级功能";
+                rm.ClassMethodName = this.ToString() + ".DoMapDataVer";
+                //  rm.Icon = "../../WF/Img/Ver.png";
+                rm.Icon = "icon-social-dropbox";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
                 rm = new RefMethod();
                 rm.Title = "改变表单类型";
                 rm.GroupName = "高级功能";
@@ -366,11 +380,12 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
+
                 //平铺模式.
                 if (BP.WF.Glo.CCBPMRunModel != CCBPMRunModel.Single)
                 {
                     map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.FrmOrgs(),
-                        new BP.WF.Port.Admin2.Orgs(),
+                        new BP.WF.Port.Admin2Group.Orgs(),
                         BP.WF.Template.FrmOrgAttr.FrmID,
                         BP.WF.Template.FrmOrgAttr.OrgNo, "适用组织");
                 }
@@ -400,14 +415,14 @@ namespace BP.WF.Template
                 #endregion 方法 - 开发接口.
 
                 #region 实验中的功能
-                rm = new RefMethod();
-                rm.Title = "批量设置验证规则";
-                rm.GroupName = "实验中的功能";
-                //rm.Icon = "../../WF/Img/RegularExpression.png";
-                rm.ClassMethodName = this.ToString() + ".DoRegularExpressionBatch";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Icon = "icon-settings";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "批量设置验证规则";
+                //rm.GroupName = "实验中的功能";
+                ////rm.Icon = "../../WF/Img/RegularExpression.png";
+                //rm.ClassMethodName = this.ToString() + ".DoRegularExpressionBatch";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.Icon = "icon-settings";
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "一键设置表单元素只读";
@@ -466,7 +481,7 @@ namespace BP.WF.Template
         protected override bool beforeUpdate()
         {
             //注册事件表单实体.
-            //BP.Sys.FormEventBase feb = BP.Sys.Glo.GetFormEventBaseByEnName(this.No);
+            //BP.Sys.Base.FormEventBase feb = BP.Sys.Base.Glo.GetFormEventBaseByEnName(this.No);
             //if (feb == null)
             //    this.FromEventEntity = "";
             //else
@@ -500,7 +515,20 @@ namespace BP.WF.Template
 
             base.afterUpdate();
         }
+
         #region 节点表单方法.
+        /// <summary>
+        /// 版本管理
+        /// </summary>
+        /// <returns></returns>
+        public string DoMapDataVer()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapDataVer.htm?FK_MapData=" + this.No + "&FrmID=" + this.No;
+        }
+        /// <summary>
+        /// 顺序
+        /// </summary>
+        /// <returns></returns>
         public string DoTabIdx()
         {
             return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/TabIdx.htm?FK_MapData=" + this.No;
@@ -511,7 +539,8 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBill()
         {
-            return "../../Admin/AttrNode/Bill.htm?FK_MapData=" + this.No + "&NodeID=" + this.NodeID + "&FK_Node=" + this.NodeID;
+            return "../../Admin/FoolFormDesigner/PrintTemplate/Default.htm?FK_MapData=" + this.No + "&FrmID=" + this.No + "&NodeID=" + this.NodeID + "&FK_Node=" + this.NodeID;
+
         }
         /// <summary>
         /// 隐藏字段.
@@ -546,7 +575,7 @@ namespace BP.WF.Template
         public string DoNodeFrmCompent()
         {
             if (this.No.Contains("ND") == true)
-                return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
+                return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDateTime;
             else
                 return "../../Admin/FoolFormDesigner/Do.htm&DoType=FWCShowError";
         }
@@ -572,8 +601,8 @@ namespace BP.WF.Template
             string sqlOfOID = " CAST(OID as VARCHAR(50)) ";
             if (SystemConfig.AppCenterDBType == DBType.MySQL)
                 sqlOfOID = " CAST(OID as CHAR) ";
-           string sql = "SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND GroupID NOT IN (SELECT "+ sqlOfOID+" FROM Sys_GroupField WHERE FrmID='" + this.No + "' AND ( CtrlType='' OR CtrlType IS NULL)  )  OR GroupID IS NULL ";
-            
+            string sql = "SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND GroupID NOT IN (SELECT " + sqlOfOID + " FROM Sys_GroupField WHERE FrmID='" + this.No + "' AND ( CtrlType='' OR CtrlType IS NULL)  )  OR GroupID IS NULL ";
+
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count != 0)
             {
@@ -643,8 +672,10 @@ namespace BP.WF.Template
             FrmAttachments aths = new FrmAttachments(this.No);
             foreach (FrmAttachment ath in aths)
             {
-                if (ath.IsVisable == false)
+                //单附件、不可见的附件，都不需要增加分组.
+                if (ath.IsVisable == false || ath.UploadType == AttachmentUploadType.Single)
                     continue;
+
 
                 GroupField gf = new GroupField();
                 int i = gf.Retrieve(GroupFieldAttr.CtrlID, ath.MyPK, GroupFieldAttr.FrmID, this.No);
@@ -712,17 +743,17 @@ namespace BP.WF.Template
         public string DoChangeFieldName(string fieldOld, string newField, string newFieldName)
         {
             MapAttr attrOld = new MapAttr();
-            attrOld.KeyOfEn = fieldOld;
-            attrOld.FK_MapData = this.No;
-            attrOld.MyPK = attrOld.FK_MapData + "_" + attrOld.KeyOfEn;
+            attrOld.setKeyOfEn(fieldOld);
+            attrOld.setFK_MapData(this.No);
+            attrOld.setMyPK(attrOld.FK_MapData + "_" + attrOld.KeyOfEn);
             if (attrOld.RetrieveFromDBSources() == 0)
                 return "@旧字段输入错误[" + attrOld.KeyOfEn + "].";
 
             //检查是否存在该字段？
             MapAttr attrNew = new MapAttr();
-            attrNew.KeyOfEn = newField;
-            attrNew.FK_MapData = this.No;
-            attrNew.MyPK = attrNew.FK_MapData + "_" + attrNew.KeyOfEn;
+            attrNew.setKeyOfEn(newField);
+            attrNew.setFK_MapData(this.No);
+            attrNew.setMyPK(attrNew.FK_MapData + "_" + attrNew.KeyOfEn);
             if (attrNew.RetrieveFromDBSources() == 1)
                 return "@该字段[" + attrNew.KeyOfEn + "]已经存在.";
 
@@ -731,8 +762,8 @@ namespace BP.WF.Template
 
             //copy这个数据,增加上它.
             attrNew.Copy(attrOld);
-            attrNew.KeyOfEn = newField;
-            attrNew.FK_MapData = this.No;
+            attrNew.setKeyOfEn(newField);
+            attrNew.setFK_MapData(this.No);
 
             if (newFieldName != "")
                 attrNew.Name = newFieldName;
@@ -743,7 +774,7 @@ namespace BP.WF.Template
             MapExts exts = new MapExts(this.No);
             foreach (MapExt item in exts)
             {
-                item.MyPK = item.MyPK.Replace("_" + fieldOld, "_" + newField);
+                item.setMyPK(item.MyPK.Replace("_" + fieldOld, "_" + newField));
 
                 if (item.AttrOfOper == fieldOld)
                     item.AttrOfOper = newField;
@@ -760,20 +791,20 @@ namespace BP.WF.Template
                 item.Doc = item.Doc.Replace(fieldOld, newField);
                 item.Save();
             }
-            
+
             //如果是开发者表单需要替换开发者表单的Html
-            if(this.HisFrmType == FrmType.Develop)
+            if (this.HisFrmType == FrmType.Develop)
             {
-                string devHtml = DBAccess.GetBigTextFromDB("Sys_MapData", "No",this.No, "HtmlTemplateFile");
+                string devHtml = DBAccess.GetBigTextFromDB("Sys_MapData", "No", this.No, "HtmlTemplateFile");
                 if (DataType.IsNullOrEmpty(devHtml) == true)
                     return "执行成功";
                 string prefix = "TB_";
                 //外部数据源、外键、枚举下拉框
                 if ((attrNew.LGType == FieldTypeS.Normal && attrNew.MyDataType == DataType.AppString && attrNew.UIContralType == UIContralType.DDL)
                     || (attrNew.LGType == FieldTypeS.FK && attrNew.MyDataType == DataType.AppString)
-                    || (attrNew.LGType == FieldTypeS.Enum&& attrNew.UIContralType == UIContralType.DDL))
+                    || (attrNew.LGType == FieldTypeS.Enum && attrNew.UIContralType == UIContralType.DDL))
                 {
-                    devHtml = devHtml.Replace("id=\"DDL_" + attrOld.KeyOfEn+ "\"", "id=\"DDL_" + attrNew.KeyOfEn + "\"")
+                    devHtml = devHtml.Replace("id=\"DDL_" + attrOld.KeyOfEn + "\"", "id=\"DDL_" + attrNew.KeyOfEn + "\"")
                                 .Replace("id=\"SS_" + attrOld.KeyOfEn + "\"", "id=\"SS_" + attrNew.KeyOfEn + "\"")
                                .Replace("name=\"DDL_" + attrOld.KeyOfEn + "\"", "name=\"DDL_" + attrNew.KeyOfEn + "\"")
                                .Replace("data-key=\"" + attrOld.KeyOfEn + "\"", "data-key=\"" + attrNew.KeyOfEn + "\"")
@@ -793,17 +824,17 @@ namespace BP.WF.Template
                     if (attrNew.UIContralType == UIContralType.CheckBok)
                     {
                         prefix = "CB_";
-                        devHtml = devHtml.Replace("id=\"SC_" + attrOld.KeyOfEn + "\"", "id=\"SC_" + attrNew.KeyOfEn + "\"");                        
+                        devHtml = devHtml.Replace("id=\"SC_" + attrOld.KeyOfEn + "\"", "id=\"SC_" + attrNew.KeyOfEn + "\"");
                     }
                     if (attrNew.UIContralType == UIContralType.RadioBtn)
                     {
                         prefix = "RB_";
-                        devHtml = devHtml.Replace("id=\"SR_" + attrOld.KeyOfEn + "\"", "id=\"SR_" + attrNew.KeyOfEn + "\"");  
+                        devHtml = devHtml.Replace("id=\"SR_" + attrOld.KeyOfEn + "\"", "id=\"SR_" + attrNew.KeyOfEn + "\"");
                     }
                     foreach (SysEnum item in enums)
                     {
-                        devHtml = devHtml.Replace("id=\""+ prefix + attrOld.KeyOfEn + "_" + item.IntKey + "\"", "id=\""+ prefix + attrNew.KeyOfEn + "_" + item.IntKey + "\"")
-                            .Replace("name=\""+ prefix + attrOld.KeyOfEn + "\"", "name=\""+ prefix + attrNew.KeyOfEn + "\"")
+                        devHtml = devHtml.Replace("id=\"" + prefix + attrOld.KeyOfEn + "_" + item.IntKey + "\"", "id=\"" + prefix + attrNew.KeyOfEn + "_" + item.IntKey + "\"")
+                            .Replace("name=\"" + prefix + attrOld.KeyOfEn + "\"", "name=\"" + prefix + attrNew.KeyOfEn + "\"")
                             .Replace("data-key=\"" + attrOld.KeyOfEn + "\"", "data-key=\"" + attrNew.KeyOfEn + "\"");
                     }
                     //保存开发者表单数据
@@ -816,7 +847,7 @@ namespace BP.WF.Template
                     prefix = "TB_";
                     if (attrNew.MyDataType == DataType.AppBoolean)
                         prefix = "CB_";
-                    devHtml = devHtml.Replace("id=\""+prefix + attrOld.KeyOfEn + "\"", "id=\"" + prefix + attrNew.KeyOfEn + "\"")
+                    devHtml = devHtml.Replace("id=\"" + prefix + attrOld.KeyOfEn + "\"", "id=\"" + prefix + attrNew.KeyOfEn + "\"")
                                 .Replace("name=\"" + prefix + attrOld.KeyOfEn + "\"", "name=\"" + prefix + attrNew.KeyOfEn + "\"")
                                 .Replace("data-key=\"" + attrOld.KeyOfEn + "\"", "data-key=\"" + attrNew.KeyOfEn + "\"")
                                 .Replace("data-name=\"" + attrOld.Name + "\"", "data-name=\"" + attrNew.Name + "\"");
@@ -834,7 +865,7 @@ namespace BP.WF.Template
         public string DoRegularExpressionBatch()
         {
             return "../../Admin/FoolFormDesigner/MapExt/RegularExpressionBatch.htm?FK_Flow=&FK_MapData=" +
-                   this.No + "&t=" + DataType.CurrentDataTime;
+                   this.No + "&t=" + DataType.CurrentDateTime;
         }
         /// <summary>
         /// 批量修改字段
@@ -843,7 +874,7 @@ namespace BP.WF.Template
         public string DoBatchEditAttr()
         {
             return "../../Admin/FoolFormDesigner/FieldTypeListBatch.htm?FK_MapData=" +
-                   this.No + "&t=" + DataType.CurrentDataTime;
+                   this.No + "&t=" + DataType.CurrentDateTime;
         }
         /// <summary>
         /// 排序字段顺序
@@ -852,7 +883,7 @@ namespace BP.WF.Template
         public string MobileFrmDesigner()
         {
             return "../../Admin/MobileFrmDesigner/Default.htm?FK_Flow=&FK_MapData=" +
-                   this.No + "&t=" + DataType.CurrentDataTime;
+                   this.No + "&t=" + DataType.CurrentDateTime;
         }
         /// <summary>
         /// 设计表单

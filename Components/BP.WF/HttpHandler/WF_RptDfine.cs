@@ -13,6 +13,8 @@ using BP.WF;
 using BP.WF.Rpt;
 using BP.WF.Template;
 using BP.WF.Data;
+using BP.Difference;
+
 
 namespace BP.WF.HttpHandler
 {
@@ -103,7 +105,7 @@ namespace BP.WF.HttpHandler
             string sql = "SELECT No,Name,ParentNo FROM WF_FlowSort ORDER BY No, Idx";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sort";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -114,7 +116,7 @@ namespace BP.WF.HttpHandler
             sql = "SELECT No,Name,FK_FlowSort FROM WF_Flow WHERE IsCanStart=1 ORDER BY FK_FlowSort, Idx";
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Flows";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -123,6 +125,20 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
 
             return BP.Tools.Json.DataSetToJson(ds, false);
+        }
+        /// <summary>
+        /// 新的数据源
+        /// </summary>
+        /// <returns></returns>
+        public string Flowlist_Init2022()
+        {
+            string sql = "SELECT A.FK_Flow AS FlowNo, A.FlowName, B.Name AS SortName,COUNT(*) as Num FROM WF_GenerWorkFlow A, WF_FlowSort B";
+            sql += " WHERE A.WFState>1 AND (A.Emps LIKE '%" + BP.Web.WebUser.No + "%'  OR A.Starter='" + BP.Web.WebUser.No + "') AND A.FK_FlowSort=B.No ";
+            sql += " GROUP BY A.FK_Flow, A.FlowName, B.Name, B.Idx ORDER BY B.Idx ";
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(dt);
+
         }
 
         #region 功能列表
@@ -229,13 +245,15 @@ namespace BP.WF.HttpHandler
             #region 用户查询条件信息 不存在注册
             UserRegedit ur = new UserRegedit();
             ur.AutoMyPK = false;
-            ur.MyPK = WebUser.No + rptNo + "_SearchAttrs";
+            string mypk = WebUser.No + rptNo + "_SearchAttrs";
+            ur.SetValByKey("MyPK", mypk);
             string selectFields = "," + GERptAttr.Title + "," + GERptAttr.FlowStarter + "," + GERptAttr.FlowStartRDT + "," + GERptAttr.FK_Dept + "," + GERptAttr.WFState + ",";
             if (ur.RetrieveFromDBSources() == 0)
             {
-                ur.MyPK = WebUser.No + rptNo + "_SearchAttrs";
-                ur.FK_Emp = WebUser.No;
-                ur.CfgKey = rptNo + "_SearchAttrs";
+                //  ur.setMyPK(WebUser.No + rptNo + "_SearchAttrs";
+                ur.SetValByKey("MyPK", mypk);
+                ur.SetValByKey("FK_Emp", WebUser.No);
+                ur.SetValByKey("CfgKey", rptNo + "_SearchAttrs");
                 ur.SetPara("SelectFields", selectFields);
                 ur.Insert();
             }
@@ -316,7 +334,7 @@ namespace BP.WF.HttpHandler
                 //如果外键是FK_NY的时候解析成时间类型
                 if (attr.KeyOfEn.Equals("FK_NY") == true)
                 {
-                    
+
                     dr["Field"] = attr.KeyOfEn;
                     dr["Name"] = attr.HisAttr.Desc;
                     dr["Width"] = attr.UIWidth; //下拉框显示的宽度.
@@ -382,8 +400,8 @@ namespace BP.WF.HttpHandler
             //查询出单流程的所有字段
             MapAttrs attrs = new MapAttrs();
             attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo, MapAttrAttr.Idx);
-            
-            
+
+
 
             //默认显示的系统字段 标题、创建人、创建时间、部门、状态.
             MapAttrs mattrsOfSystem = new MapAttrs();
@@ -663,7 +681,7 @@ namespace BP.WF.HttpHandler
                         qo.addLeftBracket();
 
 
-                        string deptName = BP.Sys.Glo.DealClassEntityName("BP.Port.Depts");
+                        string deptName = BP.Sys.Base.Glo.DealClassEntityName("BP.Port.Depts");
 
                         if (attr.UIBindKey.Equals(deptName) == true)  //判断特殊情况。
                             qo.AddWhere(attr.Key, " LIKE ", selectVal + "%");
@@ -757,14 +775,16 @@ namespace BP.WF.HttpHandler
 
             string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.SearchType;
             UserRegedit ur = new UserRegedit();
-            ur.MyPK = WebUser.No + rptNo + "_SearchAttrs";
-            ur.RetrieveFromDBSources();
+            //   ur.setMyPK(WebUser.No + rptNo + "_SearchAttrs";
+            ur.SetValByKey("MyPK", WebUser.No + rptNo + "_SearchAttrs");
 
-            ur.SearchKey = searchKey;
-            ur.DTFrom_Data = dtFrom;
-            ur.DTTo_Data = dtTo;
-            ur.Vals = vals;
-            ur.MVals = mvals;
+            ur.RetrieveFromDBSources();
+            ur.SetValByKey("SearchKey", searchKey);
+            ur.SetValByKey("DTFrom_Data", dtFrom);
+            ur.SetValByKey("DTTo_Data", dtTo);
+
+            ur.SetValByKey("Vals", vals);
+            ur.SetValByKey("MVals", mvals);
             ur.Update();
 
 
@@ -808,7 +828,7 @@ namespace BP.WF.HttpHandler
                 attrsa.Add(attr.HisAttr);
             }
 
-            string filePath = ExportDGToExcel(qo.DoQueryToTable(), ges.GetNewEntity, title, attrsa);
+            string filePath = BP.Tools.ExportExcelUtil.ExportDGToExcel(qo.DoQueryToTable(), ges.GetNewEntity, title, attrsa);
 
 
             return filePath;
@@ -847,13 +867,13 @@ namespace BP.WF.HttpHandler
             string cfgfix = "_SearchAttrs";
             UserRegedit ur = new UserRegedit();
             ur.AutoMyPK = false;
-            ur.MyPK = WebUser.No + rptNo + cfgfix;
+            ur.setMyPK(WebUser.No + rptNo + cfgfix);
 
             if (ur.RetrieveFromDBSources() == 0)
             {
-                ur.MyPK = WebUser.No + rptNo + cfgfix;
-                ur.FK_Emp = WebUser.No;
-                ur.CfgKey = rptNo + cfgfix;
+                ur.setMyPK(WebUser.No + rptNo + cfgfix);
+                ur.SetValByKey("FK_Emp", WebUser.No);
+                ur.SetValByKey("CfgKey", rptNo + cfgfix);
 
                 ur.Insert();
             }
@@ -862,13 +882,13 @@ namespace BP.WF.HttpHandler
             cfgfix = "_GroupAttrs";
             UserRegedit groupUr = new UserRegedit();
             groupUr.AutoMyPK = false;
-            groupUr.MyPK = WebUser.No + rptNo + cfgfix;
+            groupUr.setMyPK(WebUser.No + rptNo + cfgfix);
 
             if (groupUr.RetrieveFromDBSources() == 0)
             {
-                groupUr.MyPK = WebUser.No + rptNo + cfgfix;
-                groupUr.FK_Emp = WebUser.No;
-                groupUr.CfgKey = rptNo + cfgfix;
+                groupUr.setMyPK(WebUser.No + rptNo + cfgfix);
+                ur.SetValByKey("FK_Emp", WebUser.No);
+                ur.SetValByKey("CfgKey", rptNo + cfgfix);
 
                 groupUr.Insert();
             }
@@ -1340,7 +1360,7 @@ namespace BP.WF.HttpHandler
 
             //查询注册信息表
             UserRegedit ur = new UserRegedit();
-            ur.MyPK = WebUser.No + rptNo + "_SearchAttrs";
+            ur.setMyPK(WebUser.No + rptNo + "_SearchAttrs");
             ur.RetrieveFromDBSources();
             qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
             qo.AddWhere(" AND  WFState > 1 "); //排除空白，草稿数据.
@@ -1565,7 +1585,7 @@ namespace BP.WF.HttpHandler
 
 
 
-            string filePath = ExportGroupExcel(ds, desc, ur.Vals);
+            string filePath = BP.Tools.ExportExcelUtil.ExportGroupExcel(ds, desc, ur.Vals);
 
 
             return filePath;
@@ -1649,7 +1669,7 @@ namespace BP.WF.HttpHandler
                     //如果用户多项选择了，就要找到它的选择项目.
 
                     UserRegedit sUr = new UserRegedit();
-                    sUr.MyPK = WebUser.No + rptNo + "_SearchAttrs";
+                    sUr.setMyPK(WebUser.No + rptNo + "_SearchAttrs");
                     sUr.RetrieveFromDBSources();
 
                     /* 如果是多选值 */
@@ -1771,7 +1791,7 @@ namespace BP.WF.HttpHandler
                     //如果用户多项选择了，就要找到它的选择项目.
 
                     UserRegedit sUr = new UserRegedit();
-                    sUr.MyPK = WebUser.No + rptNo + "_SearchAttrs";
+                    sUr.setMyPK(WebUser.No + rptNo + "_SearchAttrs");
                     sUr.RetrieveFromDBSources();
 
                     /* 如果是多选值 */
@@ -1841,7 +1861,7 @@ namespace BP.WF.HttpHandler
                 newAttrs.Add(attr.HisAttr);
             }
 
-            string filePath = ExportDGToExcel(dt, ges.GetNewEntity, rptNo, newAttrs);
+            string filePath = BP.Tools.ExportExcelUtil.ExportDGToExcel(dt, ges.GetNewEntity, rptNo, newAttrs);
             return filePath;
         }
 
@@ -2143,7 +2163,7 @@ namespace BP.WF.HttpHandler
                         qo.addLeftBracket();
 
 
-                        string deptName = BP.Sys.Glo.DealClassEntityName("BP.Port.Depts");
+                        string deptName = BP.Sys.Base.Glo.DealClassEntityName("BP.Port.Depts");
 
                         if (attr.UIBindKey.Equals(deptName) == true)  //判断特殊情况。
                             qo.AddWhere(attr.Key, " LIKE ", selectVal + "%");

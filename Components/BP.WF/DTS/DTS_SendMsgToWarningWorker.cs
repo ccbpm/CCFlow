@@ -64,7 +64,7 @@ namespace BP.WF.DTS
                 string empNo = dr["FK_Emp"].ToString();
                 string empName = dr["FK_EmpText"].ToString();
 
-                BP.WF.Port.WFEmp emp = new Port.WFEmp(empNo);
+                BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(empNo);
 
                 if (way == CHAlertWay.ByEmail)
                 {

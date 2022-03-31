@@ -185,7 +185,7 @@ namespace BP.CCBill.Template
                 Map map = new Map("Frm_GroupMethod", "方法分组");
 
                 #region 字段.
-                map.AddTBStringPK(GroupMethodAttr.No, null, "编号", true, true, 0, 500, 20);
+                map.AddTBStringPK(GroupMethodAttr.No, null, "编号", true, true, 0, 150, 20);
                 map.AddTBString(GroupMethodAttr.FrmID, null, "表单ID", true, true, 0, 200, 20);
 
                 map.AddTBString(GroupMethodAttr.Name, null, "标签", true, false, 0, 500, 20, true);

@@ -344,6 +344,15 @@ namespace BP.En
                 return this._SearchAttrs;
             }
         }
+        /// <summary>
+        /// 增加查询条件exp
+        /// </summary>
+        /// <param name="exp">表达式</param>
+        public void AddHidden(string exp)
+        {
+            AttrOfSearch aos = new AttrOfSearch("K" + this.AttrsOfSearch.Count, exp, exp, "exp", exp, 0, true);
+            this.AttrsOfSearch.Add(aos);
+        }
         public void AddHidden(string refKey, string symbol, string val)
         {
             AttrOfSearch aos = new AttrOfSearch("K" + this.AttrsOfSearch.Count, refKey, refKey, symbol, val, 0, true);
@@ -616,7 +625,7 @@ namespace BP.En
                 if (this._HisCfgAttrs == null)
                 {
                     this._HisCfgAttrs = new Attrs();
-                    if (Web.WebUser.No.Equals("admin") == true)
+                    if (BP.Web.WebUser.No.Equals("admin") == true)
                     {
 
                         this._HisCfgAttrs.AddDDLSysEnum("UIRowStyleGlo", 2, "表格数据行风格(应用全局)", true, false, "UIRowStyleGlo",
@@ -740,6 +749,10 @@ namespace BP.En
                 if (this._RefMethods == null)
                     _RefMethods = new RefMethods();
                 return _RefMethods;
+            }
+            set
+            {
+                _RefMethods = value;
             }
         }
         /// <summary>
@@ -908,8 +921,13 @@ namespace BP.En
             }
             set
             {
+
                 this._EnDesc = value;
             }
+        }
+        public void setEnDesc(string val)
+        {
+            this._EnDesc = val;
         }
         /// <summary>
         /// 是否版本管理
@@ -958,7 +976,7 @@ namespace BP.En
         /// 为方便java转换设置
         /// </summary>
         /// <param name="val"></param>
-        public void Java_SetEnType11(EnType val)
+        public void setEnType(EnType val)
         {
             this._EnType = val;
         }
@@ -1011,7 +1029,7 @@ namespace BP.En
                 switch (dc.ColumnName)
                 {
                     case "EnDesc":
-                        this.EnDesc = val;
+                        this.setEnDesc(val);
                         break;
                     case "Table":
                         this.PhysicsTable = val;
@@ -1032,31 +1050,31 @@ namespace BP.En
                         switch (val)
                         {
                             case "Admin":
-                                this.EnType = EnType.Admin;
+                                this.setEnType(EnType.Admin);
                                 break;
                             case "App":
-                                this.EnType = EnType.App;
+                                this.setEnType(EnType.App);
                                 break;
                             case "Dot2Dot":
-                                this.EnType = EnType.Dot2Dot;
+                                this.setEnType(EnType.Dot2Dot);
                                 break;
                             case "Dtl":
-                                this.EnType = EnType.Dtl;
+                                this.setEnType(EnType.Dtl);
                                 break;
                             case "Etc":
-                                this.EnType = EnType.Etc;
+                                this.setEnType(EnType.Etc);
                                 break;
                             case "PowerAble":
-                                this.EnType = EnType.PowerAble;
+                                this.setEnType(EnType.PowerAble);
                                 break;
                             case "Sys":
-                                this.EnType = EnType.Sys;
+                                this.setEnType(EnType.Sys);
                                 break;
                             case "View":
-                                this.EnType = EnType.View;
+                                this.setEnType(EnType.View);
                                 break;
                             case "XML":
-                                this.EnType = EnType.XML;
+                                this.setEnType(EnType.XML);
                                 break;
                             default:
                                 throw new Exception("没有约定的标记:EnType =  " + val);
@@ -1234,16 +1252,14 @@ namespace BP.En
             set
             {
                 this._CodeStruct = value;
-                this.IsAutoGenerNo = true;
+                this._IsAutoGenerNo = true;
+
             }
         }
-        /// <summary>
-        /// 设置编码规则，为方便java转换使用.
-        /// </summary>
-        /// <param name="val"></param>
-        public void Java_SetCodeStruct(string val)
+        public void setCodeStruct(string val)
         {
-            CodeStruct = val;
+            this._CodeStruct = val;
+            this._IsAutoGenerNo = true;
         }
         /// <summary>
         /// 编号的总长度。
@@ -1305,6 +1321,10 @@ namespace BP.En
             {
                 _IsAutoGenerNo = value;
             }
+        }
+        public void setIsAutoGenerNo(bool val)
+        {
+            _IsAutoGenerNo = val;
         }
         /// <summary>
         /// 是否检查编号长度。（默认的false）
@@ -1382,16 +1402,6 @@ namespace BP.En
             get
             {
                 return this._PhysicsTable;
-                /*
-				if (DBAccess.AppCenterDBType==DBType.Oracle)
-				{
-					return ""+this._PhysicsTable+"";
-				}
-				else
-				{
-					return this._PhysicsTable;
-				}
-				*/
             }
             set
             {
@@ -1418,6 +1428,8 @@ namespace BP.En
             }
             set
             {
+                _attrs = value;
+                return;
                 if (this._attrs == null)
                     this._attrs = new En.Attrs();
 
@@ -1626,7 +1638,7 @@ namespace BP.En
             if (typeof(int) == defaultVal.GetType())
             {
                 attr.DefaultVal = defaultVal;
-                attr.MyDataType = DataType.AppInt;
+                attr.MyDataType = DataType.AppInt; ;
             }
             else
             {
@@ -1827,55 +1839,6 @@ namespace BP.En
         #endregion
 
         #region 公共的。
-        /// <summary>
-        /// 同步两个实体属性.
-        /// </summary>
-        public void AddAttrsFromMapData(string FK_MapData = null)
-        {
-            if (DataType.IsNullOrEmpty(this.FK_MapData) && DataType.IsNullOrEmpty(FK_MapData))
-                throw new Exception("@您没有为map的 FK_MapData 赋值.");
-            if (DataType.IsNullOrEmpty(FK_MapData) == false)
-                this.FK_MapData = FK_MapData;
-            MapData md = null;
-            md = new MapData();
-            md.No = this.FK_MapData;
-            if (md.RetrieveFromDBSources() == 0)
-            {
-                md.Name = this.FK_MapData;
-                md.PTable = this.PhysicsTable;
-                md.EnPK = this.PKs;
-                md.Insert();
-                md.RepairMap();
-            }
-            md.Retrieve();
-            BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs(this.FK_MapData);
-
-            /*把 手工编写的attr 放入 mapattrs里面去. */
-            foreach (Attr attr in this.Attrs)
-            {
-                if (attrs.Contains(BP.Sys.MapAttrAttr.KeyOfEn, attr.Key))
-                    continue;
-
-                if (attr.IsRefAttr)
-                    continue;
-
-                //把文件实体类的属性放入关系实体类中去。
-                BP.Sys.MapAttr mapattrN = attr.ToMapAttr;
-                mapattrN.FK_MapData = this.FK_MapData;
-                if (mapattrN.UIHeight == 0)
-                    mapattrN.UIHeight = 23;
-                mapattrN.Insert();
-                attrs.AddEntity(mapattrN);
-            }
-
-            //把关系实体类的属性放入文件实体类中去。
-            foreach (BP.Sys.MapAttr attr in attrs)
-            {
-                if (this.Attrs.Contains(attr.KeyOfEn) == true)
-                    continue;
-                this.AddAttr(attr.HisAttr);
-            }
-        }
         public void AddAttrs(Attrs attrs)
         {
             foreach (Attr attr in attrs)
@@ -2397,7 +2360,7 @@ namespace BP.En
         }
         public void AddTBDateTime(string key, string desc, bool uiVisable, bool isReadonly)
         {
-            this.AddTBDateTime(key, key, DateTime.Now.ToString(DataType.SysDataTimeFormat), desc, uiVisable, isReadonly);
+            this.AddTBDateTime(key, key, DateTime.Now.ToString(DataType.SysDateTimeFormat), desc, uiVisable, isReadonly);
         }
         #endregion
 
@@ -2436,7 +2399,7 @@ namespace BP.En
             attr.Key = key;
             attr.Field = _Field;
             attr.DefaultVal = defaultVal;
-            attr.MyDataType = DataType.AppInt;
+            attr.MyDataType = DataType.AppInt; ;
             attr.MyFieldType = FieldType.Normal;
             attr.Desc = desc;
             attr.UIVisible = uiVisable;
@@ -2471,7 +2434,7 @@ namespace BP.En
             attr.Key = key;
             attr.Field = _Field;
             attr.DefaultVal = defaultVal;
-            attr.MyDataType = DataType.AppInt;
+            attr.MyDataType = DataType.AppInt; ;
             attr.MyFieldType = FieldType.PK;
             attr.Desc = desc;
             attr.UIVisible = uiVisable;
@@ -2515,11 +2478,11 @@ namespace BP.En
             //attr.Key = "MyPK";
             //attr.Field = "MyPK";
             //attr.DefaultVal = null;
-            //attr.MyDataType = DataType.AppString;
+            //attr.MyDataType=DataType.AppString);
             //attr.MyFieldType = FieldType.PK;
             //attr.Desc = "MyPK";
             //attr.UITBShowType = TBType.TB;
-            //attr.UIVisible = false;
+            //attr.setUIVisible(false);
             //attr.UIIsReadonly = true;
             //attr.MinLength = 1;
             //attr.MaxLength = 100;
@@ -2534,7 +2497,7 @@ namespace BP.En
             attr.Key = "AID";
             attr.Field = "AID";
             attr.DefaultVal = null;
-            attr.MyDataType = DataType.AppInt;
+            attr.MyDataType = DataType.AppInt; ;
             attr.MyFieldType = FieldType.PK;
             attr.Desc = "AID";
             attr.UIVisible = false;

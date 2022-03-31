@@ -619,7 +619,7 @@ namespace BP.WF.Data
                         return "已完成";
                     case WF.WFState.Runing:
                         return "在运行";
-                    case WF.WFState.HungUp:
+                    case WF.WFState.Hungup:
                         return "挂起";
                     case WF.WFState.Askfor:
                         return "加签";
@@ -760,7 +760,7 @@ namespace BP.WF.Data
                 rm.ClassMethodName = this.ToString() + ".DoTrack";
                 // rm.Icon = "../../WF/Img/Track.png";
                 rm.Icon = "icon-graph";
-        //        rm.IsForEns = true;
+                //        rm.IsForEns = true;
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -785,12 +785,12 @@ namespace BP.WF.Data
                 //rm.RefMethodType = RefMethodType.RightFrameOpen;
                 //map.AddRefMethod(rm);
 
-            
+
 
                 rm = new RefMethod();
                 rm.Title = "轨迹修改";
                 rm.Icon = "icon-graph";
-             //   rm.IsForEns = false;
+                //   rm.IsForEns = false;
                 rm.ClassMethodName = this.ToString() + ".DoEditTrack";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -799,11 +799,12 @@ namespace BP.WF.Data
                 rm = new RefMethod();
                 rm.Title = "调整流程";
                 rm.Icon = "icon-target";
-                rm.HisAttrs.AddTBString("RenYuan", null, "调整到人员", true, false, 0, 100, 100);
+                //rm.HisAttrs.AddTBString("RenYuan", null, "调整到人员", true, false, 0, 100, 100);
                 //rm.HisAttrs.AddTBInt("shuzi", 0, "调整到节点", true, false);
-                rm.HisAttrs.AddDDLSQL("nodeID", "0", "调整到节点",
-                    "SELECT NodeID as No,Name FROM WF_Node WHERE FK_Flow='@FK_Flow'", true);
-                rm.ClassMethodName = this.ToString() + ".DoTest";
+                //rm.HisAttrs.AddDDLSQL("nodeID", "0", "调整到节点",
+                //    "SELECT NodeID as No,Name FROM WF_Node WHERE FK_Flow='@FK_Flow'", true);
+                rm.ClassMethodName = this.ToString() + ".DoFlowReSend";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -827,7 +828,7 @@ namespace BP.WF.Data
                 rm.Title = "逻辑删除";
                 rm.ClassMethodName = this.ToString() + ".DoDeleteFlag";
                 rm.HisAttrs.AddTBString("Note", null, "删除原因", true, false, 0, 100, 100);
-             //   rm.Warning = "您确定要删除吗？";
+                //   rm.Warning = "您确定要删除吗？";
                 // rm.Icon = "../../WF/Img/Btn/Delete.gif";
                 rm.Icon = "icon-close";
                 rm.IsForEns = false;
@@ -847,16 +848,20 @@ namespace BP.WF.Data
 
 
                 rm = new RefMethod();
-                //rm.Icon = "../../WF/Img/Btn/CC.gif";
                 rm.Icon = "icon-key";
                 rm.Title = "移交";
-
                 rm.ClassMethodName = this.ToString() + ".DoFlowShift";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
 
-
+                rm = new RefMethod();
+                rm.Icon = "icon-key";
+                rm.Title = "强制结束";
+                rm.Warning = "您确定要结束吗？";
+                rm.ClassMethodName = this.ToString() + ".DoFlowOver";
+                rm.RefMethodType = RefMethodType.Func;
+                map.AddRefMethod(rm);
 
                 this._enMap = map;
                 return this._enMap;
@@ -864,6 +869,12 @@ namespace BP.WF.Data
         }
         #endregion
 
+        public string DoFlowOver()
+        {
+            BP.WF.Dev2Interface.Flow_DoFlowOver(this.WorkID, "强制结束");
+
+            return "执行成功.";
+        }
         /// <summary>
         /// 修改表单
         /// </summary>
@@ -885,18 +896,9 @@ namespace BP.WF.Data
 
         #region 执行功能.
         //,string isOK, int wfstate, string fk_emp
-        public string DoTest(string toEmpNo, string toNodeID)
+        public string DoFlowReSend()
         {
-            try
-            {
-                return BP.WF.Dev2Interface.Flow_ReSend(this.WorkID, int.Parse(toNodeID),
-                    toEmpNo, BP.Web.WebUser.Name + ":调整.");
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
-
+            return "../../WorkOpt/FlowOperation/ReSend.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
         }
         /// <summary>
         /// 修复数据
@@ -921,18 +923,20 @@ namespace BP.WF.Data
             wk.OID = this.WorkID;
             wk.RetrieveFromDBSources();
 
-            string file = "c:/temp/" + this.WorkID + ".txt";
+            string json = "";
             try
             {
-                DBAccess.GetFileFromDB(file, trackTable, "MyPK", mypk, "FrmDB");
+                json = DBAccess.GetBigTextFromDB(trackTable, "MyPK", mypk, "FrmDB");
             }
             catch (Exception ex)
             {
-                infos += "@ 错误:" + fl.No + " - Rec" + wk.Rec + " db=" + wk.OID + " - " + fl.Name;
+                infos += "@ 错误:" + fl.No + " - Rec" + wk.Rec + " db=" + wk.OID;
             }
+            if (DataType.IsNullOrEmpty(json) == true)
+                return "没有保存历史数据不能修复";
 
-            string json = DataType.ReadTextFile(file);
             DataTable dtVal = BP.Tools.Json.ToDataTable(json);
+
 
             DataRow mydr = dtVal.Rows[0];
 

@@ -193,64 +193,63 @@ namespace BP.En
 
                 BP.Sys.MapAttr attr = new BP.Sys.MapAttr();
 
-                attr.KeyOfEn = this.Key;
-                attr.Name = this.Desc;
-                attr.DefVal  = this.DefaultVal.ToString();
-                attr.KeyOfEn = this.Field;
+                attr.setKeyOfEn(this.Key);
+                attr.setName(this.Desc);
+                attr.setDefVal(this.DefaultVal.ToString());
+                attr.setKeyOfEn(this.Field);
 
-                attr.MaxLen = this.MaxLength;
-                attr.MinLen = this.MinLength;
+                attr.setMaxLen(this.MaxLength);
+                attr.setMinLen(this.MinLength);
                 attr.UIBindKey = this.UIBindKey;
-                attr.UIIsLine = this.UIIsLine;
-                attr.UIHeight = 0;
-                attr.DefValType = this.DefValType;
+                attr.setUIIsLine(this.UIIsLine);
+                attr.setUIHeight(0);
+                attr.setDefValType(this.DefValType);
 
                 if (this.MaxLength > 3000)
-                    attr.UIHeight = 10;
+                    attr.setUIHeight(10);
 
                 attr.UIWidth = this.UIWidth;
-                attr.MyDataType = this.MyDataType;
+                attr.setMyDataType(this.MyDataType);
 
                 attr.UIRefKey = this.UIRefKeyValue;
 
                 attr.UIRefKeyText = this.UIRefKeyText;
-                attr.UIVisible = this.UIVisible;
+                attr.setUIVisible(this.UIVisible);
 
                 switch (this.MyFieldType)
                 {
                     case FieldType.Enum:
                     case FieldType.PKEnum:
-                        attr.UIContralType = this.UIContralType;
-                        attr.LGType = FieldTypeS.Enum;
-                        attr.UIIsEnable = this.UIIsReadonly;
+                        attr.setUIContralType(this.UIContralType);
+                        attr.setLGType(FieldTypeS.Enum);
+                        attr.setUIIsEnable(this.UIIsReadonly);
                         break;
                     case FieldType.FK:
                     case FieldType.PKFK:
-                        attr.UIContralType = this.UIContralType;
-                        attr.LGType = FieldTypeS.FK;
+                        attr.setUIContralType(this.UIContralType);
+                        attr.setLGType(FieldTypeS.FK);
                         //attr.MyDataType = (int)FieldType.FK;
                         attr.UIRefKey = "No";
                         attr.UIRefKeyText = "Name";
-                        attr.UIIsEnable = this.UIIsReadonly;
+                        attr.setUIIsEnable(this.UIIsReadonly);
                         break;
                     default:
-                        attr.UIContralType = UIContralType.TB;
-                        attr.LGType = FieldTypeS.Normal;
-
-                        attr.UIIsEnable = !this.UIIsReadonly;
+                        attr.setUIContralType( UIContralType.TB);
+                        attr.setLGType(FieldTypeS.Normal);
+                        attr.setUIIsEnable(!this.UIIsReadonly);
                         switch (this.MyDataType)
                         {
                             case DataType.AppBoolean:
-                                attr.UIContralType = UIContralType.CheckBok;
-                                attr.UIIsEnable = this.UIIsReadonly;
+                                attr.setUIContralType(UIContralType.CheckBok);
+                                attr.setUIIsEnable(this.UIIsReadonly);
                                 break;
                             case DataType.AppDate:
                                 //if (this.Tag == "1")
-                                //    attr.DefaultVal = DataType.CurrentData;
+                                //    attr.DefaultVal = DataType.CurrentDate;
                                 break;
                             case DataType.AppDateTime:
                                 //if (this.Tag == "1")
-                                //    attr.DefaultVal = DataType.CurrentData;
+                                //    attr.DefaultVal = DataType.CurrentDate;
                                 break;
                             default:
                                 break;
@@ -385,7 +384,7 @@ namespace BP.En
 						}
 						else if (this.MyDataType==DataType.AppDateTime)
 						{
-							return "输入日期时间类型"+DataType.SysDataTimeFormat;
+							return "输入日期时间类型"+DataType.SysDatatimeFormatCN;
 						}
 						else if (this.MyDataType==DataType.AppString)
 						{ 
@@ -439,24 +438,24 @@ namespace BP.En
 		/// <param name="desc"></param>
 		public Attr(string key , string field,  object defaultVal, int dataType, bool isPK, string desc, int minLength, int maxlength)
 		{			
-			this._key=key;
-			this._field=field;
-			this._desc=desc;
+			this.Key=key;
+			this.Field=field;
+			this.Desc=desc;
 			if (isPK)
 				this.MyFieldType = FieldType.PK ;			 
-			this._dataType=dataType;
+			this.MyDataType=dataType;
 			this._defaultVal=defaultVal;
-			this._minLength=minLength;
+			this.MinLength=minLength;
 			this._maxLength=maxlength;
 		}
 		public Attr(string key , string field,  object defaultVal, int dataType, bool isPK, string desc)
 		{			
-			this._key=key;
-			this._field=field;
-			this._desc=desc;
+			this.Key=key;
+			this.Field=field;
+			this.Desc=desc;
 			if (isPK)
 				this.MyFieldType = FieldType.PK;
-			this._dataType=dataType;
+			this.MyDataType=dataType;
 			this._defaultVal=defaultVal;			 
 		}
 		#endregion
@@ -466,57 +465,12 @@ namespace BP.En
 		/// <summary>
 		/// 属性名称
 		/// </summary>
-		private string _key=null;
-		/// <summary>
-		/// 属性名称
-		/// </summary>
-		public string Key
-		{
-			get
-			{
-				return this._key;
-			}
-            set
-            {
-                if (value != null)
-                    this._key = value.Trim();
-            }
-		}		
+		public string Key=null;
 		/// <summary>
 		/// 属性对应的字段
 		/// </summary>
-		private string _field=null;
-		/// <summary>
-		/// 属性对应的字段
-		/// </summary>
-		/// <returns></returns>
-		public string Field
-		{
-			get
-			{
-				return this._field;
-			}
-			set
-			{
-                if (value != null)
-                    this._field = value.Trim();
-			}
-		}
-
-        private int _DefValType = 0;
-        public int DefValType
-        {
-            get
-            {
-                return this._DefValType;
-            }
-            set
-            {
-                if (value != null)
-                    this._DefValType = value;
-            }
-        }
-
+		public string Field=null;
+		public int DefValType = 0;
         /// <summary>
         /// 字段默认值
         /// </summary>
@@ -632,20 +586,8 @@ namespace BP.En
 		/// <summary>
 		/// 数据类型。
 		/// </summary>
-		private int _dataType=0;
-		/// <summary>
-		/// 数据类型。
-		/// </summary>
-		public int MyDataType 
-		{
-			get{
-				return this._dataType;
-			}
-			set
-			{
-				this._dataType=value;
-			}
-		}
+		public int MyDataType = 0;
+		 
 		public string MyDataTypeStr
 		{
 			get
@@ -657,37 +599,11 @@ namespace BP.En
 		/// <summary>
 		/// 是不是主键。
 		/// </summary>
-		private FieldType _FieldType=FieldType.Normal;
-		/// <summary>
-		/// 是不是主键
-		/// </summary>
-		/// <returns> yes / no</returns>
-		public FieldType MyFieldType
-		{
-			get
-			{
-				return this._FieldType;
-			}
-			set
-			{
-				this._FieldType=value;
-			}
-		}
+		public FieldType MyFieldType = FieldType.Normal;
 		/// <summary>
 		/// 描述。
 		/// </summary>
-		private string _desc=null;
-		public string Desc
-		{
-			get
-			{
-				return this._desc;
-			}
-			set
-			{
-				this._desc=value;
-			}
-		}
+		public string Desc = null;
         /// <summary>
         /// 在线帮助
         /// </summary>
@@ -696,12 +612,12 @@ namespace BP.En
             get
             {
                 if (this.HelperUrl == null)
-                    return this._desc;
+                    return this.Desc;
 
                 if (this.HelperUrl.Contains("script"))
-                    return "<a href=\"" + this.HelperUrl + "\"  ><img src='../../Img/Help.png'  height='20px' border=0/>" + this._desc + "</a>";
+                    return "<a href=\"" + this.HelperUrl + "\"  ><img src='../../Img/Help.png'  height='20px' border=0/>" + this.Desc + "</a>";
                 else
-                    return "<a href=\"" + this.HelperUrl + "\" target=_blank ><img src='../../Img/Help.png'  height='20px' border=0/>" + this._desc + "</a>";
+                    return "<a href=\"" + this.HelperUrl + "\" target=_blank ><img src='../../Img/Help.png'  height='20px' border=0/>" + this.Desc + "</a>";
             }
         }
         public string DescHelperIcon
@@ -709,7 +625,7 @@ namespace BP.En
             get
             {
                 if (this.HelperUrl == null)
-                    return this._desc;
+                    return this.Desc;
                 return "<a href=\"" + this.HelperUrl + "\" ><img src='../../Img/Help.png' height='20px' border=0/></a>";
             }
         }
@@ -758,21 +674,7 @@ namespace BP.En
 		/// <summary>
 		/// 最小长度。
 		/// </summary>
-		private int _minLength=0;
-		/// <summary>
-		/// 最小长度。
-		/// </summary>
-		public int MinLength
-		{
-			get
-			{
-				return this._minLength;
-			}
-			set
-			{
-				this._minLength=value;
-			}
-		}
+		public int MinLength = 0;
         /// <summary>
         /// 是否可以为空, 对数值类型的数据有效.
         /// </summary>
@@ -815,104 +717,26 @@ namespace BP.En
 			}
 		}
 
-		private int _UIHeight=0;
-		/// <summary>
-		/// 高度
-		/// </summary>
-		public int UIHeight
-		{
-			get
-			{
-				return this._UIHeight*10;
-			}
-			set
-			{
-				this._UIHeight=value;
-			}
-		}
+		public int UIHeight = 0;
 
-		private bool _UIVisible=true;
 		/// <summary>
 		/// 是不是可见
 		/// </summary>
-        public bool UIVisible
-        {
-            get
-            {
-                return this._UIVisible;
-            }
-            set
-            {
-                this._UIVisible = value;
-            }
-        }
+		public bool UIVisible = true;
       
 
         /// <summary>
         /// 是否单行显示
         /// </summary>
         public bool UIIsLine = false;
-		private bool _UIIsReadonly=false;
 		/// <summary>
 		/// 是不是只读
 		/// </summary>
-		public bool UIIsReadonly
-		{
-			get
-			{
-				return this._UIIsReadonly;
-			}
-			set
-			{
-				this._UIIsReadonly=value;
-			}
-		}
-		private UIContralType _UIContralType=UIContralType.TB;
-		/// <summary>
-		/// 控件类型。
-		/// </summary>
-		public UIContralType UIContralType
-		{
-			get
-			{
-				return this._UIContralType;
-			}
-			set
-			{
-				this._UIContralType=value;
-			}
-		}
-		private string _UIBindKey=null;
-		/// <summary>
-		/// 要Bind 的Key.
-		/// 在TB 里面就是 DataHelpKey
-		/// 在DDL 里面是  SelfBindKey.
-		/// </summary>
-		public string UIBindKey
-		{
-			get
-			{
-				return this._UIBindKey ;
-			}
-			set
-			{
-				this._UIBindKey=value;
-			}
-		}
-
-		private int _IsSupperText = 0;
-		public int IsSupperText
-		{
-			get
-			{
-				return this._IsSupperText;
-			}
-			set
-			{
-				this._IsSupperText = value;
-			}
-		}
-
+		public bool UIIsReadonly = false;
+		public UIContralType UIContralType = UIContralType.TB;
+		public string UIBindKey = null;
+		public int IsSupperText = 0;
+		 
 		private string _UIBindKeyOfEn = null;
 		public bool UIIsDoc
 		{
@@ -930,12 +754,10 @@ namespace BP.En
             get
             {
                 #warning new a entity.
-
                return this.HisFKEns.GetNewEntity;
 
                 if (_HisFKEn == null)
                     _HisFKEn = this.HisFKEns.GetNewEntity;
-
                 return _HisFKEn;
             }
         }
@@ -973,37 +795,13 @@ namespace BP.En
 				_HisFKEns=value;
 			}
 		}
-		private string _UIRefKey=null;
-		/// <summary>
-		/// 要Bind 的Key. 在TB 里面就是 DataHelpKey 
-		/// 在DDL 里面是SelfBindKey.
-		/// </summary>
-		public string UIRefKeyValue
-		{
-			get
-			{
-				return this._UIRefKey ;
-			}
-			set
-			{
-				this._UIRefKey=value;
-			}
-		}
-		private string _UIRefText=null;
+		public string UIRefKeyValue = null;
+
 		/// <summary>
 		/// 关联的实体valkey	 
 		/// </summary>
-		public string UIRefKeyText
-		{
-			get
-			{
-				return this._UIRefText ;
-			}
-			set
-			{
-				this._UIRefText=value;
-			}
-		}
+		public string UIRefKeyText = null;
+		
         public string UITag = null;
 		#endregion		 
 	}
@@ -1240,7 +1038,7 @@ namespace BP.En
 		}
 		public void AddTBDateTime(string key,string desc, bool uiVisable, bool isReadonly )
 		{
-			this.AddTBDateTime(key,key,DateTime.Now.ToString(DataType.SysDataTimeFormat),desc,uiVisable,isReadonly);
+			this.AddTBDateTime(key,key,desc,uiVisable,isReadonly);
 		}
 		#endregion 
 
@@ -1620,23 +1418,23 @@ namespace BP.En
                         continue;
 
                     BP.Sys.MapAttr mattr = new Sys.MapAttr();
-                    mattr.KeyOfEn = item.Key;
-                    mattr.Name = item.Desc;
-                    mattr.MyDataType = item.MyDataType;
-                    mattr.UIContralType = item.UIContralType;
-                    mattr.UIBindKey = item.UIBindKey;
+                    mattr.setKeyOfEn(item.Key);
+                    mattr.setName(item.Desc);
+                    mattr.setMyDataType(item.MyDataType);
+                    mattr.setUIContralType(item.UIContralType);
+                    mattr.setUIBindKey(item.UIBindKey);
 
                     //@于庆海，这里需要翻译.
-                    mattr.UIWidthInt = item.UIWidthInt;
-                    mattr.UIHeightInt = item.UIHeight;
+                    mattr.setUIWidth(item.UIWidthInt);
+                    mattr.setUIHeight(item.UIHeight);
 
-                    mattr.MaxLen = item.MaxLength;
-                    mattr.MinLen = item.MinLength;
-                    mattr.UIVisible = item.UIVisible;
-                    mattr.DefValReal = item.DefaultValOfReal;
-                    mattr.DefValType = item.DefValType;
+                    mattr.setMaxLen(item.MaxLength);
+                    mattr.setMinLen(item.MinLength);
+                    mattr.setUIVisible(item.UIVisible);
+                    mattr.setDefValReal(item.DefaultValOfReal);
+                    mattr.setDefValType(item.DefValType);
 
-                    mattr.UIIsEnable = item.UIIsReadonly;
+                    mattr.setUIIsEnable(item.UIIsReadonly);
 
                     if (item.MyFieldType == FieldType.Normal || item.MyFieldType == FieldType.PK )
                     {
@@ -1648,7 +1446,7 @@ namespace BP.En
                             item.MyDataType == DataType.AppDate ||
                             item.MyDataType == DataType.AppDateTime)
                         {
-                            mattr.UIIsEnable = !item.UIIsReadonly;
+                            mattr.setUIIsEnable(!item.UIIsReadonly);
                         }
                     }
 

@@ -101,20 +101,20 @@ namespace BP.GPM.WeiXin
             //生成签名算法
             string str1 = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonceStr + "&timestamp=" + timestamp + "&url=" + url1 + "";
             UserLog userLog = new UserLog();
-            userLog.MyPK = DBAccess.GenerGUID();
+            userLog.setMyPK(DBAccess.GenerGUID());
 
             userLog.LogFlag = "系统定位1";
             userLog.Docs = str1;
-            userLog.RDT = DataType.CurrentDataTimess;
+            userLog.RDT = DataType.CurrentDateTimess;
             userLog.Insert();
             string Signature = Sha1Signature(str1);
             ht.Add("signature", Signature);
 
-            userLog.MyPK = DBAccess.GenerGUID();
+            userLog.setMyPK(DBAccess.GenerGUID());
 
             userLog.LogFlag = "生成签名";
             userLog.Docs = Signature;
-            userLog.RDT = DataType.CurrentDataTimess;
+            userLog.RDT = DataType.CurrentDateTimess;
             userLog.Insert();
 
             return BP.Tools.Json.ToJson(ht);
@@ -151,7 +151,7 @@ namespace BP.GPM.WeiXin
             //StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
             //string str = reader.ReadToEnd();
 
-            Log.DebugWriteInfo(url + "----------------" + parameters + "---------------" + str);
+            BP.DA.Log.DebugWriteInfo(url + "----------------" + parameters + "---------------" + str);
             return str;
         }
         #endregion

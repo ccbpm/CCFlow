@@ -6,6 +6,8 @@ using BP.Sys;
 using BP.En;
 using BP.Web;
 using System.Linq;
+using BP.Difference;
+
 
 namespace BP.En
 {
@@ -110,29 +112,29 @@ namespace BP.En
                 if (v.Equals("@WebUser.No"))
                 {
 
-                    this.SetValByKey(attr.Key, Web.WebUser.No);
+                    this.SetValByKey(attr.Key, WebUser.No);
 
                     continue;
                 }
                 else if (v.Equals("@WebUser.Name"))
                 {
-                    this.SetValByKey(attr.Key, Web.WebUser.Name);
+                    this.SetValByKey(attr.Key, WebUser.Name);
                     continue;
                 }
                 else if (v.Equals("@WebUser.FK_Dept"))
                 {
-                    this.SetValByKey(attr.Key, Web.WebUser.FK_Dept);
+                    this.SetValByKey(attr.Key, WebUser.FK_Dept);
                     continue;
                 }
                 else if (v.Equals("@WebUser.FK_DeptName"))
                 {
-                    this.SetValByKey(attr.Key, Web.WebUser.FK_DeptName);
+                    this.SetValByKey(attr.Key, WebUser.FK_DeptName);
                     continue;
                 }
                 else if (v.Equals("@WebUser.FK_DeptNameOfFull")
                     || v.Equals("@WebUser.FK_DeptFullName"))
                 {
-                    this.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
+                    this.SetValByKey(attr.Key, WebUser.FK_DeptNameOfFull);
                     continue;
                 }
                 else if (v.Equals("@RDT"))
@@ -223,79 +225,79 @@ namespace BP.En
                     case "@CurrWorker":
                         if (attr.UIIsReadonly == true)
                         {
-                            this.SetValByKey(attr.Key, Web.WebUser.No);
+                            this.SetValByKey(attr.Key, WebUser.No);
                         }
                         else
                         {
                             if (DataType.IsNullOrEmpty(myval) || myval == v)
-                                this.SetValByKey(attr.Key, Web.WebUser.No);
+                                this.SetValByKey(attr.Key, WebUser.No);
                         }
                         continue;
                     case "@WebUser.Name":
                         if (attr.UIIsReadonly == true)
                         {
-                            this.SetValByKey(attr.Key, Web.WebUser.Name);
+                            this.SetValByKey(attr.Key, WebUser.Name);
                         }
                         else
                         {
                             if (DataType.IsNullOrEmpty(myval) || myval == v)
-                                this.SetValByKey(attr.Key, Web.WebUser.Name);
+                                this.SetValByKey(attr.Key, WebUser.Name);
                         }
                         continue;
                     case "@WebUser.FK_Dept":
                         if (attr.UIIsReadonly == true)
                         {
-                            this.SetValByKey(attr.Key, Web.WebUser.FK_Dept);
+                            this.SetValByKey(attr.Key, WebUser.FK_Dept);
                         }
                         else
                         {
                             if (DataType.IsNullOrEmpty(myval) || myval == v)
-                                this.SetValByKey(attr.Key, Web.WebUser.FK_Dept);
+                                this.SetValByKey(attr.Key, WebUser.FK_Dept);
                         }
                         continue;
                     case "@WebUser.FK_DeptName":
                         if (attr.UIIsReadonly == true)
                         {
-                            this.SetValByKey(attr.Key, Web.WebUser.FK_DeptName);
+                            this.SetValByKey(attr.Key, WebUser.FK_DeptName);
                         }
                         else
                         {
                             if (DataType.IsNullOrEmpty(myval) || myval == v)
-                                this.SetValByKey(attr.Key, Web.WebUser.FK_DeptName);
+                                this.SetValByKey(attr.Key, WebUser.FK_DeptName);
                         }
                         continue;
                     case "@WebUser.FK_DeptNameOfFull":
                     case "@WebUser.FK_DeptFullName":
                         if (attr.UIIsReadonly == true)
                         {
-                            this.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
+                            this.SetValByKey(attr.Key, WebUser.FK_DeptNameOfFull);
                         }
                         else
                         {
                             if (DataType.IsNullOrEmpty(myval) || myval == v)
-                                this.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
+                                this.SetValByKey(attr.Key, WebUser.FK_DeptNameOfFull);
                         }
                         continue;
                     case "@WebUser.OrgNo":
                         if (attr.UIIsReadonly == true)
                         {
-                            this.SetValByKey(attr.Key, Web.WebUser.OrgNo);
+                            this.SetValByKey(attr.Key, WebUser.OrgNo);
                         }
                         else
                         {
                             if (DataType.IsNullOrEmpty(myval) || myval == v)
-                                this.SetValByKey(attr.Key, Web.WebUser.OrgNo);
+                                this.SetValByKey(attr.Key, WebUser.OrgNo);
                         }
                         continue;
                     case "@WebUser.OrgName":
                         if (attr.UIIsReadonly == true)
                         {
-                            this.SetValByKey(attr.Key, Web.WebUser.OrgName);
+                            this.SetValByKey(attr.Key, WebUser.OrgName);
                         }
                         else
                         {
                             if (DataType.IsNullOrEmpty(myval) || myval == v)
-                                this.SetValByKey(attr.Key, Web.WebUser.OrgName);
+                                this.SetValByKey(attr.Key, WebUser.OrgName);
                         }
                         continue;
                     case "@RDT":
@@ -426,16 +428,16 @@ namespace BP.En
             exp = exp.Replace("~", "'");
 
             //首先替换加; 的。
-            exp = exp.Replace("@WebUser.No;", Web.WebUser.No);
-            exp = exp.Replace("@WebUser.Name;", Web.WebUser.Name);
-            exp = exp.Replace("@WebUser.FK_Dept;", Web.WebUser.FK_Dept);
-            exp = exp.Replace("@WebUser.FK_DeptName;", Web.WebUser.FK_DeptName);
+            exp = exp.Replace("@WebUser.No;", WebUser.No);
+            exp = exp.Replace("@WebUser.Name;", WebUser.Name);
+            exp = exp.Replace("@WebUser.FK_Dept;", WebUser.FK_Dept);
+            exp = exp.Replace("@WebUser.FK_DeptName;", WebUser.FK_DeptName);
 
             // 替换没有 ; 的 .
-            exp = exp.Replace("@WebUser.No", Web.WebUser.No);
-            exp = exp.Replace("@WebUser.Name", Web.WebUser.Name);
-            exp = exp.Replace("@WebUser.FK_DeptName", Web.WebUser.FK_DeptName);
-            exp = exp.Replace("@WebUser.FK_Dept", Web.WebUser.FK_Dept);
+            exp = exp.Replace("@WebUser.No", WebUser.No);
+            exp = exp.Replace("@WebUser.Name", WebUser.Name);
+            exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
+            exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
             //  exp = exp.Replace("@WorkID", "0");
 
             if (exp.Contains("@") == false)
@@ -563,25 +565,25 @@ namespace BP.En
                 switch (v)
                 {
                     case "@WebUser.No":
-                        this.SetValByKey(attr.Key, Web.WebUser.No);
+                        this.SetValByKey(attr.Key, WebUser.No);
                         continue;
                     case "@WebUser.Name":
-                        this.SetValByKey(attr.Key, Web.WebUser.Name);
+                        this.SetValByKey(attr.Key, WebUser.Name);
                         continue;
                     case "@WebUser.FK_Dept":
-                        this.SetValByKey(attr.Key, Web.WebUser.FK_Dept);
+                        this.SetValByKey(attr.Key, WebUser.FK_Dept);
                         continue;
                     case "@WebUser.FK_DeptName":
-                        this.SetValByKey(attr.Key, Web.WebUser.FK_DeptName);
+                        this.SetValByKey(attr.Key, WebUser.FK_DeptName);
                         continue;
                     case "@WebUser.FK_DeptNameOfFull":
-                        this.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);
+                        this.SetValByKey(attr.Key, WebUser.FK_DeptNameOfFull);
                         continue;
                     case "@RDT":
                         if (attr.MyDataType == DataType.AppDate)
-                            this.SetValByKey(attr.Key, DataType.CurrentData);
+                            this.SetValByKey(attr.Key, DataType.CurrentDate);
                         else
-                            this.SetValByKey(attr.Key, DataType.CurrentDataTime);
+                            this.SetValByKey(attr.Key, DataType.CurrentDateTime);
                         continue;
                     default:
                         continue;

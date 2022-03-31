@@ -177,7 +177,7 @@ namespace BP.ZHOU
         {
             this.No = DBAccess.GenerGUID();
             this.Rec = BP.Web.WebUser.No;
-            this.RDT = DataType.CurrentDataTime;
+            this.RDT = DataType.CurrentDateTime;
 
             //初始化该家谱的根目录.
             People pe = new People();

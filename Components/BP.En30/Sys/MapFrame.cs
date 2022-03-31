@@ -88,10 +88,10 @@ namespace BP.Sys
             {
                 return this.GetValStrByKey(MapFrameAttr.Name);
             }
-            set
-            {
-                this.SetValByKey(MapFrameAttr.Name, value);
-            }
+        }
+        public void setName(string val)
+        {
+            this.SetValByKey(MapFrameAttr.Name, val);
         }
         /// <summary>
         /// EleID
@@ -102,10 +102,10 @@ namespace BP.Sys
             {
                 return this.GetValStrByKey(MapFrameAttr.FrmID);
             }
-            set
-            {
-                this.SetValByKey(MapFrameAttr.FrmID, value);
-            }
+        }
+        public void setFrmID(string val)
+        {
+            this.SetValByKey(MapFrameAttr.FrmID, val);
         }
         /// <summary>
         /// EleType
@@ -116,10 +116,10 @@ namespace BP.Sys
             {
                 return this.GetValStrByKey(MapFrameAttr.EleType);
             }
-            set
-            {
-                this.SetValByKey(MapFrameAttr.EleType, value);
-            }
+        }
+        public void setEleType(string val)
+        {
+            this.SetValByKey(MapFrameAttr.EleType, val);
         }
         /// <summary>
         /// 连接
@@ -136,28 +136,6 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(MapFrameAttr.FrameURL, value);
-            }
-        }
-        public float X
-        {
-            get
-            {
-                return this.GetValFloatByKey(MapFrameAttr.X);
-            }
-            set
-            {
-                this.SetValByKey(MapFrameAttr.X, value);
-            }
-        }
-        public float Y
-        {
-            get
-            {
-                return this.GetValFloatByKey(MapFrameAttr.Y);
-            }
-            set
-            {
-                this.SetValByKey(MapFrameAttr.Y, value);
             }
         }
         /// <summary>
@@ -201,6 +179,10 @@ namespace BP.Sys
                 this.SetValByKey(MapFrameAttr.FK_MapData, value);
             }
         }
+        public void setFK_MapData(string val)
+        {
+            this.SetValByKey(MapFrameAttr.FK_MapData, val);
+        }
         #endregion
 
         #region 构造方法
@@ -216,7 +198,7 @@ namespace BP.Sys
         /// <param name="no"></param>
         public MapFrame(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -238,12 +220,8 @@ namespace BP.Sys
 
                 map.AddTBInt(MapFrameAttr.UrlSrcType, 0, "URL来源", false, false);
 
-
-              //  map.AddDDLSysEnum(MapFrameAttr.UrlSrcType, 0, "URL来源", true, true, MapFrameAttr.UrlSrcType,
+                //map.AddDDLSysEnum(MapFrameAttr.UrlSrcType, 0, "URL来源", true, true, MapFrameAttr.UrlSrcType,
                 //"@0=自定义@1=地图@2=流程轨迹表@3=流程轨迹图");
-
-                map.AddTBString(MapFrameAttr.Y, null, "Y", true, false, 0, 20, 20);
-                map.AddTBString(MapFrameAttr.X, null, "x", true, false, 0, 20, 20);
 
                 map.AddTBString(MapFrameAttr.W, null, "宽度", true, false, 0, 20, 20);
                 map.AddTBString(MapFrameAttr.H, null, "高度", true, false, 0, 20, 20);
@@ -291,7 +269,7 @@ namespace BP.Sys
         protected override bool beforeInsert()
         {
             //在属性实体集合插入前，clear父实体的缓存.
-            BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
              
             return base.beforeInsert();
         }

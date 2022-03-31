@@ -114,7 +114,7 @@ namespace BP.WF.Template
         /// <param name="_oid">标签ID</param>	
         public LabNote(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -146,7 +146,7 @@ namespace BP.WF.Template
 
         protected override bool beforeInsert()
         {
-            this.MyPK = DBAccess.GenerOID().ToString();
+            this.setMyPK(DBAccess.GenerOID().ToString());
             return base.beforeInsert();
         }
     }

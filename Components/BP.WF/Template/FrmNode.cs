@@ -159,35 +159,35 @@ namespace BP.WF.Template
         /// <summary>
         /// 始终启用
         /// </summary>
-        Allways,
+        Allways=0,
         /// <summary>
         /// 有数据时启用
         /// </summary>
-        WhenHaveData,
+        WhenHaveData=1,
         /// <summary>
         /// 有参数时启用
         /// </summary>
-        WhenHaveFrmPara,
+        WhenHaveFrmPara=2,
         /// <summary>
         /// 按表单的字段表达式
         /// </summary>
-        ByFrmFields,
+        ByFrmFields=3,
         /// <summary>
         /// 按SQL表达式
         /// </summary>
-        BySQL,
+        BySQL=4,
         /// <summary>
         /// 不启用
         /// </summary>
-        Disable,
+        Disable=5,
         /// <summary>
         /// 按岗位
         /// </summary>
-        ByStation,
+        ByStation=6,
         /// <summary>
         /// 按部门
         /// </summary>
-        ByDept
+        ByDept=7
     }
     /// <summary>
     /// 节点表单
@@ -210,7 +210,7 @@ namespace BP.WF.Template
                 {
                     case FrmType.FoolForm:
                         return Glo.CCFlowAppPath + "/WF/CCForm/FrmFix";
-                    case FrmType.FreeFrm:
+                    case FrmType.Develop:
                         return Glo.CCFlowAppPath + "/WF/CCForm/Frm";
                     default:
                         throw new Exception("err,未处理。");
@@ -491,7 +491,7 @@ namespace BP.WF.Template
         {
             get
             {
-                if (this.FrmEnableRole == Template.FrmEnableRole.WhenHaveFrmPara && this.FK_Frm == "ND" + this.FK_Node)
+                if (this.FrmEnableRole == FrmEnableRole.WhenHaveFrmPara && this.FK_Frm == "ND" + this.FK_Node)
                     return "不启用";
 
                 SysEnum se = new SysEnum(FrmNodeAttr.FrmEnableRole, this.FrmEnableRoleInt);
@@ -533,7 +533,7 @@ namespace BP.WF.Template
         {
             get
             {
-                if (this.FrmSln == Template.FrmSln.Readonly)
+                if (this.FrmSln == FrmSln.Readonly)
                     return false;
                 return true;
             }
@@ -664,7 +664,7 @@ namespace BP.WF.Template
             {
                 this.IsPrint = false;
                 //不可以编辑.
-                this.FrmSln = Template.FrmSln.Default;
+                this.FrmSln = FrmSln.Default;
                 Node node = new Node(fk_node);
                 if (node.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
                     this.IsEnableFWC = node.FrmWorkCheckSta;
@@ -756,7 +756,7 @@ namespace BP.WF.Template
                 throw new Exception("@流程编号为空");
 
 
-            this.MyPK = this.FK_Frm + "_" + this.FK_Node + "_" + this.FK_Flow;
+            this.setMyPK(this.FK_Frm + "_" + this.FK_Node + "_" + this.FK_Flow);
 
             //获取表单的类型
             MapData mapData = new MapData();
@@ -769,6 +769,15 @@ namespace BP.WF.Template
             return base.beforeUpdateInsertAction();
         }
         #endregion 方法.
+
+        protected override bool beforeInsert()
+        {
+            //如果不是开始节点，默认为只读方案.
+            if (this.FK_Node.ToString().EndsWith("01") == false)
+                this.FrmSln =  FrmSln.Readonly;
+
+            return base.beforeInsert();
+        }
 
     }
     /// <summary>

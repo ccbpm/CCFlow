@@ -46,7 +46,6 @@ namespace BP.GPM.Home
         /// </summary>
         public const string PopW = "PopW";
         public const string PopH = "PopH";
-
         /// <summary>
         /// 风格，比如Tab风格, table风格等.
         /// </summary>
@@ -87,6 +86,13 @@ namespace BP.GPM.Home
         /// 页面ID.
         /// </summary>
         public const string PageID = "PageID";
+
+        public const string DefaultChart = "DefaultChart";
+
+        public const string C1Ens = "C1Ens";
+        public const string C2Ens = "C2Ens";
+        public const string C3Ens = "C3Ens";
+
 
         #region 数据源
         public const string DBType = "DBType";
@@ -346,7 +352,7 @@ namespace BP.GPM.Home
         /// <summary>
         /// 信息块
         /// </summary>
-        /// <param name="mypk"></param>
+        /// <param name="no"></param>
         public WindowTemplate(string no)
         {
             this.No = no;
@@ -362,11 +368,8 @@ namespace BP.GPM.Home
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("GPM_WindowTemplate");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "信息块";
-                map.EnType = EnType.Sys;
+                Map map = new Map("GPM_WindowTemplate", "信息块");
+                map.setEnType(EnType.Sys);
 
                 #region 基本信息.
                 map.AddTBStringPK(WindowTemplateAttr.No, null, "编号", true, true, 1, 40, 100);
@@ -410,7 +413,6 @@ namespace BP.GPM.Home
                 map.AddTBString(WindowTemplateAttr.OrgNo, null, "OrgNo", false, false, 0, 50, 20);
                 #endregion 其他
 
-
                 #region 扇形图
 
                 map.AddTBString(WindowTemplateAttr.LabOfFZ, null, "分子标签", true, false, 0, 100, 20);
@@ -420,6 +422,21 @@ namespace BP.GPM.Home
                 map.AddTBStringDoc(WindowTemplateAttr.SQLOfFM, null, "分子表达式", true, false, true);
                 map.AddTBString(WindowTemplateAttr.LabOfRate, null, "率标签", true, false, 0, 100, 20);
                 #endregion 扇形图
+
+
+                #region 多图形展示.
+
+                map.AddBoolean("IsPie", false, "饼图?", true, true);
+                map.AddBoolean("IsLine", false, "折线图?", true, true);
+                map.AddBoolean("IsZZT", false, "柱状图?", true, true);
+                map.AddBoolean("IsRing", false, "显示环形图?", true, true);
+          //      map.AddBoolean("IsRate", false, "百分比扇形图?", true, true);
+
+                map.AddDDLSysEnum(WindowTemplateAttr.DefaultChart, 0, "默认显示图形", true, true, WindowTemplateAttr.DefaultChart,
+            "@0=饼图@1=折线图@2=柱状图@3=显示环形图");
+
+                #endregion 多图形展示.
+
 
 
                 this._enMap = map;
@@ -505,7 +522,7 @@ namespace BP.GPM.Home
                 //内置的.
                 if (item.WinDocModel.Equals(WinDocModel.System))
                 {
-                    string exp = item.Docs.Clone() as string;
+                    string exp = item.Docs;
                     exp = BP.WF.Glo.DealExp(exp, null);
                     item.Docs = exp;
                     continue;
@@ -519,7 +536,7 @@ namespace BP.GPM.Home
 
                     foreach (HtmlVarDtl dtl in dtls)
                     {
-                        string sql = dtl.Exp0.Clone() as string;
+                        string sql = dtl.Exp0;
                         sql = sql.Replace("~", "'");
                         sql = BP.WF.Glo.DealExp(sql, null);
                         try
@@ -543,7 +560,7 @@ namespace BP.GPM.Home
 
                     foreach (TabDtl dtl in dtls)
                     {
-                        string sql = dtl.Exp0.Clone() as string;
+                        string sql = dtl.Exp0;
                         sql = sql.Replace("~", "'");
                         sql = BP.WF.Glo.DealExp(sql, null);
                         try
@@ -567,14 +584,14 @@ namespace BP.GPM.Home
                     try
                     {
                         //分子.
-                        string sql = item.GetValStringByKey(WindowTemplateAttr.SQLOfFZ).Clone() as string;
+                        string sql = item.GetValStringByKey(WindowTemplateAttr.SQLOfFZ);
                         sql = sql.Replace("~", "'");
                         sql = BP.WF.Glo.DealExp(sql, null);
                         string val = DBAccess.RunSQLReturnString(sql);
                         item.SetValByKey(WindowTemplateAttr.SQLOfFZ, val);
 
                         //分母.
-                        sql = item.GetValStringByKey(WindowTemplateAttr.SQLOfFM).Clone() as string;
+                        sql = item.GetValStringByKey(WindowTemplateAttr.SQLOfFM);
                         sql = sql.Replace("~", "'");
                         sql = BP.WF.Glo.DealExp(sql, null);
                         val = DBAccess.RunSQLReturnString(sql);
@@ -592,13 +609,13 @@ namespace BP.GPM.Home
                 //SQL列表. 
                 if (item.WinDocModel.Equals(WinDocModel.Table) //sql列表.
                     || item.WinDocModel.Equals(WinDocModel.ChartLine) //sql柱状图
-                    || item.WinDocModel.Equals(WinDocModel.ChartZZT) //折线图.
+                    || item.WinDocModel.Equals(WinDocModel.ChartChina) //折线图.
                     || item.WinDocModel.Equals(WinDocModel.ChartRing) //环形图.
                     || item.WinDocModel.Equals(WinDocModel.ChartPie)) //饼图.
                 {
                     try
                     {
-                        string sql = item.Docs.Clone() as string;
+                        string sql = item.Docs;
                         sql = sql.Replace("~", "'");
                         sql = BP.WF.Glo.DealExp(sql, null);
                         DataTable dt = DBAccess.RunSQLReturnTable(sql);
@@ -606,6 +623,7 @@ namespace BP.GPM.Home
                     }
                     catch (Exception ex)
                     {
+                        BP.DA.Log.DebugWriteError(ex.Message);
                         item.WinDocModel = WinDocModel.Html;
                         item.Docs = "err@" + ex.Message + " SQL=" + item.Docs;
                     }
@@ -645,10 +663,10 @@ namespace BP.GPM.Home
             string html = "";
             html += "<ul>";
             html += " <li>ccbpm是一个100%的开源软件,包含工作流程引擎、表单引擎、组织结构管理、菜单管理等敏捷开发的基础模块。</li>";
-            html += " <li>该开源软件由驰骋公司从2003年开始研发到至今，经过多个版本迭代，并历经数千个项目于用户需求场景完成。</li>";
+            html += " <li>该开源软件由高凌公司从2003年开始研发到至今，经过多个版本迭代，并历经数千个项目于用户需求场景完成。</li>";
             html += " <li>设计严谨、考究抽象程度高、覆盖大部分客户应用需求，属于一款不可多得的应用国产的敏捷开发工具。</li>";
             html += " <li>源代码都发布在giee上，采用GPL开源协议进行开源，遵守GPL开源协议使用ccbpm合法有效。</li>";
-            html += " <li>驰骋公司对外提供现场培训、技术支持、协助集成、协助项目落地服务，对小微企业，小企业，中等企业，大企业收费8,12,18,23三个等级的付费。</li>";
+            html += " <li>高凌公司对外提供现场培训、技术支持、协助集成、协助项目落地服务，对小微企业，小企业，中等企业，大企业收费8,12,18,23三个等级的付费。</li>";
             html += "</ul>";
             en.Docs = html;
             en.MoreLinkModel = 1;
@@ -706,7 +724,7 @@ namespace BP.GPM.Home
             en.Name = "全部流程";
             en.WinDocModel = WinDocModel.ChartLine; //柱状图.
 
-            if (Sys.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.Single)
+            if (BP.Sys.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.Single)
                 en.Docs = "SELECT FlowName AS '流程名', COUNT(WorkID) AS '数量'  FROM WF_GenerWorkFlow WHERE WFState !=0 GROUP BY FlowName";
             else
                 en.Docs = "SELECT FlowName AS '流程名', COUNT(WorkID) AS '数量'  FROM WF_GenerWorkFlow WHERE WFState !=0 AND OrgNo='@WebUser.OrgNo' GROUP BY FlowName";
@@ -739,7 +757,7 @@ namespace BP.GPM.Home
             en.Name = "我的发起";
             en.WinDocModel = WinDocModel.ChartPie; //柱状图.
 
-            if (Sys.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.Single)
+            if (BP.Sys.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.Single)
                 en.Docs = "SELECT FlowName AS '流程名', COUNT(WorkID) AS '数量'  FROM WF_GenerWorkFlow WHERE WFState !=0 AND Starter='@WebUser.No'  GROUP BY FlowName";
             else
                 en.Docs = "SELECT FlowName AS '流程名', COUNT(WorkID) AS '数量'  FROM WF_GenerWorkFlow WHERE WFState !=0 AND Starter='@WebUser.No' AND OrgNo='@WebUser.OrgNo' GROUP BY FlowName";
@@ -754,9 +772,9 @@ namespace BP.GPM.Home
             en.PageID = "Home";
             en.No = "007";
             en.Name = "我参与的";
-            en.WinDocModel = WinDocModel.ChartZZT; //柱状图.
+            en.WinDocModel = WinDocModel.ChartChina; //柱状图.
 
-            if (Sys.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.Single)
+            if (BP.Sys.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.Single)
                 en.Docs = "SELECT FlowName AS '流程名', COUNT(WorkID) AS '数量'  FROM WF_GenerWorkFlow WHERE WFState !=0 AND Emps LIKE  '%@WebUser.No,%'  GROUP BY FlowName";
             else
                 en.Docs = "SELECT FlowName AS '流程名', COUNT(WorkID) AS '数量'  FROM WF_GenerWorkFlow WHERE WFState !=0 AND Emps LIKE '%@WebUser.No,%' AND OrgNo='@WebUser.OrgNo' GROUP BY FlowName";

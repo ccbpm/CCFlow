@@ -55,7 +55,7 @@ namespace BP.GPM
             set
             {
                 SetValByKey(DeptEmpAttr.FK_Emp, value);
-                this.MyPK = this.FK_Dept + "_" + this.FK_Emp;
+                this.setMyPK(this.FK_Dept + "_" + this.FK_Emp);
             }
         }
         /// <summary>
@@ -70,7 +70,7 @@ namespace BP.GPM
             set
             {
                 SetValByKey(DeptEmpAttr.FK_Dept, value);
-                this.MyPK = this.FK_Dept + "_" + this.FK_Emp;
+                this.setMyPK(this.FK_Dept + "_" + this.FK_Emp);
             }
         }
         public string OrgNo
@@ -104,7 +104,7 @@ namespace BP.GPM
         {
             this.FK_Dept = deptNo;
             this.FK_Emp = empNo;
-            this.MyPK = this.FK_Dept + "_" + this.FK_Emp;
+            this.setMyPK(this.FK_Dept + "_" + this.FK_Emp);
             this.Retrieve();
         }
         /// <summary>
@@ -117,8 +117,7 @@ namespace BP.GPM
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Port_DeptEmp");
-                map.EnDesc = "部门人员信息";
+                Map map = new Map("Port_DeptEmp", "部门人员信息");
                 map.IndexField = DeptEmpAttr.FK_Dept;
 
                 
@@ -139,7 +138,7 @@ namespace BP.GPM
         /// <returns></returns>
         protected override bool beforeUpdateInsertAction()
         {
-            this.MyPK = this.FK_Dept + "_" + this.FK_Emp;
+            this.setMyPK(this.FK_Dept + "_" + this.FK_Emp);
             return base.beforeUpdateInsertAction();
         }
     }

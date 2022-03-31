@@ -7,8 +7,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using BP.Difference;
 
-namespace BP.En30.Tools
+namespace BP.Tools
 {
     public class Verify
     {
@@ -17,12 +18,18 @@ namespace BP.En30.Tools
         /// 随机码认证
         /// </summary>
         /// <param name="code">生成认证长度</param>
-        public static string DrawImage(int code,string sessionName)
+        public static string DrawImage(int code, string sessionName, string errorSign, string codeSign)
         { 
             string str = Rand.Number(5);
 
-            HttpContextHelper.AddCookie("CCS", sessionName, Convert.ToBase64String(MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(str))));
-            HttpContext.Current.Session[sessionName] = str;
+            Dictionary<string, string> cookieValues = new Dictionary<string, string>();
+            //base64编码会把+改为空格的问题修复
+            cookieValues.Add(sessionName + codeSign, Convert.ToBase64String(MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(str))).Replace("+", "%2B"));
+            cookieValues.Add(sessionName + errorSign, sessionName + errorSign);
+            HttpContextHelper.ResponseCookieAdd(cookieValues, null, "CCS");
+
+            // HttpContext Core中没又  session 使用 HttpContextHelper.SessionSet 替代 
+            HttpContextHelper.SessionSet(sessionName, str);
 
             return CreateImages(str);
         }
@@ -74,12 +81,6 @@ namespace BP.En30.Tools
             ms.Read(arr, 0, (int)ms.Length);
             ms.Close();
             return "data:image/jpg;base64," + Convert.ToBase64String(arr);
-
-            HttpContext.Current.Response.ClearContent();//Response.ClearContent();
-            HttpContext.Current.Response.ContentType = "image/Jpeg";
-            HttpContext.Current.Response.BinaryWrite(ms.ToArray());
-            g.Dispose();
-            image.Dispose();
         }
     }
 

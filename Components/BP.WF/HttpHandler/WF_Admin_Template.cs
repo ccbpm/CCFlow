@@ -12,6 +12,8 @@ using BP.WF;
 using BP.WF.Template;
 using System.Collections;
 using FluentFTP;
+using BP.Difference;
+
 
 namespace BP.WF.HttpHandler
 {

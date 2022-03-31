@@ -78,10 +78,10 @@ namespace BP.WF.DTS
                     gwf.FK_Node = int.Parse(dr[NDXRptBaseAttr.FlowEndNode].ToString());
                     gwf.FK_Dept = dr[NDXRptBaseAttr.FK_Dept].ToString();
 
-                    Port.Dept dept=null;
+                   BP.WF.Port.Dept dept=null;
                     try
                     {
-                        dept=new Port.Dept(gwf.FK_Dept);
+                        dept=new BP.WF.Port.Dept(gwf.FK_Dept);
                         gwf.DeptName =dept.Name; 
                     }
                     catch

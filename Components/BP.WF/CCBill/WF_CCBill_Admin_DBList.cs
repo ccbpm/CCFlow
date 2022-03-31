@@ -14,7 +14,7 @@ using BP.WF.Template;
 using BP.WF.Data;
 using BP.WF.HttpHandler;
 using BP.CCBill.Template;
-
+using BP.Difference;
 
 namespace BP.CCBill
 {
@@ -134,9 +134,9 @@ namespace BP.CCBill
                         if (SystemConfig.IsBSsystem)
                         {
                             /*在cs模式下自动获取*/
-                            string host = HttpContextHelper.RequestUrlHost;//BP.Sys.Glo.Request.Url.Host;
+                            string host = HttpContextHelper.RequestUrlHost;//BP.Sys.Base.Glo.Request.Url.Host;
                             if (url.Contains("@AppPath"))
-                                url = url.Replace("@AppPath", "http://" + host + HttpContextHelper.RequestApplicationPath);//BP.Sys.Glo.Request.ApplicationPath
+                                url = url.Replace("@AppPath", "http://" + host + HttpContextHelper.RequestApplicationPath);//BP.Sys.Base.Glo.Request.ApplicationPath
                             else
                                 url = "http://" + HttpContextHelper.RequestUrlAuthority + url;
                         }
@@ -148,7 +148,7 @@ namespace BP.CCBill
                             if (DataType.IsNullOrEmpty(cfgBaseUrl))
                             {
                                 string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
-                                Log.DefaultLogWriteLineError(err);
+                                BP.DA.Log.DebugWriteError(err);
                                 throw new Exception(err);
                             }
                             url = cfgBaseUrl + url;
@@ -185,7 +185,7 @@ namespace BP.CCBill
                 if (attr != null)
                 {
                     bool uiVisible = this.GetRequestValBoolen("CB_" + attr.KeyOfEn);
-                    attr.UIVisible = uiVisible;
+                    attr.setUIVisible(uiVisible);
                     attr.Name = val;
                     attr.DirectUpdate();
                 }
@@ -232,8 +232,8 @@ namespace BP.CCBill
                     attr.DirectUpdate();
                     if (systemKeys.IndexOf(attr.KeyOfEn + ",") == -1)
                     {
-                        attr.FK_MapData = this.FrmID;
-                        attr.MyPK = this.FrmID + "_" + attr.KeyOfEn;
+                        attr.setFK_MapData(this.FrmID);
+                        attr.setMyPK(this.FrmID + "_" + attr.KeyOfEn);
                         attr.GroupID = 1;
                         attr.Insert();
                     }

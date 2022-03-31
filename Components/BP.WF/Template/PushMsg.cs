@@ -1026,8 +1026,8 @@ namespace BP.WF.Template
                 {
                     /*当前节点的处理人.*/
                     toEmpIDs = jumpToEmps;
-                    string[] emps = toEmpIDs.Split(',');
-                    foreach (string empNo in emps)
+                    string[] myEmpStrs = toEmpIDs.Split(',');
+                    foreach (string empNo in myEmpStrs)
                     {
                         if (DataType.IsNullOrEmpty(empNo))
                             continue;
@@ -1049,8 +1049,8 @@ namespace BP.WF.Template
                     /*如果向接受人发送消息.*/
                     toEmpIDs = objs.VarAcceptersID;
                     string toEmpNames = objs.VarAcceptersName;
-                    string[] emps = toEmpIDs.Split(',');
-                    foreach (string empNo in emps)
+                    string[] myEmpStrs = toEmpIDs.Split(',');
+                    foreach (string empNo in myEmpStrs)
                     {
                         if (DataType.IsNullOrEmpty(empNo))
                             continue;
@@ -1091,9 +1091,9 @@ namespace BP.WF.Template
                             }
                         }
                     }
-                    string[] emps = empsStrs.Split('@');
+                    string[] myEmpStrs = empsStrs.Split('@');
                     string empNo = "";
-                    foreach (string str in emps)
+                    foreach (string str in myEmpStrs)
                     {
                         if (DataType.IsNullOrEmpty(str))
                             continue;
@@ -1119,8 +1119,8 @@ namespace BP.WF.Template
                 {
                     //获取当前节点的接收人
                     GenerWorkFlow gwf = new GenerWorkFlow(workid);
-                    string[] emps = gwf.TodoEmps.Split(';');
-                    foreach (string emp in emps)
+                    string[] myEmpStrs = gwf.TodoEmps.Split(';');
+                    foreach (string emp in myEmpStrs)
                     {
                         if (DataType.IsNullOrEmpty(emp))
                             continue;
@@ -1149,7 +1149,7 @@ namespace BP.WF.Template
         }
         protected override bool beforeUpdateInsertAction()
         {
-            //  this.MyPK = this.FK_Event + "_" + this.FK_Node + "_" + this.PushWay;
+            //  this.setMyPK(this.FK_Event + "_" + this.FK_Node + "_" + this.PushWay;
 
 
             //  string sql = "UPDATE WF_PushMsg SET FK_Flow=(SELECT FK_Flow FROM WF_Node WHERE NodeID= WF_PushMsg.FK_Node)";

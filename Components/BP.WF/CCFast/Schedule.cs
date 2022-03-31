@@ -44,7 +44,7 @@ namespace BP.CCFast
         /// <summary>
         /// 重复方式
         /// </summary>
-        public const string Repeat = "Repeat";
+        public const string Repeats = "Repeats";
         /// <summary>
         /// 位置
         /// </summary>
@@ -131,7 +131,7 @@ namespace BP.CCFast
         }
         public Schedule(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -160,7 +160,7 @@ namespace BP.CCFast
 
                 map.AddTBDateTime(ScheduleAttr.DTAlert, null, "提醒时间", true, false);
 
-                map.AddDDLSysEnum(ScheduleAttr.Repeat, 0, "重复", true, false, "Repeat",
+                map.AddDDLSysEnum(ScheduleAttr.Repeats, 0, "重复", true, false, "Repeat",
               "@0=永不@1=每年@2=每月");
 
                 map.AddTBString(ScheduleAttr.Local, null, "位置", true, false, 0, 300, 10, true);
@@ -200,11 +200,11 @@ namespace BP.CCFast
         #region 执行方法.
         protected override bool beforeInsert()
         {
-            this.MyPK = DBAccess.GenerGUID();
+            this.setMyPK(DBAccess.GenerGUID());
             this.Rec = WebUser.No;
             this.OrgNo = WebUser.OrgNo;
 
-            this.RDT = DataType.CurrentDataTime;
+            this.RDT = DataType.CurrentDateTime;
             this.NianYue = DataType.CurrentYearMonth;
 
             return base.beforeInsert();
@@ -225,19 +225,6 @@ namespace BP.CCFast
         public string DTFromTo(string dtFrom, string dtTo)
         {
             this.RetrieveAll();
-            return this.ToJson();
-
-
-            QueryObject qo = new QueryObject(this);
-
-            qo.AddWhere(ScheduleAttr.DTStart, ">=", dtFrom);
-            qo.addAnd();
-            qo.AddWhere(ScheduleAttr.DTStart, "<=", dtTo);
-            qo.addAnd();
-            qo.AddWhere(ScheduleAttr.Rec, BP.Web.WebUser.No);
-            qo.addOrderBy(ScheduleAttr.DTStart);
-            qo.DoQuery();
-
             return this.ToJson();
         }
         /// <summary>

@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
 using System.Data;
 using System.Text;
-using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
-using BP.Port;
 using BP.En;
-using BP.WF;
-using BP.WF.Template;
 using BP.WF.Data;
 using BP.WF.HttpHandler;
-using BP.CCBill.Template;
 using ThoughtWorks.QRCode.Codec;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -78,8 +71,8 @@ namespace BP.CCBill
             DataSet ds = new DataSet();
 
             #region 查询显示的列
-            MapAttrs mapattrs = new MapAttrs();
-            mapattrs.Retrieve(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.Idx);
+            MapAttrs mattrs = new MapAttrs();
+            mattrs.Retrieve(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.Idx);
 
             DataRow row = null;
             DataTable dt = new DataTable("Attrs");
@@ -92,7 +85,7 @@ namespace BP.CCBill
             //设置标题、单据号位于开始位置
 
 
-            foreach (MapAttr attr in mapattrs)
+            foreach (MapAttr attr in mattrs)
             {
                 string searchVisable = attr.atPara.GetValStrByKey("SearchVisable");
                 if (searchVisable == "0")
@@ -267,10 +260,10 @@ namespace BP.CCBill
         {
             //创建实体.
             EnVer ev = new EnVer();
-            ev.MyPK = DBAccess.GenerGUID();
+            ev.setMyPK(DBAccess.GenerGUID());
             ev.RecNo = WebUser.No;
             ev.RecName = WebUser.Name;
-            ev.RDT = DataType.CurrentDataTimeCN;
+            ev.RDT = DataType.CurrentDateTimeCN;
             ev.FrmID = this.FrmID;
             ev.EnPKValue = this.WorkID.ToString();
             ev.MyNote = this.GetRequestVal("MyNote");
@@ -291,8 +284,8 @@ namespace BP.CCBill
             //不需要存储的字段.
             string sysFiels = ",AtPara,OID,WorkID,WFState,BillNo,Title,RDT,CDT,OrgNo,Starter,StarterName,BillState,FK_Dept,";
 
-            MapAttrs mapattrs = new MapAttrs(this.FrmID);
-            foreach (MapAttr attr in mapattrs)
+            MapAttrs mattrs = new MapAttrs(this.FrmID);
+            foreach (MapAttr attr in mattrs)
             {
                 //如果是非数据控件.
                 if ((int)attr.UIContralType >= 4)
@@ -301,7 +294,7 @@ namespace BP.CCBill
                 if (sysFiels.Contains("," + attr.KeyOfEn + ",") == true)
                     continue;
 
-                dtl.MyPK = DBAccess.GenerGUID();
+                dtl.setMyPK(DBAccess.GenerGUID());
                 dtl.RefPK = ev.MyPK; //设置关联主键.
 
                 dtl.FrmID = ev.FrmID;
@@ -392,6 +385,29 @@ namespace BP.CCBill
             return url;
         }
         #endregion 二维码.
+
+        #region 评论回复附件上传
+        public string FrmBBs_UploadFile()
+        {
+            if (BP.Difference.HttpContextHelper.RequestFilesCount == 0)
+                return "err@获取附件信息有误.";
+            //上传附件
+            string filepath = "";
+            var file = BP.Difference.HttpContextHelper.RequestFiles(0);
+            filepath = SystemConfig.PathOfDataUser + "UploadFile/FrmBBS/" + DataType.CurrentYearMonth;
+            if (System.IO.Directory.Exists(filepath) == false)
+                System.IO.Directory.CreateDirectory(filepath);
+            filepath= filepath+"/"+ DBAccess.GenerGUID()+ file.FileName;
+            BP.Difference.HttpContextHelper.UploadFile(file, filepath);
+            BP.CCBill.FrmBBS bbs = new BP.CCBill.FrmBBS(this.No);
+            string fileName = file.FileName.Substring(0, file.FileName.LastIndexOf("."));
+            bbs.SetValByKey("MyFileName", fileName);
+            bbs.SetValByKey("MyFilePath", filepath);
+            bbs.SetValByKey("MyFileExt", file.FileName.Replace(fileName,""));
+            bbs.Update();
+            return "附件保存成功";
+        }
+        #endregion 评论回复附件上传
 
     }
 }

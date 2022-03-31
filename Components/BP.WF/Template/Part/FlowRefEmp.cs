@@ -281,7 +281,7 @@ namespace BP.WF.Template
         /// <param name="_oid">流程关联人员ID</param>	
         public FlowRefEmp(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>

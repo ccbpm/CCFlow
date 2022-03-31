@@ -90,17 +90,17 @@ namespace BP.WF.HttpHandler
         public string NewHidF()
         {
             MapAttr mdHid = new MapAttr();
-            mdHid.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
-            mdHid.FK_MapData = this.FK_MapData;
-            mdHid.KeyOfEn = this.KeyOfEn;
+            mdHid.setMyPK(this.FK_MapData + "_" + this.KeyOfEn);
+            mdHid.setFK_MapData(this.FK_MapData);
+            mdHid.setKeyOfEn(this.KeyOfEn);
             mdHid.Name = this.Name;
             mdHid.MyDataType = int.Parse(this.GetRequestVal("FieldType"));
             mdHid.HisEditType = EditType.Edit;
-            mdHid.MaxLen = 100;
-            mdHid.MinLen = 0;
-            mdHid.LGType = FieldTypeS.Normal;
-            mdHid.UIVisible = false;
-            mdHid.UIIsEnable = false;
+            mdHid.setMaxLen(100);
+            mdHid.setMinLen(0);
+            mdHid.setLGType(FieldTypeS.Normal);
+            mdHid.setUIVisible(false);
+            mdHid.setUIIsEnable(false);
             mdHid.Insert();
 
             return "创建成功..";
@@ -202,7 +202,7 @@ namespace BP.WF.HttpHandler
 
             //数据源实体，修改OID的属性为字符型
             MapAttr mapAttr = new MapAttr(md.No + "_OID");
-            mapAttr.MyDataType = DataType.AppString;
+            mapAttr.setMyDataType(DataType.AppString);
             mapAttr.Update();
 
 
@@ -212,7 +212,7 @@ namespace BP.WF.HttpHandler
             ctrl.FrmID = this.No;
             ctrl.CtrlObj = "BtnSearch";
             ctrl.IsEnableAll = true;
-            ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
+            ctrl.setMyPK(ctrl.FrmID + "_" + ctrl.CtrlObj);
             if (ctrl.RetrieveFromDBSources() == 0)
                 ctrl.Insert();
             entityDict.CheckEnityTypeAttrsFor_EntityNoName();
@@ -257,11 +257,8 @@ namespace BP.WF.HttpHandler
                 md.HisFrmTypeInt = this.GetRequestValInt("DDL_FrmType");
                 string ptable = this.GetRequestVal("TB_PTable");
 
-              
-
                 md.PTable = ptable;
                 //   md.PTable = DataType.ParseStringForNo(this.GetRequestVal("TB_PTable"), 100);
-
                 //数据表模式。  需要翻译.
                 md.PTableModel = this.GetRequestValInt("DDL_PTableModel");
 
@@ -280,7 +277,6 @@ namespace BP.WF.HttpHandler
                 switch (md.HisFrmType)
                 {
                     //自由，傻瓜，SL表单不做判断
-                    case BP.Sys.FrmType.FreeFrm:
                     case BP.Sys.FrmType.FoolForm:
                     case BP.Sys.FrmType.Develop:
                         break;
@@ -291,11 +287,12 @@ namespace BP.WF.HttpHandler
                         break;
                     //如果是以下情况，导入模式
                     case BP.Sys.FrmType.WordFrm:
+                    case BP.Sys.FrmType.WPSFrm:
                     case BP.Sys.FrmType.ExcelFrm:
                     case BP.Sys.FrmType.VSTOForExcel:
                         break;
                     default:
-                        throw new Exception("未知表单类型." + md.HisFrmType.ToString());
+                        throw new Exception("err@未知表单类型." + md.HisFrmType.ToString());
                 }
                 md.Insert();
 
@@ -345,7 +342,7 @@ namespace BP.WF.HttpHandler
                 GEEntity en = new GEEntity(md.No);
                 en.CheckPhysicsTable();
 
-                if (md.HisFrmType == BP.Sys.FrmType.WordFrm || md.HisFrmType == BP.Sys.FrmType.ExcelFrm)
+                if (md.HisFrmType == BP.Sys.FrmType.WPSFrm ||  md.HisFrmType == BP.Sys.FrmType.WordFrm || md.HisFrmType == BP.Sys.FrmType.ExcelFrm)
                 {
                     /*把表单模版存储到数据库里 */
                     return "url@../../Comm/RefFunc/En.htm?EnName=BP.WF.Template.MapFrmExcel&PKVal=" + md.No;
@@ -353,9 +350,6 @@ namespace BP.WF.HttpHandler
 
                 if (md.HisFrmType == BP.Sys.FrmType.Entity)
                     return "url@../../Comm/Ens.htm?EnsName=" + md.PTable;
-
-                if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
-                    return "url@FormDesigner.htm?FK_MapData=" + md.No + "&EntityType=" + this.GetRequestVal("EntityType");
 
                 if (md.HisFrmType == BP.Sys.FrmType.Develop)
                     return "url@../DevelopDesigner/Designer.htm?FK_MapData=" + md.No + "&FrmID=" + md.No + "&EntityType=" + this.GetRequestVal("EntityType");
@@ -387,11 +381,7 @@ namespace BP.WF.HttpHandler
             BP.Sys.MapData md = new BP.Sys.MapData(this.FK_MapData);
             if (md.EntityType == EntityType.SingleFrm)
             {
-                if (md.HisFrmType == FrmType.FreeFrm)
-                    return "url@../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFree&No=" + this.FK_MapData;
-
-                //、、f (md.HisFrmType == FrmType.FoolForm)
-                //     return "url@../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFool&No=" + this.FK_MapData;
+               
 
                 if (md.HisFrmType == FrmType.ExcelFrm)
                     return "url@../../Comm/En.htm?EnName=BP.WF.Template.MapFrmExcel&No=" + this.FK_MapData;
@@ -488,12 +478,7 @@ namespace BP.WF.HttpHandler
 
                 FrmRBs rbs = new FrmRBs(this.FK_MapData);
                 ds.Tables.Add(rbs.ToDataTableField("Sys_FrmRB"));
-
-                FrmLabs labs = new FrmLabs(this.FK_MapData);
-                ds.Tables.Add(labs.ToDataTableField("Sys_FrmLab"));
-
-                FrmLinks links = new FrmLinks(this.FK_MapData);
-                ds.Tables.Add(links.ToDataTableField("Sys_FrmLink"));
+                 
 
                 FrmImgs imgs = new FrmImgs(this.FK_MapData);
                 ds.Tables.Add(imgs.ToDataTableField("Sys_FrmImg"));
@@ -508,8 +493,7 @@ namespace BP.WF.HttpHandler
                 dtls.Retrieve(MapDtlAttr.FK_MapData, this.FK_MapData, MapDtlAttr.FK_Node, 0);
                 ds.Tables.Add(dtls.ToDataTableField("Sys_MapDtl"));
 
-                FrmLines lines = new FrmLines(this.FK_MapData);
-                ds.Tables.Add(lines.ToDataTableField("Sys_FrmLine"));
+              
 
                 BP.Sys.FrmUI.MapFrameExts mapFrameExts = new BP.Sys.FrmUI.MapFrameExts(this.FK_MapData);
                 ds.Tables.Add(mapFrameExts.ToDataTableField("Sys_MapFrame"));
@@ -554,7 +538,7 @@ namespace BP.WF.HttpHandler
 
                     dt.TableName = "FigureCom";
 
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                     {
                         //  figureComCols = "Name,No,Sta,X,Y,H,W";
                         dt.Columns[0].ColumnName = "Name";
@@ -576,21 +560,7 @@ namespace BP.WF.HttpHandler
             }
         }
 
-        /// <summary>
-        /// 保存表单
-        /// </summary>
-        /// <returns></returns>
-        public string SaveForm()
-        {
-            //清缓存
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
-
-            string docs = this.GetRequestVal("diagram");
-            BP.Sys.CCFormAPI.SaveFrm(this.FK_MapData, docs);
-
-            return "保存成功.";
-        }
-
+       
         #region 表格处理.
         public string Tables_Init()
         {
@@ -634,24 +604,10 @@ namespace BP.WF.HttpHandler
 
         #endregion
 
-        /// <summary>
-        /// 表单重置
-        /// </summary>
-        /// <returns></returns>
-        public string ResetFrm_Init()
-        {
-            MapData md = new MapData(this.FK_MapData);
-            md.ResetMaxMinXY();
-            md.Update();
-            return "重置成功.";
-        }
+       
 
         #region 复制表单
-        /// <summary>
-        /// 复制表单属性和表单内容
-        /// </summary>
-        /// <param name="frmId">新表单ID</param>
-        /// <param name="frmName">新表单内容</param>
+        
         public void DoCopyFrm()
         {
             string fromFrmID = GetRequestVal("FromFrmID");

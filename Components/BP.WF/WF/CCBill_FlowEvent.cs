@@ -61,7 +61,7 @@ namespace BP.WF
 
                 string menuNo = wn.HisGenerWorkFlow.GetParaString("MenuNo");
 
-                BP.CCBill.Template.MethodFlowNewEntity menu = new CCBill.Template.MethodFlowNewEntity(menuNo);
+                BP.CCBill.Template.MethodFlowNewEntity menu = new BP.CCBill.Template.MethodFlowNewEntity(menuNo);
 
                 //创建工作，并copy数据过去.
                 Row row = wn.rptGe.Row;

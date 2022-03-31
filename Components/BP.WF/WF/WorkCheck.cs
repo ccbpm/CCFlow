@@ -98,7 +98,7 @@ namespace BP.WF
                     {
                         qo.AddWhere(TrackAttr.WorkID, this.FID);
                         qo.addOr();
-                        qo.AddWhere(TrackAttr.FID, this.FID);
+                        qo.AddWhere(TrackAttr.WorkID, this.WorkID);
                     }
                     else
                     {

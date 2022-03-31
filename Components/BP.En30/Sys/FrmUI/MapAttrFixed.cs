@@ -101,7 +101,7 @@ namespace BP.Sys.FrmUI
         /// </summary>
         public MapAttrFixed(string myPK)
         {
-            this.MyPK = myPK;
+            this.setMyPK(myPK);
             this.Retrieve();
 
         }
@@ -169,7 +169,7 @@ namespace BP.Sys.FrmUI
         protected override bool beforeUpdateInsertAction()
         {
             MapAttr attr = new MapAttr();
-            attr.MyPK = this.MyPK;
+            attr.setMyPK(this.MyPK);
             attr.RetrieveFromDBSources();
 
             //强制设置为评论组件.
@@ -213,42 +213,42 @@ namespace BP.Sys.FrmUI
         protected override void afterInsertUpdateAction()
         {
             MapAttr mapAttr = new MapAttr();
-            mapAttr.MyPK = this.MyPK;
+            mapAttr.setMyPK(this.MyPK);
             mapAttr.RetrieveFromDBSources();
             mapAttr.Update();
 
             //判断表单中是否存在经度、维度字段
             mapAttr = new MapAttr();
-            mapAttr.MyPK = this.FK_MapData + "_" + "JD";
+            mapAttr.setMyPK(this.FK_MapData + "_" + "JD");
             if (mapAttr.RetrieveFromDBSources() == 0)
             {
-                mapAttr.FK_MapData = this.FK_MapData;
-                mapAttr.KeyOfEn = "JD";
-                mapAttr.Name = "经度";
+                mapAttr.setFK_MapData(this.FK_MapData);
+                mapAttr.setKeyOfEn("JD");
+                mapAttr.setName("经度");
                 mapAttr.GroupID = 1;
-                mapAttr.UIContralType = UIContralType.TB;
+                mapAttr.setUIContralType(UIContralType.TB);
                 mapAttr.MyDataType = 1;
                 mapAttr.LGType = 0;
-                mapAttr.UIVisible = false;
-                mapAttr.UIIsEnable = false;
+                mapAttr.setUIVisible(false);
+                mapAttr.setUIIsEnable(false);
                 mapAttr.UIIsInput = true;
                 mapAttr.UIWidth = 150;
                 mapAttr.UIHeight = 23;
                 mapAttr.Insert(); //插入字段.
             }
 
-            mapAttr.MyPK = this.FK_MapData + "_" + "WD";
+            mapAttr.setMyPK(this.FK_MapData + "_" + "WD");
             if (mapAttr.RetrieveFromDBSources() == 0)
             {
-                mapAttr.FK_MapData = this.FK_MapData;
-                mapAttr.KeyOfEn = "WD";
-                mapAttr.Name = "纬度";
+                mapAttr.setFK_MapData(this.FK_MapData);
+                mapAttr.setKeyOfEn("WD");
+                mapAttr.setName("纬度");
                 mapAttr.GroupID = 1;
-                mapAttr.UIContralType = UIContralType.TB;
+                mapAttr.setUIContralType(UIContralType.TB);
                 mapAttr.MyDataType = 1;
                 mapAttr.LGType = 0;
-                mapAttr.UIVisible = false;
-                mapAttr.UIIsEnable = false;
+                mapAttr.setUIVisible(false);
+                mapAttr.setUIIsEnable(false);
                 mapAttr.UIIsInput = true;
                 mapAttr.UIWidth = 150;
                 mapAttr.UIHeight = 23;

@@ -75,28 +75,7 @@ namespace BP.WF.Rpt
             return cell;
         }
 
-        /// <summary>
-        /// 保存到xml文件中
-        /// </summary>
-        /// <param name="fileName">xml文件路径</param>
-        /// <returns></returns>
-        public bool SaveXml(string fileName)
-        {
-            try
-            {
-                using (var sw = new StreamWriter(fileName, false, Encoding.UTF8))
-                {
-                    new XmlSerializer(typeof(RptExportTemplate)).Serialize(sw, this);
-                }
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
+        
         /// <summary>
         /// 获取定义的填充明细表NO
         /// </summary>
@@ -112,47 +91,7 @@ namespace BP.WF.Rpt
             return null;
         }
 
-        /// <summary>
-        /// 从xml文件加载报表导出模板信息对象
-        /// </summary>
-        /// <param name="fileName">xml文件路径</param>
-        /// <returns></returns>
-        public static RptExportTemplate FromXml(string fileName)
-        {
-            RptExportTemplate t;
-
-            if(!File.Exists(fileName))
-            {
-                t = new RptExportTemplate
-                        {
-                            LastModify = DateTime.Now,
-                            Direction = FillDirection.Vertical,
-                            Cells = new List<RptExportTemplateCell>()
-                        };
-
-                t.SaveXml(fileName);
-                return t;
-            }
-
-            try
-            {
-                using (var sr = new StreamReader(fileName, Encoding.UTF8))
-                {
-                    t = new XmlSerializer(typeof(RptExportTemplate)).Deserialize(sr) as RptExportTemplate;
-                }
-            }
-            catch
-            {
-                t = new RptExportTemplate
-                        {
-                            LastModify = DateTime.Now,
-                            Direction = FillDirection.Vertical,
-                            Cells = new List<RptExportTemplateCell>()
-                        };
-            }
-
-            return t;
-        }
+       
     }
 
     /// <summary>

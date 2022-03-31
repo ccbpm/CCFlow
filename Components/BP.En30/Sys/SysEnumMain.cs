@@ -147,8 +147,8 @@ namespace BP.Sys
         protected override bool beforeDelete()
         {
             // 检查这个类型是否被使用？
-            MapAttrs attrs = new MapAttrs();
-            QueryObject qo = new QueryObject(attrs);
+            MapAttrs mattrs = new MapAttrs();
+            QueryObject qo = new QueryObject(mattrs);
             qo.AddWhere(MapAttrAttr.UIBindKey, this.No);
             int i = qo.DoQuery();
             if (i == 0)
@@ -159,7 +159,7 @@ namespace BP.Sys
             else
             {
                 string msg = "错误:下列数据已经引用了枚举您不能删除它。"; // "错误:下列数据已经引用了枚举您不能删除它。";
-                foreach (MapAttr attr in attrs)
+                foreach (MapAttr attr in mattrs)
                     msg += "\t\n" + attr.Field + "" + attr.Name + " Table = " + attr.FK_MapData;
 
                 //抛出异常，阻止删除.
@@ -267,7 +267,7 @@ namespace BP.Sys
                 se.Lab = kvs[1].Trim();
                 se.Lang = "CH";
                 se.Insert();
-                //   se.MyPK = this.No+"_"+se
+                //   se.setMyPK(this.No+"_"+se
             }
 
             return "执行成功.";

@@ -48,29 +48,29 @@ namespace BP.GPM.WeiXin
 
             #region 清楚现有的数据.
             //先删除所有部门
-            GPM.Depts depts = new GPM.Depts();
+            GPM.Depts depts = new BP.GPM.Depts();
             depts.ClearTable();
 
             //删除所有人员
-            GPM.Emps emps = new GPM.Emps();
+            GPM.Emps emps = new BP.GPM.Emps();
             emps.ClearTable();
 
             //删除部门人员表
-            GPM.DeptEmps deptEmps = new GPM.DeptEmps();
+            GPM.DeptEmps deptEmps = new BP.GPM.DeptEmps();
             deptEmps.ClearTable();
 
             //删除部门人员岗位表
-            GPM.DeptEmpStations deptEmpStations = new GPM.DeptEmpStations();
+            GPM.DeptEmpStations deptEmpStations = new BP.GPM.DeptEmpStations();
             deptEmpStations.ClearTable();
             #endregion 清楚现有的数据.
 
             #region 写入数据.
-            GPM.DeptEmp deptEmp = new GPM.DeptEmp();
-            GPM.Emp emp = new GPM.Emp();
+            GPM.DeptEmp deptEmp = new BP.GPM.DeptEmp();
+            GPM.Emp emp = new BP.GPM.Emp();
             foreach (DeptEntity deptMent in DeptMentList.department)
             {
                 //先插入部门表
-                GPM.Dept dept = new GPM.Dept();
+                GPM.Dept dept = new BP.GPM.Dept();
                 dept.No = deptMent.id;
                 dept.Name = deptMent.name;
                 dept.ParentNo = deptMent.parentid;
@@ -91,8 +91,8 @@ namespace BP.GPM.WeiXin
                     if (emps.Retrieve(GPM.EmpAttr.No, userInfo.userid) > 0)
                     {
                         //插入部门人员表
-                        deptEmp = new GPM.DeptEmp();
-                        deptEmp.MyPK = deptMent.id + "_" + userInfo.userid;
+                        deptEmp = new BP.GPM.DeptEmp();
+                        deptEmp.setMyPK(deptMent.id + "_" + userInfo.userid);
                         deptEmp.FK_Emp = userInfo.userid;
                         deptEmp.FK_Dept = deptMent.id;
                         deptEmp.Insert();
@@ -101,7 +101,7 @@ namespace BP.GPM.WeiXin
                     else
                     {
                         //插入人员表
-                        emp = new GPM.Emp();
+                        emp = new BP.GPM.Emp();
                         emp.No = userInfo.userid;
                         emp.Name = userInfo.name;
                         emp.FK_Dept = deptMent.id;
@@ -110,15 +110,15 @@ namespace BP.GPM.WeiXin
                         emp.Insert();
 
                         //插入部门人员表
-                        deptEmp = new GPM.DeptEmp();
-                        deptEmp.MyPK = deptMent.id + "_" + userInfo.userid;
+                        deptEmp = new BP.GPM.DeptEmp();
+                        deptEmp.setMyPK(deptMent.id + "_" + userInfo.userid);
                         deptEmp.FK_Emp = userInfo.userid;
                         deptEmp.FK_Dept = deptMent.id;
                         deptEmp.Insert();
 
                         //没有岗位，不同步，手动分配岗位吧
-                        //GPM.DeptEmpStation deptEmpStation = new GPM.DeptEmpStation();
-                        //deptEmpStation.MyPK = deptMent.id + "_" + userInfo.userid + "";
+                        //GPM.DeptEmpStation deptEmpStation = new BP.GPM.DeptEmpStation();
+                        //deptEmpStation.setMyPK(deptMent.id + "_" + userInfo.userid + "";
                     }
                 }
             }
@@ -127,7 +127,7 @@ namespace BP.GPM.WeiXin
             #region 增加 admin.
             //不管以上有无人员，都添加admin帐号的信息
             //插入admin帐号
-            emp = new GPM.Emp();
+            emp = new BP.GPM.Emp();
             emp.No = "admin";
             emp.Name = "admin";
             emp.FK_Dept = "1";//默认跟部门为1
@@ -136,8 +136,8 @@ namespace BP.GPM.WeiXin
             emp.Insert();
 
             //部门人员表加入admin
-            deptEmp = new GPM.DeptEmp();
-            deptEmp.MyPK = "1_admin";
+            deptEmp = new BP.GPM.DeptEmp();
+            deptEmp.setMyPK("1_admin");
             deptEmp.FK_Emp = "admin";
             deptEmp.FK_Dept = "1";
             deptEmp.Insert();

@@ -7,6 +7,8 @@ using BP.DA;
 using BP.En;
 using BP.Port;
 using BP.Web;
+using BP.Difference;
+
 
 namespace BP.Sys
 {
@@ -255,6 +257,10 @@ namespace BP.Sys
             {
                 this.SetValByKey(FrmEventAttr.FK_MapData, value);
             }
+        }
+        public void setFK_MapData(string val)
+        {
+            this.SetValByKey(FrmEventAttr.FK_MapData, val);
         }
         public string DoDoc
         {
@@ -616,14 +622,14 @@ namespace BP.Sys
         }
         public FrmEvent(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.RetrieveFromDBSources();
         }
         public FrmEvent(string fk_mapdata, string fk_Event)
         {
             this.FK_Event = fk_Event;
-            this.FK_MapData = fk_mapdata;
-            this.MyPK = this.FK_MapData + "_" + this.FK_Event;
+            this.setFK_MapData(fk_mapdata);
+            this.setMyPK(this.FK_MapData + "_" + this.FK_Event);
             this.RetrieveFromDBSources();
         }
         /// <summary>
@@ -703,7 +709,7 @@ namespace BP.Sys
         {
             //在属性实体集合插入前，clear父实体的缓存.
             if (DataType.IsNullOrEmpty(this.FK_MapData) == false)
-                BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
+                BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
 
 
             return base.beforeInsert();
@@ -781,7 +787,7 @@ namespace BP.Sys
             if (nev.HisDoType == EventDoType.BuessUnit)
             {
                 /* 获得业务单元，开始执行他 */
-                BuessUnitBase enBuesss = BP.Sys.Glo.GetBuessUnitEntityByEnName(nev.DoDoc);
+                BuessUnitBase enBuesss = BP.Sys.Base.Glo.GetBuessUnitEntityByEnName(nev.DoDoc);
                 enBuesss.WorkID = Int64.Parse(en.PKVal.ToString());
                 return enBuesss.DoIt();
             }
@@ -804,6 +810,7 @@ namespace BP.Sys
             doc = doc.Replace("@FK_Node", nev.FK_MapData.Replace("ND", ""));
             doc = doc.Replace("@FK_MapData", nev.FK_MapData);
             doc = doc.Replace("@WorkID", en.GetValStrByKey("OID", "@WorkID"));
+            doc = doc.Replace("@WebUser.OrgNo", BP.Web.WebUser.OrgNo);
 
             if (doc.Contains("@") == true)
             {
@@ -826,7 +833,7 @@ namespace BP.Sys
                 if (HttpContextHelper.Current != null)
                 {
                     /*如果是 bs 系统, 有可能参数来自于url ,就用url的参数替换它们 .*/
-                    //string url = BP.Sys.Glo.Request.RawUrl;
+                    //string url = BP.Sys.Base.Glo.Request.RawUrl;
                     //2019-07-25 zyt改造
                     string url = HttpContextHelper.RequestRawUrl;
                     if (url.IndexOf('?') != -1)
@@ -858,8 +865,7 @@ namespace BP.Sys
 
                 if (SystemConfig.IsBSsystem)
                 {
-                    /*是bs系统，并且是url参数执行类型.*/
-                    //string url = BP.Sys.Glo.Request.RawUrl;
+                    /*是bs系统，并且是url参数执行类型.*/                    
                     //2019-07-25 zyt改造
                     string url = HttpContextHelper.RequestRawUrl;
                     if (url.IndexOf('?') != -1)
@@ -890,7 +896,7 @@ namespace BP.Sys
                     if (SystemConfig.IsBSsystem)
                     {
                         /*在cs模式下自动获取*/
-                        //string host = BP.Sys.Glo.Request.Url.Host;
+                        //string host = BP.Sys.Base.Glo.Request.Url.Host;
                         //2019-07-25 zyt改造
                         string host = HttpContextHelper.RequestUrlHost;
                         if (doc.Contains("@AppPath"))
@@ -906,7 +912,7 @@ namespace BP.Sys
                         if (DataType.IsNullOrEmpty(cfgBaseUrl))
                         {
                             string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
-                            Log.DefaultLogWriteLineError(err);
+                            BP.DA.Log.DebugWriteError(err);
                             throw new Exception(err);
                         }
                         doc = cfgBaseUrl + doc;
@@ -932,8 +938,15 @@ namespace BP.Sys
             {
                 case EventDoType.SP:
                 case EventDoType.SQL:
+                    //SQLServer数据库中执行带参的存储过程
                     try
                     {
+                        if (nev.HisDoType == EventDoType.SP && doc.Contains("=") == true
+                        && SystemConfig.AppCenterDBType == DBType.MSSQL)
+                        {
+                            RunSQL(doc);
+                            return nev.MsgOK(en);
+                        }
                         if (DataType.IsNullOrEmpty(nev.FK_DBSrc) == false && nev.FK_DBSrc.Equals("local") == false)
                         {
                             SFDBSrc sfdb = new SFDBSrc(nev.FK_DBSrc);
@@ -949,7 +962,7 @@ namespace BP.Sys
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception(nev.MsgError(en) + " Error:" + ex.Message);
+                        throw new Exception(nev.MsgError(en));
                     }
                     break;
 
@@ -959,7 +972,7 @@ namespace BP.Sys
                     {
                         if (SystemConfig.IsBSsystem)
                         {
-                            //string host = BP.Sys.Glo.Request.Url.Host;
+                            //string host = BP.Sys.Base.Glo.Request.Url.Host;
                             //2019-07-25 zyt改造
                             string host = HttpContextHelper.RequestUrlHost;
                             if (myURL.Contains("@AppPath"))
@@ -973,7 +986,7 @@ namespace BP.Sys
                             if (DataType.IsNullOrEmpty(cfgBaseUrl))
                             {
                                 string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
-                                Log.DefaultLogWriteLineError(err);
+                                BP.DA.Log.DebugWriteError(err);
                                 throw new Exception(err);
                             }
                             myURL = cfgBaseUrl + myURL;
@@ -1023,7 +1036,7 @@ namespace BP.Sys
                 case EventDoType.EventBase: //执行事件类.
                     // 获取事件类.
                     string evName = doc.Clone() as string;
-                    BP.Sys.EventBase ev = null;
+                    BP.Sys.Base.EventBase ev = null;
                     try
                     {
                         ev = BP.En.ClassFactory.GetEventBase(evName);
@@ -1143,27 +1156,34 @@ namespace BP.Sys
                     //开始执行webserives.
                     break;
                 case EventDoType.WebApi:
-                    //接收返回值
-                    string postData = "";
-                    //获取webapi接口地址
-                    string apiUrl = doc.Clone() as string;
-                    if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
-                        apiUrl = apiUrl.Replace("@WebApiHost", SystemConfig.AppSettings["WebApiHost"]);
+                    try
+                    {
+                        //接收返回值
+                        string postData = "";
+                        //获取webapi接口地址
+                        string apiUrl = doc.Clone() as string;
+                        if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
+                            apiUrl = apiUrl.Replace("@WebApiHost", SystemConfig.AppSettings["WebApiHost"]);
 
-                    if (apiUrl.Contains("?") == true)
-                        apiUrl += "&WorkID=" + en.PKVal + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + WebUser.SID;
-                    else
-                        apiUrl += "?WorkID=" + en.PKVal + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + WebUser.SID;
+                        if (apiUrl.Contains("?") == true)
+                            apiUrl += "&WorkID=" + en.PKVal + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + WebUser.SID;
+                        else
+                            apiUrl += "?WorkID=" + en.PKVal + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + WebUser.SID;
 
-                    //api接口地址
-                    string apiHost = apiUrl.Split('?')[0];
-                    //api参数
-                    string apiParams = apiUrl.Split('?')[1];
-                    //参数替换
-                    apiParams = BP.Tools.PubGlo.DealExp(apiParams, en);
-                    //执行POST
-                    postData = BP.Tools.PubGlo.HttpPostConnect(apiHost, apiParams);
-                    return postData;
+                        //api接口地址
+                        string apiHost = apiUrl.Split('?')[0];
+                        //api参数
+                        string apiParams = apiUrl.Split('?')[1];
+                        //参数替换
+                        apiParams = BP.Tools.PubGlo.DealExp(apiParams, en);
+                        //执行POST
+                        postData = BP.Tools.PubGlo.HttpPostConnect(apiHost, apiParams);
+                        return postData;
+                    }catch(Exception ex)
+                    {
+                        throw new Exception("@" + nev.MsgError(en) + " Error:" + ex.Message);
+                    }
+                    break;
                 case EventDoType.SpecClass:
                     #region //执行dll文件中指定类的指定方法，added by liuxc,2016-01-16
                     string evdll = nev.MonthedDLL;

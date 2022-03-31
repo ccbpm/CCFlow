@@ -146,7 +146,7 @@ namespace BP.Sys
             return int.Parse(dt.Rows[0][0].ToString());
         }
 
-        public Entities DoQuery(Entities ens,string sql,string expPageSize,string pk,Attrs attrs, int count, int pageSize, int pageIdx, string orderBy, bool isDesc=false)
+        public Entities DoQuery(Entities ens, string sql, string expPageSize, string pk, Attrs attrs, int count, int pageSize, int pageIdx, string orderBy, bool isDesc = false)
         {
             DataTable dt = new DataTable();
             if (count == 0)
@@ -154,7 +154,7 @@ namespace BP.Sys
             int pageNum = 0;
             string orderBySQL = "";
             //如果没有加入排序字段，使用主键
-            if (DataType.IsNullOrEmpty(orderBy)==false)
+            if (DataType.IsNullOrEmpty(orderBy) == false)
             {
                 orderBy = pk;
                 string isDescStr = "";
@@ -169,7 +169,7 @@ namespace BP.Sys
                     pageSize = 10;
                 if (pageIdx == 0)
                     pageIdx = 1;
-                int top = pageSize * (pageIdx - 1)+1;
+                int top = pageSize * (pageIdx - 1) + 1;
                 int max = pageSize * pageIdx;
                 int myleftCount = count - (pageNum * pageSize);
                 string mysql = "";
@@ -181,21 +181,22 @@ namespace BP.Sys
                     case DBSrcType.MySQL:
                         mysql = sql + " LIMIT " + pageSize * (pageIdx - 1) + "," + pageSize;
                         break;
-                    case DBSrcType.PostgreSQL:    
+                    case DBSrcType.PostgreSQL:
+                    case DBSrcType.UX:
                     case DBSrcType.SQLServer:
                     default:
                         //获取主键的类型
                         Attr attr = attrs.GetAttrByKeyOfEn(pk);
-                       
+
                         //mysql = countSql;
                         //mysql = mysql.Substring(mysql.ToUpper().IndexOf("FROM "));
                         // mysql = "SELECT  "+ mainTable+pk + " "  + mysql;
-                        string pks = this.GenerPKsByTableWithPara(pk, attr.IsNum, expPageSize, pageSize * (pageIdx - 1), max,null);
+                        string pks = this.GenerPKsByTableWithPara(pk, attr.IsNum, expPageSize, pageSize * (pageIdx - 1), max, null);
 
                         if (pks == null)
-                            mysql =sql+ " AND 1=2";
+                            mysql = sql + " AND 1=2";
                         else
-                            mysql =sql+ " AND OID in(" + pks + ")";
+                            mysql = sql + " AND OID in(" + pks + ")";
                         break;
                 }
                 dt = this.RunSQLReturnTable(mysql);
@@ -208,7 +209,7 @@ namespace BP.Sys
             }
         }
 
-        public  Entities InitEntitiesByDataTable(Entities ens, DataTable dt, string[] fullAttrs)
+        public Entities InitEntitiesByDataTable(Entities ens, DataTable dt, string[] fullAttrs)
         {
             bool isUpper = false;
             if (this.DBSrcType == DBSrcType.Oracle
@@ -289,7 +290,7 @@ namespace BP.Sys
 
         }
 
-        public string GenerPKsByTableWithPara(string pk,bool isNum, string sql, int from, int to,Paras paras)
+        public string GenerPKsByTableWithPara(string pk, bool isNum, string sql, int from, int to, Paras paras)
         {
             DataTable dt = this.RunSQLReturnTable(sql, paras);
             string pks = "";
@@ -302,12 +303,12 @@ namespace BP.Sys
                 i++;
                 if (i > from)
                 {
-       
-                 
-                    if (isNum==true)
-                        pks+=int.Parse(dr[pk].ToString())+",";
+
+
+                    if (isNum == true)
+                        pks += int.Parse(dr[pk].ToString()) + ",";
                     else
-                        pks += "'"+ dr[pk].ToString() + "',";
+                        pks += "'" + dr[pk].ToString() + "',";
                     if (i >= to)
                         return pks.Substring(0, pks.Length - 1);
                 }
@@ -350,7 +351,7 @@ namespace BP.Sys
                             conn.Close();
                         if (cmd != null)
                             cmd.Dispose();
-                       // throw new Exception("RunSQL 错误，SQL=" + sql);
+                        // throw new Exception("RunSQL 错误，SQL=" + sql);
                         throw new Exception("RunSQL 错误，SQL=" + sql + " ex=" + ex.Message);
 
                     }
@@ -374,7 +375,7 @@ namespace BP.Sys
                             connOra.Close();
                         if (cmdOra != null)
                             cmdOra.Dispose();
-                        throw new Exception("RunSQL 错误，SQL=" + sql+" ex="+ex.Message );
+                        throw new Exception("RunSQL 错误，SQL=" + sql + " ex=" + ex.Message);
                     }
                 case Sys.DBSrcType.MySQL:
                     MySqlConnection connMySQL = new MySqlConnection(this.ConnString);
@@ -427,7 +428,7 @@ namespace BP.Sys
 
             return 0;
         }
-        public  void RunSQLs(string sql)
+        public void RunSQLs(string sql)
         {
             if (DataType.IsNullOrEmpty(sql))
                 return;
@@ -466,7 +467,7 @@ namespace BP.Sys
             return RunSQLReturnTable(runObj, new Paras());
         }
 
-        public string RunSQLReturnString(string runObj, string isNullasVal=null )
+        public string RunSQLReturnString(string runObj, string isNullasVal = null)
         {
             DataTable dt = RunSQLReturnTable(runObj);
             if (dt.Rows.Count == 0)
@@ -481,124 +482,132 @@ namespace BP.Sys
         /// <returns></returns>
         public DataTable RunSQLReturnTable(string runObj, Paras ps)
         {
-            switch (this.DBSrcType)
+            try
             {
-                case DBSrcType.Localhost: //如果是本机，直接在本机上执行.
-                    return DBAccess.RunSQLReturnTable(runObj, ps);
-                case DBSrcType.SQLServer: //如果是SQLServer.
-                    SqlConnection connSQL = new SqlConnection(this.ConnString);
-                    SqlDataAdapter ada = null;
-                    SqlParameter myParameter = null;
+                switch (this.DBSrcType)
+                {
+                    case DBSrcType.Localhost: //如果是本机，直接在本机上执行.
+                        return DBAccess.RunSQLReturnTable(runObj, ps);
+                    case DBSrcType.SQLServer: //如果是SQLServer.
+                        SqlConnection connSQL = new SqlConnection(this.ConnString);
+                        SqlDataAdapter ada = null;
+                        SqlParameter myParameter = null;
 
-                    try
-                    {
-                        connSQL.Open(); //打开.
-                        ada = new SqlDataAdapter(runObj, connSQL);
-                        ada.SelectCommand.CommandType = CommandType.Text;
-
-                        // 加入参数
-                        if (ps != null)
+                        try
                         {
-                            foreach (Para para in ps)
-                            {
-                                myParameter = new SqlParameter(para.ParaName, para.val);
-                                myParameter.Size = para.Size;
-                                ada.SelectCommand.Parameters.Add(myParameter);
-                            }
-                        }
+                            connSQL.Open(); //打开.
+                            ada = new SqlDataAdapter(runObj, connSQL);
+                            ada.SelectCommand.CommandType = CommandType.Text;
 
-                        DataTable oratb = new DataTable("otb");
-                        ada.Fill(oratb);
-                        ada.Dispose();
-                        connSQL.Close();
-                        return oratb;
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ada != null)
+                            // 加入参数
+                            if (ps != null)
+                            {
+                                foreach (Para para in ps)
+                                {
+                                    myParameter = new SqlParameter(para.ParaName, para.val);
+                                    myParameter.Size = para.Size;
+                                    ada.SelectCommand.Parameters.Add(myParameter);
+                                }
+                            }
+
+                            DataTable oratb = new DataTable("otb");
+                            ada.Fill(oratb);
                             ada.Dispose();
-                        if (connSQL.State == ConnectionState.Open)
                             connSQL.Close();
-                        throw new Exception("SQL=" + runObj + " Exception=" + ex.Message);
-                    }
-                case Sys.DBSrcType.Oracle:
-                    OracleConnection oracleConn = new OracleConnection(ConnString);
-                    OracleDataAdapter oracleAda = null;
-                    OracleParameter myParameterOrcl = null;
-
-                    try
-                    {
-                        oracleConn.Open();
-                        oracleAda = new OracleDataAdapter(runObj, oracleConn);
-                        oracleAda.SelectCommand.CommandType = CommandType.Text;
-
-                        if (ps != null)
-                        {
-                            // 加入参数
-                            foreach (Para para in ps)
-                            {
-                                myParameterOrcl = new OracleParameter(para.ParaName, para.val);
-                                myParameterOrcl.Size = para.Size;
-                                oracleAda.SelectCommand.Parameters.Add(myParameterOrcl);
-                            }
+                            return oratb;
                         }
+                        catch (Exception ex)
+                        {
+                            if (ada != null)
+                                ada.Dispose();
+                            if (connSQL.State == ConnectionState.Open)
+                                connSQL.Close();
+                            throw new Exception("SQL=" + runObj + " Exception=" + ex.Message);
+                        }
+                    case Sys.DBSrcType.Oracle:
+                        OracleConnection oracleConn = new OracleConnection(ConnString);
+                        OracleDataAdapter oracleAda = null;
+                        OracleParameter myParameterOrcl = null;
 
-                        DataTable oracleTb = new DataTable("otb");
-                        oracleAda.Fill(oracleTb);
-                        oracleAda.Dispose();
-                        oracleConn.Close();
-                        return oracleTb;
-                    }
-                    catch (Exception ex)
-                    {
-                        if (oracleAda != null)
+                        try
+                        {
+                            oracleConn.Open();
+                            oracleAda = new OracleDataAdapter(runObj, oracleConn);
+                            oracleAda.SelectCommand.CommandType = CommandType.Text;
+
+                            if (ps != null)
+                            {
+                                // 加入参数
+                                foreach (Para para in ps)
+                                {
+                                    myParameterOrcl = new OracleParameter(para.ParaName, para.val);
+                                    myParameterOrcl.Size = para.Size;
+                                    oracleAda.SelectCommand.Parameters.Add(myParameterOrcl);
+                                }
+                            }
+
+                            DataTable oracleTb = new DataTable("otb");
+                            oracleAda.Fill(oracleTb);
                             oracleAda.Dispose();
-                        if (oracleConn.State == ConnectionState.Open)
                             oracleConn.Close();
-                        throw new Exception("SQL=" + runObj + " Exception=" + ex.Message);
-                    }
-                case Sys.DBSrcType.MySQL:
-                    MySqlConnection mysqlConn = new MySqlConnection(ConnString);
-                    MySqlDataAdapter mysqlAda = null;
-                    MySqlParameter myParameterMysql = null;
-
-                    try
-                    {
-                        mysqlConn.Open();
-                        mysqlAda = new MySqlDataAdapter(runObj, mysqlConn);
-                        mysqlAda.SelectCommand.CommandType = CommandType.Text;
-
-                        if (ps != null)
+                            return oracleTb;
+                        }
+                        catch (Exception ex)
                         {
-                            // 加入参数
-                            foreach (Para para in ps)
+                            if (oracleAda != null)
+                                oracleAda.Dispose();
+                            if (oracleConn.State == ConnectionState.Open)
+                                oracleConn.Close();
+                            throw new Exception("SQL=" + runObj + " Exception=" + ex.Message);
+                        }
+                    case Sys.DBSrcType.MySQL:
+                        MySqlConnection mysqlConn = new MySqlConnection(ConnString);
+                        MySqlDataAdapter mysqlAda = null;
+                        MySqlParameter myParameterMysql = null;
+
+                        try
+                        {
+                            mysqlConn.Open();
+                            mysqlAda = new MySqlDataAdapter(runObj, mysqlConn);
+                            mysqlAda.SelectCommand.CommandType = CommandType.Text;
+
+                            if (ps != null)
                             {
-                                myParameterMysql = new MySqlParameter(para.ParaName, para.val);
-                                myParameterMysql.Size = para.Size;
-                                mysqlAda.SelectCommand.Parameters.Add(myParameterMysql);
+                                // 加入参数
+                                foreach (Para para in ps)
+                                {
+                                    myParameterMysql = new MySqlParameter(para.ParaName, para.val);
+                                    myParameterMysql.Size = para.Size;
+                                    mysqlAda.SelectCommand.Parameters.Add(myParameterMysql);
+                                }
                             }
+
+                            DataTable mysqlTb = new DataTable("otb");
+                            mysqlAda.Fill(mysqlTb);
+                            mysqlAda.Dispose();
+                            mysqlConn.Close();
+                            return mysqlTb;
+                        }
+                        catch (Exception ex)
+                        {
+                            if (mysqlAda != null)
+                                mysqlAda.Dispose();
+                            if (mysqlConn.State == ConnectionState.Open)
+                                mysqlConn.Close();
+                            throw new Exception("SQL=" + runObj + " Exception=" + ex.Message);
                         }
 
-                        DataTable mysqlTb = new DataTable("otb");
-                        mysqlAda.Fill(mysqlTb);
-                        mysqlAda.Dispose();
-                        mysqlConn.Close();
-                        return mysqlTb;
-                    }
-                    catch (Exception ex)
-                    {
-                        if (mysqlAda != null)
-                            mysqlAda.Dispose();
-                        if (mysqlConn.State == ConnectionState.Open)
-                            mysqlConn.Close();
-                        throw new Exception("SQL=" + runObj + " Exception=" + ex.Message);
-                    }
-
-                default:
-                    break;
+                    default:
+                        break;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("err@从自定义数据源中获取数据失败，" + this.No + " , " + this.Name + " 异常信息:" + ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
             }
 
-            return null;
         }
 
         public DataTable RunSQLReturnTable(string sql, int startRecord, int recordCount)
@@ -756,6 +765,7 @@ namespace BP.Sys
             {
                 case DBType.MSSQL:
                 case DBType.PostgreSQL:
+                case DBType.UX:
                     return string.Format("SELECT (CASE s.xtype WHEN 'U' THEN 'TABLE' WHEN 'V' THEN 'VIEW' WHEN 'P' THEN 'PROCEDURE' ELSE 'OTHER' END) OTYPE FROM sysobjects s WHERE s.name = '{0}'", objName);
                 case DBType.Oracle:
                     return string.Format("SELECT uo.OBJECT_TYPE OTYPE FROM user_objects uo WHERE uo.OBJECT_NAME = '{0}'", objName.ToUpper());
@@ -868,11 +878,11 @@ namespace BP.Sys
             if (this.No == "local")
                 return "本地连接不需要测试.";
 
-            if (this.DBSrcType == Sys.DBSrcType.Localhost)
+            if (this.DBSrcType == BP.Sys.DBSrcType.Localhost)
                 return "@在该系统中只能有一个本地连接.";
 
             string dsn = "";
-            if (this.DBSrcType == Sys.DBSrcType.SQLServer)
+            if (this.DBSrcType == BP.Sys.DBSrcType.SQLServer)
             {
                 try
                 {
@@ -888,7 +898,7 @@ namespace BP.Sys
                 }
             }
 
-            if (this.DBSrcType == Sys.DBSrcType.Oracle)
+            if (this.DBSrcType == BP.Sys.DBSrcType.Oracle)
             {
                 try
                 {
@@ -907,7 +917,7 @@ namespace BP.Sys
                 }
             }
 
-            if (this.DBSrcType == Sys.DBSrcType.MySQL)
+            if (this.DBSrcType == BP.Sys.DBSrcType.MySQL)
             {
                 try
                 {
@@ -924,7 +934,7 @@ namespace BP.Sys
                 }
             }
 
-            if (this.DBSrcType == Sys.DBSrcType.WebServices)
+            if (this.DBSrcType == BP.Sys.DBSrcType.WebServices)
             {
                 string url = this.ConnString;
                 try
@@ -951,24 +961,27 @@ namespace BP.Sys
         {
             var sql = new StringBuilder();
             var dbType = this.DBSrcType;
-            if (dbType == Sys.DBSrcType.Localhost)
+            if (dbType == BP.Sys.DBSrcType.Localhost)
             {
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
-                        dbType = Sys.DBSrcType.SQLServer;
+                        dbType = BP.Sys.DBSrcType.SQLServer;
                         break;
                     case DBType.Oracle:
-                        dbType = Sys.DBSrcType.Oracle;
+                        dbType = BP.Sys.DBSrcType.Oracle;
                         break;
                     case DBType.MySQL:
-                        dbType = Sys.DBSrcType.MySQL;
+                        dbType = BP.Sys.DBSrcType.MySQL;
                         break;
                     case DBType.Informix:
-                        dbType = Sys.DBSrcType.Informix;
+                        dbType = BP.Sys.DBSrcType.Informix;
                         break;
                     case DBType.PostgreSQL:
-                        dbType = Sys.DBSrcType.PostgreSQL;
+                        dbType = BP.Sys.DBSrcType.PostgreSQL;
+                        break;
+                    case DBType.UX:
+                        dbType = BP.Sys.DBSrcType.UX;
                         break;
                     default:
                         throw new Exception("没有涉及到的连接测试类型...");
@@ -999,7 +1012,7 @@ namespace BP.Sys
                     sql.AppendLine("FROM");
                     sql.AppendLine("    information_schema.tables");
                     sql.AppendLine("WHERE");
-                    sql.AppendLine(string.Format("    table_schema = '{0}'", this.DBSrcType == Sys.DBSrcType.Localhost ? DBAccess.GetAppCenterDBConn.Database : this.DBName));
+                    sql.AppendLine(string.Format("    table_schema = '{0}'", this.DBSrcType == BP.Sys.DBSrcType.Localhost ? DBAccess.GetAppCenterDBConn.Database : this.DBName));
                     sql.AppendLine("        AND table_type = 'BASE TABLE'");
                     sql.AppendLine("ORDER BY table_name;");
                     break;
@@ -1007,13 +1020,14 @@ namespace BP.Sys
                     sql.AppendLine("");
                     break;
                 case Sys.DBSrcType.PostgreSQL:
+                case Sys.DBSrcType.UX:
                     sql.AppendLine("SELECT ");
                     sql.AppendLine("    table_name No,");
                     sql.AppendLine("    table_name Name");
                     sql.AppendLine("FROM");
                     sql.AppendLine("    information_schema.tables");
                     sql.AppendLine("WHERE");
-                    sql.AppendLine(string.Format("    table_schema = '{0}'", this.DBSrcType == Sys.DBSrcType.Localhost ? DBAccess.GetAppCenterDBConn.Database : this.DBName));
+                    sql.AppendLine(string.Format("    table_schema = '{0}'", this.DBSrcType == BP.Sys.DBSrcType.Localhost ? DBAccess.GetAppCenterDBConn.Database : this.DBName));
                     sql.AppendLine("        AND table_type = 'BASE TABLE'");
                     sql.AppendLine("ORDER BY table_name;");
                     break;
@@ -1057,24 +1071,27 @@ namespace BP.Sys
             sql.Clear();
 
             var dbType = this.DBSrcType;
-            if (dbType == Sys.DBSrcType.Localhost)
+            if (dbType == BP.Sys.DBSrcType.Localhost)
             {
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
-                        dbType = Sys.DBSrcType.SQLServer;
+                        dbType = BP.Sys.DBSrcType.SQLServer;
                         break;
                     case DBType.Oracle:
-                        dbType = Sys.DBSrcType.Oracle;
+                        dbType = BP.Sys.DBSrcType.Oracle;
                         break;
                     case DBType.MySQL:
-                        dbType = Sys.DBSrcType.MySQL;
+                        dbType = BP.Sys.DBSrcType.MySQL;
                         break;
                     case DBType.Informix:
-                        dbType = Sys.DBSrcType.Informix;
+                        dbType = BP.Sys.DBSrcType.Informix;
                         break;
                     case DBType.PostgreSQL:
-                        dbType = Sys.DBSrcType.PostgreSQL;
+                        dbType = BP.Sys.DBSrcType.PostgreSQL;
+                        break;
+                    case DBType.UX:
+                        dbType = BP.Sys.DBSrcType.UX;
                         break;
                     default:
                         throw new Exception("没有涉及到的连接测试类型...");
@@ -1139,7 +1156,7 @@ namespace BP.Sys
                     sql.AppendLine("FROM");
                     sql.AppendLine("    information_schema.tables");
                     sql.AppendLine("WHERE");
-                    sql.AppendLine(string.Format("    table_schema = '{0}'", this.DBSrcType == Sys.DBSrcType.Localhost ? DBAccess.GetAppCenterDBConn.Database : this.DBName));
+                    sql.AppendLine(string.Format("    table_schema = '{0}'", this.DBSrcType == BP.Sys.DBSrcType.Localhost ? DBAccess.GetAppCenterDBConn.Database : this.DBName));
                     sql.AppendLine("        AND (table_type = 'BASE TABLE'");
                     sql.AppendLine("        OR table_type = 'VIEW')");
                     //   sql.AppendLine("       AND (table_name NOT LIKE 'ND%'");
@@ -1153,6 +1170,7 @@ namespace BP.Sys
                     sql.AppendLine("");
                     break;
                 case Sys.DBSrcType.PostgreSQL:
+                case Sys.DBSrcType.UX:
                     sql.AppendLine("SELECT ");
                     sql.AppendLine("    table_name AS No,");
                     sql.AppendLine("    CONCAT('[',");
@@ -1169,7 +1187,7 @@ namespace BP.Sys
                     sql.AppendLine("FROM");
                     sql.AppendLine("    information_schema.tables");
                     sql.AppendLine("WHERE");
-                    sql.AppendLine(string.Format("    table_schema = '{0}'", this.DBSrcType == Sys.DBSrcType.Localhost ? DBAccess.GetAppCenterDBConn.Database : this.DBName));
+                    sql.AppendLine(string.Format("    table_schema = '{0}'", this.DBSrcType == BP.Sys.DBSrcType.Localhost ? DBAccess.GetAppCenterDBConn.Database : this.DBName));
                     sql.AppendLine("        AND (table_type = 'BASE TABLE'");
                     sql.AppendLine("        OR table_type = 'VIEW')");
                     //   sql.AppendLine("       AND (table_name NOT LIKE 'ND%'");
@@ -1280,21 +1298,21 @@ namespace BP.Sys
             System.Data.Common.DbConnection conn = null;
 
             var dbType = this.DBSrcType;
-            if (dbType == Sys.DBSrcType.Localhost)
+            if (dbType == BP.Sys.DBSrcType.Localhost)
             {
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
-                        dbType = Sys.DBSrcType.SQLServer;
+                        dbType = BP.Sys.DBSrcType.SQLServer;
                         break;
                     case DBType.Oracle:
-                        dbType = Sys.DBSrcType.Oracle;
+                        dbType = BP.Sys.DBSrcType.Oracle;
                         break;
                     case DBType.MySQL:
-                        dbType = Sys.DBSrcType.MySQL;
+                        dbType = BP.Sys.DBSrcType.MySQL;
                         break;
                     case DBType.Informix:
-                        dbType = Sys.DBSrcType.Informix;
+                        dbType = BP.Sys.DBSrcType.Informix;
                         break;
                     default:
                         throw new Exception("没有涉及到的连接测试类型...");
@@ -1371,21 +1389,21 @@ namespace BP.Sys
         public void Rename(string objType, string oldName, string newName, string tableName = null)
         {
             var dbType = this.DBSrcType;
-            if (dbType == Sys.DBSrcType.Localhost)
+            if (dbType == BP.Sys.DBSrcType.Localhost)
             {
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
-                        dbType = Sys.DBSrcType.SQLServer;
+                        dbType = BP.Sys.DBSrcType.SQLServer;
                         break;
                     case DBType.Oracle:
-                        dbType = Sys.DBSrcType.Oracle;
+                        dbType = BP.Sys.DBSrcType.Oracle;
                         break;
                     case DBType.MySQL:
-                        dbType = Sys.DBSrcType.MySQL;
+                        dbType = BP.Sys.DBSrcType.MySQL;
                         break;
                     case DBType.Informix:
-                        dbType = Sys.DBSrcType.Informix;
+                        dbType = BP.Sys.DBSrcType.Informix;
                         break;
                     default:
                         throw new Exception("@没有涉及到的连接测试类型。");
@@ -1464,21 +1482,21 @@ namespace BP.Sys
         public string GetIsNullInSQL(string expression, string isNullBack)
         {
             var dbType = this.DBSrcType;
-            if (dbType == Sys.DBSrcType.Localhost)
+            if (dbType == BP.Sys.DBSrcType.Localhost)
             {
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
-                        dbType = Sys.DBSrcType.SQLServer;
+                        dbType = BP.Sys.DBSrcType.SQLServer;
                         break;
                     case DBType.Oracle:
-                        dbType = Sys.DBSrcType.Oracle;
+                        dbType = BP.Sys.DBSrcType.Oracle;
                         break;
                     case DBType.MySQL:
-                        dbType = Sys.DBSrcType.MySQL;
+                        dbType = BP.Sys.DBSrcType.MySQL;
                         break;
                     case DBType.Informix:
-                        dbType = Sys.DBSrcType.Informix;
+                        dbType = BP.Sys.DBSrcType.Informix;
                         break;
                     default:
                         throw new Exception("没有涉及到的连接测试类型...");
@@ -1493,6 +1511,7 @@ namespace BP.Sys
                 case Sys.DBSrcType.MySQL:
                     return " IFNULL(" + expression + "," + isNullBack + ")";
                 case Sys.DBSrcType.PostgreSQL:
+                case Sys.DBSrcType.UX:
                     return " COALESCE(" + expression + "," + isNullBack + ")";
                 default:
                     throw new Exception("GetIsNullInSQL未涉及的数据库类型");
@@ -1510,21 +1529,21 @@ namespace BP.Sys
             var sql = new StringBuilder();
 
             var dbType = this.DBSrcType;
-            if (dbType == Sys.DBSrcType.Localhost)
+            if (dbType == BP.Sys.DBSrcType.Localhost)
             {
                 switch (SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
-                        dbType = Sys.DBSrcType.SQLServer;
+                        dbType = BP.Sys.DBSrcType.SQLServer;
                         break;
                     case DBType.Oracle:
-                        dbType = Sys.DBSrcType.Oracle;
+                        dbType = BP.Sys.DBSrcType.Oracle;
                         break;
                     case DBType.MySQL:
-                        dbType = Sys.DBSrcType.MySQL;
+                        dbType = BP.Sys.DBSrcType.MySQL;
                         break;
                     case DBType.Informix:
-                        dbType = Sys.DBSrcType.Informix;
+                        dbType = BP.Sys.DBSrcType.Informix;
                         break;
                     default:
                         throw new Exception("没有涉及到的连接测试类型...");
@@ -1658,7 +1677,7 @@ namespace BP.Sys
         //added by liuxc,2015-11-10,新建修改时，判断只能加一个本地主库数据源
         protected override bool beforeUpdateInsertAction()
         {
-            if (this.No != "local" && this.DBSrcType == Sys.DBSrcType.Localhost)
+            if (this.No != "local" && this.DBSrcType == BP.Sys.DBSrcType.Localhost)
                 throw new Exception("@在该系统中只能有一个本地连接，请选择其他数据源类型。");
 
             //测试数据库连接.

@@ -84,7 +84,7 @@ namespace BP.WF.Template
                 map.IndexField = FlowOrgAttr.FlowNo;
 
                 map.AddTBStringPK(FlowOrgAttr.FlowNo,null,"流程",true,true,1,100,100);
-                map.AddDDLEntitiesPK(FlowOrgAttr.OrgNo, null, "到组织", new BP.WF.Port.Admin2.Orgs(),
+                map.AddDDLEntitiesPK(FlowOrgAttr.OrgNo, null, "到组织", new BP.WF.Port.Admin2Group.Orgs(),
                     true);
 
                 this._enMap = map;

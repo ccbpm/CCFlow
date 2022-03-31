@@ -65,6 +65,10 @@ namespace BP.Sys
         /// </summary>
         KingBase=6,
         /// <summary>
+        /// 优炫
+        /// </summary>
+        UX=9,
+        /// <summary>
         /// WebService数据源
         /// </summary>
         WebServices = 100,

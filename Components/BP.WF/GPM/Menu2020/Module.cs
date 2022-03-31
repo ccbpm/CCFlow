@@ -119,15 +119,17 @@ namespace BP.GPM.Menu2020
         public Module()
         {
         }
+
         /// <summary>
         /// 模块
         /// </summary>
-        /// <param name="mypk"></param>
+        /// <param name="no"></param>
         public Module(string no)
         {
             this.No = no;
             this.Retrieve();
         }
+
         /// <summary>
         /// EnMap
         /// </summary>
@@ -137,11 +139,9 @@ namespace BP.GPM.Menu2020
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_Module");
-                map.DepositaryOfEntity = Depositary.None;
-                map.EnDesc = "模块";
-                map.EnType = EnType.App;
-                map.IsAutoGenerNo = false;
+                Map map = new Map("GPM_Module", "模块");
+                map.setEnType(EnType.App);
+                map.setIsAutoGenerNo(  false);
 
                 map.AddTBStringPK(ModuleAttr.No, null, "编号", true, true, 1, 200, 20);
                 map.AddTBString(ModuleAttr.Name, null, "名称", true, false, 0, 300, 20);
@@ -224,9 +224,9 @@ namespace BP.GPM.Menu2020
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 return base.RetrieveAll("Idx");
 
-            //集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
-            if (BP.Sys.SystemConfig.GroupStationModel == 1)
-                return base.RetrieveAll("Idx");
+            ////集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
+            //if (BP.Sys.SystemConfig.GroupStationModel == 1)
+            //    return base.RetrieveAll("Idx");
 
             //按照orgNo查询.
             return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, "Idx");

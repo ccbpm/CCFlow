@@ -430,7 +430,7 @@ namespace BP.WF.Template
                 map.AddTBString(MapDataAttr.UrlExt, null, "URL连接", true, false, 0, 500, 20, true);
 
                 //表单的运行类型.
-                map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型",true, false, MapDataAttr.FrmType);
+                map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FoolForm, "表单类型",true, false, MapDataAttr.FrmType);
 
                 //数据源.
                // map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);

@@ -77,8 +77,8 @@ namespace BP.CCBill
             DataSet ds = new DataSet();
 
             #region 查询显示的列
-            MapAttrs mapattrs = new MapAttrs();
-            mapattrs.Retrieve(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.Idx);
+            MapAttrs mattrs = new MapAttrs();
+            mattrs.Retrieve(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.Idx);
 
             DataRow row = null;
             DataTable dt = new DataTable("Attrs");
@@ -91,7 +91,7 @@ namespace BP.CCBill
             //设置标题、单据号位于开始位置
 
 
-            foreach (MapAttr attr in mapattrs)
+            foreach (MapAttr attr in mattrs)
             {
                 string searchVisable = attr.atPara.GetValStrByKey("SearchVisable");
                 if (searchVisable == "0")

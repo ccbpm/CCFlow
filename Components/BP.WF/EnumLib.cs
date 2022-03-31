@@ -54,9 +54,9 @@ namespace BP.WF
         SDKFrm = 4
     }
     /// <summary>
-    /// 子流程结束处理规则
+    /// 所有子流程结束，父流程处理规则
     /// </summary>
-    public enum SubFlowOver
+    public enum AllSubFlowOverRole
     {
         /// <summary>
         /// 无
@@ -70,6 +70,47 @@ namespace BP.WF
         /// 结束父流程
         /// </summary>
         OverParentFlow
+    }
+    /// <summary>
+    /// 根据子流程运行模式控制父流程的运行到下一个节点/结束
+    /// </summary>
+    public enum SubFlowRunModel
+    {
+        /// <summary>
+        /// 无，不设置
+        /// </summary>
+        None,
+        /// <summary>
+        /// 子流程结束
+        /// </summary>
+        FlowOver,
+        /// <summary>
+        /// 子流程运行到指定节点
+        /// </summary>
+        SpecifiedNodes
+
+    }
+    /// <summary>
+    /// 子流程数据反填父流程数据规则
+    /// </summary>
+    public enum BackCopyRole
+    {
+        /// <summary>
+        /// 不反填
+        /// </summary>
+        None,
+        /// <summary>
+        /// 字段自动匹配
+        /// </summary>
+        AutoFieldMatch,
+        /// <summary>
+        /// 按照设置的格式匹配
+        /// </summary>
+        FollowSetFormat,
+        /// <summary>
+        /// 混合模式
+        /// </summary>
+        MixedMode
     }
     /// <summary>
     /// 会签模式
@@ -444,11 +485,11 @@ namespace BP.WF
         /// <summary>
         /// 挂起
         /// </summary>
-        HungUp = 15,
+        Hungup = 15,
         /// <summary>
         /// 取消挂起
         /// </summary>
-        UnHungUp = 16,
+        UnHungup = 16,
         /// <summary>
         /// 强制移交
         /// </summary>
@@ -506,6 +547,10 @@ namespace BP.WF
         /// </summary>
         HuiQian = 30,
         /// <summary>
+        /// 调整流程
+        /// </summary>
+        Adjust = 31,
+        /// <summary>
         /// 信息
         /// </summary>
         Info = 100
@@ -513,7 +558,7 @@ namespace BP.WF
     /// <summary>
     /// 挂起方式
     /// </summary>
-    public enum HungUpWay
+    public enum HungupWay
     {
         /// <summary>
         /// 永久挂起
@@ -704,24 +749,7 @@ namespace BP.WF
         /// </summary>
         ByAuto
     }
-    /// <summary>
-    /// 流程应用类型
-    /// </summary>
-    public enum FlowAppType
-    {
-        /// <summary>
-        /// 普通的
-        /// </summary>
-        Normal,
-        /// <summary>
-        /// 工程类
-        /// </summary>
-        PRJ,
-        /// <summary>
-        /// 公文流程
-        /// </summary>
-        DocFlow
-    }
+    
     /// <summary>
     /// 子线程启动方式
     /// </summary>
@@ -908,7 +936,11 @@ namespace BP.WF
         /// <summary>
         /// 触发式启动
         /// </summary>
-        WF_TaskTableInsertModel
+        WF_TaskTableInsertModel,
+        /// <summary>
+        /// 指定人员按时启动高级模式
+        /// </summary>
+        SpecEmpAdv
     }
     /// <summary>
     /// 保存模式
@@ -1089,9 +1121,19 @@ namespace BP.WF
         /// </summary>
         ByAPIUrl = 45,
         /// <summary>
+        /// 发送人的上级部门的负责人
+        /// 就是找上级领导主管.
+        /// </summary>
+        BySenderParentDeptLeader = 46,
+        /// <summary>
+        /// 发送人上级部门指定的岗位
+        /// </summary>
+        BySenderParentDeptStations = 47,
+        /// <summary>
         /// 外部用户
         /// </summary>
         ByGuest = 51,
+
         /// <summary>
         /// 按照ccflow的BPM模式处理
         /// </summary>
@@ -1267,7 +1309,7 @@ namespace BP.WF
         /// <summary>
         /// 挂起
         /// </summary>
-        HungUp = 4,
+        Hungup = 4,
         /// <summary>
         /// 退回
         /// </summary>
@@ -1399,10 +1441,7 @@ namespace BP.WF
         /// 傻瓜表单.
         /// </summary>
         FoolForm = 0,
-        /// <summary>
-        /// 自由表单.
-        /// </summary>
-        FreeForm = 1,
+         
         /// <summary>
         /// 嵌入式表单.
         /// </summary>
@@ -1559,5 +1598,87 @@ namespace BP.WF
         /// 中间节点参与
         /// </summary>
         MiddleNodeJoin
+    }
+
+    /// <summary>
+    /// 工作提醒规则
+    /// </summary>
+    public enum CHAlertRole
+    {
+        /// <summary>
+        /// 不提醒
+        /// </summary>
+        None,
+        /// <summary>
+        /// 一天一次
+        /// </summary>
+        OneDayOneTime,
+        /// <summary>
+        /// 一天两次
+        /// </summary>
+        OneDayTowTime
+    }
+    /// <summary>
+    /// 工作提醒方式
+    /// </summary>
+    public enum CHAlertWay
+    {
+        /// <summary>
+        /// 邮件
+        /// </summary>
+        ByEmail,
+        /// <summary>
+        /// 短消息
+        /// </summary>
+        BySMS,
+        /// <summary>
+        /// 即时通讯
+        /// </summary>
+        ByCCIM
+    }
+
+    /// <summary>
+    /// 运行平台
+    /// </summary>
+    public enum Plant
+    {
+        CCFlow,
+        JFlow
+    }
+    /// <summary>
+    /// 周末休息类型
+    /// </summary>
+    public enum WeekResetType
+    {
+        /// <summary>
+        /// 双休
+        /// </summary>
+        Double,
+        /// <summary>
+        /// 单休
+        /// </summary>
+        Single,
+        /// <summary>
+        /// 不
+        /// </summary>
+        None
+    }
+    /// <summary>
+    /// 用户信息显示格式
+    /// </summary>
+    public enum UserInfoShowModel
+    {
+        /// <summary>
+        /// 用户ID,用户名
+        /// </summary>
+        UserIDUserName = 0,
+        /// <summary>
+        /// 用户ID
+        /// </summary>
+        UserIDOnly = 1,
+        /// <summary>
+        /// 用户名
+        /// </summary>
+        UserNameOnly = 2
     }
 }

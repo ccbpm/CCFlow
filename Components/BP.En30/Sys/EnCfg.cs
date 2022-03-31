@@ -5,6 +5,7 @@ using BP.En;
 using BP;
 using BP.Web;
 using System.IO;
+using BP.Difference;
 
 namespace BP.Sys
 {
@@ -467,9 +468,12 @@ namespace BP.Sys
                 map.AddTBString(EnCfgAttr.UI, null, "UI设置", true, false, 0, 2000, 60);
 
                 //字段颜色设置.
-                map.AddTBString(EnCfgAttr.ColorSet, null, "颜色设置", true, false, 0, 500, 60);
+                map.AddTBString(EnCfgAttr.ColorSet, null, "颜色设置", true, false, 0, 500, 60,true);
+                msg = "对字段的颜色处理";
+                msg += "\t\n @Age:From=0,To=18,Color=green;From=19,To=30,Color=red";
+                map.SetHelperAlert(EnCfgAttr.ColorSet, msg);
                 //对字段求总和平均.
-                map.AddTBString(EnCfgAttr.FieldSet, null, "字段求和/平均设置", true, false, 0, 500, 60);
+                map.AddTBString(EnCfgAttr.FieldSet, null, "字段求和/平均设置", true, false, 0, 500, 60,true);
 
 
                 //字段格式化函数.

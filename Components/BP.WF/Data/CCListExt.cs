@@ -26,7 +26,7 @@ namespace BP.WF.Data
             {
                 //@sly 这里去掉了业务逻辑.
                 if (value == CCSta.Read)
-                    this.ReadDT = DataType.CurrentDataTime;
+                    this.ReadDT = DataType.CurrentDateTime;
                 this.SetValByKey(CCListAttr.Sta, (int)value);
             }
         }
@@ -375,13 +375,13 @@ namespace BP.WF.Data
 
                 map.DTSearchLable = "抄送日期";
                 map.DTSearchKey = CCListAttr.RDT;
-                map.DTSearchWay = Sys.DTSearchWay.ByDate;
+                map.DTSearchWay = BP.Sys.DTSearchWay.ByDate;
 
                 map.AddSearchAttr(CCListAttr.Sta);
 
                 //增加隐藏条件.
-                if (BP.Sys.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.Single
-                    || BP.Sys.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.GroupInc)
+                if (BP.Sys.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.Single
+                    || BP.Sys.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.GroupInc)
                 {
                     map.AddHidden(CCListAttr.CCTo, "=", "@WebUser.No");
                 }

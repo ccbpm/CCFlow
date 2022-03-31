@@ -56,11 +56,8 @@ namespace BP.GPM.Menu2020
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("GPM_Menu");  // 类的基本属性.
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "标签容器";
-                map.EnType = EnType.Sys;
+                Map map = new Map("GPM_Menu", "标签容器");  // 类的基本属性.
+                map.setEnType(EnType.Sys);
 
                 map.AddTBStringPK(MenuAttr.No, null, "编号", false, false, 1, 90, 50);
                 map.AddTBString(MenuAttr.Name, null, "名称", true, false, 0, 300, 200, true);

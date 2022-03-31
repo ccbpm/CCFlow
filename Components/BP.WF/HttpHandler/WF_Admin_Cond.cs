@@ -121,7 +121,7 @@ namespace BP.WF.HttpHandler
             string mypk = this.FK_MainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.WorkCheck.ToString();
 
             Cond cond = new Cond();
-            cond.MyPK = mypk;
+            cond.setMyPK(mypk);
             cond.RetrieveFromDBSources();
 
             return cond.ToJson();
@@ -147,7 +147,7 @@ namespace BP.WF.HttpHandler
             //  CondAttr.ToNodeID, toNodeID,
             //   CondAttr.CondType, (int)condTypeEnum);
 
-            cond.MyPK = mypk;
+            cond.setMyPK(mypk);
             cond.HisDataFrom = ConnDataFrom.WorkCheck;
 
             cond.FK_Node = this.FK_MainNode;
@@ -203,7 +203,7 @@ namespace BP.WF.HttpHandler
             string mypk = this.FK_MainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.Url.ToString();
 
             Cond cond = new Cond();
-            cond.MyPK = mypk;
+            cond.setMyPK(mypk);
             cond.RetrieveFromDBSources();
 
             return cond.ToJson();
@@ -229,7 +229,7 @@ namespace BP.WF.HttpHandler
             //  CondAttr.ToNodeID, toNodeID,
             //   CondAttr.CondType, (int)condTypeEnum);
 
-            cond.MyPK = mypk;
+            cond.setMyPK(mypk);
             cond.HisDataFrom = ConnDataFrom.Url;
 
             cond.FK_Node = this.FK_MainNode;
@@ -286,7 +286,7 @@ namespace BP.WF.HttpHandler
             string mypk = this.FK_MainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.WebApi.ToString();
 
             Cond cond = new Cond();
-            cond.MyPK = mypk;
+            cond.setMyPK(mypk);
             cond.RetrieveFromDBSources();
 
             return cond.ToJson();
@@ -306,7 +306,7 @@ namespace BP.WF.HttpHandler
 
             Cond cond = new Cond();
 
-            cond.MyPK = mypk;
+            cond.setMyPK(mypk);
             cond.HisDataFrom = ConnDataFrom.WebApi;
 
             cond.FK_Node = this.GetRequestValInt("FK_MainNode");
@@ -373,7 +373,7 @@ namespace BP.WF.HttpHandler
 
             //增加字段集合.
             string sql = "";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 sql = "SELECT KeyOfEn as No, KeyOfEn||' - '||Name as Name FROM Sys_MapAttr WHERE FK_MapData='ND" + int.Parse(nd.FK_Flow) + "Rpt'";
                 sql += " AND KeyOfEn Not IN (" + noteIn + ") ";
@@ -410,7 +410,7 @@ namespace BP.WF.HttpHandler
         {
             //字段属性.
             MapAttr attr = new MapAttr();
-            attr.MyPK = "ND" + int.Parse(this.FK_Flow) + "Rpt_" + this.KeyOfEn;
+            attr.setMyPK("ND" + int.Parse(this.FK_Flow) + "Rpt_" + this.KeyOfEn);
             attr.Retrieve();
             return AttrCond(attr);
         }
@@ -480,19 +480,19 @@ namespace BP.WF.HttpHandler
             {
                 case Template.CondType.Flow:
                 case Template.CondType.Node:
-                    cond.MyPK = DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.setMyPK(DBAccess.GenerOID().ToString());   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
                     cond.Insert();
                     //DBAccess.RunSQL(sql);
                     break;
                 case Template.CondType.Dir:
-                    // cond.MyPK = cond.NodeID +"_"+ this.Request.QueryString["ToNodeID"]+"_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
-                    cond.MyPK = DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    // cond.setMyPK(cond.NodeID +"_"+ this.Request.QueryString["ToNodeID"]+"_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.setMyPK(DBAccess.GenerOID().ToString());   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
                     cond.ToNodeID = toNodeID;
                     cond.Insert();
                     //DBAccess.RunSQL(sql);
                     break;
                 case Template.CondType.SubFlow: //启动子流程.
-                    cond.MyPK = DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.setMyPK(DBAccess.GenerOID().ToString());   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
                     cond.ToNodeID = toNodeID;
                     cond.Insert();
                     //DBAccess.RunSQL(sql);
@@ -612,16 +612,16 @@ namespace BP.WF.HttpHandler
             {
                 case Template.CondType.Flow:
                 case Template.CondType.Node:
-                    cond.MyPK = DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.setMyPK(DBAccess.GenerOID().ToString());   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
                     cond.Insert();
                     break;
                 case Template.CondType.Dir:
-                    cond.MyPK = DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.setMyPK(DBAccess.GenerOID().ToString());   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
                     cond.ToNodeID = toNodeID;
                     cond.Insert();
                     break;
                 case Template.CondType.SubFlow: //启动子流程.
-                    cond.MyPK = DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.setMyPK(DBAccess.GenerOID().ToString());   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
                     cond.ToNodeID = toNodeID;
                     cond.Insert();
                     break;
@@ -635,7 +635,7 @@ namespace BP.WF.HttpHandler
         {
             //字段属性.
             MapAttr attr = new MapAttr();
-            attr.MyPK = this.FrmID + "_" + this.KeyOfEn;
+            attr.setMyPK(this.FrmID + "_" + this.KeyOfEn);
             attr.Retrieve();
             return AttrCond(attr);
         }
@@ -653,42 +653,52 @@ namespace BP.WF.HttpHandler
             }
 
             #region 增加操作符 number.
-            if (attr.IsNum)
+            if (attr.IsNum )
             {
                 DataTable dtOperNumber = new DataTable();
                 dtOperNumber.TableName = "Opers";
                 dtOperNumber.Columns.Add("No", typeof(string));
                 dtOperNumber.Columns.Add("Name", typeof(string));
 
-                DataRow dr = dtOperNumber.NewRow();
-                dr["No"] = "dengyu";
-                dr["Name"] = "= 等于";
-                dtOperNumber.Rows.Add(dr);
+                if (attr.MyDataType == BP.DA.DataType.AppBoolean)
+                {
+                    DataRow dr = dtOperNumber.NewRow();
+                    dr["No"] = "dengyu";
+                    dr["Name"] = "= 等于";
+                    dtOperNumber.Rows.Add(dr);
+                }
+                else
+                {
+                    DataRow dr = dtOperNumber.NewRow();
+                    dr["No"] = "dengyu";
+                    dr["Name"] = "= 等于";
+                    dtOperNumber.Rows.Add(dr);
 
-                dr = dtOperNumber.NewRow();
-                dr["No"] = "dayu";
-                dr["Name"] = " > 大于";
-                dtOperNumber.Rows.Add(dr);
+                    dr = dtOperNumber.NewRow();
+                    dr["No"] = "dayu";
+                    dr["Name"] = " > 大于";
+                    dtOperNumber.Rows.Add(dr);
 
-                dr = dtOperNumber.NewRow();
-                dr["No"] = "dayudengyu";
-                dr["Name"] = " >= 大于等于";
-                dtOperNumber.Rows.Add(dr);
+                    dr = dtOperNumber.NewRow();
+                    dr["No"] = "dayudengyu";
+                    dr["Name"] = " >= 大于等于";
+                    dtOperNumber.Rows.Add(dr);
 
-                dr = dtOperNumber.NewRow();
-                dr["No"] = "xiaoyu";
-                dr["Name"] = " < 小于";
-                dtOperNumber.Rows.Add(dr);
+                    dr = dtOperNumber.NewRow();
+                    dr["No"] = "xiaoyu";
+                    dr["Name"] = " < 小于";
+                    dtOperNumber.Rows.Add(dr);
 
-                dr = dtOperNumber.NewRow();
-                dr["No"] = "xiaoyudengyu";
-                dr["Name"] = " <= 小于等于";
-                dtOperNumber.Rows.Add(dr);
+                    dr = dtOperNumber.NewRow();
+                    dr["No"] = "xiaoyudengyu";
+                    dr["Name"] = " <= 小于等于";
+                    dtOperNumber.Rows.Add(dr);
 
-                dr = dtOperNumber.NewRow();
-                dr["No"] = "budengyu";
-                dr["Name"] = " != 不等于";
-                dtOperNumber.Rows.Add(dr);
+                    dr = dtOperNumber.NewRow();
+                    dr["No"] = "budengyu";
+                    dr["Name"] = " != 不等于";
+                    dtOperNumber.Rows.Add(dr);
+                }
 
                 ds.Tables.Add(dtOperNumber);
             }
@@ -760,7 +770,7 @@ namespace BP.WF.HttpHandler
             string mypk = this.FK_MainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQLTemplate.ToString();
 
             Cond cond = new Cond();
-            cond.MyPK = mypk;
+            cond.setMyPK(mypk);
 
             return cond.ToJson();
         }
@@ -787,7 +797,7 @@ namespace BP.WF.HttpHandler
             //  CondAttr.ToNodeID, toNodeID,
             //  CondAttr.CondType, (int)condTypeEnum);
 
-            cond.MyPK = mypk;
+            cond.setMyPK(mypk);
             cond.HisDataFrom = ConnDataFrom.SQLTemplate;
 
             cond.FK_Node = this.FK_MainNode;
@@ -842,7 +852,7 @@ namespace BP.WF.HttpHandler
             string mypk = this.FK_MainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQL.ToString();
 
             Cond cond = new Cond();
-            cond.MyPK = mypk;
+            cond.setMyPK(mypk);
             cond.RetrieveFromDBSources();
 
             return cond.ToJson();
@@ -871,7 +881,7 @@ namespace BP.WF.HttpHandler
             //  CondAttr.ToNodeID, toNodeID,
             // CondAttr.CondType, (int)condTypeEnum);
 
-            cond.MyPK = mypk;
+            cond.setMyPK(mypk);
             cond.HisDataFrom = ConnDataFrom.SQL;
 
             cond.FK_Node = this.FK_MainNode;
@@ -937,7 +947,7 @@ namespace BP.WF.HttpHandler
             int ToNodeID = this.ToNodeID;
             Cond cond = new Cond();
             string mypk = this.FK_MainNode + "_" + ToNodeID + "_Dir_" + ConnDataFrom.Stas.ToString();
-            cond.MyPK = mypk;
+            cond.setMyPK(mypk);
             cond.RetrieveFromDBSources();
             ds.Tables.Add(cond.ToDataTableField("Cond"));
 
@@ -952,7 +962,7 @@ namespace BP.WF.HttpHandler
           
             int ToNodeID = this.ToNodeID;
 
-            CondType HisCondType = Template.CondType.Dir;
+         //   CondType HisCondType = CondType.Dir;
 
             Cond cond = new Cond();
             //cond.Delete(CondAttr.NodeID, FK_MainNode,
@@ -965,7 +975,7 @@ namespace BP.WF.HttpHandler
             // DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)HisCondType + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + ToNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.Stas);
 
             // 删除岗位条件.
-            cond.MyPK = mypk;
+            cond.setMyPK(mypk);
             if (cond.RetrieveFromDBSources() == 0)
             {
                 cond.HisDataFrom = ConnDataFrom.Stas;
@@ -992,7 +1002,7 @@ namespace BP.WF.HttpHandler
             }
             cond.HisDataFrom = ConnDataFrom.Stas;
             cond.FK_Flow = this.FK_Flow;
-            cond.CondType = Template.CondType.Dir;
+            cond.CondType = BP.WF.Template.CondType.Dir;
             cond.FK_Node = FK_MainNode;
 
             cond.ToNodeID = ToNodeID;
@@ -1036,7 +1046,7 @@ namespace BP.WF.HttpHandler
             //DBAccess.RunSQL("DELETE FROM WF_Cond WHERE (CondType=" + (int)condType + " AND  NodeID=" + this.FK_Node + " AND ToNodeID=" + this.ToNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.Depts);
 
             string mypk = this.FK_MainNode + "_" + this.ToNodeID + "_" + condType.ToString() + "_" + ConnDataFrom.Depts.ToString();
-            cond.MyPK = mypk;
+            cond.setMyPK(mypk);
 
             if (cond.RetrieveFromDBSources() == 0)
             {
@@ -1139,7 +1149,7 @@ namespace BP.WF.HttpHandler
             string mypk = this.FK_MainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.Paras.ToString();
 
             Cond cond = new Cond();
-            cond.MyPK = mypk;
+            cond.setMyPK(mypk);
             cond.RetrieveFromDBSources();
 
             return cond.ToJson();
@@ -1166,7 +1176,7 @@ namespace BP.WF.HttpHandler
             //  CondAttr.ToNodeID, toNodeID,
             //  CondAttr.CondType, (int)condTypeEnum);
 
-            cond.MyPK = mypk;
+            cond.setMyPK(mypk);
             cond.HisDataFrom = ConnDataFrom.Paras;
 
             cond.FK_Node = this.FK_MainNode;
@@ -1227,7 +1237,7 @@ namespace BP.WF.HttpHandler
             int ToNodeID = this.ToNodeID;
             Cond cond = new Cond();
             string mypk = this.FK_MainNode + "_" + ToNodeID + "_Dir_" + ConnDataFrom.Stas.ToString();
-            cond.MyPK = mypk;
+            cond.setMyPK(mypk);
             cond.RetrieveFromDBSources();
             ds.Tables.Add(cond.ToDataTableField("Cond"));
 

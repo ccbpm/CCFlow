@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Web;
 
-namespace BP.En30.Tools
+namespace BP.Tools
 {
     /// <summary>
     /// 文件压缩类

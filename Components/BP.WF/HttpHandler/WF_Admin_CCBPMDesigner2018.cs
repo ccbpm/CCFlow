@@ -5,6 +5,7 @@ using System.Data;
 using System.Text;
 using System.Web;
 using BP.DA;
+using BP.Difference;
 using BP.Sys;
 using BP.Web;
 using BP.Port;
@@ -185,7 +186,7 @@ namespace BP.WF.HttpHandler
                 string pk = this.FK_Flow + "_" + this.FK_Node + "_" + this.GetValFromFrmByKey("ToNode");
 
                 Direction dir = new Direction();
-                dir.MyPK = pk;
+                dir.setMyPK(pk);
 
                 if (dir.RetrieveFromDBSources() > 0)
                 {
@@ -210,7 +211,7 @@ namespace BP.WF.HttpHandler
                 string pk = this.FK_Flow + "_" + this.FK_Node + "_" + this.GetValFromFrmByKey("ToNode");
                 
                 Direction dir = new Direction();
-                dir.MyPK = pk;
+                dir.setMyPK(pk);
                 
                 if (dir.RetrieveFromDBSources()>0)
                 {
@@ -243,7 +244,7 @@ namespace BP.WF.HttpHandler
                 int x = int.Parse(this.GetValFromFrmByKey("X"));
                 int y = int.Parse(this.GetValFromFrmByKey("Y"));
 
-                lb.MyPK = this.FK_Flow + "_" + x + "_" + y + "_" + (num + 1);
+                lb.setMyPK(this.FK_Flow + "_" + x + "_" + y + "_" + (num + 1));
                 lb.Name = Name;
                 lb.FK_Flow = this.FK_Flow;
                 lb.X = x;

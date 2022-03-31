@@ -12,7 +12,11 @@ namespace BP.WF.Template
     /// </summary>
     public class SubFlowAutoAttr : SubFlowAttr
     {
-
+       
+        /// <summary>
+        /// 当前节点为子流程时，所有子流程完成后启动他的同级子流程自动运行或者结束
+        /// </summary>
+        public const string IsAutoSendSLSubFlowOver = "IsAutoSendSLSubFlowOver";
     }
     /// <summary>
     /// 自动触发子流程.
@@ -300,12 +304,17 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowSta, 1, "状态", true, true, SubFlowYanXuAttr.SubFlowSta,
              "@0=禁用@1=启用@2=只读");
 
-                map.AddDDLSysEnum(FlowAttr.IsAutoSendSubFlowOver, 0, "子流程结束规则", true, true,
-                FlowAttr.IsAutoSendSubFlowOver, "@0=不处理@1=让父流程自动运行下一步@2=结束父流程");
+                
+                map.AddDDLSysEnum(SubFlowAutoAttr.ParentFlowSendNextStepRole, 0, "父流程自动运行到下一步规则", true, true,
+                SubFlowAutoAttr.ParentFlowSendNextStepRole, "@0=不处理@1=该子流程运行结束@2=该子流程运行到指定节点");
 
 
-                map.AddDDLSysEnum(FlowAttr.IsAutoSendSLSubFlowOver, 0, "同级子流程结束规则", true, true,
-               FlowAttr.IsAutoSendSLSubFlowOver, "@0=不处理@1=让同级子流程自动运行下一步@2=结束同级子流程");
+                map.AddDDLSysEnum(SubFlowAutoAttr.ParentFlowOverRole, 0, "父流程结束规则", true, true,
+                SubFlowAutoAttr.ParentFlowSendNextStepRole, "@0=不处理@1=该子流程运行结束@2=该子流程运行到指定节点");
+                map.AddTBInt(SubFlowAutoAttr.SubFlowNodeID, 0, "指定子流程节点ID", true, false);
+
+                map.AddDDLSysEnum(SubFlowAutoAttr.IsAutoSendSLSubFlowOver, 0, "同级子流程结束规则", true, true,
+               SubFlowAutoAttr.IsAutoSendSLSubFlowOver, "@0=不处理@1=让同级子流程自动运行下一步@2=结束同级子流程");
 
                 map.AddDDLSysEnum(SubFlowAttr.InvokeTime, 0, "调用时间", true, true, SubFlowAttr.InvokeTime,
                     "@0=发送时@1=工作到达时");
@@ -369,7 +378,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            this.MyPK = this.FK_Node + "_" + this.SubFlowNo + "_1";
+            this.setMyPK(this.FK_Node + "_" + this.SubFlowNo + "_1");
             return base.beforeInsert();
         }
 

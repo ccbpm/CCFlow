@@ -20,6 +20,15 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Setting : DirectoryPageBase
     {
+        /// <summary>
+        /// 清楚缓存
+        /// </summary>
+        /// <returns></returns>
+        public string Default_ClearCash()
+        {
+            DBAccess.RunSQL("DELETE FROM Sys_UserRegedit WHERE FK_Emp='" + BP.Web.WebUser.No + "' AND OrgNo='"+BP.Web.WebUser.OrgNo+"'");
+            return "执行成功，请刷新菜单或者重新进入看看菜单权限是否有变化。";
+        }
         public string UpdateEmpNo()
         {
             BP.Port.Emp emp = new Emp(WebUser.No);
@@ -110,7 +119,7 @@ namespace BP.WF.HttpHandler
             ht.Add("Stations", stas);
 
 
-            BP.WF.Port.WFEmp wfemp = new Port.WFEmp(WebUser.No);
+            BP.WF.Port.WFEmp wfemp = new BP.WF.Port.WFEmp(WebUser.No);
             ht.Add("Tel", emp.Tel);
             ht.Add("Email", emp.Email);
 
@@ -122,7 +131,7 @@ namespace BP.WF.HttpHandler
         /// <returns>json数据</returns>
         public string Author_Init()
         {
-            BP.WF.Port.WFEmp emp = new Port.WFEmp(BP.Web.WebUser.No);
+            BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(BP.Web.WebUser.No);
             Hashtable ht = emp.Row;
             ht.Remove(BP.WF.Port.WFEmpAttr.StartFlows); //移除这一列不然无法形成json.
             return emp.ToJson();
@@ -173,8 +182,8 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message + "" + info;
             }
 
-            //f.SaveAs(SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.No + ".jpg");
-            // f.SaveAs(SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.Name + ".jpg");
+            //f.SaveAs(SystemConfig.PathOfWebApp + "DataUser/Siganture/" + WebUser.No + ".jpg");
+            // f.SaveAs(SystemConfig.PathOfWebApp + "DataUser/Siganture/" + WebUser.Name + ".jpg");
             //f.PostedFile.InputStream.Close();
             //f.PostedFile.InputStream.Dispose();
             //f.Dispose();
@@ -224,7 +233,6 @@ namespace BP.WF.HttpHandler
             ps.Add("FK_Emp", BP.Web.WebUser.No);
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
-            //@hongyan.
             if (dt.Rows.Count == 0)
             {
                 string sql = "SELECT a.No,a.Name,B.NameOfPath, '1' as CurrentDept FROM ";
@@ -233,7 +241,7 @@ namespace BP.WF.HttpHandler
             }
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle 
-                || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
@@ -275,7 +283,7 @@ namespace BP.WF.HttpHandler
             //strs += "@FK_DeptNameOfFull=" + WebUser.FK_DeptNameOfFull;
             //BP.Web.WebUser.SetValToCookie(strs);
 
-            BP.WF.Port.WFEmp emp = new Port.WFEmp(WebUser.No);
+            BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(WebUser.No);
             emp.StartFlows = "";
             emp.Update();
 
@@ -346,7 +354,7 @@ namespace BP.WF.HttpHandler
         public string SetUserTheme()
         {
             string theme = this.GetRequestVal("Theme");
-            BP.WF.Port.WFEmp emp = new Port.WFEmp(WebUser.No);
+            BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(WebUser.No);
             emp.SetPara("Theme", theme);
             emp.Update();
 

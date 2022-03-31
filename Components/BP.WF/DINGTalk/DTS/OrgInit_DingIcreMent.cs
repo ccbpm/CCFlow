@@ -45,7 +45,7 @@ namespace BP.GPM.DTalk.DTS
         /// <returns>返回执行结果</returns>
         public override object Do()
         {
-            GPM.Emp emp = new GPM.Emp();
+            GPM.Emp emp = new BP.GPM.Emp();
             emp.CheckPhysicsTable();
 
             DingDing ding = new DingDing();
@@ -63,8 +63,7 @@ namespace BP.GPM.DTalk.DTS
                 string webPath = "Log/Ding_GPM" + DateTime.Now.ToString("yyyy_MM_dd") + ".log";
                 string savePath = SystemConfig.PathOfDataUser + webPath;
 
-                Log log = new Log(savePath);
-                log.WriteLine(result);
+                BP.DA.Log.DebugWriteInfo(result);
                 return "执行成功<a href=\"/DataUser/" + webPath + "\" target='_blank'>下载日志</a>";
             }
             else

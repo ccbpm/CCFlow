@@ -2,6 +2,7 @@
 using System.Collections;
 using BP.En;
 using BP.Web;
+using BP.Difference;
 
 namespace BP.En
 {
@@ -178,22 +179,25 @@ namespace BP.En
                 if (_DefaultVal.Contains("@"))
                 {
                     if (_DefaultVal.Contains("@WebUser.No"))
-                        return _DefaultVal.Replace("@WebUser.No", Web.WebUser.No);
+                        return _DefaultVal.Replace("@WebUser.No", WebUser.No);
 
                     if (_DefaultVal.Contains("@WebUser.Name"))
-                        return _DefaultVal.Replace("@WebUser.Name", Web.WebUser.Name);
+                        return _DefaultVal.Replace("@WebUser.Name", WebUser.Name);
 
                     if (_DefaultVal.Contains("@WebUser.FK_Dept"))
-                        return _DefaultVal.Replace("@WebUser.FK_Dept", Web.WebUser.FK_Dept);
+                        return _DefaultVal.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
 
                     if (_DefaultVal.Contains("@WebUser.DeptParentNo"))
-                        return _DefaultVal.Replace("@WebUser.DeptParentNo", Web.WebUser.DeptParentNo);
+                        return _DefaultVal.Replace("@WebUser.DeptParentNo", WebUser.DeptParentNo);
 
                     if (_DefaultVal.Contains("@WebUser.FK_DeptName"))
-                        return _DefaultVal.Replace("@WebUser.FK_DeptName", Web.WebUser.FK_DeptName);
+                        return _DefaultVal.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
+
+                    if (_DefaultVal.Contains("@WebUser.OrgNo"))
+                        return _DefaultVal.Replace("@WebUser.OrgNo", WebUser.OrgNo);
 
                     if (_DefaultVal.Contains("@WebUser.FK_DeptNameOfFull"))
-                        return _DefaultVal.Replace("@WebUser.FK_DeptNameOfFull", Web.WebUser.FK_DeptNameOfFull);
+                        return _DefaultVal.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
 
                     // 处理传递过来的参数。
                     //foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
@@ -210,7 +214,7 @@ namespace BP.En
                     //}
 
                     //if (_DefaultVal.Contains("@WebUser.FK_Unit"))
-                    //    return _DefaultVal.Replace("@WebUser.FK_Unit", Web.WebUser.FK_Unit);
+                    //    return _DefaultVal.Replace("@WebUser.FK_Unit", WebUser.FK_Unit);
 
                 }
                 return _DefaultVal;

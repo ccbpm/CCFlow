@@ -13,7 +13,11 @@ namespace BP.Sys
         /// <summary>
         /// 名称
         /// </summary>
-        public const string FK_Emp = "FK_Emp";
+        public const string EmpNo = "EmpNo";
+        /// <summary>
+        /// 用户名
+        /// </summary>
+        public const string EmpName = "EmpName";
         /// <summary>
         /// 日志标记
         /// </summary>
@@ -46,9 +50,6 @@ namespace BP.Sys
             }
         }
 
-		#region 用户日志信息键值列表
-		#endregion
-
 		#region 基本属性
         public string IP
         {
@@ -78,17 +79,28 @@ namespace BP.Sys
 		/// <summary>
 		/// FK_Emp
 		/// </summary>
-		public string FK_Emp
-		{
+		public string EmpNo
+        {
 			get
 			{
-				return this.GetValStringByKey(UserLogAttr.FK_Emp) ; 
+				return this.GetValStringByKey(UserLogAttr.EmpNo) ; 
 			}
 			set
 			{
-				this.SetValByKey(UserLogAttr.FK_Emp,value) ; 
+				this.SetValByKey(UserLogAttr.EmpNo, value) ; 
 			}
 		}
+        public string EmpName
+        {
+            get
+            {
+                return this.GetValStringByKey(UserLogAttr.EmpName);
+            }
+            set
+            {
+                this.SetValByKey(UserLogAttr.EmpName, value);
+            }
+        }
         public string RDT
         {
             get
@@ -134,14 +146,12 @@ namespace BP.Sys
                     return this._enMap;
                 Map map = new Map("Sys_UserLogT", "用户日志");
                 map.AddMyPK();
-
-                map.AddTBString(UserLogAttr.FK_Emp, null, "用户", true, false, 0, 30, 20);
-                map.AddTBString(UserLogAttr.IP, null, "IP", true, false, 0, 200, 20);
-                map.AddTBString(UserLogAttr.LogFlag, null, "标识", true, false, 0, 300, 20);
-                map.AddTBString(UserLogAttr.Docs, null, "说明", true, false, 0, 300, 20);
-                map.AddTBString(UserLogAttr.RDT, null, "记录日期", true, false, 0, 20, 20);
-
-                map.GetAttrByKey(this.PK).UIVisible = false;
+                map.AddTBString(UserLogAttr.EmpNo, null, "用户账号", true, true, 0, 30, 20);
+                map.AddTBString(UserLogAttr.EmpName, null, "用户名", true, true, 0, 30, 20);
+                map.AddTBString(UserLogAttr.RDT, null, "记录日期", true, true, 0, 20, 20);
+                map.AddTBString(UserLogAttr.IP, null, "IP", true, true, 0, 200, 20);
+                map.AddTBString(UserLogAttr.LogFlag, null, "标识", true, true, 0, 300, 20);
+                map.AddTBStringDoc(UserLogAttr.Docs, null, "说明", true, true, true);
 
                 map.DTSearchKey = UserLogAttr.RDT;
                 map.DTSearchWay = DTSearchWay.ByDate;
@@ -154,12 +164,20 @@ namespace BP.Sys
 
         protected override bool beforeInsert()
         {
-            this.MyPK = DBAccess.GenerGUID();
-            this.RDT = DataType.CurrentDataTime;
+            this.setMyPK(DBAccess.GenerGUID());
+            this.RDT = DataType.CurrentDateTime;
             if (SystemConfig.IsBSsystem)
-                this.IP = BP.Difference.Glo.GetIP; 
+                this.IP = BP.Difference.Glo.GetIP;
+
+            if (DataType.IsNullOrEmpty(this.EmpNo) == true)
+            {
+                this.EmpNo = BP.Web.WebUser.No;
+                this.EmpName = BP.Web.WebUser.Name;
+            }
+
             return base.beforeInsert();
         }
+
         #region 重写
         public override Entities GetNewEntities
         {
@@ -183,7 +201,7 @@ namespace BP.Sys
         public UserLogs(string emp)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(UserLogAttr.FK_Emp, emp);
+            qo.AddWhere(UserLogAttr.EmpNo, emp);
             qo.DoQuery();
         }
         #endregion

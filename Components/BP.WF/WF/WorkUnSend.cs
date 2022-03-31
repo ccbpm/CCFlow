@@ -8,6 +8,7 @@ using BP.Port;
 using BP.Sys;
 using BP.WF.XML;
 using BP.WF.Template;
+using BP.Difference;
 
 namespace BP.WF
 {
@@ -56,7 +57,7 @@ namespace BP.WF
                 if (_VirPath == null)
                 {
                     if (SystemConfig.IsBSsystem)
-                        _VirPath = Glo.CCFlowAppPath;//BP.Sys.Glo.Request.ApplicationPath;
+                        _VirPath = Glo.CCFlowAppPath;//BP.Sys.Base.Glo.Request.ApplicationPath;
                     else
                         _VirPath = "";
                 }
@@ -130,7 +131,7 @@ namespace BP.WF
             work.SetValByKey("FK_Dept", BP.Web.WebUser.FK_Dept);
             if (work.RetrieveFromDBSources() == 0)
             {
-                Log.DefaultLogWriteLineError("@WorkID=" + this.WorkID + ",FK_Node=" + gwf.FK_Node + ".不应该出现查询不出来工作."); // 没有找到当前的工作节点的数据，流程出现未知的异常。
+                BP.DA.Log.DebugWriteError("@WorkID=" + this.WorkID + ",FK_Node=" + gwf.FK_Node + ".不应该出现查询不出来工作."); // 没有找到当前的工作节点的数据，流程出现未知的异常。
                 work.Rec = BP.Web.WebUser.No;
                 try
                 {
@@ -138,7 +139,7 @@ namespace BP.WF
                 }
                 catch (Exception ex)
                 {
-                    Log.DefaultLogWriteLineError("@没有找到当前的工作节点的数据，流程出现未知的异常" + ex.Message + ",不应该出现"); // 没有找到当前的工作节点的数据
+                    BP.DA.Log.DebugWriteError("@没有找到当前的工作节点的数据，流程出现未知的异常" + ex.Message + ",不应该出现"); // 没有找到当前的工作节点的数据
                 }
             }
             work.FID = gwf.FID;
@@ -305,8 +306,8 @@ namespace BP.WF
                 RememberMe rm = new RememberMe();
                 rm.Retrieve(RememberMeAttr.FK_Node, wnOfCancelTo.HisNode.NodeID, RememberMeAttr.FK_Emp, ppPri.HisWork.Rec);
 
-                string[] empStrs = rm.Objs.Split('@');
-                foreach (string s in empStrs)
+                string[] myEmpStrs = rm.Objs.Split('@');
+                foreach (string s in myEmpStrs)
                 {
                     if (DataType.IsNullOrEmpty(s) == true)
                         continue;
@@ -317,7 +318,7 @@ namespace BP.WF
                     wlN.Copy(wl);
                     wlN.FK_Emp = s;
 
-                    WF.Port.Emp myEmp = new Port.Emp(s);
+                   BP.WF.Port.Emp myEmp = new BP.WF.Port.Emp(s);
                     wlN.FK_EmpText = myEmp.Name;
                     wlN.FK_Dept = myEmp.FK_Dept;
                     wlN.FK_DeptT = myEmp.FK_DeptText;
@@ -455,6 +456,22 @@ namespace BP.WF
 
                         toEmps += dr["Emps"].ToString().Replace('@', ',');
                     }
+                    //恢复上一步发送人
+                    dt = Dev2Interface.Flow_GetPreviousNodeTrack(this.WorkID, nd.NodeID);
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        gwf.Sender = dt.Rows[0]["EmpFrom"].ToString() + "," + dt.Rows[0]["EmpFromT"].ToString() + ";";
+                    }
+
+                    if (nd.IsEnableTaskPool && Glo.IsEnableTaskPool)
+                        gwf.TaskSta = TaskSta.Takeback;
+                    else
+                        gwf.TaskSta = TaskSta.None;
+
+                    gwf.TodoEmps = WebUser.No + "," + WebUser.Name + ";";
+                    gwf.Update();
+                    //并且修改当前人员的待办
+                    DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND FK_Emp='" + WebUser.No + "'");
                     return "撤销成功";
                 }
             }
@@ -550,7 +567,7 @@ namespace BP.WF
 
             #region 求的撤销的节点.
             /* 查询出来. */
-            sql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND IsPass=1 AND IsEnable=1 AND WorkID=" + this.WorkID + " ORDER BY RDT DESC ";
+            sql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND IsPass=1 AND IsEnable=1 AND WorkID=" + this.WorkID + " ORDER BY CDT DESC ";
             int cancelToNodeID = DBAccess.RunSQLReturnValInt(sql, 0); //计算要撤销到的节点.
             if (cancelToNodeID == 0)
                 return "err@您没有权限操作该工作.";
@@ -575,7 +592,7 @@ namespace BP.WF
                     return "err@您不能执行撤消发送，因为当前工作不是您发送的或下一步工作已处理。";
             }
 
-            //求出来要撤销到的节点. @hongyan
+            //求出来要撤销到的节点. 
             Node cancelToNode = new Node(cancelToNodeID);
             #endregion 求的撤销的节点.
 
@@ -612,7 +629,7 @@ namespace BP.WF
             switch (nd.HisNodeWorkType)
             {
                 case NodeWorkType.WorkFHL:
-                    //如果是撤销的节点是断头路的节点. @hongyan
+                    //如果是撤销的节点是断头路的节点.
                     if (cancelToNode.IsSendBackNode == true)
                     {
                         //不需要处理，按照正常的模式处理.
@@ -631,7 +648,7 @@ namespace BP.WF
                         /* 首先找到与他最近的一个分流点，
                          * 并且判断当前的操作员是不是分流点上的工作人员。*/
 
-                        //如果是撤销的节点是断头路的节点. @hongyan
+                        //如果是撤销的节点是断头路的节点.
                         if (cancelToNode.IsSendBackNode == true)
                         {
                             //不需要处理，按照正常的模式处理.
@@ -675,7 +692,7 @@ namespace BP.WF
             if (cancelToNode.TodolistModel == TodolistModel.TeamupGroupLeader
                 || cancelToNode.TodolistModel == TodolistModel.Teamup)
             {
-                sql = "SELECT ActionType FROM ND" + int.Parse(this.FlowNo) + "Track WHERE NDFrom=" + cancelToNodeID + " AND EmpFrom='" + WebUser.No + "' AND WorkID=" + this.WorkID;
+                sql = "SELECT ActionType FROM ND" + int.Parse(this.FlowNo) + "Track WHERE NDFrom=" + cancelToNodeID + " AND EmpFrom='" + WebUser.No + "' AND WorkID=" + this.WorkID +" Order By RDT DESC";
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -686,6 +703,7 @@ namespace BP.WF
                         /*如果是写作人员，就不允许他撤销 */
                         return "err@您是节点[" + cancelToNode.Name + "]的会签人，您不能执行撤销。";
                     }
+                    break;
                 }
             }
             #endregion 如果当前是协作组长模式
@@ -818,7 +836,7 @@ namespace BP.WF
                     wlN.Copy(wl);
                     wlN.FK_Emp = s;
 
-                    WF.Port.Emp myEmp = new Port.Emp(s);
+                    BP.WF.Port.Emp myEmp = new BP.WF.Port.Emp(s);
                     wlN.FK_EmpText = myEmp.Name;
                     wlN.FK_Dept = myEmp.FK_Dept;
                     wlN.FK_DeptT = myEmp.FK_DeptText;
@@ -855,7 +873,7 @@ namespace BP.WF
                 switch (wnOfCancelTo.HisNode.HisFormType)
                 {
                     case NodeFormType.FoolForm:
-                    case NodeFormType.FreeForm:
+                    case NodeFormType.Develop:
                         return "@撤消执行成功." + msg;
                         break;
                     default:
@@ -870,7 +888,7 @@ namespace BP.WF
                 switch (wnOfCancelTo.HisNode.HisFormType)
                 {
                     case NodeFormType.FoolForm:
-                    case NodeFormType.FreeForm:
+                    case NodeFormType.Develop:
                         return "@撤消执行成功. " + msg;
                         break;
                     default:
@@ -962,7 +980,7 @@ namespace BP.WF
             // 更新分流节点，让其出现待办.
             gwl.IsPassInt = 0;
             gwl.IsRead = false;
-            gwl.SDT = DataType.CurrentDataTimess;  //这里计算时间有问题.
+            gwl.SDT = DataType.CurrentDateTimess;  //这里计算时间有问题.
             gwl.Update();
 
             // 把设置当前流程运行到分流流程上.
@@ -970,7 +988,7 @@ namespace BP.WF
             Node nd = new Node(this.UnSendToNode);
             gwf.NodeName = nd.Name;
             gwf.Sender = WebUser.No + "," + WebUser.Name + ";"; 
-            gwf.SendDT = DataType.CurrentDataTimess;
+            gwf.SendDT = DataType.CurrentDateTimess;
             gwf.Update();
 
 
@@ -1111,9 +1129,10 @@ namespace BP.WF
                     wlN.Copy(wl);
                     wlN.FK_Emp = s;
 
-                    WF.Port.WFEmp myEmp = new Port.WFEmp(s);
+                   BP.WF.Port.WFEmp myEmp = new BP.WF.Port.WFEmp(s);
                     wlN.FK_EmpText = myEmp.Name;
 
+                    
                     wlN.Insert();
                 }
             }
@@ -1128,7 +1147,6 @@ namespace BP.WF
                     return "@撤消执行成功.";
                 else
                     return "@撤销成功.";
-
             }
             else
             {

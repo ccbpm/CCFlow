@@ -165,14 +165,7 @@ namespace BP.GPM
         public VGPMEmpMenu()
         {
         }
-        /// <summary>
-        /// 人员菜单功能
-        /// </summary>
-        /// <param name="mypk"></param>
-        public VGPMEmpMenu(string no)
-        {
-            this.Retrieve();
-        }
+         
         /// <summary>
         /// 人员菜单功能
         /// </summary>
@@ -182,11 +175,8 @@ namespace BP.GPM
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("V_GPM_EmpMenu");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "人员菜单对应";
-                map.EnType = EnType.View;
+                Map map = new Map("V_GPM_EmpMenu", "人员菜单对应");
+                map.setEnType(EnType.View);
 
                 map.AddMyPK();
 

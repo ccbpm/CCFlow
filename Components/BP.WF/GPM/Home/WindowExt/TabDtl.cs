@@ -91,7 +91,7 @@ namespace BP.GPM.Home.WindowExt
 
         protected override bool beforeInsert()
         {
-            this.MyPK = DBAccess.GenerGUID();
+            this.setMyPK(DBAccess.GenerGUID());
             return base.beforeInsert();
         }
 

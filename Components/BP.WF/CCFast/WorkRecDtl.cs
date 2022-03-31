@@ -142,7 +142,7 @@ namespace BP.CCFast
         }
         public WorkRecDtl(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -190,15 +190,15 @@ namespace BP.CCFast
         #region 执行方法.
         protected override bool beforeInsert()
         {
-            this.MyPK = DBAccess.GenerGUID();
+            this.setMyPK(DBAccess.GenerGUID());
 
             this.Rec = WebUser.No;
             this.RecName = WebUser.Name;
 
             this.OrgNo = WebUser.OrgNo;
 
-            this.RDT = DataType.CurrentDataTime;
-           // this.RiQi = DataType.CurrentData;
+            this.RDT = DataType.CurrentDateTime;
+           // this.RiQi = DataType.CurrentDate;
 
             this.NianYue = DataType.CurrentYearMonth; //隶属年月.
 

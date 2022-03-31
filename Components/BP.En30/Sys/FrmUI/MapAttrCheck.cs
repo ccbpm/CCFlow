@@ -101,7 +101,7 @@ namespace BP.Sys.FrmUI
         /// </summary>
         public MapAttrCheck(string myPK)
         {
-            this.MyPK = myPK;
+            this.setMyPK(myPK);
             this.Retrieve();
 
         }
@@ -193,9 +193,20 @@ namespace BP.Sys.FrmUI
                 rm.Warning = "您确定要转化为文本框组件吗？";
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "视频教程";
+                rm.ClassMethodName = this.ToString() + ".DoVideo()";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
+
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+        public string DoVideo()
+        {
+            return "https://www.bilibili.com/video/BV1EK411T7U4";
         }
         /// <summary>
         /// 设置签批组件
@@ -205,8 +216,8 @@ namespace BP.Sys.FrmUI
         {
             MapAttrString en = new MapAttrString(this.MyPK);
             en.UIContralType = UIContralType.TB;
-            en.UIIsEnable = true;
-            en.UIVisible = true;
+            en.setUIIsEnable(true);
+            en.setUIVisible(true);
             en.Update();
 
             return "设置成功,当前签批组件已经是文本框了,请关闭掉当前的窗口.";
@@ -248,7 +259,7 @@ namespace BP.Sys.FrmUI
         protected override void afterInsertUpdateAction()
         {
             MapAttr mapAttr = new MapAttr();
-            mapAttr.MyPK = this.MyPK;
+            mapAttr.setMyPK(this.MyPK);
             mapAttr.RetrieveFromDBSources();
             mapAttr.Update();
 
@@ -292,13 +303,13 @@ namespace BP.Sys.FrmUI
         protected override bool beforeUpdateInsertAction()
         {
             MapAttr attr = new MapAttr();
-            attr.MyPK = this.MyPK;
+            attr.setMyPK(this.MyPK);
             attr.RetrieveFromDBSources();
 
             #region 自动扩展字段长度. 需要翻译.
             if (attr.MaxLen < this.MaxLen )
             {
-                attr.MaxLen = this.MaxLen;
+                attr.setMaxLen(this.MaxLen);
 
                 string sql = "";
                 MapData md = new MapData();
@@ -307,18 +318,26 @@ namespace BP.Sys.FrmUI
                 {
                     if (DBAccess.IsExitsTableCol(md.PTable, this.KeyOfEn) == true)
                     {
-                        if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                            sql = "ALTER TABLE " + md.PTable + " ALTER column " + this.KeyOfEn + " NVARCHAR(" + attr.MaxLen + ")";
-
-                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                            sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
-
-                        if (SystemConfig.AppCenterDBType == DBType.Oracle
-                            || SystemConfig.AppCenterDBType == DBType.DM )
-                            sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR2(" + attr.MaxLen + ")";
-
-                        if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-                            sql = "ALTER table " + md.PTable + " alter " + attr.Field + " type character varying(" + attr.MaxLen + ")";
+                        switch (SystemConfig.AppCenterDBType)
+                        {
+                            case DBType.MSSQL:
+                                sql = "ALTER TABLE " + md.PTable + " ALTER column " + this.KeyOfEn + " NVARCHAR(" + attr.MaxLen + ")";
+                                break;
+                            case DBType.MySQL:
+                                sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
+                                break;
+                            case DBType.Oracle:
+                            case DBType.DM:
+                                sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR2(" + attr.MaxLen + ")";
+                                break;
+                            case DBType.PostgreSQL:
+                            case DBType.UX:
+                                sql = "ALTER table " + md.PTable + " alter " + attr.Field + " type character varying(" + attr.MaxLen + ")";
+                                break;
+                            default:
+                                throw new Exception("err@没有判断的数据库类型.");
+                                break;
+                        }
 
                         DBAccess.RunSQL(sql); //如果是oracle如果有nvarchar与varchar类型，就会出错.
                     }

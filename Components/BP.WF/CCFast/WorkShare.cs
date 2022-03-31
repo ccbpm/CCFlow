@@ -106,7 +106,7 @@ namespace BP.CCFast
         }
         public WorkShare(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -145,9 +145,9 @@ namespace BP.CCFast
             this.OrgNo = BP.Web.WebUser.OrgNo;
 
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
-                this.MyPK = this.EmpNo + "_" + this.ShareToEmpNo;
+                this.setMyPK(this.EmpNo + "_" + this.ShareToEmpNo);
             else
-                this.MyPK = this.OrgNo + "_" + this.EmpNo + "_" + this.ShareToEmpNo;
+                this.setMyPK(this.OrgNo + "_" + this.EmpNo + "_" + this.ShareToEmpNo);
 
             this.EmpNo = WebUser.No;
             this.EmpName = WebUser.Name;

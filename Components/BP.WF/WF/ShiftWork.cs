@@ -118,7 +118,7 @@ namespace BP.WF
 
             gwf.WFState = WFState.Shift;
             gwf.TodoEmpsNum = 1;
-            gwf.TodoEmps = WebUser.No + "," + WebUser.Name + ";";
+            gwf.TodoEmps = emp.UserID + "," + emp.Name + ";";
             gwf.Update();
 
             //记录日志.

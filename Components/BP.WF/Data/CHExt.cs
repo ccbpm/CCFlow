@@ -9,9 +9,9 @@ using BP.Sys;
 
 namespace BP.WF.Data
 {
-	/// <summary>
-	/// 时效考核
-	/// </summary> 
+    /// <summary>
+    /// 时效考核
+    /// </summary> 
     public class CHExt : EntityMyPK
     {
         #region 基本属性
@@ -287,7 +287,7 @@ namespace BP.WF.Data
 
         #region Map
         /// <summary>
-        /// EnMap
+        /// 时效考核
         /// </summary>
         public override Map EnMap
         {
@@ -297,9 +297,10 @@ namespace BP.WF.Data
                     return this._enMap;
 
                 Map map = new Map("WF_CH", "时效考核");
+                map.AddMyPK();
+                //  map.AddTBStringPK(CHAttr.MyPK, null, "MyPK", false, false, 0, 50, 5);
 
-                map.AddTBString(CHAttr.Title, null, "标题", true, true, 0, 900, 5,true);
-
+                map.AddTBString(CHAttr.Title, null, "标题", true, true, 0, 900, 5, true);
                 map.AddDDLEntities(CHAttr.FK_Flow, null, "流程", new Flows(), false);
 
                 map.AddTBString(CHAttr.FK_NodeT, null, "节点名称", true, true, 0, 50, 5);
@@ -319,34 +320,21 @@ namespace BP.WF.Data
                 map.AddDDLEntities(CHAttr.FK_Dept, null, "隶属部门", new BP.Port.Depts(), false);
                 map.AddDDLEntities(CHAttr.FK_Emp, null, "当事人", new BP.Port.Emps(), false);
                 map.AddTBString(CHAttr.FK_NY, null, "月份", true, true, 0, 50, 5);
-                //map.AddDDLEntities(CHAttr.FK_NY, null, "月份", new BP.Pub.NYs(), false);
-
                 map.AddTBInt(CHAttr.WorkID, 0, "工作ID", false, true);
-                map.AddTBInt(CHAttr.FID, 0, "FID", false, false);
-
-                map.AddTBStringPK(CHAttr.MyPK, null, "MyPK", false, false, 0, 50, 5);
-                //map.AddMyPK();
 
                 //查询条件.
                 map.AddSearchAttr(CHAttr.FK_Dept);
-               // map.AddSearchAttr(CHAttr.FK_NY);
                 map.AddSearchAttr(CHAttr.CHSta);
                 map.AddSearchAttr(CHAttr.FK_Flow);
 
                 //方法.
                 RefMethod rm = new RefMethod();
-                rm.Title = "打开流程轨迹";
+                rm.Title = "打开流程";
                 rm.ClassMethodName = this.ToString() + ".DoOpen";
-                rm.RefMethodType = En.RefMethodType.RightFrameOpen;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "../../WF/Img/FileType/doc.gif";
                 rm.IsForEns = false;
                 map.AddRefMethod(rm);
-
-                //rm = new RefMethod();
-                //rm.Title = "打开";
-                //rm.ClassMethodName = this.ToString() + ".DoOpenPDF";
-                //rm.Icon = "/WF/Img/FileType/pdf.gif";
-                //map.AddRefMethod(rm);
 
                 this._enMap = map;
                 return this._enMap;
@@ -356,33 +344,33 @@ namespace BP.WF.Data
 
         public string DoOpen()
         {
-            return "../../WFRpt.htm?FK_Flow" + this.FK_Flow + "&WorkID=" + this.WorkID + "&OID=" + this.WorkID;
+            return "../../MyView.htm?FK_Flow" + this.FK_Flow + "&WorkID=" + this.WorkID + "&OID=" + this.WorkID;
         }
     }
-	/// <summary>
-	/// 时效考核s
-	/// </summary>
-	public class CHExts :Entities
-	{
-		#region 构造方法属性
-		/// <summary>
+    /// <summary>
+    /// 时效考核s
+    /// </summary>
+    public class CHExts : Entities
+    {
+        #region 构造方法属性
+        /// <summary>
         /// 时效考核s
-		/// </summary>
-		public CHExts(){}
-		#endregion 
+        /// </summary>
+        public CHExts() { }
+        #endregion
 
-		#region 属性
-		/// <summary>
+        #region 属性
+        /// <summary>
         /// 时效考核
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{
-				return new CHExt();
-			}
-		}
-		#endregion
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new CHExt();
+            }
+        }
+        #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
@@ -407,5 +395,5 @@ namespace BP.WF.Data
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
+    }
 }

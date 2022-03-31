@@ -53,7 +53,7 @@ namespace BP.En
             {
                // if (this._enMap != null) return this._enMap;
                 Map map = new Map(this.PhysicsTable,this.Desc);
-                map.IsAutoGenerNo = true;
+                map.setIsAutoGenerNo(true);
 
                 map.AddTBStringPK(GETreeAttr.No, null, "编号", true, true, 1, 30, 3);
                 map.AddTBString(GETreeAttr.Name, null, "名称", true, false, 1, 60, 500);

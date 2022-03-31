@@ -17,19 +17,18 @@ namespace BP.WF.Data
         /// <summary>
         /// 按期完成
         /// </summary>
-        AnQi=0,
+        AnQi = 0,
         /// <summary>
         /// 预期完成
         /// </summary>
-        YuQi=1
+        YuQi = 1
     }
-	/// <summary>
-	/// 时效考核属性
-	/// </summary>
-    public class CHAttr
+    /// <summary>
+    /// 时效考核属性
+    /// </summary>
+    public class CHAttr : EntityMyPKAttr
     {
         #region 属性
-        public const string MyPK = "MyPK";
         /// <summary>
         /// 工作ID
         /// </summary>
@@ -157,11 +156,15 @@ namespace BP.WF.Data
         /// 总扣分
         /// </summary>
         public const string Points = "Points";
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public const string OrgNo = "OrgNo";
         #endregion
     }
-	/// <summary>
-	/// 时效考核
-	/// </summary> 
+    /// <summary>
+    /// 时效考核
+    /// </summary> 
     public class CH : EntityMyPK
     {
         #region 基本属性
@@ -617,7 +620,7 @@ namespace BP.WF.Data
                 Map map = new Map("WF_CH", "时效考核");
 
                 map.AddMyPK();
-                    
+
                 #region 基本属性.
                 map.AddTBInt(CHAttr.WorkID, 0, "工作ID", false, true);
                 map.AddTBInt(CHAttr.FID, 0, "FID", false, true);
@@ -663,37 +666,47 @@ namespace BP.WF.Data
                 map.AddTBFloat(CHAttr.Points, 0, "总扣分", true, true);
                 #endregion 计算属性.
 
+                map.AddTBString(CHAttr.OrgNo, null, "组织", false, false, 0, 4, 3);
+
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
-       
-    }
-	/// <summary>
-	/// 时效考核s
-	/// </summary>
-	public class CHs :Entities
-	{
-		#region 构造方法属性
-		/// <summary>
-        /// 时效考核s
-		/// </summary>
-		public CHs(){}
-		#endregion 
 
-		#region 属性
-		/// <summary>
+        protected override bool beforeUpdateInsertAction()
+        {
+
+            this.setMyPK(BP.Web.WebUser.OrgNo);
+            return base.beforeUpdateInsertAction();
+        }
+
+    }
+    /// <summary>
+    /// 时效考核s
+    /// </summary>
+    public class CHs : Entities
+    {
+        #region 构造方法属性
+        /// <summary>
+        /// 时效考核s
+        /// </summary>
+        public CHs() { }
+        #endregion
+
+        #region 属性
+        /// <summary>
         /// 时效考核
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{
-				return new CH();
-			}
-		}
-		#endregion
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new CH();
+            }
+        }
+        #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
@@ -718,5 +731,5 @@ namespace BP.WF.Data
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
+    }
 }

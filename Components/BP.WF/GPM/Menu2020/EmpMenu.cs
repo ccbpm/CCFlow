@@ -95,11 +95,7 @@ namespace BP.GPM.Menu2020
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_EmpMenu");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "人员菜单对应";
-                map.EnType = EnType.App;
+                Map map = new Map("GPM_EmpMenu", "人员菜单对应");
 
                 // map.AddTBStringPK(EmpMenuAttr.FK_Emp, null, "操作员", true, false, 0, 3900, 20);
                 map.AddTBStringPK(EmpMenuAttr.FK_Menu, null, "菜单", false, false, 0, 50, 20);

@@ -292,7 +292,7 @@ namespace BP.WF.Data
         #endregion
         protected override bool beforeUpdateInsertAction()
         {
-            this.MyPK = this.WorkID + "_" + this.FK_Node;
+            this.setMyPK(this.WorkID + "_" + this.FK_Node);
             return base.beforeUpdateInsertAction();
         }
 

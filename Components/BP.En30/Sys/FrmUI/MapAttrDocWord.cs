@@ -85,7 +85,7 @@ namespace BP.Sys.FrmUI
         /// </summary>
         public MapAttrDocWord(string myPK)
         {
-            this.MyPK = myPK;
+            this.setMyPK(myPK);
             this.Retrieve();
 
         }
@@ -115,7 +115,6 @@ namespace BP.Sys.FrmUI
 
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否启用？", true, true);
                 //map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", false, false);
-
                 map.AddDDLSQL(MapAttrAttr.CSSCtrl, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
                 #endregion 基本字段信息.
 
@@ -176,7 +175,7 @@ namespace BP.Sys.FrmUI
         protected override void afterInsertUpdateAction()
         {
             MapAttr mapAttr = new MapAttr();
-            mapAttr.MyPK = this.MyPK;
+            mapAttr.setMyPK(this.MyPK);
             mapAttr.RetrieveFromDBSources();
             mapAttr.Update();
 

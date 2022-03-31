@@ -120,17 +120,6 @@ namespace BP.WF.Port
                 return this.GetValRefTextByKey(WFEmpAttr.AlertWay);
             }
         }
-        public string Token
-        {
-            get
-            {
-                return this.GetValStringByKey(WFEmpAttr.Token);
-            }
-            set
-            {
-                SetValByKey(WFEmpAttr.Token, value);
-            }
-        }
         /// <summary>
         /// 用户状态
         /// </summary>
@@ -143,6 +132,17 @@ namespace BP.WF.Port
             set
             {
                 SetValByKey(WFEmpAttr.UseSta, value);
+            }
+        }
+        public string Token
+        {
+            get
+            {
+                return this.GetValStringByKey(WFEmpAttr.Token);
+            }
+            set
+            {
+                SetValByKey(WFEmpAttr.Token, value);
             }
         }
         /// <summary>
@@ -314,7 +314,6 @@ namespace BP.WF.Port
                 map.AddTBString(WFEmpAttr.SPass, null, "图片签名密码", true, true, 0, 200, 20);
 
                 map.AddTBString(WFEmpAttr.Token, null, "token", true, true, 0, 200, 20);
-
 
                 map.AddTBInt(WFEmpAttr.Idx, 0, "Idx", false, false);
 

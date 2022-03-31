@@ -31,7 +31,7 @@ namespace BP.WF.Data
                     return this._enMap;
 
                 Map map = new Map("Port_Emp", "流程数据");
-                map.EnType = EnType.View;
+                map.setEnType(EnType.View);
 
                 map.AddTBStringPK(MyDeptEmpAttr.No, null, "编号", false, false, 0, 100, 100);
                 map.AddTBString(MyDeptEmpAttr.Name, null, "名称", false, false, 0, 100, 100);

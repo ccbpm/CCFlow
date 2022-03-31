@@ -14,6 +14,17 @@ namespace BP.Sys.FrmUI
     public class MapAttrSFSQL : EntityMyPK
     {
         #region 文本字段参数属性.
+        public string DefVal
+        {
+            get
+            {
+                return this.GetValStringByKey(MapAttrAttr.DefVal);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.DefVal, value);
+            }
+        }
         /// <summary>
         /// 表单ID
         /// </summary>
@@ -67,9 +78,12 @@ namespace BP.Sys.FrmUI
             get
             {
                 UAC uac = new UAC();
-                uac.IsInsert = false;
-                uac.IsUpdate = true;
-                uac.IsDelete = true;
+                if (BP.Web.WebUser.IsAdmin == true)
+                {
+                    uac.IsInsert = false;
+                    uac.IsUpdate = true;
+                    uac.IsDelete = true;
+                }
                 return uac;
             }
         }
@@ -113,7 +127,6 @@ namespace BP.Sys.FrmUI
 
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
                // map.AddBoolean("IsEnableJS", false, "是否启用JS高级设置？", true, true); //参数字段.
-
                 #endregion 基本信息.
 
                 #region 傻瓜表单。
@@ -233,15 +246,30 @@ namespace BP.Sys.FrmUI
         {
             return "../../Admin/FoolFormDesigner/MapExt/ActiveDDL.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
+        protected override bool beforeUpdateInsertAction()
+        {
+            #region 修改默认值.
+            MapData md = new MapData();
+            md.No = this.FK_MapData;
+            if (md.RetrieveFromDBSources() == 1)
+            {
+                BP.DA.DBAccess.UpdateTableColumnDefaultVal(md.PTable, this.KeyOfEn,  this.DefVal);
+            }
+            #endregion 修改默认值.
+
+
+            return base.beforeUpdateInsertAction();
+        }
         #endregion 方法执行.
 
+        #region 重写的方法.
         /// <summary>
         /// 删除，把影子字段也要删除.
         /// </summary>
         protected override void afterDelete()
         {
             MapAttr attr = new MapAttr();
-            attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn + "T";
+            attr.setMyPK(this.FK_MapData + "_" + this.KeyOfEn + "T");
             attr.Delete();
 
             //删除相对应的rpt表中的字段
@@ -260,7 +288,7 @@ namespace BP.Sys.FrmUI
         protected override void afterInsertUpdateAction()
         {
             MapAttr mapAttr = new MapAttr();
-            mapAttr.MyPK = this.MyPK;
+            mapAttr.setMyPK(this.MyPK);
             mapAttr.RetrieveFromDBSources();
             mapAttr.Update();
 
@@ -269,6 +297,8 @@ namespace BP.Sys.FrmUI
 
             base.afterInsertUpdateAction();
         }
+        #endregion 重写的方法.
+
     }
     /// <summary>
     /// 实体属性s

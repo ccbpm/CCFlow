@@ -25,7 +25,38 @@ namespace BP.WF.HttpHandler
         {
 
         }
+        /// <summary>
+        /// 视图组件
+        /// </summary>
+        /// <returns></returns>
+        public string DataView_Init()
+        {
+            var en = new BP.Sys.FrmUI.MapAttrDataView(this.MyPK);
 
+            string sql = en.GetValStringByKey(MapAttrAttr.DefaultVal);
+
+            sql = BP.WF.Glo.DealExp(sql, null, null);
+
+            if (this.WorkID != 0)
+            {
+                sql = sql.Replace("@WorkID", this.WorkID.ToString());
+                sql = sql.Replace("@OID", this.WorkID.ToString());
+            }
+
+            if (this.OID != 0)
+            {
+                sql = sql.Replace("@WorkID", this.OID.ToString());
+                sql = sql.Replace("@OID", this.OID.ToString());
+            }
+
+            if (this.FID != 0)
+            {
+                sql = sql.Replace("@FID", this.FID.ToString());
+            }
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(dt);
+        }
         #region  公文文号 .
         /// <summary>
         /// 初始化字号编辑器

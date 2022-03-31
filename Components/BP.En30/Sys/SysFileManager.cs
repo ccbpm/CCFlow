@@ -303,7 +303,7 @@ namespace BP.Sys
         protected override bool beforeInsert()
         {
            this.Rec = BP.Web.WebUser.No;
-           this.RDT = DataType.CurrentDataTime;
+           this.RDT = DataType.CurrentDateTime;
             return base.beforeInsert();
         }
         protected override bool beforeDelete()

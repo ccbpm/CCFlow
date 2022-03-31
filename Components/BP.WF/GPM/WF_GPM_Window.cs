@@ -33,7 +33,7 @@ namespace BP.WF.HttpHandler
                 var enNo = ens[i];
                 string sql = "UPDATE GPM_WindowTemplate SET Idx=" + i + " WHERE No='" + enNo + "'  ";
                 DBAccess.RunSQL(sql);
-                // BP.GPM.Home.Window en = new GPM.Home.Window(); 
+                // BP.GPM.Home.Window en = new BP.GPM.Home.Window(); 
             }
             return "移动成功..";
         }
@@ -45,7 +45,7 @@ namespace BP.WF.HttpHandler
                 var enNo = ens[i];
                 string sql = "UPDATE GPM_MenuDtl SET Idx=" + i + " WHERE No='" + enNo + "'  ";
                 DBAccess.RunSQL(sql);
-                // BP.GPM.Home.Window en = new GPM.Home.Window(); 
+                // BP.GPM.Home.Window en = new BP.GPM.Home.Window(); 
             }
             return "移动成功..";
         }

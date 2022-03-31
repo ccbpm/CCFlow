@@ -16,9 +16,18 @@ namespace BP.Port
         /// 父节点的编号
         /// </summary>
         public const string ParentNo = "ParentNo";
-        public const string Idx = "Idx";
+        /// <summary>
+        /// 组织编号
+        /// </summary>
         public const string OrgNo = "OrgNo";
+        /// <summary>
+        /// 部门编号
+        /// </summary>
         public const string Leader = "Leader";
+        /// <summary>
+        /// 顺序号
+        /// </summary>
+        public const string Idx = "Idx";
     }
     /// <summary>
     /// 部门
@@ -45,19 +54,6 @@ namespace BP.Port
             get
             {
                 return 1;
-            }
-        }
-        private Depts _HisSubDepts = null;
-        /// <summary>
-        /// 它的子节点
-        /// </summary>
-        public Depts HisSubDepts
-        {
-            get
-            {
-                if (_HisSubDepts == null)
-                    _HisSubDepts = new Depts(this.No);
-                return _HisSubDepts;
             }
         }
         #endregion
@@ -99,12 +95,10 @@ namespace BP.Port
 
                 map.AddTBStringPK(DeptAttr.No, null, "编号", true, false, 1, 50, 20);
                 map.AddTBString(DeptAttr.Name, null, "名称", true, false, 0, 100, 30);
-                map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, true, 0, 100, 30);
+                map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 100, 30);
                 map.AddTBString(DeptAttr.OrgNo, null, "OrgNo", true, true, 0, 50, 30);
-                map.AddTBString(DeptAttr.Leader, null, "部门领导", true, true, 0, 50, 30);
-
+                map.AddDDLEntities(DeptAttr.Leader, null, "部门领导",new BP.Port.Emps(),true);
                 map.AddTBInt(DeptAttr.Idx, 0, "序号", false, true);
-
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "历史变更";

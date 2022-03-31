@@ -130,7 +130,7 @@ namespace BP.Sys
         /// <param name="nodeid">节点ID</param>
         public GEEntityWordFrm(string fk_mapdata)
         {
-            this.FK_MapData = fk_mapdata;
+            this.FK_MapData = fk_mapdata; 
         }
         /// <summary>
         /// 通用实体
@@ -139,7 +139,7 @@ namespace BP.Sys
         /// <param name="_oid">OID</param>
         public GEEntityWordFrm(string fk_mapdata, object pk)
         {
-            this.FK_MapData = fk_mapdata;
+            this.FK_MapData= fk_mapdata;
             this.PKVal = pk;
             this.Retrieve();
         }

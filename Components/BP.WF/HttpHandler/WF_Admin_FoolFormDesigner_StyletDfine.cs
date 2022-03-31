@@ -132,7 +132,7 @@ namespace BP.WF.HttpHandler
             //获得标准的配置文件,用于比较缺少或者删除的标记.
             string path = SystemConfig.PathOfWebApp + "WF/Admin/FoolFormDesigner/StyletDfine/DefaultStyle.xml";
 
-            System.Data.DataSet ds = new System.Data.DataSet();
+            DataSet ds = new DataSet();
             ds.ReadXml(path);
             DataTable dt = ds.Tables[0];
 

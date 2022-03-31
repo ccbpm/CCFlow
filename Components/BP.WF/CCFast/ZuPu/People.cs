@@ -269,7 +269,7 @@ namespace BP.ZHOU
         {
             this.No = DBAccess.GenerGUID();
             this.Rec = BP.Web.WebUser.No;
-            this.RDT = DataType.CurrentDataTime;
+            this.RDT = DataType.CurrentDateTime;
 
 
 

@@ -31,7 +31,7 @@ namespace BP.GPM.DTalk
             //return AccessToken_Ding.Value;
             string url = "https://oapi.dingtalk.com/gettoken?appkey="+SystemConfig.Ding_AppKey + "&appsecret="+SystemConfig.Ding_AppSecret;
             string str = new HttpWebResponseUtility().HttpResponseGet(url);
-            Log.DefaultLogWriteLineError(str);
+            BP.DA.Log.DebugWriteError(str);
             DingAccessToken token = new DingAccessToken();
             token = FormatToJson.ParseFromJson<DingAccessToken>(str);
             if (token.errcode == "0")
@@ -50,23 +50,23 @@ namespace BP.GPM.DTalk
         public string GetUserID(string code)
         {
             string access_token = getAccessToken();
-            Log.DefaultLogWriteLineError(access_token);
-            Log.DefaultLogWriteLineError(code);
+            BP.DA.Log.DebugWriteError(access_token);
+            BP.DA.Log.DebugWriteError(code);
             string url = "https://oapi.dingtalk.com/user/getuserinfo?access_token=" + access_token + "&code=" + code;
             try
             {
                 string str = new HttpWebResponseUtility().HttpResponseGet(url);
-                Log.DefaultLogWriteLineError(str);
+                BP.DA.Log.DebugWriteError(str);
                 CreateUser_PostVal user = new CreateUser_PostVal();
                 user = FormatToJson.ParseFromJson<CreateUser_PostVal>(str);
-                Log.DefaultLogWriteLineError(user.userid);
-                //Log.DefaultLogWriteLineError(access_token + "code:" + code + "1." + user.userid + "2." + user.errcode + "3." + user.errmsg);
+                BP.DA.Log.DebugWriteError(user.userid);
+                //BP.DA.Log.DebugWriteError(access_token + "code:" + code + "1." + user.userid + "2." + user.errcode + "3." + user.errmsg);
                 if (!DataType.IsNullOrEmpty(user.userid)) {
                     string userUrl = "https://oapi.dingtalk.com/topapi/v2/user/get?access_token=" + access_token+"&userid="+ user.userid;
                     
 
                     string json= new HttpWebResponseUtility().HttpResponseGet(userUrl);
-                    Log.DefaultLogWriteLineError(json);
+                    BP.DA.Log.DebugWriteError(json);
                     DingUserInfo userinfo = new DingUserInfo();
                     userinfo= FormatToJson.ParseFromJson<DingUserInfo>(json);
 
@@ -76,7 +76,7 @@ namespace BP.GPM.DTalk
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineError(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
                 return ex.Message;
             }
             return "";
@@ -325,7 +325,7 @@ namespace BP.GPM.DTalk
                                 //如果账户存在则人员信息不添加，添加关联表
                                 if (emp.IsExit(EmpAttr.No, userInfo.userid) == true)
                                 {
-                                    deptEmp.MyPK = deptMentInfo.id + "_" + emp.No;
+                                    deptEmp.setMyPK(deptMentInfo.id + "_" + emp.No);
                                     deptEmp.FK_Dept = deptMentInfo.id;
                                     deptEmp.FK_Emp = emp.No;
                                     deptEmp.DirectInsert();
@@ -342,7 +342,7 @@ namespace BP.GPM.DTalk
                                 emp.DirectInsert();
 
                                 //增加人员与部门对应表
-                                deptEmp.MyPK = deptMentInfo.id + "_" + emp.No;
+                                deptEmp.setMyPK(deptMentInfo.id + "_" + emp.No);
                                 deptEmp.FK_Dept = deptMentInfo.id;
                                 deptEmp.FK_Emp = emp.No;
                                 deptEmp.DirectInsert();
@@ -361,7 +361,7 @@ namespace BP.GPM.DTalk
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineError(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
             }
             return false;
         }
@@ -446,7 +446,7 @@ namespace BP.GPM.DTalk
                                     append.Append("\r\n人员名称发生变化：" + emp.Name + " --> " + userInfo.name);
                                 }
 
-                                deptEmp.MyPK = deptMentInfo.id + "_" + emp.No;
+                                deptEmp.setMyPK(deptMentInfo.id + "_" + emp.No);
                                 if (deptEmp.RetrieveFromDBSources() > 0)
                                     continue;
 
@@ -469,7 +469,7 @@ namespace BP.GPM.DTalk
                             append.Append("\r\n增加人员：" + emp.Name + "  所属部门:" + deptMentInfo.name);
 
                             //增加人员与部门对应表
-                            deptEmp.MyPK = deptMentInfo.id + "_" + emp.No;
+                            deptEmp.setMyPK(deptMentInfo.id + "_" + emp.No);
                             deptEmp.FK_Dept = deptMentInfo.id;
                             deptEmp.FK_Emp = emp.No;
                             deptEmp.DirectInsert();
@@ -584,7 +584,7 @@ namespace BP.GPM.DTalk
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineError(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
             }
             return null;
         }
@@ -607,7 +607,7 @@ namespace BP.GPM.DTalk
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineError(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
             }
             return null;
         }
@@ -638,14 +638,14 @@ namespace BP.GPM.DTalk
                 if (postVal != null)
                 {
                     if (postVal.errcode != "0")
-                        Log.DefaultLogWriteLineError("钉钉新增部门失败：" + postVal.errcode + "-" + postVal.errmsg);
+                        BP.DA.Log.DebugWriteError("钉钉新增部门失败：" + postVal.errcode + "-" + postVal.errmsg);
 
                     return postVal;
                 }
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineError(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
             }
             return null;
         }
@@ -677,14 +677,14 @@ namespace BP.GPM.DTalk
                 if (postVal != null)
                 {
                     if (postVal.errcode != "0")
-                        Log.DefaultLogWriteLineError("钉钉修改部门失败：" + postVal.errcode + "-" + postVal.errmsg);
+                        BP.DA.Log.DebugWriteError("钉钉修改部门失败：" + postVal.errcode + "-" + postVal.errmsg);
 
                     return postVal;
                 }
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineError(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
             }
             return null;
         }
@@ -706,14 +706,14 @@ namespace BP.GPM.DTalk
                 if (postVal != null)
                 {
                     if (postVal.errcode != "0")
-                        Log.DefaultLogWriteLineError("钉钉删除部门失败：" + postVal.errcode + "-" + postVal.errmsg);
+                        BP.DA.Log.DebugWriteError("钉钉删除部门失败：" + postVal.errcode + "-" + postVal.errmsg);
 
                     return postVal;
                 }
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineError(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
             }
             return null;
         }
@@ -755,14 +755,14 @@ namespace BP.GPM.DTalk
                     {
                         //在钉钉通讯录已经存在
                         if (postVal.errcode == "60102") postVal.userid = emp.No;
-                        Log.DefaultLogWriteLineError("钉钉新增人员失败：" + postVal.errcode + "-" + postVal.errmsg);
+                        BP.DA.Log.DebugWriteError("钉钉新增人员失败：" + postVal.errcode + "-" + postVal.errmsg);
                     }
                     return postVal;
                 }
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineError(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
             }
             return null;
         }
@@ -822,14 +822,14 @@ namespace BP.GPM.DTalk
 
                     if (postVal.errcode != "0")
                     {
-                        Log.DefaultLogWriteLineError("钉钉修改人员失败：" + postVal.errcode + "-" + postVal.errmsg);
+                        BP.DA.Log.DebugWriteError("钉钉修改人员失败：" + postVal.errcode + "-" + postVal.errmsg);
                     }
                     return postVal;
                 }
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineError(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
             }
             return null;
         }
@@ -852,14 +852,14 @@ namespace BP.GPM.DTalk
                 if (postVal != null)
                 {
                     if (postVal.errcode != "0")
-                        Log.DefaultLogWriteLineError("钉钉删除人员失败：" + postVal.errcode + "-" + postVal.errmsg);
+                        BP.DA.Log.DebugWriteError("钉钉删除人员失败：" + postVal.errcode + "-" + postVal.errmsg);
 
                     return postVal;
                 }
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineError(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
             }
             return null;
         }

@@ -131,7 +131,7 @@ namespace BP.Sys.FrmUI
         protected override bool beforeInsert()
         {
             //利用这个时间串进行排序.
-            this.SetValByKey("RDT", DataType.CurrentDataTime);
+            this.SetValByKey("RDT", DataType.CurrentDateTime);
             return base.beforeInsert();
         }
     }

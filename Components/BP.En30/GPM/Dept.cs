@@ -101,14 +101,14 @@ namespace BP.GPM
                     return this._enMap;
 
                 Map map = new Map("Port_Dept", "部门");
-                map.EnType = EnType.Admin; 
+                map.setEnType(EnType.Admin); 
 
                 map.AddTBStringPK(DeptAttr.No, null, "编号", true, true, 1, 50, 20);
 
                 //比如xx分公司财务部
                 map.AddTBString(DeptAttr.Name, null, "名称", true, false, 0, 100, 30);
 
-                //比如:\\驰骋集团\\南方分公司\\财务部
+                //比如:\\高凌集团\\南方分公司\\财务部
                 map.AddTBString(DeptAttr.NameOfPath, null, "部门路径", true, true, 0, 300, 30, true);
 
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 100, 30);
@@ -177,13 +177,11 @@ namespace BP.GPM
                 try
                 {
                     this.No = this.GenerNewNoByKey("No");
-
                 }catch(Exception ex)
                 {
                     this.No = DBAccess.GenerGUID();
                 }
             }
-
             return base.beforeInsert();
         }
 
@@ -345,7 +343,7 @@ namespace BP.GPM
             if (BP.Web.WebUser.No.Equals("admin")==true)
             {
                 QueryObject qo = new QueryObject(this);
-                qo.addOrderBy(GPM.DeptAttr.Idx);
+                qo.addOrderBy(DeptAttr.Idx);
                 return qo.DoQuery();
             }
 
@@ -355,11 +353,11 @@ namespace BP.GPM
                 qo.AddWhere(DeptAttr.No, " = ", BP.Web.WebUser.FK_Dept);
                 qo.addOr();
                 qo.AddWhere(DeptAttr.ParentNo, " = ", BP.Web.WebUser.FK_Dept);
-                qo.addOrderBy(GPM.DeptAttr.Idx);
+                qo.addOrderBy(DeptAttr.Idx);
                 return qo.DoQuery();
             }
 
-            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, GPM.DeptAttr.Idx);
+            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, DeptAttr.Idx);
 
           
         }

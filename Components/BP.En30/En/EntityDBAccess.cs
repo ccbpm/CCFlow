@@ -63,6 +63,7 @@ namespace BP.En
                             case DBType.Oracle:
                             case DBType.MySQL:
                             case DBType.PostgreSQL:
+                            case DBType.UX:
                                 return DBAccess.RunSQL(sql, paras);
                             case DBType.Informix:
                                 return DBAccess.RunSQL(en.SQLCash.GetUpdateSQL(en, keys), SqlBuilder.GenerParas_Update_Informix(en, keys));
@@ -131,18 +132,7 @@ namespace BP.En
                     case DBUrlType.AppCenterDSN:
                         dt = DBAccess.RunSQLReturnTable(sql, paras);
                         break;
-                    case DBUrlType.DBAccessOfMSSQL1:
-                        dt = DBAccessOfMSSQL1.RunSQLReturnTable(sql);
-                        break;
-                    case DBUrlType.DBAccessOfMSSQL2:
-                        dt = DBAccessOfMSSQL2.RunSQLReturnTable(sql);
-                        break;
-                    //case DBUrlType.DBAccessOfOracle1:
-                    //    dt = DBAccessOfOracle1.RunSQLReturnTable(sql);
-                    //    break;
-                    //case DBUrlType.DBAccessOfOracle2:
-                    //    dt = DBAccessOfOracle2.RunSQLReturnTable(sql);
-                    //    break;
+                    
                     default:
                         throw new Exception("@没有设置DB类型。");
                 }
@@ -168,18 +158,7 @@ namespace BP.En
                 case DBUrlType.AppCenterDSN:
                     dt = DBAccess.RunSQLReturnTable(sql, paras);
                     break;
-                case DBUrlType.DBAccessOfMSSQL1:
-                    dt = DBAccessOfMSSQL1.RunSQLReturnTable(sql,paras);
-                    break;
-                case DBUrlType.DBAccessOfMSSQL2:
-                    dt = DBAccessOfMSSQL2.RunSQLReturnTable(sql, paras);
-                    break;
-                //case DBUrlType.DBAccessOfOracle1:
-                //    dt = DBAccessOfOracle1.RunSQLReturnTable(sql);
-                //    break;
-                //case DBUrlType.DBAccessOfOracle2:
-                //    dt = DBAccessOfOracle2.RunSQLReturnTable(sql);
-                //    break;
+                
                 default:
                     throw new Exception("@没有设置DB类型。");
             }
@@ -208,18 +187,7 @@ namespace BP.En
                     case DBUrlType.AppCenterDSN:
                         dt = DBAccess.RunSQLReturnTable(sql);
                         break;
-                    case DBUrlType.DBAccessOfMSSQL1:
-                        dt = DBAccessOfMSSQL1.RunSQLReturnTable(sql);
-                        break;
-                    case DBUrlType.DBAccessOfMSSQL2:
-                        dt = DBAccessOfMSSQL2.RunSQLReturnTable(sql);
-                        break;
-                    //case DBUrlType.DBAccessOfOracle1:
-                    //    dt = DBAccessOfOracle1.RunSQLReturnTable(sql);
-                    //    break;
-                    //case DBUrlType.DBAccessOfOracle2:
-                    //    dt = DBAccessOfOracle2.RunSQLReturnTable(sql);
-                    //    break;
+                     
                     default:
                         throw new Exception("@没有设置DB类型。");
                 }
@@ -249,7 +217,7 @@ namespace BP.En
                 return;
             }
             
-            //执行解密. @yln.
+            //执行解密.
             foreach (Attr attr in attrs)
             {
                 var val = dt.Rows[0][attr.Key];
@@ -271,12 +239,7 @@ namespace BP.En
                     case DBUrlType.AppCenterDSN:
                         dt = DBAccess.RunSQLReturnTable(sql);
                         break;
-                    case DBUrlType.DBAccessOfMSSQL1:
-                        dt = DBAccessOfMSSQL1.RunSQLReturnTable(sql);
-                        break;
-                    case DBUrlType.DBAccessOfMSSQL2:
-                        dt = DBAccessOfMSSQL2.RunSQLReturnTable(sql);
-                        break;
+                   
                     default:
                         throw new Exception("@没有设置DB类型。");
                 }
@@ -317,21 +280,7 @@ namespace BP.En
                 case DBUrlType.AppCenterDSN:
                     dt = DBAccess.RunSQLReturnTable(sql, paras);
                     break;
-                case DBUrlType.DBAccessOfMSSQL1:
-                    dt = DBAccessOfMSSQL1.RunSQLReturnTable(sql,paras);
-                    break;
-                case DBUrlType.DBAccessOfMSSQL2:
-                    dt = DBAccessOfMSSQL2.RunSQLReturnTable(sql, paras);
-                    break;
-                //case DBUrlType.DBAccessOfOracle1:
-                //    dt = DBAccessOfOracle1.RunSQLReturnTable(sql);
-                //    break;
-                //case DBUrlType.DBAccessOfOracle2:
-                //    dt = DBAccessOfOracle2.RunSQLReturnTable(sql);
-                //    break;
-                //case DBUrlType.DBAccessOfOLE:
-                //    dt = DBAccessOfOLE.RunSQLReturnTable(sql);
-                //    break;
+              
                 default:
                     throw new Exception("@没有设置DB类型。");
             }

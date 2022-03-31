@@ -85,7 +85,7 @@ namespace BP.Sys.FrmUI
         /// </summary>
         public MapAttrGovDocFile(string myPK)
         {
-            this.MyPK = myPK;
+            this.setMyPK(myPK);
             this.Retrieve();
 
         }
@@ -99,22 +99,23 @@ namespace BP.Sys.FrmUI
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_MapAttr", "公文正文组件");
+                Map map = new Map("Sys_MapAttr", "公文组件");
 
                 #region 基本字段信息.
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
-
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "表单ID", false, false, 1, 100, 20);
-                map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20, true);
+
+                map.AddTBString(MapAttrAttr.Name, null, "中文名", true, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
 
                 map.AddTBInt(MapAttrAttr.MinLen, 0, "最小长度", false, false);
                 map.AddTBInt(MapAttrAttr.MaxLen, 50, "最大长度", false, false);
-                map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
-                map.SetHelperAlert(MapAttrAttr.UIWidth, "对自由表单,从表有效,显示文本框的宽度.");
 
-                map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否启用？", true, true);
-                map.AddDDLSQL(MapAttrAttr.CSSCtrl, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
+                map.AddDDLSysEnum(MapAttrAttr.UIIsEnable, 0, "启用类型", true, true, "CtrlEnableType", "@0=禁用(隐藏)@1=启用@2=只读");
+
+                map.AddDDLSysEnum(MapAttrAttr.Tag, 0, "组件类型", true, true, "GovDocType", "@0=RTF模板@1=HTML模板@2=Weboffice组件@3=WPS组件@4=金格组件");
+
+                //map.AddDDLSQL(MapAttrAttr.CSSCtrl, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
                 #endregion 基本字段信息.
 
                 #region 傻瓜表单
@@ -129,25 +130,51 @@ namespace BP.Sys.FrmUI
                 map.SetHelperAlert(MapAttrAttr.TextColSpan, "对于傻瓜表单有效: 标识该字段Lable，标签横跨的宽度,占的单元格数量.");
 
                 //文本跨行.
-                map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
-                map.SetHelperAlert(MapAttrAttr.RowSpan, "对于傻瓜表单有效: 占的单元格row的数量.");
+                // map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
+                // map.SetHelperAlert(MapAttrAttr.RowSpan, "对于傻瓜表单有效: 占的单元格row的数量.");
 
                 //显示的分组.
                 map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
-
-                map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false);
-                map.SetHelperAlert(MapAttrAttr.Idx, "对傻瓜表单有效:用于调整字段在同一个分组中的顺序.");
-
                 #endregion 傻瓜表单
+
+                map.AddMyFile("模板", null, SystemConfig.PathOfDataUser + "\\FrmVSTOTemplate");
+
+
+                RefMethod rm = new RefMethod();
+                rm.Title = "rtf模板打印";
+                rm.ClassMethodName = this.ToString() + ".DoBill";
+                rm.Icon = "../../WF/Img/FileType/doc.gif";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-printer";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "帮助";
+                rm.ClassMethodName = this.ToString() + ".DoHelp";
+                rm.Icon = "../../WF/Img/FileType/help.gif";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Icon = "icon-printer";
+                map.AddRefMethod(rm);
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
+        public string DoHelp()
+        {
+            return "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=5184749&doc_id=31094";
+        }
+        /// <summary>
+        /// 单据打印
+        /// </summary>
+        /// <returns></returns>
+        public string DoBill()
+        {
+            return "../../Admin/FoolFormDesigner/PrintTemplate/Default.htm?FK_MapData=" + this.FK_MapData + "&FrmID="+this.FK_MapData+"&KeyOfEn=" + this.KeyOfEn;
+        }
 
         protected override bool beforeUpdateInsertAction()
         {
-            //设置公文字号.
             this.UIContralType = UIContralType.GovDocFile;
             return base.beforeUpdateInsertAction();
         }
@@ -174,7 +201,7 @@ namespace BP.Sys.FrmUI
         protected override void afterInsertUpdateAction()
         {
             MapAttr mapAttr = new MapAttr();
-            mapAttr.MyPK = this.MyPK;
+            mapAttr.setMyPK(this.MyPK);
             mapAttr.RetrieveFromDBSources();
             mapAttr.Update();
 

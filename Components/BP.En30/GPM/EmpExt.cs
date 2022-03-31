@@ -138,7 +138,7 @@ namespace BP.GPM
 
                 #region 基本属性
                 map.EnDBUrl = new DBUrl(DBUrlType.AppCenterDSN); //要连接的数据源（表示要连接到的那个系统数据库）。
-                map.EnType = EnType.App;
+                map.setEnType(EnType.App);
                 map.IndexField = EmpAttr.FK_Dept;
                 #endregion
 

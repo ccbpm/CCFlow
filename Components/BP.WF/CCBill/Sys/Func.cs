@@ -147,12 +147,12 @@ namespace BP.CCBill.Sys
         public string Gener_MethodDoc_JavaScript_function()
         {
             string paras = "";
-            MapAttrs attrs = new MapAttrs(this.No);
-            foreach (MapAttr item in attrs)
+            MapAttrs mattrs = new MapAttrs(this.No);
+            foreach (MapAttr item in mattrs)
             {
                 paras += item.KeyOfEn + ",";
             }
-            if (attrs.Count > 1)
+            if (mattrs.Count > 1)
                 paras = paras.Substring(0, paras.Length - 1);
 
             string strs = " function " + this.MethodID + "(" + paras + ") {";

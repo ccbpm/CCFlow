@@ -58,14 +58,7 @@ namespace BP.GPM.Menu2020
         public GroupDept()
         {
         }
-        /// <summary>
-        /// 权限组部门
-        /// </summary>
-        /// <param name="mypk"></param>
-        public GroupDept(string no)
-        {
-            this.Retrieve();
-        }
+      
         /// <summary>
         /// 权限组Dept
         /// </summary>
@@ -75,11 +68,7 @@ namespace BP.GPM.Menu2020
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_GroupDept");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "权限组部门";
-                map.EnType = EnType.Sys;
+                Map map = new Map("GPM_GroupDept", "权限组部门");
 
                 map.AddTBStringPK(GroupDeptAttr.FK_Group, null, "权限组", false, false, 0, 50, 20);
                 map.AddDDLEntitiesPK(GroupDeptAttr.FK_Dept, null, "部门", new Depts(), true);

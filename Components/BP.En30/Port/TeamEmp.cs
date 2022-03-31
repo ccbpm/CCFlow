@@ -62,25 +62,14 @@ namespace BP.Port
         /// <summary>
         /// 用户组人员
         /// </summary>
-        /// <param name="mypk"></param>
-        public TeamEmp(string no)
-        {
-            this.Retrieve();
-        }
-        /// <summary>
-        /// 用户组人员
-        /// </summary>
         public override Map EnMap
         {
             get
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Port_TeamEmp");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "用户组人员";
-                map.EnType = EnType.App;
+                Map map = new Map("Port_TeamEmp", "用户组人员");
+                map.setEnType(EnType.App);
 
                 map.AddTBStringPK(TeamEmpAttr.FK_Team, null, "用户组", true, false, 0, 50, 20);
                 map.AddDDLEntitiesPK(TeamEmpAttr.FK_Emp, null, "人员", new Emps(), true);

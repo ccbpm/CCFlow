@@ -138,6 +138,10 @@ namespace BP.WF.Template
                 this.SetValByKey(FrmFieldAttr.FK_MapData, value);
             }
         }
+        public void setFK_MapData(string val)
+        {
+            this.SetValByKey(FrmFieldAttr.FK_MapData, val);
+        }
         /// <summary>
         /// 字段
         /// </summary>
@@ -151,6 +155,10 @@ namespace BP.WF.Template
             {
                 this.SetValByKey(FrmFieldAttr.KeyOfEn, value);
             }
+        }
+        public void setKeyOfEn(string val)
+        {
+            this.SetValByKey(FrmFieldAttr.KeyOfEn, val);
         }
         /// <summary>
         /// 流程编号
@@ -208,6 +216,16 @@ namespace BP.WF.Template
                 this.SetValByKey(MapAttrAttr.UIIsEnable, value);
             }
         }
+        public void setUIIsEnable(bool val)
+        {
+            this.SetValByKey(MapAttrAttr.UIIsEnable, val);
+
+        }
+        public void setUIVisible(bool val)
+        {
+                this.SetValByKey(MapAttrAttr.UIVisible, val);
+
+        }
         public string DefVal
         {
             get
@@ -236,7 +254,7 @@ namespace BP.WF.Template
 
         public override string InitMyPKVals()
         {
-            this.MyPK =  this.FK_MapData + "_" + this.FK_Flow + "_" + this.FK_Node + "_" + this.KeyOfEn + "_" + this.EleType;
+            this.setMyPK( this.FK_MapData + "_" + this.FK_Flow + "_" + this.FK_Node + "_" + this.KeyOfEn + "_" + this.EleType);
             return base.InitMyPKVals();
         }
         #endregion
@@ -292,15 +310,12 @@ namespace BP.WF.Template
                 // 是否写入流程表? 2014-01-26，如果是，则首先写入该节点的数据表，然后copy到流程数据表里
                 // 在节点发送时有ccflow自动写入，写入目的就是为了
                 map.AddTBInt(FrmFieldAttr.IsWriteToFlowTable, 0, "是否写入流程表", true, false);
-
                 map.AddTBInt(FrmFieldAttr.IsWriteToGenerWorkFlow, 0, "是否写入流程注册表", true, false);
 
                 //map.AddDDLSysEnum(FrmFieldAttr.IsWriteToFlowTable, 0, "写入规则", true, true, FrmFieldAttr.IsWriteToFlowTable,
                   //  "@0=不写入@1=写入流程数据表@2=写入流程注册表@3=写入全部");
 
-
                 map.AddBoolean(MapAttrAttr.IsSigan, false, "是否签名", true, true);
-
                 map.AddTBString(MapAttrAttr.DefVal, null, "默认值", true, false, 0, 200, 20);
 
                 this._enMap = map;
@@ -315,7 +330,7 @@ namespace BP.WF.Template
                 this.EleType = FrmEleType.Field;
 
             if(this.EleType == FrmEleType.Field)
-                this.MyPK = this.FK_MapData + "_"+ this.FK_Node + "_" + this.KeyOfEn;
+                this.setMyPK(this.FK_MapData + "_"+ this.FK_Node + "_" + this.KeyOfEn);
 
 
             return base.beforeInsert();

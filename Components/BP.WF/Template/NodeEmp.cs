@@ -97,7 +97,7 @@ namespace BP.WF.Template
         #endregion
         protected override bool beforeInsert()
         {
-            if (Sys.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.SAAS)
+            if (BP.Sys.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
                 this.FK_Emp = Web.WebUser.OrgNo + "_" + this.FK_Emp;
             return base.beforeInsert();
         }

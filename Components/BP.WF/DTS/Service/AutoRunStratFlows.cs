@@ -53,83 +53,121 @@ namespace BP.WF.DTS
             BP.WF.Flows fls = new Flows();
             fls.RetrieveAll();
 
+            string msg = "开始执行:";
+
+            DateTime dt = DateTime.Now;
+
+           
+            int week = (int)dt.DayOfWeek;
+            week++;
+
             #region 自动启动流程
             foreach (BP.WF.Flow fl in fls)
             {
                 if (fl.HisFlowRunWay == BP.WF.FlowRunWay.HandWork)
                     continue;
 
-                if (DateTime.Now.ToString("HH:mm") == fl.Tag && fl.HisFlowRunWay == FlowRunWay.SpecEmp)
-                    continue;
+                msg += "<br>扫描：" + fl.Name;
 
-                /*if (fl.RunObj == null || fl.RunObj == "")
+                #region 高级设置模式，是否达到启动的时间点？
+                if (fl.HisFlowRunWay == FlowRunWay.SpecEmpAdv || fl.HisFlowRunWay == FlowRunWay.SpecEmp)
                 {
-                    string msg = "您设置自动运行流程错误，没有设置流程内容，流程编号：" + fl.No + ",流程名称:" + fl.Name;
-                    Log.DebugWriteError(msg);
-                    continue;
-                }*/
+                    string currTime = DataType.CurrentDateTime; //2022-09-01 09:10
+                    string[] strs = null;
 
-                #region 判断当前时间是否可以运行它。
-                if (fl.HisFlowRunWay == FlowRunWay.SpecEmp)
-                {
-                    string nowStr = DateTime.Now.ToString("yyyy-MM-dd,HH:mm");
-                    string[] strs = fl.RunObj.Split('@'); //破开时间串。
-                    bool IsCanRun = false;
-                    foreach (string str in strs)
+                    if (fl.HisFlowRunWay == FlowRunWay.SpecEmp)
+                        strs = fl.RunObj.Split('@');
+
+                    if (fl.HisFlowRunWay == FlowRunWay.SpecEmpAdv)
+                        strs = fl.StartGuidePara2.Split('@');
+
+                    bool isHave = false;
+                    foreach (string s in strs)
                     {
-                        if (string.IsNullOrEmpty(str))
+                        if (string.IsNullOrEmpty(s))
                             continue;
-                        if (nowStr.Contains(str))
-                            IsCanRun = true;
+
+                        string str = s.Clone() as string;
+
+                        //如果有周.
+                        if (str.Contains("Week.") == true)
+                        {
+                            if (str.Contains("Week.1") == true && dt.DayOfWeek != DayOfWeek.Monday)
+                                continue;
+                            if (str.Contains("Week.2") == true && dt.DayOfWeek != DayOfWeek.Tuesday)
+                                continue;
+                            if (str.Contains("Week.3") == true && dt.DayOfWeek != DayOfWeek.Wednesday)
+                                continue;
+                            if (str.Contains("Week.4") == true && dt.DayOfWeek != DayOfWeek.Thursday)
+                                continue;
+                            if (str.Contains("Week.5") == true && dt.DayOfWeek != DayOfWeek.Friday)
+                                continue;
+                            if (str.Contains("Week.6") == true && dt.DayOfWeek != DayOfWeek.Saturday)
+                                continue;
+                            if (str.Contains("Week.7") == true && dt.DayOfWeek != DayOfWeek.Sunday)
+                                continue;
+
+                            str = str.Replace("Week.1", "");
+                            str = str.Replace("Week.2", "");
+                            str = str.Replace("Week.3", "");
+                            str = str.Replace("Week.4", "");
+                            str = str.Replace("Week.5", "");
+                            str = str.Replace("Week.6", "");
+                            str = str.Replace("Week.7", "");
+                        }
+
+                        //是否每月的最后一天？
+                        if (str.Contains("LastDayOfMonth") == true)
+                        {
+                            //获得当前月份有多少天.
+                            int days = DateTime.DaysInMonth(dt.Year, dt.Month);
+                            if (dt.Day != days)
+                                continue;
+                        }
+
+
+                        if (currTime.Contains(str) == false)
+                            continue;
+
+                        //记录执行过的时间点，如果有该时间点，就不要在执行了。
+                        string pkval = "AutoFlow_" + fl.No + "_" + str;
+                        BP.Sys.GloVar gv = new GloVar();
+                        gv.No = pkval;
+                        if (gv.RetrieveFromDBSources() == 0)
+                        {
+                            isHave = true;
+                            gv.Name = fl.Name + "自动发起.";
+                            gv.GroupKey = "AutoStartFlow";
+                            gv.Insert();
+                            break;
+                        }
+                        else
+                        {
+                            isHave = false;
+                            continue;
+                        }
                     }
-                    if (IsCanRun == false )
+                    if (isHave == false)
                         continue;
                 }
-
-                // 设置时间.
-                fl.Tag = DateTime.Now.ToString("HH:mm");
-                #endregion 判断当前时间是否可以运行它。
+                #endregion 高级设置模式，是否达到启动的时间点？
 
                 // 以此用户进入.
                 switch (fl.HisFlowRunWay)
                 {
                     case BP.WF.FlowRunWay.SpecEmp: //指定人员按时运行。
-                        string RunObj = fl.RunObj;
-                        string fk_emp = RunObj.Substring(0, RunObj.IndexOf('@'));
-
-                        BP.Port.Emp emp = new BP.Port.Emp();
-                        emp.UserID = fk_emp;
-                        if (emp.RetrieveFromDBSources() == 0)
-                        {
-                            Log.DebugWriteError("启动自动启动流程错误：发起人(" + fk_emp + ")不存在。");
-                            continue;
-                        }
-
-                        try
-                        {
-                            //让 userNo 登录.
-                            BP.WF.Dev2Interface.Port_Login(emp.UserID);
-
-                            //创建空白工作, 发起开始节点.
-                            Int64 workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fl.No);
-
-                            //执行发送.
-                            SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(fl.No, workID);
-
-                            //string info_send= BP.WF.Dev2Interface.Node_StartWork(fl.No,);
-                            Log.DefaultLogWriteLineInfo("流程:" + fl.No + fl.Name + "的定时任务\t\n -------------- \t\n" + objs.ToMsgOfText());
-
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.DebugWriteError("流程:" + fl.No + fl.Name + "自动发起错误:\t\n -------------- \t\n" + ex.Message);
-                        }
+                        msg += "<br>触发了:指定人员按时运行.";
+                        this.SpecEmp(fl);
                         continue;
                     case BP.WF.FlowRunWay.SelectSQLModel: //按数据集合驱动的模式执行。
                         this.SelectSQLModel(fl);
                         continue;
                     case BP.WF.FlowRunWay.WF_TaskTableInsertModel: //按数据集合驱动的模式执行。
                         this.WF_TaskTableInsertModel(fl);
+                        continue;
+                    case BP.WF.FlowRunWay.SpecEmpAdv: //指定人员按时运行 高级模式.。
+                        msg += "<br>触发了:指定人员按时运行 高级模式.";
+                        this.SpecEmpAdv(fl);
                         continue;
                     default:
                         break;
@@ -142,7 +180,97 @@ namespace BP.WF.DTS
             }
             #endregion 发送消息
 
-            return "调度完成..";
+            return msg;
+        }
+        public void SpecEmp(Flow fl)
+        {
+            string RunObj = fl.RunObj;
+            string fk_emp = RunObj.Substring(0, RunObj.IndexOf('@'));
+
+            BP.Port.Emp emp = new BP.Port.Emp();
+            emp.UserID = fk_emp;
+            if (emp.RetrieveFromDBSources() == 0)
+            {
+                BP.DA.Log.DebugWriteError("启动自动启动流程错误：发起人(" + fk_emp + ")不存在。");
+                return;
+            }
+
+            try
+            {
+                //让 userNo 登录.
+                BP.WF.Dev2Interface.Port_Login(emp.UserID);
+
+                //创建空白工作, 发起开始节点.
+                Int64 workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fl.No);
+
+                //执行发送.
+                SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(fl.No, workID);
+
+                //string info_send= BP.WF.Dev2Interface.Node_StartWork(fl.No,);
+                BP.DA.Log.DebugWriteInfo("流程:" + fl.No + fl.Name + "的定时任务\t\n -------------- \t\n" + objs.ToMsgOfText());
+            }
+            catch (Exception ex)
+            {
+                BP.DA.Log.DebugWriteError("流程:" + fl.No + fl.Name + "自动发起错误:\t\n -------------- \t\n" + ex.Message);
+            }
+        }
+        /// <summary>
+        /// 指定人员按时启动高级模式
+        /// </summary>
+        /// <param name="fl">流程</param>
+        /// <returns></returns>
+        public void SpecEmpAdv(Flow fl)
+        {
+            string empsExp = fl.StartGuidePara1; //获得人员信息。
+            if (DataType.IsNullOrEmpty(empsExp) == true)
+                return;
+
+            #region 获得人员集合.
+            string[] emps = null;
+            if (empsExp.ToUpper().Contains("SELECT") == true)
+            {
+                string strs = "";
+                empsExp = BP.WF.Glo.DealExp(empsExp, null, null);
+                DataTable dt = DBAccess.RunSQLReturnTable(empsExp);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    strs += dr[0].ToString() + ";";
+                }
+                emps = strs.Split(';');
+            }
+            else
+            {
+                empsExp = empsExp.Replace("@", ";");
+                empsExp = empsExp.Replace(",", ";");
+                empsExp = empsExp.Replace("、", ";");
+                empsExp = empsExp.Replace("，", ";");
+                emps = empsExp.Split(';');
+            }
+            #endregion 获得人员集合.
+
+
+            foreach (string emp in emps)
+            {
+                if (DataType.IsNullOrEmpty(emp) == true)
+                    continue;
+                try
+                {
+                    //让 emp 登录.
+                    BP.WF.Dev2Interface.Port_Login(emp);
+
+                    //创建空白工作, 发起开始节点.
+                    Int64 workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fl.No);
+
+                    //把草稿设置为待办..
+                    BP.WF.Dev2Interface.Node_SetDraft2Todolist(fl.No, workID);
+
+                    BP.DA.Log.DebugWriteInfo("流程:" + fl.No + fl.Name + "的定时任务\t\n -------------- \t\n 已经启动，待办：" + emp + " , " + workID);
+                }
+                catch (Exception ex)
+                {
+                    BP.DA.Log.DebugWriteError("流程:" + fl.No + fl.Name + "自动发起错误:\t\n -------------- \t\n" + ex.Message);
+                }
+            }
         }
         /// <summary>
         /// 触发模式
@@ -156,14 +284,14 @@ namespace BP.WF.DTS
         {
             #region 读取数据.
             BP.Sys.MapExt me = new MapExt();
-            me.MyPK = MapExtXmlList.StartFlow + "_ND" + int.Parse(fl.No) + "01";
+            me.setMyPK(MapExtXmlList.StartFlow + "_ND" + int.Parse(fl.No) + "01");
             int i = me.RetrieveFromDBSources();
             if (i == 0)
                 return;
 
             if (string.IsNullOrEmpty(me.Tag))
             {
-                Log.DefaultLogWriteLineError("没有为流程(" + fl.Name + ")的开始节点设置发起数据,请参考说明书解决.");
+                BP.DA.Log.DebugWriteError("没有为流程(" + fl.Name + ")的开始节点设置发起数据,请参考说明书解决.");
                 return;
             }
 
@@ -176,7 +304,7 @@ namespace BP.WF.DTS
             DataTable dtMain = DBAccess.RunSQLReturnTable(me.Tag);
             if (dtMain.Rows.Count == 0)
             {
-                Log.DefaultLogWriteLineError("流程(" + fl.Name + ")此时无任务.");
+                BP.DA.Log.DebugWriteError("流程(" + fl.Name + ")此时无任务.");
                 return;
             }
 
@@ -188,7 +316,7 @@ namespace BP.WF.DTS
 
             if (errMsg.Length > 2)
             {
-                Log.DefaultLogWriteLineError("流程(" + fl.Name + ")的开始节点设置发起数据,不完整." + errMsg);
+                BP.DA.Log.DebugWriteError("流程(" + fl.Name + ")的开始节点设置发起数据,不完整." + errMsg);
 
                 return;
             }
@@ -218,7 +346,7 @@ namespace BP.WF.DTS
                     emp.UserID = starter;
                     if (emp.RetrieveFromDBSources() == 0)
                     {
-                        Log.DefaultLogWriteLineInfo("@数据驱动方式发起流程(" + fl.Name + ")设置的发起人员:" + starter + "不存在。");
+                        BP.DA.Log.DebugWriteInfo("@数据驱动方式发起流程(" + fl.Name + ")设置的发起人员:" + starter + "不存在。");
                         continue;
                     }
                     WebUser.SignInOfGener(emp);
@@ -231,12 +359,12 @@ namespace BP.WF.DTS
 
                 //创建工作.
                 GEEntity wk = new GEEntity(frmID, workID);
-               // Work wk = fl.NewWork();
+                // Work wk = fl.NewWork();
 
                 //给主表赋值.
                 foreach (DataColumn dc in dtMain.Columns)
                     wk.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
-                
+
                 // 获取从表数据.
                 DataSet ds = new DataSet();
                 string[] dtlSQLs = me.Tag1.Split('*');
@@ -282,16 +410,16 @@ namespace BP.WF.DTS
                 string msg = "";
                 try
                 {
-                    
+
                     //执行发送到下一个节点.
                     SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(fl.No, workID, wk.Row, ds, toNodeID, toEmps);
 
                     msg = "@自动发起:" + mainPK + "第" + idx + "条:  - " + objs.MsgOfText;
-                    Log.DefaultLogWriteLineInfo(msg);
+                    BP.DA.Log.DebugWriteInfo(msg);
                 }
                 catch (Exception ex)
                 {
-                    Log.DefaultLogWriteLineWarning("@" + fl.Name + ",第" + idx + "条,发起人员:" + WebUser.No + "-" + WebUser.Name + "发起时出现错误.\r\n" + ex.Message);
+                    BP.DA.Log.DebugWriteError("@" + fl.Name + ",第" + idx + "条,发起人员:" + WebUser.No + "-" + WebUser.Name + "发起时出现错误.\r\n" + ex.Message);
                 }
             }
             #endregion 处理流程发起.

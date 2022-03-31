@@ -82,14 +82,7 @@ namespace BP.GPM.Menu2020
         public GroupMenu()
         {
         }
-        /// <summary>
-        /// 权限组菜单
-        /// </summary>
-        /// <param name="mypk"></param>
-        public GroupMenu(string no)
-        {
-            this.Retrieve();
-        }
+        
         /// <summary>
         /// 权限组菜单
         /// </summary>
@@ -99,11 +92,8 @@ namespace BP.GPM.Menu2020
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_GroupMenu");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "权限组菜单";
-                map.EnType = EnType.Sys;
+                Map map = new Map("GPM_GroupMenu", "权限组菜单");
+                map.setEnType(EnType.Sys);
 
                 map.AddTBStringPK(GroupMenuAttr.FK_Group, null, "权限组", false, false, 0, 50, 20);
                 map.AddTBStringPK(GroupMenuAttr.FK_Menu, null, "菜单", false, false, 0, 50, 20);

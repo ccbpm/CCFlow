@@ -52,7 +52,20 @@ namespace BP.GPM.Menu2020
         /// <summary>
         /// 扩展1
         /// </summary>
+        public const string Tag0 = "Tag0";
         public const string Tag1 = "Tag1";
+        /// <summary>
+        /// 扩展2
+        /// </summary>
+        public const string Tag2 = "Tag2";
+        /// <summary>
+        /// 扩展3
+        /// </summary>
+        public const string Tag3 = "Tag3";
+        public const string Tag4 = "Tag4";
+        public const string Tag5 = "Tag5";
+        public const string Tag6 = "Tag6";
+
         /// <summary>
         /// 扩展2
         /// </summary>
@@ -69,6 +82,10 @@ namespace BP.GPM.Menu2020
         /// 图标
         /// </summary>
         public const string Icon = "Icon";
+        /// <summary>
+        /// 标题
+        /// </summary>
+        public const string Title = "Title";
 
         public const string FrmID = "FrmID";
         public const string FlowNo = "FlowNo";
@@ -77,6 +94,11 @@ namespace BP.GPM.Menu2020
         /// 风格:比如Tab,的风格.
         /// </summary>
         public const string Style = "Style";
+
+
+        public const string TagInt1 = "TagInt1";
+        public const string TagInt2 = "TagInt2";
+        public const string TagInt3 = "TagInt3";
 
     }
     /// <summary>
@@ -313,15 +335,7 @@ namespace BP.GPM.Menu2020
         public Menu()
         {
         }
-        /// <summary>
-        /// 菜单
-        /// </summary>
-        /// <param name="mypk"></param>
-        public Menu(string no)
-        {
-            this.No = no;
-            this.Retrieve();
-        }
+
         /// <summary>
         /// 业务处理.
         /// </summary>
@@ -349,7 +363,7 @@ namespace BP.GPM.Menu2020
             //删除窗体信息.
             if (this.MenuModel.Equals("Windows") == true)
             {
-                BP.GPM.Home.WindowTemplates ens = new Home.WindowTemplates();
+                BP.GPM.Home.WindowTemplates ens = new BP.GPM.Home.WindowTemplates();
                 ens.Delete(BP.GPM.Home.WindowTemplateAttr.PageID, this.No);
 
                 // BP.GPM.Home.WindowExt.HtmlVarDtls dtls = new Home.WindowExt.HtmlVarDtls();
@@ -369,12 +383,8 @@ namespace BP.GPM.Menu2020
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("GPM_Menu");  // 类的基本属性.
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "菜单";
-                map.EnType = EnType.Sys;
-                map.CodeStruct = "4";
+                Map map = new Map("GPM_Menu", "菜单");  // 类的基本属性.
+                map.setEnType(EnType.Sys);
 
                 map.AddTBStringPK(MenuAttr.No, null, "编号", false, false, 1, 90, 50);
                 map.AddTBString(MenuAttr.Name, null, "名称", true, false, 0, 300, 200, true);
@@ -433,6 +443,42 @@ namespace BP.GPM.Menu2020
             return base.beforeUpdateInsertAction();
         }
 
+        protected override void afterDelete()
+        {
+            string sql = "";
+            #region 删除实体。
+            if (this.MenuModel.Equals("Dict") == true)
+            {
+                string frmID = this.UrlExt;
+                //删除实体.
+                MapData md = new MapData(frmID);
+                md.Delete();
+
+                //删除集合方法.
+                sql = "DELETE FROM Frm_Collection WHERE FrmID='" + this.No + "'";
+                DBAccess.RunSQL(sql);
+
+                //删除实体组件.
+                sql = "DELETE FROM Frm_Method WHERE FrmID='" + this.No + "'";
+                DBAccess.RunSQL(sql);
+
+                //删除实体组件.
+                sql = "DELETE FROM Frm_ToolbarBtn WHERE FrmID='" + this.No + "'";
+                DBAccess.RunSQL(sql);
+
+                //删除实体组件.
+                sql = "DELETE FROM GPM_PowerCenter WHERE CtrlObj='" + this.No + "'";
+                DBAccess.RunSQL(sql);
+            }
+            #endregion 删除实体。
+
+            //删除权限控制..
+            sql = "DELETE FROM GPM_PowerCenter WHERE CtrlObj='Menu' AND CtrlPKVal='"+this.No+"'";
+            DBAccess.RunSQL(sql);
+
+            base.afterDelete();
+        }
+
         #region 移动方法.
         /// <summary>
         /// 向上移动
@@ -478,9 +524,9 @@ namespace BP.GPM.Menu2020
             if (SystemConfig.CCBPMRunModel != CCBPMRunModel.SAAS)
                 return base.RetrieveAll("Idx");
 
-            //集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
-            if (BP.Sys.SystemConfig.GroupStationModel == 1)
-                return base.RetrieveAll("Idx");
+            ////集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
+            //if (BP.Sys.SystemConfig.GroupStationModel == 1)
+            //    return base.RetrieveAll("Idx");
 
             //按照orgNo查询.
             return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, "Idx");

@@ -151,7 +151,7 @@ namespace BP.WF.Template
 				map.AddDDLEntities(MapFrmExcelAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
 
 				//表单的运行类型.
-				map.AddDDLSysEnum(MapFrmExcelAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型", true, false, MapFrmExcelAttr.FrmType);
+				map.AddDDLSysEnum(MapFrmExcelAttr.FrmType, (int)BP.Sys.FrmType.FoolForm, "表单类型", true, false, MapFrmExcelAttr.FrmType);
 				#endregion 基本属性.
 
 				#region 模版属性。
@@ -176,7 +176,7 @@ namespace BP.WF.Template
 				map.AddTBInt(MapFrmExcelAttr.Idx, 100, "顺序号", false, false);
 				#endregion 设计者信息.
 
-				map.AddMyFile("表单模版", null, SystemConfig.PathOfDataUser + "FrmOfficeTemplate/");
+				map.AddMyFile("表单模版", null, SystemConfig.PathOfDataUser + "FrmVSTOTemplate/");
 
 				//查询条件.
 				map.AddSearchAttr(MapFrmExcelAttr.DBSrc);
@@ -206,15 +206,15 @@ namespace BP.WF.Template
 				rm.RefMethodType = RefMethodType.LinkeWinOpen;
 				map.AddRefMethod(rm);
 
-				rm = new RefMethod();
-				rm.Title = "字段维护";
-				rm.ClassMethodName = this.ToString() + ".DoEditFiledsList";
-				rm.Icon = "../../WF/Img/FileType/xlsx.gif";
-				// rm.Icon = ../../Admin/CCBPMDesigner/Img/Field.png";
-				rm.Visable = true;
-				rm.Target = "_blank";
-				rm.RefMethodType = RefMethodType.RightFrameOpen;
-				map.AddRefMethod(rm);
+				//rm = new RefMethod();
+				//rm.Title = "字段维护";
+				//rm.ClassMethodName = this.ToString() + ".DoEditFiledsList";
+				//rm.Icon = "../../WF/Img/FileType/xlsx.gif";
+				//// rm.Icon = ../../Admin/CCBPMDesigner/Img/Field.png";
+				//rm.Visable = true;
+				//rm.Target = "_blank";
+				//rm.RefMethodType = RefMethodType.RightFrameOpen;
+				//map.AddRefMethod(rm);
 
 				rm = new RefMethod();
 				rm.Title = "装载填充"; // "设计表单";
@@ -235,12 +235,12 @@ namespace BP.WF.Template
 				rm.Target = "_blank";
 				map.AddRefMethod(rm);
 
-				rm = new RefMethod();
-				rm.Title = "批量设置验证规则";
-				rm.Icon = "../../WF/Img/RegularExpression.png";
-				rm.ClassMethodName = this.ToString() + ".DoRegularExpressionBatch";
-				rm.RefMethodType = RefMethodType.RightFrameOpen;
-				map.AddRefMethod(rm);
+				//rm = new RefMethod();
+				//rm.Title = "批量设置验证规则";
+				//rm.Icon = "../../WF/Img/RegularExpression.png";
+				//rm.ClassMethodName = this.ToString() + ".DoRegularExpressionBatch";
+				//rm.RefMethodType = RefMethodType.RightFrameOpen;
+				//map.AddRefMethod(rm);
 
 				rm = new RefMethod();
 				rm.Title = "批量修改字段"; // "设计表单";
@@ -250,7 +250,6 @@ namespace BP.WF.Template
 				rm.RefMethodType = RefMethodType.RightFrameOpen;
 				rm.Target = "_blank";
 				//map.AddRefMethod(rm);
-
 
 				rm = new RefMethod();
 				rm.Title = "JS编程"; // "设计表单";
@@ -386,14 +385,7 @@ namespace BP.WF.Template
 		{
 			return "../../Admin/CCFormDesigner/ExcelFrmDesigner/Designer.htm?FK_MapData=" + this.No;
 		}
-		/// <summary>
-		/// 表单字段.
-		/// </summary>
-		/// <returns></returns>
-		public string DoEditFiledsList()
-		{
-            return "../../Admin/FoolFormDesigner/BatchEdit.htm?FK_MapData=" + this.No;
-		}
+	 
 		/// <summary>
 		/// 节点表单组件
 		/// </summary>
@@ -401,7 +393,7 @@ namespace BP.WF.Template
 		public string DoNodeFrmCompent()
 		{
 			if (this.No.Contains("ND") == true)
-				return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
+				return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDateTime;
 			else
                 return "../../Admin/FoolFormDesigner/Do.htm&DoType=FWCShowError";
 		}
@@ -419,17 +411,17 @@ namespace BP.WF.Template
 		public string DoChangeFieldName(string fieldOld, string newField, string newFieldName)
 		{
 			MapAttr attrOld = new MapAttr();
-			attrOld.KeyOfEn = fieldOld;
-			attrOld.FK_MapData = this.No;
-			attrOld.MyPK = attrOld.FK_MapData + "_" + attrOld.KeyOfEn;
+			attrOld.setKeyOfEn(fieldOld);
+			attrOld.setFK_MapData(this.No);
+			attrOld.setMyPK(attrOld.FK_MapData + "_" + attrOld.KeyOfEn);
 			if (attrOld.RetrieveFromDBSources() == 0)
 				return "@旧字段输入错误[" + attrOld.KeyOfEn + "].";
 
 			//检查是否存在该字段？
 			MapAttr attrNew = new MapAttr();
-			attrNew.KeyOfEn = newField;
-			attrNew.FK_MapData = this.No;
-			attrNew.MyPK = attrNew.FK_MapData + "_" + attrNew.KeyOfEn;
+			attrNew.setKeyOfEn(newField);
+			attrNew.setFK_MapData(this.No);
+			attrNew.setMyPK(attrNew.FK_MapData + "_" + attrNew.KeyOfEn);
 			if (attrNew.RetrieveFromDBSources() == 1)
 				return "@该字段[" + attrNew.KeyOfEn + "]已经存在.";
 
@@ -438,8 +430,8 @@ namespace BP.WF.Template
 
 			//copy这个数据,增加上它.
 			attrNew.Copy(attrOld);
-			attrNew.KeyOfEn = newField;
-			attrNew.FK_MapData = this.No;
+			attrNew.setKeyOfEn(newField);
+			attrNew.setFK_MapData(this.No);
 
 			if (newFieldName != "")
 				attrNew.Name = newFieldName;
@@ -450,7 +442,7 @@ namespace BP.WF.Template
 			MapExts exts = new MapExts(this.No);
 			foreach (MapExt item in exts)
 			{
-				item.MyPK = item.MyPK.Replace("_" + fieldOld, "_" + newField);
+				item.setMyPK(item.MyPK.Replace("_" + fieldOld, "_" + newField));
 
 				if (item.AttrOfOper == fieldOld)
 					item.AttrOfOper = newField;
@@ -476,7 +468,7 @@ namespace BP.WF.Template
 		public string DoRegularExpressionBatch()
 		{
 			return "../../Admin/FoolFormDesigner/MapExt/RegularExpressionBatch.htm?FK_Flow=&FK_MapData=" +
-				   this.No + "&t=" + DataType.CurrentDataTime;
+				   this.No + "&t=" + DataType.CurrentDateTime;
 		}
 		/// <summary>
 		/// 批量修改字段
@@ -485,7 +477,7 @@ namespace BP.WF.Template
 		public string DoBatchEditAttr()
 		{
 			return "../../Admin/FoolFormDesigner/BatchEdit.htm?FK_MapData=" +
-				   this.No + "&t=" + DataType.CurrentDataTime;
+				   this.No + "&t=" + DataType.CurrentDateTime;
 		}
 		/// <summary>
 		/// 排序字段顺序
@@ -494,7 +486,7 @@ namespace BP.WF.Template
 		public string MobileFrmDesigner()
 		{
 			return "../../Admin/MobileFrmDesigner/Default.htm?FK_Flow=&FK_MapData=" +
-				   this.No + "&t=" + DataType.CurrentDataTime;
+				   this.No + "&t=" + DataType.CurrentDateTime;
 		}
 		/// <summary>
 		/// 设计表单

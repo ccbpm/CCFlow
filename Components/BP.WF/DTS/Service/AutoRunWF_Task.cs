@@ -100,15 +100,6 @@ namespace BP.WF.DTS
                 }
 
                 Flow fl = new Flow(fk_flow);
-                if (fl.HisFlowAppType == FlowAppType.PRJ)
-                {
-                    if (paras.Contains("PrjNo=") == false || paras.Contains("PrjName=") == false)
-                    {
-                        info += "err@工程类的流程，没有PrjNo，PrjName参数:"+fl.Name;
-                        DBAccess.RunSQL("UPDATE WF_Task SET TaskSta=2,Msg='" + info + "' WHERE MyPK='" + mypk + "'");
-                        continue;
-                    }
-                }
 
                 Int64 workID = 0;
                 try
@@ -138,7 +129,7 @@ namespace BP.WF.DTS
                     }
 
                     //创建workid.
-                    workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fk_flow, Web.WebUser.No);
+                    workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fk_flow, BP.Web.WebUser.No);
 
                     Node nd = new Node(int.Parse(fk_flow + "01"));
                     Work wk = nd.HisWork;
@@ -160,17 +151,7 @@ namespace BP.WF.DTS
 
                     wk.SetValByKey("MainPK", mypk);
                     wk.Update();
-
-                    if (fl.HisFlowAppType == FlowAppType.PRJ)
-                    {
-                        string prjNo = wk.GetValStrByKey("PrjNo");
-                        if (DataType.IsNullOrEmpty(prjNo) == true)
-                        {
-                            info += "err@没有找到工程编号：MainPK" + mypk;
-                            DBAccess.RunSQL("UPDATE WF_Task SET TaskSta=2,Msg='" + info + "' WHERE MyPK='" + mypk + "'");
-                            continue;
-                        }
-                    }
+                    
 
                     WorkNode wn = new WorkNode(wk, fl.HisStartNode);
 

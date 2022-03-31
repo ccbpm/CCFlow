@@ -11,6 +11,7 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
+using BP.Difference;
 
 namespace BP.WF.HttpHandler
 {
@@ -209,11 +210,11 @@ namespace BP.WF.HttpHandler
                 //获取流程实例
                 Flow fl = new Flow(fk_flow);
                 //获取设置的前置导航的sql
-                string sql = fl.StartGuidePara2.Clone() as string;
+                string sql = fl.StartGuidePara2;
                 //判断是否有查询条件
-                if (!string.IsNullOrWhiteSpace(skey))
+                if ( !DataType.IsNullOrEmpty(skey))
                 {
-                    sql = fl.StartGuidePara1.Clone() as string;
+                    sql = fl.StartGuidePara1;
                     sql = sql.Replace("@Key", skey);
                 }
                 sql = sql.Replace("~", "'");
@@ -274,7 +275,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string MyCC_Init()
         {
-            //手动启动子流程的标志 0父子流程 1 同级子流程
+            //手动启动子流程的标志 0父子流程 1 同级子流程.
             string isStartSameLevelFlow = this.GetRequestVal("IsStartSameLevelFlow");
 
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
@@ -638,6 +639,14 @@ namespace BP.WF.HttpHandler
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
                 }
+                if (btnLab.FrmDBVerMyCC == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "FrmDBVer";
+                    dr["Name"] = btnLab.FrmDBVerLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
                 /* 公文标签 */
                 if (btnLab.OfficeBtnEnable == true && btnLab.OfficeBtnLocal == 0)
                 {
@@ -678,7 +687,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                Log.DefaultLogWriteLineError(ex);
+                BP.DA.Log.DebugWriteError(ex);
                 toolbar = "err@" + ex.Message;
             }
             return BP.Tools.Json.ToJson(dt);
@@ -861,9 +870,9 @@ namespace BP.WF.HttpHandler
                         string dept = DBAccess.RunSQLReturnString(Sql);
                         if (DataType.IsNullOrEmpty(dept) == true)
                             continue;
-                        string[] depts = dept.Split(';');
+                        string[] deptStrs = dept.Split(';');
                         isExit = false;
-                        foreach (string s in depts)
+                        foreach (string s in deptStrs)
                         {
                             if (exp.Contains(s) == true)
                             {

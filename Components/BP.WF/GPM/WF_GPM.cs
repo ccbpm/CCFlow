@@ -61,7 +61,7 @@ namespace BP.WF.HttpHandler
             {
                 var enNo = EnNos[i];
 
-                string sql = "UPDATE GPM_Module SET SystemNo ='" + sortNo + "',Idx=" + i + " WHERE No='" + enNo + "'";
+                string sql = "UPDATE GPM_Module SET Idx=" + i + " WHERE No='" + enNo + "'";
                 DBAccess.RunSQL(sql);
             }
             return "模块顺序移动成功..";
@@ -76,7 +76,7 @@ namespace BP.WF.HttpHandler
                 string sql = "UPDATE GPM_System SET Idx=" + i + " WHERE No='" + enNo + "'";
                 DBAccess.RunSQL(sql);
             }
-            return "模块顺序移动成功..";
+            return "系统顺序移动成功..";
         }
         /// <summary>
         /// 菜单移动
@@ -84,14 +84,13 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Menu_Move()
         {
-
             string sortNo = this.GetRequestVal("RootNo");
             string[] EnNos = this.GetRequestVal("EnNos").Split(',');
             for (int i = 0; i < EnNos.Length; i++)
             {
                 var enNo = EnNos[i];
 
-                string sql = "UPDATE GPM_Menu SET ModuleNo ='" + sortNo + "',Idx=" + i + " WHERE No='" + enNo + "'";
+                string sql = "UPDATE GPM_Menu SET Idx=" + i + " WHERE No='" + enNo + "'";
                 DBAccess.RunSQL(sql);
             }
             return "菜单顺序移动成功..";
@@ -160,7 +159,7 @@ namespace BP.WF.HttpHandler
 
             //创建模块.
             string modelNo = null;
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i <= 5; i++)
             {
                 name = this.GetRequestVal("TB_" + i);
                 if (DataType.IsNullOrEmpty(name) == true)

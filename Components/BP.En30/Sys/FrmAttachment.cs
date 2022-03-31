@@ -86,6 +86,14 @@ namespace BP.Sys
         /// </summary>
         public const string AthSaveWay = "AthSaveWay";
         /// <summary>
+        /// 单附件模板使用规则
+        /// </summary>
+        public const string AthSingleRole = "AthSingleRole";
+        /// <summary>
+        /// 单附件编辑模式
+        /// </summary>
+        public const string AthEditModel = "AthEditModel";
+        /// <summary>
         /// 是否排序？
         /// </summary>
         public const string IsIdx = "IsIdx";
@@ -509,6 +517,10 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentAttr.Name, value);
             }
         }
+        public void setName(string val)
+        {
+            this.SetValByKey(FrmAttachmentAttr.Name, val);
+        }
         /// <summary>
         /// 类别
         /// </summary>
@@ -552,7 +564,7 @@ namespace BP.Sys
         {
             get
             {
-                if (this.AthSaveWay == Sys.AthSaveWay.IISServer)
+                if (this.AthSaveWay == BP.Sys.AthSaveWay.IISServer)
                 {
                     //string s = this.GetValStringByKey(FrmAttachmentAttr.SaveTo);
                     //if (s == "" || s == null)
@@ -560,9 +572,9 @@ namespace BP.Sys
                     // return s;
                 }
 
-                if (this.AthSaveWay == Sys.AthSaveWay.FTPServer)
+                if (this.AthSaveWay == BP.Sys.AthSaveWay.FTPServer)
                 {
-                        return @"//" + this.FK_MapData + "//";
+                    return @"//" + this.FK_MapData + "//";
                 }
 
                 return this.FK_MapData;
@@ -772,12 +784,12 @@ namespace BP.Sys
             {
                 return this.GetValStrByKey(FrmAttachmentAttr.FK_MapData);
             }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.FK_MapData, value);
-            }
-        }
 
+        }
+        public void setFK_MapData(string val)
+        {
+            this.SetValByKey(FrmAttachmentAttr.FK_MapData, val);
+        }
         #endregion
 
         #region 快捷键
@@ -824,7 +836,7 @@ namespace BP.Sys
         /// <param name="mypk"></param>
         public FrmAttachment(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -889,9 +901,7 @@ namespace BP.Sys
 
                 map.AddTBInt(FrmAttachmentAttr.IsIdx, 0, "是否排序", false, false);
 
-
-                //@hongyan. 
-               // map.AddBoolean(FrmAttachmentAttr.IsIdx, false, "是否排序?", true, true);
+                // map.AddBoolean(FrmAttachmentAttr.IsIdx, false, "是否排序?", true, true);
 
                 #region 流程属性.
                 //对于父子流程有效.
@@ -924,24 +934,24 @@ namespace BP.Sys
             {
                 //适应设计器新的规则 by dgq 
                 if (!DataType.IsNullOrEmpty(this.NoOfObj) && this.NoOfObj.Contains(this.FK_MapData))
-                    this.MyPK = this.NoOfObj;
+                    this.setMyPK(this.NoOfObj);
                 else
-                    this.MyPK = this.FK_MapData + "_" + this.NoOfObj;
+                    this.setMyPK(this.FK_MapData + "_" + this.NoOfObj);
             }
             else
-                this.MyPK = this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node;
+                this.setMyPK(this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node);
 
             return base.beforeUpdateInsertAction();
         }
         protected override bool beforeInsert()
         {
             //在属性实体集合插入前，clear父实体的缓存.
-            BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
 
             if (this.FK_Node == 0)
-                this.MyPK = this.FK_MapData + "_" + this.NoOfObj;
+                this.setMyPK(this.FK_MapData + "_" + this.NoOfObj);
             else
-                this.MyPK = this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node;
+                this.setMyPK(this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node);
 
             //对于流程类的多附件，默认按照WorkID控制. add 2017.08.03  by zhoupeng.
             if (this.FK_Node != 0 && this.HisCtrlWay == AthCtrlWay.PK)

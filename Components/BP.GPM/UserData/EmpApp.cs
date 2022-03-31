@@ -112,14 +112,7 @@ namespace BP.GPM
         public EmpApp()
         {
         }
-        /// <summary>
-        /// 管理员与系统权限
-        /// </summary>
-        /// <param name="mypk"></param>
-        public EmpApp(string no)
-        {
-            this.Retrieve();
-        }
+       
         /// <summary>
         /// 管理员与系统权限
         /// </summary>
@@ -129,11 +122,8 @@ namespace BP.GPM
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_EmpApp");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "管理员与系统权限";
-                map.EnType = EnType.App;
+                Map map = new Map("GPM_EmpApp", "管理员与系统权限");
+                map.setEnType(EnType.App);
 
                 map.AddMyPK();
 

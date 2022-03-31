@@ -406,7 +406,7 @@ namespace BP.CCBill
                 map.AddTBString(FrmDictAttr.BtnDelLable, "删除", "删除", true, false, 0, 50, 20);
 
                 //数据版本.
-                map.AddTBString(FrmDictAttr.BtnDataVer, "数据快照", "数据快照", true, false, 0, 50, 20);
+               // map.AddTBString(FrmDictAttr.BtnDataVer, "数据快照", "数据快照", true, false, 0, 50, 20);
 
                 //map.AddBoolean(FrmDictAttr.BtnDelEnable, true, "是否可用？", true, true);
 
@@ -464,8 +464,8 @@ namespace BP.CCBill
                 RefMethod rm = new RefMethod();
 
                 rm = new RefMethod();
-                rm.Title = "执行方法"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoMethod";
+                rm.Title = "按钮权限"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".ToolbarSetting";
                 rm.Icon = "../../WF/Img/Event.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -669,7 +669,7 @@ namespace BP.CCBill
                     if (item.UIIsEnable == false)
                         continue;
 
-                    item.UIIsEnable = false;
+                    item.setUIIsEnable(false);
                     item.Update();
                 }
             }
@@ -685,7 +685,7 @@ namespace BP.CCBill
             CtrlModel ctrl = new CtrlModel();
             ctrl.FrmID = this.No;
             ctrl.CtrlObj = "BtnNew";
-            ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
+            ctrl.setMyPK(ctrl.FrmID + "_" + ctrl.CtrlObj);
             ctrl.IsEnableAll = true;
             if (ctrl.RetrieveFromDBSources() == 0)
                 ctrl.Insert();
@@ -694,23 +694,23 @@ namespace BP.CCBill
             ctrl.FrmID = this.No;
             ctrl.CtrlObj = "BtnSave";
             ctrl.IsEnableAll = true;
-            ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
+            ctrl.setMyPK(ctrl.FrmID + "_" + ctrl.CtrlObj);
             if (ctrl.RetrieveFromDBSources() == 0)
                 ctrl.Insert();
 
-            ctrl = new CtrlModel();
+            /**ctrl = new CtrlModel();
             ctrl.FrmID = this.No;
             ctrl.CtrlObj = "BtnSubmit";
             ctrl.IsEnableAll = true;
-            ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
+            ctrl.setMyPK(ctrl.FrmID + "_" + ctrl.CtrlObj);
             if (ctrl.RetrieveFromDBSources() == 0)
-                ctrl.Insert();
+                ctrl.Insert();**/
 
             ctrl = new CtrlModel();
             ctrl.FrmID = this.No;
             ctrl.CtrlObj = "BtnDelete";
             ctrl.IsEnableAll = true;
-            ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
+            ctrl.setMyPK(ctrl.FrmID + "_" + ctrl.CtrlObj);
             if (ctrl.RetrieveFromDBSources() == 0)
                 ctrl.Insert();
 
@@ -718,7 +718,7 @@ namespace BP.CCBill
             ctrl.FrmID = this.No;
             ctrl.CtrlObj = "BtnSearch";
             ctrl.IsEnableAll = true;
-            ctrl.MyPK = ctrl.FrmID + "_" + ctrl.CtrlObj;
+            ctrl.setMyPK(ctrl.FrmID + "_" + ctrl.CtrlObj);
             if (ctrl.RetrieveFromDBSources() == 0)
                 ctrl.Insert();
 
@@ -745,34 +745,34 @@ namespace BP.CCBill
             {
                 /* WorkID */
                 MapAttr attr = new MapAttr();
-                attr.FK_MapData = this.No;
-                attr.KeyOfEn = "OID";
-                attr.Name = "主键ID";
-                attr.MyDataType = DataType.AppInt;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
+                attr.setFK_MapData(this.No);
+                attr.setKeyOfEn("OID");
+                attr.setName("主键ID");
+                attr.setMyDataType(DataType.AppInt);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
                 attr.DefVal = "0";
-                attr.HisEditType = EditType.Readonly;
+                attr.setEditType(EditType.Readonly);
                 attr.Insert();
             }
             if (attrs.Contains(this.No + "_" + GERptAttr.BillNo) == false)
             {
                 /* 单据编号 */
                 MapAttr attr = new MapAttr();
-                attr.FK_MapData = this.No;
+                attr.setFK_MapData(this.No);
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.BillNo;
-                attr.Name = "编号"; //  单据编号
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = true;
-                attr.UIIsEnable = false;
+                attr.setKeyOfEn(GERptAttr.BillNo);
+                attr.setName("编号"); //  单据编号
+                attr.setMyDataType(DataType.AppString);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(true);
+                attr.setUIIsEnable(false);
                 attr.UIIsLine = false;
-                attr.MinLen = 0;
-                attr.MaxLen = 100;
+                attr.setMinLen(0);
+                attr.setMaxLen(100);
                 attr.Idx = -100;
                 attr.Insert();
             }
@@ -781,18 +781,18 @@ namespace BP.CCBill
             {
                 /* 名称 */
                 MapAttr attr = new MapAttr();
-                attr.FK_MapData = this.No;
+                attr.setFK_MapData(this.No);
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.Title; // "FlowEmps";
-                attr.Name = "名称"; //   单据模式， ccform的模式.
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = true;
-                attr.UIIsEnable = true;
+                attr.setKeyOfEn(GERptAttr.Title); // "FlowEmps";
+                attr.setName("名称"); //   单据模式， ccform的模式.
+                attr.setMyDataType(DataType.AppString);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(true);
+                attr.setUIIsEnable(true);
                 attr.UIIsLine = true;
-                attr.MinLen = 0;
-                attr.MaxLen = 400;
+                attr.setMinLen(0);
+                attr.setMaxLen(400);
                 attr.Idx = -90;
                 attr.Insert();
             }
@@ -800,18 +800,20 @@ namespace BP.CCBill
             {
                 /* 单据状态 */
                 MapAttr attr = new MapAttr();
-                attr.FK_MapData = this.No;
+                attr.setFK_MapData(this.No);
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = "BillState"; // "FlowEmps";
-                attr.Name = "单据状态"; //  
-                attr.MyDataType = DataType.AppInt;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
+                attr.setKeyOfEn("BillState"); // "FlowEmps";
+                attr.setName("单据状态"); //  
+                attr.setMyDataType(DataType.AppInt);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setUIContralType(UIContralType.TB);
+
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
                 attr.UIIsLine = true;
-                attr.MinLen = 0;
-                attr.MaxLen = 10;
+                attr.setMinLen(0);
+                attr.setMaxLen(10);
                 attr.Idx = -98;
                 attr.Insert();
             }
@@ -820,18 +822,18 @@ namespace BP.CCBill
             {
                 /* 发起人 */
                 MapAttr attr = new MapAttr();
-                attr.FK_MapData = this.No;
+                attr.setFK_MapData(this.No);
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = "Starter";
-                attr.Name = "创建人"; //  
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
+                attr.setKeyOfEn("Starter");
+                attr.setName("创建人"); //  
+                attr.setMyDataType(DataType.AppString);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
 
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.MinLen = 0;
-                attr.MaxLen = 32;
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
+                attr.setMinLen(0);
+                attr.setMaxLen(32);
                 attr.Idx = -1;
                 attr.Insert();
             }
@@ -839,18 +841,18 @@ namespace BP.CCBill
             {
                 /* 创建人名称 */
                 MapAttr attr = new MapAttr();
-                attr.FK_MapData = this.No;
+                attr.setFK_MapData(this.No);
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = "StarterName";
-                attr.Name = "创建人名称"; //  
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
+                attr.setKeyOfEn("StarterName");
+                attr.setName("创建人名称"); //  
+                attr.setMyDataType(DataType.AppString);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
 
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.MinLen = 0;
-                attr.MaxLen = 32;
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
+                attr.setMinLen(0);
+                attr.setMaxLen(32);
                 attr.Idx = -1;
                 attr.Insert();
             }
@@ -859,18 +861,18 @@ namespace BP.CCBill
             {
                 /* 参数 */
                 MapAttr attr = new MapAttr();
-                attr.FK_MapData = this.No;
+                attr.setFK_MapData(this.No);
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = GERptAttr.AtPara;
-                attr.Name = "参数"; // 单据编号
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
+                attr.setKeyOfEn(GERptAttr.AtPara);
+                attr.setName("参数"); // 单据编号
+                attr.setMyDataType(DataType.AppString);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
                 attr.UIIsLine = false;
-                attr.MinLen = 0;
-                attr.MaxLen = 4000;
+                attr.setMinLen(0);
+                attr.setMaxLen(4000);
                 attr.Idx = -99;
                 attr.Insert();
             }
@@ -878,15 +880,15 @@ namespace BP.CCBill
             if (attrs.Contains(this.No + "_RDT") == false)
             {
                 MapAttr attr = new MapAttr();
-                attr.FK_MapData = this.No;
+                attr.setFK_MapData(this.No);
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = "RDT";
-                attr.Name = "创建时间";
-                attr.MyDataType = DataType.AppDateTime;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
+                attr.setKeyOfEn("RDT");
+                attr.setName("创建时间");
+                attr.setMyDataType(DataType.AppDateTime);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
                 attr.UIIsLine = false;
                 attr.Idx = -97;
                 attr.Insert();
@@ -895,18 +897,18 @@ namespace BP.CCBill
             {
                 /* 创建人部门 */
                 MapAttr attr = new MapAttr();
-                attr.FK_MapData = this.No;
+                attr.setFK_MapData(this.No);
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = "FK_Dept";
-                attr.Name = "创建人部门"; //  
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
+                attr.setKeyOfEn("FK_Dept");
+                attr.setName("创建人部门"); //  
+                attr.setMyDataType(DataType.AppString);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
 
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.MinLen = 0;
-                attr.MaxLen = 100;
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
+                attr.setMinLen(0);
+                attr.setMaxLen(100);
                 attr.Idx = -1;
                 attr.Insert();
             }
@@ -914,18 +916,18 @@ namespace BP.CCBill
             {
                 /* 创建人名称 */
                 MapAttr attr = new MapAttr();
-                attr.FK_MapData = this.No;
+                attr.setFK_MapData(this.No);
                 attr.HisEditType = EditType.UnDel;
-                attr.KeyOfEn = "OrgNo";
-                attr.Name = "创建人所在的组织"; //  
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
+                attr.setKeyOfEn("OrgNo");
+                attr.setName("创建人所在的组织"); //  
+                attr.setMyDataType(DataType.AppString);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
 
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.MinLen = 0;
-                attr.MaxLen = 32;
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
+                attr.setMinLen(0);
+                attr.setMaxLen(32);
                 attr.Idx = -1;
                 attr.Insert();
             }
@@ -1043,9 +1045,9 @@ namespace BP.CCBill
         }
         #endregion 权限控制.
 
-        public string DoMethod()
+        public string ToolbarSetting()
         {
-            return "../../CCBill/Admin/Method.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+            return "../../CCBill/Admin/ToolbarSetting.htm?s=34&FrmID=" + this.No ;
         }
         public string DoPageLoadFull()
         {
@@ -1091,17 +1093,17 @@ namespace BP.CCBill
         public string DoOpenBillDict()
         {
             return "../../CCBill/SearchDict.htm?FrmID=" +
-              this.No + "&t=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff");
+              this.No + "&t=" + BP.DA.DataType.CurrentDateTime;
         }
         public string DoOpenBillEditer()
         {
             return "../../CCBill/SearchEditer.htm?FrmID=" +
-              this.No + "&t=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff");
+              this.No + "&t=" + BP.DA.DataType.CurrentDateTime;
         }
         public string DoAPI()
         {
             return "../../Admin/FoolFormDesigner/Bill/API.htm?FrmID=" +
-              this.No + "&t=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff");
+              this.No + "&t=" + BP.DA.DataType.CurrentDateTime;
         }
         #endregion 方法操作.
 

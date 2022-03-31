@@ -193,8 +193,8 @@ namespace BP.WF.HttpHandler
             DataTable dt = null;
             string nid = this.GetRequestVal("nodeid");
             string sql = "SELECT pd.No,pd.Name,pd1.No DeptNo,pd1.Name DeptName FROM WF_NodeDept wnd "
-                         + "  INNER JOIN Port_Dept pd ON pd.No = wnd.FK_Dept "
-                         + "  LEFT JOIN Port_Dept pd1 ON pd1.No = pd.ParentNo "
+                         + "  INNER JOIN Port_Dept pd ON pd.No=wnd.FK_Dept "
+                         + "  LEFT JOIN Port_Dept pd1 ON pd1.No=pd.ParentNo "
                          + "WHERE wnd.FK_Node = " + nid + " ORDER BY pd1.Idx, pd.Name";
 
             dt = DBAccess.RunSQLReturnTable(sql);   //, pagesize, pageidx, "No", "Name", "ASC"
@@ -517,7 +517,7 @@ namespace BP.WF.HttpHandler
                     string.Format(
                         "SELECT ps.No,ps.Name,pst.No FK_StationType, pst.Name FK_StationTypeName,ps.FK_Unit,pd.Name FK_UnitName FROM Port_Station ps"
                         + " INNER JOIN Port_StationType pst ON pst.No = ps.FK_StationType"
-                        + " INNER JOIN Port_Dept pd ON pd.No = ps.FK_Unit"
+                        + " INNER JOIN Port_Dept pd ON pd.No=ps.FK_Unit"
                         + " WHERE ps.FK_Unit = '{0}' ORDER BY pst.{1} ASC,ps.Name ASC", parentid, sortField));
 
                 //增加岗位
@@ -562,15 +562,15 @@ namespace BP.WF.HttpHandler
             if (st == "UNIT")
             {
                 sql = "SELECT ps.No,ps.Name,pd.No UnitNo,pd.Name UnitName FROM WF_NodeStation wns "
-                             + "  INNER JOIN Port_Station ps ON ps.No = wns.FK_Station "
-                             + "  INNER JOIN Port_Dept pd ON pd.No = ps.FK_Unit "
+                             + "  INNER JOIN Port_Station ps ON ps.No=wns.FK_Station "
+                             + "  INNER JOIN Port_Dept pd ON pd.No=ps.FK_Unit "
                              + "WHERE wns.FK_Node = " + nid + " ORDER BY ps.Name ASC";
             }
             else
             {
                 sql = "SELECT ps.No,ps.Name,pst.No UnitNo,pst.Name UnitName FROM WF_NodeStation wns "
-                             + "  INNER JOIN Port_Station ps ON ps.No = wns.FK_Station "
-                             + "  INNER JOIN Port_StationType pst ON pst.No = ps.FK_StationType "
+                             + "  INNER JOIN Port_Station ps ON ps.No=wns.FK_Station "
+                             + "  INNER JOIN Port_StationType pst ON pst.No=ps.FK_StationType "
                              + "WHERE wns.FK_Node = " + nid + " ORDER BY pst." + sortField + " ASC,ps.Name ASC";
             }
 

@@ -80,8 +80,8 @@ namespace BP.CCBill
                 if (attr.IsExit(MapAttrAttr.FK_MapData, toFrmID, MapAttrAttr.KeyOfEn, attr.KeyOfEn) == true)
                     continue;
 
-                attr.FK_MapData = toFrmID;
-                attr.MyPK = attr.FK_MapData + "_" +attr.KeyOfEn;
+                attr.setFK_MapData(toFrmID);
+                attr.setMyPK(attr.FK_MapData + "_" +attr.KeyOfEn);
                 attr.Insert();
             }
             return "复制成功.";
@@ -115,12 +115,12 @@ namespace BP.CCBill
             string flowNo = handler.FlowDevModel_Save();
 
             //执行更新. 设置为不能独立启动.
-            BP.WF.Flow fl = new WF.Flow(flowNo);
+            BP.WF.Flow fl = new BP.WF.Flow(flowNo);
             fl.IsCanStart = false;
             fl.Update();
 
             //更新开始节点.
-            BP.WF.Node nd = new WF.Node(int.Parse(flowNo + "01"));
+            BP.WF.Node nd = new BP.WF.Node(int.Parse(flowNo + "01"));
             nd.Name = this.Name;
             if (mapData.HisFrmType == FrmType.Develop)
             {
@@ -136,7 +136,7 @@ namespace BP.CCBill
 
             #region 第2步 把表单导入到流程上去.
             //如果是发起流程的方法，就要表单的字段复制到，流程的表单上去.
-            BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp handlerFrm = new WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp();
+            BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp handlerFrm = new BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp();
             //   handler.AddPara
             handlerFrm.Imp_CopyFrm("ND" + int.Parse(flowNo + "01"), this.FrmID);
 
@@ -144,7 +144,7 @@ namespace BP.CCBill
             #endregion 把表单导入到流程上去.
 
             //创建方法.
-            BP.CCBill.Template.Method en = new Template.Method();
+            BP.CCBill.Template.Method en = new BP.CCBill.Template.Method();
             en.FrmID = this.FrmID;
             en.No = en.FrmID + "_" + flowNo;
             en.Name = this.Name;
@@ -204,7 +204,7 @@ namespace BP.CCBill
             fl.Update();
 
             //更新开始节点.
-            BP.WF.Node nd = new WF.Node(int.Parse(flowNo + "01"));
+            BP.WF.Node nd = new BP.WF.Node(int.Parse(flowNo + "01"));
             nd.Name = this.Name;
             
             nd.Update();
@@ -213,7 +213,7 @@ namespace BP.CCBill
 
             #region 第2步 把表单导入到流程上去.
             //如果是发起流程的方法，就要表单的字段复制到，流程的表单上去.
-            BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp handlerFrm = new WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp();
+            BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp handlerFrm = new BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp();
            
             handlerFrm.Imp_CopyFrm("ND" + int.Parse(flowNo + "01"), this.FrmID);
 
@@ -231,7 +231,7 @@ namespace BP.CCBill
             }
 
             //查询出来数据.
-            MapAttrs mapAttrs = new MapAttrs(md.No);
+            MapAttrs mattrs = new MapAttrs(md.No);
             GroupFields gfs = new GroupFields(md.No);
 
             //遍历分组.
@@ -239,7 +239,7 @@ namespace BP.CCBill
             {
                 //遍历字段.
                 int idx = 0;
-                foreach (MapAttr mapAttr in mapAttrs)
+                foreach (MapAttr mapAttr in mattrs)
                 {
                     if (gs.OID != mapAttr.GroupID)
                         continue;
@@ -262,11 +262,11 @@ namespace BP.CCBill
                     //  DBAccess.RunSQL("UP")
 
                     //复制一个影子字段.
-                    mapAttr.KeyOfEn = "bak" + mapAttr.KeyOfEn;
-                    mapAttr.Name = "(原)" + mapAttr.Name;
+                    mapAttr.setKeyOfEn("bak" + mapAttr.KeyOfEn);
+                    mapAttr.setName("(原)" + mapAttr.Name);
 
-                    mapAttr.MyPK = mapAttr.FK_MapData + "_" + mapAttr.KeyOfEn;
-                    mapAttr.UIIsEnable = false;
+                    mapAttr.setMyPK(mapAttr.FK_MapData + "_" + mapAttr.KeyOfEn);
+                    mapAttr.setUIIsEnable(false);
                     mapAttr.Idx = idx - 1;
                     mapAttr.DirectInsert();
                 }
@@ -274,7 +274,7 @@ namespace BP.CCBill
             #endregion 处理流程的业务表单 - 字段增加一个影子字段..
 
             //创建方法.
-            BP.CCBill.Template.Method en = new Template.Method();
+            BP.CCBill.Template.Method en = new BP.CCBill.Template.Method();
             en.FrmID = this.FrmID;
             en.No = en.FrmID + "_" + flowNo;
             en.Name = this.Name;
@@ -330,7 +330,7 @@ namespace BP.CCBill
 
 
             //创建 - 方法
-            BP.CCBill.Template.Method en = new Template.Method();
+            BP.CCBill.Template.Method en = new BP.CCBill.Template.Method();
             en.FrmID = this.FrmID;
             en.No = en.FrmID + "_" + flowNo;
             en.Name = this.Name;
@@ -380,14 +380,14 @@ namespace BP.CCBill
         {
             #region 第5步: 创建菜单目录与菜单-分组
             //创建该模块下的 菜单:分组.
-            BP.GPM.Menu2020.Module mmodule = new GPM.Menu2020.Module();
+            BP.GPM.Menu2020.Module mmodule = new BP.GPM.Menu2020.Module();
             mmodule.Name = this.Name;
             mmodule.SystemNo = this.GetRequestVal("SortNo"); // md.FK_FormTree; //设置类别.
             mmodule.Idx = 100;
             mmodule.Insert();
 
             //创建菜单.
-            BP.GPM.Menu2020.Menu menu = new GPM.Menu2020.Menu();
+            BP.GPM.Menu2020.Menu menu = new BP.GPM.Menu2020.Menu();
 
             //流程查询.
             menu = new BP.GPM.Menu2020.Menu();

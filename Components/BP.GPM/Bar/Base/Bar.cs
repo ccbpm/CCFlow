@@ -284,7 +284,7 @@ namespace BP.GPM
                         {
                             string no = dr["No"].ToString();
                             string name = dr["Name"].ToString();
-                            string url = this.Tag2.Clone().ToString();
+                            string url = this.Tag2;
                             //url = url.Replace("@No", no);
                             url = url.Replace("~", "'");
                             //if (url.Contains("@"))
@@ -358,7 +358,7 @@ namespace BP.GPM
         /// <summary>
         /// 信息块
         /// </summary>
-        /// <param name="mypk"></param>
+        /// <param name="no"></param>
         public Bar(string no)
         {
             this.No = no;
@@ -373,11 +373,8 @@ namespace BP.GPM
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_Bar");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "信息块";
-                map.EnType = EnType.Sys;
+                Map map = new Map("GPM_Bar", "信息块");
+                map.setEnType(EnType.Sys);
 
                 map.AddTBStringPK(BarAttr.No, null, "编号", true, false, 100, 200, 200);
                 map.AddTBString(BarAttr.Name, null, "名称", true, false, 100, 3900, 20);
@@ -511,7 +508,7 @@ namespace BP.GPM
                     continue;
 
                 BP.GPM.BarEmp barEmp = new BarEmp();
-                barEmp.MyPK = en.No+"_"+Web.WebUser.No;
+                barEmp.setMyPK(en.No+"_"+Web.WebUser.No);
                int i=  barEmp.RetrieveFromDBSources();
 
                 barEmp.FK_Bar = en.No;

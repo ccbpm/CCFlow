@@ -48,7 +48,7 @@ namespace BP.WF.HttpHandler
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                 sql = "SELECT A.No, A.Name,A.FK_Dept FROM Port_Emp A, Port_TeamEmp B WHERE A.No=B.FK_Emp AND B.FK_Team='" + TeamNo + "'";
             else
-                sql = "SELECT A." + BP.Sys.Glo.UserNo + ", A.Name,A.FK_Dept FROM Port_Emp A, Port_TeamEmp B WHERE A.No=B.FK_Emp AND A.OrgNo='" + BP.Web.WebUser.OrgNo + "' AND B.FK_Team='" + TeamNo + "'";
+                sql = "SELECT A." + BP.Sys.Base.Glo.UserNo + ", A.Name,A.FK_Dept FROM Port_Emp A, Port_TeamEmp B WHERE A.No=B.FK_Emp AND A.OrgNo='" + BP.Web.WebUser.OrgNo + "' AND B.FK_Team='" + TeamNo + "'";
 
             DataTable db = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(db);
@@ -66,7 +66,7 @@ namespace BP.WF.HttpHandler
             Dept dept = new Dept(FK_Dept);
             string DeptName = dept.Name;
             SelectAccper selectAccper = new SelectAccper();
-            selectAccper.MyPK = FK_Node + "_" + WorkID + "_" + FK_Emp;
+            selectAccper.setMyPK(FK_Node + "_" + WorkID + "_" + FK_Emp);
             if (selectAccper.RetrieveFromDBSources() == 0)
             {
                 selectAccper.FK_Node =int.Parse(FK_Node);

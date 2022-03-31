@@ -183,7 +183,7 @@ namespace BP.WF
                 gwf.Title = title;
             gwf.Starter = WebUser.No;
             gwf.StarterName = WebUser.Name;
-            gwf.RDT = DataType.CurrentDataTimess;
+            gwf.RDT = DataType.CurrentDateTimess;
             gwf.PWorkID = parentWorkID;
            // gwf.PFID = parentFID;
             gwf.PFlowNo = parentFlowNo;
@@ -208,7 +208,7 @@ namespace BP.WF
             gwl.FK_DeptT = WebUser.FK_DeptName;
 
             gwl.SDT = "无";
-            gwl.DTOfWarning = DataType.CurrentDataTime;
+            gwl.DTOfWarning = DataType.CurrentDateTime;
             gwl.IsEnable = true;
             gwl.IsPass = false;
             gwl.PRI = gwf.PRI;

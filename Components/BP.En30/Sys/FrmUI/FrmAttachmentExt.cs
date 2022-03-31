@@ -494,7 +494,7 @@ namespace BP.Sys.FrmUI
         /// <param name="mypk">主键</param>
         public FrmAttachmentExt(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -537,7 +537,7 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSysEnum(FrmAttachmentAttr.AthSaveWay, 0, "保存方式", true, true, FrmAttachmentAttr.AthSaveWay,
                   "@0=保存到web服务器@1=保存到数据库@2=ftp服务器");
 
-                //@hongyan. 
+                 
                 map.AddBoolean(FrmAttachmentAttr.IsIdx, false, "是否排序?", true, true);
 
 
@@ -579,7 +579,10 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(FrmAttachmentAttr.IsExpCol, true, "是否启用扩展列", true, true);
 
                 map.AddBoolean(FrmAttachmentAttr.IsShowTitle, true, "是否显示标题列", true, true);
+
                 map.AddDDLSysEnum(FrmAttachmentAttr.UploadType, 0, "上传类型", true, false, FrmAttachmentAttr.CtrlWay, "@0=单个@1=多个@2=指定");
+                map.SetHelperAlert(FrmAttachmentAttr.UploadType,"单附件：请使用字段单附件组件。");
+
 
                 map.AddDDLSysEnum(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式", true, true, FrmAttachmentAttr.AthUploadWay, "@0=继承模式@1=协作模式");
 
@@ -652,7 +655,7 @@ namespace BP.Sys.FrmUI
                 rm.Title = "设置扩展列";
                 rm.ClassMethodName = this.ToString() + ".DtlOfAth";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                map.AddRefMethod(rm);
+               // map.AddRefMethod(rm);
                 #endregion 基本配置.
 
 
@@ -741,9 +744,9 @@ namespace BP.Sys.FrmUI
             {
                 //适应设计器新的规则 by dgq 
                 if (!DataType.IsNullOrEmpty(this.NoOfObj) && this.NoOfObj.Contains(this.FK_MapData))
-                    this.MyPK = this.NoOfObj;
+                    this.setMyPK(this.NoOfObj);
                 else
-                    this.MyPK = this.FK_MapData + "_" + this.NoOfObj;
+                    this.setMyPK(this.FK_MapData + "_" + this.NoOfObj);
             }
 
             if (this.FK_Node != 0)
@@ -751,7 +754,7 @@ namespace BP.Sys.FrmUI
                 /*工作流程模式.*/
                 if (this.HisCtrlWay == AthCtrlWay.PK)
                     this.HisCtrlWay = AthCtrlWay.WorkID;
-                this.MyPK = this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node;
+                this.setMyPK(this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node);
             }
 
             if (this.HisCtrlWay != AthCtrlWay.WorkID)
@@ -808,13 +811,13 @@ namespace BP.Sys.FrmUI
         protected override bool beforeInsert()
         {
             //在属性实体集合插入前，clear父实体的缓存.
-            BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
 
 
             if (this.FK_Node == 0)
-                this.MyPK = this.FK_MapData + "_" + this.NoOfObj;
+                this.setMyPK(this.FK_MapData + "_" + this.NoOfObj);
             else
-                this.MyPK = this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node;
+                this.setMyPK(this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node);
 
             return base.beforeInsert();
         }
@@ -840,7 +843,7 @@ namespace BP.Sys.FrmUI
         protected override void afterInsertUpdateAction()
         {
             FrmAttachment ath = new FrmAttachment();
-            ath.MyPK = this.MyPK;
+            ath.setMyPK(this.MyPK);
             ath.RetrieveFromDBSources();
             ath.IsToHeLiuHZ = this.IsToHeLiuHZ;
             ath.IsHeLiuHuiZong = this.IsHeLiuHuiZong;
@@ -854,7 +857,7 @@ namespace BP.Sys.FrmUI
 
             //判断是否是字段附件
             MapAttr mapAttr = new MapAttr();
-            mapAttr.MyPK = this.MyPK;
+            mapAttr.setMyPK(this.MyPK);
             if (mapAttr.RetrieveFromDBSources() != 0 && mapAttr.Name.Equals(this.Name) == false)
             {
                 mapAttr.Name = this.Name;
@@ -879,12 +882,11 @@ namespace BP.Sys.FrmUI
 
             //把相关的字段也要删除.
             MapAttrString attr = new MapAttrString();
-            attr.MyPK = this.MyPK;
+            attr.setMyPK(this.MyPK);
             if (attr.RetrieveFromDBSources() != 0)
             {
                 attr.Delete();
             }
-
 
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
@@ -929,20 +931,20 @@ namespace BP.Sys.FrmUI
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<FrmAttachment> ToJavaList()
+        public System.Collections.Generic.IList<FrmAttachmentExt> ToJavaList()
         {
-            return (System.Collections.Generic.IList<FrmAttachment>)this;
+            return (System.Collections.Generic.IList<FrmAttachmentExt>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<FrmAttachment> Tolist()
+        public System.Collections.Generic.List<FrmAttachmentExt> Tolist()
         {
-            System.Collections.Generic.List<FrmAttachment> list = new System.Collections.Generic.List<FrmAttachment>();
+            System.Collections.Generic.List<FrmAttachmentExt> list = new System.Collections.Generic.List<FrmAttachmentExt>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((FrmAttachment)this[i]);
+                list.Add((FrmAttachmentExt)this[i]);
             }
             return list;
         }

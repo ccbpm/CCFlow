@@ -59,14 +59,7 @@ namespace BP.GPM
         public GroupEmp()
         {
         }
-        /// <summary>
-        /// 权限组人员
-        /// </summary>
-        /// <param name="mypk"></param>
-        public GroupEmp(string no)
-        {
-            this.Retrieve();
-        }
+       
         /// <summary>
         /// 权限组人员
         /// </summary>
@@ -77,11 +70,7 @@ namespace BP.GPM
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("GPM_GroupEmp");
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "权限组人员";
-                map.EnType = EnType.App;
+                Map map = new Map("GPM_GroupEmp", "权限组人员");
 
                 map.AddTBStringPK(GroupEmpAttr.FK_Group, null, "权限组", true, false, 0, 50, 20);
                 map.AddDDLEntitiesPK(GroupEmpAttr.FK_Emp, null, "人员", new Emps(), true);

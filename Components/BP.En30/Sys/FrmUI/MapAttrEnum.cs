@@ -57,6 +57,21 @@ namespace BP.Sys.FrmUI
             }
         }
         /// <summary>
+        /// 默认值
+        /// </summary>
+        public string DefVal
+        {
+            get
+            {
+                return this.GetValStringByKey(MapAttrAttr.DefVal);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.DefVal, value);
+            }
+        }
+        
+        /// <summary>
         /// 控件类型
         /// </summary>
         public UIContralType UIContralType
@@ -129,6 +144,7 @@ namespace BP.Sys.FrmUI
                         break;
 
                     case DBType.PostgreSQL:
+                    case DBType.UX:
                     default:
                         sql = "SELECT -1 AS No, '-无(不选择)-' as Name FROM Port_Emp WHERE 1=2 ";
                         break;
@@ -137,7 +153,8 @@ namespace BP.Sys.FrmUI
 
                 if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                     sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey'";
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+
+                if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 {
                     sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey' AND OrgNo='" + BP.Web.WebUser.OrgNo + "' ";
                     sql += " union ";
@@ -235,9 +252,9 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         protected override bool beforeUpdateInsertAction()
         {
-
+            
             MapAttr attr = new MapAttr();
-            attr.MyPK = this.MyPK;
+            attr.setMyPK(this.MyPK);
             attr.RetrieveFromDBSources();
 
             //单选按钮的展现方式.
@@ -245,12 +262,26 @@ namespace BP.Sys.FrmUI
 
             if (this.UIContralType == UIContralType.DDL
                 || this.UIContralType == UIContralType.RadioBtn)
-                attr.MyDataType = DataType.AppInt;
+                attr.setMyDataType(DataType.AppInt);
             else
-                attr.MyDataType = DataType.AppString;
+                attr.setMyDataType(DataType.AppString);
 
             //执行保存.
             attr.Update();
+
+            #region 修改默认值.
+            //如果没默认值.
+            if (DataType.IsNullOrEmpty(this.DefVal)==true)
+                this.DefVal ="0";
+            MapData md = new MapData();
+            md.No = this.FK_MapData;
+            if (md.RetrieveFromDBSources() == 1)
+            {
+                //修改默认值.
+                BP.DA.DBAccess.UpdateTableColumnDefaultVal(md.PTable, this.KeyOfEn, int.Parse(this.DefVal));
+            }
+            #endregion 修改默认值.
+
 
             return base.beforeUpdateInsertAction();
         }
@@ -258,12 +289,12 @@ namespace BP.Sys.FrmUI
         protected override void afterInsertUpdateAction()
         {
             MapAttr mapAttr = new MapAttr();
-            mapAttr.MyPK = this.MyPK;
+            mapAttr.setMyPK(this.MyPK);
             mapAttr.RetrieveFromDBSources();
            
             if (this.UIContralType == UIContralType.CheckBok)
             {
-                mapAttr.MyDataType = DataType.AppString;
+                mapAttr.setMyDataType(DataType.AppString);
                 MapData mapData = new MapData(this.FK_MapData);
                 GEEntity en = new GEEntity(this.FK_MapData);
 
@@ -291,7 +322,7 @@ namespace BP.Sys.FrmUI
                             string sql = "SELECT DATA_TYPE FROM ALL_TAB_COLUMNS WHERE upper(TABLE_NAME)='" + en.EnMap.PhysicsTable.ToUpper() + "' AND UPPER(COLUMN_NAME)='" + this.KeyOfEn.ToUpper() + "' ";
                             string val = DBAccess.RunSQLReturnString(sql);
                             if (val == null)
-                                Log.DefaultLogWriteLineError("@没有检测到字段eunm" + this.KeyOfEn);
+                                BP.DA.Log.DebugWriteError("@没有检测到字段eunm" + this.KeyOfEn);
                             if (val.IndexOf("NUMBER") != -1)
                             {
                                 this.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable + " RENAME COLUMN " + this.KeyOfEn + " TO " + this.KeyOfEn + "_tmp");
@@ -312,7 +343,11 @@ namespace BP.Sys.FrmUI
                             this.RunSQL("alter table  " + en.EnMap.PhysicsTable + " modify " + this.KeyOfEn + " NVARCHAR(20)");
                             break;
                         case DBType.PostgreSQL:
+                        case DBType.UX:
                             this.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable + " ALTER column " + this.KeyOfEn + " type character varying(20)");
+                            break;
+                        default:
+                            throw new Exception("err@没有判断的异常.");
                             break;
                     }
                 }

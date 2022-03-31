@@ -309,7 +309,6 @@ namespace BP.WF.Template
                 map.SetHelperUrl(FlowAttr.IsCanStart, "http://ccbpm.mydoc.io/?v=5404&t=17027");
 
 
-
                 map.AddBoolean(FlowAttr.IsMD5, false, "是否是数据加密流程(MD5数据加密防篡改)", true, true, true);
                 map.SetHelperUrl(FlowAttr.IsMD5, "http://ccbpm.mydoc.io/?v=5404&t=17028");
 
@@ -326,9 +325,7 @@ namespace BP.WF.Template
                 map.AddBoolean(FlowAttr.IsBatchStart, false, "是否可以批量发起流程？(如果是就要设置发起的需要填写的字段,多个用逗号分开)", true, true, true);
                 map.AddTBString(FlowAttr.BatchStartFields, null, "发起字段s", true, false, 0, 500, 10, true);
                 map.SetHelperUrl(FlowAttr.IsBatchStart, "http://ccbpm.mydoc.io/?v=5404&t=17047");
-                map.AddDDLSysEnum(FlowAttr.FlowAppType, (int)FlowAppType.Normal, "流程应用类型",
-                  true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
-                map.SetHelperUrl(FlowAttr.FlowAppType, "http://ccbpm.mydoc.io/?v=5404&t=17035");
+              
 
                 // 草稿
                 map.AddDDLSysEnum(FlowAttr.Draft, (int)DraftRole.None, "草稿规则",
@@ -347,10 +344,8 @@ namespace BP.WF.Template
                 map.AddTBString(FlowAttr.FlowNoteExp, null, "备注的表达式", true, false, 0, 500, 10, true);
                 map.SetHelperUrl(FlowAttr.FlowNoteExp, "http://ccbpm.mydoc.io/?v=5404&t=17043");
                 map.AddTBString(FlowAttr.Note, null, "流程描述", true, false, 0, 100, 10, true);
-
-                map.AddDDLSysEnum(FlowAttr.FlowAppType, (int)FlowAppType.Normal, "流程应用类型", true, true,
-                    "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
-                map.AddTBString(FlowAttr.HelpUrl, null, "帮助文档", true, false, 0, 300, 10, true);
+ 
+             //   map.AddTBString(FlowAttr.HelpUrl, null, "帮助文档", true, false, 0, 300, 10, true);
                 #endregion 基本属性。
 
                 //查询条件.
@@ -358,7 +353,7 @@ namespace BP.WF.Template
                 //   map.AddSearchAttr(FlowAttr.TimelineRole);
 
                 //绑定组织.
-                map.AttrsOfOneVSM.Add(new FlowOrgs(), new BP.WF.Port.Admin2.Orgs(),
+                map.AttrsOfOneVSM.Add(new FlowOrgs(), new BP.WF.Port.Admin2Group.Orgs(),
                     FlowOrgAttr.FlowNo,
                   FlowOrgAttr.OrgNo, FlowAttr.Name, FlowAttr.No, "可以发起的组织");
 
@@ -386,7 +381,7 @@ namespace BP.WF.Template
 
         public string DoBindFlowSheet()
         {
-            return "../../Admin/Sln/BindFrms.htm?s=d34&ShowType=FlowFrms&FK_Node=0&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
+            return "../../Admin/Sln/BindFrms.htm?s=d34&ShowType=FlowFrms&FK_Node=0&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDateTime;
         }
         /// <summary>
         /// 批量发起字段
@@ -394,7 +389,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBatchStartFields()
         {
-            return "../../Admin/AttrFlow/BatchStartFields.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
+            return "../../Admin/AttrFlow/BatchStartFields.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDateTime;
         }
         /// <summary>
         /// 执行流程数据表与业务表数据手工同步
@@ -415,8 +410,10 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoRebackFlowData(Int64 workid, int backToNodeID, string note)
         {
-            if (note.Length <= 2)
+            if (DataType.IsNullOrEmpty(note) == true)
                 return "请填写恢复已完成的流程原因.";
+            if (note.Length <= 2)
+                return "填写回滚原因不能少于三个字符.";
 
             Flow fl = new Flow(this.No);
             GERpt rpt = new GERpt("ND" + int.Parse(this.No) + "Rpt");
@@ -481,7 +478,7 @@ namespace BP.WF.Template
                 string ndTrack = "ND" + int.Parse(this.No) + "Track";
                 string actionType = (int)ActionType.Forward + "," + (int)ActionType.FlowOver + "," + (int)ActionType.ForwardFL + "," + (int)ActionType.ForwardHL;
                 string sql = "SELECT  * FROM " + ndTrack + " WHERE   ActionType IN (" + actionType + ")  and WorkID=" + workid + " ORDER BY RDT DESC, NDFrom ";
-                System.Data.DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0)
                     throw new Exception("@工作ID为:" + workid + "的数据不存在.");
 
@@ -552,9 +549,9 @@ namespace BP.WF.Template
                 rw.ReturnToNode = currWl.FK_Node;
                 rw.ReturnToEmp = currWl.FK_Emp;
                 rw.BeiZhu = note;
-                rw.RDT = DataType.CurrentDataTime;
+                rw.RDT = DataType.CurrentDateTime;
                 rw.IsBackTracking = false;
-                rw.MyPK = DBAccess.GenerGUID();
+                rw.setMyPK(DBAccess.GenerGUID());
                 rw.Insert();
                 #endregion   加入退回信息, 让接受人能够看到退回原因.
 

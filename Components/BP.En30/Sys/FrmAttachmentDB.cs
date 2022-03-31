@@ -358,6 +358,10 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentDBAttr.FK_MapData, value);
             }
         }
+        public void setFK_MapData(string val)
+        {
+            this.SetValByKey(FrmAttachmentDBAttr.FK_MapData, val);
+        }
         /// <summary>
         /// 文件大小
         /// </summary>
@@ -442,7 +446,7 @@ namespace BP.Sys
         /// <param name="mypk"></param>
         public FrmAttachmentDB(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -549,22 +553,14 @@ namespace BP.Sys
             if (string.IsNullOrWhiteSpace(this.FK_FrmAttachment))
                 return;
 
-            //是一个流程先判断流程是否结束，如果结束了，就不让删除.
-            //   string nodeID = this.FK_MapData.Replace("ND", "");
-            //  if (DataType.IsNumStr(nodeID) = true)
-            // {
-            //}
-
-
-
             FrmAttachment ath = new FrmAttachment(this.FK_FrmAttachment);
             try
             {
                 // @于庆海需要翻译.
-                if (ath.AthSaveWay == Sys.AthSaveWay.IISServer)
+                if (ath.AthSaveWay == BP.Sys.AthSaveWay.IISServer)
                     System.IO.File.Delete(this.FileFullName);
 
-                if (ath.AthSaveWay == Sys.AthSaveWay.FTPServer)
+                if (ath.AthSaveWay == BP.Sys.AthSaveWay.FTPServer)
                 {
                     FtpConnection ftpconn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPServerPort,
                              SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
@@ -575,9 +571,8 @@ namespace BP.Sys
             }
             catch (Exception ex)
             {
-                Log.DebugWriteError(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
             }
-
 
             base.afterDelete();
         }
@@ -589,15 +584,15 @@ namespace BP.Sys
         /// 获得临时文件
         /// </summary>
         /// <returns></returns>
-        public string GenerTempFile(AthSaveWay saveWay = Sys.AthSaveWay.IISServer)
+        public string GenerTempFile(AthSaveWay saveWay = BP.Sys.AthSaveWay.IISServer)
         {
-            if (saveWay == Sys.AthSaveWay.IISServer)
+            if (saveWay == BP.Sys.AthSaveWay.IISServer)
                 return this.FileFullName;
 
-            if (saveWay == Sys.AthSaveWay.FTPServer)
+            if (saveWay == BP.Sys.AthSaveWay.FTPServer)
                 return this.MakeFullFileFromFtp();
 
-            if (saveWay == Sys.AthSaveWay.DB)
+            if (saveWay == BP.Sys.AthSaveWay.DB)
                 throw new Exception("@尚未处理存储到db里面的文件.");
 
             throw new Exception("@尚未处理存储到db里面的文件.");

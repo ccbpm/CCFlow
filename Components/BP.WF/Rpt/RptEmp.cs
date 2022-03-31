@@ -115,7 +115,7 @@ namespace BP.WF.Rpt
                     return this._enMap;
 
                 Map map = new Map("Sys_RptEmp", "报表人员对应信息");
-                map.EnType = EnType.Dot2Dot;
+                map.setEnType(EnType.Dot2Dot);
 
                 map.AddTBStringPK(RptEmpAttr.FK_Rpt, null, "报表", false, false, 1, 15, 1);
                 map.AddDDLEntitiesPK(RptEmpAttr.FK_Emp, null, "人员", new Emps(), true);

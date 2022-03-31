@@ -14,6 +14,7 @@ using BP.WF.Template;
 using BP.WF.Data;
 using BP.WF.HttpHandler;
 using BP.CCBill.Template;
+using BP.Difference;
 
 
 namespace BP.CCBill
@@ -23,6 +24,53 @@ namespace BP.CCBill
     /// </summary>
     public class WF_CCBill_Admin : DirectoryPageBase
     {
+
+        /// <summary>
+        /// 工具栏按钮
+        /// </summary>
+        /// <returns></returns>
+        public string ToolbarSetting_Init()
+        {
+            ToolbarBtns btns = new ToolbarBtns(); 
+            int i = btns.Retrieve(GroupMethodAttr.FrmID, this.FrmID, "Idx");
+            if (i == 0)
+            {
+                ToolbarBtn btn = new ToolbarBtn();
+                btn.FrmID = this.FrmID;
+                btn.BtnID = "New";
+                btn.BtnLab = "新建";
+                btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+                btn.SetValByKey("Idx", 0);
+                btn.Insert();
+
+                btn = new ToolbarBtn();
+                btn.FrmID = this.FrmID;
+                btn.BtnID = "Save";
+                btn.BtnLab = "保存";
+                btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+                btn.SetValByKey("Idx", 1);
+                btn.Insert();
+
+                btn = new ToolbarBtn();
+                btn.FrmID = this.FrmID;
+                btn.BtnID = "Delete";
+                btn.BtnLab = "删除";
+                btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+                btn.SetValByKey("Idx", 2);
+                btn.Insert();
+
+                btn = new ToolbarBtn();
+                btn.FrmID = this.FrmID;
+                btn.BtnID = "Delete";
+                btn.BtnLab = "删除";
+                btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+                btn.SetValByKey("Idx", 3);
+                btn.Insert();
+                btns.Retrieve(GroupMethodAttr.FrmID, this.FrmID, "Idx");
+            }
+            return btns.ToJson(); 
+        }
+
         #region 方法的操作.
         /// <summary>
         /// 方法的初始化

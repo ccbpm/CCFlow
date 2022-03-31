@@ -21,6 +21,79 @@ namespace BP.WF
     public class WorkNodePlus
     {
         /// <summary>
+        /// 处理数据源.
+        /// </summary>
+        /// <param name="fl"></param>
+        /// <param name="nd"></param>
+        /// <param name="track"></param>
+        public static void AddNodeFrmTrackDB(Flow fl, Node nd, Track track, Work wk)
+        {
+            //如果是单个表单.
+            if (nd.HisFormType == NodeFormType.Develop
+                 || nd.HisFormType == NodeFormType.FoolTruck
+                || nd.HisFormType == NodeFormType.FoolForm)
+            {
+                //接点表单保存NDXXRpt
+                string frmID = "ND" + Int32.Parse(fl.No) + "Rpt";
+                string dtlJson = AddNodeFrmDtlDB(nd.NodeID, track.WorkID,nd.NodeFrmID);
+                BP.Sys.FrmDBVer.AddFrmDBTrack(frmID, track.WorkID.ToString(), track.MyPK, wk.ToJson(), dtlJson);
+                return;
+            }
+            if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+            {
+                string dtlJson = AddNodeFrmDtlDB(nd.NodeID, track.WorkID, nd.NodeFrmID);
+                BP.Sys.FrmDBVer.AddFrmDBTrack(nd.NodeFrmID, track.WorkID.ToString(), track.MyPK, wk.ToJson(), dtlJson);
+                return;
+            }
+
+            //如果是多个表单.
+            if (nd.HisFormType == NodeFormType.SheetTree)
+            {
+                FrmNodes fns = new FrmNodes(fl.No,nd.NodeID);
+
+                foreach (FrmNode fn in fns)
+                {
+                    if (fn.FrmSln == FrmSln.Readonly)
+                        continue;
+
+                    BP.Sys.GEEntity ge = new GEEntity(fn.FK_Frm);
+                    ge.OID = track.WorkID;
+                    if (ge.RetrieveFromDBSources() == 0)
+                        continue;
+                    string dtlJson = AddNodeFrmDtlDB(nd.NodeID, track.WorkID, fn.FK_Frm);
+                    BP.Sys.FrmDBVer.AddFrmDBTrack(fn.FK_Frm, track.WorkID.ToString(), track.MyPK, ge.ToJson(), dtlJson);
+                }
+                return;
+            }
+
+            //if (fl.HisNodes)
+            // FrmDBVer.AddFrmDBTrack()
+
+        }
+        /// <summary>
+        /// 获取表单从表的数据集合
+        /// </summary>
+        /// <param name="nodeId"></param>
+        /// <param name="workID"></param>
+        /// <param name="frmID"></param>
+        /// <returns></returns>
+        public static string AddNodeFrmDtlDB(int nodeId, Int64 workID,string frmID)
+        {
+            MapData mapData = new MapData(frmID);
+            GenerWorkFlow gwf = new GenerWorkFlow(workID);
+            MapDtls dtls = mapData.MapDtls;
+            DataSet ds = new DataSet();
+            DataTable dt = null;
+            foreach (MapDtl dtl in dtls)
+            {
+                string dtlRefPKVal = BP.WF.Dev2Interface.GetDtlRefPKVal(gwf.WorkID, gwf.PWorkID, gwf.FID, nodeId, dtl.FK_MapData, dtl);
+                dt = CCFormAPI.GetDtlInfo(dtl, null, dtlRefPKVal);
+                dt.TableName = dtl.PTable;
+                ds.Tables.Add(dt);
+            }
+            return BP.Tools.Json.ToJson(ds);
+        }
+        /// <summary>
         /// 发送草稿实例 2020.10.27 fro 铁路局.
         /// </summary>
         public static void SendDraftSubFlow(WorkNode wn)
@@ -44,7 +117,7 @@ namespace BP.WF
                 {
                     string pkval = wn.HisGenerWorkFlow.FK_Flow + "_" + gwfSubFlow.FK_Flow + "_0";
                     sf = new SubFlowHandGuide();
-                    sf.MyPK = pkval;
+                    sf.setMyPK(pkval);
                     sf.RetrieveFromDBSources();
                 }
 
@@ -60,150 +133,6 @@ namespace BP.WF
                 //启动子流程. 并把两个字段，写入子流程.
                 BP.WF.Dev2Interface.Node_SendWork(gwfSubFlow.FK_Flow, gwfSubFlow.WorkID, null, null);
             }
-        }
-        /// <summary>
-        /// 生成单据
-        /// </summary>
-        /// <param name="wn"></param>
-        public static void GenerRtfBillTemplate(WorkNode wn)
-        {
-            BillTemplates reffunc = wn.HisNode.BillTemplates;
-
-            #region 生成单据信息
-            Int64 workid = wn.HisWork.OID;
-            int nodeId = wn.HisNode.NodeID;
-            string flowNo = wn.HisNode.FK_Flow;
-            #endregion
-
-            DateTime dtNow = DateTime.Now;
-            Flow fl = wn.HisNode.HisFlow;
-            string year = dtNow.Year.ToString();
-            string billInfo = "";
-            foreach (BillTemplate func in reffunc)
-            {
-                if (func.TemplateFileModel != TemplateFileModel.RTF)
-                    continue;
-
-                string file = year + "_" + wn.ExecerDeptNo + "_" + func.No + "_" + workid + ".doc";
-                BP.Pub.RTFEngine rtf = new BP.Pub.RTFEngine();
-
-                Works works;
-                string[] paths;
-                string path;
-                try
-                {
-                    #region 把数据放入 单据引擎。
-                    rtf.HisEns.Clear(); //主表数据。
-                    rtf.EnsDataDtls.Clear(); // 明细表数据.
-
-                    // 找到主表数据.
-                    rtf.HisGEEntity = new GEEntity(wn.rptGe.ClassID);
-                    rtf.HisGEEntity.Row = wn.rptGe.Row;
-
-                    // 把每个节点上的工作加入到报表引擎。
-                    rtf.AddEn(wn.HisWork);
-                    rtf.ensStrs += ".ND" + wn.HisNode.NodeID;
-
-                    //把当前work的Dtl 数据放进去了。
-                    System.Collections.Generic.List<Entities> al = wn.HisWork.GetDtlsDatasOfList();
-
-                    foreach (Entities ens in al)
-                        rtf.AddDtlEns(ens);
-                    #endregion 把数据放入 单据引擎。
-
-                    #region 生成单据
-
-                    paths = file.Split('_');
-                    path = paths[0] + "/" + paths[1] + "/" + paths[2] + "/";
-                    string billUrl = wn.VirPath + "DataUser/Bill/" + path + file;
-                    if (func.HisBillFileType == BillFileType.PDF)
-                    {
-                        billUrl = billUrl.Replace(".doc", ".pdf");
-                        billInfo += "<img src='./Img/FileType/PDF.gif' /><a href='" + billUrl + "' target=_blank >" + func.Name + "</a>";
-                    }
-                    else
-                    {
-                        billInfo += "<img src='./Img/FileType/doc.gif' /><a href='" + billUrl + "' target=_blank >" + func.Name + "</a>";
-                    }
-
-                    path = BP.WF.Glo.FlowFileBill + year + "/" + wn.ExecerDeptNo + "/" + func.No + "/";
-                    // path = AppDomain.CurrentDomain.BaseDirectory + path;
-                    if (System.IO.Directory.Exists(path) == false)
-                        System.IO.Directory.CreateDirectory(path);
-
-                    rtf.MakeDoc(func.TempFilePath + ".rtf", path, file);
-                    #endregion
-
-                    #region 转化成pdf.
-                    if (func.HisBillFileType == BillFileType.PDF)
-                    {
-                        string rtfPath = path + file;
-                        string pdfPath = rtfPath.Replace(".doc", ".pdf");
-                        try
-                        {
-                            Glo.Rtf2PDF(rtfPath, pdfPath);
-                        }
-                        catch (Exception ex)
-                        {
-                            wn.addMsg("RptError", BP.WF.Glo.multilingual("生成报表数据错误:{0}.", "WorkNode", "rpt_error", ex.Message));
-
-                        }
-                    }
-                    #endregion
-
-                    #region 保存单据
-                    Bill bill = new Bill();
-                    bill.MyPK = wn.HisWork.FID + "_" + wn.HisWork.OID + "_" + wn.HisNode.NodeID + "_" + func.No;
-                    bill.FID = wn.HisWork.FID;
-                    bill.WorkID = wn.HisWork.OID;
-                    bill.FK_Node = wn.HisNode.NodeID;
-                    bill.FK_Dept = wn.ExecerDeptNo;
-                    bill.FK_Emp = wn.Execer;
-                    bill.Url = billUrl;
-                    bill.RDT = DataType.CurrentDataTime;
-                    bill.FullPath = path + file;
-                    bill.FK_NY = DataType.CurrentYearMonth;
-                    bill.FK_Flow = wn.HisNode.FK_Flow;
-                    //  bill.FK_BillType = func.FK_BillType;
-                    bill.FK_Flow = wn.HisNode.FK_Flow;
-                    bill.Emps = wn.rptGe.GetValStrByKey("Emps");
-                    bill.FK_Starter = wn.rptGe.GetValStrByKey("Rec");
-                    bill.StartDT = wn.rptGe.GetValStrByKey("RDT");
-                    bill.Title = wn.rptGe.GetValStrByKey("Title");
-                    bill.FK_Dept = wn.rptGe.GetValStrByKey("FK_Dept");
-                    try
-                    {
-                        bill.Save();
-                    }
-                    catch
-                    {
-                        bill.Update();
-                    }
-                    #endregion
-                }
-                catch (Exception ex)
-                {
-                    BP.WF.DTS.InitBillDir dir = new BP.WF.DTS.InitBillDir();
-                    dir.Do();
-                    path = BP.WF.Glo.FlowFileBill + year + "/" + wn.ExecerDeptNo + "/" + func.No + "/";
-
-                    string[] para1 = new string[4];
-                    para1[0] = BP.WF.Glo.FlowFileBill;
-                    para1[1] = ex.Message;
-                    para1[2] = file;
-                    para1[3] = path;
-                    string msgErr1 = BP.WF.Glo.multilingual("@生成单据失败,请让管理员检查目录设置:[{0}].@Err:{1},@File={2},@Path:{3}.", "WorkNode", "wf_eng_error_2", para1);
-                    string msgErr2 = BP.WF.Glo.multilingual("@系统已经做了可能性的修复，请您再发送一次，如果问题仍然存在请联系管理员。", "WorkNode", "wf_eng_error_3");
-                    string msgErr3 = BP.WF.Glo.multilingual("@其它信息:{0}.", "WorkNode", "other_info", ex.Message);
-
-                    billInfo += "@<font color=red>" + msgErr1 + "</font>@<hr>" + msgErr2;
-                    throw new Exception(msgErr1 + msgErr3);
-                }
-            } // end 生成循环单据。
-
-            if (billInfo != "")
-                billInfo = "@" + billInfo;
-            wn.addMsg(SendReturnMsgFlag.BillInfo, billInfo);
         }
         /// <summary>
         /// 当要发送是检查流程是否可以允许发起.
@@ -455,8 +384,8 @@ namespace BP.WF
                 string mainTable = "";
                 mainTable += "\"mainTable\":";
                 mainTable += "{";
-                MapAttrs attrs = new MapAttrs(currNode.NodeFrmID);
-                foreach (MapAttr attr in attrs)
+                MapAttrs mattrs = new MapAttrs(currNode.NodeFrmID);
+                foreach (MapAttr attr in mattrs)
                 {
                     if (attr.KeyOfEn.Equals("Title") || attr.KeyOfEn.Equals("BillNo"))
                         continue;
@@ -619,8 +548,8 @@ namespace BP.WF
                 var res = postData.ToJObject();
                 if (!res["code"].ToString().Equals("200"))
                 {
-                    BP.DA.Log.DefaultLogWriteLine(LogType.Info, "同步失败:WebAPI请求地址：" + apiUrl + ",请求内容：" + postData);
-                    BP.DA.Log.DefaultLogWriteLine(LogType.Info, "失败数据:" + info);
+                    BP.DA.Log.DebugWriteInfo("同步失败:WebAPI请求地址：" + apiUrl + ",请求内容：" + postData);
+                    BP.DA.Log.DebugWriteInfo("失败数据:" + info);
                 }
                 return;
 
@@ -647,7 +576,7 @@ namespace BP.WF
                 string sqlUnion = "";
                 if (nd.GenerWorkerListDelRole == 1)
                 {
-                    sqlUnion += " SELECT " + BP.Sys.Glo.UserNoWhitOutAS + " as FK_Emp FROM Port_Emp WHERE FK_Dept='" + WebUser.FK_Dept + "' ";
+                    sqlUnion += " SELECT " + BP.Sys.Base.Glo.UserNoWhitOutAS + " as FK_Emp FROM Port_Emp WHERE FK_Dept='" + WebUser.FK_Dept + "' ";
                     sqlUnion += " UNION ";
                     sqlUnion += " SELECT FK_Emp FROM Port_DeptEmp WHERE FK_Dept='" + WebUser.FK_Dept + "'";
                 }
@@ -655,7 +584,7 @@ namespace BP.WF
                 //主部门的人员.
                 if (nd.GenerWorkerListDelRole == 3)
                 {
-                    sqlUnion += " SELECT " + BP.Sys.Glo.UserNo + " FROM Port_Emp WHERE FK_Dept='" + WebUser.FK_Dept + "' ";
+                    sqlUnion += " SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE FK_Dept='" + WebUser.FK_Dept + "' ";
                 }
 
                 //兼职部门的人员.
@@ -690,8 +619,8 @@ namespace BP.WF
                     throw new Exception("err@流程设计错误: 您设置了待办按照岗位删除的规则,但是在当前节点上，您没有设置岗位。");
                 //定义岗位人员
                 string station = "SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'";
-                station = DBAccess.RunSQLReturnVal(station).ToString();
-                string stationEmp = "SELECT FK_Emp FROM Port_DeptEmpStation where FK_Station = " + station + "";
+                station = DBAccess.RunSQLReturnString(station);
+                string stationEmp = "SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Station ='" + station + "'";
                 //获得要删除的人员.
                 string sql = " SELECT FK_Emp FROM WF_GenerWorkerlist WHERE ";
                 sql += " WorkID=" + gwf.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND IsPass=0 ";
@@ -925,142 +854,323 @@ namespace BP.WF
         /// 子流程运行结束后
         /// </summary>
         /// <param name="wn"></param>
-        public static SendReturnObjs SubFlowEvent(WorkNode wn)
+        public static String SubFlowEvent(WorkNode wn)
         {
-            GenerWorkFlow gwf = wn.HisGenerWorkFlow;
-            //不是子流程
+            GenerWorkFlow gwf = new GenerWorkFlow(wn.WorkID);
+            //判断是否是子流程
             if (gwf.PWorkID == 0)
-                return wn.HisMsgObjs;
-
-
-            //子流程运行到该节点时主流程自动运行到下一个节点
-            if (gwf.WFState != WFState.Complete && wn.HisNode.IsToParentNextNode == true)
+                return "";
+            string msg = "";
+            //子流程运行到指定节点后父流程自动运行到下一个节点
+            if (gwf.WFState != WFState.Complete)
             {
-                GenerWorkFlow pgwf = new GenerWorkFlow(gwf.PWorkID);
-                if (pgwf.FK_Node == gwf.PNodeID)
+                SubFlows subFlows = new SubFlows();
+                subFlows.Retrieve(SubFlowAttr.FK_Node, gwf.PNodeID, SubFlowAttr.SubFlowNo, wn.HisFlow.No);
+                if (subFlows.Count == 0)
+                    return "";
+                SubFlow subFlow = subFlows[0] as SubFlow;
+
+                if (subFlow.SubFlowNodeID == 0 || wn.HisNode.NodeID != subFlow.SubFlowNodeID)
+                    return "";
+
+                if (subFlow.ParentFlowSendNextStepRole == SubFlowRunModel.SpecifiedNodes)
                 {
-                    SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(gwf.PFlowNo, gwf.PWorkID);
-                    string sendSuccess = "父流程自动运行到下一个节点，" + returnObjs.ToMsgOfHtml();
-                    wn.HisMsgObjs.AddMsg("info", sendSuccess, sendSuccess, SendReturnMsgType.Info);
+                    //获取父流程实例信息
+                    GenerWorkFlow pgwf = new GenerWorkFlow(gwf.PWorkID);
+                    if (pgwf.FK_Node == gwf.PNodeID)
+                    {
+                        SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(gwf.PFlowNo, gwf.PWorkID);
+                        msg = "父流程自动运行到下一个节点，" + returnObjs.ToMsgOfHtml();
+
+                    }
+                    return msg;
                 }
-                return wn.HisMsgObjs;
+                return "";
             }
 
-            //判断是不是子流程结束后显示父流程待办
+            //子流程结束后父流程/同级子流程的处理
             if (gwf.WFState == WFState.Complete)
             {
-                Int64 slWorkID = gwf.GetParaInt("SLWorkID");
+                //先判断当前流程是下级子流程还是同级子流程
+                Int64 slworkid = gwf.GetParaInt("SLWorkID");
+                SubFlows subFlows = new SubFlows();
+                SubFlow subFlow = null;
+                //下级子流程
+                if (slworkid == 0)
+                {
+                    //判断子流程中的设置关系
+                    subFlows.Retrieve(SubFlowAttr.FK_Node, gwf.PNodeID, SubFlowAttr.SubFlowNo, wn.HisFlow.No);
+                    if (subFlows.Count == 0)
+                        return "";
+                    subFlow = subFlows[0] as SubFlow;
+
+                    //把子流程的数据反填到父流程中
+                    SubFlowOver_CopyDataToParantFlow(subFlow, wn.HisGenerWorkFlow.PWorkID, wn);
+
+                    int pnodeId = gwf.PNodeID;
+                    FrmSubFlow nd = new FrmSubFlow(pnodeId);
+                    switch (nd.AllSubFlowOverRole)
+                    {
+                        case AllSubFlowOverRole.None: //父节点不设置所有子流程结束规则
+                                                      //发送成功后显示父流程的待办
+                            if (subFlow.SubFlowHidTodolist == true)
+                            {
+                                GenerWorkFlow pgwf = new GenerWorkFlow(gwf.PWorkID);
+                                string mysql = "SELECT COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + gwf.PWorkID + " AND FK_Flow='" + wn.HisFlow.No + "' AND WFState !=3 ";
+                                if (DBAccess.RunSQLReturnValInt(mysql, 0) == 0)
+                                {
+                                    DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 Where WorkID=" + pgwf.WorkID + " AND FK_Node=" + pgwf.FK_Node);
+
+                                }
+                            }
+
+                            //单个子流程控制父流程运行到下一个节点
+                            if (subFlow.ParentFlowSendNextStepRole == SubFlowRunModel.FlowOver)
+                                msg = SubFlowOver_ParentFlowAutoSendNextSetp(false, wn.HisGenerWorkFlow.PWorkID, wn.HisGenerWorkFlow);
+                            //单个子流程控制父流程结束
+                            if (subFlow.ParentFlowOverRole == SubFlowRunModel.FlowOver)
+                                msg = SubFlowOver_ParentFlowOver(false, wn.HisGenerWorkFlow.PWorkID);
+                            break;
+                        case AllSubFlowOverRole.SendParentFlowToNextStep://父流程设置所有子流程结束后，父流程运行到下一个节点
+                            msg = SubFlowOver_ParentFlowAutoSendNextSetp(true, wn.HisGenerWorkFlow.PWorkID, wn.HisGenerWorkFlow);
+                            break;
+                        case AllSubFlowOverRole.OverParentFlow://父流程设置所有子流程结束后，父流程结束
+                            msg = SubFlowOver_ParentFlowOver(true, wn.HisGenerWorkFlow.PWorkID);
+                            break;
+                        default: break;
+
+                    }
+
+                    return msg;
+                }
+
+                //同级子流程
                 string slFlowNo = gwf.GetParaString("SLFlowNo");
                 Int32 slNodeID = gwf.GetParaInt("SLNodeID");
-
-                SubFlows subFlows = new SubFlows();
-                if (slWorkID == 0)
-                    subFlows.Retrieve(SubFlowAttr.FK_Node, gwf.PNodeID, SubFlowAttr.SubFlowNo, wn.HisFlow.No);
-                else
-                    subFlows.Retrieve(SubFlowAttr.FK_Node, slNodeID, SubFlowAttr.SubFlowNo, wn.HisFlow.No);
-
+                subFlows.Retrieve(SubFlowAttr.FK_Node, slNodeID, SubFlowAttr.SubFlowNo, wn.HisFlow.No);
                 if (subFlows.Count == 0)
-                    return wn.HisMsgObjs;
-
-                SubFlow subFlow = subFlows[0] as SubFlow;
-                if (subFlow.BackCopyRole != 0 && slWorkID == 0)
-                {
-
-                    Node pNd = new Node(subFlow.FK_Node);
-                    Work pwork = pNd.HisWork;
-                    pwork.OID = gwf.PWorkID;
-                    pwork.RetrieveFromDBSources();
-                    GERpt prpt = new BP.WF.Data.GERpt("ND" + int.Parse(subFlow.FK_Flow) + "Rpt");
-                    prpt.OID = gwf.PWorkID;
-                    prpt.RetrieveFromDBSources();
-                    //判断是否启用了数据字段反填规则
-                    if (subFlow.BackCopyRole == 1 || subFlow.BackCopyRole == 3)
-                    {
-                        //子流程数据拷贝到父流程中
-                        pwork.Copy(wn.HisWork);
-                        prpt.Copy(wn.HisWork);
-                    }
-                    //子流程数据拷贝到父流程中
-                    if ((subFlow.BackCopyRole == 2 || subFlow.BackCopyRole == 3) && DataType.IsNullOrEmpty(subFlow.ParentFlowCopyFields) == false)
-                    {
-                        Work wk = wn.HisWork;
-                        Attrs attrs = wk.EnMap.Attrs;
-                        //获取子流程的签批字段
-                        string keyOfEns = "";
-                        string keyVals = ""; //签批字段存储的值
-                        foreach (Attr attr in attrs)
-                        {
-                            if (attr.UIContralType == UIContralType.SignCheck)
-                            {
-                                keyOfEns += attr.Field + ",";
-                                continue;
-                            }
-
-                        }
-
-                        //父流程把子流程不同字段进行匹配赋值
-                        AtPara ap = new AtPara(subFlow.ParentFlowCopyFields);
-                        foreach (String str in ap.HisHT.Keys)
-                        {
-                            Object val = ap.GetValStrByKey(str);
-                            if (DataType.IsNullOrEmpty(val.ToString()) == true)
-                                continue;
-                            pwork.SetValByKey(val.ToString(), wk.GetValByKey(str));
-                            prpt.SetValByKey(val.ToString(), wk.GetValByKey(str));
-                            if (keyOfEns.Contains(str + ",") == true)
-                                keyVals += wk.GetValByKey(str);
-                        }
-                        if (DataType.IsNullOrEmpty(keyVals) == false)
-                        {
-                            string trackPTable = "ND" + int.Parse(wn.HisFlow.No) + "Track";
-                            //把子流程的签批字段对应的审核信息拷贝到父流程中
-                            keyVals = keyVals.Substring(1);
-                            string sql = "SELECT * FROM " + trackPTable + " WHERE ActionType=22 AND WorkID=" + wn.WorkID + " AND NDFrom IN(" + keyVals + ")";
-                            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                            Tracks tracks = new Tracks();
-                            BP.En.QueryObject.InitEntitiesByDataTable(tracks, dt, null);
-                            foreach (Track t in tracks)
-                            {
-
-                                t.WorkID = pwork.OID;
-                                t.FID = pwork.FID;
-                                t.FK_Flow = subFlow.FK_Flow;
-                                t.HisActionType = ActionType.WorkCheck;
-                                t.MyPK = DBAccess.GenerOIDByGUID().ToString();
-                                t.Insert();
-                            }
-                        }
-
-                    }
-                    pwork.Update();
-                    prpt.Update();
-
-                }
-
-
+                    return "";
+                subFlow = subFlows[0] as SubFlow;
                 //子流程运行结束后父流程是否自动往下运行一步
-                string msg = BP.WF.Dev2Interface.FlowOverAutoSendParentOrSameLevelFlow(wn.HisGenerWorkFlow, wn.HisFlow, subFlow);
-                if (DataType.IsNullOrEmpty(msg) == false)
+                msg = SubFlowOver_DealSLSubFlow(slworkid, subFlow, wn.HisGenerWorkFlow);
+
+                return msg;
+            }
+            return "";
+
+        }
+        /// <summary>
+        /// 子流程运行结束后把数据反填到父流程中
+        /// </summary>
+        /// <param name="subFlow"></param>
+        /// <param name="pworkid"></param>
+        /// <param name="wn"></param>
+        private static void SubFlowOver_CopyDataToParantFlow(SubFlow subFlow, Int64 pworkid, WorkNode wn)
+        {
+            //子流程结束后，数据不反填到父流程中
+            if (subFlow.BackCopyRole == BackCopyRole.None)
+                return;
+            Node nd = new Node(subFlow.FK_Node);
+            Work pwk = nd.HisWork;
+            pwk.OID = pworkid;
+            pwk.RetrieveFromDBSources();
+
+            GERpt prpt = new BP.WF.Data.GERpt("ND" + int.Parse(subFlow.FK_Flow) + "Rpt");
+            prpt.OID = pworkid;
+            prpt.RetrieveFromDBSources();
+
+
+            //判断是否启用了数据字段反填规则
+            if (subFlow.BackCopyRole == BackCopyRole.AutoFieldMatch || subFlow.BackCopyRole == BackCopyRole.MixedMode)
+            {
+                //子流程数据拷贝到父流程中
+                pwk.Copy(wn.HisWork);
+                prpt.Copy(wn.HisWork);
+            }
+            // 子流程数据拷贝到父流程中
+            if ((subFlow.BackCopyRole == BackCopyRole.FollowSetFormat || subFlow.BackCopyRole == BackCopyRole.MixedMode)
+                && DataType.IsNullOrEmpty(subFlow.ParentFlowCopyFields) == false)
+            {
+                Work wk = wn.HisWork;
+                Attrs attrs = wk.EnMap.Attrs;
+                //获取子流程的签批字段
+                string keyOfEns = "";
+                string keyVals = ""; //签批字段存储的值
+                foreach (Attr attr in attrs)
                 {
-                    wn.HisMsgObjs.AddMsg("info", msg, msg, SendReturnMsgType.Info);
-                    return wn.HisMsgObjs;
+                    if (attr.UIContralType == UIContralType.SignCheck)
+                    {
+                        keyOfEns += attr.Field + ",";
+                        continue;
+                    }
+
                 }
 
-
-                if (subFlow.SubFlowHidTodolist == true)
+                //父流程把子流程不同字段进行匹配赋值
+                AtPara ap = new AtPara(subFlow.ParentFlowCopyFields);
+                foreach (String str in ap.HisHT.Keys)
                 {
-                    GenerWorkFlow pgwf = new GenerWorkFlow(gwf.PWorkID);
-                    string mysql = "SELECT COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + gwf.PWorkID + " AND FK_Flow='" + wn.HisFlow.No + "' AND WFState !=3 ";
-                    if (DBAccess.RunSQLReturnValInt(mysql, 0) == 0)
+                    Object val = ap.GetValStrByKey(str);
+                    if (DataType.IsNullOrEmpty(val.ToString()) == true)
+                        continue;
+                    pwk.SetValByKey(val.ToString(), wk.GetValByKey(str));
+                    prpt.SetValByKey(val.ToString(), wk.GetValByKey(str));
+                    if (keyOfEns.Contains(str + ",") == true)
+                        keyVals += wk.GetValByKey(str);
+                }
+                if (DataType.IsNullOrEmpty(keyVals) == false)
+                {
+                    string trackPTable = "ND" + int.Parse(wn.HisFlow.No) + "Track";
+                    //把子流程的签批字段对应的审核信息拷贝到父流程中
+                    keyVals = keyVals.Substring(1);
+                    string sql = "SELECT * FROM " + trackPTable + " WHERE ActionType=22 AND WorkID=" + wn.WorkID + " AND NDFrom IN(" + keyVals + ")";
+                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                    Tracks tracks = new Tracks();
+                    BP.En.QueryObject.InitEntitiesByDataTable(tracks, dt, null);
+                    foreach (Track t in tracks)
                     {
-                        DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 Where WorkID=" + pgwf.WorkID + " AND FK_Node=" + pgwf.FK_Node);
 
+                        t.WorkID = pwk.OID;
+                        t.FID = pwk.FID;
+                        t.FK_Flow = subFlow.FK_Flow;
+                        t.HisActionType = ActionType.WorkCheck;
+                        t.setMyPK(DBAccess.GenerOIDByGUID().ToString());
+                        t.Insert();
                     }
                 }
+
+            }
+            pwk.Update();
+            prpt.Update();
+
+        }
+        /// <summary>
+        /// 子流程运行结束后，父流程自动运行到下一个节点
+        /// </summary>
+        /// <param name="isAllSubFlowOver"></param>
+        /// <param name="pworkid"></param>
+        /// <param name="gwf"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        private static string SubFlowOver_ParentFlowAutoSendNextSetp(bool isAllSubFlowOver, Int64 pworkid, GenerWorkFlow gwf)
+        {
+            //所有子流程结束后，父流程自动运行到下一个节点
+            if (isAllSubFlowOver == true)
+            {
+                if (BP.WF.Dev2Interface.Flow_NumOfSubFlowRuning(pworkid) != 0)
+                    return "";
             }
 
-            return wn.HisMsgObjs;
+            #region 检查父流程是否符合自动运行到下一个节点的条件
+            GenerWorkFlow pgwf = new GenerWorkFlow();
+            pgwf.WorkID = pworkid;
+            if (pgwf.RetrieveFromDBSources() == 0)
+                return ""; // 父流程被删除了也不能执行。
 
+            if (pgwf.WFState == WFState.Complete)
+                return ""; //父流程已经完成也不能执行.
+
+            //检查父流程的当前停留的节点是否还是发起子流程的节点？
+            if (gwf.PNodeID != pgwf.FK_Node)
+                return "";
+            #endregion 检查父流程是否符合自动运行到下一个节点的条件
+
+            //获得父流程.
+            string[] strs = pgwf.TodoEmps.Split(';');
+            strs = strs[0].Split(',');
+            string empNo = strs[0];
+            if (DataType.IsNullOrEmpty(empNo) == true)
+                throw new Exception("err@没有找到父流程的处理人.");
+
+            //当前登录用户.
+            string currUserNo = BP.Web.WebUser.No;
+            try
+            {
+                Emp emp = new Emp(empNo);
+                //让父流程的userNo登录.
+                BP.WF.Dev2Interface.Port_Login(emp.No);
+                SendReturnObjs objs = null;
+                try
+                {
+                    objs = BP.WF.Dev2Interface.Node_SendWork(pgwf.FK_Flow, pgwf.WorkID);
+                    //切换到当前流程节点.
+                    BP.WF.Dev2Interface.Port_Login(currUserNo);
+                }
+                catch (Exception ex)
+                {
+                    BP.WF.Dev2Interface.Port_Login(currUserNo);
+                    throw new Exception(ex.Message);
+                }
+
+                return "@成功让父流程运行到下一个节点." + objs.ToMsgOfHtml();
+            }
+            catch (Exception ex)
+            {
+                //切换到当前流程节点.
+                BP.WF.Dev2Interface.Port_Login(currUserNo);
+                string info = "这个错误";
+                if (ex.Message.Contains("WorkOpt/") == true)
+                {
+                    info += "@流程设计错误:自动运行到的下一个节点的接收人规则是由上一个人员来选择的,导致到不能自动运行到下一步骤.";
+                    return info;
+                }
+
+                return "@在最后一个子流程完成后，让父流程的节点自动发送时，出现错误:" + ex.Message;
+            }
+        }
+        /// <summary>
+        /// 子流程结束后，父流程自动结束
+        /// </summary>
+        /// <param name="isAllSubFlowOver"></param>
+        /// <param name="pworkid"></param>
+        /// <returns></returns>
+        public static string SubFlowOver_ParentFlowOver(bool isAllSubFlowOver, Int64 pworkid)
+        {
+            //所有子流程结束后，父流程自动结束
+            if (isAllSubFlowOver == true)
+            {
+                if (BP.WF.Dev2Interface.Flow_NumOfSubFlowRuning(pworkid) == 0)
+                    return "";
+            }
+            GenerWorkFlow gwf = new GenerWorkFlow(pworkid);
+            if (gwf.WFState == WFState.Complete)
+                return "";
+
+            return BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.WorkID, "父流程[" + gwf.FlowName + "],标题为[" + gwf.Title + "]成功结束");
+        }
+        /// <summary>
+        /// 子流程结束后，处理同级子流程
+        /// </summary>
+        /// <param name="slWorkID"></param>
+        /// <param name="subFlow"></param>
+        /// <param name="gwf"></param>
+        /// <returns></returns>
+        private static string SubFlowOver_DealSLSubFlow(Int64 slWorkID, SubFlow subFlow, GenerWorkFlow gwf)
+        {
+            if (subFlow.IsAutoSendSLSubFlowOver == 0)
+                return "";
+            string slFlowNo = gwf.GetParaString("SLFlowNo");
+            Int32 slNodeID = gwf.GetParaInt("SLNodeID");
+            Flow fl = new Flow(slFlowNo);
+            GenerWorkFlow subgwf = new GenerWorkFlow(slWorkID);
+            if (subFlow.IsAutoSendSLSubFlowOver == 1)
+            {
+                if (subgwf.FK_Node != slNodeID)
+                    return "";
+
+                //主流程自动运行到一下节点
+                SendReturnObjs returnObjs = BP.WF.Dev2Interface.Node_SendWork(slFlowNo, slWorkID);
+                string sendSuccess = "同级子流程[" + fl.Name + "]程自动运行到下一个节点，发送过程如下：\n @接收人" + returnObjs.VarAcceptersName + "\n @下一步[" + returnObjs.VarCurrNodeName + "]启动";
+                return sendSuccess;
+            }
+            //结束父流程
+            if (subFlow.IsAutoSendSLSubFlowOver == 2)
+            {
+                if (subgwf.WFState == WFState.Complete)
+                    return "";
+                return BP.WF.Dev2Interface.Flow_DoFlowOver(slWorkID, "同级子流程流程[" + fl.Name + "],WorkID为[" + slWorkID + "]成功结束");
+            }
+            return "";
         }
     }
 }

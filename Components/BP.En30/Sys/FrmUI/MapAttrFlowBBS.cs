@@ -99,7 +99,7 @@ namespace BP.Sys.FrmUI
         /// </summary>
         public MapAttrFlowBBS(string myPK)
         {
-            this.MyPK = myPK;
+            this.setMyPK(myPK);
             this.Retrieve();
         }
         /// <summary>
@@ -185,7 +185,7 @@ namespace BP.Sys.FrmUI
         protected override void afterInsertUpdateAction()
         {
             MapAttr mapAttr = new MapAttr();
-            mapAttr.MyPK = this.MyPK;
+            mapAttr.setMyPK(this.MyPK);
             mapAttr.RetrieveFromDBSources();
             mapAttr.Update();
 
@@ -200,7 +200,7 @@ namespace BP.Sys.FrmUI
         protected override bool beforeUpdateInsertAction()
         {
             MapAttr attr = new MapAttr();
-            attr.MyPK = this.MyPK;
+            attr.setMyPK(this.MyPK);
             attr.RetrieveFromDBSources();
 
             //强制设置为评论组件.

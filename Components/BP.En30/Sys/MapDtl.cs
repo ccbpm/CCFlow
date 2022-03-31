@@ -121,6 +121,10 @@ namespace BP.Sys
         /// </summary>
         public const string EditModel = "EditModel";
         /// <summary>
+        /// 自定义url。
+        /// </summary>
+        public const string UrlDtl = "UrlDtl";
+        /// <summary>
         /// 移动端显示方式
         /// </summary>
         public const string MobileShowModel = "MobileShowModel";
@@ -283,6 +287,18 @@ namespace BP.Sys
         /// 列的中文名称
         /// </summary>
         public const string ImpSQLNames = "ImpSQLNames";
+        /// <summary>
+        /// 从表最小集合
+        /// </summary>
+        public const string NumOfDtl = "NumOfDtl";
+        /// <summary>
+        /// 是否拷贝第一条数据
+        /// </summary>
+        public const string IsCopyFirstData = "IsCopyFirstData";
+        /// <summary>
+        /// 行数据初始化字段
+        /// </summary>
+        public const string InitDBAttrs = "InitDBAttrs";
         #endregion
     }
     /// <summary>
@@ -589,6 +605,14 @@ namespace BP.Sys
                 this.SetValByKey(MapDtlAttr.FK_Node, value);
             }
         }
+
+        public string InitDBAttrs
+        {
+            get
+            {
+                return this.GetValStringByKey(MapDtlAttr.InitDBAttrs);
+            }
+        }
         #endregion 参数属性
 
         #region 外键属性
@@ -682,86 +706,7 @@ namespace BP.Sys
                 return obj;
             }
         }
-        /// <summary>
-        /// 超连接
-        /// </summary>
-        public FrmLinks FrmLinks
-        {
-            get
-            {
-                FrmLinks obj = this.GetRefObject("FrmLinks") as FrmLinks;
-                if (obj == null)
-                {
-                    obj = new FrmLinks(this.No);
-                    this.SetRefObject("FrmLinks", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 按钮
-        /// </summary>
-        public FrmBtns FrmBtns
-        {
-            get
-            {
-                FrmBtns obj = this.GetRefObject("FrmLinks") as FrmBtns;
-                if (obj == null)
-                {
-                    obj = new FrmBtns(this.No);
-                    this.SetRefObject("FrmBtns", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 线
-        /// </summary>
-        public FrmLines FrmLines
-        {
-            get
-            {
-                FrmLines obj = this.GetRefObject("FrmLines") as FrmLines;
-                if (obj == null)
-                {
-                    obj = new FrmLines(this.No);
-                    this.SetRefObject("FrmLines", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 标签
-        /// </summary>
-        public FrmLabs FrmLabs
-        {
-            get
-            {
-                FrmLabs obj = this.GetRefObject("FrmLabs") as FrmLabs;
-                if (obj == null)
-                {
-                    obj = new FrmLabs(this.No);
-                    this.SetRefObject("FrmLabs", obj);
-                }
-                return obj;
-            }
-        }
-        /// <summary>
-        /// 图片
-        /// </summary>
-        public FrmImgs FrmImgs
-        {
-            get
-            {
-                FrmImgs obj = this.GetRefObject("FrmLabs") as FrmImgs;
-                if (obj == null)
-                {
-                    obj = new FrmImgs(this.No);
-                    this.SetRefObject("FrmLabs", obj);
-                }
-                return obj;
-            }
-        }
+        
         /// <summary>
         /// 附件
         /// </summary>
@@ -1123,10 +1068,10 @@ namespace BP.Sys
             {
                 return this.GetValStrByKey(MapDtlAttr.FK_MapData);
             }
-            set
-            {
-                this.SetValByKey(MapDtlAttr.FK_MapData, value);
-            }
+        }
+        public void setFK_MapData(string val)
+        {
+            this.SetValByKey(MapDtlAttr.FK_MapData, val);
         }
         /// <summary>
         /// 从表的模式
@@ -1373,8 +1318,8 @@ namespace BP.Sys
 
                 map.AddBoolean(MapDtlAttr.IsEnableM2M, false, "是否启用M2M", false, false);
                 map.AddBoolean(MapDtlAttr.IsEnableM2MM, false, "是否启用M2M", false, false);
-
-
+                map.AddBoolean(MapDtlAttr.IsCopyFirstData, false, "是否复制第一行数据？", false, false);
+                map.AddTBString(MapDtlAttr.InitDBAttrs, null, "行初始化字段", true, false, 0, 40, 20, false);
                 // 超出行数
                 map.AddTBInt(MapDtlAttr.WhenOverSize, 0, "列表数据显示格式", false, false);
 
@@ -1383,6 +1328,7 @@ namespace BP.Sys
 
                 map.AddTBInt(MapDtlAttr.ListShowModel, 0, "列表数据显示格式", false, false);
                 map.AddTBInt(MapDtlAttr.EditModel, 0, "行数据显示格式", false, false);
+                map.AddTBString(MapDtlAttr.UrlDtl, null, "自定义Url", true, false, 0, 200, 20, true);
 
                 map.AddTBInt(MapDtlAttr.MobileShowModel, 0, "移动端数据显示格式", false, false);
                 map.AddTBString(MapDtlAttr.MobileShowField, null, "移动端列表显示字段", true, false, 0, 100, 20);
@@ -1395,7 +1341,7 @@ namespace BP.Sys
 
                 map.AddTBFloat(MapDtlAttr.FrmW, 900, "表单宽度", true, true);
                 map.AddTBFloat(MapDtlAttr.FrmH, 1200, "表单高度", true, true);
-
+                map.AddTBInt(MapDtlAttr.NumOfDtl, 0, "最小从表集合", true, false);
                 //MTR 多表头列.
                 //map.AddTBString(MapDtlAttr.MTR, null, "多表头列", true, false, 0, 3000, 20);
                 #region 超链接.
@@ -1548,16 +1494,17 @@ namespace BP.Sys
             if (attrs.Contains(MapAttrAttr.KeyOfEn, "OID") == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = this.No;
-                attr.HisEditType = EditType.Readonly;
+                attr.setFK_MapData(this.No);
+                attr.setEditType(EditType.Readonly);
 
-                attr.KeyOfEn = "OID";
-                attr.Name = "主键";
-                attr.MyDataType = DataType.AppInt;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
+                attr.setKeyOfEn("OID");
+                attr.setName("主键");
+                attr.setMyDataType(DataType.AppInt);
+
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
                 attr.DefVal = "0";
                 attr.Insert();
             }
@@ -1565,16 +1512,21 @@ namespace BP.Sys
             if (attrs.Contains(MapAttrAttr.KeyOfEn, "RefPK") == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = this.No;
-                attr.HisEditType = EditType.Readonly;
+                attr.setFK_MapData(this.No);
+                attr.setEditType(EditType.Readonly);
 
-                attr.KeyOfEn = "RefPK";
-                attr.Name = "关联ID";
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
+                attr.setKeyOfEn("RefPK");
+                attr.setName("关联ID");
+                attr.setMyDataType(DataType.AppString);
+
+                attr.setMyDataType(DataType.AppString);
+
+                attr.setMyDataType(DataType.AppString);
+
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
                 attr.DefVal = "0";
                 attr.Insert();
             }
@@ -1582,16 +1534,16 @@ namespace BP.Sys
             if (attrs.Contains(MapAttrAttr.KeyOfEn, "FID") == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = this.No;
-                attr.HisEditType = EditType.Readonly;
+                attr.setFK_MapData(this.No);
+                attr.setEditType(EditType.Readonly);
 
-                attr.KeyOfEn = "FID";
-                attr.Name = "FID";
-                attr.MyDataType = DataType.AppInt;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
+                attr.setKeyOfEn("FID");
+                attr.setName("FID");
+                attr.setMyDataType(DataType.AppInt);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
                 attr.DefVal = "0";
                 attr.Insert();
             }
@@ -1599,16 +1551,16 @@ namespace BP.Sys
             if (attrs.Contains(MapAttrAttr.KeyOfEn, "RDT") == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = this.No;
+                attr.setFK_MapData(this.No);
                 attr.HisEditType = EditType.UnDel;
 
-                attr.KeyOfEn = "RDT";
-                attr.Name = "记录时间";
-                attr.MyDataType = DataType.AppDateTime;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
+                attr.setKeyOfEn("RDT");
+                attr.setName("记录时间");
+                attr.setMyDataType(DataType.AppDateTime);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
                 attr.Tag = "1";
                 attr.Insert();
             }
@@ -1616,18 +1568,18 @@ namespace BP.Sys
             if (attrs.Contains(MapAttrAttr.KeyOfEn, "Rec") == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.FK_MapData = this.No;
-                attr.HisEditType = EditType.Readonly;
+                attr.setFK_MapData(this.No);
+                attr.setEditType(EditType.Readonly);
 
-                attr.KeyOfEn = "Rec";
-                attr.Name = "记录人";
-                attr.MyDataType = DataType.AppString;
-                attr.UIContralType = UIContralType.TB;
-                attr.LGType = FieldTypeS.Normal;
-                attr.UIVisible = false;
-                attr.UIIsEnable = false;
-                attr.MaxLen = 20;
-                attr.MinLen = 0;
+                attr.setKeyOfEn("Rec");
+                attr.setName("记录人");
+                attr.setMyDataType(DataType.AppString);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
+                attr.setMaxLen(20);
+                attr.setMinLen(0);
                 attr.DefVal = "@WebUser.No";
                 attr.Tag = "@WebUser.No";
                 attr.Insert();
@@ -1639,10 +1591,10 @@ namespace BP.Sys
             if (this.IsEnableAthM == true)
             {
                 BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
-                athDesc.MyPK = this.No + "_AthMDtl";
+                athDesc.setMyPK(this.No + "_AthMDtl");
                 if (athDesc.RetrieveFromDBSources() == 0)
                 {
-                    athDesc.FK_MapData = this.No;
+                    athDesc.setFK_MapData(this.No);
                     athDesc.NoOfObj = "AthMDtl";
                     athDesc.Name = this.Name;
                     athDesc.DirectInsert();
@@ -1677,7 +1629,7 @@ namespace BP.Sys
         protected override bool beforeInsert()
         {
             //在属性实体集合插入前，clear父实体的缓存.
-            BP.Sys.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
 
 
             GroupField gf = new GroupField();
@@ -1735,9 +1687,9 @@ namespace BP.Sys
         }
         protected override bool beforeUpdate()
         {
-            MapAttrs attrs = new MapAttrs(this.No);
+            MapAttrs mattrs = new MapAttrs(this.No);
             bool isHaveEnable = false;
-            foreach (MapAttr attr in attrs)
+            foreach (MapAttr attr in mattrs)
             {
                 if (attr.UIIsEnable && attr.UIContralType == UIContralType.TB)
                     isHaveEnable = true;
@@ -1750,7 +1702,7 @@ namespace BP.Sys
             md.No = this.No;
 
             //获得事件实体.
-            var febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(this.No);
+            var febd = BP.Sys.Base.Glo.GetFormDtlEventBaseByEnName(this.No);
             if (febd == null)
                 this.FEBD = "";
             else
@@ -1773,9 +1725,9 @@ namespace BP.Sys
         protected override bool beforeDelete()
         {
             string sql = "";
-            sql += "@DELETE FROM Sys_FrmLine WHERE FK_MapData='" + this.No + "'";
-            sql += "@DELETE FROM Sys_FrmLab WHERE FK_MapData='" + this.No + "'";
-            sql += "@DELETE FROM Sys_FrmLink WHERE FK_MapData='" + this.No + "'";
+          //  sql += "@DELETE FROM Sys_FrmLine WHERE FK_MapData='" + this.No + "'";
+          //  sql += "@DELETE FROM Sys_FrmLab WHERE FK_MapData='" + this.No + "'";
+         //   sql += "@DELETE FROM Sys_FrmLink WHERE FK_MapData='" + this.No + "'";
             sql += "@DELETE FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'";
             sql += "@DELETE FROM Sys_FrmImgAth WHERE FK_MapData='" + this.No + "'";
             sql += "@DELETE FROM Sys_FrmRB WHERE FK_MapData='" + this.No + "'";

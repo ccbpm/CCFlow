@@ -395,7 +395,7 @@ namespace BP.Sys
         /// <param name="val"></param>
         public SysDocFile(string enName, string key, string val)
         {
-            this.MyPK = enName + "@" + key + "@" + val;
+            this.setMyPK(enName + "@" + key + "@" + val);
         }
 		public override Map EnMap
 		{
@@ -495,21 +495,21 @@ namespace BP.Sys
         public static string GetValHtmlV1(string enName, string pkVal)
         {
             SysDocFile sdf = new SysDocFile();
-            sdf.MyPK = enName + "@Doc@" + pkVal;
+            sdf.setMyPK(enName + "@Doc@" + pkVal);
             sdf.RetrieveFromDBSources();
             return sdf.DocHtml;
         }
         public static string GetValTextV1(string enName, string pkVal)
         {
             SysDocFile sdf = new SysDocFile();
-            sdf.MyPK = enName + "@Doc@" + pkVal;
+            sdf.setMyPK(enName + "@Doc@" + pkVal);
             sdf.RetrieveFromDBSources();
             return sdf.DocText;
         }
         public static void SetValV1(string enName, string pkVal, string val)
         {
             SysDocFile sdf = new SysDocFile();
-            sdf.MyPK = enName + "@Doc@" + pkVal;
+            sdf.setMyPK(enName + "@Doc@" + pkVal);
             sdf.FileSize = val.Length;
             sdf.DocText = val;
             sdf.Save();

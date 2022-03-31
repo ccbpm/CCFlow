@@ -150,6 +150,10 @@ namespace BP.Sys
                 this.SetValByKey(FrmEleDBAttr.FK_MapData, value);
             }
         }
+        public void setFK_MapData(string val)
+        {
+            this.SetValByKey(FrmEleDBAttr.FK_MapData, val);
+        }
         /// <summary>
         /// RefPKVal
         /// </summary>
@@ -193,7 +197,7 @@ namespace BP.Sys
         /// <param name="mypk"></param>
         public FrmEleDB(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -227,13 +231,13 @@ namespace BP.Sys
 
         protected override bool beforeUpdateInsertAction()
         {
-            //this.MyPK = this.FK_MapData + "_" + this.EleID + "_" + this.RefPKVal;
+            //this.setMyPK(this.FK_MapData + "_" + this.EleID + "_" + this.RefPKVal;
            // this.GenerPKVal();
             return base.beforeUpdateInsertAction();
         }
         public void GenerPKVal()
         {
-            this.MyPK = this.FK_MapData + "_" + this.EleID + "_" + this.RefPKVal;
+            this.setMyPK(this.FK_MapData + "_" + this.EleID + "_" + this.RefPKVal);
         }
     }
     /// <summary>
@@ -264,9 +268,9 @@ namespace BP.Sys
         public FrmEleDBs(string fk_mapdata)
         {
             if (SystemConfig.IsDebug)
-                this.Retrieve(FrmLineAttr.FK_MapData, fk_mapdata);
+                this.Retrieve(MapAttrAttr.FK_MapData, fk_mapdata);
             else
-                this.RetrieveFromCash(FrmLineAttr.FK_MapData, (object)fk_mapdata);
+                this.RetrieveFromCash(MapAttrAttr.FK_MapData, (object)fk_mapdata);
         }
 
         public void SaveFrmEleDBs(string fk_mapdata,string eleID,string refPKVal,string paras)
@@ -279,8 +283,8 @@ namespace BP.Sys
             {
                 string[] vals = str.Split(',');
                 frmEleDB =new FrmEleDB();
-                frmEleDB.MyPK = eleID + "_" + refPKVal + "_" + vals[0];
-                frmEleDB.FK_MapData = fk_mapdata;
+                frmEleDB.setMyPK(eleID + "_" + refPKVal + "_" + vals[0]);
+                frmEleDB.setFK_MapData(fk_mapdata);
                 frmEleDB.EleID = eleID;
                 frmEleDB.RefPKVal = refPKVal;
                 frmEleDB.Tag1 = vals[0];

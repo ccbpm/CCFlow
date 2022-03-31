@@ -29,7 +29,7 @@ namespace BP.Port
         /// <summary>
         /// 用户组
         /// </summary>
-        /// <param name="mypk"></param>
+        /// <param name="no"></param>
         public Team(string no)
         {
             this.No = no;
@@ -45,11 +45,9 @@ namespace BP.Port
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Port_Team");
-                map.DepositaryOfEntity = Depositary.None;
-                map.EnDesc = "用户组";
-                map.EnType = EnType.Sys;
-                map.IsAutoGenerNo = true;
+                Map map = new Map("Port_Team", "用户组");
+                map.setEnType(EnType.Sys);
+                map.setIsAutoGenerNo(true);
 
                 map.AddTBStringPK(TeamAttr.No, null, "编号", true, true, 3, 3, 3);
                 map.AddTBString(TeamAttr.Name, null, "名称", true, false, 0, 300, 20);

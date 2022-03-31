@@ -222,7 +222,7 @@ namespace BP.WF.Template
         /// <param name="mypk">mypk</param>	
         public PartParentSubGuide(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>

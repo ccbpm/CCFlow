@@ -11,6 +11,8 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
+using BP.Difference;
+
 
 namespace BP.WF.HttpHandler
 {
@@ -153,11 +155,9 @@ namespace BP.WF.HttpHandler
                 {
                     case DeliveryWay.ByStation:
                     case DeliveryWay.ByStationOnly:
-
                         sql = "SELECT Port_Emp.No  FROM Port_Emp LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No)   join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
                         // emps.RetrieveInSQL_Order("select fk_emp from Port_Empstation WHERE fk_station in (select fk_station from WF_NodeStation WHERE FK_Node=" + nodeid + " )", "FK_Dept");
                         break;
-
                     case DeliveryWay.ByDept:
                         sql = "SELECT No,Name FROM Port_Emp where FK_Dept in (select FK_Dept from WF_NodeDept where FK_Node='" + nodeid + "') ";
                         //emps.RetrieveInSQL("");
@@ -308,7 +308,7 @@ namespace BP.WF.HttpHandler
 
                 //判断是不是有.
                 if (DBAccess.IsExitsObject("WF_Flow") == true)
-                    return "err@info数据库已经安装上了，您不必在执行安装. 点击:<a href='./CCBPMDesigner/Login.htm' >这里直接登录流程设计器</a>";
+                    return "err@info数据库已经安装上了，您不必在执行安装. 点击:<a href='../Portal/Login.htm' >这里直接登录流程设计器</a>";
 
                 Hashtable ht = new Hashtable();
                 ht.Add("OSModel", 1); //组织结构类型.
@@ -339,7 +339,15 @@ namespace BP.WF.HttpHandler
             //加注释.
             BP.Pub.PubClass.AddComment();
 
-            return "info@系统成功安装 点击:<a href='./CCBPMDesigner/Login.htm' >这里直接登录流程设计器</a>";
+            if (DBAccess.IsExitsTableCol("Port_Emp", "EmpSta") == true)
+            {
+                DBAccess.DropTableColumn("Port_Emp", "EmpSta");
+                //string sql = "UPDATE Port_Emp SET EmpSta=1 ";
+                //if (DBAccess.RunSQLReturnValInt(sql, 1) == 0)
+                //    return "err@该用户已经被禁用.";
+            }
+
+            return "info@系统成功安装 点击:<a href='../Portal/Login.htm' >这里直接登录流程设计器</a>";
             // this.Response.Redirect("DBInstall.aspx?DoType=OK", true);
         }
         #endregion
@@ -401,7 +409,7 @@ namespace BP.WF.HttpHandler
 
             string add = "+";
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                 add = "||";
 
             if (templateType == "DDLFullCtrl")

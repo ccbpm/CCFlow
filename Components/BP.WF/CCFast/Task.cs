@@ -187,7 +187,7 @@ namespace BP.CCFast
         }
         public Task(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -240,13 +240,13 @@ namespace BP.CCFast
         #region 执行方法.
         protected override bool beforeInsert()
         {
-            this.MyPK = DBAccess.GenerGUID();
+            this.setMyPK(DBAccess.GenerGUID());
             this.Rec = WebUser.No;
             this.RecName = WebUser.Name;
             if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = WebUser.OrgNo;
 
-            this.SetValByKey("RDT", DataType.CurrentDataTime);
+            this.SetValByKey("RDT", DataType.CurrentDateTime);
 
             return base.beforeInsert();
         }

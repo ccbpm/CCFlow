@@ -117,7 +117,7 @@ namespace BP.Sys
         /// <param name="nodeid">节点ID</param>
         public GEEntityExcelFrm(string fk_mapdata)
         {
-            this.FK_MapData = fk_mapdata;
+            this.FK_MapData=fk_mapdata;
         }
         /// <summary>
         /// 通用实体
@@ -126,7 +126,7 @@ namespace BP.Sys
         /// <param name="_oid">OID</param>
         public GEEntityExcelFrm(string fk_mapdata, int oid)
         {
-            this.FK_MapData = fk_mapdata;
+            this.FK_MapData= fk_mapdata;
             this.OID = oid;
             int i =this.RetrieveFromDBSources();
         }
@@ -221,7 +221,7 @@ namespace BP.Sys
         /// <param name="fk_mapdtl"></param>
         public GEEntityExcelFrms(string fk_mapdata)
         {
-            this.FK_MapData = fk_mapdata;
+            this.FK_MapData= fk_mapdata;
         }
         #endregion
 

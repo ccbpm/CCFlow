@@ -120,7 +120,7 @@ namespace BP.WF.Template
                 map.AddTBString(SysFormAttr.Name, null, null, true, false, 0, 500, 10);
 
                 //表单类型.
-                map.AddTBInt(Sys.MapDataAttr.FrmType, 1, "表单类型", true, false);
+                map.AddTBInt(MapDataAttr.FrmType, 1, "表单类型", true, false);
                
 
                 //该表单对应的物理表
@@ -132,8 +132,8 @@ namespace BP.WF.Template
                 //系统表单类别.
                 map.AddTBString(SysFormAttr.FK_FormTree, null, "表单树", true, false, 0, 10, 20);
 
-                map.AddTBInt(Sys.MapDataAttr.FrmW, 900, "系统表单宽度", true, false);
-                map.AddTBInt(Sys.MapDataAttr.FrmH, 1200, "系统表单高度", true, false);
+                map.AddTBInt(MapDataAttr.FrmW, 900, "系统表单宽度", true, false);
+                map.AddTBInt(MapDataAttr.FrmH, 1200, "系统表单高度", true, false);
 
                 this._enMap = map;
                 return this._enMap;
@@ -143,14 +143,14 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValIntByKey(Sys.MapDataAttr.FrmW);
+                return this.GetValIntByKey(MapDataAttr.FrmW);
             }
         }
         public int FrmH
         {
             get
             {
-                return this.GetValIntByKey(Sys.MapDataAttr.FrmH);
+                return this.GetValIntByKey(MapDataAttr.FrmH);
             }
         }
         

@@ -154,6 +154,18 @@ namespace BP.WF.Template
         /// 子流程字段值拷贝到对应父流程字段中
         /// </summary>
         public const string ParentFlowCopyFields = "ParentFlowCopyFields";
+        /// <summary>
+        /// 父流程自动运行到下一步的规则
+        /// </summary>
+        public const string ParentFlowSendNextStepRole = "ParentFlowSendNextStepRole";
+        /// <summary>
+        /// 父流程自动结束的规则
+        /// </summary>
+        public const string ParentFlowOverRole = "ParentFlowOverRole";
+        /// <summary>
+        /// 指定的子流程节点
+        /// </summary>
+        public const string SubFlowNodeID = "SubFlowNodeID";
 
     }
     /// <summary>
@@ -345,13 +357,23 @@ namespace BP.WF.Template
         }
 
         /// <summary>
-        /// 子流程结束规则
+        /// 父流程运行到下一步的规则
         /// </summary>
-        public int IsAutoSendSubFlowOver
+        public SubFlowRunModel ParentFlowSendNextStepRole
         {
             get
             {
-                return this.GetValIntByKey(FlowAttr.IsAutoSendSubFlowOver);
+                return (SubFlowRunModel)this.GetValIntByKey(SubFlowAttr.ParentFlowSendNextStepRole);
+            }
+        }
+        /// <summary>
+        /// 父流程结束的规则
+        /// </summary>
+        public SubFlowRunModel ParentFlowOverRole
+        {
+            get
+            {
+                return (SubFlowRunModel)this.GetValIntByKey(SubFlowAttr.ParentFlowOverRole);
             }
         }
 
@@ -362,7 +384,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValIntByKey(FlowAttr.IsAutoSendSLSubFlowOver);
+                return this.GetValIntByKey(SubFlowAutoAttr.IsAutoSendSLSubFlowOver);
             }
         }
 
@@ -373,11 +395,11 @@ namespace BP.WF.Template
                 return this.GetValStringByKey(SubFlowAttr.SubFlowCopyFields);
             }
         }
-        public int BackCopyRole
+        public BackCopyRole BackCopyRole
         {
             get
             {
-                return this.GetValIntByKey(SubFlowAttr.BackCopyRole);
+                return (BackCopyRole)this.GetValIntByKey(SubFlowAttr.BackCopyRole);
             }
         }
 
@@ -386,6 +408,14 @@ namespace BP.WF.Template
             get
             {
                 return this.GetValStringByKey(SubFlowAttr.ParentFlowCopyFields);
+            }
+        }
+
+        public int SubFlowNodeID
+        {
+            get
+            {
+                return this.GetValIntByKey(SubFlowAttr.SubFlowNodeID);
             }
         }
         #endregion
@@ -416,8 +446,10 @@ namespace BP.WF.Template
                 map.AddTBInt(SubFlowAttr.SubFlowType, 0, "子流程类型", false, true);
                 map.AddTBInt(SubFlowAttr.SubFlowModel, 0, "子流程模式", false, true);
 
-                map.AddTBInt(FlowAttr.IsAutoSendSubFlowOver, 0, "子流程结束规则", false, true);
-                map.AddTBInt(FlowAttr.IsAutoSendSLSubFlowOver, 0, "同级子流程结束规则", false, true);
+                map.AddTBInt(SubFlowAutoAttr.ParentFlowSendNextStepRole, 0, "父流程自动运行到下一步规则", false, true);
+                map.AddTBInt(SubFlowAutoAttr.ParentFlowOverRole, 0, "父流程结束规则", false, true);
+                map.AddTBInt(SubFlowAutoAttr.SubFlowNodeID, 0, "指定子流程节点ID", false, true);
+                map.AddTBInt(SubFlowAutoAttr.IsAutoSendSLSubFlowOver, 0, "同级子流程结束规则", false, true);
 
 
                 map.AddTBString(SubFlowAttr.SubFlowNo, null, "子流程编号", true, true, 0, 10, 150, false);
@@ -474,7 +506,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            this.MyPK = this.FK_Node + "_" + this.SubFlowNo + "_" + this.SubFlowType;
+            this.setMyPK(this.FK_Node + "_" + this.SubFlowNo + "_" + this.SubFlowType);
             return base.beforeInsert();
         }
     }

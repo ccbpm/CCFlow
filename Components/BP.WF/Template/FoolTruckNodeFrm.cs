@@ -113,10 +113,10 @@ namespace BP.WF.Template
                 map.AddMyPK();
 
                 map.AddTBInt(FrmNodeAttr.FK_Node, 0, "要作用的节点ID", false, true);
-                map.AddTBString(FrmNodeAttr.FK_Frm, null, "表单ID", false, true, 1, 200, 200);
-                map.AddDDLSysEnum(FrmNodeAttr.FrmSln, 0, "表单控制方案", true, true, FrmNodeAttr.FrmSln,
-                   "@0=默认方案@1=只读方案@2=自定义方案");
+                map.AddTBString(FrmNodeAttr.FK_Frm, null, "表单ID", false, true, 1, 100, 200);
 
+                //   map.AddDDLSysEnum(FrmNodeAttr.FrmSln, 0, "表单控制方案", true, true, FrmNodeAttr.FrmSln,
+                //    "@0=默认方案@1=只读方案@2=自定义方案");
 
                 map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程编号", true, true, 1, 4, 20);
 
@@ -136,7 +136,7 @@ namespace BP.WF.Template
             if (this.FrmSln == 0 || this.FrmSln == 1)
             {
                 string sql = "";
-                sql += "@DELETE FROM Sys_FrmSln WHERE FK_MapData='" + this.FK_Frm + "' AND FK_Node='"+this.FK_Node+"'";
+                sql += "@DELETE FROM Sys_FrmSln WHERE FK_MapData='" + this.FK_Frm + "' AND FK_Node='" + this.FK_Node + "'";
                 sql += "@DELETE FROM Sys_FrmAttachment WHERE FK_MapData='" + this.FK_Frm + "' AND FK_Node='" + this.FK_Node + "'";
                 sql += "@DELETE FROM Sys_MapDtl WHERE FK_MapData='" + this.FK_Frm + "' AND FK_Node='" + this.FK_Node + "'";
                 DBAccess.RunSQLs(sql);

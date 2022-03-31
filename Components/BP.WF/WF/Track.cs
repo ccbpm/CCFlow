@@ -130,6 +130,10 @@ namespace BP.WF
                 this.SetValByKey(TrackAttr.MyPK, value);
             }
         }
+        public void setMyPK(string val)
+        {
+            this.SetValByKey(TrackAttr.MyPK, val);
+        }
         public override string PK
         {
             get
@@ -328,9 +332,9 @@ namespace BP.WF
                     return "恢复已完成的流程";
                 case ActionType.FlowOverByCoercion:
                     return "强制结束流程";
-                case ActionType.HungUp:
+                case ActionType.Hungup:
                     return "挂起";
-                case ActionType.UnHungUp:
+                case ActionType.UnHungup:
                     return "取消挂起";
                 case ActionType.Press:
                     return "催办";
@@ -354,6 +358,8 @@ namespace BP.WF
                     return "评论";
                 case ActionType.TeampUp:
                     return "协作";
+                case ActionType.Adjust:
+                    return "调整";
                 default:
                     return "信息" + at.ToString();
             }
@@ -573,7 +579,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                Log.DebugWriteError(ex.Message + " @可以容忍的异常....");
+                BP.DA.Log.DebugWriteError(ex.Message + " @可以容忍的异常....");
             }
 
             string sqlRename = "";
@@ -586,9 +592,8 @@ namespace BP.WF
                     sqlRename = "RENAME TABLE WF_Track TO " + ptable;
                     break;
                 case DBType.Oracle:
-                    sqlRename = "ALTER TABLE WF_Track RENAME to " + ptable;
-                    break;
                 case DBType.PostgreSQL:
+                case DBType.UX:
                     sqlRename = "ALTER TABLE WF_Track RENAME to " + ptable;
                     break;
                 case DBType.MySQL:
@@ -602,14 +607,25 @@ namespace BP.WF
             //重命名.
             DBAccess.RunSQL(sqlRename);
 
-            //删除主键.
-            DBAccess.DropTablePK(ptable);
+            try
+            {
 
-            //创建主键.  这里创建主键的时候提示错误。提示该主键应存在.
-            DBAccess.CreatePK(ptable, TrackAttr.MyPK, tk.EnMap.EnDBUrl.DBType);
+                //去掉索引
+                DBAccess.RunSQLs("drop index WF_Track_MyPK on " + ptable);
+                DBAccess.RunSQL("Alter Table " + ptable + " ALTER column MyPK bigint NOT NULL");
+                DBAccess.RunSQL("CREATE INDEX WF_Track_MyPK ON " + ptable + "(MyPK)");
+                //删除主键.
+                DBAccess.DropTablePK(ptable);
 
+
+                //创建主键.  这里创建主键的时候提示错误。提示该主键应存在.
+                DBAccess.CreatePK(ptable, TrackAttr.MyPK, tk.EnMap.EnDBUrl.DBType);
+            }
+            catch (Exception ex)
+            {
+                Log.DebugWriteError(ex.Message);
+            }
             //增加frmDB字段.
-
         }
         /// <summary>
         /// 插入
@@ -681,11 +697,11 @@ namespace BP.WF
 
             //HttpWebResponse.
             //if (HttpHandler.)
-            this.Tag += "@SheBei="+BP.Web.WebUser.SheBei;
+            this.Tag += "@SheBei=" + BP.Web.WebUser.SheBei;
 
             DateTime d;
             if (string.IsNullOrWhiteSpace(RDT) || DateTime.TryParse(this.RDT, out d) == false)
-                this.RDT = DataType.CurrentDataTimess;
+                this.RDT = DataType.CurrentDateTimess;
 
             #region 执行保存
             try
@@ -713,16 +729,41 @@ namespace BP.WF
             catch (Exception ex)
             {
                 // 写入日志.
-                Log.DefaultLogWriteLineError(ex.Message);
+                BP.DA.Log.DebugWriteError(ex.Message);
 
                 //创建track.
                 //Track.CreateOrRepairTrackTable(this.FK_Flow);
                 throw ex;
             }
 
+            #region 增加,日志.
             //把frm日志写入到数据里.
             if (this.FrmDB != null)
-                DBAccess.SaveBigTextToDB(this.FrmDB, ptable, "MyPK", this.MyPK, "FrmDB");
+            {
+                if (this.HisActionType == ActionType.SubThreadForward
+                  || this.HisActionType == ActionType.StartChildenFlow
+                  || this.HisActionType == ActionType.Start
+                  || this.HisActionType == ActionType.Forward
+                  || this.HisActionType == ActionType.SubThreadForward
+                  || this.HisActionType == ActionType.ForwardHL
+                  || this.HisActionType == ActionType.FlowOver)
+                {
+
+                    Flow fl = new Flow(this.FK_Flow);
+                    Node nd = new Node(this.NDFrom);
+
+                    Work wk = nd.HisWork;
+                    wk.OID = this.WorkID;
+                    wk.RetrieveFromDBSources();
+
+                    WorkNodePlus.AddNodeFrmTrackDB(fl, nd, this, wk);
+                    //t.FrmDB = this.HisWork.ToJson();
+                }
+
+                //  DBAccess.SaveBigTextToDB(this.FrmDB, ptable, "MyPK", this.MyPK, "FrmDB");
+            }
+            #endregion 增加.
+
 
             if (DataType.IsNullOrEmpty(this.WriteDB) == false && DBAccess.IsExitsTableCol(ptable, "WriteDB") == true)
             {
@@ -775,7 +816,7 @@ namespace BP.WF
 
             DateTime d;
             if (string.IsNullOrWhiteSpace(RDT) || DateTime.TryParse(this.RDT, out d) == false)
-                this.RDT = DataType.CurrentDataTimess;
+                this.RDT = DataType.CurrentDateTimess;
 
 
 

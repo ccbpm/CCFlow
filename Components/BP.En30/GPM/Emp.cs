@@ -281,7 +281,7 @@ namespace BP.GPM
 
                 #region 基本属性
                 map.EnDBUrl = new DBUrl(DBUrlType.AppCenterDSN); //要连接的数据源（表示要连接到的那个系统数据库）。
-                map.EnType = EnType.App;
+                map.setEnType(EnType.App);
                 map.IndexField = EmpAttr.FK_Dept;
                 #endregion
 
@@ -304,6 +304,7 @@ namespace BP.GPM
 
                 map.AddTBString(EmpAttr.Leader, null, "直属部门领导", false, false, 0, 20, 130);
                 map.SetHelperAlert(EmpAttr.Leader, "这里是领导的登录帐号，不是中文名字，用于流程的接受人规则中。");
+
                 map.AddTBString(EmpAttr.LeaderName, null, "直属部门领导", true, true, 0, 20, 130);
 
                 map.AddTBString(EmpAttr.Email, null, "邮箱", true, false, 0, 100, 132, true);
@@ -318,8 +319,16 @@ namespace BP.GPM
 
                 map.AddTBInt(EmpAttr.Idx, 0, "序号", true, false);
                 map.SetHelperAlert(EmpAttr.Idx, "显示的顺序");
-
                 #endregion 字段
+
+                #region 查询条件. //@hontyan.
+                if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                {
+                    map.AddHidden(EmpAttr.OrgNo, " = ", "@WebUser.OrgNo");
+                    map.AddSearchAttr(EmpAttr.FK_Dept);
+                }
+                #endregion 查询条件.
+
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "设置图片签名";
@@ -437,7 +446,7 @@ namespace BP.GPM
                 //给拼音重新定义值,让其加上部门的信息.
                 this.PinYin = this.PinYin + pinyinJX + "/" + DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
 
-                BP.Port.Station sta = new Port.Station();
+                BP.Port.Station sta = new BP.Port.Station();
                 sta.No = item.FK_Station;
                 if (sta.RetrieveFromDBSources() == 0)
                 {
@@ -452,7 +461,7 @@ namespace BP.GPM
         }
         protected override bool beforeDelete()
         {
-            if (this.No.ToLower().Equals("admin")==true)
+            if (this.No.ToLower().Equals("admin") == true)
                 throw new Exception("err@管理员账号不能删除.");
 
             return base.beforeDelete();
@@ -474,7 +483,7 @@ namespace BP.GPM
             DeptEmp deptEmp = new DeptEmp();
             deptEmp.FK_Dept = this.FK_Dept;
             deptEmp.FK_Emp = this.No;
-            deptEmp.MyPK = this.FK_Dept + "_" + this.No;
+            deptEmp.setMyPK(this.FK_Dept + "_" + this.No);
             if (deptEmp.IsExit("MyPK", deptEmp.MyPK) == false)
                 deptEmp.Insert();
 
@@ -527,7 +536,7 @@ namespace BP.GPM
                 //给拼音重新定义值,让其加上部门的信息.
                 py = py + pinyinJX + "/" + DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
 
-                BP.Port.Station sta = new Port.Station();
+                BP.Port.Station sta = new BP.Port.Station();
                 sta.No = item.FK_Station;
                 if (sta.RetrieveFromDBSources() == 0)
                 {
@@ -603,7 +612,11 @@ namespace BP.GPM
         }
         public override int RetrieveAll()
         {
-            return base.RetrieveAll("Name");
+            //@hontyan.
+            if (BP.Sys.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                return base.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
+
+            return base.RetrieveAll();
         }
         #endregion 构造方法
 

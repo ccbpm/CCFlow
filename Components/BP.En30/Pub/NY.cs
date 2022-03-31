@@ -59,7 +59,7 @@ namespace BP.Pub
                 map.DepositaryOfMap = Depositary.Application;
                 map.DepositaryOfEntity = Depositary.None;
                 map.IsCheckNoLength = false;
-                map.EnType = EnType.App;
+                map.setEnType(EnType.App);
                 map.CodeStruct = "4";
                 #endregion
 

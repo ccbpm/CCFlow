@@ -43,7 +43,7 @@ namespace BP.WF.DTS
         /// <returns>返回执行结果</returns>
         public override object Do()
         {
-            //BP.WF.Template.AutoRpts rpts = new Template.AutoRpts();
+            //BP.WF.Template.AutoRpts rpts = new AutoRpts();
             //rpts.RetrieveAll();
 
             //string html = "执行内容如下:";

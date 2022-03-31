@@ -11,6 +11,7 @@ using BP.En;
 using BP.WF;
 using BP.WF.Template;
 using Newtonsoft.Json;
+using BP.Difference;
 
 namespace BP.WF.HttpHandler
 {
@@ -84,14 +85,14 @@ namespace BP.WF.HttpHandler
                     if (fn.IsExit("mypk", frm + "_" + this.FK_Node + "_" + this.FK_Flow))
                     {
                         frmNode.Copy(fn);
-                        frmNode.MyPK = frm + "_" + nodeid + "_" + this.FK_Flow;
+                        frmNode.setMyPK(frm + "_" + nodeid + "_" + this.FK_Flow);
                         frmNode.FK_Flow = this.FK_Flow;
                         frmNode.FK_Node = nodeid;
                         frmNode.FK_Frm = frm;
                     }
                     else
                     {
-                        frmNode.MyPK = frm + "_" + nodeid + "_" + this.FK_Flow;
+                        frmNode.setMyPK(frm + "_" + nodeid + "_" + this.FK_Flow);
                         frmNode.FK_Flow = this.FK_Flow;
                         frmNode.FK_Node = nodeid;
                         frmNode.FK_Frm = frm;
@@ -139,7 +140,7 @@ namespace BP.WF.HttpHandler
                     fn.FK_Flow = this.FK_Flow;
                     fn.FK_Node = this.FK_Node;
 
-                    fn.MyPK = fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow;
+                    fn.setMyPK(fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow);
 
                     fn.Save();
                 }

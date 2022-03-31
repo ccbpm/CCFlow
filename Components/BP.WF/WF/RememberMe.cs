@@ -67,7 +67,7 @@ namespace BP.WF
             set
             {
                 this.SetValByKey(RememberMeAttr.FK_Emp, value);
-                this.MyPK = this.FK_Node + "_" + BP.Web.WebUser.No;
+                this.setMyPK(this.FK_Node + "_" + BP.Web.WebUser.No);
             }
         }
         /// <summary>
@@ -82,7 +82,7 @@ namespace BP.WF
             set
             {
                 this.SetValByKey(RememberMeAttr.FK_Node, value);
-                this.MyPK = this.FK_Node + "_" + BP.Web.WebUser.No;
+                this.setMyPK(this.FK_Node + "_" + BP.Web.WebUser.No);
             }
         }
         /// <summary>
@@ -207,7 +207,7 @@ namespace BP.WF
         protected override bool beforeUpdateInsertAction()
         {
             this.FK_Emp = BP.Web.WebUser.No;
-            this.MyPK = this.FK_Node + "_" + this.FK_Emp;
+            this.setMyPK(this.FK_Node + "_" + this.FK_Emp);
             return base.beforeUpdateInsertAction();
         }
     }

@@ -13,7 +13,10 @@ using BP.WF;
 using BP.WF.Template;
 using LitJson;
 using BP.WF.XML;
-using BP.WF.Port.Admin2;
+using BP.WF.Port.Admin2Group;
+using BP.Difference;
+using BP.WF.Port.Admin2Group;
+
 namespace BP.WF.HttpHandler
 {
     /// <summary>
@@ -36,9 +39,9 @@ namespace BP.WF.HttpHandler
             string sql = "";
             if (DBAccess.AppCenterDBType == DBType.MySQL)
                 sql = "SELECT CONCAT('F' , No) as No,Name, CONCAT('F' ,ParentNo) as ParentNo FROM WF_FlowSort WHERE No='" + fk_flowsort + "' OR ParentNo='" + fk_flowsort + "' ORDER BY Idx";
-            else 
+            else
                 sql = "SELECT 'F' + No as No,Name, 'F' + ParentNo as ParentNo FROM WF_FlowSort WHERE No='" + fk_flowsort + "' OR ParentNo='" + fk_flowsort + "' ORDER BY Idx";
-            
+
             DataTable dtFlowSorts = DBAccess.RunSQLReturnTable(sql);
             //if (dtFlowSort.Rows.Count == 0)
             //{
@@ -50,7 +53,7 @@ namespace BP.WF.HttpHandler
             dtFlowSorts.TableName = "FlowSorts";
             ds.Tables.Add(dtFlowSorts);
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dtFlowSorts.Columns[0].ColumnName = "No";
                 dtFlowSorts.Columns[1].ColumnName = "Name";
@@ -60,17 +63,17 @@ namespace BP.WF.HttpHandler
             //sql = "SELECT No,Name, FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' ";
 
             if (DBAccess.AppCenterDBType == DBType.MySQL)
-            
+
                 sql = "SELECT  No,CONCAT(NO ,'.',NAME) as Name, CONCAT('F',FK_FlowSort) as ParentNo, Idx FROM WF_Flow where FK_FlowSort='" + fk_flowsort + "' ";
             else
                 sql = "SELECT  No,(NO + '.' + NAME) as Name, 'F' + FK_FlowSort as ParentNo, Idx FROM WF_Flow where FK_FlowSort='" + fk_flowsort + "' ";
-            
+
             sql += " ORDER BY Idx ";
-            
+
             DataTable dtFlows = DBAccess.RunSQLReturnTable(sql);
             dtFlows.TableName = "Flows";
             ds.Tables.Add(dtFlows);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dtFlows.Columns[0].ColumnName = "No";
                 dtFlows.Columns[1].ColumnName = "Name";
@@ -153,7 +156,7 @@ namespace BP.WF.HttpHandler
                     if (item == "" || item == null)
                         continue;
                     string[] strs = item.Split(',');
-                    mydir.MyPK = strs[0];
+                    mydir.setMyPK(strs[0]);
                     if (mydir.IsExits == true)
                         continue;
 
@@ -256,9 +259,6 @@ namespace BP.WF.HttpHandler
             ds.WriteXml(file);
             string docs = DataType.ReadTextFile(file);
             return docs;
-
-            //return file;
-            //return docs;
         }
 
         /// <summary>
@@ -615,19 +615,19 @@ namespace BP.WF.HttpHandler
             }
 
             //获得当前管理员管理的组织数量.
-            OrgAdminers adminers = null;
+            Port.Admin2Group.OrgAdminers adminers = null;
 
             //查询他管理多少组织.
             adminers = new OrgAdminers();
             adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.UserID);
             if (adminers.Count == 0)
             {
-                BP.WF.Port.Admin2.Orgs orgs = new Orgs();
+                BP.WF.Port.Admin2Group.Orgs orgs = new Orgs();
                 int i = orgs.Retrieve("Adminer", this.GetRequestVal("TB_No"));
                 if (i == 0)
                     return "err@非管理员或二级管理员用户，不能登录后台.";
 
-                foreach (BP.WF.Port.Admin2.Org org in orgs)
+                foreach (BP.WF.Port.Admin2Group.Org org in orgs)
                 {
                     OrgAdminer oa = new OrgAdminer();
                     oa.FK_Emp = WebUser.No;
@@ -876,7 +876,7 @@ namespace BP.WF.HttpHandler
                            "SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) as NAME,IDX,0 ISPARENT,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow ) A  ORDER BY DTYPE, IDX,NO ";
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle
-                || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 sql = @"SELECT * FROM (SELECT 'F'||No as NO,'F'||ParentNo as PARENTNO,NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort " +
                         "  union " +
@@ -948,7 +948,7 @@ namespace BP.WF.HttpHandler
             sql += "  ORDER BY DTYPE, IDX ";
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle
-                || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 sql = @"SELECT * FROM (SELECT 'F'||No as NO,'F'||ParentNo as PARENTNO,NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort " +
                         " WHERE OrgNo ='" + WebUser.OrgNo + "' or No = 1 union " +
@@ -965,7 +965,7 @@ namespace BP.WF.HttpHandler
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dt.Columns["no"].ColumnName = "NO";
                 dt.Columns["name"].ColumnName = "NAME";
@@ -996,7 +996,7 @@ namespace BP.WF.HttpHandler
             //如果为0。
             if (dt.Rows.Count == 0)
             {
-                BP.WF.Port.Admin2.Org org = new Port.Admin2.Org(WebUser.OrgNo);
+                BP.WF.Port.Admin2Group.Org org = new BP.WF.Port.Admin2Group.Org(WebUser.OrgNo);
                 org.DoCheck();
                 return "err@系统出现错误，请刷新一次，如果仍然出现错误，请反馈给管理员.";
             }
@@ -1040,7 +1040,7 @@ namespace BP.WF.HttpHandler
             sql.AppendLine("       0 ISPARENT");
             sql.AppendLine("FROM   WF_FrmNode wfn");
             sql.AppendLine("       INNER JOIN Sys_MapData smd");
-            sql.AppendLine("            ON  smd.No = wfn.FK_Frm");
+            sql.AppendLine("            ON  smd.No=wfn.FK_Frm");
             sql.AppendLine("WHERE  wfn.FK_Flow = '{0}'");
             sql.AppendLine("       AND wfn.FK_Node = (");
             sql.AppendLine("               SELECT wn.NodeID");
@@ -1101,7 +1101,7 @@ namespace BP.WF.HttpHandler
             DataTable dtSort = ds.Tables[0]; //类别表.
             DataTable dtForm = ds.Tables[1].Clone(); //表单表,这个是最终返回的数据.
 
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dtForm.Columns["no"].ColumnName = "No";
                 dtForm.Columns["name"].ColumnName = "Name";
@@ -1166,7 +1166,7 @@ namespace BP.WF.HttpHandler
             DataTable dtSort = ds.Tables[0]; //类别表.
             DataTable dtForm = ds.Tables[1].Clone(); //表单表,这个是最终返回的数据.
 
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
             {
                 dtForm.Columns["no"].ColumnName = "No";
                 dtForm.Columns["name"].ColumnName = "Name";
@@ -1284,142 +1284,11 @@ namespace BP.WF.HttpHandler
         public string GetTreeJson_AdminMenu()
         {
             string treeJson = string.Empty;
+            //查询全部.
+            AdminMenus groups = new AdminMenus();
+            groups.RetrieveAll();
 
-            if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
-            {
-                //查询全部.
-                Admin2MenuGroups groups = new Admin2MenuGroups();
-                groups.RetrieveAll();
-
-                Admin2Menus menus = new Admin2Menus();
-                menus.RetrieveAll();
-
-                // 定义容器.
-                Admin2Menus newMenus = new Admin2Menus();
-
-                foreach (Admin2MenuGroup menu in groups)
-                {
-
-                    //是否可以使用？
-                    if (menu.IsCanUse(WebUser.No) == false)
-                        continue;
-                    Admin2Menu newMenu = new Admin2Menu();
-                    newMenu.No = menu.No;
-                    newMenu.Name = menu.Name;
-                    newMenu.GroupNo = "0";
-                    newMenu.For = menu.For;
-                    newMenu.Url = "";
-                    newMenus.Add(newMenu);
-                }
-
-                foreach (Admin2Menu menu in menus)
-                {
-                    newMenus.Add(menu);
-                }
-                //添加默认，无权限
-                if (newMenus.Count == 0)
-                {
-                    Admin2Menu menu = new Admin2Menu();
-                    menu.No = "1";
-                    menu.GroupNo = "0";
-                    menu.Name = "无权限";
-                    menu.Url = "";
-                    newMenus.Add(menu);
-                }
-                return BP.Tools.Json.ToJson(newMenus.ToDataTable());
-            }
-            if (Glo.CCBPMRunModel == CCBPMRunModel.SAAS)
-            {
-                //查询全部.
-                AdminMenuCloudGroups groups = new AdminMenuCloudGroups();
-                groups.RetrieveAll();
-
-                AdminMenuClouds menus = new AdminMenuClouds();
-                menus.RetrieveAll();
-
-                // 定义容器.
-                AdminMenuClouds newMenus = new AdminMenuClouds();
-
-                foreach (AdminMenuCloudGroup menu in groups)
-                {
-
-                    //是否可以使用？
-                    if (menu.IsCanUse(WebUser.No) == false)
-                        continue;
-                    AdminMenuCloud newMenu = new AdminMenuCloud();
-                    newMenu.No = menu.No;
-                    newMenu.Name = menu.Name;
-                    newMenu.GroupNo = "0";
-                    newMenu.For = menu.For;
-                    newMenu.Url = "";
-                    newMenus.Add(newMenu);
-                }
-
-                foreach (AdminMenuCloud menu in menus)
-                {
-                    if (menu.Name.Equals("系统设置") && menu.Url.Contains("BP.Cloud.OrgSetting.Org"))
-                        menu.Url = menu.Url + "&No=" + WebUser.OrgNo;
-                    newMenus.Add(menu);
-                }
-                //添加默认，无权限
-                if (newMenus.Count == 0)
-                {
-                    AdminMenuCloud menu = new AdminMenuCloud();
-                    menu.No = "1";
-                    menu.GroupNo = "0";
-                    menu.Name = "无权限";
-                    menu.Url = "";
-                    newMenus.Add(menu);
-                }
-                return BP.Tools.Json.ToJson(newMenus.ToDataTable());
-            }
-            if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
-            {
-                //查询全部.
-                AdminMenuGroups groups = new AdminMenuGroups();
-                groups.RetrieveAll();
-
-                AdminMenus menus = new AdminMenus();
-                menus.RetrieveAll();
-
-                // 定义容器.
-                AdminMenus newMenus = new AdminMenus();
-
-                foreach (AdminMenuGroup menu in groups)
-                {
-                    //是否可以使用？
-                    if (menu.IsCanUse(WebUser.No) == false)
-                        continue;
-
-                    AdminMenu newMenu = new AdminMenu();
-                    newMenu.No = menu.No;
-                    newMenu.Name = menu.Name;
-                    newMenu.GroupNo = "0";
-                    newMenu.For = menu.For;
-                    newMenu.Url = "";
-                    newMenus.Add(newMenu);
-                }
-
-                foreach (AdminMenu menu in menus)
-                {
-                    //是否可以使用？
-                    if (menu.IsCanUse(WebUser.No) == false)
-                        continue;
-
-                    newMenus.Add(menu);
-                }
-                //添加默认，无权限
-                if (newMenus.Count == 0)
-                {
-                    AdminMenu menu = new AdminMenu();
-                    menu.No = "1";
-                    menu.GroupNo = "0";
-                    menu.Name = "无权限";
-                    menu.Url = "";
-                    newMenus.Add(menu);
-                }
-                return BP.Tools.Json.ToJson(newMenus.ToDataTable());
-            }
+            return BP.Tools.Json.ToJson(groups.ToDataTable());
             return treeJson;
         }
 
@@ -1650,16 +1519,19 @@ namespace BP.WF.HttpHandler
             formTree.Delete();
             return "删除成功";
         }
+        /// <summary>
+        /// 让admin登录
+        /// </summary>
+        /// <returns></returns>
         public string LetAdminLoginByToken()
         {
             try
             {
                 string userNo = this.GetRequestVal("UserNo");
                 string sid = this.GetRequestVal("SID");
-                if (BP.Web.WebUser.No.Equals(userNo) == true)
-                    return "info@已经成功登录.";
 
-                BP.WF.Dev2Interface.Port_Login(userNo, sid, BP.Web.WebUser.OrgNo);
+                BP.WF.Dev2Interface.Port_LoginBySID(sid);
+
                 return "info@登录成功";
             }
             catch (Exception ex)

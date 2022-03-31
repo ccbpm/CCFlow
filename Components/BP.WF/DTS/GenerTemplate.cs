@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Collections;
 using BP.DA;
 using System.Reflection;
@@ -83,7 +84,7 @@ namespace BP.WF.DTS
                     foreach (Node nd in nds)
                     {
                         MapData md = new MapData("ND" + nd.NodeID);
-                        System.Data.DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
+                        DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
                         ds.WriteXml(pathFlowDir + "/" + nd.NodeID + "." + nd.Name + ".Frm.xml");
                     }
                 }
@@ -101,7 +102,7 @@ namespace BP.WF.DTS
                 mds.Retrieve(MapDataAttr.FK_FormTree, sort.No);
                 foreach (MapData md in mds)
                 {
-                    System.Data.DataSet ds =BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
+                    DataSet ds =BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
                     ds.WriteXml(pathDir + "/" + md.No + "." + md.Name + ".Frm.xml");
                 }
             }

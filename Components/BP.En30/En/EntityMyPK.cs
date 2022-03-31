@@ -41,6 +41,10 @@ namespace BP.En
                 this.SetValByKey(EntityMyPKAttr.MyPK, value);
             }
         }
+        public void setMyPK(string val)
+        {
+            this.SetValByKey(EntityMyPKAttr.MyPK, val);
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -62,7 +66,7 @@ namespace BP.En
         /// <param name="_MyPK">_MyPK</param>
         protected EntityMyPK(string _MyPK)
         {
-            this.MyPK = _MyPK;
+            this.setMyPK(_MyPK);
             this.Retrieve();
         }
         #endregion
@@ -165,7 +169,7 @@ namespace BP.En
 		/// <param name="_MyPK">_MyPK</param>
         protected EntityMyPKMyFile(string _MyPK)
         {
-            this.MyPK = _MyPK;
+            this.setMyPK(_MyPK);
             this.Retrieve();
         }
 		#endregion

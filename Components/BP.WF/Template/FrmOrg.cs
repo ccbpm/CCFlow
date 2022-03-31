@@ -85,7 +85,7 @@ namespace BP.WF.Template
                 map.IndexField = FrmOrgAttr.FrmID;
 
                 map.AddTBStringPK(FrmOrgAttr.FrmID,null,"表单",true,true,1,100,100);
-                map.AddDDLEntitiesPK(FrmOrgAttr.OrgNo, null, "到组织", new BP.WF.Port.Admin2.Orgs(),
+                map.AddDDLEntitiesPK(FrmOrgAttr.OrgNo, null, "到组织", new BP.WF.Port.Admin2Group.Orgs(),
                     true);
 
                 this._enMap = map;

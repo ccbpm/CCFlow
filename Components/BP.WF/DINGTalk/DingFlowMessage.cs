@@ -58,7 +58,7 @@ namespace BP.GPM.DTalk.DINGTalk
                     msgText.Access_Token = DingDing.getAccessToken();
                     msgText.agentid = SystemConfig.Ding_AgentID;
                     msgText.touser = toUsers;
-                    msgText.content = title + "\n发送人：" + sender + "\n时间：" + DataType.CurrentDataTimeCNOfShort;
+                    msgText.content = title + "\n发送人：" + sender + "\n时间：" + DataType.CurrentDateTimeCNOfShort;
                     return DingTalk_Message.Msg_AgentText_Send(msgText);
                 case DingMsgType.link:
                     Ding_Msg_Link msgLink = new Ding_Msg_Link();
@@ -68,7 +68,7 @@ namespace BP.GPM.DTalk.DINGTalk
                     msgLink.messageUrl = SystemConfig.Ding_MessageUrl + "/CCMobile/login.aspx";
                     msgLink.picUrl = "@lALOACZwe2Rk";
                     msgLink.title = title;
-                    msgLink.text = "发送人：" + sender + "\n时间：" + DataType.CurrentDataTimeCNOfShort;
+                    msgLink.text = "发送人：" + sender + "\n时间：" + DataType.CurrentDateTimeCNOfShort;
                     return DingTalk_Message.Msg_AgentLink_Send(msgLink);
                 case DingMsgType.OA:
                     string[] users = toUsers.Split('|');

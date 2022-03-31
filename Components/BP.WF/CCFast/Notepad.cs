@@ -107,7 +107,7 @@ namespace BP.CCFast
         }
         public Notepad(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -163,9 +163,9 @@ namespace BP.CCFast
         #region 执行方法.
         protected override bool beforeInsert()
         {
-            this.MyPK = DBAccess.GenerGUID();
+            this.setMyPK(DBAccess.GenerGUID());
             this.Rec = WebUser.No;
-            this.RDT = DataType.CurrentDataTime;
+            this.RDT = DataType.CurrentDateTime;
 
             this.NianYue = DataType.CurrentYearMonth;
 

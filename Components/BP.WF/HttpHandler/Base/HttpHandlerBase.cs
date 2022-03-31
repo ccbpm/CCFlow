@@ -6,6 +6,8 @@ using System.Web.SessionState;
 using BP.Web;
 using BP.DA;
 using BP.Port;
+using BP.Difference;
+
 
 namespace BP.WF.HttpHandler
 {
@@ -27,6 +29,7 @@ namespace BP.WF.HttpHandler
         public void ProcessRequest(HttpContext mycontext)
         {
             context = mycontext;
+
 
             //创建 ctrl 对象, 获得业务实体类.
             DirectoryPageBase ctrl = Activator.CreateInstance(this.CtrlType) as DirectoryPageBase;
@@ -76,11 +79,11 @@ namespace BP.WF.HttpHandler
                 else
                     err = "err@在执行类[" + this.CtrlType.ToString() + "]，方法[" + ctrl.DoType + "]错误 \t\n @" + ex.Message + " \t\n @技术信息:" + ex.StackTrace + " \t\n相关参数:" + paras;
 
-                if (Web.WebUser.No == null)
+                if (BP.Web.WebUser.No == null)
                     err = "err@登录时间过长,请重新登录. @其他信息:" + err;
 
                 //记录错误日志以方便分析.
-                Log.DebugWriteError(err);
+                BP.DA.Log.DebugWriteError(err);
 
                 HttpContextHelper.Response.Write(err);
             }

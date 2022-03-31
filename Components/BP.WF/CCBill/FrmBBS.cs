@@ -278,7 +278,7 @@ namespace BP.CCBill
 
                 map.AddTBString(FrmBBSAttr.FrmID, null, "表单ID", true, false, 0, 50, 200);
                 map.AddTBString(FrmBBSAttr.FrmName, null, "表单名称(可以为空)", true, false, 0, 200, 200);
-
+                map.AddMyFile();
                 this._enMap = map;
                 return this._enMap;
             }
@@ -289,6 +289,11 @@ namespace BP.CCBill
         public FrmBBS()
         {
         }
+        public FrmBBS(string no)
+        {
+            this.No = no;
+            this.Retrieve();
+        }
         #endregion 构造.
 
         protected override bool beforeInsert()
@@ -297,7 +302,7 @@ namespace BP.CCBill
 
             this.SetValByKey(FrmBBSAttr.Rec, BP.Web.WebUser.No);
             this.SetValByKey(FrmBBSAttr.RecName, BP.Web.WebUser.Name);
-            this.SetValByKey(FrmBBSAttr.RDT, DataType.CurrentDataTime);
+            this.SetValByKey(FrmBBSAttr.RDT, DataType.CurrentDateTime);
 
             this.SetValByKey(FrmBBSAttr.DeptNo, BP.Web.WebUser.FK_Dept);
             this.SetValByKey(FrmBBSAttr.DeptName, BP.Web.WebUser.FK_DeptName);

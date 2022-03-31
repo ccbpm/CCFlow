@@ -100,7 +100,7 @@ namespace BP.CCFast
         }
         public WorkChecker(string mypk)
         {
-            this.MyPK = mypk;
+            this.setMyPK(mypk);
             this.Retrieve();
         }
         /// <summary>
@@ -137,12 +137,12 @@ namespace BP.CCFast
 
         protected override bool beforeInsert()
         {
-            this.MyPK = DBAccess.GenerGUID();
+            this.setMyPK(DBAccess.GenerGUID());
             this.Rec = WebUser.No;
             this.RecName = WebUser.Name;
             this.OrgNo = WebUser.OrgNo;
 
-            this.RDT = DataType.CurrentDataTime;
+            this.RDT = DataType.CurrentDateTime;
 
             return base.beforeInsert();
         }

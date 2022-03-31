@@ -64,11 +64,8 @@ namespace BP.GPM.Menu2020
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("GPM_MenuDtl");  // 类的基本属性.
-                map.DepositaryOfEntity = Depositary.None;
-                map.DepositaryOfMap = Depositary.Application;
-                map.EnDesc = "标签";
-                map.EnType = EnType.Sys;
+                Map map = new Map("GPM_MenuDtl", "标签");  // 类的基本属性.
+                map.setEnType(EnType.Sys);
 
                 map.AddTBStringPK(TabDtlAttr.No, null, "编号", false, false, 1, 90, 50);
                 map.AddTBString(TabDtlAttr.RefMenuNo, null, "菜单编号", false, false, 0, 100, 100);

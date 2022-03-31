@@ -20,28 +20,30 @@
     <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
     <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
     <script type="text/javascript">
-
+        var Flow = null;
         $(function () {
 
             InitBar(StartGuideWay.ByFrms);
             var nodeID = GetQueryString("FK_Flow") + "01";
-
-            //nodeID = parseInt(nodeID);
-            //var node = new Entity("BP.WF.Node", nodeID);
+            var fk_flow = GetQueryString("FK_Flow");
+            Flow = new Entity("BP.WF.Flow", fk_flow);
+            var model = Flow.GetPara("StartGuidePara");
+            if (model == null || model == undefined || model == "")
+                model = "0";
+            $("#DDL_Model").val(model);
 
         });
 
         function Save() {
 
-            var fk_flow = GetQueryString("FK_Flow");
-            var data = new Entity("BP.WF.Flow", fk_flow);
+           
 
-            data.StartGuideWay = StartGuideWay.ByFrms;
+            Flow.StartGuideWay = StartGuideWay.ByFrms;
 
             //设置的模式.
-            data.TB_StartGuidePara1 = $("#DDL_Model").val();
+            Flow.SetPara("StartGuidePara",$("#DDL_Model").val());
 
-            data.Update();
+            Flow.Update();
 
             window.location.href = window.location.href;
         }

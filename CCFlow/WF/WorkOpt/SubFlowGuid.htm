@@ -235,7 +235,12 @@
 
             //显示已经选择的节点
             var gwfs = new Entities("BP.WF.GenerWorkFlows");
-            gwfs.Retrieve("PWorkID", GetQueryString("PWorkID"), "FK_Flow", subFlowGuid.SubFlowNo, "WFState", 1);
+
+            var pworkid = GetQueryString("PWorkID")
+            if (pworkid == null || pworkid == undefined)
+                pworkid = 0;
+
+            gwfs.Retrieve("PWorkID", pworkid, "FK_Flow", subFlowGuid.SubFlowNo, "WFState", 1);
             $.each(gwfs, function (i, item) {
                 selectedRows.push({
                     "No": GetPara(item.AtPara, "SubFlowGuideEnNoFiled"),

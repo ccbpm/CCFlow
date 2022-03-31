@@ -15,7 +15,8 @@
     }
 
     $.cookie('easyuiThemeName', themeName, {
-        expires: 7
+        expires: 7,
+        httpOnly: true
     });
 };
 if ($.cookie('easyuiThemeName')) {

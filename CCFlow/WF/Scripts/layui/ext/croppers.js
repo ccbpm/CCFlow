@@ -63,14 +63,20 @@ layui.config({
                 ,image = $(".showImgEdit .readyimg img")
                 ,preview = '.showImgEdit .img-preview'
                 ,file = $(".showImgEdit input[name='file']")
-                , options = {aspectRatio: mark,preview: preview,viewMode:1};
-
-            $(elem).on('click',function () {
+                , options = { aspectRatio: mark, preview: preview, viewMode: 1 };
+           
+            $(elem).on('click', function () {
                 layer.open({
                     type: 1
                     , content: content
                     , area: area
                     , success: function () {
+                       
+                        //默认的图片附件是不是存在
+                        var elementID = "Img" + $("#editimg").attr("data-ref");
+                        //获取原始的图片src
+                        var src = $("#" + elementID).attr("src");
+                        $(".showImgEdit .readyimg img").cropper('destroy').attr('src', src);
                         image.cropper(options);
                     }
                     , cancel: function (index) {

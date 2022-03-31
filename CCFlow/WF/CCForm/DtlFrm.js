@@ -44,6 +44,8 @@ $(function () {
  * 网页页面参数获取
  */
 var pageData = {};
+var richTextType = getConfigByKey("RichTextType", 'tinymce');
+
 function initPageParam() {
     pageData.FK_Flow = GetQueryString("FK_Flow");
     pageData.FK_Node = GetQueryString("FK_Node");
@@ -135,7 +137,7 @@ function GenerFrm() {
 
     //解析表单数据
     $('head').append('<link href="../../DataUser/Style/FoolFrmStyle/Default.css" rel="stylesheet" type="text/css" />');
-    Skip.addJs("./FrmFool2021.js?ver=" + Math.random());
+    Skip.addJs("./FrmFool.js?ver=" + Math.random());
     GenerFoolFrm(frmData);
 
     //获得sys_mapdata.
@@ -233,6 +235,12 @@ function Save(isSaveAndNew) {
         icon: 16
         , shade: 0.01
     });
+    $("[name=Dtl]").each(function (i, obj) {
+        var contentWidow = obj.contentWindow;
+        if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
+            contentWidow.SaveAll();
+        }
+    });
     //监听提交
     layui.form.on('submit(Save)', function (data) {
         //保存信息
@@ -250,7 +258,8 @@ function Save(isSaveAndNew) {
         if (data.indexOf("err@") != -1) {
             layer.alert(data);
         }
-        layer.alert("数据保存成功");
+
+        //layer.alert("数据保存成功");
 
         if (isSaveAndNew == false) {
             window.location.href = window.location.href + "&IsSave=true";

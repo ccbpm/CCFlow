@@ -25,11 +25,11 @@
             if (data.indexOf("GusetNo@") != -1) {
                 
                //外部客户填写信息
-                var name = window.prompt('初次使用，填写姓名:');
+                var name = promptGener('初次使用，填写姓名:');
                 if (name == null || name == undefined ) {
                     return ;
                 }
-                var tel = window.prompt('初次使用，填写手机号:');
+                var tel = promptGener('初次使用，填写手机号:');
                 if (tel == null || tel == undefined) {
                     return;
                 }

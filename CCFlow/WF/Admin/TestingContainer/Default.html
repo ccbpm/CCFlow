@@ -16,70 +16,77 @@
     <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <script src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/bootstrap/BootstrapUIDialog.js"></script>
-    <script src="Left.js"></script>
+    <script src="Default.js"></script>
     <script language="javascript" type="text/javascript">
+     
+        var workID = 0;
+        var webUser = new WebUser();
 
-        //关闭页面登录admin
-        $(window).on('beforeunload', function () {
-
-            LetAdminerLogin();
-
-        });
-
-        /*// 当前页面失去焦点登录admin
-        window.onblur  = function () {
-            var adminer = GetQueryString("Adminer"); //管理员.
-            var sid = GetQueryString("AdminerSID"); //管理员SID.
-            //访问后台，管理员登录.
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
-        }*/
-        //获得参数.
-        var flowNo = this.GetQueryString("FK_Flow");
-
-        var flow = new Entity("BP.WF.Flow", flowNo);
-        document.title = "测试容器:" + flow.Name;
-
-        //var adminer = GetQueryString("Adminer"); //管理员.
-        var adminerSID = GetQueryString("AdminerSID"); //管理员SID.
-        var userNo = GetQueryString("UserNo"); //要登录的用户
-
-        //访问后台，获得一个工作ID.
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
-        handler.AddUrlData();
-        var workID = handler.DoMethodReturnString("Default_Init");
-        if (workID.indexOf('err@') == 0) {
-
-            var url = 'error.htm?err=' + workID;
-
-            confirm("测试容器发起错误，请参考以下信息：<\br>" + workID);
-            // window.open(url, '错误信息', 'height=500,width=600,top=200,left=500,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
-            window.close();
-        }
-        var webUser = new WebUser()
-        var orgNo = GetQueryString("OrgNo");
-        var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&AdminerSID=" + adminerSID + "&OrgNo=" + orgNo;
-        urlEnd += "&Adminer=" + GetQueryString("Adminer");
-        urlEnd += "&SID=" + webUser.SID;
         //负责人：@qfl
         $(function () {
+        
             InitPageUserInfo();
-            document.getElementById("J_iframe").src = "../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workID;
+
+            //获得参数.
+            var flowNo = GetQueryString("FK_Flow");
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            document.title = "测试容器:" + flow.Name;
+
+            //var adminer = GetQueryString("Adminer"); //管理员.
+            var adminerSID = GetQueryString("AdminerSID"); //管理员SID.
+            var userNo = GetQueryString("UserNo"); //要登录的用户
+
+            //第一次加载,如果没有传递过来workid.
+             workID = GetQueryString("WorkID");
+            if (workID == undefined || workID == null) {
+                //访问后台，获得一个工作ID.
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
+                handler.AddUrlData();
+                workID = handler.DoMethodReturnString("Default_Init");
+                if (workID.indexOf('err@') == 0) {
+
+                    var url = 'error.htm?err=' + workID;
+
+                    confirm("测试容器发起错误，请参考以下信息：<\br>" + workID);
+                    // window.open(url, '错误信息', 'height=500,width=600,top=200,left=500,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+                    window.close();
+                }
+                var webUser = new WebUser()
+                var orgNo = GetQueryString("OrgNo");
+                document.getElementById("J_iframe").src = "../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workID;
+
+            } else {
+                //urlEnd += "&WorkID=" + workID;
+                workID = GetQueryString("WorkID");
+                SelectOneUser();
+                //document.getElementById("J_iframe").src = "../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workID;
+            }
+
         });
+
+
+        function GenerUrlEnd()
+        {
+            var adminerSID = GetQueryString("AdminerSID");
+
+            //定义变量.
+            var urlEnd = "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + workID + "&UserNo=" + webUser.No + "&AdminerSID=" + adminerSID + "&OrgNo=" + webUser.OrgNo;
+            urlEnd += "&Adminer=" + GetQueryString("Adminer");
+            urlEnd += "&SID=" + webUser.SID;
+            return urlEnd;
+        }
         // 发送成功后刷新页面进入切换用户页面
         function refreshRight() {
-            $("#J_iframe").attr('src', "SelectOneUser.html?1=2" + urlEnd);
-
+            $("#J_iframe").attr('src', "SelectOneUser.html?1=2" + GenerUrlEnd() );
         }
 
         //如果关闭的时候，就让admin登录.
         function LetAdminerLogin() {
             // var adminer = GetQueryString("Adminer"); //管理员.
             var sid = GetQueryString("AdminerSID"); //管理员SID.
+            var userNo = GetQueryString("UserNo"); //管理员SID.
 
-            if (sid == null || sid == "null")
-            {
+            if (sid == null || sid == "null") {
                 alert("系统错误，丢失了登录信息SID,请重新登录。");
                 return;
             }
@@ -90,6 +97,147 @@
             var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
             window.close();
         }
+
+
+        //页面启动函数.
+        //var adminer = GetQueryString("Adminer"); //管理员.
+        var sid = GetQueryString("SID"); //管理员SID.
+        // var workID = GetQueryString("WorkID"); 
+        var userNo = GetQueryString("UserNo");
+        var flowNo = GetQueryString("FK_Flow");
+        // var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&SID=" + sid;
+        function InitPageUserInfo() {
+
+            webUserJsonString = null;
+
+            var webUser = new WebUser();
+
+            var html = "<table class=Table style='width:100%;margin:13px;padding:4px;'>";
+            html += "<caption>当前用户</caption>";
+            html += "<tr>";
+            html += "<td colspan=2 style='text-align:center'>";
+            html += "<img style='width:50%;' src='../../../DataUser/UserIcon/" + webUser.No + ".png' onerror=\"this.src='../../../DataUser/UserIcon/Default.png'\" />";
+            html += "</td>";
+            html += "</tr>";
+
+            html += "<tr>";
+            html += "<td>帐号</td>";
+            html += "<td>" + webUser.No + "</td>";
+            html += "</tr>";
+
+            html += "<tr>";
+            html += "<td>用户</td>";
+            html += "<td>" + webUser.Name + "</td>";
+            html += "</tr>";
+
+            html += "<tr>";
+            html += "<td>部门</td>";
+            html += "<td>" + webUser.FK_DeptName + "</td>";
+            html += "</tr>";
+            html += "</table>";
+
+            $("#userInfo").html(html);
+
+            var html = "<ul class='nav' id='side-menu'>";
+
+
+            html += "<li>"
+            html = "<ul style='border:solid 1px #C2D5E3;'>";
+            html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='SelectOneUser.html?1=2' class='J_menuItem' >切换用户</a></li>";
+            html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='DBInfo.html?1=2' class='J_menuItem' >数据库信息</a></li>";
+            html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='../../WFRpt.htm?1=2' class='J_menuItem' >轨迹图</a></li>";
+            html += "<li style='padding:5px;'><a href='javascript:Restart();' >重新启动 </a></li>";
+            html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='SelectGWF.html?1=2' class='J_menuItem' >切换测试实例</a></li>";
+            html += "<li style='padding:5px;'><a href='javascript:LetAdminerLogin();' >安全退出 </a></li>";
+
+            var runModel = GetQueryString("RunModel");
+            if (runModel != 2) {
+                html += "<li style='padding:5px;'><a href='javascript:ToLogin();'  >登录到前台</a></li>";
+            }
+
+            html += "</ul>";
+            html += "</li>";
+            html += "</ul>";
+            $("#Info").html(html);
+
+            $("#BaseInfo").html();
+
+        }
+
+        function ToLogin() {
+
+            if (window.confirm('您确定要退出吗？') == false)
+                return;
+
+            var url = "../../AppClassic/Login.htm";
+            window.open(url);
+            window.location.href = url; //可以关闭窗口.
+        }
+        function chageFramPage(obj) {
+            var url = $(obj).attr('data-info');
+            $("#J_iframe").attr('src', url + GenerUrlEnd() );
+            return false
+        }
+
+
+        //重新启动.
+        function Restart() {
+
+            //if (window.confirm('您确认要使用[' + userNo + ']创建一个新的流程吗？') == false)
+            //    return;
+            // 使用最初用户登录
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
+            handler.AddPara("FK_Emp", userNo);
+            //handler.AddPara("WorkID", workID);
+            //handler.AddPara("Adminer", adminer);
+            handler.AddPara("SID", sid);
+
+            var webUser = new WebUser();
+            $("#userInfo").html(webUser.No + "," + webUser.Name);
+            var data = handler.DoMethodReturnString("SelectOneUser_ChangUser");
+
+            // 进入流程页面
+            //var url = "Default.html?RunModel=1&FK_Flow=" + flowNo + "&SID=" + sid + "&UserNo=" + userNo;
+            // window.location.href = url;
+            //访问后台，获得一个工作ID.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Default_Init");
+            if (data.indexOf('err@') == 0) {
+                var url = 'error.htm?err=' + workID;
+
+                confirm("测试容器发起错误，请参考以下信息：<\br>" + workID);
+                // window.open(url, '错误信息', 'height=500,width=600,top=200,left=500,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+                window.close();
+            }
+            workID = data;
+
+            InitPageUserInfo();
+            document.getElementById("J_iframe").src = "../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workID;
+        }
+
+        function SelectOneUser() {
+
+            alert('切换用户..');
+
+            var url = "SelectOneUser.html?1=2" + GenerUrlEnd();
+            $("#J_iframe").attr('src', url);
+            LetAdminerLogin();
+
+        }
+
+        //如果关闭的时候，就让admin登录.
+        function LetAdminerLoginLeft() {
+            if (window.confirm('您确定要退出到管理员吗？') == false)
+                return;
+            LetAdminerLogin();
+        }
+
+        //关闭页面登录 admin.
+        $(window).on('beforeunload', function () {
+            LetAdminerLogin();
+        });
+
     </script>
     <style type="text/css">
         .navbar-default {

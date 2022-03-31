@@ -1,10 +1,6 @@
-var currentTopContextMenuNodes = []
-var currentChildContextMenuNodes = []
-var layDropdown = null
-
+'use strict';
 window.onload = function () {
-
-    var vm = new Vue({
+    window.vm = new Vue({
         el: '#g-app-main',
         data: function () {
             return {
@@ -39,7 +35,7 @@ window.onload = function () {
                 IsShowFullScreen: true,
                 IsShowTheme: true,
                 IsShowFlexible: true
-            }
+            };
         },
         computed: {
             contextMenuStyle: function () {
@@ -51,32 +47,28 @@ window.onload = function () {
                     background: 'white',
                     padding: '0 10px',
                     border: '1px solid #eee'
-                }
-            }
+                };
+            },
         },
         methods: {
-
             openTabDropdownMenu: function (e) {
-                this.tabDropdownVisible = true
-                this.top = e.pageY
-                this.left = e.pageX
+                this.tabDropdownVisible = true;
+                this.top = e.pageY;
+                this.left = e.pageX;
             },
             selectTopMenu: function (index) {
-                if (this.classicalLayout) return
-                this.selectedTopMenuIndex = index
-                this.selectedSubIndex = -1
+                if (this.classicalLayout) return;
+                this.selectedTopMenuIndex = index;
+                this.selectedSubIndex = -1;
                 if (this.menuTreeData.length > 0) {
-                    this.subMenuData = this.menuTreeData[index]
-                    this.subMenuTitle = this.menuTreeData[index].Name
+                    this.subMenuData = this.menuTreeData[index];
+                    this.subMenuTitle = this.menuTreeData[index].Name;
                     if (this.subMenuTitle.length > 4)
                         $(".line").css("width", (70 - (this.subMenuTitle.length - 4) * 8) + "px");
                     this.bindDropdown(this.subMenuData.type)
                 }
-
-
                 this.sideBarOpen = true
                 this.initChildContextMenu()
-
             },
             fullScreenOpen: function (uri, name) {
                 this.changeFullScreenStatus()
@@ -123,7 +115,6 @@ window.onload = function () {
                 else if (element.mozRequestFullScreen) {
                     element.mozRequestFullScreen();
                 }
-
                 this.inFullScreenMode = true
             },
             exitFullScreen: function () {
@@ -238,8 +229,6 @@ window.onload = function () {
                 // this.$nextTick(function() {
                 //     var tabs = this.$refs['iframe-tabs']
                 //     var elLeft = tabs.querySelector('.layui-this').offsetLeft
-
-
                 //     if (elLeft >= 0 && elLeft <= Math.abs(tabs.offsetLeft)) {
                 //         return
                 //     } else {
@@ -255,17 +244,12 @@ window.onload = function () {
                 this.openTab(menu.Name, menu.Url, alignRight);
             },
             openTab: function (name, src, alignRight) {
-                
-
-
                 //如果发起实体类的流程，是通过一个页面中专过去的.
                 /*
                  *  /WF/CCBill/Opt/StartFlowByNewEntity.htm
                  *  这里不解析特殊的业务逻辑, 让页面解析。
-                 * 
+                 *
                  */
-
-
                 if (this.tabsList.length >= 30) {
                     layer.alert('最多可以打开30个标签页~');
                     return;
@@ -412,7 +396,7 @@ window.onload = function () {
 
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
                 var data = handler.DoMethodReturnString("Default_LogOut");
-                window.location.href = data;// "Login.htm?DoType=Logout";
+                window.location.href = data; // "Login.htm?DoType=Logout";
 
                 //  win
                 //  var url = getPortalConfigByKey("LogoutPath", "./") + data;
@@ -422,7 +406,11 @@ window.onload = function () {
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
                 var data = handler.DoMethodReturnString("Default_LogOut");
                 var url = getPortalConfigByKey("LogoutPath", "./") + data;
-                window.location.href = url;// "Login.htm?DoType=Logout";
+                window.location.href = url; // "Login.htm?DoType=Logout";
+            },
+            GoToAppClassic: function () {
+                var webUser = new WebUser();
+                window.location.href = "../AppClassic/Login.htm?UserNo=" + webUser.No + "&SID=" + webUser.SID + "&OrgNo=" + webUser.OrgNo;
             },
             GoToMobile: function () {
                 var webUser = new WebUser();  //退出
@@ -472,143 +460,116 @@ window.onload = function () {
 
             },
             initChildContextMenu: function () {
-                // var _this = this
-                // this.$nextTick(function () {
-                //     var sortContainer = _this.classicalLayout ? _this.$refs['c-sort-tree-child'] : _this.$refs['sort-tree-child']
-                //     new Sortable(sortContainer[0], {
-                //         animation: 150,
-                //         dataIdAttr: 'data-id',
-                //         onEnd: function (evt) {
-                //             var pid = evt.item.dataset.pid
-                //             var arr = this.toArray();
-                //             _this.updateSort(pid, arr)
-                //         }
-                //     });
-                //
-                // })
             },
             bindDropdown: function (type) {
                 var _this = this
                 this.$nextTick(function () {
                     layui.use('dropdown', function () {
-
                         var dropdown = layui.dropdown
-
-                        if (currentTopContextMenuNodes.length > 0) {
-                            for (let i = 0; i < currentTopContextMenuNodes.length; i++) {
-                                currentTopContextMenuNodes[i].removeEventListener('contextmenu', null)
-                            }
-                        }
-                        if (currentChildContextMenuNodes.length > 0) {
-                            for (let i = 0; i < currentChildContextMenuNodes.length; i++) {
-                                currentChildContextMenuNodes[i].removeEventListener('contextmenu', null)
-                            }
-                        }
                         if (type === 'flow') {
-                            var topFlowNodeItems = [
-                                { title: '<i class=icon-plus></i> 新建流程', id: "NewFlow", Icon: "icon-plus" },
-                                { title: '<i class=icon-star></i> 目录属性', id: "EditSort", Icon: "icon-options" },
-                                { title: '<i class=icon-folder></i> 新建目录', id: "NewSort", Icon: "icon-magnifier-add" },
-                                {
-                                    title: '<i class=icon-share-alt ></i> 导入流程模版',
-                                    id: "ImpFlowTemplate",
-                                    Icon: "icon-plus"
-                                },
-                                //{ title: '新建下级目录', id: 5 },
-                                { title: '<i class=icon-close></i> 删除目录', id: "DeleteSort", Icon: "icon-close" }
-                            ]
-
-                            var tfOptions = {
+                            var topFlowNodeItems = document.querySelectorAll(".flow-node")
+                            var topFlowNodeMenu = {
                                 trigger: 'contextmenu',
-                                data: topFlowNodeItems,
+                                data: [
+                                    { title: '<i class=icon-plus></i> 新建流程', id: "NewFlow", Icon: "icon-plus" },
+                                    { title: '<i class=icon-star></i> 目录属性', id: "EditSort", Icon: "icon-options" },
+                                    { title: '<i class=icon-folder></i> 新建目录', id: "NewSort", Icon: "icon-magnifier-add" },
+                                    {
+                                        title: '<i class=icon-share-alt ></i> 导入流程模版',
+                                        id: "ImpFlowTemplate",
+                                        Icon: "icon-plus"
+                                    },
+                                    //{ title: '新建下级目录', id: 5 },
+                                    { title: '<i class=icon-close></i> 删除目录', id: "DeleteSort", Icon: "icon-close" }
+                                ],
                                 click: function (data, oThis) {
                                     _this.topFlowNodeOption(data.id, $(this.elem)[0].dataset.no, $(this.elem)[0].dataset.name, $(this.elem)[0].dataset.idx)
                                 }
                             }
-                            var topFlowNodeItems = document.querySelectorAll('.flow-node')
-                            for (var i = 0; i < topFlowNodeItems.length; i++) {
-                                tfOptions.elem = topFlowNodeItems[i]
-                                dropdown.render(tfOptions)
-                            }
-
-
-                            var childFlowNodeItems = [
-                                { title: '<i class=icon-star></i> 流程属性', id: "Attr", Icon: "icon-options" },
-                                { title: '<i class=icon-settings></i> 设计流程', id: "Designer", Icon: "icon-settings" },
-                                { title: '<i class=icon-plane></i> 测试容器', id: "Start", Icon: "icon-paper-plane" },
-                                { title: '<i class=icon-docs></i> 复制流程', id: "Copy", Icon: "icon-docs" },
-                                { title: '<i class=icon-close></i> 删除流程', id: "Delete", Icon: "icon-close" }
-                            ]
-                            var cfOptions = {
-                                trigger: 'contextmenu',
-                                data: childFlowNodeItems,
-                                click: function (data, oThis) {
-                                    var dataset = $(this.elem)[0].dataset
-                                    _this.childFlowNodeOption(data.id, dataset.no, dataset.name, dataset.pidx, dataset.idx)
-                                }
-                            }
-                            var childFlowNodeItems = document.querySelectorAll('.flow-node-child')
-                            for (var i = 0; i < childFlowNodeItems.length; i++) {
-                                cfOptions.elem = childFlowNodeItems[i]
-                                dropdown.render(cfOptions)
-                            }
-                            currentTopContextMenuNodes = topFlowNodeItems
-                            currentChildContextMenuNodes = childFlowNodeItems
+                            topFlowNodeItems.forEach(function (node) {
+                                $(node).unbind("contextmenu")
+                                topFlowNodeMenu.trigger = "contextmenu"
+                                topFlowNodeMenu.elem = node
+                                dropdown.render(topFlowNodeMenu)
+                                // 按钮
+                                var elem = node.querySelector(".option")
+                                $(elem).unbind("click")
+                                topFlowNodeMenu.elem = elem
+                                topFlowNodeMenu.trigger = 'click'
+                                dropdown.render(topFlowNodeMenu)
+                            })
+                            var childFlowNodeItems = document.querySelectorAll(".flow-node-child")
+                            childFlowNodeItems.forEach(function (node) {
+                                dropdown.render({
+                                    trigger: 'contextmenu',
+                                    elem: node,
+                                    data: [
+                                        { title: '<i class=icon-star></i> 流程属性', id: "Attr", Icon: "icon-options" },
+                                        { title: '<i class=icon-settings></i> 设计流程', id: "Designer", Icon: "icon-settings" },
+                                        { title: '<i class=icon-plane></i> 测试容器', id: "Start", Icon: "icon-paper-plane" },
+                                        { title: '<i class=icon-docs></i> 复制流程', id: "Copy", Icon: "icon-docs" },
+                                        { title: '<i class=icon-close></i> 删除流程', id: "Delete", Icon: "icon-close" }
+                                    ],
+                                    click: function (data, oThis) {
+                                        var dataset = $(this.elem)[0].dataset
+                                        _this.childFlowNodeOption(data.id, dataset.no, dataset.name, dataset.pidx, dataset.idx)
+                                    }
+                                })
+                            })
                             return
                         }
-
                         if (type === 'form') {
-                            var topFormNodeItems = [
-                                { title: '<i class=icon-plus></i> 新建表单', id: "NewFrm", Icon: "icon-plus" },
-                                { title: '<i class=icon-star></i> 重命名', id: "EditSort", Icon: "icon-options" },
-                                { title: '<i class=icon-folder></i> 新建目录', id: "NewFrmSort", Icon: "icon-magnifier-add" },
-                                {
-                                    title: '<i class=icon-share-alt ></i> 导入表单模版',
-                                    id: "ImpFlowTemplate",
-                                    Icon: "icon-plus"
-                                },
-                                //{ title: '新建下级目录', id: 5 },
-                                { title: '<i class=icon-close></i> 删除目录', id: "DeleteSort", Icon: "icon-close" }
-                            ]
-
-                            var tfOptions = {
+                            var topFormNodeMenu = {
                                 trigger: 'contextmenu',
-                                data: topFormNodeItems,
+                                data: [
+                                    { title: '<i class=icon-plus></i> 新建表单', id: "NewFrm" },
+                                    { title: '<i class=icon-star></i> 重命名', id: "EditSort" },
+                                    { title: '<i class=icon-folder></i> 新建目录', id: "NewFrmSort" },
+                                    {
+                                        title: '<i class=icon-share-alt ></i> 导入表单模版',
+                                        id: "ImpFlowTemplate"
+                                    },
+                                    { title: '<i class=icon-close></i> 删除目录', id: "DeleteFrmSort", Icon: "icon-close" }
+                                ],
                                 click: function (data, oThis) {
+                                    console.log(data, oThis)
                                     _this.topFormNodeOption(data.id, $(this.elem)[0].dataset.no, $(this.elem)[0].dataset.name, $(this.elem)[0].dataset.idx)
                                 }
                             }
-
                             var topFormNodeItems = document.querySelectorAll('.form-node')
-                            for (var i = 0; i < topFormNodeItems.length; i++) {
-                                tfOptions.elem = topFormNodeItems[i]
-                                dropdown.render(tfOptions)
-                            }
-
-
-                            var childFormNodeItems = [
-                                { title: '<i class=icon-star></i> 表单属性', id: "Attr", Icon: "icon-options" },
-                                { title: '<i class=icon-settings></i> 设计表单', id: "Designer", Icon: "icon-settings" },
-                                { title: '<i class=icon-plane></i> 运行表单', id: "Start", Icon: "icon-paper-plane" },
-                                { title: '<i class=icon-docs></i> 复制表单', id: "Copy", Icon: "icon-docs" },
-                                { title: '<i class=icon-close></i> 删除表单', id: "Delete", Icon: "icon-close" }
-                            ]
-                            var cfOptions = {
-                                trigger: 'contextmenu',
-                                data: childFormNodeItems,
-                                click: function (data, oThis) {
-                                    var dataset = $(this.elem)[0].dataset
-                                    _this.childFormNodeOption(data.id, dataset.no, dataset.name, dataset.pidx, dataset.idx)
-                                }
-                            }
-                            var childFormNodeItems = document.querySelectorAll('.form-node-child')
-                            for (var i = 0; i < childFormNodeItems.length; i++) {
-                                cfOptions.elem = childFormNodeItems[i]
-                                dropdown.render(cfOptions)
-                            }
-                            currentTopContextMenuNodes = topFormNodeItems
-                            currentChildContextMenuNodes = childFormNodeItems
+                            topFormNodeItems.forEach(function (node) {
+                                $(node).unbind("contextmenu")
+                                topFormNodeMenu.trigger = 'contextmenu'
+                                topFormNodeMenu.elem = node
+                                dropdown.render(topFormNodeMenu)
+                                //渲染点击事件
+                                var elem = node.querySelector(".option")
+                                $(elem).unbind("click")
+                                topFormNodeMenu.trigger = 'click'
+                                topFormNodeMenu.elem = elem
+                                dropdown.render(topFormNodeMenu)
+                            })
+                            var childFormNodeItems = document.querySelectorAll(".form-node-child")
+                            childFormNodeItems.forEach(function (node) {
+                                dropdown.render({
+                                    trigger: 'contextmenu',
+                                    elem: node,
+                                    data: [
+                                        { title: '<i class=icon-star></i> 表单属性', id: "Attr", Icon: "icon-options" },
+                                        { title: '<i class=icon-settings></i> 设计表单', id: "Designer", Icon: "icon-settings" },
+                                        { title: '<i class=icon-plane></i> 运行表单', id: "Start", Icon: "icon-paper-plane" },
+                                        { title: '<i class=icon-docs></i> 复制表单', id: "Copy", Icon: "icon-docs" },
+                                        { title: '<i class=icon-close></i> 删除表单', id: "Delete", Icon: "icon-close" }
+                                    ],
+                                    click: function (data, oThis) {
+                                        var dataset = $(this.elem)[0].dataset
+                                        _this.childFormNodeOption(data.id, dataset.no, dataset.name, dataset.pidx, dataset.idx)
+                                    }
+                                })
+                            })
+                            return
                         }
+                        $(".context-menu").unbind("contextmenu")
                     })
                 })
             },
@@ -623,7 +584,7 @@ window.onload = function () {
                     layer.close(index);
                     var en = new Entity("BP.WF.Template.FlowSort", currentElem);
                     var data = "";
-                    if (sameLevel == true) {
+                    if (sameLevel) {
                         data = en.DoMethodReturnString("DoCreateSameLevelNodeMy", value);
                     } else {
                         data = en.DoMethodReturnString("DoCreateSubNodeMy", value);
@@ -635,10 +596,8 @@ window.onload = function () {
                 });
             },
             DeleteSort: function (no) {
-
-                if (window.confirm("确定要删除吗?") == false)
+                if (!window.confirm("确定要删除吗?"))
                     return;
-
                 var en = new Entity("BP.WF.Template.FlowSort", no);
                 var data = en.Delete();
                 layer.msg(data);
@@ -670,8 +629,45 @@ window.onload = function () {
                 this.openTab("新建流程", url);
 
             },
+            NewFrmSort: function (currentElem, sameLevel) {
+                //只能创建同级.
+                sameLevel = true;
+                //例子2
+                layer.prompt({
+                    value: '',
+                    title: '新建' + (sameLevel ? '同级' : '子级') + '表单类别',
+                }, function (value, index, elem) {
+                    layer.close(index);
+                    var en = new Entity("BP.Sys.FrmTree", currentElem);
+                    var data = "";
+                    if (sameLevel) {
+                        data = en.DoMethodReturnString("DoCreateSameLevelNodeMy", value);
+                    } else {
+                        data = en.DoMethodReturnString("DoCreateSubNode", value);
+                    }
+                    layer.msg("创建成功" + data);
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 800);
+                });
+            },
+            DeleteFrmSort: function (no) {
+                if (!window.confirm("确定要删除吗?"))
+                    return;
+                var en = new Entity("BP.Sys.FrmTree", no);
+                var data = en.Delete();
+                //layer.msg(data);
+
+                //如果有错误.
+                if (data.indexOf("err@") == 0)
+                    return;
+
+                setTimeout(function () {
+                    window.location.reload()
+                }, 2000)
+            },
             NewFrm: function (data, name) {
-                url = "../Admin/FoolFormDesigner/NewFrmGuide.htm?SortNo=" + data + "&From=Frms.htm&RunModel=1&s=" + Math.random();
+                var url = "../Admin/FoolFormDesigner/NewFrmGuide.htm?SortNo=" + data + "&From=Frms.htm&RunModel=1&s=" + Math.random();
                 url += "&UserNo=" + webUser.No;
                 url += "&SID=" + webUser.SID;
                 this.openTab("新建表单", url);
@@ -716,6 +712,12 @@ window.onload = function () {
                         break;
                     case "NewFrm":
                         this.NewFrm(data, name);
+                        break;
+                    case "NewFrmSort":
+                        this.NewFrmSort(data, true);
+                        break;
+                    case "DeleteFrmSort":
+                        this.DeleteFrmSort(data);
                         break;
                     default:
                         alert("没有判断的命令" + key);
@@ -769,13 +771,13 @@ window.onload = function () {
             },
 
             fNewFlow: function (data, name) {
-                url = "../Admin/CCBPMDesigner/FlowDevModel/Default.htm?SortNo=" + data + "&From=Flows.htm&RunModel=1&s=" + Math.random();
+                var url = "../Admin/CCBPMDesigner/FlowDevModel/Default.htm?SortNo=" + data + "&From=Flows.htm&RunModel=1&s=" + Math.random();
                 this.openTab("新建流程", url);
 
             },
             fDeleteSort: function (no) {
 
-                if (window.confirm("确定要删除吗?") == false)
+                if (!window.confirm("确定要删除吗?"))
                     return;
 
                 var en = new Entity("BP.WF.Template.FlowSort", no);
@@ -793,7 +795,7 @@ window.onload = function () {
 
             fImpFlowTemplate: function (data) {
                 var fk_sort = data;
-                url = "./../Admin/AttrFlow/Imp.htm?FK_FlowSort=" + fk_sort + "&Lang=CH";
+                var url = "./../Admin/AttrFlow/Imp.htm?FK_FlowSort=" + fk_sort + "&Lang=CH";
                 this.openTab("导入流程模版", url);
             },
 
@@ -939,10 +941,10 @@ window.onload = function () {
 
                 var frm = new Entity("BP.Sys.MapData", no);
 
-                var frmID = window.prompt("表单ID:" + no + "Copy");
+                var frmID = promptGener("表单ID:" + no + "Copy");
                 if (frmID == undefined || frmID == null || frmID == '') return;
 
-                var frmName = window.prompt("表单名称:" + frm.Name + "Copy");
+                var frmName = promptGener("表单名称:" + frm.Name + "Copy");
                 if (frmName == undefined || frmName == null || frmName == '') return;
 
                 var data = frm.DoMethodReturnString("DoCopy", frmID + '~' + frmName);
@@ -987,21 +989,18 @@ window.onload = function () {
                 }, 120)
             },
             calcClassList: function (item, type) {
-                var cList = []
+                var cList = ['context-menu']
                 if (item.type === 'flow') cList.push(type === 1 ? 'flow-node' : 'flow-node-child')
                 if (item.type === 'form') cList.push(type === 1 ? 'form-node' : 'form-node-child')
                 return cList
             }
         },
         mounted: function () {
-
             // fix firefox bug
             document.body.ondrop = function (event) {
                 event.preventDefault();
                 event.stopPropagation();
             }
-
-
             this.SystemName = getPortalConfigByKey("SystemName", "驰骋BPM");
             this.SystemLogo = getPortalConfigByKey("SystemLogo", "./image/logo.png");
             this.IsShowFast = getPortalConfigByKey("IsShowFast", true);
@@ -1013,16 +1012,11 @@ window.onload = function () {
             this.webUser = new WebUser();
             this.isAdmin = this.webUser.No === "admin" || parseInt(this.webUser.IsAdmin) === 1;
             this.initMenus();
-            var _this = this;
-
-            setTimeout(function () {
-                _this.bindDropdown('flow')
-            }, 500)
+            // var _this = this;
+            // setTimeout(function () {
+            //     _this.bindDropdown('flow')
+            // }, 500)
         },
-
     })
-    window.vm = vm
 
 }
-
-

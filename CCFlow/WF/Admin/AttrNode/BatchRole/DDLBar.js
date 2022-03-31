@@ -19,16 +19,8 @@ function InitBar(optionKey) {
             html += "<option value=" + dtl.No + ">&nbsp;&nbsp;" + dtl.Name + "</option>";
         }
     }
-
-   
-    html += "</select >";
-
+    html += "</select>";
     html += "<button  id='Btn_Save' class='cc-btn-tab btn-save' type=button onclick='Save()' value='保存' >保存</button>";
-
-    //   html += "<input  id='Btn_SaveAndClose' type=button onclick='SaveAndClose()' value='保存并关闭' />";
-    //  html += "<input type=button onclick='OldVer()' value='使用旧版本' />";
-    //  html += "<input  id='Btn_Help' type=button onclick='Help()' value='视频帮助' />";
-    // html += "<input id='Btn_Advanced' type=button onclick='AdvSetting()' value='高级设置' />";
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
@@ -46,7 +38,6 @@ function GetDBGroup() {
 function GetDBDtl() {
 
     var json = [
-
         { "No": 0, "Name": "不处理", "GroupNo": "A", "Url": "0.None.htm" },
         { "No": 1, "Name": "审核组件模式", "GroupNo": "A", "Url": "1.WorkCheck.htm" },
         { "No": 2, "Name": "审核字段分组模式", "GroupNo": "A", "Url": "2.GroupFieldCheck.htm" },

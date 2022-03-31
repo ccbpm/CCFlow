@@ -31,6 +31,8 @@
             node = new Entity("BP.WF.Node", nodeID);
 
             //子线程流程引擎注册表.
+            if (workID == null || workID == undefined)
+                workID = 0;
             var gwfs = new Entities("BP.WF.GenerWorkFlows");
             gwfs.Retrieve("FID", workID);
 
@@ -73,7 +75,7 @@
                 msg += "\t\n 1. 新增加的人员，从分流节点的下一个节点开始执行.";
                 msg += "\t\n 2. 输入人员账号，点击确定后，系统就会自动为该人员分配一个任务.";
 
-                var empNo = window.prompt(msg + ' 请输入要增加的人员账号，多个人员用逗号分开(比如:zhangsan,lisi):');
+                var empNo = promptGener(msg + ' 请输入要增加的人员账号，多个人员用逗号分开(比如:zhangsan,lisi):');
                 if (empNo == null || empNo == '')
                     return;
                 //  var empNo = 'zhoupeng';

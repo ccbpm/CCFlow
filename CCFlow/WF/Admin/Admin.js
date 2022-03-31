@@ -44,14 +44,14 @@ $(document).ready(function () {
     //如何给按钮自动增加标签?
     AddBtnIcon();
 
-  
-   /* $(".cs-content-box legend").click(function () {  //给每个li元素添加点击事件
-        $(".cs-content-box legend").removeClass('up');
-        $(this).addClass('up');       
-        $(this).parent().children(".cs-help").slideDown();
-        $(this).parent().siblings().children(".cs-help").slideUp();
-    });*/
-   
+
+    /* $(".cs-content-box legend").click(function () {  //给每个li元素添加点击事件
+         $(".cs-content-box legend").removeClass('up');
+         $(this).addClass('up');       
+         $(this).parent().children(".cs-help").slideDown();
+         $(this).parent().siblings().children(".cs-help").slideUp();
+     });*/
+
 })
 
 function AddBtnIcon() {
@@ -132,7 +132,6 @@ function AddBtnIcon() {
 style = ''
 //动态添加新风格  
 function SetCSS() {
-
     //处理 ToolBar.
     //body下添加一个父Div
     var div = document.createElement('div');
@@ -151,6 +150,7 @@ function SetCSS() {
 
         var _html = $(obj).html();
         if (obj.id.indexOf("help") != -1) {
+
             $(obj).html("");
 
             var helpImg = basePath + "/WF/Admin/Img/Help.png";
@@ -162,15 +162,16 @@ function SetCSS() {
 
     //bar风格
     $('#bar').attr('class', 'cs-tr cs-bar');
-    //删除重复的说明标题
-    var leg = $("legend");
-    for (var i = 0; i < leg.length; i++) {
-        if (leg.eq(i).text() == "说明")
-            leg.eq(i).remove();
-    }
+    ////删除重复的说明标题
+    //var leg = $("legend");
+    //for (var i = 0; i < leg.length; i++) {
+    //    if (leg.eq(i).text() == "说明")
+    //        leg.eq(i).remove();
+    //}
 }
 //设置帮助页面内容 
 function SetHelpPage() {
+    return;
 
     var legends = $("legend#help");
     //隐藏所有兄弟级元素
@@ -282,7 +283,7 @@ function CheckSQLTextArea() {
             var msg = "请输入SQL语句,支持ccbpm的表达式.";
             this.placeholder = msg;
             this.value = FormatSQL(this.value);
-            
+
         }
     });
 }
@@ -394,6 +395,8 @@ function FormatSQL(sql) {
 function initToggle() {
 
     var legends = document.getElementsByTagName('legend');
+    return;
+
 
     for (var i = 0, len = legends.length; i < len; i++) {
 
@@ -403,11 +406,11 @@ function initToggle() {
 
         if (lengID.indexOf('help') == -1)
             continue;
-        if (en.innerHTML) {
-            en.innerHTML = "<label>" + en.innerHTML + "</label>";
-        } else {
-            en.innerHTML = "<label>说明</label>";
-        }
+        //if (en.innerHTML) {
+        //    en.innerHTML = "<label>" + en.innerHTML + "</label>";
+        //} else {
+        //    en.innerHTML = "<label>说明</label>";
+        //}
 
         en.onclick = function () {
 

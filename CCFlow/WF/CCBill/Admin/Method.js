@@ -37,9 +37,6 @@ new Vue({
                         var obj = $(this.elem)[0].dataset;
                         console.log(obj);
 
-                        //    var obj = $(this.elem)[0].dataset;
-                        //    debugger;
-
                         _this.topNodeOption(data.id, obj.no, obj.name, obj.idx);
                     }
                 }, {
@@ -50,7 +47,6 @@ new Vue({
 
                         var obj = $(this.elem)[0].dataset;
                         console.log(obj);
-                        //  debugger;
 
                         _this.topNodeOption(data.id, obj.no, obj.name, obj.idx);
                     }
@@ -72,8 +68,6 @@ new Vue({
                     trigger: 'contextmenu',
                     data: childNodeMenuItems,
                     click: function (data, othis) {
-                        debugger;
-
                         var obj = $(this.elem)[0].dataset;
                         console.log(obj);
 
@@ -85,9 +79,6 @@ new Vue({
                     trigger: 'click',
                     data: childNodeMenuItems,
                     click: function (data, othis) {
-
-                        debugger;
-
                         var obj = $(this.elem)[0].dataset;
                         var no = obj.No;
                         if (no == undefined)
@@ -377,8 +368,6 @@ new Vue({
                 alert("没有获得当前分组的ID");
                 return;
             }
-
-            // debugger;
             // 方法排序..
             var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin");
             handler.AddPara("GroupID", currentNodeId);
@@ -655,7 +644,7 @@ function addTab(no, name, url) {
 
 //新建:分组.
 function NewGroup() {
-    var val = window.prompt("请输入分组名", "基本信息");
+    var val = promptGener("请输入分组名", "基本信息");
     if (!val)
         return null;
 
@@ -671,7 +660,7 @@ function NewGroup() {
 function EditGroupName(groupID) {
 
     var en = new Entity("BP.CCBill.Template.GroupMethod", groupID);
-    var val = window.prompt("请输入分组名", en.Name);
+    var val = promptGener("请输入分组名", en.Name);
     if (!val)
         return null;
 
@@ -695,7 +684,7 @@ function NewMethod(groupID) {
 function EditMethodName(methodID) {
 
     var en = new Entity("BP.CCBill.Template.Method", groupID);
-    var val = window.prompt("请输入方法名", en.Name);
+    var val = promptGener("请输入方法名", en.Name);
     if (!val)
         return null;
     en.Name = val;

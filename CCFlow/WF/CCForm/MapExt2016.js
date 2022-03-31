@@ -562,6 +562,8 @@ function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
     // 获取原来选择值.
     var oldVal = null;
     var ddl = document.getElementById(ddlChild);
+    if (ddl == null) return;
+
 
     if (ddl == null) {
         alert(ddlChild + "丢失,或者该字段被删除.");

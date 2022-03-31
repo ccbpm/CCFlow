@@ -6,7 +6,7 @@
  * @param {any} keyVal 选择替换的值
  */
 function GetDataTableByDB(dbSrc, dbType, dbSource, keyVal) {
-    debugger
+   // debugger
     if (dbSrc == null || dbSrc == undefined || dbSrc == "")
         return null;
     //处理sql，url参数.
@@ -28,7 +28,7 @@ function GetDataTableByDB(dbSrc, dbType, dbSource, keyVal) {
 * 文本自动完成表格展示
 */
 function showDataGrid(tbid, selectVal, mapExtMyPK) {
-    debugger
+    //debugger
     var mapExt = new Entity("BP.Sys.MapExt", mapExtMyPK);
     var dataObj = GetDataTableByDB(mapExt.Tag4, mapExt.DBType, mapExt.FK_DBSrc, selectVal );
     var columns = mapExt.Tag3;
@@ -78,7 +78,7 @@ function showDataGrid(tbid, selectVal, mapExtMyPK) {
 
         });
     }
-    debugger
+    //debugger
         var ispagination = dataObj.length > 20 ? true : false;
         layui.use('table', function () {
             var table = layui.table;
@@ -128,14 +128,21 @@ function GetDataTableOfTBChoice(mapExt, frmData, defVal) {
                 if (data == undefined)
                     data = frmData[mapExt.Tag2];
                 if (data == undefined) {
-                    var enums = flowData.Sys_Enum;
+                    var enums = frmData.Sys_Enum;
                     enums = $.grep(enums, function (value) {
                         return value.EnumKey == mapExt.Tag2;
                     });
+                    if (enums.length == 0) {
+                        enums = new Entities("BP.Sys.SysEnums");
+                        enums.Retrieve("EnumKey", mapExt.Tag2);
+                        frmData[mapExt.Tag2] = enums;
+                    }
+                  //  debugger
+                    data = [];
                     $.each(enums, function (i, o) {
                         data.push({
                             value: o.IntKey,
-                            no: o.Lab,
+                            name: o.Lab,
                             selected: defVal.indexOf("," + o.IntKey + ",") != -1 ? true : false
                         })
                     });
@@ -147,7 +154,7 @@ function GetDataTableOfTBChoice(mapExt, frmData, defVal) {
                 $.each(enums, function (i, o) {
                     data.push({
                         value: o.IntKey,
-                        no: o.Lab,
+                        name: o.Lab,
                         selected: defVal.indexOf("," + o.IntKey + ",") != -1 ? true : false
 
                     })
@@ -563,6 +570,7 @@ function FullCtrlDDL(selectVal, ctrlID, mapExt) {
         //重新绑定下拉框.
         GenerBindDDL("DDL_" + ctrlID, db);
     }
+	layui.form.render("select");
 }
 //填充明细.
 function FullDtl(selectVal, mapExt,oid) {
@@ -663,7 +671,8 @@ function DealSQL(dbSrc, key, kvs) {
  * @param {any} rows
  */
 function SaveFrmEleDBs(rows, keyOfEn, mapExt, pkval) {
-    pkval = pkval == null || pkval == undefined || pkval == 0 ? pageData.OID : pkval;
+   // debugger
+    pkval = pkval == null || pkval == undefined || pkval == 0 ? pageData.WorkID : pkval;
     //删除
     var ens = new Entities("BP.Sys.FrmEleDBs");
     ens.Delete("FK_MapData", mapExt.FK_MapData, "EleID", keyOfEn, "RefPKVal", pkval);

@@ -2,12 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>单据打印</title>
-    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
     <!-- 导入配置文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <script src="../CCForm/JS/wpslib/project.js"></script>
+    <script src="../CCForm/JS/wpslib/wpsjsrpcsdk.js"></script>
     <script type="text/javascript">
 
         var printType = 0;
@@ -78,40 +80,43 @@
                 return;
             }
 
-            //如果包含多个打印模板
             var ens = JSON.parse(data);
+            //包含多模板
+            if (data.MainTable == undefined) {
+                var html = "<ul>";
+                for (var i = 0; i < ens.length; i++) {
+                    var en = ens[i];
+                    //  html += "<li ><a href='?FK_Bill=" + en.No + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&WorkID=" + workID + "'>" + en.Name + "</li>";
+                    html += "<li><a href='javascript:void(0);' onclick=PrintIt(\"" + en.MyPK + "\",\"" + flowNo + "\"," + nodeID + "," + workID + "," + fid + ",\"" + en.FK_MapData + "\",\"" + en.TemplateFileModel + "\") >" + en.Name + "</li>";
+                }
 
-            var html = "<ul>";
-            for (var i = 0; i < ens.length; i++) {
-                var en = ens[i];
-                //  html += "<li ><a href='?FK_Bill=" + en.No + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&WorkID=" + workID + "'>" + en.Name + "</li>";
-                html += "<li><a href='javascript:void(0);' onclick=PrintIt(" + en.No + "," + flowNo + "," + nodeID + "," + workID + "," + fid + ",\"" + en.FK_MapData + "\",\"" + en.TemplateFileModel + "\") >" + en.Name + "</li>";
+                html += "</ul>";
+
+                $("#Msg").html(html);
+                return;
             }
-
-            html += "</ul>";
-
-            $("#Msg").html(html);
-
+            //打印Wps模板文件
+            PrintDoc_WpsWord(data, fk_bill)
         });
 
-        function PrintSignleFormIt(flowNo, nodeId, WorkID,FID,ccfromId) {
+        function PrintSignleFormIt(flowNo, nodeId, WorkID, FID, ccfromId) {
             $("#rtf").html("");
-            var ens = new Entities("BP.WF.Template.BillTemplates");
+            var ens = new Entities("BP.WF.Template.FrmPrintTemplates");
             ens.Retrieve("FK_MapData", ccfromId);
-            if (ens.length == 0){
+            if (ens.length == 0) {
                 alert("当前节点上没有绑定单据模板");
                 return false;
-             }
+            }
             if (ens.length == 1) {
                 PrintIt(ens[0].No, flowNo, nodeId, WorkID, FID, ccfromId);
                 return;
-             }
+            }
 
             var html = "<ul>";
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
                 //  html += "<li ><a href='?FK_Bill=" + en.No + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&WorkID=" + workID + "'>" + en.Name + "</li>";
-                html += "<li><a href='javascript:void(0);' onclick=PrintIt(" + en.No + "," + flowNo + "," + nodeId + "," + WorkID + "," + FID + ",\"" + ccfromId + "\",\""+en.TemplateFileModel+"\") >" + en.Name + "</li>";
+                html += "<li><a href='javascript:void(0);' onclick=PrintIt(\"" + en.MyPK + "\",\"" + flowNo + "\"," + nodeId + "," + WorkID + "," + FID + ",\"" + ccfromId + "\",\"" + en.TemplateFileModel + "\") >" + en.Name + "</li>";
             }
 
             html += "</ul>";
@@ -120,7 +125,7 @@
         }
 
         //打印.
-        function PrintIt(billNo, flowNo, nodeID, workID, FID, ccfromId,printModal) {
+        function PrintIt(billNo, flowNo, nodeID, workID, FID, ccfromId, printModal) {
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddPara("FK_Bill", billNo);
@@ -155,22 +160,85 @@
 
                 }
             }
-            
-        }
+            PrintDoc_WpsWord(JSON.parse(data), billNo)
 
+        }
+        function PrintDoc_WpsWord(frmData) {
+            var billTemp = frmData.Sys_FrmPrintTemplate[0];
+            var wpsTempURL = document.location.protocol + "//" + document.location.host + "/DataUser/CyclostyleFile/" + billTemp.TempFilePath;
+            var mainTable = frmData.MainTable[0];
+            var mapDtls = frmData.Sys_MapDtl;
+            var wpsData = [];
+            var childDatas = [];
+            if (mapDtls.length > 0) {
+                $.each(frmData.Sys_MapDtl, function (i, mapDtl) {
+                    childDatas.push(frmData[mapDtl.No]);
+                })
+            }
+            for (var key in mainTable) {
+                var json =
+                {
+                    "name": key,
+                    "text": getFiledValue(frmData.Sys_MapAttr, key, mainTable[key]),
+                    "type": "text"
+                };
+                wpsData.push(json);
+            }
+            var invokeParam = {
+                "fileName": wpsTempURL,
+                "templateDataUrl": wpsData,
+                "childDatas": childDatas
+
+            }; //根据需求任意定义
+            WpsInvoke.InvokeAsHttp(
+                projInfo.type,
+                projInfo.name, //wps加载项的名字，在实际项目中写上对应的名字
+                "OpenDoc", //要调用的在wps加载项中的函数名
+                JSON.stringify(invokeParam), //调用的在wps加载项中的函数要传递的数据，是一个json对象，根据业务系统需求任意定义
+                callbackFunc, //回调函数，wps加载项中InvokeFromSystemDemo这个函数的返回值作为这个函数的参数
+                true) //设置wps是否显示到最前面来
+        }
+       
+        var callbackFunc = function (result) {
+            if (result.status == 0) {
+                //下面这行代码用来注册从wps加载项返回的消息的接收函数
+                WpsInvoke.RegWebNotify(projInfo.type, projInfo.name, function (messageText) {
+                    var span = document.getElementById("webnotifyspan")
+                    span.innerHTML = "(次数：" + ++WebNotifycount + ")：" + messageText;
+                })
+                alert(result.response)
+            }
+            else
+                alert(result.message)
+        }
+        /* 处理值方法 */
+        function getFiledValue(Sys_MapAttr, filedName, rvalue) {
+            for (var i in Sys_MapAttr) {
+                if (filedName == Sys_MapAttr[i].KeyOfEn) {
+                    if (Sys_MapAttr[i].MyDataType == "4") {//布尔
+                        if (rvalue == "1") {//是
+                            rvalue = "是";
+                        } else if (rvalue == "0") {//否
+                            rvalue = "否";
+                        }
+                    }
+                }
+            }
+            return rvalue;
+        }
         //取消退回
         function Close() {
             if (isFrameCross == 0) {
                 if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                     window.parent.returnWorkWindowClose("取消");
                 }
-               
+
             } else {
                 ChildrenPostMessage("取消", "returnWorkWindowClose");
             }
-           
+
         }
-      
+
     </script>
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
 </head>

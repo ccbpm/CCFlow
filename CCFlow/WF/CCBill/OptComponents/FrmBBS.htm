@@ -278,127 +278,131 @@
     <!--<div id="idcc">
         <i class="icon-home"></i>\\流程列表
     </div>-->
-    <div class="wapper" id="FrmBBSlist">
-        <div class="project-content">
+    <form id="cc" enctype="multipart/form-data" method="post">
+        <div class="wapper" id="FrmBBSlist">
+            <div class="project-content">
 
 
-            <div class="pl" v-for="(item,index) in flowNodes">
-                <div class="tx">
-                    <span>{{item.Rec}}</span>
-                </div>
-                <ul class="plbg">
-                    <div class="f z13">{{item.RecName}}</div>
-                    <div class="r"><span class="z13">{{item.RDT}}</span></div>
-                    <div class="dr"></div>
-                </ul>
-                <ul class="plul">
-                    {{item.Name}}
-
-                    <ul v-for="(it,key) in item.children">
-                        <div class="pl ">
-                            <div class="tx tx2">
-                                <span>{{it.Rec}}</span>
-                            </div>
-                            <ul class="plbg plbg2">
-                                <div class="f">{{it.RecName}}</div>
-                                <div class="r"><span class="z12">{{item.RDT}}</span> <span v-if="it.Rec==webuser" @click="Delete(it.No)">删除</span></div>
-                                <div class="dr"></div>
-                            </ul>
-                            <ul style="padding-top: 10px; padding-bottom: 10px; word-wrap: break-word; width: 100%">
-                                {{item.Name}}
-                            </ul>
-                        </div>
+                <div class="pl" v-for="(item,index) in flowNodes">
+                    <div class="tx">
+                        <span>{{item.Rec}}</span>
+                    </div>
+                    <ul class="plbg">
+                        <div class="f z13">{{item.RecName}}</div>
+                        <div class="r"><span class="z13">{{item.RDT}}</span></div>
+                        <div class="dr"></div>
                     </ul>
+                    <ul class="plul">
+                        {{item.Name}}
 
-                    <a class="hf" @click="Repay(index,item.No)">回复</a>
-                    <a class="hf" v-if="item.Rec==webuser" @click="Delete(item.No)">删除</a>
-                    <div class="huifu" :data-No="item.No"></div>
-                    <div class="dr"></div>
-                </ul>
-            </div>
+                        <ul v-for="(it,key) in item.children">
+                            <div class="pl ">
+                                <div class="tx tx2">
+                                    <span>{{it.Rec}}</span>
+                                </div>
+                                <ul class="plbg plbg2">
+                                    <div class="f">{{it.RecName}}</div>
+                                    <div class="r"><a v-if="it.MyFilePath!=''" @click="downloadFile(it)" style="margin-right:15px"><img src="../../Img/FileType/ie.gif" style='width:16px' />{{it.MyFileName}}</a><span class="z12">{{it.RDT}}</span> <span v-if="it.Rec==webuser" @click="Delete(it.No)">删除</span></div>
+                                    <div class="dr"></div>
+                                </ul>
+                                <ul style="padding-top: 10px; padding-bottom: 10px; word-wrap: break-word; width: 100%">
+                                    {{it.Name}}
+                                </ul>
+                            </div>
+                        </ul>
 
-
-            <h4 name="a1">发表评论</h4>
-            <div class="in2">
-                <textarea id='reply-input' style='height: 90px; width: 98%;' placeholder="您有什么想法要说的吗？" spellcheck="false"></textarea>
-                <div class="l top10">
-                    <button @click="Save()" type="button" id="myButton" data-loading-text="Loading..." class="layui-btn" autocomplete="off">
-                        发表评论
-                    </button>
-
+                        <a class="hf" @click="Repay(index,item.No)">回复</a>
+                        <a class="hf" v-if="item.Rec==webuser" @click="Delete(item.No)">删除</a>
+                        <div class="huifu" :data-No="item.No"></div>
+                        <div class="dr"></div>
+                    </ul>
                 </div>
-                <div class="dr"></div>
+
+                <div v-if="isReadonly == false">
+                    <h4 name="a1">发表评论</h4>
+                    <div class="in2">
+                        <textarea id='reply-input' style='height: 90px; width: 98%;' placeholder="您有什么想法要说的吗？" spellcheck="false"></textarea>
+                        <div class="l top10">
+                            <button @click="Save()" type="button" id="myButton" data-loading-text="Loading..." class="layui-btn" autocomplete="off">
+                                发表评论
+                            </button>
+
+                        </div>
+                        <div class="dr"></div>
+                    </div>
+                </div>
+                <div class="huif">
+
+                    <textarea id='textarea2' style='height: 90px; width: 100%;' placeholder="期待您的回复！" spellcheck="false"></textarea>
+                    <button onclick="hftj()" type="button" class="layui-btn top10">回复</button>
+                    <a class="qxhf" onclick="qx()">取消回复</a>
+                    <button type="button" class="layui-btn" id="test1">
+                        <i class="layui-icon">&#xe67c;</i>上传附件
+                    </button>
+                </div>
+
             </div>
-
-            <div class="huif">
-
-                <textarea id='textarea2' style='height: 90px; width: 100%;' placeholder="期待您的回复！" spellcheck="false"></textarea>
-                <button onclick="hftj()" type="button" class="layui-btn top10">回复</button>
-                <a class="qxhf" onclick="qx()">取消回复</a>
-            </div>
-
         </div>
-    </div>
 
 
-    <!-- <div class="wrapper">
-         <div class="form-head">
-             <div class="item">
-                 编号：<span id="TB_No"></span>
+        <!-- <div class="wrapper">
+             <div class="form-head">
+                 <div class="item">
+                     编号：<span id="TB_No"></span>
+                 </div>
+                 <div class="item">
+                     名称：<span id="TB_Name"></span>
+                 </div>
              </div>
-             <div class="item">
-                 名称：<span id="TB_Name"></span>
-             </div>
-         </div>
-         <div class="ph">回复列表</div>
-         <div class="form-body">
-             <div class="reply-item">
-                 <div class="info">
-                     <div class="left">
-                         <span class="reply-user">张三</span>
-                         <span class="reply-date">2021-06-12</span>
+             <div class="ph">回复列表</div>
+             <div class="form-body">
+                 <div class="reply-item">
+                     <div class="info">
+                         <div class="left">
+                             <span class="reply-user">张三</span>
+                             <span class="reply-date">2021-06-12</span>
+                         </div>
+                         <div class="operate-list">
+                             <div class="reply-btn" onclick="replayItem()">回复</div>
+                             <div class="del-btn">删除回复</div>
+                         </div>
                      </div>
-                     <div class="operate-list">
-                         <div class="reply-btn" onclick="replayItem()">回复</div>
+                     <div class="content"></div>
+                 </div>
+                 <div class="reply-item">
+                     <div class="info">
+                         <div class="left">
+                             <span class="reply-user">张三</span>
+                             <span class="reply-date">2021-06-12</span>
+                         </div>
+
                          <div class="del-btn">删除回复</div>
                      </div>
+                     <div class="content">aaaaaaaaaaaaaaaa</div>
                  </div>
-                 <div class="content"></div>
              </div>
-             <div class="reply-item">
-                 <div class="info">
-                     <div class="left">
-                         <span class="reply-user">张三</span>
-                         <span class="reply-date">2021-06-12</span>
+             <div class="submit-area">
+                 <div class="ph divider">发表评论</div>
+                 <div class="form-textarea">
+                     <label>
+                         <textarea id="reply-input" class="area" cols="108" rows="14" placeholder="请输入要回复的内容"></textarea>
+                     </label>
+                     <div class="reply-info">
+
+                         <p>
+                             日期：<span id="r-date" class="reply-date">2021-06-2</span>
+                             填写人：<span id="r-user" class="reply-user">张三</span>
+                         </p>
+                         <p id="reply-tips"></p>
+
+                         <button onclick="Save()">提交</button>
                      </div>
-
-                     <div class="del-btn">删除回复</div>
-                 </div>
-                 <div class="content">aaaaaaaaaaaaaaaa</div>
-             </div>
-         </div>
-         <div class="submit-area">
-             <div class="ph divider">发表评论</div>
-             <div class="form-textarea">
-                 <label>
-                     <textarea id="reply-input" class="area" cols="108" rows="14" placeholder="请输入要回复的内容"></textarea>
-                 </label>
-                 <div class="reply-info">
-
-                     <p>
-                         日期：<span id="r-date" class="reply-date">2021-06-2</span>
-                         填写人：<span id="r-user" class="reply-user">张三</span>
-                     </p>
-                     <p id="reply-tips"></p>
-
-                     <button onclick="Save()">提交</button>
                  </div>
              </div>
          </div>
-     </div>
-        -->
-    <script src="FrmBBS.js"></script>
-
+            -->
+        <script src="FrmBBS.js"></script>
+    </form>
 </body>
 
 </html>

@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
+    <title>驰骋表单设计器\\导入导出</title>
     <link href="../../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -16,12 +16,14 @@
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
-            var url = GetUrl(Imp.localhostImp);
-            document.location.href = url+'?FK_MapData=' + GetQueryString("FK_MapData") + "&DoType=FunList&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+            //var url = GetUrl(Imp.LocalhostImp);
+            document.location.href = 'LocalhostXml.htm?FrmID=' + GetQueryString("FrmID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
         });
     </script>
 </head>
 <body>
-        
+
+    <h3>正在进入请稍后....</h3>
+
 </body>
 </html>

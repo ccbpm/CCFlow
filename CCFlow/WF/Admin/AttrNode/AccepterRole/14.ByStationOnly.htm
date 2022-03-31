@@ -48,7 +48,7 @@
         </fieldset>
 
         <fieldset>
-            <legend id="help">帮助</legend>
+            <legend>帮助</legend>
 
             <ul>
                 <li>当前节点绑定岗位的集合下面的人员集合作为接受人</li>
@@ -71,12 +71,14 @@
             methods: {
                 OpenDot2DotStations: function () {
                     OpenDot2DotStations();
+                    Save();
                 },
                 OpenNew: function () {
                     var nodeID = GetQueryString("FK_Node");
                     var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
-                    OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500, function () {
+                    OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 1100, 500, function () {
                         Baseinfo.stas = getStas();
+                        Save();
                     });
                 },
                 SetGroupStations: function () {
@@ -111,6 +113,7 @@
             var node = new Entity("BP.WF.Node", nodeID);
             node.DeliveryWay = Baseinfo.deliverWay;
             node.Update();
+            alert("接受人方式，设置成功.");
         }
     </script>
 

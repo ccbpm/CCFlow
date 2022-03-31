@@ -10,7 +10,7 @@
     margin-right: 6px;
 }
 
- ::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 8px;
     height: 16px;
     background-color: #F5F5F5;
@@ -20,7 +20,7 @@
 /*定义滚动条轨道
   内阴影+圆角*/
 
- ::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px #ddd;
     border-radius: 10px;
     background-color: #F5F5F5;
@@ -30,7 +30,7 @@
 /*定义滑块
   内阴影+圆角*/
 
- ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px #999;
     background-color: #999;
@@ -132,10 +132,11 @@
 }
 
 .sideMenuBar {
-    position: absolute;
+    position: fixed;
     left: 0;
     width: 65px;
-    min-height: 100%;
+    height: 100%;
+
 }
 
 .sub-menu-divider {
@@ -171,6 +172,9 @@
     flex-direction: column;
     color: rgba(255, 255, 255, .7);
     cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .top-menu-item:hover {
@@ -390,7 +394,8 @@ html {
     .layui-form[wid100] .layui-form-item .layui-input-inline {
         margin-left: 132px
     }
-    .layui-form[wid100] .layui-form-item .layui-input-inline+.layui-form-mid {
+
+    .layui-form[wid100] .layui-form-item .layui-input-inline + .layui-form-mid {
         margin-left: 130px
     }
 }
@@ -549,7 +554,7 @@ html {
     padding-right: 30px
 }
 
-.layui-side-menu .layui-nav .layui-nav-item>a {
+.layui-side-menu .layui-nav .layui-nav-item > a {
     padding-top: 8px;
     padding-bottom: 8px
 }
@@ -558,7 +563,7 @@ html {
     background: 0 0
 }
 
-.layui-side-menu .layui-nav .layui-nav-itemed>.layui-nav-child {
+.layui-side-menu .layui-nav .layui-nav-itemed > .layui-nav-child {
     padding: 5px 0
 }
 
@@ -623,19 +628,19 @@ html {
     position: static
 }
 
-.g-admin-sidebar-fold .layui-side-menu .layui-nav-item>a {
+.g-admin-sidebar-fold .layui-side-menu .layui-nav-item > a {
     padding-right: 0
 }
 
 .g-admin-sidebar-fold .layui-side-menu .layui-nav-item cite,
-.g-admin-sidebar-fold .layui-side-menu .layui-nav>.layui-nav-item>.layui-nav-child,
-.g-admin-sidebar-fold .layui-side-menu .layui-nav>.layui-nav-item>a .layui-nav-more {
+.g-admin-sidebar-fold .layui-side-menu .layui-nav > .layui-nav-item > .layui-nav-child,
+.g-admin-sidebar-fold .layui-side-menu .layui-nav > .layui-nav-item > a .layui-nav-more {
     display: none;
     padding: 8px 0;
     width: 200px
 }
 
-.g-admin-sidebar-fold .layui-side-menu .layui-nav>.layui-nav-itemed>a {
+.g-admin-sidebar-fold .layui-side-menu .layui-nav > .layui-nav-itemed > a {
     background: rgba(0, 0, 0, .3)
 }
 
@@ -722,7 +727,7 @@ html {
     line-height: 40px
 }
 
-.g-admin-tabs-select.layui-nav .layui-nav-item>a {
+.g-admin-tabs-select.layui-nav .layui-nav-item > a {
     height: 40px
 }
 
@@ -946,7 +951,7 @@ html {
 }
 
 .g-admin-carousel .layui-carousel,
-.g-admin-carousel>[carousel-item]>* {
+.g-admin-carousel > [carousel-item] > * {
     background-color: #fff
 }
 
@@ -1064,11 +1069,11 @@ html {
     height: 332px !important
 }
 
-.g-admin-dataview>[carousel-item]:before {
+.g-admin-dataview > [carousel-item]:before {
     display: none
 }
 
-.g-admin-dataview>[carousel-item]>div {
+.g-admin-dataview > [carousel-item] > div {
     height: 332px
 }
 
@@ -1358,7 +1363,7 @@ html {
     padding-bottom: 10px
 }
 
-.layuiadmin-card-status li>span {
+.layuiadmin-card-status li > span {
     color: #999
 }
 
@@ -1443,12 +1448,12 @@ html {
     overflow-x: hidden
 }
 
-.g-admin-setTheme>h5 {
+.g-admin-setTheme > h5 {
     padding: 20px 0 10px;
     color: #000
 }
 
-.g-admin-setTheme>h5:first-child {
+.g-admin-setTheme > h5:first-child {
     padding-top: 0
 }
 
@@ -1632,9 +1637,11 @@ html {
         margin: 0;
         width: auto
     }
+
     .layui-body .layui-nav .layui-nav-item {
         display: block
     }
+
     .g-admin-layout .layui-body .g-admin-tabsbody-item {
         -webkit-overflow-scrolling: touch;
         overflow: auto

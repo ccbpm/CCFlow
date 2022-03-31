@@ -138,7 +138,7 @@ function BindFrm() {
                 case 0: //傻瓜表单
                 case 10://累加表单
                     $('head').append('<link href="../DataUser/Style/FoolFrmStyle/Default.css" rel="stylesheet" type="text/css" />');
-                    Skip.addJs("./CCForm/FrmFool2021.js?ver=" + Math.random());
+                    Skip.addJs("./CCForm/FrmFool.js?ver=" + Math.random());
                     GenerFoolFrm(flowData);
                     break;
                 case 12://开发者表单
@@ -158,7 +158,7 @@ function BindFrm() {
                         frmNode = frmNode[0];
                         if (mapData.FrmType == 0) { //傻瓜表单
                             $('head').append('<link href="../DataUser/Style/FoolFrmStyle/Default.css" rel="stylesheet" type="text/css" />');
-                            Skip.addJs("./CCForm/FrmFool2021.js?ver=" + Math.random());
+                            Skip.addJs("./CCForm/FrmFool.js?ver=" + Math.random());
                             GenerFoolFrm(flowData);
                         }
                         if (mapData.FrmType == 8) {//开发者表单
@@ -179,7 +179,7 @@ function BindFrm() {
             var mapData = flowData.Sys_MapData[0];
             if (mapData.FrmType == 0) { //傻瓜表单
                 $('head').append('<link href="../DataUser/Style/FoolFrmStyle/Default.css" rel="stylesheet" type="text/css" />');
-                Skip.addJs("./CCForm/FrmFool2021.js?ver=" + Math.random());
+                Skip.addJs("./CCForm/FrmFool.js?ver=" + Math.random());
                 GenerFoolFrm(flowData);
             }
             if (mapData.FrmType == 8) {//开发者表单
@@ -191,7 +191,7 @@ function BindFrm() {
             }
             break;
         case FlowDevModel.FoolTruck://累加模式
-            Skip.addJs("./CCForm/FrmFool2021.js?ver=" + Math.random());
+            Skip.addJs("./CCForm/FrmFool.js?ver=" + Math.random());
             GenerFoolFrm(flowData); //傻瓜表单.
             break;
         case FlowDevModel.RefOneFrmTree://表单库单表单
@@ -199,7 +199,7 @@ function BindFrm() {
             if (frmNode != null && frmNode != undefined) {
                 frmNode = frmNode[0];
                 if (frmNode.FrmType == 0) { //傻瓜表单
-                    Skip.addJs("./CCForm/FrmFool2021.js?ver=" + Math.random());
+                    Skip.addJs("./CCForm/FrmFool.js?ver=" + Math.random());
                     GenerFoolFrm(flowData);
                 }
                 if (frmNode.FrmType == 8) {//开发者表单

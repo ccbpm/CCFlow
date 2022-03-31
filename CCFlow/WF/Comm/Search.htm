@@ -97,6 +97,16 @@
             background: #009688;
             border-color: #fefefe;
         }
+        select {
+            -moz-appearance: none;
+            appearance: none;
+            background: #FFFFFF;
+            background-repeat: no-repeat;
+            background-position: calc(100% - 7px) 50%;
+            background-size: 2% auto;
+            border-radius: 3px;
+            padding: 0;
+        }
     </style>
     <script language="javascript" type="text/javascript">
         var ensName = GetQueryString("EnsName");
@@ -1495,19 +1505,21 @@
 
         function Exp() {
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
-            handler.AddPara("EnsName", GetQueryString("EnsName"));
-            //查询集合
-            var data = handler.DoMethodReturnString("Search_Exp");
-            var url = "";
-            if (data.indexOf('err@') == 0) {
-                alert(data);
+            if (plant != 'CCFlow')
+                downLoadExcel(basePath + "/WF/Export/Search_Exp?type=search&EnsName=" + GetQueryString("EnsName"));
+            else {
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+                handler.AddPara("EnsName", GetQueryString("EnsName"));
+                //查询集合
+                var data = handler.DoMethodReturnString("Search_Exp");
+                var url = "";
+                if (data.indexOf('err@') == 0) {
+                    alert(data);
+                    return;
+                }
+                data = basePath + data;
+                window.open(data);
             }
-
-            data = basePath + data;
-
-            window.open(data);
-            return;
         }
 
         ///导入.
@@ -1642,7 +1654,6 @@
                 alert(ddlChild + "丢失,或者该字段被删除.");
                 return;
             }
-
 
             var mylen = ddl.options.length - 1;
             while (mylen >= 0) {

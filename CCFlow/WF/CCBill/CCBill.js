@@ -125,7 +125,6 @@ function CCForm_SaveAsDraftByOID(frmID, oid) {
     var handler = new HttpHandler("BP.CCBill.WF_CCBill");
     handler.AddPara("FrmID", frmID);
     handler.AddPara("OID", oid);
-
 }
 
 /**

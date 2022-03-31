@@ -43,11 +43,11 @@ function GetDBDtl() {
         { "No": "Html", "Name": "Html文本", "GroupNo": "A", "Url": "Html.htm" },
         { "No": "HtmlVar", "Name": "变量文本", "GroupNo": "A", "Url": "HtmlVar.htm" },
 
-        { "No": "ChartLine", "Name": "折线图", "GroupNo": "B", "Url": "ChartLine.htm" },
-        { "No": "ChartPie", "Name": "饼图", "GroupNo": "B", "Url": "ChartPie.htm" },
-        { "No": "ChartZZT", "Name": "柱状图", "GroupNo": "B", "Url": "ChartZZT.htm" },
-        { "No": "ChartRate", "Name": "百分比扇形图", "GroupNo": "B", "Url": "ChartRate.htm" },
+        { "No": "ChartLine", "Name": "饼、柱、折线图", "GroupNo": "B", "Url": "ChartLine.htm" },
+        /* { "No": "ChartPie", "Name": "饼图", "GroupNo": "B", "Url": "ChartPie.htm" },*/
+       /* { "No": "ChartRate", "Name": "百分比扇形图", "GroupNo": "B", "Url": "ChartRate.htm" },*/
         { "No": "ChartRing", "Name": "环形图", "GroupNo": "B", "Url": "ChartRing.htm" },
+        { "No": "ChartChina", "Name": "中国地图", "GroupNo": "B", "Url": "ChartChina.htm" },
 
         { "No": "Table", "Name": "简单表格", "GroupNo": "C", "Url": "Table.htm" },
         { "No": "Tab", "Name": "标签页", "GroupNo": "C", "Url": "Tab.htm" }

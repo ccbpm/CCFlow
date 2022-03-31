@@ -375,7 +375,7 @@
 
                 checkedStr = "";
 
-                return "<label style='font-weight:50;' ><input  " + enableAttr + " value='" + defValue + "' " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + pkval + "_" + mapAttr.KeyOfEn + "'  name='CB_" + pkval + "_" + mapAttr.KeyOfEn + "' " + checkedStr + " />" + mapAttr.Name + "</label>";
+                return "<label style='font-weight:50;' ><input  " + enableAttr + " value='1' " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + pkval + "_" + mapAttr.KeyOfEn + "'  name='CB_" + pkval + "_" + mapAttr.KeyOfEn + "' " + checkedStr + " />" + mapAttr.Name + "</label>";
             }
 
             //枚举类型.
@@ -616,12 +616,9 @@
             var url = "";
             if (data.indexOf('err@') == 0) {
                 alert(data);
+                return;
             }
-            //if (plant != 'CCFlow') {
-            //   var currentPath = window.document.location.href;
-            //   var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
             data = basePath + "/" + data;
-            //}
             window.open(data);
             return;
 
@@ -635,7 +632,7 @@
                 <!--  <input type='button' value='保存' id='Btn_Save' onclick='Save()' />-->
             </div>
         </div>
-        <form id="divCCForm" method="post">
+        <form id="divCCForm">
             <div id="mytable"> </div>
         </form>
         <div id="Msg"></div>

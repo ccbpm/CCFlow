@@ -238,9 +238,11 @@
             }
             if ($(".ccdate").length > 0) {
                 $.each($(".ccdate"), function (i, item) {
+                    var type = $(item).attr("data-info");
                     laydate.render({
                         elem: '#' + item.id //指定元素
-                        , type: $(item).attr("data-info")
+                        , type: type
+                        ,format:type=="date"?"yyyy-MM-dd":"yyyy-MM-dd HH:mm:ss"
                     });
                 })
             }
@@ -255,6 +257,7 @@
                 elem: '#lay_table_dict',
                 id: 'lay_table_dict',
                 data: tableData,
+                limit: Number.MAX_VALUE,
                 title: '数据表',
                 height: $(document).height() - $("#view").height() - 130,
                 cellMinWidth: 120,
@@ -392,7 +395,7 @@
                         pageSize = obj.limit;
                         //刷新数据
                         var tableData = SearchData();
-                        layui.table.reload('lay_table_dict', { data: tableData });
+                        layui.table.reload('lay_table_dict', { data: tableData }); 
                     }
 
                 }
@@ -477,7 +480,9 @@
                 })
             }
             searchData["inputSearch"] = inputSearch;
-            if (dateShowType == "0" && GetPara(atPara, "DTSearchWay") != "0") {
+            var dtSearchWay = GetPara(atPara, "DTSearchWay");
+            dtSearchWay = dtSearchWay == null || dtSearchWay == undefined ? "0" : dtSearchWay;
+            if (dateShowType == "0" && dtSearchWay != "0") {
                 var dtFrom = GetPara(atPara, "DTSearchLabel");
                 if (dtFrom == undefined)
                     dtFrom = '日期从';
@@ -487,7 +492,7 @@
                     dtFromLabel: dtFrom,
                     dtFromValue: ur.DTFrom,
                     dtToValue: ur.DTTo,
-                    dtType: GetPara(atPara, "DTSearchWay") == "1" ? "date" : "datetime"
+                    dtType:dtSearchWay == "1" ? "date" : "datetime"
                 })
             }
             searchData["dateSearch"] = dateSearch;

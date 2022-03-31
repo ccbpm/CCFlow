@@ -134,15 +134,15 @@
 
         //打开根据单据编号打开或者创建一个表单.
         function OpenFrm(frmID, frmType) {
-            var billNo = window.prompt("请输入单据编号");
+            var billNo = promptGener("请输入单据编号");
             if (billNo == null || billNo == undefined)
                 return;
 
-            var name = window.prompt("单据名称");
+            var name = promptGener("单据名称");
             if (name == null || name == undefined)
                 name = "";
 
-            var paras = window.prompt("其他参数(默认字段名字或者值,格式为:@Name=张三@Age=12@Addr=山东济南):",
+            var paras = promptGener("其他参数(默认字段名字或者值,格式为:@Name=张三@Age=12@Addr=山东济南):",
                 "@Name=张三@Age=12@Addr=山东济南");
             if (paras == null || paras == undefined)
                 paras = "";
@@ -167,7 +167,7 @@
 
         function DeleteEntity(frmID)
         {
-            var oid = window.prompt("要删除表单[" + frmID + "]的OID.");
+            var oid = promptGener("要删除表单[" + frmID + "]的OID.");
             if (oid == null || oid == undefined)
                 return;
             var data = CCFrom_DeleteFrmEntityByOID(frmID, oid);
@@ -213,15 +213,15 @@
         //新建单据. frmType  0=傻瓜表单 1=自由表单, 3=URL
         function NewFrmBill(frmType) {
 
-            var frmID = window.prompt("请输入表单ID,必须是英文字母或者下划线数字组合,不能重复,比如MyBill.");
+            var frmID = promptGener("请输入表单ID,必须是英文字母或者下划线数字组合,不能重复,比如MyBill.");
             if (frmID == null || frmID == undefined)
                 return;
 
-            var frmName = window.prompt("请输入表单名称", frmID);
+            var frmName = promptGener("请输入表单名称", frmID);
             if (frmName == null || frmName == undefined)
                 return;
 
-            var ptable = window.prompt("请输入存储的表名称,必须是英文字母或者下划线数字组合.", frmID);
+            var ptable = promptGener("请输入存储的表名称,必须是英文字母或者下划线数字组合.", frmID);
             if (ptable == null || ptable == undefined)
                 return;
 
@@ -233,15 +233,15 @@
         //新建单据. frmType  0=傻瓜表单,1=自由表单, 3=URL
         function NewFrmDict(frmType) {
 
-            var frmID = window.prompt("请输入表单ID,不能重复");
+            var frmID = promptGener("请输入表单ID,不能重复");
             if (frmID == null || frmID == undefined)
                 return;
 
-            var frmName = window.prompt("请输入表单名称", frmID);
+            var frmName = promptGener("请输入表单名称", frmID);
             if (frmName == null || frmName == undefined)
                 return;
 
-            var ptable = window.prompt("请输入存储的表名称", frmID);
+            var ptable = promptGener("请输入存储的表名称", frmID);
             if (ptable == null || ptable == undefined)
                 return;
 

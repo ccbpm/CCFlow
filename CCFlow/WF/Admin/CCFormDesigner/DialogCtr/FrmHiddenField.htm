@@ -21,7 +21,7 @@
         <tr v-for="(value,index) in listData.data" v-if="value.UIVisible==0">
             <td>{{index+1}}</td>
             <td>{{ value.KeyOfEn }}</td>
-            <td><a href="#" v-on:click="OpenEn(value.MyPK)">{{value.Name}}</a> </td>
+            <td><a href="#" v-on:click="OpenEn(value.MyPK,value.MyDataType)">{{value.Name}}</a> </td>
 
             <!-- 操作 -->
             <!--<td v-if="value.UIVisible==0">隐藏字段</td>-->
@@ -50,8 +50,14 @@
                 this.listData = ens.GetEns();
             },
             methods: {
-                OpenEn: function (myPK) {
-                    var url = "../../../Comm/En.htm?EnName=BP.Sys.MapAttr&MyPK=" + myPK;
+                OpenEn: function (myPK, ftype) {
+                    var enName = "";
+                    if (ftype == "1")
+                        enName = "BP.Sys.FrmUI.MapAttrString";
+                    else
+                        enName = "BP.Sys.FrmUI.MapAttrNum";
+
+                    var url = "../../../Comm/En.htm?EnName=" + enName+"&MyPK=" + myPK;
                     WinOpen(url);
                 },
                 Delete: function (myPK) {

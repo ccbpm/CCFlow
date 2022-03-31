@@ -26,7 +26,6 @@
                 entityType = 0;
 
             //if (entityType == 1 || entityType == 2) {
-
             //var option2 = document.createElement("option");
             //$(option2).val('8');
             //$(option2).text('开发者表单');
@@ -53,7 +52,7 @@
 
             //创建表单类型.
             if (entityType == 0 && webUser.CCBPMRunModel != 2) {
-               // GenerBindEnumKey("DDL_FrmType", "FrmType", frmType);
+                // GenerBindEnumKey("DDL_FrmType", "FrmType", frmType);
             }
 
             var caption = "";
@@ -156,15 +155,16 @@
                         <option value=8>&nbsp;&nbsp;开发者表单</option>
                         <option value=1 disabled='disabled'>&nbsp;&nbsp;自由表单(暂停支持)</option>
 
-                        <option value=null disabled='disabled'>+插件表单(暂停支持)</option>
+                        <option value=null>+文件(插件)表单(部分支持)</option>
 
-                        <option value=4 disabled='disabled'>&nbsp;&nbsp;Word表单</option>
-                        <option value=5 disabled='disabled'>&nbsp;&nbsp;在线编辑模式Excel表单</option>
-                        <option value=6 disabled='disabled'>&nbsp;&nbsp;VSTO模式Excel表单</option>
+                        <option value=9>&nbsp;&nbsp;Wps表单</option>
+                        <!--<option value=5 disabled='disabled'>&nbsp;&nbsp;在线编辑模式Excel表单(暂停支持)</option>-->
+                        <option value=6> &nbsp;&nbsp;VSTO模式Excel表单</option>
+                        <option value=9> &nbsp;&nbsp;VSTO模式Word表单</option>
 
                         <option value=null disabled='disabled'>+其他表单</option>
                         <option value=3>&nbsp;&nbsp;嵌入式表单</option>
-                        <option value=7 >&nbsp;&nbsp;实体类组件</option>
+                        <option value=7>&nbsp;&nbsp;实体类组件</option>
 
                     </select>
 
@@ -367,7 +367,7 @@
                                 //表单库增加表单节点
                                 if (typeof window.parent.AppendFrmToFormTree != "undefined") {
                                     // var sort = $("#HD_FK_FormTree").val();
-                                    var sort = GetQueryString("FK_FrmSort"); 
+                                    var sort = GetQueryString("FK_FrmSort");
                                     var webUser = new WebUser()
                                     if (webUser.CCBPMRunModel == 2)
                                         no = no + "_" + webUser.OrgNo;

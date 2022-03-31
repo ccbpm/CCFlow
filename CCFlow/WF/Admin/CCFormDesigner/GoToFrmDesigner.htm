@@ -1,8 +1,9 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>转入表单设计器</title>
-    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="../../Comm/JScript.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
@@ -14,75 +15,57 @@
 
         //页面启动函数.
         $(function () {
-
             $("#Msg").html("<h1><img src='../../Img/loading.gif' /> 正在转入对应的表单设计器. </h1>");
-
             var frmID = GetQueryString("FK_MapData");
             if (frmID == null || frmID == undefined || frmID == "null")
                 frmID = GetQueryString("FrmID");
-
             var md = new Entity("BP.Sys.MapData", frmID);
             if (md.FrmType == FrmType.FoolForm) {
                 window.location.href = "../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random();
                 return;
             }
-
             if (md.FrmType == FrmType.Develop) {
                 window.location.href = "../DevelopDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random();
                 return;
             }
-
             if (md.FrmType == FrmType.FreeFrm) {
                 window.location.href = "../DevelopDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random();
                 return;
             }
-
             if (md.FrmType == FrmType.Url) {
                 // return "url@../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.MapDataURL&No=" + this.FK_MapData;
                 window.location.href = "../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.MapDataURL&No=" + frmID + "&s=" + Math.random();
                 return;
             }
-
             if (md.HisFrmType == FrmType.Url) {
                 /* 自由表单 */
                 window.location.href = "../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.MapDataURL&No=" + this.FK_MapData;
             }
-
             if (md.FrmType == FrmType.Entity) {
                 window.location.href = "../../Comm/Ens.htm?EnsName=" + md.PTable;
                 return;
             }
-
             window.location.href = "../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random();
-
             //var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
             //handler.AddUrlData();
-
             //var data = handler.DoMethodReturnString("GoToFrmDesigner_Init");
-
             //if (data.indexOf('err@') == 0) {
             //    $("#Msg").html("<font color=red>" + data + "</font>");
             //    return;
             //}
-
             //if (data.indexOf('url@') == 0) {
             //    window.location.href = data.replace('url@', '');
             //    return;
             //}
-
             //$("#Msg").html("<font color=blue>" + data + "</font>");
-            return;
 
         });
     </script>
 </head>
-<body>
-    <br />
-    <br />
-    <br />
-    <center>
-
-        <div id="Msg"> </div>
-    </center>
+<body style="text-align: center">
+<br/>
+<br/>
+<br/>
+<div id="Msg"></div>
 </body>
 </html>

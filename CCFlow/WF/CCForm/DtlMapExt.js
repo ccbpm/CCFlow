@@ -11,7 +11,7 @@ var isHaveEnableJs = false;
 var mapExts = workNodeData.Sys_MapExt; // 扩展信息
 //根据字段的主键分组
 var mapKeyExts = GetMapExtsGroup(mapExts);
-debugger
+//debugger
 //获取扩展属性的MapAttr
 var mapAttrs = workNodeData.Sys_MapAttr;
 var mapExtAttrs = $.grep(mapAttrs, function (mapAttr) {
@@ -244,7 +244,7 @@ function AfterBindEn_DealMapExt(tr, rowIndex) {
                     if (mapAttr.UIIsEnable == 0 || isReadonly == true)
                         break;
 
-                    debugger
+                  //  debugger
                     var isLoad = true;
                     $("#TB_" + targetID).hide();
                     $("#TB_" + targetID).after("<div id='mapExt_" + targetID + "' style='width:99%'></div>");

@@ -41,7 +41,6 @@
     <script src="Data/lang/load.js" type="text/javascript"></script>
     <script src="Data/lang/js/zh-cn.js"></script>
     <script src="Data/lang/lang.js" type="text/javascript"></script>
-    <!--<script src="AppClassic/comm.js" type="text/javascript"></script>-->
     <script type="text/javascript">
 
         var webUser = null;
@@ -64,7 +63,6 @@
 
             document.title = window.lang.daiban;
 
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             handler.AddUrlData();
             data = handler.DoMethodReturnString("Todolist_Init");
@@ -75,7 +73,6 @@
 
             data = eval('(' + data + ')');
 
-
             BindTable();
         });
 
@@ -84,7 +81,7 @@
             if (keyword == null)
                 keyword = "";
 
-            keyword = window.prompt('请输入关键字', keyword);
+            keyword = promptGener('请输入关键字', keyword);
 
             if (keyword == null || keyword == undefined)
                 keyword = null;
@@ -135,7 +132,7 @@
                 tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByFlow' >" + window.lang.liucheng + "</th>";
                 tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByNode' >" + window.lang.jiedian + "</th>";
             }
-           
+
 
             tablet += "<th>" + window.lang.fqrq + "</th>";
             tablet += "<th>" + window.lang.sdrq + "</th>";
@@ -209,7 +206,7 @@
                     //  flows.Retrieve("NodeName", groupName);
                 }
 
-                listbox += "<tr   >";
+                listbox += "<tr>";
                 listbox += "<th colspan=8 class='table-title' onclick=\"GroupBarClick('" + groupName + "')\"> <i class='fa fa-minus-square' alert='Min'  id='Img" + groupName + "'></i><span>" + groupName + "</span></th> ";
                 var showBatch = false;
                 //for (var j = 0; j < flows.length; j++) {
@@ -357,8 +354,9 @@
                     edt = new Date(Date.parse(edt.replace(/-/g, "/")));
                     passTime = GetSpanTime(date, edt);
                     //判断流程是否逾期
-                    if (date.getTime() > edt.getTime() && work.WFState == 2 && entStr != "01" && work.RDT != work.SDT
-                        && paras.indexOf("&IsCC=1") == -1) {
+                    if (date.getTime() > edt.getTime() )//&& work.WFState == 2 && entStr != "01" && work.RDT != work.SDT
+                    //&& paras.indexOf("&IsCC=1") == -1) 
+                    {
                         listbox += "<td><font color=red>" + window.lang.yuqi + "</font></td>";
                     }
                     else {
@@ -395,9 +393,59 @@
         function OpenWork(flowNo, nodeID, workid, pWorkID, fid, title, isRead, paras) {
 
             JumpFlowPage("MyFlow", title, workid, flowNo, nodeID, fid, pWorkID, isRead, paras);
-
             return;
 
+        }
+
+
+        /**
+         *  为什么写到这里？ Gener.js 是一个与其他任何业务模块无关的js文件.
+         * 执行跳转到MyFlow/MyView页面的判断方法:
+         * @param {any} title
+         * @param {any} workid
+         * @param {any} fk_flow
+         * @param {any} fk_node
+         * @param {any} fid
+         * @param {any} pworkid
+         */
+        function JumpFlowPage(pageType, title, workid, fk_flow, fk_node, fid, pworkid, isread, paras) {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_" + pageType);
+            handler.AddPara("WorkID", workid);
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("FK_Node", fk_node);
+            handler.AddPara("FID", fid);
+            handler.AddPara("PWorkID", pworkid);
+            handler.AddPara("IsRead", isread);
+            handler.AddPara("Paras", paras);
+            var data = null;
+            data = handler.DoMethodReturnString(pageType + "_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            if (data.indexOf('url@') == 0) {
+
+                data = data.replace('url@', ''); //如果返回url，就直接转向.
+                data = data.replace('?DoType=HttpHandler', '?');
+                data = data.replace('&DoType=HttpHandler', '');
+                data = data.replace('&DoMethod=MyFlow_Init', '');
+                data = data.replace('&HttpHandlerName=BP.WF.HttpHandler.WF_MyFlow', '');
+                data = data.replace('?&', '?');
+
+                try {
+
+                    var url = data;
+                    if (url.indexOf("My") == 0)
+                        url = "../" + url;
+
+                    window.top.vm.openTab(title, url);
+                    return;
+                } catch (e) {
+                    window.open(data); //打开流程.
+                    return;
+                }
+            }
         }
 
         function Batch(fk_node) {

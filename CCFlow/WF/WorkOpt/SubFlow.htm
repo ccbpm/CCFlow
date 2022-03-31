@@ -95,6 +95,9 @@
 
             //遍历子流程配置。
             var pworkID = GetQueryString("WorkID");
+            if (pworkID == null || pworkID == undefined)
+                pworkID = 0;
+
             for (var i = 0; i < subFlows.length; i++) {
 
                 var subFlow = subFlows[i];
@@ -223,6 +226,9 @@
 
 
         function InsertSubFlows(flowNo, fid, workid, layer, html) {
+
+            if (workid == null || workid == undefined)
+                workid = 0;
 
             //该流程的子流程信息, 并按照流程排序.
             var gwfs = new Entities("BP.WF.GenerWorkFlows");

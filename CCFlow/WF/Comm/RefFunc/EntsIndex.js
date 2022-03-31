@@ -11,7 +11,7 @@ window.onload = function () {
                 tabsList: [], // 打开的tab页面
                 showPagesAction: false, // 打开tabs操作选项
                 selectedTabsIndex: -1, // 当前所选的tab 索引
-                selectedTabsIndexUrl: '', 
+                selectedTabsIndexUrl: '',
                 sideBarOpen: true,
                 inFullScreenMode: false, // 是否处于全屏模式
                 showThemePicker: false, // 显示主题选择器
@@ -60,7 +60,7 @@ window.onload = function () {
                 this.subMenuData = this.menuTreeData[index]
                 this.subMenuTitle = this.menuTreeData[index].Name
                 if (this.subMenuTitle.length > 4)
-                    $(".line").css("width", (70 - (this.subMenuTitle.length-4)*8)+"px");
+                    $(".line").css("width", (70 - (this.subMenuTitle.length - 4) * 8) + "px");
                 this.sideBarOpen = true
                 this.bindDropdown(this.subMenuData.type)
                 this.initChildContextMenu()
@@ -86,7 +86,7 @@ window.onload = function () {
                 }
                 this.fullScreen()
             },
-           
+
             // 改变侧边栏大小
             resizeSideBar: function () {
                 this.sideBarOpen = !this.sideBarOpen
@@ -186,10 +186,24 @@ window.onload = function () {
 
                 //写入日志.
                 UserLogInsert("MenuClick", menu.Title + "@" + menu.Icon + "@" + menu.Url);
+                if (menu.RefMethodType == 0 && menu.FunPara=="false") {
+                    var warning = menu.Warning;
+                    if (warning == "null" || warning == "")
+                        warning = "确定要执行吗？";
+                    warning = warning.replace(/,\s+/g, ",");
+                    warning = warning.replace(/\s+/g, "\r\n");
 
-                this.openTab(menu.Title, menu.Url, alignRight);
+                    if (confirm(warning) == false)
+                        return;
+                }
+
+                //菜单打开方式
+                if (menu.RefMethodType == 1)
+                    window.open(menu.Url, menu.Title);
+                else
+                    this.openTab(menu.Title, menu.Url, alignRight);
             },
-            openTab: function (name, src, alignRight) {              
+            openTab: function (name, src, alignRight) {
 
 
                 //如果发起实体类的流程，是通过一个页面中专过去的.
@@ -288,7 +302,7 @@ window.onload = function () {
                 var layout = document.getElementById("layout-data")
                 if (!this.classicalLayout) {
                     try {
-                        this.classicalLayout = false                       
+                        this.classicalLayout = false
                         layout.innerHTML = "\n                        .g-admin-layout .layui-side{\n                            width: 220px\n                        }\n                        .g-admin-layout .layui-logo, .layui-side-menu .layui-nav{\n                            background-color: white;\n                            position: absolute;\n                            \n                            height: 50px;\n                            line-height:50px;\n                            color: #333;\n                            box-shadow: none;\n                        }\n                        .layui-side-menu .layui-side-scroll{\n                            background-color: white;\n                            width: 220px\n                        }\n                        .g-admin-pagetabs, .g-admin-layout .layui-body, .g-admin-layout .layui-footer, .g-admin-layout .g-layout-left{\n                            left:220px;\n                        }\n                        .layui-side-menu .layui-nav .layui-nav-item a{\n                            height: 30px;\n                            line-height: 30px;\n                            color:#5f626e;\n                            display: flex;\n                            align-items: center;\n                        }\n                        .layui-side-menu .layui-nav .layui-nav-item .layui-icon{\n                            margin-top: -14px;\n                        }          \n                    ";
                         localStorage.setItem("classicalLayout", "0")
 
@@ -339,7 +353,7 @@ window.onload = function () {
                 clearTimeout(this.closeTimeout)
                 this.closeTimeout = null
             },
-            
+
             initMenus: function () {
                 /* var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
                 var data = handler.DoMethodReturnString("Default_Init");
@@ -353,14 +367,14 @@ window.onload = function () {
                     return;
                 }
                 data = JSON.parse(data);*/
-               var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+                var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
                 var enName = GetQueryString("EnName");
                 var type = GetQueryString("type");
                 var pkVal = GetPKVal();
                 var isTree = GetQueryString("isTree");
                 var isReadonly = GetQueryString("isReadonly");
                 httpHandler.AddPara("EnName", enName);
-              
+
                 if (pkVal != null) {
                     httpHandler.AddPara("PKVal", pkVal);
                 }
@@ -374,13 +388,13 @@ window.onload = function () {
                 //解析json.
                 frmData = JSON.parse(data);
                 dtM = frmData["dtM"];
-             
+
 
                 this.refreshMenuTree(dtM);
-              
+
 
             },
-         
+
             bindDropdown: function (type) {
                 var _this = this
                 this.$nextTick(function () {
@@ -551,7 +565,7 @@ window.onload = function () {
                 url = "./../Admin/Template/ImpFrmLocal.htm?SortNo=" + sortNo + "&Lang=CH";
                 this.openTab("导入表单模版", url);
             },
-            
+
             NewFlow: function (data, name) {
 
                 ////  if (runModelType == 0)
@@ -864,10 +878,10 @@ window.onload = function () {
             }
         },
         mounted: function () {
-            var param = document.location.search.substr(1);           
+            var param = document.location.search.substr(1);
             selectedTabsurl = "../RefFunc/EnOnly.htm?" + param;
             this.selectedTabsIndexUrl = selectedTabsurl;
-            
+
             this.initMenus()
             var _this = this
             setTimeout(function () {

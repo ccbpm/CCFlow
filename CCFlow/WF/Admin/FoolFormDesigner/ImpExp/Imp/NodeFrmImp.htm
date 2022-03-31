@@ -15,7 +15,7 @@
     <script src="../../../CCFlowEnum.js"></script>
     <script type="text/javascript">
         //页面启动函数.
-        var frmID = GetQueryString("FK_MapData");
+        var frmID = GetQueryString("FrmID");
         var flowNo = GetQueryString("FK_Flow");
         var nodeID = GetQueryString("FK_Node");
 
@@ -23,7 +23,7 @@
         var selFrmNode = null;
         var Btn_Flows = null;
         $(function () {
-            InitBar(Imp.NodeFrmImp);
+            InitBar("NodeFrmImp");
             btnFrmLib = document.getElementById("btnFrmLib");
             selFrmNode = document.getElementById("selFrmNode");
             Btn_Flows = document.getElementById("Btn_Flows");
@@ -213,7 +213,7 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
 
-            handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
+            handler.AddPara("FK_MapData", GetQueryString("FrmID"));
             handler.AddPara("FromFrmID", "ND" + nodeIdSelected);
 
             if ($('#CB_IsClear').attr('checked') == 'checked')

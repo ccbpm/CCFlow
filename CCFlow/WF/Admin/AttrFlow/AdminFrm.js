@@ -3,740 +3,50 @@
 function CloseWindow() {
     window.close();
 }
+//定义全局的变量
+var pageData = {};//全局的参数变量
+var flowData = {}; // 流程数据
+var isReadonly = false;//表单方案是只读时的变化
+if (typeof webUser == "undefined" || webUser == null)
+    webUser = new WebUser();
 
-var ccbpmPath = GetPath();
-
-var pageData = {};
-var globalVarList = {};
-var flowData = {};
-
-//处理，表单没有加载完，就可以点击发送按钮.
-var isLoadOk = false;
-//获取WF之前路径
-function GetPath() {
-    var js = document.scripts || document.getElementsByTagName("script");
-    var jsPath;
-    for (var i = js.length; i > 0; i--) {
-        if (js[i - 1].src.indexOf("AdminFrm.js") > -1) {
-            jsPath = js[i - 1].src.substring(0, js[i - 1].src.lastIndexOf("/"));
-            jsPath = jsPath.substring(0, jsPath.length - 17);
-            return jsPath;
-        }
-    }
-    return null;
-}
-
+var UserICon = getConfigByKey("UserICon", '../../../DataUser/Siganture/'); //获取签名图片的地址
+var UserIConExt = getConfigByKey("UserIConExt", '.jpg');  //签名图片的默认后缀
+var richTextType = getConfigByKey("RichTextType", 'tinymce');
 $(function () {
+    UserICon = UserICon.replace("@basePath", basePath);
 
-    if ("undefined" == typeof UserICon) {
-        UserICon = '../../../DataUser/Siganture/';
-    } else {
-        UserICon = UserICon.replace("@basePath", basePath);
-    }
-    if ("undefined" == typeof UserIConExt) {
-        UserIConExt = '.jpg';
-    }
+    //增加css样式
+    $('head').append('<link href="../../../DataUser/Style/GloVarsCSS.css" rel="stylesheet" type="text/css" />');
 
-    //动态加载css样式
-    if (webUser == null)
-        webUser = new WebUser();
-    var theme = webUser.Theme;
-    if (theme == null || theme == undefined || theme == "")
-        theme = "Default";
-    $('head').append('<link href="../../../DataUser/Style/CSS/' + theme + '.css" rel="stylesheet" type="text/css" />');
-    $('head').append('<link href="../../../DataUser/Style/MyFlow.css" rel="Stylesheet" />');
+    //初始化表单参数
+    initPageData();
 
-    // initToolBar();//初始化按钮
-    initPageParam(); //初始化参数
-
-    GenerWorkNode(); //表单数据.ajax
-
-
-    if ($("#Message").html() == "") {
-        $(".Message").hide();
-    }
-
-    $('#btnCloseMsg').bind('click', function () {
-        $('.Message').hide();
-    });
-
-   
-
-   
+    //初始化表单数据
+    GenerWorkNode();
 })
 
-
-
-//从表在新建或者在打开行的时候，如果 EditModel 配置了使用卡片的模式显示一行数据的时候，就调用此方法.
-function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage, H) {
-    // model=1 自由表单, model=2傻瓜表单.
-    var pathName = document.location.pathname;
-    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-    var projectName = pathName.length > 3 ? pathName.substring(1, 3) : "";
-    var wWidth = $(window).width();
-    var wHeight = $(window).height();
-    if (wWidth > 1200) {
-        wWidth = 1000;
-    }
-    if (H < 600 || H == undefined) {
-        wHeight = 600;
-    } else {
-        wHeight = H;
-    }
-
-    if (projectName == "WF") {
-        projectName = "";
-    }
-    
-    if (plant == "JFlow")
-        projectName = basePath;
-    var url = basePath + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal;
-
-    if (typeof ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal) === "function") {
-        ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal)(url, "editSubGrid", '编辑', wWidth, wHeight, "icon-property", false, function () { }, null, function () {
-            if (typeof InitPage === "function") {
-                InitPage.call();
-            } else {
-                alert("请手动刷新表单");
-            }
-        }, "editSubGridDiv");
-    } else {
-        window.open(url);
+/**
+ * 初始化表单数据
+ */
+function initPageData() {
+    pageData = {
+        FK_Flow: GetQueryString("FK_Flow"),
+        FK_Node: GetQueryString("FK_Node"),
+        FID: GetQueryString("FID") == null ? 0 : GetQueryString("FID"),
+        WorkID: GetQueryString("WorkID"),
+        OID: pageData.WorkID,
+        Paras: GetQueryString("Paras"),
+        IsReadonly: 0,
+        IsStartFlow: GetQueryString("IsStartFlow"),
+        IsMobile: IsMobile()//是不是移动端
     }
 }
-//从表在新建或者在打开行的时候，如果 EditModel 配置了使用卡片的模式显示一行数据的时候，就调用此方法. // IsSave 弹出页面关闭时是否要删除从表
-function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage, FK_MapData, FK_Node, FID, IsSave, H) {
-    // model=1 自由表单, model=2傻瓜表单.
-    var pathName = document.location.pathname;
-    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-    if (projectName.startsWith("/WF")) {
-        projectName = "";
-    }
-    if (H == undefined || H < 600)
-        H = 600;
-    if (H > 1000)
-        H = 1000;
-
-    var url = projectName + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal + "&FK_MapData=" + FK_MapData + "&FK_Node=" + FK_Node + "&FID=" + FID + "&IsSave=" + IsSave;
-    if (typeof ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal) === "function") {
-        OpenBootStrapModal(url, "editSubGrid", '编辑', 1000, H, "icon-property", false, function () { }, null, function () {
-            if (typeof InitPage === "function") {
-                InitPage.call();
-            } else {
-                alert("请手动刷新表单");
-            }
-        }, "editSubGridDiv", null, false);
-    } else {
-        window.open(url);
-    }
-}
-//单表单加载需要执行的函数
-function CCFormLoaded() {
-    if (parent != null && parent.document.getElementById('MainFrames') != undefined) {
-        //计算高度，展示滚动条
-        var height = $(parent.document.getElementById('MainFrames')).height() - 110;
-        //$('#topContentDiv').height(height);
-
-        $(window).resize(function () {
-            //$("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); 
-            $("#divCCForm").height($(window).height() - 100 + "px").css("overflow-y", "auto");
-        });
-    }
-    else {
-        //新加
-        //计算高度，展示滚动条
-        var height = $("#divCCForm").height($(window).height() - 57 + "px").css("overflow-y", "auto");
-
-        $(window).resize(function () {
-            $("#divCCForm").height($(window).height() - 57 + "px").css("overflow-y", "auto");
-        });
-    }
-
-    SetHegiht();
-    //打开表单检查正则表达式
-    if (typeof FormOnLoadCheckIsNull != 'undefined' && FormOnLoadCheckIsNull instanceof Function) {
-        FormOnLoadCheckIsNull();
-    }
-}
-
-
-window.onload = function () {
-    ResizeWindow();
-    setToobarUnVisible();
-
-};
-
-
-
-
-//双击签名
-function figure_Template_Siganture(SigantureID, val, type) {
-
-    //先判断，是否存在签名图片
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-    handler.AddPara('no', val);
-    data = handler.DoMethodReturnString("HasSealPic");
-
-    //如果不存在，就显示当前人的姓名
-    if (data.length > 0 && type == 0) {
-        $("#TB_" + SigantureID).before(data);
-        var obj = document.getElementById("Img" + SigantureID);
-        var impParent = obj.parentNode; //获取img的父对象
-        impParent.removeChild(obj);
-    }
-    else {
-        var src = UserICon + val + UserIConExt;    //新图片地址
-        document.getElementById("Img" + SigantureID).src = src;
-    }
-    isSigantureChecked = true;
-
-    var sealData = new Entities("BP.Tools.WFSealDatas");
-    sealData.Retrieve("OID", GetQueryString("WorkID"), "FK_Node", GetQueryString("FK_Node"), "SealData", GetQueryString("UserNo"));
-    if (sealData.length > 0) {
-        return;
-    }
-    else {
-        sealData = new Entity("BP.Tools.WFSealData");
-        sealData.MyPK = GetQueryString("WorkID") + "_" + GetQueryString("FK_Node") + "_" + val;
-        sealData.OID = GetQueryString("WorkID");
-        sealData.FK_Node = GetQueryString("FK_Node");
-        sealData.SealData = val;
-        sealData.Insert();
-    }
-
-}
-
-//签字板
-function figure_Template_HandWrite(HandWriteID, val) {
-    var url = "../../CCForm/HandWriting.htm?WorkID=" + pageData.WorkID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + HandWriteID;
-    OpenEasyUiDialogExt(url, '签字板', 400, 300, false);
-}
-//地图
-function figure_Template_Map(MapID, UIIsEnable) {
-    var mainTable = flowData.MainTable[0];
-    var AtPara = "";
-    //通过MAINTABLE返回的参数
-    for (var ele in mainTable) {
-        if (ele == "AtPara" && mainTable != '') {
-            AtPara = mainTable[ele];
-            break;
-        }
-    }
-
-    var url = "../../CCForm/Map.htm?WorkID=" + pageData.WorkID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + MapID + "&UIIsEnable=" + UIIsEnable + "&Paras=" + AtPara;
-    OpenBootStrapModal(url, "eudlgframe", "地图", 800, 500, null, false, function () { }, null, function () {
-
-    });
-}
-function setHandWriteSrc(HandWriteID, imagePath) {
-    imagePath = "../../../" + imagePath.substring(imagePath.indexOf("DataUser"));
-    document.getElementById("Img" + HandWriteID).src = "";
-    $("#Img" + HandWriteID).attr("src", imagePath);
-    // document.getElementById("Img" + HandWriteID).src = imagePath;
-    $("#TB_" + HandWriteID).val(imagePath);
-    $('#eudlg').dialog('close');
-}
-//然浏览器最大化.
-function ResizeWindow() {
-    if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen     
-        var myw = screen.availWidth;   //定义一个myw，接受到当前全屏的宽     
-        var myh = screen.availHeight;  //定义一个myw，接受到当前全屏的高     
-        window.moveTo(0, 0);           //把window放在左上角     
-        window.resizeTo(myw, myh);     //把当前窗体的长宽跳转为myw和myh     
-    }
-}
-function OpenCC() {
-    var url = $("#CC_Url").val();
-    var v = window.showModalDialog(url, 'cc', 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: 650px; dialogWidth: 850px; dialogTop: 100px; dialogLeft: 150px;');
-    if (v == '1')
-        return true;
-    return false;
-}
-
-//原有的
-function OpenOfiice(fk_ath, pkVal, delPKVal, FK_MapData, NoOfObj, FK_Node) {
-    var date = new Date();
-    var t = date.getFullYear() + "" + date.getMonth() + "" + date.getDay() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
-
-    var url = 'WebOffice/AttachOffice.htm?DoType=EditOffice&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + "&FK_MapData=" + FK_MapData + "&NoOfObj=" + NoOfObj + "&FK_Node=" + FK_Node + "&T=" + t;
-    window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
-}
-
-
-
-//以下是软通写的
-//初始化网页URL参数
-function initPageParam() {
-    pageData.FK_Flow = GetQueryString("FK_Flow");
-    pageData.FK_Node = GetQueryString("FK_Node");
-    pageData.FID = GetQueryString("FID") == null ? 0 : GetQueryString("FID");
-    pageData.WorkID = GetQueryString("WorkID");
-    pageData.OID = pageData.WorkID;
-    pageData.Paras = GetQueryString("Paras");
-    pageData.IsReadonly = 0; 
-}
-
-
-//隐藏下方的功能按钮
-function setToobarUnVisible() {
-    //隐藏下方的功能按钮
-    $('#bottomToolBar').css('display', 'none');
-}
-
-
-function CheckMinMaxLength() {
-
-    return true;
-
-    var editor = document.activeEditor;
-    if (editor) {
-        var wordslen = editor.getContent().length,
-            msg = "";
-
-        if (wordslen > editor.MaxLen || wordslen < editor.MinLen) {
-            msg += '@' + editor.BindFieldName + ' , 输入的值长度必须在:' + editor.MinLen + ', ' + editor.MaxLen + '之间. 现在输入是:' + wordslen;
-        }
-
-        if (msg != "") {
-            alert(msg);
-            return false;
-        }
-    }
-    return true;
-}
-
-
-//获取表单数据
-function getFormData(isCotainTextArea, isCotainUrlParam) {
-
-    var formss = $('#divCCForm').serialize();
-
-    var formArr = formss.split('&');
-    var formArrResult = [];
-    var haseExistStr = ",";
-    var mcheckboxs = "";
-    $.each(formArr, function (i, ele) {
-        if (ele.split('=')[0].indexOf('CB_') == 0) {
-            //如果ID获取不到值，Name获取到值为复选框多选
-            var targetId = ele.split('=')[0];
-            if ($('#' + targetId).length == 1) {
-                if ($('#' + targetId + ':checked').length == 1) {
-                    ele = targetId + '=1';
-                } else {
-                    ele = targetId + '=0';
-                }
-                formArrResult.push(ele);
-            } else {
-
-                if (mcheckboxs.indexOf(targetId + ",") == -1) {
-                    mcheckboxs += targetId + ",";
-                    var str = "";
-                    $("input[name='" + targetId + "']:checked").each(function (index, item) {
-                        if ($("input[name='" + targetId + "']:checked").length - 1 == index) {
-                            str += $(this).val();
-                        } else {
-                            str += $(this).val() + ",";
-                        }
-                    });
-
-                    formArrResult.push(targetId + '=' + str);
-                }
-            }
-
-        }
-        if (ele.split('=')[0].indexOf('DDL_') == 0) {
-
-            var ctrlID = ele.split('=')[0];
-
-            var item = $("#" + ctrlID).children('option:checked').text();
-
-            var mystr = '';
-            mystr = ctrlID.replace("DDL_", "TB_") + 'T=' + item;
-            formArrResult.push(mystr);
-            formArrResult.push(ele);
-            haseExistStr += ctrlID.replace("DDL_", "TB_") + "T" + ",";
-        }
-        if (ele.split('=')[0].indexOf('RB_') == 0) {
-            formArrResult.push(ele);
-        }
-
-    });
-
-    $.each(formArr, function (i, ele) {
-        var ctrID = ele.split('=')[0];
-        if (ctrID.indexOf('TB_') == 0) {
-            if (haseExistStr.indexOf("," + ctrID + ",") == -1) {
-                formArrResult.push(ele);
-                haseExistStr += ctrID + ",";
-            }
-
-
-        }
-    });
-
-    //获取表单中禁用的表单元素的值
-    var disabledEles = $('#divCCForm :disabled');
-    $.each(disabledEles, function (i, disabledEle) {
-
-        var name = $(disabledEle).attr('id');
-
-        switch (disabledEle.tagName.toUpperCase()) {
-
-            case "INPUT":
-                switch (disabledEle.type.toUpperCase()) {
-                    case "CHECKBOX": //复选框
-                        formArrResult.push(name + '=' + encodeURIComponent(($(disabledEle).is(':checked') ? 1 : 0)));
-                        break;
-                    case "TEXT": //文本框
-                    case "HIDDEN":
-                        formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).val()));
-                        break;
-                    case "RADIO": //单选钮
-                        name = $(disabledEle).attr('name');
-                        var eleResult = name + '=' + $('[name="' + name + '"]:checked').val();
-                        if ($.inArray(eleResult, formArrResult) == -1) {
-                            formArrResult.push(eleResult);
-                        }
-                        break;
-                }
-                break;
-            //下拉框            
-            case "SELECT":
-                formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).children('option:checked').val()));
-                var tbID = name.replace("DDL_", "TB_") + 'T';
-                if ($("#" + tbID).length == 1) {
-                    if (haseExistStr.indexOf("," + tbID + ",") == -1) {
-                        formArrResult.push(tbID + '=' + $(disabledEle).children('option:checked').text());
-                        haseExistStr += tbID + ",";
-                    }
-                }
-                break;
-
-            //文本区域                    
-            case "TEXTAREA":
-                formArrResult.push(name + '=' + encodeURIComponent($(disabledEle).val()));
-                break;
-        }
-    });
-
-    //获取树形结构的表单值
-    var combotrees = $(".easyui-combotree");
-    $.each(combotrees, function (i, combotree) {
-        var name = $(combotree).attr('id');
-        var tree = $('#' + name).combotree('tree');
-        //获取当前选中的节点
-        var data = tree.tree('getSelected');
-        if (data != null) {
-            formArrResult.push(name + '=' + data.id);
-            formArrResult.push(name.replace("DDL_", "TB_") + 'T=' + data.text);
-        }
-    });
-
-    if (!isCotainTextArea) {
-        formArrResult = $.grep(formArrResult, function (value) {
-            return value.split('=').length == 2 ? value.split('=')[1].length <= 50 : true;
-        });
-    }
-
-    formss = formArrResult.join('&');
-    var dataArr = [];
-    //加上URL中的参数
-    if (pageData != undefined && isCotainUrlParam) {
-        var pageDataArr = [];
-        for (var data in pageData) {
-            pageDataArr.push(data + '=' + pageData[data]);
-        }
-        dataArr.push(pageDataArr.join('&'));
-    }
-    if (formss != '')
-        dataArr.push(formss);
-    var formData = dataArr.join('&');
-
-    //为了复选框  合并一下值  复选框的值以  ，号分割
-    //用& 符号截取数据
-    var formDataArr = formData.split('&');
-
-    var formDataResultObj = {};
-    $.each(formDataArr, function (i, formDataObj) {
-        //计算出等号的INDEX
-        var indexOfEqual = formDataObj.indexOf('=');
-        var objectKey = formDataObj.substr(0, indexOfEqual);
-        var objectValue = formDataObj.substr(indexOfEqual + 1);
-        if (formDataResultObj[objectKey] == undefined) {
-            formDataResultObj[objectKey] = objectValue;
-        } else {
-            formDataResultObj[objectKey] = formDataResultObj[objectKey] + ',' + objectValue;
-        }
-    });
-
-    var formdataResultStr = '';
-    for (var ele in formDataResultObj) {
-        formdataResultStr = formdataResultStr + ele + '=' + formDataResultObj[ele] + '&';
-    }
-
-    // 处理没有选择的文本框.
-    //获得checkBoxIDs 格式为: CB_IsXX,CB_IsYY,
-    var ids = GenerCheckNames();
-
-    if (ids) {
-        var scores = ids.split(",");
-        var arrLength = scores.length;
-        for (var i = 0; i < arrLength; i++) {
-            var field = scores[i];
-            var index = formdataResultStr.indexOf(field);
-            if (index == -1) {
-                if ($("input[name='" + field + "'").length == 1)
-                    formdataResultStr += '&' + field + '=0';
-                else
-                    formdataResultStr += '&' + field + '= ';
-            }
-        }
-    }
-
-    formdataResultStr = formdataResultStr.replace('&&', '&');
-
-    return formdataResultStr;
-}
-
-
-//保存 0单保存 1发送的保存
-function Save(saveType) {
-    //正在保存弹出层
-    var index = layer.msg('正在保存，请稍后..', {
-        icon: 16
-        , shade: 0.01
-    });
-    //保存从表数据
-    $("[name=Dtl]").each(function (i, obj) {
-        var contentWidow = obj.contentWindow;
-        if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
-            IsSaveTrue = contentWidow.SaveAll();
-
-        }
-    });
-    //审核组件
-    if ($("#WorkCheck_Doc").length == 1) {
-        //保存审核信息
-        SaveWorkCheck();
-    }
-
-    //保存前事件
-    if (typeof beforeSave != 'undefined' && beforeSave(saveType) instanceof Function)
-        if (beforeSave(saveType) == false)
-            return false;
-
-    //判断是否有保存按钮，如果有就需要安全性检查，否则就不执行，这种情况在会签下，发送的时候不做检查。
-    /*  var btn = document.getElementById('Btn_Save');
-    if (btn != null) {
-        //检查最小最大长度.
-        var f = CheckMinMaxLength();
-        if (f == false)
-            return false;
-    }
-  var msg = checkAths();
-    if (msg != "") {
-        alert(msg);
-        return false;
-    }
-
-
-
-    //必填项和正则表达式检查
-    var formCheckResult = true;
-
-    if (checkBlanks() == false) {
-        formCheckResult = false;
-    }
-
-    if (checkReg() == false) {
-        formCheckResult = false;
-    }
-
-    if (formCheckResult == false) {
-        // alert("请检查表单必填项和正则表达式");
-        alert("请检查表单必填项");
-        return false;
-    }*/
-
-   // setToobarDisiable();
-
-    //判断是否启用审核组件
-    var iframe = document.getElementById("FWC");
-    if (iframe)
-        iframe.contentWindow.SaveWorkCheck();
-
-    //树形表单保存
-    if (flowData) {
-        var node = flowData.WF_Node[0];
-        //   alert(node.FormType);
-        if (node && node.FormType == 5) {
-            if (OnTabChange("btnsave") == true) {
-                //判断内容是否保存到待办
-                var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-                handler.AddPara("FK_Flow", pageData.FK_Flow);
-                handler.AddPara("FK_Node", pageData.FK_Node);
-                handler.AddPara("WorkID", pageData.WorkID);
-                handler.AddPara("SaveType", saveType);
-                handler.DoMethodReturnString("SaveFlow_ToDraftRole");
-            }
-            setToobarEnable();
-            return;
-        }
-    }
-
-    var params = getFormData(true, true);
-
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-    $.each(params.split("&"), function (i, o) {
-        var param = o.split("=");
-        if (param.length == 2 && validate(param[1])) {
-            handler.AddPara(param[0], param[1]);
-        } else {
-            handler.AddPara(param[0], "");
-        }
-    });
-    var data = handler.DoMethodReturnString("Save"); //执行保存方法.
-    layer.close(index);//关闭正在保存
-    //setToobarEnable();
-    //刷新 从表的IFRAME
-    var dtls = $('.Fdtl');
-    $.each(dtls, function (i, dtl) {
-        $(dtl).attr('src', $(dtl).attr('src'));
-    });
-
-    if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
-        $('#Message').html(data.substring(4, data.length));
-        $('#MessageDiv').modal().show();
-    }
-
-
-}
-
-//调用后，就关闭刷新按钮.
-function returnWorkWindowClose(data) {
-
-    if (data == "" || data == "取消") {
-        $('#returnWorkModal').modal('hide');
-        setToobarEnable();
-        return;
-    }
-
-    $('#returnWorkModal').modal('hide');
-    //通过下发送按钮旁的下拉框选择下一个节点
-    if (data.indexOf('SaveOK@') == 0) {
-        //说明保存人员成功,开始调用发送按钮.
-        var toNode = 0;
-        //含有发送节点 且接收
-        if ($('#DDL_ToNode').length > 0) {
-            var selectToNode = $('#DDL_ToNode  option:selected').data();
-            toNode = selectToNode.No;
-        }
-
-        execSend(toNode);
-        //$('[name=Send]:visible').click();
-        return;
-    } else {//可以重新打开接收人窗口
-        winSelectAccepter = null;
-    }
-
-    if (data.indexOf('err@') == 0 || data == "取消") {//发送时发生错误
-        $('#Message').html(data);
-        $('#MessageDiv').modal().show();
-        return;
-    }
-
-    OptSuc(data);
-}
-
-
-
-
-//AtPara  @PopValSelectModel=0@PopValFormat=0@PopValWorkModel=0@PopValShowModel=0
-function GepParaByName(name, atPara) {
-    var params = atPara.split('@');
-    var result = $.grep(params, function (value) {
-        return value != '' && value.split('=').length == 2 && value.split('=')[0] == value;
-    })
-    return result;
-}
-
-//初始化下拉列表框的OPERATION
-function InitDDLOperation(flowData, mapAttr, defVal) {
-
-    var operations = '';
-    var data = flowData[mapAttr.KeyOfEn];
-    if (data == undefined)
-        data = flowData[mapAttr.UIBindKey];
-    if (data == undefined) {
-        //枚举类型的.
-        if (mapAttr.LGType == 1) {
-            var enums = flowData.Sys_Enum;
-            enums = $.grep(enums, function (value) {
-                return value.EnumKey == mapAttr.UIBindKey;
-            });
-
-            if (mapAttr.DefVal == -1)
-                operations += "<option selected='selected' value='" + mapAttr.DefVal + "'>-无(不选择)-</option>";
-            $.each(enums, function (i, obj) {
-                operations += "<option " + (obj.IntKey == mapAttr.DefVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
-            });
-        }
-        return operations;
-    }
-    $.each(data, function (i, obj) {
-        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-    });
-    return operations;
-}
-
-
-//填充默认数据
-function ConvertDefVal(flowData, defVal, keyOfEn) {
-    //计算URL传过来的表单参数@TXB_Title=事件测试
-
-    var pageParams = getQueryString();
-    var pageParamObj = {};
-    $.each(pageParams, function (i, pageParam) {
-        if (pageParam.indexOf('@') == 0) {
-            var pageParamArr = pageParam.split('=');
-            pageParamObj[pageParamArr[0].substring(1, pageParamArr[0].length)] = pageParamArr[1];
-        }
-    });
-
-
-    var result = defVal;
-
-    var mainTable = flowData.MainTable[0];
-
-
-    //通过MAINTABLE返回的参数
-    for (var ele in mainTable) {
-        if (keyOfEn == ele && mainTable != '') {
-            result = mainTable[ele];
-            break;
-        }
-    }
-
-    if (result != undefined && typeof (result) == 'string') {
-    }
-    var result = unescape(result);
-
-    if (result == "null")
-        result = "";
-
-    return result;
-}
-
-function isExistArray(arrys, no) {
-    for (var i = 0; i < arrys.length; i++) {
-        if (arrys[i].split('=')[0] == no)
-            return i;
-    }
-    return -1;
-}
-
+/**
+ * 获取表单数据
+ */
 function GenerWorkNode() {
-
+    var index = layer.load(0, { shade: false }); //0代表加载的风格，支持0-2
     var href = window.location.href;
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
@@ -745,9 +55,10 @@ function GenerWorkNode() {
     handler.AddUrlData(urlParam);
     var data = handler.DoMethodReturnString("GenerWorkNode"); //执行保存方法.
 
-
     if (data.indexOf('err@') == 0) {
-        alert(data);
+        layer.alert(data);
+        console.log(data);
+        layer.close(index);
         return;
     }
 
@@ -756,11 +67,13 @@ function GenerWorkNode() {
         flowData = JSON.parse(data);
 
     } catch (err) {
-        //console.log(data);
-        alert(" GenerWorkNode转换JSON失败,请查看控制台日志,或者联系管理员.");
+        layer.alert(" GenerWorkNode转换JSON失败,请查看控制台日志,或者联系管理员.");
+        console.log(flowData);
+        layer.close(index);
         return;
     }
-
+    if (webUser == null)
+        webUser = new WebUser();
     //处理附件的问题 
     if (flowData.Sys_FrmAttachment.length != 0) {
         Skip.addJs("../../CCForm/Ath.js");
@@ -797,197 +110,498 @@ function GenerWorkNode() {
         }
 
     }
-
     var node = flowData.WF_Node[0];
-    var gfs = flowData.Sys_MapAttr;
+    //修改网页标题.
+    document.title = node.FlowName + ',' + node.Name;
+    //增加提示信息
+    ShowWorkReturnTip();
+    //解析表单
+    BindFrm();
+    //加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
+    var enName = flowData.Sys_MapData[0].No;
+    loadScript("../../../DataUser/JSLibData/" + pageData.FK_Flow + ".js?t=" + Math.random());
+    loadScript("../../../DataUser/JSLibData/" + enName + "_Self.js?t=" + Math.random());
+    loadScript("../../../DataUser/JSLibData/" + enName + ".js?t=" + Math.random());
 
-    //设置标题.
-    document.title = node.FlowName + ',' + node.Name; // "业务流程管理（BPM）平台";
+    layer.close(index);
+}
 
-    //帮助提醒
-    //   HelpAlter();
-
-    //判断类型不同的类型不同的解析表单. 处理中间部分的表单展示.
-
-    if (node.FormType == 5) {
-        GenerTreeFrm(flowData); /*树形表单*/
-        return;
-    }
-
-    if (node.FormType == 0 || node.FormType == 10) {
-        $("#glyphicon").show();//显示换肤按钮
-        GenerFoolFrm(flowData); //傻瓜表单.
-    }
-
-    if (node.FormType == 1) {
-        Skip.addJs("../../MyFlowFree2017.js");
-        GenerFreeFrm(flowData);  //自由表单.
-    }
-
-    if (node.FormType == 12) {
-        Skip.addJs("../../CCForm/FrmDevelop.js");
-        $('head').append('<link href="../../../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
-        GenerDevelopFrm(flowData, flowData.Sys_MapData[0].No);
-    }
-
-    //2018.1.1 新增加的类型, 流程独立表单， 为了方便期间都按照自由表单计算了.
-    if (node.FormType == 11) {
-        if (flowData.WF_FrmNode[0] != null && flowData.WF_FrmNode[0] != undefined)
-            if (flowData.WF_FrmNode[0].FrmType == 0)
-                GenerFoolFrm(flowData); //傻瓜表单.
-        if (flowData.WF_FrmNode[0].FrmType == 1) {
-            Skip.addJs("../../MyFlowFree2017.js");
-            GenerFreeFrm(flowData);
-        }
-        if (flowData.WF_FrmNode[0].FrmType == 8) {
-            Skip.addJs("../../CCForm/FrmDevelop.js");
-            $('head').append('<link href="../../../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
-            GenerDevelopFrm(flowData, flowData.WF_FrmNode[0].FK_Frm);
+/**
+ * 解析表单数据
+ */
+function BindFrm() {
+    var node = flowData.WF_Node[0];
+    var flow = flowData.WF_Flow[0];
+    var flowDevModel = GetPara(flow.AtPara, "FlowDevModel");
+    flowDevModel = flowDevModel == null || flowDevModel == undefined || flowDevModel == "" ? 0 : parseInt(flowDevModel);
+    var isFool = true;
+    var frmNode = flowData["WF_FrmNode"];
+    var flow = flowData["WF_Flow"];
+    if ((flow && flow[0].FlowDevModel == 1 || node.FormType == 11) && frmNode != null && frmNode != undefined) {
+        frmNode = frmNode[0];
+        if (frmNode.FrmSln == 1) {
+            isReadonly = true;
         }
     }
+    //根据流程设计模式解析
+    switch (flowDevModel) {
+        case FlowDevModel.Prefessional: //专业模式 
+            //根据节点的表单方案解析
+            switch (parseInt(node.FormType)) {
+                case 0: //傻瓜表单
+                case 10://累加表单
+                    $('head').append('<link href="../../../DataUser/Style/FoolFrmStyle/Default.css" rel="stylesheet" type="text/css" />');
+                    Skip.addJs("../../CCForm/FrmFool.js?ver=" + Math.random());
+                    GenerFoolFrm(flowData);
+                    break;
+                case 12://开发者表单
+                    $('head').append('<link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />');
+                    $('head').append('<link href="../../../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
+                    Skip.addJs("../../CCForm/FrmDevelop2021.js?ver=1");
+                    GenerDevelopFrm(flowData, flowData.Sys_MapData[0].No);
+                    isFool = false;
+                    break;
+                case 5://树形表单
+                    Skip.addJs("../../MyFlowTree.js?ver=1");
+                    Skip.addJs("../../Scripts/vue.js?ver=1");
+                    $("#AdminFrm").hide();
+                    $("#app").show();
+                    break;
+                case 11://表单库单表单
+                    var mapData = flowData.Sys_MapData[0];
+                    if (frmNode != null && frmNode != undefined) {
+                        if (mapData.FrmType == 0) { //傻瓜表单
+                            $('head').append('<link href="../../../DataUser/Style/FoolFrmStyle/Default.css" rel="stylesheet" type="text/css" />');
+                            Skip.addJs("../../CCForm/FrmFool.js?ver=" + Math.random());
+                            GenerFoolFrm(flowData);
+                        }
+                        if (mapData.FrmType == 8) {//开发者表单
+                            Skip.addJs("../../CCForm/FrmDevelop2021.js?ver=" + Math.random());
+                            $('head').append('<link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />');
+                            $('head').append('<link href="../../../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
+                            GenerDevelopFrm(flowData, flowData.Sys_MapData[0].No);
+                            isFool = false;
+                        }
+                    }
+                    break;
+                default:
+                    layer.alert("节点表单方案:[" + node.FormType + "]不存在或者暂未解析，请联系管理员")
+                    break;
+            }
+            break;
+        case FlowDevModel.JiJian://极简模式(傻瓜表单)
+            var mapData = flowData.Sys_MapData[0];
+            if (mapData.FrmType == 0) { //傻瓜表单
+                $('head').append('<link href="../../../DataUser/Style/FoolFrmStyle/Default.css" rel="stylesheet" type="text/css" />');
+                Skip.addJs("../../CCForm/FrmFool.js?ver=" + Math.random());
+                GenerFoolFrm(flowData);
+            }
+            if (mapData.FrmType == 8) {//开发者表单
+                Skip.addJs("../../CCForm/FrmDevelop2021.js?ver=" + Math.random());
+                $('head').append('<link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />');
+                $('head').append('<link href="../../../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
+                GenerDevelopFrm(flowData, flowData.Sys_MapData[0].No);
+                isFool = false;
+            }
 
-    //公文表单
-    if (node.FormType == 7) {
-        var btnOffice = new Entity("BP.WF.Template.BtnLabExtWebOffice", pageData.FK_Node);
-        if (btnOffice.WebOfficeFrmModel == 1)
-            GenerFreeFrm(flowData);  //自由表单.
-        else
+            break;
+        case FlowDevModel.FoolTruck://累加模式
+            Skip.addJs("../../CCForm/FrmFool.js?ver=" + Math.random());
             GenerFoolFrm(flowData); //傻瓜表单.
+            break;
+        case FlowDevModel.RefOneFrmTree://表单库单表单
+            if (frmNode != null && frmNode != undefined) {
+                // frmNode = frmNode[0];
+                if (frmNode.FrmType == 0) { //傻瓜表单
+                    Skip.addJs("../../CCForm/FrmFool.js?ver=" + Math.random());
+                    GenerFoolFrm(flowData);
+                }
+                if (frmNode.FrmType == 8) {//开发者表单
+                    Skip.addJs("../../CCForm/FrmDevelop2021.js?ver=" + Math.random());
+                    $('head').append('<link href="../../../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
+                    GenerDevelopFrm(flowData, flowData.Sys_MapData[0].No);
+                    isFool = false;
+                }
+            }
+            break;
+        case FlowDevModel.FrmTree://表单库多表单
+            Skip.addJs("../../MyFlowTree.js?ver=1");
+            Skip.addJs("../../Scripts/vue.js?ver=1");
+            $("#AdminFrm").hide();
+            $("#app").show();
+            break;
+        default:
+            layer.alert("流程设计模式:[" + getFlowDevModelText(flow.FlowDevModel) + "]不存在或者暂未解析，请联系管理员")
+            break;
     }
 
-    $.parser.parse("#CCForm");
 
-    //单表单加载后执行.
-    CCFormLoaded();
-
-    //装载表单数据与修改表单元素风格.
-    LoadFrmDataAndChangeEleStyle(flowData);
-
-    //初始化Sys_MapData
-    var h = flowData.Sys_MapData[0].FrmH;
-    var w = flowData.Sys_MapData[0].FrmW;
-
+    //调整页面宽度
+    var w = flowData.Sys_MapData[0].FrmW;//设置的页面宽度
     //傻瓜表单的名称居中的问题
     if ($(".form-unit-title img").length > 0) {
         var width = $(".form-unit-title img")[0].width;
         $(".form-unit-title center h4 b").css("margin-left", "-" + width + "px");
     }
+    if (isFool == true && pageData.IsMobile == false) {
+        $('#ContentDiv').width(w);
+        $('#ContentDiv').css("margin-left", "auto").css("margin-right", "auto");
+    }
 
-    $('#topContentDiv').width(w);
-    $('.Bar').width(w + 15);
-    $('#lastOptMsg').width(w + 15);
 
-    Common.MaxLengthError();
 
-    var marginLeft = $('#topContentDiv').css('margin-left');
-    marginLeft = marginLeft.replace('px', '');
+    //如果是富文本编辑器
+    if ($(".rich").length > 0 && richTextType == "tinymce") {
+        var images_upload_url = "";
+        var directory = "ND" + pageData.FK_Flow;
+        var handlerUrl = "";
+        if (plant == "CCFlow")
+            handlerUrl = basePath + "/WF/Comm/Handler.ashx";
+        else
+            handlerUrl = basePath + "/WF/Comm/Sys/ProcessRequest.do";
 
-    marginLeft = parseFloat(marginLeft.substr(0, marginLeft.length - 2)) + 50;
-    $('#topContentDiv i').css('left', marginLeft.toString() + 'px');
-    //原有的
+        images_upload_url = handlerUrl + '?DoType=HttpHandler&DoMethod=RichUploadFile';
+        images_upload_url += '&HttpHandlerName=BP.WF.HttpHandler.WF_Comm_Sys&Directory=' + directory;
+        layui.extend({
+            tinymce: '../../Scripts/layui/ext/tinymce/tinymce'
+        }).use('tinymce', function () {
+            var tinymce = layui.tinymce;
+            $(".rich").each(function (i, item) {
+                var id = item.id;
+                tinymce.render({
+                    elem: "#" + id
+                    , height: 200
+                    , images_upload_url: images_upload_url
+                });
+            })
 
-    //textarea的高度自适应的设置
-    if (node.FormType != 1) {
-        var textareas = $("textarea");
-        $.each(textareas, function (idex, item) {
-            autoTextarea(item);
         });
-    }
-
-
-    //为 DISABLED 的 TEXTAREA 加TITLE 
-    var disabledTextAreas = $('#divCCForm textarea:disabled');
-    $.each(disabledTextAreas, function (i, obj) {
-        $(obj).attr('title', $(obj).val());
-    })
-
-    ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
-    var enName = flowData.Sys_MapData[0].No;
-    var filespec = "../../../DataUser/JSLibData/" + pageData.FK_Flow + ".js";
-    $.getScript(filespec);
-
-    try {
-        ////加载JS文件
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.src = "../../../DataUser/JSLibData/" + enName + "_Self.js";
-        var tmp = document.getElementsByTagName('script')[0];
-        tmp.parentNode.insertBefore(s, tmp);
-    }
-    catch (err) {
 
     }
-
-    var jsSrc = '';
-    try {
-
-
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.src = "../../../DataUser/JSLibData/" + enName + ".js";
-        var tmp = document.getElementsByTagName('script')[0];
-        tmp.parentNode.insertBefore(s, tmp);
-    }
-    catch (err) {
-
-    }
-    //星级评分事件
-    var scoreDiv = $(".score-star");
-    $.each(scoreDiv, function (idex, item) {
-        var divId = $(item).attr("id");
-        var KeyOfEn = divId.substring(3);//获取字段值
-        $("#Star_" + KeyOfEn + " img").click(function () {
-            var index = $(this).index() + 1;
-            $("#Star_" + KeyOfEn + " img:lt(" + index + ")").attr("src", "Style/Img/star_2.png");
-            $("#SP_" + KeyOfEn + " strong").html(index + "  分");
-            $("#TB_" + KeyOfEn).val(index);//给评分的隐藏input赋值
-            index = index - 1;
-            $("#Star_" + KeyOfEn + " img:gt(" + index + ")").attr("src", "Style/Img/star_1.png");
-        });
-    });
-
-
-
-    $(".pimg").on("dblclick", function () {
-        var _this = $(this); //将当前的pimg元素作为_this传入函数  
-        imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
-    });
-
-
-    //给富文本创建编辑器
-    if (document.BindEditorMapAttr) {
-        var EditorDivs = $(".EditorClass");
-        $.each(EditorDivs, function (i, EditorDiv) {
+    if ($(".EditorClass").length > 0 && richTextType == "ueditor") {
+        $('head').append('<link href="./Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">');
+        Skip.addJs("../../Comm/umeditor1.2.3-utf8/third-party/template.min.js?Version=" + Math.random());
+        Skip.addJs("../../Comm/umeditor1.2.3-utf8/umeditor.config.js?Version=" + Math.random());
+        Skip.addJs("../../Comm/umeditor1.2.3-utf8/umeditor.js?Version=" + Math.random());
+        Skip.addJs("../../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js?Version=" + Math.random());
+        $.each($(".EditorClass"), function (i, EditorDiv) {
             var editorId = $(EditorDiv).attr("id");
             //给富文本 创建编辑器
             var editor = document.activeEditor = UM.getEditor(editorId, {
-                'autoHeightEnabled': false,
+                'autoHeightEnabled': false, //是否自动长高
                 'fontsize': [10, 12, 14, 16, 18, 20, 24, 36],
-                'initialFrameWidth': '100%'
+                'initialFrameWidth': '98%'
             });
-            var height = document.BindEditorMapAttr[i].UIHeight;
-            $("#Td_" + document.BindEditorMapAttr[i].KeyOfEn).find('div[class = "edui-container"]').css("height", height);
-            //$(".edui-container").css("height", height);
+            var mapAttr = $(EditorDiv).data();
+            var height = mapAttr.UIHeight
+            $("#Td_" + mapAttr.KeyOfEn).find('div[class = "edui-container"]').css("height", height);
 
             if (editor) {
 
-                editor.MaxLen = document.BindEditorMapAttr[i].MaxLen;
-                editor.MinLen = document.BindEditorMapAttr[i].MinLen;
-                editor.BindField = document.BindEditorMapAttr[i].KeyOfEn;
-                editor.BindFieldName = document.BindEditorMapAttr[i].Name;
+                editor.MaxLen = mapAttr.MaxLen;
+                editor.MinLen = mapAttr.MinLen;
+                editor.BindField = mapAttr.KeyOfEn;
+                editor.BindFieldName = mapAttr.Name;
 
                 //调整样式,让必选的红色 * 随后垂直居中
-                $(editor.container).css({ "display": "inline-block", "margin-right": "4px", "vertical-align": "middle" });
+                $(editor.container).css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
             }
         })
     }
-    //给富文本创建编辑器
+
+    //3.装载表单数据与修改表单元素风格.
+    LoadFrmDataAndChangeEleStyle(flowData);
+    if ((flow && flow[0].FlowDevModel == 1 || node.FormType == 11) && frmNode != null && frmNode != undefined) {
+        if (frmNode.FrmSln == 1)
+            /*只读的方案.*/
+            SetFrmReadonly();
+
+    }
+    layui.form.render();
+
+    //星级评分事件
+    setScore(isReadonly);
+
+    //4.解析表单的扩展功能
+    AfterBindEn_DealMapExt(flowData);
+
+    $.each($(".ccdate"), function (i, item) {
+        var format = $(item).attr("data-info");
+        var type = $(item).attr("data-type");
+        if (format.indexOf("HH") != -1) {
+            layui.laydate.render({
+                elem: '#' + item.id,
+                format: $(item).attr("data-info"), //可任意组合
+                type: type,
+                trigger: 'click',
+                ready: function (date) {
+                    var now = new Date();
+                    var mm = "";
+                    if (now.getMinutes() < 10)
+                        mm = "0" + now.getMinutes();
+                    else
+                        mm = now.getMinutes();
+
+                    var ss = "";
+                    if (now.getSeconds() < 10)
+                        ss = "0" + now.getSeconds();
+                    else
+                        ss = now.getSeconds();
+
+                    this.dateTime.hours = now.getHours();
+                    this.dateTime.minutes = mm;
+                    this.dateTime.seconds = ss;
+                },
+                change: function (value, date, endDate) {
+                    $('.laydate-btns-confirm').click();
+                },
+                done: function (value, date, endDate) {
+                    var data = $(this.elem).data();
+                    $(this.elem).val(value);
+                    if (data && data.ReqDay != null && data.ReqDay != undefined)
+                        ReqDays(data.ReqDay);
+                }
+            });
+        } else {
+            layui.laydate.render({
+                elem: '#' + item.id,
+                format: $(item).attr("data-info"), //可任意组合
+                done: function (value, date, endDate) {
+                    var data = $(this.elem).data();
+                    $(this.elem).val(value);
+                    if (data && data.ReqDay != null && data.ReqDay != undefined)
+                        ReqDays(data.ReqDay);
+                }
+            });
+        }
+
+    })
+
+}
+
+/**
+ *保存表单数据 
+ */
+function Save(saveType) {
+
+    //正在保存弹出层
+    var index = layer.msg('正在保存，请稍后..', {
+        icon: 16
+        , shade: 0.01
+    });
+    if (checkBlanks() == false) {
+        layer.alert("必填项不能为空");
+        return;
+    }
+
+    //保存从表数据
+    $("[name=Dtl]").each(function (i, obj) {
+        var contentWidow = obj.contentWindow;
+        if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
+            contentWidow.SaveAll();
+        }
+    });
+    //审核组件
+    if ($("#WorkCheck_Doc").length == 1) {
+        //保存审核信息
+        SaveWorkCheck();
+    }
+
+    //保存前事件
+    if (typeof beforeSave != 'undefined' && beforeSave(saveType) instanceof Function)
+        if (beforeSave(saveType) == false) {
+            layer.close(index);
+            return;
+        }
+
+    //监听提交
+    layui.form.on('submit(Save)', function (data) {
+        //保存信息
+        var formData = getFormData(data.field);
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+        handler.AddUrlData();
+        for (var key in formData) {
+            handler.AddPara(key, encodeURIComponent(formData[key]));
+        }
+        var data = handler.DoMethodReturnString("Save");
+        layer.close(index);
+        if (data.indexOf("err@") != -1) {
+            layer.alert(data);
+        }
+
+        //if (typeof isSaveOnly != undefined && isSaveOnly == true) {
+
+        //}else
+        //    layer.alert("数据保存成功");
+
+        return false;
+    });
+
+}
+
+//获得所有的checkbox 的id组成一个string用逗号分开, 以方便后台接受的值保存.
+function GenerCheckIDs() {
+
+    var checkBoxIDs = "";
+    var arrObj = document.all;
+
+    for (var i = 0; i < arrObj.length; i++) {
+
+        if (arrObj[i].type != 'checkbox')
+            continue;
+
+        var cid = arrObj[i].id;
+        if (cid == null || cid == "" || cid == '')
+            continue;
+
+        checkBoxIDs += arrObj[i].id + ',';
+    }
+    return checkBoxIDs;
+}
+//流程设计模式.
+var FlowDevModel = {
+    //专业模式
+    Prefessional: 0,
+    //极简模式（傻瓜表单）
+    JiJian: 1,
+    //累加模式
+    FoolTruck: 2,
+    //绑定单表单
+    RefOneFrmTree: 3,
+    //绑定多表单
+    FrmTree: 4,
+    //SDK表单
+    SDKFrm: 5,
+    /// 嵌入式表单
+    SelfFrm: 6,
+    /// 物联网流程
+    InternetOfThings: 7,
+    /// 决策树流程
+    Tree: 8
+}
+function getFlowDevModelText(model) {
+    switch (model) {
+        case FlowDevModel.Prefessional:
+            return "专业模式";
+        case FlowDevModel.JiJian:
+            return "专业模式";
+        case FlowDevModel.FoolTruck:
+            return "累加模式";
+        case FlowDevModel.RefOneFrmTree:
+            return "绑定表单库的单表单";
+        case FlowDevModel.FrmTree:
+            return "绑定表单库的多表单";
+        case FlowDevModel.SDKFrm:
+            return "SDK表单";
+        case FlowDevModel.SelfFrm:
+            return "嵌入式表单";
+        case FlowDevModel.InternetOfThings:
+            return "物联网流程";
+        case FlowDevModel.Tree:
+            return "决策树流程";
+        default:
+            return model;
+    }
 }
 
 
-function resetData() {
-    //装载表单数据与修改表单元素风格.
-    LoadFrmDataAndChangeEleStyle(flowData);
+/**
+ * 增加退回
+ */
+function ShowWorkReturnTip() {
+
+    //显示退回消息
+    if (flowData.AlertMsg.length != 0) {
+        var _html = "";
+        $.each(flowData.AlertMsg, function (i, item) {
+            if (item.Title == "退回信息")
+                _html += "<div style='padding: 10px 0px 0px 10px;line-height: 24px;color:red'>";
+            else
+                _html += "<div style='padding: 10px 0px 0px 10px;line-height: 24px;'>";
+            _html += (i + 1) + "." + item.Title + "<br/>";
+            _html += item.Msg;
+            _html += "</div>";
+        });
+        var h = window.innerHeight - 240;
+        //退回消息
+        layer.open({
+            type: 1,
+            skin: '', //加上边框
+            area: ['420px', h + 'px'], //宽高
+            content: _html
+        });
+    }
+}
+
+function SaveDtlAll() {
+    return true;
+}
+
+//必填项检查   名称最后是*号的必填  如果是选择框，值为'' 或者 显示值为 【*请选择】都算为未填 返回FALSE 检查必填项失败
+function checkBlanks() {
+    var checkBlankResult = true;
+    //获取所有的列名 找到带* 的LABEL mustInput
+
+    var lbs = $('.mustInput');
+    $.each(lbs, function (i, obj) {
+        var parentObj = $(obj).parent().parent();
+        if (parentObj && parentObj.css('display') != 'none') {
+            var keyOfEn = $(obj).attr("data-keyofen");
+            if (keyOfEn != null) {
+                var item = $("#TB_" + keyOfEn);
+                if (item.length != 0) {
+                    if (item.val() == "") {
+                        checkBlankResult = false;
+                        item.addClass('errorInput');
+                    } else {
+                        item.removeClass('errorInput');
+                    }
+                    return true;
+                }
+
+                item = $("#DDL_" + keyOfEn);
+                if (item.length != 0) {
+                    if (item.val() == "" || item.val() == null || item.val() == -1 || item.children('option:checked').text() == "*请选择") {
+                        checkBlankResult = false;
+                        item.addClass('errorInput');
+                    } else {
+                        item.removeClass('errorInput');
+                    }
+                    return true;
+                }
+
+            }
+
+        }
+    });
+
+    return checkBlankResult;
+}
+
+//正则表达式检查
+function checkReg() {
+    var checkRegResult = true;
+    var regInputs = $('.CheckRegInput');
+    $.each(regInputs, function (i, obj) {
+        var name = obj.name;
+        var mapExtData = $(obj).data();
+        if (mapExtData.Doc != undefined) {
+            var regDoc = mapExtData.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}').replace(/，/g, ',');
+            var tag1 = mapExtData.Tag1;
+            if ($(obj).val() != undefined && $(obj).val() != '') {
+
+                var result = CheckRegInput(name, regDoc, tag1);
+                if (!result) {
+                    $(obj).addClass('errorInput');
+                    checkRegResult = false;
+                } else {
+                    $(obj).removeClass('errorInput');
+                }
+            }
+        }
+    });
+
+    return checkRegResult;
 }
 
 function SetFrmReadonly() {
@@ -996,76 +610,15 @@ function SetFrmReadonly() {
     $('#CCForm').find('input,textarea,select').attr('disabled', false);
     $('#CCForm').find('input,textarea,select').attr('readonly', true);
     $('#CCForm').find('input,textarea,select').attr('disabled', true);
+    if ($("#WorkCheck_Doc").length == 1) {
+        $("#WorkCheck_Doc").removeAttr("readonly");
+        $("#WorkCheck_Doc").removeAttr("disabled");
+    }
 
     $('#Btn_Save').attr('disabled', true);
 }
 
 
 
-var appPath = "../../";
-var DtlsCount = " + dtlsCount + "; //应该加载的明细表数量
-
-function figure_Template_MsgAlert(msgAlert, i) {
-    var eleHtml = $('<div></div>');
-    var titleSpan = $('<span class="titleAlertSpan"> ' + (parseInt(i) + 1) + "&nbsp;&nbsp;&nbsp;" + msgAlert.Title + '</span>');
-    var msgDiv = $('<div>' + msgAlert.Msg + '</div>');
-    eleHtml.append(titleSpan).append(msgDiv)
-    return eleHtml;
-}
-
-
-var colVisibleJsonStr = ''
-document.BindEditorMapAttr = [];
-/*
-公共的工作处理器js. 
-1. 该js的方法都是从各个类抽取出来的.
-2. MyFlowFool.htm, MyFlowFree.htm, MyFlowSelfForm.htm 引用它.
-3. 用于处理流程业务逻辑，表单业务逻辑.
-*/
-
-
-
-
-function To(url) {
-    window.name = "dialogPage"; window.open(url, "dialogPage")
-}
-
-function WinOpen(url, winName) {
-    var newWindow = window.open(url, winName, 'width=700,height=400,top=100,left=300,scrollbars=yes,resizable=yes,toolbar=false,location=false,center=yes,center: yes;');
-    newWindow.focus();
-    return;
-}
-
-
-function SetHegiht() {
-
-    var screenHeight = document.documentElement.clientHeight;
-
-    var messageHeight = $('#Message').height();
-    var topBarHeight = 40;
-    var infoHeight = $('#flowInfo').height();
-    var allHeight = messageHeight + topBarHeight + infoHeight;
-    try {
-
-        var BtnWord = $("#BtnWord").val();
-        if (BtnWord == 2)
-            allHeight = allHeight + 30;
-
-        var frmHeight = $("#FrmHeight").val();
-        if (frmHeight == NaN || frmHeight == "" || frmHeight == null)
-            frmHeight = 0;
-
-        if (screenHeight > parseFloat(frmHeight) + allHeight) {
-
-            $("#TDWorkPlace").height(screenHeight - allHeight - 10);
-
-        }
-        else {
-            $("#TDWorkPlace").height(parseFloat(frmHeight) + allHeight - 10);
-        }
-    }
-    catch (e) {
-    }
-}
 
 

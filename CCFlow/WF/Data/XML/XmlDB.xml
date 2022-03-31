@@ -55,10 +55,6 @@
   <!--./Img/MapExt/DTS.gif-->
   <MapMenu11 No="BatchEdit" CH="批量修改"    JS="javascript:BatchEdit(@MyPK);" Img="icon-dts"
             Note="批量修改字段属性..."/>
-
-  
-  
-  
   
     <!--<MapMenu111 No="Ext" CH="扩展设置"    JS="javascript:MapExt(@MyPK);" Img="/WF/Img/Btn/DTS.gif" />-->
 

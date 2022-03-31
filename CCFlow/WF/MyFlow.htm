@@ -13,10 +13,11 @@
         //页面启动函数.
         $(function () {
 
-            var html = "<br><center><img src=./Img/loading.gif />正在加载,请稍后......</center>";
+            var html = "<br/><br/><br/>";
+            html += "<center><img src=./Img/loading.gif />正在加载,请稍后......</center>";
             html += "<ul>";
-            html += "<li>首次需要:10-20秒...</li>";
-            html += "<li>之后需要3-4秒...</li>";
+            html += "<li>感谢您使用驰骋bpm</li>";
+            html += "<li>首次加载有一点慢，请您耐心等待。。。</li>";
             html += "</ul>";
 
             $("#Msg").html(html);
@@ -45,7 +46,6 @@
                 data = data.replace('&DoMethod=MyFlow_Init', '');
                 data = data.replace('&HttpHandlerName=BP.WF.HttpHandler.WF_MyFlow', '');
                 data = data.replace('?&', '?');
-
 
                 //如果返回url，就直接转向.
                 window.location.href = data;

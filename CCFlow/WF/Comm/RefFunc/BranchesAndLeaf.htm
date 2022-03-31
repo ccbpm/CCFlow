@@ -72,7 +72,7 @@
             rootNo = GetQueryString("RootNo");
             if (rootNo == null || rootNo == undefined || rootNo == "")
                 rootNo = "0";
-     
+
             //获得数据.
             var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
             hander.AddUrlData();
@@ -82,7 +82,7 @@
             selectedRows = data["DBMMs"]; //选择的数据.
             if (data["Base_Info"] != undefined) {
                 IsEnsOfMExitParentNo = data["Base_Info"][0].IsExitParentNo;
-                if (data["Base_Info"][0].ExtShowCols != undefined && data["Base_Info"][0].ExtShowCols!="")
+                if (data["Base_Info"][0].ExtShowCols != undefined && data["Base_Info"][0].ExtShowCols != "")
                     showCols = data["Base_Info"][0].ExtShowCols;
             }
 
@@ -196,7 +196,7 @@
 
             });
 
-      
+
             loadViewGrid(selectedRows);
         });
 
@@ -244,7 +244,7 @@
             var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
             hander.AddUrlData();
 
-            hander.AddPara("Key", key.replace(/'/g,''));
+            hander.AddPara("Key", key.replace(/'/g, ''));
             var json = hander.DoMethodReturnJSON("BranchesAndLeaf_SearchByKey");
 
             loadSelectGrid(json);
@@ -292,8 +292,8 @@
             });
 
 
-          //  $('#selectGrid').bootstrapTable("showColumn", "No");
-          //  $('#selectGrid').bootstrapTable("showColumn", "Name");
+            //  $('#selectGrid').bootstrapTable("showColumn", "No");
+            //  $('#selectGrid').bootstrapTable("showColumn", "Name");
 
 
 
@@ -313,7 +313,7 @@
         }
 
         var nodeId = "";
-       
+
         function loadTree(dbTrees, rootNo, global) {
             var jsonTree = findChildren(dbTrees, rootNo);
             $('#tree').treeview({
@@ -355,7 +355,7 @@
                         $("#tree").treeview("addNode", [data.nodeId, { node: jsonTree, silent: true }]);
 
                     }
-                    
+
                 }
             });
         }
@@ -488,9 +488,8 @@
 
         function removeRecord(No) {
 
-            if (window.confirm('您确认要删除吗？') == false)
-                return;
-
+            // if (window.confirm('您确认要删除吗？') == false)
+            //   return;
 
             $("#selectGrid").bootstrapTable("uncheckBy", {
                 field: "No",
@@ -528,40 +527,40 @@
             }
         }
     </script>
-    </head>
-        <body>
-            <div class="container-fluid">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="col-md-3 col-sm-3">
-                                <h4 class="text-right" id="title"></h4>
-                            </div>
-                            <div class="col-md-9 col-sm-9">
-                                <div class="pull-center search search-margin">
-                                    <input class="form-control" type="text" placeholder="" id="TB_Key">
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-md-3 col-sm-3">
+                        <h4 class="text-right" id="title"></h4>
                     </div>
-                </div>
-                <div class="row row-margin-top">
-                    <div class="col-md-4 col-sm-4">
-                        <div id="tree" class="pre-scrollable"></div>
-                    </div>
-                    <div class="col-md-7 col-sm-7">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <table id="selectGrid"></table>
-                            </div>
-                        </div>
-                        <div class="row row-margin-top">
-                            <div class="col-md-12">
-                                <table id="viewGrid"></table>
-                            </div>
+                    <div class="col-md-9 col-sm-9">
+                        <div class="pull-center search search-margin">
+                            <input class="form-control" type="text" placeholder="" id="TB_Key">
                         </div>
                     </div>
                 </div>
             </div>
-        </body>
+        </div>
+        <div class="row row-margin-top">
+            <div class="col-md-4 col-sm-4">
+                <div id="tree" class="pre-scrollable"></div>
+            </div>
+            <div class="col-md-7 col-sm-7">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="selectGrid"></table>
+                    </div>
+                </div>
+                <div class="row row-margin-top">
+                    <div class="col-md-12">
+                        <table id="viewGrid"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
 </html>

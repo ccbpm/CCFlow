@@ -25,6 +25,11 @@
                 return;
             }
 
+            if (workID == 0 || workID == undefined) {
+                alert("丢失了workid.");
+                return;
+            }
+
             var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
 
             //访问后台，获得一个工作ID.
@@ -84,10 +89,10 @@
 
                 if (en.IsPass == 0 && en.FK_Node == gwf.FK_Node) {
                     html += "<td><b><font color=green>待办</font></b></td>";
-                    html += "<td><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "')\">切换用户执行工作</a></td>";
+                    html += "<td><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "')\">切换用户</a><br/><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "',1)\">移动端</a></td>";
                 } else if (en.IsPass == 0 && en.FID != 0) {
                     html += "<td><b><font color=green>待办</font></b></td>";
-                    html += "<td><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "')\">切换用户执行工作</a></td>";
+                    html += "<td><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "')\">切换用户</a><br/><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "',1)\">移动端</a></td>";
 
                 } else if (en.IsPass == -2) {
                     html += "<td>分流</td>";
@@ -105,7 +110,7 @@
             html += "</table>";
             $("#gwls").html(html);
 
-            
+
 
             //******************************** 绑定流程信息 **/
             var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
@@ -130,14 +135,22 @@
             html += "<td>" + gwf.FK_Node + "," + gwf.NodeName + "</td>";
             html += "<th>当前待办人员</th>";
             html += "<td>" + gwf.TodoEmps + "</td>";
-            html += "</tr>";
+
+            html += "<td colspan=2> <b>";
+            html += "<a href='javascript:Skip();' >实例运维：跳转-调整-删除-移交-强制结束</a></b>";
+            html += "</td>";
 
             html += "</table>";
             $("#gwf").html(html);
 
         });
 
-        function ChangUser(empNo, nodeID, workid, fid) {
+        function Skip() {
+            var url = "../../Comm/En.htm?EnName=BP.WF.Data.GenerWorkFlowView&PKVal=" + workID + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WFSta=all";
+            window.location.href = url;
+        }
+
+        function ChangUser(empNo, nodeID, workid, fid,isMobile) {
 
             //当这个人登录。
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
@@ -167,10 +180,15 @@
                 alert(data);
                 return;
             }
-            window.open('../../MyFlow.htm?FK_Flow=' + flowNo + '&WorkID=' + workid + "&FID=" + fid + "&FK_Node=" + nodeID, '_self');
+            if (isMobile==1)
+                window.open('../../../CCMobile/MyFlow.htm?FK_Flow=' + flowNo + '&WorkID=' + workid + "&FID=" + fid + "&FK_Node=" + nodeID, '_self');
+            else
+                window.open('../../MyFlow.htm?FK_Flow=' + flowNo + '&WorkID=' + workid + "&FID=" + fid + "&FK_Node=" + nodeID, '_self');
+
+
             window.parent.InitPageUserInfo();
         }
-        
+
         function GetWFState(wfstate) {
             switch (parseInt(wfstate)) {
                 case 0:
@@ -195,6 +213,11 @@
     </script>
 </head>
 <body>
+
+    <h4 style="text-align:center">
+
+        <!--| <a href="javascript:Skip();">回滚</a>-->
+    </h4>
     <div id="userInfo"></div>
 
     <center>

@@ -33,9 +33,7 @@
             if (doType == "" || doType == null)
                 doType = "TestFlow_Init";
 
-
             var fk_flow = GetQueryString("FK_Flow");
-
             var webUser = new WebUser();
             if (webUser.No != "admin") {
 
@@ -76,8 +74,6 @@
                 document.getElementById("Info").innerHTML = "<font color=red>" + data + '</font>';
                 return;
             }
-
-
 
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');

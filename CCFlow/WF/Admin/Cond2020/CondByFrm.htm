@@ -21,7 +21,7 @@
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    
+
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <base target="_self" />
 
@@ -151,11 +151,11 @@
             $("#opts").html("");
 
 
+            /*是枚举类型*/
             if (mapattr.LGType == "1") {
-                /*是枚举类型*/
+
                 var enums = data["Enums"];
                 GenerBindDDL("DDL_Val", enums, "IntKey", "Lab", 0);
-
                 //显示.
                 document.getElementById("DDL_Val").style.display = "";
             }
@@ -185,9 +185,9 @@
 
         //返回.
         function Back() {
-           var url = window.location.href;
-             url = url.replace('CondByFrm.htm', 'List.htm');
-             window.location.href = url;
+            var url = window.location.href;
+            url = url.replace('CondByFrm.htm', 'List.htm');
+            window.location.href = url;
 
         }
         //检查流程.
@@ -196,7 +196,18 @@
             var flowId = Number(flowNo);
             flowId = String(flowId);
 
-            // WinOpen(url);
+
+            $("#Btn_Check").attr('value', '正在检查请稍后');
+
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            var data = flow.DoMethodReturnString("DoCheck");
+
+            $("#Btn_Check").attr('value', '检查成功，请设置条件');
+
+            alert("执行成功...")
+            return;
+
+            WinOpen(url);
             var url = "";
             if (typeof top.layui == "undefined") {
                 url = "../AttrFlow/CheckFlow.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
@@ -207,13 +218,18 @@
                 url = "../AttrFlow/CheckFlow.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
                 OpenLayuiDialog(url, "检查流程" + flowNo, window.innerWidth * 2 / 3);
             }
-
+        }
+        function DoCheck()
+        {
+            var val = window.confirm('提示:\t\n1.如果没有您期望的字段,请在流程设计器中检查一下流程. \t\n2.检查流程后，节点表单字段才能汇总上来. \t\n3.您要执行检查流程吗？');
+            if (val == true)
+                FlowCheck();
         }
         function dlgClosedFunc() {
             window.location.reload();
-           // window.location.refresh();
+            // window.location.refresh();
         }
-        
+
     </script>
 </head>
 <body>
@@ -222,23 +238,21 @@
             <span class="pull-right">
 
                 <button id="Btn_Save" name="Btn_Save" onclick="Save();">保存</button>
-
                 <button id="Btn_Check" name="Btn_Check" class="cc-btn-tab btn-save" onclick="FlowCheck()">检查流程</button>
-
                 <button id="Btn_Back" name="Btn_Back" onclick="Back();">返回</button>
 
             </span>
             <strong>按照表单的字段作为条件</strong>
         </div>
         <form id="cc">
-          
+
             <table id="table" class="table">
-              
+
                 <tr>
                     <td style="width:20%;">选择表单字段: </td>
                     <td>
                         <select id="DDL_Fields" name="DDL_Fields" onchange="changeCond(this)"></select>
-                        <a href="javascript:alert('提示:\t\n1.如果没有您期望的字段,请在流程设计器中检查一下流程. \t\n2.检查流程后，节点表单字段才能汇总上来.')">  <img src='../../Img/Btn/Help.gif' /> 为什么没有我要的字段？</a>
+                        <a href="javascript:DoCheck()">  <img src='../../Img/Btn/Help.gif' /> 为什么没有我要的字段？</a>
                     </td>
                 </tr>
 

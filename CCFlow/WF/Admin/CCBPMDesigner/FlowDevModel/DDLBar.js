@@ -49,6 +49,12 @@ function Save() {
         handler.AddPara("FrmID", newFlowInfo.FrmID);
         var data = handler.DoMethodReturnString("FlowDevModel_Save");
 
+        if (data.indexOf('err@') == 0)
+        {
+            alert(data);
+            return;
+        }
+
         var webUser = new WebUser();
         var url = "../Designer.htm?FK_Flow=" + data + "&OrgNo=" + webUser.OrgNo + "&SID=" + webUser.SID + "&UserNo=" + webUser.No + "&From=Ver2021";
         //  var url = "";

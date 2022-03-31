@@ -106,7 +106,7 @@
                 layer.msg("<font>请输入用户名，密码.</font>");
                 return;
             }
-            //判断验证码是否正确
+            //判断验证码是否正确.
             var node = $("#validate");
             if (node.is(':visible') && $("#inputCode").val() == '') {
                 alert("请输入验证码");
@@ -144,38 +144,38 @@
 
         //设置cookies值
         function setCookie(cname, cvalue, exdays) {
-            var d = new Date();
-            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-            var expires = "expires=" + d.toGMTString();
-            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+            //var d = new Date();
+            //d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            //var expires = "expires=" + d.toGMTString();
+            //document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
         }
         //获取cookies值
         function getCookie(cname) {
-            var name = cname + "=";
-            var decodedCookie = decodeURIComponent(document.cookie);
-            var ca = decodedCookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1);
-                }
-                if (c.indexOf(name) == 0) {
-                    return c.substring(name.length, c.length);
-                }
-            }
+            //var name = cname + "=";
+            //var decodedCookie = decodeURIComponent(document.cookie);
+            //var ca = decodedCookie.split(';');
+            //for (var i = 0; i < ca.length; i++) {
+            //    var c = ca[i];
+            //    while (c.charAt(0) == ' ') {
+            //        c = c.substring(1);
+            //    }
+            //    if (c.indexOf(name) == 0) {
+            //        return c.substring(name.length, c.length);
+            //    }
+            //}
             return "";
         }
         //检查cookies值
         function checkCookie() {
-            var user = getCookie("username");
-            if (user != "") {
-                $(" select option[value='" + user + "']").attr("selected", "selected");
-            } else {
+            //var user = getCookie("username");
+            //if (user != "") {
+            //    $(" select option[value='" + user + "']").attr("selected", "selected");
+            //} else {
 
-                if (user != "" && user != null) {
-                    setCookie("username", user, 30);
-                }
-            }
+            //    if (user != "" && user != null) {
+            //        setCookie("username", user, 30);
+            //    }
+            //}
         }
         //手机扫描登录.
         function Mobile() {
@@ -204,7 +204,7 @@
                             <img alt="logo" src="image/logo.png" /><span>流程引擎技术</span>
                         </div>
                         <h2 class="login-sidebox-subtitle">
-                            驰骋低代码开发平台 Fast 2.0
+                            驰骋低代码开发平台<br /> CCFast 2.0
                         </h2>
                     </div>
                     <div class="login-sidebox-body">
@@ -224,7 +224,7 @@
             </section>
             <section class="login-form">
                 <div class="login-form-header">
-                    <h2>登录</h2>
+                    <h2>驰骋软件</h2>
                 </div>
                 <div class="login-form-body">
                     <form id="cc" class="form-signin">
@@ -253,19 +253,17 @@
                                 <a href="javascript:void(0)" style="margin-left: 10px" onclick="createCode()">看不清</a>
                             </div>
 
-                            <input type="button" class="btn btn-lg btn-login btn-block" value="登录" id="Btn_Login" onclick="Login();" />
+                            <input type="button" class="btn btn-lg btn-login btn-block" value="用户登录" id="Btn_Login" onclick="Login();" />
 
                             <!--<input type="button" class="btn btn-primary btn-block" value="测试版本test" id="Btn_LoginExt" onclick="LoginText();" />-->
                             <!--//  <input type="button" class="btn btn-primary btn-block" value="登录简洁版(开发中)" id="Btn_LoginSimple" onclick="LoginSimple();" />
                             // <input type="button" class="btn btn-primary btn-block" value="登录表单引擎(开发中)" id="Btn_LoginFrm" onclick="LoginFrm();" />-->
-
-
-                            <div class="text-center">
+                            <!--<div class="text-center">
                                 <div class="forget-password">
-                                    <a href="javascript:Mobile();">手机登录</a>
-                                    <!--<a href="../AppClassic/Login.htm">前台登录</a>-->
-                                </div>
-                            </div>
+                                    <a href="javascript:Mobile();">手机登录</a>-->
+                            <!--<a href="../AppClassic/Login.htm">前台登录</a>-->
+                            <!--</div>
+                            </div>-->
                         </div>
                         <div>
                             <div class="login-other">

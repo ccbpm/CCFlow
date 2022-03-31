@@ -87,6 +87,11 @@ function ToolBar_Init(entityType) {
                         return false;
                     }
                     layer.alert("保存成功");
+                    if (typeof isSaveAfterCloseOfBill != "undefined" && isSaveAfterCloseOfBill == true) {
+                        var index = parent.parent.layer.getFrameIndex(window.parent.name);
+                        parent.parent.layer.close(index);
+                    }
+
                     return false;
                 })
                 break;
@@ -128,6 +133,10 @@ function ToolBar_Init(entityType) {
                         return false;
                     }
                     layer.alert("提交成功");
+                    if (typeof isSaveAfterCloseOfBill != "undefined" && isSaveAfterCloseOfBill == true) {
+                        var index = parent.parent.layer.getFrameIndex(window.parent.name);
+                        parent.parent.layer.close(index);
+                    }
 
                     return false;
                 })
@@ -195,15 +204,12 @@ function ToolBar_Init(entityType) {
             case "Print":
                 var type = $(this).data("type");
                 var url = "";
-                if (type == "HTML") {
-                    url = "../WorkOpt/Packup.htm?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID") + "&SourceType=Bill&FileType=htm";
+                if (type == "HTML" || type == "PDF") {
+                    url = "../WorkOpt/Packup.htm?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID") + "&SourceType=Bill&FileType=" + type;
                     OpenLayuiDialog(url, "打印ZIP", window.innerWidth / 2, Window.innerHeight / 2, "auto");
                     break;
                 }
-                if (type == "PDF") {
-                    PrintPDF();
-                    break;
-                }
+               
                 if (type == "RTF") {
                     url = "../WorkOpt/PrintDoc.htm?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID") + "&SourceType=Bill";
                     OpenLayuiDialog(url, "打印RTF", window.innerWidth / 2, 50, "auto");

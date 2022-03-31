@@ -73,9 +73,13 @@
             GenerBindDDL("DDL_FK_DBSrc", ens, "No", "Name", "");
             if (en != null) {
                 GenerFullAllCtrlsVal(en);
+                if (en.EventDoType == 1 || en.EventDoType == 2 || en.EventDoType == 3
+                    || en.EventDoType == 8) {
+                    en.DoDoc = en.DoDoc.replace(/~/g, "'");
+                    $("#TB_Doc").val(en.DoDoc);
+                }
                 if (en.EventDoType == 2) {
                     $("#DBSrc").show();
-                    $("#TB_Doc").val(en.DoDoc);
                 }
                 else
                     $("#DBSrc").hide();
@@ -107,7 +111,7 @@
 
         function Save() {
 
-            var en = new Entity("BP.Sys.FrmEvent");
+            var en = new Entity("BP.Sys.FrmEvent","0");
             en.CopyForm();
             en.FK_Node = GetQueryString("FK_Node");
             en.EventSource = 2;//节点事件
@@ -256,7 +260,7 @@
                             执行成功信息提示(可为空)
                         </td>
                         <td colspan="1">
-                            <input type="text" id="MsgOK" name="MsgOK" />
+                            <input type="text" id="TB_MsgOK" name="TB_MsgOK" />
                         </td>
                     </tr>
                     <tr>
@@ -264,7 +268,7 @@
                             执行失败时提示(可为空)
                         </td>
                         <td>
-                            <input type="text" id="MsgError" name="MsgError" />
+                            <input type="text" id="TB_MsgError" name="TB_MsgError" />
                         </td>
                     </tr>
                 </table>
@@ -275,7 +279,7 @@
 
                     <legend id="help"></legend>
                     <ul>
-                        <li>执行的结果如果返回的err@ 系统就会认为您要抛出异常了.</li>
+                        <li>执行的结果如果不符合预想结果，可以直接throw出异常，我们调用的时候会抛出异常，终止程序继续运行.</li>
                         <li>返回其他的信息的时候系统就会提示出来.</li>
 
                         <li>执行的内容,支持ccbpm的表达式.比如: UPDATE XXX SET xxxx=@MyFiledName </li>
@@ -297,6 +301,16 @@
                         <li>它是一个子类，按照要求，从基类上集成下来并且写入到与bp的包名或者命名空间里，如下图：</li>
                         <li>java 与.net 一样语法与基类名称：</li>
                         <li><img src="ActionDtl.png" id="HelpImg" class="HelpImg" /></li>
+                    </ul>
+
+                    <legend>SQL表达式</legend>
+                    <ul>
+                        <li>1. 支持ccbpm表达式,什么是bpm表达式,请参考. </li>
+                        <li>2. 支持 @PTable 表达式, 比如: UPDATE @PTable SET MyFile1='@WebUser.No' WHERE OID=@WorkID </li>
+                    </ul>
+                    <legend>存储过程</legend>
+                    <ul>
+                        <li>1. 支持 @WebUser.No 表达式, 比如: EXECUTE P_ChangeUserDeptName @_userNo='@WebUser.No',@_orgNo='@WebUser.OrgNo'; </li>
                     </ul>
 
                 </fieldset>

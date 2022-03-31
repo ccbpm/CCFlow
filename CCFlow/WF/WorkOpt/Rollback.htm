@@ -7,7 +7,7 @@
     2，需要 FK_Flow,WorkID
     3, 调用方法 Rollback.htm?FK_Flow=001&WorkID=232
     -->
-    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
@@ -83,7 +83,7 @@
             var flowNo = GetQueryString("FK_Flow");
             var workID = GetQueryString("WorkID");
 
-            var msg = window.prompt('请输入回滚原因', '审核错误，需要回滚到该节点上重新审批。');
+            var msg = promptGener('请输入回滚原因', '审核错误，需要回滚到该节点上重新审批。');
             if (msg == null || msg == undefined)
                 return;
 

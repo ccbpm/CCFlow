@@ -49,8 +49,8 @@
             </div>
         </fieldset>
 
-        <fieldset id="help">
-            <legend id="help">帮助 </legend>
+        <fieldset>
+            <legend id="help"></legend>
             <ul>
                 <li>说明：绑定的所有的人员，都可以处理该节点的工作。</li>
                 <li> 绑定多少个人，当前节点就有多少个人处理，这一种是最简洁最直接的方式。</li>
@@ -87,7 +87,7 @@
                         if (this.webUser.CCBPMRunModel == 2)
                             rootNo = this.webUser.OrgNo;
                         if (this.webUser.CCBPMRunModel == 1) {
-                            var orgs = new Entities("BP.WF.Port.Admin2.Orgs");
+                            var orgs = new Entities("BP.WF.Port.Admin2Group.Orgs");
                             orgs.RetrieveCond("No", "=", "ParentNo");
                             if (orgs.length != 0) {
                                 rootNo = orgs[0].No;

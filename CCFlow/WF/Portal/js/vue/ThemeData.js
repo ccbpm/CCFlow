@@ -6,7 +6,7 @@
         sideBar: '#226A62',
         navBar: '#fff',
         selectedMenu: '#009688',
-        formColor:'#5FB878',
+        formColor: '#5FB878',
         alias: '默认主题'
     },
     pink: {
@@ -28,7 +28,7 @@
         selectedMenu: '#3e3e3e',
         alias: '典雅黑'
     },
-   
+
     blue: {
         logo: 'rgb(24, 144, 255)',
         selected: 'rgb(57, 158, 253)',
@@ -45,7 +45,7 @@
         header: 'rgba(28, 90, 201, 1)',
         sideBar: 'rgba(28, 90, 201, 1)',
         navBar: 'rgba(28, 90, 201, 1)',
-        selectedMenu: 'rgba(51, 125, 254, 1)',//选择菜单的颜色
+        selectedMenu: 'rgba(51, 125, 254, 1)', //选择菜单的颜色
         alias: '深之蓝'
     },
     pro: {
@@ -84,6 +84,7 @@ function chooseTheme(color) {
         document.getElementsByClassName("layui-header")[0].style.backgroundColor = themeData[color].header
         localStorage.setItem("themeColor", color);
         localStorage.setItem("themeColorInfo", JSON.stringify(themeData[color]));
+        document.documentElement.style.setProperty('--sub-menu-hover', themeData[color].selectedMenu)
     } catch (e) {
         console.log(e)
         console.log("设置主题失败")

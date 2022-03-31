@@ -64,23 +64,15 @@
             var data = handler.DoMethodReturnString("LoadRDTClo_Save");
             alert(data);
         }
-
-
-
     </script>
 </head>
 <body>
     <div class="container-full">
         <div class="attrnode-bar-header">
-            <span class="pull-right">
-                <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
-            </span>
             <strong> 自动计算日期天数</strong>
         </div>
         <form id="cc">
-           
             <table id="table" class="table">
-               
                 <tr>
                     <td colspan="3" style="width: 95%;">
                         选择开始日期:<select id="DDL_StarRDT" name="DDL_StarRDT"> </select>
@@ -93,19 +85,16 @@
                             <label> <input type="radio" value="0" name="RDTRadio" =/ /> 包含节假日</label>
                             <label> <input type="radio" value="1" name="RDTRadio" =/ /> 不包含节假日</label>
                         </div>
-                        <div class="form-group"> <input type="button" value="节假日维护" class="cc-btn-tab" target="_parent" onclick="window.location.href='../../../Comm/Sys/Holiday.htm'" />
-                        </div></td>
+                        <div class="form-group">
+                            <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+                            <input type="button" value="节假日维护" class="cc-btn-tab" target="_parent" onclick="window.location.href='../../../Comm/Sys/Holiday.htm'" />
+                        </div>
+                    </td>
                 </tr>
             </table>
-
-
             <div id="Msg">
             </div>
-
-
         </form>
     </div>
 </body>
 </html>
-    </style>
-</head>

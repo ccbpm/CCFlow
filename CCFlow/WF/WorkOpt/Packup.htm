@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>打包下载</title>
-    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
@@ -48,7 +48,7 @@
                 html += "<li>说明：点击上面的表单名称生成PDF进行打印</li>";
                 html += "</ul>";
                 html += "</fieldset>";
-                html += "<br><br><center><div style=''><a href='javascript:window.parent.close();' >关闭窗口</a></div></center>";
+                html += "<br><br><center><div style=''><a href='javascript:CloseWindow();' >关闭窗口</a></div></center>";
                 document.getElementById("Msg").innerHTML = html;
                 return;
             }
@@ -116,10 +116,18 @@
             }
             html = '<b><font color=red>提示:如果不能弹出打印窗口,请点击连接手工打印下载.</font></b>' + html;
 
-            html += "<br><br><center><div style=''><a href='javascript:window.parent.close();' >关闭窗口</a></div></center>";
+            html += "<br><br><center><div style=''><a href='#' onclick='CloseWindow()' >关闭窗口</a></div></center>";
             document.getElementById("Msg").innerHTML = html;
 
         });
+
+        function CloseWindow() {
+            debugger
+            if (window.parent && typeof window.parent.layer == "object")
+                window.parent.layer.close(parent.layer.index);
+            else
+                window.close();
+        }
 
         function PackUpPDF(frmId, frmName) {
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");

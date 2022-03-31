@@ -5,7 +5,7 @@
  * @param {any} mapExt 扩展属性
  * @param {any} frmData 表单数据
  */
-function CommPop(popType, mapAttr, mapExt, frmData, mapExts, targetID, pkVal) {
+function CommPop(popType, mapAttr, mapExt, frmData, mapExts, targetID) {
 
     targetID = targetID == null || targetID == undefined ? mapAttr.KeyOfEn : targetID;
     if (mapAttr.UIIsEnable == 0 || isReadonly == true) {
@@ -15,8 +15,8 @@ function CommPop(popType, mapAttr, mapExt, frmData, mapExts, targetID, pkVal) {
     //单选还是多选
     var selectType = mapExt.GetPara("SelectType");
     selectType = selectType == null || selectType == undefined || selectType == "" ? 1 : selectType;
-   
-    pkVal =  pkVal==null||pkVal == undefined || pkVal == 0 ? pageData.OID : pkVal;
+    var pkVal = GetQueryString("WorkID");
+    pkVal = pkVal == null || pkVal == undefined || pkVal == 0 ? GetQueryString("OID") : pkVal;
 
     //选中的值
     var selects = new Entities("BP.Sys.FrmEleDBs");
@@ -227,7 +227,7 @@ function CloseLayuiDialogFunc(mapExt, mapExts, mtagsId, target, targetID, pkval)
     var selectType = mapExt.GetPara("SelectType");
     var iframe = $(window.frames["dlg"]).find("iframe");
     if (iframe.length > 0) {
-        debugger
+       // debugger
         var selectedRows = iframe[0].contentWindow.selectedRows;
         if (selectedRows == undefined || selectedRows.length == 0)
             selectedRows = iframe[0].contentWindow.GetCheckNodes()
@@ -298,9 +298,9 @@ function xmSelectTree(eleID, mapExt, frmEleDBs, type, selectType) {
         alert('配置错误:查询数据源，初始化树的数据源不能为空。');
         return;
     }
-   
+
     var json = GetDataTableByDB(treeUrl, mapExt.DBType, mapExt.FK_DBSrc, rootNo);
-    var data = TreeJson(json, rootNo);
+    var data = TreeJson(json, rootNo, frmEleDBs);
     layui.use('xmSelect', function () {
         var xmSelect = layui.xmSelect;
         var tree = xmSelect.render({
@@ -405,7 +405,7 @@ function GetInitJsonData(mapExt, refPKVal, val) {
 }
 
 //树形结构
-function TreeJson(jsonArray, parentNo) {
+function TreeJson(jsonArray, parentNo, frmEleDBs) {
  
     var jsonTree = [];
     if (jsonArray.length > 0) {
@@ -414,7 +414,8 @@ function TreeJson(jsonArray, parentNo) {
                 jsonTree.push({
                     "No": o.No,
                     "Name": o.Name,
-                    "children": findChildren(jsonArray, o.No)
+                    "selected": IsSelect(frmEleDBs,o.No),
+                    "children": findChildren(jsonArray, o.No, frmEleDBs)
                 });
                 return false;
             }
@@ -422,7 +423,8 @@ function TreeJson(jsonArray, parentNo) {
                 jsonTree.push({
                     "No": o.No,
                     "Name": o.Name,
-                    "children": findChildren(jsonArray, o.No)
+                    "selected": IsSelect(frmEleDBs, o.No),
+                    "children": findChildren(jsonArray, o.No, frmEleDBs)
                 });
                 return false;
             }
@@ -430,16 +432,27 @@ function TreeJson(jsonArray, parentNo) {
     }
     return jsonTree;
 }
-function findChildren(jsonArray, parentNo) {
+function findChildren(jsonArray, parentNo, frmEleDBs) {
     var children = [];
     $.each(jsonArray, function (i, child) {
         if (parentNo == child.ParentNo)
             children.push({
                 "No": child.No,
                 "Name": child.Name,
+                "selected": IsSelect(frmEleDBs, child.No),
                 "children": []
             });
     });
    
     return children;
+}
+function IsSelect(frmEleDBs,no) {
+    if (frmEleDBs == null || frmEleDBs.length == 0)
+        return false;
+    var dbs = $.grep(frmEleDBs, function (item) {
+        return item.Tag1 == no;
+    });
+    if (dbs.length > 0)
+        return true;
+    return false;
 }

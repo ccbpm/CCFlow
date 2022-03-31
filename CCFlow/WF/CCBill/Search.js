@@ -385,7 +385,7 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
                 for (var i = 0; i < fieldColor.length; i++) {
                     var color = fieldColor[i];
                     if (color.From <= val && color.To >= val) {
-                        var stylecss = "height: 22px;line-height: 22px;padding: 0 5px;font-size: 12px;color: #fff;white-space: nowrap;border-radius: 2px;text-align:center;";
+                        var stylecss = "height: 40px;line-height: 40px;padding: 0 5px;font-size: 14px;color: #fff;white-space: nowrap;border-radius: 2px;text-align:center;";
                         return '<div style="' + stylecss + 'background-color:' + color.Color + ';">' + val + '</div>'
                     }
                 }
@@ -482,7 +482,7 @@ function SearchData(key,val) {
  * @param {any} openModel 打开方式 //0=新窗口打开 1=在本窗口打开 2=弹出窗口打开,关闭后不刷新列表 3=弹出窗口打开,关闭刷新
  * @param {any} title 标题
  */
-function OpenIt(workid, entityType, billstate, row) {
+function OpenIt(workid, entityType, billstate, row,isOpenAdd) {
     if (row != null && row != undefined && row != "")
         row = JSON.parse(decodeURIComponent(row));
 
@@ -524,10 +524,14 @@ function OpenIt(workid, entityType, billstate, row) {
             window.open(url);
         return;
     }
-    if (mapData.RowOpenModel == 3) 
+    if (mapData.RowOpenModel == 3)
         OpenLayuiDialog(url, "", 90000, 0, null, true);
-    else
-        OpenLayuiDialog(url, "", 90000, 0, null, false);
+    else {
+        if (isOpenAdd == true)
+            OpenLayuiDialog(url, "", 90000, 0, null, true);
+        else
+            OpenLayuiDialog(url, "", 90000, 0, null, false);
+    }
 
     return;
 }
@@ -1065,6 +1069,7 @@ function DeleteIt(oid,entityType) {
         pageIdx = 1;
         var tableData = SearchData();
         layui.table.reload('lay_table_dict', { data: tableData });
+        renderLaypage();
         layui.laypage.render();
         layer.close(index);
 

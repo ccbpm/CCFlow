@@ -28,7 +28,8 @@
             }
             InitMainTable();
         });
-
+        var sys_MapDtl;
+        var dtlCount = 0;
         //生成主表数据
         function InitMainTable() {
             var isReadonly = getQueryString("IsReadonly");
@@ -39,10 +40,10 @@
 
             //主表数据，用于变量替换.
             var mainTable = mainData["DTDtls"]; //主表数据.
-            var sys_MapDtl = mainData["Main"][0]; //从表描述.
+            sys_MapDtl = mainData["Main"][0]; //从表描述.
             var sys_mapAttrs = mainData["MapAttrs"]; //从表字段.
             var mapDtls = mainData["MapDtls"]; //从表的从表集合.
-
+            dtlCount = mainTable.length;
             $('#dt_CardPanel').html(''); //清空表格数据
             //表头
             var thread = $('<thead></thead>');
@@ -393,6 +394,18 @@
 
                 InitMainTable();
             }
+        }
+
+        //从表最小集合判断
+        function CheckDtlNum() {
+            var num = sys_MapDtl.NumOfDtl;
+            if (dtlCount < num) {
+                return false;
+            }
+        }
+
+        function SaveAll() {
+
         }
     </script>
 </head>

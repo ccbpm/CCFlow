@@ -69,10 +69,9 @@
             html += "<th>授权给</th>";
             html += "<th>流程</th>";
             html += "<th>收回日期</th>";
-
             html += "</tr></thead>";
 
-            var sql = "SELECT *   FROM V_WF_AuthTodolist ";
+            var sql = "SELECT *  FROM V_WF_AuthTodolist ";
             sql += "WHERE AutherToEmpNo = '" + webUser.No + "' and Auther ='" + author + "' and FK_Flow ='" + flowNo + "'";
             sql += "  AND TakeBackDT >= '" + nowDate + "'";
             var data = DBAccess.RunSQLReturnTable(sql);

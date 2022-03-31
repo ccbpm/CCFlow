@@ -81,12 +81,12 @@ function GenerFreeFrm(wn) {
         $('#CCForm').append(createdFigure);
     }
 
-    //循环线
-    for (var i in flowData.Sys_FrmLine) {
-        var frmLine = flowData.Sys_FrmLine[i];
-        var createdConnector = connector_Template_Line(frmLine);
-        $('#CCForm').append(createdConnector);
-    }
+    ////循环线
+    //for (var i in flowData.Sys_FrmLine) {
+    //    var frmLine = flowData.Sys_FrmLine[i];
+    //    var createdConnector = connector_Template_Line(frmLine);
+    //    $('#CCForm').append(createdConnector);
+    //}
 
     //循环Sys_MapFrame
     for (var i in flowData.Sys_MapFrame) {

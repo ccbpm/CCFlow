@@ -165,7 +165,7 @@ function BindFrm(frmData) {
         ////加载JS文件
         var s = document.createElement('script');
         s.type = 'text/javascript';
-        s.src = "../DataUser/JSLibData/" + enName + "_Self.js";
+        s.src = basePath+"/DataUser/JSLibData/" + enName + "_Self.js";
         var tmp = document.getElementsByTagName('script')[0];
         tmp.parentNode.insertBefore(s, tmp);
     }
@@ -462,7 +462,7 @@ var FormUtils = {
         var val = ConvertDefVal(frmData.MainTable[0], attr.DefVal, attr.KeyOfEn);
         var html_Sign = "<label for=\"Sign_" + attr.KeyOfEn + "\"><p>" + attr.Name + "</p></label>";
         html_Sign += "<div align=\"left\">";
-        html_Sign += "<img name=\"Sign_" + attr.KeyOfEn + "\" id=\"Sign_" + attr.KeyOfEn + "\" src='../DataUser/Siganture/" + val + ".jpg' border=0 onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"/>";
+        html_Sign += "<img name=\"Sign_" + attr.KeyOfEn + "\" id=\"Sign_" + attr.KeyOfEn + "\" src='" + basePath + "/DataUser/Siganture/" + val + ".jpg' border=0 onerror=\"this.src='" + basePath+"/DataUser/Siganture/UnName.jpg'\"/>";
         //        html_Sign += defValue;
         html_Sign += "</div>";
         return html_Sign;

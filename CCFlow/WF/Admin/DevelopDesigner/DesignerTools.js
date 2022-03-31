@@ -64,11 +64,13 @@ function PreviewForm() {
 //表单属性.
 function FrmAttr() {
     var frmID = GetQueryString("FK_MapData");
-    //var mapdata = new Entity("BP.WF.Template.MapFrmFool", frmID);
+    var en = new Entity("BP.Sys.MapData", frmID);
 
     var url = "../../Comm/RefFunc/En.htm?EnName=BP.WF.Template.MapFrmFool&PKVal=" + frmID;
-    window.open(url);
+    if (en.FrmType == 9)
+          url = "../../Comm/RefFunc/En.htm?EnName=BP.WF.Template.MapFrmWps&No=" + frmID;
 
+    window.open(url);
 }
 
 //表单属性.

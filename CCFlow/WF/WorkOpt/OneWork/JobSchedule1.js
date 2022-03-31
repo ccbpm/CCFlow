@@ -57,8 +57,8 @@ $(function () {
         if (nodeID == "")
             continue;
         var currTrack = getTracksByNodeID(tracks,nodeID);
-        if(currTrack.length != 0){
-            $(".DashbCon").append('<div class="alone '+ (currTrack[0].IsPass == 0?"gray":currTrack[0].IsPass ==1?"green":"red") +'"><div class="circleDot finishType"><div class="circle"><div></div>'+ (currTrack[0].NodeName?currTrack[0].NodeName:'') +'</div></div><div class="figure"></div><div class="contentCon"><p>'+ (currTrack[0].EmpName == null?'':currTrack[0].EmpName == 0?'':currTrack[0].EmpName)+'</p><p>'+ (currTrack[0].SDT == null?'':currTrack[0].SDT == 0?'':currTrack[0].SDT) +'</p></div></div>')
+        if (currTrack.length != 0) {//$(".DashbCon")
+            $("#JobSchedule").append('<div class="alone '+ (currTrack[0].IsPass == 0?"gray":currTrack[0].IsPass ==1?"green":"red") +'"><div class="circleDot finishType"><div class="circle"><div></div>'+ (currTrack[0].NodeName?currTrack[0].NodeName:'') +'</div></div><div class="figure"></div><div class="contentCon"><p>'+ (currTrack[0].EmpName == null?'':currTrack[0].EmpName == 0?'':currTrack[0].EmpName)+'</p><p>'+ (currTrack[0].SDT == null?'':currTrack[0].SDT == 0?'':currTrack[0].SDT) +'</p></div></div>')
         }
 
     }
@@ -66,8 +66,8 @@ $(function () {
     if (gwf.WFState != 3) {
 
         //当前停留的节点.
-        var currNodeID = gwf.FK_Node;
-        $(".DashbCon").append('<div class="alone gray"><div class="circleDot finishType"><div class="circle"><div></div>' + nodes[currNodeID][0].Name + '</div></div><div class="figure"></div><div class="contentCon"></div>');
+        var currNodeID = gwf.FK_Node;// $(".DashbCon")
+       $("#JobSchedule").append('<div class="alone gray"><div class="circleDot finishType"><div class="circle"><div></div>' + nodes[currNodeID][0].Name + '</div></div><div class="figure"></div><div class="contentCon"></div>');
         //递归获取未运行到的节点
         ShowNextNode_DiGui(currNodeID, dirs, transf, nodes, gwf);
 

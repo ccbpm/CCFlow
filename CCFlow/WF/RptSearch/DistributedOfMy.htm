@@ -1,74 +1,82 @@
 ﻿<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的流程分布</title>
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-		<link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
-		<link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
-		<link href="../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
-		 <link href="../Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <link href="../Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
 </head>
-<body  class="gray-bg">
-		<div class="wrapper wrapper-content animated fadeInRight">
-			<div class="row">
-		<div class="col-md-3 paddings">
-			<div class="ibox">
-				<div class="ibox-title">
-					<h5>我发起的流程</h5>
-				</div>
-				<div class="ibox-content">
-					<div id="Start"></div>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-3 paddings">
-			<div class="ibox">
-				<div class="ibox-title">
-					<h5>我的待办(待处理)</h5>
-				</div>
-				<div class="ibox-content">
-					<div id="Todolist"></div>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-3 paddings">
-			<div class="ibox">
-				<div class="ibox-title">
-					<h5>我的在途(未完成)</h5>
-				</div>
-				<div class="ibox-content">
-					<div id="Runing"></div>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-3 paddings">
-			<div class="ibox">
-				<div class="ibox-title">
-					<h5>已归档(已完成)</h5>
-				</div>
-				<div class="ibox-content">
-					<div id="OK"></div>
-				</div>
-			</div>
-		</div>
-	</div>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-md-3 paddings">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>我发起的流程</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div id="Start"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 paddings">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>我的待办(待处理)</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div id="Todolist"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 paddings">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>我的在途(未完成)</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div id="Runing"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 paddings">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>已归档(已完成)</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div id="OK"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-</div>
+    </div>
 
-<script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
-    <script language="javascript" type="text/javascript" >
+    <script language="javascript" type="text/javascript">
 
         //页面启动函数.
         $(function () {
             InitPage();
 
         });
+
+        function OpenMySearch(flowNo)
+        {
+
+            var url = "../Comm/Search.htm?EnsName=BP.WF.Data.MyStartFlows&FK_Flow=" + en.FK_Flow;
+            WinOpen(url);
+
+        }
 
         //初始化数据.
         function InitPage() {
@@ -92,17 +100,17 @@
             var sthtml = "<ul>";
             for (var idx = 0; idx < dtStart.length; idx++) {
                 var en = dtStart[idx];
-                sthtml += "<li><a href='../Comm/Search.htm?EnsName=BP.WF.Data.MyStartFlows&FK_Flow=" + en.FK_Flow + "&WFSta=All&TSpan=All' >" + en.FlowName + "(" + en.Num + ")</a></li>";
+                sthtml += "<li><a href=\"javascript:OpenMySearch('" + en.FK_Flow + "')\" >" + en.FlowName + "(" + en.Num + ")</a></li>";
             }
             sthtml += "</ul>";
             $('#Start').html(sthtml);
-        
+
 
             //待办
             tlhtml = "<ul>";
             for (var idx = 0; idx < dtTodolist.length; idx++) {
                 var en = dtTodolist[idx];
-                tlhtml += "<li><a href='../Todolist.htm?FK_Flow=" + en.FK_Flow + "&WFSta=All&TSpan=All' >" + en.FlowName + "(" + en.Num + ")</a></li>";
+                tlhtml += "<li><a href='../Todolist.htm?FK_Flow=" + en.FK_Flow + "' >" + en.FlowName + "(" + en.Num + ")</a></li>";
             }
             tlhtml += "</ul>";
             $('#Todolist').html(tlhtml);
@@ -110,7 +118,7 @@
             rihtml = "<ul>";
             for (var idx = 0; idx < dtRuning.length; idx++) {
                 var en = dtRuning[idx];
-                rihtml += "<li><a href='../Runing.htm?FK_Flow=" + en.FK_Flow + "&WFSta=All&TSpan=All' >" + en.FlowName + "(" + en.Num + ")</a></li>";
+                rihtml += "<li><a href='../Runing.htm?FK_Flow=" + en.FK_Flow + "' >" + en.FlowName + "(" + en.Num + ")</a></li>";
             }
             rihtml += "</ul>";
             $('#Runing').html(rihtml);
@@ -119,7 +127,7 @@
             okhtml = "<ul>";
             for (var idx = 0; idx < dtOK.length; idx++) {
                 var en = dtOK[idx];
-                okhtml += "<li><a href='../Comm/Search.htm?EnsName=BP.WF.Data.MyJoinFlows&FK_Flow=" + en.FK_Flow + "&WFSta=1&TSpan=All' >" + en.FlowName + "(" + en.Num + ")</a></li>";
+                okhtml += "<li><a href='../SearchZongHe.htm?FlowNo=" + en.FK_Flow + "&WFState=3' >" + en.FlowName + "(" + en.Num + ")</a></li>";
             }
             okhtml += "</ul>";
             $('#OK').html(okhtml);

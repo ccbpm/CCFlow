@@ -6,17 +6,16 @@
     <title>流程查询</title>
     <link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
- 	<link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
-	<link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
 </head>
-<style >
+<style>
     /*设置表格内容过长，用省略号代替多余部分，前提:table的style属性*/
-     td
-        {
-           overflow:hidden;
-           white-space:nowrap;
-           text-overflow:ellipsis; 
-        }
+    td {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 </style>
 
 <body class="gray-bg">
@@ -324,14 +323,7 @@
         function OpenIt(wfState, workid, flowNo, nodeID, emps, userNo) {
 
             var url = "";
-
-            if (wfState != 3 && emps.indexOf(userNo) >= 0) {
-                url = "MyFlow.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
-            } else {
-                url = "WFRpt.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
-            }
-            window.location.href = url;
-             WinOpen(url);
+            url = "MyView.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
             layer.open({
                 skin: 'layer-class',
                 type: 2,

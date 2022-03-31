@@ -6,6 +6,7 @@
     <!--引入jquery-->
     <script src="../../Scripts/jquery-1.11.0.min.js"></script>
     <!--引入bootstrap-->
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <script src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
 
@@ -19,8 +20,13 @@
     <script src="./js/ueditor/dialogs/internal.js"></script>
     <script src="../../../../DataUser/JSLibData/CommonShowConfig.js"></script>
     <script src="./DialogCtr/Public.js"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <link href="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" />
-    <script src="../Admin.js"></script>
+    <style type="text/css">
+        .cs-content-box .cs-help ul {
+            margin: 0px 0px !important;
+        }
+    </style>
     <script type="text/javascript">
 
         var frmID = "";
@@ -61,10 +67,10 @@
 
                 dir1ul += "<ul>";
                 for (var k = 0; k < temps.length; k++) {
-                    
+
                     var temp = temps[k];
                     if (temp.Dir == dir.Name)
-                        dir1ul += "<li style='padding-left: 24px'><a  href='javascript:Save(\"" + temp.Name + "\",\"" + dir.Name + "\")'><img src='../../Img/ie.gif' />" +   temp.Name.replace(".htm", "") + "</a></li>";
+                        dir1ul += "<li style='padding-left: 24px'><a  href='javascript:Save(\"" + temp.Name + "\",\"" + dir.Name + "\")'><img src='../../Img/ie.gif' />" + temp.Name.replace(".htm", "") + "</a></li>";
                 }
                 dir1ul += "</ul></li>";
             }
@@ -102,40 +108,104 @@
             }
 
             DevForm_Close();
-            debugger
         }
         function DevForm_Close() {
             dialog.close(true);
+        }
+
+        function SaveImpFromLocalFile() {
+            var fileValue = $("#File_Upload").val();
+            //必须要选择文件
+            if (fileValue == "") {
+                $.messager.alert("提示", "没有选择流程模板。");
+                return;
+            }
+            //扩展名
+            var index = fileValue.lastIndexOf('.');
+            var fileExt = fileValue.substring(index);
+            if (fileExt.toLowerCase() == ".html" || fileExt.toLowerCase() == ".htm" || fileExt.toLowerCase() == ".doc" || fileExt.toLowerCase() == ".docx") {
+
+            } else {
+                $.messager.alert("提示", "所选表单模板文件，请重新选择。");
+                return;
+            }
+            $("#form1").form("submit", {
+                type: 'POST',
+                dataType: 'html',
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=Template_Imp&HttpHandlerName=BP.WF.HttpHandler.WF_Admin_DevelopDesigner&FK_MapData=" + GetQueryString("FK_MapData"),
+                onSubmit: function (param) {
+                    //return false;
+                },
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    var ctrl = document.getElementById("CB_IsCalearHtml");
+                    var isClear = ctrl.checked;
+                   
+                    if (isClear == true) {
+                        editor.setContent('');
+                        editor.execCommand('insertHtml', data);
+                    }
+                    else {
+                        editor.execCommand('insertHtml', data);
+                    }
+
+                    DevForm_Close();
+                }
+            });
         }
     </script>
 
 </head>
 <body>
-    <form id="form1">
+    <form id="form1" name="form1" action="" enctype="multipart/form-data" method="post">
+        <div>
+            <fieldset>
+                <legend>常用模板</legend>
+                <ul style="margin:0px">
+                    <li><div id="devTemp"></div></li>
+                </ul>
+
+
+
+            </fieldset>
+            <fieldset>
+                <legend>引用本地模板</legend>
+                <div>
+                    <input style="background-color:white;color:#000000;display:inline" type="file" id="File_Upload" name="File_Upload" />
+                    <input type="button"  value="执行导入" onclick="SaveImpFromLocalFile();" class="cc-btn-tab" />
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>
+                    <input type="checkbox" id="CB_IsCalearHtml" value="1" checked="true" />
+                    是否清空已有的html?
+                </legend>
+                
+            </fieldset>
+            
+            <fieldset>
+                <legend id="help"></legend>
+                <ul>
+                    <li> 所有的模版文件位于 DataUser\Style\TemplateFoolDevelopDesigner\*.htm </li>
+                    <li> 如果要维护这些文件，请直接打开该目录进行维护。 </li>
+                </ul>
+            </fieldset>
+
+
+
+        </div>
         <!--<div id="toolbar">
             <h4> 请选择模版：</h4>
         </div>-->
 
-        <div id="devTemp">
-
-
-        </div>
-
-        <label>
-            <input type="checkbox" id="CB_IsCalearHtml" value="1" checked="true" />
-            是否清空已有的html?
-        </label>
-
-        <fieldset>
-            <legend id="help"></legend>
-            <ul>
-                <li> 所有的模版文件位于 DataUser\Style\TemplateFoolDevelopDesigner\*.htm </li>
-                <li> 如果要维护这些文件，请直接打开该目录进行维护。 </li>
-            </ul>
-        </fieldset>
 
 
 
     </form>
+    <script src="../Admin.js"></script>
 </body>
 </html>

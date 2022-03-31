@@ -45,6 +45,8 @@ function GetDBDtl() {
         { "No": MenuModel.StandAloneFlow, "Name": "创建独立运行的流程", "GroupNo": "A", "Url": "StandAloneFlow.htm" },
         { "No": "Windows", "Name": "信息窗/大屏(统计分析图表)", "GroupNo": "A", "Url": "Windows.htm" },
         { "No": "Tabs", "Name": "Tabs页面容器", "GroupNo": "A", "Url": "Tabs.htm" },
+        { "No": "Rpt3D", "Name": "3维报表", "GroupNo": "A", "Url": "Rpt3D.htm" },
+
         { "No": MenuModel.FlowUrl, "Name": "内置流程菜单", "GroupNo": "A", "Url": "FlowUrl.htm" },
         { "No": MenuModel.Func, "Name": "独立功能(方法)页", "GroupNo": "A", "Url": "Func.htm" },
         { "No": MenuModel.Dict, "Name": "创建实体", "GroupNo": "B", "Url": "Dict.htm" },

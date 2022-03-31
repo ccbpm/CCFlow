@@ -114,9 +114,10 @@ function GenerWorkNode() {
     BindFrm();
     //加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
     var enName = flowData.Sys_MapData[0].No;
-    loadScript("../DataUser/JSLibData/" + pageData.FK_Flow + ".js?t=" + Math.random());
-    loadScript("../DataUser/JSLibData/" + enName + "_Self.js?t=" + Math.random());
-    loadScript("../DataUser/JSLibData/" + enName + ".js?t=" + Math.random());
+    //loadScript("../DataUser/JSLibData/" + pageData.FK_Flow + ".js?t=" + Math.random());
+    if (flowData.Sys_MapData[0].IsEnableJs == 1)
+        loadScript("../DataUser/JSLibData/" + enName + "_Self.js?t=" + Math.random());
+    //loadScript("../DataUser/JSLibData/" + enName + ".js?t=" + Math.random());
 
     layer.close(index);  
 }
@@ -146,7 +147,7 @@ function BindFrm() {
                 case 0: //傻瓜表单
                 case 10://累加表单
                     $('head').append('<link href="../DataUser/Style/FoolFrmStyle/Default.css" rel="stylesheet" type="text/css" />');
-                    Skip.addJs("./CCForm/FrmFool2021.js?ver="+Math.random());
+                    Skip.addJs("./CCForm/FrmFool.js?ver="+Math.random());
                     GenerFoolFrm(flowData);
                     break;
                 case 12://开发者表单
@@ -164,7 +165,7 @@ function BindFrm() {
                     if (frmNode != null && frmNode != undefined) {
                         if (mapData.FrmType == 0) { //傻瓜表单
                             $('head').append('<link href="../DataUser/Style/FoolFrmStyle/Default.css" rel="stylesheet" type="text/css" />');
-                            Skip.addJs("./CCForm/FrmFool2021.js?ver="+Math.random());
+                            Skip.addJs("./CCForm/FrmFool.js?ver="+Math.random());
                             GenerFoolFrm(flowData);
                         }
                         if (mapData.FrmType == 8) {//开发者表单
@@ -185,7 +186,7 @@ function BindFrm() {
             var mapData = flowData.Sys_MapData[0];
             if (mapData.FrmType == 0) { //傻瓜表单
                 $('head').append('<link href="../DataUser/Style/FoolFrmStyle/Default.css" rel="stylesheet" type="text/css" />');
-                Skip.addJs("./CCForm/FrmFool2021.js?ver=" + Math.random());
+                Skip.addJs("./CCForm/FrmFool.js?ver=" + Math.random());
                 GenerFoolFrm(flowData);
             }
             if (mapData.FrmType == 8) {//开发者表单
@@ -198,14 +199,14 @@ function BindFrm() {
             
             break;
         case FlowDevModel.FoolTruck://累加模式
-            Skip.addJs("./CCForm/FrmFool2021.js?ver=" + Math.random());
+            Skip.addJs("./CCForm/FrmFool.js?ver=" + Math.random());
             GenerFoolFrm(flowData); //傻瓜表单.
             break;
         case FlowDevModel.RefOneFrmTree://表单库单表单
             if (frmNode != null && frmNode != undefined) {
                // frmNode = frmNode[0];
                 if (frmNode.FrmType == 0) { //傻瓜表单
-                    Skip.addJs("./CCForm/FrmFool2021.js?ver=" + Math.random());
+                    Skip.addJs("./CCForm/FrmFool.js?ver=" + Math.random());
                     GenerFoolFrm(flowData);
                 }
                 if (frmNode.FrmType == 8) {//开发者表单
@@ -417,10 +418,11 @@ function Save(saveType) {
         if (data.indexOf("err@") != -1) {
             layer.alert(data);
         }
-        if (typeof isSaveOnly != undefined && isSaveOnly == true) {
 
-        }else
-            layer.alert("数据保存成功");
+        //if (typeof isSaveOnly != undefined && isSaveOnly == true) {
+
+        //}else
+        //    layer.alert("数据保存成功");
         
         return false;
     });
@@ -499,7 +501,12 @@ function getFlowDevModelText(model) {
 function ShowWorkReturnTip() {
 
     //显示退回消息
-    if (flowData.AlertMsg.length != 0) {
+    var gwf = flowData.WF_GenerWorkFlow[0];
+    var scrip = GetPara(gwf.AtPara, "ScripMsg");
+    var scripNodeID = GetPara(gwf.AtPara, "ScripNodeID");
+    if (scrip==null || scrip == undefined)
+        scrip = "";
+    if ((flowData.AlertMsg != undefined && flowData.AlertMsg.length != 0) || (scrip != "" && scripNodeID != GetQueryString("FK_Node"))) {
         var _html = "";
         $.each(flowData.AlertMsg, function (i, item) {
             if (item.Title == "退回信息")
@@ -510,6 +517,13 @@ function ShowWorkReturnTip() {
             _html += item.Msg;
             _html += "</div>";
         });
+
+        if (scripNodeID != GetQueryString("FK_Node")) {
+            _html += "<div style='padding: 10px 0px 0px 10px;line-height: 24px;'>";
+            _html += "小纸条<br/>";
+            _html += scrip;
+            _html += "</div>";
+        }
         var h = window.innerHeight - 240;
         //退回消息
         layer.open({
@@ -549,7 +563,7 @@ function checkBlanks() {
 
                 item = $("#DDL_" + keyOfEn);
                 if (item.length != 0) {
-                    if (item.val() == "" || item.val() == -1 || item.children('option:checked').text() == "*请选择") {
+                    if (item.val() == "" || item.val() == null || item.val() == -1 || item.children('option:checked').text() == "*请选择") {
                         checkBlankResult = false;
                         item.addClass('errorInput');
                     } else {

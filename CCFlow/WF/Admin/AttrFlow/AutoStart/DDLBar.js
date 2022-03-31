@@ -28,6 +28,7 @@ function InitBar(optionKey) {
      html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";*/
 
     html += "<button  id='Btn_Save' class='cc-btn-tab btn-save'  onclick='Save()' >保存</button>";
+    html += "<button  id='Btn_Save' class='cc-btn-tab btn-save'  onclick='RunIt()' >手工运行</button>";
     //html += "<input  id='Btn_Help' type=button onclick='Adv()' value='高级设置' />";
     html += "<button  id='Btn_Help'class='cc-btn-tab btn-hlep' onclick='HelpOnline()'>在线帮助</button>";
 
@@ -51,6 +52,8 @@ function GetDBDtl() {
         { "No": 0, "Name": "手工启动（默认）", "GroupNo": "A", "Url": "0.None.htm" },
         { "No": 1, "Name": "指定人员按时启动", "GroupNo": "A", "Url": "1.ByDesignee.htm" },
         { "No": 2, "Name": "数据集按时启动", "GroupNo": "A", "Url": "2.ByTimeData.htm" },
+        { "No": 4, "Name": "指定人员集合按时启动", "GroupNo": "A", "Url": "4.ByDesigneeAdv.htm" },
+
 
         { "No": 3, "Name": "触发试启动", "GroupNo": "B", "Url": "3.ByTrigger.htm" }
     ];
@@ -70,6 +73,10 @@ function GetUrl(optionKey) {
 function Adv() {
     var url = "Adv.htm?FK_Flow=" + GetQueryString("FK_Flow");
     OpenEasyUiDialogExt(url, '高级设置', 600, 400, false);
+}
+function RunIt() {
+    var url = basePath + "/DataUser/AppCoder/Default.htm";
+    window.open(url);
 }
 
 function HelpOnline() {

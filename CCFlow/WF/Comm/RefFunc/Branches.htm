@@ -175,7 +175,10 @@
             //var json = DBAccess.RunDBSrc(treeUrl); // 执行url返回json.
 
             var ens = new Entities(GetQueryString("EnsOfM")); //BP.Port.Depts
-            ens.Retrieve("Idx");
+            if (webUser.CCBPMRunModel == 2)
+                ens.Retrieve("OrgNo", rootNo, "Idx");
+            else
+                ens.Retrieve("Idx");
             var jsonTree = createJsonToTree(ens, rootNo);
             $('#tree').treeview({
                 data: jsonTree,         // 数据源

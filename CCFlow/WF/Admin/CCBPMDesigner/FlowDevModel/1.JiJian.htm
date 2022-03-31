@@ -28,31 +28,41 @@
     <div id="bar"></div>
 
     <fieldset>
-        <legend>请输入流程名称   </legend>
+        <legend>请输入流程名称</legend>
         <ul>
-            <li><label><font color="red" style="font-size:larger">*</font></label><label><input type="text" id="TB_Name" name="TB_Name"   height="60" style="font-weight:bolder; font-size:30px;" /></label></li>
+            <li>
+                <label><font color="red" style="font-size:larger">*</font></label>
+                <input type="text" id="TB_Name" name="TB_Name" height="60" style="font-weight:bolder; font-size:30px;width:90%;" placeholder="输入名称，点击右上角创建，系统进入流程设计器。" />
+            </li>
         </ul>
-    </fieldset>
 
-    <fieldset>
-        <legend  id="help"> </legend>
+        <legend class="help">帮助：<a href="https://www.bilibili.com/video/BV1FV41167ch" target="_blank">极简模式视频教程. </a></legend>
         <ul>
-            <li> 采用了内置傻瓜表单，表单ID为开始节点表单，比如:ND101，只有一个设计表单的入口。</li>
-            <li> 通过改变审核组件的状态，来实现不同节点的控制审核。</li>
-            <li> 也可以控制表单的字段权限，来实现表单在不同字段中显示。</li>
-            <li> 极简模式：配合审核组件来使用,在每个节点上点击右键，可以设置节点的审核组件的状态。</li>
-
-
-            <li>PC该表单有4个列,设计简单方便.</li>
-            <li><img src='../../AttrNode/Img/Col4Frm.JPG' style="width:80%;" class="HelpImg" /> </li>
-            <li>PC该表单6列,展示效果</li>
-            <li><img src='../../AttrNode/Img/Col6Frm.JPG' style="width:80%;" class="HelpImg" /> </li>
-            <li>手机端展现有2个列,手机端自动适应,一次性设计</li>
-            <li><img src='../../AttrNode/Img/Col2Frm.JPG' class="HelpImg" /> </li>
-
+            <li> 极简模式是采用傻瓜表单+审核组件实现流程审核的一种模式。</li>
+            <li> 开始节点填写申请，以后的节点都是审批，我们把这样的模式称为极简模式。</li>
+            <li> 在极简模式下，每个节点右键上有一个审核组件状态（启用，禁用，只读）。</li>
+            <li></li>
         </ul>
     </fieldset>
 
 
-</body>
-</html>
+    <!--<legend>PC该表单4列,展示效果 </legend>
+    <img src='../../AttrNode/Img/Col4Frm.JPG' style="width:80%;" class="HelpImg" />
+
+    <legend>PC该表单6列,展示效果 </legend>
+    <img src='../../AttrNode/Img/Col6Frm.JPG' style="width:80%;" class="HelpImg" />
+
+    <legend>手机端展现有2个列,手机端自动适应,一次性设计 </legend>
+
+    <img src='../../AttrNode/Img/Col2Frm.JPG' class="HelpImg" />
+    <li> 通过改变审核组件的状态，来实现不同节点的控制审核。</li>
+        <li> 也可以控制表单的字段权限，来实现表单在不同字段中显示。</li>
+        <li> 极简模式：配合审核组件来使用,在每个节点上点击右键，可以设置节点的审核组件的状态。</li>
+
+        <li>PC该表单有4个列,设计简单方便.</li>
+        <li></li>
+        <li>手机端展现有2个列,手机端自动适应,一次性设计</li>-->
+
+
+    </body>
+    </html>

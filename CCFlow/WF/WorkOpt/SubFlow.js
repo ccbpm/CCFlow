@@ -25,11 +25,16 @@ if (typeof SFShowCtrl == "undefined") {
 function SubFlow_Init(node) {
      
     var workID = GetQueryString("WorkID");
+    if (workID == null || workID == undefined)
+        workID = 0;
+
     var flowNo = GetQueryString("FK_Flow");
     var nodeID = node.NodeID; // GetQueryString("FK_Node");
     var currNodeID = GetQueryString("FK_Node");
 
     var pworkID = GetQueryString("WorkID");
+    if (pworkID == null || pworkID == undefined)
+        pworkID = 0;
 
     var _Html = "";
     var subFlows = new Entities("BP.WF.Template.SubFlowHands");
@@ -187,6 +192,8 @@ function ShowTableSubFlow(subFlows, sf, node, workID, pworkID, flowNo, nodeID) {
 
     if (currUrl.indexOf("Admin/FoolFormDesigner/Designer.htm") != -1)
         imgbasePath = "../../";
+    if (currUrl.indexOf("FrmGener.htm") != -1)
+        imgbasePath = "../";
     for (var i = 0; i < subFlows.length; i++) {
 
         var subFlow = subFlows[i];

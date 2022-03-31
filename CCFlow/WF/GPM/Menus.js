@@ -254,14 +254,7 @@ new Vue({
             var en = new Entity("BP.GPM.Menu2020.Module", moduleNo);
             var systemNo = en.SystemNo;
             var reoadUrl = "Menus.htm?SystemNo=" + systemNo;
-
-
-            //@yln 怎么不能刷洗？
-            //    OpenLayuiDialog(url, "新建菜单" 0, 0, null, true);
             OpenLayuiDialog(url, "", 90000, false, false, true, false, true, false, false, reoadUrl);
-
-
-            //    this.openLayer(url, '新增目录');
         },
         CopyLink: function (no) {
             var menu = new Entity("BP.GPM.Menu2020.Menu", no);
@@ -282,8 +275,7 @@ new Vue({
             }
 
             var webUser = new WebUser();
-            if (webUser.No != 'admin')
-            {
+            if (webUser.No != 'admin') {
                 alert("只有超级用户才能执行此操作.");
                 return;
             }
@@ -291,7 +283,7 @@ new Vue({
             if (window.confirm("您确定要导出吗？ 导出到xml需要一定的时间，请耐心等待.") == false)
                 return;
 
-            var ens = new Entity("BP.GPM.Menu2020.MySystem", systemNo );
+            var ens = new Entity("BP.GPM.Menu2020.MySystem", systemNo);
             var data = ens.DoMethodReturnString("DoExp");
             alert(data);
 
@@ -347,7 +339,6 @@ new Vue({
             console.log(no, enName)
             layer.confirm('您确定要删除吗？', { icon: 3, title: '提示' }, function (index) {
 
-                //debugger;
                 var en = new Entity(enName, no);
                 en.Delete();
 
@@ -443,10 +434,10 @@ new Vue({
                             }).join(',')
                             var currentNodeId = evt.to.dataset.pid
                             _this.updateModuleSort(currentNodeArrStr, currentNodeId)
-                            var oldSysIndex = evt.item.dataset.sysidx
-                            var newSysIndex = evt.to.dataset.sysidx
-                            var item = _this.flowNodes[oldSysIndex].children.splice(evt.oldDraggableIndex, 1)[0]
-                            _this.flowNodes[newSysIndex].children.splice(evt.newDraggableIndex, 0, item)
+                            // var oldSysIndex = evt.item.dataset.sysidx
+                            // var newSysIndex = evt.to.dataset.sysidx
+                            // var item = _this.flowNodes[oldSysIndex].children.splice(evt.oldDraggableIndex, 1)[0]
+                            // _this.flowNodes[newSysIndex].children.splice(evt.newDraggableIndex, 0, item)
                         }
                     });
                 })
@@ -468,24 +459,23 @@ new Vue({
                         },
                         onEnd: function (evt) {
                             layer.close(_this.loadingDialog)
-                            var pastNodeArrStr = Array.from(evt.from.querySelectorAll('div[data-id]')).map(function (item) {
+                            var pastNodeArrStr = Array.from(evt.from.querySelectorAll('div.row[data-id]')).map(function (item) {
                                 return item.dataset.id
                             }).join(',')
                             var pastNodeId = evt.from.dataset.pid
-                            var currentNodeArrStr = Array.from(evt.to.querySelectorAll('div[data-id]')).map(function (item) {
+                            var currentNodeArrStr = Array.from(evt.to.querySelectorAll('div.row[data-id]')).map(function (item) {
                                 return item.dataset.id
                             }).join(',')
                             var currentNodeId = evt.to.dataset.pid;
 
-
                             _this.updateMenuSort(pastNodeArrStr, pastNodeId, currentNodeArrStr, currentNodeId)
-                            var oldSysIndex = evt.item.dataset.sysidx;
-                            var oldModuleIndex = evt.item.dataset.moduleidx;
-                            var newSysIndex = evt.to.dataset.sysidx;
-                            var newModuleIndex = evt.to.dataset.moduleidx;
-                            if (oldSysIndex === newSysIndex && oldModuleIndex === newModuleIndex) return
-                            var item = _this.flowNodes[oldSysIndex].children[oldModuleIndex].children.splice(evt.oldDraggableIndex, 1)[0]
-                            _this.flowNodes[newSysIndex].children[newModuleIndex].children.splice(evt.newDraggableIndex, 0, item)
+                            // var oldSysIndex = evt.item.dataset.sysidx;
+                            // var oldModuleIndex = evt.item.dataset.moduleidx;
+                            // var newSysIndex = evt.to.dataset.sysidx;
+                            // var newModuleIndex = evt.to.dataset.moduleidx;
+                            // if (oldSysIndex === newSysIndex && oldModuleIndex === newModuleIndex) return
+                            // var item = _this.flowNodes[oldSysIndex].children[oldModuleIndex].children.splice(evt.oldDraggableIndex, 1)[0]
+                            // _this.flowNodes[newSysIndex].children[newModuleIndex].children.splice(evt.newDraggableIndex, 0, item)
                         }
                     })
                 }
@@ -523,13 +513,12 @@ new Vue({
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_GPM");
             handler.AddPara("EnNos", systemNos); //目录下的 菜单IDs
             var data = handler.DoMethodReturnString("System_Move");
-
         },
         // 是否启用
         changeSystemEnableStatus(system, ctrl) {
             // 当前启用状态
 
-            var en = new Entity("BP.GPM.Menu2020.MySystems", system.No);
+            var en = new Entity("BP.GPM.Menu2020.MySystem", system.No);
             if (en.IsEnable == 0)
                 en.IsEnable = 1; // method.IsEnable;
             else
@@ -686,15 +675,12 @@ new Vue({
             if (menu.MenuModel === "Dict" || menu.MenuModel === "DBList") {
 
                 var html = "";
-
-
                 if (menu.MenuModel === "DBList") {
                     html += "<a " + btnStyle + " href=\"javascript:addTab('../CCBill/SearchDBList.htm?FrmID=" + menu.UrlExt + "','" + menu.Name + "');\"  >打开</a>";
                 }
 
                 if (menu.MenuModel === "Dict") {
                     if (menu.Icon === "") menu.Icon = "icon-notebook";
-
                     html += "<a " + btnStyle + " href=\"javascript:addTab('../CCBill/SearchDict.htm?FrmID=" + menu.UrlExt + "','" + menu.Name + "');\"  >打开</a>";
                 }
 
@@ -716,15 +702,9 @@ new Vue({
                 if (menu.MenuModel === "Dict") {
                     menu.MenuModel = "实体";
                     html += "<a " + btnStyle + "  href=\"javascript:GoToFrmDesigner('" + menu.UrlExt + "')\" >表单设计</a>";
-
                     html += "&nbsp; <a href='https://www.bilibili.com/video/BV1sy4y157ac/' target='_blank' class='icon-camrecorder'></a>";
-
                 }
-
-                // html += " <span class='layui-badge-rim'>实体:" + menu.UrlExt + "</span>";
-
                 menu.Docs = html;
-
             }
 
             if (menu.MenuModel == "FlowUrl") {
@@ -732,6 +712,20 @@ new Vue({
                 if (menu.Icon === "") menu.Icon = "icon-heart";
 
                 var html = "<a " + btnStyle + "  href=\"javascript:addTab('../" + menu.UrlExt + "','" + menu.Name + "');\"  >" + menu.Name + "</a>";
+                menu.Docs = html;
+            }
+
+            if (menu.MenuModel == "Rpt3D" || menu.MenuModel == "Rpt3D") {
+
+                if (menu.Icon === "") menu.Icon = "icon-heart";
+
+                var url = basePath + "/CCFast/Rpt/Rpt3D.htm?RptNo=" + menu.No;
+                var html = "<a " + btnStyle + "  href=\"javascript:addTab('" + url + "','" + menu.Name + "');\"  >运行</a>";
+
+                url = basePath + '/WF/Comm/En.htm?EnName=BP.GPM.Menu2020.Rpt3D&No=' + menu.No;
+                // url = basePath + '/WF/Comm/En.htm?EnName=BP.GPM.Menu2020.Rpt3D&No=' + menu.No;
+                html += "<a " + btnStyle + "  href=\"javascript:addTab('" + url + "','" + menu.Name + "');\"  >属性</a>";
+
                 menu.Docs = html;
             }
 

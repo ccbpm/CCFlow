@@ -136,6 +136,7 @@
                 id: 'lay_table_bill',
                 data: tableData,
                 title: '数据表',
+                limit: Number.MAX_VALUE,
                 height: $(document).height() - $("#view").height() - 130,
                 cellMinWidth: 120,
                 size: 'lg',
@@ -192,7 +193,7 @@
                             return;
                         }
 
-                        OpenIt(data, 1, 0);
+                        OpenIt(data, 1, 0, null, true);
                         break;
                     case "delete"://删除数据
                         var checkStatus = table.checkStatus(vtable.config.id);
@@ -218,6 +219,7 @@
                             pageIdx = 1;
                             tableData = SearchData();
                             table.reload('lay_table_bill', { data: tableData });
+                            renderLaypage();
                             layui.laypage.render();
                             layer.close(index);
 
@@ -228,22 +230,19 @@
                         OpenLayuiDialog(url, "导入模板数据", window.innerWidth / 2, 0, null, true);
                         break;
                     case "exp"://导出
-                        var handler = new HttpHandler("BP.CCBill.WF_CCBill");
-                        handler.AddPara("FrmID", GetQueryString("FrmID"));
-                        //查询集合
-                        var data = handler.DoMethodReturnString("Search_Exp");
-                        var url = "";
-                        if (data.indexOf('err@') == 0) {
-                            layer.alert(data);
+                        if (plant != 'CCFlow')
+                            downLoadExcel(basePath + "/WF/Export/Search_Exp?type=dict&FrmID=" + GetQueryString("FrmID"));
+                        else {
+                            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+                            handler.AddPara("FrmID", GetQueryString("FrmID"));
+                            //查询集合
+                            var data = handler.DoMethodReturnString("Search_Exp");
+                            if (data.indexOf("err@") != -1) {
+                                layer.alert(data);
+                                return;
+                            }
+                            window.open(data);
                         }
-                        if (plant != 'CCFlow') {
-                            var currentPath = window.document.location.href;
-                            var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-                            data = path + data;
-                        }
-                        window.open(data);
-                        return;
-                        table.exportFile(vtable.config.id, tableData, 'xls');
                         break;
                     case "group"://跳转到分组页面
                         url = "Group.htm?FrmID=" + GetQueryString("FrmID");

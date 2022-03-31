@@ -1,97 +1,615 @@
 <!DOCTYPE html>
-<html>
+<html class="x-admin-sm">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>首页</title>
-   <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
- 	<link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
- 	<link href="../Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8" />
+    <title>控制台</title>
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link href="./../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="./../Style/skin/css/Default.css" rel="stylesheet" />
+    <link href="./../Style/skin/layui/css/layui.css" rel="stylesheet" />
 </head>
-<body  class="gray-bg" onkeypress="Esc()">
-	<div class="wrapper wrapper-content animated fadeInRight">
-			<div class="row">
-            <div class="col-sm-6">
-                <div class="ibox">
-                	<div class="ibox-title">
-                        <h5>待办</h5>
+<body style="">
+    <div id="Msg"></div>
+    <div class="layui-fluid">
+        <div class="welcome-datainfo">
+            <div class="layui-row">
+                <div class="layui-col-sm24 layui-col-md12">
+                    <div class="layui-row iconhref">
+
+                        <!--待办 100  发起300   逾期 13   退回 23   草稿33    运行中 80-->
+                        <div class="layui-col-md3 layui-col-xs3">
+                            <a href="javascript:;" class="">
+                                <i class="iconfont icon-anli main-bg1"></i>
+                                <p>
+                                    <cite id="Todlist" class="main-cl1"> 0 </cite>
+                                    <span>待办</span>
+                                </p>
+                            </a>
+                        </div>
+                        <div class="layui-col-md3 layui-col-xs3">
+                            <a href="javascript:;" class="">
+                                <i class="iconfont icon-biaodandingzhimoban main-bg2"></i>
+                                <p>
+                                    <cite id="Start" class="main-cl2">0</cite><span>发起</span>
+                                </p>
+                            </a>
+                        </div>
+                        <div class="layui-col-md3 layui-col-xs3">
+                            <a href="javascript:;" class="">
+                                <i class="iconfont icon-daiban main-bg2"></i>
+                                <p>
+                                    <cite id="OverTime" class="main-cl2">0</cite><span>逾期</span>
+                                </p>
+                            </a>
+                        </div>
+                        <div class="layui-col-md3 layui-col-xs3">
+                            <a href="javascript:;" class="">
+                                <i class="iconfont icon-wj-thwj main-bg2"></i>
+                                <p>
+                                    <cite id="ReturnNum" class="main-cl2">0</cite><span>退回</span>
+                                </p>
+                            </a>
+                        </div>
+                        <div class="layui-col-md3 layui-col-xs3">
+                            <a href="javascript:;" class="">
+                                <i class="iconfont icon-wj-thwj main-bg2"></i>
+                                <p>
+                                    <cite id="Draft" class="main-cl2">0</cite><span>草稿</span>
+                                </p>
+                            </a>
+                        </div>
+                        <div class="layui-col-md3 layui-col-xs3">
+                            <a href="javascript:;" class="">
+                                <i class="iconfont icon-wj-thwj main-bg2"></i>
+                                <p>
+                                    <cite id="Runing" class="main-cl2">0</cite><span>运行中</span>
+                                </p>
+                            </a>
+                        </div>
                     </div>
-                    <div class="ibox-content">
-                    	  <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>姓名</th>
-                                    <th>性别</th>
-                                    <th>年龄</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>张三</td>
-                                    <td>男</td>
-                                    <td>23</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>李四</td>
-                                    <td>男</td>
-                                    <td>27</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>王麻子</td>
-                                    <td>男</td>
-                                    <td>65</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">按期完成流程-按月份统计</div>
+                    <div class="layui-card-body" style="min-height:280px">
+                        <div id="ComplateFlowsByNY" class="layui-col-sm12" style="height: 300px;"></div>
                     </div>
-				</div>	
-      </div>
-	  <div class="col-sm-6">
-                <div class="ibox">
-                	<div class="ibox-title">
-                        <h5>我的流程</h5>
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">逾期完成流程-按月份统计</div>
+                    <div class="layui-card-body" style="min-height:280px">
+                        <div id="OverComplateFlowsByNY" class="layui-col-sm12" style="height: 300px;"></div>
                     </div>
-                    <div class="ibox-content">
-                    	  <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>姓名</th>
-                                    <th>性别</th>
-                                    <th>年龄</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>张三</td>
-                                    <td>男</td>
-                                    <td>23</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>李四</td>
-                                    <td>男</td>
-                                    <td>27</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>王麻子</td>
-                                    <td>男</td>
-                                    <td>65</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">运行中流程-按部门统计</div>
+                    <div class="layui-card-body" style="min-height:280px">
+                        <div id="TodoListByDept" class="layui-col-sm12" style="height: 300px;"></div>
                     </div>
-				</div>	
-      </div>
-	  </div>
-</div>
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">运行中流程-按流程统计</div>
+                    <div class="layui-card-body" style="min-height:280px">
+                        <div id="TodoListByFlow" class="layui-col-sm12" style="height: 300px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-row layui-col-space15" id="FlowByEmpDiv">
+            <div class="layui-col-md15">
+                <div class="layui-card">
+                    <div class="layui-card-header">运行中流程-按人员统计</div>
+                    <div class="layui-card-body" style="min-height:280px">
+                        <div id="TodoListByEmp" class="layui-col-sm12" style="height: 300px;"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script type="text/javascript" src="./../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="./../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="./../Scripts/config.js"></script>
+    <script type="text/javascript" src="./../Comm/Gener.js"></script>
+
+    <script src="./../Scripts/echartsjs/echarts.min.js"></script>
+
+    <!--<script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>-->
+    <script type="text/javascript">
+        var webUser = new WebUser();
+        //页面启动函数.
+        $(function () {
+            if (webUser.No == "admin")
+                $("#FlowByEmpDiv").hide();
+            var date = new Date();
+            var curMonth = date.getMonth() + 1;
+            var curYear = date.getFullYear();
+            var beforeYM = 12 - curMonth;
+            var yearMonth = new Array();
+            //获取一年的月份
+            for (var month = curMonth + 1; month <= 12; month++) {
+                month = month < 10 ? "0" + month : month;
+                yearMonth.push(curYear - 1 + "-" + month);
+            }
+            for (var month = 1; month <= curMonth; month++) {
+                month = month < 10 ? "0" + month : month;
+                yearMonth.push(curYear + "-" + month);
+            }
+
+            var FlowsByNY_X = new Array();
+            var ComplateFlowsByNY_Y = new Array();
+            var OverComplateFlowsByNY_Y = new Array();
+
+            var TodolistByDept_X = new Array();
+            var TodolistAllByDept_Y = new Array();
+            var TodoListReturnByDept_Y = new Array();
+            var TodoListOverTByDept_Y = new Array();
+
+            var TodolistByFlow_X = new Array();
+            var TodolistAllByFlow_Y = new Array();
+            var TodoListReturnByFlow_Y = new Array();
+            var TodoListOverTByFlow_Y = new Array();
+
+
+
+            var TodolistByEmp_X = new Array();
+            var TodolistAllByEmp_Y = new Array();
+            var TodoListReturnByEmp_Y = new Array();
+            var TodoListOverTByEmp_Y = new Array();
+
+            // $("#Msg").html("<img src=../../WF/Admin/Portal/Img/loading_small.gif />&nbsp;正在加载,请稍后......");
+
+            //获得数数量，并把数量绑定.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+            var data = handler.DoMethodReturnJSON("Welcome_Init");
+            //设置数据。
+            GenerFullAllDivVal(data);
+
+            //绑定- 流程发起数
+            data = handler.DoMethodReturnJSON("Welcome_EchartDataSet");
+
+            //按期完成的流程-按月份.
+            var ComplateFlowsByNY = data.ComplateFlowsByNY;
+            $.each(yearMonth, function (i, ny) {
+                var num = 0
+                $.each(ComplateFlowsByNY, function (k, item) {
+                    if (ny == item.FK_NY) {
+                        num = item.Num;
+                        return false;
+                    }
+                })
+                ComplateFlowsByNY_Y[i] = num;
+            });
+
+            queryChart_FlowsByNY(yearMonth, ComplateFlowsByNY_Y, "ComplateFlowsByNY");
+
+            //逾期完成的流程-按月份.
+            var OverComplateFlowsByNY = data.OverComplateFlowsByNY;
+            $.each(yearMonth, function (i, ny) {
+                var num = 0
+                $.each(OverComplateFlowsByNY, function (k, item) {
+                    if (ny == item.FK_NY) {
+                        num = item.Num;
+                        return false;
+                    }
+                })
+                OverComplateFlowsByNY_Y[i] = num;
+            });
+            queryChart_FlowsByNY(yearMonth, OverComplateFlowsByNY_Y, "OverComplateFlowsByNY");
+
+            //运行中的流程-按部门.
+            var TodoListAllByDept = data.TodoListAllByDept;
+            var TodoListReturnByDept = data.TodoListReturnByDept;
+            var TodoListOverTByDept = data.TodoListOverTByDept;
+
+            $.each(TodoListAllByDept, function (i, TodolistByDept) {
+                TodolistByDept_X[i] = TodolistByDept.Name;
+                TodolistAllByDept_Y[i] = TodolistByDept.Num;
+            });
+            //退回
+            $.each(TodolistByDept_X, function (i, deptName) {
+                var num = 0;
+                $.each(TodoListReturnByDept, function (k, item) {
+                    if (item.Name == deptName) {
+                        num = item.Num;
+                        return false;
+                    }
+                });
+                TodoListReturnByDept_Y[i] = num;
+            });
+
+            //逾期
+            $.each(TodolistByDept_X, function (i, deptName) {
+                var num = 0;
+                $.each(TodoListOverTByDept, function (k, item) {
+                    if (item.Name == deptName) {
+                        num = item.Num;
+                        return false;
+                    }
+                });
+                TodoListOverTByDept_Y[i] = num;
+            });
+
+
+
+            queryChart_FlowsOfTodoList(TodolistByDept_X, TodolistAllByDept_Y, TodoListReturnByDept_Y, TodoListOverTByDept_Y, "TodoListByDept");
+
+            //待办-按流程.
+            var TodoListAllByFlow = data.TodoListAllByFlow;
+            var TodoListReturnByFlow = data.TodoListReturnByFlow;
+            var TodoListOverTByFlow = data.TodoListOverTByFlow;
+
+            $.each(TodoListAllByFlow, function (i, TodolistByFlow) {
+                TodolistByFlow_X[i] = TodolistByFlow.Name;
+                TodolistAllByFlow_Y[i] = TodolistByFlow.Num;
+            });
+            //退回
+            $.each(TodolistByFlow_X, function (i, flowName) {
+                var num = 0;
+                $.each(TodoListReturnByFlow, function (k, item) {
+                    if (item.Name == flowName) {
+                        num = item.Num;
+                        return false;
+                    }
+                });
+                TodoListReturnByFlow_Y[i] = num;
+            });
+
+            //逾期
+            $.each(TodolistByFlow_X, function (i, flowName) {
+                var num = 0;
+                $.each(TodoListOverTByFlow, function (k, item) {
+                    if (item.Name == flowName) {
+                        num = item.Num;
+                        return false;
+                    }
+                });
+                TodoListOverTByFlow_Y[i] = num;
+            });
+
+
+
+            queryChart_FlowsOfTodoList(TodolistByFlow_X, TodolistAllByFlow_Y, TodoListReturnByFlow_Y, TodoListOverTByFlow_Y, "TodoListByFlow");
+
+            //待办-按人员.
+            var Emps = data.Emps;
+            var TodoListAllByEmp = data.TodoListAllByEmp;
+            var TodoListReturnByEmp = data.TodoListReturnByEmp;
+            var TodoListOverTByEmp = data.TodoListOverTByEmp;
+
+            Emps.forEach(function (emp) {
+                TodolistByEmp_X.push(emp.Name);
+            });
+
+            $.each(TodolistByEmp_X, function (i, empName) {
+                var num = 0;
+                $.each(TodoListAllByEmp, function (k, item) {
+                    if (item.Name == empName) {
+                        num = item.Num;
+                        return false;
+                    }
+                });
+                TodolistAllByEmp_Y[i] = num;
+            });
+
+
+
+            //退回
+            $.each(TodolistByEmp_X, function (i, empName) {
+                var num = 0;
+                $.each(TodoListReturnByEmp, function (k, item) {
+                    if (item.Name == empName) {
+                        num = item.Num;
+                        return false;
+                    }
+                });
+                TodoListReturnByEmp_Y[i] = num;
+            });
+
+            //逾期
+            $.each(TodolistByEmp_X, function (i, empName) {
+                var num = 0;
+                $.each(TodoListOverTByEmp, function (k, item) {
+                    if (item.Name == empName) {
+                        num = item.Num;
+                        return false;
+                    }
+                });
+                TodoListOverTByEmp_Y[i] = num;
+            });
+
+
+
+            queryChart_FlowsOfTodoList(TodolistByEmp_X, TodolistAllByEmp_Y, TodoListReturnByEmp_Y, TodoListOverTByEmp_Y, "TodoListByEmp");
+
+            $("#Msg").html("");
+        });
+
+
+        //完成的流程发起-按月份.
+        function queryChart_FlowsByNY(FlowsByNY_X, FlowsByNY_Y, chartID) {
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById(chartID));
+
+            // 指定图表的配置项和数据
+            var option = {
+                grid: {
+                    top: '5%',
+                    right: '1%',
+                    left: '1%',
+                    bottom: '10%',
+                    containLabel: true
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: FlowsByNY_X
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: '流程数',
+                    data: FlowsByNY_Y,
+                    type: 'bar',
+                    smooth: true
+                }]
+            };
+
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+        //运行中的流程
+        function queryChart_FlowsOfTodoList(Todolist_X, TodolistAll_Y, TodolistReturn_Y, TodolistOverT_Y, chartID) {
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById(chartID));
+
+            // 指定图表的配置项和数据
+            var option = {
+
+                grid: {
+                    top: '10%',
+                    right: '1%',
+                    left: '1%',
+                    bottom: '10%',
+                    containLabel: true
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: { //顶部显示 与series中的数据类型的name一致
+                    data: ['全部', '退回', '逾期']
+                },
+                xAxis: {
+                    type: 'category',
+                    data: Todolist_X
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: '全部',
+                    data: TodolistAll_Y,
+                    type: 'line',
+                    smooth: true
+                },
+                {
+                    name: '退回',
+                    data: TodolistReturn_Y,
+                    type: 'line',
+                    smooth: true
+                }, {
+                    name: '逾期',
+                    data: TodolistOverT_Y,
+                    type: 'line',
+                    smooth: true
+                }]
+            };
+
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+
+        //流程发起-按部门.
+        function queryChart_FlowsByDept(FlowsByDept_X, FlowsByDept_Y) {
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('FlowsByDept'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                grid: {
+                    top: '5%',
+                    right: '1%',
+                    left: '1%',
+                    bottom: '10%',
+                    containLabel: true
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: FlowsByDept_X
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: '流程数',
+                    data: FlowsByDept_Y,
+                    type: 'bar',
+                    smooth: true
+                }]
+            };
+
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+        //待办-按部门.
+        function queryChart_TodolistByDept(TodolistByDept_X, TodolistByDept_Y) {
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('TodolistByDept'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                grid: {
+                    top: '5%',
+                    right: '1%',
+                    left: '1%',
+                    bottom: '10%',
+                    containLabel: true
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: TodolistByDept_X
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: '待办数',
+                    data: TodolistByDept_Y,
+                    type: 'bar',
+                    smooth: true
+                }]
+            };
+
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+        //待办-按流程.
+        function queryChart_TodolistByFlow(TodolistByFlow_Pie, TodolistByFlow_Select, TodolistByFlows) {
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('TodolistByFlow'));
+
+            // 指定图表的配置项和数据
+            var option = {
+
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b} : {c} ({d}%)'
+                },
+                legend: {
+                    type: 'scroll',
+                    orient: 'vertical',
+                    right: 0,
+                    top: 20,
+                    bottom: 20,
+                    data: TodolistByFlow_Pie,
+                    selected: TodolistByFlow_Select
+
+                },
+                series: [{
+                    type: 'pie',
+                    name: '待办数',
+                    radius: '45%',
+                    center: ['20%', '50%'],
+                    data: TodolistByFlows,
+
+                }]
+            };
+
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+        //逾期-按流程.
+        function queryChart_OverTimeByFlow(OverTimeByFlows) {
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('OverTimeByFlow'));
+
+            // 指定图表的配置项和数据
+            var option = {
+
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b} : {c} ({d}%)'
+                },
+                series: [{
+                    type: 'pie',
+                    name: '逾期数',
+                    radius: '25%',
+                    center: ['50%', '50%'],
+                    data: OverTimeByFlows,
+
+
+                }]
+            };
+
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+        //逾期-按部门.
+        function queryChart_OverTimeByDept(OverTimeByDept_X, OverTimeByDept_Y) {
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('OverTimeByDept'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                grid: {
+                    top: '5%',
+                    right: '1%',
+                    left: '1%',
+                    bottom: '10%',
+                    containLabel: true
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: OverTimeByDept_X
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: '流程数',
+                    data: OverTimeByDept_Y,
+                    type: 'bar',
+                    smooth: true
+                }]
+            };
+
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        }
+
+
+    </script>
 
 </body>
 </html>

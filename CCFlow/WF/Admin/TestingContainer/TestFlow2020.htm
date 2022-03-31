@@ -16,7 +16,13 @@
             <span class="pull-right">
                 <input type="button" class="cc-btn-tab" value="参数测试" onclick="ToParaTest();" />
             </span>
-            <h4 class="text-bold">能发起该流程的人员列表(<a href="javascript:alert('运行流程之前不检查可能会导致字段没有创建的错误');"><font color=red>提示</font></font></a>)  </h4>
+            <h4 class="text-bold">
+                <a href="javascript:SetTester() ">设置测试发起人</a>|
+
+                能发起该流程的人员列表(<a href="javascript:alert('运行流程之前不检查可能会导致字段没有创建的错误');"><font color=red>提示</font></a>)
+
+            </h4>
+
         </div>
 
 
@@ -25,9 +31,10 @@
                 <th style="width:50px;"> 序 </th>
                 <th> 可登录用户编号</th>
                 <th> 名称</th>
-                <th> 经典模式</th>
-                <th> 手机模式</th>
-                <th> 所在部门</th>
+                <th> 测试容器</th>
+                <!--<th> 容器-历史记录</th>-->
+                <th> 中间件模式</th>
+                <!--<th> 所在部门</th>-->
             </tr>
         </table>
         <div class="text-center"> <input type="button" id="Btn_Reset" class="cc-btn-tab" value="显示更多...." onclick="ClearTester();" /></div>
@@ -68,12 +75,10 @@
             var sid = GetQueryString("SID");
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
-            //debugger;
             handler.AddUrlData();
             var data = handler.DoMethodReturnString(doType);
 
             if (data.indexOf('err@') == 0) {
-
 
                 if (data.indexOf('访问规则') > 0) {
                     $("#Msg").html('<font color=red>' + data + '</font>');
@@ -88,12 +93,12 @@
                 }
 
                 var msg = "<font color=red>" + data + "</font>";
-                msg += "<br/><a href='javascript:SetTester()'>设置发起的测试人员</a>";
+
+                //msg += "<br/><a href='javascript:SetTester()'>设置发起的测试人员</a>";
 
                 $("#Msg").html('<font color=red>' + msg + '</font>');
                 return;
             }
-
 
             if (data.indexOf('url@') == 0) {
                 if (data.indexOf('Login.htm') > 0) {
@@ -116,17 +121,20 @@
 
                 newRow = "<tr ><td class=Idx>" + i + "</td>";
                 newRow += "<td>" + emp.No + "</td>";
-                newRow += "<td>" + emp.Name + "</td>";
+                newRow += "<td>" + emp.Name + " - " + emp.FK_DeptText + "</td>";
 
                 var url = "<a  href=\"javascript:StartIt('" + emp.No + "');\" ><i class='iconfont icon-Send'></i>发起流程</a>";
-                if (emp.No == "admin")
-                    newRow += "<td><font color=green><b>" + url + "</b></font></td>";
-                else
-                    newRow += "<td>" + url + "</td>";
 
-                newRow += "<td>无</td>";
+                newRow += "<td>";
+                newRow += url;
+                newRow += "<a  href=\"javascript:StartHistory('" + emp.No + "');\" ><i class='iconfont icon-Send'></i>历史</a>";
+                newRow += "  <div id='" + emp.No + "' />";
+                newRow += "</td>";
 
-                newRow += "<td>" + emp.FK_DeptText + "</td>";
+
+                var url = "<a  href=\"javascript:StartClassic('" + emp.No + "');\" ><i class='iconfont icon-Send'></i>中间件</a>";
+                newRow += "<td>" + url + "</td>";
+
                 newRow += "</tr>";
                 $("#Table1 tr:last").after(newRow);
             }
@@ -140,8 +148,60 @@
             $("#Msg").html("");
         });
 
+        function StartClassic(userNo) {
+            //  ?FK_Flow = 002 & Lang=CH & SID=c424770d - c435 - 463a - 9cd2 - 7d9a18e93912 & OrgNo=& UserNo=admin
+            var url = "../TestFlow.htm?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + userNo + "&FK_Flow=" + GetQueryString("FK_Flow");
+            url += "&SID=" + GetQueryString("SID");
+            url += "&OrgNo=" + GetQueryString("OrgNo");
+            window.location.href = url;
+        }
+
+        function closeTable(empNo) {
+            $("#" + empNo).html('');
+        }
+
+        //历史记录.
+        function StartHistory(empNo) {
+
+            //获得当前用户发起的流程列表，并且没有完成的.
+            var gwfs = new Entities("BP.WF.GenerWorkFlows");
+            gwfs.Retrieve("Starter", empNo, "WFState", 2, "FK_Flow", GetQueryString("FK_Flow"), "WorkID DESC");
+
+            //  var html = "<table style='width:900px;' >";
+            var html = "<table class='table table-bordered table - hover' style='width:900px;' >";
+            html += "<caption><a href=\"javascript:closeTable('" + empNo + "')\" >关闭</a></caption>";
+            html += "<tr>";
+            html += "<th>Idx</th>";
+            html += "<th>WorkID</th>";
+            html += "<th>标题</th>";
+            html += "<th>停留节点</th>";
+            html += "<th>当前人员</th>";
+            html += "<th>发起日期</th>";
+            html += "<th>最后处理日期</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < gwfs.length; i++) {
+                var en = gwfs[i];
+                if (en.FID != 0) continue;
+
+                html += "<tr>";
+                html += "<td>" + i + "</td>";
+                html += "<td>" + en.WorkID + "</td>";
+                html += "<td><a href=\"javascript:StartIt('" + empNo + "','" + en.WorkID + "');\" >" + en.Title + "</a></td>";
+                html += "<td>" + en.FK_Node + " - " + en.NodeName + "</td>";
+                html += "<td>" + en.TodoEmps + "</td>";
+                html += "<td>" + en.RDT + "</td>";
+                html += "<td>" + en.SendDT + "</td>";
+                html += "</tr>";
+            }
+            html += "</table>";
+
+            $("#" + empNo).html(html);
+
+        }
+
         //发起流程。
-        function StartIt(empNo) {
+        function StartIt(empNo, workID) {
 
             // var webUser = new WebUser();
             //  alert(webUser.SID);
@@ -167,6 +227,9 @@
                 return;
             }
 
+            if (workID != undefined)
+                data += "&WorkID=" + workID;
+
             //启动测试容器.
             //WinOpenFull(data);
             window.location.href = data;
@@ -189,11 +252,12 @@
             var msg = "请输入测试人员的帐号，多个人员用逗号分开";
             msg += "\t\n 比如:zhangsan,lisi";
             msg += "\t\n 帐号就是登录该系统的编号，如果输入的帐号没有发起该流程的权限，系统就会提示错误。";
-            var emps = window.prompt(msg, webUser.No);
+            var emps = promptGener(msg, webUser.No);
 
             var en = new Entity("BP.WF.Template.FlowExt", GetQueryString("FK_Flow"));
             en.Tester = emps;
             en.Update();
+
             window.location.href = window.location.href;
         }
 

@@ -3,7 +3,6 @@ var wf_node = null;
 var webUser = new WebUser();
 var toolbarPos = getConfigByKey("ToolbarPos", '0');  //签名图片的默认后缀
 $(function () {
-
     var barHtml = "";
     var data;
     //广西计算中心特意加的一个url参数，用来控制toolbar隐藏
@@ -44,21 +43,21 @@ $(function () {
     var sendBtnOper = "";
     $.each(toolBars, function (i, toolBar) {
         var Oper = "";
-    
-        if (toolBar.Oper != ""){
-            if (toolBar.No == "Send" || toolBar.No =="SendBtn" || toolBar.No=="Save")
+
+        if (toolBar.Oper != "") {
+            if (toolBar.No == "Send" || toolBar.No == "SendBtn" || toolBar.No == "Save")
                 Oper = "onclick=\"" + toolBar.Oper + "\"";
             else
                 Oper = "data-info=\"" + toolBar.Oper + "\"";
             if (toolBar.No == "Send")
                 sendBtnOper = Oper;
-		}
-   
+        }
+
         if (toolBar.No == "Save") {
             _html += "<button type='button' class='layui-btn layui-btn-primary' lay-submit lay-filter='Save' name='" + toolBar.No + "Btn' enable=true " + Oper + "><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='22px' height='22px'>&nbsp;" + toolBar.Name + "</button>";
             return true;
         }
-       
+
 
         if (toolBar.No == "NodeToolBar") { //自定义工具栏按钮
 
@@ -80,7 +79,7 @@ $(function () {
             if (toolBar.No == "Send")
                 _html += "<button type='button' class='layui-btn layui-btn-primary' name='" + toolBar.No + "Btn' enable=true " + Oper + " lay-submit lay-filter='Send'><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='22px' height='22px'>&nbsp;" + toolBar.Name + "</button>";
             else {
-                
+
                 _html += "<button type='button' class='layui-bar layui-btn layui-btn-primary' name='" + toolBar.No + "' enable=true " + Oper + " ><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='22px' height='22px'>&nbsp;" + toolBar.Name + "</button>";
 
             }
@@ -100,17 +99,20 @@ $(function () {
         $(".layui-header").hide();
         $(".layui-fluid").css("padding-top", "0px");
     }
-   
-   
+
+
     //按钮旁的下来框
     if (wf_node != null && wf_node.IsBackTrack == 0)
         InitToNodeDDL(data, wf_node);
 
     $('.layui-bar').on('click', function () {
         var oper = $(this).data("info");
-       if (oper != null && oper != undefined && oper != "")
-            eval(oper);       
-       
+        if (oper != null && oper != undefined && oper != "") {
+            oper = oper.toString().replace(/~/g, "'");
+            eval(oper);
+        }
+
+
     });
 
     if ($('[name=Return]').length > 0) {
@@ -132,7 +134,15 @@ $(function () {
             initModal("TransferCustom");
         });
     }
-    
+
+
+    //挂起
+    if ($('[name=Hungup]').length > 0) {
+        $('[name=Hungup]').bind('click', function () {
+            initModal("Hungup");
+        });
+    }
+
 
     if ($('[name=Thread]').length > 0) {
         $('[name=Thread]').bind('click', function () {
@@ -157,29 +167,31 @@ $(function () {
         $('[name=Track]').bind('click', function () { initModal("Track"); });
     }
 
+
+
     if ($('[name=HuiQian]').length > 0) {
         $('[name=HuiQian]').bind('click', function () { initModal("HuiQian"); });
     }
 
     if ($('[name=AddLeader]').length > 0) {
-        $('[name=AddLeader]').bind('click', function () { initModal("AddLeader");});
+        $('[name=AddLeader]').bind('click', function () { initModal("AddLeader"); });
     }
 
 
     if ($('[name=CC]').length > 0) {
-        $('[name=CC]').bind('click', function () { initModal("CC");});
+        $('[name=CC]').bind('click', function () { initModal("CC"); });
     }
 
     if ($('[name=PackUp_zip]').length > 0) {
-        $('[name=PackUp_zip]').bind('click', function () { initModal("PackUp_zip");});
+        $('[name=PackUp_zip]').bind('click', function () { initModal("PackUp_zip"); });
     }
 
     if ($('[name=PackUp_html]').length > 0) {
-        $('[name=PackUp_html]').bind('click', function () { initModal("PackUp_html");});
+        $('[name=PackUp_html]').bind('click', function () { initModal("PackUp_html"); });
     }
 
     if ($('[name=PackUp_pdf]').length > 0) {
-        $('[name=PackUp_pdf]').bind('click', function () { initModal("PackUp_pdf");});
+        $('[name=PackUp_pdf]').bind('click', function () { initModal("PackUp_pdf"); });
     }
 
     if ($('[name=SelectAccepter]').length > 0) {
@@ -207,32 +219,32 @@ $(function () {
 
 
     if ($('[name=ParentForm]').length > 0) {
-        $('[name=ParentForm]').bind('click', function() {
+        $('[name=ParentForm]').bind('click', function () {
 
             var myPWorkID = GetQueryString("PWorkID");
             var myPFlow = GetQueryString("PFlowNo");
-            if(myPFlow == null){
-            	//取得父流程FK_Flow
-            	 var gwf = new Entity("BP.WF.GenerWorkFlow", GetQueryString("WorkID"));
-            	 myPFlow=gwf.PFlowNo;
+            if (myPFlow == null) {
+                //取得父流程FK_Flow
+                var gwf = new Entity("BP.WF.GenerWorkFlow", GetQueryString("WorkID"));
+                myPFlow = gwf.PFlowNo;
             }
-            var url = "MyView.htm?WorkID=" + myPWorkID+"&FK_Flow=" + myPFlow;
+            var url = "MyView.htm?WorkID=" + myPWorkID + "&FK_Flow=" + myPFlow;
             window.open(url);
         });
     }
 
     if ($('[name=CH]').length > 0) {
-        $('[name=CH]').bind('click', function () { initModal("CH");});
+        $('[name=CH]').bind('click', function () { initModal("CH"); });
     }
 
     if ($('[name=Note]').length > 0) {
-        $('[name=Note').bind('click', function () { initModal("Note");});
+        $('[name=Note').bind('click', function () { initModal("Note"); });
     }
 
 
     //公文正文组件
     if ($('[name=GovDocFile]').length > 0) {
-        $('[name=GovDocFile').bind('click', function () { initModal("GovDocFile");});
+        $('[name=GovDocFile').bind('click', function () { initModal("GovDocFile"); });
     }
 
     //公文
@@ -240,21 +252,41 @@ $(function () {
         $('[name=DocWord').bind('click', function () { initModal("DocWord"); });
     }
 
-   
+
     //回滚 Rollback
     if ($('[name=Rollback]').length > 0) {
-        $('[name=Rollback]').bind('click', function () { initModal("Rollback");});
+        $('[name=Rollback]').bind('click', function () { initModal("Rollback"); });
     }
 
     //跳转 JumpWay
     if ($('[name=JumpWay]').length > 0) {
-        $('[name=JumpWay]').bind('click', function () { initModal("JumpWay");});
+        $('[name=JumpWay]').bind('click', function () { initModal("JumpWay"); });
     }
     //生成二维码
     if ($('[name=QRCode]').length > 0) {
         $('[name=QRCode]').bind('click', function () { initModal("QRCode"); });
     }
-    
+    //数据库版本
+    if ($('[name=FrmDBVer]').length > 0) {
+        $('[name=FrmDBVer]').bind('click', function () { initModal("FrmDBVer"); });
+    }
+
+    //小纸条
+    if ($('[name=Scrip]').length > 0) {
+        $('[name=Scrip]').bind('click', function () { initModal("Scrip"); });
+    }
+
+    //评论
+    if ($('[name=FlowBBS]').length > 0) {
+        $('[name=FlowBBS]').bind('click', function () { initModal("FlowBBS"); });
+    }
+
+    //IM
+    if ($('[name=IM]').length > 0) {
+        $('[name=IM]').bind('click', function () { initModal("IM"); });
+    }
+
+    HelpAlter();
 
 });
 //添加保存动态
@@ -280,22 +312,11 @@ function setModalMax() {
 //初始化退回、移交、加签窗口
 function initModal(modalType, toNode, url) {
 
-    if ("undefined" != typeof flowData && flowData != null && flowData != undefined) {
-        var node = flowData.WF_Node[0];
-        if (node.FormType == 12 || (node.FormType == 11 && flowData.WF_FrmNode[0] != null && flowData.WF_FrmNode[0].FrmType == 8)) {
-            if (modalType == "PackUp_pdf" || modalType == "PackUp_html" || modalType == "PackUp_zip") {
-                PrintPDF(modalType.replace("PackUp_", ""));
-                return;
-            }
-        }
-    }
-
-
     $("#returnWorkModal").on('hide.bs.modal', function () {
         setToobarEnable();
     });
 
-    var isFrameCross = window.location.href.indexOf(basePath)==-1 ? 1 : 0;
+    var isFrameCross = window.location.href.indexOf(basePath) == -1 ? 1 : 0;
     var modalIframeSrc = '';
     var width = window.innerWidth / 2;
     var height = 50;
@@ -306,11 +327,11 @@ function initModal(modalType, toNode, url) {
         switch (modalType) {
             case "returnBack":
                 title = "退回";
-                width =window.innerWidth/2; 
+                width = window.innerWidth / 2;
                 var node = new Entity("BP.WF.Template.NodeExt", paramData.FK_Node);
 
                 var info = "";
-           
+
                 if (info == "" && node.ReturnField != "") {
                     if ($("#" + node.ReturnField).length == 1)
                         info = $("#" + node.ReturnField).val();
@@ -319,104 +340,116 @@ function initModal(modalType, toNode, url) {
                     if (info == undefined)
                         info = "";
                 }
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/ReturnWork.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=" + info + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/ReturnWork.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=" + info + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "Send":
                 SetChildPageSize(80, 80);
                 break;
             case "TransferCustom":
                 title = "流转自定义";
-                width = window.innerWidth * 3/5; 
+                width = window.innerWidth * 3 / 5;
                 height = 60;
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/TransferCustom.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/TransferCustom.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "accpter":
                 title = "工作移交";
-                width = window.innerWidth * 4/5;
+                width = window.innerWidth * 4 / 5;
                 height = 80;
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 isShowColseBtn = 0;
                 break;
             case "Thread":
             case "thread":
                 title = "子线程";
-                width = window.innerWidth * 4/5;
-                height =80;
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/ThreadDtl.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                width = window.innerWidth * 4 / 5;
+                height = 80;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/ThreadDtl.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "shift":
                 title = "工作移交";
-                width = window.innerWidth * 4/5; 
+                width = window.innerWidth * 4 / 5;
                 height = 80;
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Shift.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Shift.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 isShowColseBtn = 0;
                 break;
             case "GovDocFile":
                 title = "公文正文";
-                width = window.innerWidth * 2/5; 
+                width = window.innerWidth * 2 / 5;
                 height = 40;
-                modalIframeSrc = ccbpmPath +"/WF/CCForm/GovDocFile.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/CCForm/GovDocFile.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "DocWord":
                 title = "公文";
-                width = window.innerWidth * 2/5; 
+                width = window.innerWidth * 2 / 5;
                 height = 40;
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/DocWord.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/DocWord.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "askfor":
                 title = "加签";
-                width = window.innerWidth * 4/5; 
+                width = window.innerWidth * 4 / 5;
                 height = 80;
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Askfor.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Askfor.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "Btn_WorkCheck":
                 title = "审核";
-                width = window.innerWidth * 4/5; 
+                width = window.innerWidth * 4 / 5;
                 height = 80;
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/WorkCheck.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/WorkCheck.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "Track": //轨迹.
                 title = "处理记录、轨迹";
-                width = window.innerWidth * 4/5; 
+                width = window.innerWidth * 4 / 5;
                 height = 80;
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "HuiQian":
-                width = window.innerWidth * 4/5; 
+                width = window.innerWidth * 4 / 5;
                 height = 80;
                 if (toNode != null)
                     title = "先会签，后发送。";
                 else
                     title = "会签";
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/HuiQian.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNode + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/HuiQian.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNode + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 isShowColseBtn = 0;
                 break;
             case "AddLeader":
                 title = "加主持人";
-                width = window.innerWidth * 4/5; 
+                width = window.innerWidth * 4 / 5;
                 height = 80;
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/HuiQian.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNode + "&HuiQianType=AddLeader&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/HuiQian.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNode + "&HuiQianType=AddLeader&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                break;
+            case "Hungup":
+                var gwf = new Entity("BP.WF.GenerWorkFlow", paramData.WorkID);
+                if (gwf.WFState == 4) {
+                    alert("业务已经被挂起，不可以重复操作.");
+                    return;
+                }
 
+                title = "挂起/延期";
+                width = window.innerWidth * 4 / 5;
+                height = 80;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Hungup.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNode + "&HuiQianType=AddLeader&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "CC":
                 title = "抄送";
-                width = window.innerWidth * 4/5; 
+                width = window.innerWidth * 4 / 5;
                 height = 80;
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/CC.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNode + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/CC.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNode + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "PackUp_zip":
             case "PackUp_html":
             case "PackUp_pdf":
                 title = "打包下载/打印";
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_', '') + "&FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_', '') + "&FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "Press":
                 //$('#modalHeader').text("催办");
                 //modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Press.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
+            case "Accepter":
             case "accepter":
                 title = "选择下一个节点及下一个节点接受人";
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 isShowColseBtn = 0;
                 break;
 
@@ -425,20 +458,20 @@ function initModal(modalType, toNode, url) {
                 //获取到达节点
                 var nodeOne = new Entity("BP.WF.Template.NodeSimple", toNode);
                 title = "选择接受人(到达节点:" + nodeOne.Name + ")";
-                width = window.innerWidth * 4/5; 
+                width = window.innerWidth * 4 / 5;
                 height = 80;
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 isShowColseBtn = 0;
                 break;
             case "SelectNodeUrl":
-                title ="请选择到达的节点";
-                width = window.innerWidth * 1/2; 
+                title = "请选择到达的节点";
+                width = window.innerWidth * 1 / 2;
                 height = 50;
                 modalIframeSrc = url;
                 break;
 
             case "BySelfUrl"://接收人规则自定义URL
-                width = window.innerWidth * 4/5; 
+                width = window.innerWidth * 4 / 5;
                 height = 80;
                 modalIframeSrc = url;
                 if ($("#returnWorkModal .modal-footer").length == 0) {
@@ -474,52 +507,79 @@ function initModal(modalType, toNode, url) {
 
                 break;
             case "sendAccepterOfOrg":
-                title ="选择接受人";
-                width = window.innerWidth *4/5; 
+                title = "选择接受人";
+                width = window.innerWidth * 4 / 5;
                 height = 80;
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/AccepterOfOrg.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/AccepterOfOrg.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "AccepterOfDept":
-                title ="选择接受人";
-                width = window.innerWidth * 4/5; 
+                title = "选择接受人";
+                width = window.innerWidth * 4 / 5;
                 height = 80;
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/AccepterOfDept.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/AccepterOfDept.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "DBTemplate":
-                title ="历史发起记录&模版";
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/DBTemplate.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                title = "历史发起记录&模版";
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/DBTemplate.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "CH":
-                title ="节点时限";
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/CH.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                title = "节点时限";
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/CH.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "Note":
-                title ="备注";
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Note.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                title = "备注";
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Note.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
             case "PR":
-                title ="重要性设置";
-                width = window.innerWidth * 1/2; 
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/PRI.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PRIEnable=" + node.PRIEnable + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                title = "重要性设置";
+                width = window.innerWidth * 1 / 2;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/PRI.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PRIEnable=" + paramData.PRIEnable + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "Rollback":
-                title ="流程回滚";
-                width = window.innerWidth/2; 
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/Rollback.htm?WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random();
+                title = "回滚";
+                width = window.innerWidth / 2;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Rollback.htm?WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random();
                 break;
             case "JumpWay":
-                title ="流程节点跳转";
-                width =window.innerWidth/2; 
-                modalIframeSrc = ccbpmPath +"/WF/WorkOpt/JumpWay.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                title = "流程节点跳转";
+                width = window.innerWidth / 2;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/JumpWay.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "QRCode":
                 title = "二维码扫描";
                 width = window.innerWidth / 2;
-                modalIframeSrc = ccbpmPath+"/WF/WorkOpt/QRCode/GenerCode.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&FID=" + paramData.FID + "&PWorkID=" + paramData.PWorkID + "&Info=&s=" + Math.random();
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/QRCode/GenerCode.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&FID=" + paramData.FID + "&PWorkID=" + paramData.PWorkID + "&Info=&s=" + Math.random();
                 break;
+            case "FrmDBVer":
+                title = "数据版本";
+                width = window.innerWidth * 4 / 5;
+                modalIframeSrc = ccbpmPath + "/WF/CCForm/FrmDBVer.htm?FK_Node=" + paramData.FK_Node + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random();
+                window.open(modalIframeSrc);
+                return;
+            case "Scrip":
+                OpenScrip();
+
+                return;
+            case "FlowBBS":
+                var type = $("input[name=FlowBBS]").attr("data-info");
+                title = "评论";
+                width = window.innerWidth * 4 / 5;
+                height = 80;
+                modalIframeSrc = ccbpmPath + "/WF/CCBill/OptComponents/FrmBBS.htm?FrmID=ND" + parseInt(paramData.FK_Flow) + "Rpt" + "&WorkID=" + paramData.WorkID + "&s=" + Math.random();
+                if (type == 2)
+                    modalIframeSrc += "&IsReadonly=1";
+                break;
+            case "IM":
+                title = "即时通讯";
+                width = window.innerWidth / 3;
+                height = 80;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/IM.htm?NodeID=" + paramData.FK_Node + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random();
+                OpenLayuiDialog(modalIframeSrc, title, width, height, "rb", false, false, false, null, null, null, 0);
+                return;
             default:
                 break;
         }
     }
+    //modalIframeSrc += "&Token=" + GetToken();
     if (isShowColseBtn == 0)
         OpenLayuiDialog(modalIframeSrc, title, width, height, "auto", false, false, false, null, null, null, 0);
     else
@@ -527,6 +587,35 @@ function initModal(modalType, toNode, url) {
     return false;
 }
 
+
+function OpenScrip() {
+    var en = new Entity("BP.WF.GenerWorkFlow", GetQueryString("WorkID"));
+    var ScripNodeID = en.GetPara("ScripNodeID");
+    var msg = en.GetPara("ScripMsg");
+    if (ScripNodeID != GetQueryString("FK_Node"))
+        msg = "";
+    if (msg == null || msg == undefined)
+        msg = "";
+
+    layer.open({
+        type: 1
+        , title: "小纸条"
+        , closeBtn: false
+        , area: ['40%', '40%']
+        , shade: 0
+        , id: 'Layui_Scrip' //设定一个id，防止重复弹出
+        , btn: ['保存', '取消']
+        , btnAlign: 'c'
+        , moveType: 1 //拖拽模式，0或者1
+        , content: '<textarea style="margin:10px;width:95%"  placeholder="请输入内容" class="layui-textarea">' + msg + '</textarea>'
+        , yes: function (index, layero) {
+            layer.close(index);
+            en.SetPara("ScripNodeID", GetQueryString("FK_Node"));
+            en.SetPara("ScripMsg", layero.find("textarea").val());
+            en.Update();
+        }
+    });
+}
 //禁用按钮功能
 function setToobarDisiable() {
     $('#ToolBar input').css('background', 'gray');
@@ -583,14 +672,14 @@ function InitToNodeDDL(JSonData, wf_node) {
             $("#DDL_ToNode").html(item.title);
             $("#TB_ToNode").data(item);
         }
-            
+
     })
 
     if (isSelected == false) {
         $("#DDL_ToNode").html(data[0].title);
         $("#TB_ToNode").data(data[0]);
     }
-       
+
     layui.dropdown.render({
         elem: '#Btn_ToNode',
         data: data,
@@ -602,14 +691,14 @@ function InitToNodeDDL(JSonData, wf_node) {
     if (wf_node.CondModel == 3) {
         var _html = "";
         $.each(JSonData.ToNodes, function (i, toNode) {
-           var obj= $("<Button  class='layui-btn layui-btn-primary' id='" + toNode.No + "' name='ToNodeBtn' enable=true onclick='ChangeToNodeState(" + toNode.No + ")'><img src='" + basePath + "/WF/Img/Btn/Send.png' width='22px' height='22px'>&nbsp;" + toNode.Name + "</button>");
+            var obj = $("<Button  class='layui-btn layui-btn-primary' id='" + toNode.No + "' name='ToNodeBtn' enable=true onclick='ChangeToNodeState(" + toNode.No + ")'><img src='" + basePath + "/WF/Img/Btn/Send.png' width='22px' height='22px'>&nbsp;" + toNode.Name + "</button>");
             $('[name=SendBtn]').before(obj);
             obj.data(toNode);
         });
         $("#Btn_ToNode").hide();
         $('[name=SendBtn]').hide();
     }
-    
+
 }
 
 function ChangeToNodeState(toNode) {
@@ -624,7 +713,21 @@ function ChangeToNodeState(toNode) {
 var IsRecordUserLog = getConfigByKey("IsRecordUserLog", false);
 var isSaveOnly = false;
 function Send(isHuiQian, formType) {
-
+    if (wf_node != null && wf_node.ScripRole == 2) {
+        var gwf = new Entity("BP.WF.GenerWorkFlow", GetQueryString("WorkID"));
+        var ScripNodeID = gwf.GetPara("ScripNodeID");
+        var msg = gwf.GetPara("ScripMsg");
+        if (ScripNodeID != GetQueryString("FK_Node"))
+            msg = "";
+        if (msg == null || msg == undefined)
+            msg = "";
+        var val = promptGener("请输入要传达的信息,可以为空.", msg);
+        if (val != null && val != '') {
+            gwf.SetPara("ScripNodeID", GetQueryString("FK_Node"));
+            gwf.SetPara("ScripMsg", val);
+            gwf.Update();
+        }
+    }
     //如果启用了流程流转自定义，必须设置选择的游离态节点
     if ($('[name=TransferCustom]').length > 0) {
         var ens = new Entities("BP.WF.TransferCustoms");
@@ -667,15 +770,15 @@ function Send(isHuiQian, formType) {
     if (formType == 5)
         if (FromTreeSend() == false)
             return false;
-   
+
     if (IsRecordUserLog == true) {
-        if(pageData.FK_Node==parseInt(pageData.FK_Flow)+"01")
+        if (pageData.FK_Node == parseInt(pageData.FK_Flow) + "01")
             UserLogInsert("StartFlow", "发起流程");
         else
             UserLogInsert("TodoList", "处理待办");
     }
 
-    
+
 
     /**发送前处理的信息 End**/
     var isShowToNode = true;
@@ -696,8 +799,8 @@ function Send(isHuiQian, formType) {
 
             initModal("SelectNodeUrl", null, url);
             return false;
-        } 
-        
+        }
+
     }
 
     window.hasClickSend = true; //标志用来刷新待办.
@@ -707,7 +810,7 @@ function Send(isHuiQian, formType) {
 
 
     //含有发送节点 且接收
-    if ($('#DDL_ToNode').length > 0 ) {
+    if ($('#DDL_ToNode').length > 0) {
         var gwf = new Entity("BP.WF.GenerWorkFlow", GetQueryString("WorkID"));
 
         var isLastHuiQian = true;
@@ -718,7 +821,7 @@ function Send(isHuiQian, formType) {
             if (wf_node.TodolistModel == 1 && huiqianSta == true && todoEmps.split(";").length > 1)
                 isLastHuiQian = false;
         }
-  
+
         var selectToNode = $('#TB_ToNode').data();
         toNodeID = selectToNode.id;
         if (selectToNode.IsSelected == 2)
@@ -767,7 +870,7 @@ function Send(isHuiQian, formType) {
             isSaveOnly = true;
             $('[name=SaveBtn]').trigger("click");
             isSaveOnly = false;
-          
+
             if (isHuiQian == true) {
                 initModal("HuiQian", toNodeID);
             } else {
@@ -788,6 +891,7 @@ function Send(isHuiQian, formType) {
     execSend(toNodeID, formType, isReturnNode);
 }
 
+
 function execSend(toNodeID, formType, isReturnNode) {
     //正在发送弹出层
     var index = layer.msg('正在发送，请稍后..', {
@@ -806,14 +910,14 @@ function execSend(toNodeID, formType, isReturnNode) {
                 handler.AddPara(key, encodeURIComponent(formData[key]));
             }
         }
-     
+
         handler.AddPara("ToNode", toNodeID);
         handler.AddUrlData();
         handler.AddPara("IsReturnNode", isReturnNode);
         var data = handler.DoMethodReturnString("Send"); //执行保存方法.
         layer.close(index);//关闭正在发送
         if (data.indexOf('err@') == 0) { //发送时发生错误
-            
+
             var reg = new RegExp('err@', "g")
             var data = data.replace(reg, '');
             layer.alert(data);
@@ -899,7 +1003,7 @@ function execSend(toNodeID, formType, isReturnNode) {
         return false;
     });
 
-   
+
 }
 
 //调用后，就关闭刷新按钮.
@@ -910,7 +1014,7 @@ function returnWorkWindowClose(data) {
         setToobarEnable();
         return;
     }
-    layer.close(layer.index); 
+    layer.close(layer.index);
     if (data == undefined) {
         //应该关闭页面
         if (window.top.vm && typeof window.top.vm.closeCurrentTabs == "function")
@@ -924,7 +1028,7 @@ function returnWorkWindowClose(data) {
             }
             window.close();
         }
-           
+
     }
     //通过下发送按钮旁的下拉框选择下一个节点
     if (data != null && data != undefined && data.indexOf('SaveOK@') == 0) {
@@ -1049,12 +1153,16 @@ function NodeFormSend() {
         $("[name=Dtl]").each(function (i, obj) {
             var contentWidow = obj.contentWindow;
             if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
-                contentWidow.SaveAll();
+                if (contentWidow.SaveAll() == false) {
+                    formCheckResult = false;
+                }
+                //最小从表明细不为0
+                if (contentWidow.CheckDtlNum() == false) {
+                    layer.alert("[" + contentWidow.sys_MapDtl.Name + "]明细不能少于最小数量" + contentWidow.sys_MapDtl.NumOfDtl + "");
+                    formCheckResult = false;
+                }
             }
-            if (contentWidow.SaveAll() == false) {
-                formCheckResult = false
-                return false;
-            }
+
 
         });
         if (formCheckResult == false)
@@ -1069,7 +1177,7 @@ function NodeFormSend() {
 
     //审核组件
     if ($("#WorkCheck_Doc").length == 1) {
-        if ($("#WorkCheck_Doc").val() == "" && $("#Img_WorkCheck").length!=0 && $("#Img_WorkCheck")[0].src =="../DataUser/Siganture/UnSiganture.jpg") {
+        if ($("#WorkCheck_Doc").val() == "" && $("#Img_WorkCheck").length != 0 && $("#Img_WorkCheck")[0].src == "../DataUser/Siganture/UnSiganture.jpg") {
             alert("请填写审核意见!!!!");
             return false;
         }
@@ -1089,7 +1197,7 @@ function NodeFormSend() {
         alert(msg);
         return false;
     }
-   
+
 
     return true;
 }
@@ -1102,36 +1210,8 @@ function FromTreeSend() {
     if (typeof beforeSend != 'undefined' && beforeSend instanceof Function)
         if (beforeSend() == false)
             return false;
-    OnTabChange("btnsave");
-    var p = $(document.getElementById("tabs")).find("li");
-
-    //查看附件上传的最新数量
-    var isSend = true;
-    var msg = "";
-    $.each(p, function (i, val) {
-        selectSpan = $(val).find("span")[0];
-        var currTab = $("#tabs").tabs("getTab", i);
-        tabText = $(selectSpan).text();
-        var lastChar = tabText.substring(tabText.length - 1, tabText.length);
-        if (lastChar == "*")
-            tabText = tabText.substring(0, tabText.length - 1);
-        var currScope = currTab.find('iframe')[0];
-
-        var contentWidow = currScope.contentWindow;
-        // 不支持火狐浏览器。
-        var frms = contentWidow.document.getElementsByName("Attach");
-        for (var i = 0; i < frms.length; i++) {
-            msg = frms[i].contentWindow.CheckAthNum();
-            if (msg != "") {
-                msg += "[" + tabText + "]表单" + msg + ";";
-                isSend = false;
-            }
-        }
-    });
-    if (isSend == false) {
-        alert(msg);
-        return;
-    }
+    if (Save(1) == false)
+        return false;
     return true;
 }
 /**
@@ -1224,7 +1304,7 @@ function DoStop(msg, flowNo, workid) {
         else
             window.close();
     })
- 
+
 }
 //执行分支流程退回到分合流节点。
 function DoSubFlowReturn(fid, workid, fk_node) {
@@ -1247,58 +1327,6 @@ function DoDelSubFlow(fk_flow, workid) {
 
 }
 
-/**打印开发者表单 */
-function PrintPDF(packUpType) {
-    var W = document.body.clientWidth;
-    var H = document.body.clientHeight - 40;
-    $("#Btn_PrintPdf").val("PDF打印中...");
-    $("#Btn_PrintPdf").attr("disabled", true);
-    var _html = document.getElementById("divCurrentForm").innerHTML;
-    _html = _html.replace("height: " + $("#topContentDiv").height() + "px", "");
-    _html = _html.replace("height: " + $("#contentDiv").height() + "px", "");
-    _html = _html.replace("height: " + $("#divCCForm").height() + "px", "");
-    //把附件、从表替换
-    var dtls = $("[name=Dtl]");
-    $.each(dtls, function (i, dtl) {
-        _html = _html.replace(dtl.innerHTML, "@Dtl_" + dtl.id);
-    });
-    var aths = $("[name=Ath]");
-    $.each(aths, function (i, ath) {
-        _html = _html.replace(ath.innerHTML, "@Ath_" + ath.id.replace("Div_", ""));
-    });
-
-
-    _html = _html.replace(/仿宋, SimSun/g, 'SimSun');
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
-    handler.AddPara("html", _html);
-    handler.AddPara("FrmID", flowData.Sys_MapData[0].No);
-    handler.AddPara("WorkID", GetQueryString("WorkID"));
-
-    var data = handler.DoMethodReturnString("Packup_Init");
-    if (data.indexOf("err@") != -1) {
-        layer.alert(data);
-    } else {
-        $("#Btn_PrintPdf").val("PDF打印成功");
-        $("#Btn_PrintPdf").attr("disabled", false);
-        $("#Btn_PrintPdf").val("打印pdf");
-        var urls = JSON.parse(data);
-        for (var i = 0; i < urls.length; i++) {
-            if (urls[i].No == packUpType) {
-                window.open(urls[i].Name.replace("../../DataUser/", "../DataUser/"));
-                break;
-            }
-
-            if (urls[i].No == packUpType) {
-                window.open(urls[i].Name.replace("../../DataUser/", "../DataUser/"));
-                break;
-            }
-
-        }
-    }
-
-
-
-}
 
 //删除流程
 function DeleteFlow() {
@@ -1366,25 +1394,38 @@ function UnSendAllThread() {
 
 //催办
 function Press() {
-    window.prompt('请输入催办信息', '该工作因为xxx原因，需要您优先处理.', function (e) {
-        if (e.index == 1) {
-            if (e.value == "")
-                return;
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-            handler.AddUrlData();
-            handler.AddPara("Msg", e.value);
-            var data = handler.DoMethodReturnString("Runing_Press");
+    var msg = window.prompt('请输入催办信息', '该工作因为xxx原因，需要您优先处理.');
+    if (msg == null)
+        return;
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+    handler.AddUrlData();
+    handler.AddPara("Msg", msg);
+    var data = handler.DoMethodReturnString("Runing_Press");
 
-            if (data.indexOf('err@') == 0) {
-                console.log(data);
-                mui.alert(data);
-                return;
-            }
+    if (data.indexOf('err@') == 0) {
+        console.log(data);
+        mui.alert(data);
+        return;
+    }
+    //promptGener('请输入催办信息', '该工作因为xxx原因，需要您优先处理.', function (e) {
+    //    if (e.index == 1) {
+    //        if (e.value == "")
+    //            return;
+    //        var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+    //        handler.AddUrlData();
+    //        handler.AddPara("Msg", e.value);
+    //        var data = handler.DoMethodReturnString("Runing_Press");
 
-            mui.alert(data);
-            return;
-        }
-    });
+    //        if (data.indexOf('err@') == 0) {
+    //            console.log(data);
+    //            mui.alert(data);
+    //            return;
+    //        }
+
+    //        mui.alert(data);
+    //        return;
+    //    }
+    //});
 
 }
 
@@ -1417,27 +1458,28 @@ function UnSend() {
  */
 function SendSubFlow(subFlowNo, subFlowMyPK) {
     var W = document.body.clientWidth - 340;
-    var H = document.body.clientHeight - 340;
+   
     var url = "./WorkOpt/SubFlowGuid.htm?SubFlowMyPK=" + subFlowMyPK + "&WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
-    OpenBootStrapModal(url, "eudlgframe", "选择", W, H,
-        "icon-edit", true, function () {
-            var iframe = document.getElementById("eudlgframe");
+    OpenLayuiDialog(url,"选择", W,80,
+        "auto", false, true, true, function () {
+            debugger
+            var iframe = $(window.frames["dlg"]).find("iframe");
             if (iframe) {
-                var result = iframe.contentWindow.Btn_OK();
-                if(result == true){
+                var result = iframe[0].contentWindow.Btn_OK();
+                if (result == true) {
                     var subFlowGuid = new Entity("BP.WF.Template.SubFlowHandGuide", subFlowMyPK);
                     if (subFlowGuid.SubFlowHidTodolist == 1) {
                         if (window.parent != null && window.parent != undefined)
                             window.parent.close();
                         else
                             window.close();
-                        
+
                     }
                     //显示子流程信息
                     var html = window.parent.SubFlow_Init(wf_node);
                     $("#SubFlow").html("").html(html);
                 }
-               
+
             }
 
         }, null, function () {
@@ -1452,43 +1494,46 @@ function StartThread() {
     handler.AddPara("FK_Node", GetQueryString("FK_Node"));
     var data = handler.DoMethodReturnString("MyFlow_StartThread");
     if (data.indexOf("err@") != -1) {
-        alert(data); 
+        alert(data);
         console.log(data);
         return;
     }
 
     if (data == null || data == undefined)
         data = "";
-    data = data.replace("@查看<img src='/WF/Img/Btn/PrintWorkRpt.gif' >", '')
-    $("#HelpAlter").html(data.replace(/@/g, '<br/>').replace(/null/g, ''));
-    var trackA = $('#HelpAlter a:contains("工作轨迹")');
-    var trackImg = $('#HelpAlter img[src*="PrintWorkRpt.gif"]');
-    trackA.remove();
-    trackImg.remove();
-    $("#HelpAlter").css("text-align", "left");
-    $('#HelpAlterDiv').modal().show();
+    data = data.replace("@查看<img src='/WF/Img/Btn/PrintWorkRpt.gif' >", '');
+    data = data.replace(/@/g, '<br/>').replace(/null/g, '');
 
-    $('#BtnOK1').bind('click', function () {
-        if ($("#SubFlow").length == 1) {
-            var node = new Entity("BP.WF.Node",GetQueryString("FK_Node"));
-            $("#SubFlow").html(SubFlow_Init(node));
+    layer.open({
+        type: 1
+        , id: 'HelpAlter'
+        , content: msg
+        , btn: ["确定"]
+        , btnAlign: 'r' //按钮居中
+        , area: ['40%', '40%']
+        , shade: 0
+
+        , yes: function () {
+            layer.closeAll();
+        }
+        , success: function (layero, index) {
+            if ($("#SubFlow").length == 1) {
+                var node = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
+                $("#SubFlow").html(SubFlow_Init(node));
+            }
         }
     });
-    $('#BtnOK').bind('click', function () {
-        if ($("#SubFlow").length == 1) {
-            var node = new Entity("BP.WF.Node",GetQueryString("FK_Node"));
-            $("#SubFlow").html(SubFlow_Init(node));
-        }
-    });
+    $("#HelpAlter").css("padding", "0px 20px");
 
-    
 }
 
 /**
  * 帮助提醒
  */
 function HelpAlter() {
-    var node = flowData.WF_Node[0];
+    if (wf_node == null)
+        return;
+    var node = wf_node;
     //判断该节点是否启用了帮助提示 0 禁用 1 启用 2 强制提示 3 选择性提示
     var btnLab = new Entity("BP.WF.Template.BtnLab", node.NodeID);
     if (btnLab.HelpRole != 0) {
@@ -1507,8 +1552,28 @@ function HelpAlter() {
                 return;
             var str = htmlobj.responseText;
             if (str != null && str != "" && str != undefined) {
-                $('#HelpAlter').html("").append(str);
-                $('#HelpAlterDiv').modal().show();
+                layer.open({
+                    type: 1
+                    , id: 'HelpAlter'
+                    , content: str
+                    , btnAlign: 'r' //按钮居中
+                    , area: ['40%', '40%']
+                    , shade: 0
+                    , success: function (layer, index) {
+                        //保存用户的帮助指引信息操作
+                        var mypk = webUser.No + "_ND" + node.NodeID + "_HelpAlert"
+                        var userRegedit = new Entity("BP.Sys.UserRegedit");
+                        userRegedit.SetPKVal(mypk);
+                        var count = userRegedit.RetrieveFromDBSources();
+                        if (count == 0) {
+                            //保存数据
+                            userRegedit.FK_Emp = webUser.No;
+                            userRegedit.FK_MapData = "ND" + node.NodeID;
+                            userRegedit.Insert();
+                        }
+                    }
+                });
+                $("#HelpAlter").css("padding", "0px 20px");
             }
         }
     }

@@ -18,27 +18,23 @@
     <script type="text/javascript">
         $(function () {
 
-           InitBar(FlowDevModel.FoolTruck);
+            InitBar(FlowDevModel.FoolTruck);
         });
 
     </script>
 </head>
 <body>
-
-    <div id="bar"></div>
-
     <div id="bar"></div>
 
     <fieldset>
-        <legend>请输入流程名称   </legend>
+        <legend>请输入流程名称</legend>
         <ul>
-            <li><label><font color="red" style="font-size:larger">*</font></label><label><input type="text" id="TB_Name" name="TB_Name" height="60" style="font-weight:bolder; font-size:30px;" /></label></li>
+            <li>
+                <label><font color="red" style="font-size:larger">*</font></label>
+                <input type="text" id="TB_Name" name="TB_Name" height="60" style="font-weight: bolder; font-size: 30px; width: 90%;" placeholder="输入名称，点击右上角创建，系统进入流程设计器。" />
+            </li>
         </ul>
-    </fieldset>
-
-
-    <fieldset>
-        <legend id="help"></legend>
+        <legend class="help">帮助：<a href="https://www.bilibili.com/video/BV1gv411i7gK" target="_blank">累加表单模式. </a></legend>
         <ul>
             <li> 累加表单模式是傻瓜表单模式的一种，它是在每个节点上都设置自己的表单。 </li>
             <li> 流程在运动的过程中，把所有经过的表单都串联起来组成一个完整的表单。</li>

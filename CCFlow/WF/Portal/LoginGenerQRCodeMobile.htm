@@ -124,38 +124,38 @@
 
         //设置cookies值
         function setCookie(cname, cvalue, exdays) {
-            var d = new Date();
-            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-            var expires = "expires=" + d.toGMTString();
-            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+            //var d = new Date();
+            //d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            //var expires = "expires=" + d.toGMTString();
+            //document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
         }
         //获取cookies值
         function getCookie(cname) {
-            var name = cname + "=";
-            var decodedCookie = decodeURIComponent(document.cookie);
-            var ca = decodedCookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1);
-                }
-                if (c.indexOf(name) == 0) {
-                    return c.substring(name.length, c.length);
-                }
-            }
+            //var name = cname + "=";
+            //var decodedCookie = decodeURIComponent(document.cookie);
+            //var ca = decodedCookie.split(';');
+            //for (var i = 0; i < ca.length; i++) {
+            //    var c = ca[i];
+            //    while (c.charAt(0) == ' ') {
+            //        c = c.substring(1);
+            //    }
+            //    if (c.indexOf(name) == 0) {
+            //        return c.substring(name.length, c.length);
+            //    }
+            //}
             return "";
         }
         //检查cookies值
         function checkCookie() {
-            var user = getCookie("username");
-            if (user != "") {
-                $(" select option[value='" + user + "']").attr("selected", "selected");
-            } else {
+            //var user = getCookie("username");
+            //if (user != "") {
+            //    $(" select option[value='" + user + "']").attr("selected", "selected");
+            //} else {
 
-                if (user != "" && user != null) {
-                    setCookie("username", user, 30);
-                }
-            }
+            //    if (user != "" && user != null) {
+            //        setCookie("username", user, 30);
+            //    }
+            //}
         }
     </script>
 </head>

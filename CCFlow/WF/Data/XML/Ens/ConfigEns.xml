@@ -43,8 +43,8 @@
    <Item Key="IsShowSearchKey" Val="1"  For="BP.Tax.Taxpayers"  />
    
    <!-- 生成 word 单据模板位置。  -->   
-   <Item Key="BillTemplatePath" Val="\\WSB\\HZ.rtf"  For="BP.Tax.BillHZs"  />
-   <Item Key="BillTemplatePath" Val="\\WSB\\ZLXG.rtf"  For="BP.Tax.BillZLXGs"  />
+   <Item Key="FrmPrintTemplatePath" Val="\\WSB\\HZ.rtf"  For="BP.Tax.BillHZs"  />
+   <Item Key="FrmPrintTemplatePath" Val="\\WSB\\ZLXG.rtf"  For="BP.Tax.BillZLXGs"  />
   
 
   <!-- 用于显示两列的分组信息。 设置规则：@属性=标签 -->

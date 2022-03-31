@@ -245,7 +245,7 @@
             var sta = node.FWCSta;
             var checkNote = ""; //审核意见.
             if (sta == 1 && BatchCheckNoteModel == "0") {
-                var checkNote = window.prompt('请输入审核意见', "同意");
+                var checkNote = promptGener('请输入审核意见', "同意");
                 if (checkNote == null || checkNote == '' || checkNote == undefined)
                     return;
             }

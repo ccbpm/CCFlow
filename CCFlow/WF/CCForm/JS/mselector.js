@@ -116,37 +116,37 @@
 
     function executeSql(sql, valueField, textField, key) {
         var datas = [];
-        var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCFrom");
-        if (sql && $.trim(key) != "") {
-            key = key.replace("'", "");
-            var _sql = sql.replace(/@Key/g, key).replace(/~/g, "'");
-            handler.AddPara("SQL", _sql);
-            var dt = handler.DoMethodReturnString("RunSQL_Init");
-            if ($.isArray(dt)) {
-                $.each(dt, function (i, o) {
-                    var option = {};
-                    option[valueField] = o[valueField];
-                    option[textField] = o[textField];
-                    datas.push(option);
-                });
-            }
-            /*
-            if (values) {
-            var machesData = [];
-            $.each(values.split(","), function (i, o) {
-            $.each(datas, function (index, object) {
-            if (o == object[valueField]) {
-            var option = {};
-            option[valueField] = object[valueField];
-            option[textField] = object[textField];
-            machesData.push(option);
-            }
-            });
-            });
-            datas = machesData;
-            }
-            */
-        }
+        //var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCFrom");
+        //if (sql && $.trim(key) != "") {
+        //    key = key.replace("'", "");
+        //    var _sql = sql.replace(/@Key/g, key).replace(/~/g, "'");
+        //    handler.AddPara("SQL", _sql);
+        //    var dt = handler.DoMethodReturnString("RunSQL_Init");
+        //    if ($.isArray(dt)) {
+        //        $.each(dt, function (i, o) {
+        //            var option = {};
+        //            option[valueField] = o[valueField];
+        //            option[textField] = o[textField];
+        //            datas.push(option);
+        //        });
+        //    }
+        //    /*
+        //    if (values) {
+        //    var machesData = [];
+        //    $.each(values.split(","), function (i, o) {
+        //    $.each(datas, function (index, object) {
+        //    if (o == object[valueField]) {
+        //    var option = {};
+        //    option[valueField] = object[valueField];
+        //    option[textField] = object[textField];
+        //    machesData.push(option);
+        //    }
+        //    });
+        //    });
+        //    datas = machesData;
+        //    }
+        //    */
+        //}
         return datas;
     }
 

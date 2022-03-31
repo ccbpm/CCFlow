@@ -20,19 +20,17 @@
         //页面启动函数.
         $(function () {
 
-            var fk_node = GetQueryString("FK_Node");
-
-            //URL参数FK_Node 不为空时
-            if (fk_node != null && fk_node != undefined && fk_node != "") {
-                var node = new Entity("BP.WF.Node", fk_node);
-                if (node.BatchRole == 0) { // 改节点不能批量审批
-                    $("#cc").append("<center>节点(" + node.Name + ")不能执行批量处理操作 </center>");
-                    return;
-                }
-                window.location.href = "./WorkOpt/BatchList.htm?FK_Node=" + fk_node + "&Type=1"; //跳转到批量审批处理列表
-                return;
-            }
-
+            //var fk_node = GetQueryString("FK_Node");
+            ////URL参数FK_Node 不为空时
+            //if (fk_node != null && fk_node != undefined && fk_node != "") {
+            //    var node = new Entity("BP.WF.Node", fk_node);
+            //    if (node.BatchRole == 0) { // 改节点不能批量审批
+            //        $("#cc").append("<center>节点(" + node.Name + ")不能执行批量处理操作 </center>");
+            //        return;
+            //    }
+            //    window.location.href = "./WorkOpt/BatchList.htm?FK_Node=" + fk_node + "&Type=1"; //跳转到批量审批处理列表
+            //    return;
+            //}
 
             //节点为空的时候，列出节点列表,  获取当前用户批处理的流程及对应的节点
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
@@ -44,12 +42,12 @@
 
             data = eval('(' + data + ')');
             if (data.length == 0) {
-                $("#lists").append("<center>当前没有批处理的工作。 </center>");
+                $("#lists").append("<center> 当前没有批处理的工作。 </center>");
                 return;
             }
 
             if (data.length == 0) {
-                $("#lists").append("<center><h3>没有要批处理的工作.</h3></center>");
+                $("#lists").append("<center><h3> 没有要批处理的工作.</h3></center>");
                 return;
             }
 
@@ -80,13 +78,11 @@
             $("#lists").append(listbox);
         });
 
-        function ToSelfUrl(nodeID)
-        {
+        function ToSelfUrl(nodeID) {
             var node = Entity("BP.WF.Node", nodeID);
             var url = node.BatchSelfUrl;
             window.location.href = url;
         }
-
     </script>
 </head>
 <body class="gray-bg">

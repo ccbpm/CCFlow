@@ -37,9 +37,6 @@ new Vue({
                         var obj = $(this.elem)[0].dataset;
                         console.log(obj);
 
-                        //    var obj = $(this.elem)[0].dataset;
-                        //    debugger;
-
                         _this.topNodeOption(data.id, obj.no, obj.name, obj.idx);
                     }
                 }, {
@@ -50,8 +47,6 @@ new Vue({
 
                         var obj = $(this.elem)[0].dataset;
                         console.log(obj);
-                        //  debugger;
-
                         _this.topNodeOption(data.id, obj.no, obj.name, obj.idx);
                     }
                 }]
@@ -72,12 +67,6 @@ new Vue({
                     trigger: 'contextmenu',
                     data: childNodeMenuItems,
                     click: function (data, othis) {
-                        debugger;
-                        //_this.childNodeOption(data.id, $(this.elem)[0].dataset.No, $(this.elem)[0].dataset.name, $(this.elem)[0].dataset.pidx, $(this.elem)[0].dataset.idx)
-
-                        // var obj = $(this.elem)[0].dataset;
-                        // console.log(obj);
-
                         var obj = $(this.elem)[0].dataset;
                         console.log(obj);
 
@@ -90,8 +79,6 @@ new Vue({
                     trigger: 'click',
                     data: childNodeMenuItems,
                     click: function (data, othis) {
-
-                        debugger;
 
                         var obj = $(this.elem)[0].dataset;
                         var no = obj.No;
@@ -152,8 +139,6 @@ new Vue({
             // todo 需要重新实现接口
 
             var frmID = GetQueryString("No");
-
-            // debugger;
             // 方法排序..
             var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin");
             handler.AddPara("FrmID", frmID);
@@ -230,9 +215,6 @@ new Vue({
         var frmID = GetQueryString("FrmID");
         var ens = new Entities("BP.CCBill.Template.Collections");
         ens.Retrieve("FrmID", frmID, "Idx");
-
-       // debugger;
-
         ens = obj2arr(ens);
         var btnStyle = "class='layui-btn layui-btn-primary layui-border-blue layui-btn-xs'";
         ens.forEach(function (en) {

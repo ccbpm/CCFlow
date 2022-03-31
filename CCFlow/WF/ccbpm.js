@@ -66,18 +66,22 @@ $(window).load(function () {
         }
 
     }
-        
+
+    //审核组件
     if ($("#WorkCheck").length == 1) {
         loadScript(ccbpmPath + "/WF/WorkOpt/WorkCheck.js", function () {
             NodeWorkCheck_Init();
-        });
-        
+        });  
+    }
+    //单个附件
+    if ($("[name=AthSingle]").length != 0) {
+        loadScript(ccbpmPath + "/WF/CCForm/AthSingle.js");
     }
        
     if ($("#FlowBBS").length == 1)
         loadScript(ccbpmPath + "/WF/WorkOpt/FlowBBS.js");
     if ($("#JobSchedule").length == 1)
-        loadScript(ccbpmPath + "/WF/WorkOpt/JobSchedule.js");
+        loadScript(ccbpmPath + "/WF/WorkOpt/OneWork/JobSchedule.js");
 
 });
 

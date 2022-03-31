@@ -1,10 +1,13 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html
+          PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <title>流程设计器</title>
     <!--JL.plus-->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="author" content="leipi.org" />
     <link href="Public/css/bootstrap/css/bootstrap.css?2025" rel="stylesheet" type="text/css" />
@@ -22,11 +25,12 @@
     <link rel="stylesheet" type="text/css" href="Public/js/jquery.multiselect2side/css/jquery.multiselect2side.css" />
     <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
     <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
-    <style>
-    </style>
-
+  
 </head>
+
 <body style="background:#f5f5f5">
+    <div id="Guide"></div>
+
     <div id="ShowMsg" class="panel window mymask mymaskContainer" style="display: none;
         width: 320px; height: 32px; z-index: 21008; text-align: center; font-size: 14px;
         font-weight: bold;">
@@ -35,7 +39,8 @@
     </div>
     <div class="window-mask mymask" style="width: 100%; height: 100%; display: none;        z-index: 21006;">
     </div>
-    <div style="display:none; z-index:10000;  margin-left:20%; margin-top:10%; background-color:white; position:fixed;" id="Msg">
+    <div style="display:none; z-index:10000;  margin-left:20%; margin-top:10%; background-color:white; position:fixed;"
+         id="Msg">
         <img src="./Img/DemoLine.gif" alt="正在加载....." />
     </div>
     <!-- fixed navbar -->
@@ -50,32 +55,44 @@
                         <button class="btn btn-light-yellow" type="button" id="Btn_Save">
                             <i class="iconfont icon-baocun"></i> 保存
                         </button>
+
                         <!--<button class="btn btn-white" type="button" id="Btn_SaveToColud">
                             保存到云
                         </button>-->
 
                         <button class="btn btn-light-red" type="button" id="Btn_FlowAttr" onclick="FlowProperty()">
-                            <i class="iconfont icon-xianxingtubiaozhizuomoban-43"></i>  流程属性
+                            <i class="iconfont icon-xianxingtubiaozhizuomoban-43"></i> 流程属性
                         </button>
                         <!--<button class="btn btn-info" type="button" id="Btn_Rpt" onclick="FlowRpt()">
                             定义报表
                         </button>-->
+
                         <button class="btn btn-danger" type="button" id="Btn_Check" onclick="FlowCheck()">
-                            <i class="iconfont icon-flow-line"></i>检查流程
-                        </button>
-                        <button class="btn btn-info" type="button" id="Btn_Run" onclick="FlowRun2020()">
-                            <i class="iconfont icon-feiji"></i>测试容器
+                            <i class="iconfont icon-flow-line"></i>检查
                         </button>
 
-                        <button class="btn btn-light-blue" type="button" id="Btn_FlowRun" onclick="FlowRun()">
-                            <i class="iconfont icon-shouye"></i>前台测试
+                        <button class="btn btn-info" type="button" id="Btn_Run" onclick="FlowRun2020()">
+                            <i class="iconfont icon-feiji"></i>测试
                         </button>
+
+                        <!--<button class="btn btn-light-blue" type="button" id="Btn_FlowRun" onclick="FlowRun()">
+                            <i class="iconfont icon-shouye"></i>前台测试
+                        </button>-->
                         <!--<button class="btn btn-light-red" type="button" id="Btn_RunIt" onclick="FlowRunAdmin()">
                             admin测试运行
                         </button>-->
 
                         <button class="btn btn-warning" type="button" id="Btn_Frm" onclick="EidtFrm()">
                             <i class="iconfont icon-biaodandingzhimoban"></i>设计表单
+                        </button>
+
+
+                        <button class="btn btn-danger" type="button" id="Btn_Batch" onclick="BatchSetting()">
+                            <i class="iconfont icon-biaodandingzhimoban"></i>批量设置
+                        </button>
+
+                        <button class="btn btn-danger" type="button" id="Btn_Batch" onclick="Guide()">
+                            <i class="iconfont icon-biaodandingzhimoban"></i>向导
                         </button>
 
                         <!--<button class="btn btn-danger" type="button" id="leipi_clear">清空连接</button>-->
@@ -95,7 +112,8 @@
     </div>
     <!-- Modal -->
     <!--<div class="cs-main-box">-->
-    <div id="alertModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="alertModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                 ×
@@ -116,8 +134,8 @@
         </div>
     </div>
     <!-- 修改节点名称 -->
-    <div id="alertModal1" style="width:400px;" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
+    <div id="alertModal1" style="width:400px;" class="modal hide fade" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                 ×
@@ -181,8 +199,8 @@
         </div>
     </div>
     <!-- 修改标签名称 -->
-    <div id="alertModal3" style="width:400px;" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
+    <div id="alertModal3" style="width:400px;" class="modal hide fade" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                 ×
@@ -253,16 +271,23 @@
     <div id="processMenu" style="display: none;" class="designer-menu">
         <ul id="mainul">
             <li id="pmAttribute"><i class="iconfont icon-shuxing-shouqi"></i>&nbsp;<span class="_label">节点属性</span></li>
+            <li id="pmName"><i class="iconfont icon-shuxing-shouqi"></i>&nbsp;<span class="_label">修改名称</span></li>
             <!--<li id="pmFrmSln"><i class="iconfont icon-shuxing-shouqi"></i>&nbsp;<span class="_label">表单方案</span></li>-->
             <!--<li id="pmFrmD"><i class="iconfont icon-shuxing-shouqi"></i>&nbsp;<span class="_label">设计表单</span></li>-->
             <!--<li id="pmFrmPower"><i class="icon-comment"></i>&nbsp;<span class="_label">表单权限</span></li>-->
 
-            <li id="pmfun"><i class="iconfont icon-jiedianguanli_1"></i>&nbsp;<span class="_label">节点类型</span><i class="iconfont icon-weimingmingwenjianjia_jiantou"></i></li>
+            <li id="pmfun">
+                <i class="iconfont icon-jiedianguanli_1"></i>&nbsp;<span class="_label">节点类型</span><i class="iconfont icon-weimingmingwenjianjia_jiantou"></i>
+            </li>
 
             <li id="pmNodeAccepterRole"><i class="iconfont icon-Shift"></i>&nbsp;<span class="_label">接收人规则</span></li>
             <li id="pmDelete"><i class="iconfont icon-jiedian1"></i>&nbsp;<span class="_label">删除节点</span></li>
-            <li id="pmCondDir"><i class="iconfont icon-01zhushuju_tiaojianleixing"></i>&nbsp;<span class="_label">方向条件</span></li>
-            <li id="Li1"><i class="iconfont icon-Track"></i>&nbsp;<span class="_label" onclick="ShowGif()">增加连接线</span></li>
+            <li id="pmCondDir">
+                <i class="iconfont icon-01zhushuju_tiaojianleixing"></i>&nbsp;<span class="_label">方向条件</span>
+            </li>
+            <li id="Li1">
+                <i class="iconfont icon-Track"></i>&nbsp;<span class="_label" onclick="ShowGif()">增加连接线</span>
+            </li>
         </ul>
     </div>
 
@@ -273,7 +298,9 @@
             <li id="FWC_Disable"><i class="iconfont icon-jinyong"></i>&nbsp;<span class="_label">禁用</span></li>
             <li id="FWC_Enable"><i class="iconfont icon-qiyong"></i>&nbsp;<span class="_label">启用</span></li>
             <li id="FWC_ReadOnly"><i class="iconfont icon-ziyuan"></i>&nbsp;<span class="_label">只读</span></li>
-            <li id="FWC_Batch"><i class="iconfont icon-jurassic_setup-batch"></i>&nbsp;<span class="_label">批量设置</span></li>
+            <li id="FWC_Batch">
+                <i class="iconfont icon-jurassic_setup-batch"></i>&nbsp;<span class="_label">批量设置</span>
+            </li>
         </ul>
     </div>
 
@@ -288,12 +315,18 @@
         border-width:4px;
 ">
         <ul id="mainul2" class="mainul2">
-            <li id="Node_Ordinary"><i class="iconfont icon-shouye-xiancheng-"></i>&nbsp;<span class="_label">线型节点</span></li>
+            <li id="Node_Ordinary">
+                <i class="iconfont icon-shouye-xiancheng-"></i>&nbsp;<span class="_label">线型节点</span>
+            </li>
             <li id="Node_FL"><i class="iconfont icon-xianchengxielou"></i>&nbsp;<span class="_label">分流</span></li>
             <li id="Node_HL"><i class="iconfont icon-xiancheng2"></i>&nbsp;<span class="_label">合流</span></li>
             <li id="Node_FHL"><i class="iconfont icon-xiancheng"></i>&nbsp;<span class="_label">分合流</span></li>
-            <li id="Node_SubThread0"><i class="iconfont icon-xianchengzhan"></i>&nbsp;<span class="_label">同表单子线程</span></li>
-            <li id="Node_SubThread1"><i class="iconfont icon-xiancheng1"></i>&nbsp;<span class="_label">异表单子线程</span></li>
+            <li id="Node_SubThread0">
+                <i class="iconfont icon-xianchengzhan"></i>&nbsp;<span class="_label">同表单子线程</span>
+            </li>
+            <li id="Node_SubThread1">
+                <i class="iconfont icon-xiancheng1"></i>&nbsp;<span class="_label">异表单子线程</span>
+            </li>
         </ul>
     </div>
     <div id="canvasMenu" style="display: none;" class="designer-menu">
@@ -303,7 +336,9 @@
             <!--  <li id="cmSave"><i class="icon-ok"></i>&nbsp;<span class="_label">保存设计</span></li>
             <li id="cmRefresh"><i class="icon-refresh"></i>&nbsp;<span class="_label">刷新 F5</span></li>
             <li id="cmPaste"><i class="icon-share"></i>&nbsp;<span class="_label">粘贴</span></li>-->
-            <li id="Li3"><i class="iconfont icon-Track"></i>&nbsp;<span class="_label" onclick="ShowGif();">增加连接线</span></li>
+            <li id="Li3">
+                <i class="iconfont icon-Track"></i>&nbsp;<span class="_label" onclick="ShowGif();">增加连接线</span>
+            </li>
             <li id="cmHelp"><i class="iconfont icon-sousuo"></i>&nbsp;<span class="_label">获得帮助</span></li>
         </ul>
     </div>
@@ -314,14 +349,13 @@
         </ul>
     </div>
     <!--end div-->
-    <div class="container mini-layout cs-main-box" id="flowdesign_canvas">
+    <div class="container mini-layout cs-main-box" id="flowdesign_canvas" title="点击右键新建节点\标签.">
         <!--div class="process-step btn" style="left: 189px; top: 340px;"><span class="process-num badge badge-inverse"><i class="icon-star icon-white"></i>3</span> 步骤3</div-->
     </div>
 
     <!--<div class="canvas-fixed">
         <span id="flowDevModelText" style=""></span> 编辑：欧阳  时间：2021-05-20
     </div>-->
-
     <!--JL.plus-->
     <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -346,7 +380,8 @@
     <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
     <script src="../../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
     <script src="Designer2018.js" type="text/javascript"></script>
-
+    <script src="../Guide/Guide.js"></script>
     <!--</div>-->
 </body>
+
 </html>

@@ -109,7 +109,7 @@ function valitationBefore(o, validateType) {
 var idx = 0;
 var oldCount = 0;
 function valitationAfter(o, validateType) {
-    debugger
+   // debugger
     idx = getCursortPosition(o);
     oldCount = getStrCount(o.value.toString().substr(0, idx), ',');
     var value = o.value;

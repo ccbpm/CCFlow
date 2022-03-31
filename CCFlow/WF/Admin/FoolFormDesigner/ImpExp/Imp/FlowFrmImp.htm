@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>导入</title>
+    <title>驰骋表单设计器\\导入导出\\从流程导入</title>
 
     <link href="../../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -14,7 +14,6 @@
     <script src="../../../../Comm/Gener.js" type="text/javascript"></script>
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../../CCFlowEnum.js"></script>
-
 
     <script src="../../../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
     <script src="../../../../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -37,140 +36,67 @@
         var selFrmNode = null;
         var Btn_Flows = null;
         $(function () {
-            InitBar(Imp.FlowFrmImp);
-            btnFrmLib = document.getElementById("btnFrmLib");
-            selFrmNode = document.getElementById("selFrmNode");
-            Btn_Flows = document.getElementById("Btn_Flows");
-            if (nodeID == 0) {
+            InitBar("FlowFrmImp");
 
-                $("ul li:eq(1)").hide();
-                $("ul li:eq(2)").hide();
-            }
-            else {
-                $("ul li:eq(1)").show();
-                $("ul li:eq(2)").show();
-            }
-            $("#Msg").html("<img src=../../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
-            /*
-            *  首先要把初始化控件的代码写入到这里,不然会导致界面的批量赋值失败.
-            */
+            //流程类别.
+            var flowSorts = new Entities("BP.WF.Template.FlowSorts");
+            flowSorts.RetrieveAll();
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("Imp_Init");
-            if (data.indexOf("err@") > -1) {
-                alert(data);
-                return;
-            }
+            //流程. FK_FlowSort
+            var flows = new Entities("BP.WF.Flows");
+            flows.RetrieveAll();
 
-            data = JSON.parse(data);
+            var html = "<table style='width:500px;'>";
 
-            var treedata1 = data["WF_FlowSort"];
-            var treedata2 = data["WF_Flow"];
-            var rootdata1 = $.grep(treedata1, function (item) {
-                return item.ParentNo == "0";
-            })[0];
+            html += "<tr>";
+            html += "<th>#</th>";
+            html += "<th>编号</th>";
+            html += "<th>名称</th>";
+            html += "<th>存储表</th>";
+            html += "<th>操作</th>";
+            html += "</tr>";
 
-            var jsonTree = createJsonToTree(treedata1, treedata2, rootdata1.No, data, "Flow");
-            $('#ul1').treeview({
-                data: jsonTree,         // 数据源
-                showCheckbox: true,   //是否显示复选框
-                highlightSelected: false,    //是否高亮选中
-                //nodeIcon: 'glyphicon glyphicon-user',    //节点上的图标
-                nodeIcon: 'glyphicon',
-                emptyIcon: '',    //没有子节点的节点图标
-                multiSelect: false,    //多选
-                onNodeChecked: function (event, node) {
-                    $("#HD_FlowID").val(node.id);
-                },
-                onNodeUnchecked: function (event, node) {
-                    $("#HD_FlowID").val();
-                },
-                onNodeSelected: function (event, node) {
+            var num = 0;
 
-                    var tree = $('#tree');
-                    if (node.state.expanded) {
-                        //处于展开状态则折叠
-                        tree.treeview('collapseNode', node.nodeId);
-                    } else {
-                        //展开
-                        tree.treeview('expandNode', node.nodeId);
-                    }
+            for (var i = 0; i < flowSorts.length; i++) {
+
+                var sort = flowSorts[i];
+
+
+                html += "<tr>";
+                html += "<td colspan=5><b>" + sort.Name + "</b></td>";
+                html += "</tr>";
+
+
+                for (var idx = 0; idx < flows.length; idx++) {
+
+                    var en = flows[idx];
+                    if (en.FK_FlowSort != sort.No)
+                        continue;
+                    num++;
+                    html += "<tr>";
+                    html += "<td>" + num + "</td>";
+                    html += "<td>" + en.No + "</td>";
+                    html += "<td>" + en.Name + "</td>";
+                    html += "<td>" + en.PTable + "</td>";
+                    html += "<td><a href=\"javascript:Imp('" + en.No + "')\" >导入</a></td>";
+                    html += "</tr>";
                 }
-            });
+            }
 
-            //$('#ul1').tree({
-            //    data: [root1],
-            //    onSelect: function (node) {
-            //        if (node.children == undefined) {
-            //            Btn_Flows.disabled = "";
-            //            $("#HD_FlowID").val(node.id);
-            //        } else {
-            //            Btn_Flows.disabled = "disabled";
-            //        }
-            //    }
-            //});
+            html += "</table>";
 
             //加载完成.
-            $("#Msg").html("");
+            $("#docs").html(html);
         });
-        //树形结构转换
-        var treeJson = [];
-        function createJsonToTree(treedata, treedata2, parentNo, data, Type) {
 
-            for (var i = 0; i < treedata.length; i++) {
-                var folder = treedata[i];
-                if (folder.ParentNo == parentNo) {
+        function Imp(flowNo) {
 
-                    treeJson.push({
-                        "id": folder.No,
-                        "text": folder.Name,
-                        "nodes": creatTreeChildern(treedata2, folder.No, data, Type),
-                        "state": ""
-                    });
-                }
-            }
-            function _(treeArray) {
-                $.each(treeArray, function (i, o) {
-                    if ($.isArray(o.nodes)) {
-                        if (o.nodes.length == 0) {
-                            o.nodes = undefined;
-                        } else {
-                            _(o.nodes);
-                        }
-                    }
-                });
-            }
-            _(treeJson);
-            return treeJson;
-        }
-
-        function creatTreeChildern(jsonArray, parentNo, data, Type) {
-            var childList = [];
-            for (var i = 0; i < jsonArray.length; i++) {
-                var folder = jsonArray[i];
-                if (folder.FK_FlowSort == parentNo) {
-                    childList.push({
-                        "id": folder.No,
-                        "text": folder.Name,
-                        "nodes": creatTreeChildern(jsonArray, folder.No, data, Type),
-                        "state": ""
-                    });
-                }
-            }
-
-            return childList;
-        }
-
-
-        //从其他流程导入
-        function SaveImpOtherFlow() {
-            var flowNo = $("#HD_FlowID").val();
-            if (flowNo == "" || flowNo == undefined) {
-                alert("未选择")
+            var frmID = GetQueryString("FrmID");
+            if (window.confirm('您确定要导入吗？') == false)
                 return;
-            }
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
             handler.AddPara("FK_MapData", frmID);
             handler.AddPara("FK_Flow", flowNo);
@@ -188,11 +114,8 @@
 </head>
 
 <body>
-    <div id="bar">
-    </div>
-    <ul id="ul1" style="height: auto;">
-    </ul>
-    <input type="hidden" value="" id="HD_FlowID" name="HD_FlowID" />
-    <input type="button" value="从其他流程导入" id="Btn_Flows" onclick="SaveImpOtherFlow()" style="margin: 25px;"  />
+    <div id="bar"> </div>
+    <div id="docs"></div>
+
 </body>
 </html>

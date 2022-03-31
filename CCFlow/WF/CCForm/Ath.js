@@ -126,8 +126,8 @@ function InitAthPage(athDivID, uploadUrl) {
 
         //如果是开发者表单
         var parent = $("#" + athDivID).parent()[0];
-        if (parent&&parent.tagName.toLowerCase() == "td") {
-           
+        if (parent && parent.tagName.toLowerCase() == "td") {
+
             //当前节点的兄弟节点，如果没有input，select,就隐藏
             var prev = $(parent).prev();
             if (prev[0].tagName.toLowerCase() == "td" && prev[0].innerText == athDesc.Name)
@@ -163,7 +163,7 @@ function InitAthPage(athDivID, uploadUrl) {
     }
 
     //4.附件列表展示
-    debugger
+   // debugger
     //4.1.图片的展示方式
     if (athDesc.FileType == 1) {
         $("#" + athDivID).html(FileShowPic(athDesc, dbs, uploadUrl));
@@ -183,6 +183,7 @@ function InitAthPage(athDivID, uploadUrl) {
             $("#tbody_" + athDesc.MyPK).html(FileShowWayTable(athDesc, dbs, uploadUrl));
     }
     $("#" + athDivID).show();
+    layui.form.render("select");
 }
 
 
@@ -285,7 +286,7 @@ function FileShowWayTable(athDesc, dbs, uploadUrl) {
         var localPath = window.location.href;
         if (localPath.indexOf("CCBill") != -1 || localPath.indexOf("CCForm") != -1)
             imgUrl = "../../";
-       
+
 
         for (var k = 0; k < dbs.length; k++) {
             var db = dbs[k];
@@ -304,7 +305,7 @@ function FileShowWayTable(athDesc, dbs, uploadUrl) {
                 var rowSpan = GetSortLenth_FromDB(sort, dbs);
                 _html += "<td rowspan=" + rowSpan + " style='text-align:center;vertical-align: middle;'>" + db.Sort + "</td>";
             }
-            debugger
+          //  debugger
             var filePath = db.FileFullName;
             var i = filePath.indexOf('\DataUser');
             var str = '/' + filePath.substring(i);
@@ -339,21 +340,21 @@ function FileShowWayTable(athDesc, dbs, uploadUrl) {
             //排序列的增加
             if (athDesc.IsIdx == 1 && athDesc.IsReadonly != 1) {
                 _html += "<td class='operate'>";
-                _html += "<a href=\"javascript:GFDoUp('" + db.MyPK + "' )\"><img src=\"" +imgUrl+"WF/\Img/\Btn/\Up.GIF\"/></a>";
-                _html += "<a href=\"javascript:GFDoDown('" + db.MyPK + "');\"><img src=\"" +imgUrl+"WF/\Img/\Btn/\Down.GIF\"/></a>";
+                _html += "<a href=\"javascript:GFDoUp('" + db.MyPK + "' )\"><img src=\"" + imgUrl + "WF/\Img/\Btn/\Up.GIF\"/></a>";
+                _html += "<a href=\"javascript:GFDoDown('" + db.MyPK + "');\"><img src=\"" + imgUrl + "WF/\Img/\Btn/\Down.GIF\"/></a>";
                 _html += "</td>";
             }
 
             //⑦操作列的增加.
             _html += "<td class='operate'>";
             if (athDesc.IsDownload == 1)
-                _html += "<a href=\"javascript:Down2018('" + db.MyPK + "')\"><img src=\"" + imgUrl +"/WF/\Img/\Btn/\Exp.png\" style='width:16px'/></a>&nbsp;&nbsp;&nbsp;&nbsp;";
+                _html += "<a href=\"javascript:Down2018('" + db.MyPK + "')\"><img src=\"" + imgUrl + "/WF/\Img/\Btn/\Exp.png\" style='width:16px'/></a>&nbsp;&nbsp;&nbsp;&nbsp;";
             if (pageData.IsReadonly != 1) {
                 if (athDesc.DeleteWay == 1)//删除所有
-                    _html += "<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "','" + db.FileName + "')\"><img src=\"" + imgUrl +"WF/\Img/\Btn/\Delete.gif\"/></a>";
+                    _html += "<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "','" + db.FileName + "')\"><img src=\"" + imgUrl + "WF/\Img/\Btn/\Delete.gif\"/></a>";
                 var webuser = new WebUser();
                 if (athDesc.DeleteWay == 2 && db.Rec == webuser.No)//删除自己上传的
-                    _html += "<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "','" + db.FileName + "')\"><img src=\"" + imgUrl +"WF/\Img/\Btn/\Delete.gif\"/></a>";
+                    _html += "<a href=\"javascript:Del('" + db.MyPK + "','" + athDesc.MyPK + "','" + db.FileName + "')\"><img src=\"" + imgUrl + "WF/\Img/\Btn/\Delete.gif\"/></a>";
             }
             _html += "</td>";
 
@@ -401,6 +402,7 @@ function FileShowWayTable(athDesc, dbs, uploadUrl) {
 
     }
     //附件可上传并且存在分组，增加分组的选择下拉框
+  //  debugger;
     if (athDesc.IsUpload == true && pageData.IsReadonly != "1" && (isHaveSort == true || athDesc.IsNote)) {
         columnNum += mapAttrs != null ? mapAttrs.length + isHaveSort == true ? 1 : 0 : 0 + isHaveSort == true ? 1 : 0;
         _html += "<tr>";
@@ -474,7 +476,7 @@ function FileShowPic(athDesc, dbs, uploadUrl) {
         if (athDesc.IsDownload == 0)
             _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0;overflow:hidden;text-overflow: ellipsis;white-space: nowrap' >" + db.FileName + "</p>";
         else
-            _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0;overflow:hidden;text-overflow: ellipsis;white-space: nowrap' ><a href=\"javascript:Down2018('" + db.MyPK + "');\" title='" + db.FileName.split(".")[0] +"'>" + db.FileName.split(".")[0] + "</a></p>";
+            _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0;overflow:hidden;text-overflow: ellipsis;white-space: nowrap' ><a href=\"javascript:Down2018('" + db.MyPK + "');\" title='" + db.FileName.split(".")[0] + "'>" + db.FileName.split(".")[0] + "</a></p>";
         _Html += "</div>";
         _Html += "</div>";
     }
@@ -508,13 +510,7 @@ function GetSortLenth_FromDB(sort, dbs) {
 function GetFileStream(mypk, FK_FrmAttachment) {
     var Url = "";
     if (plant == "CCFlow") {
-        if (window.location.href.indexOf("/CCForm") != -1)
-            Url = './DownFile.aspx?DoType=Down&MyPK=' + mypk + '&FK_FrmAttachment=' + FK_FrmAttachment;
-        else if (window.location.href.indexOf("/CCBill") != -1)
-            Url = '../CCForm/DownFile.aspx?DoType=Down&MyPK=' + mypk + '&FK_FrmAttachment=' + FK_FrmAttachment;
-        else
-            Url = './CCForm/DownFile.aspx?DoType=Down&MyPK=' + mypk + '&FK_FrmAttachment=' + FK_FrmAttachment;
-
+        Url = basePath + "/WF/Comm/Handler.ashx?DoType=HttpHandler&DoMethod=AttachmentUpload_Down&HttpHandlerName=BP.WF.HttpHandler.WF_CCForm&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&MyPK=" + mypk;
     } else {
         //按照数据流模式下载。
         var currentPath = window.document.location.href;
@@ -536,13 +532,45 @@ function Down2018(mypk) {
     var workID = GetQueryString("WorkID");
 
     var url = "";
-    if (plant == "CCFlow")
-        url = basePath + '/WF/CCForm/DownFile.aspx?DoType=Down&MyPK=' + mypk + "&WorkID=" + workID + "&FK_Node=" + nodeID;
-    else {
-        var currentPath = window.document.location.href;
-        var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-        url = path + 'WF/Ath/downLoad.do?MyPK=' + mypk + "&WorkID=" + workID + "&FK_Node=" + nodeID;
+    if (plant == "CCFlow") {
+        //url = basePath + '/WF/CCForm/DownFile.aspx?DoType=Down&MyPK=' + mypk + "&WorkID=" + workID + "&FK_Node=" + nodeID;
+        url = basePath + "/WF/Comm/Handler.ashx?DoType=HttpHandler&DoMethod=AttachmentUpload_Down&HttpHandlerName=BP.WF.HttpHandler.WF_CCForm&WorkID=" + workID + "&FK_Node=" + nodeID + "&MyPK=" + mypk;
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.responseType = 'blob';
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=utf-8');
+        xhr.send();//JSON.stringify(params));   // 发送ajax请求
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                // 获取唯一成功标识
+                var code = decodeURI(xhr.getResponseHeader("Code"));
+                console.log(code);
+                if (code.toString() === "OK") {
+                    var fileName = decodeURI(xhr.getResponseHeader("content-disposition").split(";")[1].split("=")[1]);
+                    console.log(fileName);
+                    // 将`blob`对象转化成一个可访问的`url`
+                    let dataUrl = window.URL.createObjectURL(new Blob([xhr.response]));
+                    let link = document.createElement("a");
+                    link.style.display = "none";
+                    link.href = dataUrl;
+                    link.setAttribute("download", fileName);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                } else {
+                    alert("下载失败,请联系管理员.");
+                }
+            }
+        }
+
+        return;
     }
+
+
+    var currentPath = window.document.location.href;
+    var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
+    url = path + 'WF/Ath/downLoad.do?MyPK=' + mypk + "&WorkID=" + workID + "&FK_Node=" + nodeID;
+
     if (IEVersion() < 11) {
         window.open(url);
         return;
@@ -592,9 +620,6 @@ function DownZip(fk_frmattachment, PKVal) {
             str = basePath + str;
         }
         window.location.href = str;
-
-
-
     }
 
 }
@@ -626,7 +651,7 @@ function Del(delPKVal, fk_framAttachment, name) {
 
         uploadFileList.setFileList(newFileListArray, opt);
     }
-    
+
     //获取
     InitAthPage("Div_" + fk_framAttachment);
 }
@@ -648,29 +673,18 @@ function AthView(mypk, filePath) {
         var url = host + filePath;
         //url = 'http://localhost:2296/DataUser/UploadFile/ND18201/838/6456dd46-04ec-4843-a057-31351053cd42.混合 - 副本.docx';
         url = encodeURIComponent(base64Encode(url));
-        debugger;
+        //debugger;
         //预览文件服务器.
         var fileServerHost = PreviewPathOfAth;
 
         //  window.open("/home/OA/jflow-web/DataUser/UploadFile" + lujin[1], "_blank");
         //对它进行编码 .
-        
+
         window.open(fileServerHost + '/onlinePreview?url=' + url);
         return;
     }
 
-    var nodeID = GetQueryString("FK_Node");
-    var workID = GetQueryString("WorkID");
-
-    if (plant == "CCFlow") {
-        window.location.href = basePath + '/WF/CCForm/DownFile.aspx?DoType=Down&MyPK=' + mypk + '&PKVal=' + mypk + '&FK_Node=' + nodeID + "&WorkID=" + workID;
-        return;
-    }
-
-    var currentPath = window.document.location.href;
-    var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-    Url = path + 'WF/Ath/downLoad.do?DelPKVal=' + mypk + '&PKVal=' + mypk + '&FK_Node=' + nodeID + "&WorkID=" + workID;
-    window.location.href = Url;
+    Down2018(mypk);
 }
 function base64Encode(input) {
     let _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";

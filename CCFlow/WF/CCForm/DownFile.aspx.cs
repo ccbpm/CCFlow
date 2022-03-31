@@ -220,6 +220,7 @@ namespace CCFlow.WF.CCForm
                         tempName = HttpUtility.UrlEncode(tempName);
 
                     HttpContext.Current.Response.Charset = "GB2312";
+                    HttpContext.Current.Response.Headers.Add("Code", "OK");// ("Content-Disposition", "attachment;filename=" + tempName);
                     HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment;filename=" + tempName);
                     HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
                     HttpContext.Current.Response.ContentType = "application/octet-stream;charset=utf8";
@@ -300,15 +301,9 @@ namespace CCFlow.WF.CCForm
                 string fileExt = (string)en.GetValByKey("MyFileExt");
                 //临时存储位置
                 string tempFile = SystemConfig.PathOfTemp + System.Guid.NewGuid() + "." + en.GetValByKey("MyFileExt");
-                try
-                {
-                    if (System.IO.File.Exists(tempFile) == true)
-                        System.IO.File.Delete(tempFile);
-                }
-                catch
-                {
-                    //  tempFile = SystemConfig.PathOfTemp + System.Guid.NewGuid() + this.FileName;
-                }
+                
+                if (System.IO.File.Exists(tempFile) == true)
+                    System.IO.File.Delete(tempFile);
 
                 //连接FTP服务器
                 FtpConnection conn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPServerPort,
@@ -412,11 +407,11 @@ namespace CCFlow.WF.CCForm
                 if (System.IO.Directory.Exists(tempPath) == true)
                     System.IO.Directory.Delete(tempPath, true);
                 //根据路径创建文件夹
-                if (System.IO.Directory.Exists(zipPath) == false)
+                if (System.IO.Directory.Exists(zipPath) == false && zipFile.Contains(WebUser.No) == true)
                     System.IO.Directory.CreateDirectory(zipPath);
                 //copy文件临时文件夹
                 tempPath = tempPath + "//" + this.WorkID;
-                if (System.IO.Directory.Exists(tempPath) == false)
+                if (System.IO.Directory.Exists(tempPath) == false && tempPath.Contains(WebUser.No) == true)
                     System.IO.Directory.CreateDirectory(tempPath);
 
                 foreach (FrmAttachmentDB db in dbs)
@@ -427,7 +422,7 @@ namespace CCFlow.WF.CCForm
                     if (!string.IsNullOrEmpty(db.Sort))
                     {
                         copyToPath = tempPath + "//" + db.Sort;
-                        if (System.IO.Directory.Exists(copyToPath) == false)
+                        if (System.IO.Directory.Exists(copyToPath) == false && copyToPath.Contains(WebUser.No) == true)
                             System.IO.Directory.CreateDirectory(copyToPath);
                     }
                     //新文件目录
@@ -437,6 +432,9 @@ namespace CCFlow.WF.CCForm
                 //执行压缩
                 (new FastZip()).CreateZip(zipFile, tempPath, true, "");
                 //删除临时文件夹
+                if (tempPath.Contains(WebUser.No) == false)
+                    throw new Exception("非法路径");
+
                 System.IO.Directory.Delete(tempPath, true);
 
                 //显示出下载超链接
@@ -446,13 +444,14 @@ namespace CCFlow.WF.CCForm
             }
             catch (Exception ex)
             {
-                //this.Alert(ex.Message);
+
+                BP.DA.Log.DebugWriteError(ex.Message);
             }
         }
 
 
         private string GetRealPath(string fileFullName)
-        {
+        { 
             bool isFile = false;
             string downpath = "";
             try
@@ -462,7 +461,7 @@ namespace CCFlow.WF.CCForm
                 isFile = true;
                 downpath = Server.MapPath("~/" + fileFullName);
             }
-            catch (Exception)
+            catch (PathTooLongException)
             {
                 FileInfo downInfo = new FileInfo(fileFullName);
                 isFile = true;

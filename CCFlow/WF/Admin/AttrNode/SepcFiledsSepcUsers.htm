@@ -18,11 +18,13 @@
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script src="../Admin.js"></script>
-    
+
     <script type="text/javascript" language="javascript">
 
         var nodeID = 0;
         var frmID = null;
+        var flowNo = null;
+
         //页面启动函数.
         $(function () {
 
@@ -34,38 +36,34 @@
             if (frmID == null)
                 frmID = "ND" + nodeID;
 
-            //加载表单字段。
+            //加载表单字段
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
             mapAttrs.Retrieve("FK_MapData", frmID);
 
             for (var i = 0; i < mapAttrs.length; i++) {
                 var mapAttr = mapAttrs[i];
 
-                if (mapAttr.UIVisible == 0)
-                    continue;
-
-                if (mapAttr.UIIsEnable == 1)
-                    continue;
+                if (mapAttr.UIVisible == 0) continue;
+                if (mapAttr.UIIsEnable == 1) continue;
 
                 var html = "<tr>";
                 html += "<td>" + (i + 1) + "</td>";
                 html += "<td><label><input type=checkbox id='CB_" + mapAttr.KeyOfEn + "' name='" + mapAttr.KeyOfEn + "'/>" + mapAttr.KeyOfEn + "-" + mapAttr.Name + "</label></td>";
-                //                html += "<td>" + mapAttr.Name + "</td>";
                 html += "</tr>";
 
                 $("#Table1").append(html);
             }
 
             //加载历史设置.
-            var mapExts = new Entities("BP.Sys.MapExts");
-            mapExts.Retrieve("FK_MapData", frmID, "Tag", nodeID);
+            var ens = new Entities("BP.WF.Template.FrmNodeFieldRemoves");
+            ens.Retrieve("FrmID", frmID, "NodeID", nodeID);
 
-            for (var i = 0; i < mapExts.length; i++) {
-                var mapExt = mapExts[i];
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
                 var html = "<tr>";
-                html += "<td>" + mapExt.Doc + "</td>";
-                html += "<td>" + mapExt.Tag1 + "</td>";
-                html += "<td><a href=\"javascript:Del('" + mapExt.MyPK + "');\">删除</a></td>";
+                html += "<td>" + en.Doc + "</td>";
+                html += "<td>" + en.Tag1 + "</td>";
+                html += "<td><a href=\"javascript:Del('" + en.MyPK + "');\">删除</a></td>";
                 html += "</tr>";
                 $("#History").append(html);
             }
@@ -76,14 +74,14 @@
             if (window.confirm('您确认要删除吗？') == false)
                 return;
 
-            var mapExt = new Entity("BP.Sys.MapExt");
+            var mapExt = new Entity("BP.WF.Template.FrmNodeFieldRemove");
             mapExt.SetPKVal(pkval);
             mapExt.Delete();
 
             window.location.href = window.location.href;
         }
 
-        function SaveField() {
+        function SaveField(expModel) {
 
             //获得选择的字段.
             var arrObj = document.all;
@@ -103,20 +101,22 @@
                 return;
             }
 
-            var emps = prompt('请输入要赋给特殊权限的人员,多个人员用逗号分开,比如: zhangsan,lisi,wangwu', '');
+            var msg = "";
+            if (msg == "Emps") msg = '请输入要赋给特殊权限的人员,多个人员用逗号分开,比如: zhangsan,lisi,wangwu';
+            if (msg == "Stas") msg = '请输入要赋给特殊权限的岗位编号,多个用逗号分开,比如: 001,002,003,';
+            if (msg == "Depts") msg = '请输入要赋给特殊权限的部门编号,多个用逗号分开,比如: 001,002,003,';
+
+            var emps = prompt(msg, '');
             if (emps == null)
                 return;
 
-            var mapExt = new Entity("BP.Sys.MapExt");
-            //mapExt.SetPKVal(emps + "_SepcFields_" + frmID);
-            //mapExt.RetrieveFromDBSources();
-
-            mapExt.FK_MapData = frmID;
-            mapExt.Doc = fields;
-            mapExt.ExtType = "SepcFieldsSepcUsers";
-            mapExt.Tag = nodeID;
-            mapExt.Tag1 = emps;
-            mapExt.Insert();
+            var en = new Entity("BP.WF.Template.FrmNodeFieldRemove");
+            en.FrmID = frmID;
+            en.Doc = fields;
+            en.ExtType = "SepcFieldsSepcUsers";
+            en.Tag = nodeID;
+            en.Tag1 = emps;
+            en.Insert();
 
             window.location.href = window.location.href;
         }
@@ -125,11 +125,17 @@
 <body>
     <div class="container-full">
         <div class="attrnode-bar-header">
-            <span class="pull-right">
-                <button id="Btn_Setting" name="Btn_Setting" class="cc-btn-tab btn-setting" onclick="SaveField();">设置字段的特别权限</button>
-               
+            <span class="pull-left">
+                协作模式下：要隐藏的特别字段。
             </span>
-         
+
+            <span class="pull-right">
+                <button id="Btn_Setting" name="Btn_Setting" class="cc-btn-tab btn-setting" onclick="SaveField('Stas');">按岗位</button>
+                <button id="Btn_Setting" name="Btn_Setting" class="cc-btn-tab btn-setting" onclick="SaveField('Depts');">按部门</button>
+                <button id="Btn_Setting" name="Btn_Setting" class="cc-btn-tab btn-setting" onclick="SaveField('Emps');">按人员</button>
+                <button id="Btn_Setting" name="Btn_Setting" class="cc-btn-tab btn-setting" onclick="SaveField('SQL');">按SQL</button>
+            </span>
+
         </div>
         <form id="cc">
             <div class="cs-content-box">
@@ -142,7 +148,7 @@
                             字段/名称
                         </th>
                         <!--   <th>类型</th>
-            <th>业务类型</th>-->
+                        <th>业务类型</th>-->
                         <!-- <th>操作</th>-->
                     </tr>
                 </table>

@@ -41,8 +41,6 @@ new Vue({
             // todo 需要重新实现接口
 
             var frmID = GetQueryString("No");
-
-            // debugger;
             // 方法排序..
             var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_MethodDoc");
             handler.AddPara("FrmID", frmID);

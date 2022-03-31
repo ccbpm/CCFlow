@@ -5,7 +5,8 @@ new Vue({
         flowNodes: [],
         expandAll: false,
         loadingDialog: false,
-        webuser: ''
+        webuser: '',
+        isReadonly:false
     },
     methods: {
         ///保存.
@@ -37,12 +38,27 @@ new Vue({
             var tag = "<textarea id = 'Retext" + index +"' style = 'height: 120px; width: 100%;' placeholder = '期待您的回复！' spellcheck = 'false' ></textarea>";
             tag += "<a onclick='SaveAsReply(" + index + ")' id='Renum" + index + "' data-noid=" + No +"  class='layui-btn layui-btn-sm top10'>回复</a>";
             tag += "<a onclick='Closeq(" + index +")'  class='layui-btn layui-btn-primary layui-btn-sm top10'>取消回复</a>";
-            //alert($(this).index());
-           
+            tag += "<a  onclick='UploadFile(" + index +")' class='layui-btn layui-btn-primary layui-btn-sm top10'>上传附件</a>";
+            tag += "<input id='" + index + "' name='" + index+"' type='file' style='visibility: hidden'>"
             var num = index
             var a = $('.huifu').eq(num).html(tag);
           
-        }      
+        },
+        downloadFile: function (frmBBS) {
+            var path = frmBBS.MyFilePath;
+            path = basePath + "/" + path.substr(path.indexOf("DataUser"), path.length);
+            var link = document.createElement('a');
+            link.setAttribute("download", "");
+            link.href = path;
+            link.click();
+
+            var x = new XMLHttpRequest();
+            x.open("GET", url, true);
+            x.responseType = 'blob';
+            x.onload = function (e) { download(x.response, frmBBS.MyFileName , "image/gif"); }
+            x.send();
+
+        }
     },
     mounted: function () {
 
@@ -74,6 +90,11 @@ new Vue({
         this.flowNodes = systems;
         var webUser = new WebUser();         
         this.webuser = webUser.Name;
+        var isRead = GetQueryString("IsReadonly");
+        if (isRead == null || isRead == undefined || isRead == "" || isRead == "0")
+            this.isReadonly = false;
+        else
+            this.isReadonly = true;
 
     }
 })
@@ -107,6 +128,9 @@ function Closeq(index) {
     var a = $('.huifu').eq(num).html('');
 }
 
+function UploadFile(index) {
+    document.getElementById(index+"").click();
+}
 function obj2arr(obj) {
     delete obj.Paras
     delete obj.ensName
@@ -131,6 +155,22 @@ function SaveAsReply(index) {
     en.WorkID = GetQueryString("WorkID");
     en.FrmID = GetQueryString("FrmID");
     en.Insert();
+    var file = $("#"+index);
+    var fileObj = file[0].files[0]; // js 获取文件对象
+    if (typeof (fileObj) == "undefined") {
+        layer.msg("回复成功", { time: 1000 }, function () {
+            window.location.reload();
+        });
+        return;
+    }
+    var handler = new HttpHandler("BP.CCBill.WF_CCBill_OptComponents");
+    handler.AddPara("file", fileObj);
+    handler.AddPara("No", en.No);
+    var data = handler.DoMethodReturnString("FrmBBs_UploadFile");
+    if (data.indexOf("err@") != -1) {
+        layer.alert(data);
+        return;
+    }
     layer.msg("回复成功", { time: 1000 }, function () {
         window.location.reload();
     });

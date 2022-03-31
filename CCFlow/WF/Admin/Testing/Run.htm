@@ -87,7 +87,7 @@
 
         function SetTestToNode(nodeID, toNds, nodeIDOfSet, flowNo) {
 
-            nodeIDOfSet = window.prompt("设置到达的节点(您可以选择的节点是:" + toNds + "):", nodeIDOfSet);
+            nodeIDOfSet = promptGener("设置到达的节点(您可以选择的节点是:" + toNds + "):", nodeIDOfSet);
             if (nodeIDOfSet == null)
                 return;
 
@@ -106,7 +106,7 @@
         }
 
         function SetTester(nodeID, val,flowNo) {
-            val = window.prompt('请设置该节点的处理人，多个人用逗号分开', val);
+            val = promptGener('请设置该节点的处理人，多个人用逗号分开', val);
             if (val == null)
                 return;
 

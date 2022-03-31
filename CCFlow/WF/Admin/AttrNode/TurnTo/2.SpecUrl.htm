@@ -22,7 +22,18 @@
     <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
+
             InitBar(TurnToDeal.SpecUrl);
+
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            $("#TB_SpecURL").val(node.TurnToDealDoc);
+
+            //   node.TurnToDeal = TurnToDeal.SpecUrl;
+            //   node.TurnToDealDoc =
+            //   node.Update();
+            //   alert("保存完毕");
+
         });
 
         function Save() {
@@ -46,7 +57,7 @@
             <legend>
                 转向指定的URL
             </legend>
-            <input type="text" placeholder="请输入URL比如 http://ccbpm.cn/aaa.htm"  ID="TB_SpecURL" name="TB_SpecURL" runat="server" style="width:90%; margin-top:30px;" />
+            <input type="text" placeholder="请输入URL比如 http://ccbpm.cn/aaa.htm" ID="TB_SpecURL" name="TB_SpecURL" runat="server" style="width:90%; margin-top:30px;" />
         </fieldset>
 
 

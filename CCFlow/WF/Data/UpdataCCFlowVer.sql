@@ -112,7 +112,7 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Sys.FrmUI.MapAttrString','@MyPK
 -- 字段属性 Num ; 
 DELETE FROM Sys_EnCfg WHERE No='BP.Sys.FrmUI.MapAttrNum';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Sys.FrmUI.MapAttrNum','@MyPK=基础,基础属性，数据属性.@ColSpan=外观,傻瓜表单属性，外观.');
-
+ 
 
 -- 枚举;
 DELETE FROM Sys_EnCfg WHERE No='BP.Sys.FrmUI.MapAttrEnum';
@@ -123,11 +123,15 @@ INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.Sys.FrmUI.MapAttrEnum','@MyPK=�
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.FlowExt';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.FlowExt','@No=基础信息,基础信息权限信息.@IsBatchStart=数据&表单,数据导入导出.@IsFrmEnable=轨迹@DesignerNo=设计者,流程开发设计者信息');
 
-
+-- 按钮权限;
+DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.BtnLab';
+INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.BtnLab',
+'@NodeID=按钮权限,控制工作节点可操作按钮.@ReturnLab=退回规则,退回规则设置.@PrintHtmlLab=打印按钮,常用的打印设置.@HuiQianLab=会签按钮,设置会签模式一般与审核组件一起工作.');
+  
 --新版本的流程属性,节点属性;
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.NodeExt';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.NodeExt',
-'@NodeID=基本配置@SendLab=按钮权限,控制工作节点可操作按钮.@ReturnLab=退回规则,退回规则设置.@RunModel=运行模式,分合流,父子流程@AutoJumpRole0=跳转,自动跳转规则当遇到该节点时如何让其自动的执行下一步.');
+'@NodeID=基本配置,基础属性配置.@RunModel=运行模式,分合流,父子流程@AutoJumpRole0=跳转,自动跳转规则当遇到该节点时如何让其自动的执行下一步.@SendLab=按钮权限,控制工作节点可操作按钮.@ReturnLab=退回规则,退回规则设置.@PrintHtmlLab=打印按钮,常用的打印设置.@HuiQianLab=会签按钮,设置会签模式一般与审核组件一起工作.');
   
 DELETE FROM Sys_EnCfg WHERE No='BP.WF.Template.MapDataExt';
 INSERT INTO Sys_EnCfg(No,GroupTitle) VALUES ('BP.WF.Template.MapDataExt','@No=基本属性@Designer=设计者信息');

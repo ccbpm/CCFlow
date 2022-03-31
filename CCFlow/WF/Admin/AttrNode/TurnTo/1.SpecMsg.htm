@@ -23,6 +23,11 @@
         //页面启动函数.
         $(function () {
             InitBar(TurnToDeal.SpecMsg);
+
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Node", nodeID);
+            $("#TB_SpecMsg").val(node.TurnToDealDoc);
+
         });
         function Save() {
             var nodeID = GetQueryString("FK_Node");

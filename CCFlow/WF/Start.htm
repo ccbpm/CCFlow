@@ -47,12 +47,49 @@
                 window.open(url);
                 return;
             }
+            JumpFlowPage("MyFlow", title, null, flowNo);
+        }
 
-            JumpFlowPage("MyFlow",title,null,flowNo);
+        function JumpFlowPage(pageType, title, workid, fk_flow, fk_node, fid, pworkid, isread, paras) {
 
-          
-            return;
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_" + pageType);
+            handler.AddPara("WorkID", workid);
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("FK_Node", fk_node);
+           
+            var data = null;
+            data = handler.DoMethodReturnString(pageType + "_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            if (data.indexOf('url@') == 0) {
 
+                data = data.replace('url@', ''); //如果返回url，就直接转向.
+                data = data.replace('?DoType=HttpHandler', '?');
+                data = data.replace('&DoType=HttpHandler', '');
+                data = data.replace('&DoMethod=MyFlow_Init', '');
+                data = data.replace('&HttpHandlerName=BP.WF.HttpHandler.WF_MyFlow', '');
+                data = data.replace('?&', '?');
+
+                try {
+
+                    var url = data;
+                    //if (url.indexOf("My") == 0)
+                     //   url = "../" + url;
+                    if (window.top.vm != undefined) {
+                        url = "../" + url;
+                        window.top.vm.openTab(title, url);
+                    } else {
+                        window.open(data); //打开流程.
+                    }
+                   
+                    return;
+                } catch (e) {
+                    window.open(data); //打开流程.
+                    return;
+                }
+            }
         }
 
         //查询
@@ -135,7 +172,7 @@
             var url = "List.htm?RptNo=ND" + Number(flowNo) + "RptMy&FK_Flow=" + flowNo + "&SearchType=My";
             window.open(url);
             return;
-     
+
         }
 
 
@@ -145,7 +182,7 @@
             var url = "./RptDfine/Search.htm?RptNo=ND" + Number(flowNo) + "RptMyJoin&FK_Flow=" + flowNo + "&SearchType=MyJoin";
             window.open(url);
             return;
-     
+
         }
 
         //批量发起.

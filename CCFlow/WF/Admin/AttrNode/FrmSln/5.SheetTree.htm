@@ -169,43 +169,33 @@
             <li>设置该节点上需要绑定那些表单。</li>
             <li>这些表单在从表单库里选择。</li>
             <li><div id="InfoBind"></div></li>
-
         </ul>
 
-
-    </fieldset>
-
-
-    <fieldset>
         <legend>设定每个表单的权限</legend>
         <ul>
             <li>  <a href="javascript:BindAttrs()">设置表单字段控件权限</a></li>
-            <li>设置表单权限。</li>
-            <li>可以控制那些表单可以显示，那些表单主键类型。</li>
+            <li>设置表单权限，可以控制那些表单可以显示，那些表单主键类型。</li>
         </ul>
-    </fieldset>
 
-    <fieldset>
-        <legend>呈现风格</legend>
-
+        <legend>展示方式设置</legend>
         <ul>
             <li>
                 <input type="radio" value="0" id="RB_tree" name="SheetTreeModel" checked=true /> <label for="RB_tree">表单树 </label>
                 <input type="radio" value="1" id="RB_tab1" name="SheetTreeModel" /> <label for="RB_tab1">为1个表单的时候，按绑定表单库的表单计算 </label>
                 <input type="radio" value="2" id="RB_tab2" name="SheetTreeModel" /> <label for="RB_tab2">Tab标签页 </label>
-
             </li>
-
-            <li>好像该设置没有解析,目前仅仅支持表单树,等待升级吧.</li>
-
+        </ul>
+        <legend>高级设置</legend>
+        <ul>
             <li> <a href="javascript:SetNodeNote()">设置摘要字段</a> </li>
             <li> 这些字段的信息会存储到NDxxRpt的Para字段里.可以显示到待办列表中，让用户没有打开工作之前就可以看到信息。</li>
             <li> <a href="javascript:SetAllNodeFrmUseThisSln()">设置该流程所有的节点都采用此表单方案</a></li>
         </ul>
+
     </fieldset>
 
     <fieldset>
-        <legend id="help">说明</legend>
+        <legend id="help"></legend>
         <font color="gray">
             <ul>
                 <li>我们把一个节点需要绑定多个表单的节点称为多表单节点，它有两种展现方式，标签页与表单树。</li>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>数据模版</title>
-    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
@@ -105,7 +105,7 @@
 
         function AddToTemplate(workid, title) {
 
-            var name = window.prompt('请输入模版名称', title);
+            var name = promptGener('请输入模版名称', title);
             if (name == null || name == '')
                 return;
 

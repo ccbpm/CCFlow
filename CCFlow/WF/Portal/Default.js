@@ -37,12 +37,30 @@ function Search() {
         vm.openTab('查询', '../Search.htm');
 }
 
+function Fasts() {
+    var urlEnd = "?SID=" + GetQueryString("SID") + "&OrgNo=" + GetQueryString("OrgNo") + "&UserNo" + GetQueryString("UserNo");
+    vm.openTab('低代码', '../GPM/Menus.htm' + urlEnd);
+}
+
+function Flows() {
+    var urlEnd = "?SID=" + GetQueryString("SID") + "&OrgNo=" + GetQueryString("OrgNo") + "&UserNo" + GetQueryString("UserNo");
+    vm.openTab('流程', 'Flows.htm' + urlEnd);
+}
+
+function Frms()
+{
+    var urlEnd = "?SID=" + GetQueryString("SID") + "&OrgNo=" + GetQueryString("OrgNo") + "&UserNo" + GetQueryString("UserNo");
+    vm.openTab('表单', 'Frms.htm' + urlEnd);
+}
+
 function OpenOrg() {
 
+    var urlEnd = "?SID=" + GetQueryString("SID") + "&OrgNo=" + GetQueryString("OrgNo")+ "&UserNo" + GetQueryString("UserNo");
+
     if (webUser.CCBPMRunModel == 2)
-        vm.openTab('组织', '../../App/App/Organization.htm');
+        vm.openTab('组织', '../../App/App/Organization.htm' + urlEnd);
     else
-        vm.openTab('组织', '../../GPM/Organization.htm');
+        vm.openTab('组织', '../../GPM/Organization.htm' + urlEnd);
 }
 
 //流程菜单.
@@ -57,7 +75,7 @@ MenuConvertTools.prototype.getFlowMenu = function () {
     var topFlowNode = [];
     for (var i = 0; i < flowTree.length; i++) {
 
-        if (ccbpmRunModel == 2) {
+        if (ccbpmRunModel == 1 || ccbpmRunModel == 2) {
             if (flowTree[i].ParentNo == '100') {
                 flowTree[i].ParentNo = '0';
                 flowTree[i].No = '1';
@@ -73,7 +91,7 @@ MenuConvertTools.prototype.getFlowMenu = function () {
         en.Icon = "icon-organization";
         en.Name = "流程设计";
         topFlowNode.push(en);
-        break;
+      
     }
     for (var i = 0; i < topFlowNode.length; i++) {
         topFlowNode[i].children = [];
@@ -81,7 +99,7 @@ MenuConvertTools.prototype.getFlowMenu = function () {
         for (var j = 0; j < flowTree.length; j++) {
             if (topFlowNode[i].No != flowTree[j].ParentNo)
                 continue;
-            topFlowNode[i].open = false
+            topFlowNode[i].open = false;
 
             topFlowNode[i].type = "flow"
             flowTree[j].children = [];
@@ -125,7 +143,7 @@ MenuConvertTools.prototype.getFormMenu = function () {
     var topFormNode = [];
     for (var i = 0; i < formTree.length; i++) {
 
-        if (ccbpmRunModel == 2) {
+        if (ccbpmRunModel == 1 || ccbpmRunModel == 2) {
             if (formTree[i].ParentNo == '100') {
                 formTree[i].ParentNo = '0';
                 formTree[i].No = '1';
@@ -187,9 +205,10 @@ MenuConvertTools.prototype.getSystemMenus = function () {
     moduleNode = this.data['Module'];
     menuNode = this.data['Menu'];
 
+    var webUser = new WebUser();
+
     var adminMenuNodes = [];
     for (var idx = 0; idx < systemNodes.length; idx++) {
-
         var systemNode = systemNodes[idx];
         if (nonSystemItems.indexOf(systemNode.No) > -1) continue;
         systemNode.children = [];
@@ -219,7 +238,17 @@ MenuConvertTools.prototype.getSystemMenus = function () {
                     continue; // 不是本模块的。
                 if (menu.MenuModel == "FlowEntityBatchStart")
                     continue;
+
                 menu = DealMenuUrl(menu);
+
+                if (menu.Url.indexOf('@WebUser.FK_Dept') > 0)
+                    menu.Url = menu.Url.replace('@WebUser.FK_Dept', webUser.FK_Dept);
+
+                if (menu.Url.indexOf('@WebUser.No') > 0)
+                    menu.Url = menu.Url.replace('@WebUser.No', webUser.No);
+
+                if (menu.Url.indexOf('@WebUser.OrgNo') > 0)
+                    menu.Url = menu.Url.replace('@WebUser.OrgNo', webUser.OrgNo);
 
                 if (menu.Icon === '')
                     menu.Icon = 'icon-user';
@@ -236,10 +265,10 @@ MenuConvertTools.prototype.getSystemMenus = function () {
 MenuConvertTools.prototype.convertToTreeData = function () {
     var topNodes = [];
     if (this.webUser.No === "admin" || parseInt(this.webUser.IsAdmin) === 1) {
-        if (this.getFlowMenu(this.data).length !== 0)
-            topNodes.push(this.getFlowMenu(this.data));
-        if (this.getFormMenu(this.data).length !== 0)
-            topNodes.push(this.getFormMenu(this.data));
+       // if (this.getFlowMenu(this.data).length !== 0)
+       //     topNodes.push(this.getFlowMenu(this.data));
+      //  if (this.getFormMenu(this.data).length !== 0)
+       //     topNodes.push(this.getFormMenu(this.data));
     }
     topNodes = topNodes.concat(this.getSystemMenus(this.data))
     // console.log(topNodes)
@@ -247,7 +276,6 @@ MenuConvertTools.prototype.convertToTreeData = function () {
 }
 
 function getPortalConfigByKey(key, defVal) {
-
     if (typeof PortalConfig == "undefined") {
         PortalConfig = {};
         PortalConfig[key] = defVal;
@@ -255,6 +283,5 @@ function getPortalConfigByKey(key, defVal) {
     }
     if (PortalConfig[key] == undefined)
         PortalConfig[key] = defVal;
-
     return PortalConfig[key];
 }

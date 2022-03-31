@@ -57,8 +57,8 @@
         <fieldset>
             <legend>绑定岗位</legend>
             <ul>
-                <li><a href="javascript:OpenDot2DotStations()">绑定岗位-分组模式</a> </li>
-                <li><a href="javascript:OpenBranchesAndLeafStations()">绑定岗位-左右树结构模式</a> </li>
+                <li><a href="javascript:OpenDot2DotStations();Save();">绑定岗位-分组模式</a> </li>
+                <li><a href="javascript:OpenBranchesAndLeafStations();Save();">绑定岗位-左右树结构模式</a> </li>
             </ul>
         </fieldset>
 
@@ -76,7 +76,7 @@
         </fieldset>
 
         <fieldset>
-            <legend id="help">找人算法</legend>
+            <legend>找人算法</legend>
             <ul>
                 <li>第0步：首先从本级部门内的人员寻找，该节点绑定的岗位，如果找不到人就进入下一步寻找。 </li>
                 <li>第1步：直线上级寻找，一直查询到根节点，如果找不到人就进入下一步寻找。 </li>
@@ -86,7 +86,7 @@
             </ul>
         </fieldset>
         <fieldset>
-            <legend id="help">什么是人员身份?</legend>
+            <legend>什么是人员身份?</legend>
             <ul>
                 <li> 就是按照那个人员来计算当前节点的接受人规则，默认是谁操作的按照谁的身份计算。 </li>
                 <li> 比如：我要请假，找部门负责人，就按照当前操作员的身份计算。 </li>
@@ -114,12 +114,14 @@
             methods: {
                 OpenDot2DotStations: function () {
                     OpenDot2DotStations();
+                    Save();
                 },
                 OpenNew: function () {
                     var nodeID = GetQueryString("FK_Node");
                     var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
                     OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500, function () {
                         Baseinfo.stas = getStas();
+                        Save();
                     });
                 },
                 SetGroupStations: function () {

@@ -167,7 +167,12 @@
                 Close(false);
                 return;
             }
-
+            if (data.indexOf('TurnUrl@') == 0) {  //发送成功时转到指定的URL
+                var url = data;
+                url = url.replace('TurnUrl@', '');
+                parent.window.location.href = url;
+                return;
+            }
             //如果包含url ,则是需要转向不同的url里面去.
             if (data.indexOf('url@') == 0) {
 
@@ -176,7 +181,7 @@
                 if (url.indexOf('ToNode=') > 0)
                     window.location.href = url + "&IsSend=" + GetQueryString("IsSend") + "&isFrameCross=" + isFrameCross + "&PageFrom=" + GetQueryString("PageFrom");
                 else
-                    window.location.href = url + "&ToNode=" + GetQueryString("ToNode") + "&IsSend=" + GetQueryString("IsSend") +"&PageFrom="+GetQueryString("PageFrom") + "&isFrameCross=" + isFrameCross;
+                    window.location.href = url + "&ToNode=" + GetQueryString("ToNode") + "&IsSend=" + GetQueryString("IsSend") + "&PageFrom=" + GetQueryString("PageFrom") + "&isFrameCross=" + isFrameCross;
 
                 return;
             }
@@ -260,7 +265,7 @@
             if (depts != null) {
 
                 $.each(depts, function (i, dept) {
-                    html += "<tr><td><b> " + dept.Name + "</b></td></tr>";
+                    html += "<tr><td class='TRSum' ><b> " + dept.Name + "</b></td></tr>";
                     html += "<tr><td>";
 
                     $.each(emps, function (i, emp) {
@@ -373,7 +378,6 @@
                 }
                 selectedEmps.push(checked[i].id);
             }
-            //debugger;
             selectedEmps = selectedEmps.join(';');
             if (selectedEmps == '' || selectedEmps == null) {
                 alert('请选择人员.');
@@ -403,7 +407,7 @@
             } else {
                 ChildrenPostMessage(data, "WindowCloseReloadPage");
             }
-            
+
 
             data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
             data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
@@ -445,7 +449,7 @@
                 } else {
                     ChildrenPostMessage(data, "returnWorkWindowClose");
                 }
-              
+
                 try {
                     window.opener.document.getElementById("acc_link_" + ToNode).innerHTML = "选择接受人员" + "<span style='color:black;'>(" + getSaveName + ")</span>";
                 } catch (e) {
@@ -456,7 +460,7 @@
                 return;
             }
 
-            if (isFrameCross == 0)  {
+            if (isFrameCross == 0) {
                 if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                     window.parent.returnWorkWindowClose(data);
                 } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
@@ -498,7 +502,7 @@
                 else
                     window.close();
             }
-           
+
         }
         //初始化人员选择窗口
         function initSelectEmpModal() {
@@ -543,6 +547,11 @@
             $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
         }
     </script>
+    <style type="text/css">
+        .TRSum {
+            background-color:antiquewhite;
+        }
+    </style>
 </head>
 <body>
     <div style="margin-bottom:45px;">
@@ -553,7 +562,7 @@
     </div>
     <div style="position: fixed;background:#f5f5f5; left:0; padding:8px; text-align:right; border-top:solid 1px #ccc; bottom: 0; right: 0;" class="foot">
 
-        <button onclick="SaveNodeEmps();" 
+        <button onclick="SaveNodeEmps();"
                 id="Btn_Save" style="display:none" class="layui-btn layui-btn-normal">
             <!--<img src="../Img/Btn/Confirm.png" />--> 保存
         </button>

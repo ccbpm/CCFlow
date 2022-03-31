@@ -425,7 +425,11 @@ function SetCtrlMustInput(key) {
         }
            
     }
-    $("#Lab_" + key).before("<span style='color: red' class='mustInput' data-keyofen='"+key+"'>*</span>");
+    if ($("#Lab_" + key).length == 0)
+        $("#Span_" + key).append("<font color=red>*</font>");
+    else
+        $("#Lab_" + key).before("<span style='color: red' class='mustInput' data-keyofen='" + key + "'>*</span>");
+    
 }
 
 //设置可不必填?

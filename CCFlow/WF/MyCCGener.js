@@ -639,10 +639,10 @@ function GenerWorkNode() {
         GenerFoolFrm(flowData); //傻瓜表单.
     }
 
-    if (node.FormType == 1) {
+    /**if (node.FormType == 1) {
         Skip.addJs("./MyFlowFree2017.js");
         GenerFreeFrm(flowData);  //自由表单.
-    }
+    }**/
 
     if (node.FormType == 12) {
         Skip.addJs("./CCForm/FrmDevelop.js");
@@ -655,10 +655,10 @@ function GenerWorkNode() {
         if (flowData.WF_FrmNode[0] != null && flowData.WF_FrmNode[0] != undefined) {
             if (flowData.WF_FrmNode[0].FrmType == 0)
                 GenerFoolFrm(flowData); //傻瓜表单.
-            if (flowData.WF_FrmNode[0].FrmType == 1) {
+            /**if (flowData.WF_FrmNode[0].FrmType == 1) {
                 Skip.addJs("./MyFlowFree2017.js");
                 GenerFreeFrm(flowData);
-            }
+            }**/
 
             if (flowData.WF_FrmNode[0].FrmType == 8) {
                 Skip.addJs("./CCForm/FrmDevelop.js");

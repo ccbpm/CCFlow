@@ -19,7 +19,7 @@ $(function () {
     var dirs = ds["WF_Direction"]; //连接线.
     var tracks = ds["Track"]; //历史记录. 
 
-    var html = "<table style='height:100px;width: 100%; table-layout: fixed;'>";
+    var html = "<div class='step'>";
     html += "<tr>";
 
     var step = 0;
@@ -106,16 +106,11 @@ $(function () {
         }
     }
 
-    // var info = "<img src='" + basePath + "/WF/WorkOpt/OneWork/Img/DotEnd.png' />";
-    // html += "<td style='text-align:center;vertical-align:top;'>" + info + "<br>结束</td>";
 
     html += "</tr>";
     html += "</table>";
 
-    //html += "<img src='./Admin/FoolFormDesigner/Img/JobSchedule.png' />";
-
     $("#JobSchedule").html(html);
-    // alert('sss');
     return;
 });
 
@@ -131,7 +126,6 @@ function GenerMNode(tracks, nodeID, gwf) {
     for (var i = 0; i < tracks.length; i++) {
 
         var tk = tracks[i];
-      //  debugger
         if (tk.FK_Node != nodeID) continue;
         if (emps.indexOf(tk.EmpNo + ',') >= 0) continue; //已经出现的，就不处理了.
         track = tk;
@@ -168,9 +162,6 @@ function GenerSingerNode(tracks, nodeID, gwf) {
         if (tk.FK_Node != nodeID)
             continue;
 
-    
-
-        var html = "";
         var doc = "";
         doc += "<br>" + tk.EmpName;
         doc += "<br>" + tk.RDT.substring(0, 16);
@@ -191,8 +182,6 @@ function GenerIcon(icon, step, docs, isEndNode, nodeName) {
 
     var url = basePath + "/WF/WorkOpt/OneWork/Img/" + icon + "-" + step + ".png";
 
-
-  //  debugger;
 
     var barUrlLeft = "";
     var barUrlRight = "";
@@ -219,14 +208,8 @@ function GenerIcon(icon, step, docs, isEndNode, nodeName) {
     var html = "";
     html += "<table style='height:100px;width: 100%; table-layout: fixed;border:none;margin:0px; padding:0px;'>";
     html += "<tr>";
-    //html += "<td style='border:none;width:30%;text-align:center;vertical-align:middle;margin:0px; padding:0px;'>" + barUrlLeft + "</td>";
     html += "<td style='border:none;margin:0px; padding:0px;width:40%;text-align:center;vertical-align:top;background-image: url('" + url + "'); background-repeat: no-repeat; background-attachment: fixed; background-position: center center'><table style='border:none;'><tr><td style='border:none;'><img src='" + url + "' style='width:18px;'/></td></tr><tr><td style='border:none;'><nobr>" + nodeName + "</nobr></td></tr><tr><td style='border:none;'>" + barUrlRight + "</td></tr><tr><td style='border:none;'>" + docs + "</td></tr></table></td>";
-    //html += "<td style='border:none;margin:0px; padding:0px;width:30%;text-align:center;vertical-align:middle;'>" + barUrlRight + "</td>";
     html += "<tr>";
-
-    //html += "<tr>";
-    //html += "<td colspan=3 style='border:none;' >" + docs + "</td>";
-    //html += "<tr>";
     html += "</table>";
 
     return html;
@@ -238,8 +221,6 @@ function GenerStart() {
 
 //根据当前节点获得下一个节点.
 function GetNextNodeID(nodeID, dirs) {
-    //   debugger
-
     var toNodeID = 0;
     for (var i = 0; i < dirs.length; i++) {
         var dir = dirs[i];

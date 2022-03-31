@@ -14,15 +14,21 @@
     <script language="javascript" type="text/javascript">
 
         var vstoUrl = "";
+        var frmID = GetQueryString("FK_MapData");
+        var nodeid = GetQueryString("FK_Node");
         //页面启动函数.
         $(function () {
+
+
 
             $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
             var webUser = new WebUser();
 
+            frmID = GetQueryString("FK_MapData");
+            if (frmID == null || frmID == undefined)
+                frmID = GetQueryString("FrmID");
 
-            var frmID = GetQueryString("FK_MapData");
             if (frmID == null || frmID == undefined || frmID == "null")
                 frmID = GetQueryString("EnName");
 
@@ -69,8 +75,6 @@
             url += ",PEmpNo=" + GetQueryString("PEmpNo");
 
 
-
-
             var wsUrl = "http://" + location.hostname + ":" + location.port + "/WF/CCForm/CCFormAPI.asmx";
             url += ",WSUrl=" + wsUrl;
 
@@ -82,18 +86,14 @@
             html1 = "<a href='" + vstoUrl + "'>导入离线文件</a>";
             $("#ImportDataVSTO").html(html1);
 
-
             $("#Msg").html("");
 
             ShowCopyWin();
 
         });
 
-        var frmid = GetQueryString("FK_MapData");
-        var nodeid = GetQueryString("FK_Node");
-
         function ShowCopyWin() {
-            var url = "../../App/ImportData.aspx?FrmId=" + frmid + "&NodeID=" + nodeid + "&";
+            var url = "../../App/ImportData.aspx?FrmId=" + frmID + "&NodeID=" + nodeid + "&";
             $('#ImportDataIfr').attr('src', url);
 
             if (frmid == "CYSheBeiUse" || nodeid != "201")
@@ -134,7 +134,7 @@
         <ul>
             <li>该插件是一个ccflow开发的excel插件，用户打开处理excel表单的插件。</li>
             <li>该需要下载后安装</li>
-            <li><a href="/DataUser/FrmOfficeTemplate/Excel表单插件安装程序.zip">点击此处下载VSTO表单插件</a></li>
+            <li><a href="/DataUser/FrmVSTOTemplate/Excel表单插件安装程序.zip">点击此处下载VSTO表单插件</a></li>
         </ul>
     </fieldset>
 </body>

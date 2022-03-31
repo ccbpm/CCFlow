@@ -87,7 +87,7 @@
                 newRow += "<td style='width:50px;' class=Idx>" + i + "</td>";
 
                 if (fk_mapData != null)
-                    newRow += "<td style='width:100px;'><a href=\"javascript:AddFrm('" + sysEnumMain.No + "','" + fk_mapData + "','" + sysEnumMain.Name + "',"+sysEnumMain.IsHaveDtl+");\" >" + sysEnumMain.No + "</a></td>";
+                    newRow += "<td style='width:100px;'><a href=\"javascript:AddFrm('" + sysEnumMain.No + "','" + fk_mapData + "','" + sysEnumMain.Name + "'," + sysEnumMain.IsHaveDtl + ");\" >" + sysEnumMain.No + "</a></td>";
                 else
                     newRow += "<td style='width:100px;'>" + sysEnumMain.No + "</td>";
 
@@ -99,7 +99,7 @@
                     newRow += "<td><a href=\"javascript:EditDtl('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >编辑</a></td>";
                 }
                 else {
-                    newRow += "<td><a href=\"javascript:CrateDtl('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >+创建</a></td>";
+                    newRow += "<td><a href=\"javascript:CreateDtl('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >+创建子项</a></td>";
                 }
 
                 newRow += "<td style='width:50px;'><a href=\"javascript:Del('" + sysEnumMain.No + "','" + sysEnumMain.Name + "');\" >删除</a></td>";
@@ -107,14 +107,14 @@
                 $("#Table1 tr:last").after(newRow);
             }
             $("#Msg").html("");
-
         });
 
-        function CrateDtl(enumNo, enumName) {
+        function CreateDtl(enumNo, enumName) {
 
-            var no = window.prompt("枚举子项编号:", enumNo + "Dtl");
+            var no = promptGener("枚举子项编号:", enumNo + "Dtl");
+
             if (no == null || no == undefined) return;
-            var name = window.prompt("枚举子项名称:", enumName + "Dtl");
+            var name = promptGener("枚举子项名称:", enumName + "Dtl");
             if (name == null || name == undefined) return;
 
             //插入数据.
@@ -141,7 +141,6 @@
             en.SetPara("DtlName", name);
             en.Update();
 
-
             //调用转向.
             EditDtl(en.No, enumNo)
 
@@ -160,7 +159,7 @@
         }
         function EditUIBindKeyOfAttr(enumID, keyOfEn, fk_mapData) {
             if (fk_mapData == null || fk_mapData == undefined || fk_mapData == "") {
-                alert("字段"+keyOfEn+"绑定的表单获取到的字段为空")
+                alert("字段" + keyOfEn + "绑定的表单获取到的字段为空")
             }
             var attr = new Entity("BP.Sys.MapAttr", fk_mapData + "_" + keyOfEn);
             attr.LGType = 1;
@@ -174,12 +173,12 @@
             window.location.href = url;
 
         }
-        function AddFrm(enumID, fk_mapdata,enumName,isHaveDtl) {
+        function AddFrm(enumID, fk_mapdata, enumName, isHaveDtl) {
 
             var keyOfEn = GetQueryString("KeyOfEn");
             keyOfEn = keyOfEn == null || keyOfEn == undefined ? "" : keyOfEn;
             if (keyOfEn != "") {
-                EditUIBindKeyOfAttr(enumID,keyOfEn,fk_mapData);
+                EditUIBindKeyOfAttr(enumID, keyOfEn, fk_mapData);
                 return;
             }
             var url = '';
@@ -187,7 +186,7 @@
 
             if (str == null) return;
 
-            var dtlKey=""
+            var dtlKey = ""
             if (isHaveDtl == 1) {
                 var v = window.confirm("您需要创建枚举值[" + enumName + "]的关联枚举字段吗？");
                 if (v == false)
@@ -234,16 +233,18 @@
         function SelectEnum() {
             var EnumName = document.getElementById("EnumValue").value;
             var sysEnumMains = new Entities("BP.Sys.SysEnumMains");
-            sysEnumMains.Retrieve("Name", EnumName);
+            //sysEnumMains.Retrieve("Name", EnumName);
+            sysEnumMains.RetrieveCond("Name", "like", "%" + EnumName + "%");
+            var newRow = "";
             for (var i = 0; i < sysEnumMains.length; i++) {
                 sysEnumMain = sysEnumMains[i];
 
-                var newRow = "";
+               
                 newRow += "<tr>";
                 newRow += "<td style='width:50px;' class=Idx>" + i + "</td>";
 
                 if (fk_mapData != null)
-                    newRow += "<td style='width:100px;'><a href=\"javascript:AddFrm('" + sysEnumMain.No + "','" + fk_mapData+"','"+sysEnumMains.Name + "'," + sysEnumMain.IsHaveDtl+");\" >" + sysEnumMain.No + "</a></td>";
+                    newRow += "<td style='width:100px;'><a href=\"javascript:AddFrm('" + sysEnumMain.No + "','" + fk_mapData + "','" + sysEnumMains.Name + "'," + sysEnumMain.IsHaveDtl + ");\" >" + sysEnumMain.No + "</a></td>";
                 else
                     newRow += "<td style='width:100px;'>" + sysEnumMain.No + "</td>";
 
@@ -342,7 +343,7 @@
                 </tr>
             </table>
         </div>
-        
+
         <div id="Msg"></div>
     </div>
 </body>

@@ -144,12 +144,10 @@ function ChangTabFormTitleRemove() {
     var tabText = "";
     var p = $(parent.document.getElementById("tabs")).find("li");
     $.each(p, function (i, val) {
-        //                debugger
         if (val.className.indexOf("tabs-selected") > -1) {
             tabText = $($(val).find("span")[0]).text();
         }
     });
-    //            debugger
     var lastChar = tabText.substring(tabText.length - 1, tabText.length);
     if (lastChar == "*") {
         $.each(p, function (i, val) {
@@ -541,7 +539,7 @@ function newFlowSort(isSub) {
         return;
 
     var propName = (isSub ? '子级' : '同级') + '流程类别';
-    var val = window.prompt(propName, '');
+    var val = promptGener(propName, '');
     if (val == null || val.length == 0) {
         alert('必须输入名称.');
         return false;
@@ -839,7 +837,7 @@ function newCCFormSort(isSub) {
         return;
 
     var propName = (isSub ? '子级' : '同级') + '表单类别';
-    var val = window.prompt(propName, "我的目录");
+    var val = promptGener(propName, "我的目录");
     if (val == null || val == undefined)
         return;
 
@@ -1199,8 +1197,8 @@ function CopyFrm() {
         return;
     }
 
-    var frmID = window.prompt('新的表单ID', node.id);
-    var frmName = window.prompt('新的表单名称', node.text);
+    var frmID = promptGener('新的表单ID', node.id);
+    var frmName = promptGener('新的表单名称', node.text);
     if (frmID == null || frmID == "") {
         alert("表单ID不能为空");
         return;

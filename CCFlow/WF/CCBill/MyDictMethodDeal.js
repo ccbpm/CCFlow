@@ -6,10 +6,7 @@
 */
 function DoMethond(methodID) {
 
-    debugger;
-
     //不同的方法类型执行不同的操作.
-    //var en = new Entity("BP.CCBill.Template.Method", methodID);
     var en = GetMethoh(methodID);
 
     if (en.RefMethodType == MethodModel.Link) {

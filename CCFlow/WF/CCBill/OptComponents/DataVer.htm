@@ -188,7 +188,7 @@
 
         function NewVer() {
 
-            var val = window.prompt("备注*", "");
+            var val = promptGener("备注*", "");
             if (val == null || val == undefined) return;
             if (val == "") val = "无";
 
@@ -211,7 +211,7 @@
         //应用此数据.
         function AppFieldData(keyOfEn) {
 
-            var val = window.prompt("请输入要复原的版本号: (请输入数字,1,2,3)", "1");
+            var val = promptGener("请输入要复原的版本号: (请输入数字,1,2,3)", "1");
             if (val == undefined || val == null)
                 return;
 

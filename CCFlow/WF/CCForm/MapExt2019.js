@@ -110,7 +110,7 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, TBModel) {
 
 //文本自动填充 表格模式
 function showDataGrid(sender, tbid, dataObj, mapExt) {
-    debugger
+   // debugger
     var columns = mapExt.Tag3;
     $("#autodiv").remove();
     $("#" + tbid).after("<div id='autodiv' style=''><div id='autoComplete' style='position:absolute;z-index:999'></div></div>");
@@ -509,6 +509,8 @@ function DDLAnsc(selectVal, ddlChild, fk_mapExt, param) {
     // 获取原来选择值.
     var oldVal = null;
     var ddl = document.getElementById(ddlChild);
+    if (ddl == null) return;
+
 
     if (ddl == null) {
         alert(ddlChild + "丢失,或者该字段被删除.");
@@ -1009,6 +1011,7 @@ function FullCtrlDDL(selectVal, ctrlID, mapExt) {
         //重新绑定下拉框.
         GenerBindDDL("DDL_" + ctrlID, db);
     }
+	layui.form.render("select");
 }
 //填充明细.
 function FullDtl(selectVal, mapExt) {

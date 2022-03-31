@@ -191,14 +191,14 @@
 <body>
 
     <div id="bar"> </div>
-    <fieldset id="help">
-        <legend id="help">选择表单</legend>
+    <fieldset>
+        <legend>选择表单</legend>
         <ul>
             <!--<li>表单类别：<select id="DDL_FrmTree" name="DDL_FrmTree" onchange="change()"> </select> </li>
             <li>表单:  <select id="DDL_RefOneFrmTree" name="DDL_RefOneFrmTree"> </select> </li>
                 -->
             <li> <b>已经选择的表单:</b> <font color="green"> <div id="MyFrm"></div></font> </li>
-            <li> <button onclick="SetFrm()" id="Btn_Setting"> <img style="width:14px; height:14px;" src="../../../Img/Btn//Setting.png" />  设置表单 </button>  </li>
+            <li> <button onclick="SetFrm()" id="Btn_Setting" class="cc-btn-tab btn-setting">设置表单 </button>  </li>
 
             <li><font color="green"><b>不成文的开发规范</b></font></li>
             <li>1.设置的表单所有的字段与元素是只读的,并且字段不设置动态的默认值, 比如@WebUser.* 。</li>
@@ -232,7 +232,7 @@
 
 
     <fieldset>
-        <legend id="help">说明</legend>
+        <legend id="help"></legend>
         <ul>
             <li>表单库里选择一个表单绑定到当前节点上.</li>
             <li>该表单的工作方式与内置表单工作模式一致.</li>

@@ -20,21 +20,21 @@
             gwf = new Entity("BP.WF.GenerWorkFlow", workid);
             pri = gwf.PRI;
             $("[name='PRI'][value='" + pri + "']").prop("checked", "checked");
-            if (PRIEnable==1) {
-                $("#Btns").hide(); 
+            if (PRIEnable == 1) {
+                $("#Btns").hide();
                 $("input[name=PRI]").each(function () {
-                        $(this).attr("disabled", true);
+                    $(this).attr("disabled", true);
                 });
             }
-           
+
         });
 
         function Save() {
             var PRI = $("input[name='PRI']:checked").val();
             gwf.PRI = PRI;
             gwf.Update();
-            alert("保存成功");
-            if (isFrameCross == 0) 
+        //    alert("保存成功");
+            if (isFrameCross == 0)
                 window.parent.returnWorkWindowClose("");
             else
                 ChildrenPostMessage("", "returnWorkWindowClose");
@@ -50,7 +50,7 @@
                 ChildrenPostMessage("取消", "returnWorkWindowClose");
             }
 
-           
+
         }
     </script>
 
@@ -58,11 +58,12 @@
 <body>
 
     <div style="padding:10px 10px;text-align:center">
-        <label> <input type="radio" id="PRI_2" value="2" name="PRI" /><img title="高" src="../Img/PRI/2.png" />--高</label>
-
-        <label> <input type="radio" id="PRI_1" value="1" name="PRI" /><img title="中" src="../Img/PRI/1.png" />--中</label>
-
-        <label> <input type="radio" id="PRI_0" value="0" name="PRI" /><img title="低" src="../Img/PRI/0.png" />--低</label>
+        <br />
+        <label> <input type="radio" id="PRI_2" value="2" name="PRI" /><img title="高" src="../Img/PRI/2.png" />高</label>
+        <br />
+        <label> <input type="radio" id="PRI_1" value="1" name="PRI" /><img title="中" src="../Img/PRI/1.png" />中</label>
+        <br />
+        <label> <input type="radio" id="PRI_0" value="0" name="PRI" /><img title="低" src="../Img/PRI/0.png" />低</label>
     </div>
     <div id="Btns" style="text-align:right;margin-bottom:10px;margin-right:10px;">
         <input type="button" id="SaveBtn" value="保存" onclick="Save()" />

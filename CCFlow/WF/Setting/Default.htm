@@ -52,6 +52,9 @@
                                     <button type="button" class="btn btn-success" id="btn_Startup" onclick="Save()">保存修改</button>
 
                                     <a href="Author.htm">设置委托</a>
+
+                                    <a href="javascript:ClearCash()">清除缓存</a>
+
                                 </div>
                             </div>
                         </div>
@@ -153,6 +156,13 @@
             $("#Author").html(data.Author);
             return;
         });
+
+        function ClearCash()
+        {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
+            var data = handler.DoMethodReturnString("Default_ClearCash");
+            alert(data);
+        }
         function Save() {
             var UserName = $("#UserName").val();
             var Tel = $("#Tel").val();

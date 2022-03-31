@@ -7,7 +7,7 @@ function treeNodeManage(dowhat, nodeNo, callback, scope) {
     switch (dowhat) {
         case "sample": //新建同级节点
 
-            var val = window.prompt('请输入名称', '新建节点');
+            var val = promptGener('请输入名称', '新建节点');
             if (val == null)
                 return;
 
@@ -27,7 +27,7 @@ function treeNodeManage(dowhat, nodeNo, callback, scope) {
             break;
         case "children": //新建下级节点
 
-            var val = window.prompt('请输入名称', '新建节点');
+            var val = promptGener('请输入名称', '新建节点');
             if (val == null)
               return;
 

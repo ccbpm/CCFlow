@@ -5,7 +5,9 @@
  */
 var currentURL = window.document.location.href;
 var frmData;
-function GenerDevelopFrm(wn, fk_mapData) {
+function GenerDevelopFrm(wn, fk_mapData, isComPare) {
+    if (isComPare == null || isComPare == undefined || isComPare == "")
+        isComPare = false;
     $("head").append("<style>.layui-form-radio{margin:0px;padding-right:0px}</style>")
     frmData = wn;
     var htmlContent = "";
@@ -42,6 +44,8 @@ function GenerDevelopFrm(wn, fk_mapData) {
             $("#DDL_" + mapAttr.KeyOfEn).hide();
             $("input[name=CB_" + mapAttr.KeyOfEn + "]").hide();
             $("input[name=RB_" + mapAttr.KeyOfEn + "]").hide();
+            if (mapAttr.UIVisible == 0 && mapAttr.UIIsEnable == 0)
+                $("input[name=RB_" + mapAttr.KeyOfEn + "]").attr("disabled", "disabled");
             continue;
         }
 
@@ -127,7 +131,7 @@ function GenerDevelopFrm(wn, fk_mapData) {
             }
            
             var element = $('#TB_' + mapAttr.KeyOfEn);
-            element.wrap("<div style=' position: relative;'></div>");
+            element.wrap("<div style=' position: relative;display:inline-block'></div>");
             element.before("<i class='input-icon layui-icon layui-icon-date'></i>");
             element.attr("data-info", dateFmt);
             element.attr("data-type", dateType);
@@ -359,79 +363,96 @@ function GenerDevelopFrm(wn, fk_mapData) {
 
     //2.解析控件 从表、附件、附件图片、框架、地图、签字版、父子流程
     var frmDtls = frmData.Sys_MapDtl;
-    for (var i = 0; i < frmDtls.length; i++) {
-        var frmDtl = frmDtls[i];
-        //根据data-key获取从表元素
-        var element = $("Img[data-key=" + frmDtl.No + "]");
-        if (element.length == 0)
-            continue;
-        var prev = $(element).parent().prev();
-        if (prev.length > 0 && prev[0].innerHTML.indexOf(frmDtl.Name) != -1)
-            $(prev[0]).attr("id", "Lab_" + frmDtl.No);
-        debugger
-        if (frmDtl.IsView == 0) {
-            $(element).hide();
-            $("#Lab_"+frmDtl.No).hide();
-            continue;
+    if (frmDtls && frmDtls.length > 0) {
+        for (var i = 0; i < frmDtls.length; i++) {
+            var frmDtl = frmDtls[i];
+            //根据data-key获取从表元素
+            var element = $("Img[data-key=" + frmDtl.No + "]");
+            if (element.length == 0)
+                continue;
+            var prev = $(element).parent().prev();
+            if (prev.length > 0 && prev[0].innerHTML.indexOf(frmDtl.Name) != -1)
+                $(prev[0]).attr("id", "Lab_" + frmDtl.No);
+       
+            if (frmDtl.IsView == 0) {
+                $(element).hide();
+                $("#Lab_" + frmDtl.No).hide();
+                continue;
+            }
+            if (isComPare == true) {
+                var eleHtml = $("<div id='Dtl_" + frmDtl.No + "' name='Dtl' style='height:auto;margin:5px 10px;border-top:1px solid #D0D0D0' ></div>");
+                $(element).after(eleHtml);
+                $(element).remove();
+            } else {
+                figure_Develop_Dtl(element, frmDtl);
+            }
         }
-          
-        figure_Develop_Dtl(element, frmDtl);
-
     }
+   
     var aths = frmData.Sys_FrmAttachment;//附件
    
     //表格附件
-    $.each(aths, function (idex, ath) {
-        var element = $("Img[data-key=" + ath.MyPK + "]");
-        if (element.length != 0) {
-            var prev = $(element).parent().prev();
-            if (prev.length > 0 && prev[0].innerHTML.indexOf(ath.Name) != -1)
-                $(prev[0]).attr("id", "Lab_" + ath.No);
+    if (aths && aths.length > 0) {
+        $.each(aths, function (idex, ath) {
+            var element = $("Img[data-key=" + ath.MyPK + "]");
+            if (element.length != 0) {
+                var prev = $(element).parent().prev();
+                if (prev.length > 0 && prev[0].innerHTML.indexOf(ath.Name) != -1)
+                    $(prev[0]).attr("id", "Lab_" + ath.No);
 
-            var eleHtml = $("<div id='Div_" + ath.MyPK + "' name='Ath' style=' height:auto;margin:5px 10px' ></div>");
-            $(element).after(eleHtml);
-            $(element).remove(); //移除Imge节点
-            AthTable_Init(ath, "Div_" + ath.MyPK);
-        }  
-    });
+                var eleHtml = $("<div id='Div_" + ath.MyPK + "' name='Ath' style=' height:auto;margin:5px 10px' ></div>");
+                $(element).after(eleHtml);
+                $(element).remove(); //移除Imge节点
+                AthTable_Init(ath, "Div_" + ath.MyPK);
+            }
+        });
+    }
+    
   
     //图片附件
     var athImgs = frmData.Sys_FrmImgAth;
-    if (athImgs.length > 0) {
+    if (athImgs && athImgs.length > 0) {
         var imgSrc = "<input type='hidden' id='imgSrc'/>";
         $('#CCForm').append(imgSrc);
-    }
-    for (var i = 0; i < athImgs.length; i++) {
-        var athImg = athImgs[i];
-        //根据data-key获取从表元素
-        var element = $("img[data-key=" + athImg.MyPK + "]");
-        if (element.length == 0)
-            continue;
-        figure_Develop_ImageAth(element, athImg, fk_mapData);
+        for (var i = 0; i < athImgs.length; i++) {
+            var athImg = athImgs[i];
+            //根据data-key获取从表元素
+            var element = $("img[data-key=" + athImg.MyPK + "]");
+            if (element.length == 0)
+                continue;
+            figure_Develop_ImageAth(element, athImg, fk_mapData);
 
+        }
     }
+    
 
     //图片
     var imgs = frmData.Sys_FrmImg;
-    for (var i = 0; i < imgs.length; i++) {
-        var img = imgs[i];
-        //根据data-key获取从表元素
-        var element = $("Img[data-key=" + img.MyPK + "]");
-        if (element.length == 0)
-            continue;
-        figure_Develop_Image(element, img);
+    if (imgs && imgs.length > 0) {
+        for (var i = 0; i < imgs.length; i++) {
+            var img = imgs[i];
+            //根据data-key获取从表元素
+            var element = $("Img[data-key=" + img.MyPK + "]");
+            if (element.length == 0)
+                continue;
+            figure_Develop_Image(element, img);
 
+        }
     }
+    
     var iframes = frmData.Sys_MapFrame;//框架
-    for (var i = 0; i < iframes.length; i++) {
-        var iframe = iframes[i];
-        //根据data-key获取从表元素
-        var element = $("Img[data-key=" + iframe.MyPK + "]");
-        if (element.length == 0)
-            continue;
-        figure_Develop_IFrame(element, iframe);
+    if (iframes && iframes.length > 0) {
+        for (var i = 0; i < iframes.length; i++) {
+            var iframe = iframes[i];
+            //根据data-key获取从表元素
+            var element = $("Img[data-key=" + iframe.MyPK + "]");
+            if (element.length == 0)
+                continue;
+            figure_Develop_IFrame(element, iframe);
 
+        }
     }
+    
     if (frmData.WF_FrmNodeComponent == null || frmData.WF_FrmNodeComponent == undefined) {
         var element = $("Img[data-type=WorkCheck]");
         if (element.length != 0)
@@ -481,17 +502,24 @@ function figure_Develop_Dtl(element, frmDtl) {
         baseUrl = "../../CCForm/";
     if ( currentURL.indexOf("MyBill.htm") != -1 || currentURL.indexOf("MyDict.htm") != -1)
         baseUrl = "../CCForm/";
-    if (currentURL.indexOf("FrmGener.htm") != -1)
+    if (currentURL.indexOf("CCForm/") != -1 )
         baseUrl = "./";
     //表格模式
     if (frmDtl.ListShowModel == "0")
-        src = baseUrl + "Dtl2017.htm";
+        src = baseUrl + "Dtl2017.htm?1=1";
     if (frmDtl.ListShowModel == "1")
-        src = baseUrl + "DtlCard.htm";
+        src = baseUrl + "DtlCard.htm?1=1";
+    if (frmDtl.ListShowModel == "2") {
+        if (frmDtl.UrlDtl == null || frmDtl.UrlDtl == undefined || frmDtl.UrlDtl == "")
+            return "从表" + frmDtl.Name + "没有设置URL,请在" + frmDtl.FK_MapData + "_Self.js中解析";
+        src = basePath +"/"+ frmDtl.UrlDtl;
+        if (src.indexOf("?") == -1)
+            src += "?1=1";
+    }
     var isRead = isReadonly == true ? 1 : 0
-    src += "?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=" + isRead + "&" + urlParam + "&Version=1&FrmType=0";
+    src += "&EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=" + isRead + "&" + urlParam + "&Version=1&FrmType=0";
 
-    var eleHtml = $("<div id='Fd" + frmDtl.No + "' name='Dtl' style='height:auto;margin:5px 10px;border-top:1px solid #D0D0D0' ></div>");
+    var eleHtml = $("<div id='Dtl_" + frmDtl.No + "' name='Dtl' style='height:auto;margin:5px 10px;border-top:1px solid #D0D0D0' ></div>");
 
     var eleIframe = $("<iframe style='width:100%;height:100%' name='Dtl' ID='Frame_" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>");
     eleHtml.append(eleIframe);

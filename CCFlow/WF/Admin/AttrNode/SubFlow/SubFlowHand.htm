@@ -54,7 +54,12 @@
                 html += "<tr>";
                 html += "<td class=Idx>" + (i + 1) + "</td>";
                 html += "<td>" + en.SubFlowNo + "</td>";
-                html += "<td>" + en.SubFlowName + "</td>";
+
+                var enSub = new Entity("BP.WF.Flow", en.SubFlowNo);
+
+              //  html += "<td>" + en.SubFlowName + "</td>";
+                html += "<td>" + enSub.Name + "</td>";
+
                 html += "<td>" + en.SubFlowModelText + "</td>";
 
                 html += "<td>" + en.SubFlowStaText + "</td>";
@@ -121,7 +126,7 @@
 
         }
         function Help() {
-            var url = "http://doc.ccbpm.cn";
+            var url = "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3982373&doc_id=31094";
             window.open(url);
         }
     </script>
@@ -134,9 +139,9 @@
                 <button id="Btn_Help" name="Btn_Help" onclick="Help();">帮助</button>
 
             </span>
-            <strong>
-                手动子流程- <a href="javascript:ShowHidden('img')">运行效果</a>
-            </strong>
+            <!--<strong>
+            手动子流程- <a href="javascript:ShowHidden('img')">运行效果</a>
+        </strong>-->
         </div>
 
         <table id="Table1" style="width: 100%" class="table">
@@ -171,14 +176,17 @@
         </table>
         <br />
         <!--<input type="button" value="增加集团子流程" onclick="AddGroup()" />
-        <input type="button" value="增加本组织子流程" onclick="AddOrg()" />-->
+    <input type="button" value="增加本组织子流程" onclick="AddOrg()" />-->
 
 
         <div style="position:relative;" id="Msg">
         </div>
 
+
+        <img src="SubFlowHand-1.png" class="HelpImg" />
+
+
         <fieldset id="img" style="display: none">
-            <img src="SubFlowHand-1.png" />
         </fieldset>
 </body>
 </html>

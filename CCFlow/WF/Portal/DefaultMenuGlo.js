@@ -11,7 +11,7 @@ function DealMenuUrl(menu) {
     }
 
     if (menu.MenuModel === "SelfUrl") {
-        menu.Url = basePath +menu.UrlExt;
+        menu.Url = basePath + menu.UrlExt;
         return menu;
     }
 
@@ -105,14 +105,19 @@ function DealMenuUrl(menu) {
         return menu;
     }
 
+    if (menu.MenuModel === "Rpt3D"  ) {
+        menu.Url = basePath + "/CCFast/Rpt/Rpt3D.htm?RptNo=" + menu.No;
+        return menu;
+    }
+
     if (menu.Url != "") {
         if (menu.Url.indexOf("?") != -1)
             menu.Url = basePath + menu.Url + "&PageID=" + menu.No;
         else
             menu.Url = basePath + menu.Url + "?PageID=" + menu.No;
+        return menu;
     }
-        
-    else
-        alert('没有判断的模式:' + menu.MenuModel + "  urlExt:" + menu.UrlExt);
+
+    alert('没有判断的模式:' + menu.MenuModel + "  urlExt:" + menu.UrlExt);
     return menu;
 }

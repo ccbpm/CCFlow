@@ -154,7 +154,7 @@
         function Setting() {
             var url = GetLocalWFPreHref() + "/WF/Comm/RefFunc/Setting.htm?EnName=" + GetQueryString("EnName") + "&PKVal=" + GetQueryString("PKVal");
             //WinOpen(url, "xxs");
-            window.parent.OpenEasyUiDialog(url, "eudlgframe", "设置", 600, 470, "icon-reset", true, null, null, null, function () {
+            window.OpenEasyUiDialog(url, "eudlgframe", "设置", 600, 470, "icon-reset", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }
@@ -208,7 +208,7 @@
 
             var tableWidth = 800; //  w - 40;
             var html = "";
-            if (Sys_GroupFields.length > 1)
+            //if (Sys_GroupFields.length > 1)
                 html = "<div id='tabDiv' class='easyui-tabs' data-options='fit:true' >";
 
             for (var i = 0; i < Sys_GroupFields.length; i++) {
@@ -220,18 +220,22 @@
                 if (lab.indexOf(',') != -1) {
                     lab = lab.substring(0, lab.indexOf(','));
                 }
-
-                if (tabIndex != null && tabIndex != undefined && tabIndex == i) {
-                    html += "<div title='" + lab + "' data-options='selected:true' id='" + gf.OID + "'>";
+                if (Sys_GroupFields.length== 1) {
+                    html += "<div  data-options='selected:true' id='" + gf.OID + "' class='single'>";
+                } else {
+                    if (tabIndex != null && tabIndex != undefined && tabIndex == i) {
+                        html += "<div title='" + lab + "' data-options='selected:true' id='" + gf.OID + "'>";
+                    }
+                    else {
+                        html += "<div title='" + lab + "' data-options='closable:false' id='" + gf.OID + "'>";
+                    }
                 }
-                else {
-                    html += "<div title='" + lab + "' data-options='closable:false' id='" + gf.OID + "'>";
-                }
+               
 
                 html += InitMapAttr(frmData.Sys_MapAttr, mainData, gf.OID, userRegedit);
                 html += "</div>";
             }
-            if (Sys_GroupFields.length > 1)
+           // if (Sys_GroupFields.length > 1)
                 html += "</div>";
 
 
@@ -247,7 +251,8 @@
             $('#CCFormTabs').html("").append(html);
 
             $.parser.parse("#CCFormTabs");
-
+            if (Sys_GroupFields.length == 1)
+                $(".tabs-inner").css("border-bottom", "1px solid #efefef");
 
             //原有的。
             //为 DISABLED 的 TEXTAREA 加TITLE
@@ -431,6 +436,8 @@
             }
             $("#FileInfo").html(html);
 
+           // $(".panel-body-noheader").height($(".easyui-layout")[0].clientHeight + 45);
+
             //设置扩展
             AfterBindEn_DealMapExt(frmData);
 
@@ -451,7 +458,7 @@
         //解析表单字段 MapAttr.
         function InitMapAttr(Sys_MapAttr, mainData, groupID, userRegedit) {
 
-            var html = "<table border='0' style='width:100%;' >";
+            var html = "<table border='0' style='width:96%;' >";
             var isDropTR = true;
             var isExitMyNum = false;
             var fileDesc = "";
@@ -785,7 +792,7 @@
             //AppString
             if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == 0) {  //不是外键
 
-                if (mapAttr.UIHeight <= 40) //普通的文本框.
+                if (mapAttr.UIHeight <10) //普通的文本框.
                 {
                     var enableAttr = '';
                     if (mapAttr.UIIsEnable == 0)
@@ -1396,6 +1403,7 @@
             border-radius: 0px;
         }
 
+      
             .tabs li a.tabs-inner .tabs-title {
                 font-size: 13px !important
             }

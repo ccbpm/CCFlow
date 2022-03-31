@@ -113,7 +113,7 @@ namespace CCFlow.WF.CCForm
                     Data = bytes
                 };
             }
-            catch (Exception ex)
+            catch (PathTooLongException ex)
             {
                 msg = new MethodReturnMessage<byte[]>
                 {
@@ -158,11 +158,11 @@ namespace CCFlow.WF.CCForm
         /// <param name="userNo">用户编号</param>
         /// <param name="sid">SID</param>
         /// <param name="workID">工作ID</param>
-        /// <param name="billTemplateNo">单据模版编号</param>
+        /// <param name="FrmPrintTemplateNo">单据模版编号</param>
         /// <param name="ds">返回的数据源</param>
         /// <param name="bytes">返回的字节</param>
         [WebMethod]
-        public void GenerBillTemplate(string userNo, string sid, Int64 workID, string billTemplateNo,
+        public void GenerFrmPrintTemplate(string userNo, string sid, Int64 workID, string FrmPrintTemplateNo,
             ref DataSet ds, ref byte[] bytes)
         {
             if (DataType.IsNullOrEmpty(userNo) == true)
@@ -251,7 +251,7 @@ namespace CCFlow.WF.CCForm
             }
 
             //生成模版的文件流.
-            BP.WF.Template.BillTemplate template = new BP.WF.Template.BillTemplate(billTemplateNo);
+            BP.WF.Template.FrmPrintTemplate template = new BP.WF.Template.FrmPrintTemplate(FrmPrintTemplateNo);
             bytes = template.GenerTemplateFile();
             return;
         }
@@ -277,7 +277,7 @@ namespace CCFlow.WF.CCForm
 
                 return "模版上传成功";
             }
-            catch (Exception ex)
+            catch (PathTooLongException ex)
             {
 
                 return "err@:" + ex.Message;
@@ -329,7 +329,7 @@ namespace CCFlow.WF.CCForm
                     };
                 }
             }
-            catch (Exception ex)
+            catch (PathTooLongException ex)
             {
                 msg = new MethodReturnMessage<byte[]>
                 {
@@ -353,6 +353,9 @@ namespace CCFlow.WF.CCForm
         [WebMethod]
         public void WordFileGenerSiganture(string userNo, ref byte[] bytes)
         {
+            if (DBAccess.RunSQLReturnValInt("select count(*) from port_emp where no='" + userNo + "'") == 0)
+                throw new Exception("用户不存在");
+
             string filePath = SystemConfig.PathOfDataUser + "Siganture\\" + userNo + ".jpg";
             if (System.IO.File.Exists(filePath) == false)
                 filePath = SystemConfig.PathOfDataUser + "Siganture\\UnSiganture.jpg";
@@ -633,10 +636,10 @@ namespace CCFlow.WF.CCForm
                                 mainEn = dtl.GenerGEMainEntity(pkValue);
 
                             //求出从表实体类.
-                            BP.Sys.FormEventBaseDtl febd = null;
+                            BP.Sys.Base.FormEventBaseDtl febd = null;
                             if (dtl.FEBD != "")
                             {
-                                febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(dtl.No);
+                                febd = BP.Sys.Base.Glo.GetFormDtlEventBaseByEnName(dtl.No);
                                 if (mainEn == null)
                                     mainEn = dtl.GenerGEMainEntity(pkValue);
                             }
@@ -660,7 +663,7 @@ namespace CCFlow.WF.CCForm
                                 }
 
                                 daDtl.SetValByKey(dtl.RefPK, pkValue);
-                                daDtl.RDT = DataType.CurrentDataTime;
+                                daDtl.RDT = DataType.CurrentDateTime;
 
                                 #region 从表保存前处理事件.
                                 if (fes.Count > 0)
@@ -838,6 +841,10 @@ namespace CCFlow.WF.CCForm
             string rootPath = Context.Server.MapPath("~/" + ath.SaveTo);
             string fileName = guid + "." + System.Drawing.Imaging.ImageFormat.Jpeg.ToString();
             string filePath = rootPath + fileName;
+
+            if (filePath.Contains(guid) == false)
+                throw new Exception("非法路径");
+
             if (System.IO.File.Exists(filePath) == true)
                 System.IO.File.Delete(filePath);
             BP.DA.DataType.WriteFile(filePath, byt);
@@ -853,7 +860,7 @@ namespace CCFlow.WF.CCForm
             dbUpload.FileFullName = filePath;
             dbUpload.FileName = fileName;
             dbUpload.FileSize = (float)info.Length;
-            dbUpload.RDT = DataType.CurrentDataTimess;
+            dbUpload.RDT = DataType.CurrentDateTimess;
             dbUpload.Rec = userNo;
             dbUpload.RecName = BP.Web.WebUser.Name;
             dbUpload.FK_Dept = WebUser.FK_Dept;
@@ -1011,7 +1018,7 @@ namespace CCFlow.WF.CCForm
 
                 return LitJson.JsonMapper.ToJson(reImgsList);
             }
-            catch (Exception ex)
+            catch (PathTooLongException ex)
             {
                 return null;
             }
@@ -1053,6 +1060,18 @@ namespace CCFlow.WF.CCForm
         public string WordDoc_GetWordFile(string flowNo, int nodeId, string userNo, long workId)
         {
             MethodReturnMessage<byte[]> msg = null;
+            if (DBAccess.RunSQLReturnValInt("select count(*) from port_emp where no='" + userNo + "'") == 0)
+            {
+                msg = new MethodReturnMessage<byte[]>
+                {
+                    Success = false,
+                    Message = "账号不存在",
+                    Data = null
+                };
+
+
+                return LitJson.JsonMapper.ToJson(msg);
+            }
             try
             {
                 BP.WF.Flow fl = new BP.WF.Flow(flowNo);
@@ -1114,6 +1133,8 @@ namespace CCFlow.WF.CCForm
                     bytes = BP.DA.DataType.ConvertFileToByte(fullFilePath);
 
                     WordDoc_SaveWordFile(flowNo, nodeId, userNo, workId, bytes);
+                    if (fullFilePath.Contains(userNo) == false)
+                        throw new Exception("非法路径");
                     File.Delete(fullFilePath);
                 }
 
@@ -1124,7 +1145,7 @@ namespace CCFlow.WF.CCForm
                     Data = bytes
                 };
             }
-            catch (Exception ex)
+            catch (PathTooLongException ex)
             {
                 msg = new MethodReturnMessage<byte[]>
                 {
@@ -1155,7 +1176,7 @@ namespace CCFlow.WF.CCForm
                 };
 
             }
-            catch (Exception ex)
+            catch (PathTooLongException ex)
             {
                 msg = new MethodReturnMessage<string>
                 {

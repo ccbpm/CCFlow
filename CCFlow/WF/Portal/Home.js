@@ -1,4 +1,3 @@
-
 var vm = new Vue({
     el: '#v-db',
     data: {
@@ -7,10 +6,11 @@ var vm = new Vue({
         loadingDialog: null,
         Veiwit: null,
         windowlist: [],
+        snum:0,
     },
     methods: {
         bindMenu: function () {
-            var _this = this
+            var _this = this;
             layui.use('dropdown', function () {
                 var dropdown = layui.dropdown
                 var menuFunc = function (data) {
@@ -73,14 +73,14 @@ var vm = new Vue({
                     }
                 }
                 var menuNodeItems = [
-                    { title: '<i class=icon-pencil></i> 新建', id: "New", Icon: "icon-plus" },
-                    { title: '<i class=icon-note></i> 编辑', id: "Edit", Icon: "icon-plus" },
-                    { title: '<i class=icon-user-following></i> 权限', id: "Power", Icon: "icon-plus" },
-                    { title: '<i class=icon-close></i> 删除', id: "Delete", Icon: "icon-close" },
-                    { title: '<i class=icon-user-following></i> 跨度1列', id: "Col1", Icon: "icon-frame" },
-                    { title: '<i class=icon-user-following></i> 跨度2列', id: "Col2", Icon: "icon-frame" },
-                    { title: '<i class=icon-user-following></i> 跨度3列', id: "Col3", Icon: "icon-frame" },
-                    { title: '<i class=icon-user-following></i> 跨度4列', id: "Col4", Icon: "icon-frame" }
+                    {title: '<i class=icon-pencil></i> 新建', id: "New", Icon: "icon-plus"},
+                    {title: '<i class=icon-note></i> 编辑', id: "Edit", Icon: "icon-plus"},
+                    {title: '<i class=icon-user-following></i> 权限', id: "Power", Icon: "icon-plus"},
+                    {title: '<i class=icon-close></i> 删除', id: "Delete", Icon: "icon-close"},
+                    {title: '<i class=icon-user-following></i> 跨度1列', id: "Col1", Icon: "icon-frame"},
+                    {title: '<i class=icon-user-following></i> 跨度2列', id: "Col2", Icon: "icon-frame"},
+                    {title: '<i class=icon-user-following></i> 跨度3列', id: "Col3", Icon: "icon-frame"},
+                    {title: '<i class=icon-user-following></i> 跨度4列', id: "Col4", Icon: "icon-frame"}
                 ]
                 var menuOptions = [{
                     elem: '.menu-btn',
@@ -254,17 +254,49 @@ var vm = new Vue({
             var neededList = this.boxes.filter(function (item) {
                 return item.WinDocModel !== "Html" && item.WinDocModel !== "System" && item.WinDocModel !== "SQLList" && item.WinDocModel !== "Table" && item.WinDocModel !== "HtmlVar"
             })
+          
             var _this = this
             this.$nextTick(function () {
                 for (var i = 0; i < neededList.length; i++) {
                     (function (i) {
                         var item = neededList[i];
-                        var el = document.querySelector('div[data-cid="' + item.No + '"]');
-                        switch (item.WinDocModel) {
+                        this.snum = item.DefaultChart
+                        if (i == 0) {
+                            var width = $('.item-body').width();
+                            var height = $('.item-body').height()-40;
+                        }
+
+                        $('#IsLine').css("width", width).css("height", height);
+                        $('#IsPie').css("width", width).css("height", height);
+                        $('#IsRate').css("width", width).css("height", height);
+                        $('#IsRing').css("width", width).css("height", height);
+                        $('#IsZZT').css("width", width).css("height", height);
+                      //  var el = document.querySelector('div[data-cid="' + item.No + item.DefaultChart+ '"]');
+                        if (item.IsLine) {
+                            el = document.querySelector('div[data-cid="' + item.No + 'IsLine"]');
+                            _this.initLineChart(el, item);
+                        }
+                        if (item.IsPie) {
+                            elPie = document.querySelector('div[data-cid="' + item.No + 'IsPie"]');
+                            _this.initPieChart(elPie, item);
+                        }
+                        if (item.IsRate) {
+                            elIsRate = document.querySelector('div[data-cid="' + item.No + 'IsRate"]');
+                            _this.initGauge(elIsRate, item);
+                        }
+                        if (item.IsRing) {
+                            elIsRing = document.querySelector('div[data-cid="' + item.No + 'IsRing"]');
+                            _this.initAnnular(elIsRing, item);
+                        }
+                        if (item.IsZZT) {
+                            elIsZZT = document.querySelector('div[data-cid="' + item.No + 'IsZZT"]');
+                            _this.initHistogram(elIsZZT, item);
+                        }
+                       /* switch (item.WinDocModel) {
                             case "ChartLine":
                                 _this.initLineChart(el, item);
                                 return
-                            case "ChartZZT":
+                            case "ChartChina":
                                 _this.initHistogram(el, item);
                                 return
                             case "ChartPie":
@@ -278,8 +310,27 @@ var vm = new Vue({
                                 return
                             default:
                                 break;
-
-                        }
+                        }*/
+                        /*switch (item.DefaultChart) {
+                            case 1:
+                                _this.initLineChart(el, item);
+                                return
+                            case 2:
+                                _this.initHistogram(el, item);
+                                return
+                            case 0:
+                                _this.initPieChart(el, item);
+                                return
+                            case 3:
+                                _this.initGauge(el, item);
+                                return
+                            case 4:
+                                _this.initAnnular(el, item);
+                                return
+                            default:
+                                break;
+                        }*/
+                       
                     })(i)
 
                 }
@@ -350,12 +401,14 @@ var vm = new Vue({
                 }
             })
         },
+       
         // 初始化折线图
         initLineChart: function (el, item) {
 
             var lineChart = echarts.init(el)
             var data = JSON.parse(item.Docs);
             var startnum = data[0];
+            var xAxis = [];
             if (startnum) {
                 var inf = [];
                 var num = 0;
@@ -364,8 +417,7 @@ var vm = new Vue({
                         xAxis = data.map(function (it) {
                             return it[i]
                         })
-                    }
-                    else {
+                    } else {
                         inf[num] = {
                             name: i,
                             type: 'line',
@@ -452,6 +504,7 @@ var vm = new Vue({
             var hChart = echarts.init(el)
             var data = JSON.parse(item.Docs)
             var startnum = data[0];
+            var xAxis = [];
             if (startnum) {
                 var inf = [];
                 var num = 0;
@@ -460,8 +513,7 @@ var vm = new Vue({
                         xAxis = data.map(function (it) {
                             return it[i]
                         })
-                    }
-                    else {
+                    } else {
                         inf[num] = {
                             name: i,
                             type: 'bar',
@@ -637,7 +689,7 @@ var vm = new Vue({
         handler.AddPara("PageID", pageID);
         //handler.AddUrlData();
         var windows = handler.DoMethodReturnJSON("Home_Init");
-        // console.log(windows);
+         console.log(windows);
         if (!windows) {
             var no = GetQueryString("PageID");
             var url = "../GPM/Window/Html.htm?PageID=" + no + "&MenuNo=" + no;
@@ -650,11 +702,8 @@ var vm = new Vue({
                 var win = windows[j];
                 if (win.WinDocModel == 'Tab') {
                     win.children = JSON.parse(win.Docs);
-
-
                 }
             }
-
         }
         //console.log(windows);
         var viewid = GetQueryString("viewid");
@@ -675,7 +724,7 @@ var vm = new Vue({
         try {
 
             this.boxes = windows;
-
+            this.snum = windows[0].DefaultChart
             this.bindArea()
             this.initCharts()
             this.initTable()
@@ -689,6 +738,7 @@ var vm = new Vue({
             console.error(e)
         }
 
+      
     }
 })
 

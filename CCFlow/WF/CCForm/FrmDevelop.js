@@ -400,7 +400,7 @@ function GenerDevelopFrm(wn, fk_mapData) {
         figure_Develop_IFrame(element, iframe);
 
     }
-    debugger
+  //  debugger
     if (frmData.WF_FrmNodeComponent == null || frmData.WF_FrmNodeComponent == undefined) {
         var element = $("Img[data-type=WorkCheck]");
         if (element.length != 0)

@@ -29,6 +29,8 @@
         function Down() {
 
             var frmID = GetQueryString("FK_MapData");
+            if (frmID == null || frmID == undefined || frmID == "")
+                frmID = GetQueryString("FrmID");
             var md = new Entity("BP.Sys.MapData", frmID);
 
 

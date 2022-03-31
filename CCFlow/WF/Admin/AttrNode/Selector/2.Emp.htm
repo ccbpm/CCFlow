@@ -54,7 +54,7 @@
                 if (webUser.CCBPMRunModel == 2)
                     rootNo = webUser.OrgNo;
                 if (webUser.CCBPMRunModel == 1) {
-                    var orgs = new Entities("BP.WF.Port.Admin2.Orgs");
+                    var orgs = new Entities("BP.WF.Port.Admin2Group.Orgs");
                     orgs.RetrieveCond("No", "=", "ParentNo");
                     if (orgs.length != 0) {
                         rootNo = orgs[0].No;

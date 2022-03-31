@@ -11,7 +11,7 @@
     6.当为子流程退回时，如果已经启动平级子流程时则不能执行退回功能
     7.退回到指定节点，如果退回到的节点中间有启动子流程或者平级子流程的节点，则不处理，正常退回
     -->
-    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
     <script src="../Scripts/commonYangYH.js"></script>
@@ -63,15 +63,11 @@
         // ?
         var isFrameCross = GetQueryString("isFrameCross");
         isFrameCross = isFrameCross == null || isFrameCross == undefined ? 0 : isFrameCross;
+        var node = null;
 
-
+        //是否全局设置了，强制每个节点都是原路返回?
         var _ReturnWin_IsBackTracking_Selected = getConfigByKey("ReturnWin_IsBackTracking_Selected", false);;
         $(function () {
-
-            ////是否选择. 退回并原路返回. 强制设置，退回并原路返回.
-            if (_ReturnWin_IsBackTracking_Selected == true) {
-                document.getElementById("CB_IsBackTracking").checked = ReturnWin_IsBackTracking_Selected;
-            }
 
             //初始化页面退回信息.
             pageData = {
@@ -80,7 +76,7 @@
                 FID: GetQueryString('FID'),
                 Message: GetQueryString('Info'),
                 FK_Flow: GetQueryString("FK_Flow"),
-                WorkIDs:GetQueryString("WorkIDs")
+                WorkIDs: GetQueryString("WorkIDs")
             };
 
             //如果有退回信息字段，就让其绑定到，退回原因的文本框里.
@@ -130,14 +126,55 @@
                 return;
             }
 
-            //启用了退回扩展字段,  退回的考核信息，就是扩充了其他的字段，这里不翻译了.
-            var node = new Entity("BP.WF.Node", pageData.FK_Node);
+            node = new Entity("BP.WF.Node", pageData.FK_Node);
 
-            if (node.IsKillEtcThread == 1 || node.IsKillEtcThread == "1") {
-                //alert(node.IsKillEtcThread);
-                //  document.getElementById("btnIsKillEtcThread").style.display = 'none';
-                //  arget.style.display="none";
-                // $("#btnIsKillEtcThread").css("display", "none");
+            //子线程退回到分流节点：子线程删除规则.  不删除其他的子线程.
+            if (node.IsKillEtcThread == 0 && node.RunModel==4 ) {
+                document.getElementById("btnIsKillEtcThread").style.display = 'none';
+                document.getElementById("CB_IsKillEtcThread").checked = false;
+            }
+
+            //子线程退回到分流节点：删除其他的子线程.
+            if (node.IsKillEtcThread == 1 && node.RunModel == 4) {
+                document.getElementById("btnIsKillEtcThread").style.display = 'inline';
+                document.getElementById("CB_IsKillEtcThread").checked = true;
+                $('#CB_IsKillEtcThread').attr("disabled", 'disabled'); //让其不可编辑.
+            }
+            //子线程退回到分流节点：由用户决定.
+            if (node.IsKillEtcThread == 1 && node.RunModel == 4) {
+                document.getElementById("btnIsKillEtcThread").style.display = 'inline';
+                document.getElementById("CB_IsKillEtcThread").checked = true;
+               // $('#CB_IsKillEtcThread').attr("disabled", 'disabled'); //让其不可编辑.
+            }
+
+            ////是否选择. 退回并原路返回. 强制设置，退回并原路返回.
+            if (_ReturnWin_IsBackTracking_Selected == true) {
+                // document.getElementById("btnIsKillEtcThread").style.display = 'inline';
+                document.getElementById("CB_IsBackTracking").checked = true;
+                //  document.getElementById("CB_IsBackTracking").checked = true;
+                $('#CB_IsBackTracking').attr("disabled", 'disabled');
+
+            } else {
+
+                //不允许原路返回.
+                if (node.IsBackTracking === 0) {
+                    document.getElementById("CB_IsBackTracking").checked = false;
+                    $('#CB_IsBackTracking').attr("disabled", 'disabled');
+                  //  $("#btnIsBackTracking").css("display", "inline");
+
+                }
+
+                //强制设置原路返回.
+                if (node.IsBackTracking === 2) {
+                    document.getElementById("CB_IsBackTracking").checked = true;
+                    $('#CB_IsBackTracking').attr("disabled", 'disabled');
+                    $("#btnIsBackTracking").css("display", "inline");
+                }
+
+                //让用户决定，是否可以原路返回.
+                if (node.IsBackTracking === 1) {
+                    $("#btnIsBackTracking").css("display", "inline");
+                }
             }
 
 
@@ -191,10 +228,10 @@
 
             //获取当前节点属性,是否可以执行退回并原路返回的按钮？
             //var node = new Entity("BP.WF.Node", pageData.FK_Node)
-            if (node.IsBackTracking == "1")
-                $('#btnIsBackTracking').css("display","inline");
+            if (node.IsBackTracking != "0")
+                $('#btnIsBackTracking').css("display", "inline");
 
-            if (node.IsKillEtcThread == "1")
+            if (node.IsKillEtcThread == "1" && (node.RunModel == 4))
                 $('#btnIsKillEtcThread').css("display", "inline");
 
             $("section").show();
@@ -222,6 +259,9 @@
             //是否全部（子线程）退回？
             var IsKillEtcThread = 0;
             if ($("#CB_IsKillEtcThread").prop("checked") == true)
+                IsKillEtcThread = 1;
+
+            if (node.IsKillEtcThread == "1")
                 IsKillEtcThread = 1;
 
             //获得选择退回的节点.
@@ -256,7 +296,7 @@
                 handler.AddPara("WorkIDs", pageData.WorkIDs);
                 doMethod = "Batch_Return";
             }
-                
+
             handler.AddPara("FK_Flow", pageData.FK_Flow);
             handler.AddPara("WorkID", pageData.WorkID);
             handler.AddPara("FID", pageData.FID);
@@ -279,7 +319,7 @@
             handler.AddPara("PageData", parasData);
 
             //调用退回方法.
-           
+
             var data = handler.DoMethodReturnString(doMethod); //执行方法.
             if (isFrameCross == 0) {
                 if (window.parent != null && window.parent.WindowCloseReloadPage != null && typeof window.parent.WindowCloseReloadPage === "function") {
@@ -298,7 +338,7 @@
             data = data.replace(/null/g, '');
             if (isFrameCross == 0) {
                 var url = window.parent ? window.parent.location.href : "";
-                if (window.parent && typeof window.parent.returnWorkWindowClose=="function" && url.indexOf("WorkCheckModel")==-1) {
+                if (window.parent && typeof window.parent.returnWorkWindowClose == "function" && url.indexOf("WorkCheckModel") == -1) {
                     window.parent.returnWorkWindowClose(data);
                 } else if (window.opener && typeof window.opener.returnWorkWindowClose == "function" && url.indexOf("WorkCheckModel") == -1) {
                     window.opener.returnWorkWindowClose(data);
@@ -330,7 +370,7 @@
                     window.parent.CloseBootstrapDialog("");
                 }
                 else {
-                   $('body').append($('<div>' + "已取消操作" + '</div>'));
+                    $('body').append($('<div>' + "已取消操作" + '</div>'));
                     window.close();
                 }
             } else {
@@ -371,14 +411,14 @@
 
         <div id="btnIsBackTracking" style="margin-top:6px;display:none">
             <label>
-                <input type="checkbox" id="CB_IsBackTracking" style="float:left;margin-top:3px;" />
-                退回后并发送给我&nbsp;&nbsp;
+                <input type="checkbox" id="CB_IsBackTracking" />
+                本次退回后，并由被退回节点直接发送到本环节&nbsp;&nbsp;
             </label>
         </div>
 
-        <div id="btnIsKillEtcThread" style="margin-top: 6px;display: none">
+        <div id="btnIsKillEtcThread" style="margin-top: 6px; display: none">
             <label>
-                <input type="checkbox" id="CB_IsKillEtcThread" style="float:left;margin-top:3px;" />
+                <input type="checkbox" id="CB_IsKillEtcThread" />
                 全部子线程退回&nbsp;&nbsp;
             </label>
         </div>

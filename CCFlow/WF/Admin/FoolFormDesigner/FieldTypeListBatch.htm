@@ -88,7 +88,7 @@
                 $("#TB_UIIsEnable_" + (idx + 1)).val(attr.UIIsEnable);
                 $("#TB_UIVisible_" + (idx + 1) ).val(attr.UIVisible);
                 $("#TB_UIIsInput_" + (idx + 1)).val(attr.UIIsInput);
-                if (attr.UIIsEnable == 1) {
+                if (attr.UIIsEnable == 0) {
                     $("#TB_UIIsEnable_" + (idx + 1)).prop("checked", "true");
                 }
                 if (attr.UIVisible == 1) {
@@ -123,9 +123,9 @@
                 str += "<td ><input disabled='true' name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:60px;' /></td>";
 
             }
-            str += "<td><label class='checkbox' ><input onclick='checkclick(this," + idx + ");' class='UIIsEnable' id='TB_UIIsEnable_" + (idx + 1) + "' type='checkbox' />只读</label></td>";
-            str += "<td><label class='checkbox' ><input onclick='checkclick(this," + idx + ");' class='UIVisible' id='TB_UIVisible_" + (idx + 1) + "' type='checkbox' />可见</label></td>";
-            str += "<td><label class='checkbox' ><input onclick='checkclick(this," + idx + ");' class='UIIsInput' id='TB_UIIsInput_" + (idx + 1) + "' type='checkbox' />必填</label></td>";
+            str += "<td><input onclick='checkclick(this," + idx + ");' class='UIIsEnable' id='TB_UIIsEnable_" + (idx + 1) + "' type='checkbox' />只读</td>";
+            str += "<td><input onclick='checkclick(this," + idx + ");' class='UIVisible' id='TB_UIVisible_" + (idx + 1) + "' type='checkbox' />可见</td>";
+            str += "<td><input onclick='checkclick(this," + idx + ");' class='UIIsInput' id='TB_UIIsInput_" + (idx + 1) + "' type='checkbox' />必填</td>";
 
             str += "<td ><input name=\"TB_" + attr.KeyOfEn + "_Idx\" type=\"text\" value=\"" + attr.Idx + "\" id=\"TB_" + attr.KeyOfEn + "_Idx\"   style='width:30px;' /></td>";
 
@@ -137,12 +137,12 @@
         function ReField(mypk,keyOfEn,name,idx,) {
             if (window.confirm('您确定重新命名改字段吗？') == false)
                 return;
-            var newKeyOfEn = window.prompt("请输入新的字段英文名称", keyOfEn);
+            var newKeyOfEn = promptGener("请输入新的字段英文名称", keyOfEn);
             if (newKeyOfEn.trim() == "" || newKeyOfEn == keyOfEn) {
                 alert("新字段名称不能为空或者未发生变化");
                 return;
             }
-            var newName = window.prompt("请输入新的字段中文名称", name);
+            var newName = promptGener("请输入新的字段中文名称", name);
             if (newName.trim() == "")
                 newName = name;
             var fk_mapData = GetQueryString("FK_MapData");

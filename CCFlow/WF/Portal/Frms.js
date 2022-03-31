@@ -143,10 +143,10 @@
            /* if (window.confirm("确定要执行表单复制吗?") == false)
                 return;*/
             var flow = new Entity("BP.Sys.MapData", no);
-            var frmID = window.prompt("表单ID:" + no + "Copy");
+            var frmID = promptGener("表单ID:" + no + "Copy");
             if (frmID == undefined || frmID == null || frmID == '') return;
 
-            var frmName = window.prompt("表单名称:" + flow.Name + "Copy");
+            var frmName = promptGener("表单名称:" + flow.Name + "Copy");
             if (frmName == undefined || frmName == null || frmName == '') return;
             var data = flow.DoMethodReturnString("DoCopy", frmID + '~' + frmName);
             layer.msg(data);

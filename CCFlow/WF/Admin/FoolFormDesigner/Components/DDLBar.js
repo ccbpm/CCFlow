@@ -239,14 +239,16 @@ function Save() {
         case 80://从表
             return CreateDtl();
             break;
-        case 90://框架
+        case 90: //框架
             return CreateFrame();
             break;
-        case 101://评分控件
+        case 101: //评分控件
             return ExtScore();
-        case 110://公文正文组件
+        case 110: //公文正文组件
             return ExtGovDocFile();
-        case 120://公文正文组件
+        case 111: //打印组件
+            return PrintRTF();
+        case 120: //公文正文组件
             return SubFlow();
         default:
             break;
@@ -261,7 +263,7 @@ function SubFlow() {
 //地图
 function ExtMap() {
 
-    var name = window.prompt('请输入地图名称:\t\n比如:中国地图', '地图');
+    var name = promptGener('请输入地图名称:\t\n比如:中国地图', '地图');
     if (name == null || name == undefined || name.trim() == "")
         return "";
 
@@ -318,37 +320,6 @@ function ExtMap() {
         window.location.href = '../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtMap&MyPK=' + mapAttr.MyPK;
     if (frmType == 8) {
         return GetHtmlByMapAttrAndFrmComponent(mapAttr, 4)
-    }
-}
-
-
-//公文正文组件
-function ExtGovDocFile() {
-
-    var en = new Entity("BP.Sys.MapAttr");
-    en.SetPKVal(fk_mapData + "_GovDocFile");
-    if (en.RetrieveFromDBSources() == 1) {
-        alert("该表单 GovDocFile 字段已经存在.");
-        return "";
-    }
-
-    var mypk = fk_mapData + "_GovDocFile";
-    var mapAttr = new Entity("BP.Sys.MapAttr");
-    mapAttr.UIContralType = 17; //发文字号.
-    mapAttr.MyPK = mypk;
-    mapAttr.FK_MapData = fk_mapData;
-    mapAttr.KeyOfEn = "GovDocFile";
-    mapAttr.Name = "公文正文组件";
-    mapAttr.MyDataType = 1;
-    mapAttr.LGType = 0;
-    mapAttr.ColSpan = 1; //
-    mapAttr.UIWidth = 150;
-    mapAttr.UIHeight = 23;
-    mapAttr.Insert(); //插入字段.
-    if (frmType != 8)
-        window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrGovDocFile&MyPK=" + mapAttr.MyPK;
-    if (frmType == 8) {
-        return GetHtmlByMapAttrAndFrmComponent(mapAttr, 17)
     }
 }
 
@@ -419,7 +390,8 @@ function DocWordReceive() {
  * 在线wps编辑
  */
 function ExtGovDocFile() {
-    var name = window.prompt('请输入在线编辑组件的名称:\t\n比如:正文', '');
+
+    var name = promptGener('请输入在线编辑组件的名称:\t\n比如:正文', '');
     if (name == null || name == undefined || name.trim() == "")
         return "";
 
@@ -456,17 +428,15 @@ function ExtGovDocFile() {
     mapAttr.IsEnableInAPP = 1;
     mapAttr.Insert(); //插入字段.
     if (frmType != 8)
-        window.location.href = "../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttGovDocFile&MyPK=" + mapAttr.MyPK;
+        window.location.href = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttGovDocFile&MyPK=" + mapAttr.MyPK;
     if (frmType == 8) {
         return GetHtmlByMapAttrAndFrmComponent(mapAttr, 110)
     }
 }
 
-
-
 //签批组件
 function ExtWorkCheck() {
-    var name = window.prompt('请输入签批组件的名称:\t\n比如:办公室意见、拟办意见', '');
+    var name = promptGener('请输入签批组件的名称:\t\n比如:办公室意见、拟办意见', '');
     if (name == null || name == undefined || name.trim() == "")
         return "";
 
@@ -616,7 +586,7 @@ function MapAttrFixed() {
 function ExtAth() {
     var frmID = fk_mapData;
 
-    var name = window.prompt('请输入附件名称:\t\n比如:报送材料、报销资料', '附件');
+    var name = promptGener('请输入附件名称:\t\n比如:报送材料、报销资料', '附件');
     if (name == null || name == undefined || name.trim() == "") {
         alert("字段附件的名称不能为空");
         ExtAth();
@@ -633,7 +603,7 @@ function ExtAth() {
     }
     //获得ID.
     var id = StrToPinYin(name);
-    var id = window.prompt('请输入附件编号:\t\n比如:BSCL、BXZL', id);
+    var id = promptGener('请输入附件编号:\t\n比如:BSCL、BXZL', id);
     if (id == null || id == undefined || id.trim() == "") {
         alert("字段附件的编号不能为空");
         ExtAth();
@@ -659,7 +629,7 @@ function ExtAth() {
     mapAttr.ColSpan = 3; //
     mapAttr.TextColSpan = 1; //
     mapAttr.UIWidth = 150;
-    mapAttr.UIHeight = 170;
+    mapAttr.UIHeight = 70;
     mapAttr.IsEnableInAPP = 0;
     mapAttr.Insert(); //插入字段.
 
@@ -686,7 +656,7 @@ function ExtAth() {
 //超链接.
 function ExtLink() {
 
-    var name = window.prompt('请输入超链接名称:\t\n比如:我的连接、点击这里打开', '我的连接');
+    var name = promptGener('请输入超链接名称:\t\n比如:我的连接、点击这里打开', '我的连接');
     if (name == null || name == undefined || name.trim() == "")
         return "";
 
@@ -711,7 +681,7 @@ function ExtLink() {
         return "";
     }
 
-    var link = window.prompt('请输入超链地址:\t\n比如:https://gitee.com/opencc', 'https://gitee.com/opencc');
+    var link = promptGener('请输入超链地址:\t\n比如:https://gitee.com/opencc', 'https://gitee.com/opencc');
     if (link == null || link == undefined)
         return "";
 
@@ -743,7 +713,7 @@ function ExtLink() {
 //评分控件
 function ExtScore() {
 
-    var name = window.prompt('请输入评分事项名称:\t\n比如:快递速度，服务水平', '评分事项');
+    var name = promptGener('请输入评分事项名称:\t\n比如:快递速度，服务水平', '评分事项');
     if (name == null || name == undefined || name.trim() == "")
         return "";
 
@@ -767,7 +737,7 @@ function ExtScore() {
         return "";
     }
 
-    var score = window.prompt('请设定总分:\t\n比如:5，10', '5');
+    var score = promptGener('请设定总分:\t\n比如:5，10', '5');
     if (score == null || score == undefined)
         return "";
 
@@ -804,7 +774,7 @@ function ExtBigNoteHtmlText() {
 //手写签名版.
 function ExtHandWriting() {
 
-    var name = window.prompt('请输入签名版名称:\t\n比如:签字版、签名', '签字版');
+    var name = promptGener('请输入签名版名称:\t\n比如:签字版、签名', '签字版');
     if (name == null || name == undefined || name.trim() == "")
         return "";
 
@@ -853,7 +823,7 @@ function ExtHandWriting() {
 //按钮
 function ExtBtn() {
 
-    var name = window.prompt('请输入按钮名称:\t\n比如:保存、发送');
+    var name = promptGener('请输入按钮名称:\t\n比如:保存、发送');
     if (name == null || name == undefined || name.trim() == "")
         return "";
 
@@ -942,7 +912,7 @@ function ExtJobSchedule() {
 //图片组件.
 function ExtImg() {
 
-    var name = window.prompt('请输入图片名称:\t\n比如:肖像、头像、ICON、地图位置', '肖像');
+    var name = promptGener('请输入图片名称:\t\n比如:肖像、头像、ICON、地图位置', '肖像');
     if (name == null || name == undefined || name.trim() == "")
         return "";
 
@@ -999,7 +969,7 @@ function ExtImg() {
 //图片附件.
 function ExtImgAth() {
 
-    var name = window.prompt('请输入图片名称:\t\n比如:肖像、头像、ICON', '肖像');
+    var name = promptGener('请输入图片名称:\t\n比如:肖像、头像、ICON', '肖像');
     if (name == null || name == undefined || name.trim() == "")
         return "";
 

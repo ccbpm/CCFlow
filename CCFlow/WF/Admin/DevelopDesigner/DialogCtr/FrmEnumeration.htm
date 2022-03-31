@@ -63,14 +63,16 @@
                         <tr v-for="(sysEnumMain,index) in sysEnumMains">
                             <td>{{index+1}}</td>
                             <td>
-                                <input type="radio" name="enumSelect" @click="ChangeEnum(sysEnumMain)" />
-                                <template v-if="sysEnumMain.EnumKey!=''">
-                                    {{sysEnumMain.EnumKey}}
-                                </template>
+                                <label>
+                                    <input type="radio" name="enumSelect" @click="ChangeEnum(sysEnumMain)" />
+                                    <template v-if="sysEnumMain.EnumKey!=''">
+                                        {{sysEnumMain.EnumKey}}
+                                    </template>
 
-                                <template v-else=v-else>
-                                    {{sysEnumMain.No}}
-                                </template>
+                                    <template v-else=v-else>
+                                        {{sysEnumMain.No}}
+                                    </template>
+                                </label>
                             </td>
                             <td>{{sysEnumMain.Name}}</td>
                             <td><a href="#" @click="Edit(sysEnumMain)">{{sysEnumMain.CfgVal}}</a></td>
@@ -204,9 +206,9 @@
                     window.location.href = url;
                 },
                 CrateDtl: function (sysEnumMain) {
-                    var no = window.prompt("枚举子项编号:", sysEnumMain.No + "Dtl");
+                    var no = promptGener("枚举子项编号:", sysEnumMain.No + "Dtl");
                     if (no == null || no == undefined) return;
-                    var name = window.prompt("枚举子项名称:", sysEnumMain.Name + "Dtl");
+                    var name = promptGener("枚举子项名称:", sysEnumMain.Name + "Dtl");
                     if (name == null || name == undefined) return;
 
                     //插入数据.

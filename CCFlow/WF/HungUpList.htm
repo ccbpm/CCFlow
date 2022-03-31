@@ -1,75 +1,51 @@
 ﻿<!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>挂起的工作</title>
+    <title>草稿</title>
     <link href="Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
- 	<link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
-	<link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
-    <link href="Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
-</head>
-
-<body class="gray-bg">
-    <div class="wrapper wrapper-content animated fadeInRight">
-        <div class="ibox-content">
-            <table class="table  table-striped">
-                <thead>
-                    <tr id="tablet">
-                    </tr>
-                </thead>
-                <tbody id="Table1"></tbody>
-            </table>
-            <div class="row">
-                <div class="col-sm-12"><span id="Table2"></span></div>
-            </div>
-        </div>
-    </div>
-
-    <script language="JavaScript" src="./Comm/JScript.js" type="text/javascript"></script>
+    <link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="./Scripts/QueryString.js" type="text/javascript"></script>
     <script src="./Scripts/config.js" type="text/javascript"></script>
     <script src="./Comm/Gener.js" type="text/javascript"></script>
     <script src="Scripts/layui/layui/lay/modules/layer.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        function GroupBarClick(groupName) {
+</head>
 
-            var alt = document.getElementById('Img' + groupName).alert;
-            var sta = 'block';
-            if (alt == 'Max') {
-                sta = 'block';
-                alt = 'Min';
-                classname = 'fa fa-minus-square';
-            } else {
-                sta = 'none';
-                alt = 'Max';
-                classname = 'fa  fa-plus-square';
-            }
+<body class="gray-bg">
 
-            document.getElementById('Img' + groupName).className = classname;
-            document.getElementById('Img' + groupName).alert = alt;
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="ibox-content">
+            <table class="table  table-striped">
+                <thead>
 
-            var i = 0;
-            for (i = 0; i <= 600; i++) {
+                <th> # </th>
+                <th> 标题</th>
+                <th> 流程</th>
+                <th>发起日期</th>
+                <th>发起人</th>
+                <th>停留节点</th>
+                <th>挂起时间</th>
+                <th>挂起人</th>
+                <th>挂起方式</th>
+                <th>备注 </th>
+                <th> 操作</th>
 
-                var row = document.getElementById(groupName + i);
+                </thead>
+                <tbody id="Table1">
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-                if (row == null || row == undefined || row.style == null)
-                    continue;
-
-                if (sta == 'block') {
-                    row.style.display = '';
-                } else {
-                    row.style.display = sta;
-                }
-            }
-        }
-
+    <script language="javascript" type="text/javascript">
         function WinOpenIt(url) {
+            window.open(url);
+            return;
 
             layer.open({
                 skin: 'layer-class',
@@ -78,10 +54,8 @@
                 area: ['96%', '90%'],
                 content: url
             });
-        }
-    </script>
 
-    <script language="javascript" type="text/javascript">
+        }
 
         /* ESC Key Down */
         function Esc() {
@@ -93,299 +67,122 @@
         //页面启动函数.
         $(function () {
             InitPage();
+
         });
 
         //初始化数据.
         function InitPage() {
 
-            //获取当前时间
-            var cdt = getNowFormatDate();
-            var timeKey = Math.random();
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("HungUpList_Init");
-
-
+            var data = handler.DoMethodReturnString("HungupList_Init");
 
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
             }
-            data = eval('(' + data + ')');
 
-            //设置表头.
-            var groupBy = GetQueryString("GroupBy");
-            if (groupBy == "" || groupBy == null)
-                groupBy = "ByFlow";
-
-
-            var nodeIDt = GetQueryString("FK_Node");
-
-            var tablet = "";
-
-            tablet += "<th>#</th>";
-            // title += "<th style='width:20px;'>优先级</th>";
-            tablet += "<th>标题</th>";
-
-            if (groupBy == "ByNode") {
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByFlow' >流程</th>";
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByStarter' >发起人</th>";
-            }
-
-            if (groupBy == "ByFlow") {
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByNode' >节点</th>";
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByStarter' >发起人</th>";
-            }
-
-            if (groupBy == "ByStarter") {
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByFlow' >流程</th>";
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByNode' >节点</th>";
-            }
-
-
-            tablet += "<th>发起日期</th>";
-            tablet += "<th>到达</th>";
-            tablet += "<th>期限</th>";
-            tablet += "<th>状态</th>";
-            tablet += "<th>类型</th>";
-            tablet += "<th>备注</th>";
-
-
-            $("#tablet").html(tablet);
-
-
-
-            //生成分组的字符串.
-            var str = "";
+            var timeKey = Math.random();
+            data = JSON.parse(data);
             var listbox = '';
+            //增加处理.
+            var idx = 0;
             for (var i = 0; i < data.length; i++) {
 
-                if (groupBy == "ByNode") {
-                    if (str.indexOf(data[i].NodeName) == -1)
-                        str += "@" + data[i].NodeName;
+                idx++;
+                var en = data[i];
+                en = new Entity("BP.WF.GenerWorkFlow", en);
+                //var title = en.Title;
+                //var flowNo = en.FK_Flow;
+                //var flowName = en.FlowName;
+                //var rdt = en.RDT;
+                //var flowNote = en.FlowNote;
+                //var workID = en.WorkID;
+                var paras = en.AtPara; //参数.
+                // AtPara ap = new AtPara(paras);
+                if (paras != '' && paras != null) {
+                    paras = paras.replace("'", "\\'");
+                    paras = paras.replace('@', '&');
+                    paras = paras.replace('@', '&');
+                    paras = paras.replace('@', '&');
+                    paras = paras.replace('@', '&');
+                    paras = paras.replace('@', '&');
+                    paras = "1" + paras;
                 }
 
-                if (groupBy == "ByFlow") {
-                    if (str.indexOf(data[i].FlowName) == -1)
-                        str += "@" + data[i].FlowName;
-                }
+                listbox = "<tr ><td class=Idx >" + idx + "</td>";
+                listbox += "<td>" + "<a href=\"javascript:WinOpenIt('MyView.htm?FK_Flow=" + en.FK_Flow + "&FID=0&WorkID=" + en.WorkID + "&IsRead=0&Paras=" + paras + "&T=" + timeKey + "');\" ><img src='./Img/Mail_UnRead.png' border=0 />" + en.Title + "</a></td>";
+                listbox += "<td>" + en.FlowName + "</td>";
+                listbox += "<td>" + en.RDT + "</td>";
 
-                if (groupBy == "ByStarter") {
-                    if (str.indexOf(data[i].StarterName) == -1)
-                        str += "@" + data[i].StarterName;
-                }
-            }
-            var strs = str.split("@"); //生成数组.
-
-            var num = 0;
-            var is1 = false;
-
-            //循环数组.
-            for (var idx = 0; idx < strs.length; idx++) {
-
-                var groupName = strs[idx];
-
-                if (groupName == "" || groupName == null)
-                    continue;
-
-                listbox += "<tr  onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=10 class='table-title'> <i class='fa fa-minus-square' alert='Min'  id='Img" + groupName + "'></i><span>" + groupName + "</span></th> </tr>";
-
-                //增加处理.
-                for (var i = 0; i < data.length; i++) {
-
-                    var work = data[i];
-                    if (groupBy == "ByNode") {
-
-                        if (work.NodeName != groupName) {
-                            continue;
-                        }
-                    } else if (groupBy == "ByFlow") {
-                        if (work.FlowName != groupName) {
-                            continue;
-                        }
-                    } else if (groupBy == "ByStarter") {
-                        if (work.StarterName != groupName) {
-                            continue;
-                        }
-                    } else {
-                        continue;
-                    }
-
-
-                    var title = work.Title;
-                    var isRead = work.IsRead;
-                    var flowNo = work.FK_Flow;
-                    var flowName = work.FlowName;
-                    var nodeName = work.NodeName;
-                    var starterName = work.StarterName;
-                    var pri = work.PRI;
-                    var nodeID = work.FK_Node;
-                    var fid = work.FID;
-                    var workID = work.WorkID;
-                    var pWorkID = work.PWorkID;
-                    var paras = work.AtPara;
-
-                    if (paras != '') {
-                        paras = paras.replace("'", "\\'");
-                        paras = paras.replace('@', '&');
-                        paras = paras.replace('@', '&');
-                        paras = paras.replace('@', '&');
-                        paras = paras.replace('@', '&');
-                        paras = paras.replace('@', '&');
-                        paras = "1" + paras;
-                    }
-
-                    num++;
-
-                    if (is1 == true) {
-                        listbox += "<tr  id='" + groupName + num + "' >";
-                        is1 = false;
-                    }
-                    else {
-                        listbox += "<tr id='" + groupName + num + "' >";
-                        is1 = true;
-                    }
-
-                    listbox += "<td style='width:20px'>" + num + "</td>"; //序号.
-                    //listbox += "<td><img class=Icon src='Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
-
-                    var url = "";
-                    if (isRead == 0)
-                        url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' />" + title + "</a>";
-                    else
-                        url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_Read.png' />" + title + "</a>";
-
-                    listbox += "<td>" + url + "</td>"; //标题
-
-                    if (groupBy == "ByNode") {
-                        listbox += "<td>" + flowName + "</td>"; //流程类别
-                        listbox += "<td>" + starterName + "</td>"; //发起人
-                    } else if (groupBy == "ByFlow") {
-                        listbox += "<td>" + nodeName + "</td>"; //节点名称
-                        listbox += "<td>" + starterName + "</td>"; //发起人
-
-                    } else if (groupBy == "ByStarter") {
-                        listbox += "<td>" + flowName + "</td>"; //流程类别
-                        listbox += "<td>" + nodeName + "</td>"; //节点名称
-                    }
-
-
-                    listbox += "<td>" + work.RDT + "</td>"; //发起时间
-                    listbox += "<td>" + work.ADT + "</td>"; //接受时间
-                    listbox += "<td>" + work.SDT + "</td>"; //应完成时间
-                    //判断流程是否逾期
-                    if (cdt > work.SDT && work.WFState == 2)
-                        listbox += "<td><font color=red>逾期</font></td>";
-                    else
-                        listbox += "<td><font color=green>正常</font></td>";
-
-                    listbox += "<td>" + GetState(work.WFState) + "</td>";
-
-                    //备注
-                    listbox += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + work.FlowNote + "'>" + work.FlowNote + "</div></td>";
-                    listbox += "</tr>";
-
-                }
-            }
-            $('#Table1').html(listbox);
-            $("#Table2").html("<div style='float:left;' >合计:" + data.length + "条</div> <div style='float:right;' >[<a href='TaskPoolApply.htm' >共享任务池待办</a>][<a href='TodolistOfAuth.htm' >查看授权人的待办工作</a>]</div>");
-        }
-        function GetState(wfState) {
-
-            switch (wfState) {
-                case 1:
-                    return "草稿";
-                case 2:
-                    return "待办";
-                    break;
-                case 3: //已完成.
-                    break;
-                case 4:
-                    return "挂起";
-                case 5:
-                    return "<font color=red>退回</font>";
-                case 6:
-                    return "转发";
-                case 7:
-                    return "删除";
-                case 8:
-                    return "加签";
-                case 11:
-                    return "加签回复";
-                default:
-                    return "其他";
-            }
-        }
-        //获取当前时间
-        function getNowFormatDate() {
-            var date = new Date();
-            var seperator1 = "-";
-            var seperator2 = ":";
-            var month = date.getMonth() + 1;
-            var strDate = date.getDate();
-            if (month >= 1 && month <= 9) {
-                month = "0" + month;
-            }
-            if (strDate >= 0 && strDate <= 9) {
-                strDate = "0" + strDate;
-            }
-            //当前时间=年份-月份-日 小时：分钟
-            var cdt = date.getFullYear() + seperator1 + month + seperator1 + strDate
-                + " " + date.getHours() + seperator2 + date.getMinutes();
-
-            return cdt;
-        }
-
-
-    </script>
-    <script type="text/javascript">
-        var NS4 = (document.layers);
-        var IE4 = (document.all);
-        var win = window;
-        var n = 0;
-        function findInPage(str) {
-
-            alert(document.getElementById('string1'));
-            str = document.getElementById('string1').value;
-            //    alert(str);
-            var txt, i, found;
-            if (str == "")
-                return false;
-            if (NS4) {
-                if (!win.find(str))
-                    while (win.find(str, false, true))
-                        n++;
+                listbox += "<td>" + en.StarterName + "</td>";
+                listbox += "<td>" + en.NodeName + "</td>";
+                listbox += "<td>" + en.HungupTime + "</td>";
+                listbox += "<td>" + en.GetPara('HunguperName') + "</td>"; //挂起人.
+                if (en.GetPara('HungupWay') == 0)
+                    listbox += "<td> 永久挂起</td>";
                 else
-                    n++;
-                if (n == 0)
-                    alert("对不起！没有你要找的内容。");
+                    listbox += "<td>在<font color=green >" + en.GetPara('HungupRelDate') + "</font> 解除</td>";
+
+                listbox += "<td>" + en.GetPara('HungupNote') + "</td>"; //挂起原因.
+
+                //   listbox += "<td>" + en. + "</td>";
+
+                listbox += "<td>";
+
+                if (en.GetPara("HungupCheckSta") == 1) {
+                    listbox += "<font color=green> 已经同意 </a>";
+
+                } else {
+                    listbox += "<a href=\"javascript:Agree('" + en.FK_Flow + "','" + en.WorkID + "')\">同意</a> - ";
+                    listbox += "<a href=\"javascript:Reject('" + en.FK_Flow + "','" + en.WorkID + "')\">不同意</a>";
+                }
+
+                listbox += "</td>";
+                listbox += "</tr>";
+
+                $('#Table1').append(listbox);
             }
-            if (IE4) {
-                txt = win.document.body.createTextRange();
-                for (i = 0; i <= n && (found = txt.findText(str)) != false; i++) {
-                    txt.moveStart("character", 1);
-                    txt.moveEnd("textedit");
-                }
-                if (found) {
-                    txt.moveStart("character", -1);
-                    txt.findText(str);
-                    txt.select();
-                    txt.scrollIntoView();
-                    n++;
-                }
-                else {
-                    if (n > 0) {
-                        n = 0;
-                        findInPage(str);
-                    }
-                    else
-                        alert("对不起！没有你要找的内容。");
-                }
-            }
-            return false;
         }
 
+        function Reject(flowNo, workid) {
+            var msg = window.prompt('输入要拒绝的原因？');
+            if (msg) {
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+                handler.AddPara("WorkID", workid);
+                handler.AddPara("FK_Flow", flowNo);
+                handler.AddPara("Msg", msg);
+                var data = handler.DoMethodReturnString("HungupList_Reject");
+
+                if (data.indexOf('err@') == 0) {
+                    alert(data);
+                    return;
+                }
+
+                window.location.href = window.location.href;
+            }
+        }
+
+        //删除流程.
+        function Agree(flowNo, workid) {
+
+            if (window.confirm('您确定要同意吗？') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddPara("WorkID", workid);
+            handler.AddPara("FK_Flow", flowNo);
+            var data = handler.DoMethodReturnString("HungupList_Agree");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //删除流程.
+            alert(data);
+
+            window.location.href = window.location.href;
+        }
     </script>
 
 </body>

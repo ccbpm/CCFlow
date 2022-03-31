@@ -125,6 +125,9 @@
         .item-op {
             width: 8%;
         }
+        [v-cloak]{
+            display: none !important;
+        }
     </style>
 </head>
 
@@ -132,7 +135,7 @@
     <!--<div id="mymask">
         正在加载..
     </div>-->
-    <div class="flow" id="flow">
+    <div class="flow" id="flow" v-cloak>
         <div class="row fixed">
             <div class="item item-other" @click="expandAll = !expandAll">
                 <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs">
@@ -146,10 +149,9 @@
                 <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="NewSys()">
                     <i class="icon-plus" style="margin-right: 6px"></i>创建系统
                 </div>
-
             </div>
             <!--<div class="item item-name" @click="expandAll = !expandAll">-->
-            <div class="item item-name" >
+            <div class="item item-name">
 
                 <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="ImpSys()">
                     <i class="icon-plus" style="margin-right: 6px"></i>导入系统

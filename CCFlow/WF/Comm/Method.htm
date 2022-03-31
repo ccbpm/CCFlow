@@ -21,7 +21,9 @@
 
 		    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
 		    handler.AddUrlData();
-		    var data = handler.DoMethodReturnString("Method_Init");
+            var data = handler.DoMethodReturnString("Method_Init");
+
+            promptGener()
 
 		    //如果错误,就提示.
 		    if (data.indexOf('err@') == 0) {

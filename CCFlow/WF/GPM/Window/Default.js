@@ -41,7 +41,6 @@ new Vue({
             // todo 需要重新实现接口
 
             var no = GetQueryString("PageID");
-            // debugger;
             // 方法排序..
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_GPM_Window");
             handler.AddPara("PageID", no);

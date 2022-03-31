@@ -31,6 +31,7 @@
         });
         //流程导入.
         function Imp_Done() {
+
             $("#Btn_Imp").val("正在导入...");
             var fk_flowSort = GetQueryString("FK_FlowSort");
             var fk_flow = GetQueryString("FK_Flow");
@@ -59,12 +60,11 @@
 
             layer.load();
             //提交数据
-            var doMethod = "Imp_Done";
             var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrFlow";
             $("#cc").form("submit", {
                 type: 'POST',
                 dataType: 'html',
-                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&FK_Flow=" + fk_flow + "&FK_Sort=" + fk_flowSort + "&ImpWay=" + impWay + "&SpecFlowNo=" + spenFlowNo,
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=Imp_Done&HttpHandlerName=" + httpHandlerName + "&FK_Flow=" + fk_flow + "&FK_Sort=" + fk_flowSort + "&ImpWay=" + impWay + "&SpecFlowNo=" + spenFlowNo,
                 onSubmit: function (param) {
                     //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交
                 },

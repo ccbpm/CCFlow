@@ -1538,7 +1538,9 @@
 				    else {
 				        for (i = 0, j = dat.length; i < j; i++) {
 				            tmp = parse_nest(dat[i], par, p.parents.concat());
-				            if (tmp) {
+                            if (tmp) {
+                                if (tmp == par)
+                                    continue;
 				                chd.push(tmp);
 				                dpc.push(tmp);
 				                if (m[tmp].children_d.length) {
@@ -1550,7 +1552,11 @@
 				        p.children_d = dpc;
 				        for (i = 0, j = p.parents.length; i < j; i++) {
 				            m[p.parents[i]].children_d = m[p.parents[i]].children_d.concat(dpc);
-				        }
+                        }
+                        if (p.children.length != 0 && m[par].children.length == 0) {
+                            m[par].children = chd;
+                            m[par].children_d = dpc;
+                        }
 				        rslt = {
 				            'cnt': t_cnt,
 				            'mod': m,

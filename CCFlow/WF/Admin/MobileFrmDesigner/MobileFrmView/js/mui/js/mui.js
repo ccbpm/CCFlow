@@ -7331,7 +7331,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 
 		} else {
 			//H5版本(确认index为0，取消index为1)
-			var result = window.prompt(text);
+			var result = promptGener(text);
 			if (result) {
 				callback({
 					index: 0,

@@ -50,13 +50,13 @@
                 mapExts.Retrieve("FK_MapData", en.No);
                 for (var j = 0; j < mapAttrs.length; j++) {
                     var mapAttr = mapAttrs[j];
-                    list += "<li><a href=\"javascript:AddMapAttr('" + mapAttr.KeyOfEn + "','" + mapAttr.FK_MapData + "')\" >" + mapAttr.KeyOfEn + "-" + mapAttr.Name ;
+                    list += "<li><a href=\"javascript:AddMapAttr('" + mapAttr.KeyOfEn + "','" + mapAttr.FK_MapData + "')\" >" + mapAttr.KeyOfEn + "-" + mapAttr.Name;
                     for (var i = 0; i < mapExts.length; i++) {
                         if (mapAttr.KeyOfEn == mapExts[i].AttrOfOper) {
                             list += "-" + mapExts[i].ExtType;
                         }
                     }
-                     list += "</a></li>";
+                    list += "</a></li>";
                 }
 
                 list += "</ul>";
@@ -78,7 +78,7 @@
             var mypkOfMapAttr = fk_mapdata + "_" + keyOfEn;
             var en = new Entity("BP.Sys.MapAttr", mypkOfMapAttr);
 
-            var name = window.prompt('请输入要增加的字段名称', en.Name);
+            var name = promptGener('请输入要增加的字段名称', en.Name);
             if (name == undefined || name == null)
                 return;
 
@@ -89,13 +89,9 @@
                 return;
             }
 
-            var field = window.prompt('字段名', keyOfEn);
+            var field = promptGener('字段名', keyOfEn);
             if (field == undefined || field == null)
                 return;
-
-           
-
-
 
             en.KeyOfEn = field;
             en.Name = name;
@@ -114,10 +110,10 @@
             alert('字段插入成功' + en.MyPK);
 
             var MapExts = new Entities("BP.Sys.MapExts");
-            MapExts.Retrieve("FK_MapData", fk_mapdata,"AttrOfOper",keyOfEn);
+            MapExts.Retrieve("FK_MapData", fk_mapdata, "AttrOfOper", keyOfEn);
             for (var i = 0; i < MapExts.length; i++) {
                 var mapExt = MapExts[i];
-                var en = new Entity("BP.Sys.MapExt",mapExt);
+                var en = new Entity("BP.Sys.MapExt", mapExt);
                 en.FK_MapData = GetQueryString("FK_MapData");
                 en.MyPK = mapExt.MyPK;
                 en.MyPK = en.MyPK.replace(fk_mapdata, GetQueryString("FK_MapData"));
@@ -126,21 +122,21 @@
                 en.SetPKVal(en.MyPK);
                 en.Insert();
             }
-            
+
             if (window.parent != null) {
                 window.parent.location.href = window.parent.location.href + "&IsFirst=1";
             }
 
             window.close();
         }
-        
+
 
         //创建模版.
         function CreateFrm() {
 
             var en = new Entity("BP.Sys.MapDataTemplate");
 
-            var name = window.prompt('请输入模版的名称', '我的字段模版');
+            var name = promptGener('请输入模版的名称', '我的字段模版');
             if (name == undefined || name == "")
                 return;
 
@@ -179,8 +175,7 @@
         <div id="info">
         </div>
     </div>
-    
 
-    
+
 </body>
 </html>

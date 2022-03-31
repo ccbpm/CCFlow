@@ -309,50 +309,51 @@
     </script>
 </head>
 <body class="easyui-layout group-easyui-body">
-    <div data-options="region:'center'">
-        <div id="tabs" class="easyui-tabs" data-options="fit:true ,border:false">
-            <div title="枚举信息" id="tab_Edit">
-                <table>
-                    <tr>
-                        <td>标签 </td>
-                        <td><input id="TB_EnumName" class="cc-input" /> </td>
-                        <td>枚举键值 </td>
-                        <td><input id="TB_EnumKey" class="cc-input" /> </td>
-                        <td>
-                            <label for="RB_QP">
-                                <input id="RB_QP" type="radio" name="RB_QPJP" value="ziduanquanpin" />
-                                全拼
-                            </label>
-                            <label for="RB_JP">
-                                <input id="RB_JP" type="radio" name="RB_QPJP" checked="checked" value="ziduanjianpin" />简拼
-                            </label>
-                        </td>
+    <div data-options="region:'center'" style="overflow:auto">
+        <!--<div id="tabs" class="easyui-tabs" data-options="fit:true ,border:false">
+    <div title="枚举信息" id="tab_Edit">-->
+        <table style="  z-index: 1000;position:fixed; background-color: white;width:100%">
+            <tr>
+                <td>标签 </td>
+                <td><input id="TB_EnumName" class="cc-input" /> </td>
+                <td>枚举键值 </td>
+                <td><input id="TB_EnumKey" class="cc-input" /> </td>
+                <td>
+                    <label for="RB_QP">
+                        <input id="RB_QP" type="radio" name="RB_QPJP" value="ziduanquanpin" />
+                        全拼
+                    </label>
+                    <label for="RB_JP">
+                        <input id="RB_JP" type="radio" name="RB_QPJP" checked="checked" value="ziduanjianpin" />简拼
+                    </label>
+                </td>
 
-                        <td>
-                            <input type="button" class="cc-btn-tab" value="保存" onclick="SaveEnum()" />
-                            <input type="button" value="重置" class="cc-btn-tab" onclick="NewEnum()" style="display:none" />
-                        </td>
-                    </tr>
-                </table>
+                <td>
+                    <input type="button" class="cc-btn-tab" value="保存" onclick="SaveEnum()" />
+                    <input type="button" value="重置" class="cc-btn-tab" onclick="NewEnum()" style="display:none" />
+                </td>
+               
+            </tr>
+        </table>
 
-                <div class="container">
-                    <div class="">
-                        <div id='DivEnumList'></div>
-                    </div>
-
-                    <fieldset id="help">
-                        <legend id="help">帮助</legend>
-                        <ul>
-                            <li>1. 请在标签上面输入枚举中文名，比如:"请假类型" </li>
-                            <li>2. 系统自动生成枚举标识字段，QJLX .</li>
-                            <li>3. 请在右边文本框列表，输入枚举值，比如: 病假  事假 婚假 其他</li>
-                            <li>4. 点击保存.</li>
-                        </ul>
-                    </fieldset>
-
-                </div>
+        <div class="container" style="margin-top:70px;">
+            <div class="">
+                <div id='DivEnumList'></div>
             </div>
+
+            <fieldset id="help">
+                <legend id="help">帮助</legend>
+                <ul>
+                    <li>1. 请在标签上面输入枚举中文名，比如:"请假类型" </li>
+                    <li>2. 系统自动生成枚举标识字段，QJLX .</li>
+                    <li>3. 请在右边文本框列表，输入枚举值，比如: 病假  事假 婚假 其他</li>
+                    <li>4. 点击保存.</li>
+                </ul>
+            </fieldset>
+
         </div>
+        <!--</div>
+    </div>-->
     </div>
 
 

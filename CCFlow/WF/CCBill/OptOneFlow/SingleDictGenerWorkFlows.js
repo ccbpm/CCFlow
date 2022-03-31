@@ -66,7 +66,6 @@ new Vue({
             event.preventDefault();
             event.stopPropagation();
         }
-        //debugger;
         //获得数据源.
         var handler = new HttpHandler("BP.CCBill.WF_CCBill_OptOneFlow");
         handler.AddUrlData();

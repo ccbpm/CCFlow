@@ -133,13 +133,13 @@
         }
         function New() {
 
-            var name = window.prompt("请输入中文标签");
+            var name = promptGener("请输入中文标签");
             if (name == null || name == undefined || name == "")
                 return;
 
             var key = GenerPinYin(name);
 
-            var no = window.prompt("请输入英文标记", key);
+            var no = promptGener("请输入英文标记", key);
             if (no == null || no == undefined)
                 return;
 

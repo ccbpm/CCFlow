@@ -644,6 +644,7 @@
             html += "<th style='background-color:#F2F2F2;'>主部门</th>";
             html += "<th style='background-color:#F2F2F2;'>邮件</th>";
             html += "<th style='background-color:#F2F2F2;'>电话</th>";
+            html += "<th style='background-color:#F2F2F2;'>飞鸽</th>";
             html += "<th style='background-color:#F2F2F2;'>操作</th>";
             html += "</tr></thead>";
 
@@ -671,10 +672,14 @@
                     html += "<td>" + emp.Tel + "</td>";
                 html += "<td>" +
                     "<button data-id='" + emp.No + "'  data-pid='" + dept.No + "' class='dept-dropdown-btn layui-btn layui-btn-primary layui-border-cyan layui-btn-sm' style='width: 100%'>操作</button></td>";
+                
+
+                html += "<td><a href=\"javascript:FeiGe('" + emp.No + "','" + emp.Name + "','" + emp.FK_Dept + "','" + emp.FK_DeptText + "','" + emp.OrgNo + "')\">飞鸽</a></td>";
+
                 html += "</tr>";
                 empNos += emp.No + ',';
             }
-            html += "</tbody>"
+            html += "</tbody>";
 
             //取消人员部门岗位管理关系. @不能出现sql.
             var deptEmps = new Entities("BP.GPM.DeptEmps");
@@ -719,6 +724,8 @@
                 else
                     html += "<td>" + emp.Tel + "</td>";
                 html += "<td><button data-id='" + emp.No + "'  data-pid='" + emp.FK_Dept + "' class='ptj-dropdown-btn layui-btn layui-btn-primary layui-border-green layui-btn-sm' style='width: 100%'>兼职操作</button></td>";
+                html += "<td><a href=\"javascript:FeiGe('" + emp.No + "','" + emp.Name + "','" + emp.FK_Dept + "','" + emp.FK_DeptText + "','" + emp.OrgNo + "')\">飞鸽</a></td>";
+
                 html += "</tr>";
                 num++;
 
@@ -748,6 +755,7 @@
                     html += "<td>-</td>";
                 else
                     html += "<td>" + emp.Tel + "</td>";
+                html += "<td><a href=\"javascript:FeiGe('" + emp.No + "','" + emp.Name + "','" + emp.FK_Dept + "','" + emp.FK_DeptText + "','" + emp.OrgNo + "')\">飞鸽</a></td>";
                 html += "<td><button data-id='" + emp.No + "'  data-pid='" + emp.FK_Dept + "' class='bl-dropdown-btn layui-btn layui-btn-primary layui-border-red layui-btn-sm' style='width: 100%'>黑名单操作</button></td>";
                 html += "</tr>";
                 empNos += emp.No + ',';
@@ -759,6 +767,11 @@
             $("#Emps").html(html);
             bindContextMenu()
             bindSortableJs()
+        }
+        function FeiGe(no, name, deptNo, deptName, orgNo, orgName)
+        {
+            var webUser = new WebUser();
+            CreateTalk(orgNo, webUser.No, no, name, "cccccc", 'http://ccflow.org');
         }
 
         /**
@@ -907,6 +920,7 @@
             html += "<th style='background-color:#F2F2F2;'>主部门</th>";
             html += "<th style='background-color:#F2F2F2;'>邮件</th>";
             html += "<th style='background-color:#F2F2F2;'>电话</th>";
+            html += "<th style='background-color:#F2F2F2;'>飞鸽</th>";
             html += "<th style='background-color:#F2F2F2;'>操作</th>";
             html += "</tr></thead>";
             html += "<tbody>";
@@ -925,6 +939,10 @@
                     html += "<td>-</td>";
                 else
                     html += "<td>" + emp.Tel + "</td>";
+
+                html += "<td><a href=\"javascript:FeiGe('" + emp.No + "','" + emp.Name + "','" + emp.FK_Dept + "','" + emp.FK_DeptText + "','" + emp.OrgNo + "')\">飞鸽</a></td>";
+
+
                 html += "<td><a href=\"javascript:Del('" + emp.No + "','" + emp.FK_Dept + "');\"  class='cc-btn-tab btn-del'>删除</a></td>";
                 html += "</tr>";
             }

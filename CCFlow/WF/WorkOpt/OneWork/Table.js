@@ -186,8 +186,8 @@ function InitPage() {
             isSend = true;
         }
 
-        if (isSend == true)
-            newRow += "<td ><a href=\"javascript:OpenFrm('" + track.MyPK + "','" + track.NDFrom + "');\">打开</a></td>";
+        if (isSend == true && 1==2)
+            newRow += "<td ><a href=\"javascript:OpenFrm('" + track.MyPK + "','" + track.NDFrom + "',"+track.WorkID+");\">打开</a></td>";
         else
             newRow += "<td></td>";
 
@@ -253,10 +253,10 @@ function InitPage() {
 }
 
 //打开表单.
-function OpenFrm(myPK, nodeID) {
+function OpenFrm(myPK, nodeID,workID) {
 
-    var url = "../../MyFrm.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + nodeID;
-    url += "&MyPK=" + myPK;
+    var url = "../../MyFrm.htm?WorkID=" +workID + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + nodeID;
+    url += "&TrackID=" + myPK;
     window.open(url);
     //    window.location.url = url;
 }
@@ -390,11 +390,11 @@ var ActionType = {
     /// <summary>
     /// 挂起
     /// </summary>
-    HungUp: 15,
+    Hungup: 15,
     /// <summary>
     /// 取消挂起
     /// </summary>
-    UnHungUp: 16,
+    UnHungup: 16,
     /// <summary>
     /// 强制移交
     /// </summary>
@@ -484,10 +484,10 @@ function ActionTypeStr(at) {
             return "../../Img/Action/RebackOverFlow.png";
         case ActionType.FlowOverByCoercion:
             return "../../Img/Action/FlowOverByCoercion.png";
-        case ActionType.HungUp:
-            return "../../Img/Action/HungUp.png";
-        case ActionType.UnHungUp:
-            return "../../Img/Action/UnHungUp.png";
+        case ActionType.Hungup:
+            return "../../Img/Action/Hungup.png";
+        case ActionType.UnHungup:
+            return "../../Img/Action/UnHungup.png";
         case ActionType.ShiftByCoercion:
             return "../../Img/Action/ShiftByCoercion.png";
         case ActionType.Press:

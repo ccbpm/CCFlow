@@ -175,7 +175,7 @@ UE.plugins['text'] = function () {
             var w = prompt("请输入：比如25(数值)或者50%(百分比)", baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width').replace("px", ""));
             var percent = new RegExp(/^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/);
             var result = percent.test(w);
-            if (result) {
+            if (result && w.indexOf("%")!=-1) {
                 baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w);
                 return;
             }
@@ -352,7 +352,7 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
         CCForm_ShowDialog(url, '字段外键属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
         return;
     }
-    if (shap == 'SQL' || shap == "Handler" || shap == "JQuery" || shap=="7" || shap=="SFTable" || shap=="WebApi") {
+    if (shap == 'SQL' || shap == "Handler" || shap == "JQuery" || shap == "7" || shap == "SFTable" || shap == "WebApi") {
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&PKVal=' + fk_mapdata + '_' + mypk;
         CCForm_ShowDialog(url, '字段外部数据源属性', null, null, shap, fk_mapdata + '_' + mypk, anchorEl);
         return;
@@ -492,7 +492,7 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
 function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
 
     if (w == null || w == undefined)
-        w = window.innerWidth/2;
+        w = window.innerWidth* 3/4;
 
     if (h == null || h == undefined)
         h = 460;
@@ -513,7 +513,7 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
     }
 
     //弹出框编辑属性
-    OpenLayuiDialog(url,  title, w, 0, "r", false, false, false, null, function () {
+    OpenLayuiDialog(url, title, w, 0, "r", false, false, false, null, function () {
         switch (shap) {
             case "Text":
             case 'SignCheck':
@@ -799,7 +799,7 @@ UE.plugins['enum'] = function () {
 
             var percent = new RegExp(/^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/);
             var result = percent.test(w);
-            if (result) {
+            if (result && w.indexOf("%") != -1){
                 baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w);
                 return;
             }
@@ -923,7 +923,7 @@ UE.plugins['textarea'] = function () {
 
             var percent = new RegExp(/^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/);
             var result = percent.test(w);
-            if (result) {
+            if (result && w.indexOf("%") != -1) {
                 baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w);
                 return;
             }
@@ -1051,7 +1051,7 @@ UE.plugins['select'] = function () {
 
             var percent = new RegExp(/^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/);
             var result = percent.test(w);
-            if (result) {
+            if (result && w.indexOf("%") != -1) {
                 baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w);
                 return;
             }
@@ -1377,7 +1377,7 @@ UE.plugins['ath'] = function () {
             }
 
             var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + data;
-            OpenLayuiDialog(url, '附件', window.innerWidth/2, 0, "r", false, false, false, null, function () {
+            OpenLayuiDialog(url, '附件', window.innerWidth / 2, 0, "r", false, false, false, null, function () {
                 var _html = "<img src='../CCFormDesigner/Controls/DataView/AthMulti.png' style='width:67%;height:200px'  leipiplugins='ath' data-key='" + data + "' />"
                 leipiEditor.execCommand('insertHtml', _html);
             });
@@ -1500,6 +1500,14 @@ UE.plugins['component'] = function () {
 
             if (dataType == "GovDocFile") {  //公文正文组件
                 ExtGovDocFile();
+            }
+
+            if (dataType == "PrintRTF") {  //RTF打印组件
+                PrintRTF();
+            }
+
+            if (dataType == "PrintHtml") {  //RTF打印组件
+                PrintHtml();
             }
 
             if (dataType == "DocWord") {  //发文字号
@@ -1948,7 +1956,7 @@ UE.plugins['leipi_template'] = function () {
 //手写签名版.
 function ExtHandWriting() {
 
-    var name = window.prompt('请输入签名版名称:\t\n比如:签字版、签名', '签字版');
+    var name = promptGener('请输入签名版名称:\t\n比如:签字版、签名', '签字版');
     if (name == null || name == undefined)
         return;
 
@@ -1995,7 +2003,7 @@ function ExtHandWriting() {
 
 //图片附件
 function ExtImgAth() {
-    var name = window.prompt('请输入图片附件名称:\t\n比如:肖像、头像、ICON、地图位置', '肖像');
+    var name = promptGener('请输入图片附件名称:\t\n比如:肖像、头像、ICON、地图位置', '肖像');
     if (name == null || name == undefined)
         return;
     var ImgAths = new Entities("BP.Sys.FrmImgAths");
@@ -2023,9 +2031,9 @@ function ExtImgAth() {
     });
 }
 
-
 //公文正文组件
 function ExtGovDocFile() {
+
     var en = new Entity("BP.Sys.MapAttr");
     en.SetPKVal(pageParam.fk_mapdata + "_GovDocFile");
     if (en.RetrieveFromDBSources() == 1) {
@@ -2039,7 +2047,7 @@ function ExtGovDocFile() {
     mapAttr.MyPK = mypk;
     mapAttr.FK_MapData = pageParam.fk_mapdata;
     mapAttr.KeyOfEn = "GovDocFile";
-    mapAttr.Name = "公文正文组价";
+    mapAttr.Name = "公文组件";
     mapAttr.MyDataType = 1;
     mapAttr.LGType = 0;
     mapAttr.ColSpan = 1; // 
@@ -2047,8 +2055,8 @@ function ExtGovDocFile() {
     mapAttr.UIHeight = 170;
     mapAttr.Insert(); //插入字段.
     mapAttr.Retrieve();
-    var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrGovDocFile&MyPK=" + mapAttr.MyPK;
-    OpenLayuiDialog(url, '公文正文组件', innerWidth / 2, 0, "r", false, false, false, null, function () {
+    var url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrGovDocFile&MyPK=" + mapAttr.MyPK;
+    OpenLayuiDialog(url, '公文组件', innerWidth / 2, 0, "r", false, false, false, null, function () {
         var _Html = "<input type='text'  id='TB_GovDocFile' name='TB_GovDocFile' data-key='GovDocFile' data-name='公文正文组件' data-type='GovDocFile'   leipiplugins='component' style='width:98%'  placeholder='公文正文组件'/>";
         leipiEditor.execCommand('insertHtml', _Html);
     });
@@ -2119,7 +2127,7 @@ function ExtDocWordReceive() {
 
 //图片
 function ExtImg() {
-    var name = window.prompt('请输入图片名称:\t\n比如:肖像、头像、ICON、地图位置', '肖像');
+    var name = promptGener('请输入图片名称:\t\n比如:肖像、头像、ICON、地图位置', '肖像');
     if (name == null || name == undefined)
         return;
     var mapAttrs = new Entities("BP.Sys.MapAttrs");
@@ -2212,7 +2220,7 @@ function NewFrame() {
 }
 //地图
 function ExtMap() {
-    var name = window.prompt('请输入地图名称:\t\n比如:中国地图', '地图');
+    var name = promptGener('请输入地图名称:\t\n比如:中国地图', '地图');
     if (name == null || name == undefined)
         return;
 
@@ -2275,9 +2283,11 @@ function ExtMap() {
         leipiEditor.execCommand('insertHtml', _html);
     });
 }
+
+
 //评分
 function ExtScore() {
-    var name = window.prompt('请输入评分事项名称:\t\n比如:快递速度，服务水平', '评分事项');
+    var name = promptGener('请输入评分事项名称:\t\n比如:快递速度，服务水平', '评分事项');
     if (name == null || name == undefined)
         return;
 
@@ -2301,7 +2311,7 @@ function ExtScore() {
         return;
     }
 
-    var score = window.prompt('请设定总分:\t\n比如:5，10', '5');
+    var score = promptGener('请设定总分:\t\n比如:5，10', '5');
     if (score == null || score == undefined)
         return;
 
@@ -2653,7 +2663,7 @@ function GetSysEnums(enumKey) {
     }
 
     var ses = new Entities("BP.Cloud.Sys.SysEnums");
-    ses.Retrieve("EnumKey", enumKey.replace(webUser.OrgNo+"_",""),"OrgNo",webUser.OrgNo, "IntKey");
+    ses.Retrieve("EnumKey", enumKey.replace(webUser.OrgNo + "_", ""), "OrgNo", webUser.OrgNo, "IntKey");
     return ses;
 }
 

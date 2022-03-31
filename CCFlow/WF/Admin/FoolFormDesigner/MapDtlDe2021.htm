@@ -306,6 +306,8 @@
             function GenerNameLink(attr) {
                 var mypk = attr.MyPK;
                 var dataType = attr.MyDataType;
+                if (attr.UIIsInput == 1)
+                    attr.Name = attr.Name + "<font color=red>*</font>";
                 var name = attr.Name;
                 var lgType = attr.LGType;
                 var uiBindKey = attr.UIBindKey;

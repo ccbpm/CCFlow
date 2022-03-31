@@ -101,7 +101,8 @@ window.onload = function () {
 
                 if (method.MethodModel === "Bill") {
 
-                    method.Docs = "./Opt/Bill.htm?FrmID=" + method.Tag1 + "&MethodNo=" + method.No + "&WorkID=" + GetQueryString("WorkID") + "&From=Dict";
+                    //method.Docs = "./Opt/Bill.htm?FrmID=" + method.Tag1 + "&MethodNo=" + method.No + "&WorkID=" + GetQueryString("WorkID") + "&From=Dict";
+                    method.Docs = "./SearchBill.htm?FrmID=" + method.Tag1 + "&MethodNo=" + method.No + "&PFrmID="+method.FrmID+"&PWorkID=" + GetQueryString("WorkID") + "&From=Dict";
 
                     //if (method.Docs == "") {
                     //    alert("没有解析的mark=" + method.Mark);
@@ -245,6 +246,12 @@ window.onload = function () {
                 }
                 this.sideBarData = groups;
                 console.log(this.sideBarData)
+                if (methods.length == 0) {
+                    $(".sidebar").hide();
+                    $(".indicator").hide();
+                    this.sideBarOpen = false;
+                }
+                   
             },
             menuHeight: function (group) {
                 return {

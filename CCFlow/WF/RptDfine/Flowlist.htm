@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,22 +10,65 @@
     <link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
     <link href="../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
     <link href="Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    <style>
+        table {
+            width: 100%;
+            font-size: 14px;
+        }
+
+        table td,
+        table th {
+            padding: 10px;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        #Table {
+            border-collapse: collapse;
+            border: none;
+        }
+
+        #Table td,
+        #Table th {
+            border: solid #dddddd .5px;
+        }
+    </style>
 </head>
+
 <body class="gray-bg">
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="ibox-content">
-            <table class="table  table-striped">
+            <table id="Table">
+                <!-- <tr>
+                    <th colspan="4" style="background-color: #f8f8ff;">办公类</th>
+                </tr>
+                <tr>
+                    <td><a>请假（20）</a></td>
+                    <td><a>请假（20）</a></td>
+                    <td><a>请假（20）</a></td>
+                    <td><a>请假（20）</a></td>
+                </tr>
+                <tr>
+                    <td><a>请假（20）</a></td>
+                    <td><a>请假（20）</a></td>
+                    <td><a>请假（20）</a></td>
+                    <td><a>请假（20）</a></td>
+                </tr> -->
+            </table>
+            <!-- <table class="table  table-striped">
                 <thead>
                     <tr>
                         <th width="40">#</th>
                         <th>名称</th>
 
                         <th colspan="2">查询</th>
-                        <!--<th>发起</th>-->
+                        <th>发起</th>
                     </tr>
                 </thead>
                 <tbody id="Table1"></tbody>
-            </table>
+            </table> -->
             <div class="row">
                 <div class="col-sm-12"><span id="Table2"></span></div>
             </div>
@@ -119,17 +163,16 @@
 
         //页面启动函数.
         $(function () {
-
-
             InitPage();
         });
 
-        //初始化数据.
+        /*初始化数据. 弃用
         function InitPage() {
-
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptDfine");
             var data = handler.DoMethodReturnString("Flowlist_Init");
-
+            var data2022 = handler.DoMethodReturnString("Flowlist_Init2022");
+            console.log(`🚀 :: data2022`, data2022);
+            console.log(`🚀 :: data `, data);
 
             if (data.indexOf('err@') == 0) {
                 alert(data);
@@ -138,67 +181,141 @@
 
             data = JSON.parse(data);
 
-            var dtSort = data["Sort"]; //类别.
-            var dtFlow = data["Flows"]; //发起的流程.
-            var listbox = '';
-            var myNum = 0;
-            var is1 = false;
-            for (var i = 0; i < dtSort.length; i++) {
-
-                var sortNo = dtSort[i].No;
-                var sortName = dtSort[i].Name;
-
-                //检查该类别下是否有流程，没有流程就continue ;.
-                var isHaveFlow = false;
-                for (var idx = 0; idx < dtFlow.length; idx++) {
-
-                    var flow = dtFlow[idx];
-                    if (sortNo == flow.FK_FlowSort) {
-                        isHaveFlow = true;
-                        break;
-                    }
+            data.Flows.forEach(flow => {
+                let sort = data.Sort.find(sortItem => sortItem.No == flow.FK_FlowSort)
+                if (sort) {
+                    if (!Array.isArray(sort.flows)) sort.flows = [];
+                    sort.flows.push(flow)
                 }
+            })
 
-                if (isHaveFlow == false)
-                    continue;
-
-                if (sortName == "" || sortName == null)
-                    continue;
-
-                listbox += "<tr  onclick=\"GroupBarClick('" + sortName + "')\" > <th colspan=8 class='table-title'> <i class='fa fa-minus-square' alert='Min'  id='Img" + sortName + "'></i><span>" + sortName + "</span></th> </tr>";
-
-                //增加处理.
-                for (var idx = 0; idx < dtFlow.length; idx++) {
-
-                    var flow = dtFlow[idx];
-                    var flowSort = flow.FK_FlowSort;
-                    if (sortNo != flowSort)
-                        continue;
-
-                    myNum++;
-
-                    if (is1 == true) {
-                        listbox += "<tr  id='" + sortName + myNum + "' >";
-                        is1 = false;
+            data.Sort.forEach(item => {
+                if (item.flows) {
+                    let index = 0;
+                    let Dom = `
+                    <tr>
+                        <th colspan="4" style="background-color: #f8f8ff;">${item.Name}</th>
+                    </tr>
+                    <tr>`
+                    for (let i = 0; i < Math.ceil(item.flows.length / 4); i++) {
+                        let flowsLen = 4 - item.flows.length
+                        item.flows.forEach(flow => {
+                            index++;
+                            Dom += `<td style="width:25%"><a href="/WF/SearchZongHe.htm?FlowNo=${flow.No}">${flow.Name}</a></td>`
+                        })
+                        for (let f = 0; f < flowsLen; f++) {
+                            Dom += '<td style="width:25%"></td>'
+                        }
                     }
-                    else {
-                        listbox += "<tr  id='" + sortName + myNum + "' >";
-                        is1 = true;
+                    Dom += '</tr>';
+                    $('#Table').append(Dom)
+                    $("#Table2").html(`合计:${index}条`);
+                }
+            })
+
+            // var dtSort = data["Sort"]; //类别.
+            // var dtFlow = data["Flows"]; //发起的流程.
+            // var listbox = '';
+            // var myNum = 0;
+            // var is1 = false;
+            // for (var i = 0; i < dtSort.length; i++) {
+
+            //     var sortNo = dtSort[i].No;
+            //     var sortName = dtSort[i].Name;
+
+            //     //检查该类别下是否有流程，没有流程就continue ;.
+            //     var isHaveFlow = false;
+            //     for (var idx = 0; idx < dtFlow.length; idx++) {
+
+            //         var flow = dtFlow[idx];
+            //         if (sortNo == flow.FK_FlowSort) {
+            //             isHaveFlow = true;
+            //             break;
+            //         }
+            //     }
+
+            //     if (isHaveFlow == false)
+            //         continue;
+
+            //     if (sortName == "" || sortName == null)
+            //         continue;
+
+            //     listbox += "<tr  onclick=\"GroupBarClick('" + sortName + "')\" > <th colspan=8 class='table-title'> <i class='fa fa-minus-square' alert='Min'  id='Img" + sortName + "'></i><span>" + sortName + "</span></th> </tr>";
+
+            //     //增加处理.
+            //     for (var idx = 0; idx < dtFlow.length; idx++) {
+
+            //         var flow = dtFlow[idx];
+            //         var flowSort = flow.FK_FlowSort;
+            //         if (sortNo != flowSort)
+            //             continue;
+
+            //         myNum++;
+
+            //         if (is1 == true) {
+            //             listbox += "<tr  id='" + sortName + myNum + "' >";
+            //             is1 = false;
+            //         }
+            //         else {
+            //             listbox += "<tr  id='" + sortName + myNum + "' >";
+            //             is1 = true;
+            //         }
+
+            //         listbox += "<td class=Idx >" + myNum + "</td>";
+            //         listbox += "<td> <a href=\"javascript:WinOpenSearch('" + flow.No + "','" + flow.Name + "');\" > " + flow.No + "." + flow.Name + "</a></td>";
+            //         listbox += "<td> <a href=\"javascript:WinOpenStart('" + flow.No + "','" + flow.Name + "');\" >我发起的流程</a></td>";
+            //         listbox += "<td> <a href=\"javascript:WinOpenJoin('" + flow.No + "','" + flow.Name + "');\" >我审批的流程</a></td>";
+            //         //listbox += "<td> <a href=\"javascript:WinOpenStartFlow('" + flow.No + "','" + flow.Name + "');\" >流程发起</a></td>";
+            //         listbox += "</tr>";
+
+            //     }
+            // }
+            // $('#Table1').html(listbox);
+            // $("#Table2").html("合计:" + myNum + "条");
+        }
+        */
+
+
+        function InitPage() {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptDfine");
+            let data = handler.DoMethodReturnString("Flowlist_Init2022");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            data = JSON.parse(data);
+            const result = {};
+            data.forEach(item => {
+                if (result[item.SortName]) {
+                    result[item.SortName].push(item);
+                } else {
+                    result[item.SortName] = [item];
+                }
+            })
+            let index = 0;
+            let Dom = '';
+            for (let key in result) {
+                let difference = 4 - (result[key].length % 4)
+                for (let i = 0; i < Math.ceil(result[key].length / 4); i++) {
+                    Dom += `
+                    <tr>
+                        <th colspan="4" style="background-color: #f8f8ff;">${key}</th>
+                    </tr>
+                    <tr>`
+                    for (let j = (i + 1) * 4 - 4; j < result[key].length; j++) {
+                        index++;
+                        Dom += `<td style="width:25%"><a href="/WF/SearchZongHe.htm?FlowNo=${result[key][j].FlowNo}">${result[key][j].FlowName}</a></td>`
                     }
-
-                    listbox += "<td class=Idx >" + myNum + "</td>";
-                    listbox += "<td> <a href=\"javascript:WinOpenSearch('" + flow.No + "','" + flow.Name + "');\" > " + flow.No + "." + flow.Name + "</a></td>";
-                    listbox += "<td> <a href=\"javascript:WinOpenStart('" + flow.No + "','" + flow.Name + "');\" >我发起的流程</a></td>";
-                    listbox += "<td> <a href=\"javascript:WinOpenJoin('" + flow.No + "','" + flow.Name + "');\" >我审批的流程</a></td>";
-                    //listbox += "<td> <a href=\"javascript:WinOpenStartFlow('" + flow.No + "','" + flow.Name + "');\" >流程发起</a></td>";
-                    listbox += "</tr>";
-
+                    for (let d = 0; d < difference; d++) {
+                        Dom += '<td style="width:25%"></td>'
+                    }
+                    Dom += '</tr>';
                 }
             }
-            $('#Table1').html(listbox);
-            $("#Table2").html("合计:" + myNum + "条");
-        }
+            $('#Table').append(Dom)
+            $("#Table2").html(`合计:${index}条`);
 
+        }
         //发起时打开窗口
         function WinOpenStartFlow(flowNo, title) {
 
@@ -247,4 +364,5 @@
 
     </script>
 </body>
+
 </html>

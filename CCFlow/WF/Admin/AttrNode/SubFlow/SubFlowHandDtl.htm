@@ -31,7 +31,7 @@
         });
 
         function SearchIt() {
-            keyWord = window.prompt('请输入关键字', keyWord);
+            keyWord = promptGener('请输入关键字', keyWord);
             if (keyWord == null || keyWord == undefined)
                 keyWord = "";
             GetData();

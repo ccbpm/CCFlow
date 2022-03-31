@@ -41,7 +41,7 @@ function SaveSelfFrom() {
            }
        }, false);
      */
-    return frm.contentWindow.postMessage({ Save:"Save" }, "*");
+    //return frm.contentWindow.postMessage({ Save:"Save" }, "*");
 }
 
 //20160106 by 柳辉
@@ -271,9 +271,9 @@ $(function () {
         if (window.opener) {
 
             if (window.opener.name && window.opener.name == "main") {
-                window.opener.location.href = window.opener.location.href;
+                window.opener.location.href = encodeURI(window.opener.location.href);
                 if (window.opener.top && window.opener.top.leftFrame) {
-                    window.opener.top.leftFrame.location.href = window.opener.top.leftFrame.location.href;
+                    window.opener.top.leftFrame.location.href = encodeURI(window.opener.top.leftFrame.location.href);
                 }
             } else if (window.opener.name && window.opener.name == "运行流程") {
                 //测试运行流程，不进行刷新

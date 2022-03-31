@@ -657,16 +657,13 @@ function Conver_CCForm_V1ToV2() {
 
 
 
-    //循环FrmLab
-    for (var i in flow_Data.Sys_FrmLab) {
-
-        var frmLab = flow_Data.Sys_FrmLab[i];
-
-        var createdFigure = figure_Template_Label(frmLab);
-     
-        createdFigure.style.lineWidth = defaultLineWidth;
-        STACK.figureAdd(createdFigure);
-    }
+    ////循环FrmLab
+    //for (var i in flow_Data.Sys_FrmLab) {
+    //    var frmLab = flow_Data.Sys_FrmLab[i];
+    //    var createdFigure = figure_Template_Label(frmLab);
+    //    createdFigure.style.lineWidth = defaultLineWidth;
+    //    STACK.figureAdd(createdFigure);
+    //}
 
     //循环FrmRB
     for (var i in flow_Data.Sys_FrmRB) {
@@ -758,11 +755,11 @@ function Conver_CCForm_V1ToV2() {
         STACK.figureAdd(createdFigure);
     }
 
-    //循环线
-    for (var i in flow_Data.Sys_FrmLine) {
-        var frmLine = flow_Data.Sys_FrmLine[i];
-        var createdConnector = connector_Template_Line(frmLine);
-    }
+    ////循环线
+    //for (var i in flow_Data.Sys_FrmLine) {
+    //    var frmLine = flow_Data.Sys_FrmLine[i];
+    //    var createdConnector = connector_Template_Line(frmLine);
+    //}
 
 
     //循环组件 轨迹图 审核组件 子流程 子线程

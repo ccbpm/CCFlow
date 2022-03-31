@@ -78,7 +78,15 @@ layui.use(['dropdown', 'util', 'layer', 'table', 'form', 'pinyin', 'laydate'], f
         var type = $(this).data('type');
         switch (type) {
             case "MapDataEdit": //属性
-                url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFool&PKVal=' + frmID;
+
+                var en = new Entity("BP.Sys.MapData", frmID);
+                var url = "../../Comm/RefFunc/En.htm?EnName=BP.WF.Template.MapFrmFool&PKVal=" + frmID;
+                if (en.FrmType == 9)
+                    url = "../../Comm/RefFunc/En.htm?EnName=BP.WF.Template.MapFrmWps&No=" + frmID;
+
+                //url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFool&PKVal=' + frmID;
+                //alert(url);
+
                 title = "属性";
                 break;
             case "FrmBillEdit": //单据属性
@@ -95,7 +103,11 @@ layui.use(['dropdown', 'util', 'layer', 'table', 'form', 'pinyin', 'laydate'], f
                 break;
             case "ExpImp": //导入/导出
                 title = "导入/导出";
-                url = './ImpExp/Imp/Default.htm?FK_MapData=' + frmID + "&DoType=FunList&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + nodeID;
+                url = './ImpExp/Imp/Default.htm?FrmID=' + frmID + "&DoType=FunList&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + nodeID;
+                break;
+            case "Batch": //导入/导出
+                title = "批处理";
+                url = './Batch/Default.htm?FrmID=' + frmID + "&DoType=FunList&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + nodeID;
                 break;
             case "FrmNodeComponent": //节点组件
                 if (nodeID == 0) {
@@ -108,7 +120,7 @@ layui.use(['dropdown', 'util', 'layer', 'table', 'form', 'pinyin', 'laydate'], f
             case "MobileFrm":
                 title = "手机端";
                 url = '../MobileFrmDesigner/Default.htm?FK_Flow=' + GetQueryString("FK_Flow") + '&FK_Node=' + nodeID + '&FK_MapData=' + frmID;
-                OpenLayuiDialog(url, title, W, 0, null,false);
+                OpenLayuiDialog(url, title, W, 0, null, false);
                 return;
             case "StyletDfine":
                 url = "./StyletDfine/Default.htm?FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + nodeID + "&FK_MapData=" + frmID + "&FrmID=" + frmID;
@@ -125,7 +137,7 @@ layui.use(['dropdown', 'util', 'layer', 'table', 'form', 'pinyin', 'laydate'], f
         }
 
         if (type != "StyletDfine" && type != "ToDevFrm")
-            OpenLayuiDialog(url, title, W,0,null, true);
+            OpenLayuiDialog(url, title, W, 0, null, true);
 
     });
 
@@ -356,6 +368,8 @@ function InitPage() {
         AthTable_Init(ath, "Div_" + ath.MyPK);
     });
 
+    //AfterBindEn_DealMapExt(data);
+
     //增加图标
     $.each(data.Sys_MapAttr, function (i, mapAttr) {
         if (mapAttr.UIVisible == 0)
@@ -380,8 +394,6 @@ function InitPage() {
             },
             //拖动结束
             onEnd: function (evt) {
-
-
                 /**
                  * 获取排序后的结果
                  * 因为之前页面结构不正确，获取不方便。
@@ -444,7 +456,21 @@ function InitPage() {
         var sortable = Sortable.create(item, ops);
 
     })
+}
 
+//生成鼠标移动上去的修改样式.
+function AddEditColTip(mapAttr) {
+    if (mapAttr.ColSpan == 1) {
+        return " ";
+    }
+}
+
+//保存设置的宽度
+function SaveColSpan(mapAttr, colspan) {
+
+    mapAttr.ColSpan = colspan;
+    mapAttr.Update();
+    window.location.href = window.location.href;
 }
 
 function AddICON(mapAttr) {
@@ -455,7 +481,6 @@ function AddICON(mapAttr) {
     if (icon == "" || icon == "0") {
         return;
     }
-
     if (icon) {
         var html = "";
         html += ' <i class=" input-icon ' + icon + '"></i>';
@@ -465,8 +490,6 @@ function AddICON(mapAttr) {
         obj.wrapAll("<div style='display:inline'></div>");
         obj.css("padding-left", "40px");
         obj.before(html);
-
-
     }
 }
 /**
@@ -610,7 +633,7 @@ function GenerGroupContext(groupEn, data, tableCol) {
             var nodeID = GetQueryString("FK_Node");
 
             Skip.addJs("../../WorkOpt/SubFlow.js");
-           // _html += gfLabHtml;
+            // _html += gfLabHtml;
             _html += "<div class='layui-row'>"
             _html += "<div class='layui-col-xs12'>";
             //说明是累加表单.
@@ -625,12 +648,12 @@ function GenerGroupContext(groupEn, data, tableCol) {
                 _html += "<div id='SubFlow'>" + SubFlow_Init(node) + "</div>";
             }
 
-           /* var src = "../../WorkOpt/SubFlow.htm?WorkID=0&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
-
-            var compent = new Entity("BP.WF.Template.FrmSubFlow", nodeID);
-
-            var frameDocs = "<iframe ID='F_SubFlow_" + nodeID + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + compent.SF_H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
-            _html += "<div  id='SubFlow" + nodeID + "'>" + frameDocs + "</div>";*/
+            /* var src = "../../WorkOpt/SubFlow.htm?WorkID=0&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+ 
+             var compent = new Entity("BP.WF.Template.FrmSubFlow", nodeID);
+ 
+             var frameDocs = "<iframe ID='F_SubFlow_" + nodeID + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + compent.SF_H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
+             _html += "<div  id='SubFlow" + nodeID + "'>" + frameDocs + "</div>";*/
 
             break;
         case "Frame":
@@ -789,7 +812,10 @@ function InitMapAttr(Sys_MapAttr, tableCol) {
             else
                 colWidth = "layui-col-xs" + (12 - parseInt(colWidth));
             html += "<div class='layui-col-xs12 item FoolFrmFieldRow' data-id='" + attr.MyPK + "' style='margin-bottom: 6px;'>";
-            html += "<div  class='" + textWidth + " FoolFrmFieldLabel'>" + GenerLabel(attr) + "</div>";
+            if (attr.MyDataType == 1 && attr.UIContralType == 0 && attr.LGType == 0 && (attr.IsSupperText == 1 || attr.UIHeight > 40))
+                html += "<div  class='" + textWidth + " FoolFrmFieldLabel' style='height:" + attr.UIHeight + "px'>" + GenerLabel(attr) + "</div>";
+            else
+                html += "<div  class='" + textWidth + " FoolFrmFieldLabel'>" + GenerLabel(attr) + "</div>";
             html += "<div  class='" + colWidth + " FoolFrmFieldInput' id='TD_" + attr.KeyOfEn + "'>" + InitMapAttrOfCtrlFool(attr) + "</div>";
             html += "</div>";
             continue;
@@ -850,24 +876,26 @@ function InitMapAttr(Sys_MapAttr, tableCol) {
  * @param {any} attr
  */
 function GenerLabel(attr) {
-    var tdUp = "<a href=\"javascript:Up('" + attr.MyPK + "','1');\"  alt='向左动顺序' ></a>";
-    var tdDown = "<a href=\"javascript:Down('" + attr.MyPK + "','1');\" alt='向右动顺序' ></a>";
+    var tdUp = "";// "<a href=\"javascript:Up('" + attr.MyPK + "','1');\"  alt='向左动顺序' ></a>";
+    var tdDown = "";//"<a href=\"javascript:Down('" + attr.MyPK + "','1');\" alt='向右动顺序' ></a>";
+    if (attr.UIIsInput == 1)
+        attr.Name = attr.Name + "<font color=red>*</font>";
     var ccsLab = "";
     if (attr.CSSLabel != "")
         ccsLab = " class='" + attr.CSSLabel + "'";
     if (attr.LGType == 0 && attr.UIContralType == 1) {
-        return tdUp + "<span " + ccsLab + " style='cursor: pointer' onclick=\"javascript:EditTableSQL('" + attr.MyPK + "','" + attr.KeyOfEn + "');\" >" + attr.Name + "</span>" + tdDown;
+        return tdUp + "<span id='Span_" + attr.KeyOfEn + "' "   + ccsLab + " style='cursor: pointer' onclick=\"javascript:EditTableSQL('" + attr.MyPK + "','" + attr.KeyOfEn + "');\" >" + attr.Name + "</span>" + tdDown;
     }
 
     if (attr.LGType == 0) {
-        return tdUp + "<span " + ccsLab + " style='cursor: pointer' onclick=\"javascript:Edit('" + attr.MyPK + "','" + attr.MyDataType + "','" + attr.GroupID + "','" + attr.LGType + "','" + attr.UIContralType + "');\" >" + attr.Name + "</span>" + tdDown;
+        return tdUp + "<span id='Span_" + attr.KeyOfEn + "' "   + ccsLab + " style='cursor: pointer' onclick=\"javascript:Edit('" + attr.MyPK + "','" + attr.MyDataType + "','" + attr.GroupID + "','" + attr.LGType + "','" + attr.UIContralType + "');\" >" + attr.Name + "</span>" + tdDown;
     }
 
     if (attr.LGType == 1)
-        return tdUp + "<span " + ccsLab + " style='cursor: pointer' onclick=\"javascript:EditEnum('" + attr.FK_MapData + "','" + attr.MyPK + "','" + attr.KeyOfEn + "');\" >" + attr.Name + "</span>" + tdDown;
+        return tdUp + "<span id='Span_" + attr.KeyOfEn + "' "   + ccsLab + " style='cursor: pointer' onclick=\"javascript:EditEnum('" + attr.FK_MapData + "','" + attr.MyPK + "','" + attr.KeyOfEn + "');\" >" + attr.Name + "</span>" + tdDown;
 
     if (attr.LGType == 2)
-        return tdUp + "<span " + ccsLab + " style='cursor: pointer' onclick=\"javascript:EditTable('" + attr.FK_MapData + "','" + attr.MyPK + "','" + attr.KeyOfEn + "');\" >" + attr.Name + "</span>" + tdDown;
+        return tdUp + "<span id='Span_" + attr.KeyOfEn + "' "   + ccsLab + " style='cursor: pointer' onclick=\"javascript:EditTable('" + attr.FK_MapData + "','" + attr.MyPK + "','" + attr.KeyOfEn + "');\" >" + attr.Name + "</span>" + tdDown;
 }
 /**
  * 获取单元格显示的内容
@@ -892,6 +920,9 @@ function InitMapAttrOfCtrlFool(mapAttr) {
                         return eleHtml;
                     case 6: //字段附件
                         return "<div " + ccsCtrl + " style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "'><label>请点击[" + mapAttr.Name + "]执行上传</label></div>";
+                    case 12: //图片肖像.
+                        
+                        return "<div " + ccsCtrl + " style='text-align:left;padding-left:10px' id='athModel_" + mapAttr.KeyOfEn + "'><label>肖像图片</label></div>";
                     case 8: //写字板
                         return "<img  src='../../../DataUser/Siganture/admin.jpg' " + ccsCtrl + " style='border:0px;height:" + mapAttr.UIHeight + "px;' id='Img" + mapAttr.KeyOfEn + "' />";
                     case 9: //超链接
@@ -955,8 +986,11 @@ function InitMapAttrOfCtrlFool(mapAttr) {
                 var bit;
                 if (attrdefVal != null && attrdefVal !== "" && attrdefVal.indexOf(".") >= 0)
                     bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
+                if (attrdefVal == null || attrdefVal == "")
+                    attrdefVal = 0.00;
 
-                return "<input " + ccsCtrl + "  value='0.00' style='text-align:right;'  onkeyup=" + '"' + "valitationAfter(this, 'float');if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + " valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+
+                return "<input " + ccsCtrl + "  value='" + attrdefVal+"' style='text-align:right;'  onkeyup=" + '"' + "valitationAfter(this, 'float');if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + " valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
             case 6: //日期类型
             case 7: //时间类型
                 //生成中间的部分.
@@ -1023,7 +1057,7 @@ function InitMapAttrOfCtrlFool(mapAttr) {
                 var checked = "";
                 if (se.IntKey == mapAttr.DefVal)
                     checked = " checked=true ";
-                rbHtmls += "<input " + ccsCtrl + " type=checkbox name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' " + checked + " onclick='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' title='"+se.Lab+"'/>" + br;
+                rbHtmls += "<input " + ccsCtrl + " type=checkbox name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' " + checked + " onclick='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' title='" + se.Lab + "'/>" + br;
             }
             return "<div id='DIV_" + mapAttr.KeyOfEn + "'>" + rbHtmls + "</div>";
         }
@@ -1042,7 +1076,7 @@ function InitMapAttrOfCtrlFool(mapAttr) {
                 var checked = "";
                 if (se.IntKey == mapAttr.DefVal)
                     checked = " checked=true ";
-                rbHtmls += "<input " + ccsCtrl + " type=radio name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' " + checked + " onclick='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' title='"+se.Lab+"'/>" + br;
+                rbHtmls += "<input " + ccsCtrl + " type=radio name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' " + checked + " onclick='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' title='" + se.Lab + "'/>" + br;
             }
             return "<div id='DIV_" + mapAttr.KeyOfEn + "'>" + rbHtmls + "</div>";
         }
@@ -1062,7 +1096,7 @@ function GetSysEnums(enumKey) {
     }
 
     var ses = new Entities("BP.Cloud.Sys.SysEnums");
-    ses.Retrieve("EnumKey", enumKey.replace(webUser.OrgNo+"_",""),"OrgNo", webUser.OrgNo, "IntKey");
+    ses.Retrieve("EnumKey", enumKey.replace(webUser.OrgNo + "_", ""), "OrgNo", webUser.OrgNo, "IntKey");
     return ses;
 }
 
@@ -1256,8 +1290,12 @@ function Edit(mypk, ftype, gf, fk_mapdtl, uiContralType) {
                     url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtScore&PKVal=' + mypk + '&s=' + Math.random();
                     break;
                 case 110:
-                    title = '公文正文组件';
-                    url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrGovDocFile&PKVal=' + mypk + '&s=' + Math.random();
+                    title = '公文组件';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrGovDocFile&PKVal=' + mypk + '&s=' + Math.random();
+                    break;
+                case 111:
+                    title = '打印组件';
+                    url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrPrint&PKVal=' + mypk + '&s=' + Math.random();
                     break;
                 default:
                     layer.alert("不可能出现的控件:FType:" + ftype + " UIControlType:" + uiContralType);
@@ -1280,11 +1318,12 @@ function Edit(mypk, ftype, gf, fk_mapdtl, uiContralType) {
             title = '字段 boolen 属性';
             url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&PKVal=' + mypk + '&s=' + Math.random();
             break;
+       
         default:
             layer.alert("不可能出现的控件:FType:" + ftype);
             return;
     }
-    OpenLayuiDialog(url, title, W, 0, null,true);
+    OpenLayuiDialog(url, title, W, 0, null, true);
     return;
 }
 /**
@@ -1296,7 +1335,7 @@ function Edit(mypk, ftype, gf, fk_mapdtl, uiContralType) {
 function EditEnum(fk_mapdata, mypk, keyOfEn) {
     getWindowWH();
     var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=' + mypk + '&s=' + Math.random();
-    OpenLayuiDialog(url, '枚举' + keyOfEn + '属性', W,false,false, true);
+    OpenLayuiDialog(url, '枚举' + keyOfEn + '属性', W, false, false, true);
 
 }
 /**
@@ -1308,7 +1347,6 @@ function EditTableSQL(mypk, keyOfEn) {
     getWindowWH();
     var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&PKVal=' + mypk + '&s=' + Math.random();
     OpenLayuiDialog(url, '外键SQL字段:' + keyOfEn + '属性', W, 0, null, true);
-
 }
 /**
  * 编辑外键字段的属性
@@ -1319,7 +1357,7 @@ function EditTableSQL(mypk, keyOfEn) {
 function EditTable(fk_mapData, mypk, keyOfEn) {
     getWindowWH();
     var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=' + mypk + '&s=' + Math.random();
-    OpenLayuiDialog(url, '外键字段:' + keyOfEn + '属性', W,false,false, true);
+    OpenLayuiDialog(url, '外键字段:' + keyOfEn + '属性', W, false, false, true);
 
 }
 
@@ -1330,7 +1368,7 @@ function EditFrmThread(mypk) {
         mypk = nodeID;
     var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmTrack&PKVal=' + mypk;
     OpenLayuiDialog(url, '子线程', W, 0, null, true);
-   
+
 
 }
 // 轨迹图.
@@ -1378,7 +1416,7 @@ function EditAth(ath) {
 function EditFrame(myPK) {
     getWindowWH();
     var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapFrameExt&FK_MapData=' + frmID + '&MyPK=' + myPK;
-    OpenLayuiDialog(url, '框架', W, 0, null,true);
+    OpenLayuiDialog(url, '框架', W, 0, null, true);
 }
 /**
  * 编辑从表
@@ -1400,7 +1438,7 @@ function AddFForDtl(fk_mapdtl) {
     OpenLayuiDialog(url, '从表', W, 0, null, true, null, function () {
         var frm = document.getElementById("F" + fk_mapdtl);
         frm.src = frm.src;
-     });
+    });
 }
 /**
  * 编辑组件信息
@@ -1457,7 +1495,7 @@ function AddEnum(typeName) {
     }
 
     OpenLayuiDialog(url, '', W, 0, null, true);
-  //  OpenLayuiDialog(url, '新建枚举', W, 0, null, true);
+    //  OpenLayuiDialog(url, '新建枚举', W, 0, null, true);
 
 
 }
@@ -1475,6 +1513,55 @@ function AddSelect() {
     }
     OpenLayuiDialog(url, '创建外键/外部数据源', W, 0, null, true);
     //LayuiPopRight(url, '创建外键/外部数据源', W, true);
+}
+
+
+function GovDoc(pinyin) {
+    layer.prompt({
+        title: '请输入文件名称,比如:正文',
+        formType: 0,
+        value: '正文',
+    }, function (text, index) {
+        layer.close(index);
+        if (text == null || text == undefined)
+            return;
+        var mapAttrs = new Entities("BP.Sys.MapAttrs");
+        mapAttrs.Retrieve("FK_MapData", frmID, "Name", text);
+        if (mapAttrs.length >= 1) {
+            alert('名称：[' + text + "]已经存在.");
+            AddHandWriting(pinyin);
+            return;
+        }
+
+        var id = pinyin.makePy(text);
+        var mypk = frmID + "_" + id;
+        var mapAttr = new Entity("BP.Sys.MapAttr");
+        mapAttr.MyPK = mypk;
+        if (mapAttr.IsExits == true) {
+            alert('名称：[' + text + "]已经存在.");
+            AddHandWriting(pinyin);
+            return;
+        }
+        var mypk = frmID + "_" + id;
+        var mapAttr = new Entity("BP.Sys.MapAttr");
+        mapAttr.UIContralType = 110; //公文组件.
+        mapAttr.MyPK = mypk;
+        mapAttr.FK_MapData = frmID;
+        mapAttr.KeyOfEn = id;
+        mapAttr.Name = text;
+        mapAttr.GroupID = groupID;
+        mapAttr.MyDataType = 1;
+        mapAttr.LGType = 0;
+        mapAttr.ColSpan = 1; //
+        mapAttr.UIWidth = 150;
+        mapAttr.UIHeight = 170;
+        mapAttr.Insert(); //插入字段.
+        mapAttr.Retrieve();
+        var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrGovDocFile&MyPK=" + mapAttr.MyPK;
+        getWindowWH();
+        OpenLayuiDialog(url, '公文组件', W, 0, null, true);
+
+    });
 }
 /**
  * 写字板
@@ -1523,8 +1610,8 @@ function AddHandWriting(pinyin) {
         mapAttr.Retrieve();
         var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&MyPK=" + mapAttr.MyPK;
         getWindowWH();
-            OpenLayuiDialog(url, '签字版', W, 0, null, true);
-        
+        OpenLayuiDialog(url, '签字版', W, 0, null, true);
+
     });
 }
 
@@ -1568,8 +1655,8 @@ function AddWorkCheck(pinyin) {
         mapAttr.Insert(); //插入字段.
         var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrCheck&MyPK=" + mapAttr.MyPK;
         getWindowWH();
-            OpenLayuiDialog(url, '签批字段', W, 0, null, true);
-       
+        OpenLayuiDialog(url, '签批字段', W, 0, null, true);
+
 
     });
 
@@ -1724,7 +1811,7 @@ function AddFieldAth(pinyin) {
             en.Insert(); //插入到数据库.
             var url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&MyPK=" + en.MyPK;
             getWindowWH();
-                OpenLayuiDialog(url, '创建外键/外部数据源', W, 0, null, true);
+            OpenLayuiDialog(url, '创建外键/外部数据源', W, 0, null, true);
         });
 
     });
@@ -1764,7 +1851,7 @@ function AddAth() {
         }
         getWindowWH();
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + frmID + '&MyPK=' + data;
-            OpenLayuiDialog(url, '附件属性', W, 0, null, true);
+        OpenLayuiDialog(url, '附件属性', W, 0, null, true);
         return;
     });
 
@@ -1804,7 +1891,7 @@ function AddImgAth(pinyin) {
         mapAttr.GroupID = groupID;
         mapAttr.UIContralType = 12; //FrmImgAth 类型的控件.
         mapAttr.MyDataType = 1;
-        mapAttr.ColSpan = 0; //单元格.
+        mapAttr.ColSpan = 1; //单元格.
         mapAttr.LGType = 0;
         mapAttr.UIWidth = 150;
         mapAttr.UIHeight = 170;
@@ -1821,7 +1908,7 @@ function AddImgAth(pinyin) {
         en.Insert(); //插入到数据库.
         getWindowWH();
         var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImgAth&MyPK=" + en.MyPK;
-            OpenLayuiDialog(url, '图片附件属性', W, 0, null, true);
+        OpenLayuiDialog(url, '图片附件属性', W, 0, null, true);
         return;
 
     });
@@ -1862,7 +1949,7 @@ function NewMapDtl() {
         }
         getWindowWH();
         var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + frmID + '&No=' + data;
-            OpenLayuiDialog(url, '从表属性', W, 0, null, true);
+        OpenLayuiDialog(url, '从表属性', W, 0, null, true);
         return;
     });
 
@@ -1950,7 +2037,7 @@ function AddBtn(pinyin) {
         mapAttr.Retrieve();
         var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmBtn&MyPK=" + mapAttr.MyPK;
         getWindowWH();
-            OpenLayuiDialog(url, '按钮属性', W, 0, null, true);
+        OpenLayuiDialog(url, '按钮属性', W, 0, null, true);
         //LayuiPopRight(url, '按钮属性', W, true);
 
     });
@@ -2005,7 +2092,7 @@ function AddLink(pinyin) {
             mapAttr.GroupID = groupID;
             mapAttr.MyDataType = 1;
             mapAttr.LGType = 0;
-            mapAttr.ColSpan = 0; //
+            mapAttr.ColSpan = 1; //
             mapAttr.UIWidth = 150;
             mapAttr.UIHeight = 170;
             mapAttr.Tag1 = "_blank"; //打开目标.
@@ -2014,7 +2101,7 @@ function AddLink(pinyin) {
             mapAttr.Retrieve();
             var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtLink&MyPK=" + mapAttr.MyPK;
             getWindowWH();
-                OpenLayuiDialog(url, '超链接属性', W, 0, null, true);
+            OpenLayuiDialog(url, '超链接属性', W, 0, null, true);
             //LayuiPopRight(url, '超链接属性', W, true);
         });
     });
@@ -2045,7 +2132,7 @@ function AddFixed() {
     }
     var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrFixed&MyPK=" + mapAttr.MyPK;
     getWindowWH();
-    OpenLayuiDialog(url, '评分控件', W, 0, null,true);
+    OpenLayuiDialog(url, '评分控件', W, 0, null, true);
     //LayuiPopRight(url, '评分控件', W, true);
 
 }
@@ -2090,7 +2177,7 @@ function AddFrame() {
         en.Insert();
         var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapFrameExt&FK_MapData=' + frmID + '&MyPK=' + en.MyPK;
         getWindowWH();
-            OpenLayuiDialog(url, '框架属性', W, 0, null, true);
+        OpenLayuiDialog(url, '框架属性', W, 0, null, true);
         //LayuiPopRight(url, '框架属性', W, true);
     });
 }
@@ -2150,7 +2237,7 @@ function AddScore(pinyin) {
             mapAttr.Retrieve();
             var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtScore&MyPK=" + mapAttr.MyPK;
             getWindowWH();
-                OpenLayuiDialog(url, '评分控件', W, 0, null, true);
+            OpenLayuiDialog(url, '评分控件', W, 0, null, true);
             //LayuiPopRight(url, '评分控件', W, true);
         });
     });
@@ -2218,7 +2305,7 @@ function AddMap(pinyin) {
         mapAttr.Retrieve();
         var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtMap&MyPK=' + mapAttr.MyPK;
         getWindowWH();
-            OpenLayuiDialog(url, '地图控件', W, 0, null, true);
+        OpenLayuiDialog(url, '地图控件', W, 0, null, true);
         //LayuiPopRight(url, '地图控件', W, true);
     });
 }
@@ -2232,10 +2319,45 @@ function AddBigNoteHtmlText() {
         layer.close(index);
         var url = "./EditFExtContral/60.BigNoteHtmlText.htm?FrmID=" + frmID;
         getWindowWH();
-            OpenLayuiDialog(url, '大块文本', W, 0, null, true);
+        OpenLayuiDialog(url, '大块文本', W, 0, null, true);
         //LayuiPopRight(url, '大块文本', W, true);
     }, function (index) {
         layer.close(index);
     });
+
+}
+
+//流程进度图.
+function ExtJobSchedule() {
+
+    var name = "流程进度图";
+    var id = "JobSchedule";
+    //获得ID.
+    var mypk = frmID + "_" + id;
+    var mapAttr = new Entity("BP.Sys.MapAttr");
+    mapAttr.MyPK = mypk;
+    if (mapAttr.IsExits == true) {
+        alert("已经存在，一个表单仅仅允许有一个流程进度图.");
+        return "";
+    }
+
+    var mapAttr = new Entity("BP.Sys.MapAttr");
+    mapAttr.UIContralType = 50; //流程进度图.
+    mapAttr.MyPK = mypk;
+    mapAttr.FK_MapData = frmID;
+    mapAttr.KeyOfEn = id;
+    mapAttr.Name = name;
+    mapAttr.GroupID = groupID;
+    mapAttr.MyDataType = 1;
+    mapAttr.LGType = 0;
+    mapAttr.ColSpan = 4; //
+    mapAttr.UIWidth = 0;
+    mapAttr.UIHeight = 100;
+    mapAttr.Idx = 0;
+    mapAttr.Insert(); //插入字段.
+    mapAttr.Retrieve();
+    getWindowWH();
+    var url = "../../Comm/EnOnly.htm?EnName=BP.WF.Template.ExtJobSchedule&MyPK=" + mapAttr.MyPK;
+    OpenLayuiDialog(url, '进度图', W, 0, null, true);
 
 }

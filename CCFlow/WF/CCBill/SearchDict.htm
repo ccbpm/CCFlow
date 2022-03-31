@@ -284,6 +284,7 @@
                 id: 'lay_table_dict',
                 data: tableData,
                 title: '数据表',
+                limit: Number.MAX_VALUE,
                 height: $(document).height() - $("#view").height() - 130,
                 cellMinWidth: 120,
                 size: 'lg',
@@ -332,7 +333,7 @@
                             return;
                         }
 
-                        OpenIt(data,2,0);
+                        OpenIt(data,2,0,null,true);
                         break;
                     case "delete"://删除数据
                         var checkStatus = table.checkStatus(vtable.config.id);
@@ -358,6 +359,7 @@
                             pageIdx = 1;
                             tableData = SearchData();
                             table.reload('lay_table_dict', { data: tableData });
+                            renderLaypage();
                             layui.laypage.render();
                             layer.close(index);
 
@@ -368,22 +370,19 @@
                         OpenLayuiDialog(url, "导入模板数据", window.innerWidth / 2, 0, null, true);
                         break;
                     case "exp"://导出
-                        var handler = new HttpHandler("BP.CCBill.WF_CCBill");
-                        handler.AddPara("FrmID", GetQueryString("FrmID"));
-                        //查询集合
-                        var data = handler.DoMethodReturnString("Search_Exp");
-                        var url = "";
-                        if (data.indexOf('err@') == 0) {
-                            layer.alert(data);
+                        if (plant != 'CCFlow')
+                            downLoadExcel(basePath + "/WF/Export/Search_Exp?type=dict&FrmID=" + GetQueryString("FrmID"));
+                        else {
+                            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+                            handler.AddPara("FrmID", GetQueryString("FrmID"));
+                            //查询集合
+                            var data = handler.DoMethodReturnString("Search_Exp");
+                            if (data.indexOf("err@") != -1) {
+                                layer.alert(data);
+                                return;
+                            }
+                            window.open(data);
                         }
-                        if (plant != 'CCFlow') {
-                            var currentPath = window.document.location.href;
-                            var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-                            data = path + data;
-                        }
-                        window.open(data);
-                        return;
-                        table.exportFile(vtable.config.id, tableData, 'xls');
                         break;
                     case "group"://跳转到分组页面
                         url = "Group.htm?FrmID=" + GetQueryString("FrmID");
@@ -610,15 +609,18 @@
             //获得当前的集合.
             var frms = data["Frm_Method"];
             var colls = data["Frm_Collection"];
-            //var menus = data["GPM_Menu"];
-            $.each(frms, function (index, frm) {
-                btns.push({
-                    label: frm.Name,
-                    type: frm.MethodModel,
-                    no: frm.No,
-                    source: "Method"
-                })
-            })
+            if (frms && frms.length > 0) {
+                $.each(frms, function (index, frm) {
+                    btns.push({
+                        label: frm.Name,
+                        type: frm.MethodModel,
+                        no: frm.No,
+                        source: "Method"
+                    })
+                });
+                isHaveSeachOper = true;
+            }
+            
             /**$.each(menus, function (index, menus) {
                 btns.push({
                     label: menus.Name,
@@ -627,19 +629,20 @@
                     source: "Menu"
                 })
             })**/
-            if (frms.length > 0)
-                isHaveSeachOper = true;
-            $.each(colls, function (index, coll) {
-                if (isHaveSeachOper == false && coll.MethodModel != "FlowNewEntity")
-                    isHaveSeachOper = true;
-                btns.push({
-                    label: coll.Name,
-                    type: coll.MethodModel,
-                    no: coll.No,
-                    source:"Collection"
-                   
-                })
-            })
+            if (colls && colls.length > 0) {
+                $.each(colls, function (index, coll) {
+                    if (isHaveSeachOper == false && coll.MethodModel != "FlowNewEntity")
+                        isHaveSeachOper = true;
+                    btns.push({
+                        label: coll.Name,
+                        type: coll.MethodModel,
+                        no: coll.No,
+                        source: "Collection"
+
+                    })
+                });
+            }
+            
             
             searchData["btns"] = btns;
             

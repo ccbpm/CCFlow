@@ -18381,7 +18381,7 @@ function make_xlsx_lib(XLSX){
     return o;
   }
 
-  /* [MS-OFFCRYPTO] 2.3.7.1 Binary Document Password Verifier Derivation */
+  /* [MS-OFFCRYPTO] 2.3.7.1 Binary Document pwd Verifier Derivation */
   function crypto_CreatePasswordVerifier_Method1(Password) {
     var Verifier = 0x0000, PasswordArray;
     var PasswordDecoded = _JS2ANSI(Password);
@@ -26215,7 +26215,7 @@ function write_cc(data, name:string, opts) {
     /* TabColorIndex */
     /* Panes */
 
-    /* NOTE: Password not supported in XLML Format */
+    /* NOTE: pwd not supported in XLML Format */
     if(ws['!protect']) {
       o.push(writetag("ProtectContents", "True"));
       if(ws['!protect'].objects) o.push(writetag("ProtectObjects", "True"));

@@ -15,8 +15,15 @@
 
         //初始化页面函数.....
         $(function () {
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
             var data = handler.DoMethodReturnString("SelectOneOrg_Init");
+            if (data.indexOf('err@') == 0)
+            {
+                $("#list").html(data);
+                return;
+            }
+
             datas = JSON.parse(data);
 
             //$("#cc").html("<img src='/Admin/Portal/Img/loading_small.gif' /><font color=blue>ccbpm 正在登录请您稍后.</font>");
@@ -24,10 +31,7 @@
 
             var html = "您好：" + webUser.No + " - " + webUser.Name + ",共有:<font color=red>" + datas.length + " </font>个. <a href='Login.htm'>切换管理员</a>";
             $("#title").html(html);
-
             var orgNo = webUser.OrgNo;
-
-
 
             var html = "<ul style='align:left'>";
             for (var i = 0; i < datas.length; i++) {
@@ -38,8 +42,6 @@
                     html += "<li><h2><a href=\"javascript:SelectOrg('" + data.No + "');\" >" + data.No + " " + data.Name + " </a></h2> </li>";
                 else
                     html += "<li><a href=\"javascript:SelectOrg('" + data.No + "');\" >" + data.No + " " + data.Name + " </a> </li>";
-
-
             }
             html += "</ul>";
             $("#list").html(html);

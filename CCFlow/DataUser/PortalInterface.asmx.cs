@@ -86,7 +86,7 @@ namespace ccbpm
         {
             // BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWeiXin  MyPK" + mypk + " UserNo:" + userNo + " Tel:" + tel + " msgInfo:" + msgInfo);
             if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
-                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
+                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDateTime);
             return true;
         }
         /// <summary>
@@ -105,7 +105,7 @@ namespace ccbpm
         {
             // BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " email:" + email + " title:" + title + " maildoc:" + maildoc);
             if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
-                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, title + " \t\n " + maildoc, BP.DA.DataType.CurrentDataTime);
+                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, title + " \t\n " + maildoc, BP.DA.DataType.CurrentDateTime);
             return true;
         }
         /// <summary>
@@ -122,7 +122,7 @@ namespace ccbpm
             //   BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " userNo:" + userNo + " msg:" + msg);
 
             if (BP.Sys.SystemConfig.IsEnableCCIM && userNo != null)
-                BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, userNo, msg, BP.DA.DataType.CurrentDataTime);
+                BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, userNo, msg, BP.DA.DataType.CurrentDateTime);
             //BP.CCIM.Glo.SendMsg(userNo, sourceUserNo, msg);
             return true;
         }

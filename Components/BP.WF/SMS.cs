@@ -582,7 +582,7 @@ namespace BP.WF
 
                 mailDoc = DataType.ParseText2Html(mailDoc);
 
-                string displayName = SystemConfig.GetValByKey("SendEmailDisplayName", "高凌BPM");
+                string displayName = SystemConfig.GetValByKey("SendEmailDisplayName", "驰骋BPM");
                 myEmail.From = new System.Net.Mail.MailAddress(emailAddr, displayName, System.Text.Encoding.UTF8);
 
                 myEmail.To.Add(mail);

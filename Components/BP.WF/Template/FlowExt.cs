@@ -527,7 +527,7 @@ namespace BP.WF.Template
                 msg += "\t\n 2. 用于待办的列表信息显示.";
                 msg += "\t\n 3. 配置格式为. Tel,Addr,Email  这些字段区分大小写并且是节点表单字段.";
                 msg += "\t\n 4. 数据存储在WF_GenerWorkFlow.AtPara里面.";
-                msg += "\t\n 5. 存储格式为: @BuessFields = 电话^Tel^18992323232;地址^Addr^山东成都;";
+                msg += "\t\n 5. 存储格式为: @BuessFields = 电话^Tel^18992323232;地址^Addr^山东济南;";
                 map.SetHelperAlert(FlowAttr.BuessFields, msg);
 
                 //表单URL. //@liuqiang 把他翻译到java里面去.

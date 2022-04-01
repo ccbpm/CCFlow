@@ -964,7 +964,7 @@ namespace BP.WF
             {
                 string s = SystemConfig.AppSettings["PrintBackgroundWord"];
                 if (string.IsNullOrEmpty(s))
-                    s = "高凌工作流引擎@开源高凌 - ccflow@openc";
+                    s = "驰骋工作流引擎@开源驰骋 - ccflow@openc";
                 return s;
             }
         }
@@ -2412,7 +2412,7 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 检查是否可以安装高凌BPM系统
+        /// 检查是否可以安装驰骋BPM系统
         /// </summary>
         /// <returns></returns>
         public static bool IsCanInstall()
@@ -2523,7 +2523,7 @@ namespace BP.WF
                     DBAccess.RunSQL(sql);
                 }
 
-                string info = "高凌工作流引擎 - 检查数据库安装权限出现错误:";
+                string info = "驰骋工作流引擎 - 检查数据库安装权限出现错误:";
                 info += "\t\n1. 当前登录的数据库帐号，必须有创建、删除视图或者table的权限。";
                 info += "\t\n2. 必须对表有增、删、改、查的权限。 ";
                 info += "\t\n3. 必须有删除创建索引主键的权限。 ";
@@ -2871,7 +2871,7 @@ namespace BP.WF
                     {
                         string sql = "";
                         sql = "INSERT INTO Demo_Resume (OID,RefPK,NianYue,GongZuoDanWei,ZhengMingRen,BeiZhu,QT) ";
-                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + emp.UserID + "','200" + myIdx + "-01','成都.高凌" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
+                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + emp.UserID + "','200" + myIdx + "-01','济南.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
                         DBAccess.RunSQL(sql);
                     }
                 }
@@ -2884,7 +2884,7 @@ namespace BP.WF
                     {
                         string sql = "";
                         sql = "INSERT INTO Demo_Resume (OID,RefPK,NianYue,GongZuoDanWei,ZhengMingRen,BeiZhu,QT) ";
-                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + no + "','200" + myIdx + "-01','成都.高凌" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
+                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + no + "','200" + myIdx + "-01','济南.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
                         DBAccess.RunSQL(sql);
                     }
                 }
@@ -3219,7 +3219,7 @@ namespace BP.WF
             //        //    WordDoc.Application.ActiveDocument.InlineShapes[1].Width = img.Width; // 图片宽度
             //        //    WordDoc.Application.ActiveDocument.InlineShapes[1].Height = img.Height; // 图片高度
             //    }
-            //    WordApp.ActiveWindow.ActivePane.Selection.InsertAfter("[高凌业务流程管理系统 http://ccFlow.org]");
+            //    WordApp.ActiveWindow.ActivePane.Selection.InsertAfter("[驰骋业务流程管理系统 http://ccFlow.org]");
             //    WordApp.Selection.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft; // 设置右对齐
             //    WordApp.ActiveWindow.View.SeekView = Word.WdSeekView.wdSeekMainDocument; // 跳出页眉设置
             //    WordApp.Selection.ParagraphFormat.LineSpacing = 15f; // 设置文档的行间距

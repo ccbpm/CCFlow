@@ -108,7 +108,7 @@ namespace BP.GPM
                 //比如xx分公司财务部
                 map.AddTBString(DeptAttr.Name, null, "名称", true, false, 0, 100, 30);
 
-                //比如:\\高凌集团\\南方分公司\\财务部
+                //比如:\\驰骋集团\\南方分公司\\财务部
                 map.AddTBString(DeptAttr.NameOfPath, null, "部门路径", true, true, 0, 300, 30, true);
 
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 100, 30);

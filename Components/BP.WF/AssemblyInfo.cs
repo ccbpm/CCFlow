@@ -10,9 +10,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ccflow")]
 [assembly: AssemblyDescription("ccflow6.0.0")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("成都高凌信息技术有限公司")]
+[assembly: AssemblyCompany("济南驰骋信息技术有限公司")]
 [assembly: AssemblyProduct("ccflow6")]
-[assembly: AssemblyCopyright("高凌工作流2003-2020")]
+[assembly: AssemblyCopyright("驰骋工作流2003-2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]	
 

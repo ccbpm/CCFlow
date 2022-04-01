@@ -2373,7 +2373,7 @@ namespace BP.WF
                 gwf.Sender = WebUser.No + "," + WebUser.Name + ";";
                 if (DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
                 {
-                    //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东成都;
+                    //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东济南;
                     string[] expFields = this.HisFlow.BuessFields.Split(',');
                     string exp = "";
                     Attrs attrs = this.rptGe.EnMap.Attrs;
@@ -2673,7 +2673,7 @@ namespace BP.WF
 
                     if (DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
                     {
-                        //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东成都;
+                        //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东济南;
                         string[] expFields = this.HisFlow.BuessFields.Split(',');
                         string exp = "";
                         Attrs attrs = this.rptGe.EnMap.Attrs;
@@ -6913,7 +6913,7 @@ namespace BP.WF
                 #region 2019-09-25 计算业务字段存储到 wf_generworkflow atpara字段里，用于显示待办信息.
                 if (this.HisNode.IsStartNode && DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
                 {
-                    //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东成都;
+                    //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东济南;
                     string[] expFields = this.HisFlow.BuessFields.Split(',');
                     string exp = "";
                     Attrs attrs = this.rptGe.EnMap.Attrs;

@@ -329,7 +329,7 @@ INSERT INTO CN_City (No,Name,Names,Grade,FK_SF,FK_PQ) VALUES('4693','海南省�
 INSERT INTO CN_City (No,Name,Names,Grade,FK_SF,FK_PQ) VALUES('4695','海南省文昌市','文昌','2','46','ZN');
 INSERT INTO CN_City (No,Name,Names,Grade,FK_SF,FK_PQ) VALUES('4696','海南省万宁市','万宁','2','46','ZN');
 INSERT INTO CN_City (No,Name,Names,Grade,FK_SF,FK_PQ) VALUES('4697','海南省东方市','东方','2','46','ZN');
-INSERT INTO CN_City (No,Name,Names,Grade,FK_SF,FK_PQ) VALUES('5101','四川省成都市','成都','2','51','XN');
+INSERT INTO CN_City (No,Name,Names,Grade,FK_SF,FK_PQ) VALUES('5101','四川省济南市','济南','2','51','XN');
 INSERT INTO CN_City (No,Name,Names,Grade,FK_SF,FK_PQ) VALUES('5001','重庆市万州区','万州区','2','50','AA');
 INSERT INTO CN_City (No,Name,Names,Grade,FK_SF,FK_PQ) VALUES('5002','重庆市涪陵区','涪陵区','2','50','AA');
 INSERT INTO CN_City (No,Name,Names,Grade,FK_SF,FK_PQ) VALUES('3505','福建省泉州市','泉州','2','35','HD');

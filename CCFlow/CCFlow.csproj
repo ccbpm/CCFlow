@@ -7946,6 +7946,9 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Components\BP.En30\BP.En30.csproj">
       <Project>{f9d27bab-758d-4205-bfc8-76b49a4c87f1}</Project>
       <Name>BP.En30</Name>
@@ -7958,9 +7961,10 @@
       <Project>{04147518-e5e6-4b01-a797-094b8ba9cfd5}</Project>
       <Name>BP.WF</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+    <ProjectReference Include="..\DemoAndTesting\BP.Demo\BP.Demo.csproj">
+      <Project>{8e48d1df-ceed-4f0c-b863-3359b2a99134}</Project>
+      <Name>BP.Demo</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,0 +1,105 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Text;
+using System.Web;
+using BP.DA;
+using BP.Sys;
+using BP.Web;
+using BP.Port;
+using BP.En;
+using BP.WF;
+using BP.WF.Template;
+using BP.Difference;
+
+namespace BP.WF.HttpHandler
+{
+    /// <summary>
+    /// 页面功能实体
+    /// </summary>
+    public class WF_Admin_FoolFormDesigner_PrintTemplate : BP.WF.HttpHandler.DirectoryPageBase
+    {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public WF_Admin_FoolFormDesigner_PrintTemplate()
+        {
+        }
+
+        #region  单据模版维护
+        /// <summary>
+        /// @李国文.
+        /// </summary>
+        /// <returns></returns>
+        public string Bill_Save()
+        {
+            FrmPrintTemplate bt = new FrmPrintTemplate();
+
+            if (HttpContextHelper.RequestFilesCount == 0)
+                return "err@请上传模版.";
+            //上传附件
+            string filepath = "";
+            //HttpPostedFile file = HttpContext.Current.Request.Files[0];
+            //HttpPostedFile file = HttpContextHelper.RequestFiles(0);
+            var file = HttpContextHelper.RequestFiles(0);
+            string fileName = file.FileName;
+            fileName = fileName.Substring(fileName.IndexOf(this.GetRequestVal("TB_Name")));
+            fileName = fileName.ToLower();
+
+            filepath = SystemConfig.PathOfDataUser + "CyclostyleFile/" + fileName;
+            //file.SaveAs(filepath);
+            HttpContextHelper.UploadFile(file, filepath);
+
+            bt.NodeID = this.FK_Node;
+            bt.FrmID = this.FK_MapData;
+            bt.MyPK= this.GetRequestVal("TB_No");
+
+            if (DataType.IsNullOrEmpty(bt.MyPK))
+                bt.MyPK = DBAccess.GenerOID("Template").ToString();
+
+            bt.Name = this.GetRequestVal("TB_Name");
+            bt.TempFilePath = fileName; //文件.
+
+            //打印的文件类型.
+            bt.HisPrintFileType = (PrintFileType)this.GetRequestValInt("DDL_PrintFileType");
+
+            //打开模式.
+            bt.PrintOpenModel = (PrintOpenModel)this.GetRequestValInt("DDL_PrintOpenModel");
+
+            //二维码模式.
+            bt.QRModel = (QRModel)this.GetRequestValInt("DDL_PrintOpenModel");
+
+            bt.TemplateFileModel = (TemplateFileModel)this.GetRequestValInt("TemplateFileModel");
+           
+
+            bt.Save();
+
+            bt.SaveFileToDB("DBFile", filepath); //把文件保存到数据库里. 
+
+            return "保存成功.";
+        }
+        /// <summary>
+        /// 下载文件.
+        /// </summary>
+        public void Bill_Download()
+        {
+            FrmPrintTemplate en = new FrmPrintTemplate(this.No);
+            string MyFilePath = en.TempFilePath;
+            //HttpResponse response = context.Response;
+            //response.Clear();
+            //response.Buffer = true;
+            //response.Charset = "utf-8";
+            //response.AppendHeader("Content-Disposition", string.Format("attachment;filename={0}", en.TempFilePath.Substring(MyFilePath.LastIndexOf('/') + 1)));
+            //response.ContentEncoding = System.Text.Encoding.UTF8;
+            //response.BinaryWrite(System.IO.File.ReadAllBytes(MyFilePath));
+            //response.End();
+
+            HttpContextHelper.ResponseWrite("Charset");
+            HttpContextHelper.ResponseWriteHeader("Content-Disposition", string.Format("attachment;filename={0}", en.TempFilePath.Substring(MyFilePath.LastIndexOf('/') + 1)));
+            HttpContextHelper.Response.ContentType = "application/octet-stream;charset=utf-8";
+            HttpContextHelper.ResponseWriteFile(MyFilePath);
+        }
+        #endregion
+
+    }
+}

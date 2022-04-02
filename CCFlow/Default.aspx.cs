@@ -24,8 +24,8 @@ namespace CCFlow
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            BP.DA.Log.DefaultLogWriteLine(LogType.Info, "----------------------------------  start ------------------ ");
-            BP.DA.Log.DefaultLogWriteLine(LogType.Info, "----------------------------------  end ------------------ ");
+            //BP.DA.Log.DefaultLogWriteLine(LogType.Info, "----------------------------------  start ------------------ ");
+            //BP.DA.Log.DefaultLogWriteLine(LogType.Info, "----------------------------------  end ------------------ ");
 
             if (DBAccess.IsExitsObject("WF_Flow") == false)
                 this.Response.Redirect("./WF/Admin/DBInstall.htm", true);

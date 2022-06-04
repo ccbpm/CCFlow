@@ -24,6 +24,11 @@ namespace CCFlow.DataUser
         {
             context = con;
 
+
+            string xx = "";
+            xx = xx.Replace("''", "'");
+
+
             #region 效验问题.
             //让其支持跨域访问.
             string origin = context.Request.Headers["Origin"];
@@ -44,15 +49,41 @@ namespace CCFlow.DataUser
                 if (BP.DA.DataType.IsNullOrEmpty(doType) == true)
                     doType = context.Request.QueryString["DoWhat"];
 
-                string sidStr = context.Request.QueryString["SID"];
+                //如果是请求登录. .
+                if (doType.Equals("Portal_Login_Submit") == true)
+                {
+                    string key = context.Request.QueryString["PrivateKey"];
+                    string userNo = context.Request.QueryString["UserNo"];
+
+                    string localKey = BP.Difference.SystemConfig.GetValByKey("PrivateKey", "");
+                    if (DataType.IsNullOrEmpty(localKey) == true)
+                        localKey = "di gua di gua,i am ccbpm";
+
+                    if (localKey.Equals(key) == false)
+                    {
+                        ResponseWrite("err@私约错误，请检查全局文件中配置 PrivateKey ");
+                        return;
+                    }
+
+                  
+
+                    //执行本地登录.
+                    BP.WF.Dev2Interface.Port_Login(userNo);
+                    string toke = BP.WF.Dev2Interface.Port_GenerToken(userNo);
+                    ResponseWrite(toke);
+                    return;
+                }
+
+                string sidStr = context.Request.QueryString["Token"];
                 if (DataType.IsNullOrEmpty(doType) == true
                     || DataType.IsNullOrEmpty(sidStr) == true)
                 {
-                    ResponseWrite("err@参数SID,DoWhat不能为空.");
+                    ResponseWrite("err@参数Token,DoType不能为空.");
                     return;
                 }
-                //执行登录.
-                BP.WF.Dev2Interface.Port_LoginBySID(sidStr);
+
+                //执行登录. 2021.07.01 采用新方式.
+                BP.WF.Dev2Interface.Port_LoginByToken(sidStr);
                 this.SID = sidStr; //记录下来他的sid.
             }
             catch (Exception ex)
@@ -110,19 +141,34 @@ namespace CCFlow.DataUser
             }
             if (doType.Equals("Node_ReturnWork") == true)
             {
+                int toNodeID = this.GetValIntByKey("ReturnToNodeID");
+                string returnToEmp = this.GetValByKey("ReturnToEmp");
+                if (toNodeID == 0)
+                {
+                    DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.FK_Node, this.WorkID, this.FID);
+                    if (dt.Rows.Count == 1)
+                    {
+                        toNodeID = Int32.Parse(dt.Rows[0]["No"].ToString());
+                        returnToEmp = dt.Rows[0]["Rec"].ToString();
+
+                    }
+                }
+               
                 //执行退回.
                 string strs = Dev2Interface.Node_ReturnWork(this.WorkID,
-                    this.GetValIntByKey("ReturnToNodeID"), this.GetValByKey("Msg"), this.GetValBoolenByKey("IsBackToThisNode"));
+                    toNodeID, returnToEmp, this.GetValByKey("Msg"), this.GetValBoolenByKey("IsBackToThisNode"));
                 this.ResponseWrite(strs);
                 return;
             }
             #endregion 与流程处理相关的接口API.
 
             #region 处理相关功能.
-            try
-            {
+            
                 switch (doType)
                 {
+                    case "Search_Init": //
+                        Search_Init();
+                        return;
                     case "DB_Start": //获得发起列表.
                         DataTable dtStrat = Dev2Interface.DB_StarFlows(BP.Web.WebUser.No);
                         this.ResponseWrite(BP.Tools.Json.ToJson(dtStrat));
@@ -166,18 +212,91 @@ namespace CCFlow.DataUser
                     case "Flow_DoFlowOver": //批量结束.
                         this.Flow_DoFlowOver();
                         return;
+                    case "Portal_LoginOut": //退出系统..
+                        BP.WF.Dev2Interface.Port_SigOut();
+                        return; 
                     default:
                         break;
                 }
 
                 context.Response.ContentType = "text/plain";
                 context.Response.Write("err@没有判断的执行类型:" + doType);
-            }
-            catch (Exception ex)
-            {
-                this.ResponseWrite("err@" + ex.Message);
-            }
+            
             #endregion 处理相关功能.
+        }
+
+        /// <summary>
+        /// 流程查询
+        /// </summary>
+        /// <returns></returns>
+        public void Search_Init()
+        {
+            GenerWorkFlows gwfs = new GenerWorkFlows();
+
+            string scop = this.GetValByKey("Scop");//范围.
+            string key = this.GetValByKey("Key");//关键字.
+            string dtFrom = this.GetValByKey("DTFrom");//日期从.
+            string dtTo = this.GetValByKey("DTTo");//日期到.
+            int pageIdx = int.Parse(this.GetValByKey("PageIdx"));//分页.
+
+            //创建查询对象.
+            QueryObject qo = new QueryObject(gwfs);
+            if (DataType.IsNullOrEmpty(key) == false)
+            {
+                qo.AddWhere(GenerWorkFlowAttr.Title, " LIKE ", "%" + key + "%");
+                qo.addAnd();
+            }
+
+            //我参与的.
+            if (scop.Equals("0") == true)
+                qo.AddWhere(GenerWorkFlowAttr.Emps, "LIKE", "%@" + WebUser.No + ",%");
+
+            //我发起的.
+            if (scop.Equals("1") == true)
+                qo.AddWhere(GenerWorkFlowAttr.Starter, "=", WebUser.No);
+
+            //我部门发起的.
+            if (scop.Equals("2") == true)
+                qo.AddWhere(GenerWorkFlowAttr.FK_Dept, "=", WebUser.FK_Dept);
+
+
+            //任何一个为空.
+            if (DataType.IsNullOrEmpty(dtFrom) ==true || DataType.IsNullOrEmpty(dtTo) == true)
+            {
+
+            }
+            else
+            {
+                qo.addAnd();
+                qo.AddWhere(GenerWorkFlowAttr.RDT, ">=", dtFrom);
+                qo.addAnd();
+                qo.AddWhere(GenerWorkFlowAttr.RDT, "<=", dtTo);
+            }
+
+            var count = qo.GetCount(); //获得总数.
+
+            qo.DoQuery("WorkID", 20, pageIdx);
+            //   qo.DoQuery(); // "WorkID", 20, pageIdx);
+
+
+            DataTable dt = gwfs.ToDataTableField("gwls");
+
+            //创建容器.
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dt); //增加查询对象.
+
+            //增加数量.
+            DataTable mydt = new DataTable();
+            mydt.TableName = "count";
+            mydt.Columns.Add("CC");
+            DataRow dr = mydt.NewRow();
+            dr[0] = count.ToString(); //把数量加进去.
+            mydt.Rows.Add(dr);
+            ds.Tables.Add(mydt);
+
+            string json = BP.Tools.Json.ToJson(ds);
+            //      string json = gwfs.ToJson("DT" + count);
+            this.ResponseWrite(json);
         }
 
         #region 通用方法.
@@ -398,7 +517,7 @@ namespace CCFlow.DataUser
         #endregion
 
         /// <summary>
-        /// 获得发起的url.
+        /// 获得发起的url. 
         /// </summary>
         public void GenerFrmUrl()
         {
@@ -410,9 +529,7 @@ namespace CCFlow.DataUser
              * 3. 选择SDK表单，把url配置到文本框里去.
              * 比如: /App/F027QingJia.htm
              */
-
-            try
-            {
+             
                 int nodeID = this.FK_Node;
                 if (nodeID == 0)
                     nodeID = int.Parse(this.FK_Flow + "01");
@@ -425,23 +542,19 @@ namespace CCFlow.DataUser
                 Node nd = new Node(nodeID);
                 if (nd.FormType == NodeFormType.SDKForm || nd.FormType == NodeFormType.SelfForm)
                 {
+                    //.
                     url = nd.FormUrl;
                     if (url.Contains("?") == true)
-                        url += "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nodeID + "&WorkID=" + workid + "&SID=" + this.SID + "&UserNo=" + BP.Web.WebUser.No;
+                        url += "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nodeID + "&WorkID=" + workid + "&Token=" + this.SID + "&UserNo=" + BP.Web.WebUser.No;
                     else
-                        url += "?FK_Flow=" + this.FK_Flow + "&FK_Node=" + nodeID + "&WorkID=" + workid + "&SID=" + this.SID + "&UserNo=" + BP.Web.WebUser.No;
+                        url += "?FK_Flow=" + this.FK_Flow + "&FK_Node=" + nodeID + "&WorkID=" + workid + "&Token=" + this.SID + "&UserNo=" + BP.Web.WebUser.No;
                 }
                 else
                 {
-                    url = "/WF/MyFlow.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + nodeID + "&WorkID=" + this.WorkID + "&SID=" + this.SID;
+                    url = "/WF/MyFlow.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + nodeID + "&WorkID=" + this.WorkID + "&Token=" + this.SID;
                 }
                 ResponseWrite(url);
-            }
-            catch (Exception ex)
-            {
-                //输出url.
-                ResponseWrite("err@" + ex.Message);
-            }
+            
         }
         public void ResponseWrite(string strs)
         {

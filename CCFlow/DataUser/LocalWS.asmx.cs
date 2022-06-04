@@ -10,6 +10,7 @@ using BP.WF.Data;
 using System.Net;
 using System.IO;
 using System.Text;
+using BP.Cloud;
 using System.Security.Cryptography;
 using BP.DA;
 
@@ -38,9 +39,7 @@ namespace CCFlow.DataUser
         {
             DataSet ds = BP.WF.Dev2Interface.DB_JobSchedule(workID);
             return BP.Tools.Json.ToJson(ds);
-
         }
-
         /// <summary>
         /// 获得待办
         /// </summary>
@@ -49,13 +48,22 @@ namespace CCFlow.DataUser
         /// <returns>返回待办</returns>
         public string DB_Todolist(string userNo, string sysNo = null)
         {
+            return null;
+            Paras ps = new Paras();
             string sql = "";
             if (sysNo == null)
-                sql = "SELECT * FROM WF_EmpWorks WHERE FK_Emp='" + userNo + "'";
+            {
+                ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp="+BP.DA.DBAccess.AppCenterDBType+"FK_Emp";
+                ps.Add(userNo);
+                ps.Add(sysNo);
+            }
             else
-                sql = "SELECT * FROM WF_EmpWorks WHERE Domain='" + sysNo + "' AND FK_Emp='" + userNo + "'";
-
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            {
+                ps.SQL = "SELECT * FROM WF_EmpWorks WHERE Domain='" + sysNo + "' AND FK_Emp='" + userNo + "'";
+                ps.Add(userNo);
+                ps.Add(sysNo);
+            }
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -64,6 +72,7 @@ namespace CCFlow.DataUser
         /// <param name="userNo">用户编号</param>
         /// <param name="sysNo">系统编号，为空时返回平台所有数据。</param>
         /// <returns></returns>
+        [WebMethod]
         public string DB_Runing(string userNo, string sysNo = null)
         {
             DataTable dt = BP.WF.Dev2Interface.DB_GenerRuning(userNo, null, false, sysNo);
@@ -75,6 +84,7 @@ namespace CCFlow.DataUser
         /// <param name="userNo">用户编号</param>
         /// <param name="sysNo">系统编号，为空时返回平台所有数据。</param>
         /// <returns>返回我可以发起的流程列表.</returns>
+        [WebMethod]
         public string DB_StarFlows(string userNo, string domain = null)
         {
             DataTable dt = BP.WF.Dev2Interface.DB_StarFlows(userNo, domain);
@@ -86,6 +96,7 @@ namespace CCFlow.DataUser
         /// <param name="userNo">用户编号</param>
         /// <param name="sysNo">子系统编号</param>
         /// <returns>我发起的流程列表.</returns>
+        [WebMethod]
         public string DB_MyStartFlowInstance(string userNo, string domain = null, int pageSize = 0, int pageIdx = 0)
         {
             string sql = "";
@@ -119,8 +130,9 @@ namespace CCFlow.DataUser
         /// <param name="userNo">工作人员编号</param>
         /// <returns>一个长整型的工作流程实例.</returns>
         [WebMethod]
-        public Int64 CreateWorkID(string flowNo, string userNo)
+        public Int64 CreateWorkID(string userNo, string flowNo, string starterNo)
         {
+            BP.WF.Dev2Interface.Port_Login(userNo);
             return BP.WF.Dev2Interface.Node_CreateBlankWork(flowNo, userNo);
         }
         /// <summary>
@@ -135,6 +147,7 @@ namespace CCFlow.DataUser
         [WebMethod]
         public string SendWork(string flowNo, Int64 workid, string atParas, int toNodeID, string toEmps)
         {
+           
             BP.DA.AtPara ap = new BP.DA.AtPara(atParas);
 
             BP.WF.SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(flowNo, workid, ap.HisHT, toNodeID, toEmps);
@@ -150,6 +163,28 @@ namespace CCFlow.DataUser
             myht.Add("VarToNodeName", objs.VarToNodeName);
 
             return BP.Tools.Json.ToJson(myht);
+        }
+        [WebMethod]
+        public void SaveAth(int nodeid, string flowNo, Int64 workid, string athNo, string frmID, byte[] byteFile, string fileName, string fileExt, string userNo, string sort = null, Int32 fid = 0, Int32 pworkid = 0)
+        {
+            //把byte文件保存到临时文件中
+            string tempPath = BP.Difference.SystemConfig.PathOfTemp + "\\" + DBAccess.GenerGUID() + "." + fileExt;
+            FileInfo fi = new System.IO.FileInfo(tempPath);
+            FileStream fs = fi.OpenWrite();
+            fs.Write(byteFile, 0, byteFile.Length);
+            fs.Close();
+            fs.Dispose();
+            BP.WF.Dev2Interface.Port_Login(userNo);
+            BP.WF.Dev2Interface.CCForm_AddAth(nodeid, flowNo, workid, athNo, frmID, tempPath, fileName + "." + fileExt, sort, fid, pworkid);
+        }
+        /// <summary>
+        /// 登录接口
+        /// </summary>
+        /// <param name="userNo"></param>
+        [WebMethod]
+        public void Port_Login(string userNo,string orgNo)
+        {
+            BP.WF.Dev2Interface.Port_Login(userNo,orgNo);
         }
         /// <summary>
         /// 保存参数
@@ -365,126 +400,126 @@ namespace CCFlow.DataUser
         /// </summary>
         /// <param name="openID"></param>
         /// <returns></returns>
-        /*[WebMethod]
-         public string LoadOrgInfo(string openID)
-         {
-             //先从Port_User 去查找 openID, 如果没有记录，就转到注册页面上去
-             //如果有就列出此人所有注册过的公司，选择其一登录
-             User user = new User();
-             int i = user.Retrieve(UserAttr.SOpenID,openID);
-             if (i == 1)
-             {
-                 Emps emps = new Emps();
-                 emps.Retrieve(EmpAttr.OpenID, openID);
-                 return emps.ToJson();
-             }
-             return "info@zhuce";
-         }
-         /// <summary>
-         /// 注册企业
-         /// </summary>
-         /// <param name="orgName"></param>
-         /// <param name="orgShortName"></param>
-         /// <param name="openid">小程序ID</param>
-         /// <param name="userName"></param>
-         /// <param name="tel"></param>
-         /// <returns></returns>
-         [WebMethod]
-         public string RegByXiaoChengXu(string orgName, string orgShortName,
-             string openid, string userName, string tel)
-         {
+        [WebMethod]
+        public string LoadOrgInfo(string openID)
+        {
+            //先从Port_User 去查找 openID, 如果没有记录，就转到注册页面上去
+            //如果有就列出此人所有注册过的公司，选择其一登录
+            User user = new User();
+            int i = user.Retrieve(UserAttr.SOpenID,openID);
+            if (i == 1)
+            {
+                Emps emps = new Emps();
+                emps.Retrieve(EmpAttr.OpenID, openID);
+                return emps.ToJson();
+            }
+            return "info@zhuce";
+        }
+        /// <summary>
+        /// 注册企业
+        /// </summary>
+        /// <param name="orgName"></param>
+        /// <param name="orgShortName"></param>
+        /// <param name="openid">小程序ID</param>
+        /// <param name="userName"></param>
+        /// <param name="tel"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public string RegByXiaoChengXu(string orgName, string orgShortName,
+            string openid, string userName, string tel)
+        {
+            
+            //注册企业.
+            BP.Cloud.Org org = new BP.Cloud.Org();
+            org.No = BP.DA.DBAccess.GenerGUID(4, "Port_Org", "No");
+            org.Name = orgShortName;
+            org.NameFull = orgName;
+            org.Adminer = openid;
+            org.AdminerName = userName;
+            org.Insert();
 
-             //注册企业.
-             BP.Cloud.Org org = new BP.Cloud.Org();
-             org.No = BP.DA.DBAccess.GenerGUID(4, "Port_Org", "No");
-             org.Name = orgShortName;
-             org.NameFull = orgName;
-             org.Adminer = openid;
-             org.AdminerName = userName;
-             org.Insert();
 
+            //增加这个人员.
+            Emp emp = new Emp();
+            emp.No = org.No + "_" + openid;
+            emp.Name = userName;
+            emp.Pass = "123";
+            emp.OrgNo = org.No;
+            emp.OrgName = org.NameFull;
+            // 设置ID.
+            emp.UserID = openid;
+            emp.OpenID = openid;
 
-             //增加这个人员.
-             Emp emp = new Emp();
-             emp.No = org.No + "_" + openid;
-             emp.Name = userName;
-             emp.Pass = "123";
-             emp.OrgNo = org.No;
-             emp.OrgName = org.NameFull;
-             // 设置ID.
-             emp.UserID = openid;
-             emp.OpenID = openid;
+            emp.FK_Dept = org.No;
+            emp.Tel = tel;
+            emp.Insert();
 
-             emp.FK_Dept = org.No;
-             emp.Tel = tel;
-             emp.Insert();
+            BP.Cloud.User user = new User();
+            int i= user.Retrieve(UserAttr.SOpenID, openid);
+            if (i == 0)
+            {
+                user.Copy(emp);
+                user.No = emp.OpenID;
+                user.OrgNo = emp.OrgNo;
+                user.SOpenID = emp.OpenID;
+                user.Insert();
+            }
+            else
+            {
+                user.Copy(emp);
+                user.No = emp.OpenID;
+                user.OrgNo = emp.OrgNo;
+                user.SOpenID = emp.OpenID;
+                user.Update();
+            }
 
-             BP.Cloud.User user = new User();
-             int i= user.Retrieve(UserAttr.SOpenID, openid);
-             if (i == 0)
-             {
-                 user.Copy(emp);
-                 user.No = emp.OpenID;
-                 user.OrgNo = emp.OrgNo;
-                 user.SOpenID = emp.OpenID;
-                 user.Insert();
-             }
-             else
-             {
-                 user.Copy(emp);
-                 user.No = emp.OpenID;
-                 user.OrgNo = emp.OrgNo;
-                 user.SOpenID = emp.OpenID;
-                 user.Update();
-             }
+            ////初始化部门.
+            //BP.Cloud.Dept dept = new Dept();
+            //dept.ParentNo = "100";
+            //dept.No = org.No;
+            //dept.Name = org.Name;
+            //dept.OrgNo = org.No;
+            //dept.Insert();
 
-             ////初始化部门.
-             //BP.Cloud.Dept dept = new Dept();
-             //dept.ParentNo = "100";
-             //dept.No = org.No;
-             //dept.Name = org.Name;
-             //dept.OrgNo = org.No;
-             //dept.Insert();
+            //dept.ParentNo = org.No;
+            //dept.No = BP.DA.DBAccess.GenerGUID(5, "Port_Dept", "No");
+            //dept.Name = "办公室";
+            //dept.OrgNo = org.No;
+            //dept.Insert();
 
-             //dept.ParentNo = org.No;
-             //dept.No = BP.DA.DBAccess.GenerGUID(5, "Port_Dept", "No");
-             //dept.Name = "办公室";
-             //dept.OrgNo = org.No;
-             //dept.Insert();
+            //dept.ParentNo = org.No;
+            //dept.No = BP.DA.DBAccess.GenerGUID(5, "Port_Dept", "No");
+            //dept.Name = "财务部";
+            //dept.OrgNo = org.No;
+            //dept.Insert();
 
-             //dept.ParentNo = org.No;
-             //dept.No = BP.DA.DBAccess.GenerGUID(5, "Port_Dept", "No");
-             //dept.Name = "财务部";
-             //dept.OrgNo = org.No;
-             //dept.Insert();
+            BP.Web.WebUser.OrgNo = org.No;
+            //生成其他的信息.(@lizhenerr 有报错？)
+            org.Init_OrgDatas();
 
-             BP.Web.WebUser.OrgNo = org.No;
-             //生成其他的信息.(@lizhenerr 有报错？)
-             org.Init_OrgDatas();
+            //管理员登录
+            BP.WF.Dev2Interface.Port_Login(openid,  org.No);
 
-             //管理员登录
-             BP.WF.Dev2Interface.Port_Login(openid, null, org.No);
+            ////初始化岗位.
+            //BP.Cloud.Station sta = new Station();
+            //sta.No = BP.DA.DBAccess.GenerGUID();
+            //sta.Name = "办公室主任";
+            //sta.OrgNo = org.No;
+            //sta.Insert();
 
-             ////初始化岗位.
-             //BP.Cloud.Station sta = new Station();
-             //sta.No = BP.DA.DBAccess.GenerGUID();
-             //sta.Name = "办公室主任";
-             //sta.OrgNo = org.No;
-             //sta.Insert();
+            //sta = new Station();
+            //sta.No = BP.DA.DBAccess.GenerGUID();
+            //sta.Name = "财务部主任";
+            //sta.OrgNo = org.No;
+            //sta.Insert();
 
-             //sta = new Station();
-             //sta.No = BP.DA.DBAccess.GenerGUID();
-             //sta.Name = "财务部主任";
-             //sta.OrgNo = org.No;
-             //sta.Insert();
-
-             return org.ToJson();
-         }*/
+            return org.ToJson();
+        }
         /// <summary>
         /// 检查此人是否加入
         /// </summary>
-        /*  [WebMethod]
-         public string CheckJoin(string openID, string orgNo)
+        [WebMethod]
+        public string CheckJoin(string openID, string orgNo)
         {
             ////让管理员登录.
             //this.LetUserLogin("admin", "ccs");
@@ -513,7 +548,7 @@ namespace CCFlow.DataUser
             //BP.Web.WebUser.Exit();
 
             //return "加入成功！";
-        }*/
+        }
         /// <summary>
         /// 获取单位该单位的部门列表
         /// </summary>

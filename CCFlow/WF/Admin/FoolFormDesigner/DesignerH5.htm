@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <title>ccform傻瓜表单设计器</title>
+
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <!-- 样式风格 icon.. -->
+    <link href="../../Comm/fonts/simple-line-icons.css" rel="stylesheet" />
+    <link href="../../Comm/fonts/font-icons.min.css" rel="stylesheet" />
+    <link href="../../Comm/fonts/font-awesome.css" rel="stylesheet" />
+    <link href="../CSS/FoolFrmBody.css" rel="stylesheet" />
+    <link href="Designer.css" rel="stylesheet" />
+    <!-- 字段样式表. -->
+    <link href="../../../DataUser/Style/GloVarsCSS.css" rel="stylesheet" />
+
+    <!--通用JS的引用-->
+    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../DataUser/JSLibData/CommonShowConfig.js" type="text/javascript"></script>
+    <script src="DesignerNewEleMenu.js" type="text/javascript"></script>
+
+    <!--layui的引用-->
+    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <script src="../../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <!--拖拽的js-->
+    <script src="../../Portal/js/sortjs/Sortable.min.js" type="text/javascript"></script>
+    <!-- <script src="../../Portal/js/gridly/jquery.gridly.js" type="text/javascript"></script>
+    <link href="../../Portal/js/gridly/jquery.gridly.css" rel="stylesheet" />-->
+
+    <script src="./MapDef.js" type="text/javascript"></script>
+    <script src="../../Style/Verify.js" type="text/javascript"></script>
+    <!-- <script src="../../Comm/JS/Calendar/WdatePicker.js" type="text/javascript" defer="defer"></script>-->
+    <script src="../../CCForm/FrmEnd.js" defer="defer" type="text/javascript"></script>
+    <script src="../../CCForm/MapExt2019.js" defer="defer" type="text/javascript"></script>
+    <script src="../../CCForm/OptionLinkOthers2021.js" type="text/javascript"></script>
+    <script src="DesignerPrint.js"></script>
+    <script src="../Guide/Guide.js"></script>
+    <style id="theme-data"></style>
+    <style>
+        *, input {
+            font-style: normal
+        }
+
+        .layui-row {
+            margin-bottom: 5px;
+        }
+
+        .layui-col-xs2 {
+            padding-left: 5px;
+        }
+
+        .layui-col-xs1 {
+            padding-left: 5px;
+        }
+
+        .form-item-drag-class {
+            border: 1px dotted #aaa
+        }
+
+        .item {
+            cursor: move;
+        }
+
+        .input-group {
+            position: absolute;
+            z-index: 99;
+            left: 15px;
+            top: 17px;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 38px;
+            line-height: 36px;
+            text-align: center;
+            color: #d2d2d2;
+        }
+
+        .FoolFrmFieldRow {
+            min-height: 40px
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layui-layout layui-layout-admin">
+
+        <div id="Guide"></div>
+        <div class="layui-input-inline" style="width:200px">
+
+        </div>
+        <!--固定头部 下拉菜单-->
+        <div class="layui-header" style="text-align: center;box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);background-color:white;height:48px">
+            <div class="layui-btn-container" style="padding-top:10px">
+                <button type="button" class="layui-btn layui-toolbar layui-btn-sm" data-type="MapDataEdit">
+                    <i class="iconfont icon-shuxing"></i>属性
+                </button>
+                <button type="button" class="layui-btn layui-toolbar layui-btn-sm" id="FrmillBtn" data-type="FrmBillEdit">
+                    <i class="iconfont icon-gaojibaobiaoshezhi"></i>单据属性
+                </button>
+                <button type="button" class="layui-btn  layui-toolbar layui-btn-sm" id="RefDict" data-type="ImpRefDict">
+                    <i class="iconfont icon-daoru"></i>导入关联表单模板
+                </button>
+
+                <button type="button" class="layui-btn layui-toolbar layui-btn-sm" data-type="ExpImp">
+                    <i class="iconfont icon-daorudaochu"></i>导入/导出
+                </button>
+
+
+                <button type="button" class="layui-btn layui-toolbar layui-btn-sm" data-type="Batch">
+                    <i class="iconfont icon-daorudaochu"></i>批处理
+                </button>
+
+                <button type="button" class="layui-btn layui-btn-sm" id="Btn_Save">
+                    <i class="iconfont icon-xinjianbiaodan"></i>新建元素
+                </button>
+                <!-- <button type="button" class="layui-btn btn-light-green layui-toolbar" id="FrmNodeComponent" data-type="FrmNodeComponent">
+                    <i class="iconfont icon-jiedian-"></i>节点组件
+                </button>-->
+                <button type="button" class="layui-btn layui-toolbar layui-btn-sm" id="MobileFrm" data-type="MobileFrm">
+                    <i class="iconfont icon-shouji"></i>手机
+                </button>
+                <button type="button" class="layui-btn layui-toolbar layui-btn-sm" id="StyletDfine" data-type="StyletDfine">
+                    <i class="iconfont icon-fengge1"></i>风格
+                </button>
+
+                <button class="layui-btn layui-btn-primary layui-btn-sm" id="Btn_TableCol">
+                    <span id="TB_TableCol">标准型4列</span>
+                    <i class="layui-icon layui-icon-down layui-font-12"></i>
+                </button>
+
+                <!--<button class="layui-btn layui-btn-primary layui-btn-sm" id="Btn_DModel">
+                    <select id="Model" title="设计模式.">
+                        <option>设计模式-极简</option>
+                        <option>设计模式-传统</option>
+                    </select>
+                </button>
+
+                <button class="layui-btn layui-btn-primary layui-btn-sm" id="Btn_NameModel">
+                    <select id="Model" title="字段名字显示风格.">
+                        <option>元素-紧凑</option>
+                        <option>元素-宽松</option>
+                    </select>
+                </button>-->
+
+                <button type="button" class="layui-btn  layui-toolbar layui-btn-sm" id="BatchAddF" data-type="ToDevFrm">
+                    <i class="iconfont icon-yangshi"></i>开发者表单
+                </button>
+            </div>
+        </div>
+        <div class="layui-container" style="margin:0px auto;top:60px">
+            <!-- 内容主体区域 -->
+            <div style="height:100%">
+                <div class="layui-card layui-panel" style="height:100%">
+                    <div class="layui-card-body" id="contentTable"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="Designer.js" type="text/javascript"></script>
+    
+</body>
+
+</html>

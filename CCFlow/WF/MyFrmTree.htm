@@ -1,0 +1,310 @@
+﻿<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>正在加载请稍候...</title>
+    <link rel="stylesheet" type="text/css" href="./Portal/icons/font-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="./Portal/icons/icons.css">
+    <link rel="stylesheet" type="text/css" href="./Portal/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="./Portal/layui/css/customer.css">
+    <script src="./Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <!--表单样式-->
+    <link href="./Admin/CSS/FoolFrmBody.css" rel="stylesheet" />
+    <!-- layui -->
+    <link href="./Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <link href="./Scripts/layui/style/admin.css" rel="stylesheet" />
+    <link href="./Scripts/layui/layui/css/autocomplete.css" rel="stylesheet" />
+    <script src="./Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <script src="./Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <!--通用的JS-->
+    <script src="./Scripts/config.js" type="text/javascript"></script>
+    <script src="./Comm/Gener.js" type="text/javascript"></script>
+    <script src="./Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="./Scripts/DealErrInfo.js" type="text/javascript"></script>
+    <script src="./CCForm/FrmEnd.js?ver=1" type="text/javascript"></script>
+    <script src="./Comm/JScript.js" type="text/javascript"></script>
+    <script src="./MyFlowTree.js?type=MyFrm" type="text/javascript"  id="ccbpmJS"></script>
+    <script src="Scripts/vue.js" type="text/javascript"></script>
+
+    <!--用户可配置的文件，内容可修改-->
+    <script src="../DataUser/SFTable.js" type="text/javascript"></script>
+    <script src="../DataUser/JSLibData/CommonShowConfig.js"></script>
+    <script src="../DataUser/JSLibData/MyFlowPublic.js?v=20200609001" type="text/javascript"></script>
+    <script src="../DataUser/JSLibData/CCFormRef.js" type="text/javascript"></script>
+    <style type="text/css">
+        *, html, body {
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+
+        .layui-fluid {
+            width: 100vw;
+            height: 100vh;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+
+        .sidebar {
+            width: 240px;
+            flex-shrink: 0;
+            height: 100%;
+            overflow: auto;
+            background-color: white;
+            border-right: 2px solid #eee;
+            transition: all ease .5s;
+        }
+
+            .sidebar .group {
+                transition: all ease .5s;
+                background-color: white;
+                border-bottom: 1px solid #eee;
+            }
+
+                .sidebar .group p {
+                    box-sizing: border-box;
+                    padding-left: 15px;
+                    line-height: 60px;
+                    font-size: 15px;
+                    font-weight: 600;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    cursor: pointer;
+                }
+
+                    .sidebar .group p i {
+                        margin-right: 8px;
+                    }
+
+                .sidebar .group .group-items {
+                    height: auto;
+                }
+
+                    .sidebar .group .group-items .item {
+                        height: 40px;
+                        line-height: 40px;
+                        padding-left: 30px;
+                        box-sizing: border-box;
+                        font-size: 13px;
+                        background-color: #f9f9f9;
+                        transition: all ease .5s;
+                        cursor: pointer;
+                    }
+
+                        .sidebar .group .group-items .item i {
+                            margin-right: 8px;
+                            min-width: 13px;
+                        }
+
+                    .sidebar .group .group-items .active {
+                        background-color: #009688 !important;
+                        color: white !important;
+                    }
+
+
+
+        .main {
+            width: calc(100% - 240px);
+            height: 100%;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all ease .5s;
+            position: relative;
+        }
+
+            .main .indicator {
+                position: absolute;
+                left: -15px;
+                top: 50%;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid #EEEEEE;
+                background-color: white;
+            }
+
+            .main .tab-page {
+                width: 100%;
+                position: relative;
+                height: 35px;
+                background-color: white;
+                border-bottom: 1px solid #eee;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+               
+                overflow-x: auto;
+                overflow-y: hidden;
+            }
+
+                .main .tab-page .tab {
+                    flex-shrink: 0;
+                    height: 35px;
+                    display: flex;
+                    align-items: center;
+                    background-color: white;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    color: #666;
+                    line-height: 35px;
+                    border-right: 1px solid #eee;
+                    border-bottom: 1px solid #eee;
+                    transition: all ease .4s;
+                }
+
+                    .main .tab-page .tab span {
+                        margin-right: 10px;
+                        margin-left: 5px;
+                    }
+
+                .main .tab-page .fixed {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                }
+
+                .main .tab-page .active {
+                    background-color: #f9f9f9;
+                    border-top: 2px solid #000;
+                }
+
+                .main .tab-page .tab .layui-icon-home {
+                    margin-right: 10px;
+                }
+
+
+        .layui-tab-close {
+            width: 16px;
+            height: 16px;
+            text-align: center;
+            line-height: 16px;
+            border-radius: 50%;
+            font-size: 12px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 2px;
+            background-color: #F5F5F5;
+        }
+
+        .layui-tab-close:hover {
+            background-color: #FF5722;
+            color: #fff;
+        }
+
+        dl dd {
+            height: 35px;
+            line-height: 35px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+            dl dd i {
+                margin-right: 8px;
+            }
+
+
+        .main .content {
+            width: calc(100vw - 262px);
+            height: calc(100vh - 70px);
+        }
+
+            .main .content .tab-iframe {
+                width: calc(100vw - 262px);
+                height: calc(100vh - 70px);
+            }
+
+    </style>
+</head>
+<body class="layui-layout-body">
+    <div id="app" v-cloak=v-cloak>
+        <div class="g-admin-sidebar-fold">
+            <div class="layui-layout g-admin-layout">
+                <!-- header -->
+                <div class="layui-header" v-if="IsShowBtn==true">
+                    <div class="layui-btn-container" id="ToolBar" style="margin:10px 10px 0px 10px"></div>
+                </div>
+                <!-- menus -->
+                <div class="layui-fluid">
+                    <div class="sidebar" :style="sideBarStyle">
+                        <div class="group" :style="menuHeight(formTree)" v-for="(formTree,formTree_index) in sideBarData" :key="formTree.No"
+                             :index="formTree_index"
+                             @click="formTree.open = !formTree.open">
+                            <p :title="formTree.Name">
+                                <i v-if="formTree.children.length > 0" class="layui-icon "
+                                   :class="[formTree.open ? 'layui-icon-down':'layui-icon-right']"></i>
+                                <i v-else class="layui-icon layui-icon-subtraction"></i>
+                                <span v-html="formTree.Name"></span>
+                            </p>
+                            <div v-show="formTree.open" class="group-items">
+                                <div @click.stop="openPage(frm)"
+                                     :class="{'active':activeItem>-1&&iframes.length> 0 && frm.No === iframes[activeItem].No}"
+                                     class="item" v-for="(frm,frm_index) in formTree.children" :key="frm.No" :index="frm_index">
+                                    <i v-if="frm.Icon" :class="frm.Icon"></i> 
+                                    <span v-html="frm.Name"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main" :style="mainStyle">
+                        <div class="tab-page" @click.right="openTabDropdownMenu">
+
+                            <template v-for="(item,index) in iframes">
+                                <div v-if="index==0" class="tab" @click="activeItem =0" :class="{'active':0 === activeItem}">
+                                    <i class="layui-icon layui-icon-home"></i>{{frmGenerName}}
+                                </div>
+                                <div v-else class="tab" :class="{'active':index === activeItem}" @click="activeItem=index">
+                                    <i v-if="item.Icon" :class="item.Icon"></i>
+                                    <span>{{item.Name}}</span>
+                                    <i class="layui-icon layui-unselect  layui-tab-close" @click="closeCurrentTabs(index)">ဆ</i>
+                                </div>
+                            </template>
+
+                        </div>
+                        <div class="content" :style="contentStyle">
+                            <!--<div v-if="activeItem === -1">
+                    <iframe :src="frmGenerUrl" frameborder="0" ref="iframe-home" class="tab-iframe" :style="contentStyle"></iframe>
+                </div>-->
+                            <div v-show="activeItem === index" v-for="(iframe,index) in iframes">
+                                <iframe :src="iframe.Docs" frameborder="0" :ref="'iframe-'+index" class="tab-iframe" :style="contentStyle"></iframe>
+                            </div>
+                        </div>
+                        <div class="indicator" @click="sideBarOpen = !sideBarOpen">
+                            <i class="layui-icon" :class="[sideBarOpen ? 'layui-icon-left': 'layui-icon-right']"></i>
+                        </div>
+                    </div>
+                    <dl v-cloak v-if="tabDropdownVisible" :style="contextMenuStyle" @mouseleave="tabDropdownVisible = false"
+                        @click.stop="tabDropdownVisible = false">
+                        <dd @click="closeCurrentTabs(activeItem)">
+                            <i class="icon-check"></i>关闭当前标签页
+                        </dd>
+                        <dd @click="closeOtherTabs"><i class="icon-minus"></i>关闭其它标签页</dd>
+                        <dd @click="closeAllTabs">
+                            <i class="icon-exclamation"></i>关闭全部标签页
+                        </dd>
+                        <dd @click="reLoadCurrentPage"><i class='icon-reload'></i>刷新</dd>
+                    </dl>
+                </div>
+                <!--底部信息-->
+                <div class="layui-footer" style="left:0px;display:none">
+                    <div class="layui-btn-container" id="bottomToolBar" style="margin:10px 10px 0px 10px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

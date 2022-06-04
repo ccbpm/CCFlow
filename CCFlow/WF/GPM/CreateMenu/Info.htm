@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>自动发起</title>
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    <script src="../EnumLab.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            InitBar("Info");
+            var html = "";
+        });
+
+        function Save() {
+
+            //更新节点表单类型.
+            var moduleNo = GetQueryString("ModuleNo");
+            var en = new Entity("BP.CCFast.CCMenu.Menu");
+            en.ModuleNo = moduleNo;
+            en.Name = $("#TB_Title").val();
+            en.UrlExt = "/WF/Comm/Search.htm?EnsName=BP.CCOA.CCInfo.Infos";
+            en.MenuModel = "Info"; //类型为.
+            en.Mark = "Info"; //类型为.
+            en.Icon = "icon-note";
+            en.Insert();
+
+
+            var en = new Entity("BP.CCFast.CCMenu.Menu");
+            en.ModuleNo = moduleNo;
+            en.Name = $("#TB_Title").val() + "类型维护";
+            en.UrlExt = "/WF/Comm/Ens.htm?EnsName=BP.CCOA.CCInfo.InfoTypes";
+            en.MenuModel = "Info"; //类型为.
+            en.Mark = "Info"; //类型为.
+            en.Icon = "icon-note";
+            en.Insert();
+
+            SetHref("../../Comm/En.htm?EnName=BP.CCFast.CCMenu.Menu&No=" + en.No);
+
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+    </div>
+    <fieldset>
+        <legend> 信息发布 </legend>
+        <ul>
+            <li>菜单标题:</li>
+            <li> <input type="text" value="信息发布" id="TB_Title" placeholder="信息发布" /> </li>
+        </ul>
+
+        <legend>帮助</legend>
+        <ul>
+            <li> <img src="Info.png" class="HelpImg" /></li>
+
+        </ul>
+    </fieldset>
+</body>
+</html>

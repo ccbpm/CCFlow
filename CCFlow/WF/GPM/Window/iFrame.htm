@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>窗体</title>
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    <script src="../EnumLab.js"></script>
+    <script type="text/javascript">
+
+        var winDocModel = "iFrame";
+        $(function () {
+
+            var menuNo = GetQueryString("MenuNo");
+            InitBar(winDocModel);
+
+        });
+
+        function Save() {
+
+            $("#Msg").html("正在创建,请稍后......");
+
+            var name = document.getElementById("TB_Name").value;
+            if (name == "" || name == null) {
+                $("#Msg").html("名称不能为空...");
+                return;
+            }
+
+            var url = document.getElementById("TB_Url").value;
+            if (url == "" || url == null) {
+                $("#Msg").html("url不能为空...");
+                return;
+            }
+
+            //更新节点表单类型.
+            var menuNo = GetQueryString("MenuNo");
+            var en = new Entity("BP.GPM.Home.WindowTemplate");
+            en.PageID = menuNo;
+            en.Name = name;
+            en.WinDocModel = winDocModel; //窗口内容模式.
+            en.Icon = "icon-fire";
+            en.Docs = url;
+            en.Insert();
+
+            SetHref("../../Comm/En.htm?EnName=BP.GPM.Home.WindowExt." + winDocModel + "&No=" + en.No);
+
+        }
+    </script>
+</head>
+<body>
+    <form id="CCForm">
+        <div id="bar">
+        </div>
+        <fieldset>
+
+            <legend>创建窗体</legend>
+            <ul>
+                <li> 标题</li>
+                <li><input type="text" id="TB_Name" value="我的页面" placeholder="不能为空" /> </li>
+                <li><input type="text" id="TB_Url" value="" style="width:90%;" placeholder="不能为空,比如:/App/F001/a.htm" /> </li>
+                <li> <div id="Msg"></div> </li>
+
+            </ul>
+
+            <legend>说明</legend>
+            <ul>
+                <li>仅仅显示文字提示</li>
+                <li> 数据可以包含变量@WebUser.No </li>
+                <li>创建后，就可以编辑熟悉与权限控制。</li>
+                <li><img src="Html.png" class="HelpImg" /> </li>
+
+            </ul>
+        </fieldset>
+    </form>
+</body>
+</html>

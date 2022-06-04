@@ -1,0 +1,402 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>方向条件-按照岗位计算</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- 引用通用的js文件. -->
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../CCFlowEnum.js" type="text/javascript"></script>
+
+    <script src="../Admin.js"></script>
+
+    <script type="text/javascript" language="javascript">
+
+        var operatorValue = "";
+        var operatorValueT = "";
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+            var ifm = document.getElementById("stationFrame");
+            ifm.height = document.documentElement.clientHeight - 67;
+
+            InitPage();
+            //    document.getElementById("TB_SpecOperPara").style.display='none';
+
+            $("#Msg").html("");
+        });
+        //初始化数据.
+        function InitPage() {
+
+            //获取URL参数
+            var nodeID = GetQueryString("FK_Node");
+            var FK_MainNode = GetQueryString("FK_MainNode");
+            var ToNodeID = GetQueryString("ToNodeID");
+
+            //条件属性
+
+            var mypk = GetQueryString("MyPK");
+            var cond = new Entity("BP.WF.Template.Cond");
+            cond.MyPK = mypk;
+            cond.SetPKVal(mypk);
+            cond.RetrieveFromDBSources();
+
+            // 运算的值
+            operatorValue = cond.OperatorValue.replace(/,/g, "@");
+            if (cond.GetPara("OrgStas") != null)
+                operatorValueT = cond.GetPara("OrgStas").replace(/&nbsp;&nbsp;/g, "@");
+
+
+            //获取已指定操作员的岗位条件
+            operatorValues = operatorValue.split("@");
+
+            var operatorValueTs = operatorValueT.split("@");
+
+
+            ////根据用户的信息，判断是否启用那个设置工具。
+            var user = new WebUser();
+            $("#AdminModel").hide();
+            $("#OrgModel").hide();
+
+
+            if (user.FK_Dept == 0) {
+                /*调用通用的.*/
+                $("#AdminModel").show();
+                var showCondition = InitStation(operatorValues);
+                document.getElementById("Stas").innerHTML = showCondition[2];
+                document.getElementById("stations").innerHTML = "合计:(<font color=red>" + showCondition[0] + "</font>)条" + showCondition[1];
+
+
+            } else {
+
+                /*调用集团模式的.*/
+                $("#OrgModel").show();
+                var showCondition = InitStation(operatorValues);
+                var showConditionT = InitStation(operatorValueTs);
+                $("#groupCount").html(showCondition[0])
+                $("#groupStations").html(showCondition[1])
+                $("#groupStas").html(showCondition[2])
+                $("#orgCount").html(showConditionT[0])
+                $("#orgStations").html(showConditionT[1])
+                $("#orgStas").html(showConditionT[2])
+                var count = showCondition[0] + showConditionT[0];
+                document.getElementById("Stas").innerHTML = showCondition[2] + showConditionT[2];
+                document.getElementById("stations").innerHTML = "合计:(<font color=red>" + count + "</font>)条" + showCondition[1] + showConditionT[1];
+            }
+
+
+            //条件参数 end
+            //end
+            var currCondStation = null;
+
+
+            //调用公共类库的方法:执行批量主表赋值
+            if (currCondStation != null)
+                GenerFullAllCtrlsVal(currCondStation);
+        }
+
+        function selChange() {
+            //01.如果 文本框 有初始值就赋初值
+            var idx = document.getElementById("DDL_SpecOperWay").value;
+            var idxinit = document.getElementById("initDDL_SpecOperWay").value;
+            if (idx == idxinit) {
+                document.getElementById("TB_SpecOperPara").value = document.getElementById("initTB_SpecOperPara").value;
+            }
+            else {
+                document.getElementById("TB_SpecOperPara").value = "";
+            }
+
+            //02.处理文本框样式
+            if (idx == 0) {
+                document.getElementById("TB_SpecOperPara").disabled = "disabled";
+            } else {
+                document.getElementById("TB_SpecOperPara").disabled = "";
+            }
+            //03.处理标签
+            $("#span" + idx).css("display", "inline-block");
+            $("#span" + idx).siblings().css("display", "none");
+        }
+
+        function InitStation(CheckStations) {
+
+            var showCondition = new Array();
+            var html = "";
+            var Stas = "";
+            var count = 0;
+            for (var i = 0; i < CheckStations.length; i++) {
+                if (CheckStations[i] != "") {
+
+                    var en = new Entity("BP.Port.Station", CheckStations[i]);
+                    html += "&nbsp;&nbsp;&nbsp;" + en.Name;
+                    count++;
+                    Stas += CheckStations[i] + ",";
+                }
+            }
+            showCondition[0] = count;
+            showCondition[1] = html;
+            showCondition[2] = Stas;
+            return showCondition;
+        }
+
+        //设置本组织岗位.
+        function SetAdminStations() {
+
+            var user = new WebUser();
+
+            OpenNodStationGroup("", 1);
+        }
+        //设置集团岗位.
+        function SetGroupStations() {
+            var user = new WebUser();
+            OpenNodStationGroup(user.GroupNo, 2);
+        }
+        //设置本组织岗位.
+        function SetOrgStations() {
+            var user = new WebUser();
+            OpenNodStationGroup(user.FK_Dept, 3);
+        }
+
+        function OpenNodStationGroup(orgNo, selectType) {
+            var Stas = $("#Stas").html();
+            if (orgNo == undefined)
+                orgNo = 0;
+            var url = "SelectStation.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node") + "&Stas=" + Stas + "&SelectType=" + selectType;
+            document.getElementById("stationFrame").style.width = "100%";
+            document.getElementById("stationFrame").src = url;
+
+            $("#win").window("open");
+
+        }
+
+       
+        function Save() {
+
+            var param = location.href.split("?")[1];
+
+            //var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+            //获取所有选中的checkbox.
+            var Stas = document.getElementById("Stas").innerHTML;
+            var orgStas = "";
+            var user = new WebUser();
+            if (user.FK_Dept != 0) {
+                Stas = document.getElementById("groupStas").innerHTML;
+                orgStas = document.getElementById("orgStas").innerHTML;
+            }
+
+            var frmData = $("#cc").serialize();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            handler.AddPara("Stas", Stas);
+            handler.AddPara("OrgStas", orgStas);
+            handler.AddPara("FK_MainNode", GetQueryString("FK_MainNode"));
+            handler.AddPara("ToNodeID", GetQueryString("ToNodeID"));
+            handler.AddPara("DirType", GetQueryString("DirType"));
+            // handler.AddPara("CondType", GetQueryString("CondType"));
+            handler.AddPara("CondOrAnd", GetQueryString("CondOrAnd"));
+            handler.AddFormData()
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("CondByStation_Save");
+
+            alert("保存成功");
+            Back();
+
+        }
+
+
+        function getChidrenValue(data) {
+
+            $('#win').window('close'); // close a window
+            if (data[3] == "1") {
+
+                document.getElementById("stations").innerHTML = "合计:(<font color=red>" + data[2] + "</font>)条" + data[1];
+                document.getElementById("Stas").innerHTML = data[0];
+            }
+            if (data[3] == "2") {
+                $("#groupStas").html(data[0]);
+                $("#groupStations").html(data[1]);
+                $("#groupCount").html(data[2]);
+
+                var orgCount = $("#orgCount").html();
+                var orgStations = $("#orgStations").html();
+                var orgStas = $("#orgStas").html();
+                var count = 0;
+                if (orgCount == null || orgCount == "") orgCount = 0;
+                if (data[2] == null || data[2] == "") data[2] = 0;
+                count = parseInt(orgCount) + parseInt(data[2]);
+                document.getElementById("stations").innerHTML = "合计:(<font color=red>" + count + "</font>)条" + orgStations + data[1];
+                document.getElementById("Stas").innerHTML = orgStas + data[0];
+            }
+
+            if (data[3] == "3") {
+                $("#orgStas").html(data[0]);
+                $("#orgStations").html(data[1]);
+                $("#orgCount").html(data[2]);
+                var groupCount = $("#groupCount").html();
+                var groupStations = $("#groupStations").html();
+                var groupStas = $("#groupStas").html();
+                var count = 0;
+
+                if (groupCount == null || groupCount == "")
+                    groupCount = 0;
+
+                if (data[2] == null || data[2] == "")
+                    data[2] = 0;
+
+                count = parseInt(groupCount) + parseInt(data[2]);
+                document.getElementById("stations").innerHTML = "合计:(<font color=red>" + count + "</font>)条" + groupStations + data[1];
+                document.getElementById("Stas").innerHTML = groupStas + data[0];
+            }
+
+            //获取URL参数
+            var nodeID = GetQueryString("FK_Node");
+
+            var ToNodeID = GetQueryString("ToNodeID");
+
+            //条件属性.
+            //var mypk = FK_MainNode + "_" + ToNodeID + "_Dir_" + "Stas";
+            //var cond = new Entity("BP.WF.Template.Cond");
+            //cond.MyPK = mypk;
+            //cond.RetrieveFromDBSources();
+
+            //cond.OperatorValue = data[0];
+            //cond.OperatorValueT = data[1];
+            //cond.Save();
+        }
+
+        //返回.
+        function Back() {
+            var url = window.location.href;
+            if (GetQueryString("CondOrAnd") == null)
+                url = url.replace('CondStation.htm', 'List.htm');
+            else {
+                url = url.replace('CondStation.htm', 'DirList.htm');
+                url = url.replace('&CondOrAnd=' + GetQueryString("CondOrAnd"), '  ');
+            }
+            SetHref(url);
+
+            /*parent.location.reload();
+            window.close();
+            window.parent.Condlist.closeCurrentTabs();*/
+        }
+    </script>
+
+    <style type="text/css">
+        ul .cond li {
+            display: none;
+            line-height: 50px;
+        }
+
+            ul .cond li .active {
+                display: block;
+            }
+
+        select {
+            display: inline-block;
+            width: 200px;
+        }
+
+
+        .lbls span {
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <span class="pull-right">
+                <button id="Btn_Save" name="Btn_Save" onclick="Save();">保存</button>
+                <button id="Btn_Back" name="Btn_Back" onclick="Back();">返回</button>
+
+            </span>
+
+        </div>
+        <form id="cc">
+
+
+            <fieldset id="AdminModel">
+                <legend>设置(超级管理员)</legend>
+                <ul>
+                    <li><a href="javascript:OpenOld()">设置/更改岗位</a></li>
+
+                </ul>
+            </fieldset>
+            <fieldset id="OrgModel">
+                <legend>设置（组织管理员）</legend>
+                <ul>
+                    <li> <a href="javascript:SetGroupStations()">设置集团岗位</a> </li>
+                    <li> <a href="javascript:SetOrgStations()">设置本组织岗位</a> </li>
+                </ul>
+            </fieldset>
+            <fieldset>
+                <legend>已经设置的岗位</legend>
+                <br />
+                <div class="pd15">
+                    <div id="stations"></div>
+
+                </div>
+
+            </fieldset>
+
+            <label id="Stas" style="display:none"></label>
+            <label id="groupCount" style="display:none"></label>
+            <label id="orgCount" style="display:none"></label>
+            <label id="groupStations" style="display:none"></label>
+            <label id="orgStations" style="display:none"></label>
+            <label id="groupStas" style="display:none"></label>
+            <label id="orgStas" style="display:none"></label>
+            <br />
+
+            <fieldset>
+                <div class="pd15">
+                    指定的操作员：<select id="DDL_SpecOperWay" name="DDL_SpecOperWay" onchange="selChange()">
+                        <option selected="selected" value="0">当前操作员</option>
+                        <option value="1">指定节点的操作员</option>
+                        <option value="2">指定表单字段作为操作员</option>
+                        <option value="3">指定操作员编号</option>
+                    </select>
+                    <input type="hidden" name="initDDL_SpecOperWay" id="initDDL_SpecOperWay" value=" " />
+                    <input type="hidden" name="initTB_SpecOperPara" id="initTB_SpecOperPara" value=" " />
+                    <br />
+                    <br />
+                    <span class="lbls">
+                        <span id="span0">参数：</span>
+                        <span id="span1" style="display: none">节点编号：</span>
+                        <span id="span2" style="display: none">表单字段：</span>
+                        <span id="span3" style="display: none">操作员编号：</span>
+                    </span>
+                    <input id="TB_SpecOperPara" name="TB_SpecOperPara" type="text" disabled="disabled" style="width: 200px;" />&nbsp;&nbsp;多个值请用英文“逗号”来分隔。
+                </div>
+            </fieldset>
+
+            <!--隐藏的文本框-->
+            <div id="win" class="easyui-window" title="绑定岗位" style="width:600px;height:400px" closed="true"
+                 data-options="iconCls:'icon-save',modal:true">
+
+                <div data-options="region:'north',title:'North Title',split:true" style="height:50px;">
+                    <iframe id="stationFrame" src="#" scrolling="no" frameborder="0"></iframe>
+
+                </div>
+            </div>
+
+        </form>
+    </div>
+</body>
+</html>

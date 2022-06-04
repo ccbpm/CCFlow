@@ -1,0 +1,342 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>数据字典表</title>
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <link href="../../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <base target="_self" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+
+        closeWhileEscUp();
+
+        /* ESC Key Down */
+        function Esc() {
+            var event = window.event || arguments.callee.caller.arguments[0];
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitPage() {
+
+            var fk_mapData = GetQueryString("FK_MapData");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            var key = $("#TB_Key").val();
+            handler.AddPara("FK_MapData", fk_mapData);
+            handler.AddPara("Key", key);
+            handler.AddPara("PTableModel", GetQueryString("PTableModel"));
+            var data = handler.DoMethodReturnString("SFList_Init");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            data = JSON.parse(data);
+
+            var sfTabls = data["SFTables"]; //外键表字段.
+            var fields = data["Fields"]; //已经存在的字段，所有的字段.
+
+            //清空以前的数据、根据新的返回对象重新渲染table内容
+            //$("#Table1 tr").remove();
+
+            //增加处理.
+            for (var i = 0; i < sfTabls.length; i++) {
+
+                var sfTable = sfTabls[i];
+
+                //如果有这个字段.
+                if (fields != undefined) {
+                    //检查这个字段是否存在可用的字段的列表里.
+                    var isHave = false;
+                    for (var idx = 0; idx < fields.length; idx++) {
+
+                        var field = fields[idx];
+                        if (field.FName != sfTable.No)
+                            continue;
+                        isHave = true;
+                        break;
+                    }
+                    if (isHave == false)
+                        continue;
+                }
+
+                var newRow = "";
+                var nameLink = "";
+
+                if (fk_mapData != null) {
+                    if (GetQueryString('From') != null)
+                        nameLink = "<label for='RB" + sfTable.No + "'> <input type=radio id='RB" + sfTable.No + "' name='RB' value='" + sfTable.No + "@" + sfTable.Name + "@" + sfTable.FK_Val + "' /> " + sfTable.No + " </label>";
+                    else
+                        nameLink = "<a href=\"javascript:AddSFTable('" + sfTable.No + "','" + sfTable.SrcType + "')\" class='cc-btn-tab btn-edit'> " + sfTable.No + "</a>";
+                }
+                else
+                    nameLink = sfTable.No;
+
+                newRow = "<tr ><td class=Idx>" + i + "</td>";
+                newRow += "<td>" + nameLink + "</td>";
+                newRow += "<td>" + sfTable.Name + "</td>";
+                newRow += "<td>" + sfTable.FK_SFDBSrcText + "</td>";
+                newRow += "<td>" + sfTable.SrcTypeText + "</td>";
+
+                if (sfTable.CodeStruct == 1)
+                    newRow += "<td>树结构</td>";
+                else
+                    newRow += "<td>编号名称</td>";
+
+                newRow += "<td>";
+
+                newRow += "<a href=\"javascript:Edit('" + sfTable.No + "','" + sfTable.SrcType + "')\"  class='cc-btn-tab btn-edit'>编辑</a>";
+
+                newRow += " - <a href=\"javascript:Del('" + sfTable.No + "','" + sfTable.Name + "','" + sfTable.SrcType + "')\"  class='cc-btn-tab btn-del'>删除</a>";
+                newRow += "</td>";
+                newRow += "</tr>";
+                
+                if ($("#Table1 tr").length==0) {
+                    $("#Table1 tbody").after(newRow);
+                } else {
+                    $("#Table1 tr:last").after(newRow);
+                }
+            }
+        }
+
+        //传入父窗体
+        function GetFrmInfo() {
+
+            var val = $('input:radio[name="RB"]:checked').val();
+            var kv = val.split('@');
+
+            var sfTableNo = kv[0];
+            var sfTableName = kv[1];
+            var fk_val = kv[2];
+
+            if (fk_val == null || fk_val == "")
+                fk_val = sfTableNo;
+
+            var str = prompt("在把外键数据[" + sfTableName + "]加入表单之前您需要确定该数据字典的字典名称\t\n字段名(必须为字母开头、数字或者下划线组合):", fk_val);
+            if (str == null)
+                return;
+
+            return {
+                Name: sfTableName,
+                KeyOfEn: str,
+                IsCreateLabel: true,
+                UIBindKey: sfTableNo
+            };
+        }
+
+        function EditUIBindKeyOfAttr(keyOfEn, fk_mapData, sfTable, srcType) {
+            if (fk_mapData == null || fk_mapData == undefined || fk_mapData == "") {
+                alert("字段" + keyOfEn + "绑定的表单获取到的字段为空")
+            }
+            var attr = new Entity("BP.Sys.MapAttr", fk_mapData + "_" + keyOfEn);
+            attr.UIContralType = 1;
+            attr.MyDataType = 1;
+            attr.UIBindKey = sfTable;
+            if (srcType == "0" || srcType == "1" || srcType == "2")
+                attr.LGType = 2;
+            else
+                 attr.LGType =0;
+            
+            attr.Update();
+            if (attr.LGType==2)
+                SetHref("../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=" + attr.MyPK);
+            else
+                SetHref("../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&PKVal=" + attr.MyPK);
+        }
+
+        function AddSFTable(sfTable,srcType) {
+
+            var fk_mapData = GetQueryString("FK_MapData");
+
+            if (fk_mapData == '' || fk_mapData == null) {
+                SetHref('SFSQLDataView.htm?FK_SFTable=' + sfTable);
+                return;
+            }
+
+            var keyOfEn = GetQueryString("KeyOfEn");
+            keyOfEn = keyOfEn == null || keyOfEn == undefined ? "" : keyOfEn;
+            if (keyOfEn != "") {
+                EditUIBindKeyOfAttr(keyOfEn, fk_mapData, sfTable, srcType);
+                return;
+            }
+
+
+            var defField = sfTable.replace('.', "_");
+            defField = defField.replace('.', "_");
+            defField = defField.replace('.', "_");
+
+            var url = '';
+            var str = prompt("请输入字段名(必须为字母开头、数字或者下划线组合):", defField);
+            if (str == null)
+                return;
+
+            var groupID = GetQueryString("GroupField");
+            if (groupID == null || groupID == "null")
+                groupID = "0";
+
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            handler.AddPara("KeyOfEn", str);
+            handler.AddPara("FK_MapData", fk_mapData);
+            handler.AddPara("GroupField", groupID);
+            handler.AddPara("SFTable", sfTable);
+            var data = handler.DoMethodReturnString("SFList_SaveSFField");
+
+            if (data.indexOf("err@") >= 0) {
+                alert(data);
+                return;
+            }
+
+            SetHref(data);
+            return;
+
+
+        }
+        function AddSFSQL(mypk, idx, key) {
+
+            var url = 'Do.aspx?DoType=AddSFSQLAttr&MyPK=' + mypk + '&IDX=' + idx + '&RefNo=' + key;
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 500px;center: yes; help: no');
+        }
+
+        //删除.
+        function Del(no, name, SrcType) {
+
+            if (window.confirm('您确定要执行删除[' + name + ']吗?') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            handler.AddPara("FK_SFTable", no);
+            var data = handler.DoMethodReturnString("SFList_Delete");
+            if (data.indexOf('err@') >= 0) {
+                alert(data);
+                return;
+            }
+            //删除系统字典表
+            if (SrcType == 7) {
+
+                var ens = new Entities("BP.Sys.DictDtls");
+                ens.Delete("FK_SFTable", no);
+
+            }
+
+            alert(data);
+            Reload(); //刷新页面.
+        }
+
+        //编辑.
+        function Edit(fk_sftable, sfType) {
+
+            var ensName = '';
+            ensName = "BP.Sys.SFTable";
+
+            if (fk_sftable.indexOf('.') != -1) {
+                ensName = 'BP.Sys.FrmUI.SFTableClass';
+            }
+
+            if (sfType == "3")
+                ensName = 'BP.Sys.SFTableSQL';
+
+            if (sfType == "7")
+                ensName = 'BP.Sys.SFTableDict';
+
+            var url = '../../Comm/En.htm?EnName=' + ensName + '&No=' + fk_sftable;
+            // SetHref(url);
+
+            //获取页面的大小
+            var W = document.body.clientWidth - 120;
+            var H = document.documentElement.clientHeight - 10;
+            //var H = (document.body.clientHeight < document.documentElement.clientHeight) ? document.body.clientHeight-10 : document.documentElement.clientHeight-10;
+            //var H = parent.document.body.clientHeight -200;
+            OpenEasyUiDialog(url, "euiframeid", ' 数据外键' + fk_sftable, W, H, 'icon-edit');
+
+        }
+
+        function New() {
+            var url = './SFTable/Default.htm?DoType=New&FromApp=SL&s=' + Math.random();
+
+            var w = window.innerWidth * 2 / 3;
+            var h = window.innerHeight -80;
+            OpenEasyUiDialog(url, "eudlgframe", "新建字典表", w, h, "icon-edit", true, null, null, null, function () {
+                Reload();
+            });
+        }
+
+        $(document).keyup(function (event) {
+            switch (event.keyCode) {
+                case 27:
+                    var dlg = dlg || $('#eudlg') || {};
+                    if (typeof dlg.dialog === "function") {
+                        //dlg.dialog('close');
+                    }
+            }
+        });
+        //关键字查询
+        function Search() {
+			$('#Table1 tbody').empty();
+			$('#Table1 tr').empty();
+            InitPage();
+        }
+    </script>
+</head>
+<body onkeypress="Esc()">
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <div class="pull-right">
+                <input type="text" placeholder="请输入编号或名称" id="TB_Key" /> <input type="button" class="cc-btn-tab" id="btn_search" onclick="Search()" value="查询" />
+                <a href="javascript:New()" class="cc-btn-tab btn-edit">创建字典表</a>
+            </div>
+            <strong>字典列表  </strong>
+        </div>
+
+        <table id="Table1" class="table">
+            <tr>
+                <th>
+                    序
+                </th>
+                <th>
+                    编号
+                </th>
+                <th>
+                    名称
+                </th>
+                <th>
+                    数据源
+                </th>
+                <th>
+                    类型
+                </th>
+                <th>
+                    格式
+                </th>
+                <th>
+                    编辑
+                </th>
+            </tr>
+        </table>
+
+        <div id="Msg">
+        </div>
+    </div>
+</body>
+</html>

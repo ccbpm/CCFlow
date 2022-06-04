@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <!--SQL编辑器-->
+    <link href="../../../Scripts/CodeMirror/lib/codemirror.css" rel="stylesheet" />
+    <link href="../../../Scripts/CodeMirror/addon/hint/show-hint.css" rel="stylesheet" />
+    <script src="../../../Scripts/CodeMirror/lib/codemirror.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
+    <script src="../../../Scripts/CodeMirror/mode/sql/sql.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
+    <script src="../../../Scripts/LoadSql.js"></script>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            InitBar(AutoStart.ByDesigneeAdminSendTo02Node);
+            //获取节点属性
+            var flowNo = GetQueryString("FK_Flow");
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            //批量为复制.
+            if (flow.FlowRunWay == AutoStart.ByDesigneeAdminSendTo02Node) {
+
+                GenerFullAllCtrlsVal(flow);
+
+                $("#TB_EmpExp").val(flow.StartGuidePara1);
+                $("#TB_DTExp").val(flow.StartGuidePara2);
+
+            }
+
+        });
+
+        function Save() {
+
+            var fk_flow = GetQueryString("FK_Flow");
+            var data = new Entity("BP.WF.Flow", fk_flow);
+            data.FlowRunWay = AutoStart.ByDesigneeAdminSendTo02Node;
+            data.StartGuidePara1 = $("#TB_EmpExp").val();
+            data.StartGuidePara2 = $("#TB_DTExp").val();
+
+            data.CopyURL();  //从url里面copy数据.
+            data.CopyForm(); //从from里面copy数据.
+            data.Update();
+
+            Reload();
+        }
+
+    </script>
+</head>
+<body>
+
+    <div id="bar"></div>
+
+    <fieldset>
+
+        <legend> 第2个节点人员集合  </legend>
+        <ul>
+            <li>比如：SELECT No,Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept' 支持表达式, 如果指定的人员，比如：zhangsan,lisi,wangwu</li>
+            <li>支持表达式：@WebUser.FK_Dept, @WebUser.No  </li>
+        </ul>
+
+        <input type="text" style="width:95%" id="TB_EmpExp" name="TB_EmpExp" />
+
+        <legend> 发起时间点  </legend>
+        <input type="text" style="width:95%" id="TB_DTExp" name="TB_DTExp" />
+        <ul>
+            <li>比如：@01:01@12:01 在每天的 1点零1分，与12点零1分发起此流程。</li>
+            <li>比如：@-01 01:01  在每月1号的1点零1分发起此流程。</li>
+            <li>比如：@06-01 01:01  在每年的6月1号的1点零1分发起此流程。</li>
+            <li>cc的日期格式为：yyyy-MM-dd HH:mm 如果时间匹配到您设置的时间点，那么系统就会触发流程，多个时间点用@符号隔开。</li>
+            <li>按照周设置的格式为: Week.3 HH:mm , 比如每周1早晨8点00分启动.  @Week.1 08:00 , 可以支持多个时间段比如：@Week.1 08:00@Week.3 08:00@Week.4 08:00@Week.7 08:00</li>
+            <li>设置每月的指定的日期发起: @-01 08:00 , 每月1号8点00分启动. </li>
+            <li>设置每月的最后一天发起: @LastDayOfMonth 20:00 , 每月最后一天 20点00分启动. </li>
+
+
+        </ul>
+    </fieldset>
+    
+</body>
+</html>

@@ -1,0 +1,172 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js"></script>
+
+</head>
+<body>
+    <div id="App">
+        <!--<model-component></model-component>-->
+        <div id="bar">
+        </div>
+
+        <fieldset>
+            <legend>人员身份规则</legend>
+            <ul>
+                <li style="list-style:none">
+                    <input type="radio" value="0" id="SF_0" v-model="SF" checked="checked" /> <label style="font-weight:bolder" for="SF_0"> 当前人员的身份（默认）</label>
+                    <ol class="olText">
+                        <li>说明：就是上一步发送作为当前节点的人员身份。 </li>
+                    </ol>
+
+                    <input type="radio" value="1" id="SF_1" v-model="SF" /> <label style="font-weight:bolder" for="SF_1"> 指定节点的人员身份</label>
+                    <ol class="olText">
+                        <li> 说明：指定节点发送人的作为当前节点的人员身份。 </li>
+                        <li>
+                            请选择节点:
+                            <select id="DDL_Nodes" v-model="node">
+                                <option v-for="option in nodes" :value="option.NodeID">{{option.Name}}</option>
+                            </select>
+                        </li>
+                    </ol>
+                    <input type="radio" value="2" id="SF_2" v-model="SF" /> <label style="font-weight:bolder" for="SF_2"> 按表单字段作为人员身份（该字段里存储的是账号）</label>
+                    <ol class="olText">
+                        <li> 说明：指定表单字段作为人员编号作为当前节点的人员身份，比如：我替别人请假，请假人字段作为人员身份。 </li>
+                        <li>
+                            请选择字段:
+                            <select id="DDL_Fields" v-model="field">
+                                <option v-for="option in fields" :value="option.KeyOfEn">{{option.Name}}</option>
+                            </select>
+                        </li>
+                    </ol>
+                </li>
+            </ul>
+        </fieldset>
+
+
+        <div id="AdminModel">
+            <fieldset v-show="adminModel===1">
+                <legend>设置岗位</legend>
+                <ul>
+                    <li><a href="#" @click="OpenDot2DotStations()">设置/更改岗位(旧版本)</a></li>
+                    <li><a href="#" @click="OpenNew()">设置/更改岗位（左右树结构）</a> </li>
+
+                </ul>
+            </fieldset>
+        </div>
+        <div id="OrgModel">
+            <fieldset v-show="orgModel===1">
+                <legend>设置（组织管理员）</legend>
+                <ul>
+                    <li v-show="isShow"><a href="#" @click="SetGroupStations()">设置集团岗位</a> </li>
+                    <li><a href="#" @click="SetOrgStations()">设置本组织岗位</a> </li>
+                </ul>
+            </fieldset>
+        </div>
+        <fieldset>
+            <legend>已经设置的岗位</legend>
+            <div id="stas">
+
+                <ul>
+                    <li v-show="stas.length===0">未设置</li>
+                    <template v-for="sta in stas">
+                        <li v-show="sta.FK_StationText!=undefined">{{sta.FK_StationText}}</li>
+                    </template>
+
+                </ul>
+
+
+            </div>
+        </fieldset>
+
+
+
+        </fieldset>
+
+
+
+    </div>
+    <script type="text/javascript">
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                adminModel: 1,
+                orgModel: 0,
+                stas: [],
+                webuser: null,
+                deliverWay: SelectorModel.ByStationAI,
+                isShow: true
+            },
+            methods: {
+                OpenDot2DotStations: function () {
+                    OpenDot2DotStations();
+                },
+                OpenNew: function () {
+                    var nodeID = GetQueryString("FK_Node");
+                    var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+                    var H = document.documentElement.clientHeight - 30;
+                    OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, H, function () {
+                        Baseinfo.stas = getStas();
+                    });
+                },
+                SetGroupStations: function () {
+                    OpenNodStationGroup(this.webuser.GroupNo);
+
+                },
+                SetOrgStations: function () {
+                    OpenNodStationGroup(this.webuser.OrgNo);
+                }
+            },
+            created() {
+                InitBar(this.deliverWay);
+                this.stas = getStas();
+
+                //根据用户的信息，判断是否启用那个设置工具。
+                this.webuser = new WebUser();
+                this.adminModel = this.webuser.No == "admin" ? 1 : 0;
+                this.orgModel = this.webuser.No == "admin" ? 0 : 1;
+                this.isShow = this.webuser.CCBPMRunModel == 2 ? false : true;
+            }
+        });
+
+        function OpenNodStationGroup(orgNo) {
+            var url = "NodeStationGroup.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node");
+            var H = document.documentElement.clientHeight - 30;
+            OpenEasyUiDialogExtCloseFunc(url, '绑定岗位', 500, H, function () {
+                Baseinfo.stas = getStas();
+            });
+        }
+
+        //保存
+        function Save() {
+            var nodeID = GetQueryString("FK_Node");
+            var node = new Entity("BP.WF.Template.Selector", nodeID);
+            node.SelectorModel = Baseinfo.deliverWay;
+            node.Update();
+
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = 4;
+            node.Update();
+
+
+            alert("保存成功.");
+        }
+    </script>
+
+</body>
+</html>

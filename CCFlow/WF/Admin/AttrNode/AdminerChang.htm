@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>切换组织</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <base target="_self" />
+    <script type="text/javascript">
+
+        //初始化页面函数.....
+        $(function () {
+
+            $("#Msg").html("<img src='../../Img/loading.gif' /><font color=blue>ccbpm 正在加载请稍后.</font>");
+            var orgNo = GetQueryString("OrgNo");
+
+            var webUser = new WebUser();
+
+            var mysql = "SELECT ";
+            mysql += "No as \"No\", ";
+            mysql += "Name as \"Name\", ";
+            mysql += "UseSta as \"UseSta\", ";
+            mysql += "RootOfDept as \"RootOfDept\" ";
+            mysql += " FROM  WF_Emp WHERE No LIKE '" + webUser.No + "@%' ";
+
+            var adminers = DBAccess.RunSQLReturnTable(mysql);
+
+            var html = "";
+            html += "<table style='width:80%;'>";
+            html += "<caption>切换组织</caption>";
+            html += "<tr>";
+            html += "<th>组织编号</th>";
+            html += "<th>组织名称</th>";
+            html += "<th>状态</th>";
+            html += "<th>操作</th>";
+            html += "</tr>";
+            for (var i = 0; i < adminers.length; i++) {
+
+                var adminer = adminers[i];
+                var dept = new Entity("BP.Port.Dept", adminer.RootOfDept);
+
+                html += "<tr>";
+                html += "<td>" + dept.No + "</td>";
+                html += "<td>" + dept.Name + "</td>";
+                html += "<td>" + adminer.UseSta + "</td>";
+                html += "<td><a href=\"javascript:LoginAs('" + dept.No + "','" + dept.Name + "')\">登录该组织</a></td>";
+                html += "</tr>";
+            }
+
+            $("#Msg").html(html);
+
+        });
+
+        function LoginAs(no, name) {
+
+            if (window.confirm('您确定要以该组织[' + no + ',' + name + ']登录吗？') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            handler.AddPara("OrgNo", no); //增加参数.
+            var data = handler.DoMethodReturnString("AdminerChang_LoginAs");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            try {
+                window.opener.location.reload();
+                return;
+            } catch (e) {
+                //alert(e);
+            }
+
+            try {
+                parent.location.reload();
+                return;
+            } catch (e) {
+                alert(e);
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+
+    <form id="cc">
+        <div id="Msg">
+        </div>
+    </form>
+
+</body>
+</html>

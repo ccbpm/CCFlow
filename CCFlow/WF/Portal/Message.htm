@@ -1,0 +1,209 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="./icons/font-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="./icons/icons.css">
+    <link rel="stylesheet" type="text/css" href="./layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="./layui/css/customer.css">
+    <script type="text/javascript" src="./js/sortjs/Sortable.min.js"></script>
+    <!--- 引入代码. -->
+    <script src="../Scripts/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="./layui/layui.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" src="./js/vue/vue.js"></script>
+    <!--    <script type="text/javascript" src="Flows.js"></script>-->
+    <style>
+        body,html{
+            height:100%;
+            width:100%;
+        }
+        .flow {
+            width: 100%;
+        }
+
+            .flow .row {
+                display: flex;
+                justify-content: flex-start;
+                flex: 0.2;
+                height: 40px;
+                line-height: 40px;
+                background-color: #FAFAFA;
+            }
+                /*.flow .row .item {*/
+                /*    box-sizing: border-box;*/
+                /*    flex-shrink: 0;*/
+                /*    text-align: center;*/
+                /*    width: 20%;*/
+                /*    border: 1px solid #eee;*/
+                /*    font-weight: 600;*/
+                /*}*/
+
+                .flow .row .item {
+                    box-sizing: border-box;
+                    flex-shrink: 0;
+                    text-align: center;
+                    border-right: 1px solid #eee;
+                    border-bottom: 1px solid #eee;
+                }
+
+        .item-name {
+            width: 40%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+            padding-left: 30px;
+        }
+
+        .item-other {
+            width: 12%;
+        }
+
+        .item-index {
+            background-color: #FAFAFA;
+            padding-right: 40px;
+            color: #999999
+        }
+
+        .flow .row .folder-item {
+            box-sizing: border-box;
+            width: 76%;
+            padding-left: 20px;
+            cursor: pointer;
+        }
+
+        .wrapper .row {
+            background-color: #fff;
+        }
+
+        #s-main {
+            transition: all ease .4s;
+            margin-top: 40px;
+        }
+
+        .fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        [v-cloak] {
+            display: none !important;
+        }
+        .hits-list {
+            text-align: left;
+            margin-top: 2px;
+            min-height: 240px;
+        }
+        .hits-list .item {
+            border-bottom: 1px solid #E2E9EE;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: left;
+            cursor:pointer;
+        }
+            .ItemActive{
+                background-color:#f6f6f6;
+            }
+            .hits-list .item .header .title {
+                color: #40485B;
+                height: 22px;
+                line-height: 22px;
+                text-decoration: none;
+                font-size: 1.1em;
+                font-weight: 700;
+                letter-spacing: 0.2px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                max-width: 90%;
+            }
+
+        .hits-list .item .desc {
+            margin-top: 10px 0px;
+            font-size: 14px;
+            line-height: 22px;
+            color: #40485B;
+            letter-spacing: 0.1px;
+            word-wrap: break-word;
+            overflow: hidden;
+        }
+        .hits-list .item .attr.adjust {
+            margin-top: 10px;
+            overflow:hidden;
+        }
+        .hits-list .item .tag {
+            float: left;
+            height: 18px;
+            line-height: 18px;
+            margin-right: 12px;
+            font-size: 0.85em;
+            color: #7687AB;
+            text-decoration: none;
+        }
+        .hits-list .item .tag.explain {
+            cursor: pointer;
+            margin-right: 0;
+            padding-right: 1px;
+        }
+        .hits-list .item .tag.right {
+            float: right;
+        }
+            .hits-list .item .header .isread {
+                color: #98A0B3;
+            }
+    </style>
+</head>
+
+<body>
+    <div class="flow" id="flow">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                    <ul class="layui-tab-title">
+                       <!-- <li class="layui-this">网站设置</li>-->
+                        <li v-for="(item,index) in Groups" :key="index" :class="TabActive==index? 'layui-this':''"  v-on:click="tabClick(item.MsgType)">{{item.TypeName}}</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item layui-show">
+                            <div class="hits-list">
+                                <div class="item" v-for ="(item,index) in msgList" :key="index" >
+                                    <div class="header"  v-on:click="OpenIt(item)">
+                                        <div :class="item.IsRead==0?'title':'title isread'">
+                                            {{item.EmailTitle}}
+                                            <span class="layui-badge-dot" v-if="item.IsRead==0"></span>
+                                        </div>    
+                                    </div>
+                                    <div class="attr adjust">
+                                        <span class="tag">发布于 {{item.RDT}}</span>
+                                        <a class="tag explain right"  v-on:click="DoDelete(item.MyPK)">
+                                            <i class="layui-icon layui-icon-delete"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="Message.js"></script>
+    <script>
+        $(".item").hover(function () {
+            $('.item').removeClass("ItemActive");
+            $(this).addClass("ItemActive");
+        })
+    </script>
+</body>
+
+</html>

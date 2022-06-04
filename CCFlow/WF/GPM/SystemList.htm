@@ -1,0 +1,459 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <!--- 引入代码. -->
+    <link rel="stylesheet" type="text/css" href="../Portal/icons/font-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="../Portal/icons/icons.css">
+    <link rel="stylesheet" type="text/css" href="../Portal/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../Portal/layui/css/customer.css">
+    <script type="text/javascript" src="../Portal/js/sortjs/Sortable.min.js"></script>
+    <!--- 引入代码. -->
+    <script src="../Scripts/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../Portal/layui/layui.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Portal/js/vue/vue.js"></script>
+    <script src="../Scripts/layui/LayuiDialog.js"></script>
+    <style>
+        .flow .row {
+            display: flex;
+            justify-content: flex-start;
+            flex: 0.2;
+            height: 40px;
+            line-height: 40px;
+            background-color: #FAFAFA;
+        }
+
+            /*.flow .row .item {*/
+            /*    box-sizing: border-box;*/
+            /*    flex-shrink: 0;*/
+            /*    text-align: center;*/
+            /*    width: 20%;*/
+            /*    border: 1px solid #eee;*/
+            /*    font-weight: 600;*/
+            /*}*/
+
+            .flow .row .item {
+                box-sizing: border-box;
+                flex-shrink: 0;
+                text-align: center;
+                border-right: 1px solid #eee;
+                border-bottom: 1px solid #eee;
+                overflow: hidden;
+            }
+
+        .item-name {
+            width: 20%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+            padding-left: 30px;
+        }
+
+        .item-other {
+            width: 20%;
+            max-width: 20%;
+        }
+
+        .item-other {
+            width: 8%;
+            max-width: 10%;
+        }
+
+        .item-index {
+            background-color: #FAFAFA;
+            padding-right: 30px;
+            color: #999999;
+        }
+
+        .flow .row .system-item {
+            box-sizing: border-box;
+            width: 66%;
+            padding-left: 20px;
+            cursor: pointer;
+        }
+
+        .wrapper .row {
+            background-color: #fff;
+        }
+
+        #s-main {
+            transition: all ease .4s;
+        }
+
+        .item-menu {
+            width: 26%;
+            cursor: pointer;
+        }
+
+        .fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .item-module {
+            width: 20%;
+        }
+
+        .item-menu-name {
+            width: 10%;
+            padding-left: 12px;
+            cursor: pointer;
+        }
+
+        .module-name {
+            width: 54%;
+            padding-left: 12px;
+            cursor: pointer;
+        }
+
+        .item-content {
+            width: 57%;
+        }
+
+        .item-op {
+            width: 8%;
+        }
+
+        [v-cloak] {
+            display: none !important;
+        }
+        .h3_list {
+            height: 40px;
+            background: #fff;
+            text-align: center;
+            line-height: 40px;
+            border-bottom: 2px solid #dcdcdc;
+        }
+
+        .cenbody .itemlst {
+            height: 100px;
+        }
+
+        .cenbody {
+            height: 100vh;
+            background: #fff;
+            margin: 2px auto;
+            padding-top: 20px;
+        }
+
+
+        .canbox:hover {
+            color: #FFF;
+            background-color: #1E9FFF;
+        }
+
+            .canbox:hover i {
+                color: #FFF;
+            }
+
+        .au-bg-white {
+            background: #fff;
+        }
+
+        .canbox {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            flex-flow: column;
+            background: #1980FF;
+            color: #fff;
+            height: 90px;
+            width: 70%;
+            margin: 0 auto;
+            border-radius: 10px;
+            cursor: pointer
+        }
+
+            .canbox i {
+                font-size: 24px;
+                color: #fff;
+            }
+
+
+
+        .cenbox:hover {
+            color: #FFF;
+            background: #1E9FFF;
+        }
+
+            .cenbox:hover i {
+                color: #FFF;
+                
+            }
+        .cenbox:hover .chooseTips {
+            display: block
+        }
+
+        .au-bg-white {
+            background: #fff;
+        }
+
+        .cenbox {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            flex-flow: column;
+            background: #1980FF;
+            color: #fff;
+            height: 90px;
+            width: 70%;
+            margin: 0 auto;
+            border-radius: 10px;
+            cursor: pointer;
+            line-height:30px;
+        }
+        .cenbox i {
+                font-size: 24px;
+                color: #fff;
+         }
+        .tipsbox{
+            position:relative;
+        }
+        .chooseTips {
+            position: absolute;
+            background-color: rgba(15, 14, 14, 0.6);
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            border-radius: 10px;
+            display:none;
+        }
+        .canbox:hover .chooseTips {
+            display: block
+        }
+            .chooseTips ul {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                line-height: 44px;
+            }
+                .chooseTips ul li {
+                    width: 50%;
+                    height: 100%;
+                    text-align: center;
+                    line-height: 82px;
+                    align-content: center;
+                    display: flex;
+                    justify-content: center;
+                    cursor:pointer
+                }
+        .choosedTips {
+            position: absolute;
+            background-color: rgba(15, 14, 14, 0.6);
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            border-radius: 10px;
+            display: none;
+        }
+        .cenbox:hover .choosedTips {
+            display: block
+        }
+
+        .choosedTips ul {
+            width: 100%;
+            height: 100%;
+            line-height: 24px;
+        }
+
+            .choosedTips ul li {
+                width: 100%;
+                height: 50%;
+                text-align: center;
+                line-height: 45px;
+                align-content: center;
+                display: flex;
+                justify-content: center;
+                cursor: pointer
+            }
+    </style>
+</head>
+
+<body>
+    <!--<div id="mymask">
+        正在加载..
+    </div>-->
+    <div id="flow">
+        <div class="layui-container">
+            <div class="layui-row layui-col-space10 cenbody" ref="iconTabs" v-show="isyShow">
+                <div class="layui-col-md3 itemlst" v-for="(item,index) in flowNodes" :data-name="item.Name" :key="index" :data-iconid="item.No" :data-pid="item.ParentNo">
+                    <div class="canbox" @click="ToSyslist(item,false)">
+                        <i :class="item.Icon"></i>
+                        <h3>{{item.Name}}</h3>
+                    </div>
+                </div>
+                <div class="layui-col-md3 itemlst  ">
+                    <div class="canbox tipsbox" >
+                        <i class="layui-icon layui-icon-add-1"></i>
+                        <h3>添加</h3>
+                        <div class="chooseTips">
+                            <ul>
+                                <li @click="NewSys()">
+                                    <i class="layui-icon layui-icon-add-1"></i>
+                                    <h3>新增</h3>
+                                </li>
+                                <li @click="ImpSys()">
+                                    <i class="layui-icon layui-icon-add-circle"></i>
+                                    <h3>导入</h3>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+            <div class="layui-row" v-show="!isyShow">
+                <div class="layui-col-md1 layui-col-sm1 au-bg-white">
+                    <h3 class="h3_list">{{tabName}}</h3>
+                    <div class="layui-row layui-col-space10 cenbody" ref="iconTabs">
+                        <div class="layui-col-md12 itemlist" v-for="(item,index) in flowNodes" :data-name="item.Name" :key="index" :data-iconid="item.No" :data-pid="item.ParentNo">
+                            <div class="cenbox" @click="tabSystemEnableStatus(item.children,item.Name)">
+                                <i :class="item.Icon"></i>
+                                <h5>{{item.Name}}</h5>
+                            </div>
+                        </div>
+                        <div class="layui-col-md12 itemlist">
+                            <div class="cenbox tipsbox" >
+                                <i class="layui-icon layui-icon-add-1"></i>
+                                <h5>添加</h5>
+                                <div class="choosedTips">
+                                    <ul>
+                                        <li @click="NewSys()">
+                                            <i class="layui-icon layui-icon-add-1"></i>
+                                            <h3>新增</h3>
+                                        </li>
+                                        <li @click="ImpSys()">
+                                            <i class="layui-icon layui-icon-add-circle"></i>
+                                            <h3>导入</h3>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="layui-col-md12 itemlist" data-name="导入系统模块/菜单">
+                            <div class="cenbox" @click="ImpSys()">
+                                <i class="layui-icon layui-icon-add-circle"></i>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+                <div class="layui-col-md11 layui-col-sm11">
+
+                    <div class="flow" v-cloak>
+                        <div class="row">
+                            <div class="item item-other" @click="expandAll = !expandAll">
+                                <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs">
+                                    {{expandAll ? '折叠' : '展开'}}
+                                </button>
+                                <!--<div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="NewSys()">
+                                <i class="icon-plus" style="margin-right: 6px"></i>创建系统
+                            </div>-->
+                            </div>
+                            <!--<div class="item item-other">
+                                <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="NewSys()">
+                                    <i class="icon-plus" style="margin-right: 6px"></i>创建系统
+                                </div>
+                            </div>-->
+                            <!--<div class="item item-name" @click="expandAll = !expandAll">-->
+                            <!--<div class="item item-name">
+
+                                <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="ImpSys()">
+                                    <i class="icon-plus" style="margin-right: 6px"></i>导入系统
+                                </div>
+
+                                模块 / 菜单
+                            </div>-->
+                            <div class="item item-other">菜单类型</div>
+                            <div class="item item-content">
+                                <a href="https://www.bilibili.com/video/BV1eU4y137XU/" target="_blank" class="icon-camrecorder"><font color="blue">&nbsp;CCFast介绍</font></a>
+                                <a href="https://www.bilibili.com/video/BV12P4y1p74h/" target="_blank" class="icon-camrecorder"><font color="blue">&nbsp;菜单体系</font></a>
+                            </div>
+                            <div class="item item-other">启用？</div>
+                            <div class="item item-op">权限</div>
+                            <div class="item item-op">操作</div>
+                        </div>
+                        <div id="s-main" ref="container">
+                            <div class="wrapper" v-for="(item,index) in itemChildren" :key="index" :data-id="item.No" :data-pid="item.ParentNo"
+                                 :data-sysid="item.No">
+                                <div class="row item-top-dp" @click="item.open = !item.open" :data-sysno="item.No" :data-name="item.Name"
+                                     :data-idx="index" style="background-color: rgba(227, 236, 243, 0.589);">
+                                    <div class="item item-other" style="text-align: center">
+                                        <i v-if="item.children && item.children.length > 0" class="layui-icon"
+                                           :class="item.open ? 'layui-icon-up':'layui-icon-right'"></i>
+                                        <i v-else class="layui-icon layui-icon-subtraction"></i>
+                                    </div>
+                                    <div class="item system-item " style="text-align: left;background-color: rgba(227, 236, 243, 0.589);"
+                                         :data-sysno="item.No" :data-name="item.Name" :data-idx="index">
+                                        <span><i :class="item.Icon"></i>&nbsp;&nbsp;&nbsp;{{item.Name}}</span>
+                                        <span class="pull-right" style="margin-right:15px;">
+                                            <button @click.stop="NewMenu(item.No)" class="layui-btn layui-btn-primary layui-border-primary layui-btn-xs">
+                                                新建菜单
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class="item item-other" style="background-color: rgba(227, 236, 243, 0.589);">
+                                        <form class="layui-form" action="">
+                                            <div class="layui-form-item" style="margin: 0">
+                                                <div class="layui-input-block" style="margin: 0" :data-id="item.No"
+                                                     @click="changeMethodEnableStatus(item,this)">
+                                                    <input type="checkbox" lay-skin="switch" lay-text="ON|OFF"
+                                                           :checked="parseInt(item.IsEnable) == 1" />
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="item item-op" @click.stop v-html="item.moduleCtrlWayText" style="background-color: rgba(227, 236, 243, 0.589);"></div>
+                                    <div class="item item-op" style="background-color: rgba(227, 236, 243, 0.589);">
+                                        <button @click.stop
+                                                class="layui-btn layui-btn-primary layui-border-primary layui-btn-xs module-btn"
+                                                :data-name="item.Name" :data-moduleno="item.No" :data-pidx="index"
+                                                :data-idx="index">
+                                            <i class="layui-icon layui-icon-down layui-font-12"></i> 模块
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div v-show="item.open" :data-id="item.No" ref="sort-main" :data-pid="item.No"
+                                     :data-sysidx="index">
+                                    <div v-for="(module,idx) in item.children" :key="idx" :data-pid="item.No" :data-id="module.No"
+                                         :data-moduleid="module.No" :data-sysidx="index">
+                                        <div class="row item-module-dp" @click="module.open = !module.open" :data-sysno="item.No"
+                                             :data-moduleno="module.No" :data-name="module.Name" :data-pidx="index" :data-idx="idx">
+                                            <div class="item item-module item-index" style="text-align: right;">
+                                                <i class="layui-icon layui-icon-subtraction"></i>
+                                            </div>
+                                            <div class="item module-name " style="text-align: left" :data-sysno="item.No"
+                                                 :data-moduleno="module.No" :data-name="module.Name" :data-pidx="index" :data-idx="idx">
+                                                <span><i :class="module.Icon"></i> {{module.Name}}</span>
+                                            </div>
+                                            <div class="item item-other"></div>
+                                            <div class="item item-op" v-html="module.moduleCtrlWayText"></div>
+                                            <div class="item item-op"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <script src="./Menus.js"></script>
+</body>
+
+</html>

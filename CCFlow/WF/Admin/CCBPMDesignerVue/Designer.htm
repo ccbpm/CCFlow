@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>流程设计器</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+
+    <!-- 引用通用的js文件. -->
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script type="text/javascript">
+
+        var flowNo = "001";
+
+        $(function () {
+
+            //流程属性.
+            var flow = new Entity("BP.WF.Flow", flowNo);
+            $("#Title").val("流程名称:" + flow.Name);
+            var ptable = flow.PTable;
+
+            //获得所有的节点.
+            var nodes = new Entities("BP.WF.Nodes");
+            nodes.Retrieve("FK_Flow", flowNo);
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i];
+                var nodeID = node.NodeID;
+                var name = node.Name;
+                var x = node.X;
+                var y = node.Y;
+            }
+
+            //链接线.
+            var dirs = new Entities("BP.WF.Template.Directions");
+            dirs.Retrieve("FK_Flow", flowNo);
+
+            //标签.
+            var labs = new Entities("BP.WF.Template.LabNotes");
+            labs.Retrieve("FK_Flow", flowNo);
+
+        });
+
+        //创建一个节点
+        function NewNode(model) {
+
+            var x = 100;
+            var y = 200;
+
+            //创建一个节点
+            var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner2018");
+            hander.AddPara("X", x);
+            hander.AddPara("Y", y);
+            hander.AddPara("FK_Flow", flowNo);
+            hander.AddPara("NodeModel", model);
+
+            var data = hander.DoMethodReturnJSON("CreateNode");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //节点ID,
+            var nodeID = data.NodeID;
+            var name = data.Name;  //节点名字.
+        }
+
+        function NewLabel() {
+
+            var x = 100;
+            var y = 100;
+
+            var lab = new Entity("BP.WF.Template.LabNote");
+            lab.X = x;
+            lab.Y = y;
+            lab.FK_Flow = flowNo;
+            lab.Name = "新建标签";
+            lab.Insert();
+        }
+
+        /**
+         * 执行保存：
+         * 1. 主要是更新节点, x,y
+         * 2. 更新 label x,y .
+         * 3. 更新连接线.
+         * */
+        function Save() {
+
+            //获取所有节点信息.
+            try {
+
+                //var nodes = new Entities("BP.WF.Template.NodeSimples");
+                //nodes.Retrieve("FK_Flow", flowNo);
+
+                //// 保存x,y位置.
+                //var processInfo = _canvas.getProcessInfo(); //连接信息.
+                //processInfo = JSON.parse(processInfo);
+
+                ////定义要生成的字符串.
+                //var nodePos = "";
+
+                ////定义名称. 格式为: @101=填写请假申请单@101=
+                //var nodeName = "";
+                //for (var nodeID in processInfo) {
+
+                //    var nodeIDStr = JSON.stringify(nodeID);
+
+                //    var nodeJSON = processInfo[nodeID];
+
+                //    for (var idx = 0; idx < nodes.length; idx++) {
+
+                //        var node = nodes[idx];
+                //        var myID = "\"" + node.NodeID + "\"";
+                //        if (myID != nodeIDStr)
+                //            continue;
+
+                //        //alert(node);
+
+                //        var nodeName = $("#span_" + node.NodeID).text();
+
+                //        nodePos += "@" + node.NodeID + "," + nodeJSON.left + "," + nodeJSON.top + "," + nodeName;
+                //        //console.log(nodePos);
+                //    }
+                //}
+
+                ////方向的字符串.
+                //var myDirs = "";
+
+                ////保存方向.
+                //for (var nodeID in processInfo) {
+
+                //    //获得toNode.
+                //    var nodeJSON = processInfo[nodeID];
+                //    var strs = JSON.stringify(nodeJSON);
+
+                //    //获得toNode.
+                //    var toNodes = nodeJSON.process_to;
+                //    if (toNodes == "")
+                //        continue;
+
+                //    if (nodeID == undefined
+                //        || nodeID == null
+                //        || nodeID == "undefined"
+                //        || nodeID == 'undefined') {
+                //        continue;
+                //    }
+
+                //    for (var i = 0; i < toNodes.length; i++) {
+
+                //        var toNodeID = toNodes[i];
+
+                //        if (toNodeID == undefined
+                //            || toNodeID == null
+                //            || toNodeID == "undefined"
+                //            || toNodeID == 'undefined') {
+
+                //            var fromNode = new Entity("BP.WF.Template.NodeSimple", nodeID);
+                //            alert('保存出错: \t\n\t\n1.节点[' + fromNode.Name + ']到达节点没有把线连接正确.\t\n2.请您关闭当前流程，重新打开然后连接，执行保存。 \t\n3.其余的方向条件保存成功.');
+                //            $("#Btn_Save").attr("disabled", false);
+                //            $("#Btn_Save").html("保存");
+                //            continue;
+                //        }
+                //        var MyPK = flowNo + "_" + nodeID + "_" + toNodeID;
+                //        myDirs += "@" + MyPK + "," + flowNo + "," + nodeID + "," + toNodeID;
+                //    }
+                //}
+
+
+                //var labs = "";
+                ////标签.
+                //var labNoteInfo = _canvas.getLabNoteInfo(); //标签信息.
+                //labNoteInfo = JSON.parse(labNoteInfo);
+                //for (var lab in labNoteInfo) {
+
+                //    var labJSON = labNoteInfo[lab];
+
+                //    labs += "@" + lab + "," + labJSON.left + "," + labJSON.top;
+                //}
+
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+                handler.AddPara("Nodes", nodes); //格式为: @NodeID,X,Y,NodeName    例如： @101,3,6,审批节点@108,10,26,总经理审批
+                handler.AddPara("Dirs", dirs);//格式为: @MyPK,flowNo,nodeID,toNodeID  例如：   @001_101_102,001,101,102
+                handler.AddPara("Labs", labs);//格式为: @Name,X,Y     例如： @标签名,3,6 
+                handler.AddPara("FK_Flow", flowNo);
+
+                var data = handler.DoMethodReturnString("Designer_Save");
+                if (data.indexOf('err@') == 0) {
+                    alert(data);
+                }
+            }
+            catch (e) {
+                alert(e);
+            }
+
+            alert('保存成功!');
+
+            //$("#Btn_Save").attr("disabled", false);
+            // $("#Btn_Save").html("<image src='../../Img/Btn/Save.png' width='14px' height='14px'>&nbsp;保存");
+            return;
+        }
+
+        function DeleteNode(nodeID) {
+            var node = new Entity("BP.WF.Node");
+            node.NodeID = nodeID;
+            node.Delete();
+        }
+
+        function NewLine() {
+
+        }
+    </script>
+
+</head>
+<body>
+
+    <table style="width:98%;">
+
+        <tr>
+            <td>
+                工具箱
+            </td>
+
+            <td>
+                <button onclick="Save()"> 保存 </button>
+                <button onclick="Check()"> 检查 </button>
+                <button onclick="Run()"> 运行 </button>
+            </td>
+            <td>
+                属性面板
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <ul>
+
+                    <li><a href="javascript:NewNode(0);"> 线性节点</a></li>
+                    <li><a href="javascript:NewNode(1);"> 分流</a></li>
+                    <li><a href="javascript:NewNode(2);"> 合流节点</a></li>
+                    <li><a href="javascript:NewNode(3);"> 分合流节点</a></li>
+                    <li><a href="javascript:NewNode(4);"> 同表单子线程</a></li>
+                    <li><a href="javascript:NewNode(5);"> 异表单子线程</a></li>
+
+                    <li> - </li>
+
+                    <li><a href="javascript:NewLabe();"> 新建标签</a></li>
+                    <li><a href="javascript:NewLine();"> 连接线</a></li>
+
+
+                </ul>
+            </td>
+
+            <td>
+            </td>
+
+            <td valign="top">
+                节点- 流程
+                <table>
+                    <tr>
+                        <td>节点ID</td>
+                        <td> </td>
+                    </tr>
+                    <tr>
+                        <td>名称</td>
+                        <td> </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+    </table>
+
+</body>
+</html>

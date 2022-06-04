@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>附件</title>
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <!--表单样式-->
+    <link href="../Admin/CSS/FoolFrmBody.css" rel="stylesheet" />
+    <!--通用的JS-->
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="./JS/FileUpload/css/fileUpload.css" rel="stylesheet" />
+    <script src="./JS/FileUpload/fileUpload.js" type="text/javascript"></script>
+    <script src="./Ath.js" type="text/javascript"></script>
+    <script src="../Scripts/jquery-form.js" type="text/javascript"></script>
+    <script src="../../DataUser/OverrideFiles/Ath.js" type="text/javascript"></script>
+    <link href="../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var pageData = {};
+        var athchmentID = null;
+        $(function () {
+            pageData.WorkID = GetQueryString("WorkID");
+            if (pageData.WorkID == null || pageData.WorkID == undefined)
+                pageData.WorkID = GetQueryString("OID");
+            pageData.FID = GetQueryString("FID");
+            pageData.FK_Node = GetQueryString("FK_Node");
+            pageData.IsReadonly = GetQueryString("IsReadonly");
+            athchmentID = GetQueryString("AthPK");
+            $("#Ath_Table").append($("<div id='Div_" + athchmentID + "'  name='Ath'></div>"));
+
+            AthTable_Init(athchmentID, "Div_" + athchmentID, pageData.WorkID);
+        })
+    </script>
+    <style>
+        html, body, form {
+            height: 100%;
+        }
+        #Ath_Table {
+            height: 100%;
+        }
+        .layui-table td:last-child, .layui-table th:last-child{
+            overflow:hidden
+        }
+    </style>
+</head>
+
+<body>
+    <form>
+        <div id="Ath_Table"></div>
+    </form>
+    
+</body>
+</html>

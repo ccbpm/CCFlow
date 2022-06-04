@@ -1,0 +1,258 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+
+    <!-- load the dashboard css -->
+    <link href="layui/css/layui.css" rel="stylesheet">
+    <script type="text/javascript" src="./js/vue/vue.js"></script>
+    <link rel="stylesheet" type="text/css" href="./icons/font-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="./icons/icons.css">
+    <script src="../Scripts/jquery/jquery.min.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" src="./js/sortjs/Sortable.min.js"></script>
+    <script src="../Scripts/layui/LayuiDialog.js"></script>
+    <script type="text/javascript" src="./layui/layui.js"></script>
+    <script type="text/javascript" src="./js/echarts/echarts.min.js"></script>
+    <!-- <script src="Default.js">   height: 100vh;</script> -->
+    <style>
+        [v-cloak] {
+            display: none !important;
+        }
+
+        body {
+            background: #15589a;
+            color:#fff
+        }
+
+        .wrapper {
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+            .wrapper .item {
+                height: 200px;
+                background-color: #153e77;
+                cursor: move;
+            }
+
+        .item .item-header {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            padding: 0px 12px 0 12px;
+            height: 30px;
+            border-bottom: 1px solid #15589a;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #d9d9d9;
+        }
+
+        .item-header .icon-group {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .item-header .operate {
+            cursor: pointer;
+        }
+
+        .icon-group i {
+            margin-right: 8px;
+        }
+
+        .item .item-body {
+            padding:0px 12px;
+            height: 100%;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+        .item-body button {
+            padding:3px 10px; background:#d9d9d9;
+            color:#414141;
+            border:0px;
+            margin:0px 5px;
+            cursor:pointer
+
+        }
+        .echartsactive {
+            background: #1296db !important;
+            color: #fff !important
+        }
+        .inner-content {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 11;
+        }
+
+        .itemadd:hover {
+            cursor: pointer;
+            color: #1E9FFF
+        }
+
+        .itemadd {
+            text-align: center;
+            font-size: 4em;
+            color: #c9c9c9;
+        }
+
+        .itemadd i {
+            margin-top: 120px
+        }
+
+        .chart-content{
+            width: 100%;
+            min-height: 240px;
+            height: 100%;
+        }
+        .chart-contents {
+            width: 100%;
+            min-height: 200px;
+            height: 100%;
+        }
+        .echartsactive {
+        background:#1296db;
+        color:#fff
+        }
+        .chart-tab-content {
+            width: 100%;
+            min-height: 180px;
+            height: 100%;
+        }
+
+        .blue-background-class {
+            background: #1296db !important;
+            color: white !important;
+        }
+
+        .HtmlVar {
+            text-align: center;
+            border: 0px;
+        }
+
+        .HtmlVar span {
+            font-size: 14px;
+            line-height: 30px;
+            color: #ffffff
+        }
+
+        .HtmlVar strong {
+            display: block;
+            font-size: 20px;
+            padding: 5px 0px 15px;
+        }
+
+        .Rate-box {
+            position: relative
+        }
+
+        .Rate-nav {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+        }
+
+        .Rate-nav span {
+            display: block
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="dashboard" id="v-db" v-cloak>
+    <div class="wrapper" ref="wrapper">
+        <div class="item" :style="itemStyle(item)" v-for="(item,index) in boxes" :key="index" :data-no="item.No">
+            <div class="item-header">
+                <div class="icon-group">
+                    <i v-if="!item.Icon" class="layui-icon layui-icon-console" :class="item.Icon"></i>
+                    <!--<i v-else :class="item.Icon"></i> {{item.Name || '未指定标题'}} {{item.WinDocModel}}-->
+                    <i v-else :class="item.Icon"></i> {{item.Name || '未指定标题'}}  
+                </div>               
+                <div class="operate" v-if="Veiwit">
+                    <!--<span @click.stop="EditIt(item.No,item.WinDocModel)" class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs">编辑</span>
+            <span  @click.stop="DeleteIt(item.No)" class="layui-btn layui-btn-primary layui-border-red layui-btn-xs">删除</span>-->
+                    <button @click.stop class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs menu-btn"
+                            :data-nameno="item.No" :data-windocmodel="item.WinDocModel">
+                        <i class="layui-icon layui-icon-down layui-font-12"></i> 操作
+                    </button>
+                </div>
+            </div>
+            <!--@click.stop @mousedown.stop.prevent-->
+            <div class="item-body" >
+
+                <div v-if="item.WinDocModel == 'Html' || item.WinDocModel == 'System'  || item.WinDocModel == 'SQLList' || item.WinDocModel == 'HtmlVar'   || item.WinDocModel == 'Table'"
+                     class='inner-content' :data-cid="item.No">
+                    {{item.Docs}}
+                </div>
+                <div v-if="item.WinDocModel == 'ChartLine' ||  item.WinDocModel == 'ChartPie' ||  item.WinDocModel == 'ChartRing'">
+
+                    <div class="layui-tab  layui-tab-brief">
+                        <ul class="layui-tab-title">
+                            <li v-for="(en,isdx) in item.children" :class="isdx ? '':'layui-this'" v-if="en.isShow==1">
+                                {{en.isName}}
+                            </li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div v-for="(etabinfo,eidx) in item.children"
+                                 :class="eidx ? 'layui-tab-item':'layui-tab-item layui-show'" v-if="etabinfo.isShow==1">
+                                <div :data-mypk="etabinfo.isNo" :id="etabinfo.isNo" class='chart-contents'>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="item.WinDocModel == 'ChartRate'" class="Rate-box">
+                    <div class="Rate-nav">
+                        <span>{{item.LabOfFZ}}:<strong>{{item.SQLOfFZ}}</strong></span>
+                        <span>{{item.LabOfFM}}:<strong>{{item.SQLOfFM}}</strong></span>
+
+                    </div>
+                    <div :data-cid="item.No" class='chart-content'></div>
+                </div>
+                <div v-if="item.WinDocModel == 'ChartChina'" class="Rate-box" >                   
+                    <div :data-cid="item.No" class='chart-content'></div>
+                </div>
+                <div v-if="item.WinDocModel == 'Tab'">
+                    <div class="layui-tab  layui-tab-brief">
+                        <ul class="layui-tab-title">
+                            <li v-for="(module,idx) in item.children" :class="idx ? '':'layui-this'">
+                                {{module.Name}}
+                            </li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div v-for="(tabinfo,cidx) in item.children"
+                                 :class="cidx ? 'layui-tab-item':'layui-tab-item layui-show'">
+                                <div :data-mypk="tabinfo.MyPK" :id="tabinfo.MyPK" class='chart-tab-content'>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="item itemadd" :style="itemadd()" @click.stop="addfile()" v-if='Veiwit'>
+            <i class="fa fa-plus-circle"></i>
+        </div>
+    </div>
+</div>
+<script src="Home.js"></script>
+</body>
+
+</html>

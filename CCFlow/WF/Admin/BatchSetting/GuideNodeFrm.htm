@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>表单设置</title>
+    <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../Guide/Guide.js" type="text/javascript"></script>
+    <script src="../../Scripts/layui/layui/layui.js" type="text/javascript"></script>
+
+    <script src="../../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <style id="theme-data"></style>
+    <script type="text/javascript" language="javascript">
+
+        //页面启动函数.
+        $(function () {
+
+            var flowNo = GetQueryString("FK_Flow");
+
+            var nds = new Entities("BP.WF.Nodes");
+            nds.Retrieve("FK_Flow", flowNo, "Step");
+            nds = nds.TurnToArry();
+            $.each(nds, function (i, nd) {
+                nd.Idx = i + 1;
+                nd.NodeName = nd.NodeID + "-" + nd.Name;
+                nd.FrmSln = "表单方案";
+                nd.Designer = "设计方案";
+            });
+
+
+            layui.use(['table', 'util'], function () {
+                var table = layui.table
+                    , laydate = layui.laydate;
+
+                //节点列表显示
+                var vtable = table.render({
+                    elem: '#docs',
+                    id: 'docs',
+                    data: nds,
+                    title: '数据表',
+                    limit: Number.MAX_VALUE,
+                    cellMinWidth: 120,
+                    size: 'lg',
+                    page: false,
+                    cols: [[
+                        { field: 'Idx', title: '序号', minWidth: 5 }
+                        , { field: 'NodeName', title: '节点ID-节点名称', minWidth: 140 }
+                        , {
+                            field: 'FrmSln', title: '表单方案', minWidth: 80,
+                            templet: function (row) {
+                                return "<a href=\"javascript:GotoSln('" + row.NodeID + "')\">表单方案</a>"
+                            }
+                        }
+                        , {
+                            field: 'Designer', title: '设计表单', minWidth: 180,
+                            templet: function (row) {
+                                return "<a href=\"javascript:NodeFrmD('" + row.NodeID + "')\">设计表单</a>";
+                            }
+                        }
+                        , { field: 'Oper', title: '操作' }
+                    ]]
+                });
+
+            });
+
+
+        });
+
+        function GotoSln(nodeID) {
+            var url = "../AttrNode/FrmSln/Default.htm?FK_Node=" + nodeID;
+            OpenLayuiDialog(url, "设计表单", window.innerWidth * 0.9);
+        }
+
+
+        //设计表单
+        function NodeFrmD(nodeID) {
+
+            var node = new Entity("BP.WF.Node", nodeID);
+            if (node.FormType == 1 || node.FormType == 0) { //自由表单，傻瓜表单.
+                //傻瓜表单.
+                var url = basePath + "/WF/Admin/FoolFormDesigner/Designer.htm?FK_MapData=ND" + nodeID + "&IsFirst=1&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+                url += "&UserNo=" + GetQueryString("UserNo");
+                url += "&Token=" + GetQueryString("Token");
+                OpenLayuiDialog(url, "设计表单ND" + nodeID, window.innerWidth * 0.9);
+                // SetHref(url);
+                return;
+            }
+
+            if (node.FormType == 12) { //开发者表单
+                //傻瓜表单.
+                var url = basePath + "/WF/Admin/DevelopDesigner/Designer.htm?FK_MapData=ND" + nodeID + "&IsFirst=1&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
+                url += "&UserNo=" + GetQueryString("UserNo");
+                url += "&Token=" + GetQueryString("Token");
+
+                OpenLayuiDialog(url, "设计表单ND" + nodeID, window.innerWidth * 0.9);
+                //window.location.href = url;
+                return;
+            }
+
+            if (node.FormType == 11) { //RefOneFrmTree, 绑定表单库的单表单.
+
+                var node = new Entity("BP.WF.Node", nodeID);
+                var frmID = node.NodeFrmID;
+                var myPK = frmID + "_" + nodeID + "_" + GetQueryString("FK_Flow");
+                var url = basePath + "/WF/Comm/En.htm?EnName=BP.WF.Template.FrmNodeExt&MyPK=" + myPK + "&Lang=CH";
+
+                OpenLayuiDialog(url, "设计表单" + nodeID, window.innerWidth * 0.9);
+                //window.location.href = url;
+                //NodeFrmRefOneFrmTree(nodeID);
+                return;
+            }
+            if (node.FormType == 5) {
+                var url = "../Sln/BindFrms.htm?FK_Node=" + nodeID + "&FK_Flow=" + GetQueryString("FK_Flow");
+                OpenLayuiDialog(url, "设计表单" + nodeID, window.innerWidth * 0.9);
+                return;
+            }
+            alert(node.FormType);
+        }
+
+
+    </script>
+</head>
+<body>
+
+    <div class="layui-header" style="text-align: center;box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);background-color:white;height:48px">
+        <div class="layui-btn-container" style="padding-top:10px">
+
+
+            <button type="button" class="layui-btn  layui-toolbar layui-btn-sm" data-type="MapDataEdit" onclick="Flow()">
+                <i class="layui-icon">&#xe65a;</i>上一步：设计流程
+            </button>
+
+            <button type="button" class="layui-btn layui-toolbar layui-btn-sm" data-type="MapDataEdit" onclick="Help()">
+                <i class="layui-icon">&#xe607;</i>帮助
+            </button>
+
+            <button type="button" class="layui-btn layui-toolbar layui-btn-sm" data-type="MapDataEdit" onclick="FlowCheck()">
+                <i class="layui-icon">&#xe6b2;</i>检查表单
+            </button>
+            <button type="button" class="layui-btn  layui-toolbar layui-btn-sm" data-type="MapDataEdit" onclick="Accepter()">
+                <i class="layui-icon">&#xe65b;</i>下一步：设置接收人
+            </button>
+        </div>
+    </div>
+
+    <div class="layui-container">
+        <table class="layui-table" lay-filter="docs" id="docs" style="width:70%"></table>
+    </div>
+
+    <div id="Guide">
+    </div>
+    <script>
+        $(function () {
+            var theme = DealText(localStorage.getItem("themeColorInfo"));
+            if (theme == null || theme == undefined || theme == "")
+                return;
+            theme = JSON.parse(theme);
+            var styleScope = document.getElementById("theme-data")
+             var html = "\n .layui-btn{\n background-color:" + theme.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + theme.selectedMenu + ";\n}";
+            html += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:" + theme.selectedMenu + " !important\n}";
+            html += "\n .layui-form-select dl dd.layui-this{\n background-color:" + theme.selectedMenu + " !important;\n}";
+
+            styleScope.innerHTML = DealText(html);
+
+        })
+    </script>
+
+</body>
+</html>

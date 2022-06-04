@@ -1,0 +1,364 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>驰骋工作流</title>
+    <!-- 引用通用的js文件. -->
+    <script src="./Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="./Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="./Scripts/config.js" type="text/javascript"></script>
+    <script src="./Comm/Gener.js" type="text/javascript"></script>
+    <script src="./Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <link href="./Admin/CSS/FoolFrmBody.css" rel="stylesheet" />
+    <script src="./Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="./Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="ccbpm.js" type="text/javascript"></script>
+    <style type="text/css">
+        .layui-card {
+            box-shadow: 1px 2px 15px 2px rgba(0,0,0,.05);
+        }
+    </style>
+    <script type="text/javascript" language="javascript">
+
+        var node = null; //公共变量.
+        $(function () {
+
+            $("#Msg").html('正在加载，请稍候...');
+            var fid = GetQueryString("FID");
+            fid = fid == null || fid == undefined || fid == "" ? 0 : fid;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("ThreadDtl_Init");
+            if (data.indexOf("err@") != -1) {
+                layer.alert(data);
+                return;
+            }
+            if (data.indexOf("url@") != -1) {
+                var url = "./MyFlow.htm?WorkID=" + GetQueryString("FID") + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FID=0";
+                SetHref(url);
+                return;
+            }
+            data = JSON.parse(data);
+
+            //当前节点的信息
+            node = data.WF_Node[0];
+            var toNodes = data.WF_ThreadNode;
+            var isSameThread = true;
+            if (toNodes.length>1)
+                isSameThread = false;
+            //子线程的流程实例信息
+            var gwfs = data.WF_GenerWorkFlow;
+            //工作人员列表信息
+            var gwls = data.WF_GenerWorkerList;
+           
+            var rws = data.WF_ReturnWork;
+            //退回的分流节点
+                
+           
+            var _html = "";
+            var workIds = "";
+            $.each(rws, function (idx, rw) {
+                if (workIds.indexOf(rw.WorkID + ",") != -1)
+                    return true;
+                workIds += rw.WorkID + ",";
+                _html += "<tr>";
+                _html += "<td>" + (idx + 1) + "</td>";
+                _html += "<td>" + rw.ReturnNodeName + "</td>";
+                _html += "<td>" + rw.ReturnerName + "</td>";
+                _html += "<td>" + rw.RDT + "</td>";
+                _html += "<td>" + rw.BeiZhu + "</td>";
+                _html += "<td><a href=\"javascript:SendThread(" + rw.WorkID + "," + rw.ReturnToNode + "," + rw.ReturnNode + ")\"><i class='layui-icon'>&#xe609;</i>发送</a>-<a href =\"javascript:DoDelThread('" + rw.WorkID + "')\"><i class='layui-icon'>&#x1007;</i>终止</a>";
+                //if (isSameThread == false)
+                //    _html += "-<a href =\"javascript:AddThread('" + rw.ReturnNode + "')\"><i class='layui-icon ayui-icon-close-circle style=font-size:30px;color:#1E9FFF;'></i>  <i class='layui-icon'>&#xe61f;</i>增加子线程</a>";
+                _html += "</td>";
+                _html += "</tr>";
+            });
+            $("#returnTable").html(_html);
+
+            //异表单，显示异表单的节点，并且可以增加子线程
+            _html = "";
+            if (isSameThread == false && node.ThreadIsCanAdd == 1) {
+                $("#threadNodeDiv").show();
+                $.each(toNodes, function (idx, nd) {
+                    _html += "<tr>";
+                    _html += "<td>" + (idx + 1) + "</td>";
+                    _html += "<td>" + nd.NodeID + "</td>";
+                    _html += "<td>" + nd.Name + "</td>";
+                    _html += "<td><a href =\"javascript:AddThread('" + nd.NodeID + "')\"><i class='layui-icon'>&#xe61f;</i>增加子线程</a></td>";
+                    _html += "</tr>";
+                });
+              
+                $("#threadNodeTable").html(_html);
+            }
+
+            //获取运行子线程数据
+            var mygwfs = [];
+            $.each(gwfs, function (i, gwf) {
+                if (gwf.WFState == 5)
+                    return true;
+                gwf.Children = [];
+                gwf.Children = $.grep(gwls, function (gwl) {
+                    return gwl.WorkID == gwf.WorkID && gwl.IsPass != -2;
+                });
+                gwf.Type = 0;
+                mygwfs.push(gwf);
+            });
+            gwfs = mygwfs;
+            BindTable(gwfs, fid == 0 ? false : true, isSameThread);
+         
+        })
+
+        
+
+        var webUser = new WebUser();
+      
+
+        function BindTable(gwfs, isThread, isSameThread) {
+
+            //判断有几个子子线程ID, 如果只有一个，就用列表模式展现.
+            var html = "<table style='width:100%;' >";
+            var oper = "";
+            $.each(gwfs, function (i, gwf) {
+                html += "<tr class=Sum >";
+                html += "<td><font color=green>#" + (i + 1) + "，标题：" + gwf.Title + "</font></td >";
+                html += "<td>" + gwf.TodoEmps + "</td>";
+                html += "<td>" + gwf.RDT + "</td>";
+                oper = "";
+                if (node.ThreadIsCanDel == 1)
+                    oper += "<a href=\"javascript:DoDelThread('" + gwf.WorkID + "')\" style='font-weight: 500;'><i class='layui-icon'>&#x1007;</i>终止</a>";
+                //if (isSameThread==false)
+                //    oper += "-<a href =\"javascript:AddThread('" + gwf.FK_Node + "')\"><i class='layui-icon'>&#xe608;</i>增加子线程</a>";
+                html += "<td>"+oper+"</td>";
+                html += "</tr>";
+                html += "<tr>";
+                html += "<td colspan=4 > " + GenerHtml(gwf.Children, isThread) + " </td>";
+                html += "</tr>";
+                html += "<tr>";
+                html += "<td colspan=4 style='margin-bottom:5px'></td>";
+                html += "</tr>";
+            });
+
+
+            $("#threadTable").html(html);
+        }
+
+        function GenerHtml(gwls, isThread) {
+
+            var strs = "<table style='width:99%;'>";
+
+            strs += "<tr>";
+            strs += "<th>节点</th>";
+            strs += "<th>处理人</th>";
+            strs += "<th>状态</th>";
+            strs += "<th>应完成日期</th>";
+            strs += "<th>实际完成日期</th>";
+            strs += "<th>操作</th>";
+            strs += "</tr>";
+
+            for (var i = 0; i < gwls.length; i++) {
+
+                var gwl = gwls[i];
+                if (isThread == true && gwl.FK_Emp == webUser.No)
+                    continue;
+
+                strs += "<tr>";
+                strs += "<td>" + gwl.FK_NodeText + "</td>";
+                strs += "<td>" + gwl.FK_Emp + " " + gwl.FK_EmpText + "</td>";
+
+                var openStr = "";
+                openStr += "<a href=\"javascript:OpenFrm('" + gwl.WorkID + "','" + gwl.FID + "','" + gwl.FK_Flow + "','" + gwl.FK_Node + "')\"><i class='layui-icon'>&#xe63c;</i>表单</a>";
+
+                if (gwl.IsPass == 1) {
+
+                    strs += "<td>已完成</td>";
+                    strs += "<td>" + gwl.SDT + "</td>";
+                    strs += "<td>" + gwl.RDT + "</td>";
+                    //if (isThread == false)
+                    //    openStr += "-<a href='ReturnWork.htm?WorkID=" + gwl.WorkID + "&FID=" + gwl.FID + "&FK_Flow=" + gwl.FK_Flow + "&FK_Node=" + GetQueryString("FK_Node") + "' >退回</a>";
+
+                } else {
+
+                    if (gwl.IsRead == 0)
+                        strs += "<td> 未读 </td>";
+                    else
+                        strs += "<td> 已读,未处理 </td>";
+                    strs += "<td>" + gwl.SDT + "</td>";
+                    strs += "<td>无</td>";
+                }
+                strs += "<td>" + openStr + "</td>";
+
+                strs += "<tr>";
+            }
+
+            strs += "</table>";
+            return strs;
+        }
+
+        function OpenFrm(workID, fid, flowNo, nodeID) {
+
+            var url = "./MyView.htm?FK_Flow=" + flowNo + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&FID=" + fid;
+            window.open(url);
+            return;
+
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+
+            handler.AddPara("FromWorkOpt", "1");
+            handler.AddPara("WorkID", workID);
+            handler.AddPara("FK_Node", nodeID);
+            handler.AddPara("FK_Flow", flowNo);
+            handler.AddPara("FID", fid);
+
+            var data = handler.DoMethodReturnString("Runing_OpenFrm");
+
+            data = data.replace('url@./CCForm', 'url@../CCForm');
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
+
+                if (data.indexOf('FromWorkOpt') == -1)
+                    data = data + "&FromWorkOpt=1";
+
+                window.open(data);
+                return;
+            }
+
+            alert(data);
+        }
+
+        //删除子线城.
+        function DoDelThread(workID) {
+
+            if (confirm('您确定要终止该子线程吗？') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddPara("WorkID", workID);
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            var data = handler.DoMethodReturnString("ThreadDtl_DelSubThread");
+            if (data.indexOf("url@") == 0) {
+                var url ="./MyView.htm?WorkID="+GetQueryString("FID")+"&FK_Node="+GetQueryString("FK_Node")+"&FK_Flow="+GetQueryString("FK_Flow")+"&FID=0";
+                SetHref(url)
+            }
+            else
+                Reload();
+        }
+
+        //发送子线程数据
+        function SendThread(workID, nodeID, toNodeID) {
+            //发送之前保存小纸条的功能
+            var gwf = new Entity("BP.WF.GenerWorkFlow");
+            gwf.SetPKVal(workID);
+            gwf.WorkID = workID;
+            var count = gwf.RetrieveFromDBSources();
+            if (count == 0) {
+                layer.alert("该退回的子线程已经取消,不能再发送");
+                Reload();
+                return;
+            }
+
+            var ScripNodeID = gwf.GetPara("ScripNodeID");
+            var msg = gwf.GetPara("ScripMsg");
+            if (ScripNodeID != nodeID)
+                msg = "";
+            if (msg == null || msg == undefined)
+                msg = "";
+            var val = promptGener("请输入要传达的信息,可以为空.", msg);
+            if (val == "")
+                return;
+            if (val != null && val != '') {
+                gwf.SetPara("ScripNodeID", nodeID);
+                gwf.SetPara("ScripMsg", val);
+                gwf.Update();
+            }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddPara("WorkID", workID);
+            handler.AddPara("FK_Node", nodeID);
+            handler.AddPara("ToNodeID", toNodeID);
+            var data = handler.DoMethodReturnString("ThreadDtl_SendSubThread");
+            if (data.indexOf("url@") == 0) {
+                layer.alert("所有退回的子线程处理完成");
+                closeWindow();
+            } else {
+                Reload();
+            }
+                
+                
+        }
+
+      
+    </script>
+</head>
+<body>
+    <div class="layui-layout layui-layout-admin">
+        <form id="cc">
+            <!--头部按钮-->
+            <div class="layui-header" style="background-color: white">
+                <div class="layui-btn-container" id="ToolBar" style="margin:10px 10px 0px 10px"></div>
+            </div>
+            <div class="layui-container" style="padding-top:55px">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        退回当前节点的子线程
+                    </div>
+                    <div class="layui-card-body">
+                        <table class="layui-table">
+                            <thead>
+                                <tr>
+                                    <th width="20">序号</th>
+                                    <th width="120">退回节点</th>
+                                    <th width="120">退回人</th>
+                                    <th width="120">日期</th>
+                                    <th>退回原因</th>
+                                    <th width="220">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="returnTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="layui-card" id="threadNodeDiv" style="display:none">
+                    <div class="layui-card-header">
+                        可以发起子线程的节点
+                    </div>
+                    <div class="layui-card-body">
+                        <table class="layui-table">
+                            <thead>
+                                <tr>
+                                    <th width="20">序号</th>
+                                    <th width="120">节点编号</th>
+                                    <th width="120">节点名称</th>
+                                    <th width="220">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="threadNodeTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        运行中的子线程
+                    </div>
+                    <div class="layui-card-body">
+                        <table class="layui-table" id="threadTable">
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id="AddThread"></div>
+        </form>
+    </div>
+    
+</body>
+</html>

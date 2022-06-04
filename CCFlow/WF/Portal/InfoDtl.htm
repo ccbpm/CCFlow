@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="./icons/font-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="./icons/icons.css">
+    <link rel="stylesheet" type="text/css" href="./layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="./layui/css/customer.css">
+    <script type="text/javascript" src="./js/sortjs/Sortable.min.js"></script>
+    <!--- 引入代码. -->
+    <script src="../Scripts/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="./layui/layui.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" src="./js/vue/vue.js"></script>
+    <script type="text/javascript" src="../Scripts/layui/LayuiDialog.js"></script>
+    <!--    <script type="text/javascript" src="Flows.js"></script>-->
+
+    <style>
+        body, html {
+            height: 100%;
+            width: 100%;
+        }
+
+
+
+        .wrapper .row {
+            background-color: #fff;
+        }
+
+        #s-main {
+            transition: all ease .4s;
+            margin-top: 40px;
+            
+        }
+
+        .fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            
+        }
+
+        [v-cloak] {
+            display: none !important;
+        }
+    </style>
+    <script type="text/javascript">
+        var editor;
+
+        function Lod() {
+            
+
+            //实体信息.
+            var no = GetQueryString("No");
+            var en = new Entity("BP.CCOA.CCInfo.Info", no);
+            en.DoMethodReturnString("DoRead");
+
+            var value = GenerFullAllCtrlsVal(en);
+            
+            $('#content').html(en.Docs);
+            var titleHTML = '<span style="font-size: 2.1em;font-weight: 700;margin:0px auto">' + en.Name+'</span>';
+            titleHTML += '</br>发布信息：' + en.RelerName + '-' + en.RelDeptName + '&nbsp;&nbsp;' + en.RDT + ' ' + en.InfoPRIText + ' ' + en.InfoTypeText;
+            titleHTML += '&nbsp;&nbsp;&nbsp;记录人：' + en.RecName;
+
+            $('#title').html(titleHTML);
+
+
+            //layui.use(['form', 'layedit', 'laydate'], function () {
+            //    var form = layui.form;
+            //    form.val('example', {
+            //        "Name": en.Name
+            //        , "Docs": HTMLDecode(en.Docs)
+            //        , "InfoPRI": en.InfoPRIText
+            //        , "RecName": en.RecName
+            //        , "RelerName": en.RelerName
+            //        , "RelDeptName": en.RelDeptName
+            //        , "RDT": en.RDT
+            //        , "InfoType": en.InfoTypeText
+            //    });
+            //})
+
+            //查询附件.
+            var fls = new Entities("BP.Sys.SysFileManagers");
+            fls.Retrieve("EnName", "BP.CCOA.CCInfo.Info", "RefVal", no);
+            fls = fls.TurnToArry();
+            console.log(fls);
+            var fileHTML = "";
+            for (var i = 0; i < fls.length; i++) {
+                var imgsrc = "../Img/FileType/" + fls[i].MyFileExt.split(".")[1] +".gif";
+                fileHTML += "<a  href='" + basePath + fls[i].MyFilePath + "' download='" + basePath + fls[i].MyFilePath + "'><img src='" + imgsrc+"' /> &nbsp;" + fls[i].MyFileName + fls[i].MyFileExt + "</a></br>";
+
+            }
+            $("#files").append(fileHTML);
+        }
+        $(function () {
+
+            Lod();
+        })
+
+    </script>
+</head>
+
+<body>
+    <div class="ccdiv" id="ccdiv">
+
+        <div id="name" name="name"></div>
+        
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <div id="title" style="text-align: center;"></div>
+                <blockquote class="layui-elem-quote layui-quote-nm">
+                    <div class="layui-inline" id="content"></div>
+                </blockquote>
+                
+
+
+                <!--<form class="layui-form" action="" lay-filter="example">
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <h3>
+                <div id="name" name="name"></div>-->
+                <!--<input type="text" name="Name" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input" disabled>-->
+                <!--</h3>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">内容</label>
+            <div class="layui-input-block">
+                <textarea placeholder=" " class="layui-textarea" name="Docs" disabled></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">重要性</label>
+            <div class="layui-input-block">
+                <input type="text" name="InfoPRI" autocomplete="off" class="layui-input" disabled>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">记录人</label>
+            <div class="layui-input-block">
+                <input type="text" name="RecName" autocomplete="off" class="layui-input" disabled>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">发布人</label>
+            <div class="layui-input-block">
+                <input type="text" name="RelerName" autocomplete="off" class="layui-input" disabled>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">发布单位</label>
+            <div class="layui-input-block">
+                <input type="text" name="RelDeptName" autocomplete="off" class="layui-input" disabled>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">发布日期</label>
+            <div class="layui-input-block">
+                <input type="text" name="RDT" autocomplete="off" class="layui-input" disabled>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-block">
+                <input type="text" name="InfoType" autocomplete="off" class="layui-input" disabled>
+            </div>
+        </div>
+
+    </form>-->
+                <blockquote class="layui-elem-quote layui-quote-nm">
+                    附件：<div id="files"></div>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

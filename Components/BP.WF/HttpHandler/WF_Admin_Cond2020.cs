@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
-using System.Web;
 using BP.DA;
-using BP.Sys;
-using BP.Web;
-using BP.Port;
-using BP.En;
-using BP.WF;
 using BP.WF.Template;
 
 namespace BP.WF.HttpHandler
@@ -89,7 +81,7 @@ namespace BP.WF.HttpHandler
             }
 
             string sql = "";
-            switch (SystemConfig.AppCenterDBType)
+            switch (BP.Difference.SystemConfig.AppCenterDBType)
             {
                 case DBType.MSSQL:
                     sql = " SELECT TOP 1 No FROM Port_Emp WHERE " + str;

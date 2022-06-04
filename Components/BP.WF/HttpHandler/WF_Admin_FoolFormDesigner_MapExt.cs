@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
-using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
-using BP.Port;
 using BP.En;
-using BP.WF;
-using BP.WF.Template;
 using System.IO;
 using BP.Difference;
 
@@ -606,7 +600,7 @@ namespace BP.WF.HttpHandler
 
             //加载外键字段.
             Paras ps = new Paras();
-            ps.SQL = "SELECT KeyOfEn AS No, Name FROM Sys_MapAttr WHERE UIContralType=1 AND FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData AND KeyOfEn!=" + SystemConfig.AppCenterDBVarStr + "KeyOfEn";
+            ps.SQL = "SELECT KeyOfEn AS No, Name FROM Sys_MapAttr WHERE UIContralType=1 AND FK_MapData=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_MapData AND KeyOfEn!=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "KeyOfEn";
             ps.Add("FK_MapData", this.FK_MapData);
             ps.Add("KeyOfEn", this.KeyOfEn);
             //var sql = "SELECT KeyOfEn AS No, Name FROM Sys_MapAttr WHERE UIContralType=1 AND FK_MapData='" + this.FK_MapData + "' AND KeyOfEn!='" + this.KeyOfEn + "'";
@@ -661,7 +655,7 @@ namespace BP.WF.HttpHandler
 
             //加载外键字段.
             Paras ps = new Paras();
-            ps.SQL = "SELECT KeyOfEn AS No, Name FROM Sys_MapAttr WHERE UIContralType=1 AND FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData AND KeyOfEn!=" + SystemConfig.AppCenterDBVarStr + "KeyOfEn";
+            ps.SQL = "SELECT KeyOfEn AS No, Name FROM Sys_MapAttr WHERE UIContralType=1 AND FK_MapData=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_MapData AND KeyOfEn!=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "KeyOfEn";
             ps.Add("FK_MapData", this.FK_MapData);
             ps.Add("KeyOfEn", this.KeyOfEn);
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
@@ -718,11 +712,11 @@ namespace BP.WF.HttpHandler
             string FK_MapData = GetRequestVal("FK_MapData");
             string KeyOfEn = GetRequestVal("KeyOfEn");
             string sql = "";
-            //if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            //if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
             //{
             //    sql = "SELECT  Name FROM Sys_MapAttr WHERE (MyDataType=6 OR MyDataType=7) AND FK_MapData='" + FK_MapData + "'";
             //}
-            //else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            //else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
             //{
             //    sql = "SELECT  Name FROM Sys_MapAttr WHERE (MyDataType=6 OR MyDataType=7) AND FK_MapData='" + FK_MapData + "'";
             //}
@@ -803,10 +797,16 @@ namespace BP.WF.HttpHandler
 
             //获取外键值
             DataTable dt = BP.Pub.PubClass.GetDataTableByUIBineKey(attr.UIBindKey);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
+            }
+
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["no"].ColumnName = "No";
+                dt.Columns["name"].ColumnName = "Name";
             }
 
             //字段值.
@@ -952,7 +952,7 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             Paras ps = new Paras();
-            ps.SQL = "SELECT * FROM Sys_MapExt WHERE AttrOfOper=" + SystemConfig.AppCenterDBVarStr + "AttrOfOper AND FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData";
+            ps.SQL = "SELECT * FROM Sys_MapExt WHERE AttrOfOper=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "AttrOfOper AND FK_MapData=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_MapData";
             ps.Add("AttrOfOper", this.KeyOfEn);
             ps.Add("FK_MapData", this.FK_MapData);
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
@@ -1412,7 +1412,7 @@ namespace BP.WF.HttpHandler
             {
                 //2019-07-26 zyt改造
                 //String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
-                String webPath = SystemConfig.PathOfWebApp.Replace("\\", "/");
+                String webPath =  BP.Difference.SystemConfig.PathOfWebApp.Replace("\\", "/");
                 String filePath = webPath + @"DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
                 String content = "";
                 if (!File.Exists(filePath))
@@ -1437,7 +1437,7 @@ namespace BP.WF.HttpHandler
             {
                 //2019-07-26 zyt改造
                 //String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
-                String webPath = SystemConfig.PathOfWebApp.Replace("\\", "/");
+                String webPath =  BP.Difference.SystemConfig.PathOfWebApp.Replace("\\", "/");
                 String filePath = webPath + @"DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
                 String content = HttpContextHelper.RequestParams("JSDoc"); // this.context.Request.Params["JSDoc"];
 
@@ -1459,7 +1459,7 @@ namespace BP.WF.HttpHandler
             {
                 //2019-07-26 zyt改造
                 //String webPath = HttpRuntime.AppDomainAppPath.Replace("\\", "/");
-                String webPath = SystemConfig.PathOfWebApp.Replace("\\", "/");
+                String webPath =  BP.Difference.SystemConfig.PathOfWebApp.Replace("\\", "/");
                 String filePath = webPath + @"DataUser/JSLibData/" + this.FK_MapData + "_Self.js";
 
                 if (File.Exists(filePath))

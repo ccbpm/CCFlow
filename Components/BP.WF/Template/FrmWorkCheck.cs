@@ -117,57 +117,7 @@ namespace BP.WF.Template
                 return this.GetValRefTextByKey(NodeWorkCheckAttr.FWCType);
             }
         }
-        /// <summary>
-        /// Y
-        /// </summary>
-        public float FWC_Y
-        {
-            get
-            {
-                return this.GetValFloatByKey(NodeWorkCheckAttr.FWC_Y);
-            }
-            set
-            {
-                this.SetValByKey(NodeWorkCheckAttr.FWC_Y, value);
-            }
-        }
-        /// <summary>
-        /// X
-        /// </summary>
-        public float FWC_X
-        {
-            get
-            {
-                return this.GetValFloatByKey(NodeWorkCheckAttr.FWC_X);
-            }
-            set
-            {
-                this.SetValByKey(NodeWorkCheckAttr.FWC_X, value);
-            }
-        }
-        /// <summary>
-        /// W
-        /// </summary>
-        public float FWC_W
-        {
-            get
-            {
-                return this.GetValFloatByKey(NodeWorkCheckAttr.FWC_W);
-            }
-            set
-            {
-                this.SetValByKey(NodeWorkCheckAttr.FWC_W, value);
-            }
-        }
-        public string FWC_Wstr
-        {
-            get
-            {
-                if (this.FWC_W == 0)
-                    return "100%";
-                return this.FWC_W + "px";
-            }
-        }
+       
         /// <summary>
         /// H
         /// </summary>
@@ -553,12 +503,7 @@ namespace BP.WF.Template
 
                 map.AddBoolean(NodeWorkCheckAttr.FWCIsFullInfo, true, "如果用户未审核是否按照默认意见填充？", true, true, true);
 
-
-                map.AddTBFloat(NodeWorkCheckAttr.FWC_X, 300, "位置X", false, false);
-                map.AddTBFloat(NodeWorkCheckAttr.FWC_Y, 500, "位置Y", false, false);
-
                 map.AddTBFloat(NodeWorkCheckAttr.FWC_H, 300, "高度(0=100%)", true, false);
-                map.AddTBFloat(NodeWorkCheckAttr.FWC_W, 400, "宽度(0=100%)", true, false);
 
                 map.AddTBString(NodeWorkCheckAttr.FWCFields, null, "审批格式字段", true, false, 0, 50, 10, true);
                 //map.AddTBString(NodeWorkCheckAttr.FWCNewDuanYu, null, "自定义常用短语(使用@分隔)", true, false, 0, 100, 10, true);
@@ -617,9 +562,6 @@ namespace BP.WF.Template
                     workCheckAth.IsVisable = false; // 让其在form 上不可见.
 
                     //位置.
-                    workCheckAth.X = (float)94.09;
-                    workCheckAth.Y = (float)333.18;
-                    workCheckAth.W = (float)626.36;
                     workCheckAth.H = (float)150;
 
                     //多附件.

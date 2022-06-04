@@ -110,7 +110,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBInt(MapAttrAttr.ColSpan, 0, "单元格数量", false, true);
 
                 //跨单元格
-                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
+                map.AddDDLSysEnum(MapAttrAttr.LabelColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
                 //跨行
                 map.AddDDLSysEnum(MapAttrAttr.RowSpan, 1, "行数", true, true, "RowSpanAttrString",
@@ -140,13 +140,11 @@ namespace BP.Sys.FrmUI
             {
                 MapAttrString attr = new MapAttrString(this.MyPK);
                 attr.SetValByKey(MapAttrAttr.ColSpan, this.GetValStrByKey(MapAttrAttr.ColSpan));
-                attr.SetValByKey(MapAttrAttr.TextColSpan, this.GetValStrByKey(MapAttrAttr.TextColSpan));
+                attr.SetValByKey(MapAttrAttr.LabelColSpan, this.GetValStrByKey(MapAttrAttr.LabelColSpan));
                 attr.SetValByKey(MapAttrAttr.RowSpan, this.GetValStrByKey(MapAttrAttr.RowSpan));
 
                 attr.SetValByKey(MapAttrAttr.Name, this.GetValStrByKey(FrmImgAttr.Name)); //名称.
 
-                attr.SetValByKey(MapAttrAttr.X, this.GetValStrByKey(FrmImgAttr.X)); 
-                attr.SetValByKey(MapAttrAttr.Y, this.GetValStrByKey(FrmImgAttr.Y));
 
                 attr.SetValByKey(MapAttrAttr.UIWidth, this.GetValStrByKey(MapAttrAttr.UIWidth));
                 attr.SetValByKey(MapAttrAttr.UIHeight, this.GetValStrByKey(MapAttrAttr.UIHeight));
@@ -187,7 +185,7 @@ namespace BP.Sys.FrmUI
         /// <param name="fk_mapdata">s</param>
         public ExtImgs(string fk_mapdata)
         {
-            if (SystemConfig.IsDebug)
+            if (BP.Difference.SystemConfig.IsDebug)
                 this.Retrieve(MapAttrAttr.FK_MapData, fk_mapdata);
             else
                 this.RetrieveFromCash(MapAttrAttr.FK_MapData, (object)fk_mapdata);

@@ -1,19 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
 using System.Data;
 using System.Text;
 using System.Web;
 using BP.DA;
 using BP.Sys;
-using BP.Web;
-using BP.Port;
-using BP.En;
-using BP.WF;
-using BP.WF.Template;
-using BP.WF.Data;
 using BP.WF.HttpHandler;
-using BP.CCBill.Template;
 using BP.Difference;
 
 namespace BP.CCBill
@@ -85,17 +76,18 @@ namespace BP.CCBill
 
                 string sql = db.ExpEn;
                 if (DataType.IsNullOrEmpty(sql) == true)
-                    return "err@请设置单笔（实体）数据源。";
+                    return "";
 
                 sql = sql.Replace("~", "'");
                 sql = sql.Replace("~", "'");
-                sql = sql.Replace("@Key", "1234");
+               
                 DataTable mydt = new DataTable();
                 mydt.Columns.Add("No");
                 mydt.Columns.Add("DBType");
                 //SQL查询
                 if (db.DBType == 0)
                 {
+                    sql = sql.Replace("@Key", "1234");
                     DataTable dt = null;
                     try
                     {
@@ -128,10 +120,11 @@ namespace BP.CCBill
                 if (db.DBType == 1)
                 {
                     string url = sql;
+                    url = url.Replace("@Key", "");
                     if (url.Contains("http") == false)
                     {
                         /*如果没有绝对路径 */
-                        if (SystemConfig.IsBSsystem)
+                        if (BP.Difference.SystemConfig.IsBSsystem)
                         {
                             /*在cs模式下自动获取*/
                             string host = HttpContextHelper.RequestUrlHost;//BP.Sys.Base.Glo.Request.Url.Host;
@@ -141,10 +134,10 @@ namespace BP.CCBill
                                 url = "http://" + HttpContextHelper.RequestUrlAuthority + url;
                         }
 
-                        if (SystemConfig.IsBSsystem == false)
+                        if (BP.Difference.SystemConfig.IsBSsystem == false)
                         {
                             /*在cs模式下它的baseurl 从web.config中获取.*/
-                            string cfgBaseUrl = SystemConfig.AppSettings["HostURL"];
+                            string cfgBaseUrl =  BP.Difference.SystemConfig.AppSettings["HostURL"];
                             if (DataType.IsNullOrEmpty(cfgBaseUrl))
                             {
                                 string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
@@ -154,9 +147,50 @@ namespace BP.CCBill
                             url = cfgBaseUrl + url;
                         }
                     }
-                    System.Text.Encoding encode = System.Text.Encoding.GetEncoding("gb2312");
+                    System.Text.Encoding encode = System.Text.Encoding.GetEncoding("UTF-8");
                     string json = DataType.ReadURLContext(url, 8000, encode);
+                    if (DataType.IsNullOrEmpty(json) == true)
+                        return "err@执行URL没有返回结果值";
+
+                    DataTable dt = BP.Tools.Json.ToDataTable(json);
+                    foreach (DataColumn dc in dt.Columns)
+                    {
+                        DataRow dr = mydt.NewRow();
+                        dr[0] = dc.ColumnName;
+                        dr[1] = dc.DataType.Name;
+                        mydt.Rows.Add(dr);
+                    }
+                    json = BP.Tools.Json.ToJson(mydt);
+
                     return json;
+                }
+                //执行存储过程
+                if(db.DBType == 2)
+                {
+                    if (sql.Trim().ToUpper().StartsWith("SELECT") == false)
+                    {
+                        switch (BP.Difference.SystemConfig.AppCenterDBType)
+                        {
+                            case DBType.MSSQL:
+                                sql = "EXEC " + sql + " null";
+                                break;
+                            case DBType.MySQL:
+                                sql = "CALL " + sql + "(null)";
+                                break;
+                            default:
+                                throw new Exception("err@其他版本的数据还未解析该功能");
+                        }
+                    }
+                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                    foreach (DataColumn dc in dt.Columns)
+                    {
+                        DataRow dr = mydt.NewRow();
+                        dr[0] = dc.ColumnName;
+                        dr[1] = dc.DataType.Name;
+                        mydt.Rows.Add(dr);
+                    }
+                    return BP.Tools.Json.ToJson(mydt);
+
                 }
                 return "err@没有增加的判断" + db.DBType;
             }
@@ -173,7 +207,7 @@ namespace BP.CCBill
             {
                 if (key == null) 
                     continue;
-                if (key.IndexOf("TB_") == -1 || key.Equals("TB_DBSrc") == true)
+                if (key.IndexOf("TB_") == -1 || key.Equals("TB_Doc") == true)
                     continue;
                 string myKey = key;
                 string val = HttpContextHelper.RequestParams(key);

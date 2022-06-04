@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
 using System.Data;
 using System.Text;
 using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
-using BP.Port;
 using BP.En;
-using BP.WF;
 using BP.WF.Template;
 using BP.Difference;
 
@@ -106,7 +102,7 @@ namespace BP.WF.HttpHandler
                     if (this.WorkID != 0)
                     {
                         Paras ps = new Paras();
-                        ps.SQL = "SELECT FK_Node FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
+                        ps.SQL = "SELECT FK_Node FROM WF_GenerWorkFlow WHERE WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID";
                         ps.Add("WorkID", this.WorkID);
                         _FK_Node = DBAccess.RunSQLReturnValInt(ps, 0);
                     }
@@ -314,16 +310,16 @@ namespace BP.WF.HttpHandler
                 if (this.IsMobile == true)
                 {
                     if (gwf.Paras_Frms.Equals("") == false)
-                        toUrl = "MyCCGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
+                        toUrl = "MyCCGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&Token=" + WebUser.Token + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
                     else
-                        toUrl = "MyCCGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID;
+                        toUrl = "MyCCGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&Token=" + WebUser.Token + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID;
                 }
                 else
                 {
                     if (gwf.Paras_Frms.Equals("") == false)
-                        toUrl = "MyCCTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
+                        toUrl = "MyCCTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&Token=" + WebUser.Token + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
                     else
-                        toUrl = "MyCCTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID;
+                        toUrl = "MyCCTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&Token=" + WebUser.Token + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID;
                 }
 
                 string[] strs = this.RequestParas.Split('&');
@@ -354,8 +350,8 @@ namespace BP.WF.HttpHandler
                 #endregion 开始组合url.
 
 
-                //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海驰骋提出. 
-                toUrl = toUrl.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
+                //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海高凌提出. 
+                toUrl = toUrl.Replace("@SDKFromServHost", BP.Difference.SystemConfig.AppSettings["SDKFromServHost"]);
 
                 //增加fk_node
                 if (toUrl.Contains("&FK_Node=") == false)
@@ -523,8 +519,8 @@ namespace BP.WF.HttpHandler
                 urlExt = urlExt.Replace("&WorkID=&", "&WorkID=" + this.WorkID + "&");
             }
 
-            //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海驰骋提出. 
-            url = url.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
+            //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海高凌提出. 
+            url = url.Replace("@SDKFromServHost", BP.Difference.SystemConfig.AppSettings["SDKFromServHost"]);
 
             if (urlExt.Contains("&NodeID") == false)
                 urlExt += "&NodeID=" + currND.NodeID;
@@ -538,8 +534,8 @@ namespace BP.WF.HttpHandler
             if (urlExt.Contains("&UserNo") == false)
                 urlExt += "&UserNo=" + HttpUtility.UrlEncode(WebUser.No);
 
-            if (urlExt.Contains("&SID") == false)
-                urlExt += "&SID=" + WebUser.SID;
+            if (urlExt.Contains("&Token") == false)
+                urlExt += "&Token=" + WebUser.Token;
 
             if (url.Contains("?") == true)
                 url += "&" + urlExt;
@@ -644,9 +640,19 @@ namespace BP.WF.HttpHandler
                     dr = dt.NewRow();
                     dr["No"] = "FrmDBVer";
                     dr["Name"] = btnLab.FrmDBVerLab;
-                    dr["Oper"] = "";
+                    dr["Oper"] = "FrmDBVer_Init()";
                     dt.Rows.Add(dr);
                 }
+                //数据批阅
+                if (btnLab.FrmDBRemarkEnable != 0)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "FrmDBRemark";
+                    dr["Name"] = btnLab.FrmDBRemarkLab;
+                    dr["Oper"] = "FrmDBRemark(" + btnLab.FrmDBRemarkEnable + ")";
+                    dt.Rows.Add(dr);
+                }
+
                 /* 公文标签 */
                 if (btnLab.OfficeBtnEnable == true && btnLab.OfficeBtnLocal == 0)
                 {
@@ -1041,7 +1047,7 @@ namespace BP.WF.HttpHandler
                 {
                     string url = formTree.Url == null ? "" : formTree.Url;
                     string ico = "icon-tree_folder";
-                    if (SystemConfig.SysNo == "YYT")
+                    if (BP.Difference.SystemConfig.SysNo == "YYT")
                     {
                         ico = "icon-boat_16";
                     }
@@ -1051,7 +1057,7 @@ namespace BP.WF.HttpHandler
                     if (formTree.NodeType == "form|0")
                     {
                         ico = "form0";
-                        if (SystemConfig.SysNo == "YYT")
+                        if (BP.Difference.SystemConfig.SysNo == "YYT")
                         {
                             ico = "icon-Wave";
                         }
@@ -1059,7 +1065,7 @@ namespace BP.WF.HttpHandler
                     if (formTree.NodeType == "form|1")
                     {
                         ico = "form1";
-                        if (SystemConfig.SysNo == "YYT")
+                        if (BP.Difference.SystemConfig.SysNo == "YYT")
                         {
                             ico = "icon-Shark_20";
                         }
@@ -1067,7 +1073,7 @@ namespace BP.WF.HttpHandler
                     if (formTree.NodeType.Contains("tools"))
                     {
                         ico = "icon-4";
-                        if (SystemConfig.SysNo == "YYT")
+                        if (BP.Difference.SystemConfig.SysNo == "YYT")
                         {
                             ico = "icon-Wave";
                         }

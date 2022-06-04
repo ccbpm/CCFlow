@@ -56,7 +56,7 @@ namespace BP.WF
                 DBAccess.RunSQL("Delete From WF_SelectAccper Where WorkID=" + workid);
 
             //求出已经路过的节点.
-            DataTable dt = DBAccess.RunSQLReturnTable("SELECT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID", "WorkID", workid);
+            DataTable dt = DBAccess.RunSQLReturnTable("SELECT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID", "WorkID", workid);
             string passedNodeIDs = "";
             foreach (DataRow item in dt.Rows)
             {
@@ -110,7 +110,7 @@ namespace BP.WF
                 //按照绑定的部门计算
                 if (item.HisDeliveryWay == DeliveryWay.ByDept)
                 {
-                    string dbStr = SystemConfig.AppCenterDBVarStr;
+                    string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
                     Paras ps = new Paras();
                     ps.Add("FK_Node", item.NodeID);
                     ps.Add("WorkID", currWorkNode.HisWork.OID);
@@ -122,7 +122,7 @@ namespace BP.WF
                 #region 仅按组织计算 
                 if (item.HisDeliveryWay == DeliveryWay.ByTeamOnly)
                 {
-                    string sql = "SELECT DISTINCT c." + BP.Sys.Base.Glo.UserNo + ",c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C." + BP.Sys.Base.Glo.UserNoWhitOutAS + " AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY C." + BP.Sys.Base.Glo.UserNoWhitOutAS;
+                    string sql = "SELECT DISTINCT c." + BP.Sys.Base.Glo.UserNo + ",c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C." + BP.Sys.Base.Glo.UserNoWhitOutAS + " AND A.FK_Team=B.FK_Team AND B.FK_Node=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY C." + BP.Sys.Base.Glo.UserNoWhitOutAS;
                     Paras ps = new Paras();
                     ps.Add("FK_Node", item.NodeID);
                     ps.SQL = sql;
@@ -155,7 +155,7 @@ namespace BP.WF
                 #region 本组织计算 
                 if (item.HisDeliveryWay == DeliveryWay.ByTeamOrgOnly)
                 {
-                    string sql = "SELECT DISTINCT c." + BP.Sys.Base.Glo.UserNo + ",c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C." + BP.Sys.Base.Glo.UserNoWhitOutAS + " AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND C.OrgNo=" + SystemConfig.AppCenterDBVarStr + "OrgNo ORDER BY C." + BP.Sys.Base.Glo.UserNoWhitOutAS;
+                    string sql = "SELECT DISTINCT c." + BP.Sys.Base.Glo.UserNo + ",c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C." + BP.Sys.Base.Glo.UserNoWhitOutAS + " AND A.FK_Team=B.FK_Team AND B.FK_Node=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Node AND C.OrgNo=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "OrgNo ORDER BY C." + BP.Sys.Base.Glo.UserNoWhitOutAS;
                     Paras ps = new Paras();
                     ps.Add("FK_Node", item.NodeID);
                     ps.Add("OrgNo", BP.Web.WebUser.OrgNo);
@@ -190,7 +190,7 @@ namespace BP.WF
                 #region 本组织计算 
                 if (item.HisDeliveryWay == DeliveryWay.ByTeamDeptOnly)
                 {
-                    string sql = "SELECT DISTINCT A.FK_Emp AS No,c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND C.FK_Dept=" + SystemConfig.AppCenterDBVarStr + "FK_Dept ORDER BY A.FK_Emp";
+                    string sql = "SELECT DISTINCT A.FK_Emp AS No,c.Name FROM Port_TeamEmp A, WF_NodeTeam B, Port_Emp C WHERE A.FK_Emp=C.No AND A.FK_Team=B.FK_Team AND B.FK_Node=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Node AND C.FK_Dept=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Dept ORDER BY A.FK_Emp";
                     Paras ps = new Paras();
                     ps.Add("FK_Node", item.NodeID);
                     ps.Add("FK_Dept", BP.Web.WebUser.FK_Dept);
@@ -225,7 +225,7 @@ namespace BP.WF
                 #region 2019-09-25 byzhoupeng, 仅按岗位计算 
                 if (item.HisDeliveryWay == DeliveryWay.ByStationOnly)
                 {
-                   string sql = "SELECT DISTINCT c." + BP.Sys.Base.Glo.UserNo + ",c.Name FROM Port_DeptEmpStation A, WF_NodeStation B, Port_Emp C WHERE A.FK_Emp=C." + BP.Sys.Base.Glo.UserNoWhitOutAS + " AND A.FK_Station=B.FK_Station AND B.FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY C."+ BP.Sys.Base.Glo.UserNoWhitOutAS;
+                   string sql = "SELECT DISTINCT c." + BP.Sys.Base.Glo.UserNo + ",c.Name FROM Port_DeptEmpStation A, WF_NodeStation B, Port_Emp C WHERE A.FK_Emp=C." + BP.Sys.Base.Glo.UserNoWhitOutAS + " AND A.FK_Station=B.FK_Station AND B.FK_Node=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY C."+ BP.Sys.Base.Glo.UserNoWhitOutAS;
                     Paras ps = new Paras();
                     ps.Add("FK_Node", item.NodeID);
                     ps.SQL = sql;
@@ -310,7 +310,7 @@ namespace BP.WF
                 #region 按部门与岗位的交集计算.
                 if (item.HisDeliveryWay == DeliveryWay.ByDeptAndStation)
                 {
-                    string dbStr = SystemConfig.AppCenterDBVarStr;
+                    string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
                     string sql = string.Empty;
 
                     //added by liuxc,2015.6.30.
@@ -364,13 +364,13 @@ namespace BP.WF
                 {
                     /*如果按照岗位访问*/
                     #region 最后判断 - 按照岗位来执行。
-                    string dbStr = SystemConfig.AppCenterDBVarStr;
+                    string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
                     string sql = "";
                     Paras ps = new Paras();
                     /* 如果执行节点 与 接受节点岗位集合不一致 */
                     /* 没有查询到的情况下, 先按照本部门计算。*/
 
-                    switch (SystemConfig.AppCenterDBType)
+                    switch (BP.Difference.SystemConfig.AppCenterDBType)
                     {
                         case DBType.MySQL: 
                         case DBType.MSSQL:

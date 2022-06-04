@@ -107,7 +107,7 @@ namespace BP.Sys
                     return this._enMap;
 
                 if (this.FK_MapData == null)
-                    throw new Exception("没有给" + this.FK_MapData + "值，您不能获取它的Map。");
+                    throw new Exception("没有给[" + this.FK_MapData + "]值，您不能获取它的Map。");
 
                 this._enMap = BP.Sys.MapData.GenerHisMap(this.FK_MapData);
                 return this._enMap;

@@ -4,34 +4,65 @@ using BP.DA;
 
 namespace BP.En
 {
-	/// <summary>
-	/// 属性列表
-	/// </summary>
-	public class EntityNoNameAttr : EntityNoAttr
-	{	
-		/// <summary>
-		/// 名称
-		/// </summary>
-		public const string Name="Name";
-        /// <summary>
-        /// 名称简称
-        /// </summary>
-        public const string NameOfS = "NameOfS";
-
-	}
-    public class EntityNoNameMyFileAttr : EntityNoMyFileAttr
+    /// <summary>
+    /// 属性列表
+    /// </summary>
+    public class EntityNoNameAttr
     {
+        #region 基本属性.
         /// <summary>
         /// 名称
         /// </summary>
         public const string Name = "Name";
+        /// <summary>
+        /// 编号
+        /// </summary>
+        public const string No = "No";
+        /// <summary>
+        /// 名称简称
+        /// </summary>
+        public const string NameOfS = "NameOfS";
+        #endregion 基本属性.
+
+        #region 附件属性.
+        public const string MyFilePath = "MyFilePath";
+        public const string MyFileName = "MyFileName";
+        public const string MyFileExt = "MyFileExt";
+        public const string MyFileH = "MyFileH";
+        public const string MyFileW = "MyFileW";
+        public const string MyFileSize = "MyFileSize";
+        public const string WebPath = "WebPath";
+        public const string MyFileNum = "MyFileNum";
+        #endregion 附件属性.
+
     }
-	/// <summary>
-	/// 具有编号名称的基类实体
-	/// </summary>
-    abstract public class EntityNoName : EntityNo
+    /// <summary>
+    /// 具有编号名称的基类实体
+    /// </summary>
+    abstract public class EntityNoName : Entity
     {
-        #region 属性
+        #region 提供的属性
+        public override string PK
+        {
+            get
+            {
+                return "No";
+            }
+        }
+        /// <summary>
+        /// 编号
+        /// </summary>
+        public string No
+        {
+            get
+            {
+                return this.GetValStringByKey(EntityNoNameAttr.No);
+            }
+            set
+            {
+                this.SetValByKey(EntityNoNameAttr.No, value);
+            }
+        }
         /// <summary>
         /// 名称
         /// </summary>
@@ -50,17 +81,16 @@ namespace BP.En
         {
             this.SetValByKey(EntityNoNameAttr.Name, val);
         }
-        //public string NameE
-        //{
-        //    get
-        //    {
-        //        return this.GetValStringByKey("NameE");
-        //    }
-        //    set
-        //    {
-        //        this.SetValByKey("NameE", value);
-        //    }
-        //}
+        /// <summary>
+        /// 生成一个编号
+        /// </summary>
+        public string GenerNewNo
+        {
+            get
+            {
+                return this.GenerNewNoByKey("No");
+            }
+        }
         #endregion
 
         #region 构造函数
@@ -70,11 +100,22 @@ namespace BP.En
         public EntityNoName()
         {
         }
+
         /// <summary>
-        /// 
+        /// 通过编号得到实体。
         /// </summary>
-        /// <param name="_No"></param>
-        protected EntityNoName(string _No) : base(_No) { }
+        /// <param name="_no">编号</param>
+        public EntityNoName(string _no)
+        {
+            if (_no == null || _no == "")
+                throw new Exception(this.EnDesc + "@对表[" + this.EnDesc + "]进行查询前必须指定编号。");
+
+            this.No = _no;
+            if (this.Retrieve() == 0)
+            {
+                throw new Exception("@没有" + this._enMap.PhysicsTable + ", No = " + No + "的记录。");
+            }
+        }
         #endregion
 
         #region 业务逻辑处理
@@ -89,7 +130,7 @@ namespace BP.En
                 if (this.EnMap.IsAutoGenerNo)
                     this.No = this.GenerNewNo;
                 else
-                    throw new Exception("@没有给[" + this.EnDesc+" " + this.ToString() + " , " + this.Name + "]设置主键,能执行插入.");
+                    throw new Exception("@没有给[" + this.EnDesc + " " + this.ToString() + " , " + this.Name + "]设置主键,能执行插入.");
             }
 
             if (this.EnMap.IsAllowRepeatName == false)
@@ -114,15 +155,48 @@ namespace BP.En
             }
             return base.beforeUpdate();
         }
-        #endregion
+        public override int Save()
+        {
+            /*如果包含编号。 */
+            if (this.IsExits)
+            {
+                return this.Update();
+            }
+            else
+            {
+                if (this.EnMap.IsAutoGenerNo
+                    && this.EnMap.GetAttrByKey("No").UIIsReadonly)
+                    this.No = this.GenerNewNo;
 
-       
+                this.Insert();
+                return 0;
+            }
+        }
+        #endregion
     }
-	/// <summary>
+    /// <summary>
     /// 具有编号名称的基类实体s
-	/// </summary>
-    abstract public class EntitiesNoName : EntitiesNo
+    /// </summary>
+    abstract public class EntitiesNoName : Entities
     {
+        #region 查询.
+        /// <summary>
+        /// 查询全部
+        /// </summary>
+        /// <returns></returns>
+        public override int RetrieveAllFromDBSource()
+        {
+            QueryObject qo = new QueryObject(this);
+            qo.addOrderBy("No");
+            return qo.DoQuery();
+        }
+        public override int RetrieveAll()
+        {
+            return base.RetrieveAll("No");
+        }
+        #endregion 查询.
+
+        #region 构造高级方法.
         /// <summary>
         /// 将对象添加到集合尾处，如果对象已经存在，则不添加.
         /// </summary>
@@ -136,21 +210,6 @@ namespace BP.En
                     return 0;
             }
             return this.InnerList.Add(entity);
-        }
-        /// <summary>
-        /// 将对象添加到集合尾处，如果对象已经存在，则不添加
-        /// </summary>
-        /// <param name="entity">要添加的对象</param>
-        /// <returns>返回添加到的地方</returns>
-        public virtual void Insert(int index, EntityNoName entity)
-        {
-            foreach (EntityNoName en in this)
-            {
-                if (en.No == entity.No)
-                    return;
-            }
-
-            this.InnerList.Insert(index, entity);
         }
         /// <summary>
         /// 根据位置取得数据
@@ -168,20 +227,7 @@ namespace BP.En
         public EntitiesNoName()
         {
         }
-        /// <summary> 
-        /// 按照名称模糊查询
-        /// </summary>
-        /// <param name="likeName">likeName</param>
-        /// <returns>返回查询的Num</returns>
-        public int RetrieveByLikeName(string likeName)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere("Name", "like", " %" + likeName + "% ");
-            return qo.DoQuery();
-        }
-        public override int RetrieveAll()
-        {
-            return base.RetrieveAll("No");
-        }
+        #endregion 构造高级方法.
+
     }
 }

@@ -794,13 +794,13 @@ namespace BP.WF.Template
 
             string openWorkURl = "";
 
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
                 //openWorkURl = hostUrl + "/App/Portal/GuideWeiXin.aspx?DoType=OpenWork&WorkID=" + workid + "&FK_Flow=" + currNode.FK_Flow + "&GUID=" + WebUser.SID;
                 openWorkURl = "";
             }
             else
-                openWorkURl = hostUrl + "WF/Do.htm?DoType=OF&SID=" + sid;
+                openWorkURl = hostUrl + "WF/Do.htm?DoType=OF&Token=" + sid;
 
             openWorkURl = openWorkURl.Replace("//", "/");
             openWorkURl = openWorkURl.Replace("http:/", "http://");
@@ -867,7 +867,7 @@ namespace BP.WF.Template
             {
                 //获取退回原因
                 Paras ps = new Paras();
-                ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
+                ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
                 ps.Add(ReturnWorkAttr.WorkID, Int64.Parse(en.PKVal.ToString()));
                 DataTable retunWdt = DBAccess.RunSQLReturnTable(ps);
                 if (retunWdt.Rows.Count != 0)

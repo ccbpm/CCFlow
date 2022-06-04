@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
 using System.Data;
-using System.Text;
-using System.Web;
-using BP.Port;
 using BP.En;
-using BP.WF;
 using BP.DA;
 using BP.Sys;
 using BP.WF.XML;
 using BP.WF.Template;
 using BP.Web;
+using BP.WF.Template.SFlow;
+
 
 namespace BP.WF.HttpHandler
 {
@@ -48,7 +45,7 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Track";
             //把列名转化成区分大小写.
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || DBAccess.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dt.Columns["MYPK"].ColumnName = "MyPK";
                 dt.Columns["ACTIONTYPE"].ColumnName = "ActionType";
@@ -71,6 +68,28 @@ namespace BP.WF.HttpHandler
                 dt.Columns["TAG"].ColumnName = "Tag";
             }
 
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["mypk"].ColumnName = "MyPK";
+                dt.Columns["actiontype"].ColumnName = "ActionType";
+                dt.Columns["actiontypetext"].ColumnName = "ActionTypeText";
+                dt.Columns["fid"].ColumnName = "FID";
+                dt.Columns["workid"].ColumnName = "WorkID";
+                dt.Columns["ndfrom"].ColumnName = "NDFrom";
+                dt.Columns["ndfromt"].ColumnName = "NDFromT";
+                dt.Columns["ndto"].ColumnName = "NDTo";
+                dt.Columns["ndtot"].ColumnName = "NDToT";
+                dt.Columns["empfrom"].ColumnName = "EmpFrom";
+                dt.Columns["empfromt"].ColumnName = "EmpFromT";
+                dt.Columns["empto"].ColumnName = "EmpTo";
+                dt.Columns["emptot"].ColumnName = "EmpToT";
+                dt.Columns["rdt"].ColumnName = "RDT";
+                dt.Columns["worktimespan"].ColumnName = "WorkTimeSpan";
+                dt.Columns["msg"].ColumnName = "Msg";
+                dt.Columns["nodedata"].ColumnName = "NodeData";
+                dt.Columns["exer"].ColumnName = "Exer";
+                dt.Columns["tag"].ColumnName = "Tag";
+            }
             //获取track.
             ds.Tables.Add(dt);
 
@@ -227,6 +246,17 @@ namespace BP.WF.HttpHandler
                     {
                         item.IsPassInt = 0;
                         item.Update();
+                    }
+                }
+                Node nd = new Node(gwf.FK_Node);
+                if(nd.HisRunModel == RunModel.FL || nd.HisRunModel == RunModel.FHL)
+                {
+                    //获取是否存在退回的分合流点
+                    GenerWorkerLists tgwls = new GenerWorkerLists();
+                    tgwls.Retrieve(GenerWorkerListAttr.FID, this.WorkID,GenerWorkerListAttr.FK_Node,gwf.FK_Node, GenerWorkerListAttr.IsPass,0,GenerWorkerListAttr.Idx);
+                    foreach(GenerWorkerList gwl in tgwls)
+                    {
+                        gwls.AddEntity(gwl);
                     }
                 }
                 ds.Tables.Add(gwls.ToDataTableField("WF_GenerWorkerList"));
@@ -411,7 +441,7 @@ namespace BP.WF.HttpHandler
             #endregion PowerModel权限的解析
 
             #region 文件打印的权限判断，这里为天业集团做的特殊判断，现实的应用中，都可以打印.
-            if (SystemConfig.CustomerNo == "TianYe" && WebUser.No != "admin")
+            if (BP.Difference.SystemConfig.CustomerNo == "TianYe" && WebUser.No != "admin")
                 CanPackUp = IsCanPrintSpecForTianYe(gwf);
             #endregion 文件打印的权限判断，这里为天业集团做的特殊判断，现实的应用中，都可以打印.
             if (CanPackUp == true)
@@ -452,16 +482,16 @@ namespace BP.WF.HttpHandler
                     int myNode = DBAccess.RunSQLReturnValInt(sql, 0);
                     if (myNode != 0)
                     {
-                        GetTask gt = new GetTask(myNode);
-                        if (gt.Can_I_Do_It())
-                        {
-                            ht.Add("TackBackFromNode", gwf.FK_Node);
-                            ht.Add("TackBackToNode", myNode);
-                            ht.Add("CanTackBack", 1);
-                        }
+                        //GetTask gt = new GetTask(myNode);
+                        //if (gt.Can_I_Do_It())
+                        //{
+                        //    ht.Add("TackBackFromNode", gwf.FK_Node);
+                        //    ht.Add("TackBackToNode", myNode);
+                        //    ht.Add("CanTackBack", 1);
+                        //}
                     }
 
-                    if (SystemConfig.CustomerNo == "TianYe")
+                    if (BP.Difference.SystemConfig.CustomerNo == "TianYe")
                     {
                         ht.Add("CanUnSend", 1);
 
@@ -613,72 +643,84 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string OneWork_GetTabs()
         {
-            string re = "[";
-
-
-            OneWorkXmls xmls = new OneWorkXmls();
-            if ( System.IO.File.Exists( xmls.File)==false)
-                System.IO.File.Copy(SystemConfig.PathOfData + "Xml/OneWorkCopy.xml", xmls.File, true);
-            xmls.RetrieveAll();
-
+            DataTable dt = new DataTable();
+            dt.Columns.Add("No", typeof(string));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Url", typeof(string));
+            dt.Columns.Add("IsDefault", typeof(int));
+            Flow flow = new Flow(this.FK_Flow);
             int nodeID = this.FK_Node;
             if (nodeID == 0)
             {
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
                 nodeID = gwf.FK_Node;
             }
+            DataRow dr = null;
 
-            //有时候nodeID被删除了.
-            Node nd = new Node();
-            nd.NodeID = nodeID;
-            if (nd.RetrieveFromDBSources() == 0)
+            string paras= string.Format("FK_Node={0}&WorkID={1}&FK_Flow={2}&FID={3}&FromWorkOpt=1&CCSta=" + this.GetRequestValInt("CCSta"),  nodeID.ToString(), this.WorkID, this.FK_Flow, this.FID);
+            string url = "";
+            if (flow.IsFrmEnable == true)
             {
-                nd.NodeID = int.Parse(this.FK_Flow + "01");
-                nd.Retrieve();
-            }
-
-            Flow flow = new Flow(nd.FK_Flow);
-            foreach (OneWorkXml item in xmls)
-            {
-                bool IsShow = true;
-                switch (item.No)
-                {
-                    case "Frm":
-                        if (flow.IsFrmEnable == false)
-                            IsShow = false;
-                        break;
-                    case "Truck":
-                        if (flow.IsTruckEnable == false)
-                            IsShow = false;
-                        break;
-                    case "TimeBase":
-                        if (flow.IsTimeBaseEnable == false)
-                            IsShow = false;
-                        break;
-                    case "Table":
-                        if (flow.IsTableEnable == false)
-                            IsShow = false;
-                        break;
-                    case "OP":
-                        if (flow.IsOPEnable == false)
-                            IsShow = false;
-                        break;
-                }
-                if (IsShow == false)
-                    continue;
-                string url = "";
-                url = string.Format("{0}?FK_Node={1}&WorkID={2}&FK_Flow={3}&FID={4}&FromWorkOpt=1&CCSta="+ this.GetRequestValInt("CCSta"), item.URL, nodeID.ToString(), this.WorkID, this.FK_Flow, this.FID);
-                if (item.No.Equals("Frm") && (nd.HisFormType == NodeFormType.SDKForm || nd.HisFormType == NodeFormType.SelfForm))
+                
+                Node nd = new Node(nodeID);
+                url = "../../MyView.htm?" + paras;
+                if ((nd.HisFormType == NodeFormType.SDKForm || nd.HisFormType == NodeFormType.SelfForm))
                 {
                     if (nd.FormUrl.Contains("?"))
-                        url = "@url=" + nd.FormUrl + "&IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1&CCSta="+this.GetRequestValInt("CCSta");
+                        url = "@url=" + nd.FormUrl + "&IsReadonly=1&" + paras;
                     else
-                        url = "@url=" + nd.FormUrl + "?IsReadonly=1&WorkID=" + this.WorkID + "&FK_Node=" + nodeID.ToString() + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FromWorkOpt=1&CCSta=" + this.GetRequestValInt("CCSta");
+                        url = "@url=" + nd.FormUrl + "?IsReadonly=1&" + paras;
                 }
-                re += "{" + string.Format("\"No\":\"{0}\",\"Name\":\"{1}\", \"Url\":\"{2}\",\"IsDefault\":\"{3}\"", item.No, item.Name, url, item.IsDefault) + "},";
+                dr = dt.NewRow();
+                dr["No"] = "Frm";
+                dr["Name"] = "表单";
+                dr["Url"] = url;
+                dr["IsDefault"] = 0;
+                dt.Rows.Add(dr);
             }
 
-            return re.TrimEnd(',') + "]";
+            if (flow.IsTruckEnable == true)
+            {
+                dr = dt.NewRow();
+                dr["No"] = "Truck";
+                dr["Name"] = "轨迹图";
+                dr["Url"] = "Chart.htm?" + paras;
+                dr["IsDefault"] = 0;
+                dt.Rows.Add(dr);
+            }
+
+            if (flow.IsTimeBaseEnable == true)
+            {
+                dr = dt.NewRow();
+                dr["No"] = "TimeBase";
+                dr["Name"] = "时间轴";
+                dr["Url"] = "TimeBase.htm?" + paras;
+                dr["IsDefault"] = 0;
+                dt.Rows.Add(dr);
+            }
+
+            if (flow.IsTableEnable == true)
+            {
+                dr = dt.NewRow();
+                dr["No"] = "Table";
+                dr["Name"] = "时间表";
+                dr["Url"] = "Table.htm?" + paras;
+                dr["IsDefault"] = 0;
+                dt.Rows.Add(dr);
+            }
+
+            if (flow.IsOPEnable == true)
+            {
+                dr = dt.NewRow();
+                dr["No"] = "Oper";
+                dr["Name"] = "操作";
+                dr["Url"] = "OP.htm?" + paras;
+                dr["IsDefault"] = 0;
+                dt.Rows.Add(dr);
+
+            }
+
+            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 获取流程的JSON数据，以供显示工作轨迹/流程设计
@@ -1268,7 +1310,7 @@ namespace BP.WF.HttpHandler
         public string FlowBBS_Check()
         {
             Paras pss = new Paras();
-            pss.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND  EMPFROMT='" + this.UserName + "'";
+            pss.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID AND  EMPFROMT='" + this.UserName + "'";
             pss.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
             pss.Add("WorkID", this.WorkID);
 
@@ -1317,7 +1359,7 @@ namespace BP.WF.HttpHandler
         public string FlowBBS_Count()
         {
             Paras ps = new Paras();
-            ps.SQL = "SELECT COUNT(ActionType) FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
+            ps.SQL = "SELECT COUNT(ActionType) FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID";
             ps.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
             ps.Add("WorkID", this.WorkID);
             string count = DBAccess.RunSQLReturnValInt(ps).ToString();

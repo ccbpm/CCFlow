@@ -7,21 +7,6 @@ namespace BP.DA
 {
     public class AtPara
     {
-       
-        public int OID
-        {
-            get
-            {
-                return this.GetValIntByKey("OID");
-            }
-        }
-        public string DoType
-        {
-            get
-            {
-                return this.GetValStrByKey("DoType");
-            }
-        }
         public AtPara()
         {
         }

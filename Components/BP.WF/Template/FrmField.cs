@@ -327,9 +327,9 @@ namespace BP.WF.Template
         protected override bool beforeInsert()
         {
             if (DataType.IsNullOrEmpty(this.EleType))
-                this.EleType = FrmEleType.Field;
+                this.EleType = "Field";
 
-            if(this.EleType == FrmEleType.Field)
+            if(this.EleType.Equals("Field") ==true)
                 this.setMyPK(this.FK_MapData + "_"+ this.FK_Node + "_" + this.KeyOfEn);
 
 
@@ -350,7 +350,7 @@ namespace BP.WF.Template
         public FrmFields(string fk_mapdata, int nodeID)
         {
             this.Retrieve(FrmFieldAttr.FK_MapData, fk_mapdata, 
-                FrmFieldAttr.FK_Node, nodeID,FrmFieldAttr.EleType,  FrmEleType.Field);
+                FrmFieldAttr.FK_Node, nodeID,FrmFieldAttr.EleType, "Field");
         }
         /// <summary>
         /// 得到它的 Entity 

@@ -27,7 +27,7 @@ namespace BP.GPM.WeiXin
         {
             get
             {
-                return SystemConfig.WX_CorpID;// "wx8eac6a18c5efec30";
+                return BP.Difference.SystemConfig.WX_CorpID;// "wx8eac6a18c5efec30";
             }
         }
         /// <summary>
@@ -39,7 +39,7 @@ namespace BP.GPM.WeiXin
         {
             get
             {
-                return SystemConfig.WX_AppSecret;// "KfFkE9AZ3Zp09zTuKvmqWLgtLj-_cHMPTvV992apOWgSKJHcbjpbu1jYVXh7gI7K";
+                return BP.Difference.SystemConfig.WX_AppSecret;// "KfFkE9AZ3Zp09zTuKvmqWLgtLj-_cHMPTvV992apOWgSKJHcbjpbu1jYVXh7gI7K";
             }
         }
         /// <summary>
@@ -96,7 +96,7 @@ namespace BP.GPM.WeiXin
             ht.Add("timestamp", timestamp);
             ht.Add("nonceStr", nonceStr);
             //企业微信的corpID
-            ht.Add("AppID", SystemConfig.WX_CorpID);
+            ht.Add("AppID", BP.Difference.SystemConfig.WX_CorpID);
 
             //生成签名算法
             string str1 = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonceStr + "&timestamp=" + timestamp + "&url=" + url1 + "";

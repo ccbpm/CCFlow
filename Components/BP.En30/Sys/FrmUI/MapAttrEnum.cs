@@ -133,7 +133,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(MapAttrAttr.UIBindKey, null, "枚举ID", true, true, 0, 100, 20);
 
                 string sql = "";
-                switch (SystemConfig.AppCenterDBType)
+                switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
                     case DBType.MySQL:
@@ -151,10 +151,10 @@ namespace BP.Sys.FrmUI
                 }
                 sql += " union ";
 
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                     sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey'";
 
-                if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 {
                     sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey' AND OrgNo='" + BP.Web.WebUser.OrgNo + "' ";
                     sql += " union ";
@@ -191,7 +191,7 @@ namespace BP.Sys.FrmUI
                    "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //文本占单元格数量
-                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
+                map.AddDDLSysEnum(MapAttrAttr.LabelColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //文本跨行
@@ -240,12 +240,27 @@ namespace BP.Sys.FrmUI
                 //     rm.GroupName = "高级设置";
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.Title = "帮助弹窗显示";
+                rm.ClassMethodName = this.ToString() + ".DoFieldBigHelper()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-settings";
+                map.AddRefMethod(rm);
+
+
                 #endregion 执行的方法.
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
+
+        public string DoFieldBigHelper()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/FieldBigHelper.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+
         /// <summary>
         /// 处理业务逻辑.
         /// </summary>
@@ -300,7 +315,7 @@ namespace BP.Sys.FrmUI
 
                 if(DBAccess.IsExitsTableCol(en.EnMap.PhysicsTable, this.KeyOfEn) == true)
                 {
-                    switch (SystemConfig.AppCenterDBType)
+                    switch (BP.Difference.SystemConfig.AppCenterDBType)
                     {
                         case DBType.MSSQL:
                             //先检查是否存在约束
@@ -395,11 +410,10 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoSysEnum()
         {
-            if(SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if(BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 return "../../Admin/CCFormDesigner/DialogCtr/EnumerationNewSAAS.htm?DoType=FrmEnumeration_SaveEnum&EnumKey=" + this.UIBindKey+"&OrgNo="+BP.Web.WebUser.OrgNo;
             else
                 return "../../Admin/CCFormDesigner/DialogCtr/EnumerationNew.htm?DoType=FrmEnumeration_SaveEnum&EnumKey=" + this.UIBindKey;
-
         }
 
         public string DoDDLFullCtrl2019()

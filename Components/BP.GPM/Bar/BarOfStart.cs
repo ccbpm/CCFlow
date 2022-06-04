@@ -41,7 +41,7 @@ namespace BP.GPM
         {
             get
             {
-                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
                     return true;
                 return false;
             }
@@ -77,7 +77,7 @@ namespace BP.GPM
             get
             {
                 Paras ps = new Paras();
-                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
                     ps.SQL = "SELECT top 9 Title,RDT,FK_Flow,WorkID,FK_Node,Sender FROM WF_GenerWorkFlow WHERE Starter=" + ps.DBStr + "FK_Emp ORDER BY WorkID ";
 
                 ps.Add("FK_Emp",BP.Web.WebUser.No);

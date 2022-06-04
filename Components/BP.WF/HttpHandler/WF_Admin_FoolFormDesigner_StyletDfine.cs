@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
-using System.Web;
 using BP.DA;
 using BP.Sys;
-using BP.Web;
-using BP.Port;
-using BP.En;
-using BP.WF;
-using BP.WF.Template;
 
 namespace BP.WF.HttpHandler
 {
@@ -59,7 +51,7 @@ namespace BP.WF.HttpHandler
             docs = docs.Replace("!important", "");
 
             //保存一个临时文件,
-            string path = SystemConfig.PathOfDataUser + "Style/GloVarsCSSTemp.css";
+            string path = BP.Difference.SystemConfig.PathOfDataUser + "Style/GloVarsCSSTemp.css";
             BP.DA.DataType.SaveAsFile(path, docs);
 
             return "风格文件已经生成:" + path;
@@ -81,7 +73,7 @@ namespace BP.WF.HttpHandler
             }
 
             //保存一个临时文件,
-            string path = SystemConfig.PathOfDataUser + "Style/GloVarsCSS.css";
+            string path = BP.Difference.SystemConfig.PathOfDataUser + "Style/GloVarsCSS.css";
             BP.DA.DataType.SaveAsFile(path, html);
 
             return "执行成功.";
@@ -105,7 +97,7 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(myName) == true)
                     myName = DateTime.Now.ToString("MM月dd日HH时mm分ss秒");
 
-                string path = SystemConfig.PathOfDataUser + "Style/TemplateFoolFrm/" + myName + ".xml";
+                string path = BP.Difference.SystemConfig.PathOfDataUser + "Style/TemplateFoolFrm/" + myName + ".xml";
                 ens.SaveToXml(path);
 
                 return "模版创建成功.";
@@ -130,7 +122,7 @@ namespace BP.WF.HttpHandler
         public string Default_GenerGloVars()
         {
             //获得标准的配置文件,用于比较缺少或者删除的标记.
-            string path = SystemConfig.PathOfWebApp + "WF/Admin/FoolFormDesigner/StyletDfine/DefaultStyle.xml";
+            string path = BP.Difference.SystemConfig.PathOfWebApp + "WF/Admin/FoolFormDesigner/StyletDfine/DefaultStyle.xml";
 
             DataSet ds = new DataSet();
             ds.ReadXml(path);
@@ -223,12 +215,17 @@ namespace BP.WF.HttpHandler
             //保存.
             if (isApp == true)
             {
-                string pathDefault = SystemConfig.PathOfDataUser + "Style/FoolFrmStyle/Default.css";
+                string pathDefault = BP.Difference.SystemConfig.PathOfDataUser + "Style/FoolFrmStyle/Default.css";
                 BP.DA.DataType.SaveAsFile(pathDefault, docs);
+
+                GloVar gen = new GloVar();
+                //    gen.No = "Sys";
+                //gen.Nem
+
             }
 
             //保存一个临时文件,
-            string path = SystemConfig.PathOfDataUser + "Style/FoolFrmStyle/DefaultPreview.css";
+            string path = BP.Difference.SystemConfig.PathOfDataUser + "Style/FoolFrmStyle/DefaultPreview.css";
             BP.DA.DataType.SaveAsFile(path, docs);
 
             return "info@风格文件已经生成:" + path;
@@ -272,7 +269,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Default_Template_Delete()
         {
-            string path = BP.Sys.SystemConfig.PathOfDataUser + "Style/TemplateFoolFrm/";
+            string path = BP.Difference.SystemConfig.PathOfDataUser + "Style/TemplateFoolFrm/";
             System.IO.File.Delete(path + this.Name);
             return "删除成功.";
         }
@@ -282,7 +279,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Default_GenerTemplate()
         {
-            string path = BP.Sys.SystemConfig.PathOfDataUser + "Style/TemplateFoolFrm/";
+            string path = BP.Difference.SystemConfig.PathOfDataUser + "Style/TemplateFoolFrm/";
             string[] fls = BP.Tools.BaseFileUtils.getFiles(path);
 
 
@@ -319,7 +316,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Default_Selected_Ext(bool isApp)
         {
-            string filePath = BP.Sys.SystemConfig.PathOfDataUser + "Style/TemplateFoolFrm/" + this.Name;
+            string filePath = BP.Difference.SystemConfig.PathOfDataUser + "Style/TemplateFoolFrm/" + this.Name;
 
             DataSet ds = new DataSet();
             ds.ReadXml(filePath);

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
 using System.Data;
 using System.Text;
 using System.Web;
@@ -9,7 +7,6 @@ using BP.Sys;
 using BP.Web;
 using BP.Port;
 using BP.En;
-using BP.WF;
 using BP.WF.Template;
 using BP.Difference;
 
@@ -20,6 +17,7 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_MyView : DirectoryPageBase
     {
+       
         /// <summary>
         /// 抄送处理类
         /// </summary>
@@ -43,7 +41,6 @@ namespace BP.WF.HttpHandler
         }
 
         #endregion 表单查看.
-
 
         #region  运行变量
         /// <summary>
@@ -123,7 +120,7 @@ namespace BP.WF.HttpHandler
                     if (this.WorkID != 0)
                     {
                         Paras ps = new Paras();
-                        ps.SQL = "SELECT FK_Node FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
+                        ps.SQL = "SELECT FK_Node FROM WF_GenerWorkFlow WHERE WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID";
                         ps.Add("WorkID", this.WorkID);
                         _FK_Node = DBAccess.RunSQLReturnValInt(ps, 0);
                     }
@@ -253,23 +250,23 @@ namespace BP.WF.HttpHandler
                             dt.Rows.Add(dr);
                         }
 
-                        /*取回审批*/
-                        string para = "";
-                        sql = "SELECT NodeID FROM WF_Node WHERE CheckNodes LIKE '%" + gwf.FK_Node + "%'";
-                        int myNode = DBAccess.RunSQLReturnValInt(sql, 0);
-                        if (myNode != 0)
-                        {
-                            GetTask gt = new GetTask(myNode);
-                            if (gt.Can_I_Do_It())
-                            {
-                                dr = dt.NewRow();
-                                dr["No"] = "TackBack";
-                                dr["Name"] = "取回审批";
-                                dr["Oper"] = "TackBack(" + gwf.FK_Node + "," + myNode + ")";
-                                dt.Rows.Add(dr);
+                        ///*取回审批*/
+                        //string para = "";
+                        //sql = "SELECT NodeID FROM WF_Node WHERE CheckNodes LIKE '%" + gwf.FK_Node + "%'";
+                        //int myNode = DBAccess.RunSQLReturnValInt(sql, 0);
+                        //if (myNode != 0)
+                        //{
+                        //    GetTask gt = new GetTask(myNode);
+                        //    if (gt.Can_I_Do_It())
+                        //    {
+                        //        dr = dt.NewRow();
+                        //        dr["No"] = "TackBack";
+                        //        dr["Name"] = "取回审批";
+                        //        dr["Oper"] = "TackBack(" + gwf.FK_Node + "," + myNode + ")";
+                        //        dt.Rows.Add(dr);
 
-                            }
-                        }
+                        //    }
+                        //}
 
 
                         /*撤销发送*/
@@ -303,7 +300,7 @@ namespace BP.WF.HttpHandler
                         }
 
                         //催办
-                        if (powers.Contains("FlowDataPress") == true || gwf.Emps.Contains(WebUser.No) == true)
+                        if (powers.Contains("FlowDataPress") == true ||( gwf.Emps.Contains(WebUser.No) == true && btnLab.PressEnable==true))
                         {
                             dr = dt.NewRow();
                             dr["No"] = "Press";
@@ -325,20 +322,14 @@ namespace BP.WF.HttpHandler
                         }
 
                         break;
-                    //case WFState.Hungup: // 挂起.
-                    //    /*撤销挂起*/
-                    //    if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(WorkID, WebUser.No) == true)
-                    //        toolbar += "<input name='UnHungup' type='button' value='撤销挂起' enable='true'  onclick='UnHungup()'/>";
-                    //    break;
                     default:
                         break;
                 }
-
-                dr = dt.NewRow();
-                dr["No"] = "Track";
-                dr["Name"] = "轨迹";
-                dr["Oper"] = "";
-                dt.Rows.Add(dr);
+                //dr = dt.NewRow();
+                //dr["No"] = "Track";
+                //dr["Name"] = "轨迹";
+                //dr["Oper"] = "";
+                //dt.Rows.Add(dr);
                 #endregion 根据流程权限控制规则获取可以操作的按钮功能
 
                 #region 加载流程查看器 - 按钮
@@ -385,13 +376,35 @@ namespace BP.WF.HttpHandler
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
                 }
+
+                if (btnLab.PrintDocEnable == true)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "PrintDoc";
+                    dr["Name"] = btnLab.PrintDocLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+
+                }
+
                 /**数据库版本*/
                 if (btnLab.FrmDBVerMyView == true)
                 {
                     dr = dt.NewRow();
                     dr["No"] = "FrmDBVer";
                     dr["Name"] = btnLab.FrmDBVerLab;
-                    dr["Oper"] = "";
+                    dr["Oper"] = "FrmDBVer_Init()";
+                    dt.Rows.Add(dr);
+                }
+
+                //数据批阅
+                if (btnLab.FrmDBRemarkEnable != 0)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "FrmDBRemark";
+                    dr["Name"] = btnLab.FrmDBRemarkLab;
+                    dr["Oper"] = "FrmDBRemark("+ btnLab.FrmDBRemarkEnable+")";
                     dt.Rows.Add(dr);
                 }
                 //评论
@@ -744,8 +757,6 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            // 
-
             if (IsCanView(gwf) == false)
             {
                 string msg = "err@您无权查看该工作,";
@@ -770,16 +781,16 @@ namespace BP.WF.HttpHandler
                 if (this.IsMobile == true)
                 {
                     if (gwf.Paras_Frms.Equals("") == false)
-                        toUrl = "MyViewGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
+                        toUrl = "MyViewGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&Token=" + WebUser.Token + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
                     else
-                        toUrl = "MyViewGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID;
+                        toUrl = "MyViewGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&Token=" + WebUser.Token + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID;
                 }
                 else
                 {
                     if (gwf.Paras_Frms.Equals("") == false)
-                        toUrl = "MyViewTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
+                        toUrl = "MyViewTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&Token=" + WebUser.Token + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID + "&Frms=" + gwf.Paras_Frms;
                     else
-                        toUrl = "MyViewTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID;
+                        toUrl = "MyViewTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&Token=" + WebUser.Token + "&PFlowNo=" + gwf.PFlowNo + "&PNodeID=" + gwf.PNodeID + "&PWorkID=" + gwf.PWorkID;
                 }
 
                 string[] strs = this.RequestParas.Split('&');
@@ -899,7 +910,9 @@ namespace BP.WF.HttpHandler
             #endregion 内置表单类型的判断.
 
             string myurl = "MyViewGener.htm";
-
+            //MapData md = new MapData(this.currND.NodeFrmID);
+            //if (md.HisFrmType == FrmType.ChapterFrm)
+             //   myurl = "MyViewTree.htm?NodeFrmType=11";
             //处理连接.
             myurl = this.MyView_Init_DealUrl(currND, myurl);
             myurl = myurl.Replace("DoType=MyView_Init&", "");
@@ -925,8 +938,8 @@ namespace BP.WF.HttpHandler
                 urlExt = urlExt.Replace("&WorkID=&", "&WorkID=" + this.WorkID + "&");
             }
 
-            //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海驰骋提出. 
-            url = url.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
+            //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海高凌提出. 
+            url = url.Replace("@SDKFromServHost", BP.Difference.SystemConfig.AppSettings["SDKFromServHost"]);
 
             if (urlExt.Contains("&NodeID") == false)
                 urlExt += "&NodeID=" + currND.NodeID;
@@ -940,8 +953,8 @@ namespace BP.WF.HttpHandler
             if (urlExt.Contains("&UserNo") == false)
                 urlExt += "&UserNo=" + HttpUtility.UrlEncode(WebUser.No);
 
-            if (urlExt.Contains("&SID") == false)
-                urlExt += "&SID=" + WebUser.SID;
+            if (urlExt.Contains("&Token") == false)
+                urlExt += "&Token=" + WebUser.Token;
 
             if (url.Contains("?") == true)
                 url += "&" + urlExt;
@@ -1305,7 +1318,7 @@ namespace BP.WF.HttpHandler
                 {
                     string url = formTree.Url == null ? "" : formTree.Url;
                     string ico = "icon-tree_folder";
-                    if (SystemConfig.SysNo == "YYT")
+                    if (BP.Difference.SystemConfig.SysNo == "YYT")
                     {
                         ico = "icon-boat_16";
                     }
@@ -1315,7 +1328,7 @@ namespace BP.WF.HttpHandler
                     if (formTree.NodeType == "form|0")
                     {
                         ico = "form0";
-                        if (SystemConfig.SysNo == "YYT")
+                        if (BP.Difference.SystemConfig.SysNo == "YYT")
                         {
                             ico = "icon-Wave";
                         }
@@ -1323,7 +1336,7 @@ namespace BP.WF.HttpHandler
                     if (formTree.NodeType == "form|1")
                     {
                         ico = "form1";
-                        if (SystemConfig.SysNo == "YYT")
+                        if (BP.Difference.SystemConfig.SysNo == "YYT")
                         {
                             ico = "icon-Shark_20";
                         }
@@ -1331,7 +1344,7 @@ namespace BP.WF.HttpHandler
                     if (formTree.NodeType.Contains("tools"))
                     {
                         ico = "icon-4";
-                        if (SystemConfig.SysNo == "YYT")
+                        if (BP.Difference.SystemConfig.SysNo == "YYT")
                         {
                             ico = "icon-Wave";
                         }
@@ -1366,6 +1379,14 @@ namespace BP.WF.HttpHandler
                 Int64 workID = this.WorkID;
                 if (this.currND.HisFormType == NodeFormType.RefOneFrmTree)
                 {
+                    MapData md = new MapData(this.currND.NodeFrmID);
+                    if (md.HisFrmType == FrmType.ChapterFrm)
+                    {
+                        string url = "Frm.htm?FK_MapData=" + md.No;
+                        url = MyView_Init_DealUrl(this.currND, url);
+                        return "url@" + url;
+                    }
+
                     //获取绑定的表单
                     FrmNode frmnode = new FrmNode(this.FK_Node, this.currND.NodeFrmID);
                     switch (frmnode.WhoIsPK)
@@ -1420,14 +1441,14 @@ namespace BP.WF.HttpHandler
                 if (WebUser.SysLang.Equals("CH") == true)
                     return BP.Tools.Json.ToJson(ds);
 
-                #region 处理多语言.
-                if (WebUser.SysLang.Equals("CH") == false)
-                {
-                    Langues langs = new Langues();
-                    langs.Retrieve(LangueAttr.Model, LangueModel.CCForm,
-                        LangueAttr.Sort, "Fields", LangueAttr.Langue, WebUser.SysLang); //查询语言.
-                }
-                #endregion 处理多语言.
+                //#region 处理多语言.
+                //if (WebUser.SysLang.Equals("CH") == false)
+                //{
+                //    Langues langs = new Langues();
+                //    langs.Retrieve(LangueAttr.Model, LangueModel.CCForm,
+                //        LangueAttr.Sort, "Fields", LangueAttr.Langue, WebUser.SysLang); //查询语言.
+                //}
+                //#endregion 处理多语言.
 
                 return BP.Tools.Json.ToJson(ds);
 

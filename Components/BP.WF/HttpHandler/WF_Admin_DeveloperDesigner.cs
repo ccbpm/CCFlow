@@ -1,15 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Collections;
+﻿using System.IO;
 using System.Data;
 using System.Web;
-using BP.WF;
-using BP.Web;
 using BP.Sys;
 using BP.DA;
-using BP.En;
-using BP.WF.Template;
 using BP.CCBill;
 using System.Text;
 using BP.Difference;
@@ -41,7 +34,7 @@ namespace BP.WF.HttpHandler
                 htmlCode = "<h3>请插入表单模板.</h3>";
 
             //把数据同步到DataUser/CCForm/HtmlTemplateFile/文件夹下
-            string filePath = SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/";
+            string filePath =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/";
             if (Directory.Exists(filePath) == false)
                 Directory.CreateDirectory(filePath);
             filePath = filePath + this.FK_MapData + ".htm";
@@ -79,7 +72,7 @@ namespace BP.WF.HttpHandler
         public string Template_Init()
         {
             DataSet ds = new DataSet();
-            string path = SystemConfig.PathOfDataUser + "Style/TemplateFoolDevelopDesigner/";
+            string path =  BP.Difference.SystemConfig.PathOfDataUser + "Style/TemplateFoolDevelopDesigner/";
             //var tmps = new DirectoryInfo(path).GetFiles("*.htm");
             string[] files = System.IO.Directory.GetDirectories(path);//获取子文件夹
             //模版类型
@@ -129,7 +122,7 @@ namespace BP.WF.HttpHandler
         {
             var fileName = this.GetRequestVal("DevTempName");
             var fielDir= this.GetRequestVal("DevTempDir");
-            string path = SystemConfig.PathOfDataUser + "Style/TemplateFoolDevelopDesigner/"+ fielDir+"/";
+            string path =  BP.Difference.SystemConfig.PathOfDataUser + "Style/TemplateFoolDevelopDesigner/"+ fielDir+"/";
 
             string filePath = path + fileName;
 
@@ -153,7 +146,7 @@ namespace BP.WF.HttpHandler
             string fileNewName = System.IO.Path.GetFileName(files[0].FileName);// DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(files[0].FileName);
 
             //文件存放路径
-            string filePath = SystemConfig.PathOfDataUser + "Style/TemplateFoolDevelopDesigner/" + "" + fileNewName;
+            string filePath =  BP.Difference.SystemConfig.PathOfDataUser + "Style/TemplateFoolDevelopDesigner/" + "" + fileNewName;
             HttpContextHelper.UploadFile(files[0], filePath);
 
             Stream stream = new FileStream(filePath, FileMode.Open);
@@ -195,7 +188,7 @@ namespace BP.WF.HttpHandler
         public string ResetFrm_Init()
         {
             //删除html
-            string filePath = SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/" + this.FK_MapData + ".htm";
+            string filePath =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/" + this.FK_MapData + ".htm";
             if (File.Exists(filePath) == true)
                 File.Delete(filePath);
 

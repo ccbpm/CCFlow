@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
 using System.Data;
 using System.Text;
@@ -7,15 +6,13 @@ using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
-using BP.Port;
 using BP.En;
 using BP.WF;
-using BP.WF.Template;
-using BP.WF.Data;
+using BP.CCFast.CCMenu;
 using BP.WF.HttpHandler;
 using BP.Difference;
 using BP.CCBill.Template;
-
+using LitJson;
 
 namespace BP.CCBill
 {
@@ -132,7 +129,7 @@ namespace BP.CCBill
             gwf.Update();
 
             //写日志.
-            BP.CCBill.Dev2Interface.Dict_AddTrack(fromFrmID, 0, FrmActionType.StartFlow, "启动:" + gwf.FlowName + ",标题:" + gwf.Title);
+            BP.CCBill.Dev2Interface.Dict_AddTrack(fromFrmID, "0", FrmActionType.StartFlow, "启动:" + gwf.FlowName + ",标题:" + gwf.Title);
             return "../MyFlow.htm?FK_Flow=" + this.FK_Flow + "&WorkID=" + workid;
         }
         /// <summary>
@@ -150,7 +147,7 @@ namespace BP.CCBill
             Attrs attrs = en.EnMap.Attrs;
             foreach (Attr item in attrs)
             {
-                if (item.Key.Equals("BillNo")==false &&BP.WF.Glo.FlowFields.Contains("," + item.Key + ",") == true)
+                if (item.Key.Equals("BillNo") == false && BP.WF.Glo.FlowFields.Contains("," + item.Key + ",") == true)
                     continue;
 
                 var val = en.GetValStrByKey(item.Key);
@@ -173,7 +170,7 @@ namespace BP.CCBill
             gwf.Update();
 
             //写日志.
-            BP.CCBill.Dev2Interface.Dict_AddTrack(md.FrmID, this.WorkID, FrmActionType.StartFlow, "启动:" + gwf.FlowName + ",标题:" + gwf.Title, null, md.FlowNo, md.Name, int.Parse(md.FlowNo + "01"), workid);
+            BP.CCBill.Dev2Interface.Dict_AddTrack(md.FrmID, this.WorkID.ToString(), FrmActionType.StartFlow, "启动:" + gwf.FlowName + ",标题:" + gwf.Title, null, md.FlowNo, md.Name, int.Parse(md.FlowNo + "01"), workid);
 
             //   GEEntity frm=new GEEntity("ND"+int.Parse())
             return "../MyFlow.htm?FK_Flow=" + md.FlowNo + "&WorkID=" + workid;
@@ -211,7 +208,7 @@ namespace BP.CCBill
             gwf.Update();
 
             //写日志.
-            BP.CCBill.Dev2Interface.Dict_AddTrack(md.FrmID, this.WorkID, FrmActionType.StartFlow, "启动:" + gwf.FlowName + ",标题:" + gwf.Title,
+            BP.CCBill.Dev2Interface.Dict_AddTrack(md.FrmID, this.WorkID.ToString(), FrmActionType.StartFlow, "启动:" + gwf.FlowName + ",标题:" + gwf.Title,
                 null, md.FlowNo, md.Name, int.Parse(md.FlowNo + "01"), workid);
 
             //GEEntity frm=new GEEntity("ND"+int.Parse())
@@ -263,17 +260,18 @@ namespace BP.CCBill
         {
             MethodFunc func = new MethodFunc(this.MyPK);
             string doc = func.MethodDoc_SQL;
-            if (this.WorkID == 0)
+            string workID = this.WorkIDStr;
+            if (DataType.IsNullOrEmpty(workID) == true)
             {
                 //批量执行方法
                 string workids = this.GetRequestVal("WorkIDs");
                 if (DataType.IsNullOrEmpty(workids) == true)
                     throw new Exception("err@执行方法获取到的WorkID或者WorkIDs不能为空");
                 string[] strs = workids.Split(',');
-                this.WorkID = Int64.Parse(strs[0]);
+                workID = strs[0];
                 doc = doc.Replace("@WorkIDs", workids);
             }
-            GEEntity en = new GEEntity(func.FrmID, this.WorkID);
+            GEEntity en = new GEEntity(func.FrmID, workID);
 
             doc = BP.WF.Glo.DealExp(doc, en, null); //替换里面的内容.
             string sql = MidStrEx(doc, "/*", "*/");
@@ -283,7 +281,7 @@ namespace BP.CCBill
                 if (func.MsgSuccess.Equals(""))
                     func.MsgSuccess = "执行成功.";
 
-                BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, this.WorkID, "执行方法", func.Name);
+                BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, workID, "执行方法", func.Name);
 
                 return func.MsgSuccess;
             }
@@ -302,17 +300,18 @@ namespace BP.CCBill
         {
             MethodFunc func = new MethodFunc(this.PKVal);
             string doc = func.MethodDoc_SQL;
-            if (this.WorkID == 0)
+            string workID = this.WorkIDStr;
+            if (DataType.IsNullOrEmpty(workID) == true)
             {
                 //批量执行方法
                 string workids = this.GetRequestVal("WorkIDs");
                 if (DataType.IsNullOrEmpty(workids) == true)
                     throw new Exception("err@执行方法获取到的WorkID或者WorkIDs不能为空");
                 string[] strs = workids.Split(',');
-                this.WorkID = Int64.Parse(strs[0]);
+                workID = strs[0];
                 doc = doc.Replace("@WorkIDs", workids);
             }
-            GEEntity en = new GEEntity(func.FrmID, this.WorkID);
+            GEEntity en = new GEEntity(func.FrmID, workID);
 
             #region 替换参数变量.
             if (doc.Contains("@") == true)
@@ -371,7 +370,7 @@ namespace BP.CCBill
             }
             #endregion 开始执行SQLs.
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, this.WorkID, "执行方法", func.Name);
+            BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, workID, "执行方法", func.Name);
 
             return "err@" + func.MethodDocTypeOfFunc + ",执行的类型没有解析.";
         }
@@ -453,7 +452,7 @@ namespace BP.CCBill
             }
             #endregion 开始执行SQLs.
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, this.WorkID, "执行方法", func.Name);
+            BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, this.WorkID.ToString(), "执行方法", func.Name);
 
             return "err@" + func.MethodDocTypeOfFunc + ",执行的类型没有解析.";
         }
@@ -687,6 +686,11 @@ namespace BP.CCBill
 
             //根据FrmID获取Mapdata
             MapData md = new MapData(this.FrmID);
+            if (md.EntityType == EntityType.DBList)
+            {
+                DBListDBSrc dbList = new DBListDBSrc(this.FrmID);
+                ds.Tables.Add(dbList.ToDataTableField("Sys_DBList"));
+            }
             //如果设置按照时间字段的月度，季度，年度查询数据，需要查询数据显示的最小年份
             if (md.DTSearchWay != DTSearchWay.None && md.GetParaInt("DTShowWay") == 1)
             {
@@ -696,14 +700,14 @@ namespace BP.CCBill
                     string sql = "SELECT min(" + md.DTSearchKey + ") From " + en.EnMap.PhysicsTable;
                     md.SetPara("DateShowYear", DBAccess.RunSQLReturnStringIsNull(sql, ""));
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     GEEntity rpt = new GEEntity(this.FrmID);
                     rpt.CheckPhysicsTable();
                     string sql = "SELECT min(" + md.DTSearchKey + ") From " + en.EnMap.PhysicsTable;
                     md.SetPara("DateShowYear", DBAccess.RunSQLReturnStringIsNull(sql, ""));
                 }
-               
+
             }
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
             //获取字段属性
@@ -783,7 +787,7 @@ namespace BP.CCBill
                         fullSQL = BP.WF.Glo.DealExp(fullSQL, null, null);
                         dtSQl = DBAccess.RunSQLReturnTable(fullSQL);
                     }
-                    else if(DataType.IsNullOrEmpty(attr.UIBindKey) == false)
+                    else if (DataType.IsNullOrEmpty(attr.UIBindKey) == false)
                     {
                         dtSQl = BP.Pub.PubClass.GetDataTableByUIBineKey(attr.UIBindKey);
                     }
@@ -850,30 +854,17 @@ namespace BP.CCBill
             {
                 methods.Retrieve(MethodAttr.FrmID, this.FrmID, MethodAttr.IsSearchBar, 1, MethodAttr.Idx);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 methods.GetNewEntity.CheckPhysicsTable();
-                methods.Retrieve(MethodAttr.FrmID, this.FrmID, MethodAttr.IsSearchBar, 1,MethodAttr.IsEnable,1, MethodAttr.Idx);
+                methods.Retrieve(MethodAttr.FrmID, this.FrmID, MethodAttr.IsSearchBar, 1, MethodAttr.IsEnable, 1, MethodAttr.Idx);
 
             }
             ds.Tables.Add(methods.ToDataTableField("Frm_Method"));
 
 
-            //BP.GPM.Menu2020.Menus menus = new BP.GPM.Menu2020.Menus();
-            //menus.Retrieve("FrmID", this.FrmID, "MenuModel", "FlowNewEntity","Mark","Search");
-            //ds.Tables.Add(menus.ToDataTableField("GPM_Menu"));
-            //实体类列表集合
-            Collections colls = new Collections();
-            try
-            {
-                colls.Retrieve(CollectionAttr.FrmID, this.FrmID, CollectionAttr.IsEnable, 1);
-            }
-            catch (Exception e)
-            {
-                colls.GetNewEntity.CheckPhysicsTable();
-                colls.Retrieve(CollectionAttr.FrmID, this.FrmID, CollectionAttr.IsEnable, 1);
-
-            }
+            Collections colls = Search_BtnPower();
+            ds.Tables.Add(methods.ToDataTableField("ToolBtns"));
             ds.Tables.Add(colls.ToDataTableField("Frm_Collection"));
 
             return BP.Tools.Json.ToJson(ds);
@@ -957,12 +948,12 @@ namespace BP.CCBill
             if (DataType.IsNullOrEmpty(listShowWayKey) == true)
                 return "err@树形结构展示的字段不存在，请检查查询条件设置中展示方式配置是否正确";
             MapAttr mapAttr = new MapAttr(this.FrmID + "_" + listShowWayKey);
-              //获取绑定的数据源
+            //获取绑定的数据源
             if (DataType.IsNullOrEmpty(mapAttr.UIBindKey) == true)
                 return "err@字段" + mapAttr.Name + "绑定的外键或者外部数据源不存在,请检查字段属性[外键SFTable]是否为空";
             DataTable dt = BP.Pub.PubClass.GetDataTableByUIBineKey(mapAttr.UIBindKey);
             return BP.Tools.Json.ToJson(dt);
-            
+
         }
 
         /// <summary>
@@ -984,7 +975,7 @@ namespace BP.CCBill
             qo.addAnd();
             qo.AddWhereIn(MapExtAttr.ExtType, "('MultipleChoiceSmall','SingleChoiceSmall')");
             qo.DoQuery();
-            foreach(MapExt mapExt in mapExts)
+            foreach (MapExt mapExt in mapExts)
             {
                 //获取mapAttr
                 MapAttr mapAttr = mattrs.GetEntityByKey(this.FrmID + "_" + mapExt.AttrOfOper) as MapAttr;
@@ -993,7 +984,7 @@ namespace BP.CCBill
                     continue;
                 mapAttr.SetPara("SearchVisable", 0);
                 mapAttr.Update();
-                mapAttr = mattrs.GetEntityByKey(this.FrmID + "_" + mapExt.AttrOfOper+"T") as MapAttr;
+                mapAttr = mattrs.GetEntityByKey(this.FrmID + "_" + mapExt.AttrOfOper + "T") as MapAttr;
                 mapAttr.SetPara("SearchVisable", 1);
                 mapAttr.Update();
             }
@@ -1007,6 +998,7 @@ namespace BP.CCBill
             dt.Columns.Add("MyDataType", typeof(int));
             dt.Columns.Add("UIBindKey", typeof(string));
             dt.Columns.Add("AtPara", typeof(string));
+            dt.Columns.Add("IsRichText", typeof(int));
 
             //设置标题、单据号位于开始位置
             foreach (MapAttr attr in mattrs)
@@ -1014,7 +1006,7 @@ namespace BP.CCBill
                 string searchVisable = attr.atPara.GetValStrByKey("SearchVisable");
                 if (searchVisable == "0")
                     continue;
-                if (DataType.IsNullOrEmpty(searchVisable)==true && attr.UIVisible == false)
+                if (DataType.IsNullOrEmpty(searchVisable) == true && attr.UIVisible == false)
                     continue;
                 row = dt.NewRow();
                 row["KeyOfEn"] = attr.KeyOfEn;
@@ -1025,6 +1017,7 @@ namespace BP.CCBill
                 row["MyDataType"] = attr.MyDataType;
                 row["UIBindKey"] = attr.UIBindKey;
                 row["AtPara"] = attr.GetValStringByKey("AtPara");
+                row["IsRichText"] = attr.IsRichText == true ? 1 : 0;
                 dt.Rows.Add(row);
             }
 
@@ -1039,8 +1032,171 @@ namespace BP.CCBill
             methods.Retrieve(MethodAttr.FrmID, this.FrmID, MethodAttr.IsList, 1, MethodAttr.Idx);
 
             ds.Tables.Add(methods.ToDataTableField("Frm_Method"));
-            
+
             return BP.Tools.Json.ToJson(ds);
+        }
+        /// <summary>
+        /// 获取查询列表的按钮权限
+        /// </summary>
+        /// <returns></returns>
+        public Collections Search_BtnPower()
+        {
+            //获取该表单所有操作按钮的权限
+            Collections colls = new Collections();
+            colls.Retrieve(CollectionAttr.FrmID, this.FrmID, CollectionAttr.IsEnable, 1, "Idx");
+            if (colls.Count == 0)
+            {
+                //查询
+                Collection collection = new Collection();
+                collection.FrmID = this.FrmID;
+                collection.MethodID = "Search";
+                collection.Name = "查询";
+                collection.MethodModel = "Search";
+                collection.Mark = "Search";
+                collection.No = collection.FrmID + "_" + collection.MethodID;
+                collection.SetValByKey("Idx", 0);
+                collection.Insert();
+
+                //新建
+                collection = new Collection();
+                collection.FrmID = this.FrmID;
+                collection.MethodID = "New";
+                collection.Name = "新建";
+                collection.MethodModel = "New";
+                collection.Mark = "New";
+                collection.No = collection.FrmID + "_" + collection.MethodID;
+                collection.SetValByKey("Idx", 1);
+                collection.Insert();
+
+                //删除
+                collection = new Collection();
+                collection.FrmID = this.FrmID;
+                collection.MethodID = "Delete";
+                collection.Name = "删除";
+                collection.MethodModel = "Delete";
+                collection.Mark = "Delete";
+                collection.No = collection.FrmID + "_" + collection.MethodID;
+                collection.SetValByKey("Idx", 2);
+                collection.Insert();
+
+                collection = new Collection();
+                collection.FrmID = this.FrmID;
+                collection.MethodID = "Group";
+                collection.Name = "分析";
+                collection.MethodModel = "Group";
+                collection.Mark = "Group";
+                collection.No = collection.FrmID + "_" + collection.MethodID;
+                collection.SetValByKey("Idx", 3);
+                collection.SetValByKey("IsEnable", false);
+                collection.Insert();
+
+                //导出
+                collection = new Collection();
+                collection.FrmID = this.FrmID;
+                collection.MethodID = "ExpExcel";
+                collection.Name = "导出Excel";
+                collection.MethodModel = "ExpExcel";
+                collection.Mark = "ExpExcel";
+                collection.No = collection.FrmID + "_" + collection.MethodID;
+                collection.SetValByKey("Idx", 4);
+                collection.Insert();
+
+                //导入
+                collection = new Collection();
+                collection.FrmID = this.FrmID;
+                collection.MethodID = "ImpExcel";
+                collection.Name = "导入Excel";
+                collection.MethodModel = "ImpExcel";
+                collection.Mark = "ImpExcel";
+                collection.No = collection.FrmID + "_" + collection.MethodID;
+                collection.SetValByKey("Idx", 5);
+                collection.Insert();
+                colls.Retrieve(GroupMethodAttr.FrmID, this.FrmID, "Idx");
+                return colls;
+
+
+            }
+
+            //获取针对按钮设置的操作权限
+            PowerCenters pcs = new PowerCenters();
+            pcs.Retrieve(PowerCenterAttr.CtrlObj, this.FrmID, PowerCenterAttr.CtrlGroup, "SearchBtn");
+
+            string mydepts = "" + WebUser.FK_Dept + ","; //我的部门.
+            string mystas = ""; //我的岗位.
+
+            DataTable mydeptsDT = DBAccess.RunSQLReturnTable("SELECT FK_Dept,FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'");
+            foreach (DataRow dr in mydeptsDT.Rows)
+            {
+                mydepts += dr[0].ToString() + ",";
+                mystas += dr[1].ToString() + ",";
+            }
+
+            Collections newCollections = new Collections();
+            string empIds = "";
+            foreach (Collection collection in colls)
+            {
+                //找到关于系统的控制权限集合.
+                PowerCenters mypcs = pcs.GetEntitiesByKey(PowerCenterAttr.CtrlPKVal, collection.No) as PowerCenters;
+                //如果没有权限控制的描述，就默认有权限.
+                if (mypcs == null)
+                {
+                    newCollections.AddEntity(collection);
+                    continue;
+                }
+
+                //控制遍历权限.
+                foreach (PowerCenter pc in mypcs)
+                {
+                    if (pc.CtrlModel.Equals("Anyone") == true)
+                    {
+                        newCollections.AddEntity(collection);
+                        break;
+                    }
+                    if (pc.CtrlModel.Equals("Adminer") == true && BP.Web.WebUser.No.Equals("admin") == true)
+                    {
+                        newCollections.AddEntity(collection);
+                        break;
+                    }
+
+                    if (pc.CtrlModel.Equals("AdminerAndAdmin2") == true && BP.Web.WebUser.IsAdmin == true)
+                    {
+                        newCollections.AddEntity(collection);
+                        break;
+                    }
+                    empIds = "," + pc.IDs + ",";
+                    if (pc.CtrlModel.Equals("Emps") == true && empIds.Contains("," + BP.Web.WebUser.No + ",") == true)
+                    {
+                        newCollections.AddEntity(collection);
+                        break;
+                    }
+
+                    //是否包含部门？
+                    if (pc.CtrlModel.Equals("Depts") == true && BP.DA.DataType.IsHaveIt(pc.IDs, mydepts) == true)
+                    {
+                        newCollections.AddEntity(collection);
+                        break;
+                    }
+
+                    //是否包含岗位？
+                    if (pc.CtrlModel.Equals("Stations") == true && BP.DA.DataType.IsHaveIt(pc.IDs, mystas) == true)
+                    {
+                        newCollections.AddEntity(collection);
+                        break;
+                    }
+
+                    //SQL？
+                    if (pc.CtrlModel.Equals("SQL") == true)
+                    {
+                        string sql = BP.WF.Glo.DealExp(pc.IDs, null, "");
+                        if (DBAccess.RunSQLReturnValFloat(sql) > 0)
+                        {
+                            newCollections.AddEntity(collection);
+                        }
+                        break;
+                    }
+                }
+            }
+            return newCollections;
         }
         /// <summary>
         /// 获取数据源实体列表显示的列及操作列方法
@@ -1052,24 +1208,29 @@ namespace BP.CCBill
             #region 查询显示的列
             MapAttrs mapattrs = new MapAttrs();
             mapattrs.Retrieve(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.Idx);
-            if (dblist.DBType == 1)
-                return "err@数据源实体执行URL返回的JSON暂未支持";
+
             //查询列表数据源显示的列
             if (DataType.IsNullOrEmpty(dblist.ExpList) == true)
                 return "err@数据源实体的列表数据源不能为空，请联系设计人员，检查错误原因.";
-            //替换@
+
+            //查询结果集返回的字段列表
+            DataTable listDT = null;
             string explist = dblist.ExpList;
-            if (explist.ToUpper().Contains("WHERE") == false)
-                explist += " WHERE 1=2";
-            if (DataType.IsNullOrEmpty(dblist.DBSrc) == true)
-                dblist.DBSrc = "local";
+            //替换
+            if (dblist.DBType == 0)
+            {
 
-            string sql = dblist.DBSrc;
-            sql = BP.WF.Glo.DealExp(sql, null) ;
-            explist = BP.WF.Glo.DealExp(explist, null);
+                if (explist.ToUpper().Contains("WHERE") == false)
+                    explist += " WHERE 1=2";
+                else
+                    explist += " AND 1=2";
+                if (DataType.IsNullOrEmpty(dblist.DBSrc) == true)
+                    dblist.DBSrc = "local";
+                explist = BP.WF.Glo.DealExp(explist, null);
+                SFDBSrc dbSrc = new SFDBSrc(dblist.DBSrc);
+                listDT = dbSrc.RunSQLReturnTable(explist);
+            }
 
-            SFDBSrc dbSrc = new SFDBSrc(sql);
-            DataTable listDT = dbSrc.RunSQLReturnTable(explist);
 
             DataRow row = null;
             DataTable dt = new DataTable("Attrs");
@@ -1081,38 +1242,67 @@ namespace BP.CCBill
             dt.Columns.Add("MyDataType", typeof(int));
             dt.Columns.Add("UIBindKey", typeof(string));
             dt.Columns.Add("AtPara", typeof(string));
-
-            //设置标题、单据号位于开始位置
-            foreach (DataColumn col in listDT.Columns)
+            if (listDT == null)
             {
-                //获取key
-                string key = col.ColumnName;
-                if (DataType.IsNullOrEmpty(key) == true)
-                    continue;
-                MapAttr attr = mapattrs.GetEntityByKey(this.FrmID + "_" + key) as MapAttr;
-                row = dt.NewRow();
-                if (attr == null)
+                foreach (MapAttr attr in mapattrs)
                 {
-                    row["KeyOfEn"] = key;
-                    row["Name"] = key;
-                    row["Width"] = 120;
-                    row["UIContralType"] = UIContralType.TB ;
-                    row["LGType"] = FieldTypeS.Normal;
-                    row["MyDataType"] = DataType.AppString;
-                    row["UIBindKey"] = "";
-                    row["AtPara"] = "";
+                    string searchVisable = attr.atPara.GetValStrByKey("SearchVisable");
+                    if (searchVisable == "0")
+                        continue;
+                    if (DataType.IsNullOrEmpty(searchVisable) == true && attr.UIVisible == false)
+                        continue;
+                    row = dt.NewRow();
+                    row["KeyOfEn"] = attr.KeyOfEn;
+                    row["Name"] = attr.Name;
+                    row["Width"] = attr.UIWidthInt;
+                    row["UIContralType"] = attr.UIContralType;
+                    row["LGType"] = attr.LGType;
+                    row["MyDataType"] = attr.MyDataType;
+                    row["UIBindKey"] = attr.UIBindKey;
+                    row["AtPara"] = attr.GetValStringByKey("AtPara");
                     dt.Rows.Add(row);
-                    continue;
                 }
-                row["KeyOfEn"] = attr.KeyOfEn;
-                row["Name"] = attr.Name;
-                row["Width"] = attr.UIWidthInt;
-                row["UIContralType"] = attr.UIContralType;
-                row["LGType"] =attr.LGType;
-                row["MyDataType"] = attr.MyDataType;
-                row["UIBindKey"] = attr.UIBindKey;
-                row["AtPara"] = attr.GetValStringByKey("AtPara");
-                dt.Rows.Add(row);
+            }
+            else
+            {
+                //设置标题、单据号位于开始位置
+                foreach (DataColumn col in listDT.Columns)
+                {
+                    //获取key
+                    string key = col.ColumnName;
+                    if (DataType.IsNullOrEmpty(key) == true)
+                        continue;
+                    MapAttr attr = mapattrs.GetEntityByKey(this.FrmID + "_" + key) as MapAttr;
+                    row = dt.NewRow();
+                    if (attr == null)
+                    {
+                        row["KeyOfEn"] = key;
+                        row["Name"] = key;
+                        row["Width"] = 120;
+                        row["UIContralType"] = UIContralType.TB;
+                        row["LGType"] = FieldTypeS.Normal;
+                        row["MyDataType"] = DataType.AppString;
+                        row["UIBindKey"] = "";
+                        row["AtPara"] = "";
+                        dt.Rows.Add(row);
+                        continue;
+                    }
+                    string searchVisable = attr.atPara.GetValStrByKey("SearchVisable");
+                    if (searchVisable == "0")
+                        continue;
+                    if (DataType.IsNullOrEmpty(searchVisable) == true && attr.UIVisible == false)
+                        continue;
+                    row["KeyOfEn"] = attr.KeyOfEn;
+                    row["Name"] = attr.Name;
+                    row["Width"] = attr.UIWidthInt;
+                    row["UIContralType"] = attr.UIContralType;
+                    row["LGType"] = attr.LGType;
+                    row["MyDataType"] = attr.MyDataType;
+                    row["UIBindKey"] = attr.UIBindKey;
+                    row["AtPara"] = attr.GetValStringByKey("AtPara");
+                    dt.Rows.Add(row);
+                }
+
             }
 
             #endregion 查询显示的列
@@ -1121,6 +1311,31 @@ namespace BP.CCBill
             //增加枚举
             MapData mapData = new MapData(this.FK_MapData);
             ds.Tables.Add(mapData.SysEnums.ToDataTableField("Sys_Enum"));
+            #region 把外键表加入 DataSet
+            DataTable ddlTable = new DataTable();
+            ddlTable.Columns.Add("No");
+
+            foreach (MapAttr attr in mapattrs)
+            {
+                //为空、枚举值就continue.
+                if (DataType.IsNullOrEmpty(attr.UIBindKey) == true || attr.LGType == FieldTypeS.Enum)
+                    continue;
+                DataTable mydt = BP.Pub.PubClass.GetDataTableByUIBineKey(attr.UIBindKey);
+                if (mydt == null)
+                {
+                    DataRow ddldr = ddlTable.NewRow();
+                    ddldr["No"] = attr.UIBindKey;
+                    ddlTable.Rows.Add(ddldr);
+                }
+                else
+                {
+                    ds.Tables.Add(mydt);
+                }
+            }
+            ddlTable.TableName = "UIBindKey";
+            ds.Tables.Add(ddlTable);
+            #endregion End把外键表加入DataSet
+
             //查询一行数据的操作
             Methods methods = new Methods();
             methods.Retrieve(MethodAttr.FrmID, this.FrmID, MethodAttr.IsList, 1, MethodAttr.Idx);
@@ -1130,6 +1345,38 @@ namespace BP.CCBill
             return BP.Tools.Json.ToJson(ds);
         }
 
+        public string SearchDB_UrlSearchData(string urlExt, string postData)
+        {
+            if (urlExt.Contains("http") == false)
+            {
+                /*如果没有绝对路径 */
+                if (BP.Difference.SystemConfig.IsBSsystem)
+                {
+                    /*在cs模式下自动获取*/
+                    string host = HttpContextHelper.RequestUrlHost;//BP.Sys.Base.Glo.Request.Url.Host;
+                    if (urlExt.Contains("@AppPath"))
+                        urlExt = urlExt.Replace("@AppPath", "http://" + host + HttpContextHelper.RequestApplicationPath);//BP.Sys.Base.Glo.Request.ApplicationPath
+                    else
+                        urlExt = "http://" + HttpContextHelper.RequestUrlAuthority + urlExt;
+                }
+
+                if (BP.Difference.SystemConfig.IsBSsystem == false)
+                {
+                    /*在cs模式下它的baseurl 从web.config中获取.*/
+                    string cfgBaseUrl =  BP.Difference.SystemConfig.AppSettings["HostURL"];
+                    if (DataType.IsNullOrEmpty(cfgBaseUrl))
+                    {
+                        string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
+                        BP.DA.Log.DebugWriteError(err);
+                        throw new Exception(err);
+                    }
+                    urlExt = cfgBaseUrl + urlExt;
+                }
+            }
+
+            string json = BP.WF.Glo.HttpPostConnect(urlExt, postData);
+            return json;
+        }
 
         public string Search_Init()
         {
@@ -1139,9 +1386,7 @@ namespace BP.CCBill
             MapData md = new MapData(this.FrmID);
 
             //取出来查询条件.
-            UserRegedit ur = new UserRegedit();
-            ur.setMyPK( WebUser.No + this.FrmID + "_SearchAttrs");
-            ur.RetrieveFromDBSources();
+            UserRegedit ur = new UserRegedit(WebUser.No, this.FrmID + "_SearchAttrs");
 
             GEEntitys rpts = new GEEntitys(this.FrmID);
 
@@ -1198,18 +1443,18 @@ namespace BP.CCBill
                         isFirst = false;
                         /* 第一次进来。 */
                         qo.addLeftBracket();
-                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                            qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                        if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(attr.Key, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
                         else
-                            qo.AddWhere(attr.Key, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                            qo.AddWhere(attr.Key, " LIKE ", " '%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey||'%'");
                         continue;
                     }
                     qo.addOr();
 
-                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                        qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                    if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                        qo.AddWhere(attr.Key, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
                     else
-                        qo.AddWhere(attr.Key, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                        qo.AddWhere(attr.Key, " LIKE ", "'%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey||'%'");
 
                 }
                 qo.MyParas.Add("SKey", keyWord);
@@ -1243,19 +1488,19 @@ namespace BP.CCBill
                         isFirst = false;
                         /* 第一次进来。 */
                         qo.addLeftBracket();
-                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                            qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                        if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(field, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + field + ",'%')") : (" '%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "+'%'"));
                         else
-                            qo.AddWhere(field, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                            qo.AddWhere(field, " LIKE ", " '%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "||'%'");
                         qo.MyParas.Add(field, fieldValue);
                         continue;
                     }
                     qo.addAnd();
 
-                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                        qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                    if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                        qo.AddWhere(field, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "+'%'"));
                     else
-                        qo.AddWhere(field, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                        qo.AddWhere(field, " LIKE ", "'%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "||'%'");
                     qo.MyParas.Add(field, fieldValue);
 
 
@@ -1330,7 +1575,7 @@ namespace BP.CCBill
                 qo.addLeftBracket();
 
 
-                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+                if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true)
                 {
                     var typeVal = BP.Sys.Base.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
                     qo.AddWhere(str, typeVal);
@@ -1482,9 +1727,7 @@ namespace BP.CCBill
             string expList = md.ExpList;
 
             //取出来查询条件.
-            UserRegedit ur = new UserRegedit();
-            ur.setMyPK(WebUser.No + this.FrmID + "_SearchAttrs");
-            ur.RetrieveFromDBSources();
+            UserRegedit ur = new UserRegedit(WebUser.No, this.FrmID + "_SearchAttrs");
 
             GEEntitys rpts = new GEEntitys(this.FrmID);
 
@@ -1497,59 +1740,70 @@ namespace BP.CCBill
             whereDT.Columns.Add("Oper");
             whereDT.Columns.Add("Value");
             whereDT.Columns.Add("Type");
-            DataRow dr; 
+            DataRow dr;
             #region 关键字字段.
             string keyWord = ur.SearchKey;
+            Hashtable ht = new Hashtable();
 
-            if (md.GetParaBoolen("IsSearchKey") && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1)
+            if (md.GetParaBoolen("IsSearchKey") == true)
             {
-                Attr attrPK = new Attr();
-                foreach (Attr attr in attrs)
+                if (DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1)
                 {
-                    if (attr.IsPK)
-                    {
-                        attrPK = attr;
-                        break;
-                    }
+                    ht.Add("SearchKey", keyWord);
                 }
-                int i = 0;
-                string enumKey = ","; //求出枚举值外键.
-                foreach (Attr attr in attrs)
+                else
                 {
-                    if (systemKeys.IndexOf(attr.Key + ",") != -1)
-                        continue;
-                    switch (attr.MyFieldType)
+                    Attr attrPK = new Attr();
+                    foreach (Attr attr in attrs)
                     {
-                        case FieldType.Enum:
-                            enumKey = "," + attr.Key + "Text,";
+                        if (attr.IsPK)
+                        {
+                            attrPK = attr;
                             break;
-                        case FieldType.FK:
-                            continue;
-                        default:
-                            break;
+                        }
                     }
-
-                    if (attr.MyDataType != DataType.AppString)
-                        continue;
-
-                    //排除枚举值关联refText.
-                    if (attr.MyFieldType == FieldType.RefText)
+                    int i = 0;
+                    string enumKey = ","; //求出枚举值外键.
+                    foreach (Attr attr in attrs)
                     {
-                        if (enumKey.Contains("," + attr.Key + ",") == true)
+                        if (systemKeys.IndexOf(attr.Key + ",") != -1)
                             continue;
-                    }
+                        switch (attr.MyFieldType)
+                        {
+                            case FieldType.Enum:
+                                enumKey = "," + attr.Key + "Text,";
+                                break;
+                            case FieldType.FK:
+                                continue;
+                            default:
+                                break;
+                        }
 
-                    if (attr.Key == "FK_Dept")
-                        continue;
-                    i++;
-                    dr = whereDT.NewRow(); 
-                    dr["Key"] = attr.Key;
-                    dr["Oper"] = "like";
-                    dr["Value"] = keyWord;
-                    dr["Type"] = "SearchKey";
-                    whereDT.Rows.Add(dr);
+                        if (attr.MyDataType != DataType.AppString)
+                            continue;
+
+                        //排除枚举值关联refText.
+                        if (attr.MyFieldType == FieldType.RefText)
+                        {
+                            if (enumKey.Contains("," + attr.Key + ",") == true)
+                                continue;
+                        }
+
+                        if (attr.Key == "FK_Dept")
+                            continue;
+                        i++;
+                        dr = whereDT.NewRow();
+                        dr["Key"] = attr.Key;
+                        dr["Oper"] = "like";
+                        dr["Value"] = keyWord;
+                        dr["Type"] = "SearchKey";
+                        whereDT.Rows.Add(dr);
+
+                    }
+                    ht.Add("SearchKey", keyWord);
 
                 }
+
             }
             else if (DataType.IsNullOrEmpty(md.GetParaString("StringSearchKeys")) == false)
             {
@@ -1571,70 +1825,88 @@ namespace BP.CCBill
                     //字段名对应的字段值
                     fieldValue = ur.GetParaString(field);
                     if (DataType.IsNullOrEmpty(fieldValue) == true)
+                    {
+                        ht.Add(field, "");
                         continue;
+                    }
+
                     dr = whereDT.NewRow();
                     dr["Key"] = field;
                     dr["Oper"] = "like";
                     dr["Value"] = fieldValue;
                     dr["Type"] = "StringKey";
                     whereDT.Rows.Add(dr);
+                    ht.Add(field, fieldValue);
                 }
-               
+
             }
 
             #endregion 关键字段查询
 
             #region 时间段的查询
-            if (md.GetParaInt("DTSearchWay") != (int)DTSearchWay.None && DataType.IsNullOrEmpty(ur.DTFrom) == false)
+            if (md.GetParaInt("DTSearchWay") != (int)DTSearchWay.None)
             {
-                string dtFrom = ur.DTFrom; // this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
-                string dtTo = ur.DTTo; // this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
-
-                //按日期查询
-                if (md.GetParaInt("DTSearchWay") == (int)DTSearchWay.ByDate)
+                if (DataType.IsNullOrEmpty(ur.DTFrom) == true)
                 {
-                    dr = whereDT.NewRow();
-                    dr["Key"] = md.GetParaString("DTSearchKey");
-                    dr["Oper"] = ">=";
-                    dr["Value"] = dtFrom;
-                    dr["Type"] = "Date";
-                    whereDT.Rows.Add(dr);
-                    dtTo += " 23:59:59";
-                    dr = whereDT.NewRow();
-                    dr["Key"] = md.GetParaString("DTSearchKey");
-                    dr["Oper"] = "<=";
-                    dr["Value"] = dtTo;
-                    dr["Type"] = "Date";
-                    whereDT.Rows.Add(dr);
-                    
+                    ht.Add("DTFrom", ur.DTFrom);
+                    ht.Add("DTTo", ur.DTTo);
+
+                }
+                else
+                {
+                    string dtFrom = ur.DTFrom; // this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
+                    string dtTo = ur.DTTo; // this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
+
+                    //按日期查询
+                    if (md.GetParaInt("DTSearchWay") == (int)DTSearchWay.ByDate)
+                    {
+                        dr = whereDT.NewRow();
+                        dr["Key"] = md.GetParaString("DTSearchKey");
+                        dr["Oper"] = ">=";
+                        dr["Value"] = dtFrom;
+                        dr["Type"] = "Date";
+                        whereDT.Rows.Add(dr);
+                        dtTo += " 23:59:59";
+                        dr = whereDT.NewRow();
+                        dr["Key"] = md.GetParaString("DTSearchKey");
+                        dr["Oper"] = "<=";
+                        dr["Value"] = dtTo;
+                        dr["Type"] = "Date";
+                        whereDT.Rows.Add(dr);
+                        ht.Add("DTFrom", dtFrom);
+                        ht.Add("DTTo", dtTo);
+                    }
+
+                    if (md.GetParaInt("DTSearchWay") == (int)DTSearchWay.ByDateTime)
+                    {
+                        //取前一天的24：00
+                        if (dtFrom.Trim().Length == 10) //2017-09-30
+                            dtFrom += " 00:00:00";
+                        if (dtFrom.Trim().Length == 16) //2017-09-30 00:00
+                            dtFrom += ":00";
+
+                        dtFrom = DateTime.Parse(dtFrom).AddDays(-1).ToString("yyyy-MM-dd") + " 24:00";
+
+                        if (dtTo.Trim().Length < 11 || dtTo.Trim().IndexOf(' ') == -1)
+                            dtTo += " 24:00";
+
+                        dr = whereDT.NewRow();
+                        dr["Key"] = md.GetParaString("DTSearchKey");
+                        dr["Oper"] = ">=";
+                        dr["Value"] = dtFrom;
+                        dr["Type"] = "Date";
+                        whereDT.Rows.Add(dr);
+                        dr = whereDT.NewRow();
+                        dr["Key"] = md.GetParaString("DTSearchKey");
+                        dr["Oper"] = "<=";
+                        dr["Value"] = dtTo;
+                        dr["Type"] = "Date";
+                        whereDT.Rows.Add(dr);
+                        ht.Add("DTFrom", dtFrom);
+                        ht.Add("DTTo", dtTo);
+                    }
                 }
 
-                if (md.GetParaInt("DTSearchWay") == (int)DTSearchWay.ByDateTime)
-                {
-                    //取前一天的24：00
-                    if (dtFrom.Trim().Length == 10) //2017-09-30
-                        dtFrom += " 00:00:00";
-                    if (dtFrom.Trim().Length == 16) //2017-09-30 00:00
-                        dtFrom += ":00";
-
-                    dtFrom = DateTime.Parse(dtFrom).AddDays(-1).ToString("yyyy-MM-dd") + " 24:00";
-
-                    if (dtTo.Trim().Length < 11 || dtTo.Trim().IndexOf(' ') == -1)
-                        dtTo += " 24:00";
-
-                    dr = whereDT.NewRow();
-                    dr["Key"] = md.GetParaString("DTSearchKey");
-                    dr["Oper"] = ">=";
-                    dr["Value"] = dtFrom;
-                    dr["Type"] = "Date";
-                    whereDT.Rows.Add(dr);
-                    dr = whereDT.NewRow();
-                    dr["Key"] = md.GetParaString("DTSearchKey");
-                    dr["Oper"] = "<=";
-                    dr["Value"] = dtTo;
-                    dr["Type"] = "Date";
-                    whereDT.Rows.Add(dr);
-                }
             }
             #endregion 时间段的查询
 
@@ -1646,17 +1918,22 @@ namespace BP.CCBill
             {
                 var val = ap.GetValStrByKey(str);
                 if (val.Equals("all"))
+                {
+                    ht.Add(str, "");
                     continue;
+                }
+
                 dr = whereDT.NewRow();
                 dr["Key"] = str;
                 dr["Oper"] = "=";
                 dr["Value"] = ap.GetValStrByKey(str);
                 dr["Type"] = "Select";
                 whereDT.Rows.Add(dr);
+                ht.Add(str, ap.GetValStrByKey(str));
             }
             #endregion 外键或者枚举的查询
 
-           
+
             //增加表单字段的查询
             foreach (string key in HttpContextHelper.RequestParamKeys)
             {
@@ -1672,17 +1949,19 @@ namespace BP.CCBill
                     dr["Value"] = HttpContextHelper.RequestParams(key);
                     dr["Type"] = "Normal";
                     whereDT.Rows.Add(dr);
+                    ht.Add(key, HttpContextHelper.RequestParams(key));
                     continue;
                 }
 
             }
             #endregion
+            #region 数据源SQL
             if (md.DBType == 0)
             {
-                
+
                 string mainTable = "A.";
                 string mainTablePK = md.MainTablePK;
-               
+
                 string whereSQL = "";
                 bool isFirstSearchKey = true;
                 bool isFirstDateKey = true;
@@ -1690,7 +1969,7 @@ namespace BP.CCBill
                 foreach (DataRow dataRow in whereDT.Rows)
                 {
                     string key = dataRow["Key"].ToString();
-                   
+
                     if (expList.IndexOf("@" + Key) != -1)
                     {
                         expList = expList.Replace("@" + Key, dataRow["Value"].ToString());
@@ -1702,7 +1981,7 @@ namespace BP.CCBill
                         if (isFirstSearchKey)
                         {
                             isFirstSearchKey = false;
-                            whereSQL += " AND (" + mainTable+ key + " like '%" + dataRow["Value"].ToString() + "%' ";
+                            whereSQL += " AND (" + mainTable + key + " like '%" + dataRow["Value"].ToString() + "%' ";
                         }
                         else
                             whereSQL += " OR " + mainTable + key + " like '%" + dataRow["Value"].ToString() + "%' ";
@@ -1712,13 +1991,13 @@ namespace BP.CCBill
                         whereSQL += ")";
                         isFirstSearchKey = true;
                     }
-                       
+
                     if (type.Equals("StringKey") == true)
                         whereSQL += " AND " + mainTable + key + " like '%" + dataRow["Value"].ToString() + "%' ";
                     //时间解析
                     if (type.Equals("Date") == true)
                     {
-                        
+
                         if (isFirstDateKey == true)
                         {
                             isFirstDateKey = false;
@@ -1735,11 +2014,11 @@ namespace BP.CCBill
                     }
                 }
 
-                if(isFirstSearchKey == false)
+                if (isFirstSearchKey == false)
                     whereSQL += ")";
                 //expCount = expCount + whereSQL;
                 //expList = expList + whereSQL;
-               
+
 
                 expList = "SELECT * From(" + expList + ") AS A WHERE 1=1 " + whereSQL;//查询列数的
                 string expCount = "SELECT Count(*) From(" + expList + ") AS A WHERE 1=1 " + whereSQL;//查询总条数的
@@ -1756,15 +2035,58 @@ namespace BP.CCBill
                 int count = dbsrc.RunSQLReturnInt(expCount, 0);
 
 
-                dbsrc.DoQuery(rpts,expList, expPageSize,"OID",attrs,count, this.PageSize, this.PageIdx, ur.OrderBy);
+                dbsrc.DoQuery(rpts, expList, expPageSize, "OID", attrs, count, this.PageSize, this.PageIdx, ur.OrderBy);
                 ur.SetPara("RecCount", count);
                 ur.Save();
                 DataTable dt = rpts.ToDataTableField("DT");
                 ds.Tables.Add(dt); //把数据加入里面.
 
             }
+            #endregion 数据源SQL
+            #region URL请求数据
+            if (md.DBType == 1)
+            {
+                ht.Add("PageSize", this.PageSize);
+                ht.Add("PageIdx", this.PageIdx);
+                // 请求的参数作为JSON字符串发送给列表URL
+                string postData = BP.Tools.Json.ToJson(ht);
+                string json = SearchDB_UrlSearchData(md.ExpList, postData);
+                if (DataType.IsNullOrEmpty(json) == true)
+                    return "err@根据URL请求数据列表数据为空";
+                JsonData jd = JsonMapper.ToObject(json);
+                string count = jd["count"].ToString();
+                if (DataType.IsNullOrEmpty(count) == true)
+                    ur.SetPara("RecCount", 0);
+                else
+                    ur.SetPara("RecCount", Int32.Parse(count));
+                ur.Save();
+                string data = jd["data"].ToJson();
+                DataTable dt = new DataTable("DT");
+                if (DataType.IsNullOrEmpty(data) == false)
+                {
+                    dt = BP.Tools.Json.ToDataTable(data);
+                    dt.TableName = "DT";
+                    ds.Tables.Add(dt); //把数据加入里面.
+                }
 
-           
+            }
+            #endregion URL请求数据
+
+            #region 存储过程的查询
+            if (md.DBType == 2)
+            {
+                string sql = md.ExpList;
+                sql = sql.Replace("~", "'");
+                Paras paras = new Paras();
+                foreach (string key in ht.Keys)
+                {
+                    paras.Add(key, ht[key]);
+                }
+                DataTable dt = DBAccess.RunProcReturnTable(sql, paras);
+                dt.TableName = "DT";
+                ds.Tables.Add(dt); //把数据加入里面.
+            }
+            #endregion 存储过程的查询
 
             return BP.Tools.Json.ToJson(ds);
         }
@@ -1826,7 +2148,7 @@ namespace BP.CCBill
             sql += "  GROUP BY A.BillState, B.Lab  ";
 
             DataTable dtFlows = DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
                 dtFlows.Columns[0].ColumnName = "No";
                 dtFlows.Columns[1].ColumnName = "Name";
@@ -1856,15 +2178,15 @@ namespace BP.CCBill
 
             string fields = " WorkID,FrmID,FrmName,Title,BillState, Starter, StarterName,Sender,RDT ";
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
                 sql = "SELECT " + fields + " FROM (SELECT * FROM Frm_GenerBill WHERE " + sqlWhere + ") WHERE rownum <= 50";
-            else if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
                 sql = "SELECT  TOP 50 " + fields + " FROM Frm_GenerBill WHERE " + sqlWhere;
-            else if (SystemConfig.AppCenterDBType == DBType.MySQL || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
                 sql = "SELECT  " + fields + " FROM Frm_GenerBill WHERE " + sqlWhere + " LIMIT 50";
 
             DataTable mydt = DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
                 mydt.Columns[0].ColumnName = "WorkID";
                 mydt.Columns[1].ColumnName = "FrmID";
@@ -1916,9 +2238,7 @@ namespace BP.CCBill
 
 
             //取出来查询条件.
-            UserRegedit ur = new UserRegedit();
-            ur.setMyPK(WebUser.No + this.FrmID + "_SearchAttrs");
-            ur.RetrieveFromDBSources();
+            UserRegedit ur = new UserRegedit(WebUser.No, this.FrmID + "_SearchAttrs");
 
             GEEntitys rpts = new GEEntitys(this.FrmID);
 
@@ -1975,18 +2295,18 @@ namespace BP.CCBill
                         isFirst = false;
                         /* 第一次进来。 */
                         qo.addLeftBracket();
-                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                            qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                        if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(attr.Key, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
                         else
-                            qo.AddWhere(attr.Key, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                            qo.AddWhere(attr.Key, " LIKE ", " '%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey||'%'");
                         continue;
                     }
                     qo.addOr();
 
-                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                        qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                    if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                        qo.AddWhere(attr.Key, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
                     else
-                        qo.AddWhere(attr.Key, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                        qo.AddWhere(attr.Key, " LIKE ", "'%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey||'%'");
 
                 }
                 qo.MyParas.Add("SKey", keyWord);
@@ -2020,19 +2340,19 @@ namespace BP.CCBill
                         isFirst = false;
                         /* 第一次进来。 */
                         qo.addLeftBracket();
-                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                            qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                        if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(field, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + field + ",'%')") : (" '%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "+'%'"));
                         else
-                            qo.AddWhere(field, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                            qo.AddWhere(field, " LIKE ", " '%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "||'%'");
                         qo.MyParas.Add(field, fieldValue);
                         continue;
                     }
                     qo.addAnd();
 
-                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                        qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                    if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                        qo.AddWhere(field, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "+'%'"));
                     else
-                        qo.AddWhere(field, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                        qo.AddWhere(field, " LIKE ", "'%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "||'%'");
                     qo.MyParas.Add(field, fieldValue);
 
 
@@ -2108,7 +2428,7 @@ namespace BP.CCBill
                 qo.addLeftBracket();
 
 
-                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+                if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType==true)
                 {
                     var typeVal = BP.Sys.Base.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
                     qo.AddWhere(str, typeVal);
@@ -2149,7 +2469,7 @@ namespace BP.CCBill
                     val = val.Replace("WebUser.FK_Dept", WebUser.FK_Dept);
 
                     //获得真实的数据类型.
-                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+                    if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true)
                     {
                         var valType = BP.Sys.Base.Glo.GenerRealType(attrs,
                             str[0], val);
@@ -2196,7 +2516,7 @@ namespace BP.CCBill
         #region 单据导入
         public string ImpData_Done()
         {
-            if (SystemConfig.CustomerNo.Equals("ASSET") == true)
+            if (BP.Difference.SystemConfig.CustomerNo.Equals("ASSET") == true)
                 return ImpData_ASSETDone();
             var files = HttpContextHelper.RequestFiles();
             if (HttpContextHelper.RequestFilesCount == 0)
@@ -2214,7 +2534,7 @@ namespace BP.CCBill
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + ext;
 
             //文件存放路径
-            string filePath = SystemConfig.PathOfTemp + "/" + fileNewName;
+            string filePath =  BP.Difference.SystemConfig.PathOfTemp + "/" + fileNewName;
             HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), filePath);
 
             //从excel里面获得数据表.
@@ -2490,7 +2810,7 @@ namespace BP.CCBill
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + ext;
 
             //文件存放路径
-            string filePath = SystemConfig.PathOfTemp + "/" + fileNewName;
+            string filePath =  BP.Difference.SystemConfig.PathOfTemp + "/" + fileNewName;
             HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), filePath);
 
             //从excel里面获得数据表.
@@ -2796,10 +3116,10 @@ namespace BP.CCBill
 
                 if (item.Key.EndsWith("BaseName") == true)
                 {
-                    Depts depts = new Depts();
-                    depts.Retrieve(DeptAttr.Name, val);
+                    BP.Port.Depts depts = new BP.Port.Depts();
+                    depts.Retrieve(BP.Port.DeptAttr.Name, val);
                     if (depts.Count != 0)
-                        en.SetValByKey(item.Key.Replace("BaseName", "BaseCode"), (depts[0] as Dept).No);
+                        en.SetValByKey(item.Key.Replace("BaseName", "BaseCode"), (depts[0] as BP.Port.Dept).No);
                     en.SetValByKey(item.Key, val);
                     continue;
                 }
@@ -3153,7 +3473,7 @@ namespace BP.CCBill
             //回调url
             string redirect_uri = HttpUtility.UrlEncode("http://www.ccbpm.cn/WF/CCBill/DictFlowStart.htm");
             //授权链接
-            string oatuth2 = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + SystemConfig.AppID + "&redirect_uri=" + redirect_uri + "&response_type=code&scope=snsapi_userinfo&&state=" + state + "#wechat_redirect";
+            string oatuth2 = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + BP.Difference.SystemConfig.AppID + "&redirect_uri=" + redirect_uri + "&response_type=code&scope=snsapi_userinfo&&state=" + state + "#wechat_redirect";
             return oatuth2;
         }
         #endregion 外部流程网页授权URL

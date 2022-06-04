@@ -1,9 +1,5 @@
-﻿using System;
-using System.Data;
-using BP.DA;
-using BP.En;
+﻿using BP.En;
 using BP.Sys;
-using BP.Web;
 
 namespace BP.WF.Port
 {
@@ -20,13 +16,28 @@ namespace BP.WF.Port
         /// 隶属组织
         /// </summary>
         public const string OrgNo = "OrgNo";
+        public const string Leader = "Leader";
+        public const string LeaderName = "LeaderName";
+        public const string Idx = "Idx";
+
     }
-	/// <summary>
-	/// 部门
-	/// </summary>
-	public class Dept:EntityNoName
+    /// <summary>
+    /// 部门
+    /// </summary>
+    public class Dept:EntityNoName
 	{
-		#region 属性
+        #region 属性
+        public int Idx
+        {
+            get
+            {
+                return this.GetValIntByKey(DeptAttr.Idx);
+            }
+            set
+            {
+                this.SetValByKey(DeptAttr.Idx, value);
+            }
+        }
         /// <summary>
         /// 父节点编号
         /// </summary>
@@ -50,6 +61,17 @@ namespace BP.WF.Port
             set
             {
                 this.SetValByKey(DeptAttr.OrgNo, value);
+            }
+        }
+        public string Leader
+        {
+            get
+            {
+                return this.GetValStrByKey(DeptAttr.Leader);
+            }
+            set
+            {
+                this.SetValByKey(DeptAttr.Leader, value);
             }
         }
         #endregion
@@ -91,15 +113,17 @@ namespace BP.WF.Port
 
                 Map map = new Map("Port_Dept", "部门");
 
-                map.AdjunctType = AdjunctType.None;
 
                 map.AddTBStringPK(DeptAttr.No, null, "编号", true, false, 1, 30, 40);
                 map.AddTBString(DeptAttr.Name, null,"名称", true, false, 0, 60, 200);
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 30, 40);
                 map.AddTBString(DeptAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
-                
+
+                map.AddTBString(DeptAttr.Leader, null, "Leader", true, false, 0, 50, 250);
+                map.AddTBInt(DeptAttr.Idx, 0, "Leader", true, false);
+
                 //map.AddTBString(DeptAttr.FK_Unit, "1", "隶属单位", false, false, 0, 50, 10);
-                
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -120,7 +144,7 @@ namespace BP.WF.Port
             if (BP.Web.WebUser.No.Equals("admin")==true)
                 return base.RetrieveAll();
 
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
             {
                 QueryObject qo = new QueryObject(this);
                 qo.AddWhere(DeptAttr.No, " = ", BP.Web.WebUser.FK_Dept);

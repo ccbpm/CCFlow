@@ -125,9 +125,9 @@ namespace BP.GPM
                 {
                     string SID = DBAccess.RunSQLReturnStringIsNull("SELECT SID FROM Port_Emp WHERE No='" + Web.WebUser.No + "'", null);
                     if (url.Contains("?"))
-                        url += "&UserNo=" + Web.WebUser.No + "&SID=" + SID;
+                        url += "&UserNo=" + Web.WebUser.No + "&Token=" + SID;
                     else
-                        url += "?UserNo=" + Web.WebUser.No + "&SID=" + SID;
+                        url += "?UserNo=" + Web.WebUser.No + "&Token=" + SID;
                 }
                 return url;
             }

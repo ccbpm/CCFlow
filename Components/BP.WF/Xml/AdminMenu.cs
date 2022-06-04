@@ -141,23 +141,23 @@ namespace BP.WF.XML
         {
             get
             {
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
-                    return SystemConfig.PathOfWebApp + "DataUser/XML/AdminMenu.xml";
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                    return BP.Difference.SystemConfig.PathOfWebApp + "DataUser/XML/AdminMenu.xml";
 
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
                     if (BP.Web.WebUser.No.Equals("admin") == true)
-                        return SystemConfig.PathOfWebApp + "DataUser/XML/AdminMenuSAAS.xml";
+                        return BP.Difference.SystemConfig.PathOfWebApp + "DataUser/XML/AdminMenuSAAS.xml";
                     else
-                        return SystemConfig.PathOfWebApp + "DataUser/XML/Admin2MenuSAAS.xml";
+                        return BP.Difference.SystemConfig.PathOfWebApp + "DataUser/XML/Admin2MenuSAAS.xml";
                 }
 
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
                 {
                     if (BP.Web.WebUser.No.Equals("admin") == true)
-                        return SystemConfig.PathOfWebApp + "DataUser/XML/AdminMenuGroup.xml";
+                        return BP.Difference.SystemConfig.PathOfWebApp + "DataUser/XML/AdminMenuGroup.xml";
                     else
-                        return SystemConfig.PathOfWebApp + "DataUser/XML/Admin2MenuGroup.xml";
+                        return BP.Difference.SystemConfig.PathOfWebApp + "DataUser/XML/Admin2MenuGroup.xml";
                 }
                 throw new Exception("err@系统错误....");
             }

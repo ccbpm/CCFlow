@@ -21,7 +21,10 @@ namespace BP.Sys.FrmUI
         {
             get
             {
-                return this.GetValStrByKey(MapAttrAttr.DefVal);
+                string str= this.GetValStrByKey(MapAttrAttr.DefVal);
+                if (DataType.IsNullOrEmpty(str) == true)
+                    return "0";
+                return str;
             }
             set
             {
@@ -163,7 +166,7 @@ namespace BP.Sys.FrmUI
                    "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //文本占单元格数量
-                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "Label文本单元格数", true, true, "ColSpanAttrString",
+                map.AddDDLSysEnum(MapAttrAttr.LabelColSpan, 1, "Label文本单元格数", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 map.AddTBFloat(MapAttrAttr.UIWidth, 80, "宽度", true, false);
@@ -237,15 +240,24 @@ namespace BP.Sys.FrmUI
                 rm.Icon = "icon-wrench";
                 rm.RefAttrKey = MapAttrAttr.CSSCtrl;
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "帮助弹窗显示";
+                rm.ClassMethodName = this.ToString() + ".DoFieldBigHelper()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-settings";
+                map.AddRefMethod(rm);
+
                 #endregion 执行的方法.
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
-
-
-
+        public string DoFieldBigHelper()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/FieldBigHelper.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
 
         protected override bool beforeUpdateInsertAction()
         {
@@ -256,6 +268,7 @@ namespace BP.Sys.FrmUI
 
             MapData md = new MapData();
             md.No = this.FK_MapData;
+
             if (md.RetrieveFromDBSources() == 1)
             {
                 //修改默认值.
@@ -269,7 +282,6 @@ namespace BP.Sys.FrmUI
                     BP.DA.DBAccess.UpdateTableColumnDefaultVal(md.PTable, this.KeyOfEn, decimal.Parse(this.DefVal));
             }
             #endregion 修改默认值.
-
 
             MapAttr attr = new MapAttr();
             attr.setMyPK(this.MyPK);

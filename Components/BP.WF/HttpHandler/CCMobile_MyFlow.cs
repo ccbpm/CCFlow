@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
-using System.Web;
+﻿using System.Data;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
-using BP.Port;
 using BP.En;
-using BP.WF;
 using BP.WF.Template;
 using BP.Difference;
+using BP.WF.Template.SFlow;
+
 
 namespace BP.WF.HttpHandler
 {
@@ -51,7 +47,7 @@ namespace BP.WF.HttpHandler
             wk.OID = this.WorkID;
             wk.RetrieveFromDBSources();
             wk.ResetDefaultVal();
-            if (SystemConfig.IsBSsystem == true)
+            if (BP.Difference.SystemConfig.IsBSsystem == true)
             {
                 // 处理传递过来的参数。
                 foreach (string k in HttpContextHelper.RequestQueryStringKeys)
@@ -146,7 +142,7 @@ namespace BP.WF.HttpHandler
 
             #region  加载自定义的button.
             BP.WF.Template.NodeToolbars bars = new NodeToolbars();
-            bars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node, NodeToolbarAttr.ShowWhere, (int)ShowWhere.Toolbar);
+            bars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node, NodeToolbarAttr.IsMyFlow, 1, NodeToolbarAttr.Idx);
             ds.Tables.Add(bars.ToDataTableField("WF_NodeToolbar"));
             #endregion  //加载自定义的button.
 
@@ -237,13 +233,13 @@ namespace BP.WF.HttpHandler
                     {
                         string mysql = "";
                         // 找出来上次发送选择的节点.
-                        if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                        if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
                             mysql = "SELECT  top 1 NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID DESC";
-                        else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
                             mysql = "SELECT * FROM ( SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
-                        else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                        else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
                             mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1";
-                        else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+                        else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
                             mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1";
 
                         //获得上一次发送到的节点.
@@ -251,7 +247,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     #region 为天业集团做一个特殊的判断.
-                    if (SystemConfig.CustomerNo == "TianYe" && nd.Name.Contains("董事长") == true)
+                    if (BP.Difference.SystemConfig.CustomerNo == "TianYe" && nd.Name.Contains("董事长") == true)
                     {
                         /*如果是董事长节点, 如果是下一个节点默认的是备案. */
                         foreach (Node item in nds)

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
-using BP.Sys;
+﻿using System.Data;
 using System.Collections;
-using BP.En;
 using BP.DA;
 
 namespace BP.GPM.DTalk.DINGTalk
@@ -56,7 +51,7 @@ namespace BP.GPM.DTalk.DINGTalk
                 case DingMsgType.text:
                     Ding_Msg_Text msgText = new Ding_Msg_Text();
                     msgText.Access_Token = DingDing.getAccessToken();
-                    msgText.agentid = SystemConfig.Ding_AgentID;
+                    msgText.agentid =  BP.Difference.SystemConfig.Ding_AgentID;
                     msgText.touser = toUsers;
                     msgText.content = title + "\n发送人：" + sender + "\n时间：" + DataType.CurrentDateTimeCNOfShort;
                     return DingTalk_Message.Msg_AgentText_Send(msgText);
@@ -64,8 +59,8 @@ namespace BP.GPM.DTalk.DINGTalk
                     Ding_Msg_Link msgLink = new Ding_Msg_Link();
                     msgLink.Access_Token = DingDing.getAccessToken();
                     msgLink.touser = toUsers;
-                    msgLink.agentid = SystemConfig.Ding_AgentID;
-                    msgLink.messageUrl = SystemConfig.Ding_MessageUrl + "/CCMobile/login.aspx";
+                    msgLink.agentid =  BP.Difference.SystemConfig.Ding_AgentID;
+                    msgLink.messageUrl =  BP.Difference.SystemConfig.Ding_MessageUrl + "/CCMobile/login.aspx";
                     msgLink.picUrl = "@lALOACZwe2Rk";
                     msgLink.title = title;
                     msgLink.text = "发送人：" + sender + "\n时间：" + DataType.CurrentDateTimeCNOfShort;
@@ -78,9 +73,9 @@ namespace BP.GPM.DTalk.DINGTalk
                     {
                         Ding_Msg_OA msgOA = new Ding_Msg_OA();
                         msgOA.Access_Token = DingDing.getAccessToken();
-                        msgOA.agentid = SystemConfig.Ding_AgentID;
+                        msgOA.agentid =  BP.Difference.SystemConfig.Ding_AgentID;
                         msgOA.touser = user;
-                        msgOA.messageUrl = SystemConfig.Ding_MessageUrl + "/CCMobile/DingAction.aspx?ActionFrom=message&UserID=" + user
+                        msgOA.messageUrl =  BP.Difference.SystemConfig.Ding_MessageUrl + "/CCMobile/DingAction.aspx?ActionFrom=message&UserID=" + user
                             + "&ActionType=ToDo&FK_Flow=" + flowNo + "&FK_Node=" + nodeID
                             + "&WorkID=" + WorkID+ "&FID=" + fid;
                         //00是完全透明，ff是完全不透明，比较适中的透明度值是 1e

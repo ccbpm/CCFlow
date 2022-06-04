@@ -140,8 +140,8 @@ namespace BP.GPM
             {
                 /*如果没有root.*/
                 root.ParentNo = "0";
-                root.Name = SystemConfig.SysName;
-                root.FK_App = SystemConfig.SysNo;
+                root.Name =  BP.Difference.SystemConfig.SysName;
+                root.FK_App =  BP.Difference.SystemConfig.SysNo;
                 root.HisMenuType = MenuType.Root;
                 root.Idx = 0;
                 root.Insert();

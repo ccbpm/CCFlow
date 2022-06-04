@@ -96,11 +96,12 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_FlowSort", "流程类别");
 
-                map.AddTBStringPK(FlowSortAttr.No, null, "编号", true, true, 1, 100, 20);
-                map.AddTBString(FlowSortAttr.ParentNo, null, "父节点No", true, true, 0, 100, 30);
+                map.AddTBStringPK(FlowSortAttr.No, null, "编号", false, false, 1, 100, 20);
+                map.AddTBString(FlowSortAttr.ParentNo, null, "父节点No", false, false, 0, 100, 30);
+
                 map.AddTBString(FlowSortAttr.Name, null, "名称", true, false, 0, 200, 30, true);
                 map.AddTBString(FlowSortAttr.ShortName, null, "简称", true, false, 0, 200, 30, true);
-                map.AddTBString(FlowSortAttr.OrgNo, "0", "组织编号(0为系统组织)", true, false, 0, 150, 30);
+                map.AddTBString(FlowSortAttr.OrgNo, "0", "组织编号(0为系统组织)", false, false, 0, 150, 30);
                 map.SetHelperAlert(FlowSortAttr.OrgNo, "用于区分不同组织的的流程,比如:一个集团有多个子公司,每个子公司都有自己的业务流程.");
 
                 map.AddTBString(FlowSortAttr.Domain, null, "域/系统编号", true, false, 0, 100, 30);
@@ -176,7 +177,7 @@ namespace BP.WF.Template
         {
             //检查是否有流程？
             Paras ps = new Paras();
-            ps.SQL = "SELECT COUNT(*) FROM WF_Flow WHERE FK_FlowSort=" + SystemConfig.AppCenterDBVarStr + "fk_flowSort";
+            ps.SQL = "SELECT COUNT(*) FROM WF_Flow WHERE FK_FlowSort=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "fk_flowSort";
             ps.Add("fk_flowSort", this.No);
             //string sql = "SELECT COUNT(*) FROM WF_Flow WHERE FK_FlowSort='" + fk_flowSort + "'";
             if (DBAccess.RunSQLReturnValInt(ps) != 0)
@@ -184,7 +185,7 @@ namespace BP.WF.Template
 
             //检查是否有子目录？
             ps = new Paras();
-            ps.SQL = "SELECT COUNT(*) FROM WF_FlowSort WHERE ParentNo=" + SystemConfig.AppCenterDBVarStr + "ParentNo";
+            ps.SQL = "SELECT COUNT(*) FROM WF_FlowSort WHERE ParentNo=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "ParentNo";
             ps.Add("ParentNo", this.No);
             //sql = "SELECT COUNT(*) FROM WF_FlowSort WHERE ParentNo='" + fk_flowSort + "'";
             if (DBAccess.RunSQLReturnValInt(ps) != 0)

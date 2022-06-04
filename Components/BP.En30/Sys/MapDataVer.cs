@@ -180,6 +180,11 @@ namespace BP.Sys
         public MapDataVer()
         {
         }
+        public MapDataVer(string mypk)
+        {
+            this.MyPK = mypk;
+            this.Retrieve();
+        }
         /// <summary>
         /// EnMap
         /// </summary>
@@ -247,21 +252,7 @@ namespace BP.Sys
             base.afterDelete();
         }
 
-        /// <summary>
-        /// 设置主版本.
-        /// </summary>
-        /// <returns></returns>
-        public string SetMainVer()
-        {
-            string sql = "UPDATE Sys_MapDataVer SET IsRel=0 WHERE FrmID='" + this.FrmID + "'";
-            DBAccess.RunSQL(sql);
-
-            this.SetValByKey("IsRel", 1);
-            this.Update(); //更新.
-
-            return "设置成功.";
-        }
-
+       
     }
     /// <summary>
     /// 表单模板版本管理s

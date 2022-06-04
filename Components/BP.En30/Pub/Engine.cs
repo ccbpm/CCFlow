@@ -8,6 +8,8 @@ using BP.DA;
 using BP.Port;
 using BP.Sys;
 using BP.Web;
+using System.Drawing;
+using BP.Difference;
 
 namespace BP.Pub
 {
@@ -35,7 +37,7 @@ namespace BP.Pub
 
         public string GetCode(string str)
         {
-            if (DataType.IsNullOrEmpty(str) )
+            if (DataType.IsNullOrEmpty(str))
                 return "";
 
             string rtn = "";
@@ -251,7 +253,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
         public string GetValueImgStrsOfQR(string billUrl)
         {
             /*说明是图片文件.*/
-            string path = SystemConfig.PathOfTemp + Guid.NewGuid() + ".png"; // key.Replace("OID.Img@AppPath", SystemConfig.PathOfWebApp);
+            string path = SystemConfig.PathOfTemp + Guid.NewGuid() + ".png"; // key.Replace("OID.Img@AppPath", BP.Difference.SystemConfig.PathOfWebApp);
 
             #region 生成二维码.
             ThoughtWorks.QRCode.Codec.QRCodeEncoder qrc = new ThoughtWorks.QRCode.Codec.QRCodeEncoder();
@@ -621,7 +623,6 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                             string text = dr["Msg"].ToString();
                             text = text.Replace("\\", "\\\\");
                             text = this.GetCode(text);
-                            //return Encoding.GetEncoding("GB2312").GetString(Encoding.UTF8.GetBytes(dr["Msg"].ToString()));
                             return text;
 
                         //return System.Text.Encoder  //审核信息.
@@ -651,16 +652,20 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                 case "Rec":
                     return row["EmpFrom"].ToString(); //记录人.
                 case "RecName":
-                    return row["EmpFromT"].ToString(); //审核人.
+                    string recName = row["EmpFromT"].ToString(); //审核人.
+                    recName = this.GetCode(recName);
+                    return recName;
                 case "Msg":
                 case "Note":
-                    return row["Msg"].ToString();
+                    string text = row["Msg"].ToString();
+                    text = text.Replace("\\", "\\\\");
+                    text = this.GetCode(text);
+                    return text;
                 case "Siganture":
-                    string empNo = row["EmpFrom"].ToString(); //记录人.
-                    //审核人的签名.
-
-
-                    return empNo;
+                    string empNo = row["EmpFrom"].ToString(); //记录人.   
+                    return empNo;//审核人的签名.
+                case "WriteDB":
+                    return row["WriteDB"].ToString();
                 default:
                     return row[key] as string;
             }
@@ -776,7 +781,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                 if (strs[1].Trim() == "BPPaint")
                 {
                     string path1 = DBAccess.RunSQLReturnString("SELECT  Tag2 FROM Sys_FrmEleDB WHERE REFPKVAL=" + this.HisGEEntity.PKVal + " AND EleID='" + strs[0].Trim() + "'");
-                    //  string path1 = SystemConfig.PathOfDataUser + "\\BPPaint\\" + this.HisGEEntity.ToString().Trim() + "\\" + this.HisGEEntity.PKVal + ".png";
+                    //  string path1 =  BP.Difference.SystemConfig.PathOfDataUser + "\\BPPaint\\" + this.HisGEEntity.ToString().Trim() + "\\" + this.HisGEEntity.PKVal + ".png";
                     //定义rtf中图片字符串.
                     StringBuilder mypict = new StringBuilder();
                     //获取要插入的图片
@@ -1028,6 +1033,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
         /// 轨迹表（用于输出打印审核轨迹,审核信息.）
         /// </summary>
         public DataTable dtTrack = null;
+        public DataTable wks = null;
         public DataTable subFlows = null;
 
         /// <summary>
@@ -1076,7 +1082,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                 #region 替换主表标记
                 foreach (string para in paras)
                 {
-                    if (DataType.IsNullOrEmpty(para ) )
+                    if (DataType.IsNullOrEmpty(para))
                         continue;
 
                     //如果包含,时间表.
@@ -1124,10 +1130,10 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                             str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para)));
                         else if (para.Contains("-EnumYes") == true)
                             str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para)));
-                        else if (para.Contains("WorkCheck.RDT")
-                            || para.Contains("WorkCheck.Rec")
-                            || para.Contains("WorkCheck.RecName")
-                            || para.Contains("WorkCheck.Note"))   // 审核组件的审核日期.
+                        else if ((para.Contains("WorkCheck.RDT") == true && para.Contains("WorkCheck.RDT.") == false)
+                            || (para.Contains("WorkCheck.Rec") == true && para.Contains("WorkCheck.Rec.") == false)
+                            || (para.Contains("WorkCheck.RecName") == true && para.Contains("WorkCheck.RecName.") == false)
+                            || (para.Contains("WorkCheck.Note") == true && para.Contains("WorkCheck.Note.") == false))   // 审核组件的审核日期.
                             str = str.Replace("<" + para + ">", this.GetValueCheckWorkByKey(para));
                         else if (para.Contains("WorkChecks") == true) //为烟台增加审核人员的信息,把所有的审核人员信息都输入到这里.
                             str = str.Replace("<" + para + ">", this.GetValueCheckWorks());
@@ -1163,7 +1169,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                     if (str.IndexOf(shortName) == -1)
                         continue;
 
-                    int pos_rowKey = str.IndexOf(shortName);
+                    int pos_rowKey = str.IndexOf("<" + shortName + ".") + 1;
                     int row_start = -1, row_end = -1;
                     if (pos_rowKey != -1)
                     {
@@ -1274,173 +1280,369 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
 
                 #region 审核组件组合信息，added by liuxc,2016-12-16
 
-                //节点单个审核人
-                if (dtTrack != null && str.Contains("<WorkCheckBegin>") == false && str.Contains("<WorkCheckEnd>") == false)
+                //节点单个审核人 @Hongyan
+                // 根据track表获取审核的节点
+                if (dtTrack != null && str.Contains("<WorkCheckBegin>") == false
+                        && str.Contains("<WorkCheckEnd>") == false)
                 {
-                    foreach (DataRow row in dtTrack.Rows) //此处的22是ActionType.WorkCheck的值，此枚举位于BP.WF项目中，此处暂写死此值
+                    if (this.wks != null && this.wks.Rows.Count != 0)
                     {
-                        int acType = int.Parse(row["ACTIONTYPE"].ToString());
-                        if (acType != 22)
-                            continue;
-
-                        //节点从.
-                        string nfFrom = row["NDFrom"].ToString();
-
-                        string wkKey = "<WorkCheck.Msg." + nfFrom + ">";
-                        string wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "Msg"));
-                        str = str.Replace(wkKey, wkVal);
-
-                        wkKey = "<WorkCheck.Rec." + nfFrom + ">";
-                        wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "EmpFromT"));
-                        str = str.Replace(wkKey, wkVal);
-
-                        wkKey = "<WorkCheck.RDT." + nfFrom + ">";
-                        wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "RDT"));
-                        str = str.Replace(wkKey, wkVal);
-
-                        wkKey = "<WorkCheck.RDT-NYR." + nfFrom + ">";
-                        wkVal = this.GetValueCheckWorkByKey(row, "RDT-NYR");
-                        str = str.Replace(wkKey, wkVal);
-
-                        //审核人的签名. 2020.11.28 by zhoupeng 
-                        wkKey = "<WorkCheck.Siganture." + nfFrom + ">";
-                        if (str.Contains(wkKey) == true)
+                        foreach (DataRow nd in this.wks.Rows)
                         {
-                            wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "EmpFrom"));
-                            String filePath = SystemConfig.PathOfDataUser + "/Siganture/" + wkVal + ".jpg";
-                            //定义rtf中图片字符串.
-                            StringBuilder mypict = new StringBuilder();
-                            //获取要插入的图片
-                            System.Drawing.Image imgAth = System.Drawing.Image.FromFile(filePath);
+                            int nodeID = nd[0] != null ? int.Parse(nd[0].ToString()) : 0;
+                            //判断是否存在一个节点多个签批意见，需要循环显示，第一个意见替换，其余的节点追加在后面
+                            bool isHaveNote = str.IndexOf("WorkCheck.Note." + nodeID) != -1 ? true : false;
+                            bool isHaveRec = str.IndexOf("WorkCheck.Rec." + nodeID) != -1 ? true : false;
+                            bool isHaveRecName = str.IndexOf("WorkCheck.RecName." + nodeID) != -1 ? true : false;
+                            bool isHaveRDT = str.IndexOf("WorkCheck.RDT." + nodeID) != -1 ? true : false;
+                            bool isHaveWriteDB = str.IndexOf("WorkCheck.WriteDB." + nodeID) != -1 ? true : false;
+                            if (isHaveNote == false && isHaveRec == false && isHaveRecName == false && isHaveRDT == false && isHaveWriteDB == false)
+                                continue;
+                            //把track信息分组
+                            DataRow[] tracks = tracks = dtTrack.Select("NDFrom=" + nodeID);
+                            if (tracks.Length == 0)
+                            { //该节点没有签名，替换签名的内容
+                                string wkKey = "<WorkCheck.Note." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.Rec." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.RecName." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.RDT." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.RDT-NYR." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.Siganture." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.WriteDB." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                continue;
+                            }
+                            string workCheckStr = "";
 
-                            //将要插入的图片转换为16进制字符串
-                            string imgHexStringImgAth = GetImgHexString(imgAth, System.Drawing.Imaging.ImageFormat.Jpeg);
-                            //生成rtf中图片字符串
-                            mypict.AppendLine();
-                            mypict.Append(@"{\pict");
-                            mypict.Append(@"\jpegblip");
-                            mypict.Append(@"\picscalex100");
-                            mypict.Append(@"\picscaley100");
-                            mypict.Append(@"\picwgoal" + imgAth.Width * 15);
-                            mypict.Append(@"\pichgoal" + imgAth.Height * 15);
-                            mypict.Append(imgHexStringImgAth + "}");
-                            mypict.AppendLine();
-                            str = str.Replace(wkKey, mypict.ToString()); ;
-                        }
-
-                        //审核人的手写签名. 2020.11.28 by zhoupeng  
-                        wkKey = "<WorkCheck.WriteDB." + nfFrom + ">";
-                        if (str.Contains(wkKey) == true)
-                        {
-                            wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "WriteDB"));
-
-                            //定义rtf中图片字符串.
-                            StringBuilder mypict = new StringBuilder();
-
-                            //将要插入的图片转换为16进制字符串
-                            byte[] buffer = Convert.FromBase64String(wkVal);
-                            StringBuilder imgs = new StringBuilder();
-                            for (int i = 0; i < buffer.Length; i++)
+                            int idx = 0;
+                            foreach (DataRow row in tracks)
                             {
-                                if ((i % 32) == 0)
-                                {
-                                    imgs.AppendLine();
-                                }
-                                //else if ((i % 8) == 0)
+                                int acType = int.Parse(row["ActionType"].ToString());
+                                if (acType != 22)
+                                    continue;
+                                string empNo = row["EmpFrom"] == null ? "" : row["EmpFrom"].ToString();
+                                //if (idx == 0)
                                 //{
-                                //    imgs.Append(" ");
+                                //    //替换，如果还有审核意见的时候需要追加在最后面
+                                //    str = WorkCheckReplace(str, row, nodeID);
+                                //    if (isHaveWriteDB == true)
+                                //    {
+                                //        string wkVal = this.GetValueCheckWorkByKey(row, "WriteDB");
+                                //        string RDT = this.GetValueCheckWorkByKey(row, "RDT").Replace("-", "");
+                                //        RDT = RDT.Replace(":", "");
+                                //        RDT = RDT.Replace(" ", "");
+                                //        Int64 rdttime = Int64.Parse(RDT);
+                                //        if (DataType.IsNullOrEmpty(wkVal) == true)
+                                //            wkVal = "";
+
+                                //        //定义rtf中图片字符串.
+                                //        StringBuilder mypict = new StringBuilder();
+                                //        //将要插入的图片转换为16进制字符串
+                                //        byte[] buffer = Convert.FromBase64String(wkVal);
+                                //        MemoryStream ms = new MemoryStream(buffer);
+                                //        Bitmap bmpt = new Bitmap(ms);
+                                //        Image image = bmpt;
+                                //        if (image != null)
+                                //        {
+                                //            int width = image.Width;
+                                //            int height = image.Height;
+                                //            StringBuilder imgs = new StringBuilder();
+                                //            for (int i = 0; i < buffer.Length; i++)
+                                //            {
+                                //                if ((i % 32) == 0)
+                                //                {
+                                //                    imgs.AppendLine();
+                                //                }
+
+                                //                byte num2 = buffer[i];
+                                //                int num3 = (num2 & 240) >> 4;
+                                //                int num4 = num2 & 15;
+                                //                imgs.Append("0123456789abcdef"[num3]);
+                                //                imgs.Append("0123456789abcdef"[num4]);
+                                //            }
+                                //            //转换
+                                //            //生成rtf中图片字符串
+                                //            mypict.AppendLine();
+                                //            mypict.Append(@"{\pict");
+                                //            mypict.Append(@"\jpegblip");
+                                //            mypict.Append(@"\picscalex100");
+                                //            mypict.Append(@"\picscaley100");
+                                //            mypict.Append(@"\picwgoal" + width * 3);
+                                //            mypict.Append(@"\pichgoal" + height * 3);
+                                //            mypict.Append(imgs.ToString() + "}");
+                                //            mypict.Append("\n");
+                                //            workCheckStr += mypict.ToString() + "\\par";
+                                //        }
+                                //        else
+                                //        {
+                                //            string md = "";
+                                //            if (row["RDT"]!= null)
+                                //            {
+                                //                string rdt = row["RDT"].ToString();
+                                //                DateTime date = DataType.ParseSysDate2DateTime(rdt);
+                                //                md = date.ToString("yyyy-MM-dd");
+                                //            }
+
+                                //            workCheckStr += row["EmpFromT"].ToString() + md + "\\par";
+                                //        }
+                                //    }
+                                //    idx++;
+                                //    continue;
+
                                 //}
-                                byte num2 = buffer[i];
-                                int num3 = (num2 & 240) >> 4;
-                                int num4 = num2 & 15;
-                                imgs.Append("0123456789abcdef"[num3]);
-                                imgs.Append("0123456789abcdef"[num4]);
+
+                                if (isHaveNote)
+                                    workCheckStr += this.GetValueCheckWorkByKey(row, "Msg") + "\\par";
+                                if (isHaveRec)
+                                    workCheckStr += this.GetValueCheckWorkByKey(row, "EmpFrom") + "\\par";
+                                if (isHaveRecName)
+                                    workCheckStr += this.GetValueCheckWorkByKey(row, "EmpFromT") + "\\par";
+                                if (isHaveRDT)
+                                    workCheckStr += this.GetValueCheckWorkByKey(row, "RDT") + "\\par";
+                                if (isHaveWriteDB)
+                                {
+                                    string wkVal = this.GetValueCheckWorkByKey(row, "WriteDB");
+                                    string RDT = this.GetValueCheckWorkByKey(row, "RDT").Replace("-", "");
+                                    RDT = RDT.Replace(":", "");
+                                    RDT = RDT.Replace(" ", "");
+                                    Int64 rdttime = Int64.Parse(RDT);
+                                    if (DataType.IsNullOrEmpty(wkVal) == true)
+                                        wkVal = "";
+
+                                    //定义rtf中图片字符串.
+                                    StringBuilder mypict = new StringBuilder();
+                                    //将要插入的图片转换为16进制字符串
+                                    byte[] buffer = Convert.FromBase64String(wkVal);
+                                    MemoryStream ms = new MemoryStream(buffer);
+                                    Bitmap bmpt = new Bitmap(ms);
+                                    Image image = bmpt;
+                                    if (image != null)
+                                    {
+                                        int width = image.Width;
+                                        int height = image.Height;
+                                        StringBuilder imgs = new StringBuilder();
+                                        for (int i = 0; i < buffer.Length; i++)
+                                        {
+                                            if ((i % 32) == 0)
+                                            {
+                                                imgs.AppendLine();
+                                            }
+
+                                            byte num2 = buffer[i];
+                                            int num3 = (num2 & 240) >> 4;
+                                            int num4 = num2 & 15;
+                                            imgs.Append("0123456789abcdef"[num3]);
+                                            imgs.Append("0123456789abcdef"[num4]);
+                                        }
+                                        //转换
+                                        //生成rtf中图片字符串
+                                        mypict.AppendLine();
+                                        mypict.Append(@"{\pict");
+                                        mypict.Append(@"\jpegblip");
+                                        mypict.Append(@"\picscalex100");
+                                        mypict.Append(@"\picscaley100");
+                                        mypict.Append(@"\picwgoal" + width * 3);
+                                        mypict.Append(@"\pichgoal" + height * 3);
+                                        mypict.Append(imgs.ToString() + "}");
+                                        mypict.Append("\n");
+                                        workCheckStr += mypict.ToString() + "\\par";
+                                    }
+                                    else
+                                    {
+                                        string md = "";
+                                        if (row["RDT"] != null)
+                                        {
+                                            string rdt = row["RDT"].ToString();
+                                            DateTime date = DataType.ParseSysDate2DateTime(rdt);
+                                            md = date.ToString("yyyy-MM-dd");
+                                        }
+
+                                        workCheckStr += row["EmpFromT"].ToString() + md + "\\par";
+
+                                    }
+
+                                }
+                                idx++;
                             }
-                            //生成rtf中图片字符串
-                            mypict.AppendLine();
-                            mypict.Append(@"{\pict");
-                            mypict.Append(@"\jpegblip");
-                            mypict.Append(@"\picscalex100");
-                            mypict.Append(@"\picscaley100");
-                            mypict.Append(@"\picwgoal" + 45 * 15);
-                            mypict.Append(@"\pichgoal" + 40 * 15);
-                            mypict.Append(imgs.ToString() + "}");
-                            mypict.AppendLine();
-                            str = str.Replace(wkKey, mypict.ToString()); ;
-                        }
-
-
-                    }
-                }
-
-                if (dtTrack != null && str.Contains("<WorkCheckBegin>") && str.Contains("<WorkCheckEnd>"))
-                {
-                    int beginIdx = str.IndexOf("<WorkCheckBegin>"); //len:16
-                    int endIdx = str.IndexOf("<WorkCheckEnd>"); //len:14
-                    string moduleStr = str.Substring(beginIdx + 16, endIdx - beginIdx - 16);
-                    ArrayList tags = new ArrayList();
-                    string val = string.Empty;
-                    string field = string.Empty;
-                    string checkStr = string.Empty;
-                    string[] ps = null;
-
-
-                    foreach (string para in paras)
-                    {
-                        if (string.IsNullOrWhiteSpace(para) || para.Contains("WorkCheckList.") == false)
-                            continue;
-
-                        ps = para.Split('.');
-                        tags.Add(ps[1]);
-                    }
-
-                    foreach (DataRow row in dtTrack.Rows) //此处的22是ActionType.WorkCheck的值，此枚举位于BP.WF项目中，此处暂写死此值
-                    {
-                        int acType = int.Parse(row["ACTIONTYPE"].ToString());
-                        if (acType != 22)
-                            continue;
-                        checkStr = moduleStr;
-                        foreach (string tag in tags)
-                        {
-                            if (tag == "Siganture") {
-                                string empNo = this.GetCode(this.GetValueCheckWorkByKey(row, "Siganture"));
-
-                                String filePath = SystemConfig.PathOfDataUser + "/Siganture/" + empNo + ".jpg";
-                                //定义rtf中图片字符串.
-                                StringBuilder mypict = new StringBuilder();
-                                //获取要插入的图片
-                                System.Drawing.Image imgAth = System.Drawing.Image.FromFile(filePath);
-
-                                //将要插入的图片转换为16进制字符串
-                                string imgHexStringImgAth = GetImgHexString(imgAth, System.Drawing.Imaging.ImageFormat.Jpeg);
-                                //生成rtf中图片字符串
-                                mypict.AppendLine();
-                                mypict.Append(@"{\pict");
-                                mypict.Append(@"\jpegblip");
-                                mypict.Append(@"\picscalex100");
-                                mypict.Append(@"\picscaley100");
-                                mypict.Append(@"\picwgoal" + imgAth.Width * 15);
-                                mypict.Append(@"\pichgoal" + imgAth.Height * 15);
-                                mypict.Append(imgHexStringImgAth + "}");
-                                mypict.AppendLine();
-                                checkStr = checkStr.Replace("<WorkCheckList." + tag + ">",
-                                                             mypict.ToString());
-                            }
-                            else
+                            if (workCheckStr.Equals(""))
                             {
-                                checkStr = checkStr.Replace("<WorkCheckList." + tag + ">",
-                                                             this.GetCode(this.GetValueCheckWorkByKey(row, tag)));
+                                string wkKey = "<WorkCheck.Note." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.Rec." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.RecName." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.RDT." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.RDT-NYR." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.Siganture." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.WriteDB." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                continue;
                             }
+                            if (isHaveNote == true || isHaveRec == true || isHaveRecName == true || isHaveRDT == true || isHaveWriteDB == true)
+                            {
+                                bool isHaveChange = false;
+                                if (isHaveNote == true)
+                                {
+                                    str = str.Replace("<WorkCheck.Note." + nodeID + ">", workCheckStr);
+                                    isHaveChange = true;
+                                }
+
+                                if (isHaveRec == true && isHaveChange == false)
+                                {
+                                    str = str.Replace("<WorkCheck.Rec." + nodeID + ">", workCheckStr);
+                                    isHaveChange = true;
+                                }
+
+                                if (isHaveRecName == true && isHaveChange == false)
+                                {
+                                    str = str.Replace("<WorkCheck.RecName." + nodeID + ">", workCheckStr);
+                                    isHaveChange = true;
+                                }
+
+                                if (isHaveRDT == true && isHaveChange == false)
+                                {
+                                    str = str.Replace("<WorkCheck.RDT." + nodeID + ">", workCheckStr);
+                                    isHaveChange = true;
+                                }
+
+                                if (isHaveWriteDB == true && isHaveChange == false)
+                                {
+                                    str = str.Replace("<WorkCheck.WriteDB." + nodeID + ">", workCheckStr);
+                                    isHaveChange = true;
+                                }
+
+                                string wkKey = "<WorkCheck.Note." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.Rec." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.RecName." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.RDT." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.RDT-NYR." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.Siganture." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+                                wkKey = "<WorkCheck.WriteDB." + nodeID + ">";
+                                str = str.Replace(wkKey, "");
+
+                            }
+
+
+
                         }
 
-                        str = str.Insert(beginIdx, checkStr);
-                        beginIdx += checkStr.Length;
-                        endIdx += checkStr.Length;
                     }
-
-                    str = str.Substring(0, beginIdx) + (endIdx < str.Length - 1 ? str.Substring(endIdx + 14) : "");
-
                 }
+                //if (dtTrack != null && str.Contains("<WorkCheckBegin>") == false && str.Contains("<WorkCheckEnd>") == false)
+                //{
+                //    foreach (DataRow row in dtTrack.Rows) //此处的22是ActionType.WorkCheck的值，此枚举位于BP.WF项目中，此处暂写死此值
+                //    {
+                //        int acType = int.Parse(row["ActionType"].ToString());
+                //        if (acType != 22)
+                //            continue;
+
+                //        //节点从.
+                //        string nfFrom = row["NDFrom"].ToString();
+
+                //        string wkKey = "<WorkCheck.Msg." + nfFrom + ">";
+                //        string wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "Msg"));
+                //        str = str.Replace(wkKey, wkVal);
+
+                //        wkKey = "<WorkCheck.Rec." + nfFrom + ">";
+                //        wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "EmpFromT"));
+                //        str = str.Replace(wkKey, wkVal);
+
+                //        wkKey = "<WorkCheck.RDT." + nfFrom + ">";
+                //        wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "RDT"));
+                //        str = str.Replace(wkKey, wkVal);
+
+                //        wkKey = "<WorkCheck.RDT-NYR." + nfFrom + ">";
+                //        wkVal = this.GetValueCheckWorkByKey(row, "RDT-NYR");
+                //        str = str.Replace(wkKey, wkVal);
+
+                //        //审核人的签名. 2020.11.28 by zhoupeng 
+                //        wkKey = "<WorkCheck.Siganture." + nfFrom + ">";
+                //        if (str.Contains(wkKey) == true)
+                //        {
+                //            wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "EmpFrom"));
+                //            String filePath =  BP.Difference.SystemConfig.PathOfDataUser + "/Siganture/" + wkVal + ".jpg";
+                //            //定义rtf中图片字符串.
+                //            StringBuilder mypict = new StringBuilder();
+                //            //获取要插入的图片
+                //            System.Drawing.Image imgAth = System.Drawing.Image.FromFile(filePath);
+
+                //            //将要插入的图片转换为16进制字符串
+                //            string imgHexStringImgAth = GetImgHexString(imgAth, System.Drawing.Imaging.ImageFormat.Jpeg);
+                //            //生成rtf中图片字符串
+                //            mypict.AppendLine();
+                //            mypict.Append(@"{\pict");
+                //            mypict.Append(@"\jpegblip");
+                //            mypict.Append(@"\picscalex100");
+                //            mypict.Append(@"\picscaley100");
+                //            mypict.Append(@"\picwgoal" + imgAth.Width * 15);
+                //            mypict.Append(@"\pichgoal" + imgAth.Height * 15);
+                //            mypict.Append(imgHexStringImgAth + "}");
+                //            mypict.AppendLine();
+                //            str = str.Replace(wkKey, mypict.ToString()); ;
+                //        }
+
+                //        //审核人的手写签名. 2020.11.28 by zhoupeng  
+                //        wkKey = "<WorkCheck.WriteDB." + nfFrom + ">";
+                //        if (str.Contains(wkKey) == true)
+                //        {
+                //            wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "WriteDB"));
+
+                //            //定义rtf中图片字符串.
+                //            StringBuilder mypict = new StringBuilder();
+
+                //            //将要插入的图片转换为16进制字符串
+                //            byte[] buffer = Convert.FromBase64String(wkVal);
+                //            StringBuilder imgs = new StringBuilder();
+                //            for (int i = 0; i < buffer.Length; i++)
+                //            {
+                //                if ((i % 32) == 0)
+                //                {
+                //                    imgs.AppendLine();
+                //                }
+                //                //else if ((i % 8) == 0)
+                //                //{
+                //                //    imgs.Append(" ");
+                //                //}
+                //                byte num2 = buffer[i];
+                //                int num3 = (num2 & 240) >> 4;
+                //                int num4 = num2 & 15;
+                //                imgs.Append("0123456789abcdef"[num3]);
+                //                imgs.Append("0123456789abcdef"[num4]);
+                //            }
+                //            //生成rtf中图片字符串
+                //            mypict.AppendLine();
+                //            mypict.Append(@"{\pict");
+                //            mypict.Append(@"\jpegblip");
+                //            mypict.Append(@"\picscalex100");
+                //            mypict.Append(@"\picscaley100");
+                //            mypict.Append(@"\picwgoal" + 45 * 15);
+                //            mypict.Append(@"\pichgoal" + 40 * 15);
+                //            mypict.Append(imgs.ToString() + "}");
+                //            mypict.AppendLine();
+                //            str = str.Replace(wkKey, mypict.ToString()); ;
+                //        }
+
+
+                //    }
+                //}
+
+
                 #endregion
 
                 #region 多附件
@@ -1550,7 +1752,86 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
         }
         #endregion
         #endregion
+        private string WorkCheckReplace(string str, DataRow row, int nodeID)
+        {
+            string wkKey = "<WorkCheck.Note." + nodeID + ">";
+            string wkVal;
+            if (row != null && !"null".Equals(this.GetValueCheckWorkByKey(row, "Msg")))
+            {
+                wkVal = this.GetValueCheckWorkByKey(row, "Msg");
+            }
+            else
+            {
+                wkVal = "";
+            }
+            str = str.Replace(wkKey, wkVal);
+            wkKey = "<WorkCheck.Rec." + nodeID + ">";
+            if (row != null)
+            {
+                wkVal = this.GetValueCheckWorkByKey(row, "EmpFrom");
+            }
+            else
+            {
+                wkVal = "";
+            }
+            str = str.Replace(wkKey, wkVal);
+            wkKey = "<WorkCheck.RecName." + nodeID + ">";
+            if (row != null)
+            {
+                wkVal = this.GetValueCheckWorkByKey(row, "EmpFromT");
+            }
+            else
+            {
+                wkVal = "";
+            }
+            str = str.Replace(wkKey, wkVal);
+            wkKey = "<WorkCheck.RDT." + nodeID + ">";
+            if (row != null)
+            {
+                wkVal = this.GetValueCheckWorkByKey(row, "RDT");
+            }
+            else
+            {
+                wkVal = "";
+            }
+            str = str.Replace(wkKey, wkVal);
+            wkKey = "<WorkCheck.RDT-NYR." + nodeID + ">";
+            wkKey = "<WorkCheck.Siganture." + nodeID + ">";
+            if (str.IndexOf(wkKey) != -1)
+            {
+                if (row != null)
+                {
+                    wkVal = this.GetCode(this.GetValueCheckWorkByKey(row, "EmpFrom"));
+                }
+                else
+                {
+                    wkVal = "";
+                }
+                String filePath = SystemConfig.PathOfDataUser + "/Siganture/" + wkVal + ".jpg";
+                // 定义rtf中图片字符串
+                StringBuilder mypict = new StringBuilder();
+                // 获取要插入的图片
+                // System.Drawing.Image img =
+                // System.Drawing.Image.FromFile(path);
+                //获取要插入的图片
+                System.Drawing.Image imgAth = System.Drawing.Image.FromFile(filePath);
 
+                //将要插入的图片转换为16进制字符串
+                string imgHexStringImgAth = GetImgHexString(imgAth, System.Drawing.Imaging.ImageFormat.Jpeg);
+                //生成rtf中图片字符串
+                mypict.AppendLine();
+                mypict.Append(@"{\pict");
+                mypict.Append(@"\jpegblip");
+                mypict.Append(@"\picscalex100");
+                mypict.Append(@"\picscaley100");
+                mypict.Append(@"\picwgoal" + imgAth.Width * 15);
+                mypict.Append(@"\pichgoal" + imgAth.Height * 15);
+                mypict.Append(imgHexStringImgAth + "}");
+                mypict.Append("\n");
+                str = str.Replace(wkKey, mypict.ToString());
+            }
+            return str;
+        }
         #region 方法
         /// <summary>
         /// RTFEngine

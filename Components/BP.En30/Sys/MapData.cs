@@ -40,10 +40,6 @@ namespace BP.Sys
         /// </summary>
         public const string FrmW = "FrmW";
         /// <summary>
-        /// 高度
-        /// </summary>
-        public const string FrmH = "FrmH";
-        /// <summary>
         /// 表格列(对傻瓜表单有效)
         /// </summary>
         public const string TableCol = "TableCol";
@@ -448,7 +444,7 @@ namespace BP.Sys
                 if (obj == null)
                 {
                     obj = new SysEnums();
-                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
                     {
                         string strs = "";
                         Paras ps = new Paras();
@@ -469,7 +465,7 @@ namespace BP.Sys
                     }
                     else
                     {
-                        if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                        if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                         {
 
                             string enumKeySQL = "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData = '" + this.No + "' AND LGType = 1 ";
@@ -628,7 +624,7 @@ namespace BP.Sys
             }
         }
 
-        public  string ICON
+        public string ICON
         {
             get
             {
@@ -886,17 +882,7 @@ namespace BP.Sys
                 this.SetValByKey(MapDataAttr.FrmW, value);
             }
         }
-        public float FrmH
-        {
-            get
-            {
-                return this.GetValFloatByKey(MapDataAttr.FrmH);
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.FrmH, value);
-            }
-        }
+        
         /// <summary>
         /// 应用类型.  0独立表单.1节点表单
         /// </summary>
@@ -1072,7 +1058,7 @@ namespace BP.Sys
         /// <returns></returns>
         public static Map GenerHisMap(string no)
         {
-            if (SystemConfig.IsDebug)
+            if (BP.Difference.SystemConfig.IsDebug)
             {
                 MapData md = new MapData();
                 md.No = no;
@@ -1139,7 +1125,6 @@ namespace BP.Sys
                 //map.AddTBString(MapDataAttr.Slns, null, "表单控制解决方案", true, false, 0, 500, 20);
 
                 map.AddTBInt(MapDataAttr.FrmW, 900, "FrmW", true, true);
-                map.AddTBInt(MapDataAttr.FrmH, 1200, "FrmH", true, true);
 
                 // @0=4列, @1=6 列.
                 map.AddTBInt(MapDataAttr.TableCol, 0, "傻瓜表单显示的列", true, true);
@@ -1449,11 +1434,8 @@ namespace BP.Sys
         /// <returns></returns>
         public static MapData ImpMapData(string specFrmID, DataSet ds)
         {
-
             if (DataType.IsNullOrEmpty(specFrmID) == true)
                 ImpMapData(ds);
-
-            //    throw new Exception("err@指定的表单ID - specFrmID 是空.");
 
             #region 检查导入的数据是否完整.
             string errMsg = "";
@@ -1493,7 +1475,8 @@ namespace BP.Sys
             MapData mdOld = new MapData();
             mdOld.No = specFrmID;
             int count = mdOld.RetrieveFromDBSources();
-            mdOld.Delete();
+            if (count == 1)
+                mdOld.Delete();
 
 
             // 求出dataset的map.
@@ -1537,16 +1520,15 @@ namespace BP.Sys
                                 object val = dr[dc.ColumnName] as object;
                                 if (val == null)
                                     continue;
-                                //如果是节点表单，是从表，则从表的名字不修改了.
-                                if (dc.ColumnName.Equals("PTable") == true && val.ToString().IndexOf("ND") == 0)
-                                {
-                                    dtl.SetValByKey(dc.ColumnName, val.ToString());
-                                }
-                                else
-                                {
-                                    dtl.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
-                                }
 
+                                //@hongyan.
+                                //编号列. 
+                                string colName = dc.ColumnName.ToLower();
+
+                                if (colName.Equals("no") || colName.Equals("name") || colName.Equals("fk_mapdata"))
+                                    dtl.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
+                                else
+                                    dtl.SetValByKey(dc.ColumnName, val.ToString());
                             }
                             dtl.Insert();
                         }
@@ -1558,7 +1540,8 @@ namespace BP.Sys
                             string htmlCode = "";
                             foreach (DataColumn dc in dt.Columns)
                             {
-                                if (dc.ColumnName == "HtmlTemplateFile")
+                                //@hongyan.
+                                if (dc.ColumnName.Equals("HtmlTemplateFile") == true)
                                 {
                                     htmlCode = dr[dc.ColumnName] as string;
                                     continue;
@@ -1567,7 +1550,12 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                md.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
+                                //@hongyan.
+                                string colName = dc.ColumnName.ToLower();
+                                if (colName.Equals("no") == true || colName.Equals("name")==true)
+                                    md.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
+                                else
+                                    md.SetValByKey(dc.ColumnName, val.ToString());
                             }
 
                             //表单类别编号不为空，则用原表单类别编号
@@ -1584,13 +1572,12 @@ namespace BP.Sys
 
                             if (count == 1)
                                 md.HisFrmType = mdOld.HisFrmType;
-                            if (frmType == FrmType.Develop)
-                                md.HisFrmType = FrmType.Develop;
+                            else
+                                frmType = md.HisFrmType;
+
 
                             if (entityType != md.HisEntityType)
                                 md.HisEntityType = entityType;
-
-
 
                             //表单应用类型保持不变
                             md.AppType = mdOld.AppType;
@@ -1607,7 +1594,7 @@ namespace BP.Sys
                                     htmlCode = htmlCode.Replace(oldMapID, specFrmID);
                                     //保存到数据库，存储html文件
                                     //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
-                                    string filePath = SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/";
+                                    string filePath = BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/";
                                     if (Directory.Exists(filePath) == false)
                                         Directory.CreateDirectory(filePath);
                                     filePath = filePath + md.No + ".htm";
@@ -1619,7 +1606,7 @@ namespace BP.Sys
                                 else
                                 {
                                     //如果htmlCode是空的需要删除当前节点的html文件
-                                    string filePath = SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/" + md.No + ".htm";
+                                    string filePath = BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/" + md.No + ".htm";
                                     if (File.Exists(filePath) == true)
                                         File.Delete(filePath);
                                     DBAccess.SaveBigTextToDB("", "Sys_MapData", "No", md.No, "HtmlTemplateFile");
@@ -1795,11 +1782,11 @@ namespace BP.Sys
                                 if (en.UIContralType == UIContralType.BigText)
                                 {
                                     //判断原文件是否存在
-                                    string file = SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + oldMapID + ".htm";
+                                    string file = BP.Difference.SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + oldMapID + ".htm";
                                     //若文件存在，则复制                                  
                                     if (System.IO.File.Exists(file) == true)
                                     {
-                                        string newFile = SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + specFrmID + ".htm";
+                                        string newFile = BP.Difference.SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + specFrmID + ".htm";
                                         if (System.IO.File.Exists(newFile) == true)
                                             System.IO.File.Delete(newFile);
                                         System.IO.File.Copy(file, newFile);
@@ -1846,7 +1833,7 @@ namespace BP.Sys
                                 string val = dr[dc.ColumnName] as string;
                                 se.SetValByKey(dc.ColumnName, val);
                             }
-                            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                             {
                                 se.OrgNo = BP.Web.WebUser.OrgNo;
                                 //  se.RefPK = se.OrgNo + "_" + se.EnumKey;
@@ -1875,7 +1862,7 @@ namespace BP.Sys
                                 sem.SetValByKey(dc.ColumnName, val);
                             }
 
-                            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                             {
                                 sem.OrgNo = BP.Web.WebUser.OrgNo;
                                 sem.No = sem.OrgNo + "_" + sem.EnumKey;
@@ -1944,7 +1931,7 @@ namespace BP.Sys
             }
             else
             {
-                if (SystemConfig.AppCenterDBType != DBType.Oracle)
+                if (BP.Difference.SystemConfig.AppCenterDBType != DBType.Oracle)
                 {
                     GroupField gfFirst = gfs[0] as GroupField;
 
@@ -2050,7 +2037,7 @@ namespace BP.Sys
             if (this.No.StartsWith("ND") == false)
                 BP.Sys.Base.Glo.WriteUserLog("新建表单：" + this.No + " - " + this.Name);
 
-            this.Ver2022 = 1; 
+            this.Ver2022 = 1;
             return base.beforeInsert();
         }
         /// <summary>
@@ -2063,7 +2050,7 @@ namespace BP.Sys
                 base.afterInsert();
                 return;
             }
-               
+
             MapDataVer ver = new MapDataVer();
             ver.MyPK = this.No + ".1";
 
@@ -2076,10 +2063,10 @@ namespace BP.Sys
             ver.RDT = DataType.CurrentDateTime;
 
             //设置数量.
-            ver.AttrsNum =0;
+            ver.AttrsNum = 0;
             ver.AthsNum = 0;
-            ver.DtlsNum =0;
-            ver.ExtsNum =0;
+            ver.DtlsNum = 0;
+            ver.ExtsNum = 0;
             ver.Insert();
             base.afterInsert();
         }
@@ -2096,9 +2083,9 @@ namespace BP.Sys
 
             //修改2021-09-04 注释，不知道这个代码的作用
             //MapAttrs.Retrieve(MapAttrAttr.FK_MapData, PTable);
-             
+
             //设置OrgNo. 如果是管理员，就设置他所在的部门编号。
-            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
 
             //判断是否有多个主键字段?
@@ -2149,9 +2136,24 @@ namespace BP.Sys
         }
         protected override bool beforeDelete()
         {
+            #region 判断是否是节点表单？如果是，判断节点是否被删除了.
+            //if (this.No.StartsWith("ND") == true)
+            //{
+            //    string frmID = this.No.Replace("ND", "");
+            //    if (BP.DA.DataType.IsNumStr(frmID) == true)
+            //    {
+            //        int nodeID = int.Parse(frmID);
+            //        int count = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) as NUM FROM WF_Node WHERE NodeID=" + nodeID);
+            //        if (count == 1)
+            //            throw new Exception("err@删除节点表单前，需要删除节点数据."+this.No+" - " +this.Name);
+            //    }
+            //}
+            #endregion 判断是否是节点表单？如果是，判断节点是否被删除了.
+
+            #region 检查完整性.
             string sql = "";
             //如果存在版本就不能删除
-            sql = "SELECT Count(*) From Sys_MapDataVer Where FrmID='" + this.No + "' AND Ver!="+this.Ver2022;
+            sql = "SELECT count(*) From Sys_MapDataVer Where FrmID='" + this.No + "' AND Ver!=" + this.Ver2022;
 
             try
             {
@@ -2172,6 +2174,20 @@ namespace BP.Sys
                 }
             }
 
+            //如果当前版本是主版本，需要删除主版本的信息
+            sql = "SELECT Ver From Sys_MapDataVer WHERE FrmID='" + this.No + "' AND IsRel=1";
+            int ver = DBAccess.RunSQLReturnValInt(sql, 0);
+            if (ver == this.Ver2022)
+            {
+                //删除主版本的信息
+                MapData md = new MapData();
+                md.No = this.No + "." + ver;
+                if (md.RetrieveFromDBSources() == 1)
+                    md.Delete();
+                DBAccess.RunSQL("DELETE FROM Sys_MapDataVer WHERE MyPK='" + md.No + "'");
+
+            }
+
             sql = "";
             sql = "SELECT * FROM Sys_MapDtl WHERE FK_MapData ='" + this.No + "'";
             DataTable Sys_MapDtl = DBAccess.RunSQLReturnTable(sql);
@@ -2187,8 +2203,7 @@ namespace BP.Sys
                 whereEnsName += " OR FrmID='" + dr["No"] + "' ";
                 whereNo += " OR No='" + dr["No"] + "' ";
             }
-
-            //	string where = " FK_MapData IN (" + ids + ")";
+            #endregion 检查完整性.
 
             #region 删除相关的数据。
             sql = "DELETE FROM Sys_MapDtl WHERE FK_MapData='" + this.No + "'";
@@ -2212,6 +2227,8 @@ namespace BP.Sys
             // sql += "@DELETE FROM Sys_M2M WHERE " + whereFK_MapData;
             sql += "@DELETE FROM WF_FrmNode WHERE FK_Frm='" + this.No + "'";
             sql += "@DELETE FROM Sys_FrmSln WHERE " + whereFK_MapData;
+            //sql += "@DELETE FROM Sys_MapDataVer WHERE " + whereFK_MapData;
+
             DBAccess.RunSQLs(sql);
             #endregion 删除相关的数据。
 
@@ -2277,7 +2294,7 @@ namespace BP.Sys
                 }
                 else //说明当前excel文件没有生成.
                 {
-                    string tempExcel = SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + this.No + ".xlsx";
+                    string tempExcel = BP.Difference.SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + this.No + ".xlsx";
                     if (System.IO.File.Exists(tempExcel) == true)
                     {
                         bytes = DataType.ConvertFileToByte(tempExcel);
@@ -2322,10 +2339,10 @@ namespace BP.Sys
             }
             else //说明当前excel文件没有生成.
             {
-                string tempExcel = SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + this.No + ".docx";
+                string tempExcel = BP.Difference.SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + this.No + ".docx";
 
                 if (System.IO.File.Exists(tempExcel) == false)
-                    tempExcel = SystemConfig.PathOfDataUser + "FrmVSTOTemplate/NDxxxRpt.docx";
+                    tempExcel = BP.Difference.SystemConfig.PathOfDataUser + "FrmVSTOTemplate/NDxxxRpt.docx";
 
                 bytes = DataType.ConvertFileToByte(tempExcel);
                 return;
@@ -2347,6 +2364,19 @@ namespace BP.Sys
         /// </summary>
         public string CreateMapDataVer()
         {
+            //创建版本之前先判断当前版本是不是有数据
+            if (BP.DA.DBAccess.IsExitsObject(this.PTable) == false)
+            {
+                //MapData md = new MapData(this.No);
+                GEEntity ge = new GEEntity(this.No);
+                ge.CheckPhysicsTable();
+            }
+
+            //获得最大的版本数.
+            int count = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) From " + this.PTable + " WHERE AtPara NOT LIKE '%@FrmVer=%'");
+            if (count == 0)
+                return "表单" + this.Name + "版本" + this.Ver2022 + "还没有使用，不用创建新的版本。";
+
             MapDataVer ver = new MapDataVer();
 
             MapDataVers vers = new MapDataVers();
@@ -2355,19 +2385,19 @@ namespace BP.Sys
             {
                 ver.MyPK = this.No + ".1";
 
-                ver.Ver=1; //设置当前为主版本.
-                ver.FrmID=this.No; //设置表单ID.
-                ver.IsRel=1; //设置为主版本.
+                ver.Ver = 1; //设置当前为主版本.
+                ver.FrmID = this.No; //设置表单ID.
+                ver.IsRel = 1; //设置为主版本.
 
-                ver.Rec=Web.WebUser.No;
-                ver.RecName=Web.WebUser.Name;
-                ver.RDT=DataType.CurrentDateTime;
+                ver.Rec = Web.WebUser.No;
+                ver.RecName = Web.WebUser.Name;
+                ver.RDT = DataType.CurrentDateTime;
 
                 //设置数量.
-                ver.AttrsNum=DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'");
-                ver.AthsNum=DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_Frmattachment WHERE FK_MapData='" + this.No + "'");
-                ver.DtlsNum=DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapDtl WHERE FK_MapData='" + this.No + "'");
-                ver.ExtsNum=DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapExt WHERE FK_MapData='" + this.No + "'");
+                ver.AttrsNum = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'");
+                ver.AthsNum = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_Frmattachment WHERE FK_MapData='" + this.No + "'");
+                ver.DtlsNum = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapDtl WHERE FK_MapData='" + this.No + "'");
+                ver.ExtsNum = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapExt WHERE FK_MapData='" + this.No + "'");
                 ver.Insert();
 
                 this.Ver2022 = ver.Ver; //更新当前的版本.
@@ -2375,6 +2405,7 @@ namespace BP.Sys
 
                 //执行复制,表单.
                 BP.Sys.CCFormAPI.CopyFrm(this.No, this.No + "." + this.Ver2022, this.Name + "." + ver.Ver, this.FK_FormTree);
+
                 return "创建成功." + ver.GetValByKey(MapDataVerAttr.Ver);
             }
 
@@ -2407,21 +2438,21 @@ namespace BP.Sys
 
             #region 1. 创建新版本 执行复制,表单.
 
-            int maxVer = DBAccess.RunSQLReturnValInt("SELECT MAX(ver) FROM Sys_MapDataVer WHERE FrmID='" + this.No + "'",0);
+            int maxVer = DBAccess.RunSQLReturnValInt("SELECT MAX(ver) FROM Sys_MapDataVer WHERE FrmID='" + this.No + "'", 0);
             //执行复制,表单，创建新版本.
             ver.Ver = maxVer + 1;
             ver.MyPK = this.No + "." + ver.Ver;
-            ver.FrmID= this.No; //设置表单ID.
-            ver.IsRel=1; //设置为主版本.
-            ver.Rec=Web.WebUser.No;
-            ver.RecName= Web.WebUser.Name;
-            ver.RDT=DataType.CurrentDateTime;
+            ver.FrmID = this.No; //设置表单ID.
+            ver.IsRel = 1; //设置为主版本.
+            ver.Rec = Web.WebUser.No;
+            ver.RecName = Web.WebUser.Name;
+            ver.RDT = DataType.CurrentDateTime;
 
             //设置数量.
-            ver.AttrsNum=DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'");
-            ver.AthsNum=DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_Frmattachment WHERE FK_MapData='" + this.No + "'");
-            ver.DtlsNum= DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapDtl WHERE FK_MapData='" + this.No + "'");
-            ver.ExtsNum= DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapExt WHERE FK_MapData='" + this.No + "'");
+            ver.AttrsNum = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'");
+            ver.AthsNum = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_Frmattachment WHERE FK_MapData='" + this.No + "'");
+            ver.DtlsNum = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapDtl WHERE FK_MapData='" + this.No + "'");
+            ver.ExtsNum = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapExt WHERE FK_MapData='" + this.No + "'");
             ver.Insert(); //创建新版本.
 
             //生成新的表单.
@@ -2430,9 +2461,8 @@ namespace BP.Sys
             MapData md = new MapData(this.No + "." + ver.Ver);
             md.FK_FormTree = "";
             md.Update();
-            
-            #endregion 1. 创建新版本 执行复制,表单.
 
+            #endregion 1. 创建新版本 执行复制,表单.
 
             #region 2. 覆盖旧版本.
             string currVer = this.No + "." + this.Ver2022.ToString(); // this.No + "." + vers.Count;
@@ -2441,25 +2471,25 @@ namespace BP.Sys
             if (md.RetrieveFromDBSources() == 1)
                 md.Delete();
             //把表单属性的FK_FormTree清空
-            BP.Sys.CCFormAPI.CopyFrm(this.No, currVer, this.Name + "(Ver" + currVer + ".0)", this.FK_FormTree);
+            BP.Sys.CCFormAPI.CopyFrm(this.No, currVer, this.Name + "(Ver" + this.Ver2022.ToString() + ".0)", this.FK_FormTree);
+            md.Retrieve();
             md.FK_FormTree = "";
             md.PTable = this.PTable;
             md.Update();
             //修改从表的存储表
             MapDtls dtls = md.MapDtls;
-            foreach(MapDtl dtl in dtls)
+            foreach (MapDtl dtl in dtls)
             {
                 if (dtl.PTable.Equals(dtl.No) == true)
                 {
                     dtl.PTable = dtl.PTable.Replace(currVer, this.No);
                     dtl.Update();
                     continue;
-
-                } 
+                }
             }
             //把当前表单对应数据改成当前的版本
-             DBAccess.RunSQL("UPDATE " + md.PTable +" SET AtPara=CONCAT(AtPara,'@FrmVer=" + this.Ver2022 + "') WHERE AtPara NOT LIKE '%@FrmVer=%'");
-            
+            DBAccess.RunSQL("UPDATE " + md.PTable + " SET AtPara=CONCAT(AtPara,'@FrmVer=" + this.Ver2022 + "') WHERE AtPara NOT LIKE '%@FrmVer=%'");
+
             #endregion 2. 覆盖旧版本.
 
             #region 3. 更新当前版本号.
@@ -2468,7 +2498,6 @@ namespace BP.Sys
             #endregion 3. 更新当前版本号.
 
             return "创建成功，版本号:" + ver.Ver; ;
-
         }
     }
     /// <summary>

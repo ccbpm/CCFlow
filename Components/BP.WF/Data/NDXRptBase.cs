@@ -94,6 +94,10 @@ namespace BP.WF.Data
         /// 项目名称
         /// </summary>
         public const string PrjName = "PrjName";
+        /// <summary>
+        /// 经费总需求
+        /// </summary>
+        public const string JingFeiZongXuQiu = "JingFeiZongXuQiu";
         #endregion 项目相关.
 
         #region 父子流程属性.
@@ -125,6 +129,8 @@ namespace BP.WF.Data
     abstract public class NDXRptBase : BP.En.EntityOID
     {
         #region 属性
+        
+     
         /// <summary>
         /// 工作ID
         /// </summary>

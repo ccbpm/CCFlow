@@ -71,8 +71,6 @@ namespace BP.En
                 sql = sql.Replace("AND ( AND )", "AND");
                 sql = sql.Replace("WHERE(1 = 1) AND ( AND )", "WHERE(1 = 1)");
 
-
-
                 sql = sql.Replace("WHERE AND", "WHERE");
                 sql = sql.Replace("WHERE  AND", "WHERE");
 
@@ -92,7 +90,7 @@ namespace BP.En
                 string sql = this.SQL;
                 foreach (Para en in this.MyParas)
                 {
-                    sql = sql.Replace(SystemConfig.AppCenterDBVarStr + en.ParaName, "'" + en.val.ToString() + "'");
+                    sql = sql.Replace(BP.Difference.SystemConfig.AppCenterDBVarStr + en.ParaName, "'" + en.val.ToString() + "'");
                 }
                 return sql;
             }
@@ -196,7 +194,7 @@ namespace BP.En
         /// <param name="len">长度</param>
         public void AddWhereLen(string attr, string exp, int len, DBType dbtype)
         {
-            this.SQL = "( " + SystemConfig.AppCenterDBLengthStr + "( " + attr2Field(attr) + " ) " + exp + " '" + len.ToString() + "')";
+            this.SQL = "( " + BP.Difference.SystemConfig.AppCenterDBLengthStr + "( " + attr2Field(attr) + " ) " + exp + " '" + len.ToString() + "')";
         }
         /// <summary>
         /// 增加查询条件，条件用 IN 表示．sql必须是一个列的集合．
@@ -973,7 +971,7 @@ namespace BP.En
             int i = 0;
             int paraI = 0;
 
-            string dbStr = SystemConfig.AppCenterDBVarStr;
+            string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
             foreach (DataRow dr in dt.Rows)
             {
                 i++;
@@ -984,7 +982,7 @@ namespace BP.En
                     if (dbStr == "?")
                         pks += "?,";
                     else
-                        pks += SystemConfig.AppCenterDBVarStr + "R" + paraI + ",";
+                        pks +=  BP.Difference.SystemConfig.AppCenterDBVarStr + "R" + paraI + ",";
 
                     if (pk.Equals("OID") || pk.Equals("WorkID") || pk.Equals("NodeID"))
                         this.MyParasR.Add("R" + paraI, int.Parse(dr[0].ToString()));
@@ -1398,7 +1396,7 @@ namespace BP.En
             }
             catch (Exception ex)
             {
-                //   if (SystemConfig.IsDebug)
+                //   if (BP.Difference.SystemConfig.IsDebug)
                 this.En.CheckPhysicsTable();
                 throw ex;
             }
@@ -1519,11 +1517,7 @@ namespace BP.En
         /// <returns>初始化后的ens</returns>
         public static Entities InitEntitiesByDataTable(Entities ens, DataTable dt, string[] fullAttrs)
         {
-            bool isUpper = false;
-            if (SystemConfig.AppCenterDBType == DBType.Oracle
-            || SystemConfig.AppCenterDBType == DBType.KingBase)
-                isUpper = true;
-
+           
             if (fullAttrs == null)
             {
                 Map enMap = ens.GetNewEntity.EnMap;
@@ -1536,14 +1530,19 @@ namespace BP.En
                         Entity en = ens.GetNewEntity;
                         foreach (Attr attr in attrs)
                         {
-                            if (isUpper == true)
+                            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
                             {
-                                if ((SystemConfig.AppCenterDBType == DBType.KingBase
-                                    || SystemConfig.AppCenterDBType == DBType.Oracle)
-                                    && attr.MyFieldType == FieldType.RefText)
+                                if ( attr.MyFieldType == FieldType.RefText)
                                     en.SetValByKey(attr.Key, dr[attr.Key]);
                                 else
                                     en.SetValByKey(attr.Key, dr[attr.Key.ToUpper()]);
+                            }
+                            else if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+                            {
+                                if (attr.MyFieldType == FieldType.RefText)
+                                    en.SetValByKey(attr.Key, dr[attr.Key]);
+                                else
+                                    en.SetValByKey(attr.Key, dr[attr.Key.ToLower()]);
                             }
 
                             else
@@ -1571,16 +1570,20 @@ namespace BP.En
                 Entity en = ens.GetNewEntity;
                 foreach (String str in fullAttrs)
                 {
-                    if (isUpper == true)
+                    if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
                     {
-                        if ((SystemConfig.AppCenterDBType == DBType.KingBase
-                                    || SystemConfig.AppCenterDBType == DBType.Oracle)
-                            && dt.Columns.Contains(str) == true)
+                        if (dt.Columns.Contains(str) == true)
                             en.SetValByKey(str, dr[str]);
                         else
                             en.SetValByKey(str, dr[str.ToUpper()]);
                     }
-
+                    else if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+                    {
+                        if (dt.Columns.Contains(str) == true)
+                            en.SetValByKey(str, dr[str]);
+                        else
+                            en.SetValByKey(str, dr[str.ToLower()]);
+                    }
                     else
                         en.SetValByKey(str, dr[str]);
 

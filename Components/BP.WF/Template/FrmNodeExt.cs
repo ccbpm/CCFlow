@@ -5,6 +5,8 @@ using BP.En;
 using BP.En;
 using BP.Port;
 using BP.Sys;
+using BP.WF.Template.SFlow;
+
 
 namespace BP.WF.Template
 {

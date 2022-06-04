@@ -40,34 +40,7 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(FrmImgAthAttr.CtrlID, value);
             }
         }
-        /// <summary>
-        /// Y
-        /// </summary>
-        public float Y
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmImgAthAttr.Y);
-            }
-            set
-            {
-                this.SetValByKey(FrmImgAthAttr.Y, value);
-            }
-        }
-        /// <summary>
-        /// X
-        /// </summary>
-        public float X
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmImgAthAttr.X);
-            }
-            set
-            {
-                this.SetValByKey(FrmImgAthAttr.X, value);
-            }
-        }
+       
         /// <summary>
         /// H
         /// </summary>
@@ -205,8 +178,6 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(FrmImgAthAttr.CtrlID, null, "控件ID", true, true, 0, 200, 20);
                 map.AddTBString(FrmImgAthAttr.Name, null, "中文名称", true, false, 0, 200, 20);
 
-                map.AddTBFloat(FrmImgAthAttr.X, 5, "X", true, false);
-                map.AddTBFloat(FrmImgAthAttr.Y, 5, "Y", false, false);
 
                 map.AddTBFloat(FrmImgAthAttr.H, 200, "H", true, false);
                 map.AddTBFloat(FrmImgAthAttr.W, 160, "W", false, false);
@@ -219,7 +190,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBInt(MapAttrAttr.ColSpan, 0, "单元格数量", false, true);
 
                 //跨单元格
-                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
+                map.AddDDLSysEnum(MapAttrAttr.LabelColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
                 //跨行
                 map.AddDDLSysEnum(MapAttrAttr.RowSpan, 1, "行数", true, true, "RowSpanAttrString",
@@ -310,7 +281,7 @@ namespace BP.Sys.FrmUI
         /// <param name="fk_mapdata">s</param>
         public FrmImgAths(string fk_mapdata)
         {
-            if (SystemConfig.IsDebug)
+            if (BP.Difference.SystemConfig.IsDebug)
                 this.Retrieve(MapAttrAttr.FK_MapData, fk_mapdata);
             else
                 this.RetrieveFromCash(MapAttrAttr.FK_MapData, (object)fk_mapdata);

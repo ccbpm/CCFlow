@@ -5,11 +5,11 @@ using BP.DA;
 using BP.Sys;
 using BP.Web;
 using BP.En;
-using BP.WF.Data;
 using BP.WF.HttpHandler;
 using ThoughtWorks.QRCode.Codec;
 using System.Drawing;
 using System.Drawing.Imaging;
+using BP.WF;
 
 namespace BP.CCBill
 {
@@ -119,15 +119,15 @@ namespace BP.CCBill
             if (DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1)
             {
                 qo.addLeftBracket();
-                if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                    qo.AddWhere("Title", " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                    qo.AddWhere("Title", " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
                 else
-                    qo.AddWhere("Title", " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                    qo.AddWhere("Title", " LIKE ", " '%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey||'%'");
                 qo.addOr();
-                if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                    qo.AddWhere("BillNo", " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                    qo.AddWhere("BillNo", " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
                 else
-                    qo.AddWhere("BillNo", " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                    qo.AddWhere("BillNo", " LIKE ", "'%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey||'%'");
 
                 qo.MyParas.Add("SKey", keyWord);
                 qo.addRightBracket();
@@ -211,7 +211,7 @@ namespace BP.CCBill
 
                 string msg= "字段：[" + dtl.AttrKey + "],已经修改为:" + dtl.MyVal;
 
-                BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, this.WorkID, FrmActionType.DataVerReback, msg);
+                BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, this.WorkID.ToString(), FrmActionType.DataVerReback, msg);
                 return msg;
             }
             catch (Exception ex)
@@ -248,7 +248,7 @@ namespace BP.CCBill
 
             // BP.CCBill.Dev2Interface.MyEntityTree_Delete
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID,  this.WorkID, FrmActionType.DataVerReback, "数据回滚");
+            BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID,  this.WorkID.ToString(), FrmActionType.DataVerReback, "数据回滚");
 
             return "已经成功还原...";
         }
@@ -326,7 +326,7 @@ namespace BP.CCBill
                 dtl.Insert();
             }
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, this.WorkID, FrmActionType.DataVerReback, "创建数据版本.");
+            BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, this.WorkID.ToString(), FrmActionType.DataVerReback, "创建数据版本.");
 
             return "版本创建成功.";
         }
@@ -341,7 +341,7 @@ namespace BP.CCBill
         {
             string workIDStr = this.GetRequestVal("WorkID");
 
-            string url = SystemConfig.HostURL + "/WF/CCBill/OptComponents/QRCode.htm?DoType=MyDict&WorkID=" + workIDStr + "&FrmID=" + this.FrmID + "&MethodNo=" + this.GetRequestVal("MethodNo");
+            string url =  BP.Difference.SystemConfig.HostURL + "/WF/CCBill/OptComponents/QRCode.htm?DoType=MyDict&WorkID=" + workIDStr + "&FrmID=" + this.FrmID + "&MethodNo=" + this.GetRequestVal("MethodNo");
             QRCodeEncoder encoder = new QRCodeEncoder();
             encoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;//编码方式(注意：BYTE能支持中文，ALPHA_NUMERIC扫描出来的都是数字)
             encoder.QRCodeScale = 4; //大小(值越大生成的二维码图片像素越高).
@@ -352,7 +352,7 @@ namespace BP.CCBill
 
             //生成临时文件.
             System.Drawing.Image image = encoder.Encode(url, Encoding.UTF8);
-            string tempPath = SystemConfig.PathOfTemp + "/" + workIDStr + ".png";
+            string tempPath =  BP.Difference.SystemConfig.PathOfTemp + "/" + workIDStr + ".png";
             image.Save(tempPath, ImageFormat.Png);
             image.Dispose();
 
@@ -366,7 +366,7 @@ namespace BP.CCBill
         public string QRCodeScan_Init()
         {
            
-            string url = SystemConfig.HostURL + "/WF/CCBill/OptComponents/QRCodeScan.htm?DoType=MyDict&WorkID=" + this.WorkID + "&FrmID=" + this.FrmID + "&MethodNo=" + this.GetRequestVal("MethodNo");
+            string url =  BP.Difference.SystemConfig.HostURL + "/WF/CCBill/OptComponents/QRCodeScan.htm?DoType=MyDict&WorkID=" + this.WorkID + "&FrmID=" + this.FrmID + "&MethodNo=" + this.GetRequestVal("MethodNo");
             QRCodeEncoder encoder = new QRCodeEncoder();
             encoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;//编码方式(注意：BYTE能支持中文，ALPHA_NUMERIC扫描出来的都是数字)
             encoder.QRCodeScale = 4;//大小(值越大生成的二维码图片像素越高)
@@ -377,7 +377,7 @@ namespace BP.CCBill
 
             //生成临时文件.
             System.Drawing.Image image = encoder.Encode(url, Encoding.UTF8);
-            string tempPath = SystemConfig.PathOfTemp + "/" + this.WorkID + ".png";
+            string tempPath =  BP.Difference.SystemConfig.PathOfTemp + "/" + this.WorkID + ".png";
             image.Save(tempPath, ImageFormat.Png);
             image.Dispose();
 
@@ -394,7 +394,7 @@ namespace BP.CCBill
             //上传附件
             string filepath = "";
             var file = BP.Difference.HttpContextHelper.RequestFiles(0);
-            filepath = SystemConfig.PathOfDataUser + "UploadFile/FrmBBS/" + DataType.CurrentYearMonth;
+            filepath =  BP.Difference.SystemConfig.PathOfDataUser + "UploadFile/FrmBBS/" + DataType.CurrentYearMonth;
             if (System.IO.Directory.Exists(filepath) == false)
                 System.IO.Directory.CreateDirectory(filepath);
             filepath= filepath+"/"+ DBAccess.GenerGUID()+ file.FileName;

@@ -4,7 +4,6 @@ using System.Data;
 using System.Text;
 using BP.En;
 using BP.DA;
-using LitJson;
 
 namespace BP.Sys
 {
@@ -13,17 +12,6 @@ namespace BP.Sys
     /// </summary>
     public class CCFormAPI
     {
-        /// <summary>
-        /// 获得附件信息.
-        /// </summary>
-        /// <param name="fk_mapdata">表单ID</param>
-        /// <param name="pk">主键</param>
-        /// <returns>附件信息.</returns>
-        public static string GetAthInfos(string fk_mapdata, string pk)
-        {
-            int num = DBAccess.RunSQL("SELECT COUNT(MYPK) FROM Sys_FrmAttachmentDB WHERE FK_MapData='" + fk_mapdata + "' AND RefPKVal=" + pk);
-            return "附件(" + num + ")";
-        }
 
         #region 创建修改字段.
         /// <summary>
@@ -40,10 +28,10 @@ namespace BP.Sys
             switch (ctrlType)
             {
                 case "Dtl":
-                    CreateOrSaveDtl(fk_mapdata, no, name, x, y);
+                    CreateOrSaveDtl(fk_mapdata, no, name);
                     break;
                 case "AthMulti":
-                    CreateOrSaveAthMulti(fk_mapdata, no, name, x, y);
+                    CreateOrSaveAthMulti(fk_mapdata, no, name);
                     break;
                 case "AthSingle":
                     CreateOrSaveAthSingle(fk_mapdata, no, name, x, y);
@@ -129,8 +117,6 @@ namespace BP.Sys
             ath.RetrieveFromDBSources();
             ath.UploadType = AttachmentUploadType.Single;
             ath.Name = name;
-            ath.X = x;
-            ath.Y = y;
             ath.Save();
         }
         /// <summary>
@@ -141,7 +127,7 @@ namespace BP.Sys
         /// <param name="dtlName">名称</param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public static void CreateOrSaveAthMulti(string fk_mapdata, string no, string name, float x, float y)
+        public static void CreateOrSaveAthMulti(string fk_mapdata, string no, string name)
         {
             FrmAttachment ath = new FrmAttachment();
             ath.setFK_MapData(fk_mapdata);
@@ -152,7 +138,7 @@ namespace BP.Sys
             if (i == 0)
             {
                 // if (!SystemConfig.CustomerNo.Equals("Factory5_mobile"))
-                //ath.SaveTo = SystemConfig.PathOfDataUser + "/UploadFile/" + fk_mapdata + "/";
+                //ath.SaveTo =  BP.Difference.SystemConfig.PathOfDataUser + "/UploadFile/" + fk_mapdata + "/";
                 // ath.SaveTo = "/DataUser/UploadFile/" + fk_mapdata + "/";
                 if (fk_mapdata.Contains("ND") == true)
                     ath.HisCtrlWay = AthCtrlWay.WorkID;
@@ -160,8 +146,6 @@ namespace BP.Sys
 
             ath.UploadType = AttachmentUploadType.Multi;
             ath.Name = name;
-            ath.X = x;
-            ath.Y = y;
             //默认在移动端显示
             ath.SetPara("IsShowMobile", 1);
             ath.Save();
@@ -174,7 +158,7 @@ namespace BP.Sys
         /// <param name="dtlName">名称</param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public static void CreateOrSaveDtl(string fk_mapdata, string dtlNo, string dtlName, float x, float y)
+        public static void CreateOrSaveDtl(string fk_mapdata, string dtlNo, string dtlName)
         {
             MapDtl dtl = new MapDtl();
             dtl.No = dtlNo;
@@ -188,11 +172,8 @@ namespace BP.Sys
                 MapData md = new MapData(fk_mapdata);
                 dtl.PTableModel = md.PTableModel;
 
-                dtl.W = 500;
             }
 
-            dtl.X = x;
-            dtl.Y = y;
             dtl.Name = dtlName;
             dtl.setFK_MapData(fk_mapdata);
 
@@ -341,10 +322,6 @@ namespace BP.Sys
 
                     rb.setEnumKey(ma.UIBindKey);
                     rb.setLab(item.Lab);
-                    //rb.X = ma.X;
-
-                    ////让其变化y值.
-                    //rb.Y = ma.Y + idx * 30;
                     rb.Save();
                 }
             }
@@ -360,18 +337,13 @@ namespace BP.Sys
         {
             //BP.Sys.CCFormParse.SaveImage(frmID, control, properties, imgPKs, ctrlID);
             //imgPKs = imgPKs.Replace(ctrlID + "@", "@");
-
             FrmImg img = new FrmImg();
             img.setMyPK(keyOfEn);
             img.setFK_MapData(frmID);
             img.Name = name;
             img.IsEdit = 1;
             img.HisImgAppType = ImgAppType.Img;
-            img.X = x;
-            img.Y = y;
-
             img.Insert();
-
         }
 
         public static void NewField(string frmID, string field, string fieldDesc, int mydataType, float x, float y, int colSpan = 1)
@@ -387,8 +359,6 @@ namespace BP.Sys
             ma.setMyDataType(mydataType);
             if (mydataType == 7)
                 ma.IsSupperText = 1;
-            //ma.X = x;
-            //ma.Y = y;
 
             //frmID设置字段所属的分组
             GroupField groupField = new GroupField();
@@ -398,7 +368,7 @@ namespace BP.Sys
             ma.Insert();
         }
         public static void NewEnumField(string fk_mapdata, string field, string fieldDesc, string enumKey, UIContralType ctrlType,
-           float x, float y, int colSpan = 1)
+            int colSpan = 1)
         {
             //检查是否可以创建字段? 
             MapData md = new MapData(fk_mapdata);
@@ -729,16 +699,16 @@ namespace BP.Sys
             if (mdCopyTo.HisFrmType == FrmType.ExcelFrm)
             {
                 /*如果是excel表单，那就需要复制excel文件.*/
-                string srcFile = SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + srcFrmID + ".xls";
-                string toFile = SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + copyToFrmID + ".xls";
+                string srcFile =  BP.Difference.SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + srcFrmID + ".xls";
+                string toFile =  BP.Difference.SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + copyToFrmID + ".xls";
                 if (System.IO.File.Exists(srcFile) == true)
                 {
                     if (System.IO.File.Exists(toFile) == false)
                         System.IO.File.Copy(srcFile, toFile, false);
                 }
 
-                srcFile = SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + srcFrmID + ".xlsx";
-                toFile = SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + copyToFrmID + ".xlsx";
+                srcFile =  BP.Difference.SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + srcFrmID + ".xlsx";
+                toFile =  BP.Difference.SystemConfig.PathOfDataUser + "FrmVSTOTemplate/" + copyToFrmID + ".xlsx";
                 if (System.IO.File.Exists(srcFile) == true)
                 {
                     if (System.IO.File.Exists(toFile) == false)
@@ -763,7 +733,6 @@ namespace BP.Sys
         /// <param name="isSetReadonly">是否把空间设置只读？</param>
         public static void ImpFrmTemplate(string toFrmID, DataSet fromds, bool isSetReadonly)
         {
-            //  MapData md = new MapData(toFrmID);
             MapData.ImpMapData(toFrmID, fromds);
         }
         /// <summary>

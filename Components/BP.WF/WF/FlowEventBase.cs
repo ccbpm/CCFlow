@@ -204,7 +204,7 @@ namespace BP.WF
         {
             get
             {
-                return this.GetValStr(BP.WF.Data.NDXRptBaseAttr.Title);
+                return this.GetValStr(GERptAttr.Title);
             }
         }
         #endregion 常用属性.
@@ -490,7 +490,7 @@ namespace BP.WF
                 }
             }
 
-            if (SystemConfig.IsBSsystem == true)
+            if (BP.Difference.SystemConfig.IsBSsystem == true)
             {
                 /*如果是bs系统, 就加入外部url的变量.*/
                 foreach (string key in HttpContextHelper.RequestParamKeys)

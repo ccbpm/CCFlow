@@ -2,17 +2,12 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Data;
-using System.Text;
-using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
 using BP.Port;
 using BP.En;
-using BP.WF;
 using BP.WF.Rpt;
-using BP.WF.Template;
-using BP.WF.Data;
 using BP.Difference;
 
 
@@ -105,22 +100,23 @@ namespace BP.WF.HttpHandler
             string sql = "SELECT No,Name,ParentNo FROM WF_FlowSort ORDER BY No, Idx";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sort";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
-                dt.Columns["NO"].ColumnName = "No";
-                dt.Columns["NAME"].ColumnName = "Name";
-                dt.Columns["PARENTNO"].ColumnName = "ParentNo";
+                dt.Columns[0].ColumnName = "No";
+                dt.Columns[1].ColumnName = "Name";
+                dt.Columns[2].ColumnName = "ParentNo";
             }
             ds.Tables.Add(dt);
 
             sql = "SELECT No,Name,FK_FlowSort FROM WF_Flow WHERE IsCanStart=1 ORDER BY FK_FlowSort, Idx";
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Flows";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
-                dt.Columns["NO"].ColumnName = "No";
-                dt.Columns["NAME"].ColumnName = "Name";
-                dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+                dt.Columns[0].ColumnName = "No";
+                dt.Columns[1].ColumnName = "Name";
+                dt.Columns[2].ColumnName = "FK_FlowSort";
             }
             ds.Tables.Add(dt);
 
@@ -161,7 +157,7 @@ namespace BP.WF.HttpHandler
                 /*如果仅仅部门领导可以查看: 检查当前人是否是部门领导人.*/
                 if (DBAccess.IsExitsTableCol("Port_Dept", "Leader") == true)
                 {
-                    ps.SQL = "SELECT Leader FROM Port_Dept WHERE No=" + SystemConfig.AppCenterDBVarStr + "No";
+                    ps.SQL = "SELECT Leader FROM Port_Dept WHERE No=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "No";
                     ps.Add("No", BP.Web.WebUser.FK_Dept);
                     //string sql = "SELECT Leader FROM Port_Dept WHERE No='" + BP.Web.WebUser.FK_Dept + "'";
                     string strs = DBAccess.RunSQLReturnStringIsNull(ps, null);
@@ -188,7 +184,7 @@ namespace BP.WF.HttpHandler
             Flow fl = new Flow(this.FK_Flow);
             ht.Add("FlowName", fl.Name);
 
-            string advEmps = SystemConfig.AppSettings["AdvEmps"];
+            string advEmps =  BP.Difference.SystemConfig.AppSettings["AdvEmps"];
             if (advEmps != null && advEmps.Contains(BP.Web.WebUser.No) == true)
             {
                 ht.Add("Adminer", "高级查询");
@@ -303,7 +299,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
 
             //判断是否含有导出至模板的模板文件，如果有，则显示导出至模板按钮RptExportToTmp
-            string tmpDir = SystemConfig.PathOfDataUser + @"TempleteExpEns/" + rptNo;
+            string tmpDir =  BP.Difference.SystemConfig.PathOfDataUser + @"TempleteExpEns/" + rptNo;
             if (System.IO.Directory.Exists(tmpDir))
             {
                 if (System.IO.Directory.GetFiles(tmpDir, "*.xls*").Length > 0)
@@ -529,19 +525,19 @@ namespace BP.WF.HttpHandler
                     if (i == 1)
                     {
                         qo.addLeftBracket();
-                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                            qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                        if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(attr.Key, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
                         else
-                            qo.AddWhere(attr.Key, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                            qo.AddWhere(attr.Key, " LIKE ", " '%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey||'%'");
                         continue;
                     }
 
                     qo.addOr();
 
-                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                        qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                    if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                        qo.AddWhere(attr.Key, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
                     else
-                        qo.AddWhere(attr.Key, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                        qo.AddWhere(attr.Key, " LIKE ", "'%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey||'%'");
                 }
 
                 qo.MyParas.Add("SKey", searchKey);
@@ -574,19 +570,19 @@ namespace BP.WF.HttpHandler
                     {
                         /* 第一次进来。 */
                         qo.addLeftBracket();
-                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                            qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                        if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(field, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + field + ",'%')") : (" '%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "+'%'"));
                         else
-                            qo.AddWhere(field, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                            qo.AddWhere(field, " LIKE ", " '%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "||'%'");
                         qo.MyParas.Add(field, fieldValue);
                         continue;
                     }
                     qo.addAnd();
 
-                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                        qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                    if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                        qo.AddWhere(field, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "+'%'"));
                     else
-                        qo.AddWhere(field, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                        qo.AddWhere(field, " LIKE ", "'%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "||'%'");
                     qo.MyParas.Add(field, fieldValue);
 
 
@@ -802,15 +798,15 @@ namespace BP.WF.HttpHandler
             {
                 case "My": //我发起的.
                     title = "我发起的流程";
-                    qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
+                    qo.AddWhere(BP.WF.GERptAttr.FlowStarter, WebUser.No);
                     break;
                 case "MyDept": //我部门发起的.
                     title = "我部门发起的流程";
-                    qo.AddWhere(BP.WF.Data.GERptAttr.FK_Dept, WebUser.FK_Dept);
+                    qo.AddWhere(BP.WF.GERptAttr.FK_Dept, WebUser.FK_Dept);
                     break;
                 case "MyJoin": //我参与的.
                     title = "我参与的流程";
-                    qo.AddWhere(BP.WF.Data.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
+                    qo.AddWhere(BP.WF.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
                     break;
                 case "Adminer":
                     break;
@@ -919,7 +915,7 @@ namespace BP.WF.HttpHandler
             }
 
             //判断是否含有导出至模板的模板文件，如果有，则显示导出至模板按钮RptExportToTmp
-            string tmpDir = SystemConfig.PathOfDataUser + @"TempleteExpEns/" + rptNo;
+            string tmpDir =  BP.Difference.SystemConfig.PathOfDataUser + @"TempleteExpEns/" + rptNo;
             if (System.IO.Directory.Exists(tmpDir))
             {
                 if (System.IO.Directory.GetFiles(tmpDir, "*.xls*").Length > 0)
@@ -1344,13 +1340,13 @@ namespace BP.WF.HttpHandler
             switch (this.GroupType)
             {
                 case "My": //我发起的.
-                    qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
+                    qo.AddWhere(BP.WF.GERptAttr.FlowStarter, WebUser.No);
                     break;
                 case "MyDept": //我部门发起的.
-                    qo.AddWhere(BP.WF.Data.GERptAttr.FK_Dept, WebUser.FK_Dept);
+                    qo.AddWhere(BP.WF.GERptAttr.FK_Dept, WebUser.FK_Dept);
                     break;
                 case "MyJoin": //我参与的.
-                    qo.AddWhere(BP.WF.Data.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
+                    qo.AddWhere(BP.WF.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
                     break;
                 case "Adminer":
                     break;
@@ -1433,7 +1429,7 @@ namespace BP.WF.HttpHandler
                         continue;
                     }
                     if (str != "FK_NY")
-                        whereOFLJ += " " + str + " =" + SystemConfig.AppCenterDBVarStr + str + "   AND ";
+                        whereOFLJ += " " + str + " =" + BP.Difference.SystemConfig.AppCenterDBVarStr + str + "   AND ";
 
                 }
 
@@ -1938,19 +1934,19 @@ namespace BP.WF.HttpHandler
                     {
                         isFirst = false;
                         qo.addLeftBracket();
-                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                            qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                        if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(attr.Key, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
                         else
-                            qo.AddWhere(attr.Key, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                            qo.AddWhere(attr.Key, " LIKE ", " '%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey||'%'");
                         continue;
                     }
 
                     qo.addOr();
 
-                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                        qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                    if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                        qo.AddWhere(attr.Key, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
                     else
-                        qo.AddWhere(attr.Key, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                        qo.AddWhere(attr.Key, " LIKE ", "'%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey||'%'");
                 }
 
                 qo.MyParas.Add("SKey", searchKey);
@@ -1984,19 +1980,19 @@ namespace BP.WF.HttpHandler
                         isFirst = false;
                         /* 第一次进来。 */
                         qo.addLeftBracket();
-                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                            qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                        if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(field, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + field + ",'%')") : (" '%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "+'%'"));
                         else
-                            qo.AddWhere(field, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                            qo.AddWhere(field, " LIKE ", " '%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "||'%'");
                         qo.MyParas.Add(field, fieldValue);
                         continue;
                     }
                     qo.addAnd();
 
-                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                        qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                    if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                        qo.AddWhere(field, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "+'%'"));
                     else
-                        qo.AddWhere(field, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                        qo.AddWhere(field, " LIKE ", "'%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "||'%'");
                     qo.MyParas.Add(field, fieldValue);
 
 
@@ -2273,12 +2269,12 @@ namespace BP.WF.HttpHandler
 
             //设置查询条件.
             QueryObject qo = new QueryObject(ges);
-            qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
+            qo.AddWhere(BP.WF.GERptAttr.FlowStarter, WebUser.No);
 
             //查询.
-            // qo.DoQuery(BP.WF.Data.GERptAttr.OID, 15, this.PageIdx);
+            // qo.DoQuery(BP.WF.GERptAttr.OID, 15, this.PageIdx);
 
-            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
             {
                 DataTable dt = qo.DoQueryToTable();
                 dt.TableName = "dt";
@@ -2309,9 +2305,9 @@ namespace BP.WF.HttpHandler
 
             //设置查询条件.
             QueryObject qo = new QueryObject(ges);
-            qo.AddWhere(BP.WF.Data.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
+            qo.AddWhere(BP.WF.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
 
-            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
             {
                 DataTable dt = qo.DoQueryToTable();
                 dt.TableName = "dt";

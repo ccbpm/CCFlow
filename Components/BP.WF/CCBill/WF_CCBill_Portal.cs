@@ -1,20 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
 using System.Data;
-using System.Text;
-using System.Web;
 using BP.DA;
-using BP.Sys;
 using BP.Web;
-using BP.Port;
-using BP.En;
-using BP.WF;
-using BP.WF.Template;
-using BP.WF.Data;
 using BP.WF.HttpHandler;
-using BP.Difference;
-using BP.CCBill.Template;
 
 
 namespace BP.CCBill
@@ -114,7 +103,7 @@ namespace BP.CCBill
             int top = GetRequestValInt("Top");
             if (top == 0) top = 8;
 
-            switch (SystemConfig.AppCenterDBType)
+            switch (BP.Difference.SystemConfig.AppCenterDBType)
             {
                 case DBType.MSSQL:
                     sql = " SELECT TOP " + top + " FK_Flow,FlowName,F.Icon FROM WF_GenerWorkFlow G ,WF_Flow F WHERE  F.IsCanStart=1 AND F.No=G.FK_Flow AND Starter='" + WebUser.No + "' GROUP BY FK_Flow,FlowName,ICON ORDER By Max(SendDT) DESC";
@@ -129,7 +118,7 @@ namespace BP.CCBill
                     sql = " SELECT * FROM (SELECT DISTINCT FK_Flow as \"FK_Flow\",FlowName as \"FlowName\",F.Icon ,max(SendDT) SendDT FROM WF_GenerWorkFlow G ,WF_Flow F WHERE F.IsCanStart=1 AND F.No=G.FK_Flow AND Starter='" + WebUser.No + "' GROUP BY FK_Flow,FlowName,ICON Order By SendDT) WHERE  rownum <=" + top;
                     break;
                 default:
-                    throw new Exception("err@系统暂时还未开发使用" + SystemConfig.AppCenterDBType + "数据库");
+                    throw new Exception("err@系统暂时还未开发使用" + BP.Difference.SystemConfig.AppCenterDBType + "数据库");
             }
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
@@ -146,7 +135,7 @@ namespace BP.CCBill
             int top = GetRequestValInt("Top");
             if (top == 0) top = 8;
 
-            switch (SystemConfig.AppCenterDBType)
+            switch (BP.Difference.SystemConfig.AppCenterDBType)
             {
                 case DBType.MSSQL:
                     sql = " SELECT TOP " + top + "  No,Name,Icon FROM GPM_Menu WHERE  LEN(MenuModel )  >1 ";
@@ -161,7 +150,7 @@ namespace BP.CCBill
                     sql = " SELECT   No,Name,Icon FROM GPM_Menu WHERE  LEN(MenuModel )  >1 rownum " + top;
                     break;
                 default:
-                    throw new Exception("err@系统暂时还未开发使用" + SystemConfig.AppCenterDBType + "数据库");
+                    throw new Exception("err@系统暂时还未开发使用" + BP.Difference.SystemConfig.AppCenterDBType + "数据库");
             }
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);

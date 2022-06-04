@@ -153,22 +153,12 @@ namespace BP.Sys
         /// 是否可见
         /// </summary>
         public const string IsView = "IsView";
-        /// <summary>
-        /// x
-        /// </summary>
-        public const string X = "X";
-        /// <summary>
-        /// Y
-        /// </summary>
-        public const string Y = "Y";
+       
         /// <summary>
         /// H高度
         /// </summary>
         public const string H = "H";
-        /// <summary>
-        /// w宽度
-        /// </summary>
-        public const string W = "W";
+       
         /// <summary>
         /// 宽度
         /// </summary>
@@ -181,14 +171,6 @@ namespace BP.Sys
         /// 是否启用多附件
         /// </summary>
         public const string IsEnableAthM = "IsEnableAthM";
-        /// <summary>
-        /// 是否启用一对多
-        /// </summary>
-        public const string IsEnableM2M = "IsEnableM2M";
-        /// <summary>
-        /// 是否启用一对多多
-        /// </summary>
-        public const string IsEnableM2MM = "IsEnableM2MM";
         /// <summary>
         /// 多表头列
         /// </summary>
@@ -1001,34 +983,7 @@ namespace BP.Sys
                 this.SetValByKey(MapDtlAttr.IsCopyNDData, value);
             }
         }
-        /// <summary>
-        /// 是否启用一对多
-        /// </summary>
-        public bool IsEnableM2M
-        {
-            get
-            {
-                return this.GetValBooleanByKey(MapDtlAttr.IsEnableM2M);
-            }
-            set
-            {
-                this.SetValByKey(MapDtlAttr.IsEnableM2M, value);
-            }
-        }
-        /// <summary>
-        /// 是否启用一对多多
-        /// </summary>
-        public bool IsEnableM2MM
-        {
-            get
-            {
-                return this.GetValBooleanByKey(MapDtlAttr.IsEnableM2MM);
-            }
-            set
-            {
-                this.SetValByKey(MapDtlAttr.IsEnableM2MM, value);
-            }
-        }
+      
 
         public bool IsUse = false;
         /// <summary>
@@ -1216,7 +1171,7 @@ namespace BP.Sys
         #region 构造方法
         public Map GenerMap()
         {
-            bool isdebug = SystemConfig.IsDebug;
+            bool isdebug =  BP.Difference.SystemConfig.IsDebug;
 
             if (isdebug == false)
             {
@@ -1316,8 +1271,6 @@ namespace BP.Sys
                 map.AddBoolean(MapDtlAttr.IsEnablePass, false, "是否启用通过审核功能?", false, false);
                 map.AddBoolean(MapDtlAttr.IsEnableAthM, false, "是否启用多附件", false, false);
 
-                map.AddBoolean(MapDtlAttr.IsEnableM2M, false, "是否启用M2M", false, false);
-                map.AddBoolean(MapDtlAttr.IsEnableM2MM, false, "是否启用M2M", false, false);
                 map.AddBoolean(MapDtlAttr.IsCopyFirstData, false, "是否复制第一行数据？", false, false);
                 map.AddTBString(MapDtlAttr.InitDBAttrs, null, "行初始化字段", true, false, 0, 40, 20, false);
                 // 超出行数
@@ -1332,12 +1285,8 @@ namespace BP.Sys
 
                 map.AddTBInt(MapDtlAttr.MobileShowModel, 0, "移动端数据显示格式", false, false);
                 map.AddTBString(MapDtlAttr.MobileShowField, null, "移动端列表显示字段", true, false, 0, 100, 20);
-
-                map.AddTBFloat(MapDtlAttr.X, 5, "距左", true, false);
-                map.AddTBFloat(MapDtlAttr.Y, 5, "距上", false, false);
-
+ 
                 map.AddTBFloat(MapDtlAttr.H, 150, "高度", true, false);
-                map.AddTBFloat(MapDtlAttr.W, 200, "宽度", false, false);
 
                 map.AddTBFloat(MapDtlAttr.FrmW, 900, "表单宽度", true, true);
                 map.AddTBFloat(MapDtlAttr.FrmH, 1200, "表单高度", true, true);
@@ -1394,41 +1343,8 @@ namespace BP.Sys
         }
 
         #region 基本属性.
-        public float X
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmImgAttr.X);
-            }
-            set
-            {
-                this.SetValByKey(MapDtlAttr.X, value);
-            }
-
-        }
-        public float Y
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmImgAttr.Y);
-            }
-            set
-            {
-                this.SetValByKey(MapDtlAttr.Y, value);
-            }
-        }
-        public float W
-        {
-            get
-            {
-                return this.GetValFloatByKey(MapDtlAttr.W);
-            }
-            set
-            {
-                this.SetValByKey(MapDtlAttr.W, value);
-            }
-
-        }
+        
+       
         public float H
         {
             get

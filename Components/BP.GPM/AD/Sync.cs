@@ -354,9 +354,9 @@ namespace BP.GPM.AD
             {
                 BP.GPM.AD.Dept dept = new Dept();
                 dept.No = entry.Guid.ToString();
-                dept.Name = SystemConfig.CustomerShortName;
+                dept.Name =  BP.Difference.SystemConfig.CustomerShortName;
                 if (dept.Name == "")
-                    dept.Name = SystemConfig.CustomerName;
+                    dept.Name =  BP.Difference.SystemConfig.CustomerName;
 
                 if (dept.Name == "")
                     dept.Name = "总部";

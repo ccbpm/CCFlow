@@ -3,6 +3,7 @@ using System.Collections;
 using BP.DA;
 using BP.En;
 using System.Data;
+using BP.Difference;
 
 namespace BP.Sys
 {
@@ -213,10 +214,10 @@ namespace BP.Sys
             if (this.Lang == null && this.Lang == "")
                 this.Lang = BP.Web.WebUser.SysLang;
 
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 this.setMyPK(this.EnumKey + "_" + this.Lang + "_" + this.IntKey + "_" + BP.Web.WebUser.OrgNo); //关联的主键.
 
-            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.SAAS)
                 this.setMyPK(this.EnumKey + "_" + this.Lang + "_" + this.IntKey);
         }
 
@@ -450,7 +451,7 @@ namespace BP.Sys
 
             QueryObject qo = new QueryObject(this);
 
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
                 //如果是自定义的枚举.
                 if (enumKey.Contains(BP.Web.WebUser.OrgNo + "_"))

@@ -3,6 +3,8 @@ using System.Collections;
 using BP.DA;
 using BP.En;
 using BP.Sys;
+using BP.Difference;
+
 
 namespace BP.Port
 {
@@ -18,6 +20,9 @@ namespace BP.Port
         /// 隶属组织
         /// </summary>
         public const string OrgNo = "OrgNo";
+
+        public const string Idx = "Idx";
+
     }
     /// <summary>
     /// 岗位
@@ -48,6 +53,17 @@ namespace BP.Port
             set
             {
                 this.SetValByKey(StationAttr.OrgNo, value);
+            }
+        }
+        public int Idx
+        {
+            get
+            {
+                return this.GetValIntByKey(StationAttr.Idx);
+            }
+            set
+            {
+                this.SetValByKey(StationAttr.Idx, value);
             }
         }
         #endregion
@@ -94,16 +110,42 @@ namespace BP.Port
                 map.AddTBString(StationAttr.Name, null, "名称", true, false, 0, 100, 200);
                 map.AddDDLEntities(StationAttr.FK_StationType, null, "类型", new StationTypes(), true);
 
-                map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
+
+                #region 根据组织结构类型不同.
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                {
+                    map.AddTBString(StationAttr.OrgNo, null, "隶属组织", false, false, 0, 50, 250);
+                    map.AddHidden(StationAttr.OrgNo, "=", BP.Web.WebUser.OrgNo); //加隐藏条件.
+                }
+
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
+                {
+                    map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, true, 0, 50, 250);
+                    if (BP.Difference.SystemConfig.GroupStationModel == 0)
+                        map.AddHidden(StationAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);//每个组织都有自己的岗责体系的时候. 加隐藏条件.
+                }
+
+                map.AddTBInt(StationAttr.Idx, 0, "顺序号", true, false);
+#endregion 根据组织结构类型不同.
+
 
                 map.AddSearchAttr(StationAttr.FK_StationType);
-
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        protected override bool beforeUpdateInsertAction()
+        {
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                this.OrgNo = BP.Web.WebUser.OrgNo;
+
+            return base.beforeUpdateInsertAction();
+        }
+
+
     }
     /// <summary>
     /// 岗位s
@@ -131,11 +173,11 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveAll(string orderBy)
         {
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 return base.RetrieveAll(orderBy);
 
             //集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
-            if (BP.Sys.SystemConfig.GroupStationModel == 1)
+            if (BP.Difference.SystemConfig.GroupStationModel == 1)
                 return base.RetrieveAll();
 
             //按照orgNo查询.
@@ -147,11 +189,11 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveAll()
         {
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 return base.RetrieveAll();
 
             //集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
-            if (BP.Sys.SystemConfig.GroupStationModel == 1)
+            if (BP.Difference.SystemConfig.GroupStationModel == 1)
                 return base.RetrieveAll();
 
             //按照orgNo查询.

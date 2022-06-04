@@ -5,7 +5,6 @@ using BP.En;
 using BP.Web;
 using BP.Port;
 using BP.Sys;
-using BP.GPM;
 using BP.WF.Template;
 
 namespace BP.WF.Port.Admin2Group
@@ -88,8 +87,6 @@ namespace BP.WF.Port.Admin2Group
                     return this._enMap;
 
                 Map map = new Map("Port_Dept", "部门");
-
-                map.AdjunctType = AdjunctType.None;
 
                 map.AddTBStringPK(DeptAttr.No, null, "编号", true, false, 1, 30, 40);
                 map.AddTBString(DeptAttr.Name, null, "名称", true, false, 0, 60, 200);
@@ -206,7 +203,7 @@ namespace BP.WF.Port.Admin2Group
                     {
                         try
                         {
-                            string fileName = SystemConfig.PathOfTemp + "" + DBAccess.GenerGUID() + ".xml";
+                            string fileName =  BP.Difference.SystemConfig.PathOfTemp + "" + DBAccess.GenerGUID() + ".xml";
                             DataSet ds = fl.GetFlow(fileName);
                             ds.WriteXml(fileName);
 

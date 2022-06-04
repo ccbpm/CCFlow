@@ -90,7 +90,7 @@ namespace BP.WF
 
             #region 2021.5.30 gaoxin. 更新授权岗位:为中科软
             //更新授权岗位:为中科软. 如果是当前节点的处理人员是按照岗位绑定的，就需要吧授权岗，写入到 Emps里面去.
-            if (doType.Equals(EventListNode.SendSuccess) == true && SystemConfig.GetValByKeyBoolen("IsEnableAuthDeptStation",false)==true)
+            if (doType.Equals(EventListNode.SendSuccess) == true && BP.Difference.SystemConfig.GetValByKeyBoolen("IsEnableAuthDeptStation",false)==true)
             {
                 // 如果这些计算人员的方式有岗位的因素，就需要把当前人员授权岗增加上去.
                 if (wn.HisNode.HisDeliveryWay== DeliveryWay.ByStation
@@ -291,6 +291,7 @@ namespace BP.WF
                 case EventListFlow.BeforeFlowDel:
                 case EventListFlow.FlowOnCreateWorkID:
                 case EventListFlow.FlowOverBefore:
+                case EventListFlow.FlowOverAfter:
                     break;
                 default:
                     return msg;

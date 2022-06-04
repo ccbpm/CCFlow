@@ -281,7 +281,11 @@ namespace BP.WF
         /// <summary>
         /// 按照webapi接口计算
         /// </summary>
-        ByWebAPI=14
+        ByWebAPI=14,
+        /// <summary>
+        /// 按照webapi接口计算
+        /// </summary>
+        ByMyDeptEmps = 15
     }
     /// <summary>
     /// 流程删除规则
@@ -924,23 +928,28 @@ namespace BP.WF
         /// <summary>
         /// 手工启动
         /// </summary>
-        HandWork,
+        HandWork=0,
         /// <summary>
         /// 指定人员按时启动
         /// </summary>
-        SpecEmp,
+        SpecEmp=1,
         /// <summary>
         /// 数据集按时启动
         /// </summary>
-        SelectSQLModel,
+        SelectSQLModel=2,
         /// <summary>
         /// 触发式启动
         /// </summary>
-        WF_TaskTableInsertModel,
+        WF_TaskTableInsertModel=3,
         /// <summary>
         /// 指定人员按时启动高级模式
         /// </summary>
-        SpecEmpAdv
+        SpecEmpAdv=4,
+        /// <summary>
+        ///  让管理员启动流程发送到指定
+        /// </summary>
+        LetAdminSendSpecEmp=5
+
     }
     /// <summary>
     /// 保存模式
@@ -1482,6 +1491,10 @@ namespace BP.WF
         /// 开发者表单
         /// </summary>
         Develop = 12,
+        /// <summary>
+        /// 开发者表单
+        /// </summary>
+        ChapterFrm = 13,
         /// <summary>
         /// 禁用(对多表单流程有效)
         /// </summary>

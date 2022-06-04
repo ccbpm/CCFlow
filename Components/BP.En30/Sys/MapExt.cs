@@ -1081,8 +1081,8 @@ namespace BP.Sys
                     
                 sql = DealExp(sql,paras, en);
                
-               if (sql.Contains("@") == true)
-                    return "err@字段" + field + "执行的SQL中有@符号";
+               //if (sql.Contains("@") == true)
+               //     return "err@字段" + field + "执行的SQL中有@符号";
 
                 DataTable dt = null;
                 if(DataType.IsNullOrEmpty(this.FK_DBSrc) == false && this.FK_DBSrc.Equals("local")==false)
@@ -1093,7 +1093,7 @@ namespace BP.Sys
                 else
                     dt = DBAccess.RunSQLReturnTable(sql);
 
-                if (SystemConfig.AppCenterDBType == BP.DA.DBType.Oracle || SystemConfig.AppCenterDBType == BP.DA.DBType.PostgreSQL || SystemConfig.AppCenterDBType == BP.DA.DBType.UX)
+                if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
                 {
                     dt.Columns["NO"].ColumnName = "No";
                     dt.Columns["NAME"].ColumnName = "Name";
@@ -1102,6 +1102,17 @@ namespace BP.Sys
                     if(dt.Columns.Contains("PARENTNO")==true)
                         dt.Columns["PARENTNO"].ColumnName = "ParentNo";
                 }
+
+                if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+                {
+                    dt.Columns["no"].ColumnName = "No";
+                    dt.Columns["name"].ColumnName = "Name";
+
+                    //判断是否存在PARENTNO列，避免转换失败
+                    if (dt.Columns.Contains("parentno") == true)
+                        dt.Columns["parentno"].ColumnName = "ParentNo";
+                }
+
                 return BP.Tools.Json.ToJson(dt);
 
             }
@@ -1236,7 +1247,7 @@ namespace BP.Sys
 
             }
 
-            if (exp.Contains("@") && SystemConfig.IsBSsystem == true)
+            if (exp.Contains("@") && BP.Difference.SystemConfig.IsBSsystem == true)
             {
                 /*如果是bs*/
                 foreach (string key in HttpContextHelper.RequestParamKeys)

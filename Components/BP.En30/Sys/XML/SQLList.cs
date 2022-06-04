@@ -115,7 +115,7 @@ namespace BP.Sys.XML
 		{
 			get
 			{
-                return SystemConfig.PathOfXML + "SQLList.xml";
+                return BP.Difference.SystemConfig.PathOfXML + "SQLList.xml";
 			}
 		}
 		/// <summary>

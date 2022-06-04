@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Text.RegularExpressions;
-using System.Data;
 using BP.DA;
 using BP.En;
-using BP.Sys;
 
 namespace BP.WF.Port
 {
@@ -28,7 +25,7 @@ namespace BP.WF.Port
         /// <summary>
         /// sid
         /// </summary>
-        public const string SID = "SID";
+        public const string SID = "Token";
         /// <summary>
         /// 电话
         /// </summary>
@@ -261,7 +258,7 @@ namespace BP.WF.Port
         public bool CheckPass(string pass)
         {
             //启用加密
-            if (SystemConfig.IsEnablePasswordEncryption == true)
+            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
                 pass = BP.Tools.Cryptography.EncryptString(pass);
 
             /*使用数据库校验.*/
@@ -330,7 +327,7 @@ namespace BP.WF.Port
                 map.AddTBString(UserAttr.Name, null, "姓名", true, false, 0, 500, 130);
                 map.AddTBString(UserAttr.Pass, null, "密码", false, false, 0, 100, 10);
                 map.AddTBString(UserAttr.FK_Dept, null, "部门", false, false, 0, 100, 10);
-                map.AddTBString(UserAttr.SID, null, "SID", false, false, 0, 36, 36);
+                map.AddTBString(UserAttr.SID, null, "Token", false, false, 0, 36, 36);
                 map.AddTBString(UserAttr.Tel, null, "电话", true, false, 0, 20, 130);
                 map.AddTBString(UserAttr.Email, null, "邮箱", true, false, 0, 100, 132, true);
                 map.AddTBString(UserAttr.PinYin, null, "拼音", true, false, 0, 1000, 132, true);
@@ -352,7 +349,7 @@ namespace BP.WF.Port
          
         protected override bool beforeInsert()
         {
-            if (SystemConfig.IsEnablePasswordEncryption == true)
+            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
             {
                 if (this.Pass == "")
                 {
@@ -396,64 +393,15 @@ namespace BP.WF.Port
             string pinyinJX = BP.DA.DataType.ParseStringToPinyinJianXie(name).ToLower();
             string py = "," + pinyinQP + "," + pinyinJX + ",";
 
-            ////处理岗位信息.
-            //DeptUserStations des = new DeptUserStations();
-            //des.Retrieve(DeptUserStationAttr.FK_User, no);
-
-            //string depts = "";
-            //string stas = "";
-
-            //foreach (DeptUserStation item in des)
-            //{
-            //    BP.GPM.Dept dept = new BP.GPM.Dept();
-            //    dept.No = item.FK_Dept;
-            //    if (dept.RetrieveFromDBSources() == 0)
-            //    {
-            //        item.Delete();
-            //        continue;
-            //    }
-
-            //    //给拼音重新定义值,让其加上部门的信息.
-            //    py = py + pinyinJX + "/" + BP.DA.DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
-
-            //    BP.Port.Station sta = new BP.Port.Station();
-            //    sta.No = item.FK_Station;
-            //    if (sta.RetrieveFromDBSources() == 0)
-            //    {
-            //        item.Delete();
-            //        continue;
-            //    }
-
-            //    stas += "@" + dept.NameOfPath + "|" + sta.Name;
-            //    depts += "@" + dept.NameOfPath;
-            //}
-
             return py;
         }
-
-        /// <summary>
-        /// 向上移动
-        /// </summary>
-        public string DoUp()
-        {
-            this.DoOrderUp(UserAttr.FK_Dept, this.FK_Dept, UserAttr.Idx);
-            return "执行成功.";
-        }
-        /// <summary>
-        /// 向下移动
-        /// </summary>
-        public string DoDown()
-        {
-            this.DoOrderDown(UserAttr.FK_Dept, this.FK_Dept, UserAttr.Idx);
-            return "执行成功.";
-        }
-
+      
         public string DoResetpassword(string pass1, string pass2)
         {
             if (pass1.Equals(pass2) == false)
                 return "两次密码不一致";
 
-            if (SystemConfig.IsEnablePasswordEncryption == true)
+            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
                 pass1 = BP.Tools.Cryptography.EncryptString(pass1);
 
             this.Pass = pass1;

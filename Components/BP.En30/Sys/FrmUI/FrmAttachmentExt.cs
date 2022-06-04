@@ -185,7 +185,7 @@ namespace BP.Sys.FrmUI
             }
         }
 
-     
+
         /// <summary>
         /// 自动控制大小
         /// </summary>
@@ -297,48 +297,7 @@ namespace BP.Sys.FrmUI
             }
 
         }
-        /// <summary>
-        /// Y
-        /// </summary>
-        public float Y
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmAttachmentAttr.Y);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.Y, value);
-            }
-        }
-        /// <summary>
-        /// X
-        /// </summary>
-        public float X
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmAttachmentAttr.X);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.X, value);
-            }
-        }
-        /// <summary>
-        /// W
-        /// </summary>
-        public float W
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmAttachmentAttr.W);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.W, value);
-            }
-        }
+     
         /// <summary>
         /// H
         /// </summary>
@@ -537,7 +496,7 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSysEnum(FrmAttachmentAttr.AthSaveWay, 0, "保存方式", true, true, FrmAttachmentAttr.AthSaveWay,
                   "@0=保存到web服务器@1=保存到数据库@2=ftp服务器");
 
-                 
+
                 map.AddBoolean(FrmAttachmentAttr.IsIdx, false, "是否排序?", true, true);
 
 
@@ -546,11 +505,7 @@ namespace BP.Sys.FrmUI
 
                 map.AddBoolean(FrmAttachmentAttr.IsTurn2Html, false, "是否转换成html(方便手机浏览)", true, true, true);
 
-                //位置.
-                map.AddTBFloat(FrmAttachmentAttr.X, 5, "X", false, false);
-                map.AddTBFloat(FrmAttachmentAttr.Y, 5, "Y", false, false);
 
-                map.AddTBFloat(FrmAttachmentAttr.W, 40, "宽度", true, false);
                 map.AddTBFloat(FrmAttachmentAttr.H, 150, "高度", true, false);
 
                 //附件是否显示
@@ -561,6 +516,14 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSysEnum(FrmAttachmentAttr.PicUploadType, 0, "图片附件上传方式", true, true, FrmAttachmentAttr.PicUploadType, "@0=拍照上传或者相册上传@1=只能拍照上传");
                 map.SetHelperAlert(FrmAttachmentAttr.PicUploadType, "该功能只使用于移动端图片文件上传的方式.");
                 map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+
+
+
+                map.AddBoolean(FrmAttachmentAttr.IsEnableTemplate, true, "是否启用模板下载？", true, true, true);
+
+
+                // @wwh.
+                map.AddMyFileS("附件模板");
 
                 #endregion 基本属性。
 
@@ -581,7 +544,7 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(FrmAttachmentAttr.IsShowTitle, true, "是否显示标题列", true, true);
 
                 map.AddDDLSysEnum(FrmAttachmentAttr.UploadType, 0, "上传类型", true, false, FrmAttachmentAttr.CtrlWay, "@0=单个@1=多个@2=指定");
-                map.SetHelperAlert(FrmAttachmentAttr.UploadType,"单附件：请使用字段单附件组件。");
+                map.SetHelperAlert(FrmAttachmentAttr.UploadType, "单附件：请使用字段单附件组件。");
 
 
                 map.AddDDLSysEnum(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式", true, true, FrmAttachmentAttr.AthUploadWay, "@0=继承模式@1=协作模式");
@@ -641,7 +604,6 @@ namespace BP.Sys.FrmUI
 
                 #endregion 基本配置.
 
-
                 #region 高级设置.
                 rm = new RefMethod();
                 rm.GroupName = "实验中功能";
@@ -655,7 +617,7 @@ namespace BP.Sys.FrmUI
                 rm.Title = "设置扩展列";
                 rm.ClassMethodName = this.ToString() + ".DtlOfAth";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
-               // map.AddRefMethod(rm);
+                // map.AddRefMethod(rm);
                 #endregion 基本配置.
 
 
@@ -712,7 +674,7 @@ namespace BP.Sys.FrmUI
             try
             {
                 FtpConnection conn = new FtpConnection();
-                conn.Connect(SystemConfig.FTPServerIP, SystemConfig.FTPServerPort, SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+                conn.Connect(BP.Difference.SystemConfig.FTPServerIP, BP.Difference.SystemConfig.FTPServerPort, BP.Difference.SystemConfig.FTPUserNo, BP.Difference.SystemConfig.FTPUserPassword);
                 return "连接成功.";
             }
             catch (Exception ex)
@@ -798,6 +760,7 @@ namespace BP.Sys.FrmUI
                 }
             }
 
+            //如果不显示.
             if (this.IsVisable == false)
             {
                 GroupField gf = new GroupField();
@@ -849,7 +812,7 @@ namespace BP.Sys.FrmUI
             ath.IsHeLiuHuiZong = this.IsHeLiuHuiZong;
 
             //强制设置,保存到ftp服务器上.
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 ath.AthSaveWay = AthSaveWay.FTPServer;
 
             ath.Update();

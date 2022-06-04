@@ -1,15 +1,6 @@
 ﻿using System;
-using System.Data;
-using BP.DA;
 using BP.En;
-using BP.WF;
 using BP.Port;
-using BP.Port;
-using BP.En;
-using BP.Web;
-using System.Drawing;
-using System.Text;
-using System.IO;
 
 namespace BP.WF.Port
 {
@@ -30,12 +21,9 @@ namespace BP.WF.Port
         public const string LoginData = "LoginData";
         public const string Tel = "Tel";
         public const string Email = "Email";
-        public const string AlertWay = "AlertWay";
         public const string Stas = "Stas";
         public const string Depts = "Depts";
         public const string FK_Dept = "FK_Dept";
-        public const string Idx = "Idx";
-        public const string Style = "Style";
         public const string Msg = "Msg";
         public const string UseSta = "UseSta";
         /// <summary>
@@ -63,9 +51,9 @@ namespace BP.WF.Port
     {
         #region 基本属性
         /// <summary>
-		/// 编号
-		/// </summary>
-		
+        /// 编号
+        /// </summary>
+
         public new string No
         {
             get
@@ -84,7 +72,7 @@ namespace BP.WF.Port
         {
             get
             {
-                if (BP.Sys.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
                     return this.GetValStringByKey(WFEmpAttr.UserID);
 
                 return this.GetValStringByKey(WFEmpAttr.No);
@@ -93,10 +81,25 @@ namespace BP.WF.Port
             {
                 this.SetValByKey(WFEmpAttr.UserID, value);
 
-                if (BP.Sys.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
                     this.SetValByKey(WFEmpAttr.No, BP.Web.WebUser.OrgNo + "_" + value);
                 else
                     this.SetValByKey(WFEmpAttr.No, value);
+            }
+        }
+
+        /// <summary>
+        /// Token
+        /// </summary>
+        public string Token
+        {
+            get
+            {
+                return this.GetValStringByKey(WFEmpAttr.Token);
+            }
+            set
+            {
+                this.SetValByKey(WFEmpAttr.Token, value);
             }
         }
         /// <summary>
@@ -113,13 +116,6 @@ namespace BP.WF.Port
                 this.SetValByKey(WFEmpAttr.OrgNo, value);
             }
         }
-        public string HisAlertWayT
-        {
-            get
-            {
-                return this.GetValRefTextByKey(WFEmpAttr.AlertWay);
-            }
-        }
         /// <summary>
         /// 用户状态
         /// </summary>
@@ -132,17 +128,6 @@ namespace BP.WF.Port
             set
             {
                 SetValByKey(WFEmpAttr.UseSta, value);
-            }
-        }
-        public string Token
-        {
-            get
-            {
-                return this.GetValStringByKey(WFEmpAttr.Token);
-            }
-            set
-            {
-                SetValByKey(WFEmpAttr.Token, value);
             }
         }
         /// <summary>
@@ -159,20 +144,6 @@ namespace BP.WF.Port
                 SetValByKey(WFEmpAttr.FK_Dept, value);
             }
         }
-        /// <summary>
-        /// 风格文件
-        /// </summary>
-        public string Style
-        {
-            get
-            {
-                return this.GetValStringByKey(WFEmpAttr.Style);
-            }
-            set
-            {
-                this.SetValByKey(WFEmpAttr.Style, value);
-            }
-        }
 
         /// <summary>
         /// 电话
@@ -186,17 +157,6 @@ namespace BP.WF.Port
             set
             {
                 SetValByKey(WFEmpAttr.Tel, value);
-            }
-        }
-        public int Idx
-        {
-            get
-            {
-                return this.GetValIntByKey(WFEmpAttr.Idx);
-            }
-            set
-            {
-                SetValByKey(WFEmpAttr.Idx, value);
             }
         }
 
@@ -258,7 +218,7 @@ namespace BP.WF.Port
                 throw new Exception("@要查询的操作员编号为空。");
 
             userID = userID.Trim();
-            if (BP.Sys.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
             {
                 if (userID.Equals("admin") == true)
                     this.SetValByKey("No", userID);
@@ -297,25 +257,21 @@ namespace BP.WF.Port
                 map.AddTBString(WFEmpAttr.Tel, null, "Tel", true, true, 0, 50, 20);
                 map.AddTBString(WFEmpAttr.FK_Dept, null, "FK_Dept", true, true, 0, 100, 36);
                 map.AddTBString(WFEmpAttr.Email, null, "Email", true, true, 0, 50, 20);
-                map.AddDDLSysEnum(WFEmpAttr.AlertWay, 3, "收听方式", true, true, WFEmpAttr.AlertWay);
 
                 map.AddTBString(WFEmpAttr.Stas, null, "岗位s", true, true, 0, 3000, 20);
-                map.AddTBString(WFEmpAttr.Depts, null, "Deptss", true, true, 0, 100, 36);
+                map.AddTBString(WFEmpAttr.Depts, null, "部门s", true, true, 0, 100, 36);
 
-                map.AddTBString(WFEmpAttr.Msg, null, "Msg", true, true, 0, 4000, 20);
-                map.AddTBString(WFEmpAttr.Style, null, "Style", true, true, 0, 30, 20);
+                map.AddTBString(WFEmpAttr.Msg, null, "消息", true, true, 0, 4000, 20);
 
                 //如果是集团模式或者是SAAS模式.
-                if (BP.Sys.SystemConfig.CCBPMRunModel != BP.Sys.CCBPMRunModel.Single)
+                if (BP.Difference.SystemConfig.CCBPMRunModel != BP.Sys.CCBPMRunModel.Single)
                     map.AddTBString(WFEmpAttr.UserID, null, "用户ID", true, false, 0, 50, 30);
+
                 //隶属组织.
                 map.AddTBString(WFEmpAttr.OrgNo, null, "OrgNo", true, true, 0, 100, 20);
 
                 map.AddTBString(WFEmpAttr.SPass, null, "图片签名密码", true, true, 0, 200, 20);
 
-                map.AddTBString(WFEmpAttr.Token, null, "token", true, true, 0, 200, 20);
-
-                map.AddTBInt(WFEmpAttr.Idx, 0, "Idx", false, false);
 
                 map.AddTBAtParas(3500); //增加字段.
 
@@ -361,7 +317,7 @@ namespace BP.WF.Port
             return base.beforeInsert();
         }
         #endregion
-       
+
         public void DoUp()
         {
             this.DoOrderUp("FK_Dept", this.FK_Dept, "Idx");

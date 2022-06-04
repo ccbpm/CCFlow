@@ -241,8 +241,8 @@ namespace BP.WF.Template
         }
         public override int RetrieveAll()
         {
-            if (SystemConfig.CCBPMRunModel== CCBPMRunModel.SAAS 
-                || SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
+            if (BP.Difference.SystemConfig.CCBPMRunModel== CCBPMRunModel.SAAS 
+                || BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
                 return this.Retrieve(SysFormTreeAttr.OrgNo,BP.Web.WebUser.OrgNo);
 
 

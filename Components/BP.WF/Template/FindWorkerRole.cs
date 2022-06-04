@@ -2,10 +2,7 @@
 using System.Data;
 using BP.DA;
 using BP.En;
-using System.Collections;
-using BP.Web;
-using BP.GPM;
-using BP.Sys;
+using BP.Port;
 
 namespace BP.WF.Template
 {
@@ -452,7 +449,7 @@ namespace BP.WF.Template
         public WorkNode town = null;
         public WorkNode currWn = null;
         public Flow fl = null;
-        string dbStr = SystemConfig.AppCenterDBVarStr;
+        string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
         public Paras ps = null;
         public Int64 WorkID = 0;
         public Node HisNode = null;
@@ -785,7 +782,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return SystemConfig.AppCenterDBVarStr;
+                return BP.Difference.SystemConfig.AppCenterDBVarStr;
             }
         }
     }

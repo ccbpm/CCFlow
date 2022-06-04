@@ -1,10 +1,6 @@
-﻿using System;
-using System.Data;
-using System.Collections;
-using BP.DA;
+﻿using BP.DA;
 using BP.Web;
 using BP.En;
-using BP.Port;
 using BP.Sys;
 using BP.CCBill.Template;
 
@@ -115,7 +111,7 @@ namespace BP.CCBill.Sys
         {
             get
             {
-                string file = SystemConfig.CCFlowAppPath + "WF/CCBill/Admin/MethodDoc/MethodDocDemoJS.txt";
+                string file =  BP.Difference.SystemConfig.CCFlowAppPath + "WF/CCBill/Admin/MethodDoc/MethodDocDemoJS.txt";
                 string doc = DataType.ReadTextFile(file); //读取文件.
                 doc = doc.Replace("/#", "+"); //为什么？
                 doc = doc.Replace("/$", "-"); //为什么？
@@ -129,7 +125,7 @@ namespace BP.CCBill.Sys
         {
             get
             {
-                string file = SystemConfig.CCFlowAppPath + "WF/CCBill/Admin/MethodDoc/MethodDocDemoSQL.txt";
+                string file =  BP.Difference.SystemConfig.CCFlowAppPath + "WF/CCBill/Admin/MethodDoc/MethodDocDemoSQL.txt";
                 string doc = DataType.ReadTextFile(file); //读取文件.
                                                           //  doc = doc.Replace("@FrmID", this.FrmID);
                 return doc;

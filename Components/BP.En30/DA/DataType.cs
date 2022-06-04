@@ -28,6 +28,40 @@ namespace BP.DA
             return false;
         }
 
+        /// <summary>
+        /// 比较两个字符串是否有交集
+        /// </summary>
+        /// <param name="ids1"></param>
+        /// <param name="ids2"></param>
+        /// <returns></returns>
+        public static bool IsHaveIt(string ids1, string ids2)
+        {
+            if (DataType.IsNullOrEmpty(ids1) == true)
+                return false;
+            if (DataType.IsNullOrEmpty(ids2) == true)
+                return false;
+
+            string[] str1s = ids1.Split(',');
+            string[] str2s = ids2.Split(',');
+
+            foreach (string str1 in str1s)
+            {
+                if (str1 == "" || str1 == null)
+                    continue;
+
+                foreach (string str2 in str2s)
+                {
+                    if (str2 == "" || str2 == null)
+                        continue;
+
+                    if (str2.Equals(str1) == true)
+                        return true;
+                }
+            }
+            return false;
+        }
+
+
         #region 与日期相关的操作.
         /// <summary>
         /// 获得指定日期的周1第一天日期.
@@ -646,7 +680,7 @@ namespace BP.DA
             catch (Exception ex)
             {
                 BP.DA.Log.DebugWriteError("@读取URL出现错误:URL=" + url + "@错误信息：" + ex.Message);
-                return null;
+                return "err@读取URL出现错误:URL=" + url + "@错误信息：" + ex.Message;
             }
             //	因为它返回的实例类型是WebRequest而不是HttpWebRequest,因此记得要进行强制类型转换
             //  接下来建立一个HttpWebResponse以便接收服务器发送的信息，它是调用HttpWebRequest.GetResponse来获取的：
@@ -1333,7 +1367,7 @@ namespace BP.DA
             try
             {
                 string sql = "SELECT  " + exp + " as Num  ";
-                switch (SystemConfig.AppCenterDBType)
+                switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
                     case DBType.Access:
@@ -1746,27 +1780,8 @@ namespace BP.DA
                 return DateTime.Now.ToString(DataType.SysDateTimeFormat + ":ss");
             }
         }
-        public static string ParseSysDateTime2SysDate(string sysDateformat)
-        {
-            try
-            {
-                return sysDateformat.Substring(0, 10);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("日期格式错误:" + sysDateformat + " errorMsg=" + ex.Message);
-            }
-        }
-        /// <summary>
-        /// 转化为友好的日期
-        /// </summary>
-        /// <param name="sysDateformat">日期</param>
-        /// <returns></returns>
-        public static string ParseSysDate2DateTimeFriendly(string sysDateformat)
-        {
-            DTTemp dt = new DTTemp();
-            return dt.DateStringFromNow(sysDateformat);
-        }
+        
+   
         /// <summary>
         /// 把chichengsoft本系统日期格式转换为系统日期格式。
         /// </summary>

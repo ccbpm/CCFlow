@@ -2,6 +2,7 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
+using BP.Difference;
 using BP;
 namespace BP.Sys
 {
@@ -166,7 +167,7 @@ namespace BP.Sys
         {
             this.setMyPK(DBAccess.GenerGUID());
             this.RDT = DataType.CurrentDateTime;
-            if (SystemConfig.IsBSsystem)
+            if (BP.Difference.SystemConfig.IsBSsystem)
                 this.IP = BP.Difference.Glo.GetIP;
 
             if (DataType.IsNullOrEmpty(this.EmpNo) == true)

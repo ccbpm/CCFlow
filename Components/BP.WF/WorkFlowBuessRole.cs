@@ -10,6 +10,8 @@ using BP.Sys;
 using BP.En;
 using BP.Port;
 using BP.Web;
+using BP.WF.Template.CCEn;
+
 
 namespace BP.WF
 {
@@ -542,7 +544,7 @@ namespace BP.WF
             string FK_Emp;
 
             //变量.
-            string dbStr = SystemConfig.AppCenterDBVarStr;
+            string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
 
             Paras ps = new Paras();
             // 按上一节点发送人处理。
@@ -1005,7 +1007,7 @@ namespace BP.WF
             if (toNode.HisDeliveryWay == DeliveryWay.ByStationOnly)
             {
                 ps = new Paras();
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
                     sql = "SELECT A.FK_Emp FROM Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND A.OrgNo=" + dbStr + "OrgNo AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
                     ps.Add("OrgNo", BP.Web.WebUser.OrgNo);
@@ -1032,7 +1034,7 @@ namespace BP.WF
             {
                 /* 考虑当前操作人员的部门, 如果本部门没有这个岗位就不向上寻找. */
 
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
                     dt = DBAccess.RunSQLReturnTable("SELECT UserID as No, Name FROM Port_Emp WHERE UserID='" + BP.Web.WebUser.No + "' AND OrgNo='" + BP.Web.WebUser.OrgNo + "'");
                 }
@@ -1242,7 +1244,7 @@ namespace BP.WF
         private static DataTable RequetNextNodeWorkers_DiGui(string deptNo, string empNo, Node toNode)
         {
             string sql;
-            string dbStr = SystemConfig.AppCenterDBVarStr;
+            string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
 
             sql = "SELECT FK_Emp as No FROM Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Dept=" + dbStr + "FK_Dept AND A.FK_Emp!=" + dbStr + "FK_Emp";
             Paras ps = new Paras();
@@ -1448,7 +1450,7 @@ namespace BP.WF
             PushMsgs pms = new PushMsgs();
             pms.Retrieve(PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Event, EventListNode.CCAfter);
 
-            string mailTemp = DataType.ReadTextFile2Html(SystemConfig.PathOfDataUser + "EmailTemplete/CC_" + WebUser.SysLang + ".txt");
+            string mailTemp = DataType.ReadTextFile2Html(BP.Difference.SystemConfig.PathOfDataUser + "EmailTemplete/CC_" + WebUser.SysLang + ".txt");
             foreach (DictionaryEntry item in ht)
             {
                 ccDoc = ccDoc.Replace("@Accepter", item.Value.ToString());
@@ -1506,11 +1508,11 @@ namespace BP.WF
                     BP.WF.Port.WFEmp wfemp = new BP.WF.Port.WFEmp(list.CCTo);
 
                     string sid = list.CCTo + "_" + list.WorkID + "_" + list.FK_Node + "_" + list.RDT;
-                    string url = basePath + "WF/Do.htm?DoType=DoOpenCC&SID=" + sid;
+                    string url = basePath + "WF/Do.htm?DoType=DoOpenCC&Token=" + sid;
                     url = url.Replace("//", "/");
                     url = url.Replace("//", "/");
 
-                    string urlWap = basePath + "WF/Do.htm?DoType=DoOpenCC&SID=" + sid + "&IsWap=1";
+                    string urlWap = basePath + "WF/Do.htm?DoType=DoOpenCC&Token=" + sid + "&IsWap=1";
                     urlWap = urlWap.Replace("//", "/");
                     urlWap = urlWap.Replace("//", "/");
 

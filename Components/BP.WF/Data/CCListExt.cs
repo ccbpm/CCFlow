@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Data;
 using BP.DA;
 using BP.En;
-using BP.WF;
-using BP.Port;
+
 
 namespace BP.WF.Data
 {
@@ -380,8 +378,8 @@ namespace BP.WF.Data
                 map.AddSearchAttr(CCListAttr.Sta);
 
                 //增加隐藏条件.
-                if (BP.Sys.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.Single
-                    || BP.Sys.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.GroupInc)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.Single
+                    || BP.Difference.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.GroupInc)
                 {
                     map.AddHidden(CCListAttr.CCTo, "=", "@WebUser.No");
                 }

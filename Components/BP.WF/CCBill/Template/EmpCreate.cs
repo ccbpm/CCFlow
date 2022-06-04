@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using BP.DA;
-using BP.En;
-using BP.WF.Port;
+﻿using BP.En;
 
 namespace BP.CCBill.Template
 {
@@ -86,7 +82,7 @@ namespace BP.CCBill.Template
                 Map map = new Map("Frm_EmpCreate", "单据可创建的人员");
 
                 map.AddTBStringPK(EmpCreateAttr.FrmID,null,"表单",true,true,1,100,100 );
-                map.AddDDLEntitiesPK(EmpCreateAttr.FK_Emp, null, "人员", new Emps(), true);
+                map.AddDDLEntitiesPK(EmpCreateAttr.FK_Emp, null, "人员", new BP.Port.Emps(), true);
 
                 this._enMap = map;
                 return this._enMap;

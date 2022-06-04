@@ -57,7 +57,7 @@ namespace BP.En
                 switch (en.EnMap.EnDBUrl.DBUrlType)
                 {
                     case DBUrlType.AppCenterDSN:
-                        switch (SystemConfig.AppCenterDBType)
+                        switch (BP.Difference.SystemConfig.AppCenterDBType)
                         {
                             case DBType.MSSQL:
                             case DBType.Oracle:
@@ -111,7 +111,7 @@ namespace BP.En
             }
             catch (Exception ex)
             {
-                if (SystemConfig.IsDebug)
+                if (BP.Difference.SystemConfig.IsDebug)
                     en.CheckPhysicsTable();
                 throw ex;
             }

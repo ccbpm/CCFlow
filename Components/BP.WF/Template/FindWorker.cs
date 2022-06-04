@@ -21,7 +21,7 @@ namespace BP.WF.Template
         public WorkNode town = null;
         public WorkNode currWn = null;
         public Flow fl = null;
-        string dbStr = SystemConfig.AppCenterDBVarStr;
+        string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
         public Paras ps = null;
         string JumpToEmp = null;
         int JumpToNode = 0;
@@ -154,7 +154,7 @@ namespace BP.WF.Template
 
                         ps = new Paras();
                         ps.SQL = "SELECT " + empFild + ", * FROM " + dtl.PTable + " WHERE RefPK=" + dbStr + "OID ORDER BY OID";
-                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                        if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
                             ps.SQL = "SELECT " + empFild + ", A.* FROM " + dtl.PTable + " A WHERE RefPK=" + dbStr + "OID ORDER BY OID";
                         ps.Add("OID", this.WorkID);
                         dt = DBAccess.RunSQLReturnTable(ps);
@@ -217,7 +217,7 @@ namespace BP.WF.Template
 
                     //查找人员的直属leader
                     sql = "";
-                    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                    if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                         sql = "SELECT Leader,FK_Dept FROM Port_Emp WHERE No='" + empNo + "'";
                     else
                         sql = "SELECT Leader,FK_Dept FROM Port_Emp WHERE No='" + BP.Web.WebUser.OrgNo + "_" + empNo + "'";
@@ -699,7 +699,7 @@ namespace BP.WF.Template
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByStationOnly)
             {
                 ps = new Paras();
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
                     //2020-4-25 按照岗位倒序排序 修改原因队列模式时，下级岗位处理后发给上级岗位， 岗位越高数值越小
                     sql = "SELECT A.FK_Emp FROM Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND A.OrgNo=" + dbStr + "OrgNo AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Station desc";
@@ -776,7 +776,7 @@ namespace BP.WF.Template
             {
                 /* 考虑当前操作人员的部门, 如果本部门没有这个岗位就不向上寻找. */
 
-                if (BP.Sys.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
                     ps = new Paras();
                     ps.SQL = "SELECT UserID as No,Name FROM Port_Emp WHERE UserID=" + dbStr + "FK_Emp AND OrgNo=" + dbStr + "OrgNo ";
@@ -850,7 +850,7 @@ namespace BP.WF.Template
                 //用户输入的webAPI地址
                 string apiUrl = town.HisNode.DeliveryParas;
                 if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
-                    apiUrl = apiUrl.Replace("@WebApiHost", SystemConfig.AppSettings["WebApiHost"]);
+                    apiUrl = apiUrl.Replace("@WebApiHost", BP.Difference.SystemConfig.AppSettings["WebApiHost"]);
                 //如果有参数
                 if (apiUrl.Contains("?"))
                 {
@@ -995,6 +995,11 @@ namespace BP.WF.Template
                 return dt;
             }
 
+            //获取当前人员信息的
+            Hashtable ht = GetEmpDeptBySFModel();
+            empDept = ht["DeptNo"].ToString();
+            empNo = ht["EmpNo"].ToString();
+
             /* 如果执行节点 与 接受节点岗位集合不一致 */
             if ((DataType.IsNullOrEmpty(toNodeTeamStaNDs) == true && DataType.IsNullOrEmpty(currGroupStaNDs) == true)
                 || currGroupStaNDs.Equals(toNodeTeamStaNDs) == false)
@@ -1041,10 +1046,7 @@ namespace BP.WF.Template
             /* 没有查询到的情况下, 按照最大匹配数 提高一个级别计算，递归算法未完成。
              * 因为:以上已经做的岗位的判断，就没有必要在判断其它类型的节点处理了。
              * */
-            //获取当前人员信息的
-            Hashtable ht = GetEmpDeptBySFModel();
-            empDept = ht["DeptNo"].ToString();
-            empNo = ht["EmpNo"].ToString();
+          
             string nowDeptID = empDept.Clone() as string;
 
             //第1步:直线父级寻找.
@@ -1298,7 +1300,7 @@ namespace BP.WF.Template
             if (DataType.IsNullOrEmpty(myEmpNo) == true)
             {
                 //如果部门的负责人为空，则查找Port_Emp中的Learder信息
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                     sql = "SELECT Leader FROM Port_Emp WHERE UserID='" + empNo + "' AND OrgNo='" + WebUser.OrgNo + "'";
                 else
                     sql = "SELECT Leader FROM Port_Emp WHERE No='" + empNo + "'";
@@ -1306,7 +1308,7 @@ namespace BP.WF.Template
                 myEmpNo = DBAccess.RunSQLReturnStringIsNull(sql, null);
                 if (DataType.IsNullOrEmpty(myEmpNo) == true)
                 {
-                    GPM.Dept mydept = new GPM.Dept(empDept);
+                    Dept mydept = new Dept(empDept);
                     throw new Exception("@流程设计错误:下一个节点(" + town.HisNode.Name + ")设置的按照部门负责人计算，当前您的部门(" + mydept.No + "," + mydept.Name + ")没有维护负责人 . ");
                 }
             }
@@ -1318,7 +1320,7 @@ namespace BP.WF.Template
                 myEmpNo = DBAccess.RunSQLReturnStringIsNull(sql, null);
                 if (DataType.IsNullOrEmpty(myEmpNo) == true)
                 {
-                    GPM.Dept mydept = new GPM.Dept(empDept);
+                    Dept mydept = new Dept(empDept);
                     throw new Exception("@流程设计错误:下一个节点(" + town.HisNode.Name + ")设置的按照部门负责人计算，当前您的部门(" + mydept.Name + ")上级没有维护负责人 . ");
                 }
             }
@@ -1336,7 +1338,7 @@ namespace BP.WF.Template
             {
                 //如果部门的负责人为空，则查找Port_Emp中的Learder信息
                 ps.Clear();
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                     ps.SQL = "SELECT ShipLeader FROM Port_Emp WHERE UserID='" + empNo + "' AND OrgNo='" + WebUser.OrgNo + "'";
                 else
                     ps.SQL = "SELECT ShipLeader FROM Port_Emp WHERE No='" + empNo + "'";
@@ -1491,7 +1493,7 @@ namespace BP.WF.Template
 
                                     //获取岗位下的人员
                                     string sql = "";
-                                    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                                    if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                                         sql = "SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Station='" + station + "'";
                                     else
                                     {

@@ -170,7 +170,7 @@ namespace BP.WF.Template
 
         protected override bool beforeInsert()
         {
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
             {
             }
             else
@@ -213,7 +213,7 @@ namespace BP.WF.Template
 
             Flow fl = new Flow(flowNo);
 
-            BP.WF.Data.GERpts rpts = new BP.WF.Data.GERpts();
+            BP.WF.GERpts rpts = new BP.WF.GERpts();
 
         //    GEEntitys ens = new GEEntitys(rptNo);
 
@@ -240,9 +240,9 @@ namespace BP.WF.Template
             string rptNo = "ND" + int.Parse(flowNo) + "Rpt";
             GEEntitys ens = new GEEntitys(rptNo);
             BP.En.QueryObject qo = new QueryObject(ens);
-            qo.AddWhere(BP.WF.Data.GERptAttr.FlowEmps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
+            qo.AddWhere(BP.WF.GERptAttr.FlowEmps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
             qo.addOr();
-            qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, BP.Web.WebUser.No );
+            qo.AddWhere(BP.WF.GERptAttr.FlowStarter, BP.Web.WebUser.No );
             qo.addOrderBy("RDT");
             qo.Top = 100;
             qo.DoQuery();
@@ -269,11 +269,11 @@ namespace BP.WF.Template
 
             //默认显示的系统字段 标题、创建人、创建时间、部门、状态.
             MapAttrs mattrsOfSystem = new MapAttrs();
-            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.Data.GERptAttr.Title));
-            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.Data.GERptAttr.FlowStarter));
-            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.Data.GERptAttr.FK_Dept));
-            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.Data.GERptAttr.WFState));
-            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.Data.GERptAttr.FlowEmps));
+            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.Title));
+            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.FlowStarter));
+            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.FK_Dept));
+            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.WFState));
+            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.FlowEmps));
             ds.Tables.Add(mattrsOfSystem.ToDataTableField("Sys_MapAttrOfSystem"));
 
             ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
@@ -310,11 +310,11 @@ namespace BP.WF.Template
 
             //默认显示的系统字段 标题、创建人、创建时间、部门、状态.
             MapAttrs mattrsOfSystem = new MapAttrs();
-            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.Data.GERptAttr.Title));
-            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.Data.GERptAttr.FlowStarter));
-            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.Data.GERptAttr.FK_Dept));
-            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.Data.GERptAttr.WFState));
-            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.Data.GERptAttr.FlowEmps));
+            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.Title));
+            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.FlowStarter));
+            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.FK_Dept));
+            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.WFState));
+            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.FlowEmps));
             ds.Tables.Add(mattrsOfSystem.ToDataTableField("Sys_MapAttrOfSystem"));
 
             ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
@@ -342,9 +342,9 @@ namespace BP.WF.Template
             GEEntitys ens = new GEEntitys(rptNo);
             QueryObject qo = new QueryObject(ens);
             qo.addLeftBracket();
-            qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, BP.Web.WebUser.No);
+            qo.AddWhere(BP.WF.GERptAttr.FlowStarter, BP.Web.WebUser.No);
             qo.addOr();
-            qo.AddWhere(BP.WF.Data.GERptAttr.FlowEmps, " LIKE ", "'%@" + BP.Web.WebUser.No + ",%'");
+            qo.AddWhere(BP.WF.GERptAttr.FlowEmps, " LIKE ", "'%@" + BP.Web.WebUser.No + ",%'");
             qo.addRightBracket();
 
             #region 关键字查询
@@ -383,19 +383,19 @@ namespace BP.WF.Template
                     if (i == 1)
                     {
                         qo.addLeftBracket();
-                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                            qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                        if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(attr.Key, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
                         else
-                            qo.AddWhere(attr.Key, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                            qo.AddWhere(attr.Key, " LIKE ", " '%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey||'%'");
                         continue;
                     }
 
                     qo.addOr();
 
-                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                        qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                    if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                        qo.AddWhere(attr.Key, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
                     else
-                        qo.AddWhere(attr.Key, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                        qo.AddWhere(attr.Key, " LIKE ", "'%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey||'%'");
                 }
 
                 qo.MyParas.Add("SKey", searchKey);
@@ -428,19 +428,19 @@ namespace BP.WF.Template
                     {
                         /* 第一次进来。 */
                         qo.addLeftBracket();
-                        if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                            qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                        if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                            qo.AddWhere(field, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + field + ",'%')") : (" '%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "+'%'"));
                         else
-                            qo.AddWhere(field, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                            qo.AddWhere(field, " LIKE ", " '%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "||'%'");
                         qo.MyParas.Add(field, fieldValue);
                         continue;
                     }
                     qo.addAnd();
 
-                    if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                        qo.AddWhere(field, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + field + "+'%'"));
+                    if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                        qo.AddWhere(field, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "+'%'"));
                     else
-                        qo.AddWhere(field, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + field + "||'%'");
+                        qo.AddWhere(field, " LIKE ", "'%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + "||'%'");
                     qo.MyParas.Add(field, fieldValue);
 
 

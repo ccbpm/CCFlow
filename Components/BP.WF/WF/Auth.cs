@@ -171,10 +171,6 @@ namespace BP.WF
                     return this._enMap;
 
                 Map map = new Map("WF_Auth", "授权");
-                //map.IsView = true;
-             //   map.setEnType(EnType.View;
-                //为啥设置为视图？导致创建表出错.
-
                 map.AddMyPK();
 
                 map.AddTBString(AuthAttr.Auther, null, "授权人", true, false, 0, 100, 10);
@@ -194,12 +190,6 @@ namespace BP.WF
             }
         }
         #endregion
-
-        protected override bool beforeInsert()
-        {
-            //this.setMyPK(this.Auther + "_" + this.AuthType + "_" + this.AutherToEmpNo;
-            return base.beforeInsert();
-        }
     }
     /// <summary>
     /// 授权

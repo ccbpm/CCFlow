@@ -157,7 +157,7 @@ namespace BP.Sys
         /// <summary>
         /// 文本合并单元格数
         /// </summary>
-        public const string TextColSpan = "TextColSpan";
+        public const string LabelColSpan = "LabelColSpan";
 
         /// <summary>
         /// 合并行数
@@ -1302,31 +1302,6 @@ namespace BP.Sys
             this.SetValByKey(MapAttrAttr.UIContralType, (int)val);
         }
 
-        public string F_Desc
-        {
-            get
-            {
-                switch (this.MyDataType)
-                {
-                    case DataType.AppString:
-                        if (this.UIVisible == false)
-                            return "长度" + this.MinLen + "-" + this.MaxLen + "不可见";
-                        else
-                            return "长度" + this.MinLen + "-" + this.MaxLen;
-                    case DataType.AppDate:
-                    case DataType.AppDateTime:
-                    case DataType.AppInt:
-                    case DataType.AppFloat:
-                    case DataType.AppMoney:
-                        if (this.UIVisible == false)
-                            return "不可见";
-                        else
-                            return "";
-                    default:
-                        return "";
-                }
-            }
-        }
         /// <summary>
         /// TabIdx
         /// </summary>
@@ -1446,7 +1421,7 @@ namespace BP.Sys
                 map.AddTBInt(MapAttrAttr.ColSpan, 1, "单元格数量", true, false);
 
                 //文本占单元格数量
-                map.AddTBInt(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, false);
+                map.AddTBInt(MapAttrAttr.LabelColSpan, 1, "文本单元格数量", true, false);
 
                 //文本跨行
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
@@ -1488,7 +1463,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string SaveBigNoteHtmlText(string text)
         {
-            string file = SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FK_MapData + ".htm";
+            string file =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FK_MapData + ".htm";
             //若文件夹不存在，则创建
             string folder = System.IO.Path.GetDirectoryName(file);
             if (System.IO.Directory.Exists(folder) == false)
@@ -1500,7 +1475,7 @@ namespace BP.Sys
         //删除大块文本信息
         public string DeleteBigNoteHtmlText()
         {
-            string file = SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FK_MapData + ".htm";
+            string file =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FK_MapData + ".htm";
 
             if (System.IO.File.Exists(file) == true)
                 System.IO.File.Delete(file);
@@ -1517,7 +1492,7 @@ namespace BP.Sys
         public string ReadBigNoteHtmlText()
         {
             string doc = "";
-            string file = SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FK_MapData + ".htm";
+            string file =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FK_MapData + ".htm";
             string folder = System.IO.Path.GetDirectoryName(file);
             if (System.IO.Directory.Exists(folder) != false)
             {
@@ -1769,7 +1744,7 @@ namespace BP.Sys
             if (this.Idx == 0)
                 this.Idx = DBAccess.RunSQLReturnValInt("SELECT MAX(Idx) FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'",0) + 1;
 
-            //@hongyan
+            //
             if (this.GroupID==0)
                 this.GroupID = DBAccess.RunSQLReturnValInt("SELECT MAX(GroupID) FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'" ,0);
 

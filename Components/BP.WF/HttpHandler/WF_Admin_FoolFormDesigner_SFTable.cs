@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
 using System.Data;
-using System.Text;
-using System.Web;
-using BP.DA;
 using BP.Sys;
-using BP.Web;
-using BP.Port;
 using BP.En;
-using BP.WF;
-using BP.WF.Template;
 
 namespace BP.WF.HttpHandler
 {

@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
 using System.Data;
 using System.Text;
-using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
 using BP.Port;
 using BP.En;
-using BP.WF;
-using BP.WF.Template;
+using BP.WF.Port.Admin2Group;
 
 namespace BP.WF.HttpHandler
 {
@@ -33,7 +30,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <returns></returns>
         protected override string DoDefaultMethod()
-        { 
+        {
             switch (this.DoType)
             {
 
@@ -44,7 +41,7 @@ namespace BP.WF.HttpHandler
             }
 
             //找不不到标记就抛出异常.
-            throw new Exception("@标记["+this.DoType+"]，没有找到.");
+            throw new Exception("@标记[" + this.DoType + "]，没有找到.");
         }
         #endregion 执行父类的重写方法.
 
@@ -57,7 +54,11 @@ namespace BP.WF.HttpHandler
         public string Login_Submit()
         {
             string userNo = this.GetRequestVal("TB_No");
+            if(DataType.IsNullOrEmpty(userNo)==true)
+               userNo = this.GetRequestVal("TB_UserNo");
             string pass = this.GetRequestVal("TB_PW");
+            if (DataType.IsNullOrEmpty(pass) == true)
+                pass = this.GetRequestVal("TB_Pass");
 
             BP.Port.Emp emp = new Emp();
             emp.UserID = userNo;
@@ -67,9 +68,8 @@ namespace BP.WF.HttpHandler
                 {
                     /*如果包含昵称列,就检查昵称是否存在.*/
                     Paras ps = new Paras();
-                    ps.SQL = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE NikeName=" + SystemConfig.AppCenterDBVarStr + "userNo";
+                    ps.SQL = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE NikeName=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "userNo";
                     ps.Add("userNo", userNo);
-                    //string sql = "SELECT No FROM Port_Emp WHERE NikeName='" + userNo + "'";
                     string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
                     if (no == null)
                         return "err@用户名或者密码错误.";
@@ -79,11 +79,11 @@ namespace BP.WF.HttpHandler
                     if (i == 0)
                         return "err@用户名或者密码错误.";
                 }
-                else if (DBAccess.IsExitsTableCol("Port_Emp", "Tel") == true) 
+                else if (DBAccess.IsExitsTableCol("Port_Emp", "Tel") == true)
                 {
                     /*如果包含昵称列,就检查昵称是否存在.*/
                     Paras ps = new Paras();
-                    ps.SQL = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE Tel=" + SystemConfig.AppCenterDBVarStr + "userNo";
+                    ps.SQL = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE Tel=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "userNo";
                     ps.Add("userNo", userNo);
                     //string sql = "SELECT No FROM Port_Emp WHERE NikeName='" + userNo + "'";
                     string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
@@ -104,13 +104,72 @@ namespace BP.WF.HttpHandler
             if (emp.CheckPass(pass) == false)
                 return "err@用户名或者密码错误.";
 
-            //调用登录方法.
-            BP.WF.Dev2Interface.Port_Login(emp.UserID);
+            if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
+            {
+                //调用登录方法.
+                BP.WF.Dev2Interface.Port_Login(emp.UserID);
+                if (DBAccess.IsExitsTableCol("Port_Emp", "EmpSta") == true)
+                {
+                    string sql = "SELECT EmpSta FROM Port_Emp WHERE No='" + emp.No + "'";
+                    if (DBAccess.RunSQLReturnValInt(sql, 1) == 1)
+                        return "err@该用户已经被禁用.";
+                }
+                return "url@Default.htm?Token=" + BP.WF.Dev2Interface.Port_GenerToken(WebUser.No, "PC", 4000, true) + "&UserNo=" + emp.UserID;
+            }
+            if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
+            {
+                //调用登录方法.
+                BP.WF.Dev2Interface.Port_Login(emp.UserID);
+                if (DBAccess.IsExitsTableCol("Port_Emp", "EmpSta") == true)
+                {
+                    string sql = "SELECT EmpSta FROM Port_Emp WHERE No='" + emp.No + "'";
+                    if (DBAccess.RunSQLReturnValInt(sql, 1) == 1)
+                        return "err@该用户已经被禁用.";
+                }
+                return "url@Default.htm?Token=" + BP.WF.Dev2Interface.Port_GenerToken(WebUser.No, "PC", 4000, true) + "&UserNo=" + emp.UserID;
+            }
+            //获得当前管理员管理的组织数量.
+            OrgAdminers adminers = null;
 
-            //if (!DataType.IsNullOrEmpty(openid) && openid != "undefined") {
-            //    emp.Wei_UserID = openid;
-            //    emp.Update();
-            //}
+            //查询他管理多少组织.
+            adminers = new OrgAdminers();
+            adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.UserID);
+            if (adminers.Count == 0)
+            {
+                BP.WF.Port.Admin2Group.Orgs orgs = new Orgs();
+                int i = orgs.Retrieve("Adminer", this.GetRequestVal("TB_No"));
+                if (i == 0)
+                {
+                    //调用登录方法.
+                    BP.WF.Dev2Interface.Port_Login(emp.UserID, emp.OrgNo);
+                    return "url@Default.htm?Token=" + BP.WF.Dev2Interface.Port_GenerToken(emp.UserID, "PC", 6000, true) + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
+                }
+
+                foreach (BP.WF.Port.Admin2Group.Org org in orgs)
+                {
+                    OrgAdminer oa = new OrgAdminer();
+                    oa.FK_Emp = WebUser.No;
+                    oa.OrgNo = org.No;
+                    oa.Save();
+                }
+                adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.UserID);
+            }
+
+            //设置他的组织，信息.
+            WebUser.No = emp.UserID; //登录帐号.
+            WebUser.FK_Dept = emp.FK_Dept;
+            WebUser.FK_DeptName = emp.FK_DeptText;
+
+            //执行登录.
+            BP.WF.Dev2Interface.Port_Login(emp.UserID, emp.OrgNo);
+
+            string token = BP.WF.Dev2Interface.Port_GenerToken(emp.UserID, "PC", 40000, true);
+
+            //判断是否是多个组织的情况.
+            if (adminers.Count == 1)
+                return "url@Default.htm?Token=" + token + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
+
+            return "url@SelectOneOrg.htm?Token=" + token + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
 
             return "登录成功.";
         }
@@ -129,7 +188,7 @@ namespace BP.WF.HttpHandler
                 {
                     /*如果包含昵称列,就检查昵称是否存在.*/
                     Paras ps = new Paras();
-                    ps.SQL = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE NikeName=" + SystemConfig.AppCenterDBVarStr + "userNo";
+                    ps.SQL = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE NikeName=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "userNo";
                     ps.Add("userNo", userNo);
                     //string sql = "SELECT No FROM Port_Emp WHERE NikeName='" + userNo + "'";
                     string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
@@ -145,7 +204,7 @@ namespace BP.WF.HttpHandler
                 {
                     /*如果包含昵称列,就检查昵称是否存在.*/
                     Paras ps = new Paras();
-                    ps.SQL = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE Tel=" + SystemConfig.AppCenterDBVarStr + "userNo";
+                    ps.SQL = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE Tel=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "userNo";
                     ps.Add("userNo", userNo);
                     //string sql = "SELECT No FROM Port_Emp WHERE NikeName='" + userNo + "'";
                     string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
@@ -168,7 +227,7 @@ namespace BP.WF.HttpHandler
 
             //调用登录方法.
             BP.WF.Dev2Interface.Port_Login(emp.UserID);
-             
+
 
             return "登录成功.";
         }
@@ -189,7 +248,7 @@ namespace BP.WF.HttpHandler
 
             StringBuilder append = new StringBuilder();
             append.Append("{");
-            string userPath = SystemConfig.PathOfWebApp + "DataUser/UserIcon/";
+            string userPath =  BP.Difference.SystemConfig.PathOfWebApp + "DataUser/UserIcon/";
             string userIcon = userPath + BP.Web.WebUser.No + "Biger.png";
             if (System.IO.File.Exists(userIcon))
             {
@@ -216,8 +275,8 @@ namespace BP.WF.HttpHandler
             ht.Add("UserName", BP.Web.WebUser.Name);
 
             //系统名称.
-            ht.Add("SysName", SystemConfig.SysName);
-            ht.Add("CustomerName", SystemConfig.CustomerName);
+            ht.Add("SysName", BP.Difference.SystemConfig.SysName);
+            ht.Add("CustomerName", BP.Difference.SystemConfig.CustomerName);
 
             ht.Add("Todolist_EmpWorks", BP.WF.Dev2Interface.Todolist_EmpWorks);
             ht.Add("Todolist_Runing", BP.WF.Dev2Interface.Todolist_Runing);
@@ -239,17 +298,15 @@ namespace BP.WF.HttpHandler
         public string Home_Init_WorkCount()
         {
             Paras ps = new Paras();
-            ps.SQL = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num, FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + SystemConfig.AppCenterDBVarStr + "Emps%' GROUP BY TSpan";
+            ps.SQL = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num, FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Emps%' GROUP BY TSpan";
             ps.Add("Emps", WebUser.No);
             //string sql = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num, FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
             DataSet ds = new DataSet();
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             ds.Tables.Add(dt);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
-            {
-                dt.Columns[0].ColumnName = "TSpan";
-                dt.Columns[1].ColumnName = "Num";
-            }
+
+            dt.Columns[0].ColumnName = "TSpan";
+            dt.Columns[1].ColumnName = "Num";
 
             string sql = "SELECT IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='TSpan'";
             DataTable dt1 = DBAccess.RunSQLReturnTable(sql);
@@ -257,7 +314,7 @@ namespace BP.WF.HttpHandler
             {
                 foreach (DataRow mydr in dt1.Rows)
                 {
-                    
+
                 }
             }
 
@@ -268,13 +325,13 @@ namespace BP.WF.HttpHandler
             BP.WF.HttpHandler.WF_MyFlow wfPage = new BP.WF.HttpHandler.WF_MyFlow();
             return wfPage.MyFlow_Init();
         }
-        
+
         public string Runing_Init()
         {
             WF wfPage = new WF();
-          return  wfPage.Runing_Init();
+            return wfPage.Runing_Init();
         }
-        
+
         /// <summary>
         /// 新版本.
         /// </summary>
@@ -303,13 +360,13 @@ namespace BP.WF.HttpHandler
             rws.Retrieve(BP.WF.ReturnWorkAttr.ReturnToNode, this.FK_Node, BP.WF.ReturnWorkAttr.WorkID, this.WorkID, BP.WF.ReturnWorkAttr.RDT);
             StringBuilder append = new StringBuilder();
             append.Append("[");
-            
+
             return BP.Tools.Json.ToJson(rws.ToDataTableField());
         }
 
         public string Start_Init()
         {
-           WF wfPage = new WF();
+            WF wfPage = new WF();
             return wfPage.Start_Init();
         }
 
@@ -325,7 +382,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Do_OpenFlow()
         {
-            string sid = this.GetRequestVal("SID");
+            string sid = this.GetRequestVal("Token");
             string[] strs = sid.Split('_');
             GenerWorkerList wl = new GenerWorkerList();
             int i = wl.Retrieve(GenerWorkerListAttr.FK_Emp, strs[0],
@@ -373,14 +430,14 @@ namespace BP.WF.HttpHandler
         }
 
         #region 关键字查询.
-         
+
         /// <summary>
         /// 执行查询
         /// </summary>
         /// <returns></returns>
         public string SearchKey_Query()
         {
-             WF_RptSearch search = new WF_RptSearch();
+            WF_RptSearch search = new WF_RptSearch();
             return search.KeySearch_Query();
         }
         #endregion 关键字查询.
@@ -396,7 +453,7 @@ namespace BP.WF.HttpHandler
             string sql = "";
 
             string sqlOrgNoWhere = "";
-            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 sqlOrgNoWhere = " AND OrgNo='" + BP.Web.WebUser.OrgNo + "'";
 
             string tSpan = this.GetRequestVal("TSpan");
@@ -410,7 +467,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtTSpan);
 
             if (this.FK_Flow == null)
-                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "') AND WFState > 1 "+ sqlOrgNoWhere + "  GROUP BY TSpan";
+                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "') AND WFState > 1 " + sqlOrgNoWhere + "  GROUP BY TSpan";
             else
                 sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "')  AND WFState > 1  " + sqlOrgNoWhere + " GROUP BY TSpan";
 
@@ -436,19 +493,18 @@ namespace BP.WF.HttpHandler
                 sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan=" + tSpan + " AND (Emps LIKE '%" + WebUser.No + "%' OR TodoEmps LIKE '%" + BP.Web.WebUser.No + ",%' OR Starter='" + WebUser.No + "')  AND WFState > 1 AND FID = 0  " + sqlOrgNoWhere + " GROUP BY FK_Flow, FlowName";
 
             DataTable dtFlows = DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
-            {
-                dtFlows.Columns[0].ColumnName = "No";
-                dtFlows.Columns[1].ColumnName = "Name";
-                dtFlows.Columns[2].ColumnName = "Num";
-            }
+
+            dtFlows.Columns[0].ColumnName = "No";
+            dtFlows.Columns[1].ColumnName = "Name";
+            dtFlows.Columns[2].ColumnName = "Num";
+
             dtFlows.TableName = "Flows";
             ds.Tables.Add(dtFlows);
             #endregion
 
             #region 3、处理流程实例列表.
             GenerWorkFlows gwfs = new GenerWorkFlows();
-            string  sqlWhere = "";
+            string sqlWhere = "";
             sqlWhere = "(1 = 1)AND (((Emps LIKE '%" + WebUser.No + "%')OR(TodoEmps LIKE '%" + WebUser.No + "%')OR(Starter = '" + WebUser.No + "')) AND (WFState > 1) " + sqlOrgNoWhere;
             if (tSpan != "-1")
             {
@@ -465,32 +521,31 @@ namespace BP.WF.HttpHandler
             }
             sqlWhere += "ORDER BY RDT DESC";
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
                 sql = "SELECT NVL(WorkID, 0) WorkID,NVL(FID, 0) FID ,FK_Flow,FlowName,Title, NVL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,NVL(RDT, '2018-05-04 19:29') RDT,NVL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM (select * from WF_GenerWorkFlow where " + sqlWhere + ") where rownum <= 500";
-            else if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
                 sql = "SELECT  TOP 500 ISNULL(WorkID, 0) WorkID,ISNULL(FID, 0) FID ,FK_Flow,FlowName,Title, ISNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,ISNULL(RDT, '2018-05-04 19:29') RDT,ISNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere;
-            else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
                 sql = "SELECT IFNULL(WorkID, 0) WorkID,IFNULL(FID, 0) FID ,FK_Flow,FlowName,Title, IFNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,IFNULL(RDT, '2018-05-04 19:29') RDT,IFNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere + " LIMIT 500";
-            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
                 sql = "SELECT COALESCE(WorkID, 0) WorkID,COALESCE(FID, 0) FID ,FK_Flow,FlowName,Title, COALESCE(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,COALESCE(RDT, '2018-05-04 19:29') RDT,COALESCE(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere + " LIMIT 500";
             DataTable mydt = DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
-            {
-                mydt.Columns[0].ColumnName = "WorkID";
-                mydt.Columns[1].ColumnName = "FID";
-                mydt.Columns[2].ColumnName = "FK_Flow";
-                mydt.Columns[3].ColumnName = "FlowName";
-                mydt.Columns[4].ColumnName = "Title";
-                mydt.Columns[5].ColumnName = "WFSta";
-                mydt.Columns[6].ColumnName = "WFState";
-                mydt.Columns[7].ColumnName = "Starter";
-                mydt.Columns[8].ColumnName = "StarterName";
-                mydt.Columns[9].ColumnName = "Sender";
-                mydt.Columns[10].ColumnName = "RDT";
-                mydt.Columns[11].ColumnName = "FK_Node";
-                mydt.Columns[12].ColumnName = "NodeName";
-                mydt.Columns[13].ColumnName = "TodoEmps";
-            }
+
+            mydt.Columns[0].ColumnName = "WorkID";
+            mydt.Columns[1].ColumnName = "FID";
+            mydt.Columns[2].ColumnName = "FK_Flow";
+            mydt.Columns[3].ColumnName = "FlowName";
+            mydt.Columns[4].ColumnName = "Title";
+            mydt.Columns[5].ColumnName = "WFSta";
+            mydt.Columns[6].ColumnName = "WFState";
+            mydt.Columns[7].ColumnName = "Starter";
+            mydt.Columns[8].ColumnName = "StarterName";
+            mydt.Columns[9].ColumnName = "Sender";
+            mydt.Columns[10].ColumnName = "RDT";
+            mydt.Columns[11].ColumnName = "FK_Node";
+            mydt.Columns[12].ColumnName = "NodeName";
+            mydt.Columns[13].ColumnName = "TodoEmps";
+
             mydt.TableName = "WF_GenerWorkFlow";
             if (mydt != null)
             {
@@ -507,12 +562,12 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJson(ds);
         }
-        public static string  GetTraceNewTime(string fk_flow, Int64 workid, Int64 fid)
+        public static string GetTraceNewTime(string fk_flow, Int64 workid, Int64 fid)
         {
             #region 获取track数据.
             string sqlOfWhere2 = "";
             string sqlOfWhere1 = "";
-            string dbStr = SystemConfig.AppCenterDBVarStr;
+            string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             if (fid == 0)
             {
@@ -528,8 +583,8 @@ namespace BP.WF.HttpHandler
             }
 
             string sql = "";
-            sql = "SELECT MAX(RDT) FROM ND" + int.Parse(fk_flow) + "Track " + sqlOfWhere1 ;
-             sql = "SELECT RDT FROM  ND" + int.Parse(fk_flow) + "Track  WHERE RDT=("+sql+")";
+            sql = "SELECT MAX(RDT) FROM ND" + int.Parse(fk_flow) + "Track " + sqlOfWhere1;
+            sql = "SELECT RDT FROM  ND" + int.Parse(fk_flow) + "Track  WHERE RDT=(" + sql + ")";
             ps.SQL = sql;
 
             try
@@ -568,7 +623,7 @@ namespace BP.WF.HttpHandler
             }
             qo.Top = 50;
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
             {
                 qo.DoQuery();
                 DataTable dt = gwfs.ToDataTableField("Ens");

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Collections;
 using BP.DA;
 using BP.En;
@@ -21,7 +22,7 @@ namespace BP.Sys
         /// <summary>
         /// 主键值
         /// </summary>
-        public const string PKVal = "PKVal";
+        public const string RefPKVal = "RefPKVal";
         /// <summary>
         /// 记录人
         /// </summary>
@@ -38,6 +39,18 @@ namespace BP.Sys
         /// 轨迹ID
         /// </summary>
         public const string TrackID = "TrackID";
+        /// <summary>
+        /// 修改的字段
+        /// </summary>
+        public const string ChangeFields = "ChangeFields";
+        /// <summary>
+        /// 修改的字段数量
+        /// </summary>
+        public const string ChangeNum = "ChangeNum";
+        /// <summary>
+        /// 字段（章节表单有效）
+        /// </summary>
+        public const string KeyOfEn = "KeyOfEn";
     }
     /// <summary>
     /// 数据版本
@@ -69,6 +82,18 @@ namespace BP.Sys
                 this.SetValByKey(FrmDBVerAttr.TrackID, value);
             }
         }
+
+        public string KeyOfEn
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmDBVerAttr.KeyOfEn);
+            }
+            set
+            {
+                this.SetValByKey(FrmDBVerAttr.KeyOfEn, value);
+            }
+        }
         public string FrmID
         {
             get
@@ -83,15 +108,15 @@ namespace BP.Sys
         /// <summary>
         /// 主键值键
         /// </summary>
-        public string EnPKVal
+        public string RefPKVal
         {
             get
             {
-                return this.GetValStringByKey(FrmDBVerAttr.PKVal);
+                return this.GetValStringByKey(FrmDBVerAttr.RefPKVal);
             }
             set
             {
-                this.SetValByKey(FrmDBVerAttr.PKVal, value);
+                this.SetValByKey(FrmDBVerAttr.RefPKVal, value);
             }
         }
         /// <summary>
@@ -130,6 +155,17 @@ namespace BP.Sys
                 this.SetValByKey(FrmDBVerAttr.RDT, value);
             }
         }
+        public int Ver
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmDBVerAttr.Ver);
+            }
+            set
+            {
+                this.SetValByKey(FrmDBVerAttr.Ver, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -139,7 +175,11 @@ namespace BP.Sys
         public FrmDBVer()
         {
         }
-
+        public FrmDBVer(string mypk)
+        {
+            this.MyPK = mypk;
+            this.Retrieve();
+        }
         /// <summary>
         /// EnMap
         /// </summary>
@@ -152,15 +192,21 @@ namespace BP.Sys
                 Map map = new Map("Sys_FrmDBVer", "数据版本");
                 map.AddMyPK();
 
-
                 map.AddTBString(FrmDBVerAttr.FrmID, null, "表单ID", true, true, 0, 100, 20);
-                map.AddTBString(FrmDBVerAttr.PKVal, null, "PKVal", true, true, 0, 40, 20);
+                map.AddTBString(FrmDBVerAttr.RefPKVal, null, "主键值", true, true, 0, 40, 20);
+
+                map.AddTBString(FrmDBVerAttr.ChangeFields, null, "修改的字段", true, true, 0, 3900, 20);
+                map.AddTBInt(FrmDBVerAttr.ChangeNum, 0, "修改的字段数量", true, true);
 
                 map.AddTBString(FrmDBVerAttr.TrackID, null, "TrackID", true, true, 0, 40, 20);
 
                 map.AddTBString(FrmDBVerAttr.RecNo, null, "记录人", true, true, 0, 30, 20);
                 map.AddTBString(FrmDBVerAttr.RecName, null, "用户名", true, true, 0, 30, 20);
                 map.AddTBDateTime(FrmDBVerAttr.RDT, null, "记录时间", true, true);
+                map.AddTBInt(FrmDBVerAttr.Ver, 0, "版本号", true, true);
+
+
+                map.AddTBString(FrmDBVerAttr.KeyOfEn, null, "章节字段有效", true, true, 0, 100, 20);
 
                 this._enMap = map;
                 return this._enMap;
@@ -168,38 +214,70 @@ namespace BP.Sys
         }
         #endregion
 
+        #region 增加版本.
+
+
         /// <summary>
-        /// 增加
+        /// 增加主表、从表的数据
         /// </summary>
-        /// <param name="frmID"></param>
-        /// <param name="pkval"></param>
+        /// <param name="frmID">表单ID</param>
+        /// <param name="refPKVal">关联值</param>
         /// <param name="trackID"></param>
         /// <param name="jsonOfFrmDB"></param>
-        public static void AddFrmDBTrack(string frmID, string pkval, string trackID, string jsonOfFrmDB,string frmDtlDB)
+        /// <param name="frmDtlDB"></param>
+        /// <param name="frmAthDB"></param>
+        /// <param name="isChartFrm">是否章节表单？</param>
+        public static void AddFrmDBTrack(int ver,string frmID, string refPKVal, string trackID, string jsonOfFrmDB, string frmDtlDB,string frmAthDB, bool isChartFrm = false)
         {
-            if (jsonOfFrmDB == null)
+            if (jsonOfFrmDB == null && isChartFrm == false)
                 return;
 
             FrmDBVer en = new FrmDBVer();
             en.FrmID = frmID;
-            en.EnPKVal = pkval;
+            en.RefPKVal = refPKVal;
             en.TrackID = trackID;
+            en.Ver = ver;
             en.Insert();
 
-
             //保存主表数据.
-            DBAccess.SaveBigTextToDB(jsonOfFrmDB, "Sys_FrmDBVer", "MyPK", en.MyPK, "FrmDB");
+            if (DataType.IsNullOrEmpty(jsonOfFrmDB) == false)
+                DBAccess.SaveBigTextToDB(jsonOfFrmDB, "Sys_FrmDBVer", "MyPK", en.MyPK, "FrmDB");
 
             //保存从表数据
-            DBAccess.SaveBigTextToDB(frmDtlDB, "Sys_FrmDBVer", "MyPK", en.MyPK, "FrmDtlDB");
+            if(DataType.IsNullOrEmpty(frmDtlDB)==false)
+                DBAccess.SaveBigTextToDB(frmDtlDB, "Sys_FrmDBVer", "MyPK", en.MyPK, "FrmDtlDB");
 
+            //保存附件数据
+            if (DataType.IsNullOrEmpty(frmAthDB) == false)
+                DBAccess.SaveBigTextToDB(frmAthDB, "Sys_FrmDBVer", "MyPK", en.MyPK, "FrmAthDB");
+        }
+        /// <summary>
+        /// 保存章节表单的字段数据
+        /// </summary>
+        /// <param name="frmID"></param>
+        /// <param name="refPKVal"></param>
+        /// <param name="trackID"></param>
+        /// <param name="chartValue"></param>
+        /// <param name="keyOfEn"></param>
+        public static void AddKeyOfEnDBTrack(int ver,string frmID, string refPKVal, string trackID, string chartValue, string keyOfEn)
+        {
 
+            FrmDBVer en = new FrmDBVer();
+            en.FrmID = frmID;
+            en.RefPKVal = refPKVal;
+            en.TrackID = trackID;
+            en.KeyOfEn = keyOfEn;
+            en.Ver = ver;
+            en.Insert();
+
+            //保存章节表单字段的数据.
+            DBAccess.SaveBigTextToDB(chartValue, "Sys_FrmDBVer", "MyPK", en.MyPK, "FrmDB");
         }
 
         protected override bool beforeInsert()
         {
             this.setMyPK(DBAccess.GenerGUID());
-            this.RDT = DataType.CurrentDateTime;
+            this.SetValByKey(FrmDBVerAttr.RDT, DataType.CurrentDateTime);
 
             if (DataType.IsNullOrEmpty(this.RecNo) == true)
             {
@@ -209,6 +287,7 @@ namespace BP.Sys
 
             return base.beforeInsert();
         }
+        #endregion 增加版本.
 
         #region 重写
         public override Entities GetNewEntities
@@ -222,6 +301,30 @@ namespace BP.Sys
     /// </summary>
     public class FrmDBVers : EntitiesMyPK
     {
+        /// <summary>
+        /// 获得章节表单的版本.
+        /// </summary>
+        /// <param name="frmID"></param>
+        /// <param name="workID"></param>
+        /// <returns></returns>
+        public string ChapterFrmDBVers(string frmID, string workID)
+        {
+            string sql = " SELECT DISTINCT Ver,RDT,RecName FROM Sys_FrmDBVer WHERE FrmID = '" + frmID + "' AND RefPKVal='" + workID + "' Group BY Ver ORDER BY RDT";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+            // dt.Columns.Add("MaxVer"); //最大版本.
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                dt.Columns[0].ColumnName = "Ver"; //版本号
+                dt.Columns[1].ColumnName = "RDT";
+                dt.Columns[2].ColumnName = "RecName";
+            }
+
+
+            return BP.Tools.Json.ToJson(dt);
+        }
+
+
         #region 构造
         public FrmDBVers()
         {

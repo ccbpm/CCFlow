@@ -11,6 +11,7 @@ using BP.En;
 using BP.WF;
 using BP.WF.Data;
 using BP.WF.Template;
+using BP.WF.Template.SFlow;
 using BP.Port;
 using System.Drawing.Imaging;
 using System.Drawing;
@@ -37,6 +38,7 @@ namespace BP.WF
         public static DataSet GenerWorkNode(string fk_flow, Node nd, Int64 workID, Int64 fid, string userNo, Int64 realWorkID, string fromWorkOpt = "0",
             bool isView = false)
         {
+            
             try
             {
                 nd.WorkID = workID; //为获取表单ID提供参数.
@@ -64,9 +66,7 @@ namespace BP.WF
                     }
                 }
 
-
                 MapData md = new MapData(frmID);
-
 
 
                 //定义变量，为绑定独立表单设置单据编号.
@@ -80,20 +80,28 @@ namespace BP.WF
 
                 //获得表单模版.
                 DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(frmID, nd.Name);
-                DataTable athdt = myds.Tables["Sys_FrmAttachment"];
-                if (frmVer != 0 && athdt.Rows.Count != 0)
+                //现在版本不是主版本的情况
+                if (frmID.Equals(nd.NodeFrmID) == false)
                 {
-                    DataTable gfdt = myds.Tables["Sys_GroupField"];
-                    foreach (DataRow dr in athdt.Rows)
+                    DataTable mddt = myds.Tables["Sys_MapData"];
+                    mddt.Rows[0]["AtPara"] = mddt.Rows[0]["AtPara"] + "@MainFrmID=" + nd.NodeFrmID;
+
+                    DataTable athdt = myds.Tables["Sys_FrmAttachment"];
+                    if (frmVer != 0 && athdt.Rows.Count != 0)
                     {
-                        DataRow[] gfr = gfdt.Select("CtrlID='" + dr["MyPK"] + "'");
-                        if (gfr.Length != 0)
-                            gfr[0]["CtrlID"] = nd.NodeFrmID + "_" + dr["NoOfObj"];
-                        dr["MyPK"] = nd.NodeFrmID + "_" + dr["NoOfObj"];
+                        DataTable gfdt = myds.Tables["Sys_GroupField"];
+                        foreach (DataRow dr in athdt.Rows)
+                        {
+                            DataRow[] gfr = gfdt.Select("CtrlID='" + dr["MyPK"] + "'");
+                            if (gfr.Length != 0)
+                                gfr[0]["CtrlID"] = nd.NodeFrmID + "_" + dr["NoOfObj"];
+                            dr["MyPK"] = nd.NodeFrmID + "_" + dr["NoOfObj"];
+
+                        }
 
                     }
-
                 }
+                
 
                 //更换表单的名字.
                 if (DataType.IsNullOrEmpty(nd.NodeFrmID) == false
@@ -309,26 +317,26 @@ namespace BP.WF
                     //按照时间的顺序查找出来 ids .
                     string sqlOrder = "SELECT OID FROM  Sys_GroupField WHERE   FrmID IN (" + myFrmIDs + ")";
                     string orderMyFrmIDs = myFrmIDs.Replace("'", "");
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
                     {
                         sqlOrder += " ORDER BY INSTR('" + orderMyFrmIDs + "',FrmID) , Idx";
                     }
 
-                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
                     {
                         sqlOrder += " ORDER BY CHARINDEX(FrmID, '" + orderMyFrmIDs + "'), Idx";
                     }
 
-                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
                     {
                         sqlOrder += " ORDER BY INSTR('" + orderMyFrmIDs + "', FrmID ), Idx";
                     }
-                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+                    if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
                     {
                         sqlOrder += " ORDER BY POSITION(FrmID  IN '" + orderMyFrmIDs + "'), Idx";
                     }
 
-                    if (SystemConfig.AppCenterDBType == DBType.DM)
+                    if (BP.Difference.SystemConfig.AppCenterDBType == DBType.DM)
                     {
                         sqlOrder += " ORDER BY POSITION(FrmID  IN '" + orderMyFrmIDs + "'), Idx";
                     }
@@ -445,7 +453,7 @@ namespace BP.WF
                         qo = new QueryObject(fls);
                         qo.AddWhere(FrmFieldAttr.FK_MapData, " IN ", "(" + nodes + ")");
                         qo.addAnd();
-                        qo.AddWhere(FrmFieldAttr.EleType, FrmEleType.Field);
+                        qo.AddWhere(FrmFieldAttr.EleType, "Field");
                         qo.addAnd();
                         qo.AddWhere(FrmFieldAttr.FK_Node, nd.NodeID);
                         qo.DoQuery();
@@ -569,7 +577,7 @@ namespace BP.WF
                     wk.ResetDefaultVal(nd.NodeFrmID, fk_flow, nd.NodeID);
 
                 //URL参数替换
-                if (SystemConfig.IsBSsystem == true && isView == false)
+                if (BP.Difference.SystemConfig.IsBSsystem == true && isView == false)
                 {
                     // 处理传递过来的参数。
                     foreach (string k in HttpContextHelper.RequestQueryStringKeys)
@@ -731,7 +739,7 @@ namespace BP.WF
                             drMsg["Title"] = "挂起信息";
                             if (sta == 2 && gwf.FK_Node == gwf.GetParaInt("HungupNodeID"))
                             {
-                                drMsg["Msg"] = "您的工单在挂起被拒绝，拒绝原因:" + gwf.GetParaString("HungupCheckMsg");
+                                drMsg["Msg"] = "您的工作挂起被拒绝，拒绝原因:" + gwf.GetParaString("HungupCheckMsg");
                                 dtAlert.Rows.Add(drMsg);
                             }
                             break;
@@ -741,13 +749,13 @@ namespace BP.WF
                             drMsg = dtAlert.NewRow();
                             drMsg["Title"] = "挂起信息";
                             if (sta == 0)
-                                drMsg["Msg"] = "您的工单在挂起状态，等待审批，挂起原因：" + gwf.GetParaString("HungupNote");
+                                drMsg["Msg"] = "您的工作在挂起状态，等待审批，挂起原因：" + gwf.GetParaString("HungupNote");
 
                             if (sta == 1)
-                                drMsg["Msg"] = "您的工单在挂起获得同意.";
+                                drMsg["Msg"] = "您的工作在挂起获得同意.";
 
                             if (sta == 2)
-                                drMsg["Msg"] = "您的工单在挂起被拒绝，拒绝原因:" + gwf.GetParaString("HungupCheckMsg");
+                                drMsg["Msg"] = "您的工作在挂起被拒绝，拒绝原因:" + gwf.GetParaString("HungupCheckMsg");
 
                             dtAlert.Rows.Add(drMsg);
                             break;
@@ -789,61 +797,67 @@ namespace BP.WF
                             break;
                         case WFState.ReturnSta:
                             /* 如果工作节点退回了*/
-                            sql = "SELECT WorkID FROM WF_GenerWorkFlow WHERE FID=" + realWorkID;
-                            DataTable subFlowDt = DBAccess.RunSQLReturnTable(sql);
 
-                            sql = "SELECT  ReturnToEmp,ReturnNodeName,ReturnerName,RDT,BeiZhu FROM WF_ReturnWork where ReturnToNode=" + nd.NodeID + " AND (WorkID=" + realWorkID;
-                            foreach (DataRow dRow in subFlowDt.Rows)
+                            ReturnWorks ens = new ReturnWorks();
+                            if (nd.HisRunModel == RunModel.FL || nd.HisRunModel == RunModel.FHL)
                             {
-                                sql += " OR WorkID=" + int.Parse(dRow[0].ToString());
+                                QueryObject qo = new QueryObject(ens);
+                                qo.addLeftBracket();
+                                qo.AddWhere(ReturnWorkAttr.WorkID, realWorkID);
+                                qo.addOr();
+                                qo.AddWhere(ReturnWorkAttr.FID, realWorkID);
+                                qo.addRightBracket();
+                                qo.addAnd();
+                                qo.AddWhere(ReturnWorkAttr.ReturnToNode,nd.NodeID);
+                                qo.addOrderBy("RDT");
+                                qo.DoQuery();
                             }
-                            sql += ") ORDER BY RDT";
-
-                            DataTable rwsDt = DBAccess.RunSQLReturnTable(sql);
-
-                            if (rwsDt.Rows.Count != 0)
+                            else
                             {
-                                string msgInfo = "";
-                                foreach (DataRow rw in rwsDt.Rows)
+                                ens.Retrieve(ReturnWorkAttr.WorkID, realWorkID, ReturnWorkAttr.ReturnToNode, nd.NodeID, "RDT");
+                            }
+
+
+                            string msgInfo = "";
+                            foreach (ReturnWork rw in ens)
+                            {
+                                if (rw.ReturnToEmp.Contains(WebUser.No) == true)
                                 {
-                                    if (WebUser.No == rw[0].ToString())
-                                    {
-                                        msgInfo += "来自节点：" + rw[1].ToString() + "@退回人：" + rw[2].ToString() + "@退回日期：" + rw[3].ToString();
-                                        msgInfo += "@退回原因：" + rw[4].ToString();
-                                        msgInfo += "<hr/>";
-                                    }
+                                    msgInfo += "来自节点：" + rw.ReturnNodeName + "@退回人：" + rw.ReturnerName + "@退回日期：" + rw.RDT;
+                                    msgInfo += "@退回原因：" + rw.BeiZhu;
+                                    msgInfo += "<hr/>";
                                 }
+                            }
 
-                                msgInfo = msgInfo.Replace("@", "<br>");
-                                if (!string.IsNullOrEmpty(msgInfo))
+                            msgInfo = msgInfo.Replace("@", "<br>");
+                            if (string.IsNullOrEmpty(msgInfo) == false)
+                            {
+                                string str = nd.ReturnAlert;
+                                if (str != "")
                                 {
-                                    string str = nd.ReturnAlert;
-                                    if (str != "")
-                                    {
-                                        str = str.Replace("~", "'");
-                                        str = str.Replace("@PWorkID", realWorkID.ToString());
-                                        str = str.Replace("@PNodeID", nd.NodeID.ToString());
-                                        str = str.Replace("@FK_Node", nd.NodeID.ToString());
+                                    str = str.Replace("~", "'");
+                                    str = str.Replace("@PWorkID", realWorkID.ToString());
+                                    str = str.Replace("@PNodeID", nd.NodeID.ToString());
+                                    str = str.Replace("@FK_Node", nd.NodeID.ToString());
 
-                                        str = str.Replace("@PFlowNo", fk_flow);
-                                        str = str.Replace("@FK_Flow", fk_flow);
-                                        str = str.Replace("@PWorkID", workID.ToString());
+                                    str = str.Replace("@PFlowNo", fk_flow);
+                                    str = str.Replace("@FK_Flow", fk_flow);
+                                    str = str.Replace("@PWorkID", workID.ToString());
 
-                                        str = str.Replace("@WorkID", workID.ToString());
-                                        str = str.Replace("@OID", workID.ToString());
+                                    str = str.Replace("@WorkID", workID.ToString());
+                                    str = str.Replace("@OID", workID.ToString());
 
-                                        drMsg = dtAlert.NewRow();
-                                        drMsg["Title"] = "退回信息";
-                                        drMsg["Msg"] = msgInfo + "\t\n" + str;
-                                        dtAlert.Rows.Add(drMsg);
-                                    }
-                                    else
-                                    {
-                                        drMsg = dtAlert.NewRow();
-                                        drMsg["Title"] = "退回信息";
-                                        drMsg["Msg"] = msgInfo + "\t\n" + str;
-                                        dtAlert.Rows.Add(drMsg);
-                                    }
+                                    drMsg = dtAlert.NewRow();
+                                    drMsg["Title"] = "退回信息";
+                                    drMsg["Msg"] = msgInfo + "\t\n" + str;
+                                    dtAlert.Rows.Add(drMsg);
+                                }
+                                else
+                                {
+                                    drMsg = dtAlert.NewRow();
+                                    drMsg["Title"] = "退回信息";
+                                    drMsg["Msg"] = msgInfo + "\t\n" + str;
+                                    dtAlert.Rows.Add(drMsg);
                                 }
                             }
                             break;
@@ -887,36 +901,36 @@ namespace BP.WF
                         default:
                             break;
                     }
+                    //获取催办信息
                     PushMsgs pms = new PushMsgs();
                     if (pms.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node,
                         PushMsgAttr.FK_Event, EventListNode.PressAfter) > 0)
                     {
-                        string sqlPress = "select mobileinfo from sys_sms where msgtype='DoPress' and workid=" + gwf.WorkID + "  and isalert=0";
+                        string sqlPress = "SELECT MobileInfo FROM Sys_SMS WHERE MsgType='DoPress' AND WorkID=" + gwf.WorkID + "  AND IsAlert=0 Order By RDT DESC";
                         DataTable dtPress = DBAccess.RunSQLReturnTable(sqlPress);
-                        foreach (DataRow item in dtPress.Rows)
+                        if (dtPress.Rows.Count > 0)
                         {
                             drMsg = dtAlert.NewRow();
                             drMsg["Title"] = "催办信息";
-                            drMsg["Msg"] = item["mobileinfo"].ToString();
-
+                            drMsg["Msg"] = dtPress.Rows[0][0].ToString();
                             dtAlert.Rows.Add(drMsg);
                         }
-
-                        DBAccess.RunSQL("update sys_sms set isalert=1  where msgtype='DoPress' and workid=" + gwf.WorkID + "  and isalert=0");
+                        DBAccess.RunSQL("UPDATE Sys_SMS SET IsAlert=1  WHERE MsgType='DoPress' AND WorkID=" + gwf.WorkID + "  AND IsAlert=0");
                     }
                     //拒绝挂起
-                    string sqlRejectHungup = "select mobileinfo from sys_sms where msgtype='RejectHungup' and workid=" + gwf.WorkID + "  and isalert=0";
+                    string sqlRejectHungup = "SELECT MobileInfo FROM Sys_SMS WHERE MsgType='RejectHungup' and WorkID=" + gwf.WorkID + "  AND IsAlert=0";
                     DataTable dtRejectHungup = DBAccess.RunSQLReturnTable(sqlRejectHungup);
-                    foreach (DataRow item in dtRejectHungup.Rows)
+                    if (dtRejectHungup.Rows.Count > 0)
                     {
                         drMsg = dtAlert.NewRow();
                         drMsg["Title"] = "拒绝挂起信息";
-                        drMsg["Msg"] = item["mobileinfo"].ToString();
-
+                        foreach (DataRow item in dtRejectHungup.Rows)
+                        {
+                            drMsg["Msg"] = drMsg["Msg"] + "<hr/> " + item[0].ToString();
+                        }
                         dtAlert.Rows.Add(drMsg);
                     }
-
-                    DBAccess.RunSQL("update sys_sms set isalert=1  where msgtype='RejectHungup' and workid=" + gwf.WorkID + "  and isalert=0");
+                    DBAccess.RunSQL("UPDATE Sys_SMS SET IsAlert=1  WHERE MsgType='RejectHungup' AND WorkID=" + gwf.WorkID + "  AND IsAlert=0");
 
                     myds.Tables.Add(dtAlert);
                 }

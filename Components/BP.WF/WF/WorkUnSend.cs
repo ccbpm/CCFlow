@@ -28,7 +28,7 @@ namespace BP.WF
             {
                 if (_AppType == null)
                 {
-                    if (SystemConfig.IsBSsystem == false)
+                    if (BP.Difference.SystemConfig.IsBSsystem == false)
                     {
                         _AppType = "WF";
                     }
@@ -56,7 +56,7 @@ namespace BP.WF
             {
                 if (_VirPath == null)
                 {
-                    if (SystemConfig.IsBSsystem)
+                    if (BP.Difference.SystemConfig.IsBSsystem)
                         _VirPath = Glo.CCFlowAppPath;//BP.Sys.Base.Glo.Request.ApplicationPath;
                     else
                         _VirPath = "";
@@ -318,7 +318,7 @@ namespace BP.WF
                     wlN.Copy(wl);
                     wlN.FK_Emp = s;
 
-                   BP.WF.Port.Emp myEmp = new BP.WF.Port.Emp(s);
+                   BP.Port.Emp myEmp = new BP.Port.Emp(s);
                     wlN.FK_EmpText = myEmp.Name;
                     wlN.FK_Dept = myEmp.FK_Dept;
                     wlN.FK_DeptT = myEmp.FK_DeptText;
@@ -516,7 +516,7 @@ namespace BP.WF
             #region 判断是否是会签状态,是否是会签人做的撤销. 主持人是不能撤销的.
             if (gwf.HuiQianTaskSta != HuiQianTaskSta.None)
             {
-                string IsEnableUnSendWhenHuiQian = SystemConfig.AppSettings["IsEnableUnSendWhenHuiQian"];
+                string IsEnableUnSendWhenHuiQian =  BP.Difference.SystemConfig.AppSettings["IsEnableUnSendWhenHuiQian"];
                 if (DataType.IsNullOrEmpty(IsEnableUnSendWhenHuiQian) == false && IsEnableUnSendWhenHuiQian.Equals("0"))
                     return "info@当前节点是会签状态，您不能执行撤销.";
 
@@ -836,7 +836,7 @@ namespace BP.WF
                     wlN.Copy(wl);
                     wlN.FK_Emp = s;
 
-                    BP.WF.Port.Emp myEmp = new BP.WF.Port.Emp(s);
+                    BP.Port.Emp myEmp = new BP.Port.Emp(s);
                     wlN.FK_EmpText = myEmp.Name;
                     wlN.FK_Dept = myEmp.FK_Dept;
                     wlN.FK_DeptT = myEmp.FK_DeptText;
@@ -1220,7 +1220,7 @@ namespace BP.WF
 
             Node unSendNode = new Node(this.UnSendToNode);
             Paras ps = new Paras();
-            string dbStr = SystemConfig.AppCenterDBVarStr;
+            string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
 
             // 删除FH, 不管是否有这笔数据.
             ps.Clear();

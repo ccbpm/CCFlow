@@ -43,7 +43,7 @@ namespace BP.DA
         }
         static Cash()
         {
-            if (SystemConfig.IsBSsystem==false)
+            if (BP.Difference.SystemConfig.IsBSsystem==false)
             {
                 CS_Cash = new Hashtable();
             }
@@ -76,7 +76,7 @@ namespace BP.DA
                 if (cfile.Contains(":"))
                     file = cfile;
                 else
-                    file = SystemConfig.PathOfDataUser + "CyclostyleFile/" + cfile;
+                    file =  BP.Difference.SystemConfig.PathOfDataUser + "CyclostyleFile/" + cfile;
 
                 try
                 {
@@ -365,7 +365,7 @@ namespace BP.DA
         public static BP.En.Entities GetEnsDataExt(string clName)
         {
             // 判断是否失效了。
-            if (SystemConfig.IsTempCashFail)
+            if (BP.Difference.SystemConfig.IsTempCashFail)
             {
                 EnsData_Cash_Ext.Clear();
                 return null;
@@ -443,7 +443,7 @@ namespace BP.DA
                 throw new Exception("您没有把[" + key + "]放到session or application 里面不能找出他们.");
 #endif
 
-            if (SystemConfig.IsBSsystem)
+            if (BP.Difference.SystemConfig.IsBSsystem)
             {
                 if (where == Depositary.Application)
                     // return  System.Web.HttpContext.Current.Cache[key];
@@ -458,7 +458,7 @@ namespace BP.DA
         }
         public static object GetObj(string key)
         {
-            if (SystemConfig.IsBSsystem)
+            if (BP.Difference.SystemConfig.IsBSsystem)
             {
                 object obj = BS_Cash[key]; // Cash.GetObjFormApplication(key, null);
                 if (obj == null)
@@ -478,7 +478,7 @@ namespace BP.DA
         public static int DelObjFormApplication(string likeKey)
         {
             int i = 0;
-            if (SystemConfig.IsBSsystem)
+            if (BP.Difference.SystemConfig.IsBSsystem)
             {
                 string willDelKeys = "";
                 foreach (string key  in BS_Cash.Keys)
@@ -521,7 +521,7 @@ namespace BP.DA
         }
         public static object GetObjFormApplication(string key, object isNullAsVal)
         {
-            if (SystemConfig.IsBSsystem)
+            if (BP.Difference.SystemConfig.IsBSsystem)
             {
                 object obj = BS_Cash[key]; // System.Web.HttpContext.Current.Cache[key];
                 if (obj == null)
@@ -540,7 +540,7 @@ namespace BP.DA
         }
         public static object GetObjFormSession(string key)
         {
-            if (SystemConfig.IsBSsystem)
+            if (BP.Difference.SystemConfig.IsBSsystem)
             {
                 try
                 {
@@ -569,7 +569,7 @@ namespace BP.DA
             if (Cash.IsExits(key, where) == false)
                 return;
 
-            if (SystemConfig.IsBSsystem)
+            if (BP.Difference.SystemConfig.IsBSsystem)
             {
                 if (where == Depositary.Application)
                     CacheHelper.Remove(key);
@@ -603,7 +603,7 @@ namespace BP.DA
             //if (Cash.IsExits(key, where))
             //    return;
 
-            if (SystemConfig.IsBSsystem)
+            if (BP.Difference.SystemConfig.IsBSsystem)
             {
                 if (where == Depositary.Application)
                 {
@@ -630,7 +630,7 @@ namespace BP.DA
         /// </summary>
         public static bool IsExits(string key, Depositary where)
         {
-            if (SystemConfig.IsBSsystem)
+            if (BP.Difference.SystemConfig.IsBSsystem)
             {
                 if (where == Depositary.Application)
                 {

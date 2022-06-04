@@ -1,22 +1,17 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Data;
 using System.Text;
 using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
-using BP.Port;
 using BP.En;
-using BP.WF;
 using BP.WF.Template;
 using System.Net.Http;
 using System.Collections;
-using NPOI.SS.Formula.Functions;
 using LitJson;
 using System.Net;
-using System.Security.Cryptography;
 using BP.Tools;
 using System.Drawing;
 using BP.Difference;
@@ -191,7 +186,7 @@ namespace BP.WF.HttpHandler
             }
 
             //获取上传文件是否需要加密
-            bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
+            bool fileEncrypt =  BP.Difference.SystemConfig.IsEnableAthEncrypt;
 
             #region 文件上传的iis服务器上 or db数据库里.
             if (athDesc.AthSaveWay == AthSaveWay.IISServer || athDesc.AthSaveWay == AthSaveWay.DB)
@@ -206,7 +201,7 @@ namespace BP.WF.HttpHandler
                     {
                         /*如果包含 @ */
                         BP.WF.Flow flow = new BP.WF.Flow(this.FK_Flow);
-                        BP.WF.Data.GERpt myen = flow.HisGERpt;
+                        BP.WF.GERpt myen = flow.HisGERpt;
                         myen.OID = this.WorkID;
                         myen.RetrieveFromDBSources();
                         savePath = BP.WF.Glo.DealExp(savePath, myen, null);
@@ -223,12 +218,12 @@ namespace BP.WF.HttpHandler
                 savePath = savePath.Replace("\\\\", "/");
                 try
                 {
-                    if (savePath.Contains(SystemConfig.PathOfWebApp) == false)
-                        savePath = SystemConfig.PathOfWebApp + savePath;
+                    if (savePath.Contains(BP.Difference.SystemConfig.PathOfWebApp) == false)
+                        savePath =  BP.Difference.SystemConfig.PathOfWebApp + savePath;
                 }
                 catch (Exception ex)
                 {
-                    savePath = SystemConfig.PathOfDataUser + "UploadFile/" + mapData.No + "/";
+                    savePath =  BP.Difference.SystemConfig.PathOfDataUser + "UploadFile/" + mapData.No + "/";
                     //return "err@获取路径错误" + ex.Message + ",配置的路径是:" + savePath + ",您需要在附件属性上修改该附件的存储路径.";
                 }
 
@@ -312,11 +307,11 @@ namespace BP.WF.HttpHandler
                 string guid = DBAccess.GenerGUID();
 
                 //把文件临时保存到一个位置.
-                string temp = SystemConfig.PathOfTemp + "" + guid + ".tmp";
+                string temp =  BP.Difference.SystemConfig.PathOfTemp + "" + guid + ".tmp";
 
                 if (fileEncrypt == true)
                 {
-                    string strtmp = SystemConfig.PathOfTemp + "" + guid + "_Desc" + ".tmp";
+                    string strtmp =  BP.Difference.SystemConfig.PathOfTemp + "" + guid + "_Desc" + ".tmp";
                     Base64StrToImage(fileSoruce, strtmp);
                     EncHelper.EncryptDES(strtmp, temp);//加密
                     File.Delete(strtmp);//删除临时文件
@@ -365,9 +360,9 @@ namespace BP.WF.HttpHandler
                 if (athDesc.AthSaveWay == AthSaveWay.FTPServer)
                 {
                     /*保存到fpt服务器上.*/
-                    BP.FtpConnection ftpconn = new BP.FtpConnection(SystemConfig.FTPServerIP,
+                    BP.FtpConnection ftpconn = new BP.FtpConnection(BP.Difference.SystemConfig.FTPServerIP,
                         SystemConfig.FTPServerPort,
-                        SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+                        SystemConfig.FTPUserNo, BP.Difference.SystemConfig.FTPUserPassword);
 
                     string ny = DateTime.Now.ToString("yyyy_MM");
 
@@ -435,8 +430,8 @@ namespace BP.WF.HttpHandler
             /// <returns></returns>
             public string getAccessToken()
         {
-            string ak = SystemConfig.APIKey;
-            string sk = SystemConfig.SecretKey;
+            string ak =  BP.Difference.SystemConfig.APIKey;
+            string sk =  BP.Difference.SystemConfig.SecretKey;
 
             //百度云应用获取token
             String authHost = "https://aip.baidubce.com/oauth/2.0/token";
@@ -494,11 +489,11 @@ namespace BP.WF.HttpHandler
                 //BP.DA.Log.DebugWriteError(res.GetResponseHeader("Content-Type"));
                 string fileName = res.GetResponseHeader("Content-Disposition").Replace("attachment; filename=", "").Replace("\"", "");
                   
-                img.Save(SystemConfig.PathOfTemp + fileName);
+                img.Save(BP.Difference.SystemConfig.PathOfTemp + fileName);
                 BP.DA.Log.DebugWriteError(this.FK_Node+":"+this.FK_Flow + ":" + this.WorkID + ":" +
-                    athDesc.NoOfObj + ":" + athDesc.FK_MapData + ":" + SystemConfig.PathOfTemp + fileName + ":" + fileName);
+                    athDesc.NoOfObj + ":" + athDesc.FK_MapData + ":" + BP.Difference.SystemConfig.PathOfTemp + fileName + ":" + fileName);
                 BP.WF.CCFormAPI.CCForm_AddAth(this.FK_Node,this.FK_Flow, this.WorkID,
-                    athMyPK, athDesc.FK_MapData, SystemConfig.PathOfTemp + fileName, fileName);
+                    athMyPK, athDesc.FK_MapData, BP.Difference.SystemConfig.PathOfTemp + fileName, fileName);
 
                 return "执行成功";
             }
@@ -568,7 +563,7 @@ namespace BP.WF.HttpHandler
             ht.Add("timestamp", timestamp);
             ht.Add("nonceStr", nonceStr);
             //企业微信的corpID
-            ht.Add("AppID", BP.Sys.SystemConfig.WX_CorpID);
+            ht.Add("AppID", BP.Difference.SystemConfig.WX_CorpID);
 
             //生成签名算法
             string str1 = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonceStr + "&timestamp=" + timestamp + "&url=" + url1 + "";

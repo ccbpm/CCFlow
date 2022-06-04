@@ -224,7 +224,7 @@ namespace BP.Sys
         {
             if (DataType.IsNullOrEmpty(this.No) == true)
             {
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                     this.No = this.EnumKey;
                 else
                     this.No = BP.Web.WebUser.OrgNo + "_" + this.EnumKey;
@@ -236,10 +236,17 @@ namespace BP.Sys
 
         protected override bool beforeUpdateInsertAction()
         {
-            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
 
             return base.beforeUpdateInsertAction();
+        }
+
+        protected override void afterUpdate()
+        {   //@HongYan
+            //清除所有的缓存，这个位置会造成拼接SQL错误 case When
+            BP.DA.Cash.ClearCash();
+            base.afterUpdate();
         }
         #endregion
 
@@ -301,7 +308,7 @@ namespace BP.Sys
         public override int RetrieveAll()
         {
             // 获取平台的类型. 0=单机版, 1=集团版，2=SAAS。
-            int val = SystemConfig.GetValByKeyInt("CCBPMRunModel", 0);
+            int val =  BP.Difference.SystemConfig.GetValByKeyInt("CCBPMRunModel", 0);
             if (val != 2)
                 return base.RetrieveAll();
 

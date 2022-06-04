@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
 using System.Data;
 using System.Text;
-using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
 using BP.Port;
 using BP.En;
-using BP.WF;
-using BP.WF.Template;
 using BP.WF.Data;
 using LitJson;
 using System.Net;
@@ -107,7 +103,7 @@ namespace BP.WF.HttpHandler
 
             /**单点登陆*/
             Paras ps = new Paras();
-            ps.SQL = "SELECT No FROM Port_Emp WHERE No=" + SystemConfig.AppCenterDBVarStr + "No and Tel=" + SystemConfig.AppCenterDBVarStr + "Tel";
+            ps.SQL = "SELECT No FROM Port_Emp WHERE No=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "No and Tel=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Tel";
             ps.Add("No", userNo);
             ps.Add("Tel", tel);
             string No = DBAccess.RunSQLReturnString(ps);
@@ -181,8 +177,8 @@ namespace BP.WF.HttpHandler
             ht.Add("UserName", BP.Web.WebUser.Name);
 
             //系统名称.
-            ht.Add("SysName", SystemConfig.SysName);
-            ht.Add("CustomerName", SystemConfig.CustomerName);
+            ht.Add("SysName", BP.Difference.SystemConfig.SysName);
+            ht.Add("CustomerName", BP.Difference.SystemConfig.CustomerName);
 
             ht.Add("Todolist_EmpWorks", BP.WF.Dev2Interface.Todolist_EmpWorks);
             ht.Add("Todolist_Runing", BP.WF.Dev2Interface.Todolist_Runing);
@@ -269,7 +265,7 @@ namespace BP.WF.HttpHandler
                     {
                         /*如果包含昵称列,就检查昵称是否存在.*/
                         Paras ps = new Paras();
-                        ps.SQL = "SELECT No FROM Port_Emp WHERE NikeName=" + SystemConfig.AppCenterDBVarStr + "NikeName";
+                        ps.SQL = "SELECT No FROM Port_Emp WHERE NikeName=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "NikeName";
                         ps.Add("NikeName", userNo);
                         string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
                         if (no == null)
@@ -284,7 +280,7 @@ namespace BP.WF.HttpHandler
                     {
                         /*如果包含Name列,就检查Name是否存在.*/
                         Paras ps = new Paras();
-                        ps.SQL = "SELECT No FROM Port_Emp WHERE Tel=" + SystemConfig.AppCenterDBVarStr + "Tel";
+                        ps.SQL = "SELECT No FROM Port_Emp WHERE Tel=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Tel";
                         ps.Add("Tel", userNo);
                         string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
                         if (no == null)
@@ -294,8 +290,6 @@ namespace BP.WF.HttpHandler
                         int i = emp.RetrieveFromDBSources();
                         if (i == 0)
                             return "err@用户名或者密码错误.";
-
-
                     }
                     else
                     {
@@ -309,16 +303,6 @@ namespace BP.WF.HttpHandler
                 //调用登录方法.
                 BP.WF.Dev2Interface.Port_Login(emp.UserID);
 
-                if (DBAccess.IsView("Port_Emp") == false)
-                {
-                    string sid = DBAccess.GenerGUID();
-                    DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.UserID + "'");
-
-                    DBAccess.RunSQL("UPDATE WF_Emp SET Token='" + sid + "' WHERE No='" + emp.UserID + "'");
-
-                    WebUser.SID = sid;
-                    emp.SID = sid;
-                }
 
                 return "登陆成功";
             }
@@ -353,9 +337,9 @@ namespace BP.WF.HttpHandler
             }
 
             Hashtable ht = new Hashtable();
-            ht.Add("SysName", SystemConfig.SysName);
-            ht.Add("ServiceTel", SystemConfig.ServiceTel);
-            ht.Add("CustomerName", SystemConfig.CustomerName);
+            ht.Add("SysName", BP.Difference.SystemConfig.SysName);
+            ht.Add("ServiceTel", BP.Difference.SystemConfig.ServiceTel);
+            ht.Add("CustomerName", BP.Difference.SystemConfig.CustomerName);
             if (WebUser.NoOfRel == null)
             {
                 ht.Add("UserNo", "");
@@ -454,12 +438,12 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(TodoListReturnByDept);
 
             //3.逾期的数据
-            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 sql = "SELECT B.Name, count(DISTINCT C.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B,WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID  and STR_TO_DATE(A.SDT,'%Y-%m-%d %H:%i') <STR_TO_DATE(C.SDTOfNode,'%Y-%m-%d %H:%i') GROUP BY B.Name";
 
             }
-            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 sql = "SELECT  B.Name, count(DISTINCT C.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B,WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(TO_DATE(C.SDTOfNode, 'yyyy-mm-dd hh24:mi:ss') - TO_DATE(A.SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 GROUP BY B.Name ";
                 sql += "UNION SELECT  B.Name, count(DISTINCT C.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B,WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (TO_DATE(SDTOfNode, 'yyyy-mm-dd') - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 GROUP BY B.Name";
@@ -495,12 +479,12 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(TodoListReturnByFlow);
 
             //3.逾期的数据
-            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 sql = "SELECT B.FlowName AS Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE A.FK_Flow=B.FK_Flow AND A.WorkID=B.WorkID  and STR_TO_DATE(A.SDT,'%Y-%m-%d %H:%i') <STR_TO_DATE(B.SDTOfNode,'%Y-%m-%d %H:%i') GROUP BY B.FlowName";
 
             }
-            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 sql = "SELECT  B.FlowName AS Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE A.FK_Flow=B.FK_Flow AND A.WorkID=B.WorkID  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(TO_DATE(B.SDTOfNode, 'yyyy-mm-dd hh24:mi:ss') - TO_DATE(A.SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 GROUP BY B.FlowName ";
                 sql += "UNION SELECT  B.FlowName AS Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE A.FK_Flow=B.FK_Flow AND A.WorkID=B.WorkID and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (TO_DATE(B.SDTOfNode, 'yyyy-mm-dd') - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 GROUP BY B.FlowName";
@@ -535,12 +519,12 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(TodoListReturnByEmp);
 
             //3.逾期的数据
-            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 sql = "SELECT A.FK_EmpText AS Name, count( A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE  A.FK_Dept='" + WebUser.FK_Dept + "' AND A.WorkID=B.WorkID  and STR_TO_DATE(A.SDT,'%Y-%m-%d %H:%i') <STR_TO_DATE(B.SDTOfNode,'%Y-%m-%d %H:%i') GROUP BY A.FK_EmpText";
 
             }
-            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 sql = "SELECT  A.FK_EmpText AS Name, count( A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE  A.FK_Dept='" + WebUser.FK_Dept + "' AND A.WorkID=B.WorkID  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(TO_DATE(B.SDTOfNode, 'yyyy-mm-dd hh24:mi:ss') - TO_DATE(A.SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 GROUP BY A.FK_EmpText ";
                 sql += "UNION SELECT A.FK_EmpText AS Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE A.FK_Dept='" + WebUser.FK_Dept + "' AND A.WorkID=B.WorkID and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (TO_DATE(B.SDTOfNode, 'yyyy-mm-dd') - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 GROUP BY A.FK_EmpText";
@@ -647,12 +631,12 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(TodoListReturnByDept);
 
             //3.逾期的数据
-            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 sql = "SELECT B.Name, count(DISTINCT C.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B,WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID  and STR_TO_DATE(A.SDT,'%Y-%m-%d %H:%i') <STR_TO_DATE(C.SDTOfNode,'%Y-%m-%d %H:%i') GROUP BY B.Name";
 
             }
-            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 sql = "SELECT  B.Name, count(DISTINCT C.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B,WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(TO_DATE(C.SDTOfNode, 'yyyy-mm-dd hh24:mi:ss') - TO_DATE(A.SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 GROUP BY B.Name ";
                 sql += "UNION SELECT  B.Name, count(DISTINCT C.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B,WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (TO_DATE(SDTOfNode, 'yyyy-mm-dd') - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 GROUP BY B.Name";
@@ -688,12 +672,12 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(TodoListReturnByFlow);
 
             //3.逾期的数据
-            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 sql = "SELECT B.FlowName AS Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE A.FK_Flow=B.FK_Flow AND A.WorkID=B.WorkID  and STR_TO_DATE(A.SDT,'%Y-%m-%d %H:%i') <STR_TO_DATE(B.SDTOfNode,'%Y-%m-%d %H:%i') GROUP BY B.FlowName";
 
             }
-            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 sql = "SELECT  B.FlowName AS Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE A.FK_Flow=B.FK_Flow AND A.WorkID=B.WorkID  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(TO_DATE(B.SDTOfNode, 'yyyy-mm-dd hh24:mi:ss') - TO_DATE(A.SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 GROUP BY B.FlowName ";
                 sql += "UNION SELECT  B.FlowName AS Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE A.FK_Flow=B.FK_Flow AND A.WorkID=B.WorkID and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (TO_DATE(B.SDTOfNode, 'yyyy-mm-dd') - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 GROUP BY B.FlowName";
@@ -728,12 +712,12 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(TodoListReturnByEmp);
 
             //3.逾期的数据
-            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 sql = "SELECT A.FK_EmpText AS Name, count( A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE  A.FK_Dept='" + WebUser.FK_Dept + "' AND A.WorkID=B.WorkID  and STR_TO_DATE(A.SDT,'%Y-%m-%d %H:%i') <STR_TO_DATE(B.SDTOfNode,'%Y-%m-%d %H:%i') GROUP BY A.FK_EmpText";
 
             }
-            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 sql = "SELECT  A.FK_EmpText AS Name, count( A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE  A.FK_Dept='" + WebUser.FK_Dept + "' AND A.WorkID=B.WorkID  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(TO_DATE(B.SDTOfNode, 'yyyy-mm-dd hh24:mi:ss') - TO_DATE(A.SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 GROUP BY A.FK_EmpText ";
                 sql += "UNION SELECT A.FK_EmpText AS Name, count(DISTINCT A.WorkID) as Num FROM WF_GenerWorkerList A,WF_GenerWorkFlow B WHERE A.FK_Dept='" + WebUser.FK_Dept + "' AND A.WorkID=B.WorkID and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (TO_DATE(B.SDTOfNode, 'yyyy-mm-dd') - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 GROUP BY A.FK_EmpText";

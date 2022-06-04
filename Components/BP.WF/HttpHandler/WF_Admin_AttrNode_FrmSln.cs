@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
-using System.Web;
+﻿using System.Data;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
-using BP.Port;
 using BP.En;
-using BP.WF;
 using BP.WF.Template;
 
 namespace BP.WF.HttpHandler
@@ -216,15 +210,21 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             #warning 需要判断不同的数据库类型
-            if (SystemConfig.AppCenterDBType == DBType.Oracle
-                || SystemConfig.AppCenterDBType == DBType.DM
-                || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dt.Columns["SORTNAME"].ColumnName = "SortName";
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
                 dt.Columns["PTABLE"].ColumnName = "PTable";
                 dt.Columns["ORGNO"].ColumnName = "OrgNo";
+            }
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["sortname"].ColumnName = "SortName";
+                dt.Columns["no"].ColumnName = "No";
+                dt.Columns["name"].ColumnName = "Name";
+                dt.Columns["ptable"].ColumnName = "PTable";
+                dt.Columns["orgno"].ColumnName = "OrgNo";
             }
 
             return BP.Tools.Json.ToJson(dt);

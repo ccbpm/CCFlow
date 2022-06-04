@@ -267,7 +267,7 @@ namespace BP.Sys
         /// <param name="fk_mapdata">s</param>
         public FrmEleDBs(string fk_mapdata)
         {
-            if (SystemConfig.IsDebug)
+            if (BP.Difference.SystemConfig.IsDebug)
                 this.Retrieve(MapAttrAttr.FK_MapData, fk_mapdata);
             else
                 this.RetrieveFromCash(MapAttrAttr.FK_MapData, (object)fk_mapdata);

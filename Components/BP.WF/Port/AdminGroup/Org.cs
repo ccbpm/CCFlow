@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using BP.DA;
 using BP.En;
 using BP.Web;
@@ -135,7 +134,6 @@ namespace BP.WF.Port.AdminGroup
                     return this._enMap;
 
                 Map map = new Map("Port_Org", "独立组织");
-                map.AdjunctType = AdjunctType.None;
                 // map.EnType = EnType.View; //独立组织是一个视图.
 
                 map.AddTBStringPK(OrgAttr.No, null, "编号(与部门编号相同)", true, false, 1, 30, 40);
@@ -228,7 +226,7 @@ namespace BP.WF.Port.AdminGroup
             //取出来根目录.
             dept.Retrieve(DeptAttr.ParentNo, "0");
 
-            BP.GPM.Emp emp = new BP.GPM.Emp();
+            BP.Port.Emp emp = new BP.Port.Emp();
             emp.No = adminerNo;
             if (emp.RetrieveFromDBSources() != 0)
                 return "err@管理员编号已经存在.";

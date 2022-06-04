@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
 using System.Data;
-using System.Text;
-using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
-using BP.Port;
-using BP.En;
-using BP.WF;
-using BP.WF.Template;
 using BP.Difference;
 
 namespace BP.WF.HttpHandler
@@ -34,33 +27,40 @@ namespace BP.WF.HttpHandler
 
             //我发起的流程.
             Paras ps = new Paras();
-            ps.SQL = "select FK_Flow, FlowName,Count(WorkID) as Num FROM WF_GenerWorkFlow  WHERE WFState >1 And Starter=" + SystemConfig.AppCenterDBVarStr + "Starter GROUP BY FK_Flow, FlowName ";
+            ps.SQL = "select FK_Flow, FlowName,Count(WorkID) as Num FROM WF_GenerWorkFlow  WHERE WFState >1 And Starter=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Starter GROUP BY FK_Flow, FlowName ";
             ps.Add("Starter", BP.Web.WebUser.No);
 
             //string sql = "";
             //sql = "select FK_Flow, FlowName,Count(WorkID) as Num FROM WF_GenerWorkFlow  WHERE Starter='" + BP.Web.WebUser.No + "' GROUP BY FK_Flow, FlowName ";
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "Start";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
-                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
-                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
-                dt.Columns["NUM"].ColumnName = "Num";
+                dt.Columns[0].ColumnName = "FK_Flow";
+                dt.Columns[1].ColumnName = "FlowName";
+                dt.Columns[2].ColumnName = "Num";
             }
             ds.Tables.Add(dt);
 
             //待办.
             ps = new Paras();
-            ps.SQL = "select FK_Flow, FlowName,Count(WorkID) as Num FROM wf_empworks  WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp GROUP BY FK_Flow, FlowName ";
+            ps.SQL = "select FK_Flow, FlowName,Count(WorkID) as Num FROM wf_empworks  WHERE FK_Emp=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Emp GROUP BY FK_Flow, FlowName ";
             ps.Add("FK_Emp", BP.Web.WebUser.No);
             //sql = "select FK_Flow, FlowName,Count(WorkID) as Num FROM wf_empworks  WHERE FK_Emp='" + BP.Web.WebUser.No + "' GROUP BY FK_Flow, FlowName ";
             DataTable dtTodolist = DBAccess.RunSQLReturnTable(ps);
             dtTodolist.TableName = "Todolist";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dtTodolist.Columns["FK_FLOW"].ColumnName = "FK_Flow";
                 dtTodolist.Columns["FLOWNAME"].ColumnName = "FlowName";
                 dtTodolist.Columns["NUM"].ColumnName = "Num";
+            }
+
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dtTodolist.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dtTodolist.Columns["flowname"].ColumnName = "FlowName";
+                dtTodolist.Columns["num"].ColumnName = "Num";
             }
 
             ds.Tables.Add(dtTodolist);
@@ -151,7 +151,7 @@ namespace BP.WF.HttpHandler
                     + " or A.TodoEmps LIKE '%" + WebUser.No + "%') "
                     + " AND A.WFState!=0 ";
 
-            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 sql += " AND A.OrgNo='" + BP.Web.WebUser.OrgNo + "' ";
 
             ps.SQL = sql;
@@ -160,7 +160,7 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "WF_GenerWorkFlow";
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dt.Columns["FLOWNAME"].ColumnName = "FlowName";
                 dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
@@ -175,6 +175,23 @@ namespace BP.WF.HttpHandler
                 dt.Columns["TODOEMPS"].ColumnName = "TodoEmps"; //处理人.
                 dt.Columns["WFSTATE"].ColumnName = "WFState"; //处理人.
             }
+
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["flowname"].ColumnName = "FlowName";
+                dt.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dt.Columns["fk_node"].ColumnName = "FK_Node";
+                dt.Columns["nodename"].ColumnName = "NodeName";
+                dt.Columns["workid"].ColumnName = "WorkID";
+                dt.Columns["fid"].ColumnName = "FID";
+                dt.Columns["title"].ColumnName = "Title";
+                dt.Columns["startername"].ColumnName = "StarterName";
+                dt.Columns["wfsta"].ColumnName = "WFSta";
+                dt.Columns["emps"].ColumnName = "Emps";
+                dt.Columns["todoemps"].ColumnName = "TodoEmps"; //处理人.
+                dt.Columns["wfstate"].ColumnName = "WFState"; //处理人.
+            }
+
             if (dt != null)
             {
                 dt.Columns.Add("TDTime");

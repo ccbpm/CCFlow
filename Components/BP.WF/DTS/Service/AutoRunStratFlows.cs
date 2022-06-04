@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Data;
-using System.Collections;
 using BP.DA;
-using System.Reflection;
-using BP.Port;
 using BP.Web;
 using BP.En;
 using BP.Sys;
-using BP.WF.Data;
-using BP.WF.Template;
 
 namespace BP.WF.DTS
 {
@@ -53,11 +48,9 @@ namespace BP.WF.DTS
             BP.WF.Flows fls = new Flows();
             fls.RetrieveAll();
 
-            string msg = "开始执行:";
+            string msg = "开始执行自动发起流程 :" + DataType.CurrentDateTimess;
 
             DateTime dt = DateTime.Now;
-
-           
             int week = (int)dt.DayOfWeek;
             week++;
 
@@ -123,19 +116,20 @@ namespace BP.WF.DTS
                             int days = DateTime.DaysInMonth(dt.Year, dt.Month);
                             if (dt.Day != days)
                                 continue;
+                            str = str.Replace("LastDayOfMonth", "");
                         }
-
 
                         if (currTime.Contains(str) == false)
                             continue;
 
+                        isHave = true;
                         //记录执行过的时间点，如果有该时间点，就不要在执行了。
                         string pkval = "AutoFlow_" + fl.No + "_" + str;
                         BP.Sys.GloVar gv = new GloVar();
                         gv.No = pkval;
                         if (gv.RetrieveFromDBSources() == 0)
                         {
-                            isHave = true;
+
                             gv.Name = fl.Name + "自动发起.";
                             gv.GroupKey = "AutoStartFlow";
                             gv.Insert();
@@ -143,8 +137,7 @@ namespace BP.WF.DTS
                         }
                         else
                         {
-                            isHave = false;
-                            continue;
+                            break;
                         }
                     }
                     if (isHave == false)
@@ -167,7 +160,11 @@ namespace BP.WF.DTS
                         continue;
                     case BP.WF.FlowRunWay.SpecEmpAdv: //指定人员按时运行 高级模式.。
                         msg += "<br>触发了:指定人员按时运行 高级模式.";
-                        this.SpecEmpAdv(fl);
+                        msg += this.SpecEmpAdv(fl);
+                        continue;
+                    case BP.WF.FlowRunWay.LetAdminSendSpecEmp: //让admin发送给指定的人员.。
+                        msg += "<br>触发了:指定人员按时运行 高级模式.";
+                        msg += this.LetAdminSendSpecEmp(fl);
                         continue;
                     default:
                         break;
@@ -214,16 +211,11 @@ namespace BP.WF.DTS
                 BP.DA.Log.DebugWriteError("流程:" + fl.No + fl.Name + "自动发起错误:\t\n -------------- \t\n" + ex.Message);
             }
         }
-        /// <summary>
-        /// 指定人员按时启动高级模式
-        /// </summary>
-        /// <param name="fl">流程</param>
-        /// <returns></returns>
-        public void SpecEmpAdv(Flow fl)
+        public string LetAdminSendSpecEmp(Flow fl)
         {
             string empsExp = fl.StartGuidePara1; //获得人员信息。
             if (DataType.IsNullOrEmpty(empsExp) == true)
-                return;
+                return "配置的表达式错误:StartGuidePara1，人员信息不能为空。";
 
             #region 获得人员集合.
             string[] emps = null;
@@ -248,7 +240,63 @@ namespace BP.WF.DTS
             }
             #endregion 获得人员集合.
 
+            //让admin登录发送.
+            BP.WF.Dev2Interface.Port_Login("admin");
 
+            string msg = "";
+            try
+            {
+
+                //创建空白工作, 发起开始节点.
+                Int64 workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fl.No);
+
+                BP.WF.Dev2Interface.Node_SendWork(fl.No, workID, 0, empsExp);
+
+                string info = "流程:【" + fl.No + fl.Name + "】的定时任务 \t\n -------------- \t\n 已经启动，待办：" + empsExp + " , " + workID;
+                BP.DA.Log.DebugWriteInfo(info);
+            }
+            catch (Exception ex)
+            {
+                BP.DA.Log.DebugWriteError("流程:" + fl.No + fl.Name + "自动发起错误:\t\n -------------- \t\n" + ex.Message);
+            }
+            return msg;
+        }
+        /// <summary>
+        /// 指定人员按时启动高级模式
+        /// </summary>
+        /// <param name="fl">流程</param>
+        /// <returns></returns>
+        public string SpecEmpAdv(Flow fl)
+        {
+            string empsExp = fl.StartGuidePara1; //获得人员信息。
+            if (DataType.IsNullOrEmpty(empsExp) == true)
+                return "配置的表达式错误:StartGuidePara1，人员信息不能为空。";
+
+            #region 获得人员集合.
+            string[] emps = null;
+            if (empsExp.ToUpper().Contains("SELECT") == true)
+            {
+                string strs = "";
+                empsExp = BP.WF.Glo.DealExp(empsExp, null, null);
+                DataTable dt = DBAccess.RunSQLReturnTable(empsExp);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    strs += dr[0].ToString() + ";";
+                }
+                emps = strs.Split(';');
+            }
+            else
+            {
+                empsExp = empsExp.Replace("@", ";");
+                empsExp = empsExp.Replace(",", ";");
+                empsExp = empsExp.Replace("、", ";");
+                empsExp = empsExp.Replace("，", ";");
+                emps = empsExp.Split(';');
+            }
+            #endregion 获得人员集合.
+
+            string msg = "";
+            int idx = 0;
             foreach (string emp in emps)
             {
                 if (DataType.IsNullOrEmpty(emp) == true)
@@ -261,16 +309,20 @@ namespace BP.WF.DTS
                     //创建空白工作, 发起开始节点.
                     Int64 workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fl.No);
 
-                    //把草稿设置为待办..
-                    BP.WF.Dev2Interface.Node_SetDraft2Todolist(fl.No, workID);
+                    //执行发送.
+                    SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(fl.No, workID);
 
-                    BP.DA.Log.DebugWriteInfo("流程:" + fl.No + fl.Name + "的定时任务\t\n -------------- \t\n 已经启动，待办：" + emp + " , " + workID);
+                    string info = "流程:" + fl.No + fl.Name + "的定时任务\t\n -------------- \t\n 已经启动，待办：" + emp + " , " + workID;
+                    BP.DA.Log.DebugWriteInfo(info);
+                    idx++;
+                    msg += "<br/>第" + idx + "条:" + info;
                 }
                 catch (Exception ex)
                 {
                     BP.DA.Log.DebugWriteError("流程:" + fl.No + fl.Name + "自动发起错误:\t\n -------------- \t\n" + ex.Message);
                 }
             }
+            return msg;
         }
         /// <summary>
         /// 触发模式

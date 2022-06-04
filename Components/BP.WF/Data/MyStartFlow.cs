@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Data;
 using BP.DA;
-using BP.WF;
-using BP.Port;
 using BP.Sys;
 using BP.En;
 
@@ -799,7 +797,7 @@ namespace BP.WF.Data
         public string DoOpenLastForm()
         {
             Paras pss = new Paras();
-            pss.SQL = "SELECT MYPK FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID ORDER BY RDT DESC";
+            pss.SQL = "SELECT MYPK FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID ORDER BY RDT DESC";
             pss.Add("ActionType", (int)BP.WF.ActionType.Forward);
             pss.Add("WorkID", this.WorkID);
             DataTable dt = DBAccess.RunSQLReturnTable(pss);

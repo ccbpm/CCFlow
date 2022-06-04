@@ -193,7 +193,7 @@ namespace BP.Sys
         }
         public override int RetrieveAll()
         {
-            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
 
             int i = base.RetrieveAll();

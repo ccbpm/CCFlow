@@ -1,19 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Data;
-using System.Text;
-using System.Web;
-using BP.DA;
-using BP.Sys;
-using BP.Web;
-using BP.Port;
-using BP.En;
-using BP.WF;
-using BP.WF.Template;
-using BP.WF.Data;
+﻿using BP.DA;
 using BP.WF.HttpHandler;
-using BP.CCBill.Template;
 
 
 namespace BP.CCBill
@@ -108,7 +94,7 @@ namespace BP.CCBill
             {
                 en.MethodDoc_JavaScript = doc;
 
-                string path = SystemConfig.PathOfDataUser + "JSLibData/Method/";
+                string path =  BP.Difference.SystemConfig.PathOfDataUser + "JSLibData/Method/";
                 if (System.IO.Directory.Exists(path) == false)
                     System.IO.Directory.CreateDirectory(path);
                 //写入文件.

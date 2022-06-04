@@ -106,7 +106,7 @@ namespace BP.WF.Template
 
                 //节点绑定部门. 节点绑定部门.
                 string defDeptVal = "@WebUser.FK_Dept";
-                if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                     defDeptVal = "@WebUser.OrgNo";
 
                 //绑定部门的.

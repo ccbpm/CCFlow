@@ -453,7 +453,7 @@ namespace BP.Sys
         {
             try
             {
-                return DataType.ReadTextFile(SystemConfig.PathOfFDB + enName + "/" + pkVal + ".fdb");
+                return DataType.ReadTextFile(BP.Difference.SystemConfig.PathOfFDB + enName + "/" + pkVal + ".fdb");
             }
             catch
             {
@@ -464,7 +464,7 @@ namespace BP.Sys
         {
               try
             {
-            return DataType.ReadTextFile(SystemConfig.PathOfFDB   + enName + "/" + pkVal + ".fdb");
+            return DataType.ReadTextFile(BP.Difference.SystemConfig.PathOfFDB   + enName + "/" + pkVal + ".fdb");
             }
               catch
               {
@@ -475,7 +475,7 @@ namespace BP.Sys
         {
             try
             {
-                string dir = SystemConfig.PathOfFDB + enName + "/";
+                string dir =  BP.Difference.SystemConfig.PathOfFDB + enName + "/";
                 if (System.IO.Directory.Exists(dir) == false)
                     System.IO.Directory.CreateDirectory(dir);
 
@@ -484,7 +484,7 @@ namespace BP.Sys
             catch (Exception ex)
             {
                 throw ex;
-                string filePath = SystemConfig.PathOfFDB + enName;
+                string filePath =  BP.Difference.SystemConfig.PathOfFDB + enName;
                 if (System.IO.Directory.Exists(filePath) == false)
                     System.IO.Directory.CreateDirectory(filePath);
             }

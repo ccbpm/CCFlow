@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using BP.CCBill.Template;
-
-
+﻿
 namespace BP.CCBill
 {
     /// <summary>
@@ -40,6 +35,10 @@ namespace BP.CCBill
         /// 字段颜色设置
         /// </summary>
         public const string ColorSet = "ColorSet";
+        /// <summary>
+        /// 按照指定字段的颜色显示表格行的颜色
+        /// </summary>
+        public const string RowColorSet = "RowColorSet";
         /// <summary>
         /// 字段求和求平均设置
         /// </summary>

@@ -199,6 +199,20 @@ namespace BP.Sys
     {
         #region 数据源属性.
         /// <summary>
+        /// 判断是否存在 @honyan. 
+        /// </summary>
+        public override bool IsExits
+        {
+            get
+            {
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                    return base.IsExits;
+
+                this.No = BP.Web.WebUser.OrgNo + "_" + this.No;
+                return base.IsExits;
+            }
+        }
+        /// <summary>
         /// 获得外部数据表
         /// </summary>
         public DataTable GenerHisDataTable(Hashtable ht = null)
@@ -263,6 +277,9 @@ namespace BP.Sys
 
                 var result = InvokeWebService(src.IP, td[0], args.ToArray());
 
+                if (DataType.IsNullOrEmpty(result as string) == true)
+                    throw new Exception("err@获得结果错误.");
+
                 switch (td[1])
                 {
                     case "DataSet":
@@ -270,21 +287,23 @@ namespace BP.Sys
                     case "DataTable":
                         return result as DataTable;
                     case "Json":
-                        var jdata = LitJson.JsonMapper.ToObject(result as string);
+                        return BP.Tools.Json.ToDataTable(result as string);
 
-                        if (!jdata.IsArray)
-                            throw new Exception("@返回的JSON格式字符串“" + (result ?? string.Empty) + "”不正确");
+                    //var jdata = bp. LitJson.JsonMapper.ToObject(result as string);
 
-                        var dt = new DataTable();
-                        dt.Columns.Add("No", typeof(string));
-                        dt.Columns.Add("Name", typeof(string));
+                    //if (!jdata.IsArray)
+                    //    throw new Exception("@返回的JSON格式字符串“" + (result ?? string.Empty) + "”不正确");
 
-                        for (var i = 0; i < jdata.Count; i++)
-                        {
-                            dt.Rows.Add(jdata[i]["No"].ToString(), jdata[i]["Name"].ToString());
-                        }
+                    //var dt = new DataTable();
+                    //dt.Columns.Add("No", typeof(string));
+                    //dt.Columns.Add("Name", typeof(string));
 
-                        return dt;
+                    //for (var i = 0; i < jdata.Count; i++)
+                    //{
+                    //    dt.Rows.Add(jdata[i]["No"].ToString(), jdata[i]["Name"].ToString());
+                    //}
+
+                    //  return dt;
                     case "Xml":
                         if (result == null || string.IsNullOrWhiteSpace(result.ToString()))
                             throw new Exception("@返回的XML格式字符串不正确。");
@@ -299,7 +318,7 @@ namespace BP.Sys
                         else
                             root = xml.ChildNodes[1];
 
-                        dt = new DataTable();
+                        DataTable dt = new DataTable();
                         dt.Columns.Add("No", typeof(string));
                         dt.Columns.Add("Name", typeof(string));
 
@@ -324,7 +343,7 @@ namespace BP.Sys
                 //用户输入的webAPI地址
                 string apiUrl = this.SelectStatement;
                 if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
-                    apiUrl = apiUrl.Replace("@WebApiHost", SystemConfig.AppSettings["WebApiHost"]);
+                    apiUrl = apiUrl.Replace("@WebApiHost", BP.Difference.SystemConfig.AppSettings["WebApiHost"]);
 
                 //api接口地址
                 string apiHost = apiUrl.Split('?')[0];
@@ -332,7 +351,7 @@ namespace BP.Sys
                 string apiParams = apiUrl.Split('?')[1];
                 //执行POST
                 postData = BP.Tools.PubGlo.HttpPostConnect(apiHost, apiParams);
-                
+
                 DataTable dt = null;
                 try
                 {
@@ -355,12 +374,12 @@ namespace BP.Sys
 
                 sql += " FROM " + this.SrcTable;
                 DataTable dt = src.RunSQLReturnTable(sql);
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
                 {
                     dt.Columns["NO"].ColumnName = "No";
                     dt.Columns["NAME"].ColumnName = "Name";
                 }
-                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+                if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
                 {
                     dt.Columns["no"].ColumnName = "No";
                     dt.Columns["name"].ColumnName = "Name";
@@ -415,7 +434,7 @@ namespace BP.Sys
                     }
                 }
 
-                if (runObj.Contains("@") && SystemConfig.IsBSsystem == true)
+                if (runObj.Contains("@") && BP.Difference.SystemConfig.IsBSsystem == true)
                 {
                     /*如果是bs*/
                     foreach (string key in HttpContextHelper.RequestParamKeys)
@@ -431,12 +450,12 @@ namespace BP.Sys
 
                 DataTable dt = src.RunSQLReturnTable(runObj);
 
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
                 {
                     dt.Columns["NO"].ColumnName = "No";
                     dt.Columns["NAME"].ColumnName = "Name";
                 }
-                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+                if (SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
                 {
                     dt.Columns["no"].ColumnName = "No";
                     dt.Columns["name"].ColumnName = "Name";
@@ -502,7 +521,11 @@ namespace BP.Sys
                 sql = "delete from " + FK_SFTable + " where No = '" + No + "'";
             DBAccess.RunSQL(sql);
         }
-        public string GenerHisJson()
+        /// <summary>
+        /// @wwh 修改了名字.
+        /// </summary>
+        /// <returns></returns>
+        public string GenerJson()
         {
             return BP.Tools.Json.ToJson(this.GenerHisDataTable());
         }
@@ -1143,11 +1166,11 @@ namespace BP.Sys
 
         public string DoAttr()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/EnOnly.htm?EnsName=BP.Sys.SFTable&No="+this.No;
+            return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Comm/EnOnly.htm?EnsName=BP.Sys.SFTable&No=" + this.No;
         }
         public string DoNew()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTable/Default.htm?DoType=New&FromApp=SL&s=0.3256071044807922";
+            return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTable/Default.htm?DoType=New&FromApp=SL&s=0.3256071044807922";
         }
         /// <summary>
         /// 数据源管理
@@ -1155,7 +1178,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoMangDBSrc()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Sys/SFDBSrcNewGuide.htm";
+            return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Comm/Sys/SFDBSrcNewGuide.htm";
         }
         /// <summary>
         /// 创建表向导
@@ -1163,7 +1186,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoGuide()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/CreateSFGuide.htm";
+            return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/CreateSFGuide.htm";
         }
         /// <summary>
         /// 编辑数据
@@ -1174,11 +1197,11 @@ namespace BP.Sys
             if (this.IsClass)
             {
 
-                return SystemConfig.CCFlowWebPath + "WF/Comm/Ens.htm?EnsName=" + this.No;
+                return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Comm/Ens.htm?EnsName=" + this.No;
             }
             else
             {
-                return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
+                return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
             }
         }
         /// <summary>
@@ -1208,14 +1231,19 @@ namespace BP.Sys
         }
         protected override bool beforeInsert()
         {
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            //@hongyan
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+            {
                 this.OrgNo = BP.Web.WebUser.OrgNo;
+                this.No = this.OrgNo + "_" + this.No;
+            }
+
 
             //利用这个时间串进行排序.
             this.RDT = DataType.CurrentDateTime;
 
             #region  如果是 系统字典表.
-            if (this.SrcType == BP.Sys.SrcType.SysDict && SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (this.SrcType == BP.Sys.SrcType.SysDict && BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
                 if (this.CodeStruct == CodeStruct.NoName)
                 {
@@ -1336,7 +1364,7 @@ namespace BP.Sys
                     sql += " AS ";
                     sql += "SELECT " + this.ColumnValue + " No," + this.ColumnText + " Name" + (this.CodeStruct == BP.Sys.CodeStruct.Tree ? ("," + this.ParentValue + " ParentNo") : "") + " FROM " + this.SrcTable + (string.IsNullOrWhiteSpace(this.SelectStatement) ? "" : (" WHERE " + this.SelectStatement));
 
-                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
                     {
                         sql = sql.Replace("[", "`").Replace("]", "`");
                     }
@@ -1431,7 +1459,7 @@ namespace BP.Sys
                 }
             }
         }
-        
+
     }
     /// <summary>
     /// 用户自定义表s
@@ -1454,6 +1482,17 @@ namespace BP.Sys
             {
                 return new SFTable();
             }
+        }
+        /// <summary>
+        ///  重写查询全部的方法 @hongyan, 
+        /// </summary>
+        /// <returns></returns>
+        public override int RetrieveAll()
+        {
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                return base.RetrieveAll("RDT");
+
+            return this.Retrieve("OrgNo", WebUser.OrgNo, "RDT");
         }
         #endregion
 

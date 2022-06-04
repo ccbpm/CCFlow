@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Data;
-using BP.Web;
 using BP.Sys;
 using BP.DA;
 using BP.WF.Template;
-using BP.WF.HttpHandler;
 using BP.Difference;
 
 namespace BP.WF.HttpHandler
@@ -58,9 +56,9 @@ namespace BP.WF.HttpHandler
             string tmpPath = "";
 
             if (BP.WF.Glo.Platform == Platform.CCFlow)
-                tmpPath = SystemConfig.PathOfWebApp + @"WF/Admin/AttrFlow/APICodeFEE.txt.CCFlow";
+                tmpPath =  BP.Difference.SystemConfig.PathOfWebApp + @"WF/Admin/AttrFlow/APICodeFEE.txt.CCFlow";
             else
-                tmpPath = SystemConfig.PathOfWebApp + @"WF/Admin/AttrFlow/APICodeFEE.txt.JFlow";
+                tmpPath =  BP.Difference.SystemConfig.PathOfWebApp + @"WF/Admin/AttrFlow/APICodeFEE.txt.JFlow";
 
             if (System.IO.File.Exists(tmpPath) == false)
                 return string.Format(@"未找到事件编写模板文件“{0}”，请联系管理员！", tmpPath);
@@ -234,11 +232,18 @@ namespace BP.WF.HttpHandler
             //获得数据源的表.
             BP.Sys.SFDBSrc src = new SFDBSrc(fl.DTSDBSrc);
             DataTable dt = src.GetTables();
-            if (src.DBSrcType == BP.Sys.DBSrcType.Oracle || src.DBSrcType == BP.Sys.DBSrcType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+
+            if (src.FieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
             }
+            if (src.FieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["no"].ColumnName = "No";
+                dt.Columns["name"].ColumnName = "Name";
+            }
+
             dt.TableName = "Tables";
             ds.Tables.Add(dt);
 
@@ -293,10 +298,15 @@ namespace BP.WF.HttpHandler
             //绑定表. 
             BP.Sys.SFDBSrc src = new SFDBSrc(dbsrc);
             DataTable dt = src.GetTables();
-            if (src.DBSrcType == BP.Sys.DBSrcType.Oracle || src.DBSrcType == BP.Sys.DBSrcType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (src.FieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
+            }
+            if (src.FieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["no"].ColumnName = "No";
+                dt.Columns["name"].ColumnName = "Name";
             }
             return BP.Tools.Json.ToJson(dt);
         }
@@ -313,11 +323,17 @@ namespace BP.WF.HttpHandler
 
             DataTable dtColms = src.GetColumns(this.GetRequestVal("TableName"));
             dtColms.TableName = "Cols";
-            if (src.DBSrcType == BP.Sys.DBSrcType.Oracle || src.DBSrcType == BP.Sys.DBSrcType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (src.FieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dtColms.Columns["NO"].ColumnName = "No";
                 dtColms.Columns["NAME"].ColumnName = "Name";
             }
+            if (src.FieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dtColms.Columns["no"].ColumnName = "No";
+                dtColms.Columns["name"].ColumnName = "Name";
+            }
+
             ds.Tables.Add(dtColms); //列名.
 
             //属性列表.
@@ -537,7 +553,7 @@ namespace BP.WF.HttpHandler
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(files[0].FileName);
 
             //文件存放路径
-            string filePath = SystemConfig.PathOfTemp + "" + fileNewName;
+            string filePath =  BP.Difference.SystemConfig.PathOfTemp + "" + fileNewName;
             //files[0].SaveAs(filePath);
             HttpContextHelper.UploadFile(files[0], filePath);
 
@@ -554,7 +570,7 @@ namespace BP.WF.HttpHandler
             //检查流程类别编号
             if (DataType.IsNullOrEmpty(FK_FlowSort) == true)
             {
-                if (BP.Sys.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                     FK_FlowSort = BP.Web.WebUser.OrgNo;
                 else
                     return "err@所选流程类别编号不存在。";
@@ -591,7 +607,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
 
             //把文件放入ds.
-            string path = SystemConfig.PathOfWebApp + "WF/Admin/ClientBin/NodeIcon/";
+            string path =  BP.Difference.SystemConfig.PathOfWebApp + "WF/Admin/ClientBin/NodeIcon/";
             string[] strs = System.IO.Directory.GetFiles(path);
             DataTable dtIcon = new DataTable();
             dtIcon.Columns.Add("No");
@@ -719,12 +735,12 @@ namespace BP.WF.HttpHandler
             ht.Add("ReturnNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=5 AND Fk_flow = '" + fk_flow + "'"));
 
             //说有逾期的数量.
-            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_EMPWORKS where STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now() AND Fk_flow = '" + fk_flow + "'"));
 
             }
-            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 string sql = "SELECT COUNT(*) from (SELECT *  FROM WF_EMPWORKS WHERE  REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 AND Fk_flow = '" + fk_flow + "'";
 
@@ -770,12 +786,12 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(TodolistByDept);
 
             //逾期的 - 人员分组.
-            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 sql = "SELECT  p.name,COUNT (w.WorkID) AS Num from Port_Emp p,WF_EmpWorks w  WHERE p. NO = w.FK_Emp AND WFState >1 and STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now() AND Fk_flow = '" + fk_flow + "' GROUP BY p.name,w.FK_Emp";
 
             }
-            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 sql = "SELECT  p.name,COUNT (w.WorkID) AS Num from Port_Emp p,WF_EmpWorks w  WHERE p. NO = w.FK_Emp AND WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY p.name,w.FK_Emp ";
                 sql += "UNION SELECT  p.name,COUNT (w.WorkID) AS Num from Port_Emp p,WF_EmpWorks w  WHERE p. NO = w.FK_Emp AND WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY p.name,w.FK_Emp";
@@ -788,12 +804,12 @@ namespace BP.WF.HttpHandler
             OverTimeByEmp.TableName = "OverTimeByEmp";
             ds.Tables.Add(OverTimeByEmp);
             //逾期的 - 部门分组.
-            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now() AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName";
 
             }
-            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName ";
                 sql += "UNION SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName";
@@ -806,12 +822,12 @@ namespace BP.WF.HttpHandler
             OverTimeByDept.TableName = "OverTimeByDept";
             ds.Tables.Add(OverTimeByDept);
             //逾期的 - 节点分组.
-            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 sql = "Select NodeName,count(*) as Num from WF_EmpWorks WHERE WFState >1 and STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now() AND Fk_flow = '" + fk_flow + "' GROUP BY NodeName";
 
             }
-            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 sql = "Select NodeName,count(*) as Num from WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY NodeName ";
                 sql += "UNION Select NodeName,count(*) as Num from WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY NodeName";
@@ -829,19 +845,7 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
         #endregion 欢迎页面初始化.
-
-
-        #region 泳道图.
-        /// <summary>
-        /// 泳道图
-        /// </summary>
-        /// <returns></returns>
-        public string Lane_Init()
-        {
-            BP.WF.Template.Lanes ens = new Lanes(this.FK_Flow);
-            return ens.ToJson();
-        }
-        #endregion 泳道图.
+       
 
     }
 }

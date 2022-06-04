@@ -1,14 +1,9 @@
-﻿using System;
-using System.Data;
-using System.Collections;
-using BP.DA;
+﻿using BP.DA;
 using BP.En;
 using BP.WF;
-using BP.WF.Data;
 using BP.WF.Template;
 using BP.Sys;
 using BP.CCBill.Template;
-using System.Collections.Generic;
 
 
 namespace BP.CCBill
@@ -210,7 +205,7 @@ namespace BP.CCBill
                 map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 500, 20, true);
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20, true);
 
-                if (CCBPMRunModel.SAAS == SystemConfig.CCBPMRunModel)
+                if (CCBPMRunModel.SAAS ==  BP.Difference.SystemConfig.CCBPMRunModel)
                 {
                     string sql = "SELECT No,Name FROM WF_FlowSort WHERE OrgNo='"+BP.Web.WebUser.OrgNo+ "' AND No!='" + BP.Web.WebUser.OrgNo + "'";
                     map.AddDDLSQL(MapDataAttr.FK_FormTree, null, "表单类别", sql, true);
@@ -251,44 +246,48 @@ namespace BP.CCBill
                 string msg = "对字段的颜色处理";
                 msg += "\t\n @Age:From=0,To=18,Color=green;From=19,To=30,Color=red";
                 map.SetHelperAlert(FrmBillAttr.ColorSet, msg);
+
+                map.AddTBString(FrmBillAttr.RowColorSet, null, "表格行颜色设置", true, false, 0, 100, 20, true);
+                map.SetHelperAlert(FrmBillAttr.RowColorSet, "按照指定字段存储的颜色设置表格行的背景色");
+
                 map.AddTBString(FrmBillAttr.FieldSet, null, "字段求和求平均设置", true, false, 0, 100, 20, true);
                 map.AddTBString(FrmBillAttr.RefDict, null, "单据关联的实体", false, true, 0, 190, 20, true);
                 #endregion 单据属性.
 
                 #region 按钮权限.
-                map.AddTBString(FrmBillAttr.BtnNewLable, "新建", "新建", true, false, 0, 50, 20);
-                map.AddDDLSysEnum(FrmDictAttr.BtnNewModel, 0, "新建模式", true, true, FrmDictAttr.BtnNewModel,
-                  "@0=表格模式@1=卡片模式@2=不可用", true);
+                //map.AddTBString(FrmBillAttr.BtnNewLable, "新建", "新建", true, false, 0, 50, 20);
+                //map.AddDDLSysEnum(FrmDictAttr.BtnNewModel, 0, "新建模式", true, true, FrmDictAttr.BtnNewModel,
+                //  "@0=表格模式@1=卡片模式@2=不可用", true);
 
 
-                map.AddTBString(FrmBillAttr.BtnSaveLable, "保存", "保存", true, false, 0, 50, 20);
-                //map.AddBoolean(FrmBillAttr.BtnSaveEnable, true, "是否可用？", true, true);
+                //map.AddTBString(FrmBillAttr.BtnSaveLable, "保存", "保存", true, false, 0, 50, 20);
+                ////map.AddBoolean(FrmBillAttr.BtnSaveEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnSubmitLable, "提交", "提交", true, false, 0, 50, 20);
+                //map.AddTBString(FrmBillAttr.BtnSubmitLable, "提交", "提交", true, false, 0, 50, 20);
 
-                map.AddTBString(FrmBillAttr.BtnDelLable, "删除", "删除", true, false, 0, 50, 20);
-                //map.AddBoolean(FrmBillAttr.BtnDelEnable, true, "是否可用？", true, true);
+                //map.AddTBString(FrmBillAttr.BtnDelLable, "删除", "删除", true, false, 0, 50, 20);
+                ////map.AddBoolean(FrmBillAttr.BtnDelEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnSearchLabel, "列表", "列表", true, false, 0, 50, 20);
-                //map.AddBoolean(FrmBillAttr.BtnSearchEnable, true, "是否可用？", true, true);
+                //map.AddTBString(FrmBillAttr.BtnSearchLabel, "列表", "列表", true, false, 0, 50, 20);
+                ////map.AddBoolean(FrmBillAttr.BtnSearchEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnGroupEnable, false, "是否可用？", true, true);
+                //map.AddTBString(FrmBillAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
+                //map.AddBoolean(FrmBillAttr.BtnGroupEnable, false, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnPrintHtml, "打印Html", "打印Html", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnPrintHtmlEnable, false, "是否可用？", true, true);
+                //map.AddTBString(FrmBillAttr.BtnPrintHtml, "打印Html", "打印Html", true, false, 0, 50, 20);
+                //map.AddBoolean(FrmBillAttr.BtnPrintHtmlEnable, false, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnPrintPDF, "打印PDF", "打印PDF", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnPrintPDFEnable, false, "是否可用？", true, true);
+                //map.AddTBString(FrmBillAttr.BtnPrintPDF, "打印PDF", "打印PDF", true, false, 0, 50, 20);
+                //map.AddBoolean(FrmBillAttr.BtnPrintPDFEnable, false, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnPrintRTF, "打印RTF", "打印RTF", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnPrintRTFEnable, false, "是否可用？", true, true);
+                //map.AddTBString(FrmBillAttr.BtnPrintRTF, "打印RTF", "打印RTF", true, false, 0, 50, 20);
+                //map.AddBoolean(FrmBillAttr.BtnPrintRTFEnable, false, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnPrintCCWord, "打印CCWord", "打印CCWord", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnPrintCCWordEnable, false, "是否可用？", true, true);
+                //map.AddTBString(FrmBillAttr.BtnPrintCCWord, "打印CCWord", "打印CCWord", true, false, 0, 50, 20);
+                //map.AddBoolean(FrmBillAttr.BtnPrintCCWordEnable, false, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnExpZip, "导出zip文件", "导出zip文件", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnExpZipEnable, false, "是否可用？", true, true);
+                //map.AddTBString(FrmBillAttr.BtnExpZip, "导出zip文件", "导出zip文件", true, false, 0, 50, 20);
+                //map.AddBoolean(FrmBillAttr.BtnExpZipEnable, false, "是否可用？", true, true);
 
 
                 map.AddTBString(FrmBillAttr.BtnRefBill, "关联单据", "关联单据", true, false, 0, 50, 20);
@@ -302,14 +301,14 @@ namespace BP.CCBill
 
                 #region 查询按钮权限.
 
-                map.AddTBString(FrmBillAttr.BtnImpExcel, "导入", "导入Excel文件", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnImpExcelEnable, true, "是否可用？", true, true);
+                //map.AddTBString(FrmBillAttr.BtnImpExcel, "导入", "导入Excel文件", true, false, 0, 50, 20);
+                //map.AddBoolean(FrmBillAttr.BtnImpExcelEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnExpExcel, "导出", "导出Excel文件", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnExpExcelEnable, true, "是否可用？", true, true);
+                //map.AddTBString(FrmBillAttr.BtnExpExcel, "导出", "导出Excel文件", true, false, 0, 50, 20);
+                //map.AddBoolean(FrmBillAttr.BtnExpExcelEnable, true, "是否可用？", true, true);
 
-                map.AddTBString(FrmBillAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
-                map.AddBoolean(FrmBillAttr.BtnGroupEnable, true, "是否可用？", true, true);
+                //map.AddTBString(FrmBillAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
+                //map.AddBoolean(FrmBillAttr.BtnGroupEnable, true, "是否可用？", true, true);
 
                 #endregion 查询按钮权限.
 
@@ -333,6 +332,16 @@ namespace BP.CCBill
 
                 #region 基本功能.
                 RefMethod rm = new RefMethod();
+
+                rm = new RefMethod();
+                rm.Title = "按钮权限"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".ToolbarSetting";
+                rm.Icon = "../../WF/Img/Event.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
                 rm = new RefMethod();
                 rm.Title = "设计表单"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoDesigner";
@@ -349,7 +358,7 @@ namespace BP.CCBill
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
                 //rm.GroupName = "开发接口";
-                map.AddRefMethod(rm);
+               // map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "打开单据数据"; // "设计表单";
@@ -391,14 +400,14 @@ namespace BP.CCBill
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "执行方法"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoMethod";
-                rm.Icon = "../../WF/Img/Event.png";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "执行方法"; // "设计表单";
+                //rm.ClassMethodName = this.ToString() + ".DoMethod";
+                //rm.Icon = "../../WF/Img/Event.png";
+                //rm.Visable = true;
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.Target = "_blank";
+                //map.AddRefMethod(rm);
                 #endregion 基本功能.
 
                 #region 权限规则.
@@ -503,55 +512,162 @@ namespace BP.CCBill
                 return this._enMap;
             }
         }
-        protected void InsertCtrlModel()
+        public void InsertToolbarBtns()
         {
-            //保存权限表
-            CtrlModel ctrl = new CtrlModel();
+            //表单的工具栏权限
+            ToolbarBtn btn = new ToolbarBtn();
+            btn.FrmID = this.No;
+            btn.BtnID = "New";
+            btn.BtnLab = "新建";
+            btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+            btn.SetValByKey("Idx", 0);
+            btn.Insert();
 
-            ctrl.FrmID = this.No;
-            ctrl.CtrlObj = "BtnNew";
-            ctrl.IsEnableAll = true;
-            ctrl.setMyPK(ctrl.FrmID + "_" + ctrl.CtrlObj);
-            if (ctrl.RetrieveFromDBSources() == 0)
-                ctrl.Insert();
 
-            ctrl = new CtrlModel();
-            ctrl.FrmID = this.No;
-            ctrl.CtrlObj = "BtnSave";
-            ctrl.IsEnableAll = true;
-            ctrl.setMyPK(ctrl.FrmID + "_" + ctrl.CtrlObj);
-            if (ctrl.RetrieveFromDBSources() == 0)
-                ctrl.Insert();
+            btn = new ToolbarBtn();
+            btn.FrmID = this.No;
+            btn.BtnID = "Save";
+            btn.BtnLab = "保存";
+            btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+            btn.SetValByKey("Idx", 1);
+            btn.Insert();
 
-            ctrl = new CtrlModel();
-            ctrl.FrmID = this.No;
-            ctrl.CtrlObj = "BtnSubmit";
-            ctrl.IsEnableAll = true;
-            ctrl.setMyPK(ctrl.FrmID + "_" + ctrl.CtrlObj);
-            if (ctrl.RetrieveFromDBSources() == 0)
-                ctrl.Insert();
+           
+            //单据增加提交的功能
+            btn = new ToolbarBtn();
+            btn.FrmID = this.No;
+            btn.BtnID = "Submit";
+            btn.BtnLab = "提交";
+            btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+            btn.SetValByKey("Idx", 1);
+            btn.Insert();
+           
 
-            ctrl = new CtrlModel();
-            ctrl.FrmID = this.No;
-            ctrl.CtrlObj = "BtnDelete";
-            ctrl.IsEnableAll = true;
-            ctrl.setMyPK(ctrl.FrmID + "_" + ctrl.CtrlObj);
-            if (ctrl.RetrieveFromDBSources() == 0)
-                ctrl.Insert();
+            btn = new ToolbarBtn();
+            btn.FrmID = this.No;
+            btn.BtnID = "Delete";
+            btn.BtnLab = "删除";
+            btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+            btn.SetValByKey("Idx", 2);
+            btn.Insert();
 
-            ctrl = new CtrlModel();
-            ctrl.FrmID = this.No;
-            ctrl.CtrlObj = "BtnSearch";
-            ctrl.IsEnableAll = true;
-            ctrl.setMyPK(ctrl.FrmID + "_" + ctrl.CtrlObj);
-            if (ctrl.RetrieveFromDBSources() == 0)
-                ctrl.Insert();
-            base.afterInsert();
+            btn = new ToolbarBtn();
+            btn.FrmID = this.No;
+            btn.BtnID = "PrintHtml";
+            btn.BtnLab = "打印Html";
+            btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+            btn.IsEnable = false;
+            btn.SetValByKey("Idx", 3);
+            btn.Insert();
+
+            btn = new ToolbarBtn();
+            btn.FrmID = this.No;
+            btn.BtnID = "PrintPDF";
+            btn.BtnLab = "打印PDF";
+            btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+            btn.IsEnable = false;
+            btn.SetValByKey("Idx", 4);
+            btn.Insert();
+
+            btn = new ToolbarBtn();
+            btn.FrmID = this.No;
+            btn.BtnID = "PrintRTF";
+            btn.BtnLab = "打印RTF";
+            btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+            btn.IsEnable = false;
+            btn.SetValByKey("Idx", 5);
+            btn.Insert();
+
+            btn = new ToolbarBtn();
+            btn.FrmID = this.No;
+            btn.BtnID = "PrintCCWord";
+            btn.BtnLab = "打印CCWord";
+            btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+            btn.IsEnable = false;
+            btn.SetValByKey("Idx", 6);
+            btn.Insert();
+
+            btn = new ToolbarBtn();
+            btn.FrmID = this.No;
+            btn.BtnID = "ExpZip";
+            btn.BtnLab = "导出Zip包";
+            btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+            btn.IsEnable = false;
+            btn.SetValByKey("Idx", 7);
+            btn.Insert();
+
+            //列表权限
+            //查询
+            Collection collection = new Collection();
+            collection.FrmID = this.No;
+            collection.MethodID = "Search";
+            collection.Name = "查询";
+            collection.MethodModel = "Search";
+            collection.Mark = "Search";
+            collection.No = collection.FrmID + "_" + collection.MethodID;
+            collection.SetValByKey("Idx", 0);
+            collection.Insert();
+
+
+            //新建
+            collection = new Collection();
+            collection.FrmID = this.No;
+            collection.MethodID = "New";
+            collection.Name = "新建";
+            collection.MethodModel = "New";
+            collection.Mark = "New";
+            collection.No = collection.FrmID + "_" + collection.MethodID;
+            collection.SetValByKey("Idx", 1);
+            collection.Insert();
+
+            //删除
+            collection = new Collection();
+            collection.FrmID = this.No;
+            collection.MethodID = "Delete";
+            collection.Name = "删除";
+            collection.MethodModel = "Delete";
+            collection.Mark = "Delete";
+            collection.No = collection.FrmID + "_" + collection.MethodID;
+            collection.SetValByKey("Idx", 2);
+            collection.Insert();
+
+            collection = new Collection();
+            collection.FrmID = this.No;
+            collection.MethodID = "Group";
+            collection.Name = "分析";
+            collection.MethodModel = "Group";
+            collection.Mark = "Group";
+            collection.No = collection.FrmID + "_" + collection.MethodID;
+            collection.SetValByKey("Idx", 3);
+            collection.SetValByKey("IsEnable", false);
+            collection.Insert();
+
+            //导出
+            collection = new Collection();
+            collection.FrmID = this.No;
+            collection.MethodID = "ExpExcel";
+            collection.Name = "导出Excel";
+            collection.MethodModel = "ExpExcel";
+            collection.Mark = "ExpExcel";
+            collection.No = collection.FrmID + "_" + collection.MethodID;
+            collection.SetValByKey("Idx", 4);
+            collection.Insert();
+
+            //导入
+            collection = new Collection();
+            collection.FrmID = this.No;
+            collection.MethodID = "ImpExcel";
+            collection.Name = "导入Excel";
+            collection.MethodModel = "ImpExcel";
+            collection.Mark = "ImpExcel";
+            collection.No = collection.FrmID + "_" + collection.MethodID;
+            collection.SetValByKey("Idx", 5);
+            collection.Insert();
         }
 
-        protected override void afterInsertUpdateAction()
+        protected override void afterInsert()
         {
-            InsertCtrlModel();
+            InsertToolbarBtns();
             CheckEnityTypeAttrsFor_Bill();
 
             base.afterInsertUpdateAction();
@@ -649,9 +765,9 @@ namespace BP.CCBill
         }
         #endregion 报表定义.
 
-        public string DoMethod()
+        public string ToolbarSetting()
         {
-            return "../../CCBill/Admin/Method.htm?s=34&FrmID=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+            return "../../CCBill/Admin/ToolbarSetting.htm?s=34&FrmID=" + this.No;
         }
         public string DoPageLoadFull()
         {

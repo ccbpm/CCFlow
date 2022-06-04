@@ -7,6 +7,53 @@ using System.Threading.Tasks;
 namespace BP.Sys
 {
     /// <summary>
+    /// 运行模式
+    /// </summary>
+    public enum CCBPMRunModel
+    {
+        /// <summary>
+        /// 单机版
+        /// </summary>
+        Single,
+        /// <summary>
+        /// 集团模式
+        /// </summary>
+        GroupInc,
+        /// <summary>
+        /// 多租户模式
+        /// </summary>
+        SAAS
+    }
+    /// <summary>
+    /// 组织结构类型
+    /// </summary>
+    public enum OSModel
+    {
+        /// <summary>
+        /// 一个人一个部门模式.
+        /// </summary>
+        OneOne,
+        /// <summary>
+        /// 一个人多个部门模式
+        /// </summary>
+        OneMore
+    }
+    
+    /// <summary>
+    /// 运行平台
+    /// </summary>
+    public enum Plant
+    {
+        /// <summary>
+        /// 默认不打开.
+        /// </summary>
+        CSharp,
+        /// <summary>
+        /// 打开
+        /// </summary>
+        Java
+    }
+    /// <summary>
     /// 按日期查询方式
     /// </summary>
     public enum DTSearchWay
@@ -52,7 +99,7 @@ namespace BP.Sys
         /// <summary>
         /// 傻瓜表单
         /// </summary>
-        FoolForm = 0,        
+        FoolForm = 0,
         /// <summary>
         /// URL表单(自定义)
         /// </summary>
@@ -84,7 +131,10 @@ namespace BP.Sys
         /// <summary>
         /// 外部数据源列表
         /// </summary>
-        DBList = 100
-
+        DBList = 100,
+        /// <summary>
+        /// 章节表单
+        /// </summary>
+        ChapterFrm= 10
     }
 }

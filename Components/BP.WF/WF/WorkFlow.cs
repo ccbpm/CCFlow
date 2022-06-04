@@ -1074,7 +1074,7 @@ namespace BP.WF
             {
                 log.CheckPhysicsTable();
                 log.Delete();
-                return ex.StackTrace;
+                throw new Exception(ex.StackTrace);
             }
         }
 
@@ -1252,7 +1252,7 @@ namespace BP.WF
 
             #region 处理后续的业务.
 
-            string dbstr = SystemConfig.AppCenterDBVarStr;
+            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             if (1 == 2)
             {
@@ -1286,9 +1286,9 @@ namespace BP.WF
 
             // 设置流程完成状态.
             ps = new Paras();
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
                 ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET  FlowEmps= FlowEmps ||'" + emps + "', WFState=:WFState,WFSta=:WFSta WHERE OID=" + dbstr + "OID";
-            else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
                 ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET FlowEmps= CONCAT(FlowEmps ,'" + emps + "'), WFState=@WFState,WFSta=@WFSta WHERE OID=" + dbstr + "OID";
             else
                 ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET FlowEmps= FlowEmps + '" + emps + "', WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta WHERE OID=" + dbstr + "OID";
@@ -1323,7 +1323,7 @@ namespace BP.WF
             //执行最后一个子流程发送后的检查，不管是否成功，都要结束该流程。
             stopMsg += WorkNodePlus.SubFlowEvent(wn);
 
-            //string dbstr = SystemConfig.AppCenterDBVarStr;
+            //string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
 
             #region 处理审核问题,更新审核组件插入的审核意见中的 到节点，到人员。
             ps = new Paras();
@@ -1411,7 +1411,7 @@ namespace BP.WF
 
             /* 执行 WF_GenerWorkFlow 冻结. */
             int sta = (int)WFState.Fix;
-            string dbstr = SystemConfig.AppCenterDBVarStr;
+            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + dbstr + "WFState WHERE WorkID=" + dbstr + "WorkID";
             ps.Add(GenerWorkFlowAttr.WFState, sta);
@@ -1471,7 +1471,7 @@ namespace BP.WF
 
             /* 执行 WF_GenerWorkFlow 冻结. */
             int sta = (int)WFState.Runing;
-            string dbstr = SystemConfig.AppCenterDBVarStr;
+            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + dbstr + "WFState WHERE WorkID=" + dbstr + "WorkID";
             ps.Add(GenerWorkFlowAttr.WFState, sta);
@@ -1787,7 +1787,7 @@ namespace BP.WF
             {
                 if (_AppType == null)
                 {
-                    if (SystemConfig.IsBSsystem == false)
+                    if (BP.Difference.SystemConfig.IsBSsystem == false)
                     {
                         _AppType = "WF";
                     }
@@ -1812,7 +1812,7 @@ namespace BP.WF
             {
                 if (_VirPath == null)
                 {
-                    if (SystemConfig.IsBSsystem)
+                    if (BP.Difference.SystemConfig.IsBSsystem)
                         _VirPath = HttpContextHelper.RequestApplicationPath; // _VirPath = BP.Sys.Base.Glo.Request.ApplicationPath;
                     else
                         _VirPath = "";
@@ -1862,7 +1862,7 @@ namespace BP.WF
 
             /* 执行 WF_GenerWorkFlow 挂起. */
             int hungSta = (int)WFState.Hungup;
-            string dbstr = SystemConfig.AppCenterDBVarStr;
+            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
 
             //更新挂起状态.
             this.HisGenerWorkFlow.WFState = WFState.Hungup;
@@ -1927,7 +1927,7 @@ namespace BP.WF
             this.HisGenerWorkFlow.Update();
 
             // 更新流程报表的状态。 
-            string dbstr = SystemConfig.AppCenterDBVarStr;
+            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps = new Paras();
             ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET WFState=2 WHERE OID=" + dbstr + "OID";
@@ -1965,7 +1965,7 @@ namespace BP.WF
             this.HisGenerWorkFlow.Update();
 
             // 更新流程报表的状态。 
-            string dbstr = SystemConfig.AppCenterDBVarStr;
+            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps = new Paras();
             ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET WFState=2 WHERE OID=" + dbstr + "OID";

@@ -30,19 +30,9 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.FK_MapData, value);
             }
         }
-        /// <summary>
-        /// 最大长度
-        /// </summary>
-        public int MaxLen
+        public string getFrmID()
         {
-            get
-            {
-                return this.GetValIntByKey(MapAttrAttr.MaxLen);
-            }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.MaxLen, value);
-            }
+            return this.GetValStringByKey(MapAttrAttr.FK_MapData);
         }
         
         /// <summary>
@@ -57,20 +47,6 @@ namespace BP.Sys.FrmUI
             set
             {
                 this.SetValByKey(MapAttrAttr.KeyOfEn, value);
-            }
-        }
-        /// <summary>
-        /// 控件类型
-        /// </summary>
-        public UIContralType UIContralType
-        {
-            get
-            {
-                return (UIContralType)this.GetValIntByKey(MapAttrAttr.UIContralType);
-            }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.UIContralType, (int)value);
             }
         }
         #endregion
@@ -161,9 +137,9 @@ namespace BP.Sys.FrmUI
                 map.SetHelperAlert(MapAttrAttr.ColSpan, "对于傻瓜表单有效: 标识该字段TextBox横跨的宽度,占的单元格数量.");
 
                 //文本占单元格数量
-                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "Label单元格数量", true, true, "ColSpanAttrString",
+                map.AddDDLSysEnum(MapAttrAttr.LabelColSpan, 1, "Label单元格数量", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格@5=跨6个单元格@6=跨6个单元格");
-                map.SetHelperAlert(MapAttrAttr.TextColSpan, "对于傻瓜表单有效: 标识该字段Lable，标签横跨的宽度,占的单元格数量.");
+                map.SetHelperAlert(MapAttrAttr.LabelColSpan, "对于傻瓜表单有效: 标识该字段Lable，标签横跨的宽度,占的单元格数量.");
 
 
                 //文本跨行
@@ -194,16 +170,27 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "帮助弹窗显示";
+                rm.ClassMethodName = this.ToString() + ".DoFieldBigHelper()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-settings";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
                 rm.Title = "视频教程";
                 rm.ClassMethodName = this.ToString() + ".DoVideo()";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
-
                 this._enMap = map;
                 return this._enMap;
             }
         }
+        public string DoFieldBigHelper()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/FieldBigHelper.htm?FK_MapData=" + this.getFrmID() + "&KeyOfEn=" + this.KeyOfEn;
+        }
+
         public string DoVideo()
         {
             return "https://www.bilibili.com/video/BV1EK411T7U4";
@@ -240,17 +227,16 @@ namespace BP.Sys.FrmUI
         protected override void afterDelete()
         {
             
-
             //删除相对应的rpt表中的字段
-            if (this.FK_MapData.Contains("ND") == true)
+            if (this.getFrmID().Contains("ND") == true)
             {
-                string fk_mapData = this.FK_MapData.Substring(0, this.FK_MapData.Length - 2) + "Rpt";
+                string fk_mapData = this.getFrmID().Substring(0, this.getFrmID().Length - 2) + "Rpt";
                 string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND( KeyOfEn='" + this.KeyOfEn + "T' OR KeyOfEn='" + this.KeyOfEn+"')";
                 DBAccess.RunSQL(sql);
             }
 
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.getFrmID());
 
             base.afterDelete();
         }
@@ -264,7 +250,7 @@ namespace BP.Sys.FrmUI
             mapAttr.Update();
 
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.getFrmID());
 
             base.afterInsertUpdateAction();
         }
@@ -274,9 +260,9 @@ namespace BP.Sys.FrmUI
         public string DoRenameField(string newField)
         {
             string sql = "";
-            if (this.FK_MapData.IndexOf("ND") == 0)
+            if (this.getFrmID().IndexOf("ND") == 0)
             {
-                string strs = this.FK_MapData.Replace("ND", "");
+                string strs = this.getFrmID().Replace("ND", "");
                 strs = strs.Substring(0, strs.Length - 2);
 
                 string rptTable = "ND" + strs + "Rpt";
@@ -291,13 +277,12 @@ namespace BP.Sys.FrmUI
             }
             else
             {
-                sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "', MyPK='" + this.FK_MapData + "_" +  newField + "'  WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
+                sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "', MyPK='" + this.getFrmID() + "_" +  newField + "'  WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.getFrmID() + "'";
                 DBAccess.RunSQL(sql);
             }
 
             return "重名称成功,如果是自由表单，请关闭表单设计器重新打开.";
         }
-       
 
         #region 重载.
         protected override bool beforeUpdateInsertAction()
@@ -306,51 +291,12 @@ namespace BP.Sys.FrmUI
             attr.setMyPK(this.MyPK);
             attr.RetrieveFromDBSources();
 
-            #region 自动扩展字段长度. 需要翻译.
-            if (attr.MaxLen < this.MaxLen )
-            {
-                attr.setMaxLen(this.MaxLen);
-
-                string sql = "";
-                MapData md = new MapData();
-                md.No = this.FK_MapData;
-                if (md.RetrieveFromDBSources() == 1)
-                {
-                    if (DBAccess.IsExitsTableCol(md.PTable, this.KeyOfEn) == true)
-                    {
-                        switch (SystemConfig.AppCenterDBType)
-                        {
-                            case DBType.MSSQL:
-                                sql = "ALTER TABLE " + md.PTable + " ALTER column " + this.KeyOfEn + " NVARCHAR(" + attr.MaxLen + ")";
-                                break;
-                            case DBType.MySQL:
-                                sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
-                                break;
-                            case DBType.Oracle:
-                            case DBType.DM:
-                                sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR2(" + attr.MaxLen + ")";
-                                break;
-                            case DBType.PostgreSQL:
-                            case DBType.UX:
-                                sql = "ALTER table " + md.PTable + " alter " + attr.Field + " type character varying(" + attr.MaxLen + ")";
-                                break;
-                            default:
-                                throw new Exception("err@没有判断的数据库类型.");
-                                break;
-                        }
-
-                        DBAccess.RunSQL(sql); //如果是oracle如果有nvarchar与varchar类型，就会出错.
-                    }
-                }
-            }
-            #endregion 自动扩展字段长度.
-
             //强制设置为签批组件.
-            this.UIContralType =  UIContralType.SignCheck;
+            this.SetValByKey(MapAttrAttr.UIContralType,  (int)UIContralType.SignCheck);
 
             //默认值.
             string defval = this.GetValStrByKey("ExtDefVal");
-            if (defval == "" || defval == "0")
+            if (defval.Equals("") == true || defval.Equals("0")==true )
             {
                 string defVal = this.GetValStrByKey("DefVal");
                 if (defval.Contains("@") == true)
@@ -364,7 +310,7 @@ namespace BP.Sys.FrmUI
             //执行保存.
             attr.Save();
 
-            if (this.GetValStrByKey("GroupID") == "无")
+            if (this.GetValStrByKey("GroupID").Equals("无")==true)
                 this.SetValByKey("GroupID", "0");
 
             return base.beforeUpdateInsertAction();

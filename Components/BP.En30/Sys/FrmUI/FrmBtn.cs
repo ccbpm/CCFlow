@@ -129,7 +129,6 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(MapAttrAttr.Name, null, "按钮标签(文字)", true, false, 0, 50, 20);
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "按钮ID", true, true, 0, 50, 20);
 
-
                 map.AddDDLSysEnum(MapAttrAttr.UIIsEnable, 0, "事件类型", true, true, FrmBtnAttr.EventType,
                 "@0=禁用@1=执行URL@2=执行CCFromRef.js");
                 //  map.AddBoolean(FrmBtnAttr.UIIsEnable, true, "是否可用", true, true);
@@ -144,9 +143,9 @@ namespace BP.Sys.FrmUI
                 map.SetHelperAlert(MapAttrAttr.ColSpan, "对于傻瓜表单有效: 标识该字段TextBox横跨的宽度,占的单元格数量.");
 
                 //文本占单元格数量
-                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "Label单元格数量", true, true, "ColSpanAttrString",
+                map.AddDDLSysEnum(MapAttrAttr.LabelColSpan, 1, "Label单元格数量", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格@5=跨6个单元格@6=跨6个单元格");
-                map.SetHelperAlert(MapAttrAttr.TextColSpan, "对于傻瓜表单有效: 标识该字段Lable，标签横跨的宽度,占的单元格数量.");
+                map.SetHelperAlert(MapAttrAttr.LabelColSpan, "对于傻瓜表单有效: 标识该字段Lable，标签横跨的宽度,占的单元格数量.");
 
                 //map.AddTBString(FrmBtnAttr.UACContext, null, "控制内容", false, false, 0, 3900, 20);
                 //map.AddDDLSysEnum(FrmBtnAttr.EventType, 0, "事件类型", true, true, FrmBtnAttr.EventType,

@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Data;
-using System.Text;
 using BP.WF;
 using BP.En;
 using BP.DA;
 using BP.Web;
-using BP.En;
-using BP.WF.Template;
-using BP.WF.Data;
 using BP.Sys;
 
 namespace BP.CCBill
@@ -27,11 +23,11 @@ namespace BP.CCBill
         /// <param name="workID"></param>
         /// <param name="msg"></param>
         /// <returns></returns>
-        public static void Dict_AddTrack(string frmID, Int64 frmWorkID, string at, string msg, string paras = null,
+        public static void Dict_AddTrack(string frmID, string frmWorkID, string at, string msg, string paras = null,
             string flowNo = null, string flowName = null, int nodeID = 0, Int64 workIDOfFlow = 0, string frmName = "")
         {
             BP.CCBill.Track tk = new BP.CCBill.Track();
-            tk.WorkID = frmWorkID.ToString();
+            tk.WorkID = frmWorkID;
             tk.FrmID = frmID;
             tk.FrmName = frmName;
             tk.ActionType = at;
@@ -158,7 +154,7 @@ namespace BP.CCBill
 
 
             //创建rpt.
-            BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt(frmID);
+            BP.WF.GERpt rpt = new BP.WF.GERpt(frmID);
 
             //设置标题.
             if (fb.EntityType == EntityType.FrmBill)
@@ -188,7 +184,7 @@ namespace BP.CCBill
                 rpt.Copy(htParas);
 
             //更新基础的数据到表单表.
-            // rpt = new BP.WF.Data.GERpt(frmID);
+            // rpt = new BP.WF.GERpt(frmID);
             rpt.SetValByKey("BillState", (int)gb.BillState);
             rpt.SetValByKey("Starter", gb.Starter);
             rpt.SetValByKey("StarterName", gb.StarterName);
@@ -207,7 +203,7 @@ namespace BP.CCBill
             rpt.OID = gb.WorkID;
             rpt.InsertAsOID(gb.WorkID);
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, rpt.OID, FrmActionType.Create, "创建记录");
+            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, rpt.OID.ToString(), FrmActionType.Create, "创建记录");
 
             return gb.WorkID;
         }
@@ -260,7 +256,7 @@ namespace BP.CCBill
             rpt.InsertAsOID(rpt.OID);
 
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, rpt.OID, FrmActionType.Create, "创建记录");
+            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, rpt.OID.ToString(), FrmActionType.Create, "创建记录");
 
             return rpt.OID;
         }
@@ -302,7 +298,7 @@ namespace BP.CCBill
             rpt.SetValByKey("RDT", DataType.CurrentDate);
             rpt.Update();
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, workid, FrmActionType.Save, "执行保存");
+            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, workid.ToString(), FrmActionType.Save, "执行保存");
 
         }
 
@@ -325,7 +321,7 @@ namespace BP.CCBill
             gb.BillState = BillState.Editing;
 
             //创建rpt.
-            BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt(gb.FrmID, workID);
+            BP.WF.GERpt rpt = new BP.WF.GERpt(gb.FrmID, workID);
 
             if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict)
             {
@@ -360,7 +356,7 @@ namespace BP.CCBill
             rpt.BillNo = gb.BillNo;
             rpt.Update();
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, rpt.OID, FrmActionType.Save, "保存");
+            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, rpt.OID.ToString(), FrmActionType.Save, "保存");
 
             return "保存成功...";
         }
@@ -385,7 +381,7 @@ namespace BP.CCBill
             gb.BillState = BillState.Over;
 
             //创建rpt.
-            BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt(gb.FrmID, workID);
+            BP.WF.GERpt rpt = new BP.WF.GERpt(gb.FrmID, workID);
 
             if (fb.EntityType == EntityType.EntityTree || fb.EntityType == EntityType.FrmDict)
             {
@@ -419,7 +415,7 @@ namespace BP.CCBill
             rpt.BillNo = gb.BillNo;
             rpt.Update();
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, workID, FrmActionType.Submit, "执行提交.");
+            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, workID.ToString(), FrmActionType.Submit, "执行提交.");
 
 
             return "提交成功...";
@@ -526,7 +522,7 @@ namespace BP.CCBill
             gb.NDStepName = "启动";
 
             //创建rpt.
-            BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt(frmID, workID);
+            BP.WF.GERpt rpt = new BP.WF.GERpt(frmID, workID);
 
             //设置标题.
             gb.Title = Dev2Interface.GenerTitle(fb.TitleRole, rpt);
@@ -613,7 +609,7 @@ namespace BP.CCBill
             }
             #endregion 复制表单其他数据.
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, workID, "复制", "执行复制");
+            BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, workID.ToString(), "复制", "执行复制");
 
 
             return "复制成功.";

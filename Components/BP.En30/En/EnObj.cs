@@ -60,23 +60,6 @@ namespace BP.En
         }
         #endregion
 
-        #region 取出外部配置的属性信息
-        /// <summary>
-        /// 取出Map 的扩展属性。
-        /// 用于第3方的扩展属性开发。
-        /// </summary>
-        /// <param name="key">属性Key</param>
-        /// <returns>设置的属性</returns>
-        public string GetMapExtAttrByKey(string key)
-        {
-            Paras ps = new Paras();
-            ps.Add("enName", this.ToString());
-            ps.Add("key", key);
-
-            return (string)DBAccess.RunSQLReturnVal("select attrValue from Sys_ExtMap WHERE className=" + SystemConfig.AppCenterDBVarStr + "enName AND attrKey=" + SystemConfig.AppCenterDBVarStr + "key", ps);
-        }
-        #endregion
-
         #region CreateInstance
         /// <summary>
         /// 创建一个实例
@@ -161,13 +144,15 @@ namespace BP.En
                         case 6:
                             dataFormat = "MM-dd";
                             break;
+                        case 7:
+                            dataFormat = "yyyy";
+                            break;
                         default:
                             throw new Exception("没有找到指定的时间类型");
                     }
                     this.SetValByKey(attr.Key, DataType.CurrentDateByFormart(dataFormat));
                     continue;
                 }
-
             }
         }
         /// <summary>
@@ -199,7 +184,7 @@ namespace BP.En
                 string v = attr.DefaultValOfReal as string;
 
                 //先判断是否设置了字段权限
-                if (dt!=null && dt.Rows.Count != 0)
+                if (dt != null && dt.Rows.Count != 0)
                 {
                     string mypk = fk_mapdata + "_" + fk_node + "_" + attr.Key;
                     foreach (DataRow dr in dt.Rows)
@@ -323,6 +308,9 @@ namespace BP.En
                             case 6:
                                 dataFormat = "MM-dd";
                                 break;
+                            case 7:
+                                dataFormat = "yyyy";
+                                break;
                             default:
                                 throw new Exception("没有找到指定的时间类型");
                         }
@@ -367,7 +355,7 @@ namespace BP.En
                         }
                         continue;
                     default:
-                        if (SystemConfig.IsBSsystem == true && HttpContextHelper.RequestParamKeys.Contains(v.Replace("@", "")) == true)
+                        if (BP.Difference.SystemConfig.IsBSsystem == true && HttpContextHelper.RequestParamKeys.Contains(v.Replace("@", "")) == true)
                         {
                             if (attr.UIIsReadonly == true)
                             {
@@ -378,7 +366,7 @@ namespace BP.En
                                 if (DataType.IsNullOrEmpty(myval) || myval == v)
                                     this.SetValByKey(attr.Key, HttpContextHelper.RequestParams(v.Replace("@", "")));
                             }
-                            continue; 
+                            continue;
                         }
                         GloVar gloVar = new GloVar();
                         gloVar.PKVal = v;
@@ -515,9 +503,7 @@ namespace BP.En
                 }
             }
 
-
-
-            if (exp.Contains("@") && SystemConfig.IsBSsystem == true)
+            if (exp.Contains("@") && BP.Difference.SystemConfig.IsBSsystem == true)
             {
                 /*如果是bs*/
                 foreach (string key in HttpContextHelper.RequestParamKeys)
@@ -620,7 +606,7 @@ namespace BP.En
                 }
 
                 Map mp = (Map)value;
-                if (SystemConfig.IsDebug)
+                if (BP.Difference.SystemConfig.IsDebug)
                 {
 
                 }
@@ -780,31 +766,6 @@ namespace BP.En
         public Object GetValByKey(string attrKey)
         {
             return this.Row.GetValByKey(attrKey);
-
-            //try
-            //{
-            //    return this.Row.GetValByKey(attrKey);				
-            //}
-            //catch(Exception ex)
-            //{
-            //    throw new Exception(ex.Message+"  "+attrKey+" EnsName="+this.ToString() );
-            //}
-        }
-        /// <summary>
-        /// GetValDateTime
-        /// </summary>
-        /// <param name="attrKey"></param>
-        /// <returns></returns>
-        public DateTime GetValDateTime(string attrKey)
-        {
-            try
-            {
-                return DataType.ParseSysDateTime2DateTime(this.GetValStringByKey(attrKey));
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("字段[" + this.EnMap.GetAttrByKey(attrKey).Desc + "],值[" + this.GetValStringByKey(attrKey) + "]，不是一个有效的时间格式.");
-            }
         }
         /// <summary>
         /// 在确定  attrKey 存在 map 的情况下才能使用它
@@ -844,7 +805,7 @@ namespace BP.En
 
             try
             {
-                return this.Row[attrKey].ToString();
+                return this.Row[attrKey] == null ? "" : this.Row[attrKey].ToString();
             }
             catch (Exception ex)
             {
@@ -957,11 +918,6 @@ namespace BP.En
             }
             catch (Exception ex)
             {
-                //if (SystemConfig.IsDebug == false)
-                //    throw new Exception("@[" + this.EnMap.GetAttrByKey(key).Desc + "]请输入数字，您输入的是[" + this.GetValStrByKey(key) + "]。");
-                //else
-                //    throw new Exception("@表[" + this.EnDesc + "]在获取属性[" + key + "]值,出现错误，不能将[" + this.GetValStringByKey(key) + "]转换为int类型.错误信息：" + ex.Message + "@请检查是否在存储枚举类型时，您在SetValbyKey中没有转换。正确做法是:this.SetValByKey( Key ,(int)value)  ");
-
                 string v = this.GetValStrByKey(key).ToLower();
                 if (v == "null")
                     return 0;
@@ -1041,26 +997,7 @@ namespace BP.En
                 return defval;
             }
         }
-        public string GetValBoolStrByKey(string key)
-        {
-            if (int.Parse(this.GetValStringByKey(key)) == 0)
-                return "否";
-            else
-                return "是";
-        }
-        /// <summary>
-        /// 根据key 得到flaot val
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public float GetValFloatByKey(string key, int blNum)
-        {
-            string val = this.Row.GetValByKey(key).ToString();
-            if (DataType.IsNullOrEmpty(val))
-                return float.Parse(blNum.ToString("0.00"));
-
-            return float.Parse(float.Parse(val).ToString("0.00"));
-        }
+       
         /// <summary>
         /// 根据key 得到flaot val
         /// </summary>
@@ -1102,17 +1039,7 @@ namespace BP.En
                 throw new Exception("@表[" + this.EnDesc + "]在获取属性[" + key + "]值,出现错误，不能将[" + this.GetValStrByKey(key) + "]转换为 decimal 类型.错误信息：" + ex.Message);
             }
         }
-        public decimal GetValDecimalByKeyIsNullAsVal(string key, decimal val)
-        {
-            try
-            {
-                return GetValDecimalByKey(key);
-            }
-            catch (Exception ex)
-            {
-                return val;
-            }
-        }
+      
         public double GetValDoubleByKey(string key)
         {
             try
@@ -1176,30 +1103,7 @@ namespace BP.En
                 return true;
             }
         }
-        /// <summary>
-        /// 获取或者设置
-        /// 是不是空的实体.
-        /// </summary>
-        public bool IsEmpty
-        {
-            get
-            {
-                if (this._row == null)
-                {
-                    return true;
-                }
-                else
-                {
-                    if (this.PKVal == null || this.PKVal.ToString() == "0" || this.PKVal.ToString() == "")
-                        return true;
-                    return false;
-                }
-            }
-            set
-            {
-                this._row = null;
-            }
-        }
+      
         /// <summary>
         /// 对这个实体的描述
         /// </summary>
@@ -1261,7 +1165,7 @@ namespace BP.En
         {
             get
             {
-                if (this.PK == "OID")
+                if (this.PK.Equals("OID")==true)
                     return true;
                 return false;
             }
@@ -1273,7 +1177,7 @@ namespace BP.En
         {
             get
             {
-                if (this.PK == "No")
+                if (this.PK.Equals("No")==true)
                     return true;
                 return false;
             }
@@ -1290,18 +1194,7 @@ namespace BP.En
                 return false;
             }
         }
-        /// <summary>
-        /// 是不是IsMIDEntity
-        /// </summary>
-        public bool IsMIDEntity
-        {
-            get
-            {
-                if (this.PK == "MID")
-                    return true;
-                return false;
-            }
-        }
+     
         /// <summary>
         /// 如果只有一个主键,就返回PK,如果有多个就返回第一个.PK
         /// </summary>

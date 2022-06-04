@@ -477,6 +477,7 @@ namespace BP.WF
             }
         }
         #endregion
+         
 
         public string PushModel
         {
@@ -566,14 +567,14 @@ namespace BP.WF
                 System.Net.Mail.MailMessage myEmail = new System.Net.Mail.MailMessage();
 
                 //邮件地址.
-                string emailAddr = SystemConfig.GetValByKey("SendEmailAddress", null);
+                string emailAddr =  BP.Difference.SystemConfig.GetValByKey("SendEmailAddress", null);
                 if (emailAddr == null)
                 {
                     return false;
                     //emailAddr = "ccbpmtester@tom.com";
                 }
 
-                string emailPassword = SystemConfig.GetValByKey("SendEmailPass", null);
+                string emailPassword =  BP.Difference.SystemConfig.GetValByKey("SendEmailPass", null);
                 if (emailPassword == null)
                 {
                     return false;
@@ -582,7 +583,7 @@ namespace BP.WF
 
                 mailDoc = DataType.ParseText2Html(mailDoc);
 
-                string displayName = SystemConfig.GetValByKey("SendEmailDisplayName", "驰骋BPM");
+                string displayName =  BP.Difference.SystemConfig.GetValByKey("SendEmailDisplayName", "高凌BPM");
                 myEmail.From = new System.Net.Mail.MailAddress(emailAddr, displayName, System.Text.Encoding.UTF8);
 
                 myEmail.To.Add(mail);
@@ -596,14 +597,14 @@ namespace BP.WF
 
                 SmtpClient client = new SmtpClient();
                 client.UseDefaultCredentials = true;
-                if (SystemConfig.GetValByKeyInt("SendEmailEnableSsl", 1) == 1)
+                if (BP.Difference.SystemConfig.GetValByKeyInt("SendEmailEnableSsl", 1) == 1)
                     client.EnableSsl = true;  //经过ssl加密.
                 else
                     client.EnableSsl = false;
 
                 client.Credentials = new System.Net.NetworkCredential(emailAddr, emailPassword);
-                client.Port = SystemConfig.GetValByKeyInt("SendEmailPort", 587); //使用的端口
-                client.Host = SystemConfig.GetValByKey("SendEmailHost", "smtp.gmail.com");
+                client.Port =  BP.Difference.SystemConfig.GetValByKeyInt("SendEmailPort", 587); //使用的端口
+                client.Host =  BP.Difference.SystemConfig.GetValByKey("SendEmailHost", "smtp.gmail.com");
 
                 object userState = myEmail;
                 //调用自带的异步方法
@@ -626,14 +627,14 @@ namespace BP.WF
         public void SendMsgToSAAS()
         {
             //获取设置.
-            string messageUrl = SystemConfig.AppSettings["HandlerOfMessage"];
+            string messageUrl =  BP.Difference.SystemConfig.AppSettings["HandlerOfMessage"];
             if (DataType.IsNullOrEmpty(messageUrl) == true)
                 return;
 
             string httpUrl = messageUrl + "?Sender=" + BP.Web.WebUser.No + "&OrgNo=" + WebUser.OrgNo + "&ToUserIDs=" + this.SendToEmpNo + "&Title=" + this.Title + "&Docs=" + this.GetValDocText();
 
             string json = "";
-            if (SystemConfig.CustomerNo.Equals("YuTong") == true)
+            if (BP.Difference.SystemConfig.CustomerNo.Equals("YuTong") == true)
             {
                 json = "{";
                 json += " \"token\": '34c45c2b30512e8a8e10467cee45d7ed',";
@@ -675,7 +676,7 @@ namespace BP.WF
         public void DealYuTong()
         {
             //获取设置.
-            string messageUrl = SystemConfig.AppSettings["HandlerOfMessage"];
+            string messageUrl =  BP.Difference.SystemConfig.AppSettings["HandlerOfMessage"];
             if (DataType.IsNullOrEmpty(messageUrl) == true)
                 return;
 
@@ -711,13 +712,13 @@ namespace BP.WF
             try
             {
                 //如果是SAAS模式.
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
                     SendMsgToSAAS();
                     return;
                 }
 
-                if (SystemConfig.CustomerNo.Equals("YuTong") == true)
+                if (BP.Difference.SystemConfig.CustomerNo.Equals("YuTong") == true)
                 {
                     DealYuTong();
                     return;
@@ -757,7 +758,7 @@ namespace BP.WF
                 //    return;
                 //throw new Exception("发送短消息时接收人的手机号不能为空,否则接受不到消息");
 
-                string messageUrl = SystemConfig.AppSettings["HandlerOfMessage"];
+                string messageUrl =  BP.Difference.SystemConfig.AppSettings["HandlerOfMessage"];
                 if (DataType.IsNullOrEmpty(messageUrl) == true)
                     return;
 
@@ -818,6 +819,16 @@ namespace BP.WF
             }
             base.afterInsert();
         }
+        /// <summary>
+        /// 设置已读
+        /// </summary> 
+        public void DoRead()
+        {
+
+            this.IsRead = 1;
+            this.Update();
+        }
+
     }
     /// <summary>
     /// 消息s

@@ -7,149 +7,19 @@ using BP.Sys;
 namespace BP.En
 {
     /// <summary>
-    /// 实体附件类型
-    /// </summary>
-    public enum BPEntityAthType
-    {
-        /// <summary>
-        /// 无
-        /// </summary>
-        None,
-        /// <summary>
-        /// 单附件
-        /// </summary>
-        Single,
-        /// <summary>
-        /// 多附件
-        /// </summary>
-        Multi
-    }
-    /// <summary>
-    /// 编辑器类型
-    /// </summary>
-    public enum EditerType
-    {
-        /// <summary>
-        /// 无编辑器
-        /// </summary>
-        None,
-        /// <summary>
-        /// Sina编辑器
-        /// </summary>
-        Sina,
-        /// <summary>
-        /// FKEditer
-        /// </summary>
-        FKEditer,
-        /// <summary>
-        /// KindEditor
-        /// </summary>
-        KindEditor,
-        /// <summary>
-        /// 百度的UEditor
-        /// </summary>
-        UEditor
-    }
-    /// <summary>
-    /// 附件类型
-    /// </summary>
-    public enum AdjunctType
-    {
-        /// <summary>
-        /// 不需要附件。
-        /// </summary>
-        None,
-        /// <summary>
-        /// 图片
-        /// </summary>
-        PhotoOnly,
-        /// <summary>
-        /// word 文档。
-        /// </summary>
-        WordOnly,
-        /// <summary>
-        /// 所有的类型
-        /// </summary>
-        ExcelOnly,
-        /// <summary>
-        /// 所有的类型。
-        /// </summary>
-        AllType
-    }
-    /// <summary>
-    /// 实体类型
-    /// </summary>
-    public enum EnType
-    {
-        /// <summary>
-        /// 系统实体
-        /// </summary>
-        Sys,
-        /// <summary>
-        /// 管理员维护的实体
-        /// </summary>
-        Admin,
-        /// <summary>
-        /// 应用程序实体
-        /// </summary>
-        App,
-        /// <summary>
-        /// 第三方的实体（可以更新）
-        /// </summary>
-        ThirdPartApp,
-        /// <summary>
-        /// 视图(更新无效)
-        /// </summary>
-        View,
-        /// <summary>
-        /// 可以纳入权限管理
-        /// </summary>
-        PowerAble,
-        /// <summary>
-        /// 其他
-        /// </summary>
-        Etc,
-        /// <summary>
-        /// 明细或着点对点。
-        /// </summary>
-        Dtl,
-        /// <summary>
-        /// 点对点
-        /// </summary>
-        Dot2Dot,
-        /// <summary>
-        /// XML　类型
-        /// </summary>
-        XML,
-        /// <summary>
-        /// 扩展类型，它用于查询的需要。
-        /// </summary>
-        Ext
-    }
-    /// <summary>
-    /// 移动到显示方式
-    /// </summary>
-    public enum MoveToShowWay
-    {
-        /// <summary>
-        /// 不显示
-        /// </summary>
-        None,
-        /// <summary>
-        /// 下拉列表
-        /// </summary>
-        DDL,
-        /// <summary>
-        /// 平铺
-        /// </summary>
-        Panel
-    }
-    /// <summary>
     /// EnMap 的摘要说明。
     /// </summary>
     public class Map
     {
+        #region MapExt 类似的UI 设置.
+        public BP.En.FrmUI.Connections Connections = new FrmUI.Connections();
+        #endregion MapExt 类似的UI 设置.
+
         #region 帮助.
+        /// <summary>
+        /// 是否是加密字段
+        /// </summary>
+        public bool IsJM = false;
         /// <summary>
         /// 增加帮助
         /// </summary>
@@ -192,57 +62,6 @@ namespace BP.En
             attr.HelperUrl = "javascript:alert('" + context + "')";
         }
         #endregion 帮助.
-
-        #region 与xml 文件操作有关系
-        /// <summary>
-        /// xml 文件的位置
-        /// </summary>
-        public string XmlFile = null;
-        #endregion 与xml 文件操作有关系
-
-        /// <summary>
-        /// 是否数据加密
-        /// </summary>
-        public bool IsJM = false;
-        private bool _IsAllowRepeatNo;
-        public bool IsAllowRepeatNo
-        {
-            get { return _IsAllowRepeatNo; }
-            set { _IsAllowRepeatNo = value; }
-        }
-        #region chuli
-        /// <summary>
-        /// 查询语句(为了避免过多的资源浪费,一次性生成多次使用)
-        /// </summary>
-        public string SelectSQL = null;
-        /// <summary>
-        /// 是否是简单的属性集合
-        /// 这里是处理外键的问题，在系统的批量运行过程中太多的外键就会影响效率。
-        /// </summary>
-        public bool IsSimpleAttrs = false;
-        /// <summary>
-        /// 设置为简单的
-        /// </summary>
-        public Attrs SetToSimple()
-        {
-            Attrs attrs = new Attrs();
-            foreach (Attr attr in this._attrs)
-            {
-                if (attr.MyFieldType == FieldType.PK ||
-                    attr.MyFieldType == FieldType.PKEnum
-                    ||
-                    attr.MyFieldType == FieldType.PKFK)
-                {
-                    attrs.Add(new Attr(attr.Key, attr.Field, attr.DefaultVal, attr.MyDataType, true, attr.Desc));
-                }
-                else
-                {
-                    attrs.Add(new Attr(attr.Key, attr.Field, attr.DefaultVal, attr.MyDataType, false, attr.Desc));
-                }
-            }
-            return attrs;
-        }
-        #endregion
 
         #region 关于缓存问题
         public string _FK_MapData = null;
@@ -616,45 +435,6 @@ namespace BP.En
         }
         #endregion
 
-        #region 他的实体配置信息
-        private Attrs _HisCfgAttrs = null;
-        public Attrs HisCfgAttrs
-        {
-            get
-            {
-                if (this._HisCfgAttrs == null)
-                {
-                    this._HisCfgAttrs = new Attrs();
-                    if (BP.Web.WebUser.No.Equals("admin") == true)
-                    {
-
-                        this._HisCfgAttrs.AddDDLSysEnum("UIRowStyleGlo", 2, "表格数据行风格(应用全局)", true, false, "UIRowStyleGlo",
-                            "@0=无风格@1=交替风格@2=鼠标移动@3=交替并鼠标移动");
-
-                        this._HisCfgAttrs.AddBoolen("IsEnableDouclickGlo", true,
-                             "是否启动双击打开(应用全局)");
-
-                        this._HisCfgAttrs.AddBoolen("IsEnableFocusField", true, "是否启用焦点字段");
-                        this._HisCfgAttrs.AddTBString("FocusField", null, "焦点字段(用于显示点击打开的列",
-                            true, false, 0, 20, 20);
-                        this._HisCfgAttrs.AddBoolen("IsEnableRefFunc", true, "是否启用相关功能列");
-                        this._HisCfgAttrs.AddBoolen("IsEnableOpenICON", true, "是否启用打开图标");
-                        this._HisCfgAttrs.AddDDLSysEnum("MoveToShowWay", 0, "移动到显示方式", true, false,
-                            "MoveToShowWay", "@0=不显示@1=下拉列表@2=平铺");
-                        this._HisCfgAttrs.AddTBString("MoveTo", null, "移动到字段", true, false, 0, 20, 20);
-                        this._HisCfgAttrs.AddTBInt("WinCardW", 820, "弹出窗口宽度", true, false);
-                        this._HisCfgAttrs.AddTBInt("WinCardH", 480, "弹出窗口高度", true, false);
-                        this._HisCfgAttrs.AddDDLSysEnum("EditerType", 0, "大块文本编辑器",
-                            true, false, "EditerType", "@0=无@1=sina编辑器@2=FKCEditer@3=KindEditor@4=UEditor");
-                        this._HisCfgAttrs.AddTBString("ShowColumns", "", "选择列", false, false, 0, 1000, 100);    //added by liuxc,2015-8-7,增加选择列存储字段
-                                                                                                                //  this._HisCfgAttrs.AddDDLSysEnum("UIRowStyleGlo", 2, "表格数据行风格(应用全局)", true, false, "UIRowStyleGlo", "@0=无风格@1=交替风格@2=鼠标移动@3=交替并鼠标移动");
-                    }
-                }
-                return _HisCfgAttrs;
-            }
-        }
-        #endregion
-
         #region 他的关连信息.
         private Attrs _HisRefAttrs = null;
         public Attrs HisRefAttrs
@@ -680,37 +460,6 @@ namespace BP.En
 
         #region 关于相关功能
         /// <summary>
-        /// 增加一个相关功能
-        /// </summary>
-        /// <param name="title">标题</param>
-        /// <param name="classMethodName">连接</param>
-        /// <param name="icon">图标</param>
-        /// <param name="tooltip">提示信息</param>
-        /// <param name="target">连接到</param>
-        /// <param name="width">宽度</param>
-        /// <param name="height">高度</param>
-        public void AddRefMethod(string title, string classMethodName, Attrs attrs, string warning, string icon, string tooltip, string target, int width, int height)
-        {
-            RefMethod func = new RefMethod();
-            func.Title = title;
-            func.Warning = warning;
-            func.ClassMethodName = classMethodName;
-            func.Icon = icon;
-            func.ToolTip = tooltip;
-            func.Width = width;
-            func.Height = height;
-            func.HisAttrs = attrs;
-            this.HisRefMethods.Add(func);
-        }
-        public void AddRefMethodOpen()
-        {
-            RefMethod func = new RefMethod();
-            func.Title = "打开";
-            func.ClassMethodName = this.ToString() + ".DoOpenCard";
-            func.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Btn/Edit.gif";
-            this.HisRefMethods.Add(func);
-        }
-        /// <summary>
         /// 增加
         /// </summary>
         /// <param name="func"></param>
@@ -724,15 +473,18 @@ namespace BP.En
         /// <summary>
         /// 增加明细
         /// </summary>
-        /// <param name="ens">集合信息</param>
-        /// <param name="refKey">属性</param>
-        /// <param name="groupName">显示到分组</param>
-        public void AddDtl(Entities ens, string refKey, string groupName = null)
+        /// <param name="ens">子类</param>
+        /// <param name="refKey">关联的键值</param>
+        /// <param name="groupName">分组名字</param>
+        /// <param name="model">模式</param>
+        public void AddDtl(Entities ens, string refKey, string groupName = null, DtlEditerModel model = DtlEditerModel.DtlBatch,string icon = null)
         {
             EnDtl dtl = new EnDtl();
             dtl.Ens = ens;
             dtl.RefKey = refKey;
             dtl.GroupName = groupName;
+            dtl.DtlEditerModel = model;
+            dtl.Icon = icon; 
             this.Dtls.Add(dtl);
         }
         /// <summary>
@@ -806,24 +558,6 @@ namespace BP.En
 
         #region 构造涵数
         /// <summary>
-        /// 构造涵数 
-        /// </summary>
-        /// <param name="dburl">数据库连接</param>
-        /// <param name="physicsTable">物理table.</param>
-        public Map(DBUrl dburl, string physicsTable)
-        {
-            this.EnDBUrl = dburl;
-            this.PhysicsTable = physicsTable;
-        }
-        /// <summary>
-        /// 构造涵数
-        /// </summary>
-        /// <param name="physicsTable">物理table</param>
-        public Map(string physicsTable)
-        {
-            this.PhysicsTable = physicsTable;
-        }
-        /// <summary>
         /// 构造涵数
         /// </summary>
         /// <param name="physicsTable">表</param>
@@ -832,16 +566,6 @@ namespace BP.En
         {
             this.PhysicsTable = physicsTable;
             this._EnDesc = enDesc;
-        }
-        /// <summary>
-        /// 构造涵数
-        /// </summary>
-        /// <param name="DBUrlKeyList">连接的Key 你可以用  DBUrlKeyList 得到</param>
-        /// <param name="physicsTable">物理表</param>
-        public Map(DBUrlType dburltype, string physicsTable)
-        {
-            this.EnDBUrl = new DBUrl(dburltype);
-            this.PhysicsTable = physicsTable;
         }
         /// <summary>
         /// 构造涵数
@@ -885,24 +609,6 @@ namespace BP.En
                 }
             }
             throw new Exception("error param:  " + ensOfMMclassName);
-        }
-        /// <summary>
-        /// 文件类型
-        /// </summary>
-        private AdjunctType _AdjunctType = AdjunctType.None;
-        /// <summary>
-        /// 文件类型
-        /// </summary>
-        public AdjunctType AdjunctType
-        {
-            get
-            {
-                return this._AdjunctType;
-            }
-            set
-            {
-                this._AdjunctType = value;
-            }
         }
         public string MoveTo = null;
         /// <summary>
@@ -1011,7 +717,6 @@ namespace BP.En
                 }
             }
             // 检查配置的完整性。
-
         }
 
         private void DealDT_Base(DataTable dt)
@@ -1209,32 +914,12 @@ namespace BP.En
         private void DealDT_SearchAttr(DataTable dt)
         {
         }
-        private void DealDT_Dtl(DataTable dt)
-        {
-        }
         private void DealDT_Dot2Dot(DataTable dt)
         {
         }
         #endregion
 
         #region 与生成No字串有关
-        /// <summary>
-        /// 生成字串的字段的长度。
-        /// </summary>
-        int _GenerNoLength = 0;
-        public int GenerNoLength
-        {
-            get
-            {
-                if (this._GenerNoLength == 0)
-                    throw new Exception("@没有指定生成字串的字段长度。");
-                return this._GenerNoLength;
-            }
-            set
-            {
-                this._GenerNoLength = value;
-            }
-        }
         /// <summary>
         /// 编码结构
         /// 例如： 0， 2322;
@@ -1325,25 +1010,6 @@ namespace BP.En
         public void setIsAutoGenerNo(bool val)
         {
             _IsAutoGenerNo = val;
-        }
-        /// <summary>
-        /// 是否检查编号长度。（默认的false）
-        /// </summary>
-        private bool _IsCheckNoLength = false;
-        /// <summary>
-        /// 是否检查编号长度.
-        /// 在insert 前检查。
-        /// </summary>
-        public bool IsCheckNoLength
-        {
-            get
-            {
-                return _IsCheckNoLength;
-            }
-            set
-            {
-                _IsCheckNoLength = value;
-            }
         }
         #endregion
 
@@ -1478,7 +1144,7 @@ namespace BP.En
             attr.Desc = desc;
             attr.UIContralType = UIContralType.CheckBok;
 
-            attr.UIIsReadonly = isUIEnable;
+            attr.UIIsReadonly = !isUIEnable;
 
             attr.UIVisible = isUIVisable;
             attr.UIIsLine = isLine;
@@ -1511,8 +1177,6 @@ namespace BP.En
         {
             AddBoolean(key, key, defaultVal, desc, isUIVisable, isUIEnable, isLine);
         }
-
-
         #endregion
 
         #region 于帮定自定义,枚举类型有关系的操作。
@@ -1557,7 +1221,7 @@ namespace BP.En
             attr.UIBindKey = sysEnumKey;
             attr.UITag = cfgVal;
             attr.UIVisible = isUIVisable;
-            attr.UIIsReadonly = isUIEnable;
+            attr.UIIsReadonly = !isUIEnable;
             attr.UIIsLine = isLine;
             this.Attrs.Add(attr);
         }
@@ -1735,7 +1399,7 @@ namespace BP.En
             attr.HisFKEns = ens;
             attr.UIRefKeyText = refText;
             attr.UIRefKeyValue = refKey;
-            attr.UIIsReadonly = uiIsEnable;
+            attr.UIIsReadonly = uiIsEnable==true?false:true;
 
             this.Attrs.Add(attr, true, this.IsAddRefName);
         }
@@ -1893,7 +1557,7 @@ namespace BP.En
         /// </summary>
         public void AddMyFileS()
         {
-            this.AddTBInt(EntityNoMyFileAttr.MyFileNum, 0, "附件", false, false);
+            this.AddTBInt(EntityNoNameAttr.MyFileNum, 0, "附件", false, false);
             this.HisBPEntityAthType = BPEntityAthType.Multi;
         }
         /// <summary>
@@ -1902,7 +1566,7 @@ namespace BP.En
         /// <param name="desc"></param>
         public void AddMyFileS(string desc)
         {
-            this.AddTBInt(EntityNoMyFileAttr.MyFileNum, 0, desc, false, false);
+            this.AddTBInt(EntityNoNameAttr.MyFileNum, 0, desc, false, false);
             this.HisBPEntityAthType = BPEntityAthType.Multi;
         }
         /// <summary>
@@ -1916,13 +1580,13 @@ namespace BP.En
             if (fileDesc == null)
                 fileDesc = "附件或图片";
 
-            this.AddTBString(EntityNoMyFileAttr.MyFileName, null, fileDesc, false, false, 0, 300, 200);
-            this.AddTBString(EntityNoMyFileAttr.MyFilePath, null, "MyFilePath", false, false, 0, 300, 200);
-            this.AddTBString(EntityNoMyFileAttr.MyFileExt, null, "MyFileExt", false, false, 0, 20, 10);
-            this.AddTBString(EntityNoMyFileAttr.WebPath, null, "WebPath", false, false, 0, 300, 10);
+            this.AddTBString(EntityNoNameAttr.MyFileName, null, fileDesc, false, false, 0, 300, 200);
+            this.AddTBString(EntityNoNameAttr.MyFilePath, null, "MyFilePath", false, false, 0, 300, 200);
+            this.AddTBString(EntityNoNameAttr.MyFileExt, null, "MyFileExt", false, false, 0, 20, 10);
+            this.AddTBString(EntityNoNameAttr.WebPath, null, "WebPath", false, false, 0, 300, 10);
 
-            this.AddTBInt(EntityNoMyFileAttr.MyFileH, 0, "MyFileH", false, false);
-            this.AddTBInt(EntityNoMyFileAttr.MyFileW, 0, "MyFileW", false, false);
+            this.AddTBInt(EntityNoNameAttr.MyFileH, 0, "MyFileH", false, false);
+            this.AddTBInt(EntityNoNameAttr.MyFileW, 0, "MyFileW", false, false);
             this.AddTBFloat("MyFileSize", 0, "MyFileSize", false, false);
 
             this.HisBPEntityAthType = BPEntityAthType.Single;
@@ -1948,28 +1612,29 @@ namespace BP.En
         {
             HisAttrFiles.Add(fExt, fileDesc);
             this.HisBPEntityAthType = BPEntityAthType.Single;
-
             AddMyFile(fileDesc, fExt, null);
         }
 
         #region 增加大块文本输入
         public void AddTBStringDoc()
         {
-            AddTBStringDoc("Doc", "Doc", null, "内容", true, false, 0, 4000, 300, 300, true);
+            AddTBStringDoc("Doc", "Doc", null, "内容", true, false, 0, 4000, 10, true);
         }
-        public void AddTBStringDoc(string key, string defaultVal, string desc, bool uiVisable, bool isReadonly, bool isUILine)
+
+        public void AddTBStringDoc(string key, string defaultVal, string desc, bool uiVisable, bool isReadonly, bool isUILine, int rows = 10)
         {
-            AddTBStringDoc(key, key, defaultVal, desc, uiVisable, isReadonly, 0, 4000, 300, 10, isUILine);
+            AddTBStringDoc(key, key, defaultVal, desc, uiVisable, isReadonly, 0, 4000, rows, isUILine);
         }
+
         public void AddTBStringDoc(string key, string defaultVal, string desc, bool uiVisable, bool isReadonly)
         {
-            AddTBStringDoc(key, key, defaultVal, desc, uiVisable, isReadonly, 0, 4000, 300, 10, false);
+            AddTBStringDoc(key, key, defaultVal, desc, uiVisable, isReadonly, 0, 4000, 300, false);
         }
-        public void AddTBStringDoc(string key, string defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith, int rows)
+        public void AddTBStringDoc(string key, string defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int rows)
         {
-            AddTBStringDoc(key, key, defaultVal, desc, uiVisable, isReadonly, minLength, maxLength, tbWith, rows, false);
+            AddTBStringDoc(key, key, defaultVal, desc, uiVisable, isReadonly, minLength, maxLength, rows, false);
         }
-        public void AddTBStringDoc(string key, string field, string defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int tbWith, int rows, bool isUILine)
+        public void AddTBStringDoc(string key, string field, string defaultVal, string desc, bool uiVisable, bool isReadonly, int minLength, int maxLength, int rows, bool isUILine, bool isRichText = false)
         {
             if (field == null)
                 field = key;
@@ -1983,11 +1648,23 @@ namespace BP.En
             attr.UIVisible = uiVisable;
             attr.UIWidth = 300;
             attr.UIIsReadonly = isReadonly;
-            attr.MaxLength = 4000;
+            attr.MaxLength = maxLength;  //决定是否是超级长度字段.
             attr.MinLength = minLength;
             attr.MyFieldType = FieldType.Normal;
             attr.UIHeight = rows;
+
+            if (isRichText == true)
+            {
+                attr.IsSupperText = 1; //是富文本. 都要解析为上下结构.
+                isUILine = true; //必须是上下结构.
+            }
+            else
+            {
+                attr.IsSupperText = 0; //不是富文本. 根据 isUILine 解析是否上下结构.
+            }
+
             attr.UIIsLine = isUILine;
+
             this.Attrs.Add(attr);
         }
         #endregion
@@ -2549,7 +2226,7 @@ namespace BP.En
             attr.Key = key;
             attr.Field = _Field;
             attr.DefaultVal = defaultVal;
-            attr.MyDataType = DataType.AppDouble;
+            attr.MyDataType = DataType.AppMoney;
             attr.Desc = desc;
             attr.UIVisible = uiVisable;
             attr.UIIsReadonly = isReadonly;

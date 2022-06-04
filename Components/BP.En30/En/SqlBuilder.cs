@@ -311,7 +311,7 @@ namespace BP.En
         /// <returns>sql</returns>
         public static string RetrieveAll(Entity en)
         {
-            return SqlBuilder.SelectSQL(en, SystemConfig.TopNum);
+            return SqlBuilder.SelectSQL(en, BP.Difference.SystemConfig.TopNum);
         }
         /// <summary>
         /// 查询
@@ -1010,7 +1010,7 @@ namespace BP.En
                 Attr refAttr = attr.HisFKEn.EnMap.GetAttrByKey(attr.UIRefKeyValue);
                 //added by liuxc,2017-9-11，此处增加是否存在实体表，因新增的字典表类型“动态SQL查询”，此类型没有具体的实体表，完全由SQL动态生成的数据集合，此处不判断会使生成的SQL报错
                 //if (DBAccess.IsExitsObject(fktable))
-                if (fktable.Equals("Port_Emp") == true && mytable.Equals("WF_NodeEmp") == false && SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                if (fktable.Equals("Port_Emp") == true && mytable.Equals("WF_NodeEmp") == false && BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                     from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + ".UserID  AND " + fktable + "_" + attr.Field + ".OrgNo = '" + BP.Web.WebUser.OrgNo + "' ";
                 else
                     from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + "." + refAttr.Field;
@@ -1048,7 +1048,7 @@ namespace BP.En
                     }
                     else
                     {
-                        if (table.Equals("Port_Emp") == true && SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                        if (table.Equals("Port_Emp") == true && BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                             from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON ISNULL( " + enTable + "." + attr.Field + ", '" + en.GetValByKey(attr.Key) + "')=" + tableAttr + ".UserID AND " + tableAttr + ".OrgNo = '" + BP.Web.WebUser.OrgNo + "' ";
                         else
                             from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON ISNULL( " + enTable + "." + attr.Field + ", '" + en.GetValByKey(attr.Key) + "')=" + tableAttr + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
@@ -1519,7 +1519,7 @@ namespace BP.En
                             val = val + ", ISNULL(" + mainTable + attr.Field + ",1) " + attr.Key;
                         break;
                     case DataType.AppDate:
-                        if (SystemConfig.DateType.Equals("datetime") == true)
+                        if (BP.Difference.SystemConfig.DateType.Equals("datetime") == true)
                         {
                             if (DataType.IsNullOrEmpty(attr.DefaultVal as string))
                                 val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 23),'" +
@@ -1539,7 +1539,7 @@ namespace BP.En
 
                         break;
                     case DataType.AppDateTime:
-                        if (SystemConfig.DateType.Equals("datetime") == true)
+                        if (BP.Difference.SystemConfig.DateType.Equals("datetime") == true)
                         {
                             if (DataType.IsNullOrEmpty(attr.DefaultVal as string))
                                 val = val + ",ISNULL(CONVERT(varchar(100), " + mainTable + attr.Field + ", 20),'" +
@@ -1758,7 +1758,7 @@ namespace BP.En
                         break;
                     case DataType.AppDate:
                     case DataType.AppDateTime:
-                        if (SystemConfig.DateType.Equals("datetime") == true)
+                        if (BP.Difference.SystemConfig.DateType.Equals("datetime") == true)
                         {
                             string format = GetDataTypeFormt(attr.IsSupperText);
 
@@ -2467,7 +2467,7 @@ namespace BP.En
         }
         public static Paras GenerParas(Entity en, string[] keys)
         {
-            bool IsEnableNull = SystemConfig.IsEnableNull;
+            bool IsEnableNull =  BP.Difference.SystemConfig.IsEnableNull;
             string mykeys = "@";
             if (keys != null)
                 foreach (string key in keys)
@@ -2587,7 +2587,7 @@ namespace BP.En
                             break;
                         case DataType.AppDate: // 如果是日期类型。
                             string da = en.GetValStrByKey(attr.Key);
-                            if (SystemConfig.DateType.Equals("datetime") && DataType.IsNullOrEmpty(da) == true)
+                            if (BP.Difference.SystemConfig.DateType.Equals("datetime") && DataType.IsNullOrEmpty(da) == true)
                             {
                                 da = GetDefValByDataType(attr.IsSupperText);
                             }
@@ -2596,7 +2596,7 @@ namespace BP.En
                             break;
                         case DataType.AppDateTime:
                             string datime = en.GetValStrByKey(attr.Key);
-                            if (SystemConfig.DateType.Equals("datetime") && DataType.IsNullOrEmpty(datime) == true)
+                            if (BP.Difference.SystemConfig.DateType.Equals("datetime") && DataType.IsNullOrEmpty(datime) == true)
                             {
                                 datime = GetDefValByDataType(attr.IsSupperText);
                             }
@@ -2836,7 +2836,7 @@ namespace BP.En
                     case DataType.AppDate:
                     case DataType.AppDateTime:
                         string da = en.GetValStringByKey(attr.Key);
-                        if (SystemConfig.DateType.Equals("datetime") == true && DataType.IsNullOrEmpty(da) == true)
+                        if (BP.Difference.SystemConfig.DateType.Equals("datetime") == true && DataType.IsNullOrEmpty(da) == true)
                         {
                             da = GetDefValByDataType(attr.IsSupperText); ;
                         }
@@ -2983,6 +2983,9 @@ namespace BP.En
                     break;
                 case 6:
                     format = "MM-dd";
+                    break;
+                case 7:
+                    format = "yyyy";
                     break;
                 default:
                     format = "yyyy-MM-dd";

@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections;
-using BP.DA;
-
-using System.Reflection;
-using BP.Port;
+﻿using BP.DA;
 using BP.En;
-using BP.Sys;
 
 namespace BP.WF.DTS
 {
@@ -51,15 +45,15 @@ namespace BP.WF.DTS
         /// <returns>返回执行结果</returns>
         public override object Do()
         {
-            if (DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
+            if (DBAccess.IsView("Port_Emp", BP.Difference.SystemConfig.AppCenterDBType) == true)
                 return "port_emp 是一个视图无法生成拼音.";
 
-            if (DBAccess.IsExitsTableCol("Port_Emp", BP.GPM.EmpAttr.PinYin) == false)
+            if (DBAccess.IsExitsTableCol("Port_Emp", BP.Port.EmpAttr.PinYin) == false)
                 return "port_emp 不包含PinYin 这一列,无法生成拼音.";
 
-            BP.GPM.Emps emps = new BP.GPM.Emps();
+            BP.Port.Emps emps = new BP.Port.Emps();
             emps.RetrieveAll();
-            foreach (BP.GPM.Emp item in emps)
+            foreach (BP.Port.Emp item in emps)
             {
                 if (item.PinYin.Contains("/") == true)
                     continue;

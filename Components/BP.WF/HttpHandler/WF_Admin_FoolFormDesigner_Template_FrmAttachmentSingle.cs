@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
-using System.Web;
+﻿using System.Web;
 using BP.DA;
-using BP.Sys;
-using BP.Web;
-using BP.Port;
-using BP.En;
-using BP.WF;
-using BP.WF.Template;
 using BP.Difference;
 
 namespace BP.WF.HttpHandler
@@ -35,7 +25,7 @@ namespace BP.WF.HttpHandler
         public string UploadAthTemplateWPS_Init()
         {
             BP.Sys.FrmUI.FrmAttachmentSingle ath = new Sys.FrmUI.FrmAttachmentSingle(this.MyPK);
-            string file = SystemConfig.PathOfTemp + "/" + this.MyPK + ".wps";
+            string file =  BP.Difference.SystemConfig.PathOfTemp + "/" + this.MyPK + ".wps";
             DBAccess.GetFileFromDB(file, ath.EnMap.PhysicsTable, "MyPK", this.MyPK, "TemplateFile");
             return file;
         }
@@ -49,7 +39,7 @@ namespace BP.WF.HttpHandler
                 return "err@请上传文件模板";
             HttpPostedFile file = HttpContextHelper.RequestFiles(0);
             //保存文件到临时目录
-            string path = SystemConfig.PathOfTemp + file.FileName;
+            string path =  BP.Difference.SystemConfig.PathOfTemp + file.FileName;
             HttpContextHelper.UploadFile(file, path);
             BP.Sys.FrmUI.FrmAttachmentSingle ath = new Sys.FrmUI.FrmAttachmentSingle(this.MyPK);
             //存储到模板库里。

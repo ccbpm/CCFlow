@@ -3,7 +3,6 @@ using System.Collections;
 using System.Web;
 using BP.Difference;
 using BP.Web;
-using BP.Sys;
 using BP.DA;
 using System.Reflection;
 
@@ -58,7 +57,7 @@ namespace BP.WF.HttpHandler
                 return null;
 
             //throw new Exception("err@登录信息丢失，或者没有传递过来token,页面:["+page.ToString()+"]方法:["+ mothodName+"]");
-            string host = SystemConfig.GetValByKey("TokenHost", null);
+            string host =  BP.Difference.SystemConfig.GetValByKey("TokenHost", null);
             if (DataType.IsNullOrEmpty(host) == true)
                 return null;
 
@@ -595,6 +594,16 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
+        public string Vals
+        {
+            get
+            {
+                string str = this.GetRequestVal("Vals");
+                if (DataType.IsNullOrEmpty(str))
+                    return null;
+                return str;
+            }
+        }
         /// <summary>
         /// FK_MapData
         /// </summary>
@@ -787,6 +796,19 @@ namespace BP.WF.HttpHandler
                 _workID = value;
             }
         }
+
+        public string WorkIDStr
+        {
+            get
+            {
+                string val =  this.GetRequestVal("WorkID");
+                if (DataType.IsNullOrEmpty(val) == true)
+                    val = this.GetRequestVal("OID");
+                if (DataType.IsNullOrEmpty(val) == true)
+                    val = this.GetRequestVal("PKVal");
+                return val;
+            }
+        }
         public Int64 CWorkID
         {
             get
@@ -816,7 +838,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = this.GetRequestVal("SID"); // context.Request.QueryString["SID"];
+                string str = this.GetRequestVal("Token"); // context.Request.QueryString["Token"];
                 if (DataType.IsNullOrEmpty(str) == true)
                     return null;
                 return str;

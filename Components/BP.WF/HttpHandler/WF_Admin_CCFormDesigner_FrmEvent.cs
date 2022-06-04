@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections;
+﻿using System.Collections;
 using System.Data;
-using System.Web;
-using BP.WF;
-using BP.Web;
 using BP.Sys;
 using BP.DA;
-using BP.En;
-using BP.WF.Template;
 using BP.WF.XML;
-using System.IO;
 
 namespace BP.WF.HttpHandler
 {
@@ -44,33 +36,7 @@ namespace BP.WF.HttpHandler
                 return "Node";
             }
         }
-        /// <summary>
-        /// 事件基类
-        /// </summary>
-        /// <returns></returns>
-        public string Action_Init()
-        {
-            DataSet ds = new DataSet();
-
-            //事件实体.
-            FrmEvents ndevs = new FrmEvents();
-            if (DataType.IsNullOrEmpty(this.FK_MapData) == false)
-                ndevs.Retrieve(FrmEventAttr.FK_MapData, this.FK_MapData);
-
-            ////已经配置的事件类实体.
-            //DataTable dtFrm = ndevs.ToDataTableField("FrmEvents");
-            //ds.Tables.Add(dtFrm);
-
-            //把事件类型列表放入里面.（发送前，发送成功时.）
-            EventLists xmls = new EventLists();
-            xmls.Retrieve("EventType", this.ShowType);
-
-            DataTable dt = xmls.ToDataTable();
-            dt.TableName = "EventLists";
-            ds.Tables.Add(dt);
-
-            return BP.Tools.Json.ToJson(ds);
-        }
+        
         /// <summary>
         /// 获得该节点下已经绑定该类型的实体.
         /// </summary>

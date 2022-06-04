@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using BP.DA;
-using BP.En;
-using BP.En;
-using BP.WF.Port;
+﻿using BP.En;
 
 namespace BP.CCBill.Template
 {
@@ -108,7 +103,7 @@ namespace BP.CCBill.Template
 
                 map.AddDDLEntitiesPK(FrmStationDeptAttr.FK_Station, null, "工作岗位", new BP.Port.Stations(), true);
 
-                map.AddDDLEntitiesPK(FrmStationDeptAttr.FK_Dept, null, "部门", new BP.GPM.Depts(), true);
+                map.AddDDLEntitiesPK(FrmStationDeptAttr.FK_Dept, null, "部门", new BP.Port.Depts(), true);
 
                 this._enMap = map;
                 return this._enMap;

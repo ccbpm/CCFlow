@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
-using BP.Port;
-using BP.En;
-using BP.WF;
-using BP.WF.Template;
-using System.Collections;
 using FluentFTP;
 using BP.Difference;
 
@@ -41,7 +34,7 @@ namespace BP.WF.HttpHandler
             string frmSort = this.GetRequestVal("FrmSort");
 
             //创建临时文件.
-            string temp = SystemConfig.PathOfTemp + "" + Guid.NewGuid() + ".xml";
+            string temp =  BP.Difference.SystemConfig.PathOfTemp + "" + Guid.NewGuid() + ".xml";
             HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), temp);
 
             //获得数据类型.
@@ -301,7 +294,7 @@ namespace BP.WF.HttpHandler
 
                 #region 下载文件.
                 //设置要到的路径.
-                string tempfile = SystemConfig.PathOfTemp +  str;
+                string tempfile =  BP.Difference.SystemConfig.PathOfTemp +  str;
                 FtpStatus fs;
                 try
                 {
@@ -391,7 +384,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //设置要到的路径.
-                string tempfile = SystemConfig.PathOfTemp + "" + fileName;
+                string tempfile =  BP.Difference.SystemConfig.PathOfTemp + "" + fileName;
 
                 //下载目录下
                 FtpStatus fs = conn.DownloadFile(tempfile, "/Form" + remotePath + "/" + fileName, FtpLocalExists.Overwrite);

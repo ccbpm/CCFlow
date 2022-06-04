@@ -4,188 +4,14 @@ using BP.DA;
 
 namespace BP.En
 {
-    /// <summary>
-    /// 编辑类型
-    /// </summary>
-    public enum EditType
-    {
-        /// <summary>
-        /// 可编辑
-        /// </summary>
-        Edit,
-        /// <summary>
-        /// 不可删除
-        /// </summary>
-        UnDel,
-        /// <summary>
-        /// 只读,不可删除。
-        /// </summary>
-        Readonly
-    }
-	/// <summary>
-	///  控件类型
-	/// </summary>
-    public enum UIContralType
-    {
-        /// <summary>
-        /// 文本框
-        /// </summary>
-        TB = 0,
-        /// <summary>
-        /// 下拉框
-        /// </summary>
-        DDL = 1,
-        /// <summary>
-        /// CheckBok
-        /// </summary>
-        CheckBok = 2,
-        /// <summary>
-        /// 单选择按钮
-        /// </summary>
-        RadioBtn = 3,
-        /// <summary>
-        /// 地图定位
-        /// </summary>
-        MapPin = 4,
-        /// <summary>
-        /// 录音控件
-        /// </summary>
-        MicHot = 5,
-        /// <summary>
-        /// 附件展示控件
-        /// </summary>
-        AthShow = 6,
-        /// <summary>
-        /// 手机拍照控件
-        /// </summary>
-        MobilePhoto = 7,
-        /// <summary>
-        /// 手写签名版
-        /// </summary>
-        HandWriting = 8,
-        /// <summary>
-        /// 超链接
-        /// </summary>
-        HyperLink = 9,
-        /// <summary>
-        /// 文本
-        /// </summary>
-        Lab = 10,
-        /// <summary>
-        /// 图片
-        /// </summary>
-        FrmImg = 11,
-		/// <summary>
-		/// 图片附件
-		/// </summary>
-		FrmImgAth = 12,
-		/// <summary>
-		/// 身份证号
-		/// </summary>
-		IDCard=13,
-		/// <summary>
-		/// 签批组件
-		/// </summary>
-		SignCheck = 14,
-		/// <summary>
-		/// 评论组件
-		/// </summary>
-		FlowBBS = 15,
-		/// <summary>
-		/// 系统定位
-		/// </summary>
-		Fixed=16,
-        /// <summary>
-        /// 公文正文组件
-        /// </summary>
-        GovDocFile = 110,
-        /// <summary>
-        /// 发文字号
-        /// </summary>
-        DocWord =17,
-        /// <summary>
-        /// 收文字号
-        /// </summary>
-        DocWordReceive = 170,
-        /// <summary>
-        /// 流程进度图
-        /// </summary>
-        JobSchedule =50,
-        /// <summary>
-        /// 大块文本Html(说明性文字)
-        /// </summary>
-        BigText = 60,
-		/// <summary>
-		/// 评分
-		/// </summary>
-		Score = 101
-
-    }
-    /// <summary>
-    /// 逻辑类型
-    /// </summary>
-    public enum FieldTypeS
-    {
-        /// <summary>
-        /// 普通类型
-        /// </summary>
-        Normal = 0,
-        /// <summary>
-        /// 枚举类型
-        /// </summary>
-        Enum=1,
-        /// <summary>
-        /// 外键
-        /// </summary>
-        FK=2
-    }
-	/// <summary>
-	/// 字段类型
-	/// </summary>
-	public enum FieldType
-	{
-		/// <summary>
-		/// 正常的
-		/// </summary>
-		Normal,
-		/// <summary>
-		/// 主键
-		/// </summary>
-		PK,
-		/// <summary>
-		/// 外键
-		/// </summary>
-		FK,
-		/// <summary>
-		/// 枚举
-		/// </summary>
-	    Enum,		 
-		/// <summary>
-		/// 既是主键又是外键
-		/// </summary>
-		PKFK,
-		/// <summary>
-		/// 既是主键又是枚举
-		/// </summary>
-		PKEnum,
-		/// <summary>
-		/// 关连的文本.
-		/// </summary>
-		RefText,
-		/// <summary>
-		/// 虚拟的
-		/// </summary>
-		NormalVirtual,
-		/// <summary>
-		/// 多值的
-		/// </summary>
-		MultiValues
-	}
 	/// <summary>
 	/// 属性
 	/// </summary>
 	public class Attr
 	{
+		/// <summary>
+		/// 转成mapattr.
+		/// </summary>
         public BP.Sys.MapAttr ToMapAttr
         {
             get
@@ -237,6 +63,9 @@ namespace BP.En
                         attr.setUIContralType( UIContralType.TB);
                         attr.setLGType(FieldTypeS.Normal);
                         attr.setUIIsEnable(!this.UIIsReadonly);
+						if (this.IsSupperText == 1)
+							attr.IsRichText = true;
+
                         switch (this.MyDataType)
                         {
                             case DataType.AppBoolean:
@@ -256,9 +85,6 @@ namespace BP.En
                         }
                         break;
                 }
-
-                //attr.HisAutoFull = this.AutoFullWay;
-                //attr.AutoFullDoc = this.AutoFullDoc;
                 return attr;
             }
         }
@@ -286,18 +112,6 @@ namespace BP.En
                     return false;
             }
         }
-		/// <summary>
-		/// 是不是能使用默认值。
-		/// </summary>
-		public bool IsCanUseDefaultValues
-		{
-			get
-			{
-				if ( this.MyDataType==DataType.AppString && this.UIIsReadonly==false )
-					return true;
-				return false;
-			}
-		}
         public bool IsNum
         {
             get
@@ -363,91 +177,11 @@ namespace BP.En
                 return false;
             }
         }
-		/// <summary>
-		/// 输入描述
-		/// </summary>
-		public string EnterDesc
-		{
-			get
-			{
-				if (this.UIContralType==UIContralType.TB)
-				{
-					if (this.UIIsReadonly || this.UIVisible==false)
-					{
-						return "此字段只读";
-					}
-					else
-					{
-						if (this.MyDataType==DataType.AppDate )
-						{
-							return "输入日期类型"+DataType.SysDataFormat;
-						}
-						else if (this.MyDataType==DataType.AppDateTime)
-						{
-							return "输入日期时间类型"+DataType.SysDatatimeFormatCN;
-						}
-						else if (this.MyDataType==DataType.AppString)
-						{ 
-							return "输入要求最小长度"+this.MinLength+"字符，最大长度"+this.MaxLength+"字符";
-						}
-						else if (this.MyDataType==DataType.AppMoney)
-						{
-							return "金额类型 0.00";
-						}
-						else 
-						{
-							return "输入数值类型";
-						}
-					}
-
-				}
-				else if ( this.UIContralType==UIContralType.DDL || this.UIContralType==UIContralType.CheckBok )
-				{
-					if (this.UIIsReadonly )
-					{
-						return "此字段只读";
-					}
-					else
-					{
-						if (this.MyDataType==DataType.AppBoolean)
-						{
-							return "是/否";
-						}
-						else
-						{
-							return "列表选择";
-						}
-					}
-				}
-				 
-				return "";
-			}
-		}
 
 		#region 构造函数
 		public Attr()
-		{}
-		/// <summary>
-		/// 构造函数
-		/// </summary>
-		/// <param name="key"></param>
-		/// <param name="field"></param>
-		/// <param name="defaultVal"></param>
-		/// <param name="dataType"></param>
-		/// <param name="isPK"></param>
-		/// <param name="desc"></param>
-		public Attr(string key , string field,  object defaultVal, int dataType, bool isPK, string desc, int minLength, int maxlength)
-		{			
-			this.Key=key;
-			this.Field=field;
-			this.Desc=desc;
-			if (isPK)
-				this.MyFieldType = FieldType.PK ;			 
-			this.MyDataType=dataType;
-			this._defaultVal=defaultVal;
-			this.MinLength=minLength;
-			this._maxLength=maxlength;
-		}
+		{
+        }
 		public Attr(string key , string field,  object defaultVal, int dataType, bool isPK, string desc)
 		{			
 			this.Key=key;
@@ -604,31 +338,6 @@ namespace BP.En
 		/// 描述。
 		/// </summary>
 		public string Desc = null;
-        /// <summary>
-        /// 在线帮助
-        /// </summary>
-        public string DescHelper
-        {
-            get
-            {
-                if (this.HelperUrl == null)
-                    return this.Desc;
-
-                if (this.HelperUrl.Contains("script"))
-                    return "<a href=\"" + this.HelperUrl + "\"  ><img src='../../Img/Help.png'  height='20px' border=0/>" + this.Desc + "</a>";
-                else
-                    return "<a href=\"" + this.HelperUrl + "\" target=_blank ><img src='../../Img/Help.png'  height='20px' border=0/>" + this.Desc + "</a>";
-            }
-        }
-        public string DescHelperIcon
-        {
-            get
-            {
-                if (this.HelperUrl == null)
-                    return this.Desc;
-                return "<a href=\"" + this.HelperUrl + "\" ><img src='../../Img/Help.png' height='20px' border=0/></a>";
-            }
-        }
 		/// <summary>
 		/// 最大长度。
 		/// </summary>
@@ -735,8 +444,8 @@ namespace BP.En
 		public bool UIIsReadonly = false;
 		public UIContralType UIContralType = UIContralType.TB;
 		public string UIBindKey = null;
-		public int IsSupperText = 0;
-		 
+		public int IsSupperText = 0; //是否大文本，还解析了日期格式,这个地方需要修改.
+
 		private string _UIBindKeyOfEn = null;
 		public bool UIIsDoc
 		{
@@ -805,6 +514,7 @@ namespace BP.En
         public string UITag = null;
 		#endregion		 
 	}
+
 	/// <summary>
 	/// 属性集合
 	/// </summary>
@@ -833,52 +543,6 @@ namespace BP.En
 		{
 			AddTBString(  key ,   key,    defaultVal,   FieldType.Normal,    desc,   uiVisable,   isReadonly ,  minLength,   maxLength,   tbWith );
 		}
-		public void AddTBString(string key, string field , object defaultVal,   string desc, bool uiVisable, bool isReadonly ,int minLength, int maxLength, int tbWith )
-		{
-			AddTBString(  key ,   field,    defaultVal,   FieldType.Normal,     desc,   uiVisable,   isReadonly ,  minLength,   maxLength,   tbWith );
-		}
-
-		public void AddTBStringDoc(string key, string defaultVal,  string desc, bool uiVisable, bool isReadonly)
-		{
-			AddTBStringDoc(  key ,   key,    defaultVal,    desc,   uiVisable,   isReadonly ,  0,   2000,   300, 300 );
-		}
-		public void AddTBStringDoc(string key, string defaultVal,  string desc, bool uiVisable, bool isReadonly ,int minLength, int maxLength, int tbWith , int rows )
-		{
-			AddTBStringDoc(  key ,   key,    defaultVal,    desc,   uiVisable,   isReadonly ,  minLength,   maxLength,   tbWith, rows );
-		}
-		public void AddTBStringDoc(string key,string field, string defaultVal,  string desc, bool uiVisable, bool isReadonly ,int minLength, int maxLength, int tbWith, int rows )
-		{
-			Attr attr = new Attr();
-			attr.Key=key;
-			attr.Field=field;
-			attr.DefaultVal = defaultVal;
-			attr.MyDataType=DataType.AppString;
-			attr.Desc=desc;
-			attr.UIVisible = uiVisable;
-			attr.UIWidth=300;
-			attr.UIIsReadonly = isReadonly;
-			attr.MaxLength =maxLength;
-			attr.MinLength =minLength;
-			attr.MyFieldType=FieldType.Normal;
-			attr.UIHeight = rows;
-			this.Add(attr);
-		}
-        /// <summary>
-        /// 增加附件
-        /// </summary>
-        /// <param name="fileDesc"></param>
-        public void AddMyFile(string fileDesc)
-        {
-            this.AddTBString(EntityNoMyFileAttr.MyFileName, null, fileDesc, false, false, 0, 100, 200);
-            this.AddTBString(EntityNoMyFileAttr.MyFilePath, null, "MyFilePath", false, false, 0, 100, 200);
-            this.AddTBString(EntityNoMyFileAttr.MyFileExt, null, "MyFileExt", false, false, 0, 10, 10);
-            //  this.AddTBInt(EntityNoMyFileAttr.MyFileNum, 0, "MyFileNum", false, false);
-            this.AddTBInt(EntityNoMyFileAttr.MyFileH, 0, "MyFileH", false, false);
-            this.AddTBInt(EntityNoMyFileAttr.MyFileW, 0, "MyFileW", false, false);
-            this.AddTBInt("MyFileSize", 0, "MyFileSize", false, false);
-
-            //this.IsHaveFJ = true;
-        }
 		#endregion  关于属性的增加 String
 
 		#region 关于属性的增加 Int
@@ -975,38 +639,6 @@ namespace BP.En
 		}
 		#endregion
 
-		#region 日期
-		public void AddTBDate(string key, string field, string defaultVal,  string desc, bool uiVisable, bool isReadonly )
-		{
-			Attr attr = new Attr();
-			attr.Key=key;
-			attr.Field=field;
-			attr.DefaultVal = defaultVal;
-			attr.MyDataType=DataType.AppDate;
-			attr.Desc=desc;
-			attr.UIVisible = uiVisable;
-			attr.UIIsReadonly = isReadonly;
-			attr.MaxLength=20;
-			this.Add(attr);
-		}
-		 
-		public void AddTBDate(string key, string defaultVal,  string desc, bool uiVisable, bool isReadonly )
-		{
-			this.AddTBDate(key,key,defaultVal,desc,uiVisable,isReadonly) ; 
-		}
-		/// <summary>
-		/// 增加日期类型的控健(默认日期是当前日期)
-		/// </summary>
-		/// <param name="key">key</param>
-		/// <param name="desc">desc</param>
-		/// <param name="uiVisable">uiVisable</param>
-		/// <param name="isReadonly">isReadonly</param>
-		public void AddTBDate(string key, string desc, bool uiVisable, bool isReadonly )
-		{
-			this.AddTBDate(key,key,DateTime.Now.ToString(DataType.SysDataFormat),desc,uiVisable,isReadonly) ; 
-		}	
-		#endregion
-
 		#region 日期时间类型。
 		/// <summary>
 		/// 增加日期类型的控健
@@ -1035,10 +667,6 @@ namespace BP.En
 		public void AddTBDateTime(string key, string defaultVal,  string desc, bool uiVisable, bool isReadonly )
 		{
 			this.AddTBDateTime(key,key,defaultVal,desc,uiVisable,isReadonly);
-		}
-		public void AddTBDateTime(string key,string desc, bool uiVisable, bool isReadonly )
-		{
-			this.AddTBDateTime(key,key,desc,uiVisable,isReadonly);
 		}
 		#endregion 
 
@@ -1102,7 +730,7 @@ namespace BP.En
         }
 		#endregion 
 
-		#region entities
+		#region 集合属性.
 		/// <summary>
 		/// 于实体有关系的操作。
 		/// </summary>
@@ -1190,21 +818,7 @@ namespace BP.En
 		{
 			AddDDLEntities(key,field,defaultVal, dataType , FieldType.FK , desc, ens,refKey,refText,uiIsEnable);
 		}
-		/// <summary>
-		/// 于实体有关系的操作。字段与属性名称相同。
-		/// </summary>
-		/// <param name="key">健值</param>
-		/// <param name="field">字段</param>
-		/// <param name="defaultVal">默认值</param>
-		/// <param name="dataType">DataType类型</param>
-		/// <param name="desc">描述</param>
-		/// <param name="ens">实体集合</param>
-		/// <param name="refKey">关联的建</param>
-		/// <param name="refText">关联的Text</param>
-		public void AddDDLEntities(string key ,  object defaultVal, int dataType, string desc, Entities ens, string refKey, string refText , bool uiIsEnable)
-		{
-			AddDDLEntities(key,key,defaultVal,  dataType ,desc, ens,refKey,refText,uiIsEnable);
-		}
+		 
         #endregion
 
 		#region entityNoName
@@ -1212,62 +826,12 @@ namespace BP.En
 		{
 			this.AddDDLEntities(key,key,defaultVal,DataType.AppString, desc,ens,"No","Name",uiIsEnable);
 		}
-		public void AddDDLEntities(string key , string field,  object defaultVal, string desc, EntitiesNoName ens, bool uiIsEnable )
-		{
-			this.AddDDLEntities(key,field,defaultVal,DataType.AppString,desc,ens,"No","Name",uiIsEnable);
-		}
-		#endregion
-
-        #region EntitiesSimpleTree
         public void AddDDLEntities(string key, object defaultVal, string desc, EntitiesTree ens, bool uiIsEnable)
         {
             this.AddDDLEntities(key, key, defaultVal, DataType.AppString, desc, ens, "No", "Name", uiIsEnable);
         }
         #endregion
 
-        #region EntitiesOIDName
-        public void AddDDLEntities(string key, object defaultVal, string desc, EntitiesOIDName ens, bool uiIsEnable)
-        {
-            this.AddDDLEntities(key, key, defaultVal, DataType.AppInt, desc, ens, "OID", "Name", uiIsEnable);
-        }
-        public void AddDDLEntities(string key, string field, object defaultVal, string desc, EntitiesOIDName ens, bool uiIsEnable)
-        {
-            this.AddDDLEntities(key, field, defaultVal, DataType.AppInt, desc, ens, "OID", "Name", uiIsEnable);
-        }
-		#endregion
-
-		public Attrs Clone()
-		{
-			Attrs attrs = new Attrs();
-			foreach(Attr attr in this)
-			{
-				attrs.Add(attr);
-			}
-			return attrs;
-		}
-		/// <summary>
-		/// 下一个Attr 是否是 Doc 类型.
-		/// </summary>
-		/// <param name="key"></param>
-		/// <returns></returns>
-		public Attr NextAttr(string CurrentKey)
-		{
-			int i =this.GetIndexByKey( CurrentKey) ;
-
-			if (this.Count > i )
-				return null;
-
-			return  this[i+1] as Attr;
-		}
-		public Attr PrvAttr(string CurrentKey)
-		{
-			int i =this.GetIndexByKey( CurrentKey ) ;
-
-			if (this.Count < i )
-				return null;
-
-			return  this[i-1] as Attr;
-		}
 		/// <summary>
 		/// 是否包含属性key。
 		/// </summary>
@@ -1277,72 +841,26 @@ namespace BP.En
 		{
             foreach (Attr attr in this)
             {
-                if (attr.Key  == key )
+                if (attr.Key.Equals( key)==true )
                     return true;
             }
 			return false;
 		}
-        public bool ContainsUpper(string key)
-        {
-            foreach (Attr attr in this)
-            {
-                if (attr.Key.ToUpper() == key.ToUpper() )
-                    return true;
-            }
-            return false;
-        }
-		/// <summary>
-		/// 物理字段Num
-		/// </summary>
-		public int ConutOfPhysicsFields
-		{
-			get
-			{
-				int i = 0 ;
-				foreach(Attr attr in this)
-				{
-					if (attr.MyFieldType!=FieldType.RefText)
-						i++;
-				}
-				return i ;
-			}
-		}
-		
-		protected override void OnInsertComplete(int index, object value)
-		{
-			base.OnInsertComplete (index, value);
-		}
-		
-		/// <summary>
-		/// 通过Key ， 取出他的Index.
-		/// </summary>
-		/// <param name="key">Key</param>
-		/// <returns>index</returns>
-		public int GetIndexByKey(string key)
-		{
-			for(int i=0 ; i < this.Count ; i++)
-			{
-				if (this[i].Key == key)
-					return i ;
-			}
-			return -1;
-		}
-
         
         public Attr GetAttrByKey(string key)
 		{
             foreach (Attr  item in this)
             {
-                if (item.Key == key)
+                if (item.Key.Equals(key)==true)
                     return item;
             }
             return null;
         }
-        public Attr GetAttrByKeyOfEn(string Field)
+        public Attr GetAttrByKeyOfEn(string f)
         {
             foreach (Attr item in this)
             {
-                if (item.Field == Field)
+                if (item.Field.Equals(f) ==true)
                     return item;
             }
             return null;
@@ -1402,8 +920,9 @@ namespace BP.En
 		/// <summary>
 		/// 属性集合
 		/// </summary>
-		public Attrs(){}
-
+		public Attrs()
+		{
+		}
         /// <summary>
         /// 转换为mapattrs
         /// </summary>
@@ -1424,7 +943,6 @@ namespace BP.En
                     mattr.setUIContralType(item.UIContralType);
                     mattr.setUIBindKey(item.UIBindKey);
 
-                    //@于庆海，这里需要翻译.
                     mattr.setUIWidth(item.UIWidthInt);
                     mattr.setUIHeight(item.UIHeight);
 
@@ -1434,7 +952,7 @@ namespace BP.En
                     mattr.setDefValReal(item.DefaultValOfReal);
                     mattr.setDefValType(item.DefValType);
 
-                    mattr.setUIIsEnable(item.UIIsReadonly);
+                    mattr.setUIIsEnable(!item.UIIsReadonly);
 
                     if (item.MyFieldType == FieldType.Normal || item.MyFieldType == FieldType.PK )
                     {
@@ -1450,28 +968,25 @@ namespace BP.En
                         }
                     }
 
-                    //if (item.MyFieldType == FieldType.Normal && item.MyDataType == DataType.AppString)
-                    //{
-                    //    mattr.UIIsEnable = !item.UIIsReadonly;
-                    //}
-
-
-                    if (item.UIIsLine == true)
-                        mattr.ColSpan = 3;
+					if (item.IsSupperText == 1)
+						mattr.IsRichText = true;
+                    if (item.UIHeight > 10)
+                    {
+						if (item.UIIsLine == true)
+							mattr.ColSpan = 4;
+						else
+							mattr.ColSpan = 3;
+                    }
+                    else
+                    {
+						if (item.UIIsLine == true)
+							mattr.ColSpan = 3;
+					}
 
                     //帮助url.
                     mattr.SetPara("HelpUrl", item.HelperUrl);
                     mattr.UIRefKeyText = item.UIRefKeyText;
                     mattr.UIRefKey = item.UIRefKeyValue;
-
-                    //if (item.UIIsReadonly == true && item.MyFieldType== FieldType.Normal)
-                    //    mattr.UIIsEnable = !item.UIIsReadonly;
-                    //else
-                    //    mattr.UIIsEnable = item.UIIsReadonly;
-                   // else
-                     //   mattr.UIIsEnable = !item.UIIsReadonly;
-
-
 
                     if (item.MyFieldType == FieldType.Enum)
                         mattr.LGType = FieldTypeS.Enum;
@@ -1481,7 +996,6 @@ namespace BP.En
 
                     mapAttrs.AddEntity(mattr);
                 }
-
                 return mapAttrs;
             }
         }
@@ -1535,7 +1049,6 @@ namespace BP.En
 				myattr.UIBindKey = attr.UIBindKey ;
                // myattr.UIBindKeyOfEn = attr.UIBindKeyOfEn;
                 myattr.HisFKEns = attr.HisFKEns;
-                             
               
 				//myattr.Desc=attr.Desc+"名称";
 				 
@@ -1549,8 +1062,6 @@ namespace BP.En
 					myattr.UIVisible=false;
 
 				this.InnerList.Add(myattr);
-
-
 				//this.Add(myattr,true);
 			}
 		}

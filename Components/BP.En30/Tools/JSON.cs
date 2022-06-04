@@ -25,6 +25,7 @@ namespace BP.Tools
             {
                 strJson = "[" + strJson + "]";
             }
+            strJson = strJson.Replace("\\\\\"","'");
             DataTable dtt = (DataTable)JsonConvert.DeserializeObject<DataTable>(strJson);
             return dtt;
         }
@@ -239,7 +240,6 @@ namespace BP.Tools
         {
             string jsonStr = JsonConvert.SerializeObject(array);
             return jsonStr;
-             
         }
         /// <summary>
         /// 删除结尾字符
@@ -271,13 +271,19 @@ namespace BP.Tools
                     continue;
                 }
 
-                if (val.GetType()==typeof(int)
-                    || val.GetType() == typeof(decimal)
-                    || val.GetType() == typeof(float))
-                strs += "\"" + key + "\":" + ht[key] + ",";
+                var tp = val.GetType();
+                if (tp == typeof(int)
+                    || tp == typeof(float)
+                    || tp == typeof(decimal)
+                    || tp == typeof(double)
+                    || tp == typeof(Int64))
+                {
+                    strs += "\"" + key + "\":" + ht[key] + ",";
+                }
                 else
+                {
                     strs += "\"" + key + "\":\"" + ht[key].ToString().Replace("\"", "\\\"") + "\",";
-
+                }
             }
             strs += "\"EndJSON\":\"0\"";
             strs += "}";

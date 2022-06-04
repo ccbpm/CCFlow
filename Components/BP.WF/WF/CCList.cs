@@ -430,8 +430,6 @@ namespace BP.WF
                 //状态  @0=抄送@1=已读@2=已回复@3=已删除
                 map.AddTBInt(CCListAttr.Sta, 0, "状态", true, true);
 
-                //map.AddTBInt(CCListAttr.IsRepaly, 0, "是否回复？", true, true);
-
                 map.AddTBString(CCListAttr.FK_Flow, null, "流程编号", true, true, 0, 5, 10, true);
                 map.AddTBString(CCListAttr.FlowName, null, "名称", true, true, 0, 200, 10, true);
                 map.AddTBInt(CCListAttr.FK_Node, 0, "节点", true, true);

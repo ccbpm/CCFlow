@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Data;
-using System.Text;
-using System.Web;
+﻿using System.Data;
 using BP.DA;
-using BP.Sys;
-using BP.Web;
-using BP.Port;
-using BP.En;
 using BP.WF;
-using BP.WF.Template;
-using BP.WF.Data;
 using BP.WF.HttpHandler;
 using BP.CCBill.Template;
 
@@ -52,7 +41,7 @@ namespace BP.CCBill
             string sql = "SELECT DISTINCT A.FK_Flow as No, A.FlowName as Name, B.Icon  FROM WF_GenerWorkFlow A, WF_Flow B  WHERE  A.FK_Flow=B.No AND A.PWorkID=" + this.WorkID;
             DataTable dtGroup = DBAccess.RunSQLReturnTable(sql);
             dtGroup.TableName = "Flows";
-            if (SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dtGroup.Columns[0].ColumnName = "No";
                 dtGroup.Columns[1].ColumnName = "Name";

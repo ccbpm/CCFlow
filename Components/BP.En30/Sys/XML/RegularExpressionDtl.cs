@@ -110,7 +110,7 @@ namespace BP.Sys.XML
 		{
 			get
 			{
-                return SystemConfig.PathOfData + "XML/RegularExpression.xml";
+                return BP.Difference.SystemConfig.PathOfData + "XML/RegularExpression.xml";
 			}
 		}
 		/// <summary>

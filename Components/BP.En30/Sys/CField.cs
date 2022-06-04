@@ -121,13 +121,14 @@ namespace BP.Sys
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.setMyPK(this.EnsName + "_" + this.FK_Emp);
+			if(DataType.IsNullOrEmpty(this.MyPK)==true)
+				this.setMyPK(this.EnsName + "_" + this.FK_Emp);
             return base.beforeUpdateInsertAction();
         }
 	
         public static Attrs GetMyAttrs(Entities ens, Map map)
         {
-            string vals = SystemConfig.GetConfigXmlEns("ListAttrs", ens.ToString());
+            string vals =  BP.Difference.SystemConfig.GetConfigXmlEns("ListAttrs", ens.ToString());
             if (vals == null)
                 return map.Attrs;
             Attrs attrs=new Attrs();

@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Data;
-using System.Text;
-using System.Web;
-using BP.DA;
+﻿using BP.DA;
 using BP.Sys;
-using BP.Web;
-using BP.Port;
 using BP.En;
 using BP.WF;
-using BP.WF.Template;
-using BP.WF.Data;
 using BP.WF.HttpHandler;
 using BP.CCBill.Template;
 
@@ -161,7 +151,7 @@ namespace BP.CCBill
 
 
          //   //创建查询菜单.放入到与该实体平行的位置.
-         //   BP.GPM.Menu2020.Menu menu = new BP.GPM.Menu2020.Menu();
+         //   BP.CCFast.CCMenu.Menu menu = new BP.CCFast.CCMenu.Menu();
          //   menu.ModuleNo = this.ModuleNo; //隶属与实体一个模块.
          //   menu.Name = this.Name;
          //   menu.Idx = 0;
@@ -292,7 +282,7 @@ namespace BP.CCBill
 
             
             ////创建查询菜单.放入到与该实体平行的位置.
-            //BP.GPM.Menu2020.Menu menu = new BP.GPM.Menu2020.Menu();
+            //BP.CCFast.CCMenu.Menu menu = new BP.CCFast.CCMenu.Menu();
             //menu.ModuleNo = this.ModuleNo; //隶属与实体一个模块.
             //menu.Name = this.Name;
             //menu.Idx = 0;
@@ -380,17 +370,17 @@ namespace BP.CCBill
         {
             #region 第5步: 创建菜单目录与菜单-分组
             //创建该模块下的 菜单:分组.
-            BP.GPM.Menu2020.Module mmodule = new BP.GPM.Menu2020.Module();
+            BP.CCFast.CCMenu.Module mmodule = new BP.CCFast.CCMenu.Module();
             mmodule.Name = this.Name;
             mmodule.SystemNo = this.GetRequestVal("SortNo"); // md.FK_FormTree; //设置类别.
             mmodule.Idx = 100;
             mmodule.Insert();
 
             //创建菜单.
-            BP.GPM.Menu2020.Menu menu = new BP.GPM.Menu2020.Menu();
+            BP.CCFast.CCMenu.Menu menu = new BP.CCFast.CCMenu.Menu();
 
             //流程查询.
-            menu = new BP.GPM.Menu2020.Menu();
+            menu = new BP.CCFast.CCMenu.Menu();
             menu.ModuleNo = mmodule.No;
             menu.Name = "发起流程";
             menu.Idx = 0;
@@ -404,7 +394,7 @@ namespace BP.CCBill
             menu.Insert();
 
             //待办.
-            menu = new BP.GPM.Menu2020.Menu();
+            menu = new BP.CCFast.CCMenu.Menu();
             menu.ModuleNo = mmodule.No;
             menu.Name = "待办";
 
@@ -417,7 +407,7 @@ namespace BP.CCBill
             menu.Insert();
 
             //未完成.
-            menu = new BP.GPM.Menu2020.Menu();
+            menu = new BP.CCFast.CCMenu.Menu();
             menu.MenuModel = menuModel; //模式.
             menu.ModuleNo = mmodule.No;
             menu.Name = "未完成(在途)";
@@ -429,7 +419,7 @@ namespace BP.CCBill
             menu.Insert();
 
             //流程查询.
-            menu = new BP.GPM.Menu2020.Menu();
+            menu = new BP.CCFast.CCMenu.Menu();
             menu.ModuleNo = mmodule.No;
             menu.Name = "流程查询";
 
@@ -442,7 +432,7 @@ namespace BP.CCBill
             menu.Insert();
 
             //流程查询.
-            menu = new BP.GPM.Menu2020.Menu();
+            menu = new BP.CCFast.CCMenu.Menu();
             menu.MenuModel = menuModel; //模式.
             menu.ModuleNo = mmodule.No;
             menu.Name = "流程分析";

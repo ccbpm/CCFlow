@@ -1,24 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
-using BP.Port;
-using BP.En;
-using BP.WF;
 using BP.GPM;
-using BP.WF.Template;
-using BP.GPM.Menu2020;
+using BP.CCFast.CCMenu;
 using System.Collections;
 using BP.WF.Port.Admin2Group;
 using BP.Tools;
 using System.Security.Cryptography;
-using BP.GPM.Home;
+using BP.CCFast.Portal;
 using BP.Difference;
 using BP.WF.XML;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace BP.WF.HttpHandler
 {
@@ -44,7 +40,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Home_Init()
         {
-            BP.GPM.Home.WindowTemplates ens = new BP.GPM.Home.WindowTemplates();
+            BP.CCFast.Portal.WindowTemplates ens = new BP.CCFast.Portal.WindowTemplates();
             ens.Retrieve(WindowTemplateAttr.PageID, this.PageID, "Idx");
             if (ens.Count == 0 && this.PageID.Equals("Home") == true)
             {
@@ -87,8 +83,8 @@ namespace BP.WF.HttpHandler
         public string Login_InitInfo()
         {
             Hashtable ht = new Hashtable();
-            ht.Add("SysNo", SystemConfig.SysNo);
-            ht.Add("SysName", SystemConfig.SysName);
+            ht.Add("SysNo", BP.Difference.SystemConfig.SysNo);
+            ht.Add("SysName", BP.Difference.SystemConfig.SysName);
 
             return BP.Tools.Json.ToJson(ht);
         }
@@ -100,7 +96,7 @@ namespace BP.WF.HttpHandler
         {
             //判断是否已经安装数据库，是否需要更新
             if (CheckIsDBInstall() == true)
-                return "url@../Admin/DBInstall.htm";
+                return "url@/WF/Admin/DBInstall.htm";
 
             string doType = GetRequestVal("LoginType");
             if (DataType.IsNullOrEmpty(doType) == false && doType.Equals("Out") == true)
@@ -111,21 +107,21 @@ namespace BP.WF.HttpHandler
 
             //是否需要自动登录。 这里都把cookeis的数据获取来了.
             string userNo = this.GetRequestVal("UserNo");
-            string sid = this.GetRequestVal("SID");
+            string sid = this.GetRequestVal("Token");
 
             if (String.IsNullOrEmpty(sid) == false && String.IsNullOrEmpty(userNo) == false)
             {
                 //调用登录方法.
                 BP.WF.Dev2Interface.Port_Login(this.UserNo, this.SID);
-                return "url@Apps.htm?UserNo=" + this.UserNo + "&SID=" + SID;
+                return "url@Apps.htm?UserNo=" + this.UserNo + "&Token=" + SID;
 
             }
 
             Hashtable ht = new Hashtable();
-            ht.Add("SysName", SystemConfig.SysName);
-            ht.Add("SysNo", SystemConfig.SysNo);
-            ht.Add("ServiceTel", SystemConfig.ServiceTel);
-            ht.Add("CustomerName", SystemConfig.CustomerName);
+            ht.Add("SysName", BP.Difference.SystemConfig.SysName);
+            ht.Add("SysNo", BP.Difference.SystemConfig.SysNo);
+            ht.Add("ServiceTel", BP.Difference.SystemConfig.ServiceTel);
+            ht.Add("CustomerName", BP.Difference.SystemConfig.CustomerName);
             if (WebUser.NoOfRel == null)
             {
                 ht.Add("UserNo", "");
@@ -202,21 +198,7 @@ namespace BP.WF.HttpHandler
                 pass = pass.Trim();
                 //pass = HttpUtility.UrlDecode(pass,Encoding.UTF8);
 
-                if (DataType.IsNullOrEmpty(userNo) == false && userNo.Equals("admin"))
-                {
-                    try
-                    {
-                        // 执行升级
-                        BP.WF.Glo.UpdataCCFlowVer();
-                    }
-                    catch (Exception ex)
-                    {
-                        BP.WF.Glo.UpdataCCFlowVer();
-                        string msg = "err@升级失败(ccbpm有自动修复功能,您可以刷新一下系统会自动创建字段,刷新多次扔解决不了问题,请反馈给我们)";
-                        msg += "@系统信息:" + ex.Message;
-                        return msg;
-                    }
-                }
+                
 
                 BP.Port.Emp emp = new BP.Port.Emp();
                 emp.UserID = userNo;
@@ -226,7 +208,7 @@ namespace BP.WF.HttpHandler
                     {
                         /*如果包含昵称列,就检查昵称是否存在.*/
                         Paras ps = new Paras();
-                        ps.SQL = "SELECT No FROM Port_Emp WHERE NikeName=" + SystemConfig.AppCenterDBVarStr + "NikeName";
+                        ps.SQL = "SELECT No FROM Port_Emp WHERE NikeName=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "NikeName";
                         ps.Add("NikeName", userNo);
                         string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
                         if (no == null)
@@ -243,12 +225,12 @@ namespace BP.WF.HttpHandler
                             return "err@用户名或者密码错误.";
                         }
                     }
-                    
+
                     if (DBAccess.IsExitsTableCol("Port_Emp", "Tel") == true)
                     {
                         /*如果包含Name列,就检查Name是否存在.*/
                         Paras ps = new Paras();
-                        ps.SQL = "SELECT No FROM Port_Emp WHERE Tel=" + SystemConfig.AppCenterDBVarStr + "Tel";
+                        ps.SQL = "SELECT No FROM Port_Emp WHERE Tel=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Tel";
                         ps.Add("Tel", userNo);
                         string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
                         if (no == null)
@@ -278,43 +260,33 @@ namespace BP.WF.HttpHandler
                     return "err@用户名或者密码错误.";
                 }
 
+                if (DataType.IsNullOrEmpty(userNo) == false && userNo.Equals("admin"))
+                {
+                    try
+                    {
+                        // 执行升级
+                        BP.WF.Glo.UpdataCCFlowVer();
+                    }
+                    catch (Exception ex)
+                    {
+                        BP.WF.Glo.UpdataCCFlowVer();
+                        string msg = "err@升级失败(ccbpm有自动修复功能,您可以刷新一下系统会自动创建字段,刷新多次扔解决不了问题,请反馈给我们)";
+                        msg += "@系统信息:" + ex.Message;
+                        return msg;
+                    }
+                }
+
                 if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                 {
                     //调用登录方法.
                     BP.WF.Dev2Interface.Port_Login(emp.UserID);
                     if (DBAccess.IsExitsTableCol("Port_Emp", "EmpSta") == true)
                     {
-                        string sql = "SELECT EmpSta FROM Port_Emp WHERE No='"+emp.No+"'";
-                        if (DBAccess.RunSQLReturnValInt(sql,1) == 1)
+                        string sql = "SELECT EmpSta FROM Port_Emp WHERE No='" + emp.No + "'";
+                        if (DBAccess.RunSQLReturnValInt(sql, 1) == 1)
                             return "err@该用户已经被禁用.";
                     }
-
-                    #region 生成sid.
-                    //生成SID,并写入数据.
-                    string sid = DBAccess.GenerGUID();
-                    var i= DBAccess.RunSQL("UPDATE WF_Emp SET Token='" + sid + "' WHERE No='" + emp.UserID + "'");
-                    if (i == 0)
-                    {
-                        BP.WF.Port.WFEmp em = new BP.WF.Port.WFEmp();
-                        em.No = emp.No;
-                        em.FK_Dept = BP.Web.WebUser.FK_Dept;
-                        em.Name = Web.WebUser.Name;
-                        em.Token = sid;
-                        em.Insert();
-                    }
-                    if (DBAccess.IsView("Port_Emp") == false)
-                    {
-                        if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-                            DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid + "' WHERE UserID='" + emp.UserID + "' AND OrgNo='" + emp.OrgNo + "'");
-                        else
-                            DBAccess.RunSQL("UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + emp.No + "'");
-                    }
-
-                    WebUser.SID = sid;
-                    emp.SID = sid;
-                    return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.UserID;
-                    #endregion 生成sid.
-
+                    return "url@Default.htm?Token=" + BP.WF.Dev2Interface.Port_GenerToken(WebUser.No, "PC", 4000, true) + "&UserNo=" + emp.UserID;
                 }
 
                 //获得当前管理员管理的组织数量.
@@ -330,8 +302,8 @@ namespace BP.WF.HttpHandler
                     if (i == 0)
                     {
                         //调用登录方法.
-                        BP.WF.Dev2Interface.Port_Login(emp.UserID, null, emp.OrgNo);
-                        return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
+                        BP.WF.Dev2Interface.Port_Login(emp.UserID, emp.OrgNo);
+                        return "url@Default.htm?Token=" + BP.WF.Dev2Interface.Port_GenerToken(emp.UserID, "PC", 6000, true) + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
                     }
 
                     foreach (BP.WF.Port.Admin2Group.Org org in orgs)
@@ -350,37 +322,15 @@ namespace BP.WF.HttpHandler
                 WebUser.FK_DeptName = emp.FK_DeptText;
 
                 //执行登录.
-                BP.WF.Dev2Interface.Port_Login(emp.UserID, null, emp.OrgNo);
-                //设置SID.
-                WebUser.SID = DBAccess.GenerGUID(); //设置SID.
-                emp.SID = WebUser.SID; //设置SID.
-                BP.WF.Dev2Interface.Port_SetSID(emp.UserID, WebUser.SID);
+                BP.WF.Dev2Interface.Port_Login(emp.UserID, emp.OrgNo);
 
-                //执行更新到用户表信息.
-                // WebUser.UpdateSIDAndOrgNoSQL();
-                if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
-                {
-                    BP.WF.Port.WFEmp em = new BP.WF.Port.WFEmp();
-                    em.No = emp.No;
+                string token = BP.WF.Dev2Interface.Port_GenerToken(emp.UserID, "PC", 40000, true);
 
-                    if (em.RetrieveFromDBSources() == 0)
-                    {
-                        em.FK_Dept = BP.Web.WebUser.FK_Dept;
-                        em.Name = Web.WebUser.Name;
-                        em.Token = emp.SID;
-                        em.Insert();
-                    }
-                    else
-                    {
-                        DBAccess.RunSQL("UPDATE WF_Emp SET Token='" + emp.SID + "' WHERE No='" + emp.No + "'");
-
-                    }
-                }
                 //判断是否是多个组织的情况.
                 if (adminers.Count == 1)
-                    return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
+                    return "url@Default.htm?Token=" + token + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
 
-                return "url@SelectOneOrg.htm?SID=" + emp.SID + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
+                return "url@SelectOneOrg.htm?Token=" + token + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
             }
             catch (Exception ex)
             {
@@ -419,7 +369,7 @@ namespace BP.WF.HttpHandler
             //获得数量.
             string sqlWhere = "";
             string sql = "";
-            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 sqlWhere = "   OrgNo='" + BP.Web.WebUser.OrgNo + "' AND No!='" + WebUser.OrgNo + "'";
             else
                 sqlWhere = "   No!='100' ";
@@ -428,7 +378,7 @@ namespace BP.WF.HttpHandler
             //求内容.
             sql = "SELECT No,Name FROM Sys_FormTree WHERE  " + sqlWhere + " ORDER BY Idx ";
             DataTable dtSort = DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
                 dtSort.Columns[0].ColumnName = "No";
                 dtSort.Columns[1].ColumnName = "Name";
@@ -447,7 +397,7 @@ namespace BP.WF.HttpHandler
             //获得流程实例的数量.
             string sqlWhere = "";
             string sql = "";
-            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 sqlWhere = " AND OrgNo='" + BP.Web.WebUser.OrgNo + "'";
 
 
@@ -465,7 +415,7 @@ namespace BP.WF.HttpHandler
                 dtFlow = DBAccess.RunSQLReturnTable(sql);
             }
 
-            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
                 dtFlow.Columns[0].ColumnName = "No";
                 dtFlow.Columns[1].ColumnName = "Name";
@@ -531,7 +481,7 @@ namespace BP.WF.HttpHandler
         {
             //求数量.
             string sqlWhere = "";
-            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 sqlWhere = "   OrgNo='" + BP.Web.WebUser.OrgNo + "' AND WFState>0 ";
             else
                 sqlWhere = " WFState>0 ";
@@ -540,13 +490,13 @@ namespace BP.WF.HttpHandler
             string sql = "SELECT  FK_FlowSort, WFState, COUNT(*) AS Num FROM WF_GenerWorkFlow WHERE " + sqlWhere + " GROUP BY FK_FlowSort, WFState ";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             //求内容. 
-            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 sqlWhere = "   OrgNo='" + BP.Web.WebUser.OrgNo + "' AND No!='" + WebUser.OrgNo + "'";
             else
                 sqlWhere = "   ParentNo!='0' ";
             sql = "SELECT No,Name, 0 as WFSta2, 0 as WFSta3, 0 as WFSta5 FROM WF_FlowSort WHERE  " + sqlWhere + " ORDER BY Idx ";
             DataTable dtSort = DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
                 dtSort.Columns[0].ColumnName = "No";
                 dtSort.Columns[1].ColumnName = "Name";
@@ -583,7 +533,7 @@ namespace BP.WF.HttpHandler
             //获得流程实例的数量.
             string sqlWhere = "";
             string sql = "";
-            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 sqlWhere = " AND OrgNo='" + BP.Web.WebUser.OrgNo + "'";
 
             //求流程数量.
@@ -593,7 +543,7 @@ namespace BP.WF.HttpHandler
             //求流程内容.
             sql = "SELECT No,Name,WorkModel, FK_FlowSort, 0 as WFSta2, 0 as WFSta3, 0 as WFSta5 FROM WF_Flow WHERE 1=1 " + sqlWhere + " ORDER BY Idx ";
             DataTable dtFlow = DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
                 dtFlow.Columns[0].ColumnName = "No";
                 dtFlow.Columns[1].ColumnName = "Name";
@@ -659,6 +609,61 @@ namespace BP.WF.HttpHandler
         }
         #endregion 流程.
 
+        #region 消息.
+
+        /// <summary>
+        /// 消息初始化
+        /// </summary>
+        /// <returns></returns>
+        public string Message_Init()
+        {
+            //获得消息分组.
+            string sql = "SELECT MsgType, Count(*) as Num FROM Sys_SMS WHERE SendTo='" + WebUser.No + "'  GROUP BY MsgType";
+            DataTable groups = DBAccess.RunSQLReturnTable(sql);
+            groups.TableName = "Groups";
+            groups.Columns.Add("TypeName");
+            //foreach (DataRow dr in groups.Rows)
+            //{
+            //    dr["TypeName"] = dr["MsgType"];
+            //}
+
+            //获得消息.
+            sql = "SELECT MyPK, EmailTitle,EmailDoc,EmailSta, RDT,Sender, AtPara,MsgType,IsRead FROM Sys_SMS WHERE SendTo='" + WebUser.No + "' ORDER BY IsRead ";
+            DataTable infos = DBAccess.RunSQLReturnTable(sql);
+            infos.TableName = "Messages";
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(groups);
+            ds.Tables.Add(infos);
+
+            //返回信息.
+            return BP.Tools.Json.ToJson(ds);
+        }
+        #endregion 消息.
+        #region 通知公告.
+
+        /// <summary>
+        /// 消息初始化
+        /// </summary>
+        /// <returns></returns>
+        public string Info_Init()
+        {
+
+            //获得消息.
+            string sql = "SELECT No, Name,Docs,InfoPRI, InfoSta,RecName, RelerName,RelDeptName,RDT FROM OA_Info WHERE InfoSta=0 ORDER BY RDT ";
+            DataTable infos = DBAccess.RunSQLReturnTable(sql);
+            infos.TableName = "Infos";
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(infos);
+            
+
+            //返回信息.
+            return BP.Tools.Json.ToJson(ds);
+        }
+        #endregion 通知公告
+        
+
         #region   加载菜单 .
 
         /// <summary>
@@ -668,12 +673,12 @@ namespace BP.WF.HttpHandler
         public string Default_InitExt()
         {
             string pkval = BP.Web.WebUser.No + "_Menus";
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 pkval += "_" + BP.Web.WebUser.OrgNo;
 
-            string docs = DBAccess.GetBigTextFromDB("Sys_UserRegedit", "MyPK", pkval, "BigDocs");
-            if (DataType.IsNullOrEmpty(docs) ==false)
-                return docs; 
+            //string docs = DBAccess.GetBigTextFromDB("Sys_UserRegedit", "MyPK", pkval, "BigDocs");
+            //if (DataType.IsNullOrEmpty(docs) == false)
+            //    return docs;
 
             //系统表.
             MySystems systems = new MySystems();
@@ -691,7 +696,7 @@ namespace BP.WF.HttpHandler
             Menus menusCopy = new Menus();
 
             //权限中心.
-            BP.GPM.PowerCenters pcs = new BP.GPM.PowerCenters();
+            BP.CCFast.CCMenu.PowerCenters pcs = new BP.CCFast.CCMenu.PowerCenters();
             pcs.RetrieveAll();
 
             string mydepts = "" + WebUser.FK_Dept + ","; //我的部门.
@@ -709,6 +714,9 @@ namespace BP.WF.HttpHandler
             string ids = "";
             foreach (MySystem item in systems)
             {
+                //如果被禁用了.
+                if (item.IsEnable == false) continue;
+
                 //找到关于系统的控制权限集合.
                 PowerCenters mypcs = pcs.GetEntitiesByKey(PowerCenterAttr.CtrlPKVal, item.No) as PowerCenters;
                 //如果没有权限控制的描述，就默认有权限.
@@ -745,14 +753,14 @@ namespace BP.WF.HttpHandler
                     }
 
                     //是否包含部门？
-                    if (pc.CtrlModel.Equals("Depts") == true && this.IsHaveIt(pc.IDs, mydepts) == true)
+                    if (pc.CtrlModel.Equals("Depts") == true && BP.DA.DataType.IsHaveIt(pc.IDs, mydepts) == true)
                     {
                         systemsCopy.AddEntity(item);
                         break;
                     }
 
                     //是否包含岗位？
-                    if (pc.CtrlModel.Equals("Stations") == true && this.IsHaveIt(pc.IDs, mystas) == true)
+                    if (pc.CtrlModel.Equals("Stations") == true && BP.DA.DataType.IsHaveIt(pc.IDs, mystas) == true)
                     {
                         systemsCopy.AddEntity(item);
                         break;
@@ -777,6 +785,10 @@ namespace BP.WF.HttpHandler
             {
                 foreach (Module module in modules)
                 {
+                    //如果被禁用了.
+                    if (module.IsEnable == false) continue;
+
+
                     if (module.SystemNo.Equals(item.No) == false) continue;
 
                     //找到关于系统的控制权限集合.
@@ -838,6 +850,10 @@ namespace BP.WF.HttpHandler
             {
                 foreach (Menu menu in menus)
                 {
+
+                    //如果被禁用了.
+                    if (menu.IsEnable == false) continue;
+
                     if (menu.ModuleNo.Equals(item.No) == false) continue;
 
                     //找到关于系统的控制权限集合.
@@ -896,14 +912,34 @@ namespace BP.WF.HttpHandler
 
             #region 组装数据.
             DataSet ds = new DataSet();
+            DataTable dtSystem = systemsCopy.ToDataTableField("System");
+            dtSystem.Columns.Add("IsOpen");
 
-            ds.Tables.Add(systemsCopy.ToDataTableField("System"));
-            ds.Tables.Add(modulesCopy.ToDataTableField("Module"));
+            //给第1个系统，第1个模块设置打开状态.
+            DataTable dtModule = modulesCopy.ToDataTableField("Module");
+            dtModule.Columns.Add("IsOpen");
+            if (dtSystem.Rows.Count > 0)
+            {
+                dtSystem.Rows[0]["IsOpen"] = "true";
+                string systemNo = dtSystem.Rows[0]["No"].ToString();
+                foreach (DataRow dr in dtModule.Rows)
+                {
+                    if (dr["SystemNo"].ToString().Equals(systemNo) == false)
+                        continue;
+
+                    dr["IsOpen"] = "true";
+                    break;
+                }
+            }
+
+            ds.Tables.Add(dtSystem);
+            ds.Tables.Add(dtModule);
 
             DataTable dtMenu = menusCopy.ToDataTableField("Menu");
             dtMenu.Columns["UrlExt"].ColumnName = "Url";
             ds.Tables.Add(dtMenu);
             #endregion 组装数据.
+
 
             string json = BP.Tools.Json.ToJson(ds);
             DBAccess.SaveBigTextToDB(json, "Sys_UserRegedit", "MyPK", pkval, "BigDocs");
@@ -957,7 +993,7 @@ namespace BP.WF.HttpHandler
         {
             BP.Web.WebUser.Exit();
 
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 return "http://passport.ccbpm.cn/";
 
             return "Login.htm?DoType=Logout";
@@ -984,11 +1020,14 @@ namespace BP.WF.HttpHandler
             MySystems systems = new MySystems();
             systems.RetrieveAll();
             DataTable dtSys = systems.ToDataTableField("System");
+            dtSys.Columns.Add("IsOpen");
+
 
             //模块.
             Modules modules = new Modules();
             modules.RetrieveAll();
             DataTable dtModule = modules.ToDataTableField("Module");
+            dtModule.Columns.Add("IsOpen");
 
             //菜单.
             Menus menus = new Menus();
@@ -1027,146 +1066,8 @@ namespace BP.WF.HttpHandler
                 #endregion 增加默认的系统.
 
                 string sqlWhere = "";
-                if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                     sqlWhere = " AND OrgNo='" + BP.Web.WebUser.OrgNo + "'";
-
-                #region 流程树.
-                string sql = "SELECT No,Name,ParentNo FROM WF_FlowSort WHERE 1=1 " + sqlWhere + " ORDER BY Idx,No ";
-                DataTable dtFlowSorts = DBAccess.RunSQLReturnTable(sql);
-                dtFlowSorts.Columns[0].ColumnName = "No";
-                dtFlowSorts.Columns[1].ColumnName = "Name";
-                dtFlowSorts.Columns[2].ColumnName = "ParentNo";
-                dtFlowSorts.TableName = "FlowTree";
-
-                //没有数据就预制数据.
-                if (dtFlowSorts.Rows.Count == 0)
-                {
-                    FlowSort fs = new FlowSort();
-                    fs.ParentNo = "100";
-                    fs.Name = "流程根目录";
-                    fs.No = WebUser.OrgNo;
-                    fs.OrgNo = WebUser.OrgNo;
-                    fs.Insert();
-
-                    fs.No = DBAccess.GenerGUID();// "101";
-                    fs.Name = "业务流程目录1";
-                    fs.ParentNo = WebUser.OrgNo;
-                    fs.Idx = 0;
-                    fs.OrgNo = WebUser.OrgNo;
-                    fs.Insert();
-
-                    fs.No = DBAccess.GenerGUID(); // "102";
-                    fs.Name = "业务流程目录2";
-                    fs.ParentNo = WebUser.OrgNo;
-                    fs.Idx = 2;
-                    fs.OrgNo = WebUser.OrgNo;
-                    fs.Insert();
-                }
-
-                DataTable dtFlows = null;
-                try
-                {
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                        sql = "SELECT No,Name,FK_FlowSort AS TreeNo, WorkModel, '' as Icon, '' as Url FROM WF_Flow WHERE 1=1  " + sqlWhere + " AND  FK_FlowSort IS NOT NULL ORDER BY FK_FlowSort,Idx  ";
-                    else
-                        sql = "SELECT No,Name,FK_FlowSort AS TreeNo, WorkModel, '' as Icon, '' as Url FROM WF_Flow WHERE 1=1  " + sqlWhere + " AND  FK_FlowSort !='' ORDER BY FK_FlowSort,Idx ";
-                    dtFlows = DBAccess.RunSQLReturnTable(sql);
-                }
-                catch (Exception ex)
-                {
-                    Flow fl = new Flow();
-                    fl.CheckPhysicsTable();
-
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                        sql = "SELECT No,Name,FK_FlowSort AS TreeNo, WorkModel, '' as Icon, '' as Url FROM WF_Flow WHERE 1=1  " + sqlWhere + " AND  FK_FlowSort IS NOT NULL ORDER BY FK_FlowSort,Idx  ";
-                    else
-                        sql = "SELECT No,Name,FK_FlowSort AS TreeNo, WorkModel, '' as Icon, '' as Url FROM WF_Flow WHERE 1=1  " + sqlWhere + " AND  FK_FlowSort !='' ORDER BY FK_FlowSort,Idx  ";
-                    dtFlows = DBAccess.RunSQLReturnTable(sql);
-                }
-                dtFlows.Columns[0].ColumnName = "No";
-                dtFlows.Columns[1].ColumnName = "Name";
-                dtFlows.Columns[2].ColumnName = "TreeNo";
-                dtFlows.Columns[3].ColumnName = "WorkModel";
-                dtFlows.Columns[4].ColumnName = "Icon";
-                dtFlows.Columns[5].ColumnName = "Url";
-                dtFlows.TableName = "Flows";
-                #endregion 流程树.
-
-                #region 表单树.
-                sql = "SELECT No,Name, ParentNo, '' as Icon FROM Sys_FormTree WHERE 1=1 " + sqlWhere + "  ORDER BY Idx,No ";
-                DataTable dtFrmSorts = DBAccess.RunSQLReturnTable(sql);
-                dtFrmSorts.Columns[0].ColumnName = "No";
-                dtFrmSorts.Columns[1].ColumnName = "Name";
-                dtFrmSorts.Columns[2].ColumnName = "ParentNo";
-                dtFrmSorts.Columns[3].ColumnName = "Icon";
-                dtFrmSorts.TableName = "FrmTree";
-
-                //没有数据就预制数据.
-                if (dtFrmSorts.Rows.Count == 0)
-                {
-                    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
-                    {
-                        FrmTree fs = new FrmTree();
-                        fs.ParentNo = "0";
-                        fs.Name = "根目录";
-                        fs.No = "100";
-                        fs.Insert();
-
-                        fs.No = "101";
-                        fs.Name = "业务表单目录1";
-                        fs.ParentNo = "100";
-                        fs.Idx = 0;
-                        fs.Insert();
-
-                        fs.No = "102";
-                        fs.Name = "业务表单目录2";
-                        fs.ParentNo = "100";
-                        fs.Idx = 2;
-                        fs.Insert();
-                    }
-                    else
-                    {
-                        FrmTree fs = new FrmTree();
-                        fs.ParentNo = "100";
-                        fs.Name = "根目录";
-                        fs.No = WebUser.OrgNo;
-                        fs.OrgNo = WebUser.OrgNo;
-                        fs.Insert();
-
-                        fs.No = DBAccess.GenerGUID(); // "101";
-                        fs.Name = "业务表单目录1";
-                        fs.ParentNo = WebUser.OrgNo;
-                        fs.Idx = 0;
-                        fs.OrgNo = WebUser.OrgNo;
-                        fs.Insert();
-
-                        fs.No = DBAccess.GenerGUID(); // "102";
-                        fs.Name = "业务表单目录2";
-                        fs.ParentNo = WebUser.OrgNo;
-                        fs.Idx = 2;
-                        fs.OrgNo = WebUser.OrgNo;
-                        fs.Insert();
-                    }
-                }
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                    sql = "SELECT No,Name,FK_FormTree AS TreeNo,  '' as Icon, FrmType FROM Sys_MapData WHERE 1=1 " + sqlWhere + " AND (FK_FormTree IS NOT NULL)   ORDER BY FK_FormTree,Idx  ";
-                else
-                    sql = "SELECT No,Name,FK_FormTree AS TreeNo,  '' as Icon, FrmType FROM Sys_MapData WHERE 1=1 " + sqlWhere + " AND (FK_FormTree!='' AND FK_FormTree IS NOT NULL)   ORDER BY FK_FormTree,Idx  ";
-                DataTable dtFrms = DBAccess.RunSQLReturnTable(sql);
-                dtFrms.Columns[0].ColumnName = "No";
-                dtFrms.Columns[1].ColumnName = "Name";
-                dtFrms.Columns[2].ColumnName = "TreeNo";
-                dtFrms.Columns[3].ColumnName = "Icon";
-                dtFrms.Columns[4].ColumnName = "FrmType";
-                dtFrms.TableName = "Frms";
-                #endregion 表单树.
-
-                //加入菜单信息.
-                myds.Tables.Add(dtFlowSorts);
-                myds.Tables.Add(dtFlows);
-                myds.Tables.Add(dtFrmSorts);
-                myds.Tables.Add(dtFrms);
-
 
                 DataSet dsAdminMenus = new DataSet();
                 AdminMenus mymenus = new AdminMenus();
@@ -1203,6 +1104,21 @@ namespace BP.WF.HttpHandler
 
             //   myds.WriteXml("c:/11.xml");
 
+            #region 让第一个系统的第1个模块的默认打开的.
+            //让第一个打开.
+            myds.Tables["System"].Rows[0]["IsOpen"] = "true";
+            string systemNo = myds.Tables["System"].Rows[0]["No"].ToString();
+            foreach (DataRow dr in myds.Tables["Module"].Rows)
+            {
+                if (dr["SystemNo"].ToString().Equals(systemNo) == false)
+                    continue;
+
+                dr["IsOpen"] = "true";
+                break;
+            }
+            #endregion 让第一个系统的第1个模块的第一个菜单打开.
+
+
             return BP.Tools.Json.ToJson(myds);
         }
         #endregion   加载菜单.
@@ -1214,9 +1130,101 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string LoginGenerQRCodeMobile_Init()
         {
-            var url = SystemConfig.HostURL + "/FastMobilePortal/Login.htm";
+            var url =  BP.Difference.SystemConfig.HostURL + "/FastMobilePortal/Login.htm";
             return url;
         }
 
+        #region 按照流程类别批量导出流程模板
+        /// <summary>
+        /// 批量导出流程模板
+        /// </summary>
+        /// <returns></returns>
+        public string Flow_BatchExpFlowTemplate()
+        {
+            string flowSort = this.GetRequestVal("FK_Sort");
+            string flowSortName = this.GetRequestVal("FlowSortName");
+            if (DataType.IsNullOrEmpty("flowSort") == true)
+                return "err@流程的类别不能为空";
+            //根据流程类别获取改类别下的所有流程
+            Flows flows = new Flows(flowSort);
+            //在临时文件中指定一个目录
+            string path =  BP.Difference.SystemConfig.PathOfTemp + flowSortName + "/";
+            if (System.IO.Directory.Exists(path) == true)
+                System.IO.Directory.Delete(path, true);
+            else
+                System.IO.Directory.CreateDirectory(path);
+            foreach (Flow flow in flows)
+            {
+                flow.DoExpFlowXmlTemplete(path);
+            }
+            //生成压缩包文件
+            string zipFile =  BP.Difference.SystemConfig.PathOfTemp + flowSortName + ".zip";
+            try
+            {
+                while (System.IO.File.Exists(zipFile) == true)
+                {
+                    System.IO.File.Delete(zipFile);
+                }
+                //执行压缩.
+                FastZip fz = new FastZip();
+                fz.CreateZip(zipFile, path, true, "");
+                //删除临时文件夹
+                System.IO.Directory.Delete(path, true);
+            }
+            catch (Exception ex)
+            {
+                return "err@执行压缩出现错误:" + ex.Message + ",路径tempPath:" + path + ",zipFile=" + zipFile;
+            }
+            return "url@DataUser/Temp/" + flowSortName + ".zip";
+        }
+        #endregion 按照流程类别批量导出流程模板
+        #region 按照表单类别批量导出表单模板
+        /// <summary>
+        /// 批量导出表单模板
+        /// </summary>
+        /// <returns></returns>
+        public string Form_BatchExpFrmTemplate()
+        {
+            string frmTree = this.GetRequestVal("FK_FrmTree");
+            string frmTreeName = this.GetRequestVal("FrmTreeName");
+            if (DataType.IsNullOrEmpty("frmTree") == true)
+                return "err@表单的类别不能为空";
+            //根据流程类别获取改类别下的所有流程
+            MapDatas mds = new MapDatas();
+            mds.Retrieve(MapDataAttr.FK_FormTree, frmTree, MapDataAttr.Idx);
+            //在临时文件中指定一个目录
+            string path =  BP.Difference.SystemConfig.PathOfTemp + frmTreeName + "/";
+            if (System.IO.Directory.Exists(path) == true)
+                System.IO.Directory.Delete(path, true);
+            else
+                System.IO.Directory.CreateDirectory(path);
+            foreach (MapData md in mds)
+            {
+                DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(md.No);
+
+                string file = path + md.Name + ".xml";
+                ds.WriteXml(file);
+            }
+            //生成压缩包文件
+            string zipFile =  BP.Difference.SystemConfig.PathOfTemp + frmTreeName + ".zip";
+            try
+            {
+                while (System.IO.File.Exists(zipFile) == true)
+                {
+                    System.IO.File.Delete(zipFile);
+                }
+                //执行压缩.
+                FastZip fz = new FastZip();
+                fz.CreateZip(zipFile, path, true, "");
+                //删除临时文件夹
+                System.IO.Directory.Delete(path, true);
+            }
+            catch (Exception ex)
+            {
+                return "err@执行压缩出现错误:" + ex.Message + ",路径tempPath:" + path + ",zipFile=" + zipFile;
+            }
+            return "url@DataUser/Temp/" + frmTreeName + ".zip";
+        }
+        #endregion 按照表单类别批量导出表单模板
     }
 }

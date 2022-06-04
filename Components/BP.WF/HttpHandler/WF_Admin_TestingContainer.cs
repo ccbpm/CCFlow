@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
-using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
 using BP.Port;
 using BP.En;
-using BP.WF;
 using BP.WF.Template;
 
 namespace BP.WF.HttpHandler
@@ -31,16 +27,16 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Default_Init()
         {
-            string userNo = this.GetRequestVal("UserNo");
-            if (WebUser.No.Equals(userNo) == false)
+            string testerNo = this.GetRequestVal("TesterNo");
+            if (WebUser.No.Equals(testerNo) == false)
             {
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
-                    BP.WF.Dev2Interface.Port_Login(userNo);
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                    BP.WF.Dev2Interface.Port_Login(testerNo);
                 else
-                    BP.WF.Dev2Interface.Port_Login(userNo, null, BP.Web.WebUser.OrgNo);
+                    BP.WF.Dev2Interface.Port_Login(testerNo, BP.Web.WebUser.OrgNo);
             }
 
-            Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, userNo);
+            Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, testerNo);
             return workid.ToString();
         }
         /// <summary>
@@ -68,7 +64,7 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Track";
             //把列大写转化为小写.
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 Track tk = new Track();
                 foreach (Attr attr in tk.EnMap.Attrs)
@@ -117,12 +113,22 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Default_LetAdminerLogin()
         {
-            //string adminer = this.GetRequestVal("Adminer");
-            string SID = this.GetRequestVal("AdminerSID");
-            BP.WF.Dev2Interface.Port_LoginBySID(SID);
-            return "登录成功.";
-            //Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, userNo);
-            //return workid.ToString();
+            try
+            {
+                string token = this.GetRequestVal("Token");
+                string userNo = BP.WF.Dev2Interface.Port_LoginByToken(token);
+                return userNo;
+            }
+            catch (Exception ex)
+            {
+                //@ 多人用同一个账号登录，就需要加上如下代码.
+                if (DataType.IsNullOrEmpty(this.UserNo) == false)
+                {
+                    BP.WF.Dev2Interface.Port_Login(this.UserNo);
+                    return this.UserNo;
+                }
+                return ex.Message;
+            }
         }
         /// <summary>
         /// 切换用户
@@ -131,10 +137,10 @@ namespace BP.WF.HttpHandler
         public string SelectOneUser_ChangUser()
         {
 
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
             {
                 string adminer = this.GetRequestVal("Adminer");
-                string SID = this.GetRequestVal("SID");
+                string SID = this.GetRequestVal("Token");
                 try
                 {
                     BP.WF.Dev2Interface.Port_Login(this.FK_Emp);
@@ -148,7 +154,7 @@ namespace BP.WF.HttpHandler
 
             try
             {
-                BP.WF.Dev2Interface.Port_Login(this.FK_Emp, null, this.OrgNo);
+                BP.WF.Dev2Interface.Port_Login(this.FK_Emp, this.OrgNo);
                 return "登录成功.";
             }
             catch (Exception ex)
@@ -166,31 +172,28 @@ namespace BP.WF.HttpHandler
         public string TestFlow2020_StartIt()
         {
             //此SID是管理员的SID.
-            string sid = this.GetRequestVal("SID");
+
             /* if (WebUser.IsAdmin == false)
                  return "err@非管理员无法测试,关闭后重新登录。";
  */
-
+            string testerNo = this.GetRequestVal("TesterNo");
             FlowExt fl = new FlowExt(this.FK_Flow);
-            fl.Tester = this.GetRequestVal("UserNo");
+            fl.Tester = testerNo;
             fl.Update();
 
             //要测试的用户编号.
-            string userNo = this.GetRequestVal("UserNo");
-
             //  Emp emp = new Emp(userNo);
             //  sid = emp.GetValStringByKey(EmpAttr.SID);
             //判断是否可以测试该流程？ 
             /*  BP.Port.Emp myEmp = new BP.Port.Emp();
-            int i = myEmp.Retrieve("SID", sid);
+            int i = myEmp.Retrieve("Token", sid);
             if (i == 0 && 1 == 2)
                 throw new Exception("err@非法的SID:" + sid);*/
 
             //组织url发起该流程.
-            string url = "Default.html?RunModel=1&FK_Flow=" + this.FK_Flow + "&UserNo=" + userNo;
+            string url = "Default.html?RunModel=1&FK_Flow=" + this.FK_Flow + "&TesterNo=" + testerNo;
             url += "&OrgNo=" + WebUser.OrgNo;
-            url += "&Adminer=" + WebUser.No;
-            url += "&AdminerSID=" + sid;
+            url += "&UserNo=" + WebUser.No;
             return url;
         }
         /// <summary>
@@ -200,22 +203,12 @@ namespace BP.WF.HttpHandler
         public string TestFlow2020_Init()
         {
             //清除缓存.
-            SystemConfig.DoClearCash();
+            BP.Difference.SystemConfig.DoClearCash();
 
             if (BP.Web.WebUser.IsAdmin == false)
                 return "err@您不是管理员，无法执行该操作.";
 
             FlowExt fl = new FlowExt(this.FK_Flow);
-
-            //if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
-            //{
-            //    if (BP.Web.WebUser.No.Equals("admin") && fl.Tester.Length <= 3)
-            //    {
-            //        string msg = "err@二级管理员[" + BP.Web.WebUser.Name + "]您好,您尚未为该流程配置测试人员.";
-            //        msg += "您需要在流程属性里的底部[设置流程发起测试人]的属性里，设置可以发起的测试人员,多个人员用逗号分开.";
-            //        return msg;
-            //    }
-            //}
 
             #region 检查.
             int nodeid = int.Parse(this.FK_Flow + "01");
@@ -241,6 +234,8 @@ namespace BP.WF.HttpHandler
                 dtEmps.Columns.Add("No");
                 dtEmps.Columns.Add("Name");
                 dtEmps.Columns.Add("FK_DeptText");
+                dtEmps.Columns.Add("DeptFullName");
+
 
                 string[] strs = fl.Tester.Split(',');
                 foreach (string str in strs)
@@ -258,6 +253,9 @@ namespace BP.WF.HttpHandler
                     dr["No"] = emp.UserID;
                     dr["Name"] = emp.Name;
                     dr["FK_DeptText"] = emp.FK_DeptText;
+
+                    //dr["DeptFullName"] = ;
+
                     dtEmps.Rows.Add(dr);
                 }
 
@@ -275,20 +273,16 @@ namespace BP.WF.HttpHandler
                     case DeliveryWay.ByStation:
                     case DeliveryWay.ByStationOnly:
                         if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
-                            sql = "SELECT Port_Emp.No  FROM Port_Emp LEFT JOIN Port_Dept ON  Port_Emp.FK_Dept=Port_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No) join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
+                        {
+                            sql = "SELECT Port_Emp.No  FROM Port_Emp LEFT JOIN Port_Dept ON  Port_Emp.FK_Dept=Port_Dept.No  join Port_DeptEmpStation ON (fk_emp=Port_Emp.No) join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
+                        }
                         else
                         {
                             // 查询当前组织下所有的该岗位的人员. 
                             sql = "SELECT a." + BP.Sys.Base.Glo.UserNo + " as No FROM Port_Emp A, Port_DeptEmpStation B, WF_NodeStation C ";
                             sql += " WHERE A.OrgNo='" + WebUser.OrgNo + "' AND C.FK_Node=" + nd.NodeID;
                             sql += " AND A.No=B.FK_Emp AND B.FK_Station=C.FK_Station ";
-
-                            //   sql = "SELECT Port_Emp." + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE OrgNo='" + BP.Web.WebUser.OrgNo + "'";
-                            //  sql+=" LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No) join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
-                            // sql += " LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No) join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
                         }
-
-                        // emps.RetrieveInSQL_Order("select fk_emp from Port_Empstation WHERE fk_station in (select fk_station from WF_NodeStation WHERE FK_Node=" + nodeid + " )", "FK_Dept");
                         break;
                     case DeliveryWay.ByTeamOrgOnly: //按照组织智能计算。
                     case DeliveryWay.ByTeamDeptOnly: //按照组织智能计算。
@@ -304,13 +298,11 @@ namespace BP.WF.HttpHandler
                         sql = "SELECT " + BP.Sys.Base.Glo.UserNo + ",Name FROM Port_Emp A, WF_NodeDept B WHERE A.FK_Dept=B.FK_Dept AND B.FK_Node=" + nodeid;
                         break;
                     case DeliveryWay.ByBindEmp:
-                        if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                        if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                             sql = "SELECT " + BP.Sys.Base.Glo.UserNo + ",Name FROM Port_Emp WHERE " + BP.Sys.Base.Glo.UserNo + " IN (SELECT FK_Emp from WF_NodeEmp where FK_Node='" + nodeid + "') AND OrgNo='" + BP.Web.WebUser.OrgNo + "'";
                         else
                             sql = "SELECT " + BP.Sys.Base.Glo.UserNo + ",Name FROM Port_Emp WHERE " + BP.Sys.Base.Glo.UserNo + " in (SELECT FK_Emp from WF_NodeEmp where FK_Node='" + nodeid + "') ";
 
-
-                        //emps.RetrieveInSQL("select fk_emp from wf_NodeEmp WHERE fk_node=" + int.Parse(this.FK_Flow + "01") + " ");
                         break;
                     case DeliveryWay.ByDeptAndStation:
 
@@ -361,7 +353,7 @@ namespace BP.WF.HttpHandler
 
                 dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0)
-                    return "err@您按照:" + nd.HisDeliveryWay + " 的方式设置的开始节点的访问规则，但是开始节点没有人员，执行的SQL:" + sql;
+                    return "err@您按照:[" + nd.HisDeliveryWay + "]的方式设置的开始节点的访问规则，但是开始节点没有人员.";
 
                 if (dt.Rows.Count > 500)
                     return "err@可以发起开始节点的人员太多，会导致系统崩溃变慢，请<a href='javascript:SetTester()' >设置测试发起人</a>。";
@@ -385,7 +377,7 @@ namespace BP.WF.HttpHandler
                     //查询数据。
                     BP.Port.Emp emp = new Emp();
 
-                    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                     {
                         emp.No = this.OrgNo + "_" + myemp;
                         emp.RetrieveFromDBSources();
@@ -407,19 +399,22 @@ namespace BP.WF.HttpHandler
                     dtMyEmps.Rows.Add(drNew);
                 }
 
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+
+                if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
                 {
                     dtMyEmps.Columns["NO"].ColumnName = "No";
                     dtMyEmps.Columns["NAME"].ColumnName = "Name";
                     dtMyEmps.Columns["FK_DEPTTEXT"].ColumnName = "FK_DeptText";
                 }
 
-                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+                if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
                 {
                     dtMyEmps.Columns["no"].ColumnName = "No";
                     dtMyEmps.Columns["name"].ColumnName = "Name";
                     dtMyEmps.Columns["fk_depttext"].ColumnName = "FK_DeptText";
                 }
+
+
 
                 //返回数据源.
                 return BP.Tools.Json.ToJson(dtMyEmps);

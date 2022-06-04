@@ -88,13 +88,17 @@ namespace BP.DA
         /// </summary>
         DM=7,
         /// <summary>
-        /// 人大金仓
+        /// 人大金仓3
         /// </summary>
-        KingBase=8,
+        KingBaseR3=8,
+        /// <summary>
+        /// 人大金仓9
+        /// </summary>
+        KingBaseR6=9,
         /// <summary>
         /// 优炫
         /// </summary>
-        UX=9
+        UX = 10
     }
     /// <summary>
     /// 保管位置
@@ -109,24 +113,6 @@ namespace BP.DA
         /// 全体
         /// </summary>
         Application        
-    }
-    /// <summary>
-    /// 图表类型
-    /// </summary>
-    public enum ChartType
-    {
-        /// <summary>
-        /// 柱状图
-        /// </summary>
-        Histogram,
-        /// <summary>
-        /// 丙状图
-        /// </summary>
-        Pie,
-        /// <summary>
-        /// 折线图
-        /// </summary>
-        Line
     }
     /// <summary>
     /// 分组方式

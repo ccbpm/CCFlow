@@ -1,14 +1,7 @@
-﻿using System;
-using System.Data;
-using System.Collections;
-using BP.DA;
+﻿using BP.DA;
 using BP.En;
 using BP.WF;
-using BP.WF.Data;
-using BP.WF.Template;
 using BP.Sys;
-using System.Collections.Generic;
-using BP.CCBill.Template;
 
 
 namespace BP.CCBill
@@ -496,17 +489,17 @@ namespace BP.CCBill
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "步骤4: 总数数据"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoExpCount";
-                rm.Icon = "../../WF/Img/Event.png";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "步骤4: 总数数据"; // "设计表单";
+                //rm.ClassMethodName = this.ToString() + ".DoExpCount";
+                //rm.Icon = "../../WF/Img/Event.png";
+                //rm.Visable = true;
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.Target = "_blank";
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "步骤5: 测试"; // "设计表单";
+                rm.Title = "步骤4: 测试"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoDBList";
                 rm.Icon = "../../WF/Img/Event.png";
                 rm.Visable = true;

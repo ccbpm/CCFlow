@@ -47,26 +47,7 @@ namespace BP.En
             }
             return null;
         }
-        public Entity Filter(string key1, string val1, string key2, string val2)
-        {
-            foreach (Entity en in this)
-            {
-                if (en.GetValStringByKey(key1) == val1 && en.GetValStringByKey(key2) == val2)
-                    return en;
-            }
-            return null;
-        }
-        public Entity Filter(string key1, string val1, string key2, string val2, string key3, string val3)
-        {
-            foreach (Entity en in this)
-            {
-                if (en.GetValStringByKey(key1) == val1 &&
-                    en.GetValStringByKey(key2) == val2 &&
-                    en.GetValStringByKey(key3) == val3)
-                    return en;
-            }
-            return null;
-        }
+       
         #endregion
 
         #region 虚拟方法
@@ -82,162 +63,7 @@ namespace BP.En
             qo.AddWhere(attr, val);
             return qo.DoQuery();
         }
-        public int RetrieveLikeAttr(string attr, string val)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(attr, " like ", val);
-            return qo.DoQuery();
-        }
-
-        #endregion
-
-        #region 扩展属性
-        /// <summary>
-        /// 是不是分级的字典。
-        /// </summary>
-        public bool IsGradeEntities
-        {
-            get
-            {
-                try
-                {
-                    Attr attr = null;
-                    attr = this.GetNewEntity.EnMap.GetAttrByKey("Grade");
-                    attr = this.GetNewEntity.EnMap.GetAttrByKey("IsDtl");
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-        }
-        #endregion
-
-        #region 通过datatable 转换为实体集合
-        #endregion
-
-        #region 公共方法
-        /// <summary>
-        /// 写入到xml.
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        public virtual int ExpDataToXml(string file)
-        {
-            DataTable dt = this.ToDataTableField();
-            DataSet ds = new DataSet();
-            ds.Tables.Add(dt);
-            ds.WriteXml(file);
-            return dt.Rows.Count;
-        }
-        ///// <summary>
-        ///// DBSimpleNoNames
-        ///// </summary>
-        ///// <returns></returns>
-        //public DBSimpleNoNames ToEntitiesNoName(string refNo, string refName)
-        //{
-        //    DBSimpleNoNames ens = new DBSimpleNoNames();
-        //    foreach (Entity en in this)
-        //    {
-        //        ens.AddByNoName(en.GetValStringByKey(refNo), en.GetValStringByKey(refName));
-        //    }
-        //    return ens;
-        //}
-        /// <summary>
-        /// 通过datatable 转换为实体集合这个Table其中一个列名称是主键
-        /// </summary>
-        /// <param name="dt">Table</param>
-        /// <param name="fieldName">字段名称，这个字段时包含在table 中的主键 </param>
-        public void InitCollectionByTable(DataTable dt, string fieldName)
-        {
-            Entity en = this.GetNewEntity;
-            string pk = en.PK;
-            foreach (DataRow dr in dt.Rows)
-            {
-                Entity en1 = this.GetNewEntity;
-                en1.SetValByKey(pk, dr[fieldName]);
-                en1.Retrieve();
-                this.AddEntity(en1);
-            }
-        }
-        /// <summary>
-        /// 通过datatable 转换为实体集合.
-        /// 这个Table 的结构需要与属性结构相同。
-        /// </summary>
-        /// <param name="dt">转换为Table</param>
-        public void InitCollectionByTable(DataTable dt)
-        {
-            try
-            {
-                foreach (DataRow dr in dt.Rows)
-                {
-                    Entity en = this.GetNewEntity;
-                    foreach (Attr attr in en.EnMap.Attrs)
-                    {
-                        if (attr.MyFieldType == FieldType.RefText)
-                        {
-                            try
-                            {
-                                en.Row.SetValByKey(attr.Key, dr[attr.Key]);
-                            }
-                            catch
-                            {
-                            }
-                        }
-                        else
-                        {
-                            en.Row.SetValByKey(attr.Key, dr[attr.Key]);
-                        }
-                    }
-                    this.AddEntity(en);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("@此表不能向集合转换详细的错误:" + ex.Message);
-            }
-        }
-        /// <summary>
-        /// 判断两个实体集合是不是相同.
-        /// </summary>
-        /// <param name="ens"></param>
-        /// <returns></returns>
-        public bool Equals(Entities ens)
-        {
-            if (ens.Count != this.Count)
-                return false;
-
-            foreach (Entity en in this)
-            {
-                bool isExits = false;
-                foreach (Entity en1 in ens)
-                {
-                    if (en.PKVal.Equals(en1.PKVal))
-                    {
-                        isExits = true;
-                        break;
-                    }
-                }
-                if (isExits == false)
-                    return false;
-            }
-            return true;
-        }
-        #endregion
-
-        #region 扩展属性
-        //		/// <summary>
-        //		/// 他的相关功能。
-        //		/// </summary>
-        //		public SysUIEnsRefFuncs HisSysUIEnsRefFuncs
-        //		{
-        //			get
-        //			{
-        //				return new SysUIEnsRefFuncs(this.ToString()) ; 
-        //			}
-        //
-        //		}
+      
         #endregion
 
         #region 构造函数
@@ -290,11 +116,7 @@ namespace BP.En
                 throw new Exception("加入的 AddEntity 不能为空。");
             return this.InnerList.Add(entity);
         }
-        public virtual int AddEntity(Entity entity, int idx)
-        {
-            this.InnerList.Insert(idx, entity);
-            return idx;
-        }
+      
         public virtual void AddEntities(Entities ens)
         {
             foreach (Entity en in ens)
@@ -324,10 +146,7 @@ namespace BP.En
                 this.AddEntity(en);
             }
         }
-        public virtual void Insert(int index, Entity entity)
-        {
-            this.InnerList.Insert(index, entity);
-        }
+       
         /// <summary>
         /// 判断是不是包含指定的Entity .
         /// </summary>
@@ -337,15 +156,7 @@ namespace BP.En
         {
             return this.Contains(en.PKVal);
         }
-        /// <summary>
-        /// 是否包含这个集合
-        /// </summary>
-        /// <param name="ens"></param>
-        /// <returns>true / false </returns>
-        public bool Contains(Entities ens)
-        {
-            return this.Contains(ens, ens.GetNewEntity.PK);
-        }
+       
         public bool Contains(Entities ens, string key)
         {
             if (ens.Count == 0)
@@ -357,17 +168,7 @@ namespace BP.En
             }
             return true;
         }
-        public bool Contains(Entities ens, string key1, string key2)
-        {
-            if (ens.Count == 0)
-                return false;
-            foreach (Entity en in ens)
-            {
-                if (this.Contains(key1, en.GetValByKey(key1), key2, en.GetValByKey(key2)) == false)
-                    return false;
-            }
-            return true;
-        }
+        
         /// <summary>
         /// 是不是包含指定的PK
         /// </summary>
@@ -403,39 +204,7 @@ namespace BP.En
             }
             return false;
         }
-        public bool Contains(string attr1, object pkVal1, string attr2, object pkVal2, string attr3, object pkVal3)
-        {
-            foreach (Entity myen in this)
-            {
-                if (myen.GetValByKey(attr1).ToString().Equals(pkVal1.ToString())
-                    && myen.GetValByKey(attr2).ToString().Equals(pkVal2.ToString())
-                    && myen.GetValByKey(attr3).ToString().Equals(pkVal3.ToString())
-                    )
-                    return true;
-            }
-            return false;
-        }
-        /// <summary>
-        /// 取得当前集合于传过来的集合交集.
-        /// </summary>
-        /// <param name="ens">一个实体集合</param>
-        /// <returns>比较后的集合</returns>
-        public Entities GainIntersection(Entities ens)
-        {
-            Entities myens = this.CreateInstance();
-            string pk = this.GetNewEntity.PK;
-            foreach (Entity en in this)
-            {
-                foreach (Entity hisen in ens)
-                {
-                    if (en.GetValByKey(pk).Equals(hisen.GetValByKey(pk)))
-                    {
-                        myens.AddEntity(en);
-                    }
-                }
-            }
-            return myens;
-        }
+        
         /// <summary>
         /// 创建立本身的一个实例.
         /// </summary>
@@ -496,17 +265,7 @@ namespace BP.En
             }
             return null;
         }
-        public Entity GetEntityByKey(string attr1, object val1, string attr2, object val2, string attr3, object val3)
-        {
-            foreach (Entity en in this)
-            {
-                if (en.GetValByKey(attr1).Equals(val1)
-                    && en.GetValByKey(attr2).Equals(val2)
-                    && en.GetValByKey(attr3).Equals(val3))
-                    return en;
-            }
-            return null;
-        }
+      
         /// <summary>
         /// 获得entis
         /// </summary>
@@ -515,7 +274,7 @@ namespace BP.En
         /// <returns></returns>
         public Entities GetEntitiesByKey(string attr, string val)
         {
-            Entities ens = this.GetNewEntity.GetNewEntities; 
+            Entities ens = this.GetNewEntity.GetNewEntities;
             foreach (Entity en in this)
             {
                 if (en.GetValStrByKey(attr).Equals(val) == false)
@@ -529,52 +288,7 @@ namespace BP.En
         #endregion
 
         #region  对一个属性操作
-        /// <summary>
-        /// 求和
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public decimal GetSumDecimalByKey(string key)
-        {
-            decimal sum = 0;
-            foreach (Entity en in this)
-            {
-                sum += en.GetValDecimalByKey(key);
-            }
-            return sum;
-        }
-        public decimal GetSumDecimalByKey(string key, string attrOfGroup, object valOfGroup)
-        {
-            decimal sum = 0;
-            foreach (Entity en in this)
-            {
-                if (en.GetValStrByKey(attrOfGroup) == valOfGroup.ToString())
-                    sum += en.GetValDecimalByKey(key);
-            }
-            return sum;
-        }
-        public decimal GetAvgDecimalByKey(string key)
-        {
-            if (this.Count == 0)
-                return 0;
-            decimal sum = 0;
-            foreach (Entity en in this)
-            {
-                sum += en.GetValDecimalByKey(key);
-            }
-            return sum / this.Count;
-        }
-        public decimal GetAvgIntByKey(string key)
-        {
-            if (this.Count == 0)
-                return 0;
-            decimal sum = 0;
-            foreach (Entity en in this)
-            {
-                sum = sum + en.GetValDecimalByKey(key);
-            }
-            return sum / this.Count;
-        }
+        
         /// <summary>
         /// 求和
         /// </summary>
@@ -619,16 +333,7 @@ namespace BP.En
             }
             return sum;
         }
-        public int GetCountByKey(string key, int val)
-        {
-            int sum = 0;
-            foreach (Entity en in this)
-            {
-                if (en.GetValIntByKey(key) == val)
-                    sum++;
-            }
-            return sum;
-        }
+     
         #endregion
 
         #region 对集合的操作
@@ -650,18 +355,12 @@ namespace BP.En
             BP.DA.Log.DebugWriteInfo("成功[" + en.ToString() + "-" + num + "]放入缓存。");
             return num;
         }
-        /// <summary>
-        /// 执行一次数据检查
-        /// </summary>
-        public string DoDBCheck(DBCheckLevel level)
-        {
-            return PubClass.DBRpt1(level, this);
-        }
+        
         /// <summary>
         /// 从集合中删除该对象
         /// </summary>
         /// <param name="entity"></param>
-        public virtual void RemoveEn(Entity entity)
+        public  void RemoveEn(Entity entity)
         {
             this.InnerList.Remove(entity);
         }
@@ -669,12 +368,12 @@ namespace BP.En
         /// 移除
         /// </summary>
         /// <param name="pk"></param>
-        public virtual void RemoveEn(string pk)
+        public  void RemoveEn(string pk)
         {
             string key = this.GetNewEntity.PK;
             RemoveEn(key, pk);
         }
-        public virtual void RemoveEn(string key, string val)
+        public  void RemoveEn(string key, string val)
         {
             foreach (Entity en in this)
             {
@@ -685,7 +384,7 @@ namespace BP.En
                 }
             }
         }
-        public virtual void Remove(string pks)
+        public  void Remove(string pks)
         {
             //设置
             pks = pks.Replace(",", "@");
@@ -848,8 +547,7 @@ namespace BP.En
             {
                 ps.Add("p3", val3);
             }
-
-
+             
             return en.RunSQL(ps);
         }
         public int Delete(string key1, object val1, string key2, object val2, string key3, object val3, string key4, object val4)
@@ -926,24 +624,7 @@ namespace BP.En
             }
             return en.RunSQL(ps);
         }
-        /// <summary>
-        /// 更新集合内的对象
-        /// </summary>
-        public void Update()
-        {
-            //string msg="";
-            foreach (Entity en in this)
-                en.Update();
-
-        }
-        /// <summary>
-        /// 保存
-        /// </summary>
-        public void Save()
-        {
-            foreach (Entity en in this)
-                en.Save();
-        }
+       
         public void SaveToXml(string file)
         {
             string dir = "";
@@ -973,93 +654,6 @@ namespace BP.En
         #endregion
 
         #region 查询方法
-        public virtual int RetrieveByKeyNoConnection(string attr, object val)
-        {
-            Entity en = this.GetNewEntity;
-            string pk = en.PK;
-
-            DataTable dt = DBAccess.RunSQLReturnTable("SELECT " + pk + " FROM " + this.GetNewEntity.EnMap.PhysicsTable + " WHERE " + attr + "=" + en.HisDBVarStr + "v", "v", val);
-            foreach (DataRow dr in dt.Rows)
-            {
-                Entity en1 = this.GetNewEntity;
-                en1.SetValByKey(pk, dr[0]);
-                en1.Retrieve();
-                this.AddEntity(en1);
-            }
-            return dt.Rows.Count;
-        }
-        /// <summary>
-        /// 按照关键字查询。
-        /// 说明这里是用Attrs接受
-        /// </summary>
-        /// <param name="key">关键字</param>
-        /// <param name="al">实体</param>
-        /// <returns>返回Table</returns>
-        public DataTable RetrieveByKeyReturnTable(string key, Attrs attrs)
-        {
-            QueryObject qo = new QueryObject(this);
-
-            // 在 Normal 属性里面增加，查询条件。
-            Map map = this.GetNewEntity.EnMap;
-            qo.addLeftBracket();
-            foreach (Attr en in map.Attrs)
-            {
-                if (en.UIContralType == UIContralType.DDL || en.UIContralType == UIContralType.CheckBok)
-                    continue;
-                qo.addOr();
-                qo.AddWhere(en.Key, " LIKE ", key);
-            }
-            qo.addRightBracket();
-
-            //            //
-            //			Attrs searchAttrs = map.SearchAttrs;
-            //			foreach(Attr attr  in attrs)
-            //			{				
-            //				qo.addAnd();
-            //				qo.addLeftBracket();
-            //				qo.AddWhere(attr.Key, attr.DefaultVal.ToString() ) ;
-            //				qo.addRightBracket();
-            //			}
-            return qo.DoQueryToTable();
-        }
-        /// <summary>
-        /// 按照KEY 查找。
-        /// </summary>
-        /// <param name="keyVal">KEY</param>
-        /// <returns>返回朝找出来的个数。</returns>
-        public virtual int RetrieveByKey(string keyVal)
-        {
-            keyVal = "%" + keyVal.Trim() + "%";
-            QueryObject qo = new QueryObject(this);
-            Attrs attrs = this.GetNewEntity.EnMap.Attrs;
-            //qo.addLeftBracket();
-            string pk = this.GetNewEntity.PK;
-            if (pk != "OID")
-                qo.AddWhere(this.GetNewEntity.PK, " LIKE ", keyVal);
-            foreach (Attr en in attrs)
-            {
-
-                if (en.UIContralType == UIContralType.DDL || en.UIContralType == UIContralType.CheckBok)
-                    continue;
-
-                if (en.Key == pk)
-                    continue;
-
-                if (en.MyDataType != DataType.AppString)
-                    continue;
-
-                if (en.MyFieldType == FieldType.FK)
-                    continue;
-
-                if (en.MyFieldType == FieldType.RefText)
-                    continue;
-
-                qo.addOr();
-                qo.AddWhere(en.Key, " LIKE ", keyVal);
-            }
-            //qo.addRightBracket();
-            return qo.DoQuery();
-        }
         /// <summary>
         /// 按LIKE 去查.
         /// </summary>
@@ -1073,17 +667,6 @@ namespace BP.En
             return qo.DoQuery();
         }
 
-        /// <summary>
-        ///  查询出来，包涵pks 的字串。
-        ///  比例："001,002,003"
-        /// </summary>
-        /// <returns></returns>
-        public virtual int Retrieve(string pks)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(this.GetNewEntity.PK, " IN ", pks);
-            return qo.DoQuery();
-        }
         /// <summary>
         /// 按照IDs查询并且排序
         /// 比如: FrmID  IN  '001','002' 
@@ -1128,8 +711,6 @@ namespace BP.En
             return qo.DoQuery();
         }
 
-
-
         public virtual int RetrieveInSQL(string attr, string sql)
         {
             QueryObject qo = new QueryObject(this);
@@ -1150,27 +731,18 @@ namespace BP.En
             qo.AddWhereInSQL(this.GetNewEntity.PK, sql);
             return qo.DoQuery();
         }
-        public virtual int RetrieveInSQL_Order(string sql, string orderby)
+        public virtual int Retrieve(string orderby)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhereInSQL(this.GetNewEntity.PK, sql);
             qo.addOrderBy(orderby);
             return qo.DoQuery();
         }
-        public virtual int Retrieve(string key, bool val)
-        {
-            QueryObject qo = new QueryObject(this);
-            if (val)
-                qo.AddWhere(key, 1);
-            else
-                qo.AddWhere(key, 0);
-            return qo.DoQuery();
-        }
+
         public virtual int Retrieve(string key, object val, string orderby = null)
         {
             QueryObject qo = new QueryObject(this);
 
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true)
                 qo.AddWhere(key, BP.Sys.Base.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key, val));
             else
                 qo.AddWhere(key, val);
@@ -1183,7 +755,8 @@ namespace BP.En
         {
             QueryObject qo = new QueryObject(this);
 
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            //是否需要参数类型
+            if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true)
             {
                 qo.AddWhere(key, BP.Sys.Base.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key, val));
                 qo.addAnd();
@@ -1204,7 +777,7 @@ namespace BP.En
         {
             QueryObject qo = new QueryObject(this);
 
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true)
             {
                 qo.AddWhere(key, BP.Sys.Base.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key, val));
                 qo.addAnd();
@@ -1233,7 +806,7 @@ namespace BP.En
         {
             QueryObject qo = new QueryObject(this);
 
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true)
             {
                 qo.AddWhere(key, BP.Sys.Base.Glo.GenerRealType(this.GetNewEntity.EnMap.Attrs, key, val));
                 qo.addAnd();
@@ -1520,11 +1093,6 @@ namespace BP.En
 
                 foreach (Attr attr in en.EnMap.Attrs)
                 {
-                    //if (attr.UIVisible == false)
-                    //    continue;
-
-                    //if (attr.MyFieldType == FieldType.Enum && attr.MyDataType == DataType.AppInt )
-                    //    continue;
 
                     switch (attr.MyDataType)
                     {
@@ -1577,11 +1145,6 @@ namespace BP.En
                 DataRow dr = dt.NewRow();
                 foreach (Attr attr in en.EnMap.Attrs)
                 {
-                    //if (attr.UIVisible == false)
-                    //    continue;
-
-                    //if (attr.MyFieldType == FieldType.Enum && attr.MyDataType == DataType.AppInt)
-                    //    continue;
 
                     if (attr.MyDataType == DataType.AppBoolean)
                     {
@@ -1596,56 +1159,6 @@ namespace BP.En
                 dt.Rows.Add(dr);
             }
             return dt;
-        }
-
-        /// <summary>
-        /// 把系统的实体的PK转换为string
-        /// 比如: "001,002,003,"。
-        /// </summary>
-        /// <param name="flag">分割符号, 一般来说用 ' ; '</param>
-        /// <returns>转化后的string / 实体集合为空就 return null</returns>
-        public string ToStringOfPK(string flag, bool isCutEndFlag)
-        {
-            string pk = null;
-            foreach (Entity en in this)
-            {
-                pk += en.PKVal + flag;
-            }
-            if (isCutEndFlag)
-                pk = pk.Substring(0, pk.Length - 1);
-
-            return pk;
-        }
-        /// <summary>
-        /// 把系统的实体的PK转换为 string
-        /// 比如: "001,002,003,"。
-        /// </summary>		 
-        /// <returns>转化后的string / 实体集合为空就 return null</returns>
-        public string ToStringOfSQLModelByPK()
-        {
-            if (this.Count == 0)
-                return "''";
-            return ToStringOfSQLModelByKey(this[0].PK);
-        }
-        /// <summary>
-        /// 把系统的实体的PK转换为 string
-        /// 比如: "001,002,003,"。
-        /// </summary>		 
-        /// <returns>转化后的string / 实体集合为空就 return "''"</returns>
-        public string ToStringOfSQLModelByKey(string key)
-        {
-            if (this.Count == 0)
-                return "''";
-
-            string pk = null;
-            foreach (Entity en in this)
-            {
-                pk += "'" + en.GetValStringByKey(key) + "',";
-            }
-
-            pk = pk.Substring(0, pk.Length - 1);
-
-            return pk;
         }
 
         /// <summary>
@@ -1681,7 +1194,7 @@ namespace BP.En
                         dt.Columns.Add(new DataColumn(attr.Key, typeof(double)));
                         break;
                     case DataType.AppMoney:
-                        dt.Columns.Add(new DataColumn(attr.Key, typeof(double)));
+                        dt.Columns.Add(new DataColumn(attr.Key, typeof(decimal)));
                         break;
                     case DataType.AppDate:
                         dt.Columns.Add(new DataColumn(attr.Key, typeof(string)));
@@ -1754,10 +1267,7 @@ namespace BP.En
             return dt;
         }
         #endregion
-
-        #region 分组方法
-        #endregion
-
+         
         #region 查询from cash
         /// <summary>
         /// 缓存查询: 根据 in sql 方式进行。
@@ -1859,39 +1369,7 @@ namespace BP.En
             return RetrieveFromCash(null, null, top, orderBy, isDesc);
         }
         #endregion
-
-        #region 包含方法
-        /// <summary>
-        /// 是否包含任意一个实体主键编号
-        /// </summary>
-        /// <param name="keys">多个主键用,符合分开</param>
-        /// <returns>true包含任意一个，fale 一个都不包含.</returns>
-        public bool ContainsAnyOnePK(string keys)
-        {
-            keys = "," + keys + ",";
-            foreach (Entity en in this)
-            {
-                if (keys.Contains("," + en.PKVal + ",") == true)
-                    return true;
-            }
-            return false;
-        }
-        /// <summary>
-        /// 包含所有的主键
-        /// </summary>
-        /// <param name="keys">多个主键用,符合分开</param>
-        /// <returns>true全部包含.</returns>
-        public bool ContainsAllPK(string keys)
-        {
-            keys = "," + keys + ",";
-            foreach (Entity en in this)
-            {
-                if (keys.Contains("," + en.PKVal + ",") == false)
-                    return false;
-            }
-            return true;
-        }
-        #endregion
+         
 
         #region 类名属性.
         /// <summary>

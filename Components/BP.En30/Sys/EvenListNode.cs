@@ -20,7 +20,6 @@ namespace BP.Sys
         public const string FrmLoadBefore = "FrmLoadBefore";
         #endregion 节点表单事件
 
-
         #region 节点事件
         /// <summary>
         /// 节点发送前

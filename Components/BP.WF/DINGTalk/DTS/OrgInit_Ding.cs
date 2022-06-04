@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Reflection;
-using BP.DA;
-using BP.Port;
-using BP.En;
-using BP.Sys;
+﻿using BP.En;
 
 namespace BP.GPM.DTalk.DTS
 {

@@ -9,6 +9,11 @@ using System.Data;
 using BP.WF;
 using BP.En;
 using BP.WF.Template;
+using BP.Difference;
+using BP.WF.Template.SFlow;
+using BP.WF.Template.CCEn;
+using BP.WF.Template.Frm;
+
 
 namespace BP.WF.Template
 {
@@ -38,7 +43,7 @@ namespace BP.WF.Template
 
 
             if (ds.Tables.Contains("WF_Flow") == false)
-                throw new Exception("导入错误，非流程模版文件" + path + "。");
+                throw new Exception("err@导入错误，非流程模版文件" + path + "。");
 
             DataTable dtFlow = ds.Tables["WF_Flow"];
             Flow fl = new Flow();
@@ -140,7 +145,6 @@ namespace BP.WF.Template
             DataTable myDTDtl = ds.Tables["Sys_MapDtl"];
             DataTable myDFrm = ds.Tables["Sys_MapFrame"];
 
-            //throw new Exception("@" + fl.No + fl.Name + ", 缺少：Sys_GroupField");
             foreach (DataRow dr in mydtGF.Rows)
             {
                 Sys.GroupField gf = new Sys.GroupField();
@@ -221,7 +225,7 @@ namespace BP.WF.Template
                     case "WF_NodeSubFlow": //延续子流程.
                         foreach (DataRow dr in dt.Rows)
                         {
-                            SubFlowYanXu yg = new SubFlowYanXu();
+                            SubFlow yg = new SubFlow();
                             foreach (DataColumn dc in dt.Columns)
                             {
                                 string val = dr[dc.ColumnName] as string;
@@ -407,7 +411,7 @@ namespace BP.WF.Template
 
                             try
                             {
-                                File.Copy(info.DirectoryName + "/" + bt.MyPK + ".rtf", SystemConfig.PathOfWebApp + @"/DataUser/CyclostyleFile/" + bt.MyPK + ".rtf", true);
+                                File.Copy(info.DirectoryName + "/" + bt.MyPK + ".rtf", BP.Difference.SystemConfig.PathOfWebApp + @"/DataUser/CyclostyleFile/" + bt.MyPK + ".rtf", true);
                             }
                             catch (Exception ex)
                             {
@@ -517,7 +521,7 @@ namespace BP.WF.Template
                                 cd.SetValByKey(dc.ColumnName, val);
                             }
 
-                            cd.FK_Flow = fl.No; //@hongyan.
+                            cd.FK_Flow = fl.No; 
                             cd.setMyPK(BP.DA.DBAccess.GenerGUID());
                             cd.DirectInsert();
                         }
@@ -687,7 +691,7 @@ namespace BP.WF.Template
                         foreach (DataRow dr in dt.Rows)
                         {
                             BP.WF.Template.NodeExt nd = new BP.WF.Template.NodeExt();
-                            BP.WF.Template.CC cc = new CC(); //抄送相关的信息.
+                            BP.WF.Template.CCEn.CC cc = new CC(); //抄送相关的信息.
                             BP.WF.Template.NodeWorkCheck fwc = new NodeWorkCheck();
 
                             foreach (DataColumn dc in dt.Columns)
@@ -1013,7 +1017,7 @@ namespace BP.WF.Template
                                     htmlCode = htmlCode.Replace("ND" + oldFlowID, "ND" + int.Parse(fl.No));
                                     //保存到数据库，存储html文件
                                     //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
-                                    string filePath = SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/";
+                                    string filePath =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/";
                                     if (Directory.Exists(filePath) == false)
                                         Directory.CreateDirectory(filePath);
                                     filePath = filePath + md.No + ".htm";
@@ -1025,7 +1029,7 @@ namespace BP.WF.Template
                                 else
                                 {
                                     //如果htmlCode是空的需要删除当前节点的html文件
-                                    string filePath = SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/" + md.No + ".htm";
+                                    string filePath =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/" + md.No + ".htm";
                                     if (File.Exists(filePath) == true)
                                         File.Delete(filePath);
                                     DBAccess.SaveBigTextToDB("", "Sys_MapData", "No", md.No, "HtmlTemplateFile");
@@ -1504,7 +1508,7 @@ namespace BP.WF.Template
             nd.Insert();
 
             //为创建节点设置默认值  @sly 部分方法
-            string file = SystemConfig.PathOfDataUser + "XML/DefaultNewNodeAttr.xml";
+            string file =  BP.Difference.SystemConfig.PathOfDataUser + "XML/DefaultNewNodeAttr.xml";
             DataSet ds = new DataSet();
             if (System.IO.File.Exists(file) == true)
             {
@@ -1607,7 +1611,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public static bool CheckPower(string flowNo)
         {
-            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.GroupInc)
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.GroupInc)
                 return true;
 
             return true;
@@ -1676,6 +1680,9 @@ namespace BP.WF.Template
                 if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
                     flow.OrgNo = WebUser.OrgNo; //隶属组织 
 
+                flow.PTable = "ND" + int.Parse(flow.No) + "Rpt";
+                 
+                //flow.TitleRole
                 flow.Insert();
 
                 //如果是集团模式下.
@@ -1727,7 +1734,7 @@ namespace BP.WF.Template
                 nd.Insert();
                 nd.CreateMap();
 
-                //为开始节点增加一个删除按钮. @李国文.
+                //为开始节点增加一个删除按钮.
                 string sql = "UPDATE WF_Node SET DelEnable=1 WHERE NodeID=" + nd.NodeID;
                 DBAccess.RunSQL(sql);
 
@@ -1742,7 +1749,7 @@ namespace BP.WF.Template
                 nd = new BP.WF.Node();
 
                 //为创建节点设置默认值 
-                string fileNewNode = SystemConfig.PathOfDataUser + "XML/DefaultNewNodeAttr.xml";
+                string fileNewNode =  BP.Difference.SystemConfig.PathOfDataUser + "XML/DefaultNewNodeAttr.xml";
                 if (System.IO.File.Exists(fileNewNode) == true)
                 {
                     DataSet myds = new DataSet();
@@ -1799,16 +1806,18 @@ namespace BP.WF.Template
                 md.Save();
 
                 // 装载模版.
-                string file = SystemConfig.PathOfDataUser + "XML/TempleteSheetOfStartNode.xml";
-                if (System.IO.File.Exists(file) == false)
-                    throw new Exception("@开始节点表单模版丢失" + file);
+                string file =  BP.Difference.SystemConfig.PathOfDataUser + "XML/TempleteSheetOfStartNode.xml";
+                if (System.IO.File.Exists(file) == true)
+                {
+                    //throw new Exception("@开始节点表单模版丢失" + file);
 
-                /*如果存在开始节点表单模版*/
-                DataSet ds = new DataSet();
-                ds.ReadXml(file);
+                    /*如果存在开始节点表单模版*/
+                    DataSet ds = new DataSet();
+                    ds.ReadXml(file);
 
-                string nodeID = "ND" + int.Parse(flow.No + "01");
-                BP.Sys.MapData.ImpMapData(nodeID, ds);
+                    string nodeID = "ND" + int.Parse(flow.No + "01");
+                    BP.Sys.MapData.ImpMapData(nodeID, ds);
+                }
 
                 //创建track.
                 Track.CreateOrRepairTrackTable(flow.No);
@@ -1848,7 +1857,7 @@ namespace BP.WF.Template
                 if (key.Contains("NewFlowDefVal") == false)
                     continue;
 
-                string val = SystemConfig.AppSettings[key];
+                string val =  BP.Difference.SystemConfig.AppSettings[key];
 
                 //设置值.
                 flow.SetValByKey(key.Replace("NewFlowDefVal_", ""), val);

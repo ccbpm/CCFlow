@@ -1,17 +1,35 @@
-﻿using System; 
+﻿using System;
 using System.Collections;
-using BP.DA; 
+using BP.DA;
 using System.Reflection;
 
 namespace BP.En
 {
+    /// <summary>
+    /// 显示位置
+    /// </summary>
+    public enum RMShowWhere
+    {
+        /// <summary>
+        /// 实例左侧
+        /// </summary>
+        EnLeft,
+        /// <summary>
+        /// 实例工具栏
+        /// </summary>
+        EnToolbar,
+        /// <summary>
+        /// 查询工具栏
+        /// </summary>
+        SearchToolbar
+    }
     /// <summary>
     /// 相关功能类型
     /// </summary>
     public enum RefMethodType
     {
         /// <summary>
-        /// 功能
+        /// 左侧功能
         /// </summary>
         Func,
         /// <summary>
@@ -25,7 +43,11 @@ namespace BP.En
         /// <summary>
         /// 右侧窗口打开
         /// </summary>
-        RightFrameOpen
+        RightFrameOpen,
+        /// <summary>
+        /// Tab页签打开
+        /// </summary>
+        TabOpen
     }
     /// <summary>
     /// RefMethod 的摘要说明。
@@ -41,6 +63,9 @@ namespace BP.En
         /// 宽度
         /// </summary>
         public int Width = 800;
+        /// <summary>
+        /// 目标
+        /// </summary>
         public string Target = "_B123";
         #endregion
 
@@ -48,6 +73,10 @@ namespace BP.En
         /// 功能
         /// </summary>
         public RefMethodType RefMethodType = RefMethodType.Func;
+        /// <summary>
+        /// 功能显示位置
+        /// </summary>
+        public RMShowWhere RMShowWhere = RMShowWhere.EnLeft;
         /// <summary>
         /// 相关字段
         /// </summary>
@@ -64,21 +93,15 @@ namespace BP.En
         /// 是否显示在Ens中?
         /// </summary>
         public bool IsForEns = false;
-
+        /// <summary>
+        /// 显示位置
+        /// </summary>
         public string IsShowForEnsCondtion = null;
         /// <summary>
         /// 相关功能
         /// </summary>
         public RefMethod()
         {
-        }
-       /// <summary>
-        /// 相关功能
-       /// </summary>
-       /// <param name="groupName"></param>
-        public RefMethod(string groupName)
-        {
-            this.GroupName = groupName;
         }
         /// <summary>
         /// 参数
@@ -128,25 +151,10 @@ namespace BP.En
         /// 图标
         /// </summary>
         public string Icon = null;
-        public string GetIcon(string path)
-        {
-            if (this.Icon == null)
-            {
-                return null;
-                return "<img src='/WF/Img/Btn/Do.gif'  border=0 />";
-            }
-            else
-            {
-                string url = path + Icon;
-                url = url.Replace("//", "/");
-                return "<img src='" + url + "'  border=0 />";
-            }
-        }
         /// <summary>
         /// 提示信息
         /// </summary>
         public string ToolTip = null;
-       
         /// <summary>
         /// PKVal
         /// </summary>
@@ -155,10 +163,6 @@ namespace BP.En
         /// 
         /// </summary>
         public Entity HisEn = null;
-        /// <summary>
-        /// 实体PK
-        /// </summary>
-        public string[] PKs = "".Split('.');
         /// <summary>
         /// 执行
         /// </summary>
@@ -204,7 +208,7 @@ namespace BP.En
         }
     }
     /// <summary>
-    /// 
+    /// 方法集合
     /// </summary>
     [Serializable]
     public class RefMethods : CollectionBase
@@ -234,22 +238,7 @@ namespace BP.En
             }
             return false;
         }
-        /// <summary>
-        /// 能够看到的属性
-        /// </summary>
-        public int CountOfVisable
-        {
-            get
-            {
-                int i = 0;
-                foreach (RefMethod rm in this)
-                {
-                    if (rm.Visable)
-                        i++;
-                }
-                return i;
-            }
-        }
+
         /// <summary>
         /// 根据索引访问集合内的元素Attr。
         /// </summary>

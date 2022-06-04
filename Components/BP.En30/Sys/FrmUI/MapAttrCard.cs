@@ -29,21 +29,6 @@ namespace BP.Sys.FrmUI
             }
         }
         /// <summary>
-        /// 最大长度
-        /// </summary>
-        public int MaxLen
-        {
-            get
-            {
-                return this.GetValIntByKey(MapAttrAttr.MaxLen);
-            }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.MaxLen, value);
-            }
-        }
-        
-        /// <summary>
         /// 字段
         /// </summary>
         public string KeyOfEn
@@ -55,20 +40,6 @@ namespace BP.Sys.FrmUI
             set
             {
                 this.SetValByKey(MapAttrAttr.KeyOfEn, value);
-            }
-        }
-        /// <summary>
-        /// 控件类型
-        /// </summary>
-        public UIContralType UIContralType
-        {
-            get
-            {
-                return (UIContralType)this.GetValIntByKey(MapAttrAttr.UIContralType);
-            }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.UIContralType, (int)value);
             }
         }
         #endregion
@@ -160,9 +131,9 @@ namespace BP.Sys.FrmUI
                 map.SetHelperAlert(MapAttrAttr.ColSpan, "对于傻瓜表单有效: 标识该字段TextBox横跨的宽度,占的单元格数量.");
 
                 //文本占单元格数量
-                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "Label单元格数量", true, true, "ColSpanAttrString",
+                map.AddDDLSysEnum(MapAttrAttr.LabelColSpan, 1, "Label单元格数量", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格@5=跨6个单元格@6=跨6个单元格");
-                map.SetHelperAlert(MapAttrAttr.TextColSpan, "对于傻瓜表单有效: 标识该字段Lable，标签横跨的宽度,占的单元格数量.");
+                map.SetHelperAlert(MapAttrAttr.LabelColSpan, "对于傻瓜表单有效: 标识该字段Lable，标签横跨的宽度,占的单元格数量.");
 
 
                 //文本跨行
@@ -219,7 +190,6 @@ namespace BP.Sys.FrmUI
         }
 
         #endregion
-        
 
         #region 重载.
         protected override bool beforeUpdateInsertAction()

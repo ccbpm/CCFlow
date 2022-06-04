@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Text;
-using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
 using BP.Port;
-using BP.En;
-using BP.WF;
 using BP.WF.Template;
 using ThoughtWorks.QRCode.Codec;
 using System.Drawing;
@@ -62,10 +57,10 @@ namespace BP.WF.HttpHandler
                 if (emp.CheckPass(this.GetRequestVal("Pass")) == false)
                     return "err@s输入密码错误.";
 
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                     BP.WF.Dev2Interface.Port_Login(emp.No);
                 else
-                    BP.WF.Dev2Interface.Port_Login(emp.No, null, emp.OrgNo);
+                    BP.WF.Dev2Interface.Port_Login(emp.No, emp.OrgNo);
 
                 return "../../MyFlowView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
             }
@@ -107,9 +102,9 @@ namespace BP.WF.HttpHandler
 
             
             if (this.WorkID == 0)  //开始节点的时候.
-                url = SystemConfig.HostURL + "/WF/WorkOpt/QRCode/ScanGuide.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow;
+                url =  BP.Difference.SystemConfig.HostURL + "/WF/WorkOpt/QRCode/ScanGuide.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow;
             else
-                url = SystemConfig.HostURL + "/WF/WorkOpt/QRCode/ScanGuide.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow;
+                url =  BP.Difference.SystemConfig.HostURL + "/WF/WorkOpt/QRCode/ScanGuide.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow;
 
             QRCodeEncoder encoder = new QRCodeEncoder();
             encoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;//编码方式(注意：BYTE能支持中文，ALPHA_NUMERIC扫描出来的都是数字)
@@ -125,9 +120,9 @@ namespace BP.WF.HttpHandler
             string tempPath = "";
 
             if (this.WorkID == 0)
-                tempPath = SystemConfig.PathOfTemp + this.FK_Flow + ".png";
+                tempPath =  BP.Difference.SystemConfig.PathOfTemp + this.FK_Flow + ".png";
             else
-                tempPath = SystemConfig.PathOfTemp + this.WorkID + ".png";
+                tempPath =  BP.Difference.SystemConfig.PathOfTemp + this.WorkID + ".png";
 
             image.Save(tempPath, ImageFormat.Png);
             image.Dispose();

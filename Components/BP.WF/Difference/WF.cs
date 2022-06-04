@@ -2,11 +2,9 @@
 using BP.WF.HttpHandler;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Web;
 using System.Web.Services.Description;
 using System.Xml.Schema;
 

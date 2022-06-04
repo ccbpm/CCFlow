@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
 using System.Data;
-using System.Text;
-using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
 using BP.Port;
-using BP.En;
-using BP.WF;
-using BP.WF.Template;
 using BP.Difference;
 
 namespace BP.WF.HttpHandler
@@ -73,7 +67,7 @@ namespace BP.WF.HttpHandler
             ht.Add("UserName", WebUser.Name);
 
             BP.Port.Emp emp = new Emp();
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 emp.No = BP.Web.WebUser.OrgNo + "_" + WebUser.No;
             else
                 emp.No = WebUser.No;
@@ -84,13 +78,13 @@ namespace BP.WF.HttpHandler
             ht.Add("DeptName", emp.FK_DeptText);
 
 
-            BP.GPM.DeptEmpStations des = new BP.GPM.DeptEmpStations();
-            des.Retrieve(BP.GPM.DeptEmpStationAttr.FK_Emp, WebUser.No);
+            BP.Port.DeptEmpStations des = new BP.Port.DeptEmpStations();
+            des.Retrieve(BP.Port.DeptEmpStationAttr.FK_Emp, WebUser.No);
 
             string depts = "";
             string stas = "";
 
-            foreach (BP.GPM.DeptEmpStation item in des)
+            foreach (BP.Port.DeptEmpStation item in des)
             {
                 BP.Port.Dept dept = new Dept();
                 dept.No = item.FK_Dept;
@@ -162,7 +156,7 @@ namespace BP.WF.HttpHandler
                 empNo = WebUser.No;
             try
             {
-                string tempFile = SystemConfig.PathOfWebApp + "DataUser/Siganture/" + empNo + ".jpg";
+                string tempFile =  BP.Difference.SystemConfig.PathOfWebApp + "DataUser/Siganture/" + empNo + ".jpg";
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
 
@@ -182,8 +176,8 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message + "" + info;
             }
 
-            //f.SaveAs(SystemConfig.PathOfWebApp + "DataUser/Siganture/" + WebUser.No + ".jpg");
-            // f.SaveAs(SystemConfig.PathOfWebApp + "DataUser/Siganture/" + WebUser.Name + ".jpg");
+            //f.SaveAs(BP.Difference.SystemConfig.PathOfWebApp + "DataUser/Siganture/" + WebUser.No + ".jpg");
+            // f.SaveAs(BP.Difference.SystemConfig.PathOfWebApp + "DataUser/Siganture/" + WebUser.Name + ".jpg");
             //f.PostedFile.InputStream.Close();
             //f.PostedFile.InputStream.Dispose();
             //f.Dispose();
@@ -203,7 +197,7 @@ namespace BP.WF.HttpHandler
                 empNo = WebUser.No;
             try
             {
-                string tempFile = SystemConfig.PathOfWebApp + "DataUser/UserIcon/" + empNo + ".png";
+                string tempFile =  BP.Difference.SystemConfig.PathOfWebApp + "DataUser/UserIcon/" + empNo + ".png";
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
 
@@ -229,7 +223,7 @@ namespace BP.WF.HttpHandler
         public string ChangeDept_Init()
         {
             Paras ps = new Paras();
-            ps.SQL = "SELECT a.No,a.Name, NameOfPath, '0' AS  CurrentDept FROM Port_Dept A, Port_DeptEmp B WHERE A.No=B.FK_Dept AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+            ps.SQL = "SELECT a.No,a.Name, NameOfPath, '0' AS  CurrentDept FROM Port_Dept A, Port_DeptEmp B WHERE A.No=B.FK_Dept AND B.FK_Emp=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Emp";
             ps.Add("FK_Emp", BP.Web.WebUser.No);
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
@@ -240,13 +234,19 @@ namespace BP.WF.HttpHandler
                 dt = DBAccess.RunSQLReturnTable(sql);
             }
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle 
-                || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
                 dt.Columns["CURRENTDEPT"].ColumnName = "CurrentDept";
                 dt.Columns["NAMEOFPATH"].ColumnName = "NameOfPath";
+            }
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["no"].ColumnName = "No";
+                dt.Columns["name"].ColumnName = "Name";
+                dt.Columns["currentdept"].ColumnName = "CurrentDept";
+                dt.Columns["nameofpath"].ColumnName = "NameOfPath";
             }
 
             //设置当前的部门.
@@ -268,7 +268,7 @@ namespace BP.WF.HttpHandler
         public string ChangeDept_Submit()
         {
             string deptNo = this.GetRequestVal("DeptNo");
-            BP.GPM.Dept dept = new BP.GPM.Dept(deptNo);
+            BP.Port.Dept dept = new BP.Port.Dept(deptNo);
 
             BP.Web.WebUser.FK_Dept = dept.No;
             BP.Web.WebUser.FK_DeptName = dept.Name;
@@ -291,7 +291,7 @@ namespace BP.WF.HttpHandler
             {
                 string sql = "";
 
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                     sql = "UPDATE Port_Emp SET fk_dept='" + deptNo + "' WHERE UserID='" + WebUser.No + "' AND OrgNo='" + WebUser.OrgNo + "'";
                 else
                     sql = "UPDATE Port_Emp SET fk_dept='" + deptNo + "' WHERE No='" + WebUser.No + "'";
@@ -323,7 +323,7 @@ namespace BP.WF.HttpHandler
         #region 修改密码.
         public string ChangePassword_Init()
         {
-            if (DBAccess.IsView("Port_Emp", SystemConfig.AppCenterDBType) == true)
+            if (DBAccess.IsView("Port_Emp", BP.Difference.SystemConfig.AppCenterDBType) == true)
                 return "err@当前是组织结构集成模式，您不能修改密码，请在被集成的系统修改密码。";
 
             return "";
@@ -341,7 +341,7 @@ namespace BP.WF.HttpHandler
             if (emp.CheckPass(oldPass) == false)
                 return "err@旧密码错误.";
 
-            if (SystemConfig.IsEnablePasswordEncryption == true)
+            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
                 pass = BP.Tools.Cryptography.EncryptString(pass);
             emp.Pass = pass;
             emp.Update();

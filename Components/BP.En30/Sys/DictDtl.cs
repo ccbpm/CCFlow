@@ -185,7 +185,7 @@ namespace BP.Sys
 
         //protected override bool beforeInsert()
         //{
-        //    if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+        //    if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
         //        this.OrgNo = BP.Web.WebUser.OrgNo;
 
         //    return base.beforeInsert();

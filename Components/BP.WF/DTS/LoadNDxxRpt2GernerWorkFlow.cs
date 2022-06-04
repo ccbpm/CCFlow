@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Data;
 using BP.DA;
-using System.Reflection;
-using BP.Port;
 using BP.En;
-using BP.Sys;
-using BP.WF.Data;
 
 namespace BP.WF.DTS
 {
@@ -31,7 +26,7 @@ namespace BP.WF.DTS
         /// <returns></returns>
         public override void Init()
         {
-           
+
         }
         /// <summary>
         /// 当前的操纵员是否可以执行这个方法
@@ -40,7 +35,7 @@ namespace BP.WF.DTS
         {
             get
             {
-                if (BP.Web.WebUser.No.Equals("admin")==true)
+                if (BP.Web.WebUser.No.Equals("admin") == true)
                     return true;
                 return false;
             }
@@ -54,35 +49,35 @@ namespace BP.WF.DTS
             BP.WF.Flows ens = new Flows();
             foreach (BP.WF.Flow en in ens)
             {
-                string sql = "SELECT * FROM "+en.PTable+" WHERE OID NOT IN (SELECT WorkID FROM WF_GenerWorkFlow WHERE FK_Flow='"+en.No+"')";
+                string sql = "SELECT * FROM " + en.PTable + " WHERE OID NOT IN (SELECT WorkID FROM WF_GenerWorkFlow WHERE FK_Flow='" + en.No + "')";
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
                 foreach (DataRow dr in dt.Rows)
                 {
                     GenerWorkFlow gwf = new GenerWorkFlow();
-                    gwf.WorkID = Int64.Parse(dr[NDXRptBaseAttr.OID].ToString());
-                    gwf.FID = Int64.Parse(dr[NDXRptBaseAttr.FID].ToString());
+                    gwf.WorkID = Int64.Parse(dr[GERptAttr.OID].ToString());
+                    gwf.FID = Int64.Parse(dr[GERptAttr.FID].ToString());
 
                     gwf.FK_FlowSort = en.FK_FlowSort;
                     gwf.SysType = en.SysType;
 
                     gwf.FK_Flow = en.No;
                     gwf.FlowName = en.Name;
-                    gwf.Title = dr[NDXRptBaseAttr.Title].ToString();
-                    gwf.WFState = (WFState)int.Parse(dr[NDXRptBaseAttr.WFState].ToString());
-                //    gwf.WFSta = WFSta.Complete;
+                    gwf.Title = dr[GERptAttr.Title].ToString();
+                    gwf.WFState = (WFState)int.Parse(dr[GERptAttr.WFState].ToString());
+                    //    gwf.WFSta = WFSta.Complete;
 
-                    gwf.Starter = dr[NDXRptBaseAttr.FlowStarter].ToString();
-                    gwf.StarterName = dr[NDXRptBaseAttr.FlowStarter].ToString();
-                    gwf.RDT = dr[NDXRptBaseAttr.FlowStartRDT].ToString();
-                    gwf.FK_Node = int.Parse(dr[NDXRptBaseAttr.FlowEndNode].ToString());
-                    gwf.FK_Dept = dr[NDXRptBaseAttr.FK_Dept].ToString();
+                    gwf.Starter = dr[GERptAttr.FlowStarter].ToString();
+                    gwf.StarterName = dr[GERptAttr.FlowStarter].ToString();
+                    gwf.RDT = dr[GERptAttr.FlowStartRDT].ToString();
+                    gwf.FK_Node = int.Parse(dr[GERptAttr.FlowEndNode].ToString());
+                    gwf.FK_Dept = dr[GERptAttr.FK_Dept].ToString();
 
-                   BP.WF.Port.Dept dept=null;
+                    BP.WF.Port.Dept dept = null;
                     try
                     {
-                        dept=new BP.WF.Port.Dept(gwf.FK_Dept);
-                        gwf.DeptName =dept.Name; 
+                        dept = new BP.WF.Port.Dept(gwf.FK_Dept);
+                        gwf.DeptName = dept.Name;
                     }
                     catch
                     {
@@ -91,7 +86,7 @@ namespace BP.WF.DTS
 
                     try
                     {
-                        gwf.PRI = int.Parse(dr[NDXRptBaseAttr.PRI].ToString());
+                        gwf.PRI = int.Parse(dr[GERptAttr.PRI].ToString());
                     }
                     catch
                     {
@@ -101,20 +96,20 @@ namespace BP.WF.DTS
                     //  gwf.SDTOfNode = dr[NDXRptBaseAttr.FK_Dept].ToString();
                     // gwf.SDTOfFlow = dr[NDXRptBaseAttr.FK_Dept].ToString();
 
-                    gwf.PFlowNo = dr[NDXRptBaseAttr.PFlowNo].ToString();
-                    gwf.PWorkID = Int64.Parse(dr[NDXRptBaseAttr.PWorkID].ToString());
-                    gwf.PNodeID = int.Parse(dr[NDXRptBaseAttr.PNodeID].ToString());
-                    gwf.PEmp = dr[NDXRptBaseAttr.PEmp].ToString();
+                    gwf.PFlowNo = dr[GERptAttr.PFlowNo].ToString();
+                    gwf.PWorkID = Int64.Parse(dr[GERptAttr.PWorkID].ToString());
+                    gwf.PNodeID = int.Parse(dr[GERptAttr.PNodeID].ToString());
+                    gwf.PEmp = dr[GERptAttr.PEmp].ToString();
 
                     //gwf.CFlowNo = dr[NDXRptBaseAttr.CFlowNo].ToString();
                     //gwf.CWorkID = Int64.Parse(dr[NDXRptBaseAttr.CWorkID].ToString());
 
-                    gwf.GuestNo = dr[NDXRptBaseAttr.GuestNo].ToString();
-                    gwf.GuestName = dr[NDXRptBaseAttr.GuestName].ToString();
-                    gwf.BillNo = dr[NDXRptBaseAttr.BillNo].ToString();
+                    gwf.GuestNo = dr[GERptAttr.GuestNo].ToString();
+                    gwf.GuestName = dr[GERptAttr.GuestName].ToString();
+                    gwf.BillNo = dr[GERptAttr.BillNo].ToString();
                     //gwf.FlowNote = dr[NDXRptBaseAttr.flowno].ToString();
 
-                    gwf.SetValByKey("Emps", dr[NDXRptBaseAttr.FlowEmps].ToString());
+                    gwf.SetValByKey("Emps", dr[GERptAttr.FlowEmps].ToString());
                     //   gwf.AtPara = dr[NDXRptBaseAttr.FK_Dept].ToString();
                     //  gwf.GUID = dr[NDXRptBaseAttr.gu].ToString();
                     gwf.Insert();

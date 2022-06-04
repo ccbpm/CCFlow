@@ -1,13 +1,8 @@
 ﻿using BP.DA;
 using BP.En;
-using BP.Port;
-using BP.Sys;
 using BP.WF.Data;
-using BP.WF.Template;
 using System;
-using System.Collections;
 using System.Data;
-using System.Reflection;
 
 namespace BP.WF.DTS
 {
@@ -121,16 +116,16 @@ namespace BP.WF.DTS
                         docs += " <a href='" + url + "'> 打开连接</a>";
                     }
 
-                    string agentId = BP.Sys.SystemConfig.WX_AgentID ?? null;
+                    string agentId = BP.Difference.SystemConfig.WX_AgentID ?? null;
                     if (agentId != null)
                     {
                         string accessToken = BP.GPM.WeiXin.WeiXinEntity.getAccessToken();//获取 AccessToken
 
-                        BP.GPM.Emp emp = new BP.GPM.Emp(empNo);
+                        BP.Port.Emp emp = new BP.Port.Emp(empNo);
                         BP.GPM.WeiXin.MsgText msgText = new BP.GPM.WeiXin.MsgText();
                         msgText.content = docs;
                         msgText.Access_Token = accessToken;
-                        msgText.agentid = BP.Sys.SystemConfig.WX_AgentID;
+                        msgText.agentid = BP.Difference.SystemConfig.WX_AgentID;
                         msgText.touser = emp.No;
                         msgText.safe = "0";
 

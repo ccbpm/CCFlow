@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Net;
 using System.IO;
-using System.Runtime.Serialization.Json;
-using System.Collections;
 using BP.Tools;
-using BP.Sys;
 using BP.En;
 using BP.GPM.DTalk.DINGTalk;
 using BP.GPM.DTalk.DDSDK;
 using BP.DA;
-using BP.GPM;
+using BP.Port;
 
 namespace BP.GPM.DTalk
 {
@@ -21,15 +16,15 @@ namespace BP.GPM.DTalk
     /// </summary>
     public class DingDing
     {
-        private string corpid = SystemConfig.Ding_CorpID;
-        private string corpsecret = SystemConfig.Ding_CorpSecret;
+        private string corpid =  BP.Difference.SystemConfig.Ding_CorpID;
+        private string corpsecret =  BP.Difference.SystemConfig.Ding_CorpSecret;
 
         public static string getAccessToken()
         {
             //if (DataType.IsNullOrEmpty(AccessToken_Ding.Value) || AccessToken_Ding.Begin.AddSeconds(ConstVars.CACHE_TIME) < DateTime.Now)
             //    UpdateAccessToken(true);
             //return AccessToken_Ding.Value;
-            string url = "https://oapi.dingtalk.com/gettoken?appkey="+SystemConfig.Ding_AppKey + "&appsecret="+SystemConfig.Ding_AppSecret;
+            string url = "https://oapi.dingtalk.com/gettoken?appkey="+BP.Difference.SystemConfig.Ding_AppKey + "&appsecret="+BP.Difference.SystemConfig.Ding_AppSecret;
             string str = new HttpWebResponseUtility().HttpResponseGet(url);
             BP.DA.Log.DebugWriteError(str);
             DingAccessToken token = new DingAccessToken();
@@ -137,8 +132,8 @@ namespace BP.GPM.DTalk
 
             var signPackage = new SignPackage()
             {
-                agentId = SystemConfig.Ding_AgentID,
-                corpId = SystemConfig.Ding_CorpID,
+                agentId =  BP.Difference.SystemConfig.Ding_AgentID,
+                corpId =  BP.Difference.SystemConfig.Ding_CorpID,
                 timeStamp = timestamp,
                 nonceStr = nonceStr,
                 signature = signature,
@@ -160,8 +155,8 @@ namespace BP.GPM.DTalk
                 //没有强制更新，并且没有超过缓存时间  
                 return;
             }
-            string CorpID = SystemConfig.Ding_CorpID;
-            string CorpSecret = SystemConfig.Ding_CorpSecret;
+            string CorpID =  BP.Difference.SystemConfig.Ding_CorpID;
+            string CorpSecret =  BP.Difference.SystemConfig.Ding_CorpSecret;
             string TokenUrl = Urls.gettoken;
             string apiurl = TokenUrl + "?" + Keys.corpid + "=" + CorpID + "&" + Keys.corpsecret + "=" + CorpSecret;
             TokenResult tokenResult = Analyze.Get<TokenResult>(apiurl);
@@ -496,23 +491,23 @@ namespace BP.GPM.DTalk
                     //部门在钉钉不存在则进行删除：部门表、部门人员、部门人员岗位、部门职位、部门岗位
                     if (isHave == false)
                     {
-                        //部门岗位
-                        DeptStation deptStation = new DeptStation();
-                        int iDeptStation = deptStation.Delete(DeptStationAttr.FK_Dept, gpm_Dept.No);
+                        ////部门岗位
+                        //DeptStation deptStation = new DeptStation();
+                        //int iDeptStation = deptStation.Delete(DeptStationAttr.FK_Dept, gpm_Dept.No);
                         
-                        //部门人员岗位
-                        DeptEmpStation deptEmpStation = new DeptEmpStation();
-                        int iDeptEmpStation = deptEmpStation.Delete(DeptEmpStationAttr.FK_Dept, gpm_Dept.No);
-                        //部门人员
-                        DeptEmp deptEmp = new DeptEmp();
-                        int iDeptEmp = deptEmp.Delete(DeptEmpAttr.FK_Dept, gpm_Dept.No);
-                        //部门表
-                        Dept dt = new Dept(gpm_Dept.No);
-                        dt.Delete();
-                        append.Append("\r\n删除部门：" + gpm_Dept.Name + " 部门全路径：" + gpm_Dept.NameOfPath);
-                        append.Append("\r\n        部门岗位 " + iDeptStation + " 条记录");
-                        append.Append("\r\n        部门人员岗位 " + iDeptEmpStation + " 条记录");
-                        append.Append("\r\n        部门人员 " + iDeptEmp + " 条记录");
+                        ////部门人员岗位
+                        //DeptEmpStation deptEmpStation = new DeptEmpStation();
+                        //int iDeptEmpStation = deptEmpStation.Delete(DeptEmpStationAttr.FK_Dept, gpm_Dept.No);
+                        ////部门人员
+                        //DeptEmp deptEmp = new DeptEmp();
+                        //int iDeptEmp = deptEmp.Delete(DeptEmpAttr.FK_Dept, gpm_Dept.No);
+                        ////部门表
+                        //Dept dt = new Dept(gpm_Dept.No);
+                        //dt.Delete();
+                        //append.Append("\r\n删除部门：" + gpm_Dept.Name + " 部门全路径：" + gpm_Dept.NameOfPath);
+                        //append.Append("\r\n        部门岗位 " + iDeptStation + " 条记录");
+                        //append.Append("\r\n        部门人员岗位 " + iDeptEmpStation + " 条记录");
+                        //append.Append("\r\n        部门人员 " + iDeptEmp + " 条记录");
                     }
                     else
                     {

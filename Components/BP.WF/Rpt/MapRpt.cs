@@ -1,10 +1,6 @@
-﻿using System;
-using System.Data;
-using System.Collections;
-using BP.DA;
+﻿using BP.DA;
 using BP.Port;
 using BP.En;
-using BP.WF;
 using BP.Sys;
 
 namespace BP.WF.Rpt

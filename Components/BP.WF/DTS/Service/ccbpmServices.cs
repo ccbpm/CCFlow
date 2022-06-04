@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Data;
 using BP.DA ; 
-using System.Collections;
 using System.Net.Mail;
 using BP.En;
-using BP.WF;
 using BP.Port ; 
-using BP.En;
 using BP.Sys;
-using BP.WF.Data;
 using BP.WF.Template;
-using BP.DTS;
 using BP.Web;
 
 namespace BP.WF.DTS
@@ -90,7 +85,7 @@ namespace BP.WF.DTS
         private void DoOverDueFlow()
         {
             //特殊处理天津的需求.
-            if (SystemConfig.CustomerNo == "")
+            if (BP.Difference.SystemConfig.CustomerNo == "")
                 DoTianJinSpecFunc();
             # region  流程逾期
             //判断是否有流程逾期的消息设置
@@ -581,17 +576,17 @@ namespace BP.WF.DTS
             SmtpClient client = new SmtpClient();
 
             //邮件地址.
-            string emailAddr = SystemConfig.GetValByKey("SendEmailAddress", null);
+            string emailAddr =  BP.Difference.SystemConfig.GetValByKey("SendEmailAddress", null);
             if (emailAddr == null)
                 emailAddr = "ccbpmtester@tom.com";
 
-            string emailPassword = SystemConfig.GetValByKey("SendEmailPass", null);
+            string emailPassword =  BP.Difference.SystemConfig.GetValByKey("SendEmailPass", null);
             if (emailPassword == null)
                 emailPassword = "ccbpm123";
 
             //是否启用ssl? 
             bool isEnableSSL = false;
-            string emailEnableSSL = SystemConfig.GetValByKey("SendEmailEnableSsl", null);
+            string emailEnableSSL =  BP.Difference.SystemConfig.GetValByKey("SendEmailEnableSsl", null);
             if (emailEnableSSL == null || emailEnableSSL == "0")
                 isEnableSSL = false;
             else
@@ -600,11 +595,11 @@ namespace BP.WF.DTS
             client.Credentials = new System.Net.NetworkCredential(emailAddr, emailPassword);
 
             //上述写你的邮箱和密码
-            client.Port = SystemConfig.GetValByKeyInt("SendEmailPort", 25); //使用的端口
-            client.Host = SystemConfig.GetValByKey("SendEmailHost", "smtp.tom.com");
+            client.Port =  BP.Difference.SystemConfig.GetValByKeyInt("SendEmailPort", 25); //使用的端口
+            client.Host =  BP.Difference.SystemConfig.GetValByKey("SendEmailHost", "smtp.tom.com");
 
             //是否启用加密,有的邮件服务器发送配置不成功就是因为此参数的错误。
-            client.EnableSsl = SystemConfig.GetValByKeyBoolen("SendEmailEnableSsl", isEnableSSL);
+            client.EnableSsl =  BP.Difference.SystemConfig.GetValByKeyBoolen("SendEmailEnableSsl", isEnableSSL);
 
             object userState = myEmail;
             try

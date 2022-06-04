@@ -56,7 +56,7 @@ namespace BP.En
             }
         }
         /// <summary>
-        /// LoadAttrs
+        /// 装载属性
         /// </summary>
         /// <param name="attrs"></param>
         public void LoadDataTable(DataTable dt, DataRow dr)
@@ -95,13 +95,7 @@ namespace BP.En
             else
                 this[key] = val;
         }
-        public bool GetBoolenByKey(string key)
-        {
-            object obj = this[key];
-            if (obj == null || DataType.IsNullOrEmpty(obj.ToString())==true || obj.ToString()=="0")
-                return false;
-            return true;
-        }
+        
         public string GetValStrByKey(string key)
         {
             return this[key] as string;
@@ -111,30 +105,5 @@ namespace BP.En
         {
             return this[key];
         }
-
-	}
-	/// <summary>
-	/// row 集合
-	/// </summary>
-	public class Rows : System.Collections.CollectionBase
-	{
-		public Rows()
-		{
-		}
-		public Row this[int index]
-		{
-			get 
-			{
-				return (Row)this.InnerList[index];
-			}
-		}	 
-		/// <summary>
-		/// 增加一个Row .
-		/// </summary>
-		/// <param name="r">row</param>
-		public void Add(Row r)
-		{
-			this.InnerList.Add(r);
-		}
 	}
 }

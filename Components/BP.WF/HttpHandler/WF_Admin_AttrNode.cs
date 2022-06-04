@@ -1,21 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
 using System.Data;
-using System.Web;
-using BP.WF;
-using BP.Web;
 using BP.Sys;
 using BP.DA;
 using BP.En;
 using BP.WF.Template;
 using BP.Difference;
-using BP.WF.XML;
 using System.IO;
 using BP.Tools;
-using System.Threading;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace BP.WF.HttpHandler
 {
@@ -130,7 +122,7 @@ namespace BP.WF.HttpHandler
                     /*如果没有此列，就自动创建此列.*/
                     string sql = "ALTER TABLE " + tableName + " ADD  " + str + " image ";
 
-                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
                         sql = "ALTER TABLE " + tableName + " ADD  " + str + " image ";
 
                     DBAccess.RunSQL(sql);
@@ -220,7 +212,7 @@ namespace BP.WF.HttpHandler
             //上传附件.
             var file = HttpContextHelper.RequestFiles(0);
             var fileName = file.FileName;
-            string path = SystemConfig.PathOfDataUser + "DocTemplate/" + nd.FK_Flow;
+            string path =  BP.Difference.SystemConfig.PathOfDataUser + "DocTemplate/" + nd.FK_Flow;
             string fileFullPath = path + "/" + fileName;
 
             //上传文件.

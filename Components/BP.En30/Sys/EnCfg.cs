@@ -59,13 +59,7 @@ namespace BP.Sys
                 return (MoveToShowWay)this.HisAP.GetValIntByKey("MoveToShowWay");
             }
         }
-        public EditerType EditerType
-        {
-            get
-            {
-                return (EditerType)this.HisAP.GetValIntByKey("EditerType");
-            }
-        }
+
 
         /// <summary>
         /// 移动到字段
@@ -172,12 +166,11 @@ namespace BP.Sys
             cfg.UI = this.HisAP.GenerAtParaStrs();
             return cfg.Save();
         }
-
     }
     /// <summary>
     ///  配置信息
     /// </summary>
-    public class EnCfgAttr : EntityNoAttr
+    public class EnCfgAttr : EntityNoNameAttr
     {
         /// <summary>
         /// 分组标签
@@ -232,7 +225,7 @@ namespace BP.Sys
     /// <summary>
     /// EnCfgs
     /// </summary>
-    public class EnCfg : EntityNo
+    public class EnCfg : EntityNoName
     {
         #region UI设置.
         public string UI
@@ -286,7 +279,7 @@ namespace BP.Sys
             {
                 string str = this.GetValStringByKey(EnCfgAttr.FJSavePath);
                 if (DataType.IsNullOrEmpty(str) == true)
-                    return SystemConfig.PathOfDataUser + this.No + "/";
+                    return BP.Difference.SystemConfig.PathOfDataUser + this.No + "/";
                 return str;
             }
             set
@@ -411,7 +404,6 @@ namespace BP.Sys
                     return this._enMap;
                 Map map = new Map("Sys_EnCfg", "实体配置");
 
-
                 map.AddTBStringPK(EnCfgAttr.No, null, "实体名称", true, false, 1, 100, 60);
 
                 #region 基本信息设置.
@@ -432,6 +424,7 @@ namespace BP.Sys
                 map.AddDDLSysEnum("MoveToShowWay", 0, "移动到显示方式", true, true);
                 map.AddTBString("KeyLabel", null, "关键字Label", true, false, 0, 30, 60, true);
                 map.SetHelperAlert("KeyLabel", "(默认为:关键字:)");
+                map.AddTBString("KeyPlaceholder", null, "关键字提示", true, false, 0, 300, 60, true);
 
                 map.AddTBInt("PageSize", 10, "页面显示的条数", true, true);
                 map.SetHelperAlert("PageSize", "(默认:10)");
@@ -468,16 +461,16 @@ namespace BP.Sys
                 map.AddTBString(EnCfgAttr.UI, null, "UI设置", true, false, 0, 2000, 60);
 
                 //字段颜色设置.
-                map.AddTBString(EnCfgAttr.ColorSet, null, "颜色设置", true, false, 0, 500, 60,true);
+                map.AddTBString(EnCfgAttr.ColorSet, null, "颜色设置", true, false, 0, 500, 60, true);
                 msg = "对字段的颜色处理";
                 msg += "\t\n @Age:From=0,To=18,Color=green;From=19,To=30,Color=red";
                 map.SetHelperAlert(EnCfgAttr.ColorSet, msg);
                 //对字段求总和平均.
-                map.AddTBString(EnCfgAttr.FieldSet, null, "字段求和/平均设置", true, false, 0, 500, 60,true);
+                map.AddTBString(EnCfgAttr.FieldSet, null, "字段求和/平均设置", true, false, 0, 500, 60, true);
 
 
                 //字段格式化函数.
-                map.AddTBString("ForamtFunc", null, "字段格式化函数", true, false, 0, 200, 60,true);
+                map.AddTBString("ForamtFunc", null, "字段格式化函数", true, false, 0, 200, 60, true);
                 msg = "对字段的显示使用函数进行处理";
                 msg += "\t\n 1. 对于字段内容需要处理后在输出出来.";
                 msg += "\t\n 2. 比如：原字段内容 @zhangsa,张三@lisi,李四 显示的内容为 张三,李四";
@@ -486,8 +479,7 @@ namespace BP.Sys
                 map.SetHelperAlert("ForamtFunc", msg);
                 #endregion 其他高级设置.
 
-
-                #region  按钮配置信息.
+                #region  Search.按钮配置信息.
                 map.AddBoolean("BtnsShowLeft", false, "按钮显示到左边?", true, true, false);
                 msg = "配置的按钮显示位置.";
                 msg += "\t\n1.默认配置的按钮显示在右边位置. ";
@@ -501,43 +493,53 @@ namespace BP.Sys
 
                 map.AddBoolean(EnCfgAttr.IsGroup, true, "是否显示分析按钮（在查询工具栏里）?", true, true, true);
                 map.AddBoolean("IsEnableLazyload", true, "是否启用懒加载？（对树结构实体有效）?", true, true, true);
-                #endregion  按钮配置信息.
 
-                #region 按钮配置信息 - 自定义按钮.
-                map.AddTBString("BtnLab1", null, "自定义按钮标签1", true, false, 0, 70, 60, false);
+                map.AddTBString("BtnLab1", null, "集合:自定义按钮标签1", true, false, 0, 70, 60, false);
                 map.SetHelperAlert("BtnLab1", "自定义按钮与标签,函数可以写入到/DataUser/JSLabData/SearchSelf.js里面.");
-                map.AddTBString("BtnJS1", null, "Url/Javasccript", true, false, 0, 300, 60, false);
+                map.AddTBString("BtnJS1", null, "集合:Url/Javasccript", true, false, 0, 300, 60, false);
 
-                map.AddTBString("BtnLab2", null, "自定义按钮标签2", true, false, 0, 70, 60, false);
-                map.AddTBString("BtnJS2", null, "Url/Javasccript", true, false, 0, 300, 60, false);
+                map.AddTBString("BtnLab2", null, "集合:自定义按钮标签2", true, false, 0, 70, 60, false);
+                map.AddTBString("BtnJS2", null, "集合:Url/Javasccript", true, false, 0, 300, 60, false);
+                #endregion 按钮配置信息 - 自定义按钮.
+
+                #region  EnOnly.按钮配置信息.
+                map.AddTBString("EnBtnLab1", null, "实体:自定义按钮标签1", true, false, 0, 70, 60, false);
+                map.SetHelperAlert("EnBtnLab1", "实体:自定义按钮与标签,函数可以写入到/DataUser/JSLabData/SearchSelf.js里面.");
+                map.AddTBString("EnBtnJS1", null, "实体:Url/Javasccript", true, false, 0, 300, 60, false);
+
+                map.AddTBString("EnBtnLab2", null, "实体:自定义按钮标签2", true, false, 0, 70, 60, false);
+                map.AddTBString("EnBtnJS2", null, "实体:Url/Javasccript", true, false, 0, 300, 60, false);
                 #endregion 按钮配置信息 - 自定义按钮.
 
 
-                #region 双击要打开的url.
+
+                #region 双击/单击行的配置.
+
                 string cfg = "@0=En.htm 实体与实体相关功能编辑器";
                 cfg += "@1=EnOnly.htm 实体编辑器";
                 cfg += "@2=/CCForm/FrmGener.htm 傻瓜表单解析器";
                 cfg += "@3=/CCForm/FrmGener.htm 自由表单解析器";
                 cfg += "@9=自定义URL";
 
-                map.AddDDLSysEnum("SearchUrlOpenType", 0, "双击行打开内容", true, true, "SearchUrlOpenType", cfg);
+                map.AddDDLSysEnum("SearchUrlOpenType", 1, "双击/单击行打开内容", true, true, "SearchUrlOpenType", cfg);
                 map.AddBoolean("IsRefreshParentPage", true, "关闭后是否刷新本页面", true, true);
 
                 map.AddTBString(EnCfgAttr.UrlExt, null, "要打开的Url", true, false, 0, 500, 60, true);
+                map.AddDDLSysEnum("DoubleOrClickModel", 0, "双击/单击行弹窗模式", true, true, "DoubleOrClickModel",
+                   "@0=双击行弹窗@1=单击行弹窗");
                 map.AddDDLSysEnum("OpenModel", 0, "打开方式", true, true, "OpenModel",
-                    "@0=弹窗-强制关闭@1=新窗口打开-winopen模式@2=弹窗-非强制关闭@3=执行指定的方法.");
+                    "@0=弹窗-强制关闭@1=新窗口打开-winopen模式@2=弹窗-非强制关闭@3=执行指定的方法.@4=流程设计器打卡模式");
                 map.AddTBString("OpenModelFunc", null, "弹窗方法", true, false, 0, 300, 60, false);
 
                 msg = "首先在写一个函数，放入到:/DataUser/JSLab/SearchSelf.js里面 ";
                 msg += "\t\n 该函数里 OpenIt(传入一个已经计算好的url);";
                 msg += "\t\n 比如您写一个方法: OpenItMyUrl(url);";
-                map.SetHelperAlert("OpenModelFunc",  msg);
+                map.SetHelperAlert("OpenModelFunc", msg);
 
-                map.AddTBInt("WinCardW", 1000, "窗体宽度", true, false);
-                map.AddTBInt("WinCardH", 600, "高度", true, false);
+                // map.AddTBInt("WinCardW", 1000, "窗体宽度", false, false);
+                //  map.AddTBInt("WinCardH", 600, "高度", false, false);
+                map.AddDDLSysEnum("WinCardW", 0, "宽度", true, true, "WinCardW", "@0=75%@1=50%@2=100%@3=25%");
                 #endregion
-
-
 
                 map.AddTBAtParas(3000);  //参数属性.
 
@@ -683,7 +685,7 @@ namespace BP.Sys
     /// <summary>
     /// 实体集合
     /// </summary>
-    public class EnCfgs : EntitiesNo
+    public class EnCfgs : EntitiesNoName
     {
         #region 构造
         /// <summary>

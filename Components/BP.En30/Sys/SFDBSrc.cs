@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-//using System.Data.OracleClient;
 using Oracle.ManagedDataAccess.Client;
 using System.Collections;
 using System.IO;
 using System.Net;
-//using System.ServiceModel.Description;
 using System.Text;
 using System.Xml.Schema;
 using BP.DA;
 using BP.En;
-//using IBM.Data.Informix;
 using MySql.Data.MySqlClient;
 
 namespace BP.Sys
@@ -51,6 +48,23 @@ namespace BP.Sys
     public class SFDBSrc : EntityNoName
     {
         #region 属性
+        public FieldCaseModel FieldCaseModel
+        {
+            get
+            {
+                switch (this.DBSrcType)
+                {
+                    case DBSrcType.Oracle:
+                        return FieldCaseModel.UpperCase;
+                    case DBSrcType.PostgreSQL:
+                    case DBSrcType.UX:
+                        return FieldCaseModel.Lowercase;
+                        break;
+                    default:
+                        return FieldCaseModel.None;
+                }
+            }
+        }
         /// <summary>
         /// 标签
         /// </summary>
@@ -115,7 +129,7 @@ namespace BP.Sys
                 switch (this.DBSrcType)
                 {
                     case Sys.DBSrcType.Localhost:
-                        return SystemConfig.AppCenterDBType;
+                        return BP.Difference.SystemConfig.AppCenterDBType;
                     case Sys.DBSrcType.SQLServer:
                         return DBType.MSSQL;
                     case Sys.DBSrcType.Oracle:
@@ -194,7 +208,7 @@ namespace BP.Sys
                         string pks = this.GenerPKsByTableWithPara(pk, attr.IsNum, expPageSize, pageSize * (pageIdx - 1), max, null);
 
                         if (pks == null)
-                            mysql = sql + " AND 1=2";
+                            mysql = sql + " AND 1=2 ";
                         else
                             mysql = sql + " AND OID in(" + pks + ")";
                         break;
@@ -205,17 +219,12 @@ namespace BP.Sys
             }
             catch (Exception ex)
             {
-                throw new Exception("err@数据源执行分页SQL出现错误");
+                throw new Exception("err@数据源执行分页SQL出现错误："+ sql+"错误原因:"+ex.Message);
             }
         }
 
         public Entities InitEntitiesByDataTable(Entities ens, DataTable dt, string[] fullAttrs)
         {
-            bool isUpper = false;
-            if (this.DBSrcType == DBSrcType.Oracle
-            || this.DBSrcType == DBSrcType.KingBase)
-                isUpper = true;
-
             if (fullAttrs == null)
             {
                 Map enMap = ens.GetNewEntity.EnMap;
@@ -231,16 +240,20 @@ namespace BP.Sys
                             if (dt.Columns.Contains(attr.Key) == false
                                 && dt.Columns.Contains(attr.Key.ToUpper()) == false)
                                 continue;
-                            if (isUpper == true)
+                            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
                             {
-                                if ((SystemConfig.AppCenterDBType == DBType.KingBase
-                                    || SystemConfig.AppCenterDBType == DBType.Oracle)
-                                    && attr.MyFieldType == FieldType.RefText)
+                                if ( attr.MyFieldType == FieldType.RefText)
                                     en.SetValByKey(attr.Key, dr[attr.Key]);
                                 else
                                     en.SetValByKey(attr.Key, dr[attr.Key.ToUpper()]);
                             }
-
+                            else if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+                            {
+                                if (attr.MyFieldType == FieldType.RefText)
+                                    en.SetValByKey(attr.Key, dr[attr.Key]);
+                                else
+                                    en.SetValByKey(attr.Key, dr[attr.Key.ToLower()]);
+                            }
                             else
                                 en.SetValByKey(attr.Key, dr[attr.Key]);
                         }
@@ -269,14 +282,19 @@ namespace BP.Sys
                     if (dt.Columns.Contains(str) == false
                                 && dt.Columns.Contains(str.ToUpper()) == false)
                         continue;
-                    if (isUpper == true)
+                    if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
                     {
-                        if ((SystemConfig.AppCenterDBType == DBType.KingBase
-                                    || SystemConfig.AppCenterDBType == DBType.Oracle)
-                            && dt.Columns.Contains(str) == true)
+                        if (dt.Columns.Contains(str) == true)
                             en.SetValByKey(str, dr[str]);
                         else
                             en.SetValByKey(str, dr[str.ToUpper()]);
+                    }
+                    else if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+                    {
+                        if (dt.Columns.Contains(str) == true)
+                            en.SetValByKey(str, dr[str]);
+                        else
+                            en.SetValByKey(str, dr[str.ToLower()]);
                     }
 
                     else
@@ -297,7 +315,7 @@ namespace BP.Sys
             int i = 0;
             int paraI = 0;
 
-            string dbStr = SystemConfig.AppCenterDBVarStr;
+            string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
             foreach (DataRow dr in dt.Rows)
             {
                 i++;
@@ -816,7 +834,7 @@ namespace BP.Sys
                 map.AddTBString(SFDBSrcAttr.DBName, null, "数据库名称/Oracle保持为空", true, false, 0, 30, 20);
                 map.AddTBStringDoc(SFDBSrcAttr.ConnString, null, "连接串", true, false, true);
 
-                if (SystemConfig.RunOnPlant.Equals("CCFlow") == false)
+                if (BP.Difference.SystemConfig.RunOnPlant.Equals("CCFlow") == false)
                 {
                     map.AddTBString(SFDBSrcAttr.UserID, null, "数据库登录用户ID", true, false, 0, 30, 20);
                     map.AddTBString(SFDBSrcAttr.Password, null, "密码", true, false, 0, 30, 20);
@@ -851,7 +869,7 @@ namespace BP.Sys
                 switch (this.DBSrcType)
                 {
                     case Sys.DBSrcType.Localhost:
-                        return SystemConfig.AppCenterDSN;
+                        return BP.Difference.SystemConfig.AppCenterDSN;
                     default:
                         return this.GetValStringByKey(SFDBSrcAttr.ConnString);
                         //case Sys.DBSrcType.SQLServer:
@@ -963,7 +981,7 @@ namespace BP.Sys
             var dbType = this.DBSrcType;
             if (dbType == BP.Sys.DBSrcType.Localhost)
             {
-                switch (SystemConfig.AppCenterDBType)
+                switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
                         dbType = BP.Sys.DBSrcType.SQLServer;
@@ -1073,7 +1091,7 @@ namespace BP.Sys
             var dbType = this.DBSrcType;
             if (dbType == BP.Sys.DBSrcType.Localhost)
             {
-                switch (SystemConfig.AppCenterDBType)
+                switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
                         dbType = BP.Sys.DBSrcType.SQLServer;
@@ -1300,7 +1318,7 @@ namespace BP.Sys
             var dbType = this.DBSrcType;
             if (dbType == BP.Sys.DBSrcType.Localhost)
             {
-                switch (SystemConfig.AppCenterDBType)
+                switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
                         dbType = BP.Sys.DBSrcType.SQLServer;
@@ -1391,7 +1409,7 @@ namespace BP.Sys
             var dbType = this.DBSrcType;
             if (dbType == BP.Sys.DBSrcType.Localhost)
             {
-                switch (SystemConfig.AppCenterDBType)
+                switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
                         dbType = BP.Sys.DBSrcType.SQLServer;
@@ -1484,7 +1502,7 @@ namespace BP.Sys
             var dbType = this.DBSrcType;
             if (dbType == BP.Sys.DBSrcType.Localhost)
             {
-                switch (SystemConfig.AppCenterDBType)
+                switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
                         dbType = BP.Sys.DBSrcType.SQLServer;
@@ -1531,7 +1549,7 @@ namespace BP.Sys
             var dbType = this.DBSrcType;
             if (dbType == BP.Sys.DBSrcType.Localhost)
             {
-                switch (SystemConfig.AppCenterDBType)
+                switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
                         dbType = BP.Sys.DBSrcType.SQLServer;

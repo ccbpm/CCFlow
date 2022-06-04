@@ -1,24 +1,16 @@
 ﻿using System;
 using System.IO;
-using System.Drawing;
 using System.Data;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
 using System.Collections.Generic;
 using System.Text;
 using System.Collections;
-using System.Threading;
 using System.Diagnostics;
 using BP.Sys;
 using BP.DA;
 using BP.En;
-using BP;
 using BP.Web;
-using System.Security.Cryptography;
-using System.Text;
 using BP.Port;
 using BP.WF.Rpt;
-using BP.WF.Data;
 using BP.WF.Template;
 using ICSharpCode.SharpZipLib.Zip;
 using System.Net;
@@ -90,7 +82,7 @@ namespace BP.WF
 
             //生成表头.
             String frmName = mapData.Name;
-            if (SystemConfig.AppSettings["CustomerNo"] == "TianYe")
+            if (BP.Difference.SystemConfig.AppSettings["CustomerNo"] == "TianYe")
                 frmName = "";
 
             sb.Append(" <table style='width:950px;height:auto;' >");
@@ -106,7 +98,7 @@ namespace BP.WF
 
             //二维码显示
             bool IsHaveQrcode = true;
-            if (SystemConfig.GetValByKeyBoolen("IsShowQrCode", false) == false)
+            if (BP.Difference.SystemConfig.GetValByKeyBoolen("IsShowQrCode", false) == false)
                 IsHaveQrcode = false;
 
             //判断当前文件是否存在图片
@@ -145,8 +137,8 @@ namespace BP.WF
 
             if (DataType.IsNullOrEmpty(FK_Node) == false && DataType.IsNullOrEmpty(flowNo) == false)
             {
-                Node nd = new Node(Int32.Parse(FK_Node.Replace("ND","")));
-                if (frmID.StartsWith("ND")==true && nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
+                Node nd = new Node(Int32.Parse(FK_Node.Replace("ND", "")));
+                if (frmID.StartsWith("ND") == true && nd.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
                 {
                     GroupField gf = gfs.GetEntityByKey(GroupFieldAttr.CtrlType, "FWC") as GroupField;
                     if (gf == null)
@@ -210,8 +202,8 @@ namespace BP.WF
                                     if (attr.IsSigan == true)
                                     {
                                         String SigantureNO = en.GetValStrByKey(attr.KeyOfEn);
-                                        String src = SystemConfig.HostURL + "/DataUser/Siganture/";
-                                        text = "<img src='" + src + SigantureNO + ".JPG' title='" + SigantureNO + "' onerror='this.src=\""+src+ "Siganture.JPG\"' style='height:50px;'  alt='图片丢失' /> ";
+                                        String src = BP.Difference.SystemConfig.HostURL + "/DataUser/Siganture/";
+                                        text = "<img src='" + src + SigantureNO + ".JPG' title='" + SigantureNO + "' onerror='this.src=\"" + src + "Siganture.JPG\"' style='height:50px;'  alt='图片丢失' /> ";
                                     }
                                     else
                                     {
@@ -225,16 +217,17 @@ namespace BP.WF
 
                                 break;
                             case FieldTypeS.Enum:
-                                if(attr.UIContralType == UIContralType.CheckBok)
+                                if (attr.UIContralType == UIContralType.CheckBok)
                                 {
-                                    string s = en.GetValStrByKey(attr.KeyOfEn)+",";
+                                    string s = en.GetValStrByKey(attr.KeyOfEn) + ",";
                                     SysEnums enums = new SysEnums(attr.UIBindKey);
-                                    foreach(SysEnum se in enums){
+                                    foreach (SysEnum se in enums)
+                                    {
                                         if (s.IndexOf(se.IntKey + ",") != -1)
                                             text += se.Lab + " ";
                                     }
 
-                                } 
+                                }
                                 else
                                     text = en.GetValRefTextByKey(attr.KeyOfEn);
                                 break;
@@ -358,7 +351,7 @@ namespace BP.WF
 
                     //#region 输出数据.
                     GEDtls dtls = new GEDtls(gf.CtrlID);
-                    dtls.Retrieve(GEDtlAttr.RefPK, workid,"OID");
+                    dtls.Retrieve(GEDtlAttr.RefPK, workid, "OID");
                     foreach (GEDtl dtl in dtls)
                     {
                         sb.Append("<tr>");
@@ -383,9 +376,9 @@ namespace BP.WF
                                     }
                                     else
                                     {
-                                       
+
                                         text = dtl.GetValStrByKey(item.KeyOfEn);
-                                        
+
                                         if (item.IsRichText == true)
                                         {
                                             text = text.Replace("white-space: nowrap;", "");
@@ -423,7 +416,7 @@ namespace BP.WF
 
                             if (item.IsNum)
                             {
-                                sb.Append("<td style='text-align:right' >" + text+ "</td>");
+                                sb.Append("<td style='text-align:right' >" + text + "</td>");
                                 continue;
                             }
 
@@ -480,7 +473,7 @@ namespace BP.WF
                         {
                             String fileTo = path + "/pdf/" + item.FileName;
                             //加密信息
-                            bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
+                            bool fileEncrypt = BP.Difference.SystemConfig.IsEnableAthEncrypt;
                             bool isEncrypt = item.GetParaBoolen("IsEncrypt");
                             //#region 从ftp服务器上下载.
                             if (ath.AthSaveWay == AthSaveWay.FTPServer)
@@ -502,7 +495,7 @@ namespace BP.WF
                                     }
                                     System.IO.File.Copy(fileTempDecryPath, fileTo, true);
 
-                                    sb.Append("<li><a href='" + SystemConfig.GetValByKey("HostURL", "") + "/DataUser/InstancePacketOfData/" + FK_Node + "/" + workid + "/" + "pdf/" + item.FileName + "'>" + item.FileName + "</a></li>");
+                                    sb.Append("<li><a href='" + BP.Difference.SystemConfig.GetValByKey("HostURL", "") + "/DataUser/InstancePacketOfData/" + FK_Node + "/" + workid + "/" + "pdf/" + item.FileName + "'>" + item.FileName + "</a></li>");
                                 }
                                 catch (Exception ex)
                                 {
@@ -529,7 +522,7 @@ namespace BP.WF
                                     //把文件copy到,
                                     System.IO.File.Copy(fileTempDecryPath, fileTo, true);
 
-                                    sb.Append("<li><a href='" + SystemConfig.GetValByKey("HostURL", "") + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/" + "pdf/" + item.FileName + "'>" + item.FileName + "</a></li>");
+                                    sb.Append("<li><a href='" + BP.Difference.SystemConfig.GetValByKey("HostURL", "") + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/" + "pdf/" + item.FileName + "'>" + item.FileName + "</a></li>");
                                 }
                                 catch (Exception ex)
                                 {
@@ -559,7 +552,7 @@ namespace BP.WF
                     String url = frame.URL;
 
                     //替换URL的
-                    url = url.Replace("@basePath", SystemConfig.HostURLOfBS);
+                    url = url.Replace("@basePath", BP.Difference.SystemConfig.HostURLOfBS);
                     //替换系统参数
                     url = url.Replace("@WebUser.No", WebUser.No);
                     url = url.Replace("@WebUser.Name;", WebUser.Name);
@@ -688,8 +681,8 @@ namespace BP.WF
 
                             if (singType == "1")
                             {
-                                String src = SystemConfig.HostURL + "/DataUser/Siganture/";
-                                empStrs = "<img src='"+src + dr["EmpFrom"] + ".JPG' title='" + dr["EmpFromT"] + "' style='height:60px;'  alt='图片丢失' /> ";
+                                String src = BP.Difference.SystemConfig.HostURL + "/DataUser/Siganture/";
+                                empStrs = "<img src='" + src + dr["EmpFrom"] + ".JPG' title='" + dr["EmpFromT"] + "' style='height:60px;'  alt='图片丢失' /> ";
                             }
 
                         }
@@ -707,8 +700,20 @@ namespace BP.WF
             sb.Append("</table>");
             return sb;
         }
-
-        private static void GenerHtmlOfDevelop(MapData mapData, string frmID, Int64 workid, Entity en, string path,string indexFile, string flowNo = null, string FK_Node = null)
+        
+        /// <summary>
+        /// @hongyan, 这里做了一些不为空的判断，获得document的元素的时候.
+        /// 注意同步.
+        /// </summary>
+        /// <param name="mapData"></param>
+        /// <param name="frmID"></param>
+        /// <param name="workid"></param>
+        /// <param name="en"></param>
+        /// <param name="path"></param>
+        /// <param name="indexFile"></param>
+        /// <param name="flowNo"></param>
+        /// <param name="FK_Node"></param>
+        private static void GenerHtmlOfDevelop(MapData mapData, string frmID, Int64 workid, Entity en, string path, string indexFile, string flowNo = null, string FK_Node = null)
         {
             string htmlString = DataType.ReadTextFile(indexFile);
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
@@ -731,7 +736,7 @@ namespace BP.WF
                 //处理隐藏字段，如果是不可见并且是启用的就隐藏.
                 if (attr.UIVisible == false)
                     continue;
-                string text =  en.GetValStrByKey(attr.KeyOfEn);
+                string text = en.GetValStrByKey(attr.KeyOfEn);
                 //外键或者外部数据源
                 if ((attr.LGType == FieldTypeS.Normal && attr.MyDataType == DataType.AppString && attr.UIContralType == UIContralType.DDL)
                     || (attr.LGType == FieldTypeS.FK && attr.MyDataType == DataType.AppString))
@@ -741,9 +746,12 @@ namespace BP.WF
                     if (DataType.IsNullOrEmpty(text))
                         if (mapAttrs.Contains(attr.KeyOfEn + "T") == true)
                             text = en.GetValStrByKey(attr.KeyOfEn + "T");
-                    node = doc.GetElementbyId("DDL_"+attr.KeyOfEn);
+                    node = doc.GetElementbyId("DDL_" + attr.KeyOfEn);
+                    if (node == null)
+                        continue;
+
                     HtmlAgilityPack.HtmlNode parentNode = node.ParentNode;
-                    HtmlAgilityPack.HtmlNode newNode = HtmlAgilityPack.HtmlNode.CreateNode("<span>"+ text+"</span>");
+                    HtmlAgilityPack.HtmlNode newNode = HtmlAgilityPack.HtmlNode.CreateNode("<span>" + text + "</span>");
                     parentNode.AppendChild(newNode);
                     node.Remove();
                     continue;
@@ -753,17 +761,23 @@ namespace BP.WF
                 {
                     text = en.GetValStrByKey(attr.KeyOfEn);
                     //如果是下拉框
-                    if(attr.UIContralType== UIContralType.DDL)
+                    if (attr.UIContralType == UIContralType.DDL)
                     {
-                        text = en.GetValRefTextByKey(attr.KeyOfEn+"Text");
+                        text = en.GetValStringByKey(attr.KeyOfEn + "Text");
                         node = doc.GetElementbyId("DDL_" + attr.KeyOfEn);
+                        if (node == null)
+                            continue;
+
                         HtmlAgilityPack.HtmlNode parentNode = node.ParentNode;
                         HtmlAgilityPack.HtmlNode newNode = HtmlAgilityPack.HtmlNode.CreateNode("<span>" + text + "</span>");
                         parentNode.AppendChild(newNode);
                         node.Remove();
                         continue;
                     }
-                    doc.GetElementbyId("RB_" + attr.KeyOfEn+"_"+text).SetAttributeValue("checked", "checked");
+                    var rb = doc.GetElementbyId("RB_" + attr.KeyOfEn + "_" + text);
+                    if (rb != null)
+                        rb.SetAttributeValue("checked", "checked");
+
                     continue;
                 }
                 //枚举复选框
@@ -774,31 +788,43 @@ namespace BP.WF
                     SysEnums enums = new SysEnums(attr.UIBindKey);
                     foreach (SysEnum se in enums)
                     {
+                        var mycb = doc.GetElementbyId("CB_" + attr.KeyOfEn + "_" + se.IntKey);
+                        if (mycb == null)
+                            continue;
+
                         if (s.IndexOf(se.IntKey + ",") != -1)
-                            doc.GetElementbyId("CB_" + attr.KeyOfEn+"_"+ se.IntKey).SetAttributeValue("checked", "checked");
-                        doc.GetElementbyId("CB_" + attr.KeyOfEn + "_" + se.IntKey).SetAttributeValue("disabled", "disabled");
+                            mycb.SetAttributeValue("checked", "checked");
+
+                        mycb.SetAttributeValue("disabled", "disabled");
                     }
-                   
+
                     continue;
                 }
 
                 if (attr.MyDataType == DataType.AppBoolean)
                 {
-                    if (DataType.IsNullOrEmpty(text) || text == "0")
-                        doc.GetElementbyId("CB_" + attr.KeyOfEn).SetAttributeValue("checked", "");
-                    else
-                        doc.GetElementbyId("CB_" + attr.KeyOfEn).SetAttributeValue("checked", "checked");
+                    var cb = doc.GetElementbyId("CB_" + attr.KeyOfEn);
+                    if (cb != null)
+                    {
+                        if (DataType.IsNullOrEmpty(text) || text == "0")
+                            doc.GetElementbyId("CB_" + attr.KeyOfEn).SetAttributeValue("checked", "");
+                        else
+                            doc.GetElementbyId("CB_" + attr.KeyOfEn).SetAttributeValue("checked", "checked");
 
-                    doc.GetElementbyId("CB_" + attr.KeyOfEn).SetAttributeValue("disabled", "disabled");
+                        doc.GetElementbyId("CB_" + attr.KeyOfEn).SetAttributeValue("disabled", "disabled");
+                    }
                     continue;
 
                 }
-                if(attr.MyDataType == DataType.AppString)
+                if (attr.MyDataType == DataType.AppString)
                 {
                     //签批字段
-                    if(attr.UIContralType == UIContralType.SignCheck)
+                    if (attr.UIContralType == UIContralType.SignCheck)
                     {
                         node = doc.GetElementbyId("TB_" + attr.KeyOfEn);
+                        if (node == null)
+                            continue;
+
                         DataTable mydt = GetWorkcheckInfoByNodeIDs(dt, text);
                         if (mydt.Rows.Count == 0)
                         {
@@ -849,15 +875,23 @@ namespace BP.WF
                     text = text.Replace("隶书,", "宋体,");
                     text = text.Replace("隶书;", "宋体;");
                     text = text.Replace("隶书\"", "宋体\"");
-                    doc.GetElementbyId("TB_" + attr.KeyOfEn).InnerHtml = text;
-                    doc.GetElementbyId("TB_" + attr.KeyOfEn).SetAttributeValue("disabled", "disabled");
+
+                    var tb1 = doc.GetElementbyId("TB_" + attr.KeyOfEn);
+                    if (tb1 != null)
+                    {
+                        doc.GetElementbyId("TB_" + attr.KeyOfEn).InnerHtml = text;
+                        doc.GetElementbyId("TB_" + attr.KeyOfEn).SetAttributeValue("disabled", "disabled");
+                    }
                     continue;
                 }
 
-                
                 //如果是字符串
-                doc.GetElementbyId("TB_" + attr.KeyOfEn).SetAttributeValue("value", text); 
-                doc.GetElementbyId("TB_" + attr.KeyOfEn).SetAttributeValue("disabled", "disabled");
+                var tb = doc.GetElementbyId("TB_" + attr.KeyOfEn);
+                if (tb != null)
+                {
+                    tb.SetAttributeValue("value", text);
+                    tb.SetAttributeValue("disabled", "disabled");
+                }
             }
             //获取从表
             MapDtls dtls = new MapDtls(frmID);
@@ -867,6 +901,9 @@ namespace BP.WF
                     continue;
                 string html = GetDtlHtmlByID(dtl, workid, mapData.FrmW);
                 node = doc.DocumentNode.SelectSingleNode("//img[@data-key='" + dtl.No + "']");
+                if (node == null)
+                    continue;
+
                 HtmlAgilityPack.HtmlNode parentNode = node.ParentNode;
                 HtmlAgilityPack.HtmlNode newNode = HtmlAgilityPack.HtmlNode.CreateNode(html);
                 parentNode.AppendChild(newNode);
@@ -878,7 +915,10 @@ namespace BP.WF
             {
                 if (ath.IsVisable == false)
                     continue;
-                node = doc.DocumentNode.SelectSingleNode("//img[@data-key='" + ath.MyPK+"']");
+                node = doc.DocumentNode.SelectSingleNode("//img[@data-key='" + ath.MyPK + "']");
+                if (node == null)
+                    continue;
+
                 string html = GetAthHtmlByID(ath, workid, path);
                 HtmlAgilityPack.HtmlNode parentNode = node.ParentNode;
                 HtmlAgilityPack.HtmlNode newNode = HtmlAgilityPack.HtmlNode.CreateNode(html);
@@ -886,22 +926,22 @@ namespace BP.WF
                 node.Remove();
             }
             doc.Save(indexFile, Encoding.UTF8);
-            return ;
+            return;
         }
 
-        private static DataTable GetWorkcheckInfoByNodeIDs(DataTable dt,string nodeId)
+        private static DataTable GetWorkcheckInfoByNodeIDs(DataTable dt, string nodeId)
         {
             DataTable mydt = dt.Clone();
             if (DataType.IsNullOrEmpty(nodeId) == true)
                 return mydt;
             string[] nodeIds = nodeId.Split(',');
-            for(int i= 0;i < nodeIds.Length; i++)
+            for (int i = 0; i < nodeIds.Length; i++)
             {
                 if (DataType.IsNullOrEmpty(nodeIds[i]) == true)
                     continue;
                 //获取到值
                 DataRow[] rows = dt.Select("NDFrom=" + nodeIds[i]);
-                foreach(DataRow dr in rows)
+                foreach (DataRow dr in rows)
                 {
                     DataRow myrow = mydt.NewRow();
                     myrow.ItemArray = dr.ItemArray;
@@ -912,7 +952,7 @@ namespace BP.WF
             return mydt;
         }
 
-        private static  string GetDtlHtmlByID(MapDtl dtl,Int64 workid,float width)
+        private static string GetDtlHtmlByID(MapDtl dtl, Int64 workid, float width)
         {
             StringBuilder sb = new System.Text.StringBuilder();
             MapAttrs attrsOfDtls = new MapAttrs(dtl.No);
@@ -927,23 +967,23 @@ namespace BP.WF
             }
             if (columNum == 0)
                 return "";
-            int columWidth = (int)100/ columNum;
+            int columWidth = (int)100 / columNum;
 
             sb.Append("<table style='width:100%' >");
             sb.Append("<tr>");
-           
+
             foreach (MapAttr item in attrsOfDtls)
             {
                 if (item.KeyOfEn == "OID")
                     continue;
                 if (item.UIVisible == false)
                     continue;
-                sb.Append("<th class='DtlTh' style='width:"+ columWidth + "%'>" + item.Name + "</th>");
+                sb.Append("<th class='DtlTh' style='width:" + columWidth + "%'>" + item.Name + "</th>");
             }
             sb.Append("</tr>");
             //#endregion 输出标题.
 
-            
+
             //#region 输出数据.
             GEDtls gedtls = new GEDtls(dtl.No);
             gedtls.Retrieve(GEDtlAttr.RefPK, workid, "OID");
@@ -956,7 +996,7 @@ namespace BP.WF
                     //处理隐藏字段，如果是不可见并且是启用的就隐藏.
                     if (attr.KeyOfEn.Equals("OID") || attr.UIVisible == false)
                         continue;
-                  
+
                     string text = "";
 
                     switch (attr.LGType)
@@ -977,7 +1017,7 @@ namespace BP.WF
                                 if (attr.IsSigan == true)
                                 {
                                     String SigantureNO = gedtl.GetValStrByKey(attr.KeyOfEn);
-                                    String src = SystemConfig.HostURL + "/DataUser/Siganture/";
+                                    String src = BP.Difference.SystemConfig.HostURL + "/DataUser/Siganture/";
                                     text = "<img src='" + src + SigantureNO + ".JPG' title='" + SigantureNO + "' onerror='this.src=\"" + src + "Siganture.JPG\"' style='height:50px;'  alt='图片丢失' /> ";
                                 }
                                 else
@@ -1040,9 +1080,9 @@ namespace BP.WF
                     if (attr.IsNum)
                         sb.Append("<td class='DtlTd' style='text-align:right;' >" + text + "</td>");
                     else
-                        sb.Append("<td class='DtlTd' >" +text + "</td>");
+                        sb.Append("<td class='DtlTd' >" + text + "</td>");
                 }
-                 
+
                 sb.Append("</tr>");
             }
             //#endregion 输出数据.
@@ -1050,7 +1090,7 @@ namespace BP.WF
 
             sb.Append("</table>");
 
-         
+
             sb.Append("</span>");
             return sb.ToString();
         }
@@ -1068,7 +1108,7 @@ namespace BP.WF
                     System.IO.Directory.CreateDirectory(path + "/pdf/");
 
                 //文件加密
-                bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
+                bool fileEncrypt = BP.Difference.SystemConfig.IsEnableAthEncrypt;
                 FrmAttachmentDBs athDBs = BP.WF.Glo.GenerFrmAttachmentDBs(ath, workid.ToString(), ath.MyPK, workid);
                 sb.Append("<table id = 'ShowTable' class='table' style='width:100%'>");
                 sb.Append("<thead><tr style = 'border:0px;'>");
@@ -1134,7 +1174,7 @@ namespace BP.WF
                                 //把文件copy到,
                                 System.IO.File.Copy(fileTempDecryPath, path + "/pdf/" + item.FileName, true);
                             }
-                            sb.Append("<td>"+item.FileName + "</td>");
+                            sb.Append("<td>" + item.FileName + "</td>");
                         }
                         catch (Exception ex)
                         {
@@ -1142,7 +1182,7 @@ namespace BP.WF
                         }
                     }
                     sb.Append("<td>" + item.FileSize + "KB</td>");
-                    sb.Append("<td>" + item.RDT+ "</td>");
+                    sb.Append("<td>" + item.RDT + "</td>");
                     sb.Append("<td>" + item.RecName + "</td>");
                     sb.Append("</tr>");
 
@@ -1176,15 +1216,15 @@ namespace BP.WF
                 gwf = new GenerWorkFlow(workid);
 
             //存放信息地址
-            string hostURL = SystemConfig.GetValByKey("HostURL", "");
-            string path = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid;
+            string hostURL = BP.Difference.SystemConfig.GetValByKey("HostURL", "");
+            string path = BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid;
             string frmID = node.NodeFrmID;
 
             //处理正确的文件名.
             if (DataType.IsNullOrEmpty(pdfName) == true)
             {
-                if (DataType.IsNullOrEmpty(flowNo)==false)
-                    pdfName = DBAccess.RunSQLReturnStringIsNull("SELECT Title FROM WF_GenerWorkFlow WHERE WorkID=" + workid,  workid.ToString());
+                if (DataType.IsNullOrEmpty(flowNo) == false)
+                    pdfName = DBAccess.RunSQLReturnStringIsNull("SELECT Title FROM WF_GenerWorkFlow WHERE WorkID=" + workid, workid.ToString());
                 else
                     pdfName = workid.ToString();
             }
@@ -1193,7 +1233,7 @@ namespace BP.WF
 
             Hashtable ht = new Hashtable();
             #region 单表单打印
-            if ((int)node.HisFormType == (int)NodeFormType.FoolForm 
+            if ((int)node.HisFormType == (int)NodeFormType.FoolForm
                 || (int)node.HisFormType == (int)NodeFormType.RefOneFrmTree || (int)node.HisFormType == (int)NodeFormType.FoolTruck
                 || node.HisFormType == NodeFormType.Develop)
             {
@@ -1201,35 +1241,35 @@ namespace BP.WF
                 if (resultMsg.IndexOf("err@") != -1)
                     return resultMsg;
 
-                string billUrl = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/index.htm";
+                string billUrl = BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/index.htm";
 
-                resultMsg = MakeHtmlDocument(frmID, workid, flowNo,path, billUrl, "ND" + node.NodeID);
+                resultMsg = MakeHtmlDocument(frmID, workid, flowNo, path, billUrl, "ND" + node.NodeID);
 
                 if (resultMsg.IndexOf("err@") != -1)
                     return resultMsg;
 
-                ht.Add("htm", SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser") + "/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/index.htm");
+                ht.Add("htm", BP.Difference.SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser") + "/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/index.htm");
                 //生成pdf文件
                 string pdfPath = filePath;
-                if(DataType.IsNullOrEmpty(pdfPath)==true)
+                if (DataType.IsNullOrEmpty(pdfPath) == true)
                     pdfPath = path + "/pdf";
 
                 if (System.IO.Directory.Exists(pdfPath) == false)
                     System.IO.Directory.CreateDirectory(pdfPath);
 
                 string pdfFile = pdfPath + "/" + pdfName + ".pdf";
-                string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware/wkhtmltox/wkhtmltopdf.exe";
+                string pdfFileExe = BP.Difference.SystemConfig.PathOfDataUser + "ThirdpartySoftware/wkhtmltox/wkhtmltopdf.exe";
                 try
                 {
                     Html2Pdf(pdfFileExe, billUrl, pdfFile);
-                    if (DataType.IsNullOrEmpty(filePath) ==true)
-                        ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + pdfName + ".pdf");
+                    if (DataType.IsNullOrEmpty(filePath) == true)
+                        ht.Add("pdf", BP.Difference.SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + pdfName + ".pdf");
                     else
                         ht.Add("pdf", pdfPath + "/" + DataType.PraseStringToUrlFileName(pdfName) + ".pdf");
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("err@html转PDF错误:PDF的路径"+ pdfPath  +"可能抛的异常"+ ex.Message);
+                    throw new Exception("err@html转PDF错误:PDF的路径" + pdfPath + "可能抛的异常" + ex.Message);
                 }
 
                 //生成压缩文件
@@ -1242,7 +1282,7 @@ namespace BP.WF
                 {
                     (new FastZip()).CreateZip(finfo.FullName, pdfPath, true, "");
 
-                    ht.Add("zip", SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + "ND" + node.NodeID + "/" + pdfName + ".zip");
+                    ht.Add("zip", BP.Difference.SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + "ND" + node.NodeID + "/" + pdfName + ".zip");
                 }
                 catch (Exception ex)
                 {
@@ -1281,20 +1321,20 @@ namespace BP.WF
                     if (flowNo != null && item.WhoIsPK == WhoIsPK.PWorkID) //如果是父子流程
                         workid = gwf.PWorkID;
                     //获取表单的信息执行打印
-                    string billUrl = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/" + item.FK_Frm + "index.htm";
+                    string billUrl = BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/" + item.FK_Frm + "index.htm";
                     resultMsg = MakeHtmlDocument(item.FK_Frm, workid, flowNo, path, billUrl, "ND" + node.NodeID);
 
                     if (resultMsg.IndexOf("err@") != -1)
                         return resultMsg;
 
-                    ht.Add("htm_" + item.FK_Frm, SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/" + item.FK_Frm + "index.htm");
+                    ht.Add("htm_" + item.FK_Frm, BP.Difference.SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/" + item.FK_Frm + "index.htm");
 
                     //#region 把所有的文件做成一个zip文件.
                     if (System.IO.Directory.Exists(pdfTempPath) == false)
                         System.IO.Directory.CreateDirectory(pdfTempPath);
 
                     string pdfFormFile = pdfTempPath + "/" + item.FK_Frm + ".pdf";
-                    string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware/wkhtmltox/wkhtmltopdf.exe";
+                    string pdfFileExe = BP.Difference.SystemConfig.PathOfDataUser + "ThirdpartySoftware/wkhtmltox/wkhtmltopdf.exe";
                     try
                     {
                         Html2Pdf(pdfFileExe, resultMsg, pdfFormFile);
@@ -1319,9 +1359,9 @@ namespace BP.WF
 
                 System.IO.Directory.Delete(pdfTempPath, true);
                 if (DataType.IsNullOrEmpty(filePath) == true)
-                    ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + pdfName + ".pdf");
+                    ht.Add("pdf", BP.Difference.SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + pdfName + ".pdf");
                 else
-                    ht.Add("pdf", pdfPath + "/"+ pdfName + ".pdf");
+                    ht.Add("pdf", pdfPath + "/" + pdfName + ".pdf");
 
                 //生成压缩文件
                 string zipFile = path + "/../" + pdfName + ".zip";
@@ -1333,7 +1373,7 @@ namespace BP.WF
                 {
                     (new FastZip()).CreateZip(finfo.FullName, pdfPath, true, "");
 
-                    ht.Add("zip", SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + frmID + "/" + pdfName + ".zip");
+                    ht.Add("zip", BP.Difference.SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + frmID + "/" + pdfName + ".zip");
                 }
                 catch (Exception ex)
                 {
@@ -1357,7 +1397,7 @@ namespace BP.WF
         /// <param name="filePath">PDF路径</param>
         /// <param name="pdfName">PDF名称</param>
         /// <returns></returns>
-        public static string MakeBillToPDF(string frmId, Int64 workid,string filePath, string pdfName)
+        public static string MakeBillToPDF(string frmId, Int64 workid, string filePath, string pdfName)
         {
             string resultMsg = "";
 
@@ -1365,7 +1405,7 @@ namespace BP.WF
             BP.CCBill.FrmBill bill = new BP.CCBill.FrmBill(frmId);
 
             //存放信息地址
-            string path = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + bill.No + "/" + workid;
+            string path = BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/" + bill.No + "/" + workid;
 
             if (DataType.IsNullOrEmpty(pdfName) == true)
                 pdfName = workid.ToString();
@@ -1375,7 +1415,7 @@ namespace BP.WF
             Hashtable ht = new Hashtable();
             string pdfPath = filePath;
             //生成pdf文件
-            if(DataType.IsNullOrEmpty(pdfPath) ==true)
+            if (DataType.IsNullOrEmpty(pdfPath) == true)
                 pdfPath = path + "/pdf";
             DataRow dr = null;
             resultMsg = setPDFPath(frmId, workid, null, null);
@@ -1383,27 +1423,27 @@ namespace BP.WF
                 return resultMsg;
 
             //获取表单的信息执行打印
-            string billUrl = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + bill.No + "/" + workid + "/" + "index.htm";
+            string billUrl = BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/" + bill.No + "/" + workid + "/" + "index.htm";
             resultMsg = MakeHtmlDocument(bill.No, workid, null, path, billUrl, frmId);
 
             if (resultMsg.IndexOf("err@") != -1)
                 return resultMsg;
 
-            ht.Add("htm", SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "InstancePacketOfData/" + frmId + "/" + workid + "/" + "index.htm");
+            ht.Add("htm", BP.Difference.SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "InstancePacketOfData/" + frmId + "/" + workid + "/" + "index.htm");
 
             //#region 把所有的文件做成一个zip文件.
             if (System.IO.Directory.Exists(pdfPath) == false)
                 System.IO.Directory.CreateDirectory(pdfPath);
 
             string pdfFormFile = pdfPath + "/" + pdfName + ".pdf";  //生成的路径.
-            string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware/wkhtmltox/wkhtmltopdf.exe";
+            string pdfFileExe = BP.Difference.SystemConfig.PathOfDataUser + "ThirdpartySoftware/wkhtmltox/wkhtmltopdf.exe";
             try
             {
                 Html2Pdf(pdfFileExe, resultMsg, pdfFormFile);
                 if (DataType.IsNullOrEmpty(filePath) == true)
-                    ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "InstancePacketOfData/" + frmId + "/" + workid + "/pdf/" + pdfName + ".pdf");
+                    ht.Add("pdf", BP.Difference.SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "InstancePacketOfData/" + frmId + "/" + workid + "/pdf/" + pdfName + ".pdf");
                 else
-                    ht.Add("pdf", pdfPath +"/" + pdfName + ".pdf");
+                    ht.Add("pdf", pdfPath + "/" + pdfName + ".pdf");
             }
             catch (Exception ex)
             {
@@ -1411,7 +1451,7 @@ namespace BP.WF
                 pdfFormFile = pdfPath + "/" + pdfName + ".pdf";
 
                 Html2Pdf(pdfFileExe, resultMsg, pdfFormFile);
-                ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS", "") + "/InstancePacketOfData/" + frmId + "/" + workid + "/pdf/" + bill.Name + ".pdf");
+                ht.Add("pdf", BP.Difference.SystemConfig.GetValByKey("HostURLOfBS", "") + "/InstancePacketOfData/" + frmId + "/" + workid + "/pdf/" + bill.Name + ".pdf");
             }
 
             //生成压缩文件
@@ -1424,7 +1464,7 @@ namespace BP.WF
             {
                 (new FastZip()).CreateZip(finfo.FullName, pdfPath, true, "");
 
-                ht.Add("zip", SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + frmId + "/" + pdfName + ".zip");
+                ht.Add("zip", BP.Difference.SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + frmId + "/" + pdfName + ".zip");
             }
             catch (Exception ex)
             {
@@ -1433,7 +1473,7 @@ namespace BP.WF
             return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
         }
 
-        public static string MakeFormToPDF(string frmId, string frmName, Node node, 
+        public static string MakeFormToPDF(string frmId, string frmName, Node node,
             Int64 workid, string flowNo, string fileNameFormat, bool urlIsHostUrl, string basePath)
         {
 
@@ -1445,8 +1485,8 @@ namespace BP.WF
                 gwf = new GenerWorkFlow(workid);
 
             //存放信息地址
-            string hostURL = SystemConfig.GetValByKey("HostURL", "");
-            string path = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid;
+            string hostURL = BP.Difference.SystemConfig.GetValByKey("HostURL", "");
+            string path = BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid;
 
             //处理正确的文件名.
             if (fileNameFormat == null)
@@ -1486,13 +1526,13 @@ namespace BP.WF
                 workid = gwf.PWorkID;
 
             //获取表单的信息执行打印
-            string billUrl = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/" + frmNode.FK_Frm + "index.htm";
-            resultMsg = MakeHtmlDocument(frmNode.FK_Frm, workid, flowNo,path, billUrl, "ND" + node.NodeID);
+            string billUrl = BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/" + frmNode.FK_Frm + "index.htm";
+            resultMsg = MakeHtmlDocument(frmNode.FK_Frm, workid, flowNo, path, billUrl, "ND" + node.NodeID);
 
             if (resultMsg.IndexOf("err@") != -1)
                 return resultMsg;
 
-            // ht.Add("htm", SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/" + frmNode.FK_Frm + "index.htm");
+            // ht.Add("htm", BP.Difference.SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/" + frmNode.FK_Frm + "index.htm");
 
             //#region 把所有的文件做成一个zip文件.
             if (System.IO.Directory.Exists(pdfPath) == false)
@@ -1500,14 +1540,14 @@ namespace BP.WF
 
             fileNameFormat = fileNameFormat.Substring(0, fileNameFormat.Length - 1);
             string pdfFormFile = pdfPath + "/" + frmNode.FK_Frm + ".pdf";
-            string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware/wkhtmltox/wkhtmltopdf.exe";
+            string pdfFileExe = BP.Difference.SystemConfig.PathOfDataUser + "ThirdpartySoftware/wkhtmltox/wkhtmltopdf.exe";
             try
             {
                 Html2Pdf(pdfFileExe, resultMsg, pdfFormFile);
                 if (urlIsHostUrl == false)
-                    ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + frmNode.FK_Frm + ".pdf");
+                    ht.Add("pdf", BP.Difference.SystemConfig.GetValByKey("HostURLOfBS", "../../DataUser/") + "InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + frmNode.FK_Frm + ".pdf");
                 else
-                    ht.Add("pdf", SystemConfig.GetValByKey("HostURL", "") + "/DataUser/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + frmNode.FK_Frm + ".pdf");
+                    ht.Add("pdf", BP.Difference.SystemConfig.GetValByKey("HostURL", "") + "/DataUser/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + frmNode.FK_Frm + ".pdf");
 
 
             }
@@ -1518,7 +1558,7 @@ namespace BP.WF
                 pdfFormFile = pdfPath + "/" + fileNameFormat + ".pdf";
 
                 Html2Pdf(pdfFileExe, resultMsg, pdfFormFile);
-                ht.Add("pdf", SystemConfig.GetValByKey("HostURLOfBS", "") + "/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + frmNode.FK_Frm + ".pdf");
+                ht.Add("pdf", BP.Difference.SystemConfig.GetValByKey("HostURLOfBS", "") + "/InstancePacketOfData/" + "ND" + node.NodeID + "/" + workid + "/pdf/" + frmNode.FK_Frm + ".pdf");
             }
 
             return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
@@ -1587,20 +1627,20 @@ namespace BP.WF
         private static string setPDFPath(string frmID, long workid, string flowNo, GenerWorkFlow gwf)
         {
             //准备目录文件.
-            string path = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + frmID + "/";
+            string path = BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/" + frmID + "/";
             try
             {
 
-                path = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + frmID + "/";
+                path = BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/" + frmID + "/";
                 if (System.IO.Directory.Exists(path) == false)
                     System.IO.Directory.CreateDirectory(path);
 
-                path = SystemConfig.PathOfDataUser + "InstancePacketOfData/" + frmID + "/" + workid;
+                path = BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/" + frmID + "/" + workid;
                 if (System.IO.Directory.Exists(path) == false)
                     System.IO.Directory.CreateDirectory(path);
 
                 //把模版文件copy过去.
-                string templateFilePath = SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/";
+                string templateFilePath = BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/";
                 System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(templateFilePath);
                 System.IO.FileInfo[] finfos = dir.GetFiles();
                 if (finfos.Length == 0)
@@ -1623,12 +1663,12 @@ namespace BP.WF
                 return "err@读写文件出现权限问题，请联系管理员解决。" + ex.Message;
             }
 
-            string hostURL = SystemConfig.GetValByKey("HostURL", "");
+            string hostURL = BP.Difference.SystemConfig.GetValByKey("HostURL", "");
             string billUrl = hostURL + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/index.htm";
 
             // begin生成二维码.
-            string pathQR = path + "/QR.png"; // key.Replace("OID.Img@AppPath", SystemConfig.PathOfWebApp);
-            if (SystemConfig.GetValByKeyBoolen("IsShowQrCode", false) == true)
+            string pathQR = path + "/QR.png"; // key.Replace("OID.Img@AppPath", BP.Difference.SystemConfig.PathOfWebApp);
+            if (BP.Difference.SystemConfig.GetValByKeyBoolen("IsShowQrCode", false) == true)
             {
                 /*说明是图片文件.*/
                 string qrUrl = hostURL + "/WF/WorkOpt/PrintDocQRGuide.htm?FrmID=" + frmID + "&WorkID=" + workid + "&FlowNo=" + flowNo;
@@ -1700,7 +1740,7 @@ namespace BP.WF
             }
             catch (Exception ee)
             {
-                new  Exception("发生异常:"+ee.Message);
+                new Exception("发生异常:" + ee.Message);
             }
             finally
             {
@@ -1712,8 +1752,8 @@ namespace BP.WF
         }
 
 
-       
-        public static string MakeHtmlDocument(string frmID, Int64 workid, string flowNo,string path, string indexFile, string nodeID)
+
+        public static string MakeHtmlDocument(string frmID, Int64 workid, string flowNo, string path, string indexFile, string nodeID)
         {
             try
             {
@@ -1755,47 +1795,67 @@ namespace BP.WF
                         }
 
                     }
-                    url = url.Replace("@basePath", SystemConfig.HostURLOfBS);
+                    url = url.Replace("@basePath", BP.Difference.SystemConfig.HostURLOfBS);
                     if (url.Contains("http") == false)
-                        url = SystemConfig.HostURLOfBS + url;
+                        url = BP.Difference.SystemConfig.HostURLOfBS + url;
 
                     string str = "<iframe style='width:100%;height:auto;' ID='" + mapData.No + "'    src='" + url + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe></div>";
-                    string docs1 = DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/indexUrl.htm");
+                    string docs1 = DataType.ReadTextFile(BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/indexUrl.htm");
                     StringBuilder sb1 = new StringBuilder();
                     WebClient MyWebClient = new WebClient();
                     MyWebClient.Credentials = CredentialCache.DefaultCredentials;//获取或设置用于向Internet资源的请求进行身份验证的网络凭据
 
                     Byte[] pageData = MyWebClient.DownloadData(url); //从指定网站下载数据
                     string pageHtml = Encoding.UTF8.GetString(pageData); //如果获取网站页面采用的是UTF-8，则使用这句
-                   
+
                     docs1 = docs1.Replace("@Width", mapData.FrmW.ToString() + "px");
-                    docs1 = docs1.Replace("@Height", mapData.FrmH.ToString() + "px");
                     if (gwf != null)
                         docs1 = docs1.Replace("@Title", gwf.Title);
                     DataType.WriteFile(indexFile, pageHtml);
                     return indexFile;
                 }
-                else if(mapData.HisFrmType == FrmType.Develop)
+
+                if (mapData.HisFrmType == FrmType.Develop)
                 {
                     GEEntity enn = new GEEntity(frmID, workid);
-                    string ddocs = DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/indexDevelop.htm");
+                    string ddocs = DataType.ReadTextFile(BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/indexDevelop.htm");
                     string htmlString = DBAccess.GetBigTextFromDB("Sys_MapData", "No", mapData.No, "HtmlTemplateFile");
-                   
 
-                    htmlString = htmlString.Replace("../../DataUser", SystemConfig.HostURLOfBS + "/DataUser");
-                    htmlString = htmlString.Replace("../DataUser", SystemConfig.HostURLOfBS + "/DataUser");
+
+                    htmlString = htmlString.Replace("../../DataUser", BP.Difference.SystemConfig.HostURLOfBS + "/DataUser");
+                    htmlString = htmlString.Replace("../DataUser", BP.Difference.SystemConfig.HostURLOfBS + "/DataUser");
                     ddocs = ddocs.Replace("@Docs", htmlString);
 
-                    ddocs = ddocs.Replace("@Height", mapData.FrmH.ToString() + "px");
                     ddocs = ddocs.Replace("@Title", mapData.Name);
 
                     DataType.WriteFile(indexFile, ddocs);
-                   GenerHtmlOfDevelop(mapData, mapData.No, workid, enn, path, indexFile, flowNo, nodeID);
-
+                    GenerHtmlOfDevelop(mapData, mapData.No, workid, enn, path, indexFile, flowNo, nodeID);
                     return indexFile;
                 }
-                 GEEntity en = new GEEntity(frmID, workid);
 
+
+                if (mapData.HisFrmType == FrmType.ChapterFrm)
+                {
+                    GEEntity enn = new GEEntity(frmID, workid);
+                    string ddocs = DataType.ReadTextFile(BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/indexChapterFrm.htm");
+                    string htmlString = DBAccess.GetBigTextFromDB("Sys_MapData", "No", mapData.No, "HtmlTemplateFile");
+
+
+                    htmlString = htmlString.Replace("../../DataUser", BP.Difference.SystemConfig.HostURLOfBS + "/DataUser");
+                    htmlString = htmlString.Replace("../DataUser", BP.Difference.SystemConfig.HostURLOfBS + "/DataUser");
+                    ddocs = ddocs.Replace("@Docs", htmlString);
+
+                    ddocs = ddocs.Replace("@Title", mapData.Name);
+
+                    DataType.WriteFile(indexFile, ddocs);
+                    GenerHtmlOfDevelop(mapData, mapData.No, workid, enn, path, indexFile, flowNo, nodeID);
+                    return indexFile;
+                }
+
+
+                //以下就是傻瓜表单.
+
+                GEEntity en = new GEEntity(frmID, workid);
 
                 #region 生成水文.
 
@@ -1808,7 +1868,7 @@ namespace BP.WF
                 }
                 //先判断节点中水印的设置
                 //判断是否打印水印
-                bool isPrintShuiYin = SystemConfig.GetValByKeyBoolen("IsPrintBackgroundWord", false);
+                bool isPrintShuiYin = BP.Difference.SystemConfig.GetValByKeyBoolen("IsPrintBackgroundWord", false);
                 Node nd = null;
                 if (gwf != null)
                     nd = new Node(gwf.FK_Node);
@@ -1825,11 +1885,11 @@ namespace BP.WF
                     if (words.Contains("@") == true)
                         words = Glo.DealExp(words, en);
 
-                    string templateFilePathMy = SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/";
+                    string templateFilePathMy = BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/";
                     WaterImageManage wim = new WaterImageManage();
                     wim.DrawWords(templateFilePathMy + "ShuiYin.png", words, float.Parse("0.15"), ImagePosition.Center, path + "/ShuiYin.png");
                 }
-               
+
                 #endregion
 
                 //生成 表单的 html.
@@ -1838,7 +1898,7 @@ namespace BP.WF
                 #region 替换模版文件..
                 //首先判断是否有约定的文件.
                 string docs = "";
-                string tempFile = SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/" + mapData.No + ".htm";
+                string tempFile = BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/" + mapData.No + ".htm";
                 if (System.IO.File.Exists(tempFile) == false)
                 {
                     if (gwf != null)
@@ -1854,19 +1914,14 @@ namespace BP.WF
 
                     if (mapData.HisFrmType == FrmType.FoolForm)
                     {
-                        docs = DataType.ReadTextFile(SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/indexFool.htm");
+                        docs = DataType.ReadTextFile(BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/indexFool.htm");
                         sb = BP.WF.MakeForm2Html.GenerHtmlOfFool(mapData, frmID, workid, en, path, flowNo, nodeID, nd.HisFormType);
                         docs = docs.Replace("@Width", mapData.FrmW.ToString() + "px");
                     }
-                     
                 }
-
-
-
 
                 docs = docs.Replace("@Docs", sb.ToString());
 
-                docs = docs.Replace("@Height", mapData.FrmH.ToString() + "px");
 
                 String dateFormat = DateTime.Now.ToString("yyyy年MM月dd日 HH时mm分ss秒");
                 docs = docs.Replace("@PrintDT", dateFormat);
@@ -1881,7 +1936,7 @@ namespace BP.WF
 
                     if (gwf.WFState == WFState.Runing)
                     {
-                        if (SystemConfig.CustomerNo == "TianYe" && gwf.NodeName.Contains("反馈") == true)
+                        if (BP.Difference.SystemConfig.CustomerNo == "TianYe" && gwf.NodeName.Contains("反馈") == true)
                         {
                             nd = new Node(gwf.FK_Node);
                             if (nd.IsEndNode == true)
@@ -1893,21 +1948,21 @@ namespace BP.WF
                     }
 
                     //替换模版尾部的打印说明信息.
-                    String pathInfo = SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/EndInfo/" + flowNo + ".txt";
+                    String pathInfo = BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/EndInfo/" + flowNo + ".txt";
                     if (System.IO.File.Exists(pathInfo) == false)
-                        pathInfo = SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/EndInfo/Default.txt";
+                        pathInfo = BP.Difference.SystemConfig.PathOfDataUser + "InstancePacketOfData/Template/EndInfo/Default.txt";
 
                     docs = docs.Replace("@EndInfo", DataType.ReadTextFile(pathInfo));
                 }
 
-                //indexFile = SystemConfig.getPathOfDataUser() + "/InstancePacketOfData/" + frmID + "/" + workid + "/index.htm";
+                //indexFile =  BP.Difference.SystemConfig.getPathOfDataUser() + "/InstancePacketOfData/" + frmID + "/" + workid + "/index.htm";
                 DataType.WriteFile(indexFile, docs);
 
                 return indexFile;
             }
             catch (Exception ex)
             {
-                return "err@报表生成错误:" + ex.Message;
+                return "err@报表生成错误:" + ex.StackTrace;
             }
         }
 
@@ -1937,7 +1992,7 @@ namespace BP.WF
             {
                 process.Dispose();
 
-                BP.DA.Log.DebugWriteError("@生成PDF错误：" + ex.Message + "  --@pdf=" + pdf + "@htmFile="+htmFile);
+                BP.DA.Log.DebugWriteError("@生成PDF错误：" + ex.Message + "  --@pdf=" + pdf + "@htmFile=" + htmFile);
                 throw ex;
             }
         }
@@ -1954,11 +2009,11 @@ namespace BP.WF
                 return "";
             }
             //如果文件存在
-            String path = SystemConfig.PathOfDataUser + "Siganture/" + userNo + ".jpg";
+            String path = BP.Difference.SystemConfig.PathOfDataUser + "Siganture/" + userNo + ".jpg";
 
             if (File.Exists(path) == false)
             {
-                path = SystemConfig.PathOfDataUser + "Siganture/" + userNo + ".JPG";
+                path = BP.Difference.SystemConfig.PathOfDataUser + "Siganture/" + userNo + ".JPG";
                 if (File.Exists(path) == true)
                     return "<img src='" + path + "' style='border:0px;width:100px;height:30px;'/>";
                 else

@@ -1,14 +1,5 @@
-﻿using System;
-using System.Data;
-using System.Collections;
-using BP.DA;
-using BP.En;
-using BP.WF;
-using BP.WF.Data;
-using BP.WF.Template;
+﻿using BP.En;
 using BP.Sys;
-using System.Collections.Generic;
-using BP.CCBill.Template;
 
 
 namespace BP.CCBill
@@ -50,6 +41,13 @@ namespace BP.CCBill
             : base(no)
         {
         }
+        public int DBType
+        {
+            get
+            {
+                return this.GetValIntByKey(MapDataAttr.DBType);
+            }
+        }
         /// <summary>
         /// EnMap
         /// </summary>
@@ -70,7 +68,7 @@ namespace BP.CCBill
 
                 #region 数据源.
                 map.AddDDLSysEnum(MapDataAttr.DBType, 0, "数据源类型", true, true, "DBListDBType",
-         "@0=数据库查询SQL@1=执行Url返回Json");
+         "@0=数据库查询SQL@1=执行Url返回Json@2=执行存储过程");
                 map.AddDDLEntities(MapDataAttr.DBSrc, null, "数据源", new BP.Sys.SFDBSrcs(), true);
                 map.SetHelperAlert(MapDataAttr.DBSrc, "您可以在系统管理中新建SQL数据源.");
                 #endregion 数据源.
@@ -80,7 +78,18 @@ namespace BP.CCBill
             }
         }
         #endregion
-
+        protected override bool beforeUpdate()
+        {
+            DBList db = new DBList(this.No);
+            if (db.DBType != this.DBType)
+            {
+                db.ExpEn = "";
+                db.ExpList = "";
+                db.ExpCount = "";
+                db.Update();
+            }
+            return base.beforeUpdate();
+        }
     }
     /// <summary>
     /// 数据源实体s

@@ -4,6 +4,7 @@ using BP.DA;
 using BP.En;
 using BP.Sys;
 using BP.Sys.XML;
+using BP.Difference;
 
 
 namespace BP.Sys.XML
@@ -106,7 +107,7 @@ namespace BP.Sys.XML
 		{
 			get
 			{
-                return SystemConfig.PathOfData + "XML/RegularExpression.xml";
+                return BP.Difference.SystemConfig.PathOfData + "XML/RegularExpression.xml";
 			}
 		}
 		/// <summary>

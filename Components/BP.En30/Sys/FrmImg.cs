@@ -43,14 +43,7 @@ namespace BP.Sys
         /// 主表
         /// </summary>
         public const string FK_MapData = "FK_MapData";
-        /// <summary>
-        /// X
-        /// </summary>
-        public const string X = "X";
-        /// <summary>
-        /// Y
-        /// </summary>
-        public const string Y = "Y";
+       
         /// <summary>
         /// URL
         /// </summary>
@@ -232,7 +225,7 @@ namespace BP.Sys
                 if (DataType.IsNullOrEmpty(src))
                 {
                     string appPath = HttpContextHelper.RequestApplicationPath;
-                    src = appPath + "DataUser/ICON/" + SystemConfig.CustomerNo + "/LogBiger.png";
+                    src = appPath + "DataUser/ICON/" + BP.Difference.SystemConfig.CustomerNo + "/LogBiger.png";
                 }
                 return src;
             }
@@ -249,7 +242,7 @@ namespace BP.Sys
                 if (DataType.IsNullOrEmpty(src) || src.Contains("component/Img"))
                 {
                     string appPath = HttpContextHelper.RequestApplicationPath;
-                    src = appPath + "DataUser/ICON/" + SystemConfig.CustomerNo + "/LogBiger.png";
+                    src = appPath + "DataUser/ICON/" + BP.Difference.SystemConfig.CustomerNo + "/LogBiger.png";
                 }
                 return src;
             }
@@ -258,34 +251,7 @@ namespace BP.Sys
                 this.SetValByKey(FrmImgAttr.ImgURL, value);
             }
         }
-        /// <summary>
-        /// Y
-        /// </summary>
-        public float Y
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmImgAttr.Y);
-            }
-            set
-            {
-                this.SetValByKey(FrmImgAttr.Y, value);
-            }
-        }
-        /// <summary>
-        /// X
-        /// </summary>
-        public float X
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmImgAttr.X);
-            }
-            set
-            {
-                this.SetValByKey(FrmImgAttr.X, value);
-            }
-        }
+      
         /// <summary>
         /// FK_MapData
         /// </summary>
@@ -387,7 +353,7 @@ namespace BP.Sys
                 map.AddTBString(FrmImgAttr.Name, null, "中文名称", true, false, 0, 500, 20);
                 map.AddTBString(FrmImgAttr.EnPK, null, "英文名称", true, false, 0, 500, 20);
                 map.AddTBInt(MapAttrAttr.ColSpan, 0, "单元格数量", false, true);
-                map.AddTBInt(MapAttrAttr.TextColSpan, 1, "文本单元格数量", false, true);
+                map.AddTBInt(MapAttrAttr.LabelColSpan, 1, "文本单元格数量", false, true);
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", false, true);
 
                 //显示的分组.
@@ -406,17 +372,7 @@ namespace BP.Sys
             return base.beforeInsert();
         }
 
-        /// <summary>
-        /// 是否存在相同的数据?
-        /// </summary>
-        /// <returns></returns>
-        public bool IsExitGenerPK()
-        {
-            string sql = "SELECT COUNT(*) FROM Sys_FrmImg WHERE FK_MapData='" + this.FK_MapData + "' AND X=" + this.X + " AND Y=" + this.Y;
-            if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
-                return false;
-            return true;
-        }
+     
     }
     /// <summary>
     /// 图片s

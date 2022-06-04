@@ -134,7 +134,7 @@ namespace BP.Sys.FrmUI
                    "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //文本占单元格数量
-                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
+                map.AddDDLSysEnum(MapAttrAttr.LabelColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //文本跨行
@@ -298,7 +298,6 @@ namespace BP.Sys.FrmUI
             base.afterInsertUpdateAction();
         }
         #endregion 重写的方法.
-
     }
     /// <summary>
     /// 实体属性s

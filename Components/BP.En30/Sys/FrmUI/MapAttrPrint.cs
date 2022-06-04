@@ -125,9 +125,9 @@ namespace BP.Sys.FrmUI
                 map.SetHelperAlert(MapAttrAttr.ColSpan, "对于傻瓜表单有效: 标识该字段TextBox横跨的宽度,占的单元格数量.");
 
                 //文本占单元格数量
-                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "Label单元格数量", true, true, "ColSpanAttrString",
+                map.AddDDLSysEnum(MapAttrAttr.LabelColSpan, 1, "Label单元格数量", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格@5=跨6个单元格@6=跨6个单元格");
-                map.SetHelperAlert(MapAttrAttr.TextColSpan, "对于傻瓜表单有效: 标识该字段Lable，标签横跨的宽度,占的单元格数量.");
+                map.SetHelperAlert(MapAttrAttr.LabelColSpan, "对于傻瓜表单有效: 标识该字段Lable，标签横跨的宽度,占的单元格数量.");
 
                 //文本跨行.
                 // map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
@@ -137,7 +137,7 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
                 #endregion 傻瓜表单
 
-                map.AddMyFile("模板", null, SystemConfig.PathOfDataUser + "\\FrmVSTOTemplate");
+                map.AddMyFile("模板", null, BP.Difference.SystemConfig.PathOfDataUser + "\\FrmVSTOTemplate");
 
 
                 RefMethod rm = new RefMethod();

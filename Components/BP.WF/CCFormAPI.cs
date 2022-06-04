@@ -11,6 +11,7 @@ using BP.WF.Template;
 using BP.En;
 using BP.Sys;
 using BP.Difference;
+using BP.WF.Template.Frm;
 
 namespace BP.WF
 {
@@ -67,7 +68,7 @@ namespace BP.WF
 
 
             //设置外部传入的默认值.
-            if (SystemConfig.IsBSsystem == true)
+            if (BP.Difference.SystemConfig.IsBSsystem == true)
             {
                 // 处理传递过来的参数。
                 //2019-07-25 zyt改造
@@ -481,7 +482,7 @@ namespace BP.WF
             #endregion 表单模版信息.（含主、从表的，以及从表的枚举/外键相关数据）.
 
             #region 主表数据
-            if (SystemConfig.IsBSsystem == true)
+            if (BP.Difference.SystemConfig.IsBSsystem == true)
             {
                 // 处理传递过来的参数。
                 foreach (string k in HttpContextHelper.RequestParamKeys)
@@ -704,7 +705,7 @@ namespace BP.WF
                     }
                 }
             }
-            if (SystemConfig.IsBSsystem == true)
+            if (BP.Difference.SystemConfig.IsBSsystem == true)
             {
                 // 处理传递过来的参数。
                 foreach (string k in HttpContextHelper.RequestParamKeys)
@@ -784,7 +785,7 @@ namespace BP.WF
 
                     dt.TableName = uiBindKey;
 
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
                     {
                         if (dt.Columns.Contains("NO") == true)
                             dt.Columns["NO"].ColumnName = "No";
@@ -794,7 +795,7 @@ namespace BP.WF
                             dt.Columns["PARENTNO"].ColumnName = "ParentNo";
                     }
 
-                    if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+                    if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
                     {
                         if (dt.Columns.Contains("no") == true)
                             dt.Columns["no"].ColumnName = "No";

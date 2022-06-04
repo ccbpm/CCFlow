@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data;
-using BP.DA;
+﻿using BP.DA;
 using BP.En;
 using BP.Web;
 
@@ -428,18 +426,8 @@ namespace BP.WF.Port.Admin2Group
              * 1. 与org里面的部门是否存在？
              */
 
-
-
             return "";
         }
-
-
-        //public string SetSubOrg(string userNo)
-        //{
-        //    BP.WF.Port.Admin2Group.Dept dept = new WF.Port.Admin2Group.Dept(this.No);
-        //    return dept.SetSubOrg(userNo);
-        //}
-
     }
     /// <summary>
     ///独立组织集合

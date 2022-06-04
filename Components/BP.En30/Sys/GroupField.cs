@@ -228,7 +228,7 @@ namespace BP.Sys
                 map.AddTBString(GroupFieldAttr.FrmID, null, "表单ID", true, true, 0, 200, 20);
 
                 map.AddTBString(GroupFieldAttr.CtrlType, null, "控件类型", true, true, 0, 50, 20);
-                map.AddTBString(GroupFieldAttr.CtrlID, null, "控件ID", true, true, 0, 500, 20);
+                map.AddTBString(GroupFieldAttr.CtrlID, null, "控件ID", true, false, 0, 500, 20);
 
                 //map.AddBoolean(GroupFieldAttr.IsZDPC, false, "是否折叠(PC)", true, true);
                 map.AddBoolean(GroupFieldAttr.IsZDMobile, false, "是否折叠(Mobile)", true, true);
@@ -249,6 +249,17 @@ namespace BP.Sys
                 rm.RefMethodType = RefMethodType.Func;
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.Title = "章节表单分组扩展";
+                rm.ClassMethodName = this.ToString() + ".DoSetGFType";
+                // rm.HisAttrs.AddDDLSysEnum("Type", 0, "设置类型", true, true, "GFType", "@0=链接到其它表单@1=自定义URL");
+
+                rm.HisAttrs.AddTBInt("Type", 0, "设置类型：0链接到其它表单，1自定义URL", true, false);
+                rm.HisAttrs.AddTBString("val", null, "输入对应的值", true, false, 0, 1000, 1000);
+                map.AddRefMethod(rm);
+
+
                 rm = new RefMethod();
                 rm.Title = "调整字段顺序";
                 rm.ClassMethodName = this.ToString() + ".DoGroupFieldIdx";
@@ -262,7 +273,41 @@ namespace BP.Sys
         }
         #endregion
 
+
         #region 方法.
+        /// <summary>
+        /// 设置分组解析类型(对章节表单有效)
+        /// </summary>
+        /// <param name="type">类型</param>
+        /// <param name="val">值</param>
+        /// <returns>执行结果</returns>
+        public string DoSetGFType(int type, string val)
+        {
+            MapData md = new MapData(this.FrmID);
+            if (md.HisFrmType != FrmType.ChapterFrm)
+                return "err@该设置对章节表单有效.";
+
+            //链接到其他表单上
+            if (type == 0)
+            {
+                md.No = val;
+                if (md.RetrieveFromDBSources() == 0)
+                    return "err@表单ID输入错误[" + val + "].";
+
+                this.CtrlType = "ChapterFrmLinkFrm";
+                this.CtrlID = val;
+            }
+
+            //如果是自定义url.
+            if (type == 1)
+            {
+                this.CtrlType = "ChapterFrmSelfUrl";
+                this.CtrlID = val;
+            }
+
+            this.Update();
+            return "执行成功.";
+        }
         /// <summary>
         /// 外部调用的
         /// </summary>
@@ -307,9 +352,34 @@ namespace BP.Sys
             this.DoOrderUp(GroupFieldAttr.FrmID, this.FrmID, GroupFieldAttr.Idx);
             return "执行成功";
         }
+        protected override bool beforeDelete()
+        {
+            string sql = "SELECT Name,KeyOfEn FROM Sys_MapAttr WHERE GroupID=" + this.OID;
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            string str = "";
+            foreach (DataRow dr in dt.Rows)
+            {
+                str += " \t\n" + dr[0].ToString() +" - " +dr[1].ToString();
+            }
+
+            if (DataType.IsNullOrEmpty(str) == false)
+            {
+                str = "err@如下字段存在，您不能删除:"+ str;
+                str += "\t\n 您要删除这个分组，请按照如下操作。";
+                str += "\t\n 1. 移除字段到其他分组里面去. ";
+                str += "\t\n 2. 删除字段. ";
+                str += "\t\n 3. 如果是隐藏字段，您可以在表单设计器中，表单属性点开隐藏字段,打开隐藏字段，并编辑所在分组. ";
+                str += "\t\n +++++++++ 容器存在的字段 +++++++++++ ";
+                str += "\t\n  "+ str;
+
+                throw new Exception(str);
+            }
+
+            return base.beforeDelete();
+        }
         protected override bool beforeInsert()
         {
-
             try
             {
                 string sql = "SELECT MAX(Idx) FROM " + this.EnMap.PhysicsTable + " WHERE FrmID='" + this.FrmID + "'";
@@ -328,6 +398,8 @@ namespace BP.Sys
     /// </summary>
     public class GroupFields : EntitiesOID
     {
+
+
         #region 构造
         /// <summary>
         /// GroupFields
@@ -378,7 +450,7 @@ namespace BP.Sys
             qo.AddWhere(GroupFieldAttr.FrmID, enName);
             qo.addAnd();
             qo.AddWhereIsNull(GroupFieldAttr.CtrlID);
-            //qo.AddWhereLen(GroupFieldAttr.CtrlID, " = ", 0, SystemConfig.AppCenterDBType);
+            //qo.AddWhereLen(GroupFieldAttr.CtrlID, " = ", 0, BP.Difference.SystemConfig.AppCenterDBType);
             int num = qo.DoQuery();
 
             if (num == 0)

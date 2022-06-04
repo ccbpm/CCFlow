@@ -133,7 +133,7 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
 
                 map.AddDDLSysEnum(MapAttrAttr.IsSupperText, 2, "格式", true, true, MapAttrAttr.IsSupperText,
-                    "@0=yyyy-MM-dd@1=yyyy-MM-dd HH:mm@2=yyyy-MM-dd HH:mm:ss@3=yyyy-MM@4=HH:mm@5=HH:mm:ss@6=MM-dd");
+                    "@0=yyyy-MM-dd@1=yyyy-MM-dd HH:mm@2=yyyy-MM-dd HH:mm:ss@3=yyyy-MM@4=HH:mm@5=HH:mm:ss@6=MM-dd@7=yyyy");
 
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
                 //CCS样式
@@ -146,7 +146,7 @@ namespace BP.Sys.FrmUI
                   "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //文本占单元格数量
-                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
+                map.AddDDLSysEnum(MapAttrAttr.LabelColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //文本跨行

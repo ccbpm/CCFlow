@@ -15,13 +15,7 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 连接
         /// </summary>
-        public string Url
-        {
-            get
-            {
-                return this.GetValStrByKey("Tag1");
-            }
-        }
+
         public string FK_MapData
         {
             get
@@ -91,13 +85,12 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSysEnum(MapFrameAttr.UrlSrcType, 0, "URL来源", true, true, MapFrameAttr.UrlSrcType,
                     "@0=自定义@1=地图@2=流程轨迹表@3=流程轨迹图");
                 map.AddTBString(MapFrameAttr.FrameURL, null, "URL", true, false, 0, 3000, 20, true);
-                map.AddTBString(MapFrameAttr.URL, null, "URL", false, false, 0, 3000, 20, true);
 
+                map.AddTBString(MapFrameAttr.URL, null, "URL", false, false, 0, 3000, 20, true);
                 //显示的分组.
                 // map.AddDDLSQL(MapFrameAttr.FrmID, "0", "表单表单","SELECT No, Name FROM Sys_Mapdata  WHERE  FrmType=3 ", true);
 
-                map.AddTBString(MapFrameAttr.Y, null, "Y", true, false, 0, 20, 20);
-                map.AddTBString(MapFrameAttr.X, null, "x", true, false, 0, 20, 20);
+          
 
                 map.AddTBString(MapFrameAttr.W, null, "宽度", true, false, 0, 20, 20);
                 map.AddTBString(MapFrameAttr.H, null, "高度", true, false, 0, 20, 20);
@@ -108,7 +101,7 @@ namespace BP.Sys.FrmUI
 
                 map.AddTBString(MapFrameAttr.GUID, null, "GUID", false, false, 0, 128, 20);
 
-                map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
+                map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文.
 
                 #region 执行的方法.
                 RefMethod rm = new RefMethod();
@@ -142,7 +135,7 @@ namespace BP.Sys.FrmUI
         {
             //删除分组信息.
             GroupField gf = new GroupField();
-            gf.Delete(GroupFieldAttr.CtrlID,this.MyPK);
+            gf.Delete(GroupFieldAttr.CtrlID, this.MyPK);
 
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
@@ -169,12 +162,12 @@ namespace BP.Sys.FrmUI
 
             //更新group.
             GroupField gf = new GroupField();
-            int i= gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData, GroupFieldAttr.CtrlID, this.MyPK);
+            int i = gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData, GroupFieldAttr.CtrlID, this.MyPK);
             if (i == 1)
             {
                 gf.Lab = this.Name;
                 gf.Update();
-            } 
+            }
 
             return base.beforeUpdateInsertAction();
         }

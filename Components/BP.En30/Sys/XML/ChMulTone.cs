@@ -82,7 +82,7 @@ namespace BP.Sys
         {
             get
             {
-                return SystemConfig.PathOfData + "XML/XmlDB.xml";
+                return BP.Difference.SystemConfig.PathOfData + "XML/XmlDB.xml";
             }
         }
         /// <summary>

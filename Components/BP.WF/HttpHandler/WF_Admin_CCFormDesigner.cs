@@ -1,15 +1,9 @@
 ﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Collections;
 using System.Data;
-using System.Web;
-using BP.WF;
 using BP.Web;
 using BP.Sys;
 using BP.DA;
 using BP.En;
-using BP.WF.Template;
 using BP.CCBill;
 namespace BP.WF.HttpHandler
 {
@@ -40,10 +34,8 @@ namespace BP.WF.HttpHandler
             string keyOfEn = this.GetRequestVal("KeyOfEn");
             string fieldDesc = this.GetRequestVal("Name");
             string enumKeyOfBind = this.GetRequestVal("UIBindKey"); //要绑定的enumKey.
-            float x = this.GetRequestValFloat("x");
-            float y = this.GetRequestValFloat("y");
 
-            BP.Sys.CCFormAPI.NewEnumField(fk_mapdata, keyOfEn, fieldDesc, enumKeyOfBind, ctrl, x, y);
+            BP.Sys.CCFormAPI.NewEnumField(fk_mapdata, keyOfEn, fieldDesc, enumKeyOfBind, ctrl);
             return "绑定成功.";
         }
         /// <summary>
@@ -140,7 +132,7 @@ namespace BP.WF.HttpHandler
 
             MapData md = new MapData();
             md.No = str;
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 md.No = str + "_" + WebUser.OrgNo;
             if (md.RetrieveFromDBSources() == 0)
                 return str;
@@ -174,7 +166,7 @@ namespace BP.WF.HttpHandler
             md.Name = this.GetRequestVal("TB_Name");
 
             md.No = DataType.ParseStringForNo(this.GetRequestVal("TB_No"), 100);
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 md.No = md.No + "_" + BP.Web.WebUser.OrgNo;
 
             //表单类型.
@@ -184,7 +176,6 @@ namespace BP.WF.HttpHandler
             if (DataType.IsNullOrEmpty(sort) == true)
                 sort = this.GetRequestVal("DDL_FrmTree");
 
-            //    md.FK_FrmSort = sort;
             md.FK_FormTree = sort;
 
             //类型.
@@ -207,23 +198,15 @@ namespace BP.WF.HttpHandler
 
 
             BP.CCBill.FrmDict entityDict = new FrmDict(md.No);
-
-            BP.CCBill.Template.CtrlModel ctrl = new BP.CCBill.Template.CtrlModel();
-            ctrl.FrmID = this.No;
-            ctrl.CtrlObj = "BtnSearch";
-            ctrl.IsEnableAll = true;
-            ctrl.setMyPK(ctrl.FrmID + "_" + ctrl.CtrlObj);
-            if (ctrl.RetrieveFromDBSources() == 0)
-                ctrl.Insert();
             entityDict.CheckEnityTypeAttrsFor_EntityNoName();
-
+            entityDict.InsertToolbarBtns();
 
             #region 初始化数据.
             DBList db = new DBList(md.No);
             db.MainTable = "A";
             db.MainTablePK = "No";
 
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
             {
                 db.ExpEn = "SELECT A.No as OID, A.No as BillNo, a.Name AS Title, A.Tel,A.Email , A.FK_Dept as DeptNo, B.Name AS DeptT FROM Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No AND A.No='@Key' ";
                 db.ExpList = "SELECT A.No as OID, A.No as BillNo, a.Name AS Title, A.Tel, A.PinYin,A.Email, B.No as DeptNo, B.Name AS DeptT FROM Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No ";
@@ -279,6 +262,7 @@ namespace BP.WF.HttpHandler
                     //自由，傻瓜，SL表单不做判断
                     case BP.Sys.FrmType.FoolForm:
                     case BP.Sys.FrmType.Develop:
+                    case BP.Sys.FrmType.ChapterFrm:
                         break;
                     case BP.Sys.FrmType.Url:
                     case BP.Sys.FrmType.Entity:
@@ -317,6 +301,7 @@ namespace BP.WF.HttpHandler
                     if (DataType.IsNullOrEmpty(this.GetRequestVal("FrmID")) == false)
                         isHavePFrmID = true;
                     bill.CheckEnityTypeAttrsFor_Bill(isHavePFrmID);
+                    bill.InsertToolbarBtns();
                 }
                 #endregion 如果是单据.
 
@@ -335,6 +320,7 @@ namespace BP.WF.HttpHandler
 
                     entityDict.Update();
                     entityDict.CheckEnityTypeAttrsFor_EntityNoName();
+                    entityDict.InsertToolbarBtns();
                 }
                 #endregion 如果是实体 EnityNoName .
 
@@ -342,10 +328,10 @@ namespace BP.WF.HttpHandler
                 GEEntity en = new GEEntity(md.No);
                 en.CheckPhysicsTable();
 
-                if (md.HisFrmType == BP.Sys.FrmType.WPSFrm ||  md.HisFrmType == BP.Sys.FrmType.WordFrm || md.HisFrmType == BP.Sys.FrmType.ExcelFrm)
+                if (md.HisFrmType == BP.Sys.FrmType.WPSFrm || md.HisFrmType == BP.Sys.FrmType.WordFrm || md.HisFrmType == BP.Sys.FrmType.ExcelFrm)
                 {
                     /*把表单模版存储到数据库里 */
-                    return "url@../../Comm/RefFunc/En.htm?EnName=BP.WF.Template.MapFrmExcel&PKVal=" + md.No;
+                    return "url@../../Comm/RefFunc/En.htm?EnName=BP.WF.Template.Frm.MapFrmExcel&PKVal=" + md.No;
                 }
 
                 if (md.HisFrmType == BP.Sys.FrmType.Entity)
@@ -364,203 +350,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion 创建表单.
 
-        public string LetLogin()
-        {
-            BP.Port.Emp emp = new BP.Port.Emp("admin");
-            WebUser.SignInOfGener(emp);
-            return "登录成功.";
-        }
 
-        /// <summary>
-        /// 表单属性
-        /// </summary>
-        /// <returns></returns>
-        public string GoToFrmAttr_Init()
-        {
-            //根据不同的表单类型转入不同的表单设计器上去.
-            BP.Sys.MapData md = new BP.Sys.MapData(this.FK_MapData);
-            if (md.EntityType == EntityType.SingleFrm)
-            {
-               
-
-                if (md.HisFrmType == FrmType.ExcelFrm)
-                    return "url@../../Comm/En.htm?EnName=BP.WF.Template.MapFrmExcel&No=" + this.FK_MapData;
-
-                if (md.HisFrmType == FrmType.Url)
-                    return "url@../../Comm/En.htm?EnName=BP.WF.Template.MapDataURL&No=" + this.FK_MapData;
-
-
-                return "url@../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFool&No=" + this.FK_MapData;
-            }
-
-            if (md.EntityType == EntityType.FrmDict)
-                return "url@../../Comm/En.htm?EnName=BP.CCBill.FrmDict&No=" + this.FK_MapData;
-
-            if (md.EntityType == EntityType.EntityTree)
-                return "url@../../Comm/En.htm?EnName=BP.CCBill.FrmBill&No=" + this.FK_MapData;
-
-
-            return "err@没有判断的表单转入类型" + md.HisFrmType.ToString();
-        }
-
-        public string PublicNoNameCtrlCreate()
-        {
-            try
-            {
-                float x = float.Parse(this.GetRequestVal("x"));
-                float y = float.Parse(this.GetRequestVal("y"));
-                BP.Sys.CCFormAPI.CreatePublicNoNameCtrl(this.FrmID, this.GetRequestVal("CtrlType"),
-                    this.GetRequestVal("No"),
-                    this.GetRequestVal("Name"), x, y);
-                return "true";
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
-        }
-        public string NewImage()
-        {
-
-            try
-            {
-                BP.Sys.CCFormAPI.NewImage(this.GetRequestVal("FrmID"),
-                    this.GetRequestVal("KeyOfEn"), this.GetRequestVal("Name"),
-                    //int.Parse(this.GetRequestVal("FieldType")),
-                    float.Parse(this.GetRequestVal("x")),
-                   float.Parse(this.GetRequestVal("y"))
-                   );
-                return "true";
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
-
-
-        }
-        public string NewField()
-        {
-            try
-            {
-                BP.Sys.CCFormAPI.NewField(this.GetRequestVal("FrmID"),
-                    this.GetRequestVal("KeyOfEn"), this.GetRequestVal("Name"),
-                    int.Parse(this.GetRequestVal("FieldType")),
-                    float.Parse(this.GetRequestVal("x")),
-                   float.Parse(this.GetRequestVal("y"))
-                   );
-                return "true";
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
-        }
-        /// <summary>
-        /// 生成所有表单元素.
-        /// </summary>
-        /// <returns></returns>
-        public string CCForm_AllElements_ResponseJson()
-        {
-            try
-            {
-                DataSet ds = new DataSet();
-
-                MapData mapData = new MapData(this.FK_MapData);
-
-                //属性.
-                MapAttrs attrs = new MapAttrs(this.FK_MapData);
-                attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.UIVisible, 1);
-                ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
-
-                FrmBtns btns = new FrmBtns(this.FK_MapData);
-                ds.Tables.Add(btns.ToDataTableField("Sys_FrmBtn"));
-
-                FrmRBs rbs = new FrmRBs(this.FK_MapData);
-                ds.Tables.Add(rbs.ToDataTableField("Sys_FrmRB"));
-                 
-
-                FrmImgs imgs = new FrmImgs(this.FK_MapData);
-                ds.Tables.Add(imgs.ToDataTableField("Sys_FrmImg"));
-
-                FrmImgAths imgAths = new FrmImgAths(this.FK_MapData);
-                ds.Tables.Add(imgAths.ToDataTableField("Sys_FrmImgAth"));
-
-                FrmAttachments aths = new FrmAttachments(this.FK_MapData);
-                ds.Tables.Add(aths.ToDataTableField("Sys_FrmAttachment"));
-
-                MapDtls dtls = new MapDtls();
-                dtls.Retrieve(MapDtlAttr.FK_MapData, this.FK_MapData, MapDtlAttr.FK_Node, 0);
-                ds.Tables.Add(dtls.ToDataTableField("Sys_MapDtl"));
-
-              
-
-                BP.Sys.FrmUI.MapFrameExts mapFrameExts = new BP.Sys.FrmUI.MapFrameExts(this.FK_MapData);
-                ds.Tables.Add(mapFrameExts.ToDataTableField("Sys_MapFrame"));
-
-                //组织节点组件信息.
-                string sql = "";
-                if (this.FK_Node > 100)
-                {
-                    sql += "select '轨迹图' AS Name,'FlowChart' AS No,FrmTrackSta Sta,FrmTrack_X X,FrmTrack_Y Y,FrmTrack_H H,FrmTrack_W  W from WF_Node WHERE nodeid=" + SystemConfig.AppCenterDBVarStr + "nodeid";
-                    sql += " union select '审核组件'AS Name, 'FrmCheck'AS No,FWCSta Sta,FWC_X X,FWC_Y Y,FWC_H H, FWC_W W from WF_Node WHERE nodeid=" + SystemConfig.AppCenterDBVarStr + "nodeid";
-                    sql += " union select '子流程' AS Name,'SubFlowDtl'AS  No,SFSta Sta,SF_X X,SF_Y Y,SF_H H, SF_W W from WF_Node  WHERE nodeid=" + SystemConfig.AppCenterDBVarStr + "nodeid";
-                    sql += " union select '子线程' AS Name, 'ThreadDtl'AS  No,FrmThreadSta Sta,FrmThread_X X,FrmThread_Y Y,FrmThread_H H,FrmThread_W W from WF_Node WHERE nodeid=" + SystemConfig.AppCenterDBVarStr + "nodeid";
-                    sql += " union select '流转自定义' AS Name,'FrmTransferCustom' AS  No,FTCSta Sta,FTC_X X,FTC_Y Y,FTC_H H,FTC_W  W FROM WF_Node WHERE nodeid=" + SystemConfig.AppCenterDBVarStr + "nodeid";
-                    Paras ps = new Paras();
-                    ps.SQL = sql;
-                    ps.Add("nodeid", this.FK_Node);
-                    DataTable dt = null;
-
-                    try
-                    {
-                        dt = DBAccess.RunSQLReturnTable(ps);
-                    }
-                    catch (Exception ex)
-                    {
-                        FrmSubFlow sb = new FrmSubFlow();
-                        sb.CheckPhysicsTable();
-
-                        TransferCustom tc = new TransferCustom();
-                        tc.CheckPhysicsTable();
-
-                        FrmThread ft = new FrmThread();
-                        ft.CheckPhysicsTable();
-
-                        FrmTrack ftd = new FrmTrack();
-                        ftd.CheckPhysicsTable();
-
-                        FrmTransferCustom ftd1 = new FrmTransferCustom();
-                        ftd1.CheckPhysicsTable();
-
-                        throw ex;
-                    }
-
-                    dt.TableName = "FigureCom";
-
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
-                    {
-                        //  figureComCols = "Name,No,Sta,X,Y,H,W";
-                        dt.Columns[0].ColumnName = "Name";
-                        dt.Columns[1].ColumnName = "No";
-                        dt.Columns[2].ColumnName = "Sta";
-                        dt.Columns[3].ColumnName = "X";
-                        dt.Columns[4].ColumnName = "Y";
-                        dt.Columns[5].ColumnName = "H";
-                        dt.Columns[6].ColumnName = "W";
-                    }
-                    ds.Tables.Add(dt);
-                }
-
-                return BP.Tools.Json.ToJson(ds);
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
-        }
-
-       
         #region 表格处理.
         public string Tables_Init()
         {
@@ -604,10 +394,10 @@ namespace BP.WF.HttpHandler
 
         #endregion
 
-       
+
 
         #region 复制表单
-        
+
         public void DoCopyFrm()
         {
             string fromFrmID = GetRequestVal("FromFrmID");
@@ -638,7 +428,7 @@ namespace BP.WF.HttpHandler
             //清空缓存
 
             toMapData.RepairMap();
-            SystemConfig.DoClearCash();
+            BP.Difference.SystemConfig.DoClearCash();
 
 
         }

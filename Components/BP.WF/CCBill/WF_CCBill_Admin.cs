@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
 using System.Data;
-using System.Text;
-using System.Web;
 using BP.DA;
 using BP.Sys;
-using BP.Web;
-using BP.Port;
-using BP.En;
-using BP.WF;
-using BP.WF.Template;
-using BP.WF.Data;
 using BP.WF.HttpHandler;
 using BP.CCBill.Template;
 using BP.Difference;
@@ -35,41 +25,116 @@ namespace BP.CCBill
             int i = btns.Retrieve(GroupMethodAttr.FrmID, this.FrmID, "Idx");
             if (i == 0)
             {
+                FrmBill bill = new FrmBill(this.FrmID);
                 ToolbarBtn btn = new ToolbarBtn();
-                btn.FrmID = this.FrmID;
-                btn.BtnID = "New";
-                btn.BtnLab = "新建";
-                btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-                btn.SetValByKey("Idx", 0);
-                btn.Insert();
+                if (bill.EntityType != EntityType.DBList)
+                {
+                    btn.FrmID = this.FrmID;
+                    btn.BtnID = "New";
+                    btn.BtnLab = "新建";
+                    btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+                    btn.SetValByKey("Idx", 0);
+                    btn.Insert();
 
+
+                    btn = new ToolbarBtn();
+                    btn.FrmID = this.FrmID;
+                    btn.BtnID = "Save";
+                    btn.BtnLab = "保存";
+                    btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+                    btn.SetValByKey("Idx", 1);
+                    btn.Insert();
+
+
+                    if (bill.EntityType == EntityType.FrmBill)
+                    {
+                        //单据增加提交的功能
+                        btn = new ToolbarBtn();
+                        btn.FrmID = this.FrmID;
+                        btn.BtnID = "Submit";
+                        btn.BtnLab = "提交";
+                        btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+                        btn.SetValByKey("Idx", 1);
+                        btn.Insert();
+                    }
+
+                    btn = new ToolbarBtn();
+                    btn.FrmID = this.FrmID;
+                    btn.BtnID = "Delete";
+                    btn.BtnLab = "删除";
+                    btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+                    btn.SetValByKey("Idx", 2);
+                    btn.Insert();
+                }
+                
+              
                 btn = new ToolbarBtn();
                 btn.FrmID = this.FrmID;
-                btn.BtnID = "Save";
-                btn.BtnLab = "保存";
+                btn.BtnID = "PrintHtml";
+                btn.BtnLab = "打印Html";
                 btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-                btn.SetValByKey("Idx", 1);
-                btn.Insert();
-
-                btn = new ToolbarBtn();
-                btn.FrmID = this.FrmID;
-                btn.BtnID = "Delete";
-                btn.BtnLab = "删除";
-                btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-                btn.SetValByKey("Idx", 2);
-                btn.Insert();
-
-                btn = new ToolbarBtn();
-                btn.FrmID = this.FrmID;
-                btn.BtnID = "Delete";
-                btn.BtnLab = "删除";
-                btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+                btn.IsEnable = false;
                 btn.SetValByKey("Idx", 3);
                 btn.Insert();
+
+                btn = new ToolbarBtn();
+                btn.FrmID = this.FrmID;
+                btn.BtnID = "PrintPDF";
+                btn.BtnLab = "打印PDF";
+                btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+                btn.IsEnable = false;
+                btn.SetValByKey("Idx", 4);
+                btn.Insert();
+
+                btn = new ToolbarBtn();
+                btn.FrmID = this.FrmID;
+                btn.BtnID = "PrintRTF";
+                btn.BtnLab = "打印RTF";
+                btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+                btn.IsEnable = false;
+                btn.SetValByKey("Idx", 5);
+                btn.Insert();
+
+                btn = new ToolbarBtn();
+                btn.FrmID = this.FrmID;
+                btn.BtnID = "PrintCCWord";
+                btn.BtnLab = "打印CCWord";
+                btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+                btn.IsEnable = false;
+                btn.SetValByKey("Idx", 6);
+                btn.Insert();
+
+                btn = new ToolbarBtn();
+                btn.FrmID = this.FrmID;
+                btn.BtnID = "ExpZip";
+                btn.BtnLab = "导出Zip包";
+                btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+                btn.IsEnable = false;
+                btn.SetValByKey("Idx", 7);
+                btn.Insert();
+
                 btns.Retrieve(GroupMethodAttr.FrmID, this.FrmID, "Idx");
             }
             return btns.ToJson(); 
         }
+        /// <summary>
+        /// 实体、单据工具栏操作按钮的顺序移动
+        /// </summary>
+        /// <returns></returns>
+        public string ToolbarSetting_Mover()
+        {
+            string[] ens = this.GetRequestVal("MyPKs").Split(',');
+            for (int i = 0; i < ens.Length; i++)
+            {
+                var enMyPK = ens[i];
+                if (DataType.IsNullOrEmpty(enMyPK) == true)
+                    continue;
+                string sql = "UPDATE Frm_ToolbarBtn SET Idx=" + i + " WHERE MyPK='" + enMyPK + "'";
+                DBAccess.RunSQL(sql);
+            }
+            return "顺序移动成功..";
+        }
+
 
         #region 方法的操作.
         /// <summary>
@@ -153,6 +218,92 @@ namespace BP.CCBill
         {
 
         }
+        /// <summary>
+        /// 列表集合初始化
+        /// </summary>
+        /// <returns></returns>
+        public string Collection_Init()
+        {
+            Collections collections = new Collections();
+            int i = collections.Retrieve(GroupMethodAttr.FrmID, this.FrmID, "Idx");
+            if (i == 0)
+            {
+                FrmBill bill = new FrmBill(this.FrmID);
+                //查询
+                Collection collection = new Collection();
+                collection.FrmID = this.FrmID;
+                collection.MethodID = "Search";
+                collection.Name = "查询";
+                collection.MethodModel = "Search";
+                collection.Mark = "Search";
+                collection.No = collection.FrmID + "_" + collection.MethodID;
+                collection.SetValByKey("Idx", 0);
+                collection.Insert();
+
+                if (bill.EntityType != EntityType.DBList)
+                {
+                    //新建
+                    collection = new Collection();
+                    collection.FrmID = this.FrmID;
+                    collection.MethodID = "New";
+                    collection.Name = "新建";
+                    collection.MethodModel = "New";
+                    collection.Mark = "New";
+                    collection.No = collection.FrmID + "_" + collection.MethodID;
+                    collection.SetValByKey("Idx", 1);
+                    collection.Insert();
+
+                    //删除
+                    collection = new Collection();
+                    collection.FrmID = this.FrmID;
+                    collection.MethodID = "Delete";
+                    collection.Name = "删除";
+                    collection.MethodModel = "Delete";
+                    collection.Mark = "Delete";
+                    collection.No = collection.FrmID + "_" + collection.MethodID;
+                    collection.SetValByKey("Idx", 2);
+                    collection.Insert();
+
+                    //导入
+                    collection = new Collection();
+                    collection.FrmID = this.FrmID;
+                    collection.MethodID = "ImpExcel";
+                    collection.Name = "导入Excel";
+                    collection.MethodModel = "ImpExcel";
+                    collection.Mark = "ImpExcel";
+                    collection.No = collection.FrmID + "_" + collection.MethodID;
+                    collection.SetValByKey("Idx", 5);
+                    collection.Insert();
+                }
+                
+
+                collection = new Collection();
+                collection.FrmID = this.FrmID;
+                collection.MethodID = "Group";
+                collection.Name = "分析";
+                collection.MethodModel = "Group";
+                collection.Mark = "Group";
+                collection.No = collection.FrmID + "_" + collection.MethodID;
+                collection.SetValByKey("Idx", 3);
+                collection.SetValByKey("IsEnable", false);
+                collection.Insert();
+
+                //导出
+                collection = new Collection();
+                collection.FrmID = this.FrmID;
+                collection.MethodID = "ExpExcel";
+                collection.Name = "导出Excel";
+                collection.MethodModel = "ExpExcel";
+                collection.Mark = "ExpExcel";
+                collection.No = collection.FrmID + "_" + collection.MethodID;
+                collection.SetValByKey("Idx", 4);
+                collection.Insert();
+
+               
+                collections.Retrieve(GroupMethodAttr.FrmID, this.FrmID, "Idx");
+            }
+            return collections.ToJson();
+        }
 
         /// <summary>
         /// 集合方法的移动.
@@ -164,6 +315,8 @@ namespace BP.CCBill
             for (int i = 0; i < ens.Length; i++)
             {
                 var enNo = ens[i];
+                if (DataType.IsNullOrEmpty(enNo) == true)
+                    continue;
                 string sql = "UPDATE Frm_Collection SET Idx=" + i + " WHERE No='" + enNo + "'";
                 DBAccess.RunSQL(sql);
             }

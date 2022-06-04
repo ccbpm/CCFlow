@@ -40,7 +40,7 @@ namespace BP.Sys.Base
             get
             {
                 string empNo = "No";
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                     empNo = "UserID as No";
                 return empNo;
             }
@@ -50,7 +50,7 @@ namespace BP.Sys.Base
             get
             {
                 string empNo = "No";
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                     empNo = "UserID";
                 return empNo;
             }
@@ -64,7 +64,7 @@ namespace BP.Sys.Base
         {
             if (DataType.IsNullOrEmpty(enName) == true)
                 return "";
-            if (SystemConfig.Plant == BP.Sys.Plant.CSharp)
+            if (BP.Difference.SystemConfig.Plant == BP.Sys.Plant.CSharp)
                 return enName;
 
             int idx = enName.LastIndexOf('.');
@@ -96,7 +96,7 @@ namespace BP.Sys.Base
         {
             get
             {
-                return SystemConfig.GetValByKey("UpdateSIDAndOrgNoSQL", null);
+                return BP.Difference.SystemConfig.GetValByKey("UpdateSIDAndOrgNoSQL", null);
             }
         }
 
@@ -367,7 +367,7 @@ namespace BP.Sys.Base
         /// <param name="msg">消息</param>
         public static void WriteUserLog(string msg, string logType = "通用操作")
         {
-            if (BP.Sys.SystemConfig.GetValByKeyBoolen("IsEnableLog", false) == false)
+            if (BP.Difference.SystemConfig.GetValByKeyBoolen("IsEnableLog", false) == false)
                 return;
 
         //    string sql = "INSERT INTO Sys_Log (id,title,exception,) value('" + DBAccess.GenerGUID() + "','" + logType + "','" + msg + "')";
@@ -382,7 +382,7 @@ namespace BP.Sys.Base
             ul.RDT = DataType.CurrentDateTime;
             try
             {
-                if (SystemConfig.IsBSsystem)
+                if (BP.Difference.SystemConfig.IsBSsystem)
                     ul.IP = HttpContextHelper.Request.UserHostAddress;
             }
             catch
@@ -402,7 +402,7 @@ namespace BP.Sys.Base
             //求出保存路径.
             string path = en.EnMap.FJSavePath;
             if (path == "" || path == null || path == string.Empty)
-                path = SystemConfig.PathOfDataUser + en.ToString() + "/";
+                path =  BP.Difference.SystemConfig.PathOfDataUser + en.ToString() + "/";
 
             if (System.IO.Directory.Exists(path) == false)
                 System.IO.Directory.CreateDirectory(path);
@@ -470,7 +470,7 @@ namespace BP.Sys.Base
         public static void File_JiaMi(string fileFullPath)
         {
             //南京宝旺达.
-            if (SystemConfig.CustomerNo == "BWDA")
+            if (BP.Difference.SystemConfig.CustomerNo == "BWDA")
             {
 
             }
@@ -478,7 +478,7 @@ namespace BP.Sys.Base
         public static void File_JieMi(string fileFullPath)
         {
             //南京宝旺达.
-            if (SystemConfig.CustomerNo == "BWDA")
+            if (BP.Difference.SystemConfig.CustomerNo == "BWDA")
             {
 
             }
@@ -491,7 +491,7 @@ namespace BP.Sys.Base
         public static string String_JieMi(string str)
         {
             //南京宝旺达.
-            if (SystemConfig.CustomerNo == "BWDA")
+            if (BP.Difference.SystemConfig.CustomerNo == "BWDA")
             {
                 return str;
             }

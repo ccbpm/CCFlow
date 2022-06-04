@@ -26,43 +26,6 @@ namespace BP.Pub
     public class PubClass
     {
         /// <summary>
-        /// 转颜色.
-        /// </summary>
-        /// <param name="colorName"></param>
-        /// <returns></returns>
-        public static string ToHtmlColor(string colorName)
-        {
-            try
-            {
-                if (colorName.StartsWith("#"))
-                {
-                    colorName = colorName.Replace("#", string.Empty);
-                    //update by dgq 六位颜色不需要转换
-                    if (colorName.Length == 6)
-                        return "#" + colorName;
-                }
-                int v = int.Parse(colorName, System.Globalization.NumberStyles.HexNumber);
-
-                Color col = Color.FromArgb
-               (
-                     Convert.ToByte((v >> 24) & 255),
-                     Convert.ToByte((v >> 16) & 255),
-                     Convert.ToByte((v >> 8) & 255),
-                     Convert.ToByte((v >> 0) & 255)
-                );
-
-                int alpha = col.A;
-                var red = Convert.ToString(col.R, 16); ;
-                var green = Convert.ToString(col.G, 16);
-                var blue = Convert.ToString(col.B, 16);
-                return string.Format("#{0}{1}{2}", red, green, blue);
-            }
-            catch
-            {
-                return "black";
-            }
-        }
-        /// <summary>
         /// 处理字段
         /// </summary>
         /// <param name="fd"></param>
@@ -89,82 +52,11 @@ namespace BP.Pub
             get
             {
                 if (_KeyFields == null)
-                    _KeyFields = DataType.ReadTextFile(SystemConfig.PathOfWebApp + SystemConfig.CCFlowWebPath + "WF/Data/Sys/FieldKeys.txt");
+                    _KeyFields = DataType.ReadTextFile(BP.Difference.SystemConfig.PathOfWebApp + BP.Difference.SystemConfig.CCFlowWebPath + "WF/Data/Sys/FieldKeys.txt");
                 return _KeyFields;
             }
         }
-        public static bool IsNum(string str)
-        {
-            Boolean strResult;
-            String cn_Regex = @"^[\u4e00-\u9fa5]+$";
-            if (Regex.IsMatch(str, cn_Regex))
-            {
-                strResult = true;
-            }
-            else
-            {
-                strResult = false;
-            }
-            return strResult;
-        }
-
-        public static bool IsCN(string str)
-        {
-            Boolean strResult;
-            String cn_Regex = @"^[\u4e00-\u9fa5]+$";
-            if (Regex.IsMatch(str, cn_Regex))
-            {
-                strResult = true;
-            }
-            else
-            {
-                strResult = false;
-            }
-            return strResult;
-        }
-
-        public static bool IsImg(string ext)
-        {
-            ext = ext.Replace(".", "").ToLower();
-            switch (ext)
-            {
-                case "gif":
-                    return true;
-                case "jpg":
-                    return true;
-                case "bmp":
-                    return true;
-                case "png":
-                    return true;
-                default:
-                    return false;
-            }
-        }
-        /// <summary>
-        /// 按照比例数小
-        /// </summary>
-        /// <param name="ObjH">目标高度</param>
-        /// <param name="factH">实际高度</param>
-        /// <param name="factW">实际宽度</param>
-        /// <returns>目标宽度</returns>
-        public static int GenerImgW_del(int ObjH, int factH, int factW, int isZeroAsWith)
-        {
-            if (factH == 0 || factW == 0)
-                return isZeroAsWith;
-
-            decimal d = decimal.Parse(ObjH.ToString()) / decimal.Parse(factH.ToString()) * decimal.Parse(factW.ToString());
-
-            try
-            {
-                return int.Parse(d.ToString("0"));
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(d.ToString() + ex.Message);
-            }
-        }
-
-        
+     
         /// <summary>
         /// 产生临时文件名称
         /// </summary>
@@ -173,62 +65,6 @@ namespace BP.Pub
         public static string GenerTempFileName(string hz)
         {
             return Web.WebUser.No + DateTime.Now.ToString("MMddhhmmss") + "." + hz;
-        }
-        public static void DeleteTempFiles()
-        {
-            //string[] strs = System.IO.Directory.GetFiles( MapPath( SystemConfig.TempFilePath )) ;
-            string[] strs = System.IO.Directory.GetFiles(SystemConfig.PathOfTemp);
-
-            foreach (string s in strs)
-            {
-                System.IO.File.Delete(s);
-            }
-        }
-        /// <summary>
-        /// 重新建立索引
-        /// </summary>
-        public static void ReCreateIndex()
-        {
-            string enName = "BP.En.Entity";
-            ArrayList als = ClassFactory.GetObjects(enName);
-            string sql = "";
-            foreach (object obj in als)
-            {
-                Entity en = (Entity)obj;
-                if (en.EnMap.EnType == EnType.View)
-                    continue;
-                sql += "IF EXISTS( SELECT name  FROM  sysobjects WHERE  name='" + en.EnMap.PhysicsTable + "') <BR> DROP TABLE " + en.EnMap.PhysicsTable + "<BR>";
-                sql += "CREATE TABLE " + en.EnMap.PhysicsTable + " ( <BR>";
-                sql += "";
-            }
-        }
-
-        /// <summary>
-        /// 检查所有的物理表(java上不用了，不用翻译)
-        /// </summary>
-        public static void CheckAllPTable(string nameS = null)
-        {
-            ArrayList al = BP.En.ClassFactory.GetObjects("BP.En.Entities");
-            foreach (Entities ens in al)
-            {
-                if (ens == null || ens.ToString() == null)
-                    continue;
-
-                if (nameS != null)
-                {
-                    if (ens.ToString().Contains(nameS) == false)
-                        continue;
-                }
-
-                try
-                {
-                    Entity en = ens.GetNewEntity;
-                    en.CheckPhysicsTable();
-                }
-                catch
-                {
-                }
-            }
         }
         /// <summary>
         /// 获取datatable.
@@ -294,21 +130,6 @@ namespace BP.Pub
 
 
         #region 系统调度
-        public static string GenerDBOfOreacle()
-        {
-            //已经处理了java的命名空间问题.
-            ArrayList als = ClassFactory.GetObjects("BP.En.Entity");
-            string sql = "";
-            foreach (object obj in als)
-            {
-                Entity en = (Entity)obj;
-                sql += "IF EXISTS( SELECT name  FROM  sysobjects WHERE  name='" + en.EnMap.PhysicsTable + "') <BR> DROP TABLE " + en.EnMap.PhysicsTable + "<BR>";
-                sql += "CREATE TABLE " + en.EnMap.PhysicsTable + " ( <BR>";
-                sql += "";
-            }
-            //DA.Log.DefaultLogWriteLine(LogType.Error,msg.Replace("<br>@","\n") ); // 
-            return sql;
-        }
         public static string DBRpt(DBCheckLevel level)
         {
             // 取出全部的实体
@@ -432,20 +253,6 @@ namespace BP.Pub
             #endregion 检查处理必要的基础数据。
             return msg;
         }
-        private static void RepleaceFieldDesc(Entity en)
-        {
-            string tableId = DBAccess.RunSQLReturnVal("select ID from sysobjects WHERE name='" + en.EnMap.PhysicsTable + "' AND xtype='U'").ToString();
-
-            if (DataType.IsNullOrEmpty(tableId) )
-                return;
-
-            foreach (Attr attr in en.EnMap.Attrs)
-            {
-                if (attr.MyFieldType == FieldType.RefText)
-                    continue;
-
-            }
-        }
         /// <summary>
         /// 为表增加注释
         /// </summary>
@@ -552,7 +359,7 @@ namespace BP.Pub
         private static void AddCommentForTable_MySql(Entity en)
         {
             MySql.Data.MySqlClient.MySqlConnection conn =
-                new MySql.Data.MySqlClient.MySqlConnection(SystemConfig.AppCenterDSN);
+                new MySql.Data.MySqlClient.MySqlConnection(BP.Difference.SystemConfig.AppCenterDSN);
             en.RunSQL("alter table " + conn.Database + "." + en.EnMap.PhysicsTable + " comment = '" + en.EnDesc + "'");
 
 

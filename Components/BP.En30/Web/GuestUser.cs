@@ -1,5 +1,4 @@
-﻿
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.IO;
 using System.Text;
 using System;
@@ -68,7 +67,7 @@ namespace BP.Web
             }
             BP.Web.WebUser.SignInOfGener(em);
 
-            if (SystemConfig.IsBSsystem)
+            if (BP.Difference.SystemConfig.IsBSsystem)
             {
                 Dictionary<string, string> cookieValues = new Dictionary<string, string>();
                 cookieValues.Add("GuestNo", guestNo);

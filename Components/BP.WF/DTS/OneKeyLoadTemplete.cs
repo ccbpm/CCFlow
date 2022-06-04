@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Data;
-using System.Collections;
 using BP.DA;
-using System.Reflection;
 using BP.Port;
 using BP.En;
 using BP.Sys;
@@ -125,11 +123,11 @@ namespace BP.WF.DTS
                 item.DirectInsert(); //插入数据.
 
             //EmpDepts.
-            BP.GPM.DeptEmps eds = new BP.GPM.DeptEmps();
+            BP.Port.DeptEmps eds = new BP.Port.DeptEmps();
             eds.ClearTable();
             dt = ds.Tables["Port_DeptEmp"];
-            eds = QueryObject.InitEntitiesByDataTable(eds, dt, null) as BP.GPM.DeptEmps;
-            foreach (BP.GPM.DeptEmp item in eds)
+            eds = QueryObject.InitEntitiesByDataTable(eds, dt, null) as BP.Port.DeptEmps;
+            foreach (BP.Port.DeptEmp item in eds)
             {
                 item.DirectInsert(); //插入数据.
             }

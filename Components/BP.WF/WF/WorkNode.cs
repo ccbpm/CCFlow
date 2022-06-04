@@ -9,6 +9,8 @@ using BP.Difference;
 using BP.Sys;
 using BP.WF.Template;
 using BP.WF.Data;
+using BP.WF.Template.SFlow;
+
 
 namespace BP.WF
 {
@@ -158,7 +160,7 @@ namespace BP.WF
         {
             get
             {
-                if (_VirPath == null && SystemConfig.IsBSsystem)
+                if (_VirPath == null && BP.Difference.SystemConfig.IsBSsystem)
                     _VirPath = Glo.CCFlowAppPath;//BP.Sys.Base.Glo.Request.ApplicationPath;
                 return _VirPath;
             }
@@ -171,12 +173,12 @@ namespace BP.WF
         {
             get
             {
-                if (SystemConfig.IsBSsystem == false)
+                if (BP.Difference.SystemConfig.IsBSsystem == false)
                 {
                     return "CCFlow";
                 }
 
-                if (_AppType == null && SystemConfig.IsBSsystem)
+                if (_AppType == null && BP.Difference.SystemConfig.IsBSsystem)
                 {
                     _AppType = "WF";
                 }
@@ -264,7 +266,7 @@ namespace BP.WF
         }
         #endregion GenerWorkerList 相关方法.
 
-        string dbStr = SystemConfig.AppCenterDBVarStr;
+        string dbStr = BP.Difference.SystemConfig.AppCenterDBVarStr;
         public Paras ps = new Paras();
         /// <summary>
         /// 递归删除两个节点之间的数据
@@ -384,7 +386,7 @@ namespace BP.WF
             if (dt.Rows.Count == 0)
                 throw new Exception(BP.WF.Glo.multilingual("@没有找到接收人.", "WorkNode", "not_found_receiver")); // 接收人员列表为空
 
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
                 string orgNo = BP.Web.WebUser.OrgNo;
                 foreach (DataRow dr in dt.Rows)
@@ -560,7 +562,7 @@ namespace BP.WF
                 {
                     string[] para = new string[1];
                     para[0] = wl.FK_Emp;
-                    string str = BP.WF.Glo.multilingual("@设置接收人规则错误, 接收人[{0}]不存在或者被停用。", "WorkNode", "invalid_setting_receiver", para);
+                    string str = BP.WF.Glo.multilingual("@设置接收人规则错误, 接收人[" + wl.FK_Emp + "][{0}]不存在或者被停用。", "WorkNode", "invalid_setting_receiver", para);
                     throw new Exception("err@" + str);
                 }
 
@@ -660,7 +662,6 @@ namespace BP.WF
                 #region 是否需要清空记忆属性.
                 // 如果按照选择的人员处理，就设置它的记忆为空。2011-11-06 处理电厂需求 .
                 if (this.town.HisNode.HisDeliveryWay == DeliveryWay.BySelected
-                    || this.town.HisNode.IsAllowRepeatEmps == true  /*允许接收人员重复*/
                     || town.HisNode.IsRememberMe == false)
                 {
                     if (rm != null)
@@ -1218,6 +1219,10 @@ namespace BP.WF
                     this.ExecerName = ExecutorName;
                 }
 
+                //判断是否是跳转时间 0=发送的时候检测。. 1=打开的时候检测.
+                if (nd.SkipTime == 1)
+                    return nd;
+
                 //如果没有设置跳转规则，就返回他们.
                 if (nd.AutoJumpRole0 == false && nd.AutoJumpRole1 == false && nd.AutoJumpRole2 == false && nd.HisWhenNoWorker == false)
                     return nd;
@@ -1250,9 +1255,9 @@ namespace BP.WF
                     }
                 }
 
+                #region 处理人就是发起人
                 if (nd.AutoJumpRole0)
                 {
-                    /*处理人就是发起人*/
                     bool isHave = false;
                     foreach (DataRow dr in dt.Rows)
                     {
@@ -1321,10 +1326,11 @@ namespace BP.WF
                     if (nd.AutoJumpRole1 == false && nd.AutoJumpRole2 == false)
                         return nd;
                 }
+                #endregion
 
-                if (nd.AutoJumpRole1)
+                #region 处理人已经出现过
+                if (nd.AutoJumpRole1 == true)
                 {
-                    /*处理人已经出现过*/
                     bool isHave = false;
                     foreach (DataRow dr in dt.Rows)
                     {
@@ -1351,17 +1357,15 @@ namespace BP.WF
                         continue;
                     }
 
-
-
-
                     //如果没有跳转,判断是否,其他两个条件是否设置.
                     if (nd.AutoJumpRole2 == false)
                         return nd;
                 }
+                #endregion 处理人已经出现过
 
+                #region 处理人与上一步相同 
                 if (nd.AutoJumpRole2)
                 {
-                    /* 处理人与上一步相同 */
                     bool isHave = false;
                     foreach (DataRow dr in dt.Rows)
                     {
@@ -1508,14 +1512,50 @@ namespace BP.WF
                         CC(nd);//执行抄送
                         continue;
                     }
-
                     //没有跳出转的条件，就返回本身.
                     return nd;
                 }
-                if (nd.HisWhenNoWorker == true)
+                #endregion 处理人与上一步相同 
+
+                #region 按照 表达式 处理. yln
+                if (DataType.IsNullOrEmpty(nd.AutoJumpExp) == false)
                 {
-                    return nd;
+                    string exp = nd.AutoJumpExp.Clone() as string;
+                    try
+                    {
+                        exp = BP.WF.Glo.DealExp(exp, this.rptGe, null);
+
+                        if (exp.ToLower().Contains("select") == true)
+                        {
+                            float val = DBAccess.RunSQLReturnValFloat(exp, 0);
+                            if (val >= 0)
+                                return nd;
+                        }
+                        else
+                        {
+                            if (exp.Contains("?") == true)
+                                exp += "&";
+                            else
+                                exp += "?";
+
+                            exp += "WorkID=" + rptGe.OID + "&Token=" + WebUser.Token + "&UserNo=" + WebUser.No;
+
+                            string str = DataType.ReadURLContext(exp, 10000);
+                            float val = float.Parse(str);
+                            if (val <= 0)
+                                return nd;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("err@判断exp跳转错误，表达式:" + exp + " 信息:" + ex.Message);
+                    }
                 }
+                #endregion 按照 表达式 处理.
+
+
+                if (nd.HisWhenNoWorker == true)
+                    return nd;
 
                 mynd = nd;
                 ndFrom = nd;
@@ -1544,7 +1584,7 @@ namespace BP.WF
 
                 if (cclist.Count > 0)
                 {
-                    ps.SQL = "UPDATE WF_CCList SET Sta=0, RDT=" + SystemConfig.AppCenterDBVarStr + "RDT,Title=" + SystemConfig.AppCenterDBVarStr + "Title  WHERE  WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node ";
+                    ps.SQL = "UPDATE WF_CCList SET Sta=0, RDT=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "RDT,Title=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title  WHERE  WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID AND FK_Node=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Node ";
                     ps.Add(CCListAttr.RDT, DataType.CurrentDateTime); //设置完成日期.
                     ps.Add(CCListAttr.Title, this.HisGenerWorkFlow.Title); //设置完成日期.
                     ps.Add(CCListAttr.WorkID, this.WorkID);
@@ -1741,9 +1781,10 @@ namespace BP.WF
             if (this.HisNode.HisToNodes.Count == 1)
                 return this.HisNode.HisToNodes;
 
+
             #region 如果使用户选择的.
-            if (this.HisNode.CondModel == DirCondModel.ByDDLSelected
-                || this.HisNode.CondModel == DirCondModel.ByButtonSelected)
+            if (this.HisNode.CondModel == DirCondModel.ByDDLSelected || this.HisNode.CondModel == DirCondModel.ByPopSelect
+            || this.HisNode.CondModel == DirCondModel.ByButtonSelected)
             {
                 // 获取用户选择的节点.
                 string nodes = this.HisGenerWorkFlow.Paras_ToNodes;
@@ -1761,6 +1802,7 @@ namespace BP.WF
                 return nds;
             }
             #endregion 如果使用户选择的.
+
 
             Nodes toNodes = this.HisNode.HisToNodes;
             // 如果只有一个转向节点, 就不用判断条件了,直接转向他.
@@ -2177,16 +2219,16 @@ namespace BP.WF
             if (this.HisWorkerLists.Count >= 2 && this.HisNode.IsTask)
             {
                 //Img 的路径问题.
-                this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href='./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&FK_Node=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "'  target=_self><img src='" + SystemConfig.HostURLOfBS + "/WF/Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
+                this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href='./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&FK_Node=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "'  target=_self><img src='" + BP.Difference.SystemConfig.HostURLOfBS + "/WF/Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
             }
 
 
             if (this.HisNode.HisFormType != NodeFormType.SDKForm && this.HisNode.HisCancelRole != CancelRole.None)
             {
                 if (this.HisNode.IsStartNode)
-                    this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "' ><img src='" + SystemConfig.HostURLOfBS + "/WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>", SendReturnMsgType.Info);
+                    this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&UserNo=" + WebUser.No + "&Token=" + WebUser.Token + "&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "' ><img src='" + BP.Difference.SystemConfig.HostURLOfBS + "/WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>", SendReturnMsgType.Info);
                 else
-                    this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "' ><img src='" + SystemConfig.HostURLOfBS + "/WF/Img/Action/UnSend.png' border=0 />撤销本次发送</a> ", SendReturnMsgType.Info);
+                    this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&UserNo=" + WebUser.No + "&Token=" + WebUser.Token + "&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "' ><img src='" + BP.Difference.SystemConfig.HostURLOfBS + "/WF/Img/Action/UnSend.png' border=0 />撤销本次发送</a> ", SendReturnMsgType.Info);
             }
 
             this.HisGenerWorkFlow.FK_Node = toND.NodeID;
@@ -2251,151 +2293,292 @@ namespace BP.WF
             foreach (Node nd in toNDs)
             {
                 Int64 workIDSubThread = 0;
-                bool isNew = true;
-                GenerWorkFlow gwf = new GenerWorkFlow();
-                foreach (GenerWorkFlow gwfT in gwfThreads)
+
+                #region 如果生成workid的规则模式为0,  异表单子线程WorkID生成规则  UnSameSheetWorkIDModel  0= 仅生成一个WorkID,  1=按接受人生成WorkID,
+                if (nd.USSWorkIDRole == 0)
                 {
-                    if (gwfT.FK_Node == nd.NodeID)
+                    bool isNew = true;
+                    GenerWorkFlow gwf = new GenerWorkFlow();
+                    foreach (GenerWorkFlow gwfT in gwfThreads)
                     {
-                        gwf = gwfT; //设置.
-                        workIDSubThread = gwfT.WorkID;
-                        isNew = false;
-                        break;
+                        if (gwfT.FK_Node == nd.NodeID)
+                        {
+                            gwf = gwfT; //设置.
+                            workIDSubThread = gwfT.WorkID;
+                            isNew = false;
+                            break;
+                        }
                     }
-                }
-                if (workIDSubThread == 0)
-                    workIDSubThread = DBAccess.GenerOID("WorkID");
-
-                //产生一个工作信息。
-                Work wk = nd.HisWork;
-                //  wk.Copy(this.HisWork);
-                wk.Copy(this.rptGe); //@hongyan
-
-                wk.FID = this.HisWork.OID;
-                wk.OID = workIDSubThread;
-                if (isNew == true)
-                    wk.DirectInsert(); //执行插入.
-                else
-                    wk.DirectUpdate(); //执行保存.
-
-                //获得它的工作者。
-                WorkNode town = new WorkNode(wk, nd);
-                current_gwls = this.Func_GenerWorkerLists(town);
-                if (current_gwls.Count == 0)
-                {
-                    msg += BP.WF.Glo.multilingual("@没有找到节点[{0}]的处理人员,所以此节点无法成功启动.", "WorkNode", "not_found_node_operator", nd.Name);
-                    // wk.Delete();
-                    continue;
-                }
-
-                #region 生成待办.
-                string operators = "";
-                int i = 0;
-                GenerWorkerList oneGWL = null; //获得这个变量，在gwf中使用.
-                string todoEmps = "";
-                foreach (GenerWorkerList wl in current_gwls)
-                {
-                    oneGWL = wl; //获得这个变量，在gwf中使用.
-
-                    i += 1;
-                    operators += wl.FK_Emp + ", " + wl.FK_EmpText + ";";
-                    empIDs += wl.FK_Emp + ",";
-                    empNames += wl.FK_EmpText + ",";
-
-                    ps = new Paras();
-                    ps.SQL = "UPDATE WF_GenerWorkerlist SET WorkID=" + dbStr + "WorkID1,FID=" + dbStr + "FID WHERE FK_Emp=" + dbStr + "FK_Emp AND WorkID=" + dbStr + "WorkID2 AND FK_Node=" + dbStr + "FK_Node ";
-                    ps.Add("WorkID1", wk.OID);
-                    ps.Add("FID", this.WorkID);
-
-                    ps.Add("FK_Emp", wl.FK_Emp);
-                    ps.Add("WorkID2", wl.WorkID);
-                    ps.Add("FK_Node", wl.FK_Node);
-                    DBAccess.RunSQL(ps);
-
-                    //设置当前的workid.
-                    wl.WorkID = wk.OID;
 
 
-                    //更新工作信息.
-                    wk.Rec = wl.FK_Emp;
-                    //wk.Emps = "@" + wl.FK_Emp;
-                    //wk.RDT = DataType.CurrentDateTimess;
-                    wk.DirectUpdate();
+                    if (workIDSubThread == 0)
+                        workIDSubThread = DBAccess.GenerOID("WorkID");
 
-                    //为子线程产生分流节点的发送副本。
-                    wl.FID = this.WorkID;
-                    wl.FK_Emp = WebUser.No;
-                    wl.FK_EmpText = WebUser.Name;
-                    wl.IsPassInt = -2;
-                    wl.IsRead = true;
-                    wl.FK_Node = this.HisNode.NodeID;
-                    wl.FK_NodeText = this.HisNode.Name;
-                    wl.FK_Dept = WebUser.FK_Dept;
-                    wl.FK_DeptT = WebUser.FK_DeptName;
-                    if (wl.IsExits == false)
-                        wl.Insert();
-                }
-                #endregion 生成待办.
 
-                #region 生成子线程的GWF.
-                gwf.WorkID = wk.OID;
-                //干流、子线程关联字段
-                gwf.FID = this.WorkID;
+                    //产生一个工作信息。
+                    Work wk = nd.HisWork;
 
-                //父流程关联字段
-                gwf.PWorkID = this.HisGenerWorkFlow.PWorkID;
-                gwf.PFlowNo = this.HisGenerWorkFlow.PFlowNo;
-                gwf.PNodeID = this.HisGenerWorkFlow.PNodeID;
+                    wk.Copy(this.rptGe);
 
-                //工程类项目关联字段
-                gwf.PrjNo = this.HisGenerWorkFlow.PrjNo;
-                gwf.PrjName = this.HisGenerWorkFlow.PrjName;
+                    wk.FID = this.HisWork.OID;
+                    wk.OID = workIDSubThread;
+                    if (isNew == true)
+                        wk.DirectInsert(); //执行插入.
+                    else
+                        wk.DirectUpdate(); //执行保存.
 
-                //#warning 需要修改成标题生成规则。
-                //#warning 让子流程的Titlte与父流程的一样.
-
-                gwf.Title = this.HisGenerWorkFlow.Title; // WorkNode.GenerTitle(this.rptGe);
-                gwf.WFState = WFState.Runing;
-                gwf.RDT = DataType.CurrentDateTime;
-                gwf.Starter = this.HisGenerWorkFlow.Starter;
-                gwf.StarterName = this.HisGenerWorkFlow.StarterName;
-                gwf.FK_Flow = nd.FK_Flow;
-                gwf.FlowName = nd.FlowName;
-                gwf.FK_FlowSort = this.HisNode.HisFlow.FK_FlowSort;
-                gwf.SysType = this.HisNode.HisFlow.SysType;
-
-                gwf.FK_Node = nd.NodeID;
-                gwf.NodeName = nd.Name;
-                gwf.FK_Dept = oneGWL.FK_Dept;
-                gwf.DeptName = oneGWL.FK_DeptT;
-                gwf.TodoEmps = operators;
-                gwf.Domain = this.HisGenerWorkFlow.Domain; //域.
-                gwf.Sender = WebUser.No + "," + WebUser.Name + ";";
-                if (DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
-                {
-                    //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东济南;
-                    string[] expFields = this.HisFlow.BuessFields.Split(',');
-                    string exp = "";
-                    Attrs attrs = this.rptGe.EnMap.Attrs;
-                    foreach (string item in expFields)
+                    //获得它的工作者。
+                    WorkNode town = new WorkNode(wk, nd);
+                    current_gwls = this.Func_GenerWorkerLists(town);
+                    if (current_gwls.Count == 0)
                     {
-                        if (DataType.IsNullOrEmpty(item) == true)
-                            continue;
-                        if (attrs.Contains(item) == false)
-                            continue;
-
-                        Attr attr = attrs.GetAttrByKey(item);
-                        exp += attr.Desc + "^" + attr.Key + "^" + this.rptGe.GetValStrByKey(item);
+                        msg += BP.WF.Glo.multilingual("@没有找到节点[{0}]的处理人员,所以此节点无法成功启动.", "WorkNode", "not_found_node_operator", nd.Name);
+                        // wk.Delete();
+                        continue;
                     }
-                    gwf.BuessFields = exp; //表达式字段.
-                }
 
-                if (isNew == true)
-                    gwf.DirectInsert();
-                else
-                    gwf.DirectUpdate();
-                #endregion 生成子线程的GWF.
-                msg += BP.WF.Glo.multilingual("@节点[{0}]成功启动, 发送给{1}位处理人:{2}.", "WorkNode", "found_node_operator", nd.Name, i.ToString(), operators);
+                    #region 生成待办.
+                    string operators = "";
+                    int i = 0;
+                    GenerWorkerList oneGWL = null; //获得这个变量，在gwf中使用.
+                    string todoEmps = "";
+                    foreach (GenerWorkerList wl in current_gwls)
+                    {
+                        oneGWL = wl; //获得这个变量，在gwf中使用.
+
+                        i += 1;
+                        operators += wl.FK_Emp + ", " + wl.FK_EmpText + ";";
+                        empIDs += wl.FK_Emp + ",";
+                        empNames += wl.FK_EmpText + ",";
+
+                        ps = new Paras();
+                        ps.SQL = "UPDATE WF_GenerWorkerlist SET WorkID=" + dbStr + "WorkID1,FID=" + dbStr + "FID WHERE FK_Emp=" + dbStr + "FK_Emp AND WorkID=" + dbStr + "WorkID2 AND FK_Node=" + dbStr + "FK_Node ";
+                        ps.Add("WorkID1", wk.OID);
+                        ps.Add("FID", this.WorkID);
+
+                        ps.Add("FK_Emp", wl.FK_Emp);
+                        ps.Add("WorkID2", wl.WorkID);
+                        ps.Add("FK_Node", wl.FK_Node);
+                        DBAccess.RunSQL(ps);
+
+                        //设置当前的workid.
+                        wl.WorkID = wk.OID;
+
+
+                        //更新工作信息.
+                        wk.Rec = wl.FK_Emp;
+                        //wk.Emps = "@" + wl.FK_Emp;
+                        //wk.RDT = DataType.CurrentDateTimess;
+                        wk.DirectUpdate();
+
+                        //为子线程产生分流节点的发送副本。
+                        wl.FID = this.WorkID;
+                        wl.FK_Emp = WebUser.No;
+                        wl.FK_EmpText = WebUser.Name;
+                        wl.IsPassInt = -2;
+                        wl.IsRead = true;
+                        wl.FK_Node = this.HisNode.NodeID;
+                        wl.FK_NodeText = this.HisNode.Name;
+                        wl.FK_Dept = WebUser.FK_Dept;
+                        wl.FK_DeptT = WebUser.FK_DeptName;
+                        if (wl.IsExits == false)
+                            wl.Insert();
+                    }
+                    #endregion 生成待办.
+
+                    #region 生成子线程的GWF.
+                    gwf.WorkID = wk.OID;
+                    //干流、子线程关联字段
+                    gwf.FID = this.WorkID;
+
+                    //父流程关联字段
+                    gwf.PWorkID = this.HisGenerWorkFlow.PWorkID;
+                    gwf.PFlowNo = this.HisGenerWorkFlow.PFlowNo;
+                    gwf.PNodeID = this.HisGenerWorkFlow.PNodeID;
+
+                    //工程类项目关联字段
+                    gwf.PrjNo = this.HisGenerWorkFlow.PrjNo;
+                    gwf.PrjName = this.HisGenerWorkFlow.PrjName;
+
+                    //#warning 需要修改成标题生成规则。
+                    //#warning 让子流程的Titlte与父流程的一样.
+
+                    gwf.Title = this.HisGenerWorkFlow.Title; // WorkNode.GenerTitle(this.rptGe);
+                    gwf.WFState = WFState.Runing;
+                    gwf.RDT = DataType.CurrentDateTime;
+                    gwf.Starter = this.HisGenerWorkFlow.Starter;
+                    gwf.StarterName = this.HisGenerWorkFlow.StarterName;
+                    gwf.FK_Flow = nd.FK_Flow;
+                    gwf.FlowName = nd.FlowName;
+                    gwf.FK_FlowSort = this.HisNode.HisFlow.FK_FlowSort;
+                    gwf.SysType = this.HisNode.HisFlow.SysType;
+
+                    gwf.FK_Node = nd.NodeID;
+                    gwf.NodeName = nd.Name;
+                    gwf.FK_Dept = oneGWL.FK_Dept;
+                    gwf.DeptName = oneGWL.FK_DeptT;
+                    gwf.TodoEmps = operators;
+                    gwf.Domain = this.HisGenerWorkFlow.Domain; //域.
+                    gwf.Sender = WebUser.No + "," + WebUser.Name + ";";
+                    if (DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
+                    {
+                        //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东成都;
+                        string[] expFields = this.HisFlow.BuessFields.Split(',');
+                        string exp = "";
+                        Attrs attrs = this.rptGe.EnMap.Attrs;
+                        foreach (string item in expFields)
+                        {
+                            if (DataType.IsNullOrEmpty(item) == true)
+                                continue;
+                            if (attrs.Contains(item) == false)
+                                continue;
+
+                            Attr attr = attrs.GetAttrByKey(item);
+                            exp += attr.Desc + "^" + attr.Key + "^" + this.rptGe.GetValStrByKey(item);
+                        }
+                        gwf.BuessFields = exp; //表达式字段.
+                    }
+
+                    if (isNew == true)
+                        gwf.DirectInsert();
+                    else
+                        gwf.DirectUpdate();
+                    #endregion 生成子线程的GWF.
+                    msg += BP.WF.Glo.multilingual("@节点[{0}]成功启动, 发送给{1}位处理人:{2}.", "WorkNode", "found_node_operator", nd.Name, i.ToString(), operators);
+                }
+                #endregion 如果生成workid的规则模式为0,  异表单子线程WorkID生成规则  UnSameSheetWorkIDModel  0= 仅生成一个WorkID,  1=按接受人生成WorkID,
+
+
+                #region 如果生成workid的规则模式为 1 ,  异表单子线程WorkID生成规则  UnSameSheetWorkIDModel  0= 仅生成一个WorkID,  1=按接受人生成WorkID,
+                if (nd.USSWorkIDRole == 1)
+                {
+                    //产生一个工作信息。
+                    Work wk = nd.HisWork;
+                    //  wk.Copy(this.HisWork);
+                    wk.Copy(this.rptGe); //
+                    wk.FID = this.HisWork.OID;
+
+                    //获得它的工作者。
+                    WorkNode town = new WorkNode(wk, nd);
+                    current_gwls = this.Func_GenerWorkerLists(town); //获得数量.
+                    if (current_gwls.Count == 0)
+                    {
+                        msg += BP.WF.Glo.multilingual("@没有找到节点[{0}]的处理人员,所以此节点无法成功启动.", "WorkNode", "not_found_node_operator", nd.Name);
+                        // wk.Delete();
+                        continue;
+                    }
+
+                    #region 生成待办.
+                    string operators = "";
+                    int i = 0;
+                    GenerWorkerList oneGWL = null; //获得这个变量，在gwf中使用.
+                    string todoEmps = "";
+                    foreach (GenerWorkerList wl in current_gwls)
+                    {
+                        workIDSubThread = DBAccess.GenerOID("WorkID");
+
+                        GenerWorkFlow gwf = new GenerWorkFlow();
+                        gwf.WorkID = workIDSubThread;
+                        gwf.FID = this.WorkID;
+
+                        wk.OID = workIDSubThread;
+                        wk.DirectInsert(); //执行插入.
+
+                        oneGWL = wl; //获得这个变量，在gwf中使用.
+
+                        i += 1;
+                        operators += wl.FK_Emp + ", " + wl.FK_EmpText + ";";
+                        empIDs += wl.FK_Emp + ",";
+                        empNames += wl.FK_EmpText + ",";
+
+                        ps = new Paras();
+                        ps.SQL = "UPDATE WF_GenerWorkerlist SET WorkID=" + dbStr + "WorkID1,FID=" + dbStr + "FID WHERE FK_Emp=" + dbStr + "FK_Emp AND WorkID=" + dbStr + "WorkID2 AND FK_Node=" + dbStr + "FK_Node ";
+                        ps.Add("WorkID1", wk.OID);
+                        ps.Add("FID", this.WorkID);
+
+                        ps.Add("FK_Emp", wl.FK_Emp);
+                        ps.Add("WorkID2", wl.WorkID);
+                        ps.Add("FK_Node", wl.FK_Node);
+                        DBAccess.RunSQL(ps);
+
+                        //设置当前的workid.
+                        wl.WorkID = wk.OID;
+
+                        //更新工作信息.
+                        wk.Rec = wl.FK_Emp;
+
+                        //为子线程产生分流节点的发送副本。
+                        wl.FID = this.WorkID;
+                        wl.FK_Emp = WebUser.No;
+                        wl.FK_EmpText = WebUser.Name;
+                        wl.IsPassInt = -2;
+                        wl.IsRead = true;
+                        wl.FK_Node = this.HisNode.NodeID;
+                        wl.FK_NodeText = this.HisNode.Name;
+                        wl.FK_Dept = WebUser.FK_Dept;
+                        wl.FK_DeptT = WebUser.FK_DeptName;
+                        if (wl.IsExits == false)
+                            wl.Insert();
+
+                        gwf.WorkID = wk.OID;
+                        //干流、子线程关联字段
+                        gwf.FID = this.WorkID;
+
+                        //父流程关联字段
+                        gwf.PWorkID = this.HisGenerWorkFlow.PWorkID;
+                        gwf.PFlowNo = this.HisGenerWorkFlow.PFlowNo;
+                        gwf.PNodeID = this.HisGenerWorkFlow.PNodeID;
+
+                        //工程类项目关联字段
+                        gwf.PrjNo = this.HisGenerWorkFlow.PrjNo;
+                        gwf.PrjName = this.HisGenerWorkFlow.PrjName;
+
+                        //#warning 需要修改成标题生成规则。
+                        //#warning 让子流程的Titlte与父流程的一样.
+
+                        gwf.Title = this.HisGenerWorkFlow.Title; // WorkNode.GenerTitle(this.rptGe);
+                        gwf.WFState = WFState.Runing;
+                        gwf.RDT = DataType.CurrentDateTime;
+                        gwf.Starter = this.HisGenerWorkFlow.Starter;
+                        gwf.StarterName = this.HisGenerWorkFlow.StarterName;
+                        gwf.FK_Flow = nd.FK_Flow;
+                        gwf.FlowName = nd.FlowName;
+                        gwf.FK_FlowSort = this.HisNode.HisFlow.FK_FlowSort;
+                        gwf.SysType = this.HisNode.HisFlow.SysType;
+
+                        gwf.FK_Node = nd.NodeID;
+                        gwf.NodeName = nd.Name;
+                        gwf.FK_Dept = oneGWL.FK_Dept;
+                        gwf.DeptName = oneGWL.FK_DeptT;
+                        gwf.TodoEmps = wl.FK_Emp + ", " + wl.FK_EmpText + ";";
+                        gwf.Domain = this.HisGenerWorkFlow.Domain; //域.
+                        gwf.Sender = WebUser.No + "," + WebUser.Name + ";";
+                        if (DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
+                        {
+                            //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东成都;
+                            string[] expFields = this.HisFlow.BuessFields.Split(',');
+                            string exp = "";
+                            Attrs attrs = this.rptGe.EnMap.Attrs;
+                            foreach (string item in expFields)
+                            {
+                                if (DataType.IsNullOrEmpty(item) == true)
+                                    continue;
+                                if (attrs.Contains(item) == false)
+                                    continue;
+
+                                Attr attr = attrs.GetAttrByKey(item);
+                                exp += attr.Desc + "^" + attr.Key + "^" + this.rptGe.GetValStrByKey(item);
+                            }
+                            gwf.BuessFields = exp; //表达式字段.
+                        }
+
+                        gwf.Insert(); //插入数据.
+                    }
+                    #endregion 生成待办.
+
+                    msg += BP.WF.Glo.multilingual("@节点[{0}]成功启动, 发送给{1}位处理人:{2}.", "WorkNode", "found_node_operator", nd.Name, i.ToString(), operators);
+                }
+                #endregion 如果生成workid的规则模式为0,  异表单子线程WorkID生成规则  UnSameSheetWorkIDModel  0= 仅生成一个WorkID,  1=按接受人生成WorkID,
             }
 
             //加入分流异表单，提示信息。
@@ -2673,7 +2856,7 @@ namespace BP.WF
 
                     if (DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
                     {
-                        //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东济南;
+                        //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东成都;
                         string[] expFields = this.HisFlow.BuessFields.Split(',');
                         string exp = "";
                         Attrs attrs = this.rptGe.EnMap.Attrs;
@@ -2769,9 +2952,9 @@ namespace BP.WF
             if (this.HisNode.HisCancelRole != CancelRole.None)
             {
                 if (this.HisNode.IsStartNode)
-                    this.addMsg("UnDo", "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "' ><img src='" + SystemConfig.HostURLOfBS + "/WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>.");
+                    this.addMsg("UnDo", "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&UserNo=" + WebUser.No + "&Token=" + WebUser.Token + "&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "' ><img src='" + BP.Difference.SystemConfig.HostURLOfBS + "/WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>.");
                 else
-                    this.addMsg("UnDo", "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "' ><img src='" + SystemConfig.HostURLOfBS + "/WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>.");
+                    this.addMsg("UnDo", "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&UserNo=" + WebUser.No + "&Token=" + WebUser.Token + "&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "' ><img src='" + BP.Difference.SystemConfig.HostURLOfBS + "/WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>.");
             }
 
 
@@ -3085,7 +3268,6 @@ namespace BP.WF
                     mainWK.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
 
                 mainWK.Rec = WebUser.No;
-                //mainWK.Emps = emps;
                 mainWK.OID = this.HisWork.FID;
                 mainWK.Save();
             }
@@ -3138,6 +3320,7 @@ namespace BP.WF
                 gwf.Emps = gwf.Emps + "@" + this.HisGenerWorkFlow.Emps;
                 //gwf.SetPara("ThreadCount", 0);
                 gwf.Update();
+
             }
             else
             {
@@ -3187,7 +3370,7 @@ namespace BP.WF
         private void NodeSend_Send_5_5()
         {
             //执行设置当前人员的完成时间. for: anhua 2013-12-18.
-            string dbstr = SystemConfig.AppCenterDBVarStr;
+            string dbstr = BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkerlist SET CDT=" + dbstr + "CDT WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node AND FK_Emp=" + dbstr + "FK_Emp";
             ps.Add(GenerWorkerListAttr.CDT, DataType.CurrentDateTimess);
@@ -3434,7 +3617,7 @@ namespace BP.WF
 
                             //把合流点设置未读.
                             ps = new Paras();
-                            ps.SQL = "UPDATE WF_GenerWorkerList SET IsRead=0 WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND  FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node";
+                            ps.SQL = "UPDATE WF_GenerWorkerList SET IsRead=0 WHERE WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID AND  FK_Node=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Node";
                             ps.Add("WorkID", this.HisWork.FID);
                             ps.Add("FK_Node", toND5.NodeID);
                             DBAccess.RunSQL(ps);
@@ -4366,9 +4549,11 @@ namespace BP.WF
                     qury.DoQuery();
 
                 }
-
                 else
+                {
                     nds = new FrmNodes(this.HisNode.FK_Flow, this.HisNode.NodeID);
+                }
+
                 foreach (FrmNode item in nds)
                 {
                     if (item.FrmEnableRole == FrmEnableRole.Disable)
@@ -4400,7 +4585,7 @@ namespace BP.WF
                     }
                     if (item.WhoIsPK == WhoIsPK.P3WorkID)
                     {
-                        string sql = "Select PWorkID From WF_GenerWorkFlow Where WorkID=(Select PWorkID From WF_GenerWorkFlow Where WorkID=" + this.HisGenerWorkFlow.PWorkID + ")";
+                        string sql = "SELECT PWorkID FROM WF_GenerWorkFlow Where WorkID=(SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.HisGenerWorkFlow.PWorkID + ")";
                         pkVal = DBAccess.RunSQLReturnValInt(sql, 0);
                     }
 
@@ -4432,6 +4617,8 @@ namespace BP.WF
                             }
                         }
                     }
+
+                    //string frmErr = "";
                     foreach (MapAttr mapAttr in mapAttrs)
                     {
                         if (mapAttr.UIIsInput == false)
@@ -4440,8 +4627,10 @@ namespace BP.WF
                         string str = row[mapAttr.KeyOfEn] == null ? string.Empty : row[mapAttr.KeyOfEn].ToString();
                         /*如果是检查不能为空 */
                         if (str == null || DataType.IsNullOrEmpty(str) == true || str.Trim() == "")
-                            err += BP.WF.Glo.multilingual("@表单{0}字段{1},{2}不能为空.", "WorkNode", "form_field_must_not_be_null_1", item.FK_Frm, mapAttr.KeyOfEn, mapAttr.Name);
+                            err += BP.WF.Glo.multilingual("@表单【{0}】字段{1},【{2}】不能为空.", "WorkNode", "form_field_must_not_be_null_1", md.Name, mapAttr.KeyOfEn, mapAttr.Name);
                     }
+                    //  if (DataType.IsNullOrEmpty(frmErr)==false)
+                    //    err+=" @表单："+md.Name
                 }
 
                 if (!err.Equals(""))
@@ -4509,22 +4698,22 @@ namespace BP.WF
                                 //未阅读记录日志并让其发送.
                                 if (ath.ReadRole == 2)
                                 {
-                                    AthUnReadLog log = new AthUnReadLog();
-                                    log.setMyPK(this.WorkID + "_" + this.HisNode.NodeID + "_" + WebUser.No);
-                                    log.Delete();
+                                    //AthUnReadLog log = new AthUnReadLog();
+                                    //log.setMyPK(this.WorkID + "_" + this.HisNode.NodeID + "_" + WebUser.No);
+                                    //log.Delete();
 
-                                    log.FK_Emp = WebUser.No;
-                                    log.FK_EmpDept = WebUser.FK_Dept;
-                                    log.FK_EmpDeptName = WebUser.FK_DeptName;
-                                    log.FK_Flow = this.HisNode.FK_Flow;
-                                    log.FlowName = this.HisFlow.Name;
+                                    //log.FK_Emp = WebUser.No;
+                                    //log.FK_EmpDept = WebUser.FK_Dept;
+                                    //log.FK_EmpDeptName = WebUser.FK_DeptName;
+                                    //log.FK_Flow = this.HisNode.FK_Flow;
+                                    //log.FlowName = this.HisFlow.Name;
 
-                                    log.FK_Node = this.HisNode.NodeID;
-                                    log.FlowName = this.HisFlow.Name;
-                                    log.SendDT = DataType.CurrentDateTime;
-                                    log.WorkID = this.WorkID;
+                                    //log.FK_Node = this.HisNode.NodeID;
+                                    //log.FlowName = this.HisFlow.Name;
+                                    //log.SendDT = DataType.CurrentDateTime;
+                                    //log.WorkID = this.WorkID;
 
-                                    log.Insert(); //插入到数据库.
+                                    //log.Insert(); //插入到数据库.
 
                                 }
                             }
@@ -4548,7 +4737,7 @@ namespace BP.WF
                     if (ath.UploadFileNumCheck == UploadFileNumCheck.NotEmpty)
                     {
                         Paras ps = new Paras();
-                        ps.SQL = "SELECT COUNT(MyPK) as Num FROM Sys_FrmAttachmentDB WHERE NoOfObj=" + SystemConfig.AppCenterDBVarStr + "NoOfObj AND RefPKVal=" + SystemConfig.AppCenterDBVarStr + "RefPKVal";
+                        ps.SQL = "SELECT COUNT(MyPK) as Num FROM Sys_FrmAttachmentDB WHERE NoOfObj=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "NoOfObj AND RefPKVal=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "RefPKVal";
                         ps.Add("NoOfObj", ath.NoOfObj);
                         ps.Add("RefPKVal", pkval);
                         int count = DBAccess.RunSQLReturnValInt(ps);
@@ -4564,7 +4753,7 @@ namespace BP.WF
 
 
                         Paras ps = new Paras();
-                        ps.SQL = "SELECT COUNT(MyPK) as Num, Sort FROM Sys_FrmAttachmentDB WHERE  NoOfObj=" + SystemConfig.AppCenterDBVarStr + "NoOfObj AND RefPKVal=" + SystemConfig.AppCenterDBVarStr + "RefPKVal Group BY Sort";
+                        ps.SQL = "SELECT COUNT(MyPK) as Num, Sort FROM Sys_FrmAttachmentDB WHERE  NoOfObj=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "NoOfObj AND RefPKVal=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "RefPKVal Group BY Sort";
                         ps.Add("NoOfObj", ath.NoOfObj);
                         ps.Add("RefPKVal", pkval);
 
@@ -4601,7 +4790,7 @@ namespace BP.WF
                         continue;
 
                     Paras ps = new Paras();
-                    ps.SQL = "SELECT COUNT(MyPK) as Num FROM Sys_FrmImgAthDB WHERE FK_MapData=" + SystemConfig.AppCenterDBVarStr + "FK_MapData AND FK_FrmImgAth=" + SystemConfig.AppCenterDBVarStr + "FK_FrmImgAth AND RefPKVal=" + SystemConfig.AppCenterDBVarStr + "RefPKVal";
+                    ps.SQL = "SELECT COUNT(MyPK) as Num FROM Sys_FrmImgAthDB WHERE FK_MapData=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_MapData AND FK_FrmImgAth=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_FrmImgAth AND RefPKVal=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "RefPKVal";
                     ps.Add("FK_MapData", "ND" + this.HisNode.NodeID);
                     ps.Add("FK_FrmImgAth", imgAth.MyPK);
                     ps.Add("RefPKVal", this.WorkID);
@@ -4927,12 +5116,17 @@ namespace BP.WF
             //查看是否我是最后一个？
             int num = 0;
             string todoEmps = ""; //记录没有处理的人.
+            string todoNos = "";
             foreach (GenerWorkerList item in gwls)
             {
                 if (item.IsPassInt == 0 || item.IsPassInt == 90)
                 {
                     if (item.FK_Emp.Equals(WebUser.No) == false)
+                    {
                         todoEmps += BP.WF.Glo.DealUserInfoShowModel(item.FK_Emp, item.FK_EmpText) + " ";
+                        todoNos += item.FK_Emp + ";";
+                    }
+
                     num++;
                 }
             }
@@ -4975,9 +5169,9 @@ namespace BP.WF
 
                 //写入日志.
                 if (this.HisGenerWorkFlow.HuiQianTaskSta != HuiQianTaskSta.None)
-                    this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps, this.HisNode.NodeID, this.HisNode.Name, BP.WF.Glo.multilingual("会签", "WorkNode", "cross_signing"));
+                    this.AddToTrack(ActionType.TeampUp, todoNos, todoEmps, this.HisNode.NodeID, this.HisNode.Name, BP.WF.Glo.multilingual("会签", "WorkNode", "cross_signing"));
                 else
-                    this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps, this.HisNode.NodeID, this.HisNode.Name, BP.WF.Glo.multilingual("协作发送", "WorkNode", "cross_signing"));
+                    this.AddToTrack(ActionType.TeampUp, todoNos, todoEmps, this.HisNode.NodeID, this.HisNode.Name, BP.WF.Glo.multilingual("协作发送", "WorkNode", "cross_signing"));
 
                 //替换人员信息.
                 string emps = this.HisGenerWorkFlow.TodoEmps;
@@ -5030,16 +5224,25 @@ namespace BP.WF
                     if (str == userNo)
                         return false;
                 }
-                string todoEmps = "";
-                //把当前的待办设置已办
+                //获取未处理的待办人员
+                string todoEmpNo = "";
+                string todoEmpName = "";
                 foreach (GenerWorkerList gwl in gwls)
                 {
-                    if ((gwl.IsPassInt == 0 || gwl.IsPassInt == 90) && (gwl.FK_Emp != WebUser.No))
+                    if (gwl.FK_Emp.Equals(WebUser.No) == false)
+                        continue;
+                    if ((gwl.IsPassInt == 0 || gwl.IsPassInt == 90) && (gwl.FK_Emp.Equals(WebUser.No) == false))
                     {
-                        todoEmps += BP.WF.Glo.DealUserInfoShowModel(gwl.FK_Emp, gwl.FK_EmpText) + " ";
+                        todoEmpName += BP.WF.Glo.DealUserInfoShowModel(gwl.FK_Emp, gwl.FK_EmpText) + ";";
+                        todoEmpNo += gwl.FK_Emp + ";";
                     }
+                }
+                //把当前的待办设置已办
 
-                    if (gwl.FK_Emp != WebUser.No)
+
+                foreach (GenerWorkerList gwl in gwls)
+                {
+                    if (gwl.FK_Emp.Equals(WebUser.No) == false)
                         continue;
 
                     //设置当前已经完成.
@@ -5056,9 +5259,9 @@ namespace BP.WF
                     else
                         Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title, gwl);
 
-                    this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps, this.HisNode.NodeID, this.HisNode.Name, "多人处理规则：协作组长模式");
+                    this.AddToTrack(ActionType.TeampUp, todoEmpNo, todoEmpName, this.HisNode.NodeID, this.HisNode.Name, "多人处理规则：协作组长模式");
                 }
-                this.addMsg(SendReturnMsgFlag.CondInfo, BP.WF.Glo.multilingual("@当前工作未处理的人还有: {0},所以不能发送到下一步.", "WorkNode", "you_have_finished_1", todoEmps), null, SendReturnMsgType.Info);
+                this.addMsg(SendReturnMsgFlag.CondInfo, BP.WF.Glo.multilingual("@当前工作未处理的人还有: {0},所以不能发送到下一步.", "WorkNode", "you_have_finished_1", todoEmpName), null, SendReturnMsgType.Info);
                 return true;
             }
 
@@ -5159,10 +5362,11 @@ namespace BP.WF
                     if (this.HisGenerWorkFlow.TodoEmps.Contains(WebUser.No + ",") == true
                             && (DataType.IsNullOrEmpty(myhqzcr) == true || myhqType.Equals("AddLeader") == true))
                     {
-                        String todoEmps = ""; // 记录没有处理的人.
-                        String todohqzcrEmps = "";//记录未处理的主持人
-                        String hqzcr = "";
-                        String hqType = "";
+                        string todoEmps = ""; // 记录没有处理的人.
+                        string todoNos = "";
+                        string todohqzcrEmps = "";//记录未处理的主持人
+                        string hqzcr = "";
+                        string hqType = "";
                         int num = 0;//自己及自己加签人的待办
                         int othernum = 0;//其它组长的待办
 
@@ -5180,7 +5384,11 @@ namespace BP.WF
                                 if (item.FK_Emp.Equals(WebUser.No) || hqzcr.Equals(WebUser.No) && hqType.Equals("AddLeader") == false)
                                 {
                                     if (item.FK_Emp.Equals(WebUser.No) == false)
-                                        todoEmps += BP.WF.Glo.DealUserInfoShowModel(item.FK_Emp, item.FK_EmpText) + " ";
+                                    {
+                                        todoEmps += BP.WF.Glo.DealUserInfoShowModel(item.FK_Emp, item.FK_EmpText) + ";";
+                                        todoNos += item.FK_Emp + ";";
+                                    }
+
                                     num++;
                                 }
                                 if (item.FK_Emp.Equals(WebUser.No) == false && (DataType.IsNullOrEmpty(hqzcr) == true || hqType.Equals("AddLeader") == true))
@@ -5232,7 +5440,7 @@ namespace BP.WF
                                         this.HisGenerWorkFlow.Title, gwlOfMe);
                             }
 
-                            this.AddToTrack(ActionType.TeampUp, gwlOfMe.FK_Emp, todoEmps, this.HisNode.NodeID,
+                            this.AddToTrack(ActionType.TeampUp, todoNos, todoEmps, this.HisNode.NodeID,
                                     this.HisNode.Name, "协作发送");
                             String emps = this.HisGenerWorkFlow.TodoEmps;
                             emps = emps.Replace(WebUser.Name + ";", "");
@@ -5257,6 +5465,7 @@ namespace BP.WF
                 int mynum = 0;
                 int cnum = 0;//当前加签人所属主持人下的待办数
                 string todoEmps1 = ""; //记录没有处理的人.
+                string todoEmpNos = "";
                 foreach (GenerWorkerList item in gwls)
                 {
                     //主持人
@@ -5265,7 +5474,11 @@ namespace BP.WF
                     if (item.IsPassInt == 0 || item.IsPassInt == 90)
                     {
                         if (item.FK_Emp.Equals(Execer) == false)
+                        {
                             todoEmps1 += BP.WF.Glo.DealUserInfoShowModel(item.FK_Emp, item.FK_EmpText) + " ";
+                            todoEmpNos += item.FK_Emp + ";";
+                        }
+
                         if (myhqzcr.Equals(hqzcr) || item.FK_Emp.Equals(myhqzcr))
                             cnum++;
                         mynum++;
@@ -5285,7 +5498,7 @@ namespace BP.WF
                 //把当前的待办设置已办，并且提示未处理的人。
                 foreach (GenerWorkerList gwl in gwls)
                 {
-                    if (gwl.FK_Emp != Execer)
+                    if (gwl.FK_Emp.Equals(Execer) == false)
                         continue;
 
                     //设置当前已经完成.
@@ -5307,7 +5520,7 @@ namespace BP.WF
                     else
                         Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title, gwl);
 
-                    this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps1, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
+                    this.AddToTrack(ActionType.TeampUp, todoEmpNos, todoEmps1, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
 
                     //cut 当前的人员.
                     string emps = this.HisGenerWorkFlow.TodoEmps;
@@ -5601,7 +5814,7 @@ namespace BP.WF
                         try
                         {
                             bool isHave = false;
-                            if (SystemConfig.IsBSsystem == true)
+                            if (BP.Difference.SystemConfig.IsBSsystem == true)
                             {
                                 foreach (string param in HttpContextHelper.RequestParamKeys)
                                 {
@@ -5959,7 +6172,7 @@ namespace BP.WF
                     ps = new Paras();
 
 
-                    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                    if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                     {
                         sql = "SELECT A.FK_Emp No FROM Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
                         ps.Add("FK_Node", node.NodeID);
@@ -6162,7 +6375,7 @@ namespace BP.WF
 
             //设置消息.
             this.addMsg("Msg1", BP.WF.Glo.multilingual("子流程({0})已经启动,发送给({1})处理人.", "WorkNode", "sub_wf_started", node.FlowName, toEmpIDs));
-            if (SystemConfig.CustomerNo.Equals("ASSET") == false)
+            if (BP.Difference.SystemConfig.CustomerNo.Equals("ASSET") == false)
                 this.addMsg("Msg2", BP.WF.Glo.multilingual("当前您的待办不可见,需要等待子流程完成后您的待办才能显示,您可以从在途里查看工作进度.", "WorkNode", "to_do_list_invisible"));
 
 
@@ -6913,7 +7126,7 @@ namespace BP.WF
                 #region 2019-09-25 计算业务字段存储到 wf_generworkflow atpara字段里，用于显示待办信息.
                 if (this.HisNode.IsStartNode && DataType.IsNullOrEmpty(this.HisFlow.BuessFields) == false)
                 {
-                    //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东济南;
+                    //存储到表里atPara  @BuessFields=电话^Tel^18992323232;地址^Addr^山东成都;
                     string[] expFields = this.HisFlow.BuessFields.Split(',');
                     string exp = "";
                     Attrs attrs = this.rptGe.EnMap.Attrs;
@@ -7120,9 +7333,9 @@ namespace BP.WF
                         Glo.AddToTrack(ActionType.StartChildenFlow, rptGe.PFlowNo, rptGe.PWorkID, fid, pND.NodeID, pND.Name,
                             WebUser.No, WebUser.Name,
                             pND.NodeID, pND.Name, WebUser.No, WebUser.Name,
-                            "<a href='" + SystemConfig.HostURLOfBS + "/WF/WFRpt.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "' target=_blank >打开子流程</a>", paras);
+                            "<a href='" + BP.Difference.SystemConfig.HostURLOfBS + "/WF/WFRpt.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "' target=_blank >打开子流程</a>", paras);
                     }
-                    else if (SystemConfig.IsBSsystem == true)
+                    else if (BP.Difference.SystemConfig.IsBSsystem == true)
                     {
                         /*如果是BS系统*/
                         string pflowNo = HttpContextHelper.RequestParams("PFlowNo");
@@ -7146,7 +7359,7 @@ namespace BP.WF
                             string paras = "@CFlowNo=" + this.HisFlow.No + "@CWorkID=" + this.WorkID;
                             Glo.AddToTrack(ActionType.StartChildenFlow, pflowNo, Int64.Parse(pWorkID), Int64.Parse(fid.ToString()), pND.NodeID, pND.Name, WebUser.No, WebUser.Name,
                                 pND.NodeID, pND.Name, WebUser.No, WebUser.Name,
-                                "<a href='" + SystemConfig.HostURLOfBS + "/WF/WFRpt.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "' target=_blank >" + BP.WF.Glo.multilingual("打开子流程", "WorkNode", "open_sub_wf") + "</a>", paras);
+                                "<a href='" + BP.Difference.SystemConfig.HostURLOfBS + "/WF/WFRpt.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "' target=_blank >" + BP.WF.Glo.multilingual("打开子流程", "WorkNode", "open_sub_wf") + "</a>", paras);
                         }
                     }
                 }
@@ -7362,7 +7575,7 @@ namespace BP.WF
                         Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.SubFlowNo, WebUser.No);
 
                         //设置父子关系.
-                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.WorkID);
+                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.WorkID, null, 0, true);
 
                         //执行发送到下一个环节..
                         SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_SendWork(sub.SubFlowNo, subWorkID, this.rptGe.Row, null);
@@ -7504,7 +7717,7 @@ namespace BP.WF
                         Int64 subWorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(sub.SubFlowNo, WebUser.No);
 
                         //设置父子关系.
-                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.PWorkID, WebUser.No, nd.NodeID);
+                        BP.WF.Dev2Interface.SetParentInfo(sub.SubFlowNo, subWorkID, this.HisGenerWorkFlow.PWorkID, WebUser.No, nd.NodeID, true);
 
                         //执行保存.
                         BP.WF.Dev2Interface.Node_SaveWork(sub.SubFlowNo, int.Parse(sub.SubFlowNo + "01"), subWorkID, this.rptGe.Row);
@@ -7815,10 +8028,15 @@ namespace BP.WF
         public GERpt rptGe = null;
         private void InitStartWorkDataV2()
         {
-            this.rptGe.SetValByKey("RDT", DataType.CurrentDateTimess);
+            //判断开始节点是不是流程发起的节点，有可能是退回或者其他流程流转过来的节点数据
+            bool isStart = true;
+            if (DataType.IsNullOrEmpty(this.HisGenerWorkFlow.Sender) == false)
+                isStart = false;
+            if (isStart == true)
+                this.rptGe.SetValByKey("RDT", DataType.CurrentDateTimess);
 
             /*如果是开始流程判断是不是被吊起的流程，如果是就要向父流程写日志。*/
-            if (SystemConfig.IsBSsystem)
+            if (BP.Difference.SystemConfig.IsBSsystem)
             {
                 string fk_nodeFrom = HttpContextHelper.RequestParams("FromNode");// BP.Sys.Base.Glo.Request.QueryString["FromNode"];
                 if (DataType.IsNullOrEmpty(fk_nodeFrom) == false)
@@ -7843,22 +8061,10 @@ namespace BP.WF
             }
 
             /* 产生开始工作流程记录. */
-
             #region 设置流程标题.
             if (this.title == null)
             {
-                if (this.HisFlow.TitleRole == "@OutPara" || DataType.IsNullOrEmpty(this.HisFlow.TitleRole) == true)
-                {
-                    /*如果是外部参数,*/
-                    this.HisGenerWorkFlow.Title = DBAccess.RunSQLReturnString("SELECT Title FROM " + this.HisFlow.PTable + " WHERE OID=" + this.WorkID);
-                    if (DataType.IsNullOrEmpty(this.HisGenerWorkFlow.Title))
-                        this.HisGenerWorkFlow.Title = BP.WF.Glo.multilingual("{0},{1}在{2}发起", "WorkNode", "start_wf_title", this.Execer, this.ExecerName, DataType.CurrentDateTimeCN);
-                    //throw new Exception("您设置的流程标题生成规则为外部传来的参数，但是您岋料在创建空白工作时，流程标题值为空。");
-                }
-                else
-                {
-                    this.HisGenerWorkFlow.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this.HisFlow, this.HisWork);
-                }
+                this.HisGenerWorkFlow.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this.HisFlow, this.HisWork);
             }
             else
             {
@@ -7907,7 +8113,8 @@ namespace BP.WF
             }
 
             this.HisWork.SetValByKey("Title", this.HisGenerWorkFlow.Title);
-            this.HisGenerWorkFlow.RDT = DataType.CurrentDateTimess;  // this.HisWork.RDT;
+            if (isStart == true)
+                this.HisGenerWorkFlow.RDT = DataType.CurrentDateTimess;  // this.HisWork.RDT;
             this.HisGenerWorkFlow.Starter = this.Execer;
             this.HisGenerWorkFlow.StarterName = this.ExecerName;
             this.HisGenerWorkFlow.FK_Flow = this.HisNode.FK_Flow;
@@ -8006,11 +8213,12 @@ namespace BP.WF
                 note = BP.WF.Glo.DealExp(note, this.rptGe, null);
             this.rptGe.FlowNote = note;
             this.HisGenerWorkFlow.FlowNote = note;
-
-            this.rptGe.FlowStartRDT = DataType.CurrentDateTimess;
+            if (isStart == true)
+                this.rptGe.FlowStartRDT = DataType.CurrentDateTimess;
             this.rptGe.FlowEnderRDT = DataType.CurrentDateTimess;
             //设置发起时间
-            this.rptGe.SetValByKey("RDT", DataType.CurrentDateTimess);
+            if (isStart == true)
+                this.rptGe.SetValByKey("RDT", DataType.CurrentDateTimess);
         }
         /// <summary>
         /// 执行将当前工作节点的数据copy到Rpt里面去.
@@ -8071,16 +8279,16 @@ namespace BP.WF
             {
                 switch (attr.Key)
                 {
-                    case BP.WF.Data.GERptAttr.FK_NY:
-                    case BP.WF.Data.GERptAttr.FK_Dept:
-                    case BP.WF.Data.GERptAttr.FlowDaySpan:
-                    case BP.WF.Data.GERptAttr.FlowEmps:
-                    case BP.WF.Data.GERptAttr.FlowEnder:
-                    case BP.WF.Data.GERptAttr.FlowEnderRDT:
-                    case BP.WF.Data.GERptAttr.FlowEndNode:
-                    case BP.WF.Data.GERptAttr.FlowStarter:
-                    case BP.WF.Data.GERptAttr.Title:
-                    case BP.WF.Data.GERptAttr.WFSta:
+                    case BP.WF.GERptAttr.FK_NY:
+                    case BP.WF.GERptAttr.FK_Dept:
+                    case BP.WF.GERptAttr.FlowDaySpan:
+                    case BP.WF.GERptAttr.FlowEmps:
+                    case BP.WF.GERptAttr.FlowEnder:
+                    case BP.WF.GERptAttr.FlowEnderRDT:
+                    case BP.WF.GERptAttr.FlowEndNode:
+                    case BP.WF.GERptAttr.FlowStarter:
+                    case BP.WF.GERptAttr.Title:
+                    case BP.WF.GERptAttr.WFSta:
                         continue;
                     default:
                         break;
@@ -8781,7 +8989,7 @@ namespace BP.WF
             if (this.HisNode.TodolistModel == WF.TodolistModel.QiangBan)
             {
                 ps = new Paras();
-                ps.SQL = "DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + dbStr + "WorkID AND FID=" + dbStr + "FID AND FK_Emp!=" + dbStr + "FK_Emp ";
+                ps.SQL = "DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + dbStr + "WorkID AND FID=" + dbStr + "FID AND FK_Emp!=" + dbStr + "FK_Emp AND IsPass=0";
                 ps.Add("WorkID", this.WorkID);
                 ps.Add("FID", this.HisWork.FID);
                 ps.Add("FK_Emp", WebUser.No);
@@ -8809,12 +9017,20 @@ namespace BP.WF
                 ps.Add("WorkID", this.HisWork.FID);
                 DBAccess.RunSQL(ps);
 
+                //ps = new Paras();
+                //ps.SQL = "UPDATE WF_GenerWorkFlow SET FK_Node=" + dbStr + "FK_Node,NodeName=" + dbStr + "NodeName WHERE WorkID=" + dbStr + "WorkID";
+                //ps.Add("FK_Node", nd.NodeID);
+                //ps.Add("NodeName", nd.Name);
+                //ps.Add("WorkID", this.HisWork.FID);
+                //DBAccess.RunSQL(ps);
+
                 ps = new Paras();
-                ps.SQL = "UPDATE WF_GenerWorkFlow SET FK_Node=" + dbStr + "FK_Node,NodeName=" + dbStr + "NodeName WHERE WorkID=" + dbStr + "WorkID";
-                ps.Add("FK_Node", nd.NodeID);
-                ps.Add("NodeName", nd.Name);
-                ps.Add("WorkID", this.HisWork.FID);
+                ps.SQL = "DELETE FROM WF_GenerWorkerlist WHERE  FID=" + dbStr + "FID  AND IsPass=-2";
+                ps.Add("FID", this.HisWork.FID);
                 DBAccess.RunSQL(ps);
+
+                gwf.FK_Node = nd.NodeID;
+                gwf.NodeName = nd.Name;
                 gwf.Emps = gwf.Emps + "@" + this.HisGenerWorkFlow.Emps;
                 //gwf.SetPara("ThreadCount", 0);
                 gwf.Update();

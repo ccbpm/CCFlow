@@ -23,6 +23,9 @@ namespace BP.En
         /// 及联子菜单
         /// </summary>
         public string RelationalDtlKey = null;
+        /// <summary>
+        /// 查询的字段
+        /// </summary>
         public string Key = null;
         /// <summary>
         /// 下拉框显示的宽度
@@ -50,7 +53,6 @@ namespace BP.En
             en.Width = width; //宽度.
             this.InnerList.Add(en);
         }
-
         public void Add(AttrSearch attr)
         {
             this.InnerList.Add(attr);

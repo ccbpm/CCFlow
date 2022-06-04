@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections;
-using BP.DA;
-using System.Reflection;
+﻿using BP.DA;
 using BP.Port;
 using BP.En;
-using BP.Sys;
-using BP.WF.Template;
 
 namespace BP.WF.DTS
 {
@@ -50,7 +45,7 @@ namespace BP.WF.DTS
             if (DBAccess.IsExitsTableCol("Port_Dept", "TreeNo") == false)
                 return "err@ Port_Dept 没有找到 TreeNo 的列.";
 
-            BP.GPM.Dept dept = new BP.GPM.Dept();
+            BP.Port.Dept dept = new BP.Port.Dept();
             int i = dept.Retrieve(DeptAttr.ParentNo, "0");
             if (i == 0)
                 return "err@没有找到ParentNo=0的根节点.";

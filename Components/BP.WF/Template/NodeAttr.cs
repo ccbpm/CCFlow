@@ -67,6 +67,11 @@ namespace BP.WF.Template
         public const string GroupStaNDs = "GroupStaNDs";
         public const string IsHandOver = "IsHandOver";
         public const string IsCanDelFlow = "IsCanDelFlow";
+
+        public const string USSWorkIDRole = "USSWorkIDRole";
+
+
+        
         /// <summary>
         /// 是否可以原路返回
         /// </summary>
@@ -257,10 +262,6 @@ namespace BP.WF.Template
         /// </summary>
         public const string DoOutTimeCond = "DoOutTimeCond";
         /// <summary>
-        /// 是否允许子线程接受人员重复？
-        /// </summary>
-        public const string IsAllowRepeatEmps = "IsAllowRepeatEmps";
-        /// <summary>
         /// 是否启动自动运行？
         /// </summary>
         public const string AutoRunEnable = "AutoRunEnable";
@@ -368,6 +369,14 @@ namespace BP.WF.Template
         /// 自动跳转规则-3
         /// </summary>
         public const string AutoJumpRole2 = "AutoJumpRole2";
+        /// <summary>
+        /// 自动跳转规则-3 按照SQL
+        /// </summary>
+        public const string AutoJumpExp = "AutoJumpExp";
+        /// <summary>
+        /// 跳转事件
+        /// </summary>
+        public const string SkipTime = "SkipTime";
         /// <summary>
         /// 是否是客户执行节点?
         /// </summary>

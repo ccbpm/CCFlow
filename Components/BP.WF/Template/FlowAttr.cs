@@ -206,6 +206,11 @@ namespace BP.WF.Template
         /// 是否是数据加密
         /// </summary>
         public const string IsJM = "IsJM";
+        /// <summary>
+        /// 是否启用数据版本控制
+        /// </summary>
+        public const string IsEnableDBVer = "IsEnableDBVer";
+
         public const string CCStas = "CCStas";
         public const string Note = "Note";
         /// <summary>

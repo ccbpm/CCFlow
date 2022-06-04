@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
 using System.Data;
-using System.Web;
-using BP.WF;
-using BP.Web;
 using BP.Sys;
 using BP.DA;
 using BP.En;
 using BP.CCBill;
-using System.IO;
-using System.Text;
 using BP.Difference;
 
 
@@ -54,34 +47,47 @@ namespace BP.WF.HttpHandler
                 //加入节点表单. 如果没有流程参数.
 
                 Paras ps = new Paras();
-                ps.SQL = "SELECT NodeID, Name  FROM WF_Node WHERE FK_Flow=" + SystemConfig.AppCenterDBVarStr + "FK_Flow ORDER BY NODEID ";
+                ps.SQL = "SELECT NodeID, Name  FROM WF_Node WHERE FK_Flow=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Flow ORDER BY NODEID ";
                 ps.Add("FK_Flow", this.FK_Flow);
                 dt = DBAccess.RunSQLReturnTable(ps);
 
                 dt.TableName = "WF_Node";
 
-                if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+                if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
                 {
                     dt.Columns["NODEID"].ColumnName = "NodeID";
                     dt.Columns["NAME"].ColumnName = "Name";
                 }
 
+                if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+                {
+                    dt.Columns["nodeid"].ColumnName = "NodeID";
+                    dt.Columns["name"].ColumnName = "Name";
+                }
+
+
                 ds.Tables.Add(dt);
             }
 
             #region 加入表单库目录.
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
                 sql = "SELECT NO as No ,Name,ParentNo FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
             else
                 sql = "SELECT No,Name,ParentNo FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
 
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_FormTree";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
                 dt.Columns["PARENTNO"].ColumnName = "ParentNo";
+            }
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["no"].ColumnName = "No";
+                dt.Columns["name"].ColumnName = "Name";
+                dt.Columns["parentno"].ColumnName = "ParentNo";
             }
             ds.Tables.Add(dt);
 
@@ -90,11 +96,17 @@ namespace BP.WF.HttpHandler
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapData";
             ds.Tables.Add(dt);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX )
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
                 dt.Columns["FK_FORMTREE"].ColumnName = "FK_FormTree";
+            }
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["no"].ColumnName = "No";
+                dt.Columns["name"].ColumnName = "Name";
+                dt.Columns["fk_formtree"].ColumnName = "FK_FormTree";
             }
             #endregion 加入表单库目录.
 
@@ -103,12 +115,20 @@ namespace BP.WF.HttpHandler
 
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "WF_FlowSort";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
                 dt.Columns["PARENTNO"].ColumnName = "ParentNo";
             }
+
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["no"].ColumnName = "No";
+                dt.Columns["name"].ColumnName = "Name";
+                dt.Columns["parentno"].ColumnName = "ParentNo";
+            }
+
             ds.Tables.Add(dt);
 
             //加入表单
@@ -116,11 +136,17 @@ namespace BP.WF.HttpHandler
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "WF_Flow";
             ds.Tables.Add(dt);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
                 dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+            }
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["no"].ColumnName = "No";
+                dt.Columns["name"].ColumnName = "Name";
+                dt.Columns["fk_flowsort"].ColumnName = "FK_FlowSort";
             }
             #endregion 加入流程树目录.
 
@@ -153,7 +179,7 @@ namespace BP.WF.HttpHandler
                     return "err@请上传导入的模板文件.";
 
                 //创建临时文件.
-                string temp = SystemConfig.PathOfTemp + Guid.NewGuid() + ".xml";
+                string temp =  BP.Difference.SystemConfig.PathOfTemp + Guid.NewGuid() + ".xml";
                 HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), temp);
                 string fk_mapData = this.FK_MapData;
                 MapData mapData = new MapData(fk_mapData);

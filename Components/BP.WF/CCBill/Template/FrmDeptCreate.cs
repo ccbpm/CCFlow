@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using BP.DA;
-using BP.En;
-using BP.En;
-using BP.WF.Port;
+﻿using BP.En;
 
 namespace BP.CCBill.Template
 {
@@ -91,7 +86,7 @@ namespace BP.CCBill.Template
 
                 map.AddTBStringPK(FrmDeptCreateAttr.FrmID, null, "表单", true, true, 1, 100, 100);
                 map.AddDDLEntitiesPK(FrmDeptCreateAttr.FK_Dept, null, "可以创建部门",
-                   new BP.GPM.Depts(), true);
+                   new BP.Port.Depts(), true);
                 this._enMap = map;
                 return this._enMap;
             }

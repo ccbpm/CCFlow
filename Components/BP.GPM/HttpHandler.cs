@@ -26,7 +26,7 @@ namespace BP.GPM
 
             //返回部门信息，用与绑定部门.
             Depts ens = new Depts();
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
             {
                 ens.RetrieveAll();
             }

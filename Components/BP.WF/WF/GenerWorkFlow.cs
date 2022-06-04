@@ -210,6 +210,7 @@ namespace BP.WF
 
         public const string OrgNo = "OrgNo";
 
+
         #endregion
     }
     /// <summary>
@@ -1204,6 +1205,7 @@ namespace BP.WF
                 this.SetPara("ScripMsg", value);
             }
         }
+        
         #endregion 参数属性.
 
         #region 构造函数
@@ -1358,7 +1360,7 @@ namespace BP.WF
         /// </summary>
         protected override void afterDelete()
         {
-            switch (SystemConfig.AppCenterDBType)
+            switch (BP.Difference.SystemConfig.AppCenterDBType)
             {
                 case DBType.MSSQL:
                 case DBType.Oracle:
@@ -1428,13 +1430,13 @@ namespace BP.WF
         /// </summary>
         /// <param name="empStrs">要增加的人员多个用都好分开.</param>
         /// <returns></returns>
-        public string DoSubFlowAddEmps(string empStrs)
+        public string DoSubFlowAddEmps(string empStrs,int toNodeID)
         {
             //获得当前的干流程的gwf.
             long workID = this.FID;
             if (workID == 0)
                 workID = this.WorkID;
-            return BP.WF.Dev2Interface.Node_FHL_AddSubThread(workID, empStrs);
+            return BP.WF.Dev2Interface.Node_FHL_AddSubThread(workID, empStrs, toNodeID);//@hongyan
         }
         /// <summary>
         /// 执行修复
@@ -1545,10 +1547,10 @@ namespace BP.WF
             if (DataType.IsNullOrEmpty(likeKey) == false)
             {
                 qo.addAnd();
-                if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
-                    qo.AddWhere("Title", " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "Title" + ",'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "Title" + "+'%'"));
+                if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                    qo.AddWhere("Title", " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title" + ",'%')") : (" '%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title" + "+'%'"));
                 else
-                    qo.AddWhere("Title", " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "Title" + "||'%'");
+                    qo.AddWhere("Title", " LIKE ", " '%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title" + "||'%'");
                 qo.MyParas.Add("Title", likeKey);
             }
 

@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
 using System.Data;
-using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
-using BP.Port;
 using BP.En;
-using BP.WF;
-using BP.WF.Template;
 using ICSharpCode.SharpZipLib.Zip;
-using BP.GPM;
+using BP.Difference;
 
 namespace BP.WF.HttpHandler
 {
@@ -114,10 +108,10 @@ namespace BP.WF.HttpHandler
                         if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
                         {
                             val = this.GetValFromFrmByKey("TB_" + i + "_" + attr.Key);
-                            if(attr.IsNum && val=="")
+                            if (attr.IsNum && val == "")
                                 val = "0";
-                             dtl.SetValByKey(attr.Key, val);
-                             continue;
+                            dtl.SetValByKey(attr.Key, val);
+                            continue;
                         }
 
                         if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == true)
@@ -148,7 +142,7 @@ namespace BP.WF.HttpHandler
                         continue;
                     }
 
-                    if (isEntityNo == true && dtl.EnMap.IsAutoGenerNo==true)
+                    if (isEntityNo == true && dtl.EnMap.IsAutoGenerNo == true)
                     {
                         dtl.PKVal = dtl.GenerNewNoByKey("No");
                         dtl.Insert();
@@ -198,7 +192,10 @@ namespace BP.WF.HttpHandler
                 md.SetPara("IsDelete", "1");
             if (dtl.HisUAC.IsImp)
                 md.SetPara("IsImp", "1");
-         
+            if (dtl.HisUAC.IsExp)
+                md.SetPara("IsImp", "1");
+            md.SetPara("EntityPK", dtl.PKField);//@Hongyan
+
             #endregion 加入权限信息.
 
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
@@ -213,9 +210,9 @@ namespace BP.WF.HttpHandler
             foreach (MapAttr mapAttr in attrs)
             {
                 string uiBindKey = mapAttr.UIBindKey;
-                if (mapAttr.LGType!=FieldTypeS.FK)
+                if (mapAttr.LGType != FieldTypeS.FK)
                     continue;
-                if (mapAttr.UIIsEnable==false)
+                if (mapAttr.UIIsEnable == false)
                     continue;
 
                 if (DataType.IsNullOrEmpty(uiBindKey) == true)
@@ -252,7 +249,7 @@ namespace BP.WF.HttpHandler
                     DataTable dt = DBAccess.RunSQLReturnTable(sqlBindKey);
                     dt.TableName = attr.Key;
 
-                    if (SystemConfig.AppCenterDBFieldCaseModel!= FieldCaseModel.None)
+                    if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
                     {
                         foreach (DataColumn col in dt.Columns)
                         {
@@ -291,7 +288,7 @@ namespace BP.WF.HttpHandler
                 string sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
                 DataTable dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
                 dtEnum.TableName = "Sys_Enum";
-                if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+                if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
                 {
                     foreach (DataColumn col in dtEnum.Columns)
                     {
@@ -334,31 +331,31 @@ namespace BP.WF.HttpHandler
             string name = "数据导出";
             if (refPKVal.Contains("/") == true)
                 refPKVal = refPKVal.Replace("/", "_");
-            string filename = refPKVal + "_" + en.ToString() +"_"+DataType.CurrentDate+ "_" + name  +".xls";
-            string filePath = BP.Tools.ExportExcelUtil.ExportDGToExcel(dtls.ToDataTableField(), en, name,null,filename);
+            string filename = refPKVal + "_" + en.ToString() + "_" + DataType.CurrentDate + "_" + name + ".xls";
+            string filePath = BP.Tools.ExportExcelUtil.ExportDGToExcel(dtls.ToDataTableField(), en, name, null, filename);
 
-            filePath = SystemConfig.PathOfTemp + filename;
+            filePath = BP.Difference.SystemConfig.PathOfTemp + filename;
 
-            string tempPath = SystemConfig.PathOfTemp + refPKVal+"/";
+            string tempPath = BP.Difference.SystemConfig.PathOfTemp + refPKVal + "/";
             if (System.IO.Directory.Exists(tempPath) == false)
                 System.IO.Directory.CreateDirectory(tempPath);
 
-            string myFilePath = SystemConfig.PathOfDataUser + this.EnsName.Substring(0, this.EnsName.Length - 1);
+            string myFilePath = BP.Difference.SystemConfig.PathOfDataUser + this.EnsName.Substring(0, this.EnsName.Length - 1);
 
             foreach (Entity dt in dtls)
             {
                 string pkval = dt.PKVal.ToString();
-                string ext =  string.IsNullOrWhiteSpace(dt.GetValByKey("MyFileExt") as string) ? "" : dt.GetValByKey("MyFileExt").ToString(); 
+                string ext = string.IsNullOrWhiteSpace(dt.GetValByKey("MyFileExt") as string) ? "" : dt.GetValByKey("MyFileExt").ToString();
                 if (DataType.IsNullOrEmpty(ext) == true)
                     continue;
                 myFilePath = myFilePath + "/" + pkval + "." + ext;
-                if(System.IO.File.Exists(myFilePath) == true)
+                if (System.IO.File.Exists(myFilePath) == true)
                     System.IO.File.Copy(myFilePath, tempPath + pkval + "." + ext, true);
             }
             System.IO.File.Copy(filePath, tempPath + filename, true);
 
             //生成压缩文件
-            string zipFile = SystemConfig.PathOfTemp + refPKVal + "_" + en.ToString() + "_" + DataType.CurrentDate + "_" + name + ".zip";
+            string zipFile = BP.Difference.SystemConfig.PathOfTemp + refPKVal + "_" + en.ToString() + "_" + DataType.CurrentDate + "_" + name + ".zip";
 
             System.IO.FileInfo finfo = new System.IO.FileInfo(zipFile);
 
@@ -427,7 +424,6 @@ namespace BP.WF.HttpHandler
                         en.SetValByKey("No", en.GenerNewNoByKey("No"));
                 }
 
-
                 //定义容器.
                 DataSet ds = new DataSet();
 
@@ -438,15 +434,17 @@ namespace BP.WF.HttpHandler
 
                 //附件类型.
                 md.SetPara("BPEntityAthType", (int)map.HisBPEntityAthType);
-               
+
 
                 //多附件上传
-                if((int)map.HisBPEntityAthType == 2){
+                if ((int)map.HisBPEntityAthType == 2)
+                {
                     //增加附件分类
                     DataTable attrFiles = new DataTable("AttrFiles");
                     attrFiles.Columns.Add("FileNo");
                     attrFiles.Columns.Add("FileName");
-                    foreach(AttrFile attrFile in map.HisAttrFiles){
+                    foreach (AttrFile attrFile in map.HisAttrFiles)
+                    {
                         DataRow dr = attrFiles.NewRow();
                         dr["FileNo"] = attrFile.FileNo;
                         dr["FileName"] = attrFile.FileName;
@@ -466,7 +464,7 @@ namespace BP.WF.HttpHandler
                 if (en.HisUAC.IsUpdate)
                     md.SetPara("IsUpdate", "1");
                 if (isBlank == true)
-                {                   
+                {
                     if (en.HisUAC.IsDelete)
                         md.SetPara("IsDelete", "0");
                 }
@@ -488,7 +486,7 @@ namespace BP.WF.HttpHandler
                 string groupTitle = "";
                 EnCfg ec = new EnCfg();
                 ec.No = this.EnName;
-                if(ec.RetrieveFromDBSources() == 1)
+                if (ec.RetrieveFromDBSources() == 1)
                     groupTitle = ec.GroupTitle;
 
                 if (DataType.IsNullOrEmpty(groupTitle) == true)
@@ -552,13 +550,13 @@ namespace BP.WF.HttpHandler
                         }
                     }
                     drAttr[MapAttrAttr.GroupID] = currGroupID;
-                    drAttr[MapAttrAttr.FK_MapData] = this.EnName+"s";
+                    drAttr[MapAttrAttr.FK_MapData] = this.EnName + "s";
                 }
                 ds.Tables.Add(sys_MapAttrs);
                 #endregion 字段属性.
 
                 #region 加入扩展属性.
-                MapExts mapExts = new MapExts(this.EnName+"s");
+                MapExts mapExts = new MapExts(this.EnName + "s");
                 DataTable Sys_MapExt = mapExts.ToDataTableField("Sys_MapExt");
                 ds.Tables.Add(Sys_MapExt);
                 #endregion 加入扩展属性.
@@ -570,7 +568,7 @@ namespace BP.WF.HttpHandler
                 {
                     string uiBindKey = dr["UIBindKey"].ToString();
                     string lgType = dr["LGType"].ToString();
-                    if (lgType.Equals("2")==false)
+                    if (lgType.Equals("2") == false)
                         continue;
 
                     string UIVisible = dr["UIVisible"].ToString();
@@ -612,7 +610,7 @@ namespace BP.WF.HttpHandler
 
                     if (attr.UIIsReadonly == true)
                         continue;
-                    
+
                     if (attr.UIBindKey.ToUpper().Contains("SELECT") == true)
                     {
                         /*是一个sql*/
@@ -623,11 +621,17 @@ namespace BP.WF.HttpHandler
                         dt.TableName = attr.Key;
 
                         //@杜. 翻译当前部分.
-                        if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+                        if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
                         {
                             dt.Columns["NO"].ColumnName = "No";
                             dt.Columns["NAME"].ColumnName = "Name";
                         }
+                        if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+                        {
+                            dt.Columns["no"].ColumnName = "No";
+                            dt.Columns["name"].ColumnName = "Name";
+                        }
+
 
                         ds.Tables.Add(dt);
                     }
@@ -648,29 +652,38 @@ namespace BP.WF.HttpHandler
                     enumKeys = enumKeys.Substring(0, enumKeys.Length - 1);
                     DataTable dtEnum = new DataTable();
                     string sqlEnum = "";
-                    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                     {
                         string sqlWhere = " EnumKey IN (" + enumKeys + ") AND OrgNo='" + WebUser.OrgNo + "'";
 
-                        sqlEnum = "SELECT * FROM Sys_Enum WHERE "+ sqlWhere;
+                        sqlEnum = "SELECT * FROM Sys_Enum WHERE " + sqlWhere;
                         sqlEnum += " UNION ";
-                        sqlEnum += "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ") AND EnumKey NOT IN (SELECT EnumKey FROM Sys_Enum WHERE " + sqlWhere+") AND (OrgNo Is Null Or OrgNo='')";
+                        sqlEnum += "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ") AND EnumKey NOT IN (SELECT EnumKey FROM Sys_Enum WHERE " + sqlWhere + ") AND (OrgNo Is Null Or OrgNo='')";
                         dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
                     }
                     else
                     {
-                       sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
-                       dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
+                        sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
+                        dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
                     }
                     dtEnum.TableName = "Sys_Enum";
 
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+                    if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
                     {
                         dtEnum.Columns["MYPK"].ColumnName = "MyPK";
                         dtEnum.Columns["LAB"].ColumnName = "Lab";
                         dtEnum.Columns["ENUMKEY"].ColumnName = "EnumKey";
                         dtEnum.Columns["INTKEY"].ColumnName = "IntKey";
                         dtEnum.Columns["LANG"].ColumnName = "Lang";
+                    }
+
+                    if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+                    {
+                        dtEnum.Columns["mypk"].ColumnName = "MyPK";
+                        dtEnum.Columns["lab"].ColumnName = "Lab";
+                        dtEnum.Columns["enumkey"].ColumnName = "EnumKey";
+                        dtEnum.Columns["intkey"].ColumnName = "IntKey";
+                        dtEnum.Columns["lang"].ColumnName = "Lang";
                     }
 
                     ds.Tables.Add(dtEnum);
@@ -753,7 +766,7 @@ namespace BP.WF.HttpHandler
             SysFileManager fileManager = new SysFileManager(OID);
             //获取上传的附件路径，删除附件
             string filepath = fileManager.MyFilePath;
-            if (SystemConfig.IsUploadFileToFTP == false)
+            if (BP.Difference.SystemConfig.IsUploadFileToFTP == false)
             {
                 if (System.IO.File.Exists(filepath) == true)
                     System.IO.File.Delete(filepath);
@@ -761,14 +774,14 @@ namespace BP.WF.HttpHandler
             else
             {
                 /*保存到fpt服务器上.*/
-                FtpConnection ftpconn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPServerPort,
-                    SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+                FtpConnection ftpconn = new FtpConnection(BP.Difference.SystemConfig.FTPServerIP, BP.Difference.SystemConfig.FTPServerPort,
+                    BP.Difference.SystemConfig.FTPUserNo, BP.Difference.SystemConfig.FTPUserPassword);
 
                 if (ftpconn == null)
                     return "err@FTP服务器连接失败";
 
-                 if (ftpconn.FileExist(filepath) == true)
-                     ftpconn.DeleteFile(filepath);
+                if (ftpconn.FileExist(filepath) == true)
+                    ftpconn.DeleteFile(filepath);
             }
             fileManager.Delete();
             return fileManager.MyFileName + "删除成功";
@@ -783,8 +796,6 @@ namespace BP.WF.HttpHandler
             {
                 //是否是空白记录.
                 bool isBlank = DataType.IsNullOrEmpty(this.PKVal);
-                //if (DataType.IsNullOrEmpty(this.PKVal) == true)
-                //    return "err@主键数据丢失，不能初始化En.htm";
 
                 //初始化entity.
                 string enName = this.EnName;
@@ -860,7 +871,7 @@ namespace BP.WF.HttpHandler
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception("err@系统错误:根据方法名生成url出现错误:@"+ex.Message+"@"+ex.InnerException+" @方法名:"+item.Title+" - 方法:"+item.ClassMethodName );
+                            throw new Exception("err@系统错误:根据方法名生成url出现错误:@" + ex.Message + "@" + ex.InnerException + " @方法名:" + item.Title + " - 方法:" + item.ClassMethodName);
                         }
                     }
                     else
@@ -886,7 +897,7 @@ namespace BP.WF.HttpHandler
                     dr["IsCanBatch"] = item.IsCanBatch;
                     dr["GroupName"] = item.GroupName;
                     Attrs attrs = item.HisAttrs;
-                    if(attrs.Count ==0)
+                    if (attrs.Count == 0)
                         dr["FunPara"] = "false";
                     else
                         dr["FunPara"] = "true";
@@ -901,11 +912,11 @@ namespace BP.WF.HttpHandler
                 int i = 0;
                 if (oneVsM.Count > 0)
                 {
-                    
+
                     foreach (AttrOfOneVSM vsM in oneVsM)
                     {
                         string rootNo = vsM.RootNo;
-                        if (rootNo!=null && rootNo.Contains("@") == true)
+                        if (rootNo != null && rootNo.Contains("@") == true)
                         {
                             rootNo = rootNo.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
                             rootNo = rootNo.Replace("@WebUser.OrgNo", WebUser.OrgNo);
@@ -998,8 +1009,14 @@ namespace BP.WF.HttpHandler
                     if (myEnDtl.HisUAC.IsView == false)
                         continue;
 
+                    //@hongyan. 
                     DataRow dr = dtM.NewRow();
-                    string url = "Dtl.htm?EnName=" + this.EnName + "&PK=" + this.PKVal + "&EnsName=" + enDtl.EnsName + "&RefKey=" + enDtl.RefKey + "&RefVal=" + en.PKVal.ToString() + "&MainEnsName=" + en.ToString();
+                    string url = "";
+                    if (enDtl.DtlEditerModel == DtlEditerModel.DtlBatch)
+                        url = "DtlBatch.htm?EnName=" + this.EnName + "&PK=" + this.PKVal + "&EnsName=" + enDtl.EnsName + "&RefKey=" + enDtl.RefKey + "&RefVal=" + en.PKVal.ToString() + "&MainEnsName=" + en.ToString();
+                    else
+                        url = "DtlSearch.htm?EnName=" + this.EnName + "&PK=" + this.PKVal + "&EnsName=" + enDtl.EnsName + "&RefKey=" + enDtl.RefKey + "&RefVal=" + en.PKVal.ToString() + "&MainEnsName=" + en.ToString();
+
                     try
                     {
                         i = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM " + enDtl.Ens.GetNewEntity.EnMap.PhysicsTable + " WHERE " + enDtl.RefKey + "='" + en.PKVal + "'");
@@ -1020,15 +1037,15 @@ namespace BP.WF.HttpHandler
                     dr["Title"] = enDtl.Desc + "(" + i + ")";
                     dr["Url"] = url;
                     dr["GroupName"] = enDtl.GroupName;
-
+                    dr["Icon"] = enDtl.Icon;//@Hongyan
                     dr["RefMethodType"] = (int)RefMethodType.RightFrameOpen;
 
                     dtM.Rows.Add(dr);
                 }
                 #endregion 增加 从表.
 
-                ds.Tables.Add(dtM); 
-                
+                ds.Tables.Add(dtM);
+
 
 
                 return BP.Tools.Json.ToJson(ds);
@@ -1042,7 +1059,7 @@ namespace BP.WF.HttpHandler
 
         public string Branches_SearchByKey()
         {
-          
+
             string key = this.GetRequestVal("Key"); //查询关键字.
 
             string ensOfM = this.GetRequestVal("EnsOfM"); //多的实体.
@@ -1066,19 +1083,19 @@ namespace BP.WF.HttpHandler
 
             //如果是部门人员信息，关联的有兼职部门.
             string emp1s = BP.Sys.Base.Glo.DealClassEntityName("BP.Port.Emps");
-            string emp2s = BP.Sys.Base.Glo.DealClassEntityName("BP.GPM.Emps");
+            string emp2s = BP.Sys.Base.Glo.DealClassEntityName("BP.Port.Emps");
 
-            if ((ensOfM.Equals(emp1s) == true ||ensOfM.Equals(emp2s) ==true) 
+            if ((ensOfM.Equals(emp1s) == true || ensOfM.Equals(emp2s) == true)
                 && defaultGroupAttrKey.Equals("FK_Dept") == true)
             {
-                string sql = "Select  E." + BP.Sys.Base.Glo.UserNo + " , E.Name ,D.Name AS FK_DeptText,-1 AS TYPE  From Port_DeptEmp DE, Port_Emp E,Port_Dept D Where DE.FK_Emp = E.No And DE.FK_Dept = D.No AND  D.No='" + key+"'";
-                
+                string sql = "Select  E." + BP.Sys.Base.Glo.UserNo + " , E.Name ,D.Name AS FK_DeptText,-1 AS TYPE  From Port_DeptEmp DE, Port_Emp E,Port_Dept D Where DE.FK_Emp = E.No And DE.FK_Dept = D.No AND  D.No='" + key + "'";
+
                 sql += " union ";
-                sql += "select  E."+ BP.Sys.Base.Glo.UserNo+ " , E.Name ,D.Name AS FK_DeptText,0 AS TYPE From Port_Emp E,Port_Dept D Where E.Fk_Dept = D.No AND  D.No='" + key + "' ORDER BY TYPE DESC";
+                sql += "select  E." + BP.Sys.Base.Glo.UserNo + " , E.Name ,D.Name AS FK_DeptText,0 AS TYPE From Port_Emp E,Port_Dept D Where E.Fk_Dept = D.No AND  D.No='" + key + "' ORDER BY TYPE DESC";
                 DataTable dtt = DBAccess.RunSQLReturnTable(sql);
                 DataTable dt = dtt.Clone();
                 string emps = "";
-                foreach(DataRow drr in dtt.Rows)
+                foreach (DataRow drr in dtt.Rows)
                 {
                     if (emps.Contains(drr["No"].ToString() + ",") == true)
                         continue;
@@ -1131,13 +1148,21 @@ namespace BP.WF.HttpHandler
             string defaultGroupAttrKey = this.GetRequestVal("DefaultGroupAttrKey");
 
             string key = this.GetRequestVal("Key"); //查询关键字.
+            string rootno = this.GetRequestVal("RootNo"); //查询根节点.
 
             string ensOfM = this.GetRequestVal("EnsOfM"); //多的实体.
             Entities ensMen = ClassFactory.GetEns(ensOfM);
             QueryObject qo = new QueryObject(ensMen); //集合.
+            qo.addLeftBracket();
             qo.AddWhere("No", " LIKE ", "%" + key + "%");
             qo.addOr();
             qo.AddWhere("Name", " LIKE ", "%" + key + "%");
+            qo.addRightBracket();
+            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+            {
+                qo.addAnd();
+                qo.AddWhere("OrgNo", rootno);
+            }
             qo.DoQuery();
 
             return ensMen.ToJson();
@@ -1232,9 +1257,9 @@ namespace BP.WF.HttpHandler
 
             Entities trees = attr.HisFKEns;
             Entity tree = trees.GetNewEntity;
-            
+
             int IsExitParentNo = 0; //是否存在ParentNo
-            
+
             int IsExitIdx = 0; //判断改类是否存在Idx
             if (DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable, "Idx") == true
               && tree.EnMap.Attrs.Contains("Idx") == true)
@@ -1244,25 +1269,25 @@ namespace BP.WF.HttpHandler
                && tree.EnMap.Attrs.Contains("ParentNo") == true)
                 IsExitParentNo = 1;
 
-            if(IsExitParentNo == 1)
+            if (IsExitParentNo == 1)
             {
-                if(IsExitIdx == 1)
+                if (IsExitIdx == 1)
                 {
                     if (rootNo.Equals("0"))
                     {
                         Entities ens = attr.HisFKEns;
                         ens.Retrieve("ParentNo", rootNo, "Idx");
                         string vals = "";
-                        foreach(Entity item in ens)
+                        foreach (Entity item in ens)
                         {
                             vals += "'" + item.GetValStringByKey("No") + "'" + ",";
                         }
-                        vals = vals+"'0'";
+                        vals = vals + "'0'";
                         trees.RetrieveInOrderBy("ParentNo", vals, "Idx");
 
 
                     }
-                       
+
                     else
                         trees.Retrieve("No", rootNo, "Idx");
                 }
@@ -1328,7 +1353,7 @@ namespace BP.WF.HttpHandler
 
             string pkval = this.PKVal;
             //是SAAS版并且Dot2DotEnName含有FK_Emp字段
-            bool isHaveSAASEmp = SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS && dot2Dot.EnMap.Attrs.Contains("FK_Emp") == true ? true : false;
+            bool isHaveSAASEmp = BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS && dot2Dot.EnMap.Attrs.Contains("FK_Emp") == true ? true : false;
             if (isHaveSAASEmp == true)
             {
                 string sql = "Select A.*,B.Name AS FK_EmpText From " + dot2Dot.EnMap.PhysicsTable + " A,Port_Emp B Where A.FK_Emp=B.UserID AND B.OrgNo='" + WebUser.OrgNo + "'";
@@ -1339,7 +1364,7 @@ namespace BP.WF.HttpHandler
                     if (DataType.IsNullOrEmpty(para1) == true)
                     {
                         pkval = pkval.Replace("_" + paraVal, "");
-                        sql += " AND " + vsM.AttrOfOneInMM + "='" + pkval + "' AND "+para+"='"+paraVal+"'";
+                        sql += " AND " + vsM.AttrOfOneInMM + "='" + pkval + "' AND " + para + "='" + paraVal + "'";
                     }
 
                     else if (DataType.IsNullOrEmpty(para) == false && DataType.IsNullOrEmpty(para1) == false)
@@ -1382,8 +1407,8 @@ namespace BP.WF.HttpHandler
                 }
                 dtSelected = dot2Dots.ToDataTableField("DBMMs");
             }
-            
-           
+
+
 
             string attrOfMInMM = this.GetRequestVal("AttrOfMInMM");
             string AttrOfOneInMM = this.GetRequestVal("AttrOfOneInMM");
@@ -1393,23 +1418,23 @@ namespace BP.WF.HttpHandler
             if (dtSelected.Columns.Contains(attrOfMInMM + "Text") == false && saveType == false)
                 return "err@MM实体类字段属性需要按照外键属性编写:" + dot2DotEnsName + " - " + attrOfMInMM;
 
-            if(saveType == false)
+            if (saveType == false)
                 dtSelected.Columns[attrOfMInMM + "Text"].ColumnName = "Name";
 
-            if(DataType.IsNullOrEmpty(vsM.ExtShowCols)==false && vsM.ExtShowCols.Contains("@"+ defaultGroupAttrKey + "=") == true)
+            if (DataType.IsNullOrEmpty(vsM.ExtShowCols) == false && vsM.ExtShowCols.Contains("@" + defaultGroupAttrKey + "=") == true)
             {
-               if(dtSelected.Columns.Contains(defaultGroupAttrKey+"Text")== false)
+                if (dtSelected.Columns.Contains(defaultGroupAttrKey + "Text") == false)
                 {
                     dtSelected.Columns.Add(defaultGroupAttrKey + "Text", typeof(string));
                 }
-               foreach(DataRow dr in dtSelected.Rows)
-               {
+                foreach (DataRow dr in dtSelected.Rows)
+                {
                     enMen.PKVal = dr["No"].ToString();
                     if (isHaveSAASEmp == true)
                         enMen.PKVal = WebUser.OrgNo + "_" + enMen.PKVal;
                     enMen.RetrieveFromDBSources();
-                    dr[defaultGroupAttrKey + "Text"] = enMen.Row[defaultGroupAttrKey+"Text"];
-               }
+                    dr[defaultGroupAttrKey + "Text"] = enMen.Row[defaultGroupAttrKey + "Text"];
+                }
             }
 
             dtSelected.Columns.Remove(AttrOfOneInMM);
@@ -1443,7 +1468,7 @@ namespace BP.WF.HttpHandler
             Entity tree = trees.GetNewEntity;
             if (DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable, "Idx") == true
                 && tree.EnMap.Attrs.Contains("Idx") == true)
-                trees.Retrieve("ParentNo",rootNo,"Idx");
+                trees.Retrieve("ParentNo", rootNo, "Idx");
             else
                 trees.Retrieve("ParentNo", rootNo);
 
@@ -1493,7 +1518,7 @@ namespace BP.WF.HttpHandler
                     else if (DataType.IsNullOrEmpty(para1) == true)
                         en.Delete(attrOfOneInMM, this.PKVal, para, paraVal);
                     else if (DataType.IsNullOrEmpty(para) == false && DataType.IsNullOrEmpty(para1) == false)
-                        en.Delete(attrOfOneInMM, this.PKVal, para, paraVal, para1, paraVal1) ;
+                        en.Delete(attrOfOneInMM, this.PKVal, para, paraVal, para1, paraVal1);
 
                     if (DataType.IsNullOrEmpty(eles) == true)
                         return "没有选择值";
@@ -1527,7 +1552,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@"+ex.Message;
+                return "err@" + ex.Message;
             }
         }
         /// <summary>
@@ -1550,7 +1575,7 @@ namespace BP.WF.HttpHandler
                 return "err@设置的分组外键错误[" + key + "],不存在[" + ensName + "]或者已经被删除.";
 
             if (attr.MyFieldType == FieldType.Normal)
-                return "err@设置的默认分组["+key+"]不能是普通字段.";
+                return "err@设置的默认分组[" + key + "]不能是普通字段.";
 
             if (attr.MyFieldType == FieldType.FK)
             {

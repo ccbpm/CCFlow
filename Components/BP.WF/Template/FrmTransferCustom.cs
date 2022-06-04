@@ -29,7 +29,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 流转自定义组件
     /// </summary>
-    public class FTCAttr : EntityNoAttr
+    public class FTCAttr : EntityNoNameAttr
     {
         /// <summary>
         /// 显示标签
@@ -43,22 +43,12 @@ namespace BP.WF.Template
         /// 工作模式
         /// </summary>
         public const string FTCWorkModel = "FTCWorkModel";
-        /// <summary>
-        /// X
-        /// </summary>
-        public const string FTC_X = "FTC_X";
-        /// <summary>
-        /// Y
-        /// </summary>
-        public const string FTC_Y = "FTC_Y";
+       
         /// <summary>
         /// H
         /// </summary>
         public const string FTC_H = "FTC_H";
-        /// <summary>
-        /// W
-        /// </summary>
-        public const string FTC_W = "FTC_W";
+       
     }
     /// <summary>
     /// 流转自定义组件
@@ -120,57 +110,7 @@ namespace BP.WF.Template
                 this.SetValByKey(FTCAttr.FTCWorkModel, value);
             }
         }
-        /// <summary>
-        /// Y
-        /// </summary>
-        public float FTC_Y
-        {
-            get
-            {
-                return this.GetValFloatByKey(FTCAttr.FTC_Y);
-            }
-            set
-            {
-                this.SetValByKey(FTCAttr.FTC_Y, value);
-            }
-        }
-        /// <summary>
-        /// X
-        /// </summary>
-        public float FTC_X
-        {
-            get
-            {
-                return this.GetValFloatByKey(FTCAttr.FTC_X);
-            }
-            set
-            {
-                this.SetValByKey(FTCAttr.FTC_X, value);
-            }
-        }
-        /// <summary>
-        /// W
-        /// </summary>
-        public float FTC_W
-        {
-            get
-            {
-                return this.GetValFloatByKey(FTCAttr.FTC_W);
-            }
-            set
-            {
-                this.SetValByKey(FTCAttr.FTC_W, value);
-            }
-        }
-        public string FTC_Wstr
-        {
-            get
-            {
-                if (this.FTC_W == 0)
-                    return "100%";
-                return this.FTC_W + "px";
-            }
-        }
+         
         /// <summary>
         /// H
         /// </summary>
@@ -310,11 +250,8 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(FTCAttr.FTCWorkModel,0, "工作模式",
                   true, true, FTCAttr.FTCWorkModel, "@0=简洁模式@1=高级模式");
 
-                map.AddTBFloat(FTCAttr.FTC_X, 5, "位置X", false, false);
-                map.AddTBFloat(FTCAttr.FTC_Y, 5, "位置Y", false, false);
 
                 map.AddTBFloat(FTCAttr.FTC_H, 300, "高度", true, false);
-                map.AddTBFloat(FTCAttr.FTC_W, 400, "宽度", true, false);
 
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
@@ -344,7 +281,7 @@ namespace BP.WF.Template
         /// <param name="fk_mapdata">s</param>
         public FrmTransferCustoms(string fk_mapdata)
         {
-            if (SystemConfig.IsDebug)
+            if (BP.Difference.SystemConfig.IsDebug)
                 this.Retrieve("No", fk_mapdata);
             else
                 this.RetrieveFromCash("No", (object)fk_mapdata);

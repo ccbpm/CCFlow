@@ -116,7 +116,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoEdit()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
+            return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
         }
         /// <summary>
         /// 执行删除.

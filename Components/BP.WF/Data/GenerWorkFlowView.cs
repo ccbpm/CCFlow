@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Data;
 using BP.DA;
-using BP.WF;
-using BP.Port;
-using BP.Sys;
 using BP.En;
 using BP.WF.Template;
 
@@ -745,10 +742,9 @@ namespace BP.WF.Data
                 map.AddTBInt(GenerWorkFlowViewAttr.FK_Node, 0, "FK_Node", false, false);
                 map.AddTBString(GenerWorkFlowViewAttr.FK_NY, null, "发起月份", true, true, 0, 100, 10);
 
-                //map.AddSearchAttr(GenerWorkFlowViewAttr.FK_Dept);
+                //@hongyan.
                 map.AddSearchAttr(GenerWorkFlowViewAttr.FK_Flow);
                 map.AddSearchAttr(GenerWorkFlowViewAttr.WFSta);
-                map.AddSearchAttr(GenerWorkFlowViewAttr.FK_NY, 4000);
 
                 //把不等于 0 的去掉.
                 map.AddHidden(GenerWorkFlowViewAttr.WFState, "!=", "0");

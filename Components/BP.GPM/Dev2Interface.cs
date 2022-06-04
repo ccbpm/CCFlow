@@ -26,7 +26,7 @@ namespace BP.GPM
         /// 用户登陆,此方法是在开发者校验好用户名与密码后执行
         /// </summary>
         /// <param name="userNo">用户名</param>
-        /// <param name="SID">安全ID,请参考流程设计器操作手册</param>
+        /// <param name="Token">安全ID,请参考流程设计器操作手册</param>
         public static void Port_Login(string userNo, string sid)
         {
             string sql = "SELECT SID FROM Port_Emp WHERE No='" + userNo + "'";
@@ -34,7 +34,7 @@ namespace BP.GPM
             if (dt.Rows.Count == 0)
                 throw new Exception("用户不存在或者SID错误。");
 
-            if (dt.Rows[0]["SID"].ToString() != sid)
+            if (dt.Rows[0]["Token"].ToString() != sid)
                 throw new Exception("用户不存在或者SID错误。");
 
             BP.Port.Emp emp = new BP.Port.Emp(userNo);
@@ -66,7 +66,7 @@ namespace BP.GPM
         public static string Port_SMSInfo(string userNo)
         {
             Paras ps = new Paras();
-            ps.SQL = "SELECT MyPK, EmailTitle  FROM sys_sms WHERE SendToEmpID=" + SystemConfig.AppCenterDBVarStr + "SendToEmpID AND IsAlert=0";
+            ps.SQL = "SELECT MyPK, EmailTitle  FROM sys_sms WHERE SendToEmpID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SendToEmpID AND IsAlert=0";
             ps.Add("SendToEmpID", userNo);
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             string strs = "";
@@ -75,7 +75,7 @@ namespace BP.GPM
                 strs += "@" + dr[0] + "=" + dr[1].ToString();
             }
             ps = new Paras();
-            ps.SQL = "UPDATE  sys_sms SET IsAlert=1 WHERE  SendToEmpID=" + SystemConfig.AppCenterDBVarStr + "SendToEmpID AND IsAlert=0";
+            ps.SQL = "UPDATE  sys_sms SET IsAlert=1 WHERE  SendToEmpID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SendToEmpID AND IsAlert=0";
             ps.Add("SendToEmpID", userNo);
             DBAccess.RunSQL(ps);
             return strs;
@@ -92,7 +92,7 @@ namespace BP.GPM
         public static DataTable DB_Menus(string userNo, string app)
         {
             Paras ps = new Paras();
-            ps.SQL = "SELECT * FROM GPM_EmpMenu WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp AND FK_App=" + SystemConfig.AppCenterDBVarStr + "FK_App ";
+            ps.SQL = "SELECT * FROM GPM_EmpMenu WHERE FK_Emp=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Emp AND FK_App=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_App ";
             ps.Add("FK_Emp", userNo);
             ps.Add("FK_App", app);
             return DBAccess.RunSQLReturnTable(ps);
@@ -105,7 +105,7 @@ namespace BP.GPM
         public static DataTable DB_Apps(string userNo)
         {
             Paras ps = new Paras();
-            ps.SQL = "SELECT * FROM GPM_EmpApp WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp ";
+            ps.SQL = "SELECT * FROM GPM_EmpApp WHERE FK_Emp=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Emp ";
             ps.Add("FK_Emp", userNo);
             return DBAccess.RunSQLReturnTable(ps);
         }
@@ -119,7 +119,7 @@ namespace BP.GPM
         public static MessageErrorModel PushMessageToTelByWeiXin(long WorkID, string sender)
         {
             //企业应用必须存在
-            string agentId = SystemConfig.WX_AgentID ?? null;
+            string agentId =  BP.Difference.SystemConfig.WX_AgentID ?? null;
             if (agentId != null)
             {
                 //获取 AccessToken
@@ -166,18 +166,18 @@ namespace BP.GPM
                 newArticle.description = msgConten;
 
                 //设置图片连接
-                string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + SystemConfig.WX_CorpID
-                    + "&redirect_uri=" + SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=TodoList#wechat_redirect";
+                string New_Url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + BP.Difference.SystemConfig.WX_CorpID
+                    + "&redirect_uri=" + BP.Difference.SystemConfig.WX_MessageUrl + "/CCMobile/action.aspx&response_type=code&scope=snsapi_base&state=TodoList#wechat_redirect";
 
                 newArticle.url = New_Url;
 
                 //http://discuz.comli.com/weixin/weather/icon/cartoon.jpg
-                newArticle.picurl = SystemConfig.WX_MessageUrl + "/DataUser/ICON/CCBPM.png";
+                newArticle.picurl =  BP.Difference.SystemConfig.WX_MessageUrl + "/DataUser/ICON/CCBPM.png";
 
                 //加入消息
                 MsgNews wxMsg = new MsgNews();
                 wxMsg.Access_Token = accessToken;
-                wxMsg.agentid = SystemConfig.WX_AgentID;
+                wxMsg.agentid =  BP.Difference.SystemConfig.WX_AgentID;
                 wxMsg.touser = toUsers;
                 wxMsg.articles.Add(newArticle);
                 //执行发送
@@ -227,7 +227,7 @@ namespace BP.GPM
                 case DingMsgType.text:
                     Ding_Msg_Text msgText = new Ding_Msg_Text();
                     msgText.Access_Token = DingDing.getAccessToken();
-                    msgText.agentid = SystemConfig.Ding_AgentID;
+                    msgText.agentid =  BP.Difference.SystemConfig.Ding_AgentID;
                     msgText.touser = toUsers;
                     msgText.content = gwf.Title + "\n发送人：" + sender + "\n时间：" + DataType.CurrentDateTimeCNOfShort;
                     return DingTalk_Message.Msg_AgentText_Send(msgText);
@@ -236,8 +236,8 @@ namespace BP.GPM
                     Ding_Msg_Link msgLink = new Ding_Msg_Link();
                     msgLink.Access_Token = DingDing.getAccessToken();
                     msgLink.touser = toUsers;
-                    msgLink.agentid = SystemConfig.Ding_AgentID;
-                    msgLink.messageUrl = SystemConfig.Ding_MessageUrl + "/CCMobile/login.aspx";
+                    msgLink.agentid =  BP.Difference.SystemConfig.Ding_AgentID;
+                    msgLink.messageUrl =  BP.Difference.SystemConfig.Ding_MessageUrl + "/CCMobile/login.aspx";
                     msgLink.picUrl = "@lALOACZwe2Rk";
                     msgLink.title = gwf.Title;
                     msgLink.text = "发送人：" + sender + "\n时间：" + DataType.CurrentDateTimeCNOfShort;
@@ -251,9 +251,9 @@ namespace BP.GPM
                     {
                         Ding_Msg_OA msgOA = new Ding_Msg_OA();
                         msgOA.Access_Token = DingDing.getAccessToken();
-                        msgOA.agentid = SystemConfig.Ding_AgentID;
+                        msgOA.agentid =  BP.Difference.SystemConfig.Ding_AgentID;
                         msgOA.touser = user;
-                        msgOA.messageUrl = SystemConfig.Ding_MessageUrl + "/CCMobile/DingAction.aspx?ActionFrom=message&UserID=" + user
+                        msgOA.messageUrl =  BP.Difference.SystemConfig.Ding_MessageUrl + "/CCMobile/DingAction.aspx?ActionFrom=message&UserID=" + user
                             + "&ActionType=ToDo&FK_Flow=" + gwf.FK_Flow + "&FK_Node=" + gwf.FK_Node
                             + "&WorkID=" + WorkID + "&FID=" + gwf.FID;
                         //00是完全透明，ff是完全不透明，比较适中的透明度值是 1e

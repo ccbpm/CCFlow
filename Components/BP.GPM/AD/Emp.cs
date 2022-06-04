@@ -22,7 +22,7 @@ namespace BP.GPM.AD
         /// <summary>
         /// sid
         /// </summary>
-        public const string SID = "SID";
+        public const string SID = "Token";
         /// <summary>
         /// 电话
         /// </summary>

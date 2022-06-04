@@ -92,21 +92,7 @@ namespace BP.En
 		/// <summary>
 		/// M的实体属性在多对多的实体中
 		/// </summary>
-		private string _Desc=null;
-		/// <summary>
-		/// 的实体属性在多对多的实体中
-		/// </summary>
-		public string Desc
-		{
-			get
-			{
-			    return _Desc;//edited by liuxc,2014-10-18 "<font color=blue ><u>" + _Desc + "</u></font>";
-			}
-			set
-			{
-				_Desc=value;
-			}
-		}
+		public string Desc=null;
 		/// <summary>
 		/// 一的实体属性在多对多的实体中.
 		/// </summary>
@@ -129,57 +115,18 @@ namespace BP.En
 		/// <summary>
 		/// M的实体属性在多对多的实体中
 		/// </summary>
-		private string _AttrOfMInMM=null;
-		/// <summary>
-		/// 的实体属性在多对多的实体中
-		/// </summary>
-		public string AttrOfMInMM
-		{
-			get
-			{
-				return _AttrOfMInMM;
-			}
-			set
-			{
-				_AttrOfMInMM=value;
-			}
-		}
+		public string AttrOfMInMM = null;
+
 		/// <summary>
 		/// 标签
 		/// </summary>
-		private string _AttrOfMText=null;
-		/// <summary>
-		/// 标签
-		/// </summary>
-		public string AttrOfMText
-		{
-			get
-			{
-				return _AttrOfMText;
-			}
-			set
-			{
-				_AttrOfMText=value;
-			}
-		}
+		public string AttrOfMText = null;
+
 		/// <summary>
 		/// Value
 		/// </summary>
-		private string _AttrOfMValue=null;
-		/// <summary>
-		/// Value
-		/// </summary>
-		public string AttrOfMValue
-		{
-			get
-			{
-				return _AttrOfMValue;
-			}
-			set
-			{
-				_AttrOfMValue=value;
-			}
-		}
+		public string AttrOfMValue = null;
+		 
 		#endregion
 
 		#region 构造方法

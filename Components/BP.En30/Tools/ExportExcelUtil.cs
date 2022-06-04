@@ -24,7 +24,7 @@ namespace BP.Tools
             string filename = title + "Ep" + title + ".xls";
             string file = filename;
             bool flag = true;
-            string filepath = SystemConfig.PathOfTemp;
+            string filepath =  BP.Difference.SystemConfig.PathOfTemp;
 
             #region 参数及变量设置
 
@@ -145,7 +145,7 @@ namespace BP.Tools
                 filename = title + "_" + DataType.CurrentDateCNOfLong + "_" + WebUser.No + ".xls";
             string file = filename;
             bool flag = true;
-            string filepath = SystemConfig.PathOfTemp;
+            string filepath =  BP.Difference.SystemConfig.PathOfTemp;
 
             #region 参数及变量设置
 

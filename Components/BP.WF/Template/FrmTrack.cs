@@ -29,7 +29,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 轨迹图标组件
     /// </summary>
-    public class FrmTrackAttr : EntityNoAttr
+    public class FrmTrackAttr : EntityNoNameAttr
     {
         /// <summary>
         /// 显示标签
@@ -39,22 +39,12 @@ namespace BP.WF.Template
         /// 状态
         /// </summary>
         public const string FrmTrackSta = "FrmTrackSta";
-        /// <summary>
-        /// X
-        /// </summary>
-        public const string FrmTrack_X = "FrmTrack_X";
-        /// <summary>
-        /// Y
-        /// </summary>
-        public const string FrmTrack_Y = "FrmTrack_Y";
+      
         /// <summary>
         /// H
         /// </summary>
         public const string FrmTrack_H = "FrmTrack_H";
-        /// <summary>
-        /// W
-        /// </summary>
-        public const string FrmTrack_W = "FrmTrack_W";
+      
     }
     /// <summary>
     /// 轨迹图标组件
@@ -102,57 +92,7 @@ namespace BP.WF.Template
                 this.SetValByKey(FrmTrackAttr.FrmTrackSta, (int)value);
             }
         }
-        /// <summary>
-        /// Y
-        /// </summary>
-        public float FrmTrack_Y
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmTrackAttr.FrmTrack_Y);
-            }
-            set
-            {
-                this.SetValByKey(FrmTrackAttr.FrmTrack_Y, value);
-            }
-        }
-        /// <summary>
-        /// X
-        /// </summary>
-        public float FrmTrack_X
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmTrackAttr.FrmTrack_X);
-            }
-            set
-            {
-                this.SetValByKey(FrmTrackAttr.FrmTrack_X, value);
-            }
-        }
-        /// <summary>
-        /// W
-        /// </summary>
-        public float FrmTrack_W
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmTrackAttr.FrmTrack_W);
-            }
-            set
-            {
-                this.SetValByKey(FrmTrackAttr.FrmTrack_W, value);
-            }
-        }
-        public string FrmTrack_Wstr
-        {
-            get
-            {
-                if (this.FrmTrack_W == 0)
-                    return "100%";
-                return this.FrmTrack_W + "px";
-            }
-        }
+       
         /// <summary>
         /// H
         /// </summary>
@@ -288,11 +228,8 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(FrmTrackAttr.FrmTrackSta, (int)FrmTrackSta.Disable, "组件状态",
                    true, true, FrmTrackAttr.FrmTrackSta, "@0=禁用@1=显示轨迹图@2=显示轨迹表");
 
-                map.AddTBFloat(FrmTrackAttr.FrmTrack_X, 5, "位置X", false, false);
-                map.AddTBFloat(FrmTrackAttr.FrmTrack_Y, 5, "位置Y", false, false);
 
                 map.AddTBFloat(FrmTrackAttr.FrmTrack_H, 300, "高度", true, false);
-                map.AddTBFloat(FrmTrackAttr.FrmTrack_W, 400, "宽度", true, false);
 
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
@@ -325,7 +262,7 @@ namespace BP.WF.Template
         /// <param name="fk_mapdata">s</param>
         public FrmTracks(string fk_mapdata)
         {
-            if (SystemConfig.IsDebug)
+            if (BP.Difference.SystemConfig.IsDebug)
                 this.Retrieve("No", fk_mapdata);
             else
                 this.RetrieveFromCash("No", (object)fk_mapdata);

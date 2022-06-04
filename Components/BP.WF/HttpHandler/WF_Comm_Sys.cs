@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using System.Web;
 using BP.DA;
 using BP.Sys;
-using BP.Web;
-using BP.Port;
 using BP.En;
-using BP.WF;
-using BP.WF.Template;
 using System.Collections;
-using System.Net;
-using System.Xml.Schema;
 using System.IO;
 using BP.Difference;
 
@@ -128,7 +120,7 @@ namespace BP.WF.HttpHandler
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + ext;
 
             //文件存放路径
-            string filePath = SystemConfig.PathOfTemp + "/" + fileNewName;
+            string filePath =  BP.Difference.SystemConfig.PathOfTemp + "/" + fileNewName;
             //files[0].SaveAs(filePath);
             HttpContextHelper.UploadFile(files[0], filePath);
             //从excel里面获得数据表.
@@ -354,7 +346,7 @@ namespace BP.WF.HttpHandler
             string expFileName = "all-wcprops,dir-prop-base,entries";
             string expDirName = ".svn";
 
-            string pathDir = SystemConfig.PathOfData + "JSLib/";
+            string pathDir =  BP.Difference.SystemConfig.PathOfData + "JSLib/";
 
             string html = "";
             html += "<fieldset>";
@@ -383,7 +375,7 @@ namespace BP.WF.HttpHandler
             }
             html += "</fieldset>";
 
-            pathDir = SystemConfig.PathOfDataUser + "JSLib/";
+            pathDir =  BP.Difference.SystemConfig.PathOfDataUser + "JSLib/";
             html += "<fieldset>";
             html += "<legend>" + "用户自定义函数. 位置:" + pathDir + "</legend>";
 
@@ -710,7 +702,7 @@ namespace BP.WF.HttpHandler
             if (files.Count == 0)
                 return "err@请选择要上传的流程模版。";
             string fileName = files[0].FileName;
-            string savePath = SystemConfig.PathOfDataUser + "JSLibData" + "/" + fileName;
+            string savePath =  BP.Difference.SystemConfig.PathOfDataUser + "JSLibData" + "/" + fileName;
 
             //存在文件则删除
             if (System.IO.Directory.Exists(savePath) == true)
@@ -723,14 +715,17 @@ namespace BP.WF.HttpHandler
 
         public string RichUploadFile()
         {
-            //HttpFileCollection files = context.Request.Files;
             var files = HttpContextHelper.RequestFiles();
             if (files.Count == 0)
                 return "err@请选择要上传的图片。";
             //获取文件存放目录
-            string directory = this.GetRequestVal("Directory");
-            string fileName = files[0].FileName;
-            string savePath = SystemConfig.PathOfDataUser + "RichTextFile" + "/" + directory;
+            string frmID = this.FrmID;
+            if (DataType.IsNullOrEmpty(frmID) == true)
+                frmID = this.EnName;
+            string directory = frmID + "/" + this.WorkIDStr + "/";
+            // 随便文件名
+            string fileName = DBAccess.GenerGUID(4) + ".jpg";
+            string savePath =  BP.Difference.SystemConfig.PathOfDataUser + "UploadFile" + "/" + directory;
 
             if (System.IO.Directory.Exists(savePath) == false)
                 System.IO.Directory.CreateDirectory(savePath);
@@ -740,9 +735,13 @@ namespace BP.WF.HttpHandler
             if (System.IO.Directory.Exists(savePath) == true)
                 System.IO.Directory.Delete(savePath);
 
-            //files[0].SaveAs(savePath);
             HttpContextHelper.UploadFile(files[0], savePath);
-            return savePath;
+            Hashtable ht = new Hashtable();
+            ht.Add("code", 0);
+            ht.Add("msg","success");
+            savePath =  "DataUser/" + "UploadFile" + "/" + directory  + fileName;
+            ht.Add("data", savePath);
+            return BP.Tools.Json.ToJson(ht);
         }
 
         /**
@@ -751,7 +750,7 @@ namespace BP.WF.HttpHandler
          */
         public string javaScriptFiles()
         {
-            String savePath = SystemConfig.PathOfDataUser + "JSLibData";
+            String savePath =  BP.Difference.SystemConfig.PathOfDataUser + "JSLibData";
 
             DirectoryInfo di = new DirectoryInfo(savePath);
             //找到该目录下的文件 

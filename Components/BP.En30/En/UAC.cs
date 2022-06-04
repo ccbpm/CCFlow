@@ -12,26 +12,7 @@ namespace BP.En
     public class UAC
     {
         #region 常用方法
-        /// <summary>
-        /// 从权限管理系统里装载数据.
-        /// </summary>
-        public void LoadRightFromCCGPM(Entity en)
-        {
-            string sql = "SELECT Tag1  FROM V_GPM_EmpMenu WHERE  FK_Emp='" + BP.Web.WebUser.No + "'  AND Url LIKE '%" + en.ToString() + "%'  ";
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            foreach (DataRow dr in dt.Rows)
-            {
-                string tag = dr[0].ToString();
-
-                if (tag.Contains("Insert") == true)
-                    this.IsInsert = true;
-                if (tag.Contains("Update") == true)
-                    this.IsUpdate = true;
-                if (tag.Contains("Delete") == true)
-                    this.IsDelete = true;
-            }
-
-        }
+        
         public void Readonly()
         {
             this.IsUpdate = false;
@@ -63,7 +44,7 @@ namespace BP.En
 
             bool bl;
 
-            bl = DBAccess.IsExits("SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp AND FK_Station=" + SystemConfig.AppCenterDBVarStr + "st", ps);
+            bl = DBAccess.IsExits("SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Emp=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Emp AND FK_Station=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "st", ps);
 
             if (bl)
                 this.OpenAll();
@@ -78,8 +59,7 @@ namespace BP.En
            // if (BP.Web.WebUser.No.Equals("admin") == true)
             if (BP.Web.WebUser.IsAdmin)
                 this.OpenAll();
-
-
+             
             return this;
         }
         public UAC OpenForAppAdmin()

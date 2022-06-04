@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Text.RegularExpressions;
-using System.Data;
 using BP.DA;
 using BP.En;
-using BP.Sys;
-
 namespace BP.WF.Port.Admin2Group
 {
     /// <summary>
@@ -28,7 +24,7 @@ namespace BP.WF.Port.Admin2Group
         /// <summary>
         /// sid
         /// </summary>
-        public const string SID = "SID";
+        public const string SID = "Token";
         /// <summary>
         /// 电话
         /// </summary>
@@ -261,7 +257,7 @@ namespace BP.WF.Port.Admin2Group
         public bool CheckPass(string pass)
         {
             //启用加密
-            if (SystemConfig.IsEnablePasswordEncryption == true)
+            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
                 pass = BP.Tools.Cryptography.EncryptString(pass);
 
             /*使用数据库校验.*/
@@ -330,7 +326,7 @@ namespace BP.WF.Port.Admin2Group
                 map.AddTBString(UserAttr.Name, null, "姓名", true, false, 0, 500, 130);
                 map.AddTBString(UserAttr.Pass, null, "密码", false, false, 0, 100, 10);
                 map.AddTBString(UserAttr.FK_Dept, null, "部门", false, false, 0, 100, 10);
-                map.AddTBString(UserAttr.SID, null, "SID", false, false, 0, 36, 36);
+                map.AddTBString(UserAttr.SID, null, "Token", false, false, 0, 36, 36);
                 map.AddTBString(UserAttr.Tel, null, "电话", true, false, 0, 20, 130);
                 map.AddTBString(UserAttr.Email, null, "邮箱", true, false, 0, 100, 132, true);
                 map.AddTBString(UserAttr.PinYin, null, "拼音", true, false, 0, 1000, 132, true);
@@ -353,7 +349,7 @@ namespace BP.WF.Port.Admin2Group
          
         protected override bool beforeInsert()
         {
-            if (SystemConfig.IsEnablePasswordEncryption == true)
+            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
             {
                 if (this.Pass == "")
                 {
@@ -406,7 +402,7 @@ namespace BP.WF.Port.Admin2Group
 
             //foreach (DeptUserStation item in des)
             //{
-            //    BP.GPM.Dept dept = new BP.GPM.Dept();
+            //    BP.Port.Dept dept = new BP.Port.Dept();
             //    dept.No = item.FK_Dept;
             //    if (dept.RetrieveFromDBSources() == 0)
             //    {
@@ -454,7 +450,7 @@ namespace BP.WF.Port.Admin2Group
             if (pass1.Equals(pass2) == false)
                 return "两次密码不一致";
 
-            if (SystemConfig.IsEnablePasswordEncryption == true)
+            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
                 pass1 = BP.Tools.Cryptography.EncryptString(pass1);
 
             this.Pass = pass1;

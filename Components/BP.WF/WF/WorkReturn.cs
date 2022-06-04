@@ -49,7 +49,7 @@ namespace BP.WF
         /// 退回到节点
         /// </summary>
         private Work ReurnToWork = null;
-        private string dbStr = SystemConfig.AppCenterDBVarStr;
+        private string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
         private Paras ps;
         public string ReturnToEmp = null;
         /// <summary>
@@ -121,7 +121,7 @@ namespace BP.WF
                 return;
 
             Paras ps = new Paras();
-            string dbStr = SystemConfig.AppCenterDBVarStr;
+            string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
 
             // 删除FH, 不管是否有这笔数据.
             ps.Clear();
@@ -446,7 +446,7 @@ namespace BP.WF
 
             //退回前事件
             string atPara = "@ToNode=" + this.ReturnToNode.NodeID;
-            //如果事件返回的信息不是 null，就终止执行。 @hongyan.
+            //如果事件返回的信息不是 null，就终止执行。
             string msg = ExecEvent.DoNode(EventListNode.ReturnBefore, this.HisNode, this.HisWork, null,
                 atPara);
             if (String.IsNullOrEmpty(msg) == false) // 2019-08-28 zl 返回空字符串表示执行成功，不应该终止。
@@ -482,7 +482,10 @@ namespace BP.WF
             gwf.TodoEmpsNum = gwls.Count;
             gwf.Update();
 
-            //记录退回轨迹. @hongyan
+            //删除子线程的工作.
+            DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE FID=" + gwf.WorkID);
+
+            //记录退回轨迹. 
             ReturnWork rw = new ReturnWork();
             rw.WorkID = gwf.WorkID;
 
@@ -491,18 +494,20 @@ namespace BP.WF
 
             rw.Returner = WebUser.No;
             rw.ReturnerName = WebUser.Name;
+            rw.BeiZhu = this.Msg;
 
             rw.ReturnToNode = this.ReturnToNode.NodeID;
-            rw.ReturnToEmp = gwf.TodoEmps;
+            rw.ReturnToEmp = this.ReturnToEmp; //.TodoEmps;
+
             //主键.
-            rw.MyPK = BP.DA.DBAccess.GenerGUID();
-            rw.Insert(); 
+            rw.setMyPK(BP.DA.DBAccess.GenerGUID());
+            rw.Insert();
 
             //设置return记录. 加入track.
             this.AddToTrack(ActionType.Return, WebUser.No, WebUser.Name, this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
 
-            //如果事件返回的信息不是 null，就终止执行。@hongyan.
-            msg = ExecEvent.DoNode(EventListNode.ReturnAfter, this.HisNode, this.HisWork, null,atPara);
+            //如果事件返回的信息不是 null，就终止执行。.
+            msg = ExecEvent.DoNode(EventListNode.ReturnAfter, this.HisNode, this.HisWork, null, atPara);
             if (String.IsNullOrEmpty(msg) == false) //  如果有消息，就返回消息.
                 return msg;
 
@@ -741,7 +746,7 @@ namespace BP.WF
             ReturnWork rw = new ReturnWork();
             rw.WorkID = this.WorkID;
             rw.ReturnToNode = this.ReturnToNode.NodeID;
-            rw.ReturnNodeName = this.ReturnToNode.Name + "-" + this.HisNode.Name;
+            rw.ReturnNodeName = this.HisNode.Name;
 
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
             rw.ReturnToEmp = returnEmp; //退回给。
@@ -793,7 +798,7 @@ namespace BP.WF
 
             //查询退回到的工作人员列表.
             GenerWorkerLists gwls = new GenerWorkerLists();
-            gwls.Retrieve(GenerWorkerListAttr.WorkID, this.FID,
+            gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FID,this.FID,
                 GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
 
             string toEmp = "";
@@ -813,15 +818,17 @@ namespace BP.WF
             else
             {
                 /*有可能多次退回的情况，表示曾经退回过n次。*/
-
             }
-           
+
             // 记录退回轨迹。
             ReturnWork rw = new ReturnWork();
+
+            //rw.WorkID = this.FID;
             rw.WorkID = this.WorkID;
             rw.FID = this.FID;
+
             rw.ReturnToNode = this.ReturnToNode.NodeID;
-            rw.ReturnNodeName = this.ReturnToNode.Name + "-" + this.HisNode.Name;
+            rw.ReturnNodeName = this.HisNode.Name;
 
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
             rw.ReturnToEmp = toEmp; //退回给。
@@ -865,7 +872,7 @@ namespace BP.WF
 
             //更新主流程的状态
             GenerWorkFlow mainGwf = new GenerWorkFlow(gwf.FID);
-            mainGwf.WFState = WFState.ReturnSta;
+            //mainGwf.WFState = WFState.ReturnSta;
             mainGwf.FK_Node = this.ReturnToNode.NodeID;
             mainGwf.Update();
 
@@ -880,6 +887,7 @@ namespace BP.WF
 
             //设置当前的工作数据为退回状态,让其不能看到待办, 这个是约定的值.
             currWorker.IsPassInt = (int)WFState.ReturnSta;
+            currWorker.IsRead = false;
             currWorker.Update();
 
             //退回消息事件
@@ -1293,7 +1301,7 @@ namespace BP.WF
         private string infoLog = "";
         private void ReorderLog(Node fromND, Node toND, ReturnWork rw)
         {
-            string filePath = SystemConfig.PathOfDataUser + "ReturnLog/" + this.HisNode.FK_Flow + "/";
+            string filePath =  BP.Difference.SystemConfig.PathOfDataUser + "ReturnLog/" + this.HisNode.FK_Flow + "/";
             if (System.IO.Directory.Exists(filePath) == false)
                 System.IO.Directory.CreateDirectory(filePath);
 

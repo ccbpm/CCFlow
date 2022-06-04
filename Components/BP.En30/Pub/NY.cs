@@ -12,7 +12,6 @@ namespace BP.Pub
     public class NYAttr : EntityNoNameAttr
     {
         #region 基本属性
-        public const string FK_SF = "FK_SF";
         #endregion
     }
     /// <summary>
@@ -20,9 +19,6 @@ namespace BP.Pub
     /// </summary>
     public class NY : EntityNoName
     {
-        #region 基本属性
-        #endregion
-
         #region 构造函数
         public override UAC HisUAC
         {
@@ -41,7 +37,6 @@ namespace BP.Pub
         {
         }
 
-
         /// <summary>
         /// Map
         /// </summary>
@@ -55,10 +50,8 @@ namespace BP.Pub
 
                 #region 基本属性 
                 map.EnDBUrl = new DBUrl(DBUrlType.AppCenterDSN);
-                map.AdjunctType = AdjunctType.AllType;
                 map.DepositaryOfMap = Depositary.Application;
                 map.DepositaryOfEntity = Depositary.None;
-                map.IsCheckNoLength = false;
                 map.setEnType(EnType.App);
                 map.CodeStruct = "4";
                 #endregion
@@ -83,7 +76,7 @@ namespace BP.Pub
     /// </summary>
     public class NYs : EntitiesNoName
     {
-        #region 
+        #region   年月
         /// <summary>
         /// 得到它的 Entity 
         /// </summary>

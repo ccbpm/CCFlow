@@ -4,6 +4,8 @@ using BP.DA;
 using BP.En;
 using BP.Port;
 using BP.Sys;
+using BP.WF.Template.SFlow;
+using BP.WF.Template.Frm;
 
 namespace BP.WF.Template
 {
@@ -217,14 +219,14 @@ namespace BP.WF.Template
                 }
             }
         }
-        private Frm _hisFrm = null;
-        public Frm HisFrm
+        private CCFrm _hisFrm = null;
+        public CCFrm HisFrm
         {
             get
             {
                 if (this._hisFrm == null)
                 {
-                    this._hisFrm = new Frm(this.FK_Frm);
+                    this._hisFrm = new CCFrm(this.FK_Frm);
                     this._hisFrm.HisFrmNode = this;
                 }
                 return this._hisFrm;

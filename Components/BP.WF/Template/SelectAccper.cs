@@ -366,7 +366,6 @@ namespace BP.WF.Template
             return "";
         }
 
-
         protected override bool beforeInsert()
         {
             this.ResetPK();

@@ -54,6 +54,8 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\</OutputPath>
@@ -151,7 +153,7 @@
       <HintPath>..\..\RefDLL\Nuxsql.dll</HintPath>
     </Reference>
     <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
-      <HintPath>..\..\RefDLL\Oracle.ManagedDataAccess.dll</HintPath>
+      <HintPath>..\..\packages\Oracle.ManagedDataAccess.19.6.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -213,15 +215,16 @@
     <Compile Include="DA\DBLoad.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DA\DTTemp.cs" />
     <Compile Include="DA\Cash2019.cs" />
     <Compile Include="DA\CashFrmTemplate.cs" />
-    <Compile Include="DTS\DataIOEn.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Difference\SystemConfig.cs" />
+    <Compile Include="EnTS\Glo.cs" />
+    <Compile Include="EnTS\TSEntityNoName.cs" />
+    <Compile Include="En\EnumLab.cs" />
+    <Compile Include="En\MapExt\Connection.cs" />
     <Compile Include="En\GENoName.cs" />
-    <Compile Include="GPM\WFEmp.cs" />
-    <Compile Include="GPM\EmpExt.cs" />
+    <Compile Include="Port\DeptEmp.cs" />
+    <Compile Include="Port\DeptEmpStation.cs" />
     <Compile Include="Pub\Current.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -236,10 +239,7 @@
     <Compile Include="En\EnObj.cs" />
     <Compile Include="En\Entities.cs" />
     <Compile Include="En\Entity.cs" />
-    <Compile Include="DA\KeyVal.cs" />
     <Compile Include="En\UAC.cs" />
-    <Compile Include="GPM\DeptStation.cs" />
-    <Compile Include="GPM\Emp.cs" />
     <Compile Include="Port\Team.cs" />
     <Compile Include="Port\TeamEmp.cs" />
     <Compile Include="Port\TeamType.cs" />
@@ -250,15 +250,6 @@
     <Compile Include="OverrideFile.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Pub\Rpt2Base.cs" />
-    <Compile Include="References\IJsonWrapper.cs" />
-    <Compile Include="References\JsonData.cs" />
-    <Compile Include="References\JsonException.cs" />
-    <Compile Include="References\JsonMapper.cs" />
-    <Compile Include="References\JsonMockWrapper.cs" />
-    <Compile Include="References\JsonReader.cs" />
-    <Compile Include="References\JsonWriter.cs" />
-    <Compile Include="References\Lexer.cs" />
-    <Compile Include="References\ParserToken.cs" />
     <Compile Include="Sys\BuessUnitBase.cs" />
     <Compile Include="Sys\CCFormAPI.cs" />
     <Compile Include="Sys\CCFormParse.cs" />
@@ -272,6 +263,8 @@
     <Compile Include="Sys\EvenListFrm.cs" />
     <Compile Include="Sys\EvenListNode.cs" />
     <Compile Include="Sys\Base\FormEventBase.cs" />
+    <Compile Include="Sys\FastInput.cs" />
+    <Compile Include="Sys\FrmDBRemark.cs" />
     <Compile Include="Sys\FrmEvent.cs" />
     <Compile Include="Sys\FrmEventBase.cs" />
     <Compile Include="Sys\FrmUI\ComponentsFieldList.cs" />
@@ -282,9 +275,9 @@
     <Compile Include="Sys\FrmUI\FrmAttachmentSingle.cs" />
     <Compile Include="Sys\FrmUI\FrmBtn.cs" />
     <Compile Include="Sys\FrmUI\FrmImgAth.cs" />
-    <Compile Include="Sys\FrmUI\MapAttrGovDocFile.cs" />
-    <Compile Include="Sys\FrmUI\MapAttrDocWordReceive.cs" />
     <Compile Include="Sys\FrmUI\MapAttrDocWord.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrDocWordReceive.cs" />
+    <Compile Include="Sys\FrmUI\MapAttrGovDocFile.cs" />
     <Compile Include="Sys\FrmUI\MapAttrFixed.cs" />
     <Compile Include="Sys\FrmUI\MapAttrCard.cs" />
     <Compile Include="Sys\FrmUI\MapAttrCheck.cs" />
@@ -324,9 +317,6 @@
     <Compile Include="Sys\SysFileManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sys\SystemConfig.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Sys\ExtContral.cs" />
     <Compile Include="Sys\FrmUI\FrmAttachmentExt.cs" />
     <Compile Include="Sys\FrmUI\MapAttrEnum.cs" />
@@ -360,7 +350,6 @@
     <Compile Include="Sys\XML\XmlMenu.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sys\Langue.cs" />
     <Compile Include="Sys\SFTableSQL.cs" />
     <Compile Include="Tools\BaseFileUtils.cs" />
     <Compile Include="Tools\Cryptography.cs" />
@@ -400,6 +389,15 @@
     <Compile Include="DA\Para.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tools\LitJson\IJsonWrapper.cs" />
+    <Compile Include="Tools\LitJson\JsonData.cs" />
+    <Compile Include="Tools\LitJson\JsonException.cs" />
+    <Compile Include="Tools\LitJson\JsonMapper.cs" />
+    <Compile Include="Tools\LitJson\JsonMockWrapper.cs" />
+    <Compile Include="Tools\LitJson\JsonReader.cs" />
+    <Compile Include="Tools\LitJson\JsonWriter.cs" />
+    <Compile Include="Tools\LitJson\Lexer.cs" />
+    <Compile Include="Tools\LitJson\ParserToken.cs" />
     <Compile Include="Tools\Luban.cs" />
     <Compile Include="Tools\NLogUtil.cs" />
     <Compile Include="Tools\NPinyin\Pinyin.cs" />
@@ -413,17 +411,8 @@
     <Compile Include="Tools\StringExpressionCalculate.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DTS\Enum.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DTS\FF.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="En\EntityOIDName.cs" />
     <Compile Include="En\EntityMM.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="En\EntityNo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="En\EntityNoName.cs">
@@ -441,9 +430,6 @@
     <Compile Include="En\EntityTree.cs" />
     <Compile Include="Sys\Base\EventBase.cs" />
     <Compile Include="Sys\EventDemo.cs" />
-    <Compile Include="GPM\Dept.cs" />
-    <Compile Include="GPM\DeptEmp.cs" />
-    <Compile Include="GPM\DeptEmpStation.cs" />
     <Compile Include="Tools\Verify.cs" />
     <Compile Include="Web\GuestUser.cs">
       <SubType>Code</SubType>
@@ -547,6 +533,10 @@
     <None Include="packages.config" />
     <None Include="Properties\DataSources\System.Data.DataTable.datasource" />
     <None Include="Properties\DataSources\System.Data.DataTable1.datasource" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="En\MapExt\readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

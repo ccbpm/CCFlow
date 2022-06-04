@@ -826,7 +826,7 @@ namespace BP.Sys
 
 
             //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上. 
-            doc = doc.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
+            doc = doc.Replace("@SDKFromServHost", BP.Difference.SystemConfig.AppSettings["SDKFromServHost"]);
 
             if (doc.Contains("@") == true)
             {
@@ -858,12 +858,12 @@ namespace BP.Sys
                     doc += "?1=2";
 
                 doc += "&UserNo=" + WebUser.No;
-                doc += "&SID=" + WebUser.SID;
+                doc += "&Token=" + WebUser.Token;
                 doc += "&FK_Dept=" + WebUser.FK_Dept;
                 // doc += "&FK_Unit=" + WebUser.FK_Unit;
                 doc += "&OID=" + en.PKVal;
 
-                if (SystemConfig.IsBSsystem)
+                if (BP.Difference.SystemConfig.IsBSsystem)
                 {
                     /*是bs系统，并且是url参数执行类型.*/                    
                     //2019-07-25 zyt改造
@@ -885,7 +885,7 @@ namespace BP.Sys
                     doc = doc.Replace("&?", "&");
                 }
 
-                if (SystemConfig.IsBSsystem == false)
+                if (BP.Difference.SystemConfig.IsBSsystem == false)
                 {
                     /*非bs模式下调用,比如在cs模式下调用它,它就取不到参数. */
                 }
@@ -893,7 +893,7 @@ namespace BP.Sys
                 if (doc.StartsWith("http") == false)
                 {
                     /*如果没有绝对路径 */
-                    if (SystemConfig.IsBSsystem)
+                    if (BP.Difference.SystemConfig.IsBSsystem)
                     {
                         /*在cs模式下自动获取*/
                         //string host = BP.Sys.Base.Glo.Request.Url.Host;
@@ -905,10 +905,10 @@ namespace BP.Sys
                             doc = "http://" + HttpContextHelper.RequestUrlAuthority + doc;
                     }
 
-                    if (SystemConfig.IsBSsystem == false)
+                    if (BP.Difference.SystemConfig.IsBSsystem == false)
                     {
                         /*在cs模式下它的baseurl 从web.config中获取.*/
-                        string cfgBaseUrl = SystemConfig.HostURL;
+                        string cfgBaseUrl =  BP.Difference.SystemConfig.HostURL;
                         if (DataType.IsNullOrEmpty(cfgBaseUrl))
                         {
                             string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
@@ -942,7 +942,7 @@ namespace BP.Sys
                     try
                     {
                         if (nev.HisDoType == EventDoType.SP && doc.Contains("=") == true
-                        && SystemConfig.AppCenterDBType == DBType.MSSQL)
+                        && BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
                         {
                             RunSQL(doc);
                             return nev.MsgOK(en);
@@ -970,7 +970,7 @@ namespace BP.Sys
                     string myURL = doc.Clone() as string;
                     if (myURL.Contains("http") == false)
                     {
-                        if (SystemConfig.IsBSsystem)
+                        if (BP.Difference.SystemConfig.IsBSsystem)
                         {
                             //string host = BP.Sys.Base.Glo.Request.Url.Host;
                             //2019-07-25 zyt改造
@@ -982,7 +982,7 @@ namespace BP.Sys
                         }
                         else
                         {
-                            string cfgBaseUrl = SystemConfig.HostURL;
+                            string cfgBaseUrl =  BP.Difference.SystemConfig.HostURL;
                             if (DataType.IsNullOrEmpty(cfgBaseUrl))
                             {
                                 string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
@@ -992,7 +992,7 @@ namespace BP.Sys
                             myURL = cfgBaseUrl + myURL;
                         }
                     }
-                    myURL = myURL.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
+                    myURL = myURL.Replace("@SDKFromServHost", BP.Difference.SystemConfig.AppSettings["SDKFromServHost"]);
 
                     if (myURL.Contains("&FID=") == false && en.Row.ContainsKey("FID") == true)
                     {
@@ -1089,7 +1089,7 @@ namespace BP.Sys
                             }
                         }
 
-                        if (SystemConfig.IsBSsystem == true)
+                        if (BP.Difference.SystemConfig.IsBSsystem == true)
                         {
                             /*如果是bs系统, 就加入外部url的变量.*/
                             //2019 - 07 - 25 zyt改造
@@ -1163,12 +1163,12 @@ namespace BP.Sys
                         //获取webapi接口地址
                         string apiUrl = doc.Clone() as string;
                         if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
-                            apiUrl = apiUrl.Replace("@WebApiHost", SystemConfig.AppSettings["WebApiHost"]);
+                            apiUrl = apiUrl.Replace("@WebApiHost", BP.Difference.SystemConfig.AppSettings["WebApiHost"]);
 
                         if (apiUrl.Contains("?") == true)
-                            apiUrl += "&WorkID=" + en.PKVal + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + WebUser.SID;
+                            apiUrl += "&WorkID=" + en.PKVal + "&UserNo=" + BP.Web.WebUser.No + "&Token=" + WebUser.Token;
                         else
-                            apiUrl += "?WorkID=" + en.PKVal + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + WebUser.SID;
+                            apiUrl += "?WorkID=" + en.PKVal + "&UserNo=" + BP.Web.WebUser.No + "&Token=" + WebUser.Token;
 
                         //api接口地址
                         string apiHost = apiUrl.Split('?')[0];

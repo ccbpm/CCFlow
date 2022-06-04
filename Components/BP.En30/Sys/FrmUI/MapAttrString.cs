@@ -223,9 +223,9 @@ namespace BP.Sys.FrmUI
                 map.SetHelperAlert(MapAttrAttr.ColSpan, "对于傻瓜表单有效: 标识该字段TextBox横跨的宽度,占的单元格数量.");
 
                 //文本占单元格数量
-                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "Label单元格数量", true, true, "ColSpanAttrString",
+                map.AddDDLSysEnum(MapAttrAttr.LabelColSpan, 1, "Label单元格数量", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格@5=跨6个单元格@6=跨6个单元格");
-                map.SetHelperAlert(MapAttrAttr.TextColSpan, "对于傻瓜表单有效: 标识该字段Lable，标签横跨的宽度,占的单元格数量.");
+                map.SetHelperAlert(MapAttrAttr.LabelColSpan, "对于傻瓜表单有效: 标识该字段Lable，标签横跨的宽度,占的单元格数量.");
 
                 //文本跨行
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
@@ -310,6 +310,13 @@ namespace BP.Sys.FrmUI
                 rm.Icon = "icon-settings";
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "帮助弹窗显示";
+                rm.ClassMethodName = this.ToString() + ".DoFieldBigHelper()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-settings";
+                map.AddRefMethod(rm);
+
                 //rm = new RefMethod();
                 //rm.Title = "常用字段";
                 //rm.ClassMethodName = this.ToString() + ".DoGeneralField()";
@@ -368,6 +375,8 @@ namespace BP.Sys.FrmUI
                 rm.Title = "字段重命名";
                 rm.ClassMethodName = this.ToString() + ".DoRenameField()";
                 rm.HisAttrs.AddTBString("key1", "@KeyOfEn", "字段重命名为?", true, false, 0, 100, 100);
+               // rm.HisAttrs.AddTBString("k33ey1", "@KeyOfEn", "字段重33命名为?", true, false, 0, 100, 100);
+
                 rm.RefMethodType = RefMethodType.Func;
                 rm.Warning = "如果是节点表单，系统就会把该流程上的所有同名的字段都会重命名，包括NDxxxRpt表单。";
                 rm.Icon = "icon-refresh";
@@ -452,7 +461,7 @@ namespace BP.Sys.FrmUI
             get
             {
                 string sql = "SELECT ";
-                switch (SystemConfig.AppCenterDBType)
+                switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
                         sql = "SELECT '' AS No, '默认风格' as Name ";
@@ -636,6 +645,10 @@ namespace BP.Sys.FrmUI
         public string DoFastEnter()
         {
             return "../../Admin/FoolFormDesigner/MapExt/FastInput.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+        public string DoFieldBigHelper()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/FieldBigHelper.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         /// <summary>
         /// 快速录入
@@ -841,7 +854,7 @@ namespace BP.Sys.FrmUI
                 {
                     if (DBAccess.IsExitsTableCol(md.PTable, this.KeyOfEn) == true)
                     {
-                        switch (SystemConfig.AppCenterDBType)
+                        switch (BP.Difference.SystemConfig.AppCenterDBType)
                         {
                             case DBType.MSSQL:
                                 sql = "ALTER TABLE " + md.PTable + " ALTER column " + attr.Field + " NVARCHAR(" + attr.MaxLen + ")";
@@ -871,8 +884,8 @@ namespace BP.Sys.FrmUI
             #region 设置默认值.
             MapData mymd = new MapData();
             mymd.No = this.FK_MapData;
-            if (mymd.RetrieveFromDBSources() == 1)
-                BP.DA.DBAccess.UpdateTableColumnDefaultVal(mymd.PTable, attr.Field, attr.DefVal);
+            if (mymd.RetrieveFromDBSources() == 1 && attr.DefVal.Equals(this.GetValStrByKey("DefVal")) ==false)
+                BP.DA.DBAccess.UpdateTableColumnDefaultVal(mymd.PTable, attr.Field, this.GetValStrByKey("DefVal"));
             #endregion 设置默认值.
 
             //默认值.

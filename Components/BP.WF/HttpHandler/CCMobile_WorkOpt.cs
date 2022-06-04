@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
-using System.Web;
+﻿using System.Data;
 using BP.DA;
-using BP.Sys;
-using BP.Web;
-using BP.Port;
-using BP.En;
-using BP.WF;
-using BP.WF.Template;
 using System.Collections;
 
 namespace BP.WF.HttpHandler
@@ -157,7 +147,7 @@ namespace BP.WF.HttpHandler
 
             //计算出来曾经抄送过的人.
             Paras ps = new Paras();
-            ps.SQL = "SELECT CCToName FROM WF_CCList WHERE FK_Node=" + SystemConfig.AppCenterDBVarStr + "FK_Node AND WorkID=" +SystemConfig.AppCenterDBVarStr +"WorkID";
+            ps.SQL = "SELECT CCToName FROM WF_CCList WHERE FK_Node=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Node AND WorkID=" +BP.Difference.SystemConfig.AppCenterDBVarStr +"WorkID";
             ps.Add("FK_Node",this.FK_Node);
             ps.Add("WorkID",this.WorkID);
             //string sql = "SELECT CCToName FROM WF_CCList WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID;

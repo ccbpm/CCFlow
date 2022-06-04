@@ -7,6 +7,8 @@ using BP.En;
 using BP.Web;
 using BP.Sys;
 using BP.WF.Data;
+using BP.WF.Template.Frm;
+
 
 namespace BP.WF.Template
 {
@@ -355,7 +357,7 @@ namespace BP.WF.Template
         public FlowExt(string _No)
         {
             this.No = _No;
-            if (SystemConfig.IsDebug)
+            if (BP.Difference.SystemConfig.IsDebug)
             {
                 int i = this.RetrieveFromDBSources();
                 if (i == 0)
@@ -386,7 +388,7 @@ namespace BP.WF.Template
 
                 //处理流程类别.
                 string sql = "";
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 {
                     map.AddDDLEntities(FlowAttr.FK_FlowSort, null, "类别", new FlowSorts(), true);
                     // map.AddDDLEntities(FlowAttr.FK_FlowSort, "01", "流程类别", new FlowSorts(), true);
@@ -435,7 +437,7 @@ namespace BP.WF.Template
                  true, true, "GuestFlowRole", "@0=不参与@1=开始节点参与@2=中间节点参与");
                 map.SetHelperUrl(FlowAttr.GuestFlowRole, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661876&doc_id=31094");
 
-               // map.AddDDLSysEnum(FlowAttr.FlowAppType, 0, "流程应用类型", true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
+                // map.AddDDLSysEnum(FlowAttr.FlowAppType, 0, "流程应用类型", true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
                 //map.SetHelperUrl(FlowAttr.FlowAppType, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661877&doc_id=31094");
 
                 //map.AddDDLSysEnum(FlowAttr.SDTOfFlow, (int)TimelineRole.ByNodeSet, "时效性规则",
@@ -460,7 +462,7 @@ namespace BP.WF.Template
                 //map.AddDDLSysEnum(FlowAttr.FlowAppType, (int)FlowAppType.Normal, "流程应用类型", true, true, "FlowAppType", "@0=业务流程@1=工程类(项目组流程)@2=公文流程(VSTO)");
                 //map.SetHelperUrl(FlowAttr.FlowAppType, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661877&doc_id=31094");
 
-            //    map.AddTBString(FlowAttr.HelpUrl, null, "帮助文档", true, false, 0, 100, 10, true);
+                //    map.AddTBString(FlowAttr.HelpUrl, null, "帮助文档", true, false, 0, 100, 10, true);
 
 
                 //为 莲荷科技增加一个系统类型, 用于存储当前所在流程树的第2级流程树编号.
@@ -503,12 +505,13 @@ namespace BP.WF.Template
 
                 map.AddBoolean(FlowAttr.IsJM, false, "是否是数据加密流程(把所有字段加密存储)", true, true, true);
                 map.SetHelperUrl(FlowAttr.IsJM, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3952997&doc_id=31094");
-
+                //@Hongyan
+                map.AddBoolean(FlowAttr.IsEnableDBVer, false, "是否是启用数据版本控制", true, true, true);
                 // 数据存储.
                 map.AddDDLSysEnum(FlowAttr.DataStoreModel, (int)DataStoreModel.ByCCFlow, "数据存储", true, true, FlowAttr.DataStoreModel, "@0=数据轨迹模式@1=数据合并模式");
                 map.SetHelperUrl(FlowAttr.DataStoreModel, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3953009&doc_id=31094");
 
-                map.AddTBString(FlowAttr.PTable, null, "流程数据存储表", true, false, 0, 30, 10);
+                map.AddTBString(FlowAttr.PTable, null, "流程数据存储表", true, false, 0, 100, 10);
                 map.SetHelperUrl(FlowAttr.PTable, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=4000827&doc_id=31094");
 
 
@@ -527,7 +530,7 @@ namespace BP.WF.Template
                 msg += "\t\n 2. 用于待办的列表信息显示.";
                 msg += "\t\n 3. 配置格式为. Tel,Addr,Email  这些字段区分大小写并且是节点表单字段.";
                 msg += "\t\n 4. 数据存储在WF_GenerWorkFlow.AtPara里面.";
-                msg += "\t\n 5. 存储格式为: @BuessFields = 电话^Tel^18992323232;地址^Addr^山东济南;";
+                msg += "\t\n 5. 存储格式为: @BuessFields = 电话^Tel^18992323232;地址^Addr^山东成都;";
                 map.SetHelperAlert(FlowAttr.BuessFields, msg);
 
                 //表单URL. //@liuqiang 把他翻译到java里面去.
@@ -569,13 +572,11 @@ namespace BP.WF.Template
                 #endregion 数据同步方案
 
                 #region 轨迹信息
-                map.AddBoolean(FlowAttr.IsFrmEnable, true, "是否显示表单", true, true, false);
+                map.AddBoolean(FlowAttr.IsFrmEnable, false, "是否显示表单", true, true, false);
                 map.AddBoolean(FlowAttr.IsTruckEnable, true, "是否显示轨迹图", true, true, false);
                 map.AddBoolean(FlowAttr.IsTimeBaseEnable, true, "是否显示时间轴", true, true, false);
                 map.AddBoolean(FlowAttr.IsTableEnable, true, "是否显示时间表", true, true, false);
-                map.AddBoolean(FlowAttr.IsOPEnable, true, "是否显示操作", true, true, false);
-
-                map.AddBoolean(FlowAttr.IsOPEnable, true, "是否显示操作", true, true, false);
+                map.AddBoolean(FlowAttr.IsOPEnable, false, "是否显示操作", true, true, false);
                 map.AddDDLSysEnum(FlowAttr.TrackOrderBy, 0, "排序方式", true, true, FlowAttr.TrackOrderBy, "@0=按照时间先后顺序@1=倒序(新发生的在前面)");
                 #endregion 轨迹信息
 
@@ -583,6 +584,7 @@ namespace BP.WF.Template
                 map.AddTBString(FlowAttr.DesignerNo, null, "设计者编号", true, true, 0, 50, 10, false);
                 map.AddTBString(FlowAttr.DesignerName, null, "设计者名称", true, true, 0, 50, 10, false);
                 map.AddTBDateTime(FlowAttr.DesignTime, null, "创建时间", true, true);
+                map.AddTBString(FlowAttr.OrgNo, null, "组织编号", true, true, 0, 50, 10, false);
                 // map.AddTBStringDoc(FlowAttr.Note, null, "流程描述", true, false, true);
                 #endregion 开发者信息.
 
@@ -724,50 +726,52 @@ namespace BP.WF.Template
                 //rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 //map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.GroupName = "模拟测试";
-                rm.Title = "检查报告"; // "设计检查报告";
-                rm.Icon = "../../WF/Img/EntityFunc/Flow/CheckRpt.png";
-                rm.ClassMethodName = this.ToString() + ".DoCheck2018Url";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Icon = "icon-paper-plane";
-                // map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.GroupName = "模拟测试";
+                //rm.Title = "检查报告"; // "设计检查报告";
+                //rm.Icon = "../../WF/Img/EntityFunc/Flow/CheckRpt.png";
+                //rm.ClassMethodName = this.ToString() + ".DoCheck2018Url";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.Icon = "icon-paper-plane";
+                //// map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.GroupName = "模拟测试";
-                rm.Title = "检查报告(旧)"; // "设计检查报告";
-                rm.Icon = "../../WF/Img/EntityFunc/Flow/CheckRpt.png";
-                rm.ClassMethodName = this.ToString() + ".DoCheck";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Icon = "icon-paper-plane";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.GroupName = "模拟测试";
+                //rm.Title = "检查报告(旧)"; // "设计检查报告";
+                //rm.Icon = "../../WF/Img/EntityFunc/Flow/CheckRpt.png";
+                //rm.ClassMethodName = this.ToString() + ".DoCheck";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.Icon = "icon-paper-plane";
+                //map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.GroupName = "模拟测试";
-                rm.Title = "测试容器"; // "设计检查报告";
-                rm.Icon = "../../WF/Img/EntityFunc/Flow/CheckRpt.png";
-                rm.ClassMethodName = this.ToString() + ".TestingContainer";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                rm.Icon = "icon-paper-plane";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.GroupName = "模拟测试";
+                //rm.Title = "测试容器"; // "设计检查报告";
+                //rm.Icon = "../../WF/Img/EntityFunc/Flow/CheckRpt.png";
+                //rm.ClassMethodName = this.ToString() + ".TestingContainer";
+                //rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                //rm.Icon = "icon-paper-plane";
+                //map.AddRefMethod(rm);
                 #endregion 模拟测试.
 
                 #region 流程模版管理.
-                rm = new RefMethod();
-                rm.Title = "模版导入";
-                rm.Icon = "../../WF/Img/redo.png";
-                rm.ClassMethodName = this.ToString() + ".DoImp()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "流程模版";
-                rm.Icon = "icon-paper-plane";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "模版导入";
+                //rm.Icon = "../../WF/Img/redo.png";
+                //rm.ClassMethodName = this.ToString() + ".DoImp()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.GroupName = "流程模版";
+                //rm.Icon = "icon-paper-plane";
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "模版导出";
+               // rm.Title = "模版导出";
+                rm.Title = "流程模版";
+
                 rm.Icon = "../../WF/Img/undo.png";
                 rm.ClassMethodName = this.ToString() + ".DoExps()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "流程模版";
+                //    rm.GroupName = "流程模版";
                 rm.Icon = "icon-paper-plane";
                 map.AddRefMethod(rm);
                 #endregion 流程模版管理.
@@ -887,15 +891,14 @@ namespace BP.WF.Template
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
 
-
-                rm = new RefMethod();
-                rm.Icon = "../../WF/Img/Btn/Delete.gif";
-                rm.Title = "删除该流程全部数据"; // this.ToE("DelFlowData", "删除数据"); // "删除数据";
-                rm.Warning = "您确定要执行删除流程数据吗? \t\n该流程的数据删除后，就不能恢复，请注意删除的内容。";// "您确定要执行删除流程数据吗？";
-                rm.ClassMethodName = this.ToString() + ".DoDelData";
-                rm.Icon = "icon-briefcase";
-                rm.GroupName = "流程维护";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Icon = "../../WF/Img/Btn/Delete.gif";
+                //rm.Title = "删除该流程全部数据"; // this.ToE("DelFlowData", "删除数据"); // "删除数据";
+                //rm.Warning = "您确定要执行删除流程数据吗? \t\n该流程的数据删除后，就不能恢复，请注意删除的内容。";// "您确定要执行删除流程数据吗？";
+                //rm.ClassMethodName = this.ToString() + ".DoDelData";
+                //rm.Icon = "icon-briefcase";
+                //rm.GroupName = "流程维护";
+                //map.AddRefMethod(rm);
 
 
                 //带有参数的方法.
@@ -1284,7 +1287,7 @@ namespace BP.WF.Template
             DBAccess.RunSQL("DELETE FROM WF_RememberMe Where FK_Node IN(SELECT NodeID From WF_Node WHERE FK_Flow='" + fk_flow + "')");
             //删除流程的抄送信息
             DBAccess.RunSQL("DELETE FROM WF_CCList WHERE WorkID=" + workid);
-           
+
             //删除流程实例的信息
             DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow Where (WorkID=" + workid + " OR FID=" + workid + ")");
 
@@ -1539,7 +1542,7 @@ namespace BP.WF.Template
                 return "请填写恢复已完成的流程原因.";
 
             Flow fl = new Flow(this.No);
-            BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt("ND" + int.Parse(this.No) + "Rpt");
+            BP.WF.GERpt rpt = new BP.WF.GERpt("ND" + int.Parse(this.No) + "Rpt");
             rpt.OID = workid;
             int i = rpt.RetrieveFromDBSources();
             if (i == 0)
@@ -1771,13 +1774,13 @@ namespace BP.WF.Template
                 Paras ps = new Paras();
                 ps.Add("Title", title);
                 ps.Add("OID", wk.OID);
-                ps.SQL = "UPDATE " + table + " SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + SystemConfig.AppCenterDBVarStr + "OID";
+                ps.SQL = "UPDATE " + table + " SET Title=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);
 
-                ps.SQL = "UPDATE " + md.PTable + " SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + SystemConfig.AppCenterDBVarStr + "OID";
+                ps.SQL = "UPDATE " + md.PTable + " SET Title=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);
 
-                ps.SQL = "UPDATE WF_GenerWorkFlow SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "OID";
+                ps.SQL = "UPDATE WF_GenerWorkFlow SET Title=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title WHERE WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);
 
 
@@ -1825,17 +1828,17 @@ namespace BP.WF.Template
                 ps.Add("OID", wk.OID);
                 if (DBAccess.IsExitsTableCol(md.PTable, "Title") == true)
                 {
-                    ps.SQL = "UPDATE " + md.PTable + " SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + SystemConfig.AppCenterDBVarStr + "OID";
+                    ps.SQL = "UPDATE " + md.PTable + " SET Title=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "OID";
                     DBAccess.RunSQL(ps);
                 }
 
                 if (table.Equals(md.PTable) == false && DBAccess.IsExitsTableCol(table, "Title") == true)
                 {
-                    ps.SQL = "UPDATE " + table + " SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + SystemConfig.AppCenterDBVarStr + "OID";
+                    ps.SQL = "UPDATE " + table + " SET Title=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "OID";
                     DBAccess.RunSQL(ps);
                 }
 
-                ps.SQL = "UPDATE WF_GenerWorkFlow SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "OID";
+                ps.SQL = "UPDATE WF_GenerWorkFlow SET Title=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title WHERE WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);
 
             }
@@ -1956,7 +1959,7 @@ namespace BP.WF.Template
                 throw new Exception("传入的流程编号为空，请检查流程");
             string flowID = int.Parse(this.No).ToString() + "01";
             //return "../../Admin/AttrFlow/AutoStart.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=";
-            return "../../Admin/AttrFlow/AutoStart/Default.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=";
+            return "../../Admin/AttrFlow/AutoStart/Default.htm?FK_Flow=" + this.No ;
         }
         /// <summary>
         /// 执行运行
@@ -2013,7 +2016,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoImp()
         {
-            return "../../Admin/AttrFlow/Imp.htm?FK_Flow=" + this.No + "&Lang=CH&FK_FlowSort="+this.FK_FlowSort;
+            return "../../Admin/AttrFlow/Imp.htm?FK_Flow=" + this.No + "&Lang=CH&FK_FlowSort=" + this.FK_FlowSort;
         }
 
         /// <summary>
@@ -2210,7 +2213,7 @@ namespace BP.WF.Template
             if (DataType.IsNullOrEmpty(fs.ParentNo) == true)
                 fs.ParentNo = "0";
 
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
                 if (fs.ParentNo.Equals(WebUser.OrgNo) == true || fs.ParentNo.Equals("100") == true)
                     this.SysType = fl.FK_FlowSort;

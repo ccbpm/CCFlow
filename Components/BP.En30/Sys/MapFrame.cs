@@ -145,8 +145,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetValFloatByKey(MapFrameAttr.H, 700);
-                 
+                return this.GetValFloatByKey(MapFrameAttr.H);
             }
             set
             {
@@ -215,10 +214,12 @@ namespace BP.Sys
                 map.AddMyPK();
                 map.AddTBString(MapFrameAttr.FK_MapData, null, "表单ID", true, true, 0, 100, 20);
                 map.AddTBString(MapFrameAttr.Name, null, "名称", true, false, 0, 200, 20,true);
-                map.AddTBString(MapFrameAttr.URL, null, "URL", true, false, 0, 3000, 20, true);
-                map.AddTBString(MapFrameAttr.FrameURL, null, "FrameURL", true, false, 0, 3000, 20, true);
 
+                //@0=自定义@1=地图@2=流程轨迹表@3=流程轨迹图.
                 map.AddTBInt(MapFrameAttr.UrlSrcType, 0, "URL来源", false, false);
+
+                map.AddTBString(MapFrameAttr.FrameURL, null, "FrameURL", true, false, 0, 3000, 20, true);
+                map.AddTBString(MapFrameAttr.URL, null, "URL", false, false, 0, 3000, 20, true);
 
                 //map.AddDDLSysEnum(MapFrameAttr.UrlSrcType, 0, "URL来源", true, true, MapFrameAttr.UrlSrcType,
                 //"@0=自定义@1=地图@2=流程轨迹表@3=流程轨迹图");

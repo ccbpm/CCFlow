@@ -6,6 +6,8 @@ using BP.Sys;
 using System.Collections;
 using BP.Port;
 using System.IO;
+using BP.WF.Template.SFlow;
+using BP.WF.Template.CCEn;
 
 namespace BP.WF.Template
 {
@@ -411,7 +413,9 @@ namespace BP.WF.Template
 
 
                 //增加对退回到合流节点的 子线城的处理控制.
-                map.AddBoolean(BtnAttr.ThreadIsCanDel, false, "是否可以删除子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效，在子线程退回后的操作)？", true, true, true);
+                map.AddBoolean(BtnAttr.ThreadIsCanDel, true, "是否可以删除子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效，在子线程退回后的操作)？", true, true, true);
+                map.AddBoolean(BtnAttr.ThreadIsCanAdd, true, "是否可以增加子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效)？", true, true, true);
+
                 map.AddBoolean(BtnAttr.ThreadIsCanShift, false, "是否可以移交子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效，在子线程退回后的操作)？", true, true, true);
 
                 ////待办处理模式.
@@ -427,7 +431,12 @@ namespace BP.WF.Template
                 //map.AddTBString(NodeAttr.BlockAlert, null, "被阻塞时提示信息", true, false, 0, 700, 10, true);
                 //map.SetHelperUrl(NodeAttr.BlockAlert, "http://ccbpm.mydoc.io/?v=5404&t=17948");
 
-                map.AddBoolean(NodeAttr.IsAllowRepeatEmps, false, "是否允许子线程接受人员重复(仅当分流点向子线程发送时有效)?", true, true, true);
+              //  map.AddBoolean(NodeAttr.USSWorkIDRole, false, "是否允许子线程接受人员重复(仅当分流点向子线程发送时有效)?", true, true, true);
+                map.AddDDLSysEnum(NodeAttr.USSWorkIDRole, 0, "异表单子线程WorkID生成规则", true, true, NodeAttr.USSWorkIDRole,
+                    "@0=仅生成一个WorkID@1=按接受人生成WorkID");
+                map.SetHelperAlert(NodeAttr.USSWorkIDRole, "对上一个节点是合流节点，当前节点是异表单子线程有效.");
+
+
                 map.AddBoolean(NodeAttr.AutoRunEnable, false, "是否启用自动运行？(仅当分流点向子线程发送时有效)", true, true, true);
                 map.AddTBString(NodeAttr.AutoRunParas, null, "自动运行SQL", true, false, 0, 100, 10, true);
 
@@ -440,11 +449,20 @@ namespace BP.WF.Template
 
                 #region 自动跳转规则
                 map.AddBoolean(NodeAttr.AutoJumpRole0, false, "处理人就是发起人", true, true, true);
-                map.SetHelperUrl(NodeAttr.AutoJumpRole0, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3982473&doc_id=31094"); //增加帮助
+                map.SetHelperUrl(NodeAttr.AutoJumpRole0, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3980077&doc_id=31094"); //增加帮助
 
                 map.AddBoolean(NodeAttr.AutoJumpRole1, false, "处理人已经出现过", true, true, true);
                 map.AddBoolean(NodeAttr.AutoJumpRole2, false, "处理人与上一步相同", true, true, true);
                 map.AddBoolean(NodeAttr.WhenNoWorker, false, "(是)找不到人就跳转,(否)提示错误.", true, true, true);
+
+
+                map.AddTBString(NodeAttr.AutoJumpExp, null, "表达式", true, false, 0, 200, 10, true);
+                map.SetHelperAlert(NodeAttr.AutoJumpExp, "可以输入Url或SQL语句，请参考帮助文档。"); //增加帮助
+
+
+                map.AddDDLSysEnum(NodeAttr.SkipTime, 0, "执行跳转事件", true, true, NodeAttr.SkipTime, "@0=上一个节点发送时@1=当前节点工作打开时");
+                map.SetHelperUrl(NodeAttr.SkipTime, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3980077&doc_id=31094"); //增加帮助
+
                 //map.AddDDLSysEnum(NodeAttr.WhenNoWorker, 0, "找不到处理人处理规则",
                 //true, true, NodeAttr.WhenNoWorker, "@0=提示错误@1=自动转到下一步");
                 #endregion
@@ -454,7 +472,7 @@ namespace BP.WF.Template
                 map.AddAttrs(lab.EnMap.Attrs);
 
                 //节点工具栏,主从表映射.
-                map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node);
+                map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node,null, DtlEditerModel.DtlBatch);
 
                 #region 基础功能.
                 RefMethod rm = null;
@@ -585,7 +603,7 @@ namespace BP.WF.Template
                 //rm.Target = "_blank";
                 //rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 //map.AddRefMethod(rm);
-                //if (SystemConfig.CustomerNo == "HCBD")
+                //if (BP.Difference.SystemConfig.CustomerNo == "HCBD")
                 //{
                 //    /* 为海成邦达设置的个性化需求. */
                 //    rm = new RefMethod();
@@ -973,7 +991,7 @@ namespace BP.WF.Template
         {
             DataTable dt = this.ToDataTableField();
             dt.TableName = "Node";
-            dt.WriteXml(SystemConfig.PathOfDataUser + "XML/DefaultNewNodeAttr.xml");
+            dt.WriteXml(BP.Difference.SystemConfig.PathOfDataUser + "XML/DefaultNewNodeAttr.xml");
             return "执行成功.";
         }
         /// <summary>
@@ -1010,7 +1028,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSubFlow()
         {
-            return "../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.FrmSubFlow&PK=" + this.NodeID;
+            return "../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SFlow.FrmSubFlow&PK=" + this.NodeID;
         }
         /// <summary>
         /// 自动触发
@@ -1222,7 +1240,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string SaveHelpAlert(string text)
         {
-            string file = SystemConfig.PathOfDataUser + "CCForm/HelpAlert/" + this.NodeID + ".htm";
+            string file =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HelpAlert/" + this.NodeID + ".htm";
             string folder = System.IO.Path.GetDirectoryName(file);
             //若文件夹不存在，则创建
             if (System.IO.Directory.Exists(folder) == false)
@@ -1238,7 +1256,7 @@ namespace BP.WF.Template
         public string ReadHelpAlert()
         {
             string doc = "";
-            string file = SystemConfig.PathOfDataUser + "CCForm/HelpAlert/" + this.NodeID + ".htm";
+            string file =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HelpAlert/" + this.NodeID + ".htm";
             string folder = System.IO.Path.GetDirectoryName(file);
             if (System.IO.Directory.Exists(folder) != false)
             {
@@ -1270,9 +1288,8 @@ namespace BP.WF.Template
                 //开始节点不能设置游离状态
                 if (this.IsYouLiTai == true)
                     throw new Exception("当前节点是开始节点不能设置游离状态");
-                /*处理按钮的问题*/
-                //不能退回, 加签，移交，退回, 子线程.
-                //this.SetValByKey(BtnAttr.ReturnRole,(int)ReturnRole.CanNotReturn); //开始节点可以退回。
+                if (this.HuiQianRole != WF.HuiQianRole.None)
+                    throw new Exception("当前节点是开始节点不能启用会签按钮操作");
                 this.SetValByKey(BtnAttr.HungEnable, false);
                 this.SetValByKey(BtnAttr.ThreadEnable, false); //子线程.
             }
@@ -1300,12 +1317,7 @@ namespace BP.WF.Template
             {
                 /*如果是合流点*/
             }
-            //子线程也可以启用，只能查看不能做任何操作
-            /*  else
-              {
-                  this.SetValByKey(BtnAttr.ThreadEnable, false); //子线程.
-              }*/
-
+            
             //如果启动了会签,并且是抢办模式,强制设置为队列模式.或者组长模式.
             if (this.HuiQianRole != WF.HuiQianRole.None)
             {
@@ -1316,7 +1328,11 @@ namespace BP.WF.Template
                 {
                     DBAccess.RunSQL("UPDATE WF_Node SET TodolistModel=" + (int)TodolistModel.TeamupGroupLeader + ", TeamLeaderConfirmRole=" + (int)TeamLeaderConfirmRole.HuiQianLeader + " WHERE NodeID=" + this.NodeID);
                     if (this.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne && this.AddLeaderEnable == true)
-                        this.AddLeaderEnable = false;
+                    {
+                        throw new Exception("当前节点是组长模式且组长只有一个，不能启用加主持人的操作");
+                        // this.AddLeaderEnable = false;
+                    }
+
                 }
             }
 
@@ -1378,9 +1394,7 @@ namespace BP.WF.Template
                     workCheckAth.IsVisable = false; // 让其在form 上不可见.
 
                     //位置.
-                    workCheckAth.X = (float)94.09;
-                    workCheckAth.Y = (float)333.18;
-                    workCheckAth.W = (float)626.36;
+                
                     workCheckAth.H = (float)150;
 
                     //多附件.
@@ -1453,10 +1467,6 @@ namespace BP.WF.Template
             frmNodeComponent.RetrieveFromDBSources();
             Cash2019.UpdateRow(frmNodeComponent.ToString(), this.NodeID.ToString(), frmNodeComponent.Row);
 
-            FrmThread frmThread = new FrmThread();
-            frmThread.NodeID = this.NodeID;
-            frmThread.RetrieveFromDBSources();
-            Cash2019.UpdateRow(frmThread.ToString(), this.NodeID.ToString(), frmThread.Row);
 
             FrmTrack frmTrack = new FrmTrack();
             frmTrack.NodeID = this.NodeID;
@@ -1488,10 +1498,10 @@ namespace BP.WF.Template
             frmSubFlow.RetrieveFromDBSources();
             Cash2019.UpdateRow(frmSubFlow.ToString(), this.NodeID.ToString(), frmSubFlow.Row);
 
-            GetTask getTask = new GetTask();
-            getTask.NodeID = this.NodeID;
-            getTask.RetrieveFromDBSources();
-            Cash2019.UpdateRow(getTask.ToString(), this.NodeID.ToString(), getTask.Row);
+            //GetTask getTask = new GetTask();
+            //getTask.NodeID = this.NodeID;
+            //getTask.RetrieveFromDBSources();
+            //Cash2019.UpdateRow(getTask.ToString(), this.NodeID.ToString(), getTask.Row);
 
             //如果是组长会签模式，通用选择器只能单项选择
             if (this.HuiQianRole == HuiQianRole.TeamupGroupLeader && this.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne)

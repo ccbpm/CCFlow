@@ -54,7 +54,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 显示在那里？
         /// </summary>
-        public const string ShowWhere = "ShowWhere";
+        //public const string ShowWhere = "ShowWhere";
         /// <summary>
         /// 在工作处理器显示
         /// </summary>
@@ -150,20 +150,7 @@ namespace BP.WF.Template
                 SetValByKey(NodeToolbarAttr.Target, value);
             }
         }
-        /// <summary>
-        /// 显示在那里？
-        /// </summary>
-        public ShowWhere ShowWhere
-        {
-            get
-            {
-                return (ShowWhere)this.GetValIntByKey(NodeToolbarAttr.ShowWhere);
-            }
-            set
-            {
-                SetValByKey(NodeToolbarAttr.ShowWhere, (int)value);
-            }
-        }
+       
         /// <summary>
         /// 执行类型
         /// </summary>
@@ -281,8 +268,8 @@ namespace BP.WF.Template
                 map.AddTBString(NodeToolbarAttr.Target, null, "目标", true, false, 0, 100, 100, true);
 
                 //显示位置.
-                map.AddDDLSysEnum(NodeToolbarAttr.ShowWhere, 1, "显示位置", false,true, NodeToolbarAttr.ShowWhere,
-                    "@0=树形表单@1=工具栏@2=抄送工具栏");
+                //map.AddDDLSysEnum(NodeToolbarAttr.ShowWhere, 1, "显示位置", false,true, NodeToolbarAttr.ShowWhere,
+                 //   "@0=树形表单@1=工具栏@2=抄送工具栏");
 
                 map.AddBoolean(NodeToolbarAttr.IsMyFlow, false, "工作处理器", true, true);
                 map.AddBoolean(NodeToolbarAttr.IsMyTree, false, "流程树", true, true);

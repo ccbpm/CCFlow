@@ -19,8 +19,10 @@ namespace BP.Port
         /// UserID
         /// </summary>
         public const string UserID = "UserID";
+        /// <summary>
+        /// 组织编号
+        /// </summary>
         public const string OrgNo = "OrgNo";
-
         /// <summary>
         /// 部门
         /// </summary>
@@ -32,7 +34,7 @@ namespace BP.Port
         /// <summary>
         /// sid
         /// </summary>
-        public const string SID = "SID";
+        public const string Token = "Token";
         /// <summary>
         /// 手机号
         /// </summary>
@@ -41,6 +43,24 @@ namespace BP.Port
         /// 邮箱
         /// </summary>
         public const string Email = "Email";
+        /// <summary>
+        /// 直属部门领导
+        /// </summary>
+        public const string Leader = "Leader";
+        /// <summary>
+        /// 部门领导编号
+        /// </summary>
+        public const string LeaderName = "LeaderName";
+        /// <summary>
+        /// 排序
+        /// </summary>
+        public const string Idx = "Idx";
+        /// <summary>
+        /// 检索拼音
+        /// </summary>
+        public const string PinYin = "PinYin";
+
+        public const string EmpSta = "EmpSta";
 
         #endregion
     }
@@ -54,13 +74,37 @@ namespace BP.Port
         {
             get
             {
-                return this.GetValStringByKey(EntityNoNameAttr.No);
+                return this.GetValStringByKey(EmpAttr.No);
             }
             set
             {
                 this.SetValByKey(EmpAttr.No, value);
             }
         }
+        public string PinYin
+        {
+            get
+            {
+                return this.GetValStringByKey(EmpAttr.PinYin);
+            }
+            set
+            {
+                this.SetValByKey(EmpAttr.PinYin, value);
+            }
+        }
+
+        public int EmpSta
+        {
+            get
+            {
+                return this.GetValIntByKey(EmpAttr.EmpSta);
+            }
+            set
+            {
+                this.SetValByKey(EmpAttr.EmpSta, value);
+            }
+        }
+
         /// <summary>
         /// 用户ID:SAAS模式下UserID是可以重复的.
         /// </summary>
@@ -68,7 +112,7 @@ namespace BP.Port
         {
             get
             {
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                     return this.GetValStringByKey(EmpAttr.UserID);
 
                 return this.GetValStringByKey(EmpAttr.No);
@@ -77,17 +121,17 @@ namespace BP.Port
             {
                 this.SetValByKey(EmpAttr.UserID, value);
 
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
                     if (value.StartsWith(BP.Web.WebUser.OrgNo + "_") == true)
                     {
-                        this.SetValByKey(EmpAttr.UserID, value.Replace(BP.Web.WebUser.OrgNo+"_",""));
+                        this.SetValByKey(EmpAttr.UserID, value.Replace(BP.Web.WebUser.OrgNo + "_", ""));
                         this.SetValByKey(EmpAttr.No, value);
                     }
                     else
                         this.SetValByKey(EmpAttr.No, BP.Web.WebUser.OrgNo + "_" + value);
                 }
-                   
+
                 else
                     this.SetValByKey(EmpAttr.No, value);
             }
@@ -104,23 +148,6 @@ namespace BP.Port
             set
             {
                 this.SetValByKey(EmpAttr.OrgNo, value);
-            }
-        }
-        /// <summary>
-        /// 主要的部门。
-        /// </summary>
-        public Dept HisDept
-        {
-            get
-            {
-                try
-                {
-                    return new Dept(this.FK_Dept);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("@获取操作员" + this.UserID + "部门[" + this.FK_Dept + "]出现错误,可能是系统管理员没有给他维护部门.@" + ex.Message);
-                }
             }
         }
 
@@ -162,15 +189,15 @@ namespace BP.Port
                 this.SetValByKey(EmpAttr.Pass, value);
             }
         }
-        public string SID
+        public string Token
         {
             get
             {
-                return this.GetValStrByKey(EmpAttr.SID);
+                return this.GetValStrByKey(EmpAttr.Token);
             }
             set
             {
-                this.SetValByKey(EmpAttr.SID, value);
+                this.SetValByKey(EmpAttr.Token, value);
             }
         }
         public string Tel
@@ -218,17 +245,17 @@ namespace BP.Port
         public bool CheckPass(string pass)
         {
             //检查是否与通用密码相符.
-            //string gePass = SystemConfig.AppSettings["GenerPass"];
+            //string gePass =  BP.Difference.SystemConfig.AppSettings["GenerPass"];
             //if (gePass == pass && DataType.IsNullOrEmpty(gePass) == false)
             //    return true;
 
             //启用加密
-            if (SystemConfig.IsEnablePasswordEncryption == true)
+            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
             {
-                pass = BP.Tools.Cryptography.EncryptString(pass);
-                /*使用数据库校验.*/
-                if (this.Pass == pass)
-                    return true;
+                //pass = BP.Tools.Cryptography.EncryptString(pass);
+                ///*使用数据库校验.*/
+                //if (this.Pass == pass)
+                //    return true;
 
                 pass = BP.Tools.Cryptography.MD5_Encrypt(pass);
                 /*使用数据库校验.*/
@@ -296,7 +323,7 @@ namespace BP.Port
                 throw new Exception("@要查询的操作员编号为空。");
 
             userID = userID.Trim();
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
                 if (userID.Equals("admin") == true)
                     this.SetValByKey("No", userID);
@@ -329,33 +356,281 @@ namespace BP.Port
                 #region 字段
                 /* 关于字段属性的增加 .. */
                 //map.IsEnableVer = true;
-
                 map.AddTBStringPK(EmpAttr.No, null, "编号", true, false, 1, 50, 30);
 
-
                 //如果是集团模式或者是SAAS模式.
-                if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                     map.AddTBString(EmpAttr.UserID, null, "用户ID", true, false, 0, 50, 30);
 
-                map.AddTBString(EmpAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 30);
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 30);
+                map.AddTBString(EmpAttr.PinYin, null, "拼音", false, false, 0, 200, 30);
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 20, 10);
-                map.AddDDLEntities(EmpAttr.FK_Dept, null, "部门", new BP.Port.Depts(), true);
-                map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
+
+                map.AddDDLEntities(EmpAttr.FK_Dept, null, "部门", new BP.Port.Depts(), false);
+                map.AddTBString(EmpAttr.Token, null, "Token", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Tel, null, "手机号", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Email, null, "邮箱", false, false, 0, 36, 36);
 
-                // map.AddTBString("docs", null, "安全校33验码", false, false, 0, 4000, 36);
+                map.AddTBString(EmpAttr.Leader, null, "直属部门领导", false, false, 0, 20, 130);
+                map.SetHelperAlert(EmpAttr.Leader, "这里是领导的登录帐号，不是中文名字，用于流程的接受人规则中。");
+                map.AddTBString(EmpAttr.LeaderName, null, "直属部门领导", true, true, 0, 20, 130);
+
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                    map.AddTBString(EmpAttr.OrgNo, null, "组织编号", false, false, 0, 50, 50);
+                else
+                    map.AddTBString(EmpAttr.OrgNo, null, "组织编号", true, false, 0, 50, 50);
+
+                map.AddTBInt(EmpAttr.EmpSta, 0, "EmpSta", false, false);
+                map.AddTBInt(EmpAttr.Idx, 0, "Idx", false, false);
                 #endregion 字段
 
                 map.AddSearchAttr(EmpAttr.FK_Dept);
 
+                RefMethod rm = new RefMethod();
+                rm.Title = "设置图片签名";
+                rm.ClassMethodName = this.ToString() + ".DoSinger";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "部门岗位";
+                rm.ClassMethodName = this.ToString() + ".DoEmpDepts";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                //节点绑定部门. 节点绑定部门.
+                map.AttrsOfOneVSM.AddBranches(new DeptEmps(), new BP.Port.Depts(),
+                   BP.Port.DeptEmpAttr.FK_Emp,
+                   BP.Port.DeptEmpAttr.FK_Dept, "部门维护", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+
+                //用户组
+                map.AttrsOfOneVSM.Add(new TeamEmps(), new Teams(), TeamEmpAttr.FK_Emp, TeamEmpAttr.FK_Team,
+                    TeamAttr.Name, TeamAttr.No, "用户组", Dot2DotModel.Default);
+
+                rm = new RefMethod();
+                rm.Title = "修改密码";
+                rm.ClassMethodName = this.ToString() + ".DoResetpassword";
+                rm.HisAttrs.AddTBString("pass1", null, "输入密码", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("pass2", null, "再次输入", true, false, 0, 100, 100);
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "修改主部门";
+                rm.ClassMethodName = this.ToString() + ".DoEditMainDept";
+                rm.RefAttrKey = EmpAttr.FK_Dept;
+                rm.RefMethodType = RefMethodType.LinkModel;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "设置部门直属领导";
+                rm.ClassMethodName = this.ToString() + ".DoEditLeader";
+                rm.RefAttrKey = EmpAttr.LeaderName;
+                rm.RefMethodType = RefMethodType.LinkModel;
+                map.AddRefMethod(rm);
 
                 this._enMap = map;
                 return this._enMap;
             }
-
         }
+
+        public string DoEditMainDept()
+        {
+            return BP.Difference.SystemConfig.CCFlowWebPath + "GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
+        }
+
+        public string DoEditLeader()
+        {
+            return BP.Difference.SystemConfig.CCFlowWebPath + "GPM/EmpLeader.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
+        }
+
+        public string DoEmpDepts()
+        {
+            return BP.Difference.SystemConfig.CCFlowWebPath + "GPM/EmpDepts.htm?FK_Emp=" + this.No;
+        }
+
+        public string DoSinger()
+        {
+            //路径
+            return BP.Difference.SystemConfig.CCFlowWebPath + "GPM/Siganture.htm?EmpNo=" + this.No;
+        }
+        protected override bool beforeInsert()
+        {
+            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
+                this.Pass = BP.Tools.Cryptography.EncryptString(this.Pass);
+            return base.beforeInsert();
+        }
+
+        protected override bool beforeUpdateInsertAction()
+        {
+            //增加拼音，以方便查找.
+            if (DataType.IsNullOrEmpty(this.Name) == true)
+                throw new Exception("err@名称不能为空.");
+
+            if (BP.Web.WebUser.IsAdmin == false)
+                throw new Exception("err@非管理员无法操作.");
+
+            if (DataType.IsNullOrEmpty(this.Email) == false)
+            {
+                //邮箱格式
+                System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex("^\\s*([A-Za-z0-9_-]+(\\.\\w+)*@(\\w+\\.)+\\w{2,5})\\s*$");
+                if (r.IsMatch(this.Email) == false)
+                    throw new Exception("邮箱格式不正确.");
+            }
+
+            string pinyinQP = DataType.ParseStringToPinyin(this.Name).ToLower();
+            string pinyinJX = DataType.ParseStringToPinyinJianXie(this.Name).ToLower();
+            this.PinYin = "," + pinyinQP + "," + pinyinJX + ",";
+
+            //处理岗位信息.
+            DeptEmpStations des = new DeptEmpStations();
+            des.Retrieve(DeptEmpStationAttr.FK_Emp, this.No);
+
+            string depts = "";
+            string stas = "";
+
+            foreach (DeptEmpStation item in des)
+            {
+                Dept dept = new Dept();
+                dept.No = item.FK_Dept;
+                if (dept.RetrieveFromDBSources() == 0)
+                {
+                    item.Delete();
+                    continue;
+                }
+
+                //给拼音重新定义值,让其加上部门的信息.
+                this.PinYin = this.PinYin + pinyinJX + "/" + DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
+
+                BP.Port.Station sta = new BP.Port.Station();
+                sta.No = item.FK_Station;
+                if (sta.RetrieveFromDBSources() == 0)
+                {
+                    item.Delete();
+                    continue;
+                }
+
+                stas += "@" + dept.NameOfPath + "|" + sta.Name;
+                depts += "@" + dept.NameOfPath;
+            }
+            return base.beforeUpdateInsertAction();
+        }
+        protected override bool beforeDelete()
+        {
+            if (this.No.ToLower().Equals("admin") == true)
+                throw new Exception("err@管理员账号不能删除.");
+
+            return base.beforeDelete();
+        }
+
+        /// <summary>
+        /// 保存后修改WF_Emp中的邮箱
+        /// </summary>
+        protected override void afterInsertUpdateAction()
+        {
+            string sql = "Select Count(*) From WF_Emp Where No='" + this.No + "'";
+            int count = DBAccess.RunSQLReturnValInt(sql);
+            if (count == 0)
+                sql = "INSERT INTO WF_Emp (No,Name,Email) VALUES('" + this.No + "','" + this.Name + "','" + this.Email + "')";
+            else
+                sql = "UPDATE WF_Emp SET Email='" + this.Email + "'";
+            DBAccess.RunSQL(sql);
+
+            DeptEmp deptEmp = new DeptEmp();
+            deptEmp.FK_Dept = this.FK_Dept;
+            deptEmp.FK_Emp = this.No;
+            deptEmp.setMyPK(this.FK_Dept + "_" + this.No);
+            if (deptEmp.IsExit("MyPK", deptEmp.MyPK) == false)
+                deptEmp.Insert();
+
+
+            base.afterInsertUpdateAction();
+        }
+        /// <summary>
+        /// 删除之后要做的事情
+        /// </summary>
+        protected override void afterDelete()
+        {
+            DeptEmps des = new DeptEmps();
+            des.Delete(DeptEmpAttr.FK_Emp, this.No);
+
+            DeptEmpStations stas = new DeptEmpStations();
+            stas.Delete(DeptEmpAttr.FK_Emp, this.No);
+
+            base.afterDelete();
+        }
+
+        public static string GenerPinYin(string no, string name)
+        {
+            //增加拼音，以方便查找.
+            string pinyinQP = DataType.ParseStringToPinyin(name).ToLower();
+            string pinyinJX = DataType.ParseStringToPinyinJianXie(name).ToLower();
+            string py = "," + pinyinQP + "," + pinyinJX + ",";
+
+            //处理岗位信息.
+            DeptEmpStations des = new DeptEmpStations();
+            des.Retrieve(DeptEmpStationAttr.FK_Emp, no);
+
+            string depts = "";
+            string stas = "";
+
+            foreach (DeptEmpStation item in des)
+            {
+                Dept dept = new Dept();
+                dept.No = item.FK_Dept;
+                if (dept.RetrieveFromDBSources() == 0)
+                {
+                    item.Delete();
+                    continue;
+                }
+
+                //给拼音重新定义值,让其加上部门的信息.
+                py = py + pinyinJX + "/" + DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
+
+                BP.Port.Station sta = new BP.Port.Station();
+                sta.No = item.FK_Station;
+                if (sta.RetrieveFromDBSources() == 0)
+                {
+                    item.Delete();
+                    continue;
+                }
+
+                stas += "@" + dept.NameOfPath + "|" + sta.Name;
+                depts += "@" + dept.NameOfPath;
+            }
+
+            return py;
+        }
+
+        /// <summary>
+        /// 向上移动
+        /// </summary>
+        public void DoUp()
+        {
+            this.DoOrderUp(EmpAttr.FK_Dept, this.FK_Dept, EmpAttr.Idx);
+        }
+        /// <summary>
+        /// 向下移动
+        /// </summary>
+        public void DoDown()
+        {
+            this.DoOrderDown(EmpAttr.FK_Dept, this.FK_Dept, EmpAttr.Idx);
+        }
+
+        public string DoResetpassword(string pass1, string pass2)
+        {
+            if (pass1.Equals(pass2) == false)
+                return "两次密码不一致";
+
+            this.Pass = pass1;
+
+            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
+                this.Pass = BP.Tools.Cryptography.EncryptString(this.Pass);
+
+            this.Update();
+            return "密码设置成功";
+        }
+
+
         /// <summary>
         /// 获取集合
         /// </summary>
@@ -365,40 +640,41 @@ namespace BP.Port
         }
         #endregion 构造函数
 
-        #region 重写方法
-        protected override bool beforeDelete()
-        {
-            if (this.No.Equals("admin") == true)
-                throw new Exception("err@管理员账号不能删除.");
-
-            return base.beforeDelete();
-        }
-        #endregion 重写方法
-
-        #region 重写查询.
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <returns></returns>
-        public override int Retrieve()
-        {
-
-            return base.Retrieve();
-        }
-        /// <summary>
-        /// 查询.
-        /// </summary>
-        /// <returns></returns>
-        public override int RetrieveFromDBSources()
-        {
-
-            return base.RetrieveFromDBSources();
-
-        }
-        #endregion
-
 
         #region 方法测试代码.
+        /// <summary>
+        /// 禁用、启用用户
+        /// </summary>
+        /// <returns></returns>
+        public string DoUnEnable()
+        {
+            string userNo = this.No;
+            //判断当前人员是否有待办
+            string wfSql = "";
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            {
+                wfSql = " AND OrgNo='" + BP.Web.WebUser.OrgNo + "'";
+                userNo = this.UserID;
+            }
+            string sql = "";
+            /*不是授权状态*/
+            if (BP.Difference.SystemConfig.GetValByKeyBoolen("IsEnableTaskPool", false) == true)
+                sql = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE FK_Emp='" + userNo + "' AND TaskSta!=1 " + wfSql;
+            else
+                sql = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp='" + userNo + "' " + wfSql;
+
+            int count = DBAccess.RunSQLReturnValInt(sql);
+            if (count != 0)
+                return this.Name + "还存在待办，不能禁用该用户";
+            sql = "UPDATE WF_Emp SET UseSta=0 WHERE No='" + this.No + "'";
+            DBAccess.RunSQL(sql);
+            //this.Delete();
+            this.EmpSta = 1;
+            this.Update();
+            return this.Name + "已禁用";
+
+        }
+
         /// <summary>
         /// 测试
         /// </summary>
@@ -421,6 +697,7 @@ namespace BP.Port
 
             return "执行成功.";
         }
+
         #endregion 方法测试代码.
 
     }

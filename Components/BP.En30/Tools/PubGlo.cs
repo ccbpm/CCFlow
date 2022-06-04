@@ -92,7 +92,7 @@ namespace BP.Tools
 
             }
 
-            if (exp.Contains("@") && SystemConfig.IsBSsystem == true)
+            if (exp.Contains("@") && BP.Difference.SystemConfig.IsBSsystem == true)
             {
                 /*如果是bs*/
                 foreach (string key in HttpContextHelper.RequestParamKeys)

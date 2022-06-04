@@ -53,7 +53,7 @@ namespace BP.WF
             string guestNo, string title, Int64 parentWorkID, string parentFlowNo, int parentNodeID, string parentEmp)
         {
 
-            string dbstr = SystemConfig.AppCenterDBVarStr;
+            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
 
             Flow fl = new Flow(flowNo);
             Node nd = new Node(fl.StartNodeID);
@@ -204,7 +204,7 @@ namespace BP.WF
          
 
             Paras ps = new Paras();
-            string dbstr = SystemConfig.AppCenterDBVarStr;
+            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
             string sql;
 
             /*不是授权状态*/
@@ -253,7 +253,7 @@ namespace BP.WF
         /// <param name="guestName">客户名称</param>
         public static void SetGuestInfo(string flowNo, Int64 workID, string guestNo, string guestName)
         {
-            string dbstr = SystemConfig.AppCenterDBVarStr;
+            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkFlow SET GuestNo=" + dbstr + "GuestNo, GuestName=" + dbstr + "GuestName WHERE WorkID=" + dbstr + "WorkID";
             ps.Add("GuestNo", guestNo);
@@ -282,7 +282,7 @@ namespace BP.WF
             if (workID == 0)
                 throw new Exception("@设置外部用户待办信息失败:参数workID不能为0.");
 
-            string dbstr = SystemConfig.AppCenterDBVarStr;
+            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkerList SET GuestNo=" + dbstr + "GuestNo, GuestName=" + dbstr + "GuestName WHERE WorkID=" + dbstr + "WorkID AND IsPass=0";
             ps.Add("GuestNo", guestNo);

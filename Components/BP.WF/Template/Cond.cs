@@ -308,9 +308,9 @@ namespace BP.WF.Template
             this.setMyPK(DBAccess.GenerGUID());
             return base.beforeInsert();
         }
-       /// <summary>
-       /// 清除数据缓存
-       /// </summary>
+        /// <summary>
+        /// 清除数据缓存
+        /// </summary>
         protected override void afterInsertUpdateAction()
         {
             Flow flow = new Flow(this.FK_Flow);
@@ -660,9 +660,9 @@ namespace BP.WF.Template
 
                     string strs1 = "";
 
-                    BP.GPM.DeptEmpStations sts = new BP.GPM.DeptEmpStations();
+                    BP.Port.DeptEmpStations sts = new BP.Port.DeptEmpStations();
                     sts.Retrieve("FK_Emp", this.SpecOper);
-                    foreach (BP.GPM.DeptEmpStation st in sts)
+                    foreach (BP.Port.DeptEmpStation st in sts)
                     {
                         if (strs.Contains("@" + st.FK_Station + "@"))
                         {
@@ -684,23 +684,23 @@ namespace BP.WF.Template
                     string strs = this.OperatorValue.ToString();
                     strs += this.OperatorValueT.ToString();
 
-                    BP.GPM.DeptEmps sts = new BP.GPM.DeptEmps();
+                    BP.Port.DeptEmps sts = new BP.Port.DeptEmps();
 
-                    sts.Retrieve(BP.GPM.DeptEmpAttr.FK_Emp, this.SpecOper);
+                    sts.Retrieve(BP.Port.DeptEmpAttr.FK_Emp, this.SpecOper);
 
                     //@于庆海.
                     BP.Port.Emp emp = new BP.Port.Emp(this.SpecOper);
                     emp.UserID = this.SpecOper;
                     if (emp.RetrieveFromDBSources() == 1)
                     {
-                        BP.GPM.DeptEmp de = new BP.GPM.DeptEmp();
+                        BP.Port.DeptEmp de = new BP.Port.DeptEmp();
                         de.FK_Dept = emp.FK_Dept;
                         sts.AddEntity(de);
                     }
 
 
                     string strs1 = "";
-                    foreach (BP.GPM.DeptEmp st in sts)
+                    foreach (BP.Port.DeptEmp st in sts)
                     {
                         if (strs.Contains("@" + st.FK_Dept + "@"))
                         {
@@ -726,7 +726,7 @@ namespace BP.WF.Template
                     sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
                     sql = sql.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
                     sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-                   
+
                     sql = sql.Replace("@WebUser.OrgNo", BP.Web.WebUser.OrgNo);
                     //获取参数值
                     //System.Collections.Specialized.NameValueCollection urlParams = HttpContextHelper.RequestParams; // System.Web.HttpContext.Current.Request.Form;
@@ -757,9 +757,10 @@ namespace BP.WF.Template
                     //如果是本地数据源
                     if (DataType.IsNullOrEmpty(this.FK_DBSrc) == true || this.FK_DBSrc == "local")
                         result = DBAccess.RunSQLReturnValInt(sql, -1);
-                    else {
+                    else
+                    {
                         SFDBSrc dbSrc = new SFDBSrc(this.FK_DBSrc);
-                        result = dbSrc.RunSQLReturnInt(sql,0);
+                        result = dbSrc.RunSQLReturnInt(sql, 0);
                     }
                     if (result <= 0)
                         return false;
@@ -826,7 +827,7 @@ namespace BP.WF.Template
                     if (url.Contains("?") == false)
                         url = url + "?1=2";
 
-                    url = url.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
+                    url = url.Replace("@SDKFromServHost", BP.Difference.SystemConfig.AppSettings["SDKFromServHost"]);
                     url = BP.WF.Glo.DealExp(url, this.en, "");
 
                     #region 加入必要的参数.
@@ -841,8 +842,8 @@ namespace BP.WF.Template
                     if (url.Contains("&FID") == false)
                         url += "&FID=" + this.FID;
 
-                    if (url.Contains("&SID") == false)
-                        url += "&SID=" + BP.Web.WebUser.SID;
+                    if (url.Contains("&Token") == false)
+                        url += "&Token=" + BP.Web.WebUser.Token;
 
                     if (url.Contains("&UserNo") == false)
                         url += "&UserNo=" + BP.Web.WebUser.No;
@@ -851,7 +852,7 @@ namespace BP.WF.Template
                     #endregion 加入必要的参数.
 
                     #region 对url进行处理.
-                    if (SystemConfig.IsBSsystem)
+                    if (BP.Difference.SystemConfig.IsBSsystem)
                     {
                         /*是bs系统，并且是url参数执行类型.*/
                         string myurl = HttpContextHelper.RequestRawUrl;// BP.Sys.Base.Glo.Request.RawUrl;
@@ -878,7 +879,7 @@ namespace BP.WF.Template
                     //替换特殊的变量.
                     url = url.Replace("&?", "&");
 
-                    if (SystemConfig.IsBSsystem == false)
+                    if (BP.Difference.SystemConfig.IsBSsystem == false)
                     {
                         /*非bs模式下调用,比如在cs模式下调用它,它就取不到参数. */
                     }
@@ -887,7 +888,7 @@ namespace BP.WF.Template
                     if (url.Contains("http") == false)
                     {
                         /*如果没有绝对路径 */
-                        if (SystemConfig.IsBSsystem)
+                        if (BP.Difference.SystemConfig.IsBSsystem)
                         {
                             /*在cs模式下自动获取*/
                             string host = HttpContextHelper.RequestUrlHost;//BP.Sys.Base.Glo.Request.Url.Host;
@@ -897,10 +898,10 @@ namespace BP.WF.Template
                                 url = "http://" + HttpContextHelper.RequestUrlAuthority + url;
                         }
 
-                        if (SystemConfig.IsBSsystem == false)
+                        if (BP.Difference.SystemConfig.IsBSsystem == false)
                         {
                             /*在cs模式下它的baseurl 从web.config中获取.*/
-                            string cfgBaseUrl = SystemConfig.AppSettings["HostURL"];
+                            string cfgBaseUrl =  BP.Difference.SystemConfig.AppSettings["HostURL"];
                             if (DataType.IsNullOrEmpty(cfgBaseUrl))
                             {
                                 string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
@@ -960,7 +961,7 @@ namespace BP.WF.Template
                     string postData = "";
                     string apiUrl = this.OperatorValueStr;
                     if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
-                        apiUrl = apiUrl.Replace("@WebApiHost", SystemConfig.AppSettings["WebApiHost"]);
+                        apiUrl = apiUrl.Replace("@WebApiHost", BP.Difference.SystemConfig.AppSettings["WebApiHost"]);
 
                     //如果有参数
                     if (apiUrl.Contains("?"))
@@ -970,7 +971,7 @@ namespace BP.WF.Template
                         //api参数
                         string apiParams = apiUrl.Split('?')[1];
                         //参数替换
-                        apiParams = BP.WF.Glo.DealExp(apiParams, nd.HisWork);
+                        apiParams = BP.WF.Glo.DealExp(apiParams, this.en);
                         //执行POST
                         postData = BP.WF.Glo.HttpPostConnect(apiHost, apiParams);
 
@@ -990,11 +991,11 @@ namespace BP.WF.Template
                     #endregion WebApi接口
                 }
                 #region 审核组件的立场
-                if(this.HisDataFrom == ConnDataFrom.WorkCheck)
+                if (this.HisDataFrom == ConnDataFrom.WorkCheck)
                 {
                     //获取当前节点的审核组件信息
                     string tag = BP.WF.Dev2Interface.GetCheckTag(this.FK_Flow, this.WorkID, this.FK_Node, WebUser.No);
-                    if (tag.Contains("@FWCView="+this.OperatorValue) == true)
+                    if (tag.Contains("@FWCView=" + this.OperatorValue) == true)
                         return true;
                     return false;
                 }
@@ -1022,7 +1023,7 @@ namespace BP.WF.Template
                     MapAttr attr = new MapAttr(this.FK_Attr);
                     attr.setMyPK(this.FK_Attr);
                     if (attr.RetrieveFromDBSources() == 0)
-                        throw new Exception("err@到达【"+this.ToNodeID+"】方向条件设置错误,原来做方向条件的字段:"+this.FK_Attr+",已经不存在了.");
+                        throw new Exception("err@到达【" + this.ToNodeID + "】方向条件设置错误,原来做方向条件的字段:" + this.FK_Attr + ",已经不存在了.");
 
                     GEEntity myen = new GEEntity(attr.FK_MapData, en.OID);
                     return CheckIsPass(myen);
@@ -1154,11 +1155,11 @@ namespace BP.WF.Template
         protected override bool beforeUpdateInsertAction()
         {
 
-            if ( DataType.IsNullOrEmpty( this.RefFlowNo)==true)
+            if (DataType.IsNullOrEmpty(this.RefFlowNo) == true)
             {
-                if (this.CondType== CondType.Dir
-                    || this.CondType == CondType.Node 
-                    || this.CondType== CondType.SubFlow)
+                if (this.CondType == CondType.Dir
+                    || this.CondType == CondType.Node
+                    || this.CondType == CondType.SubFlow)
                 {
                     Node nd = new Node(this.FK_Node);
                     this.RefFlowNo = nd.FK_Flow;
@@ -1245,17 +1246,19 @@ namespace BP.WF.Template
 
                 //如果是混合计算.
                 string sql = "";
-                switch (SystemConfig.AppCenterDBType)
+                switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
                         sql = " SELECT TOP 1 No FROM WF_Emp WHERE " + exp;
                         break;
                     case DBType.MySQL:
+                    case DBType.PostgreSQL:
+                    case DBType.UX:
                         sql = " SELECT No FROM WF_Emp WHERE " + exp + "    limit 1 ";
                         break;
                     case DBType.Oracle:
                     case DBType.DM:
-                        sql = " SELECT No FROM WF_Emp WHERE " + exp + "    rownum <=1 ";
+                        sql = " SELECT No FROM WF_Emp WHERE " + exp + "  AND  rownum <=1 ";
                         break;
                     default:
                         throw new Exception("err@没有做的数据库类型判断.");
@@ -1269,7 +1272,7 @@ namespace BP.WF.Template
             }
             catch (Exception ex)
             {
-                throw new Exception("err@计算条件出现错误:"+this.NodeID+" - "+ex.Message);
+                throw new Exception("err@计算条件出现错误:" + this.NodeID + " - " + ex.Message);
             }
         }
         /// <summary>

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Reflection;
 using BP.DA;
 using BP.Port;
 using BP.En;
-using BP.Sys;
 namespace BP.GPM.DTalk.DTS
 {
     /// <summary>
@@ -45,7 +42,7 @@ namespace BP.GPM.DTalk.DTS
         /// <returns>返回执行结果</returns>
         public override object Do()
         {
-            GPM.Emp emp = new BP.GPM.Emp();
+            Emp emp = new BP.Port.Emp();
             emp.CheckPhysicsTable();
 
             DingDing ding = new DingDing();
@@ -61,7 +58,7 @@ namespace BP.GPM.DTalk.DTS
             else if (result.Length > 0)
             {
                 string webPath = "Log/Ding_GPM" + DateTime.Now.ToString("yyyy_MM_dd") + ".log";
-                string savePath = SystemConfig.PathOfDataUser + webPath;
+                string savePath =  BP.Difference.SystemConfig.PathOfDataUser + webPath;
 
                 BP.DA.Log.DebugWriteInfo(result);
                 return "执行成功<a href=\"/DataUser/" + webPath + "\" target='_blank'>下载日志</a>";

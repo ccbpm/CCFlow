@@ -137,7 +137,7 @@ namespace BP.Sys.XML
 		{
 			get
 			{
-				return SystemConfig.PathOfXML+"Ens/ActiveAttr.xml";
+				return BP.Difference.SystemConfig.PathOfXML+"Ens/ActiveAttr.xml";
 			}
 		}
 		/// <summary>

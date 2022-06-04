@@ -86,7 +86,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoEdit()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No + "&&QueryType=Sql";
+            return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No + "&&QueryType=Sql";
         }
         /// <summary>
         /// 删除之前要做的工作

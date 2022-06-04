@@ -34,21 +34,6 @@ namespace BP.DA
 		{
 			this.DBUrlType=type;
 		}
-     
-        #region 其他数据源.
-        private BP.Sys.SFDBSrc _HisDBSrc = null;
-        public BP.Sys.SFDBSrc HisDBSrc
-        {
-            get
-            {
-                return _HisDBSrc;
-            }
-            set
-            {
-                _HisDBSrc = value;
-            }
-        }
-        #endregion 其他数据源.
 
         /// <summary>
 		/// 默认值

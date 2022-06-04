@@ -10,6 +10,8 @@ using BP.WF.Template;
 using BP.WF.Data;
 using System.Text;
 using BP.Tools;
+using BP.WF.Template.SFlow;
+using BP.Difference;
 
 namespace BP.WF
 {
@@ -28,40 +30,113 @@ namespace BP.WF
         /// <param name="track"></param>
         public static void AddNodeFrmTrackDB(Flow fl, Node nd, Track track, Work wk)
         {
+            //流程是否启用了版本控制
+            if (fl.GetValBooleanByKey("IsEnableDBVer") == false)
+                return;
+            Paras ps = new Paras();
+            string dbstr = SystemConfig.AppCenterDBVarStr;
+            int ver = 1;
             //如果是单个表单.
             if (nd.HisFormType == NodeFormType.Develop
                  || nd.HisFormType == NodeFormType.FoolTruck
+                 || nd.HisFormType == NodeFormType.ChapterFrm
                 || nd.HisFormType == NodeFormType.FoolForm)
             {
                 //接点表单保存NDXXRpt
                 string frmID = "ND" + Int32.Parse(fl.No) + "Rpt";
-                string dtlJson = AddNodeFrmDtlDB(nd.NodeID, track.WorkID,nd.NodeFrmID);
-                BP.Sys.FrmDBVer.AddFrmDBTrack(frmID, track.WorkID.ToString(), track.MyPK, wk.ToJson(), dtlJson);
+                string dtlJson = AddNodeFrmDtlDB(nd.NodeID, track.WorkID, nd.NodeFrmID);
+                string athJson = AddNodeFrmAthDB(nd.NodeID, track.WorkID, nd.NodeFrmID);
+                //获取版本号
+                ps.SQL = "SELECT MAX(Ver) From Sys_FrmDBVer WHERE FrmID=" + dbstr + "FrmID AND RefPKVal=" + dbstr + "RefPKVal";
+                ps.Add("FrmID", frmID);
+                ps.Add("RefPKVal", track.WorkID);
+                ver = DBAccess.RunSQLReturnValInt(ps,0);
+                ver = ver == 0 ? 1:ver + 1;
+                BP.Sys.FrmDBVer.AddFrmDBTrack(ver,frmID, track.WorkID.ToString(), track.MyPK, wk.ToJson(), dtlJson,athJson,false);
                 return;
             }
+
             if (nd.HisFormType == NodeFormType.RefOneFrmTree)
             {
+                FrmNode fn = new FrmNode(nd.NodeID,nd.NodeFrmID);
+                if (fn.FrmSln == FrmSln.Readonly)
+                    return;
+                MapData md = nd.MapData;
+                //获取版本号
+                ps.SQL = "SELECT MAX(Ver) From Sys_FrmDBVer WHERE FrmID=" + dbstr + "FrmID AND RefPKVal=" + dbstr + "RefPKVal";
+                ps.Add("FrmID", md.No);
+                ps.Add("RefPKVal", track.WorkID);
+                ver = DBAccess.RunSQLReturnValInt(ps, 0);
+                ver = ver == 0 ? 1 : ver + 1;
+                //@Hongyan
+                if (md.HisFrmType == FrmType.ChapterFrm)
+                {
+                    //获取字段
+                    MapAttrs attrs = md.MapAttrs;
+                    foreach(MapAttr attr in attrs)
+                    {
+                        if (attr.UIVisible == false)
+                            continue;
+                        BP.Sys.FrmDBVer.AddKeyOfEnDBTrack(ver,nd.NodeFrmID, track.WorkID.ToString(), track.MyPK, wk.GetValStringByKey(attr.KeyOfEn), attr.KeyOfEn);
+                    }
+                    string json = AddNodeFrmDtlDB(nd.NodeID, track.WorkID, nd.NodeFrmID);
+                    string aths = AddNodeFrmAthDB(nd.NodeID, track.WorkID, nd.NodeFrmID);
+                    BP.Sys.FrmDBVer.AddFrmDBTrack(ver,nd.NodeFrmID, track.WorkID.ToString(), track.MyPK, null, json, aths,true);
+
+                    //获取控件类型是ChapterFrmLinkFrm的分组
+                    GroupFields groups =new GroupFields();
+                    groups.Retrieve(GroupFieldAttr.FrmID, md.No, GroupFieldAttr.CtrlType, "ChapterFrmLinkFrm");
+                    foreach(GroupField group in groups)
+                    {
+                        //获取表单数据
+                        GEEntity en = new GEEntity(group.CtrlID, track.WorkID);
+                        json = AddNodeFrmDtlDB(nd.NodeID, track.WorkID, group.CtrlID);
+                        aths = AddNodeFrmAthDB(nd.NodeID, track.WorkID, group.CtrlID);
+                        if (en.Row.ContainsKey("RDT"))
+                            en.SetValByKey("RDT", "");
+                        BP.Sys.FrmDBVer.AddFrmDBTrack(ver,group.CtrlID, track.WorkID.ToString(), track.MyPK, en.ToJson(), json, aths, false);
+                    }
+
+                    return;
+                }
                 string dtlJson = AddNodeFrmDtlDB(nd.NodeID, track.WorkID, nd.NodeFrmID);
-                BP.Sys.FrmDBVer.AddFrmDBTrack(nd.NodeFrmID, track.WorkID.ToString(), track.MyPK, wk.ToJson(), dtlJson);
+                string athJson = AddNodeFrmAthDB(nd.NodeID, track.WorkID, nd.NodeFrmID);
+                BP.Sys.FrmDBVer.AddFrmDBTrack(ver,nd.NodeFrmID, track.WorkID.ToString(), track.MyPK, wk.ToJson(), dtlJson, athJson,false);
                 return;
             }
 
             //如果是多个表单.
             if (nd.HisFormType == NodeFormType.SheetTree)
             {
-                FrmNodes fns = new FrmNodes(fl.No,nd.NodeID);
+                FrmNodes fns = new FrmNodes(fl.No, nd.NodeID);
 
                 foreach (FrmNode fn in fns)
                 {
                     if (fn.FrmSln == FrmSln.Readonly)
                         continue;
 
+                    //如果是禁用的.
+                    if (fn.FrmEnableRole == FrmEnableRole.Disable)
+                        continue;
+
+                    //如果是由参数启用的.
+                    if (fn.FrmEnableRole == FrmEnableRole.WhenHaveFrmPara)
+                        continue;
+
                     BP.Sys.GEEntity ge = new GEEntity(fn.FK_Frm);
                     ge.OID = track.WorkID;
                     if (ge.RetrieveFromDBSources() == 0)
                         continue;
+                    //获取版本号
+                    ps = new Paras();
+                    ps.SQL = "SELECT MAX(Ver) From Sys_FrmDBVer WHERE FrmID=" + dbstr + "FrmID AND RefPKVal=" + dbstr + "RefPKVal";
+                    ps.Add("FrmID", fn.FK_Frm);
+                    ps.Add("RefPKVal", track.WorkID);
+                    ver = DBAccess.RunSQLReturnValInt(ps, 0);
+                    ver = ver == 0 ? 1 : ver + 1;
                     string dtlJson = AddNodeFrmDtlDB(nd.NodeID, track.WorkID, fn.FK_Frm);
-                    BP.Sys.FrmDBVer.AddFrmDBTrack(fn.FK_Frm, track.WorkID.ToString(), track.MyPK, ge.ToJson(), dtlJson);
+                    string athJson = AddNodeFrmAthDB(nd.NodeID, track.WorkID, fn.FK_Frm);
+                    BP.Sys.FrmDBVer.AddFrmDBTrack(ver,fn.FK_Frm, track.WorkID.ToString(), track.MyPK, ge.ToJson(), dtlJson, athJson,false);
                 }
                 return;
             }
@@ -77,7 +152,7 @@ namespace BP.WF
         /// <param name="workID"></param>
         /// <param name="frmID"></param>
         /// <returns></returns>
-        public static string AddNodeFrmDtlDB(int nodeId, Int64 workID,string frmID)
+        public static string AddNodeFrmDtlDB(int nodeId, Int64 workID, string frmID)
         {
             MapData mapData = new MapData(frmID);
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
@@ -93,6 +168,30 @@ namespace BP.WF
             }
             return BP.Tools.Json.ToJson(ds);
         }
+        /// <summary>
+        /// 获取表单附件的数据集合
+        /// </summary>
+        /// <param name="nodeId"></param>
+        /// <param name="workID"></param>
+        /// <param name="frmID"></param>
+        /// <returns></returns>
+        public static string AddNodeFrmAthDB(int nodeId, Int64 workID, string frmID)
+        {
+            MapData mapData = new MapData(frmID);
+            GenerWorkFlow gwf = new GenerWorkFlow(workID);
+            FrmAttachments aths = mapData.FrmAttachments;
+            DataSet ds = new DataSet();
+            FrmAttachmentDBs dbs = null;
+            foreach (FrmAttachment ath in aths)
+            {
+                dbs = BP.WF.Glo.GenerFrmAttachmentDBs(ath, gwf.WorkID.ToString(),
+                    ath.MyPK, gwf.WorkID, gwf.FID, gwf.PWorkID, true, nodeId, frmID);
+                
+                ds.Tables.Add(dbs.ToDataTableField(ath.NoOfObj));
+            }
+            return BP.Tools.Json.ToJson(ds);
+        }
+
         /// <summary>
         /// 发送草稿实例 2020.10.27 fro 铁路局.
         /// </summary>
@@ -306,7 +405,7 @@ namespace BP.WF
                     switch (src.DBSrcType)
                     {
                         case Sys.DBSrcType.Localhost:
-                            switch (SystemConfig.AppCenterDBType)
+                            switch (BP.Difference.SystemConfig.AppCenterDBType)
                             {
                                 case DBType.MSSQL:
                                     break;
@@ -531,18 +630,11 @@ namespace BP.WF
 
                 string apiUrl = fl.DTSWebAPI;
                 Hashtable headerMap = new Hashtable();
-                //设置token
-                string token = "";
-                //如果对接系统的token
-                if (!DataType.IsNullOrEmpty(WebUser.Token))
-                    token = WebUser.Token;
-                else
-                    token = WebUser.SID;
 
                 //设置返回值格式
                 headerMap.Add("Content-Type", "application/json");
                 //设置token，用于接口校验
-                headerMap.Add("Authorization", token);
+                headerMap.Add("Authorization", WebUser.Token);
                 //执行POST
                 string postData = BP.WF.Glo.HttpPostConnect(apiUrl, headerMap, info.ToString());
                 var res = postData.ToJObject();
@@ -684,9 +776,9 @@ namespace BP.WF
 
                 var mysql = "";
                 if (wn.HisNode.HisRunModel == RunModel.SubThread)
-                    mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE (WorkID =" + wn.WorkID + " AND FID=" + wn.HisGenerWorkFlow.FID + ") AND ActionType!= " + (int)ActionType.UnSend + " AND NDTo = " + wn.HisNode.NodeID + " AND(NDTo != NDFrom) AND NDFrom In(Select Node From WF_Direction Where ToNode=" + wn.HisNode.NodeID + " AND FK_Flow='" + wn.HisFlow.No + "')";
+                    mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE (WorkID =" + wn.WorkID + " AND FID=" + wn.HisGenerWorkFlow.FID + ") AND ActionType!= " + (int)ActionType.UnSend + " AND NDTo = " + wn.HisNode.NodeID + " AND(NDTo != NDFrom) AND NDFrom In(Select Node From WF_Direction Where ToNode=" + wn.HisNode.NodeID + " AND FK_Flow='" + wn.HisFlow.No + "') ORDER BY RDT DESC";
                 else
-                    mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE WorkID =" + wn.WorkID + " AND ActionType!= " + (int)ActionType.UnSend + " AND NDTo = " + wn.HisNode.NodeID + " AND(NDTo != NDFrom) AND NDFrom In(Select Node From WF_Direction Where ToNode=" + wn.HisNode.NodeID + " AND FK_Flow='" + wn.HisFlow.No + "')";
+                    mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE WorkID =" + wn.WorkID + " AND ActionType!= " + (int)ActionType.UnSend + " AND NDTo = " + wn.HisNode.NodeID + " AND(NDTo != NDFrom) AND NDFrom In(Select Node From WF_Direction Where ToNode=" + wn.HisNode.NodeID + " AND FK_Flow='" + wn.HisFlow.No + "') ORDER BY RDT DESC";
 
                 //DataTable mydt = DBAccess.RunSQLReturnTable("SELECT FK_Node,FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!=" + this.HisNode.NodeID + " ORDER BY RDT DESC ");
                 DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
@@ -919,7 +1011,7 @@ namespace BP.WF
                                 string mysql = "SELECT COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE PWorkID=" + gwf.PWorkID + " AND FK_Flow='" + wn.HisFlow.No + "' AND WFState !=3 ";
                                 if (DBAccess.RunSQLReturnValInt(mysql, 0) == 0)
                                 {
-                                    DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 Where WorkID=" + pgwf.WorkID + " AND FK_Node=" + pgwf.FK_Node);
+                                    DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 Where WorkID=" + pgwf.WorkID + " AND FK_Node=" + pgwf.FK_Node + " AND IsPass=100");
 
                                 }
                             }
@@ -975,7 +1067,7 @@ namespace BP.WF
             pwk.OID = pworkid;
             pwk.RetrieveFromDBSources();
 
-            GERpt prpt = new BP.WF.Data.GERpt("ND" + int.Parse(subFlow.FK_Flow) + "Rpt");
+            GERpt prpt = new BP.WF.GERpt("ND" + int.Parse(subFlow.FK_Flow) + "Rpt");
             prpt.OID = pworkid;
             prpt.RetrieveFromDBSources();
 

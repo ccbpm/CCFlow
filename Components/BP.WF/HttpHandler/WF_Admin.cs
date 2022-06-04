@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
 using System.Data;
-using System.Text;
-using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
 using BP.Port;
-using BP.En;
-using BP.WF;
 using BP.WF.Template;
 using BP.Difference;
 
@@ -45,7 +40,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string TestFlow_GetRunOnPlant()
         {
-            return SystemConfig.RunOnPlant;
+            return BP.Difference.SystemConfig.RunOnPlant;
         }
         /// <summary>
         /// 加密工具.
@@ -165,7 +160,7 @@ namespace BP.WF.HttpHandler
 
                     case DeliveryWay.ByBindEmp:
                         //sql = "SELECT No,Name from Port_Emp where No in (select FK_Emp from WF_NodeEmp where FK_Node='" + nodeid + "') ";
-                        if (CCBPMRunModel.SAAS == SystemConfig.CCBPMRunModel)
+                        if (CCBPMRunModel.SAAS ==  BP.Difference.SystemConfig.CCBPMRunModel)
                             sql = "SELECT UserID,Name FROM Port_Emp A, WF_NodeEmp B WHERE A.UserID=B.FK_Emp AND B.FK_Node=" + nodeid;
                         else
                             sql = "SELECT No,Name FROM Port_Emp A, WF_NodeEmp B WHERE A.No=B.FK_Emp AND  B.FK_Node=" + nodeid;
@@ -187,22 +182,22 @@ namespace BP.WF.HttpHandler
                               + "        pdes.FK_Emp";
                         break;
                     case DeliveryWay.BySelected: //所有的人员多可以启动, 2016年11月开始约定此规则.
-                        switch (SystemConfig.AppCenterDBType)
+                        switch (BP.Difference.SystemConfig.AppCenterDBType)
                         {
                             case DBType.MSSQL:
-                                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                                     sql = "SELECT top 300 No as FK_Emp FROM Port_Emp ";
                                 else
                                     sql = "SELECT top 300 No as FK_Emp FROM Port_Emp WHERE OrgNo='" + WebUser.OrgNo + "' ";
                                 break;
                             case DBType.Oracle:
-                                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                                     sql = "SELECT  No as FK_Emp FROM Port_Emp WHERE ROWNUM < 300 ";
                                 else
                                     sql = "SELECT  No as FK_Emp FROM Port_Emp WHERE ROWNUM < 300 AND OrgNo='" + WebUser.OrgNo + "'";
                                 break;
                             case DBType.MySQL:
-                                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                                     sql = "SELECT  No as FK_Emp FROM Port_Emp limit 0,300 ";
                                 else
                                     sql = "SELECT  No as FK_Emp FROM Port_Emp limit 0,300 WHERE   OrgNo='" + WebUser.OrgNo + "' ";
@@ -243,7 +238,7 @@ namespace BP.WF.HttpHandler
 
                     emps += "," + myemp + ",";
 
-                    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                     {
                         emp = new Emp();
                         emp.No = myemp;
@@ -283,8 +278,8 @@ namespace BP.WF.HttpHandler
         {
             string userNo = this.GetRequestVal("UserNo");
             BP.WF.Dev2Interface.Port_Login(userNo);
-            string sid = BP.WF.Dev2Interface.Port_GenerSID(userNo);
-            string url = "../../WF/Port.htm?UserNo=" + userNo + "&SID=" + sid + "&DoWhat=" + this.GetRequestVal("DoWhat") + "&FK_Flow=" + this.FK_Flow + "&IsMobile=" + this.GetRequestVal("IsMobile");
+            string sid = BP.WF.Dev2Interface.Port_GenerToken(userNo);
+            string url = "../../WF/Port.htm?UserNo=" + userNo + "&Token=" + sid + "&DoWhat=" + this.GetRequestVal("DoWhat") + "&FK_Flow=" + this.FK_Flow + "&IsMobile=" + this.GetRequestVal("IsMobile");
             return "url@" + url;
         }
         #endregion 测试页面.
@@ -312,7 +307,7 @@ namespace BP.WF.HttpHandler
 
                 Hashtable ht = new Hashtable();
                 ht.Add("OSModel", 1); //组织结构类型.
-                ht.Add("DBType", SystemConfig.AppCenterDBType.ToString()); //数据库类型.
+                ht.Add("DBType", BP.Difference.SystemConfig.AppCenterDBType.ToString()); //数据库类型.
                 ht.Add("Ver", BP.WF.Glo.Ver); //版本号.
 
                 return BP.Tools.Json.ToJson(ht);
@@ -347,7 +342,7 @@ namespace BP.WF.HttpHandler
                 //    return "err@该用户已经被禁用.";
             }
 
-            return "info@系统成功安装 点击:<a href='../Portal/Login.htm' >这里直接登录流程设计器</a>";
+            return "info@系统成功安装 点击:<a href='../../Portal/Default.htm' >这里直接登录流程设计器</a>";
             // this.Response.Redirect("DBInstall.aspx?DoType=OK", true);
         }
         #endregion
@@ -409,7 +404,7 @@ namespace BP.WF.HttpHandler
 
             string add = "+";
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
                 add = "||";
 
             if (templateType == "DDLFullCtrl")

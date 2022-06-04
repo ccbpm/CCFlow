@@ -12,6 +12,7 @@ using BP.Sys;
 using BP.Pub;
 using BP.Sys.XML;
 using BP.Sys.Base;
+using BP.Difference;
 
 
 namespace BP.En
@@ -125,7 +126,7 @@ namespace BP.En
             dscfg.Dispose();
 
             // 增加特殊判断。
-            SystemConfig.AppCenterDSN = SystemConfig.AppCenterDSN.Replace("VisualFlowDesigner", "VisualFlow");
+            SystemConfig.AppCenterDSN = BP.Difference.SystemConfig.AppCenterDSN.Replace("VisualFlowDesigner", "VisualFlow");
             #endregion
             return true;
         }
@@ -184,9 +185,9 @@ namespace BP.En
             string path = AppDomain.CurrentDomain.BaseDirectory;
             if (Directory.Exists(path + "bin/"))
             {
-                if (!DataType.IsNullOrEmpty(SystemConfig.AppSettings["CCFlowAppPath"]) && Directory.Exists(path + SystemConfig.AppSettings["CCFlowAppPath"] + "bin/"))
+                if (!DataType.IsNullOrEmpty(BP.Difference.SystemConfig.AppSettings["CCFlowAppPath"]) && Directory.Exists(path + BP.Difference.SystemConfig.AppSettings["CCFlowAppPath"] + "bin/"))
                 {
-                    _BasePath = path + SystemConfig.AppSettings["CCFlowAppPath"] + "bin/";
+                    _BasePath = path + BP.Difference.SystemConfig.AppSettings["CCFlowAppPath"] + "bin/";
                 }
                 else
                 {
@@ -205,10 +206,10 @@ namespace BP.En
             {
                 if (_BasePath == null)
                 {
-                    if (SystemConfig.AppSettings["InstallPath"] == null)
+                    if (BP.Difference.SystemConfig.AppSettings["InstallPath"] == null)
                         _BasePath = "D:/";
                     else
-                        _BasePath = SystemConfig.AppSettings["InstallPath"];
+                        _BasePath = BP.Difference.SystemConfig.AppSettings["InstallPath"];
                 }
                 return _BasePath;
             }
@@ -524,7 +525,15 @@ namespace BP.En
                         continue;
 
                     if (Htable_En.ContainsKey(key) == false)
-                        Htable_En.Add(key, en);
+                    {
+                        try
+                        {
+                            Htable_En.Add(key, en);
+                        }
+                        catch
+                        {
+                        }
+                    }
                 }
             }
 
@@ -590,7 +599,14 @@ namespace BP.En
                     if (Htable_Ens.ContainsKey(str) == true)
                         continue;
 
-                    Htable_Ens.Add(str, en);
+                    //增加字典属性.
+                    try
+                    {
+                        Htable_Ens.Add(str, en);
+                    }
+                    catch
+                    {
+                    }
                 }
             }
             Entities ens = Htable_Ens[className] as Entities;

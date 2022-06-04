@@ -5,7 +5,6 @@ using System.Text;
 using System.Data;
 using BP.DA;
 using BP.En;
-using LitJson;
 
 namespace BP.Sys
 {
@@ -102,9 +101,6 @@ namespace BP.Sys
             en.NoOfObj = ctrlID;
             en.RetrieveFromDBSources();
 
-            en.X = x;
-            en.Y = y;
-            en.W = w;
             en.H = h;
             en.Update();
         }
@@ -115,8 +111,6 @@ namespace BP.Sys
             dtl.RetrieveFromDBSources();
 
             dtl.setFK_MapData(fk_mapdata);
-            dtl.X = x;
-            dtl.Y = y;
             dtl.SetValByKey(MapAttrAttr.UIWidth, w);
             dtl.SetValByKey(MapAttrAttr.UIHeight, h);
             dtl.Update();

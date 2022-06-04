@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using BP.DA;
+using BP.Difference;
 using BP.En;
 
 namespace BP.Sys
@@ -507,14 +508,14 @@ namespace BP.Sys
         /// <returns></returns>
         private string MakeFullFileFromFtp()
         {
-            string pathOfTemp = SystemConfig.PathOfTemp;
+            string pathOfTemp =  BP.Difference.SystemConfig.PathOfTemp;
             if (System.IO.Directory.Exists(pathOfTemp) == false)
                 System.IO.Directory.CreateDirectory(pathOfTemp);
 
             string tempFile = pathOfTemp + System.Guid.NewGuid() + "." + this.FileExts;
 
 
-            //  string tempFile = SystemConfig.PathOfTemp + + this.FileName;
+            //  string tempFile =  BP.Difference.SystemConfig.PathOfTemp + + this.FileName;
             try
             {
                 if (System.IO.File.Exists(tempFile) == true)
@@ -522,11 +523,11 @@ namespace BP.Sys
             }
             catch
             {
-                //  tempFile = SystemConfig.PathOfTemp + System.Guid.NewGuid() + this.FileName;
+                //  tempFile =  BP.Difference.SystemConfig.PathOfTemp + System.Guid.NewGuid() + this.FileName;
             }
 
-            FtpConnection conn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPServerPort,
-                SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+            FtpConnection conn = new FtpConnection(BP.Difference.SystemConfig.FTPServerIP, BP.Difference.SystemConfig.FTPServerPort,
+                SystemConfig.FTPUserNo, BP.Difference.SystemConfig.FTPUserPassword);
 
             conn.GetFile(this.FileFullName, tempFile, false, System.IO.FileAttributes.Archive);
 
@@ -562,8 +563,8 @@ namespace BP.Sys
 
                 if (ath.AthSaveWay == BP.Sys.AthSaveWay.FTPServer)
                 {
-                    FtpConnection ftpconn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPServerPort,
-                             SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+                    FtpConnection ftpconn = new FtpConnection(BP.Difference.SystemConfig.FTPServerIP, BP.Difference.SystemConfig.FTPServerPort,
+                             SystemConfig.FTPUserNo, BP.Difference.SystemConfig.FTPUserPassword);
 
                     string fullName = this.FileFullName;
                     ftpconn.DeleteFile(fullName);

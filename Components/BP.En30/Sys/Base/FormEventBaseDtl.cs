@@ -318,7 +318,7 @@ namespace BP.Sys.Base
                 }
             }
 
-            if (SystemConfig.IsBSsystem == true)
+            if (BP.Difference.SystemConfig.IsBSsystem == true)
             {
                 /*如果是bs系统, 就加入外部url的变量.*/
                 foreach (string key in HttpContextHelper.RequestParamKeys)

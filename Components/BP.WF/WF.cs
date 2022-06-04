@@ -96,39 +96,5 @@ namespace BP.WF
         /// </summary>
         public const string OneWork = "OneWork";
     }
-    public enum FlowShowType
-    {
-        /// <summary>
-        /// 当前工作
-        /// </summary>
-        MyWorks,
-        /// <summary>
-        /// 新建
-        /// </summary>
-        WorkNew,
-        /// <summary>
-        /// 工作步骤
-        /// </summary>
-        WorkStep,
-        /// <summary>
-        /// 工作图片
-        /// </summary>
-        WorkImages
-    }
-    public enum WorkProgress
-    {
-        /// <summary>
-        /// 正常运行
-        /// </summary>
-        Runing,
-        /// <summary>
-        /// 预警
-        /// </summary>
-        Alert,
-        /// <summary>
-        /// 逾期
-        /// </summary>
-        Timeout
-    }
-
+     
 }

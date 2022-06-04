@@ -7,8 +7,11 @@ using System.Collections;
 using BP.Port;
 using BP.WF.Data;
 using BP.WF.Template;
+using BP.WF.Template.CCEn;
 using BP.WF.Port;
 using System.Collections.Generic;
+using BP.WF.Template.SFlow;
+
 
 namespace BP.WF
 {
@@ -300,13 +303,13 @@ namespace BP.WF
                 sql += "  AND B.FormType=" + (int)NodeFormType.FoolTruck + " "; // 仅仅找累加表单.
                 sql += "  AND NDFrom!=" + this.NodeID + " "; //排除当前的表单.
 
-                //if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                //if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
                 //    sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+CONVERT(varchar(10),B.NodeID) ) ";
 
-                //if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                //if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
                 //    sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+cast(B.NodeID as varchar(10)) ) ";
 
-                //if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                //if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
                 //    sql += "  AND (B.NodeFrmID='' OR B.NodeFrmID IS NULL OR B.NodeFrmID='ND'+to_char(B.NodeID) ) ";
 
                 sql += "  AND (A.WorkID=" + this.WorkID + ") ";
@@ -414,7 +417,7 @@ namespace BP.WF
 
                     obj = ens as PushMsgs;
 
-                    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                     {
 
                         //检查是否有默认的发送？如果没有就增加上他。
@@ -429,7 +432,7 @@ namespace BP.WF
                                 isHaveReturn = true;
                         }
 
-                        if (isHaveSend == false )
+                        if (isHaveSend == false)
                         {
                             PushMsg pm = new PushMsg();
                             pm.FK_Event = EventListNode.SendSuccess;
@@ -475,7 +478,7 @@ namespace BP.WF
                 return obj;
             }
         }
-      
+
         public NodeStations NodeStations
         {
             get
@@ -717,10 +720,10 @@ namespace BP.WF
                             string sql = "";
                             sql = "ALTER TABLE WF_Emp ADD StartFlows text ";
 
-                            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
                                 sql = "ALTER TABLE WF_Emp ADD StartFlows blob";
 
-                            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+                            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
                                 sql = "ALTER TABLE  WF_Emp ADD StartFlows bytea NULL ";
 
                             DBAccess.RunSQL(sql);
@@ -817,9 +820,7 @@ namespace BP.WF
                 workCheckAth.IsVisable = false; // 让其在form 上不可见.
 
                 //位置.
-                workCheckAth.X = (float)94.09;
-                workCheckAth.Y = (float)333.18;
-                workCheckAth.W = (float)626.36;
+          
                 workCheckAth.H = (float)150;
 
                 //多附件.
@@ -1000,10 +1001,7 @@ namespace BP.WF
             {
                 return this.GetValBooleanByKey(NodeAttr.AutoJumpRole1);
             }
-            set
-            {
-                this.SetValByKey(NodeAttr.AutoJumpRole1, value);
-            }
+
         }
         /// <summary>
         /// 自动跳转规则2-处理人与上一步相同
@@ -1014,9 +1012,25 @@ namespace BP.WF
             {
                 return this.GetValBooleanByKey(NodeAttr.AutoJumpRole2);
             }
-            set
+        }
+        /// <summary>
+        /// 跳转的表达式.
+        /// </summary>
+        public string AutoJumpExp
+        {
+            get
             {
-                this.SetValByKey(NodeAttr.AutoJumpRole2, value);
+                return this.GetValStringByKey(NodeAttr.AutoJumpExp);
+            }
+        }
+        /// <summary>
+        /// 执行跳转时间 0=上节点发送时，1=打开时.
+        /// </summary>
+        public int SkipTime
+        {
+            get
+            {
+                return this.GetValIntByKey(NodeAttr.SkipTime);
             }
         }
         /// <summary>
@@ -1145,8 +1159,7 @@ namespace BP.WF
             get
             {
                 string str = this.GetValStrByKey(NodeAttr.FormUrl);
-                str = str.Replace("@SDKFromServHost",
-                    SystemConfig.AppSettings["SDKFromServHost"]);
+                str = str.Replace("@SDKFromServHost",BP.Difference.SystemConfig.AppSettings["SDKFromServHost"]);
                 return str;
             }
             set
@@ -1373,7 +1386,7 @@ namespace BP.WF
             }
         }
 
-        
+
         /// <summary>
         /// 是否是开始节点
         /// </summary>
@@ -1433,10 +1446,6 @@ namespace BP.WF
             get
             {
                 return this.GetValIntByKey(NodeAttr.WhoExeIt);
-            }
-            set
-            {
-                this.SetValByKey(NodeAttr.WhoExeIt, value);
             }
         }
         /// <summary>
@@ -1911,7 +1920,7 @@ namespace BP.WF
                 return null;
             else
                 return wk;
-            
+
         }
         #endregion
 
@@ -2139,17 +2148,17 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 是否允许子线程接受人员重复(对子线程点有效)?
+        /// 异表单子线程WorkID生成规则
         /// </summary>
-        public bool IsAllowRepeatEmps
+        public int USSWorkIDRole
         {
             get
             {
-                return this.GetValBooleanByKey(NodeAttr.IsAllowRepeatEmps);
+                return this.GetValIntByKey(NodeAttr.USSWorkIDRole);
             }
             set
             {
-                this.SetValByKey(NodeAttr.IsAllowRepeatEmps, value);
+                this.SetValByKey(NodeAttr.USSWorkIDRole, value);
             }
         }
         /// <summary>
@@ -2182,11 +2191,19 @@ namespace BP.WF
         /// <summary>
         /// 是否杀掉全部的子线程
         /// </summary>
-        public bool IsKillEtcThread
+        public bool ThreadIsCanDel
         {
             get
             {
-                return this.GetValBooleanByKey(NodeAttr.IsKillEtcThread);
+                return this.GetValBooleanByKey(BtnAttr.ThreadIsCanDel);
+            }
+        }
+
+        public bool ThreadIsCanAdd
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.ThreadIsCanAdd);
             }
         }
         /// <summary>
@@ -2637,7 +2654,7 @@ namespace BP.WF
             this.NodeID = _oid;
             this.Retrieve();
 
-            //if (SystemConfig.IsDebug)
+            //if (BP.Difference.SystemConfig.IsDebug)
             //{
             //    if (this.RetrieveFromDBSources() <= 0)
             //        throw new Exception("Node Retrieve 错误没有ID=" + _oid);
@@ -2663,7 +2680,7 @@ namespace BP.WF
             ndName = ndName.Replace("ND", "");
             this.NodeID = int.Parse(ndName);
 
-            if (SystemConfig.IsDebug)
+            if (BP.Difference.SystemConfig.IsDebug)
             {
                 if (this.RetrieveFromDBSources() <= 0)
                     throw new Exception("Node Retrieve 错误没有ID=" + ndName);
@@ -2718,13 +2735,6 @@ namespace BP.WF
             get
             {
                 return this.GetValFloatByKey(NodeWorkCheckAttr.FWC_H);
-            }
-        }
-        public float FWC_W
-        {
-            get
-            {
-                return this.GetValFloatByKey(NodeWorkCheckAttr.FWC_W);
             }
         }
 
@@ -2782,7 +2792,7 @@ namespace BP.WF
                 //map.AddTBString(NodeAttr.FK_FlowSortT, null, "FK_FlowSortT", false, true, 0, 100, 10);
 
                 map.AddTBString(NodeAttr.FrmAttr, null, "FrmAttr", false, true, 0, 300, 10);
-              //  map.AddTBInt(NodeAttr.IsBUnit, 0, "是否是节点模版(业务单元)", true, false);
+                //  map.AddTBInt(NodeAttr.IsBUnit, 0, "是否是节点模版(业务单元)", true, false);
                 #endregion 基本属性.
 
                 #region 审核组件.
@@ -2874,10 +2884,13 @@ namespace BP.WF
 
                 map.AddTBInt(BtnAttr.ScripRole, 0, "小纸条规则", true, true);
 
-                map.AddTBInt(NodeAttr.IsAllowRepeatEmps, 0, "是否允许子线程接受人员重复(对子线程点有效)?", true, true);
+                map.AddTBInt(NodeAttr.USSWorkIDRole, 0, "是否允许子线程接受人员重复(对子线程点有效)?", true, true);
                 map.AddTBInt(NodeAttr.IsBackTracking, 1, "是否可以在退回后原路返回(只有启用退回功能才有效)", true, true);
                 map.AddTBInt(NodeAttr.IsBackResetAccepter, 0, "原路返回后是否自动计算接收人", true, true);
-                map.AddTBInt(NodeAttr.IsKillEtcThread, 1, "是否允许删除所有的子线程(对于子线程向分流节点退回有效)", true, true);
+                map.AddTBInt(BtnAttr.ThreadIsCanDel, 0, "是否可以删除子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效，在子线程退回后的操作)？", true, true);
+                map.AddTBInt(BtnAttr.ThreadIsCanAdd, 0, "是否可以增加子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效)？", true, true);
+
+                map.AddTBInt(NodeAttr.IsKillEtcThread, 0, "是否允许删除所有的子线程(对于子线程向分流节点退回有效)", true, true);
 
                 map.AddTBInt(NodeAttr.IsRM, 1, "是否启用投递路径自动记忆功能?", true, true);
                 map.AddTBInt(NodeAttr.IsOpenOver, 0, "是否打开即审批?", true, true);
@@ -2896,7 +2909,12 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.AutoJumpRole0, 0, "处理人就是提交人0", false, false);
                 map.AddTBInt(NodeAttr.AutoJumpRole1, 0, "处理人已经出现过1", false, false);
                 map.AddTBInt(NodeAttr.AutoJumpRole2, 0, "处理人与上一步相同2", false, false);
-                 
+
+                map.AddTBString(NodeAttr.AutoJumpExp, null, "表达式", true, false, 0, 200, 10, true);
+                //@0=上一个节点发送时@1=当前节点工作打开时.
+                map.AddTBInt(NodeAttr.SkipTime, 0, "执行跳转事件", false, false);
+
+
                 // 批处理规则， 2021.1.20 为福建人寿重构.
                 // @0=不启用，1=审核组件模式，2=审核分组字段模式,3=自定义url模式.
                 map.AddTBInt(NodeAttr.BatchRole, 0, "批处理", true, true);
@@ -2958,7 +2976,6 @@ namespace BP.WF
 
                 #region 子流程相关的参数
                 map.AddTBFloat(FrmSubFlowAttr.SF_H, 300, "高度", true, false);
-                map.AddTBFloat(FrmSubFlowAttr.SF_W, 400, "宽度", true, false);
                 #endregion 子流程相关的参数
 
                 //map.AddDDLSysEnum(FrmEventAttr.MsgCtrl, 0, "消息发送控制", true, true, FrmEventAttr.MsgCtrl,
@@ -3055,7 +3072,7 @@ namespace BP.WF
 
             return base.beforeDelete();
         }
-        
+
         /// <summary>
         /// 修复map
         /// </summary>
@@ -3299,7 +3316,7 @@ namespace BP.WF
             attr.DefVal = "0";
             attr.HisEditType = BP.En.EditType.Readonly;
             attr.Insert();
-          
+
 
             attr = new BP.Sys.MapAttr();
             attr.setFK_MapData(md.No);
@@ -3318,7 +3335,7 @@ namespace BP.WF
             attr.SetValByKey(MapAttrAttr.FK_MapData, md.No);
             attr.setEditType(BP.En.EditType.UnDel);
             attr.SetValByKey(MapAttrAttr.KeyOfEn, "RDT");
-                attr.SetValByKey(MapAttrAttr.Name, "接受时间");
+            attr.SetValByKey(MapAttrAttr.Name, "接受时间");
             attr.SetValByKey(MapAttrAttr.MyDataType, DataType.AppDateTime);
             attr.setUIContralType(UIContralType.TB);
             attr.SetValByKey(MapAttrAttr.UIVisible, false);

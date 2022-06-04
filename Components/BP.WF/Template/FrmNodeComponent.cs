@@ -4,6 +4,8 @@ using BP.DA;
 using BP.Sys;
 using BP.En;
 using BP.WF;
+using BP.WF.Template.SFlow;
+
 namespace BP.WF.Template
 {
     /// <summary>
@@ -143,9 +145,7 @@ namespace BP.WF.Template
 
                 FrmSubFlow subflow = new FrmSubFlow();
                 map.AddAttrs(subflow.EnMap.Attrs);
-
-                FrmThread thread = new FrmThread();
-                map.AddAttrs(thread.EnMap.Attrs);
+ 
 
                 //轨迹组件.
                 FrmTrack track = new FrmTrack();
@@ -233,29 +233,7 @@ namespace BP.WF.Template
                 }
             }
             #endregion 处理轨迹组件.
-
-            #region 子线程组件.
-            FrmThread thread = new FrmThread(this.NodeID);
-            thread.Copy(this);
-
-            if (thread.FrmThreadSta == FrmThreadSta.Disable)
-            {
-                gf.Delete(GroupFieldAttr.CtrlID, "FrmThread" + this.No);
-            }
-            else
-            {
-                if (gf.IsExit(GroupFieldAttr.CtrlID, "FrmThread" + this.No) == false)
-                {
-                    gf = new GroupField();
-                    gf.EnName = "ND" + this.NodeID;
-                    gf.CtrlID = "FrmThread" + this.No;
-                    gf.CtrlType = GroupCtrlType.Thread;
-                    gf.Lab = "子线程";
-                    gf.Idx = 0;
-                    gf.Insert(); //插入.
-                }
-            }
-            #endregion 子线程组件.
+           
 
             #region 流转自定义组件.
             FrmTransferCustom ftc = new FrmTransferCustom(this.NodeID);
@@ -319,7 +297,7 @@ namespace BP.WF.Template
         /// <param name="fk_mapdata">s</param>
         public FrmNodeComponents(string fk_mapdata)
         {
-            if (SystemConfig.IsDebug)
+            if (BP.Difference.SystemConfig.IsDebug)
                 this.Retrieve("No", fk_mapdata);
             else
                 this.RetrieveFromCash("No", (object)fk_mapdata);

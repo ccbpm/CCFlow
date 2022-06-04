@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Reflection;
-using BP.DA;
-using BP.Port;
-using BP.En;
-using BP.Sys;
+﻿using BP.En;
 
 namespace BP.GPM.DTalk.DTS
 {
@@ -47,7 +41,7 @@ namespace BP.GPM.DTalk.DTS
         public override object Do()
         {
             DingDing ding = new DingDing();
-            string savePath = SystemConfig.PathOfDataUser + "UserIcon";
+            string savePath =  BP.Difference.SystemConfig.PathOfDataUser + "UserIcon";
             bool result = ding.DownLoadUserIcon(savePath);
             if (result == true)
                 return "执行成功...";

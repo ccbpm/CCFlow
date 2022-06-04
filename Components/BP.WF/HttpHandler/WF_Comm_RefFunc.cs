@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
-using System.Web;
 using BP.DA;
-using BP.Sys;
-using BP.WF.Template;
 using BP.Port;
 
 namespace BP.WF.HttpHandler
@@ -627,7 +623,7 @@ namespace BP.WF.HttpHandler
         {
             if (DBAccess.IsExitsTableCol("Port_StationType", "Idx") == false)
             {
-                if (DBAccess.IsView("Port_StationType", SystemConfig.AppCenterDBType) == false)
+                if (DBAccess.IsView("Port_StationType", BP.Difference.SystemConfig.AppCenterDBType) == false)
                 {
                     StationType st = new StationType();
                     st.CheckPhysicsTable();

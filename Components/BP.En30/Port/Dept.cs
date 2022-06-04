@@ -28,11 +28,14 @@ namespace BP.Port
         /// 顺序号
         /// </summary>
         public const string Idx = "Idx";
+
+        public const string NameOfPath = "NameOfPath";
+
     }
     /// <summary>
     /// 部门
     /// </summary>
-    public class Dept : EntityNoName
+    public class Dept : EntityTree
     {
         #region 属性
         /// <summary>
@@ -49,13 +52,18 @@ namespace BP.Port
                 this.SetValByKey(DeptAttr.ParentNo, value);
             }
         }
-        public int Grade
+        public string NameOfPath
         {
             get
             {
-                return 1;
+                return this.GetValStrByKey(DeptAttr.NameOfPath);
+            }
+            set
+            {
+                this.SetValByKey(DeptAttr.NameOfPath, value);
             }
         }
+        
         #endregion
 
         #region 构造函数
@@ -95,20 +103,57 @@ namespace BP.Port
 
                 map.AddTBStringPK(DeptAttr.No, null, "编号", true, false, 1, 50, 20);
                 map.AddTBString(DeptAttr.Name, null, "名称", true, false, 0, 100, 30);
+                map.AddTBString(DeptAttr.NameOfPath, null, "部门路径", true, false, 0, 100, 30);
+
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 100, 30);
                 map.AddTBString(DeptAttr.OrgNo, null, "OrgNo", true, true, 0, 50, 30);
-                map.AddDDLEntities(DeptAttr.Leader, null, "部门领导",new BP.Port.Emps(),true);
+                map.AddDDLEntities(DeptAttr.Leader, null, "部门领导", new BP.Port.Emps(), true);
                 map.AddTBInt(DeptAttr.Idx, 0, "序号", false, true);
 
                 RefMethod rm = new RefMethod();
-                rm.Title = "历史变更";
-                rm.ClassMethodName = this.ToString() + ".History";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //rm.Title = "历史变更";
+                //rm.ClassMethodName = this.ToString() + ".History";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
                 #region 增加点对多属性
-                //他的部门权限
-                // map.AttrsOfOneVSM.Add(new DeptStations(), new Stations(), DeptStationAttr.FK_Dept, DeptStationAttr.FK_Station, StationAttr.Name, StationAttr.No, "岗位权限");
+                rm.Title = "重置该部门一下的部门路径";
+                rm.ClassMethodName = this.ToString() + ".DoResetPathName";
+                rm.RefMethodType = RefMethodType.Func;
+
+                string msg = "当该部门名称变化后,该部门与该部门的子部门名称路径(Port_Dept.NameOfPath)将发生变化.";
+                msg += "\t\n 该部门与该部门的子部门的人员路径也要发生变化Port_Emp列DeptDesc.StaDesc.";
+                msg += "\t\n 您确定要执行吗?";
+                rm.Warning = msg;
+
+                map.AddRefMethod(rm);
+
+                //rm = new RefMethod();
+                //rm.Title = "增加同级部门";
+                //rm.ClassMethodName = this.ToString() + ".DoSameLevelDept";
+                //rm.HisAttrs.AddTBString("No", null, "同级部门编号", true, false, 0, 100, 100);
+                //rm.HisAttrs.AddTBString("Name", null, "部门名称", true, false, 0, 100, 100);
+                //map.AddRefMethod(rm);
+
+                //rm = new RefMethod();
+                //rm.Title = "增加下级部门";
+                //rm.ClassMethodName = this.ToString() + ".DoSubDept";
+                //rm.HisAttrs.AddTBString("No", null, "同级部门编号", true, false, 0, 100, 100);
+                //rm.HisAttrs.AddTBString("Name", null, "部门名称", true, false, 0, 100, 100);
+                //map.AddRefMethod(rm);
+
+
+                //节点绑定人员. 使用树杆与叶子的模式绑定.
+                string rootNo = "0";
+                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single && (DataType.IsNullOrEmpty(WebUser.No) == true || WebUser.IsAdmin == false))
+                    rootNo = "@WebUser.FK_Dept";
+                else
+                    rootNo = "@WebUser.OrgNo";
+                map.AttrsOfOneVSM.AddBranchesAndLeaf(new DeptEmps(), new BP.Port.Emps(),
+                   DeptEmpAttr.FK_Dept,
+                   DeptEmpAttr.FK_Emp, "对应人员", BP.Port.EmpAttr.FK_Dept, BP.Port.EmpAttr.Name, BP.Port.EmpAttr.No, rootNo);
+
+
                 #endregion
 
                 this._enMap = map;
@@ -117,6 +162,82 @@ namespace BP.Port
         }
         #endregion
 
+        /// <summary>
+        /// 重置部门
+        /// </summary>
+        /// <returns></returns>
+        public string DoResetPathName()
+        {
+            this.GenerNameOfPath();
+            return "重置成功.";
+        }
+
+        /// <summary>
+        /// 生成部门全名称.
+        /// </summary>
+        public void GenerNameOfPath()
+        {
+            string name = this.Name;
+
+            //根目录不再处理
+            if (this.IsRoot == true)
+            {
+                this.NameOfPath = name;
+                this.DirectUpdate();
+                this.GenerChildNameOfPath(this.No);
+                return;
+            }
+
+            Dept dept = new Dept();
+            dept.No = this.ParentNo;
+            if (dept.RetrieveFromDBSources() == 0)
+                return;
+
+            while (true)
+            {
+                if (dept.IsRoot)
+                    break;
+
+                name = dept.Name + "\\" + name;
+                dept = new Dept(dept.ParentNo);
+            }
+            //根目录
+            name = dept.Name + "\\" + name;
+            this.NameOfPath = name;
+            this.DirectUpdate();
+
+            this.GenerChildNameOfPath(this.No);
+
+            //更新人员路径信息.
+            BP.Port.Emps emps = new BP.Port.Emps();
+            emps.Retrieve(BP.Port.EmpAttr.FK_Dept, this.No);
+            foreach (BP.Port.Emp emp in emps)
+                emp.Update();
+        }
+        
+        /// <summary>
+        /// 处理子部门全名称
+        /// </summary>
+        /// <param name="FK_Dept"></param>
+        public void GenerChildNameOfPath(string deptNo)
+        {
+            Depts depts = new Depts(deptNo);
+            if (depts != null && depts.Count > 0)
+            {
+                foreach (Dept dept in depts)
+                {
+                    dept.GenerNameOfPath();
+                    GenerChildNameOfPath(dept.No);
+
+
+                    //更新人员路径信息.
+                    BP.Port.Emps emps = new BP.Port.Emps();
+                    emps.Retrieve(BP.Port.EmpAttr.FK_Dept, this.No);
+                    foreach (BP.Port.Emp emp in emps)
+                        emp.Update();
+                }
+            }
+        }
         /// <summary>
         /// 执行排序
         /// </summary>
@@ -158,9 +279,7 @@ namespace BP.Port
         /// <returns></returns>
         public override int RetrieveFromDBSources()
         {
-
             return base.RetrieveFromDBSources();
-
         }
         #endregion
 
@@ -168,7 +287,7 @@ namespace BP.Port
     /// <summary>
     ///部门s
     /// </summary>
-    public class Depts : EntitiesNoName
+    public class Depts : EntitiesTree
     {
         #region 初始化实体.
         /// <summary>
@@ -186,7 +305,6 @@ namespace BP.Port
         /// </summary>
         public Depts()
         {
-
         }
         /// <summary>
         /// 部门集合
@@ -194,24 +312,33 @@ namespace BP.Port
         /// <param name="parentNo">父部门No</param>
         public Depts(string parentNo)
         {
-
             this.Retrieve(DeptAttr.ParentNo, parentNo);
-
         }
+
         #endregion 初始化实体.
 
         #region 重写查询,add by zhoupeng 2015.09.30 为了适应能够从webservice数据源查询数据.
-        /// <summary>
-        /// 重写查询全部适应从WS取数据需要
-        /// </summary>
-        /// <returns></returns>
         public override int RetrieveAll()
         {
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single || WebUser.No == "admin")
-                return base.RetrieveAll();
 
-            //按照orgNo查询.
-            return this.Retrieve("OrgNo", WebUser.OrgNo);
+            if (BP.Web.WebUser.No.Equals("admin") == true)
+            {
+                QueryObject qo = new QueryObject(this);
+                qo.addOrderBy(DeptAttr.Idx);
+                return qo.DoQuery();
+            }
+
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+            {
+                QueryObject qo = new QueryObject(this);
+                qo.AddWhere(DeptAttr.No, " = ", BP.Web.WebUser.FK_Dept);
+                qo.addOr();
+                qo.AddWhere(DeptAttr.ParentNo, " = ", BP.Web.WebUser.FK_Dept);
+                qo.addOrderBy(DeptAttr.Idx);
+                return qo.DoQuery();
+            }
+
+            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, DeptAttr.Idx);
         }
         /// <summary>
         /// 重写重数据源查询全部适应从WS取数据需要
@@ -220,7 +347,7 @@ namespace BP.Port
         public override int RetrieveAllFromDBSource()
         {
 
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 return base.RetrieveAllFromDBSource();
 
             //按照orgNo查询.

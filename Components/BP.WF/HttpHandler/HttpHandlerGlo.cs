@@ -1,9 +1,5 @@
-﻿using System;
-using System.Net;
-using System.Web;
+﻿using System.Net;
 using System.IO;
-using BP.Sys;
-using BP.Web;
 using System.Collections.Generic;
 using BP.Difference;
 
@@ -38,11 +34,11 @@ namespace BP.WF.HttpHandler
             }
             if (!SystemConfig.AttachWebSite.Trim().EndsWith("/"))
             {
-                filepath = SystemConfig.AttachWebSite.Trim() + "/" + filepath;
+                filepath =  BP.Difference.SystemConfig.AttachWebSite.Trim() + "/" + filepath;
             }
             else
             {
-                filepath = SystemConfig.AttachWebSite.Trim() + filepath;
+                filepath =  BP.Difference.SystemConfig.AttachWebSite.Trim() + filepath;
             }
 
             HttpWebRequest myRequest = (HttpWebRequest)HttpWebRequest.Create(filepath);

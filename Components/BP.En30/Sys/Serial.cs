@@ -90,11 +90,11 @@ namespace BP.Sys
             Paras ps = new Paras();
             ps.Add("p", CfgKey);
 
-            string sql = "SELECT IntVal Sys_Serial WHERE CfgKey="+SystemConfig.AppCenterDBVarStr+"p";
+            string sql = "SELECT IntVal Sys_Serial WHERE CfgKey="+BP.Difference.SystemConfig.AppCenterDBVarStr+"p";
             int val = DBAccess.RunSQLReturnValInt(sql, 0,ps);
             if (val == 0)
             {
-                sql = "INSERT INTO Sys_Serial VALUES(" + SystemConfig.AppCenterDBVarStr + "p,1)";
+                sql = "INSERT INTO Sys_Serial VALUES(" + BP.Difference.SystemConfig.AppCenterDBVarStr + "p,1)";
                 DBAccess.RunSQLReturnVal(sql, ps);
                 return 1;
             }
@@ -102,7 +102,7 @@ namespace BP.Sys
             {
                 val++;
                 ps.Add("intV", val);
-                sql = "UPDATE  Sys_Serial SET IntVal="+SystemConfig.AppCenterDBVarStr+"intV WHERE  CfgKey=" + SystemConfig.AppCenterDBVarStr + "p";
+                sql = "UPDATE  Sys_Serial SET IntVal="+BP.Difference.SystemConfig.AppCenterDBVarStr+"intV WHERE  CfgKey=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "p";
                 DBAccess.RunSQLReturnVal(sql);
                 return val;
             }

@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Data;
-using System.Text;
-using System.Web;
-using BP.DA;
+﻿using BP.DA;
 using BP.Sys;
-using BP.Web;
-using BP.Port;
 using BP.En;
 using BP.WF;
-using BP.WF.Template;
-using BP.WF.Data;
 using BP.WF.HttpHandler;
 using BP.CCBill.Template;
 
@@ -124,12 +114,12 @@ namespace BP.CCBill
             attr.setMyPK(attr.FK_MapData + "_" + attr.KeyOfEn);
             attr.DirectInsert();
 
-            
+
             #endregion 把表单导入到流程上去.
 
 
             //创建查询菜单.放入到与该实体平行的位置.
-            BP.GPM.Menu2020.Menu menu = new BP.GPM.Menu2020.Menu();
+            BP.CCFast.CCMenu.Menu menu = new BP.CCFast.CCMenu.Menu();
             menu.ModuleNo = this.ModuleNo; //隶属与实体一个模块.
             menu.Name = this.Name;
             menu.Idx = 0;
@@ -149,7 +139,7 @@ namespace BP.CCBill
             en.FrmID = this.FrmID;
             en.DTSWhenFlowOver = true; // 是否在流程结束后同步?
             en.DTSDataWay = 1; // 同步所有相同的字段.
-            en.UrlExt = "../CCBill/Opt/StartFlowByNewEntity.htm?FlowNo=" + en.FlowNo + "&FrmID=" + this.FrmID + "&MenuNo=" + menu.No;
+            en.UrlExt = "/WF/CCBill/Opt/StartFlowByNewEntity.htm?FlowNo=" + en.FlowNo + "&FrmID=" + this.FrmID + "&MenuNo=" + menu.No;
             en.Update();
 
             //增加一个集合链接.

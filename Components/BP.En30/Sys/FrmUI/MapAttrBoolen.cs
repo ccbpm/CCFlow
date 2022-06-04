@@ -53,34 +53,6 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.KeyOfEn, value);
             }
         }
-        /// <summary>
-        /// 绑定的枚举ID
-        /// </summary>
-        public string UIBindKey
-        {
-            get
-            {
-                return this.GetValStringByKey(MapAttrAttr.UIBindKey);
-            }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.UIBindKey, value);
-            }
-        }
-        /// <summary>
-        /// 数据类型
-        /// </summary>
-        public int MyDataType
-        {
-            get
-            {
-                return this.GetValIntByKey(MapAttrAttr.MyDataType);
-            }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.MyDataType, value);
-            }
-        }
         #endregion
 
         #region 构造方法
@@ -120,21 +92,19 @@ namespace BP.Sys.FrmUI
                 #region 基本信息.
 
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
-                map.AddTBString(MapAttrAttr.FK_MapData, null, "实体标识", false, false, 1, 100, 20);
+                map.AddTBString(MapAttrAttr.FK_MapData, null, "表单ID", false, false, 1, 100, 20);
 
-                map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20, true); //@李国文
+                map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20, true); 
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
 
                 //数据类型.
                 map.AddDDLSysEnum(MapAttrAttr.MyDataType, 4, "数据类型", true, false);
-
-
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
 
-                map.AddTBString(MapAttrAttr.DefVal, "0", "默认值(是否选中？0=否,1=是)", true, false, 0, 200, 20);
+                map.AddTBString(MapAttrAttr.DefVal, "0", "默认值(是否选中？0=否,1=是)", true, false, 0, 10, 20);
 
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
-                map.AddTBStringDoc(MapAttrAttr.Tip, null, "激活提示", true, false); //@李国文
+                map.AddTBStringDoc(MapAttrAttr.Tip, null, "激活提示", true, false); 
                 #endregion 基本信息.
 
                 #region 傻瓜表单。
@@ -143,7 +113,7 @@ namespace BP.Sys.FrmUI
                   "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //文本占单元格数量
-                map.AddDDLSysEnum(MapAttrAttr.TextColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
+                map.AddDDLSysEnum(MapAttrAttr.LabelColSpan, 1, "文本单元格数量", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //文本跨行
@@ -153,12 +123,10 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
 
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
-               // map.AddTBInt(MapAttrAttr.UIWidth, 0, "宽度(对自由表单有效)", true, false);
-                map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); //@李国文
+                map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false); 
 
                 //CCS样式
                 map.AddDDLSQL(MapAttrAttr.CSSCtrl, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
-
                 #endregion 傻瓜表单。
 
 
@@ -182,7 +150,6 @@ namespace BP.Sys.FrmUI
                 rm.RefAttrKey = MapAttrAttr.CSSCtrl;
                 map.AddRefMethod(rm);
 
-
                 this._enMap = map;
                 return this._enMap;
             }
@@ -198,8 +165,6 @@ namespace BP.Sys.FrmUI
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
 
-
-
             #region 修改默认值.
             //如果没默认值.
             if (DataType.IsNullOrEmpty(this.DefVal)==true)
@@ -207,11 +172,8 @@ namespace BP.Sys.FrmUI
             MapData md = new MapData();
             md.No = this.FK_MapData;
             if (md.RetrieveFromDBSources() == 1)
-            {
                 BP.DA.DBAccess.UpdateTableColumnDefaultVal(md.PTable, this.KeyOfEn, int.Parse(this.DefVal));
-            }
             #endregion 修改默认值.
-
 
             base.afterInsertUpdateAction();
         }

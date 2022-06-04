@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Data;
-using BP.DA;
-using BP.Web;
-using BP.En;
-using BP.Port;
+﻿using BP.En;
 
 namespace BP.WF.Port.Admin2Group
 {
@@ -25,7 +19,9 @@ namespace BP.WF.Port.Admin2Group
         /// 组织
         /// </summary>
         public const string OrgNo = "OrgNo";
-
+        /// <summary>
+        /// FlowSortNo
+        /// </summary>
         public const string FlowSortNo = "FlowSortNo";
     }
     /// <summary>

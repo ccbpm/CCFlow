@@ -13,7 +13,6 @@ namespace BP.WF
     /// </summary>
     public class CCBill_FlowEvent
     {
-
         /// <summary>
         /// 流程结束的时候要处理的事件
         /// </summary>
@@ -76,16 +75,12 @@ namespace BP.WF
                     ge.Update();
                 }
 
-                //GenerWorkFlow gwf = wn.HisGenerWorkFlow;
-                //gwf.PWorkID = gwf.WorkID;
-                //gwf.PFlowNo = menu.FrmID;
-
                 //写入日志.
                 string myparas = "";
                 myparas += "@PWorkID=" + wn.WorkID;
                 myparas += "@PFlowNo=" + wn.HisFlow.No;
                 myparas += "@PNodeID=" + wn.HisNode.NodeID;
-                BP.CCBill.Dev2Interface.Dict_AddTrack(menu.FrmID,  wn.WorkID, CCBill.FrmActionType.StartRegFlow, "流程创建实体",
+                BP.CCBill.Dev2Interface.Dict_AddTrack(menu.FrmID,  wn.WorkID.ToString(), CCBill.FrmActionType.StartRegFlow, "流程创建实体",
                     myparas, wn.HisFlow.No, wn.HisFlow.Name, wn.HisNode.NodeID, wn.WorkID);
             }
             #endregion 如果是新建实体流程.

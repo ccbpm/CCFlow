@@ -7,6 +7,8 @@ using BP.WF.Data;
 using BP.DA;
 using BP.En;
 using BP.Sys;
+using BP.WF.Template.SFlow;
+
 
 namespace BP.WF
 {
@@ -459,28 +461,6 @@ namespace BP.WF
             foreach (SubFlowYanXu flow in yanxuFlows)
             {
                 Flow fl = new Flow(flow.SubFlowNo);
-
-                /* 如果当前为子流程的时候，允许节点自动运行下一步骤，就要确定下一步骤的节点，必须有确定的可以计算的接收人.
-                if (fl.SubFlowOver == SubFlowOver.SendParentFlowToNextStep)
-                {
-                    Node nd = new Node(flow.FK_Node);
-                    if (nd.HisToNodes.Count > 1)
-                        this.AddMsgError("@当前节点[" + nd.Name + "]的可以启动子流程或者延续流程.被启动的子流程设置了当子流程结束时让父流程自动运行到下一个节点，但是当前节点有分支，导致流程无法运行到下一个节点.", nd);
-
-                    if (nd.HisToNodes.Count == 1)
-                    {
-                        Node toNode = nd.HisToNodes[0] as Node;
-                        if (nd.HisDeliveryWay == DeliveryWay.BySelected)
-                        {
-                            msg = "@当前节点[" + nd.Name + "]的可以启动子流程或者延续流程.被启动的子流程设置了当子流程结束时让父流程自动运行到下一个节点，但是当前节点有分支，导致流程无法运行到下一个节点.";
-                            this.AddMsgError(msg, nd);
-                        }
-                    }
-
-                }
-                */
-
-
             }
         }
 
@@ -716,7 +696,7 @@ namespace BP.WF
 
             #region 插入字段。
             string sql = "SELECT distinct KeyOfEn FROM Sys_MapAttr WHERE FK_MapData IN (" + ndsstrs + ")";
-            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 sql = "SELECT A.* FROM (" + sql + ") AS A ";
                 string sql3 = "DELETE FROM Sys_MapAttr WHERE KeyOfEn NOT IN (" + sql + ") AND FK_MapData='" + fk_mapData + "' ";

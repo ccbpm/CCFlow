@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using BP.DA;
-using BP.En;
-using BP.En;
-using BP.WF.Port;
+﻿using BP.En;
 
 namespace BP.CCBill.Template
 {

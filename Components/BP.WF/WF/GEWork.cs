@@ -6,12 +6,12 @@ using BP.En;
 
 namespace BP.WF
 {
-	/// <summary>
-	/// 普通工作
-	/// </summary>
-	public class GEWorkAttr :WorkAttr
-	{
-	}
+    /// <summary>
+    /// 普通工作
+    /// </summary>
+    public class GEWorkAttr : WorkAttr
+    {
+    }
     /// <summary>
     /// 普通工作
     /// </summary>
@@ -80,7 +80,8 @@ namespace BP.WF
         {
             get
             {
-                this._enMap = BP.Sys.MapData.GenerHisMap(this.NodeFrmID );
+                //if (this._enMap == null)
+                this._enMap = BP.Sys.MapData.GenerHisMap(this.NodeFrmID);
                 return this._enMap;
             }
         }
@@ -93,7 +94,7 @@ namespace BP.WF
             {
                 if (this.NodeID == 0)
                     return new GEWorks();
-                return new GEWorks(this.NodeID,this.NodeFrmID);
+                return new GEWorks(this.NodeID, this.NodeFrmID);
             }
         }
         #endregion
@@ -104,7 +105,7 @@ namespace BP.WF
         /// <returns></returns>
         public override string ToString()
         {
-            return this.NodeFrmID; 
+            return this.NodeFrmID;
         }
     }
     /// <summary>
@@ -129,7 +130,7 @@ namespace BP.WF
             {
                 if (this.NodeID == 0)
                     return new GEWork();
-                return new GEWork(this.NodeID,this.NodeFrmID);
+                return new GEWork(this.NodeID, this.NodeFrmID);
             }
         }
         /// <summary>

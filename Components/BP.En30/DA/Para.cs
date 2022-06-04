@@ -1,5 +1,6 @@
 ﻿using System;
 using BP.Sys;
+using BP.Difference;
 
 namespace BP.DA
 {
@@ -49,36 +50,16 @@ namespace BP.DA
         /// </summary>
         public Para()
         {
+
         }
-        /// <summary>
-        /// 构造参数
-        /// </summary>
-        /// <param name="_paraName">参数名称</param>
-        /// <param name="_DAType">System.Data.SqlDbType</param>
-        /// <param name="_val">值</param>
-        public Para(string _paraName, System.Data.DbType _DAType, Object _val)
-        {
-            this.ParaName = _paraName;
-            this.DAType = _DAType;
-            this.val = _val;
-        }
+        
     }
     /// <summary>
     /// 参数集合
     /// </summary>
     public class Paras : System.Collections.CollectionBase
     {
-        /// <summary>
-        /// 描述
-        /// </summary>
-        /// <returns>描述信息</returns>
-        public string ToDesc()
-        {
-            string msg = "";
-            foreach (Para p in this)
-                msg += "@" + p.ParaName + " = " + p.val;
-            return msg;
-        }
+        
         /// <summary>
         /// 要执行的SQL
         /// </summary>
@@ -95,17 +76,17 @@ namespace BP.DA
                 {
                     if (p.DAType == System.Data.DbType.String)
                     {
-                        if (mysql.Contains(SystemConfig.AppCenterDBVarStr + p.ParaName + ","))
-                            mysql = mysql.Replace(SystemConfig.AppCenterDBVarStr + p.ParaName + ",", "'" + p.val.ToString() + "',");
+                        if (mysql.Contains(BP.Difference.SystemConfig.AppCenterDBVarStr + p.ParaName + ","))
+                            mysql = mysql.Replace(BP.Difference.SystemConfig.AppCenterDBVarStr + p.ParaName + ",", "'" + p.val.ToString() + "',");
                         else
-                            mysql = mysql.Replace(SystemConfig.AppCenterDBVarStr + p.ParaName, "'" + p.val.ToString() + "'");
+                            mysql = mysql.Replace(BP.Difference.SystemConfig.AppCenterDBVarStr + p.ParaName, "'" + p.val.ToString() + "'");
                     }
                     else
                     {
-                        if (mysql.Contains(SystemConfig.AppCenterDBVarStr + p.ParaName + ","))
-                            mysql = mysql.Replace(SystemConfig.AppCenterDBVarStr + p.ParaName + ",", p.val.ToString() + ",");
+                        if (mysql.Contains(BP.Difference.SystemConfig.AppCenterDBVarStr + p.ParaName + ","))
+                            mysql = mysql.Replace(BP.Difference.SystemConfig.AppCenterDBVarStr + p.ParaName + ",", p.val.ToString() + ",");
                         else
-                            mysql = mysql.Replace(SystemConfig.AppCenterDBVarStr + p.ParaName, p.val.ToString());
+                            mysql = mysql.Replace(BP.Difference.SystemConfig.AppCenterDBVarStr + p.ParaName, p.val.ToString());
                     }
                 }
                 return mysql;
@@ -117,14 +98,7 @@ namespace BP.DA
 		public Paras()
         {
         }
-        /// <summary>
-        /// 实例化参数
-        /// </summary>
-        /// <param name="o"></param>
-        public Paras(object o)
-        {
-            this.Add("p", o);
-        }
+       
         /// <summary>
         /// 数据库连接标记
         /// </summary>
@@ -132,29 +106,8 @@ namespace BP.DA
         {
             get
             {
-                return SystemConfig.AppCenterDBVarStr;
+                return BP.Difference.SystemConfig.AppCenterDBVarStr;
             }
-        }
-        /// <summary>
-        /// 实例化参数
-        /// </summary>
-        /// <param name="p"></param>
-        /// <param name="v"></param>
-        public Paras(string p, object v)
-        {
-            this.Add(p, v);
-        }
-        /// <summary>
-        /// 实例化参数
-        /// </summary>
-        /// <param name="p1"></param>
-        /// <param name="o1"></param>
-        /// <param name="p2"></param>
-        /// <param name="o2"></param>
-        public Paras(string p1, object o1, string p2, object o2)
-        {
-            this.Add(p1, o1);
-            this.Add(p2, o2);
         }
         /// <summary>
         /// 增加参数
@@ -345,21 +298,6 @@ namespace BP.DA
             en.ParaName = _name;
             this.Add(en);
         }
-        /// <summary>
-        /// 移除
-        /// </summary>
-        /// <param name="_name">参数名</param>
-        /// <param name="_val">值</param>
-        public void Remove(string paraName)
-        {
-            int i = 0;
-            foreach (Para p in this)
-            {
-                if (p.ParaName == paraName)
-                    break;
-                i++;
-            }
-            this.RemoveAt(i);
-        }
+        
     }
 }

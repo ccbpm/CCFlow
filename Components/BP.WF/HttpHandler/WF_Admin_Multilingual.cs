@@ -1,16 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
-using System.Data;
-using System.Text;
-using System.Web;
-using BP.DA;
-using BP.Sys;
-using BP.Web;
-using BP.Port;
-using BP.En;
-using BP.WF;
-using BP.WF.Template;
 using BP.Difference;
 
 namespace BP.WF.HttpHandler
@@ -34,12 +23,12 @@ namespace BP.WF.HttpHandler
         {
             Hashtable ht = new Hashtable();
 
-            if (SystemConfig.IsMultilingual == true)
+            if (BP.Difference.SystemConfig.IsMultilingual == true)
                 ht.Add("IsMultilingual", "1");
             else
                 ht.Add("IsMultilingual", "0");
 
-            ht.Add("Langue", SystemConfig.Langue);
+            ht.Add("Langue", BP.Difference.SystemConfig.Langue);
             return BP.Tools.Json.ToJson(ht);
         }
 

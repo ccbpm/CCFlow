@@ -1,4 +1,5 @@
 ﻿using BP.En;
+using BP.Port;
 using BP.GPM.DTalk;
 using BP.GPM.WeiXin;
 using BP.Sys;
@@ -37,7 +38,7 @@ namespace BP.GPM.WeiXin
         {
             #region 读取数据.
             //判断是否配置了企业号
-            if (string.IsNullOrWhiteSpace(SystemConfig.WX_CorpID))
+            if (string.IsNullOrWhiteSpace(BP.Difference.SystemConfig.WX_CorpID))
                 return "err@没有配置企业号相关信息";
             //获取部门列表
             DeptList DeptMentList = new DeptList();
@@ -48,29 +49,29 @@ namespace BP.GPM.WeiXin
 
             #region 清楚现有的数据.
             //先删除所有部门
-            GPM.Depts depts = new BP.GPM.Depts();
+            Depts depts = new BP.Port.Depts();
             depts.ClearTable();
 
             //删除所有人员
-            GPM.Emps emps = new BP.GPM.Emps();
+            Emps emps = new BP.Port.Emps();
             emps.ClearTable();
 
             //删除部门人员表
-            GPM.DeptEmps deptEmps = new BP.GPM.DeptEmps();
+            DeptEmps deptEmps = new BP.Port.DeptEmps();
             deptEmps.ClearTable();
 
             //删除部门人员岗位表
-            GPM.DeptEmpStations deptEmpStations = new BP.GPM.DeptEmpStations();
+            DeptEmpStations deptEmpStations = new BP.Port.DeptEmpStations();
             deptEmpStations.ClearTable();
             #endregion 清楚现有的数据.
 
             #region 写入数据.
-            GPM.DeptEmp deptEmp = new BP.GPM.DeptEmp();
-            GPM.Emp emp = new BP.GPM.Emp();
+            DeptEmp deptEmp = new BP.Port.DeptEmp();
+            Emp emp = new BP.Port.Emp();
             foreach (DeptEntity deptMent in DeptMentList.department)
             {
                 //先插入部门表
-                GPM.Dept dept = new BP.GPM.Dept();
+                Dept dept = new BP.Port.Dept();
                 dept.No = deptMent.id;
                 dept.Name = deptMent.name;
                 dept.ParentNo = deptMent.parentid;
@@ -88,10 +89,10 @@ namespace BP.GPM.WeiXin
                         continue;
 
                     //如果有，放入部门人员表
-                    if (emps.Retrieve(GPM.EmpAttr.No, userInfo.userid) > 0)
+                    if (emps.Retrieve(EmpAttr.No, userInfo.userid) > 0)
                     {
                         //插入部门人员表
-                        deptEmp = new BP.GPM.DeptEmp();
+                        deptEmp = new BP.Port.DeptEmp();
                         deptEmp.setMyPK(deptMent.id + "_" + userInfo.userid);
                         deptEmp.FK_Emp = userInfo.userid;
                         deptEmp.FK_Dept = deptMent.id;
@@ -101,7 +102,7 @@ namespace BP.GPM.WeiXin
                     else
                     {
                         //插入人员表
-                        emp = new BP.GPM.Emp();
+                        emp = new BP.Port.Emp();
                         emp.No = userInfo.userid;
                         emp.Name = userInfo.name;
                         emp.FK_Dept = deptMent.id;
@@ -110,14 +111,14 @@ namespace BP.GPM.WeiXin
                         emp.Insert();
 
                         //插入部门人员表
-                        deptEmp = new BP.GPM.DeptEmp();
+                        deptEmp = new BP.Port.DeptEmp();
                         deptEmp.setMyPK(deptMent.id + "_" + userInfo.userid);
                         deptEmp.FK_Emp = userInfo.userid;
                         deptEmp.FK_Dept = deptMent.id;
                         deptEmp.Insert();
 
                         //没有岗位，不同步，手动分配岗位吧
-                        //GPM.DeptEmpStation deptEmpStation = new BP.GPM.DeptEmpStation();
+                        //GPM.DeptEmpStation deptEmpStation = new BP.Port.DeptEmpStation();
                         //deptEmpStation.setMyPK(deptMent.id + "_" + userInfo.userid + "";
                     }
                 }
@@ -127,7 +128,7 @@ namespace BP.GPM.WeiXin
             #region 增加 admin.
             //不管以上有无人员，都添加admin帐号的信息
             //插入admin帐号
-            emp = new BP.GPM.Emp();
+            emp = new BP.Port.Emp();
             emp.No = "admin";
             emp.Name = "admin";
             emp.FK_Dept = "1";//默认跟部门为1
@@ -136,7 +137,7 @@ namespace BP.GPM.WeiXin
             emp.Insert();
 
             //部门人员表加入admin
-            deptEmp = new BP.GPM.DeptEmp();
+            deptEmp = new BP.Port.DeptEmp();
             deptEmp.setMyPK("1_admin");
             deptEmp.FK_Emp = "admin";
             deptEmp.FK_Dept = "1";

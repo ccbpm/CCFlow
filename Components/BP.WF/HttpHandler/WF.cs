@@ -1,21 +1,15 @@
 ﻿using BP.DA;
 using BP.Sys;
 using BP.Web;
-using BP.WF;
 using BP.Difference;
-using BP.WF.Data;
 using BP.WF.Port;
-using BP.WF.Rpt;
 using BP.WF.Template;
+using BP.WF.Template.SFlow;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Web;
+
 
 namespace BP.WF.HttpHandler
 {
@@ -79,30 +73,13 @@ namespace BP.WF.HttpHandler
                 BP.WF.Template.FrmNodeComponent refFnc = new FrmNodeComponent(refNodeID);
 
                 fnc.SetValByKey(NodeWorkCheckAttr.FWC_H, refFnc.GetValFloatByKey(NodeWorkCheckAttr.FWC_H));
-                fnc.SetValByKey(NodeWorkCheckAttr.FWC_W, refFnc.GetValFloatByKey(NodeWorkCheckAttr.FWC_W));
-                fnc.SetValByKey(NodeWorkCheckAttr.FWC_X, refFnc.GetValFloatByKey(NodeWorkCheckAttr.FWC_X));
-                fnc.SetValByKey(NodeWorkCheckAttr.FWC_Y, refFnc.GetValFloatByKey(NodeWorkCheckAttr.FWC_Y));
-
 
                 fnc.SetValByKey(FrmSubFlowAttr.SF_H, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_H));
-                fnc.SetValByKey(FrmSubFlowAttr.SF_W, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_W));
-                fnc.SetValByKey(FrmSubFlowAttr.SF_X, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_X));
-                fnc.SetValByKey(FrmSubFlowAttr.SF_Y, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_Y));
 
-                fnc.SetValByKey(FrmThreadAttr.FrmThread_H, refFnc.GetValFloatByKey(FrmThreadAttr.FrmThread_H));
-                fnc.SetValByKey(FrmThreadAttr.FrmThread_W, refFnc.GetValFloatByKey(FrmThreadAttr.FrmThread_W));
-                fnc.SetValByKey(FrmThreadAttr.FrmThread_X, refFnc.GetValFloatByKey(FrmThreadAttr.FrmThread_X));
-                fnc.SetValByKey(FrmThreadAttr.FrmThread_Y, refFnc.GetValFloatByKey(FrmThreadAttr.FrmThread_Y));
 
                 fnc.SetValByKey(FrmTrackAttr.FrmTrack_H, refFnc.GetValFloatByKey(FrmTrackAttr.FrmTrack_H));
-                fnc.SetValByKey(FrmTrackAttr.FrmTrack_W, refFnc.GetValFloatByKey(FrmTrackAttr.FrmTrack_W));
-                fnc.SetValByKey(FrmTrackAttr.FrmTrack_X, refFnc.GetValFloatByKey(FrmTrackAttr.FrmTrack_X));
-                fnc.SetValByKey(FrmTrackAttr.FrmTrack_Y, refFnc.GetValFloatByKey(FrmTrackAttr.FrmTrack_Y));
 
                 fnc.SetValByKey(FTCAttr.FTC_H, refFnc.GetValFloatByKey(FTCAttr.FTC_H));
-                fnc.SetValByKey(FTCAttr.FTC_W, refFnc.GetValFloatByKey(FTCAttr.FTC_W));
-                fnc.SetValByKey(FTCAttr.FTC_X, refFnc.GetValFloatByKey(FTCAttr.FTC_X));
-                fnc.SetValByKey(FTCAttr.FTC_Y, refFnc.GetValFloatByKey(FTCAttr.FTC_Y));
             }
             myds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent").Copy());
             #endregion 加入组件的状态信息, 在解析表单的时候使用.
@@ -121,7 +98,7 @@ namespace BP.WF.HttpHandler
                 if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
                 {
                     Paras ps = new Paras();
-                    ps.SQL = "SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
+                    ps.SQL = "SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID";
                     ps.Add("WorkID", this.WorkID);
                     string pWorkID = DBAccess.RunSQLReturnValInt(ps, 0).ToString();
                     if (pWorkID == null || pWorkID == "0")
@@ -348,10 +325,10 @@ namespace BP.WF.HttpHandler
             string path = "/DataUser/Siganture/" + no + ".jpg";
             //如果文件存在
 
-            if (File.Exists(SystemConfig.PathOfWebApp + (path)) == false)
+            if (File.Exists(BP.Difference.SystemConfig.PathOfWebApp + (path)) == false)
             {
                 path = "/DataUser/Siganture/" + no + ".JPG";
-                if (File.Exists(SystemConfig.PathOfWebApp + (path)) == true)
+                if (File.Exists(BP.Difference.SystemConfig.PathOfWebApp + (path)) == true)
                 {
                     return "";
                 }
@@ -446,7 +423,7 @@ namespace BP.WF.HttpHandler
                         // 处理删除前事件.
                         try
                         {
-                            fes.DoEventNode(BP.WF.XML.EventListDtlList.DtlItemDelBefore, dtl);
+                            fes.DoEventNode(EventListFrm.DtlRowDelBefore, dtl);
                         }
                         catch (Exception ex)
                         {
@@ -457,7 +434,7 @@ namespace BP.WF.HttpHandler
                         // 处理删除后事件.
                         try
                         {
-                            fes.DoEventNode(BP.WF.XML.EventListDtlList.DtlItemDelAfter, dtl);
+                            fes.DoEventNode(EventListFrm.DtlRowDelAfter, dtl);
                         }
                         catch (Exception ex)
                         {
@@ -484,7 +461,7 @@ namespace BP.WF.HttpHandler
                         emps11441.RetrieveAll();
                         return "info@Close";
                     case "Track": //通过一个串来打开一个工作.
-                        string mySid = this.SID; // this.Request.QueryString["SID"];
+                        string mySid = this.SID; // this.Request.QueryString["Token"];
                         string[] mystrs = mySid.Split('_');
 
                         Int64 myWorkID = int.Parse(mystrs[1]);
@@ -579,8 +556,8 @@ namespace BP.WF.HttpHandler
         public string PCAndMobileUrl()
         {
             Hashtable ht = new Hashtable();
-            ht.Add("PCUrl", SystemConfig.HostURL);
-            ht.Add("MobileUrl", SystemConfig.MobileURL);
+            ht.Add("PCUrl", BP.Difference.SystemConfig.HostURL);
+            ht.Add("MobileUrl", BP.Difference.SystemConfig.MobileURL);
             return BP.Tools.Json.ToJson(ht);
         }
 
@@ -598,11 +575,11 @@ namespace BP.WF.HttpHandler
             //移动端打开
             if (HttpContextHelper.RequestIsFromMobile)
             {
-                return SystemConfig.MobileURL + baseUrl;
+                return BP.Difference.SystemConfig.MobileURL + baseUrl;
             }
             else
             {
-                return SystemConfig.HostURL + baseUrl;
+                return BP.Difference.SystemConfig.HostURL + baseUrl;
             }
 
         }
@@ -810,11 +787,18 @@ namespace BP.WF.HttpHandler
             DataTable dtStart = DBAccess.RunSQLReturnTable("SELECT No,Name, FK_FlowSort FROM WF_Flow ORDER BY FK_FlowSort,Idx");
             dtStart.TableName = "Start";
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dtStart.Columns["NO"].ColumnName = "No";
                 dtStart.Columns["NAME"].ColumnName = "Name";
                 dtStart.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+            }
+
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dtStart.Columns["no"].ColumnName = "No";
+                dtStart.Columns["name"].ColumnName = "Name";
+                dtStart.Columns["fk_flowsort"].ColumnName = "FK_FlowSort";
             }
 
             ds.Tables.Add(dtStart);
@@ -846,11 +830,11 @@ namespace BP.WF.HttpHandler
         {
             /* 如果不是删除流程注册表. */
             Paras ps = new Paras();
-            string dbstr = SystemConfig.AppCenterDBVarStr;
+            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT  * FROM WF_GenerWorkFlow  WHERE (Emps LIKE '%@" + WebUser.No + "@%' OR Emps LIKE '%@" + WebUser.No + ",%' OR Emps LIKE '%," + WebUser.No + "@%') and WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             //添加oracle的处理
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dt.Columns["PRI"].ColumnName = "PRI";
                 dt.Columns["WORKID"].ColumnName = "WorkID";
@@ -896,7 +880,7 @@ namespace BP.WF.HttpHandler
                 dt.Columns["BILLNO"].ColumnName = "BillNo";
             }
 
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
             {
                 dt.Columns["pri"].ColumnName = "PRI";
                 dt.Columns["workid"].ColumnName = "WorkID";
@@ -1071,7 +1055,7 @@ namespace BP.WF.HttpHandler
                 urlExt = "&PFlowNo=" + ndrpt.Rows[0]["PFlowNo"] + "&PWorkID=" + ndrpt.Rows[0]["PWorkID"] + "&IsToobar=0&IsHidden=true&CCSta=" + this.GetRequestValInt("CCSta");
             }
 
-            urlExt += "&From=CCFlow&TruckKey=" + tk.GetValStrByKey("MyPK") + "&DoType=" + this.DoType + "&UserNo=" + WebUser.No ?? string.Empty + "&SID=" + WebUser.SID ?? string.Empty;
+            urlExt += "&From=CCFlow&TruckKey=" + tk.GetValStrByKey("MyPK") + "&DoType=" + this.DoType + "&UserNo=" + WebUser.No ?? string.Empty + "&Token=" + WebUser.Token ?? string.Empty;
 
             urlExt = urlExt.Replace("PFlowNo=null", "");
             urlExt = urlExt.Replace("PWorkID=null", "");
@@ -1201,13 +1185,13 @@ namespace BP.WF.HttpHandler
             sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B ";
             sql += " WHERE A.WorkID=B.WorkID and a.FK_Node=b.FK_Node ";
             sql += " AND (B.IsPass=90 OR A.AtPara LIKE '%HuiQianZhuChiRen=" + WebUser.No + "%') ";
-            sql += " AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+            sql += " AND B.FK_Emp=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Emp";
 
             Paras ps = new Paras();
             ps.Add("FK_Emp", WebUser.No);
             ps.SQL = sql;
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dt.Columns["WORKID"].ColumnName = "WorkID";
                 dt.Columns["TITLE"].ColumnName = "Title";
@@ -1222,6 +1206,22 @@ namespace BP.WF.HttpHandler
                 dt.Columns["NODENAME"].ColumnName = "NodeName";
                 dt.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
                 dt.Columns["TODOEMPS"].ColumnName = "TodoEmps";
+            }
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["workid"].ColumnName = "WorkID";
+                dt.Columns["title"].ColumnName = "Title";
+                dt.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dt.Columns["flowname"].ColumnName = "FlowName";
+
+                dt.Columns["starter"].ColumnName = "Starter";
+                dt.Columns["startername"].ColumnName = "StarterName";
+
+                dt.Columns["sender"].ColumnName = "Sender";
+                dt.Columns["fk_node"].ColumnName = "FK_Node";
+                dt.Columns["nodename"].ColumnName = "NodeName";
+                dt.Columns["sdtofnode"].ColumnName = "SDTOfNode";
+                dt.Columns["todoemps"].ColumnName = "TodoEmps";
             }
             return BP.Tools.Json.ToJson(dt);
         }
@@ -1234,14 +1234,14 @@ namespace BP.WF.HttpHandler
             string sql = "SELECT A.WorkID, A.Title,A.FK_Flow, A.FlowName, A.Starter, A.StarterName, A.Sender, A.Sender,A.FK_Node,A.NodeName,A.SDTOfNode,A.TodoEmps";
             sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B, WF_Node C ";
             sql += " WHERE A.WorkID=B.WorkID and a.FK_Node=b.FK_Node AND A.FK_Node=C.NodeID AND C.TodolistModel=1 ";
-            sql += " AND B.IsPass=0 AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
-            //   sql += " AND B.IsPass=0 AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+            sql += " AND B.IsPass=0 AND B.FK_Emp=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Emp";
+            //   sql += " AND B.IsPass=0 AND B.FK_Emp=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Emp";
 
             Paras ps = new Paras();
             ps.Add("FK_Emp", WebUser.No);
             ps.SQL = sql;
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dt.Columns["WORKID"].ColumnName = "WorkID";
                 dt.Columns["TITLE"].ColumnName = "Title";
@@ -1257,6 +1257,22 @@ namespace BP.WF.HttpHandler
                 dt.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
                 dt.Columns["TODOEMPS"].ColumnName = "TodoEmps";
             }
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["workid"].ColumnName = "WorkID";
+                dt.Columns["title"].ColumnName = "Title";
+                dt.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dt.Columns["flowname"].ColumnName = "FlowName";
+
+                dt.Columns["starter"].ColumnName = "Starter";
+                dt.Columns["startername"].ColumnName = "StarterName";
+
+                dt.Columns["sender"].ColumnName = "Sender";
+                dt.Columns["fk_node"].ColumnName = "FK_Node";
+                dt.Columns["nodename"].ColumnName = "NodeName";
+                dt.Columns["sdtofnode"].ColumnName = "SDTOfNode";
+                dt.Columns["todoemps"].ColumnName = "TodoEmps";
+            }
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -1268,7 +1284,7 @@ namespace BP.WF.HttpHandler
         {
             string sql = "SELECT A.WorkID, A.Title,A.FK_Flow, A.FlowName, A.Starter, A.StarterName, A.Sender, A.Sender,A.FK_Node,A.NodeName,A.SDTOfNode,A.TodoEmps";
             sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B, WF_Node C ";
-            sql += " WHERE A.WorkID=B.WorkID and a.FK_Node=b.FK_Node AND B.IsPass=0 AND B.FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
+            sql += " WHERE A.WorkID=B.WorkID and a.FK_Node=b.FK_Node AND B.IsPass=0 AND B.FK_Emp=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Emp";
             sql += " AND B.AtPara LIKE '%IsHuiQian=1%' ";
             sql += " AND A.FK_Node=C.NodeID ";
             sql += " AND C.TodolistModel= 4";
@@ -1277,7 +1293,7 @@ namespace BP.WF.HttpHandler
             ps.Add("FK_Emp", WebUser.No);
             ps.SQL = sql;
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dt.Columns["WORKID"].ColumnName = "WorkID";
                 dt.Columns["TITLE"].ColumnName = "Title";
@@ -1292,6 +1308,23 @@ namespace BP.WF.HttpHandler
                 dt.Columns["NODENAME"].ColumnName = "NodeName";
                 dt.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
                 dt.Columns["TODOEMPS"].ColumnName = "TodoEmps";
+            }
+
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["workid"].ColumnName = "WorkID";
+                dt.Columns["title"].ColumnName = "Title";
+                dt.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dt.Columns["flowname"].ColumnName = "FlowName";
+
+                dt.Columns["starter"].ColumnName = "Starter";
+                dt.Columns["startername"].ColumnName = "StarterName";
+
+                dt.Columns["sender"].ColumnName = "Sender";
+                dt.Columns["fk_node"].ColumnName = "FK_Node";
+                dt.Columns["nodename"].ColumnName = "NodeName";
+                dt.Columns["sdtofnode"].ColumnName = "SDTOfNode";
+                dt.Columns["todoemps"].ColumnName = "TodoEmps";
             }
             return BP.Tools.Json.ToJson(dt);
         }
@@ -1346,7 +1379,7 @@ namespace BP.WF.HttpHandler
             //{
             //    //移除不需要前台看到的数据.
             //    DataTable dt = ems.ToDataTableField();
-            //    dt.Columns.Remove("SID");
+            //    dt.Columns.Remove("Token");
             //    dt.Columns.Remove("Stas");
             //    dt.Columns.Remove("Depts");
             //    dt.Columns.Remove("Msg");
@@ -1452,10 +1485,10 @@ namespace BP.WF.HttpHandler
                 return "url@Home.htm?Token=" + token;
             }
 
-            string sid = this.GetRequestVal("SID");
+            string sid = this.GetRequestVal("Token");
             if (DataType.IsNullOrEmpty(sid) == false)
             {
-                BP.WF.Dev2Interface.Port_LoginBySID(sid);
+                BP.WF.Dev2Interface.Port_LoginByToken(sid);
                 return "url@Home.htm?Token=" + sid;
             }
             #endregion 检查一下是否有token ?
@@ -1572,15 +1605,21 @@ namespace BP.WF.HttpHandler
         public string AuthorList_Init()
         {
             Paras ps = new Paras();
-            ps.SQL = "SELECT No,Name,AuthorDate FROM WF_Emp WHERE AUTHOR=" + SystemConfig.AppCenterDBVarStr + "AUTHOR";
+            ps.SQL = "SELECT No,Name,AuthorDate FROM WF_Emp WHERE AUTHOR=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "AUTHOR";
             ps.Add("AUTHOR", BP.Web.WebUser.No);
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
             {
                 dt.Columns["NO"].ColumnName = "No";
                 dt.Columns["NAME"].ColumnName = "Name";
                 dt.Columns["AUTHORDATE"].ColumnName = "AuthorDate";
+            }
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["no"].ColumnName = "No";
+                dt.Columns["name"].ColumnName = "Name";
+                dt.Columns["authordate"].ColumnName = "AuthorDate";
             }
             return BP.Tools.Json.ToJson(dt);
         }
@@ -1705,12 +1744,14 @@ namespace BP.WF.HttpHandler
             sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE (Emps LIKE '%" + WebUser.No + "%' OR TodoEmps LIKE '%" + BP.Web.WebUser.No + ",%' OR Starter='" + WebUser.No + "')  AND WFState > 1 AND FID = 0 " + sqlWhere + " GROUP BY FK_Flow, FlowName";
 
             DataTable dtFlows = DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel!= FieldCaseModel.None)
             {
                 dtFlows.Columns[0].ColumnName = "No";
                 dtFlows.Columns[1].ColumnName = "Name";
                 dtFlows.Columns[2].ColumnName = "Num";
             }
+            
+
             dtFlows.TableName = "Flows";
             ds.Tables.Add(dtFlows);
             #endregion
@@ -1781,18 +1822,19 @@ namespace BP.WF.HttpHandler
                 sqlWhere += "AND FK_Flow = '" + this.FK_Flow + "' ";
 
             sqlWhere += " ORDER BY RDT DESC ";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
                 sql = "SELECT NVL(WorkID, 0) WorkID,NVL(FID, 0) FID ,FK_Flow,FlowName,Title, NVL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,NVL(RDT, '2018-05-04 19:29') RDT,NVL(FK_Node, 0) FK_Node,NodeName, TodoEmps " +
                     "FROM (select A.*, rownum r from (select * from WF_GenerWorkFlow where " + sqlWhere + ") A) where r between " + (pageIdx * pageSize - pageSize + 1) + " and " + (pageIdx * pageSize);
-            else if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
                 sql = "SELECT  TOP " + pageSize + " ISNULL(WorkID, 0) WorkID,ISNULL(FID, 0) FID ,FK_Flow,FlowName,Title, ISNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,ISNULL(RDT, '2018-05-04 19:29') RDT,ISNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow " +
                     "where WorkID not in (select top(" + num + ") WorkID from WF_GenerWorkFlow where " + sqlWhere + ") AND" + sqlWhere;
-            else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
                 sql = "SELECT IFNULL(WorkID, 0) WorkID,IFNULL(FID, 0) FID ,FK_Flow,FlowName,Title, IFNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,IFNULL(RDT, '2018-05-04 19:29') RDT,IFNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where (1=1) AND " + sqlWhere + " LIMIT " + startIndex + "," + pageSize;
-            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
                 sql = "SELECT COALESCE(WorkID, 0) WorkID,COALESCE(FID, 0) FID ,FK_Flow,FlowName,Title, COALESCE(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,COALESCE(RDT, '2018-05-04 19:29') RDT,COALESCE(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where (1=1) AND " + sqlWhere + " LIMIT " + pageSize + " offset " + startIndex;
             DataTable mydt = DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
                 mydt.Columns[0].ColumnName = "WorkID";
                 mydt.Columns[1].ColumnName = "FID";
@@ -1829,7 +1871,7 @@ namespace BP.WF.HttpHandler
             #region 获取track数据.
             string sqlOfWhere2 = "";
             string sqlOfWhere1 = "";
-            string dbStr = SystemConfig.AppCenterDBVarStr;
+            string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             if (fid == 0)
             {
@@ -1892,7 +1934,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str= this.GetRequestVal("SID");
+                string str= this.GetRequestVal("Token");
                 if (DataType.IsNullOrEmpty(str)==true)
                     str = this.GetRequestVal("Token");
                 return str;
@@ -1921,8 +1963,14 @@ namespace BP.WF.HttpHandler
             if (BP.DA.DataType.IsNullOrEmpty(this.UserNo) == false)
             {
                 BP.WF.Dev2Interface.Port_Login(this.UserNo);
+                BP.WF.Dev2Interface.Port_GenerToken(this.UserNo, "PC", 40000, true);
+               
             }
 
+            if (BP.DA.DataType.IsNullOrEmpty(this.SID)==false)
+                BP.WF.Dev2Interface.Port_LoginByToken(this.SID);
+               
+         
             #endregion 安全性校验. SID 模式.
 
             if (this.DoWhat.Equals("PortLogin") == true)
@@ -1955,7 +2003,7 @@ namespace BP.WF.HttpHandler
                     case "FK_Flow":
                     case "WorkID":
                     case "FK_Node":
-                    case "SID":
+                    case "Token":
                         break;
                     default:
                         paras += "&" + str + "=" + val;

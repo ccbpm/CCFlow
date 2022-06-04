@@ -109,10 +109,6 @@ namespace BP.En
         }
         #endregion 自动标记获取属性实体方法.
 
-        #region mapInfotoJson
-
-        #endregion
-
         #region 与缓存有关的操作
         private Entities _GetNewEntities = null;
         public virtual Entities GetNewEntities
@@ -185,28 +181,6 @@ namespace BP.En
                 _SQLCash = value;
             }
         }
-        /// <summary>
-        /// 转化成
-        /// </summary>
-        /// <returns></returns>
-        public string ToStringAtParas()
-        {
-            string str = "";
-            foreach (Attr attr in this.EnMap.Attrs)
-            {
-                str += "@" + attr.Key + "=" + this.GetValByKey(attr.Key);
-            }
-            return str;
-        }
-        public KeyVals ToKeyVals()
-        {
-            KeyVals kvs = new KeyVals();
-            foreach (Attr attr in this.EnMap.Attrs)
-            {
-                //kvs.Add(attr.Key, this.GetValByKey(attr.Key), );
-            }
-            return kvs;
-        }
 
         /// <summary>
         /// 把一个实体转化成Json.
@@ -219,8 +193,6 @@ namespace BP.En
             //如果不包含参数字段.
             if (isInParaFields == false)
                 return BP.Tools.Json.ToJsonEntityModel(ht);
-
-
 
             if (ht.ContainsKey("AtPara") == false)
                 return BP.Tools.Json.ToJsonEntityModel(ht);
@@ -246,50 +218,7 @@ namespace BP.En
 
             return BP.Tools.Json.ToJson(ht);
         }
-
-        /// <summary>
-        /// 转化成json字符串，包含外键与枚举，主表使用Main命名。
-        /// 外键使用外键表命名，枚举值使用枚举值命名。
-        /// </summary>
-        /// <returns></returns>
-        public string ToJsonIncludeEnumAndForeignKey()
-        {
-            DataSet ds = new DataSet();
-
-            ds.Tables.Add(this.ToDataTableField()); //把主表数据加入进去.
-
-            Attrs attrs = this.EnMap.Attrs;
-            foreach (Attr attr in attrs)
-            {
-                if (attr.UIBindKey == "")
-                    continue;
-
-                if (attr.IsEnum)
-                {
-                    if (ds.Tables.Contains(attr.UIBindKey))
-                        continue;
-                    SysEnums ses = new SysEnums(attr.UIBindKey);
-
-                    DataTable dt = ses.ToDataTableField(attr.UIBindKey); //把枚举加入进去.
-                    ds.Tables.Add(dt); //把这个枚举值加入进去..
-                    continue;
-                }
-
-                if (attr.IsFK)
-                {
-                    if (ds.Tables.Contains(attr.UIBindKey))
-                        continue;
-
-                    Entities ens = attr.HisFKEns;
-                    ens.RetrieveAll();
-
-                    DataTable dt = ens.ToDataTableField(attr.UIBindKey); //把外键表加入进去.
-                    ds.Tables.Add(dt); //把这个枚举值加入进去..
-                    continue;
-                }
-            }
-            return BP.Tools.Json.ToJson(ds);
-        }
+ 
         /// <summary>
         /// 创建一个空的表
         /// </summary>
@@ -314,16 +243,16 @@ namespace BP.En
                         dt.Columns.Add(new DataColumn(attr.Key, typeof(int)));
                         break;
                     case DataType.AppFloat:
-                        dt.Columns.Add(new DataColumn(attr.Key, typeof(float)));
+                        dt.Columns.Add(new DataColumn(attr.Key, typeof(string)));
                         break;
                     case DataType.AppBoolean:
                         dt.Columns.Add(new DataColumn(attr.Key, typeof(string)));
                         break;
                     case DataType.AppDouble:
-                        dt.Columns.Add(new DataColumn(attr.Key, typeof(double)));
+                        dt.Columns.Add(new DataColumn(attr.Key, typeof(string)));
                         break;
                     case DataType.AppMoney:
-                        dt.Columns.Add(new DataColumn(attr.Key, typeof(double)));
+                        dt.Columns.Add(new DataColumn(attr.Key, typeof(string)));
                         break;
                     case DataType.AppDate:
                         dt.Columns.Add(new DataColumn(attr.Key, typeof(string)));
@@ -481,89 +410,6 @@ namespace BP.En
         #endregion
 
         #region 关于明细的操作
-        public Entities GetEnsDaOfOneVSM(AttrOfOneVSM attr)
-        {
-            Entities ensOfMM = attr.EnsOfMM;
-            Entities ensOfM = attr.EnsOfM;
-            ensOfM.Clear();
-
-            QueryObject qo = new QueryObject(ensOfMM);
-            qo.AddWhere(attr.AttrOfOneInMM, this.PKVal.ToString());
-            qo.DoQuery();
-
-            foreach (Entity en in ensOfMM)
-            {
-                Entity enOfM = ensOfM.GetNewEntity;
-                enOfM.PKVal = en.GetValStringByKey(attr.AttrOfMInMM);
-                enOfM.Retrieve();
-                ensOfM.AddEntity(enOfM);
-            }
-            return ensOfM;
-        }
-        /// <summary>
-        /// 取得实体集合多对多的实体集合.
-        /// </summary>
-        /// <param name="ensOfMMclassName">实体集合的类名称</param>
-        /// <returns>数据实体</returns>
-        public Entities GetEnsDaOfOneVSM(string ensOfMMclassName)
-        {
-            AttrOfOneVSM attr = this.EnMap.GetAttrOfOneVSM(ensOfMMclassName);
-
-            return GetEnsDaOfOneVSM(attr);
-        }
-        public Entities GetEnsDaOfOneVSMFirst()
-        {
-            AttrOfOneVSM attr = this.EnMap.AttrsOfOneVSM[0];
-            //	throw new Exception("err "+attr.Desc); 
-            return this.GetEnsDaOfOneVSM(attr);
-        }
-        #endregion
-
-        #region 关于明细的操作
-        /// <summary>
-        /// 得到他的数据实体
-        /// </summary>
-        /// <param name="EnsName">类名称</param>
-        /// <returns></returns>
-        public Entities GetDtlEnsDa(string EnsName)
-        {
-            Entities ens = ClassFactory.GetEns(EnsName);
-            return GetDtlEnsDa(ens);
-            /*
-            EnDtls eds =this.EnMap.Dtls; 
-            foreach(EnDtl ed in eds)
-            {
-                if (ed.EnsName==EnsName)
-                {
-                    Entities ens =ClassFactory.GetEns(EnsName) ; 
-                    QueryObject qo = new QueryObject(ClassFactory.GetEns(EnsName));
-                    qo.AddWhere(ed.RefKey,this.PKVal.ToString());
-                    qo.DoQuery();
-                    return ens;
-                }
-            }
-            throw new Exception("@实体["+this.EnDesc+"],不包含"+EnsName);	
-            */
-        }
-        /// <summary>
-        /// 取出他的数据实体
-        /// </summary>
-        /// <param name="ens">集合</param>
-        /// <returns>执行后的实体信息</returns>
-        public Entities GetDtlEnsDa(Entities ens)
-        {
-            foreach (EnDtl dtl in this.EnMap.Dtls)
-            {
-                if (dtl.Ens.GetType() == ens.GetType())
-                {
-                    QueryObject qo = new QueryObject(dtl.Ens);
-                    qo.AddWhere(dtl.RefKey, this.PKVal.ToString());
-                    qo.DoQuery();
-                    return dtl.Ens;
-                }
-            }
-            throw new Exception("@在取[" + this.EnDesc + "]的明细时出现错误。[" + ens.GetNewEntity.EnDesc + "],不在他的集合内。");
-        }
 
         public Entities GetDtlEnsDa(EnDtl dtl, string pkval = null)
         {
@@ -617,43 +463,6 @@ namespace BP.En
             {
                 throw new Exception("@在取[" + this.EnDesc + "]的明细时出现错误。[" + dtl.Desc + "],不在他的集合内。");
             }
-        }
-
-        //		/// <summary>
-        //		/// 返回第一个实体
-        //		/// </summary>
-        //		/// <returns>返回第一个实体,如果没有就抛出异常</returns>
-        //		public Entities GetDtl()
-        //		{
-        //			 return this.GetDtls(0);
-        //		}
-        //		/// <summary>
-        //		/// 返回第一个实体
-        //		/// </summary>
-        //		/// <returns>返回第一个实体</returns>
-        //		public Entities GetDtl(int index)
-        //		{
-        //			try
-        //			{
-        //				return this.GetDtls(this.EnMap.Dtls[index].Ens);
-        //			}
-        //			catch( Exception ex)
-        //			{
-        //				throw new Exception("@在取得按照顺序取["+this.EnDesc+"]的明细,出现错误:"+ex.Message);
-        //			}			 
-        //		}
-        /// <summary>
-        /// 取出他的明细集合。
-        /// </summary>
-        /// <returns></returns>
-        public System.Collections.ArrayList GetDtlsDatasOfArrayList()
-        {
-            ArrayList al = new ArrayList();
-            foreach (EnDtl dtl in this.EnMap.Dtls)
-            {
-                al.Add(this.GetDtlEnsDa(dtl.Ens));
-            }
-            return al;
         }
 
         public List<Entities> GetDtlsDatasOfList(string pkval = null)
@@ -738,142 +547,6 @@ namespace BP.En
                 this.CheckPhysicsTable();
                 throw ex;
             }
-        }
-        /// <summary>
-        /// 按照一列产生顺序号码。
-        /// </summary>
-        /// <param name="attrKey">要产生的列</param>
-        /// <param name="attrGroupKey">分组的列名</param>
-        /// <param name="FKVal">分组的主键</param>
-        /// <returns></returns>		
-        public string GenerNewNoByKey(int nolength, string attrKey, string attrGroupKey, string attrGroupVal)
-        {
-            if (attrGroupKey == null || attrGroupVal == null)
-                throw new Exception("@分组字段attrGroupKey attrGroupVal 不能为空");
-
-            Paras ps = new Paras();
-            ps.Add("groupKey", attrGroupKey);
-            ps.Add("groupVal", attrGroupVal);
-
-            string sql = "";
-            string field = this.EnMap.GetFieldByKey(attrKey);
-            ps.Add("f", attrKey);
-
-            switch (this.EnMap.EnDBUrl.DBType)
-            {
-                case DBType.MSSQL:
-                    sql = "SELECT CONVERT(bigint, MAX([" + field + "]))+1 AS Num FROM " + this.EnMap.PhysicsTable + " WHERE " + attrGroupKey + "='" + attrGroupVal + "'";
-                    break;
-                case DBType.Oracle:
-                case DBType.DM:
-                case DBType.Informix:
-                    sql = "SELECT MAX( :f )+1 AS No FROM " + this.EnMap.PhysicsTable + " WHERE " + this.HisDBVarStr + "groupKey=" + this.HisDBVarStr + "groupVal ";
-                    break;
-                case DBType.MySQL:
-                    sql = "SELECT MAX(" + field + ") +1 AS Num FROM " + this.EnMap.PhysicsTable + " WHERE " + attrGroupKey + "='" + attrGroupVal + "'";
-                    break;
-                case DBType.Access:
-                    sql = "SELECT MAX([" + field + "]) +1 AS Num FROM " + this.EnMap.PhysicsTable + " WHERE " + attrGroupKey + "='" + attrGroupVal + "'";
-                    break;
-                default:
-                    throw new Exception("error");
-            }
-
-            DataTable dt = DBAccess.RunSQLReturnTable(sql, ps);
-            string str = "1";
-            if (dt.Rows.Count != 0)
-            {
-                //System.DBNull n = new DBNull();
-                if (dt.Rows[0][0] is DBNull)
-                    str = "1";
-                else
-                    str = dt.Rows[0][0].ToString();
-            }
-            return str.PadLeft(nolength, '0');
-        }
-        public string GenerNewNoByKey(string attrKey, string attrGroupKey, string attrGroupVal)
-        {
-            return this.GenerNewNoByKey(int.Parse(this.EnMap.CodeStruct), attrKey, attrGroupKey, attrGroupVal);
-        }
-        /// <summary>
-        /// 按照两列查生顺序号码。
-        /// </summary>
-        /// <param name="attrKey"></param>
-        /// <param name="attrGroupKey1"></param>
-        /// <param name="attrGroupKey2"></param>
-        /// <param name="attrGroupVal1"></param>
-        /// <param name="attrGroupVal2"></param>
-        /// <returns></returns>
-        public string GenerNewNoByKey(string attrKey, string attrGroupKey1, string attrGroupKey2, object attrGroupVal1, object attrGroupVal2)
-        {
-            string f = this.EnMap.GetFieldByKey(attrKey);
-            Paras ps = new Paras();
-            //   ps.Add("f", f);
-
-            string sql = "";
-            switch (this.EnMap.EnDBUrl.DBType)
-            {
-                case DBType.Oracle:
-                case DBType.DM:
-                case DBType.Informix:
-                    sql = "SELECT   MAX(" + f + ") +1 AS No FROM " + this.EnMap.PhysicsTable;
-                    break;
-                case DBType.MSSQL:
-                    sql = "SELECT CONVERT(INT, MAX(" + this.EnMap.GetFieldByKey(attrKey) + ") )+1 AS No FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetFieldByKey(attrGroupKey1) + "='" + attrGroupVal1 + "' AND " + this.EnMap.GetFieldByKey(attrGroupKey2) + "='" + attrGroupVal2 + "'";
-                    break;
-                case DBType.Access:
-                    sql = "SELECT CONVERT(INT, MAX(" + this.EnMap.GetFieldByKey(attrKey) + ") )+1 AS No FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetFieldByKey(attrGroupKey1) + "='" + attrGroupVal1 + "' AND " + this.EnMap.GetFieldByKey(attrGroupKey2) + "='" + attrGroupVal2 + "'";
-                    break;
-                default:
-                    break;
-            }
-
-            DataTable dt = DBAccess.RunSQLReturnTable(sql, ps);
-            string str = "1";
-            if (dt.Rows.Count != 0)
-                str = dt.Rows[0][0].ToString();
-            return str.PadLeft(int.Parse(this.EnMap.CodeStruct), '0');
-        }
-        /// <summary>
-        /// 按照两列查生顺序号码。
-        /// </summary>
-        /// <param name="attrKey">字段</param>
-        /// <param name="attrGroupKey1"></param>
-        /// <param name="attrGroupKey2"></param>
-        /// <param name="attrGroupKey3"></param>
-        /// <param name="attrGroupVal1"></param>
-        /// <param name="attrGroupVal2"></param>
-        /// <param name="attrGroupVal3"></param>
-        /// <returns></returns>
-        public string GenerNewNoByKey(string attrKey, string attrGroupKey1, string attrGroupKey2, string attrGroupKey3, object attrGroupVal1, object attrGroupVal2, object attrGroupVal3)
-        {
-            string f = this.EnMap.GetFieldByKey(attrKey);
-            Paras ps = new Paras();
-            //   ps.Add("f", f);
-
-            string sql = "";
-            switch (this.EnMap.EnDBUrl.DBType)
-            {
-                case DBType.Oracle:
-                case DBType.DM:
-                case DBType.Informix:
-                    sql = "SELECT   MAX(" + f + ") +1 AS No FROM " + this.EnMap.PhysicsTable;
-                    break;
-                case DBType.MSSQL:
-                    sql = "SELECT CONVERT(INT, MAX(" + this.EnMap.GetFieldByKey(attrKey) + ") )+1 AS No FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetFieldByKey(attrGroupKey1) + "='" + attrGroupVal1 + "' AND " + this.EnMap.GetFieldByKey(attrGroupKey2) + "='" + attrGroupVal2 + "'  AND " + this.EnMap.GetFieldByKey(attrGroupKey3) + "='" + attrGroupVal3 + "'";
-                    break;
-                case DBType.Access:
-                    sql = "SELECT CONVERT(INT, MAX(" + this.EnMap.GetFieldByKey(attrKey) + ") )+1 AS No FROM " + this.EnMap.PhysicsTable + " WHERE " + this.EnMap.GetFieldByKey(attrGroupKey1) + "='" + attrGroupVal1 + "' AND " + this.EnMap.GetFieldByKey(attrGroupKey2) + "='" + attrGroupVal2 + "'  AND " + this.EnMap.GetFieldByKey(attrGroupKey3) + "='" + attrGroupVal3 + "'";
-                    break;
-                default:
-                    break;
-            }
-
-            DataTable dt = DBAccess.RunSQLReturnTable(sql, ps);
-            string str = "1";
-            if (dt.Rows.Count != 0)
-                str = dt.Rows[0][0].ToString();
-            return str.PadLeft(int.Parse(this.EnMap.CodeStruct), '0');
         }
         #endregion
 
@@ -1077,9 +750,6 @@ namespace BP.En
 
             sql = "UPDATE " + ptable + " SET " + idxAttr + "=" + idxFirst + "-1, " + groupKey + "='" + groupValFirst + "' WHERE " + this.PK + "='" + this.PKVal + "'";
             DBAccess.RunSQL(sql);
-
-            //   sql = "SELECT "+ pk + " FROM "+ptable+ " WHERE "+ groupKey+"='"++"'  ORDER BY Idx ";
-
 
         }
         /// <summary>
@@ -1372,7 +1042,7 @@ namespace BP.En
             {
                 var paras = SqlBuilder.GenerParas(this, null);
 
-                switch (SystemConfig.AppCenterDBType)
+                switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
                         return this.RunSQL(this.SQLCash.Insert, paras);
@@ -1394,7 +1064,6 @@ namespace BP.En
                 if (isCheck == true)
                     return this.Insert();
 
-                this.roll();
                 throw ex;
             }
             //this.RunSQL(this.SQLCash.Insert, SqlBuilder.GenerParas(this, null));
@@ -1556,7 +1225,7 @@ namespace BP.En
                     this.CheckPhysicsTable();
 
                     if (this.EnMap.EnDBUrl.DBUrlType == DBUrlType.AppCenterDSN
-                        && DBAccess.IsView(this.EnMap.PhysicsTable, SystemConfig.AppCenterDBType) == false)
+                        && DBAccess.IsView(this.EnMap.PhysicsTable, BP.Difference.SystemConfig.AppCenterDBType) == false)
                         return Retrieve(); //让其在查询一遍.
                 }
                 throw new Exception(ex.Message + "@在Entity(" + this.ToString() + ")查询期间出现错误@" + ex.StackTrace);
@@ -1705,18 +1374,7 @@ namespace BP.En
                 }
             }
         }
-        /// <summary>
-        /// 按照主键查询，查询出来的结果不赋给当前的实体。
-        /// </summary>
-        /// <returns>查询出来的个数</returns>
-        public DataTable RetrieveNotSetValues()
-        {
-            Paras ps = new Paras();
-            ps.SQL = SqlBuilder.Retrieve(this);
-            ps.Add(this.PK, this.PKVal);
-
-            return this.RunSQLReturnTable(ps.SQL, ps);
-        }
+       
         /// <summary>
         /// 这个表里是否存在
         /// </summary>
@@ -1770,82 +1428,16 @@ namespace BP.En
         #endregion
 
         #region 删除.
-        private bool CheckDB()
-        {
-            #region 检查数据.
-            //CheckDatas  ens=new CheckDatas(this.EnMap.PhysicsTable);
-            //foreach(CheckData en in ens)
-            //{
-            //    string sql="DELETE  FROM "+en.RefTBName+"   WHERE  "+en.RefTBFK+" ='"+this.GetValByKey(en.MainTBPK) +"' ";	
-            //    DBAccess.RunSQL(sql);
-            //}
-            #endregion
-
-            #region 判断是否有明细
-            foreach (EnDtl dtl in this.EnMap.Dtls)
-            {
-                string sql = "DELETE  FROM  " + dtl.Ens.GetNewEntity.EnMap.PhysicsTable + "   WHERE  " + dtl.RefKey + " ='" + this.PKVal.ToString() + "' ";
-                //DBAccess.RunSQL(sql);
-                /*
-                //string sql="SELECT "+dtl.RefKey+" FROM  "+dtl.Ens.GetNewEntity.EnMap.PhysicsTable+"   WHERE  "+dtl.RefKey+" ='"+this.PKVal.ToString() +"' ";	
-                DataTable dt= DBAccess.RunSQLReturnTable(sql); 
-                if(dt.Rows.Count==0)
-                    continue;
-                else
-                    throw new Exception("@["+this.EnDesc+"],删除期间出现错误，它有["+dt.Rows.Count+"]个明细存在,不能删除！");
-                    */
-            }
-            #endregion
-
-            return true;
-        }
+        
         /// <summary>
         /// 删除之前要做的工作
         /// </summary>
         /// <returns></returns>
         protected virtual bool beforeDelete()
         {
-            this.CheckDB();
             return true;
         }
-        /// <summary>
-        /// 删除它关连的实体．
-        /// </summary>
-        public void DeleteHisRefEns()
-        {
-            #region 检查数据.
-            //			CheckDatas  ens=new CheckDatas(this.EnMap.PhysicsTable);
-            //			foreach(CheckData en in ens)
-            //			{
-            //				string sql="DELETE  FROM "+en.RefTBName+"   WHERE  "+en.RefTBFK+" ='"+this.GetValByKey(en.MainTBPK) +"' ";	
-            //				DBAccess.RunSQL(sql); 
-            //			}
-            #endregion
-
-            #region 判断是否有明细
-            foreach (EnDtl dtl in this.EnMap.Dtls)
-            {
-                string sql = "DELETE FROM " + dtl.Ens.GetNewEntity.EnMap.PhysicsTable + "   WHERE  " + dtl.RefKey + " ='" + this.PKVal.ToString() + "' ";
-                DBAccess.RunSQL(sql);
-            }
-            #endregion
-
-            #region 判断是否有一对对的关系.
-            foreach (AttrOfOneVSM dtl in this.EnMap.AttrsOfOneVSM)
-            {
-                string sql = "DELETE  FROM " + dtl.EnsOfMM.GetNewEntity.EnMap.PhysicsTable + "   WHERE  " + dtl.AttrOfOneInMM + " ='" + this.PKVal.ToString() + "' ";
-                DBAccess.RunSQL(sql);
-            }
-            #endregion
-        }
-        /// <summary>
-        /// 把缓存删除
-        /// </summary>
-        public void DeleteDataAndCash()
-        {
-            this.Delete();
-            this.DeleteFromCash();
-        }
+         
         public void DeleteFromCash()
         {
             //删除缓存.
@@ -1884,16 +1476,7 @@ namespace BP.En
         {
             Paras ps = new Paras();
             ps.Add(this.PK, pk);
-            switch (this.EnMap.EnDBUrl.DBType)
-            {
-                case DBType.Oracle:
-                case DBType.DM:
-                case DBType.MSSQL:
-                case DBType.MySQL:
-                    return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.PK + " =" + this.HisDBVarStr + pk);
-                default:
-                    throw new Exception("没有涉及到的类型。");
-            }
+            return DBAccess.RunSQL("DELETE FROM " + this.EnMap.PhysicsTable + " WHERE " + this.PK + " =" + this.HisDBVarStr + pk);
         }
         /// <summary>
         /// 删除指定的数据
@@ -1904,7 +1487,7 @@ namespace BP.En
         {
             Paras ps = new Paras();
             ps.Add(attr, val);
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true)
             {
                 ps.Add(attr, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr, val));
             }
@@ -1919,7 +1502,7 @@ namespace BP.En
         {
             Paras ps = new Paras();
 
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true)
             {
                 ps.Add(attr1, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr1, val1));
                 ps.Add(attr2, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr2, val2));
@@ -1937,7 +1520,7 @@ namespace BP.En
         {
             Paras ps = new Paras();
 
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true)
             {
                 ps.Add(attr1, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr1, val1));
                 ps.Add(attr2, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr2, val2));
@@ -1956,13 +1539,12 @@ namespace BP.En
         {
             Paras ps = new Paras();
 
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true)
             {
                 ps.Add(attr1, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr1, val1));
                 ps.Add(attr2, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr2, val2));
                 ps.Add(attr3, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr3, val3));
                 ps.Add(attr4, BP.Sys.Base.Glo.GenerRealType(this.EnMap.Attrs, attr4, val4));
-
             }
             else
             {
@@ -1980,8 +1562,6 @@ namespace BP.En
                 return;
             ///删除缓存。
             CashEntity.Delete(this.ToString(), this.PKVal.ToString());
-
-
             return;
         }
         #endregion
@@ -1999,8 +1579,6 @@ namespace BP.En
                     string atParaStr = this.GetValStringByKey("AtPara");
                     if (DataType.IsNullOrEmpty(atParaStr))
                     {
-                        /*没有发现数据，就执行初始化.*/
-                        this.InitParaFields();
 
                         // 重新获取一次。
                         atParaStr = this.GetValStringByKey("AtPara");
@@ -2021,13 +1599,7 @@ namespace BP.En
                 }
             }
         }
-        /// <summary>
-        /// 初始化参数字段(需要子类重写)
-        /// </summary>
-        /// <returns></returns>
-        protected virtual void InitParaFields()
-        {
-        }
+       
         /// <summary>
         /// 获取参数
         /// </summary>
@@ -2130,14 +1702,6 @@ namespace BP.En
         public object GetRefObject(string key)
         {
             return this.Row["_" + key];
-            //object obj = this.Row[key];
-            //if (obj == null)
-            //{
-            //    if (this.Row.ContainsKey(key) == false)
-            //        return null;
-            //    obj = this.Row[key];
-            //}
-            //return obj;
         }
         /// <summary>
         /// 设置实体
@@ -2177,14 +1741,7 @@ namespace BP.En
         {
             return true;
         }
-        protected virtual bool roll()
-        {
-            return true;
-        }
-        public virtual void InsertWithOutPara()
-        {
-            this.RunSQL(SqlBuilder.Insert(this));
-        }
+         
         /// <summary>
         /// Insert .
         /// </summary>
@@ -2253,29 +1810,7 @@ namespace BP.En
                 ver.RDT = rdt;
                 ver.RecNo = BP.Web.WebUser.Name;
                 ver.Save();
-
-                // 保存字段数据.
-                Attrs attrs = this.EnMap.Attrs;
-                foreach (Attr attr in attrs)
-                {
-                    if (attr.IsRefAttr)
-                        continue;
-
-                    //EnVerDtl dtl = new EnVerDtl();
-                    //dtl.EnVerPK = ver.MyPK;
-                    //dtl.EnVer = ver.EVer;
-                    //dtl.EnName = ver.No;
-                    //dtl.AttrKey = attr.Key;
-                    //dtl.AttrName = attr.Desc;
-                    ////dtl.OldVal = this.GetValStrByKey(attr.Key);   //第一个版本时，旧值没有
-                    //dtl.RDT = rdt;
-                    //dtl.Rec = BP.Web.WebUser.Name;
-                    //dtl.NewVal = this.GetValStrByKey(attr.Key);
-                    //dtl.setMyPK(ver.MyPK + "_" + attr.Key + "_" + dtl.EnVer;
-                    //dtl.Insert();
-                }
             }
-
             return;
         }
         /// <summary>
@@ -2302,7 +1837,7 @@ namespace BP.En
         {
             foreach (Attr attr in this.EnMap.Attrs)
             {
-#warning zhoupeng 打开如下注释代码？没有考虑到为什么要改变PK.
+                #warning zhoupeng 打开如下注释代码？没有考虑到为什么要改变PK.
                 //if (attr.IsPK)
                 //    continue;   //不能在打开，如果打开，就会与其他的约定出错，copy就是全部的属性，然后自己。
 
@@ -2313,44 +1848,7 @@ namespace BP.En
                 this.SetValByKey(attr.Key, obj);
             }
         }
-        /// <summary>
-        /// 从一个副本上
-        /// </summary>
-        /// <param name="fromRow"></param>
-        public virtual void Copy(Row fromRow)
-        {
-            Attrs attrs = this.EnMap.Attrs;
-            foreach (Attr attr in attrs)
-            {
-                try
-                {
-                    this.SetValByKey(attr.Key, fromRow.GetValByKey(attr.Key));
-                }
-                catch
-                {
-                }
-            }
-        }
-        public virtual void Copy(XmlEn xmlen)
-        {
-            Attrs attrs = this.EnMap.Attrs;
-            foreach (Attr attr in attrs)
-            {
-                object obj = null;
-                try
-                {
-                    obj = xmlen.GetValByKey(attr.Key);
-                }
-                catch
-                {
-                    continue;
-                }
-
-                if (obj == null || obj.ToString() == "")
-                    continue;
-                this.SetValByKey(attr.Key, xmlen.GetValByKey(attr.Key));
-            }
-        }
+      
         /// <summary>
         /// 复制 Hashtable
         /// </summary>
@@ -2387,15 +1885,6 @@ namespace BP.En
                 }
             }
         }
-        public string Copy(string refDoc)
-        {
-            foreach (Attr attr in this._enMap.Attrs)
-            {
-                refDoc = refDoc.Replace("@" + attr.Key, this.GetValStrByKey(attr.Key));
-            }
-            return refDoc;
-        }
-
 
         public void Copy()
         {
@@ -2428,7 +1917,7 @@ namespace BP.En
         public bool verifyData()
         {
             //如果启用验证就执行验证.
-            if (SystemConfig.GetValByKeyBoolen("IsEnableVerifyData", false) == false)
+            if (BP.Difference.SystemConfig.GetValByKeyBoolen("IsEnableVerifyData", false) == false)
                 return true;
 
             string str = "";
@@ -2469,7 +1958,7 @@ namespace BP.En
             if (str == "")
                 return true;
 
-            if (SystemConfig.IsDebug)
+            if (BP.Difference.SystemConfig.IsDebug)
                 throw new Exception("@在保存[" + this.EnDesc + "],主键[" + this.PK + "=" + this.PKVal + "]时出现信息录入不整错误：" + str);
             else
                 throw new Exception("@在保存[" + this.EnDesc + "][" + this.EnMap.GetAttrByKey(this.PK).Desc + "=" + this.PKVal + "]时错误：" + str);
@@ -2495,10 +1984,6 @@ namespace BP.En
         #endregion 更新，插入之前的工作。
 
         #region 更新操作
-        /// <summary>
-        /// 更新
-
-        /// <returns></returns>
         public virtual int Update()
         {
             return this.Update(null);
@@ -2635,47 +2120,13 @@ namespace BP.En
                 }
 
                 BP.DA.Log.DebugWriteError(ex.Message);
-                if (SystemConfig.IsDebug)
+                if (BP.Difference.SystemConfig.IsDebug)
                     throw new Exception("@[" + this.EnDesc + "]更新期间出现错误:" + str + ex.Message);
                 else
                     throw ex;
             }
         }
-        private int UpdateOfDebug(string[] keys)
-        {
-            string str = "";
-            try
-            {
-                str = "@在更新之前出现错误";
-                if (this.beforeUpdate() == false)
-                {
-                    return 0;
-                }
-                str = "@在beforeUpdateInsertAction出现错误";
-                if (this.beforeUpdateInsertAction() == false)
-                {
-                    return 0;
-                }
-                int i = EntityDBAccess.Update(this, keys);
-                str = "@在afterUpdate出现错误";
-                this.afterUpdate();
-                str = "@在afterInsertUpdateAction出现错误";
-                this.afterInsertUpdateAction();
-                //this.UpdateMemory();
-                return i;
-            }
-            catch (System.Exception ex)
-            {
-                string msg = "@[" + this.EnDesc + "]UpdateOfDebug更新期间出现错误:" + str + ex.Message;
-                BP.DA.Log.DebugWriteError(msg);
-
-                if (SystemConfig.IsDebug)
-                    throw new Exception(msg);
-                else
-                    throw ex;
-            }
-        }
-
+      
         protected virtual void afterUpdate()
         {
             if (this.EnMap.IsEnableVer)
@@ -2694,73 +2145,10 @@ namespace BP.En
 
                 if (ver.RetrieveFromDBSources() == 0)
                 {
-                    /*初始化数据.*/
-                    //ver.PKValue = this.PKVal.ToString();
-                    //ver.No = enName;
-                    //ver.RDT = rdt;
-                    //ver.Name = this.EnMap.EnDesc;
-                    //ver.Rec = BP.Web.WebUser.Name;
-                    //ver.Insert();
-
-                    //foreach (Attr attr in this.EnMap.Attrs)
-                    //{
-                    //    if (attr.IsRefAttr)
-                    //        continue;
-
-                    //    dtl = new EnVerDtl();
-                    //    dtl.EnVerPK = ver.MyPK;
-                    //    dtl.EnVer = ver.EVer;
-                    //    dtl.EnName = ver.No;
-                    //    dtl.AttrKey = attr.Key;
-                    //    dtl.AttrName = attr.Desc;
-
-                    //    dtl.RDT = rdt;
-                    //    dtl.Rec = BP.Web.WebUser.Name;
-                    //    dtl.NewVal = this.GetValStrByKey(attr.Key);
-
-                    //    dtl.setMyPK(ver.MyPK + "_" + attr.Key + "_" + dtl.EnVer;
-                    //    dtl.Insert();
-                    //}
+                   
                     return;
                 }
-
-                //更新主版本信息.
-                //ver.EVer += 1;
-                //ver.Rec = BP.Web.WebUser.No;
-                //ver.RDT = rdt;
-                //ver.Update();
-
-                ////获取上一版本的数据
-                //EnVerDtls dtls = new EnVerDtls(ver.MyPK, ver.EVer - 1);
-
-                //// 保存字段数据.
-                //Attrs attrs = this.EnMap.Attrs;
-                //foreach (Attr attr in attrs)
-                //{
-                //    if (attr.IsRefAttr)
-                //        continue;
-
-                //    dtl = new BP.Sys.EnVerDtl();
-                //    dtl.EnVerPK = ver.MyPK;
-                //    dtl.EnVer = ver.EVer;
-                //    dtl.EnName = ver.No;
-                //    dtl.AttrKey = attr.Key;
-                //    dtl.AttrName = attr.Desc;
-
-                //    dtlTemp = dtls.GetEntityByKey(EnVerDtlAttr.AttrKey, attr.Key) as EnVerDtl;
-
-                //    if (dtlTemp != null)
-                //        dtl.OldVal = dtlTemp.NewVal;
-                //    else
-                //        dtl.OldVal = this.GetValStrByKey(attr.Key);
-
-                //    dtl.RDT = rdt;
-                //    dtl.Rec = BP.Web.WebUser.Name;
-                //    dtl.NewVal = this.GetValStrByKey(attr.Key);
-
-                //    dtl.setMyPK(ver.MyPK + "_" + attr.Key + "_" + dtl.EnVer;
-                //    dtl.Insert();
-                //}
+                 
             }
             return;
         }
@@ -2771,35 +2159,6 @@ namespace BP.En
 
             DBAccess.SaveBigTextToDB(bigTxt, this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
 
-        }
-        /// <summary>
-        /// 保存文件到数据库
-        /// </summary>
-        /// <param name="saveToField">要保存的字段</param>
-        /// <param name="bytes">文件流</param>
-        public void SaveFileToDB(string saveToField, byte[] bytesOfFile)
-        {
-            try
-            {
-                DBAccess.SaveBytesToDB(bytesOfFile, this.EnMap.PhysicsTable, this.PK, this.PKVal.ToString(), saveToField);
-            }
-            catch (Exception ex)
-            {
-                /* 为了防止任何可能出现的数据丢失问题，您应该先仔细检查此脚本，然后再在数据库设计器的上下文之外运行此脚本。*/
-                string sql = "";
-                if (DBAccess.AppCenterDBType == DBType.MSSQL)
-                    sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " Image NULL ";
-
-                if (DBAccess.AppCenterDBType == DBType.Oracle)
-                    sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " Image NULL ";
-
-                if (DBAccess.AppCenterDBType == DBType.MySQL)
-                    sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " Image NULL ";
-
-                DBAccess.RunSQL(sql);
-
-                throw new Exception("@保存文件期间出现错误，有可能该字段没有被自动创建，现在已经执行创建修复数据表，请重新执行一次." + ex.Message);
-            }
         }
 
         /// <summary>
@@ -2816,18 +2175,20 @@ namespace BP.En
             catch (Exception ex)
             {
                 /* 为了防止任何可能出现的数据丢失问题，您应该先仔细检查此脚本，然后再在数据库设计器的上下文之外运行此脚本。*/
-                string sql = "";
-                if (DBAccess.AppCenterDBType == DBType.MSSQL)
-                    sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " Image NULL ";
+                if (DBAccess.IsExitsTableCol(this.EnMap.PhysicsTable, saveToField) == false)
+                {
+                    string sql = "";
+                    if (DBAccess.AppCenterDBType == DBType.MSSQL)
+                        sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " Image NULL ";
 
-                if (DBAccess.AppCenterDBType == DBType.Oracle)
-                    sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " Blob NULL ";
+                    if (DBAccess.AppCenterDBType == DBType.Oracle)
+                        sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " Blob NULL ";
 
-                if (DBAccess.AppCenterDBType == DBType.MySQL)
-                    sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " MediumBlob NULL ";
+                    if (DBAccess.AppCenterDBType == DBType.MySQL)
+                        sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " MediumBlob NULL ";
 
-                DBAccess.RunSQL(sql);
-
+                    DBAccess.RunSQL(sql);
+                }
                 throw new Exception("@保存文件期间出现错误，有可能该字段没有被自动创建，现在已经执行创建修复数据表，请重新执行一次." + ex.Message);
             }
         }
@@ -2906,21 +2267,7 @@ namespace BP.En
         #endregion
 
         #region 关于数据库的处理
-        /// <summary>
-        /// 检查是否是日期
-        /// </summary>
-        protected void CheckDateAttr()
-        {
-            Attrs attrs = this.EnMap.Attrs;
-            foreach (Attr attr in attrs)
-            {
-                if (attr.MyDataType == DataType.AppDate
-                    || attr.MyDataType == DataType.AppDateTime)
-                {
-                    DateTime dt = this.GetValDateTime(attr.Key);
-                }
-            }
-        }
+       
         /// <summary>
         /// 创建物理表
         /// </summary>
@@ -2959,12 +2306,9 @@ namespace BP.En
                 this.CreateIndexAndPK();
                 return;
             }
-
-
         }
         private void CreateIndexAndPK()
         {
-
             #region 建立主键
             if (DBAccess.IsExitsTabPK(this.EnMap.PhysicsTable) == false)
             {
@@ -3015,7 +2359,6 @@ namespace BP.En
             DBType dbtype = this._enMap.EnDBUrl.DBType;
             string sqlFields = "";
             string sqlYueShu = "";
-
 
             DataTable dtAttr = DBAccess.RunSQLReturnTable(DBAccess.SQLOfTableFieldDesc(table));
             DataTable dtYueShu = DBAccess.RunSQLReturnTable(DBAccess.SQLOfTableFieldYueShu(table));
@@ -3639,7 +2982,7 @@ namespace BP.En
 
             string sql = "";
 
-            switch (SystemConfig.AppCenterDBType)
+            switch (BP.Difference.SystemConfig.AppCenterDBType)
             {
                 case DBType.MSSQL:
                     return CheckPhysicsTableAutoExtFieldLength_SQL();
@@ -3647,7 +2990,7 @@ namespace BP.En
                 case DBType.DM:
                     break;
                 case DBType.MySQL:
-                    // sql = "select character_maximum_length as Len, table_schema as OWNER FROM information_schema.columns WHERE TABLE_SCHEMA='" + SystemConfig.AppCenterDBDatabase + "' AND table_name ='" + this._enMap.PhysicsTable + "' and column_Name='" + attr.Field + "' AND character_maximum_length < " + attr.MaxLength;
+                    // sql = "select character_maximum_length as Len, table_schema as OWNER FROM information_schema.columns WHERE TABLE_SCHEMA='" + BP.Difference.SystemConfig.AppCenterDBDatabase + "' AND table_name ='" + this._enMap.PhysicsTable + "' and column_Name='" + attr.Field + "' AND character_maximum_length < " + attr.MaxLength;
                     //return CheckPhysicsTableAutoExtFieldLength_MySQL(sql);
                     break;
                 case DBType.Informix:
@@ -3768,7 +3111,7 @@ namespace BP.En
             if (this._enMap.EnDBUrl.DBUrlType
                 != DBUrlType.AppCenterDSN)
                 return;
-            switch (SystemConfig.AppCenterDBType)
+            switch (BP.Difference.SystemConfig.AppCenterDBType)
             {
                 case DBType.MSSQL:
                     this.CheckPhysicsTable_SQL();
@@ -3790,14 +3133,6 @@ namespace BP.En
                 default:
                     throw new Exception("@没有涉及到的数据库类型");
             }
-
-            ////检查从表.
-            //MapDtls dtls = new MapDtls(this.ClassID);
-            //foreach (MapDtl dtl in dtls)
-            //{
-            //    GEDtl dtlen = new GEDtl(dtl.No);
-            //    dtlen.CheckPhysicsTable();
-            //}
         }
         private void CheckPhysicsTable_Informix()
         {
@@ -4030,7 +3365,7 @@ namespace BP.En
 
                 int maxLen = attr.MaxLength;
                 dt = new DataTable();
-                sql = "select character_maximum_length as Len, table_schema as OWNER FROM information_schema.columns WHERE TABLE_SCHEMA='" + SystemConfig.AppCenterDBDatabase + "' AND table_name ='" + this._enMap.PhysicsTable + "' and column_Name='" + attr.Field + "' AND character_maximum_length < " + attr.MaxLength;
+                sql = "select character_maximum_length as Len, table_schema as OWNER FROM information_schema.columns WHERE TABLE_SCHEMA='" + BP.Difference.SystemConfig.AppCenterDBDatabase + "' AND table_name ='" + this._enMap.PhysicsTable + "' and column_Name='" + attr.Field + "' AND character_maximum_length < " + attr.MaxLength;
                 dt = this.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0)
                     continue;
@@ -4058,7 +3393,7 @@ namespace BP.En
                 if (attr.MyDataType != DataType.AppInt)
                     continue;
 
-                sql = "SELECT DATA_TYPE FROM information_schema.columns WHERE table_name='" + this._enMap.PhysicsTable + "' AND COLUMN_NAME='" + attr.Field + "' and table_schema='" + SystemConfig.AppCenterDBDatabase + "'";
+                sql = "SELECT DATA_TYPE FROM information_schema.columns WHERE table_name='" + this._enMap.PhysicsTable + "' AND COLUMN_NAME='" + attr.Field + "' and table_schema='" + BP.Difference.SystemConfig.AppCenterDBDatabase + "'";
                 string val = DBAccess.RunSQLReturnString(sql);
                 if (val == null)
                 {
@@ -4069,7 +3404,7 @@ namespace BP.En
                 if (val.ToUpper().IndexOf("CHAR") != -1)
                 {
                     /*如果它是 varchar 字段*/
-                    sql = "SELECT table_schema as OWNER FROM information_schema.columns WHERE  table_name='" + this._enMap.PhysicsTableExt + "' AND COLUMN_NAME='" + attr.Field + "' and table_schema='" + SystemConfig.AppCenterDBDatabase + "'";
+                    sql = "SELECT table_schema as OWNER FROM information_schema.columns WHERE  table_name='" + this._enMap.PhysicsTableExt + "' AND COLUMN_NAME='" + attr.Field + "' and table_schema='" + BP.Difference.SystemConfig.AppCenterDBDatabase + "'";
                     string OWNER = DBAccess.RunSQLReturnString(sql);
                     try
                     {
@@ -4123,7 +3458,7 @@ namespace BP.En
         {
             #region 检查字段是否存在
             //string sql = "SELECT * FROM " + this.EnMap.PhysicsTable + " WHERE 1=2 ";
-            string sql = "SELECT WMSYS.WM_CONCAT(DISTINCT(column_name)) AS Column_Name  FROM all_tab_cols WHERE table_name = '" + this.EnMap.PhysicsTable.ToUpper() + "' AND owner='" + SystemConfig.AppCenterDBDatabase.ToUpper() + "'";
+            string sql = "SELECT WMSYS.WM_CONCAT(DISTINCT(column_name)) AS Column_Name  FROM all_tab_cols WHERE table_name = '" + this.EnMap.PhysicsTable.ToUpper() + "' AND owner='" + BP.Difference.SystemConfig.AppCenterDBDatabase.ToUpper() + "'";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
                 return;
@@ -4385,7 +3720,8 @@ namespace BP.En
 
                 mattr.UIRefKeyText = attr.UIRefKeyText;
                 mattr.setUIVisible(attr.UIVisible);
-
+                if (attr.IsSupperText == 1)
+                    mattr.IsRichText = true;
                 //设置显示与隐藏，按照默认值.
                 if (mattr.GetParaString("SearchVisable") == "")
                 {

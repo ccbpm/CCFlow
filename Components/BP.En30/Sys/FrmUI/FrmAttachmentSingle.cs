@@ -116,7 +116,7 @@ namespace BP.Sys.FrmUI
         {
             get
             {
-              return SystemConfig.PathOfDataUser + "UploadFile/" + this.FK_MapData + "/";
+              return BP.Difference.SystemConfig.PathOfDataUser + "UploadFile/" + this.FK_MapData + "/";
             }
         }
         #endregion 参数属性.
@@ -321,48 +321,7 @@ namespace BP.Sys.FrmUI
             }
 
         }
-        /// <summary>
-        /// Y
-        /// </summary>
-        public float Y
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmAttachmentAttr.Y);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.Y, value);
-            }
-        }
-        /// <summary>
-        /// X
-        /// </summary>
-        public float X
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmAttachmentAttr.X);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.X, value);
-            }
-        }
-        /// <summary>
-        /// W
-        /// </summary>
-        public float W
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmAttachmentAttr.W);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.W, value);
-            }
-        }
+       
         /// <summary>
         /// H
         /// </summary>
@@ -652,7 +611,7 @@ namespace BP.Sys.FrmUI
             try
             {
                 FtpConnection conn = new FtpConnection();
-                conn.Connect(SystemConfig.FTPServerIP, SystemConfig.FTPServerPort, SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+                conn.Connect(BP.Difference.SystemConfig.FTPServerIP, BP.Difference.SystemConfig.FTPServerPort, BP.Difference.SystemConfig.FTPUserNo, BP.Difference.SystemConfig.FTPUserPassword);
                 return "连接成功.";
             }
             catch (Exception ex)
@@ -734,7 +693,7 @@ namespace BP.Sys.FrmUI
             ath.IsHeLiuHuiZong = this.IsHeLiuHuiZong;
 
             //强制设置,保存到ftp服务器上.
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 ath.AthSaveWay = AthSaveWay.FTPServer;
 
             ath.Update();

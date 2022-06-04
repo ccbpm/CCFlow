@@ -1,19 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Data;
-using System.Text;
-using System.Web;
+﻿using System.Data;
 using BP.DA;
-using BP.Sys;
-using BP.Web;
-using BP.Port;
-using BP.En;
 using BP.WF;
-using BP.WF.Template;
-using BP.WF.Data;
 using BP.WF.HttpHandler;
-using BP.CCBill.Template;
 
 
 namespace BP.CCBill

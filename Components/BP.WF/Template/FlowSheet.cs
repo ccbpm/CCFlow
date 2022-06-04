@@ -254,7 +254,7 @@ namespace BP.WF.Template
         public FlowSheet(string _No)
         {
             this.No = _No;
-            if (SystemConfig.IsDebug)
+            if (BP.Difference.SystemConfig.IsDebug)
             {
                 int i = this.RetrieveFromDBSources();
                 if (i == 0)
@@ -402,7 +402,7 @@ namespace BP.WF.Template
 
         }
         /// <summary>
-        /// 恢复已完成的流程数据到指定的节点，如果节点为0就恢复到最后一个完成的节点上去.
+        /// 回滚已完成的流程数据到指定的节点，如果节点为0就恢复到最后一个完成的节点上去.
         /// </summary>
         /// <param name="workid">要恢复的workid</param>
         /// <param name="backToNodeID">恢复到的节点编号，如果是0，标示回复到流程最后一个节点上去.</param>
@@ -641,13 +641,13 @@ namespace BP.WF.Template
                 Paras ps = new Paras();
                 ps.Add("Title", title);
                 ps.Add("OID", wk.OID);
-                ps.SQL = "UPDATE " + table + " SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + SystemConfig.AppCenterDBVarStr + "OID";
+                ps.SQL = "UPDATE " + table + " SET Title=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);
 
-                ps.SQL = "UPDATE " + md.PTable + " SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + SystemConfig.AppCenterDBVarStr + "OID";
+                ps.SQL = "UPDATE " + md.PTable + " SET Title=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);
 
-                ps.SQL = "UPDATE WF_GenerWorkFlow SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "OID";
+                ps.SQL = "UPDATE WF_GenerWorkFlow SET Title=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title WHERE WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);
 
 
@@ -693,13 +693,13 @@ namespace BP.WF.Template
                 Paras ps = new Paras();
                 ps.Add("Title", title);
                 ps.Add("OID", wk.OID);
-                ps.SQL = "UPDATE " + table + " SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + SystemConfig.AppCenterDBVarStr + "OID";
+                ps.SQL = "UPDATE " + table + " SET Title=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);
 
-                ps.SQL = "UPDATE " + md.PTable + " SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + SystemConfig.AppCenterDBVarStr + "OID";
+                ps.SQL = "UPDATE " + md.PTable + " SET Title=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title WHERE OID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);
 
-                ps.SQL = "UPDATE WF_GenerWorkFlow SET Title=" + SystemConfig.AppCenterDBVarStr + "Title WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "OID";
+                ps.SQL = "UPDATE WF_GenerWorkFlow SET Title=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title WHERE WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "OID";
                 DBAccess.RunSQL(ps);
 
 

@@ -13,28 +13,28 @@ namespace BP.GPM.AD
         {
             get
             {
-                return SystemConfig.AppSettings["ADBasePath"];
+                return BP.Difference.SystemConfig.AppSettings["ADBasePath"];
             }
         }
         public static string ADUser
         {
             get
             {
-                return SystemConfig.AppSettings["ADUser"];
+                return BP.Difference.SystemConfig.AppSettings["ADUser"];
             }
         }
         public static string ADPassword
         {
             get
             {
-                return SystemConfig.AppSettings["ADPassword"];
+                return BP.Difference.SystemConfig.AppSettings["ADPassword"];
             }
         }
         public static string ADPath
         {
             get
             {
-                return SystemConfig.AppSettings["ADPath"];
+                return BP.Difference.SystemConfig.AppSettings["ADPath"];
             }
         }
         /// <summary>

@@ -583,7 +583,7 @@ namespace BP.WF
             }
 
             string sqlRename = "";
-            switch (SystemConfig.AppCenterDBType)
+            switch (BP.Difference.SystemConfig.AppCenterDBType)
             {
                 case DBType.MSSQL:
                     sqlRename = "EXEC SP_RENAME WF_Track, " + ptable;
@@ -607,25 +607,6 @@ namespace BP.WF
             //重命名.
             DBAccess.RunSQL(sqlRename);
 
-            try
-            {
-
-                //去掉索引
-                DBAccess.RunSQLs("drop index WF_Track_MyPK on " + ptable);
-                DBAccess.RunSQL("Alter Table " + ptable + " ALTER column MyPK bigint NOT NULL");
-                DBAccess.RunSQL("CREATE INDEX WF_Track_MyPK ON " + ptable + "(MyPK)");
-                //删除主键.
-                DBAccess.DropTablePK(ptable);
-
-
-                //创建主键.  这里创建主键的时候提示错误。提示该主键应存在.
-                DBAccess.CreatePK(ptable, TrackAttr.MyPK, tk.EnMap.EnDBUrl.DBType);
-            }
-            catch (Exception ex)
-            {
-                Log.DebugWriteError(ex.Message);
-            }
-            //增加frmDB字段.
         }
         /// <summary>
         /// 插入
@@ -634,7 +615,7 @@ namespace BP.WF
         public void DoInsert(Int64 mypk)
         {
             string ptable = "ND" + int.Parse(this.FK_Flow) + "Track";
-            string dbstr = SystemConfig.AppCenterDBVarStr;
+            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
             string sql = "INSERT INTO " + ptable;
             sql += "(";
             sql += "" + TrackAttr.MyPK + ",";
@@ -709,7 +690,7 @@ namespace BP.WF
                 Paras ps = SqlBuilder.GenerParas(this, null);
                 ps.SQL = sql;
 
-                switch (SystemConfig.AppCenterDBType)
+                switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
                     case DBType.MSSQL:
                         this.RunSQL(ps);
@@ -784,13 +765,13 @@ namespace BP.WF
             if (this.HisActionType == ActionType.Start || this.HisActionType == ActionType.StartChildenFlow)
             {
                 Paras ps = new Paras();
-                ps.SQL = "UPDATE WF_GenerWorkerlist SET RDT=" + SystemConfig.AppCenterDBVarStr + "RDT WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID ";
+                ps.SQL = "UPDATE WF_GenerWorkerlist SET RDT=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "RDT WHERE WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID ";
                 ps.Add("RDT", this.RDT);
                 ps.Add("WorkID", this.WorkID);
                 DBAccess.RunSQL(ps);
 
                 ps = new Paras();
-                ps.SQL = "UPDATE WF_GenerWorkFlow SET RDT=" + SystemConfig.AppCenterDBVarStr + "RDT WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID ";
+                ps.SQL = "UPDATE WF_GenerWorkFlow SET RDT=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "RDT WHERE WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID ";
                 ps.Add("RDT", this.RDT);
                 ps.Add("WorkID", this.WorkID);
                 DBAccess.RunSQL(ps);

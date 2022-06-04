@@ -255,12 +255,22 @@ namespace BP.Tools
         /// <returns>散列后的字符串</returns> 
         public static string MD5_Encrypt(string encryptString)
         {
-            System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-            byte[] source = md5.ComputeHash(Encoding.Default.GetBytes(encryptString));
+            //第一种模式：X2
+            //System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            //byte[] source = md5.ComputeHash(Encoding.Default.GetBytes(encryptString));
+            //StringBuilder sBuilder = new StringBuilder();
+            //for (int i = 0; i < source.Length; i++)
+            //{
+            //    sBuilder.Append(source[i].ToString("X2"));
+            //}
+            //return sBuilder.ToString();
+            //第二种模式：X
+            MD5 md5 = MD5.Create();
+            byte[] source = md5.ComputeHash(Encoding.UTF8.GetBytes(encryptString));
             StringBuilder sBuilder = new StringBuilder();
             for (int i = 0; i < source.Length; i++)
             {
-                sBuilder.Append(source[i].ToString("X2"));
+                sBuilder.Append(source[i].ToString("X"));
             }
             return sBuilder.ToString();
         }

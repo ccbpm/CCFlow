@@ -26,18 +26,6 @@ namespace BP.Sys
         /// </summary>
         public const string FK_Node = "FK_Node";
         /// <summary>
-        /// X
-        /// </summary>
-        public const string X = "X";
-        /// <summary>
-        /// Y
-        /// </summary>
-        public const string Y = "Y";
-        /// <summary>
-        /// 宽度
-        /// </summary>
-        public const string W = "W";
-        /// <summary>
         /// 高度
         /// </summary>
         public const string H = "H";
@@ -175,6 +163,8 @@ namespace BP.Sys
         /// 移动端图片附件上传的方式
         /// </summary>
         public const string PicUploadType = "PicUploadType";
+        public const string IsEnableTemplate = "IsEnableTemplate";
+        
         /// <summary>
         /// 附件删除方式
         /// </summary>
@@ -568,7 +558,7 @@ namespace BP.Sys
                 {
                     //string s = this.GetValStringByKey(FrmAttachmentAttr.SaveTo);
                     //if (s == "" || s == null)
-                    return SystemConfig.PathOfDataUser + @"/UploadFile/" + this.FK_MapData + "/";
+                    return BP.Difference.SystemConfig.PathOfDataUser + @"/UploadFile/" + this.FK_MapData + "/";
                     // return s;
                 }
 
@@ -611,48 +601,8 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentAttr.NoOfObj, value);
             }
         }
-        /// <summary>
-        /// Y
-        /// </summary>
-        public float Y
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmAttachmentAttr.Y);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.Y, value);
-            }
-        }
-        /// <summary>
-        /// X
-        /// </summary>
-        public float X
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmAttachmentAttr.X);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.X, value);
-            }
-        }
-        /// <summary>
-        /// W
-        /// </summary>
-        public float W
-        {
-            get
-            {
-                return this.GetValFloatByKey(FrmAttachmentAttr.W);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentAttr.W, value);
-            }
-        }
+        
+      
         /// <summary>
         /// H
         /// </summary>
@@ -875,9 +825,6 @@ namespace BP.Sys
                 // map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", true, false, 0, 150, 20);
                 map.AddTBString(FrmAttachmentAttr.Sort, null, "类别(可为空)", true, false, 0, 500, 20);
 
-                map.AddTBFloat(FrmAttachmentAttr.X, 5, "X", true, false);
-                map.AddTBFloat(FrmAttachmentAttr.Y, 5, "Y", false, false);
-                map.AddTBFloat(FrmAttachmentAttr.W, 40, "TBWidth", false, false);
                 map.AddTBFloat(FrmAttachmentAttr.H, 150, "H", false, false);
 
                 map.AddBoolean(FrmAttachmentAttr.IsUpload, true, "是否可以上传", false, false);
@@ -901,6 +848,7 @@ namespace BP.Sys
 
                 map.AddTBInt(FrmAttachmentAttr.IsIdx, 0, "是否排序", false, false);
 
+
                 // map.AddBoolean(FrmAttachmentAttr.IsIdx, false, "是否排序?", true, true);
 
                 #region 流程属性.
@@ -920,6 +868,9 @@ namespace BP.Sys
                 //  map.AddTBInt(FrmAttachmentAttr.RowIdx, 0, "RowIdx", false, false);
                 map.AddTBInt(FrmAttachmentAttr.GroupID, 0, "GroupID", false, false);
                 map.AddTBString(FrmAttachmentAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+
+                map.AddTBInt(FrmAttachmentAttr.IsEnableTemplate, 0, "是否启用模板下载?", false, false);
+
 
                 this._enMap = map;
                 return this._enMap;
@@ -964,10 +915,11 @@ namespace BP.Sys
         /// </summary>
         protected override void afterInsert()
         {
-
             GroupField gf = new GroupField();
             if (this.FK_Node == 0 && gf.IsExit(GroupFieldAttr.CtrlID, this.MyPK) == false)
             {
+                if (this.GetParaBoolen("IsFieldAth") == true)
+                    gf.SetPara("IsFieldAth", 1);
                 gf.FrmID = this.FK_MapData;
                 gf.CtrlID = this.MyPK;
                 gf.CtrlType = "Ath";

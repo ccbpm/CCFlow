@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
-using System.Web;
-using BP.DA;
-using BP.Sys;
-using BP.Web;
-using BP.Port;
-using BP.En;
-using BP.WF;
+﻿using BP.DA;
 using BP.WF.Template;
+using BP.WF.Template.Frm;
 using BP.Difference;
 
 namespace BP.WF.HttpHandler
@@ -46,7 +37,7 @@ namespace BP.WF.HttpHandler
             fileName = fileName.Substring(fileName.IndexOf(this.GetRequestVal("TB_Name")));
             fileName = fileName.ToLower();
 
-            filepath = SystemConfig.PathOfDataUser + "CyclostyleFile/" + fileName;
+            filepath =  BP.Difference.SystemConfig.PathOfDataUser + "CyclostyleFile/" + fileName;
             //file.SaveAs(filepath);
             HttpContextHelper.UploadFile(file, filepath);
 
@@ -61,13 +52,13 @@ namespace BP.WF.HttpHandler
             bt.TempFilePath = fileName; //文件.
 
             //打印的文件类型.
-            bt.HisPrintFileType = (PrintFileType)this.GetRequestValInt("DDL_PrintFileType");
+            bt.HisPrintFileType = (PrintFileType)this.GetRequestValInt("DDL_BillFileType");
 
             //打开模式.
-            bt.PrintOpenModel = (PrintOpenModel)this.GetRequestValInt("DDL_PrintOpenModel");
+            bt.PrintOpenModel = (PrintOpenModel)this.GetRequestValInt("DDL_BillOpenModel");
 
             //二维码模式.
-            bt.QRModel = (QRModel)this.GetRequestValInt("DDL_PrintOpenModel");
+            bt.QRModel = (QRModel)this.GetRequestValInt("DDL_QRModel");
 
             bt.TemplateFileModel = (TemplateFileModel)this.GetRequestValInt("TemplateFileModel");
            

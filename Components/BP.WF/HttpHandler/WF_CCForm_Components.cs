@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
-using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
-using BP.Port;
-using BP.En;
-using BP.WF;
-using BP.WF.Template;
 
 namespace BP.WF.HttpHandler
 {
@@ -100,7 +93,7 @@ namespace BP.WF.HttpHandler
             }
 
             //处理大小写.
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 dt.Columns[0].ColumnName = "DocWordKey";
                 dt.Columns[1].ColumnName = "DocWordName";

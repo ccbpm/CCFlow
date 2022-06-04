@@ -21,7 +21,7 @@ namespace BP.WF.WeiXin
         {
             get
             {
-                return SystemConfig.WXGZH_Appid;// "wx8eac6a18c5efec30";
+                return BP.Difference.SystemConfig.WXGZH_Appid;// "wx8eac6a18c5efec30";
             }
         }
         /// <summary>
@@ -31,7 +31,7 @@ namespace BP.WF.WeiXin
         {
             get
             {
-                return SystemConfig.WXGZH_AppSecret;// "KfFkE9AZ3Zp09zTuKvmqWLgtLj-_cHMPTvV992apOWgSKJHcbjpbu1jYVXh7gI7K";
+                return BP.Difference.SystemConfig.WXGZH_AppSecret;// "KfFkE9AZ3Zp09zTuKvmqWLgtLj-_cHMPTvV992apOWgSKJHcbjpbu1jYVXh7gI7K";
             }
         }
         #endregion 基本配置.

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Collections;
-using BP;
-using BP.Sys;
+﻿using BP.Sys;
 using BP.DA;
 using BP.En;
 

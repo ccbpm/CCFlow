@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Data;
-using System.Collections;
 using BP.DA;
 using BP.Web;
 using BP.En;
-using BP.Port;
-using BP.Sys;
 
 namespace BP.CCBill.Template
 {
@@ -121,7 +117,7 @@ namespace BP.CCBill.Template
 
                 Map map = new Map("GPM_Menu", "新建实体");
 
-                map.AddTBStringPK(BP.GPM.Menu2020.MenuAttr.No, null, "编号", true, true, 0, 300, 10);
+                map.AddTBStringPK(BP.CCFast.CCMenu.MenuAttr.No, null, "编号", true, true, 0, 150, 10);
                 map.AddTBString(MethodAttr.FrmID, null, "表单ID", true, true, 0, 300, 10);
                 map.AddTBString("FlowNo", null, "流程编号", true, true, 0, 300, 10, false);
                 map.AddTBString(MethodAttr.Icon, null, "图标", true, false, 0, 50, 10, true);

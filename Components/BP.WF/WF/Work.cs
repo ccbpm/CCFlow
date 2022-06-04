@@ -106,19 +106,6 @@ namespace BP.WF
         public const string MD5 = "MD5";
         #endregion
     }
-    public class SubThreadWorkAttr: WorkAttr
-    {
-        #region 基本属性
-        /// <summary>
-        /// 记录人
-        /// </summary>
-        public const string Rec = "Rec";
-        /// <summary>
-        /// 流程ID
-        /// </summary>
-        public const string FID = "FID";
-        #endregion
-    }
     /// <summary>
     /// WorkBase 的摘要说明。
     /// 工作
@@ -215,7 +202,7 @@ namespace BP.WF
             int i = qo.DoQuery();
             if (i == 0)
             {
-                if (SystemConfig.IsDebug == false)
+                if (BP.Difference.SystemConfig.IsDebug == false)
                 {
                     this.CheckPhysicsTable();
                     throw new Exception("@节点[" + this.EnDesc + "]数据丢失：WorkID=" + this.OID + " FID=" + this.FID + " sql=" + qo.SQL);
@@ -326,7 +313,7 @@ namespace BP.WF
         public void SaveAsOID(Int64 oid)
         {
             this.SetValByKey("OID", oid);
-            if (this.RetrieveNotSetValues().Rows.Count == 0)
+            if (this.IsExits==false)
                 this.InsertAsOID(oid);
             this.Update();
         }

@@ -88,7 +88,7 @@ namespace BP.WF.Template
                 map.IndexField = NodeEmpAttr.FK_Node;
 
                 map.AddTBIntPK(NodeEmpAttr.FK_Node,0,"Node",true,true);
-                map.AddDDLEntitiesPK(NodeEmpAttr.FK_Emp, null, "到人员", new Emps(), true);
+                map.AddDDLEntitiesPK(NodeEmpAttr.FK_Emp, null, "到人员", new BP.Port.Emps(), true);
 
                 this._enMap = map;
                 return this._enMap;
@@ -97,7 +97,7 @@ namespace BP.WF.Template
         #endregion
         protected override bool beforeInsert()
         {
-            if (BP.Sys.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
                 this.FK_Emp = Web.WebUser.OrgNo + "_" + this.FK_Emp;
             return base.beforeInsert();
         }

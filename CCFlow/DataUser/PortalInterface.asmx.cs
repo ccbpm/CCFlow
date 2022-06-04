@@ -85,8 +85,8 @@ namespace ccbpm
         public bool SendToWeiXin(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo)
         {
             // BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWeiXin  MyPK" + mypk + " UserNo:" + userNo + " Tel:" + tel + " msgInfo:" + msgInfo);
-            if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
-                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
+            if (BP.Difference.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDateTime);
             return true;
         }
         /// <summary>
@@ -104,8 +104,8 @@ namespace ccbpm
         public bool SendToEmail(string mypk, string sender, string sendToEmpNo, string email, string title, string maildoc)
         {
             // BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " email:" + email + " title:" + title + " maildoc:" + maildoc);
-            if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
-                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, title + " \t\n " + maildoc, BP.DA.DataType.CurrentDataTime);
+            if (BP.Difference.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, title + " \t\n " + maildoc, BP.DA.DataType.CurrentDateTime);
             return true;
         }
         /// <summary>
@@ -121,8 +121,8 @@ namespace ccbpm
         {
             //   BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " userNo:" + userNo + " msg:" + msg);
 
-            if (BP.Sys.SystemConfig.IsEnableCCIM && userNo != null)
-                BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, userNo, msg, BP.DA.DataType.CurrentDataTime);
+            if (BP.Difference.SystemConfig.IsEnableCCIM && userNo != null)
+                BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, userNo, msg, BP.DA.DataType.CurrentDateTime);
             //BP.CCIM.Glo.SendMsg(userNo, sourceUserNo, msg);
             return true;
         }
@@ -159,7 +159,7 @@ namespace ccbpm
                 if (userNo.Contains(" ") == true)
                     return false;
 
-                if (BP.DA.DBAccess.IsView("Port_Emp", BP.Sys.SystemConfig.AppCenterDBType) == true)
+                if (BP.DA.DBAccess.IsView("Port_Emp", BP.Difference.SystemConfig.AppCenterDBType) == true)
                     return false;
 
                 string sql = "UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + userNo + "'";

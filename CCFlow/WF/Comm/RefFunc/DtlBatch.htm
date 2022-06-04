@@ -15,7 +15,7 @@
 
     <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
     <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
-    
+
 
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
@@ -89,7 +89,7 @@
 
                 OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 650, 600, "icon-edit", false, function () { }, null, function () {
 
-                    window.location.href = window.location.href
+                    Reload();
 
                 });
                 return;
@@ -123,7 +123,8 @@
 
             OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', windowW, windowH, "icon-edit", false, function () { }, null, function () {
 
-                window.location.href = window.location.href
+                Reload();
+                //window.location.href = window.location.href
 
             });
 
@@ -493,7 +494,7 @@
                 var fn;
                 try {
                     if (mapAttr.UIBindKey) {
-                        fn = eval(mapAttr.UIBindKey);
+                        fn = cceval(mapAttr.UIBindKey);
                     }
                 } catch (e) {
                 }
@@ -567,7 +568,7 @@
                 return;
             }
             //   alert(data);
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function Delete(pkval) {
@@ -583,7 +584,7 @@
             en.SetPKVal(pkval);
             en.Delete();
 
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function CloseIt() {

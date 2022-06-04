@@ -131,7 +131,7 @@
             // url += "&IsGuide=1";
             // url += "&CopyFormWorkID=" + pWorkID;
             // url += "&CopyFormNode=" + en.FK_Node;
-            // window.location.href = url;
+            // SetHref(url);
             // return;
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_StartGuide");
@@ -154,7 +154,7 @@
             url += "&IsGuide=1";
             url += "&CopyFormWorkID=" + pWorkID;
             url += "&CopyFormNode=" + en.FK_Node;
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
 

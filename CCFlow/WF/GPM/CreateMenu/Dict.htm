@@ -26,7 +26,7 @@
             var moduleNo = GetQueryString("ModuleNo");
 
             //设置树的编号,树的编号与系统编号一致.
-            module = new Entity("BP.GPM.Menu2020.Module", moduleNo);
+            module = new Entity("BP.CCFast.CCMenu.Module", moduleNo);
             frmTreeNo = module.SystemNo;
 
             InitBar(MenuModel.Dict);
@@ -74,7 +74,7 @@
 
             //更新节点表单类型.
             var moduleNo = GetQueryString("ModuleNo");
-            var en = new Entity("BP.GPM.Menu2020.Menu");
+            var en = new Entity("BP.CCFast.CCMenu.Menu");
             en.ModuleNo = moduleNo;
             en.SystemNo = module.SystemNo; //系统编号.
             en.Name = name;
@@ -90,10 +90,10 @@
             en.WorkType = "0"; //自定义菜单.
             en.Insert();
 
-            window.location.href = "../../Comm/En.htm?EnName=BP.GPM.Menu2020.Menu&No=" + en.No;
+            SetHref("../../Comm/En.htm?EnName=BP.CCFast.CCMenu.Menu&No=" + en.No);
 
             //  alert("创建成功，您可以在在菜单里执行高级编辑与授权.");
-            //  window.location.href = "../Menus.htm";
+            //  SetHref( "../Menus.htm";
             // window.close();
         }
 

@@ -20,9 +20,9 @@
         function ToNew() {
 
             if (confirm('您要使用新版本吗？')) {
-                var url = window.location.href;
+                var url = GetHrefUrl();
                 url = url.replace('Condition.htm', 'List.htm');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
         }
@@ -44,7 +44,7 @@
                 var url = data.replace('url@', '');
                 alert(url);
 
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
 
@@ -124,11 +124,11 @@
 
          //返回.
         function Back() {
-            var url = window.location.href;
+            var url = GetHrefUrl();
             
                 url = url.replace('Condition.htm', 'List.htm');
 
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
     <base target="_self" />

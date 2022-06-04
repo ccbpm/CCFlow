@@ -81,7 +81,7 @@
             $("#Msg").html("正在加载,请稍后......");
 
           //  var url = "./FrmSln/Default.htm?FK_Flow" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
-           // window.location.href = url;
+           // SetHref(url);
            // return;
 
             //初始化groupID.
@@ -238,7 +238,7 @@
             var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeExt&MyPK=' + mypk;
 
             OpenEasyUiDialog(url, "eudlgframe", '编辑', 900, 500, "icon-edit", true, null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
             });
         }
 
@@ -609,7 +609,7 @@
                  <!--<li>
                          [<a href="javascript:WinOpen('../CCFormDesigner/FormDesigner.htm?FK_MapData=ND<%=nodeIDstr %>');">
                                 设计自由表单(Html5)</a>]
-                                 [<a href="javascript:WinOpen('../CCFormDesigner/CCFormDesignerSL.htm?FK_Flow=<%=nd.FK_Flow %>&FK_MapData=ND<%=nodeIDstr %>&UserNo=<%=BP.Web.WebUser.No %>&SID=<%=BP.Web.WebUser.SID%>');">
+                                 [<a href="javascript:WinOpen('../CCFormDesigner/CCFormDesignerSL.htm?FK_Flow=<%=nd.FK_Flow %>&FK_MapData=ND<%=nodeIDstr %>&UserNo=<%=BP.Web.WebUser.No %>&Token=<%=BP.Web.webUser.Token%>');">
                                 设计自由表单(Silverlight)</a>]
                                 [手机表单]-[设计傻瓜表单]
                  </li>-->

@@ -161,7 +161,7 @@ function InitBar(optionKey) {
 //批处理.
 function Batch() {
     var url = "Batch.htm?NodeID=" + GetQueryString("FK_Node") + "&FK_Flow=" + GetQueryString("FK_Flow");
-    window.location.href = url;
+    SetHref(url);
 }
 
 function SaveRole() {
@@ -199,7 +199,7 @@ function OldVer() {
     var flowNo = GetQueryString("FK_Flow");
 
     var url = '../NodeAccepterRole.aspx?FK_Flow=' + flowNo + '&FK_Node=' + nodeID;
-    window.location.href = url;
+    SetHref(url);
 }
 function Help() {
 
@@ -535,7 +535,7 @@ function changeOption() {
 
     // alert(roleName);
 
-    window.location.href = roleName + "?FK_Node=" + nodeID + "&FK_Flow=" + flowNo;
+    SetHref( roleName + "?FK_Node=" + nodeID + "&FK_Flow=" + flowNo);
 }
 function SaveAndClose() {
     Save();
@@ -568,7 +568,7 @@ function OpenEasyUiDialogExt(url, title, w, h, isReload) {
 
     OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
         if (isReload == true) {
-            window.location.href = window.location.href;
+            Reload();
         }
     });
 }

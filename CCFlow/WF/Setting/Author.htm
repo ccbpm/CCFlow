@@ -132,7 +132,7 @@
                 var res = Auth.Delete();
                 if (res.indexOf("err@")==-1) {
                     alert("删除成功");
-                    window.location.href = window.location.href;
+                    Reload();
                 }
                 else {
                     alert("删除失败");
@@ -155,7 +155,7 @@
             if (isSuccess == false)
                 alert("删除失败");
 
-            window.location.href = window.location.href;
+            Reload();
            
 
         }

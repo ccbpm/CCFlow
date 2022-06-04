@@ -107,7 +107,7 @@
             flow.Update();
             flow.DoMethodReturnString("CheckRpt");
             alert('系统已经设置成功.');
-            window.location.href = window.location.href;
+            Reload();
             return;
         }
 
@@ -118,7 +118,7 @@
             return;
 
             OpenEasyUiDialog(url, "eudlgframe", '编辑', 900, 500, "icon-edit", true, null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
             });
         }
 
@@ -183,7 +183,7 @@
         }
         function BatchEdit() {
             var url = "BatchEditSln.htm?NodeID=" + nodeID;
-            window.location.href = url;
+            SetHref(url);
 
         }
     </script>

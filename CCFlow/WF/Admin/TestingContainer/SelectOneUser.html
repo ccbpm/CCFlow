@@ -13,15 +13,17 @@
 
         var flowNo = GetQueryString("FK_Flow");
         var workID = GetQueryString("WorkID");
-        var adminer = GetQueryString("Adminer");
-        var adminerSID = GetQueryString("AdminerSID");
-        var SID = GetQueryString("SID");
+        var userNo = GetQueryString("UserNo");
+        var token = GetQueryString("Token");
+
+        var tester = GetQueryString("Tester");
+
 
         //页面启动函数.
         $(function () {
 
-            if (adminerSID == null || adminerSID == undefined) {
-                alert("没有找到，adminerSID, 请确认上一步操作的问题. ");
+            if (token == null || userNo == undefined) {
+                alert("没有找到，Token, 请确认上一步操作的问题. ");
                 return;
             }
 
@@ -36,10 +38,11 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddUrlData();
             handler.DoMethodReturnString("Default_LetAdminerLogin");
+            window.parent.InitPageUserInfo();
+
 
             var ens = handler.DoMethodReturnJSON("SelectOneUser_Init");
 
-            window.parent.InitPageUserInfo();
             //   var webUser = new WebUser();
             //    $("#userInfo").html("<h3>用户信息：<font color=green>" + webUser.No + "," + webUser.Name + " </font> 部门编号:<font color=green>" + webUser.FK_Dept + "</font> 部门名称: <font color=green>" + webUser.FK_DeptName + "</font></h3>");
 
@@ -58,8 +61,9 @@
 
             html += "<th>状态</th>";
             html += "<th>IsPass</th>";
+            html += "<th>节点类型</th>";
 
-            html += "<th>操作</th>";
+           // html += "<th>操作</th>";
             html += "</tr>";
 
             for (var i = 0; i < ens.length; i++) {
@@ -105,6 +109,7 @@
                     html += "<td>已处理</td>";
                     html += "<td> - </td>";
                 }
+
                 html += "</tr>";
             }
             html += "</table>";
@@ -147,10 +152,10 @@
 
         function Skip() {
             var url = "../../Comm/En.htm?EnName=BP.WF.Data.GenerWorkFlowView&PKVal=" + workID + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WFSta=all";
-            window.location.href = url;
+            SetHref(url);
         }
 
-        function ChangUser(empNo, nodeID, workid, fid,isMobile) {
+        function ChangUser(empNo, nodeID, workid, fid, isMobile) {
 
             //当这个人登录。
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
@@ -161,8 +166,8 @@
             var adminer = GetQueryString("Adminer");
             handler.AddPara("Adminer", adminer);
 
-            var adminerSID = GetQueryString("AdminerSID");
-            handler.AddPara("AdminerSID", adminerSID);
+            var AdminerToken = GetQueryString("AdminerToken");
+            handler.AddPara("AdminerToken", AdminerToken);
 
             var orgNo = GetQueryString("OrgNo");
 
@@ -180,7 +185,7 @@
                 alert(data);
                 return;
             }
-            if (isMobile==1)
+            if (isMobile == 1)
                 window.open('../../../CCMobile/MyFlow.htm?FK_Flow=' + flowNo + '&WorkID=' + workid + "&FID=" + fid + "&FK_Node=" + nodeID, '_self');
             else
                 window.open('../../MyFlow.htm?FK_Flow=' + flowNo + '&WorkID=' + workid + "&FID=" + fid + "&FK_Node=" + nodeID, '_self');

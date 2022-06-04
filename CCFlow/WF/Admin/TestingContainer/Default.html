@@ -16,15 +16,15 @@
     <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <script src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/bootstrap/BootstrapUIDialog.js"></script>
-    <script src="Default.js"></script>
+   
+    <script src="../Guide/Guide.js"></script>
     <script language="javascript" type="text/javascript">
-     
         var workID = 0;
         var webUser = new WebUser();
 
         //负责人：@qfl
         $(function () {
-        
+
             InitPageUserInfo();
 
             //获得参数.
@@ -33,11 +33,11 @@
             document.title = "测试容器:" + flow.Name;
 
             //var adminer = GetQueryString("Adminer"); //管理员.
-            var adminerSID = GetQueryString("AdminerSID"); //管理员SID.
+            var token = GetQueryString("Token"); //管理员SID.
             var userNo = GetQueryString("UserNo"); //要登录的用户
 
             //第一次加载,如果没有传递过来workid.
-             workID = GetQueryString("WorkID");
+            workID = GetQueryString("WorkID");
             if (workID == undefined || workID == null) {
                 //访问后台，获得一个工作ID.
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
@@ -65,25 +65,24 @@
         });
 
 
-        function GenerUrlEnd()
-        {
-            var adminerSID = GetQueryString("AdminerSID");
+        function GenerUrlEnd() {
+            var AdminerToken = GetQueryString("AdminerToken");
 
             //定义变量.
-            var urlEnd = "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + workID + "&UserNo=" + webUser.No + "&AdminerSID=" + adminerSID + "&OrgNo=" + webUser.OrgNo;
+            var urlEnd = "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + workID + "&UserNo=" + webUser.No + "&AdminerToken=" + AdminerToken + "&OrgNo=" + webUser.OrgNo;
             urlEnd += "&Adminer=" + GetQueryString("Adminer");
-            urlEnd += "&SID=" + webUser.SID;
+            urlEnd += "&Token=" + webUser.Token;
             return urlEnd;
         }
         // 发送成功后刷新页面进入切换用户页面
         function refreshRight() {
-            $("#J_iframe").attr('src', "SelectOneUser.html?1=2" + GenerUrlEnd() );
+            $("#J_iframe").attr('src', "SelectOneUser.html?1=2" + GenerUrlEnd());
         }
 
         //如果关闭的时候，就让admin登录.
         function LetAdminerLogin() {
             // var adminer = GetQueryString("Adminer"); //管理员.
-            var sid = GetQueryString("AdminerSID"); //管理员SID.
+            var sid = GetQueryString("Token"); //管理员SID.
             var userNo = GetQueryString("UserNo"); //管理员SID.
 
             if (sid == null || sid == "null") {
@@ -93,27 +92,40 @@
 
             //访问后台，获得一个工作ID.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
-            handler.AddPara("AdminerSID", sid);
+            handler.AddPara("Token", sid);
+            handler.AddPara("UserNo", userNo);
+
             var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
+            if (data.indexOf('err@') == 0)
+            {
+                alert(data);
+                return;
+              //  data = GetQueryString("UserNo");
+            }
+
+            var url = basePath + "/WF/Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + GetQueryString("FK_Flow") + "&UserNo=" + data + "&Token=" + sid;
+            SetHref(url);
+            return;
+
             window.close();
         }
 
 
         //页面启动函数.
         //var adminer = GetQueryString("Adminer"); //管理员.
-        var sid = GetQueryString("SID"); //管理员SID.
-        // var workID = GetQueryString("WorkID"); 
+        var sid = GetQueryString("Token"); //管理员SID.
+        // var workID = GetQueryString("WorkID");
         var userNo = GetQueryString("UserNo");
         var flowNo = GetQueryString("FK_Flow");
-        // var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&SID=" + sid;
+        // var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&Token=" + sid;
         function InitPageUserInfo() {
 
+            //先设置缓存为空.
             webUserJsonString = null;
-
             var webUser = new WebUser();
 
-            var html = "<table class=Table style='width:100%;margin:13px;padding:4px;'>";
-            html += "<caption>当前用户</caption>";
+            var html = "<table style='width:100%;'>";
+            html += "<caption><a href='javascript:LetAdminerLogin();' >返回流程设计器 </a></caption>";
             html += "<tr>";
             html += "<td colspan=2 style='text-align:center'>";
             html += "<img style='width:50%;' src='../../../DataUser/UserIcon/" + webUser.No + ".png' onerror=\"this.src='../../../DataUser/UserIcon/Default.png'\" />";
@@ -140,27 +152,26 @@
 
             var html = "<ul class='nav' id='side-menu'>";
 
-
             html += "<li>"
             html = "<ul style='border:solid 1px #C2D5E3;'>";
             html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='SelectOneUser.html?1=2' class='J_menuItem' >切换用户</a></li>";
             html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='DBInfo.html?1=2' class='J_menuItem' >数据库信息</a></li>";
-            html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='../../WFRpt.htm?1=2' class='J_menuItem' >轨迹图</a></li>";
+            //      html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='../../WFRpt.htm?1=2' class='J_menuItem' >轨迹图</a></li>";
             html += "<li style='padding:5px;'><a href='javascript:Restart();' >重新启动 </a></li>";
             html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='SelectGWF.html?1=2' class='J_menuItem' >切换测试实例</a></li>";
-            html += "<li style='padding:5px;'><a href='javascript:LetAdminerLogin();' >安全退出 </a></li>";
+            //   html += "<li style='padding:5px;'><a href='javascript:LetAdminerLogin();' >安全退出 </a></li>";
 
-            var runModel = GetQueryString("RunModel");
-            if (runModel != 2) {
-                html += "<li style='padding:5px;'><a href='javascript:ToLogin();'  >登录到前台</a></li>";
-            }
+            //var runModel = GetQueryString("RunModel");
+            //if (runModel != 2) {
+            //    html += "<li style='padding:5px;'><a href='javascript:ToLogin();'  >登录到前台</a></li>";
+            //}
 
             html += "</ul>";
             html += "</li>";
             html += "</ul>";
             $("#Info").html(html);
 
-            $("#BaseInfo").html();
+            // $("#BaseInfo").html();
 
         }
 
@@ -171,17 +182,20 @@
 
             var url = "../../AppClassic/Login.htm";
             window.open(url);
-            window.location.href = url; //可以关闭窗口.
+            SetHref(url); //可以关闭窗口.
         }
         function chageFramPage(obj) {
             var url = $(obj).attr('data-info');
-            $("#J_iframe").attr('src', url + GenerUrlEnd() );
+            $("#J_iframe").attr('src', url + GenerUrlEnd());
             return false
         }
 
 
         //重新启动.
         function Restart() {
+
+            webUserJsonString = null;
+
 
             //if (window.confirm('您确认要使用[' + userNo + ']创建一个新的流程吗？') == false)
             //    return;
@@ -190,15 +204,15 @@
             handler.AddPara("FK_Emp", userNo);
             //handler.AddPara("WorkID", workID);
             //handler.AddPara("Adminer", adminer);
-            handler.AddPara("SID", sid);
+            handler.AddPara("Token", sid);
 
             var webUser = new WebUser();
             $("#userInfo").html(webUser.No + "," + webUser.Name);
             var data = handler.DoMethodReturnString("SelectOneUser_ChangUser");
 
             // 进入流程页面
-            //var url = "Default.html?RunModel=1&FK_Flow=" + flowNo + "&SID=" + sid + "&UserNo=" + userNo;
-            // window.location.href = url;
+            //var url = "Default.html?RunModel=1&FK_Flow=" + flowNo + "&Token=" + sid + "&UserNo=" + userNo;
+            // SetHref(url);
             //访问后台，获得一个工作ID.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddUrlData();
@@ -228,8 +242,8 @@
 
         //如果关闭的时候，就让admin登录.
         function LetAdminerLoginLeft() {
-            if (window.confirm('您确定要退出到管理员吗？') == false)
-                return;
+            //  if (window.confirm('您确定要退出到管理员吗？') == false)
+            //    return;
             LetAdminerLogin();
         }
 
@@ -261,7 +275,7 @@
             background-color: #fff !important;
             text-align: center;
             border: none !important;
-            height: 45px;
+            height: 25px;
             text-indent: 0 !important;
             color: #000;
             border-bottom: solid 1px #ccc !important;
@@ -285,6 +299,7 @@
     </style>
 </head>
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+    <!--<div id="Guide"></div>-->
     <div id="wrapper">
         <!--左侧导航开始-->
         <nav class="navbar-default navbar-static-side" role="navigation" style="background-color:#f5f5f5!important;border-right:solid 1px #ccc;">
@@ -295,11 +310,11 @@
                 </div>
                 <div class="sidebar-collapse" id="Info">
                 </div>
-                <div style="background-color:#fff!important;text-align:center;padding:10px;border-top:solid 1px #ccc;border-bottom:solid 1px #ccc;color:#000;font-weight:bold;">
+                <!--<div style="background-color:#fff!important;text-align:center;padding:10px;border-top:solid 1px #ccc;border-bottom:solid 1px #ccc;color:#000;font-weight:bold;">
                     基础功能
                 </div>
                 <div class="sidebar-collapse" id="BaseInfo">
-                </div>
+                </div>-->
             </div>
         </nav>
         <!--左侧导航结束-->
@@ -310,25 +325,7 @@
             </div>
         </div>
         <!--右侧部分结束-->
-    </div>
 
-    <!--<body>
-        <div id="wrap">
-            <div class="leftMenu" id="leftMenu">
-                <div id="userInfo"></div>
-                <table style="width:100%;">
-                    <caption>操作功能</caption>
-                    <tr>
-                        <td>
-                            <div id="Info"></div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="rightContent">
-                <iframe id="J_iframe" width="100%" height="100%" frameborder="0" seamless></iframe>
-            </div>
-        </div>
-    </body>-->
+    </div>
 </body>
 </html>

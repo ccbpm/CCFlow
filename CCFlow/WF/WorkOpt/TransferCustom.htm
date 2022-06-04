@@ -231,14 +231,14 @@
 
             var en = new Entity("BP.WF.TransferCustom", myPK);
             en.DoMethodReturnString("DoUp");
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function DoDown(myPK) {
 
             var en = new Entity("BP.WF.TransferCustom", myPK);
             en.DoMethodReturnString("DoDown");
-            window.location.href = window.location.href;
+            Reload();
         }
 
 
@@ -247,7 +247,7 @@
             var en = new Entity("BP.WF.TransferCustom", myPK);
             en.IsEnable = 1;
             en.Update();
-            window.location.href = window.location.href;
+            Reload();
         }
         function Remove(myPK) {
             var ens = new Entities("BP.WF.TransferCustoms");
@@ -259,7 +259,7 @@
             var en = new Entity("BP.WF.TransferCustom", myPK);
             en.IsEnable = 0;
             en.Update();
-            window.location.href = window.location.href;
+            Reload();
         }
         function Save() {
             //获取需要保存时间的数据

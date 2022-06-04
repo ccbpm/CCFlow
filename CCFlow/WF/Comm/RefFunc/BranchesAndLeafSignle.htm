@@ -237,7 +237,7 @@
                         
                     }
                 });
-                SaveVal(globalSelectedRows);
+                Savcceval(globalSelectedRows);
                 selectedRows =globalSelectedRows;
                 return;
             }
@@ -250,7 +250,7 @@
                 });
                 if (sel.length == 0) {
 
-                    SaveVal(o.No);
+                    Savcceval(o.No);
                     globalSelectedRows.push(o);
                 }
             });
@@ -265,7 +265,7 @@
                        
                     }
                 });
-                 SaveVal(globalSelectedRows);
+                 Savcceval(globalSelectedRows);
                 selectedRows = globalSelectedRows;
 
                 return;
@@ -519,7 +519,7 @@
                 alert(msg);
         }
         //设置值.
-        function SaveVal(val) {
+        function Savcceval(val) {
 
             var dot2DotEnName = GetQueryString("Dot2DotEnName");
             var attrOfOneInMM = GetQueryString("AttrOfOneInMM");

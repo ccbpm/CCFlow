@@ -102,7 +102,7 @@ window.onload = function () {
                 if (method.MethodModel === "Bill") {
 
                     //method.Docs = "./Opt/Bill.htm?FrmID=" + method.Tag1 + "&MethodNo=" + method.No + "&WorkID=" + GetQueryString("WorkID") + "&From=Dict";
-                    method.Docs = "./SearchBill.htm?FrmID=" + method.Tag1 + "&MethodNo=" + method.No + "&PFrmID="+method.FrmID+"&PWorkID=" + GetQueryString("WorkID") + "&From=Dict";
+                    method.Docs = "./SearchBill.htm?FrmID=" + method.Tag1 + "&MethodNo=" + method.No + "&PFrmID=" + method.FrmID + "&PWorkID=" + GetQueryString("WorkID") + "&From=Dict";
 
                     //if (method.Docs == "") {
                     //    alert("没有解析的mark=" + method.Mark);
@@ -174,10 +174,10 @@ window.onload = function () {
 
                 //超链接.
                 if (method.MethodModel == "Link") {
-                    if (method.UrlExt.indexOf('?') > 0)
-                        method.Docs = method.UrlExt + "&FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID");
+                    if (method.Tag1.indexOf('?') > 0)
+                        method.Docs = method.Tag1 + "&FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID");
                     else
-                        method.Docs = method.UrlExt + "?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID");
+                        method.Docs = method.Tag1 + "?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID");
                 }
 
                 if (method.Docs === "") {
@@ -251,7 +251,7 @@ window.onload = function () {
                     $(".indicator").hide();
                     this.sideBarOpen = false;
                 }
-                   
+
             },
             menuHeight: function (group) {
                 return {
@@ -273,9 +273,9 @@ window.onload = function () {
     })
 }
 $(function () {
-    var theme = localStorage.getItem("themeColorInfo");
+    var theme = DealText(localStorage.getItem("themeColorInfo"));
     theme = JSON.parse(theme);
     var styleScope = document.getElementById("theme-data")
-    styleScope.innerHTML = "\n .sidebar .group .group-items .active{\n background-color:" + theme.selectedMenu + ";\n}";
+    styleScope.innerHTML = DealText("\n .sidebar .group .group-items .active{\n background-color:" + theme.selectedMenu + ";\n}");
 
 })

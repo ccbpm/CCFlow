@@ -5,14 +5,14 @@
         //页面启动函数.
         function ToURL() {
 
-            var url = window.location.href;
+            var url = GetHrefUrl();
             if (plant == "CCFlow") {
                 url = url.replace('.htm', '.aspx');
-                window.location.href = url;
+                SetHref(url);
                 return;
             } else {
                 url = url.replace('.htm', '.jsp');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
         }

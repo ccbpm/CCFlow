@@ -51,14 +51,14 @@
             url += "&FrmID=" + GetQueryString("FrmID");
             url += "&FK_Flow=" + GetQueryString("FK_Flow");
             url += "&FK_Node=" + GetQueryString("FK_Node");
-            window.location.href = url;
+            SetHref(url);
         }
         function BackToDesigner() {
             var url = "../Designer.htm?FK_MapData=" + GetQueryString("FrmID");
             url += "&FrmID=" + GetQueryString("FrmID");
             url += "&FK_Flow=" + GetQueryString("FK_Flow");
             url += "&FK_Node=" + GetQueryString("FK_Node");
-            window.location.href = url;
+            SetHref(url);
         }
         ///执行应用.
         function App(val) {
@@ -87,7 +87,7 @@
                 return;
             }
 
-            window.location.href = window.location.href;
+            Reload();
 
         }
 
@@ -97,7 +97,7 @@
             url += "&FrmID=" + GetQueryString("FrmID");
             url += "&FK_Flow=" + GetQueryString("FK_Flow");
             url += "&FK_Node=" + GetQueryString("FK_Node");
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
 </head>

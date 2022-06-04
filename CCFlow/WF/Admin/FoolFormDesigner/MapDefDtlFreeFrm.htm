@@ -93,7 +93,7 @@
           function HidAttr(mypk) {
               var url = 'HidAttr.htm?FK_MapData=' + mypk;
               var b = window.showModalDialog(url, 'ass', 'dialogHeight: 700px; dialogWidth: 900px;center: yes; help: no');
-              window.location.href = window.location.href;
+              Reload();
           }
 
           function Edit(mypk, ftype) {
@@ -156,7 +156,7 @@
               }
 
               OpenEasyUiDialog(url, "eudlgframe", title, 800, 500, "icon-edit", true, null, null, null, function () {
-                  window.location.href = window.location.href;
+                  Reload();
               });
           }
 
@@ -176,7 +176,7 @@
           }
           //刷新.
           function ReloadDtlFrame() {
-              window.location.href = window.location.href;
+              Reload();
           }
           function Esc() {
               if (event.keyCode == 27)
@@ -187,20 +187,20 @@
           var isInser = "";
           function EditDtl(fk_mapData, dtlKey) {
 
-              var url = "../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&PKVal=" + dtlKey;
+              var url = "../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapDtlExt&PKVal=" + dtlKey;
               var W = document.body.clientWidth - 40;
               var H = document.body.clientHeight - 40;
               OpenEasyUiDialog(url, "eudlgframe", "设置", W, H, "icon-edit", true, null, null, null, function () {
-                  window.location.href = window.location.href;
+                  Reload();
               });
           }
 
           function EditMapDtl(dtlKey) {
 
-              var url = "../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&inlayer=1&PKVal=" + dtlKey;
+              var url = "../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapDtlExt&inlayer=1&PKVal=" + dtlKey;
 
               OpenEasyUiDialog(url, "eudlgframe", "设置", 800, 500, "icon-edit", true, null, null, null, function () {
-                  window.location.href = window.location.href;
+                  Reload();
               });
           }
 

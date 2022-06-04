@@ -14,8 +14,8 @@
         var flowNo = GetQueryString("FK_Flow");
         var workID = GetQueryString("WorkID");
         var adminer = GetQueryString("Adminer");
-        var adminerSID = GetQueryString("AdminerSID");
-        var SID = GetQueryString("SID");
+        var AdminerToken = GetQueryString("AdminerToken");
+        var SID = GetQueryString("Token");
 
         //页面启动函数.
         $(function () {
@@ -56,7 +56,7 @@
         });
         function GoTo(workID)
         {
-            var urlParams = "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + workID + "&UserNo=" + GetQueryString("UserNo") + "&AdminerSID=" + GetQueryString("AdminerSID") + "&OrgNo=" + GetQueryString("OrgNo") + "&Adminer=" + GetQueryString("Adminer") + "&SID=" + GetQueryString("SID");
+            var urlParams = "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + workID + "&UserNo=" + GetQueryString("UserNo") + "&AdminerToken=" + GetQueryString("AdminerToken") + "&OrgNo=" + GetQueryString("OrgNo") + "&Adminer=" + GetQueryString("Adminer") + "&Token=" + GetQueryString("Token");
             var url = "SelectOneUser.html?1=2" + urlParams;
             window.parent.urlEnd = urlParams;
 
@@ -65,7 +65,7 @@
             //改变他的workid.
             window.parent.workID = workID;
 
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
 </head>

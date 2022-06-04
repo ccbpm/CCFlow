@@ -49,7 +49,7 @@
                     return obj.No == o.No;
                 });
                 if (sel.length == 0) {
-                    SaveVal(FK_MapData, AttrOfOper, oid, o.No, o.Name);
+                    Savcceval(FK_MapData, AttrOfOper, oid, o.No, o.Name);
                     globalSelectedRows.push(o);
                 }
             });
@@ -500,7 +500,7 @@
             frmEleDB.Delete();
         }
         //设置值.
-        function SaveVal(fk_mapdata, keyOfEn, oid, val1, val2) {
+        function Savcceval(fk_mapdata, keyOfEn, oid, val1, val2) {
             var frmEleDB = new Entity("BP.Sys.FrmEleDB");
             frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + val1;
             frmEleDB.FK_MapData = fk_mapdata;

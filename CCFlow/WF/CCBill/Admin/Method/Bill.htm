@@ -46,7 +46,7 @@
 
             // 或的系统编号.
             var moduleNo = this.GetQueryString("ModuleNo");
-            var module = new Entity("BP.GPM.Menu2020.Module", moduleNo);
+            var module = new Entity("BP.CCFast.CCMenu.Module", moduleNo);
 
             //1. 创建单据.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
@@ -90,7 +90,7 @@
 
 
             //4. 创建菜单.放到与单据的平行的目录下.
-            var menu = new Entity("BP.GPM.Menu2020.Menu");
+            var menu = new Entity("BP.CCFast.CCMenu.Menu");
             menu.ModuleNo = moduleNo; //模块编号.
             menu.SystemNo = module.SystemNo; //系统编号.
             menu.Name = name;
@@ -111,7 +111,7 @@
             msg += "\t\n 2. 同时fast也在当前实体的菜单上创建了。";
 
 
-            window.location.href = "../../../Comm/En.htm?EnName=BP.CCBill.Template.MethodBill&No=" + methodNewNo;
+            SetHref("../../../Comm/En.htm?EnName=BP.CCBill.Template.MethodBill&No=" + methodNewNo);
         }
 
         function GenerPinYin() {

@@ -104,8 +104,12 @@
             var sys_mapExtDtl = data["Sys_MapExt"]; //扩展信息.
             mapAttrs = sys_mapAttr;
             mapExts = sys_mapExtDtl;
-            var mainDtl = data["Main_"+sys_MapDtl.PTable]; //主版本从表数据.
+            var mainDtl = data["Main_" + sys_MapDtl.PTable]; //主版本从表数据.
+            if (mainDtl == null || mainDtl == undefined)
+                mainDtl = [];
             var compareDtl = data["Compare_" + sys_MapDtl.PTable]; //比对版本从表数据.
+            if (compareDtl == null || compareDtl == undefined)
+                compareDtl = [];
             Parse_Dtl(mainDtl, "mainDtlDiv");
             Parse_Dtl(compareDtl, "compareDtlDiv");
             setIframeHeight();
@@ -604,6 +608,8 @@
                                 dateFmt = "yyyy-MM";
                             } else if (frmDate == 6) {
                                 dateFmt = "MM-dd";
+                            } else if (frmDate == 7) {
+                                dateFmt = "yyyy";
                             } else
                                 dateFmt = "yyyy-MM-dd";
 
@@ -1075,7 +1081,7 @@
             var loop = setInterval(function () {
                 if (self.closed) {
                     clearInterval(loop);
-                    window.location.href = url;
+                    SetHref(url);
                 }
             }, 1);
         }
@@ -1111,7 +1117,7 @@
                 linkUrl += '&FK_MapData=' + GetQueryString("FK_MapData");
 
             if (sys_MapDtl.LinkTarget == "_self") {
-                window.location.href = linkUrl;
+                SetHref( linkUrl;
                 return;
             }
 

@@ -22,9 +22,9 @@
             var dblist = new Entity("BP.CCBill.DBList", frmID);
 
             if (dblist.DBType == 0)
-                window.location.href = "ListDBSrcSQL.htm?FrmID=" + frmID;
+                SetHref("ListDBSrcSQL.htm?FrmID=" + frmID);
             else
-                window.location.href = "ListDBSrcUrl.htm?FrmID=" + frmID;
+                SetHref("ListDBSrcUrl.htm?FrmID=" + frmID);
             return;
         });
     </script>

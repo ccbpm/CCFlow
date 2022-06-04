@@ -293,7 +293,10 @@
                 enEntity.SetPara("MultiTitle1", newTitle);
             enEntity.Update();
 
-            window.location.href = window.location;
+
+            Reload();
+           // window.Reload();
+           // SetHref( window.location;
         }
 
         function getMutliFile(keyOfEn, multi) {
@@ -362,7 +365,7 @@
             //赋值
             enEntity.SetPara("MultiTitle", multiTitle);
             enEntity.Update();
-            window.location.href = window.location.href;
+            Reload();
         }
         function AddGroup2() {
 
@@ -436,7 +439,7 @@
             //赋值
             enEntity.SetPara("MultiTitle1", multiTitle1);
             enEntity.Update();
-            window.location.href = window.location.href;
+            Reload();
         }
 
         /*
@@ -449,7 +452,7 @@
             enEntity.SetPara("MultiTitle", "");
             enEntity.SetPara("MultiTitle1", "");
             enEntity.Update();
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </head>

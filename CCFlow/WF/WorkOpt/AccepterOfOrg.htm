@@ -10,9 +10,9 @@
         $(function () {
 
             // 如果您要把该页面转入其他页面，请按照如下方式处理.
-            var url = window.location.href;
+            var url = GetHrefUrl();
             url = url.replace('AccepterOfOrg.htm', '../../App/gxjtoaPicker/userOrgPicker.html');
-            window.location.href = url;
+            SetHref(url);
             return;
         });
 

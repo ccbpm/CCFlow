@@ -778,7 +778,7 @@ function getPageData() {
 
 //获取WF之前路径
 function GetLocalWFPreHref() {
-    var url = window.location.href;
+    var url = GetHrefUrl();
     if (url.indexOf('/WF/') >= 0) {
         var index = url.indexOf('/WF/');
         url = url.substring(0, index);

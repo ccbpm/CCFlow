@@ -33,12 +33,14 @@ if (typeof RefMethodType == "undefined") {
     var RefMethodType = {}
     //功能
     RefMethodType.Func = 0,
-        // 模态窗口打开
-        RefMethodType.LinkModel = 1,
-        // 新窗口打开
-        RefMethodType.LinkeWinOpen = 2,
-        // 右侧窗口打开
-        RefMethodType.RightFrameOpen = 3
+    // 模态窗口打开
+    RefMethodType.LinkModel = 1,
+    // 新窗口打开
+    RefMethodType.LinkeWinOpen = 2,
+    // 右侧窗口打开
+    RefMethodType.RightFrameOpen = 3,
+    //Tab页签打开
+    RefMethodType.TabOpen =4
 }
 
 

@@ -317,7 +317,7 @@
                 click: function (obj) {
                     var nodes = $(".layui-tree-txt");
                     $.each(nodes, function (idx, node) {
-                        var theme = localStorage.getItem("themeColorInfo");
+                        var theme = DealText(localStorage.getItem("themeColorInfo"));
                         theme = JSON.parse(theme);
                         if (node.innerHTML == obj.data.title)
                             $(node).css("color", theme.selectedMenu);
@@ -448,7 +448,7 @@
                         break;
                     case "group"://跳转到分组页面
                         url = "Group.htm?FrmID=" + GetQueryString("FrmID");
-                        window.location.href = url;
+                        SetHref(url);
                         break;
                     case "Link"://链接
                         var no = $(this).data('no');
@@ -600,7 +600,7 @@
             //格式为: @WFSta=0@FK_Dept=02
             var json = AtParaToJson(ur.Vals);
             var ddlShowWays = GetPara(atPara, "DDLShowWays");
-            ddlShowWays = ddlShowWays == null || ddlShowWays == undefined ? "" : ddlShowWays;
+            ddlShowWays = ddlShowWays == null || ddlShowWays == undefined || dtSearchWay == "" ? "" : ddlShowWays;
             ddlShowWays = ddlShowWays.replace(/[*]/g, "@");
             ddlShowWays = AtParaToJson(ddlShowWays);
             for (var i = 0; i < attrs.length; i++) {
@@ -712,14 +712,21 @@
     </script>
     <script>
         $(function () {
-            var theme = localStorage.getItem("themeColorInfo");
+
+
+            var theme = DealText(localStorage.getItem("themeColorInfo"));
             theme = JSON.parse(theme);
-            var styleScope = document.getElementById("theme-data")
-            styleScope.innerHTML = "\n .layui-btn{\n background-color:" + theme.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + theme.selectedMenu + ";\n}";
-            styleScope.innerHTML += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:" + theme.selectedMenu + " !important\n}";
-            styleScope.innerHTML += "\n .layui-form-select dl dd.layui-this{\n background-color:" + theme.selectedMenu + " !important;\n}";
-            styleScope.innerHTML += "\n .layui-tab-title .layui-this{\n background-color:" + theme.selectedMenu + " !important;\n} \n .layui-tab-title>.layui-this{\n color:#fff;\n} \n .layui-tab-title li {border: 1px solid " + theme.selectedMenu + ";}";
-            styleScope.innerHTML += "\n .layui-a-this{\n background-color:" + theme.selectedMenu + ";\n padding: 3px;\n color: #fff;\n}";
+
+            var html = "\n .layui-btn{\n background-color:" + theme.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + theme.selectedMenu + ";\n}";
+            html += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:" + theme.selectedMenu + " !important\n}";
+            html += "\n .layui-form-select dl dd.layui-this{\n background-color:" + theme.selectedMenu + " !important;\n}";
+            html += "\n .layui-tab-title .layui-this{\n background-color:" + theme.selectedMenu + " !important;\n} \n .layui-tab-title>.layui-this{\n color:#fff;\n} \n .layui-tab-title li {border: 1px solid " + theme.selectedMenu + ";}";
+            html += "\n .layui-a-this{\n background-color:" + theme.selectedMenu + ";\n color: #fff;\n}";
+            html = DealText(html);
+
+            var styleScope = document.getElementById("theme-data");
+            styleScope.innerHTML = html;
+
         })
     </script>
 </body>

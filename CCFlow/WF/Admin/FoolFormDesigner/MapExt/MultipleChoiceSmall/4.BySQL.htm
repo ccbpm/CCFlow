@@ -53,7 +53,7 @@
 
             if (en.Update() == 0)
                 en.Insert();
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </head>
@@ -66,6 +66,9 @@
             <legend><label for="RB_4">按照SQL计算</label> </legend>
             <br />
             <textarea rows="3" id="TB_SQL" name="TB_SQL"></textarea>
+        </fieldset>
+        <fieldset>
+            <img src="MultipleChoiceSmall.png" />
         </fieldset>
     </form>
 </body>

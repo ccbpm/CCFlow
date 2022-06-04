@@ -48,7 +48,7 @@
             mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
             mapExt.Delete();
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function Save() {
@@ -72,7 +72,7 @@
             mapExt.ExtType = "DtlImpByJSON";
             var i = mapExt.Save();
 
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </head>

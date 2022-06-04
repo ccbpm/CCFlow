@@ -57,7 +57,7 @@
 
             //授权的情况下.
             if (webUser.IsAuthorize == "1") {
-                window.location.href = "AuthorTodolist.htm";
+                SetHref("AuthorTodolist.htm");
                 return;
             }
 
@@ -71,7 +71,7 @@
                 return;
             }
 
-            data = eval('(' + data + ')');
+            data = cceval('(' + data + ')');
 
             BindTable();
         });
@@ -436,8 +436,13 @@
                 try {
 
                     var url = data;
-                    if (url.indexOf("My") == 0)
-                        url = "../" + url;
+                    if (url.indexOf("My") == 0) {
+                        if (window.top.location.href.indexOf("WF/") != -1)
+                            url = "../" + url;
+                        else
+                            url = "/WF/" + url;
+                    }
+                        
 
                     window.top.vm.openTab(title, url);
                     return;
@@ -464,7 +469,7 @@
             //自定义url模式.
             if (node.BatchRole == 3)
                 url = node.BatchSelfUrl;
-            window.location.href = url;
+            SetHref(url);
         }
         function GetState(wfState, auther) {
 

@@ -119,12 +119,12 @@
             else
                 en.Update();
 
-            window.location.href = window.location.href;
+            Reload();
         }
         function EtcDBFull() {
-            var url = window.location.href;
+            var url = GetHrefUrl();
             url = url.replace("Main.htm", "MainDtlList.htm");
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
 </head>

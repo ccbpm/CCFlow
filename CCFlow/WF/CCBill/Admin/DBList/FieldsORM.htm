@@ -2,8 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>链接</title>
-    <!--<link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />-->
+
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
     <script src="../../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
@@ -20,20 +19,25 @@
 
             var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_DBList");
             handler.AddUrlData();
-            var data = handler.DoMethodReturnJSON("FieldsORM_Init");
+            var data = handler.DoMethodReturnString("FieldsORM_Init");
 
             var frmID = GetQueryString("FrmID");
             var dblist = new Entity("BP.CCBill.DBList", frmID);
 
-            dblist.ExpEn = dblist.ExpEn.replace('~', '\'');
-            dblist.ExpEn = dblist.ExpEn.replace('~', '\'');
-            $("#TB_DBSrc").val(dblist.ExpEn);
+            dblist.ExpEn = dblist.ExpEn.replace(/~/g, "'");
+           
+            $("#TB_Doc").val(dblist.ExpEn);
 
-            if (data.indexOf('err@') == 0) {
+            if (data.indexOf("err@")!=-1) {
                 alert(data);
                 return;
             }
 
+            if (data == "") {
+                return;
+            }
+            data = JSON.parse(data);
+            debugger
             var bakAttrs = new Entities("BP.Sys.MapAttrs");
             bakAttrs.Retrieve("FK_MapData", frmID + "Bak");
 
@@ -198,11 +202,7 @@
             if (datatype == 7) return "DateTime";
             if (datatype == 8) return "Money";
         }
-        //function ShowHid( )
-        //{
-        //    var en = new Entity("BP.Sys.MapAttr", mypk);
-        //    en.Delete();
-        //}
+
         /**
          * 转换成外键、外部数据源
          * @param keyOfEn
@@ -210,9 +210,9 @@
          * @param idx
          */
         function TurnToFK(keyOfEn, frmID, idx) {
-            var w = window.innerWidth * 2 / 3;
-            var url = "../../../Admin/FoolFormDesigner/SFList.htm?KeyOfEn=" + keyOfEn + "&FK_MapData=" + frmID;
-            OpenLayuiDialog(url, "绑定外键/外部数据源", w, 70, "auto", false, false, false, null, function () {
+            var url = "../../Admin/FoolFormDesigner/SFList.htm?KeyOfEn=" + keyOfEn + "&FK_MapData=" + frmID;
+            var w = parent.window.innerWidth * 4 / 5;
+            parent.OpenLayuiDialog(url, "绑定外键/外部数据源", w, 80, "auto", false, false, false, null, function () {
                 var en = new Entity("BP.Sys.MapAttr", frmID + "_" + keyOfEn);
                 var lab = en.LGType == 0 ? "外部数据源" : "外键";
                 //变更这行的数据信息
@@ -226,9 +226,10 @@
          * @param mypk
          */
         function TurnToEnum(keyOfEn, frmID, idx) {
-            var w = window.innerWidth * 2 / 3;
             var url = "../../../Admin/FoolFormDesigner/SysEnumList.htm?KeyOfEn=" + keyOfEn + "&FK_MapData=" + frmID;
-            OpenLayuiDialog(url, "绑定枚举", w, 70, "auto", false, false, false, null, function () {
+            var w = parent.window.innerWidth * 4 / 5;
+            
+            parent.OpenLayuiDialog(url, "绑定枚举", w, 80, "auto", false, false, false, null, function () {
                 //变更这行的数据信息
                 var tr = $($("tr")[idx]);
                 $(tr.find("td")[5]).html("枚举");
@@ -252,7 +253,7 @@
             var en = new Entity("BP.Sys.MapAttr", mypk);
             en.Delete();
             SaveNames();
-            window.location.href = window.location.href;
+            Reload();
         }
         /**
          * 修改字段类型
@@ -267,7 +268,7 @@
             en.MyDataType = dataType;
             en.Update();
             SaveNames();
-            window.location.href = window.location.href;
+            Reload();
         }
 
         /**
@@ -281,28 +282,28 @@
             var url = "";
 
             if (barkEn.MyDataType == 1) {
-                url = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&MyPK=" + mypk;
+                url = "./En.htm?EnName=BP.Sys.FrmUI.MapAttrString&MyPK=" + mypk;
                 if (barkEn.LGType == "0" && barkEn.UIContralType == 1)
-                    url = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&MyPK=" + mypk;
+                    url = "./En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&MyPK=" + mypk;
                 if (barkEn.LGType == "2")
-                    url = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&MyPK=" + mypk;
+                    url = "./En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&MyPK=" + mypk;
             }
 
 
             if (barkEn.MyDataType == 2 || barkEn.MyDataType == 3 || barkEn.MyDataType == 5) {
                 if (barkEn.MyDataType == 2 && barkEn.LGType == 1 && (barkEn.UIContralType == 1 || barkEn.UIContralType == 3))
-                    url = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&MyPK=" + mypk;
+                    url = "./En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&MyPK=" + mypk;
                 else
-                    url = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&MyPK=" + mypk;
+                    url = "./En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&MyPK=" + mypk;
             }
 
             if (barkEn.MyDataType == 6 || barkEn.MyDataType == 7)
-                url = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDate&MyPK=" + mypk;
+                url = "./En.htm?EnName=BP.Sys.FrmUI.MapAttrDate&MyPK=" + mypk;
 
             if (barkEn.MyDataType == 4)
-                url = "../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&MyPK=" + mypk;
-            var w = window.innerWidth * 2 / 3;
-            OpenLayuiDialog(url, "编辑字段属性", w, 70, "auto", false, false, false, null, function () {
+                url = "./En.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&MyPK=" + mypk;
+            var w = parent.window.innerWidth*4/5;
+            parent.OpenLayuiDialog(url, "编辑字段属性", w, 80, "auto", false, false, false, null, function () {
                 var en = new Entity("BP.Sys.MapAttr", mypk);
                 //变更这行的数据信息
                 var tr = $($("tr")[idx]);
@@ -315,16 +316,20 @@
         function Save() {
             var frmID = GetQueryString("FrmID");
             var dblist = new Entity("BP.CCBill.DBList", frmID);
-            dblist.ExpEn = $("#TB_DBSrc").val();
+            dblist.ExpEn = $("#TB_Doc").val();
+            if (dblist.DBType == 2 && dblist.ExpEn.toUpperCase().indexOf("SELECT") != -1) {
 
-            if (dblist.ExpEn.indexOf('@Key') == -1) {
-                alert("数据源里必须包含@Key参数.");
-                return;
+            } else {
+                if (dblist.ExpEn.indexOf('@Key') == -1) {
+                    alert("数据源里必须包含@Key参数.");
+                    return;
+                }
             }
+            
 
             dblist.Update();
             SaveNames();
-            window.location.href = window.location.href;
+            Reload();
         }
         /**
          *修改字段名称、保存应用
@@ -336,7 +341,7 @@
             handler.AddFormData();
             var data = handler.DoMethodReturnString("FieldsORM_App");
             alert(data);
-            window.location.href = window.location.href;
+            Reload();
         }
         function ViewFrm() {
             var frmID = GetQueryString("FrmID");
@@ -351,7 +356,7 @@
     <form id="cc">
         <fieldset>
             <legend>单笔记录数据源，必须有：OID,BillNo,Title 字段.</legend>
-            <textarea value="" id="TB_DBSrc" name="TB_DBSrc" rows="5">
+            <textarea value="" id="TB_Doc" name="TB_Doc" rows="5">
            </textarea>
 
             <input type="button" value="保存实体数据源" id="Btn_Save" onclick="Save()" />
@@ -380,8 +385,22 @@
                 <li> 如果字段类型不匹配，请打开字段属性，进行编辑，然后把string类型的转化为其他类型. </li>
 
                 <li>
+                    1.使用数据库SQL查询:
                     SELECT A.No as OID, A.No as BillNo, a.Name AS Title, A.Tel,A.Email , B.No as FK_Dept, B.Name AS FK_DeptText
                     FROM Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No AND A.No='@Key'
+                    <br />
+                    2.使用URL查询:
+                    /DataUser/Handler.ashx?PKVal=@Key
+                    <br />
+                    &nbsp;&nbsp;①获取到的PKVal为空时，需要返回字段列表的集合，包含字段名称，字段类型 <br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;[{"No":"Title","DBType":"string"},"No":"BillNo","DBType":"string"},{"No":"Age","DBType":"int"}]<br />
+                    &nbsp;&nbsp;②PKVal不为空时，返回实体集合<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;[{"Title":"测试数据","BillNo":'CS_202204200001',"Age":20}]
+                    <br/>
+                    3.使用存储过程:
+                        如果存在单选单数据的存储过程时必须包含@Key, </br>
+                        如果使用Select语句时可以不包含@Key 例如 SELECT '' BillNo,''Title,'' OID ,''Tel,''ZCSJ
+                        
                 </li>
                 <li>
                     <font color="red">注意：SQL语句中字段的别名不能作为查询的条件，需要把某个字段设置成查询条件时需要使用原始字段名，如按照Name查询时不能写成 a.Name as Title</font>

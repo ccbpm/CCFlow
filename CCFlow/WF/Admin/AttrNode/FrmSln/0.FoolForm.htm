@@ -16,12 +16,12 @@
     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
     <!-- 自己的系统风格统一. -->
     <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
-    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />  
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
     <!-- 自己的系统风格统一end -->
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../CCFlowEnum.js" type="text/javascript"></script>
     <style type="text/css">
-     
+
         select[disabled], input[type=text]:disabled {
             width: auto;
             padding-left: 10px;
@@ -134,6 +134,13 @@
             var url = "../../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=" + nodeID;
             OpenEasyUiDialogExt(url, '节点表单组件', 800, 450, false);
         }
+        function BatchFWC() {
+            var nodeID = GetQueryString("FK_Node");
+            var flowNo = GetQueryString("FK_Flow");
+
+            var url = "/WF/Admin/AttrFlow/BatchFWC.htm?FK_Flow=" + flowNo + "&NodeID=" + nodeID;
+            OpenEasyUiDialogExt(url, '批量设置', 800, 450, false);
+        }
 
         function OneKeySetting() {
             var msg = "";
@@ -182,6 +189,11 @@
 
             <legend>高级设置</legend>
             <ul>
+                <li>
+                    <a href="javascript:BatchFWC()">批量设置审核组件状态 </a>
+                </li>
+
+                </li>
                 <li>
                     <a href="javascript:ShowFWCAttr()">节点表单组件属性</a>
                 </li>

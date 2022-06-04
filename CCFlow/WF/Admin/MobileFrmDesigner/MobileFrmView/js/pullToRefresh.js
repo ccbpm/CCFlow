@@ -56,7 +56,7 @@ var refresher = {
         this.scrollIt(parameter, pullDownEl, pullDownOffset, pullUpEl, pullUpOffset);
     },
     scrollIt: function (parameter, pullDownEl, pullDownOffset, pullUpEl, pullUpOffset) {
-        eval(parameter.id + "= new iScroll(parameter.id, {useTransition: true,vScrollbar: false,topOffset: pullDownOffset,onRefresh: function () {refresher.onRelease(pullDownEl,pullUpEl,parameter);},onScrollMove: function () {refresher.onScrolling(this,pullDownEl,pullUpEl,pullUpOffset);},onScrollEnd: function () {refresher.onPulling(pullDownEl,parameter.pullDownAction,pullUpEl,parameter.pullUpAction);},})");
+        cceval(parameter.id + "= new iScroll(parameter.id, {useTransition: true,vScrollbar: false,topOffset: pullDownOffset,onRefresh: function () {refresher.onRelease(pullDownEl,pullUpEl,parameter);},onScrollMove: function () {refresher.onScrolling(this,pullDownEl,pullUpEl,pullUpOffset);},onScrollEnd: function () {refresher.onPulling(pullDownEl,parameter.pullDownAction,pullUpEl,parameter.pullUpAction);},})");
         if (parameter.ShowDownLabel == true) {
             pullDownEl.querySelector('.pullDownLabel').innerHTML = refresher.info.pullDownLable;
         }

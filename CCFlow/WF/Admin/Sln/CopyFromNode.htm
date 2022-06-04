@@ -87,10 +87,10 @@
 
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </head>

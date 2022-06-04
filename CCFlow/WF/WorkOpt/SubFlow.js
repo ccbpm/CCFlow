@@ -37,7 +37,7 @@ function SubFlow_Init(node) {
         pworkID = 0;
 
     var _Html = "";
-    var subFlows = new Entities("BP.WF.Template.SubFlowHands");
+    var subFlows = new Entities("BP.WF.Template.SFlow.SubFlowHands");
     subFlows.Retrieve("FK_Node", nodeID, "SubFlowType", 0, "Idx");
 
     //处理累加表单问题，如果当前节点与，绑定子流程的节点不一致，就把他设置为只读.
@@ -50,7 +50,7 @@ function SubFlow_Init(node) {
     }
 
     //查询出来所有子流程的数据.
-    var fsf = new Entity("BP.WF.Template.FrmSubFlow", nodeID);
+    var fsf = new Entity("BP.WF.Template.SFlow.FrmSubFlow", nodeID);
 
     var subFlowGuids = $.grep(subFlows, function (subFlow) {
 
@@ -68,7 +68,7 @@ function SubFlow_Init(node) {
 function ShowBtnListSubFlow(subFlows, fsf, node, workID, pworkID, flowNo, nodeID) {
     var _Html = "";
     var basePath = "./";
-    var currUrl = window.location.href;
+    var currUrl = GetHrefUrl();
 
     if (currUrl.indexOf("Admin/FoolFormDesigner/Designer.htm") != -1)
         basePath = "../../";
@@ -178,7 +178,7 @@ function ShowTableSubFlow(subFlows, sf, node, workID, pworkID, flowNo, nodeID) {
             if (flowNo == null || flowNo == "")
                 continue;
 
-            var en = new Entity("BP.WF.Template.SubFlowHand");
+            var en = new Entity("BP.WF.Template.SFlow.SubFlowHand");
             en.FK_Node = nodeID;
             en.SubFlowNo = flowNo;
 
@@ -188,7 +188,7 @@ function ShowTableSubFlow(subFlows, sf, node, workID, pworkID, flowNo, nodeID) {
     }
     var tdHtml = "";
     var imgbasePath = "./";
-    var currUrl = window.location.href;
+    var currUrl = GetHrefUrl();
 
     if (currUrl.indexOf("Admin/FoolFormDesigner/Designer.htm") != -1)
         imgbasePath = "../../";
@@ -343,7 +343,7 @@ function InsertSubFlows(flowNo, fid, workid, layer, html) {
     if (gwfs.Count == 0)
         return;
 
-    var currUrl = window.location.href;
+    var currUrl = GetHrefUrl();
 
     if (currUrl.indexOf("Admin/FoolFormDesigner/Designer.htm") != -1)
         imgbasePath = "../../";

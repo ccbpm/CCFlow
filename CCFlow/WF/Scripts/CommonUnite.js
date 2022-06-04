@@ -12,7 +12,7 @@ jQuery(function ($) {
 commonUnite = function () {
     //sArgName表示要获取哪个参数的值
     this.getArgsFromHref = function (sArgName) {
-        var sHref = window.location.href;
+        var sHref = GetHrefUrl();
         var args = sHref.split("?");
         var retval = "";
         if (args[0] == sHref) /*参数为空*/

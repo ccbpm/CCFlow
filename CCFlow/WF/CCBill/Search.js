@@ -1,4 +1,5 @@
-﻿/**
+﻿var dblist = null;
+/**
  * 是否自动填充数据
  * @param {any} mapAttr
  */
@@ -46,7 +47,7 @@ function InitDDLOperation(frmData, mapAttr, defVal, ddlShowWays, selectSearch) {
     var operations = [];
     var isAutoFull = isHaveAutoFull(mapAttr);
     var isActiveDDL = isHaveActiveDDLSearchCond(mapAttr);
-    if (isAutoFull == false && isActiveDDL==false )
+    if (isAutoFull == false && isActiveDDL == false)
         operations.push({
             name: "全部",
             value: "all"
@@ -86,9 +87,9 @@ function InitDDLOperation(frmData, mapAttr, defVal, ddlShowWays, selectSearch) {
                 });
         })
     }
-    
-    
-    if ((isAutoFull == true || isActiveDDL==true) && defVal == 'all') {
+
+
+    if ((isAutoFull == true || isActiveDDL == true) && defVal == 'all') {
         defVal = operations[0].value;
 
     }
@@ -112,12 +113,17 @@ function InitDDLOperation(frmData, mapAttr, defVal, ddlShowWays, selectSearch) {
  * @param {any} ColorSet 列字段颜色显示
  * @param {any} attrs 显示列的集合
  * @param {any} sortColumns 排序的字段
+ * @param {any} openModel 行打开方式
+ * @param {any} openTitle 弹窗的标题
+ * @param {any} entityType 当前表单是实体类，单据，数据源
+ * @param {any} isBatch 是否可以批处理
  */
 
 //判断是否是多级表头
 var isThrHeader = false; //是否是三级表头
 var isSecHeader = false;//是否是二级表头
-function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openModel, openTitle, entityType) {
+var richAttrs = [];
+function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openModel, openTitle, entityType,isBatch) {
     var foramtFunc = mapData.ForamtFunc;
     foramtFunc = foramtFunc == null || foramtFunc == undefined ? "" : foramtFunc;
     var handler = new HttpHandler("BP.CCBill.WF_CCBill");
@@ -146,27 +152,29 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
     var threeColumns = new Array(); //三级菜单
     var fieldColumns = {};
     //判断查询列表是不是有其他删除，集合操作，无不显示复选框
-    if (isHaveDelOper == true || isHaveSeachOper == true) {
+    if (isHaveDelOper == true || isHaveSeachOper == true || isBatch == true) {
         fieldColumns = {
             type: 'checkbox',
             rowspan: isThrHeader == true ? 3 : isSecHeader == true ? 2 : 1
 
         };
         AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, isThrHeader == true ? 3 : isSecHeader == true ? 2 : 1);
-    }
-   
-    fieldColumns = {
-        title: '序',
-        field: '',
-        align: 'center',
-        width: 50,
-        rowspan: isThrHeader == true ? 3 : isSecHeader == true ? 2 : 1,
-        templet: function (d) {
-            return pageSize * (pageIdx - 1) + d.LAY_TABLE_INDEX + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
+    } else {
+        fieldColumns = {
+            title: '序',
+            field: '',
+            align: 'center',
+            width: 50,
+            rowspan: isThrHeader == true ? 3 : isSecHeader == true ? 2 : 1,
+            templet: function (d) {
+                return pageSize * (pageIdx - 1) + d.LAY_TABLE_INDEX + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
 
-        }
-    };
-    AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, isThrHeader == true ? 3 : isSecHeader == true ? 2 : 1);
+            }
+        };
+        AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, isThrHeader == true ? 3 : isSecHeader == true ? 2 : 1);
+    }
+    
+    
     for (var i = 0; i < attrs.length; i++) {
         var attr = attrs[i];
 
@@ -195,7 +203,7 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
         var field = attr.KeyOfEn;
         var title = attr.Name;
         var width = attr.Width;
-        var sortable = true;
+        var sortable = false;
         if (sortColumns != null && sortColumns != "")
             sortable = sortColumns.indexOf(field) != -1 ? true : false;
 
@@ -227,7 +235,7 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
                     var icon = GenerICON(false, row.BillState);
                     var rowstr = JSON.stringify(row);
                     rowstr = encodeURIComponent(rowstr);
-                    return "<a href=\"javascript:OpenIt('" + row.OID + "'," + entityType + "," + row.BillState+",'" + rowstr+"')\"><img src=" + icon + " border=0 width='14px;' />" + row[this.field] + "</a>";
+                    return "<a href=\"javascript:OpenIt('" + row.OID + "'," + entityType + "," + row.BillState + ",'" + rowstr + "')\"><img src=" + icon + " border=0 width='14px;' />" + row[this.field] + "</a>";
                 }
             };
             AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, keyRowSpan);
@@ -242,7 +250,7 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
                 minWidth: width,
                 sort: sortable,
                 rowspan: keyRowSpan,
-               
+                uibindkey: attr.UIBindKey,
                 templet: function (row) {
                     if (row[this.field] == -1)
                         return "无";
@@ -251,12 +259,15 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
                         formatter = formatter.substring(0, formatter.indexOf(";"));
                         var strs = formatter.split("@");
                         if (strs.length == 2) {
-                            val = eval(strs[1] + "('" + row[this.field] + "')");
+                            val = cceval(strs[1] + "('" + row[this.field] + "')");
                             return val;
                         }
                     }
                     var val = row[this.field + "Text"];
-                   
+                    if ((val == undefined || val == "") && entityType == 100) {
+                        //获取外键对应的文本值
+                        val = GetDDLText(this.field, row[this.field], this.uibindkey, data);
+                    }
                     if (val == undefined || val == null)
                         return row[this.field];
                     else
@@ -285,7 +296,7 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
                         formatter = formatter.substring(0, formatter.indexOf(";"));
                         var strs = formatter.split("@");
                         if (strs.length == 2) {
-                            val = eval(strs[1] + "('" + row[this.field] + "')");
+                            val = cceval(strs[1] + "('" + row[this.field] + "')");
                             return val;
                         }
                     }
@@ -293,7 +304,7 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
                     var enums = $.grep(sys_enums, function (item) {
                         return item.EnumKey == bindkey;
                     });
-                    if(enums.length==0)
+                    if (enums.length == 0)
                         return val;
                     val = val + ",";
                     var str = [];
@@ -318,6 +329,7 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
                 minWidth: width,
                 sort: sortable,
                 rowspan: keyRowSpan,
+                uibindKey: attr.UIBindKey,
                 style: {
                     css: { "white-space": "nowrap", "word-break": "keep-all", "width": "100%" }
                 },
@@ -325,7 +337,10 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
                     var val = row[this.field + "Text"];
                     if (val == undefined || val == null)
                         val = row[this.field + "T"];
-
+                    if ((val == undefined || val == "") && row[this.field] != "" && entityType == 100) {
+                        //获取外键对应的文本值
+                        val = GetDDLText(this.field, row[this.field], this.uibindKey, data);
+                    }
                     if (val == undefined || val == null)
                         return row[this.field];
                     else
@@ -344,18 +359,45 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
                 sort: sortable,
                 rowspan: keyRowSpan,
                 templet: function (row) {
-                    if (row[this.field] == "0") return "否";
-                    if (row[this.field] == "1") return "是";
+                    var val = "";
+                    if (row[this.field] == "0")
+                        val = "否";
+                    if (row[this.field] == "1")
+                        val = "是";
+
+                    return FieldColorSet(colorSet, this.field, row[this.field], val)
+
                 }
             };
             AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, keyRowSpan);
             continue;
         }
 
-        
-
         if (width == null || width == "" || width == undefined)
             width = 100;
+        if (attr.IsRichText == "1") {
+            richAttrs.push(attr);
+            fieldColumns = {
+                field: field,
+                title: title,
+                width: width,
+                fixed: false,
+                sort: sortable,
+                rowspan: keyRowSpan,
+                templet: function (row) {
+                    var val = row[this.field];
+                    if (val == "")
+                        return val;
+                    val = htmlDecodeByRegExp(val);
+                    return "<div style='margin:9px 0px 9px 15px'>" + val + "</div>";
+
+                }
+            };
+            AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, keyRowSpan);
+            continue;
+        }
+
+
         fieldColumns = {
             field: field,
             title: title,
@@ -366,30 +408,18 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
 
             templet: function (row) {
                 var val = row[this.field];
-               
+
                 if (foramtFunc.indexOf(this.field + "@") != -1) {
                     formatter = foramtFunc.substring(foramtFunc.indexOf(this.field + "@"));
                     formatter = formatter.substring(0, formatter.indexOf(";"));
                     var strs = formatter.split("@");
                     if (strs.length == 2) {
-                        val =  eval(strs[1] + "('" + val + "')");
+                        val = cceval(strs[1] + "('" + val + "')");
                     }
                 }
-                
-                var fieldColor = [];
-                if (colorSet.indexOf("@" + this.field + ":") != -1) {
-                    fieldColor = getFieldColor(colorSet, this.field);
-                }
-                if (fieldColor.length == 0)
-                    return val;
-                for (var i = 0; i < fieldColor.length; i++) {
-                    var color = fieldColor[i];
-                    if (color.From <= val && color.To >= val) {
-                        var stylecss = "height: 40px;line-height: 40px;padding: 0 5px;font-size: 14px;color: #fff;white-space: nowrap;border-radius: 2px;text-align:center;";
-                        return '<div style="' + stylecss + 'background-color:' + color.Color + ';">' + val + '</div>'
-                    }
-                }
-                return val;
+
+                return FieldColorSet(colorSet, this.field, val, val);
+
             }
 
         };
@@ -405,20 +435,25 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
             var _html = "";
             var rowstr = JSON.stringify(row);
             rowstr = encodeURIComponent(rowstr);
-            if (row.BillState == 100 || entityType==100)
-                _html += "<a href='javascript:void(0)'onclick='OpenIt(\"" + row.OID + "\"," + entityType + "," + row.BillState + ",\"" + rowstr+"\")'style='color:blue'>详情</a>";
+            if (row.BillState == 100 || entityType == 100) {
+                _html += "<a href='javascript:void(0)'onclick='OpenIt(\"" + row.OID + "\"," + entityType + "," + row.BillState + ",\"" + rowstr + "\")'style='color:blue'>详情</a>";
+            }
             else
-                _html += "<a href='javascript:void(0)'onclick='OpenIt(\"" + row.OID + "\"," + entityType + "," + row.BillState +")'style='color:blue'>编辑</a>";
+                _html += "<a href='javascript:void(0)'onclick='OpenIt(\"" + row.OID + "\"," + entityType + "," + row.BillState + ")'style='color:blue'>编辑</a>";
             //增加其他的方法
-            $.each(methods, function (idx,method) {
-                _html += "<span style='padding: 0px 3px; color:#ccc'>|</span><a href='javascript:void(0)'onclick='DoMethod(\""+method.No+"\","+row.OID+")'style='color:blue'>" + method.Name+"</a>";
+            $.each(methods, function (idx, method) {
+                _html += "<span style='padding: 0px 3px; color:#ccc'>|</span><a href='javascript:void(0)'onclick='DoMethod(\"" + method.No + "\"," + row.OID + ")'style='color:blue'>" + method.Name + "</a>";
             })
-            if(isHaveDelOper == true)
-                _html += "<span style='padding: 0px 3px; color:#ccc'>|</span><a href='javascript:void(0)'onclick='DeleteIt(\""+row.OID+"\","+entityType+")' style='color:red'>删除</a>";
+            if (isHaveDelOper == true)
+                _html += "<span style='padding: 0px 3px; color:#ccc'>|</span><a href='javascript:void(0)'onclick='DeleteIt(\"" + row.OID + "\"," + entityType + ")' style='color:red'>删除</a>";
             return _html;
         }
     };
-    AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, isThrHeader == true ? 3 : isSecHeader == true ? 2 : 1);
+    if (dblist != null && dblist.DBType == 2 && methods.length == 0 && isHaveDelOper == false) {
+
+    } else {
+        AddColumn(fieldColumns, firstColumns, secondColumns, threeColumns, isThrHeader == true ? 3 : isSecHeader == true ? 2 : 1);
+    }
 
     if (thrcolspan.field != undefined)
         threeColumns.push(thrcolspan);
@@ -442,7 +477,7 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
 /**
  * 查询数据
  */
-function SearchData(key,val) {
+function SearchData(key, val) {
     var handler = new HttpHandler("BP.CCBill.WF_CCBill");
     handler.AddUrlData()
     handler.AddPara("PageIdx", pageIdx);
@@ -457,10 +492,10 @@ function SearchData(key,val) {
 
     //查询集合
     var data;
-    if(mapData.EntityType==100)
+    if (mapData.EntityType == 100)
         data = handler.DoMethodReturnString("SearchDB_Init");
     else
-        data =handler.DoMethodReturnString("Search_Init");
+        data = handler.DoMethodReturnString("Search_Init");
 
     if (data.indexOf('err@') == 0) {
         alert(data);
@@ -473,7 +508,7 @@ function SearchData(key,val) {
     ur.MyPK = webUser.No + frmID + "_SearchAttrs";
     ur.RetrieveFromDBSources();
 
-    return data["DT"];
+    return transferHtmlData(data["DT"]);
 }
 /**
  * 打开新页面的方式
@@ -482,7 +517,7 @@ function SearchData(key,val) {
  * @param {any} openModel 打开方式 //0=新窗口打开 1=在本窗口打开 2=弹出窗口打开,关闭后不刷新列表 3=弹出窗口打开,关闭刷新
  * @param {any} title 标题
  */
-function OpenIt(workid, entityType, billstate, row,isOpenAdd) {
+function OpenIt(workid, entityType, billstate, row, isOpenAdd) {
     if (row != null && row != undefined && row != "")
         row = JSON.parse(decodeURIComponent(row));
 
@@ -594,7 +629,7 @@ function Search() {
  * @param {any} obj
  * @param {any} type
  */
-function SearchByDate(type,selectVal,selectType,obj) {
+function SearchByDate(type, selectVal, selectType, obj) {
     //去掉选择的节点的class
     if (obj != null) {
         if (selectType == "year")
@@ -605,7 +640,7 @@ function SearchByDate(type,selectVal,selectType,obj) {
 
         $(obj).addClass("layui-a-this");
         $("a[name=" + selectVal + "]").addClass("layui-a-this");
-        
+
     }
     if (selectType != null && selectType != undefined) {
         if (selectType == "year")
@@ -647,18 +682,18 @@ function SearchByDate(type,selectVal,selectType,obj) {
         var date = new Date(parseInt(year), parseInt(endMonth), 0)
         var days = date.getDate();
         endMonth = endMonth < 10 ? "0" + endMonth : "" + endMonth;
-        beginMonth =beginMonth<10?"0"+beginMonth:""+beginMonth;
+        beginMonth = beginMonth < 10 ? "0" + beginMonth : "" + beginMonth;
         ur.DTFrom = year + "-" + beginMonth + "-01";
         ur.DTTo = year + "-" + endMonth + "-" + days;
     }
-    Search();   
+    Search();
 }
 /**
  * 根据下拉框执行
  * @param {any} ddlKey
  * @param {any} ddlVal
  */
-function SearchBySelect(ddlKey,ddlVal) {
+function SearchBySelect(ddlKey, ddlVal) {
     $("#DDL_" + ddlKey).val(ddlVal);
     layui.form.render("select");
     var select = 'dd[lay-value=' + ddlVal + ']';
@@ -868,8 +903,8 @@ function getFieldColor(colorSet, keyOfEn) {
             }
 
             fieldColor.push({
-                "From": parseInt(ts[0].replace("From=", "")),
-                "To": parseInt(ts[1].replace("To=", "")),
+                "From": ts[0].replace("From=", ""),
+                "To": ts[1].replace("To=", ""),
                 "Color": ts[2].replace("Color=", "")
             });
         }
@@ -881,11 +916,42 @@ function getFieldColor(colorSet, keyOfEn) {
 }
 
 /**
+ * 获取字段颜色
+ * @param {any} colorSet
+ * @param {any} field
+ * @param {any} val
+ * @param {any} valText
+ */
+function FieldColorSet(colorSet, field, val, valText) {
+    var fieldColor = [];
+    if (colorSet.indexOf("@" + field + ":") != -1) {
+        fieldColor = getFieldColor(colorSet, field);
+    }
+    if (fieldColor.length == 0)
+        return valText;
+    var reg = /^[0-9]+.?[0-9]*/;
+    for (var i = 0; i < fieldColor.length; i++) {
+        var color = fieldColor[i];
+        //说明是字符串，需要修改
+        if (reg.test(color.From) == false && reg.test(color.To) == false && (color.From == valText || color.To == valText)) {
+            var stylecss = "padding: 0 5px;font-size: 14px;color: #fff;white-space: nowrap;border-radius: 2px;text-align:center;";
+            return '<div style="' + stylecss + 'background-color:' + color.Color + ';">' + valText + '</div>'
+        }
+        if (reg.test(color.From) == true && reg.test(color.To) == true
+            && parseInt(color.From) <= val && parseInt(color.To) >= val) {
+            var stylecss = "padding: 0 5px;font-size: 14px;color: #fff;white-space: nowrap;border-radius: 2px;text-align:center;";
+            return '<div style="' + stylecss + 'background-color:' + color.Color + ';">' + valText + '</div>'
+        }
+    }
+    return valText;
+}
+
+/**
  * 打开链接
  * @param {any} no
  * @param {any} source
  */
-function OpenLink(no,source) {
+function OpenLink(no, source) {
     var enName = "BP.CCBill.Template.CollectionLink";
     if (source == "Method")
         enName = "BP.CCBill.Template.MethodLink";
@@ -896,12 +962,12 @@ function OpenLink(no,source) {
         return;
     }
     url = url.indexOf("?") == -1 ? url + "?1=1" : url;
-    url+="&FrmID="+frmID
-    if (link.RefMethodType==0) {//0=模态窗口打开@1=新窗口打开@2=右侧窗口打开@4=转到新页面
-        OpenLayuiDialog(url, link.Name, window.innerWidth * 2 / 3, null, "r", false); 
+    url += "&FrmID=" + frmID
+    if (link.RefMethodType == 0) {//0=模态窗口打开@1=新窗口打开@2=右侧窗口打开@4=转到新页面
+        OpenLayuiDialog(url, link.Name, window.innerWidth * 2 / 3, null, "r", false);
         return;
     }
-    window.top.vm.openTab(link.Name, url);   
+    window.top.vm.openTab(link.Name, url);
 }
 /**
  * 列表集合的方法操作
@@ -916,10 +982,10 @@ function OpenFunc(no, source) {
 
     var checkStatus = layui.table.checkStatus("lay_table_dict");
     if (checkStatus.data.length == 0) {
-        layer.alert("请选择" +func.Name+"的行");
+        layer.alert("请选择" + func.Name + "的行");
         return;
     }
-    layer.confirm('确定要'+func.Name+'选择的数据吗?', function (index) {
+    layer.confirm('确定要' + func.Name + '选择的数据吗?', function (index) {
         layer.close(index);
         var workids = [];
         for (var i = 0; i < checkStatus.data.length; i++) {
@@ -929,14 +995,14 @@ function OpenFunc(no, source) {
         //执行方法.
         var isHaveAttr = false;
         var attrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", func.MyPK);
-        if(attrs.length>0)
+        if (attrs.length > 0)
             isHaveAttr = true;
-       
+
 
         //带有参数的方法.
         if (isHaveAttr == true) {
             var url = "./Opt/DoMethodPara.htm?No=" + func.MethodID + "&WorkIDs=" + workids + "&FrmID=" + frmID;
-            OpenLayuiDialog(url,func.Name, window.innerWidth * 2 / 3, null, 'r',true)
+            OpenLayuiDialog(url, func.Name, window.innerWidth * 2 / 3, null, 'r', true)
             return;
         }
 
@@ -951,7 +1017,7 @@ function OpenFunc(no, source) {
  * @param {any} source
  */
 function OpenBill(no, source) {
-  
+
     var enName = "BP.CCBill.Template.MethodBill";
     var bill = new Entity(enName, no);
     var billFrm = bill.Tag1;
@@ -1051,9 +1117,9 @@ function OpenFlowEntity(no, source) {
  * @param {any} oid
  * @param {any} entityType
  */
-function DeleteIt(oid,entityType) {
+function DeleteIt(oid, entityType) {
     layer.confirm('确定要删除改行数据信息吗?', function (index) {
-        
+
         var handler = new HttpHandler("BP.CCBill.WF_CCBill");
         handler.AddPara("FrmID", GetQueryString("FrmID"));
         handler.AddPara("WorkID", oid);
@@ -1080,30 +1146,30 @@ function DeleteIt(oid,entityType) {
  * @param {any} methodNo
  * @param {any} workid
  */
-function DoMethod(methodNo,workid) {
-    var method = new Entity("BP.CCBill.Template.Method",methodNo);
+function DoMethod(methodNo, workid) {
+    var method = new Entity("BP.CCBill.Template.Method", methodNo);
     if (method.MethodModel === "Bill")
         method.Docs = "./Opt/Bill.htm?FrmID=" + method.Tag1 + "&MethodNo=" + method.No + "&WorkID=" + workid + "&From=Dict";
     //如果是一个方法.
     if (method.MethodModel === "Func") {
         if (method.IsHavePara == 0) {
-            Skip.addJs("../../DataUser/JSLibData/Method/" + method.No+".js");
-            DBAccess.RunFunctionReturnStr(method.MethodID + "(" + workid+")");
+            Skip.addJs("../../DataUser/JSLibData/Method/" + method.No + ".js");
+            DBAccess.RunFunctionReturnStr(method.MethodID + "(" + workid + ")");
             return;
         }
         method.Docs = "./Opt/DoMethod.htm?FrmID=" + method.FrmID + "&No=" + method.No + "&WorkID=" + workid + "&From=Search";
 
     }
-   
+
     if (method.MethodModel === "FrmBBS")
         method.Docs = "./OptComponents/FrmBBS.htm?FrmID=" + method.FrmID + "&No=" + method.No + "&WorkID=" + workid;
     if (method.MethodModel === "QRCode")
         method.Docs = "./OptComponents/QRCode.htm?FrmID=" + method.FrmID + "&MethodNo=" + method.No + "&WorkID=" + workid;
-   
+
     //单个实体发起的流程汇总.
     if (method.MethodModel === "SingleDictGenerWorkFlows")
         method.Docs = "./OptOneFlow/SingleDictGenerWorkFlows.htm?FrmID=" + method.FrmID + "&No=" + method.No + "&MethodNo=" + method.No + "&WorkID=" + workid;
-  
+
     //修改基础数据的的流程.
     if (method.MethodModel === "FlowBaseData") {
         var url = "./OptOneFlow/FlowBaseData.htm?WorkID=" + workid;
@@ -1118,9 +1184,9 @@ function DoMethod(methodNo,workid) {
 
         var url = "./OptOneFlow/FlowEtc.htm?WorkID=" + workid;
         url += "&FrmID=" + method.FrmID;
-        url += "&MethodNo=" + method.No; 
+        url += "&MethodNo=" + method.No;
         url += "&FlowNo=" + method.FlowNo;
-     
+
         method.Docs = url;
 
     }
@@ -1153,14 +1219,14 @@ function DoMethod(methodNo,workid) {
         if (url.indexOf('?') > 0)
             method.Docs = url + "&FrmID=" + method.FrmID + "&WorkID=" + workid;
         else
-            method.Docs = url + "?FrmID=" + method.FrmID+ "&WorkID=" + workid;
+            method.Docs = url + "?FrmID=" + method.FrmID + "&WorkID=" + workid;
     }
 
-    if (method.MethodModel === "Func") 
+    if (method.MethodModel === "Func")
         OpenLayuiDialog(method.Docs, method.Name, window.innerWidth / 2, 50, "auto");
     else
         window.top.vm.openTab(method.Name, method.Docs);
-    
+
 }
 
 function GetBillState(BillState) {
@@ -1177,4 +1243,78 @@ function GetBillState(BillState) {
         return "归档";
 
     return BillState;
+}
+
+function GetDDLText(field, val, uibindKey, data) {
+    //获取这个字段对应的值
+    if (uibindKey == null || uibindKey == undefined || uibindKey == "")
+        return "";
+    var options = data[uibindKey];
+    if (options == null || options == undefined) {
+        var enums = data.Sys_Enum;
+        if (enums.length > 0) {
+            var text = "";
+            $.each(enums, function (i, item) {
+                if (item.EnumKey == uibindKey && item.IntKey == val) {
+                    text = item.Lab;
+                    return false;
+                }
+            })
+            if (text != "")
+                return text;
+        }
+        return "";
+    }
+
+    var item = $.grep(options, function (option) {
+        return option.No == val;
+    });
+    if (item.length == 0)
+        return "";
+    return item[0].Name;
+}
+function transferHtmlData(tableData) {
+    var val = "";
+    if (richAttrs.length != 0) {
+        $.each(tableData, function (i, item) {
+            richAttrs.forEach(attr => {
+                val = item[attr.KeyOfEn];
+                if (val != "") {
+
+                    val = htmlEncodeByRegExp(val);
+                    val = val.replace(/<[^>]+>/g, "")
+                    item[attr.KeyOfEn] = val;
+                }
+            })
+        });
+    }
+    return tableData;
+}
+
+function htmlEncodeByRegExp(str) {
+    var s = '';
+    if (str.length === 0) {
+        return '';
+    }
+    s = str.replace(/&/g, '&amp;');
+    s = s.replace(/</g, '&lt;');
+    s = s.replace(/>/g, '&gt;');
+    s = s.replace(/ /g, '&nbsp;');
+    s = s.replace(/\'/g, '&#39;');
+    s = s.replace(/\"/g, '&quot;');
+    return s;
+}
+
+function htmlDecodeByRegExp(str) {
+    var s = '';
+    if (str.length === 0) {
+        return '';
+    }
+    s = str.replace(/&amp;/g, '&');
+    s = s.replace(/&lt;/g, '<');
+    s = s.replace(/&gt;/g, '>');
+    s = s.replace(/&nbsp;/g, ' ');
+    s = s.replace(/&#39;/g, '\'');
+    s = s.replace(/&quot;/g, '\"');
+    return s;
 }

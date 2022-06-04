@@ -50,7 +50,7 @@
 
             node.Update();
             //alert("保存完毕");
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </head>
@@ -65,11 +65,22 @@
             </legend>
             <br />
 
-            <textarea type="text" id="TB_SQL" name="TB_SQL" runat="server" textmode="MultiLine"
+            <textarea type="text" id="TB_SQL" name="TB_SQL" textmode="MultiLine"
                       rows="1" style="width: 95%"></textarea>
             <br />
 
         </fieldset>
+
+        <input type="id"  tb/>
+
+        <my-input value="xxx">
+            ant-design
+            <a-input></a-input>
+            naive-ui
+            <n-input></n-input>
+        </my-input>
+
+        
 
         <fieldset style="margin-bottom:50px;">
             <legend id="help">

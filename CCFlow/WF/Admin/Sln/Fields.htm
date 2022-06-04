@@ -60,7 +60,7 @@
 
                 for (var i = 0; i < mapAttrs.length; i++) {
                     var en = mapAttrs[i];
-                    if (en.EditType != 0 || en.GroupID != group.OID || en.KeyOfEn == "FID")
+                    if (en.EditType != 0  || en.KeyOfEn == "FID")
                         continue;
                     if (en.MyDataType == 2 && en.DefValType == 0 && en.DefVal == '10002') {
                         en.DefVal = "";
@@ -299,7 +299,7 @@
             }
             $("#Btn_Save").text(" 保 存 ");
 
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function replaceTrim(val) {//去除空格

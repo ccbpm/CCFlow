@@ -20,14 +20,33 @@
     <script src="Search.js" type="text/javascript"></script>
     <script src="../../DataUser/JSLibData/SearchSelf.js"></script>
     <script src="../CCForm/MapExt2021.js"></script>
+    <script src="../Scripts/xss.js"></script>
     <style id="theme-data"></style>
     <style type="text/css">
         .layui-tab-title .layui-this:after {
             border: 0;
         }
 
+        .layui-form-label-search {
+            float: left;
+            display: block;
+            min-width: 40px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+            padding: 9px 5px;
+        }
+
+        .layui-table-cell {
+            height: 28px;
+            line-height: 28px;
+            padding: 0 15px;
+            position: relative;
+            box-sizing: border-box;
+        }
+
         .layui-tab-title li {
-            border: 1px solid #eee;
+            margin-top: 3px;
         }
 
         .layui-input-span {
@@ -42,13 +61,50 @@
             color: rgba(0, 0, 0, 0.85);
             line-height: 18px;
         }
+
+        .layui-form-label {
+            color: #808080
+        }
+
+        .layui-a-this {
+            line-height: 30px;
+            height: 30px;
+            padding: 0px 10px;
+        }
+
+        .dateChoose .layui-tab-title {
+            border: 0px;
+        }
+
+        .dateChoose .layui-tab-title li {
+            height: 30px;
+            line-height: 30px;
+            border: 0px;
+            padding: 0px;
+        }
+
+        .dateChoose .layui-tab-content {
+            padding: 5px 0px;
+        }
+
+        .dateChoose .layui-tab-content a {
+            display: inline-block;
+            height: 30px;
+            line-height: 30px;
+            margin-top: 3px;
+            padding: 0px 10px;
+        }
+
+        .dateChoose .layui-tab-content a.layui-a-this:hover {
+            color: #eeeeee
+        }
     </style>
 </head>
 <body>
     <div class="layui-fluid">
-        <div class="layui-row layui-col-space15">
+        <div class="layui-row  layui-col-space30">
             <!-- 内容主体区域 -->
-            <div class="layui-col-md12">
+            <div class="layui-col-md12" style="padding:10px">
                 <div class="layui-card">
                     <div class="layui-card-body">
                         <div id="view"></div>
@@ -62,57 +118,9 @@
     <script id="toolbar" type="text/html">
         <div class="layui-form">
             <div class="layui-form-item">
-                {{# if(d.dateTabSearch.key!=undefined){}}
-                <div class="layui-tab">
-                    <ul class="layui-tab-title">
-                        <li class="layui-this" onclick="SearchByDate('month')">月报</li>
-                        <li onclick="SearchByDate('jidu')">季报</li>
-                        <li onclick="SearchByDate('year')">年报</li>
-                    </ul>
-                    <div class="layui-tab-content">
-                        <div class="layui-tab-item layui-show">
-                            <div>
-                                <span class="layui-date-span">年度:</span>
-                                {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
-                                <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('month','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
-                                {{# }); }}
-                            </div>
-                            <div>
-                                <span class="layui-date-span">月份:</span>
-                                {{# layui.each(d.dateTabSearch.Month,function(month_idx,month){ }}
-                                <a href="javascript:void(0)" class="{{# if(d.dateTabSearch.value[1]==month){}}layui-a-this{{# } }}" onclick="SearchByDate('month','{{month}}','month',this)" style="margin-right:5px">{{month}}</a>
-                                {{# }); }}
-                            </div>
-                        </div>
-                        <div class="layui-tab-item">
-                            <div>
-                                <span class="layui-date-span">年度:</span>
-                                {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
-                                <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('jidu','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
-                                {{# }); }}
-                            </div>
-                            <div>
-                                <span class="layui-date-span">季度:</span>
-                                {{# layui.each(d.dateTabSearch.JiDu,function(JiDu_idx,jidu){ }}
-                                <a href="javascript:void(0)" class="{{# if(d.dateTabSearch.value[2]==jidu){}}layui-a-this{{# } }}" onclick="SearchByDate('jidu','{{jidu}}','jidu',this)" style="margin-right:5px">{{jidu}}</a>
-                                {{# }); }}
-                            </div>
-                        </div>
-                        <div class="layui-tab-item">
-                            <div>
-                                <span class="layui-date-span">年度:</span>
-                                {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
-                                <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('year','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
-                                {{# }); }}
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                {{# } }}
                 {{#  layui.each(d.inputSearch, function(index, item){ }}
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{item.label}}</label>
+                    <label class="layui-form-label-search">{{item.label}}</label>
                     <div class="layui-input-inline">
                         <input type="text" class="layui-input" id="TB_{{=item.key}}" name="TB_{{=item.key}}" value="{{item.value}}" />
                     </div>
@@ -121,12 +129,12 @@
                 {{#  }); }}
                 {{#  layui.each(d.dateSearch, function(index, item){ }}
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{item.dtFromLabel}}</label>
+                    <label class="layui-form-label-search">{{item.dtFromLabel}}</label>
                     <div class="layui-input-inline">
                         <i class="input-icon layui-icon layui-icon-date"></i>
                         <input type="text" class="layui-input ccdate" data-info="{{=item.dtType}}" id="TB_{{=item.dtFromKey}}" name="TB_{{=item.dtFromKey}}" value="{{=item.dtFromValue}}" style="padding-left: 40px;" />
                     </div>
-                    <label class="layui-form-label" style="width:10px">到</label>
+                    <label class="layui-form-label-search" style="width:10px">到</label>
                     <div class="layui-input-inline">
                         <i class="input-icon layui-icon layui-icon-date"></i>
                         <input type="text" class="layui-input ccdate" data-info="{{=item.dtType}}" id="TB_{{=item.dtToKey}}" name="TB_{{=item.dtToKey}}" value="{{=item.dtToValue}}" style="padding-left: 40px;" />
@@ -135,38 +143,97 @@
                 {{#  }); }}
                 {{#  layui.each(d.selectSearch, function(index, item){ }}
                 <div class="layui-inline">
-                    <label class="layui-form-label">{{item.label}}</label>
+                    <label class="layui-form-label-search">{{item.label}}</label>
                     {{# if(item.showWay==0){ }}
                     <div class="layui-input-inline">
-                        {{# }else { }}
-                        <div class="layui-input-inline" style="display:none">
-                            {{# } }}
-                            <select class="layui-input" id="DDL_{{=item.key}}" name="DDL_{{=item.key}}" data-info="{{item.ShowWay}}" lay-filter="{{=item.key}}" value="{{item.value}}">
-                                {{#  layui.each(item.operations, function(k, opt){ }}
-                                <option value="{{opt.value}}" selected="{{=opt.selected}}">{{opt.name}}</option>
-                                {{#  }); }}
-                            </select>
-                        </div>
-                        {{# if(item.showWay==1){ }}
-                        <div class="layui-tab" style="width:auto">
-                            <ul class="layui-tab-title" id="Tab_{{=item.key}}" style="margin-left:110px;border:0">
-                                {{#  layui.each(item.operations, function(k, opt){ }}
-                                <li class="layui-input-span {{# if(opt.value==item.value){}} layui-this{{# } }}" id="{{item.key}}_{{opt.value}}" onclick="SearchBySelect('{{item.key}}','{{opt.value}}')">{{opt.name}}</li>
-                                {{#  }); }}
+                        <select class="layui-input" id="DDL_{{=item.key}}" name="DDL_{{=item.key}}" data-info="{{item.ShowWay}}" lay-filter="{{=item.key}}" value="{{item.value}}">
+                            {{#  layui.each(item.operations, function(k, opt){ }}
+                            <option value="{{opt.value}}" selected="{{=opt.selected}}">{{opt.name}}</option>
+                            {{#  }); }}
+                        </select>
+                    </div>
+                    {{# } }}
+
+                    {{# if(item.showWay==1){ }}
+                    <div class="layui-tab" style="width:auto">
+                        <ul class="layui-tab-title" id="Tab_{{=item.key}}" style="margin-left:110px;border:0">
+                            {{#  layui.each(item.operations, function(k, opt){ }}
+                            <li class="layui-input-span {{# if(opt.value==item.value){}} layui-this{{# } }}" id="{{item.key}}_{{opt.value}}" onclick="SearchBySelect('{{item.key}}','{{opt.value}}')">{{opt.name}}</li>
+                            {{#  }); }}
+                        </ul>
+                    </div>
+                    {{# } }}
+                </div>
+                {{#  }); }}
+                {{# if(d.dateTabSearch.key!=undefined){}}
+                <div class="layui-form-item">
+
+                    <div class="layui-tab  dateChoose">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类别</label>
+                            <ul class="layui-tab-title">
+                                <li class="layui-this" onclick="SearchByDate('month')">月报</li>
+                                <li onclick="SearchByDate('jidu')">季报</li>
+                                <li onclick="SearchByDate('year')">年报</li>
                             </ul>
                         </div>
-                        {{# } }}
-                    </div>
-                    {{#  }); }}
-                    <div class="layui-inline">
-                        <div class="layui-btn-container" style="padding-top: 10px;">
-                            {{#  layui.each(d.btns, function(index, item){ }}
-                            <button type="button" class="layui-btn layui-btn-sm" data-type="{{=item.type}}" data-no="{{=item.no}}" data-source="{{=item.source}}">{{item.label}}</button>
-                            {{#  }); }}
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-inline">
+
+                                    <label class="layui-form-label">年度</label>
+                                    {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
+                                    <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('month','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
+                                    {{# }); }}
+                                </div>
+                                <div class="layui-inline">
+
+                                    <label class="layui-form-label">月份</label>
+                                    {{# layui.each(d.dateTabSearch.Month,function(month_idx,month){ }}
+                                    <a href="javascript:void(0)" class="{{# if(d.dateTabSearch.value[1]==month){}}layui-a-this{{# } }}" onclick="SearchByDate('month','{{month}}','month',this)" style="margin-right:5px">{{month}}</a>
+                                    {{# }); }}
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-inline">
+
+                                    <label class="layui-form-label">年度</label>
+                                    {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
+                                    <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('jidu','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
+                                    {{# }); }}
+                                </div>
+                                <div class="layui-inline">
+
+                                    <label class="layui-form-label">季度</label>
+                                    {{# layui.each(d.dateTabSearch.JiDu,function(JiDu_idx,jidu){ }}
+                                    <a href="javascript:void(0)" class="{{# if(d.dateTabSearch.value[2]==jidu){}}layui-a-this{{# } }}" onclick="SearchByDate('jidu','{{jidu}}','jidu',this)" style="margin-right:5px">{{jidu}}</a>
+                                    {{# }); }}
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-inline">
+
+                                    <label class="layui-form-label">年度</label>
+                                    {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
+                                    <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('year','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
+                                    {{# }); }}
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
+                {{# } }}
+                <div class="layui-inline">
+                    <div class="layui-btn-container" style="padding-left: 10px;">
+                        {{#  layui.each(d.btns, function(index, item){ }}
+                        <button type="button" style="min-width:50px" class="layui-btn layui-btn-sm" data-type="{{=item.type}}" data-no="{{=item.no}}" data-source="{{=item.source}}">{{item.label}}</button>
+                        {{#  }); }}
+                    </div>
+                </div>
+
             </div>
+        </div>
     </script>
     <script>
         var frmID = GetQueryString("FrmID");
@@ -242,7 +309,7 @@
                     laydate.render({
                         elem: '#' + item.id //指定元素
                         , type: type
-                        ,format:type=="date"?"yyyy-MM-dd":"yyyy-MM-dd HH:mm:ss"
+                        , format: type == "date" ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm:ss"
                     });
                 })
             }
@@ -253,29 +320,43 @@
             var tableData = SearchData();
             //渲染table
             //主页面数据
+            var H = $(document).height() - $("#view").height() - 110;
+            if (dblist.DBType == 2)
+                H = $(document).height() - $("#view").height() - 80;
             var vtable = table.render({
                 elem: '#lay_table_dict',
                 id: 'lay_table_dict',
                 data: tableData,
                 limit: Number.MAX_VALUE,
                 title: '数据表',
-                height: $(document).height() - $("#view").height() - 130,
+                height: H,
                 cellMinWidth: 120,
-                size: 'lg',
                 cols: cols,
-                page: false
+                page: false,
+                done: function (res, curr, count) {
+                    //遍历表格每行代码
+                    var rowColorSet = frmDict.RowColorSet;
+                    if (rowColorSet != null && rowColorSet != undefined && rowColorSet != "") {
+                        $("table tbody tr").each(function (i, item) {
+                            var color = res.data[i][rowColorSet];
+                            if (color != null && color != undefined && color != "")
+                                $(this).css("background", color);
+                        })
+                    }
+                }
             });
-            renderLaypage();
             //触发行双击事件
-            table.on('rowDouble(dict)', function (obj) {
-                var row = obj.data;
-                var pkval = row["OID"];
+            if (dblist.DBType != 2) {
+                renderLaypage();
+                table.on('rowDouble(dict)', function (obj) {
+                    var row = obj.data;
+                    var pkval = row["OID"];
 
-                var rowstr = JSON.stringify(row);
-                rowstr = encodeURIComponent(rowstr);
-                OpenIt(pkval, 2, row["BillState"], rowstr);
-            });
-
+                    var rowstr = JSON.stringify(row);
+                    rowstr = encodeURIComponent(rowstr);
+                    OpenIt(pkval, 2, row["BillState"], rowstr);
+                });
+            }
             table.on('sort(dict)', function (obj) { //注：sort 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
                 orderBy = obj.field; //当前排序的字段名
                 orderWay = obj.type;//当前排序类型：desc（降序）、asc（升序）、null（空对象，默认排序）
@@ -290,11 +371,11 @@
             $('#view .layui-btn').on('click', function () {
                 var type = $(this).data('type');
                 switch (type) {
-                    case "search":
+                    case "Search":
                         Search();
                         break;
 
-                    case "add"://新增
+                    case "New"://新增
                         var frmID = GetQueryString("FrmID");
 
                         var handler = new HttpHandler("BP.CCBill.WF_CCBill");
@@ -309,7 +390,7 @@
 
                         OpenIt(data, 2, 0);
                         break;
-                    case "delete"://删除数据
+                    case "Delete"://删除数据
                         var checkStatus = table.checkStatus(vtable.config.id);
                         if (checkStatus.data.length == 0) {
                             layer.alert("请选择删除的行");
@@ -338,16 +419,16 @@
 
                         });
                         break;
-                    case "imp"://导入
+                    case "ImpExcel"://导入
                         var url = "./Opt/Imp.htm?FrmID=" + GetQueryString("FrmID") + "&EntityType=2";
                         OpenLayuiDialog(url, "导入模板数据", window.innerWidth / 2, 0, null, true);
                         break;
-                    case "exp"://导出
+                    case "ExpExcel"://导出
                         table.exportFile(vtable.config.id, tableData, 'xls');
                         break;
-                    case "group"://跳转到分组页面
+                    case "Group"://跳转到分组页面
                         url = "Group.htm?FrmID=" + GetQueryString("FrmID");
-                        window.location.href = url;
+                        SetHref(url);
                         break;
                     case "Link"://链接
                         var no = $(this).data('no');
@@ -395,7 +476,7 @@
                         pageSize = obj.limit;
                         //刷新数据
                         var tableData = SearchData();
-                        layui.table.reload('lay_table_dict', { data: tableData }); 
+                        layui.table.reload('lay_table_dict', { data: tableData });
                     }
 
                 }
@@ -421,6 +502,7 @@
             var data = JSON.parse(data);
             //单据表单属性
             var mapData = data.Sys_MapData;
+            dblist = data.Sys_DBList[0];
             var attrs = data.Attrs;
             var atPara = mapData[0].AtPara;
             mapExts = data.Sys_MapExt;
@@ -481,7 +563,7 @@
             }
             searchData["inputSearch"] = inputSearch;
             var dtSearchWay = GetPara(atPara, "DTSearchWay");
-            dtSearchWay = dtSearchWay == null || dtSearchWay == undefined ? "0" : dtSearchWay;
+            dtSearchWay = dtSearchWay == null || dtSearchWay == undefined || dtSearchWay ==""? "0" : dtSearchWay;
             if (dateShowType == "0" && dtSearchWay != "0") {
                 var dtFrom = GetPara(atPara, "DTSearchLabel");
                 if (dtFrom == undefined)
@@ -492,8 +574,10 @@
                     dtFromLabel: dtFrom,
                     dtFromValue: ur.DTFrom,
                     dtToValue: ur.DTTo,
-                    dtType:dtSearchWay == "1" ? "date" : "datetime"
+                    dtType: dtSearchWay == "1" ? "date" : "datetime"
                 })
+
+               
             }
             searchData["dateSearch"] = dateSearch;
             //格式为: @WFSta=0@FK_Dept=02
@@ -517,56 +601,7 @@
 
             }
             searchData["selectSearch"] = selectSearch;
-            //获得配置的按钮.
 
-            if (frmDict.BtnNewLable == "") frmDict.BtnNewLable = "新建";
-            if (frmDict.BtnDelLable == "") frmDict.BtnDelLable = "删除";
-            if (frmDict.BtnImpExcel == "") frmDict.BtnImpExcel = "导入";
-            if (frmDict.BtnExpExcel == "") frmDict.BtnExpExcel = "导出";
-            if (frmDict.BtnGroupLabel == "") frmDict.BtnGroupLabel = "分析";
-
-            var handler = new HttpHandler("BP.CCBill.WF_CCBill_API");
-            handler.AddPara("FrmID", frmID);
-            var powerData = handler.DoMethodReturnString("CCFrom_FrmPower");
-            if (powerData.indexOf("err@") != -1) {
-                alert(powerData);
-                return;
-            }
-            powerData = JSON.parse(powerData);
-            btns.push({
-                label: "查询",
-                type: 'search',
-            })
-            //权限判断按钮.
-            if (parseInt(powerData.IsInsert) == 1)
-                btns.push({
-                    label: frmDict.BtnNewLable,
-                    type: 'add',
-                })
-            if (parseInt(powerData.IsDelete) == 1) {
-                isHaveDelOper = true;
-                btns.push({
-                    label: frmDict.BtnDelLable,
-                    type: 'delete'
-                })
-            }
-
-            if (frmDict.BtnImpExcelEnable == 1)
-                btns.push({
-                    label: frmDict.BtnImpExcel,
-                    type: 'imp'
-                })
-            if (frmDict.BtnExpExcelEnable == 1)
-                btns.push({
-                    label: frmDict.BtnExpExcel,
-                    type: 'exp'
-                })
-            if (frmDict.BtnGroupEnable == 1)
-                btns.push({
-                    label: frmDict.BtnGroupLabel,
-                    type: 'group'
-                })
-            //增加方法.
             //获得当前的集合.
             var frms = data["Frm_Method"];
             var colls = data["Frm_Collection"];
@@ -609,14 +644,20 @@
     </script>
     <script>
         $(function () {
-            var theme = localStorage.getItem("themeColorInfo");
+            var theme = filterXSS(localStorage.getItem("themeColorInfo"));
+            if (theme == null || theme == undefined || theme == "")
+                return;
             theme = JSON.parse(theme);
-            var styleScope = document.getElementById("theme-data")
-            styleScope.innerHTML = "\n .layui-btn{\n background-color:" + theme.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + theme.selectedMenu + ";\n}";
-            styleScope.innerHTML += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:" + theme.selectedMenu + " !important\n}";
-            styleScope.innerHTML += "\n .layui-form-select dl dd.layui-this{\n background-color:" + theme.selectedMenu + " !important;\n}";
-            styleScope.innerHTML += "\n .layui-tab-title .layui-this{\n background-color:" + theme.selectedMenu + " !important;\n} \n .layui-tab-title>.layui-this{\n color:#fff;\n} \n .layui-tab-title li {border: 1px solid " + theme.selectedMenu + ";}";
-            styleScope.innerHTML += "\n .layui-a-this{\n background-color:" + theme.selectedMenu + ";\n padding: 3px;\n color: #fff;\n}";
+
+            var html = "\n .layui-btn{\n background-color:" + theme.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + theme.selectedMenu + ";\n}";
+            html += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:" + theme.selectedMenu + " !important\n}";
+            html += "\n .layui-form-select dl dd.layui-this{\n background-color:" + theme.selectedMenu + " !important;\n}";
+            html += "\n .layui-tab-title .layui-this{\n background-color:" + theme.selectedMenu + " !important;\n} \n .layui-tab-title>.layui-this{\n color:#fff;\n} \n .layui-tab-title li {border: 1px solid " + theme.selectedMenu + ";}";
+            html += "\n .layui-a-this{\n background-color:" + theme.selectedMenu + ";\n color: #fff;\n}";
+            html = filterXSS(html);
+
+            var styleScope = document.getElementById("theme-data");
+            styleScope.innerHTML = html;
         })
     </script>
 </body>

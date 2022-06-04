@@ -28,7 +28,7 @@
             //        $("#cc").append("<center>节点(" + node.Name + ")不能执行批量处理操作 </center>");
             //        return;
             //    }
-            //    window.location.href = "./WorkOpt/BatchList.htm?FK_Node=" + fk_node + "&Type=1"; //跳转到批量审批处理列表
+            //    SetHref( "./WorkOpt/BatchList.htm?FK_Node=" + fk_node + "&Type=1"; //跳转到批量审批处理列表
             //    return;
             //}
 
@@ -40,7 +40,7 @@
                 return;
             }
 
-            data = eval('(' + data + ')');
+            data = cceval('(' + data + ')');
             if (data.length == 0) {
                 $("#lists").append("<center> 当前没有批处理的工作。 </center>");
                 return;
@@ -81,7 +81,7 @@
         function ToSelfUrl(nodeID) {
             var node = Entity("BP.WF.Node", nodeID);
             var url = node.BatchSelfUrl;
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
 </head>

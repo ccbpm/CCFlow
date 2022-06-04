@@ -1,11 +1,12 @@
 ﻿
 new Vue({
-    el: '#mapAttrParas',
+    el: '#condParas',
     data: {
-        mapAttrs: [],
+        conds: [],
         expandAll: false,
         loadingDialog: false,
-        Event: ''
+        Event: '',
+        systemNodeItems: []
     },
     watch: {
         expandAll(val) {
@@ -14,15 +15,15 @@ new Vue({
     },
     methods: {
         expandMenus: function (status) {
-            for (var i = 0; i < this.mapAttrs.length; i++) {
-                this.mapAttrs[i].open = status
+            for (var i = 0; i < this.conds.length; i++) {
+                this.conds[i].open = status
             }
         },
         bindMenu: function () {
-            var _this = this
+            var _this = this;
             layui.use('dropdown', function () {
                 var dropdown = layui.dropdown
-                var systemNodeItems = [
+                _this.systemNodeItems = [
                     { title: '按表单条件计算', id: "CondByFrm" },
                     { title: '按已选择的独立表单条件计算', id: "StandAloneFrm" },
                     { title: '按指定操作员的岗位条件', id: "CondStation" },
@@ -36,10 +37,10 @@ new Vue({
                 ]
 
                 var systemFunc = function (data, oThis) {
-                    var url = window.location.href;
+                    var url = GetHrefUrl();
                     url = url.replace('List.htm', data.id + '.htm');
 
-                    window.location.href = url;
+                    SetHref(url);
 
                     // window.parent.Condlist.openTab(data.title, url);
                     // OpenLayuiDialog(url, "", 0, 0, null, true);
@@ -48,23 +49,22 @@ new Vue({
                 var systemOptions = [{
                     elem: '.item-top-dp',
                     trigger: 'contextmenu',
-                    data: systemNodeItems,
+                    data: _this.systemNodeItems,
                     click: systemFunc
                 }, {
                     elem: '.NewPara-btn',
                     trigger: 'click',
-                    data: systemNodeItems,
+                    data: _this.systemNodeItems,
                     click: systemFunc
                 }]
 
                 dropdown.render(systemOptions[0]);
                 dropdown.render(systemOptions[1]);
 
-
                 var menuFunc = function (data, oThis) {
 
-                    var idx = $(this.elem)[0].dataset.idx;
-                    var condIdx = idx - 1;
+                    //var idx = $(this.elem)[0].dataset.idx;
+                    //  var condIdx = idx - 1;
                     var en = new Entity("BP.WF.Template.Cond");
                     //生成一个随机数添加到运算符的主键中
                     var radomNum = parseInt(Math.random() * 1000) + 1;
@@ -78,15 +78,16 @@ new Vue({
                     en.OperatorValue = data.condExp; //都赋值，以免用错.
 
                     en.ToNodeID = toNodeID;
-                    en.Idx = condIdx;
+                    en.Idx = 100;
                     en.Insert();
+
                     layer.msg('添加成功', { time: 2000 }, function () {
-                        window.location.href = window.location.href;
+                        Reload();
                     });
                 }
                 var menuNodeItems = [
-                    { title: '( 左括号', condExp: '（' },
-                    { title: ') 右括号', condExp: '）' },
+                    { title: '( 左括号', condExp: '(' },
+                    { title: ') 右括号', condExp: ')' },
                     { title: 'AND 并且', condExp: 'AND' },
                     { title: 'OR 或者', condExp: 'OR' }
                 ]
@@ -121,14 +122,21 @@ new Vue({
                 window.location.reload();
             }, 2000)
         },
+        EditCond: function (item) {
+            var url = GetHrefUrl();
+
+            url = url.replace('List.htm', this.systemNodeItems[item.DataFrom].id + '.htm') + "&MyPK=" + item.MyPK;
+
+            SetHref(url);
+        },
         MoveItem(pastNodeArrStr, pastNodeId, currentNodeArrStr, currentNodeId) {
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond2020");
             handler.AddPara("MyPKs", currentNodeArrStr);
             var data = handler.DoMethodReturnString("List_Move");
-            //  layer.msg(data);
-            //设置tonodeID.
-            // handler.AddPara("ToNodeID", GetQueryString("ToNodeID"));
-
+            this.CondCheck();
+        },
+        CondCheck: function () {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond2020");
             handler.AddPara("ToNodeID", GetQueryString("ToNodeID"));
             handler.AddPara("FK_Node", GetQueryString("FK_Node"));
             handler.AddPara("CondType", GetQueryString("CondType"));
@@ -136,7 +144,6 @@ new Vue({
             var data = handler.DoMethodReturnString("List_DoCheck");
             //  alert(data);
             $("#msg").html(data);
-            //  var data = handler.DoMethodReturnString("List_Move");
         },
         initSortArea: function () {
             var _this = this
@@ -180,14 +187,14 @@ new Vue({
             })
         },
         // 是否启用
-        changemapAttrEnableStatus(mapAttr, ctrl) {
+        changecondEnableStatus(cond, ctrl) {
 
             // 当前启用状态
-            //var en = new Entity("BP.CCBill.Template.mapAttr", mapAttr.No);
+            //var en = new Entity("BP.CCBill.Template.cond", cond.No);
             //if (en.IsEnable == 0)
-            //    en.IsEnable = 1; // mapAttr.IsEnable;
+            //    en.IsEnable = 1; // cond.IsEnable;
             //else
-            //    en.IsEnable = 0; // mapAttr.IsEnable;
+            //    en.IsEnable = 0; // cond.IsEnable;
             //en.Update();
             console.log("更新成功..");
         }
@@ -200,6 +207,8 @@ new Vue({
 
         var dir = null;
         var conds = new Entities("BP.WF.Template.Conds");
+
+        //  alert(condType);
         conds.Retrieve("FK_Node", nodeID, "ToNodeID", toNodeID, "CondType", condType, "Idx");
 
 
@@ -220,51 +229,55 @@ new Vue({
         this.Event = Eventtitle;
         console.log(this.Event);
 
-        mapAttrs = obj2arr(conds);
-        console.log(mapAttrs)
-        mapAttrs.forEach(function (mapAttr) {
+        conds = obj2arr(conds);
+        console.log(conds)
+        conds.forEach(function (cond) {
 
             //控件数据类型
-            if (mapAttr.DataFrom == "0") {
-                mapAttr.UIContralType = "表单字段";
-            } else if (mapAttr.DataFrom == "1") {
-                mapAttr.UIContralType = "独立表单";
-            } else if (mapAttr.DataFrom == "2") {
-                mapAttr.UIContralType = "按岗位";
-            } else if (mapAttr.DataFrom == "3") {
-                mapAttr.UIContralType = "按部门";
-            } else if (mapAttr.DataFrom == "4") {
-                mapAttr.UIContralType = "按SQL";
-            } else if (mapAttr.DataFrom == "5") {
-                mapAttr.UIContralType = "按SQL模板";
-            } else if (mapAttr.DataFrom == "6") {
-                mapAttr.UIContralType = "按参数";
-            } else if (mapAttr.DataFrom == "7") {
-                mapAttr.UIContralType = "按URL";
-            } else if (mapAttr.DataFrom == "8") {
-                mapAttr.UIContralType = "按WebApi返回值";
-            } else if (mapAttr.DataFrom == "9") {
-                mapAttr.UIContralType = "按审核组件立场";
-            } else if (mapAttr.DataFrom == "100") {
-                mapAttr.UIContralType = "运算符";
+            if (cond.DataFrom == "0") {
+                cond.DataFromText = "表单字段";
+            } else if (cond.DataFrom == "1") {
+                cond.DataFromText = "独立表单";
+            } else if (cond.DataFrom == "2") {
+                cond.DataFromText = "按岗位";
+            } else if (cond.DataFrom == "3") {
+                cond.DataFromText = "按部门";
+            } else if (cond.DataFrom == "4") {
+                cond.DataFromText = "按SQL";
+            } else if (cond.DataFrom == "5") {
+                cond.DataFromText = "按SQL模板";
+            } else if (cond.DataFrom == "6") {
+                cond.DataFromText = "按参数";
+            } else if (cond.DataFrom == "7") {
+                cond.DataFromText = "按URL";
+            } else if (cond.DataFrom == "8") {
+                cond.DataFromText = "按WebApi返回值";
+            } else if (cond.DataFrom == "9") {
+                cond.DataFromText = "按审核组件立场";
+            } else if (cond.DataFrom == "100") {
+                cond.DataFromText = "运算符";
             }
-            if (mapAttr.DataFrom == 100) {
-                mapAttr.Express = mapAttr.OperatorValue;
-            } else {
-                mapAttr.Express = mapAttr.AttrKey + mapAttr.FK_Operator + mapAttr.OperatorValue;
 
-                if (mapAttr.AttrKey != "")
-                    mapAttr.Express = "说明：" + mapAttr.AttrName + " " + mapAttr.FK_Operator + " " + "" + mapAttr.OperatorValue;
+            if (cond.DataFrom == 100) {
+                cond.Express = cond.OperatorValue;
+            } else {
+                if (cond.OperatorValueT != "")
+                    cond.Express = cond.AttrKey + cond.FK_Operator + cond.OperatorValueT;
+                else
+                    cond.Express = cond.AttrKey + cond.FK_Operator + cond.OperatorValue;
+
+                if (cond.AttrKey != "")
+                    cond.Express = "说明：" + cond.AttrName + " " + cond.FK_Operator + " " + "" + cond.OperatorValue;
             }
 
         })
 
-        this.mapAttrs = mapAttrs;
+        this.conds = conds;
 
-        console.log(this.mapAttrs);
+        console.log(this.conds);
+        this.CondCheck();
         this.bindMenu();
         this.initSortArea();
-
 
         layui.use('form', function () {
             var form = layui.form;
@@ -313,79 +326,10 @@ function addTab(no, name, url) {
 }
 
 
-
-function Edit(mypk, ftype, gf, fk_mapdtl) {
-
-    var url = 'EditF.htm?DoType=Edit&No=' + mypk + '&FType=' + ftype + '&FK_MapData=' + GetQueryString("FrmID") + '&GroupField=' + gf;
-    var title = '';
-    if (ftype == 1) {
-        title = '字段String属性';
-        url = '../../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=' + mypk + '&s=' + Math.random();
-    }
-
-    if (ftype == 2 || ftype == 3 || ftype == 5 || ftype == 8) {
-        title = '字段Num属性';
-        url = '../../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrNum&PKVal=' + mypk + '&s=' + Math.random();
-    }
-
-    if (ftype == 6 || ftype == 7) {
-        title = '字段 date 属性';
-        url = '../../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + mypk + '&s=' + Math.random();
-    }
-
-    if (ftype == 6 || ftype == 7) {
-        title = '字段 datetime 属性';
-        url = '../../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrDT&PKVal=' + mypk + '&s=' + Math.random();
-    }
-
-    if (ftype == 4) {
-        title = '字段 boolen 属性';
-        url = '../../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&PKVal=' + mypk + '&s=' + Math.random();
-    }
-
-    /*OpenLayuiDialog(url, "eudlgframe", title, 800, 500, "icon-edit", true, null, null, null, function () {
-        window.location.href = window.location.href;
-    });*/
-
-    OpenLayuiDialog(url, title, 730, 80, "auto");
-    // OpenEasyUiDialog(url, "dd", title, 730, 500);
-    return;
-}
-
-function EditEnum(fk_mapdata, mypk, keyOfEn) {
-
-    var url = '../../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=' + mypk + '&s=' + Math.random();
-
-    /*OpenLayuiDialog(url, "eudlgframe", '枚举' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
-        window.location.href = window.location.href;
-    });*/
-    OpenLayuiDialog(url, '外键字段:' + keyOfEn + '属性', 730, 80, "auto");
-}
-
-function EditTableSQL(mypk, keyOfEn) {
-
-    var url = '../../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&PKVal=' + mypk + '&s=' + Math.random();
-
-    /* OpenLayuiDialog(url, "eudlgframe", '外键SQL字段:' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
-         window.location.href = window.location.href;
-     });*/
-    OpenLayuiDialog(url, '外键字段:' + keyOfEn + '属性', 730, 80, "auto");
-}
-
-function EditTable(fk_mapData, mypk, keyOfEn) {
-
-    var url = '../../../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=' + mypk + '&s=' + Math.random();
-
-    /* OpenLayuiDialog(url, "eudlgframe", '外键字段:' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
-         window.location.href = window.location.href;
-     });*/
-    OpenLayuiDialog(url, '外键字段:' + keyOfEn + '属性', 730, 80, "auto");
-}
-
 function NewPara() {
     var url = "../../../Admin/FoolFormDesigner/FieldTypeList.htm?DoType=AddF&FK_MapData=" + GetQueryString("No");
     /* OpenLayuiDialog(url, "eudlgframe", "新建参数", 800, 500, "icon-edit", true, null, null, null, function () {
-         window.location.href = window.location.href;
+         Reload();
      });*/
     OpenLayuiDialog(url, '新建参数', 900, 80, "auto", true);
 }
@@ -393,12 +337,12 @@ function NewPara() {
 function Delete(no) {
     if (window.confirm('您确定要删除吗？') == false)
         return;
-    var en = new Entity("BP.Sys.MapAttr");
+    var en = new Entity("BP.Sys.cond");
     en.No = no;
     en.Delete();
-    window.location.href = window.location.href;
+    Reload();
 }
-function TomapAttrDoc() {
-    window.location.href = "Default.htm?No=" + GetQueryString("No");
+function TocondDoc() {
+    SetHref("Default.htm?No=" + GetQueryString("No"));
 }
 

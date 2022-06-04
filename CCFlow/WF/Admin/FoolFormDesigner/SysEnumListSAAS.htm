@@ -123,7 +123,7 @@
             }
 
             url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=" + data;
-            window.location.href = url;
+            SetHref(url);
 
          }
 
@@ -131,7 +131,7 @@
 
             var url = '../CCFormDesigner/DialogCtr/EnumerationNew.htm?s=' + Math.random();
             OpenEasyUiDialog(url, "eudlgframe", "新建枚举", 600, 400, "icon-edit", true, null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
             });
         }
 
@@ -140,7 +140,7 @@
             var url = '../CCFormDesigner/DialogCtr/EnumerationNew.htm?EnumKey=' + enumKey + '&Name=' + name + '&CfgKeys=' + cfgKeys + '&DoType=FrmEnumeration_SaveEnum&s=' + Math.random();
 
             OpenEasyUiDialog(url, "eudlgframe", "修改枚举值", 600, 400, "icon-edit", true, null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
             });
         }
 
@@ -176,7 +176,7 @@
             var enumMain = new Entity("BP.Sys.SysEnumMain", key);
             enumMain.Delete();
 
-            window.location.href = window.location.href;
+            Reload();
 
         }
 

@@ -46,7 +46,7 @@
             en.Insert();
 
             var url = "../../../Comm/En.htm?EnName=BP.CCBill.Template.Collection&No=" + en.No;
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
 </head>
@@ -73,7 +73,7 @@
         <ul>
             <li> 用于解决不能实现的对实体的操作个性化较强的功能。 </li>
             <li> 比如：您输入的url为:  http://ccbpm.cn/MyUrl.htm </li>
-            <li> 系统将解析为: http://ccbpm.cn/MyUrl.htm?FrmID=xxxx&UserNo=xxxx&SID=xxxx </li>
+            <li> 系统将解析为: http://ccbpm.cn/MyUrl.htm?FrmID=xxxx&UserNo=xxxx&Token=xxxx </li>
         </ul>
 
         <legend id="help"> 帮助</legend>

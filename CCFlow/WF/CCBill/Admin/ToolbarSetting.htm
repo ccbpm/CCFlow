@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>方法参数</title>
+    <title>工具栏操作权限设置</title>
 
     <link rel="stylesheet" type="text/css" href="../../Portal/icons/font-icons.min.css" />
     <script type="text/javascript" src="../../Portal/js/sortjs/Sortable.min.js"></script>
@@ -86,7 +86,7 @@
 
         #s-main {
             transition: all ease .4s;
-            margin-top: 44px;
+            margin-top: 45px;
         }
 
         .fixed {
@@ -110,7 +110,7 @@
         //转到菜单
         function ToMenu() {
             var moduleNo = GetQueryString("ModuleNo");
-            var module = new Entity("BP.GPM.Menu2020.Module", moduleNo);
+            var module = new Entity("BP.CCFast.CCMenu.Module", moduleNo);
             var url = "../GPM/Menus.htm?SystemNo=" + module.SystemNo;
             window.top.vm.openTab(name, url);
         }
@@ -138,15 +138,15 @@
             if (frmID == undefined)
                 frmID = GetQueryString("FrmID");
 
-            //  var module = new Entity("BP.GPM.Menu2020.Module", moduleNo);
-            var url = "../Admin/CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + frmID + "&FrmID=" + frmID;
+            //  var module = new Entity("BP.CCFast.CCMenu.Module", moduleNo);
+            var url = "../Admin/FoolFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + frmID + "&FrmID=" + frmID;
 
             window.top.vm.openTab(frmID, url);
         }
         //到达集合组件.
         function GoToMethodD() {
             var moduleNo = GetQueryString("ModuleNo");
-            var module = new Entity("BP.GPM.Menu2020.Module", moduleNo);
+            var module = new Entity("BP.CCFast.CCMenu.Module", moduleNo);
             var url = "../CCBill/Admin/Method.htm?SystemNo=" + module.SystemNo;
             url += "&ModuleNo=" + moduleNo;
             url += "&FrmID=" + GetQueryString("FrmID");
@@ -164,58 +164,52 @@
 <body>
 
     <span class="layui-breadcrumb">
-        <!--<a href=""><i class="icon-home"></i>  首页</a>
-        <a href="javascript:ToMenu()"><i class="icon-menu"></i>  菜单设计</a>
-        <a href="javascript:GoToFrmD()"><i class="icon-diamond"></i>  表单设计器</a>
-        <a href="javascript:ToDictAttr()"><i class="icon-heart"></i>  实体属性</a>
-        <a href="javascript:GoToMethodD()"><i class="icon-diamond"></i>  实体组件</a>-->
-        <!--<a><cite><font color="red">列表组件</font></cite></a>-->
-        <a><cite><font color="red">按钮权限</font></cite></a>
-
+       <h5>工具栏按钮权限</h5>
+       
     </span>
 
     <div id="mapAttrParas" class="mapAttrParas" v-cloak=v-cloak>
         <div class="row fixed">
             <div class="item item-name">序</div>
             <div class="item item-other">名称</div>
-            <div class="item item-other">
-                类型&nbsp;&nbsp;
-                <div class="item item-content">
+            <!--<div class="item item-other">
+                类型&nbsp;&nbsp;-->
+                <!--<div class="item item-content">
                     <a href="https://www.bilibili.com/video/BV15P4y1p7Sj" target="_blank" class="icon-camrecorder"><font color="blue">&nbsp;集合组件</font></a>
-                </div>
+                </div>-->
 
-            </div>
+            <!--</div>
             <div class="item item-docs">
                 <div style="margin-right: 6px"> 内容</div>
                 <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="NewMethod()">
                     <i class="icon-plus" style="margin-right: 6px"></i>+新建组件
                 </div>
 
-            </div>
+            </div>-->
             <div class="item item-other">启用？</div>
             <div class="item item-op">权限</div>
-            <div class="item item-other">
+            <!--<div class="item item-other">
 
-            </div>
+            </div>-->
         </div>
 
         <div class="wrapper" id="s-main" ref="child-row">
-            <div v-for="(en,index) in mapAttrs" :key="index" :data-id="en.No">
+            <div v-for="(en,index) in mapAttrs" :key="index" :data-id="en.MyPK">
 
-                <div class="row item-name-dp" :data-id="en.No" :data-idx="index">
+                <div class="row item-name-dp" :data-id="en.MyPK" :data-idx="index">
                     <div class="item item-name">{{index + 1}}</div>
-                    <div class="item item-other" @click.stop="MethodAttr(en.No)"
-                         style="text-align: left" :data-no="en.No" :data-name="en.Name">
-                        <span><i :class="en.Icon" style="margin-right: 8px"> </i> {{en.Name}}</span>
+                    <div class="item item-other"
+                         style="text-align: left" :data-no="en.BtnID" :data-name="en.BtnLab">
+                        <span><i :class="en.Icon" style="margin-right: 8px"> </i> {{en.BtnLab}}</span>
                     </div>
                     <!--<div class="item item-other ">{{en.Name}} </div>
-                    <span><i :class="method.Icon" style="margin-right: 8px"> </i> {{method.Name}}</span>-->
+    <span><i :class="method.Icon" style="margin-right: 8px"> </i> {{method.Name}}</span>
                     <div class="item item-other" v-html="en.MethodModel"></div>
-                    <div class="item item-docs" v-html="en.Docs"></div>
+                    <div class="item item-docs" v-html="en.Docs"></div>-->
                     <div class="item item-other">
                         <form class="layui-form" action="">
                             <div class="layui-form-item" style="margin: 0">
-                                <div class="layui-input-block" style="margin: 0" :data-id="en.No"
+                                <div class="layui-input-block" style="margin: 0" :data-id="en.MyPK"
                                      @click="changeMethodEnableStatus(en,this)">
                                     <input type="checkbox" lay-skin="switch" lay-text="ON|OFF"
                                            :checked="parseInt(en.IsEnable) == 1" />
@@ -224,41 +218,17 @@
                         </form>
                     </div>
                     <div class="item item-op" v-html="en.enCtrlWayText"></div>
-                    <div class="item item-other" @click.stop="DeleteIt(en.No)">
+                    <!--<div class="item item-other" @click.stop="DeleteIt(en.MyPK)">
                         <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs c-btn">
                             <i class="layui-icon layui-icon-delete layui-font-12"></i> 删除
                         </button>
-                    </div>
+                    </div>-->
                 </div>
 
             </div>
         </div>
     </div>
 
-    <!--<hr />-->
-    <!--<fieldset>
-        <legend>其他设置 </legend>
-        <div id="Btns">
-            <ul>
-                <li> <a href="javascript:SearchCond()">查询条件定义 </a></li>
-                <li>  <a href="javascript:SearchCond()">多表头定义 </a></li>
-                <li> <a href="javascript:SearchCond()">设置显示的列 </a></li>
-                <li> <a href="javascript:SearchCond()">表单事件 </a></li>
-                <li> <a href="javascript:SearchCond()">数据查询权限 </a></li>
-                <li> <a href="javascript:SearchCond()">数据查询权限 </a></li>
-                <li> <a href="javascript:SearchCond()">颜色设置 </a></li>
-                <li> <a href="javascript:SearchCond()">字段求和求平均设置 </a></li>
-            </ul>
-        </div>
-    </fieldset>-->
-
-
-    <script src="Collection.js"></script>
-
-    <script type="text/javascript">
-        function SearchCond() {
-            //xxx..x
-        }
-    </script>
+    <script src="ToolbarSetting.js"></script>
 </body>
 </html>

@@ -75,16 +75,52 @@ function OpenLayuiDialog(url, title, dlgWidth, dlgHeight, offset, isRefresh, isS
             if (dlgClosedFunc)
                 dlgClosedFunc();
             if (isRefresh == true)
-{
-if (reloadUrl==null || reloadUrl=='' )
-                location.reload();
-else
-                location.href= reloadUrl;
-}
+            {
+                if (reloadUrl==null || reloadUrl=='' )
+                      location.reload();
+                else
+                      location.href= reloadUrl;
+            }
         }
+        , success: function (layero) {
+            layero.find('.layui-layer-min').remove();
+        },
     });
     if (offset == "r")
         $(".layui-layer-setwin .layui-layer-close2").css("right", "-18px").css("top", "-18px");
+}
+
+/**
+ * 居中弹出
+ * @param {any} url 请求的url
+ * @param {any} title 标题,标题为空时，这弹出框不显示title
+ * @param {any} dlgWidth 弹出框宽度
+ * @param {any} dlgHeight 弹出框高度
+ */
+function OpenFullLayuiDialog(url, title) {
+
+    title = title == null || title == undefined ? "" : title;
+    var w = window;
+    w.layer.open({
+        type: 2 //此处以iframe举例
+        , title: title
+        , id: "dlg"
+        , area: ['100%','100%']
+        , maxmin: false
+   
+        , offset: ['0px', '0px']
+        , content: url
+        , yes: function () {
+            layer.closeAll();
+        }
+        , btn2: function () {
+            layer.closeAll();
+        },
+         success: function (layero) {
+            layero.find('.layui-layer-min').remove();
+        },
+    });
+    
 }
 /**
  * 右侧呼出
@@ -167,7 +203,7 @@ function OpenOtherLayuiDialog(content,title, dlgWidth, dlgHeight,divID, isRefres
         , content: ""
         , btn: btn
         ,success: function (layero, index) {
-            eval(content);
+            cceval(content);
             $("#" + this.id).show();
         }
         , yes: function () {

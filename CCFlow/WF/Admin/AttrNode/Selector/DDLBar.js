@@ -33,8 +33,10 @@ function InitBar(key) {
 
     html += "<option value=" + SelectorModel.Station + ">&nbsp;&nbsp;&nbsp;&nbsp;按照岗位</option>";
     html += "<option value=" + SelectorModel.ByStationAI + ">&nbsp;&nbsp;&nbsp;&nbsp;按照岗位智能计算</option>";
-    html += "<option value=" + SelectorModel.Dept + " >&nbsp;&nbsp;&nbsp;&nbsp;按部门计算</option>";
-    html += "<option value=" + SelectorModel.Emp + " >&nbsp;&nbsp;&nbsp;&nbsp;按人员计算</option>";
+    html += "<option value=" + SelectorModel.Dept + " >&nbsp;&nbsp;&nbsp;&nbsp;按指定的部门人员计算</option>";
+    html += "<option value=" + SelectorModel.ByMyDeptEmps + " >&nbsp;&nbsp;&nbsp;&nbsp;按本部门人员计算</option>";
+
+    html += "<option value=" + SelectorModel.Emp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的人员计算</option>";
     html += "<option value=" + SelectorModel.SQL + " >&nbsp;&nbsp;&nbsp;&nbsp;按SQL计算</option>";
     html += "<option value=" + SelectorModel.SQLTemplate + " >&nbsp;&nbsp;&nbsp;&nbsp;按SQL模板计算</option>";
     html += "<option value=" + SelectorModel.GenerUserSelecter + " >&nbsp;&nbsp;&nbsp;&nbsp;使用通用人员选择器</option>";
@@ -48,6 +50,7 @@ function InitBar(key) {
 
     html += "<option value=null  disabled='disabled'>+其他</option>";
     html += "<option value=" + SelectorModel.Url + ">&nbsp;&nbsp;&nbsp;&nbsp;自定义URL</option>";
+    html += "<option value=" + SelectorModel.ByWebAPI + ">&nbsp;&nbsp;&nbsp;&nbsp;按照WebAPI计算</option>";
     html += "<option value=" + SelectorModel.AccepterOfDeptStationEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;使用通用部门岗位人员选择器（开发中）</option>";
     html += "<option value=" + SelectorModel.AccepterOfDeptStationEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;按岗位智能计算(操作员所在部门)（开发中）</option>";
 
@@ -67,7 +70,7 @@ function InitBar(key) {
 }
 function Back() {
     url = "../AccepterRole/Default.htm?FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + GetQueryString("FK_Flow");
-    window.location.href = url;
+    SetHref(url);
 }
 
 /*
@@ -127,7 +130,7 @@ function OldVer() {
     var flowNo = GetQueryString("FK_Flow");
 
     var url = '../NodeAccepterRole.aspx?FK_Flow=' + flowNo + '&FK_Node=' + nodeID;
-    window.location.href = url;
+    SetHref(url);
 }
 function Help() {
 
@@ -205,8 +208,13 @@ function GenerUrlByOptionKey(optionKey) {
         case SelectorModel.ByStationAI:
             roleName = "13.ByStationAI.htm";
             break;
+        case SelectorModel.ByWebAPI:
+            roleName = "14.ByWebAPI.htm";
+            break;
+        case SelectorModel.ByMyDeptEmps:
+            roleName = "15.ByMyDeptEmps.htm";
+            break;
         default:
-
             roleName = "0.Station.htm";
             break;
     }
@@ -225,7 +233,7 @@ function changeOption() {
     }
 
     var roleName = GenerUrlByOptionKey(optionKey);
-    window.location.href = roleName + "?FK_Node=" + nodeID + "&FK_Flow=" + GetQueryString("FK_Flow");
+    SetHref( roleName + "?FK_Node=" + nodeID + "&FK_Flow=" + GetQueryString("FK_Flow"));
 }
 function SaveAndClose() {
     Save();
@@ -237,7 +245,7 @@ function OpenEasyUiDialogExt(url, title, w, h, isReload) {
 
     OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
         if (isReload == true) {
-            window.location.href = window.location.href;
+            Reload();
         }
     });
 }
@@ -248,4 +256,18 @@ function AdvSetting() {
     var nodeID = GetQueryString("FK_Node");
     var url = "AdvSetting.htm?FK_Node=" + nodeID + "&M=" + Math.random();
     OpenEasyUiDialogExt(url, "高级设置", 600, 500, false);
+}
+
+//设置岗位-左右结构.
+function OpenBranchesAndLeafStations() {
+
+    var w = 300;
+    var nodeID = GetQueryString("FK_Node");
+    var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+
+    OpenEasyUiDialogExt(url, '设置岗位', 800, 800, true);
+
+    //OpenEasyUiDialogExtCloseFunc(url, '设置岗位', w * 1.5, h, function () {
+    //    Baseinfo.stas = getStas();
+    //});
 }

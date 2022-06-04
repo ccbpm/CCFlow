@@ -1,8 +1,8 @@
 ﻿window.onload = function () {
     var mime = 'text/x-mariadb';
     // get mime type
-    if (window.location.href.indexOf('mime=') > -1) {
-        mime = window.location.href.substr(window.location.href.indexOf('mime=') + 5);
+    if (GetHrefUrl().indexOf('mime=') > -1) {
+        mime = GetHrefUrl().substr(GetHrefUrl().indexOf('mime=') + 5);
     }
     window.editor = CodeMirror.fromTextArea(document.getElementById('TB_SQL'), {
         mode: mime,

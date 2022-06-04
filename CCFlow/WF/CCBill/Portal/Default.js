@@ -5,7 +5,7 @@ var runModelType = 0; // 0=完整版 1=简洁版.
 $(function () {
 
     //判断运行的类型.
-    var url = window.location.href;
+    var url = GetHrefUrl();
     if (url.indexOf('Simple') > 1)
         runModelType = 1;
 
@@ -26,7 +26,7 @@ $(function () {
 
     if (data.indexOf('url@') == 0) {
         var url = data.replace('url@', '');
-        window.location.href = url;
+        SetHref(url);
         return;
     }
 
@@ -329,25 +329,25 @@ function tabCloseEven() {
 function Login2App() {
 
     if (initData.RunOnPlant == "jeesite") {
-        window.location.href = getContextPath() + "/a/logout";
+        SetHref(getContextPath() + "/a/logout");
         return;
     }
 
     //表单引擎.
-    var url = window.location.href;
+    var url = GetHrefUrl();
     if (url.indexOf("DefaultFrm.htm") != 0) {
-        window.location.href = "../../CCBill/Portal/Login.htm?DoType=Logout";
+        SetHref("../../CCBill/Portal/Login.htm?DoType=Logout");
         return;
     }
 
     //简洁版.
     if (url.indexOf("DefaultSimple.htm") != 0) {
-        window.location.href = "../../CCBill/Portal/Login.htm?DoType=Logout";
+        SetHref("../../CCBill/Portal/Login.htm?DoType=Logout");
         return;
     }
 
     //完整版.
-    window.location.href = "../../AppClassic/Login.htm?DoType=Logout";
+    SetHref("../../AppClassic/Login.htm?DoType=Logout");
     return;
 }
 
@@ -356,7 +356,7 @@ function LoginOut() {
 
     if (confirm("提示确定需要退出？") == false)
         return;
-    window.location.href = "Login.htm?DoType=Logout";
+    SetHref("Login.htm?DoType=Logout");
 }
 
 var FLOW_TREE = "flowTree";
@@ -387,7 +387,7 @@ function RefreshFlowJson() {
 
     $(".mymask").show();
 
-    addTab(node.id, node.text, "../CCBPMDesigner/Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
+    addTab(node.id, node.text, "../CCBPMDesigner/Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&Token=" + webUser.Token + "&Flow_V=0", node.iconCls);
     //延时3秒, 为什么要延迟？
     setTimeout(DesignerLoaded, 1000);
 }
@@ -396,21 +396,21 @@ function RefreshFlowJson() {
 function OpenFlowToCanvas(node, id, text) {
     $(".mymask").show();
     if (node.attributes.DTYPE == "2") {//BPMN模式
-        addTab(id, text, "../CCBPMDesigner/Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=2", node.iconCls);
+        addTab(id, text, "../CCBPMDesigner/Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&Token=" + webUser.Token + "&Flow_V=2", node.iconCls);
     } else if (node.attributes.DTYPE == "1") {//CCBPM
-        addTab(id, text, "../CCBPMDesigner/Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1", node.iconCls);
+        addTab(id, text, "../CCBPMDesigner/Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&Token=" + webUser.Token + "&Flow_V=1", node.iconCls);
     } else {
         //if (confirm("此流程版本为V1.0,是否执行升级为V2.0 ?")) {
         var attrs = node.attributes;    //这样写，是为了不将attributes里面原有的属性丢失，edited by liuxc,2015-11-05
         attrs.DTYPE = "1";
-        attrs.Url = "../CCBPMDesigner/Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1";
+        attrs.Url = "../CCBPMDesigner/Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&Token=" + webUser.Token + "&Flow_V=1";
         $('#flowTree').tree('update', {
             target: node.target,
             attributes: attrs
         });
-        addTab(id, text, "../CCBPMDesigner/Designer.htm?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
+        addTab(id, text, "../CCBPMDesigner/Designer.htm?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&Token=" + webUser.Token + "&Flow_V=0", node.iconCls);
         //        } else {
-        //            addTab(id, text, "DesignerSL.htm?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);
+        //            addTab(id, text, "DesignerSL.htm?FK_Flow=" + id + "&UserNo=" + WebUser.No + "&Token=" + webUser.Token + "&Flow_V=0", node.iconCls);
         //        }
     }
     //延时3秒
@@ -503,7 +503,7 @@ function newFlow() {
             data: [{
                 id: flowNo,
                 text: flowNo + '.' + flowName,
-                attributes: { ISPARENT: '0', TTYPE: 'FLOW', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
+                attributes: { ISPARENT: '0', TTYPE: 'FLOW', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&Token=@@webUser.Token" },
                 iconCls: 'icon-flow1',
                 checked: false
             }]
@@ -511,7 +511,7 @@ function newFlow() {
         var nodeData = {
             id: flowNo,
             text: flowNo + '.' + flowName,
-            attributes: { ISPARENT: '0', TTYPE: 'FLOW', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
+            attributes: { ISPARENT: '0', TTYPE: 'FLOW', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&Token=@@webUser.Token" },
             iconCls: 'icon-flow1',
             checked: false
         };
@@ -995,7 +995,7 @@ function AppendFrmToFormTree(FK_FormTree, No, Name) {
         data: [{
             id: No,
             text: Name,
-            attributes: { MenuId: "mForm", TType: "FORM", Url: "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + No },
+            attributes: { MenuId: "mForm", TType: "FORM", Url: "../FoolFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + No },
             checked: false,
             iconCls: 'icon-form',
             state: 'open',
@@ -1006,7 +1006,7 @@ function AppendFrmToFormTree(FK_FormTree, No, Name) {
     $('#formTree').tree('select', $('#formTree').tree('find', No).target);
 
     //打开表单
-    addTab("DesignerFreeFrm" + No, Name, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + No);
+    addTab("DesignerFreeFrm" + No, Name, "../FoolFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + No);
 }
 
 //表单属性
@@ -1016,7 +1016,7 @@ function CCForm_Attr() {
         alert('请选择表单.');
         return;
     }
-    var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=' + node.id;
+    var url = '../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapFrmFree&PKVal=' + node.id;
     OpenEasyUiDialog(url, "CCForm_Attr", '表单属性', 900, 560, "icon-window");
 }
 //单据属性
@@ -1039,7 +1039,7 @@ function Bill_CCForm() {
 
     //流程单据.
     if (en.EntityType == 0)
-        url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=' + node.id;
+        url = '../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapFrmFree&PKVal=' + node.id;
 
     if (en.EntityType == 1)
         url = '../../Comm/En.htm?EnName=BP.CCBill.FrmBill&PKVal=' + node.id;
@@ -1048,7 +1048,7 @@ function Bill_CCForm() {
         url = '../../Comm/En.htm?EnName=BP.CCBill.FrmDict&PKVal=' + node.id;
 
     //   alert(en.EntityType);
-    // http: //localhost:2207/WF/Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=CCFrm_GDZC&s=0.635120123659069
+    // http: //localhost:2207/WF/Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.Frm.MapFrmFree&PKVal=CCFrm_GDZC&s=0.635120123659069
 
     OpenEasyUiDialog(url, "CCForm_Attr", '表单属性', 900, 560, "icon-window");
 }
@@ -1119,7 +1119,7 @@ function designFreeFrm() {
         alert('请选择表单.');
         return;
     }
-    addTab("DesignerFreeFrm" + node.id, node.text, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + node.id);
+    addTab("DesignerFreeFrm" + node.id, node.text, "../FoolFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + node.id);
 }
 
 //设计傻瓜表单
@@ -1219,7 +1219,7 @@ function CopyFrm() {
     AppendFrmToFormTree(node.attributes.Node.ParentId, frmID, frmName);
 
     //设计表单.
-    addTab("DesignerFrm" + frmID, "设计表单-" + frmName, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + frmID);
+    addTab("DesignerFrm" + frmID, "设计表单-" + frmName, "../FoolFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + frmID);
 }
 
 
@@ -1240,27 +1240,11 @@ var treesObj;   //保存功能区处理对象
 var webUser = new WebUser();
 if (webUser.No == "") {
     alert("登录信息丢失, 请重新登录.");
-    window.location.href = "./Login.htm";
+    SetHref("./Login.htm");
 }
 
 
 $(function () {
-
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-    var data = handler.DoMethodReturnString("GetWebUserInfo");
-
-    if (data.indexOf('err@') == 0) {
-        alert(data);
-        window.location.href = "Login.htm?DoType=Logout";
-        return;
-    }
-
-    var jdata = $.parseJSON(data);
-    //WebUser.No = jdata.No;
-    //WebUser.Name = jdata.Name;
-    //WebUser.FK_Dept = jdata.FK_Dept;
-    //WebUser.SID = jdata.SID;
-    // SetTreeRoot(jdata);
 
     treesObj = new FuncTrees("menuTab");
     treesObj.loadTrees();

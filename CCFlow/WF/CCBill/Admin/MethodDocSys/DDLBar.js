@@ -83,7 +83,7 @@ function GetUrl(optionKey) {
 function Paras() {
 
     var url = "MethodParas.htm?No=" + GetQueryString("No");
-    window.location.href = url;
+    SetHref(url);
 }
 
 
@@ -105,17 +105,17 @@ function changeOption() {
     var optionKey = optionKey = sele[index].value;
     var url = GetUrl(optionKey);
 
-    window.location.href = url + "?No=" + flowNo;
+    SetHref(url + "?No=" + flowNo);
 }
 function ToMethodParas() {
-    window.location.href = "MethodParas.htm?No=" + GetQueryString("No");
+    SetHref("MethodParas.htm?No=" + GetQueryString("No"));
 }
 
 //打开窗体.
 function OpenEasyUiDialogExt(url, title, w, h, isReload) {
     OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
         if (isReload == true) {
-            window.location.href = window.location.href;
+            Reload();
         }
     });
 }

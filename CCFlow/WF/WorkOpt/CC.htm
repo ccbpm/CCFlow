@@ -88,9 +88,9 @@
             // 如果您要把该页面转入其他页面，请按照如下方式处理.
             var webuser = new WebUser();
             if (webuser.CustomerNo == "GXJSZX") {
-                var url = window.location.href;
+                var url = GetHrefUrl();
                 url = url.replace('CC.htm?', '../../App/gxjtoaPicker/userOrgPicker.html?IsCC=1&');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
 
@@ -174,7 +174,7 @@
             cc.MyPK = mypk;
             cc.SetPKVal(mypk);
             cc.Delete();
-            window.location.href = window.location.href;
+            Reload();
             return;
         }
 
@@ -193,7 +193,7 @@
             handler.AddPara("FK_Node", GetQueryString("FK_Node"));
             var data = handler.DoMethodReturnString("CC_Send");
 
-            window.location.href = window.location.href;
+            Reload();
 
             $(".foot").hide();
         }

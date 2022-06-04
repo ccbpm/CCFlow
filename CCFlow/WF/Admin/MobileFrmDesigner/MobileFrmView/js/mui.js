@@ -3316,7 +3316,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
  */
 (function($) {
 	var originAnchor = document.createElement('a');
-	originAnchor.href = window.location.href;
+	originAnchor.href = GetHrefUrl();
 	$.plusReady(function() {
 		$.ajaxSettings = $.extend($.ajaxSettings, {
 			xhr: function(settings) {

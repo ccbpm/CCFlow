@@ -626,9 +626,9 @@ function AttrFrm(enName, title, pkVal) {
 
 
 function DesignerFlow(no, name) {
-    var sid = GetQueryString("SID");
+    var sid = GetQueryString("Token");
     var webUser = new WebUser();
-    var url = "../Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + no + "&UserNo=" + webUser.No + "&SID=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
+    var url = "../Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + no + "&UserNo=" + webUser.No + "&Token=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
     window.top.vm.openTab(name, url);
 }
 

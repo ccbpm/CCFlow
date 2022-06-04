@@ -14,8 +14,8 @@ $(function () {
     initPageParam(); //初始化参数.
 
     //隐藏保存按钮.
-    if (window.location.href.indexOf('&IsReadonly=1') > 1
-        || window.location.href.indexOf('&IsEdit=0') > 1) {
+    if (GetHrefUrl().indexOf('&IsReadonly=1') > 1
+        || GetHrefUrl().indexOf('&IsEdit=0') > 1) {
         isReadonly = true;
         $("#Save").hide();
         $("#SaveAndClose").hide();
@@ -69,7 +69,7 @@ function initPageParam() {
 var frmData = null;
 function GenerFrm() {
 
-    var href = window.location.href;
+    var href = GetHrefUrl();
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
 
@@ -87,7 +87,7 @@ function GenerFrm() {
 
     if (data.indexOf('url@') == 0) {
         data = data.replace('url@', '');
-        window.location.href = data;
+        SetHref(data);
         return;
     }
     try {
@@ -180,6 +180,7 @@ function GenerFrm() {
                     elem: "#" + id
                     , height: 200
                     , images_upload_url: images_upload_url
+                    , paste_data_images: true
                 });
             })
 
@@ -262,13 +263,13 @@ function Save(isSaveAndNew) {
         //layer.alert("数据保存成功");
 
         if (isSaveAndNew == false) {
-            window.location.href = window.location.href + "&IsSave=true";
+            SetHref(GetHrefUrl() + "&IsSave=true");
             IsSave = true;
             return false;
         }
         IsSave = false;
         var url = "DtlFrm.htm?EnsName=" + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&OID=0";
-        window.location.href = url;
+        SetHref(url);
         return false;
     });
 

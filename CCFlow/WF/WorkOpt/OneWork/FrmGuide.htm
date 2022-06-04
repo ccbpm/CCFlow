@@ -17,7 +17,7 @@
 
         $(function () {
             var url = "../../MyView.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
-            window.location.href = url;
+            SetHref(url);
             return;
         });
 

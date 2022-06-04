@@ -21,15 +21,15 @@
             var flowNo = GetQueryString("FK_Flow");
             var nodeID = GetQueryString("FK_Node");
 
-            var url = window.location.href;
+            var url = GetHrefUrl();
 
             if (plant == "CCFlow") {
                 url = url.replace('.htm', '.aspx');
-                window.location.href = url;
+                SetHref(url);
                 return;
             } else {
                 url = url.replace('.htm', '.jsp');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
         });

@@ -58,7 +58,7 @@
             var appType = $("#DDL_NodeAppType").val();
             var sql = "UPDATE WF_Node SET NodeAppType=" + appType + " WHERE NodeID=" + nodeID;
             DBAccess.RunSQL(sql);
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </head>

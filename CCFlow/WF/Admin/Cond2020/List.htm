@@ -18,11 +18,11 @@
     <base target="_self" />
     <style>
         .event{ padding:8px 10px; line-height:32px;}
-        .mapAttrParas {
+        .condParas {
             width: 100%;
         }
 
-        .mapAttrParas .row {
+        .condParas .row {
             display: flex;
             justify-content: flex-start;
             flex: 0.2;
@@ -31,7 +31,7 @@
             background-color: #FAFAFA;
         }
 
-        .mapAttrParas .row .item {
+        .condParas .row .item {
             box-sizing: border-box;
             flex-shrink: 0;
             text-align: center;
@@ -65,7 +65,7 @@
             color: #999999
         }
 
-        .mapAttrParas .row .folder-item {
+        .condParas .row .folder-item {
             box-sizing: border-box;
             width: 76%;
             padding-left: 20px;
@@ -115,7 +115,7 @@
 <body>
    
    
-    <div id="mapAttrParas" class="mapAttrParas" v-cloak=v-cloak>
+    <div id="condParas" class="condParas" v-cloak=v-cloak>
 
         <strong id="Event" class="event" v-html="Event"> </strong>
         <div class="row">
@@ -123,29 +123,37 @@
             <div class="item item-other">类型</div>
             <div class="item item-docs">表达式</div>
             <div class="item item-docs">
+
                 <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs NewPara-btn">
                     <i class="icon-plus" style="margin-right: 6px"></i>新建条件
                 </div>
+
+                <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs condExp-btn">
+                    <i class="icon-plus" style="margin-right: 6px"></i>插入运算符
+                </div>
+
+                <!--<button @click.stop
+                        class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs condExp-btn"
+                        :data-mypk="cond.MyPK" :data-pidx="index"
+                        :data-idx="cond.Idx">
+                    <i class="layui-icon layui-icon-down layui-font-12"></i> 插入运算符
+                </button>-->
+
             </div>
         </div>
 
         <div class="wrapper" id="s-main" ref="child-row">
-            <div v-for="(mapAttr,index) in mapAttrs" :key="index" :data-id="mapAttr.MyPK">
+            <div v-for="(cond,index) in conds" :key="index" :data-id="cond.MyPK">
 
-                <div class="row item-name-dp" :data-id="mapAttr.MyPK" :data-idx="index">
+                <div class="row item-name-dp" :data-id="cond.MyPK" :data-idx="index">
                     <div class="item item-num">{{index + 1}}</div>
-                    <div class="item item-other " v-html="mapAttr.UIContralType"></div>
-                    <div class="item item-docs" v-html="mapAttr.Express"></div>
-
+                    <div class="item item-other " v-html="cond.DataFromText"></div>
+                   
+                    <a class="item item-docs" href="javascript:void(0)" @click="EditCond(cond)">
+                        <div class="" v-html="cond.Express"></div>
+                    </a>
                     <div class="item item-docs">
-                        <button @click.stop
-                                class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs condExp-btn"
-                                :data-mypk="mapAttr.MyPK" :data-pidx="index"
-                                :data-idx="mapAttr.Idx">
-                            <i class="layui-icon layui-icon-down layui-font-12"></i> 插入运算符
-                        </button>
-
-                        <button @click.stop="DeleteSort(mapAttr.MyPK)" class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs c-btn">
+                        <button @click.stop="DeleteSort(cond.MyPK)" class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs c-btn">
                             <i class="layui-icon layui-icon-delete layui-font-12"></i> 删除
                         </button>
                     </div>

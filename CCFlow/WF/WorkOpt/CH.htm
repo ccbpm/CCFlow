@@ -6,22 +6,16 @@
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
-
-    <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
-    <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
-    <script src="../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
-    <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
-    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <link href="../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <link href="../Scripts/layui/style/admin.css" rel="stylesheet" />
+    <script src="../Scripts/layui/layui/layui.js" type="text/javascript"></script>
     <style type="text/css">
         .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th, .table > colgroup + thead > tr:first-child > th {
             border: 1px solid rgb(221, 221, 221);
         }
 
-        body {
-            font-size: 12px;
+        .ccdate {
+            padding-left: 25px;
         }
         /*滚动条*/
         ::-webkit-scrollbar-thumb {
@@ -54,7 +48,8 @@
         var fid = GetQueryString("FID");
         var webUser = new WebUser();
         var isReadOnly = GetQueryString("IsReadOnly");
-       
+        isReadOnly = isReadOnly == null || isReadOnly == undefined || isReadOnly == "" ? "0" : isReadOnly;
+        var startNodeID = parseInt(fk_flow) + "01";
 
         $(function () {
             InitPage();
@@ -78,10 +73,20 @@
             //流程时限属性
             var gwf = new Entity("BP.WF.GenerWorkFlow");
             gwf.CopyJSON(data.WF_GenerWorkFlow[0]);
+            //节点时限
+            var tableData = [];
 
 
             //判断是否可以修改时限
             var chRole = node.CHRole;
+            if ((chRole == 1 || chRole == 3) && isReadOnly != "1") {
+                $("#bottomBar").show();
+                $('#SaveBtn').on('click', function () {
+                    Save();
+                });
+            }
+              
+
             var _Html = "";
             var idx = 0;
             var plantStartDt; // 计划开始时间
@@ -92,168 +97,256 @@
             for (var i = 0; i < chNodes.length; i++) {
                 idx = i + 1;
                 var chNode = chNodes[i];
-                _Html += "<tr>";
-                _Html += "<td>" + idx + "</td>";
-
+                var item = {};
+                item.idx = idx;
                 //已经运行过的节点或者运行到的节点
                 if (chNode.AtPara != "" && chNode.AtPara != undefined) {
-                    _Html += "<td style='text-align: center'>" + chNode.NodeName + "</td>";
-                    _Html += "<td style='text-align: center'>" + chNode.FK_EmpT + "</td>";
-                    _Html += "<td style='text-align: center'>" + chNode.StartDt + "</td>"; //计划开始
-                    _Html += "<td style='text-align: center'>" + chNode.EndDT + "</td>";//计划完成
+                    item.NodeName = chNode.NodeName;
+                    item.NodeID = chNode.FK_Node;
+                    item.EmpName = chNode.FK_EmpT;
+                    item.StartDT = chNode.StartDT;
+                    item.EndDT = chNode.EndDT
+                    item.GT = chNode.GT;
+                    item.Scale = chNode.Scale;
+                    item.TotalScale = chNode.TotalScale;
                     var isPass = GetPara(chNode.AtPara, "IsPass");
                     if (isPass != 1) {
-                        _Html += "<td style='text-align: center'><input type='text' id=GT_" + chNode.FK_Node + "' name='GT_" + chNode.FK_Node + "' value='" + chNode.Scale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"GT\")'/></td>";
-                        _Html += "<td style='text-align: center'><input type='text' id='Scale_" + chNode.FK_Node + "' name='Scale_" + chNode.FK_Node + "' value='" + chNode.Scale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"Scale\")'/></td>";
-                        _Html += "<td style='text-align: center'><input type='text' id='TotalScale_" + chNode.FK_Node + "' name='TotalScale_" + chNode.FK_Node + "' value='" + chNode.TotalScale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"TotalScale\")'/></td>";
-
+                        item.IsEdit = 1;
                     } else {
-                        _Html += "<td style='text-align: center'>" + chNode.GT + "</td>";
-                        _Html += "<td style='text-align: center'>" + chNode.Scale + "</td>";
-                        _Html += "<td style='text-align: center'>" + chNode.TotalScale + "</td>";
+                        item.IsEdit = 0;
                     }
 
 
                     if (chNode.FK_Node == parseInt(fk_flow) + "01") { // 开始节点
-                        _Html += "<td style='text-align: center'>无</td>";
-                        _Html += "<td style='text-align: center'>正常</td>";
+                        item.HS = "无";
+                        item.WFState = "正常";
                     } else {
                         //耗时
                         var rdt = GetPara(chNode.AtPara, "RDT");
                         rdt = new Date(Date.parse(rdt.replace(/-/g, "/")));
                         var cdt = GetPara(chNode.AtPara, "CDT");
-                        var cdtD = new Date(Date.parse(cdt.replace(/-/g, "/")));
+                        cdt = new Date(Date.parse(cdt.replace(/-/g, "/")));
 
-                        _Html += "<td style='text-align: center'>" + GetSpanTime(rdt, cdt) + "</td>";
+                        item.HS = GetSpanTime(rdt, cdt);
                         //状态
                         if (cdt <= chNode.EndDT)
-                            _Html += "<td style='text-align: center'>正常</td>";
+                            item.WFState = "正常";
                         else
-                            _Html += "<td style='text-align: center'><label style='color:red'>逾期</label></td>";
+                            item.WFState = "逾期";
 
                     }
                 } else { //未运行到的节点
                     if (chNode.FK_Node == parseInt(fk_flow) + "01") { // 开始节点
-                        _Html += "<td style='text-align: center'>" + chNode.NodeName + "</td>";
-                        _Html += "<td style='text-align: center'>" + webUser.Name + "</td>";
-                        _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
-                        _Html += "<td style='text-align: center'>无</td>";
-                        _Html += "<td style='text-align: center'><input type='text' id=GT_" + chNode.FK_Node + "' name='GT_" + chNode.FK_Node + "' value='" + chNode.Scale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"GT\")'/></td>";
-                        _Html += "<td style='text-align: center'><input type='text' id='Scale_" + chNode.FK_Node + "' name='Scale_" + chNode.FK_Node + "' value='" + chNode.Scale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"Scale\")'/></td>";
-                        _Html += "<td style='text-align: center'><input type='text' id='TotalScale_" + chNode.FK_Node + "' name='TotalScale_" + chNode.FK_Node + "' value='" + chNode.TotalScale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"TotalScale\")'/></td>";
-
-                        _Html += "<td style='text-align: center'>" + new Date().format("yyyy-MM-dd hh:mm") + "</td>";
-                        _Html += "<td style='text-align: center'>无</td>";
-                        _Html += "<td style='text-align: center'>无</td>";
-                        _Html += "<td style='text-align: center'>正常</td>";
-
+                        item.NodeName = chNode.NodeName;
+                        item.NodeID = chNode.FK_Node;
+                        item.EmpName = webUser.Name;
+                        item.StartDT = new Date().format("yyyy-MM-dd hh:mm");
+                        item.EndDT = "无";
+                        item.GT = chNode.GT;
+                        item.Scale = chNode.Scale;
+                        item.TotalScale = chNode.TotalScale;
+                        item.ADT = new Date().format("yyyy-MM-dd hh:mm");
+                        item.ComplateDT = "无";
+                        item.HS = "无";
+                        item.WFState = "正常";
+                        item.IsEdit = 1;
                     } else {
-                        _Html += "<td style='text-align: center'>" + chNode.NodeName + "</td>";
-                        _Html += "<td style='text-align: center'>___</td>";
-
+                        item.NodeName = chNode.NodeName;
+                        item.NodeID = chNode.FK_Node;
+                        item.EmpName = "";
                         if (isReadOnly == "1") {
-                            _Html += "<td style='text-align: center'>" + chNode.StartDT + "</td>";
-                            _Html += "<td style='text-align: center'>" + chNode.EndDT + "</td>";
-                            _Html += "<td style='text-align: center'>" + chNode.GT + "</td>";
-                            _Html += "<td style='text-align: center'>" + chNode.Scale + "</td>";
-                            _Html += "<td style='text-align: center'>" + chNode.TotalScale + "</td>";
+                            item.StartDT = chNode.StartDT;
+                            item.EndDT = chNode.EndDT;
+                            item.GT = chNode.GT;
+                            item.Scale = chNode.Scale;
+                            item.TotalScale = chNode.TotalScale;
+                            item.IsEdit = 0;
                         } else {
-                            if (chRole == 1||chRole==3 || isReadOnly == "0") {
-
-
-                                _Html += "<td style='text-align: center'><input type='text'  id='StartDT_" + chNode.FK_Node + "' name='StartDT_" + chNode.FK_Node + "' value='" + chNode.StartDT + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
-                                    + "$(this).blur(); CompareDate(" + chNode.FK_Node + ",\"StartDT\");}})'  class='form-control Wdate'/></td>";
-                                _Html += "<td style='text-align: center'><input type='text' id='EndDT_" + chNode.FK_Node + "' name='EndDT_" + chNode.FK_Node + "' value='" + chNode.EndDT + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\", onpicked: function (dp) {"
-                                    + "$(this).blur(); CompareDate(" + chNode.FK_Node + ",\"EndDT\");}})'  class='form-control Wdate'/></td>";
-                                _Html += "<td style='text-align: center'><input type='text' id='GT_" + chNode.FK_Node + "' name='GT_" + chNode.FK_Node + "' value='" + chNode.GT + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"GT\")'/></td>";
-                                _Html += "<td style='text-align: center'><input type='text' id='Scale_" + chNode.FK_Node + "' name='Scale_" + chNode.FK_Node + "' value='" + chNode.Scale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"Scale\")'/></td>";
-                                _Html += "<td style='text-align: center'><input type='text' id='TotalScale_" + chNode.FK_Node + "' name='TotalScale_" + chNode.FK_Node + "' value='" + chNode.TotalScale + "'  class='form-control' onChange='changeStyle(\"" + chNode.FK_Node + "\",\"TotalScale\")'/></td>";
-
+                            if (chRole == 1 || chRole == 3 || isReadOnly == "0") {
+                                item.StartDT = chNode.StartDT;
+                                item.EndDT = chNode.EndDT;
+                                item.GT = chNode.GT;
+                                item.Scale = chNode.Scale;
+                                item.TotalScale = chNode.TotalScale;
+                                item.IsEdit = 1;
                             } else {
-                                _Html += "<td style='text-align: center'>" + chNode.StartDT + "</td>";
-                                _Html += "<td style='text-align: center'>" + chNode.EndDT + "</td>";
-                                _Html += "<td style='text-align: center'>" + chNode.GT + "</td>";
-                                _Html += "<td style='text-align: center'>" + chNode.Scale + "</td>";
-                                _Html += "<td style='text-align: center'>" + chNode.TotalScale + "</td>";
+                                item.StartDT = chNode.StartDT;
+                                item.EndDT = chNode.EndDT;
+                                item.GT = chNode.GT;
+                                item.Scale = chNode.Scale;
+                                item.TotalScale = chNode.TotalScale;
+                                item.IsEdit = 0;
                             }
                         }
-
-                        
-                        _Html += "<td style='text-align: center'>___</td>";
-                        _Html += "<td style='text-align: center'>___</td>";
-                        _Html += "<td style='text-align: center'>___</td>";
-                        _Html += "<td style='text-align: center'>___</td>";
-
-                        _Html += "</tr>";
+                        item.ADT = "-";
+                        item.ComplateDT = "-";
+                        item.HS = "-";
+                        item.WFState = "-";
                     }
                 }
+                tableData.push(item);
 
             }
 
-            $("#CHTbody").html(_Html);
+            layui.use(['table', 'util'], function () {
+                var table = layui.table
+                    , laydate = layui.laydate;
 
-            var flow = data.WF_Flow[0];
-            if (flow.SDTOfFlowRole != 0) {
-                $("#flowTable").hide();
-            } else {
-                _Html = "<tr>";
-                _Html += "<td>" + gwf.RDT + "</td>";
+                //显示节点时限的数据信息
+                var vtable = table.render({
+                    elem: '#node',
+                    id: 'node',
+                    data: tableData,
+                    title: '数据表',
+                    limit: Number.MAX_VALUE,
+                    cellMinWidth: 120,
+                    size: 'lg',
+                    page: false,
+                    cols: [[
+                        { field: 'idx', title: '序号', minWidth: 5 }
+                        , { field: 'NodeName', title: '节点', minWidth: 140, sort: false }
+                        , { field: 'EmpName', title: '处理人', minWidth: 80, sort: false }
+                        , {
+                            field: 'StartDT', type: 'date', title: '计划开始时间', minWidth: 180,
+                            templet: function (row) {
+                                if (row.IsEdit == 1 && row.NodeID != startNodeID)
+                                    return '<div class="layui-input-inline"><i class="input-icon layui-icon layui-icon-date"></i><input type="text" id="' + this.field + '_' + row["NodeID"] + '" name="' + this.field + '_' + row["NodeID"] + '" class="layui-input ccdate" value="' + row[this.field] + '"></div>';
+                                return row[this.field];
+                            }
+                        }
+                        , {
+                            field: 'EndDT', type: 'date', title: '计划完成时间', minWidth: 180,
+                            templet: function (row) {
+                                if (row.IsEdit == 1 && row.NodeID != startNodeID)
+                                    return '<div class="layui-input-inline"><i class="input-icon layui-icon layui-icon-date"></i><input type="text" id="' + this.field + '_' + row["NodeID"] + '" name="' + this.field + '_' + row["NodeID"] + '" class="layui-input ccdate" value="' + row[this.field] + '"></div>';
+                                return row[this.field];
+                            }
+                        }
+                        , {
+                            field: 'GT', type: 'number', title: '工天(天)', minWidth: 80,
+                            templet: function (row) {
+                                if (row.IsEdit == 1 && row.NodeID != startNodeID)
+                                    return '<input type="number" name="' + this.field + '_' + row["NodeID"] + '" step="1" class="layui-input" value="' + row[this.field] + '"  onchange="ChangeStyle(this)">';
+                                return row[this.field];
+                            }
+                        }
+                        , {
+                            field: 'Scale', type: 'number', title: '阶段占比(%)', minWidth: 80,
+                            templet: function (row) {
+                                if (row.IsEdit == 1)
+                                    return '<input type="number" name="' + this.field + '_' + row["NodeID"] + '" step="1" class="layui-input" value="' + row[this.field] + '"  onchange="ChangeStyle(this)"';
+                                return row[this.field];
+                            }
+                        }
+                        , {
+                            field: 'TotalScale', type: 'number', title: '总体进度(%)', minWidth: 80,
+                            templet: function (row) {
+                                if (row.IsEdit == 1)
+                                    return '<input type="number" name="' + this.field + '_' + row["NodeID"] + '" step="1" class="layui-input  layui-table-edit" value="' + row[this.field] + '"  onchange="ChangeStyle(this)">';
+                                return row[this.field];
+                            }
+                        }
+                        , { field: 'ADT', title: '任务到达时间', minWidth: 160, sort: false }
+                        , { field: 'ComplateDT', title: '实际完成时间', minWidth: 160, sort: false }
+                        , { field: 'HS', title: '耗时', minWidth: 60 }
+                        , { field: 'WFState', title: '状态', minWidth: 60 }
+                        , { field: 'IsEdit', title: '是否编辑', hide: true }
+                    ]]
+                });
 
+               
+                
+                $.each($(".ccdate"), function (i, item) {
+                    laydate.render({
+                        elem: '#' + item.id,
+                        type: 'datetime',
+                        format: 'yyyy-MM-dd HH:mm',
+                        done: function (value, date, endDate) {
+                            var val = $(this.elem).val();
+                            if (val != value) {
+                                $(this.elem).css("background-color", "#5fb87852");
+                            }
+                               
+                        }
+                    });
+                });
+                var flow = data.WF_Flow[0];
+                if (flow.SDTOfFlowRole != 0) {
+                    $("#flow").hide();
+                    return;
+                }
+                tableData = [];
+                var item = {};
+                item.StartDT = gwf.RDT;
                 if (gwf.SDTOfFlow == null || gwf.SDTOfFlow == "" || gwf.SDTOfFlow == undefined) {
-                    _Html += "<td>无</td>";
-                    _Html += "<td>0秒</td>";
-                    _Html += "<td>无</td>";
+                    item.SDTOfFlow="无";
+                    item.SYSJ="0秒";
+                    item.State="无";
                 } else {
-                    _Html += "<td>" + gwf.SDTOfFlow + "</td>";
+                    item.SDTOfFlow =gwf.SDTOfFlow ;
                     var sdtofFlow = new Date(Date.parse(gwf.SDTOfFlow.replace(/-/g, "/")));
                     if (gwf.SDTOfFlow <= new Date().format("yyyy-MM-dd HH:mm")) {
-                        _Html += "<td>-" + GetSpanTime(sdtofFlow, new Date()) + "</td>";
-                        _Html += "<td><label style='color:red'>逾期</label></td>";
+                        item.SYSJ =GetSpanTime(sdtofFlow, new Date());
+                        item.State ="逾期";
 
                     } else {
                         var spanTime = data.SpanTime[0].SpanTime;
-                        _Html += "<td>" + spanTime + "</td>";
-                        _Html += "<td>正常</td>";
+                         item.SYSJ =spanTime;
+                         item.State ="正常";
                     }
                 }
-                if (isReadOnly == "1") {
-                    $("#IsChangeDT").hide();
-                } else {
-                     if (chRole == 3|| isReadOnly == "0")
-                        _Html += "<td><input type='text' id='GWF' name='GWF' value='" + gwf.SDTOfFlow + "' onfocus='WdatePicker({dateFmt:\"yyyy-MM-dd HH:mm\"})'  class='form-control Wdate' style='width:150px;display:inline'/></td>";
-                    else {
-                        $("#IsChangeDT").hide();
-                }
-                }
-               
-                _Html += "</tr>";
+                if (chRole == 3 && isReadOnly == "0")
+                    item.IsHidden = 0;
+                else
+                    item.IsHidden = 1;
+                tableData.push(item);
+                //显示流程时限的数据信息
+                var vtable = table.render({
+                    elem: '#flow',
+                    id: 'flow',
+                    data: tableData,
+                    title: '数据表',
+                    limit: Number.MAX_VALUE,
+                    cellMinWidth: 120,
+                    size: 'lg',
+                    page: false,
+                    cols: [[
+                        {field: 'StartDT', type: 'date', title: '开始日期', minWidth: 180}
+                        ,{field: 'SDTOfFlow', type: 'date', title: '应完成日期', minWidth: 180,}
+                        , {field: 'SYSJ', type: 'number', title: '剩余时间', minWidth: 80,}
+                        , {field: 'State', type: 'number', title: '状态', minWidth: 80,}
+                        
+                        , {
+                            field: 'IsChangeDT', title: '调整时间', minWidth: 160, templet: function (row) {
+                                if (row.IsHidden == 0)
+                                    return '<div class="layui-input-inline"><i class="input-icon layui-icon layui-icon-date"></i><input type="text" id="GWF" name="GWF" class="layui-input ccdate"   value="' + gwf.SDTOfFlow + '"></div>';
+                                return "-";
+                            }}
+                        
+                    ]]
+                });
 
-                $("#FlowCH").html(_Html);
+                laydate.render({
+                    elem: '#GWF',
+                    type: 'datetime',
+                    format: 'yyyy-MM-dd HH:mm',
+                    done: function (value, date, endDate) {
+                        var val = $(this.elem).val();
+                        if (val != value) {
+                            $(this.elem).css("background-color", "#5fb87852");
+                        }
 
-            }
-
-            //可调整时限增加保存按钮
-            if (isReadOnly == "1") {
-
-            } else {
-                if (chRole == 1||chRole==3  || isReadOnly == "0")
-                    $("#bottomBar").append("<input type='button' id='Save' onclick='Save()' value='保存'/>");
-            }
-            
-
-
-
+                    }
+                });
+            });
         }
 
-        function changeStyle(nodeId, type) {
-            if (type == "StartDT")
-                $("#StartDT_" + nodeId).css("color", "#a7a4a4");
-            if (type == "EndDT")
-                $("#EndDT_" + nodeId).css("color", "#a7a4a4");
-            if (type == "GT")
-                $("#GT_" + nodeId).css("color", "#a7a4a4");
-            if (type == "Scale")
-                $("#Scale_" + nodeId).css("color", "#a7a4a4");
+        /**
+         * 改变背景颜色
+         * @param obj 元素DOM
+         */
+        function ChangeStyle(obj) {
+            $(obj).css("background-color", "#5fb87852");
         }
 
         //比对时间
@@ -286,7 +379,7 @@
                 return;
             }
             alert("保存成功");
-            window.location.href = window.location.href;
+            Reload();
 
         }
 
@@ -375,48 +468,22 @@
 <body>
     <div style="padding:12px">
         <form id="cc">
-            <div style="height:80%">
-                <table class="table table-hover" style="width:100%">
-                    <caption>节点时限 </caption>
-                    <thead>
-                        <tr>
-                            <th style='background-color:#F2F2F2;width:10px'>#</th>
-                            <th style='background-color:#F2F2F2;text-align:center;width:10%'>节点</th>
-                            <th style='background-color:#F2F2F2;text-align:center;width:10%'>处理人</th>
-                            <th style='background-color:#F2F2F2;width:160px;text-align:center'>计划开始时间</th>
-                            <th style='background-color:#F2F2F2;width:160px;text-align:center'>计划完成时间</th>
-                            <th style='background-color:#F2F2F2;width:70px;text-align:center'>工天(天)</th>
-                            <th style='background-color:#F2F2F2;width:100px;text-align:center'>阶段占比(%)</th>
-                            <th style='background-color:#F2F2F2;width:100px;text-align:center'>总体进度(%)</th>
-                            <th style='background-color:#F2F2F2;width:120px;text-align:center'>任务到达时间</th>
-                            <th style='background-color:#F2F2F2;width:120px;text-align:center'>实际完成时间</th>
-                            <th style='background-color:#F2F2F2;width:70px;text-align:center'> 耗时 </th>
-                            <th style='background-color:#F2F2F2;width:50px;text-align:center'>状态</th>
-                        </tr>
-                    </thead>
-                    <tbody id="CHTbody"></tbody>
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-card-header">节点时限</div>
+                    <table class="layui-table" lay-filter="node" id="node"></table>
+                    <div class="layui-card-header">流程时限</div>
+                    <table class="layui-table" lay-filter="flow" id="flow"></table>
+                </div>
+                <div id="bottomBar"  style="display:none;margin:10px 0px 10px 10px">
+                    <button type="button" class="layui-bar layui-btn" lay-filter='SaveBtn' id="SaveBtn">保存</button>
+                </div>
 
-                </table>
             </div>
-            <table class="table" id="flowTable">
-                <caption>流程时限 </caption>
-                <thead>
-                    <tr>
-                        <th style='background-color:#F2F2F2;'>开始日期</th>
-                        <th style='background-color:#F2F2F2;'>应完成日期</th>
-                        <th style='background-color:#F2F2F2;width:150px'>剩余时间</th>
-                        <th style='background-color:#F2F2F2;width:150px'>状态</th>
-                        <th style='background-color:#F2F2F2;width:150px' id="IsChangeDT">调整时间</th>
-
-                    </tr>
-                </thead>
-                <tbody id="FlowCH"></tbody>
-
-            </table>
+           
         </form>
 
-        <div id="bottomBar"></div>
-
+        
     </div>
 
 </body>

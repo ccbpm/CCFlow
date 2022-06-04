@@ -23,7 +23,7 @@
             var flowName = document.getElementById("TB_FlowName");
             flowName.focus();
 
-            if (window.location.href.indexOf("Simple.htm") > 0)
+            if (GetHrefUrl().indexOf("Simple.htm") > 0)
                 model = 1; //轻量版.
 
 
@@ -93,7 +93,7 @@
         function OpenFlowMod() {
             url = "../Template/Flow.htm?SortNo=" + GetQueryString("sort");
 
-            window.location.href = url;
+            SetHref(url);
 
             //window.close();
         }

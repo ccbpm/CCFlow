@@ -34,7 +34,7 @@ function GetDBGroup() {
 
         { "No": "A", "Name": "常规组件" },
         { "No": "B", "Name": "实体组件" },
-        { "No": "C", "Name": "打印组件" },
+        //{ "No": "C", "Name": "打印组件" },
         { "No": "D", "Name": "流程类" }
 
         /*  { "No": "C", "Name": "工具栏按钮" },*/
@@ -91,7 +91,7 @@ function changeOption() {
     var optionKey = optionKey = sele[index].value;
 
     var url = GetUrl(optionKey);
-    window.location.href = url + "?GroupID=" + groupID + "&FrmID=" + frmID + "&ModuleNo=" + GetQueryString("ModuleNo");
+    SetHref(url + "?GroupID=" + groupID + "&FrmID=" + frmID + "&ModuleNo=" + GetQueryString("ModuleNo"));
 
 }
 function GetUrl(optionKey) {

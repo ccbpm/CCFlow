@@ -2,6 +2,7 @@
 var wf_node = null;
 var webUser = new WebUser();
 var toolbarPos = getConfigByKey("ToolbarPos", '0');  //签名图片的默认后缀
+var btnMenu = null;
 $(function () {
     var barHtml = "";
     var data;
@@ -35,6 +36,12 @@ $(function () {
     //当前节点的信息
     if (data.WF_Node != undefined)
         wf_node = data.WF_Node[0];
+    else
+        wf_node = new Entity("BP.WF.Node", paramData.FK_Node);
+
+   
+
+
 
     var toolBars = data.ToolBar;
     if (toolBars == undefined)
@@ -54,7 +61,7 @@ $(function () {
         }
 
         if (toolBar.No == "Save") {
-            _html += "<button type='button' class='layui-btn layui-btn-primary' lay-submit lay-filter='Save' name='" + toolBar.No + "Btn' enable=true " + Oper + "><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='22px' height='22px'>&nbsp;" + toolBar.Name + "</button>";
+            _html += "<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' lay-submit lay-filter='Save' name='" + toolBar.No + "Btn' enable=true " + Oper + "><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='20px' height='20px'>&nbsp;" + toolBar.Name + "</button>";
             return true;
         }
 
@@ -63,24 +70,24 @@ $(function () {
 
             var Icon = toolBar.Icon;
             //自定义的默认按钮
-            var img = "<img src='" + basePath + "/WF/Img/Btn/CH.png' width='22px' height='22px'>&nbsp;"
+            var img = "<img src='" + basePath + "/WF/Img/Btn/CH.png' width='20px' height='20px'>&nbsp;"
             //有上传的icon,否则用默认的
             if (Icon != "" && Icon != undefined) {
                 var index = Icon.indexOf("\DataUser");
                 if (index != -1)
                     Icon = Icon.replace(Icon.substr(0, index), "../");
-                img = "<img src='" + Icon + "' width='22px' height='22px'>&nbsp;";
+                img = "<img src='" + Icon + "' width='20px' height='20px'>&nbsp;";
             }
 
-            _html += "<button type='button' class='layui-bar layui-btn layui-btn-primary' name='" + toolBar.No + "' enable=true " + Oper + ">" + img + toolBar.Name + "</button>";
+            _html += "<button type='button' class='layui-bar layui-btn layui-btn-sm layui-btn-primary' name='" + toolBar.No + "' enable=true " + Oper + ">" + img + toolBar.Name + "</button>";
 
         }
         else {
             if (toolBar.No == "Send")
-                _html += "<button type='button' class='layui-btn layui-btn-primary' name='" + toolBar.No + "Btn' enable=true " + Oper + " lay-submit lay-filter='Send'><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='22px' height='22px'>&nbsp;" + toolBar.Name + "</button>";
+                _html += "<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' name='" + toolBar.No + "Btn' enable=true " + Oper + " lay-submit lay-filter='Send'><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='20px' height='20px'>&nbsp;" + toolBar.Name + "</button>";
             else {
 
-                _html += "<button type='button' class='layui-bar layui-btn layui-btn-primary' name='" + toolBar.No + "' enable=true " + Oper + " ><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='22px' height='22px'>&nbsp;" + toolBar.Name + "</button>";
+                _html += "<button type='button' class='layui-bar layui-btn-sm layui-btn layui-btn-primary' name='" + toolBar.No + "' enable=true " + Oper + " ><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='20px' height='20px'>&nbsp;" + toolBar.Name + "</button>";
 
             }
         }
@@ -98,18 +105,46 @@ $(function () {
         $(".layui-footer").show();
         $(".layui-header").hide();
         $(".layui-fluid").css("padding-top", "0px");
+       
+        $(".layui-fluid").css("top", "0px");
     }
 
+    //引入数据批阅的js
+    if ($('[name=FrmDBRemark]').length > 0) {
+        loadScript(basePath + "/WF/CCForm/JS/FrmDBRemark.js?t=" + Math.random());
+    }
+
+    if ($('[name=FrmDBVer]').length > 0) {
+        loadScript(basePath + "/WF/CCForm/JS/FrmDBVer.js?t=" + Math.random());
+    }
 
     //按钮旁的下来框
     if (wf_node != null && wf_node.IsBackTrack == 0)
         InitToNodeDDL(data, wf_node);
 
+    //如果启用的按钮操作太多时，自适应高度
+   
+    if (toolbarPos == "0") {
+        var btnH = $("#ToolBar").height();
+        if (btnH > 50) {
+            $("#ToolBar").parent().height(btnH);
+            $("#ContentDiv").parent().css("padding-top", btnH + "px");
+        }
+    }
+    if (toolbarPos == "1") {
+        var btnH = $('#bottomToolBar').height();
+        if (btnH > 50) {
+            $("#bottomToolBar").parent().height(btnH);
+            $("#ContentDiv").parent().css("padding-bottom", btnH + "px");
+        }
+    }
+    
+
     $('.layui-bar').on('click', function () {
         var oper = $(this).data("info");
         if (oper != null && oper != undefined && oper != "") {
             oper = oper.toString().replace(/~/g, "'");
-            eval(oper);
+            cceval(oper);
         }
 
 
@@ -193,6 +228,9 @@ $(function () {
     if ($('[name=PackUp_pdf]').length > 0) {
         $('[name=PackUp_pdf]').bind('click', function () { initModal("PackUp_pdf"); });
     }
+    if ($('[name=PrintDoc]').length > 0) {
+        $('[name=PrintDoc]').bind('click', function () { initModal("PrintDoc"); });
+    }
 
     if ($('[name=SelectAccepter]').length > 0) {
         $('[name=SelectAccepter]').bind('click', function () {
@@ -267,9 +305,9 @@ $(function () {
         $('[name=QRCode]').bind('click', function () { initModal("QRCode"); });
     }
     //数据库版本
-    if ($('[name=FrmDBVer]').length > 0) {
-        $('[name=FrmDBVer]').bind('click', function () { initModal("FrmDBVer"); });
-    }
+   // if ($('[name=FrmDBVer]').length > 0) {
+    //    $('[name=FrmDBVer]').bind('click', function () { initModal("FrmDBVer"); });
+    //}
 
     //小纸条
     if ($('[name=Scrip]').length > 0) {
@@ -286,8 +324,14 @@ $(function () {
         $('[name=IM]').bind('click', function () { initModal("IM"); });
     }
 
-    HelpAlter();
+    //分流节点，查看表单
+    if ($('[name=OpenFrm]').length > 0) {
+        $('[name=OpenFrm]').bind('click', function () { initModal("OpenFrm"); });
+    }
 
+    HelpAlter();
+    if (typeof AfterToolbarLoad == "function")
+        AfterToolbarLoad();
 });
 //添加保存动态
 function SaveOnly() {
@@ -316,7 +360,7 @@ function initModal(modalType, toNode, url) {
         setToobarEnable();
     });
 
-    var isFrameCross = window.location.href.indexOf(basePath) == -1 ? 1 : 0;
+    var isFrameCross = GetHrefUrl().indexOf(basePath) == -1 ? 1 : 0;
     var modalIframeSrc = '';
     var width = window.innerWidth / 2;
     var height = 50;
@@ -400,7 +444,10 @@ function initModal(modalType, toNode, url) {
                 title = "处理记录、轨迹";
                 width = window.innerWidth * 4 / 5;
                 height = 80;
-                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                var workID = paramData.WorkID;
+                if (paramData.WorkID == 0 && paramData.FID != 0)
+                    workID = paramData.FID;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + workID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
             case "HuiQian":
                 width = window.innerWidth * 4 / 5;
@@ -442,6 +489,16 @@ function initModal(modalType, toNode, url) {
                 title = "打包下载/打印";
                 modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_', '') + "&FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 break;
+            case "PrintDoc":
+                title = "打印单据";
+                if (wf_node.FormType == 5) {
+                    //绑定表单的时候增加一个tab页到页面
+                    var formData = { No: "PrintDoc", "Name": "打印单据" };
+                    vm.openPage(formData);
+                    return;
+                }
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/PrintDoc.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random();
+                break;
             case "Press":
                 //$('#modalHeader').text("催办");
                 //modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Press.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
@@ -465,8 +522,10 @@ function initModal(modalType, toNode, url) {
                 break;
             case "SelectNodeUrl":
                 title = "请选择到达的节点";
-                width = window.innerWidth * 1 / 2;
-                height = 50;
+               // width = 700;// window.innerWidth * 1 / 2;
+                width = window.innerWidth * 0.8; // / 2;
+
+                height = 100;
                 modalIframeSrc = url;
                 break;
 
@@ -549,12 +608,12 @@ function initModal(modalType, toNode, url) {
                 width = window.innerWidth / 2;
                 modalIframeSrc = ccbpmPath + "/WF/WorkOpt/QRCode/GenerCode.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&FID=" + paramData.FID + "&PWorkID=" + paramData.PWorkID + "&Info=&s=" + Math.random();
                 break;
-            case "FrmDBVer":
-                title = "数据版本";
-                width = window.innerWidth * 4 / 5;
-                modalIframeSrc = ccbpmPath + "/WF/CCForm/FrmDBVer.htm?FK_Node=" + paramData.FK_Node + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random();
-                window.open(modalIframeSrc);
-                return;
+            //case "FrmDBVer":
+            //    title = "数据版本";
+            //    width = window.innerWidth * 4 / 5;
+            //    modalIframeSrc = ccbpmPath + "/WF/CCForm/FrmDBVer.htm?FK_Node=" + paramData.FK_Node + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random();
+            //    window.open(modalIframeSrc);
+            //    return;
             case "Scrip":
                 OpenScrip();
 
@@ -574,12 +633,20 @@ function initModal(modalType, toNode, url) {
                 height = 80;
                 modalIframeSrc = ccbpmPath + "/WF/WorkOpt/IM.htm?NodeID=" + paramData.FK_Node + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random();
                 OpenLayuiDialog(modalIframeSrc, title, width, height, "rb", false, false, false, null, null, null, 0);
-                return;
+                break;
+            case "OpenFrm":
+                title = "查看表单";
+                var workID = paramData.WorkID;
+                if (paramData.WorkID == 0 && paramData.FID != 0)
+                    workID = paramData.FID;
+                width = window.innerWidth * 4/5;
+                height = 80;
+                modalIframeSrc = ccbpmPath + "/WF/MyFrm.htm?NodeID=" + paramData.FK_Node + "&FK_Node=" + paramData.FK_Node + "&WorkID=" + workID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random();
+                OpenLayuiDialog(modalIframeSrc, title, width, height, "auto");
             default:
                 break;
         }
     }
-    //modalIframeSrc += "&Token=" + GetToken();
     if (isShowColseBtn == 0)
         OpenLayuiDialog(modalIframeSrc, title, width, height, "auto", false, false, false, null, null, null, 0);
     else
@@ -640,7 +707,7 @@ function InitToNodeDDL(JSonData, wf_node) {
     //如果没有发送按钮，就让其刷新,说明加载不同步.
     var btn = $('[name=SendBtn]');
     if (btn == null || btn == undefined) {
-        window.location.href = window.location.href;
+        Reload();
         return;
     }
 
@@ -650,7 +717,7 @@ function InitToNodeDDL(JSonData, wf_node) {
         if (dataType != null && dataType != undefined && dataType == "isAskFor")
             return;
     }
-    var _html = '<button class="layui-btn layui-btn-primary" id="Btn_ToNode">';
+    var _html = '<button class="layui-btn layui-btn-primary layui-btn-sm" id="Btn_ToNode">';
     _html += '<span id="DDL_ToNode"></span>';
     _html += '<input type="hidden" id="TB_ToNode"/>';
     _html += '<i class="layui-icon layui-icon-down layui-font-12"></i>';
@@ -680,7 +747,7 @@ function InitToNodeDDL(JSonData, wf_node) {
         $("#TB_ToNode").data(data[0]);
     }
 
-    layui.dropdown.render({
+    btnMenu = layui.dropdown.render({
         elem: '#Btn_ToNode',
         data: data,
         click: function (obj) {
@@ -691,27 +758,29 @@ function InitToNodeDDL(JSonData, wf_node) {
     if (wf_node.CondModel == 3) {
         var _html = "";
         $.each(JSonData.ToNodes, function (i, toNode) {
-            var obj = $("<Button  class='layui-btn layui-btn-primary' id='" + toNode.No + "' name='ToNodeBtn' enable=true onclick='ChangeToNodeState(" + toNode.No + ")'><img src='" + basePath + "/WF/Img/Btn/Send.png' width='22px' height='22px'>&nbsp;" + toNode.Name + "</button>");
+            var obj = $("<Button type='button' class='layui-btn layui-btn-sm layui-btn-primary' id='" + toNode.No + "' name='ToNodeBtn' enable=true ><img src='" + basePath + "/WF/Img/Btn/Send.png' width='22px' height='22px'>&nbsp;" + toNode.Name + "</button>");
             $('[name=SendBtn]').before(obj);
             obj.data(toNode);
         });
         $("#Btn_ToNode").hide();
         $('[name=SendBtn]').hide();
+        $('[name=ToNodeBtn]').on('click', function () {
+            var toNode = this.id;
+            $("#TB_ToNode").data($("#" + toNode).data());
+            $('[name=SendBtn]').trigger("click");
+
+        });
     }
 
 }
 
-function ChangeToNodeState(toNode) {
-    $("#TB_ToNode").data($("#" + toNode).data());
-    $('[name=SendBtn]').trigger("click");
-}
 /**
  * 流程发送的方法,这个是通用的方法
  * @param {isHuiQian} isHuiQian 是否是会签模式
  * @param {formType} formType 表单方案模式
  */
 var IsRecordUserLog = getConfigByKey("IsRecordUserLog", false);
-var isSaveOnly = false;
+var isSaveOnly = true;
 function Send(isHuiQian, formType) {
     if (wf_node != null && wf_node.ScripRole == 2) {
         var gwf = new Entity("BP.WF.GenerWorkFlow", GetQueryString("WorkID"));
@@ -794,7 +863,8 @@ function Send(isHuiQian, formType) {
         if (isShowToNode == true) {
             isSaveOnly = true;
             $('[name=SaveBtn]').trigger("click");
-            isSaveOnly = false;
+            if (isSaveOnly == false)
+                return;
             var url = ccbpmPath + "/WF/WorkOpt/ToNodes.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&IsSend=0" + "&s=" + Math.random();
 
             initModal("SelectNodeUrl", null, url);
@@ -829,7 +899,8 @@ function Send(isHuiQian, formType) {
         if (selectToNode.IsSelectEmps == "1" && isLastHuiQian == true) { //跳到选择接收人窗口
             isSaveOnly = true;
             $('[name=SaveBtn]').trigger("click");
-            isSaveOnly = false;
+            if (isSaveOnly == false)
+                return;
             if (isHuiQian == true) {
                 initModal("HuiQian", toNodeID);
             } else {
@@ -840,8 +911,8 @@ function Send(isHuiQian, formType) {
         if (selectToNode.IsSelectEmps == "2") {
             isSaveOnly = true;
             $('[name=SaveBtn]').trigger("click");
-            isSaveOnly = false;
-            //Save(1); //执行保存.
+            if (isSaveOnly == false)
+                return;
             if (isHuiQian == true) {
                 initModal("HuiQian", toNodeID);
             } else {
@@ -856,7 +927,8 @@ function Send(isHuiQian, formType) {
         if (selectToNode.IsSelectEmps == "3") {
             isSaveOnly = true;
             $('[name=SaveBtn]').trigger("click");
-            isSaveOnly = false;
+            if (isSaveOnly == false)
+                return;
             //Save(1); //执行保存.
             if (isHuiQian == true) {
                 initModal("HuiQian", toNodeID);
@@ -869,7 +941,8 @@ function Send(isHuiQian, formType) {
         if (selectToNode.IsSelectEmps == "4") {
             isSaveOnly = true;
             $('[name=SaveBtn]').trigger("click");
-            isSaveOnly = false;
+            if (isSaveOnly == false)
+                return;
 
             if (isHuiQian == true) {
                 initModal("HuiQian", toNodeID);
@@ -881,7 +954,8 @@ function Send(isHuiQian, formType) {
         if (isHuiQian == true) {
             isSaveOnly = true;
             $('[name=SaveBtn]').trigger("click");
-            isSaveOnly = false;
+            if (isSaveOnly == false)
+                return;
             initModal("HuiQian", toNodeID);
             return false;
         }
@@ -928,7 +1002,7 @@ function execSend(toNodeID, formType, isReturnNode) {
         if (data.indexOf('TurnUrl@') == 0) {  //发送成功时转到指定的URL 
             var url = data;
             url = url.replace('TurnUrl@', '');
-            window.location.href = url;
+            SetHref(url);
             return false;
         }
         if (data.indexOf('SelectNodeUrl@') == 0) {
@@ -996,7 +1070,7 @@ function execSend(toNodeID, formType, isReturnNode) {
             var url = data;
             url = url.replace('url@', '');
 
-            window.location.href = url;
+            SetHref(url);
             return false;
         }
         OptSuc(data);
@@ -1112,8 +1186,12 @@ function OptSuc(msg) {
  * 关闭弹出消息页面同时关闭父页面
  */
 function closeWindow() {
-    if (window.top.vm && typeof window.top.vm.closeCurrentTabs == "function")
-        window.top.vm.closeCurrentTabs(window.top.vm.selectedTabsIndex);
+    if (window.top.vm && typeof window.top.vm.closeCurrentTabs == "function") {
+        if (window.top.vm.selectedTabsIndex == undefined)
+            window.close();
+        else
+            window.top.vm.closeCurrentTabs(window.top.vm.selectedTabsIndex);
+    }
     else {
         // 取得父页面URL，用于判断是否是来自测试流程
         var pareUrl = window.top.document.referrer;
@@ -1147,20 +1225,37 @@ function SDKSend() {
  * 节点表单发送前的验证
  */
 function NodeFormSend() {
+    if (typeof isChartFrm != "undefined" && isChartFrm == true && $("#ChapterIFrame").length > 0) {
+        //获取IFrame的页面
+        var frame = $("#ChapterIFrame")[0];
+        if (frame && frame.contentWindow.Save != undefined && typeof (frame.contentWindow.Save) == "function") {
+            var flag = frame.contentWindow.Save(false);
+            if (flag == false) {
+                return false;
+            }
+        }
+        return true;
+    }
     //检查，保存从表
     if ($("[name=Dtl]").length > 0) {
         var formCheckResult = true;
         $("[name=Dtl]").each(function (i, obj) {
             var contentWidow = obj.contentWindow;
-            if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
-                if (contentWidow.SaveAll() == false) {
-                    formCheckResult = false;
+            if (contentWidow != null) {
+                if (contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
+                    var isTrue = contentWidow.SaveAll();
+                    if (isTrue == false)
+                        formCheckResult = false;
                 }
+                
                 //最小从表明细不为0
-                if (contentWidow.CheckDtlNum() == false) {
-                    layer.alert("[" + contentWidow.sys_MapDtl.Name + "]明细不能少于最小数量" + contentWidow.sys_MapDtl.NumOfDtl + "");
-                    formCheckResult = false;
+                if (contentWidow.CheckDtlNum != undefined && typeof (contentWidow.CheckDtlNum) == "function") {
+                    if (contentWidow.CheckDtlNum() == false) {
+                        layer.alert("[" + contentWidow.sys_MapDtl.Name + "]明细不能少于最小数量" + contentWidow.sys_MapDtl.NumOfDtl + "");
+                        formCheckResult = false;
+                    }
                 }
+               
             }
 
 
@@ -1191,6 +1286,10 @@ function NodeFormSend() {
         layer.alert("必填项不能为空");
         return false;
     }
+    if (typeof checkReg == "undefined")
+        return true;
+    if (checkReg() == false)
+        return false;
     //附件检查
     var msg = checkAths();
     if (msg != "") {
@@ -1282,7 +1381,7 @@ function ConfirmBtn(btn, workid) {
 }
 //结束流程.
 function DoStop(msg, flowNo, workid) {
-    layui.layer.confirm('您确定要执行 [' + msg + '] ?', function (index) {
+    layer.confirm('您确定要执行 [' + msg + '] ?', function (index) {
         layer.close(index);
         //流程结束前
         if (typeof beforeStopFow != 'undefined' && beforeStopFow instanceof Function)
@@ -1299,10 +1398,7 @@ function DoStop(msg, flowNo, workid) {
         if (typeof afterStopFow != 'undefined' && afterStopFow instanceof Function)
             if (afterStopFow() == false)
                 return false;
-        if (window.top.vm && typeof window.top.vm.closeCurrentTabs == "function")
-            window.top.vm.closeCurrentTabs(window.top.vm.selectedTabsIndex);
-        else
-            window.close();
+        closeWindow();
     })
 
 }
@@ -1310,7 +1406,7 @@ function DoStop(msg, flowNo, workid) {
 function DoSubFlowReturn(fid, workid, fk_node) {
     var url = 'ReturnWorkSubFlowToFHL.htm?FID=' + fid + '&WorkID=' + workid + '&FK_Node=' + fk_node;
     var v = WinShowModalDialog(url, 'df');
-    window.location.href = window.history.url;
+    SetHref(window.history.url);
 }
 
 //结束子流程
@@ -1323,7 +1419,7 @@ function DoDelSubFlow(fk_flow, workid) {
 
     var data = handler.DoMethodReturnString("DelSubFlow"); //删除子流程..
     alert(data);
-    window.location.href = window.location.href;
+    Reload();
 
 }
 
@@ -1331,19 +1427,53 @@ function DoDelSubFlow(fk_flow, workid) {
 //删除流程
 function DeleteFlow() {
 
-    if (window.confirm('您确定要删除吗？') == false)
+   //让用户决定的方式删除
+    if (wf_node.DelEnable == 4) {
+        //按照用户选择的方式删除
+        var url = "./WorkOpt/DeleteFlowInstance.htm?WorkID=" + paramData.WorkID + "&FK_Node=" + paramData.FK_Node + "&FK_Flow=" + paramData.FK_Flow;
+        var  width = window.innerWidth * 3 / 5;
+        var  height = 80;
+        OpenLayuiDialog(url, "选择删除的方式", width, height, "auto");
+        
         return;
+    }
 
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-    handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
-    handler.AddPara("FK_Node", GetQueryString("FK_Node"));
-    handler.AddPara("WorkID", GetQueryString("WorkID"));
-    var str = handler.DoMethodReturnString("DeleteFlow");
+    
+    //彻底删除
+    if (wf_node.DelEnable == 3) {
+        layer.confirm('删除后流程实例不可恢复,你确定要彻底删除流程吗?', function (index) {
+            layer.close(index);
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            handler.AddPara("WorkID", GetQueryString("WorkID"));
+            handler.AddPara("DelEnable", wf_node.DelEnable);
+            var str = handler.DoMethodReturnString("DeleteFlow");
+            layer.alert(str);
+            closeWindow();
+        });
+        return;
+    }
 
-    alert(str);
-
-    self.opener.location.reload();
-    window.close();
+    //逻辑删除/写入日志方式的删除
+    layer.prompt({
+        formType: 2,
+        value: '删除原因',
+        title: '请输入删除流程的原因',
+        offset: '100px'
+    }, function (value, index, elem) {
+        layer.close(index);
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+        handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+        handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+        handler.AddPara("WorkID", GetQueryString("WorkID"));
+        handler.AddPara("Msg", value);
+        handler.AddPara("DelEnable", wf_node.DelEnable);
+        var str = handler.DoMethodReturnString("DeleteFlow");
+        layer.alert(str);
+        closeWindow();
+       
+    });
 }
 
 
@@ -1388,9 +1518,36 @@ function UnSendAllThread() {
     }
     if (data.indexOf("url@") != -1) {
         var url = data.replace("url@", "");
-        window.location.href = url;
+        SetHref(url);
     }
 }
+/**
+ * 增加子线程
+ */
+function AddThread(toNodeID) {
+    if (toNodeID == null || toNodeID == undefined || toNodeID == "")
+        toNodeID=0;
+    if (wf_node.RunModel == 2 || wf_node.RunModel == 3) {
+
+        var msg = "说明：";
+        msg += "\t\n 1. 新增加的人员，从分流节点的下一个节点开始执行.";
+        msg += "\t\n 2. 输入人员账号，点击确定后，系统就会自动为该人员分配一个任务.";
+
+        var empNo = promptGener(msg + ' 请输入要增加的人员账号，多个人员用逗号分开(比如:zhangsan,lisi):');
+        if (empNo == null || empNo == '')
+            return;
+
+        var workid = GetQueryString("WorkID");
+        var en = new Entity("BP.WF.GenerWorkFlow", GetQueryString("FID"));
+        var data = en.DoMethodReturnString("DoSubFlowAddEmps", empNo, toNodeID);
+        layer.alert(data);
+        Reload();
+        return;
+    }
+    layer.alert('您没有权限增加人员.');
+   
+}
+/**------------------------子线程退回分流节点的工作处理器按钮操作-------------------------------**/
 
 //催办
 function Press() {
@@ -1404,29 +1561,10 @@ function Press() {
 
     if (data.indexOf('err@') == 0) {
         console.log(data);
-        mui.alert(data);
+        layer.alert(data);
         return;
     }
-    //promptGener('请输入催办信息', '该工作因为xxx原因，需要您优先处理.', function (e) {
-    //    if (e.index == 1) {
-    //        if (e.value == "")
-    //            return;
-    //        var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-    //        handler.AddUrlData();
-    //        handler.AddPara("Msg", e.value);
-    //        var data = handler.DoMethodReturnString("Runing_Press");
-
-    //        if (data.indexOf('err@') == 0) {
-    //            console.log(data);
-    //            mui.alert(data);
-    //            return;
-    //        }
-
-    //        mui.alert(data);
-    //        return;
-    //    }
-    //});
-
+ 
 }
 
 /***
@@ -1449,7 +1587,7 @@ function UnSend() {
     }
 
     var url = 'MyFlow.htm?FK_Flow=' + GetQueryString("FK_Flow") + '&WorkID=' + GetQueryString("WorkID") + '&FID=' + GetQueryString("FID");
-    window.location.href = url;
+    SetHref(url);
     return;
 }
 /**
@@ -1467,7 +1605,7 @@ function SendSubFlow(subFlowNo, subFlowMyPK) {
             if (iframe) {
                 var result = iframe[0].contentWindow.Btn_OK();
                 if (result == true) {
-                    var subFlowGuid = new Entity("BP.WF.Template.SubFlowHandGuide", subFlowMyPK);
+                    var subFlowGuid = new Entity("BP.WF.Template.SFlow.SubFlowHandGuide", subFlowMyPK);
                     if (subFlowGuid.SubFlowHidTodolist == 1) {
                         if (window.parent != null && window.parent != undefined)
                             window.parent.close();
@@ -1487,6 +1625,9 @@ function SendSubFlow(subFlowNo, subFlowMyPK) {
         });
 
 }
+/**
+ * 发送子线程
+ */
 function StartThread() {
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
     handler.AddPara("WorkID", GetQueryString("WorkID"));
@@ -1518,14 +1659,14 @@ function StartThread() {
         }
         , success: function (layero, index) {
             if ($("#SubFlow").length == 1) {
-                var node = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
-                $("#SubFlow").html(SubFlow_Init(node));
+                $("#SubFlow").html(SubFlow_Init(wf_node));
             }
         }
     });
     $("#HelpAlter").css("padding", "0px 20px");
 
 }
+
 
 /**
  * 帮助提醒
@@ -1578,3 +1719,7 @@ function HelpAlter() {
         }
     }
 }
+
+
+
+

@@ -14,6 +14,11 @@ namespace CCFlow.WF.CCForm
     public partial class WF_CCForm_DownFile : System.Web.UI.Page
     {
         #region 属性.
+        public string GetVal(string key)
+        {
+            string val=this.Request.QueryString[key];
+            return BP.Tools.DealString.DealStr(val);
+        }
         /// <summary>
         /// 关闭窗口
         /// </summary>
@@ -25,7 +30,7 @@ namespace CCFlow.WF.CCForm
         {
             get
             {
-                return this.Request.QueryString["DoType"];
+                return this.GetVal("DoType");
             }
         }
 
@@ -33,21 +38,21 @@ namespace CCFlow.WF.CCForm
         {
             get
             {
-                return this.Request.QueryString["DoWhat"];
+                return this.GetVal("DoWhat");
             }
         }
         public string EnsName
         {
             get
             {
-                return this.Request.QueryString["EnsName"];
+                return this.GetVal("EnsName");
             }
         }
         public string MyPK
         {
             get
             {
-                return this.Request.QueryString["MyPK"];
+                return this.GetVal("MyPK");
             }
         }
 
@@ -58,42 +63,42 @@ namespace CCFlow.WF.CCForm
         {
             get
             {
-                return this.Request.QueryString["NoOfObj"];
+                return this.GetVal("NoOfObj");
             }
         }
         public string PKVal
         {
             get
             {
-                return this.Request.QueryString["PKVal"];
+                return this.GetVal("PKVal");
             }
         }
         public string IsReadonly
         {
             get
             {
-                return this.Request.QueryString["IsReadonly"];
+                return this.GetVal("IsReadonly");
             }
         }
         public string DelPKVal
         {
             get
             {
-                return this.Request.QueryString["DelPKVal"];
+                return this.GetVal("DelPKVal");
             }
         }
         public string FK_FrmAttachment
         {
             get
             {
-                return this.Request.QueryString["FK_FrmAttachment"];
+                return this.GetVal("FK_FrmAttachment");
             }
         }
         public string FK_FrmAttachmentExt
         {
             get
             {
-                return "ND" + this.FK_Node + "_DocMultiAth"; // this.Request.QueryString["FK_FrmAttachment"];
+                return "ND" + this.FK_Node + "_DocMultiAth"; // this.GetVal("FK_FrmAttachment");
             }
         }
 
@@ -102,8 +107,8 @@ namespace CCFlow.WF.CCForm
         {
             get
             {
-                if (_fk_node == 0 && !string.IsNullOrEmpty(this.Request.QueryString["FK_Node"]))
-                    return int.Parse(this.Request.QueryString["FK_Node"]);
+                if (_fk_node == 0 && !string.IsNullOrEmpty(this.GetVal("FK_Node")))
+                    return int.Parse(this.GetVal("FK_Node"));
 
                 return _fk_node;
             }
@@ -116,12 +121,12 @@ namespace CCFlow.WF.CCForm
         {
             get
             {
-                string str = this.Request.QueryString["WorkID"];
+                string str = this.GetVal("WorkID");
                 if (string.IsNullOrEmpty(str))
-                    str = this.Request.QueryString["OID"];
+                    str = this.GetVal("OID");
 
                 if (string.IsNullOrEmpty(str))
-                    str = this.Request.QueryString["PKVal"];
+                    str = this.GetVal("PKVal");
                 return Int64.Parse(str);
             }
         }
@@ -129,7 +134,7 @@ namespace CCFlow.WF.CCForm
         {
             get
             {
-                string str = this.Request.QueryString["FID"];
+                string str = this.GetVal("FID");
                 if (string.IsNullOrEmpty(str))
                     return 0;
                 return Int64.Parse(str);
@@ -140,7 +145,7 @@ namespace CCFlow.WF.CCForm
         {
             get
             {
-                string paras = this.Request.QueryString["Paras"];
+                string paras = this.GetVal("Paras");
                 if (string.IsNullOrEmpty(paras) == false)
                     if (paras.Contains("IsCC=1") == true)
                         return "1";
@@ -171,7 +176,7 @@ namespace CCFlow.WF.CCForm
             if (this.DoType == "Down")
             {
                 //获取文件是否加密
-                bool fileEncrypt = SystemConfig.IsEnableAthEncrypt;
+                bool fileEncrypt = BP.Difference.SystemConfig.IsEnableAthEncrypt;
                 FrmAttachmentDB downDB = new FrmAttachmentDB();
 
                 downDB.MyPK = this.MyPK;
@@ -224,7 +229,7 @@ namespace CCFlow.WF.CCForm
                     HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment;filename=" + tempName);
                     HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
                     HttpContext.Current.Response.ContentType = "application/octet-stream;charset=utf8";
-                    HttpContext.Current.Response.WriteFile(filepath);
+                    HttpContext.Current.Response.WriteFile(BP.Tools.DealString.DealStr( filepath));
                     HttpContext.Current.Response.End();
                     HttpContext.Current.Response.Close();
                     #endregion
@@ -294,20 +299,20 @@ namespace CCFlow.WF.CCForm
             if (i == 0)
                 return;
             //获取使用的客户 TianYe集团保存在FTP服务器上
-            if (SystemConfig.CustomerNo.Equals("TianYe") || SystemConfig.IsUploadFileToFTP == true)
+            if (BP.Difference.SystemConfig.CustomerNo.Equals("TianYe") || BP.Difference.SystemConfig.IsUploadFileToFTP == true)
             {
                 string filePath = (string)en.GetValByKey("MyFilePath");
                 string fileName = (string)en.GetValByKey("MyFileName");
                 string fileExt = (string)en.GetValByKey("MyFileExt");
                 //临时存储位置
-                string tempFile = SystemConfig.PathOfTemp + System.Guid.NewGuid() + "." + en.GetValByKey("MyFileExt");
+                string tempFile = BP.Difference.SystemConfig.PathOfTemp + System.Guid.NewGuid() + "." + en.GetValByKey("MyFileExt");
                 
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
 
                 //连接FTP服务器
-                FtpConnection conn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPServerPort,
-                    SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+                FtpConnection conn = new FtpConnection(BP.Difference.SystemConfig.FTPServerIP, BP.Difference.SystemConfig.FTPServerPort,
+                    BP.Difference.SystemConfig.FTPUserNo, BP.Difference.SystemConfig.FTPUserPassword);
                 conn.GetFile(filePath, tempFile, false, System.IO.FileAttributes.Archive);
                 conn.Close();
 
@@ -324,7 +329,7 @@ namespace CCFlow.WF.CCForm
                 HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
                 HttpContext.Current.Response.ContentType = "application/octet-stream;charset=utf8";
 
-                HttpContext.Current.Response.WriteFile((string)en.GetValByKey("MyFilePath"));
+                HttpContext.Current.Response.WriteFile(BP.Tools.DealString.DealStr( (string)en.GetValByKey("MyFilePath")) );
                 HttpContext.Current.Response.End();
                 HttpContext.Current.Response.Close();
             }
@@ -333,7 +338,7 @@ namespace CCFlow.WF.CCForm
         //实体文件下载
         protected void EntityMutliFile_Load(object sender, EventArgs e)
         {
-            string oid = this.Request.QueryString["OID"];
+            string oid = this.GetVal("OID");
             //根据SysFileManager的OID获取对应的实体
             SysFileManager fileManager = new SysFileManager();
             fileManager.PKVal = oid;
@@ -342,12 +347,12 @@ namespace CCFlow.WF.CCForm
                 throw new Exception("没有找到OID=" + oid + "的文件管理数据，请联系管理员");
 
             //获取使用的客户 TianYe集团保存在FTP服务器上
-            if (SystemConfig.CustomerNo.Equals("TianYe") || SystemConfig.IsUploadFileToFTP == true)
+            if (BP.Difference.SystemConfig.CustomerNo.Equals("TianYe") || BP.Difference.SystemConfig.IsUploadFileToFTP == true)
             {
                 string filePath = fileManager.MyFilePath;
                 string fileName = fileManager.MyFileName;
                 //临时存储位置
-                string tempFile = SystemConfig.PathOfTemp + System.Guid.NewGuid() + "." + fileManager.MyFileExt;
+                string tempFile = BP.Difference.SystemConfig.PathOfTemp + System.Guid.NewGuid() + "." + fileManager.MyFileExt;
                 try
                 {
                     if (System.IO.File.Exists(tempFile) == true)
@@ -359,8 +364,8 @@ namespace CCFlow.WF.CCForm
                 }
 
                 //连接FTP服务器
-                FtpConnection conn = new FtpConnection(SystemConfig.FTPServerIP, SystemConfig.FTPServerPort,
-                    SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+                FtpConnection conn = new FtpConnection(BP.Difference.SystemConfig.FTPServerIP, BP.Difference.SystemConfig.FTPServerPort,
+                    BP.Difference.SystemConfig.FTPUserNo, BP.Difference.SystemConfig.FTPUserPassword);
                 conn.GetFile(filePath, tempFile, false, System.IO.FileAttributes.Archive);
                 conn.Close();
 
@@ -377,7 +382,7 @@ namespace CCFlow.WF.CCForm
                 HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
                 HttpContext.Current.Response.ContentType = "application/octet-stream;charset=utf8";
 
-                HttpContext.Current.Response.WriteFile(fileManager.MyFilePath);
+                HttpContext.Current.Response.WriteFile(BP.Tools.DealString.DealStr( fileManager.MyFilePath) );
                 HttpContext.Current.Response.End();
                 HttpContext.Current.Response.Close();
             }

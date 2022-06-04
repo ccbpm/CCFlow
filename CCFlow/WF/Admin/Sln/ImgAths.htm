@@ -77,7 +77,7 @@
                 en.FK_MapData = fk_mapdata + "_" + fk_node;
                 en.Insert();
             }
-            window.location.href = window.location.href;
+            Reload();
             var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImgAth&FK_MapData=' + fk_mapdata + '&PK=' + mypk + '&FK_Node=' + fk_node;
             WinOpen(url);
         }
@@ -92,7 +92,7 @@
             en.MyPK = mypk;
             en.Delete();
             alert("删除成功!");
-            window.location.href = window.location.href;
+            Reload();
         }
 
     </script>

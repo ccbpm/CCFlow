@@ -46,7 +46,7 @@
             html += "<th>创建人</th>";
             html += "<th>日期</th>";
 
-            html += "<th>操作</th>";
+          /*  html += "<th>操作</th>";*/
             html += "</tr>";
 
             for (var i = 0; i < ens.length; i++) {
@@ -64,8 +64,6 @@
                     html += "<td>主版本</td>";
                 }
 
-
-
                 html += "<td>" + item.RowNum + "</td>";
                 html += "<td>" + item.AttrsNum + "</td>";
                 html += "<td>" + item.AthsNum + "</td>";
@@ -75,8 +73,8 @@
                 html += "<td>" + item.RecName + "</td>";
                 html += "<td>" + item.RDT + "</td>";
 
-                html += "<td><a class='cc-btn-tab' href='javaScript:void(0)' onclick='changeOrOpenTab(\""
-                    + item.Name + "\",\"" + item.No + "\")'>编辑</a></td>";
+                //html += "<td><a class='cc-btn-tab' href='javaScript:void(0)' onclick='changeOrOpenTab(\""
+                //    + item.Name + "\",\"" + item.No + "\")'>编辑</a></td>";
                 // html += "<td><a class='cc-btn-tab' href='Imp.htm?FK_Flow=" + item.No + "'>导入</a>&nbsp&nbsp<a class='cc-btn-tab' href='Exp.htm?FK_Flow=" + item.No + "'>导出</a></td>";
                 html += "</tr>";
             }
@@ -95,15 +93,15 @@
 
 
         function changeOrOpenTab(flowName, flowNo) {
-            //"&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1", node.iconCls
+            //"&UserNo=" + WebUser.No + "&Token=" + webUser.Token + "&Flow_V=1", node.iconCls
             var webUser = new WebUser();
             var url = "../CCBPMDesigner/Designer.htm?FK_Flow=" + flowNo;
 
-            url += "&UserNo=" + webUser.No + "&SID=" + webUser.SID + "&Flow_V=1&OrgNo=" + webUser.OrgNo;
+            url += "&UserNo=" + webUser.No + "&Token=" + webUser.Token + "&Flow_V=1&OrgNo=" + webUser.OrgNo;
             if (top.layui.index) {
                 url = "../FlowDesigner/Designer.htm?FK_Flow=" + flowNo;
 
-                url += "&UserNo=" + webUser.No + "&SID=" + webUser.SID + "&Flow_V=1&OrgNo=" + webUser.OrgNo;
+                url += "&UserNo=" + webUser.No + "&Token=" + webUser.Token + "&Flow_V=1&OrgNo=" + webUser.OrgNo;
                 top.layui.index.openTabsPage(url, flowNo + "." + flowName);
             } else {
                 window.parent.parent.addTab(flowNo, flowNo + "." + flowName, url,
@@ -117,7 +115,7 @@
                 return;
             var en = new Entity("BP.Sys.MapDataVer", no);
             en.Delete();
-            window.location.href = window.location.href;
+            Reload();
         }
         //创建新版本.
         function NewVer() {
@@ -129,17 +127,19 @@
             var data = en.DoMethodReturnString("CreateMapDataVer");
             alert(data);
 
-            window.location.href = window.location.href;
+            Reload();
         }
         function SetCurrentVer(no) {
 
             if (window.confirm('您确定要设置为当前版本？') == false)
                 return;
-
-            var en = new Entity("BP.Sys.MapDataVer", no);
-            var data = en.DoMethodReturnString("SetMainVer");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            handler.AddPara("MyPK", no);
+            var data = handler.DoMethodReturnString("MapDataVer_SetMainVer");
+            //var en = new Entity("BP.Sys.MapDataVer", no);
+            //var data = en.DoMethodReturnString("SetMainVer");
             alert(data);
-            window.location.href = window.location.href;
+            Reload();
 
         }
 

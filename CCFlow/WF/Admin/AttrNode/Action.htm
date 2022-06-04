@@ -74,12 +74,12 @@
 
         function New() {
             var url = "ActionDtl.htm?FK_Node=" + GetQueryString("FK_Node");
-            window.location.href = url;
+            SetHref(url);
         }
 
         function Edit(mypk) {
             var url = "ActionDtl.htm?FK_Node=" + GetQueryString("FK_Node")+"&MyPK="+mypk;
-            window.location.href = url;
+            SetHref(url);
         }
         function Delete(mypk) {
 
@@ -88,7 +88,7 @@
 
             var en = new Entity("BP.Sys.FrmEvent", mypk);
             en.Delete();
-            window.location.href = window.location.href;
+            Reload();
             return;
         }
         function GetActionTypeName(type) {

@@ -18,6 +18,16 @@
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Portal/js/vue/vue.js"></script>
     <script src="../Scripts/layui/LayuiDialog.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            var url = "SystemList.htm";
+         //   SetHref(url);
+        });
+    </script>
+
+
     <style>
         .flow {
             width: 100%;
@@ -125,7 +135,8 @@
         .item-op {
             width: 8%;
         }
-        [v-cloak]{
+
+        [v-cloak] {
             display: none !important;
         }
     </style>
@@ -181,7 +192,7 @@
                     <div class="item system-item " style="text-align: left;background-color: rgba(227, 236, 243, 0.589);"
                          :data-sysno="item.No" :data-name="item.Name" :data-idx="index">
                         <!--<i class="layui-icon layui-icon-set" style="margin-right: 8px"></i>-->
-                        <!--<span @click.stop="Edit(item.No,item.Name,'BP.GPM.Menu2020.MySystem')">{{item.Name}}</span>-->
+                        <!--<span @click.stop="Edit(item.No,item.Name,'BP.CCFast.CCMenu.MySystem')">{{item.Name}}</span>-->
                         <span><i :class="item.Icon"></i>{{item.Name}}</span>
                     </div>
                     <div class="item item-other" style="background-color: rgba(227, 236, 243, 0.589);">
@@ -226,7 +237,7 @@
                                     </button>
                                 </span>
                                 <span><i :class="module.Icon"></i> {{module.Name}}</span>
-                                <!--<span @click.stop="Edit(module.No,module.Name,'BP.GPM.Menu2020.Module')">{{module.Name}}</span>-->
+                                <!--<span @click.stop="Edit(module.No,module.Name,'BP.CCFast.CCMenu.Module')">{{module.Name}}</span>-->
 
                             </div>
                             <div class="item item-other">
@@ -266,7 +277,7 @@
                                     <!-- 这里是子菜单的icon -->
                                     <!--<span>{{menu.Name}}</span>-->
 
-                                    <span @click.stop="Edit(menu.No,menu.Name,'BP.GPM.Menu2020.Menu', item.No)" style="color:deepskyblue">
+                                    <span @click.stop="Edit(menu.No,menu.Name,'BP.CCFast.CCMenu.Menu', item.No)" style="color:deepskyblue">
                                         <i :class="menu.Icon"></i> {{menu.Name}}
                                     </span>
 

@@ -9,13 +9,13 @@
 .navbar-fixed-top {
   _position:absolute;
   _bottom:auto;
-  _top:expression(eval(document.documentElement.scrollTop));
+  _top:expression(cceval(document.documentElement.scrollTop));
 }
 /* !CPU HIGH, fix for IE6 not support fixed position */
 .navbar-fixed-bottom {
   _position:absolute;
   _bottom:auto;
-  _top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0)));
+  _top:expression(cceval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0)));
 }
 
 /* DROPDOWN */
@@ -39,14 +39,14 @@
   _position: absolute;
   _top:0;
   _margin-top:0;
-  _width:expression(eval(document.documentElement.scrollWidth));
-  _height:expression(eval(document.documentElement.scrollHeight));
+  _width:expression(cceval(document.documentElement.scrollWidth));
+  _height:expression(cceval(document.documentElement.scrollHeight));
 }
 .modal {
   _position:absolute;
   _top:0;
   _margin-top:0;
-  _top:expression(eval(document.documentElement.scrollTop));
+  _top:expression(cceval(document.documentElement.scrollTop));
 }
 .modal.fade.in {
   _filter:alpha(opacity=100);

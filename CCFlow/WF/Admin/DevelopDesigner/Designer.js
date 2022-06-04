@@ -241,7 +241,7 @@ UE.plugins['text'] = function () {
             switch (evt.keyCode) {
                 case 46:
                     popup.anchorEl = el;
-                    eval(baidu.editor.utils.html(popup.formatHtml('$$._delete()')));
+                    cceval(baidu.editor.utils.html(popup.formatHtml('$$._delete()')));
                     break;
                 default:
             }
@@ -412,7 +412,7 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
     }
 
     if (shap == 'SubFlow') {
-        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.FrmSubFlow&PKVal=' + fk_mapdata.replace('ND', '') + '&tab=父子流程组件';
+        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SFlow.FrmSubFlow&PKVal=' + fk_mapdata.replace('ND', '') + '&tab=父子流程组件';
         CCForm_ShowDialog(url, '父子流程组件', null, null, shap, fk_mapdata.replace('ND', ''), anchorEl);
         return;
     }
@@ -587,6 +587,12 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
                             UE.dom.domUtils.setAttributes(anchorEl, attributes);
                         }
                     }
+                    if (shap == "Btn") {
+                        UE.dom.domUtils.setAttributes(anchorEl, {
+                            "data-name": en.Name,
+                            "value": en.Name
+                        });
+                    }
 
 
                 }
@@ -624,7 +630,7 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
                 break;
             case "SubFlow":
                 var nodeID = GetQueryString("FK_Node");
-                var subFlow = new Entity("BP.WF.Template.FrmSubFlow", nodeID);
+                var subFlow = new Entity("BP.WF.Template.SFlow.FrmSubFlow", nodeID);
             //if (subFlow.SFSta == 0)
             //   UE.dom.domUtils.remove(anchorEl, false);
             case "HyperLink":
@@ -971,7 +977,7 @@ UE.plugins['textarea'] = function () {
             switch (evt.keyCode) {
                 case 46:
                     popup.anchorEl = el;
-                    eval(baidu.editor.utils.html(popup.formatHtml('$$._delete()')));
+                    cceval(baidu.editor.utils.html(popup.formatHtml('$$._delete()')));
                     break;
                 default:
             }
@@ -1270,19 +1276,28 @@ UE.plugins['dtl'] = function () {
                 NewMapDtl(pageParam.fk_mapdata);
                 return;
             }
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
-            handler.AddPara("FK_MapData", pageParam.fk_mapdata);
-            handler.AddPara("DtlNo", val);
-            handler.AddPara("FK_Node", 0); //从表为原始属性的时候FK_Node=0,设置从表权限的时候FK_Node为该节点的值
 
-            var data = handler.DoMethodReturnString("Designer_NewMapDtl");
+            var en = new Entity("BP.Sys.MapDtl");
+            en.No = val;
+            if (en.RetrieveFromDBSources() == 1) {
+                alert("已经存在:" + val);
+                return;
+            }
+            en.FK_Node = 0;
+            en.PTable = en.No;
+            en.Name = "从表" + en.No;
+            en.FK_MapData = pageParam.fk_mapdata;
+            en.H = 300;
+            en.Insert();
+            var data = en.DoMethodReturnString("IntMapAttrs");
+
 
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
             }
 
-            var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + pageParam.fk_mapdata + '&No=' + data;
+            var url = '../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapDtlExt&FK_MapData=' + pageParam.fk_mapdata + '&No=' + data;
             OpenLayuiDialog(url, '从表属性', innerWidth / 2, 0, "r", false, false, false, null, function () {
                 var _html = "<img src='../CCFormDesigner/Controls/DataView/Dtl.png' style='width:67%;height:200px'  leipiplugins='dtl' data-key='" + data + "'/>"
                 leipiEditor.execCommand('insertHtml', _html);
@@ -1557,7 +1572,7 @@ UE.plugins['component'] = function () {
                     leipiEditor.execCommand('insertHtml', _html);
                     return;
                 }
-                var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PKVal=' + mypk + '&tab=父子流程组件';
+                var url = '../../Comm/En.htm?EnName=BP.WF.Template.SFlow.FrmSubFlow&PKVal=' + mypk + '&tab=父子流程组件';
                 OpenLayuiDialog(url, '父子流程', innerWidth / 2, 0, "r", false, false, false, null, function () {
                     //加载js
                     // $("<script type='text/javascript' src='../../WorkOpt/SubFlow.js'></script>").appendTo("head");
@@ -1626,7 +1641,7 @@ UE.plugins['component'] = function () {
 
                 if (dataType == "SubFlow") {
                     var nodeID = GetQueryString("FK_Node");
-                    var subFlow = new Entity("BP.WF.Template.FrmSubFlow", nodeID);
+                    var subFlow = new Entity("BP.WF.Template.SFlow.FrmSubFlow", nodeID);
                     subFlow.SFSta = 0;//禁用
                     subFlow.Update();
                 }

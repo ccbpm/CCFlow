@@ -32,7 +32,7 @@
             isHaveParas = attrs.length > 0 ? true : false;
 
             if (isHaveParas == true) {
-                window.location.href = window.location.href.replace("DoMethod.htm", "DoMethodPara.htm");
+                SetHref(GetHrefUrl().replace("DoMethod.htm", "DoMethodPara.htm"));
                 return;
             }
 

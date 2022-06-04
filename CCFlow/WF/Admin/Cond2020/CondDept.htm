@@ -29,36 +29,15 @@
         //初始化页面函数.....
         $(function () {
 
-            var condType = GetQueryString("CondType");
-            var fk_flow = GetQueryString("FK_Flow");
-            var fk_mainNode = GetQueryString("FK_MainNode");
-            var fk_Node = GetQueryString("FK_Node");
-            var toNodeID = GetQueryString("ToNodeID");
-            var param = location.href.split("?")[1];
-
-            // var depts = new Entities("BP.Port.Depts");
-            //depts.RetrieveAll();
-
-            var mypk = fk_Node + "_" + toNodeID + "_Dir_Depts";
+            var mypk = GetQueryString("MyPK");
             var cond = new Entity("BP.WF.Template.Cond");
-            cond.SetPKVal(mypk);
-            cond.RetrieveFromDBSources();
-
-            /* $("#t1").append("<td colspan=3 class='GroupTitle' >部门选择</td>");
-             for (var i = 0, len = depts.length; i < len; i++) {
-                 var td = "<td><input type='checkbox' id='dept_CB_" + depts[i].No + "' name='dept_CB_" + depts[i].No + "'/><label for='dept_CB_" + depts[i].No + "'>" + depts[i].Name + "</label></td>";
-                 if (i % 3 == 0) {
-                     $("#t1").append("<tr></tr>");
-                 }
-                 $("#t1 tr:last").append(td);
-             }*/
-
+            if (mypk != null && mypk != undefined && mypk != "") {
+                cond.SetPKVal(mypk);
+                cond.RetrieveFromDBSources();
+            }
+           
             var initDepts = cond.OperatorValue.split("@");
-            /* for (i = 0, len = initDepts.length; i < len; i++) {
-                 if (initDepts[i] == "") continue;
-                 document.getElementById("dept_CB_" + initDepts[i]).checked = true;
-             }*/
-
+          
             //解析部门信息
             //global
             var global = window;
@@ -226,22 +205,24 @@
         //执行保存..CondByDept_Save
         function Btn_Save_Click() {
 
-            //var param = location.href.split("?")[1];
             var depts = ",";
             //获取复选框选中的节点
             var nodes = $('#tree').treeview('getChecked');
-
+            if (nodes.length == 0) {
+                alert("请选择部门");
+                return;
+            }
+            var deptNames ="";
             $.each(nodes, function (i, node) {
                 depts += node.id + ",";
+                var elementId = "CB_Dept_" + node.id;
+                deptNames += node.text+",";
             });
-
-
+            deptNames = deptNames.substring(0, deptNames.length);
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddUrlData();
-            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
-            handler.AddPara("CondType", GetQueryString("CondType"));
             handler.AddPara("depts", depts);
-            handler.AddPara("CondOrAnd", GetQueryString("CondOrAnd"));
+            handler.AddPara("deptNames", deptNames);
             handler.AddFormData();
             var data = handler.DoMethodReturnString("CondByDept_Save");
 
@@ -256,28 +237,6 @@
 
         }
 
-        //执行删除..
-        function Btn_Delete_Click() {
-
-            if (window.confirm('您确定要删除吗？') == false)
-                return;
-
-            //var param = location.href.split("?")[1];
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
-            handler.AddUrlData();
-            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
-            var data = handler.DoMethodReturnString("CondByDept_Delete");
-
-            if (data.indexOf('err@') >= 0) {
-                alert(data);
-                return;
-            }
-
-            window.location.href = window.location.href;
-            return;
-
-        }
 
         function selChange() {
             //01.如果 文本框 有初始值就赋初值
@@ -303,7 +262,7 @@
 
         //返回.
         function Back() {
-            var url = window.location.href;
+            var url = GetHrefUrl();
             if (GetQueryString("CondOrAnd") == null)
                 url = url.replace('CondDept.htm', 'List.htm');
             else {
@@ -311,10 +270,11 @@
                 url = url.replace('&CondOrAnd=' + GetQueryString("CondOrAnd"), '  ');
 
             }
-            window.location.href = url;
-            /*parent.location.reload();
-           window.close();
-            window.parent.Condlist.closeCurrentTabs();*/
+            if (url.indexOf("MyPK=") != -1) {
+                url = url.replace("&MyPK=" + GetQueryString("MyPK"), "");
+            }
+            SetHref(url);
+          
         }
     </script>
     <style type="text/css">

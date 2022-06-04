@@ -209,7 +209,7 @@
 
                     //afterOper=1 关闭提示窗口刷新页面
                     if (afterOper == 1)
-                        window.location.href = window.location.href;
+                        Reload();
 
                     //afterOper=2 关闭提示窗口跳转到Search.htm
                     if (afterOper == 2) {
@@ -218,7 +218,7 @@
                             window.close();
                         }
                         else
-                            window.location.href = "./SearchDict.htm?FrmID=" + GetQueryString("FrmID");
+                            SetHref("./SearchDict.htm?FrmID=" + GetQueryString("FrmID"));
                     }
                 });
                 return;
@@ -240,7 +240,7 @@
 
                 //afterOper=1 关闭提示窗口刷新页面
                 if (afterOper == 1)
-                    window.location.href = window.location.href;
+                    Reload();
 
                 //afterOper=2 关闭提示窗口跳转到Search.htm
                 if (afterOper == 2) {
@@ -249,7 +249,7 @@
                         window.close();
                     }
                     else
-                        window.location.href = "./SearchDict.htm?FrmID=" + GetQueryString("FrmID");
+                        SetHref("./SearchDict.htm?FrmID=" + GetQueryString("FrmID"));
                 }
             });
         }
@@ -282,7 +282,7 @@
                 return;
             }
 
-            // window.location.href = window.location.href;
+            // Reload();
         }
 
         //获取表单数据

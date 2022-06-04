@@ -94,7 +94,7 @@
             en.Insert();
             Back();
 
-            //window.location.href = window.location.href;
+            //Reload();
             return;
         }
 
@@ -110,7 +110,7 @@
 
         function Back() {
             var url = "Action.htm?FK_MapData=" + GetQueryString("FK_MapData");
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
 </head>

@@ -54,16 +54,14 @@
                 rootNo = webUser.OrgNo;
 
             if (rootNo == null || rootNo == "")
-                rootNo = "0";
+                rootNo = webUser.FK_Dept;
 
             //多对多实体.
             var dot2DotEnsName = new Entities(GetQueryString("Dot2DotEnsName"));
 
             var dot2DotEnName = new Entities(GetQueryString("Dot2DotEnName"));
             dot2DotEnsName.Retrieve(GetQueryString("AttrOfOneInMM"), pkval);
-            //dot2DotEnsName.Retrieve(GetQueryString("AttrOfOneInMM"), "1000000");
 
-            //alert(dot2DotEnsName.length);
             $.each(dot2DotEnsName, function (i, o) {
 
                 var enDot = new Entity(dot2DotEnName, o);
@@ -108,26 +106,40 @@
         //树形结构转换
         var treeJson = [];
         function createJsonToTree(jsonArray, parentNo) {
-            for (var i = 0; i < jsonArray.length; i++) {
-                var data = jsonArray[i];
-                if (data.ParentNo.trim() == parentNo) {
-                    var checked = false;
-                    var selectedNodes = window.selectedNodes;
-                    var sel = $.grep(selectedNodes, function (obj) {
-                        return data.No == obj.No;
-                    });
+            //获取ParentNo的数据
+            var items = $.grep(jsonArray, function (obj) {
+                return obj.No == parentNo;
+            });
+            if (items.length != 0) {
+                treeJson.push({
+                    "id": items[0].No,
+                    "text": items[0].Name,
+                    "nodes": creatTreeChildern(jsonArray, items[0].No),
+                    "state": { checked: checked, disabled: false }
+                });
+            } else {
+                for (var i = 0; i < jsonArray.length; i++) {
+                    var data = jsonArray[i];
+                    if (data.ParentNo.trim() == parentNo) {
+                        var checked = false;
+                        var selectedNodes = window.selectedNodes;
+                        var sel = $.grep(selectedNodes, function (obj) {
+                            return data.No == obj.No;
+                        });
 
-                    if (sel.length > 0) {
-                        checked = true;
+                        if (sel.length > 0) {
+                            checked = true;
+                        }
+                        treeJson.push({
+                            "id": data.No,
+                            "text": data.Name,
+                            "nodes": creatTreeChildern(jsonArray, data.No),
+                            "state": { checked: checked, disabled: false }
+                        });
                     }
-                    treeJson.push({
-                        "id": data.No,
-                        "text": data.Name,
-                        "nodes": creatTreeChildern(jsonArray, data.No),
-                        "state": { checked: checked, disabled: false }
-                    });
                 }
             }
+
             function _(treeArray) {
                 $.each(treeArray, function (i, o) {
                     if ($.isArray(o.nodes)) {
@@ -172,13 +184,8 @@
 
         function loadTree(rootNo, global) {
 
-            //var json = DBAccess.RunDBSrc(treeUrl); // 执行url返回json.
-
             var ens = new Entities(GetQueryString("EnsOfM")); //BP.Port.Depts
-            if (webUser.CCBPMRunModel == 2)
-                ens.Retrieve("OrgNo", rootNo, "Idx");
-            else
-                ens.Retrieve("Idx");
+            ens.Retrieve("Idx");
             var jsonTree = createJsonToTree(ens, rootNo);
             $('#tree').treeview({
                 data: jsonTree,         // 数据源
@@ -391,7 +398,7 @@
 
                 var en = new Entity(dot2EnName);
 
-                en[ AttrOfOneInMM ] = pkval;
+                en[AttrOfOneInMM] = pkval;
 
                 var refVal = null;
                 if (flag == 0)
@@ -400,7 +407,7 @@
                     refVal = $('#tree').treeview('getNode', selectNodes[i]).id;
 
                 en[GetQueryString("AttrOfMInMM")] = refVal;
-                en.Delete(AttrOfOneInMM,pkval, GetQueryString("AttrOfMInMM"),refVal);
+                en.Delete(AttrOfOneInMM, pkval, GetQueryString("AttrOfMInMM"), refVal);
             }
         }
         function CheckAll() {

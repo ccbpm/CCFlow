@@ -96,7 +96,7 @@
             //获取URL参数
             if (location.search.indexOf("PrjNo") != -1)
                 href = href + "&PrjNo=" + GetQueryString("PrjNo") + "&PrjName=" + GetQueryString("PrjName");
-            window.location.href = href;
+            SetHref(href);
 
         }
         //加载方法

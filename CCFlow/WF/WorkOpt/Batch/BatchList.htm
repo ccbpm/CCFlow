@@ -33,7 +33,7 @@
                 alert(data);
                 return;
             }
-            data = eval('(' + data + ')');
+            data = cceval('(' + data + ')');
             var node = data.WF_Node[0];
 
             $("#title").html("流程：" + node.FlowName + " => 节点：" + node.Name);
@@ -132,7 +132,7 @@
         function To(url) {
             WinOpen(url);
             return;
-            window.location.href = url;
+            SetHref(url);
             return;
         }
 
@@ -218,7 +218,7 @@
             }
             var url = "";
             var fk_node = GetQueryString("FK_Node");
-            var isFrameCross = window.location.href.indexOf(basePath) == -1 ? 1 : 0;
+            var isFrameCross = GetHrefUrl().indexOf(basePath) == -1 ? 1 : 0;
             if (WorkIDs.indexOf(",") == -1)
                 url = "../ReturnWork.htm?FK_Node=" + fk_node + "&WorkID=" + WorkIDs + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
             else {
@@ -228,7 +228,7 @@
 
 
             OpenBootStrapModal(url, "ReturnModel", "退回", 600, 400, null, null, null, null, function () {
-                window.location.href = window.location.href.replace("#", "");
+                SetHref(GetHrefUrl().replace("#", ""));
             });
             /**$('#batchModal').attr('src', url);
              $("#batchModal .modal-dialog").css("width", "50%");
@@ -261,7 +261,7 @@
             data = data.replace(/@/g, '<br/>@');
             $("#msgContent").html(data);
             $('#batchModal').on('hidden.bs.modal', function () {
-                window.location.href = window.location.href.replace("#", "");
+                SetHref(GetHrefUrl().replace("#", ""));
             });
             $("#batchModal").modal("hidden");
         }
@@ -269,7 +269,7 @@
         function Back() {
             var url = "";
             var type = GetQueryString("Type");
-            window.location.href = "../../Batch.htm";
+            SetHref("../../Batch.htm");
             return;
 
 
@@ -278,7 +278,7 @@
             } else {
                 url = "../../Batch.htm?FK_Node=" + GetQueryString("FK_Node");
             }
-            window.location.href = url;
+            SetHref(url);
         }
 
 
@@ -502,7 +502,7 @@
                 var fn;
                 try {
                     if (mapAttr.UIBindKey) {
-                        fn = eval(mapAttr.UIBindKey);
+                        fn = cceval(mapAttr.UIBindKey);
                     }
                 } catch (e) {
                 }

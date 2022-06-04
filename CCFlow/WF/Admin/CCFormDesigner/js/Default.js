@@ -1,6 +1,6 @@
 ﻿//sArgName表示要获取哪个参数的值
 function getArgsFromHref(sArgName) {
-    var sHref = window.location.href;
+    var sHref = GetHrefUrl();
     var args = sHref.split("?");
     var retval = "";
     if (args[0] == sHref) /*参数为空*/

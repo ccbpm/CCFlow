@@ -45,7 +45,7 @@
             //更新节点表单类型.
             var refMenuNo = GetQueryString("RefMenuNo");
 
-            var en = new Entity("BP.GPM.Menu2020.TabDtl");
+            var en = new Entity("BP.CCFast.CCMenu.TabDtl");
             en.RefMenuNo = refMenuNo;
             en.Name = name;
             en.UrlExt = url ; //窗口内容模式.
@@ -53,7 +53,7 @@
             en.Model = "Self";
             en.Insert();
 
-            window.location.href = "../../Comm/En.htm?EnName=BP.GPM.Menu2020.TabDtl&No=" + en.No;
+            SetHref("../../Comm/En.htm?EnName=BP.CCFast.CCMenu.TabDtl&No=" + en.No);
 
         }
     </script>

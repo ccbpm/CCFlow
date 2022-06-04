@@ -80,7 +80,7 @@
         function NewEnum() {
             var url = "EnumerationNew.htm";
 
-            OpenDialogAndCloseRefresh(url, '新建枚举', 560, 400, null, function () { window.location.href = window.location.href; });
+            OpenDialogAndCloseRefresh(url, '新建枚举', 560, 400, null, function () { Reload(); });
         }
 
 
@@ -111,11 +111,11 @@
             var enumMain = new Entity("BP.Sys.SysEnumMain", key);
             enumMain.Delete();
 
-            window.location.href = window.location.href;
+            Reload();
         }
         function Edit(key) {
             var url = "EnumerationNew.htm?DoType=FrmEnumeration_SaveEnum&EnumKey=" + key;
-            OpenDialogAndCloseRefresh(url, '编辑枚举', 560, 400, null, function () { window.location.href = window.location.href; });
+            OpenDialogAndCloseRefresh(url, '编辑枚举', 560, 400, null, function () { Reload(); });
         }
 
 /**/</script>

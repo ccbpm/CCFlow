@@ -44,7 +44,9 @@
         if ($.isArray(opts.data) && opts.data.length > 0) {
             datas = opts.data;
         } else if ($.trim(opts.sql) != "") {
-            datas = executeSql(opts.sql, opts.valueField, opts.textField, values);
+
+            datas = exeSrc(opts.sql, opts.valueField, opts.textField, values);
+
         } else if ($.trim(opts.url) != "") {
             datas = requestUrl(opts.url, valueField, textField, text);
         }
@@ -114,7 +116,7 @@
         return datas;
     }
 
-    function executeSql(sql, valueField, textField, key) {
+    function exeSrc(sql, valueField, textField, key) {
         var datas = [];
         //var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCFrom");
         //if (sql && $.trim(key) != "") {

@@ -270,12 +270,12 @@
             
 
             //取消人员部门管理关系
-            var en = new Entity("BP.GPM.DeptEmp");
+            var en = new Entity("BP.Port.DeptEmp");
             en.SetPKVal(deptNo + "_" + empNo);
             en.Delete();
 
             //取消人员部门岗位关系
-            var ens = new Entities("BP.GPM.DeptEmpStations")
+            var ens = new Entities("BP.Port.DeptEmpStations")
             ens.Delete("FK_Emp",empNo,"FK_Dept",deptNo);
 
             //改变主部门
@@ -284,7 +284,7 @@
             emp.FK_Dept = deptNo;
             emp.Update();
             //增加人员部门管理关系
-            var deptEmp = new Entity("BP.GPM.DeptEmp");
+            var deptEmp = new Entity("BP.Port.DeptEmp");
             deptEmp.FK_Dept = emp.FK_Dept;
             deptEmp.FK_Emp = emp.No;
             deptEmp.MyPK = emp.FK_Dept + "_" + emp.No;

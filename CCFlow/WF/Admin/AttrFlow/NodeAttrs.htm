@@ -92,13 +92,7 @@
             // window.open(url, 'OpenFrmAttr', 'height=670, width=997, top=200, left=200, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
             window.parent.addTab('OpenFrmAttr', '表单方案', url);
         }
-
-        // 设计自由表单
-        function OpenFreeFrm(nodeID, flowNo) {
-            var url = "../CCFormDesigner/FormDesigner.htm?FK_MapData=ND" + nodeID + '&FK_Flow=' + flowNo;
-            // window.open(url, 'OpenFreeFrm', 'height=auto, width=auto, top=200, left=200, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
-        }
-
+ 
         // URL
         function OpenUrl(url) {
             window.open(url, 'attr', 'height=400, width=500, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
@@ -171,13 +165,13 @@
 
         // 按钮权限配置.
         function OpenSubFlows(nodeID) {
-            var url = "../../Comm/En.htm?EnName=BP.WF.Template.FrmSubFlow&PKVal=" + nodeID;
+            var url = "../../Comm/En.htm?EnName=BP.WF.Template.SFlow.FrmSubFlow&PKVal=" + nodeID;
             window.parent.closeTab('SubFlows');
             window.parent.addTab('SubFlows', '调起子流程', url, 'icon-SubFlows');
         }
 
         function Refurbish() {
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
     <style>

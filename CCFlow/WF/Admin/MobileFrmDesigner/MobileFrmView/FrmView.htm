@@ -6,22 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <script src="../../../Scripts/jquery-1.11.0.min.js"></script>
+    <script src="js/jquery.form.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
 
     <!-- 引入MUI -->
     <link href="js/mui/css/mui.min.css" rel="stylesheet" type="text/css" />
     <link href="js/mui/css/mui.picker.min.css" rel="stylesheet" type="text/css" />
     <link href="js/mui/css/feedback-page.css" rel="stylesheet" type="text/css" />
     <link href="js/mui/css/mui.indexedlist.css" rel="stylesheet" type="text/css" />
-    <script src="js/mui/js/mui.js" type="text/javascript"></script>
+    <script src="js/mui/js/mui.min.js" type="text/javascript"></script>
     <script src="js/mui/js/mui.view.js" type="text/javascript"></script>
     <script src="js/mui/js/mui.picker.min.js" type="text/javascript"></script>
-    <script src="js/jquery.js" type="text/javascript"></script>
-    <script src="js/jquery.form.js" type="text/javascript"></script>
+
     <script src="js/mui/js/mui.indexedlist.js" type="text/javascript"></script>
 
-    <script src="../../../Scripts/config.js" type="text/javascript"></script>
-    <script src="./js/comment/QueryString.js" type="text/javascript"></script>
-    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+
 
     <!--<script src="../../../CCForm/MapExt2016.js" type="text/javascript"></script>
     <script src="../../../CCForm/BranchesAndLeaf.js" type="text/javascript"></script>
@@ -426,38 +428,38 @@
                 from = "TimeBase"
             }
             if (from == "CC") {
-                window.location.href = 'CC.htm?s=' + Math.random();
+                SetHref('CC.htm?s=' + Math.random());
                 return;
             }
             if (from == "Runing") {
-                window.location.href = 'Runing.htm?s=' + Math.random();
+                SetHref('Runing.htm?s=' + Math.random());
                 return;
             }
             if (from == "Complete") {
-                window.location.href = 'Complete.htm?s=' + Math.random();
+                SetHref('Complete.htm?s=' + Math.random());
                 return;
             }
             if (from == "SearchKey") {
-                window.location.href = 'SearchKey.htm?s=' + Math.random() + "&Key=" + GetQueryString("Key");
+                SetHref('SearchKey.htm?s=' + Math.random() + "&Key=" + GetQueryString("Key"));
                 return;
             }
 
             if (from == "RptSearch") {
-                window.location.href = 'Search.htm?s=' + Math.random();
+                SetHref('Search.htm?s=' + Math.random());
                 return;
             }
 
             if (from == "TimeBase") {
-                window.location.href = './WorkOpt/OneWork/TimeBase.htm?FK_Node=' + GetQueryString("FK_Node") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&s=" + Math.random();
+                SetHref('./WorkOpt/OneWork/TimeBase.htm?FK_Node=' + GetQueryString("FK_Node") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&s=" + Math.random());
                 return;
             }
 
-            window.location.href = 'Todolist.htm?s=' + Math.random();
+            SetHref('Todolist.htm?s=' + Math.random());
             return;
         }
 
         function SearchKey() {
-            window.location.href = 'SearchKey.htm?s=' + Math.random();
+            SetHref('SearchKey.htm?s=' + Math.random());
         }
 
     </script>

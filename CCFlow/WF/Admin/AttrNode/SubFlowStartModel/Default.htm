@@ -16,7 +16,7 @@
 
             var pkval = GetQueryString("MyPK");
 
-            var en = new Entity("BP.WF.Template.SubFlowHandGuide", pkval);
+            var en = new Entity("BP.WF.Template.SFlow.SubFlowHandGuide", pkval);
 
             var url = GenerUrlByOptionKey(en.SubFlowStartModel);
             document.location.href = url + "?MyPK=" + pkval + "&FK_Flow=" + GetQueryString("FK_Flow");

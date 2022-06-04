@@ -18,7 +18,7 @@
             var flowNo = GetQueryString("FK_Flow");
             var nodeID = GetQueryString("FK_Node");
             var url = "./AttrFlow/CheckFlow.htm?FK_Flow=" + flowNo;
-            window.location.href = url;
+            SetHref(url);
             return;
         });
     </script>

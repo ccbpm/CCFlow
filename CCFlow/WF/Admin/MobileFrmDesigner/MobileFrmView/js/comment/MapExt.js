@@ -46,14 +46,14 @@ function CCForm_DealMapExt(mapExts) {
     }
     //执行函数
     if (fun_Script != "")
-        eval(fun_Script);
+        cceval(fun_Script);
 }
 
 //按钮处理事件
 function FrmBtnEventFactory(objID, EventType, EventContent) {
     switch (EventType) {
         case "6": //js脚本
-            eval(EventContent);    
+            cceval(EventContent);    
             break;
     }
 }

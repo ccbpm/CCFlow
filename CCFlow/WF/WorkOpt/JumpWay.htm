@@ -95,7 +95,7 @@
                     var url = data;
                     url = url.replace('TurnUrl@', '');
                     url = url.replace('url@', '');
-                    window.location.href = url;
+                    SetHref(url);
                     return;
                 }
                 layer.close(index);

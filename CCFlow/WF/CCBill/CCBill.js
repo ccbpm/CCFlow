@@ -58,7 +58,8 @@ function CCFrom_GenerBillsByBillNo(billNo) {
 function CCFrom_FrmPower(frmID) {
     var handler = new HttpHandler("BP.CCBill.WF_CCBill_API");
     handler.AddPara("FrmID", frmID);
-    var data = handler.DoMethodReturnJSON("CCFrom_FrmPower");
+    handler.AddPara("IsReadonly", GetQueryString("IsReadonly"));
+    var data = handler.DoMethodReturnJSON("CCFrom_ToolBar_Init");
     return data;
 }
 

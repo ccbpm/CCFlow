@@ -145,7 +145,7 @@
                 else
                     url = 'DDLFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&MyPK=' + myPK + "&KeyOfEn=" + GetQueryString('KeyOfEn');
 
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
 
@@ -179,7 +179,7 @@
                 else
                     url = 'DDLFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + mypk;
 
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
 
@@ -192,7 +192,7 @@
                 handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
                 var data = handler.DoMethodReturnString("TBFullCtrl_Delete");
                 alert(data);
-                window.location.href = window.location.href;
+                Reload();
                 return;
             }
         </script>

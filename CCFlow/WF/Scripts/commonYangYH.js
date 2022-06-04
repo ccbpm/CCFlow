@@ -87,45 +87,7 @@ Common.ConsoleLogError = function (data, methodName) {
     //    }
     //}
 }
-
-//设置用户COOKIE
-Common.SetStaffCookie = function () {
-    var userId = Common.GetQueryString("userid");
-    if (userId != null && userId != undefined && userId != "") {
-        
-        //如果cookie不存在STAFFID 或者STAFFID与传过来的STAFFID不一致，就写COOKIE，没有就是新增，有就是覆盖
-        if ($.cookie("StaffID") != undefined && $.cookie("StaffID") == userId) {
-            return;
-        }
-        //通过USERID请求USER相关数据，写COOKIE
-        $.ajax({
-            type: "post",
-            async: true,
-            xhrFields: {
-                withCredentials: true
-            },
-            crossDomain: true,
-            url: "../../Ashx/CCD/OnDutyHandler.ashx?method=GetStaffById&userId=" + userId + "&u=" + Math.random(),
-            dataType: 'html',
-            success: function (data) {
-                var userCookie = JSON.parse(data);
-                for (var cookie in userCookie) {
-                    $.cookie(cookie,
-                        userCookie[cookie]);
-                }
-            },
-            error: function (http, error) {
-                //$("body").html(http.responseText);
-                //console.log(http.responseText);
-            }
-        });
-    }
-    //如果没有使用框架传过来STAFFID，又没有登录的COOKIE就调转到登录页面
-    else if ($.cookie("StaffID") == undefined) {
-        window.location.href = "/PortalLogin.aspx";
-    }
-}
-
+ 
 //通过参数名称获取参数值 url=reportDetail.html?reportId=12  时 name=reportId 即可取出来值12
 Common.GetQueryString = function (name) {
     var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
@@ -167,7 +129,7 @@ Common.CustomPagePlug1 = function (operation) {
         }
     };
     PageData.DateFromMSJsonString = function (value) {
-        var d = eval('new ' + (value.replace(/\//g, '')));
+        var d = cceval('new ' + (value.replace(/\//g, '')));
         var result = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
         return result;
     };
@@ -561,7 +523,7 @@ Common.CustomPagePlug = function (operation) {
     };
 
     PageData.prototype.DateFromMSJsonString = function (value) {
-        var d = eval('new ' + (value.replace(/\//g, '')));
+        var d = cceval('new ' + (value.replace(/\//g, '')));
         var result = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
         return result;
     };

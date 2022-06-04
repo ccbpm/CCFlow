@@ -117,7 +117,7 @@
             var url = "../../../Comm/EnOnly.htm?EnName=BP.WF.Template.FoolTruckNodeFrm&MyPK=" + mypk;
 
             OpenEasyUiDialog(url, "eudlgframe", '表单方案', 600, 300, "icon-property", true, null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
             });
         }
 
@@ -183,7 +183,7 @@
             flow.DoMethodReturnString("DoCheck");
 
             alert('设置成功.');
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function SetDemo() {

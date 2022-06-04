@@ -126,18 +126,18 @@
         //增加枚举字段
         function Enum(doType) {
             if (webUser.CCBPMRunModel == 2) {
-                window.location.href = '../../../Admin/CCFormDesigner/SysEnum/List.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
+                SetHref( '../../../Admin/CCFormDesigner/SysEnum/List.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID);
             } else {
-                window.location.href = 'SysEnumList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
+                SetHref( 'SysEnumList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID);
             }
         }
         //增加外键下拉框
         function Table(doType) {
             // SaaS模式下进入SaaS下页面
             if (webUser.CCBPMRunModel == 2) {
-                window.location.href = '../../../Admin/CCFormDesigner/SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+                SetHref( '../../../Admin/CCFormDesigner/SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID);
             } else {
-                window.location.href = 'SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+                SetHref( 'SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID);
             }
         }
 
@@ -180,7 +180,7 @@
                 mapAttr.UIHeight = 50;
                 mapAttr.IsEnableInAPP = 1;
                 mapAttr.Insert(); //插入字段.
-                window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrCheck&MyPK=" + mapAttr.MyPK;
+                SetHref( "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.MapAttrCheck&MyPK=" + mapAttr.MyPK);
              
             });
 
@@ -200,16 +200,16 @@
         function SelectOne() {
 
             var url = "./FieldTypeListChoseOneField.htm?FK_MapData=" + GetQueryString("FK_MapData");
-            window.location.href = url;
+            SetHref(url);
         }
         function ToTemplate() {
             var url = "./Template/Fields.htm?FK_MapData=" + GetQueryString("FK_MapData");
-            window.location.href = url;
+            SetHref(url);
         }
 
         function HidAttr() {
             var url = 'HidAttr.htm?FK_MapData=' + GetQueryString("FK_MapData");
-            window.location.href = url;
+            SetHref(url);
         }
 
         function ContainsChinese(str) {
@@ -272,11 +272,11 @@
 
             var url = data.replace('url@', '');
             if (isSaveAndNew == false) {
-                window.location.href = url + "&inlayer=" + GetQueryString("inlayer");
+                SetHref( url + "&inlayer=" + GetQueryString("inlayer"));
                 return;
             }
 
-            window.location.href = "FrmTextBox.htm?DataType=" + coverTypeToName(fType) + "&FK_MapData=" + fk_mapdata + "&GroupField=" + groupID + "&m=" + Math.random();
+            SetHref( "FrmTextBox.htm?DataType=" + coverTypeToName(fType) + "&FK_MapData=" + fk_mapdata + "&GroupField=" + groupID + "&m=" + Math.random());
             return;
         }
 

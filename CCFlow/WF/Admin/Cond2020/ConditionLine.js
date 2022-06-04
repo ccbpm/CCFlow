@@ -1,6 +1,6 @@
 
 function MenuConvertTools(data) {
- 
+
     this.data = data;
 }
 
@@ -11,28 +11,22 @@ MenuConvertTools.prototype.getSystemMenus = function () {
     console.log(endtM);
 
     //求出所有的分组名称.
-  
-
-
     //生成菜单.
     var adminMenuNodes = [];
-       
 
-        for (var idx = 0; idx < endtM.length; idx++) {
 
-            var moduleEn = endtM[idx];
-            adminMenuNodes.push(moduleEn)
-           
-        } 
-       
-    
-    
+    for (var idx = 0; idx < endtM.length; idx++) {
+
+        var moduleEn = endtM[idx];
+        adminMenuNodes.push(moduleEn)
+    }
+
     return adminMenuNodes
 }
 MenuConvertTools.prototype.convertToTreeData = function () {
     var topNodes = [];
-   //console.log(this.data)
+    //console.log(this.data)
     topNodes = topNodes.concat(this.getSystemMenus(this.data))
-    
+
     return topNodes
 }

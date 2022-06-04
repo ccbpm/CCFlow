@@ -3,7 +3,7 @@
  * @param {any} mapData 表单属性
  * @param {any} fk_mapData 表单数据
  */
-var currentURL = window.document.location.href;
+var currentURL = GetHrefUrl();
 var frmData;
 function GenerDevelopFrm(wn, fk_mapData) {
     frmData = wn;
@@ -105,6 +105,8 @@ function GenerDevelopFrm(wn, fk_mapData) {
                 dateFmt = "yyyy-MM";
             } else if (frmDate == 6) {
                 dateFmt = "MM-dd";
+            } else if (frmDate == 7) {
+                dateFmt = "yyyy";
             }
             $('#TB_' + mapAttr.KeyOfEn).attr("onfocus", "WdatePicker({ dateFmt:'" + dateFmt + "' })");
             continue;
@@ -268,7 +270,8 @@ function GenerDevelopFrm(wn, fk_mapData) {
                     var br = "";
                     if (RBShowModel == 0)
                         br = "<br>";
-                    _html += "<label style='font-weight:normal;vertical-align:middle;'><input style='vertical-align:-1px;' type=checkbox name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "'  onclick='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' />" + obj.Lab + " </label>&nbsp;" + br;
+                    debugger
+                    _html += "<label style='font-weight:normal;vertical-align:middle;'><input style='vertical-align:-1px;' class='mcheckbox' type=checkbox name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "'  onclick='clickEnable( this ,\"" + mapAttr.FK_MapData + "\",\"" + mapAttr.KeyOfEn + "\",\"" + mapAttr.AtPara + "\")' />" + obj.Lab + " </label>&nbsp;" + br;
                 }
             });
             $("#SC_" + mapAttr.KeyOfEn).empty();
@@ -338,13 +341,20 @@ function GenerDevelopFrm(wn, fk_mapData) {
 
 
 
-
+    //获取版本
+    var ver = GetPara(frmData.MainTable[0].AtPara, "FrmVer");
+    ver = ver == null || ver == undefined || ver == "" ? 0 : parseInt(ver);
+    var mainFrmID = GetPara(frmData.Sys_MapData[0].AtPara, "MainFrmID");
+    var isSameVer = mainFrmID == fk_mapData ? true : false;
     //2.解析控件 从表、附件、附件图片、框架、地图、签字版、父子流程
     var frmDtls = frmData.Sys_MapDtl;
     for (var i = 0; i < frmDtls.length; i++) {
         var frmDtl = frmDtls[i];
+        var dtlNo = frmDtl.No;
+        if (isSameVer == false)
+            dtlNo = dtlNo.replace(fk_mapData, mainFrmID);
         //根据data-key获取从表元素
-        var element = $("Img[data-key=" + frmDtl.No + "]");
+        var element = $("Img[data-key=" + dtlNo+ "]");
         if (element.length == 0)
             continue;
         figure_Develop_Dtl(element, frmDtl);
@@ -354,7 +364,10 @@ function GenerDevelopFrm(wn, fk_mapData) {
    
     //表格附件
     $.each(aths, function (idex, ath) {
-        var element = $("Img[data-key=" + ath.MyPK + "]");
+        var mypk = ath.MyPK;
+        if (isSameVer == false)
+            mypk = mypk.replace(fk_mapData, mainFrmID);
+        var element = $("Img[data-key=" + mypk + "]");
         if (element.length != 0) {
             var eleHtml = $("<div id='Div_" + ath.MyPK + "' name='Ath' style=' height:auto;margin:5px 10px' ></div>");
             $(element).after(eleHtml);
@@ -371,8 +384,12 @@ function GenerDevelopFrm(wn, fk_mapData) {
     }
     for (var i = 0; i < athImgs.length; i++) {
         var athImg = athImgs[i];
+        var mypk = athImg.MyPK;
+        if (isSameVer == false)
+            mypk = mypk.replace(fk_mapData, mainFrmID);
+
         //根据data-key获取从表元素
-        var element = $("Img[data-key=" + athImg.MyPK + "]");
+        var element = $("Img[data-key=" + mypk + "]");
         if (element.length == 0)
             continue;
         figure_Develop_ImageAth(element, athImg, fk_mapData);
@@ -383,8 +400,12 @@ function GenerDevelopFrm(wn, fk_mapData) {
     var imgs = frmData.Sys_FrmImg;
     for (var i = 0; i < imgs.length; i++) {
         var img = imgs[i];
+        var mypk = img.MyPK;
+        if (isSameVer == false)
+            mypk = mypk.replace(fk_mapData, mainFrmID);
+
         //根据data-key获取从表元素
-        var element = $("Img[data-key=" + img.MyPK + "]");
+        var element = $("Img[data-key=" + mypk + "]");
         if (element.length == 0)
             continue;
         figure_Develop_Image(element, img);
@@ -393,8 +414,12 @@ function GenerDevelopFrm(wn, fk_mapData) {
     var iframes = frmData.Sys_MapFrame;//框架
     for (var i = 0; i < iframes.length; i++) {
         var iframe = iframes[i];
+        var mypk = iframe.MyPK;
+        if (isSameVer == false)
+            mypk = mypk.replace(fk_mapData, mainFrmID);
+
         //根据data-key获取从表元素
-        var element = $("Img[data-key=" + iframe.MyPK + "]");
+        var element = $("Img[data-key=" + mypk + "]");
         if (element.length == 0)
             continue;
         figure_Develop_IFrame(element, iframe);
@@ -643,12 +668,12 @@ function figure_Develop_Btn(frmBtn) {
         var FK_Flow = GetQueryString("FK_Flow");
         var webUser = new WebUser();
         var userNo = webUser.No;
-        var SID = webUser.SID;
+        var SID = webUser.Token;
         if (SID == undefined)
             SID = "";
         if (doc.indexOf("?") == -1)
             doc = doc + "?1=1";
-        doc = doc + "&OID=" + pageData.WorkID + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&SID=" + SID;
+        doc = doc + "&OID=" + pageData.WorkID + "&FK_Node=" + FK_Node + "&FK_Flow=" + FK_Flow + "&UserNo=" + userNo + "&Token=" + SID;
         element.attr('onclick', "window.open('" + doc + "')");
 
     } else {//运行JS
@@ -780,7 +805,7 @@ function figure_Develop_FigureSubFlowDtl(wf_node, element) {
 //审核组件
 function figure_Develop_FigureFrmCheck(wf_node, element, frmData) {
     
-    var currentURL = window.location.href;
+    var currentURL = GetHrefUrl();
     //这个修改数据的位置
     if (currentURL != undefined && currentURL.indexOf("AdminFrm.htm") != -1) {
         $(element).remove(); 
@@ -963,7 +988,7 @@ function GetFieldAth(mapAttr) {
 
     if (data.indexOf('url@') == 0) {
         var url = data.replace('url@', '');
-        window.location.href = url;
+        SetHref(url);
         return;
     }
     data = JSON.parse(data);

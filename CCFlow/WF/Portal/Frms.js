@@ -24,7 +24,7 @@
                     { title: '<i class=icon-star></i> 重命名', id: "EditSort", Icon: "icon-options" },
                     { title: '<i class=icon-folder></i> 新建目录', id: "NewSort", Icon: "icon-magnifier-add" },
                     { title: '<i class=icon-share-alt ></i> 导入表单模版', id: "ImpFlowTemplate", Icon: "icon-plus" },
-                    //{ title: '新建下级目录', id: 5 },
+                    { title: '<i class=icon-share-alt ></i> 批量导出表单模版', id: "BatchExpFrmTemplate", Icon: "icon-plus" },
                     { title: '<i class=icon-close></i> 删除目录', id: "DeleteSort", Icon: "icon-close" }
                 ]
                 var tRenderOptions = [{
@@ -96,9 +96,9 @@
             })
         },
         Designer: function(no, name) {
-            var sid = GetQueryString("SID");
+            var sid = GetQueryString("Token");
             var webUser = new WebUser();
-            var url = "../Admin/CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&SID=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
+            var url = basePath + "/WF/Admin/FoolFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&Token=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
             window.top.vm.openTab(name, url);
         },
         EditSort: function(no, name) {
@@ -112,7 +112,7 @@
             en.Update();
 
             // alert("修改成功");
-            window.location.href = window.location.href;
+            Reload();
             return;
 
 
@@ -120,9 +120,9 @@
             // this.openLayer(url, "目录:" + name);
         },
         StartFrm: function(no, name) {
-            var sid = GetQueryString("SID");
+            var sid = GetQueryString("Token");
             var webUser = new WebUser();
-            var url = "../Admin/CCFormDesigner/GoToRunFrm.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&SID=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
+            var url = basePath + "/WF/Admin/FoolFormDesigner/GoToRunFrm.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&Token=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
             //var url = "../Comm/En.htm?EnName=BP.WF.Template.FlowExt&No=" + no;
             window.top.vm.openTab(name, url);
 
@@ -131,9 +131,9 @@
             // this.openLayer(url, name);
         },
         flowAttr: function(no, name) {
-            var sid = GetQueryString("SID");
+            var sid = GetQueryString("Token");
             var webUser = new WebUser();
-            var url = "../Admin/CCFormDesigner/GoToFrmAttr.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&SID=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
+            var url = basePath + "/WF/Admin/FoolFormDesigner/GoToFrmAttr.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&Token=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
             //var url = "../Comm/En.htm?EnName=BP.WF.Template.FlowExt&No=" + no;
             window.top.vm.openTab(name, url);
             //this.openLayer(url, name,900);
@@ -143,16 +143,19 @@
            /* if (window.confirm("确定要执行表单复制吗?") == false)
                 return;*/
             var flow = new Entity("BP.Sys.MapData", no);
-            var frmID = promptGener("表单ID:" + no + "Copy");
+            var frmID = promptGener("表单ID:" + no + "Copy", no + "Copy");
+
             if (frmID == undefined || frmID == null || frmID == '') return;
 
-            var frmName = promptGener("表单名称:" + flow.Name + "Copy");
+            var frmName = promptGener("表单名称:" + flow.Name + "Copy", flow.Name + "Copy");
             if (frmName == undefined || frmName == null || frmName == '') return;
             var data = flow.DoMethodReturnString("DoCopy", frmID + '~' + frmName);
             layer.msg(data);
-            setTimeout(function() {
-                window.location.reload();
-            }, 800);
+            Reload();
+            //setTimeout(function() {
+            //    window.location.reload();
+            //}, 800);
+
         },
         DeleteFlow: function(no, pidx, idx) {
             var msg = "提示: 确定要删除该表单吗?";
@@ -177,7 +180,7 @@
 
             layer.close(load);
 
-            window.location.href = window.location.href;
+            Reload();
             return;
 
             this.flowNodes[pidx].children.splice(idx, 1);
@@ -215,6 +218,9 @@
                 case "ImpFlowTemplate":
                     this.ImpFlowTemplate(data);
                     break;
+                case "BatchExpFrmTemplate":
+                    this.BatchExpFrmTemplate(data, name);
+                    break;
                 case "NewSort":
                     this.NewSort(data, true);
                     break;
@@ -231,18 +237,35 @@
         },
         NewFlow: function(data, name) {
 
-            url = "../Admin/FoolFormDesigner/NewFrmGuide.htm?SortNo=" + data + "&From=Flows.htm&RunModel=1&s=" + Math.random();
+            url = basePath + "/WF/Admin/FoolFormDesigner/NewFrmGuide.htm?SortNo=" + data + "&From=Frms.htm&RunModel=1&s=" + Math.random();
             addTab("NewFlow", "新建表单", url);
 
         },
         ImpFlowTemplate: function(data) {
 
-            var url = "../Admin/Template/ImpFrmLocal.htm?SortNo=" + data;
+            var url = basePath + "/WF/Admin/Template/ImpFrmLocal.htm?SortNo=" + data;
             // url = "../Admin/FoolFormDesigner/NewFrmGuide.htm?SortNo=" + data + "&From=Flows.htm&RunModel=1&s=" + Math.random();
             // url = "./../Admin/AttrFlow/Imp.htm?FK_Flow=" + fk_flow + "&Lang=CH";
             addTab("ImpFlowTemplate", "导入表单模版", url);
         },
+        BatchExpFrmTemplate: function (frmTreeNo,frmTreeName) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
+            handler.AddPara("FK_FrmTree", frmTreeNo);
+            handler.AddPara("FrmTreeName", frmTreeName);
+            var data = handler.DoMethodReturnString("Form_BatchExpFrmTemplate");
+            if (data.indexOf("err@") != -1) {
+                layer.alert(data);
+                return;
+            }
+            var url = data.replace("url@", "");
+            if (url.indexOf("resources") == -1) {
+                SetHref(basePath + "/" + url);
+                return;
+            }
 
+            //这个是针对Springboot jar包发布后的下载
+            SetHref(basePath + "/WF/Ath/DownloadByPath?filePath=" + encodeURIComponent(url));
+        },
         DeleteSort: function(no) {
 
             if (window.confirm("确定要删除吗?") == false)
@@ -382,6 +405,8 @@
                 if (flow.FrmType == 6) flow.FrmType = "VSTO模式Excel表单";
                 if (flow.FrmType == 7) flow.FrmType = "实体类组件";
                 if (flow.FrmType == 8) flow.FrmType = "开发者表单";
+                if (flow.FrmType == 10) flow.FrmType = "章节表单";
+
 
                 if (flow.Icon == "" || flow.Icon == null) {
                     if (flow.EntityType == 0) flow.Icon = "icon-flag";

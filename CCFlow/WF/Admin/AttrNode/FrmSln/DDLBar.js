@@ -20,6 +20,8 @@ function InitBar(optionKey) {
     html += "<option value=" + FormSlnType.FreeForm + "  disabled='disabled' >&nbsp;&nbsp;自由表单</option>";
     html += "<option value=" + FormSlnType.FoolTruck + " >&nbsp;&nbsp;累加模式表单</option>";
     html += "<option value=" + FormSlnType.Developer + " >&nbsp;&nbsp;开发者表单</option>";
+    html += "<option value=" + FormSlnType.changeOption + " >&nbsp;&nbsp;章节表单(beta)</option>";
+
     // html += "<option value=" + FormSlnType.WebOffice + "  >&nbsp;&nbsp;公文表单(weboffice)</option>";
 
 
@@ -55,7 +57,7 @@ function OldVer() {
     var nodeID = GetQueryString("FK_Node");
     var flowNo = GetQueryString("FK_Flow");
     var url = '../NodeFromWorkModel.htm?FK_Flow=' + flowNo + '&FK_Node=' + nodeID;
-    window.location.href = url;
+    SetHref(url);
 }
 function Imp() {
     var url = "../../Template/From.htm";
@@ -173,7 +175,7 @@ function changeOption() {
             url = "0.FoolForm.htm";
             break;
     }
-    window.location.href = url + "?FK_Node=" + nodeID;
+    SetHref( url + "?FK_Node=" + nodeID);
 }
 
 
@@ -193,7 +195,7 @@ function OpenEasyUiDialogExt(url, title, w, h, isReload) {
 
     OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
         if (isReload == true) {
-            window.location.href = window.location.href;
+            Reload();
         }
     });
 }

@@ -1181,7 +1181,7 @@ vjs.get = function(url, onSuccess, onError){
     onError(e);
   }
 
-  local = (url.indexOf('file:') === 0 || (window.location.href.indexOf('file:') === 0 && url.indexOf('http') === -1));
+  local = (url.indexOf('file:') === 0 || (GetHrefUrl().indexOf('file:') === 0 && url.indexOf('http') === -1));
 
   request.onreadystatechange = function() {
     if (request.readyState === 4) {

@@ -58,7 +58,7 @@
             if (en.Update() == 0)
                 en.Insert();
 
-            window.location.href = "MultipleInputSearch.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&M=" + Math.random();
+            SetHref( "MultipleInputSearch.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&M=" + Math.random());
             return;
         }
 
@@ -75,7 +75,7 @@
             var i = en.Delete();
 
             var url = "MultipleInputSearch.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&M=" + Math.random();
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
     <style>

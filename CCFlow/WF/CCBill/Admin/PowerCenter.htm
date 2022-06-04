@@ -85,7 +85,7 @@
             var ctrlObj = GetQueryString("CtrlObj");
 
             //定义的集合.
-            var ens = new Entities("BP.GPM.PowerCenters");
+            var ens = new Entities("BP.CCFast.CCMenu.PowerCenters");
             ens.Retrieve("CtrlObj", ctrlObj, "CtrlPKVal", ctrlPKVal);
 
             for (var i = 0; i < ens.length; i++) {
@@ -122,7 +122,7 @@
 
             if (window.confirm('您确定要删除吗？') == false)
                 return;
-            var en = new Entity("BP.GPM.PowerCenter");
+            var en = new Entity("BP.CCFast.CCMenu.PowerCenter");
             en.MyPK = myPK;
             en.Delete();
 
@@ -130,25 +130,25 @@
             ClearCash();
 
             //刷新.
-            window.location.href = window.location.href;
+            Reload();
         }
 
         //执行.
         function DoIt(model, Ids, IDNames, isurl) {
             console.log(isurl)
             if (isurl == 0) {
-                var en = new Entity("BP.GPM.PowerCenter");
+                var en = new Entity("BP.CCFast.CCMenu.PowerCenter");
                 en.CopyURL();
                 en.CtrlModel = model;
                 en.IDs = Ids;
                 en.IDNames = IDNames;
                 en.Insert();
-                window.location.href = window.location.href;
+                Reload();
                 return;
             } else {
                 var url = "./PowerCenter/" + model + ".htm";
                 url += "?CtrlObj=" + GetQueryString("CtrlObj") + "&CtrlPKVal=" + GetQueryString("CtrlPKVal") + "&CtrlGroup=" + GetQueryString("CtrlGroup");
-                window.location.href = url;
+                SetHref(url);
             }
         }
         function Help() {

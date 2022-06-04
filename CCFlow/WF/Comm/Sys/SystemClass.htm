@@ -189,7 +189,7 @@
         function OpenFeild(m, name) {
             var url = 'SystemClassField.htm?EnsName=' + m;
             OpenEasyUiDialog(url, "eudlgframe", name, 800, 550, "icon-edit", true, null, null, null, function () {
-                //window.location.href = window.location.href;
+                //Reload();
             });
         }
 
@@ -197,7 +197,7 @@
             m = m.substring(0, m.length - 1);
             var url = '../En.htm?EnName=' + m;
             OpenEasyUiDialog(url, "eudlgframe", name, 700, 550, "icon-edit", true, null, null, null, function () {
-                //  window.location.href = window.location.href;
+                //  Reload();
             });
         }
 
@@ -206,7 +206,7 @@
             var url = 'SystemClassCheck.htm?EnName=' + ensName;
 
             OpenEasyUiDialog(url, "eudlgframe", name, 800, 550, "icon-edit", true, null, null, null, function () {
-                //window.location.href = window.location.href;
+                //Reload();
             });
         }
 

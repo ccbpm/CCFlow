@@ -175,8 +175,13 @@
                 try {
 
                     var url = data;
-                    if (url.indexOf("My") == 0)
-                        url = "../" + url;
+                    if (url.indexOf("My") == 0) {
+                        if (window.top.location.href.indexOf("WF/") != -1)
+                            url = "../" + url;
+                        else
+                            url = "/WF/" + url;
+                    }
+                    
 
                
                     window.top.vm.openTab(title, url);

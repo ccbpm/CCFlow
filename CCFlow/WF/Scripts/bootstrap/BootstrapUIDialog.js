@@ -260,7 +260,7 @@ function OpenBootStrapModalByContent(jsUrl,jsfunction,divID, dlgTitle, dlgWidth,
         modalContent.append(modalFooter);
     }
 
-    eval(jsfunction);
+    cceval(jsfunction);
     //关闭事件
     dlg.off('hide.bs.modal');
     dlg.on('hide.bs.modal', function () {

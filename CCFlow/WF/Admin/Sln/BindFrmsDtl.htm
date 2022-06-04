@@ -54,7 +54,7 @@
                 return;
             }
 
-            var pushData = eval('(' + data + ')');
+            var pushData = cceval('(' + data + ')');
 
             //加载表单库
             $("#formTree").tree({
@@ -213,7 +213,7 @@
         function SetFormSln() {
             var FK_Flow = Application.common.getArgsFromHref("FK_Flow");
             var FK_Node = $("#lbFlowNodes").val();
-            window.location.href = "BindFrms.htm?ShowType=FlowFrms&FK_Flow=" + FK_Flow + "&FK_Node=" + FK_Node + "&Lang=CH";
+            SetHref("BindFrms.htm?ShowType=FlowFrms&FK_Flow=" + FK_Flow + "&FK_Node=" + FK_Node + "&Lang=CH");
         }
         var FK_Flow = null;
         var FK_Node = null;

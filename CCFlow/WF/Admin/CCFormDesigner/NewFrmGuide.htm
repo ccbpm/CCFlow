@@ -154,7 +154,7 @@
                         <option value=0>&nbsp;&nbsp;傻瓜表单</option>
                         <option value=8>&nbsp;&nbsp;开发者表单</option>
                         <option value=1 disabled='disabled'>&nbsp;&nbsp;自由表单(暂停支持)</option>
-
+                        <option value=10>&nbsp;&nbsp;章节表单</option>
                         <option value=null>+文件(插件)表单(部分支持)</option>
 
                         <option value=9>&nbsp;&nbsp;Wps表单</option>
@@ -169,7 +169,6 @@
                     </select>
 
                     <!--<select name="DDL_FrmType" id="DDL_FrmType" onchange="FrmTypeChange()" />-->
-
 
                 </td>
                 <td>
@@ -384,7 +383,7 @@
                             }
 
                             //切换页面
-                            window.location.href = data;
+                            SetHref(data);
                             return;
                         }
                     </script>

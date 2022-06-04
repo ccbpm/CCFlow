@@ -74,6 +74,11 @@
             node.SelectorModel = SelectorModel.Emp;
             node.Update();
 
+
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = 4 ;
+            node.Update();
+
             alert("保存成功.");
 
         }

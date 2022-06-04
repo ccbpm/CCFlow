@@ -28,7 +28,7 @@
     <script type="text/javascript">
         $(function () {
 
-            var ens = new Entities("BP.GPM.Menu2020.MySystems");
+            var ens = new Entities("BP.CCFast.CCMenu.MySystems");
             var data = ens.DoMethodReturnJSON("ImpSystem_Init");
             console.log(data);
 
@@ -48,7 +48,7 @@
             if (window.confirm('您确定要导入吗？') == false)
                 return;
 
-            var ens = new Entities("BP.GPM.Menu2020.MySystems");
+            var ens = new Entities("BP.CCFast.CCMenu.MySystems");
             var data = ens.DoMethodReturnString("ImpSystem_Imp", name);
             alert(data);
             window.close();

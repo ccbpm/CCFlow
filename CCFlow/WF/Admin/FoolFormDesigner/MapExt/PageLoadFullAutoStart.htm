@@ -171,12 +171,12 @@
             mapExt.RetrieveFromDBSources();
             mapExt.Delete();
 
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function Back() {
             var url = "../../AttrFlow/AutoStart/2.ByTimeData.htm?FK_Flow=" + flowNo;
-            window.location.href = url;
+            SetHref(url);
         }
 
         function Help() {

@@ -51,7 +51,7 @@
             en.Delete();
 
             alert("删除成功.");
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function Save() {
@@ -73,13 +73,13 @@
 
             alert("保存成功...");
             BackTo();
-            //window.location.href = window.location.href;
+            //Reload();
         }
 
         function BackTo() {
             var FK_MapData = GetQueryString("FK_MapData");
             var AttrOfOper = GetQueryString("KeyOfEn");
-            window.location.href = "BindFunction.htm?FK_MapData=" + FK_MapData + "&KeyOfEn=" + AttrOfOper;
+            SetHref("BindFunction.htm?FK_MapData=" + FK_MapData + "&KeyOfEn=" + AttrOfOper);
         }
     </script>
 

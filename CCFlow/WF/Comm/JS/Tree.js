@@ -69,7 +69,7 @@ function CreateSampleNode() {
         treeNodeManage("sample", node.id, function (js) {
             if (js) {
                 var parentNode = $('#enTree').tree('getParent', node.target);
-                var pushData = eval('(' + js + ')');
+                var pushData = cceval('(' + js + ')');
                 $('#enTree').tree('append', {
                     parent: (parentNode ? parentNode.target : null),
                     data: [{
@@ -91,7 +91,7 @@ function CreateSubNode() {
     if (node) {
         treeNodeManage("children", node.id, function (js) {
             if (js) {
-                var pushData = eval('(' + js + ')');
+                var pushData = cceval('(' + js + ')');
                 $('#enTree').tree('append', {
                     parent: (node ? node.target : null),
                     data: [{

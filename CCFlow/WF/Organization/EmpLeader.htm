@@ -294,7 +294,7 @@
             var empNo = GetQueryString("FK_Emp");
             
             //改变直属领导
-            var emp = new Entity("BP.GPM.Emp", empNo);
+            var emp = new Entity("BP.Port.Emp", empNo);
             emp.Leader = nodes[0].id;
             emp.LeaderName = nodes[0].name;
             emp.Update();

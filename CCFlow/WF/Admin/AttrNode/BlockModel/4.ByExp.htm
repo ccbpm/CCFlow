@@ -43,7 +43,7 @@
             node.BlockModel = BlockModel.ByExp;
             node.BlockExp = exp;// $("#TB_Exp").val();
             node.Update();
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </head>
@@ -57,7 +57,7 @@
                 <label for="RB_BlockModel_4">按照表达式阻塞</label>
             </legend>
             <br />
-            <input type="text" id="TB_Exp" name="TB_Exp" runat="server" style="width: 95%" />
+            <input type="text" id="TB_Exp" name="TB_Exp" style="width: 95%" />
         </fieldset>
 
 

@@ -28,8 +28,8 @@ http://localhost/WF/Comm/Contrast.htm?EnsName=BP.WF.Demo.SaleBills
 
 
 维护单个树:
-http://localhost/WF/Comm/Tree.htm?TreeEnsName=BP.GPM.Depts
+http://localhost/WF/Comm/Tree.htm?TreeEnsName=BP.Port.Depts
 
 维护树与叶子
-http://localhost/WF/Comm/TreeEns.htm?TreeEnsName=BP.GPM.Depts&EnsName=BP.GPM.Emps&RefPK=FK_Dept
+http://localhost/WF/Comm/TreeEns.htm?TreeEnsName=BP.Port.Depts&EnsName=BP.Port.Emps&RefPK=FK_Dept
 

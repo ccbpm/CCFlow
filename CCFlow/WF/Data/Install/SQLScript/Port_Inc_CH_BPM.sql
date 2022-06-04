@@ -35,78 +35,51 @@ INSERT INTO Port_StationType (No,Name) VALUES('3','基层');
  
 -- Port_Station ;
 DELETE FROM Port_Station;
-INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('01','总经理','1','0') ;
-INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('02','市场部经理','2','0');
-INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('03','研发部经理','2','0')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('04','客服部经理','2','0')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('05','财务部经理','2','0')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('06','人力资源部经理','2','0')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('07','销售人员岗','3','0')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('08','程序员岗','3','0')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('09','技术服务岗','3','0')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('10','出纳岗','3','0')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('11','人力资源助理岗','3','0')  ;
-INSERT INTO Port_Station (No,Name,FK_StationType,OrgNo) VALUES('12','外来人员岗','3','0')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('01','总经理','1') ;
+INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('02','市场部经理','2');
+INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('03','研发部经理','2')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('04','客服部经理','2')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('05','财务部经理','2')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('06','人力资源部经理','2')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('07','销售人员岗','3')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('08','程序员岗','3')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('09','技术服务岗','3')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('10','出纳岗','3')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('11','人力资源助理岗','3')  ;
+INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('12','外来人员岗','3')  ;
 
 
 
 -- Port_Emp ;
 -- 总经理部 ;
 DELETE FROM Port_Emp;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email) VALUES('admin','admin','123','100','0531-82374939','zhoupeng@ccflow.org')  ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email) VALUES('zhoupeng','周朋','123','100','0531-82374939','zhoupeng@ccflow.org')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('admin','admin','123','100','0531-82374939','zhoupeng@ccflow.org',0)  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('zhoupeng','周朋','123','100','0531-82374939','zhoupeng@ccflow.org',0)  ;
 
 -- 市场部 ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email) VALUES('zhanghaicheng','张海成','123','1001','0531-82374939','zhanghaicheng@ccflow.org')  ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email) VALUES('zhangyifan','张一帆','123','1001','0531-82374939','zhangyifan@ccflow.org')  ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email) VALUES('zhoushengyu','周升雨','123','1001','0531-82374939','zhoushengyu@ccflow.org')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('zhanghaicheng','张海成','123','1001','0531-82374939','zhanghaicheng@ccflow.org',0)  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('zhangyifan','张一帆','123','1001','0531-82374939','zhangyifan@ccflow.org',0)  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('zhoushengyu','周升雨','123','1001','0531-82374939','zhoushengyu@ccflow.org',0)  ;
 
 -- 研发部 ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email) VALUES('qifenglin','祁凤林','123','1002','0531-82374939','qifenglin@ccflow.org')  ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email) VALUES('zhoutianjiao','周天娇','123','1002','0531-82374939','zhoutianjiao@ccflow.org')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('qifenglin','祁凤林','123','1002','0531-82374939','qifenglin@ccflow.org',0)  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('zhoutianjiao','周天娇','123','1002','0531-82374939','zhoutianjiao@ccflow.org',0)  ;
 
 -- 服务部经理 ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email) VALUES('guoxiangbin','郭祥斌','123','1003','0531-82374939','guoxiangbin@ccflow.org')  ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email) VALUES('fuhui','福惠','123','1003','0531-82374939','fuhui@ccflow.org')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('guoxiangbin','郭祥斌','123','1003','0531-82374939','guoxiangbin@ccflow.org',0)  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('fuhui','福惠','123','1003','0531-82374939','fuhui@ccflow.org',0)  ;
 
 -- 财务部 ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email) VALUES('yangyilei','杨依雷','123','1004','0531-82374939','yangyilei@ccflow.org')  ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email) VALUES('guobaogeng','郭宝庚','123','1004','0531-82374939','guobaogeng@ccflow.org') ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('yangyilei','杨依雷','123','1004','0531-82374939','yangyilei@ccflow.org',0)  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('guobaogeng','郭宝庚','123','1004','0531-82374939','guobaogeng@ccflow.org',0) ;
 
 -- 人力资源部 ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email) VALUES('liping','李萍','123','1005','0531-82374939','liping@ccflow.org')  ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email) VALUES('liyan','李言','123','1005','0531-82374939','liyan@ccflow.org')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('liping','李萍','123','1005','0531-82374939','liping@ccflow.org',0)  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('liyan','李言','123','1005','0531-82374939','liyan@ccflow.org',0)  ;
 
 -- 外来单位人员
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email) VALUES('Guest','外来人员','123','1099','0531-82374939','Guest@ccflow.org')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('Guest','外来人员','123','1099','0531-82374939','Guest@ccflow.org',0)  ;
 
- 
-
-
---==== 增加部门与岗位对应.;
-
-DELETE FROM Port_DeptStation;
-
-INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES ('100', '01');
-   -- 市场部
-INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES ('1001','02');  
-INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES ('1001','07');  
-   -- 研发部
-INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES ('1002','03');  
-INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES ('1002','08'); 
-   -- 客服部
-INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES ('1003','04');  
-INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES ('1003','09');  
-   -- 财务部
-INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES ('1004','05');  
-INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES ('1004','10');  
-   -- 人力资源
-INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES ('1005','06');  
-INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES ('1005','11');
-
--- 外来单位
-INSERT INTO Port_DeptStation (FK_Dept,FK_Station) VALUES ('1099','12');
-  
  
 -- Port_DeptEmp 人员与部门的对应 ;
 DELETE FROM Port_DeptEmp;

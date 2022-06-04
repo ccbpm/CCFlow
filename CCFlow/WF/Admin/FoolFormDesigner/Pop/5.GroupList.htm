@@ -50,7 +50,16 @@
             en.Update();
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.MyPK = "PopGroupList_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
-            mapExt.RetrieveFromDBSources(); //从数据库来查询.
+            var count = mapExt.RetrieveFromDBSources(); //从数据库来查询.
+            if (count == 0) {
+                mapExt.SetPara("OpenPopType", 0);
+                mapExt.SetPara("SelectType", 1);
+            } else {
+                if (mapExt.GetPara("OpenPopType") == undefined)
+                    mapExt.SetPara("OpenPopType", 0);
+                if (mapExt.GetPara("SelectType") == undefined)
+                    mapExt.SetPara("SelectType", 1);
+            }
 
             mapExt.CopyURL();  //从url里面copy数据.
             mapExt.CopyForm(); //从from里面copy数据.
@@ -69,7 +78,7 @@
 
             var val = mapExt.Save();
             // alert(val);
-            window.location.href = window.location.href;
+            Reload();
         }
         function Delete() {
 
@@ -80,7 +89,7 @@
             mapExt.MyPK = "PopGroupList_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
             mapExt.Delete();
-            window.location.href = window.location.href;
+            Reload();
         }
 
     </script>
@@ -116,16 +125,7 @@
         </div>
         <form id="cc">
             <table id="Table1" class="table">
-                <!--<tr>
-                    <td>
-                        标题
-                    </td>
-                    <td colspan="3">
-                        <input type="text" id="TBPara_Title" name="TBPara_Title" style="width: 99%;" />
-                        <br />
-                        <font color="gray">显示在窗口的文字，比如:请选择采购产品. </font>
-                    </td>
-                </tr>-->
+  
                 <tr>
 
                     <td colspan="3">
@@ -135,31 +135,7 @@
                         <input id="TBPara_ShowCol" name="TBPara_ShowCol" value="2" />列
                     </td>
                 </tr>
-                <!--<tr>
-                    <td>
-                        数据源类型
-                    </td>
-                    <td>
-                        <select id="DDL_DBType" name="DDL_DBType">
-                            <option value="0">执行SQL</option>
-                            <option value="1">执行url返回JSON</option>
-                            <option value="2">执行CCFromRef.js返回JSON</option>
-                        </select>
-                    </td>
-                    <td>
-                        选择类型
-                    </td>
-                    <td>
-                        <input type="radio" id="RBPara_SelectType_0" name="RBPara_SelectType" value="0" checked="true" />
-                        <label for="RBPara_SelectType_0">
-                            单选
-                        </label>
-                        <input type="radio" id="RBPara_SelectType_1" name="RBPara_SelectType" value="1" />
-                        <label for="RBPara_SelectType_1">
-                            多选
-                        </label>
-                    </td>
-                </tr>-->
+  
                 <tr>
                     <td colspan="4">
                         <a href="javascript:ShowHidden('PopValSearchCond')">分组数据源</a>

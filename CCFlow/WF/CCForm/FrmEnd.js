@@ -1,39 +1,42 @@
-﻿$(function () {
-    var theme = localStorage.getItem("themeColorInfo");
-    theme = JSON.parse(theme);
+﻿ 
+
+$(function () {
+    Skip.addJs(basePath + "/WF/Scripts/xss.js");
+    var theme = filterXSS(localStorage.getItem("themeColorInfo"));
+    if (theme == null || theme == undefined || theme == "")
+        return;
+    var data = JSON.parse(theme);
     var styleScope = document.getElementById("theme-data");
-    if (styleScope != null && theme != null) {
+    if (styleScope != null && data != null) {
+
+        var html = "";
         //按钮
-        styleScope.innerHTML = "\n .layui-btn{\n background-color:" + theme.selectedMenu + ";\n}";
-        if (localStorage.getItem("themeColor") == "rynn") {
-            styleScope.innerHTML += "\n button>img{\n filter: hue-rotate(90deg) brightness(220%);\n}\n .layui-btn-primary{\n color: white;\n}";
+        html += "\n .layui-btn{\n background-color:" + data.selectedMenu + ";\n}";
+        if (filterXSS(localStorage.getItem("themeColor")) == "rynn") {
+            html += "\n button>img{\n filter: hue-rotate(90deg) brightness(220%);\n}\n .layui-btn-primary{\n color: white;\n}";
         } else {
-            styleScope.innerHTML += "\n .layui-btn-primary{\n background:0 0 \n}";
+            html += "\n .layui-btn-primary{\n background:0 0 \n}";
         }
         //分页信息
-        styleScope.innerHTML += "\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + theme.selectedMenu + ";\n}\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:" + theme.selectedMenu + " !important\n}";
+        html += "\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + data.selectedMenu + ";\n}\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:" + data.selectedMenu + " !important\n}";
         //时间
-        styleScope.innerHTML += "\n .layui-laydate .layui-this{\n background-color:" + theme.selectedMenu + " !important;\n}";
+        html += "\n .layui-laydate .layui-this{\n background-color:" + data.selectedMenu + " !important;\n}";
         //复选框
-        styleScope.innerHTML += "\n .layui-form-checked[lay-skin=primary] i{\n background-color:" + theme.selectedMenu + " !important;\n} \n .layui-form-select dl dd.layui-this{\n background-color:" + theme.selectedMenu + " !important;\n}";
-        styleScope.innerHTML += "\n .layui-form-onswitch{\n background-color:" + theme.selectedMenu + " !important;\n border-color:" + theme.selectedMenu + " !important;\n}";
+        html += "\n .layui-form-checked[lay-skin=primary] i{\n background-color:" + data.selectedMenu + " !important;\n} \n .layui-form-select dl dd.layui-this{\n background-color:" + data.selectedMenu + " !important;\n}";
+        html += "\n .layui-form-onswitch{\n background-color:" + data.selectedMenu + " !important;\n border-color:" + data.selectedMenu + " !important;\n}";
         //多选
-        styleScope.innerHTML += "\n .layui-form-checked, .layui-form-checked:hover{\n border-color:" + theme.selectedMenu + " !important;\n} \n  .layui-form-checked:hover i{\n color:" + theme.selectedMenu + " !important;\n}";
+        html += "\n .layui-form-checked, .layui-form-checked:hover{\n border-color:" + data.selectedMenu + " !important;\n} \n  .layui-form-checked:hover i{\n color:" + data.selectedMenu + " !important;\n}";
         //单选
-        styleScope.innerHTML += "\n .layui-form-radio:hover *, .layui-form-radioed, .layui-form-radioed>i{\n color:" + theme.selectedMenu + " !important;\n} \n .layui-form-select dl dd.layui-this{\n background-color:" + theme.selectedMenu + " !important;\n}";
-
+        html += "\n .layui-form-radio:hover *, .layui-form-radioed, .layui-form-radioed>i{\n color:" + data.selectedMenu + " !important;\n} \n .layui-form-select dl dd.layui-this{\n background-color:" + data.selectedMenu + " !important;\n}";
+        styleScope.innerHTML = filterXSS(html);
     }
 
 })
-var currentURL = window.document.location.href;
-var laybase = "./";
-if (currentURL.indexOf("CCForm") != -1 || currentURL.indexOf("CCBill") != -1)
-    laybase = "../";
-if (currentURL.indexOf("AdminFrm.htm") != -1)
-    laybase = "../../";
-var frmMapAttrs;
-function LoadFrmDataAndChangeEleStyle(frmData) {
 
+var frmMapAttrs;
+var mapData = "";
+function LoadFrmDataAndChangeEleStyle(frmData) {
+    mapData = frmData.Sys_MapData[0];
     //加入隐藏控件.
     var mapAttrs = frmData.Sys_MapAttr;
     frmMapAttrs = mapAttrs;
@@ -50,6 +53,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
         $('#TB_' + mapAttr.KeyOfEn).attr("name", "TB_" + mapAttr.KeyOfEn);
         $('#DDL_' + mapAttr.KeyOfEn).attr("name", "DDL_" + mapAttr.KeyOfEn);
         $('#CB_' + mapAttr.KeyOfEn).attr("name", "CB_" + mapAttr.KeyOfEn);
+       
 
         //富文本绑数据
         if ($("#editor_" + mapAttr.KeyOfEn).length > 0) {
@@ -95,10 +99,19 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                     bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
                 else
                     bit = 2;
-                if (bit == 2)
-                    val = formatNumber(val, 2, ",");
+                    val = formatNumber(val, bit, ",",1);
             }
             $('#TB_' + mapAttr.KeyOfEn).val(val);
+
+            if (mapAttr.Tip != "" && mapAttr.UIIsEnable=="1" && pageData.IsReadonly!="1") {
+                $('#TB_' + mapAttr.KeyOfEn).attr("placeholder", mapAttr.Tip);
+                $('#TB_' + mapAttr.KeyOfEn).on("focus", function () {
+                    var elementId = this.id;
+                    layer.tips("<span style='color:black;'>"+$(this).attr("placeholder")+"</span>", '#' + elementId, {tips:[3,"#fff"]});
+                    $(".layui-layer-tips").css("box-shadow", "1px 1px 50px rgb(0 0 0 / 30%)");
+                })
+                
+            }
             return true;
         }
 
@@ -131,9 +144,9 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
 
 
 
-        if (mapAttr.UIContralType == 14) {//签批组件
+        if (mapAttr.UIContralType == 14) { //签批组件
             $("#TB_" + mapAttr.KeyOfEn).hide();
-            if (window.document.location.href.indexOf("AdminFrm.htm") != -1)
+            if (GetHrefUrl().indexOf("AdminFrm.htm") != -1)
                 return true;
             //获取审核组件信息
             var node = frmData.WF_Node == undefined ? null : frmData.WF_Node[0];
@@ -142,7 +155,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
             else
                 FWCVer = 1;
             if (checkData == null && node != null) {
-                Skip.addJs(laybase+"WorkOpt/WorkCheck.js");
+                Skip.addJs(laybase + "WorkOpt/WorkCheck.js");
                 isFistQuestWorkCheck = false;
                 checkData = WorkCheck_Init(FWCVer);
 
@@ -262,8 +275,9 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
             if (expression[0].Doc != null && expression[0].Doc != "") {
                 var doc = expression[0].Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}');
                 verifys[mapAttr.KeyOfEn] = [];
-                verifys[mapAttr.KeyOfEn].push(eval(doc));
+                verifys[mapAttr.KeyOfEn].push(cceval(doc));
                 verifys[mapAttr.KeyOfEn].push(expression[0].Tag1);
+                $('#TB_' + mapAttr.KeyOfEn).addClass("CheckRegInput");
             }
 
 
@@ -297,7 +311,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                 , url: $("#editimg").data("info") //图片上传接口返回和（layui 的upload 模块）返回的JOSN一样
                 , done: function (data) { //上传完毕回调
                     if (data.SourceImage != undefined) {
-                        $('#Img' + $("#editimg").data("ref")).attr('src', basePath+"/"+data.SourceImage + "?M=" + Math.random());
+                        $('#Img' + $("#editimg").data("ref")).attr('src', basePath + "/" + data.SourceImage + "?M=" + Math.random());
                     } else {
                         return layer.msg('上传失败');
                     }
@@ -318,12 +332,12 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
         var isAllHidenField = false;
         for (var k = 0; k < sibles.length; k++) {
             var sible = $(sibles[k]);
-            if (k == 0 && sible.hasClass("FoolFrmFieldRow")==true)
+            if (k == 0 && sible.hasClass("FoolFrmFieldRow") == true)
                 break;
             if (k == 0 && sible.hasClass("layui-row") == true)
                 break;
 
-            if (k == 0 && sible.hasClass("FoolFrmFieldRow")==true) {
+            if (k == 0 && sible.hasClass("FoolFrmFieldRow") == true) {
                 isHidden = true;
                 break;
             }
@@ -364,6 +378,12 @@ function SetICONForCtrl(mapAttr) {
     }
 }
 
+var currentURL = GetHrefUrl();
+var laybase = "./";
+if (currentURL.indexOf("CCForm") != -1 || currentURL.indexOf("CCBill") != -1)
+    laybase = "../";
+if (currentURL.indexOf("AdminFrm.htm") != -1 || currentURL.indexOf("/Admin/") != -1 || currentURL.indexOf("Comm/RefFunc")!=-1)
+    laybase = "../../";
 
 //处理 MapExt 的扩展. 工作处理器，独立表单都要调用他.
 function AfterBindEn_DealMapExt(frmData) {
@@ -377,13 +397,16 @@ function AfterBindEn_DealMapExt(frmData) {
 
     var mapAttrs = frmData.Sys_MapAttr;
     var isFirstTBFull = true;
+
     var baseUrl = "./CCForm/";
-    if (window.location.href.indexOf("CCForm") != -1)
+    if (GetHrefUrl().indexOf("CCForm") != -1)
         baseUrl = "./";
-    if (window.location.href.indexOf("CCBill") != -1)
+    if (GetHrefUrl().indexOf("CCBill") != -1)
         baseUrl = "../CCForm/";
-    if (window.location.href.indexOf("AdminFrm.htm") != -1)
+    if (GetHrefUrl().indexOf("AdminFrm.htm") != -1 || GetHrefUrl().indexOf("RefFunc") != -1)
         baseUrl = "../../CCForm/";
+
+
     var isHaveLoadMapExt = false;
     var isHaveEnableJs = false;
     $.each(mapAttrs, function (idx, mapAttr) {
@@ -399,6 +422,9 @@ function AfterBindEn_DealMapExt(frmData) {
             Skip.addJs(baseUrl + "MapExt2021.js");
             isHaveLoadMapExt = true;
         }
+        var mypk = mapAttr.MyPK;
+        if (mypk == null || mypk == undefined || mypk == "")
+            mapAttr.MyPK = mapAttr.FK_MapData + "_" + mapAttr.KeyOfEn;
         //如果是枚举、下拉框、复选框判断是否有选项联动其他控件
         if (mapAttr.LGType == 1 && (mapAttr.UIContralType == 1 || mapAttr.UIContralType == 3)
             || (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == 1)
@@ -409,6 +435,7 @@ function AfterBindEn_DealMapExt(frmData) {
             var isEnableJS = AtPara == "" || AtPara == null || AtPara == undefined || AtPara.indexOf('@IsEnableJS=1') == -1 ? false : true;
 
             //不存在联动其他控件且不存在其他扩展属性
+            
             if (isEnableJS == false && (mapExts[mapAttr.MyPK] == undefined || mapExts[mapAttr.MyPK].length == 0))
                 return true;
             var model = mapAttr.LGType == 1 && (mapAttr.UIContralType == 2 || mapAttr.UIContralType == 3) ? "radio" : "select";
@@ -441,11 +468,11 @@ function AfterBindEn_DealMapExt(frmData) {
             if (model == "radio") {
                 layui.form.on('radio(' + mapAttr.KeyOfEn + ')', function (element) {
                     var data = $(this).data();
-                    SetRadioSelectMapExt(data.mapExts, data.mapAttr, element.value, data.isEnableJS, "radio", frmType, true,element);
+                    SetRadioSelectMapExt(data.mapExts, data.mapAttr, element.value, data.isEnableJS, "radio", frmType, true, element);
                 });
             } else if (model == "select") {
                 layui.form.on('select(' + mapAttr.KeyOfEn + ')', function (element) {
-                    SetRadioSelectMapExt(data.mapExts, data.mapAttr, element.value, data.isEnableJS, "select", frmType, true,element);
+                    SetRadioSelectMapExt(data.mapExts, data.mapAttr, element.value, data.isEnableJS, "select", frmType, true, element);
                 });
             } else if (model == "checkbox") {
                 var obj = $("#CB_" + mapAttr.KeyOfEn);
@@ -478,7 +505,7 @@ function AfterBindEn_DealMapExt(frmData) {
 
         //如果是整数，浮点型，金额类型的扩展属性
         if (mapAttr.MyDataType == 2 || mapAttr.MyDataType == 3 || mapAttr.MyDataType == 5 || mapAttr.MyDataType == 8) {
-            if (mapAttr.UIIsEnable == 0 || isReadonly == true)
+            if (isReadonly == true)
                 return true;
             //数值字段绑定的chang事件
             var isEnableNumEnterLimit = GetPara(mapAttr.AtPara, "IsEnableNumEnterLimit");
@@ -529,8 +556,6 @@ function AfterBindEn_DealMapExt(frmData) {
             return true;
         }
 
-       
-
         //文本字段扩展属性
         $.each(mapExts[mapAttr.MyPK], function (k, mapExt1) {
             var mapExt = new Entity("BP.Sys.MapExt", mapExt1);
@@ -538,8 +563,8 @@ function AfterBindEn_DealMapExt(frmData) {
             //处理Pop弹出框的问题
             var PopModel = GetPara(mapAttr.AtPara, "PopModel");
 
-            if (PopModel != undefined && PopModel != "" && PopModel!= "None") {
-               
+            if (PopModel != undefined && PopModel != "" && PopModel != "None") {
+
                 if (mapExt.ExtType != PopModel)
                     return true;
                 if (mapAttr.UIIsEnable == 0 || isReadonly == true || $("#TB_" + mapAttr.KeyOfEn).length == 0)
@@ -580,9 +605,9 @@ function AfterBindEn_DealMapExt(frmData) {
                     obj.attr("onkeyup", "showDataGrid(\'TB_" + mapAttr.KeyOfEn + "\',this.value, \'" + mapExt.MyPK + "\');");
                     //showDataGrid("TB_" + mapAttr.KeyOfEn, $("#TB_" + mapAttr.KeyOfEn).val(), mapExt);
                 }
-
-
             }
+
+            //alert(mapExt.Doc);
 
             switch (mapExt.ExtType) {
                 case "MultipleChoiceSmall"://小范围多选
@@ -592,7 +617,7 @@ function AfterBindEn_DealMapExt(frmData) {
                     var tag = mapExt.Tag;
                     if (tag == null || tag == undefined || tag == "")
                         tag = "0";
-                    if (tag=="0" &&(mapAttr.UIIsEnable == 0 || isReadonly == true)) {
+                    if (tag == "0" && (mapAttr.UIIsEnable == 0 || isReadonly == true)) {
                         //只显示
                         $("#TB_" + mapAttr.KeyOfEn).hide();
                         var val = frmData.MainTable[0][mapAttr.KeyOfEn + "T"];
@@ -603,7 +628,7 @@ function AfterBindEn_DealMapExt(frmData) {
                     var data = GetDataTableOfTBChoice(mapExt, frmData, $("#TB_" + mapAttr.KeyOfEn).val());
                     data = data == null ? [] : data;
                     $("#TB_" + mapAttr.KeyOfEn).hide();
-                    
+
                     //下拉框
                     if (tag == "0") {
                         $("#TB_" + mapAttr.KeyOfEn).after("<div id='mapExt_" + mapAttr.KeyOfEn + "'style='width:99%'></div>")
@@ -652,19 +677,19 @@ function AfterBindEn_DealMapExt(frmData) {
                         if (selectType == 1 && val.indexOf(item.value + ",") != -1)
                             checked = " checked='checked'";
 
-                        _html += "<input " + disabled + checked + " type='checkbox' id='" + id + "'name='"+name+"' data-info='" + mapAttr.KeyOfEn + "' value='" + item.value + "' lay-skin='primary' title='" + item.name +"'lay-filter='"+name+"'  />";
-                        if (selectType==0)
-                            _html += "<input " + disabled + checked + " type='radio' id='" + id + "' name='" + name +"' data-info='" + mapAttr.KeyOfEn + "' value='" + item.value + "' title='" + item.name + "' lay-filter='" + name +"'  />";
+                        _html += "<input " + disabled + checked + " type='checkbox' id='" + id + "'name='" + name + "' data-info='" + mapAttr.KeyOfEn + "' value='" + item.value + "' lay-skin='primary' title='" + item.name + "'lay-filter='" + name + "'  />";
+                        if (selectType == 0)
+                            _html += "<input " + disabled + checked + " type='radio' id='" + id + "' name='" + name + "' data-info='" + mapAttr.KeyOfEn + "' value='" + item.value + "' title='" + item.name + "' lay-filter='" + name + "'  />";
 
                         if (tag == "2")
                             _html += "</br>";
                     })
                     _html += "</div>";
                     $("#TB_" + mapAttr.KeyOfEn).after(_html);
-                   
+
                     if (selectType == 1)
                         layui.form.on('checkbox(' + name + ')', function (element) {
-                            changeValue(element.value,$(this).data().info, 1);
+                            changeValue(element.value, $(this).data().info, 1);
                         });
                     if (selectType == 0)
                         layui.form.on('radio(' + name + ')', function (element) {
@@ -750,6 +775,15 @@ function AfterBindEn_DealMapExt(frmData) {
                         break;
                     }
                     break;
+
+                case "FieldBigHelper": //大块文本帮助.
+
+                    var ctrl = $("#TB_" + mapAttr.KeyOfEn);
+                    $("#TB_" + mapAttr.KeyOfEn).after("<span>" + mapExt.Doc + "</span>");
+                    alert(mapExt.Doc);
+
+                    break;
+
                 case "FullData"://POP返回值的处理，放在了POP2021.js
 
                     break;
@@ -787,9 +821,9 @@ function AfterBindEn_DealMapExt(frmData) {
     });
 }
 
-function changeValue(tbval, tbID,type) {
+function changeValue(tbval, tbID, type) {
     var strgetSelectValue = "";
-    var getSelectValueMenbers = $("input[name='CB_" + tbID+"_"+tbID + "']:checked").each(function (j) {
+    var getSelectValueMenbers = $("input[name='CB_" + tbID + "_" + tbID + "']:checked").each(function (j) {
         if (type == 0)
             strgetSelectValue = $(this).val();
         else {
@@ -797,7 +831,7 @@ function changeValue(tbval, tbID,type) {
                 strgetSelectValue += $(this).val() + ",";
             }
         }
-      
+
     });
     $("#TB_" + tbID).val(strgetSelectValue);
 }
@@ -860,7 +894,7 @@ function GetMapExtsGroup(mapExts) {
  * @param {any} frmType 表单类型 傻瓜表单 开发者表单
  * @param {any} tag 标记，无实际意义
  */
-function SetRadioSelectMapExt(mapExts, mapAttr, selectVal, isEnableJS, model, frmType, tag,element) {
+function SetRadioSelectMapExt(mapExts, mapAttr, selectVal, isEnableJS, model, frmType, tag, element) {
     //联动其他控件
     if (isEnableJS == true && (selectVal != null && selectVal != undefined && selectVal != "")) {
         if (model == "radio" && selectVal == -1) {
@@ -888,7 +922,7 @@ function SetRadioSelectMapExt(mapExts, mapAttr, selectVal, isEnableJS, model, fr
                 if (tag == true) {
                     var doc = DealExp(mapExt.Doc);
                     DBAccess.RunFunctionReturnStr(doc);
-                }   
+                }
                 break;
             case "ActiveDDL"://级联其他控件
                 if (model == "checkbox")
@@ -931,6 +965,7 @@ function SetDateExt(mapExts, mapAttr) {
     var isFullData = GetPara(mapAttr.AtPara, "IsFullData");
     isFullData = isFullData == undefined || isFullData == "" || isFullData != "1" ? false : true;
 
+
     var format = $("#TB_" + mapAttr.KeyOfEn).attr("data-info");
     var type = $("#TB_" + mapAttr.KeyOfEn).attr("data-type");
     var dateOper = "";
@@ -966,7 +1001,8 @@ function SetDateExt(mapExts, mapAttr) {
 
                 },
                 change: function (value, date, endDate) {
-                    $('.laydate-btns-confirm').click();
+                    if (this.type != "year")
+                        $('.laydate-btns-confirm').click();
                 },
                 done: function (value, date, endDate) {
                     $(this.elem).val(value);
@@ -989,74 +1025,74 @@ function SetDateExt(mapExts, mapAttr) {
                 return item.KeyOfEn == roleExt.Tag4 && item.FK_MapData == roleExt.FK_MapData;
             })[0];
 
-           /** var startOper = "";
-            startOper = {
-                elem: '#TB_' + roleExt.Tag4,
-                format: format, //可任意组合
-                type: type,
-                operKey: mapAttr.KeyOfEn,
-                operKeyName: mapAttr.Name,
-                oper: roleExt.Tag3,
-                ready: function (date) {
-                    if (this.format.indexOf("HH") != -1) {
-                        var now = new Date();
-                        var mm = "";
-                        if (now.getMinutes() < 10)
-                            mm = "0" + now.getMinutes();
-                        else
-                            mm = now.getMinutes();
-
-                        var ss = "";
-                        if (now.getSeconds() < 10)
-                            ss = "0" + now.getSeconds();
-                        else
-                            ss = now.getSeconds();
-
-                        this.dateTime.hours = now.getHours();
-                        this.dateTime.minutes = mm;
-                        this.dateTime.seconds = ss;
-                    }
-
-                },
-                change: function (value, date, endDate) {
-                    $('.laydate-btns-confirm').click();
-                },
-                done: function (value, date, endDate) {
-                    //比对的时间字段值
-                    var operVal = $('#TB_' + this.operKey).val();
-                    var oper = this.oper;
-                    var msg = "";
-                    switch (oper) {
-                        case "dayu":
-                            if (value >= operVal && operVal != "")
-                                msg = "所选日期不能大于等于[" + this.operKeyName + "]对应的日期时间";
-                            break;
-                        case "dayudengyu":
-                            if (value > operVal && operVal != "")
-                                msg = "所选日期不能大于[" + this.operKeyName + "]对应的日期时间";
-                            break;
-                        case "xiaoyu":
-                            if (value <= operVal && operVal != "")
-                                msg = "所选日期不能小于等于[" + this.operKeyName + "]对应的日期时间";
-                            break;
-                        case "xiaoyudengyu":
-                            if (value < operVal && operVal != "")
-                                msg = "所选日期不能小于[" + this.operKeyName + "]对应的日期时间";
-                            break;
-                        case "budengyu":
-                            if (value == operVal && operVal != "")
-                                msg = "所选日期不能等于[" + this.operKeyName + "]对应的日期时间";
-                            break;
-                    }
-                    if (msg != "") {
-                        layer.alert(msg);
-                        this.value = "";
-                        this.elem.val("");
-                    }
-
-
-                }
-            } */
+            /** var startOper = "";
+             startOper = {
+                 elem: '#TB_' + roleExt.Tag4,
+                 format: format, //可任意组合
+                 type: type,
+                 operKey: mapAttr.KeyOfEn,
+                 operKeyName: mapAttr.Name,
+                 oper: roleExt.Tag3,
+                 ready: function (date) {
+                     if (this.format.indexOf("HH") != -1) {
+                         var now = new Date();
+                         var mm = "";
+                         if (now.getMinutes() < 10)
+                             mm = "0" + now.getMinutes();
+                         else
+                             mm = now.getMinutes();
+ 
+                         var ss = "";
+                         if (now.getSeconds() < 10)
+                             ss = "0" + now.getSeconds();
+                         else
+                             ss = now.getSeconds();
+ 
+                         this.dateTime.hours = now.getHours();
+                         this.dateTime.minutes = mm;
+                         this.dateTime.seconds = ss;
+                     }
+ 
+                 },
+                 change: function (value, date, endDate) {
+                     $('.laydate-btns-confirm').click();
+                 },
+                 done: function (value, date, endDate) {
+                     //比对的时间字段值
+                     var operVal = $('#TB_' + this.operKey).val();
+                     var oper = this.oper;
+                     var msg = "";
+                     switch (oper) {
+                         case "dayu":
+                             if (value >= operVal && operVal != "")
+                                 msg = "所选日期不能大于等于[" + this.operKeyName + "]对应的日期时间";
+                             break;
+                         case "dayudengyu":
+                             if (value > operVal && operVal != "")
+                                 msg = "所选日期不能大于[" + this.operKeyName + "]对应的日期时间";
+                             break;
+                         case "xiaoyu":
+                             if (value <= operVal && operVal != "")
+                                 msg = "所选日期不能小于等于[" + this.operKeyName + "]对应的日期时间";
+                             break;
+                         case "xiaoyudengyu":
+                             if (value < operVal && operVal != "")
+                                 msg = "所选日期不能小于[" + this.operKeyName + "]对应的日期时间";
+                             break;
+                         case "budengyu":
+                             if (value == operVal && operVal != "")
+                                 msg = "所选日期不能等于[" + this.operKeyName + "]对应的日期时间";
+                             break;
+                     }
+                     if (msg != "") {
+                         layer.alert(msg);
+                         this.value = "";
+                         this.elem.val("");
+                     }
+ 
+ 
+                 }
+             } */
             dateOper = {
                 elem: '#TB_' + mapAttr.KeyOfEn,
                 format: format, //可任意组合
@@ -1091,12 +1127,14 @@ function SetDateExt(mapExts, mapAttr) {
 
                 },
                 change: function (value, date, endDate) {
-                    $('.laydate-btns-confirm').click();
+                    if (this.type != "year")
+                        $('.laydate-btns-confirm').click();
                 },
                 done: function (value, date, endDate) {
                     //比对的时间字段值
                     var operVal = $('#TB_' + this.operKey).val();
                     var oper = this.oper;
+                    var msg = "";
                     switch (oper) {
                         case "dayu":
                             if (value <= operVal && operVal != "") {
@@ -1134,7 +1172,7 @@ function SetDateExt(mapExts, mapAttr) {
                         layer.alert(msg);
                         value = "";
                     }
-                     
+
                     $(this.elem).val(value);
                     if (this.funDoc != "")
                         DBAccess.RunFunctionReturnStr(this.funDoc);
@@ -1186,7 +1224,8 @@ function SetDateExt(mapExts, mapAttr) {
 
             },
             change: function (value, date, endDate) {
-                $('.laydate-btns-confirm').click();
+                if (this.type != "year")
+                    $('.laydate-btns-confirm').click();
             },
             done: function (value, date, endDate) {
                 $(this.elem).val(value);
@@ -1204,7 +1243,7 @@ function SetDateExt(mapExts, mapAttr) {
     }
 
     layui.laydate.render(dateOper);
-    $("#TB_" + mapAttr.KeyOfEn).removeClass(".ccdate");
+    $("#TB_" + mapAttr.KeyOfEn).removeClass("ccdate");
 }
 /**
  * 整数，浮点型，金额型扩展属性的解析
@@ -1317,7 +1356,7 @@ function SetNumberMapExt(mapExts, mapAttr) {
                         expVal = max;
                         $(this).val(expVal);
                     }
-                   
+
                     $('#TB_' + mapExt.Doc).val(Rmb2DaXie(expVal));//给大写的文本框赋值
                 });
                 $('#TB_' + mapExt.AttrOfOper).attr("data-daxie", mapExt.Doc);
@@ -1345,17 +1384,20 @@ function DynamicBind(mapExt, ctrlType) {
     if (ctrlType == "RB_") {
         $('input[name="' + ctrlType + mapExt.AttrOfOper + '"]').on(mapExt.Tag, function () {
             var doc = DealExp(mapExt.Doc);
+            doc = doc.replace("this", this.id);
             DBAccess.RunFunctionReturnStr(doc);
         });
     } else if (ctrlType == "CB_") {
         $('input[name="' + ctrlType + mapExt.AttrOfOper + '"]').on(mapExt.Tag, function () {
             var doc = DealExp(mapExt.Doc);
+            doc = doc.replace("this", this.id);
             DBAccess.RunFunctionReturnStr(doc);
         });
     }
     else {
         $('#' + ctrlType + mapExt.AttrOfOper).on(mapExt.Tag, function () {
             var doc = DealExp(mapExt.Doc);
+            doc = doc.replace("this", this.id);
             DBAccess.RunFunctionReturnStr(doc);
         });
     }
@@ -1522,6 +1564,7 @@ function IsHaveSelect(keyVal, selects) {
     return isHave;
 }
 
+
 /**
  * 获取表单数据
  * @param {any} dataJson 表单数据JSON集合
@@ -1642,7 +1685,7 @@ function calculator(mapExt) {
                 if (expression.execute_judgement.length > 0) {
                     evalExpression += "} ";
                 }
-                eval(evalExpression);
+                var result = cceval(evalExpression);
 
                 if (typeof result != "undefined") {
                     var mapAttr = $.grep(frmMapAttrs, function (item) {
@@ -1650,8 +1693,16 @@ function calculator(mapExt) {
                     });
                     if (mapAttr[0].MyDataType == 2)
                         result = parseInt(result);
-                    else
-                        result = numberFormat(result, 2);
+                    else {
+                        var defVal = mapAttr[0].DefVal;
+						var bit = null;
+                        if (defVal != null && defVal !== "" && defVal.indexOf(".") >= 0)
+                            bit = defVal.substring(defVal.indexOf(".") + 1).length;
+                        if (bit == null || bit == undefined || bit == "")
+                            bit = 2;
+                        result = numberFormat(result, bit);
+                    }
+                        
                 } else {
                     result = 0;
                 }
@@ -1834,9 +1885,9 @@ function figure_Template_Map(MapID, UIIsEnable) {
  */
 function figure_Template_HandWrite(HandWriteID) {
     var url = "./CCForm/";
-    if (window.location.href.indexOf("CCForm") != -1)
+    if (GetHrefUrl().indexOf("CCForm") != -1)
         url = "./";
-    if (window.location.href.indexOf("CCBill") != -1)
+    if (GetHrefUrl().indexOf("CCBill") != -1)
         url = "../CCForm/";
     url += "HandWriting.htm?WorkID=" + pageData.WorkID + "&FK_Node=" + pageData.FK_Node + "&KeyOfEn=" + HandWriteID;
     OpenLayuiDialog(url, '签字板', window.innerWidth / 2 - 30, 50, "auto");
@@ -2170,7 +2221,7 @@ function getFieldAth(mapAttr) {
 
     if (data.indexOf('url@') == 0) {
         var url = data.replace('url@', '');
-        window.location.href = url;
+        SetHref(url);
         return;
     }
     data = JSON.parse(data);
@@ -2242,7 +2293,7 @@ function imgShow(obj, src) {
             }
         });
     }
-   
+
 }
 
 //树形结构
@@ -2299,7 +2350,7 @@ function findChildren(jsonArray, parentNo) {
 }
 
 //修改公文正文组件的值,这里需要处理  todo:yln
-function ChangeGovDocFileVal(docWord) {
+function ChangeGovDocFilcceval(docWord) {
 
     if ($("#TB_GovDocFile").length == 1) {
         $("#TB_GovDocFile").val(docWord);
@@ -2363,7 +2414,7 @@ function OpenAth(title, keyOfEn, athMyPK, atPara, FK_MapData, frmType) {
 
         if (data.indexOf('url@') == 0) {
             var url = data.replace('url@', '');
-            window.location.href = url;
+            SetHref(url);
             return;
         }
         data = JSON.parse(data);
@@ -2385,7 +2436,7 @@ function OpenAth(title, keyOfEn, athMyPK, atPara, FK_MapData, frmType) {
         }
 
         var workID = GetQueryString("WorkID");
-        var curUrl = window.location.href;
+        var curUrl = GetHrefUrl();
         var isRoot = false;
         if (curUrl.indexOf("MyFlowGener.htm") != -1 || curUrl.indexOf("MyViewGener.htm"))
             isRoot = true;
@@ -2443,3 +2494,43 @@ function WindowOpenDtl(dtlNo) {
     iframeDtl[0].contentWindow.WindowOpenDtl();
 }
 
+//正则表达式检查
+function CheckRegInput(oInput, filter, tipInfo) {
+    var mapExt = $('#' + oInput).data();
+    var filter = mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}');
+    var oInputVal = $("#" + oInput).val();
+    var result = true;
+    if (oInput != '') {
+        var re = filter;
+        if (typeof (filter) == "string") {
+            if (filter.indexOf('/') == 0) {
+                filter = filter.substr(1, filter.length - 2);
+            }
+
+            re = new RegExp(filter);
+        } else {
+            re = filter;
+        }
+        result = re.test(oInputVal);
+    }
+    if (!result) {
+        $("#" + oInput).addClass('errorInput');
+        var errorId = oInput + "error";
+        if ($("#" + errorId).length == 0) {
+            var span = $("<span id='" + errorId + "' style='color:red'></span>");
+            $("#" + oInput).parent().append(span);
+        }
+        $("#" + errorId).html(tipInfo);
+
+    } else {
+        $("#" + oInput).removeClass('errorInput');
+        var errorId = oInput + "error";
+        if ($("#" + errorId).length != 0)
+            $("#" + errorId).remove();
+        //$("[name=" + oInput + ']').parent().removeChild($("#" + errorId));
+
+
+
+    }
+    return result;
+}

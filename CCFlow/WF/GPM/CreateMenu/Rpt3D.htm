@@ -28,7 +28,7 @@
 
             //更新节点表单类型.
             var moduleNo = GetQueryString("ModuleNo");
-            var en = new Entity("BP.GPM.Menu2020.Menu");
+            var en = new Entity("BP.CCFast.CCMenu.Menu");
             en.ModuleNo = moduleNo;
             en.Name = $("#TB_Title").val();
             //en.UrlExt = $("#TB_Url").val();
@@ -38,14 +38,14 @@
 
             alert("创建成功，您可以在在菜单里执行高级编辑与授权.");
 
-            //var en = new Entity("BP.GPM.Menu2020.Rpt3D", en.No);
+            //var en = new Entity("BP.CCFast.Rpt.Rpt3D", en.No);
             //en.Tag1 = "SELECT ";
             // en.Tag2 = "";
             //en.Tag3 = "";
             //en.Update();
 
-            window.location.href = "../../Comm/En.htm?EnName=BP.GPM.Menu2020.Rpt3D&No=" + en.No;
-            // window.location.href = "../Menus.htm";
+            SetHref("../../Comm/En.htm?EnName=BP.CCFast.Rpt.Rpt3D&No=" + en.No);
+            // SetHref( "../Menus.htm";
         }
     </script>
 </head>

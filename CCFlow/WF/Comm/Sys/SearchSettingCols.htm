@@ -73,26 +73,26 @@
             mapAttrEn.SetPara("SearchVisable", 0);
             mapAttrEn.Update();
 
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function ShowIt(mypk) {
             var mapAttrEn = new Entity("BP.Sys.MapAttr", mypk);
             mapAttrEn.SetPara("SearchVisable", 1);
             mapAttrEn.Update();
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function Up(mypk) {
             var mapAttrEn = new Entity("BP.Sys.MapAttr", mypk);
             mapAttrEn.DoMethodReturnString("DoUpTabIdx");
-            window.location.href = window.location.href;
+            Reload();
         }
         function Down(mypk) {
             var mapAttrEn = new Entity("BP.Sys.MapAttr", mypk);
             mapAttrEn.DoMethodReturnString("DoDownTabIdx");
 
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function SaveCols() {
@@ -109,19 +109,19 @@
                 }
 
                 var mapAttrEn = new Entity("BP.Sys.MapAttr", mapAttr);
-
+                mapAttrEn.MyPK = mapAttr.MyPK;
                 mapAttrEn.Name = $("#TB_" + mapAttrEn.KeyOfEn).val();
                 mapAttrEn.UIWidth = $("#TBW_" + mapAttrEn.KeyOfEn).val();
                 mapAttrEn.Update();
 
             }
 
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function Back() {
             var url = "SearchSetting.htm?EnsName=" + GetQueryString("EnsName");
-            window.location.href = url;
+            SetHref(url);
         }
 
         function Clear() {
@@ -138,7 +138,7 @@
             }
 
             //重置排序顺序
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function FoolDesinger() {

@@ -106,10 +106,10 @@
                 if (en.IsExits() == true) {
                     layer.confirm("该账号已经注册过了，您需要直接登录吗?", function (index) {
                         layer.close(index);
-                        var url = window.location.href;
+                        var url = GetHrefUrl();
                         url = url.replace("RegUser.htm", "Login.htm");
                         url += "&Tel=" + en.No;
-                        window.location.href = url;
+                        SetHref(url);
                     });
                 }
                 $('#ri').removeAttr('hidden');
@@ -183,7 +183,7 @@
                     alert(data);
                     return;
                 }
-                window.location.href = data;
+                SetHref(data);
                 //防止页面跳转
                 return false;
             });
@@ -196,10 +196,10 @@
         function Login() {
 
             var no = $("#TB_No").val();
-            var url = window.location.href;
+            var url = GetHrefUrl();
             url = url.replace("RegUser.htm", "Login.htm");
             url += "&Tel=" + no;
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
 

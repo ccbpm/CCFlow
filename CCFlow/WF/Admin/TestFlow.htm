@@ -38,7 +38,7 @@
             if (webUser.No != "admin") {
 
                 var url = "TestCase.htm?FK_Flow=" + fk_flow;
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
 
@@ -67,7 +67,7 @@
                 }
 
                 if (data.indexOf('管理员') > 0) {
-                    window.location.href = './CCBPMDesigner/Login.htm';
+                    SetHref('./CCBPMDesigner/Login.htm');
                     return;
                 }
 
@@ -77,7 +77,7 @@
 
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
 
@@ -121,7 +121,7 @@
 
         function ToParaTest() {
             var url = "TestCase.htm?FK_Flow=" + GetQueryString("FK_Flow");
-            window.location.href = url;
+            SetHref(url);
             return;
         }
     </script>

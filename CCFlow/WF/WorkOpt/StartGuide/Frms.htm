@@ -60,7 +60,7 @@
                 return;
             }
             if (checks.length == 1) {
-                window.location.href = "../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workid + "&FK_Node=" + flowNo + "01&IsCheckGuide=1&Frms=" + checks[0].id;
+                SetHref("../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workid + "&FK_Node=" + flowNo + "01&IsCheckGuide=1&Frms=" + checks[0].id);
                 return;
             }
             var frmIds = [];
@@ -72,7 +72,7 @@
             var gwf = new Entity("BP.WF.GenerWorkFlow", workid);
             gwf.SetPara("Frms", frmIds);
             gwf.Update();
-            window.location.href = "../../MyFlowTree.htm?FK_Flow=" + flowNo + "&WorkID=" + workid + "&FK_Node=" + flowNo + "01";
+            SetHref("../../MyFlowTree.htm?FK_Flow=" + flowNo + "&WorkID=" + workid + "&FK_Node=" + flowNo + "01");
             return;
 
         }

@@ -103,9 +103,8 @@
             <!--<div class="item item-name">流程名称</div>-->
 
             <div class="item item-name">
-                <div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs" onclick="NewFlow()">
-                    <i class="icon-plus" style="margin-right: 6px"></i>创建流程
-                </div>
+                <!--<div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs">
+                </div>-->
             </div>
 
             <div class="item item-other">实例</div>
@@ -130,7 +129,7 @@
                         <div class="item item-other">{{item.WFSta5}}</div>-->
                     </div>
                     <div class="item item-other" style="background-color:azure;">
-                        <button @click.stop="NewFlow()" :data-no="item.No" :data-name="item.Name" :data-idx="index" class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs">
+                        <button @click.stop="NewFlow(item.No)" :data-no="item.No" :data-name="item.Name" :data-idx="index" class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs">
                             新建流程
                         </button>
                     </div>
@@ -171,9 +170,6 @@
 
     <script type="text/javascript">
 
-        function NewFlow() {
-            alert("请点击目录，或者在目录上点击右键，创建流程。");
-        }
     </script>
 
 </body>

@@ -66,7 +66,7 @@ var RequestArgs = function () {
     this.FK_MapData = GetQueryString("FK_MapData");
     this.UserNo = GetQueryString("UserNo");
     this.FID = GetQueryString("FID");
-    this.SID = GetQueryString("SID");
+    this.SID = GetQueryString("Token");
     this.CWorkID = GetQueryString("CWorkID");
     this.PWorkID = GetQueryString("PWorkID");
     this.PFlowNo = GetQueryString("PFlowNo");
@@ -95,7 +95,7 @@ var urlExtFrm = function () {
     if (args.FID != "")
         extUrl += "&FID=" + args.FID;
     if (args.SID != "")
-        extUrl += "&SID=" + args.SID;
+        extUrl += "&Token=" + args.SID;
 
     if (args.CWorkID != "")
         extUrl += "&CWorkID=" + args.CWorkID;
@@ -107,7 +107,7 @@ var urlExtFrm = function () {
         extUrl += "&IsLoadData=" + args.IsLoadData;
 
     //获取其他参数
-    var sHref = window.location.href;
+    var sHref = GetHrefUrl();
     var args = sHref.split("?");
     var retval = "";
     if (args[0] != sHref) /*参数不为空*/

@@ -122,7 +122,7 @@
             }
 
             if (data.indexOf('url@') == 0) {
-                window.location.href = data.replace('url@', '');
+                SetHref(data.replace('url@', ''));
                 return;
             }
 
@@ -177,7 +177,7 @@
         }
 
         function Ref() {
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function DeleteIt(empNo, empName) {
@@ -194,7 +194,7 @@
                 alert(data);
                 return;
             }
-            window.location.href = window.location.href;
+            Reload();
             return;
         }
 
@@ -218,7 +218,7 @@
 
             if (data.indexOf('err@') == 0) {
                 alert(data);
-                window.location.href = window.location.href;
+                Reload();
                 return;
             }
 

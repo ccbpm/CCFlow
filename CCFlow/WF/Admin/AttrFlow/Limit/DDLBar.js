@@ -108,7 +108,7 @@ function changeOption() {
     var optionKey = optionKey = sele[index].value;
     var url = GetUrl(optionKey);
 
-    window.location.href = url + "?FK_Flow=" + flowNo;
+    SetHref( url + "?FK_Flow=" + flowNo);
 }
 
 function CheckFlow(flowNo) {
@@ -126,7 +126,7 @@ function SaveAndClose() {
 function OpenEasyUiDialogExt(url, title, w, h, isReload) {
     OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
         if (isReload == true) {
-            window.location.href = window.location.href;
+            Reload();
         }
     });
 }

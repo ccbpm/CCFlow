@@ -41,7 +41,7 @@
 }
 //获取WF之前路径
 function GetLocalWFPreHref() {
-    var url = window.location.href;
+    var url = GetHrefUrl();
     if (url.indexOf('/WF/') >= 0) {
         var index = url.indexOf('/WF/');
         url = url.substring(0, index);
@@ -109,15 +109,15 @@ function valitationBefore(o, validateType) {
 var idx = 0;
 var oldCount = 0;
 function valitationAfter(o, validateType) {
-   // debugger
+    // debugger
     idx = getCursortPosition(o);
     oldCount = getStrCount(o.value.toString().substr(0, idx), ',');
     var value = o.value;
     if (validateType == "int") {
         value = value.replace(/[^\d,-]/g, "");
         o.value = value;
-    } 
-        
+    }
+
 
     //if (isFF()) {
     var flag = false;
@@ -139,7 +139,7 @@ function valitationAfter(o, validateType) {
     if (!flag) {
         o.value = '';
     }
-  
+
 }
 
 
@@ -189,8 +189,8 @@ function clearNoNum(obj) {
     if (obj.value == "")
         obj.value = 0.00;
 
-    if (!/\./.test(obj.value)) //为整数字符串在末尾添加.00  
-        obj.value += '.00';
+    //if (!/\./.test(obj.value)) //为整数字符串在末尾添加.00  
+    //   obj.value += '.00';
 
     obj.value = obj.value.replace(/^0*(0\.|[1-9])/, '$1');//解决 粘贴不生效  
     obj.value = obj.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符  
@@ -234,22 +234,23 @@ function getCursortPosition(ctrl) {
     return (CaretPos);
 }
 
-function FormatMoney(obj, precision, separator) {
+function FormatMoney(obj, precision, separator, isDealPrec) {
     //获取之前的，
     var oldV = obj.value;
 
     if (precision == undefined || precision == null || precision == "")
         precision = 2;
-    if (precision != 2)
-        return;
+    //if (precision != 2)
+    //   return;
     oldV = oldV.replace(/[^\d.-]/g, "");
-    var val = formatNumber(oldV, precision, separator);
+    var val = formatNumber(oldV, precision, separator, isDealPrec);
     if (val != NaN)
         obj.value = val;
     var didx = getStrCount(val.toString().substr(0, idx), ',');
     if (didx > oldCount && didx > 0)
         idx = idx + 1;
-    setCaretPosition(obj, idx);
+    if (isDealPrec==0)
+        setCaretPosition(obj, idx);
 
 
 }
@@ -272,9 +273,10 @@ function getStrCount(scrstr, armstr) { //scrstr 源字符串 armstr 特殊字符
 * @return 金额格式的字符串,如'1,234,567'，默认返回NaN
 * @type String 
 */
-function formatNumber(num, precision, separator) {
-    if (precision != 2)
-        return num;
+function formatNumber(num, precision, separator, isDealPrec) {
+
+    //if (precision != 2)
+    //   return num;
     var parts;
     // 判断是否为数字
     if (!isNaN(parseFloat(num)) && isFinite(num)) {
@@ -282,9 +284,12 @@ function formatNumber(num, precision, separator) {
         // 不在判断中直接写 if (!isNaN(num = parseFloat(num)) && isFinite(num))
         // 是因为parseFloat有一个奇怪的精度问题, 比如 parseFloat(12312312.1234567119)
         // 的值变成了 12312312.123456713
-        num = Number(num);
+        //num = Number(num);
         // 处理小数点位数
-        num = (typeof precision !== 'undefined' ? (Math.round(num * Math.pow(10, precision)) / Math.pow(10, precision)).toFixed(precision) : num).toString();
+        if (isDealPrec == 1)
+            num = (typeof precision !== 'undefined' ? (Math.round(num * Math.pow(10, precision)) / Math.pow(10, precision)).toFixed(precision) : num).toString();
+        else
+            num = num.toString();
         // 分离数字的小数部分和整数部分
         parts = num.split('.');
         // 整数部分加[separator]分隔, 借用一个著名的正则表达式

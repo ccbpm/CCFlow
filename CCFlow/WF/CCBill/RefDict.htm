@@ -304,13 +304,13 @@
             ur.SetPara("RecCount", count);
             var i = ur.Save();
 
-            var url = window.location.href;
+            var url = GetHrefUrl();
             if (url.indexOf("PageIdx") != -1)
                 url = replaceParamVal(url, "PageIdx", 1);
 
             BindTable();
 
-            window.location.href = url;
+            SetHref(url);
         }
 
 
@@ -577,7 +577,7 @@
                     }
 
                     //打开学生缴费页面
-                    window.location.href = "./MyBill.htm?FrmID=" + GetQueryString("BillID") + "&FK_MapData=" + GetQueryString("BillID") + "&WorkID=" + data;
+                    SetHref("./MyBill.htm?FrmID=" + GetQueryString("BillID") + "&FK_MapData=" + GetQueryString("BillID") + "&WorkID=" + data);
                 }
 
             });
@@ -833,7 +833,7 @@
                 if (rowOpenModel == 0)
                     window.open(url);
                 if (rowOpenModel == 1)
-                    window.location.href = url;
+                    SetHref(url);
                 if (rowOpenModel == 2) {
                     var W = document.body.clientWidth - 40;
                     var H = document.body.clientHeight - 40;
@@ -844,7 +844,7 @@
                     var W = document.body.clientWidth - 40;
                     var H = document.body.clientHeight - 40;
                     OpenBootStrapModal(url, "eudlgframe", frmDict.Name, W, H, "icon-property", null, null, null, function () {
-                        window.location.href = window.location.href;
+                        Reload();
                     }, null, "black");
                 }
 

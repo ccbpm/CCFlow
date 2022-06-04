@@ -27,47 +27,14 @@
         var condOrAnd = GetQueryString("CondOrAnd");
         //初始化页面函数.....
         $(function () {
-
-            //检查当前审核组件的状态.
-            var condType = GetQueryString("CondType");
-            var fk_flow = GetQueryString("FK_Flow");
-            var fk_mainNode = GetQueryString("FK_MainNode");
-            var fk_Node = GetQueryString("FK_Node");
-            var toNodeID = GetQueryString("ToNodeID");
-
             var en = new Entity("BP.WF.Template.FrmWorkCheck", fk_Node);
             if (en.FWCSta != 0) {
                 $("#Msg1").html("<font color=red>当前审核组件是非启用状态，您不能设置此模式.</fon>");
-            }
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
-            handler.AddUrlData();
-            handler.AddPara("FK_Node", fk_Node);
-            handler.AddPara("CondType", condType);
-            handler.AddPara("FK_Flow", fk_flow);
-            handler.AddPara("FK_MainNode", fk_mainNode);
-            handler.AddPara("ToNodeID", toNodeID);
-            var data = handler.DoMethodReturnString("CondByWorkCheck_Init");
-
-            if (data.indexOf('err@') == 0) {
-                $("#Msg").html("<font color=red>加载失败:<br>" + data + "</font> .");
                 return;
             }
-
-            if (data.indexOf('url@') == 0) {
-                var url = data.replace('url@', '');
-                window.location.href = url;
-                return;
-            }
-
-            //转json.
-            data = JSON.parse(data);
-            var docs = data.OperatorValue;
-            //en.FWCView = "同意,不同意,酌情处理";
             if (en.FWCView == "") {
                 $("#Msg2").html("<font color=red>您没有设置立场，无法设置按照立场设置转向条件</fon>");
             } else {
-
                 //同意,不同意,酌情处理
                 var strs = en.FWCView.split(',');
                 var html = "";
@@ -75,25 +42,26 @@
                     var str = strs[i]
                     html += "<option value=" + str + ">" + str + "</option>"
                 }
-
                 $("#DDL_Docs").append(html);
 
             }
+            var mypk = GetQueryString("MyPK");
+            var cond = new Entity("BP.WF.Template.Cond");
+            if (mypk != null && mypk != undefined && mypk != "") {
+                cond.MyPK = mypk;
+                cond.SetPKVal(mypk);
+                cond.RetrieveFromDBSources();
+            }
+            var docs = cond.OperatorValue;
+            //en.FWCView = "同意,不同意,酌情处理";
+            
             document.getElementById("DDL_Docs").value = docs;
             document.getElementById("TB_Note").value = data.Note;
-            //设置默认选中第一个
-            $("#DDL_Docs").find('option:first').prop("selected", 'selected');
+           
         });
 
         //执行保存..
         function Save() {
-
-            var condType = GetQueryString("CondType");
-            var fk_flow = GetQueryString("FK_Flow");
-            var fk_mainNode = GetQueryString("FK_MainNode");
-            var fk_Node = GetQueryString("FK_Node");
-
-            var toNodeID = GetQueryString("ToNodeID");
             var sqlVal = document.getElementById("DDL_Docs").value;
             var note = document.getElementById("TB_Note").value;
 
@@ -106,11 +74,7 @@
                 return;
             }
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
-            handler.AddPara("FK_Flow", fk_flow);
-            handler.AddPara("CondType", condType);
-            handler.AddPara("FK_MainNode", fk_mainNode);
-            handler.AddPara("FK_Node", fk_Node);
-            handler.AddPara("ToNodeID", toNodeID);
+            handler.AddUrlData();
             handler.AddPara("TB_Docs", sqlVal);
             handler.AddPara("TB_Note", note);
             handler.AddPara("CondOrAnd", GetQueryString("CondOrAnd"));
@@ -123,66 +87,26 @@
 
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
             Back();
         }
 
-        //执行删除..
-        function Delete() {
-
-            if (window.confirm('您确定要删除吗？') == false)
-                return;
-
-            var condType = GetQueryString("CondType");
-            var fk_flow = GetQueryString("FK_Flow");
-            var fk_mainNode = GetQueryString("FK_MainNode");
-            var fk_Node = GetQueryString("FK_Node");
-            var toNodeID = GetQueryString("ToNodeID");
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
-            handler.AddPara("FK_Flow", fk_flow);
-            handler.AddPara("CondType", condType);
-            handler.AddPara("FK_MainNode", fk_mainNode);
-            handler.AddPara("FK_Node", fk_Node);
-            handler.AddPara("ToNodeID", toNodeID);
-
-            var data = handler.DoMethodReturnString("CondByWorkCheck_Delete");
-
-            if (data.indexOf('err@') == 0) {
-                $("#Msg").html("<font color=red>" + data + "</font>");
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) {
-                var url = data.replace('url@', '');
-                window.location.href = url;
-                return;
-            }
-
-            document.getElementById("TB_Docs").value = "";
-            document.getElementById("TB_Note").value = "";
-
-            if (window.confirm('保存成功,是否返回？'))
-                window.location.href = window.location.href;
-            Back();
-        }
         //返回.
         function Back() {
-            var url = window.location.href;
+            var url = GetHrefUrl();
             url = url.replace('CondByWorkCheck.htm', 'List.htm');
-            window.location.href = url;
-            /*parent.location.reload();
-           window.close();
-            window.parent.Condlist.closeCurrentTabs();*/
+            if (url.indexOf("MyPK=") != -1) {
+                url = url.replace("&MyPK=" + GetQueryString("MyPK"), "");
+            }
+            SetHref(url);
+           
         }
         function ToWorkCheck() {
-            //var url = "../../Comm/En.htm?EnName=BP.WF.Template.FrmWorkCheck&NodeID=" + GetQueryString("FK_Node");
             var url = "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmWorkCheck&NodeID=" + GetQueryString("FK_Node");
 
             WinOpen(url);
-            //window.open(url);
 
         }
     </script>

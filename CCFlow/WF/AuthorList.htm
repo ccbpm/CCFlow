@@ -33,7 +33,7 @@
 
             var webUser = new WebUser();
             if (webUser.IsAuthorize == "1") {
-                window.location.href = 'AuthorTodolist.htm';
+                SetHref('AuthorTodolist.htm');
                 return;
             }
 
@@ -97,7 +97,7 @@
                 return;
             }
 
-            window.location.href = 'AuthorTodolist.htm?RefNo=' + fk_emp;
+            SetHref('AuthorTodolist.htm?RefNo=' + fk_emp);
             return;
 
             // parent.location.reload();

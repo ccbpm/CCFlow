@@ -186,15 +186,28 @@ window.onload = function () {
 
                 //写入日志.
                 UserLogInsert("MenuClick", menu.Title + "@" + menu.Icon + "@" + menu.Url);
-                if (menu.RefMethodType == 0 && menu.FunPara=="false") {
+                if (menu.RefMethodType == 0 && menu.FunPara == "false") {
                     var warning = menu.Warning;
                     if (warning == "null" || warning == "")
                         warning = "确定要执行吗？";
                     warning = warning.replace(/,\s+/g, ",");
                     warning = warning.replace(/\s+/g, "\r\n");
 
-                    if (confirm(warning) == false)
+                    if (menu.RefMethodType == 0 && menu.FunPara == "false") {
+                        var warning = menu.Warning;
+                        if (warning == "null" || warning == "")
+                            warning = "确定要执行吗？";
+                        warning = warning.replace(/,\s+/g, ",");
+                        warning = warning.replace(/\s+/g, "\r\n");
+                        var _this = this;
+                        layer.confirm(warning, function (index) {
+
+                            layer.close(index);
+                            _this.openTab(menu.Title, menu.Url, alignRight);
+                        });
                         return;
+                    }
+
                 }
 
                 //菜单打开方式
@@ -321,11 +334,7 @@ window.onload = function () {
             refreshMenuTree: function (data) {
                 //this.menuTreeData = new MenuConvertTools(data).convertToTreeData()
                 this.menuTreeData = new MenuConvertTools(data).convertToTreeData()
-                layer.close(loading);
-                //this.openThemePicker();
-                //var color = localStorage.getItem("themeColor")
-                //console.log(color)
-                // chooseTheme(color)
+
                 this.classicalLayout = parseInt(localStorage.getItem('classicalLayout')) === 1
                 this.updateLayout()
             },
@@ -363,7 +372,7 @@ window.onload = function () {
                 }
                 if (data.indexOf('url@') == 0) {
                     var url = data.replace('url@', '');
-                    window.location.href = url;
+                    SetHref(url);
                     return;
                 }
                 data = JSON.parse(data);*/
@@ -812,7 +821,7 @@ window.onload = function () {
             Designer: function (no, name) {
                 var sid = GetQueryString("SID");
                 var webUser = new WebUser();
-                var url = "../Admin/CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&SID=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
+                var url = "../Admin/FoolFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&SID=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
                 this.openTab(name, url);
             },
             EditSort: function (no, name) {
@@ -837,39 +846,6 @@ window.onload = function () {
                 var url = "../Admin/CCFormDesigner/GoToFrmAttr.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&SID=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
                 this.openTab(name, url);
             },
-            copyFrm: function (no) {
-                if (window.confirm("确定要执行表单复制吗?") == false)
-                    return;
-                var flow = new Entity("BP.Sys.MapData", no);
-                var data = flow.DoMethodReturnString("DoCopy");
-                layer.msg(data);
-                setTimeout(function () {
-                    window.location.reload();
-                }, 2000);
-            },
-            DeleteFlow: function (no, pidx, idx) {
-                var msg = "提示: 确定要删除该表单吗?";
-                //   msg += "\t\n1.如果该流程下有实例，您不能删除。";
-                //  msg += "\t\n2.该流程为子流程的时候，被引用也不能删除.";
-                if (window.confirm(msg) == false)
-                    return;
-
-                var load = layer.msg("正在处理,请稍候...", {
-                    icon: 16,
-                    anim: 5
-                })
-                var _this = this
-                setTimeout(function () {
-                    var en = new Entity("BP.Sys.MapData", no);
-                    en.Delete();
-                    //  var data = flow.DoMethodReturnString("DoDelete");
-                    layer.close(load);
-                    // layer.msg(data);
-                    _this.subMenuData.children[pidx].children.splice(idx, 1)
-                    var leaveItems = _this.subMenuData.children[pidx].children
-                    _this.$set(_this.subMenuData.children[pidx], 'children', leaveItems)
-                }, 120)
-            },
             calcClassList: function (item, type) {
                 var cList = []
                 if (item.type === 'flow') cList.push(type === 1 ? 'flow-node' : 'flow-node-child')
@@ -878,12 +854,19 @@ window.onload = function () {
             }
         },
         mounted: function () {
-            var param = document.location.search.substr(1);
-            selectedTabsurl = "../RefFunc/EnOnly.htm?" + param;
+
+
+            var url = GetHrefUrl();
+            url = url.replace("En.htm", "EnOnly.htm");
+
+            selectedTabsurl = url;// "../RefFunc/EnOnly.htm?EnName=" + GetQueryString("EnName") + "&PKVal=" + pkval; // GetQueryString("PKVal");
+            //alert(selectedTabsurl);
             this.selectedTabsIndexUrl = selectedTabsurl;
 
             this.initMenus()
             var _this = this
+
+
             setTimeout(function () {
                 _this.bindDropdown('flow')
             }, 500)

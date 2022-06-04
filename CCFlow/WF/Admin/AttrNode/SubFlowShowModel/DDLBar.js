@@ -72,7 +72,7 @@ function changeOption() {
         optionKey = sele[index].value
     }
     var roleName = GenerUrlByOptionKey(optionKey);
-    window.location.href = roleName + "?MyPK=" + mypk + "&FK_Flow=" + GetQueryString("FK_Flow");
+    SetHref( roleName + "?MyPK=" + mypk + "&FK_Flow=" + GetQueryString("FK_Flow");
 }
 function SaveAndClose() {
     Save();
@@ -84,7 +84,7 @@ function OpenEasyUiDialogExt(url, title, w, h, isReload) {
 
     OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
         if (isReload == true) {
-            window.location.href = window.location.href;
+            Reload();
         }
     });
 }

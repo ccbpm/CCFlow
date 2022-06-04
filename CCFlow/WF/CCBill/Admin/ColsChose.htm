@@ -114,25 +114,25 @@
             mapAttrEn.SetPara("SearchVisable", 0);
             mapAttrEn.Update();
 
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function ShowIt(mypk) {
             var mapAttrEn = new Entity("BP.Sys.MapAttr", mypk);
             mapAttrEn.SetPara("SearchVisable", 1);
             mapAttrEn.Update();
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function Up(mypk) {
             var mapAttrEn = new Entity("BP.Sys.MapAttr", mypk);
             mapAttrEn.DoMethodReturnString("DoUpTabIdx");
-            window.location.href = window.location.href;
+            Reload();
         }
         function Down(mypk) {
             var mapAttrEn = new Entity("BP.Sys.MapAttr", mypk);
             mapAttrEn.DoMethodReturnString("DoDownTabIdx");
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function Save() {
@@ -155,11 +155,11 @@
                 mapAttrEn.Update();
             }
 
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function SaveAndSetSearchCond() {
-            window.location.href = "SearchCond.htm?FrmID=" + GetQueryString("FrmID");
+            SetHref("SearchCond.htm?FrmID=" + GetQueryString("FrmID"));
         }
     </script>
 </head>

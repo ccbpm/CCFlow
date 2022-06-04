@@ -44,7 +44,7 @@
 
             if (en.Update() == 0)
                 en.Insert();
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </head>
@@ -58,6 +58,9 @@
             <br />
             <textarea rows="3" id="TB_Doc" name="TB_Doc"></textarea>
             值用逗号分开,比如: 飞机,火车,轮船,火箭,其他
+        </fieldset>
+        <fieldset>
+            <img src="MultipleChoiceSmall.png" />
         </fieldset>
     </form>
 </body>

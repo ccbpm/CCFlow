@@ -21,7 +21,7 @@ var writeImg = "";
 //是否只读?
 function IsReadOnly() {
     //如果是MyFlowView 或者是MyCC 就把该控件设置为只读的.
-    var url = window.location.href;
+    var url = GetHrefUrl();
     if (url.indexOf('MyViewGener') != -1 || url.indexOf('MyCC') != -1 || url.indexOf('MyFrm') != -1) {
         return 1;
     }
@@ -177,7 +177,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
     //可编辑的审核意见
     if (isEditWorkCheck == true) {
 
-        _Html += "<div class='only-print-hidden'>";
+        _Html += "<div class=''>";
 
         //是否启用附件上传
         if (frmWorkCheck.FWCAth == 1) {
@@ -192,7 +192,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
         else
             msg = msg.replace(/<BR>/g, '\t\n');
 
-        _Html += "<textarea id='WorkCheck_Doc' maxlength='2000' placeholder='内容不能为空,请输入信息,或者使用常用短语选择,内容不超过2000字.' rows='3' style='color:blue;width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck(0)' onkeydown='this.style.height=\"60px\";this.style.height=this.scrollHeight+\"px\";'>";
+        _Html += "<textarea id='WorkCheck_Doc' maxlength='2000' placeholder='内容不能为空,请输入信息,或者使用常用短语选择,内容不超过2000字.' rows='3' style='color:blue;width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck(0)'>";
         _Html += msg;
         _Html += "</textarea>";
         _Html += "<br>";
@@ -296,7 +296,7 @@ function WorkCheck_Parse(track, aths, frmWorkCheck, SignType, showNodeName, isSh
         //签名，日期.
         //_Html += "<tr style='border: 1px solid #D6DDE6;border-top: none;'>";
         if (track.RDT == "")
-            _Html += "<div style='text-align:right;width:100%;padding-right:5px' class='only-print-hidden'>";
+            _Html += "<div style='text-align:right;width:100%;padding-right:5px' class=''>";
         else
             _Html += "<div style='text-align:right;padding-right:5px'>";
         if (isEditWorkCheck == true && getConfigByKey("IsShowWorkCheckUsefulExpres", true) == true)
@@ -474,14 +474,14 @@ function DelWorkCheckAth(athPK) {
 
 function AthDown(fk_ath, pkVal, delPKVal, fk_mapData, fk_flow, ath) {
     if (plant == "CCFlow") {
-        window.location.href = basePath + '/WF/CCForm/DownFile.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_MapData=' + fk_mapData + '&Ath=' + ath;
+        SetHref(basePath + '/WF/CCForm/DownFile.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_MapData=' + fk_mapData + '&Ath=' + ath);
         return;
     }
 
-    var currentPath = window.document.location.href;
+    var currentPath = GetHrefUrl();
     var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
     Url = path + 'WF/Ath/downLoad.do?DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=' + fk_node + '&FK_Flow=' + fk_flow + '&FK_MapData=' + fk_mapData + '&Ath=' + ath;
-    window.location.href = Url;
+    SetHref(url);
 }
 
 
@@ -568,7 +568,7 @@ function GetSubAths(nodeID, aths) {
 function GetAthHtml(ath) {
     var html = "<div id='Ath_" + ath.MyPK + "' style='margin:5px; display:inline-block;'>";
     var src = './';
-    if (window.location.href.indexOf("/CCForm") != -1)
+    if (GetHrefUrl().indexOf("/CCForm") != -1)
         src = '../';
     if (ath.CanDelete == "1" || ath.CanDelete == true) {
         html += "<img alt='删除' align='middle' src='" + src + "Img/Btn/Delete.gif' onclick=\"DelWorkCheckAth('" + ath.MyPK + "')\" />&nbsp;&nbsp;";
@@ -594,7 +594,7 @@ function AddUploadify(divid, fwcShowModel) {
         if (plant == 'CCFlow')
             url = basePath + '/WF/CCForm/Handler.ashx?AttachPK=ND' + checkParam.FK_Node + '_FrmWorkCheck&DoType=MoreAttach&FK_Flow=' + checkParam.FK_Flow + '&PKVal=' + workid + "&FK_Node=" + GetQueryString("FK_Node");
         else {
-            var currentPath = window.document.location.href;
+            var currentPath = GetHrefUrl();
             var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
             url = path + "WF/Ath/AttachmentUpload.do?FK_FrmAttachment=ND" + checkParam.FK_Node + "_FrmWorkCheck&FK_Flow=" + checkParam.FK_Flow + "&PKVal=" + checkParam.WorkID + "&FK_Node=" + GetQueryString("FK_Node");
         }
@@ -666,7 +666,7 @@ function UploadChange(fwcShowModel) {
     if (plant == 'CCFlow')
         Url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&FK_FrmAttachment=" + AttachPK + "&WorkID=" + checkParam.WorkID + "&PKVal=" + checkParam.WorkID + "&AttachPK=" + AttachPK + "&FK_Node=" + GetQueryString("FK_Node") + "&parasData=" + parasData + "&t=" + new Date().getTime();
     else {
-        var currentPath = window.document.location.href;
+        var currentPath = GetHrefUrl();
         var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
         Url = path + "WF/Ath/AttachmentUploadS.do/?FK_FrmAttachment=" + AttachPK + "&PKVal=" + checkParam.WorkID + "&AttachPK=" + AttachPK + "&parasData=" + parasData;
     }
@@ -725,7 +725,7 @@ function GetNewUploadedAths(files, fwcShowModel) {
         console.log(data);
         return;
     }
-    var naths = eval('(' + data + ')');
+    var naths = cceval('(' + data + ')');
 
 
     if ($("#aths_" + checkParam.FK_Node).length == 0) {

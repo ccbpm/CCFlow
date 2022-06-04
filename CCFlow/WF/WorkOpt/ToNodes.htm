@@ -26,7 +26,7 @@
         if ("undefined" == typeof WF_WorkOpt_LeftSecond) {
             var WF_WorkOpt_LeftSecond = 30;
         }
-       
+
         //初始化数据
         $(function () {
             WorkID = GetQueryString("WorkID");
@@ -90,8 +90,10 @@
                 if (isSubYBD == true) {
                     if (node.NodeID == selectNodeID)
                         checked = "checked=checked";
-                    html += "<input type='checkbox' id='CB_" + node.NodeID + "' name='nodeSelect' " + checked + ">";
+
+                    html += "&nbsp;&nbsp;<input type='checkbox' id='CB_" + node.NodeID + "' name='nodeSelect' " + checked + ">";
                     html += "<label for='CB_" + node.NodeID + "'>" + node.Name + "</label>";
+
                     //上一步发送人选择或者是根据工程类项目由发送人选择
                     if (node.DeliveryWay == 4 || node.DeliveryWay == 21) {
                         html += "- <a id=\"acc_link_" + node.NodeID + "\"  href='javaScript:void(0)' onclick='SelectEmps(\"Accepter\",\"" + node.NodeID + "\")'>选择处理人" + addSpan + "</a>";
@@ -99,11 +101,16 @@
                     if (node.DeliveryWay == 43)
                         html += "- <a id=\"acc_link_" + node.NodeID + "\"  href='javaScript:void(0)' onclick='SelectEmps(\"AccepterOfOrg\",\"" + node.NodeID + "\")'>选择处理人" + addSpan + "</a>";
 
-
                     html += "<br/><br/>";
-                } else {
+
+                }
+
+                if (isSubYBD == false) {
+
+
                     if (node.NodeID == selectNodeID)
                         checked = "checked=checked";
+
                     html += "<input type='radio' id='RB_" + node.NodeID + "' name='nodeSelect' value='RB_" + node.NodeID + "' " + checked + "  onclick='SetUnEable(this);'>";
                     html += "<label for='RB_" + node.NodeID + "'>" + node.Name + "</label>";
                     //上一步发送人选择或者是根据工程类项目由发送人选择
@@ -221,7 +228,7 @@
             if (data.indexOf('TurnUrl@') == 0) {  //发送成功时转到指定的URL
                 var url = data;
                 url = url.replace('TurnUrl@', '');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
 
@@ -249,7 +256,7 @@
 
                 var url = data;
                 url = url.replace('url@', '');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
             data = data.replace('<br/>', '');
@@ -305,10 +312,10 @@
                     window.parent.returnWorkWindowClose();
                 }
             } else {
-				window.parent.parent.close();
+                window.parent.parent.close();
                 ChildrenPostMessage('', "returnWorkWindowClose");
             }
-          
+
 
             window.close();
         }
@@ -336,25 +343,28 @@
             margin-bottom: 0px;
             font-weight: normal;
         }
+
         input {
-            width:24px;
-            height:24px;
-            margin-right:6px!important;
-            float:left;
+            width: 24px;
+            height: 24px;
+            margin-right: 6px !important;
+            float: left;
         }
+
         .button-bar {
-            position:absolute;
-            left:0;
-            right:0;
-            bottom:0;
-            background:#f2f2f2;
-            border-top:solid 1px #e5e5e5;
-            padding:6px;
-            text-align:center
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #f2f2f2;
+            border-top: solid 1px #e5e5e5;
+            padding: 6px;
+            text-align: center
         }
-        input[type="radio"], input[type="checkbox"]{
-            margin:0;
-        }  
+
+        input[type="radio"], input[type="checkbox"] {
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -373,7 +383,7 @@
 
         <div class="button-bar">
             <button type=button onclick="Send();" id="Btn_Send" class="btn btn-primary">
-               发送
+                发送
             </button>
 
             <button type=button onclick="Cancel();" id="Btn_Cancel" class="btn btn-default">

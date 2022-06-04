@@ -8,14 +8,15 @@
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script src="../../Scripts/layui/layui/layui.js" type="text/javascript"></script>
-    <script src="../../Scripts/layui/LayuiDialog.js"  type="text/javascript"></script>
+    <script src="../../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
     <style type="text/css">
-      
+
         .layui-table-cell {
             height: auto;
             white-space: normal;
         }
-        .layui-table-view .layui-form-checkbox{
+
+        .layui-table-view .layui-form-checkbox {
             top: 10px !important;
         }
     </style>
@@ -128,7 +129,7 @@
                             title: namelink,
                             width: attr.UIWidth,
                             align: 'center',
-                            name:attr.Name,
+                            name: attr.Name,
                             templet: function (d) {
                                 return "<input type=checkbox value='1' id='" + this.field + "_" + d.LAY_INDEX + "' name='" + this.field + "_" + d.LAY_INDEX + "'  lay-skin='primary'/>";
                             }
@@ -349,7 +350,16 @@
                         return true;
                     var defVal = attr.DefVal; //默认值.
                     defVal = defVal == "null" || defVal == null ? "" : defVal;
-                    switch (parseInt(attr.MyDataType)) {
+
+                    var myDataType = parseInt(attr.MyDataType);
+                    //if (defVal == "" && (myDataType == 2 || myDataType == 3 || myDataType == 4)) {
+                    //    if (myDataType == 4)
+                    //        defVal = "0.00";
+                    //    else
+                    //        defVal = "0";
+                    //}
+
+                    switch (myDataType) {
                         case 1:
                             if (attr.UIContralType == 0)
                                 rowData[attr.KeyOfEn] = defVal;
@@ -410,7 +420,7 @@
 
             var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata;
             OpenEasyUiDialog(url, "eudlgframe", '新增字段', 800, 500, "icon-property", true, null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
 
             });
 
@@ -418,18 +428,18 @@
         function AddFGroup(fk_mapdata) {
             var url = 'Do.aspx?DoType=AddFGroup&FK_MapData=' + fk_mapdata;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-            window.location.href = window.location.href;
+            Reload();
         }
         function CopyF(fk_mapdata) {
             var url = 'CopyDtlField.htm?FK_MapData=' + fk_mapdata + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 800px;center: yes; help: no');
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function HidAttr(mypk) {
             var url = 'HidAttr.htm?FK_MapData=' + mypk + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 800px;center: yes; help: no');
-            //  window.location.href = window.location.href;
+            //  Reload();
         }
 
         /*
@@ -453,11 +463,11 @@
             var parentwin = parent.window;
             if (parentwin) {
                 var iFrame = parentwin.document.getElementById("F" + fk_mapdata);
-                if (iFrame!=null && iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {
+                if (iFrame != null && iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {
                     parentwin.Edit(mypk, ftype, gf, fk_mapdata, uiControlType);
                     return;
                 }
-               // parentwin.Edit(mypk, ftype, gf, fk_mapdata, uiControlType);
+                // parentwin.Edit(mypk, ftype, gf, fk_mapdata, uiControlType);
                 //return;
             }
 
@@ -520,7 +530,7 @@
             }
             getWindowWH();
             OpenLayuiDialog(url, title, W, 0, null, true);
-            
+
         }
 
         function EditEnumForDtl(fk_mapdata, mypk, enumKey) {
@@ -529,7 +539,7 @@
             if (parentwin) {
                 var iFrame = parentwin.document.getElementById("F" + fk_mapdata);
 
-                if (iFrame!=null && iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {
+                if (iFrame != null && iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {
                     parentwin.EditEnum(fk_mapdata, mypk, enumKey);
                     return;
                 }
@@ -540,7 +550,7 @@
             var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&inlayer=1&PKVal=' + mypk + '&s=' + Math.random();
             getWindowWH();
             OpenLayuiDialog(url, "编辑枚举字段", W, 0, null, true);
-           
+
         }
         function EditTable(fk_mapdata, mypk, fk_sfTable) {
 
@@ -548,10 +558,10 @@
 
             if (parentwin) {
 
-                var iFrame = parentwin.document.getElementById("F"  + fk_mapdata);
+                var iFrame = parentwin.document.getElementById("F" + fk_mapdata);
 
 
-                if (iFrame!=null && iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {
+                if (iFrame != null && iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {
                     parentwin.EditTable(fk_mapdata, mypk, fk_sfTable);
                     return;
                 }
@@ -563,7 +573,7 @@
             var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&inlayer=1&PKVal=' + mypk + '&s=' + Math.random();
             getWindowWH();
             OpenLayuiDialog(url, "外键字段属性", W, 0, null, true);
-           
+
         }
 
         function closeDlg() {
@@ -577,7 +587,7 @@
             if (data.indexOf('err@') != -1)
                 alert(data);
 
-            window.location.href = window.location.href;
+            Reload();
         }
         function Down(mypk) {
 
@@ -586,7 +596,7 @@
             if (data.indexOf('err@') != -1)
                 alert(data);
 
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function Attachment(fk_mapdtl) {

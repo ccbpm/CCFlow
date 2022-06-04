@@ -340,7 +340,7 @@
             handler.AddPara("FID", fid);
             var data = handler.DoMethodReturnString("OP_UnSend");
             alert(data);
-            window.location.href = window.location.href;
+            Reload();
         }
         function GenerColor(wfState, isCanDo) {
 
@@ -432,15 +432,15 @@
             var flowNo = GetQueryString("FK_Flow");
             if (flowNo == null) {
                 if (tspan == '')
-                    window.location.href = '?1=1';
+                    SetHref('?1=1');
                 else
-                    window.location.href = '?TSpan=' + tspan;
+                    SetHref('?TSpan=' + tspan);
             }
             else {
                 if (tspan == '')
-                    window.location.href = '?FK_Flow=' + flowNo;
+                    SetHref('?FK_Flow=' + flowNo);
                 else
-                    window.location.href = '?FK_Flow=' + flowNo + '&TSpan=' + tspan;
+                    SetHref('?FK_Flow=' + flowNo + '&TSpan=' + tspan);
             }
         }
 
@@ -450,22 +450,22 @@
 
             if (tspan == null) {
                 if (flowNo == "")
-                    window.location.href = '?1=1';
+                    SetHref('?1=1');
                 else
-                    window.location.href = '?FK_Flow=' + flowNo;
+                    SetHref('?FK_Flow=' + flowNo);
             }
             else {
 
                 if (flowNo == "")
-                    window.location.href = '?TSpan=' + GetQueryString("TSpan");
+                    SetHref('?TSpan=' + GetQueryString("TSpan"));
                 else
-                    window.location.href = '?FK_Flow=' + flowNo + '&TSpan=' + GetQueryString("TSpan");
+                    SetHref('?FK_Flow=' + flowNo + '&TSpan=' + GetQueryString("TSpan"));
             }
         }
         //跳转url
         function ToUrl(pageID) {
             var url = pageID + ".htm?m=" + Math.random();
-            window.location.href = url;
+            SetHref(url);
         }
         //关键字查询
         function SearchKey() {

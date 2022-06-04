@@ -4,13 +4,19 @@ function ShowMultiFile(AttrFiles, FileManagers, isExitMyNum) {
 
     //如果多附件没有分类
     if (AttrFiles.length == 0) {
-        html += "<tr>";
-        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'>多附件上传</td>";
-        if (isExitMyNum == true)
-            html += "<td colspan=2>";
-        else
-            html += "<td colspan=3>";
-        html += "<table border='0'width='99%' id='TableFile'>";
+        html += "<div class='layui-row FoolFrmFieldRow'>";
+        html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'><label class='layui-form-label'>多附件上传</label></div>";
+       
+        html += "<div class='layui-col-md10 layui-col-xs10 FoolFrmFieldInput'>";
+        if (isExitMyNum == true) {
+            html += "<div class='FoolFrmFieldLabel'>";
+            
+            if (mapData.GetPara("IsDelete") == 1 || mapData.GetPara("IsUpdate") == 1 || mapData.GetPara("IsInsert") == 1)
+                html += "<a href='javaScript:void(0)' style='color:#fff;' class='layui-btn layui-btn-xs' onclick='ActiveUploadFile(\"\",\"\")'>上传附件</a>";
+
+            html += "</div>"
+        }
+        html += "<table class='layui-table' width='99%' id='TableFile'>";
         for (var k = 0; k < FileManagers.length; k++) {
             var sf = FileManagers[k];
             //显示附件
@@ -20,7 +26,7 @@ function ShowMultiFile(AttrFiles, FileManagers, isExitMyNum) {
             html += "</td>";
             html += "<td width='25%'>";
             html += "<a href='javaScript:void(0)' onclick='downLoadFileM(\"" + sf.OID + "\")'>下载</a>&nbsp;&nbsp;&nbsp;&nbsp;";
-            if (mapData.GetPara("IsDelete") == 1)
+            if (mapData.GetPara("IsDelete") == 1 || mapData.GetPara("IsUpdate") == 1 || mapData.GetPara("IsInsert") == 1 )
                 html += "<a href='javaScript:void(0)' onclick='deleteFile(\"" + sf.OID + "\",this)'>删除</a>";
             html += "</td>";
             html += "</tr>";
@@ -29,29 +35,27 @@ function ShowMultiFile(AttrFiles, FileManagers, isExitMyNum) {
         html += "</table>";
         if (count == 0)
             html += "没有上传附件";
-        html += "</td>";
-        if (isExitMyNum == true) {
-            html += "<td>";
-            if (pkVal == null || pkVal == "" || pkVal == "0")
-                html += "<a href=\"javascript:alert('请在保存后在执行。');\" target=_self>附件批量上传(请在保存后在执行)</a>";
-            else
-                html += "<a href='javaScript:void(0)' onclick='ActiveUploadFile(\"\",\"\")'>上传附件</a>";
-            html += "</td>"
-        }
-        html += "</tr>";
+        html += "</div>";
+        
+        html += "</div>";
         return html;
     }
     //多附件分类
     for (var i = 0; i < AttrFiles.length; i++) {
         var attrFile = AttrFiles[i];
-        html += "<tr>";
-        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'>" + attrFile.FileName + "</td>";
-        if (isExitMyNum == true)
-            html += "<td colspan=2>";
-        else
-            html += "<td colspan=3>";
+        html += "<div class='layui-row FoolFrmFieldRow'>";
+        html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'><label class='layui-form-label'>多附件上传</label></div>";
+
+        html += "<div class='layui-col-md10 layui-col-xs10 FoolFrmFieldInput'>";
+        if (isExitMyNum == true) {
+            html += "<div class='FoolFrmFieldLabel'>";
+            if (mapData.GetPara("IsDelete") == 1 || mapData.GetPara("IsUpdate") == 1 || mapData.GetPara("IsInsert") == 1)
+                html += "<a href='javaScript:void(0)' style='color:#fff;' class='layui-btn layui-btn-xs' onclick='ActiveUploadFile(\"" + attrFile.FileNo + "\",\"" + attrFile.FileName + "\")'>上传附件</a>";
+            html += "</div>"
+        }
+
         var count = 0;
-        html += "<table border='0'width='99%' id='Table_" + attrFile.FileNo + "'>";
+        html += "<table class='layui-table' width='99%' id='Table_" + attrFile.FileNo + "'>";
         for (var k = 0; k < FileManagers.length; k++) {
             var sf = FileManagers[k];
             if (sf.AttrFileNo != attrFile.FileNo)
@@ -63,7 +67,7 @@ function ShowMultiFile(AttrFiles, FileManagers, isExitMyNum) {
             html += "</td>";
             html += "<td width='25%'>";
             html += "<a href='javaScript:void(0)' onclick='downLoadFile(\"" + sf.OID + "\")'>下载</a>&nbsp;&nbsp;&nbsp;&nbsp;";
-            if (mapData.GetPara("IsDelete") == 1)
+            if (mapData.GetPara("IsDelete") == 1 || mapData.GetPara("IsUpdate") == 1 || mapData.GetPara("IsInsert") == 1)
                 html += "<a href='javaScript:void(0)' onclick='deleteFile(\"" + sf.OID + "\",this)'>删除</a>";
             html += "</td>";
             html += "</tr>";
@@ -74,23 +78,20 @@ function ShowMultiFile(AttrFiles, FileManagers, isExitMyNum) {
         html += "</table>";
         if (count == 0)
             html += "没有上传附件";
-        html += "</td>";
-
-        if (isExitMyNum == true) {
-            html += "<td align='center'>";
-            if (pkVal == null || pkVal == "" || pkVal == "0")
-                html += "<a href=\"javascript:alert('请在保存后在执行。');\" target=_self>附件批量上传(请在保存后在执行)</a>";
-            else
-                html += "<a href='javaScript:void(0)' onclick='ActiveUploadFile(\"" + attrFile.FileNo + "\",\"" + attrFile.FileName + "\")'>上传附件</a>";
-            html += "</td>"
-        }
-        html += "</tr>";
+        html += "</div>";
+        html += "</div>";
     }
     return html;
 }
 var fileNo = "";
 var fileName = "";
 function ActiveUploadFile(upfileNo, upfileName) {
+    if (pkVal == null) {
+        var flag = Update(false);
+        if (flag == false)
+            return;
+    }
+       
     fileNo = upfileNo;
     fileName = upfileName;
     //激活上传文件
@@ -99,16 +100,19 @@ function ActiveUploadFile(upfileNo, upfileName) {
 
 function downLoadFileM(OID) {
     if (plant == "CCFlow")
-        window.location.href = '../../CCForm/DownFile.aspx?DoType=EntityMutliFile_Load&OID=' + OID;
+        SetHref('../../CCForm/DownFile.aspx?DoType=EntityMutliFile_Load&OID=' + OID);
     else {
-        var currentPath = window.document.location.href;
+        var currentPath = GetHrefUrl();
         var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
         Url = path + '/WF/CCForm/EntityMutliFile_Load.do?OID=' + OID;
-        window.location.href = Url;
+        SetHref(url);
     }
 }
 
 function deleteFile(OID, td) {
+    if (window.confirm('您确定要删除吗?') == false)
+        return;
+
     //需要删除文件
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
     handler.AddPara("OID", OID);
@@ -174,7 +178,7 @@ function MultiUploadFile() {
     //URL 路径
     var URL = basePath + "/WF/Comm/Handler.ashx?DoType=EntityMultiAth_Upload";
     if (plant != "CCFlow") {
-        var currentPath = window.document.location.href;
+        var currentPath = GetHrefUrl();
         var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
         URL = path + "/WF/Comm/ProcessRequest.do?DoType=EntityMultiAth_Upload";
     }

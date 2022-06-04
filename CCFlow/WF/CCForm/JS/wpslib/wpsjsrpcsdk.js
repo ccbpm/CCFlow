@@ -367,7 +367,7 @@
         var strData = JSON.stringify(startInfo);
         if (IEVersion() < 10) {
             try {
-                eval("strData = '" + JSON.stringify(startInfo) + "';");
+                cceval("strData = '" + JSON.stringify(startInfo) + "';");
             } catch (err) {
 
             }
@@ -448,7 +448,7 @@
         var strData = JSON.stringify(startInfo);
         if (IEVersion() < 10) {
             try {
-                eval("strData = '" + JSON.stringify(startInfo) + "';");
+                cceval("strData = '" + JSON.stringify(startInfo) + "';");
             } catch (err) {
 
             }
@@ -680,9 +680,9 @@
      */
     function InitWpsCloudSvr() {
         if (serverId == undefined)
-            window.location.href = "ksoWPSCloudSvr://start=RelayHttpServer"//是否启动wps弹框
+            SetHref( "ksoWPSCloudSvr://start=RelayHttpServer")//是否启动wps弹框
         else
-            window.location.href = "ksoWPSCloudSvr://start=RelayHttpServer" + "&serverId=" + serverId //是否启动wps弹框
+            SetHref( "ksoWPSCloudSvr://start=RelayHttpServer" + "&serverId=" + serverId )//是否启动wps弹框
     }
 
     /**
@@ -1039,7 +1039,7 @@
                     res.response = decode(resObject.data);
                 }
                 if (IEVersion() < 10)
-                    eval(" res.response = '" + res.response + "';");
+                    cceval(" res.response = '" + res.response + "';");
                 if (callback)
                     callback(res);
                 this.wpsclient.RegWebNotify(name);
@@ -1454,7 +1454,7 @@
     function FormatSendData(data) {
         var strData = JSON.stringify(data);
         if (IEVersion() < 10)
-            eval("strData = '" + JSON.stringify(strData) + "';");
+            cceval("strData = '" + JSON.stringify(strData) + "';");
 
         if (serverVersion >= "1.0.2" && serverId != undefined) {
             var base64Data = encode(strData);

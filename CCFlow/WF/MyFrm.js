@@ -40,8 +40,18 @@ function initPageData() {
  * 获取表单数据
  */
 function GenerWorkNode() {
+    //判断当前节点是不是绑定多表单
+    if (pageData.FK_Node != null || pageData.FK_Node != undefined) {
+        var node = new Entity("BP.WF.Node", pageData.FK_Node);
+        if (node.FormType == 5) {
+            SetHref(GetHrefUrl().replace("MyFrm.htm", "MyFrmTree.htm"));
+            return;
+        }
+          
+       
+    }
     var index = 0;
-    var href = window.location.href;
+    var href = GetHrefUrl();
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
 
@@ -85,12 +95,9 @@ function GenerWorkNode() {
         }
 
     } catch (err) {
-        //console.log(data);
         alert("err@ GenerWorkNode转换JSON失败,请查日志.");
         return;
     }
-
-
     if (webUser == null)
         webUser = new WebUser();
     //处理附件的问题 
@@ -132,9 +139,7 @@ function GenerWorkNode() {
     var node = flowData.WF_Node[0];
     //修改网页标题.
     document.title = node.FlowName + ',' + node.Name;
-    //增加提示信息
-    //ShowWorkReturnTip();
-    //ShowWorkReturnTip();
+
     //解析表单
     BindFrm();
     //加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
@@ -174,7 +179,7 @@ function BindFrm() {
                     isFool = false;
                     break;
                 case 5://树形表单
-                    GenerTreeFrm(flowData);
+                    //GenerTreeFrm(flowData);
                     break;
                 case 11://表单库单表单
                     var frmNode = flowData.WF_FrmNode;
@@ -264,7 +269,7 @@ function BindFrm() {
             }
             break;
         case FlowDevModel.FrmTree://表单库多表单
-            GenerTreeFrm(flowData);
+            //GenerTreeFrm(flowData);
             break;
         default:
             layer.alert("流程设计模式:[" + getFlowDevModelText(flow.FlowDevModel) + "]不存在或者暂未解析，请联系管理员")

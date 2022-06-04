@@ -64,7 +64,7 @@
             }
 
             dblist.Update();
-            window.location.href = window.location.href;
+            Reload();
         }
         /**
          *修改字段名称、保存应用
@@ -76,7 +76,7 @@
             handler.AddFormData();
             var data = handler.DoMethodReturnString("FieldsORM_App");
             alert(data);
-            window.location.href = window.location.href;
+            Reload();
         }
         function ViewFrm() {
             var frmID = GetQueryString("FrmID");

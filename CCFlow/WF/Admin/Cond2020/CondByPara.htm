@@ -15,7 +15,6 @@
     <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
     <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
-
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <base target="_self" />
  
@@ -30,25 +29,15 @@
         //初始化页面函数.....
         $(function () {
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("CondByPara_Init");
-
-            if (data.indexOf('err@') == 0) {
-                $("#Msg").html("<font color=red>加载失败:<br>" + data + "</font> .");
-                return;
+            var mypk = GetQueryString("MyPK");
+            var cond = new Entity("BP.WF.Template.Cond");
+            if (mypk != null && mypk != undefined && mypk != "") {
+                cond.MyPK = mypk;
+                cond.SetPKVal(mypk);
+                cond.RetrieveFromDBSources();
             }
 
-            if (data.indexOf('url@') == 0) {
-                var url = data.replace('url@', '');
-                window.location.href = url;
-                return;
-            }
-
-            //转json.
-            data = JSON.parse(data);
-
-            var docs = data.OperatorValue;
+            var docs = cond.OperatorValue;
             docs = docs.replace("~", "'");
             docs = docs.replace("~", "'");
             docs = docs.replace("~", "'");
@@ -57,8 +46,8 @@
             docs = docs.replace("~", "'");
             docs = docs.replace("~", "'");
 
-            document.getElementById("TB_Docs").value = docs;
-            document.getElementById("TB_Note").value = data.Note;
+            $("#TB_Docs").val(docs);
+            $("#TB_Note").val(cond.Note);
 
         });
 
@@ -86,7 +75,6 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddUrlData();
             handler.AddFormData();
-            handler.AddPara("CondOrAnd", GetQueryString("CondOrAnd"))
             var data = handler.DoMethodReturnString("CondByPara_Save");
 
             if (data.indexOf('err@') == 0) {
@@ -96,59 +84,28 @@
 
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
 
-            //  alert("保存成功");
             Back();
 
 
-            //$("#Msg").html("<font color=green>" + data + "</font>");
 
         }
 
-        //执行删除..
-        function Delete() {
 
-            if (window.confirm('您确定要删除吗？') == false)
-                return;
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("CondByPara_Delete");
-
-            if (data.indexOf('err@') == 0) {
-                $("#Msg").html("<font color=red>" + data + "</font>");
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) {
-                var url = data.replace('url@', '');
-                window.location.href = url;
-                return;
-            }
-
-            alert(data);
-            document.getElementById("TB_Docs").value = "";
-            document.getElementById("TB_Note").value = "";
-        }
-
-        //装载 CondByPara 模版.
-        function LoadTemplate() {
-
-            //打开方向条件.
-            var url = "../SettingTemplate.htm?TemplateType=CondByPara&CondType=2&m=" + Math.random();
-            WinOpen(url, 'ss');
-        }
         //返回.
         function Back() {
 
           
-            var url = window.location.href;
+            var url = GetHrefUrl();
 
             url = url.replace('CondByPara.htm', 'List.htm');
-            window.location.href = url;
+            if (url.indexOf("MyPK=") != -1) {
+                url = url.replace("&MyPK=" + GetQueryString("MyPK"), "");
+            }
+            SetHref(url);
         }
 
         /**/</script>

@@ -158,7 +158,7 @@
             $.each(processData.list, function (i, row) {
                 var nodeDiv = document.createElement('div');
                 var nodeId = "window" + row.id, badge = 'badge-inverse', icon = 'icon-star';
-                
+
 
                 if (lastProcessId == 0)//第一步
                 {
@@ -247,7 +247,7 @@
                     })
                     .dblclick(function (e) {
                         console.log('e', e.currentTarget.id);
-                        var activeId = e.currentTarget.id.replace('lab',''); //右键当前的ID
+                        var activeId = e.currentTarget.id.replace('lab', ''); //右键当前的ID
                         var windowtext = $("#lab" + activeId).text();
                         windowtext = windowtext.replace(/(^\s*)|(\s*$)/g, ""); //去掉左右空格.
                         $("#alertModal3 div:eq(2) button").attr("class", "btn btn-primary savetext" + activeId);
@@ -330,14 +330,12 @@
 
             $("#lineSet").click(function () {
 
-
                 var fromNodeID = c.sourceId.replace('window', '');
                 var targetId = c.targetId.replace('window', '');
 
-
                 var flowNo = GetQueryString("FK_Flow");
                 var url = "";
-                if (window.location.href.indexOf("/WF/Admin/CCBPMDesigner") == -1)
+                if (GetHrefUrl().indexOf("/WF/Admin/CCBPMDesigner") == -1)
                     url = "/WF/Admin/";
                 else
                     url = "../";
@@ -346,6 +344,9 @@
                 $(".modal-backdrop").hide();
                 var w = window.innerWidth - 240;
                 var h = window.innerHeight - 120;
+
+                CondDir(fromNodeID);
+                return;
                 OpenEasyUiDialog(url, flowNo + fromNodeID + "DIRECTION" + targetId, "设置方向条件" + fromNodeID + "->" + targetId, w, h, "icon-property", true, null, null, null, function () {
 
                 });
@@ -468,13 +469,13 @@
                             jsPlumb.connect({
                                 source: "window" + sourceId,
                                 target: "window" + targetId,
-                                 overlays: [
+                                overlays: [
                                     ['Label', {
                                         label: '<label style="font-size:14px;margin-bottom:25px;margin-left:-20px;color:#00a6ac;">' + (linedes == null ? '' : linedes) + '</label>', width: 12, length: 12, location: 0.5, id: "des_" + sourceId + "_" + targetId, events: {
                                             click: function (labelOverlay, originalEvent) {
                                             }
                                         }
-                                 }]]
+                                    }]]
                                 /* ,labelStyle : { cssClass:"component label" }
                                 ,label : id +" - "+ n*/
                             });

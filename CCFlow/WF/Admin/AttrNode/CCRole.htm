@@ -38,8 +38,8 @@
         window.onload = function () {
             var mime = 'text/x-mariadb';
             // get mime type
-            if (window.location.href.indexOf('mime=') > -1) {
-                mime = window.location.href.substr(window.location.href.indexOf('mime=') + 5);
+            if (GetHrefUrl().indexOf('mime=') > -1) {
+                mime = GetHrefUrl().substr(GetHrefUrl().indexOf('mime=') + 5);
             }
             window.editor = CodeMirror.fromTextArea(document.getElementById('TB_CCSQL'), {
                 mode: mime,
@@ -64,7 +64,7 @@
             //初始化groupID.
             nodeID = GetQueryString("FK_Node");
 
-            var node = new Entity("BP.WF.Template.CC");
+            var node = new Entity("BP.WF.Template.CCEn.CC");
             node.NodeID = nodeID;
             node.Retrieve();
             console.log(node);
@@ -84,24 +84,24 @@
         });
 
         function WinOldStationOpen() {
-            var url = "../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.CC&Dot2DotEnsName=BP.WF.Template.CCStations&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID + "&s=" + Math.random();
+            var url = "../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.CCEn.CC&Dot2DotEnsName=BP.WF.Template.CCEn.CCStations&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID + "&s=" + Math.random();
             OpenEasyUiDialogExt(url, '抄送岗位', 800, 500, true);
         }
         function WinNewStationOpen() {
-            var url = "../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.CC&Dot2DotEnsName=BP.WF.Template.CCStations&Dot2DotEnName=BP.WF.Template.CCStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID + "&s=" + Math.random();
+            var url = "../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.CCEn.CC&Dot2DotEnsName=BP.WF.Template.CCEn.CCStations&Dot2DotEnName=BP.WF.Template.CCEn.CCStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID + "&s=" + Math.random();
 
             OpenEasyUiDialogExt(url, '抄送岗位', 800, 500, true);
         }
         function WinDeptOpen() {
 
-            var url = "../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.CC&Dot2DotEnsName=BP.WF.Template.CCDepts&Dot2DotEnName=BP.WF.Template.CCDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=&NodeID=" + nodeID + "&PKVal=" + nodeID + "&s=" + Math.random();
+            var url = "../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.CCEn.CC&Dot2DotEnsName=BP.WF.Template.CCEn.CCDepts&Dot2DotEnName=BP.WF.Template.CCEn.CCDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=&NodeID=" + nodeID + "&PKVal=" + nodeID + "&s=" + Math.random();
 
 
             OpenEasyUiDialogExt(url, "抄送部门", 800, 600, true);
         }
 
         function WinEmpOpen() {
-            var url = "../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.CC&Dot2DotEnsName=BP.WF.Template.CCEmps&Dot2DotEnName=BP.WF.Template.CCEmp&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept&NodeID=" + nodeID + "&PKVal=" + nodeID + "&s=" + Math.random();
+            var url = "../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.CCEn.CC&Dot2DotEnsName=BP.WF.Template.CCEn.CCEmps&Dot2DotEnName=BP.WF.Template.CCEn.CCEmp&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept&NodeID=" + nodeID + "&PKVal=" + nodeID + "&s=" + Math.random();
 
 
             OpenEasyUiDialogExt(url, '抄送人员', 800, 500, true);
@@ -109,7 +109,7 @@
         function Save() {
 
             var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Template.CC");
+            var node = new Entity("BP.WF.Template.CCEn.CC");
             node.SetPKVal(nodeID);
             node.Retrieve();
 
@@ -120,7 +120,7 @@
             node.NodeID = nodeID;
             node.Update();
 
-            window.location.href = window.location.href;
+            Reload();
 
         }
     </script>

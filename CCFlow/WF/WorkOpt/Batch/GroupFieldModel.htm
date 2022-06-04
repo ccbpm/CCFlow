@@ -36,7 +36,7 @@
                 return;
             }
 
-            data = eval('(' + data + ')');
+            data = cceval('(' + data + ')');
 
             var works = data.Works; //数据.
             var mapAttrs = data.Sys_MapAttr; //要显示的字段.
@@ -144,7 +144,7 @@
         function To(url) {
             WinOpen(url);
             return;
-            window.location.href = url;
+            SetHref(url);
             return;
         }
 
@@ -201,7 +201,7 @@
                 $("#Table2").html("");
                 $("#btnDiv").html("");
 
-                window.location.href = window.location.href;
+                Reload();
 
             });
 
@@ -244,7 +244,7 @@
             data = data.replace(/@/g, '<br/>@');
             $("#msgContent").html(data);
             $('#batchModal').on('hidden.bs.modal', function () {
-                window.location.href = window.location.href;
+                Reload();
 
             });
             $("#batchModal").modal("hidden");
@@ -254,9 +254,9 @@
 
             var type = GetQueryString("Type");
             if (type == 0)
-                window.location.href = "Batch.htm";
+                SetHref("Batch.htm");
             if (type == 1)
-                window.location.href = "Batch.htm?FK_Node=" + GetQueryString("FK_Node");
+                SetHref("Batch.htm?FK_Node=" + GetQueryString("FK_Node"));
         }
 
         function InitMapAttr(mapAttr) {
@@ -485,7 +485,7 @@
                 var fn;
                 try {
                     if (mapAttr.UIBindKey) {
-                        fn = eval(mapAttr.UIBindKey);
+                        fn = cceval(mapAttr.UIBindKey);
                     }
                 } catch (e) {
                 }

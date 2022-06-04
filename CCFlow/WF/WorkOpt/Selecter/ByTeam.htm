@@ -124,7 +124,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_Selecter");
             handler.AddPara("TeamNo", TeamNo);
             var data = handler.DoMethodReturnString("SelectEmpsByTeamStation_Init");
-            var emps = eval('(' + data + ')');
+            var emps = cceval('(' + data + ')');
             var html = "";
 
             for (var i = 0; i < emps.length; i++) {
@@ -247,7 +247,7 @@
         function GotoUrl(url) {
             var urlSuffix = "?WorkID=" + workID + "&ToNode=" + toNodeID;
             url += urlSuffix;
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
 

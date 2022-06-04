@@ -29,7 +29,7 @@
 
             OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
                 if (isReload == true) {
-                    window.location.href = window.location.href;
+                    Reload();
                 }
             });
         }
@@ -41,12 +41,19 @@
 
             //求出来已经设置的自动触发子流程.
             var nodeID = GetQueryString("FK_Node");
-            var ens = new Entities("BP.WF.Template.SubFlowAutos");
+            var ens = new Entities("BP.WF.Template.SFlow.SubFlowAutos");
             ens.Retrieve("FK_Node", nodeID, "SubFlowType", 1, "Idx");
 
             var node = new Entity("BP.WF.Node", nodeID);
             node.SetPara("SubFlowAutoNum", ens.length);
             node.Update();
+
+
+            $("#Btn_AddGroup").hide();
+            var webUser = new WebUser();
+            if (webUser.CCBPMRunModel == 1) {
+                $("#Btn_AddGroup").show();
+            }
 
             //console.log(ens);
 
@@ -78,14 +85,14 @@
         });
 
         function DoUp(mypk) {
-            var en = new Entity("BP.WF.Template.SubFlowAuto", mypk);
+            var en = new Entity("BP.WF.Template.SFlow.SubFlowAuto", mypk);
             en.DoMethodReturnString("DoUp");
-            window.location.href = window.location.href;
+            Reload();
         }
         function DoDown(mypk) {
-            var en = new Entity("BP.WF.Template.SubFlowAuto", mypk);
+            var en = new Entity("BP.WF.Template.SFlow.SubFlowAuto", mypk);
             en.DoMethodReturnString("DoDown");
-            window.location.href = window.location.href;
+            Reload();
         }
 
         //查询集团的流程.
@@ -93,13 +100,13 @@
             var webUser = new WebUser();
 
             var url = "SubFlowAutoDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.GroupNo;
-            OpenEasyUiDialogExt(url, "选择子流程", 500, 400, true);
+            OpenEasyUiDialogExt(url, "选择子流程", 700, 600, true);
         }
         //查询集团的流程.
         function AddOrg() {
             var webUser = new WebUser();
             var url = "SubFlowAutoDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.FK_Dept;
-            OpenEasyUiDialogExt(url, "选择子流程", 500, 400, true);
+            OpenEasyUiDialogExt(url, "选择子流程", 700, 600, true);
         }
 
         //删除成功.
@@ -108,35 +115,25 @@
             if (confirm('您确定要删除吗？') == false)
                 return;
 
-            var en = new Entity("BP.WF.Template.SubFlowAuto", pk);
+            var en = new Entity("BP.WF.Template.SFlow.SubFlowAuto", pk);
             en.Delete();
-            window.location.href = window.location.href;
+            Reload();
         }
 
         //设置子流程启动条件.
         function SetCond(pk) {
-            var en = new Entity("BP.WF.Template.SubFlowAuto", pk);
+            var en = new Entity("BP.WF.Template.SFlow.SubFlowAuto", pk);
             var url = "../../Cond2020/List.htm?CondType=3&FK_Flow=" + en.FK_Flow + "&FK_MainNode=" + en.FK_Node + "&FK_Node=" + en.FK_Node + "&ToNodeID=" + en.FK_Node + "&SubFlowNo=" + en.SubFlowNo;
-            window.location.href = url;
+            //  SetHref(url);
+            OpenEasyUiDialogExt(url, '设置条件', 700, 600, true);
             return;
-
-
-            //var url = "../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowAuto&PKVal=" + pk;
-
-            //OpenEasyUiDialogExt(url, '', 700, 500, true);
-
-            //OpenEasyUiDialogExt(url, '编辑', 500, 400, true);
-            //window.location.href = url;
         }
-
-
-
         //编辑.
         function Edit(pk) {
 
-            var url = "../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowAuto&PKVal=" + pk;
+            var url = "../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SFlow.SubFlowAuto&PKVal=" + pk;
 
-            OpenEasyUiDialogExt(url, '编辑', 700, 500, true);
+            OpenEasyUiDialogExt(url, '编辑', 700, 600, true);
             //OpenEasyUiDialogExt(url, '编辑', 500, 400, true);
 
             //window.location.href = url;
@@ -152,18 +149,17 @@
     <div class="container-full">
         <div class="attrnode-bar-header">
             <span class="pull-right">
-                <button id="Btn_New" name="Btn_New" onclick="AddGroup();">增加子流程</button>
-                <button id="Btn_New2" class="cc-btn-tab btn-batch" name="Btn_New2" onclick="AddOrg();">增加本组织子流程</button>
+                <button id="Btn_AddGroup" name="Btn_AddGroup" onclick="AddGroup();">增加集团子流程</button>
+                <button id="Btn_AddMyOrg" class="cc-btn-tab btn-batch" name="Btn_AddMyOrg" onclick="AddOrg();">增加本组织子流程</button>
                 <button id="Btn_Help" name="Btn_Help" onclick="Help();">帮助</button>
-
             </span>
             <strong>
                 自动触发子流程
             </strong>
         </div>
-    
+
         <table id="Table1" class="table">
-       
+
             <tr>
                 <th>
                     序

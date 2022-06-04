@@ -51,7 +51,7 @@
             mapExt.ExtType = "DtlImp";
             mapExt.AttrOfOper = "BillModel"; //后台有默认设置，要使主键区分开，所以设置此值 
             var val = mapExt.Save();
-            window.location.href = window.location.href;
+            Reload();
         }
         function Delete() {
             if (confirm('您确定要删除吗？') == false)
@@ -60,7 +60,7 @@
             mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapDtl") + "_BillModel";
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
             mapExt.Delete();
-            window.location.href = window.location.href;
+            Reload();
         }
 
     </script>

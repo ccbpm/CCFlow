@@ -95,10 +95,10 @@
 
             var data = handler.DoMethodReturnString("MethodDocSys_SaveScript");
 
-            window.location.href = window.location.href;
+            Reload();
         }
         function ToMethodParas() {
-            window.location.href = "MethodParas.htm?No=" + GetQueryString("No");
+            SetHref("MethodParas.htm?No=" + GetQueryString("No"));
         }
 
         var editor = CodeMirror.fromTextArea(document.getElementById("tb_doc"), {

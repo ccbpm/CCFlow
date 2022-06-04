@@ -26,8 +26,6 @@
             //求出来已经设置的延续子流程.
             GetData();
 
-          
-
         });
 
         function SearchIt() {
@@ -37,13 +35,19 @@
             GetData();
         }
         function GetData() {
+
+            var orgNo = GetQueryString("OrgNo");
+            if (orgNo == undefined || orgNo == "undefined")
+                orgNo = "ccflow";
+
+
             var dt = new Entities("BP.WF.Flows");
-            if(webUser.CCBPMRunModel==0)
+            if (webUser.CCBPMRunModel == 0)
                 dt.RetrieveCond("Name", "like", '%' + keyWord + '%', "No");
             else
-                dt.RetrieveCond("Name", "like", '%' + keyWord + '%',"OrgNo","=",webUser.OrgNo, "No");
+                dt.RetrieveCond("Name", "like", '%' + keyWord + '%', "OrgNo", "=", orgNo, "No");
 
-            var Hands = new Entities("BP.WF.Template.SubFlowHands");
+            var Hands = new Entities("BP.WF.Template.SFlow.SubFlowHands");
             Hands.Retrieve("FK_Node", nodeID, "SubFlowType", 0);
 
 
@@ -53,8 +57,8 @@
                 var en = dt[i];
 
                 html += "<tr>";
-
-                html += "<td>" + en.FK_FlowSortText + "</td>";
+                html += "<td>" + orgNo + "</td>";
+                //  html += "<td>" + en.FK_FlowSortText + "</td>";
                 html += "<td>" + en.No + "</td>";
                 html += "<td>" + en.Name + "</td>";
 
@@ -67,7 +71,7 @@
 
                         if (Hand.FlowName != en.Name) {
 
-                            var HandEn = new Entity("BP.WF.Template.SubFlowHand", Hand);
+                            var HandEn = new Entity("BP.WF.Template.SFlow.SubFlowHand", Hand);
                             HandEn.FlowName = en.Name;
                             HandEn.Update();
                             //Hand.Update();
@@ -94,8 +98,8 @@
             var nodeID = GetQueryString("FK_Node");
 
 
-            var ens = new Entities("BP.WF.Template.SubFlowHands");
-            ens.Retrieve("FK_Node", nodeID, "SubFlowNo", flowNo,"SubFlowType", 0);
+            var ens = new Entities("BP.WF.Template.SFlow.SubFlowHands");
+            ens.Retrieve("FK_Node", nodeID, "SubFlowNo", flowNo, "SubFlowType", 0);
 
             if (ens.length == 1) {
                 alert("该流程已经存在");
@@ -104,7 +108,7 @@
 
             var myNode = new Entity("BP.WF.Node", nodeID);
 
-            var en = new Entity("BP.WF.Template.SubFlowHand");
+            var en = new Entity("BP.WF.Template.SFlow.SubFlowHand");
 
             en.SubFlowNo = flowNo;
             en.FK_Node = nodeID;
@@ -114,21 +118,22 @@
 
             var myen = en.Insert();
 
-            window.location.href = '../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowHand&PKVal=' + myen.MyPK;
+            SetHref('../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SFlow.SubFlowHand&PKVal=' + myen.MyPK);
 
             //alert('当前流程已经加入了延续流程中.');
         }
-         
+
     </script>
 </head>
 <body>
     <table id="Table1" style="width: 100%">
         <caption>
-            请选择一个子流程</caption>
+            请选择一个子流程
+        </caption>
         <thead>
             <tr>
                 <th>
-                    流程类别
+                    组织编号
                 </th>
                 <th>
                     流程编号
@@ -142,7 +147,6 @@
             </tr>
         </thead>
         <tbody id="SubFlows">
-            
         </tbody>
     </table>
 </body>

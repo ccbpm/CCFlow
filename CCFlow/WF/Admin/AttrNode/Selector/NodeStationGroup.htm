@@ -176,6 +176,11 @@
             //获得该组织的岗位.
             var stas = new Entities("BP.Port.Stations");
             stas.Retrieve("OrgNo", orgNo);
+
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = 4;
+            node.Update();
+
      
             //遍历checkbox控件，然后执行插入.
             for (var i = 0; i < stas.length; i++) {

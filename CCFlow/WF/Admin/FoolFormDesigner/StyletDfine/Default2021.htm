@@ -125,7 +125,7 @@
             url += "&FK_Flow=" + GetQueryString("FK_Flow");
             url += "&Template=" + val;
 
-            window.location.href = url;
+            SetHref(url);
         }
 
         function DDLChange(changeToStyleNo) {
@@ -219,7 +219,7 @@
 
             //alert(url);
 
-            window.location.href = url;
+            SetHref(url);
             return;
         }
 
@@ -304,7 +304,7 @@
                 alert(data);
                 return;
             }
-            window.location.href = window.location.href;
+            Reload();
         }
 
         //表单样式：变化的时候.
@@ -351,7 +351,7 @@
                         <button type="button" value="应用" class="cc-btn-tab btn_app" onclick="App();" id="Btn_App"> 应用</button>
                         <button type="button" value="删除模版" id="Btn_Delete" onclick="Delete();">删除模版</button>
                         <button type="button" value="保存为模版" onclick="SaveAsTemplate();" id="Btn_SaveAs">保存为模版</button>
-                        <button type="button" value="刷新" class="cc-btn-tab btn-load" onclick="window.location.href = window.location.href;" id="Btn_Refash">刷新</button>
+                        <button type="button" value="刷新" class="cc-btn-tab btn-load" onclick="Reload();" id="Btn_Refash">刷新</button>
                     </div>
                     <div class="form-group">
                         <!--<select id="DB" onchange="DDL_TableCol_Change" class="form-control">

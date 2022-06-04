@@ -37,7 +37,7 @@
                 return;
             }
 
-            data = eval('(' + data + ')');
+            data = cceval('(' + data + ')');
 
             var works = data.Works; //数据.
             var mapAttrs = data.Sys_MapAttr; //要显示的字段.
@@ -173,7 +173,7 @@
         function To(url) {
             WinOpen(url);
             return;
-            window.location.href = url;
+            SetHref(url);
             return;
         }
 
@@ -280,7 +280,7 @@
                 $("#Table2").html("");
                 $("#btnDiv").html("");
 
-                window.location.href = window.location.href;
+                Reload();
 
             });
             $("#batchModal").modal("hidden");
@@ -327,7 +327,7 @@
             }
             var url = "";
             var fk_node = GetQueryString("FK_Node");
-            var isFrameCross = window.location.href.indexOf(basePath) == -1 ? 1 : 0;
+            var isFrameCross = GetHrefUrl().indexOf(basePath) == -1 ? 1 : 0;
             if (workIds.indexOf(",") == -1)
                 url = "../ReturnWork.htm?FK_Node=" + fk_node + "&WorkID=" + workIds + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
             else {
@@ -337,7 +337,7 @@
 
 
             OpenBootStrapModal(url, "ReturnModel", "退回", 600, 400, null, null, null, null, function () {
-                window.location.href = window.location.href.replace("#", "");
+                SetHref(GetHrefUrl().replace("#", ""));
             });
         }
 
@@ -363,7 +363,7 @@
             data = data.replace(/@/g, '<br/>@');
             $("#msgContent").html(data);
             $('#batchModal').on('hidden.bs.modal', function () {
-                window.location.href = window.location.href;
+                Reload();
 
             });
             $("#batchModal").modal("hidden");
@@ -388,11 +388,11 @@
         function Btn_Back() {
             var type = GetQueryString("Type");
             if (type == 0)
-                window.location.href = "../../Batch.htm";
+                SetHref("../../Batch.htm");
             else if (type == 1)
-                window.location.href = "../../Batch.htm?FK_Node=" + GetQueryString("FK_Node");
+                SetHref("../../Batch.htm?FK_Node=" + GetQueryString("FK_Node"));
             else
-                window.location.href = "../../Batch.htm";
+                SetHref("../../Batch.htm");
         }
 
         function InitMapAttr(mapAttr) {
@@ -621,7 +621,7 @@
                 var fn;
                 try {
                     if (mapAttr.UIBindKey) {
-                        fn = eval(mapAttr.UIBindKey);
+                        fn = cceval(mapAttr.UIBindKey);
                     }
                 } catch (e) {
                 }

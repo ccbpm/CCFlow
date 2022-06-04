@@ -31,7 +31,7 @@
             var data = handler.DoMethodReturnJSON("PCAndMobileUrl")
 
             if (IsPC() == false) {
-                window.location.href = data["MobileUrl"].substring(0, data["MobileUrl"].length - 1) + window.document.location.pathname.replace("WF", "CCMobile") + "?" + params;
+                SetHref(data["MobileUrl"].substring(0, data["MobileUrl"].length - 1) + window.document.location.pathname.replace("WF", "CCMobile") + "?" + params);
                 return;
             }
 
@@ -53,7 +53,7 @@
             if (data.indexOf('url@') == 0) {
                 data = data.replace("url@", "");
 
-                window.location.href = data;
+                SetHref(data);
                 return;
             }
 

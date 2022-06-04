@@ -38,7 +38,7 @@
 
             //更新节点表单类型.
             var menuNo = GetQueryString("MenuNo");
-            var en = new Entity("BP.GPM.Home.WindowTemplate");
+            var en = new Entity("BP.CCFast.Portal.WindowTemplate");
             en.PageID = menuNo;
             en.Name = name;
             en.WinDocModel = winDocModel; //窗口内容模式.
@@ -47,7 +47,7 @@
 
 
             en.Docs = sql;
-            var en = new Entity("BP.GPM.Home.WindowTemplate", en.No);
+            var en = new Entity("BP.CCFast.Portal.WindowTemplate", en.No);
 
             //处理分子.
             en.LabOfFZ = "退回数";
@@ -70,7 +70,7 @@
             en.Update();
 
 
-            window.location.href = "../../Comm/EnOnly.htm?EnName=BP.GPM.Home.WindowExt." + winDocModel + "&No=" + en.No;
+            SetHref("../../Comm/EnOnly.htm?EnName=BP.CCFast.Portal.WindowExt." + winDocModel + "&No=" + en.No);
 
         }
     </script>

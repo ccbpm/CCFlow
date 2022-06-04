@@ -67,7 +67,7 @@
 
  
             //岗位类型
-            var dbTrees = new Entities("BP.GPM.StationTypes");
+            var dbTrees = new Entities("BP.Port.StationTypes");
             dbTrees.RetrieveAll();
 
             var statDepts = new Entities("BP.Frm.FrmStationDepts");
@@ -195,7 +195,7 @@
                 });
                 if (sel.length == 0) {
 
-                    SaveVal(o.No);
+                    Savcceval(o.No);
                     globalSelectedRows.push(o);
                 }
             });
@@ -233,7 +233,7 @@
         //按照节点加载数据.
         function loadSelectGridByNodeID(nodeID) {
 
-            var stations = new Entities("BP.GPM.Stations");
+            var stations = new Entities("BP.Port.Stations");
             stations.Retrieve("FK_StationType", nodeID);
             var json = [];
             $.each(stations, function (i,item) {
@@ -399,7 +399,7 @@
 
         }
         //设置值.
-        function SaveVal(val) {
+        function Savcceval(val) {
             var stadept = new Entity("BP.Frm.FrmStationDept");
             stadept.FK_Frm = frmID;
             stadept.FK_Station = val;

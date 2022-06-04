@@ -33,10 +33,26 @@
         }
 
         function GetData() {
-            var dt = new Entities("BP.WF.Flows");
-            dt.RetrieveCond("Name", "like", '%' + keyWord + '%', "No");
 
-            var Autos = new Entities("BP.WF.Template.SubFlowAutos");
+            var orgNo = GetQueryString("OrgNo");
+            if (orgNo == undefined || orgNo == "undefined")
+                orgNo = "ccflow";
+            var webUser = new WebUser();
+            var dt = new Entities("BP.WF.Template.FlowExts");
+
+            if (webUser.CCBPMRunModel == 1) {
+                dt.Retrieve("OrgNo", orgNo);
+            }
+            else {
+                dt.RetrieveAll("FK_FlowSort");
+                dt.RetrieveCond("Name", "like", '%' + keyWord + '%', "No");
+            }
+
+            //var dt = new Entities("BP.WF.Template.FlowExts");
+            //dt.RetrieveCond("Name", "like", '%' + keyWord + '%', "No");
+
+
+            var Autos = new Entities("BP.WF.Template.SFlow.SubFlowAutos");
             Autos.Retrieve("FK_Node", nodeID, "SubFlowType", 1);
 
 
@@ -45,10 +61,10 @@
 
                 var en = dt[i];
 
-
                 html += "<tr>";
 
-                html += "<td>" + en.FK_FlowSortText + "</td>";
+                html += "<td>" + en.OrgNo + "</td>";
+                // html += "<td>" + en.FK_FlowSortText + "</td>";
                 html += "<td>" + en.No + "</td>";
                 html += "<td>" + en.Name + "</td>";
 
@@ -61,7 +77,7 @@
 
                         if (Auto.FlowName != en.Name) {
 
-                            var AutoEn = new Entity("BP.WF.Template.SubFlowAuto", Auto);
+                            var AutoEn = new Entity("BP.WF.Template.SFlow.SubFlowAuto", Auto);
                             AutoEn.FlowName = en.Name;
                             AutoEn.Update();
                             //Auto.Update();
@@ -87,7 +103,7 @@
 
             var nodeID = GetQueryString("FK_Node");
 
-            var ens = new Entities("BP.WF.Template.SubFlowAutos");
+            var ens = new Entities("BP.WF.Template.SFlow.SubFlowAutos");
             ens.Retrieve("FK_Node", nodeID, "SubFlowNo", flowNo, "SubFlowType", 1);
 
             if (ens.length == 1) {
@@ -95,8 +111,8 @@
                 return;
             }
 
-			var myNode = new Entity("BP.WF.Node", nodeID);
-            var en = new Entity("BP.WF.Template.SubFlowAuto");
+            var myNode = new Entity("BP.WF.Node", nodeID);
+            var en = new Entity("BP.WF.Template.SFlow.SubFlowAuto");
 
             en.SubFlowNo = flowNo;
             en.FK_Node = nodeID;
@@ -106,23 +122,20 @@
 
             var myen = en.Insert();
 
-            window.location.href = '../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowAuto&PKVal=' + myen.MyPK;
-
-            //alert('当前流程已经加入了延续流程中.');
+            SetHref('../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SFlow.SubFlowAuto&PKVal=' + myen.MyPK);
         }
-         
     </script>
 </head>
 <body>
-    <table id="Table1" style="width: 100%">
-        <caption>
-            请选择一个子流程
-        </caption>
+    <table id="Table1" style="width: 95%">
         <thead>
             <tr>
                 <th>
-                    流程类别
+                    组织
                 </th>
+                <!--<th>
+                    流程类别
+                </th>-->
                 <th>
                     流程编号
                 </th>

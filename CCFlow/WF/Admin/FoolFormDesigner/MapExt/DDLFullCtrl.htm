@@ -148,7 +148,7 @@
                 myPK = "DDLFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn"); 
             var DBType = $("#DDL_DBType").val();
             var url = 'TBFullCtrlDtl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK + '&FromPage=DDL&DBType=' + DBType;
-            window.location.href = url;
+            SetHref(url);
             return;
         }
 
@@ -160,7 +160,7 @@
              myPK  = "DDLFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");; 
             var DBType = $("#DDL_DBType").val();
             var url = 'TBFullCtrlDDL.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK + '&FromPage=DDL&DBType=' + DBType;
-            window.location.href = url;
+            SetHref(url);
             return;
         }
 
@@ -183,7 +183,7 @@
             if (en.Update() == 0)
                 en.Insert();
             $("#Msg").html("<font color=green>保存成功</font>");
-            window.location.href = window.location.href;
+            Reload();
             return;
 
         }
@@ -198,7 +198,7 @@
             handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
             var data = handler.DoMethodReturnString("DDLFullCtrl_Delete");
             alert(data);
-            window.location.href = window.location.href;
+            Reload();
             return;
         }
     </script>

@@ -212,10 +212,15 @@ new Vue({
             event.stopPropagation();
         }
 
-        var frmID = GetQueryString("FrmID");
-        var ens = new Entities("BP.CCBill.Template.Collections");
-        ens.Retrieve("FrmID", frmID, "Idx");
-        ens = obj2arr(ens);
+        var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin");
+        handler.AddPara("FrmID", GetQueryString("FrmID"));
+        var ds = handler.DoMethodReturnString("Collection_Init");
+        if (ds.indexOf("err@") != -1) {
+            layer.alert(data);
+            return;
+        }
+
+        var ens = JSON.parse(ds);
         var btnStyle = "class='layui-btn layui-btn-primary layui-border-blue layui-btn-xs'";
         ens.forEach(function (en) {
 
@@ -226,9 +231,11 @@ new Vue({
             var url = "./PowerCenter.htm?CtrlObj=Menu&CtrlPKVal=" + en.No + "&CtrlGroup=Menu";
 
             en.enCtrlWayText = "<a " + btnStyle + "  href =\"javascript:OpenLayuiDialog('" + url + "','" + en.No + "','700',0,null,false);\" >权限</a>";
-            //   if (en.Mark==="")
-            //if (mapAttr.LGType == 2)
-            //     mapAttr.Name = "<a " + btnStyle + " href=\"javascript:EditTable('" + mapAttr.FK_MapData + "','" + mapAttr.MyPK + "','" + mapAttr.KeyOfEn + "');\" > " + mapAttr.Name + "</a>";
+            if (en.MethodID == "Delete" || en.MethodID == "New" || en.MethodID == "Search"
+                || en.MethodID == "Group" || en.MethodID == "ExpExcel" || en.MethodID == "ImpExcel")
+                en.IsDelete = false;
+            else
+                en.IsDelete = true;
         })
 
         this.mapAttrs = ens;
@@ -272,9 +279,9 @@ function AttrFrm(enName, title, pkVal) {
 
 
 function DesignerFlow(no, name) {
-    var sid = GetQueryString("SID");
+    var sid = GetQueryString("Token");
     var webUser = new WebUser();
-    var url = "../Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + no + "&UserNo=" + webUser.No + "&SID=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
+    var url = "../Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + no + "&UserNo=" + webUser.No + "&Token=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
     window.top.vm.openTab(name, url);
 }
 

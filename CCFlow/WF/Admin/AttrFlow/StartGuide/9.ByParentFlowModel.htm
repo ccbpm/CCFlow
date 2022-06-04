@@ -83,7 +83,7 @@
                 part.PartType = "ParentSubFlowGuide";
                 part.Update();
                 alert('该流程编号已经存在,当前列表.' + myPK);
-                window.location.href = window.location.href;
+                Reload();
                 return;
             }
 
@@ -124,7 +124,7 @@
             flow.StartGuidePara1 = $("#TB_StartGuidePara1").val();
             flow.Update();
 
-            window.location.href = window.location.href;
+            Reload();
             //alert("保存成功.");
         }
     </script>

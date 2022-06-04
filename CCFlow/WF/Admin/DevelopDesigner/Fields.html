@@ -106,7 +106,7 @@
                     var attr = new Entity("BP.Sys.MapAttr", myPK);
                     attr.Delete();
                     alert('删除成功,需要手工刷新');
-                    window.location.href = window.location.href;
+                    Reload();
                 }
             }
         })
@@ -332,7 +332,7 @@
             var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=' + mypk + '&s=' + Math.random();
 
             OpenEasyUiDialog(url, "eudlgframe", '枚举' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
             });
         }
 
@@ -341,7 +341,7 @@
             var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&PKVal=' + mypk + '&s=' + Math.random();
 
             OpenEasyUiDialog(url, "eudlgframe", '外键SQL字段:' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
             });
         }
 
@@ -350,7 +350,7 @@
             var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=' + mypk + '&s=' + Math.random();
 
             OpenEasyUiDialog(url, "eudlgframe", '外键字段:' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
             });
         }
     </script>

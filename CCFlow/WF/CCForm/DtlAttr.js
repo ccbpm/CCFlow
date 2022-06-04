@@ -85,6 +85,8 @@ function figure_MapAttr_Template(mapAttr) {
                         dateFmt = "HH:mm:ss"
                      if (frmDate == 6) 
                         dateFmt = "MM-dd";
+                    if (frmDate == 7)
+                        dateFmt = "yyyy";
                     
 
                     if (mapAttr.UIIsEnable == 1) {

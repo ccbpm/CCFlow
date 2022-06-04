@@ -57,7 +57,9 @@ function Adv(PopModel) {
     var myPK = optionKey + "_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
 
     var url = "Adv.htm?FK_MapData=" + this.GetQueryString("FK_MapData") + "&RefPK=" + myPK + "&KeyOfEn=" + keyOfEn + "&PopModel=" + PopModel;
-    OpenEasyUiDialogExt(url, "通用设置", 500, 300, false);
+    var w = window.innerWidth*4/5;
+    var h = window.innerHeight*4/5;
+    OpenEasyUiDialogExt(url, "通用设置", w, h, false);
     //window.location.href = url;
 
     //WinOpen(url);
@@ -72,7 +74,7 @@ function FullData() {
     var optionKey = $("#changBar").val();
     var myPK = optionKey + "_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
     var url = "../FullData/Default.htm?FK_MapData=" + this.GetQueryString("FK_MapData") + "&RefPK=" + myPK + "&KeyOfEn=" + keyOfEn;
-    window.location.href = url;
+    SetHref(url);
 
 }
 
@@ -95,7 +97,7 @@ function changeOption() {
 
     var url = GetUrl(optionKey);
 
-    window.location.href = url + "?FK_MapData=" + fk_MapData + "&KeyOfEn=" + KeyOfEn;
+    SetHref(url + "?FK_MapData=" + fk_MapData + "&KeyOfEn=" + KeyOfEn);
 }
 
 function GetUrl(popModel) {
@@ -152,7 +154,7 @@ function OpenEasyUiDialogExt(url, title, w, h, isReload) {
 
     OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
         if (isReload == true) {
-            window.location.href = window.location.href;
+            Reload();
         }
     });
 }

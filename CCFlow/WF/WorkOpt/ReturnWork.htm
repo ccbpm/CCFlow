@@ -45,7 +45,7 @@
 
         function isExitsVariable(variableName) {
             try {
-                if (typeof (eval(variableName)) == "undefined") {
+                if (typeof (cceval(variableName)) == "undefined") {
                     console.log("已声明变量,但未初始化");
                     return false;
                 } else {
@@ -281,12 +281,8 @@
             $('.foot input').attr('disabled', 'disabled');
             $('.foot input').css('background', 'gray');
             var doc = "";
-            if (plant == 'CCFlow') {
-                doc = escape($('#TB_Doc').val());
-            } else {
-                doc = $('#TB_Doc').val();
-            }
-
+            doc = $('#TB_Doc').val();
+             
             //调动退回接口.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             var doMethod = "DoReturnWork";

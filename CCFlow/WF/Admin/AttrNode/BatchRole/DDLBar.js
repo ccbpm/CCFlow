@@ -57,7 +57,7 @@ function changeOption() {
     var optionKey = optionKey = sele[index].value;
 
     var url = GetUrl(optionKey);
-    window.location.href = url + "?FK_Node=" + nodeID +"&FK_Flow=" + GetQueryString("FK_Flow");;
+    SetHref( url + "?FK_Node=" + nodeID +"&FK_Flow=" + GetQueryString("FK_Flow"));
 }
 
 function GetUrl(optionKey) {

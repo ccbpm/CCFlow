@@ -173,7 +173,7 @@
 
             var frmID = GetQueryString("FrmID");
             var url = "MyBill.htm?FK_MapData=" + frmID + "&FrmID=" + frmID;
-            window.location.href = url;
+            SetHref(url);
         }
 
         function Delete(workid) {
@@ -190,7 +190,7 @@
                 alert(data);
             }
 
-            window.location.href = window.location.href;
+            Reload();
         }
         function GenerColor(BillState, isCanDo) {
 
@@ -288,15 +288,15 @@
             var frmID = GetQueryString("FrmID");
             if (frmID == null) {
                 if (tspan == '')
-                    window.location.href = '?1=1' + "&FrmID=" + GetQueryString("FrmID");
+                    SetHref('?1=1' + "&FrmID=" + GetQueryString("FrmID"));
                 else
-                    window.location.href = '?TSpan=' + tspan + "&FrmID=" + GetQueryString("FrmID");
+                    SetHref('?TSpan=' + tspan + "&FrmID=" + GetQueryString("FrmID"));
             }
             else {
                 if (tspan == '')
-                    window.location.href = '?FrmID=' + frmID;
+                    SetHref('?FrmID=' + frmID);
                 else
-                    window.location.href = '?FrmID=' + frmID + '&TSpan=' + tspan;
+                    SetHref('?FrmID=' + frmID + '&TSpan=' + tspan);
             }
         }
 
@@ -306,20 +306,20 @@
             var frmID = GetQueryString("FrmID");
 
             if (tspan == null) {
-                window.location.href = '?FrmID=' + frmID + "&BillState=" + billState;
+                SetHref('?FrmID=' + frmID + "&BillState=" + billState);
             }
             else {
 
                 if (frmID == "")
-                    window.location.href = '?TSpan=' + tspan + "&FrmID=" + frmID + "&BillState=" + billState;
+                    SetHref('?TSpan=' + tspan + "&FrmID=" + frmID + "&BillState=" + billState);
                 else
-                    window.location.href = '?FrmID=' + frmID + '&TSpan=' + tspan + "&BillState=" + billState;
+                    SetHref('?FrmID=' + frmID + '&TSpan=' + tspan + "&BillState=" + billState);
             }
         }
 
         function ToUrl(pageID) {
             var url = pageID + ".htm?m=" + Math.random();
-            window.location.href = url;
+            SetHref(url);
         }
 
         function SearchKey() {

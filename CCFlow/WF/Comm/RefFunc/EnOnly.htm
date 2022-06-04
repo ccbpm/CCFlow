@@ -6,62 +6,82 @@
     <title>ccform正在加载请稍候...</title>
 
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-
+    <link href="../../Admin/CSS/FoolFrmBody.css" rel="stylesheet" />
     <script type="text/javascript" src="../../Scripts/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
-    <script type="text/javascript" src="../../Scripts/EasyUIUtility.js"></script>
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/Cookie.js"></script>
-    <!--<link href="../Style/CommStyle.css" rel="stylesheet" type="text/css" />-->
-    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
     <link href="../fonts/font-icons.min.css" rel="Stylesheet" />
-    <script src="../JS/Calendar/WdatePicker.js" type="text/javascript"></script>
-    <link href="../JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
-    <!-- 自己的系统风格统一. -->
     <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
-    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
-    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
-    <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
-
     <!-- 位置必须放在 jquery 之后. -->
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../Gener.js" type="text/javascript"></script>
     <script src="../JScript.js" type="text/javascript"></script>
 
-    <!--UEditor-->
-    <link href="../../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css" type="text/css"
-          rel="stylesheet" />
-    <script src="../../Comm/umeditor1.2.3-utf8/third-party/template.min.js" type="text/javascript"></script>
-    <script charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.config.js" type="text/javascript"></script>
-    <script charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.min.js" type="text/javascript"></script>
-    <script src="../../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js" type="text/javascript"></script>
     <script src="../../Admin/CCFlowEnum.js" type="text/javascript"></script>
-    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../../CCForm/FrmEnd.js" type="text/javascript"></script>
-    <script src="../../CCForm/MapExt2016.js" type="text/javascript"></script>
-    <!-- 引入表单的扩展控件. -->
-    <link href="../../CCForm/JS/mselector.css" rel="stylesheet" type="text/css" />
-    <script src="../../CCForm/JS/Pop.js?ver=1" type="text/javascript"></script>
-    <script src="../../CCForm/JS/mselector.js?ver=1" type="text/javascript"></script>
-    <script src="../../CCForm/JS/mtags.js?ver=1" type="text/javascript"></script>
-    <script src="../../CCForm/JS/MultipleChoiceSearch.js?ver=1" type="text/javascript"></script>
-    <script src="../../CCForm/JS/MultipleChoiceSmall.js?ver=1" type="text/javascript"></script>
+    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <script src="../../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
     <script src="EnOnly.js" type="text/javascript"></script>
     <style type="text/css">
-        .textbox-addon {
-            position: absolute;
+
+        .layui-form-label {
+            min-width: 80px;
+            width: auto;
+            padding: 9px 15px 9px 0px;
         }
 
-        .textbox-text {
-            margin: 0px 26px 0px 0px;
-            padding-top: 0px;
-            padding-bottom: 0px;
-            height: 28px !important;
-            line-height: 28px !important;
+        .input-icon {
+            position: absolute;
+            left: calc(100% - 40px);
+            top: 1px;
+            width: 38px;
+            line-height: 36px;
+            text-align: center;
+            color: #d2d2d2;
+        }
+
+        .ccdate {
+            padding-right: 40px;
+        }
+
+        .layui-input-suffix {
+            width: 60px;
+            padding: 10px 15px 11px 15px;
+            line-height: 38px;
+            line-height: 20px;
+            border-width: 1px;
+            border-style: solid;
+            border-radius: 0 2px 2px 0px;
+            text-align: center;
+            background-color: none;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            box-sizing: border-box;
+            border-color: #eee;
+            display: inline;
+            border-left-color: none;
+            border-left: none;
+        }
+
+        .layui-input-prefix {
+            width: 60px;
+            padding: 10px 15px 11px 15px;
+            line-height: 38px;
+            line-height: 20px;
+            border-width: 1px;
+            border-style: solid;
+            border-radius: 0 2px 2px 0px;
+            text-align: center;
+            background-color: none;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            box-sizing: border-box;
+            border-color: #eee;
+            display: inline;
+            border-right-color: none;
+            border-right: none;
         }
     </style>
     <!--杨玉慧 -->
@@ -74,16 +94,30 @@
         var isReadonly = GetQueryString("isReadonly");
         var pkVal = "";
         var webUser = new WebUser();
+        var isSameEnName = true;//EnOnly页面和En的EnName是否相同
+        var cfg = null;
         $(function () {
             pkVal = GetPKVal();
-
+            var enName = GetQueryString("EnName");
             //新增时En.htm页面隐藏
-            if (window.parent && window.parent.$('#EnLayout').length == 1 && pkVal == null)
-                window.parent.$('#EnLayout').layout('remove', 'west');
+            if (window.parent) {
+                var url = window.parent.location.href;
+                var pEnName = getQueryStringByNameFromUrl(url, "EnName");
+                
+                if (pEnName != enName)
+                    isSameEnName = false;
+            }
+            cfg = new Entity("BP.Sys.EnCfg");
+            cfg.No = enName+"s";
+            cfg.RetrieveFromDBSources();
+
+            if (isSameEnName == true && window.parent && window.parent.vm != undefined && pkVal == null) {
+                window.parent.vm.sideBarOpen = false;
+                $(".ocside",window.parent.document).remove();
+            }
+              
 
             var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
-            var enName = GetQueryString("EnName");
-            var type = GetQueryString("type");
             httpHandler.AddUrlData();
             if (pkVal != null) {
                 httpHandler.AddPara("PKVal", pkVal);
@@ -99,9 +133,8 @@
             frmData = JSON.parse(data);
             mapData = frmData["Sys_MapData"][0];
             mapData = new Entity("BP.Sys.MapData", mapData); //把他转化成entity.
-            mainData = frmData["MainData"];
+            mainData = frmData["MainTable"][0];
             dtM = frmData["dtM"];
-
             document.title = mapData.Name;
 
             //获取没有解析的外部数据源
@@ -134,65 +167,115 @@
             InitToolbar(); //初始工具栏.
 
             //生成傻瓜表单.
-            GenerFoolFrm(mapData, mainData, frmData);
-            //修改页面样式
-            //debugger
-            if ($("ul.tabs").length != 0) {
-                var li = $("<li style='float:right !important;z-index:999; top:0px' class='cs-btn-group panel-body panel-body-noheader panel-body-noborder layout-body'></li>");
+            GenerFoolFrm(mapData,frmData);
+
+
+
+            //解析富文本
+            if ($(".rich").length > 0) {
+                var images_upload_url = "";
+                var handlerUrl = "";
+                if (plant == "CCFlow")
+                    handlerUrl = basePath + "/WF/Comm/Handler.ashx";
+                else
+                    handlerUrl = basePath + "/WF/Comm/Sys/ProcessRequest.do";
+
+                images_upload_url = handlerUrl + '?DoType=HttpHandler&DoMethod=RichUploadFile';
+                images_upload_url += '&HttpHandlerName=BP.WF.HttpHandler.WF_Comm_Sys&FrmID=' + GetQueryString("EnName") + "&PKVal=" + GetQueryString("PKVal");
+                layui.extend({
+                    tinymce: '../../Scripts/layui/ext/tinymce/tinymce'
+                }).use('tinymce', function () {
+                    var tinymce = layui.tinymce;
+                    $(".rich").each(function (i, item) {
+                        var id = item.id;
+                        var h = item.style.height.replace("px", "");
+                        if (h < 400) h = 400;
+                        tinymce.render({
+                            elem: "#" + id
+                            , height: h
+                            , images_upload_url: images_upload_url
+                            , paste_data_images: true
+							//取消默认提示
+							,plugins: ['advlist', 'saveBtn', 'lists', 'image', 'charmap', 'searchreplace', 'visualblocks',
+                                        'table', 'wordcount',
+                            ],
+                        });
+                    })
+
+                });
+
+            }
+            if ($("ul.layui-tab-title li").length > 1) {
+                var li = $("<div style='float:right !important;z-index:999; top:0px' class='cs-btn-group'></div>");
                 li.append($("#Btns").children());
-                $("ul.tabs").append(li);
-                //$(".tabs-panels").css("padding-bottom", "30px");
-                $("#Btns").parent().remove();
+                $("ul.layui-tab-title").append(li);
+                //$("#Btns").parent().remove();
                 $("#Btns").remove();
 
             } else {
-                $("#CCFormTabs").css("top", "45px");
+                if (isHiddenBtn == true)
+                    $("#Btns").css("display", "none");
             }
+
         })
 
         ///设置.
         function Setting() {
             var url = GetLocalWFPreHref() + "/WF/Comm/RefFunc/Setting.htm?EnName=" + GetQueryString("EnName") + "&PKVal=" + GetQueryString("PKVal");
-            //WinOpen(url, "xxs");
-            window.OpenEasyUiDialog(url, "eudlgframe", "设置", 600, 470, "icon-reset", true, null, null, null, function () {
-                window.location.href = window.location.href;
-            });
+            OpenLayuiDialog(url, "设置", 600, 470, "auto", true);
         }
 
 
         //设置按钮
+        var isHiddenBtn = true;
         function InitToolbar() {
-            $("#Btn_New").hide();
-            $("#Btn_Save").hide();
-            $("#Btn_Delete").hide();
             var isTree = GetQueryString("isTree");
             var isReadonly = GetQueryString("isReadonly");
             if (isTree == "1") {
-                if (isReadonly != "1")
+                if (isReadonly != "1") {
+                    isHiddenBtn = false;
                     $("#Btn_Save").show();
+
+                }
+
             } else {
                 //权限控制.
-                if (mapData.GetPara("IsInsert") == 1) {
+                if (mapData.GetPara("IsInsert") == 1 && pkVal!=null) {
+                    isHiddenBtn = false;
                     $("#Btn_New").show();
                 }
 
                 if (mapData.GetPara("IsUpdate") == 1) {
+                    isHiddenBtn = false;
                     $("#Btn_Save").show();
                 }
-                if (mapData.GetPara("IsDelete") == 1) {
-                    var pkVal = GetPKVal();
-                    if (pkVal != null)
+                if (mapData.GetPara("IsDelete") == 1 && pkVal != null) {
+                    if (pkVal != null) {
+                        isHiddenBtn = false;
                         $("#Btn_Delete").show();
+                    }
+
                 }
             }
 
             if (webUser.No == 'admin') {
+                isHiddenBtn = false;
                 $("#Btn_Setting").show();
+            }
+            var _html = "";
+            var btnLab1 = cfg.EnBtnLab1;
+            if (btnLab1 != null && btnLab1 != undefined && btnLab1 != "")
+                _html += "<button type='button' class='layui-btn layui-btn-primary layui-border-green layui-btn-sm' id='BtnLab1' onclick='executeFunction(1)'>" + btnLab1 + "</button>";
+            var btnLab2 = cfg.EnBtnLab2;
+            if (btnLab2 != null && btnLab2 != undefined && btnLab2 != "")
+                _html += "<button  type='button' class='layui-btn layui-btn-primary layui-border-green layui-btn-sm' id='BtnLab2' onclick='executeFunction(2)'>" + btnLab2 + "</button>";
+            if (_html != "") {
+                $("#Btns").append(_html);
             }
 
         }
 
-        function GenerFoolFrm(mapData, mainData, frmData) {
+        function GenerFoolFrm(mapData,frmData) {
 
             frmData = frmData;
             var Sys_GroupFields = frmData.Sys_GroupField;
@@ -205,12 +288,10 @@
             userRegedit.SetPKVal(mypk);
             var count = userRegedit.RetrieveFromDBSources();
             var tabIndex = GetQueryString("tabIndex");
-
-            var tableWidth = 800; //  w - 40;
+            tabIndex = tabIndex == null || tabIndex == undefined ? 0 : tabIndex;
+            var tableWidth = 800;
             var html = "";
-            //if (Sys_GroupFields.length > 1)
-                html = "<div id='tabDiv' class='easyui-tabs' data-options='fit:true' >";
-
+            html += "<ul class='layui-tab-title'>";
             for (var i = 0; i < Sys_GroupFields.length; i++) {
                 var gf = Sys_GroupFields[i];
                 if (count != 0 && userRegedit.MVals.indexOf("," + gf.OID + ",") != -1 && gf.OID != mapData.GetPara("PK"))//去除基本信息
@@ -220,24 +301,39 @@
                 if (lab.indexOf(',') != -1) {
                     lab = lab.substring(0, lab.indexOf(','));
                 }
-                if (Sys_GroupFields.length== 1) {
-                    html += "<div  data-options='selected:true' id='" + gf.OID + "' class='single'>";
+                if (Sys_GroupFields.length == 1) {
+                    html += "<li class='layui-this' id='" + gf.OID + "'>" + lab + "</li>";
                 } else {
-                    if (tabIndex != null && tabIndex != undefined && tabIndex == i) {
-                        html += "<div title='" + lab + "' data-options='selected:true' id='" + gf.OID + "'>";
+                    if (tabIndex == i) {
+                        html += "<li  class='layui-this' id='" + gf.OID + "'>" + lab + "</li>";
                     }
                     else {
-                        html += "<div title='" + lab + "' data-options='closable:false' id='" + gf.OID + "'>";
+                        html += "<li id='" + gf.OID + "'>" + lab + "</li>";
                     }
                 }
-               
 
-                html += InitMapAttr(frmData.Sys_MapAttr, mainData, gf.OID, userRegedit);
+            }
+            html += "</ul>";
+            html += "<div class='layui-tab-content'style='width:95%'>";
+            for (var i = 0; i < Sys_GroupFields.length; i++) {
+                var gf = Sys_GroupFields[i];
+                if (count != 0 && userRegedit.MVals.indexOf("," + gf.OID + ",") != -1 && gf.OID != mapData.GetPara("PK"))//去除基本信息
+                    continue;
+
+                if (Sys_GroupFields.length == 1) {
+                    html += "<div class='layui-tab-item layui-show'>";
+                } else {
+                    if (tabIndex != null && tabIndex != undefined && tabIndex == i) {
+                        html += "<div class='layui-tab-item layui-show'>";
+                    }
+                    else {
+                        html += "<div class='layui-tab-item'>";
+                    }
+                }
+                html += InitMapAttr(frmData.Sys_MapAttr,gf.OID, userRegedit);
                 html += "</div>";
             }
-           // if (Sys_GroupFields.length > 1)
-                html += "</div>";
-
+            html += "</div>";
 
             //加入隐藏控件.
             for (var i = 0; i < mapAtrrs.length; i++) {
@@ -249,10 +345,11 @@
             }
 
             $('#CCFormTabs').html("").append(html);
+            layui.form.render();
 
-            $.parser.parse("#CCFormTabs");
+            $(".layui-form-label").css("width", "");
             if (Sys_GroupFields.length == 1)
-                $(".tabs-inner").css("border-bottom", "1px solid #efefef");
+                $(".layui-tab-title").css("display", "none");
 
             //原有的。
             //为 DISABLED 的 TEXTAREA 加TITLE
@@ -283,8 +380,8 @@
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
                     if (defValue == null || defValue == "null")
                         continue;
-                    if ($('#TB_' + mapAttr.KeyOfEn).val() == "" || $('#TB_' + mapAttr.KeyOfEn).val() == undefined)
-                        $('#TB_' + mapAttr.KeyOfEn).val(defValue);
+                    $('#TB_' + mapAttr.KeyOfEn).val(defValue);
+
 
                     if (mapAttr.KeyOfEn.toLowerCase() == "icon") {
                         $("#menuIconIcon").attr("class", defValue);
@@ -321,20 +418,17 @@
                                 $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
 
                         }
-                        $('#DDL_' + mapAttr.KeyOfEn).combotree('loadData', pushData);
-                        if (mapAttr.UIIsEnable == 0)
-                            $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
+                        //$('#DDL_' + mapAttr.KeyOfEn).combotree('loadData', pushData);
+                        //if (mapAttr.UIIsEnable == 0)
+                        //    $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
 
-                        $('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', defValue);
-                        var target = $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('find', defValue)
-                        if (target != null) {
-                            target = target.target;
-                            $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('expandTo', target);
-                        }
+                        //$('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', defValue);
+                        //var target = $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('find', defValue)
+                        //if (target != null) {
+                        //    target = target.target;
+                        //    $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('expandTo', target);
+                        //}
 
-
-
-                        //$('#DDL_' + mapAttr.KeyOfEn).combotree('select', defValue);
                     } else {
                         // 判断下拉框是否有对应option, 若没有则追加
                         if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
@@ -364,6 +458,7 @@
                                 $("#TB_" + mapAttr.KeyOfEn + "Text").val($('#DDL_' + mapAttr.KeyOfEn).find("option:selected").text());
                         }
                     }
+                    $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
                 }
 
                 if ($('#CB_' + mapAttr.KeyOfEn).length == 1) {
@@ -380,11 +475,7 @@
                 }
             }
 
-
-            //如果有主键，就设置主键不可以编辑.
-            var pkval = GetPKVal();
-
-            if (pkval != null && pkval != 0) {
+            if (pkVal != null && pkVal != 0) {
                 //获取当前主键字段是否可以编辑?
                 $("#TB_No").attr("disabled", true);
                 $("#TB_MyPK").attr("disabled", 'disabled');
@@ -408,17 +499,37 @@
                     var param = o.split("=");
                     if (param.length == 2 && param[0] != "RefKey" && param[0] != "RefVal") {
                         realVal = decodeURI(param[1]);
-                        $('#TB_' + param[0]).val(realVal);
-                        $('#DDL_' + param[0]).val(realVal);
-                        if ($('#DDL_' + param[0]).hasClass("easyui-combotree") == true) {
-                            if ($("option[value='" + realVal + "']", '#DDL_' + param[0]).length == 0) {
-                                var pushData = [];
-                                pushData.push({ "id": realVal, "text": realVal, "children": [] });
-                                $('#DDL_' + param[0]).combotree('loadData', pushData);
-                            }
-                            $('#DDL_' + param[0]).combotree('setValue', realVal);
-
+                        if ($('#TB_' + param[0]).length == 1) {
+                            if ($('#TB_' + param[0]).attr("disabled") == "disabled" && $('#TB_' + param[0]).val() != null && $('#TB_' + param[0]).val() != "")
+                                return true;
+                            $('#TB_' + param[0]).val(realVal);
+                            return true;
                         }
+                        if ($('#DDL_' + param[0]).length == 1) {
+                            if ($('#DDL_' + param[0]).attr("disabled") == "disabled" && $('#DDL_' + param[0]).val() != null && $('#DDL_' + param[0]).val() != "")
+                                return true;
+                            $('#DDL_' + param[0]).val(realVal);
+                            if (realVal != "" && $("option[value='" + realVal + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
+                                var mainTable = frmData.MainTable[0];
+                                var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
+                                if (selectText == null || selectText == undefined || selectText == "")
+                                    selectText = mainTable[mapAttr.KeyOfEn + "T"];
+
+                                if (selectText == null || selectText == undefined || selectText == "")
+                                    selectText = realVal;
+                                $('#DDL_' + param[0]).append("<option value='" + realVal + "'>" + selectText + "</option>");
+                            }
+                        }
+
+                        //if ($('#DDL_' + param[0]).hasClass("easyui-combotree") == true) {
+                        //    if ($("option[value='" + realVal + "']", '#DDL_' + param[0]).length == 0) {
+                        //        var pushData = [];
+                        //        pushData.push({ "id": realVal, "text": realVal, "children": [] });
+                        //        $('#DDL_' + param[0]).combotree('loadData', pushData);
+                        //    }
+                        //    $('#DDL_' + param[0]).combotree('setValue', realVal);
+
+                        //}
 
                         if (realVal == "1") {
                             var obj = document.getElementById("CB_" + param[0])
@@ -435,30 +546,27 @@
                 html = "<a href='#' onclick='downLoadFile()' target='_self'>" + $("#TB_MyFileName").val() + "." + $("#TB_MyFileExt").val() + "</a>";
             }
             $("#FileInfo").html(html);
-
-           // $(".panel-body-noheader").height($(".easyui-layout")[0].clientHeight + 45);
-
+            layui.form.render();
             //设置扩展
             AfterBindEn_DealMapExt(frmData);
 
         }
 
         function downLoadFile() {
-            var PKVal = GetPKVal();
             if (plant == "CCFlow")
-                window.location.href = '../../CCForm/DownFile.aspx?DoType=EntityFile_Load&DelPKVal=' + PKVal + '&EnsName=' + GetQueryString("EnName") + "s";
+                SetHref('../../CCForm/DownFile.aspx?DoType=EntityFile_Load&DelPKVal=' + pkVal + '&EnsName=' + GetQueryString("EnName") + "s");
             else {
-                var currentPath = window.document.location.href;
+                var currentPath = GetHrefUrl();
                 var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-                Url = path + '/WF/Ath/EntityFileLoad.do?DelPKVal=' + PKVal + '&EnsName=' + GetQueryString("EnName") + "s";
-                window.location.href = Url;
+                Url = path + '/WF/Ath/EntityFileLoad.do?DelPKVal=' + pkVal + '&EnsName=' + GetQueryString("EnName") + "s";
+                SetHref(url);
             }
         }
 
         //解析表单字段 MapAttr.
-        function InitMapAttr(Sys_MapAttr, mainData, groupID, userRegedit) {
+        function InitMapAttr(Sys_MapAttr, groupID, userRegedit) {
 
-            var html = "<table border='0' style='width:96%;' >";
+            var html = "<div class='layui-row FoolFrmGroupBar' id='Group_" + groupID + "'>";
             var isDropTR = true;
             var isExitMyNum = false;
             var fileDesc = "";
@@ -512,67 +620,94 @@
 
                 var lab = "";
                 if (attr.UIContralType == 0)
-                    lab = "<label for='TB_" + attr.KeyOfEn + "' class=' " + (attr.UIIsInput == 1 ? "mustInput" : "") + "' style='font-weight: normal;margin-bottom: 0px;' >" + name + "</label>";
+                    lab = "<label for='TB_" + attr.KeyOfEn + "' class='layui-form-label " + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + name + "</label>";
 
                 if (attr.MyDataType == 4)
-                    lab = "<label for='CB_" + attr.KeyOfEn + "' class=' " + (attr.UIIsInput == 1 ? "mustInput" : "") + "' style='font-weight: normal;margin-bottom: 0px;' >" + name + "</label>";
+                    lab = "<label for='CB_" + attr.KeyOfEn + "' class='layui-form-label " + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + name + "</label>";
 
                 if (attr.UIContralType == 1)
-                    lab = "<label for='DDL_" + attr.KeyOfEn + "' class=' " + (attr.UIIsInput == 1 ? "mustInput" : "") + "'  style='font-weight: normal;margin-bottom: 0px;' >" + name + "</label>";
+                    lab = "<label for='DDL_" + attr.KeyOfEn + "' class='layui-form-label " + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + name + "</label>";
 
                 if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
-                    lab += " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "'  style='font-weight: normal;' >*</span>";
+                    lab += " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "'>*</span>";
                 }
 
+                //大文本
+                if (attr.UIHeight >= 10) {
+
+                    if (GetPara(attr.AtPara, "IsRichText") == "1" || attr.ColSpan == 4) {
+                        if (isDropTR == false) {
+                            html += "</div>";
+                        }
+                        isDropTR = true;
+                        html += "<div class='layui-row FoolFrmFieldRow'style='padding-left:10px;padding-right:10px'>";
+                        html += "<div class='layui-col-md12 layui-col-xs12 FoolFrmFieldLabel'>" + lab + "</div>";
+                        html += "</div>";
+                        html += "<div class='layui-row FoolFrmFieldRow'style='padding-left:10px;padding-right:10px'>";
+                        html += "<div class='layui-col-md12 layui-col-xs12 FoolFrmFieldInput'>";
+                        html += InitMapAttrOfCtrl(attr);
+                        html += "</div>";
+                        html += "</div>";
+                        continue;
+                    }
+
+                }
                 //线性展示并且colspan=3
                 if ((attr.ColSpan == 3 || attr.ColSpan == 4) && attr.UIHeight <= 40) {
+                    if (isDropTR == false) {
+                        html += "</div>";
+                    }
                     isDropTR = true;
-                    html += "<tr>";
+                    html += "<div class='layui-row FoolFrmFieldRow'>";
                     if (attr.UIContralType == 2) {
-                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'></td>";
-                        html += "<td class='FContext'  colspan=3>";
+                        html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'><label class='layui-form-label'></label></div>";
+                        html += "<div class='layui-col-md10 layui-col-xs10 FoolFrmFieldInput'>";
                         html += InitMapAttrOfCtrl(attr);
-                        html += "</td>";
+                        html += "</div>";
                     } else {
-                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'>" + lab + "</td>";
-                        html += "<td class='FContext'  colspan=3>";
+                        html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'>" + lab + "</div>";
+                        html += "<div class='layui-col-md10 layui-col-xs10 FoolFrmFieldInput'>";
                         html += InitMapAttrOfCtrl(attr);
-                        html += "</td>";
+                        html += "</div>";
                     }
 
 
-                    html += "</tr>";
+                    html += "</div>";
 
                     if (rm != null) {
-                        html += "<tr>";
-                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'></td>";
-                        html += "<td colspan=3>";
+                        html += "<div class='layui-row FoolFrmFieldRow'>";
+                        html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'><label class='layui-form-label'></label></div>";
+                        html += "<div class='layui-col-md10 layui-col-xs10 FoolFrmFieldInput'>";
                         html += GenerRM(rm);
-                        html += "</td>";
-                        html += "</tr>";
+                        html += "</div>";
+                        html += "</div>";
                         isDropTR = true;
                     }
                     continue;
                 }
 
                 //线性展示并且colspan=4
-                if ((attr.ColSpan == 4 || attr.ColSpan == 3)&& attr.UIHeight >40 ) {
+                if ((attr.ColSpan == 4 || attr.ColSpan == 3) && attr.UIHeight > 40) {
+                    if (isDropTR == false) {
+                        html += "</div>";
+                    }
                     isDropTR = true;
-                    html += "<tr>";
-                    html += "<td colspan='4'>";
-                    html += "<div style='margin-left:15%'>" + lab + "</br > ";
+                    html += "<div class='layui-row FoolFrmFieldRow'>";
+                    html += "<div class='layui-col-md12 layui-col-xs12 FoolFrmFieldLabel'>" + lab + "</div>";
+                    html += "</div>";
+                    html += "<div class='layui-row FoolFrmFieldRow'>";
+                    html += "<div class='layui-col-md12 layui-col-xs12 FoolFrmFieldInput'>";
                     html += InitMapAttrOfCtrl(attr);
                     html += "</div>";
-                    html += "</td>";
-                    html += "</tr>";
+                    html += "</div>";
 
                     if (rm != null) {
-                        html += "<tr>";
-                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'></td>";
-                        html += "<td colspan=3>";
+                        html += "<div class='layui-row FoolFrmFieldRow'>";
+                        html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'><label class='layui-form-label'></label></div>";
+                        html += "<div class='layui-col-md10 layui-col-xs10 FoolFrmFieldInput'>";
                         html += GenerRM(rm);
-                        html += "</td>";
-                        html += "</tr>";
+                        html += "</div>";
+                        html += "</div>";
                         isDropTR = true;
                     }
                     continue;
@@ -580,27 +715,27 @@
 
 
                 if (isDropTR == true) {
-                    html += "<tr>";
+                    html += "<div class='layui-row FoolFrmFieldRow'>";
 
                     if (attr.UIContralType == 2) {
-                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'></td>";
-                        html += "<td class='FContext'>";
+                        html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'><label class='layui-form-label'></label></div>";
+                        html += "<div class='layui-col-md4 layui-col-xs4 FoolFrmFieldInput'>";
                         html += InitMapAttrOfCtrl(attr);
-                        html += "</td>";
+                        html += "</div>";
                     } else {
-                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'>" + lab + "</td>";
-                        html += "<td class='FContext'  >";
+                        html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'>" + lab + "</div>";
+                        html += "<div class='layui-col-md4 layui-col-xs4 FoolFrmFieldInput'>";
                         html += InitMapAttrOfCtrl(attr);
-                        html += "</td>";
+                        html += "</div>";
                     }
 
                     isDropTR = !isDropTR;
 
                     if (rm != null) {
-                        html += "<td colspan=2>";
+                        html += "<div class='layui-col-md6 layui-col-xs6 FoolFrmFieldLabel'>";
                         html += GenerRM(rm);
-                        html += "</td>";
-                        html += "</tr>";
+                        html += "</div>";
+                        html += "</div>";
                         isDropTR = true;
                     }
                     continue;
@@ -609,57 +744,59 @@
                 if (isDropTR == false) {
 
                     if (rm != null) {
-                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'></td>";
-                        html += "<td class='FContext'></td>";
-                        html += "</tr>";
-                        html += "<tr>";
+                        html += "<div class='layui-col-md6 layui-col-xs6 FoolFrmFieldLabel'>";
+                        html += GenerRM(rm);
+                        html += "</div>";
+                        html += "</div>";
+                        html += "<div class='layui-row FoolFrmFieldRow'>";
                     }
                     if (attr.UIContralType == 2) {
-                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'></td>";
-                        html += "<td class='FContext'>";
+                        html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'><label class='layui-form-label'></label></div>";
+                        html += "<div class='layui-col-md4 layui-col-xs4 FoolFrmFieldInput'>";
                         html += InitMapAttrOfCtrl(attr);
-                        html += "</td>";
+                        html += "</div>";
                     } else {
-                        html += "<td class='FoolFrmFieldCtrl' style='width:20%;'>" + lab + "</td>";
-                        html += "<td class='FContext'  >";
+                        html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'>" + lab + "</div>";
+                        html += "<div class='layui-col-md4 layui-col-xs4 FoolFrmFieldInput'>";
                         html += InitMapAttrOfCtrl(attr);
-                        html += "</td>";
+                        html += "</div>";
                     }
                     //html += "</tr>";
 
-                   //isDropTR = !isDropTR;
+                    //isDropTR = !isDropTR;
 
                     if (rm != null) {
-                        //html += "<tr>";
-                        html += "<td colspan=2>";
+                        html += "<div class='layui-col-md6 layui-col-xs6 FoolFrmFieldLabel'>";
                         html += GenerRM(rm);
-                        html += "</td>";
-                        html += "</tr>"
+                        html += "</div>";
+                        html += "</div>";
+                        //html += "<div class='layui-row FoolFrmFieldRow'>";
 
                         isDropTR = true;;
                     } else {
-                        html += "</tr>";
+                        html += "</div>";
                         isDropTR = !isDropTR;
                     }
                     continue;
                 }
             }
-
+            if (isDropTR == false)
+                html += "</div>";
             //如果MapData中具有文件上传的权限，解析设置   0 无 1 单附件上传 2 多附件上传
             var entityAthType = mapData.GetPara("BPEntityAthType");
 
             //单附件上传
             if (entityAthType == 1) {
-                html += "<tr>";
+                html += "<div class='layui-row FoolFrmFieldRow'>";
                 if (fileDesc == "")
-                    html += "<td class='FoolFrmFieldCtrl' style='width:20%;'>附件上传</td>";
+                    html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'>附件上传</div>";
                 else
-                    html += "<td class='FoolFrmFieldCtrl' style='width:20%;'>" + fileDesc + "</td>";
-                html += "<td colspan=3>";
+                    html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'>" + fileDesc + "</div>";
+                html += "<div class='layui-col-md10 layui-col-xs10 FoolFrmFieldInput'>";
                 html += "<input type='file' id='File_Upload' name='File_Upload' style='background-color:white;' onchange='changeFile(1)' />";
                 html += "已上传的文件：<span id='FileInfo'></span>";
-                html += "</td>";
-                html += "</tr>";
+                html += "</div>";
+                html += "</div>";
             }
             //多附件上传
             if (entityAthType == 2) {
@@ -672,7 +809,8 @@
 
             }
 
-            html += "</table>";
+
+            html += "</div>";
             return html;
         }
 
@@ -685,33 +823,39 @@
                 icon = "../../Img/dot.png";
             }
 
-            if (rm.Icon != null && rm.Icon.indexOf('http') != 0) {
-                icon = "../" + rm.Icon;
+
+            var img = "";
+            if (icon.toLowerCase().indexOf(".png") != -1 || icon.toLowerCase().indexOf(".jpg") != -1) {
+                if (rm.Icon != null && rm.Icon.indexOf('http') != 0) {
+                    icon = "../" + rm.Icon;
+                }
+                img = "<img src='" + icon + "' border=0 style='width:16px;height:16px;' />";
             }
+            else
+                img = "<i class='" + icon + "'></i>";
             var html = "";
             var W = document.body.clientWidth - 80;
-            var H = document.body.clientHeight - 20;
+            var H = document.body.clientHeight - 140;
             if (W > rm.W)
                 W = rm.W;
-            if (H > rm.H)
-                H = rm.H;
+
             if (parseInt(rm.RefMethodType) == RefMethodType.LinkeWinOpen) {
-                html = "<a href='javascript:WinOpenFull(\"" + rm.Url + "\",\"" + rm.Title + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+                html = "<a href='javascript:WinOpenFull(\"" + rm.Url + "\",\"" + rm.Title + "\")'>" + img + rm.Title + "</a>";
             }
 
             if (parseInt(rm.RefMethodType) == RefMethodType.Func) {
-                html = "<a href='javascript:OPenFun(\"" + rm.Url + "\",\"" + rm.Warning + "\",\"" + rm.Title + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+                html = "<a href='javascript:OPenFun(\"" + rm.Url + "\",\"" + rm.Warning + "\",\"" + rm.Title + "\")'>" + img + rm.Title + "</a>";
             }
 
             if (parseInt(rm.RefMethodType) == RefMethodType.LinkModel) {
-                html = "<a href='javascript:OpenEasyUiDialogExt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + W + "\",\"" + H + "\",true)'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+                html = "<a href='javascript:OpenLayuiDialog(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + W + "\",80,\"auto\",true)'>" + img + rm.Title + "</a>";
             }
 
 
             if (parseInt(rm.RefMethodType) == RefMethodType.RightFrameOpen) {
                 // alert('没有实现@代国强, 需要根据窗口大小，弹出模态窗口..');
                 //var html = "<img src='" + icon + "' border=0 style='width:16px;height:16px;' /><a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'>" + rm.Title + "</a>";
-                html = "<a href='javascript:OpenUrlInRightFrame(this,\"" + rm.Url + "\")'><img src='" + icon + "' border=0 style='width:16px;height:16px;' />" + rm.Title + "</a>";
+                html = "<a href='javascript:OpenUrlInRightFrame(this,\"" + rm.Url + "\")'>" + img + rm.Title + "</a>";
 
             }
             return html;
@@ -719,9 +863,11 @@
         function OPenFun(url, warning, title) {
             warning = warning.replace(/,\s+/g, ",");
             warning = warning.replace(/\s+/g, "\r\n");
-            if (confirm("\"" + warning + "\"")) {
-                OpenEasyUiDialogExt(url, title, 400, 300, false);
-            }
+            layer.confirm(warning, function (index) {
+                layer.close(index);
+                OpenLayuiDialog(url, title, 400, 80, "auto", false);
+            });
+
         }
         //在右侧框架中显示指定url的页面
         function OpenUrlInRightFrame(ele, url) {
@@ -741,179 +887,218 @@
             }
         }
         function InitMapAttrOfCtrl(mapAttr) {
+            var ccsCtrl = mapAttr.CSSCtrl;
+            ccsCtrl = ccsCtrl == null || ccsCtrl == undefined || ccsCtrl == "0" ? "" : ccsCtrl;
+            //下拉框 外键和外部数据源
+            if ((mapAttr.LGType == "0" && (mapAttr.MyDataType == "1" || mapAttr.MyDataType == "2") && mapAttr.UIContralType == 1)
+                || (mapAttr.LGType == "2" && mapAttr.MyDataType == "1")) {
+                var css = "";
+                if (mapAttr.LGType == "0")
+                    css = "class='ddl-ext'";
+                return "<div id='DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group'><select id = 'DDL_" + mapAttr.KeyOfEn + "' name = 'DDL_" + mapAttr.KeyOfEn + "' " + css + " lay-filter='" + mapAttr.KeyOfEn + "'  > " + InitDDLOperation(frmData, mapAttr, "") + "</select></div>";
 
-            var str = '';
-            var defValue = ""; //  ConvertDefVal(mapAttr);
-            var isInOneRow = false; //是否占一整行
-            var islabelIsInEle = false; //
-            var eleHtml = '';
-
-            //外部数据源类型.
-            if (mapAttr.LGType == "0" && (mapAttr.MyDataType == "1" || mapAttr.MyDataType == "2") && mapAttr.UIContralType == "1") {
-
-                //枚举类型.
-                if (mapAttr.UIIsEnable == 1)
-                    enableAttr = "";
-                else
-                    enableAttr = "disabled='disabled'";
-
-                return "<select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + " onchange='ChangeKeyOfEnText(this,\"" + mapAttr.KeyOfEn + "\")'>" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
-
-            //外键类型.
-            if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
-
-                //枚举类型.
-                if (mapAttr.UIIsEnable == 1)
-                    enableAttr = "";
-                else
-                    enableAttr = "disabled='disabled'";
-
-                //判断外键是否为树形结构
-                var uiBindKey = mapAttr.UIBindKey;
-                if (uiBindKey.indexOf("Dept") != -1)
-                    return "<select  id='DDL_" + mapAttr.KeyOfEn + "' class='easyui-combotree' style='height:28px;width:100%'></select>";
-
-                return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
-            }
-
-            //            if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContral == 1) {
-
-            //                //枚举类型.
-            //                if (mapAttr.UIIsEnable == 1)
-            //                    enableAttr = "";
-            //                else
-            //                    enableAttr = "disabled='disabled'";
-
-            //                return "<select  class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
-            //            }
-
-            //添加文本框 ，日期控件等
-            //AppString
-            if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == 0) {  //不是外键
-
-                if (mapAttr.UIHeight <10) //普通的文本框.
-                {
-                    var enableAttr = '';
-                    if (mapAttr.UIIsEnable == 0)
-                        enableAttr = "disabled='disabled'";
-                    var html = "";
-                    if (mapAttr.KeyOfEn.toLowerCase() == "icon") {
-                        html += '<div class="input-group">';
-                        html += "<span class='input-group-addon' style='border-radius:0;border-color:#d2d6de;background-color:#fff'><i id='menuIconIcon' class='icon-settings'></i></span>";
-                        html += "<input  class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;margin:0px 0px' type='text'  " + enableAttr + " />";
-                        html += "<span class='input-group-btn' style='padding-left:3px;border:1px solid #d2d6de;'><a id='menuIconButton' href='javascript:void(0)' class='btn btn-default'  onclick='openIconWindow(\"" + mapAttr.KeyOfEn + "\")'><i class='fa fa-search'></i></a></span>";
-                        html += "</div>";
-                        return html;
+            //枚举 单选枚举和下拉框枚举
+            if (mapAttr.LGType == 1) {
+                var ses = frmData[mapAttr.KeyOfEn];
+                if (ses == undefined)
+                    ses = frmData[mapAttr.UIBindKey];
+                if (ses == undefined) {
+                    //枚举类型的.
+                    if (mapAttr.LGType == 1) {
+                        ses = frmData.Sys_Enum;
+                        ses = $.grep(ses, function (value) {
+                            return value.EnumKey == mapAttr.UIBindKey;
+                        });
                     }
 
-                    return "<input  class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;' type='text'  " + enableAttr + " aria-invalid='false' />";
-
+                }
+                if (mapAttr.UIContralType == 1) {//下拉框显示
+                    var operations = "";
+                    $.each(ses, function (i, obj) {
+                        operations += "<option  value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+                    });
+                    return "<div id='DIV_" + mapAttr.KeyOfEn + "'><select " + ccsCtrl + " name='DDL_" + mapAttr.KeyOfEn + "'  id='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + "  lay-filter='" + mapAttr.KeyOfEn + "' >" + operations + "</select></div>";
+                }
+                if (mapAttr.UIContralType == 2) {//复选框
+                    var rbHtmls = "";
+                    //显示方式,默认为 0=横向展示 3=横向..
+                    var RBShowModel = 0;
+                    if (mapAttr.AtPara.indexOf('@RBShowModel=3') >= 0)
+                        RBShowModel = 3;
+                    for (var i = 0; i < ses.length; i++) {
+                        var se = ses[i];
+                        var br = "";
+                        if (RBShowModel == 0)
+                            br = "<br>";
+                        var checked = "";
+                        //if (se.IntKey == mapAttr.DefVal)
+                        //    checked = " checked=true ";
+                        rbHtmls += "<input " + ccsCtrl + " type=checkbox name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' " + checked + " lay-filter='" + mapAttr.KeyOfEn + "'  class='mcheckbox'  value='" + se.IntKey + "' title='" + se.Lab + "'/>";
+                    }
+                    return "<div id='DIV_" + mapAttr.KeyOfEn + "'>" + rbHtmls + "</div>";
                 }
 
-                //普通的大块文本.
-                return "<textarea  class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />"
-            }
-
-            //日期类型.
-            if (mapAttr.MyDataType == 6) {
-                var enableAttr = '';
-                if (mapAttr.UIIsEnable == 1)
-                    enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
-                else
-                    enableAttr = "disabled='disabled'";
-
-                return "<input   class='form-control  Wdate' " + enableAttr + " style='width:120px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' />";
-            }
-
-            //时期时间类型.
-            if (mapAttr.MyDataType == 7) {
-
-                var enableAttr = '';
-                if (mapAttr.UIIsEnable == 1)
-                    enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
-                else
-                    enableAttr = "disabled='disabled'";
-
-                return "<input  type='text'  class='form-control  Wdate'   style='width:160px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
-            }
-
-            // boolen 类型.
-            if (mapAttr.MyDataType == 4) {  // AppBoolean = 7
-
-                if (mapAttr.UIIsEnable == 1)
-                    enableAttr = "";
-                else
-                    enableAttr = "disabled='disabled'";
-
-                //CHECKBOX 默认值
-                var checkedStr = '';
-                if (checkedStr != "true" && checkedStr != '1') {
-                    checkedStr = ' checked="checked" ';
+                if (mapAttr.UIContralType == 3) {//单选按钮显示
+                    var rbHtmls = "";
+                    //显示方式,默认为 0=横向展示 3=横向..
+                    var RBShowModel = 0;
+                    if (mapAttr.AtPara.indexOf('@RBShowModel=3') >= 0)
+                        RBShowModel = 3;
+                    for (var i = 0; i < ses.length; i++) {
+                        var se = ses[i];
+                        var br = "";
+                        if (RBShowModel == 0)
+                            br = "<br>";
+                        var checked = "";
+                        if (se.IntKey == mapAttr.DefVal)
+                            checked = " checked=true ";
+                        rbHtmls += "<input " + ccsCtrl + " type=radio name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' " + checked + " lay-filter='" + mapAttr.KeyOfEn + "'   title='" + se.Lab + "'/>" + br;
+                    }
+                    return "<div id='DIV_" + mapAttr.KeyOfEn + "'>" + rbHtmls + "</div>";
                 }
-                var name = "";
-                var helpUrl = GetPara(mapAttr.AtPara, "HelpUrl");
-                if (helpUrl == null || helpUrl == "" || helpUrl == "null") {
-                    name = mapAttr.Name;
-                } else {
-                    if (helpUrl.indexOf('javascr') == 0)
-                        name = mapAttr.Name + "<a href=\"" + helpUrl + "\" ><img src='../../Img/Help.png' style='text-align:right;height:15px'  /></a>";
-                    else
-                        name = mapAttr.Name + "<a href=\"" + helpUrl + "\" target=_blank ><img src='../../Img/Help.png' style='text-align:right;height:15px' /></a>";
+            }
+            if (mapAttr.LGType == 0) {
+                switch (parseInt(mapAttr.MyDataType)) {
+                    case 1://普通文本
+                        //富文本编辑器
+                        if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
+                            if (mapAttr.UIIsEnable == "0" || isReadonly == true) {
+                                //使用div展示
+                                var defValue = ConvertDefVal(mapAttr);
+                                defValue = defValue.replace(/white-space: nowrap;/g, "");
+                                return "<div style='margin:9px 0px 9px 15px'>" + defValue + "</div>";
+                            }
+                            return "<textarea maxlength=" + mapAttr.MaxLen + "  style='height:" + mapAttr.UIHeight + "px;width:100%;' id='TB_" + mapAttr.KeyOfEn + "'  class='rich'/>";
+                        }
+                        //判断是不是大块文本
+                        if (mapAttr.IsSupperText == 1 || mapAttr.UIHeight > 40) {
+                            return "<textarea class='layui-textarea'  id='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "></textarea>"
+                        }
+                        var baseUrl = "../";
+                        if (currentURL.indexOf("AdminFrm.htm") != -1)
+                            baseUrl = "../../../";
+                        if (currentURL.indexOf("CCBill") != -1 || currentURL.indexOf("CCForm") != -1)
+                            baseUrl = "../../";
 
+                        if (mapAttr.IsSigan == "1" && mapAttr.UIIsEnable == 1 && isReadonly != 0) {
+                            var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'  value='" + defValue + "' type=hidden />";
+                            //是否签过
+                            var sealData = new Entities("BP.Tools.WFSealDatas");
+                            sealData.Retrieve("OID", pageData.OID, "FK_Node", GetQueryString("FK_Node"), "SealData", GetQueryString("UserNo"));
+
+                            if (sealData.length > 0) {
+                                eleHtml += "<img src='" + baseUrl + "DataUser/Siganture/" + defValue + ".jpg' alt='" + defValue + "'  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                                isSigantureChecked = true;
+                            }
+                            else {
+                                eleHtml += "<img src='" + baseUrl + "DataUser/Siganture/siganture.jpg'   ondblclick='figure_Template_Siganture(\"" + mapAttr.KeyOfEn + "\",\"" + defValue + "\")' style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                            }
+                            return eleHtml;
+                        }
+                        //如果不可编辑，并且是图片名称
+                        if (mapAttr.IsSigan == "1") {
+                            var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+                            var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'  value='" + val + "' type=hidden />";
+                            eleHtml += "<img src='" + baseUrl + "DataUser/Siganture/" + val + ".jpg' alt='" + val + "' style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                            return eleHtml;
+                        }
+                        if (mapAttr.KeyOfEn.toLowerCase() == "icon") {
+                            var _html = "<div id='DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group'>";
+                            _html += "<span class='layui-input-prefix'><i id='menuIconIcon' class='icon-settings'></i></span>"
+                            _html += "<input class='" + ccsCtrl + " layui-input' style='text-align:left;width:calc(100% - 120px)!important;display:inline' type='text' maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>";
+                            if (mapAttr.UIIsEnable == 1&& isReadonly!="1")
+                                _html += "<span class='layui-input-suffix'><a id='menuIconButton' href='javascript:void(0)' class=''  onclick='openIconWindow(\"" + mapAttr.KeyOfEn + "\")'><i class='layui-icon'>&#xe615;</i></a></span>";
+                            _html += "</div>";
+                            return _html;
+
+                        }
+                        return "<div id='DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group'> <input class='" + ccsCtrl + " layui-input'  maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div>";
+                    case 2://整数
+                        var _html = "<div id = 'DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group' >";
+                        _html += "<input class='" + ccsCtrl + " layui-input'  value='0' style='text-align:right;'  onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "'/>";
+                        _html += "</div>";
+                        return _html;
+                    case 4:  //复选框
+                        if (mapAttr.UIIsEnable == 0) {
+                            enableAttr = "disabled='disabled'";
+                        } else {
+                            enableAttr = "";
+                        }
+                        return "<div style='line-height:38px' id='DIV_" + mapAttr.KeyOfEn + "'><label for='CB_" + mapAttr.KeyOfEn + "' ></label><input type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "'" + (mapAttr.DefVal == 1 ? "checked = 'checked'" : "") + enableAttr + " lay-filter='" + mapAttr.KeyOfEn + "' lay-skin='primary' value='1' title='" + mapAttr.Name + "'></div>";
+                    case 3://浮点
+                    case 5://双精度
+                        var _html = "<div id = 'DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group' >";
+                        var attrdefVal = mapAttr.DefVal;
+                        var bit;
+                        if (attrdefVal != null && attrdefVal !== "" && attrdefVal.indexOf(".") >= 0)
+                            bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
+                        else
+                            bit = 2;
+                        _html += "<input class='" + ccsCtrl + " layui-input'  value='0.00'  onkeyup=" + '"' + "valitationAfter(this, 'float');if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + " valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+                        _html += "</div>";
+                        return _html;
+                    case 6://日期类型
+                    case 7://时间类型
+                        //生成中间的部分.
+                        var enableAttr = '';
+                        var frmDate = mapAttr.IsSupperText; //获取日期格式
+                        var dateFmt = '';
+                        var dateType = "";
+                        if (frmDate == 0) {
+                            dateFmt = "yyyy-MM-dd";
+                            dateType = "date"
+                        } else if (frmDate == 1) {
+                            dateFmt = "yyyy-MM-dd HH:mm";
+                            dateType = "datetime";
+                        } else if (frmDate == 2) {
+                            dateFmt = "yyyy-MM-dd HH:mm:ss";
+                            dateType = "datetime";
+                        } else if (frmDate == 3) {
+                            dateFmt = "yyyy-MM";
+                            dateType = "month";
+                        } else if (frmDate == 4) {
+                            dateFmt = "HH:mm";
+                            dateType = "time";
+                        } else if (frmDate == 5) {
+                            dateFmt = "HH:mm:ss";
+                            dateType = "time";
+                        } else if (frmDate == 6) {
+                            dateFmt = "MM-dd";
+                            dateType = "date";
+                        }
+                        else if (frmDate == 7) {
+                            dateFmt = "yyyy";
+                            dateType = "year";
+                        }
+                        if (mapAttr.UIIsEnable == 0)
+                            enableAttr = "disabled='disabled' ";
+
+
+
+                        return "<div id='DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group'><i class='input-icon layui-icon layui-icon-date'></i> <input class='" + ccsCtrl + " ccdate layui-input'  data-info='" + dateFmt + "' data-type='" + dateType + "' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div>";
+                    case 8://金额
+                        //获取DefVal,根据默认的小数点位数来限制能输入的最多小数位数
+                        var _html = "<div id = 'DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group' >";
+                        var attrdefVal = mapAttr.DefVal;
+                        var bit;
+                        if (attrdefVal != null && attrdefVal !== "" && attrdefVal.indexOf(".") >= 0)
+                            bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
+                        else
+                            bit = 2;
+                        _html += "<input class='" + ccsCtrl + " layui-input' style='text-align:right;' onkeyup=" + '"' + "valitationAfter(this, 'money');limitLength(this," + bit + "); FormatMoney(this, " + bit + ", ',',0)" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo');" + '"' + " onblur=" + '"' + "FormatMoney(this, " + bit + ", ',',1)" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
+                        _html += "</div>";
+                        return _html;
+                    default:
+                        layer.alert(mapAttr.Name + "的类型没有判断.");
+                        break;
                 }
-
-                checkedStr = "";
-
-                return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "'   style='font-weight: normal;margin-bottom: 0px;' >" + name + "</label>";
             }
-
-            //枚举类型.
-            if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
-                if (mapAttr.UIIsEnable == 1)
-                    enableAttr = "";
-                else
-                    enableAttr = "disabled='disabled'";
-
-                return "<select  class='form-control'  name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
-            }
-
-            // AppDouble  AppFloat
-            if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
-
-                var enableAttr = '';
-                if (mapAttr.UIIsEnable != 1)
-                    enableAttr = "disabled='disabled'";
-
-                return "<input  class='form-control' style='text-align:right;width:80px;'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
-            }
-
-            if ((mapAttr.MyDataType == 2)) { //AppInt
-                var enableAttr = '';
-                if (mapAttr.UIIsEnable == 0 || mapAttr.KeyOfEn == "NodeID") {
-                    enableAttr = "disabled='disabled'";
-                }
-                return "<input   class='form-control' style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
-            }
-
-            //AppMoney  AppRate
-            if (mapAttr.MyDataType == 8) {
-                var enableAttr = '';
-                if (mapAttr.UIIsEnable == 1) {
-
-                } else {
-                    enableAttr = "disabled='disabled'";
-                }
-                return "<input  class='form-control'  style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
-            }
-
-            alert(mapAttr.Name + "的类型没有判断.");
-            return;
         }
 
         //填充默认数据
         function ConvertDefVal(attr) {
-
+            var result = '';
             //通过MAINTABLE返回的参数
             for (var ele in frmData.MainTable[0]) {
                 if (attr.KeyOfEn == ele && frmData.MainTable[0] != '') {
@@ -922,9 +1107,6 @@
                 }
             }
 
-            if (result != undefined && typeof (result) == 'string') {
-                //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
-            }
             return result = unescape(result);
         }
 
@@ -971,32 +1153,34 @@
                 index = $('#tabDiv').tabs('getTabIndex', tab);
             }
 
-            url = window.location.href;
+            url = GetHrefUrl();
             url = url.replace("#", "");
             url = replaceParamVal(url, "tabIndex", index);
             url = replaceParamVal(url, "PKVal", "");
 
             //新增时En.htm页面隐藏
-            if (window.parent && window.parent.$('#EnLayout').length == 1)
-                window.parent.$('#EnLayout').layout('remove', 'west');
+            if (window.parent && window.parent.$(".layui-side").length == 1 && isSameEnName == true) {
+                parent.window.location.href = url.replace("EnOnly", "En"); //刷新.
+                return;
+            }
+            window.location.href = url;
 
-            parent.window.location.href = url.replace("EnOnly", "En"); //刷新.
+
         }
 
         function Save() {
-
+            debugger
             $("#Btn_Save").html('正在保存');
-            this.Update();
+            this.Update(true);
             $("#Btn_Save").html('保存');
         }
 
         //更新.
-        function Update() {
-            var url = window.location.href;
+        function Update(isRefresh) {
+            var url = GetHrefUrl();
             var enName = GetQueryString("EnName");
             var en = new Entity(enName);
-            var pkval = GetPKVal();
-
+           
             //获取选中的tab选项卡
             var index = 0;
             if ($('#tabDiv').length == 1) {
@@ -1005,10 +1189,17 @@
                 index = $('#tabDiv').tabs('getTabIndex', tab);
             }
 
-            if (pkval == null || pkval == "") {
+            if (pkVal == null || pkVal == "") {
 
                 en.CopyForm();
-
+                if ($(".rich").length > 0) {
+                    $(".rich").each(function (i, item) {
+                        var edit = layui.tinymce.get('#' + item.id)
+                        var val = edit.getContent();
+                        var key = item.id.replace("TB_", "");
+                        en[key] = val;
+                    })
+                }
                 //有编号列.
                 if (en.No != undefined) {
 
@@ -1019,27 +1210,30 @@
                     if (val == false) {
                         if (en.IsExits() == true) {
                             alert('编号为[' + en.No + ']的数据已经存在.');
-                            return;
+                            return false;
                         }
                     }
 
                 }
 
                 //获取树形结构的表单值
-                var combotrees = $(".easyui-combotree");
-                $.each(combotrees, function (i, combotree) {
-                    var name = $(combotree).attr('id');
-                    var tree = $('#' + name).combotree('tree');
-                    //获取当前选中的节点
-                    var data = tree.tree('getSelected');
-                    if (data != null) {
-                        en[name] = data.id;
-                    }
-                });
-
+                //var combotrees = $(".easyui-combotree");
+                //$.each(combotrees, function (i, combotree) {
+                //    var name = $(combotree).attr('id');
+                //    var tree = $('#' + name).combotree('tree');
+                //    //获取当前选中的节点
+                //    var data = tree.tree('getSelected');
+                //    if (data != null) {
+                //        en[name] = data.id;
+                //    }
+                //});
+                var refPK = GetQueryString("RefPK");
+                if (refPK && refPK != "") {
+                    en[refPK] = GetQueryString("RefPKVal");
+                }
                 var info = en.Insert();
                 if (info.toString().indexOf("err@") != -1) {
-                    return;
+                    return false;
                 }
 
                 //保存实体后文件上传
@@ -1059,41 +1253,77 @@
 
 
                 //新增保存后显示En
-                if (window.parent && window.parent.$('#EnLayout').length == 1)
+                if (window.parent && window.parent.$(".layui-side").length == 1 && isSameEnName == true && isRefresh==true) {
                     url = url.replace("EnOnly", "En");
-                parent.window.location.href = url; //刷新.
-                return;
+                    parent.window.location.href = url; //刷新.
+                    return;
+                }
+                if (isRefresh == true) {
+                    SetHref(url); //刷新.
+                    return;
+                }
+                    
+                if (pkVal == null) {
+                    pkVal = mainData.OID;
+                    if (pkVal == undefined || pkVal == "")
+                        pkVal = mainData.No;
+
+                    if (pkVal == undefined || pkVal == "")
+                        pkVal = mainData.WorkID;
+
+                    if (pkVal == undefined || pkVal == "")
+                        pkVal = mainData.NodeID;
+
+                    if (pkVal == undefined || pkVal == "")
+                        pkVal = mainData.MyPK;
+                    if (pkVal == "null" || pkVal == "" || pkVal == undefined)
+                        pkVal = null;
+                    InitToolbar();
+                }
+                return true;
             }
 
-            en.pkval = pkval;
+            en.pkval = pkVal;
+            en.SetPKVal(pkVal);
             en.RetrieveFromDBSources();
-            en.SetPKVal(pkval);
+            //en.SetPKVal(pkVal);
 
             en.CopyForm();
-            en.pkval = pkval;
-            en.SetPKVal(pkval);
-            //获取树形结构的表单值
-            var combotrees = $(".easyui-combotree");
-            $.each(combotrees, function (i, combotree) {
-                var name = $(combotree).attr('id');
-                var tree = $('#' + name).combotree('tree');
-                //获取当前选中的节点
-                var data = tree.tree('getSelected');
-                if (data != null) {
-                    en[name] = data.id;
-                }
-            });
+            if ($(".rich").length > 0) {
+                $(".rich").each(function (i, item) {
+                    var edit = layui.tinymce.get('#' + item.id)
+                    var val = edit.getContent();
+                    var key = item.id.replace("TB_", "");
+                    en[key] = val;
+                })
+            }
+            
+            var refPK = GetQueryString("RefPK");
+            if (refPK && refPK != "") {
+                en[refPK] = GetQueryString("RefPKVal");
+            }
+            ////获取树形结构的表单值
+            //var combotrees = $(".easyui-combotree");
+            //$.each(combotrees, function (i, combotree) {
+            //    var name = $(combotree).attr('id');
+            //    var tree = $('#' + name).combotree('tree');
+            //    //获取当前选中的节点
+            //    var data = tree.tree('getSelected');
+            //    if (data != null) {
+            //        en[name] = data.id;
+            //    }
+            //});
 
             var info = en.Update();
             if (info == 0) {
                 alert('更新错误:' + info);
-                return;
+                return false;
             }
 
             //保存实体后文件上传
             var entityAthType = mapData.GetPara("BPEntityAthType")
             if (entityAthType == 1 || entityAthType == 2)
-                uploadFile(pkval);
+                uploadFile(pkVal);
 
             url = url.replace("#", "");
             url = replaceParamVal(url, "tabIndex", index);
@@ -1102,7 +1332,15 @@
                 url += "&tabIndex=" + index;
 
 
-            window.location.href = url;; //刷新.
+            if (window.parent && window.parent.$(".layui-side").length == 1 && isSameEnName == true && isRefresh==true) {
+                url = url.replace("EnOnly", "En");
+                parent.window.location.href = url;
+                return;
+            }
+
+            if (isRefresh==true)
+                window.location.href = url; //刷新.
+            return true;
         }
 
 
@@ -1144,7 +1382,7 @@
             //URL 路径
             var URL = "/WF/Comm/Handler.ashx?DoType=EntityAth_Upload";
             if (plant != "CCFlow") {
-                var currentPath = window.document.location.href;
+                var currentPath = GetHrefUrl();
                 var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
                 URL = path + "/WF/Comm/ProcessRequest.do?DoType=EntityAth_Upload";
             }
@@ -1191,7 +1429,7 @@
             }
             en = new Entity(enName, GetPKVal());
             var rs = en.Delete();
-            if (rs != null && rs != undefined && rs != ''&&rs.indexOf("err@")==-1) {
+            if (rs != null && rs != undefined && rs != '' && rs.indexOf("err@") == -1) {
                 $("#Btns").html("");
                 $("#Left").html("");
                 $("#CCFormTabs").html("删除成功..");
@@ -1213,9 +1451,7 @@
                 this.el = el || {};
                 this.multiple = multiple || false;
 
-                // Variables privadas
                 var links = this.el.find('.link');
-                // Evento
                 links.on('click', { el: this.el, multiple: this.multiple }, this.dropdown)
             }
 
@@ -1240,8 +1476,7 @@
         function openIconWindow(keyOfEn) {
             IconKeyOfEn = keyOfEn;
             var width = $(document).width() - 120;
-            var height = $(document).height() - 120;
-            OpenEasyUiDialogExt("IconSelect.htm", "选择图标", width, height, false);
+            OpenLayuiDialog("IconSelect.htm", "选择图标", width, 80, "auto", false);
         }
 
         function changeICon(icon) {
@@ -1249,285 +1484,64 @@
             var oldICon = $("#TB_" + IconKeyOfEn).val();
             $("#menuIconIcon").attr("class", icon);
             $("#TB_" + IconKeyOfEn).val(icon);
-            $("#eudlg").dialog("close");
+            layer.close(layer.index);
 
         }
 
-        /**/</script>
-    <style type="text/css">
-        /*body.easyui-layout {
-            top: 20px;
-            left: 40px;
-        }*/
-        .panel-body {
-            padding: 0
-        }
-
-        .tabs {
-            border-width: 1px 0 1px 0
-        }
-
-        .btn-default {
-            border: 0
-        }
-
-        .cs-btn-group {
-            width: auto !important;
-            margin-top:3px !important;
-            text-align: right;
-            background-color: transparent
-        }
-
-            .cs-btn-group .l-btn-icon {
-                display: none
+        function executeFunction(type) {
+            //执行方法前先保存
+            var flag = Update(false);
+            if (flag == false)
+                return;
+            var label = "";
+            var funcStr = "";
+            if (type == 1) {
+                label = cfg.EnBtnLab1;
+                funcStr = cfg.EnBtnJS1;
             }
-
-            .cs-btn-group .l-btn-text {
-                margin: 0
+                
+            if (type == 2) {
+                label = cfg.EnBtnLab2;
+                funcStr = cfg.EnBtnJS2;
             }
-
-        .layout-panel {
-            position: absolute;
-            right: 0;
-            top: 0 !important;
-            box-shadow: none
-        }
-
-        .layout-panel-north {
-            width: auto !important;
-            left: auto !important;
-            background-color: transparent
-        }
-
-        .btn {
-            padding: 0 15px;
-            color: #fff !important;
-            border-radius: 0 !important;
-            border: 0 !important;
-            height: 32px;
-            line-height: 32px;
-            box-sizing: border-box;
-            margin-top: 3px;
-            margin-left: 5px;
-            border-radius: 3px !important;
-        }
-
-            .btn:hover {
-                border: 0
+            funcStr = funcStr.replace(/~/g, "'");
+            if (funcStr.indexOf("/") != -1) {
+                var W = document.body.clientWidth - 40;
+                OpenLayuiDialog(funcStr, label, W, 100, "r", false);
+            } else {
+                if (funcStr.indexOf('(') == -1)
+                    cceval(funcStr + "()");
+                else
+                    cceval(funcStr);
             }
-
-        .btn-light-green {
-            background-color: #50b6ac !important
         }
+    </script>
 
-            .btn-light-green:hover {
-                background-color: #38a399 !important
-            }
-
-        .btn-light-blue {
-            background-color: #62cae3 !important
-        }
-
-            .btn-light-blue:hover {
-                background-color: #24a3c1 !important
-            }
-
-        .btn-light-yellow {
-            background-color: #f3ba20 !important
-        }
-
-            .btn-light-yellow:hover {
-                background-color: #c0900e !important
-            }
-
-        .btn-light-red {
-            background-color: #f74f52 !important
-        }
-
-            .btn-light-red:hover {
-                background-color: #da191c !important
-            }
-
-        .btn-white {
-            border: 1px solid #031f5d;
-            background-color: #fff !important;
-            color: #031f5d !important
-        }
-
-            .btn-white:hover {
-                border: 1px solid #031f5d
-            }
-
-        .tabs li a.tabs-inner, .tabs-panels, .tabs-panels table, .tabs-wrap .tabs, td, td.FContext, td.FDesc {
-            border: 0
-        }
-
-        .tabs-wrap table {
-            width: 100% !important
-        }
-
-        .tabs-wrap .tabs {
-            padding-left: 0;
-            width: auto;
-            height: 42px !important;
-           
-            border-bottom: 1px solid #efefef;
-        }
-
-        .tabs-wrap .tabs a {
-            ;
-            height: 42px !important;
-           
-        }
-
-        .tabs li {
-            margin: 0px;
-        }
-
-            .tabs li a.tabs-inner {
-                padding: 0 16px;
-                background: 0 0;
-                border-radius: 0px;
-                font-size: 14px;
-                color: #414141
-            }
-
-                .tabs li a.tabs-inner:hover {
-                    background: #dbdbf5
-                }
-
-        .tabs li.tabs-selected a.tabs-inner {
-            border: 0;
-            border-bottom: 2px solid #009688;
-            background: #fff;
-            border-radius: 0px;
-        }
-
-      
-            .tabs li a.tabs-inner .tabs-title {
-                font-size: 13px !important
-            }
-
-        table {
-            border: 0
-        }
-
-        td {
-            box-sizing: border-box;
-           
-        }
-
-        td a {
-            color: #009688;
-            font-size: 13px
-        }
-
-                td a img {
-                    vertical-align: -2px
-                }
-
-            td.FContext {
-                width: 30%
-            }
-
-                td.FContext:nth-child(2) {
-                    padding-right: 30px
-                }
-
-                td.FContext > :only-child {
-                    width: 100% !important;
-                    font-size: 13px;
-                    color: #282828;
-                    box-sizing: border-box
-                }
-
-                td.FContext[colspan] {
-                    padding-right: 0
-                }
-
-        .form-control, .form-control[disabled], .form-control[readonly], fieldset[disabled], input[type=text]:disabled, select[disabled] {
-            background-color: #fff;
-           
-            text-align: left !important;
-            height: 32px;
-            box-sizing: border-box
-        }
-
-            .form-control[disabled], .form-control[readonly], fieldset[disabled], input[type=text]:disabled, select[disabled] {
-                background-color: #f7f6f9
-            }
-
-        td input[type=date], td input[type=number], td input[type=tel], td input[type=text] {
-            height: 32px
-        }
-
-        td input[type=checkbox] {
-            margin-right: 5px;
-          
-            width: 16px;
-            height: 16px;
-            vertical-align: top;
-        }
-
-        td label {
-            font-size: 13px
-        }
-
-        .cs-form-import > .layout-panel-center {
-            padding: 0px 15px 0 16px
-        }
-
-        .cs-form-import > .layout-panel-north {
-            top: 6px !important;
-            padding-right: 21px;
-            border-radius: 0
-        }
-
-        .enonly-center .tabs-panels {
-            padding: 18px 0px 0px;
-        }
-    </style>
 </head>
-<body class="easyui-layout cs-form-import" data-options="fit:true">
-    <div id="Btns" class="cs-btn-group" data-options="region:'north',noheader:true,split:false,border:false">
-        <!--<a id="Btn_New" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-blue" data-options="plain:true,iconCls:'icon-new'"
-        onclick="New()" style="margin-right:5px;">新建</a>-->
 
+<body>
+    <form class="layui-form" enctype="multipart/form-data" method="post" autocomplete=off>
+        <div id="Btns" style="text-align:right;margin-right:15px">
+            <button id="Btn_New" type="button" class="layui-btn layui-btn-primary layui-border-green layui-btn-sm" onclick="New()" style="display:none">
+                <i class="iconfont icon-xinjian"></i> 新建
+            </button>
+            <button id="Btn_Save"  type="button" class="layui-btn layui-btn-primary layui-border-green layui-btn-sm" onclick="Save()" style="display:none">
+                <i class="iconfont icon-Save"></i> 保存
+            </button>
 
+            <button id="Btn_Delete" type="button" class="layui-btn layui-btn-primary layui-border-green layui-btn-sm" onclick="Delete()" style="display:none">
+                <i class="iconfont icon-shanchu1"></i>  删除
+            </button>
 
-        <button id="Btn_New" class="cc-btn-tab" onclick="New()">
-            <i class="iconfont icon-xinjian"></i> 新建
-        </button>
-
-        <!--<input style='background-image: url(../../Img/Btn/New.png); background-repeat: no-repeat; background-size: 13px 13px; background-position: 1px 6px;height:30px;' type="button" />-->
-        <!--<a id="Btn_Save" href="javaScript:void(0)" class="easyui-linkbutton btn btn-light-green"
-        data-options="plain:true,iconCls:'icon-save'" onclick="Update()" style="margin-right:5px;">保存</a>-->
-
-        <button id="Btn_Save" class="cc-btn-tab" onclick="Update()">
-            <i class="iconfont icon-Save"></i> 保存
-        </button>
-
-        <button id="Btn_Delete" class="cc-btn-tab" onclick="Delete()">
-            <i class="iconfont icon-shanchu1"></i>  删除
-        </button>
-
-        <button id="Btn_Setting" class="cc-btn-tab" onclick="Setting()">
-            <i class="iconfont icon-jurassic_setup-batch"></i>  设置
-        </button>
-
-
-    </div>
-    <div class="easyui-layout" data-options="region:'center'" style="margin: 0px;overflow: auto;">
-        <div class="easyui-layout enonly-center" id="CCFormTabs" data-options="region:'center',noheader:true,border:false,fit:true" style="margin: 0px;
-                    padding: 0px; overflow: auto;">
-         
-            <center>
-                <img src='./../../Img/loading.gif' />正在初始化，请耐心等待。。。
-            </center>
-            
+            <button id="Btn_Setting"  type="button" class="layui-btn layui-btn-primary layui-border-green layui-btn-sm" onclick="Setting()" style="display:none">
+                <i class="iconfont icon-jurassic_setup-batch"></i>  设置
+            </button>
         </div>
-    </div>
-    <!--</div>-->
-    <!--</div>-->
+
+        <div class="layui-tab layui-tab-brief" id="CCFormTabs">
+
+        </div>
+    </form>
+
 </body>
 </html>

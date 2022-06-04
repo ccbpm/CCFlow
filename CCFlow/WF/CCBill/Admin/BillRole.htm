@@ -11,7 +11,7 @@
             }
             if (window.confirm('您确定要创建规则吗?') == false)
                 return;
-            window.location.href = 'Method.htm?MyPK=' + mypk + '&DoType=Del&FrmID=' + nodeid;
+            SetHref('Method.htm?MyPK=' + mypk + '&DoType=Del&FrmID=' + nodeid);
         }
     </script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -80,7 +80,7 @@
             en.FrmID = frmID;
             en.CtrlObj = CtrlObj;
             en.Save();
-            window.location.href = window.location.href;
+            Reload();
         }
 
         //设置岗位.

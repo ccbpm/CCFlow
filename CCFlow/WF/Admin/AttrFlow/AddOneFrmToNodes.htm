@@ -8,15 +8,7 @@
 <form id="cc">
 
 <!-- edit by xushuhao -->
-
-<%
-    string flowNo = this.Request.QueryString["FK_Flow"];
-    if (flowNo == null)
-        flowNo = "001";
-    
-    BP.WF.Flow fl = new BP.WF.Flow(flowNo);
-    
-     %>
+ 
 <table style="width:100%">
 <caption > 增加一个表单到流程[<%=fl.Name %>]多个节点里 </caption>
 <tr>

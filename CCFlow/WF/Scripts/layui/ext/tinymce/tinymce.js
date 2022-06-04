@@ -19,6 +19,7 @@ layui.define(['jquery'],function (exports) {
         base_url: modPath
         , images_upload_url: ''//图片上传接口，可在option传入，也可在这里修改，option的值优先
         , language: 'zh_CN'//语言，可在option传入，也可在这里修改，option的值优先
+        , paste_data_images:true
         , response: {//后台返回数据格式设置
             statusName: response.statusName || 'code'//返回状态字段
             , msgName: response.msgName || 'msg'//返回消息字段
@@ -28,8 +29,21 @@ layui.define(['jquery'],function (exports) {
             }
         }
         , success: function (res, succFun, failFun) {//图片上传完成回调 根据自己需要修改
+
+            if (res.indexOf("err@") != -1) {
+                return;
+            }
+            res = JSON.parse(res);
             if (res[this.response.statusName] == this.response.statusCode.ok) {
-                succFun(res[this.response.dataName]);
+                var data = res[this.response.dataName];
+                data = replaceAll(data, "\/", "/");
+                var path = laybase;
+                if (path == "./")
+                    path = "../";
+                else
+                    path = "../" + path;
+                data = path+data;
+                succFun(data);
             } else {
                 failFun(res[this.response.msgName]);
             }
@@ -116,9 +130,9 @@ layui.define(['jquery'],function (exports) {
 
         option.quickbars_selection_toolbar = isset(option.quickbars_selection_toolbar) ? option.quickbars_selection_toolbar : 'cut copy | bold italic underline strikethrough '
 
-        option.plugins = isset(option.plugins) ? option.plugins : 'code quickbars print preview searchreplace autolink fullscreen image link media codesample table charmap hr advlist lists wordcount imagetools indent2em';
+        option.plugins = isset(option.plugins) ? option.plugins : 'code quickbars print preview searchreplace autolink fullscreen image link media codesample table charmap hr advlist lists wordcount imagetools indent2em paste';
 
-        option.toolbar = isset(option.toolbar) ? option.toolbar : 'code undo redo | forecolor backcolor bold italic underline strikethrough | indent2em alignleft aligncenter alignright alignjustify outdent indent | link bullist numlist image table codesample | formatselect fontselect fontsizeselect';
+        option.toolbar = isset(option.toolbar) ? option.toolbar : 'code undo redo | forecolor backcolor bold italic underline strikethrough | indent2em alignleft aligncenter alignright alignjustify outdent indent | link bullist numlist image table codesample | formatselect fontselect fontsizeselect paste';
 
         option.resize = isset(option.resize) ? option.resize : false;
 

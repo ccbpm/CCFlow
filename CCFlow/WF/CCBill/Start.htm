@@ -216,7 +216,7 @@
         function LanchBill(frmID, title) {
 
             var url = "SearchBill.htm?FrmID=" + frmID + "&FK_MapData=" + frmID;
-            window.location.href = url;
+            SetHref(url);
             return;
             layer.open({
                 skin: 'layer-class',
@@ -230,10 +230,10 @@
         function LanchDict(frmID, title) {
 
             var url = "SearchDict.htm?FrmID=" + frmID + "&FK_MapData=" + frmID;
-            window.location.href = url;
+            SetHref(url);
         }
         function Ref() {
-            window.location.href = 'Start.htm?IsRef=1';
+            SetHref('Start.htm?IsRef=1');
         }
         function GroupBarClick(groupName) {
 

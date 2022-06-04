@@ -66,9 +66,9 @@ function FrmAttr() {
     var frmID = GetQueryString("FK_MapData");
     var en = new Entity("BP.Sys.MapData", frmID);
 
-    var url = "../../Comm/RefFunc/En.htm?EnName=BP.WF.Template.MapFrmFool&PKVal=" + frmID;
+    var url = "../../Comm/RefFunc/En.htm?EnName=BP.WF.Template.Frm.MapFrmFool&PKVal=" + frmID;
     if (en.FrmType == 9)
-          url = "../../Comm/RefFunc/En.htm?EnName=BP.WF.Template.MapFrmWps&No=" + frmID;
+          url = "../../Comm/RefFunc/En.htm?EnName=BP.WF.Template.Frm.MapFrmWps&No=" + frmID;
 
     window.open(url);
 }
@@ -80,7 +80,7 @@ function OpenFoolFrm() {
     url += "&FK_Node=" + GetQueryString("FK_Node");
     url += "&FK_MapData=" + GetQueryString("FK_MapData");
     url += "&FrmID=" + GetQueryString("FK_MapData");
-    window.location.href = url;
+    SetHref(url);
     return;
 }
 

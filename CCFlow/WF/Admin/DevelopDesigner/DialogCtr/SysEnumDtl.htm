@@ -130,7 +130,7 @@
             url += "&FK_MapData=" + GetQueryString("FK_MapData");
             url += "&Type=" + GetQueryString("Type");
             url += "&DataType=" + GetQueryString("DataType");
-            window.location.href = url;
+            SetHref(url);
         }
 
         //执行保存.
@@ -194,9 +194,9 @@
             url += "&DoType=" + GetQueryString("DoType");
             url += "&FK_MapData=" + GetQueryString("FK_MapData");
             url += "&DataType=" + GetQueryString("DataType");
-            window.location.href = url;
+            SetHref(url);
 
-            // window.location.href = "SysEnumList.htm";
+            // SetHref( "SysEnumList.htm";
         }
     </script>
 </head>

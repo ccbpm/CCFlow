@@ -35,8 +35,8 @@
                     </tr>
                     <tr v-for="(node,index) in nodes">
                         <td class=Idx>{{index}}</td>
-                        <td v-if="selectNodes.indexOf(node.NodeID)!=-1"><input type='checkbox' name='RB_NodeNo' :value='node.NodeID' checked='checked' /><label>名称:{{node.Name}}</label></td>
-                        <td v-else=v-else><input type='checkbox' name='RB_NodeNo' :value="node.NodeID" /><label>名称:{{node.Name}}</label></td>
+                        <td v-if="selectNodes.indexOf(node.NodeID)!=-1"><label><input type='checkbox' name='RB_NodeNo' :value='node.NodeID' checked='checked' />{{node.Name}}</label></td>
+                        <td v-else=v-else><label><input type='checkbox' name='RB_NodeNo' :value="node.NodeID" />{{node.Name}}</label></td>
                         <td>{{node.NodeID}}</td>
                         <td>{{node.Step}}</td>
                     </tr>

@@ -19,7 +19,7 @@
             var keyOfEn = GetQueryString("KeyOfEn");
 
             //组织主键.
-            var mypk = "DataFieldInputRole_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var mypk = "DataFieldInputRole_" + GetQueryString("FK_MapData") + "_" + keyOfEn;
             var en = new Entity("BP.Sys.MapExt");
             en.MyPK = mypk;
             var i = en.RetrieveFromDBSources();
@@ -39,7 +39,9 @@
             //加上时间类型的.
             tables = new Entities("BP.Sys.MapAttrs");
             tables.Retrieve("FK_MapData", frmID, "MyDataType", 7);
+
             GenerBindDDLAppend("DDL_DT", tables, "KeyOfEn", "Name");
+
             if (en.Tag1 == 1)
                 document.getElementById("CB_History").checked = true;
             else
@@ -94,7 +96,7 @@
             if (en.Update() == 0)
                 en.Insert();
 
-            window.location.href = "DataFieldInputRole.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&M=" + Math.random();
+            SetHref("DataFieldInputRole.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&M=" + Math.random());
             return;
         }
 
@@ -111,7 +113,7 @@
             en.Delete();
 
             var url = "DataFieldInputRole.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn");
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
 </head>

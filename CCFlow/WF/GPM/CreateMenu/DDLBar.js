@@ -29,10 +29,10 @@ function InitBar(optionKey) {
 function GetDBGroup() {
 
     var json = [
-        { "No": "A", "Name": "通用功能" },
-        { "No": "B", "Name": "实体单据" },
-        { "No": "C", "Name": "字典表" },
-        { "No": "D", "Name": "OA应用" }
+        { "No": "A", "Name": "通用功能", "Icon": "icon-note" },
+        { "No": "B", "Name": "实体单据", "Icon": "icon-note" },
+        { "No": "C", "Name": "字典表", "Icon": "icon-note" },
+        { "No": "D", "Name": "OA应用", "Icon": "icon-note" }
     ];
     return json;
 }
@@ -41,31 +41,36 @@ function GetDBDtl() {
 
     var json = [
 
-        { "No": MenuModel.SelfUrl, "Name": "自定义URL菜单", "GroupNo": "A", "Url": "SelfUrl.htm" },
-        { "No": MenuModel.StandAloneFlow, "Name": "创建独立运行的流程", "GroupNo": "A", "Url": "StandAloneFlow.htm" },
-        { "No": "Windows", "Name": "信息窗/大屏(统计分析图表)", "GroupNo": "A", "Url": "Windows.htm" },
-        { "No": "Tabs", "Name": "Tabs页面容器", "GroupNo": "A", "Url": "Tabs.htm" },
-        { "No": "Rpt3D", "Name": "3维报表", "GroupNo": "A", "Url": "Rpt3D.htm" },
+        { "No": MenuModel.SelfUrl, "Name": "自定义URL菜单", "GroupNo": "A", "Url": "SelfUrl.htm", "Icon": "icon-note" },
+        { "No": MenuModel.StandAloneFlow, "Name": "创建独立运行的流程", "GroupNo": "A", "Url": "StandAloneFlow.htm", "Icon": "icon-note" },
+        { "No": "RptWhite", "Name": "信息窗/大屏(白色风格)", "GroupNo": "A", "Url": "RptWhite.htm", "Icon": "icon-note" },
+        { "No": "RptBlue", "Name": "信息窗/大屏(蓝色风格)", "GroupNo": "A", "Url": "RptBlue.htm", "Icon": "icon-note" },
 
-        { "No": MenuModel.FlowUrl, "Name": "内置流程菜单", "GroupNo": "A", "Url": "FlowUrl.htm" },
-        { "No": MenuModel.Func, "Name": "独立功能(方法)页", "GroupNo": "A", "Url": "Func.htm" },
-        { "No": MenuModel.Dict, "Name": "创建实体", "GroupNo": "B", "Url": "Dict.htm" },
-        { "No": "DBList", "Name": "数据源实体", "GroupNo": "B", "Url": "DBList.htm" },
+        { "No": "Tabs", "Name": "Tabs页面容器", "GroupNo": "A", "Url": "Tabs.htm", "Icon": "icon-note" },
+        { "No": "Rpt3D", "Name": "3维报表", "GroupNo": "A", "Url": "Rpt3D.htm", "Icon": "icon-note" },
+
+        { "No": MenuModel.FlowUrl, "Name": "内置流程菜单", "GroupNo": "A", "Url": "FlowUrl.htm", "Icon": "icon-note" },
+        { "No": MenuModel.Func, "Name": "独立功能(方法)页", "GroupNo": "A", "Url": "Func.htm", "Icon": "icon-note" },
+        { "No": MenuModel.Dict, "Name": "创建实体", "GroupNo": "B", "Url": "Dict.htm", "Icon": "icon-note" },
+        { "No": "DBList", "Name": "数据源实体", "GroupNo": "B", "Url": "DBList.htm", "Icon": "icon-note" },
 
         /*    { "No": "DictQRCode", "Name": "表单填报二维码", "GroupNo": "B", "Url": "DictQRCode.htm" },*/
-        { "No": MenuModel.DictCopy, "Name": "复制实体", "GroupNo": "B", "Url": "DictCopy.htm" },
-        { "No": MenuModel.Bill, "Name": "创建单据(beta)", "GroupNo": "B", "Url": "Bill.htm" },
-        { "No": MenuModel.DictRef, "Name": "引入实体", "GroupNo": "B", "Url": "DictRef.htm" },
+        { "No": MenuModel.DictCopy, "Name": "复制实体", "GroupNo": "B", "Url": "DictCopy.htm", "Icon": "icon-note" },
+        { "No": MenuModel.Bill, "Name": "创建单据(beta)", "GroupNo": "B", "Url": "Bill.htm", "Icon": "icon-note" },
+        { "No": MenuModel.DictRef, "Name": "引入实体", "GroupNo": "B", "Url": "DictRef.htm", "Icon": "icon-note" },
 
         /* { "No": MenuModel.BillRef, "Name": "引入单据", "GroupNo": "B", "Url": "BillRef.htm" },*/
 
-        { "No": MenuModel.DictTable, "Name": "创建字典表", "GroupNo": "C", "Url": "DictTable.htm" },
+        { "No": MenuModel.DictTable, "Name": "创建字典表", "GroupNo": "C", "Url": "DictTable.htm", "Icon": "icon-note" },
 
-        { "No": "Task", "Name": "任务", "GroupNo": "D", "Url": "Task.htm" },
-        { "No": "Calendar", "Name": "日历日程", "GroupNo": "D", "Url": "Calendar.htm" },
-        { "No": "Notepad", "Name": "记事本", "GroupNo": "D", "Url": "Notepad.htm" },
-        { "No": "KnowledgeManagement", "Name": "知识库", "GroupNo": "D", "Url": "KnowledgeManagement.htm" },
-        { "No": "WorkRec", "Name": "工作日志", "GroupNo": "D", "Url": "WorkRec.htm" }
+        { "No": "Task", "Name": "任务", "GroupNo": "D", "Url": "Task.htm", "Icon": "icon-note" },
+        { "No": "Info", "Name": "信息发布", "GroupNo": "D", "Url": "Info.htm", "Icon": "icon-note" },
+
+        { "No": "Calendar", "Name": "日历日程", "GroupNo": "D", "Url": "Calendar.htm", "Icon": "icon-note" },
+        { "No": "Notepad", "Name": "记事本", "GroupNo": "D", "Url": "Notepad.htm", "Icon": "icon-note" },
+        { "No": "KnowledgeManagement", "Name": "知识库", "GroupNo": "D", "Url": "KnowledgeManagement.htm", "Icon": "icon-note" },
+
+        { "No": "WorkRec", "Name": "工作日志", "GroupNo": "D", "Url": "WorkRec.htm", "Icon": "icon-note" }
 
 
         /*     { "No": MenuModel.DictTableSpecNo, "Name": "引入字典表", "GroupNo": "C", "Url": "DictTableSpecNo.htm" }*/
@@ -84,7 +89,7 @@ function Close() {
 
 function Back() {
     var url = "../Menus.htm";
-    window.location.href = url;
+    SetHref(url);
 }
 
 function Adv() {
@@ -109,7 +114,7 @@ function changeOption() {
     var optionKey = optionKey = sele[index].value;
     var url = GetUrl(optionKey);
 
-    window.location.href = url + "?ModuleNo=" + flowNo;
+    SetHref(url + "?ModuleNo=" + flowNo);
 }
 
 function GetUrl(optionKey) {

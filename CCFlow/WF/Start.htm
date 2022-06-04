@@ -71,14 +71,16 @@
                 data = data.replace('&DoMethod=MyFlow_Init', '');
                 data = data.replace('&HttpHandlerName=BP.WF.HttpHandler.WF_MyFlow', '');
                 data = data.replace('?&', '?');
-
                 try {
-
                     var url = data;
-                    //if (url.indexOf("My") == 0)
-                     //   url = "../" + url;
+
                     if (window.top.vm != undefined) {
-                        url = "../" + url;
+                        if (window.top.location.href.indexOf("WF/") != -1)
+                            url = "../" + url;
+                        else if (url.indexOf("http")!= -1)
+                            url = url;
+                        else
+                            url = "/WF/" + url;
                         window.top.vm.openTab(title, url);
                     } else {
                         window.open(data); //打开流程.
@@ -316,7 +318,7 @@
         }
 
         function Ref() {
-            window.location.href = 'Start.htm?IsRef=1';
+            SetHref('Start.htm?IsRef=1');
         }
     </script>
 </body>

@@ -57,17 +57,6 @@ function GenerFrm() {
 
     BindFrm(frmData);
 
-    ////循环组件 轨迹图 审核组件 子流程 子线程
-    //$('#CCForm').append(figure_Template_FigureFlowChart(wf_node));
-
-    //if (wf_node.FWCSta != 0) {
-    //    $('#CCForm').append(figure_Template_FigureFrmCheck(wf_node));
-    //    getWorkCheck();
-
-    //}
-
-    //$('#CCForm').append(figure_Template_FigureSubFlowDtl(wf_node));
-    //$('#CCForm').append(figure_Template_FigureThreadDtl(wf_node));
 
 }
 //绑定表单.
@@ -237,27 +226,6 @@ function Change() {
     }
 }
 
-//20160106 by 柳辉
-//获取页面参数
-//sArgName表示要获取哪个参数的值
-function GetPageParas(sArgName) {
-
-    var sHref = window.location.href;
-    var args = sHref.split("?");
-    var retval = "";
-    if (args[0] == sHref) /*参数为空*/ {
-        return retval; /*无需做任何处理*/
-    }
-    var str = args[1];
-    args = str.split("&");
-    for (var i = 0; i < args.length; i++) {
-        str = args[i];
-        var arg = str.split("=");
-        if (arg.length <= 1) continue;
-        if (arg[0] == sArgName) retval = arg[1];
-    }
-    return retval;
-}
 
 function To(url) {
     //window.location.href = url;
@@ -288,7 +256,7 @@ function AjaxService(param, callback, scope, levPath) {
 function Do(warning, url) {
     if (window.confirm(warning) == false)
         return;
-    window.location.href = url;
+    SetHref(url);
 }
 
 //以下是软通写的
@@ -953,7 +921,7 @@ function figure_Template_Dtl(frmDtl) {
             strs += "&" + str + "=" + paras[str];
     }
     var src = "";
-    var href = window.location.href;
+    var href = GetHrefUrl();
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
     if (frmDtl.DtlShowModel == "0") {
@@ -1066,52 +1034,11 @@ function figure_Template_FigureFrmCheck(wf_node) {
 
     return eleHtml;
 }
-//子线程
-function figure_Template_FigureThreadDtl(wf_node) {
-
-    //FrmThreadSta Sta,FrmThread_X X,FrmThread_Y Y,FrmThread_H H,FrmThread_W
-    var sta = wf_node.FrmThreadSta;
-    var x = wf_node.FrmThread_X;
-    var y = wf_node.FrmThread_Y;
-    var h = wf_node.FrmThread_H;
-    var w = wf_node.FrmThread_W;
-    if (sta == 0 || sta == '0')
-        return $('');
-
-    var src = "./WorkOpt/Thread.htm?s=2";
-    var fwcOnload = "";
-    var paras = '';
-
-    paras += "&FID=" + pageData["FID"];
-    paras += "&OID=" + pageData["WorkID"];
-    paras += '&FK_Flow=' + pageData.FK_Flow;
-    paras += '&FK_Node=' + pageData.FK_Node;
-    paras += '&WorkID=' + pageData.WorkID;
-
-    if (sta == 2) //只读
-    {
-        src += "&DoType=View";
-    }
-    else {
-        fwcOnload = "onload= 'WC" + wf_node.NodeID + "load();'";
-        $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
-    }
-    src += "&r=q" + paras;
-    var eleHtml = '<div id=DIVFT' + wf_node.NodeID + '>' + "<iframe id=FFT" + wf_node.NodeID + " style='width:100%;height:" + h + "px;'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-    eleHtml = $(eleHtml);
-    eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
-
-    return eleHtml;
-}
 
 //子流程
 function figure_Template_FigureSubFlowDtl(wf_node) {
-    //SFSta Sta,SF_X X,SF_Y Y,SF_H H, SF_W W
     var sta = wf_node.SFSta;
-    var x = wf_node.SF_X;
-    var y = wf_node.SF_Y;
     var h = wf_node.SF_H;
-    var w = wf_node.SF_W;
     if (sta == 0)
         return $('');
 
@@ -1133,7 +1060,7 @@ function figure_Template_FigureSubFlowDtl(wf_node) {
         $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
     }
     src += "&r=q" + paras;
-    var eleHtml = '<div id=DIVWC' + wf_node.NodeID + '>' + "<iframe id=FSF" + wf_node.NodeID + " style='width:" + w + "px';height:" + h + "px'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+    var eleHtml = '<div id=DIVWC' + wf_node.NodeID + '>' + "<iframe id=FSF" + wf_node.NodeID + " style='width:100%';height:" + h + "px'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml = $(eleHtml);
     eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
 

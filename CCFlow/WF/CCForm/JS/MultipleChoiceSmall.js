@@ -219,7 +219,7 @@ function Delete(keyOfEn, val, oid) {
 }
 
 //设置值.
-function SaveVal(fk_mapdata, keyOfEn, val, name, oid) {
+function Savcceval(fk_mapdata, keyOfEn, val, name, oid) {
 
     if (oid == null || oid == undefined) {
         if (GetQueryString("WorkID") == null || GetQueryString("WorkID") == undefined)

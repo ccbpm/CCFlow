@@ -95,7 +95,7 @@
             path = path.replace('//', '/');
             retrunUrl = "?SortNo=" + this.GetQueryString("SortNo");
             var url = "?SortNo=" + this.GetQueryString("SortNo") + "&DirName=" + path;
-            window.location.href = url;
+            SetHref(url);
         }
         //返回上一级
         function RetrunToParent() {
@@ -150,7 +150,7 @@
             //    $("#Btn_Imp").hide(); //("正在导入请稍候，10分钟左右，请不要关闭");
 
             //返回执行结果的数据.
-            var json = eval('(' + data + ')');
+            var json = cceval('(' + data + ')');
 
             var html = "<table>";
             html += "<tr>";

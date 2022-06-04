@@ -609,7 +609,7 @@ function FullDtl(selectVal, mapExt,oid) {
             alert(data);
             return;
         }
-        dataObj = eval("(" + data + ")"); //转换为json对象 	
+        dataObj = cceval("(" + data + ")"); //转换为json对象 	
     }
 
     for (var i in dataObj.Head) {

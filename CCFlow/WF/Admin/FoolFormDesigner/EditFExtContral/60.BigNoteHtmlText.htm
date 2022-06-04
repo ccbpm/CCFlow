@@ -40,23 +40,23 @@
             var en = new Entity("BP.Sys.MapAttr");
             en.SetPKVal(frmID + "_" + id);
             var num = en.RetrieveFromDBSources();
-            if (num !=0) 
+            if (num != 0)
                 mypk = en.MyPK;
-            
+
             if (mypk == "") {
-                 //初始化富文本框的内容
+                //初始化富文本框的内容
                 editor.setContent("");
                 $("#deleteBtn").attr("disabled", "disabled");
-                $("#deleteBtn").css("background-color","#d2cdcd");
+                $("#deleteBtn").css("background-color", "#d2cdcd");
                 return;
-            } 
-            
+            }
+
             var en = new Entity("BP.Sys.MapAttr", mypk);
             var doc = en.DoMethodReturnString("ReadBigNoteHtmlText");
             //初始化富文本框的内容
             editor.setContent(doc);
-            
-            
+
+
 
         });
         function Save() {
@@ -87,28 +87,29 @@
                 en.Insert(); //插入字段.
                 en.Retrieve();
             }
-            
-           var en = new Entity("BP.Sys.MapAttr", mypk);
+
+            var en = new Entity("BP.Sys.MapAttr", mypk);
             //执行保存富文本的内容
             var msg = en.DoMethodReturnString("SaveBigNoteHtmlText", html);
             alert(msg);
-  
-            window.location.href = window.location.href;
+
+            Reload();
 
         }
         function Delete() {
-            
+
             //删除字段、文件
             var en = new Entity("BP.Sys.MapAttr", mypk);
-           en.DoMethodReturnString("DeleteBigNoteHtmlText");
+            en.Delete();
+            //  en.DoMethodReturnString("DeleteBigNoteHtmlText");
 
             window.close();
             parent.$("#eudlg").dialog('close');
-          
+
 
         }
 
-/**/</script>
+        /**/</script>
 </head>
 <body>
 

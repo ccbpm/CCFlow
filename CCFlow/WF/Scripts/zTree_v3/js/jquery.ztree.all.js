@@ -1089,7 +1089,7 @@
               if (!msg || msg.length == 0) {
                 newNodes = [];
               } else if (typeof msg == "string") {
-                newNodes = eval("(" + msg + ")");
+                  newNodes = cceval("(" + msg + ")");
               } else {
                 newNodes = msg;
               }

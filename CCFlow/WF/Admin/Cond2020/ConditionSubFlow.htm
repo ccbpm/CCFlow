@@ -12,24 +12,24 @@
             alert('该功能尚未完善，敬请期待。');
             return;
 
-            var url = window.location.href;
+            var url = GetHrefUrl();
             if (plant == "CCFlow") {
                 url = url.replace('.htm', '.aspx');
-                window.location.href = url;
+                SetHref(url);
                 return;
             } else {
                 url = url.replace('.htm', '.jsp');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
         }
          //返回.
         function Back() {
-            var url = window.location.href;
+            var url = GetHrefUrl();
             
                 url = url.replace('CondByFrm.htm', 'List.htm');
 
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
 </head>

@@ -81,7 +81,7 @@
 
         function New() {
             var url = "ActionDtl.htm?FK_Flow=" + GetQueryString("FK_Flow");
-            window.location.href = url;
+            SetHref(url);
         }
 
         function Delete(mypk) {
@@ -91,7 +91,7 @@
 
             var en = new Entity("BP.Sys.FrmEvent", mypk);
             en.Delete();
-            window.location.href = window.location.href;
+            Reload();
             return;
         }
         function GetActionTypeName(type) {

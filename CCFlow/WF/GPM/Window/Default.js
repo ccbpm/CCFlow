@@ -21,7 +21,7 @@ new Vue({
 
             if (window.confirm("确定要删除吗?") == false)
                 return;
-            var en = new Entity("BP.GPM.Home.WindowTemplate", no);
+            var en = new Entity("BP.CCFast.Portal.WindowTemplate", no);
             var data = en.Delete();
             layer.msg(data);
 
@@ -34,7 +34,7 @@ new Vue({
             }, 2000)
         },
         EditIt: function (no, docModel) {
-            var url = "../../Comm/En.htm?EnName=BP.GPM.Home.WindowExt." + docModel + "&No=" + no;
+            var url = "../../Comm/En.htm?EnName=BP.CCFast.Portal.WindowExt." + docModel + "&No=" + no;
             OpenLayuiDialog(url, '', 1100, 89, "auto", false);
         },
         MoveItem(pastNodeArrStr, pastNodeId, currentNodeArrStr, currentNodeId) {
@@ -108,7 +108,7 @@ new Vue({
 
         var PageID = GetQueryString("PageID");
 
-        var ens = new Entities("BP.GPM.Home.WindowTemplates");
+        var ens = new Entities("BP.CCFast.Portal.WindowTemplates");
         ens.Retrieve("PageID", PageID);
 
         this.myEns = ens.TurnToArry(); 

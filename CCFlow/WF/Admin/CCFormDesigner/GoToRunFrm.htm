@@ -25,7 +25,7 @@
                 alert("独立表单无法运行");
                 return;
             }
-            window.location.href = url; // "../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData" + frmID + "&s=" + Math.random();
+            SetHref(url); // "../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData" + frmID + "&s=" + Math.random();
             return;
             $("#Msg").html("<font color=blue>" + data + "</font>");
             return;
@@ -39,12 +39,12 @@
             if (md.EntityType == EntityType.SingleFrm) {
                 return null;
                 //if (md.FrmType == FrmType.FreeFrm)
-                //    return "../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFree&No=" + frmID + "&m=" + Math.random();
+                //    return "../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapFrmFree&No=" + frmID + "&m=" + Math.random();
                 //if (md.FrmType == FrmType.ExcelFrm)
-                //    return "../../Comm/En.htm?EnName=BP.WF.Template.MapFrmExcel&No=" + frmID + "&m=" + Math.random();
+                //    return "../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapFrmExcel&No=" + frmID + "&m=" + Math.random();
                 //if (md.FrmType == FrmType.Url)
-                //    return "../../Comm/En.htm?EnName=BP.WF.Template.MapDataURL&No=" + frmID + "&m=" + Math.random();
-                //return "../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFool&No=" + frmID + "&m=" + Math.random();
+                //    return "../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapDataURL&No=" + frmID + "&m=" + Math.random();
+                //return "../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapFrmFool&No=" + frmID + "&m=" + Math.random();
             }
 
             if (md.EntityType == EntityType.FrmDict)

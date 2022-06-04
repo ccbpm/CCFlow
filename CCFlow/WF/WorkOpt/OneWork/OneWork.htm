@@ -86,11 +86,14 @@
                 return;
             }
 
-            data = eval('(' + data + ')');
+            data = cceval('(' + data + ')');
             var IsDefaultTab = null;
             $.each(data, function (index, obj) {
-                if (this.IsDefault == "1")
-                    IsDefaultTab = index;
+                
+                if (obj.No =="Truck")
+                    $("#OneWorkTab").append("<li class='active'><a data-toggle='tab' href='#" + obj.No + "'>" + obj.Name + "</a></li>");
+                else
+                    $("#OneWorkTab").append("<li><a data-toggle='tab' href='#" + obj.No + "'>" + obj.Name + "</a></li>");
                 addTab(this.No, this.Name, this.Url);
                 tpo[this.No] = this.Name;
             });
@@ -142,20 +145,15 @@
 
                 var content = createFrame(url);
                 var htm = '';
-                if (MenuIdx == 1)
-                    htm += '<div id="menu' + MenuIdx + '" class="tab-pane fade in active">';
+                if (id == "Truck")
+                    htm += '<div id="' + id + '" class="tab-pane fade in active">';
                 else
-                    htm += '<div id="menu' + MenuIdx + '" class="tab-pane fade">';
+                    htm += '<div id="' + id + '" class="tab-pane fade">';
                 htm += '    <iframe scrolling="auto" frameborder="0" src="' + url + '" style="width:100%;height:100%;"></iframe>';
                 htm += '</div>';
                 $(".tab-content").append(htm)
                 MenuIdx++;
-                //$('#mtabs').tabs('add', {
-                //    title: title,
-                //    id: id,
-                //    content: content,
-                //    closable: false
-                //});
+              
             }
         }
 
@@ -183,10 +181,8 @@
 </head>
 <body class="easyui-layout">
     <div data-options="region:'center',noheader:true">
-        <ul style="margin-left:10px" class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#menu1">轨迹图</a></li>
-            <li><a data-toggle="tab" href="#menu2">时间轴</a></li>
-            <li><a data-toggle="tab" href="#menu3">时间表</a></li>
+        <ul style="margin-left:10px" class="nav nav-tabs" id="OneWorkTab">
+          
         </ul>
         <div class="tab-content">
 

@@ -33,7 +33,7 @@
 
                 data = data.replace('url@', ''); //如果返回url，就直接转向.
 
-                window.location.href = data + handler.getParams();
+                SetHref(data + handler.getParams());
                 return;
             }
 
@@ -102,7 +102,7 @@
 
         function CheangeColName() {
 
-            //  BP.WF.Template.MapDtlExt ext = new BP.WF.Template.MapDtlExt();
+            //  BP.WF.Template.Frm.MapDtlExt ext = new BP.WF.Template.Frm.MapDtlExt();
             //            var ensName = GetQueryString("EnsName"); // Demo_DtlExpImpDtl1
 
             //            var sql = "SELECT ImpSQLNames FROM Sys_MapDtl WHERE No='" + ensName + "'";
@@ -111,7 +111,7 @@
 
             var pkval = GetQueryString("EnsName");
 
-            var en = new GEEntity("BP.WF.Template.MapDtlExt", pkval);
+            var en = new GEEntity("BP.WF.Template.Frm.MapDtlExt", pkval);
             var strs = en.GetValByKey("ImpSQLNames");
 
 
@@ -139,7 +139,7 @@
                 return;
             }
 
-            // var href = window.location.href;
+            // var href = GetHrefUrl();
             //var urlParam = href.substring(href.indexOf('?') + 1, href.length);
             var url = Handler + "?DoType=DtlOpt_Search&Key=" + key + "&FK_MapDtl=" + GetQueryString("FK_MapDtl") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&m=" + Math.random();
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
@@ -167,7 +167,7 @@
             //获得pks. 
             alert(vals);
 
-            var href = window.location.href;
+            var href = GetHrefUrl();
             var urlParam = href.substring(href.indexOf('?') + 1, href.length);
             var url = Handler + "?DoType=DtlOpt_Add&PKs=" + vals + "&" + urlParam + "&m=" + Math.random();
             
@@ -203,12 +203,12 @@
 
             url += "&IsReadonly=" + isReadonly;
             url += "&UserNo=" + GetQueryString("UserNo");
-            url += "&SID=" + GetQueryString("SID");
+            url += "&Token=" + GetQueryString("Token");
             url += "&WorkID=" + GetQueryString("WorkID");
             url += "&FK_Flow=" + GetQueryString("FK_Flow");
             url += "&FK_Node=" + GetQueryString("FK_Node");
             url += "&RefPKVal=" + GetQueryString("RefPKVal");
-            window.location.href = url;
+            SetHref(url);
         }
 
         function CheckAll() {

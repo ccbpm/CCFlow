@@ -154,7 +154,7 @@
             url += "&FK_MapData=" + GetQueryString("FK_MapData");
             url += "&KeyOfEn=" + GetQueryString("KeyOfEn");
             url += "&Type=" + GetQueryString("Type");
-            window.location.href = url;
+            SetHref(url);
 
         }
         function EditUIBindKeyOfAttr(enumID, keyOfEn, fk_mapData) {
@@ -170,7 +170,7 @@
 
             attr.Update();
             url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=" + attr.MyPK;
-            window.location.href = url;
+            SetHref(url);
 
         }
         function AddFrm(enumID, fk_mapdata, enumName, isHaveDtl) {
@@ -216,7 +216,7 @@
             }
 
             url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&PKVal=" + data;
-            window.location.href = url;
+            SetHref(url);
 
         }
 
@@ -226,7 +226,7 @@
             var W = document.body.clientWidth - 120;
             var H = document.documentElement.clientHeight - 10;
             OpenEasyUiDialog(url, "eudlgframe", "新建枚举", W, H, "icon-edit", true, null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
             });
         }
         //查询枚举
@@ -268,8 +268,8 @@
             var url = '../CCFormDesigner/DialogCtr/EnumerationNew.htm?EnumKey=' + enumKey + '&Name=' + name + '&DoType=FrmEnumeration_SaveEnum&s=' + Math.random();
             var W = document.body.clientWidth - 120;
             var H = document.documentElement.clientHeight - 10;
-            OpenEasyUiDialog(url, "eudlgframe", "", W, H, "icon-edit", true, null, null, null, function () {
-                window.location.href = window.location.href;
+            OpenEasyUiDialog(url, "eudlgframe", "编辑"+name, W, H, "icon-edit", true, null, null, null, function () {
+                Reload();
             });
         }
 
@@ -305,7 +305,7 @@
             var enumMain = new Entity("BP.Sys.SysEnumMain", key);
             enumMain.Delete();
 
-            window.location.href = window.location.href;
+            Reload();
 
         }
 

@@ -823,7 +823,7 @@ $.fn.ajaxSubmit = function(options) {
                 if (type === 'json' || !type && ct.indexOf('json') >= 0) {
                     data = parseJSON(data);
                 } else if (type === "script" || !type && ct.indexOf("javascript") >= 0) {
-                    $.globalEval(data);
+                    $.globalcceval(data);
                 }
             }
             return data;

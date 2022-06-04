@@ -23,7 +23,6 @@
         //初始化页面函数.....
         $(function () {
 
-
             //  $("#Msg").html("<img src='../../Img/loading.gif' /><font color=blue>ccbpm 正在生成代码.</font>");
 
             var fk_flow = GetQueryString("FK_Flow");
@@ -60,7 +59,7 @@
 
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
 
@@ -68,6 +67,10 @@
             return;
         }
 
+        function Imp()
+        {
+            SetHref( "Imp.htm?FK_Flow=" + GetQueryString("FK_Flow"));
+        }
     </script>
 
 
@@ -75,8 +78,7 @@
 <body>
 
     <div id="bar" class="cs-tr cs-bar">
-       
-        <!--<input type="button" id="Btn_Exp" style="background-color:#F7F6F9" value="导出" />-->
+        流程模板管理\\ <a href="javascript:Imp()" >模板导入</a> -  <b>模板导出</b>
     </div>
 
 

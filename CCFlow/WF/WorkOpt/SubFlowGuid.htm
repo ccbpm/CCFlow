@@ -29,7 +29,7 @@
         var subFlowGuid;
         $(function () {
             var subFlowMyPK = GetQueryString("SubFlowMyPK");
-            subFlowGuid = new Entity("BP.WF.Template.SubFlowHandGuide", subFlowMyPK);
+            subFlowGuid = new Entity("BP.WF.Template.SFlow.SubFlowHandGuide", subFlowMyPK);
             if (subFlowGuid.SubFlowGuideSQL == null || subFlowGuid.SubFlowGuideSQL == "") {
                 alert("请配置批量启动子流程的实体数据源");
                 return;

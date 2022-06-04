@@ -49,7 +49,7 @@ function changeOption() {
     var optionKey = optionKey = sele[index].value;
 
     var url = GetUrl(optionKey);
-    window.location.href = url + "?FK_Node=" + nodeID+"&NodeID="+nodeID+"&FrmID="+frmID+"&FK_MapData="+frmID;
+    SetHref( url + "?FK_Node=" + nodeID+"&NodeID="+nodeID+"&FrmID="+frmID+"&FK_MapData="+frmID);
 }
 
 function GetUrl(optionKey) {
@@ -66,7 +66,7 @@ function GetUrl(optionKey) {
 //处理显示模板列表的数据
 function SetTableList() {
 
-    var ens = new Entities("BP.WF.Template.FrmPrintTemplates");
+    var ens = new Entities("BP.WF.Template.Frm.FrmPrintTemplates");
     ens.Retrieve("FrmID", frmID);
 
     var fk_FrmPrintTemplate = GetQueryString("FK_FrmPrintTemplate");
@@ -110,11 +110,11 @@ function Delete(mypk) {
     if (window.confirm('您确定要删除[' + mypk + ']吗？') == false)
         return;
 
-    var en = new Entity("BP.WF.Template.FrmPrintTemplate");
-    en.SetPKVal(no);
+    var en = new Entity("BP.WF.Template.Frm.FrmPrintTemplate");
+    en.SetPKVal(mypk);
     en.Delete();
 
-    window.location.href = window.location.href;
+    Reload();
 }
 /**
  * 上传文件名自动显示到模板名称中

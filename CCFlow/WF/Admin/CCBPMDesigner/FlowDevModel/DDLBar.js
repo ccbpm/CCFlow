@@ -22,6 +22,21 @@ function InitBar(optionKey) {
     }
     html += "</select>";
 
+    var sorts = new Entities("BP.WF.Admin.FlowSorts");
+    sorts.RetrieveAll();
+    html += "&nbsp;存放目录:";
+    html += "<select id=DDL_FlowSort >";
+    var sortNo = GetQueryString("SortNo");
+    for (var i = 0; i < sorts.length; i++) {
+        var sort = sorts[i];
+
+        if (sortNo == sort.No)
+            html += "<option selected=true value=" + sort.No + ">" + sort.Name + "</option>";
+        else
+            html += "<option  value=" + sort.No + ">" + sort.Name + "</option>";
+    }
+    html += "</select>";
+
     var from = GetQueryString("From");
 
     if (from == "Flows.htm")
@@ -29,6 +44,9 @@ function InitBar(optionKey) {
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
+
+
+
 }
 
 //创建流程.
@@ -41,6 +59,7 @@ function Save() {
     }
     $("#Btn_Save").val("正在创建,请稍后");
     setTimeout(function () {
+
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner_FlowDevModel");
         handler.AddPara("SortNo", newFlowInfo.FlowSort);
         handler.AddPara("FlowName", newFlowInfo.FlowName);
@@ -49,16 +68,15 @@ function Save() {
         handler.AddPara("FrmID", newFlowInfo.FrmID);
         var data = handler.DoMethodReturnString("FlowDevModel_Save");
 
-        if (data.indexOf('err@') == 0)
-        {
+        if (data.indexOf('err@') == 0) {
             alert(data);
             return;
         }
 
         var webUser = new WebUser();
-        var url = "../Designer.htm?FK_Flow=" + data + "&OrgNo=" + webUser.OrgNo + "&SID=" + webUser.SID + "&UserNo=" + webUser.No + "&From=Ver2021";
+        var url = "../Designer.htm?FK_Flow=" + data + "&OrgNo=" + webUser.OrgNo + "&Token=" + webUser.Token + "&UserNo=" + webUser.No + "&From=Ver2021";
         //  var url = "";
-        window.location.href = url;
+        SetHref(url);
     }, 1000);
 
 }
@@ -113,7 +131,7 @@ function HelpOnline() {
 }
 function changeOption() {
     //获得流程类别.
-    var sortNo = GetQueryString("SortNo");
+    var sortNo = $("#DDL_FlowSort").val(); // GetQueryString("SortNo");
     var from = GetQueryString("From");
 
     var obj = document.getElementById("changBar");
@@ -123,7 +141,7 @@ function changeOption() {
 
     var url = GetUrl(optionKey);
 
-    window.location.href = url + "?SortNo=" + sortNo + "&From=" + from;
+    SetHref(url + "?SortNo=" + sortNo + "&From=" + from);
 }
 //高级设置.
 function AdvSetting() {

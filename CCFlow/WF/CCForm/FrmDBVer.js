@@ -1,5 +1,5 @@
 ﻿
-var currentURL = window.document.location.href;
+var currentURL = GetHrefUrl();
 var pageData = {};
 var ver = null;
 var vers = null;
@@ -27,7 +27,7 @@ function InitPage() {
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
     handler.AddUrlData();
     var data = handler.DoMethodReturnString("FrmDBVer_Init");
-    if (data.indexOf("err@") !=-1) {
+    if (data.indexOf("err@") != -1) {
         layer.alert(data);
         return;
     }
@@ -49,6 +49,7 @@ function InitPage() {
 
     //数据版本
     vers = data.Sys_FrmDBVer;
+    debugger
     //绑定主版本
     GenerBindDDLAppend("DDL_MainVer", vers, "MyPK", "RDT");
 
@@ -64,10 +65,10 @@ function InitPage() {
                 }
             });
         } else {
-            $("#DDL_MainVer").val(vers[vers.length-1].MyPK);
+            $("#DDL_MainVer").val(vers[vers.length - 1].MyPK);
         }
     }
-    
+
     layui.form.render("select");
 
     if (vers.length == 1) {
@@ -81,7 +82,7 @@ function InitPage() {
 
         });
     }
-   
+
 
     //处理附件的问题 
     if (data.Sys_FrmAttachment.length != 0) {
@@ -119,10 +120,10 @@ function InitPage() {
         var width = $(".form-unit-title img")[0].width;
         $(".form-unit-title center h4 b").css("margin-left", "-" + width + "px");
     }
-    
+
     $('#ContentDiv').width(w);
     $('#ContentDiv').css("margin-left", "auto").css("margin-right", "auto");
-   
+
 }
 
 function ChangeFrmID() {
@@ -142,13 +143,16 @@ function ChangeFrmID() {
     //重新加载版本
     vers = data.Sys_FrmDBVer;
 
-
+    $("#DDL_MainVer").empty();
+    $("#DDL_CompareVer").empty();
     GenerBindDDLAppend("DDL_MainVer", vers, "MyPK", "RDT");
     GenerBindDDL("DDL_CompareVer", vers, "MyPK", "RDT");
+
     if (vers.length != 0)
         $("#DDL_MainVer").val(vers[vers.length - 1].MyPK);
 
     $("#DDL_CompareVer").val("");
+    layui.form.render("select");
 
     mapData = data.Sys_MapData[0];
     //处理附件的问题 
@@ -196,6 +200,7 @@ function ChangeFrmID() {
 function DoCompare(vers, mainVer, compareVer) {
     if (mainVer == "" || compareVer == "")
         return;
+
     if (mainVer == compareVer) {
         layer.alert("主版本和比对版本选择一致，不需要比对");
         return;
@@ -217,30 +222,33 @@ function DoCompare(vers, mainVer, compareVer) {
         var frmData = JSON.parse(data);
         //解析表单
         $("#CCForm").html("");
-         mapData = frmData.Sys_MapData[0];
+        mapData = frmData.Sys_MapData[0];
         if (mapData.FrmType == 0 || mapData.FrmType == 10 || mapData.FrmType == 9) {
             Skip.addJs("./FrmFool.js?ver=" + Math.random());
-            GenerFoolFrm(frmData,true);
+            GenerFoolFrm(frmData, true);
         }
 
         if (mapData.FrmType == 8) {
+            $('head').append('<link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />');
+            $('head').append('<link href="../../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
+            //Skip.addJs("./FrmDevelop2021.js?ver=" + Math.random());
             Skip.addJs("./FrmDevelop2021.js?ver=" + Math.random());
-            GenerDevelopFrm(frmData, mapData.No,true); //开发者表单.
+            GenerDevelopFrm(frmData, mapData.No, true); //开发者表单.
         }
 
         //从表比对
         $.each(frmData.Sys_MapDtl, function (idx, mapDtl) {
             Ele_CompareDtl(mapDtl, mainVer, compareVer);
         })
-       
+
         //设置默认值
         LoadData(frmData);
     }
-   
+
     ver = $.grep(vers, function (en) {
         return en.MyPK == compareVer;
     })[0];
-    
+
     layui.form.render();
     var w = mapData.FrmW;
     if (mapData.FrmType == 8)
@@ -253,7 +261,7 @@ function DoCompare(vers, mainVer, compareVer) {
 
     $('#ContentDiv').width(w);
     $('#ContentDiv').css("margin-left", "auto").css("margin-right", "auto");
-   
+
 }
 
 function OpenDialog(obj) {
@@ -261,7 +269,7 @@ function OpenDialog(obj) {
     layer.open({
         type: 1
         , offset: 'auto'
-        , content: '<div style="padding: 20px 100px;">修订时间:' + ver.RDT + '<br/>修订人:' + ver.RecName+'<br/>变更值:'+val+'</div>'
+        , content: '<div style="padding: 20px 100px;">修订时间:' + ver.RDT + '<br/>修订人:' + ver.RecName + '<br/>变更值:' + val + '</div>'
         , btn: '关闭'
         , btnAlign: 'c'
         , shade: 0
@@ -270,8 +278,30 @@ function OpenDialog(obj) {
         }
     });
 }
-function Ele_CompareDtl(frmDtl,mainVer,compareVer) {
-  
+function Ele_CompareDtl(frmDtl, mainVer, compareVer) {
+    if (frmDtl.ListShowModel == "2") {
+        if (frmDtl.UrlDtl == null || frmDtl.UrlDtl == undefined || frmDtl.UrlDtl == "")
+            $("#Dtl_" + frmDtl.No).append("从表" + frmDtl.Name + "没有设置URL,请在" + frmDtl.FK_MapData + "_Self.js中解析");
+        src = basePath + "/" + frmDtl.UrlDtl;
+        if (src.indexOf("?") == -1)
+            src += "?1=1";
+        src += "&EnsName=" + frmDtl.No + "&RefPKVal=" + pageData.WorkID + "&FK_MapData=" + frmDtl.FK_MapData + "&IsReadonly=1";
+        var mainUrl = src + "&VerMyPK=" + mainVer;
+        var compareUrl = src + "&VerMyPK=" + compareVer;
+        _html = "<div>";
+        _html += "<div style='float:left;width:50%'>";
+        _html += "<h5>主版本数据</h5>";
+        _html += "<iframe style='width:100%;height:100%' name='Dtl' ID='Frame_" + mainVer + "'    src='" + mainUrl + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>";
+        _html += "</div>";
+        _html += "<div style='float:left;width:50%'>";
+        _html += "<h5>比对版本数据</h5>";
+        _html += "<iframe style='width:50%;height:100%' name='Dtl' ID='Frame_" + compareVer + "'    src='" + compareUrl + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>";
+        _html += "</div>";
+        _html += "</div>";
+        $("#Dtl_" + frmDtl.No).append(_html);
+        return;
+    }
+
     var url = "./DtlCompare.htm?FK_MapDtl=" + frmDtl.No + "&MainVer=" + mainVer + "&CompareVer=" + compareVer + "&t=" + Math.random();
     var _html = "<iframe style='width:100%;height:100%' name='Dtl' ID='Frame_" + frmDtl.No + "'    src='" + url + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>";
     $("#Dtl_" + frmDtl.No).append(_html);
@@ -325,7 +355,7 @@ function LoadData(frmData) {
         if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
             // 判断下拉框是否有对应option, 若没有则追加
             if (val != "" && $("option[value='" + val + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
-                var mainTable = JSON.parse(frmData.Datas[0].mainData);
+                var mainTable = frmData.mainData[0];
                 var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
                 if (selectText == null || selectText == undefined || selectText == "")
                     selectText = mainTable[mapAttr.KeyOfEn + "T"];
@@ -458,30 +488,30 @@ function ConvertDefVal(frmData, defVal, keyOfEn) {
             val = compareData[ele];
             if (result != val) {
                 var w = $("#TD_" + keyOfEn).width() - 10;
-               
+
                 if ($("#TB_" + keyOfEn).length != 0) {
                     if (mapData.FrmType == 8)
-                        w = $("#TB_" + keyOfEn)[0].offsetWidth  - 10;
-                    $("#TB_" + keyOfEn).after("<div class='" + style+"'data-info='"+val+"' style='margin-left:"+w+"px' onclick='OpenDialog(this)'></div>");
+                        w = $("#TB_" + keyOfEn)[0].offsetWidth - 10;
+                    $("#TB_" + keyOfEn).after("<div class='" + style + "'data-info='" + val + "' style='margin-left:" + w + "px' onclick='OpenDialog(this)'></div>");
                 }
-                   
+
                 if ($("#DDL_" + keyOfEn).length != 0) {
                     if (mapData.FrmType == 8)
-                        w = $("#DDL" + keyOfEn)[0].offsetWidth - 10;
+                        w = $("#DDL_" + keyOfEn)[0].offsetWidth - 10;
                     $("#DDL_" + keyOfEn).after("<div class='" + style + "'data-info='" + val + "' style='margin-left:" + w + "px'onclick='OpenDialog(this)'></div>");
 
                 }
                 if ($("#CB_" + keyOfEn).length != 0) {
                     if (mapData.FrmType == 8)
-                        w = $("#CB" + keyOfEn)[0].offsetWidth - 10;
-                    $("#CB_" + keyOfEn).after("<div class='" + style + "'data-info='"+ val + "' style='margin-left:" + w + "px'onclick='OpenDialog(this)'></div>");
+                        w = $("#CB_" + keyOfEn)[0].offsetWidth - 10;
+                    $("#CB_" + keyOfEn).after("<div class='" + style + "'data-info='" + val + "' style='margin-left:" + w + "px'onclick='OpenDialog(this)'></div>");
 
                 }
                 if ($("input[name=RB_" + keyOfEn + "]").length != 0) {
                     if ($("#TD_" + keyOfEn).length == 0)
                         w = $("#SR_" + keyOfEn).width() - 10;
 
-                    $("#SR_" + keyOfEn).append("<div class='" + style +"'data-info='" + val + "' style='margin-left:" + w + "px'onclick='OpenDialog(this)'></div>");
+                    $("#SR_" + keyOfEn).append("<div class='" + style + "'data-info='" + val + "' style='margin-left:" + w + "px'onclick='OpenDialog(this)'></div>");
 
                 }
             }

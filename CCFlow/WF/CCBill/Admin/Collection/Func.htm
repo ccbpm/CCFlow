@@ -39,6 +39,7 @@
                 alert("请输入方法名称.");
                 return;
             }
+
             var methodId = $("#DDL_Func").val();
             if (methodId === "") {
                 alert("请选择要执行的方法");
@@ -49,13 +50,21 @@
             en.MethodID = methodId;
             en.Mark = "Func";
             en.Name = name;
-            en.MethodModel = "Func"; 
-           
+            en.MethodModel = "Func";
+
             en.Icon = "icon-energy";
             en.Insert();
 
             var url = "../../../Comm/En.htm?EnName=BP.CCBill.Template.CollectionFunc&No=" + en.No;
-            window.location.href = url;
+            SetHref(url);
+        }
+        function onchangeIt() {
+
+            var val = $("#DDL_Func option:selected").text();
+            if (val == "- 请选择 -")
+                return;
+
+            $("#TB_Name").val(val);
         }
     </script>
 </head>
@@ -71,7 +80,7 @@
                 <td>  <input type="text" value="" id="TB_Name" name="TB_Name" /></td>
                 <td>可以批量执行的方法</td>
                 <td>
-                    <select id="DDL_Func" name="DDL_Func"></select>
+                    <select id="DDL_Func" name="DDL_Func" onchange="onchangeIt();"></select>
                 </td>
             </tr>
         </table>
@@ -80,6 +89,8 @@
         <legend> 配置说明</legend>
         <ul>
             <li> 能够批量执行的方法也必能单个执行。 </li>
+            <li> 定义实体的方法，可以在实体组件中设置。 </li>
+
         </ul>
     </fieldset>
 

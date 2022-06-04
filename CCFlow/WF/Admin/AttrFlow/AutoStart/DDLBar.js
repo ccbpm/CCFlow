@@ -22,10 +22,7 @@ function InitBar(optionKey) {
     }
 
     html += "</select >";
-
-    /* html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-     html += "<input  id='Btn_Help' type=button onclick='Adv()' value='高级设置' />";
-     html += "<input  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />";*/
+ 
 
     html += "<button  id='Btn_Save' class='cc-btn-tab btn-save'  onclick='Save()' >保存</button>";
     html += "<button  id='Btn_Save' class='cc-btn-tab btn-save'  onclick='RunIt()' >手工运行</button>";
@@ -53,6 +50,8 @@ function GetDBDtl() {
         { "No": 1, "Name": "指定人员按时启动", "GroupNo": "A", "Url": "1.ByDesignee.htm" },
         { "No": 2, "Name": "数据集按时启动", "GroupNo": "A", "Url": "2.ByTimeData.htm" },
         { "No": 4, "Name": "指定人员集合按时启动", "GroupNo": "A", "Url": "4.ByDesigneeAdv.htm" },
+        { "No": 5, "Name": "以admin启动发送给指定人员集合", "GroupNo": "A", "Url": "5.ByDesigneeAdminSendTo02Node.htm" },
+
 
 
         { "No": 3, "Name": "触发试启动", "GroupNo": "B", "Url": "3.ByTrigger.htm" }
@@ -96,7 +95,7 @@ function changeOption() {
     var optionKey = optionKey = sele[index].value;
     var url = GetUrl(optionKey);
 
-    window.location.href = url + "?FK_Flow=" + flowNo;
+    SetHref( url + "?FK_Flow=" + flowNo);
 }
 
 
@@ -115,7 +114,7 @@ function SaveAndClose() {
 function OpenEasyUiDialogExt(url, title, w, h, isReload) {
     OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
         if (isReload == true) {
-            window.location.href = window.location.href;
+            Reload();
         }
     });
 }

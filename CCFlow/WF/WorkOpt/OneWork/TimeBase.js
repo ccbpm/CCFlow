@@ -16,7 +16,7 @@ function InitPage() {
     if (data == "[]")
         return;
 
-    data = eval('(' + data + ')');
+    data = cceval('(' + data + ')');
 
     //日志列表.
     var tracks = data["Track"];
@@ -74,7 +74,7 @@ function InitPage() {
             continue;
         }
         var at = track.ActionType;
-        if (at == ActionType.ForwardFL)
+        if (at == ActionType.ForwardFL && track.NDFrom!=parseInt(GetQueryString("FK_Flow"))+"01")
             continue;
         //增加一个子线程的节点
         if (isHaveThread == true) {

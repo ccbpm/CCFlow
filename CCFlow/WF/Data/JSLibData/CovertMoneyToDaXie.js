@@ -36,7 +36,7 @@ function AmountLtoU(num) {
 };
 
 function getArgsFromHref(sArgName) {
-    var sHref = window.location.href;
+    var sHref = GetHrefUrl();
     var args = sHref.split("?");
     var retval = "";
 

@@ -183,7 +183,7 @@
                 return;
             var en = new Entity("BP.Sys.EnVer", mypk);
             en.Delete(); //已经在删除的逻辑里写了删除dtl数据。
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function NewVer() {
@@ -232,7 +232,7 @@
             if (data.indexOf("err@") == 0) {
                 return;
             }
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function Ver() {
@@ -240,7 +240,7 @@
             var frmID = GetQueryString("FrmID");
             var workID = GetQueryString("WorkID");
             url = "DataVer.htm?FrmID=" + frmID + "&WorkID=" + workID;
-            window.location.href = url;
+            SetHref(url);
             return;
         }
 
@@ -249,7 +249,7 @@
             var frmID = GetQueryString("FrmID");
             var workID = GetQueryString("WorkID");
             url = "../MyDict.htm?FrmID=" + frmID + "&WorkID=" + workID;
-            window.location.href = url;
+            SetHref(url);
             return;
             //var md = new Entity("BP.Sys.MapData", frmID);
             //EntityType = md.EntityType;

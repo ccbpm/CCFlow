@@ -29,7 +29,7 @@
             $("#Msg").html("");
         });
         function basePath() {
-            var curWwwPath = window.document.location.href;
+            var curWwwPath = GetHrefUrl();
             var pathName = window.document.location.pathname;
             var pos = curWwwPath.indexOf(pathName);
             var localhostPaht = curWwwPath.substring(0, pos);

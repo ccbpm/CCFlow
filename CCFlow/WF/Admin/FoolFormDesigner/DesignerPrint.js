@@ -41,10 +41,10 @@ function PrintRTF() {
 
         var _Html = "<input type='button' value='" + mapAttr.Name + "'  id='Btn_RTF' name='Btn_RTF' data-key='RTF' data-name='rtf模板打印' data-type='RTF'   leipiplugins='component' style='width:98%'  placeholder='rtf模板打印'/>";
         leipiEditor.execCommand('insertHtml', _Html);
-        var url = window.location.href;
+        var url = GetHrefUrl();
         if (url.indexOf('FoolFormDesigner') > 0)
         {
-            window.location.href = window.location.href;
+            Reload();
         }
     });
 }

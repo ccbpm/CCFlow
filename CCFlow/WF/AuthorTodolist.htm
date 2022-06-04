@@ -95,7 +95,7 @@
             var webUser = new WebUser();
             if (webUser.IsAuthorize == "0") {
                 //alert('当前非授权登录状态，无法处理待办。');
-                window.location.href = 'AuthorList.htm';
+                SetHref('AuthorList.htm');
                 return;
             }
 
@@ -123,7 +123,7 @@
                 return;
             }
 
-            data = eval('(' + data + ')');
+            data = cceval('(' + data + ')');
 
             //设置表头.
             var groupBy = GetQueryString("GroupBy");
@@ -341,14 +341,14 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             var data = handler.DoMethodReturnString("WebUser_BackToAuthorize");
-            window.location.href = 'AuthorList.htm';
+            SetHref('AuthorList.htm');
         }
 
         function BackToMyTodolist() {
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             var data = handler.DoMethodReturnString("WebUser_BackToAuthorize");
-            window.location.href = 'Todolist.htm';
+            SetHref('Todolist.htm');
         }
 
         function GetState(wfState) {

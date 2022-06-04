@@ -80,7 +80,7 @@
     function create(target) {
         //var opts = getOptions(target);
         var html = "";
-        html += '<div class="col-xs-10 main-container">';
+        html += '<div class="layui-col-xs12 main-container">';
         html += '<div class="ccflow-input-span-container" style="display:flex;padding:3px 10px; flex-wrap:wrap;">';
         html += '<div id="stuff" style="display: inline; border-left: 0px solid white; width: 0px;"></div>';
         html += '</div>';

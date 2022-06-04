@@ -86,7 +86,7 @@
                     var nodeID = GetQueryString("FK_Node");
                     url += '?NodeID=' + nodeID+ "&FK_Flow=" + GetQueryString("FK_Flow");
                     
-                    window.location.href = url;
+                    SetHref(url);
                 },
                 IsChange: function () {
                     if ($("#CB_IsSimpleSelector").attr("checked") != "checked") {

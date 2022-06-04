@@ -63,7 +63,7 @@
                 emp.Email = wfemp.Email;
                 emp.Update();
 
-                window.location.href = "Default.htm";
+                SetHref( "Default.htm");
                 return;
             }
             //保存手机号，Email
@@ -103,7 +103,7 @@
                         return;
                     }
                     alert(data);
-                    window.location.href = "Default.htm";
+                    SetHref( "Default.htm");
                 }
             });
         }

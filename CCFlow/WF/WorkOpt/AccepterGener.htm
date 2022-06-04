@@ -164,7 +164,7 @@
                 if (firstLoad) {
                     toNode = 0;
                 } else {
-                    toNode = $("#searchS1 option:selected").val()
+                    toNode = $("#searchS1 option:selected").val();
                 }
             } else {
                 $("#searchS").css('display', 'none');
@@ -197,7 +197,7 @@
             }
 
             try {
-                initData = eval('(' + data + ')');
+                initData = cceval('(' + data + ')');
             }
             catch (err) {
                 alert("转换JSON 失败" + err + data);

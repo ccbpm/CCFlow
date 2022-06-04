@@ -233,7 +233,7 @@
                         var defVal = condtion.Val;
                         defVal = defVal.replace('<br/>', '');
                         defVal = defVal.replace('@Now', "(new Date())");
-                        defVal = new Date(eval(defVal));
+                        defVal = new Date(cceval(defVal));
                         defVal = FormatDate(defVal, "yyyy-MM-dd");
                         var inputDate = $("<input type='text'/>");
                         inputDate.attr("id", condtion.FieldKey);

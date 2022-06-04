@@ -33,255 +33,102 @@
         //页面启动函数.
         $(function () {
 
+            debugger;
+
             $("#Msg").html("正在加载,请稍后......");
             var ifm = document.getElementById("stationFrame");
             ifm.height = document.documentElement.clientHeight - 67;
 
-            InitPage();
-            //    document.getElementById("TB_SpecOperPara").style.display='none';
-
-            $("#Msg").html("");
-        });
-        //初始化数据.
-        function InitPage() {
-            //获取URL参数
-            var nodeID = GetQueryString("FK_Node");
-            var FK_MainNode = GetQueryString("FK_MainNode");
-            var ToNodeID = GetQueryString("ToNodeID");
-
-            //条件属性
-            var mypk = FK_MainNode + "_" + ToNodeID + "_Dir_" + "Stas";
-
+          
+            var mypk = GetQueryString("MyPK");
             var cond = new Entity("BP.WF.Template.Cond");
             cond.MyPK = mypk;
-            cond.SetPKVal(mypk);
-            cond.RetrieveFromDBSources();
+            if (mypk != null) {
+                cond.SetPKVal(mypk);
+                cond.RetrieveFromDBSources();
+            }
 
-            // 运算的值
-            operatorValue = cond.OperatorValue.replace(/,/g, "@");
-            if (cond.GetPara("orgEmps") != null)
-                operatorValueT = cond.GetPara("orgEmps").replace(/&nbsp;&nbsp;/g, "@");
-
-
+            // 运算的值 Stations.
+            var operatorValue = cond.OperatorValue.replace(/,/g, "@");
             //获取已指定操作员的岗位条件
             operatorValues = operatorValue.split("@");
 
-            var operatorValueTs = operatorValueT.split("@");
+            //标签
+            var operatorValueTs = cond.OperatorValueT.replace(/&nbsp;&nbsp;/g,",");
 
+            /*设置值.*/
+            document.getElementById("Stations").innerHTML = operatorValue.replace(/@/g, ",");
+            var len = operatorValue==""?0: operatorValues.length > 0 ? operatorValues.length - 2 : 0;
+            document.getElementById("StationNames").innerHTML = "合计:(<font color=red>" + len + "</font>)条" + operatorValueTs;
+            document.getElementById("StationTs").innerHTML = operatorValueTs;
+            $("#Msg").html("");
+        });
 
-            ////根据用户的信息，判断是否启用那个设置工具。
-            var user = new WebUser();
-            $("#AdminModel").hide();
-            $("#OrgModel").hide();
+        function OpenStations(selectType) {
 
+            var stas = $("#Stations").html();
 
-            if (user.FK_Dept == 0) {
-                /*调用通用的.*/
-                $("#AdminModel").show();
-                var showCondition = InitStation(operatorValues);
-                document.getElementById("emps").innerHTML = showCondition[2];
-                document.getElementById("stations").innerHTML = "合计:(<font color=red>" + showCondition[0] + "</font>)条" + showCondition[1];
-
-
-            } else {
-
-                /*调用集团模式的.*/
-                $("#OrgModel").show();
-                var showCondition = InitStation(operatorValues);
-                var showConditionT = InitStation(operatorValueTs);
-                $("#groupCount").html(showCondition[0])
-                $("#groupStations").html(showCondition[1])
-                $("#groupEmps").html(showCondition[2])
-                $("#orgCount").html(showConditionT[0])
-                $("#orgStations").html(showConditionT[1])
-                $("#orgEmps").html(showConditionT[2])
-                var count = showCondition[0] + showConditionT[0];
-                document.getElementById("emps").innerHTML = showCondition[2] + showConditionT[2];
-                document.getElementById("stations").innerHTML = "合计:(<font color=red>" + count + "</font>)条" + showCondition[1] + showConditionT[1];
-            }
-
-            //TODO 条件参数
-            //var atpara = cond.AtPara;
-            //if (atpara != "") {
-
-            //    var initDDL_SpecOperWay = atpara.split("@")[2].split("=")[1];
-            //    document.getElementById("initDDL_SpecOperWay").value = initDDL_SpecOperWay;
-            //    document.getElementById("DDL_SpecOperWay").value = initDDL_SpecOperWay;
-
-            //    var initTB_SpecOperPara = atpara.split("@")[3].split("=")[1];
-            //    document.getElementById("TB_SpecOperPara").value = initTB_SpecOperPara;
-            //    if (initDDL_SpecOperWay != 0) {
-            //        document.getElementById("TB_SpecOperPara").disabled = "";
-            //    }
-            //    document.getElementById("initTB_SpecOperPara").value = initTB_SpecOperPara;
-            //    $("#span" + initDDL_SpecOperWay).css("display", "inline-block");
-            //    $("#span" + initDDL_SpecOperWay).siblings().css("display", "none");
-            //}
-
-            //条件参数 end
-            //end
-            var currCondStation = null;
-
-
-            //调用公共类库的方法:执行批量主表赋值
-            if (currCondStation != null)
-                GenerFullAllCtrlsVal(currCondStation);
-        }
-
-        function selChange() {
-            //01.如果 文本框 有初始值就赋初值
-            var idx = document.getElementById("DDL_SpecOperWay").value;
-            var idxinit = document.getElementById("initDDL_SpecOperWay").value;
-            if (idx == idxinit) {
-                document.getElementById("TB_SpecOperPara").value = document.getElementById("initTB_SpecOperPara").value;
-            }
-            else {
-                document.getElementById("TB_SpecOperPara").value = "";
-            }
-
-            //02.处理文本框样式
-            if (idx == 0) {
-                document.getElementById("TB_SpecOperPara").disabled = "disabled";
-            } else {
-                document.getElementById("TB_SpecOperPara").disabled = "";
-            }
-            //03.处理标签
-            $("#span" + idx).css("display", "inline-block");
-            $("#span" + idx).siblings().css("display", "none");
-        }
-
-        function InitStation(CheckStations) {
-
-            var showCondition = new Array();
-            var html = "";
-            var emps = "";
-            var count = 0;
-            for (var i = 0; i < CheckStations.length; i++) {
-                if (CheckStations[i] != "") {
-
-                    var en = new Entity("BP.Port.Station", CheckStations[i]);
-                    html += "&nbsp;&nbsp;&nbsp;" + en.Name;
-                    count++;
-                    emps += CheckStations[i] + ",";
-                }
-            }
-            showCondition[0] = count;
-            showCondition[1] = html;
-            showCondition[2] = emps;
-            return showCondition;
-        }
-
-        //设置本组织岗位.
-        function SetAdminStations() {
-
-            var user = new WebUser();
-
-            OpenNodStationGroup("", 1);
-        }
-        //设置集团岗位.
-        function SetGroupStations() {
-            var user = new WebUser();
-            OpenNodStationGroup(user.GroupNo, 2);
-        }
-        //设置本组织岗位.
-        function SetOrgStations() {
-            var user = new WebUser();
-            OpenNodStationGroup(user.FK_Dept, 3);
-        }
-
-        function OpenNodStationGroup(orgNo, selectType) {
-            var emps = $("#emps").html();
-            if (orgNo == undefined)
-                orgNo = 0;
-            var url = "SelectStation.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node") + "&emps=" + emps + "&SelectType=" + selectType;
+            var url = "SelectStation.htm?FK_Node=" + GetQueryString("FK_Node") + "&Stas=" + stas + "&SelectType=" + selectType;
             document.getElementById("stationFrame").style.width = "100%";
             document.getElementById("stationFrame").src = url;
-
             $("#win").window("open");
-
         }
 
-        function Btn_Delete_Click() {
 
-            if (window.confirm('您确定要删除吗？') == false)
-                return;
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
-            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
-
-            handler.AddPara("ToNodeID", GetQueryString("ToNodeID"));
-            handler.AddPara("DirType", GetQueryString("DirType"));
-            handler.AddPara("CondType", GetQueryString("CondType"));
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("CondByStation_Delete");
-            window.location.href = window.location.href;
-
-        }
-
-        function Btn_Save_Click() {
-
-            var param = location.href.split("?")[1];
+        function Save() {
 
             //var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
-            //获取所有选中的checkbox
-            var emps = document.getElementById("emps").innerHTML;
-            var orgEmps = "";
-            var user = new WebUser();
-            if (user.FK_Dept != 0) {
-                emps = document.getElementById("groupEmps").innerHTML;
-                orgEmps = document.getElementById("orgEmps").innerHTML;
-            }
+            //获取所有选中的checkbox.
+            var stas = document.getElementById("Stations").innerHTML;
+            var staNames = document.getElementById("StationTs").innerText;
 
-            var frmData = $("#cc").serialize();
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddPara("FK_Node", GetQueryString("FK_Node"));
-            handler.AddPara("emps", emps);
-            handler.AddPara("orgEmps", orgEmps);
-            handler.AddPara("FK_MainNode", GetQueryString("FK_MainNode"));
-            handler.AddPara("ToNodeID", GetQueryString("ToNodeID"));
-            handler.AddPara("DirType", GetQueryString("DirType"));
-            handler.AddPara("CondType", GetQueryString("CondType"));
-            handler.AddPara("CondOrAnd", GetQueryString("CondOrAnd"));
+            handler.AddPara("Stations", stas);
+            handler.AddPara("StationNames", staNames);
             handler.AddFormData()
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("CondByStation_Save");
-
             alert("保存成功");
             Back();
-
         }
 
 
         function getChidrenValue(data) {
 
             $('#win').window('close'); // close a window
-            if (data[3] == "1") {
+            // if (data[3] == "1") {
 
-                document.getElementById("stations").innerHTML = "合计:(<font color=red>" + data[2] + "</font>)条" + data[1];
-                document.getElementById("emps").innerHTML = data[0];
-            }
+            document.getElementById("StationNames").innerHTML = "合计:(<font color=red>" + data[2] + "</font>)条" + data[1];
+            document.getElementById("Stations").innerHTML = data[0];
+            document.getElementById("StationTs").innerHTML = data[1];
+            return;
+            //}
+
+
             if (data[3] == "2") {
-                $("#groupEmps").html(data[0]);
+                $("#groupStas").html(data[0]);
                 $("#groupStations").html(data[1]);
                 $("#groupCount").html(data[2]);
 
                 var orgCount = $("#orgCount").html();
                 var orgStations = $("#orgStations").html();
-                var orgEmps = $("#orgEmps").html();
+                var orgStas = $("#orgStas").html();
                 var count = 0;
                 if (orgCount == null || orgCount == "") orgCount = 0;
                 if (data[2] == null || data[2] == "") data[2] = 0;
                 count = parseInt(orgCount) + parseInt(data[2]);
                 document.getElementById("stations").innerHTML = "合计:(<font color=red>" + count + "</font>)条" + orgStations + data[1];
-                document.getElementById("emps").innerHTML = orgEmps + data[0];
+                document.getElementById("Stas").innerHTML = orgStas + data[0];
             }
 
             if (data[3] == "3") {
-                $("#orgEmps").html(data[0]);
+                $("#orgStas").html(data[0]);
                 $("#orgStations").html(data[1]);
                 $("#orgCount").html(data[2]);
                 var groupCount = $("#groupCount").html();
                 var groupStations = $("#groupStations").html();
-                var groupEmps = $("#groupEmps").html();
+                var groupStas = $("#groupStas").html();
                 var count = 0;
 
                 if (groupCount == null || groupCount == "")
@@ -292,39 +139,25 @@
 
                 count = parseInt(groupCount) + parseInt(data[2]);
                 document.getElementById("stations").innerHTML = "合计:(<font color=red>" + count + "</font>)条" + groupStations + data[1];
-                document.getElementById("emps").innerHTML = groupEmps + data[0];
+                document.getElementById("Stas").innerHTML = groupStas + data[0];
             }
 
-            //获取URL参数
-            var nodeID = GetQueryString("FK_Node");
-
-            var ToNodeID = GetQueryString("ToNodeID");
-
-            //条件属性.
-            //var mypk = FK_MainNode + "_" + ToNodeID + "_Dir_" + "Stas";
-            //var cond = new Entity("BP.WF.Template.Cond");
-            //cond.MyPK = mypk;
-            //cond.RetrieveFromDBSources();
-
-            //cond.OperatorValue = data[0];
-            //cond.OperatorValueT = data[1];
-            //cond.Save();
         }
+
 
         //返回.
         function Back() {
-            var url = window.location.href;
+            var url = GetHrefUrl();
             if (GetQueryString("CondOrAnd") == null)
                 url = url.replace('CondStation.htm', 'List.htm');
             else {
                 url = url.replace('CondStation.htm', 'DirList.htm');
                 url = url.replace('&CondOrAnd=' + GetQueryString("CondOrAnd"), '  ');
             }
-            window.location.href = url;
-
-            /*parent.location.reload();
-            window.close();
-            window.parent.Condlist.closeCurrentTabs();*/
+            if (url.indexOf("MyPK=") != -1) {
+                url = url.replace("&MyPK=" +GetQueryString("MyPK"), "");
+            }
+            SetHref(url);
         }
     </script>
 
@@ -334,9 +167,9 @@
             line-height: 50px;
         }
 
-        ul .cond li .active {
-            display: block;
-        }
+            ul .cond li .active {
+                display: block;
+            }
 
         select {
             display: inline-block;
@@ -353,49 +186,29 @@
     <div class="container-full">
         <div class="attrnode-bar-header">
             <span class="pull-right">
-                <button id="Btn_Save" name="Btn_Save" onclick="Btn_Save_Click();">保存</button>
+                <button id="Btn_Save" name="Btn_Save" onclick="Save();">保存</button>
                 <button id="Btn_Back" name="Btn_Back" onclick="Back();">返回</button>
-
             </span>
-          
+
         </div>
         <form id="cc">
-          
+
 
             <fieldset id="AdminModel">
-                <legend>设置(超级管理员)</legend>
+                <legend>设置</legend>
                 <ul>
-                    <li><a href="javascript:OpenOld()">设置/更改岗位</a></li>
+                    <li>以岗位做为条件. </li>
+                    <li> <a href="javascript:OpenStations()">设置岗位</a> </li>
 
+                    <li>已经设置的岗位. </li>
+
+                    <li><div id="StationNames"> </div></li>
+                    <li style="display:none"><div id="StationTs"> </div></li>
+                    <li style="display:none"><div id="Stations"> </div></li>
                 </ul>
-            </fieldset>
-            <fieldset id="OrgModel">
-                <legend>设置（组织管理员）</legend>
-                <ul>
-                    <li> <a href="javascript:SetGroupStations()">设置集团岗位</a> </li>
-                    <li> <a href="javascript:SetOrgStations()">设置本组织岗位</a> </li>
-                </ul>
-            </fieldset>
-            <fieldset>
-                <legend>已经设置的岗位</legend>
-                <br />
-                <div class="pd15">
-                    <div id="stations"></div>
 
-                </div>
 
-            </fieldset>
-
-            <label id="emps" style="display:none"></label>
-            <label id="groupCount" style="display:none"></label>
-            <label id="orgCount" style="display:none"></label>
-            <label id="groupStations" style="display:none"></label>
-            <label id="orgStations" style="display:none"></label>
-            <label id="groupEmps" style="display:none"></label>
-            <label id="orgEmps" style="display:none"></label>
-            <br />
-
-            <fieldset>
+                <legend>高级选项</legend>
                 <div class="pd15">
                     指定的操作员：<select id="DDL_SpecOperWay" name="DDL_SpecOperWay" onchange="selChange()">
                         <option selected="selected" value="0">当前操作员</option>
@@ -415,6 +228,8 @@
                     </span>
                     <input id="TB_SpecOperPara" name="TB_SpecOperPara" type="text" disabled="disabled" style="width: 200px;" />&nbsp;&nbsp;多个值请用英文“逗号”来分隔。
                 </div>
+                </ul>
+                </ul>
             </fieldset>
 
             <!--隐藏的文本框-->

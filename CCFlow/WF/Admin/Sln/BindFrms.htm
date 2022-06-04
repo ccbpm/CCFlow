@@ -119,7 +119,7 @@
             else
                 frmNode.DoMethodReturnString("DoDown");
 
-            window.location.href = window.location.href;
+            Reload();
         }
 
         //删除.
@@ -131,7 +131,7 @@
             var frmNode = new Entity("BP.WF.Template.FrmNode", no);
             frmNode.Delete();
 
-            window.location.href = window.location.href;
+            Reload();
         }
 
         //设计表单.
@@ -165,12 +165,12 @@
             var W = document.body.clientWidth - 80;
             var H = document.body.clientHeight - 40;
             OpenEasyUiDialog(url, "eudlgframe", '编辑', W, H, "icon-edit", true, null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
             });
         }
         function ToBindFrms() {
             var url = "BindFrmsDtl.htm?FK_Node=" + fk_node + '&FK_Flow=' + fk_flow + '&DoType=SelectedFrm';
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
 </head>

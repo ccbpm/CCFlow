@@ -117,7 +117,7 @@
             }
             const data = JSON.parse(datajson);
             const nodes = data.Emps.map(item => ({
-              value: item.No,
+              value: item.No.replace("Emp_",""),
               label: item.Name,
               leaf: true,
               ...item
@@ -225,7 +225,7 @@
             handler.AddPara("FK_Flow", this.toNode.FK_Flow);
             handler.AddPara("ToNodeID", this.toNode.NodeID);
             handler.AddPara("WorkID", GetQueryString("WorkID"));
-            handler.AddPara("Emps", this.$refs.cascader.getCheckedNodes(true).map(item => item.data.No));
+            handler.AddPara("Emps", this.$refs.cascader.getCheckedNodes(true).map(item => item.data.value));
             handler.AddPara("Note", this.form.desc);
             var data = handler.DoMethodReturnString("ReSend");
             if (data.indexOf("err@") != -1) {

@@ -27,7 +27,7 @@
                 data += "&WorkID=" + GetQueryString("WorkID");
 
                 //如果返回url，就直接转向.
-                window.location.href = data;
+                SetHref(data);
                 return;
             }
 
@@ -91,7 +91,7 @@
             
             var webUser = new WebUser();
             paras += "UserNo=" + webUser.No + ",";
-            paras += "SID=" + webUser.SID + ",";
+            paras += "SID=" + webUser.Token + ",";
             
             //是否可以编辑(只读)
             var isEdit = "True";
@@ -104,7 +104,7 @@
             
             var urlWS = local + "/WF/CCForm/CCFormAPI.asmx?DocName="+DocName;
             var url = "httpCCWord://-fromccflow,App=WordDoc," + paras + "WSUrl=" + urlWS;
-            window.location.href = url;
+            SetHref(url);
             //window.open(url);
         }
 
@@ -137,7 +137,7 @@
                 return;
             }
 
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </head>

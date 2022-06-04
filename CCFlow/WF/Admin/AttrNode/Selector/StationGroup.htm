@@ -24,8 +24,6 @@
             var stas = new Entities("BP.Port.Depts");
             stas.RetrieveAll();
 
-
-
         });
     
         //保存
@@ -34,6 +32,11 @@
            var node = new Entity("BP.WF.Node", nodeID);
            node.SelectorModel = SelectorModel.Station;
            node.Update();
+
+           var node = new Entity("BP.WF.Node", nodeID);
+           node.DeliveryWay = 4;
+           node.Update();
+
            alert("保存成功.");
        }
     </script>

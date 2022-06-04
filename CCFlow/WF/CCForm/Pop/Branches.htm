@@ -384,7 +384,7 @@
                         var item = {};
                         item.No = node.id;
                         item.Name = node.text;
-                        SaveVal(global.FK_MapData, global.AttrOfOper, global.oid, node.id, node.text);
+                        Savcceval(global.FK_MapData, global.AttrOfOper, global.oid, node.id, node.text);
                         nodeIds.push(item);
                     }
                 });
@@ -394,14 +394,14 @@
                     var item = {};
                     item.No = row.No;
                     item.Name = row.Name;
-                    SaveVal(global.FK_MapData, global.AttrOfOper, global.oid, row.No, row.Name);
+                    Savcceval(global.FK_MapData, global.AttrOfOper, global.oid, row.No, row.Name);
                     nodeIds.push(item);
                 });
             }
             return nodeIds;
         }
         //设置值.
-        function SaveVal(fk_mapdata, keyOfEn, oid, val1, val2) {
+        function Savcceval(fk_mapdata, keyOfEn, oid, val1, val2) {
             var frmEleDB = new Entity("BP.Sys.FrmEleDB");
             frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + val1;
             frmEleDB.FK_MapData = fk_mapdata;

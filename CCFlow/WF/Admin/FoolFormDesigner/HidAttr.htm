@@ -18,16 +18,16 @@
         }
         function Edit(fk_mapdata, mypk, ftype) {
             var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype;
-            window.location.href = url;
+            SetHref(url);
         }
         function EditEnum(fk_mapdata, mypk, ftype) {
 
             var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype;
-            window.location.href = url;
+            SetHref(url);
         }
         function EditTable(fk_mapdata, mypk, ftype) {
             var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype;
-            window.location.href = url;
+            SetHref(url);
         }
 
         //页面启动函数.

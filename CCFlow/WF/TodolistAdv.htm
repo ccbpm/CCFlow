@@ -120,7 +120,7 @@
                 return;
             }
 
-            data = eval('(' + data + ')');
+            data = cceval('(' + data + ')');
 
             //设置表头.
             var groupBy = GetQueryString("GroupBy");

@@ -23,7 +23,7 @@ function FullData() {
     var myPK = "TBFullCtrl_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
     var url = "../FullData/Main.htm?FK_MapData=" + this.GetQueryString("FK_MapData") + "&RefPK=" + myPK + "&KeyOfEn=" + GetQueryString("KeyOfEn");
 
-    window.location.href = url;
+    SetHref(url);
 }
 
 //生成主键.
@@ -49,7 +49,7 @@ function Delete() {
     en.MyPK = GenerMapExtPK();
     var i = en.Delete();
 
-    window.location.href = "0.None.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn");
+    SetHref("0.None.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn"));
 }
 
 function HelpOnline() {
@@ -69,7 +69,7 @@ function changeOption() {
 
     var url = GetUrl(optionKey);
 
-    window.location.href = url + "?FK_MapData=" + fk_MapData + "&KeyOfEn=" + KeyOfEn;
+    SetHref(url + "?FK_MapData=" + fk_MapData + "&KeyOfEn=" + KeyOfEn);
 }
 
 function GetUrl(popModel) {
@@ -103,7 +103,7 @@ function OpenEasyUiDialogExt(url, title, w, h, isReload) {
 
     OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
         if (isReload == true) {
-            window.location.href = window.location.href;
+            Reload();
         }
     });
 }

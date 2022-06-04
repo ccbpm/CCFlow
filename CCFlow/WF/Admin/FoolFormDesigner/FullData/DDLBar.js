@@ -56,7 +56,7 @@ function Back() {
         var url = '../MapExt/PageLoadFull.htm?FK_MapData=' + GetQueryString('FK_MapData');
 
 
-    window.location.href = url;
+    SetHref(url);
     return;
 }
 
@@ -73,7 +73,7 @@ function changeOption() {
 
     var url = GetUrl(optionKey);
 
-    window.location.href = url + "?RefPK=" + refPK + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + GetQueryString('KeyOfEn') + "&ExtType=" + GetQueryString("ExtType");
+    SetHref(url + "?RefPK=" + refPK + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + GetQueryString('KeyOfEn') + "&ExtType=" + GetQueryString("ExtType"));
 }
 
 function GetUrl(popModel) {
@@ -106,7 +106,7 @@ function OpenEasyUiDialogExt(url, title, w, h, isReload) {
 
     OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
         if (isReload == true) {
-            window.location.href = window.location.href;
+            Reload();
         }
     });
 }

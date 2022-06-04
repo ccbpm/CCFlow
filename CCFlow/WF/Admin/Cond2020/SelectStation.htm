@@ -8,7 +8,6 @@
     <script src="../../Scripts/bootstrap/js/jquery.min.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
 
-
     <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
     <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
     <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
@@ -25,6 +24,7 @@
         $(function () {
 
             $("#Msg").html("正在加载,请稍后......");
+
             InitPage();
 
             $("#Msg").html("");
@@ -38,7 +38,7 @@
             if (orgNo == null || orgNo == undefined)
                 orgNo = "";
 
-            var emps = GetQueryString("emps");
+            var emps = GetQueryString("Stas");
             selectType = GetQueryString("SelectType");
             var CheckStations = emps.split(",");
             //岗位类型集合
@@ -109,18 +109,19 @@
 
         function Save() {
             var emps = ",";
-            var html = "&nbsp;&nbsp;";
+            var html = "";
             var i = 0;
             var data = new Array();
             $("input[type='checkbox']").each(function () {
                 if (this.checked && this.name.indexOf("emp_CB_") == 0) {
                     var id = this.name.replace("emp_CB_", "")
                     emps += id + ",";
-                    html += document.getElementById(id).innerHTML + "&nbsp;&nbsp;";
+                    html += document.getElementById(id).innerText + ",";
                     i++;
                 }
             });
-
+            if (html.length != 0)
+                html = html.substring(0, html.length - 1);
             data[0] = emps;
             data[1] = html;
             data[2] = i;
@@ -137,9 +138,9 @@
             line-height: 50px;
         }
 
-        ul .cond li .active {
-            display: block;
-        }
+            ul .cond li .active {
+                display: block;
+            }
 
         select {
             display: inline-block;
@@ -162,7 +163,7 @@
     </style>
 </head>
 <body>
-    <div  style="margin-bottom:10px;">
+    <div style="margin-bottom:10px;">
         <button value='保存' onclick='Save();' class="cc-btn-tab btn-save" id='Save'>保存</button>
         <button onclick="Back()" value="返回" class="cc-btn-tab btn-back" id="Button2">返回</button>
     </div>

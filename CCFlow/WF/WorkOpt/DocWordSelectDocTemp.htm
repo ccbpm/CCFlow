@@ -61,7 +61,7 @@
             var fk_flow = GetQueryString("FK_Flow");
 
             var url = "DocWord.htm?FK_Flow=" + fk_flow + "&WorkID=" + workId + "&FK_Node=" + nodeId+"&DocName="+name;
-            window.location.href = url;
+            SetHref(url);
 
         }
     </script>

@@ -107,7 +107,7 @@
             en.Save();
 
             //  alert("保存成功.");
-            window.location.href = window.location.href;
+            Reload();
         }
 
         //执行编辑.
@@ -129,7 +129,7 @@
             en.MyPK = mypk;
             en.Delete();
 
-            window.location.href = window.location.href;
+            Reload();
         }
         function doChangeContent(o) {
 

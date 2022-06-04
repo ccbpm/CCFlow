@@ -118,7 +118,7 @@ Common.SetStaffCookie = function () {
     }
     //如果没有使用框架传过来STAFFID，又没有登录的COOKIE就调转到登录页面
     else if ($.cookie("StaffID") == undefined) {
-        window.location.href = "/PortalLogin.aspx";
+        SetHref("/PortalLogin.aspx");
     }
 }
 
@@ -163,7 +163,7 @@ Common.CustomPagePlug1 = function (operation) {
         }
     };
     PageData.DateFromMSJsonString = function (value) {
-        var d = eval('new ' + (value.replace(/\//g, '')));
+        var d = cceval('new ' + (value.replace(/\//g, '')));
         var result = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
         return result;
     };
@@ -550,7 +550,7 @@ Common.CustomPagePlug = function (operation) {
     };
 
     PageData.prototype.DateFromMSJsonString = function (value) {
-        var d = eval('new ' + (value.replace(/\//g, '')));
+        var d = cceval('new ' + (value.replace(/\//g, '')));
         var result = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
         return result;
     };

@@ -61,7 +61,7 @@
             var frmID = GetQueryString("FrmID");
             var workID = GetQueryString("WorkID");
             url = "../MyDict.htm?FrmID=" + frmID + "&WorkID=" + workID;
-            window.location.href = url;
+            SetHref(url);
             return;
             //var md = new Entity("BP.Sys.MapData", frmID);
             //EntityType = md.EntityType;

@@ -20,7 +20,7 @@
     if (plant == 'CCFlow') {
         Url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&FK_FrmAttachment=" + GetQueryString("FK_FrmAttachment")  + "&PKVal=" + GetQueryString("PKVal")  + "&t=" + new Date().getTime();
     } else {
-        var currentPath = window.document.location.href;
+        var currentPath = GetHrefUrl();
         var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
         var url = path + "/WF/Ath/AttachmentUpload.do/?FK_FrmAttachment=" + GetQueryString("FK_FrmAttachment") + "&PKVal=" + GetQueryString("PKVal");
     }

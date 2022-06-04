@@ -85,7 +85,7 @@
                 en.MyPK = mypk;
                 en.Insert();
             }
-            window.location.href = window.location.href;
+            Reload();
             var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&FK_MapData=' + fk_mapdata + '&PK=' + mypk + '&FK_Node=' + fk_node;
             WinOpen(url);
         }
@@ -100,7 +100,7 @@
             en.MyPK = mypk;
             en.Delete();
             alert("删除成功!");
-            window.location.href = window.location.href;
+            Reload();
         }
 
     </script>

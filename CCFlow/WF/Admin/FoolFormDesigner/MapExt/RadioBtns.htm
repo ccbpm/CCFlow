@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
+    <title>选项联动控件</title>
     <script type="text/javascript" src="../../../Scripts/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="../../../Scripts/QueryString.js"></script>
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
@@ -340,7 +340,7 @@
             handler.AddPara("KeyOfEn", pageData.KeyOfEn);
             var data = handler.DoMethodReturnString("RadioBtns_Save");
 
-            window.location.href = window.location.href;
+            Reload();
 
         }
 
@@ -374,12 +374,12 @@
 </head>
 <body>
 
-    <h3>
-        选项联动控件
-        <button onclick="Save()" type="button" id="Btn_Save">
-            保存
-        </button>
-    </h3>
+
+    <!--<fieldset>
+        <legend>选项联动控件</legend>
+        <h4>
+        </h4>
+    </fieldset>-->
 
 
     <fieldset>
@@ -392,9 +392,15 @@
         <label for="RB_IsEnableJS_0">
             禁用
         </label>
+        <button onclick="Save()" type="button" id="Btn_Save">
+            保存
+        </button>
+
         <ul>
             <li>禁用当前的配置就不生效.</li>
         </ul>
+
+
 
 
         <legend>列表值 </legend>
@@ -498,7 +504,7 @@
                             <th>
                                 可以编辑
                             </th>
-                           
+
                             <th>
                                 可见？
                             </th>
@@ -543,6 +549,7 @@
         </ul>
 
     </div>
+
 
 </body>
 </html>

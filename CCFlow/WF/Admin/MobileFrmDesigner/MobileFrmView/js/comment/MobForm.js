@@ -41,7 +41,7 @@ function GenerFormElement() {
         CWorkID: args.CWorkID,
         PWorkID: args.PWorkID
     }, function (scope) {
-        var pushData = eval('(' + scope + ')');
+        var pushData = cceval('(' + scope + ')');
 
         //有错误消息
         if (pushData.error) {
@@ -91,7 +91,7 @@ function GenerFormElement() {
         LoadFormSelfJavaScript(curFK_MapData);
         //执行扩展函数
         if (Form_Ext_Function.length > 0) {
-            eval(Form_Ext_Function);
+            cceval(Form_Ext_Function);
         }
         //存在扩展设置
         if (pushData.MapExts) {
@@ -136,7 +136,7 @@ function Frm_InitControls(FK_MapData) {
         IsTest: args.IsTest,
         IsEdit: curFormIsEdit
     }, function (scope) {
-        var pushData = eval('(' + scope + ')');
+        var pushData = cceval('(' + scope + ')');
         //只读
         if (pushData.IsReadOnly == "1") {
             Form_ReadOnly = true;
@@ -157,7 +157,7 @@ function Frm_InitControls(FK_MapData) {
         LoadFormSelfJavaScript(curFK_MapData);
         //执行扩展函数
         if (Form_Ext_Function.length > 0) {
-            eval(Form_Ext_Function);
+            cceval(Form_Ext_Function);
         }
         //存在扩展设置
         if (pushData.MapExts) {
@@ -428,7 +428,7 @@ TransControlFromJson.prototype = {
                 EnumKey: this.control.UIBindKey
             },
             success: function (scope) {
-                var pushData = eval('(' + scope + ')');
+                var pushData = cceval('(' + scope + ')');
                 for (var i = 0; i < pushData.length; i++) {
                     if (selectedVal == pushData[i].IntKey) {
                         html_Select += "<option value=\"" + pushData[i].IntKey + "\" selected='selected'>" + pushData[i].Lab + "</option>";
@@ -463,7 +463,7 @@ TransControlFromJson.prototype = {
                 IsEnable: isEnable
             },
             success: function (scope) {
-                var pushData = eval('(' + scope + ')');
+                var pushData = cceval('(' + scope + ')');
                 for (var i = 0; i < pushData.length; i++) {
                     if (selectedVal == pushData[i].No) {
                         html_Select += "<option value=\"" + pushData[i].No + "\" selected='selected'>" + pushData[i].Name + "</option>";
@@ -528,7 +528,7 @@ TransControlFromJson.prototype = {
                 KeyOfEn: keyOfEn
             },
             success: function (data) {
-                var pushData = eval("(" + data + ")");
+                var pushData = cceval("(" + data + ")");
                 for (var i = 0; i < pushData.length; i++) {
                     var mediaId = pushData[i].RefPKVal;
                     var duration = pushData[i].Tag2;
@@ -578,7 +578,7 @@ function WorkCheck_InitHtml() {
             FID: args.FID
         },
         success: function (scorp) {
-            var pushData = eval('(' + scorp + ')');
+            var pushData = cceval('(' + scorp + ')');
             if (pushData.Msg) {
                 _Html = "<li><div style='color: Red;font-size: 0.9em;font-family: Arial;'>" + pushData.Msg + "</div></li>";
             } else {
@@ -749,7 +749,7 @@ function OpenMapView(keyOfen) {
                 KeyOfEn: keyOfen
             },
             success: function (scope) {
-                var pushData = eval('(' + scope + ')');
+                var pushData = cceval('(' + scope + ')');
                 if (pushData.address) {
                     OpenDDBizMapView(pushData.latitude, pushData.longitude, pushData.address);
                 }

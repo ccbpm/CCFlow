@@ -258,7 +258,7 @@
 
         //选中行或者选中复选框时弹出从表页面
         function BootStrapDialog(refPK) {
-            var url = window.location.href;
+            var url = GetHrefUrl();
             url = url.replace("DtlImpByBill.htm", "DtlImpByBillDtl.htm");
             if (url.indexOf("#") != -1)
                 url = url.replace("#", "");

@@ -36,7 +36,7 @@
         function SQLSetting() {
             var flowNo = GetQueryString("FK_Flow");
             var url = "../../FoolFormDesigner/MapExt/PageLoadFullAutoStart.htm?FK_Flow=" + flowNo;
-            window.location.href = url;
+            SetHref(url);
         }
         function Save() {
 
@@ -49,7 +49,7 @@
             if (flow.Update() == 0)
                 flow.Insert();
 
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </head>

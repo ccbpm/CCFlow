@@ -400,7 +400,7 @@
         _this.roleSelect.attr("data-name", _this.oliNameArray)
         if(_this.oliNameArray.length!=0)
             $("#TB_" + this.options.keyOfEn).val(_this.oliNameArray.join(","));
-        SaveVal(_this.options.FK_MapData,_this.options.keyOfEn,oliId,oildName,_this.options.refPK);
+        Savcceval(_this.options.FK_MapData,_this.options.keyOfEn,oliId,oildName,_this.options.refPK);
 
         if (_this.oliIdArray.length > 0) {
             _this.myplaceholder.hide();

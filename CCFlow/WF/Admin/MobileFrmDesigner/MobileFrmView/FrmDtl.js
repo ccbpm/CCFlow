@@ -115,7 +115,7 @@ function Load_DtlInit() {
         $("#dtlDone").off("tap").on("tap", function () {
             Dtl_SaveData();
             // function (data) {
-                // var pushData = eval('(' + data + ')');
+                // var pushData = cceval('(' + data + ')');
                 // if (pushData.Msg) {
                 //     mui.toast(pushData.Msg);
                 //     return;
@@ -179,7 +179,7 @@ function Dtl_SaveData(CallBack) {
     var args = new RequestArgs();
     var dtl_No = $("#HD_CurDtl_No").val();
 
-    var url = window.location.href;
+    var url = GetHrefUrl();
     if (url.indexOf('/jflow-web/') >= 0) {
         var index = url.indexOf('/jflow-web');
         url = url.substring(index);
@@ -391,7 +391,7 @@ function DtlChild_SaveData(CallBack) {
     var dtl_No = $("#HD_CurChildDtl_No").val();
     var revpk = $("#HD_CurDtl_OID").val();
 
-    var url = window.location.href;
+    var url = GetHrefUrl();
     if (url.indexOf('/jflow-web/') >= 0) {
         var index = url.indexOf('/jflow-web');
         url = url.substring(index);

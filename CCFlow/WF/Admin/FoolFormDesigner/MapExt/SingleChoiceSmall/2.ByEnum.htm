@@ -44,7 +44,7 @@
 
             if (en.Update() == 0)
                 en.Insert();
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </head>
@@ -58,6 +58,9 @@
             请选择一个枚举: <select id="DDL_Enums"></select>
             <br />
             系统用枚举值作为该字段的多选.
+        </fieldset>
+        <fieldset>
+            <img src="SingleChouceSmall.png" />
         </fieldset>
     </form>
 </body>

@@ -89,11 +89,11 @@
 
             var val = $("#DDL_List").val();
             if (val == "" || val == undefined) {
-                window.location.href = "GloValStyles.htm";
+                SetHref("GloValStyles.htm");
                 return;
             }
 
-            window.location.href = "GloValStyles.htm?CSS=" + val;
+            SetHref("GloValStyles.htm?CSS=" + val);
             return;
         }
 
@@ -148,7 +148,7 @@
             en.Name = name;
             en.GroupKey = "CSS";
             en.Insert();
-            window.location.href = "?CSS=" + no;
+            SetHref("?CSS=" + no);
         }
         function GenerPinYin(name) {
 
@@ -173,7 +173,7 @@
                 return;
 
             en.Delete();
-            window.location.href = "GloValStyles.htm";
+            SetHref("GloValStyles.htm");
         }
     </script>
 </head>

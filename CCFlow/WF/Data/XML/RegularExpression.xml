@@ -28,10 +28,10 @@
   <Dtl ItemNo="MailNotNull"  ForEvent="onblur"  Exp="/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/" Msg="邮箱格式不正确" />
   <Dtl ItemNo="MailNotNull"  ForEvent="onsubmit"  Exp="/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/" Msg="必填项，邮箱不能为空" />
 
-  <Item No="Num" Name="检查输入是否为数字" Note="应用于检查输入的是否为数字"  ForCtrl="TB" />
+  <Item No="Num" Name="检查输入是否为数字" Note="应用于检查输入的是否为数字"  ForCtrl="TBNum" />
   <Dtl ItemNo="Num"  ForEvent="onblur"  Exp="/^[0-9]*$/" Msg="只能输入数字" />
 
-  <Item No="NumNotNull" Name="检查输入是否为数字(并且提交时不能为空)" Note="应用于检查输入的是否为数字"  ForCtrl="TB" />
+  <Item No="NumNotNull" Name="检查输入是否为数字(并且提交时不能为空)" Note="应用于检查输入的是否为数字"  ForCtrl="TBNum" />
   <Dtl ItemNo="NumNotNull"  ForEvent="onblur"  Exp="/^[0-9]*$/" Msg="只能输入数字" />
   <Dtl ItemNo="NumNotNull"  ForEvent="onsubmit"  Exp="/^[0-9]*$/" Msg="必填项，并且只能输入数字" />
 

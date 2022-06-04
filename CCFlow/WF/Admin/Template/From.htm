@@ -121,7 +121,7 @@
             path = path.replace('//', '/');
             retrunUrl = "?SortNo=" + this.GetQueryString("SortNo");
             var url = "?SortNo=" + this.GetQueryString("SortNo") + "&DirName=" + path;
-            window.location.href = url;
+            SetHref(url);
         }
         //返回上一级
         function RetrunToParent() {
@@ -182,7 +182,7 @@
                 return;
             }
             //若选择的一个模板，则打开此模板
-            var json = eval('(' + data + ')');
+            var json = cceval('(' + data + ')');
 
             var html = "<table>";
             html += "<tr>";

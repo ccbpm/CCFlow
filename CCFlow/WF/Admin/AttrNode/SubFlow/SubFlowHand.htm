@@ -27,7 +27,7 @@
 
             OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
                 if (isReload == true) {
-                    window.location.href = window.location.href;
+                    Reload();
                 }
             });
         }
@@ -39,12 +39,19 @@
 
             //求出来已经设置的延续子流程.
             var nodeID = GetQueryString("FK_Node");
-            var ens = new Entities("BP.WF.Template.SubFlowHands");
+            var ens = new Entities("BP.WF.Template.SFlow.SubFlowHands");
             ens.Retrieve("FK_Node", nodeID, "SubFlowType", 0, "Idx");
 
             var node = new Entity("BP.WF.Node", nodeID);
             node.SetPara("SubFlowHandNum", ens.length);
             node.Update();
+
+            $("#Btn_AddGroup").hide();
+            var webUser = new WebUser();
+            if (webUser.CCBPMRunModel == 1) {
+                $("#Btn_AddGroup").show();
+            }
+
 
             //console.log(ens);
 
@@ -57,7 +64,7 @@
 
                 var enSub = new Entity("BP.WF.Flow", en.SubFlowNo);
 
-              //  html += "<td>" + en.SubFlowName + "</td>";
+                //  html += "<td>" + en.SubFlowName + "</td>";
                 html += "<td>" + enSub.Name + "</td>";
 
                 html += "<td>" + en.SubFlowModelText + "</td>";
@@ -80,14 +87,14 @@
         });
 
         function DoUp(mypk) {
-            var en = new Entity("BP.WF.Template.SubFlowHand", mypk);
+            var en = new Entity("BP.WF.Template.SFlow.SubFlowHand", mypk);
             en.DoMethodReturnString("DoUp");
-            window.location.href = window.location.href;
+            Reload();
         }
         function DoDown(mypk) {
-            var en = new Entity("BP.WF.Template.SubFlowHand", mypk);
+            var en = new Entity("BP.WF.Template.SFlow.SubFlowHand", mypk);
             en.DoMethodReturnString("DoDown");
-            window.location.href = window.location.href;
+            Reload();
         }
 
         //查询集团的流程.
@@ -95,13 +102,13 @@
             var webUser = new WebUser();
 
             var url = "SubFlowHandDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.GroupNo;
-            OpenEasyUiDialogExt(url, "选择子流程", 600, 500, true);
+            OpenEasyUiDialogExt(url, "选择子流程", 700, 600, true);
         }
         //查询集团的流程.
         function AddOrg() {
             var webUser = new WebUser();
             var url = "SubFlowHandDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&OrgNo=" + webUser.FK_Dept;
-            OpenEasyUiDialogExt(url, "选择子流程", 500, 400, true);
+            OpenEasyUiDialogExt(url, "选择子流程", 700, 600, true);
         }
 
         //删除成功.
@@ -110,18 +117,18 @@
             if (confirm('您确定要删除吗？') == false)
                 return;
 
-            var en = new Entity("BP.WF.Template.SubFlowHand", pk);
+            var en = new Entity("BP.WF.Template.SFlow.SubFlowHand", pk);
             en.Delete();
-            window.location.href = window.location.href;
+            Reload();
         }
 
         //编辑.
         function Edit(pk) {
 
-            // var url = "../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowHand&PKVal=" + pk;
-            var url = "../../../Comm/RefFunc/En.htm?EnName=BP.WF.Template.SubFlowHand&PKVal=" + pk;
+            // var url = "../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SFlow.SubFlowHand&PKVal=" + pk;
+            var url = "../../../Comm/RefFunc/En.htm?EnName=BP.WF.Template.SFlow.SubFlowHand&PKVal=" + pk;
 
-            OpenEasyUiDialogExt(url, '编辑', 800, 400, true);
+            OpenEasyUiDialogExt(url, '编辑', 900, 800, true);
             //window.location.href = url;
 
         }
@@ -134,17 +141,23 @@
 <body>
     <div class="container-full">
         <div class="attrnode-bar-header">
+
             <span class="pull-right">
+                <button id="Btn_AddGroup" name="Btn_AddGroup" onclick="AddGroup();">增加集团子流程</button>
+                <button id="Btn_AddMyOrg" class="cc-btn-tab btn-batch" name="Btn_AddMyOrg" onclick="AddOrg();">增加本组织子流程</button>
+                <button id="Btn_Help" name="Btn_Help" onclick="Help();">帮助</button>
+            </span>
+
+            <!--<span class="pull-right">
                 <button id="Btn_New" name="Btn_New" onclick="AddGroup();">增加子流程</button>
                 <button id="Btn_Help" name="Btn_Help" onclick="Help();">帮助</button>
-
-            </span>
+            </span>-->
             <!--<strong>
-            手动子流程- <a href="javascript:ShowHidden('img')">运行效果</a>
-        </strong>-->
+                手动子流程- <a href="javascript:ShowHidden('img')">运行效果</a>
+            </strong>-->
         </div>
 
-        <table id="Table1" style="width: 100%" class="table">
+        <table id="Table1" style="width: 95%" class="table">
 
             <tr>
                 <th>
@@ -176,17 +189,19 @@
         </table>
         <br />
         <!--<input type="button" value="增加集团子流程" onclick="AddGroup()" />
-    <input type="button" value="增加本组织子流程" onclick="AddOrg()" />-->
-
+        <input type="button" value="增加本组织子流程" onclick="AddOrg()" />-->
 
         <div style="position:relative;" id="Msg">
         </div>
 
+        <fieldset id="img">
+            <legend>帮助</legend>
+            <ul>
+                <li> 手工启动的子流程，依附于子流程组件。</li>
+                <li> 使用子流程组件，可以启用一个或者多个子流程。</li>
+            </ul>
+            <img src="SubFlowHand-1.png" class="HelpImg" style="width:50%;" />
 
-        <img src="SubFlowHand-1.png" class="HelpImg" />
-
-
-        <fieldset id="img" style="display: none">
         </fieldset>
 </body>
 </html>

@@ -48,7 +48,7 @@
                 return;
             }
 
-            mdinfo = eval('(' + data + ')');
+            mdinfo = cceval('(' + data + ')');
 
             if (mdinfo.IsExist == "0") {
                 isEdit = "1";
@@ -60,7 +60,7 @@
 
             oid = mdinfo.OID;
 
-            var url = "./Frm.aspx?FK_MapData=" + mapdata + "&IsEdit=" + isEdit + "&IsPrint=" + isPrint + "&OID=" + oid + "&UserNo=" + mdinfo.UserNo + "&SID=" + mdinfo.SID + "&IsLoadData=" + isLoadData;
+            var url = "./Frm.aspx?FK_MapData=" + mapdata + "&IsEdit=" + isEdit + "&IsPrint=" + isPrint + "&OID=" + oid + "&UserNo=" + mdinfo.UserNo + "&Token=" + mdinfo.SID + "&IsLoadData=" + isLoadData;
             var se = location.search.substr(1).split('&');
             var passed = "fk_mapdata=isedit=isprint=oid=userno=sid=isloaddata=m=";
             var si;

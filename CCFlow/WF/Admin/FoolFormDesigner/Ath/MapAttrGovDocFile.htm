@@ -22,7 +22,7 @@
 
             var nodeID = GetQueryString("FK_Node");
             var frmID = GetQueryString("FK_MapData");
-            var ens = new Entities("BP.WF.Template.FrmPrintTemplates");
+            var ens = new Entities("BP.WF.Template.Frm.FrmPrintTemplates");
             ens.Retrieve("FK_MapData", frmID);
 
             var fk_FrmPrintTemplate = GetQueryString("FK_FrmPrintTemplate");
@@ -67,10 +67,10 @@
 
             if (window.confirm('您确定要删除[' + no + ']吗？') == false)
                 return;
-            var en = new Entity("BP.WF.Template.FrmPrintTemplate");
+            var en = new Entity("BP.WF.Template.Frm.FrmPrintTemplate");
             en.SetPKVal(no);
             en.Delete();
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function Btn_Save_Click() {
@@ -103,7 +103,7 @@
                         alert(data);
                         return;
                     }
-                    window.location.href = window.location.href;
+                    Reload();
                     return;
                 }
             });

@@ -199,6 +199,12 @@
                 en.Insert();
 
             }
+
+
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = 4;
+            node.Update();
+
             parent.location.reload(); 
             //self.opener.location.reload(); 
             //window.opener.document.location.reload();

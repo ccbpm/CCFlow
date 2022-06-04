@@ -275,7 +275,7 @@
                     }
                     var redirectUrl = data.split("@SelfUrl")[1]; //URL时直接返回了路径
                     //将URL中的@参数替换成值
-                    window.location.href = redirectUrl;
+                    SetHref(redirectUrl);
                     return;
                 } else {
                     setDataArr = JSON.parse(data).Hashtable;
@@ -591,7 +591,7 @@
                     if (defVal != undefined && defVal.trim() != '') {
                         defVal = defVal.replace('<br/>', '');
                         defVal = defVal.replace('@Now', "(new Date())");
-                        defVal = new Date(eval(defVal));
+                        defVal = new Date(cceval(defVal));
                         defVal = defVal.FormateDate("yyyy-MM-dd");
                     }
                     conHtml += '<input value="' + defVal + '"  onfocus="' + "WdatePicker({dateFmt:'yyyy-MM-dd'})" + '"' + " type='text' value='2016-10-16' name='" + paramName + "' id='" + paramName + "'/>";

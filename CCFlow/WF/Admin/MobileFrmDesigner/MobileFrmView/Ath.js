@@ -11,7 +11,7 @@ function InitAth(frmData, gf) {
     if (ath == null) {
         return "";
     }
-    
+
 
 
     ////判断是否设置了附件权限
@@ -41,10 +41,10 @@ function InitAth(frmData, gf) {
             var attr = GetMapAttr(ath.MyPK);
             if (attr.UIVisible == 0)
                 return "";
-        }else
+        } else
             return "";
     }
-       
+
 
     var html = "";
     html += "<div class=\"mui-table-view-divider\"><h5 style='color:black;'>" + gf.Lab + "</h5></div>";
@@ -70,11 +70,11 @@ function GetAllAttachments(ath) {
     var jsonString;
     IsReadonly = GetQueryString("IsReadonly");
     //获取上传的附件文件
-//    var CCForm = url.substring(0, url.lastIndexOf('/') + 1) + "CCForm/ProcessRequest.do";
-        var FK_FrmAttachment = ath.MyPK;
-        var FK_MapData = ath.FK_MapData;
-//    var noOfObj = athPK.substr(athPK.lastIndexOf("_") + 1);
-    var href = window.location.href;
+    //    var CCForm = url.substring(0, url.lastIndexOf('/') + 1) + "CCForm/ProcessRequest.do";
+    var FK_FrmAttachment = ath.MyPK;
+    var FK_MapData = ath.FK_MapData;
+    //    var noOfObj = athPK.substr(athPK.lastIndexOf("_") + 1);
+    var href = GetHrefUrl();
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     var FK_Flow = GetQueryString("FK_Flow");
     var FID = GetQueryString("FID");
@@ -92,19 +92,19 @@ function GetAllAttachments(ath) {
     handler.AddPara("NodeID", NodeID);
     handler.AddPara("WorkID", WorkID);
     var data = handler.DoMethodReturnString("Ath_Init");
-        if (data.indexOf('err@') == 0) {
-            mui.alert(data);
-            return;
-        }
+    if (data.indexOf('err@') == 0) {
+        mui.alert(data);
+        return;
+    }
 
 
-        data = JSON.parse(data);
+    data = JSON.parse(data);
 
-        var athDesc = data["AthDesc"][0];
+    var athDesc = data["AthDesc"][0];
 
-        var dbs = data["DBAths"];
+    var dbs = data["DBAths"];
 
-        return dbs;
+    return dbs;
 }
 
 //判断上传文件的后缀名是否是Img类型
@@ -146,12 +146,12 @@ function uploadFile(fileObj, FK_FrmAttachment) {
     if (plant == 'CCFlow') {
         Url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName + "&FK_FrmAttachment=" + FK_FrmAttachment + "&WorkID=" + WorkID + "&PKVal=" + pkval + "&AttachPK=" + FK_FrmAttachment + "&t=" + new Date().getTime();
     } else {
-        var currentPath = window.document.location.href;
+        var currentPath = GetHrefUrl();
         var path = currentPath.substring(0, currentPath.indexOf('/CCMobile') + 1);
         var Url = path + "WF/Ath/AttachmentUploadS.do?FK_FrmAttachment=" + FK_FrmAttachment + "&PKVal=" + pkval;
     }
-    
-   
+
+
 
 
     var IsUpSuccess = false;
@@ -183,17 +183,18 @@ function downLoad(mypk) {
         var Url = 'CCForm/DownFile.aspx?DoType=Down&MyPK=' + mypk + '&PKVal=' + mypk;
     else {
         //按照数据流模式下载。
-        var currentPath = window.document.location.href;
+        var currentPath = GetHrefUrl();
         var path = currentPath.substring(0, currentPath.indexOf('/CCMobile') + 1);
         var Url = path + "WF/Ath/downLoad.do?MyPK=" + mypk + "&PKVal=" + mypk;
     }
 
-//    return Url;
-//    //按照数据流模式下载。
-//    var currentPath = window.document.location.href;
-//    var path = currentPath.substring(0, currentPath.indexOf('/CCMobile') + 1);
-//    var Url = path + "/CCMobile/CCForm/downloadFile.do?MyPK=" + mypk + "&PKVal=" + mypk;
-    window.location.href = Url;
+    SetHref(Url);
+    //    return Url;
+    //    //按照数据流模式下载。
+    //    var currentPath = GetHrefUrl();
+    //    var path = currentPath.substring(0, currentPath.indexOf('/CCMobile') + 1);
+    //    var Url = path + "/CCMobile/CCForm/downloadFile.do?MyPK=" + mypk + "&PKVal=" + mypk;
+    //window.location.href = Url;
 }
 
 //文件下载
@@ -202,10 +203,10 @@ function GetFileStream(mypk) {
         var Url = 'CCForm/DownFile.aspx?DoType=Down&MyPK=' + mypk + '&PKVal=' + mypk;
     } else {
         //按照数据流模式下载。
-        var currentPath = window.document.location.href;
+        var currentPath = GetHrefUrl();
         var path = currentPath.substring(0, currentPath.indexOf('/CCMobile') + 1);
         var Url = path + "WF/Ath/downLoad.do?MyPK=" + mypk + "&PKVal=" + mypk;
     }
-    
+
     return Url;
 }

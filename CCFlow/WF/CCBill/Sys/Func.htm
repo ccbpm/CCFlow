@@ -30,7 +30,7 @@
             var isHaveParas = attrs.length > 0 ? true : false;
 
             if (isHaveParas == true)
-                window.location.href = window.location.href.replace("Func.htm", "FuncParas.htm");
+                SetHref(GetHrefUrl().replace("Func.htm", "FuncParas.htm"));
 
             $("#Btn_Done").html("执行:" + enFunc.Name);
 
@@ -82,7 +82,7 @@
                         $("#Btn_Done").attr('disabled', true);
                     break;
                 case 1://执行JavaScript
-                    data = eval(enFunc.MethodID + "()");
+                    data = cceval(enFunc.MethodID + "()");
                     layer.alert(data);
                     break;
                 case 2://URL模式

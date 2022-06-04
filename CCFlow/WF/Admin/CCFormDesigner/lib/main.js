@@ -3358,7 +3358,7 @@ function LoadTempDiagram(frmID) {
 
     action(data);
 
-    var obj = eval('(' + data + ')');
+    var obj = cceval('(' + data + ')');
 
     //alert(obj);
     //console.log(obj);

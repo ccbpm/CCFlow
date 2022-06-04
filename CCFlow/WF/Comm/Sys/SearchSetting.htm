@@ -94,12 +94,12 @@
             myen.GroupTitle = en.GroupTitle;
             myen.Save();
 
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function ShowCols() {
             var url = "SearchSettingCols.htm?EnsName=" + GetQueryString("EnsName");
-            window.location.href = url;
+            SetHref(url);
         }
 
         function StartFoolFormDesigner() {
@@ -111,13 +111,13 @@
         //导入设置.
         function Imp() {
             var url = "ImpData.htm?EnsName=" + GetQueryString("EnsName");
-            window.location.href = url;
+            SetHref(url);
         }
 
         //多表头设置.
         function MTitle() {
             var url = "MultiTitle.htm?EnsName=" + GetQueryString("EnsName");
-            window.location.href = url;
+            SetHref(url);
         }
 
         //清除傻瓜表达设计内容

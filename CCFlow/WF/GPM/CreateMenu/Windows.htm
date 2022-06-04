@@ -28,18 +28,20 @@
 
             //更新节点表单类型.
             var moduleNo = GetQueryString("ModuleNo");
-            var en = new Entity("BP.GPM.Menu2020.Menu");
+            var en = new Entity("BP.CCFast.CCMenu.Menu");
             en.ModuleNo = moduleNo;
             en.Name = $("#TB_Title").val();
             //   en.UrlExt = $("#TB_Url").val();
 
             en.MenuModel = "Windows"; //类型为.
 
+            en.Tag1 = $("#DDL_Style").val(); //风格定义.
+
             en.Insert();
             alert("创建成功，您可以在在菜单里执行高级编辑与授权.");
 
-            window.location.href = "../../Comm/En.htm?EnName=BP.GPM.Menu2020.Menu&No=" + en.No;
-            // window.location.href = "../Menus.htm";
+            SetHref("../../Comm/En.htm?EnName=BP.CCFast.CCMenu.Menu&No=" + en.No);
+            // SetHref( "../Menus.htm";
         }
     </script>
 </head>

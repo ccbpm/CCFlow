@@ -109,7 +109,7 @@ function LoadGridData(pageNumber, pageSize) {
                 return;
             }
 
-            var pushData = eval('(' + js + ')');
+            var pushData = cceval('(' + js + ')');
             var fitColumns = true;
             if (pushData.columns.length > 7) {
                 fitColumns = false;

@@ -60,7 +60,7 @@
             var myPK = GetQueryString('MyPK');
             var DBType = $("#DDL_DBType").val();
             var url = 'TBFullCtrlDtl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK + '&DBType=' + DBType;
-            window.location.href = url;
+            SetHref(url);
             return;
         }
 
@@ -69,7 +69,7 @@
             var DBType = $("#DDL_DBType").val();
             var myPK = GetQueryString('MyPK');
             var url = 'TBFullCtrlDDL.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK + '&DBType=' + DBType;
-            window.location.href = url;
+            SetHref(url);
             return;
         }
 
@@ -92,7 +92,7 @@
             if (en.Update() == 0)
                 en.Insert();
 
-            window.location.href = "TBFullCtrl.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&MyPK=" + mypk + "&M=" + Math.random();
+            SetHref("TBFullCtrl.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&MyPK=" + mypk + "&M=" + Math.random());
             return;
 
         }
@@ -106,7 +106,7 @@
             handler.AddPara("KeyOfEn", GetQueryString("KeyOfEn"));
             var data = handler.DoMethodReturnString("TBFullCtrl_Delete");
             alert(data);
-            window.location.href = window.location.href;
+            Reload();
             return;
         }
     </script>

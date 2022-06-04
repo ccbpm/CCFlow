@@ -31,7 +31,7 @@
 
         function Save() {
 
-            var en = new Entity("BP.GPM.PowerCenter");
+            var en = new Entity("BP.CCFast.CCMenu.PowerCenter");
             en.CopyURL();
             en.CtrlModel = "SQL";
 
@@ -41,7 +41,7 @@
 
             var url = "../PowerCenter.htm";
             url += "?CtrlObj=" + GetQueryString("CtrlObj") + "&CtrlPKVal=" + GetQueryString("CtrlPKVal") + "&CtrlGroup=" + GetQueryString("CtrlGroup");
-            window.location.href = url;
+            SetHref(url);
             window.parent.selectStasWindowClose("确定");
         }
     </script>

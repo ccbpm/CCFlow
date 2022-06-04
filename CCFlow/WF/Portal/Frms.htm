@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>表单</title>
     <link rel="stylesheet" type="text/css" href="./icons/font-icons.min.css">
     <link rel="stylesheet" type="text/css" href="./icons/icons.css">
     <link rel="stylesheet" type="text/css" href="./layui/css/layui.css">
@@ -67,7 +67,7 @@
         
         .flow .row .folder-item {
             box-sizing: border-box;
-            width: 76%;
+            /*width: 76%;*/
             padding-left: 20px;
             cursor: pointer;
         }
@@ -114,20 +114,18 @@
                         <i v-if="item.children.length > 0" class="layui-icon" :class="item.open ? 'layui-icon-up':'layui-icon-right'"></i>
                         <i v-else class="layui-icon layui-icon-subtraction"></i>
                     </div>
-                    <div class="item folder-item item-top-dp" style="text-align: left; background-color:azure;" :data-no="item.No" :data-name="item.Name" :data-idx="index">
-
-
+                    <div class="item item-name folder-item item-top-dp" style="text-align: left; background-color:azure;" :data-no="item.No" :data-name="item.Name" :data-idx="index">
                         <i class="icon-folder" style="margin-right: 8px"></i>
                         <span>{{item.Name}}</span>
 
-                        <!--@click.stop="EditSort(item.No,item.Name)"-->
-                        <!--<div class="item item-other">{{item.WFSta2 + item.WFSta3 + item.WFSta5}}</div>
-                        <div class="item item-other">{{item.WFSta2}}</div>
-                        <div class="item item-other">{{item.WFSta5}}</div>-->
-
                     </div>
-
-
+                    <div class="item item-other">
+                        <button @click.stop="NewFlow(item.No)" :data-no="item.No" :data-name="item.Name" :data-idx="index" class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs">
+                            新建表单
+                        </button>
+                    </div>
+                    <div class="item item-other"></div>
+                    <div class="item item-other"></div>
                     <div class="item item-other ">
                         <button @click.stop :data-no="item.No" :data-name="item.Name" :data-idx="index" class="layui-btn layui-btn-primary layui-border-black layui-btn-sm t-btn">
                             <i class="layui-icon layui-icon-down layui-font-12"></i> 目录

@@ -21,25 +21,14 @@
 
             var dblist = new Entity("BP.CCBill.DBList", frmID);
 
-            dblist.ExpList = dblist.ExpEn.replace('~', '\'');
-            dblist.ExpList = dblist.ExpEn.replace('~', '\'');
+            dblist.ExpList = dblist.ExpList.replace('~', '\'');
+            dblist.ExpList = dblist.ExpList.replace('~', '\'');
 
             $("#TB_DBSrc").val(dblist.ExpList);
-            $("#TB_MainTable").val(dblist.MainTable);
-            $("#TB_MainTablePK").val(dblist.MainTablePK);
-
+           
         });
 
-        function GetDataType(datatype) {
-            if (datatype == 1) return "String";
-            if (datatype == 2) return "Int";
-            if (datatype == 3) return "Float";
-            if (datatype == 4) return "Boolean";
-            if (datatype == 5) return "Double";
-            if (datatype == 6) return "Date";
-            if (datatype == 7) return "DateTime";
-            if (datatype == 8) return "Money";
-        }
+      
         /**
          * 获取数据结构
          */
@@ -47,35 +36,12 @@
             var frmID = GetQueryString("FrmID");
             var dblist = new Entity("BP.CCBill.DBList", frmID);
             dblist.ExpList = $("#TB_DBSrc").val();
-
-            dblist.MainTable = $("#TB_MainTable").val();
-            dblist.MainTablePK = $("#TB_MainTablePK").val();
-
-            if (dblist.ExpList.indexOf('@Key') == -1) {
-                alert("数据源里必须包含@Key参数.");
+            if (dblist.ExpList == "") {
+                alert("列表URL不能为空");
                 return;
             }
-
             dblist.Update();
-            window.location.href = window.location.href;
-        }
-        /**
-         *修改字段名称、保存应用
-         */
-        function App() {
-
-            var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin_DBList");
-            handler.AddUrlData();
-            handler.AddFormData();
-            var data = handler.DoMethodReturnString("FieldsORM_App");
-            alert(data);
-            window.location.href = window.location.href;
-        }
-        function ViewFrm() {
-            var frmID = GetQueryString("FrmID");
-            //http://localhost:2296/WF/CCForm/FrmGener.htm?1=2&t=0.7413469328474454&FrmID=Dict_XueShengTaiZhang&FK_MapData=Dict_XueShengTaiZhang
-            var url = "../../../CCForm/FrmGener.htm?FrmID=" + frmID + "&FK_MapData=" + frmID;
-            window.open(url);
+            Reload();
         }
     </script>
 </head>
@@ -86,33 +52,26 @@
         <fieldset>
             <legend>列表数据源: 必须有：OID,BillNo,Title 字段.</legend>
             <textarea value="" id="TB_DBSrc" name="TB_DBSrc"> </textarea>
-            数据源主表：
-            <input type="text" id="TB_MainTable" value="" />
-            数据源主键盘：
-            <input type="text" id="TB_MainTablePK" value="" />
-
             <br />
             <input type="button" value="保存并检查" id="Btn_Save" onclick="Save()" />
-
-            <!--<div id="docs"></div>
-            <input type="button" value="保存字段名并提交应用" id="Btn_App" onclick="App()" />
-            <input type="button" value="表单预览" id="Btn_ViewFrm" onclick="ViewFrm()" />-->
-
             <legend>
                 说明：
             </legend>
             <ul>
 
-                <li> 单笔记录数据源也叫实体数据源，他是列表可以看到的数据源。 </li>
-                <li> 表达式里必须有一个@Key参数，就是主键。 </li>
+                <li>OID是内置主键，BillNo是编号, Title 是名称， RDT是创建时间(如果没有就 '' as RDT) </li>
 
-                <li> 只有提交应用才能生效 </li>
-
-                <li> 如果字段类型不匹配，请打开字段属性，进行编辑，然后把string类型的转化为其他类型. </li>
-
+                <li> 如果是多表关联查询时需要设置对应主表的别名，便于查询条件的拼接。 </li>
+                <li> 列表数据源不能为空。 </li>
                 <li>
-                    SELECT A.No as OID, A.No as BillNo, a.Name AS Title, A.Tel,A.Email , B.No as Dept, B.Name AS DeptT
-                    FROM Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No AND A.No='@Key'
+                    查询条件相关的信息：<br />
+                    1.查询条件已JSON数据格式传递给请求的URL<br />
+                    2.参数的查询：<br />
+                    &nbsp;&nbsp;①关键字的查询传递参数是SearchKey,如果输入的关键字内容为空时不传递参数<br />
+                    &nbsp;&nbsp;②时间段的查询传递的参数是DTFrom、DTTo<br />
+                    &nbsp;&nbsp;③其他字段的参数查询是以字段名传递，请检测单实体URL返回的字段名和查询的字段名是否一一对应<br />
+                    3.数据返回结果 JSON字符串格式<br />
+                    &nbsp;&nbsp;{"count":10,"data":[{}]}
                 </li>
 
             </ul>

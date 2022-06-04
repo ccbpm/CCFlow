@@ -63,7 +63,7 @@
              ShowIt: function (m) {
                  var url = 'Method.htm?M=' + m;
                  OpenEasyUiDialog(url, "eudlgframe", "方法执行", 600, 450, "icon-edit", true, null, null, null, function () {
-                     window.location.href = window.location.href;
+                     Reload();
                  });
              }
          }

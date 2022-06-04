@@ -7,7 +7,6 @@
     2，需要 FK_Flow, FK_Node,WorkID, FID.
     3, 调用方法 ReturnWork.htm?FK_Flow=001&FK_Node=103&WorkID=232&FID=23
     -->
-    
     <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="../../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
     <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
@@ -50,7 +49,7 @@
                 return;
             }
 
-            var en = new Entity("BP.GPM.PowerCenter");
+            var en = new Entity("BP.CCFast.CCMenu.PowerCenter");
             en.CopyURL();
             en.CtrlModel = "Emps";
 
@@ -60,13 +59,13 @@
 
             var url = "../PowerCenter.htm";
             url += "?CtrlObj=" + GetQueryString("CtrlObj") + "&CtrlPKVal=" + GetQueryString("CtrlPKVal") + "&CtrlGroup=" + GetQueryString("CtrlGroup");
-            window.location.href = url;
+            SetHref(url);
 
             window.parent.selectEmpsWindowClose("确定");
 
         }
-
-        var pageData = { IsSelectMore: true, FK_Dept: 100 || '', ParentDept: '' };
+        var webUser = new WebUser();
+        var pageData = { IsSelectMore: true, FK_Dept: webUser.FK_Dept || '', ParentDept: '' };
         var returnVal = {};
         var isFirst = true;
 
@@ -88,7 +87,7 @@
             //返回节点数组
             var initNodeData = function (data, fk_dept2) {
 
-                data = eval('(' + data + ')');
+                data = cceval('(' + data + ')');
 
                 var fk_dept = fk_dept2; //pageData.FK_Dept;
                 var parentNo = undefined;
@@ -303,7 +302,10 @@
             }
             $.each(nameArrs, function (i, selected) {
                 for (var property in returnVal) {
-                    returnVal[property].push(selected[property]);
+                    var val = selected[property];
+                    if (property == "No")
+                        val = val.replace("Emp_", "");
+                    returnVal[property].push(val);
                 }
             });
             for (var property in nameArrs[0]) {
@@ -331,7 +333,7 @@
         function Close() {
             var url = "../PowerCenter.htm";
             url += "?CtrlObj=" + GetQueryString("CtrlObj") + "&CtrlPKVal=" + GetQueryString("CtrlPKVal") + "&CtrlGroup=" + GetQueryString("CtrlGroup");
-            window.location.href = url;
+            SetHref(url);
 
             window.parent.selectEmpsWindowClose("确定");
         }

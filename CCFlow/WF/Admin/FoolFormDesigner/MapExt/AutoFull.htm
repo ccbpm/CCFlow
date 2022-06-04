@@ -62,7 +62,7 @@
             en.SetValByKey("Doc", doc);
             en.Save();
 
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function Delete() {
@@ -76,7 +76,7 @@
             en.MyPK = mypk;
             en.Delete(); //执行删除.
 
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </head>

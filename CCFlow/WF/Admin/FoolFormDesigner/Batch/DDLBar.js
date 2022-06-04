@@ -4,7 +4,7 @@ function InitBar(optionKey) {
 
     if (optionKey == null) {
         // http://111.111.11:/xxx.htm?x=111;
-        var url = window.location.href;
+        var url = GetHrefUrl();
         optionKey = "111.htm"; //怎么求？
     }
 
@@ -70,7 +70,7 @@ function changeOption() {
     var optionKey = optionKey = sele[index].value;
 
     var url = GetUrl(optionKey);
-    window.location.href = url + "?FrmID=" + GetQueryString("FrmID");
+    SetHref(url + "?FrmID=" + GetQueryString("FrmID"));
 }
 
 function GetUrl(optionKey) {

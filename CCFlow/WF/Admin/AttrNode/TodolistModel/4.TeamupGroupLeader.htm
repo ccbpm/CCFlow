@@ -35,7 +35,7 @@
             node.TeamLeaderConfirmRole = $("#DDL_TeamLeaderConfirmRole option:selected").val();
             node.TeamLeaderConfirmDoc = $("#TB_TeamLeaderConfirmDoc").val();
             node.Update();
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </head>
@@ -51,7 +51,7 @@
                 </label>
             </legend>
             <ul style="color: Gray">
-                <li>这个模式与协作模式区别在于，如果当前的人员中有一个是组长（领导），他在执行发送的时候就标记这个流程结束。</li>
+                <li>这个模式与协作模式区别在于，如果当前的人员中有一个是组长（领导），他在执行发送的时候就标记这个节点工作结束。</li>
                 <li>这种模式有如下3中情况：</li>
                 <li>第一种：接受人员列表里没有领导/组长，这种模式与协作模式是一样的，就是所有的成员都表态（举手）才能向下发送。</li>
                 <li>第二种：只有一个领导/组长的情况，领导/组长向下发送的时候，标识该节点完成。比如: 当前节点是一个采样节点，采样组有1个组长n个组员，只有组长向下发送的时候才标记次该工作完成。</li>

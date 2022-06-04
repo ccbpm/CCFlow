@@ -153,7 +153,7 @@
             }
             if (data.indexOf('url@') == 0) {
                 data = data.replace('url@./WorkOpt/', './');
-                window.location.href = data;
+                SetHref(data);
                 return;
             }
 

@@ -134,7 +134,7 @@ function Admin_FromTemplateAttr(frmID) {
 
     //流程单据.
     if (en.EntityType == 0)
-        url = '../Comm/En.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=' + frmID;
+        url = '../Comm/En.htm?EnName=BP.WF.Template.Frm.MapFrmFree&PKVal=' + frmID;
 
     if (en.EntityType == 1)
         url = '../Comm/En.htm?EnName=BP.CCBill.FrmBill&PKVal=' + frmID;

@@ -141,7 +141,7 @@
         function loadTree(rootNo, global) {
 
 
-            var ens = new Entities("BP.GPM.Depts"); //BP.Port.Depts
+            var ens = new Entities("BP.Port.Depts"); //BP.Port.Depts
             ens.RetrieveAll();
             var jsonTree = createJsonToTree(ens, rootNo);
             $('#tree').treeview({

@@ -83,7 +83,13 @@
             var node = new Entity("BP.WF.Template.Selector", nodeID);
             node.SelectorModel = SelectorModel.DeptAndStation;
             node.Update();
-            alert("保存成功.");
+
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = 4;
+            node.Update();
+
+            Reload();
+            //alert("保存成功.");
         }
     </script>
 </head>

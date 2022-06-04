@@ -20,6 +20,7 @@
     <script src="../Comm/JScript.js" type="text/javascript"></script>
     <script src="FrmDBVer.js" type="text/javascript"></script>
     <script src="FrmFool.js" type="text/javascript"></script>
+    <script src="../Scripts/layui/LayuiDialog.js"></script>
     <style type="text/css">
         .layui-btn-primary {
             border-radius: 6px !important
@@ -86,16 +87,17 @@
                     <div class="layui-col-md12" style=" background-color:white">
                         <div class="layui-card-body">
                             <div class="layui-row">
-                                <div class="layui-col-md2 formTree">&nbsp;&nbsp;选择表单</div>
+                                <div class="layui-col-md2 formTree">选择表单</div>
                                 <div class="layui-col-md2 formTree">
                                     <select id='DDL_FormTree' name='DDL_FormTree' lay-filter='FormTree'></select>
                                 </div>
-                                <div class="layui-col-md2">&nbsp;&nbsp;主版本 </div>
-                                <div class="layui-col-md3 ">
-                                    <select id='DDL_MainVer' name='DDL_MainVer' lay-filter='MainVer'></select>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-md5 ">
+                                    主版本<select id='DDL_MainVer' name='DDL_MainVer' lay-filter='MainVer'></select>
                                 </div>
-                                <div class="layui-col-md2">&nbsp;&nbsp;比对版本&nbsp; </div>
-                                <div class="layui-col-md3 ">
+                                <div class="layui-col-md5 ">
+                                    比对版本
                                     <select id='DDL_CompareVer' name='DDL_CompareVer' lay-filter='CompareVer'></select>
                                 </div>
                             </div>

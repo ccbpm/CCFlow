@@ -33,7 +33,7 @@
 
             if (data.indexOf('url@') == 0) {
                 data = data.replace('url@', ''); //如果返回url，就直接转向.
-                window.location.href = data;
+                SetHref(data);
                 return;
             }
 

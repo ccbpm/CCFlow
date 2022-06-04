@@ -1,11 +1,13 @@
 ﻿
-new Vue({
+var myvue=new Vue({
     el: '#FrmBBSlist',
     data: {
         flowNodes: [],
         expandAll: false,
         loadingDialog: false,
         webuser: '',
+        workID: null,
+        frmID: null,
         isReadonly:false
     },
     methods: {
@@ -14,7 +16,7 @@ new Vue({
             var input = $("#reply-input")
             var en = new Entity("BP.CCBill.FrmBBS");
             en.Name = input.val();
-            en.WorkID = GetQueryString("WorkID");
+            en.WorkID = this.workID; 
             en.FrmID = GetQueryString("FrmID");
             en.ParentNo = "0";
             en.Insert();
@@ -35,9 +37,9 @@ new Vue({
         },
         Repay: function (index,No) {
             var noid = No;
-            var tag = "<textarea id = 'Retext" + index +"' style = 'height: 120px; width: 100%;' placeholder = '期待您的回复！' spellcheck = 'false' ></textarea>";
+            var tag = "<textarea id = 'Retext" + index +"' style = 'height: 40px; width: 100%;' placeholder = '期待您的回复！' spellcheck = 'false' ></textarea>";
             tag += "<a onclick='SaveAsReply(" + index + ")' id='Renum" + index + "' data-noid=" + No +"  class='layui-btn layui-btn-sm top10'>回复</a>";
-            tag += "<a onclick='Closeq(" + index +")'  class='layui-btn layui-btn-primary layui-btn-sm top10'>取消回复</a>";
+            tag += "<a onclick='Closeq(" + index +")'  class='layui-btn layui-btn-primary layui-btn-sm top10'>取消</a>";
             tag += "<a  onclick='UploadFile(" + index +")' class='layui-btn layui-btn-primary layui-btn-sm top10'>上传附件</a>";
             tag += "<input id='" + index + "' name='" + index+"' type='file' style='visibility: hidden'>"
             var num = index
@@ -47,16 +49,7 @@ new Vue({
         downloadFile: function (frmBBS) {
             var path = frmBBS.MyFilePath;
             path = basePath + "/" + path.substr(path.indexOf("DataUser"), path.length);
-            var link = document.createElement('a');
-            link.setAttribute("download", "");
-            link.href = path;
-            link.click();
-
-            var x = new XMLHttpRequest();
-            x.open("GET", url, true);
-            x.responseType = 'blob';
-            x.onload = function (e) { download(x.response, frmBBS.MyFileName , "image/gif"); }
-            x.send();
+            SetHref(path);
 
         }
     },
@@ -68,22 +61,29 @@ new Vue({
             event.stopPropagation();
         }
 
+          this.workID = GetQueryString("WorkID");
+        if (this.workID == null)
+            this.workID = GetQueryString("No");
+        if (this.workID == null)
+            this.workID = GetQueryString("MyPK");
 
-        var workID = GetQueryString("WorkID");
+
+
         var frmID = GetQueryString("FrmID");
 
         //查询出来数据.
         var ens = new Entities("BP.CCBill.FrmBBSs");
-        ens.Retrieve("WorkID", workID, "ParentNo",0);
+        ens.Retrieve("WorkID", this.workID, "ParentNo", 0);
+
         systems = obj2arr(ens)
         for (var i = 0; i < systems.length; i++) {
             var en = systems[i];
             
             en.children = [];
             var ensk = new Entities("BP.CCBill.FrmBBSs");
-            ensk.Retrieve("WorkID", workID, 'ParentNo', en.No);
+            ensk.Retrieve("WorkID", this.workID, 'ParentNo', en.No);
             childModules = obj2arr(ensk)
-            console.log(workID);
+          //  console.log(workID);
             en.children = childModules
         }
         
@@ -98,30 +98,7 @@ new Vue({
 
     }
 })
-
-function Init() {
-
-    var workID = GetQueryString("WorkID");
-    var frmID = GetQueryString("FrmID");
-
-    //查询出来数据.
-    var ens = new Entities("BP.CCBill.FrmBBSs");
-    ens.Retrieve("WorkID", workID, "RDT");
-    
-    for (var i = 0; i < ens.length; i++) {
-
-        var en = ens[i];
-        var rdt = en.RDT;
-        var name = en.Name;
-        var parnt = en.ParentNo;
-    }
-
-    //给头部赋值.
-    var dictEn = new Entity(frmID, workID);
-    $("#TB_No").html(dictEn.BillNo);
-    $("#TB_Name").html(dictEn.Title);
-
-}
+ 
 function Closeq(index) {
     var num = index
     console.log(index);
@@ -152,7 +129,7 @@ function SaveAsReply(index) {
     en.Name = $("#Retext" + index).val();
     console.log(en.Name);
     en.ParentNo = parentNo;
-    en.WorkID = GetQueryString("WorkID");
+    en.WorkID = myvue.workID; 
     en.FrmID = GetQueryString("FrmID");
     en.Insert();
     var file = $("#"+index);

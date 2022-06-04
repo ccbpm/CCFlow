@@ -63,7 +63,7 @@ function onDragEndF(fid, gid) {
 
     
     var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-    window.location.href = window.location.href;
+    Reload();
     moveToFieldID = null;
     currGID = null;
     currFieldID = null;

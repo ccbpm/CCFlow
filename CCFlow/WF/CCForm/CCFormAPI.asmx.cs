@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Web.Services;
 using BP.WF.Template;
+using BP.WF.Template.Frm;
 using BP.Sys;
 using BP.Web;
 using BP.DA;
@@ -27,7 +28,7 @@ namespace CCFlow.WF.CCForm
         /// 获得返回的文件流
         /// </summary>
         /// <param name="userNo"></param>
-        /// <param name="sid"></param>
+        /// <param name="Token"></param>
         /// <param name="filePath"></param>
         /// <returns></returns>
         [WebMethod]
@@ -40,7 +41,7 @@ namespace CCFlow.WF.CCForm
             if (filePath.IndexOf("/DataUser/") == -1)
                 return "err@非法的访问.";
 
-            string path = SystemConfig.PathOfDataUser + "" + filePath.Replace("/DataUser/", "");
+            string path = BP.Difference.SystemConfig.PathOfDataUser + "" + filePath.Replace("/DataUser/", "");
             MethodReturnMessage<byte[]> msg = null;
             try
             {
@@ -87,7 +88,7 @@ namespace CCFlow.WF.CCForm
                     strContext = "欢迎使用ccflow word";
                     doc.Paragraphs.Last.Range.Text = strContext;
 
-                    string rootPath = BP.Sys.SystemConfig.PathOfDataUser + "\\worddoc\\";
+                    string rootPath = BP.Difference.SystemConfig.PathOfDataUser + "\\worddoc\\";
 
                     if (!System.IO.Directory.Exists(rootPath))
                         System.IO.Directory.CreateDirectory(rootPath);
@@ -135,7 +136,7 @@ namespace CCFlow.WF.CCForm
             if (filePath.IndexOf("/DataUser/") == -1)
                 return "err@非法的访问.";
 
-            string path = SystemConfig.PathOfDataUser + "" + filePath.Replace("/DataUser/", "");
+            string path = BP.Difference.SystemConfig.PathOfDataUser + "" + filePath.Replace("/DataUser/", "");
 
             //BP.DA.DataType.wir
 
@@ -156,7 +157,7 @@ namespace CCFlow.WF.CCForm
         /// 获得单据模版信息
         /// </summary>
         /// <param name="userNo">用户编号</param>
-        /// <param name="sid">SID</param>
+        /// <param name="Token">SID</param>
         /// <param name="workID">工作ID</param>
         /// <param name="FrmPrintTemplateNo">单据模版编号</param>
         /// <param name="ds">返回的数据源</param>
@@ -177,7 +178,7 @@ namespace CCFlow.WF.CCForm
                 throw new Exception("err@[" + userNo + "]无权查看该流程,WorkID=" + workID);
 
             string frmID = "ND" + int.Parse(gwf.FK_Flow) + "Rpt";
-            BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt("ND" + int.Parse(gwf.FK_Flow) + "Rpt", workID);
+            BP.WF.GERpt rpt = new BP.WF.GERpt("ND" + int.Parse(gwf.FK_Flow) + "Rpt", workID);
             DataTable dt = rpt.ToDataTableField();
             dt.TableName = "Main";
             ds.Tables.Add(dt);
@@ -251,7 +252,7 @@ namespace CCFlow.WF.CCForm
             }
 
             //生成模版的文件流.
-            BP.WF.Template.FrmPrintTemplate template = new BP.WF.Template.FrmPrintTemplate(FrmPrintTemplateNo);
+            FrmPrintTemplate template = new FrmPrintTemplate(FrmPrintTemplateNo);
             bytes = template.GenerTemplateFile();
             return;
         }
@@ -261,7 +262,7 @@ namespace CCFlow.WF.CCForm
         {
             try
             {
-                string filePath = SystemConfig.PathOfDataUser + "CyclostyleFile\\VSTO\\";
+                string filePath = BP.Difference.SystemConfig.PathOfDataUser + "CyclostyleFile\\VSTO\\";
                 string fileName = billNo + "_" + frmID + ".docx";
                 if (!Directory.Exists(filePath))
                     Directory.CreateDirectory(filePath);
@@ -297,7 +298,7 @@ namespace CCFlow.WF.CCForm
 
             try
             {
-                string filePath = SystemConfig.PathOfDataUser + "CyclostyleFile\\VSTO\\";
+                string filePath = BP.Difference.SystemConfig.PathOfDataUser + "CyclostyleFile\\VSTO\\";
                 string fileName = billNo + "_" + frmID + ".docx";
                 if (!Directory.Exists(filePath))
                     Directory.CreateDirectory(filePath);
@@ -356,9 +357,9 @@ namespace CCFlow.WF.CCForm
             if (DBAccess.RunSQLReturnValInt("select count(*) from port_emp where no='" + userNo + "'") == 0)
                 throw new Exception("用户不存在");
 
-            string filePath = SystemConfig.PathOfDataUser + "Siganture\\" + userNo + ".jpg";
+            string filePath = BP.Difference.SystemConfig.PathOfDataUser + "Siganture\\" + userNo + ".jpg";
             if (System.IO.File.Exists(filePath) == false)
-                filePath = SystemConfig.PathOfDataUser + "Siganture\\UnSiganture.jpg";
+                filePath = BP.Difference.SystemConfig.PathOfDataUser + "Siganture\\UnSiganture.jpg";
 
             //怎么把文件转化为字节， 把字节转化为文件，请参考。http://www.cnblogs.com/yy981420974/p/8193081.html
             FileStream stream = new FileInfo(filePath).OpenRead();
@@ -371,7 +372,7 @@ namespace CCFlow.WF.CCForm
         /// 获得Word文件 - 未开发完成.
         /// </summary>
         /// <param name="userNo">用户编号</param>
-        /// <param name="sid">SID</param>
+        /// <param name="Token">SID</param>
         /// <param name="frmID">表单ID</param>
         /// <param name="oid">表单主键</param>
         /// <returns></returns>
@@ -406,7 +407,7 @@ namespace CCFlow.WF.CCForm
         /// 执行保存
         /// </summary>
         /// <param name="userNo">用户编号</param>
-        /// <param name="sid">sid</param>
+        /// <param name="Token">sid</param>
         /// <param name="flowNo">流程编号</param>
         /// <param name="workid">工作ID</param>
         /// <param name="byt">文件流</param>
@@ -444,7 +445,7 @@ namespace CCFlow.WF.CCForm
         /// 获得Excel文件
         /// </summary>
         /// <param name="userNo">用户编号</param>
-        /// <param name="sid">SID</param>
+        /// <param name="Token">SID</param>
         /// <param name="frmID">表单ID</param>
         /// <param name="oid">表单主键</param>
         /// <returns></returns>
@@ -491,7 +492,7 @@ namespace CCFlow.WF.CCForm
         /// 生成vsto模式的数据
         /// </summary>
         /// <param name="userNo"></param>
-        /// <param name="sid"></param>
+        /// <param name="Token"></param>
         /// <param name="frmID"></param>
         /// <param name="oid"></param>
         /// <param name="atParas">参数</param>
@@ -509,7 +510,7 @@ namespace CCFlow.WF.CCForm
         /// 执行保存
         /// </summary>
         /// <param name="userNo">用户编号</param>
-        /// <param name="sid">SID</param>
+        /// <param name="Token">SID</param>
         /// <param name="frmID">表单编号</param>
         /// <param name="mainEnPKOID">主键（OID）</param>
         /// <param name="mainTableAtParas">主表数据（"@KeyOfEn=value@..."）</param>
@@ -820,7 +821,7 @@ namespace CCFlow.WF.CCForm
         /// 保存一个文件
         /// </summary>
         /// <param name="userNo">用户编号</param>
-        /// <param name="sid">SID</param>
+        /// <param name="Token">SID</param>
         /// <param name="frmID">表单ID</param>
         /// <param name="pkValue">主键</param>
         /// <param name="byt">文件流.</param>
@@ -832,7 +833,7 @@ namespace CCFlow.WF.CCForm
             FrmAttachments aths = new FrmAttachments(frmID);
             if (aths.Count == 0)
             {
-                BP.Sys.CCFormAPI.CreateOrSaveAthMulti(md.No, "Ath", "附件", 100, 100);
+                BP.Sys.CCFormAPI.CreateOrSaveAthMulti(md.No, "Ath", "附件");
                 aths = new FrmAttachments(frmID);
             }
             FrmAttachment ath = aths[0] as FrmAttachment;
@@ -875,7 +876,7 @@ namespace CCFlow.WF.CCForm
         /// 级联接口
         /// </summary>
         /// <param name="userNo">用户</param>
-        /// <param name="sid">安全校验码</param>
+        /// <param name="Token">安全校验码</param>
         /// <param name="pkValue">表单主键值（WorkId）</param>
         /// <param name="mapExtMyPK">逻辑逐渐值</param>
         /// <param name="cheaneKey">级联父字段的值（No)</param>
@@ -978,7 +979,7 @@ namespace CCFlow.WF.CCForm
                 if (string.IsNullOrWhiteSpace(createReportType))
                     return null;
 
-                string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                string dbStr = BP.Difference.SystemConfig.AppCenterDBVarStr;
                 BP.DA.Paras ps = new BP.DA.Paras();
 
 
@@ -1117,7 +1118,7 @@ namespace CCFlow.WF.CCForm
                     strContext = "欢迎使用ccflow word";
                     doc.Paragraphs.Last.Range.Text = strContext;
 
-                    string rootPath = BP.Sys.SystemConfig.PathOfDataUser + "\\worddoc\\";
+                    string rootPath = BP.Difference.SystemConfig.PathOfDataUser + "\\worddoc\\";
 
                     if (!System.IO.Directory.Exists(rootPath))
                         System.IO.Directory.CreateDirectory(rootPath);

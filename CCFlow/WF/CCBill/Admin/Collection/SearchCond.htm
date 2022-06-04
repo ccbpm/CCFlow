@@ -231,7 +231,7 @@
             mapData.SetPara("ListShowWayKey", $("#DDL_ListShowWayKey").val());
 
             mapData.Update();
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function changeStringKeysState(val) {
@@ -253,6 +253,10 @@
             //树形结构的展示
             if (val == 1) {
                 //获取当前是树形结构的外键或者外部数据源
+                if (ddlkeys == null || ddlkeys == undefined || ddlkeys == "") {
+                    $("#DDL_ListShowWay").val(0);
+                    return;
+                }
                 var ens = new Entities("BP.Sys.SFTables");
                 ens.RetrieveCond("No", "IN", "(" + ddlkeys + ")");
                 if (ens.length == 0) {

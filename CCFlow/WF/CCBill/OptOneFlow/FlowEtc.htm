@@ -198,7 +198,7 @@
                         var url = "../../" + data;
 
                         //如果返回url，就直接转向.
-                        window.location.href = url; //
+                        SetHref(url); //
                         // LayuiPopRight(url, null, 0, 900, false);
                         return;
                     }
@@ -259,7 +259,7 @@
                 return;
             } else {
                 layer.close(loading);
-                window.location.href = "../" + data;
+                SetHref("../" + data);
             }
         }
 
@@ -276,17 +276,20 @@
             url += "&WorkID=" + GetQueryString("WorkID");
             url += "&MethodNo=" + GetQueryString("MethodNo");
 
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
     <script>
         $(function () {
-            var theme = localStorage.getItem("themeColorInfo");
+            var theme = DealText(localStorage.getItem("themeColorInfo"));
             theme = JSON.parse(theme);
-            var styleScope = document.getElementById("theme-data")
-            styleScope.innerHTML = "\n .layui-btn{\n background-color:" + theme.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + theme.selectedMenu + ";\n}";
-            styleScope.innerHTML += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:" + theme.selectedMenu + " !important\n}";
-            styleScope.innerHTML += "\n .layui-form-select dl dd.layui-this{\n background-color:" + theme.selectedMenu + " !important;\n}";
+            var styleScope = document.getElementById("theme-data");
+             
+            var html = "\n .layui-btn{\n background-color:" + theme.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + theme.selectedMenu + ";\n}";
+            html += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:" + theme.selectedMenu + " !important\n}";
+            html += "\n .layui-form-select dl dd.layui-this{\n background-color:" + theme.selectedMenu + " !important;\n}";
+
+            styleScope.innerHTML = DealText(html);
 
         })
     </script>

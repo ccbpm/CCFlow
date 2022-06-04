@@ -89,7 +89,7 @@
                 return;
             }
 
-            var treeData = eval('(' + data + ')');
+            var treeData = cceval('(' + data + ')');
 
             // for bug 591 at 20171205
             (function (cnode) {
@@ -111,7 +111,7 @@
                     return;
                 }
 
-                var redata = eval('(' + data + ')');
+                var redata = cceval('(' + data + ')');
 
                 $("#treeUnits").tree("loadData", redata);
                 //					}, this);
@@ -148,7 +148,7 @@
                 return;
             }
 
-            var redata = eval('(' + data + ')');
+            var redata = cceval('(' + data + ')');
 
             $("#treeUnits").tree("remove", children[0].target);
             $("#treeUnits").tree("append", { parent: cnode.target, data: redata });
@@ -177,10 +177,10 @@
                 return;
             }
 
-            var redata = eval('(' + data + ')');
+            var redata = cceval('(' + data + ')');
             nodestations = redata.InnerData;
             if (nodestations == undefined || nodestations == 'undefined')
-                redata = eval('(' + redata + ')');
+                redata = cceval('(' + redata + ')');
             nodestations = redata.InnerData;
             $("#save").linkbutton("enable");
             ShowSelectedStations();
@@ -356,7 +356,7 @@
                     return;
                 }
 
-                var redata = eval('(' + data + ')');
+                var redata = cceval('(' + data + ')');
 
                 $.messager.show({
                     title: " ",
@@ -386,7 +386,7 @@
                     return;
                 }
 
-                var redata = eval('(' + data + ')');
+                var redata = cceval('(' + data + ')');
 
                 if (redata.InnerData.lastpart) {
                     $.messager.show({

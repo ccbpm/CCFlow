@@ -96,30 +96,6 @@ new Vue({
                 dropdown.render(cRenderOptions[1]);
             })
         },
-        MethodAttr: function (no) {
-
-            console.log(en);
-
-            var en = new Entity("BP.CCBill.Template.Collection", no);
-
-            var enName = "BP.CCBill.Template.Collection";
-
-            if (en.MethodModel == "Func") enName = "BP.CCBill.Template.CollectionFunc";
-            if (en.MethodModel == "Link") enName = "BP.CCBill.Template.CollectionLink";
-            if (en.MethodModel == "QRCode") enName = "BP.CCBill.Template.CollectionQRCode";
-            if (en.MethodModel == "FlowBaseData") enName = "BP.CCBill.Template.CollectionFlowBaseData";
-            if (en.MethodModel == "FlowNewEntity") enName = "BP.CCBill.Template.CollectionFlowNewEntity";
-
-            if (en.MethodModel === "SingleDictGenerWorkFlows" || en.MethodModel === "SingleDictGenerWorkFlow")
-                enName = "BP.CCBill.Template.MethodSingleDictGenerWorkFlow";
-
-            if (en.MethodModel == "FlowEtc")
-                enName = "BP.CCBill.Template.FlowEtc";
-
-            var url = "../../Comm/En.htm?EnName=" + enName + "&No=" + en.No + "&From=Ver2021";
-            OpenLayuiDialog(url, "", 100000, 0, null, false);
-
-        },
         DeleteIt: function (no) {
 
             if (window.confirm("确定要删除吗?") == false)
@@ -143,7 +119,7 @@ new Vue({
             var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin");
             handler.AddPara("FrmID", frmID);
             handler.AddPara("MyPKs", currentNodeArrStr);
-            var data = handler.DoMethodReturnString("Collection_Mover");
+            var data = handler.DoMethodReturnString("ToolbarSetting_Mover");
 
             layer.msg(data);
 
@@ -190,10 +166,10 @@ new Vue({
             })
         },
         // 是否启用
-        changeMethodEnableStatus(method, ctrl) {
+        changeMethodEnableStatus(toolBarBtn, ctrl) {
             // 当前启用状态
 
-            var en = new Entity("BP.CCBill.Template.Collection", method.No);
+            var en = new Entity("BP.CCBill.Template.ToolbarBtn", toolBarBtn.MyPK);
             if (en.IsEnable == 0)
                 en.IsEnable = 1; // method.IsEnable;
             else
@@ -211,38 +187,30 @@ new Vue({
             event.preventDefault();
             event.stopPropagation();
         }
-
-        var frmID = GetQueryString("FrmID");
-        var ens = new Entities("BP.CCBill.Template.ToolbarBtns");
-        ens.Retrieve("FrmID", frmID, "Idx");
-
-        ens = obj2arr(ens);
+        var handler = new HttpHandler("BP.CCBill.WF_CCBill_Admin");
+        handler.AddPara("FrmID", GetQueryString("FrmID"));
+        var ds = handler.DoMethodReturnString("ToolbarSetting_Init");
+        if (ds.indexOf("err@") != -1) {
+            layer.alert(data);
+            return;
+        }
+       
+        var ens = JSON.parse(ds);
         var btnStyle = "class='layui-btn layui-btn-primary layui-border-blue layui-btn-xs'";
         ens.forEach(function (en) {
-
-            if (en.Mark === "FlowNewEntity" || en.Mark === "FlowEntityBatchStart"  ) {
-                var doc = "<a " + btnStyle + "  href=\"javascript:DesignerFlow('" + en.FlowNo + "','" + en.Name + "');\" >设计流程</a>";
-                en.Docs = doc;
-            }
-            var url = "./PowerCenter.htm?CtrlObj=Menu&CtrlPKVal=" + en.No + "&CtrlGroup=Menu";
-
-            en.enCtrlWayText = "<a " + btnStyle + "  href =\"javascript:OpenLayuiDialog('" + url + "','" + en.No + "','700',0,null,false);\" >权限</a>";
-            //   if (en.Mark==="")
-            //if (mapAttr.LGType == 2)
-            //     mapAttr.Name = "<a " + btnStyle + " href=\"javascript:EditTable('" + mapAttr.FK_MapData + "','" + mapAttr.MyPK + "','" + mapAttr.KeyOfEn + "');\" > " + mapAttr.Name + "</a>";
+            var url = "./PowerCenter.htm?CtrlObj="+en.FrmID+"&CtrlPKVal=" + en.MyPK + "&CtrlGroup=FrmBtn";
+            en.enCtrlWayText = "<a " + btnStyle + "  href =\"javascript:OpenLayuiDialog('" + url + "','" + en.MyPK + "','700',0,null,false);\" >权限</a>";
+           
         })
 
         this.mapAttrs = ens;
 
-       // console.log(this.mapAttrs);
         this.initSortArea();
 
         layui.use('form', function () {
             var form = layui.form;
             form.render()
-            // form.on("switch(enable)", function (e) {
-            //     console.log(e)
-            // })
+          
         });
         var _this = this
         setTimeout(function () {
@@ -263,21 +231,8 @@ function obj2arr(obj) {
     }
     return arr
 }
-//属性.
-function AttrFrm(enName, title, pkVal) {
-    var url = "../../Comm/En.htm?EnName=" + enName + "&No=" + pkVal;
-    title = "";
-    OpenLayuiDialog(url, title, 5000, 0, null, false);
-    return;
-}
 
 
-function DesignerFlow(no, name) {
-    var sid = GetQueryString("SID");
-    var webUser = new WebUser();
-    var url = "../Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + no + "&UserNo=" + webUser.No + "&SID=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
-    window.top.vm.openTab(name, url);
-}
 
 function addTab(no, name, url) {
     window.top.vm.openTab(name, url);

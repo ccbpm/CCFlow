@@ -37,7 +37,9 @@
             margin: 5px 3px 5px 3px;
             padding: 4px 15px;
         }
-
+        .fixed-table-body {
+            overflow-x: hidden;
+        }
             button:hover {
                 background: #f5f5f5;
                 color: #000;
@@ -124,7 +126,7 @@
                     $('#TextArea').focus();
                     return;
                 }
-                var ens = new Entities("BP.WF.Data.FastInputs");
+                var ens = new Entities("BP.Sys.FastInputs");
                 ens.Retrieve("FK_Emp", webUser.No);
                 for (var i = 0; i < ens.length; i++) {
                     var en = ens[i];
@@ -136,7 +138,7 @@
                     }
                 }
                 if (isPass) {
-                    var en = new Entity("BP.WF.Data.FastInput")
+                    var en = new Entity("BP.Sys.FastInput")
                     en.ContrastKey = groupKey;
                     en.FK_Emp = webUser.No;
                     en.Vals = text;
@@ -163,7 +165,7 @@
                     return;
                 }
 
-                var en = new Entity("BP.WF.Data.FastInput", mypk)
+                var en = new Entity("BP.Sys.FastInput", mypk)
                 en.Vals = text;
                 en.Update();
                 $('#myModal').modal('hide');
@@ -206,7 +208,7 @@
                     return;
 
                 $.each(rows, function (i, item) {
-                    var en = new Entity("BP.WF.Data.FastInput", item.MYPK);
+                    var en = new Entity("BP.Sys.FastInput", item.MYPK);
                     en.Delete();
                 });
 

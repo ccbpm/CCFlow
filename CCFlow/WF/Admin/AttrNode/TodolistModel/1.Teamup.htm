@@ -48,7 +48,7 @@
             var role = $("input[name='GenerWorkerListDelRole']:checked").val();
             node.SetPara("GenerWorkerListDelRole", role);
             node.Update();
-            window.location.href = window.location.href;
+            Reload();
         }
         //打开代办删除规则
         function ToolDelRole() {

@@ -53,7 +53,7 @@
 
         //编辑从表的原始属性.
         function EditDtlYuanShi(fk_mapdata, dtlKey) {
-            // var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&PK=' + dtlKey;
+            // var url = '../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapDtlExt&PK=' + dtlKey;
 
             var url = "../FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=" + fk_mapdata + "&FK_MapDtl=" + dtlKey;
             //  http: //localhost:9958/WF/Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=YYT_XQ_SQ&FK_MapDtl=YYT_XQ_SQDtl2
@@ -64,7 +64,7 @@
         function EditDtl(fk_node, fk_mapdata, dtlNo) {
 
             var mypk = dtlNo + '_' + fk_Node;
-            var en = new Entity("BP.WF.Template.MapDtlExt");
+            var en = new Entity("BP.WF.Template.Frm.MapDtlExt");
             en.SetPKVal(mypk);
             if (en.RetrieveFromDBSources() == 0) {
 
@@ -87,14 +87,14 @@
                 }
             }
 
-            window.location.href = window.location.href;
-            //var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&FK_MapData=' + fk_mapdata + '&No=' + mypk + '&FK_Node=' + fk_node;
+            Reload();
+            //var url = '../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapDtlExt&FK_MapData=' + fk_mapdata + '&No=' + mypk + '&FK_Node=' + fk_node;
 
             var url = "../FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=" + fk_mapdata + "_" + fk_node + "&FK_MapDtl=" + mypk + "&FK_Node=" + fk_Node;
             WinOpen(url);
 
             //var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
-            //window.location.href = window.location.href;
+            //Reload();
         }
 
         //删除从表在节点中的权限控制.
@@ -102,11 +102,11 @@
             if (confirm('您确定要删除该控件在当前节点的权限控制吗？') == false)
                 return;
             var mypk = dtl + '_' + fk_node;
-            var en = new Entity("BP.WF.Template.MapDtlExt");
+            var en = new Entity("BP.WF.Template.Frm.MapDtlExt");
             en.No = mypk;
             en.Delete();
             alert("删除成功!");
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </head>

@@ -6,7 +6,7 @@ $(function () {
         return;
     //获取引入JS的路径
     var ccPath = "../DataUser/";
-    var currentURL = window.document.location.href;
+    var currentURL = GetHrefUrl();
     if (currentURL.indexOf("FoolFormDesigner/Designer") != -1)
         ccPath = "../../../DataUser/";
     if (currentURL.indexOf("CCForm") != -1)

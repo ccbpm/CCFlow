@@ -18,34 +18,39 @@
 
         //页面启动函数.
         $(function () {
+
             $("#Msg").html("<img src=../../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
             //求出来已经设置的延续子流程.
             var nodeID = GetQueryString("FK_Node");
+
+
+            //如果是集团版，就查询指定组织的.
             var orgNo = GetQueryString("OrgNo");
+            if (orgNo == undefined || orgNo == "undefined")
+                orgNo = "ccflow";
+            var webUser = new WebUser();
+            var dt = new Entities("BP.WF.Template.FlowExts");
 
-            //查询出来数据.
-            //    var sql = "SELECT A.No AS SortNo, A.Name as SORTNAME, b.No AS NO, b.Name AS FLOWNAME ";
-            //    sql += " FROM WF_FlowSort a, WF_Flow b WHERE (A.OrgNo='" + orgNo + "' OR A.ParentNo='" + orgNo + "') AND A.No=B.FK_FlowSort ";
-            //    sql += " ORDER BY A.Idx, b.Idx ";
+            if (webUser.CCBPMRunModel == 1)
+                dt.Retrieve("OrgNo", orgNo);
+            else
+                dt.RetrieveAll("FK_FlowSort");
 
-            var dt = new Entities("BP.WF.Flows");
-            dt.RetrieveAll("FlowSort");
 
-            var yanXus = new Entities("BP.WF.Template.SubFlowYanXus");
+            var yanXus = new Entities("BP.WF.Template.SFlow.SubFlowYanXus");
             yanXus.Retrieve("FK_Node", nodeID, "SubFlowType", 2);
-
 
             var html = "";
             for (var i = 0; i < dt.length; i++) {
 
                 var en = dt[i];
 
-                //console.log(en);
-
                 html += "<tr>";
 
-                html += "<td>" + en.FK_FlowSortText + "</td>";
+                html += "<td>" + en.OrgNo + "</td>"; //组织编号
+                //   html += "<td>" + en.FK_FlowSortText + "</td>";
+
                 html += "<td>" + en.No + "</td>";
                 html += "<td>" + en.Name + "</td>";
 
@@ -58,7 +63,7 @@
 
                         if (yanXu.FlowName != en.Name) {
 
-                            var yanXuEn = new Entity("BP.WF.Template.SubFlowYanXu", yanXu);
+                            var yanXuEn = new Entity("BP.WF.Template.SFlow.SubFlowYanXu", yanXu);
                             yanXuEn.FlowName = en.Name;
                             yanXuEn.Update();
                             //yanXu.Update();
@@ -71,6 +76,7 @@
                     html += "<td><a href=\"javascript:CheckIt('" + en.No + "','" + en.Name + "');\" >选择</a></td>";
                 else
                     html += "<td><font color=red>已存在</font></td>";
+
 
                 html += "</tr>";
             }
@@ -87,41 +93,42 @@
 
             var nodeID = GetQueryString("FK_Node");
 
-            var ens = new Entities("BP.WF.Template.SubFlowYanXus");
-            ens.Retrieve("FK_Node", nodeID, "FK_Flow", flowNo, "SubFlowType",2);
+            var ens = new Entities("BP.WF.Template.SFlow.SubFlowYanXus");
+            ens.Retrieve("FK_Node", nodeID, "FK_Flow", flowNo, "SubFlowType", 2);
 
             if (ens.length == 1) {
                 alert("该流程已经存在");
                 return;
             }
             var myNode = new Entity("BP.WF.Node", nodeID);
-            var en = new Entity("BP.WF.Template.SubFlowYanXu");
+            var en = new Entity("BP.WF.Template.SFlow.SubFlowYanXu");
 
             en.SubFlowNo = flowNo;
             en.FK_Node = nodeID;
             en.SubFlowName = name;
             en.SubFlowType = 2;
 
-               
+
             en.FK_Flow = myNode.FK_Flow;
 
             var myen = en.Insert();
 
-            window.location.href = '../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SubFlowYanXu&PKVal=' + myen.MyPK;
+            SetHref('../../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SFlow.SubFlowYanXu&PKVal=' + myen.MyPK);
 
             //alert('当前流程已经加入了延续流程中.');
         }
-         
+
     </script>
 </head>
 <body>
     <table id="Table1" style="width: 100%">
-        <caption>
-            请选择一个子流程</caption>
         <tr>
             <th>
-                流程类别
+                组织编号
             </th>
+            <!--<th>
+                流程类别
+            </th>-->
             <th>
                 流程编号
             </th>

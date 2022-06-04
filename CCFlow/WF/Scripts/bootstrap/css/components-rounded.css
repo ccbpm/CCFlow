@@ -2623,7 +2623,7 @@ Customized Bootstrap Close Icon
   width: 9px;
   height: 9px;
   background-repeat: no-repeat !important;
-  text-indent: -10000px;
+  /* text-indent: -10000px; */
   outline: none;
   background-image: url("../img/remove-icon-small.png") !important;
 }

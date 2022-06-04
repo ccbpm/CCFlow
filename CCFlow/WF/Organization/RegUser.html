@@ -83,7 +83,7 @@
             }
             $("#Msg").html("");
 
-            data = eval(data); //转成Json.
+            data = cceval(data); //转成Json.
             //绑定部门.
             GenerBindDDL("DDL_FK_Dept", data, "No", "Name");
 

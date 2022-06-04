@@ -2,7 +2,7 @@
 <NewDataSet>
   <!-- 系统管理  -->
   <Item No="01"  Name="组织结构" Img="/Images/Btn/Help.gif"  Url="">
-    <!--<Item No="0101"  Name="部门类型" Url="/WF/Comm/Search.htm?EnsName=BP.GPM.DeptTypes"  Img="/Images/Btn/Card.gif"  />-->
+    <!--<Item No="0101"  Name="部门类型" Url="/WF/Comm/Search.htm?EnsName=BP.Port.DeptTypes"  Img="/Images/Btn/Card.gif"  />-->
 
     <Item No="0102"  Name="岗位类型" Url="/WF/Comm/Search.htm?EnsName=BP.Port.StationTypes"  Img="/Images/Btn/Card.gif"  />
     <Item No="0103"  Name="岗位" Url="/WF/Comm/Search.htm?EnsName=BP.Port.Stations"  Img="/Images/Btn/Station.gif"  />

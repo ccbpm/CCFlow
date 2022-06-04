@@ -99,7 +99,7 @@
         function Back() {
             var url = '';
             url = 'ActionForDtl.htm?FK_MapData=' + GetQueryString("FK_MapData") + '&FK_Node=' + GetQueryString('FK_Node') + '&FK_Flow=' + GetQueryString('FK_Flow') + '&m' + Math.random();
-            window.location.href = url;
+            SetHref(url);
         }
 
 /**/</script>

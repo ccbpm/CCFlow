@@ -342,28 +342,28 @@
 
             var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata;
             OpenEasyUiDialog(url, "eudlgframe", '新增字段', 800, 500, "icon-property", true, null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
 
             });
 
             //  var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-            //window.location.href = window.location.href;
+            //Reload();
         }
         function AddFGroup(fk_mapdata) {
             var url = 'Do.aspx?DoType=AddFGroup&FK_MapData=' + fk_mapdata;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-            window.location.href = window.location.href;
+            Reload();
         }
         function CopyF(fk_mapdata) {
             var url = 'CopyDtlField.htm?FK_MapData=' + fk_mapdata + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 800px;center: yes; help: no');
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function HidAttr(mypk) {
             var url = 'HidAttr.htm?FK_MapData=' + mypk + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 800px;center: yes; help: no');
-            //  window.location.href = window.location.href;
+            //  Reload();
         }
         function Edit(mypk, ftype, gf, fk_mapdata, uiControlType) {
             var parentwin = parent.window;
@@ -438,7 +438,7 @@
             }
 
             OpenEasyUiDialog(url, "eudlgframe", title, 800, 500, "icon-edit", true, null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
             });
         }
 
@@ -459,7 +459,7 @@
             var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&inlayer=1&PKVal=' + mypk + '&s=' + Math.random();
 
             OpenEasyUiDialog(url, "eudlgframe", "编辑枚举字段", 800, 500, "icon-edit", true, null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
             });
         }
         function EditTable(fk_mapdata, mypk, fk_sfTable) {
@@ -483,7 +483,7 @@
             var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&inlayer=1&PKVal=' + mypk + '&s=' + Math.random();
 
             OpenEasyUiDialog(url, "eudlgframe", "外键字段属性", 800, 500, "icon-edit", true, null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
             });
 
         }
@@ -499,7 +499,7 @@
             if (data.indexOf('err@') != -1)
                 alert(data);
 
-            window.location.href = window.location.href;
+            Reload();
         }
         function Down(mypk) {
 
@@ -508,7 +508,7 @@
             if (data.indexOf('err@') != -1)
                 alert(data);
 
-            window.location.href = window.location.href;
+            Reload();
         }
 
 
@@ -518,12 +518,12 @@
 
             var url = 'Do.aspx?DoType=Del&MyPK=' + fk_mapdata + '&RefNo=' + refNo;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
-            window.location.href = window.location.href;
+            Reload();
         }
         function DtlMTR(MyPK) {
             var url = 'MapDtlMTR.aspx?MyPK=' + MyPK + '&s=' + Math.random();
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 350px; dialogWidth: 550px;center: yes; help: no');
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function Attachment(fk_mapdtl) {

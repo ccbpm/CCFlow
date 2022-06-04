@@ -53,7 +53,7 @@
 
         .input-icon {
             position: absolute;
-            left: 1px;
+            left: calc(100% - 40px);
             top: 1px;
             width: 38px;
             line-height: 36px;
@@ -62,7 +62,7 @@
         }
 
         .ccdate {
-            padding-left: 40px;
+            padding-right: 40px;
         }
 
         .layui-row {
@@ -91,7 +91,9 @@
                     layer.alert(workID);
                     return;
                 }
-                window.location.href = window.location.href;
+                var url = GetHrefUrl();
+                url = replaceParamVal(url, "WorkID", workID);
+                SetHref(url);
             }
             ToolBar_Init(1);
         })
@@ -100,7 +102,7 @@
 </head>
 <body style="background-color:#f2f2f2">
     <div id="MyBill" class="layui-layout layui-layout-admin">
-        <form id="divCCForm" enctype="multipart/form-data" method="post" class="layui-form">
+        <form id="divCCForm" enctype="multipart/form-data" method="post" class="layui-form" autocomplete=off>
             <!--头部按钮-->
             <div class="layui-header" style="background-color: white">
                 <div class="layui-btn-container" id="ToolBar" style="margin:10px 10px 0px 10px"></div>

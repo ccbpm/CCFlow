@@ -100,104 +100,8 @@ $(function () {
     });
 })
 
+ 
 
-function closeWindow() {
-    if (window.opener) {
-
-        if (window.opener.name && window.opener.name == "main") {
-            window.opener.location.href = window.opener.location.href;
-            if (window.opener.top && window.opener.top.leftFrame) {
-                window.opener.top.leftFrame.location.href = window.opener.top.leftFrame.location.href;
-            }
-        } else if (window.opener.name && window.opener.name == "运行流程") {
-            //测试运行流程，不进行刷新
-        } else {
-            //window.opener.location.href = window.opener.location.href;
-        }
-    }
-
-    //提示消息有错误，页面不跳转
-    var msg = $("#msgModalContent").html();
-    if (msg.indexOf("err@") == -1)
-        window.close();
-    else {
-        setToobarEnable();
-        $("#msgModal").modal("hidden");
-    }
-    // 取得父页面URL，用于判断是否是来自测试流程
-    var pareUrl = window.top.document.referrer;
-    if (pareUrl.indexOf("test") != -1 || pareUrl.indexOf("Test") != -1) {
-        // 测试流程时，发送成功刷新测试容器页面右侧
-        window.parent.parent.refreshRight();
-    }
-    if (window.parent != null && window.parent != undefined
-        && pareUrl.indexOf("test") == -1 && pareUrl.indexOf("Test") == -1) {
-        window.parent.close();
-    }
-}
-//从表在新建或者在打开行的时候，如果 EditModel 配置了使用卡片的模式显示一行数据的时候，就调用此方法.
-function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage, H) {
-    // model=1 自由表单, model=2傻瓜表单.
-    var pathName = document.location.pathname;
-    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-    var projectName = pathName.length > 3 ? pathName.substring(1, 3) : "";
-    var wWidth = $(window).width();
-    var wHeight = $(window).height();
-    if (wWidth > 1200) {
-        wWidth = 1000;
-    }
-    if (H < 600 || H == undefined) {
-        wHeight = 600;
-    } else {
-        wHeight = H;
-    }
-
-    if (projectName == "WF") {
-        projectName = "";
-    }
-
-    if (plant == "JFlow")
-        projectName = basePath;
-    var url = basePath + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal;
-
-    if (typeof ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal) === "function") {
-        ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal)(url, "editSubGrid", '编辑', wWidth, wHeight, "icon-property", false, function () { }, null, function () {
-            if (typeof InitPage === "function") {
-                InitPage.call();
-            } else {
-                alert("请手动刷新表单");
-            }
-        }, "editSubGridDiv");
-    } else {
-        window.open(url);
-    }
-}
-//从表在新建或者在打开行的时候，如果 EditModel 配置了使用卡片的模式显示一行数据的时候，就调用此方法. // IsSave 弹出页面关闭时是否要删除从表
-function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage, FK_MapData, FK_Node, FID, IsSave, H) {
-    // model=1 自由表单, model=2傻瓜表单.
-    var pathName = document.location.pathname;
-    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-    if (projectName.startsWith("/WF")) {
-        projectName = "";
-    }
-    if (H == undefined || H < 600)
-        H = 600;
-    if (H > 1000)
-        H = 1000;
-
-    var url = projectName + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal + "&FK_MapData=" + FK_MapData + "&FK_Node=" + FK_Node + "&FID=" + FID + "&IsSave=" + IsSave;
-    if (typeof ((parent && parent.OpenBootStrapModal) || OpenBootStrapModal) === "function") {
-        OpenBootStrapModal(url, "editSubGrid", '编辑', 1000, H, "icon-property", false, function () { }, null, function () {
-            if (typeof InitPage === "function") {
-                InitPage.call();
-            } else {
-                alert("请手动刷新表单");
-            }
-        }, "editSubGridDiv", null, false);
-    } else {
-        window.open(url);
-    }
-}
 //单表单加载需要执行的函数
 function CCFormLoaded() {
     if (parent != null && parent.document.getElementById('MainFrames') != undefined) {
@@ -250,34 +154,7 @@ $(function () {
         }
     })
 });
-
-function HelpAlter() {
-    var node = flowData.WF_Node[0];
-    //判断该节点是否启用了帮助提示 0 禁用 1 启用 2 强制提示 3 选择性提示
-    var btnLab = new Entity("BP.WF.Template.BtnLab", node.NodeID);
-    if (btnLab.HelpRole != 0) {
-        var count = 0;
-        if (btnLab.HelpRole == 3) {
-            var mypk = webUser.No + "_ND" + node.NodeID + "_HelpAlert";
-            var userRegedit = new Entity("BP.Sys.UserRegedit");
-            userRegedit.SetPKVal(mypk);
-            count = userRegedit.RetrieveFromDBSources();
-        }
-
-        if (btnLab.HelpRole == 2 || (count == 0 && btnLab.HelpRole == 3)) {
-            var filename = basePath + "/DataUser/CCForm/HelpAlert/" + node.NodeID + ".htm";
-            var htmlobj = $.ajax({ url: filename, async: false });
-            if (htmlobj.status == 404)
-                return;
-            var str = htmlobj.responseText;
-            if (str != null && str != "" && str != undefined) {
-                $('#HelpAlter').html("").append(str);
-                $('#HelpAlterDiv').modal().show();
-            }
-        }
-    }
-}
-
+ 
 
 //双击签名
 function figure_Template_Siganture(SigantureID, val, type) {
@@ -547,7 +424,7 @@ function isExistArray(arrys, no) {
 // 杨玉慧
 function GenerWorkNode() {
 
-    var href = window.location.href;
+    var href = GetHrefUrl();
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
 
@@ -810,33 +687,33 @@ function GenerWorkNode() {
         LoadGovDocFile();
     }
 
-    //给富文本创建编辑器
-    if (document.BindEditorMapAttr) {
-        var EditorDivs = $(".EditorClass");
-        $.each(EditorDivs, function (i, EditorDiv) {
-            var editorId = $(EditorDiv).attr("id");
-            //给富文本 创建编辑器
-            var editor = document.activeEditor = UM.getEditor(editorId, {
-                'autoHeightEnabled': false,
-                'fontsize': [10, 12, 14, 16, 18, 20, 24, 36],
-                'initialFrameWidth': '100%'
-            });
-            var height = document.BindEditorMapAttr[i].UIHeight;
-            $("#Td_" + document.BindEditorMapAttr[i].KeyOfEn).find('div[class = "edui-container"]').css("height", height);
-            //$(".edui-container").css("height", height);
+    ////给富文本创建编辑器
+    //if (document.BindEditorMapAttr) {
+    //    var EditorDivs = $(".EditorClass");
+    //    $.each(EditorDivs, function (i, EditorDiv) {
+    //        var editorId = $(EditorDiv).attr("id");
+    //        //给富文本 创建编辑器
+    //        var editor = document.activeEditor = UM.getEditor(editorId, {
+    //            'autoHeightEnabled': false,
+    //            'fontsize': [10, 12, 14, 16, 18, 20, 24, 36],
+    //            'initialFrameWidth': '100%'
+    //        });
+    //        var height = document.BindEditorMapAttr[i].UIHeight;
+    //        $("#Td_" + document.BindEditorMapAttr[i].KeyOfEn).find('div[class = "edui-container"]').css("height", height);
+    //        //$(".edui-container").css("height", height);
 
-            if (editor) {
+    //        if (editor) {
 
-                editor.MaxLen = document.BindEditorMapAttr[i].MaxLen;
-                editor.MinLen = document.BindEditorMapAttr[i].MinLen;
-                editor.BindField = document.BindEditorMapAttr[i].KeyOfEn;
-                editor.BindFieldName = document.BindEditorMapAttr[i].Name;
+    //            editor.MaxLen = document.BindEditorMapAttr[i].MaxLen;
+    //            editor.MinLen = document.BindEditorMapAttr[i].MinLen;
+    //            editor.BindField = document.BindEditorMapAttr[i].KeyOfEn;
+    //            editor.BindFieldName = document.BindEditorMapAttr[i].Name;
 
-                //调整样式,让必选的红色 * 随后垂直居中
-                $(editor.container).css({ "display": "inline-block", "margin-right": "4px", "vertical-align": "middle" });
-            }
-        })
-    }
+    //            //调整样式,让必选的红色 * 随后垂直居中
+    //            $(editor.container).css({ "display": "inline-block", "margin-right": "4px", "vertical-align": "middle" });
+    //        }
+    //    })
+    //}
     //给富文本创建编辑器
 }
 

@@ -21,31 +21,28 @@
                 frmID = GetQueryString("FrmID");
             var md = new Entity("BP.Sys.MapData", frmID);
             if (md.FrmType == FrmType.FoolForm) {
-                window.location.href = "../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random();
+                SetHref( "../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random());
                 return;
             }
             if (md.FrmType == FrmType.Develop) {
-                window.location.href = "../DevelopDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random();
+                SetHref("../DevelopDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random());
                 return;
             }
             if (md.FrmType == FrmType.FreeFrm) {
-                window.location.href = "../DevelopDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random();
+                SetHref("../DevelopDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random());
                 return;
             }
             if (md.FrmType == FrmType.Url) {
-                // return "url@../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.MapDataURL&No=" + this.FK_MapData;
-                window.location.href = "../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.MapDataURL&No=" + frmID + "&s=" + Math.random();
+                // return "url@../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.Frm.MapDataURL&No=" + this.FK_MapData;
+                SetHref("../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapDataURL&No=" + frmID + "&s=" + Math.random());
                 return;
             }
-            if (md.HisFrmType == FrmType.Url) {
-                /* 自由表单 */
-                window.location.href = "../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.MapDataURL&No=" + this.FK_MapData;
-            }
+           
             if (md.FrmType == FrmType.Entity) {
-                window.location.href = "../../Comm/Ens.htm?EnsName=" + md.PTable;
+                SetHref("../../Comm/Ens.htm?EnsName=" + md.PTable);
                 return;
             }
-            window.location.href = "../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random();
+            SetHref("../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random());
             //var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
             //handler.AddUrlData();
             //var data = handler.DoMethodReturnString("GoToFrmDesigner_Init");
@@ -54,7 +51,7 @@
             //    return;
             //}
             //if (data.indexOf('url@') == 0) {
-            //    window.location.href = data.replace('url@', '');
+            //    SetHref( data.replace('url@', '');
             //    return;
             //}
             //$("#Msg").html("<font color=blue>" + data + "</font>");

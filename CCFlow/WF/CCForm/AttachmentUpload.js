@@ -1,6 +1,6 @@
 ﻿//点击右边的下载标签.
 function Down(fk_ath, pkVal, delPKVal) {
-    window.location.href = 'AttachmentUpload.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=<%=FK_Node %>&FK_Flow = <%=FK_Flow %>&FK_MapData=<%=FK_MapData %>&Ath=<%=Ath %>';
+    SetHref('AttachmentUpload.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=<%=FK_Node %>&FK_Flow = <%=FK_Flow %>&FK_MapData=<%=FK_MapData %>&Ath=<%=Ath %>');
 }
 
 //点击文件名称执行的下载.
@@ -124,6 +124,6 @@ function Del(fk_ath, pkVal, delPKVal) {
 
     alert(data);
 
-    window.location.href = window.location.href;
+    Reload();
 }
    

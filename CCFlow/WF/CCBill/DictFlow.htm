@@ -368,7 +368,7 @@
 
         //返回
         function Back() {
-            window.location.href = "./MyDict.htm?WorkID=" + param.FrmOID + "&FrmID=" + param.FrmID + "&IsReadonly=" + GetQueryString("IsReadonly") + "&FK_MapData=" + param.FrmID;
+            SetHref("./MyDict.htm?WorkID=" + param.FrmOID + "&FrmID=" + param.FrmID + "&IsReadonly=" + GetQueryString("IsReadonly") + "&FK_MapData=" + param.FrmID);
         }
 
         //发起子流程

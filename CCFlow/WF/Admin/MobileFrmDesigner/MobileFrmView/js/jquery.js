@@ -4279,7 +4279,7 @@ jQuery.extend({
 	valHooks: {
 		option: {
 			get: function( elem ) {
-				// Use proper attribute retrieval(#6932, #12072)
+				// Use proper attribute retricceval(#6932, #12072)
 				var val = jQuery.find.attr( elem, "value" );
 				return val != null ?
 					val :
@@ -4481,7 +4481,7 @@ jQuery.extend({
 			get: function( elem ) {
 				// elem.tabIndex doesn't always return the correct value when it hasn't been explicitly set
 				// http://fluidproject.org/blog/2008/01/09/getting-setting-and-removing-tabindex-values-with-javascript/
-				// Use proper attribute retrieval(#12072)
+				// Use proper attribute retricceval(#12072)
 				var tabindex = jQuery.find.attr( elem, "tabindex" );
 
 				return tabindex ?
@@ -6091,7 +6091,7 @@ jQuery.fn.extend({
 
 			if ( elem.parentNode ) {
 				if ( keepData && jQuery.contains( elem.ownerDocument, elem ) ) {
-					setGlobalEval( getAll( elem, "script" ) );
+					setGlobalcceval( getAll( elem, "script" ) );
 				}
 				elem.parentNode.removeChild( elem );
 			}
@@ -6278,7 +6278,7 @@ jQuery.fn.extend({
 								// Hope ajax is available...
 								jQuery._evalUrl( node.src );
 							} else {
-								jQuery.globalEval( ( node.text || node.textContent || node.innerHTML || "" ).replace( rcleanScript, "" ) );
+								jQuery.globalcceval( ( node.text || node.textContent || node.innerHTML || "" ).replace( rcleanScript, "" ) );
 							}
 						}
 					}
@@ -6320,7 +6320,7 @@ function restoreScript( elem ) {
 }
 
 // Mark scripts as having already been evaluated
-function setGlobalEval( elems, refElements ) {
+function setGlobalcceval( elems, refElements ) {
 	var elem,
 		i = 0;
 	for ( ; (elem = elems[i]) != null; i++ ) {
@@ -6525,7 +6525,7 @@ jQuery.extend({
 		// Preserve script evaluation history
 		destElements = getAll( clone, "script" );
 		if ( destElements.length > 0 ) {
-			setGlobalEval( destElements, !inPage && getAll( elem, "script" ) );
+			setGlobalcceval( destElements, !inPage && getAll( elem, "script" ) );
 		}
 
 		destElements = srcElements = node = null;
@@ -6642,7 +6642,7 @@ jQuery.extend({
 
 			// Preserve script evaluation history
 			if ( contains ) {
-				setGlobalEval( tmp );
+				setGlobalcceval( tmp );
 			}
 
 			// Capture executables
@@ -8448,7 +8448,7 @@ jQuery.ajaxSetup({
 	},
 	converters: {
 		"text script": function( text ) {
-			jQuery.globalEval( text );
+			jQuery.globalcceval( text );
 			return text;
 		}
 	}

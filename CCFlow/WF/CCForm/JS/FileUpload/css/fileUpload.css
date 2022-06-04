@@ -88,7 +88,7 @@
     color: #FFFFFF;
     padding: 10px;
     font-size: 15px;
-    border-radius: 5px;
+    border-radius: 3px;
     cursor: pointer;
 }
 .fileUploadContent .uploadBts>div .selectFileBt:hover{
@@ -203,7 +203,7 @@
     text-align: center;
     background-color: white !important;
     color: black !important;
-    border: 1px solid #999 !important;
+    border: 1px solid #d2d2d2 !important;
     font-size: 12px !important;
     font-weight: normal;
 }

@@ -185,6 +185,8 @@ function AfterBindEn_DealMapExt(tr, rowIndex) {
                         dateFmt = "HH:mm:ss";
                     } else if (frmDate == 6) {
                         dateFmt = "MM-dd";
+                    } else if (frmDate == 7) {
+                        dateFmt = "yyyy";
                     }
 
                     var mapextDoc = mapExt.Doc;
@@ -219,9 +221,9 @@ function AfterBindEn_DealMapExt(tr, rowIndex) {
                     curRowIndex = id.substring(id.lastIndexOf("_") + 1);
                     var mapExtThis = $(obj.target).data().MapExt;
                     if (mapExtThis.Doc.indexOf("(") != -1)
-                        eval(mapExtThis.Doc);
+                        cceval(mapExtThis.Doc);
                     else
-                        eval(mapExtThis.Doc + '(this)');
+                        cceval(mapExtThis.Doc + '(this)');
                 });
                 break;
             case "DataFieldInputRole": //时间限制
@@ -252,6 +254,8 @@ function AfterBindEn_DealMapExt(tr, rowIndex) {
                             dateFmt = "HH:mm:ss";
                         } else if (frmDate == 6) {
                             dateFmt = "MM-dd";
+                        } else if (frmDate == 7) {
+                            dateFmt = "yyyy";
                         }
 
                         var minDate = '%y-%M-#{%d}';

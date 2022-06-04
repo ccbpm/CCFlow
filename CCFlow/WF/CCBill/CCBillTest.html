@@ -30,7 +30,7 @@
             if (webUser.No == null) {
                 Port_Login("admin");
                  webUser = new WebUser();
-               // window.location.href = "./Portal/Login.htm?RefUrl=" + window.location.href;
+               // SetHref( "./Portal/Login.htm?RefUrl=" + window.location.href;
                // return;
             }
 
@@ -228,7 +228,7 @@
             var data = Admin_Form_CreateBill(100, frmID, frmName, frmType, ptable);
             alert(data);
 
-            window.location.href = window.location.href;
+            Reload();
         }
         //新建单据. frmType  0=傻瓜表单,1=自由表单, 3=URL
         function NewFrmDict(frmType) {
@@ -247,7 +247,7 @@
 
             var data = Admin_Form_CreateDict(100, frmID, frmName, frmType, ptable);
             alert(data);
-            window.location.href = window.location.href;
+            Reload();
         }
 
 
@@ -256,19 +256,19 @@
                 return;
 
             Admin_From_Drop(frmID);
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function DoUp(frmID) {
 
             Admin_From_Up(frmID);
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function DoDown(frmID) {
 
             Admin_From_Down(frmID);
-            window.location.href = window.location.href;
+            Reload();
         }
 
         //打开模版属性.

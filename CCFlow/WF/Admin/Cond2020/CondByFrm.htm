@@ -29,10 +29,6 @@
 
         var OperForString = null;
         var OperForNumber = null;
-        var condType = GetQueryString("CondType");
-        var fk_flow = GetQueryString("FK_Flow");
-        var fk_Node = GetQueryString("FK_Node");
-        var toNodeID = GetQueryString("ToNodeID");
 
         //初始化页面函数.....
         $(function () {
@@ -58,17 +54,44 @@
             //绑定查询.
             GenerBindDDL("DDL_Fields", sys_mapattr, "No", "Name", "all");
 
+            var cond = data["WF_Cond"];
+            if (cond != null && cond != undefined) {
+                cond = cond[0];
+                $("#DDL_Fields").val(cond.AttrKey);
+                changeCond($("#DDL_Fields")[0]);
+                $("#DDL_Operator").val(getOperText(cond.FK_Operator));
+                $("#TB_Val").val(cond.OperatorValue);
+            }
 
 
         });
 
+        function getOperText(Oper) {
+            if (Oper == "")
+                return "all";
+            switch (Oper) {
+                case "=":
+                    return "dengyu";
+                case ">":
+                    return "dayu";
+                case ">=":
+                    return "dayudengyu";
+                case "<":
+                    return "xiaoyu";
+                case "<=":
+                    return "xiaoyudengyu";
+                case "!=":
+                    return "budengyu"
+                case "LIKE":
+                    return "like";
+                default:
+                    return "all";
+            }
+
+        }
         //执行保存..
         function Save() {
 
-            var condType = GetQueryString("CondType");
-            var fk_flow = GetQueryString("FK_Flow");
-            var fk_Node = GetQueryString("FK_Node");
-            var toNodeID = GetQueryString("ToNodeID");
 
             var DDL_Fields = $("#DDL_Fields").val(); //  字段.
             var DDL_Operator = $("#DDL_Operator").val(); //  操作符.
@@ -88,10 +111,7 @@
             handler.AddPara("DDL_Operator", DDL_Operator);
             handler.AddPara("OperVal", OperVal);
             handler.AddPara("OperValText", encodeURI(tbText.value));
-            handler.AddPara("ToNodeID", toNodeID);
-            handler.AddPara("CondType", condType);
-            handler.AddPara("FK_Flow", fk_flow);
-            handler.AddPara("FK_Node", fk_Node);
+            handler.AddUrlData();
             var data = handler.DoMethodReturnString("CondByFrm_Save");
 
             if (data.indexOf('err@') == 0) {
@@ -101,10 +121,9 @@
 
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
-            //alert("保存成功");
             Back();
         }
 
@@ -133,7 +152,7 @@
 
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
 
@@ -185,9 +204,12 @@
 
         //返回.
         function Back() {
-            var url = window.location.href;
+            var url = GetHrefUrl();
             url = url.replace('CondByFrm.htm', 'List.htm');
-            window.location.href = url;
+            if (url.indexOf("MyPK=") != -1) {
+                url = url.replace("&MyPK=" + GetQueryString("MyPK"), "");
+            }
+            SetHref(url);
 
         }
         //检查流程.

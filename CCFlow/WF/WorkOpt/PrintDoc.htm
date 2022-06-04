@@ -2,7 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>单据打印</title>
-    
+
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
+
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
     <!-- 导入配置文件. -->
@@ -32,6 +37,7 @@
                 alert(data);
                 return;
             }
+
             if (data.indexOf("info@") == 0) {
                 data = data.replace("info@", "");
                 data = JSON.parse(data);
@@ -41,15 +47,15 @@
                 }
                 var html = "";
                 html += "<fieldset>";
-                html += "<legend>ND" + GetQueryString("FK_Node") + "绑定的表单</legend>";
+                html += "<legend> 表单打印 </legend>";
                 html += "<ul>";
 
                 for (var i = 0; i < data.length; i++) {
                     if (data[i].FrmType == 3) //url
                         continue;
-                    html += "<li><a href='javaScript:void(0)' target=_blank onclick=PrintSignleFormIt(" + flowNo + "," + nodeID + "," + workID + "," + fid + ",\"" + data[i].No + "\")>" + data[i].Name + "</a></li>";
+                    html += "<li><a href='javaScript:void(0)' target=_blank onclick=PrintSignleFormIt(" + flowNo + "," + nodeID + "," + workID + "," + fid + ",\"" + data[i].No + "\")><img src='../Img/FileType/doc.gif' />" + data[i].Name + ".doc</a><br/><br/></li>";
                 }
-                html += "<li>说明：点击上面的表单名称进行RTF进行打印</li>";
+                //  html += "<li>说明：点击上面的表单名称进行RTF进行打印</li>";
                 html += "</ul>";
                 html += "</fieldset>";
 
@@ -74,8 +80,7 @@
                         return;
                     }
 
-
-                    WinOpen(data);
+                    SetHref(data);
                 }
                 return;
             }
@@ -101,14 +106,14 @@
 
         function PrintSignleFormIt(flowNo, nodeId, WorkID, FID, ccfromId) {
             $("#rtf").html("");
-            var ens = new Entities("BP.WF.Template.FrmPrintTemplates");
-            ens.Retrieve("FK_MapData", ccfromId);
+            var ens = new Entities("BP.WF.Template.Frm.FrmPrintTemplates");
+            ens.Retrieve("FrmID", ccfromId);
             if (ens.length == 0) {
                 alert("当前节点上没有绑定单据模板");
                 return false;
             }
             if (ens.length == 1) {
-                PrintIt(ens[0].No, flowNo, nodeId, WorkID, FID, ccfromId);
+                PrintIt(ens[0].MyPK, flowNo, nodeId, WorkID, FID, ccfromId);
                 return;
             }
 
@@ -146,6 +151,7 @@
                 data = data.replace('url@', '');
                 if (data.indexOf('rtf@') != -1) {
                     window.location.href = data.replace('rtf@', '');
+                    return;
                 } else {
                     data = data.replace('word@', '');
                     if (plant == 'CCFlow' && printModal == 1) {
@@ -155,7 +161,7 @@
                         alert('还没有翻译.');
                         return;
                     }
-                    WinOpen(data);
+                    SetHref(data);
                     return;
 
                 }
@@ -198,7 +204,7 @@
                 callbackFunc, //回调函数，wps加载项中InvokeFromSystemDemo这个函数的返回值作为这个函数的参数
                 true) //设置wps是否显示到最前面来
         }
-       
+
         var callbackFunc = function (result) {
             if (result.status == 0) {
                 //下面这行代码用来注册从wps加载项返回的消息的接收函数
@@ -243,11 +249,12 @@
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <div id="Msg">
-    </div>
-    <div id="rtf"></div>
+
     <center>
-        <input type="button" value='关闭' onclick="window.close();" />
+        <div id="Msg">
+        </div>
     </center>
+    <div id="rtf"></div>
+
 </body>
 </html>

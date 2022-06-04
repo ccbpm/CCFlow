@@ -99,6 +99,8 @@
             ens = hander.DoMethodReturnJSON("Default_GenerTemplate");
             var templates = [];
             var templateName = GetQueryString("Template");
+
+
             templateName = templateName == null || templateName == undefined ? "" : templateName;
             $.each(ens, function (i, item) {
                 if (item.No == templateName) {
@@ -203,7 +205,7 @@
                         SaveAsTemplate();
                         break;
                     case "Btn_Refresh"://刷新
-                        window.location.href = window.location.href;
+                        Reload();
                         break;
                     default: break;
                 }
@@ -311,7 +313,7 @@
                 url += "&FK_Flow=" + GetQueryString("FK_Flow");
                 url += "&Template=" + val;
 
-                window.location.href = url;
+                SetHref(url);
             }
             /**
              *退回
@@ -322,7 +324,7 @@
 
                 url += "&FK_Flow=" + GetQueryString("FK_Flow");
                 url += "&FK_Node=" + GetQueryString("FK_Node");
-                window.location.href = url;
+                SetHref(url);
             }
             /*
              * 应用
@@ -370,7 +372,7 @@
                         alert(data);
                         return;
                     }
-                    window.location.href = window.location.href;
+                    Reload();
                 }, function (index) {
                     layer.close(index);
 

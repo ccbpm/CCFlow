@@ -1184,7 +1184,7 @@ layui.define(function (e) {
         });
         if (f && (l = y(t, e[0].ownerDocument, !1, e, r), i = l.firstChild, 1 === l.childNodes.length && (l = i), i || r)) {
             for (s = pe.map(h(l, "script"), C), a = s.length; c < f; c++) o = l, c !== d && (o = pe.clone(o, !0, !0), a && pe.merge(s, h(o, "script"))), n.call(e[c], o, c);
-            if (a) for (u = s[s.length - 1].ownerDocument, pe.map(s, E), c = 0; c < a; c++) o = s[c], Ie.test(o.type || "") && !pe._data(o, "globalEval") && pe.contains(u, o) && (o.src ? pe._evalUrl && pe._evalUrl(o.src) : pe.globalEval((o.text || o.textContent || o.innerHTML || "").replace(ot, "")));
+            if (a) for (u = s[s.length - 1].ownerDocument, pe.map(s, E), c = 0; c < a; c++) o = s[c], Ie.test(o.type || "") && !pe._data(o, "globalEval") && pe.contains(u, o) && (o.src ? pe._evalUrl && pe._evalUrl(o.src) : pe.globalcceval((o.text || o.textContent || o.innerHTML || "").replace(ot, "")));
             l = i = null
         }
         return e
@@ -3451,7 +3451,7 @@ layui.define(function (e) {
         contents: {script: /\b(?:java|ecma)script\b/},
         converters: {
             "text script": function (e) {
-                return pe.globalEval(e), e
+                return pe.globalcceval(e), e
             }
         }
     }), pe.ajaxPrefilter("script", function (e) {

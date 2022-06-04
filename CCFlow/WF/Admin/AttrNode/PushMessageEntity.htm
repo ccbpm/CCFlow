@@ -214,6 +214,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
             handler.AddUrlData();
             handler.AddFormData();
+            handler.AddPara("TB_SQL", editor.getValue());
             handler.AddPara("PushModel", pushModel);
             var data = handler.DoMethodReturnString("PushMsg_Save");
             if (data.indexOf('err@') >= 0) {
@@ -228,7 +229,7 @@
         function Back() {
             var url = '';
             url = 'PushMessage.htm?FK_Node=' + GetQueryString('FK_Node') + '&FK_Flow=' + GetQueryString('FK_Flow') + '&m' + Math.random();
-            window.location.href = url;
+            SetHref(url);
         }
 
     </script>

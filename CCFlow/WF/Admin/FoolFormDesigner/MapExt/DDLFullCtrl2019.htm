@@ -114,7 +114,7 @@
                     $("#Btn_FullData").hide();
                 }
                 en.Update();
-                window.location.href = window.location.href;
+                Reload();
                 return;
             }
 
@@ -126,7 +126,7 @@
                 var myPK = "DDLFullCtrl_" + frmID + "_" + keyOfEn;
                 var url = "../FullData/Main.htm?FK_MapData=" + frmID + "&RefPK=" + myPK + "&KeyOfEn=" + keyOfEn + "&ExtType=" + extType;
 
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
         </script>

@@ -54,18 +54,47 @@
             }
 
             GenerBindDDL("DDL_Frms", frms, "No", "Name", "all");
+            var cond = data["WF_Cond"];
+            if (cond != null && cond != undefined) {
+                cond = cond[0];
+                var frmID = cond.FK_Attr.replace("_" + cond.AttrKey, "");
+                $("#DDL_Frms").val(frmID);
+                changeForm($("#DDL_Frms")[0]);
+                $("#DDL_Fields").val(cond.AttrKey);
+                changeCond($("#DDL_Fields")[0]);
+                $("#DDL_Operator").val(getOperText(cond.FK_Operator));
+                $("#TB_Val").val(cond.OperatorValue);
+            }
 
 
         });
 
+        function getOperText(Oper) {
+            if (Oper == "")
+                return "all";
+            switch (Oper) {
+                case "=":
+                    return "dengyu";
+                case ">":
+                    return "dayu";
+                case ">=":
+                    return "dayudengyu";
+                case "<":
+                    return "xiaoyu";
+                case "<=":
+                    return "xiaoyudengyu";
+                case "!=":
+                    return "budengyu"
+                case "LIKE":
+                    return "like";
+                default:
+                    return "all";
+            }
+
+        }
+
         //执行保存..
         function Save() {
-
-            var condType = GetQueryString("CondType");
-            var fk_flow = GetQueryString("FK_Flow");
-            var fk_Node = GetQueryString("FK_Node");
-            var fk_mainNode = GetQueryString("FK_MainNode");
-            var toNodeID = GetQueryString("ToNodeID");
             var DDL_Fields = $("#DDL_Fields").val(); //  字段.
             var DDL_Operator = $("#DDL_Operator").val(); //  操作符.
 
@@ -96,11 +125,7 @@
             handler.AddPara("DDL_Fields", DDL_Fields);
             handler.AddPara("DDL_Operator", DDL_Operator);
             handler.AddPara("OperVal", OperVal);
-            handler.AddPara("CondType", condType);
-            handler.AddPara("FK_Flow", fk_flow);
-            handler.AddPara("FK_Node", fk_Node);
-            handler.AddPara("FK_MainNode", fk_mainNode);
-            handler.AddPara("ToNodeID", toNodeID);
+            handler.AddUrlData();
             handler.AddPara("FrmID", $("#DDL_Frms").val()); //表单ID.
             handler.AddFormData();
 
@@ -112,7 +137,7 @@
 
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
             alert("保存成功");
@@ -162,7 +187,7 @@
 
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
 
@@ -197,12 +222,13 @@
 
         //返回.
         function Back() {
-            var url = window.location.href;
+            var url = GetHrefUrl();
             url = url.replace('StandAloneFrm.htm', 'List.htm');
-
-            window.location.href = url;
-            /*parent.location.reload();
-            window.close();*/
+            if (url.indexOf("MyPK=") != -1) {
+                url = url.replace("&MyPK=" + GetQueryString("MyPK"), "");
+            }
+            SetHref(url);
+          
         }
     </script>
 </head>

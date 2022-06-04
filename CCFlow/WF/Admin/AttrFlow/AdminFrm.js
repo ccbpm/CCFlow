@@ -47,7 +47,7 @@ function initPageData() {
  */
 function GenerWorkNode() {
     var index = layer.load(0, { shade: false }); //0代表加载的风格，支持0-2
-    var href = window.location.href;
+    var href = GetHrefUrl();
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
 
@@ -251,7 +251,7 @@ function BindFrm() {
 
 
     //如果是富文本编辑器
-    if ($(".rich").length > 0 && richTextType == "tinymce") {
+    if ($(".rich").length > 0) {// && richTextType == "tinymce"
         var images_upload_url = "";
         var directory = "ND" + pageData.FK_Flow;
         var handlerUrl = "";
@@ -278,36 +278,36 @@ function BindFrm() {
         });
 
     }
-    if ($(".EditorClass").length > 0 && richTextType == "ueditor") {
-        $('head').append('<link href="./Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">');
-        Skip.addJs("../../Comm/umeditor1.2.3-utf8/third-party/template.min.js?Version=" + Math.random());
-        Skip.addJs("../../Comm/umeditor1.2.3-utf8/umeditor.config.js?Version=" + Math.random());
-        Skip.addJs("../../Comm/umeditor1.2.3-utf8/umeditor.js?Version=" + Math.random());
-        Skip.addJs("../../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js?Version=" + Math.random());
-        $.each($(".EditorClass"), function (i, EditorDiv) {
-            var editorId = $(EditorDiv).attr("id");
-            //给富文本 创建编辑器
-            var editor = document.activeEditor = UM.getEditor(editorId, {
-                'autoHeightEnabled': false, //是否自动长高
-                'fontsize': [10, 12, 14, 16, 18, 20, 24, 36],
-                'initialFrameWidth': '98%'
-            });
-            var mapAttr = $(EditorDiv).data();
-            var height = mapAttr.UIHeight
-            $("#Td_" + mapAttr.KeyOfEn).find('div[class = "edui-container"]').css("height", height);
+    //if ($(".EditorClass").length > 0 && richTextType == "ueditor") {
+    //    $('head').append('<link href="./Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">');
+    //    Skip.addJs("../../Comm/umeditor1.2.3-utf8/third-party/template.min.js?Version=" + Math.random());
+    //    Skip.addJs("../../Comm/umeditor1.2.3-utf8/umeditor.config.js?Version=" + Math.random());
+    //    Skip.addJs("../../Comm/umeditor1.2.3-utf8/umeditor.js?Version=" + Math.random());
+    //    Skip.addJs("../../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js?Version=" + Math.random());
+    //    $.each($(".EditorClass"), function (i, EditorDiv) {
+    //        var editorId = $(EditorDiv).attr("id");
+    //        //给富文本 创建编辑器
+    //        var editor = document.activeEditor = UM.getEditor(editorId, {
+    //            'autoHeightEnabled': false, //是否自动长高
+    //            'fontsize': [10, 12, 14, 16, 18, 20, 24, 36],
+    //            'initialFrameWidth': '98%'
+    //        });
+    //        var mapAttr = $(EditorDiv).data();
+    //        var height = mapAttr.UIHeight
+    //        $("#Td_" + mapAttr.KeyOfEn).find('div[class = "edui-container"]').css("height", height);
 
-            if (editor) {
+    //        if (editor) {
 
-                editor.MaxLen = mapAttr.MaxLen;
-                editor.MinLen = mapAttr.MinLen;
-                editor.BindField = mapAttr.KeyOfEn;
-                editor.BindFieldName = mapAttr.Name;
+    //            editor.MaxLen = mapAttr.MaxLen;
+    //            editor.MinLen = mapAttr.MinLen;
+    //            editor.BindField = mapAttr.KeyOfEn;
+    //            editor.BindFieldName = mapAttr.Name;
 
-                //调整样式,让必选的红色 * 随后垂直居中
-                $(editor.container).css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
-            }
-        })
-    }
+    //            //调整样式,让必选的红色 * 随后垂直居中
+    //            $(editor.container).css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
+    //        }
+    //    })
+    //}
 
     //3.装载表单数据与修改表单元素风格.
     LoadFrmDataAndChangeEleStyle(flowData);

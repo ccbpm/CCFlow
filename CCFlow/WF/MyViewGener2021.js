@@ -18,6 +18,8 @@ $(function () {
 
     //初始化表单数据
     GenerWorkNode();
+    if (typeof AfterWindowLoad == "function")
+        AfterWindowLoad();
 })
 
 /**
@@ -52,6 +54,17 @@ function GenerWorkNode() {
     if (data.indexOf('err@') == 0) {
         layer.alert(data);
         console.log(data);
+        layer.close(index);
+        return;
+    }
+
+    if (data.indexOf("url@") == 0) {
+        isChartFrm = true;
+        var flow = new Entity("BP.WF.Data.FlowSimple", pageData.FK_Flow);
+        document.title = flow.Name;
+        var url = "./CCForm/" + data.replace("url@", "");
+        $("#CCForm").append("<iframe  id='ChapterIFrame' src='" + url + "' frameborder='0' style='width:100%;height:100%' scroll=no></iframe>");
+        $("#CCForm").css("height", " calc(100vh - 70px)");
         layer.close(index);
         return;
     }
@@ -114,10 +127,10 @@ function GenerWorkNode() {
     BindFrm();
     //加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
     var enName = flowData.Sys_MapData[0].No;
-    loadScript("../DataUser/JSLibData/" + pageData.FK_Flow + ".js?t=" + Math.random());
-    loadScript("../DataUser/JSLibData/" + enName + "_Self.js?t=" + Math.random());
-    loadScript("../DataUser/JSLibData/" + enName + ".js?t=" + Math.random());
+    if (flowData.Sys_MapData[0].IsEnableJs == 1)
+        loadScript("../DataUser/JSLibData/" + enName + "_Self.js?t=" + Math.random());
 
+    
     layer.close(index);
 }
 
@@ -130,6 +143,7 @@ function BindFrm() {
     var flowDevModel = flow.FlowDevModel;
     flowDevModel = flowDevModel == null || flowDevModel == undefined || flowDevModel == "" ? 0 : parseInt(flowDevModel);
     var isFool = true;
+    var isChartFrm = false;
     //根据流程设计模式解析
     switch (flowDevModel) {
         case FlowDevModel.Prefessional: //专业模式 
@@ -167,6 +181,13 @@ function BindFrm() {
                             $('head').append('<link href="../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
                             GenerDevelopFrm(flowData, flowData.Sys_MapData[0].No);
                             isFool = false;
+                        }
+                        if (mapData.FrmType == 10) {//章节表单
+                            var url = GetHrefUrl();
+                            url = url.replace("MyFlowGener.htm", "CCForm/Frm.htm") + "&FK_MapData=" + mapData.No +"&Readonly=1";
+                            $("#CCForm").append("<iframe src='" + url + "' frameborder='0' style='width:100%;height:100%' scroll=no></iframe>");
+                            $("#CCForm").css("height", " calc(100vh - 70px)")
+                            isChartFrm = true;
                         }
                     }
                     break;
@@ -208,6 +229,13 @@ function BindFrm() {
                     GenerDevelopFrm(flowData, flowData.Sys_MapData[0].No);
                     isFool = false;
                 }
+                if (frmNode.FrmType == 10) {//章节表单
+                    var url = GetHrefUrl();
+                    url = url.replace("MyFlowGener.htm", "CCForm/Frm.htm") + "&FK_MapData=" + mapData.No + "&Readonly=1";;
+                    $("#CCForm").append("<iframe src='" + url + "' frameborder='0' style='width:100%;height:100%' scroll=no></iframe>");
+                    $("#CCForm").css("height", " calc(100vh - 70px)")
+                    isChartFrm = true;
+                }
             }
             break;
         case FlowDevModel.FrmTree://表单库多表单
@@ -221,6 +249,8 @@ function BindFrm() {
 
     //调整页面宽度
     var w = flowData.Sys_MapData[0].FrmW;//设置的页面宽度
+    if (isChartFrm == true)
+        w = "calc(100vw - 50px)";
     //傻瓜表单的名称居中的问题
     if ($(".form-unit-title img").length > 0) {
         var width = $(".form-unit-title img")[0].width;
@@ -231,6 +261,8 @@ function BindFrm() {
         $('#ContentDiv').css("margin-left", "auto").css("margin-right", "auto");
     }
 
+    if (isChartFrm == true)
+        return;
     //星级评分事件
     setScore(isReadonly);
 

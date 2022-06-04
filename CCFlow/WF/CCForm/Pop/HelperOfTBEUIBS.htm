@@ -114,7 +114,7 @@
                 $("#newsGrid").html("<b>访问页面出错，请联系管理员。<b>");
                 return;
             }
-            data =eval('(' + data + ')');// ToJson(data);
+            data =cceval('(' + data + ')');// ToJson(data);
             if (data == null || data =="" || data==undefined) {
                 data = [];
             }

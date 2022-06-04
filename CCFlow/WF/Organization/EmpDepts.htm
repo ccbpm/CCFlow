@@ -21,11 +21,11 @@
 
             var emp = new Entity("BP.Port.Emp", empNo);
 
-            var ens = new Entities("BP.GPM.DeptEmps");
+            var ens = new Entities("BP.Port.DeptEmps");
             ens.Retrieve("FK_Emp", empNo);
 
             if (ens.length == 0) {
-                var deptEmp = new Entity("BP.GPM.DeptEmp");
+                var deptEmp = new Entity("BP.Port.DeptEmp");
                 deptEmp.FK_Dept = emp.FK_Dept;
                 deptEmp.FK_Emp = emp.No;
                 deptEmp.MyPK = emp.FK_Dept + "_" + emp.No;
@@ -67,7 +67,7 @@
 
                 //求岗位集合.
 
-                var dess = new Entities("BP.GPM.DeptEmpStations");
+                var dess = new Entities("BP.Port.DeptEmpStations");
                 dess.Retrieve("FK_Emp", empNo, "FK_Dept", dept.No);
 
                 if (dess.length == 0) {
@@ -105,7 +105,7 @@
 
             var empNo = GetQueryString("FK_Emp");
             var emp = new Entity("BP.Port.Emp", empNo);
-            window.location.href = "EmpDeptMainDept.htm?FK_Emp=" + empNo + "&FK_DEPT=" + emp.FK_Dept;
+            SetHref("EmpDeptMainDept.htm?FK_Emp=" + empNo + "&FK_DEPT=" + emp.FK_Dept);
 
 
         }
@@ -116,14 +116,14 @@
             var emp = new Entity("BP.Port.Emp", empNo);
             emp.FK_Dept = deptNo;
             emp.Update();
-            window.location.href = window.location.href;
+            Reload();
           
         }
 
         //设置岗位.
         function AddStation(deptNo, empNo) {
             var url = "EmpDeptsDtl.htm?FK_Emp=" + empNo + "&FK_Dept=" + deptNo;
-            window.location.href = url;
+            SetHref(url);
         }
 
 
@@ -131,10 +131,10 @@
 
             var empNo = GetQueryString("FK_Emp");
 
-            var url = "../../WF/Comm/RefFunc/Branches.htm?EnName=BP.GPM.GPMEmp&Dot2DotEnsName=BP.GPM.DeptEmps&Dot2DotEnName=BP.GPM.DeptEmp&AttrOfOneInMM=FK_Emp&AttrOfMInMM=FK_Dept&EnsOfM=BP.GPM.Depts&DefaultGroupAttrKey=&No=" + empNo + "&PKVal=" + empNo;
+            var url = "../../WF/Comm/RefFunc/Branches.htm?EnName=BP.GPM.GPMEmp&Dot2DotEnsName=BP.Port.DeptEmps&Dot2DotEnName=BP.Port.DeptEmp&AttrOfOneInMM=FK_Emp&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=&No=" + empNo + "&PKVal=" + empNo;
             if (plant != "CCFlow")
-                url = basePath + "/WF/Comm/RefFunc/Branches.htm?EnName=BP.GPM.GPMEmp&Dot2DotEnsName=BP.GPM.DeptEmps&Dot2DotEnName=BP.GPM.DeptEmp&AttrOfOneInMM=FK_Emp&AttrOfMInMM=FK_Dept&EnsOfM=BP.GPM.Depts&DefaultGroupAttrKey=&No=" + empNo + "&PKVal=" + empNo;
-            window.location.href = url;
+                url = basePath + "/WF/Comm/RefFunc/Branches.htm?EnName=BP.GPM.GPMEmp&Dot2DotEnsName=BP.Port.DeptEmps&Dot2DotEnName=BP.Port.DeptEmp&AttrOfOneInMM=FK_Emp&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=&No=" + empNo + "&PKVal=" + empNo;
+            SetHref(url);
         }
 
         function Del(mypk) {
@@ -142,10 +142,10 @@
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
-            var dept = new Entity("BP.GPM.DeptEmp", mypk);
+            var dept = new Entity("BP.Port.DeptEmp", mypk);
             dept.Delete();
 
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 

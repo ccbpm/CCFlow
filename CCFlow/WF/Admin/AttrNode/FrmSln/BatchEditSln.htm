@@ -168,7 +168,7 @@
 
         // 绑定表单信息.
         function EditFrm(frmID) {
-            var url = '../../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=' + frmID + "&FrmID=" + frmID;
+            var url = '../../FoolFormDesigner/GoToFrmDesigner.htm?FK_MapData=' + frmID + "&FrmID=" + frmID;
             window.open(url);
         }
 
@@ -179,7 +179,7 @@
             return;
 
             OpenEasyUiDialog(url, "eudlgframe", '编辑', 900, 500, "icon-edit", true, null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
             });
         }
 
@@ -230,7 +230,7 @@
             }
             layer.closeAll('loading');
             alert('保存成功.');
-            window.location.href = window.location.href;
+            Reload();
         }
 
 

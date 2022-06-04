@@ -70,7 +70,7 @@
             if (en.Update() == 0)
                 en.Insert();
 
-            window.location.href = "Link.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&M=" + Math.random();
+            SetHref("Link.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&M=" + Math.random());
             return;
         }
 
@@ -86,7 +86,7 @@
             en.Delete();
 
             var url = "Link.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn");
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
 </head>

@@ -7,7 +7,7 @@
     2，需要 FK_Flow, FK_Node,WorkID, FID.
     3, 调用方法 ReturnWork.htm?FK_Flow=001&FK_Node=103&WorkID=232&FID=23
     -->
-    
+
     <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="../../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
     <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
@@ -50,7 +50,7 @@
                 return;
             }
 
-            var en = new Entity("BP.GPM.PowerCenter");
+            var en = new Entity("BP.CCFast.CCMenu.PowerCenter");
             en.CopyURL();
             en.CtrlModel = "Depts";
 
@@ -60,13 +60,13 @@
 
             var url = "../PowerCenter.htm";
             url += "?CtrlObj=" + GetQueryString("CtrlObj") + "&CtrlPKVal=" + GetQueryString("CtrlPKVal") + "&CtrlGroup=" + GetQueryString("CtrlGroup");
-            window.location.href = url;
+            SetHref(url);
 
             window.parent.selectEmpsWindowClose("确定");
 
         }
-
-        var pageData = { IsSelectMore: true, FK_Dept: 100 || '', ParentDept: '' };
+        var webUser = new WebUser();
+        var pageData = { IsSelectMore: true, FK_Dept: webUser.FK_Dept || '', ParentDept: '' };
         var returnVal = {};
         var isFirst = true;
 
@@ -88,7 +88,6 @@
             //返回节点数组
             var initNodeData = function (data, fk_dept2) {
 
-                data = eval('(' + data + ')');
 
                 var fk_dept = fk_dept2; //pageData.FK_Dept;
                 var parentNo = undefined;
@@ -108,7 +107,7 @@
                 var childDepts = $.grep(data, function (value) {
                     return value.ParentNo == fk_dept;
                 })
-              
+
                 var itemArr = [];
                 $.each(depts, function (i, dept) {
                     var deptNode = {
@@ -133,7 +132,7 @@
                                 children.push(childDeptNode);
                             });
                         }
-                       
+
                         deptNode.data.childrenData = children;
                     }
 
@@ -144,8 +143,8 @@
                     pageData.ParentDept = parentNo;
                 }
                 else {
-                    if (itemArr.length>0)
-                    itemArr = itemArr[0].data.childrenData;
+                    if (itemArr.length > 0)
+                        itemArr = itemArr[0].data.childrenData;
                 }
                 return itemArr;
 
@@ -163,13 +162,24 @@
                             if (webUser.CCBPMRunModel == 2)
                                 handler.AddPara("ParentNo", webUser.OrgNo);
                             else
-                                handler.AddPara("ParentNo", 0);
+                                handler.AddPara("ParentNo", pageData.FK_Dept);
                             var data = handler.DoMethodReturnString("Organization_Init");
                             if (data.indexOf('err@') == 0) {
                                 alert(data);
                                 return;
                             }
-
+                            data = JSON.parse(data);
+                            var depts = $.grep(data, function (item) {
+                                return item.No == pageData.FK_Dept;
+                            });
+                            if (depts.length == 0) {
+                                var dept = new Entity("BP.Port.Dept", pageData.FK_Dept)
+                                data.push({
+                                    No: dept.No,
+                                    Name: dept.Name,
+                                    ParentNo: dept.ParentNo
+                                })
+                            }
                             var fk_dept2 = pageData.FK_Dept;
                             cb(initNodeData(data, fk_dept2));
 
@@ -190,6 +200,18 @@
                                 if (data.indexOf('err@') == 0) {
                                     alert(data);
                                     return;
+                                }
+                                data = JSON.parse(data);
+                                var depts = $.grep(data, function (item) {
+                                    return item.No == pageData.FK_Dept;
+                                });
+                                if (depts.length == 0) {
+                                    var dept = new Entity("BP.Port.Dept", pageData.FK_Dept)
+                                    data.push({
+                                        No: dept.No,
+                                        Name: dept.Name,
+                                        ParentNo: dept.ParentNo
+                                    })
                                 }
 
                                 var fk_dept2 = node.id;
@@ -301,7 +323,7 @@
         function Close() {
             var url = "../PowerCenter.htm";
             url += "?CtrlObj=" + GetQueryString("CtrlObj") + "&CtrlPKVal=" + GetQueryString("CtrlPKVal") + "&CtrlGroup=" + GetQueryString("CtrlGroup");
-            window.location.href = url;
+            SetHref(url);
 
             window.parent.selectEmpsWindowClose("确定");
         }

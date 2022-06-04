@@ -40,7 +40,7 @@ function changeOption() {
 
     var url = GetUrl(optionKey);
 
-    window.location.href = url + "?MyPK=" + GetQueryString("MyPK");
+    SetHref(url + "?MyPK=" + GetQueryString("MyPK"));
 }
 
 function GetUrl(popModel) {
@@ -94,7 +94,7 @@ function OpenEasyUiDialogExt(url, title, w, h, isReload) {
 
     OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
         if (isReload == true) {
-            window.location.href = window.location.href;
+            Reload();
         }
     });
 }

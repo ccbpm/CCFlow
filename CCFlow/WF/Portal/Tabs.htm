@@ -115,11 +115,11 @@
             var pageID = GetQueryString("PageID");
 
             //给标题赋值.
-            var menu = new Entity("BP.GPM.Menu2020.Menu", pageID);
+            var menu = new Entity("BP.CCFast.CCMenu.Menu", pageID);
             this.title = menu.Name;
 
             //获得标签页, 生成标签页.
-            var ens = new Entities("BP.GPM.Menu2020.TabDtls");
+            var ens = new Entities("BP.CCFast.CCMenu.TabDtls");
             ens.Retrieve("RefMenuNo", pageID, "Idx");
            
             systems = obj2arr(ens)

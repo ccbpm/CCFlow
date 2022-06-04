@@ -110,8 +110,8 @@
         //转到菜单
         function ToMenu() {
             var moduleNo = GetQueryString("ModuleNo");
-            var module = new Entity("BP.GPM.Menu2020.Module", moduleNo);
-            var url = "../GPM/Menus.htm?SystemNo=" + module.SystemNo;
+            var module = new Entity("BP.CCFast.CCMenu.Module", moduleNo);
+            var url = "../../GPM/Menus.htm?SystemNo=" + module.SystemNo;
             window.top.vm.openTab(name, url);
         }
 
@@ -138,16 +138,16 @@
             if (frmID == undefined)
                 frmID = GetQueryString("FrmID");
 
-            //  var module = new Entity("BP.GPM.Menu2020.Module", moduleNo);
-            var url = "../Admin/CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + frmID + "&FrmID=" + frmID;
+            //  var module = new Entity("BP.CCFast.CCMenu.Module", moduleNo);
+            var url = basePath + "/WF/Admin/FoolFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + frmID + "&FrmID=" + frmID;
 
             window.top.vm.openTab(frmID, url);
         }
         //到达集合组件.
         function GoToMethodD() {
             var moduleNo = GetQueryString("ModuleNo");
-            var module = new Entity("BP.GPM.Menu2020.Module", moduleNo);
-            var url = "../CCBill/Admin/Method.htm?SystemNo=" + module.SystemNo;
+            var module = new Entity("BP.CCFast.CCMenu.Module", moduleNo);
+            var url = basePath + "/WF/CCBill/Admin/Method.htm?SystemNo=" + module.SystemNo;
             url += "&ModuleNo=" + moduleNo;
             url += "&FrmID=" + GetQueryString("FrmID");
             window.top.vm.openTab(name, url);
@@ -207,7 +207,7 @@
                         <span><i :class="en.Icon" style="margin-right: 8px"> </i> {{en.Name}}</span>
                     </div>
                     <!--<div class="item item-other ">{{en.Name}} </div>
-                    <span><i :class="method.Icon" style="margin-right: 8px"> </i> {{method.Name}}</span>-->
+    <span><i :class="method.Icon" style="margin-right: 8px"> </i> {{method.Name}}</span>-->
                     <div class="item item-other" v-html="en.MethodModel"></div>
                     <div class="item item-docs" v-html="en.Docs"></div>
                     <div class="item item-other">
@@ -222,10 +222,12 @@
                         </form>
                     </div>
                     <div class="item item-op" v-html="en.enCtrlWayText"></div>
-                    <div class="item item-other" @click.stop="DeleteIt(en.No)">
+                    <div v-if="en.IsDelete==true" class="item item-other" @click.stop="DeleteIt(en.No)">
                         <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs c-btn">
                             <i class="layui-icon layui-icon-delete layui-font-12"></i> 删除
                         </button>
+                    </div>
+                    <div v-if="en.IsDelete==false" class="item item-other" >
                     </div>
                 </div>
 

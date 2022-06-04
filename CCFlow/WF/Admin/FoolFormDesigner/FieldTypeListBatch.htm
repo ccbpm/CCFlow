@@ -6,7 +6,7 @@
     <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
     <script src="../../Scripts/easyUI145/jquery.min.js"></script>
     <script src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/QueryString2016.js"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
@@ -146,7 +146,7 @@
             if (newName.trim() == "")
                 newName = name;
             var fk_mapData = GetQueryString("FK_MapData");
-            var mapFool = new Entity("BP.WF.Template.MapFrmFool", fk_mapData);
+            var mapFool = new Entity("BP.WF.Template.Frm.MapFrmFool", fk_mapData);
             var data = mapFool.DoMethodReturnString("DoChangeFieldName",keyOfEn, newKeyOfEn, newName);
             if (data.indexOf("err@") != -1) {
                 alert(data);
@@ -166,7 +166,7 @@
             var attr = new Entity("BP.Sys.MapAttr");
             attr.SetPKVal(mypk);
             attr.Delete();
-            window.location.href = window.location.href;
+            Reload();
         }
         //还没存表的删除
         function Remove(obj) {
@@ -273,7 +273,7 @@
                     
                 }
             });
-            window.location.href = window.location.href;
+            Reload();
 
         }
          //全选或者反选
@@ -291,7 +291,7 @@
         function setWidth(url) {
             url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&PKVal=" + url;
             OpenEasyUiDialog(url, "eudlgframe", '设置字段属性', 700, 470, "icon-edit", true, null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
             });
         }
 

@@ -104,12 +104,12 @@
                 //关闭提示窗口并刷新.
                 if (methodFunc.WhatAreYouTodo == 1) {
                     //$("#Msg").html(data);
-                    window.location.href = window.location.href;
+                    Reload();
                     return;
                 }
                 //转入到Search.htm页面上去.
                 if (methodFunc.WhatAreYouTodo == 2) {
-                    window.location.href = "SearchDict.htm?FrmID=" + GetQueryString("FrmID");
+                    SetHref("SearchDict.htm?FrmID=" + GetQueryString("FrmID"));
                     return;
                 }
             })
@@ -157,7 +157,7 @@
 
             //执行这个 script.
             try {
-                var data = eval(func.MethodID + "(" + paras + ")");
+                var data = cceval(func.MethodID + "(" + paras + ")");
                // debugger
                 if (data == undefined || data == "")
                     data = "执行成功";

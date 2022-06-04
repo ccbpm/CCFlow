@@ -163,10 +163,10 @@
     <!--杨玉慧 -->
     <script type="text/javascript">
         $(function () {
-            var index=window.location.href.indexOf('?');
+            var index=GetHrefUrl().indexOf('?');
             if (index>0){
-                var paramUrl=window.location.href.substring(index,window.location.href.length);
-                window.location.href = "../MyFlow.htm" + paramUrl + "&DoType=View";
+                var paramUrl=GetHrefUrl().substring(index,GetHrefUrl().length);
+                SetHref("../MyFlow.htm" + paramUrl + "&DoType=View");
 
                 $('#viewFrmIframe').attr('src', paramUrl);
 

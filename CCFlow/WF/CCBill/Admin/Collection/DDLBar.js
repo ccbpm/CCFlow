@@ -46,16 +46,16 @@ function GetDBDtl() {
     var json = [
 
         //无需集合支持.
-        { "No": "New", "Name": "新建:创建实体按钮", "GroupNo": "A", "Url": "New.htm" },
+        //{ "No": "New", "Name": "新建:创建实体按钮", "GroupNo": "A", "Url": "New.htm" },
         { "No": "SearchCond", "Name": "查询条件设置", "GroupNo": "A", "Url": "SearchCond.htm" },
-        { "No": "Toolbar", "Name": "导出Excel", "GroupNo": "A", "Url": "Toolbar.htm" },
-        { "No": "Toolbar", "Name": "导出固定的模板", "GroupNo": "A", "Url": "Toolbar.htm" },
+        //{ "No": "Toolbar", "Name": "导出Excel", "GroupNo": "A", "Url": "Toolbar.htm" },
+        //{ "No": "Toolbar", "Name": "导出固定的模板", "GroupNo": "A", "Url": "Toolbar.htm" },
         { "No": "Link", "Name": "自定义按钮", "GroupNo": "A", "Url": "Link.htm" },
         { "No": "QRCodeAddDict", "Name": "扫码填报", "GroupNo": "A", "Url": "QRCodeAddDict.htm" },
         { "No": "FlowNewEntity", "Name": "注册/新增实体类流程", "GroupNo": "A", "Url": "FlowNewEntity.htm" },
 
         //需要集合支持.
-        { "No": "Delete", "Name": "删除:(批量删除选中的多条实体)", "GroupNo": "B", "Url": "Delete.htm" },
+        //{ "No": "Delete", "Name": "删除:(批量删除选中的多条实体)", "GroupNo": "B", "Url": "Delete.htm" },
         { "No": "Func", "Name": "方法:(包含有参数与无参数的方法)", "GroupNo": "B", "Url": "Func.htm" },
         { "No": "Bill", "Name": "单据:批量发起.", "GroupNo": "B", "Url": "Bill.htm" },
         { "No": "LinkCollection", "Name": "自定义按钮", "GroupNo": "B", "Url": "LinkCollection.htm" },
@@ -78,7 +78,7 @@ function changeOption() {
     var optionKey = optionKey = sele[index].value;
 
     var url = GetUrl(optionKey);
-    window.location.href = url + "?FrmID=" + frmID + "&ModuleNo=" + GetQueryString("ModuleNo") ;
+    SetHref(url + "?FrmID=" + frmID + "&ModuleNo=" + GetQueryString("ModuleNo"));
 
 }
 function GetUrl(optionKey) {

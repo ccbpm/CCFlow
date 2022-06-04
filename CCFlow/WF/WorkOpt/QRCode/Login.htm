@@ -104,7 +104,7 @@
                 alert(data);
                 return;
             }
-            window.location.href = data;
+            SetHref(data);
             return false;
         })
 
@@ -112,10 +112,10 @@
         function Reg() {
 
             var no = $("#TB_No").val();
-            var url = window.location.href;
+            var url = GetHrefUrl();
             url = url.replace("Login.htm", "RegUser.htm");
             url += "&Tel=" + no;
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
 

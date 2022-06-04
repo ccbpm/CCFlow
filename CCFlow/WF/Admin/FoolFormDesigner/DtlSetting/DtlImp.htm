@@ -36,7 +36,7 @@
             mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapData");
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
             mapExt.Delete();
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function Save() {
@@ -50,7 +50,7 @@
             mapExt.ExtType = "DtlImp";
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
             var val = mapExt.Save();
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </head>

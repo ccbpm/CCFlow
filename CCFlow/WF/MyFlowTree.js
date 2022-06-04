@@ -16,14 +16,15 @@ window.onload = function () {
             frmGenerUrl: "",
             frmGenerName: "",
             frmGenerNo: "",
-            sideBarOpen: true,
+            sideBarOpen: false,
             IsReadonly: GetQueryString("IsReadonly"),
             IsCC: "0",
             WorkID: GetQueryString("WorkID"),
             FK_Node: GetQueryString("FK_Node"),
             FK_Flow: GetQueryString("FK_Flow"),
             FID: GetQueryString("FID"),
-            PWorkID: GetQueryString("PWorkID")
+            PWorkID: GetQueryString("PWorkID"),
+            IsShowBtn: true
 
         },
         computed: {
@@ -99,14 +100,20 @@ window.onload = function () {
                 this.top = e.pageY
                 this.left = e.pageX
             },
-            openPage: function (formData) {
+            openPage: function (formData, url) {
                 var iframe = this.$refs['iframe-' + this.activeItem];
                 if (iframe != null && iframe != undefined) {
                     iframe = iframe[0];
                     var contentWindow = iframe.contentWindow;
-                    if (contentWindow != null && contentWindow.SaveTreeFrm != undefined && typeof (contentWindow.SaveTreeFrm) == "function") {
-                        contentWindow.SaveTreeFrm(0);
+                    try {
+                        if (contentWindow != null && contentWindow.Save != undefined && typeof (contentWindow.Save) == "function") {
+                            contentWindow.Save(0);
+                        }
+                    } catch (e) {
+                        //页面存在跨域
+                        contentWindow.postMessage({ Save: "Save" }, "*")
                     }
+                    
                 }
 
 
@@ -114,22 +121,28 @@ window.onload = function () {
                 var loading = layer.msg("加载中..", {
                     icon: 16
                 })
-                var isEdit = formData.IsEdit;
-                if ((this.IsCC && this.IsCC == "1") || this.IsReadonly == "1")
-                    isEdit = "0";
-                var isReadonly = this.IsReadonly;
-                if (isEdit == "0")
-                    isReadonly = "1";
 
-                var url = "./CCForm/Frm.htm";
-                if (window.location.href.indexOf("AdminFrm.htm") != -1)
-                    url = "../../CCForm/Frm.htm";
-                url +="?FK_MapData="+formData.No+"&IsEdit="+isEdit+"&WorkID="+this.WorkID+ "&FK_Flow="+this.FK_Flow+"&FK_Node="+this.FK_Node+ "&FID="+this.FID+"&PWorkID=" + this.PWorkID+"&IsReadonly="+isReadonly;
+                if (formData.No != "PrintDoc" && (url == undefined || url == "")) {
+                    var isEdit = formData.IsEdit;
+                    if ((this.IsCC && this.IsCC == "1") || this.IsReadonly == "1")
+                        isEdit = "0";
+                    var isReadonly = this.IsReadonly;
+                    if (isEdit == "0")
+                        isReadonly = "1";
+
+                    url = basePath + "/WF/CCForm/Frm.htm";
+                    url += "?FK_MapData=" + formData.No + "&IsEdit=" + isEdit + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&PWorkID=" + this.PWorkID + "&IsReadonly=" + isReadonly;
+                }
+                if (formData.No == "PrintDoc")
+                    url = basePath + "/WF/WorkOpt/PrintDoc.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + Math.random();
+
                 formData.Docs = url;
 
                 var isExist = this.iframes.filter(function (iframe) {
                     return iframe.No === formData.No;
                 }).length > 0
+
+                this.frmGenerNo = formData.No;
 
                 //不存在就加载.
                 if (!isExist) {
@@ -138,6 +151,8 @@ window.onload = function () {
                     layer.close(loading)
                     return
                 }
+
+               
 
                 this.$nextTick(function () {
                     var currentIndex = this.getIndex(formData)
@@ -164,17 +179,45 @@ window.onload = function () {
                 }
                 return -1
             },
+			openTab: function (formData) {
+                //打开一个tab页  lyc
+                var isExist = this.iframes.filter(function (iframe) {
+                    return iframe.No === formData.No;
+                }).length > 0
+                //不存在就加载.
+                if (!isExist) {
+                    this.iframes.push(formData);
+                    this.activeItem = this.getIndex(formData)
+                    return
+                }
+            },
+            refreshParentTab(formData) {
+                var _this = this
+                this.$nextTick(function () {
+                    if (this.activeItem === -1) {
+                        _this.$refs['iframe-home'].contentWindow.location.reload();
+                        return
+                    }
 
+                    _this.$refs['iframe-' + formData.ParentNo][0].contentWindow.location
+                        .reload()
+                })
+            },
 
             loadData: function () {
                 var url = $('#ccbpmJS')[0].src;
                 var type = getQueryStringByNameFromUrl(url, "type");
                 if (type == "MyView")
                     this.IsReadonly = 1;
+                if (type == "MyFrm") {
+                    this.IsReadonly = 1;
+                    this.IsShowBtn = false;
+                }
+
                 var node = new Entity("BP.WF.Node", GetQueryString("FK_Node"));
                 //修改网页标题.
                 document.title = node.FlowName + ',' + node.Name;
-                 //获得数据源.
+                //获得数据源.
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
                 handler.AddUrlData();
                 handler.AddPara("IsReadonly", this.IsReadonly);
@@ -195,7 +238,22 @@ window.onload = function () {
                         return tree.No === item.ParentNo
                     });
                 }
-                this.sideBarData = trees;
+                if (this.forms.length == 1) {
+                    this.sideBarOpen = false;
+                    $(".indicator").remove();
+                } else {
+                    this.sideBarOpen = true;
+                    this.sideBarData = trees;
+                }
+                //在forms的后面增加一个打印的数据
+                this.forms.push({
+                    No: "PrintDoc",
+                    ParentNo: "",
+                    Name: "打印单据"
+
+                })
+               
+                
                 this.frmGenerUrl = "./CCForm/Frm.htm?FK_MapData=" + this.forms[0].No + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&PWorkID=" + this.PWorkID + "&IsReadonly=" + this.IsReadonly;
                 this.frmGenerName = this.forms[0].Name;
                 this.frmGenerNo = this.forms[0].No;
@@ -203,6 +261,13 @@ window.onload = function () {
                 ShowWorkReturnTip(data, this.IsReadonly);
                 //显示
                 console.log(this.sideBarData)
+            },
+            ChangeItem: function (index, formData) {
+                if (index == 0)
+                    this.activeItem = 0;
+                else
+                    this.activeItem = index;
+                this.frmGenerNo = formData.No;
             },
             menuHeight: function (formTree) {
                 return {
@@ -213,10 +278,14 @@ window.onload = function () {
         },
         mounted() {
 
-            this.loadData()
+            this.loadData();
+            var color = localStorage.getItem("themeColor")
+            chooseTheme(color);
             document.addEventListener('contextmenu', function (e) {
                 e.preventDefault()
-            })
+            });
+            if (typeof AfterWindowLoad == "function")
+                AfterWindowLoad();
         }
     })
 }
@@ -224,7 +293,7 @@ window.onload = function () {
 /**
  * 增加退回
  */
-function ShowWorkReturnTip(flowData,isReadonly) {
+function ShowWorkReturnTip(flowData, isReadonly) {
     if (isReadonly == 1)
         return;
     //显示退回消息
@@ -233,7 +302,7 @@ function ShowWorkReturnTip(flowData,isReadonly) {
     var scripNodeID = GetPara(gwf.AtPara, "ScripNodeID");
     if (scrip == null || scrip == undefined)
         scrip = "";
-    if ((flowData.AlertMsg != undefined && flowData.AlertMsg.length != 0) || (scrip != "" && scripNodeID!=GetQueryString("FK_Node"))) {
+    if ((flowData.AlertMsg != undefined && flowData.AlertMsg.length != 0) || (scrip != "" && scripNodeID != GetQueryString("FK_Node"))) {
         var _html = "";
         if (flowData.AlertMsg != undefined) {
             $.each(flowData.AlertMsg, function (i, item) {
@@ -252,7 +321,7 @@ function ShowWorkReturnTip(flowData,isReadonly) {
             _html += scrip;
             _html += "</div>";
         }
-       
+
         var h = window.innerHeight - 240;
         //退回消息
         layer.open({
@@ -284,14 +353,17 @@ function Save(saveType) {
         if (iframe != null && iframe != undefined) {
             iframe = iframe[0];
             var contentWindow = iframe.contentWindow;
-            if (contentWindow != null && contentWindow.SaveTreeFrm != undefined && typeof (contentWindow.SaveTreeFrm) == "function") {
-                if (contentWindow.SaveTreeFrm(saveType) == false)
-                    isSaveTrue = false;
+            try {
+                if (contentWindow != null && contentWindow.Save != undefined && typeof (contentWindow.Save) == "function") {
+                    if (contentWindow.Save(saveType) == false)
+                        isSaveTrue = false;
 
-            } else if (contentWindow != null && contentWindow.Save != undefined && typeof (contentWindow.Save) == "function") {
-                if (contentWindow.Save(saveType) == false)
-                    isSaveTrue = false;
+                }
+            } catch (e) {
+                //页面存在跨域
+                isSaveTrue = contentWindow.postMessage({ Save: "Save" }, "*")
             }
+            
         }
     })
     if (isSaveTrue == false)

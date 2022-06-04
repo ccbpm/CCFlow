@@ -11,7 +11,7 @@
             }
             if (window.confirm('您确定要删除吗?') == false)
                 return;
-            window.location.href = 'PushMessage.htm?MyPK=' + mypk + '&DoType=Del&FK_Node=' + nodeid;
+            SetHref('PushMessage.htm?MyPK=' + mypk + '&DoType=Del&FK_Node=' + nodeid);
         }
     </script>
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -115,7 +115,7 @@
             var en = new Entity("BP.Sys.MapExt");
             en.MyPK = myPK;
             en.Delete();
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function Btn_Save_Click() {
@@ -133,7 +133,7 @@
             }
 
             alert(data);
-            window.location.href = window.location.href;
+            Reload();
             return;
         }
         //加载模板
@@ -154,11 +154,11 @@
             url += '&KeyOfEn=' + GetQueryString("KeyOfEn");
             url += '&MyPK=' + GetQueryString('FK_MapData') + "_" + GetQueryString("KeyOfEn");
             url += '&tk=' + Math.random();
-            window.location.href = url;
+            SetHref(url);
         }
         function Edit() {
             var url = "InitScript.htm?s=34&FK_MapData=" + GetQueryString('FK_MapData') + "&ExtType=PageLoadFull&RefNo=";
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
     <style type="text/css">

@@ -71,7 +71,7 @@
             group.Idx = 100;
             group.Insert();
 
-            window.location.href = window.location.href;
+            Reload();
 
         }
         //编辑分组名称
@@ -88,7 +88,7 @@
         }
         //编辑明细表
         function EditDtl(mypk, dtlKey) {
-            var url = "../../Comm/En.htm?EnName=BP.WF.Template.MapDtlExt&PKVal=" + dtlKey;
+            var url = "../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapDtlExt&PKVal=" + dtlKey;
             var W = document.body.clientWidth - 240;
             var H = document.body.clientHeight - 20;
             OpenBootStrapModal(url, "EditFrame", "编辑明细表", W, H, "icon-edit");
@@ -104,7 +104,7 @@
         //预览手机端
         function Form_View() {
             var url = "./MobileFrmView/FrmView.htm?IsTest=1&FrmID=" + frmID;
-            window.location.href = url;
+            SetHref(url);
             //OpenBootStrapModal(url, "EditFrame", "预览手机端表单", 300, 530, "icon-edit");
         }
         //复制顺序到节点
@@ -226,7 +226,7 @@
             if (fk_node == null || fk_node == undefined || fk_node == "")
                 fk_node = 0;
             var url = "./MobileFrmView/FrmView.htm?IsTest=1&FrmID=" + frmID + "&FK_Node=" + fk_node;
-            window.location.href = url;
+            SetHref(url);
             return;
 
             //Form_View();
@@ -284,7 +284,7 @@
                                 //获得主键值
                                 insetToPK = EnName + '_' + insetToPK;
                                 mapAttr.DoMethodReturnString("DoInsertTo", insetToPK);
-                                window.location.href = window.location.href;
+                                Reload();
                                 sta = 0; // 1.0 重置状态.
                             }
                             return;
@@ -294,7 +294,7 @@
                             if (insetToPK != undefined && insetToPK.indexOf('<') == 0) {
 
                                 alert('移动位置错误.' + insetToPK);
-                                window.location.href = window.location.href;
+                                Reload();
                                 return;
                             }
 
@@ -317,7 +317,7 @@
                             }
 
                             sta = 0;//重置状态
-                            //window.location.href = window.location.href;
+                            //Reload();
                         }
                     });
 
@@ -354,7 +354,7 @@
 
         function EditGroup(oid) {
             var url = '../../Comm/EnOnly.htm?EnsName=BP.Sys.GroupFields&OID=' + oid;
-            window.location.href = url;
+            SetHref(url);
         }
 
         function InitPage() {

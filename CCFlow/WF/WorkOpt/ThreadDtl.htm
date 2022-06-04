@@ -75,7 +75,7 @@
                 msg += "\t\n 1. 新增加的人员，从分流节点的下一个节点开始执行.";
                 msg += "\t\n 2. 输入人员账号，点击确定后，系统就会自动为该人员分配一个任务.";
 
-                var empNo = promptGener(msg + ' 请输入要增加的人员账号，多个人员用逗号分开(比如:zhangsan,lisi):');
+                var empNo = window.prompt(msg + ' 请输入要增加的人员账号，多个人员用逗号分开(比如:zhangsan,lisi):');
                 if (empNo == null || empNo == '')
                     return;
                 //  var empNo = 'zhoupeng';
@@ -299,7 +299,7 @@
             handler.AddPara("FK_Flow", flowNo);
             handler.AddPara("WorkID", workID);
 
-            var data = handler.DoMethodReturnString("ThreadDtl_DelSubFlow");
+            var data = handler.DoMethodReturnString("ThreadDtl_DelSubThread");
             window.location.href = window.location.href;
         }
 

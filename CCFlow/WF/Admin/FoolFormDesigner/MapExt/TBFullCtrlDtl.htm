@@ -147,7 +147,7 @@
                     var url = 'TBFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&MyPK=' + myPK + "&KeyOfEn=" + GetQueryString('KeyOfEn');
                 else
                     var url = 'DDLFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&MyPK=' + myPK + "&KeyOfEn=" + GetQueryString('KeyOfEn');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
 
@@ -171,7 +171,7 @@
 
                 var mypk = GetQueryString('MyPK');
                 var url = 'DDLFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + mypk;
-                window.location.href = url;
+                SetHref(url);
                 return;
 
             }

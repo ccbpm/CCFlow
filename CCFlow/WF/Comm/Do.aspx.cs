@@ -21,6 +21,11 @@ namespace CCFlow.Web.Comm
 	public partial class Do : System.Web.UI.Page
     {
         #region ÊôÐÔ.
+        public string GetVal(string key)
+        {
+            string val = this.Request.QueryString[key];
+            return BP.Tools.DealString.DealStr(val);
+        }
         /// <summary>
         /// ¹Ø±Õ´°¿Ú
         /// </summary>
@@ -32,35 +37,35 @@ namespace CCFlow.Web.Comm
         {
             get
             {
-                return this.Request.QueryString["DoType"];
+                return this.GetVal("DoType");
             }
         }
         public string DoWhat
         {
             get
             {
-                return this.Request.QueryString["DoWhat"];
+                return this.GetVal("DoWhat");
             }
         }
         public string MyPK
         {
             get
             {
-                return this.Request.QueryString["MyPK"];
+                return this.GetVal("MyPK");
             }
         }
         public string EnName
         {
             get
             {
-                return this.Request.QueryString["EnName"];
+                return this.GetVal("EnName");
             }
         }
         public string EnsName
         {
             get
             {
-                return this.Request.QueryString["EnsName"];
+                return this.GetVal("EnsName");
             }
         }
         
@@ -75,7 +80,7 @@ namespace CCFlow.Web.Comm
                     break;
 				case "DownFile":
 					Entity enF = BP.En.ClassFactory.GetEn(this.EnName);
-					enF.PKVal = this.Request.QueryString["PK"];
+					enF.PKVal = this.GetVal("PK");
 					enF.Retrieve();
 					string pPath = enF.GetValStringByKey("MyFilePath") + "\\" + enF.PKVal + "." + enF.GetValStringByKey("MyFileExt");
 

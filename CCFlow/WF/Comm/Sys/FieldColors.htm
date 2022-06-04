@@ -91,7 +91,9 @@
             mapDtl.SetPara("MultiTitle", newTitle); 
             mapDtl.Update();
 
-            window.location.href = window.location;
+            Reload();
+
+         //   SetHref( window.location;
         }
 
         function Delete() {
@@ -105,7 +107,8 @@
             multiTitle = "";
             mapDtl.SetPara("MultiTitle", multiTitle);
             mapDtl.Update();
-            window.location.href = window.location;
+
+            Reload();
         }
         function getMutliFile(keyOfEn, multi) {
             var fields = multi.split(";");
@@ -126,11 +129,11 @@
             var fields = "";
 
             var url = "MultiTitleDtl.htm?ensName=" + GetQueryString("ensName");
-            window.location.href = url;
+            SetHref(url);
             return;
 
             WinOpenFull(url);
-            //window.location.href = window.location.href;
+            //Reload();
         }
     </script>
 </head>

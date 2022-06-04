@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>隐藏字段</title>     
+    <title>隐藏字段</title> 
     <script src="../../../Scripts/QueryString.js"></script>
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/config.js" type="text/javascript"></script>
@@ -9,30 +9,30 @@
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
 </head>
 <body>
+    <center>
+        <table id="tabApp" style="width:60%; text-align:center" class="table tableizer-table  table-striped table-bordered table-hover table-condensed">
+            <caption>隐藏字段</caption>
+            <tr>
+                <th>#</th>
+                <th>字段</th>
+                <th>字段名</th>
+                <th>操作</th>
+            </tr>
+            <tr v-for="(value,index) in listData.data" v-if="value.UIVisible==0">
+                <td>{{index+1}}</td>
+                <td>{{ value.KeyOfEn }}</td>
+                <td><a href="#" v-on:click="OpenEn(value.MyPK,value.MyDataType)">{{value.Name}}</a> </td>
 
-    <table id="tabApp" style="width:100%;">
-        <caption>隐藏字段</caption>
-        <tr>
-            <th>#</th>
-            <th>字段</th>
-            <th>字段名</th>
-            <th>操作</th>
-        </tr>
-        <tr v-for="(value,index) in listData.data" v-if="value.UIVisible==0">
-            <td>{{index+1}}</td>
-            <td>{{ value.KeyOfEn }}</td>
-            <td><a href="#" v-on:click="OpenEn(value.MyPK,value.MyDataType)">{{value.Name}}</a> </td>
-
-            <!-- 操作 -->
-            <!--<td v-if="value.UIVisible==0">隐藏字段</td>-->
-            <!--<td v-if="value.UIVisible==1"> -  </td>-->
-
-            <!-- 操作 -->
-            <td v-if="value.EditType==0"><a href="#" v-on:click="Delete(value.MyPK)">删除</a> </td>
-            <td v-if="value.EditType==1"> - </td>
-            <td v-if="value.EditType==2"> - </td>
-        </tr>
-    </table>
+                <!-- 操作 -->
+                <!--<td v-if="value.UIVisible==0">隐藏字段</td>-->
+                <!--<td v-if="value.UIVisible==1"> -  </td>-->
+                <!-- 操作 -->
+                <td v-if="value.EditType==0"><a href="#" v-on:click="Delete(value.MyPK)">删除</a> </td>
+                <td v-if="value.EditType==1"> - </td>
+                <td v-if="value.EditType==2"> - </td>
+            </tr>
+        </table>
+    </center>
 
     <script src="../../../Scripts/vue.js"></script>
     <script language="javascript" type="text/javascript">
@@ -66,7 +66,7 @@
 
                     var en = new Entity("BP.Sys.MapAttr", myPK);
                     en.Delete();
-                    window.location.href = window.location.href;
+                    Reload();
                 }
             }
         })

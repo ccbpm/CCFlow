@@ -110,7 +110,7 @@
                 en.SetPara("IsPageLoadFull", 0);
 
             en.Update();
-            window.location.href = window.location.href;
+            Reload();
             return;
         }
 
@@ -118,7 +118,7 @@
             var frmID = GetQueryString("FK_MapData");
             var myPK = "PageLoadFull_" + frmID;;
             var url = "../FullData/Main.htm?FK_MapData=" + frmID + "&RefPK=" + myPK + "&ExtType=PageLoadFull";
-            window.location.href = url;
+            SetHref(url);
             return;
         }
     </script>

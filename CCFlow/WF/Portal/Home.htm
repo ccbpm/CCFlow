@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <title></title>
 
     <!-- load the dashboard css -->
@@ -35,11 +35,11 @@
             flex-wrap: wrap;
         }
 
-        .wrapper .item {
-            height: 200px;
-            background-color: white;
-            cursor: move;
-        }
+            .wrapper .item {
+                height: 200px;
+                background-color: white;
+                cursor: move;
+            }
 
         .item .item-header {
             display: flex;
@@ -79,18 +79,21 @@
             overflow-y: auto;
             box-sizing: border-box;
         }
-        .item-body button {
-            padding:3px 10px; background:#d9d9d9;
-            color:#414141;
-            border:0px;
-            margin:0px 5px;
-            cursor:pointer
 
+        .item-body button {
+            padding: 3px 10px;
+            background: #d9d9d9;
+            color: #414141;
+            border: 0px;
+            margin: 0px 5px;
+            cursor: pointer
         }
+
         .echartsactive {
             background: #1296db !important;
             color: #fff !important
         }
+
         .inner-content {
             overflow: hidden;
             text-overflow: ellipsis;
@@ -110,19 +113,21 @@
             color: #c9c9c9;
         }
 
-        .itemadd i {
-            margin-top: 120px
-        }
+            .itemadd i {
+                margin-top: 120px
+            }
 
-        .chart-content{
+        .chart-content {
             width: 100%;
             min-height: 240px;
             height: 100%;
         }
+
         .echartsactive {
-        background:#1296db;
-        color:#fff
+            background: #1296db;
+            color: #fff
         }
+
         .chart-tab-content {
             width: 100%;
             min-height: 180px;
@@ -139,17 +144,17 @@
             border: 0px;
         }
 
-        .HtmlVar span {
-            font-size: 16px;
-            line-height: 30px;
-            color: #808080
-        }
+            .HtmlVar span {
+                font-size: 16px;
+                line-height: 30px;
+                color: #808080
+            }
 
-        .HtmlVar strong {
-            display: block;
-            font-size: 20px;
-            padding: 5px 0px 15px;
-        }
+            .HtmlVar strong {
+                display: block;
+                font-size: 20px;
+                padding: 5px 0px 15px;
+            }
 
         .Rate-box {
             position: relative
@@ -161,93 +166,91 @@
             right: 0px;
         }
 
-        .Rate-nav span {
-            display: block
-        }
-
+            .Rate-nav span {
+                display: block
+            }
     </style>
 </head>
 
 <body>
-<div class="dashboard" id="v-db" v-cloak>
-    <div class="wrapper" ref="wrapper">
-        <div class="item" :style="itemStyle(item)" v-for="(item,index) in boxes" :key="index" :data-no="item.No">
-            <div class="item-header">
-                <div class="icon-group">
-                    <i v-if="!item.Icon" class="layui-icon layui-icon-console" :class="item.Icon"></i>
-                    <!--<i v-else :class="item.Icon"></i> {{item.Name || '未指定标题'}} {{item.WinDocModel}}-->
-                    <i v-else :class="item.Icon"></i> {{item.Name || '未指定标题'}}  
+    <div class="dashboard" id="v-db" v-cloak>
+        <div class="wrapper" ref="wrapper">
+            <div class="item" :style="itemStyle(item)" v-for="(item,index) in boxes" :key="index" :data-no="item.No">
+                <div class="item-header">
+                    <div class="icon-group">
+                        <i v-if="!item.Icon" class="layui-icon layui-icon-console" :class="item.Icon"></i>
+                        <!--<i v-else :class="item.Icon"></i> {{item.Name || '未指定标题'}} {{item.WinDocModel}}-->
+                        <i v-else :class="item.Icon"></i> {{item.Name || '未指定标题'}}
+                    </div>
+                    <div class="operate" v-if="Veiwit">
+                        <!--<span @click.stop="EditIt(item.No,item.WinDocModel)" class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs">编辑</span>
+                        <span  @click.stop="DeleteIt(item.No)" class="layui-btn layui-btn-primary layui-border-red layui-btn-xs">删除</span>-->
+                        <button @click.stop class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs menu-btn"
+                                :data-nameno="item.No" :data-windocmodel="item.WinDocModel">
+                            <i class="layui-icon layui-icon-down layui-font-12"></i> 操作
+                        </button>
+                    </div>
                 </div>
-                <div class="operate" v-if="Veiwit">
-                    <!--<span @click.stop="EditIt(item.No,item.WinDocModel)" class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs">编辑</span>
-            <span  @click.stop="DeleteIt(item.No)" class="layui-btn layui-btn-primary layui-border-red layui-btn-xs">删除</span>-->
-                    <button @click.stop class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs menu-btn"
-                            :data-nameno="item.No" :data-windocmodel="item.WinDocModel">
-                        <i class="layui-icon layui-icon-down layui-font-12"></i> 操作
-                    </button>
-                </div>
-            </div>
-            <!--@click.stop @mousedown.stop.prevent-->
-            <div class="item-body">
-               
-                <div v-if="item.WinDocModel == 'Html' || item.WinDocModel == 'System'  || item.WinDocModel == 'SQLList' || item.WinDocModel == 'HtmlVar'   || item.WinDocModel == 'Table'"
-                     class='inner-content' :data-cid="item.No">
-                    {{item.Docs}}
-                </div>
-                <div v-if="item.WinDocModel == 'ChartLine' || item.WinDocModel == 'ChartChina' ||  item.WinDocModel == 'ChartPie' ||  item.WinDocModel == 'ChartRing'">
-                    <button @click.stop="snum=0"  :class="{echartsactive:snum==0}" v-if="item.IsLine==1">折线图</button> <button @click.stop="snum=1" :class="{echartsactive:snum==1}" v-if="item.IsPie==1">扇形图</button><button @click.stop="snum=2" :class="{echartsactive:snum==2}" v-if="item.IsRate==1">百分百</button><button @click.stop="snum=3" :class="{echartsactive:snum==3}" v-if="item.IsRing==1">环型图</button>
-                    <button @click.stop="snum=4" :class="{echartsactive:snum==4}"  v-if="item.IsZZT==1">柱状图</button>
+                <!--@click.stop @mousedown.stop.prevent-->
+                <div class="item-body">
 
-                    <div class='chart-content' id="IsLine" :data-cid="item.No+'IsLine'" v-show="snum==0 && item.IsLine==1">
+                    <div v-if="item.WinDocModel == 'Html' || item.WinDocModel == 'System'  || item.WinDocModel == 'SQLList' || item.WinDocModel == 'HtmlVar'   || item.WinDocModel == 'Table'"
+                         class='inner-content' :data-cid="item.No">
                         {{item.Docs}}
                     </div>
-                    <div class='chart-content' id="IsPie" :data-cid="item.No+'IsPie'" v-show="snum==1 && item.IsPie==1">
-                        {{item.Docs}}
-                    </div>
-                    <div class='chart-content' id="IsRate" :data-cid="item.No+'IsRate'" v-show="snum==2 && item.IsRate==1">
-                        {{item.Docs}}
-                    </div>
-                    <div class='chart-content' id="IsRing" :data-cid="item.No+'IsRing'" v-show="snum==3 && item.IsRing==1" >
-                        {{item.Docs}}
-                    </div>
-                    <div class='chart-content' id="IsZZT" :data-cid="item.No+'IsZZT'" v-show="snum==4 && item.IsZZT==1">
-                        {{item.Docs}}
-                    </div>
+                    <div v-if="item.WinDocModel == 'ChartLine' ||  item.WinDocModel == 'ChartPie' ||  item.WinDocModel == 'ChartRing'">
 
-                </div>
-                <div v-if="item.WinDocModel == 'ChartRate'" class="Rate-box">
-                    <div class="Rate-nav">
-                        <span>{{item.LabOfFZ}}:<strong>{{item.SQLOfFZ}}</strong></span>
-                        <span>{{item.LabOfFM}}:<strong>{{item.SQLOfFM}}</strong></span>
+                        <div class="layui-tab  layui-tab-brief">
+                            <ul class="layui-tab-title">
+                                <li v-for="(en,isdx) in item.children" :class="isdx ? '':'layui-this'" v-if="en.isShow==1">
+                                    {{en.isName}}
+                                </li>
+                            </ul>
+                            <div class="layui-tab-content">
+                                <div v-for="(etabinfo,eidx) in item.children"
+                                     :class="eidx ? 'layui-tab-item':'layui-tab-item layui-show'" v-if="etabinfo.isShow==1">
+                                    <div :data-mypk="etabinfo.isNo" :id="etabinfo.isNo" class='chart-content'>
 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div :data-cid="item.No" class='chart-content'></div>
+                    <div v-if="item.WinDocModel == 'ChartRate'" class="Rate-box">
+                        <div class="Rate-nav">
+                            <span>{{item.LabOfFZ}}:<strong>{{item.SQLOfFZ}}</strong></span>
+                            <span>{{item.LabOfFM}}:<strong>{{item.SQLOfFM}}</strong></span>
 
-                </div>
-                <div v-if="item.WinDocModel == 'Tab'">
-                    <div class="layui-tab  layui-tab-brief">
-                        <ul class="layui-tab-title">
-                            <li v-for="(module,idx) in item.children" :class="idx ? '':'layui-this'">
-                                {{module.Name}}
-                            </li>
-                        </ul>
-                        <div class="layui-tab-content">
-                            <div v-for="(tabinfo,cidx) in item.children"
-                                 :class="cidx ? 'layui-tab-item':'layui-tab-item layui-show'">
-                                <div :data-mypk="tabinfo.MyPK" :id="tabinfo.MyPK" class='chart-tab-content'>
+                        </div>
+                        <div :data-cid="item.No" class='chart-content'></div>
+                    </div>
+                    <div v-if="item.WinDocModel == 'ChartChina'" class="Rate-box">
+                        <div :data-cid="item.No" class='chart-content'>123213</div>
+                    </div>
+                    <div v-if="item.WinDocModel == 'Tab'">
+                        <div class="layui-tab  layui-tab-brief">
+                            <ul class="layui-tab-title">
+                                <li v-for="(module,idx) in item.children" :class="idx ? '':'layui-this'">
+                                    {{module.Name}}
+                                </li>
+                            </ul>
+                            <div class="layui-tab-content">
+                                <div v-for="(tabinfo,cidx) in item.children"
+                                     :class="cidx ? 'layui-tab-item':'layui-tab-item layui-show'">
+                                    <div :data-mypk="tabinfo.MyPK" :id="tabinfo.MyPK" class='chart-tab-content'>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="item itemadd" :style="itemadd()" @click.stop="addfile()" v-if='Veiwit'>
-            <i class="fa fa-plus-circle"></i>
+            <div class="item itemadd" :style="itemadd()" @click.stop="addfile()" v-if='Veiwit'>
+                <i class="fa fa-plus-circle"></i>
+            </div>
         </div>
     </div>
-</div>
-<script src="Home.js"></script>
+    <script src="Rpt.js"></script>
 </body>
 
 </html>

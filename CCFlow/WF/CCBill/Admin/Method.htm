@@ -119,8 +119,8 @@
         //转到菜单
         function ToMenu() {
             var moduleNo = GetQueryString("ModuleNo");
-            var module = new Entity("BP.GPM.Menu2020.Module", moduleNo);
-            var url = "../GPM/Menus.htm?SystemNo=" + module.SystemNo;
+            var module = new Entity("BP.CCFast.CCMenu.Module", moduleNo);
+            var url = basePath + "/WF/GPM/Menus.htm?SystemNo=" + module.SystemNo;
             window.top.vm.openTab(name, url);
         }
 
@@ -128,7 +128,7 @@
         function ToDictAttr() {
 
             var frmID = GetQueryString("FrmID");
-            var url = "../../Comm/En.htm?EnName=BP.CCBill.FrmDict&No=" + frmID;
+            var url = basePath + "/WF/Comm/En.htm?EnName=BP.CCBill.FrmDict&No=" + frmID;
 
             OpenLayuiDialog(url, '', 9000, 0, null, false);
 
@@ -139,8 +139,8 @@
         //到达集合组件.
         function ToCollectionAttr() {
             var moduleNo = GetQueryString("ModuleNo");
-            var module = new Entity("BP.GPM.Menu2020.Module", moduleNo);
-            var url = "../CCBill/Admin/Collection.htm?SystemNo=" + module.SystemNo;
+            var module = new Entity("BP.CCFast.CCMenu.Module", moduleNo);
+            var url = basePath + "/WF/CCBill/Admin/Collection.htm?SystemNo=" + module.SystemNo;
             url += "&ModuleNo=" + moduleNo;
             url += "&FrmID=" + GetQueryString("FrmID");
             window.top.vm.openTab(name, url);
@@ -157,8 +157,8 @@
             if (frmID == undefined)
                 frmID = GetQueryString("FrmID");
 
-            //  var module = new Entity("BP.GPM.Menu2020.Module", moduleNo);
-            var url = "../Admin/CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + frmID + "&FrmID=" + frmID;
+            //  var module = new Entity("BP.CCFast.CCMenu.Module", moduleNo);
+            var url = basePath + "/WF/Admin/FoolFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + frmID + "&FrmID=" + frmID;
 
             window.top.vm.openTab(frmID, url);
         }

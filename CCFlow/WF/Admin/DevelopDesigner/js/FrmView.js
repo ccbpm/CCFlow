@@ -63,7 +63,7 @@ function GenerFrm() {
     var isTest = GetQueryString("IsTest");
     var isReadonly = GetQueryString("IsReadonly");
 
-    var href = window.location.href;
+    var href = GetHrefUrl();
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
 
@@ -453,9 +453,6 @@ function figure_Template_FigureSubFlowDtl(wf_node, mapData,element) {
         return $('');
 
     var sta = wf_node.SFSta;
-    var x = wf_node.SF_X;
-    var y = wf_node.SF_Y;
-    var h = wf_node.SF_H;
     var w = wf_node.SF_W;
 
     var src = "../WorkOpt/SubFlow.htm?s=2";
@@ -476,7 +473,7 @@ function figure_Template_FigureSubFlowDtl(wf_node, mapData,element) {
     }
     src += "&r=q" + paras;
 
-    var eleHtml = $("<div id=''SubFlow" + wf_node.NodeID + "' style='width:" + w + "px; height:auto;' ></div>");
+    var eleHtml = $("<div id=''SubFlow" + wf_node.NodeID + "' style='width:100%; height:auto;' ></div>");
 
     var eleIframe = $("<iframe class= 'Fdtl' ID = 'SubFlow_" + wf_node.NodeID + "' src = '" + src + "' frameborder=0  style='width:" + w + "px;"
         + "height: auto; text-align: left; '  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");

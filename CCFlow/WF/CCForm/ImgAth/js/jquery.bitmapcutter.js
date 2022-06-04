@@ -386,7 +386,7 @@ $.extend(
                     var k = (e.keyCode || e.which);
                     //window.console && console.log('key code: %s', k);
                     if ((k >= 37 && k <= 40) || k == 45 || k == 61) {
-                        var func = eval('scissors.' + eval('(ks.k' + k + ')') + '');
+                        var func = cceval('scissors.' + cceval('(ks.k' + k + ')') + '');
                         func();
                     }
                 });
@@ -395,8 +395,8 @@ $.extend(
 
                 $opts.find('a').each(function () {
                     var me = $(this), c = me.attr('class');
-                    me.attr('title', eval('(ps.lang.' + c + ')'))
-                        .bind('click', eval('(scissors.' + c + ')'));
+                    me.attr('title', cceval('(ps.lang.' + c + ')'))
+                        .bind('click', cceval('(scissors.' + c + ')'));
                 });
 
                 $cutter.dragndrop({
@@ -431,7 +431,7 @@ $.extend(
                         height: ps.cutterSize.height,
                         t: Math.random()
                     }, function (json) {
-                        json = eval("(" + json + ")");
+                        json = cceval("(" + json + ")");
                         if (json.msg == 'success') {
                             me.fadeIn();
                             $opts.fadeIn();

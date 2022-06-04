@@ -292,7 +292,7 @@ function showFigurePropertyWin(figure) {
     }
 
     if (shap == 'SubFlowDtl') {
-        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.FrmSubFlow&PKVal=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
+        var url = '../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.SFlow.FrmSubFlow&PKVal=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
         CCForm_ShowDialog(url, '父子流程组件');
         return;
     }
@@ -546,11 +546,11 @@ function CCForm_FoolFrm() {
 
 //表单属性
 function CCForm_Attr() {
-    var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFree&PKVal=' + CCForm_FK_MapData;
+    var url = '../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapFrmFree&PKVal=' + CCForm_FK_MapData;
     var fk_node = Application.common.getArgsFromHref("FK_Node");
     //设置的为节点表单
     if (fk_node) {
-        url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmNode&PKVal=' + CCForm_FK_MapData;
+        url = '../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapFrmNode&PKVal=' + CCForm_FK_MapData;
     }
 
     CCForm_ShowDialog(url, '表单属性', $(parent).width() * 0.65, $(parent).height() * 0.8);

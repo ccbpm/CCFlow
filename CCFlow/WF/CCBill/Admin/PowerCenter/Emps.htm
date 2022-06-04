@@ -50,7 +50,7 @@
                 return;
             }           
                
-            var en = new Entity("BP.GPM.PowerCenter");
+            var en = new Entity("BP.CCFast.CCMenu.PowerCenter");
             en.CopyURL();
             en.CtrlModel = "Emps";
 
@@ -60,7 +60,7 @@
 
             var url = "../PowerCenter.htm";
             url += "?CtrlObj=" + GetQueryString("CtrlObj") + "&CtrlPKVal=" + GetQueryString("CtrlPKVal") + "&CtrlGroup=" + GetQueryString("CtrlGroup");
-            window.location.href = url;
+            SetHref(url);
 
                 window.parent.selectEmpsWindowClose("确定");
             
@@ -88,7 +88,7 @@
             //返回节点数组
             var initNodeData = function (data, fk_dept2) {
 
-                data = eval('(' + data + ')');
+                data = cceval('(' + data + ')');
 
                 var fk_dept = fk_dept2; //pageData.FK_Dept;
                 var parentNo = undefined;
@@ -295,7 +295,10 @@
             }
             $.each(nameArrs, function (i, selected) {
                 for (var property in returnVal) {
-                    returnVal[property].push(selected[property]);
+                    var val = selected[property];
+                    if (property == "No")
+                        val = val.replace("Emp_", "");
+                    returnVal[property].push(val);
                 }
             });
             for (var property in nameArrs[0]) {
@@ -323,7 +326,7 @@
         function Close() {
             var url = "../PowerCenter.htm";
             url += "?CtrlObj=" + GetQueryString("CtrlObj") + "&CtrlPKVal=" + GetQueryString("CtrlPKVal") + "&CtrlGroup=" + GetQueryString("CtrlGroup");
-            window.location.href = url;
+            SetHref(url);
 
             window.parent.selectEmpsWindowClose("确定");
         }

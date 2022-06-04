@@ -71,7 +71,7 @@
             var fk_node = GetQueryString("FK_Node");
 
             //如何获得全部的参数？ &FK_Node=120&FK_Flow=222 放入到url里面去？
-            var href = window.location.href;
+            var href = GetHrefUrl();
             var urlParam = href.substring(href.indexOf('?') + 1, href.length);
 
             //初始化表格.
@@ -848,7 +848,7 @@
                                                 }
                                             }
 
-                                            tmpResult = eval(mapExtDoc);
+                                            tmpResult = cceval(mapExtDoc);
                                             attrOfOperEle.val(tmpResult);
                                             
                                             $(tr).data().data[$(obj.target).data().mapExt.AttrOfOper] =

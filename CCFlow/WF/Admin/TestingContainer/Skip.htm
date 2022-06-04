@@ -14,8 +14,8 @@
         var flowNo = GetQueryString("FK_Flow");
         var workID = GetQueryString("WorkID");
         var adminer = GetQueryString("Adminer");
-        var adminerSID = GetQueryString("AdminerSID");
-        var SID = GetQueryString("SID");
+        var AdminerToken = GetQueryString("AdminerToken");
+        var SID = GetQueryString("Token");
 
         //页面启动函数.
         $(function () {
@@ -52,8 +52,8 @@
             $("#gwls").html(html);
         });
         function GoTo(workID) {
-            var url = "SelectOneUser.html?1=2&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + workID + "&UserNo=" + GetQueryString("UserNo") + "&AdminerSID=" + GetQueryString("AdminerSID") + "&OrgNo=" + GetQueryString("OrgNo") + "&Adminer=" + GetQueryString("Adminer") + "&SID=" + GetQueryString("SID");
-            window.location.href = url;
+            var url = "SelectOneUser.html?1=2&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + workID + "&UserNo=" + GetQueryString("UserNo") + "&AdminerToken=" + GetQueryString("AdminerToken") + "&OrgNo=" + GetQueryString("OrgNo") + "&Adminer=" + GetQueryString("Adminer") + "&Token=" + GetQueryString("Token");
+            SetHref(url);
         }
     </script>
 </head>

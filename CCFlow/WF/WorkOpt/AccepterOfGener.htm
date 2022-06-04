@@ -228,23 +228,23 @@
         }
 
         function Ref() {
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function Up(mypk) {
             var en = new Entity("BP.WF.Template.SelectAccper", mypk);
             en.DoMethodReturnString("DoUp");
-            window.location.href = window.location.href;
+            Reload();
         }
         function Down(mypk) {
             var en = new Entity("BP.WF.Template.SelectAccper", mypk);
             en.DoMethodReturnString("DoDown");
-            window.location.href = window.location.href;
+            Reload();
         }
         function DeleteIt(mypk) {
             var en = new Entity("BP.WF.Template.SelectAccper", mypk);
             en.Delete();
-            window.location.href = window.location.href;
+            Reload();
             return;
         }
 
@@ -266,7 +266,7 @@
 
             if (data.indexOf('err@') == 0) {
                 alert(data);
-                window.location.href = window.location.href;
+                Reload();
                 return;
             }
 
@@ -602,6 +602,25 @@
     </div>
     <div class="techMsg" style="text-align: left;padding-left:25px; display:none;">
     </div>
+
+
+
+    <table class="table table-striped" id="Table1" style="width:98%;padding:5px; margin:10px;">
+        <!-- <caption>下一步接受人员列表</caption>-->
+        <thead>
+            <tr id="title" class="Sum">
+                <td style="width:40px; font-weight:bolder">#</td>
+                <!--<th>编号 </th>-->
+                <td style="width:30%; font-weight:bolder">姓名</td>
+                <!--<td style="width:40%; font-weight:bolder">部门  &nbsp; - &nbsp;  <a href="javascript:Ref()">刷新</a></td>-->
+                <td style="width:40%; font-weight:bolder">部门</td>
+
+                <td style="width:60px; font-weight:bolder" colspan="3">操作</td>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
     <div style="margin-left:20px">
         <div style="float:left;margin-top:4px">
 
@@ -643,23 +662,6 @@
 
     </div>
 
-
-    <table class="table table-striped" id="Table1" style="width:98%;padding:5px; margin:10px;">
-        <!-- <caption>下一步接受人员列表</caption>-->
-        <thead>
-            <tr id="title" class="Sum">
-                <td style="width:40px; font-weight:bolder">#</td>
-                <!--<th>编号 </th>-->
-                <td style="width:30%; font-weight:bolder">姓名</td>
-                <!--<td style="width:40%; font-weight:bolder">部门  &nbsp; - &nbsp;  <a href="javascript:Ref()">刷新</a></td>-->
-                <td style="width:40%; font-weight:bolder">部门</td>
-
-                <td style="width:60px; font-weight:bolder" colspan="3">操作</td>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
     <br />
 
 

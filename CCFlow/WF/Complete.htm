@@ -154,8 +154,8 @@
         }
 
         /* 打开表单. */
-        function OpenFrm(workid, nodeID, flowNo,fid,pworkid,title) {
-            JumpFlowPage("MyView", title, workid, flowNo, nodeID, fid,pworkid);
+        function OpenFrm(workid, nodeID, flowNo, fid, pworkid, title) {
+            JumpFlowPage("MyView", title, workid, flowNo, nodeID, fid, pworkid);
             return;
         }
 
@@ -212,10 +212,13 @@
                 try {
 
                     var url = data;
-                    if (url.indexOf("My") == 0)
-                        url = "../" + url;
+                    if (url.indexOf("My") == 0) {
+                        if (window.top.location.href.indexOf("WF/") != -1)
+                            url = "../" + url;
+                        else
+                            url = "/WF/" + url;
+                    }
 
-                   
 
                     window.top.vm.openTab(title, url);
                     return;
@@ -304,9 +307,9 @@
             //生成分组的字符串.
             var str = "@";
             for (var i = 0; i < sourceData.length; i++) {
-                if (str.indexOf('@' + sourceData[i].FlowName+"@") == -1) {
+                if (str.indexOf('@' + sourceData[i].FlowName + "@") == -1) {
                     if (flowNos == null || (flowNos != null && flowNos.indexOf(sourceData[i].FK_Flow) != -1))
-                        str += sourceData[i].FlowName+"@";
+                        str += sourceData[i].FlowName + "@";
                 }
 
             }
@@ -370,7 +373,7 @@
                         is1 = true;
                     }
                     listbox += "<td>" + num + "</td>";
-                    listbox += "<td><a href=\"javascript:OpenFrm('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "',"+work.FID+","+work.PWorkID+",'"+work.FlowName+"')\" >" + work.Title + "</a></td>";
+                    listbox += "<td><a href=\"javascript:OpenFrm('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "'," + work.FID + "," + work.PWorkID + ",'" + work.FlowName + "')\" >" + work.Title + "</a></td>";
                     listbox += "<td>" + work.StarterName + "</td>";
                     listbox += "<td>" + work.DeptName + "</td>";
                     listbox += "<td>" + work.FlowName + "</td>";

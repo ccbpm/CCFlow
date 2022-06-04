@@ -113,7 +113,7 @@
                     var url = 'PopFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&MyPK=' + myPK + "&KeyOfEn=" + GetQueryString('KeyOfEn');
                 else
                     var url = 'DDLFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&MyPK=' + myPK + "&KeyOfEn=" + GetQueryString('KeyOfEn');
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
 
@@ -141,7 +141,7 @@
 
                 var mypk = GetQueryString('MyPK');
                 var url = 'PopFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + mypk;
-                window.location.href = url;
+                SetHref(url);
                 return;
             }
 
@@ -155,7 +155,7 @@
                 var data = handler.DoMethodReturnString("PopFullCtrl_Delete");
 
                 alert(data);
-                window.location.href = window.location.href;
+                Reload();
                 return;
 
             }

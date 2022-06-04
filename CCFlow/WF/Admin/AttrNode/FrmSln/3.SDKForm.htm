@@ -101,7 +101,7 @@
             flow.DoMethodReturnString("DoCheck");
 
             alert('设置成功.');
-            window.location.href = window.location.href;
+            Reload();
         }
         function OpenAPI() {
             var url = "../../AttrFlow/APICode.htm?FK_Flow=067&s=0.07910842745423852";
@@ -130,7 +130,7 @@
                     <div id="DivHelp1" class="help" style="color: blue; display: none">
                         <ul>
                             <li>比如您输入:/XXX/Abc.htm 系统就会自动把系统变量带入</li>
-                            <li>url: /XXX/Abc.htm?WorkID=1223&FK_Node=105&FK_Flow=001&UserNo=zhangsan&SID=xcwwxccsdsdsd</li>
+                            <li>url: /XXX/Abc.htm?WorkID=1223&FK_Node=105&FK_Flow=001&UserNo=zhangsan&Token=xcwwxccsdsdsd</li>
                             <li><a href="javascript:OpenAPI()">查看发送，退回API接口.</a></li>
                         </ul>
                     </div>

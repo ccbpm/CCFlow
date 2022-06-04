@@ -141,11 +141,11 @@
 
             var url = data.replace('url@', '');
             if (isSaveAndNew == false) {
-                window.location.href = url + "&inlayer=" + GetQueryString("inlayer");
+                SetHref( url + "&inlayer=" + GetQueryString("inlayer"));
                 return;
             }
 
-            window.location.href = "FieldTypeList.htm?FType=" + fType + "&FK_MapData=" + fk_mapdata + "&GroupField=" + groupID + "&m=" + Math.random();
+            SetHref("FieldTypeList.htm?FType=" + fType + "&FK_MapData=" + fk_mapdata + "&GroupField=" + groupID + "&m=" + Math.random());
             return;
         }
 
@@ -162,17 +162,17 @@
         //在这里把返回值获取到，放入到对应的文本框里.
         function SelectOne() {
             var url = "FieldTypeListChoseOneField.htm?FK_MapData=" + GetQueryString("FK_MapData");
-            window.location.href = url;
+            SetHref(url);
         }
 
         function ToTemplate() {
             var url = "./Template/Fields.htm?FK_MapData=" + GetQueryString("FK_MapData");
-            window.location.href = url;
+            SetHref(url);
         }
 
         function HidAttr() {
             var url = 'HidAttr.htm?FK_MapData=' + GetQueryString("FK_MapData");
-            window.location.href = url;
+            SetHref(url);
         }
 
     </script>
@@ -289,9 +289,9 @@
                         function Enum(doType) {
                             var webUser = new WebUser();
                             if (webUser.CCBPMRunModel == 2) {
-                                window.location.href = '../../../Admin/CCFormDesigner/SysEnum/List.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
+                                SetHref('../../../Admin/CCFormDesigner/SysEnum/List.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID);
                             } else {
-                                window.location.href = 'SysEnumList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID;
+                                SetHref('SysEnumList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&GroupField=' + groupID);
                                 }
                         }
 
@@ -299,9 +299,9 @@
                             var webUser = new WebUser();
                             // SaaS模式下进入SaaS下页面
                             if (webUser.CCBPMRunModel == 2) {
-                                window.location.href = '../../../Admin/CCFormDesigner/SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+                                SetHref('../../../Admin/CCFormDesigner/SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID);
                             } else {
-                                window.location.href = 'SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+                                SetHref('SFList.htm?DoType=' + doType + '&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID);
                             }
                         }
 
@@ -310,9 +310,9 @@
                             var webUser = new WebUser();
                             // SaaS模式下进入SaaS下页面
                             if (webUser.CCBPMRunModel == 2) {
-                                window.location.href = '../../../Admin/CCFormDesigner/SFTable/Default.htm?DoType=New&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+                                SetHref('../../../Admin/CCFormDesigner/SFTable/Default.htm?DoType=New&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID);
                             } else {
-                                 window.location.href = './SFTable/Default.htm?DoType=New&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+                                SetHref('./SFTable/Default.htm?DoType=New&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID);
                             }
                            
                         }
@@ -376,7 +376,7 @@
                             en.GroupID = mapAttr.GroupID; //设置分组列.
                             en.Name = name;
                             en.Insert(); //插入到数据库.
-                            window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&MyPK=" + en.MyPK;
+                            SetHref("../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&MyPK=" + en.MyPK);
                         }
 
                         //图片附件.
@@ -426,7 +426,7 @@
                             en.GroupID = mapAttr.GroupID; //设置分组列.
                            
                             en.Insert(); //插入到数据库.
-                            window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImgAth&MyPK=" + en.MyPK;
+                            SetHref("../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmImgAth&MyPK=" + en.MyPK);
                         }
 
                         //身份证
@@ -447,7 +447,7 @@
                                         mapAttr.ColSpan = 3; //单元格.
                                     else
                                         mapAttr.ColSpan = 1;
-                                    mapAttr.TextColSpan = 1;
+                                    mapAttr.LabelColSpan = 1;
                                     mapAttr.LGType = 0; //文本
                                     mapAttr.UIIsEnable = 0; //不可编辑
                                     mapAttr.UIIsInput = 1;//必填
@@ -475,7 +475,7 @@
                                 mapAttr.UIContralType = 16; //系统定位
                                 mapAttr.MyDataType = 1;
                                 mapAttr.ColSpan = 1;
-                                mapAttr.TextColSpan = 1;
+                                mapAttr.LabelColSpan = 1;
                                 mapAttr.LGType = 0; //文本
                                 mapAttr.UIIsEnable = 0; //不可编辑
                                 mapAttr.UIIsInput = 0;
@@ -526,7 +526,7 @@
                             mapAttr.MyDataType = 1;
                             mapAttr.LGType = 0;
                             mapAttr.ColSpan = 3; //
-                            mapAttr.TextColSpan = 1; //
+                            mapAttr.LabelColSpan = 1; //
                             mapAttr.UIWidth = 150;
                             mapAttr.UIHeight = 170;
                             mapAttr.IsEnableInAPP = 0;
@@ -545,7 +545,7 @@
                             en.CtrlWay = 4; // 按流程WorkID计算
                             en.SetPara("IsShowMobile", 1);
                             en.Insert(); //插入到数据库.
-                            window.location.href = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&MyPK=" + en.MyPK;
+                            SetHref("../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&MyPK=" + en.MyPK);
                         }
 
                         //超链接.
@@ -598,7 +598,7 @@
                             mapAttr.Tag2 = link; // 超链接地址.
                             mapAttr.Insert(); //插入字段.
                             mapAttr.Retrieve();
-                            window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtLink&MyPK=" + mapAttr.MyPK;
+                            SetHref("../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtLink&MyPK=" + mapAttr.MyPK);
                         }
 
                         //评分控件
@@ -648,7 +648,7 @@
                             mapAttr.Tag2 = score; // 总分
                             mapAttr.Insert(); //插入字段.
                             mapAttr.Retrieve();
-                            window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtScore&MyPK=" + mapAttr.MyPK;
+                            SetHref("../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtScore&MyPK=" + mapAttr.MyPK);
                         }
                         //大块文本
                         function ExtBigNoteHtmlText() {
@@ -657,7 +657,7 @@
                             //增加大文本
                              if (window.confirm('您确认要创建吗？') == false)
                                 return;
-                            window.location.href = "./EditFExtContral/60.BigNoteHtmlText.htm?FrmID=" + frmID;
+                            SetHref("./EditFExtContral/60.BigNoteHtmlText.htm?FrmID=" + frmID);
                         }
 
                         //手写签名版.
@@ -703,7 +703,7 @@
                             mapAttr.UIHeight = 170;
                             mapAttr.Insert(); //插入字段.
                             mapAttr.Retrieve();
-                            window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&MyPK=" + mapAttr.MyPK;
+                            SetHref("../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtHandWriting&MyPK=" + mapAttr.MyPK);
                         }
                         //地图控件.
                         function ExtMap() {
@@ -763,7 +763,7 @@
                             mapAttr1.Insert(); //插入字段
 
                             mapAttr.Retrieve();
-                            window.location.href = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtMap&MyPK=" + mapAttr.MyPK;
+                            SetHref("../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtMap&MyPK=" + mapAttr.MyPK);
                         }
                         //流程进度图.
                         function ExtJobSchedule() {
@@ -796,7 +796,7 @@
                             mapAttr.Idx = 0;
                             mapAttr.Insert(); //插入字段.
                             mapAttr.Retrieve();
-                            window.location.href = "../../Comm/EnOnly.htm?EnName=BP.WF.Template.ExtJobSchedule&MyPK=" + mapAttr.MyPK;
+                            SetHref("../../Comm/EnOnly.htm?EnName=BP.WF.Template.ExtJobSchedule&MyPK=" + mapAttr.MyPK);
 
                         }
 

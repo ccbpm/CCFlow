@@ -682,14 +682,14 @@
             html += "</tbody>";
 
             //取消人员部门岗位管理关系. @不能出现sql.
-            var deptEmps = new Entities("BP.GPM.DeptEmps");
+            var deptEmps = new Entities("BP.Port.DeptEmps");
             deptEmps.DoMethodReturnString("DelteNotInEmp");
-            var deptEmpStas = new Entities("BP.GPM.DeptEmpStations");
+            var deptEmpStas = new Entities("BP.Port.DeptEmpStations");
             deptEmpStas.DoMethodReturnString("DelteNotInEmp");
 
 
             //查询出来兼职人员.
-            var deptEmps = new Entities("BP.GPM.DeptEmps");
+            var deptEmps = new Entities("BP.Port.DeptEmps");
             deptEmps.Retrieve("FK_Dept", deptNo);
 
             var num = emps.length;
@@ -734,7 +734,7 @@
             html += "</tbody>"
 
             //把WF_Emp中主部门是当前部门且禁用的查询出来
-            var wfEmps = new Entities("BP.GPM.WFEmps");
+            var wfEmps = new Entities("BP.WF.Port.WFEmps");
             wfEmps.Retrieve("FK_Dept", deptNo, "UseSta", 0, "Idx");
 
             html += "<tbody class='blacklist-sort'>";
@@ -781,7 +781,7 @@
         function DoUnEnable(empNo) {
 
             //把用户的信息禁用掉存储到WF_Emp表中
-            var emp = new Entity("BP.GPM.EmpExt", empNo);
+            var emp = new Entity("BP.Port.Emp", empNo);
             var data = emp.DoMethodReturnString("DoUnEnable");
             alert(data);
             BindEmps();
@@ -794,11 +794,11 @@
          */
         function DoEnable(empNo) {
 
-            var wfEmp = new Entity("BP.GPM.WFEmp", empNo);
+            var wfEmp = new Entity("BP.WF.Port.WFEmp", empNo);
             wfEmp.UseSta = 1; //启用
             wfEmp.Save();
 
-            var emp = new Entity("BP.GPM.EmpExt");
+            var emp = new Entity("BP.Port.Emp");
             emp.CopyJSON(wfEmp);
             emp.Save();
             BindEmps();
@@ -851,7 +851,7 @@
 
         function RefEmps() {
 
-            var url = "../WF/Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.GPM.Dept&Dot2DotEnsName=BP.GPM.DeptEmps&Dot2DotEnName=BP.GPM.DeptEmp&AttrOfOneInMM=FK_Dept&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept&No=" + deptNo + "&PKVal=" + deptNo + "&s=0.13113811473063341";
+            var url = "../WF/Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.Port.Dept&Dot2DotEnsName=BP.Port.DeptEmps&Dot2DotEnName=BP.Port.DeptEmp&AttrOfOneInMM=FK_Dept&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept&No=" + deptNo + "&PKVal=" + deptNo + "&s=0.13113811473063341";
             OpenBootStrapModal(url, "eudlgframe", "关联人员", '1000', '500', "icon-edit", true, null, null, function () {
                 //刷新打开的页面
                 BindEmps();
@@ -867,7 +867,7 @@
 
 
             //取消人员部门管理关系
-            var en = new Entity("BP.GPM.DeptEmp");
+            var en = new Entity("BP.Port.DeptEmp");
             en.SetPKVal(deptEmpPK);
             en.Delete();
             if (useSta == 1) {
@@ -876,14 +876,14 @@
             }
 
             if (useSta == 0) {
-                var en = new Entity("BP.GPM.WFEmp", no);
+                var en = new Entity("BP.WF.Port.WFEmp", no);
                 en.Delete();
             }
 
             //取消人员部门岗位管理关系
             var sql = "delete from Port_DeptEmpStation where FK_Emp='" + no + "' and FK_Dept='" + deptNo + "'";
             DBAccess.RunSQL(sql);
-            //   var en = new Entity("BP.GPM.DeptEmpStation");
+            //   var en = new Entity("BP.Port.DeptEmpStation");
             //  en.Delete("FK_Dept",);
             // SELECT * FROM Port_DeptEmpStation WHERE FK_Dept+'_'+FK_Emp not in (select MyPK FROM PORT_DEPTEMP)
 
@@ -895,7 +895,7 @@
             if (confirm('您确定要从该部门中移除吗？') == false)
                 return;
 
-            var en = new Entity("BP.GPM.DeptEmp");
+            var en = new Entity("BP.Port.DeptEmp");
             en.SetPKVal(deptNo + "_" + no);
             en.Delete();
 

@@ -179,9 +179,9 @@
                 var url = data.replace('url@', '');
 
                 if (url.indexOf('ToNode=') > 0)
-                    window.location.href = url + "&IsSend=" + GetQueryString("IsSend") + "&isFrameCross=" + isFrameCross + "&PageFrom=" + GetQueryString("PageFrom");
+                    SetHref(url + "&IsSend=" + GetQueryString("IsSend") + "&isFrameCross=" + isFrameCross + "&PageFrom=" + GetQueryString("PageFrom"));
                 else
-                    window.location.href = url + "&ToNode=" + GetQueryString("ToNode") + "&IsSend=" + GetQueryString("IsSend") + "&PageFrom=" + GetQueryString("PageFrom") + "&isFrameCross=" + isFrameCross;
+                    SetHref(url + "&ToNode=" + GetQueryString("ToNode") + "&IsSend=" + GetQueryString("IsSend") + "&PageFrom=" + GetQueryString("PageFrom") + "&isFrameCross=" + isFrameCross);
 
                 return;
             }
@@ -203,7 +203,7 @@
 
             //把string 转化为json.
             try {
-                data = eval('(' + data + ')');
+                data = cceval('(' + data + ')');
             }
             catch (err) {
                 alert("转换JSON 失败" + err + data);

@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>通用人员选择器</title>
+
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -29,6 +30,11 @@
             var node = new Entity("BP.WF.Template.Selector", nodeID);
             node.SelectorModel = SelectorModel.GenerUserSelecter;
             node.Update();
+
+            var node = new Entity("BP.WF.Node", nodeID);
+            node.DeliveryWay = 4;
+            node.Update();
+
             alert("保存成功.");
         }
     </script>
@@ -38,6 +44,7 @@
     <div id="bar"> </div>
 
     <fieldset>
+
         <legend id="help"> 帮助 </legend>
 
         <ul>

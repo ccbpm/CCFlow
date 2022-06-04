@@ -11,7 +11,7 @@
             }
             if (window.confirm('您确定要删除吗?') == false)
                 return;
-            window.location.href = 'PushMessage.htm?MyPK=' + mypk + '&DoType=Del&FK_Node=' + nodeid;
+            SetHref('PushMessage.htm?MyPK=' + mypk + '&DoType=Del&FK_Node=' + nodeid);
         }
     </script>
 
@@ -149,7 +149,7 @@
             var en = new Entity("BP.WF.Template.PushMsg");
             en.MyPK = myPK;
             en.Delete();
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function PushMessageEntity(eventType) {
@@ -159,7 +159,7 @@
             url += '&FK_Event=' + eventType;
             url += '&tk=' + Math.random();
 
-            window.location.href = url;
+            SetHref(url);
         }
         function Help() {
             var url = "http://doc.ccbpm.cn";

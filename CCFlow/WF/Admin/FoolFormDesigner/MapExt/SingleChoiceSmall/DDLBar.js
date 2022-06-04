@@ -64,7 +64,7 @@ function changeOption() {
     var optionKey = optionKey = sele[index].value;
 
     var url = GetUrl(optionKey);
-    window.location.href = url + "?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" +GetQueryString("KeyOfEn");
+    SetHref( url + "?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" +GetQueryString("KeyOfEn"));
 }
 //高级设置.
 function AdvSetting() {

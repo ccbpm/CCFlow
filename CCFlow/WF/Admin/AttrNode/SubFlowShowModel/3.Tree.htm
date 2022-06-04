@@ -51,7 +51,7 @@
         function Save() {
             var pkval = GetQueryString("MyPK");
 
-            var en = new Entity("BP.WF.Template.SubFlowHandGuide", pkval);
+            var en = new Entity("BP.WF.Template.SFlow.SubFlowHandGuide", pkval);
             en.SubFlowStartModel = Baseinfo.enumVal;
             en.Update();
 

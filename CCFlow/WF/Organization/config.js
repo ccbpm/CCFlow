@@ -11,15 +11,15 @@ var NewDeptNoModel = 0;
 var RegUserIDMode = 1;
 
 //部门类名.
-var deptEnsName = "BP.GPM.Depts";
-var deptEnName = "BP.GPM.Dept";
+var deptEnsName = "BP.Port.Depts";
+var deptEnName = "BP.Port.Dept";
 
 /*  新建人员编号模式. 0=手工输入自己编号.  1=自动生成，由实体类的 beforeInser 生成. */
 var NewEmpNoModel = 0;
 
 //操作员类名.
-var empEnsName = "BP.GPM.Emps";
-var empEnName = "BP.GPM.Emp";
+var empEnsName = "BP.Port.Emps";
+var empEnName = "BP.Port.Emp";
 
 
 //岗位

@@ -26,7 +26,8 @@
                     { title: '<i class=icon-folder></i> 新建目录', id: "NewSort", Icon: "icon-magnifier-add" },
                     { title: '<i class=icon-pencil></i> 修改名称', id: "EditSortName", Icon: "icon-magnifier-add" },
                     { title: '<i class=icon-share-alt ></i> 导入流程模版', id: "ImpFlowTemplate", Icon: "icon-plus" },
-                    //{ title: '新建下级目录', id: 5 },
+                   // { title: '<i class=icon-share-alt ></i> 批量导入流程模版', id: "BatchImpFlowTemplate", Icon: "icon-plus" },
+                    { title: '<i class=icon-share-alt ></i> 批量导出流程模版', id: "BatchExpFlowTemplate", Icon: "icon-plus" },
                     { title: '<i class=icon-close></i> 删除目录', id: "DeleteSort", Icon: "icon-close" }
                 ]
                 var tRenderOptions = [{
@@ -100,23 +101,25 @@
         },
 
         Designer: function (no, name) {
-            var sid = GetQueryString("SID");
+            var sid = GetQueryString("Token");
             var webUser = new WebUser();
-            var url = "../Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + no + "&UserNo=" + webUser.No + "&SID=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
-            window.top.vm.openTab(name, url);
+            var url = basePath + "/WF/Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + no + "&UserNo=" + webUser.No + "&Token=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
+            // window.top.vm.openTab(name, url);
+            WinOpenFull(url, "xx");
+
         },
         EditSort: function (no, name) {
-            var url = "../Comm/EnOnly.htm?EnName=BP.WF.Template.FlowSort&No=" + no;
+            var url = basePath + "/WF/Comm/EnOnly.htm?EnName=BP.WF.Template.FlowSort&No=" + no;
             this.openLayer(url, "目录:" + name);
         },
         testFlow: function (no, name) {
-            var url = "../Admin/TestingContainer/TestFlow2020.htm?FK_Flow=" + no;
+            var url = basePath + "/WF/Admin/TestingContainer/TestFlow2020.htm?FK_Flow=" + no;
             //window.top.vm.fullScreenOpen(url, name);
             window.top.vm.openTab(name, url);
             // this.openLayer(url, name);
         },
         flowAttr: function (no, name) {
-            var url = "../Comm/En.htm?EnName=BP.WF.Template.FlowExt&No=" + no;
+            var url = basePath + "/WF/Comm/En.htm?EnName=BP.WF.Template.FlowExt&No=" + no;
             window.top.vm.openTab(name, url);
             //this.openLayer(url, name,900);
         },
@@ -193,6 +196,12 @@
                 case "ImpFlowTemplate":
                     this.ImpFlowTemplate(data);
                     break;
+                case "BatchImpFlowTemplate":
+                    this.BatchImpFlowTemplate(data);
+                    break;
+                case "BatchExpFlowTemplate":
+                    this.BatchExpFlowTemplate(data,name);
+                    break;
                 case "NewSort":
                     this.NewSort(data, true);
                     break;
@@ -225,11 +234,11 @@
         },
         NewFlow: function (data, name) {
 
-            ////  if (runModelType == 0)
-            //   url = "../CCBPMDesigner/FlowDevModel/Default.htm?SortNo=" + flowSort + "&s=" + Math.random();
-            //else
-            url = "../Admin/CCBPMDesigner/FlowDevModel/Default.htm?SortNo=" + data + "&From=Flows.htm&RunModel=1&s=" + Math.random();
-            addTab("NewFlow", "新建流程", url);
+            url = basePath + "/WF/Admin/CCBPMDesigner/FlowDevModel/Default.htm?SortNo=" + data + "&From=Flows.htm&RunModel=1&s=" + Math.random();
+            url += "&UserNo=" + GetQueryString("UserNo");
+            url += "&Token=" + GetQueryString("Token");
+            window.open(url);
+            //  addTab("NewFlow", "新建流程", url);
 
         },
         EditFlowName(id, name, pidx, idx) {
@@ -251,9 +260,33 @@
         },
         ImpFlowTemplate: function (data) {
             var fk_flowSort = data;
-            url = "./../Admin/AttrFlow/Imp.htm?FK_FlowSort=" + fk_flowSort + "&Lang=CH";
+            url = basePath + "/WF/Admin/AttrFlow/Imp.htm?FK_FlowSort=" + fk_flowSort + "&Lang=CH";
             addTab("ImpFlowTemplate", "导入流程模版", url);
         },
+        BatchImpFlowTemplate: function (data) {
+            var fk_flowSort = data;
+            url = basePath + "/WF/Admin/AttrFlow/Imp.htm?FK_FlowSort=" + fk_flowSort + "&Lang=CH";
+            addTab("ImpFlowTemplate", "导入流程模版", url);
+        },
+        BatchExpFlowTemplate: function (flowSortNo,flowSortName) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
+            handler.AddPara("FK_Sort", flowSortNo);
+            handler.AddPara("FlowSortName", flowSortName);
+            var data = handler.DoMethodReturnString("Flow_BatchExpFlowTemplate");
+            if (data.indexOf("err@") != -1) {
+                layer.alert(data);
+                return;
+            }
+            var url = data.replace("url@", "");
+            if (url.indexOf("resources") == -1) {
+                SetHref(basePath + "/" + url);
+                return;
+            }
+
+            //这个是针对Springboot jar包发布后的下载
+            SetHref(basePath + "/WF/Ath/DownloadByPath?filePath=" + encodeURIComponent(url));
+        },
+
         DeleteSort: function (no) {
 
             if (window.confirm("确定要删除吗?") == false)

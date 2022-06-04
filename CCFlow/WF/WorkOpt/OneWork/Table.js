@@ -21,7 +21,7 @@ function InitPage() {
     if (data == "[]")
         return;
 
-    data = eval('(' + data + ')');
+    data = cceval('(' + data + ')');
 
     //日志列表.
     var tracks = data["Track"];

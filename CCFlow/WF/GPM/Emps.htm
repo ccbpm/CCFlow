@@ -81,7 +81,7 @@
             //返回节点数组
             var initNodeData = function (data, fk_dept2) {
 
-                data = eval('(' + data + ')');
+                data = cceval('(' + data + ')');
 
                 var fk_dept = fk_dept2; //pageData.FK_Dept;
                 var parentNo = undefined;
@@ -298,7 +298,10 @@
             }
             $.each(nameArrs, function (i, selected) {
                 for (var property in returnVal) {
-                    returnVal[property].push(selected[property]);
+                    var val = selected[property];
+                    if (property == "No")
+                        val = val.replace("Emp_", "");
+                    returnVal[property].push(val);
                 }
             });
             for (var property in nameArrs[0]) {

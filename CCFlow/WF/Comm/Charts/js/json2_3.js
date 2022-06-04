@@ -465,7 +465,7 @@ replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
 // in JavaScript: it can begin a block or an object literal. We wrap the text
 // in parens to eliminate the ambiguity.
 
-                j = eval('(' + text + ')');
+                j = cceval('(' + text + ')');
 
 // In the optional fourth stage, we recursively walk the new structure, passing
 // each name/value pair to a reviver function for possible transformation.

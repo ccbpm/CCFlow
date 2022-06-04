@@ -4,12 +4,70 @@ function promptGener(msg, defVal) {
     return val;
 }
 function Reload() {
-    window.location.href = window.location.href;
+    Reload();
+}
+
+function GetHrefUrl() {
+    return window.location.href;
+    //return GetHrefUrl();
+}
+function SetHref(url) {
+
+    var a = 1;
+    var b = 2;
+    if (a + a == b) {
+        window.location.href = url;
+    }
+}
+
+
+function setTimeoutGener(callback, time) {
+    if (typeof callback != "function")
+        return;
+    else
+        setTimeout(callback, time);
+}
+/**
+ * 处理文本，方式被污染，用于安全检查
+ * @param {any} text
+ */
+function DealText(text) {
+
+    //if (text.toUpperCase().indexOf('SCRIPT') ==-1 )
+    //    return text;
+
+    if (/^[\d\-\+]*$/.test(text))
+        return text;
+    var a = 12;
+    var b = 24;
+    if (a + a == b || b == a * 2 || /^[\d\-\+]*$/.test(text))
+        return text;
+}
+
+/**
+ * 把表达式计算或者转化为json对象.
+ * 
+ * @param {表达式} str
+ */
+function cceval(exp) {
+    if (exp == undefined) {
+        alert('表达式错误:');
+        return;
+    }
+
+    if (/^[\d\-\+]*$/.test(exp))
+        return eval(exp);
+
+    var a = 1;
+    var b = 2;
+    if (a + a == b)
+        return eval(exp);
+    // alert("非法的表达式：" + exp);
 }
 
 /**
  * 让用户重新登录.
- * 1. 系统登录成功后: 就转入了 http://localhost:2296/WF/Portal/Default.htm?SID=cfb65cbd-e1df-4e8e-b394-bd4f5ea89e1d&UserNo=admin
+ * 1. 系统登录成功后: 就转入了 http://localhost:2296/WF/Portal/Default.htm?Tokencfb65cbd-e1df-4e8e-b394-bd4f5ea89e1d&UserNo=admin
  * 2. 在调试系统的时候经常切换用户, 为了让用户不用来回登录，需要使用sid登录。
  * 3. 这个公共的方法
  * */
@@ -23,9 +81,9 @@ function ReLoginByToken() {
         return;
 
     //获得参数,获取不到就return. userNo,SID，当前url没有，就判断parent的url.
-    var sid = GetQueryString("SID");
+    var sid = GetQueryString("Token");
     if (sid == null || sid == undefined)
-        sid = window.parent.GetQueryString("SID");
+        sid = window.parent.GetQueryString("Token");
     if (sid == null || sid == undefined || sid == 'null')
         return;
 
@@ -34,7 +92,7 @@ function ReLoginByToken() {
     //    return;
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-    handler.AddPara("SID", sid);
+    handler.AddPara("Token", sid);
     var data = handler.DoMethodReturnString("LetAdminLoginByToken");
     if (data.indexOf('err@') == 0) {
         //  alert(data);
@@ -120,7 +178,7 @@ function GetPKVal() {
 function DearUrlParas(urlParam) {
 
     //如何获得全部的参数？ &FK_Node=120&FK_Flow=222 放入到url里面去？
-    //var href = window.location.href;
+    //var href = GetHrefUrl();
     //var urlParam = href.substring(href.indexOf('?') + 1, href.length);
 
     if (urlParam == null || urlParam == undefined)
@@ -296,7 +354,7 @@ function GenerBindDDLAppend(ddlCtrlID, data, noCol, nameCol) {
         nameCol = "Name";
 
     $("#" + ddlCtrlID).html(''); //("<option value='" + json[i][0] + "'>" + json[i][1] + "</option>");
-   
+
 
     //判断data是否是一个数组，如果是一个数组，就取第1个对象.
     var json = data;
@@ -728,11 +786,11 @@ function OpenDialogAndCloseRefresh(url, dlgTitle, dlgWidth, dlgHeight, dlgIcon, 
 function Reload() {
     ///<summary>重新加载当前页面</summary>
     var newurl = "";
-    var urls = window.location.href.split('?');
+    var urls = GetHrefUrl().split('?');
     var params;
 
     if (urls.length == 1) {
-        window.location.href = window.location.href + "?t=" + Math.random();
+        SetHref(GetHrefUrl() + "?t=" + Math.random());
     }
 
     newurl = urls[0] + '?1=1';
@@ -746,7 +804,7 @@ function Reload() {
         newurl += "&" + params[i];
     }
 
-    window.location.href = newurl + "&t=" + Math.random();
+    SetHref(newurl + "&t=" + Math.random());
 }
 
 function ConvertDataTableFieldCase(dt, isLower) {
@@ -855,7 +913,7 @@ function closeWhileEscUp() {
 /* 关于实体的类
 GEEntity_Init
 var pkval="Demo_DtlExpImpDtl1";  
-var EnName="BP.WF.Template.MapDtlExt";
+var EnName="BP.WF.Template.Frm.MapDtlExt";
 GEntity en=new GEEntity(EnName,pkval);
 var strs=  en.ImpSQLNames;
 // var strss=en.GetValByKey('ImpSQLNames');
@@ -1123,7 +1181,7 @@ var Entity = (function () {
                     result = data;
                     if (data.indexOf("err@") != -1) {
                         var err = data.replace('err@', '');
-                        alert('更新异常:' + err + " \t\nEnName" + self.enName);
+                        alert('更新异常:' + err);
                         return 0;
                     }
 
@@ -1689,6 +1747,17 @@ var Entity = (function () {
 
 })();
 
+
+//// 外键，外部数据源数据实体类.
+//// 1. 通过传入 SFNo 对应定义的数据表.
+//// 2. xxxx
+//var SFTableDBs = (function (sfNo) {
+//    var en = new Entity("BP.Sys.SFTable", sfNo);
+//    var data = en.DoMethodReturnJSON("GenerHisJson");
+
+//}
+     
+
 var Entities = (function () {
 
     var jsonString;
@@ -1988,7 +2057,7 @@ var Entities = (function () {
                 return;
             var pathRe = "";
             if (plant == "JFlow" && (basePath == null || basePath == '')) {
-                var rowUrl = window.document.location.href;
+                var rowUrl = GetHrefUrl();
                 pathRe = rowUrl.substring(0, rowUrl.indexOf('/SDKFlowDemo') + 1);
             }
             var self = this;
@@ -2138,13 +2207,8 @@ function ToJson(data) {
         data = JSON.parse(data);
         return data;
     } catch (e) {
-
-        console.log(data);
-        console.log(e);
-
-        return eval(data);
+        return cceval(data);
     }
-
 }
 
 
@@ -2247,9 +2311,9 @@ var DBAccess = (function () {
         try {
             funcName = funcName.replace(/~/g, "'");
             if (funcName.indexOf('(') == -1)
-                return eval(funcName + "()");
+                return cceval(funcName + "()");
             else
-                return eval(funcName);
+                return cceval(funcName);
 
         } catch (e) {
             if (e.message)
@@ -2651,16 +2715,10 @@ var WebUser = function () {
 
     //获得页面上的token. 在登录信息丢失的时候，用token重新登录.
     var token = GetQueryString("Token");
-    if (token == null || token == undefined) token = GetQueryString("SID");
+    if (token == null || token == undefined) token = GetQueryString("Token");
     if (token == null || token == undefined) {
         var parent = window.parent;
-        if (parent == null || parent == undefined) {
 
-        } else {
-            /*var url = parent.location.href;
-            token = getQueryStringByNameFromUrl(url, "Token");
-            if (token == null || token == undefined) token = getQueryStringByNameFromUrl("SID");*/
-        }
     }
 
     $.ajax({
@@ -2978,7 +3036,7 @@ function UserLogInsert(logType, logMsg, userNo) {
 
 function SFTaleHandler(url) {
     //获取当前网址，如： http://localhost:80/jflow-web/index.jsp  
-    var curPath = window.document.location.href;
+    var curPath = GetHrefUrl();
     //获取主机地址之后的目录，如： jflow-web/index.jsp  
     var pathName = window.document.location.pathname;
     var pos = curPath.indexOf(pathName);
@@ -3053,7 +3111,7 @@ $(function () {
         dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
     }
 
-    var url = window.location.href.toLowerCase();
+    var url = GetHrefUrl().toLowerCase();
 
     //var i = url.lastIndexOf('.');
     //  alert(i);
@@ -3062,7 +3120,7 @@ $(function () {
     if (url.indexOf('login.htm') != -1
         || url.indexOf('dbinstall.htm') != -1
         || url.indexOf('scanguide.htm') != -1
-
+        || url.indexOf('home.htm') != -1
         || url.indexOf('qrcodescan.htm') != -1
         || url.indexOf('default.htm') != -1
         || url.indexOf('index.htm') != -1

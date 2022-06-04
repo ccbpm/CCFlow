@@ -1,11 +1,11 @@
 ﻿// UI风格配置. UIPlant, 为了适应不同风格的版本需要. 我们增加这个配置, UIPlant=BS,Ele.
+ 
 var uiPlant = 'BS'; //风格文件.
 
 //  For .net 后台的调用的url ,  java的与.net的不同.
 var plant = 'CCFlow'; //运行平台.
 var basePath = basePath();
 var Handler = "Handler.ashx"; //处理器,一般来说，都放在与当前处理程序的相同的目录下。
-var MyFlow = "MyFlow.ashx"; //工作处理器.
 var webUser = null; //定义通用变量用户信息
 var IsIELower10 = false;
 
@@ -15,9 +15,9 @@ if (ver == 6 || ver == 7 || ver == 8 || ver == 9)
 
 
 function basePath() {
-    
+
     //获取当前网址，如： http://localhost:80/jflow-web/index.jsp  
-    var curPath = window.document.location.href;
+    var curPath = window.location.href; // GetHrefUrl();
     //获取主机地址之后的目录，如： jflow-web/index.jsp  
     var pathName = window.document.location.pathname;
     if (pathName == "/") { //说明不存在项目名
@@ -125,7 +125,7 @@ Skip.includeJsText = function (rootObject, jsText) {
         var oScript = document.createElement("script");
         oScript.type = "text/javascript";
         oScript.text = jsText;
-        rootObject.appendChild(oScript);
+        rootObject.append(oScript);
     }
 },
 //导入文件
@@ -141,23 +141,14 @@ Skip.includeJsSrc = function (rootObject, fileUrl) {
 Skip.addJs = function (url, rootObject) {
     if (Exists(url) == false)
         return;
-    var oXmlHttp = Skip.getXmlHttpRequest();
-    oXmlHttp.onreadystatechange = function () {//其实当在第二次调用导入js时,因为在浏览器当中存在这个*.js文件了,它就不在访问服务器,也就不在执行这个方法了,这个方法也只有设置成异步时才用到
-        if (oXmlHttp.readyState == 4) { //当执行完成以后(返回了响应)所要执行的
-            if (oXmlHttp.status == 200 || oXmlHttp.status == 304) { //200有读取对应的url文件,404表示不存在这个文件
-                Skip.includeJsSrc(rootObject, url);
-            } else {
-                alert('XML request error: ' + oXmlHttp.statusText + ' (' + oXmlHttp.status + ')');
-            }
-        }
-    }
-    //1.True 表示脚本会在 send() 方法之后继续执行，而不等待来自服务器的响应,并且在open()方法当中有调用到onreadystatechange()这个方法。通过把该参数设置为 "false"，可以省去额外的 onreadystatechange 代码,它表示服务器返回响应后才执行send()后面的方法.
-    //2.同步执行oXmlHttp.send()方法后oXmlHttp.responseText有返回对应的内容,而异步还是为空,只有在oXmlHttp.readyState == 4时才有内容,反正同步的在oXmlHttp.send()后的操作就相当于oXmlHttp.readyState == 4下的操作,它相当于只有了这一种状态.
-    oXmlHttp.open('GET', url, false); //url为js文件时,ie会自动生成 '<script src="*.js" type="text/javascript"> </scr ipt>',ff不会  
-    oXmlHttp.send(null);
-    if (rootObject == null || rootObject==undefined)
-        rootObject = document.getElementsByTagName('script')[0];
-    Skip.includeJsText(rootObject, oXmlHttp.responseText);
+    //同步加载
+    $.ajaxSettings.async = false;
+    $.get(url, function (data, status, xhr) {
+        if (rootObject == null || rootObject == undefined)
+            rootObject = document.getElementsByTagName('head')[0];
+        Skip.includeJsText(rootObject, xhr.responseText);
+    });
+    $.ajaxSettings.async = true;
 }
 
 function Exists(url) {

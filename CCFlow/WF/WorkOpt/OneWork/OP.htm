@@ -59,7 +59,7 @@
         });
 
         function RollbackIt() {
-            window.location.href = "../Rollback.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow");
+            SetHref("../Rollback.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow"));
         }
 
         //回滚流程
@@ -249,7 +249,7 @@
             if (confirm('您确定要执行吗？') == false)
                 return;
             var url = '../../GetTask.aspx?DoType=Tackback&FK_Flow=' + fk_flow + '&FK_Node=' + fk_node + '&ToNode=' + toNode + '&WorkID=' + workid;
-            window.location.href = url;
+            SetHref(url);
         }
 
         function UnSend(fk_flow, workID, fid) {

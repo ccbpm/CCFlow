@@ -628,7 +628,7 @@
                     method: 'get',
                     onsuccess: function (r) {
                         try {
-                            var json = eval('(' + r.responseText + ')');
+                            var json = cceval('(' + r.responseText + ')');
                             if (json.state == 'SUCCESS') {
                                 _this.pushData(json.list);
                                 _this.listIndex = parseInt(json.start) + parseInt(json.list.length);

@@ -38,7 +38,7 @@
 
             //更新节点表单类型.
             var menuNo = GetQueryString("MenuNo");
-            var en = new Entity("BP.GPM.Home.WindowTemplate");
+            var en = new Entity("BP.CCFast.Portal.WindowTemplate");
             en.PageID = menuNo;
             en.Name = name;
             en.WinDocModel = winDocModel; //窗口内容模式.
@@ -48,7 +48,7 @@
 
 
             //从表信息.
-            var enDtl = new Entity("BP.GPM.Home.WindowExt.TabDtl");
+            var enDtl = new Entity("BP.CCFast.Portal.WindowExt.TabDtl");
             enDtl.RefPK = en.No;
             enDtl.Name = "待办";
             enDtl.Exp0 = "SELECT FK_NodeText AS '节点名', COUNT(*) as '数量' FROM WF_GenerWorkerList WHERE FK_Emp='@WebUser.No' AND IsPass=0 GROUP BY FK_NodeText";
@@ -56,7 +56,7 @@
             enDtl.WindowsShowType = 0; //饼图
             enDtl.Insert();
 
-            enDtl = new Entity("BP.GPM.Home.WindowExt.TabDtl");
+            enDtl = new Entity("BP.CCFast.Portal.WindowExt.TabDtl");
             enDtl.RefPK = en.No;
             enDtl.Name = "在途";
             enDtl.Exp0 = "SELECT FK_NodeText AS '节点名', COUNT(*) as '数量' FROM WF_GenerWorkerList WHERE FK_Emp='@WebUser.No' AND IsPass=1 GROUP BY FK_NodeText";
@@ -64,7 +64,7 @@
             enDtl.WindowsShowType = 1; //折线图
             enDtl.Insert();
 
-            enDtl = new Entity("BP.GPM.Home.WindowExt.TabDtl");
+            enDtl = new Entity("BP.CCFast.Portal.WindowExt.TabDtl");
             enDtl.RefPK = en.No;
             enDtl.Name = "退回";
             enDtl.Exp0 = "SELECT FlowName AS '流程名', COUNT(*) as '数量' FROM  WF_GenerWorkFlow A,  WF_GenerWorkerList B WHERE B.FK_Emp='@WebUser.No' AND B.IsPass=0 AND A.WorkID=B.WorkID AND A.WFState=5  GROUP BY FlowName";
@@ -72,7 +72,7 @@
             enDtl.WindowsShowType = 2; //柱状图
             enDtl.Insert();
 
-            enDtl = new Entity("BP.GPM.Home.WindowExt.TabDtl");
+            enDtl = new Entity("BP.CCFast.Portal.WindowExt.TabDtl");
             enDtl.RefPK = en.No;
             enDtl.Name = "已完成";
             enDtl.Exp0 = "SELECT FlowName AS '流程名', COUNT(*) as '数量'  FROM  WF_GenerWorkFlow  WHERE Emps LIKE '@WebUser.No' AND WFState=3  GROUP BY FlowName";
@@ -80,7 +80,7 @@
             enDtl.WindowsShowType = 3; //表格
             enDtl.Insert();
 
-            window.location.href = "../../Comm/En.htm?EnName=BP.GPM.Home.WindowExt." + winDocModel + "&No=" + en.No;
+            SetHref("../../Comm/En.htm?EnName=BP.CCFast.Portal.WindowExt." + winDocModel + "&No=" + en.No);
 
         }
     </script>

@@ -48,8 +48,9 @@
         th, td {
             white-space: normal;
         }
-        .pagination-detail{
-            color:black !important;
+
+        .pagination-detail {
+            color: black !important;
         }
     </style>
 
@@ -62,6 +63,9 @@
         var isShowFull = GetQueryString("IsShowFull");
         isShowFull = isShowFull == null || isShowFull == undefined || isShowFull == "" ? "0 " : isShowFull;
         var webUser = new WebUser();
+        var AthParams = {};
+        var athRefPKVal = 0;
+        AthParams.AthInfo = {};
         //页面数据
         var pageData = {
             DBDtl: [{ OID: 0, RowData: {} }],
@@ -126,7 +130,7 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
             handler.AddJson(param);
             var data = handler.DoMethodReturnString(method);
-            if (data.indexOf("err@") != -1 && data.indexOf("err@不允许保存")==-1) {
+            if (data.indexOf("err@") != -1 && data.indexOf("err@不允许保存") == -1) {
                 alert('保存数据出错' + data);
                 return;
             }
@@ -250,7 +254,7 @@
                 linkUrl += '&FK_MapData=' + GetQueryString("FK_MapData");
 
             if (sys_MapDtl.LinkTarget == "_self") {
-                window.location.href = linkUrl;
+                SetHref(linkUrl);
                 return;
             }
 
@@ -282,7 +286,7 @@
                 url = "Ath.htm?IsBTitle=1&PKVal=" + dtlOID + "&Ath=AthMDtl&FK_MapData=" + GetQueryString("EnsName") + "&FK_FrmAttachment=" + dtlName + "_AthMDtl&WorkID=" + workID + "&FK_Node=" + fk_node + "&FK_Flow=" + fk_flow + "&FFK_MapData=" + FFK_MapData + "&IsReadonly=" + IsReadonly;
                 WinOpen(url);
             } else {
-                if (typeof parent.OpenBootStrapModalByContent!="undefined")
+                if (typeof parent.OpenBootStrapModalByContent != "undefined")
                     parent.OpenBootStrapModalByContent(url, "AthTable_Init('" + dtlName + "_AthMDtl','Div_" + dtlName + "_AthMDtl'," + dtlOID + ")", 'Div_' + dtlName + '_AthMDtl', "从表多附件", 800, 500, "icon-property", null, null, null, function () {
                         //关闭窗口事件
                         AthNum = $("#athModel_" + dtlName + "_AthMDtl").find("a").length;
@@ -314,6 +318,27 @@
                 }
             }
 
+        }
+
+        function OpenVerAndMark() {
+            var url = "./FrmDBVerAndRemark.htm?FrmID=" + sys_MapDtl.FK_MapData + "&RFrmID=" + sys_MapDtl.FK_MapData + "&Field=" + sys_MapDtl.No + "&FieldType=1" + "&RefPKVal=" + GetQueryString("RefPKVal") + "&IsReadonly=" + GetQueryString("IsReadonly");
+            if (typeof parent.OpenLayuiDialog != "undefined") {
+                var W = parent.window.innerWidth / 2;
+                parent.OpenLayuiDialog(url,"审阅&版本",W,"100","r");
+                return;
+            }
+            if (typeof parent.OpenBootStrapModal != "undefined") {
+                var W = parent.window.innerWidth / 2;
+                var H = parent.window.innerHeight-240;
+                parent.OpenBootStrapModal(url,"VerRemark","审阅&版本", W, H);
+                return;
+            }
+            if (typeof OpenBootStrapModal != "undefined") {
+                var W = parent.window.innerWidth / 2;
+                var H = parent.window.innerHeight - 240;
+                OpenBootStrapModal(url, "VerRemark", "审阅&版本", W, H);
+                return;
+            }
         }
 
         //插入行.
@@ -421,6 +446,7 @@
 
                     //处理复选框  设置表格中数据的值
                     var textVal = workNodeData.Blank[0][o.data().KeyOfEn];
+
                     //var ckEle = $.grep(tmplate, function (obj) {
                     //  return $(obj).attr('name') == 'CB_' + o.data().KeyOfEn || $(obj).attr('name') == 'CB_' + o.data().KeyOfEn + '_' + newRowIndex;
                     //})
@@ -644,6 +670,16 @@
             mapAttrs = sys_mapAttr;
             mapExts = sys_mapExtDtl;
             dbDtl = data["DBDtl"]; //从表数据.
+            var dbVerPK = GetQueryString("DBVerPK");
+            if (dbVerPK && dbVerPK != "") {
+                handler.Clear();
+                handler.AddPara("MyPK", dbVerPK);
+                var json = handler.DoMethodReturnString("ChartFrm_GetDtlDataByVer");
+                if (json && json != "") {
+                    json = JSON.parse(json);
+                    dbDtl = json[sys_MapDtl.PTable];
+                }
+            }
 
             var uiBindKeys = data["UIBindKey"];
             if (uiBindKeys.length != 0) {
@@ -832,9 +868,19 @@
 
                     imgStr += '<img title="选项" style="width: 40px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option(' + impModel + ');" />';
                 }
+
+                //var isShowVerBtn = GetQueryString("IsShowVerBtn");
+                //isShowVerBtn = isShowVerBtn == null || isShowVerBtn == undefined || isShowVerBtn == "" ? "0" : isShowVerBtn;
+               // if (isShowVerBtn == "1") {
+                    //增加数据审阅和版本的信息
+                //    imgStr += '<img title="审阅&版本" style="width: 30px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/FrmDBVer.png" onclick="OpenVerAndMark()" />'
+
+               // }
                 if (isShowFull != "1")
                     imgStr += '<img title="全屏显示" style="width: 30px;padding: 0px 5px;cursor:pointer;" src="../Img/Full.png" onclick="WindowOpenDtl()" />'
                 var delTh = $($(th).append(imgStr));
+
+
 
                 var delThData;
 
@@ -885,9 +931,9 @@
                     $('#dtlDiv div table thead').append(secondTr);
             }
             //if (isShowFull != "1")
-                //$('#dtlDiv div table thead tr').bind("dblclick", function () {
-                //    WindowOpenDtl();
-                //});
+            //$('#dtlDiv div table thead tr').bind("dblclick", function () {
+            //    WindowOpenDtl();
+            //});
             // 表头over --------------------
 
             //如果不能新增，就把新增按钮去掉.
@@ -1192,11 +1238,11 @@
                     return webUser.FK_DeptName;
                 case "@WebUser.FK_DeptNameOfFull":
                 case "@WebUser.FK_DeptFullName":
-                    return webUser.FK_DeptNameOfFull;  
+                    return webUser.FK_DeptNameOfFull;
                 case "@WebUser.OrgNo":
-                    return webUser.OrgNo;                  
+                    return webUser.OrgNo;
                 case "@WebUser.OrgName":
-                    return webUser.OrgName;                  
+                    return webUser.OrgName;
                 case "@RDT":
                     var dataFormat = "yyyy-MM-dd";
                     switch (attr.IsSupperText) {
@@ -1219,6 +1265,8 @@
                         case 6:
                             dataFormat = "MM-dd";
                             break;
+                        case 7:
+                            dataFormat = "yyyy";
                         default:
                             alert("没有找到指定的时间类型");
                             return;
@@ -1231,7 +1279,7 @@
                 case "@yy年MM月dd日":
                 case "@yy年MM月dd日HH时mm分":
                 case "@yyyy-MM-dd":
-                    return FormatDate(new Date(), defVal.replace("@",""));
+                    return FormatDate(new Date(), defVal.replace("@", ""));
                 default:
                     return defVal;
             }
@@ -1365,6 +1413,7 @@
 
 
         function parentStatistics(extArr) {
+            debugger
             if ($.isArray(extArr)) {
                 $.each(extArr, function (i, extObj) {
                     var columnsName = getColumnElementsName(extObj.DtlColumn);
@@ -1498,7 +1547,7 @@
 
             //表格查询模式导入
             if (impModel == 1) {
-                var url = window.location.href;
+                var url = GetHrefUrl();
                 url = url.replace('Dtl.htm', 'DtlImp.htm');
                 url = url.replace('Dtl2017.htm', 'DtlImp.htm');
                 url = url.replace('Dtl2018.htm', 'DtlImp.htm');
@@ -1506,7 +1555,7 @@
 
             //excel模式导入方式
             if (impModel == 2) {
-                var url = window.location.href;
+                var url = GetHrefUrl();
                 url = url.replace('Dtl.htm', 'DtlImpByExcel.htm');
                 url = url.replace('Dtl2017.htm', 'DtlImpByExcel.htm');
                 url = url.replace('Dtl2018.htm', 'DtlImpByExcel.htm');
@@ -1514,7 +1563,7 @@
 
             //单据模式
             if (impModel == 3) {
-                var url = window.location.href;
+                var url = GetHrefUrl();
                 url = url.replace('Dtl.htm', 'DtlImpByBill.htm');
                 url = url.replace('Dtl2017.htm', 'DtlImpByBill.htm');
                 url = url.replace('Dtl2018.htm', 'DtlImpByBill.htm');
@@ -1544,7 +1593,7 @@
                 });
                 return;
             }
-            
+
             //window.location.href = url;
             WinOpenIt(url);
         }
@@ -1666,7 +1715,7 @@
                             return true;
                         value = hidden.val();
                     }
-                } 
+                }
                 if (radio.length != 0) {
                     var name = $(radio[0]).attr('name');
                     keyOfEn = name.substring(3).replace("_" + rowIndex, "");
@@ -1822,7 +1871,9 @@
                                 dateFmt = "yyyy-MM";
                             } else if (frmDate == 6) {
                                 dateFmt = "MM-dd";
-                            } else
+                            } else if (frmDate ==7) {
+                                dateFmt = "yyyy";
+                            }else
                                 dateFmt = "yyyy-MM-dd";
 
                             if (mapAttr.UIIsEnable == 1) {
@@ -1844,7 +1895,9 @@
                                 dateFmt = "HH:mm";
                             } else if (frmDate == 5) {
                                 dateFmt = "HH:mm:ss";
-                            } else
+                            } else if (frmDate == 7) {
+                                dateFmt = "yyyy";
+                            }else
                                 dateFmt = "yyyy-MM-dd HH:mm";
 
                             if (mapAttr.UIIsEnable == 1) {
@@ -1918,7 +1971,11 @@
                             else
                                 bit = 2;
 
-                            eleHtml += "<input  class='form-control' style='text-align:right;' onblur='valitationAfter(this, \"float\")' onkeydown='valitationBefore(this, \"float\")' onkeyup=" + '"' + "valitationAfter(this, 'float'); if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'float'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                            var minMax = GetNumberMinMax(mapAttr);
+                            var dataInfo = "";
+                            if (minMax.length == 2)
+                                dataInfo = " data-min='" + minMax[0] + "' data-max='" + minMax[1] + "'";
+                            eleHtml += "<input  class='form-control' style='text-align:right;' " + dataInfo + " onblur='valitationAfter(this, \"float\")' onkeydown='valitationBefore(this, \"float\")' onkeyup=" + '"' + "valitationAfter(this, 'float'); if(!(value.indexOf('-')==0&&value.length==1)&&isNaN(value))execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'float'); if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
                         }
                         if ((mapAttr.MyDataType == 2 && mapAttr.LGType != 1)) {//AppInt
                             var enableAttr = '';
@@ -1927,7 +1984,12 @@
                             } else {
                                 enableAttr = "disabled='disabled'";
                             }
-                            eleHtml += "<input style='text-align:right;' onblur='valitationAfter(this, \"int\")' onkeydown='valitationBefore(this, \"int\")' onkeyup=" + '"' + "valitationAfter(this, 'int'); if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int'); if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+
+                            var minMax = GetNumberMinMax(mapAttr);
+                            var dataInfo = "";
+                            if (minMax.length == 2)
+                                dataInfo = " data-min='" + minMax[0] + "' data-max='" + minMax[1] + "'";
+                            eleHtml += "<input style='text-align:right;' " + dataInfo + " onblur='valitationAfter(this, \"int\")' onkeydown='valitationBefore(this, \"int\")' onkeyup=" + '"' + "valitationAfter(this, 'int'); if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int'); if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
                         }
 
 
@@ -2009,6 +2071,25 @@
 
             return eleHtml;
         }
+        var numString = ",";
+        function GetNumberMinMax(mapAttr) {
+            var isEnableNumEnterLimit = GetPara(mapAttr.AtPara, "IsEnableNumEnterLimit");
+            isEnableNumEnterLimit = isEnableNumEnterLimit == null || isEnableNumEnterLimit == "" || isEnableNumEnterLimit == undefined || isEnableNumEnterLimit == "0" ? false : true;
+            if (isEnableNumEnterLimit == false)
+                return [];
+            if (numString.indexOf("," + mapAttr.KeyOfEn + ",") == -1)
+                numString += mapAttr.KeyOfEn + ",";
+            var min = 0, max = 0;
+            if (isEnableNumEnterLimit == true) {
+                min = GetPara(mapAttr.AtPara, "MinNum");
+                if (min == undefined || min == "")
+                    min = 0;
+                max = GetPara(mapAttr.AtPara, "MaxNum");
+                if (max == undefined || max == "")
+                    max = 100000;
+                return [min, max];
+            }
+        }
 
         //只能输入数字
         function keyDown(event) {
@@ -2062,7 +2143,7 @@
             var isReadonly = GetQueryString("IsReadonly");
             if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1" || sys_MapDtl.IsUpdate == "1") && sys_MapDtl.IsReadonly == "0" && isReadonly != "1") {
 
-            }else {
+            } else {
                 return;
             }
 
@@ -2073,8 +2154,8 @@
             }
 
 
-           // if (isDelRowAlert == true) {
-             //   isDelRowAlert = false;
+            // if (isDelRowAlert == true) {
+            //   isDelRowAlert = false;
             //    return;
             //}
 
@@ -2375,6 +2456,7 @@
         var curRowIndex = 0;
         //处理MapExt
         function AfterBindEn_DealMapExt(tr, rowIndex) {
+            var numberSet = numString;
             var workNode = workNodeData;
             var mapExtArr = workNode.Sys_MapExt; // 扩展信息
             var WorkId = GetQueryString("WorkId")
@@ -2498,6 +2580,8 @@
                             tb.data(mapExt)
                             tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('id') + "','','" + mapExt.Tag1 + "')");
                         }
+                        if (numberSet != "" && numberSet.indexOf("," + mapExt.AttrOfOper + ",") != -1)
+                            numberSet = numberSet.replace("," + mapExt.AttrOfOper + ",", "");
                         break;
                     case "InputCheck": //输入检查
                         if (mapExt.AttrOfOper.length == 0 || mapExt.Tag1.length == 0 || mapExt.Tag2.length == 0) {
@@ -2558,6 +2642,8 @@
                                 dateFmt = "HH:mm:ss";
                             } else if (frmDate == 6) {
                                 dateFmt = "MM-dd";
+                            } else if (frmDate == 7) {
+                                dateFmt = "yyyy";
                             }
 
                             var mapextDoc = mapExt.Doc;
@@ -2567,8 +2653,8 @@
                                     WdatePicker({
                                         dateFmt: dateFmt, onpicked: function (dp) {
                                             $(this).blur(); //失去焦点
-                                            var  id = ctrl[0].id;
-                                            curRowIndex = id.substring(id.lastIndexOf("_")+1);
+                                            var id = ctrl[0].id;
+                                            curRowIndex = id.substring(id.lastIndexOf("_") + 1);
                                             DBAccess.RunFunctionReturnStr(mapextDoc);
                                         }
                                     });
@@ -2577,7 +2663,7 @@
                                         dateFmt: dateFmt, minDate: minDate, onpicked: function (dp) {
                                             $(this).blur(); //失去焦点
                                             var id = ctrl[0].id;
-                                            curRowIndex = id.substring(id.lastIndexOf("_")+ 1);
+                                            curRowIndex = id.substring(id.lastIndexOf("_") + 1);
                                             DBAccess.RunFunctionReturnStr(mapextDoc);
                                         }
                                     });
@@ -2587,14 +2673,17 @@
                         }
 
                         ctrl.data().MapExt = mapExt;
+                        if (numberSet != "" && numberSet.indexOf("," + mapExt.AttrOfOper + ",") != -1 && mapExt.Tag == "change")
+                            numberSet = numberSet.replace("," + mapExt.AttrOfOper + ",", "");
+
                         ctrl.bind(mapExt.Tag, function (obj) {
                             var id = ctrl[0].id;
                             curRowIndex = id.substring(id.lastIndexOf("_") + 1);
                             var mapExtThis = $(obj.target).data().MapExt;
                             if (mapExtThis.Doc.indexOf("(") != -1)
-                                eval(mapExtThis.Doc);
+                                cceval(mapExtThis.Doc);
                             else
-                                eval(mapExtThis.Doc + '(this)');
+                                cceval(mapExtThis.Doc + '(this)');
                         });
                         break;
                     case "DataFieldInputRole": //时间限制
@@ -2625,6 +2714,8 @@
                                     dateFmt = "HH:mm:ss";
                                 } else if (frmDate == 6) {
                                     dateFmt = "MM-dd";
+                                } else if (frmDate == 7) {
+                                    dateFmt = "yyyy";
                                 }
 
                                 var minDate = '%y-%M-#{%d}';
@@ -2755,7 +2846,7 @@
                                         // alert("mapExt:" + mapExt.AttrOfOper + "配置有误");
                                     } else {
                                         var mapExts = [];
-                                       
+
 
                                         extDocObj1 = extObjAr[0].KeyOfEn;
                                         $(tr).find('[name=TB_' + mapExt.AttrOfOper + ']').attr('disabled', true);
@@ -2796,7 +2887,7 @@
                                                 mapExts = targetObj.data().mapExt;
                                                 mapExts.push(mapExt);
                                             }
-                                               
+
 
                                             targetObj.data().mapExt = mapExts;
                                             targetObj.bind('blur', function (obj) {
@@ -2833,6 +2924,30 @@
                         break;
                 }
             }
+
+            if (numberSet != "") {
+                var strs = numberSet.split(",");
+                for (var i = 0; i < strs.length; i++) {
+                    if (strs[i] == "")
+                        continue;
+                    $(tr).find('[name=TB_' + strs[i] + ']').bind("change", function () {
+                        var expVal = $(this).val();//获取要转换的值
+                        var min = $(this).attr("data-min");
+                        var max = $(this).attr("data-max");
+                        if (min && parseInt(expVal) < parseInt(min)) {
+                            alert("值不能小于设置的最小值:" + min);
+                            expVal = min;
+                            $(this).val(expVal);
+                        }
+                        if (max && parseInt(expVal) > parseInt(max)) {
+                            alert("值不能大于设置的最大值:" + max);
+                            expVal = max;
+                            $(this).val(expVal);
+                        }
+                    });
+                }
+            }
+
         }
 
         /**Pop弹出框的处理**/
@@ -2975,7 +3090,7 @@
                     }
                 }
 
-                tmpResult = eval(mapExtDoc);
+                tmpResult = cceval(mapExtDoc);
 
                 var mapAttr = $.grep(workNodeData.Sys_MapAttr, function (item) {
                     return item.MyPK == mapExt.FK_MapData + "_" + mapExt.AttrOfOper;
@@ -2992,7 +3107,7 @@
 
                 $(tr).data().data[$(obj.target).data().mapExt.AttrOfOper] = tmpResult;
             });
-            
+
 
         }
 
@@ -3011,8 +3126,6 @@
                     enums = $.grep(enums, function (value) {
                         return value.EnumKey == mapAttr.UIBindKey;
                     });
-
-
                     $.each(enums, function (i, obj) {
                         if (obj.IntKey == -1)
                             return false;
@@ -3220,10 +3333,10 @@
 
 
         function WindowOpenDtl() {
-            var url = window.location.href;
+            var url = GetHrefUrl();
             //获取屏幕的长宽
-            var W = window.parent.document.body.clientWidth-40;
-            var H = window.parent.document.body.clientHeight-40;
+            var W = window.parent.document.body.clientWidth - 40;
+            var H = window.parent.document.body.clientHeight - 40;
             window.parent.OpenLayuiDialog(url + "&IsShowFull=1", '编辑', W, 80, 'auto', true);
             return;
 
@@ -3231,7 +3344,7 @@
             var loop = setInterval(function () {
                 if (self.closed) {
                     clearInterval(loop);
-                    window.location.href = url;
+                    SetHref(url);
                 }
             }, 1);
         }

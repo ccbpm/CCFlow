@@ -132,7 +132,11 @@ if (typeof SelectorModel == "undefined") {
         SelectorModel.TeamOrgOnly = 10,
         SelectorModel.TeamOnly = 11,
         SelectorModel.TeamDeptOnly = 12,
-        SelectorModel.ByStationAI = 13
+        SelectorModel.ByStationAI = 13,
+        SelectorModel.ByWebAPI = 14,
+        SelectorModel.ByMyDeptEmps = 15
+
+
 
 
 }
@@ -486,7 +490,8 @@ if (typeof AutoStart == "undefined") {
         /// 触发试启动
         /// </summary>
         AutoStart.ByTrigger = 3,
-        AutoStart.ByDesigneeAdv = 4
+        AutoStart.ByDesigneeAdv = 4,
+        AutoStart.ByDesigneeAdminSendTo02Node=5
 
 }
 //前置导航

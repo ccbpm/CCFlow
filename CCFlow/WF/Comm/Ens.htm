@@ -73,7 +73,8 @@
         var mapAtrrs;
         var InsertFlag = 0;
         var PK;//En的主键
-        var newPKVal = 0;
+        //var newPKVal = 0;
+        var NewPKVals=[]; //新增行
         $(function () {
             var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             httpHandler.AddUrlData();  //增加参数属性.
@@ -171,7 +172,10 @@
                 width: 80,
                 align: 'center',
                 formatter: function (value, row, index) {
-                    return "<a href='#' onclick='OpenEn(\"" + row[PK] + "\")'>详情</a>";
+                    if (row["Type"] != undefined && row["Type"] == 1)
+                        return "--";
+                    else
+                        return "<a href='#' onclick='OpenEn(\"" + row[PK] + "\")'>详情</a>";
                 }
             });
 
@@ -407,8 +411,8 @@
 
         //新建.
         function New() {
-            if ($("#new_btn").attr('disabled') == "disabled")
-                return;
+            //if ($("#new_btn").attr('disabled') == "disabled")
+             ///   return;
             var ensName = GetQueryString("EnsName");
             var enName = ensName.substring(0, ensName.length - 1);
             var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
@@ -416,13 +420,26 @@
             var data = httpHandler.DoMethodReturnString("EntityOnly_Init");
             frmData = JSON.parse(data);
             mainData = frmData.MainTable[0];
-
+            if (GetPara(mapData.AtPara, "IsNewRow") == "0") {
+                if (NewPKVals.length != 0) {
+                    mainData[PK] = "00" + parseInt(parseInt(NewPKVals[0]) + NewPKVals.length);
+                }
+            } else {
+                mainData[PK] = NewPKVals.length;
+            }
+           
+            mainData.Type = 1;
             $('#mytable').bootstrapTable('insertRow', { index: $('#mytable').bootstrapTable('getData').length, row: mainData });
-            $("#new_btn").attr('disabled', true);
+            //$("#new_btn").attr('disabled', true);
             InsertFlag = 1;
-            newPKVal = mainData[PK];
+            //newPKVal = mainData[PK];
+            NewPKVals.push(mainData[PK]);
 
         }
+
+        //function removeEn(pkVal, index) {
+        //    $('#mytable').bootstrapTable('remove', { field: PK, values: pkVal });
+        //}
 
         function OpenEn(pkVal) {
 
@@ -432,7 +449,7 @@
             var url = "En.htm?EnName=" + enName + "&PKVal=" + pkVal + "&RefVal=" + GetQueryString("RefVal") + "&RefKey=" + GetQueryString("RefKey");
 
             OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 800, 450, "icon-property", null, null, null, function () {
-                window.location.href = window.location.href;
+                Reload();
             }, null, 'black');
         }
 
@@ -467,7 +484,7 @@
 
             handler.AddFormData();
             handler.AddPara("InsertFlag", InsertFlag);
-            handler.AddPara("NewPKVal", newPKVal);
+            handler.AddPara("NewPKVals", NewPKVals.join(","));
             var data = handler.DoMethodReturnString("Entities_Save");
 
             alert(data);
@@ -498,7 +515,8 @@
             $('#mytable').bootstrapTable("load", data.Ens);
             $("#new_btn").attr('disabled', false);
             InsertFlag = 0;
-            newPKVal = 0;
+            //newPKVal = 0;
+            NewPKVals = [];
         }
 
 

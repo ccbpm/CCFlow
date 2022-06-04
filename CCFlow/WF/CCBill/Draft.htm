@@ -61,7 +61,7 @@
 
         function New() {
             var frmID = GetQueryString("FrmID");
-            window.location.href = 'MyBill.htm?FrmID=' + frmID + "&FK_MapData=" + frmID;
+            SetHref('MyBill.htm?FrmID=' + frmID + "&FK_MapData=" + frmID);
         }
 
         /* ESC Key Down */
@@ -132,7 +132,7 @@
         function ToMyBill(frmID, workID) {
 
             var url = "MyBill.htm?FrmID=" + frmID + "&FK_MapData=" + frmID + "&WorkID=" + workID + "&OID=" + workID;
-            window.location.href = url;
+            SetHref(url);
         }
 
         //删除流程.
@@ -150,7 +150,7 @@
                 alert(data);
             }
 
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </body>

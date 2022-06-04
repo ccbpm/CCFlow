@@ -46,7 +46,7 @@
             //转到Url..
             if (data.indexOf('url@') == 0) {
                 data = data.replace('url@', '');
-                window.location.href = data;
+                SetHref(data);
                 return;
             }
 
@@ -67,7 +67,7 @@
                 if (title == "轨迹") {
 
                     //window.open(data);
-                    window.location.href = data;
+                    SetHref(data);
                     window.close();
                     return;
                 }
@@ -455,7 +455,7 @@
                 var fn;
                 try {
                     if (mapAttr.UIBindKey) {
-                        fn = eval(mapAttr.UIBindKey);
+                        fn = cceval(mapAttr.UIBindKey);
                     }
                 } catch (e) {
                 }
@@ -539,7 +539,7 @@
             //转到Url..
             if (data.indexOf('url@') == 0) {
                 data = data.replace('url@', '');
-                window.location.href = data;
+                SetHref(data);
                 return;
             }
 
@@ -564,7 +564,7 @@
         }
 
         function reload() {
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </body>

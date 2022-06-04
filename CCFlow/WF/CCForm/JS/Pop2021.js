@@ -184,44 +184,58 @@ function CommPopDialog(poptype, mapAttr, mapExt, pkval, frmData, baseUrl, mapExt
     $("#" + mtagsId).mtags("loadData", GetInitJsonData(mapExt, pkval,''));
     target.val($("#" + mtagsId).mtags("getText"));
 
+    var OpenPopType = GetPara(mapExt.AtPara, "OpenPopType");
+    if (OpenPopType && OpenPopType == 1) {
+        var btnLab = GetPara(mapExt.AtPara, "BtnLab");
+        btnLab = btnLab == null || btnLab == undefined || btnLab == "" ? "查找" : btnLab;
+        var element = $("<div class='layui-col-xs1'><button type=button class='layui-btn layui-btn-primary layui-btn-sm'>" + btnLab + "</button></div>");
+        container.append(element);
+        $(container.children()[0]).removeClass("layui-col-xs12").addClass("layui-col-xs10");
+        element.on("click", function () {
+            OpenPopFunction(mapExt, mapExts, mtagsId, target, targetID, pkval, poptype, frmData, baseUrl);
+        });
+        return;
+    }
     $("#" + mtagsId).on('dblclick', function () {
-        var url = "";
-        switch (poptype) {
-            case "PopBranchesAndLeaf": //树干叶子模式.
-                url = baseUrl + "Pop/BranchesAndLeaf.htm?MyPK=" + mapExt.MyPK + "&oid=" + pkval + "&m=" + Math.random();
-                break;
-            case "PopBranches": //树干简单模式.
-                url = baseUrl + "Pop/Branches.htm?MyPK=" + mapExt.MyPK + "&oid=" + pkval + "&m=" + Math.random();
-                break;
-            case "PopTableSearch": //表格查询.
-                url = baseUrl + "Pop/TableSearch.htm?MyPK=" + mapExt.MyPK + "&oid=" + pkval + "&m=" + Math.random();
-                break;
-            case "PopSelfUrl":
-                url = mapExt.Tag;
-                if (url.indexOf('?') == -1)
-                    url = url + "?PKVal=" + pkval + "&UserNo=" + webUser.No;
-                break;
-            default: break;
-        }
-        var dlgWidth = mapExt.W;
-        var dlgHeight = mapExt.H;
-        if (dlgWidth > window.innerWidth || dlgWidth < window.innerWidth / 2)
-            dlgWidth = window.innerWidth / 2;
-        if (dlgHeight > window.innerHeight || dlgHeight < window.innerHeight / 2)
-            dlgHeight = 50;
-        else
-            dlgHeight = dlgHeight / window.innerHeight *100;
-        if (window.parent && window.parent.OpenLayuiDialog)
-            window.OpenLayuiDialog(url, mapExt.Title, dlgWidth, dlgHeight, "auto", false, true, true, function () {
-                CloseLayuiDialogFunc(mapExt, mapExts, mtagsId, target, targetID, pkval);
-            })
-       else
-        OpenLayuiDialog(url, mapExt.Title, dlgWidth, dlgHeight, "auto", false, true, true,function () {
-            CloseLayuiDialogFunc(mapExt, mapExts, mtagsId, target, targetID, pkval);
-        })
+        OpenPopFunction(mapExt, mapExts, mtagsId, target, targetID, pkval, poptype, frmData, baseUrl);
     })
 }
-
+function OpenPopFunction(mapExt, mapExts, mtagsId, target, targetID, pkval, poptype, frmData, baseUrl) {
+    var url = "";
+    switch (poptype) {
+        case "PopBranchesAndLeaf": //树干叶子模式.
+            url = baseUrl + "Pop/BranchesAndLeaf.htm?MyPK=" + mapExt.MyPK + "&oid=" + pkval + "&m=" + Math.random();
+            break;
+        case "PopBranches": //树干简单模式.
+            url = baseUrl + "Pop/Branches.htm?MyPK=" + mapExt.MyPK + "&oid=" + pkval + "&m=" + Math.random();
+            break;
+        case "PopTableSearch": //表格查询.
+            url = baseUrl + "Pop/TableSearch.htm?MyPK=" + mapExt.MyPK + "&oid=" + pkval + "&m=" + Math.random();
+            break;
+        case "PopSelfUrl":
+            url = mapExt.Tag;
+            if (url.indexOf('?') == -1)
+                url = url + "?PKVal=" + pkval + "&UserNo=" + webUser.No;
+            break;
+        default: break;
+    }
+    var dlgWidth = mapExt.W;
+    var dlgHeight = mapExt.H;
+    if (dlgWidth > window.innerWidth || dlgWidth < window.innerWidth / 2)
+        dlgWidth = window.innerWidth * 4 / 5;
+    if (dlgHeight > window.innerHeight || dlgHeight < window.innerHeight / 2)
+        dlgHeight = 50;
+    else
+        dlgHeight = dlgHeight / window.innerHeight * 100;
+    if (window.parent && window.parent.OpenLayuiDialog)
+        window.OpenLayuiDialog(url, mapExt.Title, dlgWidth, dlgHeight, "auto", false, true, true, function () {
+            CloseLayuiDialogFunc(mapExt, mapExts, mtagsId, target, targetID, pkval);
+        })
+    else
+        OpenLayuiDialog(url, mapExt.Title, dlgWidth, dlgHeight, "auto", false, true, true, function () {
+            CloseLayuiDialogFunc(mapExt, mapExts, mtagsId, target, targetID, pkval);
+        })
+}
 function CloseLayuiDialogFunc(mapExt, mapExts, mtagsId, target, targetID, pkval) {
     //获取选择的值，存储展示
     var selectType = mapExt.GetPara("SelectType");

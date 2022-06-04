@@ -97,7 +97,7 @@
                         alert(data);
                         return;
                     }
-                    window.location.href = window.location.href;
+                    Reload();
                 }
             });
         }
@@ -140,7 +140,7 @@
             var urlWS = local + "/WF/CCForm/CCFormAPI.asmx?DocName="+DocName;
             var url = "httpCCWord://-fromccflow,Path="+path+",App=OnlineEdit," + paras + "WSUrl=" + urlWS;
            // alert(url);
-            window.location.href = url;
+            SetHref(url);
 
             //alert('尚未完成.');
         }
@@ -150,7 +150,7 @@
             var en = new Entity("BP.WF.Template.DocTemplate", id);
             en.PKVal = id;
             en.Delete();
-            window.location.href = window.location.href;
+            Reload();
         }
     </script>
 </head>

@@ -640,46 +640,7 @@ function CheckInput(oInput, filter) {
     }
     return re.test(oInput);
 }
-//正则表达式检查
-function CheckRegInput(oInput, filter, tipInfo) {
-    var mapExt = $('#' + oInput).data();
-    var filter = mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}');
-    var oInputVal = $("#" + oInput).val();
-    var result = true;
-    if (oInput != '') {
-        var re = filter;
-        if (typeof (filter) == "string") {
-            if (filter.indexOf('/') == 0) {
-                filter = filter.substr(1, filter.length - 2);
-            }
 
-            re = new RegExp(filter);
-        } else {
-            re = filter;
-        }
-        result = re.test(oInputVal);
-    }
-    if (!result) {
-        $("#" + oInput).addClass('errorInput');
-        var errorId = oInput + "error";
-        if ($("#" + errorId).length == 0) {
-            var span = $("<span id='" + errorId + "' style='color:red'></span>");
-            $("#" + oInput).parent().append(span);
-        }
-        $("#" + errorId).html(tipInfo);
-
-    } else {
-        $("#" + oInput).removeClass('errorInput');
-        var errorId = oInput + "error";
-        if ($("#" + errorId).length != 0)
-            $("#" + errorId).remove();
-        //$("[name=" + oInput + ']').parent().removeChild($("#" + errorId));
-
-
-
-    }
-    return result;
-}
 //输入检查
 function txtTest_Onkeyup(ele, filter, message) {
     if (ele == null) return;
@@ -773,7 +734,7 @@ function TB_ClickNum(ele, defVal) {
 
 //获取WF之前路径
 function GetLocalWFPreHref() {
-    var url = window.location.href;
+    var url = GetHrefUrl();
     if (url.indexOf('/WF/') >= 0) {
         var index = url.indexOf('/WF/');
         url = url.substring(0, index);
@@ -1046,7 +1007,7 @@ function FullDtl(selectVal, mapExt) {
             alert(data);
             return;
         }
-        dataObj = eval("(" + data + ")"); //转换为json对象 	
+        dataObj = cceval("(" + data + ")"); //转换为json对象 	
     }
 
     for (var i in dataObj.Head) {

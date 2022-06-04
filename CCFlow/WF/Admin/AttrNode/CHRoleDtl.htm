@@ -115,11 +115,11 @@
             node.TWay = $("#DDL_TWay").val(); //节假日考核方式.
 
             node.Update();
-            window.location.href = window.location.href;
+            Reload();
 
         }
         function Back() {
-            window.location.href = "EvaluationRole/1.ByTime.htm?FK_Node=" + GetQueryString("FK_Node");
+            SetHref( "EvaluationRole/1.ByTime.htm?FK_Node=" + GetQueryString("FK_Node"));
         }
         function testInt(obj) {
             //var value = $("#TBPara_TimeLimitHH").val();

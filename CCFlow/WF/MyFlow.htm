@@ -16,8 +16,6 @@
             var html = "<br/><br/><br/>";
             html += "<center><img src=./Img/loading.gif />正在加载,请稍后......</center>";
             html += "<ul>";
-            html += "<li>感谢您使用驰骋bpm</li>";
-            html += "<li>首次加载有一点慢，请您耐心等待。。。</li>";
             html += "</ul>";
 
             $("#Msg").html(html);
@@ -48,7 +46,7 @@
                 data = data.replace('?&', '?');
 
                 //如果返回url，就直接转向.
-                window.location.href = data;
+                SetHref(data);
                 return;
             }
 

@@ -59,12 +59,12 @@
             node.CHWay = $('input:radio[name="RB_CHWay"]:checked').val();
             node.Update();
 
-            window.location.href = window.location.href;
+            Reload();
             return;
         }
         function SetCHRoleDtl() {
             var url = "CHRoleDtl.htm?FK_Node=" + GetQueryString("FK_Node");
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
 </head>

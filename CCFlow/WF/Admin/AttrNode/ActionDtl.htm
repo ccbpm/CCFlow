@@ -145,7 +145,7 @@
 
             Back();
 
-            //window.location.href = window.location.href;
+            //Reload();
             return;
         }
 
@@ -172,7 +172,7 @@
 
         function Back() {
             var url = "Action.htm?FK_Node=" + GetQueryString("FK_Node");
-            window.location.href = url;
+            SetHref(url);
         }
 
         function Help() {
@@ -291,8 +291,8 @@
                         <li>如果该url地址在本机上，您需要配置绝对路径就好,比如：  /DataUser/xxx.jsp </li>
                         <li>如果是另外的服务器，请使用绝对的路径，比如 : http://192.168.1.111/xxx.jsp  </li>
                         <li> 系统会在您的url上面增加WorkID, UserNo, SID 等参数.  </li>
-                        <li> 比如1：您配置的是 /DataUser/xxx.jsp 系统解析执行的时候会是 /DataUser/xxx.jsp?WorkID=1101&UserNo=zhangsan&SID=xxxxxxxx </li>
-                        <li> 比如：您配置的是 /DataUser/xxx.jsp?DoType=xxx 系统解析执行的时候会是 /DataUser/xxx.jsp?DoType=xxx&WorkID=1101&UserNo=zhangsan&SID=xxxxxxxx </li>
+                        <li> 比如1：您配置的是 /DataUser/xxx.jsp 系统解析执行的时候会是 /DataUser/xxx.jsp?WorkID=1101&UserNo=zhangsan&Token=xxxxxxxx </li>
+                        <li> 比如：您配置的是 /DataUser/xxx.jsp?DoType=xxx 系统解析执行的时候会是 /DataUser/xxx.jsp?DoType=xxx&WorkID=1101&UserNo=zhangsan&Token=xxxxxxxx </li>
                         <li>根据WorkID您可以获取您所需要的其他参数。  </li>
                     </ul>
 

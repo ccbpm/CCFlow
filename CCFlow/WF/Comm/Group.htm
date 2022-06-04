@@ -218,7 +218,7 @@
         //到查询页面.
         function ToSearch() {
             var url = "Search.htm?EnsName=" + GetQueryString("EnsName");
-            window.location.href = url;
+            SetHref(url);
         }
 
         /**
@@ -523,7 +523,7 @@
                             url += "&" + o.KeyOfEn + "=" + data[o.KeyOfEn];
                     });
 
-                    return "<a href=\"javascript:WinOpen('" + url + "', 'wincommgroup',900,900);\"  class='btn btn-default btn - sm easyui- linkbutton'>详细</a>"
+                    return "<a href=\"javascript:WinOpen('" + url + "', 'wincommgroup',900,900);\"  class='btn btn-default btn - sm easyui- linkbutton'>查看</a>"
                 }
             });
 

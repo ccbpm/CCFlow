@@ -75,7 +75,7 @@ function changeOption() {
     var optionKey = optionKey = sele[index].value;
     var url = GetUrl(optionKey);
 
-    window.location.href = url + "?FrmID=" + frmID;
+    SetHref(url + "?FrmID=" + frmID);
 }
 
 function SaveAndClose() {
@@ -87,7 +87,7 @@ function SaveAndClose() {
 function OpenEasyUiDialogExt(url, title, w, h, isReload) {
     OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
         if (isReload == true) {
-            window.location.href = window.location.href;
+            Reload();
         }
     });
 }

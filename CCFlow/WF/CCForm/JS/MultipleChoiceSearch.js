@@ -32,7 +32,7 @@ function MultipleChoiceSearch(mapExt, mapAttr, tbID, rowIndex, OID) {
 			"dbSrc": dbSrc,
             "onSelect": function (record) {
                 $("#TB_" + objID).val(mselector.mselector("getText"));
-				msSaveVal(FK_MapData, AttrOfOper, oid, record.No, record.Name);
+				msSavcceval(FK_MapData, AttrOfOper, oid, record.No, record.Name);
             },
             "onUnselect": function (record) {
                 $("#TB_" + objID).val(mselector.mselector("getText"));
@@ -62,7 +62,7 @@ function msDelete(keyOfEn, oid, val) {
 }
 
 //设置值.
-function msSaveVal(fk_mapdata, keyOfEn, oid, val1, val2) {
+function msSavcceval(fk_mapdata, keyOfEn, oid, val1, val2) {
     var frmEleDB = new Entity("BP.Sys.FrmEleDB");
     frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + val1;
     frmEleDB.FK_MapData = fk_mapdata;

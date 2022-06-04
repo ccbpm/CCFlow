@@ -631,14 +631,14 @@
 
             //SQL\JSON导入方式
             if (impModel == 1) {
-                var url = window.location.href;
+                var url = GetHrefUrl();
                 //url = url.replace('Dtl.htm', 'DtlOpt.htm');
                 url = url.replace('Dtl.htm', 'DtlImp.htm');
             }
 
             //excel模式导入方式
             if (impModel == 2) {
-                var url = window.location.href;
+                var url = GetHrefUrl();
                 url = url.replace('Dtl.htm', 'DtlImpByExcel.htm');
                 //  url = url.replace('Dtl.htm', 'DtlOpt.htm');
             }
@@ -648,7 +648,7 @@
 
             //SQL\JSON导入方式
             if (impModel == 3) {
-                var url = window.location.href;
+                var url = GetHrefUrl();
                 //url = url.replace('Dtl.htm', 'DtlOpt.htm');
                 url = url.replace('Dtl.htm', 'DtlImpByExcel.htm');
             }
@@ -678,7 +678,7 @@
                 return;
             }
 
-            window.location.href = url;
+            SetHref(url);
         }
     </script>
     <style type="text/css">

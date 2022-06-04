@@ -1,0 +1,41 @@
+.layui-side-menu, .layadmin-pagetabs .layui-tab-title li:after, .layadmin-pagetabs .layui-tab-title li.layui-this:after, .layui-layer-admin .layui-layer-title, .layadmin-side-shrink .layui-side-menu .layui-nav > .layui-nav-item > .layui-nav-child {
+    background-color: undefined !important;
+}
+
+.layui-nav-tree .layui-this, .layui-nav-tree .layui-this > a, .layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-nav-child dd.layui-this a {
+    background-color: undefined !important;
+}
+
+.layui-layout-admin .layui-logo {
+    background-color: undefined !important;
+}
+
+.layui-layout-admin .layui-header {
+    background-color: #393D49;
+}
+
+.layui-layout-admin .layui-header a, .layui-layout-admin .layui-header a cite {
+    color: #f8f8f8;
+}
+
+.layui-layout-admin .layui-header a:hover {
+    color: #fff;
+}
+
+.layui-layout-admin .layui-header .layui-nav .layui-nav-more {
+    border-top-color: #fbfbfb;
+}
+
+.layui-layout-admin .layui-header .layui-nav .layui-nav-mored {
+    border-color: transparent;
+    border-bottom-color: #fbfbfb;
+}
+
+.layui-layout-admin .layui-header .layui-nav .layui-this:after, .layui-layout-admin .layui-header .layui-nav-bar {
+    background-color: #fff;
+    background-color: rgba(255, 255, 255, .5);
+}
+
+.layadmin-pagetabs .layui-tab-title li:after {
+    display: none;
+}

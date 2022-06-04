@@ -50,7 +50,7 @@
 
             //保存主表数据.
             // var HeiJiHour = $("#shichang").html();
-            var enMain = new Entity("BP.CCFast.WorkRec");
+            var enMain = new Entity("BP.CCOA.WorkLog.WorkRec");
             enMain.CopyForm();
             enMain.WorkRecModel = $(':radio[name="RB_WorkRecModel"]:checked').val();
             enMain.HeiJiHour = $("#HeiJiHour").val()
@@ -58,10 +58,9 @@
 
             try {
                 var data = enMain.Insert();
-                //debugger
                 console.log(data)
            
-                if (data.indexOf("err@") == 0)
+                if (typeof data!="object")
                     return
 
             } catch (e) {
@@ -69,7 +68,7 @@
                 return;
             }
 
-            var enDtl = new Entity("BP.CCFast.WorkRecDtl");
+            var enDtl = new Entity("BP.CCOA.WorkLog.WorkRecDtl");
             for (var i = 1; i < 16; i++) {
 
                 var prjName = $("#TB_PrjName_" + i).val();
@@ -92,7 +91,7 @@
 
             }
 
-            window.location.href = "Default.htm";
+            SetHref( "Default.htm");
         }
     </script>
 </head>

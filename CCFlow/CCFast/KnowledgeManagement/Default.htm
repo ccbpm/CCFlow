@@ -377,7 +377,7 @@
                         Empsstr += de.no+'@'+de.name+';'
                     }
                   
-                    var en = new Entity("BP.CCFast.KnowledgeManagement.Knowledge");                  
+                    var en = new Entity("BP.CCOA.KnowledgeManagement.Knowledge");                  
                     en.CopyForm();
                     en.Emps = Empsstr;
                     en.Insert();
@@ -397,7 +397,7 @@
                     location.href = "Knowledge.htm?no=" + no
                 },
                 StarType: function (status,no,index) {                  
-                    var en = new Entity("BP.CCFast.KnowledgeManagement.Knowledge", no);
+                    var en = new Entity("BP.CCOA.KnowledgeManagement.Knowledge", no);
                     en.Retrieve();
                  
                     var Foucs=en.Foucs
@@ -416,7 +416,7 @@
                     en.Update();
                 },
                 myStarType: function (status, no, index) {
-                    var en = new Entity("BP.CCFast.KnowledgeManagement.Knowledge", no);
+                    var en = new Entity("BP.CCOA.KnowledgeManagement.Knowledge", no);
                     en.Retrieve();
                     var Foucs = en.Foucs
                     var webUser = new WebUser();
@@ -562,7 +562,7 @@
                     return offset
                 },
                 Refresh: function () {
-                    var ens = new Entities("BP.CCFast.KnowledgeManagement.Knowledges");
+                    var ens = new Entities("BP.CCOA.KnowledgeManagement.Knowledges");
                     ens = ens.DoMethodReturnJSON("Default_Init");
                     var webUser = new WebUser();
                     var myknow = []
@@ -583,7 +583,7 @@
             },
             mounted: function () {
 
-                var ens = new Entities("BP.CCFast.KnowledgeManagement.Knowledges");
+                var ens = new Entities("BP.CCOA.KnowledgeManagement.Knowledges");
                 ens = ens.DoMethodReturnJSON("Default_Init");
                 var webUser = new WebUser();
                 var myknow=[]
@@ -602,7 +602,7 @@
                 this.knowList = ens;
                 this.myknowList = myknow;
                 //人员信息
-                var ensD = new Entities("BP.CCFast.KnowledgeManagement.Knowledges");
+                var ensD = new Entities("BP.CCOA.KnowledgeManagement.Knowledges");
                 var DeptEmps = ensD.DoMethodReturnJSON("Selecter_DeptEmps");
                 var Depts = DeptEmps.Depts
                 var Emps = DeptEmps.Emps

@@ -746,7 +746,7 @@
     </div>
     <script>
         $(function () {
-            var theme = localStorage.getItem("themeColorInfo");
+            var theme = DealText(localStorage.getItem("themeColorInfo"));
             theme = JSON.parse(theme);
             var styleScope = document.getElementById("theme-data")
             styleScope.innerHTML = "\n .layui-btn{\n background-color:" + theme.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + theme.selectedMenu + ";\n}";

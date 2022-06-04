@@ -716,7 +716,7 @@
                     var key = event.currentTarget.value;
                     //console.log(event.currentTarget.value);
                     if (key) {
-                        var ens = new Entities("BP.CCFast.Tasks");
+                        var ens = new Entities("BP.CCOA.Tasks");
                         var data = ens.DoMethodReturnJSON("TextBox_EmpPinYin", key);
                        // console.log(data);
                         if (data.length) {
@@ -1009,7 +1009,7 @@
                         taskState = 1;
                         $('#title' + mypk).addClass('textu')
                     }
-                    var task = new Entity("BP.CCFast.Task", mypk);
+                    var task = new Entity("BP.CCOA.Task", mypk);
                     task.TaskSta = taskState; // 0=未完成， 1=完成.
                     task.Update();
                 },
@@ -1030,7 +1030,7 @@
                         elem: '#' + id //指定元素
                         , done: function (value, date, endDate) {
                             $('#' + id+'a').html(value)
-                            var task = new Entity("BP.CCFast.Task", mypk);
+                            var task = new Entity("BP.CCOA.Task", mypk);
                             task.DTTo = value;
                             task.Update();
                         }
@@ -1045,7 +1045,7 @@
                     //console.log(cTitle);
                     if (cTitle) {
                         if (childstart == 'add') {
-                            var task = new Entity("BP.CCFast.Task");
+                            var task = new Entity("BP.CCOA.Task");
                             task.Title = cTitle;
                             task.DTTo = childDTTo;
                             task.ParentNo = mypk;
@@ -1054,13 +1054,13 @@
                         }
                         if (childstart == 'edit') {
                             var chmpyk = $('#TaskchildStart').data('childmpyk');
-                            var task = new Entity("BP.CCFast.Task", chmpyk);
+                            var task = new Entity("BP.CCOA.Task", chmpyk);
                             task.Title = cTitle;                           
                             task.Update();
                             this.showEditChild = [];
                         }
                     }
-                    var edChildTk = new Entities("BP.CCFast.Tasks");
+                    var edChildTk = new Entities("BP.CCOA.Tasks");
                     edChildTk.Retrieve("ParentNo", mypk);
                     var edChildTkdata = edChildTk.TurnToArry()
                     this.taskChildData = edChildTkdata;
@@ -1079,7 +1079,7 @@
                 delChildTask: function (mypk, index) {
 
                     if (confirm('您确定想删除子任务吗?')) {
-                        var endel = new Entity('BP.CCFast.Task', mypk);
+                        var endel = new Entity('BP.CCOA.Task', mypk);
                         endel.Delete();
                         this.taskChildData.splice(index, 1);
                     }
@@ -1118,7 +1118,7 @@
 
                 AddRefSave: function (mypk,no,name) {
 
-                    var task = new Entity("BP.CCFast.Task", mypk);
+                    var task = new Entity("BP.CCOA.Task", mypk);
                     task.RefEmpsNo = no;
                     task.RefEmpsName = name;
                     task.Update();
@@ -1139,11 +1139,11 @@
                 PRIshowBtn: function (mypk, pri) {
 
                     this.prisshow = false
-                    var task = new Entity("BP.CCFast.Task", mypk);
+                    var task = new Entity("BP.CCOA.Task", mypk);
                     task.TaskPRI = pri;
                     task.Update();
 
-                    var edtask = new Entity("BP.CCFast.Task", mypk);
+                    var edtask = new Entity("BP.CCOA.Task", mypk);
                     edtask.Retrieve();
                     this.edittaskdata = edtask
                 },
@@ -1151,10 +1151,10 @@
                 editTask: function (mypk) {
                     this.editshow = true
                     this.showfixed = false
-                    var edtask = new Entity("BP.CCFast.Task", mypk);
+                    var edtask = new Entity("BP.CCOA.Task", mypk);
                     edtask.Retrieve();
                    
-                    var edChildTk = new Entities("BP.CCFast.Tasks");
+                    var edChildTk = new Entities("BP.CCOA.Tasks");
                     edChildTk.Retrieve("ParentNo", mypk);
                     var edChildTkdata = edChildTk.TurnToArry()
 
@@ -1198,7 +1198,7 @@
                 SaveTask: function () { // 新建任务.
                     var title = $('#TB_Title').val();
                     if (title) {
-                        var task = new Entity("BP.CCFast.Task");
+                        var task = new Entity("BP.CCOA.Task");
                         task.ManagerEmpName = this.ManagerEmpName;
                         task.ManagerEmpNo = this.ManagerEmpNo;
                         task.RefEmpsName = this.RefEmpsName;
@@ -1218,7 +1218,7 @@
                 },
                 SaveSimpleTask: function () { // 新建任务.
 
-                    var task = new Entity("BP.CCFast.Task");
+                    var task = new Entity("BP.CCOA.Task");
                     task.Title = $('#addInputTask').val();
                     task.DTFrom = $('#icon-date').html();
                     task.Insert();
@@ -1229,7 +1229,7 @@
                 },
                 delTask: function (mypk) { //设置任务完成.
                     if (confirm('您确定想删除该任务吗?')) {
-                        var endel = new Entity('BP.CCFast.Task', mypk);
+                        var endel = new Entity('BP.CCOA.Task', mypk);
                         endel.Delete();
                         location.reload();
                     }
@@ -1244,11 +1244,11 @@
                 editTasktitleSave: function (mypk) { //设置任务完成.
                     this.edittitle = 1;
                     var Newtitle = $('#edittitle').val();
-                    var task = new Entity("BP.CCFast.Task", mypk);
+                    var task = new Entity("BP.CCOA.Task", mypk);
                     task.Title = Newtitle;
 
                     task.Update();
-                    var edtask = new Entity("BP.CCFast.Task", mypk);
+                    var edtask = new Entity("BP.CCOA.Task", mypk);
                     edtask.Retrieve();
 
                     this.edittaskdata = edtask
@@ -1263,10 +1263,10 @@
                 editTaskDocsSave: function (mypk) { //设置任务完成.
                     this.editdocs = 1;
                     var NewDocs = $('#editDocs').val();
-                    var task = new Entity("BP.CCFast.Task", mypk);
+                    var task = new Entity("BP.CCOA.Task", mypk);
                     task.Docs = NewDocs;
                     task.Update();
-                    var edtask = new Entity("BP.CCFast.Task", mypk);
+                    var edtask = new Entity("BP.CCOA.Task", mypk);
                     edtask.Retrieve();
 
                     this.edittaskdata = edtask
@@ -1274,7 +1274,7 @@
                 editTaskEmpSave: function (mypk,no,name) { //设置任务完成.
                     this.editdocs = 1;
                     
-                    var task = new Entity("BP.CCFast.Task", mypk);
+                    var task = new Entity("BP.CCOA.Task", mypk);
                     task.ManagerEmpNo = no;
                     task.ManagerEmpName = name;
                     task.Update();
@@ -1331,7 +1331,7 @@
                             $('#nDTFrom strong').html(value)
                             $('#nDTFrom').addClass('coltxt')
                             $('#nDTFrom').removeClass('coltxto')
-                            var task = new Entity("BP.CCFast.Task", editPK);
+                            var task = new Entity("BP.CCOA.Task", editPK);
                             task.DTFrom = value;
                             task.Update();
                         }
@@ -1344,7 +1344,7 @@
                                 $('#nDTTo strong').html(value)
                                 $('#nDTTo').addClass('coltxt')
                                 $('#nDTTo').removeClass('coltxto')
-                                var task = new Entity("BP.CCFast.Task", editPK);
+                                var task = new Entity("BP.CCOA.Task", editPK);
                                 task.DTTo = value;
                                 task.Update();
                             }
@@ -1359,14 +1359,14 @@
                 }
             },
             mounted: function () {
-                var ens = new Entities("BP.CCFast.Tasks");
+                var ens = new Entities("BP.CCOA.Tasks");
                 ens = ens.DoMethodReturnJSON("Task_AllTasks");
                 this.tasklist = ens;
                 this.list = ens;
                // console.log(ens);
                 this.activeIndex = 1
 
-                var ensD = new Entities("BP.CCFast.Tasks");
+                var ensD = new Entities("BP.CCOA.Tasks");
                 var DeptEmps = ensD.DoMethodReturnJSON("Selecter_DeptEmps");            
                 var Depts = DeptEmps.Depts
                 var Emps = DeptEmps.Emps
@@ -1413,13 +1413,13 @@
         }
 
         function getSubTask(mypk) {
-            var ens = new Entities("BP.CCFast.Tasks");
+            var ens = new Entities("BP.CCOA.Tasks");
             ens.Retrieve("ParentNo", mypk);
             return ens;
         }
         function Save() {
             var mypk = GetQueryString("MyPK");
-            var en = new Entity("BP.CCFast.Task", mypk);
+            var en = new Entity("BP.CCOA.Task", mypk);
             en.CopyForm();
             en.Update();
 
@@ -1432,7 +1432,7 @@
 
         function AddSubTask(title, endDate) {
             var mypk = GetQueryString("MyPK");
-            var en = new Entity("BP.CCFast.Task");
+            var en = new Entity("BP.CCOA.Task");
             en.Title = title;
             en.DTTo = endDate; //结束日期.
             en.ParentNo = mypk;

@@ -77,7 +77,7 @@
                 },
                 SaveKnow: function () {
                     console.log(this.editor.txt.html());
-                    var en = new Entity("BP.CCFast.KnowledgeManagement.KMDtl", knno);
+                    var en = new Entity("BP.CCOA.KnowledgeManagement.KMDtl", knno);
                     en.Docs = this.editor.txt.html()
                     en.CopyForm();
                     en.Update();
@@ -89,7 +89,7 @@
 
             },
             mounted: function () {
-                var pageData = new Entity("BP.CCFast.KnowledgeManagement.KMDtl", knno);
+                var pageData = new Entity("BP.CCOA.KnowledgeManagement.KMDtl", knno);
                 this.KnowledgeNo = pageData.KnowledgeNo
                 this.knowInfo = pageData;
                 console.log(pageData)

@@ -85,18 +85,18 @@
                 return;
             }
 
-            $("#Msg").html(data + " <br> @点击这里<a href='javascript:window.location.href = window.location.href;' >刷新</a>");
+            $("#Msg").html(data + " <br> @点击这里<a href='javascript:Reload();' >刷新</a>");
             alert(data);
             var url = 'MyFlow.htm?FK_Flow=' + fk_flow + '&WorkID=' + workid + '&FID=' + fid;
             window.open(url);
-            window.location.href = window.location.href;
+            Reload();
             return;
         }
 
         //催办.
         function Press(fk_flow, workid, fid) {
 
-            var msg = window.prompt('请输入催办信息', '该工作因为xxx原因，需要您优先处理.');
+            var msg = promptGener('请输入催办信息', '该工作因为xxx原因，需要您优先处理.');
             if (msg == null)
                 return;
 

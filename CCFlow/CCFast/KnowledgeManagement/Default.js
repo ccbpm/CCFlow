@@ -2,20 +2,20 @@
 //执行保存.
 function SaveKM() {
 
-    var en = new Entity("BP.CCFast.KnowledgeManagement.Knowledge");
+    var en = new Entity("BP.CCOA.KnowledgeManagement.Knowledge");
 
     en.Name = $("TB_Name").val();
     en.ImgUrl = $("TB_ImgUrl").val();
     en.Docs = $("TB_Docs").val();
     en.Insert();
 
-    window.location.href = "Knowledge.htm?No=" + en.No;
+    SetHref("Knowledge.htm?No=" + en.No);
 }
 
 //获得数据源, 
 function Default_Init() {
 
-    var ens = new Entities("BP.CCFast.KnowledgeManagement.Knowledges");
+    var ens = new Entities("BP.CCOA.KnowledgeManagement.Knowledges");
     var data = ens.DoMethodReturnJSON("Default_Init");
 }
 
@@ -26,7 +26,7 @@ function Default_Init() {
 function DoFuncsOn( myno)
 {
     var webUser = new WebUser();
-    var en = new Entity("BP.CCFast.KnowledgeManagement.Knowledge", myno);
+    var en = new Entity("BP.CCOA.KnowledgeManagement.Knowledge", myno);
     en.Foucs = en.Foucs + "," + webUser.No + ",";
     en.Update();
 }
@@ -37,7 +37,7 @@ function DoFuncsOn( myno)
  */
 function DoFuncsOn(myno) {
     var webUser = new WebUser();
-    var en = new Entity("BP.CCFast.KnowledgeManagement.Knowledge", myno);
+    var en = new Entity("BP.CCOA.KnowledgeManagement.Knowledge", myno);
 
     //替换掉 webUser.No; 
    // en.Foucs = en.Foucs.replace(," + webUser.No + ",");

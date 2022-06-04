@@ -53,7 +53,7 @@ function Close() {
 
 function Back() {
     var url = "../Menus.htm";
-    window.location.href = url;
+    SetHref(url);
 }
 
 function Adv() {
@@ -78,7 +78,7 @@ function changeOption() {
     var optionKey = optionKey = sele[index].value;
     var url = GetUrl(optionKey);
 
-    window.location.href = url + "?MenuNo=" + pageID + "&PageID=" + pageID;
+    SetHref(url + "?MenuNo=" + pageID + "&PageID=" + pageID);
 }
 
 function GetUrl(optionKey) {

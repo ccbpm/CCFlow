@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../WF/Portal/icons/font-icons.min.css">
+
+    <link rel="stylesheet" type="text/css" href="../../WF/Portal/icons/icons.css">
+    <link rel="stylesheet" type="text/css" href="../../WF/Portal/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../../WF/Portal/layui/css/customer.css">
+    <!--- 引入代码. -->
+    <script src="../../WF//Scripts/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../../WF/Portal/layui/layui.js"></script>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../WF/Portal/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../../WF/Scripts/layui/LayuiDialog.js"></script>
+    <link href="../../WF/CCBill/OptComponents/FrmBBS.css" rel="stylesheet" />
+    <!--    <script type="text/javascript" src="Flows.js"></script>-->
+    <style>
+        body, html {
+            height: 100%;
+            width: 100%;
+        }
+
+        .wrapper .row {
+            background-color: #fff;
+        }
+
+        #s-main {
+            transition: all ease .4s;
+            margin-top: 40px;
+        }
+
+        .fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        [v-cloak] {
+            display: none !important;
+        }
+    </style>
+    <script type="text/javascript">
+        var editor;
+        $(function () {
+
+            //实体信息.
+            var no = GetQueryString("No");
+            var en = new Entity("BP.CCOA.CCBBS.BBS", no);
+            en.DoMethodReturnString("DoRead");
+
+            var value = GenerFullAllCtrlsVal(en);
+
+            $('#content').html(en.Docs);
+            var titleHTML = '<span style="font-size: 2.1em;font-weight: 700;margin:0px auto">' + en.Name + '</span>';
+            titleHTML += '</br>发布信息：' + en.RelerName + '-' + en.RelDeptName + '&nbsp;&nbsp;' + en.RDT + ' ' + en.BBSPRIText + ' ' + en.BBSTypeText;
+            titleHTML += '&nbsp;&nbsp;&nbsp;记录人：' + en.RecName;
+
+            $('#title').html(titleHTML);
+
+
+            //查询附件.
+            var fls = new Entities("BP.Sys.SysFileManagers");
+            fls.Retrieve("EnName", "BP.CCOA.CCBBS.BBS", "RefVal", no);
+            fls = fls.TurnToArry();
+            console.log(fls);
+            var fileHTML = "";
+            for (var i = 0; i < fls.length; i++) {
+                var imgsrc = "../Img/FileType/" + fls[i].MyFileExt.split(".")[1] + ".gif";
+                fileHTML += "<a  href='" + basePath + fls[i].MyFilePath + "' download='" + basePath + fls[i].MyFilePath + "'><img src='" + imgsrc + "' /> &nbsp;" + fls[i].MyFileName + fls[i].MyFileExt + "</a></br>";
+            }
+
+            if (fls.length == 0)
+                $("#fileDiv").hide();
+            else
+                $("#files").append(fileHTML);
+        })
+    </script>
+</head>
+
+<body>
+    <div class="ccdiv" id="ccdiv">
+
+        <div id="name" name="name"></div>
+
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <div id="title" style="text-align: center;"></div>
+
+
+                <blockquote class="layui-elem-quote layui-quote-nm">
+                    <font size="20px">
+                        <div class="layui-inline" id="content"></div>
+                    </font>
+
+
+                </blockquote>
+
+
+                <blockquote id="fileDiv" class="layui-elem-quote layui-quote-nm">
+                    附件：<div id="files"></div>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+
+    <form id="cc" enctype="multipart/form-data" method="post">
+
+        <div class="wapper" id="FrmBBSlist">
+            <div class="project-content">
+
+                <div class="pl" v-for="(item,index) in flowNodes">
+                    <div class="tx">
+                        <span>{{item.RecName}}</span>
+                    </div>
+                    <ul class="plbg">
+                        <div class="f z13">{{item.RecName}}</div>
+                        <div class="r"><span class="z13">{{item.RDT}}</span></div>
+                        <div class="dr"></div>
+                    </ul>
+                    <ul class="plul">
+                        {{item.Name}}
+
+                        <ul v-for="(it,key) in item.children">
+                            <div class="pl ">
+                                <div class="tx tx2">
+                                    <span>{{it.Rec}}</span>
+                                </div>
+                                <ul class="plbg plbg2">
+                                    <div class="f">{{it.RecName}}</div>
+                                    <div class="r"><a v-if="it.MyFilePath!=''" @click="downloadFile(it)" style="margin-right:15px"><img src="../../Img/FileType/.gif" style='width:16px' />{{it.MyFileName}}</a><span class="z12">{{it.RDT}}</span> <span v-if="it.Rec==webuser" @click="Delete(it.No)">删除</span></div>
+                                    <div class="dr"></div>
+                                </ul>
+                                <ul style="padding-top: 10px; padding-bottom: 10px; word-wrap: break-word; width: 100%">
+                                    {{it.Name}}
+                                </ul>
+                            </div>
+                        </ul>
+
+                        <a class="hf" @click="Repay(index,item.No)">回复</a>
+                        <a class="hf" v-if="item.Rec==webuser" @click="Delete(item.No)">删除</a>
+                        <div class="huifu" :data-No="item.No"></div>
+                        <div class="dr"></div>
+                    </ul>
+                </div>
+
+                <div v-if="isReadonly == false">
+                    <!--<h4 name="a1">发布</h4>-->
+                    <div class="in2">
+                        <textarea id='reply-input' style='height: 40px; width: 98%;' placeholder="请输入内容..." spellcheck="false"></textarea>
+                        <div class="l top10">
+                            <button @click="Save()" type="button" id="myButton" data-loading-text="Loading..." class="layui-btn" autocomplete="off">
+                                发布
+                            </button>
+
+                        </div>
+                        <div class="dr"></div>
+                    </div>
+                </div>
+                <div class="huif">
+
+                    <textarea id='textarea2' style='height: 40px; width: 100%;' placeholder="期待您的回复！" spellcheck="false"></textarea>
+                    <button onclick="hftj()" type="button" class="layui-btn top10">回复</button>
+                    <a class="qxhf" onclick="qx()">取消回复</a>
+                    <button type="button" class="layui-btn" id="test1">
+                        <i class="layui-icon">&#xe67c;</i>上传附件
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <script src="../../WF/CCBill/OptComponents/FrmBBS.js"></script>
+    </form>
+
+
+</body>
+
+</html>

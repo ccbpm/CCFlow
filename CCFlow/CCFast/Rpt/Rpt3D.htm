@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>3维度报表</title>
+    <link href="../../WF/Portal/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../WF/Portal/layui/layui.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+
+    <link href="../../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../../WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript">
+
+        var rptNo = GetQueryString("RptNo");
+        var src = null;
+        $(function () {
+
+            if (rptNo == null)
+                rptNo = "10697faf-9ca8-4505-b8c6-db574a718e89";
+
+            var rpt = new Entity("BP.CCFast.Rpt.Rpt3D", rptNo);
+            var data = rpt.DoMethodReturnJSON("Rpt3D_Init");
+            src = data["Src"]; //定义数据源.
+            $("#title").html(rpt.Name);
+
+
+            //输出 维度在上面。
+            var html = "<table class='table table - bordered table - hover'>";
+
+            html += "<tr>";
+            html += "<th  rowspan=2 style='vertical-align:middle;text-align:center'>序号</th>";
+            html += "<th colspan=1 rowspan=2 style='vertical-align:middle;text-align:center'>" + rpt.Tag4 + "</th>"; //输出维度1的名称.
+
+            var d2 = data["D2"]; //获得第2维度数据.
+            var d3 = data["D3"]; //获得第3维度数据.
+
+            var colSpan = d3.length;
+
+            for (var i = 0; i < d2.length; i++) {
+                var d2En = d2[i];
+                html += "<th colspan='" + colSpan + "'  ><center>" + d2En.Name + "</center></th>";
+            }
+            html += "</tr>";
+
+            html += "<tr>";
+            for (var i = 0; i < d2.length; i++) {
+
+                for (var i3 = 0; i3 < d3.length; i3++) {
+
+                    var item = d3[i3];
+                    html += "<th>" + item.Name + "</th>";
+                }
+            }
+            html += "</tr>";
+
+            //输出内容
+            var d1 = data["D1"];
+            for (var i = 0; i < d1.length; i++) {
+                var en = d1[i];
+                html += "<tr>";
+                html += "<th>" + (i + 1) + "</th>";
+                html += "<td>" + en.Name + " </td>";
+
+                for (var i2 = 0; i2 < d2.length; i2++) {
+
+                    var d2Val = d2[i2];
+
+                    for (var i3 = 0; i3 < d3.length; i3++) {
+                        var item = d3[i3];
+                        html += "<td>" + GetVal(en.No, d2Val.No, item.No) + "</td>";
+                    }
+                }
+                html += "</tr>";
+            }
+
+            html += "</table>";
+
+            $("#docs").html(html);
+        });
+
+        //根据三个维度从数据源取值.
+        function GetVal(d1, d2, d3) {
+
+            for (var i = 0; i < src.length; i++) {
+               // debugger;
+                var en = src[i];
+
+                var idx = 0;
+                var v1, v2, v3;
+                for (var item in en) {
+
+                    if (idx == 0)
+                        v1 = en[item];
+                    if (idx == 1)
+                        v2 = en[item];
+                    if (idx == 2)
+                        v3 = en[item];
+                    idx++;
+                }
+
+                if (v1 == d1 && v2 == d2 && v3 == d3)
+                    return en[3];
+            }
+            return '无';
+        }
+    </script>
+</head>
+
+<body>
+
+    <h3 style="text-align:center;"><div id="title"></div></h3>
+
+    <div id="docs"></div>
+
+</body>
+</html>

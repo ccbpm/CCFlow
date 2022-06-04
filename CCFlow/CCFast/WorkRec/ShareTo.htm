@@ -131,7 +131,7 @@
             methods: {
                 Add: function () {
                     var webUser = new WebUser();
-                    var en = new Entity("BP.CCFast.WorkShare");
+                    var en = new Entity("BP.CCOA.WorkLog.WorkShare");
                     en.EmpNo = webUser.No;
                     en.EmpName = webUser.EmpName;
                     en.ShareToEmpNo = $("#TB_ShareTo").val();
@@ -139,7 +139,7 @@
 
                         en.Insert();
                         layer.msg('添加成功')
-                        window.location.href = window.location.href;
+                        Reload();
                     } catch (e) {
                         layer.msg('分享错误，该账号不存在或者账号输入错误.')
 
@@ -148,14 +148,14 @@
                 Del: function (mypk) {
                     if (window.confirm("确定要删除吗?") == false)
                         return;
-                    var endel = new Entity("BP.CCFast.WorkShare", mypk);
+                    var endel = new Entity("BP.CCOA.WorkLog.WorkShare", mypk);
                     var data = endel.Delete();
-                    window.location.href = window.location.href;
+                    Reload();
                 }
 
             },
             mounted: function () {
-                var ens = new Entities("BP.CCFast.WorkShares");
+                var ens = new Entities("BP.CCOA.WorkLog.WorkShares");
                 ens.Retrieve();
                 ens = ens.TurnToArry();
                 console.log(ens);
@@ -171,7 +171,7 @@
             form.on('switch(switchTest)', function (obj) {
 
                 var mypk = this.id;
-                var enst = new Entity("BP.CCFast.WorkShare", mypk);
+                var enst = new Entity("BP.CCOA.WorkLog.WorkShare", mypk);
                 if (obj.elem.checked == true) {
                     enst.ShareState = 1;
                 } else {

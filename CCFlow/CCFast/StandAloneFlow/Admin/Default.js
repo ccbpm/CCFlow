@@ -40,27 +40,12 @@ new Vue({
         updateSystemSort: function (pastNodeArrStr, pastNodeId, currentNodeArrStr, currentNodeId) {
 
 
-            //这里没有参数. currentNodeArrStr 
-            // alert(currentNodeArrStr + "  " + pastNodeArrStr);
-            //alert(pastNodeId + "  " + currentNodeId);
-
             // todo 需要重新实现接口
             var ens = new Entities("BP.WF.Template.FlowTabs");
             var flowNo = GetQueryString("FlowNo");
             var data = ens.DoMethodReturnString("Default_Mover", flowNo, currentNodeArrStr);
 
-            // alert(data);
-
-            //layer.msg(data);
-
-            //var no = GetQueryString("PageID");
-            //// debugger;
-            //// 方法排序..
-            //var handler = new HttpHandler("BP.WF.HttpHandler.WF_GPM_Window");
-            //handler.AddPara("PageID", no);
-            //handler.AddPara("MyPKs", currentNodeArrStr);
-            //var data = handler.DoMethodReturnString("Tabs_Default_Mover");
-            //layer.msg(data);
+  
 
         },
         updateSort: function (currentNodeArrStr) {

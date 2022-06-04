@@ -40,11 +40,11 @@
         function Save() {
 
             //保存主表数据.
-            var enMain = new Entity("BP.CCFast.WorkRec");
+            var enMain = new Entity("BP.CCOA.WorkLog.WorkRec");
             enMain.CopyForm();
             enMain.Insert();
 
-            var enDtl = new Entity("BP.CCFast.WorkRecDtl");
+            var enDtl = new Entity("BP.CCOA.WorkLog.WorkRecDtl");
             for (var i = 0; i < 15; i++) {
 
                 var prjName = $("TB_PrjName_" + i).val();
@@ -67,8 +67,7 @@
 
             }
 
-
-            window.location.href = "Default.htm";
+            SetHref("Default.htm");
         }
     </script>
 </head>
@@ -155,7 +154,7 @@
 
         function Save() {
 
-            var en = new Entity("BP.CCFast.WorkChecker");
+            var en = new Entity("BP.CCOA.WorkLog.WorkChecker");
             en.Cent = $("DDL_Cent").val();
             en.Doc = $("TB_Doc").val();
             en.RefPK = GetQueryString("MyPK");

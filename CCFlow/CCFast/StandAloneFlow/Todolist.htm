@@ -40,7 +40,7 @@
 
             //授权的情况下.
             if (webUser.IsAuthorize == "1") {
-                window.location.href = "AuthorTodolist.htm";
+                SetHref("AuthorTodolist.htm");
                 return;
             }
 
@@ -63,7 +63,7 @@
                 alert(data);
                 return;
             }
-            data = eval('(' + data + ')');
+            data = cceval('(' + data + ')');
 
             var tablet = "";
             tablet += "<th style='width:40px;'>#</th>";

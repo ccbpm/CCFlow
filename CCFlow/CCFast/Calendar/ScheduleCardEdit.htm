@@ -117,7 +117,7 @@
         layui.use(['form', 'layer', 'laydate'], function () {
             var form = layui.form, $ = layui.jquery, laydate = layui.laydate;
             var mypk = GetQueryString("mypk");
-            var en = new Entity("BP.CCFast.Schedule", mypk);
+            var en = new Entity("BP.CCOA.Schedule", mypk);
             en.Retrieve();
             console.log(en);
 
@@ -130,7 +130,7 @@
 
 
             form.on('submit(submit)', function (data) {               
-                var en = new Entity("BP.CCFast.Schedule", mypk);
+                var en = new Entity("BP.CCOA.Schedule", mypk);
                 en.CopyForm();
 
                 var DTStart = $('#TB_DTStart').val()
@@ -183,7 +183,7 @@
             }
             $('#delCard').click(function () {
                 if (confirm('您确定想删除该日程吗?')) {
-                    var endel = new Entity('BP.CCFast.Schedule', mypk);
+                    var endel = new Entity('BP.CCOA.Schedule', mypk);
                     endel.Delete();
                     parent.location.reload();
                 }

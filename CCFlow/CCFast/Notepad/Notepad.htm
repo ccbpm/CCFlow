@@ -273,18 +273,18 @@
 
             methods: {
                 StarType: function (MyPK) {
-                    var en = new Entity("BP.CCFast.Notepad", MyPK);
+                    var en = new Entity("BP.CCOA.Notepad", MyPK);
                     en.Retrieve();
 
                     if (en.IsStar == 0) {
                         $("#" + MyPK).addClass('nyellow')
-                        var ens = new Entity("BP.CCFast.Notepad", MyPK);
+                        var ens = new Entity("BP.CCOA.Notepad", MyPK);
                         ens.IsStar = 1;
                         ens.Update();
 
                     } else {
                         $("#" + MyPK).removeClass('nyellow')
-                        var ens = new Entity("BP.CCFast.Notepad", MyPK);
+                        var ens = new Entity("BP.CCOA.Notepad", MyPK);
                         ens.IsStar = 0;
                         ens.Update();
                     }
@@ -293,13 +293,13 @@
                 },
                 Delnote: function (MyPK) {
                     if (confirm('您确定想删除该记事吗?')) {
-                        var endel = new Entity('BP.CCFast.Notepad', MyPK);
+                        var endel = new Entity('BP.CCOA.Notepad', MyPK);
                         endel.Delete();
                         location.reload();
                     }
                 },
                 EidtNote: function (MyPK) {
-                    var en = new Entity("BP.CCFast.Notepad", MyPK);
+                    var en = new Entity("BP.CCOA.Notepad", MyPK);
                     console.log(en);
                     this.editdata = en;
                     /*var notelisturl = 'form.htm?MyPK='+ MyPK
@@ -312,12 +312,12 @@
                         IsStar = 1
                     }
                     // console.log(IsStar)
-                    var ens = new Entity("BP.CCFast.Notepad", MyPK);
+                    var ens = new Entity("BP.CCOA.Notepad", MyPK);
                     ens.IsStar = IsStar;
                     ens.CopyForm();
                     ens.Update();
                     this.Isedit = false
-                    var en = new Entities("BP.CCFast.Notepads");
+                    var en = new Entities("BP.CCOA.Notepads");
                     en.Retrieve();
                     en = en.TurnToArry();
                     this.notelist = en;
@@ -330,7 +330,7 @@
                 },
                 
                 See: function (MyPK) {
-                    var enSee = new Entity("BP.CCFast.Notepad", MyPK);
+                    var enSee = new Entity("BP.CCOA.Notepad", MyPK);
                     enSee.Retrieve();
                         layer.open({
                             type: 1
@@ -356,15 +356,15 @@
                 }
 
 
-                var ens = new Entities("BP.CCFast.Notepads");
+                var ens = new Entities("BP.CCOA.Notepads");
                 ens= ens.DoMethodReturnJSON("RetrieveTop30");
 
                 
-                var ensStars = new Entities("BP.CCFast.Notepads");
+                var ensStars = new Entities("BP.CCOA.Notepads");
                 ensStars = ensStars.DoMethodReturnJSON("RetrieveTop30Stars");
                 console.log(ensStars);
 
-                /*var en = new Entities("BP.CCFast.Notepads");
+                /*var en = new Entities("BP.CCOA.Notepads");
                 en.Retrieve();
                 en = en.TurnToArry();
                 console.log(en);*/
@@ -382,7 +382,7 @@
 
                 //console.log(data.field);
                 var str = $('#TB_Docs').val()
-                var en = new Entity("BP.CCFast.Notepad");
+                var en = new Entity("BP.CCOA.Notepad");
                 en.CopyForm();
                 if (en.Docs == "")
                     return;

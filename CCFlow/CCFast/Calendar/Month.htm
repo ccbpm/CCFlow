@@ -85,7 +85,7 @@
                     var url = 'ScheduleCardEdit.htm?mypk=' + mypk
                     OpenLayuiDialog(url, "", 800, false, false, true, false);
                     /*if (confirm('您确定想删除这个吗?')) {                      
-                        var en = new Entity('BP.CCFast.Schedule', moduleNo);
+                        var en = new Entity('BP.CCOA.Schedule', moduleNo);
                         en.Delete();
                         arg.event.remove()
                     }*/
@@ -97,7 +97,7 @@
                     console.log(info.event);
                     if (startDate[0]) {
 
-                    var en = new Entity('BP.CCFast.Schedule', mypk);
+                    var en = new Entity('BP.CCOA.Schedule', mypk);
                     en.DTStart = startDate[0];
                     en.Update();
                     }
@@ -124,7 +124,7 @@
             var b = info.endStr
             var startDate = a.split('T');
             var endDate = b.split('T'); 
-            var ens = new Entities("BP.CCFast.Schedules");
+            var ens = new Entities("BP.CCOA.Schedules");
             ens = ens.DoMethodReturnString("DTFromTo", startDate[0], endDate[0]);
             ens = JSON.parse(ens);
             //ens = ens.DoMethodReturnString("DTFromTo", "xxxx", "xxx");

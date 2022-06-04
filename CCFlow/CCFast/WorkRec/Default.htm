@@ -110,7 +110,7 @@
                         this.RecChildData = []
                         this.$set(this.showEditChild, index, true)
                         //console.log(this.showEditChild[index]);
-                        var enDtls = new Entities("BP.CCFast.WorkRecDtls");
+                        var enDtls = new Entities("BP.CCOA.WorkLog.WorkRecDtls");
                         enDtls.Retrieve("RefPK", mypk);
                         data = enDtls.TurnToArry();
                         this.RecChildData = data                       
@@ -133,10 +133,10 @@
                 },
 
                 openRz: function (mypk) {
-                    var enwk = new Entity("BP.CCFast.WorkRec", mypk);
+                    var enwk = new Entity("BP.CCOA.WorkLog.WorkRec", mypk);
                     console.log(enwk);
 
-                    var enDtls = new Entities("BP.CCFast.WorkRecDtls");
+                    var enDtls = new Entities("BP.CCOA.WorkLog.WorkRecDtls");
                     enDtls.Retrieve("RefPK", mypk);
 
                     console.log(enDtls);
@@ -153,7 +153,7 @@
                 //审核处理
             },
             mounted: function () {
-                var ens = new Entities("BP.CCFast.WorkRecs");
+                var ens = new Entities("BP.CCOA.WorkLog.WorkRecs");
                 ens = ens.DoMethodReturnJSON("Default_Init");// ens.RetrieveA(ll);
                
                 //ens = ens.TurnToArry();

@@ -61,12 +61,12 @@
                 },
                 //审核处理
                 CheckRz: function (mypk) {
-                    var enck = new Entity("BP.CCFast.WorkRec");
+                    var enck = new Entity("BP.CCOA.WorkLog.WorkRec");
                     alert('审核' + mypk)
                 },
             },
             mounted: function () {
-                var ens = new Entities("BP.CCFast.WorkRecs");
+                var ens = new Entities("BP.CCOA.WorkLog.WorkRecs");
                 ens = ens.DoMethodReturnJSON("CheckRZ_Init");
                 console.log(ens);
                 this.list = ens

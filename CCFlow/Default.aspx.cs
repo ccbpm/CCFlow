@@ -30,7 +30,7 @@ namespace CCFlow
             if (DBAccess.IsExitsObject("WF_Flow") == false)
                 this.Response.Redirect("./WF/Admin/DBInstall.htm", true);
             else
-                this.Response.Redirect("./WF/Admin/CCBPMDesigner/Login.htm", true);
+                this.Response.Redirect("./Portal/Standard/Login.htm", true);
             return;
         }
     }

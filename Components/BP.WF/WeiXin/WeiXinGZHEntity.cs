@@ -50,7 +50,19 @@ namespace BP.WF.WeiXin
             string str = BP.DA.DataType.ReadURLContext(url, 5000, Encoding.UTF8);
             at = FormatToJson.ParseFromJson<AccessToken>(str);
 
+            return at;
+        }
+        /// <summary>
+        /// 微信网页开发获取token
+        /// </summary>
+        /// <returns></returns>
+        public static AccessToken getAccessToken()
+        {
+            string url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + Appid + "&secret=" + AppSecret;
 
+            AccessToken at = new AccessToken();
+            string str = BP.DA.DataType.ReadURLContext(url, 5000, Encoding.UTF8);
+            at = FormatToJson.ParseFromJson<AccessToken>(str);
             return at;
         }
         #endregion 获取用户access_token

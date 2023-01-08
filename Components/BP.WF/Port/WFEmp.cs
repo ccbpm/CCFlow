@@ -42,6 +42,9 @@ namespace BP.WF.Port
         public const string OrgNo = "OrgNo";
 
         public const string UserID = "UserID";
+
+        public const string Author = "Author";
+        public const string AuthorDate = "AuthorDate";
         #endregion
     }
     /// <summary>
@@ -258,7 +261,7 @@ namespace BP.WF.Port
                 map.AddTBString(WFEmpAttr.FK_Dept, null, "FK_Dept", true, true, 0, 100, 36);
                 map.AddTBString(WFEmpAttr.Email, null, "Email", true, true, 0, 50, 20);
 
-                map.AddTBString(WFEmpAttr.Stas, null, "岗位s", true, true, 0, 3000, 20);
+                map.AddTBString(WFEmpAttr.Stas, null, "角色s", true, true, 0, 3000, 20);
                 map.AddTBString(WFEmpAttr.Depts, null, "部门s", true, true, 0, 100, 36);
 
                 map.AddTBString(WFEmpAttr.Msg, null, "消息", true, true, 0, 4000, 20);
@@ -272,7 +275,8 @@ namespace BP.WF.Port
 
                 map.AddTBString(WFEmpAttr.SPass, null, "图片签名密码", true, true, 0, 200, 20);
 
-
+                map.AddTBString(WFEmpAttr.Author, null, "授权人", true, true, 0, 50, 20);
+                map.AddTBString(WFEmpAttr.AuthorDate, null, "授权日期", true, true, 0, 20, 20);
                 map.AddTBAtParas(3500); //增加字段.
 
                 this._enMap = map;

@@ -238,10 +238,11 @@ namespace BP.En
             string strs = "";
             foreach (DataRow dr in dt.Rows)
             {
-                strs += dr[0].ToString() + ",";
+                strs += "'"+dr[0].ToString() + "',";
             }
-            strs = strs.Substring(strs.Length - 1, 0);
-            this.AddWhereIn(attr, strs);
+            if(DataType.IsNullOrEmpty(strs)==false)
+                strs = strs.Substring(0, strs.Length - 1);
+            this.AddWhereIn(attr,"("+strs+")");
         }
         /// <summary>
         /// 增加条件,vals 必须是sql可以识别的字串．
@@ -298,6 +299,8 @@ namespace BP.En
                     switch (this.HisDBType)
                     {
                         case DBType.Oracle:
+                        case DBType.KingBaseR3:
+                        case DBType.KingBaseR6:
                             this.SQL = "( " + attr2Field(attr) + " " + exp + " '%'||" + this.HisVarStr + "FK_Dept||'%' )";
                             this.MyParas.Add("FK_Dept", valStr);
                             break;
@@ -360,6 +363,10 @@ namespace BP.En
         public void AddWhereIsNull(string attr)
         {
             this.SQL = "( " + attr2Field(attr) + "  IS NULL OR  " + attr2Field(attr) + "='' )";
+        }
+        public void AddWhereIsNotNull(string attr)
+        {
+            this.SQL = "( " + attr2Field(attr) + "  IS NOT NULL AND  " + attr2Field(attr) + "!='' )";
         }
         public void AddWhereField(string attr, string exp, string val)
         {
@@ -637,7 +644,7 @@ namespace BP.En
             Attr attr = this.HisMap.GetAttrByKey(attrKey);
             if (attr.IsRefAttr == true)
             {
-                if (this.HisDBType == DBType.Oracle)
+                if (this.HisDBType == DBType.Oracle || this.HisDBType==DBType.KingBaseR3 || this.HisDBType==DBType.KingBaseR6)
                     return "T" + attr.Key.Replace("Text", "") + ".Name";
 
                 Entity en = attr.HisFKEn;
@@ -652,174 +659,174 @@ namespace BP.En
             return this.HisMap.PhysicsTable + "." + attr.Field;
             // return this.HisMap.PhysicsTable + "."+attr;
         }
-        public DataTable DoGroupReturnTable(Entity en, Attrs attrsOfGroupKey, Attr attrGroup, GroupWay gw, OrderWay ow)
-        {
-            switch (en.EnMap.EnDBUrl.DBType)
-            {
-                case DBType.Oracle:
-                    return DoGroupReturnTableOracle(en, attrsOfGroupKey, attrGroup, gw, ow);
-                default:
-                    return DoGroupReturnTableSqlServer(en, attrsOfGroupKey, attrGroup, gw, ow);
-            }
-        }
-        public DataTable DoGroupReturnTableOracle(Entity en, Attrs attrsOfGroupKey, Attr attrGroup, GroupWay gw, OrderWay ow)
-        {
-            #region  生成要查询的语句
-            string fields = "";
-            string str = "";
-            foreach (Attr attr in attrsOfGroupKey)
-            {
-                if (attr.Field == null)
-                    continue;
+        //public DataTable DoGroupReturnTable(Entity en, Attrs attrsOfGroupKey, Attr attrGroup, GroupWay gw, OrderWay ow)
+        //{
+        //    switch (en.EnMap.EnDBUrl.DBType)
+        //    {
+        //        case DBType.Oracle:
+        //            return DoGroupReturnTableOracle(en, attrsOfGroupKey, attrGroup, gw, ow);
+        //        default:
+        //            return DoGroupReturnTableSqlServer(en, attrsOfGroupKey, attrGroup, gw, ow);
+        //    }
+        //}
+        //public DataTable DoGroupReturnTableOracle(Entity en, Attrs attrsOfGroupKey, Attr attrGroup, GroupWay gw, OrderWay ow)
+        //{
+        //    #region  生成要查询的语句
+        //    string fields = "";
+        //    string str = "";
+        //    foreach (Attr attr in attrsOfGroupKey)
+        //    {
+        //        if (attr.Field == null)
+        //            continue;
 
-                str = "," + attr.Field;
-                fields += str;
-            }
+        //        str = "," + attr.Field;
+        //        fields += str;
+        //    }
 
-            if (attrGroup.Key == "MyNum")
-            {
-                switch (gw)
-                {
-                    case GroupWay.BySum:
-                        fields += ", COUNT(*) AS MyNum";
-                        break;
-                    case GroupWay.ByAvg:
-                        fields += ", AVG(" + attrGroup.Field + ") AS MyNum";
-                        break;
-                    default:
-                        throw new Exception("no such case:");
-                }
-            }
-            else
-            {
-                switch (gw)
-                {
-                    case GroupWay.BySum:
-                        fields += ",SUM(" + attrGroup.Field + ") AS " + attrGroup.Key;
-                        break;
-                    case GroupWay.ByAvg:
-                        fields += ",AVG(" + attrGroup.Field + ") AS " + attrGroup.Key;
-                        break;
-                    default:
-                        throw new Exception("no such case:");
-                }
-            }
+        //    if (attrGroup.Key == "MyNum")
+        //    {
+        //        switch (gw)
+        //        {
+        //            case GroupWay.BySum:
+        //                fields += ", COUNT(*) AS MyNum";
+        //                break;
+        //            case GroupWay.ByAvg:
+        //                fields += ", AVG(" + attrGroup.Field + ") AS MyNum";
+        //                break;
+        //            default:
+        //                throw new Exception("no such case:");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        switch (gw)
+        //        {
+        //            case GroupWay.BySum:
+        //                fields += ",SUM(" + attrGroup.Field + ") AS " + attrGroup.Key;
+        //                break;
+        //            case GroupWay.ByAvg:
+        //                fields += ",AVG(" + attrGroup.Field + ") AS " + attrGroup.Key;
+        //                break;
+        //            default:
+        //                throw new Exception("no such case:");
+        //        }
+        //    }
 
-            string by = "";
-            foreach (Attr attr in attrsOfGroupKey)
-            {
-                if (attr.Field == null)
-                    continue;
+        //    string by = "";
+        //    foreach (Attr attr in attrsOfGroupKey)
+        //    {
+        //        if (attr.Field == null)
+        //            continue;
 
-                str = "," + attr.Field;
-                by += str;
-            }
-            by = by.Substring(1);
-            //string sql 
-            string sql = "SELECT " + fields.Substring(1) + " FROM " + this.En.EnMap.PhysicsTable + " WHERE " + this._sql + " Group BY " + by;
-            #endregion
+        //        str = "," + attr.Field;
+        //        by += str;
+        //    }
+        //    by = by.Substring(1);
+        //    //string sql 
+        //    string sql = "SELECT " + fields.Substring(1) + " FROM " + this.En.EnMap.PhysicsTable + " WHERE " + this._sql + " Group BY " + by;
+        //    #endregion
 
-            #region
-            Map map = new Map();
-            map.PhysicsTable = "@VT@";
-            map.Attrs = attrsOfGroupKey;
-            map.Attrs.Add(attrGroup);
-            #endregion .
+        //    #region
+        //    Map map = new Map();
+        //    map.PhysicsTable = "@VT@";
+        //    map.Attrs = attrsOfGroupKey;
+        //    map.Attrs.Add(attrGroup);
+        //    #endregion .
 
-            string sql1 = SqlBuilder.SelectSQLOfOra(en.ToString(), map) + " " + SqlBuilder.GenerFormWhereOfOra(en, map);
+        //    string sql1 = SqlBuilder.SelectSQLOfOra(en.ToString(), map) + " " + SqlBuilder.GenerFormWhereOfOra(en, map);
 
-            sql1 = sql1.Replace("@TopNum", "");
-            sql1 = sql1.Replace("FROM @VT@", "FROM (" + sql + ") VT");
-            sql1 = sql1.Replace("@VT@", "VT");
-            sql1 = sql1.Replace("TOP", "");
+        //    sql1 = sql1.Replace("@TopNum", "");
+        //    sql1 = sql1.Replace("FROM @VT@", "FROM (" + sql + ") VT");
+        //    sql1 = sql1.Replace("@VT@", "VT");
+        //    sql1 = sql1.Replace("TOP", "");
 
-            if (ow == OrderWay.OrderByUp)
-                sql1 += " ORDER BY " + attrGroup.Key + " DESC ";
-            else
-                sql1 += " ORDER BY " + attrGroup.Key;
+        //    if (ow == OrderWay.OrderByUp)
+        //        sql1 += " ORDER BY " + attrGroup.Key + " DESC ";
+        //    else
+        //        sql1 += " ORDER BY " + attrGroup.Key;
 
-            return this.En.RunSQLReturnTable(sql1, this.MyParas);
-        }
+        //    return this.En.RunSQLReturnTable(sql1, this.MyParas);
+        //}
 
-        public DataTable DoGroupReturnTableSqlServer(Entity en, Attrs attrsOfGroupKey, Attr attrGroup, GroupWay gw, OrderWay ow)
-        {
+        //public DataTable DoGroupReturnTableSqlServer(Entity en, Attrs attrsOfGroupKey, Attr attrGroup, GroupWay gw, OrderWay ow)
+        //{
 
-            #region  生成要查询的语句
-            string fields = "";
-            string str = "";
-            foreach (Attr attr in attrsOfGroupKey)
-            {
-                if (attr.Field == null)
-                    continue;
-                str = "," + attr.Field;
-                fields += str;
-            }
+        //    #region  生成要查询的语句
+        //    string fields = "";
+        //    string str = "";
+        //    foreach (Attr attr in attrsOfGroupKey)
+        //    {
+        //        if (attr.Field == null)
+        //            continue;
+        //        str = "," + attr.Field;
+        //        fields += str;
+        //    }
 
-            if (attrGroup.Key == "MyNum")
-            {
-                switch (gw)
-                {
-                    case GroupWay.BySum:
-                        fields += ", COUNT(*) AS MyNum";
-                        break;
-                    case GroupWay.ByAvg:
-                        fields += ", AVG(*)   AS MyNum";
-                        break;
-                    default:
-                        throw new Exception("no such case:");
-                }
-            }
-            else
-            {
-                switch (gw)
-                {
-                    case GroupWay.BySum:
-                        fields += ",SUM(" + attrGroup.Field + ") AS " + attrGroup.Key;
-                        break;
-                    case GroupWay.ByAvg:
-                        fields += ",AVG(" + attrGroup.Field + ") AS " + attrGroup.Key;
-                        break;
-                    default:
-                        throw new Exception("no such case:");
-                }
-            }
+        //    if (attrGroup.Key == "MyNum")
+        //    {
+        //        switch (gw)
+        //        {
+        //            case GroupWay.BySum:
+        //                fields += ", COUNT(*) AS MyNum";
+        //                break;
+        //            case GroupWay.ByAvg:
+        //                fields += ", AVG(*)   AS MyNum";
+        //                break;
+        //            default:
+        //                throw new Exception("no such case:");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        switch (gw)
+        //        {
+        //            case GroupWay.BySum:
+        //                fields += ",SUM(" + attrGroup.Field + ") AS " + attrGroup.Key;
+        //                break;
+        //            case GroupWay.ByAvg:
+        //                fields += ",AVG(" + attrGroup.Field + ") AS " + attrGroup.Key;
+        //                break;
+        //            default:
+        //                throw new Exception("no such case:");
+        //        }
+        //    }
 
-            string by = "";
-            foreach (Attr attr in attrsOfGroupKey)
-            {
-                if (attr.Field == null)
-                    continue;
+        //    string by = "";
+        //    foreach (Attr attr in attrsOfGroupKey)
+        //    {
+        //        if (attr.Field == null)
+        //            continue;
 
-                str = "," + attr.Field;
-                by += str;
-            }
-            by = by.Substring(1);
-            //string sql 
-            string sql = "SELECT " + fields.Substring(1) + " FROM " + this.En.EnMap.PhysicsTable + " WHERE " + this._sql + " Group BY " + by;
-            #endregion
+        //        str = "," + attr.Field;
+        //        by += str;
+        //    }
+        //    by = by.Substring(1);
+        //    //string sql 
+        //    string sql = "SELECT " + fields.Substring(1) + " FROM " + this.En.EnMap.PhysicsTable + " WHERE " + this._sql + " Group BY " + by;
+        //    #endregion
 
-            #region
-            Map map = new Map();
-            map.PhysicsTable = "@VT@";
-            map.Attrs = attrsOfGroupKey;
-            map.Attrs.Add(attrGroup);
-            #endregion .
-            //string sql1=SqlBuilder.SelectSQLOfMS( map )+" "+SqlBuilder.GenerFormWhereOfMS( en,map) + "   AND ( " + this._sql+" ) "+_endSql;
+        //    #region
+        //    Map map = new Map();
+        //    map.PhysicsTable = "@VT@";
+        //    map.Attrs = attrsOfGroupKey;
+        //    map.Attrs.Add(attrGroup);
+        //    #endregion .
+        //    //string sql1=SqlBuilder.SelectSQLOfMS( map )+" "+SqlBuilder.GenerFormWhereOfMS( en,map) + "   AND ( " + this._sql+" ) "+_endSql;
 
-            string sql1 = SqlBuilder.SelectSQLOfMS(map) + " " + SqlBuilder.GenerFormWhereOfMS(en, map);
+        //    string sql1 = SqlBuilder.SelectSQLOfMS(map) + " " + SqlBuilder.GenerFormWhereOfMS(en, map);
 
-            sql1 = sql1.Replace("@TopNum", "");
+        //    sql1 = sql1.Replace("@TopNum", "");
 
-            sql1 = sql1.Replace("FROM @VT@", "FROM (" + sql + ") VT");
+        //    sql1 = sql1.Replace("FROM @VT@", "FROM (" + sql + ") VT");
 
-            sql1 = sql1.Replace("@VT@", "VT");
-            sql1 = sql1.Replace("TOP", "");
-            if (ow == OrderWay.OrderByUp)
-                sql1 += " ORDER BY " + attrGroup.Key + " DESC ";
-            else
-                sql1 += " ORDER BY " + attrGroup.Key;
-            return this.En.RunSQLReturnTable(sql1, this.MyParas);
-        }
+        //    sql1 = sql1.Replace("@VT@", "VT");
+        //    sql1 = sql1.Replace("TOP", "");
+        //    if (ow == OrderWay.OrderByUp)
+        //        sql1 += " ORDER BY " + attrGroup.Key + " DESC ";
+        //    else
+        //        sql1 += " ORDER BY " + attrGroup.Key;
+        //    return this.En.RunSQLReturnTable(sql1, this.MyParas);
+        //}
         /// <summary>
         /// 分组查询，返回datatable.
         /// </summary>
@@ -827,83 +834,83 @@ namespace BP.En
         /// <param name="groupValField"></param>
         /// <param name="gw"></param>
         /// <returns></returns>
-        public DataTable DoGroupReturnTable1(Entity en, Attrs attrsOfGroupKey, Attr attrGroup, GroupWay gw, OrderWay ow)
-        {
-            #region  生成要查询的语句
-            string fields = "";
-            string str = "";
-            foreach (Attr attr in attrsOfGroupKey)
-            {
-                if (attr.Field == null)
-                    continue;
-                str = "," + attr.Field;
-                fields += str;
-            }
+        //public DataTable DoGroupReturnTable1(Entity en, Attrs attrsOfGroupKey, Attr attrGroup, GroupWay gw, OrderWay ow)
+        //{
+        //    #region  生成要查询的语句
+        //    string fields = "";
+        //    string str = "";
+        //    foreach (Attr attr in attrsOfGroupKey)
+        //    {
+        //        if (attr.Field == null)
+        //            continue;
+        //        str = "," + attr.Field;
+        //        fields += str;
+        //    }
 
-            if (attrGroup.Key == "MyNum")
-            {
-                switch (gw)
-                {
-                    case GroupWay.BySum:
-                        fields += ", COUNT(*) AS MyNum";
-                        break;
-                    case GroupWay.ByAvg:
-                        fields += ", AVG(*)   AS MyNum";
-                        break;
-                    default:
-                        throw new Exception("no such case:");
-                }
-            }
-            else
-            {
-                switch (gw)
-                {
-                    case GroupWay.BySum:
-                        fields += ",SUM(" + attrGroup.Field + ") AS " + attrGroup.Key;
-                        break;
-                    case GroupWay.ByAvg:
-                        fields += ",AVG(" + attrGroup.Field + ") AS " + attrGroup.Key;
-                        break;
-                    default:
-                        throw new Exception("no such case:");
-                }
-            }
+        //    if (attrGroup.Key == "MyNum")
+        //    {
+        //        switch (gw)
+        //        {
+        //            case GroupWay.BySum:
+        //                fields += ", COUNT(*) AS MyNum";
+        //                break;
+        //            case GroupWay.ByAvg:
+        //                fields += ", AVG(*)   AS MyNum";
+        //                break;
+        //            default:
+        //                throw new Exception("no such case:");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        switch (gw)
+        //        {
+        //            case GroupWay.BySum:
+        //                fields += ",SUM(" + attrGroup.Field + ") AS " + attrGroup.Key;
+        //                break;
+        //            case GroupWay.ByAvg:
+        //                fields += ",AVG(" + attrGroup.Field + ") AS " + attrGroup.Key;
+        //                break;
+        //            default:
+        //                throw new Exception("no such case:");
+        //        }
+        //    }
 
-            string by = "";
-            foreach (Attr attr in attrsOfGroupKey)
-            {
-                if (attr.Field == null)
-                    continue;
+        //    string by = "";
+        //    foreach (Attr attr in attrsOfGroupKey)
+        //    {
+        //        if (attr.Field == null)
+        //            continue;
 
-                str = "," + attr.Field;
-                by += str;
-            }
-            by = by.Substring(1);
-            //string sql 
-            string sql = "SELECT " + fields.Substring(1) + " FROM " + this.En.EnMap.PhysicsTable + " WHERE " + this._sql + " Group BY " + by;
-            #endregion
+        //        str = "," + attr.Field;
+        //        by += str;
+        //    }
+        //    by = by.Substring(1);
+        //    //string sql 
+        //    string sql = "SELECT " + fields.Substring(1) + " FROM " + this.En.EnMap.PhysicsTable + " WHERE " + this._sql + " Group BY " + by;
+        //    #endregion
 
-            #region
-            Map map = new Map();
-            map.PhysicsTable = "@VT@";
-            map.Attrs = attrsOfGroupKey;
-            map.Attrs.Add(attrGroup);
-            #endregion .
+        //    #region
+        //    Map map = new Map();
+        //    map.PhysicsTable = "@VT@";
+        //    map.Attrs = attrsOfGroupKey;
+        //    map.Attrs.Add(attrGroup);
+        //    #endregion .
 
-            //string sql1=SqlBuilder.SelectSQLOfMS( map )+" "+SqlBuilder.GenerFormWhereOfMS( en,map) + "   AND ( " + this._sql+" ) "+_endSql;
+        //    //string sql1=SqlBuilder.SelectSQLOfMS( map )+" "+SqlBuilder.GenerFormWhereOfMS( en,map) + "   AND ( " + this._sql+" ) "+_endSql;
 
-            string sql1 = SqlBuilder.SelectSQLOfMS(map) + " " + SqlBuilder.GenerFormWhereOfMS(en, map);
+        //    string sql1 = SqlBuilder.SelectSQLOfMS(map) + " " + SqlBuilder.GenerFormWhereOfMS(en, map);
 
-            sql1 = sql1.Replace("@TopNum", "");
-            sql1 = sql1.Replace("FROM @VT@", "FROM (" + sql + ") VT");
-            sql1 = sql1.Replace("@VT@", "VT");
-            sql1 = sql1.Replace("TOP", "");
-            if (ow == OrderWay.OrderByUp)
-                sql1 += " ORDER BY " + attrGroup.Key + " DESC ";
-            else
-                sql1 += " ORDER BY " + attrGroup.Key;
-            return this.En.RunSQLReturnTable(sql1);
-        }
+        //    sql1 = sql1.Replace("@TopNum", "");
+        //    sql1 = sql1.Replace("FROM @VT@", "FROM (" + sql + ") VT");
+        //    sql1 = sql1.Replace("@VT@", "VT");
+        //    sql1 = sql1.Replace("TOP", "");
+        //    if (ow == OrderWay.OrderByUp)
+        //        sql1 += " ORDER BY " + attrGroup.Key + " DESC ";
+        //    else
+        //        sql1 += " ORDER BY " + attrGroup.Key;
+        //    return this.En.RunSQLReturnTable(sql1);
+        //}
         public string[] FullAttrs = null;
         /// <summary>
         /// 执行查询
@@ -1145,6 +1152,8 @@ namespace BP.En
                     switch (map.EnDBUrl.DBType)
                     {
                         case DBType.Oracle:
+                        case DBType.KingBaseR3:
+                        case DBType.KingBaseR6:
                             toIdx = top + pageSize;
                             if (DataType.IsNullOrEmpty(this._sql) == true)
                             {
@@ -1213,20 +1222,20 @@ namespace BP.En
                             toIdx = top + pageSize;
                             if (DataType.IsNullOrEmpty(this._sql) == true)
                             {
-                                if (top == 0)
-                                    sql = " SELECT  " + this.En.PKField + " FROM " + map.PhysicsTable + " " + this._orderBy + " LIMIT " + pageSize;
-                                else
-                                    sql = " SELECT  " + this.En.PKField + " FROM " + map.PhysicsTable + " " + this._orderBy;
+                                //if (top == 0)
+                                //    sql = " SELECT  " + this.En.PKField + " FROM " + map.PhysicsTable + " " + this._orderBy + " LIMIT " + pageSize;
+                                //else
+                                 sql = " SELECT  " + this.En.PKField + " FROM " + map.PhysicsTable + " " + this._orderBy;
                             }
                             else
                             {
                                 string mysql = this.SQL;
                                 mysql = mysql.Substring(mysql.IndexOf("FROM "));
 
-                                if (top == 0)
-                                    sql = "SELECT " + map.PhysicsTable + "." + this.En.PKField + " " + mysql + " LIMIT " + pageSize;
-                                else
-                                    sql = "SELECT " + map.PhysicsTable + "." + this.En.PKField + " " + mysql;
+                                //if (top == 0) //这个位置暂时注释掉，使用LIMIT分页会出现数据重复的问题
+                                 //   sql = "SELECT " + map.PhysicsTable + "." + this.En.PKField + " " + mysql + " LIMIT " + pageSize;
+                                //else
+                                sql = "SELECT " + map.PhysicsTable + "." + this.En.PKField + " " + mysql;
                             }
 
                             sql = sql.Replace("AND ( ( 1=1 ) )", " ");
@@ -1361,6 +1370,8 @@ namespace BP.En
             switch (this.En.EnMap.EnDBUrl.DBType)
             {
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     if (DataType.IsNullOrEmpty(this._sql) == true)
                         sql = "SELECT COUNT(" + ptable + "." + pk + ") as C FROM " + ptable;
                     else
@@ -1410,6 +1421,8 @@ namespace BP.En
             switch (this.En.EnMap.EnDBUrl.DBType)
             {
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     if (DataType.IsNullOrEmpty(this._sql) == true)
                         sql = "SELECT " + oper + " FROM " + ptable;
                     else
@@ -1450,6 +1463,8 @@ namespace BP.En
             switch (this.En.EnMap.EnDBUrl.DBType)
             {
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     if (DataType.IsNullOrEmpty(this._sql) == true)
                         sql = selectSQl + " FROM " + ptable + "WHERE " + groupBy + orderBy;
                     else
@@ -1495,6 +1510,8 @@ namespace BP.En
             switch (this.HisDBType)
             {
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     if (this.Top != -1)
                     {
                         this.addAnd();

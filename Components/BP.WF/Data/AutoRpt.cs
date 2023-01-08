@@ -134,7 +134,7 @@ namespace BP.WF.Data
                 map.AddTBString(AutoRptAttr.ToEmpOfSQLs, null, "通知的人员SQL", true, false, 0, 500, 10,true);
                 map.SetHelperAlert(AutoRptAttr.ToEmpOfSQLs,"查询出来要通知的人员，返回列必须是No,Name 比如:SELECT top 100 No,Name FROM Port_Emp ");
 
-                //map.AddTBString(AutoRptAttr.ToStations, null, "通知的岗位", true, false, 0, 200, 10);
+                //map.AddTBString(AutoRptAttr.ToStations, null, "通知的角色", true, false, 0, 200, 10);
                 //map.AddTBString(AutoRptAttr.ToDepts, null, "通知的部门", true, false, 0, 200, 10);
               
 

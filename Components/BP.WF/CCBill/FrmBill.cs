@@ -5,7 +5,6 @@ using BP.WF.Template;
 using BP.Sys;
 using BP.CCBill.Template;
 
-
 namespace BP.CCBill
 {
 
@@ -199,6 +198,7 @@ namespace BP.CCBill
 
 
                 #region 基本属性.
+                map.AddGroupAttr("基本属性");
                 map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, true, 1, 190, 20);
                 map.AddDDLSysEnum(MapDataAttr.FrmType, 0, "表单类型", true, true, "BillFrmType", "@0=傻瓜表单@1=自由表单@8=开发者表单");
                 //map.AddDDLSysEnum(MapDataAttr.FrmModel, 0, "单据模板", true, true, "BillFrmModel", "@0=系统预置@1=用户新增");
@@ -226,10 +226,13 @@ namespace BP.CCBill
                 cfg += "@2=MyBill.htm 单据编辑器";
                 cfg += "@9=自定义URL";
                 map.AddDDLSysEnum("SearchDictOpenType", 0, "双击行打开内容", true, true, "SearchDictOpenType", cfg);
+                map.AddBoolean(EnCfgAttr.IsSelectMore, true, "是否下拉查询条件多选?", true, true);
                 map.AddTBString(EnCfgAttr.UrlExt, null, "要打开的Url", true, false, 0, 500, 60, true);
                 #endregion 基本属性.
 
                 #region 单据属性.
+                map.AddGroupAttr("单据属性");
+
                 //map.AddDDLSysEnum(FrmBillAttr.FrmBillWorkModel, 0, "工作模式", true, false, FrmBillAttr.FrmBillWorkModel,
                 //    "@0=独立表单@1=单据工作模式");
 
@@ -300,19 +303,17 @@ namespace BP.CCBill
                 #endregion 按钮权限.
 
                 #region 查询按钮权限.
-
                 //map.AddTBString(FrmBillAttr.BtnImpExcel, "导入", "导入Excel文件", true, false, 0, 50, 20);
                 //map.AddBoolean(FrmBillAttr.BtnImpExcelEnable, true, "是否可用？", true, true);
-
                 //map.AddTBString(FrmBillAttr.BtnExpExcel, "导出", "导出Excel文件", true, false, 0, 50, 20);
                 //map.AddBoolean(FrmBillAttr.BtnExpExcelEnable, true, "是否可用？", true, true);
-
                 //map.AddTBString(FrmBillAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
                 //map.AddBoolean(FrmBillAttr.BtnGroupEnable, true, "是否可用？", true, true);
-
                 #endregion 查询按钮权限.
 
                 #region 设计者信息.
+                map.AddGroupAttr("设计者信息");
+
                 map.AddTBString(MapDataAttr.Designer, null, "设计者", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.DesignerContact, null, "联系方式", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20, true);
@@ -323,14 +324,17 @@ namespace BP.CCBill
                 #endregion 设计者信息.
 
                 #region 扩展参数.
-                map.AddTBString(FrmDictAttr.Tag0, null, "Tag0", false, false, 0, 500, 20);
-                map.AddTBString(FrmDictAttr.Tag1, null, "Tag1", false, false, 0, 4000, 20);
-                map.AddTBString(FrmDictAttr.Tag2, null, "Tag2", false, false, 0, 500, 20);
+                map.AddTBString(FrmAttr.Tag0, null, "Tag0", false, false, 0, 500, 20);
+                map.AddTBString(FrmAttr.Tag1, null, "Tag1", false, false, 0, 4000, 20);
+                map.AddTBString(FrmAttr.Tag2, null, "Tag2", false, false, 0, 500, 20);
                 #endregion 扩展参数.
 
                 map.AddTBAtParas(800); //参数属性.
 
                 #region 基本功能.
+
+                map.AddGroupMethod("基本设置");
+
                 RefMethod rm = new RefMethod();
 
                 rm = new RefMethod();
@@ -411,13 +415,14 @@ namespace BP.CCBill
                 #endregion 基本功能.
 
                 #region 权限规则.
+                map.AddGroupMethod("权限规则");
+
                 rm = new RefMethod();
                 rm.Title = "创建规则"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoCreateRole";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkModel;
                 rm.RefAttrKey = FrmBillAttr.BtnNewLable;
-                rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -426,7 +431,6 @@ namespace BP.CCBill
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkModel;
                 rm.RefAttrKey = FrmBillAttr.BtnSaveLable;
-                rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -435,7 +439,6 @@ namespace BP.CCBill
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkModel;
                 rm.RefAttrKey = FrmBillAttr.BtnSubmitLable;
-                rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -444,7 +447,6 @@ namespace BP.CCBill
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkModel;
                 rm.RefAttrKey = FrmBillAttr.BtnDelLable;
-                rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -453,21 +455,18 @@ namespace BP.CCBill
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkModel;
                 rm.RefAttrKey = FrmBillAttr.BtnSearchLabel;
-                rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "数据查询权限规则";
                 rm.ClassMethodName = this.ToString() + ".DoSearchDataRole()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
-
                 #endregion
 
                 #region 报表定义.
+                map.AddGroupMethod("报表定义");
                 rm = new RefMethod();
-                rm.GroupName = "报表定义";
                 rm.Title = "设置显示的列"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoRpt_ColsChose";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -475,7 +474,6 @@ namespace BP.CCBill
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "报表定义";
                 rm.Title = "设置多表头"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoRptMTitle";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -483,7 +481,6 @@ namespace BP.CCBill
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "报表定义";
                 rm.Title = "列的顺序"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoRpt_ColsIdxAndLabel";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -491,7 +488,6 @@ namespace BP.CCBill
                 //   map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "报表定义";
                 rm.Title = "查询条件"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoRpt_SearchCond";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -674,7 +670,6 @@ namespace BP.CCBill
         }
         #endregion
 
-
         #region 权限控制.
         public string DoSaveRole()
         {
@@ -723,7 +718,6 @@ namespace BP.CCBill
             return "../../CCBill/Admin/SearchDataRole.htm?s=34&FrmID=" + this.No;
         }
         #endregion 权限控制.
-
 
         #region 报表定义
         /// <summary>

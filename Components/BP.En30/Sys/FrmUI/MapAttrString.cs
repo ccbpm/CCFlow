@@ -25,18 +25,18 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.IsSupperText, value);
             }
         }
-
-        public bool IsRichText
+        public int TextModel
         {
             get
             {
-                return this.GetValBooleanByKey(MapAttrAttr.IsRichText);
+                return this.GetValIntByKey(MapAttrAttr.TextModel);
             }
             set
             {
-                this.SetValByKey(MapAttrAttr.IsRichText, value);
+                this.SetValByKey(MapAttrAttr.TextModel, value);
             }
         }
+
         /// <summary>
         /// 表单ID
         /// </summary>
@@ -175,7 +175,9 @@ namespace BP.Sys.FrmUI
                 Map map = new Map("Sys_MapAttr", "文本字段");
 
                 #region 基本字段信息.
+                map.AddGroupAttr("基本属性");
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
+
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "表单ID", false, false, 1, 100, 20);
                 map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20, true);
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
@@ -196,8 +198,8 @@ namespace BP.Sys.FrmUI
                 map.SetHelperAlert(MapAttrAttr.UIWidth, "对自由表单,从表有效,显示文本框的宽度.");
 
                 map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, false);
-                //map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", true, false); 
-                //map.AddDDLSysEnum(MapAttrAttr.UIContralType, 0, "控件", true, false, MapAttrAttr.UIContralType);
+                map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", false, false); 
+                //map.AddDDLSysEnum(MapAttrAttr.UIContralType, 0, "控件", false, false, MapAttrAttr.UIContralType);
                 //map.AddTBFloat("ExtRows", 1, "文本框行数(决定高度)", true, false);
 
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
@@ -207,15 +209,19 @@ namespace BP.Sys.FrmUI
                 map.SetHelperAlert(MapAttrAttr.UIIsEnable, "不可编辑,让该字段设置为只读.");
 
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
-                map.AddBoolean(MapAttrAttr.IsRichText, false, "是否富文本？", true, true);
-                map.SetHelperAlert(MapAttrAttr.IsRichText, "以html编辑器呈现或者编写字段.");
-                map.AddBoolean(MapAttrAttr.IsSecret, false, "是否保密？", true, true);
+              //  map.AddBoolean(MapAttrAttr.IsRichText, false, "是否富文本？", true, true);
+               // map.SetHelperAlert(MapAttrAttr.IsRichText, "以html编辑器呈现或者编写字段.");
+             //   map.AddBoolean(MapAttrAttr.IsSecret, false, "是否保密？", true, true);
+
+                map.AddDDLSysEnum(MapAttrAttr.TextModel, 0, "文本类型", true, true, "TextModel",
+                 "@0=普通文本@1=密码框@2=大文本@3=富文本");
 
                 map.AddBoolean(MapAttrAttr.IsSupperText, false, "是否大块文本？(是否该字段存放的超长字节字段)", true, true, true);
                 map.SetHelperAlert(MapAttrAttr.IsSupperText, "大块文本存储字节比较长，超过4000个字符.");
                 #endregion 基本字段信息.
 
                 #region 傻瓜表单
+                map.AddGroupAttr("傻瓜表单");
 
                 //单元格数量 2013-07-24 增加
                 map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "TextBox单元格数量", true, true, "ColSpanAttrDT",
@@ -256,6 +262,7 @@ namespace BP.Sys.FrmUI
                 #endregion 傻瓜表单.
 
                 #region 基本功能.
+                map.AddGroupMethod("基本功能");
                 RefMethod rm = new RefMethod();
 
                 rm = new RefMethod();
@@ -311,12 +318,18 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "帮助弹窗显示";
-                rm.ClassMethodName = this.ToString() + ".DoFieldBigHelper()";
+                rm.Title = "字段名链接";
+                rm.ClassMethodName = this.ToString() + ".DoFieldNameLink()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "icon-settings";
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "只读字段名链接";
+                rm.ClassMethodName = this.ToString() + ".DoReadOnlyLink()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-settings";
+                map.AddRefMethod(rm);
                 //rm = new RefMethod();
                 //rm.Title = "常用字段";
                 //rm.ClassMethodName = this.ToString() + ".DoGeneralField()";
@@ -325,8 +338,9 @@ namespace BP.Sys.FrmUI
                 #endregion 基本功能.
 
                 #region 输入多选.
+                map.AddGroupMethod("输入内容多选");
                 rm = new RefMethod();
-                rm.GroupName = "输入内容多选";
+                //rm.GroupName = "输入内容多选";
                 rm.Title = "小范围多选(combox)";
                 rm.ClassMethodName = this.ToString() + ".DoMultipleChoiceSmall()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -335,7 +349,7 @@ namespace BP.Sys.FrmUI
 
 
                 rm = new RefMethod();
-                rm.GroupName = "输入内容多选";
+                //rm.GroupName = "输入内容多选";
                 rm.Title = "小范围单选(select)";
                 rm.ClassMethodName = this.ToString() + ".DSingleChoiceSmall()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -344,7 +358,7 @@ namespace BP.Sys.FrmUI
 
 
                 rm = new RefMethod();
-                rm.GroupName = "输入内容多选";
+                //rm.GroupName = "输入内容多选";
                 rm.Title = "搜索选择";
                 rm.ClassMethodName = this.ToString() + ".DoMultipleChoiceSearch()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -353,13 +367,14 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "输入内容多选";
+                //rm.GroupName = "输入内容多选";
                 rm.Title = "高级快速录入";
                 rm.ClassMethodName = this.ToString() + ".DoFastInput()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "icon-magnifier";
                 map.AddRefMethod(rm);
 
+              //  map.AddGroupMethod("移动端扫码录入");
                 rm = new RefMethod();
                 rm.Title = "移动端扫码录入";
                 rm.ClassMethodName = this.ToString() + ".DoQRCode()";
@@ -370,8 +385,9 @@ namespace BP.Sys.FrmUI
                 #endregion 输入多选
 
                 #region 高级设置.
+                map.AddGroupMethod("高级设置");
                 rm = new RefMethod();
-                rm.GroupName = "高级设置";
+              //  rm.GroupName = "高级设置";
                 rm.Title = "字段重命名";
                 rm.ClassMethodName = this.ToString() + ".DoRenameField()";
                 rm.HisAttrs.AddTBString("key1", "@KeyOfEn", "字段重命名为?", true, false, 0, 100, 100);
@@ -383,7 +399,7 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "高级设置";
+              //  rm.GroupName = "高级设置";
                 rm.Title = "字段类型转换";
                 rm.ClassMethodName = this.ToString() + ".DoTurnFieldType()";
                 rm.HisAttrs.AddTBString("key1", "int", "输入类型，格式:int,float,double,date,datetime,boolean", true, false, 0, 100, 100);
@@ -397,7 +413,7 @@ namespace BP.Sys.FrmUI
                 rm.Title = "批处理";
                 rm.ClassMethodName = this.ToString() + ".DoEleBatch()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级设置";
+              //  rm.GroupName = "高级设置";
                 rm.Icon = "icon-calculator";
                 map.AddRefMethod(rm);
 
@@ -406,7 +422,7 @@ namespace BP.Sys.FrmUI
                 rm.Title = "转化为签批组件";
                 rm.ClassMethodName = this.ToString() + ".DoSetCheck()";
                 rm.Warning = "您确定要设置为签批组件吗？";
-                rm.GroupName = "高级设置";
+                //rm.GroupName = "高级设置";
                 rm.Icon = "icon-magic-wand";
                 map.AddRefMethod(rm);
 
@@ -469,6 +485,8 @@ namespace BP.Sys.FrmUI
                     case DBType.Oracle:
                     case DBType.PostgreSQL:
                     case DBType.UX:
+                    case DBType.KingBaseR3:
+                    case DBType.KingBaseR6:
                         sql = "SELECT '' AS No, '默认风格' as Name FROM DUAL ";
                         break;
                     default:
@@ -600,16 +618,55 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoRenameField(string newField)
         {
+            //Hongyan
             if (this.KeyOfEn.Equals(newField) == true)
                 return "err@与现在的名字相同.";
 
-            string sql = "SELECT COUNT(MyPK) as Num FROM Sys_MapAttr WHERE MyPK='" + this.KeyOfEn + "_" + newField + "'";
+            MapData md = new MapData(this.FK_MapData);
+
+            if (DBAccess.IsExitsTableCol(md.PTable, newField) == true)
+                return "err@该字段已经存在数据表:" + md.PTable + ",您不能重命名.";
+
+
+            string sql = "SELECT COUNT(MyPK) as Num FROM Sys_MapAttr WHERE MyPK='" + this.FK_MapData + "_" + newField + "'";
             if (DBAccess.RunSQLReturnValInt(sql) >= 1)
                 return "err@该字段已经存在[" + newField + "].";
 
             //修改字段名.
             sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "', MyPK='" + this.FK_MapData + "_" + newField + "'  WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
             DBAccess.RunSQL(sql);
+
+            //更新处理他的相关业务逻辑.
+            MapExts exts = new MapExts(this.FK_MapData);
+            foreach (MapExt item in exts)
+            {
+                item.MyPK = item.MyPK.Replace("_" + this.KeyOfEn, "_" + newField);
+
+                if (item.AttrOfOper.Equals(this.KeyOfEn))
+                    item.AttrOfOper = newField;
+
+                if (item.AttrsOfActive.Equals(this.KeyOfEn))
+                    item.AttrsOfActive = newField;
+
+                item.Tag = item.Tag.Replace(this.KeyOfEn, newField);
+                item.Tag1 = item.Tag1.Replace(this.KeyOfEn, newField);
+                item.Tag2 = item.Tag2.Replace(this.KeyOfEn, newField);
+                item.Tag3 = item.Tag3.Replace(this.KeyOfEn, newField);
+
+                item.AtPara = item.AtPara.Replace(this.KeyOfEn, newField);
+                item.Doc = item.Doc.Replace(this.KeyOfEn, newField);
+                item.Save();
+            }
+
+            //如果是表单库的表单，需要把数据库中的字段重命名
+            if (DataType.IsNullOrEmpty(md.FK_FormTree) == false && this.FK_MapData.StartsWith("ND") == false)
+            {
+                //对数据库中的字段重命名
+                DBAccess.RenameTableField(md.PTable, this.KeyOfEn, newField);
+                return "重名成功,关闭设置页面重新查看表单设计器中字段属性";
+            }
+
+
 
             //如果是节点表单，就修改其他的字段.
             if (this.FK_MapData.IndexOf("ND") != 0)
@@ -619,13 +676,20 @@ namespace BP.Sys.FrmUI
             strs = strs.Substring(0, strs.Length - 2);
             string rptTable = "ND" + strs + "Rpt";
             MapDatas mds = new MapDatas();
-            mds.Retrieve(MapDataAttr.PTable, rptTable);
+            mds.Retrieve(MapDataAttr.No, rptTable);
+            if (mds.Count == 0)
+            {
+                sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "',  MyPK='" + rptTable + "_" + newField + "' WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + rptTable + "'";
+                DBAccess.RenameTableField(rptTable, this.KeyOfEn, newField);
+            }
 
             foreach (MapData item in mds)
             {
                 sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "',  MyPK='" + item.No + "_" + newField + "' WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + item.No + "'";
                 DBAccess.RunSQL(sql);
+                DBAccess.RenameTableField(item.PTable, this.KeyOfEn, newField);
             }
+
 
             //自由表单模板的替换 
             return "重名称成功,如果是自由表单，请关闭表单设计器重新打开.";
@@ -636,7 +700,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string BindFunction()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&T=" + DateTime.Now.ToString();
         }
         /// <summary>
         /// 快速录入
@@ -646,9 +710,14 @@ namespace BP.Sys.FrmUI
         {
             return "../../Admin/FoolFormDesigner/MapExt/FastInput.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
-        public string DoFieldBigHelper()
+        public string DoFieldNameLink()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/FieldBigHelper.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/FieldNameLink.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+        public string DoReadOnlyLink()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/ReadOnlyLink.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+
         }
         /// <summary>
         /// 快速录入
@@ -704,7 +773,7 @@ namespace BP.Sys.FrmUI
         {
             this.UIContralType = UIContralType.SignCheck;
             this.setUIIsEnable(false);
-            this.setUIVisible(false);
+            this.setUIVisible(true);
             this.Update();
             return "设置成功,当前文本框已经是签批组件了,请关闭掉当前的窗口.";
         }
@@ -832,10 +901,10 @@ namespace BP.Sys.FrmUI
             //高度.
             //  attr.UIHeightInt = this.GetValIntByKey("ExtRows") * 23;
 
-            attr.IsRichText = this.GetValBooleanByKey(MapAttrAttr.IsRichText); //是否是富文本？
-            attr.IsSupperText = this.GetValIntByKey(MapAttrAttr.IsSupperText); //是否是大块文本？
+            //attr.IsRichText = this.GetValBooleanByKey(MapAttrAttr.IsRichText); //是否是富文本？
+            //attr.IsSupperText = this.GetValIntByKey(MapAttrAttr.IsSupperText); //是否是大块文本？
 
-            if (attr.IsRichText || attr.IsSupperText == 1)
+            if (this.TextModel == 2 || this.TextModel == 3)
             {
                 attr.setMaxLen(4000);
                 this.SetValByKey(MapAttrAttr.MaxLen, 4000);
@@ -865,6 +934,10 @@ namespace BP.Sys.FrmUI
                             case DBType.Oracle:
                             case DBType.DM:
                                 sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR2(" + attr.MaxLen + ")";
+                                break;
+                            case DBType.KingBaseR3:
+                            case DBType.KingBaseR6:
+                                sql = "ALTER table " + md.PTable + " ADD  COLUMN " + attr.Field + " Type NVARCHAR2(" + attr.MaxLen + ")";
                                 break;
                             case DBType.PostgreSQL:
                             case DBType.UX:

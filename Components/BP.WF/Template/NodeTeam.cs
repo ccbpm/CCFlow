@@ -27,7 +27,7 @@ namespace BP.WF.Template
     /// 记录了从一个节点到其他的多个节点.
     /// 也记录了到这个节点的其他的节点.
     /// </summary>
-    public class NodeTeam : EntityMM
+    public class NodeTeam : EntityMyPK
     {
         #region 基本属性
         /// <summary>
@@ -94,21 +94,32 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("WF_NodeTeam", "节点岗位");
+                Map map = new Map("WF_NodeTeam", "节点权限组");
 
-                map.AddTBIntPK(NodeTeamAttr.FK_Node, 0, "节点", false, false);
 
-                // #warning ,这里为了方便用户选择，让分组都统一采用了枚举类型. edit zhoupeng. 2015.04.28. 注意jflow也要修改.
-                map.AddDDLEntitiesPK(NodeTeamAttr.FK_Team, null, "用户组",
+                map.AddMyPK();
+
+                map.AddTBInt(NodeTeamAttr.FK_Node, 0, "节点", false, false);
+                map.AddDDLEntities(NodeTeamAttr.FK_Team, null, "用户组",
                    new BP.Port.Teams(), true);
+
+                //map.AddTBIntPK(NodeTeamAttr.FK_Node, 0, "节点", false, false);
+                //map.AddDDLEntitiesPK(NodeTeamAttr.FK_Team, null, "用户组",
+                //   new BP.Port.Teams(), true);
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
 
+        protected override bool beforeUpdateInsertAction()
+        {
+            this.setMyPK(this.FK_Node + "_" + this.FK_Team);
+            return base.beforeUpdateInsertAction();
+        }
+
         /// <summary>
-        /// 节点岗位发生变化，删除该节点记忆的接收人员。
+        /// 节点权限组发生变化，删除该节点记忆的接收人员。
         /// </summary>
         /// <returns></returns>
         protected override bool beforeInsert()
@@ -123,7 +134,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 节点用户组s
     /// </summary>
-    public class NodeTeams : EntitiesMM
+    public class NodeTeams : EntitiesMyPK
     {
         /// <summary>
         /// 节点用户组s

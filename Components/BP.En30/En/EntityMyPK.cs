@@ -70,6 +70,18 @@ namespace BP.En
             this.Retrieve();
         }
         #endregion
+
+        /// <summary>
+        /// 赋值:@hongyan.
+        /// </summary>
+        /// <returns></returns>
+        protected override bool beforeInsert()
+        {
+            if (DataType.IsNullOrEmpty(this.MyPK) == true)
+                this.MyPK = DBAccess.GenerGUID();
+
+            return base.beforeInsert();
+        }
     }
     /// <summary>
     /// EntityMyPKMyFile

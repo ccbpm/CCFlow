@@ -27,7 +27,7 @@ namespace BP.WF.Template
         /// </summary>
         SpecEmps,
         /// <summary>
-        /// 指定的工作岗位s
+        /// 指定的工作角色s
         /// </summary>
         SpecStations,
         /// <summary>
@@ -691,7 +691,7 @@ namespace BP.WF.Template
 
                 #region 将要删除.
                 map.AddDDLSysEnum(PushMsgAttr.PushWay, 0, "推送方式", true, false, PushMsgAttr.PushWay,
-                    "@0=按照指定节点的工作人员@1=按照指定的工作人员@2=按照指定的工作岗位@3=按照指定的部门@4=按照指定的SQL@5=按照系统指定的字段");
+                    "@0=按照指定节点的工作人员@1=按照指定的工作人员@2=按照指定的工作角色@3=按照指定的部门@4=按照指定的SQL@5=按照系统指定的字段");
                 //设置内容.
                 map.AddTBString(PushMsgAttr.PushDoc, null, "推送保存内容", true, false, 0, 3500, 10);
                 map.AddTBString(PushMsgAttr.Tag, null, "Tag", true, false, 0, 500, 10);

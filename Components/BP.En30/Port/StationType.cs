@@ -8,7 +8,7 @@ using BP.Difference;
 namespace BP.Port
 {
     /// <summary>
-    /// 岗位类型
+    /// 角色类型
     /// </summary>
     public class StationTypeAttr : EntityNoNameAttr
     {
@@ -23,7 +23,7 @@ namespace BP.Port
 
     }
     /// <summary>
-    ///  岗位类型
+    ///  角色类型
     /// </summary>
     public class StationType : EntityNoName
     {
@@ -78,20 +78,20 @@ namespace BP.Port
 
         #region 构造方法
         /// <summary>
-        /// 岗位类型
+        /// 角色类型
         /// </summary>
         public StationType()
         {
         }
         /// <summary>
-        /// 岗位类型
+        /// 角色类型
         /// </summary>
         /// <param name="_No"></param>
         public StationType(string _No) : base(_No) { }
         #endregion
 
         /// <summary>
-        /// 岗位类型Map
+        /// 角色类型Map
         /// </summary>
         public override Map EnMap
         {
@@ -99,7 +99,7 @@ namespace BP.Port
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Port_StationType", "岗位类型");
+                Map map = new Map("Port_StationType", "角色类型");
                 map.CodeStruct = "2";
 
                 map.AddTBStringPK(StationTypeAttr.No, null, "编号", true, true, 1, 40, 40);
@@ -118,6 +118,12 @@ namespace BP.Port
 
                     if (BP.Difference.SystemConfig.GroupStationModel == 0)
                         map.AddHidden(StationAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);//每个组织都有自己的岗责体系的时候. 加隐藏条件.
+                    if(BP.Difference.SystemConfig.GroupStationModel == 2)
+                    {
+                        map.AddTBString(StationAttr.FK_Dept, null, "隶属部门", false, false, 0, 50, 250);
+                        map.AddHidden(StationAttr.FK_Dept, "=", BP.Web.WebUser.FK_Dept);
+
+                    }
                 }
 
                 this._enMap = map;
@@ -126,20 +132,25 @@ namespace BP.Port
         }
         protected override bool beforeUpdateInsertAction()
         {
+            if (DataType.IsNullOrEmpty(this.Name) == true)
+                throw new Exception("请输入名称"); //@hongyan.
+
             if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
-
+            if (BP.Difference.SystemConfig.GroupStationModel == 2)
+                this.SetValByKey(StationAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
             return base.beforeUpdateInsertAction();
         }
 
     }
     /// <summary>
-    /// 岗位类型
+    /// 角色类型
     /// </summary>
     public class StationTypes : EntitiesNoName
     {
+        #region 构造方法..
         /// <summary>
-        /// 岗位类型s
+        /// 角色类型s
         /// </summary>
         public StationTypes() { }
         /// <summary>
@@ -152,6 +163,9 @@ namespace BP.Port
                 return new StationType();
             }
         }
+        #endregion 构造方法..
+
+        #region 查询..
         /// <summary>
         /// 查询全部
         /// </summary>
@@ -162,9 +176,15 @@ namespace BP.Port
             if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 return base.RetrieveAll(orderBy);
 
-            //集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
+            //集团模式下的角色体系: @0=每套组织都有自己的角色体系@1=所有的组织共享一套岗则体系.
+            if (BP.Difference.SystemConfig.GroupStationModel == 0)
+                return base.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, orderBy);
+
             if (BP.Difference.SystemConfig.GroupStationModel == 1)
                 return base.RetrieveAll();
+
+            //if (BP.Difference.SystemConfig.GroupStationModel == 2)
+            //    return base.Retrieve("FK_Dept", BP.Web.WebUser.FK_Dept, orderBy);
 
             //按照orgNo查询.
             return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, orderBy);
@@ -176,16 +196,16 @@ namespace BP.Port
         public override int RetrieveAll()
         {
             if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
-                return base.RetrieveAll();
+                return base.RetrieveAll("Idx");
 
-            //集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
+            //集团模式下的角色体系: @0=每套组织都有自己的角色体系@1=所有的组织共享一套岗则体系.
             if (BP.Difference.SystemConfig.GroupStationModel == 1)
-                return base.RetrieveAll();
+                return base.RetrieveAll("Idx");
 
             //按照orgNo查询.
-            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
+            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo,"Idx");
         }
-
+        #endregion 查询..
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

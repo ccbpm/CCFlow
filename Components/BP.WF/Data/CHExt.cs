@@ -305,16 +305,20 @@ namespace BP.WF.Data
 
                 map.AddTBString(CHAttr.TimeLimit, null, "限期", true, true, 0, 50, 5);
 
-                map.AddTBFloat(CHAttr.UseDays, 0, "实际使用天", false, true);
-                map.AddTBFloat(CHAttr.OverDays, 0, "逾期天", false, true);
+                map.AddTBFloat(CHAttr.UseDays, 0, "实际使用天", true, true);
+                map.AddTBFloat(CHAttr.OverDays, 0, "逾期天", true, true);
 
-                map.AddDDLSysEnum(CHAttr.CHSta, 0, "状态", true, true, CHAttr.CHSta,
-                    "@0=及时完成@1=按期完成@2=逾期完成@3=超期完成");
+                map.AddDDLSysEnum(CHAttr.CHSta, 0, "状态", true, true, CHAttr.CHSta,"@0=及时完成@1=按期完成@2=逾期完成@3=超期完成");
 
                 map.AddDDLEntities(CHAttr.FK_Dept, null, "隶属部门", new BP.Port.Depts(), false);
                 map.AddDDLEntities(CHAttr.FK_Emp, null, "当事人", new BP.Port.Emps(), false);
                 map.AddTBString(CHAttr.FK_NY, null, "月份", true, true, 0, 50, 5);
                 map.AddTBInt(CHAttr.WorkID, 0, "工作ID", false, true);
+
+                //查询日期范围.
+                map.DTSearchKey = "DTFrom";
+                map.DTSearchLabel = "发生日期";
+                map.DTSearchWay = Sys.DTSearchWay.ByDate;
 
                 //查询条件.
                 map.AddSearchAttr(CHAttr.FK_Dept);
@@ -338,13 +342,14 @@ namespace BP.WF.Data
 
         public string DoOpen()
         {
-            return "../../MyView.htm?FK_Flow" + this.FK_Flow + "&WorkID=" + this.WorkID + "&OID=" + this.WorkID;
+            //@hongyan.
+            return "../../MyView.htm?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&OID=" + this.WorkID;
         }
     }
     /// <summary>
     /// 时效考核s
     /// </summary>
-    public class CHExts : Entities
+    public class CHExts : EntitiesMyPK
     {
         #region 构造方法属性
         /// <summary>

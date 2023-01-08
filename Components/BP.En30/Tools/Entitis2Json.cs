@@ -580,33 +580,33 @@ namespace BP.DA
         {
             StringBuilder jsonBuilder = new StringBuilder();
 
-            jsonBuilder.Append("{rows:[");
+            jsonBuilder.Append("{\"rows\":[");
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 jsonBuilder.Append("{");
                 for (int j = 0; j < dt.Columns.Count; j++)
                 {
-                    jsonBuilder.Append(dt.Columns[j].ColumnName.ToUpper());
+                    jsonBuilder.Append("\""+dt.Columns[j].ColumnName.ToUpper()+"\"");
                     jsonBuilder.Append(":");
-                    jsonBuilder.Append("'" + GetFilteredStrForJSON(dt.Rows[i][j].ToString(), true) + "'");
+                    jsonBuilder.Append("\"" + GetFilteredStrForJSON(dt.Rows[i][j].ToString(), true) + "\"");
                     jsonBuilder.Append(",");
                 }
                 jsonBuilder.Remove(jsonBuilder.Length - 1, 1);
                 jsonBuilder.Append("},");
             }
             //不存在数据时
-            if (jsonBuilder.Length > 7)
+            if (jsonBuilder.Length > 11)
             {
                 jsonBuilder.Remove(jsonBuilder.Length - 1, 1);
             }
             //jsonBuilder.Remove(jsonBuilder.Length - 1, 1);
             if (totalRows == 0)
             {
-                jsonBuilder.Append("],total:0");
+                jsonBuilder.Append("],\"total\":0");
             }
             else
             {
-                jsonBuilder.Append("],total:" + totalRows);
+                jsonBuilder.Append("],\"total\":" + totalRows);
             }
             jsonBuilder.Append("}");
             return jsonBuilder.ToString();

@@ -137,13 +137,13 @@ namespace BP.WF.Port
         /// <summary>
         /// 主要的部门。
         /// </summary>
-        public Dept HisDept
+        public BP.Port.Dept HisDept
         {
             get
             {
                 try
                 {
-                    return new Dept(this.FK_Dept);
+                    return new BP.Port.Dept(this.FK_Dept);
                 }
                 catch (Exception ex)
                 {

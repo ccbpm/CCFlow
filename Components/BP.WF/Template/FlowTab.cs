@@ -240,14 +240,17 @@ namespace BP.WF.Template
             string rptNo = "ND" + int.Parse(flowNo) + "Rpt";
             GEEntitys ens = new GEEntitys(rptNo);
             BP.En.QueryObject qo = new QueryObject(ens);
+            qo.AddWhere(GERptAttr.WFState, ">", 1);
+            qo.addAnd();
+            qo.addLeftBracket();
             qo.AddWhere(BP.WF.GERptAttr.FlowEmps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
             qo.addOr();
             qo.AddWhere(BP.WF.GERptAttr.FlowStarter, BP.Web.WebUser.No );
+            qo.addRightBracket();
             qo.addOrderBy("RDT");
             qo.Top = 100;
             qo.DoQuery();
             ds.Tables.Add(ens.ToDataTableField("DT"));
-
 
            
             //表单的ID
@@ -271,9 +274,10 @@ namespace BP.WF.Template
             MapAttrs mattrsOfSystem = new MapAttrs();
             mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.Title));
             mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.FlowStarter));
-            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.FK_Dept));
+           // mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.fk)); @hongyan. 去掉.
             mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.WFState));
             mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.FlowEmps));
+
             ds.Tables.Add(mattrsOfSystem.ToDataTableField("Sys_MapAttrOfSystem"));
 
             ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));

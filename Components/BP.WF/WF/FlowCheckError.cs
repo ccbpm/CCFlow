@@ -200,7 +200,7 @@ namespace BP.WF
                     case DeliveryWay.ByStation:
                     case DeliveryWay.FindSpecDeptEmpsInStationlist:
                         if (nd.NodeStations.Count == 0)
-                            this.AddMsgInfo("错误:您设置了该节点的访问规则是按岗位，但是您没有为节点绑定岗位。", nd);
+                            this.AddMsgInfo("错误:您设置了该节点的访问规则是按角色，但是您没有为节点绑定角色。", nd);
                         break;
                     case DeliveryWay.ByDept:
                         if (nd.NodeDepts.Count == 0)
@@ -212,21 +212,21 @@ namespace BP.WF
                             this.AddMsgInfo("您设置了该节点的访问规则是按人员，但是您没有为节点绑定人员。", nd);
 
                         break;
-                    case DeliveryWay.BySpecNodeEmp: /*按指定的岗位计算.*/
-                    case DeliveryWay.BySpecNodeEmpStation: /*按指定的岗位计算.*/
+                    case DeliveryWay.BySpecNodeEmp: /*按指定的角色计算.*/
+                    case DeliveryWay.BySpecNodeEmpStation: /*按指定的角色计算.*/
                         if (nd.DeliveryParas.Trim().Length == 0)
                         {
-                            this.AddMsgInfo("您设置了该节点的访问规则是按指定的岗位计算，但是您没有设置节点编号。", nd);
+                            this.AddMsgInfo("您设置了该节点的访问规则是按指定的角色计算，但是您没有设置节点编号。", nd);
                         }
                         else
                         {
                             if (DataType.IsNumStr(nd.DeliveryParas) == false)
                             {
-                                this.AddMsgInfo("您没有设置指定岗位的节点编号，目前设置的为{" + nd.DeliveryParas + "}", nd);
+                                this.AddMsgInfo("您没有设置指定角色的节点编号，目前设置的为{" + nd.DeliveryParas + "}", nd);
                             }
                         }
                         break;
-                    case DeliveryWay.ByDeptAndStation: /*按部门与岗位的交集计算.*/
+                    case DeliveryWay.ByDeptAndStation: /*按部门与角色的交集计算.*/
                         string mysql = string.Empty;
                         //added by liuxc,2015.6.30.
                         //区别集成与BPM模式
@@ -245,7 +245,7 @@ namespace BP.WF
 
                         DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
                         if (mydt.Rows.Count == 0)
-                            this.AddMsgInfo("按照岗位与部门的交集计算错误，没有人员集合{" + mysql + "}", nd);
+                            this.AddMsgInfo("按照角色与部门的交集计算错误，没有人员集合{" + mysql + "}", nd);
                         break;
                     case DeliveryWay.BySQL:
                     case DeliveryWay.BySQLAsSubThreadEmpsAndData:
@@ -297,7 +297,9 @@ namespace BP.WF
 
                         break;
                     case DeliveryWay.ByPreviousNodeFormEmpsField:
-
+                    case DeliveryWay.ByPreviousNodeFormStationsAI:
+                    case DeliveryWay.ByPreviousNodeFormStationsOnly:
+                    case DeliveryWay.ByPreviousNodeFormDepts:
                         //去rpt表中，查询是否有这个字段
                         string str = nd.NodeID.ToString().Substring(0, nd.NodeID.ToString().Length - 2);
                         MapAttrs rptAttrs = new BP.Sys.MapAttrs();
@@ -432,9 +434,6 @@ namespace BP.WF
         /// </summary>
         public void CheckMode_SpecTable()
         {
-            if (this.flow.HisDataStoreModel != DataStoreModel.SpecTable)
-                return;
-
             foreach (Node nd in nds)
             {
                 MapData md = new MapData();
@@ -954,8 +953,6 @@ namespace BP.WF
                 attr.SetValByKey(MapAttrAttr.MinLen, 0);
                 attr.SetValByKey(MapAttrAttr.MaxLen, 1000);
                 attr.SetValByKey(MapAttrAttr.Idx, -100);
-
-                 
                 attr.Insert();
             }
 
@@ -1099,8 +1096,6 @@ namespace BP.WF
                 attr.SetValByKey(MapAttrAttr.MinLen, 0);
                 attr.SetValByKey(MapAttrAttr.MaxLen, 10);
                 attr.SetValByKey(MapAttrAttr.Idx, -100);
-
-                 
                 attr.Insert();
             }
 
@@ -1120,7 +1115,7 @@ namespace BP.WF
                 attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
                 attr.SetValByKey(MapAttrAttr.UIIsLine, false);
                 attr.SetValByKey(MapAttrAttr.MinLen, 0);
-                attr.SetValByKey(MapAttrAttr.MaxLen, 10);
+                attr.SetValByKey(MapAttrAttr.MaxLen, 30);
                 attr.SetValByKey(MapAttrAttr.Idx, -100);
 
                  
@@ -1299,30 +1294,6 @@ namespace BP.WF
                 attr.SetValByKey(MapAttrAttr.MaxLen, 100);
                 attr.SetValByKey(MapAttrAttr.Idx, -100);
                  
-            }
-
-            if (attrs.Contains(md.No + "_" + GERptAttr.FlowNote) == false)
-            {
-                /* 流程信息 */
-                MapAttr attr = new BP.Sys.MapAttr();
-
-                attr.SetValByKey(MapAttrAttr.FK_MapData, md.No);
-                attr.SetValByKey(MapAttrAttr.EditType, (int)EditType.UnDel);
-
-                attr.SetValByKey(MapAttrAttr.KeyOfEn, GERptAttr.FlowNote);
-                attr.SetValByKey(MapAttrAttr.Name, "流程信息");
-                attr.SetValByKey(MapAttrAttr.MyDataType, DataType.AppString);
-
-                attr.setUIContralType(UIContralType.TB);
-                attr.setLGType(FieldTypeS.Normal);
-                attr.SetValByKey(MapAttrAttr.UIVisible, true);
-                attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
-                attr.SetValByKey(MapAttrAttr.UIIsLine, true);
-
-                attr.SetValByKey(MapAttrAttr.MinLen, 0);
-                attr.SetValByKey(MapAttrAttr.MaxLen, 500);
-                attr.SetValByKey(MapAttrAttr.Idx, -100);
-                attr.Insert();
             }
             #endregion 补充上流程字段。
 

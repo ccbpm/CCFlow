@@ -181,34 +181,8 @@ namespace BP.WF.Template
             }
         }
         #endregion        
-        /// <summary>
-        /// 设计者编号
-        /// </summary>
-        public string DesignerNo
-        {
-            get
-            {
-                return this.GetValStringByKey(FlowAttr.DesignerNo);
-            }
-            set
-            {
-                this.SetValByKey(FlowAttr.DesignerNo, value);
-            }
-        }
-        /// <summary>
-        /// 设计者名称
-        /// </summary>
-        public string DesignerName
-        {
-            get
-            {
-                return this.GetValStringByKey(FlowAttr.DesignerName);
-            }
-            set
-            {
-                this.SetValByKey(FlowAttr.DesignerName, value);
-            }
-        }
+        
+       
         /// <summary>
         /// 编号生成格式
         /// </summary>
@@ -234,7 +208,7 @@ namespace BP.WF.Template
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No.Equals("admin") == true || this.DesignerNo == WebUser.No)
+                if (BP.Web.WebUser.No.Equals("admin") == true )
                 {
                     uac.IsUpdate = true;
                 }
@@ -279,6 +253,7 @@ namespace BP.WF.Template
                 map.CodeStruct = "3";
 
                 #region 基本属性。
+                map.AddGroupAttr("基本属性");
                 map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 10, 3);
                 map.SetHelperUrl(FlowAttr.No, "http://ccbpm.mydoc.io/?v=5404&t=17023"); //使用alert的方式显示帮助信息.
 
@@ -331,21 +306,8 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(FlowAttr.Draft, (int)DraftRole.None, "草稿规则",
                true, true, FlowAttr.Draft, "@0=无(不设草稿)@1=保存到待办@2=保存到草稿箱");
                 map.SetHelperUrl(FlowAttr.Draft, "http://ccbpm.mydoc.io/?v=5404&t=17037");
-
-                // 数据存储.
-                map.AddDDLSysEnum(FlowAttr.DataStoreModel, (int)DataStoreModel.ByCCFlow,
-                    "流程数据存储模式", true, true, FlowAttr.DataStoreModel,
-                   "@0=数据轨迹模式@1=数据合并模式");
-                map.SetHelperUrl(FlowAttr.DataStoreModel, "http://ccbpm.mydoc.io/?v=5404&t=17038");
-
-                //add 2013-05-22.
-                map.AddTBString(FlowAttr.HistoryFields, null, "历史查看字段", true, false, 0, 500, 10, true);
-                //map.SetHelperBaidu(FlowAttr.HistoryFields, "ccflow 历史查看字段");
-                map.AddTBString(FlowAttr.FlowNoteExp, null, "备注的表达式", true, false, 0, 500, 10, true);
-                map.SetHelperUrl(FlowAttr.FlowNoteExp, "http://ccbpm.mydoc.io/?v=5404&t=17043");
-                map.AddTBString(FlowAttr.Note, null, "流程描述", true, false, 0, 100, 10, true);
+                 
  
-             //   map.AddTBString(FlowAttr.HelpUrl, null, "帮助文档", true, false, 0, 300, 10, true);
                 #endregion 基本属性。
 
                 //查询条件.

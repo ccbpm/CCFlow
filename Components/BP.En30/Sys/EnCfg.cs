@@ -173,13 +173,13 @@ namespace BP.Sys
     public class EnCfgAttr : EntityNoNameAttr
     {
         /// <summary>
-        /// 分组标签
-        /// </summary>
-        public const string GroupTitle = "GroupTitle";
-        /// <summary>
         /// 是否是数据加密
         /// </summary>
         public const string IsJM = "IsJM";
+        /// <summary>
+        /// 是否查询条件多选
+        /// </summary>
+        public const string IsSelectMore = "IsSelectMore";
         /// <summary>
         /// Url
         /// </summary>
@@ -209,6 +209,9 @@ namespace BP.Sys
         /// 字段求和求平均设置
         /// </summary>
         public const string FieldSet = "FieldSet";
+        public const string Drill = "Drill";
+        public const string MobileFieldShowModel = "MobileFieldShowModel";
+        public const string MobileShowContent = "MobileShowContent";
         /// <summary>
         /// 导入功能Url
         /// </summary>
@@ -254,20 +257,6 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(EnCfgAttr.Datan, value);
-            }
-        }
-        /// <summary>
-        /// 数据源
-        /// </summary>
-        public string GroupTitle
-        {
-            get
-            {
-                return this.GetValStringByKey(EnCfgAttr.GroupTitle);
-            }
-            set
-            {
-                this.SetValByKey(EnCfgAttr.GroupTitle, value);
             }
         }
         /// <summary>
@@ -403,7 +392,7 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_EnCfg", "实体配置");
-
+                map.AddGroupAttr("基础信息");
                 map.AddTBStringPK(EnCfgAttr.No, null, "实体名称", true, false, 1, 100, 60);
 
                 #region 基本信息设置.
@@ -420,8 +409,13 @@ namespace BP.Sys
 
                 //数据加密存储.
                 map.AddBoolean(EnCfgAttr.IsJM, false, "是否是加密存储?", true, true);
+                map.AddBoolean(EnCfgAttr.IsSelectMore, false, "是否下拉查询条件多选?", true, true);
 
                 map.AddDDLSysEnum("MoveToShowWay", 0, "移动到显示方式", true, true);
+
+                map.AddDDLSysEnum("TableCol", 0, "实体表单显示列数", true, true, "实体表单显示列数",
+                 "@0=4列@1=6列");
+                map.AddBoolean("IsShowIcon", false, "是否显示项目图标", true, true);
                 map.AddTBString("KeyLabel", null, "关键字Label", true, false, 0, 30, 60, true);
                 map.SetHelperAlert("KeyLabel", "(默认为:关键字:)");
                 map.AddTBString("KeyPlaceholder", null, "关键字提示", true, false, 0, 300, 60, true);
@@ -437,16 +431,8 @@ namespace BP.Sys
                 map.SetHelperAlert("IsCond", "在查询组件中，是不是每次进入前都要清空以前的查询条件？默认不清空。");
                 #endregion 基本信息设置.
 
-                #region 分组标签.
-                //字段分组标签设置.
-                map.AddTBString(EnCfgAttr.GroupTitle, null, "分组标签", true, false, 0, 2000, 60, true);
-                string msg = "字段显示分组标签:";
-                msg += "\t\n格式为: @字段名1=标签1,标签描述1";
-                msg += "\t\n@No=基础信息,单据基础配置信息.@BtnNewLable=单据按钮权限,用于控制每个功能按钮启用规则.@BtnImpExcel=列表按钮,列表按钮控制@Designer=设计者,流程开发设计者信息";
-                map.SetHelperAlert(EnCfgAttr.GroupTitle, msg);
-                #endregion 分组标签.
-
                 #region 查询排序.
+                map.AddGroupAttr("查询排序");
                 map.AddTBString("OrderBy", null, "查询排序字段", true, false, 0, 100, 60);
                 map.AddBoolean("IsDeSc", true, "是否降序排序?", true, true);
                 #endregion 查询排序.
@@ -462,12 +448,11 @@ namespace BP.Sys
 
                 //字段颜色设置.
                 map.AddTBString(EnCfgAttr.ColorSet, null, "颜色设置", true, false, 0, 500, 60, true);
-                msg = "对字段的颜色处理";
-                msg += "\t\n @Age:From=0,To=18,Color=green;From=19,To=30,Color=red";
+                string msg = "对字段的颜色处理";
+                msg += "\t\n@Age:From=0,To=18,Color=green;From=19,To=30,Color=red";
                 map.SetHelperAlert(EnCfgAttr.ColorSet, msg);
                 //对字段求总和平均.
                 map.AddTBString(EnCfgAttr.FieldSet, null, "字段求和/平均设置", true, false, 0, 500, 60, true);
-
 
                 //字段格式化函数.
                 map.AddTBString("ForamtFunc", null, "字段格式化函数", true, false, 0, 200, 60, true);
@@ -477,9 +462,26 @@ namespace BP.Sys
                 msg += "\t\n 3. 配置格式: 字段名@函数名; 比如:  FlowEmps@DealFlowEmps; ";
                 msg += "\t\n 4. 函数写入到 \\DataUser\\JSLibData\\SearchSelf.js";
                 map.SetHelperAlert("ForamtFunc", msg);
+
+
+                map.AddTBString(EnCfgAttr.Drill, null, "数据钻取", true, false, 0, 200, 60, true);
+                msg = "显示钻取链接的字段";
+                msg += "\t\n 格式: @Age@JinE@ShouYi";
+                msg += "\t\n 显示在Search, En组件里面.";
+                map.SetHelperAlert(EnCfgAttr.Drill, msg);
+
+                map.AddDDLSysEnum(EnCfgAttr.MobileFieldShowModel, 0, "移动端列表字段显示方式", true, true, EnCfgAttr.MobileFieldShowModel, "@0=默认设置@1=设置显示字段@2=设置模板");
+              
+
+                map.AddTBStringDoc(EnCfgAttr.MobileShowContent, EnCfgAttr.MobileShowContent, null, "移动端列表字段设置", true,
+                    false, 0, 500, 10, true);
+
+                string help = "格式1: Key1,Key2, 格式2: @Key1@Key2@Key3@";
+                map.SetHelperAlert(EnCfgAttr.MobileShowContent, help);
                 #endregion 其他高级设置.
 
-                #region  Search.按钮配置信息.
+                #region  Search.工具栏按钮.
+                map.AddGroupAttr("工具栏按钮");
                 map.AddBoolean("BtnsShowLeft", false, "按钮显示到左边?", true, true, false);
                 msg = "配置的按钮显示位置.";
                 msg += "\t\n1.默认配置的按钮显示在右边位置. ";
@@ -491,6 +493,7 @@ namespace BP.Sys
                 map.AddTBString(EnCfgAttr.ImpFuncUrl, null, "导入功能Url", true, false, 0, 500, 60, true);
                 map.SetHelperAlert(EnCfgAttr.ImpFuncUrl, "如果为空，则使用通用的导入功能.");
 
+                map.AddBoolean("IsExp", false, "是否显示导出", true, true, true);
                 map.AddBoolean(EnCfgAttr.IsGroup, true, "是否显示分析按钮（在查询工具栏里）?", true, true, true);
                 map.AddBoolean("IsEnableLazyload", true, "是否启用懒加载？（对树结构实体有效）?", true, true, true);
 
@@ -500,9 +503,13 @@ namespace BP.Sys
 
                 map.AddTBString("BtnLab2", null, "集合:自定义按钮标签2", true, false, 0, 70, 60, false);
                 map.AddTBString("BtnJS2", null, "集合:Url/Javasccript", true, false, 0, 300, 60, false);
+
+                map.AddTBString("BtnLab3", null, "集合:自定义按钮标签3", true, false, 0, 70, 60, false);
+                map.AddTBString("BtnJS3", null, "集合:Url/Javasccript", true, false, 0, 300, 60, false);
                 #endregion 按钮配置信息 - 自定义按钮.
 
                 #region  EnOnly.按钮配置信息.
+
                 map.AddTBString("EnBtnLab1", null, "实体:自定义按钮标签1", true, false, 0, 70, 60, false);
                 map.SetHelperAlert("EnBtnLab1", "实体:自定义按钮与标签,函数可以写入到/DataUser/JSLabData/SearchSelf.js里面.");
                 map.AddTBString("EnBtnJS1", null, "实体:Url/Javasccript", true, false, 0, 300, 60, false);
@@ -511,24 +518,21 @@ namespace BP.Sys
                 map.AddTBString("EnBtnJS2", null, "实体:Url/Javasccript", true, false, 0, 300, 60, false);
                 #endregion 按钮配置信息 - 自定义按钮.
 
-
-
                 #region 双击/单击行的配置.
-
+                map.AddGroupAttr("双击/单击行的配置");
                 string cfg = "@0=En.htm 实体与实体相关功能编辑器";
                 cfg += "@1=EnOnly.htm 实体编辑器";
                 cfg += "@2=/CCForm/FrmGener.htm 傻瓜表单解析器";
                 cfg += "@3=/CCForm/FrmGener.htm 自由表单解析器";
                 cfg += "@9=自定义URL";
-
-                map.AddDDLSysEnum("SearchUrlOpenType", 1, "双击/单击行打开内容", true, true, "SearchUrlOpenType", cfg);
+                map.AddDDLSysEnum("SearchUrlOpenType", 0, "双击/单击行打开内容", true, true, "SearchUrlOpenType", cfg);
                 map.AddBoolean("IsRefreshParentPage", true, "关闭后是否刷新本页面", true, true);
 
                 map.AddTBString(EnCfgAttr.UrlExt, null, "要打开的Url", true, false, 0, 500, 60, true);
                 map.AddDDLSysEnum("DoubleOrClickModel", 0, "双击/单击行弹窗模式", true, true, "DoubleOrClickModel",
                    "@0=双击行弹窗@1=单击行弹窗");
                 map.AddDDLSysEnum("OpenModel", 0, "打开方式", true, true, "OpenModel",
-                    "@0=弹窗-强制关闭@1=新窗口打开-winopen模式@2=弹窗-非强制关闭@3=执行指定的方法.@4=流程设计器打卡模式");
+                    "@0=弹窗-强制关闭@1=新窗口打开-winopen模式@2=弹窗-非强制关闭@3=执行指定的方法.@4=流程设计器打开模式");
                 map.AddTBString("OpenModelFunc", null, "弹窗方法", true, false, 0, 300, 60, false);
 
                 msg = "首先在写一个函数，放入到:/DataUser/JSLab/SearchSelf.js里面 ";
@@ -539,19 +543,16 @@ namespace BP.Sys
                 // map.AddTBInt("WinCardW", 1000, "窗体宽度", false, false);
                 //  map.AddTBInt("WinCardH", 600, "高度", false, false);
                 map.AddDDLSysEnum("WinCardW", 0, "宽度", true, true, "WinCardW", "@0=75%@1=50%@2=100%@3=25%");
+                map.AddDDLSysEnum("WinCardH", 2, "高度", true, true, "WinCardH", "@0=75%@1=50%@2=100%@3=85%@4=25%");
+
                 #endregion
 
                 map.AddTBAtParas(3000);  //参数属性.
 
-                #region 执行的方法.
 
+                #region 执行的方法 - 基本功能
+                map.AddGroupMethod("基本功能");
                 RefMethod rm = new RefMethod();
-                //rm = new RefMethod();
-                //rm.Title = "基本信息";
-                //rm.ClassMethodName = this.ToString() + ".SearchSetting()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //map.AddRefMethod(rm);
-
                 rm = new RefMethod();
                 rm.Title = "设置显示的列";
                 rm.ClassMethodName = this.ToString() + ".SearchSettingCols()";
@@ -596,6 +597,27 @@ namespace BP.Sys
                 rm.RefMethodType = RefMethodType.Func;
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.Title = "移动端Search";
+                rm.ClassMethodName = this.ToString() + ".ToMSearch()";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
+                #endregion 执行的方法.
+
+                #region 执行的方法 - 数据库信息
+                rm = new RefMethod();
+                rm.Title = "表结构";
+                rm.ClassMethodName = this.ToString() + ".FieldDesc()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "字段UI";
+                rm.ClassMethodName = this.ToString() + ".FieldDescUI()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
                 #endregion 执行的方法.
 
                 this._enMap = map;
@@ -603,6 +625,21 @@ namespace BP.Sys
             }
         }
         #endregion
+
+        public string FieldDescUI()
+        {
+            return "../../Comm/Sys/SystemClassFieldUI.htm?EnsName=" + this.No;
+        }
+
+        public string FieldDesc()
+        {
+            return "../../Comm/Sys/SystemClassField.htm?EnsName=" + this.No;
+        }
+
+        public string ToMSearch()
+        {
+            return "../../../CCMobile/Comm/Search.htm?EnsName=" + this.No;
+        }
 
         /// <summary>
         /// 字段颜色设置

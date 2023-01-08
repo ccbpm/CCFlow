@@ -73,6 +73,7 @@ namespace BP.WF.Port.Admin2Group
             {
                 UAC uac = new UAC();
                 uac.OpenForSysAdmin();
+                uac.IsInsert = false;
                 return uac;
             }
         }
@@ -87,240 +88,43 @@ namespace BP.WF.Port.Admin2Group
                     return this._enMap;
 
                 Map map = new Map("Port_Dept", "部门");
-
                 map.AddTBStringPK(DeptAttr.No, null, "编号", true, false, 1, 30, 40);
                 map.AddTBString(DeptAttr.Name, null, "名称", true, false, 0, 60, 200);
-                map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 30, 40);
-                map.AddTBString(DeptAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 40);
+                map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, true, 0, 30, 40);
+                map.AddTBString(DeptAttr.OrgNo, null, "隶属组织", true, true, 0, 50, 40);
                 map.AddTBInt(DeptAttr.Idx, 0, "顺序号", true, false);
 
-                RefMethod rm = new RefMethod();
-                rm.Title = "设置为独立组织";
-                rm.Warning = "如果当前部门已经是独立组织，系统就会提示错误。";
-                rm.ClassMethodName = this.ToString() + ".SetOrg";
-                rm.HisAttrs.AddTBString("adminer", null, "组织管理员编号", true, false, 0, 100, 100);
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "克隆独立组织";
-                rm.Warning = "如果当前部门已经是独立组织，系统就会提示错误。";
-                rm.ClassMethodName = this.ToString() + ".DoCloneOrg";
-                rm.HisAttrs.AddTBString("adminer", null, "组织管理员编号", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBString("coneOrgNo", null, "被克隆的组织编号(14903)", true, false, 0, 100, 100);
-                map.AddRefMethod(rm);
+                if (BP.Web.WebUser.No.Equals("admin") == true)
+                {
+                    RefMethod rm = new RefMethod();
+                    rm.Title = "设置为独立组织";
+                    rm.Warning = "如果当前部门已经是独立组织，系统就会提示错误。";
+                    rm.ClassMethodName = this.ToString() + ".SetDept2Org";
+                    rm.HisAttrs.AddTBString("adminer", null, "组织管理员编号", true, false, 0, 100, 100);
+                    map.AddRefMethod(rm);
+                }
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
-        /// <summary>
-        /// 克隆组织
-        /// </summary>
-        /// <param name="adminer"></param>
-        /// <param name="orgNo"></param>
-        /// <returns></returns>
-        public string DoCloneOrg(string adminer, string cloneOrgNo)
+
+        protected override bool beforeDelete()
         {
-            Org orgClone = new Org(cloneOrgNo);
+            //检查是否可以删除.
+            BP.Port.Dept dept = new BP.Port.Dept(this.No);
+            dept.CheckIsCanDelete();
 
-            if (WebUser.No.Equals("admin") == false)
-                return "err@非admin管理员，您无法执行该操作.";
-
-            //检查是否有该用户.
-            BP.Port.Emp emp = new BP.Port.Emp();
-            emp.UserID = adminer;
-            if (emp.RetrieveFromDBSources() == 0)
-                return "err@用户编号错误:" + adminer;
-
-            //检查该部门是否是独立组织.
-            Org org = new Org();
-            org.No = this.No;
-            if (org.RetrieveFromDBSources() == 1)
-            {
-                /* 已经是独立组织了. */
-                return "info@当前部门已经是独立组织了,您不能在克隆了.";
-            }
-            org.Name = this.Name; //把部门名字改为组织名字.
-
-            try
-            {
-                //设置父级信息.
-                BP.Port.Dept parentDept = new BP.Port.Dept();
-                if (this.ParentNo.Equals("0") == true)
-                    this.ParentNo = this.No;
-
-                parentDept.No = this.ParentNo;
-                parentDept.Retrieve();
-
-                org.ParentNo = this.ParentNo;
-                org.ParentName = parentDept.Name;
-
-                //设置管理员信息.
-                org.Adminer = emp.UserID;
-                org.AdminerName = emp.Name;
-                org.DirectInsert();
-
-                //增加到管理员.
-                OrgAdminer oa = new OrgAdminer();
-                oa.FK_Emp = emp.UserID;
-                oa.OrgNo = this.No;
-                oa.DirectDelete();
-                oa.DirectInsert();
-
-                //初始化流程树的根节点.
-                FlowSort fsRoot = new FlowSort();
-                fsRoot.No = this.No;
-                fsRoot.ParentNo = "1";
-                fsRoot.Name = this.Name;
-                fsRoot.OrgNo = this.No;
-                fsRoot.DirectUpdate();
-
-                string info = "";
-
-                //执行 clone...
-
-                //查询出来被克隆的流程树.
-                BP.WF.Template.FlowSorts sorts = new Template.FlowSorts();
-                sorts.Retrieve(FlowSortAttr.OrgNo, cloneOrgNo);
-                foreach (FlowSort sort in sorts)
-                {
-                    if (sort.ParentNo.Equals("1") == true)
-                        continue;
-
-                    FlowSort fs = new FlowSort();
-                    fs.Copy(sort);
-                    fs.Name = sort.Name;
-                    fs.ParentNo = this.No;
-                    fs.No = DBAccess.GenerGUID();
-                    fs.OrgNo = this.No;
-                    fs.DirectInsert();
-
-                    //查询出来模版，开始执行clone.
-                    Flows fls = new Flows();
-                    fls.Retrieve(FlowAttr.FK_FlowSort, sort.No);
-                    foreach (Flow fl in fls)
-                    {
-                        try
-                        {
-                            string fileName =  BP.Difference.SystemConfig.PathOfTemp + "" + DBAccess.GenerGUID() + ".xml";
-                            DataSet ds = fl.GetFlow(fileName);
-                            ds.WriteXml(fileName);
-
-                            var flowNew = BP.WF.Template.TemplateGlo.LoadFlowTemplate(fs.No, fileName, ImpFlowTempleteModel.AsNewFlow);
-                            flowNew.OrgNo = this.No;
-                            flowNew.DirectUpdate();
-                        }
-                        catch (Exception ex)
-                        {
-                            info += "err@" + ex.Message;
-                        }
-                    }
-                }
-
-                //初始化frmTree的根节点.
-                SysFormTree frmRoot = new SysFormTree();
-                frmRoot.No = this.No;
-                frmRoot.ParentNo = "1";
-                frmRoot.Name = this.Name;
-                frmRoot.OrgNo = this.No;
-                frmRoot.DirectInsert();
-
-                //查询出来被克隆的表单树
-                BP.WF.Template.SysFormTrees frmTrees = new Template.SysFormTrees();
-                sorts.Retrieve(FlowSortAttr.OrgNo, cloneOrgNo);
-                foreach (SysFormTree sort in frmTrees)
-                {
-                    if (sort.ParentNo.Equals("1") == true)
-                        continue;
-
-                    SysFormTree fs = new SysFormTree();
-                    fs.Copy(sort);
-                    fs.Name = sort.Name;
-                    fs.ParentNo = this.No;
-                    fs.No = DBAccess.GenerGUID();
-                    fs.OrgNo = this.No;
-                    fs.DirectInsert();
-
-                    //查询出来模版，开始执行clone.
-                    BP.Sys.MapDatas mds = new BP.Sys.MapDatas();
-                    mds.Retrieve(BP.Sys.MapDataAttr.FK_FormTree, sort.No);
-                    foreach (BP.Sys.MapData frm in mds)
-                    {
-                        try
-                        {
-                            DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(frm.No, frm.Name);
-
-                            BP.WF.HttpHandler.WF_Admin_Template en = new HttpHandler.WF_Admin_Template();
-                            en.ImpFrm("2", frm.No, frm, myds, sort.No);
-                        }
-                        catch (Exception ex)
-                        {
-                            info += "err@" + ex.Message;
-                        }
-                    }
-                }
-
-                return info;
-            }
-            catch (Exception ex)
-            {
-                string sql = " delete from port_org where adminer = '" + adminer + "' ";
-                DBAccess.RunSQL(sql);
-
-                sql = "delete from port_orgAdminer where FK_Emp = '" + adminer + "'";
-                DBAccess.RunSQL(sql);
-
-                //删除流程&流程类别.
-                FlowSorts fss = new FlowSorts();
-                fss.Retrieve("OrgNo", this.No);
-                foreach (FlowSort fs in fss)
-                {
-                    Flows fls = new Flows();
-                    fls.Retrieve(FlowAttr.FK_FlowSort, fs.No);
-
-                    //删除流程.
-                    foreach (Flow item in fls)
-                    {
-                        item.DoDelete();
-                    }
-                    fs.Delete(); //删除.
-                }
-
-                //删除表单与表单类别.
-                BP.WF.Template.SysFormTrees fts = new BP.WF.Template.SysFormTrees();
-                fts.Retrieve("OrgNo", this.No);
-                foreach (BP.WF.Template.SysFormTree ft in fts)
-                {
-                    MapDatas mds = new BP.Sys.MapDatas();
-                    mds.Retrieve(MapDataAttr.FK_FormTree, ft.No);
-
-                    //删除流程.
-                    foreach (MapData item in mds)
-                    {
-                        item.Delete();
-                    }
-                    ft.Delete(); //删除.
-                }
-
-                //sql = "delete from wf_flowsort where orgNo = '" + this.No + "'";
-                //DBAccess.RunSQL(sql);
-
-                ////SELECT* FROM sys_formtree WHERE OrgNo = ''
-                //sql = "delete from sys_formtree where orgNo = '" + this.No + "'";
-                //DBAccess.RunSQL(sql);
-
-                return "err@" + ex.Message;
-            }
+            return base.beforeDelete();
         }
         /// <summary>
         /// 设置组织
         /// </summary>
         /// <param name="userNo">管理员编号</param>
         /// <returns></returns>
-        public string SetOrg(string adminer)
+        public string SetDept2Org(string adminer)
         {
-
             if (WebUser.No.Equals("admin") == false)
                 return "err@非admin管理员，您无法执行该操作.";
 
@@ -330,28 +134,25 @@ namespace BP.WF.Port.Admin2Group
             if (emp.RetrieveFromDBSources() == 0)
                 return "err@用户编号错误:" + adminer;
 
+            //如果指定的人员.
+            if (emp.FK_Dept.Equals(this.No) == false)
+                return "err@管理员不在本部门下，您不能设置他为管理员.";
+
             //检查该部门是否是独立组织.
-            Org org = new Org();
+            BP.WF.Port.Admin2Group.Org org = new BP.WF.Port.Admin2Group.Org();
             org.No = this.No;
             if (org.RetrieveFromDBSources() == 1)
-            {
-                /* 已经是独立组织了. */
-                string info1 = org.DoCheck();
-                return "info@当前部门已经是独立组织了,检查信息如下:" + info1;
-            }
+                return "err@当前已经是独立组织.";
+
             org.Name = this.Name; //把部门名字改为组织名字.
 
             //设置父级信息.
             BP.Port.Dept parentDept = new BP.Port.Dept();
-
             if (this.ParentNo.Equals("0") == true)
                 this.ParentNo = this.No;
 
             parentDept.No = this.ParentNo;
             parentDept.Retrieve();
-
-            org.ParentNo = this.ParentNo;
-            org.ParentName = parentDept.Name;
 
             //设置管理员信息.
             org.Adminer = emp.UserID;
@@ -364,95 +165,100 @@ namespace BP.WF.Port.Admin2Group
             oa.OrgNo = this.No;
             oa.Insert();
 
+            //设置部门编号.
+            this.OrgNo = this.No;
+            this.DirectUpdate();
+
             //如果不是视图.
             if (DBAccess.IsView("Port_StationType") == false)
             {
-                #region 高层岗位.
-                StationType st = new StationType();
-                st.No = DBAccess.GenerGUID();
-                st.Name = "高层岗";
-                st.OrgNo = this.No;
-                st.DirectInsert();
+                StationTypes sts = new StationTypes();
+                sts.Retrieve("OrgNo", this.No);
+                if (sts.Count == 0)
+                {
 
-                Station sta = new Station();
-                sta.No = DBAccess.GenerGUID();
-                sta.Name = "总经理";
-                sta.OrgNo = this.No;
-                sta.FK_StationType = st.No;
-                sta.DirectInsert();
-                #endregion 高层岗位.
+                    #region 高层角色.
+                    StationType st = new StationType();
+                    st.No = DBAccess.GenerGUID();
+                    st.Name = "高层岗";
+                    st.OrgNo = this.No;
+                    st.DirectInsert();
 
-                #region 中层岗.
-                st = new StationType();
-                st.No = DBAccess.GenerGUID();
-                st.Name = "中层岗";
-                st.OrgNo = this.No;
-                st.DirectInsert();
+                    Station sta = new Station();
+                    sta.No = DBAccess.GenerGUID();
+                    sta.Name = "总经理";
+                    sta.OrgNo = this.No;
+                    sta.FK_StationType = st.No;
+                    sta.DirectInsert();
+                    #endregion 高层角色.
 
-                sta = new Station();
-                sta.No = DBAccess.GenerGUID();
-                sta.Name = "财务部经理";
-                sta.OrgNo = this.No;
-                sta.FK_StationType = st.No;
-                sta.DirectInsert();
+                    #region 中层岗.
+                    st = new StationType();
+                    st.No = DBAccess.GenerGUID();
+                    st.Name = "中层岗";
+                    st.OrgNo = this.No;
+                    st.DirectInsert();
 
+                    sta = new Station();
+                    sta.No = DBAccess.GenerGUID();
+                    sta.Name = "财务部经理";
+                    sta.OrgNo = this.No;
+                    sta.FK_StationType = st.No;
+                    sta.DirectInsert();
 
-                sta = new Station();
-                sta.No = DBAccess.GenerGUID();
-                sta.Name = "研发部经理";
-                sta.OrgNo = this.No;
-                sta.FK_StationType = st.No;
-                sta.DirectInsert();
+                    sta = new Station();
+                    sta.No = DBAccess.GenerGUID();
+                    sta.Name = "研发部经理";
+                    sta.OrgNo = this.No;
+                    sta.FK_StationType = st.No;
+                    sta.DirectInsert();
 
-                sta = new Station();
-                sta.No = DBAccess.GenerGUID();
-                sta.Name = "市场部经理";
-                sta.OrgNo = this.No;
-                sta.FK_StationType = st.No;
-                sta.DirectInsert();
-                #endregion 中层岗.
+                    sta = new Station();
+                    sta.No = DBAccess.GenerGUID();
+                    sta.Name = "市场部经理";
+                    sta.OrgNo = this.No;
+                    sta.FK_StationType = st.No;
+                    sta.DirectInsert();
+                    #endregion 中层岗.
 
-                #region 基层岗.
-                st = new StationType();
-                st.No = DBAccess.GenerGUID();
-                st.Name = "基层岗";
-                st.OrgNo = this.No;
-                st.DirectInsert();
+                    #region 基层岗.
+                    st = new StationType();
+                    st.No = DBAccess.GenerGUID();
+                    st.Name = "基层岗";
+                    st.OrgNo = this.No;
+                    st.DirectInsert();
 
-                sta = new Station();
-                sta.No = DBAccess.GenerGUID();
-                sta.Name = "会计岗";
-                sta.OrgNo = this.No;
-                sta.FK_StationType = st.No;
-                sta.DirectInsert();
+                    sta = new Station();
+                    sta.No = DBAccess.GenerGUID();
+                    sta.Name = "会计岗";
+                    sta.OrgNo = this.No;
+                    sta.FK_StationType = st.No;
+                    sta.DirectInsert();
 
-                sta = new Station();
-                sta.No = DBAccess.GenerGUID();
-                sta.Name = "销售岗";
-                sta.OrgNo = this.No;
-                sta.FK_StationType = st.No;
-                sta.DirectInsert();
+                    sta = new Station();
+                    sta.No = DBAccess.GenerGUID();
+                    sta.Name = "销售岗";
+                    sta.OrgNo = this.No;
+                    sta.FK_StationType = st.No;
+                    sta.DirectInsert();
 
-                sta = new Station();
-                sta.No = DBAccess.GenerGUID();
-                sta.Name = "程序员岗";
-                sta.OrgNo = this.No;
-                sta.FK_StationType = st.No;
-                sta.DirectInsert();
-
-                #endregion 基层岗.
+                    sta = new Station();
+                    sta.No = DBAccess.GenerGUID();
+                    sta.Name = "程序员岗";
+                    sta.OrgNo = this.No;
+                    sta.FK_StationType = st.No;
+                    sta.DirectInsert();
+                    #endregion 基层岗.
+                }
             }
-
             // 返回他的检查信息，这个方法里，已经包含了自动创建独立组织的，表单树，流程树。
-            // 自动他创建，岗位类型，岗位信息.
+            // 自动他创建，角色类型，角色信息.
             string info = org.DoCheck();
 
             if (info.IndexOf("err@") == 0)
                 return info;
 
             return "设置成功.";
-
-
             //初始化表单树，流程树.
             //InitFlowSortTree();
             //return "设置成功,[" + ad.No + "," + ad.Name + "]重新登录就可以看到.";
@@ -469,7 +275,7 @@ namespace BP.WF.Port.Admin2Group
         /// <returns></returns>
         public override int RetrieveAll()
         {
-            if (BP.Web.WebUser.No.Equals("admin")==true)
+            if (BP.Web.WebUser.No.Equals("admin") == true)
                 return base.RetrieveAll();
 
             QueryObject qo = new QueryObject(this);

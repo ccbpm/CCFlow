@@ -673,37 +673,6 @@ namespace BP.WF
             }
            
         }
-        public void DealYuTong()
-        {
-            //获取设置.
-            string messageUrl =  BP.Difference.SystemConfig.AppSettings["HandlerOfMessage"];
-            if (DataType.IsNullOrEmpty(messageUrl) == true)
-                return;
-
-            string httpUrl = messageUrl;//  + "?Sender=" + BP.Web.WebUser.No + "&OrgNo=" + WebUser.OrgNo + "&ToUserIDs=" + this.SendToEmpNo + "&Title=" + this.Title + "&Docs=" + this.GetValDocText();
-
-            string json = "";
-
-            json = "{";
-            json += " \"token\":\"34c45c2b30512e8a8e10467cee45d7ed\",";
-        //    json += " \"Sender\": \"" + WebUser.No + "\",";
-         //   json += " \"OrgNo\": \"" + WebUser.OrgNo + "\",";
-            json += " \"userid\": \"" + this.SendToEmpNo + "\",";
-          //  json += " \"Tel\": \"" + this.Mobile + "\",";
-            json += " \"title\":\"" + this.Title + "\",";
-            json += " \"MsgFlg\":\"" + this.MsgFlag + "\",";
-           // json += " \"MobileInfo\":\"" + this.MobileInfo + " \",";
-
-            json += " \"MsgAL\": null,";
-
-            json += " \"contents\":\"" + this.Doc + " \",";
-            json += " \"wx\":'true',";
-            json += " \"isEmail\":'true',";
-            json += " \"url\":\"" + this.OpenURL + " \"}";
-
-            //注册到url里面去.
-            BP.WF.Glo.HttpPostConnect(httpUrl, json);
-        }
         /// <summary>
         /// 插入之后执行的方法.
         /// </summary>
@@ -718,11 +687,11 @@ namespace BP.WF
                     return;
                 }
 
-                if (BP.Difference.SystemConfig.CustomerNo.Equals("YuTong") == true)
-                {
-                    DealYuTong();
-                    return;
-                }
+                //if (BP.Difference.SystemConfig.CustomerNo.Equals("YuTong") == true)
+                //{
+                //    DealYuTong();
+                //    return;
+                //}
 
                 if (this.HisEmailSta != MsgSta.UnRun)
                     return;

@@ -191,6 +191,10 @@ namespace BP.Sys
         /// </summary>
         public const string OrgNo = "OrgNo";
         #endregion 链接到其他系统获取数据的属性。
+        /// <summary>
+        /// AtPara
+        /// </summary>
+        public const string AtPara = "AtPara";
     }
     /// <summary>
     /// 用户自定义表
@@ -212,6 +216,7 @@ namespace BP.Sys
                 return base.IsExits;
             }
         }
+
         /// <summary>
         /// 获得外部数据表
         /// </summary>
@@ -415,8 +420,6 @@ namespace BP.Sys
                 if (runObj.Contains("@WebUser.FK_Dept"))
                     runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
-
-
                 if (runObj.Contains("@") == true && ht != null)
                 {
                     foreach (string key in ht.Keys)
@@ -448,7 +451,15 @@ namespace BP.Sys
                 if (runObj.Contains("@") == true)
                     throw new Exception("@外键类型SQL错误," + runObj + "部分查询条件没有被替换.");
 
-                DataTable dt = src.RunSQLReturnTable(runObj);
+                DataTable dt = null;
+                try
+                {
+                    dt = src.RunSQLReturnTable(runObj);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("err@获得SFTable(" + this.No + "," + this.Name + ")出现错误:SQL[" + runObj + "],数据库异常信息:" + ex.Message);
+                }
 
                 if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
                 {
@@ -560,6 +571,8 @@ namespace BP.Sys
                                 sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM Sys_SFTableDtl where FK_SFTable='" + table + "'";
                                 break;
                             case DBType.Oracle:
+                            case DBType.KingBaseR3:
+                            case DBType.KingBaseR6:
                                 sql = "SELECT MAX(" + field + ") +1 AS No FROM Sys_SFTableDtl where FK_SFTable='" + table + "'";
                                 break;
                             case DBType.MySQL:
@@ -599,6 +612,8 @@ namespace BP.Sys
                             sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM " + table;
                             break;
                         case DBType.Oracle:
+                        case DBType.KingBaseR3:
+                        case DBType.KingBaseR6:
                             sql = "SELECT MAX(" + field + ") +1 AS No FROM " + table;
                             break;
                         case DBType.MySQL:
@@ -1035,7 +1050,8 @@ namespace BP.Sys
             get
             {
                 UAC uac = new UAC();
-                uac.OpenForSysAdmin();
+             //   uac.OpenForSysAdmin();
+                uac.Readonly(); //@hongyan.
                 return uac;
             }
         }
@@ -1092,6 +1108,7 @@ namespace BP.Sys
                     return this._enMap;
                 Map map = new Map("Sys_SFTable", "字典表");
 
+
                 map.AddTBStringPK(SFTableAttr.No, null, "表英文名称", true, false, 1, 200, 20);
                 map.AddTBString(SFTableAttr.Name, null, "表中文名称", true, false, 0, 200, 20);
 
@@ -1118,6 +1135,14 @@ namespace BP.Sys
 
 
                 map.AddTBString(SFTableAttr.OrgNo, null, "组织编号", false, false, 0, 100, 20);
+
+                map.AddTBString(SFTableAttr.AtPara, null, "AtPara", false, false, 0, 50, 20);
+
+                for (int i = 0; i < 50; i++)
+                {
+                    map.AddTBString("BH" + i, null, "编号", true, true, 0, 3, 20);
+                    map.AddTBString("Name" + i, null, "名称", true, false, 0, 50, 20);
+                }
 
                 //查找.
                 map.AddSearchAttr(SFTableAttr.FK_SFDBSrc);
@@ -1166,7 +1191,7 @@ namespace BP.Sys
 
         public string DoAttr()
         {
-            return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Comm/EnOnly.htm?EnsName=BP.Sys.SFTable&No=" + this.No;
+            return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Comm/EnOnly.htm?EnName=BP.Sys.SFTable&No=" + this.No;
         }
         public string DoNew()
         {
@@ -1231,7 +1256,7 @@ namespace BP.Sys
         }
         protected override bool beforeInsert()
         {
-            //@hongyan
+            
             if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
             {
                 this.OrgNo = BP.Web.WebUser.OrgNo;
@@ -1247,21 +1272,21 @@ namespace BP.Sys
             {
                 if (this.CodeStruct == CodeStruct.NoName)
                 {
-                    DictDtl dtl = new DictDtl();
+                    SFTableDtl dtl = new SFTableDtl();
                     dtl.setMyPK(this.No + "_001");
                     dtl.BH = "001";
                     dtl.Name = "Item1";
                     dtl.FK_SFTable = this.No;
                     dtl.Insert();
 
-                    dtl = new DictDtl();
+                    dtl = new SFTableDtl();
                     dtl.setMyPK(this.No + "_002");
                     dtl.BH = "002";
                     dtl.Name = "Item2";
                     dtl.FK_SFTable = this.No;
                     dtl.Insert();
 
-                    dtl = new DictDtl();
+                    dtl = new SFTableDtl();
                     dtl.setMyPK(this.No + "_003");
                     dtl.BH = "003";
                     dtl.Name = "Item3";
@@ -1271,7 +1296,7 @@ namespace BP.Sys
 
                 if (this.CodeStruct == CodeStruct.Tree)
                 {
-                    DictDtl dtl = new DictDtl();
+                    SFTableDtl dtl = new SFTableDtl();
                     dtl.setMyPK(this.No + "_001");
                     dtl.BH = "001";
                     dtl.Name = "Item1";
@@ -1279,7 +1304,7 @@ namespace BP.Sys
                     dtl.ParentNo = "0";
                     dtl.Insert();
 
-                    dtl = new DictDtl();
+                    dtl = new SFTableDtl();
                     dtl.setMyPK(this.No + "_002");
                     dtl.BH = "002";
                     dtl.Name = "Item2";
@@ -1287,7 +1312,7 @@ namespace BP.Sys
                     dtl.ParentNo = "001";
                     dtl.Insert();
 
-                    dtl = new DictDtl();
+                    dtl = new SFTableDtl();
                     dtl.setMyPK(this.No + "_003");
                     dtl.BH = "003";
                     dtl.Name = "Item3";
@@ -1381,45 +1406,24 @@ namespace BP.Sys
                 this.DirectDelete();
                 throw ex;
             }
-
             base.afterInsert();
         }
 
-        /// <summary>
-        /// 获得该数据源的数据
-        /// </summary>
-        /// <returns></returns>
-        public DataTable GenerData_bak()
-        {
-            string sql = "";
-            DataTable dt = null;
-            if (this.SrcType == BP.Sys.SrcType.CreateTable)
-            {
-                sql = "SELECT No,Name FROM " + this.SrcTable;
-                dt = this.RunSQLReturnTable(sql);
-            }
-
-            if (this.SrcType == BP.Sys.SrcType.TableOrView)
-            {
-                sql = "SELECT No,Name FROM " + this.SrcTable;
-                dt = this.RunSQLReturnTable(sql);
-            }
-
-            if (dt == null)
-                throw new Exception("@没有判断的数据.");
-
-            dt.Columns[0].ColumnName = "No";
-            dt.Columns[1].ColumnName = "Name";
-
-            return dt;
-        }
         /// <summary>
         /// 返回json.
         /// </summary>
         /// <returns></returns>
         public string GenerDataOfJson()
         {
-            return BP.Tools.Json.ToJson(this.GenerHisDataTable());
+            //  BP.DA.Log.DebugWriteInfo("********  "+this.No+" - "+this.Name+"  ************************   ");
+            // BP.DA.Log.DebugWriteInfo(this.ToJson());
+
+            DataTable dt = this.GenerHisDataTable();
+            string json = BP.Tools.Json.ToJson(dt);
+
+            //   BP.DA.Log.DebugWriteInfo("************************"+ this.No+this.Name+ " ************************ json: \t\n" + //json);
+            return json;
+            // return BP.Tools.Json.ToJson(this.GenerHisDataTable());
         }
         /// <summary>
         /// 初始化数据.
@@ -1484,7 +1488,7 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        ///  重写查询全部的方法 @hongyan, 
+        ///  重写查询全部的方法
         /// </summary>
         /// <returns></returns>
         public override int RetrieveAll()

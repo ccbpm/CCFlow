@@ -24,8 +24,15 @@ namespace BP.WF
         private static StringBuilder GenerHtmlOfFool(MapData mapData, string frmID, Int64 workid, Entity en, string path, string flowNo = null, string FK_Node = null, NodeFormType formType = NodeFormType.FoolForm)
         {
             StringBuilder sb = new StringBuilder();
+
+            //审核意见
+            string sql = "SELECT NDFromT,Msg,RDT,EmpFromT,EmpFrom,NDFrom FROM ND" + int.Parse(flowNo) + "Track WHERE WorkID=" + workid + " AND ActionType=" + (int)ActionType.WorkCheck + " ORDER BY RDT ";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
             //字段集合.
             MapAttrs mapAttrs = new MapAttrs(frmID);
+            //获取当前表单的联动项
+            FrmRBs frmRBs = new FrmRBs(frmID);
             Attrs attrs = null;
             GroupFields gfs = null;
             if (formType == NodeFormType.FoolTruck && DataType.IsNullOrEmpty(FK_Node) == false)
@@ -36,7 +43,7 @@ namespace BP.WF
                 wk.RetrieveFromDBSources();
 
                 /* 求出来走过的表单集合 */
-                string sql = "SELECT NDFrom FROM ND" + int.Parse(flowNo) + "Track A, WF_Node B ";
+                sql = "SELECT NDFrom FROM ND" + int.Parse(flowNo) + "Track A, WF_Node B ";
                 sql += " WHERE A.NDFrom=B.NodeID  ";
                 sql += "  AND (ActionType=" + (int)ActionType.Forward + " OR ActionType=" + (int)ActionType.Start + "  OR ActionType=" + (int)ActionType.Skip + ")  ";
                 sql += "  AND B.FormType=" + (int)NodeFormType.FoolTruck + " "; // 仅仅找累加表单.
@@ -73,13 +80,44 @@ namespace BP.WF
 
                 mapAttrs = new MapAttrs();
                 mapAttrs.RetrieveIn(MapAttrAttr.FK_MapData, "(" + frmIDs + ")", "GroupID, Idx");
+                frmRBs = new FrmRBs();
+                frmRBs.RetrieveIn(FrmRBAttr.FK_MapData, "(" + frmIDs + ")");
             }
             else
             {
                 gfs = new GroupFields(frmID);
                 attrs = en.EnMap.Attrs;
             }
-
+            string hideField = ",";
+            string showField = ",";
+            if (frmRBs.Count > 0)
+            {
+                foreach (MapAttr mapAttr in mapAttrs)
+                {
+                    if (mapAttr.GetParaBoolen("IsEnableJS") == true)
+                    {
+                        string val = en.GetValStrByKey(mapAttr.KeyOfEn);
+                        FrmRB rb = frmRBs.GetEntityByKey(mapAttr.MyPK + "_" + val) as FrmRB;
+                        if (rb == null)
+                            continue;
+                        string cfgs = rb.FieldsCfg;
+                        if (DataType.IsNullOrEmpty(cfgs) == true)
+                            continue;
+                        AtPara atPara = new AtPara(cfgs);
+                        //获取显示的字段
+                        foreach (string key in atPara.HisHT.Keys)
+                        {
+                            int keyVal = atPara.GetValIntByKey(key);
+                            if (keyVal == 0)
+                                continue;
+                            if (keyVal == 3)
+                                hideField += key + ",";
+                            if (keyVal == 2 || keyVal == 4)
+                                showField += key + ",";
+                        }
+                    }
+                }
+            }
             //生成表头.
             String frmName = mapData.Name;
             if (BP.Difference.SystemConfig.AppSettings["CustomerNo"] == "TianYe")
@@ -174,7 +212,9 @@ namespace BP.WF
                     foreach (MapAttr attr in mapAttrs)
                     {
                         //处理隐藏字段，如果是不可见并且是启用的就隐藏.
-                        if (attr.UIVisible == false)
+                        if (attr.UIVisible == false && showField.Contains("," + attr.KeyOfEn + ",") == false)
+                            continue;
+                        if (hideField.Contains("," + attr.KeyOfEn + ",") == true)
                             continue;
                         if (attr.GroupID != attr.GroupID)
                             continue;
@@ -204,12 +244,26 @@ namespace BP.WF
                                         String SigantureNO = en.GetValStrByKey(attr.KeyOfEn);
                                         String src = BP.Difference.SystemConfig.HostURL + "/DataUser/Siganture/";
                                         text = "<img src='" + src + SigantureNO + ".JPG' title='" + SigantureNO + "' onerror='this.src=\"" + src + "Siganture.JPG\"' style='height:50px;'  alt='图片丢失' /> ";
+                                    }else if (attr.UIContralType == UIContralType.SignCheck)//是不是签批字段
+                                    {
+                                        //获取当前节点的审核意见
+                                        DataTable mydt = GetWorkcheckInfoByNodeIDs(dt, en.GetValStrByKey(attr.KeyOfEn));
+                                        text = "<div style='min-height:17px;'>";
+                                        text += "<table style='width:100%'><tbody>";
+                                        foreach (DataRow dr in mydt.Rows)
+                                        {
+                                            text += "<tr><td style='border: 1px solid #D6DDE6;'>";
+                                            text += "<div style='word-wrap: break-word;line-height:20px;padding:5px;padding-left:50px;'><font color='#999'>" + dr[1].ToString() + "</font></div>";
+                                            text += "<div style='text-align:right;padding-right:5px'>" + dr[3].ToString() + "(" + dr[2].ToString() + ")</div>";
+                                            text += "</td></tr>";
+                                        }
+                                        text += "</tbody></table></div>";
                                     }
                                     else
                                     {
                                         text = en.GetValStrByKey(attr.KeyOfEn);
                                     }
-                                    if (attr.IsRichText == true)
+                                    if (attr.TextModel == 3)
                                     {
                                         text = text.Replace("white-space: nowrap;", "");
                                     }
@@ -379,7 +433,7 @@ namespace BP.WF
 
                                         text = dtl.GetValStrByKey(item.KeyOfEn);
 
-                                        if (item.IsRichText == true)
+                                        if (item.TextModel == 3)
                                         {
                                             text = text.Replace("white-space: nowrap;", "");
                                         }
@@ -411,6 +465,15 @@ namespace BP.WF
                             if (item.UIContralType == UIContralType.DDL)
                             {
                                 sb.Append("<td>" + text + "</td>");
+                                continue;
+                            }
+                            //Hongyan
+                            if (item.MyDataType == DataType.AppBoolean)
+                            {
+                                if (DataType.IsNullOrEmpty(text) || text == "0")
+                                    sb.Append("<td>[&#10005]</td>");
+                                else
+                                    sb.Append("<td>[&#10004]</td>");
                                 continue;
                             }
 
@@ -590,7 +653,6 @@ namespace BP.WF
                 {
                     NodeWorkCheck fwc = new NodeWorkCheck(frmID);
 
-                    String sql = "";
                     DataTable dtTrack = null;
                     Boolean bl = false;
                     try
@@ -617,8 +679,7 @@ namespace BP.WF
                     String html = ""; // "<table style='width:100%;valign:middle;height:auto;' >";
 
                     //#region 生成审核信息.
-                    sql = "SELECT NDFromT,Msg,RDT,EmpFromT,EmpFrom,NDFrom FROM ND" + int.Parse(flowNo) + "Track WHERE WorkID=" + workid + " AND ActionType=" + (int)ActionType.WorkCheck + " ORDER BY RDT ";
-                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                    
 
                     //获得当前待办的人员,把当前审批的人员排除在外,不然就有默认同意的意见可以打印出来.
                     sql = "SELECT FK_Emp, FK_Node FROM WF_GenerWorkerList WHERE IsPass!=1 AND WorkID=" + workid;
@@ -702,7 +763,7 @@ namespace BP.WF
         }
         
         /// <summary>
-        /// @hongyan, 这里做了一些不为空的判断，获得document的元素的时候.
+        /// 这里做了一些不为空的判断，获得document的元素的时候.
         /// 注意同步.
         /// </summary>
         /// <param name="mapData"></param>
@@ -1024,7 +1085,7 @@ namespace BP.WF
                                 {
                                     text = gedtl.GetValStrByKey(attr.KeyOfEn);
                                 }
-                                if (attr.IsRichText == true)
+                                if (attr.TextModel == 3)
                                 {
                                     text = text.Replace("white-space: nowrap;", "");
                                 }
@@ -1233,9 +1294,7 @@ namespace BP.WF
 
             Hashtable ht = new Hashtable();
             #region 单表单打印
-            if ((int)node.HisFormType == (int)NodeFormType.FoolForm
-                || (int)node.HisFormType == (int)NodeFormType.RefOneFrmTree || (int)node.HisFormType == (int)NodeFormType.FoolTruck
-                || node.HisFormType == NodeFormType.Develop)
+            if (node.HisFormType == NodeFormType.RefOneFrmTree || node.IsNodeFrm==true)
             {
                 resultMsg = setPDFPath("ND" + node.NodeID, workid, flowNo, gwf);
                 if (resultMsg.IndexOf("err@") != -1)
@@ -1373,7 +1432,7 @@ namespace BP.WF
                 {
                     (new FastZip()).CreateZip(finfo.FullName, pdfPath, true, "");
 
-                    ht.Add("zip", BP.Difference.SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + frmID + "/" + pdfName + ".zip");
+                    ht.Add("zip", BP.Difference.SystemConfig.HostURLOfBS + "/DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/" + pdfName + ".zip");
                 }
                 catch (Exception ex)
                 {
@@ -1910,6 +1969,13 @@ namespace BP.WF
                             mapData.HisFrmType = FrmType.FoolForm;
                         else if (nd.HisFormType == NodeFormType.SelfForm)
                             mapData.HisFrmType = FrmType.Url;
+
+                        //如果是应用表单.
+                        if (nd.HisFormType == NodeFormType.RefNodeFrm)
+                        {
+                            MapData myMapData = new MapData(nd.NodeFrmID);
+                            mapData.HisFrmType = myMapData.HisFrmType;
+                        }
                     }
 
                     if (mapData.HisFrmType == FrmType.FoolForm)

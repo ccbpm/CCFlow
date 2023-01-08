@@ -97,7 +97,7 @@ namespace BP.WF.DTS
             dsSysTables.Tables.Add(dt);
 
             //Sys_Enum
-            dt = DBAccess.RunSQLReturnTable("SELECT * FROM Sys_Enum");
+            dt = DBAccess.RunSQLReturnTable("SELECT * FROM " + BP.Sys.Base.Glo.SysEnum() );
             dt.TableName = "Sys_Enum";
             dsSysTables.Tables.Add(dt);
 

@@ -103,7 +103,7 @@ namespace BP.WF.Rpt
 
                 map.AddDDLSysEnum(RptDfineAttr.MyDeptRole, 0, "本部门发起的流程", true,
                     true, RptDfineAttr.MyDeptRole,
-                    "@0=仅部门领导可以查看@1=部门下所有的人都可以查看@2=本部门里指定岗位的人可以查看", true);
+                    "@0=仅部门领导可以查看@1=部门下所有的人都可以查看@2=本部门里指定角色的人可以查看", true);
                 
                 //map.AddTBString(RptDfineAttr.PTable, null, "物理表", true, false, 0, 500, 20);
                 //map.AddTBString(RptDfineAttr.Note, null, "备注", true, false, 0, 500, 20);
@@ -111,7 +111,7 @@ namespace BP.WF.Rpt
 
                 #region 绑定的关联关系.
                 map.AttrsOfOneVSM.Add(new RptStations(), new Stations(), RptStationAttr.FK_Rpt, RptStationAttr.FK_Station,
-                DeptAttr.Name, DeptAttr.No, "岗位权限");
+                DeptAttr.Name, DeptAttr.No, "角色权限");
                 map.AttrsOfOneVSM.Add(new RptDepts(), new Depts(), RptDeptAttr.FK_Rpt, RptDeptAttr.FK_Dept,
                     DeptAttr.Name, DeptAttr.No, "部门权限");
                 map.AttrsOfOneVSM.Add(new RptEmps(), new Emps(), RptEmpAttr.FK_Rpt, RptEmpAttr.FK_Emp,

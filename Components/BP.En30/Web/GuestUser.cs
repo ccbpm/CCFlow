@@ -72,6 +72,7 @@ namespace BP.Web
                 Dictionary<string, string> cookieValues = new Dictionary<string, string>();
                 cookieValues.Add("GuestNo", guestNo);
                 cookieValues.Add("GuestName", HttpUtility.UrlEncode(guestName));
+                cookieValues.Add("Token", WebUser.Token);
                 HttpContextHelper.ResponseCookieAdd(cookieValues, null, "CCS");
             }
 

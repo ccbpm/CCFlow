@@ -114,6 +114,7 @@ namespace BP.En
                 this.SetValByKey(EntityTreeAttr.ICON, value);
             }
         }
+        
         /// <summary>
         /// 顺序号
         /// </summary>
@@ -230,7 +231,6 @@ namespace BP.En
         /// <returns></returns>
         public EntityTree DoCreateSubNode(string name=null)
         {
-            
             EntityTree en = this.CreateInstance() as EntityTree;
             en.Copy(this);
             en.No = DBAccess.GenerOID(this.ToString()).ToString();  

@@ -99,6 +99,7 @@ namespace BP.CCBill
         { 
             //当前表单的信息
             MapData mapData = new MapData(this.FrmID);
+
             #region 第1步: 创建一个流程.
             //首先创建流程. 参数都通过 httrp传入了。
             BP.WF.HttpHandler.WF_Admin_CCBPMDesigner_FlowDevModel handler = new WF_Admin_CCBPMDesigner_FlowDevModel();
@@ -147,6 +148,7 @@ namespace BP.CCBill
             en.Tag1 = flowNo; //标记为空.
             en.MethodID = flowNo; // 就是流程编号.
             en.FlowNo = flowNo;
+            en.SetPara("EnName", "TS.CCBill.MethodFlowEtc"); //新增.
             en.Insert();
 
 
@@ -278,8 +280,8 @@ namespace BP.CCBill
             en.MethodID = flowNo; // 就是流程编号.
             
             en.FlowNo = flowNo;
+            en.SetPara("EnName", "TS.CCBill.MethodFlowBaseData");
             en.Insert();
-
             
             ////创建查询菜单.放入到与该实体平行的位置.
             //BP.CCFast.CCMenu.Menu menu = new BP.CCFast.CCMenu.Menu();

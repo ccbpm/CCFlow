@@ -186,7 +186,7 @@ namespace BP.WF.HttpHandler
             ma.Delete();
             return "删除成功.";
         }
-      
+
         /// <summary>
         /// 是不是第一次进来.
         /// </summary>
@@ -544,7 +544,7 @@ namespace BP.WF.HttpHandler
                 ext.AttrsOfActive = dtlKey;
                 ext.DBType = "0";
                 ext.FK_DBSrc = "local";
-                ext.Doc = "Select IntKey as No, Lab as Name From Sys_Enum Where EnumKey='" + uiBindKey + "' AND IntKey>=@Key*100 AND IntKey< (@Key*100/#100)";
+                ext.Doc = "Select IntKey as No, Lab as Name From " + BP.Sys.Base.Glo.SysEnum() + " Where EnumKey='" + uiBindKey + "' AND IntKey>=@Key*100 AND IntKey< (@Key*100/#100)";
                 ext.setFK_MapData(this.FK_MapData);
                 ext.AttrOfOper = this.KeyOfEn;
                 ext.ExtType = "ActiveDDL";
@@ -552,7 +552,7 @@ namespace BP.WF.HttpHandler
             }
             return this.FK_MapData + "_" + this.KeyOfEn;
         }
- 
+
         /// <summary>
         /// 保存空白的分组.
         /// </summary>
@@ -582,7 +582,7 @@ namespace BP.WF.HttpHandler
         {
             string lab = this.GetValFromFrmByKey("TB_Check_Name");
             if (lab.Length == 0)
-                return "err@审核岗位不能为空";
+                return "err@审核角色不能为空";
 
             string prx = this.GetValFromFrmByKey("TB_Check_No");
             if (prx.Length == 0)
@@ -600,7 +600,7 @@ namespace BP.WF.HttpHandler
 
             return "保存成功";
         }
-       
+
         /// <summary>
         /// 保存分组
         /// </summary>
@@ -670,7 +670,7 @@ namespace BP.WF.HttpHandler
             {
                 string str = this.GetRequestVal("FK_MapData");  //context.Request.QueryString["FK_MapData"];
                 if (DataType.IsNullOrEmpty(str))
-                    return "abc";
+                    str = this.GetRequestVal("FrmID");
                 return str;
             }
         }
@@ -917,7 +917,7 @@ namespace BP.WF.HttpHandler
 
             if (this.MyPK == null)
             {
-                mf.URL = "http://ccflow.org";
+                mf.URL = "http://citydo.com.cn";
                 mf.W = 400;
                 mf.H = 300;
                 mf.setName("我的框架.");
@@ -1522,7 +1522,7 @@ namespace BP.WF.HttpHandler
             // DataType.WriteFile("c:\\FieldInitGroupAndSysEnum.json", json);
             return json;
         }
- 
+
         /// <summary>
         /// 保存枚举值.
         /// </summary>
@@ -1713,126 +1713,126 @@ namespace BP.WF.HttpHandler
         /// 执行保存.
         /// </summary>
         /// <returns></returns>
-        public string EditF_Save()
-        {
-            try
-            {
-                //定义变量.
-                int fType = int.Parse(this.GetRequestVal("FType"));  //字段数据物理类型
-                FieldTypeS lgType = (FieldTypeS)int.Parse(this.GetRequestVal("LGType")); //逻辑类型.
-                string uiBindKey = this.GetRequestVal("UIBindKey");// context.Request.QueryString["UIBindKey"];
+        //public string EditF_Save()
+        //{
+        //    try
+        //    {
+        //        //定义变量.
+        //        int fType = int.Parse(this.GetRequestVal("FType"));  //字段数据物理类型
+        //        FieldTypeS lgType = (FieldTypeS)int.Parse(this.GetRequestVal("LGType")); //逻辑类型.
+        //        string uiBindKey = this.GetRequestVal("UIBindKey");// context.Request.QueryString["UIBindKey"];
 
-                //赋值.
-                MapAttr attr = new MapAttr();
-                attr.setKeyOfEn(this.KeyOfEn);
-                attr.setFK_MapData(this.FK_MapData);
-                attr.LGType = lgType; //逻辑类型.
-                attr.UIBindKey = uiBindKey; //绑定的枚举或者外键.
-                attr.MyDataType = fType; //物理类型.
+        //        //赋值.
+        //        MapAttr attr = new MapAttr();
+        //        attr.setKeyOfEn(this.KeyOfEn);
+        //        attr.setFK_MapData(this.FK_MapData);
+        //        attr.LGType = lgType; //逻辑类型.
+        //        attr.UIBindKey = uiBindKey; //绑定的枚举或者外键.
+        //        attr.MyDataType = fType; //物理类型.
 
-                if (DataType.IsNullOrEmpty(this.MyPK) == false)
-                {
-                    attr.setMyPK(this.MyPK);
-                    attr.RetrieveFromDBSources();
-                }
+        //        if (DataType.IsNullOrEmpty(this.MyPK) == false)
+        //        {
+        //            attr.setMyPK(this.MyPK);
+        //            attr.RetrieveFromDBSources();
+        //        }
 
-                attr.setFK_MapData(this.FK_MapData);
-                attr.MyDataType = fType; //数据类型.
-                attr.Name = this.GetValFromFrmByKey("TB_Name");
+        //        attr.setFK_MapData(this.FK_MapData);
+        //        attr.MyDataType = fType; //数据类型.
+        //        attr.Name = this.GetValFromFrmByKey("TB_Name");
 
-                attr.setKeyOfEn(this.GetValFromFrmByKey("TB_KeyOfEn"));
-                attr.ColSpan = this.GetValIntFromFrmByKey("DDL_ColSpan");
+        //        attr.setKeyOfEn(this.GetValFromFrmByKey("TB_KeyOfEn"));
+        //        attr.ColSpan = this.GetValIntFromFrmByKey("DDL_ColSpan");
 
-                if (attr.ColSpan == 0)
-                    attr.ColSpan = 1;
+        //        if (attr.ColSpan == 0)
+        //            attr.ColSpan = 1;
 
-                attr.Para_FontSize = this.GetValIntFromFrmByKey("TB_FontSize"); //字体大小.
-                attr.Para_Tip = this.GetValFromFrmByKey("TB_Tip"); //操作提示.
+        //        attr.Para_FontSize = this.GetValIntFromFrmByKey("TB_FontSize"); //字体大小.
+        //        attr.Para_Tip = this.GetValFromFrmByKey("TB_Tip"); //操作提示.
 
-                //默认值.
-                attr.DefVal = this.GetValFromFrmByKey("TB_DefVal");
-
-
-                //对于明细表就可能没有值.
-                try
-                {
-                    //分组.
-                    if (this.GetValIntFromFrmByKey("DDL_GroupID") != 0)
-                        attr.GroupID = this.GetValIntFromFrmByKey("DDL_GroupID"); //在那个分组里？
-                }
-                catch
-                {
-
-                }
+        //        //默认值.
+        //        attr.DefVal = this.GetValFromFrmByKey("TB_DefVal");
 
 
-                //把必填项拿出来，所有字段都可以设置成必填项 杨玉慧
-                attr.UIIsInput = this.GetValBoolenFromFrmByKey("CB_IsInput");   //是否是必填项.
+        //        //对于明细表就可能没有值.
+        //        try
+        //        {
+        //            //分组.
+        //            if (this.GetValIntFromFrmByKey("DDL_GroupID") != 0)
+        //                attr.GroupID = this.GetValIntFromFrmByKey("DDL_GroupID"); //在那个分组里？
+        //        }
+        //        catch
+        //        {
 
-                if (attr.MyDataType == DataType.AppString && lgType == FieldTypeS.Normal)
-                {
-                    attr.IsRichText = this.GetValBoolenFromFrmByKey("CB_IsRichText"); //是否是富文本？
-                    attr.IsSupperText = this.GetValIntFromFrmByKey("CB_IsSupperText"); //是否是超大文本？
-
-
-                    //高度.
-                    attr.UIHeightInt = this.GetValIntFromFrmByKey("DDL_Rows") * 23;
-
-                    //最大最小长度.
-                    attr.setMaxLen(this.GetValIntFromFrmByKey("TB_MaxLen"));
-                    attr.setMinLen(this.GetValIntFromFrmByKey("TB_MinLen"));
-
-                    attr.UIWidth = this.GetValIntFromFrmByKey("TB_UIWidth"); //宽度.
-                }
-
-                switch (attr.MyDataType)
-                {
-                    case DataType.AppInt:
-                    case DataType.AppFloat:
-                    case DataType.AppDouble:
-                    case DataType.AppMoney:
-                        attr.IsSum = this.GetValBoolenFromFrmByKey("CB_IsSum");
-                        break;
-                }
-
-                //获取宽度.
-                try
-                {
-                    attr.UIWidth = this.GetValIntFromFrmByKey("TB_UIWidth"); //宽度.
-                }
-                catch
-                {
-                }
+        //        }
 
 
-                //是否可用？所有类型的属性，都需要。
-                int isEnable = this.GetValIntFromFrmByKey("RB_UIIsEnable");
-                if (isEnable == 0)
-                    attr.setUIIsEnable(false);
-                else
-                    attr.setUIIsEnable(true);
+        //        //把必填项拿出来，所有字段都可以设置成必填项 杨玉慧
+        //        attr.UIIsInput = this.GetValBoolenFromFrmByKey("CB_IsInput");   //是否是必填项.
 
-                //仅仅对普通类型的字段需要.
-                if (lgType == FieldTypeS.Normal)
-                {
-                    //是否可见?
-                    int visable = this.GetValIntFromFrmByKey("RB_UIVisible");
-                    if (visable == 0)
-                        attr.setUIVisible(false);
-                    else
-                        attr.setUIVisible(true);
-                }
+        //        if (attr.MyDataType == DataType.AppString && lgType == FieldTypeS.Normal)
+        //        {
+        //            attr.IsRichText = this.GetValBoolenFromFrmByKey("CB_IsRichText"); //是否是富文本？
+        //            attr.IsSupperText = this.GetValIntFromFrmByKey("CB_IsSupperText"); //是否是超大文本？
 
-                attr.setMyPK(this.FK_MapData + "_" + this.KeyOfEn);
-                attr.Save();
 
-                return "保存成功.";
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-        }
+        //            //高度.
+        //            attr.UIHeightInt = this.GetValIntFromFrmByKey("DDL_Rows") * 23;
+
+        //            //最大最小长度.
+        //            attr.setMaxLen(this.GetValIntFromFrmByKey("TB_MaxLen"));
+        //            attr.setMinLen(this.GetValIntFromFrmByKey("TB_MinLen"));
+
+        //            attr.UIWidth = this.GetValIntFromFrmByKey("TB_UIWidth"); //宽度.
+        //        }
+
+        //        switch (attr.MyDataType)
+        //        {
+        //            case DataType.AppInt:
+        //            case DataType.AppFloat:
+        //            case DataType.AppDouble:
+        //            case DataType.AppMoney:
+        //                attr.IsSum = this.GetValBoolenFromFrmByKey("CB_IsSum");
+        //                break;
+        //        }
+
+        //        //获取宽度.
+        //        try
+        //        {
+        //            attr.UIWidth = this.GetValIntFromFrmByKey("TB_UIWidth"); //宽度.
+        //        }
+        //        catch
+        //        {
+        //        }
+
+
+        //        //是否可用？所有类型的属性，都需要。
+        //        int isEnable = this.GetValIntFromFrmByKey("RB_UIIsEnable");
+        //        if (isEnable == 0)
+        //            attr.setUIIsEnable(false);
+        //        else
+        //            attr.setUIIsEnable(true);
+
+        //        //仅仅对普通类型的字段需要.
+        //        if (lgType == FieldTypeS.Normal)
+        //        {
+        //            //是否可见?
+        //            int visable = this.GetValIntFromFrmByKey("RB_UIVisible");
+        //            if (visable == 0)
+        //                attr.setUIVisible(false);
+        //            else
+        //                attr.setUIVisible(true);
+        //        }
+
+        //        attr.setMyPK(this.FK_MapData + "_" + this.KeyOfEn);
+        //        attr.Save();
+
+        //        return "保存成功.";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ex.Message;
+        //    }
+        //}
         /// <summary>
         /// 该方法有2处调用。
         /// 1，修改字段。
@@ -1930,7 +1930,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public void DownTempFrm()
         {
-            string fileFullName =  BP.Difference.SystemConfig.PathOfWebApp + "Temp/" + this.FK_MapData + ".xml";
+            string fileFullName = BP.Difference.SystemConfig.PathOfWebApp + "Temp/" + this.FK_MapData + ".xml";
 
             HttpContextHelper.ResponseWriteFile(fileFullName, this.FK_MapData + ".xml");
         }
@@ -2274,7 +2274,7 @@ namespace BP.WF.HttpHandler
                 List<DataRow> wsRows = new List<DataRow>();
                 foreach (DataRow r in dt.Rows)
                 {
-                    if (Equals(r["DBSrcType"], (int)DBSrcType.WebServices))
+                    if (Equals(r["DBSrcType"], DBSrcType.WebServices))
                         wsRows.Add(r);
                 }
 
@@ -2489,7 +2489,7 @@ namespace BP.WF.HttpHandler
 
         public string MapDataVer_SetMainVer()
         {
-            MapDataVer mdVer =new  MapDataVer(this.MyPK);
+            MapDataVer mdVer = new MapDataVer(this.MyPK);
             #region 1.变更主版本
             string sql = "UPDATE Sys_MapDataVer SET IsRel=0 WHERE FrmID='" + mdVer.FrmID + "'";
             DBAccess.RunSQL(sql);
@@ -2535,7 +2535,7 @@ namespace BP.WF.HttpHandler
             frmNodes.Retrieve(FrmNodeAttr.FK_Frm, mainData.No);
 
             FrmFields frmFields = new FrmFields();
-            string whereFK_MapData = "'"+mainData.No+"'";
+            string whereFK_MapData = "'" + mainData.No + "'";
             dtls = new MapDtls(mainData.No);
             foreach (MapDtl dtl in dtls)
             {

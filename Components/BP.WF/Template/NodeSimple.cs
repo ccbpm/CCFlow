@@ -86,6 +86,25 @@ namespace BP.WF.Template
                 this.SetValByKey(NodeAttr.Y, value);
             }
         }
+
+        public string HisToNDs
+        {
+            get
+            {
+                return this.GetValStrByKey(NodeAttr.HisToNDs);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.HisToNDs, value);
+            }
+        }
+        public bool IsResetAccepter
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeAttr.IsResetAccepter);
+            }
+        }
         #endregion 节点属性.
 
         #region 构造函数
@@ -125,6 +144,8 @@ namespace BP.WF.Template
 
                 map.AddTBInt(NodeAttr.DeliveryWay, 0, "运行模式", true, true);
                 map.AddTBString(NodeAttr.DeliveryParas, null, "参数", true, false, 0, 300, 10);
+                map.AddTBString(NodeAttr.HisToNDs, null, "转到的节点", false, false, 0, 50, 10);
+                map.AddBoolean(NodeAttr.IsResetAccepter, false, "可逆节点时重新计算接收人?", true, true, true);
 
                 map.AddTBInt(NodeAttr.Step, 0, "步骤", true, true);
                 #endregion 基本属性.

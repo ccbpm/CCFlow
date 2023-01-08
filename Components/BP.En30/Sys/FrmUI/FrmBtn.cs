@@ -81,6 +81,17 @@ namespace BP.Sys.FrmUI
                 return this.GetValStrByKey(FrmBtnAttr.FK_MapData);
             }
         }
+        public string KeyOfEn
+        {
+            get
+            {
+                return this.GetValStringByKey(MapAttrAttr.KeyOfEn);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.KeyOfEn, value);
+            }
+        }
         public override UAC HisUAC
         {
             get
@@ -162,10 +173,21 @@ namespace BP.Sys.FrmUI
                 //map.AddTBString(FrmBtnAttr.MsgOK, null, "运行成功提示", true, false, 0, 500, 20);
                 //map.AddTBString(FrmBtnAttr.MsgErr, null, "运行失败提示", true, false, 0, 500, 20);
                 //map.AddTBString(FrmBtnAttr.BtnID, null, "按钮ID", true, false, 0, 128, 20);
+                RefMethod rm = new RefMethod();
+                rm = new RefMethod();
+                rm.Title = "填充其他控件";
+                rm.ClassMethodName = this.ToString() + ".DoFullCtrl()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
 
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+
+        public string DoFullCtrl()
+        {
+            return "../../Admin/FoolFormDesigner/FullData/Main.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefPK=" + this.MyPK+"&UIControlType=18";
         }
 
         protected override void afterInsertUpdateAction()

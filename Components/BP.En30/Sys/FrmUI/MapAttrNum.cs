@@ -134,10 +134,11 @@ namespace BP.Sys.FrmUI
                 Map map = new Map("Sys_MapAttr", "数值字段");
                 map.IndexField = MapAttrAttr.FK_MapData;
 
-                #region 基本信息.
-                map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
-                map.AddTBString(MapAttrAttr.FK_MapData, null, "实体标识", false, false, 1, 100, 20);
 
+                #region 基本信息.
+                map.AddGroupAttr("基本属性");
+                map.AddMyPK();
+                map.AddTBString(MapAttrAttr.FK_MapData, null, "实体标识", false, false, 1, 100, 20);
                 map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
 
@@ -155,20 +156,26 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
-                map.AddBoolean(MapAttrAttr.IsSecret, false, "是否保密？", true, true);
+                //map.AddBoolean(MapAttrAttr.IsSecret, false, "是否保密？", true, true);
                 map.AddBoolean("ExtIsSum", false, "是否显示合计(对从表有效)", true, true);
                 map.SetHelperAlert("ExtIsSum", "如果是从表，就需要显示该从表的合计,在从表的底部.");
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
+                map.AddTBString("NumMin", null, "最小值", true, false, 0, 400, 20);
+                map.AddTBString("NumMax", null, "最大值", true, false, 0, 400, 20);
+                map.AddTBFloat("NumStepLength", 1, "步长", true, false);
+
+                map.AddTBAtParas(4000);
                 #endregion 基本信息.
 
-                #region 傻瓜表单
+                #region 傻瓜表单 
+                map.AddGroupAttr("傻瓜表单");
+
                 map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "TextBox单元格数", true, true, "ColSpanAttrDT",
                    "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
 
                 //文本占单元格数量
                 map.AddDDLSysEnum(MapAttrAttr.LabelColSpan, 1, "Label文本单元格数", true, true, "ColSpanAttrString",
                     "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
-
                 map.AddTBFloat(MapAttrAttr.UIWidth, 80, "宽度", true, false);
                 map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, true);
 
@@ -181,7 +188,11 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSQL(MapAttrAttr.CSSCtrl, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
                 #endregion 傻瓜表单
 
+                //参数字段.
+                map.ParaFields = "NumMin,NumMax,NumStepLength";
+
                 #region 执行的方法.
+                map.AddGroupMethod("基本功能");
                 RefMethod rm = new RefMethod();
                 rm = new RefMethod();
                 rm.Title = "正则表达式";
@@ -242,8 +253,8 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "帮助弹窗显示";
-                rm.ClassMethodName = this.ToString() + ".DoFieldBigHelper()";
+                rm.Title = "字段名链接";
+                rm.ClassMethodName = this.ToString() + ".DoFieldNameLink()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "icon-settings";
                 map.AddRefMethod(rm);
@@ -254,9 +265,9 @@ namespace BP.Sys.FrmUI
                 return this._enMap;
             }
         }
-        public string DoFieldBigHelper()
+        public string DoFieldNameLink()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/FieldBigHelper.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/FieldNameLink.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
 
         protected override bool beforeUpdateInsertAction()
@@ -349,7 +360,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string BindFunction()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&T=" + DateTime.Now.ToString();
         }
         #endregion
 

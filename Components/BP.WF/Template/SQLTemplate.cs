@@ -75,7 +75,6 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("WF_SQLTemplate", "SQL模板");
-                
                 map.CodeStruct = "3";
 
                 map.AddTBStringPK(SQLTemplateAttr.No, null, "编号", true, true, 3, 3, 3);
@@ -83,9 +82,7 @@ namespace BP.WF.Template
                     "@0=方向条件@1=接受人规则@2=下拉框数据过滤@3=级联下拉框@4=PopVal开窗返回值@5=人员选择器人员选择范围");
 
                 map.AddTBString(SQLTemplateAttr.Name, null, "SQL说明", true, false, 0, 200, 20,true);
-
                 map.AddTBStringDoc(SQLTemplateAttr.Docs, null, "SQL模版", true, false,true);
-
 
                 //查询条件.
                 map.AddSearchAttr(SQLTemplateAttr.SQLType);

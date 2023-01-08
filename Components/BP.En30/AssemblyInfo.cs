@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("成都高凌信息技术有限公司")]
 [assembly: AssemblyProduct("BP.En30")]
-[assembly: AssemblyCopyright("高凌软件2003-2020")]
+[assembly: AssemblyCopyright("高凌软件2003-2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]	
 

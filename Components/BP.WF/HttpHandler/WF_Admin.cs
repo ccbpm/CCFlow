@@ -197,6 +197,8 @@ namespace BP.WF.HttpHandler
                                     sql = "SELECT  No as FK_Emp FROM Port_Emp WHERE ROWNUM < 300 AND OrgNo='" + WebUser.OrgNo + "'";
                                 break;
                             case DBType.MySQL:
+                            case DBType.KingBaseR3:
+                            case DBType.KingBaseR6:
                                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                                     sql = "SELECT  No as FK_Emp FROM Port_Emp limit 0,300 ";
                                 else
@@ -404,7 +406,7 @@ namespace BP.WF.HttpHandler
 
             string add = "+";
 
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX || SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6)
                 add = "||";
 
             if (templateType == "DDLFullCtrl")

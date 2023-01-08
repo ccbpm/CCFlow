@@ -337,8 +337,10 @@ namespace BP.WF
         /// <summary>
         /// 产生单据编号
         /// </summary>
-        /// <param name="billFormat"></param>
+        /// <param name="billNo"></param>
+        /// <param name="workid"></param>
         /// <param name="en"></param>
+        /// <param name="flowPTable"></param>
         /// <returns></returns>
         public static string GenerBillNo(string billNo, Int64 workid, Entity en, string flowPTable)
         {
@@ -348,20 +350,22 @@ namespace BP.WF
             if (billNo.Contains("@"))
                 billNo = BP.WF.Glo.DealExp(billNo, en, null);
 
+            DateTime dt = DateTime.Now;
+
             /*如果，Bill 有规则 */
-            billNo = billNo.Replace("{YYYY}", DateTime.Now.ToString("yyyy"));
-            billNo = billNo.Replace("{yyyy}", DateTime.Now.ToString("yyyy"));
+            billNo = billNo.Replace("{YYYY}", dt.ToString("yyyy"));
+            billNo = billNo.Replace("{yyyy}", dt.ToString("yyyy"));
 
-            billNo = billNo.Replace("{yy}", DateTime.Now.ToString("yy"));
-            billNo = billNo.Replace("{YY}", DateTime.Now.ToString("yy"));
+            billNo = billNo.Replace("{yy}", dt.ToString("yy"));
+            billNo = billNo.Replace("{YY}", dt.ToString("yy"));
 
-            billNo = billNo.Replace("{MM}", DateTime.Now.ToString("MM"));
-            billNo = billNo.Replace("{mm}", DateTime.Now.ToString("MM"));
+            billNo = billNo.Replace("{MM}", dt.ToString("MM"));
+            billNo = billNo.Replace("{mm}", dt.ToString("MM"));
 
-            billNo = billNo.Replace("{DD}", DateTime.Now.ToString("dd"));
-            billNo = billNo.Replace("{dd}", DateTime.Now.ToString("dd"));
-            billNo = billNo.Replace("{HH}", DateTime.Now.ToString("HH"));
-            billNo = billNo.Replace("{hh}", DateTime.Now.ToString("HH"));
+            billNo = billNo.Replace("{DD}", dt.ToString("dd"));
+            billNo = billNo.Replace("{dd}", dt.ToString("dd"));
+            billNo = billNo.Replace("{HH}", dt.ToString("HH"));
+            billNo = billNo.Replace("{hh}", dt.ToString("HH"));
 
             billNo = billNo.Replace("{LSH}", workid.ToString());
             billNo = billNo.Replace("{WorkID}", workid.ToString());
@@ -372,15 +376,16 @@ namespace BP.WF
                 string val = DBAccess.RunSQLReturnStringIsNull("SELECT Zi FROM Port_Dept WHERE No='" + WebUser.FK_Dept + "'", "");
                 billNo = billNo.Replace("@WebUser.DeptZi", val.ToString());
             }
-
+            int num = 0;
+            string sql = "";
             if (billNo.Contains("{ParentBillNo}"))
             {
                 string pWorkID = DBAccess.RunSQLReturnStringIsNull("SELECT PWorkID FROM " + flowPTable + " WHERE   WFState >1 AND  OID=" + workid, "0");
                 string parentBillNo = DBAccess.RunSQLReturnStringIsNull("SELECT BillNo FROM WF_GenerWorkFlow WHERE WorkID=" + pWorkID, "");
                 billNo = billNo.Replace("{ParentBillNo}", parentBillNo);
 
-                string sql = "";
-                int num = 0;
+                sql = "";
+                num = 0;
                 for (int i = 2; i < 9; i++)
                 {
                     if (billNo.Contains("{LSH" + i + "}") == false)
@@ -392,125 +397,123 @@ namespace BP.WF
                     billNo = billNo.Replace("{LSH" + i + "}", "");
                     break;
                 }
+                return billNo;
+            }
+
+            num = 0;
+            string supposeBillNo = billNo;  //假设单据号，长度与真实单据号一致
+            List<KeyValuePair<int, int>> loc = new List<KeyValuePair<int, int>>();  //流水号位置，流水号位数
+            string lsh; //流水号设置码
+            int lshIdx = -1;    //流水号设置码所在位置
+
+            for (int i = 2; i < 9; i++)
+            {
+                lsh = "{LSH" + i + "}";
+
+                if (!supposeBillNo.Contains(lsh))
+                    continue;
+
+                while (supposeBillNo.Contains(lsh))
+                {
+                    //查找流水号所在位置
+                    lshIdx = supposeBillNo.IndexOf(lsh);
+                    //将找到的流水号码替换成假设的流水号
+                    supposeBillNo = (lshIdx == 0 ? "" : supposeBillNo.Substring(0, lshIdx))
+                                    + string.Empty.PadLeft(i, '_')
+                                    +
+                                    (lshIdx + 6 < supposeBillNo.Length
+                                         ? supposeBillNo.Substring(lshIdx + 6)
+                                         : "");
+                    //保存当前流程号所处位置，及流程号长度，以便之后使用替换成正确的流水号
+                    loc.Add(new KeyValuePair<int, int>(lshIdx, i));
+                }
+            }
+
+            //数据库中查找符合的单据号集合,NOTE:此处需要注意，在LIKE中带有左广方括号时，要使用一对广播号将其转义
+            supposeBillNo = supposeBillNo.Replace("[", "[[]");
+            sql = "SELECT Max(BillNo) FROM " + flowPTable + " WHERE BillNo LIKE '" + supposeBillNo + "%'";
+            if (flowPTable.ToLower() == "wf_generworkflow")
+                sql += " AND WorkID <> " + workid + " AND WFState > 1 ";
+            else
+                sql += " AND OID <> " + workid + " ";
+           // sql += " ORDER BY BillNo ";
+
+            string maxBillNo = DBAccess.RunSQLReturnString(sql);
+            int ilsh = 0;
+            if (string.IsNullOrWhiteSpace(maxBillNo))
+            {
+                //没有数据，则所有流水号都从1开始
+                foreach (KeyValuePair<int, int> kv in loc)
+                {
+                    supposeBillNo = (kv.Key == 0 ? "" : supposeBillNo.Substring(0, kv.Key))
+                                    + "1".PadLeft(kv.Value, '0')
+                                    +
+                                    (kv.Key + kv.Value < supposeBillNo.Length
+                                         ? supposeBillNo.Substring(kv.Key + kv.Value)
+                                         : "");
+                }
             }
             else
             {
-                string sql = "";
-                int num = 0;
-                string supposeBillNo = billNo;  //假设单据号，长度与真实单据号一致
-                List<KeyValuePair<int, int>> loc = new List<KeyValuePair<int, int>>();  //流水号位置，流水号位数
-                string lsh; //流水号设置码
-                int lshIdx = -1;    //流水号设置码所在位置
+                //有数据，则从右向左开始判断流水号，当右侧的流水号达到最大值，则左侧的流水号自动加1
+                Dictionary<int, int> mlsh = new Dictionary<int, int>();
+                int plus1idx = -1;
 
-                for (int i = 2; i < 9; i++)
+                for (int i = loc.Count - 1; i >= 0; i--)
                 {
-                    lsh = "{LSH" + i + "}";
+                    //获取单据号中当前位的流水码数
+                    ilsh = Convert.ToInt32(maxBillNo.Substring(loc[i].Key, loc[i].Value));
 
-                    if (!supposeBillNo.Contains(lsh))
+                    if (plus1idx >= 0)
+                    {
+                        //如果当前码位被置为+1，则+1，同时将标识置为-1
+                        ilsh++;
+                        plus1idx = -1;
+                    }
+                    else
+                    {
+                        mlsh.Add(loc[i].Key, i == loc.Count - 1 ? ilsh + 1 : ilsh);
                         continue;
-
-                    while (supposeBillNo.Contains(lsh))
-                    {
-                        //查找流水号所在位置
-                        lshIdx = supposeBillNo.IndexOf(lsh);
-                        //将找到的流水号码替换成假设的流水号
-                        supposeBillNo = (lshIdx == 0 ? "" : supposeBillNo.Substring(0, lshIdx))
-                                        + string.Empty.PadLeft(i, '_')
-                                        +
-                                        (lshIdx + 6 < supposeBillNo.Length
-                                             ? supposeBillNo.Substring(lshIdx + 6)
-                                             : "");
-                        //保存当前流程号所处位置，及流程号长度，以便之后使用替换成正确的流水号
-                        loc.Add(new KeyValuePair<int, int>(lshIdx, i));
                     }
-                }
 
-                //数据库中查找符合的单据号集合,NOTE:此处需要注意，在LIKE中带有左广方括号时，要使用一对广播号将其转义
-                sql = "SELECT BillNo FROM " + flowPTable + " WHERE BillNo LIKE '" + supposeBillNo.Replace("[", "[[]")
-                    + "'" + (flowPTable.ToLower() == "wf_generworkflow" ? (" AND WorkID <> " + workid) : (" AND OID <> " + workid))
-                    + " ORDER BY BillNo DESC";
-
-                string maxBillNo = DBAccess.RunSQLReturnString(sql);
-                int ilsh = 0;
-
-                if (string.IsNullOrWhiteSpace(maxBillNo))
-                {
-                    //没有数据，则所有流水号都从1开始
-                    foreach (KeyValuePair<int, int> kv in loc)
+                    if (ilsh >= Convert.ToInt32(string.Empty.PadLeft(loc[i].Value, '9')))
                     {
-                        supposeBillNo = (kv.Key == 0 ? "" : supposeBillNo.Substring(0, kv.Key))
-                                        + "1".PadLeft(kv.Value, '0')
-                                        +
-                                        (kv.Key + kv.Value < supposeBillNo.Length
-                                             ? supposeBillNo.Substring(kv.Key + kv.Value)
-                                             : "");
-                    }
-                }
-                else
-                {
-                    //有数据，则从右向左开始判断流水号，当右侧的流水号达到最大值，则左侧的流水号自动加1
-                    Dictionary<int, int> mlsh = new Dictionary<int, int>();
-                    int plus1idx = -1;
-
-                    for (int i = loc.Count - 1; i >= 0; i--)
-                    {
-                        //获取单据号中当前位的流水码数
-                        ilsh = Convert.ToInt32(maxBillNo.Substring(loc[i].Key, loc[i].Value));
-
-                        if (plus1idx >= 0)
+                        //右侧已经达到最大值
+                        if (i > 0)
                         {
-                            //如果当前码位被置为+1，则+1，同时将标识置为-1
-                            ilsh++;
-                            plus1idx = -1;
+                            //记录前位的码
+                            mlsh.Add(loc[i].Key, 1);
                         }
                         else
                         {
-                            mlsh.Add(loc[i].Key, i == loc.Count - 1 ? ilsh + 1 : ilsh);
-                            continue;
+                            supposeBillNo = "单据号超出范围";
+                            break;
                         }
 
-                        if (ilsh >= Convert.ToInt32(string.Empty.PadLeft(loc[i].Value, '9')))
-                        {
-                            //右侧已经达到最大值
-                            if (i > 0)
-                            {
-                                //记录前位的码
-                                mlsh.Add(loc[i].Key, 1);
-                            }
-                            else
-                            {
-                                supposeBillNo = "单据号超出范围";
-                                break;
-                            }
-
-                            //则将前一个流水码位，标记为+1
-                            plus1idx = i - 1;
-                        }
-                        else
-                        {
-                            mlsh.Add(loc[i].Key, ilsh + 1);
-                        }
+                        //则将前一个流水码位，标记为+1
+                        plus1idx = i - 1;
                     }
-
-                    if (supposeBillNo == "单据号超出范围")
-                        return supposeBillNo;
-
-                    //拼接单据号
-                    foreach (KeyValuePair<int, int> kv in loc)
+                    else
                     {
-                        supposeBillNo = (kv.Key == 0 ? "" : supposeBillNo.Substring(0, kv.Key))
-                                        + mlsh[kv.Key].ToString().PadLeft(kv.Value, '0')
-                                        +
-                                        (kv.Key + kv.Value < supposeBillNo.Length
-                                             ? supposeBillNo.Substring(kv.Key + kv.Value)
-                                             : "");
+                        mlsh.Add(loc[i].Key, ilsh + 1);
                     }
                 }
 
-                billNo = supposeBillNo;
+                if (supposeBillNo == "单据号超出范围")
+                    return supposeBillNo;
+
+                //拼接单据号
+                foreach (KeyValuePair<int, int> kv in loc)
+                {
+                    supposeBillNo = (kv.Key == 0 ? "" : supposeBillNo.Substring(0, kv.Key))
+                                    + mlsh[kv.Key].ToString().PadLeft(kv.Value, '0')
+                                    +
+                                    (kv.Key + kv.Value < supposeBillNo.Length
+                                         ? supposeBillNo.Substring(kv.Key + kv.Value)
+                                         : "");
+                }
             }
-
-            return billNo;
+            return supposeBillNo;
         }
         #endregion 产生单据编号
 
@@ -544,7 +547,7 @@ namespace BP.WF
             string FK_Emp;
 
             //变量.
-            string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
+            string dbStr = BP.Difference.SystemConfig.AppCenterDBVarStr;
 
             Paras ps = new Paras();
             // 按上一节点发送人处理。
@@ -588,13 +591,10 @@ namespace BP.WF
             }
             #endregion 首先判断是否配置了获取下一步接受人员的sql.
 
-
-
-
             #region 按绑定部门计算,该部门一人处理标识该工作结束(子线程)..
             if (toNode.HisDeliveryWay == DeliveryWay.BySetDeptAsSubthread)
             {
-                if (toNode.HisRunModel != RunModel.SubThread)
+                if (toNode.IsSubThread == false)
                     throw new Exception("@您设置的节点接收人方式为：按绑定部门计算,该部门一人处理标识该工作结束(子线程)，但是当前节点非子线程节点。");
 
                 sql = "SELECT " + BP.Sys.Base.Glo.UserNo + ", Name,FK_Dept AS GroupMark FROM Port_Emp WHERE FK_Dept IN (SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + toNode.NodeID + ")";
@@ -608,7 +608,7 @@ namespace BP.WF
             #region 按照明细表,作为子线程的接收人.
             if (toNode.HisDeliveryWay == DeliveryWay.ByDtlAsSubThreadEmps)
             {
-                if (toNode.HisRunModel != RunModel.SubThread)
+                if (toNode.IsSubThread == false)
                     throw new Exception("@您设置的节点接收人方式为：以分流点表单的明细表数据源确定子线程的接收人，但是当前节点非子线程节点。");
 
                 currNode.WorkID = workid; //为获取表单ID ( NodeFrmID )提供参数.
@@ -707,7 +707,7 @@ namespace BP.WF
             if (toNode.HisDeliveryWay == DeliveryWay.BySpecNodeEmp
                 || toNode.HisDeliveryWay == DeliveryWay.ByStarter)
             {
-                /* 按指定节点岗位上的人员计算 */
+                /* 按指定节点角色上的人员计算 */
                 string strs = toNode.DeliveryParas;
                 if (toNode.HisDeliveryWay == DeliveryWay.ByStarter)
                 {
@@ -739,12 +739,12 @@ namespace BP.WF
                         continue;
 
                     if (DataType.IsNumStr(nd) == false)
-                        throw new Exception("流程设计错误:您设置的节点(" + toNode.Name + ")的接收方式为按指定的节点岗位投递，但是您没有在访问规则设置中设置节点编号。");
+                        throw new Exception("流程设计错误:您设置的节点(" + toNode.Name + ")的接收方式为按指定的节点角色投递，但是您没有在访问规则设置中设置节点编号。");
 
                     ps = new Paras();
                     ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node AND IsPass=1 AND IsEnable=1 ";
                     ps.Add("FK_Node", int.Parse(nd));
-                    if (currNode.HisRunModel == RunModel.SubThread)
+                    if (currNode.IsSubThread == true)
                         ps.Add("OID", workid);
                     else
                         ps.Add("OID", workid);
@@ -802,7 +802,7 @@ namespace BP.WF
                         ps = new Paras();
                         ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node AND IsPass=1 AND IsEnable=1 ";
                         ps.Add("FK_Node", nd.NodeID);
-                        if (currNode.HisRunModel == RunModel.SubThread)
+                        if (currNode.IsSubThread == true)
                             ps.Add("OID", gwf.PFID);
                         else
                             ps.Add("OID", gwf.PWorkID);
@@ -830,7 +830,7 @@ namespace BP.WF
                         ps.Add("ActionType5", (int)ActionType.Skip);
                         ps.Add("NDFrom", nd.NodeID);
 
-                        if (currNode.HisRunModel == RunModel.SubThread)
+                        if (currNode.IsSubThread == true)
                             ps.Add("OID", gwf.PFID);
                         else
                             ps.Add("OID", gwf.PWorkID);
@@ -855,7 +855,7 @@ namespace BP.WF
             }
             #endregion 按照节点绑定的人员处理。
 
-            #region 按照上一个节点表单指定字段的人员处理。
+            #region 按照上一个节点表单指定字段的人员处理。 
             if (toNode.HisDeliveryWay == DeliveryWay.ByPreviousNodeFormEmpsField)
             {
                 // 检查接受人员规则,是否符合设计要求.
@@ -904,10 +904,6 @@ namespace BP.WF
                 {
                     if (DataType.IsNullOrEmpty(s))
                         continue;
-
-                    //if (DBAccess.RunSQLReturnValInt("SELECT COUNT(NO) AS NUM FROM Port_Emp WHERE NO='" + s + "' or name='"+s+"'", 0) == 0)
-                    //    continue;
-
                     DataRow dr = dt.NewRow();
                     dr[0] = s;
                     dt.Rows.Add(dr);
@@ -916,9 +912,120 @@ namespace BP.WF
             }
             #endregion 按照上一个节点表单指定字段的人员处理。
 
-             
 
-            #region 按部门与岗位的交集计算.
+            #region 按照上一个节点表单指定字段的【角色】处理。
+            if (toNode.HisDeliveryWay == DeliveryWay.ByPreviousNodeFormStationsAI
+                || toNode.HisDeliveryWay == DeliveryWay.ByPreviousNodeFormStationsOnly)
+            {
+                // 检查接受人员规则,是否符合设计要求.
+                string specEmpFields = toNode.DeliveryParas;
+                if (DataType.IsNullOrEmpty(specEmpFields))
+                    specEmpFields = "SysSendEmps";
+
+                if (enParas.EnMap.Attrs.Contains(specEmpFields) == false)
+                    throw new Exception("@您设置的接受人规则是按照表单指定的角色字段，决定下一步的接受人员，该字段{" + specEmpFields + "}已经删除或者丢失。");
+
+                string stas = "";
+                //获取接受人并格式化接受人, 
+                string emps = enParas.GetValStringByKey(specEmpFields);
+                emps = emps.Replace(" ", "");
+                if (emps.Contains(",") && emps.Contains(";"))
+                {
+                    /*如果包含,; 例如 xx,角色1;222,角色2;*/
+                    string[] myemps1 = emps.Split(';');
+                    foreach (string str in myemps1)
+                    {
+                        if (DataType.IsNullOrEmpty(str))
+                            continue;
+
+                        string[] ss = str.Split(',');
+                        stas += "," + ss[0];
+                    }
+                    if (DataType.IsNullOrEmpty(stas))
+                        throw new Exception("@输入的接受人员的角色信息错误;[" + emps + "]。");
+                }
+                else
+                {
+                    emps = emps.Replace(";", ",");
+                    emps = emps.Replace("；", ",");
+                    emps = emps.Replace("，", ",");
+                    emps = emps.Replace("、", ",");
+                    emps = emps.Replace("@", ",");
+
+                    if (DataType.IsNullOrEmpty(emps))
+                        throw new Exception("@没有在字段[" + enParas.EnMap.Attrs.GetAttrByKey(specEmpFields).Desc + "]中指定接受人的角色，工作无法向下发送。");
+
+                    // 把它加入接受人员列表中.
+                    string[] myemps = emps.Split(',');
+                    foreach (string s in myemps)
+                    {
+                        if (DataType.IsNullOrEmpty(s))
+                            continue;
+                        stas += "," + s;
+                    }
+                }
+                //根据角色:集合获取信息.
+                stas = stas.Substring(1);
+
+                // 仅按角色计算. 以下都有要重写.
+                if (toNode.HisDeliveryWay == DeliveryWay.ByPreviousNodeFormStationsOnly)
+                {
+                    dt = WorkFlowBuessRole.FindWorker_GetEmpsByStations(stas);
+                    if (dt.Rows.Count == 0 && toNode.HisWhenNoWorker == false)
+                        throw new Exception("err@按照字段角色(仅按角色计算)找接受人错误,当前部门下没有您选择的角色人员.");
+                    return dt;
+                }
+
+                #region 按角色智能计算, 集合模式.
+                if (toNode.DeliveryStationReqEmpsWay == 0)
+                {
+                    string deptNo = BP.Web.WebUser.FK_Dept;
+                    dt = FindWorker_GetEmpsByDeptAI(stas, deptNo);
+                    if (dt.Rows.Count == 0 && toNode.HisWhenNoWorker == false)
+                        throw new Exception("err@按照字段角色(智能)找接受人错误,当前部门与父级部门下没有您选择的角色人员.");
+                    return dt;
+                }
+                #endregion 按角色智能计算, 要判断切片模式,还是集合模式.
+
+                #region 按角色智能计算, 切片模式. 需要对每个角色都要找到接受人，然后把这些接受人累加起来.
+                if (toNode.DeliveryStationReqEmpsWay == 1 || toNode.DeliveryStationReqEmpsWay == 2)
+                {
+                    string deptNo = BP.Web.WebUser.FK_Dept;
+                    string[] temps = stas.Split(',');
+                    foreach (string str in temps)
+                    {
+                        //求一个角色下的人员.
+                        DataTable mydt = FindWorker_GetEmpsByDeptAI(str, deptNo);
+
+                        //如果是严谨模式.
+                        if (toNode.DeliveryStationReqEmpsWay == 1 && mydt.Rows.Count == 0)
+                        {
+                            Station st = new Station(str);
+                            throw new Exception("@角色["+st.Name+"]下，没有找到人不能发送下去，请检查组织结构是否完整。");
+                        }
+
+                        //累加起来.
+                        foreach (DataRow dr in mydt.Rows)
+                        {
+                            DataRow mydr = dt.NewRow();
+                            mydr[0] = dr[0].ToString();
+                            dt.Rows.Add(mydr);
+                        }
+                    }
+
+                    if (dt.Rows.Count == 0 && toNode.HisWhenNoWorker == false)
+                        throw new Exception("err@按照字段角色(智能,切片)找接受人错误,当前部门与父级部门下没有您选择的角色人员.");
+
+                    return dt;
+                }
+                #endregion 按角色智能计算, 切片模式.
+
+                throw new Exception("err@没有判断的模式....");
+            }
+            #endregion 按照上一个节点表单指定字段的人员处理 【角色】。
+
+
+            #region 按部门与角色的交集计算.
             if (toNode.HisDeliveryWay == DeliveryWay.ByDeptAndStation)
             {
 
@@ -936,9 +1043,9 @@ namespace BP.WF
                 if (dt.Rows.Count > 0)
                     return dt;
                 else
-                    throw new Exception("@节点访问规则(" + toNode.HisDeliveryWay.ToString() + ")错误:节点(" + toNode.NodeID + "," + toNode.Name + "), 按照岗位与部门的交集确定接受人的范围错误，没有找到人员:SQL=" + sql);
+                    throw new Exception("@节点访问规则(" + toNode.HisDeliveryWay.ToString() + ")错误:节点(" + toNode.NodeID + "," + toNode.Name + "), 按照角色与部门的交集确定接受人的范围错误，没有找到人员:SQL=" + sql);
             }
-            #endregion 按部门与岗位的交集计算.
+            #endregion 按部门与角色的交集计算.
 
             #region 判断节点部门里面是否设置了部门，如果设置了就按照它的部门处理。
             if (toNode.HisDeliveryWay == DeliveryWay.ByDept)
@@ -1002,8 +1109,7 @@ namespace BP.WF
             }
             #endregion
 
-
-            #region 仅按岗位计算
+            #region 仅按角色计算
             if (toNode.HisDeliveryWay == DeliveryWay.ByStationOnly)
             {
                 ps = new Paras();
@@ -1025,14 +1131,14 @@ namespace BP.WF
                 if (dt.Rows.Count > 0)
                     return dt;
                 else
-                    throw new Exception("@节点访问规则错误:节点(" + toNode.NodeID + "," + toNode.Name + "), 仅按岗位计算，没有找到人员。");
+                    throw new Exception("@节点访问规则错误:节点(" + toNode.NodeID + "," + toNode.Name + "), 仅按角色计算，没有找到人员。");
             }
             #endregion
 
-            #region 按岗位计算(以部门集合为纬度).
+            #region 按角色计算(以部门集合为纬度).
             if (toNode.HisDeliveryWay == DeliveryWay.ByStationAndEmpDept)
             {
-                /* 考虑当前操作人员的部门, 如果本部门没有这个岗位就不向上寻找. */
+                /* 考虑当前操作人员的部门, 如果本部门没有这个角色就不向上寻找. */
 
                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
@@ -1051,17 +1157,17 @@ namespace BP.WF
                 if (dt.Rows.Count > 0)
                     return dt;
                 else
-                    throw new Exception("@节点访问规则(" + toNode.HisDeliveryWay.ToString() + ")错误:节点(" + toNode.NodeID + "," + toNode.Name + "), 按岗位计算(以部门集合为纬度)。技术信息,执行的SQL=" + ps.SQLNoPara);
+                    throw new Exception("@节点访问规则(" + toNode.HisDeliveryWay.ToString() + ")错误:节点(" + toNode.NodeID + "," + toNode.Name + "), 按角色计算(以部门集合为纬度)。技术信息,执行的SQL=" + ps.SQLNoPara);
             }
             #endregion
 
             string empNo = WebUser.No;
             string empDept = WebUser.FK_Dept;
 
-            #region 按指定的节点的人员岗位，做为下一步骤的流程接受人。
+            #region 按指定的节点的人员角色，做为下一步骤的流程接受人。
             if (toNode.HisDeliveryWay == DeliveryWay.BySpecNodeEmpStation)
             {
-                /* 按指定的节点的人员岗位 */
+                /* 按指定的节点的人员角色 */
                 string para = toNode.DeliveryParas;
                 para = para.Replace("@", "");
 
@@ -1094,7 +1200,7 @@ namespace BP.WF
             }
             #endregion 按指定的节点人员，做为下一步骤的流程接受人。
 
-            #region 最后判断 - 按照岗位来执行。
+            #region 最后判断 - 按照角色AI来执行。
             if (currNode.IsStartNode == false)
             {
                 ps = new Paras();
@@ -1110,7 +1216,7 @@ namespace BP.WF
                 }
             }
 
-            /* 如果执行节点 与 接受节点岗位集合一致 */
+            /* 如果执行节点 与 接受节点角色集合一致 */
             if (currNode.GroupStaNDs == toNode.GroupStaNDs)
             {
                 /* 说明，就把当前人员做为下一个节点处理人。*/
@@ -1120,25 +1226,25 @@ namespace BP.WF
                 return dt;
             }
 
-            /* 如果执行节点 与 接受节点岗位集合不一致 */
+            /* 如果执行节点 与 接受节点角色集合不一致 */
             if (currNode.GroupStaNDs != toNode.GroupStaNDs)
             {
                 /* 没有查询到的情况下, 先按照本部门计算。*/
-               
 
-                    sql = "SELECT FK_Emp as No FROM Port_DeptEmpStation A, WF_NodeStation B  WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Dept=" + dbStr + "FK_Dept";
-                    ps = new Paras();
-                    ps.SQL = sql;
-                    ps.Add("FK_Node", toNode.NodeID);
-                    ps.Add("FK_Dept", empDept);
- 
-                  
+
+                sql = "SELECT FK_Emp as No FROM Port_DeptEmpStation A, WF_NodeStation B  WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Dept=" + dbStr + "FK_Dept";
+                ps = new Paras();
+                ps.SQL = sql;
+                ps.Add("FK_Node", toNode.NodeID);
+                ps.Add("FK_Dept", empDept);
+
+
                 dt = DBAccess.RunSQLReturnTable(ps);
                 if (dt.Rows.Count == 0)
                 {
                     NodeStations nextStations = toNode.NodeStations;
                     if (nextStations.Count == 0)
-                        throw new Exception("@节点没有岗位:" + toNode.NodeID + "  " + toNode.Name);
+                        throw new Exception("@节点没有角色:" + toNode.NodeID + "  " + toNode.Name);
                 }
                 else
                 {
@@ -1147,13 +1253,13 @@ namespace BP.WF
                     {
                         if (dr[0].ToString() == BP.Web.WebUser.No)
                         {
-                            /* 如果岗位分组不一样，并且结果集合里还有当前的人员，就说明了出现了当前操作员，拥有本节点上的岗位也拥有下一个节点的工作岗位
+                            /* 如果角色分组不一样，并且结果集合里还有当前的人员，就说明了出现了当前操作员，拥有本节点上的角色也拥有下一个节点的工作角色
                              导致：节点的分组不同，传递到同一个人身上。 */
                             isInit = true;
                         }
                     }
 
-#warning edit by peng, 用来确定不同岗位集合的传递包含同一个人的处理方式。
+#warning edit by zhoupeng, 用来确定不同角色集合的传递包含同一个人的处理方式。
 
                     //  if (isInit == false || isInit == true)
                     return dt;
@@ -1164,7 +1270,7 @@ namespace BP.WF
 
 
             /* 没有查询到的情况下, 按照最大匹配数 提高一个级别计算，递归算法未完成。
-             * 因为:以上已经做的岗位的判断，就没有必要在判断其它类型的节点处理了。
+             * 因为:以上已经做的角色的判断，就没有必要在判断其它类型的节点处理了。
              * */
             string nowDeptID = empDept.Clone() as string;
             while (true)
@@ -1174,7 +1280,7 @@ namespace BP.WF
                 if (nowDeptID == "-1" || nowDeptID.ToString() == "0")
                 {
                     break; /*一直找到了最高级仍然没有发现，就跳出来循环从当前操作员人部门向下找。*/
-                    throw new Exception("@按岗位计算没有找到(" + toNode.Name + ")接受人.");
+                    throw new Exception("@按角色计算没有找到(" + toNode.Name + ")接受人.");
                 }
 
                 //检查指定的部门下面是否有该人员.
@@ -1201,19 +1307,125 @@ namespace BP.WF
                     return mydtTemp;
             }
 
-            /*如果向上找没有找到，就考虑从本级部门上向下找。 */
+            /* 如果向上找没有找到，就考虑从本级部门上向下找. */
             nowDeptID = empDept.Clone() as string;
             BP.Port.Depts subDepts = new BP.Port.Depts(nowDeptID);
 
-            //递归出来子部门下有该岗位的人员.
+            //递归出来子部门下有该角色的人员.
             DataTable mydt123 = RequetNextNodeWorkers_DiGui_ByDepts(subDepts, empNo, toNode);
             if (mydt123 == null)
-                throw new Exception("@按岗位计算没有找到(" + toNode.Name + ")接受人.");
+                throw new Exception("@按角色计算没有找到(" + toNode.Name + ")接受人.");
             return mydt123;
-            #endregion  按照岗位来执行。
+            #endregion  按照角色来执行。
         }
         /// <summary>
-        /// 递归出来子部门下有该岗位的人员
+        /// 按照部门编号，与角色集合智能计算接受人.
+        /// </summary>
+        /// <param name="stas">角色编号</param>
+        /// <param name="deptNo">部门编号</param>
+        /// <returns></returns>
+        public static DataTable FindWorker_GetEmpsByDeptAI(string stas, string deptNo)
+        {
+            DataTable dt = WorkFlowBuessRole.FindWorker_GetEmpsByStationsAndDepts(stas, deptNo);
+            if (dt.Rows.Count == 0)
+            {
+                //本部门的父级.
+                Dept deptMy = new Dept(deptNo);
+                dt = WorkFlowBuessRole.FindWorker_GetEmpsByStationsAndDepts(stas, deptMy.ParentNo);
+
+                //本级部门的祖父级,不在向上判断了.
+                if (dt.Rows.Count == 0 && deptMy.ParentNo.Equals("0") == false)
+                {
+                    Dept deptParent = new Dept(deptMy.ParentNo);
+                    dt = WorkFlowBuessRole.FindWorker_GetEmpsByStationsAndDepts(stas, deptParent.ParentNo);
+                }
+
+                //扫描评级部门.
+                if (dt.Rows.Count == 0)
+                {
+                    string deptNos = "";
+                    Depts depts = new Depts();
+                    depts.Retrieve(DeptAttr.ParentNo, deptMy.ParentNo);
+                    foreach (Dept mydept in depts)
+                        deptNos += "," + mydept.No;
+
+                    dt = WorkFlowBuessRole.FindWorker_GetEmpsByStationsAndDepts(stas, deptNos);
+                }
+                return dt;
+            }
+            return dt;
+        }
+
+        public static DataTable FindWorker_GetEmpsByStations(string stas)
+        {
+            string sqlEnd = "";
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                sqlEnd = " AND OrgNo='" + BP.Web.WebUser.OrgNo + "'";
+
+            //处理合法的 in 字段.
+            if (stas.Contains("'") == false)
+            {
+                string[] temps = stas.Split(',');
+                string mystrs = "";
+                foreach (string temp in temps)
+                    mystrs += ",'" + temp + "'";
+
+                mystrs = mystrs.Substring(1);
+                stas = mystrs;
+            }
+
+            string sql = "SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Station IN (" + stas + ") " + sqlEnd;
+            return DBAccess.RunSQLReturnTable(sql);
+        }
+        /// <summary>
+        /// 获取部门与角色的交集.
+        /// </summary>
+        /// <param name="stas">角色集合s</param>
+        /// <param name="depts">部门集合s</param>
+        /// <returns></returns>
+        public static DataTable FindWorker_GetEmpsByStationsAndDepts(string stas, string depts)
+        {
+            string sqlEnd = "";
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                sqlEnd = " AND OrgNo='" + BP.Web.WebUser.OrgNo + "'";
+
+
+            //是单个的.
+            if (stas.Contains(",") == false && depts.Contains(",") == false)
+            {
+                string sql1 = "SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Station='" + stas + "' AND FK_Dept='" + depts + "' ";// + sqlEnd;
+                return DBAccess.RunSQLReturnTable(sql1);
+            }
+
+            //处理合法的 in 字段.
+            if (stas.Contains("'") == false)
+            {
+                string[] temps = stas.Split(',');
+                string mystrs = "";
+                foreach (string temp in temps)
+                    mystrs += ",'" + temp + "'";
+
+                mystrs = mystrs.Substring(1);
+                stas = mystrs;
+            }
+
+            //处理合法的in 字段.
+            if (depts.Contains("'") == false)
+            {
+                string[] temps = depts.Split(',');
+                string mystrs = "";
+                foreach (string temp in temps)
+                    mystrs += ",'" + temp + "'";
+
+                mystrs = mystrs.Substring(1);
+                depts = mystrs;
+            }
+
+            string sql = "SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Station IN(" + stas + ") AND FK_Dept IN (" + depts + ") ";// + sqlEnd;
+            return DBAccess.RunSQLReturnTable(sql);
+        }
+        /// <summary>
+        /// 递归出来子部门下有该角色的人员
         /// </summary>
         /// <param name="subDepts"></param>
         /// <param name="empNo"></param>
@@ -1244,7 +1456,7 @@ namespace BP.WF
         private static DataTable RequetNextNodeWorkers_DiGui(string deptNo, string empNo, Node toNode)
         {
             string sql;
-            string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
+            string dbStr = BP.Difference.SystemConfig.AppCenterDBVarStr;
 
             sql = "SELECT FK_Emp as No FROM Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Dept=" + dbStr + "FK_Dept AND A.FK_Emp!=" + dbStr + "FK_Emp";
             Paras ps = new Paras();
@@ -1258,7 +1470,7 @@ namespace BP.WF
             {
                 NodeStations nextStations = toNode.NodeStations;
                 if (nextStations.Count == 0)
-                    throw new Exception("@节点没有岗位:" + toNode.NodeID + "  " + toNode.Name);
+                    throw new Exception("@节点没有角色:" + toNode.NodeID + "  " + toNode.Name);
 
                 sql = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE " + BP.Sys.Base.Glo.UserNoWhitOutAS + " IN ";
                 sql += "(SELECT  FK_Emp  FROM Port_DeptEmpStation  WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node ) )";
@@ -1293,6 +1505,109 @@ namespace BP.WF
         #endregion 找到下一个节点的接受人员
 
         #region 执行抄送.
+        public static string DoCCAuto2022(Node node, GERpt rpt, Int64 workid, Int64 fid, CCRoles rls)
+        {
+
+            CC ccEn = new CC(node.NodeID);
+
+            /*如果是自动抄送*/
+            foreach (CCRole rl in rls)
+            {
+                //执行抄送.
+                DataTable dt = rl.GenerCCers(rpt, workid);
+                if (dt.Rows.Count == 0)
+                    return "@设置的抄送规则，没有找到抄送人员。";
+
+                string ccMsg = "@消息自动抄送给";
+                string basePath = BP.WF.Glo.HostURL;
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string toUserNo = dr[0].ToString();
+                    string toUserName = dr[1].ToString();
+
+                    //生成标题与内容.
+                    string ccTitle = ccEn.CCTitle.Clone() as string;
+                    ccTitle = BP.WF.Glo.DealExp(ccTitle, rpt);
+
+                    string ccDoc = ccEn.CCDoc.Clone() as string;
+                    ccDoc = BP.WF.Glo.DealExp(ccDoc, rpt);
+
+                    ccDoc = ccDoc.Replace("@Accepter", toUserNo);
+                    ccTitle = ccTitle.Replace("@Accepter", toUserNo);
+
+                    //抄送信息.
+                    ccMsg += "(" + toUserNo + " - " + toUserName + ");";
+                    CCList list = new CCList();
+                    list.setMyPK(workid + "_" + node.NodeID + "_" + dr[0].ToString());
+                    list.FK_Flow = node.FK_Flow;
+                    list.FlowName = node.FlowName;
+                    list.FK_Node = node.NodeID;
+                    list.NodeName = node.Name;
+                    list.Title = ccTitle;
+                    list.Doc = ccDoc;
+                    list.CCTo = dr[0].ToString();
+                    list.CCToName = dr[1].ToString();
+                    list.RDT = DataType.CurrentDateTime;
+                    list.Rec = WebUser.No;
+                    list.WorkID = workid;
+                    list.FID = fid;
+
+                    // if (this.HisNode.CCWriteTo == CCWriteTo.Todolist)
+                    list.InEmpWorks = node.CCWriteTo == CCWriteTo.CCList ? false : true;    //added by liuxc,2015.7.6
+
+                    //写入待办和写入待办与抄送列表,状态不同
+                    if (node.CCWriteTo == CCWriteTo.All || node.CCWriteTo == CCWriteTo.Todolist)
+                    {
+                        //如果为写入待办则抄送列表中置为已读，原因：只为不提示有未读抄送。
+                        //list.HisSta = node.CCWriteTo == CCWriteTo.All ? CCSta.UnRead : CCSta.Read;
+                        list.HisSta = CCSta.UnRead;
+                    }
+                    //结束节点只写入抄送列表
+                    if (node.IsEndNode == true)
+                    {
+                        list.HisSta = CCSta.UnRead;
+                        list.InEmpWorks = false;
+                    }
+                    try
+                    {
+                        list.Insert();
+                    }
+                    catch
+                    {
+                        list.Update();
+                    }
+                    PushMsgs pms = new PushMsgs();
+                    pms.Retrieve(PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListNode.CCAfter);
+
+                    if (pms.Count > 0)
+                    {
+                        PushMsg pushMsg = pms[0] as PushMsg;
+                        //     //写入消息提示.
+                        //     ccMsg += list.CCTo + "(" + dr[1].ToString() + ");";
+                        BP.WF.Port.WFEmp wfemp = new BP.WF.Port.WFEmp(list.CCTo);
+
+                        string title = string.Format("工作抄送:{0}.工作:{1},发送人:{2},需您查阅", node.FlowName, node.Name, WebUser.Name);
+                        string mytemp = pushMsg.SMSDoc;
+                        mytemp = mytemp.Replace("{Title}", title);
+                        mytemp = mytemp.Replace("@WebUser.No", WebUser.No);
+                        mytemp = mytemp.Replace("@WebUser.Name", WebUser.Name);
+                        mytemp = mytemp.Replace("@WorkID", workid.ToString());
+                        mytemp = mytemp.Replace("@OID", workid.ToString());
+
+                        /*如果仍然有没有替换下来的变量.*/
+                        if (mytemp.Contains("@") == true)
+                            mytemp = BP.WF.Glo.DealExp(mytemp, rpt, null);
+                        BP.WF.Dev2Interface.Port_SendMsg(wfemp.No, title, mytemp, null, BP.WF.SMSMsgType.CC, list.FK_Flow, list.FK_Node, list.WorkID, list.FID, pushMsg.SMSPushModel);
+                    }
+                }
+            }
+
+            return "抄送执行成功.";
+        }
+        #endregion 执行抄送.
+
+        #region 执行抄送.
         /// <summary>
         /// 执行抄送.
         /// </summary>
@@ -1302,8 +1617,8 @@ namespace BP.WF
         public static string DoCCAuto(Node node, GERpt rpt, Int64 workid, Int64 fid)
         {
 
-            if (node.HisCCRole == CCRole.AutoCC
-          || node.HisCCRole == CCRole.HandAndAuto)
+            if (node.HisCCRole == CCRoleEnum.AutoCC
+          || node.HisCCRole == CCRoleEnum.HandAndAuto)
             {
 
             }
@@ -1420,7 +1735,7 @@ namespace BP.WF
         /// <returns></returns>
         public static string DoCCByEmps(Node nd, GERpt rptGE, Int64 workid, Int64 fid)
         {
-            if (nd.HisCCRole != CCRole.BySysCCEmps)
+            if (nd.HisCCRole != CCRoleEnum.BySysCCEmps)
                 return "";
 
             CC cc = nd.HisCC;

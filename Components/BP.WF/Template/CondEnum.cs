@@ -23,7 +23,7 @@ namespace BP.WF.Template
         /// </summary>
         StandAloneFrm = 1,
         /// <summary>
-        /// 岗位数据
+        /// 角色数据
         /// </summary>
         Stas = 2,
         /// <summary>

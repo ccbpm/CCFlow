@@ -290,7 +290,8 @@ namespace BP.WF.HttpHandler
 
             #region 处理表单类型.
             if (this.currND.HisFormType == NodeFormType.SheetTree
-                 || this.currND.HisFormType == NodeFormType.SheetAutoTree)
+                 || this.currND.HisFormType == NodeFormType.SheetAutoTree
+                 || this.currFlow.FlowDevModel == FlowDevModel.FrmTree)
             {
 
                 if (this.currND.IsStartNode)
@@ -369,7 +370,7 @@ namespace BP.WF.HttpHandler
                 return "url@" + toUrl;
             }
 
-            if (this.currND.HisFormType == NodeFormType.SDKForm)
+            if (this.currND.HisFormType == NodeFormType.SDKForm || this.currFlow.FlowDevModel == FlowDevModel.SDKFrm)
             {
                 if (this.WorkID == 0)
                 {
@@ -473,7 +474,7 @@ namespace BP.WF.HttpHandler
             }
 
             //自定义表单
-            if (frmtype == NodeFormType.SelfForm && this.IsMobile == false)
+            if ((frmtype == NodeFormType.SelfForm || this.currFlow.FlowDevModel == FlowDevModel.SelfFrm) && this.IsMobile == false)
             {
                 if (this.WorkID == 0)
                 {
@@ -595,13 +596,26 @@ namespace BP.WF.HttpHandler
 
                 }
 
+                if (btnLab.GetValBooleanByKey(BtnAttr.ShowParentFormEnableMyCC) && this.PWorkID != 0)
+                {
+                    /*如果要查看父流程.*/
+                    dr = dt.NewRow();
+                    dr["No"] = "ParentForm";
+                    dr["Name"] = btnLab.ShowParentFormLab;
+                    dr["Oper"] = "";
 
-                //加载轨迹.
-                dr = dt.NewRow();
-                dr["No"] = "Track";
-                dr["Name"] = "轨迹";
-                dr["Oper"] = "";
-                dt.Rows.Add(dr);
+                    dt.Rows.Add(dr);
+                }
+                if (btnLab.GetValBooleanByKey(BtnAttr.TrackEnableMyCC))
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Track";
+                    dr["Name"] = btnLab.TrackLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                
 
                 #region 加载流程抄送 - 按钮
 

@@ -9,23 +9,29 @@ using BP.Difference;
 namespace BP.Port
 {
     /// <summary>
-    /// 岗位属性
+    /// 角色属性
     /// </summary>
     public class StationAttr : EntityNoNameAttr
     {
         /// <summary>
-        /// 岗位类型
+        /// 角色类型
         /// </summary>
         public const string FK_StationType = "FK_StationType";
         /// 隶属组织
         /// </summary>
         public const string OrgNo = "OrgNo";
-
+        /// <summary>
+        /// 隶属部门
+        /// </summary>
+        public const string FK_Dept = "FK_Dept";
+        /// <summary>
+        /// 序号
+        /// </summary>
         public const string Idx = "Idx";
 
     }
     /// <summary>
-    /// 岗位
+    /// 角色
     /// </summary>
     public class Station : EntityNoName
     {
@@ -82,13 +88,13 @@ namespace BP.Port
 
         #region 构造方法
         /// <summary>
-        /// 岗位
+        /// 角色
         /// </summary> 
         public Station()
         {
         }
         /// <summary>
-        /// 岗位
+        /// 角色
         /// </summary>
         /// <param name="_No"></param>
         public Station(string _No) : base(_No) { }
@@ -102,34 +108,40 @@ namespace BP.Port
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Port_Station", "岗位");
-                map.setCodeStruct("3");
-                map.setIsAutoGenerNo(true);
+                Map map = new Map("Port_Station", "角色");
+               // map.setCodeStruct("3");
+              //  map.setIsAutoGenerNo(true);
 
                 map.AddTBStringPK(StationAttr.No, null, "编号", true, true, 1, 50, 200);
                 map.AddTBString(StationAttr.Name, null, "名称", true, false, 0, 100, 200);
                 map.AddDDLEntities(StationAttr.FK_StationType, null, "类型", new StationTypes(), true);
-
+                map.AddTBString(StationAttr.OrgNo, null, "隶属组织", false, false, 0, 50, 250);
 
                 #region 根据组织结构类型不同.
                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
-                    map.AddTBString(StationAttr.OrgNo, null, "隶属组织", false, false, 0, 50, 250);
                     map.AddHidden(StationAttr.OrgNo, "=", BP.Web.WebUser.OrgNo); //加隐藏条件.
                 }
 
                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
                 {
-                    map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, true, 0, 50, 250);
                     if (BP.Difference.SystemConfig.GroupStationModel == 0)
                         map.AddHidden(StationAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);//每个组织都有自己的岗责体系的时候. 加隐藏条件.
+                    //每个部门都有自己的角色体系.
+                    if (BP.Difference.SystemConfig.GroupStationModel == 2)
+                    {
+                        map.AddTBString(StationAttr.FK_Dept, null, "部门编号", true, false, 0, 100, 200);
+                        map.AddHidden(StationAttr.FK_Dept, "=", BP.Web.WebUser.FK_Dept);//每个组织都有自己的岗责体系的时候. 加隐藏条件.
+                    }
                 }
 
                 map.AddTBInt(StationAttr.Idx, 0, "顺序号", true, false);
-#endregion 根据组织结构类型不同.
-
+                #endregion 根据组织结构类型不同.
 
                 map.AddSearchAttr(StationAttr.FK_StationType);
+
+                //角色下的用户.
+                map.AddDtl(new DeptEmpStations(), DeptEmpStationAttr.FK_Station, null, DtlEditerModel.DtlSearch, null);
 
                 this._enMap = map;
                 return this._enMap;
@@ -137,23 +149,47 @@ namespace BP.Port
         }
         #endregion
 
+        protected override bool beforeInsert()
+        {
+            if (DataType.IsNullOrEmpty(this.No))
+                this.No = DBAccess.GenerGUID();
+
+            return base.beforeInsert();
+        }
+
         protected override bool beforeUpdateInsertAction()
         {
+            if (DataType.IsNullOrEmpty(this.Name) == true)
+                throw new Exception("请输入名称");
+            if (DataType.IsNullOrEmpty(this.FK_StationType) == true)
+                throw new Exception("请选择类型"); //@hongyan.
+
             if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
 
+            //每个部门都有自己的角色体系.
+            if (BP.Difference.SystemConfig.GroupStationModel == 2)
+                this.SetValByKey(StationAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
+
+
+            BP.Sys.Base.Glo.WriteUserLog("新建/修改角色:" + this.ToJson(), "组织数据操作");
+
             return base.beforeUpdateInsertAction();
         }
-
+        protected override bool beforeDelete()
+        {
+            BP.Sys.Base.Glo.WriteUserLog("删除角色:" + this.ToJson(), "组织数据操作");
+            return base.beforeDelete();
+        }
 
     }
     /// <summary>
-    /// 岗位s
+    /// 角色s
     /// </summary>
     public class Stations : EntitiesNoName
     {
         /// <summary>
-        /// 岗位
+        /// 角色
         /// </summary>
         public Stations() { }
         /// <summary>
@@ -176,7 +212,7 @@ namespace BP.Port
             if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 return base.RetrieveAll(orderBy);
 
-            //集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
+            //集团模式下的角色体系: @0=每套组织都有自己的角色体系@1=所有的组织共享一套岗则体系.
             if (BP.Difference.SystemConfig.GroupStationModel == 1)
                 return base.RetrieveAll();
 
@@ -190,14 +226,29 @@ namespace BP.Port
         public override int RetrieveAll()
         {
             if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
-                return base.RetrieveAll();
+                return base.RetrieveAll("Idx");
 
-            //集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
+            //集团模式下的角色体系: @0=每套组织都有自己的角色体系@1=所有的组织共享一套岗则体系.
             if (BP.Difference.SystemConfig.GroupStationModel == 1)
-                return base.RetrieveAll();
+                return base.RetrieveAll("Idx");
+            if (BP.Difference.SystemConfig.GroupStationModel == 0)
+                return base.Retrieve(StationAttr.OrgNo, BP.Web.WebUser.OrgNo);
+
+            if (BP.Difference.SystemConfig.GroupStationModel == 2)
+                return base.Retrieve(StationAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
 
             //按照orgNo查询.
-            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
+            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, "Idx");
+        }
+
+        public override int RetrieveAllFromDBSource()
+        {
+            return this.RetrieveAll();
+        }
+
+        public override int RetrieveAllFromDBSource(string orderBY)
+        {
+            return this.RetrieveAll(orderBY);
         }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

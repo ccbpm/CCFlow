@@ -681,17 +681,16 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("WF_Node", "审核组件");
-                
 
+                #region 基本设置
+                map.AddGroupAttr("基本设置");
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10);
-                map.AddTBString(NodeWorkCheckAttr.FWCLab, "审核信息", "显示标签", true, false, 0, 100, 10, true);
-
-                #region 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
                 map.AddDDLSysEnum(NodeWorkCheckAttr.FWCSta, (int)FrmWorkCheckSta.Disable, "审核组件状态",
                    true, true, NodeWorkCheckAttr.FWCSta, "@0=禁用@1=启用@2=只读");
-                map.AddDDLSysEnum(NodeWorkCheckAttr.FWCShowModel, (int)FrmWorkShowModel.Free, "显示方式",
-                    true, true, NodeWorkCheckAttr.FWCShowModel, "@0=表格方式@1=自由模式"); //此属性暂时没有用.
+
+                map.AddTBString(NodeWorkCheckAttr.FWCLab, "审核信息", "显示标签", true, false, 0, 100, 10, true);
+
 
                 map.AddDDLSysEnum(NodeWorkCheckAttr.FWCType, (int)FWCType.Check, "审核组件", true, true,
                     NodeWorkCheckAttr.FWCType, "@0=审核组件@1=日志组件@2=周报组件@3=月报组件");
@@ -703,53 +702,57 @@ namespace BP.WF.Template
                 map.SetHelperAlert(NodeWorkCheckAttr.FWCAth,
                     "在审核期间，是否启用上传附件？启用什么样的附件？注意：附件的属性在节点表单里配置。"); //使用alert的方式显示帮助信息.
 
-                map.AddBoolean(NodeWorkCheckAttr.FWCTrackEnable, true, "轨迹图是否显示？", true, true, false);
-
-                map.AddBoolean(NodeWorkCheckAttr.FWCListEnable, true, "历史审核信息是否显示？(否,仅出现意见框)", true, true, true);
-                map.AddBoolean(NodeWorkCheckAttr.FWCIsShowAllStep, false, "在轨迹表里是否显示所有的步骤？", true, true);
-
                 map.AddTBString(NodeWorkCheckAttr.FWCOpLabel, "审核", "操作名词(审核/审阅/批示)", true, false, 0, 50, 10);
                 map.AddTBString(NodeWorkCheckAttr.FWCDefInfo, "", "默认审核信息", true, false, 0, 50, 10);
 
-                map.AddDDLSysEnum(NodeWorkCheckAttr.SigantureEnabel, 0, "签名方式", true, true, NodeWorkCheckAttr.SigantureEnabel,"@0=不签名@1=图片签名@2=写字板");
+                map.AddDDLSysEnum(NodeWorkCheckAttr.SigantureEnabel, 0, "签名方式", true, true, NodeWorkCheckAttr.SigantureEnabel, "@0=不签名@1=图片签名@2=写字板@3=电子签名@4=电子盖章@5=电子签名+盖章");
                 map.SetHelperUrl(NodeWorkCheckAttr.SigantureEnabel, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3577079&doc_id=31094");
 
                 map.AddBoolean(NodeWorkCheckAttr.FWCIsFullInfo, true, "如果用户未审核是否按照默认意见填充？", true, true, true);
-
-
-                map.AddTBFloat(NodeWorkCheckAttr.FWC_H, 300, "高度(0=100%)", true, false);
+                //map.AddBoolean("WhetherStamp ", false, "是否启用盖章？", true, true, false);
 
                 map.AddTBString(NodeWorkCheckAttr.FWCFields, null, "审批格式字段", true, false, 0, 50, 10, true);
                 //map.AddTBString(NodeWorkCheckAttr.FWCNewDuanYu, null, "自定义常用短语(使用@分隔)", true, false, 0, 100, 10, true);
 
-                map.AddBoolean(NodeWorkCheckAttr.FWCIsShowTruck, false, "是否显示未审核的轨迹？", true, true, true);
-                map.AddBoolean(NodeWorkCheckAttr.FWCIsShowReturnMsg, false, "是否显示退回信息？", true, true, true);
 
                 //增加如下字段是为了查询与排序的需要.
                 map.AddTBString(NodeAttr.FK_Flow, null, "流程编号", false, false, 0, 5, 10);
                 map.AddTBInt(NodeAttr.Step, 0, "步骤", false, false);
 
 
-                //协作模式下审核人显示顺序. add for yantai zongheng.
-                map.AddDDLSysEnum(NodeWorkCheckAttr.FWCOrderModel, 0, "协作模式下操作员显示顺序", true, true,
-                  NodeWorkCheckAttr.FWCOrderModel, "@0=按审批时间先后排序@1=按照接受人员列表先后顺序(官职大小)");
-
-                //for tianye , 多人审核的时候，不让其看到其他人的意见.
-                map.AddDDLSysEnum(NodeWorkCheckAttr.FWCMsgShow, 0, "审核意见显示方式", true, true,
-                  NodeWorkCheckAttr.FWCMsgShow, "@0=都显示@1=仅显示自己的意见");
-
                 map.AddDDLSysEnum(NodeWorkCheckAttr.FWCVer, 1, "审核意见保存规则", true, true, NodeWorkCheckAttr.FWCVer,
                 "@0=1个节点1个人保留1个意见@1=保留节点历史意见(默认)");
 
-                string sql = "SELECT KeyOfEn AS No,Name From Sys_MapAttr Where UIContralType=14 AND FK_MapData='ND@NodeID'";
+                //签批字段解决关联字段或者极简模式查询不到结果的修改
+                map.AddTBString(NodeAttr.NodeFrmID, null, "节点表单ID", false, true, 0, 50, 10);
+                String sql = "SELECT KeyOfEn AS No,Name From Sys_MapAttr Where UIContralType=14 AND (FK_MapData='ND@NodeID' OR FK_MapData='@NodeFrmID' )";
                 map.AddDDLSQL(NodeWorkCheckAttr.CheckField, null, "签批字段", sql, true);
 
                // map.AddTBString(NodeWorkCheckAttr.CheckField, null, "签批字段", true, false, 0, 50, 10, false);
 
                 map.AddTBString(NodeWorkCheckAttr.FWCView, null, "审核意见立场", true, false, 0, 200, 200,true);
                 map.SetHelperAlert(NodeWorkCheckAttr.FWCView, "比如:同意,不同意,酌情处理, 多个立场用逗号分开,此立场可以作为方向条件.");
+                #endregion 基本设置
 
-                #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
+                #region 外观设置.
+                map.AddGroupAttr("外观设置");
+                map.AddDDLSysEnum(NodeWorkCheckAttr.FWCShowModel, (int)FrmWorkShowModel.Free, "显示方式",
+                    true, true, NodeWorkCheckAttr.FWCShowModel, "@0=表格方式@1=自由模式"); //此属性暂时没有用.
+                //协作模式下审核人显示顺序. add for yantai zongheng.
+                map.AddDDLSysEnum(NodeWorkCheckAttr.FWCOrderModel, 0, "协作模式下操作员显示顺序", true, true,
+                  NodeWorkCheckAttr.FWCOrderModel, "@0=按审批时间先后排序@1=按照接受人员列表先后顺序(官职大小)");
+                //for tianye , 多人审核的时候，不让其看到其他人的意见.
+                map.AddDDLSysEnum(NodeWorkCheckAttr.FWCMsgShow, 0, "审核意见显示方式", true, true,
+                  NodeWorkCheckAttr.FWCMsgShow, "@0=都显示@1=仅显示自己的意见");
+                map.AddTBFloat(NodeWorkCheckAttr.FWC_H, 300, "高度(0=100%)", true, false);
+
+                map.AddBoolean(NodeWorkCheckAttr.FWCTrackEnable, true, "轨迹图是否显示？", true, true, false);
+                map.AddBoolean(NodeWorkCheckAttr.FWCListEnable, true, "历史审核信息是否显示？(否,仅出现意见框)", true, true, true);
+                map.AddBoolean(NodeWorkCheckAttr.FWCIsShowAllStep, false, "在轨迹表里是否显示所有的步骤？", true, true);
+
+                map.AddBoolean(NodeWorkCheckAttr.FWCIsShowTruck, false, "是否显示未审核的轨迹？", true, true, true);
+                map.AddBoolean(NodeWorkCheckAttr.FWCIsShowReturnMsg, false, "是否显示退回信息？", true, true, true);
+                #endregion 外观
 
                 this._enMap = map;
                 return this._enMap;

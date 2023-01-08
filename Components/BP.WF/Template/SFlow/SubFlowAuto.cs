@@ -264,6 +264,14 @@ namespace BP.WF.Template.SFlow
                 return this.GetValIntByKey(SubFlowAutoAttr.SendModel);
             }
         }
+
+        public bool SubFlowHidTodolist
+        {
+            get
+            {
+                return this.GetValBooleanByKey(SubFlowAttr.SubFlowHidTodolist);
+            }
+        }
         #endregion
 
         #region 构造函数
@@ -359,8 +367,10 @@ namespace BP.WF.Template.SFlow
                 map.AddTBString(SubFlowAttr.ParentFlowCopyFields, null, "子流程字段对应父流程字段", true, false, 0, 400, 150, true);
                 map.SetHelperAlert(SubFlowHandAttr.ParentFlowCopyFields, "子流程结束后，按照设置模式:格式为@SubField1=ParentField1@SubField2=ParentField2@SubField3=ParentField3,即子流程字段对应父流程字段，设置成立复制\r\n如果使用签批字段时，请使用按照设置模式");
 
+                //批量发送后，是否隐藏父流程的待办
+                map.AddBoolean(SubFlowHandGuideAttr.SubFlowHidTodolist, false, "发送后是否隐藏父流程待办", true, true, true);
 
-                map.AddTBInt(SubFlowHandAttr.Idx, 0, "显示顺序", true, false);
+                map.AddTBInt(SubFlowHandAttr.Idx, 0, "顺序", true, false);
 
                 this._enMap = map;
                 return this._enMap;

@@ -48,7 +48,7 @@ namespace BP.Sys
                     mapFrame.setEleType("iFrame");
                     mapFrame.setName(name);
                     mapFrame.setFrmID(no);
-                    mapFrame.URL = "http://ccflow.org";
+                    mapFrame.URL = "http://citydo.com.cn";
                  
                     mapFrame.W = 400;
                     mapFrame.H = 600;
@@ -897,8 +897,16 @@ namespace BP.Sys
             DataTable Sys_MapFrame = md.MapFrames.ToDataTableField("Sys_MapFrame");
             ds.Tables.Add(Sys_MapFrame);
 
-            //Sys_FrmAttachment.
-            DataTable Sys_FrmAttachment = md.FrmAttachments.ToDataTableField("Sys_FrmAttachment");
+            //Sys_FrmAttachment.@hongyan
+            FrmAttachments aths = md.FrmAttachments;
+            //获取从表中的附件字段
+            foreach (MapDtl dtl in md.OrigMapDtls)
+            {
+                FrmAttachments dtlAths = new FrmAttachments(dtl.No);
+                aths.AddEntities(dtlAths);
+
+            }
+            DataTable Sys_FrmAttachment = aths.ToDataTableField("Sys_FrmAttachment");
             ds.Tables.Add(Sys_FrmAttachment);
 
             //FrmImgAths. 上传图片附件.
@@ -938,7 +946,7 @@ namespace BP.Sys
 
             // Sys_Enum
             listNames.Add("Sys_Enum");
-            sql = "@SELECT * FROM Sys_Enum WHERE EnumKey IN ( SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData IN (" + ids + ") ) order By EnumKey,IntKey";
+            sql = "@SELECT * FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey IN ( SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData IN (" + ids + ") ) order By EnumKey,IntKey";
             sqls += sql;
 
             // 审核组件

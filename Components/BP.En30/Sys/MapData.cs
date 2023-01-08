@@ -470,9 +470,9 @@ namespace BP.Sys
 
                             string enumKeySQL = "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData = '" + this.No + "' AND LGType = 1 ";
                             string sqlWhere = " EnumKey IN (" + enumKeySQL + ") AND OrgNo='" + BP.Web.WebUser.OrgNo + "'";
-                            string sqlEnum = "SELECT * FROM Sys_Enum WHERE " + sqlWhere;
+                            string sqlEnum = "SELECT * FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE " + sqlWhere;
                             sqlEnum += " UNION ";
-                            sqlEnum += "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeySQL + ") AND EnumKey NOT IN (SELECT EnumKey FROM Sys_Enum WHERE " + sqlWhere + ") AND (OrgNo Is Null Or OrgNo='')";
+                            sqlEnum += "SELECT * FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey IN (" + enumKeySQL + ") AND EnumKey NOT IN (SELECT EnumKey FROM Sys_Enum WHERE " + sqlWhere + ") AND (OrgNo Is Null Or OrgNo='')";
                             sqlEnum += "Order By IntKey";
                             DataTable dt = DBAccess.RunSQLReturnTable(sqlEnum);
                             QueryObject.InitEntitiesByDataTable(obj, dt, null);
@@ -514,6 +514,20 @@ namespace BP.Sys
                 return ens as FrmAttachments;
             }
         }
+
+        /// <summary>
+        /// 附件模板列表
+        /// </summary>
+       // public SysFileManagers sysFileManagers
+       // {
+       //     get
+       //     {
+       //         var ens = this.GetEntitiesAttrFromAutoNumCash(new SysFileManagers(),
+       //SysFileManagerAttr.FK_MapData, this.No);
+       //         return ens as SysFileManagers;
+       //     }
+       // }
+
         /// <summary>
         /// 图片附件
         /// </summary>
@@ -1117,13 +1131,11 @@ namespace BP.Sys
                 //@周朋 表存储格式0=自定义表,1=指定表,可以修改字段2=执行表不可以修改字段.
                 map.AddTBInt(MapDataAttr.PTableModel, 0, "表存储模式", true, true);
 
-
                 map.AddTBString(MapDataAttr.UrlExt, null, "连接(对嵌入式表单有效)", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.Dtls, null, "从表", true, false, 0, 500, 20);
 
                 //格式为: @1=方案名称1@2=方案名称2@3=方案名称3
                 //map.AddTBString(MapDataAttr.Slns, null, "表单控制解决方案", true, false, 0, 500, 20);
-
                 map.AddTBInt(MapDataAttr.FrmW, 900, "FrmW", true, true);
 
                 // @0=4列, @1=6 列.
@@ -1158,7 +1170,6 @@ namespace BP.Sys
                 map.AddTBString(MapDataAttr.Designer, null, "设计者", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.DesignerContact, null, "联系方式", true, false, 0, 500, 20);
-
                 map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", true, true);
                 map.AddTBString(MapDataAttr.GUID, null, "GUID", true, false, 0, 128, 20);
                 map.AddTBString(MapDataAttr.Ver, null, "版本号", true, false, 0, 30, 20);
@@ -1521,7 +1532,6 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                //@hongyan.
                                 //编号列. 
                                 string colName = dc.ColumnName.ToLower();
 
@@ -1540,7 +1550,7 @@ namespace BP.Sys
                             string htmlCode = "";
                             foreach (DataColumn dc in dt.Columns)
                             {
-                                //@hongyan.
+                                
                                 if (dc.ColumnName.Equals("HtmlTemplateFile") == true)
                                 {
                                     htmlCode = dr[dc.ColumnName] as string;
@@ -1550,7 +1560,7 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                //@hongyan.
+                                
                                 string colName = dc.ColumnName.ToLower();
                                 if (colName.Equals("no") == true || colName.Equals("name")==true)
                                     md.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
@@ -1825,6 +1835,7 @@ namespace BP.Sys
                         }
                         break;
                     case "Sys_Enum":
+                    case "Sys_Enums":
                         foreach (DataRow dr in dt.Rows)
                         {
                             SysEnum se = new Sys.SysEnum();

@@ -88,6 +88,10 @@ namespace BP.Sys
         /// </summary>
         public const string ExtType = "ExtType";
         /// <summary>
+        /// 模式
+        /// </summary>
+        public const string ExtModel = "ExtModel";
+        /// <summary>
         /// 插入表单的位置
         /// </summary>
         public const string RowIdx = "RowIdx";
@@ -528,7 +532,18 @@ namespace BP.Sys
                 this.SetValByKey(MapExtAttr.AtPara, value);
             }
         }
-      
+
+        public string ExtModel
+        {
+            get
+            {
+                return this.GetValStrByKey(MapExtAttr.ExtModel);
+            }
+            set
+            {
+                this.SetValByKey(MapExtAttr.ExtModel, value);
+            }
+        }
         public string ExtType
         {
             get
@@ -810,27 +825,25 @@ namespace BP.Sys
                 Map map = new Map("Sys_MapExt","业务逻辑");
 
                 map.IndexField = MapDtlAttr.FK_MapData; 
-
                 map.AddMyPK();
+                map.AddTBString(MapExtAttr.FK_MapData, null, "表单ID", true, false, 0, 100, 20);
+                map.AddTBString(MapExtAttr.ExtModel, null, "类型1", true, false, 0, 30, 20);
+                map.AddTBString(MapExtAttr.ExtType, null, "类型2", true, false, 0, 30, 20);
 
-                map.AddTBString(MapExtAttr.FK_MapData, null, "主表", true, false, 0, 100, 20);
-                map.AddTBString(MapExtAttr.ExtType, null, "类型", true, false, 0, 30, 20);
-
-                map.AddTBInt(MapExtAttr.DoWay, 0, "执行方式", true, false);
+                //@hongyan. 修改类型.
+                // map.AddTBInt(MapExtAttr.DoWay, 0, "执行方式", true, false);
+                map.AddTBString(MapExtAttr.DoWay, null, "执行方式", true, false, 0, 50, 20);
 
                 map.AddTBString(MapExtAttr.AttrOfOper, null, "操作的Attr", true, false, 0, 30, 20);
                 map.AddTBString(MapExtAttr.AttrsOfActive, null, "激活的字段", true, false, 0, 900, 20);
 
                 map.AddTBStringDoc();
-
                 map.AddTBString(MapExtAttr.Tag, null, "Tag", true, false, 0, 2000, 20);
-
                 map.AddTBString(MapExtAttr.Tag1, null, "Tag1", true, false, 0, 2000, 20);
                 map.AddTBString(MapExtAttr.Tag2, null, "Tag2", true, false, 0, 2000, 20);
                 map.AddTBString(MapExtAttr.Tag3, null, "Tag3", true, false, 0, 2000, 20);
                 map.AddTBString(MapExtAttr.Tag4, null, "Tag4", true, false, 0, 2000, 20);
                 map.AddTBString(MapExtAttr.Tag5, null, "Tag5", true, false, 0, 2000, 20);
-
 
                 map.AddTBInt(MapExtAttr.H, 500, "高度", false, false);
                 map.AddTBInt(MapExtAttr.W, 400, "宽度", false, false);
@@ -856,6 +869,9 @@ namespace BP.Sys
         /// </summary>
         public void InitPK()
         {
+            if (DataType.IsNullOrEmpty(this.FK_MapData) == true)
+                return;
+
             switch (this.ExtType)
             {
                 case MapExtXmlList.FullData:
@@ -910,16 +926,64 @@ namespace BP.Sys
         protected override bool beforeInsert()
         {
             if (this.MyPK == "")
-                this.setMyPK(DBAccess.GenerGUID()); //@李国文
+                this.setMyPK(DBAccess.GenerGUID());
+
+            InitEtcFieldForTSEntity();
 
             BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
 
             return base.beforeInsert();
         }
+        /// <summary>
+        /// 根据主键初始化其的字段.
+        /// </summary>
+        private void InitEtcFieldForTSEntity()
+        {
+
+            if (DataType.IsNullOrEmpty(this.FK_MapData) == true && this.MyPK.Contains("_") == true)
+            {
+                string[] strs = this.MyPK.Split('_');
+                //表单ID.
+                this.FK_MapData = strs[0];
+
+                //要操作的字段.
+                if (DataType.IsNullOrEmpty(this.AttrOfOper) == true && strs.Length > 2)
+                    this.ExtType = strs[1];
+
+                //设置模式.
+                if (DataType.IsNullOrEmpty(this.ExtType) == true && strs.Length > 2)
+                    this.ExtType = strs[2];
+                if (DataType.IsNullOrEmpty(this.ExtModel) == true && strs.Length > 2)
+                    this.ExtType = strs[2];
+            }
+
+        }
 
         protected override bool beforeUpdate()
         {
             this.InitPK();
+
+            #region 处理ts程序更新前的，补充填写其他的数据.
+            if (this.MyPK.Contains("_") == true)
+            {
+                string[] strs = this.MyPK.Split('_');
+                if (strs.Length == 3)
+                {
+                    if (DataType.IsNullOrEmpty(this.FK_MapData) == true)
+                        this.FK_MapData = strs[0];
+
+                    if (DataType.IsNullOrEmpty(this.AttrOfOper) == true)
+                        this.AttrOfOper = strs[1];
+
+                    if (DataType.IsNullOrEmpty(this.ExtModel) == true)
+                        this.ExtModel = strs[2];
+                }
+            }
+            #endregion 处理ts程序更新前的，补充填写其他的数据.
+
+
+            //根据主键初始化其的字段
+            InitEtcFieldForTSEntity();
 
             switch (this.ExtType)
             {
@@ -1261,6 +1325,22 @@ namespace BP.Sys
 
             exp = exp.Replace("~", "'");
             return exp;
+        }
+
+        /// <summary>
+        /// 保存大块html文本
+        /// </summary>
+        /// <returns></returns>
+        public string SaveBigNoteHtmlText(string text)
+        {
+            DBAccess.SaveBigTextToDB(text, "Sys_MapExt", "MyPK", this.MyPK, "HtmlText");
+            return "保存成功！";
+        }
+
+        public string ReadBigNoteHtmlText()
+        {
+            string doc =DBAccess.GetBigTextFromDB("Sys_MapExt", "MyPK", this.MyPK, "HtmlText");
+            return doc;
         }
     }
     /// <summary>

@@ -134,8 +134,6 @@ namespace BP.WF.Template.Frm
                 return this.GetValIntByKey(MapDataAttr.FrmW);
             }
         }
-      
-        
         #endregion
     }
 	/// <summary>

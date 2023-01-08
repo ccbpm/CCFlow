@@ -47,7 +47,7 @@ namespace BP.En
             }
             return null;
         }
-       
+
         #endregion
 
         #region 虚拟方法
@@ -63,7 +63,7 @@ namespace BP.En
             qo.AddWhere(attr, val);
             return qo.DoQuery();
         }
-      
+
         #endregion
 
         #region 构造函数
@@ -116,7 +116,7 @@ namespace BP.En
                 throw new Exception("加入的 AddEntity 不能为空。");
             return this.InnerList.Add(entity);
         }
-      
+
         public virtual void AddEntities(Entities ens)
         {
             foreach (Entity en in ens)
@@ -146,7 +146,7 @@ namespace BP.En
                 this.AddEntity(en);
             }
         }
-       
+
         /// <summary>
         /// 判断是不是包含指定的Entity .
         /// </summary>
@@ -156,7 +156,7 @@ namespace BP.En
         {
             return this.Contains(en.PKVal);
         }
-       
+
         public bool Contains(Entities ens, string key)
         {
             if (ens.Count == 0)
@@ -168,7 +168,7 @@ namespace BP.En
             }
             return true;
         }
-        
+
         /// <summary>
         /// 是不是包含指定的PK
         /// </summary>
@@ -204,7 +204,7 @@ namespace BP.En
             }
             return false;
         }
-        
+
         /// <summary>
         /// 创建立本身的一个实例.
         /// </summary>
@@ -265,7 +265,7 @@ namespace BP.En
             }
             return null;
         }
-      
+
         /// <summary>
         /// 获得entis
         /// </summary>
@@ -275,6 +275,7 @@ namespace BP.En
         public Entities GetEntitiesByKey(string attr, string val)
         {
             Entities ens = this.GetNewEntity.GetNewEntities;
+            ens.Clear();
             foreach (Entity en in this)
             {
                 if (en.GetValStrByKey(attr).Equals(val) == false)
@@ -288,7 +289,7 @@ namespace BP.En
         #endregion
 
         #region  对一个属性操作
-        
+
         /// <summary>
         /// 求和
         /// </summary>
@@ -333,7 +334,7 @@ namespace BP.En
             }
             return sum;
         }
-     
+
         #endregion
 
         #region 对集合的操作
@@ -355,12 +356,12 @@ namespace BP.En
             BP.DA.Log.DebugWriteInfo("成功[" + en.ToString() + "-" + num + "]放入缓存。");
             return num;
         }
-        
+
         /// <summary>
         /// 从集合中删除该对象
         /// </summary>
         /// <param name="entity"></param>
-        public  void RemoveEn(Entity entity)
+        public void RemoveEn(Entity entity)
         {
             this.InnerList.Remove(entity);
         }
@@ -368,12 +369,12 @@ namespace BP.En
         /// 移除
         /// </summary>
         /// <param name="pk"></param>
-        public  void RemoveEn(string pk)
+        public void RemoveEn(string pk)
         {
             string key = this.GetNewEntity.PK;
             RemoveEn(key, pk);
         }
-        public  void RemoveEn(string key, string val)
+        public void RemoveEn(string key, string val)
         {
             foreach (Entity en in this)
             {
@@ -384,7 +385,7 @@ namespace BP.En
                 }
             }
         }
-        public  void Remove(string pks)
+        public void Remove(string pks)
         {
             //设置
             pks = pks.Replace(",", "@");
@@ -547,7 +548,7 @@ namespace BP.En
             {
                 ps.Add("p3", val3);
             }
-             
+
             return en.RunSQL(ps);
         }
         public int Delete(string key1, object val1, string key2, object val2, string key3, object val3, string key4, object val4)
@@ -624,7 +625,7 @@ namespace BP.En
             }
             return en.RunSQL(ps);
         }
-       
+
         public void SaveToXml(string file)
         {
             string dir = "";
@@ -865,14 +866,14 @@ namespace BP.En
             return qo.DoQuery();
         }
         /// <summary>
-        /// 查询全部
+        /// 查询全部 
         /// </summary>
         /// <returns></returns>
         public virtual int RetrieveAll(string orderBy)
         {
             QueryObject qo = new QueryObject(this);
-            if (orderBy != null)
-                qo.addOrderBy(orderBy);
+            if (DataType.IsNullOrEmpty(orderBy) == false)
+                qo.addOrderBy(orderBy); 
             return qo.DoQuery();
         }
         /// <summary>
@@ -882,7 +883,7 @@ namespace BP.En
         public virtual int RetrieveAll(string orderBy1, string orderBy2)
         {
             QueryObject qo = new QueryObject(this);
-            if (orderBy1 != null)
+            if (DataType.IsNullOrEmpty(orderBy1) == false)
                 qo.addOrderBy(orderBy1, orderBy2);
             return qo.DoQuery();
         }
@@ -1050,7 +1051,13 @@ namespace BP.En
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception("err@列[" + attr.Key + "]，设置值:" + val + "错误，也许是类型匹配");
+                            if (attr.IsNum)
+                            {
+                                dr[attr.Key] = 0;
+                                continue;
+                            }
+
+                            throw new Exception("err@列[" + this.ToString() + " attr:" + attr.Key + "]，设置值:[" + val + "]错误，也许是类型匹配");
                         }
                     }
                 }
@@ -1267,7 +1274,7 @@ namespace BP.En
             return dt;
         }
         #endregion
-         
+
         #region 查询from cash
         /// <summary>
         /// 缓存查询: 根据 in sql 方式进行。
@@ -1369,7 +1376,7 @@ namespace BP.En
             return RetrieveFromCash(null, null, top, orderBy, isDesc);
         }
         #endregion
-         
+
 
         #region 类名属性.
         /// <summary>

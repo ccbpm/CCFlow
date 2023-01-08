@@ -57,7 +57,7 @@ namespace BP.WF.Data
         /// </summary>
         public const string FK_Node = "FK_Node";
         /// <summary>
-        /// 当前工作岗位
+        /// 当前工作角色
         /// </summary>
         public const string FK_Station = "FK_Station";
         /// <summary>
@@ -738,22 +738,22 @@ namespace BP.WF.Data
                 map.AddSearchAttr(MyAuthtoAttr.WFSta);
 
                 map.DTSearchWay = DTSearchWay.ByDate;
-                map.DTSearchLable = "发起日期";
+                map.DTSearchLabel = "发起日期";
                 map.DTSearchKey = MyAuthtoAttr.RDT;
 
                 #region 增加多个隐藏条件.
                 ////我授权的流程.
-                //AttrOfSearch search = new AttrOfSearch(MyAuthtoAttr.Starter, "发起人",
+                //SearchNormal search = new SearchNormal(MyAuthtoAttr.Starter, "发起人",
                 //    MyAuthtoAttr.Starter, "=", BP.Web.WebUser.No, 0, true);
-                //map.AttrsOfSearch.Add(search);
+                //map.SearchNormals.Add(search);
 
-                //search = new AttrOfSearch(MyAuthtoAttr.WFState, "流程状态",
+                //search = new SearchNormal(MyAuthtoAttr.WFState, "流程状态",
                 //    MyAuthtoAttr.WFState, " not in", "('0')", 0, true);
-                //map.AttrsOfSearch.Add(search);
+                //map.SearchNormals.Add(search);
 
-                AttrOfSearch search = new AttrOfSearch(MyAuthtoAttr.AtPara, "授权人",
+                SearchNormal search = new SearchNormal(MyAuthtoAttr.AtPara, "授权人",
                 MyAuthtoAttr.AtPara, " LIKE ", " '%@Auth="+BP.Web.WebUser.Name+"%' ", 0, true);
-                map.AttrsOfSearch.Add(search);
+                map.SearchNormals.Add(search);
 
                 #endregion 增加多个隐藏条件.
 

@@ -158,7 +158,6 @@ namespace BP.CCBill
         public const string RefBillRole = "RefBillRole";
         #endregion 按钮.
 
-
         #region 集合的操作.
         /// <summary>
         /// 导入Excel
@@ -182,7 +181,6 @@ namespace BP.CCBill
         /// 行打开模式
         /// </summary>
         public const string RowOpenModel = "RowOpenModel";
-
         public const string PopHeight = "PopHeight";
         public const string PopWidth = "PopWidth";
         public const string Tag0 = "Tag0";
@@ -192,5 +190,8 @@ namespace BP.CCBill
         /// 实体编辑模式
         /// </summary>
         public const string EntityEditModel = "EntityEditModel";
+
+        public const string SearchDictOpenType = "SearchDictOpenType";
+
     }
 }

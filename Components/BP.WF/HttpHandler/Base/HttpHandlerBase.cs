@@ -6,7 +6,7 @@ using BP.Difference;
 
 namespace BP.WF.HttpHandler
 {
-    abstract public class HttpHandlerBase : IHttpHandler, IRequiresSessionState, IReadOnlySessionState
+    abstract public class HttpHandlerBase : IHttpHandler, IRequiresSessionState
     {
        
         /// <summary>

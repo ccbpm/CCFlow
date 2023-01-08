@@ -53,7 +53,7 @@ namespace BP.WF.Data
         /// </summary>
         public const string FK_Node = "FK_Node";
         /// <summary>
-        /// 当前工作岗位
+        /// 当前工作角色
         /// </summary>
         public const string FK_Station = "FK_Station";
         /// <summary>
@@ -738,7 +738,7 @@ namespace BP.WF.Data
 
 
                 map.DTSearchKey = GenerWorkFlowAttr.SDTOfNode;
-                map.DTSearchLable = "节点应完成时间";
+                map.DTSearchLabel = "节点应完成时间";
                 map.DTSearchWay = DTSearchWay.ByDate;
 
                 //   map.AddSearchAttr(MyFlowAttr.FK_Flow);
@@ -747,9 +747,9 @@ namespace BP.WF.Data
                 //map.IsShowSearchKey = false;
 
                 //增加隐藏的查询条件. 我参与的流程.
-                AttrOfSearch search = new AttrOfSearch(MyFlowAttr.Emps, "人员",
+                SearchNormal search = new SearchNormal(MyFlowAttr.Emps, "人员",
                     MyFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%", 0, true);
-                map.AttrsOfSearch.Add(search);
+                map.SearchNormals.Add(search);
 
 
                 RefMethod rm = new RefMethod();

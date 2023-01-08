@@ -58,7 +58,7 @@ namespace BP.Port
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Port_TeamType", "用户组类型");
+                Map map = new Map("Port_TeamType", "标签类型");
                 map.CodeStruct = "2";
 
                 map.AddTBStringPK(TeamTypeAttr.No, null, "编号", true, true, 1, 5, 5);
@@ -68,6 +68,13 @@ namespace BP.Port
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+
+        protected override bool beforeUpdateInsertAction()
+        {
+            if (DataType.IsNullOrEmpty(this.Name) == true)
+                throw new Exception("请输入名称"); //@hongyan.
+            return base.beforeUpdateInsertAction();
         }
     }
     /// <summary>

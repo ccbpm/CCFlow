@@ -292,6 +292,27 @@ namespace BP.CCBill
                 return "err@" + func.MsgErr + " @ " + ex.Message;
             }
         }
+        public string DoMethod_ExecFunc()
+        {
+            MethodFunc func = new MethodFunc(this.MyPK);
+            string doc = func.Docs;
+            BuessUnitBase en = BP.Sys.Base.Glo.GetBuessUnitEntityByEnName(doc);
+            try
+            {
+                string workID = this.WorkIDStr;
+                en.WorkID = Int64.Parse(workID);
+                en.DoIt();
+
+                BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, workID, "执行方法", func.Name);
+                return func.MsgSuccess;
+            }
+            catch (Exception ex)
+            {
+                if (func.MsgErr.Equals(""))
+                    func.MsgErr = "执行失败(DoMethod_ExecFunc).";
+                return "err@" + func.MsgErr + " @ " + ex.Message;
+            }
+        }
         /// <summary>
         /// 执行SQL
         /// </summary>
@@ -647,6 +668,10 @@ namespace BP.CCBill
         {
             return BP.CCBill.Dev2Interface.MyBill_Delete(this.FrmID, this.WorkID);
         }
+        public string MyBill_Deletes()
+        {
+            return BP.CCBill.Dev2Interface.MyBill_DeleteBills(this.FrmID, this.GetRequestVal("WorkIDs"));
+        }
 
 
         //删除实体
@@ -766,11 +791,16 @@ namespace BP.CCBill
                 if (attr.IsFK == true)
                 {
                     Entities ensFK = attr.HisFKEns;
-                    ensFK.RetrieveAll();
+                    if (ensFK != null)
+                    {
+                        ensFK.RetrieveAll();
+                        DataTable dtEn = ensFK.ToDataTableField();
+                        dtEn.TableName = attr.Key;
+                        ds.Tables.Add(dtEn);
+                    }
 
-                    DataTable dtEn = ensFK.ToDataTableField();
-                    dtEn.TableName = attr.Key;
-                    ds.Tables.Add(dtEn);
+
+
                 }
                 //绑定SQL的外键
                 if (ds.Tables.Contains(attr.Key) == false)
@@ -1017,7 +1047,7 @@ namespace BP.CCBill
                 row["MyDataType"] = attr.MyDataType;
                 row["UIBindKey"] = attr.UIBindKey;
                 row["AtPara"] = attr.GetValStringByKey("AtPara");
-                row["IsRichText"] = attr.IsRichText == true ? 1 : 0;
+                row["IsRichText"] = attr.TextModel == 3 ? 1 : 0;
                 dt.Rows.Add(row);
             }
 
@@ -1122,7 +1152,7 @@ namespace BP.CCBill
             pcs.Retrieve(PowerCenterAttr.CtrlObj, this.FrmID, PowerCenterAttr.CtrlGroup, "SearchBtn");
 
             string mydepts = "" + WebUser.FK_Dept + ","; //我的部门.
-            string mystas = ""; //我的岗位.
+            string mystas = ""; //我的角色.
 
             DataTable mydeptsDT = DBAccess.RunSQLReturnTable("SELECT FK_Dept,FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'");
             foreach (DataRow dr in mydeptsDT.Rows)
@@ -1177,7 +1207,7 @@ namespace BP.CCBill
                         break;
                     }
 
-                    //是否包含岗位？
+                    //是否包含角色？
                     if (pc.CtrlModel.Equals("Stations") == true && BP.DA.DataType.IsHaveIt(pc.IDs, mystas) == true)
                     {
                         newCollections.AddEntity(collection);
@@ -1347,6 +1377,7 @@ namespace BP.CCBill
 
         public string SearchDB_UrlSearchData(string urlExt, string postData)
         {
+            urlExt = BP.WF.Glo.DealExp(urlExt, null);
             if (urlExt.Contains("http") == false)
             {
                 /*如果没有绝对路径 */
@@ -1363,7 +1394,7 @@ namespace BP.CCBill
                 if (BP.Difference.SystemConfig.IsBSsystem == false)
                 {
                     /*在cs模式下它的baseurl 从web.config中获取.*/
-                    string cfgBaseUrl =  BP.Difference.SystemConfig.AppSettings["HostURL"];
+                    string cfgBaseUrl = BP.Difference.SystemConfig.AppSettings["HostURL"];
                     if (DataType.IsNullOrEmpty(cfgBaseUrl))
                     {
                         string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
@@ -1562,10 +1593,11 @@ namespace BP.CCBill
 
             //获得关键字.
             AtPara ap = new AtPara(ur.Vals);
+            Attr ddattr = null;
             foreach (string str in ap.HisHT.Keys)
             {
                 var val = ap.GetValStrByKey(str);
-                if (val.Equals("all"))
+                if (val.Equals("all") || val.Equals("null"))
                     continue;
                 if (isFirst == false)
                     qo.addAnd();
@@ -1573,8 +1605,20 @@ namespace BP.CCBill
                     isFirst = false;
 
                 qo.addLeftBracket();
-
-
+                ddattr = attrs.GetAttrByKeyOfEn(str);
+                if (val.IndexOf(",") != -1)
+                {
+                    if (ddattr.IsNum == true)
+                    {
+                        qo.AddWhere(str, "IN", "(" + val + ")");
+                        qo.addRightBracket();
+                        continue;
+                    }
+                    val = "('" + val.Replace(",", "','") + "')";
+                    qo.AddWhere(str, "IN", val);
+                    qo.addRightBracket();
+                    continue;
+                }
                 if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true)
                 {
                     var typeVal = BP.Sys.Base.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
@@ -1596,6 +1640,14 @@ namespace BP.CCBill
 
             if (DataType.IsNullOrEmpty(hidenField) == false)
             {
+                hidenField = hidenField.Replace("_WebUser.No", WebUser.No);
+                hidenField = hidenField.Replace("_WebUser.Name", WebUser.Name);
+                hidenField = hidenField.Replace("_WebUser.FK_DeptName", WebUser.FK_DeptName);
+                hidenField = hidenField.Replace("_WebUser.FK_Dept", WebUser.FK_Dept);
+                hidenField = hidenField.Replace("_WebUser.OrgNo", WebUser.OrgNo);
+                if (hidenField.IndexOf("_") != -1)
+                    return "err@隐藏条件" + hidenField + "还有未替换的_符号";
+
                 if (isFirst == false)
                     qo.addAnd();
                 else
@@ -1725,7 +1777,7 @@ namespace BP.CCBill
                 return "err@列表数据源和的查询不能为空";
 
             string expList = md.ExpList;
-
+            expList = BP.WF.Glo.DealExp(expList, null);
             //取出来查询条件.
             UserRegedit ur = new UserRegedit(WebUser.No, this.FrmID + "_SearchAttrs");
 
@@ -1914,6 +1966,7 @@ namespace BP.CCBill
 
             //获得关键字.
             AtPara ap = new AtPara(ur.Vals);
+            Attr ddattr = null;
             foreach (string str in ap.HisHT.Keys)
             {
                 var val = ap.GetValStrByKey(str);
@@ -1926,7 +1979,10 @@ namespace BP.CCBill
                 dr = whereDT.NewRow();
                 dr["Key"] = str;
                 dr["Oper"] = "=";
-                dr["Value"] = ap.GetValStrByKey(str);
+                if (val.IndexOf(",") != -1)
+                    dr["Oper"] = "IN";
+
+                dr["Value"] = val;
                 dr["Type"] = "Select";
                 whereDT.Rows.Add(dr);
                 ht.Add(str, ap.GetValStrByKey(str));
@@ -2009,7 +2065,25 @@ namespace BP.CCBill
                     }
                     if (type.Equals("Select") == true || type.Equals("Normal") == true)
                     {
-                        whereSQL += " AND " + mainTable + key + " " + dataRow["Oper"].ToString() + " '" + dataRow["Value"].ToString() + "'";
+                        string oper = dataRow["Oper"].ToString();
+                        string val = dataRow["Value"].ToString();
+                        if (oper.Equals("IN") == true)
+                        {
+                            ddattr = attrs.GetAttrByKeyOfEn(key);
+                            if (ddattr != null)
+                            {
+                                if (ddattr.IsNum)
+                                    whereSQL += " AND " + mainTable + key + " " + oper + " (" + val + ") ";
+                                else
+                                {
+                                    val = "('" + val.Replace(",", "','") + "')";
+                                    whereSQL += " AND " + mainTable + key + " " + oper + val;
+                                }
+                            }
+
+                        }
+                        else
+                            whereSQL += " AND " + mainTable + key + " " + oper + " '" + val + "'";
 
                     }
                 }
@@ -2018,7 +2092,19 @@ namespace BP.CCBill
                     whereSQL += ")";
                 //expCount = expCount + whereSQL;
                 //expList = expList + whereSQL;
+                string hidenField = md.GetParaString("HidenField");
 
+                if (DataType.IsNullOrEmpty(hidenField) == false)
+                {
+                    hidenField = hidenField.Replace("_WebUser.No", WebUser.No);
+                    hidenField = hidenField.Replace("_WebUser.Name", WebUser.Name);
+                    hidenField = hidenField.Replace("_WebUser.FK_DeptName", WebUser.FK_DeptName);
+                    hidenField = hidenField.Replace("_WebUser.FK_Dept", WebUser.FK_Dept);
+                    hidenField = hidenField.Replace("_WebUser.OrgNo", WebUser.OrgNo);
+                    if (hidenField.IndexOf("@") != -1)
+                        return "err@隐藏条件" + hidenField + "还有未替换的_符号";
+                    whereSQL += " AND (" + hidenField + ")";
+                }
 
                 expList = "SELECT * From(" + expList + ") AS A WHERE 1=1 " + whereSQL;//查询列数的
                 string expCount = "SELECT Count(*) From(" + expList + ") AS A WHERE 1=1 " + whereSQL;//查询总条数的
@@ -2050,6 +2136,8 @@ namespace BP.CCBill
                 ht.Add("PageIdx", this.PageIdx);
                 // 请求的参数作为JSON字符串发送给列表URL
                 string postData = BP.Tools.Json.ToJson(ht);
+                if (DataType.IsNullOrEmpty(md.ExpList) == true)
+                    return "err@根据URL请求数据的URL为空，请检查配置";
                 string json = SearchDB_UrlSearchData(md.ExpList, postData);
                 if (DataType.IsNullOrEmpty(json) == true)
                     return "err@根据URL请求数据列表数据为空";
@@ -2081,6 +2169,30 @@ namespace BP.CCBill
                 foreach (string key in ht.Keys)
                 {
                     paras.Add(key, ht[key]);
+                }
+                string hidenField = md.GetParaString("HidenField");
+
+                if (DataType.IsNullOrEmpty(hidenField) == false)
+                {
+                    hidenField = hidenField.Replace("_WebUser.No", WebUser.No);
+                    hidenField = hidenField.Replace("_WebUser.Name", WebUser.Name);
+                    hidenField = hidenField.Replace("_WebUser.FK_DeptName", WebUser.FK_DeptName);
+                    hidenField = hidenField.Replace("_WebUser.FK_Dept", WebUser.FK_Dept);
+                    hidenField = hidenField.Replace("_WebUser.OrgNo", WebUser.OrgNo);
+                    if (hidenField.IndexOf("@") != -1)
+                        return "err@隐藏条件" + hidenField + "还有未替换的_符号";
+                    string[] strs = hidenField.Split(',');
+                    foreach (string str in strs)
+                    {
+                        if (DataType.IsNullOrEmpty(str) == true)
+                            continue;
+                        string[] strVal = str.Split('=');
+                        if (strVal.Length == 1)
+                            paras.Add(strVal[0], "");
+                        else
+                            paras.Add(strVal[0], strVal[1]);
+                    }
+
                 }
                 DataTable dt = DBAccess.RunProcReturnTable(sql, paras);
                 dt.TableName = "DT";
@@ -2140,7 +2252,7 @@ namespace BP.CCBill
             #endregion
 
             #region 2、处理流程类别列表.
-            sql = " SELECT  A.BillState as No, B.Lab as Name, COUNT(WorkID) as Num FROM Frm_GenerBill A, Sys_Enum B ";
+            sql = " SELECT  A.BillState as No, B.Lab as Name, COUNT(WorkID) as Num FROM Frm_GenerBill A, " + BP.Sys.Base.Glo.SysEnum() + " B ";
             sql += " WHERE A.BillState=B.IntKey AND B.EnumKey='BillState' AND  A.Starter='" + WebUser.No + "' AND BillState >=1";
             if (tSpan.Equals("-1") == false)
                 sql += "  AND A.TSpan=" + tSpan;
@@ -2178,12 +2290,27 @@ namespace BP.CCBill
 
             string fields = " WorkID,FrmID,FrmName,Title,BillState, Starter, StarterName,Sender,RDT ";
 
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
-                sql = "SELECT " + fields + " FROM (SELECT * FROM Frm_GenerBill WHERE " + sqlWhere + ") WHERE rownum <= 50";
-            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
-                sql = "SELECT  TOP 50 " + fields + " FROM Frm_GenerBill WHERE " + sqlWhere;
-            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
-                sql = "SELECT  " + fields + " FROM Frm_GenerBill WHERE " + sqlWhere + " LIMIT 50";
+            switch (BP.Difference.SystemConfig.AppCenterDBType)
+            {
+                case DBType.MySQL:
+                case DBType.PostgreSQL:
+                case DBType.UX:
+                    sql = "SELECT  " + fields + " FROM Frm_GenerBill WHERE " + sqlWhere + " LIMIT 50";
+                    break;
+                case DBType.MSSQL:
+                    sql = "SELECT  TOP 50 " + fields + " FROM Frm_GenerBill WHERE " + sqlWhere;
+                    break;
+                case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
+                    sql = "SELECT " + fields + " FROM (SELECT * FROM Frm_GenerBill WHERE " + sqlWhere + ") WHERE rownum <= 50";
+                    break;
+                default:
+                    throw new Exception("err@没有判断的数据库类型.");
+                    break;
+            }
+
+
 
             DataTable mydt = DBAccess.RunSQLReturnTable(sql);
             if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
@@ -2428,7 +2555,7 @@ namespace BP.CCBill
                 qo.addLeftBracket();
 
 
-                if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType==true)
+                if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true)
                 {
                     var typeVal = BP.Sys.Base.Glo.GenerRealType(attrs, str, ap.GetValStrByKey(str));
                     qo.AddWhere(str, typeVal);
@@ -2449,40 +2576,17 @@ namespace BP.CCBill
 
             if (DataType.IsNullOrEmpty(hidenField) == false)
             {
-                hidenField = hidenField.Replace("[%]", "%");
-                foreach (string field in hidenField.Split(';'))
-                {
-                    if (field == "")
-                        continue;
-                    if (field.Split(',').Length != 3)
-                        throw new Exception("单据" + frmBill.Name + "的过滤设置规则错误：" + hidenField + ",请联系管理员检查");
-                    string[] str = field.Split(',');
-                    if (isFirst == false)
-                        qo.addAnd();
-                    else
-                        isFirst = false;
-                    qo.addLeftBracket();
-                    string val = str[2].Replace("WebUser.No", WebUser.No);
-                    val = val.Replace("WebUser.Name", WebUser.Name);
-                    val = val.Replace("WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
-                    val = val.Replace("WebUser.FK_DeptName", WebUser.FK_DeptName);
-                    val = val.Replace("WebUser.FK_Dept", WebUser.FK_Dept);
+                hidenField = hidenField.Replace("_WebUser.No", WebUser.No);
+                hidenField = hidenField.Replace("_WebUser.Name", WebUser.Name);
+                hidenField = hidenField.Replace("_WebUser.FK_DeptName", WebUser.FK_DeptName);
+                hidenField = hidenField.Replace("_WebUser.FK_Dept", WebUser.FK_Dept);
+                hidenField = hidenField.Replace("_WebUser.OrgNo", WebUser.OrgNo);
 
-                    //获得真实的数据类型.
-                    if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true)
-                    {
-                        var valType = BP.Sys.Base.Glo.GenerRealType(attrs,
-                            str[0], val);
-                        qo.AddWhere(str[0], str[1], valType);
-                    }
-                    else
-                    {
-                        qo.AddWhere(str[0], str[1], val);
-                    }
-                    qo.addRightBracket();
-                    continue;
-                }
-
+                if (isFirst == false)
+                    qo.addAnd();
+                else
+                    isFirst = false;
+                qo.addSQL(hidenField);
             }
 
             #endregion 设置隐藏字段的查询
@@ -2534,7 +2638,7 @@ namespace BP.CCBill
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + ext;
 
             //文件存放路径
-            string filePath =  BP.Difference.SystemConfig.PathOfTemp + "/" + fileNewName;
+            string filePath = BP.Difference.SystemConfig.PathOfTemp + "/" + fileNewName;
             HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), filePath);
 
             //从excel里面获得数据表.
@@ -2810,7 +2914,7 @@ namespace BP.CCBill
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + ext;
 
             //文件存放路径
-            string filePath =  BP.Difference.SystemConfig.PathOfTemp + "/" + fileNewName;
+            string filePath = BP.Difference.SystemConfig.PathOfTemp + "/" + fileNewName;
             HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), filePath);
 
             //从excel里面获得数据表.
@@ -3471,7 +3575,7 @@ namespace BP.CCBill
         {
             string state = "FlowNo_" + this.FK_Flow + "|OrgNo_" + WebUser.OrgNo + "|FrmID_" + this.FrmID + "|FrmOID_" + this.GetRequestVal("FrmOID");
             //回调url
-            string redirect_uri = HttpUtility.UrlEncode("http://www.ccbpm.cn/WF/CCBill/DictFlowStart.htm");
+            string redirect_uri = HttpUtility.UrlEncode("http://www.citydo.com.cn/WF/CCBill/DictFlowStart.htm");
             //授权链接
             string oatuth2 = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + BP.Difference.SystemConfig.AppID + "&redirect_uri=" + redirect_uri + "&response_type=code&scope=snsapi_userinfo&&state=" + state + "#wechat_redirect";
             return oatuth2;

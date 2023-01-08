@@ -80,6 +80,8 @@ namespace BP.CCFast.CCMenu
             switch (DBAccess.AppCenterDBType)
             {
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     int beginIndex = (pageNumber - 1) * pageSize + 1;
                     int endIndex = pageNumber * pageSize;
 

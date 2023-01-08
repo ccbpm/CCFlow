@@ -4,7 +4,7 @@ using BP.Sys;
 namespace BP.WF.Port
 {
 	/// <summary>
-	/// 部门属性
+	/// 部门属性(即将弃用)
 	/// </summary>
     public class DeptAttr : EntityNoNameAttr
     {
@@ -22,7 +22,7 @@ namespace BP.WF.Port
 
     }
     /// <summary>
-    /// 部门
+    /// 部门(即将弃用)
     /// </summary>
     public class Dept:EntityNoName
 	{
@@ -98,7 +98,8 @@ namespace BP.WF.Port
 			{
 				UAC uac = new UAC();
 				uac.OpenForSysAdmin();
-				return uac;
+                uac.IsInsert = false;
+                return uac;
 			}
 		}
 		/// <summary>
@@ -116,8 +117,8 @@ namespace BP.WF.Port
 
                 map.AddTBStringPK(DeptAttr.No, null, "编号", true, false, 1, 30, 40);
                 map.AddTBString(DeptAttr.Name, null,"名称", true, false, 0, 60, 200);
-                map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 30, 40);
-                map.AddTBString(DeptAttr.OrgNo, null, "隶属组织", true, false, 0, 50, 250);
+                map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, true, 0, 30, 40);
+                map.AddTBString(DeptAttr.OrgNo, null, "隶属组织", true, true, 0, 50, 250);
 
                 map.AddTBString(DeptAttr.Leader, null, "Leader", true, false, 0, 50, 250);
                 map.AddTBInt(DeptAttr.Idx, 0, "Leader", true, false);
@@ -128,11 +129,21 @@ namespace BP.WF.Port
                 return this._enMap;
             }
 		}
-		#endregion
-	}
-	/// <summary>
-	///部门集合
-	/// </summary>
+        #endregion
+
+
+        protected override bool beforeDelete()
+        {
+            //检查是否可以删除.
+            BP.Port.Dept dept = new BP.Port.Dept(this.No);
+            dept.CheckIsCanDelete();
+
+            return base.beforeDelete();
+        }
+    }
+    /// <summary>
+    ///部门集合(即将弃用)
+    /// </summary>
     public class Depts : EntitiesNoName
     {
         /// <summary>

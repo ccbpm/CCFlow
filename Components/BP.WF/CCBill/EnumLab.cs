@@ -47,7 +47,7 @@ namespace BP.CCBill
         /// </summary>
         ByDeptAndSSubLevel = 2,
         /// <summary>
-        /// 根据岗位设定的部门的集合
+        /// 根据角色设定的部门的集合
         /// </summary>
         ByStationDept = 3,
         /// <summary>
@@ -104,6 +104,10 @@ namespace BP.CCBill
         /// 发起注册流程
         /// </summary>
         public const string StartRegFlow = "StartRegFlow";
+        /// <summary>
+        /// 流程修改实体数据
+        /// </summary>
+        public const string FlowBaseData = "FlowBaseData";
         /// <summary>
         /// 其他
         /// </summary>

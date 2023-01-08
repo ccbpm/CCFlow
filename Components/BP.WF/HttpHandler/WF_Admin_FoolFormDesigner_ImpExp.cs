@@ -77,18 +77,10 @@ namespace BP.WF.HttpHandler
 
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_FormTree";
-            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
-            {
-                dt.Columns["NO"].ColumnName = "No";
-                dt.Columns["NAME"].ColumnName = "Name";
-                dt.Columns["PARENTNO"].ColumnName = "ParentNo";
-            }
-            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
-            {
-                dt.Columns["no"].ColumnName = "No";
-                dt.Columns["name"].ColumnName = "Name";
-                dt.Columns["parentno"].ColumnName = "ParentNo";
-            }
+
+            dt.Columns[0].ColumnName = "No";
+            dt.Columns[1].ColumnName = "Name";
+            dt.Columns[2].ColumnName = "ParentNo";
             ds.Tables.Add(dt);
 
             //加入表单
@@ -96,18 +88,11 @@ namespace BP.WF.HttpHandler
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapData";
             ds.Tables.Add(dt);
-            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
-            {
-                dt.Columns["NO"].ColumnName = "No";
-                dt.Columns["NAME"].ColumnName = "Name";
-                dt.Columns["FK_FORMTREE"].ColumnName = "FK_FormTree";
-            }
-            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
-            {
-                dt.Columns["no"].ColumnName = "No";
-                dt.Columns["name"].ColumnName = "Name";
-                dt.Columns["fk_formtree"].ColumnName = "FK_FormTree";
-            }
+           
+            dt.Columns[0].ColumnName = "No";
+            dt.Columns[1].ColumnName = "Name";
+            dt.Columns[2].ColumnName = "FK_FormTree";
+           
             #endregion 加入表单库目录.
 
             #region 加入流程树目录.

@@ -115,6 +115,8 @@ namespace BP.CCBill
                     break;
                 case DBType.Oracle:
                 case DBType.DM:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     sql = " SELECT * FROM (SELECT DISTINCT FK_Flow as \"FK_Flow\",FlowName as \"FlowName\",F.Icon ,max(SendDT) SendDT FROM WF_GenerWorkFlow G ,WF_Flow F WHERE F.IsCanStart=1 AND F.No=G.FK_Flow AND Starter='" + WebUser.No + "' GROUP BY FK_Flow,FlowName,ICON Order By SendDT) WHERE  rownum <=" + top;
                     break;
                 default:
@@ -147,6 +149,8 @@ namespace BP.CCBill
                     break;
                 case DBType.Oracle:
                 case DBType.DM:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     sql = " SELECT   No,Name,Icon FROM GPM_Menu WHERE  LEN(MenuModel )  >1 rownum " + top;
                     break;
                 default:

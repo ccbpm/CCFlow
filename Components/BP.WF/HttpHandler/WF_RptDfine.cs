@@ -281,7 +281,7 @@ namespace BP.WF.HttpHandler
             if (md.DTSearchWay != DTSearchWay.None)
             {
                 MapAttr mapAttr = new MapAttr(rptNo, md.DTSearchKey);
-                md.SetPara("DTSearchLable", mapAttr.Name);
+                md.SetPara("DTSearchLabel", mapAttr.Name);
 
                 if (md.DTSearchWay == DTSearchWay.ByDate)
                 {

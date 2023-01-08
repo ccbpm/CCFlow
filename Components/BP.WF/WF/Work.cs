@@ -153,7 +153,7 @@ namespace BP.WF
         {
             get
             {
-                if (this.HisNode.HisRunModel != RunModel.SubThread)
+                if (this.HisNode.IsSubThread == false)
                     return 0;
                
                 return this.GetValInt64ByKey(WorkAttr.FID);
@@ -161,7 +161,7 @@ namespace BP.WF
             }
             set
             {
-                if (this.HisNode.HisRunModel != RunModel.SubThread)
+                if (this.HisNode.IsSubThread == false)
                     this.SetValByKey(WorkAttr.FID, 0);
                 else
                     this.SetValByKey(WorkAttr.FID, value);

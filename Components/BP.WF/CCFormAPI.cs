@@ -122,7 +122,7 @@ namespace BP.WF
                         //增加枚举字段.
                         if (myds.Tables.Contains(attr.UIBindKey) == false)
                         {
-                            string mysql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + attr.UIBindKey + "' ORDER BY IntKey ";
+                            string mysql = "SELECT IntKey AS No, Lab as Name FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey='" + attr.UIBindKey + "' ORDER BY IntKey ";
                             DataTable dtEnum = DBAccess.RunSQLReturnTable(mysql);
                             dtEnum.TableName = attr.UIBindKey;
                             myds.Tables.Add(dtEnum);
@@ -229,7 +229,7 @@ namespace BP.WF
                             //增加枚举字段.
                             if (myds.Tables.Contains(attr.UIBindKey) == false)
                             {
-                                string mysql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + attr.UIBindKey + "' ORDER BY IntKey ";
+                                string mysql = "SELECT IntKey AS No, Lab as Name FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey='" + attr.UIBindKey + "' ORDER BY IntKey ";
                                 DataTable dtEnum = DBAccess.RunSQLReturnTable(mysql);
                                 dtEnum.TableName = attr.UIBindKey;
                                 myds.Tables.Add(dtEnum);
@@ -433,7 +433,7 @@ namespace BP.WF
                         if (myds.Tables.Contains(uiBindKey) == true)
                             continue;
 
-                        string mysql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + uiBindKey + "' ORDER BY IntKey ";
+                        string mysql = "SELECT IntKey AS No, Lab as Name FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey='" + uiBindKey + "' ORDER BY IntKey ";
                         DataTable dtEnum = DBAccess.RunSQLReturnTable(mysql);
                         dtEnum.TableName = uiBindKey;
                         myds.Tables.Add(dtEnum);
@@ -620,7 +620,7 @@ namespace BP.WF
                     if (myds.Tables.Contains(uiBindKey) == true)
                         continue;
 
-                    string mysql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + uiBindKey + "' ORDER BY IntKey ";
+                    string mysql = "SELECT IntKey AS No, Lab as Name FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey='" + uiBindKey + "' ORDER BY IntKey ";
                     DataTable dtEnum = DBAccess.RunSQLReturnTable(mysql);
                     dtEnum.TableName = uiBindKey;
                     myds.Tables.Add(dtEnum);
@@ -754,7 +754,7 @@ namespace BP.WF
                     // 如果是枚举值, 判断是否存在.
                     if (myds.Tables.Contains(uiBindKey) == true)
                         continue;
-                    string mysql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + uiBindKey + "' ORDER BY IntKey ";
+                    string mysql = "SELECT IntKey AS No, Lab as Name FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey='" + uiBindKey + "' ORDER BY IntKey ";
                     DataTable dtEnum = DBAccess.RunSQLReturnTable(mysql);
                     dtEnum.TableName = uiBindKey;
 
@@ -968,7 +968,7 @@ namespace BP.WF
                 else
                 {
                     //增加排序.
-                    qo.addOrderBy(GEDtlAttr.OID);
+                    qo.addOrderBy("Idx");
                 }
 
                 qo.DoQuery();

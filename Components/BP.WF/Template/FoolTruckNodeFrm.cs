@@ -115,8 +115,8 @@ namespace BP.WF.Template
                 map.AddTBInt(FrmNodeAttr.FK_Node, 0, "要作用的节点ID", false, true);
                 map.AddTBString(FrmNodeAttr.FK_Frm, null, "表单ID", false, true, 1, 100, 200);
 
-                //   map.AddDDLSysEnum(FrmNodeAttr.FrmSln, 0, "表单控制方案", true, true, FrmNodeAttr.FrmSln,
-                //    "@0=默认方案@1=只读方案@2=自定义方案");
+                map.AddDDLSysEnum(FrmNodeAttr.FrmSln, 0, "表单控制方案", true, true, FrmNodeAttr.FrmSln,
+                    "@0=默认方案@1=只读方案@2=自定义方案");
 
                 map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程编号", true, true, 1, 4, 20);
 

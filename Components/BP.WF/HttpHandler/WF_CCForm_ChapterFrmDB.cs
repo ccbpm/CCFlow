@@ -197,6 +197,10 @@ namespace BP.WF.HttpHandler
                 {
                     for (int j = 0; j < dtA.Columns.Count; j++)
                     {
+                        string columnName = dtA.Columns[j].ColumnName;
+                        if (columnName.Equals("OID") == true || columnName.Equals("WorkID") == true
+                            || columnName.Equals("MyPK") == true || columnName.Equals("RDT") == true)
+                            continue;
                         if (dtA.Rows[i][j].Equals(dtB.Rows[i][j])==false)
                         {
                             return false;

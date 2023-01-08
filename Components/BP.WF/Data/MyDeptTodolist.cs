@@ -50,7 +50,7 @@ namespace BP.WF.Data
         /// </summary>
         public const string FK_Node = "FK_Node";
         /// <summary>
-        /// 当前工作岗位
+        /// 当前工作角色
         /// </summary>
         public const string FK_Station = "FK_Station";
         /// <summary>
@@ -153,6 +153,10 @@ namespace BP.WF.Data
         /// GUID
         /// </summary>
         public const string GUID = "GUID";
+        /// <summary>
+        /// OrgNo
+        /// </summary>
+        public const string OrgNo = "OrgNo";
         #endregion
     }
 	/// <summary>
@@ -677,10 +681,11 @@ namespace BP.WF.Data
                 //map.AddTBString(MyDeptTodolistAttr.TodoEmps, null, "当前处理人", true, false, 0, 100, 10);
 
                 map.AddTBStringDoc(MyDeptTodolistAttr.FlowNote, null, "备注", true, false,true);
-              //  MyDeptTodolistAttr.WorkerDept
+                //  MyDeptTodolistAttr.WorkerDept
                 ////作为隐藏字段.
                 //map.AddTBString(MyDeptTodolistAttr.WorkerDept, null, "工作人员部门编号", 
                 //    false, false, 0, 30, 10);
+                map.AddTBString(MyDeptTodolistAttr.OrgNo, null, "组织编号", false, false, 0, 100, 10);
 
                 map.AddDDLEntities(MyDeptTodolistAttr.FK_Emp, null, "当前处理人", new BP.WF.Data.MyDeptEmps(), false);
                 map.AddTBIntPK(MyDeptTodolistAttr.WorkID, 0, "工作ID", true, true);
@@ -690,10 +695,15 @@ namespace BP.WF.Data
                 map.AddSearchAttr(MyDeptTodolistAttr.FK_Emp);
 
                 ////增加隐藏的查询条件.
-                //AttrOfSearch search = new AttrOfSearch(MyDeptTodolistAttr.WorkerDept, "部门",
+                //SearchNormal search = new SearchNormal(MyDeptTodolistAttr.WorkerDept, "部门",
                 //    MyDeptTodolistAttr.WorkerDept, "=", BP.Web.WebUser.FK_Dept, 0, true);
-                //map.AttrsOfSearch.Add(search);
-
+                //map.SearchNormals.Add(search);
+                if (BP.Difference.SystemConfig.CCBPMRunModel != Sys.CCBPMRunModel.Single)
+                {
+                    SearchNormal search = new SearchNormal(MyDeptTodolistAttr.OrgNo, "组织",
+                            MyDeptTodolistAttr.OrgNo, "=", BP.Web.WebUser.OrgNo, 0, true);
+                    map.SearchNormals.Add(search);
+                }
                 RefMethod rm = new RefMethod();
                 rm.Title = "轨迹";  
                 rm.ClassMethodName = this.ToString() + ".DoTrack";

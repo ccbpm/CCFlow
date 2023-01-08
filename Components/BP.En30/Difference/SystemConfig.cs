@@ -24,6 +24,7 @@ using System.Web;
 using System.Data;
 using System.Data.SqlClient;
 using Oracle.ManagedDataAccess.Client;
+using Kdbndp;
 using System.IO;
 using MySql;
 using MySql.Data;
@@ -199,6 +200,8 @@ namespace BP.Difference
             }
             #endregion
         }
+
+        #region 用户配置信息
         /// <summary>
         /// 运行模式
         /// </summary>
@@ -219,8 +222,21 @@ namespace BP.Difference
                 return CCBPMRunModel.Single;
             }
         }
-
-        #region 用户配置信息
+        /// <summary>
+        /// token验证模式 
+        /// 0=宽泛模式, 一个账号可以在多个设备登录. 
+        /// 1=唯一模式. 一个账号仅仅在一台设备登录，另外的设备就会失效.
+        /// </summary>
+        public static int TokenModel
+        {
+            get
+            {
+                string s = AppSettings["TokenModel"];
+                if (s == null)
+                    return 0;
+                return int.Parse(s);
+            }
+        }
         /// <summary>
         /// 系统语言（）
         /// 对多语言的系统有效。
@@ -535,6 +551,30 @@ namespace BP.Difference
             }
         }
 
+
+        public static string FrontEndEncrypt
+        {
+            get
+            {
+                string s = AppSettings["FrontEndEncrypt"];
+                if (s == null)
+                    s = "请在web.config中配置FrontEndEncrypt名称。";
+                return s;
+            }
+        }
+
+        public static string UserLockTimeSeconds
+        {
+            get
+            {
+                string s = AppSettings["UserLockTimeSeconds"];
+                if (s == null)
+                    s = "请在web.config中配置UserLockTimeSeconds名称。";
+                return s;
+            }
+        }
+
+
         public static int PageSize
         {
             get
@@ -636,6 +676,16 @@ namespace BP.Difference
                     return false;
             }
         }
+        public static bool IsDisHelp
+        {
+            get
+            {
+                if (AppSettings["IsDisHelp"] == "1")
+                    return true;
+                return false;
+            }
+        }
+        
         /// <summary>
         /// 是否启用密码加密
         /// </summary>
@@ -688,7 +738,6 @@ namespace BP.Difference
             }
         }
         #endregion
-
 
         #region 处理临时缓存
         /// <summary>
@@ -771,8 +820,8 @@ namespace BP.Difference
             }
         }
         /// <summary>
-        /// 集团模式下的岗位体系
-        /// @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
+        /// 集团模式下的角色体系
+        /// @0=每套组织都有自己的角色体系@1=所有的组织共享一套岗则体系.@2=每个部门有自己的角色体系.
         /// </summary>
         public static int GroupStationModel
         {
@@ -1072,6 +1121,7 @@ namespace BP.Difference
         }
         #endregion
 
+        #region 其他配置.
         /// <summary>
         ///取得配置 NestedNamesSection 内的相应 key 的内容.
         /// </summary>
@@ -1253,6 +1303,7 @@ namespace BP.Difference
         {
             return GetConfigXmlSQL(key).Replace(replaceKey1, replaceVal1).Replace(replaceKey2, replaceVal2);
         }
+        #endregion 其他配置.
 
         #region dsn
         /// <summary>
@@ -1294,11 +1345,29 @@ namespace BP.Difference
                 return AppSettings["DBAccessOfOracle"];
             }
         }
+
+
         public static string DBAccessOfOracle1
         {
             get
             {
                 return AppSettings["DBAccessOfOracle1"];
+            }
+        }
+
+        public static string DBAccessOfKingBaseR3
+        {
+            get
+            {
+                return AppSettings["DBAccessOfKingBaseR3"];
+            }
+        }
+
+        public static string DBAccessOfKingBaseR6
+        {
+            get
+            {
+                return AppSettings["DBAccessOfKingBaseR6"];
             }
         }
         public static string DBAccessOfMSSQL
@@ -1330,6 +1399,8 @@ namespace BP.Difference
             }
         }
         #endregion
+
+        #region xx
         /// <summary>
         /// 获取主应用程序的数据库部署方式．
         /// </summary>
@@ -1427,6 +1498,10 @@ namespace BP.Difference
                         return DBType.Informix;
                     case "UX":
                         return DBType.UX;
+                    case "KingBaseR3":
+                        return DBType.KingBaseR3;
+                    case "KingBaseR6":
+                        return DBType.KingBaseR6;
                     default:
                         return DBType.Oracle;
                 }
@@ -1468,6 +1543,23 @@ namespace BP.Difference
                         //    connOra.Open();
                         //_AppCenterDBDatabase = connOra.Database;
                         break;
+                    case DBType.KingBaseR3:
+                    case DBType.KingBaseR6:
+                        string[] strskdb = BP.Difference.SystemConfig.AppCenterDSN.Split(';');
+                        foreach (string str in strskdb)
+                        {
+
+                            if (str.ToLower().Contains("user id") == false)
+                                continue;
+
+                            string[] mystrs = str.Split('=');
+                            return mystrs[1];
+
+                        }
+                        //KdbndpConnection kdbndpConnection = new KdbndpConnection(BP.Difference.SystemConfig.AppCenterDSN);
+                        //_AppCenterDBDatabase = kdbndpConnection.Database;
+                        break;
+
                     case DA.DBType.MySQL:
                         MySqlConnection connMySQL = new MySqlConnection(BP.Difference.SystemConfig.AppCenterDSN);
                         _AppCenterDBDatabase = connMySQL.Database;
@@ -1518,6 +1610,8 @@ namespace BP.Difference
                 switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
                     case DBType.Oracle:
+                    case DBType.KingBaseR3:
+                    case DBType.KingBaseR6:
                     case DBType.PostgreSQL:
                     case DBType.DM:
                         return ":";
@@ -1537,6 +1631,8 @@ namespace BP.Difference
                 switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
                     case DBType.Oracle:
+                    case DBType.KingBaseR3:
+                    case DBType.KingBaseR6:
                         return "Length";
                     case DBType.MSSQL:
                         return "LEN";
@@ -1559,6 +1655,8 @@ namespace BP.Difference
                 switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
                     case DBType.Oracle:
+                    case DBType.KingBaseR3:
+                    case DBType.KingBaseR6:
                         return "substr";
                     case DBType.MSSQL:
                         return "substring";
@@ -1578,6 +1676,8 @@ namespace BP.Difference
                 switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
                     case DBType.Oracle:
+                    case DBType.KingBaseR3:
+                    case DBType.KingBaseR6:
                     case DBType.MySQL:
                     case DBType.Informix:
                         return "||";
@@ -1609,5 +1709,7 @@ namespace BP.Difference
                 return BP.Difference.SystemConfig.GetValByKey("DateType", "varchar");
             }
         }
+        #endregion xx
+
     }
 }

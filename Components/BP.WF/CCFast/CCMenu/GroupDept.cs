@@ -20,7 +20,7 @@ namespace BP.CCFast.CCMenu
     /// <summary>
     /// 权限组部门
     /// </summary>
-    public class GroupDept : EntityMM
+    public class GroupDept : EntityMyPK
     {
         #region 属性
         public string FK_Dept
@@ -65,20 +65,28 @@ namespace BP.CCFast.CCMenu
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("GPM_GroupDept", "权限组部门");
+                map.AddMyPK();
 
-                map.AddTBStringPK(GroupDeptAttr.FK_Group, null, "权限组", false, false, 0, 50, 20);
-                map.AddDDLEntitiesPK(GroupDeptAttr.FK_Dept, null, "部门", new Depts(), true);
+                map.AddTBString(GroupDeptAttr.FK_Group, null, "权限组", false, false, 0, 50, 20);
+                map.AddDDLEntities(GroupDeptAttr.FK_Dept, null, "部门", new Depts(), true);
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+        protected override bool beforeInsert()
+        {
+            //
+            this.MyPK = this.FK_Group + "_" + this.FK_Dept;
+            
+            return base.beforeInsert();
+        }
     }
     /// <summary>
     /// 权限组部门s
     /// </summary>
-    public class GroupDepts : EntitiesMM
+    public class GroupDepts : EntitiesMyPK
     {
         #region 构造
         /// <summary>

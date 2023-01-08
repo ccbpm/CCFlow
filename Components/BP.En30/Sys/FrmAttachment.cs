@@ -154,7 +154,6 @@ namespace BP.Sys
         /// 是否可见？
         /// </summary>
         public const string IsVisable = "IsVisable";
-
         /// <summary>
         /// 附件类型 0 普通附件 1 图片附件
         /// </summary>
@@ -163,8 +162,10 @@ namespace BP.Sys
         /// 移动端图片附件上传的方式
         /// </summary>
         public const string PicUploadType = "PicUploadType";
+        /// <summary>
+        /// 是否启用模板？
+        /// </summary>
         public const string IsEnableTemplate = "IsEnableTemplate";
-        
         /// <summary>
         /// 附件删除方式
         /// </summary>
@@ -362,22 +363,6 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// 类型名称
-        /// </summary>
-        public string UploadTypeT
-        {
-            get
-            {
-                if (this.UploadType == AttachmentUploadType.Multi)
-                    return "多附件";
-                if (this.UploadType == AttachmentUploadType.Single)
-                    return "单附件";
-                if (this.UploadType == AttachmentUploadType.Specifically)
-                    return "指定的";
-                return "XXXXX";
-            }
-        }
-        /// <summary>
         /// 是否可以上传
         /// </summary>
         public bool IsUpload
@@ -446,18 +431,6 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(FrmAttachmentAttr.IsShowTitle, value);
-            }
-        }
-        /// <summary>
-        /// 是否是节点表单.
-        /// </summary>
-        public bool IsNodeSheet
-        {
-            get
-            {
-                if (this.FK_MapData.StartsWith("ND") == true)
-                    return true;
-                return false;
             }
         }
         /// <summary>
@@ -556,10 +529,7 @@ namespace BP.Sys
             {
                 if (this.AthSaveWay == BP.Sys.AthSaveWay.IISServer)
                 {
-                    //string s = this.GetValStringByKey(FrmAttachmentAttr.SaveTo);
-                    //if (s == "" || s == null)
                     return BP.Difference.SystemConfig.PathOfDataUser + @"/UploadFile/" + this.FK_MapData + "/";
-                    // return s;
                 }
 
                 if (this.AthSaveWay == BP.Sys.AthSaveWay.FTPServer)
@@ -803,7 +773,6 @@ namespace BP.Sys
                 map.IndexField = FrmAttachmentAttr.FK_MapData;
                 map.AddMyPK();
 
-
                 map.AddTBString(FrmAttachmentAttr.FK_MapData, null, "表单ID", true, false, 1, 100, 20);
                 map.AddTBString(FrmAttachmentAttr.NoOfObj, null, "附件编号", true, false, 0, 50, 20);
                 map.AddTBInt(FrmAttachmentAttr.FK_Node, 0, "节点控制(对sln有效)", false, false);
@@ -818,11 +787,7 @@ namespace BP.Sys
                 map.AddTBInt(FrmAttachmentAttr.TopNumOfUpload, 99, "最大上传数量", true, false);
                 map.AddTBInt(FrmAttachmentAttr.FileMaxSize, 10240, "附件最大限制(KB)", true, false);
                 map.AddTBInt(FrmAttachmentAttr.UploadFileNumCheck, 0, "上传校验方式", true, false);
-
-                //map.AddDDLSysEnum(FrmAttachmentAttr.UploadFileNumCheck, 0, "上传校验方式", true, true, FrmAttachmentAttr.UploadFileNumCheck,
-                //  "@0=不用校验@1=不能为空@2=每个类别下不能为空");
-
-                // map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", true, false, 0, 150, 20);
+                 
                 map.AddTBString(FrmAttachmentAttr.Sort, null, "类别(可为空)", true, false, 0, 500, 20);
 
                 map.AddTBFloat(FrmAttachmentAttr.H, 150, "H", false, false);

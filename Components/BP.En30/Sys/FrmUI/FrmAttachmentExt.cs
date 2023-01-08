@@ -297,7 +297,7 @@ namespace BP.Sys.FrmUI
             }
 
         }
-     
+
         /// <summary>
         /// H
         /// </summary>
@@ -468,7 +468,7 @@ namespace BP.Sys.FrmUI
 
                 Map map = new Map("Sys_FrmAttachment", "附件");
                 map.IndexField = MapAttrAttr.FK_MapData;
-
+                map.AddGroupAttr("基础信息");
                 map.AddMyPK();
 
                 #region 基本属性。
@@ -505,9 +505,6 @@ namespace BP.Sys.FrmUI
 
                 map.AddBoolean(FrmAttachmentAttr.IsTurn2Html, false, "是否转换成html(方便手机浏览)", true, true, true);
 
-
-                map.AddTBFloat(FrmAttachmentAttr.H, 150, "高度", true, false);
-
                 //附件是否显示
                 map.AddBoolean(FrmAttachmentAttr.IsVisable, true, "是否显示附件分组", true, true, true);
 
@@ -515,13 +512,9 @@ namespace BP.Sys.FrmUI
 
                 map.AddDDLSysEnum(FrmAttachmentAttr.PicUploadType, 0, "图片附件上传方式", true, true, FrmAttachmentAttr.PicUploadType, "@0=拍照上传或者相册上传@1=只能拍照上传");
                 map.SetHelperAlert(FrmAttachmentAttr.PicUploadType, "该功能只使用于移动端图片文件上传的方式.");
-                map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
-
-
 
                 map.AddBoolean(FrmAttachmentAttr.IsEnableTemplate, true, "是否启用模板下载？", true, true, true);
-
-
+                map.AddTBFloat(FrmAttachmentAttr.H, 150, "高度", true, false);
                 // @wwh.
                 map.AddMyFileS("附件模板");
 
@@ -530,7 +523,7 @@ namespace BP.Sys.FrmUI
                 #region 权限控制。
                 //hzm新增列
                 // map.AddTBInt(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则(0=不能删除1=删除所有2=只能删除自己上传的", false, false);
-
+                map.AddGroupAttr("权限控制");
                 map.AddDDLSysEnum(FrmAttachmentAttr.DeleteWay, 1, "附件删除规则", true, true, FrmAttachmentAttr.DeleteWay,
                     "@0=不能删除@1=删除所有@2=只能删除自己上传的");
 
@@ -557,7 +550,8 @@ namespace BP.Sys.FrmUI
                 //    "@0=当前组件ID@1=指定的组件ID");
                 #endregion 权限控制。
 
-                #region 节点相关
+                #region 流程相关
+                map.AddGroupAttr("流程相关");
                 //map.AddDDLSysEnum(FrmAttachmentAttr.DtlOpenType, 0, "附件删除规则", true, true, FrmAttachmentAttr.DeleteWay, 
                 //    "@0=不能删除@1=删除所有@2=只能删除自己上传的");
                 map.AddBoolean(FrmAttachmentAttr.IsToHeLiuHZ, true, "该附件是否要汇总到合流节点上去？(对子线程节点有效)", true, true, true);
@@ -567,14 +561,15 @@ namespace BP.Sys.FrmUI
 
                 map.AddDDLSysEnum(FrmAttachmentAttr.ReadRole, 0, "阅读规则", true, true, FrmAttachmentAttr.ReadRole,
                "@0=不控制@1=未阅读阻止发送@2=未阅读做记录");
-                #endregion 节点相关
+                #endregion 流程相关
 
                 #region 其他属性。
                 //参数属性.
                 map.AddTBAtParas(3000);
                 #endregion 其他属性。
 
-                #region 基本配置.
+                #region 基本功能.
+                map.AddGroupMethod("基本功能");
                 RefMethod rm = new RefMethod();
                 //  rm.Icon = "/WF/Admin/CCFormDesigner/Img/Menu/CC.png";
                 //rm.ClassMethodName = this.ToString() + ".DoAdv";
@@ -602,24 +597,24 @@ namespace BP.Sys.FrmUI
                 rm.Warning = msg;
                 map.AddRefMethod(rm);
 
-                #endregion 基本配置.
+                #endregion 基本功能.
 
                 #region 高级设置.
+                map.AddGroupMethod("实验中功能");
                 rm = new RefMethod();
-                rm.GroupName = "实验中功能";
+
                 rm.Title = "类别设置";
                 rm.ClassMethodName = this.ToString() + ".DoSettingSort";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "实验中功能";
+
                 rm.Title = "设置扩展列";
                 rm.ClassMethodName = this.ToString() + ".DtlOfAth";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 // map.AddRefMethod(rm);
-                #endregion 基本配置.
-
+                #endregion 高级设置.
 
                 this._enMap = map;
                 return this._enMap;
@@ -821,8 +816,9 @@ namespace BP.Sys.FrmUI
             //判断是否是字段附件
             MapAttr mapAttr = new MapAttr();
             mapAttr.setMyPK(this.MyPK);
-            if (mapAttr.RetrieveFromDBSources() != 0 && mapAttr.Name.Equals(this.Name) == false)
+            if (mapAttr.RetrieveFromDBSources() != 0)
             {
+                mapAttr.UIHeight = this.H;
                 mapAttr.Name = this.Name;
                 mapAttr.Update();
             }
@@ -839,17 +835,15 @@ namespace BP.Sys.FrmUI
         protected override void afterDelete()
         {
             GroupFields gfs = new GroupFields();
-            gfs.RetrieveByLike(GroupFieldAttr.CtrlID, this.MyPK + "%");
-            gfs.Delete();
-            //gf.Delete(GroupFieldAttr.CtrlID, this.MyPK);
+            //   gfs.RetrieveByLike(GroupFieldAttr.CtrlID, this.MyPK + "%");
+            //  gfs.Delete();
+            gfs.Delete(GroupFieldAttr.CtrlID, this.MyPK);
 
             //把相关的字段也要删除.
             MapAttrString attr = new MapAttrString();
             attr.setMyPK(this.MyPK);
             if (attr.RetrieveFromDBSources() != 0)
-            {
                 attr.Delete();
-            }
 
             //调用frmEditAction, 完成其他的操作.
             BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);

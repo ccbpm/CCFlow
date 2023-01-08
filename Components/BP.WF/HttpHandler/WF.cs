@@ -243,29 +243,68 @@ namespace BP.WF.HttpHandler
             string dtTo = this.GetRequestVal("DTTo");
             string flowNo = this.GetRequestVal("FlowNo");
             string wfState = this.GetRequestVal("WFState");
+            Paras ps = new Paras();
+            ps.SQL = "SELECT WorkID,FlowName,NodeName,StarterName,RDT,SendDT,WFState,Title FROM WF_GenerWorkFlow ";
+            string dbstr = SystemConfig.AppCenterDBVarStr;
 
-            string sql = "SELECT WorkID,FlowName,NodeName,StarterName,RDT,SendDT,WFState,Title FROM WF_GenerWorkFlow ";
-            sql += "  WHERE (Starter='" + BP.Web.WebUser.No + "' OR  Emps like '%" + BP.Web.WebUser.No + "%')  ";
+            ps.SQL += "  WHERE (Starter=" + dbstr + "Starter OR ";
+            if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+            {
+                if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    ps.SQL += " Emps like CONCAT('%'," + dbstr + "Emps" + ",'%'))";
+                else
+                    ps.SQL += " Emps like '%' +" + dbstr + "Emps" + "+'%')";
+            }
+            else
+            {
+                ps.SQL += "  Emps like '%'||" + dbstr + "Emps" + "||'%')";
+            }
 
+            ps.Add("Starter", WebUser.No);
+            ps.Add("Emps", WebUser.No);
             //如果关键字key.
             if (DataType.IsNullOrEmpty(key) == false)
-                sql += " AND Title LIKE '%" + key + "%'";
+            {
+                if (SystemConfig.AppCenterDBVarStr == "@" || SystemConfig.AppCenterDBVarStr == "?")
+                {
+                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                        ps.SQL += " AND Title like CONCAT('%'," + dbstr + "Title" + ",'%')";
+                    else
+                        ps.SQL += "  AND Title like '%' +" + dbstr + "Title" + "+'%'";
+                }
+                else
+                {
+                    ps.SQL += " AND Title like '%'||" + dbstr + "Title" + "||'%'";
+                }
+                ps.Add("Title", key);
+            }
 
             //如果有日期从到.
             if (DataType.IsNullOrEmpty(dtFrom) == false)
-                sql += " AND ( RDT >= '" + dtFrom + "' AND RDT <='" + dtTo + "' ) ";
+            {
+                ps.SQL += " AND ( RDT >= " + dbstr + "DtFrom AND RDT <=" + dbstr + "DtTo ) ";
+                ps.Add("DtFrom", dtFrom);
+                ps.Add("DtTo", dtTo);
+            }
+
 
             //如果有流程编号.
             if (DataType.IsNullOrEmpty(flowNo) == false)
-                sql += " AND  FK_Flow= '" + flowNo + "' ";
+            {
+                ps.SQL += " AND  FK_Flow= " + dbstr + "FK_Flow ";
+                ps.Add("FK_Flow", flowNo);
+            }
 
             //如果有流程状态.
-            if (DataType.IsNullOrEmpty(wfState) == true || wfState.Equals("all") == false)
-                sql += " AND  WFState= '" + wfState + "' ";
+            if (DataType.IsNullOrEmpty(wfState) == false && wfState.Equals("all") == false)
+            {
+                ps.SQL += " AND  WFState= " + dbstr + "WFState ";
+                ps.Add("WFState", wfState);
+            }
             else
-                sql += " AND  WFState >1 ";
+                ps.SQL += " AND  WFState >1 ";
 
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
             return BP.Tools.Json.ToJson(dt);
         }
         #endregion
@@ -409,7 +448,7 @@ namespace BP.WF.HttpHandler
                             return "err@" + ex.Message;
                         }
                         break;
-                   
+
                     case "DelDtl":
                         GEDtls dtls = new GEDtls(this.EnsName);
                         GEDtl dtl = (GEDtl)dtls.GetNewEntity;
@@ -581,7 +620,6 @@ namespace BP.WF.HttpHandler
             {
                 return BP.Difference.SystemConfig.HostURL + baseUrl;
             }
-
         }
 
         #region 我的关注流程.
@@ -660,6 +698,8 @@ namespace BP.WF.HttpHandler
             string sql = "SELECT FK_Flow as No,FlowName as Name, FK_FlowSort,B.Name as FK_FlowSortText,B.Domain, COUNT(WorkID) as Num ";
             sql += " FROM WF_GenerWorkFlow A, WF_FlowSort B  ";
             sql += " WHERE Starter='" + BP.Web.WebUser.No + "'  AND A.FK_FlowSort=B.No  ";
+            if (DataType.IsNullOrEmpty(this.FK_Flow) == false)
+                sql += " AND A.FK_Flow='" + this.FK_Flow + "'";
             sql += " GROUP BY FK_Flow, FlowName, FK_FlowSort, B.Name,B.Domain ";
 
             DataTable dtStart = DBAccess.RunSQLReturnTable(sql);
@@ -695,6 +735,12 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
+        public string Start_CopyAsWorkID()
+        {
+            Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, this.WorkID);
+            return workid.ToString();
+        }
+
         /// <summary>
         /// 获得发起列表 
         /// </summary>
@@ -822,6 +868,114 @@ namespace BP.WF.HttpHandler
             dt = BP.WF.Dev2Interface.DB_GenerRuning(WebUser.No, this.FK_Flow, false, this.Domain, isContainFuture); //获得指定域的在途.
             return BP.Tools.Json.ToJson(dt);
         }
+        //近期工作
+        public string RecentWork_Init()
+        {
+            /* 近期工作. */
+            string sql = "";
+            string empNo = BP.Web.WebUser.No;
+            sql += "SELECT  * FROM WF_GenerWorkFlow  WHERE ";
+            sql += " (Emps LIKE '%@" + empNo + "@%' OR Emps LIKE '%@" + empNo + ",%' OR Emps LIKE '%," + empNo + "@%')";
+           // sql += " AND Starter!='" + empNo + "'"; //不能是我发起的.
+
+            if (DataType.IsNullOrEmpty(this.FK_Flow) == false)
+                sql += " AND FK_Flow='" + this.FK_Flow + "'"; //如果有流程编号,就按他过滤.
+
+            sql += " AND WFState >1 ORDER BY RDT DESC ";
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            //添加oracle的处理
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+            {
+                dt.Columns["PRI"].ColumnName = "PRI";
+                dt.Columns["WORKID"].ColumnName = "WorkID";
+                dt.Columns["FID"].ColumnName = "FID";
+                dt.Columns["WFSTATE"].ColumnName = "WFState";
+                dt.Columns["WFSTA"].ColumnName = "WFSta";
+                dt.Columns["WEEKNUM"].ColumnName = "WeekNum";
+                dt.Columns["TSPAN"].ColumnName = "TSpan";
+                dt.Columns["TODOSTA"].ColumnName = "TodoSta";
+                dt.Columns["DEPTNAME"].ColumnName = "DeptName";
+                dt.Columns["TODOEMPSNUM"].ColumnName = "TodoEmpsNum";
+                dt.Columns["TODOEMPS"].ColumnName = "TodoEmps";
+                dt.Columns["TITLE"].ColumnName = "Title";
+                dt.Columns["TASKSTA"].ColumnName = "TaskSta";
+                dt.Columns["SYSTYPE"].ColumnName = "SysType";
+                dt.Columns["STARTERNAME"].ColumnName = "StarterName";
+                dt.Columns["STARTER"].ColumnName = "Starter";
+                dt.Columns["SENDER"].ColumnName = "Sender";
+                dt.Columns["SENDDT"].ColumnName = "SendDT";
+                dt.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
+                dt.Columns["SDTOFFLOW"].ColumnName = "SDTOfFlow";
+                dt.Columns["RDT"].ColumnName = "RDT";
+                dt.Columns["PWORKID"].ColumnName = "PWorkID";
+                dt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
+                dt.Columns["PFID"].ColumnName = "PFID";
+                dt.Columns["PEMP"].ColumnName = "PEmp";
+                dt.Columns["NODENAME"].ColumnName = "NodeName";
+
+                dt.Columns["GUID"].ColumnName = "Guid";
+                dt.Columns["GUESTNO"].ColumnName = "GuestNo";
+                dt.Columns["GUESTNAME"].ColumnName = "GuestName";
+                dt.Columns["FLOWNOTE"].ColumnName = "FlowNote";
+                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+                dt.Columns["FK_NY"].ColumnName = "FK_NY";
+                dt.Columns["FK_NODE"].ColumnName = "FK_Node";
+                dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FK_DEPT"].ColumnName = "FK_Dept";
+                dt.Columns["EMPS"].ColumnName = "Emps";
+                dt.Columns["DOMAIN"].ColumnName = "Domain";
+                dt.Columns["DEPTNAME"].ColumnName = "DeptName";
+                dt.Columns["BILLNO"].ColumnName = "BillNo";
+            }
+
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["pri"].ColumnName = "PRI";
+                dt.Columns["workid"].ColumnName = "WorkID";
+                dt.Columns["fid"].ColumnName = "FID";
+                dt.Columns["wfstate"].ColumnName = "WFState";
+                dt.Columns["wfsta"].ColumnName = "WFSta";
+                dt.Columns["weeknum"].ColumnName = "WeekNum";
+                dt.Columns["tspan"].ColumnName = "TSpan";
+                dt.Columns["todosta"].ColumnName = "TodoSta";
+                dt.Columns["deptname"].ColumnName = "DeptName";
+                dt.Columns["todoempsnum"].ColumnName = "TodoEmpsNum";
+                dt.Columns["todoemps"].ColumnName = "TodoEmps";
+                dt.Columns["title"].ColumnName = "Title";
+                dt.Columns["tasksta"].ColumnName = "TaskSta";
+                dt.Columns["systype"].ColumnName = "SysType";
+                dt.Columns["startername"].ColumnName = "StarterName";
+                dt.Columns["starter"].ColumnName = "Starter";
+                dt.Columns["sender"].ColumnName = "Sender";
+                dt.Columns["senddt"].ColumnName = "SendDT";
+                dt.Columns["sdtofnode"].ColumnName = "SDTOfNode";
+                dt.Columns["sdtofflow"].ColumnName = "SDTOfFlow";
+                dt.Columns["rdt"].ColumnName = "RDT";
+                dt.Columns["pworkid"].ColumnName = "PWorkID";
+                dt.Columns["pflowno"].ColumnName = "PFlowNo";
+                dt.Columns["pfid"].ColumnName = "PFID";
+                dt.Columns["pemp"].ColumnName = "PEmp";
+                dt.Columns["nodename"].ColumnName = "NodeName";
+                dt.Columns["guid"].ColumnName = "Guid";
+                dt.Columns["guestno"].ColumnName = "GuestNo";
+                dt.Columns["guestname"].ColumnName = "GuestName";
+                dt.Columns["flownote"].ColumnName = "FlowNote";
+                dt.Columns["flowname"].ColumnName = "FlowName";
+                dt.Columns["fk_ny"].ColumnName = "FK_NY";
+                dt.Columns["fk_node"].ColumnName = "FK_Node";
+                dt.Columns["fk_flowsort"].ColumnName = "FK_FlowSort";
+                dt.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dt.Columns["fk_dept"].ColumnName = "FK_Dept";
+                dt.Columns["emps"].ColumnName = "Emps";
+                dt.Columns["domain"].ColumnName = "Domain";
+                dt.Columns["deptname"].ColumnName = "DeptName";
+                dt.Columns["billno"].ColumnName = "BillNo";
+            }
+            return BP.Tools.Json.ToJson(dt);
+        }
+
         /// <summary>
         /// 我参与的已经完成的工作.
         /// </summary>
@@ -830,7 +984,7 @@ namespace BP.WF.HttpHandler
         {
             /* 如果不是删除流程注册表. */
             Paras ps = new Paras();
-            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
+            string dbstr = BP.Difference.SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT  * FROM WF_GenerWorkFlow  WHERE (Emps LIKE '%@" + WebUser.No + "@%' OR Emps LIKE '%@" + WebUser.No + ",%' OR Emps LIKE '%," + WebUser.No + "@%') and WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             //添加oracle的处理
@@ -1004,7 +1158,7 @@ namespace BP.WF.HttpHandler
 
             Flow fl = new Flow(this.FK_Flow);
             Int64 workid = 0;
-            if (nd.HisRunModel == RunModel.SubThread)
+            if (nd.IsSubThread == true)
             {
                 if (tk.FID == 0)
                 {
@@ -1335,9 +1489,29 @@ namespace BP.WF.HttpHandler
         public string Todolist_Init()
         {
             string wfState = this.GetRequestVal("ShowWhat"); //比如：WFSTate=1,状态.
-
+            string orderBy = this.GetRequestVal("OrderBy");
             DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node,
-                wfState, this.Domain, this.FK_Flow);
+                wfState, this.Domain, this.FK_Flow, orderBy);
+            return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 逾期工作
+        /// </summary>
+        /// <returns></returns>
+        public string Timeout_Init()
+        {
+            //string wfState = this.GetRequestVal("ShowWhat"); //比如：WFSTate=1,状态.
+            //string orderBy = this.GetRequestVal("OrderBy");
+            DataTable dt = BP.WF.Dev2Interface.DB_Timeout();
+            return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 近期发起
+        /// </summary>
+        /// <returns></returns>
+        public string RecentStart_Init()
+        {
+            DataTable dt = BP.WF.Dev2Interface.DB_RecentStart(this.FK_Flow);
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -1359,32 +1533,6 @@ namespace BP.WF.HttpHandler
         public string TodolistOfAuth_Init()
         {
             return "err@尚未重构完成.";
-
-            //DataTable dt = null;
-            //foreach (BP.WF.Port.WFEmp item in ems)
-            //{
-            //    if (dt == null)
-            //    {
-            //        dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(item.No, null);
-            //    }
-            //    else
-            //    {
-            //    }
-            //}
-
-            //    return BP.Tools.Json.DataTableToJson(dt, false);
-
-            //string fk_emp = this.FK_Emp;
-            //if (fk_emp == null)
-            //{
-            //    //移除不需要前台看到的数据.
-            //    DataTable dt = ems.ToDataTableField();
-            //    dt.Columns.Remove("Token");
-            //    dt.Columns.Remove("Stas");
-            //    dt.Columns.Remove("Depts");
-            //    dt.Columns.Remove("Msg");
-            //    return BP.Tools.Json.DataTableToJson(dt, false);
-            //}
         }
         /// <summary>
         /// 获得挂起列表
@@ -1408,7 +1556,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string HungupList_Reject()
         {
-            return BP.WF.Dev2Interface.Node_HungupWorkReject(this.WorkID,this.GetRequestVal("Msg"));
+            return BP.WF.Dev2Interface.Node_HungupWorkReject(this.WorkID, this.GetRequestVal("Msg"));
         }
 
         public string FutureTodolist_Init()
@@ -1604,24 +1752,37 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string AuthorList_Init()
         {
-            Paras ps = new Paras();
-            ps.SQL = "SELECT No,Name,AuthorDate FROM WF_Emp WHERE AUTHOR=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "AUTHOR";
-            ps.Add("AUTHOR", BP.Web.WebUser.No);
-            DataTable dt = DBAccess.RunSQLReturnTable(ps);
+            try
+            {
+                Auths ens = new Auths();
+                ens.Retrieve(AuthAttr.AutherToEmpNo, WebUser.No);
+                return ens.ToJson();
 
-            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
-            {
-                dt.Columns["NO"].ColumnName = "No";
-                dt.Columns["NAME"].ColumnName = "Name";
-                dt.Columns["AUTHORDATE"].ColumnName = "AuthorDate";
+                //Paras ps = new Paras();
+                //ps.SQL = "SELECT No,Name,AuthorDate FROM WF_Emp WHERE Author=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Author";
+                //ps.Add("Author", BP.Web.WebUser.No);
+                //DataTable dt = DBAccess.RunSQLReturnTable(ps);
+
+                //if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+                //{
+                //    dt.Columns["NO"].ColumnName = "No";
+                //    dt.Columns["NAME"].ColumnName = "Name";
+                //    dt.Columns["AUTHORDATE"].ColumnName = "AuthorDate";
+                //}
+                //if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+                //{
+                //    dt.Columns["no"].ColumnName = "No";
+                //    dt.Columns["name"].ColumnName = "Name";
+                //    dt.Columns["authordate"].ColumnName = "AuthorDate";
+                //}
+                //return BP.Tools.Json.ToJson(dt);
             }
-            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            catch (Exception ex)
             {
-                dt.Columns["no"].ColumnName = "No";
-                dt.Columns["name"].ColumnName = "Name";
-                dt.Columns["authordate"].ColumnName = "AuthorDate";
+                WFEmp en = new WFEmp();
+                en.CheckPhysicsTable();
+                throw new Exception("err@系统异常，请在执行一次:" + ex.Message);
             }
-            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 当前登陆人是否有授权
@@ -1744,13 +1905,13 @@ namespace BP.WF.HttpHandler
             sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE (Emps LIKE '%" + WebUser.No + "%' OR TodoEmps LIKE '%" + BP.Web.WebUser.No + ",%' OR Starter='" + WebUser.No + "')  AND WFState > 1 AND FID = 0 " + sqlWhere + " GROUP BY FK_Flow, FlowName";
 
             DataTable dtFlows = DBAccess.RunSQLReturnTable(sql);
-            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel!= FieldCaseModel.None)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
                 dtFlows.Columns[0].ColumnName = "No";
                 dtFlows.Columns[1].ColumnName = "Name";
                 dtFlows.Columns[2].ColumnName = "Num";
             }
-            
+
 
             dtFlows.TableName = "Flows";
             ds.Tables.Add(dtFlows);
@@ -1822,7 +1983,7 @@ namespace BP.WF.HttpHandler
                 sqlWhere += "AND FK_Flow = '" + this.FK_Flow + "' ";
 
             sqlWhere += " ORDER BY RDT DESC ";
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6)
                 sql = "SELECT NVL(WorkID, 0) WorkID,NVL(FID, 0) FID ,FK_Flow,FlowName,Title, NVL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,NVL(RDT, '2018-05-04 19:29') RDT,NVL(FK_Node, 0) FK_Node,NodeName, TodoEmps " +
                     "FROM (select A.*, rownum r from (select * from WF_GenerWorkFlow where " + sqlWhere + ") A) where r between " + (pageIdx * pageSize - pageSize + 1) + " and " + (pageIdx * pageSize);
             else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
@@ -1871,7 +2032,7 @@ namespace BP.WF.HttpHandler
             #region 获取track数据.
             string sqlOfWhere2 = "";
             string sqlOfWhere1 = "";
-            string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
+            string dbStr = BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             if (fid == 0)
             {
@@ -1911,8 +2072,8 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str= this.GetRequestVal("DoWhat");
-                if (DataType.IsNullOrEmpty(str)==true)
+                string str = this.GetRequestVal("DoWhat");
+                if (DataType.IsNullOrEmpty(str) == true)
                     str = this.GetRequestVal("DoType");
                 return str;
             }
@@ -1934,8 +2095,8 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str= this.GetRequestVal("Token");
-                if (DataType.IsNullOrEmpty(str)==true)
+                string str = this.GetRequestVal("Token");
+                if (DataType.IsNullOrEmpty(str) == true)
                     str = this.GetRequestVal("Token");
                 return str;
             }
@@ -1955,22 +2116,20 @@ namespace BP.WF.HttpHandler
 
             #region 安全性校验. SID 模式.
             if (this.SID == null)
-                return "err@必要的参数没有传入，请参考接口规则。SID";
+                return "err@必要的参数没有传入，请参考接口规则SID";
 
             if (BP.WF.Dev2Interface.Port_CheckUserLogin(this.UserNo, this.SID) == false)
-                return "err@非法的访问，请与管理员联系。SID=" + this.SID;
+                return "err@非法的访问，请与管理员联系,SID=" + this.SID;
 
             if (BP.DA.DataType.IsNullOrEmpty(this.UserNo) == false)
             {
                 BP.WF.Dev2Interface.Port_Login(this.UserNo);
-                BP.WF.Dev2Interface.Port_GenerToken(this.UserNo, "PC", 40000, true);
-               
+                BP.WF.Dev2Interface.Port_GenerToken("PC");
             }
 
-            if (BP.DA.DataType.IsNullOrEmpty(this.SID)==false)
+            if (BP.DA.DataType.IsNullOrEmpty(this.SID) == false)
                 BP.WF.Dev2Interface.Port_LoginByToken(this.SID);
-               
-         
+
             #endregion 安全性校验. SID 模式.
 
             if (this.DoWhat.Equals("PortLogin") == true)

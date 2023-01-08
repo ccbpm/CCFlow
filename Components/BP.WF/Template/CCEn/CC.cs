@@ -29,11 +29,11 @@ namespace BP.WF.Template.CCEn
         /// </summary>
         public const string CCFormAttr = "CCFormAttr";
         /// <summary>
-        /// 是否启用抄送到岗位
+        /// 是否启用抄送到角色
         /// </summary>
         public const string CCIsStations = "CCIsStations";
         /// <summary>
-        /// 按照岗位计算方式
+        /// 按照角色计算方式
         /// </summary>
         public const string CCStaWay = "CCStaWay";
         /// <summary>
@@ -122,7 +122,7 @@ namespace BP.WF.Template.CCEn
 
                 if (this.CCStaWay == WF.CCStaWay.StationSmartCurrNodeWorker || this.CCStaWay == WF.CCStaWay.StationSmartNextNodeWorker)
                 {
-                    /*按岗位智能计算*/
+                    /*按角色智能计算*/
                     string deptNo = "";
                     if (this.CCStaWay == WF.CCStaWay.StationSmartCurrNodeWorker)
                         deptNo = BP.Web.WebUser.FK_Dept;
@@ -142,7 +142,7 @@ namespace BP.WF.Template.CCEn
                     }
                 }
 
-                if (this.CCStaWay == WF.CCStaWay.StationAdndDept)
+                if (this.CCStaWay == WF.CCStaWay.StationAndDept)
                 {
                   
                         sql = "SELECT " + BP.Sys.Base.Glo.UserNo + ",Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C, WF_CCDept D WHERE A." + BP.Sys.Base.Glo.UserNoWhitOutAS + "=B.FK_Emp AND B.FK_Station=C.FK_Station AND A.FK_Dept=D.FK_Dept AND B.FK_Dept=D.FK_Dept AND C.FK_Node=" + this.NodeID+" AND D.FK_Node="+this.NodeID;
@@ -361,7 +361,7 @@ namespace BP.WF.Template.CCEn
             }
         }
         /// <summary>
-        /// 是否启用按照岗位抄送
+        /// 是否启用按照角色抄送
         /// </summary>
         public bool CCIsStations
         {
@@ -375,7 +375,7 @@ namespace BP.WF.Template.CCEn
             }
         }
         /// <summary>
-        /// 抄送到岗位计算方式.
+        /// 抄送到角色计算方式.
         /// </summary>
         public CCStaWay CCStaWay
         {
@@ -488,8 +488,6 @@ namespace BP.WF.Template.CCEn
                     return this._enMap;
 
                 Map map = new Map("WF_Node", "抄送规则");
-               
-
 
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10, false);
@@ -501,9 +499,9 @@ namespace BP.WF.Template.CCEn
                 map.AddBoolean(CCAttr.CCIsAttr, false, "按表单字段抄送", true, true, true);
                 map.AddTBString(CCAttr.CCFormAttr, null, "抄送人员字段", true, false, 0, 100, 10, true);
                 
-                map.AddBoolean(CCAttr.CCIsStations, false, "是否启用？-按照岗位抄送", true, true, false);
-                map.AddDDLSysEnum(CCAttr.CCStaWay, 0, "抄送岗位计算方式", true, true, CCAttr.CCStaWay,
-                    "@0=仅按岗位计算@1=按岗位智能计算(当前节点)@2=按岗位智能计算(发送到节点)@3=按岗位与部门的交集@4=按直线上级部门找岗位下的人员(当前节点)@5=按直线上级部门找岗位下的人员(接受节点)");
+                map.AddBoolean(CCAttr.CCIsStations, false, "是否启用？-按照角色抄送", true, true, false);
+                map.AddDDLSysEnum(CCAttr.CCStaWay, 0, "抄送角色计算方式", true, true, CCAttr.CCStaWay,
+                    "@0=仅按角色计算@1=按角色智能计算(当前节点)@2=按角色智能计算(发送到节点)@3=按角色与部门的交集@4=按直线上级部门找角色下的人员(当前节点)@5=按直线上级部门找角色下的人员(接受节点)");
 
                 map.AddBoolean(CCAttr.CCIsDepts, false, "是否启用？-按照部门抄送", true, true, false);
                 map.AddBoolean(CCAttr.CCIsEmps, false, "是否启用？-按照人员抄送", true, true, false);
@@ -520,11 +518,11 @@ namespace BP.WF.Template.CCEn
                 //平铺模式.
                 map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.CCEn.CCStations(), new BP.Port.Stations(),
                     BP.WF.Template.NodeStationAttr.FK_Node,
-                    BP.WF.Template.NodeStationAttr.FK_Station, "抄送岗位(分组模式)", StationAttr.FK_StationType);
+                    BP.WF.Template.NodeStationAttr.FK_Station, "抄送角色(分组模式)", StationAttr.FK_StationType);
 
                 map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.CCEn.CCStations(), new BP.Port.Stations(),
                   BP.WF.Template.NodeStationAttr.FK_Node,
-                  BP.WF.Template.NodeStationAttr.FK_Station, "抄送岗位(分组列表模式)", StationAttr.FK_StationType);
+                  BP.WF.Template.NodeStationAttr.FK_Station, "抄送角色(分组列表模式)", StationAttr.FK_StationType);
 
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
@@ -543,9 +541,9 @@ namespace BP.WF.Template.CCEn
                 //// 相关功能。
                 //map.AttrsOfOneVSM.Add(new BP.WF.Template.CCStations(), new BP.Port.Stations(),
                 //    NodeStationAttr.FK_Node, NodeStationAttr.FK_Station,
-                //    DeptAttr.Name, DeptAttr.No, "抄送岗位");
+                //    DeptAttr.Name, DeptAttr.No, "抄送角色");
 
-                //map.AttrsOfOneVSM.Add(new BP.WF.Template.CCDepts(), new BP.WF.Port.Depts(), NodeDeptAttr.FK_Node, NodeDeptAttr.FK_Dept, DeptAttr.Name,
+                //map.AttrsOfOneVSM.Add(new BP.WF.Template.CCDepts(), new BP.Port.Depts(), NodeDeptAttr.FK_Node, NodeDeptAttr.FK_Dept, DeptAttr.Name,
                 //DeptAttr.No,  "抄送部门" );
 
                 //map.AttrsOfOneVSM.Add(new BP.WF.Template.CCEmps(), new BP.WF.Port.Emps(), NodeEmpAttr.FK_Node, NodeEmpAttr.FK_Emp, DeptAttr.Name,

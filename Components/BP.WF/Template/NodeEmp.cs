@@ -27,7 +27,7 @@ namespace BP.WF.Template
 	/// 记录了从一个节点到其他的多个节点.
 	/// 也记录了到这个节点的其他的节点.
 	/// </summary>
-	public class NodeEmp :EntityMM
+	public class NodeEmp :EntityMyPK
 	{
 		#region 基本属性
 		/// <summary>
@@ -87,18 +87,33 @@ namespace BP.WF.Template
                 Map map = new Map("WF_NodeEmp", "节点人员");
                 map.IndexField = NodeEmpAttr.FK_Node;
 
-                map.AddTBIntPK(NodeEmpAttr.FK_Node,0,"Node",true,true);
-                map.AddDDLEntitiesPK(NodeEmpAttr.FK_Emp, null, "到人员", new BP.Port.Emps(), true);
+                map.AddMyPK();
+
+                map.AddTBInt(NodeEmpAttr.FK_Node, 0, "节点ID", true, true);
+                map.AddDDLEntities(NodeEmpAttr.FK_Emp, null, "到人员", new BP.Port.Emps(), true);
+
+                //map.AddTBIntPK(NodeEmpAttr.FK_Node,0,"Node",true,true);
+                //map.AddDDLEntitiesPK(NodeEmpAttr.FK_Emp, null, "到人员", new BP.Port.Emps(), true);
 
                 this._enMap = map;
                 return this._enMap;
             }
 		}
         #endregion
+
+
+        protected override bool beforeUpdateInsertAction()
+        {
+            this.setMyPK(this.FK_Node + "_" + this.FK_Emp);
+            return base.beforeUpdateInsertAction();
+        }
+
+
         protected override bool beforeInsert()
         {
             if (BP.Difference.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
                 this.FK_Emp = Web.WebUser.OrgNo + "_" + this.FK_Emp;
+
             return base.beforeInsert();
         }
 
@@ -106,7 +121,7 @@ namespace BP.WF.Template
 	/// <summary>
 	/// 节点人员
 	/// </summary>
-    public class NodeEmps : EntitiesMM
+    public class NodeEmps : EntitiesMyPK
     {
         /// <summary>
         /// 节点人员
@@ -120,16 +135,6 @@ namespace BP.WF.Template
         {
             QueryObject qo = new QueryObject(this);
             qo.AddWhere(NodeEmpAttr.FK_Node, NodeID);
-            qo.DoQuery();
-        }
-        /// <summary>
-        /// 节点人员
-        /// </summary>
-        /// <param name="EmpNo">EmpNo </param>
-        public NodeEmps(string EmpNo)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(NodeEmpAttr.FK_Emp, EmpNo);
             qo.DoQuery();
         }
         /// <summary>

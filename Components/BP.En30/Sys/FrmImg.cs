@@ -332,8 +332,8 @@ namespace BP.Sys
 
                 map.AddTBInt(FrmImgAttr.ImgAppType, 0, "应用类型", false, false);
                 
-                map.AddTBFloat(MapAttrAttr.X, 5, "X", true, false);
-                map.AddTBFloat(MapAttrAttr.Y, 5, "Y", false, false);
+                //map.AddTBFloat(MapAttrAttr.X, 5, "X", true, false);
+                //map.AddTBFloat(MapAttrAttr.Y, 5, "Y", false, false);
 
                 map.AddTBFloat(MapAttrAttr.UIWidth, 200, "H", true, false);
                 map.AddTBFloat(MapAttrAttr.UIHeight, 160, "H", true, false);
@@ -346,7 +346,7 @@ namespace BP.Sys
 
                 map.AddTBString(FrmImgAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
-                //如果是 seal 就是岗位集合。
+                //如果是 seal 就是角色集合。
                 map.AddTBString(FrmImgAttr.Tag0, null, "参数", true, false, 0, 500, 20);
                 map.AddTBInt(FrmImgAttr.ImgSrcType, 0, "图片来源0=本地,1=URL", true, false);
                 map.AddTBInt(FrmImgAttr.IsEdit, 0, "是否可以编辑", true, false);

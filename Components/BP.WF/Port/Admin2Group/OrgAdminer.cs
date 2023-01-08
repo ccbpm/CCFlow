@@ -1,5 +1,6 @@
 ﻿using BP.En;
 using BP.Port;
+using BP.WF.Template;
 
 namespace BP.WF.Port.Admin2Group
 {
@@ -16,7 +17,9 @@ namespace BP.WF.Port.Admin2Group
         /// 组织
         /// </summary>
         public const string OrgNo = "OrgNo";
-
+        public const string FlowSorts = "FlowSorts";
+        public const string FrmTrees = "FrmTrees";
+        public const string EmpName = "EmpName";
     }
     /// <summary>
     /// 组织管理员
@@ -24,6 +27,40 @@ namespace BP.WF.Port.Admin2Group
     public class OrgAdminer : EntityMyPK
     {
         #region 属性
+        public string FrmTrees
+        {
+            get
+            {
+                return this.GetValStringByKey(OrgAdminerAttr.FrmTrees);
+            }
+            set
+            {
+                this.SetValByKey(OrgAdminerAttr.FrmTrees, value);
+            }
+        }
+        public string FlowSorts
+        {
+            get
+            {
+                return this.GetValStringByKey(OrgAdminerAttr.FlowSorts);
+            }
+            set
+            {
+                this.SetValByKey(OrgAdminerAttr.FlowSorts, value);
+            }
+        }
+        public string EmpName
+        {
+            get
+            {
+                return this.GetValStringByKey(OrgAdminerAttr.EmpName);
+            }
+            set
+            {
+                this.SetValByKey(OrgAdminerAttr.EmpName, value);
+            }
+        }
+
         public string FK_Emp
         {
             get
@@ -55,8 +92,9 @@ namespace BP.WF.Port.Admin2Group
             {
                 UAC uac = new UAC();
                 uac.OpenForSysAdmin();
+                uac.IsInsert = false;
                 //uac.IsDelete = false;
-               // uac.IsInsert = false;
+                // uac.IsInsert = false;
                 return uac;
             }
         }
@@ -85,22 +123,27 @@ namespace BP.WF.Port.Admin2Group
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Port_OrgAdminer", "组织管理员");
-                map.AddMyPK();
-                map.AddTBString(OrgAdminerAttr.OrgNo, null, "组织", true, false, 0, 50, 20);
-                map.AddDDLEntities(OrgAdminerAttr.FK_Emp, null, "管理员", new Emps(), false);
 
-                map.AddTBStringDoc("FlowSorts", null, "管理的流程目录", true, true,true);
-                map.AddTBStringDoc("FrmTrees", null, "管理的表单目录", true, true, true);
+                //不能注释掉.
+                map.AddMyPK(false);
+
+                map.AddTBString(OrgAdminerAttr.OrgNo, null, "组织", true, true, 0, 50, 20);
+                map.AddTBString(OrgAdminerAttr.FK_Emp, null, "管理员账号", true, true, 0, 50, 20);
+                map.AddTBString(OrgAdminerAttr.EmpName, null, "管理员名称", true, true, 0, 50, 20);
+
+                map.AddTBStringDoc(OrgAdminerAttr.FlowSorts, null, "管理的流程目录", true, true, true);
+                map.AddTBStringDoc(OrgAdminerAttr.FrmTrees, null, "管理的表单目录", true, true, true);
 
                 map.AttrsOfOneVSM.AddGroupPanelModel(new OAFlowSorts(), new BP.WF.Template.FlowSorts(),
                   OAFlowSortAttr.RefOrgAdminer,
                   OAFlowSortAttr.FlowSortNo, "流程目录权限");
 
-                map.AttrsOfOneVSM.AddGroupPanelModel(new OAFrmTrees(), new BP.Sys.FrmTrees(),
+                map.AttrsOfOneVSM.AddGroupPanelModel(new OAFrmTrees(), new SysFormTrees(),
                 OAFrmTreeAttr.RefOrgAdminer,
                 OAFrmTreeAttr.FrmTreeNo, "表单目录权限");
 
-                map.AddHidden("OrgNo", " = ", "@WebUser.OrgNo");
+                if (BP.Web.WebUser.No != null)
+                    map.AddHidden("OrgNo", " = ", "@WebUser.OrgNo");
 
                 this._enMap = map;
                 return this._enMap;
@@ -112,17 +155,25 @@ namespace BP.WF.Port.Admin2Group
         {
             string str = "";
             BP.WF.Template.FlowSorts ens = new Template.FlowSorts();
-            ens.RetrieveInSQL("SELECT FlowSortNo FROM Port_OrgAdminerFlowSort WHERE  FK_Emp='"+this.FK_Emp+"' AND OrgNo='"+this.OrgNo+"'");
+            ens.RetrieveInSQL("SELECT FlowSortNo FROM Port_OrgAdminerFlowSort WHERE  FK_Emp='" + this.FK_Emp + "' AND OrgNo='" + this.OrgNo + "'");
             foreach (BP.WF.Template.FlowSort item in ens)
-                str += "(" + item.No + ")" + item.Name+";";
-            this.SetValByKey("FlowSorts", str);
+                str += "(" + item.No + ")" + item.Name + ";";
+            this.FlowSorts = str;
 
             str = "";
-            BP.Sys.FrmTrees enTrees = new BP.Sys.FrmTrees();
+            SysFormTrees enTrees = new SysFormTrees();
             enTrees.RetrieveInSQL("SELECT FrmTreeNo FROM Port_OrgAdminerFrmTree WHERE  FK_Emp='" + this.FK_Emp + "' AND OrgNo='" + this.OrgNo + "'");
-            foreach (BP.Sys.FrmTree item in enTrees)
-                str += "("+item.No+")"+item.Name + ";";
-            this.SetValByKey("FrmTrees", str);
+            foreach (SysFormTree item in enTrees)
+                str += "(" + item.No + ")" + item.Name + ";";
+            this.FrmTrees = str;
+
+            if (this.EmpName=="" || this.EmpName ==null)
+            {
+                Emp emp = new Emp(this.FK_Emp);
+                this.EmpName = emp.Name;
+                this.MyPK = this.OrgNo + "_" + this.FK_Emp;
+            }
+           
 
             return base.beforeUpdateInsertAction();
         }
@@ -134,8 +185,12 @@ namespace BP.WF.Port.Admin2Group
     {
         public override int RetrieveAll()
         {
-            return this.Retrieve(OrgAdminerAttr.OrgNo, BP.Web.WebUser.OrgNo);
+            if (BP.Web.WebUser.No != null && BP.Web.WebUser.No.Equals("admin") == false)
+                return this.Retrieve(OrgAdminerAttr.OrgNo, BP.Web.WebUser.OrgNo);
+
+            return base.RetrieveAll();
         }
+
         #region 构造
         /// <summary>
         /// 组织s

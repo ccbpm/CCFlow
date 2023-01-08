@@ -40,7 +40,7 @@ namespace BP.WF.Template
         /// </summary>
         DutyLeader,
         /// <summary>
-        /// 特定岗位
+        /// 特定角色
         /// </summary>
         SpecStation
     }

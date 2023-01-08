@@ -332,10 +332,10 @@ namespace BP.CCBill
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_MapData", "实体表单");
-
                 map.CodeStruct = "4";
 
                 #region 基本属性.
+                map.AddGroupAttr("基本信息");
                 map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, true, 1, 190, 20);
                 map.SetHelperAlert(MapDataAttr.No, "也叫表单ID,系统唯一.");
 
@@ -348,6 +348,7 @@ namespace BP.CCBill
                 #endregion 基本属性.
 
                 #region 外观.
+                map.AddGroupAttr("外观");
                 map.AddDDLSysEnum(FrmAttr.RowOpenModel, 2, "行记录打开模式", true, true,
                   "RowOpenMode", "@0=新窗口打开@1=在本窗口打开@2=弹出窗口打开,关闭后不刷新列表@3=弹出窗口打开,关闭后刷新列表");
                 string cfg = "@0=MyDictFrameWork.htm 实体与实体相关功能编辑器";
@@ -355,6 +356,7 @@ namespace BP.CCBill
                 cfg += "@2=MyBill.htm 单据编辑器";
                 cfg += "@9=自定义URL";
                 map.AddDDLSysEnum("SearchDictOpenType", 0, "双击行打开内容", true, true, "SearchDictOpenType", cfg);
+                map.AddBoolean(EnCfgAttr.IsSelectMore, true, "是否下拉查询条件多选?", true, true);
                 map.AddTBString(EnCfgAttr.UrlExt, null, "要打开的Url", true, false, 0, 500, 60, true);
                 map.AddTBInt(FrmAttr.PopHeight, 500, "弹窗高度", true, false);
                 map.AddTBInt(FrmAttr.PopWidth, 760, "弹窗宽度", true, false);
@@ -367,6 +369,8 @@ namespace BP.CCBill
                 #endregion 外观.
 
                 #region 实体表单.
+                map.AddGroupAttr("实体表单");
+
                 map.AddDDLSysEnum(FrmDictAttr.EntityType, 0, "业务类型", true, false, FrmDictAttr.EntityType,
                    "@0=独立表单@1=单据@2=编号名称实体@3=树结构实体");
                 map.SetHelperAlert(FrmDictAttr.EntityType, "该实体的类型,@0=单据@1=编号名称实体@2=树结构实体.");
@@ -397,7 +401,7 @@ namespace BP.CCBill
                 //#region MyBill - 按钮权限.
                 //map.AddTBString(FrmDictAttr.BtnNewLable, "新建", "新建", true, false, 0, 50, 20);
                 //map.AddDDLSysEnum(FrmDictAttr.BtnNewModel, 0, "新建模式", true, true, FrmDictAttr.BtnNewModel,
-                 //  "@0=表格模式@1=卡片模式@2=不可用", true);
+                //  "@0=表格模式@1=卡片模式@2=不可用", true);
 
                 //map.AddTBString(FrmDictAttr.BtnSaveLable, "保存", "保存", true, false, 0, 50, 20);
                 //map.AddBoolean(FrmDictAttr.BtnSaveEnable, true, "是否可用？", true, true);
@@ -409,7 +413,7 @@ namespace BP.CCBill
                 //map.AddTBString(FrmDictAttr.BtnDelLable, "删除", "删除", true, false, 0, 50, 20);
 
                 //数据版本.
-               // map.AddTBString(FrmDictAttr.BtnDataVer, "数据快照", "数据快照", true, false, 0, 50, 20);
+                // map.AddTBString(FrmDictAttr.BtnDataVer, "数据快照", "数据快照", true, false, 0, 50, 20);
 
                 //map.AddBoolean(FrmDictAttr.BtnDelEnable, true, "是否可用？", true, true);
 
@@ -435,18 +439,20 @@ namespace BP.CCBill
                 //map.AddBoolean(FrmDictAttr.BtnExpZipEnable, false, "是否可用？", true, true);
                 //#endregion 按钮权限.
 
-               // #region 查询按钮权限.
-               // map.AddTBString(FrmDictAttr.BtnImpExcel, "导入", "导入Excel文件", true, false, 0, 50, 20);
+                // #region 查询按钮权限.
+                // map.AddTBString(FrmDictAttr.BtnImpExcel, "导入", "导入Excel文件", true, false, 0, 50, 20);
                 //map.AddBoolean(FrmDictAttr.BtnImpExcelEnable, true, "是否可用？", true, true);
 
                 //map.AddTBString(FrmDictAttr.BtnExpExcel, "导出", "导出Excel文件", true, false, 0, 50, 20);
                 //map.AddBoolean(FrmDictAttr.BtnExpExcelEnable, true, "是否可用？", true, true);
 
-               // map.AddTBString(FrmDictAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
+                // map.AddTBString(FrmDictAttr.BtnGroupLabel, "分析", "分析", true, false, 0, 50, 20);
                 //map.AddBoolean(FrmDictAttr.BtnGroupEnable, true, "是否可用？", true, true);
                 //#endregion 查询按钮权限.
 
                 #region 设计者信息.
+                map.AddGroupAttr("设计者信息");
+
                 map.AddTBString(MapDataAttr.Designer, null, "设计者", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.DesignerContact, null, "联系方式", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20, true);
@@ -464,6 +470,9 @@ namespace BP.CCBill
                 #endregion 扩展参数.
 
                 #region 基本功能.
+
+                map.AddGroupMethod("基本功能");
+
                 RefMethod rm = new RefMethod();
 
                 rm = new RefMethod();
@@ -533,9 +542,9 @@ namespace BP.CCBill
 
                 #endregion 基本功能.
 
-                #region 报表定义.
+                #region 查询定义.
+                map.AddGroupMethod("查询定义");
                 rm = new RefMethod();
-                rm.GroupName = "查询定义";
                 rm.Title = "设置显示的列"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoRpt_ColsChose";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -543,7 +552,6 @@ namespace BP.CCBill
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "查询定义";
                 rm.Title = "设置多表头"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoRptMTitle";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -551,7 +559,6 @@ namespace BP.CCBill
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "查询定义";
                 rm.Title = "列的顺序"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoRpt_ColsIdxAndLabel";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -559,7 +566,6 @@ namespace BP.CCBill
                 //   map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "查询定义";
                 rm.Title = "查询条件"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoRpt_SearchCond";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -567,15 +573,14 @@ namespace BP.CCBill
                 map.AddRefMethod(rm);
                 #endregion 报表定义.
 
-
                 #region 权限规则.
+                map.AddGroupMethod("权限规则");
                 rm = new RefMethod();
                 rm.Title = "创建规则"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoCreateRole";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkModel;
                 rm.RefAttrKey = FrmDictAttr.BtnNewLable;
-                rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -584,7 +589,6 @@ namespace BP.CCBill
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkModel;
                 rm.RefAttrKey = FrmDictAttr.BtnSaveLable;
-                rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
 
                 //rm = new RefMethod();
@@ -602,7 +606,6 @@ namespace BP.CCBill
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkModel;
                 rm.RefAttrKey = FrmDictAttr.BtnDelLable;
-                rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -611,7 +614,6 @@ namespace BP.CCBill
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkModel;
                 rm.RefAttrKey = FrmDictAttr.BtnDataVer;
-                rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
 
 
@@ -621,18 +623,14 @@ namespace BP.CCBill
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkModel;
                 rm.RefAttrKey = FrmDictAttr.BtnSearchLabel;
-                rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "数据查询权限规则";
                 rm.ClassMethodName = this.ToString() + ".DoSearchDataRole()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "权限规则";
                 map.AddRefMethod(rm);
                 #endregion
-
-
 
                 this._enMap = map;
                 return this._enMap;

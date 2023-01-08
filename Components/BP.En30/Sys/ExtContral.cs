@@ -138,8 +138,6 @@ namespace BP.Sys
         }
         #endregion 附件属性
 
-       
-
         #region 构造方法
         /// <summary>
         /// 扩展控件
@@ -197,9 +195,8 @@ namespace BP.Sys
                 map.AddBoolean(MapAttrAttr.UIIsLine, false, "是否单独栏显示", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填字段", true, true);
 
-
-                map.AddTBFloat(MapAttrAttr.X, 5, "X", true, false);
-                map.AddTBFloat(MapAttrAttr.Y, 5, "Y", false, false);
+                //map.AddTBFloat(MapAttrAttr.X, 5, "X", true, false);
+                //map.AddTBFloat(MapAttrAttr.Y, 5, "Y", false, false);
 
 
                 map.AddTBString(MapAttrAttr.Tag, null, "标识（存放临时数据）", true, false, 0, 100, 20);

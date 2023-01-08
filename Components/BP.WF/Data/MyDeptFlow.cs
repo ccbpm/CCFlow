@@ -53,7 +53,7 @@ namespace BP.WF.Data
         /// </summary>
         public const string FK_Node = "FK_Node";
         /// <summary>
-        /// 当前工作岗位
+        /// 当前工作角色
         /// </summary>
         public const string FK_Station = "FK_Station";
         /// <summary>
@@ -739,7 +739,7 @@ namespace BP.WF.Data
 
                 #region 查询条件.
                 map.DTSearchKey = MyFlowAttr.RDT;
-                map.DTSearchLable = "发起日期";
+                map.DTSearchLabel = "发起日期";
                 map.DTSearchWay = DTSearchWay.ByDate;
 
                 map.AddSearchAttr(MyDeptFlowAttr.FK_Flow);
@@ -748,10 +748,10 @@ namespace BP.WF.Data
                 map.AddHidden(MyStartFlowAttr.FID, "=", "0");
 
                 //增加隐藏的查询条件.
-                AttrOfSearch search = new AttrOfSearch(MyDeptFlowAttr.FK_Dept, "部门",
+                SearchNormal search = new SearchNormal(MyDeptFlowAttr.FK_Dept, "部门",
                     MyDeptFlowAttr.FK_Dept, "=", BP.Web.WebUser.FK_Dept, 0, true);
 
-                map.AttrsOfSearch.Add(search);
+                map.SearchNormals.Add(search);
                 #endregion 查询条件.
 
 

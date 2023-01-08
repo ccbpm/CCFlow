@@ -183,7 +183,7 @@ namespace BP.WF.Template
         /// </summary>
         Disable=5,
         /// <summary>
-        /// 按岗位
+        /// 按角色
         /// </summary>
         ByStation=6,
         /// <summary>

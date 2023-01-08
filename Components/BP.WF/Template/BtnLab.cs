@@ -355,7 +355,7 @@ namespace BP.WF.Template
             get
             {
                 string str = this.GetValStringByKey(BtnAttr.SendJS).Replace("~", "'");
-                if (this.CCRole == BP.WF.CCRole.WhenSend)
+                if (this.CCRole == BP.WF.CCRoleEnum.WhenSend)
                     str = str + "  if ( OpenCC()==false) return false;";
                 return str;
             }
@@ -435,11 +435,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 抄送规则
         /// </summary>
-        public CCRole CCRole
+        public CCRoleEnum CCRole
         {
             get
             {
-                return (CCRole)this.GetValIntByKey(BtnAttr.CCRole);
+                return (CCRoleEnum)this.GetValIntByKey(BtnAttr.CCRole);
             }
         }
         /// <summary>
@@ -1081,6 +1081,7 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_Node", "节点按钮标签");
 
+                map.AddGroupAttr("处理器按钮权限");
                 map.AddTBIntPK(BtnAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(BtnAttr.Name, null, "节点名称", true, true, 0, 200, 10);
 
@@ -1144,7 +1145,6 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(BtnAttr.OfficeBtnLocal, 0, "按钮位置", true, true, BtnAttr.OfficeBtnLocal,
          "@0=工具栏上@1=表单标签(divID=GovDocFile)", false);
-
                 #endregion 公文相关.
 
                 //map.AddTBString(BtnAttr.OfficeBtnLab, "公文主文件", "公文按钮标签", true, false, 0, 50, 10);
@@ -1196,13 +1196,10 @@ namespace BP.WF.Template
                 map.SetHelperUrl(BtnAttr.TCLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3938664&doc_id=31094");
 
                 map.AddTBString(BtnAttr.FrmDBVerLab, "数据版本", "数据版本", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.FrmDBVerEnable, false, "(数据版本)是否启用", true, true);
-                map.AddBoolean(BtnAttr.FrmDBVerMyView, false, "(数据版本)显示在查看器工具栏?", true, true);
-                map.AddBoolean(BtnAttr.FrmDBVerMyCC, false, "(数据版本)显示在抄送工具栏?", true, true);
+                map.AddBoolean(BtnAttr.FrmDBVerEnable, false, "是否启用", true, true);
 
                 map.AddTBString(BtnAttr.FrmDBRemarkLab, "数据批阅", "数据批阅", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.FrmDBRemarkEnable, 0, "数据批阅", true, true, BtnAttr.FrmDBRemarkEnable, "@0=禁用@1=可编辑@2=不可编辑", false);
-
 
 
                 //map.AddTBString(BtnAttr.AskforLab, "执行", "加签按钮标签", true, false, 0, 50, 10);
@@ -1297,18 +1294,36 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(NodeAttr.JumpWay, 0, "跳转规则", true, true, NodeAttr.JumpWay);
                 map.AddTBString(NodeAttr.JumpToNodes, null, "可跳转的节点", true, false, 0, 200, 10, true);
 
+                map.AddGroupAttr("查看器按钮权限");
+                map.AddBoolean(BtnAttr.ShowParentFormEnableMyView, false, "查看父流程是否启用", true, true);
+                map.AddBoolean(BtnAttr.TrackEnableMyView, true, "轨迹是否启用", true, true);
+                map.AddBoolean(BtnAttr.FrmDBVerMyView, false, "数据版本是否启用", true, true);
 
+                map.AddDDLSysEnum(BtnAttr.FrmDBRemarkEnableMyView, 0, "数据批阅", true, true, BtnAttr.FrmDBRemarkEnable, "@0=禁用@1=可编辑@2=不可编辑", false);
                 // 催办
                 map.AddTBString(BtnAttr.PressLab, "催办", "催办", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PressEnable, true, "是否启用", true, true);
                 map.SetHelperAlert(BtnAttr.PressLab, "是否在在途的流程查看器上显示催办按钮？");
 
-                //  scrip
+                map.AddTBString(BtnAttr.RollbackLab, "回滚", "回滚", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.RollbackEnable, true, "是否启用", true, true);
+                map.SetHelperAlert(BtnAttr.RollbackLab, "流程结束后是否在查看器上显示回滚操作?");
+
+                map.AddGroupAttr("抄送器按钮权限");
+                map.AddBoolean(BtnAttr.ShowParentFormEnableMyCC, false, "查看父流程是否启用", true, true);
+                map.AddBoolean(BtnAttr.TrackEnableMyCC, true, "轨迹是否启用", true, true);
+                map.AddBoolean(BtnAttr.FrmDBVerMyCC, false, "数据版本是否启用", true, true);
+                
                 #endregion  功能按钮状态
 
                 #region 退回处理.
+                map.AddGroupAttr("退回规则");
                 map.AddTBString(BtnAttr.ReturnLab, "退回", "退回按钮标签", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(NodeAttr.ReturnRole, 0, "退回规则", true, true, NodeAttr.ReturnRole);
+
+                string returnRole = "@0=不能退回@1=只能退回上一个节点@2=可以退回任意节点@3=退回指定的节点";
+                map.AddDDLSysEnum(NodeAttr.ReturnRole, 0, "退回规则", true, true, NodeAttr.ReturnRole, returnRole);
+
+               // map.AddDDLSysEnum(NodeAttr.ReturnRole, 0, "退回规则", true, true, NodeAttr.ReturnRole);
                 map.SetHelperUrl(NodeAttr.ReturnRole, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3579467&doc_id=31094"); //增加帮助.
                 map.AddTBString(NodeAttr.ReturnAlert, null, "被退回后信息提示", true, false, 0, 999, 10, true);
 
@@ -1341,6 +1356,7 @@ namespace BP.WF.Template
                 #endregion 退回处理.
 
                 #region 打印.
+                map.AddGroupAttr("打印");
                 // add 2017.9.1 for 天业集团.
                 map.AddTBString(BtnAttr.PrintHtmlLab, "打印Html", "打印Html标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.PrintHtmlEnable, false, "(打印Html)是否启用", true, true);
@@ -1363,7 +1379,7 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.ShuiYinModle, null, "PDF水印内容", true, false, 20, 100, 100);
                 map.SetHelperUrl(BtnAttr.ShuiYinModle, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=4055911&doc_id=31094"); //增加帮助
 
-                map.AddTBString(BtnAttr.PrintZipLab, "打包下载", "打包下载zip按钮标签", true, false, 0, 50, 10, false);
+                map.AddTBString(BtnAttr.PrintZipLab, "打包下载", "打包下载zip标签", true, false, 0, 50, 10, false);
                 map.AddBoolean(BtnAttr.PrintZipEnable, false, "(打包下载zip)是否启用", true, true);
                 map.SetHelperUrl(BtnAttr.PrintZipLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979897&doc_id=31094"); //增加帮助
 
@@ -1379,6 +1395,7 @@ namespace BP.WF.Template
                 #endregion
 
                 #region 会签按钮.
+                map.AddGroupAttr("会签");
                 map.AddTBString(BtnAttr.HuiQianLab, "会签", "按钮标签", true, false, 0, 50, 10);
                 map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "会签模式", true, true, BtnAttr.HuiQianRole, "@0=不启用@1=协作(同事)模式@4=组长(领导)模式");
                 map.SetHelperUrl(BtnAttr.HuiQianLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979976&doc_id=31094");

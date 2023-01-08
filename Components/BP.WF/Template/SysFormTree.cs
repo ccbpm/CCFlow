@@ -5,6 +5,8 @@ using BP.DA;
 using BP.En;
 using BP.Port;
 using BP.Sys;
+using BP.Difference;
+using BP.WF.Port.Admin2Group;
 
 namespace BP.WF.Template
 {
@@ -116,16 +118,16 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("Sys_FormTree", "表单树");
-                map.CodeStruct = "2";
+                //map.CodeStruct = "2";
 
                 map.DepositaryOfEntity= Depositary.None;
                 map.DepositaryOfMap = Depositary.Application;
 
                 map.AddTBStringPK(SysFormTreeAttr.No, null, "编号", true, true, 1, 10, 40);
                 map.AddTBString(SysFormTreeAttr.Name, null, "名称", true, false, 0, 100, 30);
-                map.AddTBString(SysFormTreeAttr.ParentNo, null, "父节点No", false, false, 0, 100, 40);
+                map.AddTBString(SysFormTreeAttr.ParentNo, null, "父节点编号", false, false, 0, 100, 40);
                 map.AddTBInt(SysFormTreeAttr.Idx, 0, "Idx", false, false);
-                map.AddTBString(SysFormTreeAttr.OrgNo, null, "OrgNo", false, false, 0, 50, 30);
+                map.AddTBString(SysFormTreeAttr.OrgNo, null, "组织编号", false, false, 0, 50, 30);
 
                 this._enMap = map;
                 return this._enMap;
@@ -160,6 +162,7 @@ namespace BP.WF.Template
         {
             if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
+            this.No = DBAccess.GenerOID(this.ToString()).ToString();
             return base.beforeInsert();
         }
 
@@ -196,19 +199,47 @@ namespace BP.WF.Template
         {
             SysFormTree en = new SysFormTree();
             en.Copy(this);
-            en.No = DBAccess.GenerOID().ToString();
+            en.No = DBAccess.GenerOID(this.ToString()).ToString();
             en.Name = name;
             en.Insert();
+            if(SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc && SystemConfig.GroupStationModel == 2)
+            {
+                //如果当前人员不是部门主要管理员
+                BP.WF.Admin.Org org = new BP.WF.Admin.Org(BP.Web.WebUser.OrgNo);
+                if (BP.Web.WebUser.No.Equals(org.Adminer) == false)
+                {
+                    OAFrmTree oatree = new OAFrmTree();
+                    oatree.FK_Emp = BP.Web.WebUser.No;
+                    oatree.OrgNo = BP.Web.WebUser.OrgNo;
+                    oatree.SetValByKey("RefOrgAdminer", oatree.OrgNo + "_" + oatree.FK_Emp);
+                    oatree.SetValByKey("FrmTreeNo", en.No);
+                    oatree.Insert();
+                }
+            }
             return en.No;
         }
         public string DoCreateSubNodeIt(string name)
         {
             SysFormTree en = new SysFormTree();
             en.Copy(this);
-            en.No = DBAccess.GenerOID().ToString();
+            en.No = DBAccess.GenerOID(this.ToString()).ToString();
             en.ParentNo = this.No;
             en.Name = name;
             en.Insert();
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc && SystemConfig.GroupStationModel == 2)
+            {
+                //如果当前人员不是部门主要管理员
+                BP.WF.Admin.Org org = new BP.WF.Admin.Org(BP.Web.WebUser.OrgNo);
+                if (BP.Web.WebUser.No.Equals(org.Adminer) == false)
+                {
+                    OAFrmTree oatree = new OAFrmTree();
+                    oatree.FK_Emp = BP.Web.WebUser.No;
+                    oatree.OrgNo = BP.Web.WebUser.OrgNo;
+                    oatree.SetValByKey("RefOrgAdminer", oatree.OrgNo + "_" + oatree.FK_Emp);
+                    oatree.SetValByKey("FrmTreeNo", en.No);
+                    oatree.Insert();
+                }
+            }
             return en.No;
         }
         public void DoUp()

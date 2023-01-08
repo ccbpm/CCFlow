@@ -130,29 +130,29 @@ namespace BP.En
                 if (this.EnMap.IsAutoGenerNo)
                     this.No = this.GenerNewNo;
                 else
-                    throw new Exception("@没有给[" + this.EnDesc + " " + this.ToString() + " , " + this.Name + "]设置主键,能执行插入.");
+                    //throw new Exception("@没有给[" + this.EnDesc + "]ClassID=[" + this.ClassID + "]Name=[" + this.Name + "]设置编号,不能执行插入.");
+                    throw new Exception("没有给当前操作设置编号和名称，保存失败。");
             }
-
-            if (this.EnMap.IsAllowRepeatName == false)
-            {
-                if (this.PKCount == 1)
-                {
-                    if (this.ExitsValueNum("Name", this.Name) >= 1)
-                        throw new Exception("@插入失败[" + this.EnMap.EnDesc + "] 编号[" + this.No + "]名称[" + Name + "]重复.");
-                }
-            }
+            //if (this.EnMap.IsAllowRepeatName == false)
+            //{
+            //    if (this.PKCount == 1)
+            //    {
+            //        if (this.ExitsValueNum("Name", this.Name) >= 1)
+            //            throw new Exception("@插入失败[" + this.EnMap.EnDesc + "] 编号[" + this.No + "]名称[" + Name + "]重复.");
+            //    }
+            //}
             return base.beforeInsert();
         }
         protected override bool beforeUpdate()
         {
-            if (this.EnMap.IsAllowRepeatName == false)
-            {
-                if (this.PKCount == 1)
-                {
-                    if (this.ExitsValueNum("Name", this.Name) >= 2)
-                        throw new Exception("@更新失败[" + this.EnMap.EnDesc + "] 编号[" + this.No + "]名称[" + Name + "]重复.");
-                }
-            }
+            //if (this.EnMap.IsAllowRepeatName == false)
+            //{
+            //    if (this.PKCount == 1)
+            //    {
+            //        if (this.ExitsValueNum("Name", this.Name) >= 2)
+            //            throw new Exception("@更新失败[" + this.EnMap.EnDesc + "] 编号[" + this.No + "]名称[" + Name + "]重复.");
+            //    }
+            //}
             return base.beforeUpdate();
         }
         public override int Save()

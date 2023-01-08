@@ -135,6 +135,7 @@ namespace BP.WF.HttpHandler
             string sql = "";
             try
             {
+                Flow flow = new Flow(this.FK_Flow);
 
                 StringBuilder sBuilder = new StringBuilder();
 
@@ -192,12 +193,33 @@ namespace BP.WF.HttpHandler
                         strs += "@" + dir.ToNode;
                     }
 
-                    DBAccess.RunSQL("UPDATE WF_Node SET HisToNDs='" + strs + "' WHERE NodeID=" + item.NodeID);
+                    int nodePosType = 0;
+                    if (item.IsStartNode == true)
+                        nodePosType = 0;
+                    else if (DataType.IsNullOrEmpty(strs) == true)
+                        nodePosType = 2;
+                    else
+                        nodePosType = 1;
+
+                    DBAccess.RunSQL("UPDATE WF_Node SET HisToNDs='" + strs + "',NodePosType=" + nodePosType + "  WHERE NodeID=" + item.NodeID);
+
+                    DBAccess.RunSQL("UPDATE Sys_MapData SET Name='"+item.Name+"' WHERE No='ND"+item.NodeID+"'");
                 }
 
-                //获得字符串格式. $101;@102@103
-                //   string[] mystr = mystrs.Split('$');
-
+                //获取所有子流程
+                string subs = this.GetRequestVal("SubFlows");
+                int subFlowShowType = flow.GetValIntByKey(FlowAttr.SubFlowShowType);
+                if (DataType.IsNullOrEmpty(subs) == false && subFlowShowType == 0)
+                {
+                    string[] subFlows = subs.Split('@');
+                    foreach (string item in subFlows)
+                    {
+                        if (DataType.IsNullOrEmpty(item) == true)
+                            continue;
+                        String[] strs = item.Split(',');
+                        sBuilder.Append("UPDATE WF_NodeSubFlow SET X=" + strs[1] + ",Y=" + strs[2] + " WHERE MyPK=" + strs[0] + ";");
+                    }
+                }
                 //保存节点位置. @101,2,30@102,3,1
                 string[] nodes = this.GetRequestVal("Nodes").Split('@');
                 foreach (string item in nodes)
@@ -207,15 +229,43 @@ namespace BP.WF.HttpHandler
 
                     string[] strs = item.Split(',');
                     string nodeID = strs[0]; //获得nodeID.
-
-
-                    sBuilder.Append("UPDATE WF_Node SET X=" + strs[1] + ",Y=" + strs[2] + ",Name='" + strs[3] + "' WHERE NodeID=" + strs[0] + ";");
+                    if (subFlowShowType == 1 && subs.IndexOf(nodeID) != -1)
+                    {
+                        string sub = subs.Substring(subs.IndexOf("@\"" + nodeID) + 1);
+                        if (sub.Contains("@") == true)
+                            sub = sub.Substring(0, sub.IndexOf("@"));
+                        string[] subInfo = sub.Split(',');
+                        sBuilder.Append("UPDATE WF_Node SET X=" + strs[1] + ",Y=" + strs[2] + ",Name='" + strs[3] + "',SubFlowX=" + subInfo[1] + ", SubFlowY=" + subInfo[2] + " WHERE NodeID=" + strs[0] + ";");
+                    }
+                    else
+                    {
+                        sBuilder.Append("UPDATE WF_Node SET X=" + strs[1] + ",Y=" + strs[2] + ",Name='" + strs[3] + "' WHERE NodeID=" + strs[0] + ";");
+                    }
                 }
 
                 DBAccess.RunSQLs(sBuilder.ToString());
 
+                // DBAccess.RunSQL("update WF_Direction set ToNodeName=WF_Node.Name from WF_Node where //WF_Direction.ToNode=WF_Node.NodeID AND WF_Direction.FK_FlOW='" + this.FK_Flow+"'");
+
+                #region 更新节点名称.
+                switch (SystemConfig.AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                    case DBType.KingBaseR3:
+                    case DBType.KingBaseR6:
+                        sql = " UPDATE WF_Direction SET ToNodeName = WF_Node.Name FROM WF_Node  ";
+                        sql += " WHERE WF_Direction.ToNode = WF_Node.NodeID AND WF_Direction.FK_Flow='" + this.FK_Flow + "'";
+                        break;
+                    default:
+                        sql = "UPDATE WF_Direction A, WF_Node B SET A.ToNodeName=B.Name WHERE A.ToNode=B.NodeID AND A.FK_Flow='" + this.FK_Flow + "' ";
+                        break;
+                }
+                DBAccess.RunSQL(sql);
+                #endregion 更新节点名称.
+
+
                 //清楚缓存.
-                Cash.ClearCash();
+               Cash.ClearCash();
                 // Node nd = new Node(102);
                 // throw new Exception(nd.Name);
 
@@ -247,7 +297,7 @@ namespace BP.WF.HttpHandler
         {
             DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet_AllEleInfo(this.FK_MapData);
 
-            string file =  BP.Difference.SystemConfig.PathOfTemp + this.FK_MapData + ".xml";
+            string file = BP.Difference.SystemConfig.PathOfTemp + this.FK_MapData + ".xml";
             ds.WriteXml(file);
             string docs = DataType.ReadTextFile(file);
             return docs;
@@ -272,7 +322,7 @@ namespace BP.WF.HttpHandler
         }
 
         /// <summary>
-        /// 根据部门、岗位获取人员列表
+        /// 根据部门、角色获取人员列表
         /// </summary>
         /// <returns></returns>
         public string GetEmpsByStationTable()
@@ -559,37 +609,6 @@ namespace BP.WF.HttpHandler
 
         #region 节点相关 Nodes
         /// <summary>
-        /// gen
-        /// </summary>
-        /// <param name="figureName"></param>
-        /// <returns></returns>
-        public BP.WF.RunModel Node_GetRunModelByFigureName(string figureName)
-        {
-            BP.WF.RunModel runModel = BP.WF.RunModel.Ordinary;
-            switch (figureName)
-            {
-                case "NodeOrdinary":
-                    runModel = BP.WF.RunModel.Ordinary;
-                    break;
-                case "NodeFL":
-                    runModel = BP.WF.RunModel.FL;
-                    break;
-                case "NodeHL":
-                    runModel = BP.WF.RunModel.HL;
-                    break;
-                case "NodeFHL":
-                    runModel = BP.WF.RunModel.FHL;
-                    break;
-                case "NodeSubThread":
-                    runModel = BP.WF.RunModel.SubThread;
-                    break;
-                default:
-                    runModel = BP.WF.RunModel.Ordinary;
-                    break;
-            }
-            return runModel;
-        }
-        /// <summary>
         /// 根据节点编号删除流程节点
         /// </summary>
         /// <returns>执行结果</returns>
@@ -636,37 +655,37 @@ namespace BP.WF.HttpHandler
             return "err@修改节点失败，请确认该节点是否存在？";
         }
 
-        /// <summary>
-        /// 修改节点运行模式
-        /// </summary>
-        /// <returns></returns>
-        public string Node_ChangeRunModel()
-        {
-            string runModel = GetValFromFrmByKey("RunModel");
-            BP.WF.Node node = new BP.WF.Node(this.FK_Node);
-            //节点运行模式
-            switch (runModel)
-            {
-                case "NodeOrdinary":
-                    node.HisRunModel = BP.WF.RunModel.Ordinary;
-                    break;
-                case "NodeFL":
-                    node.HisRunModel = BP.WF.RunModel.FL;
-                    break;
-                case "NodeHL":
-                    node.HisRunModel = BP.WF.RunModel.HL;
-                    break;
-                case "NodeFHL":
-                    node.HisRunModel = BP.WF.RunModel.FHL;
-                    break;
-                case "NodeSubThread":
-                    node.HisRunModel = BP.WF.RunModel.SubThread;
-                    break;
-            }
-            node.Update();
+        ///// <summary>
+        ///// 修改节点运行模式
+        ///// </summary>
+        ///// <returns></returns>
+        //public string Node_ChangeRunModel()
+        //{
+        //    string runModel = GetValFromFrmByKey("RunModel");
+        //    BP.WF.Node node = new BP.WF.Node(this.FK_Node);
+        //    //节点运行模式
+        //    switch (runModel)
+        //    {
+        //        case "NodeOrdinary":
+        //            node.HisRunModel = BP.WF.RunModel.Ordinary;
+        //            break;
+        //        case "NodeFL":
+        //            node.HisRunModel = BP.WF.RunModel.FL;
+        //            break;
+        //        case "NodeHL":
+        //            node.HisRunModel = BP.WF.RunModel.HL;
+        //            break;
+        //        case "NodeFHL":
+        //            node.HisRunModel = BP.WF.RunModel.FHL;
+        //            break;
+        //        case "NodeSubThread":
+        //            node.HisRunModel = BP.WF.RunModel.SubThread;
+        //            break;
+        //    }
+        //    node.Update();
 
-            return "设置成功.";
-        }
+        //    return "设置成功.";
+        //}
         #endregion end Node
 
         #region CCBPMDesigner

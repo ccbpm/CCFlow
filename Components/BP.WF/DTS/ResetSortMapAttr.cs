@@ -54,7 +54,7 @@ namespace BP.WF.DTS
                         qo.AddWhere(MapAttrAttr.FK_MapData, row["NO"].ToString());
                         qo.addAnd();
                         qo.AddWhere(MapAttrAttr.UIVisible, true);
-                        qo.addOrderBy(MapAttrAttr.Y, MapAttrAttr.X);
+                        //qo.addOrderBy(MapAttrAttr.Y, MapAttrAttr.X);
                         qo.DoQuery();
                         int rowIdx = 0;
                         foreach (MapAttr mapAttr in mattrs)

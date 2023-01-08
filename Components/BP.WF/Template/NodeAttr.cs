@@ -47,10 +47,6 @@ namespace BP.WF.Template
         /// </summary>
         public const string WhenNoWorker = "WhenNoWorker";
         /// <summary>
-        /// 子线程类型
-        /// </summary>
-        public const string SubThreadType = "SubThreadType";
-        /// <summary>
         /// 是否可以隐性退回
         /// </summary>
         public const string IsCanHidReturn = "IsCanHidReturn";
@@ -67,11 +63,7 @@ namespace BP.WF.Template
         public const string GroupStaNDs = "GroupStaNDs";
         public const string IsHandOver = "IsHandOver";
         public const string IsCanDelFlow = "IsCanDelFlow";
-
         public const string USSWorkIDRole = "USSWorkIDRole";
-
-
-        
         /// <summary>
         /// 是否可以原路返回
         /// </summary>
@@ -261,14 +253,7 @@ namespace BP.WF.Template
         /// 执行超时的条件
         /// </summary>
         public const string DoOutTimeCond = "DoOutTimeCond";
-        /// <summary>
-        /// 是否启动自动运行？
-        /// </summary>
-        public const string AutoRunEnable = "AutoRunEnable";
-        /// <summary>
-        /// 自动运行参数
-        /// </summary>
-        public const string AutoRunParas = "AutoRunParas";
+ 
         /// <summary>
         /// 属性
         /// </summary>
@@ -321,14 +306,6 @@ namespace BP.WF.Template
         /// 抢办发送后处理规则
         /// </summary>
         public const string QiangBanSendAfterRole = "QiangBanSendAfterRole";
-        /// <summary>
-        /// 子流程启动方式
-        /// </summary>
-        public const string SubFlowStartWay = "SubFlowStartWay";
-        /// <summary>
-        /// 子流程启动参数
-        /// </summary>
-        public const string SubFlowStartParas = "SubFlowStartParas";
         /// <summary>
         /// 是否工作质量考核点
         /// </summary>
@@ -402,6 +379,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string IsSendDraftSubFlow = "IsSendDraftSubFlow";
         /// <summary>
+        /// 可逆节点时是否重新计算接收人
+        /// </summary>
+        public const string IsResetAccepter = "IsResetAccepter";
+        /// <summary>
         /// 该节点是否是游离状态
         /// </summary>
         public const string IsYouLiTai = "IsYouLiTai";
@@ -437,7 +418,6 @@ namespace BP.WF.Template
         public const string MPad_SrcModel = "MPad_SrcModel";
         #endregion 移动设置.
 
-
         #region 未来处理人.
         /// <summary>
         /// 是否计算未来处理人
@@ -454,6 +434,22 @@ namespace BP.WF.Template
 
         public const string RefOneFrmTreeType = "RefOneFrmTreeType";
         #endregion 未来处理人.
+
+        public const string SubFlowX = "SubFlowX";
+        public const string SubFlowY = "SubFlowY";
+
+        #region 对应关系 2022.12
+        public const string NodeStations = "NodeStations";
+        public const string NodeStationsT = "NodeStationsT";
+
+        public const string NodeDepts = "NodeDepts";
+        public const string NodeDeptsT = "NodeDeptsT";
+
+        public const string NodeEmps = "NodeEmps";
+        public const string NodeEmpsT = "NodeEmpsT";
+        #endregion 对应关系
+
+
 
     }
 }

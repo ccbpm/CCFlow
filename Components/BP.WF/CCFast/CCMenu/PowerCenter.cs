@@ -182,7 +182,7 @@ namespace BP.CCFast.CCMenu
             if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.SAAS)
                 return base.RetrieveAll();
 
-            //集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
+            //集团模式下的角色体系: @0=每套组织都有自己的角色体系@1=所有的组织共享一套岗则体系.
             if (BP.Difference.SystemConfig.GroupStationModel == 1)
                 return base.RetrieveAll();
 

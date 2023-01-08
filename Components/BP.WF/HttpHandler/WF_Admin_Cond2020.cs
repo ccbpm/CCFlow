@@ -39,23 +39,29 @@ namespace BP.WF.HttpHandler
             }
             return "顺序移动成功..";
         }
+        public string List_DoCheck()
+        {
+            int toNodeID = 0;
+            string mystr = this.GetRequestVal("ToNodeID");
+            if (DataType.IsNullOrEmpty(mystr) == false)
+                toNodeID = int.Parse(mystr);
+
+            int condType = this.GetRequestValInt("CondType");
+            return List_DoCheckExt(condType,this.FK_Node, toNodeID);
+        }
         /// <summary>
         /// 校验是否正确
         /// </summary>
         /// <returns></returns>
-        public string List_DoCheck()
+        public static string List_DoCheckExt( int condType,int nodeID, int toNodeID)
         {
-            string str = "";
-
-            string mystr = this.GetRequestVal("ToNodeID");
-            int toNodeID = this.FK_Node;
-            if (DataType.IsNullOrEmpty(mystr) == false)
-                toNodeID = int.Parse(mystr);
+            if (toNodeID == 0)
+                toNodeID = nodeID;
 
             //集合.
             Conds conds = new Conds();
-            conds.Retrieve(CondAttr.FK_Node, this.FK_Node, CondAttr.ToNodeID,
-                toNodeID, CondAttr.CondType, this.GetRequestValInt("CondType"), CondAttr.Idx);
+            conds.Retrieve(CondAttr.FK_Node, nodeID, CondAttr.ToNodeID,
+                toNodeID, CondAttr.CondType, condType, CondAttr.Idx);
 
             if (conds.Count == 0)
                 return " 没有条件. ";
@@ -70,7 +76,7 @@ namespace BP.WF.HttpHandler
                         return "条件成立.";
                 }
             }
-
+            string str = "";
             //遍历方向条件.
             foreach (Cond item in conds)
             {
@@ -91,7 +97,9 @@ namespace BP.WF.HttpHandler
                     break;
                 case DBType.Oracle:
                 case DBType.DM:
-                    sql = " SELECT No FROM Port_Emp WHERE " + str + "  rownum <=1 ";
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
+                    sql = " SELECT No FROM Port_Emp WHERE (" + str + ") AND  rownum <=1 ";
                     break;
                 default:
                     return "err@没有做的数据库类型判断.";
@@ -100,11 +108,11 @@ namespace BP.WF.HttpHandler
             try
             {
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                return "格式正确:<font color=blue>" + str + "</blue>";
+                return "格式正确:" + str;
             }
             catch (Exception ex)
             {
-                return "err@不符合规范. <font color=blue>" + str + "</font>";
+                return "不符合规范:" + str;
             }
         }
 

@@ -270,7 +270,7 @@ namespace BP.WF
         /// <returns></returns>
         public string HttpResponseGet(string url)
         {
-            HttpWebResponse response = this.CreateGetHttpResponse(url, 10000, null, null);
+            HttpWebResponse response = this.CreateGetHttpResponse(url, 600000, null, null);
             StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
             string str = reader.ReadToEnd();
             reader.Dispose();

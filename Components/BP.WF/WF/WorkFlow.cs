@@ -183,7 +183,6 @@ namespace BP.WF
                 gwf.WFState = BP.WF.WFState.Delete;
                 gwf.Update();
 
-
                 //调用结束后事件.
                 ExecEvent.DoFlow(EventListFlow.AfterFlowDel, wn, null);
 
@@ -1252,7 +1251,7 @@ namespace BP.WF
 
             #region 处理后续的业务.
 
-            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
+            string dbstr = BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             if (1 == 2)
             {
@@ -1286,10 +1285,10 @@ namespace BP.WF
 
             // 设置流程完成状态.
             ps = new Paras();
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6 || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
                 ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET  FlowEmps= FlowEmps ||'" + emps + "', WFState=:WFState,WFSta=:WFSta WHERE OID=" + dbstr + "OID";
             else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
-                ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET FlowEmps= CONCAT(FlowEmps ,'" + emps + "'), WFState=@WFState,WFSta=@WFSta WHERE OID=" + dbstr + "OID";
+                ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET FlowEmps= CONCAT(FlowEmps ,'" + emps + "'), WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta WHERE OID=" + dbstr + "OID";
             else
                 ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET FlowEmps= FlowEmps + '" + emps + "', WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta WHERE OID=" + dbstr + "OID";
 
@@ -1411,7 +1410,7 @@ namespace BP.WF
 
             /* 执行 WF_GenerWorkFlow 冻结. */
             int sta = (int)WFState.Fix;
-            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
+            string dbstr = BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + dbstr + "WFState WHERE WorkID=" + dbstr + "WorkID";
             ps.Add(GenerWorkFlowAttr.WFState, sta);
@@ -1471,7 +1470,7 @@ namespace BP.WF
 
             /* 执行 WF_GenerWorkFlow 冻结. */
             int sta = (int)WFState.Runing;
-            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
+            string dbstr = BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + dbstr + "WFState WHERE WorkID=" + dbstr + "WorkID";
             ps.Add(GenerWorkFlowAttr.WFState, sta);
@@ -1724,12 +1723,12 @@ namespace BP.WF
         public static bool IsCanDoWorkCheckByEmpStation(int nodeId, string empId)
         {
             bool isCan = false;
-            // 判断岗位对应关系是不是能够执行.
+            // 判断角色对应关系是不是能够执行.
             string sql = "SELECT a.FK_Node FROM WF_NodeStation a,  Port_DeptEmpStation b WHERE (a.FK_Station=b.FK_Station) AND (a.FK_Node=" + nodeId + " AND b.FK_Emp='" + empId + "' )";
             isCan = DBAccess.IsExits(sql);
             if (isCan)
                 return true;
-            // 判断他的主要工作岗位能不能执行它.
+            // 判断他的主要工作角色能不能执行它.
             sql = "select FK_Node from WF_NodeStation WHERE FK_Node=" + nodeId + " AND ( FK_Station in (select FK_Station from Port_DeptEmpStation WHERE FK_Emp='" + empId + "') ) ";
             return DBAccess.IsExits(sql);
         }
@@ -1821,6 +1820,34 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 撤销挂起
+        /// </summary>
+        /// <returns></returns>
+        public string DoHungupWork_Un()
+        {
+
+            string checker = this.HisGenerWorkFlow.GetParaString("HungupChecker");
+
+            //删除领导审核的数据.
+            DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FK_Node=" + this.HisGenerWorkFlow.FK_Node + " AND FK_Emp='" + checker + "' AND WorkID=" + this.HisGenerWorkFlow.WorkID);
+
+            this.HisGenerWorkFlow.HungupTime = DataType.CurrentDateTime;
+            this.HisGenerWorkFlow.WFState = WFState.Runing; 
+            this.HisGenerWorkFlow.Update();
+
+            string ptable = this.HisFlow.PTable;
+
+
+
+
+            // 记录日志..
+            WorkNode wn = new WorkNode(this.WorkID, this.HisGenerWorkFlow.FK_Node);
+            wn.AddToTrack(ActionType.UnHungup, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name, "撤销挂起");
+
+
+            return "成功撤销.";
+        }
+        /// <summary>
         /// 执行挂起
         /// </summary>
         /// <param name="way">挂起方式</param>
@@ -1830,17 +1857,24 @@ namespace BP.WF
         public string DoHungup(HungupWay way, string relData, string hungNote)
         {
             if (this.HisGenerWorkFlow.WFState == WFState.Hungup)
-                throw new Exception("err@当前已经是挂起的状态您不能执行在挂起.");
+                return "err@当前已经是挂起的状态您不能执行在挂起.";
 
             if (DataType.IsNullOrEmpty(hungNote) == true)
                 hungNote = "无";
 
             if (way == HungupWay.SpecDataRel)
-                if (relData.Length < 10)
-                    throw new Exception("err@解除挂起的日期不正确(" + relData + ")");
+            {
+                try
+                {
+                    DateTime d = DataType.ParseSysDate2DateTime(relData);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("err@解除挂起的日期[" + relData + "]不正确" + ex.Message);
+                }
+            }
             if (relData == null)
                 relData = "";
-
 
             /* 获取它的工作者，向他们发送消息。*/
             GenerWorkerLists wls = new GenerWorkerLists(this.WorkID, this.HisFlow.No);
@@ -1848,6 +1882,8 @@ namespace BP.WF
             string mailDoc = "详细信息:<A href='" + url + "'>打开流程轨迹</A>.";
             string title = "工作:" + this.HisGenerWorkFlow.Title + " 被" + WebUser.Name + "挂起" + hungNote;
             string emps = "";
+
+            GenerWorkerList gwl = null;
             foreach (GenerWorkerList wl in wls)
             {
                 if (wl.IsEnable == false)
@@ -1856,13 +1892,29 @@ namespace BP.WF
                 //BP.WF.Port.WFEmp emp = new BP.Port.WFEmp(wl.FK_Emp);
                 emps += wl.FK_Emp + "," + wl.FK_EmpText + ";";
 
+                gwl = wl;
+
                 //写入消息。
                 BP.WF.Dev2Interface.Port_SendMsg(wl.FK_Emp, title, mailDoc, "Hungup" + wl.WorkID, BP.WF.SMSMsgType.Hungup, wl.FK_Flow, wl.FK_Node, wl.WorkID, wl.FID);
             }
 
             /* 执行 WF_GenerWorkFlow 挂起. */
             int hungSta = (int)WFState.Hungup;
-            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
+            string dbstr = BP.Difference.SystemConfig.AppCenterDBVarStr;
+
+
+            //发送人.
+            string[] sender = this.HisGenerWorkFlow.Sender.Split(',');
+            gwl.FK_Emp = sender[0];
+            gwl.FK_EmpText = sender[1];
+            gwl.WorkID = this.HisGenerWorkFlow.WorkID;
+            gwl.FK_Node = this.HisGenerWorkFlow.FK_Node;
+            gwl.IsPassInt = 0;
+            gwl.IsRead = false;
+            gwl.SDT = "2030-01-01 10:00";
+            gwl.RDT = DataType.CurrentDateTime;
+            //   gwl.FID = this.HisGenerWorkFlow.FID;
+            gwl.Save();
 
             //更新挂起状态.
             this.HisGenerWorkFlow.WFState = WFState.Hungup;
@@ -1872,6 +1924,8 @@ namespace BP.WF
             this.HisGenerWorkFlow.SetPara("HungupRelDate", relData);
             this.HisGenerWorkFlow.SetPara("HungupNote", hungNote);
             this.HisGenerWorkFlow.SetPara("HungupSta", (int)HungupSta.Apply); //设置申请状态.
+            this.HisGenerWorkFlow.SetPara("HungupChecker", gwl.FK_Emp); //要审批的人.
+
             this.HisGenerWorkFlow.HungupTime = DataType.CurrentDateTime;
             this.HisGenerWorkFlow.Update();
 
@@ -1885,6 +1939,7 @@ namespace BP.WF
             // 记录日志..
             WorkNode wn = new WorkNode(this.WorkID, this.HisGenerWorkFlow.FK_Node);
             wn.AddToTrack(ActionType.Hungup, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name, hungNote);
+
             return "已经成功执行挂起,并且已经通知给:" + emps;
         }
         /// <summary>
@@ -1909,6 +1964,14 @@ namespace BP.WF
                 string relDT = this.HisGenerWorkFlow.GetParaString("HungupRelDate");
                 DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET SDT='" + relDT + "' WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.HisGenerWorkFlow.FK_Node);
             }
+            //删除当前的待办.
+            GenerWorkerList gwl = new GenerWorkerList();
+            gwl.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node,
+                this.HisGenerWorkFlow.FK_Node, GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No);
+
+            //更新业务表的状态.
+            DBAccess.RunSQL("UPDATE "+this.HisFlow.PTable+" SET WFState="+(int)WFState.Hungup+" WHERE OID="+this.WorkID);
+
             return "已经同意挂起.";
         }
 
@@ -1927,7 +1990,7 @@ namespace BP.WF
             this.HisGenerWorkFlow.Update();
 
             // 更新流程报表的状态。 
-            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
+            string dbstr = BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps = new Paras();
             ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET WFState=2 WHERE OID=" + dbstr + "OID";
@@ -1948,7 +2011,7 @@ namespace BP.WF
             return "您已经取消挂起，该流程实例已经进入了正常运行状态.";
         }
         /// <summary>
-        /// 拒绝挂起
+        /// 拒绝挂起 @wwh
         /// </summary>
         /// <returns></returns>
         public string HungupWorkReject(string msg)
@@ -1957,7 +2020,7 @@ namespace BP.WF
                 throw new Exception("@非挂起状态,您不能解除挂起.");
 
             /* 执行解除挂起. */
-            this.HisGenerWorkFlow.WFState = WFState.Runing;
+            this.HisGenerWorkFlow.WFState = WFState.Hungup;
 
             this.HisGenerWorkFlow.SetPara("HungupSta", (int)HungupSta.Reject); //不同意.
             this.HisGenerWorkFlow.SetPara("HungupNodeID", this.HisGenerWorkFlow.FK_Node); //不同意.
@@ -1965,10 +2028,10 @@ namespace BP.WF
             this.HisGenerWorkFlow.Update();
 
             // 更新流程报表的状态。 
-            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
+            string dbstr = BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps = new Paras();
-            ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET WFState=2 WHERE OID=" + dbstr + "OID";
+            ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET WFState=4 WHERE OID=" + dbstr + "OID";
             ps.Add(GERptAttr.OID, this.WorkID);
             DBAccess.RunSQL(ps);
 
@@ -2005,6 +2068,16 @@ namespace BP.WF
             // 记录日志..
             WorkNode wn = new WorkNode(this.WorkID, this.HisGenerWorkFlow.FK_Node);
             wn.AddToTrack(ActionType.UnHungup, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name, "拒绝挂起，通知给:" + emps);
+
+            //删除当前的待办(当前人是，审核人.)
+            GenerWorkerList gwl = new GenerWorkerList();
+            gwl.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node,
+                this.HisGenerWorkFlow.FK_Node, GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No);
+
+
+            //更新业务表的状态.
+            DBAccess.RunSQL("UPDATE " + this.HisFlow.PTable + " SET WFState=" + (int)WFState.Runing + " WHERE OID=" + this.WorkID);
+
             return "您不同意对方挂起，该流程实例已经进入了正常运行状态.";
         }
         #endregion

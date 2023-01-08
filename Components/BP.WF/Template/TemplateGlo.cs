@@ -151,10 +151,24 @@ namespace BP.WF.Template
                 foreach (DataColumn dc in mydtGF.Columns)
                 {
                     string val = dr[dc.ColumnName] as string;
+                    if (val == null)
+                        continue;
+                    switch (dc.ColumnName.ToLower())
+                    {
+                        case "enname":
+                        case "keyofen":
+                        case "ctrlid": //升级傻瓜表单的时候,新增加的字段 add by zhoupeng 2016.11.21
+                        case "frmid": //升级傻瓜表单的时候,新增加的字段 add by zhoupeng 2016.11.21
+                            val = val.Replace("ND" + oldFlowID, "ND" + flowID);
+                            break;
+                        default:
+                            break;
+                    }
                     gf.SetValByKey(dc.ColumnName, val);
                 }
                 int oldID = gf.OID;
                 gf.OID = DBAccess.GenerOID();
+                gf.DirectInsert();
                 dr["OID"] = gf.OID; //给他一个新的OID.
 
                 // 属性。
@@ -407,7 +421,7 @@ namespace BP.WF.Template
                                 bt.SetValByKey(dc.ColumnName, val);
                             }
 
-                                bt.MyPK = DBAccess.GenerGUID();
+                            bt.MyPK = DBAccess.GenerGUID();
 
                             try
                             {
@@ -521,7 +535,7 @@ namespace BP.WF.Template
                                 cd.SetValByKey(dc.ColumnName, val);
                             }
 
-                            cd.FK_Flow = fl.No; 
+                            cd.FK_Flow = fl.No;
                             cd.setMyPK(BP.DA.DBAccess.GenerGUID());
                             cd.DirectInsert();
                         }
@@ -913,6 +927,7 @@ namespace BP.WF.Template
                         }
                         break;
                     case "Sys_Enum": //RptEmps.xml。
+                    case "Sys_Enums":
                         foreach (DataRow dr in dt.Rows)
                         {
                             SysEnum se = new Sys.SysEnum();
@@ -1017,7 +1032,7 @@ namespace BP.WF.Template
                                     htmlCode = htmlCode.Replace("ND" + oldFlowID, "ND" + int.Parse(fl.No));
                                     //保存到数据库，存储html文件
                                     //保存到DataUser/CCForm/HtmlTemplateFile/文件夹下
-                                    string filePath =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/";
+                                    string filePath = BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/";
                                     if (Directory.Exists(filePath) == false)
                                         Directory.CreateDirectory(filePath);
                                     filePath = filePath + md.No + ".htm";
@@ -1029,7 +1044,7 @@ namespace BP.WF.Template
                                 else
                                 {
                                     //如果htmlCode是空的需要删除当前节点的html文件
-                                    string filePath =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/" + md.No + ".htm";
+                                    string filePath = BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/" + md.No + ".htm";
                                     if (File.Exists(filePath) == true)
                                         File.Delete(filePath);
                                     DBAccess.SaveBigTextToDB("", "Sys_MapData", "No", md.No, "HtmlTemplateFile");
@@ -1237,33 +1252,33 @@ namespace BP.WF.Template
                                 }
                                 ne.SetValByKey(dc.ColumnName, val);
                             }
-                            ne.DirectInsert();
+                            ne.Insert();
                         }
                         break;
-                    case "Sys_GroupField": 
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            GroupField gf = new Sys.GroupField();
-                            foreach (DataColumn dc in dt.Columns)
-                            {
-                                string val = dr[dc.ColumnName] as string;
-                                if (val == null)
-                                    continue;
-                                switch (dc.ColumnName.ToLower())
-                                {
-                                    case "enname":
-                                    case "keyofen":
-                                    case "ctrlid": //升级傻瓜表单的时候,新增加的字段 add by zhoupeng 2016.11.21
-                                    case "frmid": //升级傻瓜表单的时候,新增加的字段 add by zhoupeng 2016.11.21
-                                        val = val.Replace("ND" + oldFlowID, "ND" + flowID);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                gf.SetValByKey(dc.ColumnName, val);
-                            }
-                            gf.InsertAsOID(gf.OID);
-                        }
+                    case "Sys_GroupField":
+                        //foreach (DataRow dr in dt.Rows)
+                        //{
+                        //    GroupField gf = new Sys.GroupField();
+                        //    foreach (DataColumn dc in dt.Columns)
+                        //    {
+                        //        string val = dr[dc.ColumnName] as string;
+                        //        if (val == null)
+                        //            continue;
+                        //        switch (dc.ColumnName.ToLower())
+                        //        {
+                        //            case "enname":
+                        //            case "keyofen":
+                        //            case "ctrlid": //升级傻瓜表单的时候,新增加的字段 add by zhoupeng 2016.11.21
+                        //            case "frmid": //升级傻瓜表单的时候,新增加的字段 add by zhoupeng 2016.11.21
+                        //                val = val.Replace("ND" + oldFlowID, "ND" + flowID);
+                        //                break;
+                        //            default:
+                        //                break;
+                        //        }
+                        //        gf.SetValByKey(dc.ColumnName, val);
+                        //    }
+                        //    gf.InsertAsOID(gf.OID);
+                        //}
                         break;
                     case "WF_NodeCC":
                         foreach (DataRow dr in dt.Rows)
@@ -1405,7 +1420,7 @@ namespace BP.WF.Template
             throw new Exception(infoErr);
         }
 
-        public static Node NewNode(string flowNo, int x, int y, string icon = null)
+        public static Node NewNode(string flowNo, int x, int y, string icon = null, int runModel = 0)
         {
             Flow flow = new Flow(flowNo);
 
@@ -1435,7 +1450,6 @@ namespace BP.WF.Template
             nd.HisDeliveryWay = DeliveryWay.BySelected;   //上一步发送人来选择.
             nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
 
-
             //如果是极简模式.
             if (flow.FlowDevModel == FlowDevModel.JiJian)
             {
@@ -1464,8 +1478,6 @@ namespace BP.WF.Template
                 nd.NodeFrmID = "ND" + nodeID;
                 nd.FrmWorkCheckSta = FrmWorkCheckSta.Disable;
                 nd.DirectUpdate();
-
-
             }
 
             //如果是绑定表单库的表单
@@ -1500,17 +1512,18 @@ namespace BP.WF.Template
                 nd.HisFormType = NodeFormType.SelfForm;
                 nd.FormUrl = flow.FrmUrl;
                 nd.DirectUpdate();
-
             }
 
-            nd.FK_Flow = flowNo;
 
+
+            nd.FK_Flow = flowNo;
             nd.Insert();
 
-            //为创建节点设置默认值  @sly 部分方法
-            string file =  BP.Difference.SystemConfig.PathOfDataUser + "XML/DefaultNewNodeAttr.xml";
+            //为创建节点设置默认值   部分方法
+            string file = BP.Difference.SystemConfig.PathOfDataUser + "XML/DefaultNewNodeAttr.xml";
             DataSet ds = new DataSet();
-            if (System.IO.File.Exists(file) == true)
+
+            if (1 == 2 && System.IO.File.Exists(file) == true)
             {
                 ds.ReadXml(file);
 
@@ -1528,7 +1541,7 @@ namespace BP.WF.Template
             }
             nd.FWCVer = 1; //设置为2019版本. 2018版是1个节点1个人,仅仅显示1个意见.
             nd.NodeID = nodeID;
-
+            nd.HisDeliveryWay = DeliveryWay.BySelected; //@hongyan.
             nd.X = x;
             nd.Y = y;
             nd.ICON = icon;
@@ -1545,7 +1558,11 @@ namespace BP.WF.Template
             nd.SetValByKey(NodeWorkCheckAttr.FWCDefInfo,
                 BP.WF.Glo.DefVal_WF_Node_FWCDefInfo);
 
-            nd.Update(); //执行更新. @sly
+            //设置节点类型.
+            nd.HisRunModel = (RunModel)runModel;
+
+
+            nd.Update(); //执行更新. 
             nd.CreateMap();
 
             //通用的人员选择器.
@@ -1564,10 +1581,8 @@ namespace BP.WF.Template
             //创建默认的推送消息.
             CreatePushMsg(nd);
 
-
             //写入日志.
             BP.Sys.Base.Glo.WriteUserLog("创建节点：" + nd.Name + " - " + nd.NodeID);
-
             return nd;
         }
         private static void CreatePushMsg(Node nd)
@@ -1639,7 +1654,7 @@ namespace BP.WF.Template
         /// <param name="ptable">物理量</param>
         /// <param name="flowMark">标记</param>
         /// <returns>创建的流程编号</returns>
-        public static string NewFlow(string flowSort, string flowName, BP.WF.Template.DataStoreModel dsm,
+        public static string NewFlowTemplate(string flowSort, string flowName, BP.WF.Template.DataStoreModel dsm,
             string ptable, string flowMark)
         {
             //定义一个变量.
@@ -1654,7 +1669,6 @@ namespace BP.WF.Template
                         throw new Exception("@非法的流程数据表(" + ptable + "),它会导致ccflow不能创建该表.");
                 }
 
-                flow.HisDataStoreModel = dsm;
                 flow.PTable = ptable;
                 flow.FK_FlowSort = flowSort;
                 flow.FlowMark = flowMark;
@@ -1674,27 +1688,32 @@ namespace BP.WF.Template
                 if (string.IsNullOrWhiteSpace(flow.Name))
                     flow.Name = "新建流程" + flow.No; //新建流程.
 
-                if (flow.IsExits == true)
-                    throw new Exception("err@系统出现自动生成的流程编号重复.");
+                //if (flow.IsExits == true)
+                //    throw new Exception("err@系统出现自动生成的流程编号重复.");
 
                 if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
                     flow.OrgNo = WebUser.OrgNo; //隶属组织 
 
                 flow.PTable = "ND" + int.Parse(flow.No) + "Rpt";
-                 
+
+                //@hongyan. 设置创建人，创建日期.
+                flow.SetValByKey(FlowAttr.CreateDate, DataType.CurrentDateTime);
+                flow.SetValByKey(FlowAttr.Creater, BP.Web.WebUser.No);
+                flow.SetValByKey("Icon", "icon-people");
+
                 //flow.TitleRole
                 flow.Insert();
 
-                //如果是集团模式下.
-                if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
-                {
-                    // 记录创建人.
-                    FlowExt fe = new FlowExt(flow.No);
-                    fe.DesignerNo = BP.Web.WebUser.No;
-                    fe.DesignerName = BP.Web.WebUser.Name;
-                    fe.DesignTime = DataType.CurrentDateTime;
-                    fe.DirectUpdate();
-                }
+                ////如果是集团模式下.
+                //if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
+                //{
+                //    // 记录创建人.
+                //    FlowExt fe = new FlowExt(flow.No);
+                //    fe.DesignerNo = BP.Web.WebUser.No;
+                //    fe.DesignerName = BP.Web.WebUser.Name;
+                //    fe.DesignTime = DataType.CurrentDateTime;
+                //    fe.DirectUpdate();
+                //}
 
 
                 BP.WF.Node nd = new BP.WF.Node();
@@ -1749,10 +1768,10 @@ namespace BP.WF.Template
                 nd = new BP.WF.Node();
 
                 //为创建节点设置默认值 
-                string fileNewNode =  BP.Difference.SystemConfig.PathOfDataUser + "XML/DefaultNewNodeAttr.xml";
-                if (System.IO.File.Exists(fileNewNode) == true)
+                string fileNewNode = BP.Difference.SystemConfig.PathOfDataUser + "XML/DefaultNewNodeAttr.xml";
+                if (System.IO.File.Exists(fileNewNode) == true && 1 == 2)
                 {
-                    DataSet myds = new DataSet();
+                    DataSet myds = new DataSet();  //@hongyan
                     myds.ReadXml(fileNewNode);
                     DataTable dt = myds.Tables[0];
                     foreach (DataColumn dc in dt.Columns)
@@ -1806,17 +1825,56 @@ namespace BP.WF.Template
                 md.Save();
 
                 // 装载模版.
-                string file =  BP.Difference.SystemConfig.PathOfDataUser + "XML/TempleteSheetOfStartNode.xml";
-                if (System.IO.File.Exists(file) == true)
+                string file = BP.Difference.SystemConfig.PathOfDataUser + "XML/TempleteSheetOfStartNode.xml";
+                if (System.IO.File.Exists(file) == true && 1 == 2)
                 {
-                    //throw new Exception("@开始节点表单模版丢失" + file);
-
+                    //throw new Exception("@开始节点表单模版丢失" + file);  @hongyan
                     /*如果存在开始节点表单模版*/
                     DataSet ds = new DataSet();
                     ds.ReadXml(file);
 
                     string nodeID = "ND" + int.Parse(flow.No + "01");
                     BP.Sys.MapData.ImpMapData(nodeID, ds);
+                }
+
+                //加载默认字段.
+                if (1 == 1)
+                {
+                    string frmID = "ND" + int.Parse(flow.No + "01");
+
+                    MapAttr attr = new MapAttr();
+                    attr.setMyPK(frmID + "_SQR");
+                    attr.setName("申请人");
+                    attr.setKeyOfEn("SQR");
+                    attr.setDefValReal("@WebUser.Name");
+                    attr.setUIVisible(true);
+                    attr.setUIIsEnable(false);
+                    attr.setFK_MapData(frmID);
+                    attr.ColSpan = 1;
+                    attr.Insert();
+
+                    attr = new MapAttr();
+                    attr.setMyPK(frmID + "_SQDT");
+                    attr.setName("申请日期");
+                    attr.setKeyOfEn("SQRQ");
+                    attr.setDefValReal("@RDT");
+                    attr.setUIVisible(true);
+                    attr.setUIIsEnable(false);
+                    attr.setFK_MapData(frmID);
+                    attr.MyDataType = DataType.AppDateTime;
+                    attr.ColSpan = 1;
+                    attr.Insert();
+
+                    attr = new MapAttr();
+                    attr.setMyPK(frmID + "_SQDept");
+                    attr.setName("申请人部门");
+                    attr.setKeyOfEn("SQDept");
+                    attr.setDefValReal("@WebUser.FK_DeptName");
+                    attr.setUIVisible(true);
+                    attr.setUIIsEnable(false);
+                    attr.setFK_MapData(frmID);
+                    attr.ColSpan = 3;
+                    attr.Insert();
                 }
 
                 //创建track.
@@ -1831,12 +1889,11 @@ namespace BP.WF.Template
                 throw new Exception("err@创建流程错误:" + ex.Message);
             }
 
-
-            FlowExt flowExt = new FlowExt(flow.No);
-            flowExt.DesignerNo = BP.Web.WebUser.No;
-            flowExt.DesignerName = BP.Web.WebUser.Name;
-            flowExt.DesignTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            flowExt.DirectSave();
+            //FlowExt flowExt = new FlowExt(flow.No);
+            //flowExt.DesignerNo = BP.Web.WebUser.No;
+            //flowExt.DesignerName = BP.Web.WebUser.Name;
+            //flowExt.DesignTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            //flowExt.DirectSave();
 
             //创建连线
             Direction drToNode = new Direction();
@@ -1850,14 +1907,13 @@ namespace BP.WF.Template
             mynd.HisToNDs = drToNode.ToNode.ToString();
             mynd.Update();
 
-
             //设置流程的默认值.
             foreach (string key in SystemConfig.AppSettings.AllKeys)
             {
                 if (key.Contains("NewFlowDefVal") == false)
                     continue;
 
-                string val =  BP.Difference.SystemConfig.AppSettings[key];
+                string val = BP.Difference.SystemConfig.AppSettings[key];
 
                 //设置值.
                 flow.SetValByKey(key.Replace("NewFlowDefVal_", ""), val);

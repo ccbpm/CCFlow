@@ -161,7 +161,14 @@ namespace BP.WF.Template.SFlow
         /// 指定的子流程节点
         /// </summary>
         public const string SubFlowNodeID = "SubFlowNodeID";
-
+        /// <summary>
+        /// 位置x
+        /// </summary>
+        public const string X = "X";
+        /// <summary>
+        /// 位置y
+        /// </summary>
+        public const string Y = "Y";
     }
     /// <summary>
     /// 子流程.
@@ -446,7 +453,6 @@ namespace BP.WF.Template.SFlow
                 map.AddTBInt(SubFlowAutoAttr.SubFlowNodeID, 0, "指定子流程节点ID", false, true);
                 map.AddTBInt(SubFlowAutoAttr.IsAutoSendSLSubFlowOver, 0, "同级子流程结束规则", false, true);
 
-
                 map.AddTBString(SubFlowAttr.SubFlowNo, null, "子流程编号", true, true, 0, 10, 150, false);
                 map.AddTBString(SubFlowAttr.SubFlowName, null, "子流程名称", true, true, 0, 200, 150, false);
 
@@ -481,8 +487,11 @@ namespace BP.WF.Template.SFlow
                 map.AddDDLSysEnum(SubFlowYanXuAttr.SubFlowSta, 1, "状态", true, true, SubFlowYanXuAttr.SubFlowSta,
            "@0=禁用@1=启用@2=只读");
 
-
                 map.AddTBInt(SubFlowAttr.Idx, 0, "顺序", true, false);
+
+
+                map.AddTBInt(SubFlowAttr.X, 0, "X", true, false);
+                map.AddTBInt(SubFlowAttr.Y, 0, "Y", true, false);
 
 
                 //为中科软增加. 批量发送后，需要隐藏父流程的待办.

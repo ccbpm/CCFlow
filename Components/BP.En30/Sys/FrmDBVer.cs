@@ -266,7 +266,7 @@ namespace BP.Sys
             en.FrmID = frmID;
             en.RefPKVal = refPKVal;
             en.TrackID = trackID;
-            en.KeyOfEn = keyOfEn;
+            en.KeyOfEn=keyOfEn;
             en.Ver = ver;
             en.Insert();
 

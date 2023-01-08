@@ -73,10 +73,10 @@ namespace BP.WF.DTS
                     gwf.FK_Node = int.Parse(dr[GERptAttr.FlowEndNode].ToString());
                     gwf.FK_Dept = dr[GERptAttr.FK_Dept].ToString();
 
-                    BP.WF.Port.Dept dept = null;
+                    BP.Port.Dept dept = null;
                     try
                     {
-                        dept = new BP.WF.Port.Dept(gwf.FK_Dept);
+                        dept = new BP.Port.Dept(gwf.FK_Dept);
                         gwf.DeptName = dept.Name;
                     }
                     catch

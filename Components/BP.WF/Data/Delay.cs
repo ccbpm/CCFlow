@@ -67,6 +67,10 @@ namespace BP.WF.Data
         /// </summary>
         public const string FK_Emp = "FK_Emp";
         /// <summary>
+        /// FK_EmpText
+        /// </summary>
+        public const string FK_EmpText = "FK_EmpText";
+        /// <summary>
         /// FID
         /// </summary>
         public const string FID = "FID";
@@ -491,44 +495,36 @@ namespace BP.WF.Data
 
                 Map map = new Map("V_WF_Delay", "逾期流程");
                 map.setEnType(EnType.View);
-
-                
-
                 map.AddMyPK();
-
                 map.AddTBInt(DelayAttr.WorkID, 0, "工作ID", true, true);
                 map.AddTBString(DelayAttr.FK_Emp, null, "待办人", true, true, 0, 50, 40);
-                map.AddTBInt(DelayAttr.FK_Node, 0, "节点", false, true);
+                map.AddTBString(DelayAttr.FK_EmpText, null, "待办人", true, true, 0, 50, 40);
 
+                map.AddTBInt(DelayAttr.FK_Node, 0, "节点", false, true);
                 map.AddTBString(DelayAttr.Title, null, "标题", true, true, 0, 50, 100);
-                map.AddTBString(DelayAttr.Starter, null, "Starter", false, false, 0, 50, 5);
                 map.AddTBString(DelayAttr.StarterName, null, "发起人", true, true, 0, 50, 30);
 
-                map.AddDDLSysEnum(DelayAttr.WFState, 0, "状态", true, true, DelayAttr.WFState);
+                //      map.AddDDLSysEnum(DelayAttr.WFState, 0, "状态", true, true, DelayAttr.WFState);
 
                 map.AddTBInt(DelayAttr.FK_Dept, 0, "隶属部门", false, true);
                 map.AddTBString(DelayAttr.DeptName, null, "隶属部门", true, true, 0, 50, 40);
                 map.AddDDLEntities(DelayAttr.FK_Flow, null, "流程", new Flows(), false);
-              //  map.AddTBString(DelayAttr.FlowName, null, "流程名称", true, true, 0, 50, 40);
                 map.AddTBString(DelayAttr.NodeName, null, "节点名称", true, true, 0, 50, 40);
 
-             //   map.AddTBInt(DelayAttr.WorkerDept, 0, "工作人员部门", false, true);
+                //   map.AddTBInt(DelayAttr.WorkerDept, 0, "工作人员部门", false, true);
                 map.AddTBString(DelayAttr.RDT, null, "接受日期", true, true, 0, 50, 30);
-                map.AddTBString(DelayAttr.SDT, null, "应完成日期", true, true, 0, 50, 50);
-                map.AddTBInt(DelayAttr.FID, 0, "FID", false, false);
-                map.AddTBInt(DelayAttr.FK_FlowSort, 0, "流程类别", false, true);
-                map.AddTBString(DelayAttr.SysType, null, "SysType", false, true, 0, 50, 5);
-               // map.AddTBString(DelayAttr.SDTOfNode, null, "节点应完成日期", true, true, 0, 50, 70);
-                map.AddTBString(DelayAttr.PressTimes, null, "催办次数", false, true, 0, 50, 5);
+                map.AddTBString(DelayAttr.SDTOfNode, null, "应完成日期", true, true, 0, 50, 50);
+
+                // map.AddTBString(DelayAttr.SDTOfNode, null, "节点应完成日期", true, true, 0, 50, 70);
+                // map.AddTBString(DelayAttr.PressTimes, null, "催办次数", false, true, 0, 50, 5);
                 map.AddTBString(DelayAttr.BillNo, null, "单据号", true, true, 0, 50, 5);
                 map.AddTBString(DelayAttr.FlowNote, null, "FlowNote", false, true, 0, 50, 5);
                 map.AddTBString(DelayAttr.TodoEmps, null, "待办人员", true, true, 0, 50, 5);
-                map.AddTBString(DelayAttr.Sender, null, "发送者", true, true, 0, 50, 50);
+                map.AddTBString(DelayAttr.Sender, null, "发送人员", true, true, 0, 50, 50);
 
                 //查询条件.
-                map.AddSearchAttr(DelayAttr.WFState);
+                // map.AddSearchAttr(DelayAttr.WFState);
                 map.AddSearchAttr(DelayAttr.FK_Flow);
-
 
                 RefMethod rm = new En.RefMethod();
                 rm.Title = "打开轨迹";
@@ -542,9 +538,15 @@ namespace BP.WF.Data
         }
         #endregion
 
+        public void InitView()
+        {
+            string sql = "";
+
+        }
+
         public string DoOpenTrack()
         {
-            return "../WFRpt.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow;
+            return "/WF/WFRpt.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow;
         }
     }
     /// <summary>

@@ -4,7 +4,7 @@
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</ProjectGuid>
+    <ProjectGuid>{8E484457-B3A3-441C-AEE3-4E49BB30E203}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ApplicationIcon>
@@ -111,16 +111,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
-      <HintPath>..\..\..\CCFlowCloud\packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
+      <HintPath>..\..\RefDLL\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
     <Reference Include="DmProvider">
       <HintPath>..\..\RefDLL\DmProvider.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf, Version=3.17.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
-      <HintPath>..\..\..\CCFlowCloud\packages\Google.Protobuf.3.17.0\lib\net45\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\RefDLL\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="IBM.Data.Informix">
       <HintPath>..\..\RefDLL\IBM.Data.Informix.dll</HintPath>
+    </Reference>
+    <Reference Include="Kdbndp">
+      <HintPath>..\..\RefDLL\Kdbndp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Expression.Interactions">
@@ -134,7 +137,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
@@ -153,7 +157,7 @@
       <HintPath>..\..\RefDLL\Nuxsql.dll</HintPath>
     </Reference>
     <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Oracle.ManagedDataAccess.19.6.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+      <HintPath>..\..\RefDLL\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -180,15 +184,15 @@
     </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Caching" />
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\CCFlowCloud\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\netstandard1.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http">
+      <HintPath>..\..\..\school\ccflowDDL\System.Web.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
@@ -219,12 +223,19 @@
     <Compile Include="DA\CashFrmTemplate.cs" />
     <Compile Include="Difference\SystemConfig.cs" />
     <Compile Include="EnTS\Glo.cs" />
+    <Compile Include="EnTS\TSEntityMyPK.cs" />
     <Compile Include="EnTS\TSEntityNoName.cs" />
+    <Compile Include="EnTS\TSEntityNodeID.cs" />
+    <Compile Include="EnTS\TSEntityWorkID.cs" />
+    <Compile Include="EnTS\TSEntityOID.cs" />
+    <Compile Include="EnTS\TSEntityTree.cs" />
     <Compile Include="En\EnumLab.cs" />
     <Compile Include="En\MapExt\Connection.cs" />
     <Compile Include="En\GENoName.cs" />
     <Compile Include="Port\DeptEmp.cs" />
     <Compile Include="Port\DeptEmpStation.cs" />
+    <Compile Include="Port\Glo.cs" />
+    <Compile Include="Port\Token.cs" />
     <Compile Include="Pub\Current.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -253,7 +264,7 @@
     <Compile Include="Sys\BuessUnitBase.cs" />
     <Compile Include="Sys\CCFormAPI.cs" />
     <Compile Include="Sys\CCFormParse.cs" />
-    <Compile Include="Sys\DictDtl.cs" />
+    <Compile Include="Sys\SFTableDtl.cs" />
     <Compile Include="Sys\EnumLab.cs" />
     <Compile Include="Sys\EnumAth.cs" />
     <Compile Include="Sys\EnumLib.cs" />
@@ -293,6 +304,8 @@
     <Compile Include="Sys\FrmUI\ExtLink.cs" />
     <Compile Include="Sys\FrmUI\ExtHandWriting.cs" />
     <Compile Include="Sys\GloVarExt.cs" />
+    <Compile Include="Sys\UserLogLevel.cs" />
+    <Compile Include="Sys\UserLogType.cs" />
     <Compile Include="Sys\MapAttrEnum.cs" />
     <Compile Include="Sys\MapDataVer.cs" />
     <Compile Include="Sys\MapExtXml.cs">
@@ -301,7 +314,6 @@
     <Compile Include="Sys\MapFrame.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sys\FrmTree.cs" />
     <Compile Include="Sys\SFTableDict.cs" />
     <Compile Include="Sys\GEEntityExcelFrm.cs" />
     <Compile Include="Sys\GEEntityWordFrm.cs" />
@@ -421,11 +433,11 @@
     <Compile Include="En\EntityOID.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="En\Attr.cs" />
-    <Compile Include="En\AttrFile.cs" />
-    <Compile Include="En\AttrOfOneVSM.cs" />
-    <Compile Include="En\AttrSearch.cs" />
-    <Compile Include="En\Map.cs" />
+    <Compile Include="En\MapExt\Attr.cs" />
+    <Compile Include="En\MapExt\AttrFile.cs" />
+    <Compile Include="En\MapExt\AttrOfOneVSM.cs" />
+    <Compile Include="En\MapExt\SearchFKEnum.cs" />
+    <Compile Include="En\MapExt\Map.cs" />
     <Compile Include="En\Row.cs" />
     <Compile Include="En\EntityTree.cs" />
     <Compile Include="Sys\Base\EventBase.cs" />
@@ -448,7 +460,7 @@
     <Compile Include="Sys\GroupField.cs" />
     <Compile Include="Sys\MapData.cs" />
     <Compile Include="Sys\MapAttr.cs" />
-    <Compile Include="En\AttrOfSearch.cs">
+    <Compile Include="En\MapExt\SearchNormal.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="En\RefMethod.cs">

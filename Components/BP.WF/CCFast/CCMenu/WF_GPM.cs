@@ -105,20 +105,20 @@ namespace BP.WF.HttpHandler
                 rootNo = BP.Web.WebUser.OrgNo;
 
             //创建根目录。
-            BP.Sys.FrmTree frmTree = new FrmTree();
+            SysFormTree frmTree = new SysFormTree();
             if (rootNo.Equals("0") == true)
             {
-                int i = frmTree.Retrieve(FrmTreeAttr.ParentNo, rootNo);
+                int i = frmTree.Retrieve(SysFormTreeAttr.ParentNo, rootNo);
             }
             else
-                frmTree.Retrieve(FrmTreeAttr.No, rootNo);
+                frmTree.Retrieve(SysFormTreeAttr.No, rootNo);
 
             //类别.
             BP.WF.Template.FlowSort fs = new BP.WF.Template.FlowSort();
             if (rootNo.Equals("0") == true)
-                fs.Retrieve(FrmTreeAttr.ParentNo, rootNo);
+                fs.Retrieve(SysFormTreeAttr.ParentNo, rootNo);
             else
-                fs.Retrieve(FrmTreeAttr.No, rootNo);
+                fs.Retrieve(SysFormTreeAttr.No, rootNo);
 
             //系统名称
             string name = this.GetRequestVal("TB_Name");
@@ -130,7 +130,7 @@ namespace BP.WF.HttpHandler
             system.OrgNo = WebUser.OrgNo;
             system.Insert();
 
-            FrmTree frmTee = frmTree.DoCreateSubNode();
+            SysFormTree frmTee = frmTree.DoCreateSubNode() as SysFormTree;
             frmTee.Name = name;
             // en.ICON = system.Icon;
             frmTee.OrgNo = WebUser.OrgNo;

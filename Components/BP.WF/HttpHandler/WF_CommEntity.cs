@@ -6,6 +6,8 @@ using BP.Web;
 using BP.En;
 using ICSharpCode.SharpZipLib.Zip;
 using BP.Difference;
+using System.IO;
+using System.Web;
 
 namespace BP.WF.HttpHandler
 {
@@ -62,14 +64,14 @@ namespace BP.WF.HttpHandler
                             continue;
                         }
 
-                        if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == true)
+                        if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == false)
                         {
                             string val = this.GetValFromFrmByKey("DDL_" + pkval + "_" + attr.Key);
                             item.SetValByKey(attr.Key, val);
                             continue;
                         }
 
-                        if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == true)
+                        if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == false)
                         {
                             string val = this.GetValFromFrmByKey("CB_" + pkval + "_" + attr.Key, "-1");
                             if (val == "-1")
@@ -114,20 +116,20 @@ namespace BP.WF.HttpHandler
                             continue;
                         }
 
-                        if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == true)
+                        if (attr.UIContralType == UIContralType.DDL && attr.UIIsReadonly == false)
                         {
                             val = this.GetValFromFrmByKey("DDL_" + i + "_" + attr.Key);
                             dtl.SetValByKey(attr.Key, val);
                             continue;
                         }
 
-                        if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == true)
+                        if (attr.UIContralType == UIContralType.CheckBok && attr.UIIsReadonly == false)
                         {
                             val = this.GetValFromFrmByKey("CB_" + i + "_" + attr.Key, "-1");
                             if (val == "-1")
                                 dtl.SetValByKey(attr.Key, 0);
                             else
-                                dtl.SetValByKey(attr.Key, 1);
+                                dtl.SetValByKey(attr.Key, val);
                             continue;
                         }
                     }
@@ -194,7 +196,7 @@ namespace BP.WF.HttpHandler
                 md.SetPara("IsImp", "1");
             if (dtl.HisUAC.IsExp)
                 md.SetPara("IsImp", "1");
-            md.SetPara("EntityPK", dtl.PKField);//@Hongyan
+            md.SetPara("EntityPK", dtl.PKField);
 
             #endregion 加入权限信息.
 
@@ -285,7 +287,7 @@ namespace BP.WF.HttpHandler
             {
                 enumKeys = enumKeys.Substring(0, enumKeys.Length - 1);
                 // Sys_Enum
-                string sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
+                string sqlEnum = "SELECT * FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey IN (" + enumKeys + ")";
                 DataTable dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
                 dtEnum.TableName = "Sys_Enum";
                 if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
@@ -482,78 +484,37 @@ namespace BP.WF.HttpHandler
                 DataTable dtMain = en.ToDataTableField("MainTable");
                 ds.Tables.Add(dtMain);
 
-                #region 增加上分组信息.
-                string groupTitle = "";
-                EnCfg ec = new EnCfg();
-                ec.No = this.EnName;
-                if (ec.RetrieveFromDBSources() == 1)
-                    groupTitle = ec.GroupTitle;
-
-                if (DataType.IsNullOrEmpty(groupTitle) == true)
-                    groupTitle = "@" + en.PK + ",基本信息," + map.EnDesc + "";
-
-                //增加上.
+                Attrs attrs = en.EnMap.Attrs;
+                MapAttrs mapAttrs = new MapAttrs();
+                //获取Map中的分组
                 DataTable dtGroups = new DataTable("Sys_GroupField");
                 dtGroups.Columns.Add("OID");
                 dtGroups.Columns.Add("Lab");
-                dtGroups.Columns.Add("Tip");
-                dtGroups.Columns.Add("CtrlType");
-                dtGroups.Columns.Add("CtrlID");
-
-                string[] strs = groupTitle.Split('@');
-                foreach (string str in strs)
+                string groupName = "";
+                string groupNames = "";
+                foreach(Attr attr in attrs)
                 {
-                    if (DataType.IsNullOrEmpty(str))
+                    if (attr.MyFieldType == FieldType.RefText)
                         continue;
-
-                    string[] vals = str.Split('=');
-                    if (vals.Length == 1)
-                        vals = str.Split(',');
-
-                    if (vals.Length == 0)
-                        continue;
-
-                    DataRow dr = dtGroups.NewRow();
-                    dr["OID"] = vals[0];
-                    dr["Lab"] = vals[1];
-                    if (vals.Length == 3)
-                        dr["Tip"] = vals[2];
-                    dtGroups.Rows.Add(dr);
+                    groupName = attr.GroupName;
+                    if (groupNames.Contains(groupName + ",") == false)
+                    {
+                        DataRow dr = dtGroups.NewRow();
+                        groupNames += groupName + ",";
+                        dr["OID"] = groupName;
+                        dr["Lab"] = groupName;
+                        dtGroups.Rows.Add(dr);
+                    }
+                   
+                    MapAttr mapAttr = attr.ToMapAttr;
+                    mapAttr.SetPara("GroupName", attr.GroupName);
+                    mapAttrs.AddEntity(mapAttr);
                 }
                 ds.Tables.Add(dtGroups);
-
-                #endregion 增加上分组信息.
-
-                #region 字段属性.
-                MapAttrs attrs = en.EnMap.Attrs.ToMapAttrs;
-                DataTable sys_MapAttrs = attrs.ToDataTableField("Sys_MapAttr");
-                sys_MapAttrs.Columns.Remove(MapAttrAttr.GroupID);
-                sys_MapAttrs.Columns.Add("GroupID");
-
-
-                //sys_MapAttrs.Columns[MapAttrAttr.GroupID].DataType = typeof(string); //改变列类型.
-
-                //给字段增加分组.
-                string currGroupID = "";
-                foreach (DataRow drAttr in sys_MapAttrs.Rows)
-                {
-                    if (currGroupID.Equals("") == true)
-                        currGroupID = dtGroups.Rows[0]["OID"].ToString();
-
-                    string keyOfEn = drAttr[MapAttrAttr.KeyOfEn].ToString();
-                    foreach (DataRow drGroup in dtGroups.Rows)
-                    {
-                        string field = drGroup["OID"].ToString();
-                        if (keyOfEn.Equals(field))
-                        {
-                            currGroupID = field;
-                        }
-                    }
-                    drAttr[MapAttrAttr.GroupID] = currGroupID;
-                    drAttr[MapAttrAttr.FK_MapData] = this.EnName + "s";
-                }
+                DataTable sys_MapAttrs = mapAttrs.ToDataTableField("Sys_MapAttr");
                 ds.Tables.Add(sys_MapAttrs);
-                #endregion 字段属性.
+
+
 
                 #region 加入扩展属性.
                 MapExts mapExts = new MapExts(this.EnName + "s");
@@ -656,14 +617,14 @@ namespace BP.WF.HttpHandler
                     {
                         string sqlWhere = " EnumKey IN (" + enumKeys + ") AND OrgNo='" + WebUser.OrgNo + "'";
 
-                        sqlEnum = "SELECT * FROM Sys_Enum WHERE " + sqlWhere;
+                        sqlEnum = "SELECT * FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE " + sqlWhere;
                         sqlEnum += " UNION ";
-                        sqlEnum += "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ") AND EnumKey NOT IN (SELECT EnumKey FROM Sys_Enum WHERE " + sqlWhere + ") AND (OrgNo Is Null Or OrgNo='')";
+                        sqlEnum += "SELECT * FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey IN (" + enumKeys + ") AND EnumKey NOT IN (SELECT EnumKey FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE " + sqlWhere + ") AND (OrgNo Is Null Or OrgNo='')";
                         dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
                     }
                     else
                     {
-                        sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
+                        sqlEnum = "SELECT * FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey IN (" + enumKeys + ")";
                         dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
                     }
                     dtEnum.TableName = "Sys_Enum";
@@ -755,6 +716,264 @@ namespace BP.WF.HttpHandler
             {
                 return "err@" + ex.Message;
             }
+        }
+
+        /// <summary>
+        /// 实体Entity 单文件上传
+        /// </summary>
+        /// <returns></returns>
+        public string EntityAth_Upload()
+        {
+            var files = HttpContextHelper.RequestFiles();
+            if (files.Count == 0)
+                return "err@请选择要上传的文件。";
+            //获取保存文件信息的实体
+
+            string enName = this.EnName;
+            Entity en = null;
+
+            //是否是空白记录.
+            bool isBlank = DataType.IsNullOrEmpty(this.PKVal);
+            if (isBlank == true)
+                return "err@请先保存实体信息然后再上传文件";
+            else
+                en = ClassFactory.GetEn(this.EnName);
+
+            if (en == null)
+                return "err@参数类名不正确.";
+            en.PKVal = this.PKVal;
+            int i = en.RetrieveFromDBSources();
+            if (i == 0)
+                return "err@数据[" + this.EnName + "]主键为[" + en.PKVal + "]不存在，或者没有保存。";
+
+            //获取文件的名称
+            string fileName = files[0].FileName;
+            if (fileName.IndexOf("/") >= 0)
+                fileName = fileName.Substring(fileName.LastIndexOf("/") + 1);
+            fileName = fileName.Substring(0, fileName.LastIndexOf('.'));
+            //文件后缀
+            string ext = System.IO.Path.GetExtension(files[0].FileName);
+            ext = ext.Replace(".", ""); //去掉点 @李国文
+
+            //文件大小
+            float size = HttpContextHelper.RequestFileLength(files[0]) / 1024;
+
+            //保存位置
+            string filepath = "";
+
+
+            //如果是天业集团则保存在ftp服务器上
+            if (BP.Difference.SystemConfig.CustomerNo.Equals("TianYe") || BP.Difference.SystemConfig.IsUploadFileToFTP == true)
+            {
+                string guid = DBAccess.GenerGUID();
+
+                //把文件临时保存到一个位置.
+                string temp = BP.Difference.SystemConfig.PathOfTemp + "" + guid + ".tmp";
+                try
+                {
+                    //files[0].SaveAs(temp);
+                    HttpContextHelper.UploadFile(files[0], temp);
+                }
+                catch (Exception ex)
+                {
+                    System.IO.File.Delete(temp);
+                    //files[0].SaveAs(temp);
+                    HttpContextHelper.UploadFile(files[0], temp);
+                }
+
+                /*保存到fpt服务器上.*/
+                FtpConnection ftpconn = new FtpConnection(BP.Difference.SystemConfig.FTPServerIP, BP.Difference.SystemConfig.FTPServerPort,
+                    SystemConfig.FTPUserNo, BP.Difference.SystemConfig.FTPUserPassword);
+
+                if (ftpconn == null)
+                    return "err@FTP服务器连接失败";
+
+                string ny = DateTime.Now.ToString("yyyy_MM");
+
+                //判断目录年月是否存在.
+                if (ftpconn.DirectoryExist(ny) == false)
+                    ftpconn.CreateDirectory(ny);
+                ftpconn.SetCurrentDirectory(ny);
+
+                //判断目录是否存在.
+                if (ftpconn.DirectoryExist("Helper") == false)
+                    ftpconn.CreateDirectory("Helper");
+
+                //设置当前目录，为操作的目录。
+                ftpconn.SetCurrentDirectory("Helper");
+
+                //把文件放上去.
+                ftpconn.PutFile(temp, guid + "." + ext);
+                ftpconn.Close();
+
+                //删除临时文件
+                System.IO.File.Delete(temp);
+
+                //设置路径.
+                filepath = ny + "/Helper/" + guid + "." + ext;
+
+            }
+            else
+            {
+                string fileSavePath = en.EnMap.FJSavePath;
+
+                if (DataType.IsNullOrEmpty(fileSavePath) == true)
+                    fileSavePath = BP.Difference.SystemConfig.PathOfDataUser + enName;
+
+                if (System.IO.Directory.Exists(fileSavePath) == false)
+                    System.IO.Directory.CreateDirectory(fileSavePath);
+
+                filepath = fileSavePath + "/" + this.PKVal + "." + ext;
+
+                //存在文件则删除
+                if (System.IO.File.Exists(filepath) == true)
+                    System.IO.File.Delete(filepath);
+
+                FileInfo info = new FileInfo(filepath);
+                //files[0].SaveAs(filepath);
+                HttpContextHelper.UploadFile(files[0], filepath);
+            }
+
+            //需要这样写 @李国文.
+            en.SetValByKey("MyFileName", fileName);
+            en.SetValByKey("MyFilePath", filepath);
+            en.SetValByKey("MyFileExt", ext);
+            en.SetValByKey("MyFileSize", size);
+            en.SetValByKey("WebPath", filepath);
+
+            en.Update();
+            return "文件保存成功";
+        }
+        /// <summary>
+        /// 实体多附件上传
+        /// </summary>
+        /// <returns></returns>
+        public string EntityMultiAth_Upload()
+        {
+            //HttpFileCollection files = context.Request.Files;
+            var files = HttpContextHelper.RequestFiles();
+            if (files.Count == 0)
+                return "err@请选择要上传的文件。";
+            //获取保存文件信息的实体
+
+            string enName = this.EnName;
+            Entity en = null;
+
+            //是否是空白记录.
+            bool isBlank = DataType.IsNullOrEmpty(this.PKVal);
+            if (isBlank == true)
+                return "err@请先保存实体信息然后再上传文件";
+            else
+                en = ClassFactory.GetEn(this.EnName);
+
+            if (en == null)
+                return "err@参数类名不正确.";
+            en.PKVal = this.PKVal;
+            int i = en.RetrieveFromDBSources();
+            if (i == 0)
+                return "err@数据[" + this.EnName + "]主键为[" + en.PKVal + "]不存在，或者没有保存。";
+
+            //获取文件的名称
+            string fileName = files[0].FileName;
+            if (fileName.IndexOf("/") >= 0)
+                fileName = fileName.Substring(fileName.LastIndexOf("/") + 1);
+            fileName = fileName.Substring(0, fileName.LastIndexOf('.'));
+
+            SysFileManagers fileManagers = new SysFileManagers();
+            fileManagers.Retrieve(SysFileManagerAttr.RefVal, this.PKVal, SysFileManagerAttr.MyFileName, fileName);
+            if (fileManagers.Count != 0)
+                return "err@文件" + fileName + "已经存在";
+            //文件后缀
+            string ext = System.IO.Path.GetExtension(files[0].FileName);
+
+            //文件大小
+            float size = HttpContextHelper.RequestFileLength(files[0]) / 1024;
+
+            //保存位置
+            string filepath = "";
+
+            //如果是天业集团则保存在ftp服务器上
+            if (BP.Difference.SystemConfig.CustomerNo.Equals("TianYe") || BP.Difference.SystemConfig.IsUploadFileToFTP == true)
+            {
+                string guid = DBAccess.GenerGUID();
+
+                //把文件临时保存到一个位置.
+                string temp = BP.Difference.SystemConfig.PathOfTemp + "" + guid + ".tmp";
+                try
+                {
+                    //files[0].SaveAs(temp);
+                    HttpContextHelper.UploadFile(files[0], temp);
+                }
+                catch (Exception ex)
+                {
+                    System.IO.File.Delete(temp);
+                    //files[0].SaveAs(temp);
+                    HttpContextHelper.UploadFile(files[0], temp);
+                }
+
+                /*保存到fpt服务器上.*/
+                FtpConnection ftpconn = new FtpConnection(BP.Difference.SystemConfig.FTPServerIP, BP.Difference.SystemConfig.FTPServerPort,
+                    SystemConfig.FTPUserNo, BP.Difference.SystemConfig.FTPUserPassword);
+
+                if (ftpconn == null)
+                    return "err@FTP服务器连接失败";
+
+                string ny = DateTime.Now.ToString("yyyy_MM");
+
+                //判断目录年月是否存在.
+                if (ftpconn.DirectoryExist(ny) == false)
+                    ftpconn.CreateDirectory(ny);
+                ftpconn.SetCurrentDirectory(ny);
+
+                //判断目录是否存在.
+                if (ftpconn.DirectoryExist("Helper") == false)
+                    ftpconn.CreateDirectory("Helper");
+
+                //设置当前目录，为操作的目录。
+                ftpconn.SetCurrentDirectory("Helper");
+
+                //把文件放上去.
+                ftpconn.PutFile(temp, guid + ext);
+                ftpconn.Close();
+
+                //删除临时文件
+                System.IO.File.Delete(temp);
+
+                //设置路径.
+                filepath = ny + "/Helper/" + guid + ext;
+
+            }
+            else
+            {
+
+                string savePath = BP.Difference.SystemConfig.PathOfDataUser + enName + "/" + this.PKVal;
+
+                if (System.IO.Directory.Exists(savePath) == false)
+                    System.IO.Directory.CreateDirectory(savePath);
+                savePath = savePath + "/" + fileName + ext;
+                //存在文件则删除
+                if (System.IO.Directory.Exists(savePath) == true)
+                    System.IO.Directory.Delete(savePath);
+
+                FileInfo info = new FileInfo(savePath);
+
+                //files[0].SaveAs(filepath);
+                HttpContextHelper.UploadFile(files[0], savePath);
+                filepath = "/DataUser/" + enName + "/" + this.PKVal + "/" + fileName + ext;
+            }
+            //保存上传的文件
+            SysFileManager fileManager = new SysFileManager();
+            fileManager.AttrFileNo = this.GetRequestVal("FileNo");
+            fileManager.AttrFileName = HttpUtility.UrlDecode(this.GetRequestVal("FileName"), System.Text.Encoding.UTF8);
+            fileManager.EnName = this.EnName;
+            fileManager.RefVal = this.PKVal;
+            fileManager.MyFileName = fileName;
+            fileManager.MyFilePath = filepath;
+            fileManager.MyFileExt = ext;
+            fileManager.MyFileSize = size;
+            fileManager.WebPath = filepath;
+            fileManager.Insert();
+            return fileManager.ToJson();
         }
         /// <summary>
         /// 删除实体多附件上传的信息
@@ -852,8 +1071,9 @@ namespace BP.WF.HttpHandler
                 dtM.Columns.Add("RefAttrKey");
                 //判断Func是否有参数
                 dtM.Columns.Add("FunPara");
+                dtM.Columns.Add("ClassMethodName");
 
-                RefMethods rms = map.HisRefMethods;
+                RefMethods rms = en.EnMapInTime.HisRefMethods;
                 foreach (RefMethod item in rms)
                 {
                     item.HisEn = en;
@@ -901,13 +1121,13 @@ namespace BP.WF.HttpHandler
                         dr["FunPara"] = "false";
                     else
                         dr["FunPara"] = "true";
-
+                    dr["ClassMethodName"] = item.ClassMethodName;
                     dtM.Rows.Add(dr); //增加到rows.
                 }
                 #endregion 增加 上方法.
 
                 #region 加入一对多的实体编辑
-                AttrsOfOneVSM oneVsM = en.EnMap.AttrsOfOneVSM;
+                AttrsOfOneVSM oneVsM = en.EnMapInTime.AttrsOfOneVSM;
                 string sql = "";
                 int i = 0;
                 if (oneVsM.Count > 0)
@@ -994,13 +1214,14 @@ namespace BP.WF.HttpHandler
                             }
                         }
                         dr["Title"] = vsM.Desc + "(" + i + ")";
+                        dr["GroupName"] = vsM.GroupName;
                         dtM.Rows.Add(dr);
                     }
                 }
                 #endregion 增加 一对多.
 
                 #region 从表
-                EnDtls enDtls = en.EnMap.Dtls;
+                EnDtls enDtls = en.EnMapInTime.Dtls;
                 foreach (EnDtl enDtl in enDtls)
                 {
                     //判断该dtl是否要显示?
@@ -1009,7 +1230,7 @@ namespace BP.WF.HttpHandler
                     if (myEnDtl.HisUAC.IsView == false)
                         continue;
 
-                    //@hongyan. 
+                    
                     DataRow dr = dtM.NewRow();
                     string url = "";
                     if (enDtl.DtlEditerModel == DtlEditerModel.DtlBatch)
@@ -1037,7 +1258,7 @@ namespace BP.WF.HttpHandler
                     dr["Title"] = enDtl.Desc + "(" + i + ")";
                     dr["Url"] = url;
                     dr["GroupName"] = enDtl.GroupName;
-                    dr["Icon"] = enDtl.Icon;//@Hongyan
+                    dr["Icon"] = enDtl.Icon;
                     dr["RefMethodType"] = (int)RefMethodType.RightFrameOpen;
 
                     dtM.Rows.Add(dr);
@@ -1164,8 +1385,18 @@ namespace BP.WF.HttpHandler
                 qo.AddWhere("OrgNo", rootno);
             }
             qo.DoQuery();
-
-            return ensMen.ToJson();
+            DataTable dt = ensMen.ToDataTableField();
+            Entity en = ensMen.GetNewEntity;
+            string tableName = en.EnMap.PhysicsTable;
+            if (tableName.Equals("Port_Emp") == true
+                && DBAccess.IsExitsTableCol(tableName,"UserID")==true)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    dr["No"] = dr["UserID"];
+                }
+            }
+            return BP.Tools.Json.ToJson(dt);
         }
         public string BranchesAndLeaf_Delete()
         {
@@ -1574,7 +1805,7 @@ namespace BP.WF.HttpHandler
             if (attr == null)
                 return "err@设置的分组外键错误[" + key + "],不存在[" + ensName + "]或者已经被删除.";
 
-            if (attr.MyFieldType == FieldType.Normal)
+            if (attr.MyFieldType == FieldType.Normal && attr.UIContralType != UIContralType.DDL)
                 return "err@设置的默认分组[" + key + "]不能是普通字段.";
 
             if (attr.MyFieldType == FieldType.FK)
@@ -1583,6 +1814,25 @@ namespace BP.WF.HttpHandler
                 ensFK.Clear();
                 ensFK.RetrieveAll();
                 return ensFK.ToJson();
+            }
+
+            if (attr.UIContralType == UIContralType.DDL && DataType.IsNullOrEmpty(attr.UIBindKey) == false
+         && attr.UIBindKey.ToUpper().StartsWith("SELECT"))
+            {
+                String sqlBindKey = Glo.DealExp(attr.UIBindKey, en, null);
+
+                DataTable dt = DBAccess.RunSQLReturnTable(sqlBindKey);
+                if (SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+                {
+                    dt.Columns["NO"].ColumnName = "No";
+                    dt.Columns["NAME"].ColumnName = "Name";
+                }
+                if (SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+                {
+                    dt.Columns["NO"].ColumnName = "No";
+                    dt.Columns["NAME"].ColumnName = "Name";
+                }
+                return BP.Tools.Json.ToJson(dt);
             }
 
             if (attr.MyFieldType == FieldType.Enum)

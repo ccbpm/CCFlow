@@ -88,7 +88,7 @@ namespace BP.CCBill.Template
                 map.AddDDLSysEnum(MethodAttr.ShowModel, 0, "显示方式", false, false, MethodAttr.ShowModel, "@0=按钮@1=超链接");
 
                 map.AddDDLSysEnum(MethodAttr.RefMethodType, 0, "页面打开方式", true, true,
-                    "RefMethodTypeLink", "@0=模态窗口打开@1=新窗口打开@2=右侧窗口打开@4=转到新页面");
+                  "RefMethodTypeLink", "@1=模态窗口打开@2=新窗口打开@3=右侧窗口打开@4=转到新页面");
                 //是否显示到列表.
                 map.AddBoolean(MethodAttr.IsList, false, "是否显示在列表?", true, true);
                 

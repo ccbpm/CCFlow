@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BP.DA;
 using BP.Difference;
 
 namespace BP.Difference
@@ -11,6 +12,18 @@ namespace BP.Difference
     /// </summary>
     public static class Glo
     {
+        public static string DealSQLStringEnumFormat(string cfgString)
+        {
+            //把这个string,转化SQL. @tuanyuan=团员@dangyuan=党员
+            AtPara ap = new AtPara(cfgString);
+            string sql = "";
+            foreach (string item in ap.HisHT.Keys)
+            {
+                sql += " SELECT '" + item + "' as No, '" + ap.GetValStrByKey(item) + "' as Name FROM Port_Emp WHERE No = 'admin' UNION ";
+            }
+            sql = sql.Substring(0, sql.Length - 6);
+            return sql;
+        }
         /// <summary>
         /// 获得ID地址
         /// </summary>

@@ -204,27 +204,25 @@ namespace BP.WF.HttpHandler
             }
 
             //对Oracle数据库做兼容性处理
-            if (DBAccess.AppCenterDBType == DBType.Oracle)
+            foreach (DataColumn col in dt.Columns)
             {
-                foreach (DataColumn col in dt.Columns)
+                switch (col.ColumnName.ToUpper())
                 {
-                    switch (col.ColumnName)
-                    {
-                        case "NO":
-                            col.ColumnName = "No";
-                            break;
-                        case "NAME":
-                            col.ColumnName = "Name";
-                            break;
-                        case "DEPTNO":
-                            col.ColumnName = "DeptNo";
-                            break;
-                        case "DEPTNAME":
-                            col.ColumnName = "DeptName";
-                            break;
-                    }
+                    case "NO":
+                        col.ColumnName = "No";
+                        break;
+                    case "NAME":
+                        col.ColumnName = "Name";
+                        break;
+                    case "DEPTNO":
+                        col.ColumnName = "DeptNo";
+                        break;
+                    case "DEPTNAME":
+                        col.ColumnName = "DeptName";
+                        break;
                 }
             }
+           
 
             jr.InnerData = dt;
             string re = BP.Tools.Json.ToJson(jr);
@@ -236,10 +234,10 @@ namespace BP.WF.HttpHandler
         }
         #endregion Dot2DotTreeDeptModel.htm（部门选择）
 
-        #region Dot2DotStationModel.htm（岗位选择）
+        #region Dot2DotStationModel.htm（角色选择）
 
         /// <summary>
-        /// 保存节点绑定岗位信息
+        /// 保存节点绑定角色信息
         /// </summary>
         /// <returns></returns>
         public string Dot2DotStationModel_SaveNodeStations()
@@ -379,11 +377,11 @@ namespace BP.WF.HttpHandler
 
                 node = new EasyuiTreeNode();
                 node.id = "STROOT_-1";
-                node.text = "岗位类型";
+                node.text = "角色类型";
                 node.iconCls = "icon-department";
                 node.attributes = new EasyuiTreeNodeAttributes();
                 node.attributes.No = "-1";
-                node.attributes.Name = "岗位类型";
+                node.attributes.Name = "角色类型";
                 node.attributes.ParentNo = parentrootid;
                 node.attributes.TType = "STROOT";
                 node.state = "closed";
@@ -486,7 +484,7 @@ namespace BP.WF.HttpHandler
             }
             else
             {
-                //岗位所属单位UNIT
+                //角色所属单位UNIT
                 dt = DBAccess.RunSQLReturnTable(string.Format("SELECT * FROM Port_Dept WHERE IsUnit = 1 AND ParentNo='{0}' ORDER BY Name ASC", parentid));
 
                 foreach (DataRow dept in dt.Rows)
@@ -516,7 +514,7 @@ namespace BP.WF.HttpHandler
                         + " INNER JOIN Port_Dept pd ON pd.No=ps.FK_Unit"
                         + " WHERE ps.FK_Unit = '{0}' ORDER BY pst.{1} ASC,ps.Name ASC", parentid, sortField));
 
-                //增加岗位
+                //增加角色
                 foreach (DataRow st in dt.Rows)
                 {
                     node = new EasyuiTreeNode();
@@ -581,27 +579,26 @@ namespace BP.WF.HttpHandler
             }
 
             //对Oracle数据库做兼容性处理
-            if (DBAccess.AppCenterDBType == DBType.Oracle)
+            
+            foreach (DataColumn col in dt.Columns)
             {
-                foreach (DataColumn col in dt.Columns)
+                switch (col.ColumnName.ToUpper())
                 {
-                    switch (col.ColumnName)
-                    {
-                        case "NO":
-                            col.ColumnName = "No";
-                            break;
-                        case "NAME":
-                            col.ColumnName = "Name";
-                            break;
-                        case "UNITNO":
-                            col.ColumnName = "DeptNo";
-                            break;
-                        case "UNITNAME":
-                            col.ColumnName = "DeptName";
-                            break;
-                    }
+                    case "NO":
+                        col.ColumnName = "No";
+                        break;
+                    case "NAME":
+                        col.ColumnName = "Name";
+                        break;
+                    case "UNITNO":
+                        col.ColumnName = "DeptNo";
+                        break;
+                    case "UNITNAME":
+                        col.ColumnName = "DeptName";
+                        break;
                 }
             }
+            
 
             jr.InnerData = dt;
             jr.Msg = "";
@@ -612,7 +609,7 @@ namespace BP.WF.HttpHandler
             }
             return Newtonsoft.Json.JsonConvert.SerializeObject(re);
         }
-        #endregion Dot2DotStationModel.htm（岗位选择）
+        #endregion Dot2DotStationModel.htm（角色选择）
 
         #region Methods
         /// <summary>

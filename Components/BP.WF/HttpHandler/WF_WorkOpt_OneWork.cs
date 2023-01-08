@@ -363,6 +363,8 @@ namespace BP.WF.HttpHandler
             switch (DBAccess.AppCenterDBType)
             {
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     currNode = "SELECT FK_Node FROM (SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' AND WorkID=" + this.WorkID + "  Order by RDT DESC ) WHERE rownum=1";
                     break;
                 case DBType.MySQL:
@@ -742,15 +744,15 @@ namespace BP.WF.HttpHandler
             try
             {
                 //流程信息
-                var sql = "SELECT No \"No\", Name \"Name\", Paras \"Paras\", ChartType \"ChartType\" FROM WF_Flow WHERE No='" + fk_flow + "'";
+                var sql = "SELECT No \"No\", Name \"Name\", ChartType \"ChartType\" FROM WF_Flow WHERE No='" + fk_flow + "'";
                 dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "WF_Flow";
                 ds.Tables.Add(dt);
 
                 //节点信息 ， 
                 // NodePosType=0，开始节点， 1中间节点,2=结束节点.
-                // RunModel= select * from sys_enum where Enumkey='RunModel' 
-                // TodolistModel= select * from sys_enum where Enumkey='TodolistModel' ;
+                // RunModel= select * FROM sys_enums where Enumkey='RunModel' 
+                // TodolistModel= select * FROM sys_enums where Enumkey='TodolistModel' ;
                 sql = "SELECT NodeID \"ID\", Name \"Name\", ICON \"Icon\", X \"X\", Y \"Y\", NodePosType \"NodePosType\",RunModel \"RunModel\",HisToNDs \"HisToNDs\",TodolistModel \"TodolistModel\" FROM WF_Node WHERE FK_Flow='" +
                     fk_flow + "' ORDER BY Step";
                 dt = DBAccess.RunSQLReturnTable(sql);
@@ -915,7 +917,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 //获取流程信息
-                var sql = "SELECT No \"No\", Name \"Name\", Paras \"Paras\", ChartType \"ChartType\" FROM WF_Flow WHERE No='" + fk_flow + "'";
+                var sql = "SELECT No \"No\", Name \"Name\",  ChartType \"ChartType\" FROM WF_Flow WHERE No='" + fk_flow + "'";
                 dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "WF_Flow";
                 ds.Tables.Add(dt);
@@ -1110,6 +1112,14 @@ namespace BP.WF.HttpHandler
                 //    }
                 //}
 
+                //获取子流程
+                SubFlows subFlows = new SubFlows(this.FK_Flow);
+                ds.Tables.Add(subFlows.ToDataTableField("WF_NodeSubFlow"));
+
+                //获取发起的子流程
+                GenerWorkFlows gwfs = new GenerWorkFlows();
+                gwfs.Retrieve(GenerWorkFlowAttr.PWorkID, this.WorkID, "WorkID");
+                ds.Tables.Add(gwfs.ToDataTableField("WF_GenerWorkFlow"));
                 string str = BP.Tools.Json.DataSetToJson(ds);
                 //  DataType.WriteFile("c:\\GetFlowTrackJsonData_CCflow.txt", str);
                 return str;
@@ -1139,7 +1149,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 //获取流程信息
-                var sql = "SELECT No \"No\", Name \"Name\", Paras \"Paras\", ChartType \"ChartType\" FROM WF_Flow WHERE No='" + fk_flow + "'";
+                var sql = "SELECT No \"No\", Name \"Name\",  ChartType \"ChartType\" FROM WF_Flow WHERE No='" + fk_flow + "'";
                 dt = DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "WF_FLOW";
                 ds.Tables.Add(dt);

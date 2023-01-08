@@ -197,7 +197,6 @@ namespace BP.GPM
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 100, 10);
                 map.AddDDLEntities(EmpAttr.FK_Dept, null, "主要部门", new BP.Port.Depts(), false);
 
-                map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
                 map.AddTBString(EmpAttr.Tel, null, "电话", true, false, 0, 20, 130);
                 map.AddTBString(EmpAttr.Email, null, "邮箱", true, false, 0, 100, 132, true);
                 map.AddTBString(EmpAttr.PinYin, null, "拼音", true, false, 0, 500, 132, true);
@@ -229,10 +228,10 @@ namespace BP.GPM
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                //节点绑定部门. 节点绑定部门.
-                map.AttrsOfOneVSM.AddBranches(new DeptEmps(), new BP.GPM.Depts(),
-                   BP.GPM.DeptEmpAttr.FK_Emp,
-                   BP.GPM.DeptEmpAttr.FK_Dept, "部门维护", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                ////节点绑定部门. 节点绑定部门.
+                //map.AttrsOfOneVSM.AddBranches(new DeptEmps(), new BP.GPM.Depts(),
+                //   BP.GPM.DeptEmpAttr.FK_Emp,
+                //   BP.GPM.DeptEmpAttr.FK_Dept, "部门维护", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
 
                 this._enMap = map;

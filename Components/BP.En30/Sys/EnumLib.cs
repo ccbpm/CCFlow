@@ -34,49 +34,25 @@ namespace BP.Sys
     /// <summary>
     /// 数据源类型
     /// </summary>
-    public enum DBSrcType
+    public class DBSrcType
     {
         /// <summary>
         /// 本机数据库
         /// </summary>
-        Localhost = 0,
-        /// <summary>
-        /// SQL
-        /// </summary>
-        SQLServer = 1,
-        /// <summary>
-        /// Oracle
-        /// </summary>
-        Oracle = 2,
-        /// <summary>
-        /// MySQL
-        /// </summary>
-        MySQL = 3,
-        /// <summary>
-        /// Informix
-        /// </summary>
-        Informix = 4,
-        /// <summary>
-        /// PGSQL
-        /// </summary>
-        PostgreSQL = 5,
-        /// <summary>
-        /// 人大金仓
-        /// </summary>
-        KingBase=6,
-        /// <summary>
-        /// 优炫
-        /// </summary>
-        UX=9,
-        /// <summary>
-        /// WebService数据源
-        /// </summary>
-        WebServices = 100,
-        /// <summary>
-        /// 海尔的Dubbo服务.
-        /// </summary>
-        Dubbo = 50
-        
+        public const string local = "local";
+        public const string MSSQL = "MSSQL";
+        public const string Oracle = "Oracle";
+        public const string MySQL = "MySQL";
+        public const string Informix = "Informix";
+        public const string PostgreSQL = "PostgreSQL";
+        public const string KingBaseR3 = "KingBaseR3";
+        public const string KingBaseR6 = "KingBaseR6";
+        public const string UX = "UX";
+        public const string WebServices = "WebServices";
+        public const string Dubbo = "Dubbo";
+        public const string CCFromRef = "CCFromRef";
+        public const string LocalWS = "LocalWS";
+        public const string LocalHandler = "LocalHandler";
     }
     /// <summary>
     /// 消息控制方式

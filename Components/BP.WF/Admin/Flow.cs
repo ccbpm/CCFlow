@@ -93,7 +93,7 @@ namespace BP.WF.Admin
                 if (WebUser.IsAdmin == false)
                     throw new Exception("err@管理员登录用户信息丢失,当前会话[" + WebUser.No + "," + WebUser.Name + "]");
                 uac.IsUpdate = true;
-                uac.IsDelete = false;
+                uac.IsDelete = true;
                 uac.IsInsert = false;
                 return uac;
             }
@@ -131,7 +131,6 @@ namespace BP.WF.Admin
                     map.AddHidden(FlowAttr.OrgNo, " = ", BP.Web.WebUser.OrgNo);
                 }
 
-
                 map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 4, 3);
                 map.SetHelperUrl(FlowAttr.No, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661868&doc_id=31094"); //使用alert的方式显示帮助信息.
                 map.AddTBString(FlowAttr.Name, null, "名称", true, false, 0, 50, 300);
@@ -151,7 +150,9 @@ namespace BP.WF.Admin
                 map.AddTBString(FlowAttr.TitleRole, null, "标题生成规则", true, false, 0, 150, 10, true);
                 map.SetHelperUrl(FlowAttr.TitleRole, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661872&doc_id=31094");
 
-                map.AddBoolean(FlowAttr.IsCanStart, true, "独立启动？", true, true);
+                // map.AddBoolean(FlowAttr.IsCanStart, true, "独立启动？", true, true);
+
+                map.AddDDLSysEnum(FlowAttr.IsCanStart, 1, "发布状态", true, false, "IsCanStart", "@0=不启用@1=独立启动");
 
                 //map.AddBoolean(FlowAttr.IsCanStart, true, "可以独立启动否？(独立启动的流程可以显示在发起流程列表里)", true, true, true);
                 //map.SetHelperUrl(FlowAttr.IsCanStart, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661874&doc_id=31094");
@@ -161,11 +162,16 @@ namespace BP.WF.Admin
                 map.SetHelperUrl(FlowAttr.Draft, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661878&doc_id=31094");
                 #endregion 基本属性。
 
-                map.AddTBDateTime(FlowAttr.DesignTime, null, "创建时间", true, true);
                 map.AddTBString(FlowAttr.OrgNo, null, "组织编号", false, false, 0, 50, 10, false);
+
+                map.AddTBString("Creater", "admin", "创建人", true, false, 0, 150, 10, true);
+                map.AddTBDateTime(FlowAttr.CreateDate, null, "创建日期", true, false);
+
 
                 //查询.
                 map.AddSearchAttr(FlowAttr.FK_FlowSort);
+                map.AddSearchAttr(FlowAttr.IsCanStart);
+
 
 
                 #region 流程模版管理.
@@ -266,6 +272,17 @@ namespace BP.WF.Admin
                 rm.Icon = "icon-briefcase";
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
+
+
+                //@hongyan.
+                rm = new RefMethod();
+                rm.Icon = "../../WF/Img/Btn/DTS.gif";
+                rm.Title = "删除模板"; // "删除数据";
+                rm.IsCanBatch = true;
+                rm.ClassMethodName = this.ToString() + ".DeleteIt";
+                rm.GroupName = "流程维护";
+                map.AddRefMethod(rm);
+
                 #endregion 流程运行维护.
 
                 this._enMap = map;
@@ -273,6 +290,19 @@ namespace BP.WF.Admin
             }
         }
         #endregion
+        public string DeleteIt()
+        {
+            try
+            {
+                BP.WF.Flow fl = new BP.WF.Flow(this.No);
+                fl.DoDelete();
+                return "删除成功...";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
 
         public string DoExps()
         {

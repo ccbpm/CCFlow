@@ -81,17 +81,17 @@ namespace BP.WF.Template
                   BP.WF.Template.NodeTeamAttr.FK_Team, "节点绑定用户组AddTeamListModel", TeamAttr.FK_TeamType);
                 #endregion  对应关系用户组
 
-                #region 对岗位.
+                #region 对角色.
                 //平铺模式.
                 map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.Port.Stations(),
                     BP.WF.Template.NodeStationAttr.FK_Node,
-                    BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位", StationAttr.FK_StationType);
+                    BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定角色", StationAttr.FK_StationType);
 
                 //列表模式.
                 map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.Port.Stations(),
                   BP.WF.Template.NodeStationAttr.FK_Node,
-                  BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位AddTeamListModel", StationAttr.FK_StationType);
-                #endregion 对岗位.
+                  BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定角色AddTeamListModel", StationAttr.FK_StationType);
+                #endregion 对角色.
 
                 #region 节点绑定人员.
                 //平铺模式.
@@ -110,7 +110,7 @@ namespace BP.WF.Template
                     defDeptVal = "@WebUser.OrgNo";
 
                 //绑定部门的.
-                map.AttrsOfOneVSM.AddBranches(new BP.WF.Template.NodeDepts(), new BP.WF.Port.Depts(),
+                map.AttrsOfOneVSM.AddBranches(new BP.WF.Template.NodeDepts(), new BP.Port.Depts(),
                   BP.WF.Template.NodeDeptAttr.FK_Node,
                   BP.WF.Template.NodeDeptAttr.FK_Dept, "节点绑定部门AddBranches",
                   EmpAttr.Name, EmpAttr.No, defDeptVal, "@No=编号@Name=名称");

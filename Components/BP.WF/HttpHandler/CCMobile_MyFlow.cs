@@ -97,7 +97,7 @@ namespace BP.WF.HttpHandler
                         else
                         {
                             text = wk.GetValStrByKey(attr.KeyOfEn);
-                            if (attr.IsRichText == true)
+                            if (attr.TextModel == 3)
                             {
                                 text = text.Replace("white-space: nowrap;", "");
                             }
@@ -235,7 +235,7 @@ namespace BP.WF.HttpHandler
                         // 找出来上次发送选择的节点.
                         if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
                             mysql = "SELECT  top 1 NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID DESC";
-                        else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
+                        else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6)
                             mysql = "SELECT * FROM ( SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
                         else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
                             mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1";
@@ -328,11 +328,30 @@ namespace BP.WF.HttpHandler
             WF_CCForm ccfrm = new WF_CCForm();
             string str = ccfrm.FrmGener_Save();
 
+            Flow fl = new Flow(this.FK_Flow);
+            Node nd = new Node(this.FK_Node);
+            Work wk = nd.HisWork;
+            if (this.WorkID != 0) {
+                wk.OID = this.WorkID;
+                wk.RetrieveFromDBSources();
+            }
+            wk.ResetDefaultVal(null, null, 0);
+            string title = BP.WF.WorkFlowBuessRole.GenerTitle(fl,wk);
+            //修改RPT表的标题
+            wk.SetValByKey(GERptAttr.Title, title);
+            wk.Update();
+
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.WorkID=this.WorkID;
+            int i = gwf.RetrieveFromDBSources();
+            gwf.Title = title; //标题.
+            gwf.Update();
+
+
             // 这里保存的时候，需要保存到草稿,没有看到PC端对应的方法。
             string nodeIDStr = this.FK_Node.ToString();
             if (nodeIDStr.EndsWith("01") == true)
             {
-                Flow fl = new Flow(this.FK_Flow);
                 if (fl.DraftRole == DraftRole.SaveToDraftList)
                     BP.WF.Dev2Interface.Node_SetDraft(this.FK_Flow, this.WorkID);
 

@@ -21,6 +21,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string ToNode = "ToNode";
         /// <summary>
+        /// 到达节点名称
+        /// </summary>
+        public const string ToNodeName = "ToNodeName";
+        /// <summary>
         /// 流程编号
         /// </summary>
         public const string FK_Flow = "FK_Flow";
@@ -28,6 +32,10 @@ namespace BP.WF.Template
         /// 描述
         /// </summary>
         public const string Des = "Des";
+        /// <summary>
+        /// 是否显示网关?
+        /// </summary>
+        public const string GateWay = "GateWay";
         /// <summary>
         /// 顺序
         /// </summary>
@@ -112,11 +120,6 @@ namespace BP.WF.Template
         /// 节点方向
         /// </summary>
         public Direction() { }
-        public Direction(string mypk)
-        {
-            this.setMyPK(mypk);
-            this.Retrieve();
-        }
         /// <summary>
         /// 重写基类方法
         /// </summary>
@@ -128,9 +131,7 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("WF_Direction", "节点方向信息");
-
                 map.IndexField = DirectionAttr.FK_Flow;
-
                 /*
                  * MyPK 是一个复合主键 是由 Node+'_'+ToNode+'_'+DirType 组合的. 比如: 101_102_1
                  */
@@ -138,21 +139,18 @@ namespace BP.WF.Template
                 map.AddTBString(DirectionAttr.FK_Flow, null, "流程", true, true, 0, 4, 0, false);
                 map.AddTBInt(DirectionAttr.Node, 0, "从节点", false, true);
                 map.AddTBInt(DirectionAttr.ToNode, 0, "到节点", false, true);
-
-                //map.AddTBInt(DirectionAttr.CondExpModel, 0, "条件计算方式", false, true);
-                map.AddTBInt(DirectionAttr.Idx, 0, "计算优先级顺序", true, true);
-
-                map.AddTBString(DirectionAttr.Des, null, "流程", true, true, 0, 100, 0, false);
+                map.AddTBString(DirectionAttr.ToNodeName, null, "到达节点名称", true, true, 0, 300, 300, false);
+                map.AddTBInt(DirectionAttr.GateWay, 0, "网关显示?", true, true);
+                map.AddTBString(DirectionAttr.Des, null, "描述", true, true, 0, 100, 0, false);
 
                 //相关功能。
                 map.AttrsOfOneVSM.Add(new BP.WF.Template.DirectionStations(), new BP.Port.Stations(),
                     NodeStationAttr.FK_Node, NodeStationAttr.FK_Station,
-                    StationAttr.Name, StationAttr.No, "方向条件与岗位");
-
-                //map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeDepts(), new BP.WF.Port.Depts(), NodeDeptAttr.FK_Node, NodeDeptAttr.FK_Dept, DeptAttr.Name,
+                    StationAttr.Name, StationAttr.No, "方向条件与角色");
+                //map.AddTBInt(DirectionAttr.CondExpModel, 0, "条件计算方式", false, true);
+                map.AddTBInt(DirectionAttr.Idx, 0, "计算优先级顺序", true, true);
+                //map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeDepts(), new BP.Port.Depts(), NodeDeptAttr.FK_Node, NodeDeptAttr.FK_Dept, DeptAttr.Name,
                 //DeptAttr.No, "节点部门", Dot2DotModel.TreeDept);
-
-
                 this._enMap = map;
                 return this._enMap;
             }

@@ -4,7 +4,7 @@ using BP.Port;
 namespace BP.WF.Rpt
 {
     /// <summary>
-    /// 报表岗位
+    /// 报表角色
     /// </summary>
     public class RptStationAttr
     {
@@ -14,7 +14,7 @@ namespace BP.WF.Rpt
         /// </summary>
         public const string FK_Rpt = "FK_Rpt";
         /// <summary>
-        /// 岗位
+        /// 角色
         /// </summary>
         public const string FK_Station = "FK_Station";
         #endregion
@@ -64,7 +64,7 @@ namespace BP.WF.Rpt
             }
         }
         /// <summary>
-        ///岗位
+        ///角色
         /// </summary>
         public string FK_Station
         {
@@ -85,14 +85,14 @@ namespace BP.WF.Rpt
 
         #region 构造函数
         /// <summary>
-        /// 报表岗位
+        /// 报表角色
         /// </summary> 
         public RptStation() { }
         /// <summary>
-        /// 报表岗位对应
+        /// 报表角色对应
         /// </summary>
         /// <param name="_empoid">报表ID</param>
-        /// <param name="wsNo">岗位编号</param> 	
+        /// <param name="wsNo">角色编号</param> 	
         public RptStation(string _empoid, string wsNo)
         {
             this.FK_Rpt = _empoid;
@@ -110,12 +110,12 @@ namespace BP.WF.Rpt
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_RptStation", "报表岗位对应信息");
+                Map map = new Map("Sys_RptStation", "报表角色对应信息");
 
                 map.setEnType(EnType.Dot2Dot);
 
                 map.AddTBStringPK(RptStationAttr.FK_Rpt, null, "报表", false, false, 1, 15, 1);
-                map.AddDDLEntitiesPK(RptStationAttr.FK_Station, null, "岗位", new Stations(), true);
+                map.AddDDLEntitiesPK(RptStationAttr.FK_Station, null, "角色", new Stations(), true);
 
                 this._enMap = map;
                 return this._enMap;
@@ -124,13 +124,13 @@ namespace BP.WF.Rpt
         #endregion
     }
     /// <summary>
-    /// 报表岗位 
+    /// 报表角色 
     /// </summary>
     public class RptStations : Entities
     {
         #region 构造
         /// <summary>
-        /// 报表与岗位集合
+        /// 报表与角色集合
         /// </summary>
         public RptStations() { }
         #endregion

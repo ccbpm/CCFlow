@@ -44,7 +44,7 @@ namespace BP.Sys
         /// <summary>
         /// 行数
         /// </summary>
-        public const string RowNum = "RowNum";
+        public const string RowNum = "RowNumExt";
 
 
         public const string AttrsNum = "AttrsNum";

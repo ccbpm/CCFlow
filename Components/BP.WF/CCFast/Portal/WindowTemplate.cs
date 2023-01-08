@@ -396,7 +396,7 @@ namespace BP.CCFast.Portal
 
                 #region 内容定义.
                 map.AddTBString(WindowTemplateAttr.MoreUrl, null, "更多链接", false, false, 0, 300, 20, true);
-                map.AddTBStringDoc(WindowTemplateAttr.Docs, null, "内容表达式", false, false);
+                map.AddTBStringDoc(WindowTemplateAttr.Docs, null, "内容表达式", true, false);
                 #endregion 内容定义.
 
                 #region 权限定义.
@@ -429,7 +429,7 @@ namespace BP.CCFast.Portal
                 map.AddBoolean("IsLine", false, "折线图?", true, true);
                 map.AddBoolean("IsZZT", false, "柱状图?", true, true);
                 map.AddBoolean("IsRing", false, "显示环形图?", true, true);
-          //      map.AddBoolean("IsRate", false, "百分比扇形图?", true, true);
+                map.AddBoolean("IsRate", false, "百分比扇形图?", true, true);
 
                 map.AddDDLSysEnum(WindowTemplateAttr.DefaultChart, 0, "默认显示图形", true, true, WindowTemplateAttr.DefaultChart,
             "@0=饼图@1=折线图@2=柱状图@3=显示环形图");

@@ -32,7 +32,7 @@ namespace BP.WF
         /// </summary>
         public const string FK_Emp = "FK_Emp";
         /// <summary>
-        /// 使用的岗位
+        /// 使用的角色
         /// </summary>
         public const string UseStation_del = "UseStation";
         /// <summary>

@@ -83,14 +83,12 @@ namespace BP.CCBill
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                dt.Columns[0].ColumnName = "No";
-                dt.Columns[1].ColumnName = "Name";
-                dt.Columns[2].ColumnName = "EntityType";
-                dt.Columns[3].ColumnName = "FrmType";
-                dt.Columns[4].ColumnName = "PTable";
-            }
+            dt.Columns[0].ColumnName = "No";
+            dt.Columns[1].ColumnName = "Name";
+            dt.Columns[2].ColumnName = "EntityType";
+            dt.Columns[3].ColumnName = "FrmType";
+            dt.Columns[4].ColumnName = "PTable";
+            
 
             return BP.Tools.Json.ToJson(dt);
         }
@@ -162,12 +160,13 @@ namespace BP.CCBill
             //获取该表单所有操作按钮的权限
             ToolbarBtns btns = new ToolbarBtns();
             btns.Retrieve(ToolbarBtnAttr.FrmID, this.FrmID, "Idx");
+            bool isReadonly = this.GetRequestValBoolen("IsReadonly");
             if (btns.Count == 0)
             {
                 MapData md = new MapData(this.FrmID);
                 //表单的工具栏权限
                 ToolbarBtn btn = new ToolbarBtn();
-                if (md.EntityType != EntityType.DBList)
+                if (md.EntityType != EntityType.DBList && isReadonly==false)
                 {
                     btn.FrmID = md.No;
                     btn.BtnID = "New";
@@ -261,7 +260,7 @@ namespace BP.CCBill
             pcs.Retrieve(PowerCenterAttr.CtrlObj,this.FrmID, PowerCenterAttr.CtrlGroup,"FrmBtn");
 
             string mydepts = "" + WebUser.FK_Dept + ","; //我的部门.
-            string mystas = ""; //我的岗位.
+            string mystas = ""; //我的角色.
 
             DataTable mydeptsDT = DBAccess.RunSQLReturnTable("SELECT FK_Dept,FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'");
             foreach (DataRow dr in mydeptsDT.Rows)
@@ -275,6 +274,8 @@ namespace BP.CCBill
             foreach (ToolbarBtn btn in btns)
             {
                 if (btn.IsEnable == false)
+                    continue;
+                if (isReadonly == true && (btn.BtnID.Equals("New") || btn.BtnID.Equals("Save") || btn.BtnID.Equals("Submit") || btn.BtnID.Equals("Delete")))
                     continue;
                 //找到关于系统的控制权限集合.
                 PowerCenters mypcs = pcs.GetEntitiesByKey(PowerCenterAttr.CtrlPKVal, btn.MyPK) as PowerCenters;
@@ -318,7 +319,7 @@ namespace BP.CCBill
                         break;
                     }
 
-                    //是否包含岗位？
+                    //是否包含角色？
                     if (pc.CtrlModel.Equals("Stations") == true && BP.DA.DataType.IsHaveIt(pc.IDs, mystas) == true)
                     {
                         newBtns.AddEntity(btn);
@@ -389,14 +390,12 @@ namespace BP.CCBill
             string sql = "";
             sql = "SELECT No,Name,EntityType,FrmType,PTable FROM Sys_MapData WHERE (EntityType=1 OR EntityType=2) ORDER BY IDX ";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                dt.Columns[0].ColumnName = "No";
-                dt.Columns[1].ColumnName = "Name";
-                dt.Columns[2].ColumnName = "EntityType";
-                dt.Columns[3].ColumnName = "FrmType";
-                dt.Columns[4].ColumnName = "PTable";
-            }
+            dt.Columns[0].ColumnName = "No";
+            dt.Columns[1].ColumnName = "Name";
+            dt.Columns[2].ColumnName = "EntityType";
+            dt.Columns[3].ColumnName = "FrmType";
+            dt.Columns[4].ColumnName = "PTable";
+           
 
             return BP.Tools.Json.ToJson(dt);
         }

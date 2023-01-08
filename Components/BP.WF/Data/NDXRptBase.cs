@@ -21,6 +21,10 @@ namespace BP.WF.Data
         /// </summary>
         public const string FlowEmps = "FlowEmps";
         /// <summary>
+        /// 当前待办人员
+        /// </summary>
+        public const string TodoEmps = "TodoEmps";
+        /// <summary>
         /// 紧急程度
         /// </summary>
         public const string PRI = "PRI";
@@ -129,8 +133,6 @@ namespace BP.WF.Data
     abstract public class NDXRptBase : BP.En.EntityOID
     {
         #region 属性
-        
-     
         /// <summary>
         /// 工作ID
         /// </summary>
@@ -269,6 +271,20 @@ namespace BP.WF.Data
             set
             {
                 this.SetValByKey(NDXRptBaseAttr.FlowEnder, value);
+            }
+        }
+        /// <summary>
+        /// 当前待办人员
+        /// </summary>
+        public string TodoEmps
+        {
+            get
+            {
+                return this.GetValStringByKey(NDXRptBaseAttr.TodoEmps);
+            }
+            set
+            {
+                this.SetValByKey(NDXRptBaseAttr.TodoEmps, value);
             }
         }
         /// <summary>

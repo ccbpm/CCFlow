@@ -1,4 +1,5 @@
 ﻿using BP.En;
+using BP.WF.Template;
 
 namespace BP.WF.Port.Admin2Group
 {
@@ -90,18 +91,29 @@ namespace BP.WF.Port.Admin2Group
         {
             string str = this.GetValStringByKey("RefOrgAdminer");
 
-
             this.MyPK = str + "_" + this.GetValStringByKey("FlowSortNo");
-
             OrgAdminer oa = new OrgAdminer(str);
-
-
             this.OrgNo = oa.OrgNo;
             this.FK_Emp = oa.FK_Emp;
-
             return base.beforeInsert();
         }
-    }
+       
+       protected override void afterInsert()
+       {
+            //插入入后更改OrgAdminer中
+            string str = "";
+            FlowSorts ens = new FlowSorts();
+            ens.RetrieveInSQL("SELECT FlowSortNo FROM Port_OrgAdminerFlowSort WHERE  FK_Emp='" + this.FK_Emp + "' AND OrgNo='" + this.OrgNo + "'");
+		    foreach (FlowSort item in ens)
+		    {
+			    str += "(" + item.No + ")" + item.Name + ";";
+		    }
+            OrgAdminer adminer = new OrgAdminer(this.GetValStringByKey("RefOrgAdminer"));
+            adminer.SetValByKey("FlowSorts", str);
+		    adminer.Update();
+            base.afterInsert();
+	   }
+     }
     /// <summary>
     /// 组织管理员s
     /// </summary>

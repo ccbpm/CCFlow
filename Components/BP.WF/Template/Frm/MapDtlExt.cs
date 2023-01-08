@@ -692,10 +692,6 @@ namespace BP.WF.Template.Frm
             {
                 return this.GetValStrByKey(MapDtlAttr.FK_MapData);
             }
-            set
-            {
-                this.SetValByKey(MapDtlAttr.FK_MapData, value);
-            }
         }
         /// <summary>
         /// 事件类.
@@ -815,6 +811,7 @@ namespace BP.WF.Template.Frm
                 map.IndexField = MapDtlAttr.FK_MapData;
 
                 #region 基础信息.
+                map.AddGroupAttr("基本属性");
                 map.AddTBStringPK(MapDtlAttr.No, null, "编号", true, false, 1, 100, 20);
                 map.AddTBString(MapDtlAttr.Name, null, "名称", true, false, 1, 200, 20);
                 map.AddTBString(MapDtlAttr.Alias, null, "别名", true, false, 0, 100, 20, false);
@@ -866,6 +863,8 @@ namespace BP.WF.Template.Frm
                 map.SetHelperAlert(MapDtlAttr.EditModel, "格式为:第1种类型就要新建行,其他类型新建的时候弹出卡片.");
                 map.AddTBString(MapDtlAttr.UrlDtl, null, "自定义Url", true, false, 0, 200, 20, true);
 
+                map.AddTBString(MapDtlAttr.ColAutoExp, null, "列字段计算", true, false, 0, 200, 20, true);
+                map.SetHelperAlert(MapDtlAttr.ColAutoExp, "用于计算指定列字段求和/求平均例如：@ShuLiang=Sum@DanJia=Sum@XiaoJi=Sum");
 
                 map.AddTBInt(MapDtlAttr.NumOfDtl, 0, "最小从表集合", true, false);
                 map.SetHelperAlert(MapDtlAttr.NumOfDtl, "用于控制输入的行数据最小值，比如：从表不能为空，就是用这个模式。");
@@ -894,10 +893,7 @@ namespace BP.WF.Template.Frm
                 map.AddTBString(MapDtlAttr.OrderBySQLExp, null, "排序字段", true, false, 0, 200, 20, true);
                 map.SetHelperAlert(MapDtlAttr.OrderBySQLExp, "格式1: MyFile1,MyField2 ,格式2: MyFile1 DESC  就是SQL语句的 Ordery By 后面的字符串，默认按照 OID (输入的顺序)排序.");
 
-                //列自动计算表达式.
-                //map.AddTBString(MapDtlAttr.ColAutoExp, null, "列自动计算", true, false, 0, 200, 20, true);
-                //map.SetHelperAlert(MapDtlAttr.ColAutoExp, "格式为:@XiaoJi:Sum@NingLing:Avg 要对小计求合计,对年龄求平均数.不配置不显示.");
-
+               
                 //要显示的列.
                 map.AddTBString(MapDtlAttr.ShowCols, null, "显示的列", true, false, 0, 500, 20, true);
                 map.SetHelperAlert(MapDtlAttr.ShowCols, "默认为空,全部显示,如果配置了就按照配置的计算,格式为:field1,field2");
@@ -923,6 +919,7 @@ namespace BP.WF.Template.Frm
                 #endregion 导入导出填充.
 
                 #region 超链接.
+                map.AddGroupAttr("超链接");
                 map.AddBoolean(MapDtlAttr.IsEnableLink, false, "相关功能1", true, true);
                 map.AddTBString(MapDtlAttr.LinkLabel, "", "超连接/功能标签", true, false, 0, 50, 100);
                 map.AddDDLSysEnum(MapDtlAttr.ExcType, 0, "执行类型", true, true, "ExcType",
@@ -940,6 +937,7 @@ namespace BP.WF.Template.Frm
                 #endregion 超链接.
 
                 #region 工作流相关.
+                map.AddGroupAttr("工作流相关");
                 //add 2014-02-21.
                 map.AddBoolean(MapDtlAttr.IsCopyNDData, true, "是否允许copy节点数据", true, true);
                 map.AddTBInt(MapDtlAttr.FK_Node, 0, "节点(用户独立表单权限控制)", false, false);
@@ -951,6 +949,7 @@ namespace BP.WF.Template.Frm
                 #endregion 工作流相关.
 
                 #region 相关方法.
+                map.AddGroupMethod("基本功能");
                 RefMethod rm = new RefMethod();
                 rm = new RefMethod();
                 rm.Title = "隐藏字段"; // "设计表单";
@@ -1023,8 +1022,9 @@ namespace BP.WF.Template.Frm
                 #endregion 相关方法.
 
                 #region 实验中的功能.
+                map.AddGroupMethod("实验中的功能");
                 rm = new RefMethod();
-                rm.GroupName = "实验中的功能";
+               // rm.GroupName = "实验中的功能";
                 rm.Title = "列自动计算"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".ColAutoExp";
                 // rm.Icon = "../Img/Setting.png";
@@ -1036,7 +1036,7 @@ namespace BP.WF.Template.Frm
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "实验中的功能";
+              //  rm.GroupName = "实验中的功能";
                 rm.Title = "数据导入"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DtlImp";
                 //rm.Icon = "../Img/Setting.png";
@@ -1048,7 +1048,7 @@ namespace BP.WF.Template.Frm
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "实验中的功能";
+              ///  rm.GroupName = "实验中的功能";
                 rm.Title = "数据导入v2019"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DtlImpV2019";
                 //rm.Icon = "../Img/Setting.png";
@@ -1061,7 +1061,7 @@ namespace BP.WF.Template.Frm
 
 
                 rm = new RefMethod();
-                rm.GroupName = "实验中的功能";
+               // rm.GroupName = "实验中的功能";
                 rm.Title = "事件"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoAction";
                 //  rm.Icon = "../Img/Setting.png";
@@ -1270,9 +1270,18 @@ namespace BP.WF.Template.Frm
             attrs.Retrieve(MapAttrAttr.FK_MapData, refDtl);
             foreach (MapAttr attr in attrs)
             {
+                string oldMyPK = attr.MyPK;
                 attr.setMyPK(this.No + "_" + attr.KeyOfEn);
                 attr.setFK_MapData(this.No);
                 attr.Insert();
+                //存在字段附件
+                if(attr.UIContralType == UIContralType.AthShow)
+                {
+                    BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(oldMyPK);
+                    athDesc.MyPK = attr.MyPK;
+                    athDesc.setFK_MapData(this.No);
+                    athDesc.DirectInsert();
+                }
             }
 
             //处理mapExt 的问题.
@@ -1397,7 +1406,6 @@ namespace BP.WF.Template.Frm
                 }
             }
 
-
             //获得事件实体.
             var febd = BP.Sys.Base.Glo.GetFormDtlEventBaseByEnName(this.No);
             if (febd == null)
@@ -1439,7 +1447,6 @@ namespace BP.WF.Template.Frm
         {
             MapDtl dtl = new MapDtl();
             dtl.No = this.No;
-            dtl.setFK_MapData(this.FK_MapData);
             dtl.Delete();
 
             //删除分组

@@ -86,27 +86,11 @@ namespace BP.Port
         }
         #endregion
 
-        #region 扩展属性
-
-        #endregion
-
         #region 构造函数
         /// <summary>
         /// 工作部门人员信息
         /// </summary> 
         public DeptEmp() { }
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="deptNo">部门编号</param>
-        /// <param name="empNo">人员编号</param>
-        public DeptEmp(string deptNo, string empNo)
-        {
-            this.FK_Dept = deptNo;
-            this.FK_Emp = empNo;
-            this.setMyPK(this.FK_Dept + "_" + this.FK_Emp);
-            this.Retrieve();
-        }
         /// <summary>
         /// 重写基类方法
         /// </summary>
@@ -120,7 +104,6 @@ namespace BP.Port
                 Map map = new Map("Port_DeptEmp", "部门人员信息");
                 map.IndexField = DeptEmpAttr.FK_Dept;
 
-                
                 map.AddMyPK();
                 map.AddTBString(DeptEmpAttr.FK_Dept, null, "部门", false, false, 1, 50, 1);
                 map.AddDDLEntities(DeptEmpAttr.FK_Emp, null, "操作员", new BP.Port.Emps(), false);
@@ -131,6 +114,17 @@ namespace BP.Port
             }
         }
         #endregion
+
+        protected override bool beforeDelete()
+        {
+            BP.Sys.Base.Glo.WriteUserLog("删除:" + this.ToJson(), "组织数据操作");
+            return base.beforeDelete();
+        }
+        protected override bool beforeInsert()
+        {
+            BP.Sys.Base.Glo.WriteUserLog("新建:" + this.ToJson(), "组织数据操作");
+            return base.beforeInsert();
+        }
 
         /// <summary>
         /// 更新前做的事情

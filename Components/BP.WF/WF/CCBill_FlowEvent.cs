@@ -47,7 +47,13 @@ namespace BP.WF
                     //设置值.
                     geEn.SetValByKey(key, row.GetValByKey(key));
                 }
+                
+                geEn.OID = dictWorkID;
                 geEn.Update(); //更新.
+
+                //修改实体信息.
+                BP.CCBill.Dev2Interface.Dict_AddTrack(dictFrmID, wn.WorkID.ToString(), CCBill.FrmActionType.FlowBaseData, "流程修改实体数据",
+                  geEn.ToJson(), wn.HisFlow.No, wn.HisFlow.Name, wn.HisNode.NodeID, wn.WorkID);
 
                 //更新从表.
                 //  MapDtls dtls = new MapDtls(flowFrmID);

@@ -8,7 +8,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Collections; 
+using System.Collections;
 using System.Collections.Specialized;
 using System.Web;
 using BP.DA;
@@ -18,39 +18,39 @@ using BP.Sys;
 
 namespace BP.En
 {
-	public class EntityDBAccess
-	{
-		#region 对实体的基本操作
-		/// <summary>
-		/// 删除
-		/// </summary>
-		/// <param name="en"></param>
-		/// <returns></returns>
-		public static int Delete(Entity en) 
-		{
-			if (en.EnMap.EnType==EnType.View)
-				return 0;
+    public class EntityDBAccess
+    {
+        #region 对实体的基本操作
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="en"></param>
+        /// <returns></returns>
+        public static int Delete(Entity en)
+        {
+            if (en.EnMap.EnType == EnType.View)
+                return 0;
 
-			switch(en.EnMap.EnDBUrl.DBUrlType)
-			{
-				case DBUrlType.AppCenterDSN :
-                    return DBAccess.RunSQL(en.SQLCash.Delete, SqlBuilder.GenerParasPK(en) );
-				default :
-					throw new Exception("@没有设置类型。");
-			}
-		}
-		/// <summary>
-		/// 更新
-		/// </summary>
-		/// <param name="en">产生要更新的语句</param>
-		/// <param name="keys">要更新的属性(null,认为更新全部)</param>
-		/// <returns>sql</returns>
-		public static int Update(Entity en, string[] keys)
-		{
-			if (en.EnMap.EnType==EnType.View)
-				return 0;
+            switch (en.EnMap.EnDBUrl.DBUrlType)
+            {
+                case DBUrlType.AppCenterDSN:
+                    return DBAccess.RunSQL(en.SQLCash.Delete, SqlBuilder.GenerParasPK(en));
+                default:
+                    throw new Exception("@没有设置类型。");
+            }
+        }
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <param name="en">产生要更新的语句</param>
+        /// <param name="keys">要更新的属性(null,认为更新全部)</param>
+        /// <returns>sql</returns>
+        public static int Update(Entity en, string[] keys)
+        {
+            if (en.EnMap.EnType == EnType.View)
+                return 0;
 
-            var paras= SqlBuilder.GenerParas(en, keys);
+            var paras = SqlBuilder.GenerParas(en, keys);
             string sql = en.SQLCash.GetUpdateSQL(en, keys);
             try
             {
@@ -64,11 +64,9 @@ namespace BP.En
                             case DBType.MySQL:
                             case DBType.PostgreSQL:
                             case DBType.UX:
+                            case DBType.KingBaseR3:
+                            case DBType.KingBaseR6:
                                 return DBAccess.RunSQL(sql, paras);
-                            case DBType.Informix:
-                                return DBAccess.RunSQL(en.SQLCash.GetUpdateSQL(en, keys), SqlBuilder.GenerParas_Update_Informix(en, keys));
-                            case DBType.Access:
-                                return DBAccess.RunSQL(SqlBuilder.UpdateOfMSAccess(en, keys));
                             default:
                                 //return DBAccess.RunSQL(en.SQLCash.GetUpdateSQL(en, keys),
                                 //    SqlBuilder.GenerParas(en, keys));
@@ -91,7 +89,7 @@ namespace BP.En
                                 }
                                 else
                                 {
-                                    return DBAccess.RunSQL(en.SQLCash.GetUpdateSQL(en, keys), 
+                                    return DBAccess.RunSQL(en.SQLCash.GetUpdateSQL(en, keys),
                                         SqlBuilder.GenerParas(en, keys));
                                 }
                                 break;
@@ -115,14 +113,14 @@ namespace BP.En
                     en.CheckPhysicsTable();
                 throw ex;
             }
-		}
-		#endregion 
-	
-		#region 产生序列号码方法
-		 
-		#endregion
+        }
+        #endregion
 
-        public static int RetrieveV2(Entity en, string sql,Paras paras)
+        #region 产生序列号码方法
+
+        #endregion
+
+        public static int RetrieveV2(Entity en, string sql, Paras paras)
         {
             try
             {
@@ -132,7 +130,7 @@ namespace BP.En
                     case DBUrlType.AppCenterDSN:
                         dt = DBAccess.RunSQLReturnTable(sql, paras);
                         break;
-                    
+
                     default:
                         throw new Exception("@没有设置DB类型。");
                 }
@@ -152,13 +150,13 @@ namespace BP.En
         }
         public static int Retrieve(Entity en, string sql, Paras paras)
         {
-            DataTable dt ;
+            DataTable dt;
             switch (en.EnMap.EnDBUrl.DBUrlType)
             {
                 case DBUrlType.AppCenterDSN:
                     dt = DBAccess.RunSQLReturnTable(sql, paras);
                     break;
-                
+
                 default:
                     throw new Exception("@没有设置DB类型。");
             }
@@ -171,12 +169,12 @@ namespace BP.En
             dt.Dispose();
             return num;
         }
-		/// <summary>
-		/// 查询
-		/// </summary>
-		/// <param name="en">实体</param>
-		/// <param name="sql">组织的查询语句</param>
-		/// <returns></returns>
+        /// <summary>
+        /// 查询
+        /// </summary>
+        /// <param name="en">实体</param>
+        /// <param name="sql">组织的查询语句</param>
+        /// <returns></returns>
         public static int Retrieve(Entity en, string sql)
         {
             try
@@ -187,7 +185,7 @@ namespace BP.En
                     case DBUrlType.AppCenterDSN:
                         dt = DBAccess.RunSQLReturnTable(sql);
                         break;
-                     
+
                     default:
                         throw new Exception("@没有设置DB类型。");
                 }
@@ -205,18 +203,51 @@ namespace BP.En
                 throw ex;
             }
         }
-		private static void fullDate(DataTable dt, Entity en, Attrs attrs )
-		{
+        private static void fullDate(DataTable dt, Entity en, Attrs attrs)
+        {
             //判断是否加密.
             if (en.EnMap.IsJM == false)
             {
+                string parafields = en.EnMap.ParaFields;
+                if (parafields == null)
+                {
+                    foreach (Attr attr in attrs)
+                    {
+                        en.Row.SetValByKey(attr.Key, dt.Rows[0][attr.Key]);
+                    }
+                    return;
+                }
+
+                if (dt.Columns.Contains("AtPara") == false)
+                    throw new Exception("err@实体类[" + en.EnMap.EnDesc + "_" + en.ToString() + "] 缺少AtPara字段.");
+
+                AtPara ap = new AtPara(dt.Rows[0]["AtPara"].ToString());
                 foreach (Attr attr in attrs)
                 {
+                    //如果是参数字段.
+                    if (parafields.Contains(attr.Key + ",") == true)
+                    {
+                        en.Row.SetValByKey(attr.Key, ap.GetValStrByKey(attr.Key));
+                        continue;
+                    }
+
+                    //判断枚举字段是否是参数字段.
+                    if (attr.IsRefAttr == true && dt.Columns.Contains(attr.Key) == false)
+                    {
+                        string key = attr.Key.Replace("Text", "");
+                        Attr enumAttr = attrs.GetAttrByKey(key);
+
+                        AtPara apcfg = new AtPara(enumAttr.UITag);
+                        string enumVal = en.Row[key].ToString();
+                        en.Row.SetValByKey(attr.Key, apcfg.GetValStrByKey(enumVal));
+                        continue;
+                    }
+
                     en.Row.SetValByKey(attr.Key, dt.Rows[0][attr.Key]);
                 }
                 return;
             }
-            
+
             //执行解密.
             foreach (Attr attr in attrs)
             {
@@ -239,7 +270,7 @@ namespace BP.En
                     case DBUrlType.AppCenterDSN:
                         dt = DBAccess.RunSQLReturnTable(sql);
                         break;
-                   
+
                     default:
                         throw new Exception("@没有设置DB类型。");
                 }
@@ -274,13 +305,13 @@ namespace BP.En
         }
         public static int Retrieve(Entities ens, string sql, Paras paras, string[] fullAttrs)
         {
-            DataTable dt =null;
+            DataTable dt = null;
             switch (ens.GetNewEntity.EnMap.EnDBUrl.DBUrlType)
             {
                 case DBUrlType.AppCenterDSN:
                     dt = DBAccess.RunSQLReturnTable(sql, paras);
                     break;
-              
+
                 default:
                     throw new Exception("@没有设置DB类型。");
             }
@@ -296,6 +327,6 @@ namespace BP.En
             return i;
             //return dt.Rows.Count;
         }
-	}
-	
+    }
+
 }

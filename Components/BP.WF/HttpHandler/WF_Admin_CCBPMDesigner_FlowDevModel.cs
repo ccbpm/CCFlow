@@ -62,18 +62,15 @@ namespace BP.WF.HttpHandler
             string FlowName = GetRequestVal("FlowName");
             string url = GetRequestVal("Url");
 
-            string FrmUrl = GetRequestVal("FrmUrl");
-            string FrmID = GetRequestVal("FrmID");
+            string frmURL = GetRequestVal("FrmUrl");
             //执行创建流程模版.
-            string flowNo = BP.WF.Template.TemplateGlo.NewFlow(SortNo, FlowName, DataStoreModel.ByCCFlow, null, null);
+            string flowNo = BP.WF.Template.TemplateGlo.NewFlowTemplate(SortNo, FlowName, DataStoreModel.ByCCFlow, null, null);
             Flow fl = new Flow(flowNo);
             fl.FlowDevModel = this.FlowDevModel; //流程开发模式.
-            fl.HisDataStoreModel = DataStoreModel.SpecTable;
-            fl.FrmUrl = FrmUrl;
-            if (DataType.IsNullOrEmpty(FrmID) == true|| FrmID.Equals("undefined"))
-                fl.FrmUrl = FrmUrl;
-            else
-                fl.FrmUrl = FrmID;
+            if (this.FlowDevModel == FlowDevModel.JiJian)
+                frmURL = "ND" + int.Parse(flowNo + "01");
+
+            fl.FrmUrl = frmURL;
             fl.Update();
 
             //设置极简类型的表单信息.
@@ -89,7 +86,7 @@ namespace BP.WF.HttpHandler
                         nd.FrmWorkCheckSta = FrmWorkCheckSta.Enable;
 
                         FrmNode fn = new FrmNode();
-                        fn.FK_Frm = nd.NodeFrmID; 
+                        fn.FK_Frm = nd.NodeFrmID;
                         fn.IsEnableFWC = FrmWorkCheckSta.Enable;
                         fn.FK_Node = nd.NodeID;
                         fn.FK_Flow = flowNo;
@@ -109,7 +106,7 @@ namespace BP.WF.HttpHandler
                 nds.Retrieve(NodeAttr.FK_Flow, fl.No);
                 foreach (Node nd in nds)
                 {
-                   //表单方案的保存
+                    //表单方案的保存
                     FrmNode fn = new FrmNode();
                     fn.FK_Frm = nd.NodeFrmID;
                     //fn.IsEnableFWC = FrmWorkCheckSta.Enable;
@@ -121,7 +118,7 @@ namespace BP.WF.HttpHandler
                     fn.Save();
                     nd.HisFormType = NodeFormType.FoolTruck;
                     nd.DirectUpdate();
-                   
+
                 }
             }
             //设置绑定表单库的表单信息.
@@ -132,7 +129,7 @@ namespace BP.WF.HttpHandler
                 foreach (Node nd in nds)
                 {
                     nd.NodeFrmID = fl.FrmUrl;
-                    if(nd.IsStartNode == true)
+                    if (nd.IsStartNode == true)
                         nd.FrmWorkCheckSta = FrmWorkCheckSta.Disable;
                     else
                         nd.FrmWorkCheckSta = FrmWorkCheckSta.Enable;
@@ -146,22 +143,56 @@ namespace BP.WF.HttpHandler
                         fn.IsEnableFWC = FrmWorkCheckSta.Disable;
                         fn.FrmSln = FrmSln.Default;
                     }
-                       
                     else
                     {
                         fn.IsEnableFWC = FrmWorkCheckSta.Enable;
                         fn.FrmSln = FrmSln.Readonly;
                     }
-                        
+
                     fn.FK_Node = nd.NodeID;
                     fn.FK_Flow = flowNo;
                     fn.FrmSln = FrmSln.Readonly;
                     fn.setMyPK(fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow);
                     //执行保存.
-                    fn.Save(); 
+                    fn.Save();
                 }
             }
 
+            //绑定表单库的表单,现在绑定了一个表单
+            if (this.FlowDevModel == FlowDevModel.FrmTree)
+            {
+                Nodes nds = new Nodes();
+                nds.Retrieve(NodeAttr.FK_Flow, fl.No, null);
+                foreach (Node nd in nds)
+                {
+                    //nd.setNodeFrmID(fl.getFrmUrl());
+                    if (nd.IsStartNode == true)
+                        nd.FrmWorkCheckSta = FrmWorkCheckSta.Disable;
+                    else
+                        nd.FrmWorkCheckSta = FrmWorkCheckSta.Enable;
+                    nd.HisFormType = NodeFormType.SheetTree;
+                    nd.DirectUpdate();
+                    FrmNode fn = new FrmNode();
+                    fn.FK_Frm = fl.FrmUrl;
+                    if (nd.IsStartNode == true)
+                    {
+                        fn.IsEnableFWC = FrmWorkCheckSta.Disable;
+                        fn.FrmSln = FrmSln.Default;
+                    }
+                    else
+                    {
+                        fn.IsEnableFWC = FrmWorkCheckSta.Enable;
+                        fn.FrmSln = FrmSln.Readonly;
+                    }
+
+                    fn.FK_Node = nd.NodeID;
+                    fn.FK_Flow = flowNo;
+                    fn.FrmSln = FrmSln.Readonly;
+                    fn.setMyPK(fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow);
+                    //执行保存.
+                    fn.Save();
+                }
+            }
             if (this.FlowDevModel == FlowDevModel.SDKFrm)
             {
                 Nodes nds = new Nodes();
@@ -183,7 +214,6 @@ namespace BP.WF.HttpHandler
                     nd.FormUrl = fl.FrmUrl;
                     nd.DirectUpdate();
                 }
-
             }
 
             ///保存模式.
@@ -233,7 +263,7 @@ namespace BP.WF.HttpHandler
                 string FrmUrl = this.GetRequestVal("FrmUrl");
                 string FlowVersion = this.GetRequestVal("FlowVersion");
 
-                string flowNo = BP.WF.Template.TemplateGlo.NewFlow(FlowSort, FlowName,
+                string flowNo = BP.WF.Template.TemplateGlo.NewFlowTemplate(FlowSort, FlowName,
                         Template.DataStoreModel.SpecTable, PTable, FlowMark);
 
                 Flow fl = new Flow(flowNo);

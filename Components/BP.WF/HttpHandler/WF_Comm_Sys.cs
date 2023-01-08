@@ -25,7 +25,7 @@ namespace BP.WF.HttpHandler
             DecryptAndEncryptionHelper.DecryptAndEncryptionHelper en = new DecryptAndEncryptionHelper.DecryptAndEncryptionHelper();
             return en.Encrypto(str);
 
-           // DecryptAndEncryptionHelper.Encrypto decode = new DecryptAndEncryptionHelper.decode();
+            // DecryptAndEncryptionHelper.Encrypto decode = new DecryptAndEncryptionHelper.decode();
             //eturn decode.decode_exe(str);
         }
         public string ImpData_Init()
@@ -63,7 +63,7 @@ namespace BP.WF.HttpHandler
                         count++;
                         successInfo += "&nbsp;&nbsp;<span>MyPK=" + en.PKVal + "的导入成功</span><br/>";
                     }
-                    
+
                 }
             }
 
@@ -77,7 +77,7 @@ namespace BP.WF.HttpHandler
                     en = (EntityMyPK)ens.GetNewEntity;
                     //给实体赋值
                     errInfo += SetEntityAttrVal("", dr, attrs, en, dt, 1);
-                    
+
                     //获取PKVal
                     en.PKVal = en.InitMyPKVals();
                     if (en.RetrieveFromDBSources() == 0)
@@ -96,7 +96,7 @@ namespace BP.WF.HttpHandler
             }
             #endregion
 
-            return "errInfo=" + errInfo + "@Split" + "count=" + count + "@Split" + "successInfo=" + successInfo+"@Split"+"changeCount="+changeCount;
+            return "errInfo=" + errInfo + "@Split" + "count=" + count + "@Split" + "successInfo=" + successInfo + "@Split" + "changeCount=" + changeCount;
         }
         /// <summary>
         /// 执行导入
@@ -120,7 +120,7 @@ namespace BP.WF.HttpHandler
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + ext;
 
             //文件存放路径
-            string filePath =  BP.Difference.SystemConfig.PathOfTemp + "/" + fileNewName;
+            string filePath = BP.Difference.SystemConfig.PathOfTemp + "/" + fileNewName;
             //files[0].SaveAs(filePath);
             HttpContextHelper.UploadFile(files[0], filePath);
             //从excel里面获得数据表.
@@ -136,13 +136,13 @@ namespace BP.WF.HttpHandler
             Entities ens = ClassFactory.GetEns(this.EnsName);
             Entity en = ens.GetNewEntity;
 
-            if(en.PK.Equals("MyPK") == true)
+            if (en.PK.Equals("MyPK") == true)
                 return this.ImpData_DoneMyPK(ens, dt);
 
             if (en.IsNoEntity == false)
             {
                 return "err@必须是EntityNo或者EntityMyPK实体,才能导入.";
-            } 
+            }
 
             string noColName = ""; //实体列的编号名称.
             string nameColName = ""; //实体列的名字名称.
@@ -320,7 +320,7 @@ namespace BP.WF.HttpHandler
                     else
                         en.Update();
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -346,7 +346,7 @@ namespace BP.WF.HttpHandler
             string expFileName = "all-wcprops,dir-prop-base,entries";
             string expDirName = ".svn";
 
-            string pathDir =  BP.Difference.SystemConfig.PathOfData + "JSLib/";
+            string pathDir = BP.Difference.SystemConfig.PathOfData + "JSLib/";
 
             string html = "";
             html += "<fieldset>";
@@ -375,7 +375,7 @@ namespace BP.WF.HttpHandler
             }
             html += "</fieldset>";
 
-            pathDir =  BP.Difference.SystemConfig.PathOfDataUser + "JSLib/";
+            pathDir = BP.Difference.SystemConfig.PathOfDataUser + "JSLib/";
             html += "<fieldset>";
             html += "<legend>" + "用户自定义函数. 位置:" + pathDir + "</legend>";
 
@@ -450,7 +450,7 @@ namespace BP.WF.HttpHandler
                     }
                     if (attr.MyFieldType == FieldType.PKEnum || attr.MyFieldType == FieldType.Enum)
                     {
-                        sql = "SELECT " + attr.Field + " FROM " + map.PhysicsTable + " WHERE " + attr.Field + " NOT IN ( select Intkey from sys_enum WHERE ENUMKEY='" + attr.UIBindKey + "' )";
+                        sql = "SELECT " + attr.Field + " FROM " + map.PhysicsTable + " WHERE " + attr.Field + " NOT IN ( select Intkey FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE ENUMKEY='" + attr.UIBindKey + "' )";
                         dt = DBAccess.RunSQLReturnTable(sql);
                         if (dt.Rows.Count == 0)
                             continue;
@@ -487,25 +487,162 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
-        public string SystemClass_Fields()
+        public string SystemClass_Fields_UI()
         {
-            Entities ens = ClassFactory.GetEns(this.EnsName);
+            return SystemClass_Fields_UI_Ext(this.EnsName);
+        }
+        public string SystemClass_Fields_UI_Ext(string ensName)
+        {
+            Entities ens = ClassFactory.GetEns(ensName);
             Entity en = ens.GetNewEntity;
 
             BP.En.Map map = en.EnMap;
             en.CheckPhysicsTable();
 
-            string html = "<table>";
+            string html = "<table style='width:95%;font-size'>";
 
-            html += "<caption>数据结构" + map.EnDesc + "," + map.PhysicsTable + "</caption>";
+            html += "<caption>" + map.EnDesc + "," + ensName + "," + map.PhysicsTable + "</caption>";
+
+            //html += "<tr>";
+            //html += "<th colspan=8> " + map.EnDesc + ","+ensName+"," + map.PhysicsTable + " </th>";
+            //html += "</tr>";
 
             html += "<tr>";
-            html += "<th>序号</th>";
+            html += "<th>#</th>";
             html += "<th>描述</th>";
-            html += "<th>属性</th>";
-            html += "<th>物理字段</th>";
-            html += "<th>数据类型</th>";
-            html += "<th>关系类型</th>";
+            html += "<th>字段</th>";
+            html += "<th>类型</th>";
+            //   html += "<th>关系</th>";
+            html += "<th>控件/外观/长度</th>";
+            html += "<th>备注</th>";
+            //      html += "<th>默认值</th>";
+            html += "</tr>";
+
+            int i = 0;
+            foreach (Attr attr in map.Attrs)
+            {
+                if (attr.MyFieldType == FieldType.RefText)
+                    continue;
+                i++;
+                html += "<tr>";
+                html += "<td>" + i + "</td>";
+                html += "<td>" + attr.Desc + "</td>";
+                html += "<td>" + attr.Key + "</td>";
+                //   html += "<td>" + attr.Field + "</td>";
+                html += "<td>" + attr.MyDataTypeStr + "</td>";
+                // html += "<td>" + attr.MyFieldType.ToString() + "</td>";
+                string desc = "";
+                if (attr.UIVisible == true)
+                    desc += "可见,";
+                else
+                    desc += "不可见,";
+
+                if (attr.UIIsReadonly == false)
+                    desc += "可编辑";
+                else
+                    desc += "不可编辑";
+
+                switch (attr.MyDataType)
+                {
+                    case DataType.AppBoolean:
+                        html += "<td>选择框," + desc + "</td>";
+                        break;
+                    case DataType.AppDouble:
+                    case DataType.AppFloat:
+                    case DataType.AppInt:
+                        if (attr.MyFieldType == FieldType.Enum)
+                        {
+                            html += "<td>下拉框," + desc + "</td>";
+                            break;
+                        }
+                        else
+                        {
+                            html += "<td>数值文本框," + desc + "</td>";
+                        }
+                        break;
+                    case DataType.AppMoney:
+                        html += "<td>金额文本框," + desc + "</td>";
+                        break;
+                    case DataType.AppDate:
+                        html += "<td>日期文本框," + desc + "</td>";
+                        break;
+                    case DataType.AppDateTime:
+                        html += "<td>日期时间文本框," + desc + "</td>";
+                        break;
+                    default:
+                        if (attr.MyFieldType == FieldType.FK)
+                        {
+                            html += "<td>下拉框(" + attr.MinLength + "/" + attr.MaxLength + ")," + desc + "</td>";
+                        }
+                        else
+                        {
+                            html += "<td>文本框(" + attr.MinLength + "/" + attr.MaxLength + ")," + desc + "</td>";
+                        }
+                        break;
+                }
+
+                string defVal = "";
+                if (DataType.IsNullOrEmpty(attr.DefaultValOfReal) == false)
+                    defVal += "默认值:" + attr.DefaultValOfReal + "";
+
+                switch (attr.MyFieldType)
+                {
+                    case FieldType.Enum:
+                    case FieldType.PKEnum:
+                        try
+                        {
+                            SysEnums ses = new SysEnums(attr.UIBindKey);
+                            string str = "";
+                            foreach (SysEnum se in ses)
+                            {
+                                str += se.IntKey + "&nbsp;" + se.Lab + ",";
+                            }
+                            html += "<td>" + str + defVal + "</td>";
+                        }
+                        catch
+                        {
+                            html += "<td>" + defVal + "</td>";
+
+                        }
+                        break;
+                    case FieldType.FK:
+                    case FieldType.PKFK:
+                        Entities myens = ClassFactory.GetEns(attr.UIBindKey);
+                        html += "<td>表/视图:" + myens.GetNewEntity.EnMap.PhysicsTable + " 关联字段:" + attr.UIRefKeyValue + "," + attr.UIRefKeyText + defVal + "</td>";
+                        break;
+                    default:
+                        html += "<td>" + defVal + "</td>";
+                        break;
+                }
+                html += "</tr>";
+            }
+            html += "</table>";
+
+            //  html += "<div style='text-align:center;' >(表:数据结构" + map.EnDesc + "," + ensName + "," + map.PhysicsTable + ")</div>";
+
+            return html;
+        }
+        public string SystemClass_Fields()
+        {
+            return SystemClass_Fields_Ext(this.EnsName);
+        }
+        public string SystemClass_Fields_Ext(string ensName)
+        {
+            Entities ens = ClassFactory.GetEns(ensName);
+            Entity en = ens.GetNewEntity;
+
+            BP.En.Map map = en.EnMap;
+            en.CheckPhysicsTable();
+
+            string html = "";
+            html += "<center>" + map.EnDesc + "," + map.PhysicsTable + "</center>";
+            html += "<table>";
+            html += "<tr>";
+            html += "<th>#</th>";
+            html += "<th>描述</th>";
+            html += "<th>字段</th>";
+            html += "<th>类型</th>";
+            html += "<th>关系</th>";
             html += "<th>长度</th>";
             html += "<th>对应</th>";
             html += "<th>默认值</th>";
@@ -520,7 +657,7 @@ namespace BP.WF.HttpHandler
                 html += "<tr>";
                 html += "<td>" + i + "</td>";
                 html += "<td>" + attr.Desc + "</td>";
-                html += "<td>" + attr.Key + "</td>";
+                //   html += "<td>" + attr.Key + "</td>";
                 html += "<td>" + attr.Field + "</td>";
                 html += "<td>" + attr.MyDataTypeStr + "</td>";
                 html += "<td>" + attr.MyFieldType.ToString() + "</td>";
@@ -573,6 +710,54 @@ namespace BP.WF.HttpHandler
             return html;
         }
 
+        /// <summary>
+        /// 系统日志
+        /// </summary>
+        /// <returns></returns>
+        public string SystemLog_Init()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("No");
+            dt.Columns.Add("Name");
+            dt.Columns.Add("LogType");
+
+            string path = SystemConfig.PathOfDataUser + "\\Log\\info";
+            string[] strs = System.IO.Directory.GetFiles(path);
+            foreach (string str in strs)
+            {
+                DataRow dr = dt.NewRow();
+                dr[0] = str.Substring(str.IndexOf("info") + 5);
+                dr[1] = str.Substring(str.IndexOf("info") + 5);
+                dr[2] = "信息";
+                // dr[1] = str;
+                dt.Rows.Add(dr);
+            }
+
+            path = SystemConfig.PathOfDataUser + "\\Log\\error";
+            strs = System.IO.Directory.GetFiles(path);
+            foreach (string str in strs)
+            {
+                DataRow dr = dt.NewRow();
+                dr[0] = str.Substring(str.IndexOf("error") + 6);
+                dr[1] = str.Substring(str.IndexOf("error") + 6);
+                dr[2] = "错误";
+                dt.Rows.Add(dr);
+            }
+            return BP.Tools.Json.ToJson(dt);
+        }
+        public string SystemLog_Open()
+        {
+            string logType = this.GetRequestVal("LogType");
+            if (logType.Equals("信息") == true)
+                logType = "info";
+            else
+                logType = "error";
+
+            string path = SystemConfig.PathOfDataUser + "\\Log\\" + logType + "\\" + this.RefNo;
+            string str = BP.DA.DataType.ReadTextFile2Html(path);
+            return str;
+        }
+
         public string SystemClass_Init()
         {
             DataTable dt = new DataTable();
@@ -589,8 +774,24 @@ namespace BP.WF.HttpHandler
                 try
                 {
                     en = obj as Entity;
+                    string className = en.ToString();
+                    switch (className.ToUpper())
+                    {
+                        case "BP.WF.STARTWORK":
+                        case "BP.WF.WORK":
+                        case "BP.WF.GESTARTWORK":
+                        case "BP.EN.GENONAME":
+                        case "BP.EN.GETREE":
+                        case "BP.WF.GERpt":
+                        case "BP.WF.GEENTITY":
+                        case "BP.WF.GEWORK":
+                        case "BP.SYS.TSENTITYNONAME":
+                            continue;
+                        default:
+                            break;
+                    }
                     string s = en.EnDesc;
-                    if (en == null )
+                    if (en == null)
                         continue;
                 }
                 catch
@@ -702,12 +903,12 @@ namespace BP.WF.HttpHandler
             if (files.Count == 0)
                 return "err@请选择要上传的流程模版。";
             string fileName = files[0].FileName;
-            string savePath =  BP.Difference.SystemConfig.PathOfDataUser + "JSLibData" + "/" + fileName;
+            string savePath = BP.Difference.SystemConfig.PathOfDataUser + "JSLibData" + "/" + fileName;
 
             //存在文件则删除
             if (System.IO.Directory.Exists(savePath) == true)
                 System.IO.Directory.Delete(savePath);
-            
+
             //files[0].SaveAs(savePath);
             HttpContextHelper.UploadFile(files[0], savePath);
             return "脚本" + fileName + "导入成功";
@@ -725,7 +926,7 @@ namespace BP.WF.HttpHandler
             string directory = frmID + "/" + this.WorkIDStr + "/";
             // 随便文件名
             string fileName = DBAccess.GenerGUID(4) + ".jpg";
-            string savePath =  BP.Difference.SystemConfig.PathOfDataUser + "UploadFile" + "/" + directory;
+            string savePath = BP.Difference.SystemConfig.PathOfDataUser + "UploadFile" + "/" + directory;
 
             if (System.IO.Directory.Exists(savePath) == false)
                 System.IO.Directory.CreateDirectory(savePath);
@@ -738,8 +939,8 @@ namespace BP.WF.HttpHandler
             HttpContextHelper.UploadFile(files[0], savePath);
             Hashtable ht = new Hashtable();
             ht.Add("code", 0);
-            ht.Add("msg","success");
-            savePath =  "DataUser/" + "UploadFile" + "/" + directory  + fileName;
+            ht.Add("msg", "success");
+            savePath = "DataUser/" + "UploadFile" + "/" + directory + fileName;
             ht.Add("data", savePath);
             return BP.Tools.Json.ToJson(ht);
         }
@@ -750,7 +951,7 @@ namespace BP.WF.HttpHandler
          */
         public string javaScriptFiles()
         {
-            String savePath =  BP.Difference.SystemConfig.PathOfDataUser + "JSLibData";
+            String savePath = BP.Difference.SystemConfig.PathOfDataUser + "JSLibData";
 
             DirectoryInfo di = new DirectoryInfo(savePath);
             //找到该目录下的文件 

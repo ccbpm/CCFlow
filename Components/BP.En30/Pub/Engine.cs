@@ -1280,7 +1280,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
 
                 #region 审核组件组合信息，added by liuxc,2016-12-16
 
-                //节点单个审核人 @Hongyan
+                //节点单个审核人
                 // 根据track表获取审核的节点
                 if (dtTrack != null && str.Contains("<WorkCheckBegin>") == false
                         && str.Contains("<WorkCheckEnd>") == false)

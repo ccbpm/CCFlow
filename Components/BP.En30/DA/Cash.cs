@@ -9,12 +9,61 @@ using BP.Web;
 using BP.Difference;
 
 namespace BP.DA
-{	 
-	/// <summary>
-	/// Cash 的摘要说明。
-	/// </summary>
+{
+
+    /// <summary>
+    /// Cash 的摘要说明。
+    /// </summary>
     public class Cash
     {
+        public static void ClearCash(string enName)
+        {
+            if (_BS_Cash != null)
+            {
+                if (_BS_Cash.ContainsKey(enName) == true)
+                    _BS_Cash.Remove(enName);
+            }
+
+            if (_SQL_Cash != null)
+            {
+                if (_SQL_Cash.ContainsKey(enName) == true)
+                    _SQL_Cash.Remove(enName);
+            }
+
+
+            if (_EnsData_Cash != null)
+            {
+                if (_EnsData_Cash.ContainsKey(enName) == true)
+                    _EnsData_Cash.Remove(enName);
+            }
+
+            if (_Map_Cash != null)
+            {
+                if (_Map_Cash.ContainsKey(enName) == true)
+                    _Map_Cash.Remove(enName);
+            }
+
+            if (_EnsData_Cash_Ext != null)
+            {
+                if (_EnsData_Cash_Ext.ContainsKey(enName) == true)
+                    _EnsData_Cash_Ext.Remove(enName);
+            }
+
+            if (_Bill_Cash != null)
+            {
+                if (_Bill_Cash.ContainsKey(enName) == true)
+                    _Bill_Cash.Remove(enName);
+            }
+
+            if (_Row_Cash != null)
+            {
+                if (_Row_Cash.ContainsKey(enName) == true)
+                    _Row_Cash.Remove(enName);
+            }
+
+            //清除
+          //  Cash2019.ClearCash();
+        }
         /// <summary>
         /// 清空缓存.
         /// </summary>
@@ -38,12 +87,15 @@ namespace BP.DA
             if (_Bill_Cash != null)
                 _Bill_Cash.Clear();
 
+            if (_Row_Cash != null)
+                _Row_Cash.Clear();
+
             //清除
             Cash2019.ClearCash();
         }
         static Cash()
         {
-            if (BP.Difference.SystemConfig.IsBSsystem==false)
+            if (BP.Difference.SystemConfig.IsBSsystem == false)
             {
                 CS_Cash = new Hashtable();
             }
@@ -63,7 +115,7 @@ namespace BP.DA
         }
         public static string GetBillStr(string cfile, bool isCheckCash)
         {
-            cfile = cfile.Replace(".rtf.rtf", ".rtf"); 
+            cfile = cfile.Replace(".rtf.rtf", ".rtf");
 
             string val = Bill_Cash[cfile] as string;
             if (isCheckCash == true)
@@ -76,7 +128,7 @@ namespace BP.DA
                 if (cfile.Contains(":"))
                     file = cfile;
                 else
-                    file =  BP.Difference.SystemConfig.PathOfDataUser + "CyclostyleFile/" + cfile;
+                    file = BP.Difference.SystemConfig.PathOfDataUser + "CyclostyleFile/" + cfile;
 
                 try
                 {
@@ -137,7 +189,7 @@ namespace BP.DA
         }
         public static string[] GetBillParas_Gener(string cfile, Attrs attrs)
         {
-            cfile = cfile.Replace(".rtf.rtf", ".rtf"); 
+            cfile = cfile.Replace(".rtf.rtf", ".rtf");
 
             //  Attrs attrs = en.EnMap.Attrs;
             string[] paras = new string[300];
@@ -231,7 +283,7 @@ namespace BP.DA
                 }
                 else
                 {
-                    if (DataType.IsNullOrEmpty(c.ToString()) )
+                    if (DataType.IsNullOrEmpty(c.ToString()))
                         continue;
                     para += c.ToString();
                 }
@@ -264,7 +316,7 @@ namespace BP.DA
         }
         public static void SetConn(string fk_emp, object csh)
         {
-            if (fk_emp == null )
+            if (fk_emp == null)
                 throw new Exception("fk_emp.  csh 参数有一个为空。");
             Conn_Cash[fk_emp] = csh;
         }
@@ -304,6 +356,15 @@ namespace BP.DA
                 throw new Exception("clName.  csh 参数有一个为空。");
             SQL_Cash[clName] = csh;
         }
+        /// <summary>
+        /// 清除缓存
+        /// </summary>
+        /// <param name="clName"></param>
+        public static void ClearSQL(string clName)
+        {
+            SQL_Cash.Remove(clName);
+        }
+
         #endregion
 
         #region EnsData cash
@@ -395,6 +456,55 @@ namespace BP.DA
         }
         #endregion
 
+        #region TSmap cash
+        private static Hashtable _Map_CashTS;
+        public static Hashtable Map_CashTS
+        {
+            get
+            {
+                if (_Map_CashTS == null)
+                    _Map_CashTS = new Hashtable();
+                return _Map_CashTS;
+            }
+        }
+        public static BP.En.Map GetMapTS(string clName)
+        {
+            try
+            {
+                return Map_CashTS[clName] as BP.En.Map;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public static void SetMapTS(string clName, BP.En.Map map)
+        {
+            if (clName == null)
+                return;
+            //    throw new Exception("clName.不能为空。");
+            if (map == null)
+            {
+                Map_CashTS.Remove(clName);
+                return;
+            }
+            Map_CashTS[clName] = map;
+        }
+        /// <summary>
+        /// 是否存map.
+        /// </summary>
+        /// <param name="clName"></param>
+        /// <returns></returns>
+        public static bool IsExitMapTS(string clName)
+        {
+            if (clName == null)
+                throw new Exception("clName.不能为空。");
+
+            return Map_CashTS.ContainsKey(clName);
+        }
+        #endregion
+
+
         #region map cash
         private static Hashtable _Map_Cash;
         public static Hashtable Map_Cash
@@ -428,6 +538,63 @@ namespace BP.DA
                 return;
             }
             Map_Cash[clName] = map;
+        }
+        /// <summary>
+        /// 是否存map.
+        /// </summary>
+        /// <param name="clName"></param>
+        /// <returns></returns>
+        public static bool IsExitMap(string clName)
+        {
+            if (clName == null)
+                throw new Exception("clName.不能为空。");
+
+            return Map_Cash.ContainsKey(clName);
+        }
+        #endregion
+
+        #region row cash
+        private static Hashtable _Row_Cash;
+        public static Hashtable Row_Cash
+        {
+            get
+            {
+                if (_Row_Cash == null)
+                    _Row_Cash = new Hashtable();
+                return _Row_Cash;
+            }
+        }
+        public static BP.En.Row GetRow(string clName)
+        {
+            var row = Row_Cash[clName] as BP.En.Row;
+            if (row == null)
+                return null;
+
+            return (BP.En.Row)row.Clone();
+        }
+        public static void SetRow(string clName, BP.En.Row map)
+        {
+            if (clName == null)
+                return;
+            //    throw new Exception("clName.不能为空。");
+            if (map == null)
+            {
+                Row_Cash.Remove(clName);
+                return;
+            }
+            Row_Cash[clName] = map;
+        }
+        /// <summary>
+        /// 是否存map.
+        /// </summary>
+        /// <param name="clName"></param>
+        /// <returns></returns>
+        public static bool IsExitRow(string clName)
+        {
+            if (clName == null)
+                throw new Exception("clName.不能为空。");
+
+            return Row_Cash.ContainsKey(clName);
         }
         #endregion
 
@@ -481,7 +648,7 @@ namespace BP.DA
             if (BP.Difference.SystemConfig.IsBSsystem)
             {
                 string willDelKeys = "";
-                foreach (string key  in BS_Cash.Keys)
+                foreach (string key in BS_Cash.Keys)
                 {
                     if (key.Contains(likeKey) == false)
                         continue;
@@ -647,7 +814,7 @@ namespace BP.DA
             }
         }
         #endregion
-      
+
     }
 
     public class CashEntity

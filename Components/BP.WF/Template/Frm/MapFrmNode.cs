@@ -329,7 +329,7 @@ namespace BP.WF.Template.Frm
                 //  rm.GroupName = "高级设置";
                 rm.HisAttrs.AddTBString("FrmID", null, "要复制新表单ID", true, false, 0, 100, 100);
                 rm.HisAttrs.AddTBString("FrmName", null, "表单名称", true, false, 0, 100, 100);
-                rm.HisAttrs.AddDDLEntities("FrmTree", null, "复制到表单目录", new FrmTrees(),true);
+                rm.HisAttrs.AddDDLEntities("FrmTree", null, "复制到表单目录", new SysFormTrees(),true);
 
                 rm.ClassMethodName = this.ToString() + ".DoCopyFrm";
                 rm.Icon = "../../WF/Img/Btn/Copy.GIF";

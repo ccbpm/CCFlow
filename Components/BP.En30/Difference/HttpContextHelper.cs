@@ -6,11 +6,13 @@ using System.Web;
 using System.Web.SessionState;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Collections;
 
 namespace BP.Difference
 {
     public static class HttpContextHelper
     {
+
         /// <summary>
         /// 获取当前的HttpContext
         /// </summary>
@@ -86,7 +88,7 @@ namespace BP.Difference
             Response.ContentType = "application/json";
             Response.ContentEncoding = encoding;
             Response.Write(json);
-            Response.End();
+            Response.End(); 
         }
 
         public static void ResponseWriteScript(string script, Encoding encoding)

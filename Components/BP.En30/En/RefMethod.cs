@@ -172,12 +172,28 @@ namespace BP.En
         {
             string str = this.ClassMethodName.Trim(' ', ';', '.');
             int pos = str.LastIndexOf(".");
-            string clas = str.Substring(0, pos);
-            string meth = str.Substring(pos, str.Length - pos).Trim('.', ' ', '(', ')');
+
+            //@hongyan.
+            string clas = this.HisEn.ToString();
+            string meth = str;
+            if (pos > 0)
+            {
+                clas = str.Substring(0, pos);
+                meth = str.Substring(pos, str.Length - pos).Trim('.', ' ', '(', ')');
+            }
+
             if (this.HisEn == null)
             {
                 this.HisEn = ClassFactory.GetEn(clas);
                 Attrs attrs = this.HisEn.EnMap.Attrs;
+            }
+
+            //如果当前的en与方法的en不同.
+            if (this.HisEn.ToString().Equals(clas) == false)
+            {
+                this.HisEn = ClassFactory.GetEn(clas);
+                this.HisEn.PKVal = this.PKVal;
+                this.HisEn.Retrieve();
             }
 
             Type tp = this.HisEn.GetType();

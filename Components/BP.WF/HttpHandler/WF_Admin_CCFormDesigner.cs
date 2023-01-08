@@ -233,10 +233,13 @@ namespace BP.WF.HttpHandler
         {
             MapData md = new MapData();
 
+            string no = this.GetRequestVal("TB_No");
+            string name = this.GetRequestVal("TB_Name");
+
             try
             {
-                md.Name = this.GetRequestVal("TB_Name");
-                md.No = DataType.ParseStringForNo(this.GetRequestVal("TB_No"), 100);
+                md.Name = name;
+                md.No = DataType.ParseStringForNo(no, 100);
                 md.HisFrmTypeInt = this.GetRequestValInt("DDL_FrmType");
                 string ptable = this.GetRequestVal("TB_PTable");
 

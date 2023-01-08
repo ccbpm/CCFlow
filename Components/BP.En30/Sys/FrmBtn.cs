@@ -54,7 +54,7 @@ namespace BP.Sys
         /// </summary>
         ByEmp,
         /// <summary>
-        /// 按岗位
+        /// 按角色
         /// </summary>
         ByStation,
         /// <summary>

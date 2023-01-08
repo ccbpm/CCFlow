@@ -2,18 +2,36 @@
 using System.Data;
 using System.Collections;
 using BP.DA;
+using Newtonsoft.Json;
 
 namespace BP.En
 {
-	/// <summary>
-	/// Row 的摘要说明。
-	/// 用来处理一条记录
-	/// </summary>
-	public class Row : Hashtable
-	{
-        public Row():base(System.StringComparer.Create(System.Globalization.CultureInfo.CurrentCulture, true))
+    /// <summary>
+    /// Row 的摘要说明。
+    /// 用来处理一条记录
+    /// </summary>
+    public class Row : Hashtable
+    {
+        public override object Clone()
+        {
+            // @wanglu
+            // deep clone 
+            var serialized = JsonConvert.SerializeObject(this);
+            Row newRow = JsonConvert.DeserializeObject<Row>(serialized);
+            return newRow;
+            /** 
+            Row row = new Row();
+            foreach (object key in this.Keys)
+            {
+                row.Add(key, this[key]);
+            }
+
+            return row; */
+        }
+        public Row() : base(System.StringComparer.Create(System.Globalization.CultureInfo.CurrentCulture, true))
         {
         }
+        public static int attrSta = 0;
         /// <summary>
         /// 初始化数据.
         /// </summary>
@@ -67,13 +85,16 @@ namespace BP.En
                 this.Add(dc.ColumnName, dr[dc.ColumnName]);
             }
         }
-		/// <summary>
-		/// 设置一个值by key . 
-		/// </summary>
-		/// <param name="key"></param>
-		/// <param name="val"></param>
+
+        /// <summary>
+        /// 设置一个值by key . 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
         public void SetValByKey(string key, object val)
         {
+
+
             if (key == null)
                 return;
 
@@ -84,7 +105,7 @@ namespace BP.En
                 return;
             }
 
-            if (val == null )
+            if (val == null)
             {
                 this[key] = val;
                 return;
@@ -94,8 +115,10 @@ namespace BP.En
                 this[key] = (int)val;
             else
                 this[key] = val;
+
+
         }
-        
+
         public string GetValStrByKey(string key)
         {
             return this[key] as string;
@@ -105,5 +128,5 @@ namespace BP.En
         {
             return this[key];
         }
-	}
+    }
 }

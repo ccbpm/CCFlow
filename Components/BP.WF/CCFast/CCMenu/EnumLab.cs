@@ -15,7 +15,7 @@ namespace BP.CCFast.CCMenu
         /// </summary>
         AnyOne,
         /// <summary>
-        /// 按岗位
+        /// 按角色
         /// </summary>
         ByStation,
         /// <summary>

@@ -85,7 +85,7 @@ namespace BP.WF.Rpt
 
 		#region 构造函数
 		/// <summary>
-		/// 报表岗位
+		/// 报表角色
 		/// </summary> 
 		public RptDept(){}
 		/// <summary>

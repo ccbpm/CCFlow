@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Data;
 using BP.DA;
+using BP.Difference;
 using BP.Sys;
 using BP.Web;
 
@@ -75,12 +76,12 @@ namespace BP.WF.HttpHandler
             ht.Add("ReturnNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=5 " + whereStrPuls));
 
             //说有逾期的数量. 应该根据 WF_GenerWorkerList的 SDT 字段来求.
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_GenerWorkerList WHERE IsPass=0 AND STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now()"));
 
             }
-            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
+            else if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6)
             {
                 
                 string sql = "SELECT COUNT(*) from (SELECT *  FROM WF_GenerWorkerList WHERE IsPass=0 AND   REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 ";
@@ -149,12 +150,12 @@ namespace BP.WF.HttpHandler
 
             #region 逾期 分析.
             //逾期的 - 流程分组.
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 sql = "SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 "+ whereStrPuls+" and STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now() GROUP BY FlowName";
 
             }
-            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
+            else if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6)
             {
                 sql = "SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 GROUP BY FlowName ";
                 sql += "UNION SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 GROUP BY FlowName";
@@ -170,12 +171,12 @@ namespace BP.WF.HttpHandler
 
             //逾期的 - 部门分组.
 
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
             {
                 sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now() GROUP BY DeptName";
 
             }
-            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
+            else if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6)
             {
                 sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 GROUP BY DeptName ";
                 sql += "UNION SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 GROUP BY DeptName";

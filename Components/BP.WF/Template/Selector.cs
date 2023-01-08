@@ -56,7 +56,7 @@ namespace BP.WF.Template
         /// </summary>
         public const string IsEnableDeptRange = "IsEnableDeptRange";
         /// <summary>
-        /// 是否启用岗位搜索范围限定
+        /// 是否启用角色搜索范围限定
         /// </summary>
         public const string IsEnableStaRange = "IsEnableStaRange";
     }
@@ -194,7 +194,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 是否启用岗位搜索范围限定
+        /// 是否启用角色搜索范围限定
         /// </summary>
         public bool IsEnableStaRange
         {
@@ -277,7 +277,7 @@ namespace BP.WF.Template
                 map.AddTBString(SelectorAttr.Name, null, "节点名称", true, true, 0, 100, 100);
 
                 map.AddDDLSysEnum(SelectorAttr.SelectorModel, 5, "显示方式", true, true, SelectorAttr.SelectorModel,
-                    "@0=按岗位@1=按部门@2=按人员@3=按SQL@4=按SQL模版计算@5=使用通用人员选择器@6=部门与岗位的交集@7=自定义Url@8=使用通用部门岗位人员选择器@9=按岗位智能计算(操作员所在部门)");
+                    "@0=按角色@1=按部门@2=按人员@3=按SQL@4=按SQL模版计算@5=使用通用人员选择器@6=部门与角色的交集@7=自定义Url@8=使用通用部门角色人员选择器@9=按角色智能计算(操作员所在部门)");
 
                 map.AddDDLSQL(SelectorAttr.FK_SQLTemplate, null, "SQL模版",
                     "SELECT No,Name FROM WF_SQLTemplate WHERE SQLType=5", true);
@@ -285,11 +285,11 @@ namespace BP.WF.Template
                 map.AddBoolean(SelectorAttr.IsAutoLoadEmps, true, "是否自动加载上一次选择的人员？", true, true);
                 map.AddBoolean(SelectorAttr.IsSimpleSelector, false, "是否单项选择(只能选择一个人)？", true, true);
                 map.AddBoolean(SelectorAttr.IsEnableDeptRange, false, "是否启用部门搜索范围限定(对使用通用人员选择器有效)？", true, true, true);
-                map.AddBoolean(SelectorAttr.IsEnableStaRange, false, "是否启用岗位搜索范围限定(对使用通用人员选择器有效)？", true, true, true);
+                map.AddBoolean(SelectorAttr.IsEnableStaRange, false, "是否启用角色搜索范围限定(对使用通用人员选择器有效)？", true, true, true);
 
 
                 // map.AddDDLSysEnum(SelectorAttr.IsMinuesAutoLoadEmps, 5, "接收人选择方式", true, true, SelectorAttr.SelectorModel,
-                // "@0=按岗位@1=按部门@2=按人员@3=按SQL@4=按SQL模版计算@5=使用通用人员选择器@6=部门与岗位的交集@7=自定义Url");
+                // "@0=按角色@1=按部门@2=按人员@3=按SQL@4=按SQL模版计算@5=使用通用人员选择器@6=部门与角色的交集@7=自定义Url");
 
                 map.AddTBStringDoc(SelectorAttr.SelectorP1, null, "分组参数:可以为空,比如:SELECT No,Name,ParentNo FROM  Port_Dept", true, false, 0, 300, 3);
                 map.AddTBStringDoc(SelectorAttr.SelectorP2, null, "操作员数据源:比如:SELECT No,Name,FK_Dept FROM  Port_Emp", true, false, 0, 300, 3);
@@ -303,11 +303,11 @@ namespace BP.WF.Template
                 //平铺模式.
                 map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.Port.Stations(),
                     BP.WF.Template.NodeStationAttr.FK_Node,
-                    BP.WF.Template.NodeStationAttr.FK_Station, "绑定岗位(平铺)", BP.Port.StationAttr.FK_StationType, "Name", "No");
+                    BP.WF.Template.NodeStationAttr.FK_Station, "绑定角色(平铺)", BP.Port.StationAttr.FK_StationType, "Name", "No");
 
                 map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.Port.Stations(),
                   BP.WF.Template.NodeStationAttr.FK_Node,
-                  BP.WF.Template.NodeStationAttr.FK_Station, "绑定岗位(树)", BP.Port.StationAttr.FK_StationType, "Name", "No");
+                  BP.WF.Template.NodeStationAttr.FK_Station, "绑定角色(树)", BP.Port.StationAttr.FK_StationType, "Name", "No");
 
                 //节点绑定部门. 节点绑定部门.
                 map.AttrsOfOneVSM.AddBranches(new BP.WF.Template.NodeDepts(), new BP.Port.Depts(),
@@ -370,7 +370,7 @@ namespace BP.WF.Template
                 case SelectorModel.GenerUserSelecter:
                     ds = ByGenerUserSelecter();
                     break;
-                case SelectorModel.AccepterOfDeptStationOfCurrentOper: //按岗位智能计算.
+                case SelectorModel.AccepterOfDeptStationOfCurrentOper: //按角色智能计算.
                     ds = AccepterOfDeptStationOfCurrentOper(nodeid, en);
                     break;
                 case SelectorModel.ByWebAPI:
@@ -700,7 +700,7 @@ namespace BP.WF.Template
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             //人员.
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6)
                 sql = "SELECT * FROM (SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Dept='" + WebUser.FK_Dept + "' AND b.FK_Node=" + nodeID + ")  ORDER BY A.Idx ";
             else
                 sql = "SELECT distinct a." + BP.Sys.Base.Glo.UserNo + ",a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a." + BP.Sys.Base.Glo.UserNo + "=c.FK_Emp AND C.FK_Dept='" + WebUser.FK_Dept + "' AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID + "  ORDER BY A.Idx";
@@ -740,7 +740,7 @@ namespace BP.WF.Template
             return ds;
         }
         /// <summary>
-        /// 部门于岗位的交集 @zkr. 
+        /// 部门于角色的交集 @zkr. 
         /// </summary>
         /// <param name="nodeID"></param>
         /// <returns></returns>
@@ -791,7 +791,7 @@ namespace BP.WF.Template
             ds.Tables.Add(dt);
 
             //人员.
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle ||BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6
                 || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || DBAccess.AppCenterDBType == DBType.UX)
             {
                 if (sm == SelectorModel.TeamDeptOnly)
@@ -833,7 +833,7 @@ namespace BP.WF.Template
             ds.Tables.Add(dt);
 
             //人员.
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || DBAccess.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6 || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || DBAccess.AppCenterDBType == DBType.UX)
             {
                 if (DBAccess.IsExitsTableCol("Port_Emp", "Idx") == true)
                     sql = "SELECT * FROM (SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeTeam b, Port_TeamEmp c WHERE a.No=c.FK_Emp AND B.FK_Group=C.FK_Group AND b.FK_Node=" + nodeID + ") ORDER BY FK_Dept,Idx,No";
@@ -938,7 +938,7 @@ namespace BP.WF.Template
                 }
             }
 
-            //如果实在找不到了，就仅按岗位计算.
+            //如果实在找不到了，就仅按角色计算.
             if (ds.Tables[1].Rows.Count == 0)
             {
                 ds = ByStation(this.NodeID, en);
@@ -960,7 +960,7 @@ namespace BP.WF.Template
             //return ds;
         }
         /// <summary>
-        /// 指定部门下的，岗位人员的数据。
+        /// 指定部门下的，角色人员的数据。
         /// </summary>
         /// <param name="nodeID"></param>
         /// <param name="en"></param>
@@ -1015,7 +1015,7 @@ namespace BP.WF.Template
                 ds.Tables.Add(dt);
 
                 //人员.
-                if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || DBAccess.AppCenterDBType == DBType.UX)
+                if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6 || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || DBAccess.AppCenterDBType == DBType.UX)
                 {
                     if (DBAccess.IsExitsTableCol("Port_Emp", "Idx") == true)
                         sql = "SELECT * FROM (SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c, WF_PrjEmp d  WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station And a.No=d.FK_Emp And C.FK_Emp=d.FK_Emp AND b.FK_Node=" + nodeID + " AND D.FK_Prj='" + en.GetValStrByKey("PrjNo") + "') ORDER BY FK_Dept,Idx,No";
@@ -1041,7 +1041,7 @@ namespace BP.WF.Template
             ds.Tables.Add(dt);
 
             //人员.
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || DBAccess.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6 || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || DBAccess.AppCenterDBType == DBType.UX)
             {
                 if (DBAccess.IsExitsTableCol("Port_Emp", "Idx") == true)
                     sql = "SELECT * FROM (SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID + ") ORDER BY FK_Dept,Idx,No";

@@ -121,7 +121,7 @@ namespace BP.DA
                 return dt.AddDays(days);
 
             //没有设置节假日.
-            if (DataType.IsNullOrEmpty(BP.Sys.GloVar.Holidays) )
+            if (DataType.IsNullOrEmpty(BP.Sys.GloVar.Holidays))
             {
                 // 2015年以前的算法.
                 dt = dt.AddDays(days);
@@ -1217,6 +1217,19 @@ namespace BP.DA
 
             return Regex.Replace(str, RegEx_Replace_FilterDangerousSymbols, "").Replace("<", "&lt;").Replace(">", "&gt;").Replace("&", "&amp;");
         }
+        public static string DealFromatSQLWhereIn(string ids)
+        {
+            if (ids.Contains("'") == true)
+                return ids;
+
+            string[] strs = ids.Split(',');
+            string sqlIn = "";
+            foreach (string str in strs)
+            {
+                sqlIn += ",'" + str + "'";
+            }
+            return sqlIn.Substring(1);
+        }
         /// <summary>
         /// 将中文转化成拼音
         /// </summary>
@@ -1374,6 +1387,8 @@ namespace BP.DA
                         sql = "SELECT  " + exp + " as Num  ";
                         return DBAccess.RunSQLReturnValDecimal(sql, 0, 2);
                     case DBType.Oracle:
+                    case DBType.KingBaseR3:
+                    case DBType.KingBaseR6:
                         sql = "SELECT  " + exp + " NUM from DUAL ";
                         return DBAccess.RunSQLReturnValDecimal(sql, 0, 2);
                     case DBType.Informix:
@@ -1692,7 +1707,7 @@ namespace BP.DA
                 return DateTime.Now.ToString("yyyy");
             }
         }
-       
+
         public static string CurrentDateTimeOfDef
         {
             get
@@ -1780,8 +1795,8 @@ namespace BP.DA
                 return DateTime.Now.ToString(DataType.SysDateTimeFormat + ":ss");
             }
         }
-        
-   
+
+
         /// <summary>
         /// 把chichengsoft本系统日期格式转换为系统日期格式。
         /// </summary>
@@ -1791,7 +1806,6 @@ namespace BP.DA
         {
             if (sysDateformat == null || sysDateformat.Trim().Length == 0)
                 return DateTime.Now;
-
 
             try
             {
@@ -1959,7 +1973,7 @@ namespace BP.DA
             switch (strDBUrl)
             {
                 case "AppCenterDSN":
-                    return DBUrlType.AppCenterDSN;      
+                    return DBUrlType.AppCenterDSN;
                 default:
                     throw new Exception("@没有此类型[" + strDBUrl + "]");
             }
@@ -1990,30 +2004,30 @@ namespace BP.DA
         }
         public static string GetDataTypeDese(int datatype)
         {
-            if (BP.Web.WebUser.SysLang == "CH")
-            {
-                switch (datatype)
-                {
-                    case DataType.AppBoolean:
-                        return "布尔(Int)";
-                    case DataType.AppDate:
-                        return "日期nvarchar";
-                    case DataType.AppDateTime:
-                        return "日期时间nvarchar";
-                    case DataType.AppDouble:
-                        return "双精度(double)";
-                    case DataType.AppFloat:
-                        return "浮点(float)";
-                    case DataType.AppInt:
-                        return "整型(int)";
-                    case DataType.AppMoney:
-                        return "货币(float)";
-                    case DataType.AppString:
-                        return "字符(nvarchar)";
-                    default:
-                        throw new Exception("@没有此类型");
-                }
-            }
+            //if (BP.Web.WebUser.SysLang == "CH")
+            //{
+            //    switch (datatype)
+            //    {
+            //        case DataType.AppBoolean:
+            //            return "布尔(Int)";
+            //        case DataType.AppDate:
+            //            return "日期nvarchar";
+            //        case DataType.AppDateTime:
+            //            return "日期时间nvarchar";
+            //        case DataType.AppDouble:
+            //            return "双精度(double)";
+            //        case DataType.AppFloat:
+            //            return "浮点(float)";
+            //        case DataType.AppInt:
+            //            return "整型(int)";
+            //        case DataType.AppMoney:
+            //            return "货币(float)";
+            //        case DataType.AppString:
+            //            return "字符(nvarchar)";
+            //        default:
+            //            throw new Exception("@没有此类型");
+            //    }
+            //}
 
             switch (datatype)
             {
@@ -2032,7 +2046,7 @@ namespace BP.DA
                 case DataType.AppMoney:
                     return "Money";
                 case DataType.AppString:
-                    return "Nvarchar";
+                    return "varchar";
                 default:
                     throw new Exception("@没有此类型");
             }
@@ -2339,7 +2353,7 @@ namespace BP.DA
        static TimeSpan ts = new TimeSpan(0, 1, 0);
 #endif
 
-        
+
         private static string _BPMHost = null;
         /// <summary>
         /// 当前BPMHost 

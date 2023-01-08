@@ -12,7 +12,7 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_CCBPMDesigner2018 : DirectoryPageBase
     {
-           /// <summary>
+        /// <summary>
         /// 构造函数
         /// </summary>
         public WF_Admin_CCBPMDesigner2018()
@@ -31,37 +31,24 @@ namespace BP.WF.HttpHandler
                 string x = this.GetRequestVal("X");
                 string y = this.GetRequestVal("Y");
                 string icon = this.GetRequestVal("icon");
+                int nodeModel = this.GetRequestValInt("NodeModel");
+
                 int iX = 20;
                 int iY = 20;
-                
-                if (DataType.IsNullOrEmpty(x)==false) 
+
+                if (DataType.IsNullOrEmpty(x) == false)
                     iX = (int)double.Parse(x);
 
-                if (DataType.IsNullOrEmpty(y)==false) 
+                if (DataType.IsNullOrEmpty(y) == false)
                     iY = (int)double.Parse(y);
 
-                Node node = BP.WF.Template.TemplateGlo.NewNode(this.FK_Flow, iX, iY,icon);
+                Node node = BP.WF.Template.TemplateGlo.NewNode(this.FK_Flow, iX, iY, icon, nodeModel);
+
 
                 Hashtable ht = new Hashtable();
                 ht.Add("NodeID", node.NodeID);
                 ht.Add("Name", node.Name);
-
-
-                #region  //2019.11.08 增加如果是极简版, 就设置初始化参数.
-                Flow fl = new Flow(this.FK_Flow);
-                if (fl.FlowFrmModel != FlowFrmModel.Ver2019Earlier)
-                {
-                    FrmNode fm = new FrmNode();
-                    fm.FK_Flow = this.FK_Flow;
-                    fm.FK_Frm = "ND" + int.Parse(this.FK_Flow + "01");
-                    if (fl.FlowDevModel == FlowDevModel.JiJian)
-                        fm.IsEnableFWC = FrmWorkCheckSta.Enable;
-                    fm.FK_Node = node.NodeID;
-                    fm.FrmSln = FrmSln.Readonly;
-                    fm.Insert();
-                }
-                #endregion  //2019.11.08 增加如果是极简版.
-
+                ht.Add("RunModel", (int)node.HisRunModel);
 
                 return BP.Tools.Json.ToJsonEntityModel(ht);
             }
@@ -94,6 +81,37 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
+
+        public string EditNodePosition()
+        {
+            try
+            {
+                string FK_Node = this.GetValFromFrmByKey("NodeID");
+                string x = this.GetValFromFrmByKey("X");
+                string y = this.GetValFromFrmByKey("Y");
+                BP.WF.Node node = new BP.WF.Node();
+                node.NodeID = int.Parse(FK_Node);
+                int left = DataType.IsNullOrEmpty(x) ? 20 : int.Parse(x);
+                int top = DataType.IsNullOrEmpty(x) ? 20 : int.Parse(y);
+                if (left <= 0) left = 20;
+                if (top <= 0) top = 20;
+
+                int iResult = node.RetrieveFromDBSources();
+                if (iResult > 0)
+                {
+                    node.X = left;
+                    node.Y = top;
+                    node.Update();
+                    return "修改成功.";
+                }
+
+                return "err@修改节点失败，请确认该节点是否存在？";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
         /// <summary>
         /// 修改节点名称
         /// </summary>
@@ -115,37 +133,37 @@ namespace BP.WF.HttpHandler
 
             return "err@修改节点失败，请确认该节点是否存在？";
         }
-        /// <summary>
-        /// 修改节点运行模式
-        /// </summary>
-        /// <returns></returns>
-        public string Node_ChangeRunModel()
-        {
-            string runModel = GetValFromFrmByKey("RunModel");
-            BP.WF.Node node = new BP.WF.Node(this.FK_Node);
-            //节点运行模式
-            switch (runModel)
-            {
-                case "NodeOrdinary":
-                    node.HisRunModel = BP.WF.RunModel.Ordinary;
-                    break;
-                case "NodeFL":
-                    node.HisRunModel = BP.WF.RunModel.FL;
-                    break;
-                case "NodeHL":
-                    node.HisRunModel = BP.WF.RunModel.HL;
-                    break;
-                case "NodeFHL":
-                    node.HisRunModel = BP.WF.RunModel.FHL;
-                    break;
-                case "NodeSubThread":
-                    node.HisRunModel = BP.WF.RunModel.SubThread;
-                    break;
-            }
-            node.Update();
+        ///// <summary>
+        ///// 修改节点运行模式
+        ///// </summary>
+        ///// <returns></returns>
+        //public string Node_ChangeRunModel()
+        //{
+        //    string runModel = GetValFromFrmByKey("RunModel");
+        //    BP.WF.Node node = new BP.WF.Node(this.FK_Node);
+        //    //节点运行模式
+        //    switch (runModel)
+        //    {
+        //        case "NodeOrdinary":
+        //            node.HisRunModel = BP.WF.RunModel.Ordinary;
+        //            break;
+        //        case "NodeFL":
+        //            node.HisRunModel = BP.WF.RunModel.FL;
+        //            break;
+        //        case "NodeHL":
+        //            node.HisRunModel = BP.WF.RunModel.HL;
+        //            break;
+        //        case "NodeFHL":
+        //            node.HisRunModel = BP.WF.RunModel.FHL;
+        //            break;
+        //        case "NodeSubThread":
+        //            node.HisRunModel = BP.WF.RunModel.SubThread;
+        //            break;
+        //    }
+        //    node.Update();
 
-            return "设置成功.";
-        }
+        //    return "设置成功.";
+        //}
         #endregion end Node
 
         /// <summary>
@@ -166,7 +184,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "@err:"+ex.Message;
+                return "@err:" + ex.Message;
             }
         }
         public string Direction_Init()
@@ -199,16 +217,16 @@ namespace BP.WF.HttpHandler
             try
             {
                 string pk = this.FK_Flow + "_" + this.FK_Node + "_" + this.GetValFromFrmByKey("ToNode");
-                
+
                 Direction dir = new Direction();
                 dir.setMyPK(pk);
-                
-                if (dir.RetrieveFromDBSources()>0)
+
+                if (dir.RetrieveFromDBSources() > 0)
                 {
                     dir.Des = this.GetValFromFrmByKey("Des");
                     dir.DirectUpdate();
                 }
-                
+
                 return "@保存成功！";
             }
             catch (Exception ex)

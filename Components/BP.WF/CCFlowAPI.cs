@@ -62,13 +62,9 @@ namespace BP.WF
                             wk.OID = workID;
                             wk.RetrieveFromDBSources();
                         }
-
                     }
                 }
-
                 MapData md = new MapData(frmID);
-
-
                 //定义变量，为绑定独立表单设置单据编号.
                 string billNo = null; //定义单据编号.
                 string billNoField = null; //定义单据编号字段.
@@ -105,7 +101,7 @@ namespace BP.WF
 
                 //更换表单的名字.
                 if (DataType.IsNullOrEmpty(nd.NodeFrmID) == false
-                    && (nd.HisFormType == NodeFormType.FoolForm || nd.HisFormType == NodeFormType.Develop))
+                    && (nd.IsNodeFrm))
                 {
                     string realName = myds.Tables["Sys_MapData"].Rows[0]["Name"] as string;
                     if (DataType.IsNullOrEmpty(realName) == true)
@@ -126,9 +122,11 @@ namespace BP.WF
                     || nd.HisFormType == NodeFormType.FoolTruck
                     || flow.FlowDevModel == FlowDevModel.JiJian)
                 {
-                    frmNode.Retrieve(FrmNodeAttr.FK_Frm, nd.NodeFrmID, FrmNodeAttr.FK_Node, nd.NodeID);
-
-                    if (DataType.IsNullOrEmpty(frmNode.MyPK) == false && frmNode.FrmSln != 0)
+                    
+                    int count = frmNode.Retrieve(FrmNodeAttr.FK_Frm, nd.NodeFrmID, FrmNodeAttr.FK_Node, nd.NodeID);
+                    if (count == 0)
+                        frmNode.IsEnableLoadData = true;
+                    if (count!=0 && frmNode.FrmSln != 0)
                     {
                         FrmFields fls = new FrmFields(nd.NodeFrmID, frmNode.FK_Node);
                         foreach (FrmField item in fls)
@@ -317,7 +315,7 @@ namespace BP.WF
                     //按照时间的顺序查找出来 ids .
                     string sqlOrder = "SELECT OID FROM  Sys_GroupField WHERE   FrmID IN (" + myFrmIDs + ")";
                     string orderMyFrmIDs = myFrmIDs.Replace("'", "");
-                    if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
+                    if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6)
                     {
                         sqlOrder += " ORDER BY INSTR('" + orderMyFrmIDs + "',FrmID) , Idx";
                     }
@@ -749,7 +747,16 @@ namespace BP.WF
                             drMsg = dtAlert.NewRow();
                             drMsg["Title"] = "挂起信息";
                             if (sta == 0)
-                                drMsg["Msg"] = "您的工作在挂起状态，等待审批，挂起原因：" + gwf.GetParaString("HungupNote");
+                            {
+                                string msg1 = "您的工单在挂起状态，等待审批，挂起原因：" + gwf.GetParaString("HungupNote");
+                                if (gwf.GetParaInt("HungupWay") == 1)
+                                    msg1 += "指定时间解除:" + gwf.GetParaString("1@HungupRelDate");
+                                else
+                                    msg1 += "无解除时间.";
+                                drMsg["Msg"] = msg1;
+
+                                drMsg["Msg"] = msg1;//  "您的工作在挂起状态，等待审批，挂起原因：" + gwf.GetParaString("HungupNote");
+                            }
 
                             if (sta == 1)
                                 drMsg["Msg"] = "您的工作在挂起获得同意.";

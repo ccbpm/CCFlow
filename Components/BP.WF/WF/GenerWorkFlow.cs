@@ -60,7 +60,7 @@ namespace BP.WF
         /// </summary>
         public const string FK_Node = "FK_Node";
         /// <summary>
-        /// 当前工作岗位
+        /// 当前工作角色
         /// </summary>
         public const string FK_Station = "FK_Station";
         /// <summary>
@@ -148,10 +148,6 @@ namespace BP.WF
         /// </summary>
         public const string BillNo = "BillNo";
         /// <summary>
-        /// 备注
-        /// </summary>
-        public const string FlowNote = "FlowNote";
-        /// <summary>
         /// 待办人员
         /// </summary>
         public const string TodoEmps = "TodoEmps";
@@ -209,8 +205,11 @@ namespace BP.WF
         public const string PrjName = "PrjName";
 
         public const string OrgNo = "OrgNo";
-
-
+        public const string FlowNote = "FlowNote";
+        /// <summary>
+        /// 耗时
+        /// </summary>
+        public const string LostTimeHH = "LostTimeHH";
         #endregion
     }
     /// <summary>
@@ -254,20 +253,7 @@ namespace BP.WF
                 SetValByKey(GenerWorkFlowAttr.Domain, value);
             }
         }
-        /// <summary>
-        /// 备注
-        /// </summary>
-        public string FlowNote
-        {
-            get
-            {
-                return this.GetValStrByKey(GenerWorkFlowAttr.FlowNote);
-            }
-            set
-            {
-                SetValByKey(GenerWorkFlowAttr.FlowNote, value);
-            }
-        }
+       
         public string BuessFields
         {
             get
@@ -839,6 +825,10 @@ namespace BP.WF
             set
             {
                 SetValByKey(GenerWorkFlowAttr.FK_Node, value);
+
+                //设置耗时. @hongyan.
+                TimeSpan ts = DateTime.Now - this.GetValDate(this.RDT);
+                this.SetValByKey(GenerWorkFlowAttr.LostTimeHH, ts.TotalHours);
             }
         }
         /// <summary>
@@ -860,6 +850,10 @@ namespace BP.WF
                     SetValByKey(GenerWorkFlowAttr.WFSta, (int)WFSta.Runing);
 
                 SetValByKey(GenerWorkFlowAttr.WFState, (int)value);
+
+                //设置耗时. @hongyan.
+                TimeSpan ts = DateTime.Now - this.GetValDate(this.RDT);
+                this.SetValByKey(GenerWorkFlowAttr.LostTimeHH, ts.TotalHours);
             }
         }
         /// <summary>
@@ -1264,11 +1258,10 @@ namespace BP.WF
                 map.AddTBString(GenerWorkFlowAttr.FlowName, null, "流程名称", true, false, 0, 100, 10);
                 map.AddTBString(GenerWorkFlowAttr.Title, null, "标题", true, false, 0, 300, 10);
 
-                //两个状态，在不同的情况下使用. WFState状态 可以查询到SELECT  * FROM sys_enum WHERE EnumKey='WFState'
+                //两个状态，在不同的情况下使用. WFState状态 可以查询到SELECT  * FROM Sys_Enum WHERE EnumKey='WFState'
                 // WFState 的状态  @0=空白@1=草稿@2=运行中@3=已经完成@4=挂起@5=退回.
                 map.AddTBInt(GenerWorkFlowAttr.WFSta, 0, "状态", true, false);
                 map.AddTBInt(GenerWorkFlowAttr.WFState, 0, "状态", true, false);
-
 
                 //  map.AddDDLSysEnum(GenerWorkFlowAttr.WFSta, 0, "状态", true, false, GenerWorkFlowAttr.WFSta, "@0=运行中@1=已完成@2=其他");
                 //  map.AddDDLSysEnum(GenerWorkFlowAttr.WFState, 0, "流程状态", true, false, GenerWorkFlowAttr.WFState);
@@ -1303,17 +1296,17 @@ namespace BP.WF
                 map.AddTBString(GenerWorkFlowAttr.GuestName, null, "客户名称", true, false, 0, 100, 10);
 
                 map.AddTBString(GenerWorkFlowAttr.BillNo, null, "单据编号", true, false, 0, 100, 10);
-                map.AddTBString(GenerWorkFlowAttr.FlowNote, null, "备注", true, false, 0, 4000, 10);
 
                 //任务池相关。
                 map.AddTBString(GenerWorkFlowAttr.TodoEmps, null, "待办人员", true, false, 0, 4000, 10);
                 map.AddTBInt(GenerWorkFlowAttr.TodoEmpsNum, 0, "待办人员数量", true, true);
                 map.AddTBInt(GenerWorkFlowAttr.TaskSta, 0, "共享状态", true, true);
 
-                //参数.
-                map.AddTBString(GenerWorkFlowAttr.AtPara, null, "参数(流程运行设置临时存储的参数)", true, false, 0, 2000, 10);
+                //参数. (流程运行设置临时存储的参数)
+                map.AddTBString(GenerWorkFlowAttr.AtPara, null, "参数", true, false, 0, 2000, 10);
 
-                map.AddTBString(GenerWorkFlowAttr.Emps, null, "参与人(格式:@zhangshan,张三@lishi,李四)", true, false, 0, 4000, 10);
+                //(格式:@zhangshan,张三@lishi,李四)
+                map.AddTBString(GenerWorkFlowAttr.Emps, null, "参与人", true, false, 0, 4000, 10);
                 map.AddTBString(GenerWorkFlowAttr.GUID, null, "GUID", false, false, 0, 36, 10);
                 map.AddTBString(GenerWorkFlowAttr.FK_NY, null, "年月", false, false, 0, 7, 7);
                 map.AddTBInt(GenerWorkFlowAttr.WeekNum, 0, "周次", true, true);
@@ -1330,6 +1323,10 @@ namespace BP.WF
 
                 //隶属组织.
                 map.AddTBString(GenerWorkFlowAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 10);
+
+                // 审核组件，签批组件最后一个人的意见填写到这里.
+                map.AddTBString(GenerWorkFlowAttr.FlowNote, null, "流程备注", true, false, 0, 500, 200);
+                map.AddTBFloat(GenerWorkFlowAttr.LostTimeHH, 0, "耗时", true, true);
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "工作轨迹";  // "工作报告";
@@ -1364,6 +1361,8 @@ namespace BP.WF
             {
                 case DBType.MSSQL:
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE WorkID in  ( select WorkID from WF_GenerWorkerlist WHERE WorkID not in (select WorkID from WF_GenerWorkFlow) )");
                     break;
                 case DBType.MySQL:
@@ -1436,7 +1435,7 @@ namespace BP.WF
             long workID = this.FID;
             if (workID == 0)
                 workID = this.WorkID;
-            return BP.WF.Dev2Interface.Node_FHL_AddSubThread(workID, empStrs, toNodeID);//@hongyan
+            return BP.WF.Dev2Interface.Node_FHL_AddSubThread(workID, empStrs, toNodeID);
         }
         /// <summary>
         /// 执行修复

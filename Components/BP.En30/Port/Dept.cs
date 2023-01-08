@@ -38,6 +38,17 @@ namespace BP.Port
     public class Dept : EntityTree
     {
         #region 属性
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStrByKey(DeptAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(DeptAttr.OrgNo, value);
+            }
+        }
         /// <summary>
         /// 父节点的ID
         /// </summary>
@@ -63,7 +74,17 @@ namespace BP.Port
                 this.SetValByKey(DeptAttr.NameOfPath, value);
             }
         }
-        
+        public string Leader
+        {
+            get
+            {
+                return this.GetValStrByKey(DeptAttr.Leader);
+            }
+            set
+            {
+                this.SetValByKey(DeptAttr.Leader, value);
+            }
+        }
         #endregion
 
         #region 构造函数
@@ -105,10 +126,14 @@ namespace BP.Port
                 map.AddTBString(DeptAttr.Name, null, "名称", true, false, 0, 100, 30);
                 map.AddTBString(DeptAttr.NameOfPath, null, "部门路径", true, false, 0, 100, 30);
 
-                map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 100, 30);
+                map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, true, 0, 100, 30);
                 map.AddTBString(DeptAttr.OrgNo, null, "OrgNo", true, true, 0, 50, 30);
                 map.AddDDLEntities(DeptAttr.Leader, null, "部门领导", new BP.Port.Emps(), true);
                 map.AddTBInt(DeptAttr.Idx, 0, "序号", false, true);
+
+
+                if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                    map.AddHidden("OrgNo", "=", "@WebUser.OrgNo");
 
                 RefMethod rm = new RefMethod();
                 //rm.Title = "历史变更";
@@ -162,6 +187,53 @@ namespace BP.Port
         }
         #endregion
 
+        protected override bool beforeUpdateInsertAction()
+        {
+            BP.Sys.Base.Glo.WriteUserLog("新建/修改部门:" + this.ToJson(), "组织数据操作");
+            return base.beforeUpdateInsertAction();
+        }
+
+        protected override bool beforeDelete()
+        {
+            this.CheckIsCanDelete();
+
+            BP.Sys.Base.Glo.WriteUserLog("删除部门:" + this.ToJson(), "组织数据操作");
+            return base.beforeDelete();
+        }
+
+        public bool CheckIsCanDelete()
+        {
+            string err = "";
+            string sql = "select count(*) FROM Port_Emp WHERE FK_Dept='" + this.No + "'";
+            int num = DBAccess.RunSQLReturnValInt(sql);
+            if (num != 0)
+                err += "err@该部门下有" + num + "个人员数据，您不能删除.";
+
+            sql = "select count(*) FROM Port_DeptEmp WHERE FK_Dept='" + this.No + "'";
+            num = DBAccess.RunSQLReturnValInt(sql);
+            if (num != 0)
+                err += "err@该部门在人员部门信息表里有" + num + "笔数据,您不能删除.";
+
+            sql = "select count(*) FROM Port_DeptEmpStation WHERE FK_Dept='" + this.No + "'";
+            num = DBAccess.RunSQLReturnValInt(sql);
+            if (num != 0)
+                err += "err@该部门在人员部门角色表里有" + num + "笔数据,您不能删除.";
+
+            //检查是否有子级部门.
+            sql = "select count(*) FROM Port_Dept WHERE ParentNo='" + this.No + "'";
+            if (num != 0)
+                err += "err@该部门有" + num + "个子部门,您不能删除.";
+
+            //是不是组织？.
+            sql = "select count(*) FROM Port_Org WHERE OrgNo='" + this.No + "'";
+            if (num != 0)
+                err += "err@该部门是一个组织,您不能删除.";
+
+            if (DataType.IsNullOrEmpty(err) == false)
+                throw new Exception(err);
+            return true;
+        }
+
         /// <summary>
         /// 重置部门
         /// </summary>
@@ -214,7 +286,7 @@ namespace BP.Port
             foreach (BP.Port.Emp emp in emps)
                 emp.Update();
         }
-        
+
         /// <summary>
         /// 处理子部门全名称
         /// </summary>

@@ -93,7 +93,7 @@ namespace BP.WF.HttpHandler
             }
 
             //处理大小写.
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
                 dt.Columns[0].ColumnName = "DocWordKey";
                 dt.Columns[1].ColumnName = "DocWordName";

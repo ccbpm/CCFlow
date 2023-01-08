@@ -209,11 +209,11 @@ namespace BP.CCBill.Template
                 //平铺模式.
                 map.AttrsOfOneVSM.AddGroupPanelModel(new StationCreates(), new Stations(),
                     StationCreateAttr.FrmID,
-                    StationCreateAttr.FK_Station, "可以创建的岗位", StationAttr.FK_StationType);
+                    StationCreateAttr.FK_Station, "可以创建的角色", StationAttr.FK_StationType);
 
                 map.AttrsOfOneVSM.AddGroupListModel(new StationCreates(), new BP.Port.Stations(),
                   StationCreateAttr.FrmID,
-                  StationCreateAttr.FK_Station, "可以创建的岗位AddGroupListModel", StationAttr.FK_StationType);
+                  StationCreateAttr.FK_Station, "可以创建的角色AddGroupListModel", StationAttr.FK_StationType);
 
                 //节点绑定部门. 节点绑定部门.
                 map.AttrsOfOneVSM.AddBranches(new FrmDeptCreates(), new BP.Port.Depts(),

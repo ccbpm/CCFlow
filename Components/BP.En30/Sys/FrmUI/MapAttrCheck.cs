@@ -14,8 +14,8 @@ namespace BP.Sys.FrmUI
     public class MapAttrCheck : EntityMyPK
     {
         #region 文本字段参数属性.
-       
-  
+
+
         /// <summary>
         /// 表单ID
         /// </summary>
@@ -34,7 +34,7 @@ namespace BP.Sys.FrmUI
         {
             return this.GetValStringByKey(MapAttrAttr.FK_MapData);
         }
-        
+
         /// <summary>
         /// 字段
         /// </summary>
@@ -146,9 +146,9 @@ namespace BP.Sys.FrmUI
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
 
                 //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID,0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
+                map.AddDDLSQL(MapAttrAttr.GroupID, 0, "显示的分组", MapAttrString.SQLOfGroupAttr, true);
 
-                
+
                 map.AddTBInt(MapAttrAttr.Idx, 0, "顺序号", true, false);
                 map.SetHelperAlert(MapAttrAttr.Idx, "对傻瓜表单有效:用于调整字段在同一个分组中的顺序.");
 
@@ -170,8 +170,8 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "帮助弹窗显示";
-                rm.ClassMethodName = this.ToString() + ".DoFieldBigHelper()";
+                rm.Title = "字段名链接";
+                rm.ClassMethodName = this.ToString() + ".DoFieldNameLink()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "icon-settings";
                 map.AddRefMethod(rm);
@@ -186,9 +186,9 @@ namespace BP.Sys.FrmUI
                 return this._enMap;
             }
         }
-        public string DoFieldBigHelper()
+        public string DoFieldNameLink()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/FieldBigHelper.htm?FK_MapData=" + this.getFrmID() + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/FieldNameLink.htm?FK_MapData=" + this.getFrmID() + "&KeyOfEn=" + this.KeyOfEn;
         }
 
         public string DoVideo()
@@ -220,18 +220,17 @@ namespace BP.Sys.FrmUI
                 return "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE FrmID='@FK_MapData'  AND (CtrlType IS NULL OR CtrlType='')  ";
             }
         }
-     
+
         /// <summary>
         /// 删除
         /// </summary>
         protected override void afterDelete()
         {
-            
             //删除相对应的rpt表中的字段
             if (this.getFrmID().Contains("ND") == true)
             {
                 string fk_mapData = this.getFrmID().Substring(0, this.getFrmID().Length - 2) + "Rpt";
-                string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND( KeyOfEn='" + this.KeyOfEn + "T' OR KeyOfEn='" + this.KeyOfEn+"')";
+                string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND( KeyOfEn='" + this.KeyOfEn + "T' OR KeyOfEn='" + this.KeyOfEn + "')";
                 DBAccess.RunSQL(sql);
             }
 
@@ -254,34 +253,12 @@ namespace BP.Sys.FrmUI
 
             base.afterInsertUpdateAction();
         }
-
         #endregion
 
         public string DoRenameField(string newField)
         {
-            string sql = "";
-            if (this.getFrmID().IndexOf("ND") == 0)
-            {
-                string strs = this.getFrmID().Replace("ND", "");
-                strs = strs.Substring(0, strs.Length - 2);
-
-                string rptTable = "ND" + strs + "Rpt";
-                MapDatas mds = new MapDatas();
-                mds.Retrieve(MapDataAttr.PTable, rptTable);
-
-                foreach (MapData item in mds)
-                {
-                    sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "',  MyPK='" + item.No  + "_" + newField + "' WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + item.No + "'";
-                    DBAccess.RunSQL(sql);
-                }
-            }
-            else
-            {
-                sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "', MyPK='" + this.getFrmID() + "_" +  newField + "'  WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.getFrmID() + "'";
-                DBAccess.RunSQL(sql);
-            }
-
-            return "重名称成功,如果是自由表单，请关闭表单设计器重新打开.";
+            MapAttrString en = new MapAttrString(this.MyPK);
+            return en.DoRenameField(newField); //@hongyan.
         }
 
         #region 重载.
@@ -292,11 +269,11 @@ namespace BP.Sys.FrmUI
             attr.RetrieveFromDBSources();
 
             //强制设置为签批组件.
-            this.SetValByKey(MapAttrAttr.UIContralType,  (int)UIContralType.SignCheck);
+            this.SetValByKey(MapAttrAttr.UIContralType, (int)UIContralType.SignCheck);
 
             //默认值.
             string defval = this.GetValStrByKey("ExtDefVal");
-            if (defval.Equals("") == true || defval.Equals("0")==true )
+            if (defval.Equals("") == true || defval.Equals("0") == true)
             {
                 string defVal = this.GetValStrByKey("DefVal");
                 if (defval.Contains("@") == true)
@@ -310,7 +287,7 @@ namespace BP.Sys.FrmUI
             //执行保存.
             attr.Save();
 
-            if (this.GetValStrByKey("GroupID").Equals("无")==true)
+            if (this.GetValStrByKey("GroupID").Equals("无") == true)
                 this.SetValByKey("GroupID", "0");
 
             return base.beforeUpdateInsertAction();

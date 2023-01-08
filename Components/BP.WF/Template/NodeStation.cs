@@ -8,7 +8,7 @@ using BP.WF.Port;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// 节点工作岗位属性	  
+    /// 节点工作角色属性	  
     /// </summary>
     public class NodeStationAttr
     {
@@ -17,14 +17,14 @@ namespace BP.WF.Template
         /// </summary>
         public const string FK_Node = "FK_Node";
         /// <summary>
-        /// 工作岗位
+        /// 工作角色
         /// </summary>
         public const string FK_Station = "FK_Station";
     }
     /// <summary>
-    /// 节点工作岗位
+    /// 节点工作角色
     /// </summary>
-    public class NodeStation : EntityMM
+    public class NodeStation : EntityMyPK
     {
         #region 基本属性
         /// <summary>
@@ -61,7 +61,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 工作岗位
+        /// 工作角色
         /// </summary>
         public string FK_Station
         {
@@ -78,7 +78,7 @@ namespace BP.WF.Template
 
         #region 构造方法
         /// <summary>
-        /// 节点工作岗位
+        /// 节点工作角色
         /// </summary>
         public NodeStation() { }
         /// <summary>
@@ -91,21 +91,31 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("WF_NodeStation", "节点岗位");
+                Map map = new Map("WF_NodeStation", "节点角色");
 
-                map.AddTBIntPK(NodeStationAttr.FK_Node, 0, "节点", false, false);
+                map.AddMyPK();
 
-                // #warning ,这里为了方便用户选择，让分组都统一采用了枚举类型. edit zhoupeng. 2015.04.28. 注意jflow也要修改.
-                map.AddDDLEntitiesPK(NodeStationAttr.FK_Station, null, "工作岗位",
+                map.AddTBInt(NodeStationAttr.FK_Node, 0, "节点", false, false);
+                map.AddDDLEntities(NodeStationAttr.FK_Station, null, "工作角色",
                    new BP.Port.Stations(), true);
+
+                //map.AddTBIntPK(NodeStationAttr.FK_Node, 0, "节点", false, false);
+                //// #warning ,这里为了方便用户选择，让分组都统一采用了枚举类型. edit zhoupeng. 2015.04.28. 注意jflow也要修改.
+                //map.AddDDLEntitiesPK(NodeStationAttr.FK_Station, null, "工作角色",
+                //   new BP.Port.Stations(), true);
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
+        protected override bool beforeUpdateInsertAction()
+        {
+            this.setMyPK(this.FK_Node + "_" + this.FK_Station);
+            return base.beforeUpdateInsertAction();
+        }
 
         /// <summary>
-        /// 节点岗位发生变化，删除该节点记忆的接收人员。
+        /// 节点角色发生变化，删除该节点记忆的接收人员。
         /// </summary>
         /// <returns></returns>
         protected override bool beforeInsert()
@@ -117,33 +127,23 @@ namespace BP.WF.Template
         #endregion
     }
     /// <summary>
-    /// 节点工作岗位s
+    /// 节点工作角色s
     /// </summary>
-    public class NodeStations : EntitiesMM
+    public class NodeStations : EntitiesMyPK
     {
         #region 构造函数.
         /// <summary>
-        /// 节点工作岗位
+        /// 节点工作角色
         /// </summary>
         public NodeStations() { }
         /// <summary>
-        /// 节点工作岗位
+        /// 节点工作角色
         /// </summary>
         /// <param name="nodeID">节点ID</param>
         public NodeStations(int nodeID)
         {
             QueryObject qo = new QueryObject(this);
             qo.AddWhere(NodeStationAttr.FK_Node, nodeID);
-            qo.DoQuery();
-        }
-        /// <summary>
-        /// 节点工作岗位
-        /// </summary>
-        /// <param name="StationNo">StationNo </param>
-        public NodeStations(string StationNo)
-        {
-            QueryObject qo = new QueryObject(this);
-            qo.AddWhere(NodeStationAttr.FK_Station, StationNo);
             qo.DoQuery();
         }
         /// <summary>

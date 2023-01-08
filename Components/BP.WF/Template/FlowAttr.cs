@@ -36,6 +36,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string CreateDate = "CreateDate";
         /// <summary>
+        /// 创建人
+        /// </summary>
+        public const string Creater = "Creater";
+        /// <summary>
         /// BillTable
         /// </summary>
         public const string BillTable = "BillTable";
@@ -104,15 +108,10 @@ namespace BP.WF.Template
         /// 类型
         /// </summary>
         public const string FlowAppType = "FlowAppType";
-        
         /// <summary>
         /// 图像类型
         /// </summary>
         public const string ChartType = "ChartType";
-        /// <summary>
-        /// 运行在的主机上
-        /// </summary>
-        public const string HostRun = "HostRun";
         /// <summary>
         /// 流程计划完成日期设置规则
         /// </summary>
@@ -139,13 +138,9 @@ namespace BP.WF.Template
         /// </summary>
         public const string FrmUrl = "FrmUrl";
         /// <summary>
-        /// 流程表单类型
+        /// 表单URL
         /// </summary>
-        public const string FlowFrmModel = "FlowFrmModel";
-        /// <summary>
-        /// 流程数据存储模式
-        /// </summary>
-        public const string DataStoreModel = "DataStoreModel";
+        public const string FlowDevModel = "FlowDevModel";
         /// <summary>
         /// 流程标记
         /// </summary>
@@ -154,22 +149,6 @@ namespace BP.WF.Template
         /// 流程事件实体
         /// </summary>
         public const string FlowEventEntity = "FlowEventEntity";
-        /// <summary>
-        /// 流程设计者编号
-        /// </summary>
-        public const string DesignerNo = "DesignerNo";
-        /// <summary>
-        /// 流程设计者名称
-        /// </summary>
-        public const string DesignerName = "DesignerName";
-        /// <summary>
-        /// 流程设计时间
-        /// </summary>
-        public const string DesignTime = "DesignTime";
-        /// <summary>
-        /// 历史发起查看字段
-        /// </summary>
-        public const string HistoryFields = "HistoryFields";
         /// <summary>
         /// 外部客户参与流程规则
         /// </summary>
@@ -183,9 +162,9 @@ namespace BP.WF.Template
         /// </summary>
         public const string BuessFields = "BuessFields";
         /// <summary>
-        /// 流程备注的表达式
+        /// 高级查询人员字段
         /// </summary>
-        public const string FlowNoteExp = "FlowNoteExp";
+        public const string AdvEmps = "AdvEmps";
         /// <summary>
         /// 数据权限控制方式
         /// </summary>
@@ -230,6 +209,10 @@ namespace BP.WF.Template
         /// 排序方式
         /// </summary>
         public const string TrackOrderBy = "TrackOrderBy";
+        /// <summary>
+        /// 子流程轨迹图中的显示
+        /// </summary>
+        public const string SubFlowShowType = "SubFlowShowType";
         #endregion 基本属性
 
         #region 发起限制规则.
@@ -299,15 +282,10 @@ namespace BP.WF.Template
         #endregion 开始节点数据导入规则.
 
         #region 父子流程
-       
         /// <summary>
         /// 版本号
         /// </summary>
         public const string Ver = "Ver";
-        /// <summary>
-        /// 删除规则
-        /// </summary>
-        public const string FlowDeleteRole = "FlowDeleteRole";
         /// <summary>
         /// 子流程结束时，让父流程自动运行到下一步
         /// </summary>
@@ -389,7 +367,7 @@ namespace BP.WF.Template
         /// </summary>
         public const string PSpecDept = "PSpecDept";
         /// <summary>
-        /// 指定的岗位可看
+        /// 指定的角色可看
         /// </summary>
         public const string PSpecSta = "PSpecSta";
         /// <summary>
@@ -401,11 +379,13 @@ namespace BP.WF.Template
         /// </summary>
         public const string PSpecEmp = "PSpecEmp";
         #endregion 权限组.
-
         /// <summary>
         /// 流程发起测试人
         /// </summary>
         public const string Tester = "Tester";
+
+        public const string DevModelType = "DevModelType";
+        public const string DevModelPara = "DevModelPara";
     }
     /// <summary>
     /// 草稿规则

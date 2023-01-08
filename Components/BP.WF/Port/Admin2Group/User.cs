@@ -392,39 +392,6 @@ namespace BP.WF.Port.Admin2Group
             string pinyinQP = BP.DA.DataType.ParseStringToPinyin(name).ToLower();
             string pinyinJX = BP.DA.DataType.ParseStringToPinyinJianXie(name).ToLower();
             string py = "," + pinyinQP + "," + pinyinJX + ",";
-
-            ////处理岗位信息.
-            //DeptUserStations des = new DeptUserStations();
-            //des.Retrieve(DeptUserStationAttr.FK_User, no);
-
-            //string depts = "";
-            //string stas = "";
-
-            //foreach (DeptUserStation item in des)
-            //{
-            //    BP.Port.Dept dept = new BP.Port.Dept();
-            //    dept.No = item.FK_Dept;
-            //    if (dept.RetrieveFromDBSources() == 0)
-            //    {
-            //        item.Delete();
-            //        continue;
-            //    }
-
-            //    //给拼音重新定义值,让其加上部门的信息.
-            //    py = py + pinyinJX + "/" + BP.DA.DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
-
-            //    BP.Port.Station sta = new Port.Station();
-            //    sta.No = item.FK_Station;
-            //    if (sta.RetrieveFromDBSources() == 0)
-            //    {
-            //        item.Delete();
-            //        continue;
-            //    }
-
-            //    stas += "@" + dept.NameOfPath + "|" + sta.Name;
-            //    depts += "@" + dept.NameOfPath;
-            //}
-
             return py;
         }
 

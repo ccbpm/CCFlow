@@ -515,8 +515,8 @@ namespace BP.WF
                 map.AddTBInt(TrackAttr.NDTo, 0, "到节点", true, false);
                 map.AddTBString(TrackAttr.NDToT, null, "到节点(名称)", true, false, 0, 999, 900);
 
-                map.AddTBString(TrackAttr.EmpFrom, null, "从人员", true, false, 0, 50, 100);
-                map.AddTBString(TrackAttr.EmpFromT, null, "从人员(名称)", true, false, 0, 30, 100);
+                map.AddTBString(TrackAttr.EmpFrom, null, "从人员", true, false, 0, 100, 100);
+                map.AddTBString(TrackAttr.EmpFromT, null, "从人员(名称)", true, false, 0, 100, 100);
 
                 map.AddTBString(TrackAttr.EmpTo, null, "到人员", true, false, 0, 2000, 100);
                 map.AddTBString(TrackAttr.EmpToT, null, "到人员(名称)", true, false, 0, 2000, 100);
@@ -594,6 +594,8 @@ namespace BP.WF
                 case DBType.Oracle:
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     sqlRename = "ALTER TABLE WF_Track RENAME to " + ptable;
                     break;
                 case DBType.MySQL:
@@ -615,7 +617,7 @@ namespace BP.WF
         public void DoInsert(Int64 mypk)
         {
             string ptable = "ND" + int.Parse(this.FK_Flow) + "Track";
-            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
+            string dbstr = BP.Difference.SystemConfig.AppCenterDBVarStr;
             string sql = "INSERT INTO " + ptable;
             sql += "(";
             sql += "" + TrackAttr.MyPK + ",";
@@ -746,14 +748,18 @@ namespace BP.WF
             #endregion 增加.
 
 
-            if (DataType.IsNullOrEmpty(this.WriteDB) == false && DBAccess.IsExitsTableCol(ptable, "WriteDB") == true)
+            if (DataType.IsNullOrEmpty(this.WriteDB) == false)
             {
-                if (this.WriteDB.Contains("data:image/png;base64,") == true)
+                if (this.HisActionType == ActionType.WorkCheck)
                     DBAccess.SaveBigTextToDB(this.WriteDB, ptable, "MyPK", this.MyPK, "WriteDB");
                 else
                 {
-                    sql = "SELECT WriteDB From " + ptable + " WHERE MyPK='" + this.WriteDB + "'";
-                    DBAccess.SaveBigTextToDB(DBAccess.RunSQLReturnStringIsNull(sql, ""), ptable, "MyPK", this.MyPK, "WriteDB");
+                    if (DBAccess.IsExitsTableCol(ptable, "WriteDB") == true)
+                    {
+                        sql = "SELECT WriteDB From " + ptable + " WHERE MyPK='" + this.WriteDB + "'";
+                        DBAccess.SaveBigTextToDB(DBAccess.RunSQLReturnStringIsNull(sql, ""), ptable, "MyPK", this.MyPK, "WriteDB");
+                    }
+
                 }
 
                 //DBAccess.SaveBigTextToDB(this.WriteDB, ptable, "MyPK", this.MyPK, "WriteDB");
@@ -798,8 +804,6 @@ namespace BP.WF
             DateTime d;
             if (string.IsNullOrWhiteSpace(RDT) || DateTime.TryParse(this.RDT, out d) == false)
                 this.RDT = DataType.CurrentDateTimess;
-
-
 
             this.DoInsert(0);
             return false;

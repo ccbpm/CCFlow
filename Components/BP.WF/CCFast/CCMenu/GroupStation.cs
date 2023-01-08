@@ -3,7 +3,7 @@
 namespace BP.CCFast.CCMenu
 {
     /// <summary>
-    /// 权限组岗位
+    /// 权限组角色
     /// </summary>
     public class GroupStationAttr
     {
@@ -17,7 +17,7 @@ namespace BP.CCFast.CCMenu
         public const string FK_Group = "FK_Group";
     }
     /// <summary>
-    /// 权限组岗位
+    /// 权限组角色
     /// </summary>
     public class GroupStation : EntityMM
     {
@@ -48,14 +48,14 @@ namespace BP.CCFast.CCMenu
 
         #region 构造方法
         /// <summary>
-        /// 权限组岗位
+        /// 权限组角色
         /// </summary>
         public GroupStation()
         {
         }
         
         /// <summary>
-        /// 权限组岗位
+        /// 权限组角色
         /// </summary>
         public override Map EnMap
         {
@@ -63,11 +63,11 @@ namespace BP.CCFast.CCMenu
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_GroupStation", "权限组岗位");
+                Map map = new Map("GPM_GroupStation", "权限组角色");
                 map.setEnType(EnType.Sys);
 
                 map.AddTBStringPK(GroupStationAttr.FK_Group, null, "权限组", false, false, 0, 50, 20);
-                map.AddDDLEntitiesPK(GroupStationAttr.FK_Station, null, "岗位", new BP.Port.Stations(), true);
+                map.AddDDLEntitiesPK(GroupStationAttr.FK_Station, null, "角色", new BP.Port.Stations(), true);
 
                 this._enMap = map;
                 return this._enMap;
@@ -76,7 +76,7 @@ namespace BP.CCFast.CCMenu
         #endregion
     }
     /// <summary>
-    /// 权限组岗位s
+    /// 权限组角色s
     /// </summary>
     public class GroupStations : EntitiesMM
     {

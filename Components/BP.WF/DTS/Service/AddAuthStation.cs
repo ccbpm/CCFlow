@@ -16,10 +16,10 @@ namespace BP.WF.DTS
         /// </summary>
         public AddAuthStation()
         {
-            this.Title = "增加授权岗位";
-            this.Help = "1. 解决一个流程执行完成后，那些授权岗位参与了该流程.";
-            this.Help += "\t\n 2. 在WF_GenerWorkFlow 的Emps的字段上增加  @部门编号+下划线+岗位编号; ";
-            this.Help += "\t\n 3. 解决中科软的人员离职后的工作交接后，按照授权岗位查询已经办理过的流量问题.";
+            this.Title = "增加授权角色";
+            this.Help = "1. 解决一个流程执行完成后，那些授权角色参与了该流程.";
+            this.Help += "\t\n 2. 在WF_GenerWorkFlow 的Emps的字段上增加  @部门编号+下划线+角色编号; ";
+            this.Help += "\t\n 3. 解决中科软的人员离职后的工作交接后，按照授权角色查询已经办理过的流量问题.";
 
             this.GroupName = "流程自动执行定时任务";
         }
@@ -73,7 +73,7 @@ namespace BP.WF.DTS
                     if (this.IsHaveStation(nd) == false)
                         continue;
 
-                    //求节点与岗位的集合.
+                    //求节点与角色的集合.
                     NodeStations ndstations = new NodeStations(nd.NodeID);
                     if (ndstations.Count == 0)
                         continue;

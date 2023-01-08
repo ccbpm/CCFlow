@@ -219,6 +219,7 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_Node", "轨迹图标组件");
 
+                map.AddGroupAttr("轨迹组件");
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10);
                 map.AddTBString(FrmTrackAttr.FrmTrackLab, "轨迹", "显示标签", true, false, 0, 200, 10, false);
@@ -227,7 +228,6 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(FrmTrackAttr.FrmTrackSta, (int)FrmTrackSta.Disable, "组件状态",
                    true, true, FrmTrackAttr.FrmTrackSta, "@0=禁用@1=显示轨迹图@2=显示轨迹表");
-
 
                 map.AddTBFloat(FrmTrackAttr.FrmTrack_H, 300, "高度", true, false);
 

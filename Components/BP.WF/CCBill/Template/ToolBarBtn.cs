@@ -148,7 +148,6 @@ namespace BP.CCBill.Template
                 map.AddTBString(ToolbarBtnAttr.BtnID, null, "按钮ID", true, true, 0, 300, 10);
                 map.AddTBString(ToolbarBtnAttr.BtnLab, null, "标签", true, false, 0, 300, 10);
 
-
                 //功能标记. 
                 map.AddTBString(ToolbarBtnAttr.FrmID, null, "表单ID", true, true, 0, 300, 10);
 
@@ -167,8 +166,6 @@ namespace BP.CCBill.Template
             }
         }
         #endregion
-
-
 
         #region 移动.
         public void DoUp()

@@ -14,14 +14,6 @@ namespace BP.Sys
         /// </summary>
         public const string FK_MapData = "FK_MapData";
         /// <summary>
-        /// X
-        /// </summary>
-        public const string X = "X";
-        /// <summary>
-        /// Y
-        /// </summary>
-        public const string Y = "Y";
-        /// <summary>
         /// KeyOfEn
         /// </summary>
         public const string KeyOfEn = "KeyOfEn";
@@ -46,12 +38,9 @@ namespace BP.Sys
         /// </summary>
         public const string FieldsCfg = "FieldsCfg";
         /// <summary>
-        /// GUID
+        /// 提示信息
         /// </summary>
-        public const string GUID = "GUID";
         public const string Tip = "Tip";
-
-        public const string AtPara = "AtPara";
         /// <summary>
         /// 字体大小，AtPara中属性，added by liuxc,2017-05-22
         /// </summary>
@@ -60,7 +49,6 @@ namespace BP.Sys
         /// 设置的值
         /// </summary>
         public const string SetVal = "SetVal";
-
     }
     /// <summary>
     /// 单选框
@@ -222,31 +210,21 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_FrmRB", "单选框");
-                //      map.EnDBUrl = new DBUrl(DBUrlType.DBAccessOfMSSQL1);
-
                 map.IndexField = FrmImgAthDBAttr.FK_MapData;
 
                 map.AddMyPK();
-                map.AddTBString(FrmRBAttr.FK_MapData, null, "表单ID", true, false, 0, 300, 20);
-                map.AddTBString(FrmRBAttr.KeyOfEn, null, "字段", true, false, 0, 300, 20);
+                map.AddTBString(FrmRBAttr.FK_MapData, null, "表单ID", true, false, 0, 200, 20);
+                map.AddTBString(FrmRBAttr.KeyOfEn, null, "字段", true, false, 0, 200, 20);
                 map.AddTBString(FrmRBAttr.EnumKey, null, "枚举值", true, false, 0, 30, 20);
                 map.AddTBString(FrmRBAttr.Lab, null, "标签", true, false, 0, 500, 20);
-
                 map.AddTBInt(FrmRBAttr.IntKey, 0, "IntKey", true, false);
-
-
                 map.AddTBInt(MapAttrAttr.UIIsEnable, 0, "是否启用", true, false);
-
-                map.AddTBFloat(FrmRBAttr.X, 5, "X", true, false);
-                map.AddTBFloat(FrmRBAttr.Y, 5, "Y", false, false);
 
                 //要执行的脚本.
                 map.AddTBString(FrmRBAttr.Script, null, "要执行的脚本", true, false, 0, 4000, 20);
                 map.AddTBString(FrmRBAttr.FieldsCfg, null, "配置信息@FieldName=Sta", true, false, 0, 4000, 20);
                 map.AddTBString(FrmRBAttr.SetVal, null, "设置的值", true, false, 0, 200, 20);
-
                 map.AddTBString(FrmRBAttr.Tip, null, "选择后提示的信息", true, false, 0, 1000, 20);
-                map.AddTBString(FrmRBAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
                 map.AddTBAtParas(500);
 
@@ -283,20 +261,10 @@ namespace BP.Sys
         /// <summary>
         /// 单选框s
         /// </summary>
-        /// <param name="fk_mapdata">s</param>
-        public FrmRBs(string fk_mapdata)
+        /// <param name="frmID">s</param>
+        public FrmRBs(string frmID)
         {
-            this.Retrieve(MapAttrAttr.FK_MapData, fk_mapdata);
-
-        }
-        /// <summary>
-        /// 单选框s
-        /// </summary>
-        /// <param name="fk_mapdata">表单ID</param>
-        /// <param name="keyOfEn">字段</param>
-        public FrmRBs(string fk_mapdata, string keyOfEn)
-        {
-            this.Retrieve(FrmRBAttr.FK_MapData, fk_mapdata, FrmRBAttr.KeyOfEn, keyOfEn);
+            this.Retrieve(MapAttrAttr.FK_MapData, frmID);
         }
         /// <summary>
         /// 得到它的 Entity

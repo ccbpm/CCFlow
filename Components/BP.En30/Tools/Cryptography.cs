@@ -274,5 +274,22 @@ namespace BP.Tools
             }
             return sBuilder.ToString();
         }
+
+        public static string MD5UpperCase(string ConvertString) //32位大写
+        {
+            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+            string t2 = BitConverter.ToString(md5.ComputeHash(UTF8Encoding.Default.GetBytes(ConvertString)));
+            t2 = t2.Replace("-", "");
+            return t2;
+        }
+        public static string MD5LowerCase(string ConvertString) //32位小写
+        {
+            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+            string t2 = BitConverter.ToString(md5.ComputeHash(UTF8Encoding.Default.GetBytes(ConvertString)));
+            t2 = t2.Replace("-", "");
+            return t2.ToLower();
+        }
     }
+
+
 }

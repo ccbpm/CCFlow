@@ -8,8 +8,12 @@ namespace BP.WF.Template.Frm
     /// <summary>
     /// 打印模板属性
     /// </summary>
-    public class FrmPrintTemplateAttr : BP.En.EntityNoNameAttr
+    public class FrmPrintTemplateAttr : BP.En.EntityMyPKAttr
     {
+        /// <summary>
+        /// 路径
+        /// </summary>
+        public const string Name = "Name";
         /// <summary>
         /// 路径
         /// </summary>

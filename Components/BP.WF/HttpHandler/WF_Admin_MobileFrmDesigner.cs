@@ -827,7 +827,7 @@ namespace BP.WF.HttpHandler
                 qo.AddWhere(MapAttrAttr.FK_MapData, FK_MapData);//添加查询条件
                 qo.addAnd();
                 qo.AddWhere(MapAttrAttr.UIVisible, true);
-                qo.addOrderBy(MapAttrAttr.Y, MapAttrAttr.X);
+                //qo.addOrderBy(MapAttrAttr.Y, MapAttrAttr.X);
                 qo.DoQuery();//执行查询
                 int rowIdx = 0;
                 //执行更新

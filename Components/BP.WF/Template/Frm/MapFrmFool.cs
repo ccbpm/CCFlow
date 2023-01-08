@@ -153,6 +153,7 @@ namespace BP.WF.Template.Frm
                 Map map = new Map("Sys_MapData", "傻瓜表单属性");
 
                 #region 基本属性.
+                map.AddGroupAttr("基本属性");
                 map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, true, 1, 190, 20);
                 if (BP.WF.Glo.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
@@ -169,9 +170,7 @@ namespace BP.WF.Template.Frm
                 }
                 map.AddTBString(MapDataAttr.Name, null, "名称", true, false, 0, 500, 20, true);
                 map.AddTBInt(MapDataAttr.TableCol, 0, "显示列数", false, false);
-
                 map.AddTBInt(MapDataAttr.FrmW, 900, "表单宽度", true, false);
-
                 if (BP.WF.Glo.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
                 }
@@ -190,12 +189,13 @@ namespace BP.WF.Template.Frm
                     true, true, MapDataAttr.FrmType);
 
                 map.AddTBString(MapDataAttr.UrlExt, null, "自定义URL", true, false, 0, 300, 20, true);
-                map.AddTBString(MapDataAttr.Icon, "icon-doc", "图标", true, false, 0, 100, 100,true);
+                map.AddTBString(MapDataAttr.Icon, "icon-doc", "图标", true, false, 0, 100, 100, true);
 
                 map.AddBoolean("IsEnableJs", false, "是否启用自定义js函数？", true, true, true);
                 #endregion 基本属性.
 
                 #region 设计者信息.
+                map.AddGroupAttr("设计者信息");
                 map.AddTBString(MapDataAttr.Designer, null, "设计者", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.DesignerContact, null, "联系方式", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20, true);
@@ -208,6 +208,7 @@ namespace BP.WF.Template.Frm
                 #endregion 设计者信息.
 
                 #region 基本功能.
+                map.AddGroupMethod("基本功能");
 
                 RefMethod rm = new RefMethod();
 
@@ -331,9 +332,10 @@ namespace BP.WF.Template.Frm
                 #endregion 方法 - 基本功能.
 
                 #region 高级功能.
+                map.AddGroupMethod("高级功能");
                 rm = new RefMethod();
                 rm.Title = "版本管理"; // "设计表单";
-                rm.GroupName = "高级功能";
+               // rm.GroupName = "高级功能";
                 rm.ClassMethodName = this.ToString() + ".DoMapDataVer";
                 //  rm.Icon = "../../WF/Img/Ver.png";
                 rm.Icon = "icon-social-dropbox";
@@ -344,7 +346,7 @@ namespace BP.WF.Template.Frm
 
                 rm = new RefMethod();
                 rm.Title = "改变表单类型";
-                rm.GroupName = "高级功能";
+               // rm.GroupName = "高级功能";
                 rm.ClassMethodName = this.ToString() + ".DoChangeFrmType()";
                 rm.HisAttrs.AddDDLSysEnum("FrmType", 0, "修改表单类型", true, true);
                 rm.Icon = "icon-refresh";
@@ -352,7 +354,7 @@ namespace BP.WF.Template.Frm
 
                 rm = new RefMethod();
                 rm.Title = "傻瓜表单设计";
-                rm.GroupName = "高级功能";
+               // rm.GroupName = "高级功能";
                 rm.ClassMethodName = this.ToString() + ".DoDesignerFool";
                 //rm.Icon = "../../WF/Img/FileType/xlsx.gif";
                 rm.Icon = "icon-note";
@@ -363,7 +365,7 @@ namespace BP.WF.Template.Frm
 
                 rm = new RefMethod();
                 rm.Title = "JS编程"; // "设计表单";
-                rm.GroupName = "高级功能";
+             //   rm.GroupName = "高级功能";
                 rm.ClassMethodName = this.ToString() + ".DoInitScript";
                 rm.Icon = "../../WF/Img/Script.png";
                 rm.Icon = "icon-social-dropbox";
@@ -384,6 +386,7 @@ namespace BP.WF.Template.Frm
                 #endregion
 
                 #region 开发接口.
+                map.AddGroupMethod("开发接口");
                 rm = new RefMethod();
                 rm.Title = "调用查询API"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoSearch";
@@ -392,7 +395,7 @@ namespace BP.WF.Template.Frm
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
-                rm.GroupName = "开发接口";
+             //   rm.GroupName = "开发接口";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -402,11 +405,12 @@ namespace BP.WF.Template.Frm
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
-                rm.GroupName = "开发接口";
+             //   rm.GroupName = "开发接口";
                 map.AddRefMethod(rm);
                 #endregion 方法 - 开发接口.
 
                 #region 实验中的功能
+                map.AddGroupMethod("实验中的功能");
                 //rm = new RefMethod();
                 //rm.Title = "批量设置验证规则";
                 //rm.GroupName = "实验中的功能";
@@ -419,7 +423,7 @@ namespace BP.WF.Template.Frm
                 rm = new RefMethod();
                 rm.Title = "一键设置表单元素只读";
                 rm.Warning = "您确定要设置吗？所有的元素，包括字段、从表、附件以及其它组件都将会被设置为只读的.";
-                rm.GroupName = "实验中的功能";
+              //  rm.GroupName = "实验中的功能";
                 //rm.Icon = "../../WF/Img/RegularExpression.png";
                 rm.ClassMethodName = this.ToString() + ".DoOneKeySetReadonly";
                 rm.RefMethodType = RefMethodType.Func;
@@ -581,6 +585,22 @@ namespace BP.WF.Template.Frm
             DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlID='' WHERE CtrlID IS NULL");
             DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlID='' WHERE CtrlID IS NULL");
 
+
+            //更新GroupFieldID
+            string sql = "";
+            switch (BP.Difference.SystemConfig.AppCenterDBType)
+            {
+                case DBType.MySQL:
+                    sql = "UPDATE Sys_MapDtl, Sys_GroupField B SET Sys_MapDtl.GroupField=B.OID WHERE Sys_MapDtl.No=B.CtrlID AND Sys_MapDtl.GroupField=''";
+                    break;
+                case DBType.MSSQL:
+                default:
+                    sql = "UPDATE Sys_MapDtl SET Sys_MapDtl.GroupField=Sys_GroupField.OID FROM Sys_GroupField WHERE Sys_MapDtl.No=Sys_GroupField.CtrlID AND Sys_MapDtl.GroupField=''";
+                    break;
+            }
+            DBAccess.RunSQL(sql);
+
+
             //删除重影数据.
             DBAccess.RunSQL("DELETE FROM Sys_GroupField WHERE CtrlType='FWC' and CTRLID is null");
 
@@ -593,7 +613,8 @@ namespace BP.WF.Template.Frm
             string sqlOfOID = " CAST(OID as VARCHAR(50)) ";
             if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
                 sqlOfOID = " CAST(OID as CHAR) ";
-            string sql = "SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND GroupID NOT IN (SELECT " + sqlOfOID + " FROM Sys_GroupField WHERE FrmID='" + this.No + "' AND ( CtrlType='' OR CtrlType IS NULL)  )  OR GroupID IS NULL ";
+
+            sql = "SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND GroupID NOT IN (SELECT " + sqlOfOID + " FROM Sys_GroupField WHERE FrmID='" + this.No + "' AND ( CtrlType='' OR CtrlType IS NULL)  )  OR GroupID IS NULL ";
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count != 0)
@@ -693,7 +714,7 @@ namespace BP.WF.Template.Frm
 
 
             //删除重复的数据, 比如一个从表显示了多个分组里. 增加此部分.
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6)
                 sql = "SELECT * FROM (SELECT FrmID,CtrlID,CtrlType, count(*) as Num FROM sys_groupfield WHERE CtrlID!='' GROUP BY FrmID,CtrlID,CtrlType ) WHERE Num > 1";
             else
                 sql = "SELECT * FROM (SELECT FrmID,CtrlID,CtrlType, count(*) as Num FROM sys_groupfield WHERE CtrlID!='' GROUP BY FrmID,CtrlID,CtrlType ) AS A WHERE A.Num > 1";
@@ -761,7 +782,32 @@ namespace BP.WF.Template.Frm
                 attrNew.Name = newFieldName;
 
             attrNew.Insert();
+            if (this.No.StartsWith("ND") == false)
+            {
+                //修改对应的数据库字段名
+                DBAccess.RenameTableField(this.PTable, fieldOld, newField);
+            }
+            else
+            {
+                string strs = this.No.Replace("ND", "");
+                strs = strs.Substring(0, strs.Length - 2);
+                string rptTable = "ND" + strs + "Rpt";
+                MapDatas mds = new MapDatas();
+                mds.Retrieve(MapDataAttr.No, rptTable);
+                if (mds.Count == 0)
+                {
+                    string sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "',  MyPK='" + rptTable + "_" + newField + "' WHERE KeyOfEn='" + fieldOld + "' AND FK_MapData='" + rptTable + "'";
+                    DBAccess.RenameTableField(rptTable, fieldOld, newField);
+                }
 
+                foreach (MapData item in mds)
+                {
+                    string sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "',  MyPK='" + item.No + "_" + newField + "' WHERE KeyOfEn='" + fieldOld + "' AND FK_MapData='" + item.No + "'";
+                    DBAccess.RunSQL(sql);
+                    DBAccess.RenameTableField(item.PTable, fieldOld, newField);
+                }
+
+            }
             //更新处理他的相关业务逻辑.
             MapExts exts = new MapExts(this.No);
             foreach (MapExt item in exts)

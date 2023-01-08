@@ -191,7 +191,6 @@ namespace BP.CCBill.Template
 
                 map.AddTBString(GroupMethodAttr.OrgNo, null, "OrgNo", true, true, 0, 40, 20, true);
 
-
                 map.AddTBInt(GroupMethodAttr.Idx, 0, "顺序号", true, false);
                 map.AddTBAtParas(3000);
                 #endregion 字段.

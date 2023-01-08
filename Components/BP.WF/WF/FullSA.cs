@@ -73,7 +73,7 @@ namespace BP.WF
                 if (passedNodeIDs.Contains(item.NodeID + ",") == true)
                     continue;
 
-                //如果按照岗位计算（默认的第一个规则.）
+                //如果按照角色计算（默认的第一个规则.）
                 if (item.HisDeliveryWay == DeliveryWay.ByStation)
                 {
                     // string sql = "SELECT No, Name FROM Port_Emp WHERE No IN (SELECT A.FK_Emp FROM " + BP.WF.Glo.EmpStation + " A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + item.NodeID + ")";
@@ -222,7 +222,7 @@ namespace BP.WF
                 }
                 #endregion
 
-                #region 2019-09-25 byzhoupeng, 仅按岗位计算 
+                #region 2019-09-25 byzhoupeng, 仅按角色计算 
                 if (item.HisDeliveryWay == DeliveryWay.ByStationOnly)
                 {
                    string sql = "SELECT DISTINCT c." + BP.Sys.Base.Glo.UserNo + ",c.Name FROM Port_DeptEmpStation A, WF_NodeStation B, Port_Emp C WHERE A.FK_Emp=C." + BP.Sys.Base.Glo.UserNoWhitOutAS + " AND A.FK_Station=B.FK_Station AND B.FK_Node=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Node ORDER BY C."+ BP.Sys.Base.Glo.UserNoWhitOutAS;
@@ -231,7 +231,7 @@ namespace BP.WF
                     ps.SQL = sql;
                     dt = DBAccess.RunSQLReturnTable(ps);
                     if (dt.Rows.Count == 0)                    
-                        throw new Exception("err@节点绑定的仅按照岗位计算，没有找到人员:"+item.Name +" SQL="+ps.SQLNoPara);
+                        throw new Exception("err@节点绑定的仅按照角色计算，没有找到人员:"+item.Name +" SQL="+ps.SQLNoPara);
                     foreach (DataRow dr in dt.Rows)
                     {
                         string no = dr[0].ToString();                         
@@ -306,8 +306,8 @@ namespace BP.WF
                     }
                 }
 
-                //按照节点的 岗位与部门的交集计算.
-                #region 按部门与岗位的交集计算.
+                //按照节点的 角色与部门的交集计算.
+                #region 按部门与角色的交集计算.
                 if (item.HisDeliveryWay == DeliveryWay.ByDeptAndStation)
                 {
                     string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
@@ -352,7 +352,7 @@ namespace BP.WF
                         sa.Insert();
                     }
                 }
-                #endregion 按部门与岗位的交集计算.
+                #endregion 按部门与角色的交集计算.
             }
 
             //预制当前节点到达节点的数据。
@@ -362,12 +362,12 @@ namespace BP.WF
                 if (item.HisDeliveryWay == DeliveryWay.ByStation
                     || item.HisDeliveryWay == DeliveryWay.FindSpecDeptEmpsInStationlist)
                 {
-                    /*如果按照岗位访问*/
-                    #region 最后判断 - 按照岗位来执行。
+                    /*如果按照角色访问*/
+                    #region 最后判断 - 按照角色来执行。
                     string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
                     string sql = "";
                     Paras ps = new Paras();
-                    /* 如果执行节点 与 接受节点岗位集合不一致 */
+                    /* 如果执行节点 与 接受节点角色集合不一致 */
                     /* 没有查询到的情况下, 先按照本部门计算。*/
 
                     switch (BP.Difference.SystemConfig.AppCenterDBType)
@@ -414,7 +414,7 @@ namespace BP.WF
 
                         sa.Insert();
                     }
-                    #endregion  按照岗位来执行。
+                    #endregion  按照角色来执行。
                 }
             }
         }

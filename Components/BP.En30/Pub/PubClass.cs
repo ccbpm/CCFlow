@@ -86,7 +86,7 @@ namespace BP.Pub
                 if (ens == null)
                     throw new Exception("类名错误:" + uiBindKey + ",不能转化成ens.");
 
-                ens.RetrieveAllFromDBSource();
+                ens.RetrieveAll();
                 dt = ens.ToDataTableField(uiBindKey);
                 return dt;
             }
@@ -268,7 +268,24 @@ namespace BP.Pub
             {
                 try
                 {
+                    
                     ens = (Entities)obj;
+                    string className = ens.ToString();
+                    switch (className.ToUpper())
+                    {
+                        case "BP.WF.STARTWORKS":
+                        case "BP.WF.WORKS":
+                        case "BP.WF.GESTARTWORKS":
+                        case "BP.EN.GENONAMES":
+                        case "BP.EN.GETREES":
+                        case "BP.WF.GERptS":
+                        case "BP.WF.GEENTITYS":
+                        case "BP.WF.GEWORKS":
+                        case "BP.SYS.TSENTITYNONAMES":
+                            continue;
+                        default:
+                            break;
+                    }
                     en = ens.GetNewEntity;
                     if (en.EnMap.EnType == EnType.View || en.EnMap.EnType == EnType.ThirdPartApp)
                         continue;
@@ -426,21 +443,15 @@ namespace BP.Pub
         {
             try
             {
-                string sql = "execute  sp_dropextendedproperty 'MS_Description','user',dbo,'table','" + table + "','column'," + col;
-                en.RunSQL(sql);
-            }
-            catch (Exception ex)
-            {
-            }
-
-            try
-            {
                 string sql = "execute  sp_addextendedproperty 'MS_Description', '" + note + "', 'user', dbo, 'table', '" + table + "', 'column', '" + col + "'";
                 en.RunSQL(sql);
             }
             catch (Exception ex)
             {
+                string sql = "execute  sp_updateextendedproperty 'MS_Description', '" + note + "', 'user', dbo, 'table', '" + table + "', 'column', '" + col + "'";
+                en.RunSQL(sql);
             }
+
         }
         /// <summary>
         /// 为表增加解释
@@ -454,22 +465,14 @@ namespace BP.Pub
 
             try
             {
-                string sql = "execute  sp_dropextendedproperty 'MS_Description','user',dbo,'table','" + en.EnMap.PhysicsTable + "'";
-                en.RunSQL(sql);
-            }
-            catch (Exception ex)
-            {
-            }
-
-            try
-            {
                 string sql = "execute  sp_addextendedproperty 'MS_Description', '" + en.EnDesc + "', 'user', dbo, 'table', '" + en.EnMap.PhysicsTable + "'";
                 en.RunSQL(sql);
             }
             catch (Exception ex)
             {
+                string sql = "execute  sp_updateextendedproperty  'MS_Description', '" + en.EnDesc + "', 'user', dbo, 'table', '" + en.EnMap.PhysicsTable + "'";
+                en.RunSQL(sql);
             }
-
 
             SysEnums ses = new SysEnums();
             foreach (Attr attr in en.EnMap.Attrs)

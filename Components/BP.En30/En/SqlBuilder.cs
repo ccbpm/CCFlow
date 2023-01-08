@@ -332,6 +332,8 @@ namespace BP.En
                     sql = SqlBuilder.SelectSQLOfOLE(en, 1) + "  AND ( " + SqlBuilder.GenerWhereByPK(en, "@") + " )";
                     break;
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                 case DBType.Informix:
                     sql = SqlBuilder.SelectSQLOfOra(en, 1) + "  AND ( " + SqlBuilder.GenerWhereByPK(en, ":") + " )";
                     break;
@@ -361,6 +363,8 @@ namespace BP.En
                     sql = SqlBuilder.SelectSQLOfPostgreSQL(en, 1) + " AND " + SqlBuilder.GenerWhereByPK(en, "@");
                     break;
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     sql = SqlBuilder.SelectSQLOfOra(en, 1) + "AND (" + SqlBuilder.GenerWhereByPK(en, ":") + " )";
                     break;
                 case DBType.Informix:
@@ -390,6 +394,8 @@ namespace BP.En
                         return SqlBuilder.SelectSQLOfMS(en, 1) + "  AND ( " + SqlBuilder.GetKeyConditionOfOraForPara(en) + " )";
                     return SqlBuilder.SelectSQLOfMS(en, 1) + "  AND ( " + SqlBuilder.GetKeyConditionOfMS(en) + " )";
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                 case DBType.Informix:
                     if (en.EnMap.HisFKAttrs.Count == 0)
                         return SqlBuilder.SelectSQLOfOra(en, 1) + SqlBuilder.GetKeyConditionOfOraForPara(en);
@@ -400,40 +406,7 @@ namespace BP.En
                     throw new Exception("还没有实现。");
             }
         }
-        public static string GenerFormOfOra(Entity en)
-        {
-            string from = " FROM " + en.EnMap.PhysicsTable;
-
-            if (en.EnMap.HisFKEnumAttrs.Count == 0)
-                return from + " WHERE (1=1) ";
-
-            string mytable = en.EnMap.PhysicsTable;
-            from += ",";
-            // 产生外键表列表。
-            Attrs fkAttrs = en.EnMap.HisFKAttrs;
-            foreach (Attr attr in fkAttrs)
-            {
-                if (attr.MyFieldType == FieldType.RefText)
-                    continue;
-
-                Entity en1 = attr.HisFKEn;
-                string fktable = en1.EnMap.PhysicsTable;
-                fktable = fktable + " " + fktable + "_" + attr.Key;
-                from += fktable + " ,";
-            }
-
-            //产生枚举表列表。
-            Attrs enumAttrs = en.EnMap.HisEnumAttrs;
-            foreach (Attr attr in enumAttrs)
-            {
-                if (attr.MyFieldType == FieldType.RefText)
-                    continue;
-                //string enumTable = "Enum_"+attr.Key;
-                from += " (SELECT Lab, IntKey FROM Sys_Enum WHERE EnumKey='" + attr.UIBindKey + "' )  Enum_" + attr.Key + " ,";
-            }
-            from = from.Substring(0, from.Length - 1);
-            return from;
-        }
+       
         public static string GenerFormWhereOfOra(Entity en)
         {
             string from = " FROM " + en.EnMap.PhysicsTable;
@@ -450,10 +423,23 @@ namespace BP.En
                 if (attr.MyFieldType == FieldType.RefText)
                     continue;
 
-                string fktable = attr.HisFKEn.EnMap.PhysicsTable;
+                if (attr.UIBindKey.Contains(","))
+                {
+                    string[] strs = attr.UIBindKey.Split(',');
+                    string ptable = strs[0];
+                    string noCol = strs[1];
+                    string nameCol = strs[2];
+                    ptable = ptable + " T" + attr.Key;
+                    from += ptable + " ,";
+                }
+                else
+                {
 
-                fktable = fktable + " T" + attr.Key;
-                from += fktable + " ,";
+                    string fktable = attr.HisFKEn.EnMap.PhysicsTable;
+
+                    fktable = fktable + " T" + attr.Key;
+                    from += fktable + " ,";
+                }
             }
 
             from = from.Substring(0, from.Length - 1);
@@ -467,24 +453,54 @@ namespace BP.En
                 if (attr.MyFieldType == FieldType.RefText)
                     continue;
 
-                Entity en1 = attr.HisFKEn; // ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
-                string fktable = "T" + attr.Key;
-
-                if (isAddAnd == false)
+                if (attr.UIBindKey.Contains(","))
                 {
-                    if (attr.MyDataType == DataType.AppString)
-                        where += "(  " + mytable + "." + attr.Key + "=" + fktable + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue) + "  (+) )";
-                    else
-                        where += "(  " + mytable + "." + attr.Key + "=" + fktable + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue) + "  (+) )";
+                    string[] strs = attr.UIBindKey.Split(',');
+                    string ptable = strs[0];
+                    string noCol = strs[1];
+                    string nameCol = strs[2];
 
-                    isAddAnd = true;
+                    string fktable = "T" + attr.Key;
+                    if (isAddAnd == false)
+                    {
+                        if (attr.MyDataType == DataType.AppString)
+                            where += "(  " + mytable + "." + attr.Key + "=" + fktable + "." + nameCol + "  (+) )";
+                        else
+                            where += "(  " + mytable + "." + attr.Key + "=" + fktable + "." + nameCol + "  (+) )";
+
+                        isAddAnd = true;
+                    }
+                    else
+                    {
+                        if (attr.MyDataType == DataType.AppString)
+                            where += " AND (  " + mytable + "." + attr.Key + "=" + fktable + "." + nameCol + "  (+) )";
+                        else
+                            where += " AND (  " + mytable + "." + attr.Key + "=" + fktable + "." + nameCol + "  (+) )";
+                    }
+
                 }
                 else
                 {
-                    if (attr.MyDataType == DataType.AppString)
-                        where += " AND (  " + mytable + "." + attr.Key + "=" + fktable + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue) + "  (+) )";
+
+                    Entity en1 = attr.HisFKEn; // ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
+                    string fktable = "T" + attr.Key;
+
+                    if (isAddAnd == false)
+                    {
+                        if (attr.MyDataType == DataType.AppString)
+                            where += "(  " + mytable + "." + attr.Key + "=" + fktable + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue) + "  (+) )";
+                        else
+                            where += "(  " + mytable + "." + attr.Key + "=" + fktable + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue) + "  (+) )";
+
+                        isAddAnd = true;
+                    }
                     else
-                        where += " AND (  " + mytable + "." + attr.Key + "=" + fktable + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue) + "  (+) )";
+                    {
+                        if (attr.MyDataType == DataType.AppString)
+                            where += " AND (  " + mytable + "." + attr.Key + "=" + fktable + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue) + "  (+) )";
+                        else
+                            where += " AND (  " + mytable + "." + attr.Key + "=" + fktable + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue) + "  (+) )";
+                    }
                 }
             }
 
@@ -506,16 +522,36 @@ namespace BP.En
                 if (attr.MyFieldType == FieldType.RefText)
                     continue;
 
-                Entity en1 = attr.HisFKEn;
-                string fktable = en1.EnMap.PhysicsTable;
-                if (isAddAnd == true)
+                if (attr.UIBindKey.Contains(","))
                 {
-                    isAddAnd = false;
-                    where += " LEFT JOIN " + fktable + "  " + fktable + "_" + attr.Key + "  ON " + mytable + "." + attr.Key + "=" + fktable + "_" + attr.Key + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
+                    string[] strs = attr.UIBindKey.Split(',');
+                    string fktable = strs[0];
+                    string noCol = strs[1];
+                    string nameCol = strs[2];
+                    if (isAddAnd == true)
+                    {
+                        isAddAnd = false;
+                        where += " LEFT JOIN " + fktable + "  " + fktable + "_" + attr.Key + "  ON " + mytable + "." + attr.Key + "=" + fktable + "_" + attr.Key + "." + nameCol;
+                    }
+                    else
+                    {
+                        where += " LEFT JOIN " + fktable + "  " + fktable + "_" + attr.Key + "  ON " + mytable + "." + attr.Key + "=" + fktable + "_" + attr.Key + "." + nameCol;
+                    }
                 }
                 else
                 {
-                    where += " LEFT JOIN " + fktable + "  " + fktable + "_" + attr.Key + "  ON " + mytable + "." + attr.Key + "=" + fktable + "_" + attr.Key + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
+
+                    Entity en1 = attr.HisFKEn;
+                    string fktable = en1.EnMap.PhysicsTable;
+                    if (isAddAnd == true)
+                    {
+                        isAddAnd = false;
+                        where += " LEFT JOIN " + fktable + "  " + fktable + "_" + attr.Key + "  ON " + mytable + "." + attr.Key + "=" + fktable + "_" + attr.Key + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
+                    }
+                    else
+                    {
+                        where += " LEFT JOIN " + fktable + "  " + fktable + "_" + attr.Key + "  ON " + mytable + "." + attr.Key + "=" + fktable + "_" + attr.Key + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
+                    }
                 }
             }
 
@@ -531,7 +567,7 @@ namespace BP.En
         public static string GenerCreateTableSQLOfMS(Entity en)
         {
             if (DataType.IsNullOrEmpty(en.EnMap.PhysicsTable))
-                return "DELETE FROM Sys_enum where enumkey='sdsf44a23'";
+                return "DELETE FROM " + BP.Sys.Base.Glo.SysEnum() + " where enumkey='sdsf44a23'";
 
             //    throw new Exception(en.ToString() +" map error "+en.GetType() );
 
@@ -607,7 +643,7 @@ namespace BP.En
         public static string GenerCreateTableSQLOfPostgreSQL(Entity en)
         {
             if (DataType.IsNullOrEmpty(en.EnMap.PhysicsTable))
-                return "DELETE FROM Sys_enum where enumkey='sdsf44a23'";
+                return "DELETE FROM " + BP.Sys.Base.Glo.SysEnum() + " where enumkey='sdsf44a23'";
 
             //    throw new Exception(en.ToString() +" map error "+en.GetType() );
 
@@ -670,6 +706,118 @@ namespace BP.En
             sql += ")";
             return sql;
         }
+
+
+
+
+
+
+
+
+
+        public static string GenerCreateTableSqlOfKingBase(Entity en)
+        {
+            string from = " FROM " + en.EnMap.PhysicsTable;
+
+            if (en.EnMap.HisFKAttrs.Count == 0)
+                return from + " WHERE (1=1) ";
+
+            string mytable = en.EnMap.PhysicsTable;
+            from += ",";
+            // 产生外键表列表。
+            Attrs fkAttrs = en.EnMap.HisFKAttrs;
+            foreach (Attr attr in fkAttrs)
+            {
+                if (attr.MyFieldType == FieldType.RefText)
+                    continue;
+
+                if (attr.UIBindKey.Contains(","))
+                {
+                    string[] strs = attr.UIBindKey.Split(',');
+                    string ptable = strs[0];
+                    string noCol = strs[1];
+                    string nameCol = strs[2];
+
+                    string fktable = ptable;
+                    fktable = fktable + " T" + attr.Key;
+                    from += fktable + " ,";
+
+                }
+                else
+                {
+                    string fktable = attr.HisFKEn.EnMap.PhysicsTable;
+                    fktable = fktable + " T" + attr.Key;
+                    from += fktable + " ,";
+                }
+            }
+
+            from = from.Substring(0, from.Length - 1);
+
+            string where = " WHERE ";
+            bool isAddAnd = true;
+
+            // 开始形成 外键 where.
+            foreach (Attr attr in fkAttrs)
+            {
+                if (attr.MyFieldType == FieldType.RefText)
+                    continue;
+
+                if (attr.UIBindKey.Contains(","))
+                {
+                    string[] strs = attr.UIBindKey.Split(',');
+                    string ptable = strs[0];
+                    string noCol = strs[1];
+                    string nameCol = strs[2];
+
+                    string fktable = "T" + attr.Key;
+
+                    if (isAddAnd == false)
+                    {
+                        if (attr.MyDataType == DataType.AppString)
+                            where += "(  " + mytable + "." + attr.Key + "=" + fktable + "." + nameCol + "  (+) )";
+                        else
+                            where += "(  " + mytable + "." + attr.Key + "=" + fktable + "." + nameCol + "  (+) )";
+
+                        isAddAnd = true;
+                    }
+                    else
+                    {
+                        if (attr.MyDataType == DataType.AppString)
+                            where += " AND (  " + mytable + "." + attr.Key + "=" + fktable + "." + nameCol + "  (+) )";
+                        else
+                            where += " AND (  " + mytable + "." + attr.Key + "=" + fktable + "." + nameCol + "  (+) )";
+                    }
+
+                }
+                else
+                {
+
+                    Entity en1 = attr.HisFKEn; // ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
+                    string fktable = "T" + attr.Key;
+
+                    if (isAddAnd == false)
+                    {
+                        if (attr.MyDataType == DataType.AppString)
+                            where += "(  " + mytable + "." + attr.Key + "=" + fktable + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue) + "  (+) )";
+                        else
+                            where += "(  " + mytable + "." + attr.Key + "=" + fktable + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue) + "  (+) )";
+
+                        isAddAnd = true;
+                    }
+                    else
+                    {
+                        if (attr.MyDataType == DataType.AppString)
+                            where += " AND (  " + mytable + "." + attr.Key + "=" + fktable + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue) + "  (+) )";
+                        else
+                            where += " AND (  " + mytable + "." + attr.Key + "=" + fktable + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue) + "  (+) )";
+                    }
+                }
+            }
+
+            where = where.Replace("WHERE  AND", "WHERE");
+            where = where.Replace("WHERE AND", "WHERE");
+            return from + where;
+        }
         public static string GenerCreateTableSQLOf_OLE(Entity en)
         {
             string sql = "CREATE TABLE  " + en.EnMap.PhysicsTable + " (";
@@ -728,6 +876,8 @@ namespace BP.En
             switch (DBAccess.AppCenterDBType)
             {
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     return GenerCreateTableSQLOfOra(en);
                 case DBType.PostgreSQL:
                 case DBType.UX:
@@ -960,19 +1110,36 @@ namespace BP.En
                 if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                 {
                     //Entity en1= ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
-                    Entity en1 = attr.HisFKEn;
+                    if (attr.UIBindKey.Contains(",") == true)
+                    {
+                        string[] strs = attr.UIBindKey.Split(',');
 
-                    table = en1.EnMap.PhysicsTable;
-                    tableAttr = "T" + attr.Key + "";
-                    from = from + " LEFT OUTER JOIN " + table + "   " + tableAttr + " ON " + enTable + "." + attr.Field + "=" + tableAttr + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
-                    //where=where+" AND "+" ("+en.EnMap.PhysicsTable+"."+attr.Field+"="+en1.EnMap.PhysicsTable+"_"+attr.Key+"."+en1.EnMap.Attrs.GetFieldByKey(attr.UIRefKeyValue )+" ) "  ;
-                    continue;
+                        table = strs[0]; // en1.EnMap.PhysicsTable;
+                        string noCol = strs[1]; // en1.EnMap.PhysicsTable;
+                        string nameCol = strs[2]; // en1.EnMap.PhysicsTable;
+
+                        tableAttr = "T" + attr.Key + "";
+                        from = from + " LEFT OUTER JOIN " + table + "   " + tableAttr + " ON " + enTable + "." + attr.Field + "=" + tableAttr + "." + noCol;
+                        //where=where+" AND "+" ("+en.EnMap.PhysicsTable+"."+attr.Field+"="+en1.EnMap.PhysicsTable+"_"+attr.Key+"."+en1.EnMap.Attrs.GetFieldByKey(attr.UIRefKeyValue )+" ) "  ;
+                        continue;
+
+                    }
+                    else
+                    {
+                        Entity en1 = attr.HisFKEn;
+
+                        table = en1.EnMap.PhysicsTable;
+                        tableAttr = "T" + attr.Key + "";
+                        from = from + " LEFT OUTER JOIN " + table + "   " + tableAttr + " ON " + enTable + "." + attr.Field + "=" + tableAttr + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
+                        //where=where+" AND "+" ("+en.EnMap.PhysicsTable+"."+attr.Field+"="+en1.EnMap.PhysicsTable+"_"+attr.Key+"."+en1.EnMap.Attrs.GetFieldByKey(attr.UIRefKeyValue )+" ) "  ;
+                        continue;
+                    }
                 }
                 if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
                 {
                     //from= from+ " LEFT OUTER JOIN "+table+" AS "+tableAttr+ " ON "+enTable+"."+attr.Field+"="+tableAttr+"."+en1.EnMap.Attrs.GetFieldByKey( attr.UIRefKeyValue );
                     tableAttr = "Enum_" + attr.Key;
-                    from = from + " LEFT OUTER JOIN ( SELECT Lab, IntKey FROM Sys_Enum WHERE EnumKey='" + attr.UIBindKey + "' )  Enum_" + attr.Key + " ON " + enTable + "." + attr.Field + "=" + tableAttr + ".IntKey ";
+                    from = from + " LEFT OUTER JOIN ( SELECT Lab, IntKey FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey='" + attr.UIBindKey + "' )  Enum_" + attr.Key + " ON " + enTable + "." + attr.Field + "=" + tableAttr + ".IntKey ";
                     //	where=where+" AND  ( "+en.EnMap.PhysicsTable+"."+attr.Field+"= Enum_"+attr.Key+".IntKey ) ";
                 }
             }
@@ -1006,14 +1173,31 @@ namespace BP.En
                 if (mapAttr.LGType == FieldTypeS.Normal && attr.UIContralType == UIContralType.DDL)
                     continue;
 
-                string fktable = attr.HisFKEn.EnMap.PhysicsTable;
-                Attr refAttr = attr.HisFKEn.EnMap.GetAttrByKey(attr.UIRefKeyValue);
-                //added by liuxc,2017-9-11，此处增加是否存在实体表，因新增的字典表类型“动态SQL查询”，此类型没有具体的实体表，完全由SQL动态生成的数据集合，此处不判断会使生成的SQL报错
-                //if (DBAccess.IsExitsObject(fktable))
-                if (fktable.Equals("Port_Emp") == true && mytable.Equals("WF_NodeEmp") == false && BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-                    from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + ".UserID  AND " + fktable + "_" + attr.Field + ".OrgNo = '" + BP.Web.WebUser.OrgNo + "' ";
+
+                if (attr.UIBindKey.Contains(",") == true)
+                {
+                    string[] strs = attr.UIBindKey.Split(',');
+
+                    string fktable = strs[0];
+                    string noCol = strs[1];
+                    string nameCol = strs[2];
+
+                    if (fktable.Equals("Port_Emp") == true && mytable.Equals("WF_NodeEmp") == false && BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                        from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + ".UserID  AND " + fktable + "_" + attr.Field + ".OrgNo = '" + BP.Web.WebUser.OrgNo + "' ";
+                    else
+                        from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + "." + noCol;
+                }
                 else
-                    from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + "." + refAttr.Field;
+                {
+                    string fktable = attr.HisFKEn.EnMap.PhysicsTable;
+                    Attr refAttr = attr.HisFKEn.EnMap.GetAttrByKey(attr.UIRefKeyValue);
+                    //added by liuxc,2017-9-11，此处增加是否存在实体表，因新增的字典表类型“动态SQL查询”，此类型没有具体的实体表，完全由SQL动态生成的数据集合，此处不判断会使生成的SQL报错
+                    //if (DBAccess.IsExitsObject(fktable))
+                    if (fktable.Equals("Port_Emp") == true && mytable.Equals("WF_NodeEmp") == false && BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                        from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + ".UserID  AND " + fktable + "_" + attr.Field + ".OrgNo = '" + BP.Web.WebUser.OrgNo + "' ";
+                    else
+                        from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + "." + refAttr.Field;
+                }
 
             }
             return from + " WHERE (1=1) ";
@@ -1037,22 +1221,45 @@ namespace BP.En
 
                 if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                 {
-                    //Entity en1= ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
-                    Entity en1 = attr.HisFKEn;
-
-                    table = en1.EnMap.PhysicsTable;
-                    tableAttr = en1.EnMap.PhysicsTable + "_" + attr.Key;
-                    if (attr.MyDataType == DataType.AppInt)
+                    if (attr.UIBindKey.Contains(",") == true)
                     {
-                        from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON ISNULL( " + enTable + "." + attr.Field + ", " + en.GetValIntByKey(attr.Key) + ")=" + tableAttr + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
+                        string[] strs = attr.UIBindKey.Split(',');
+                        string ptable = strs[0];
+                        string noCol = strs[1];
+                        string nameCol = strs[2];
+
+                        tableAttr = ptable + "_" + attr.Key;
+                        if (attr.MyDataType == DataType.AppInt)
+                        {
+                            from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON ISNULL( " + enTable + "." + attr.Field + ", " + en.GetValIntByKey(attr.Key) + ")=" + tableAttr + "." + noCol;
+                        }
+                        else
+                        {
+                            if (table.Equals("Port_Emp") == true && BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                                from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON ISNULL( " + enTable + "." + attr.Field + ", '" + en.GetValByKey(attr.Key) + "')=" + tableAttr + ".UserID AND " + tableAttr + ".OrgNo = '" + BP.Web.WebUser.OrgNo + "' ";
+                            else
+                                from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON ISNULL( " + enTable + "." + attr.Field + ", '" + en.GetValByKey(attr.Key) + "')=" + tableAttr + "." + noCol;
+                        }
                     }
                     else
                     {
-                        if (table.Equals("Port_Emp") == true && BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-                            from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON ISNULL( " + enTable + "." + attr.Field + ", '" + en.GetValByKey(attr.Key) + "')=" + tableAttr + ".UserID AND " + tableAttr + ".OrgNo = '" + BP.Web.WebUser.OrgNo + "' ";
-                        else
-                            from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON ISNULL( " + enTable + "." + attr.Field + ", '" + en.GetValByKey(attr.Key) + "')=" + tableAttr + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
+                        //Entity en1= ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
+                        Entity en1 = attr.HisFKEn;
 
+                        table = en1.EnMap.PhysicsTable;
+                        tableAttr = en1.EnMap.PhysicsTable + "_" + attr.Key;
+                        if (attr.MyDataType == DataType.AppInt)
+                        {
+                            from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON ISNULL( " + enTable + "." + attr.Field + ", " + en.GetValIntByKey(attr.Key) + ")=" + tableAttr + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
+                        }
+                        else
+                        {
+                            if (table.Equals("Port_Emp") == true && BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                                from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON ISNULL( " + enTable + "." + attr.Field + ", '" + en.GetValByKey(attr.Key) + "')=" + tableAttr + ".UserID AND " + tableAttr + ".OrgNo = '" + BP.Web.WebUser.OrgNo + "' ";
+                            else
+                                from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON ISNULL( " + enTable + "." + attr.Field + ", '" + en.GetValByKey(attr.Key) + "')=" + tableAttr + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
+
+                        }
                     }
                     //where=where+" AND "+" ("+en.EnMap.PhysicsTable+"."+attr.Field+"="+en1.EnMap.PhysicsTable+"_"+attr.Key+"."+en1.EnMap.Attrs.GetFieldByKey(attr.UIRefKeyValue )+" ) "  ;
                     continue;
@@ -1062,7 +1269,7 @@ namespace BP.En
                 {
                     //from= from+ " LEFT OUTER JOIN "+table+" AS "+tableAttr+ " ON "+enTable+"."+attr.Field+"="+tableAttr+"."+en1.EnMap.Attrs.GetFieldByKey( attr.UIRefKeyValue );
                     tableAttr = "Enum_" + attr.Key;
-                    from = from + " LEFT OUTER JOIN ( SELECT Lab, IntKey FROM Sys_Enum WHERE EnumKey='" + attr.UIBindKey + "' )  Enum_" + attr.Key + " ON ISNULL( " + enTable + "." + attr.Field + ", " + en.GetValIntByKey(attr.Key) + ")=" + tableAttr + ".IntKey ";
+                    from = from + " LEFT OUTER JOIN ( SELECT Lab, IntKey FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey='" + attr.UIBindKey + "' )  Enum_" + attr.Key + " ON ISNULL( " + enTable + "." + attr.Field + ", " + en.GetValIntByKey(attr.Key) + ")=" + tableAttr + ".IntKey ";
                     //	where=where+" AND  ( "+en.EnMap.PhysicsTable+"."+attr.Field+"= Enum_"+attr.Key+".IntKey ) ";
                 }
             }
@@ -1092,24 +1299,46 @@ namespace BP.En
 
                 if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                 {
-                    Entity en1 = attr.HisFKEn; // ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
-                    table = en1.EnMap.PhysicsTable;
-                    tableAttr = en1.EnMap.PhysicsTable + "_" + attr.Key;
-
-                    if (attr.MyDataType == DataType.AppInt)
+                    if (attr.UIBindKey.Contains(","))
                     {
-                        from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON IIf( ISNULL( " + enTable + "." + attr.Field + "), " + en.GetValIntByKey(attr.Key) + " , " + enTable + "." + attr.Field + " )=" + tableAttr + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
+                        string[] strs = attr.UIBindKey.Split(',');
+                        string ptable = strs[0];
+                        string noCol = strs[1];
+                        string nameCol = strs[2];
+
+                        table = ptable;
+                        tableAttr = ptable + "_" + attr.Key;
+
+                        if (attr.MyDataType == DataType.AppInt)
+                        {
+                            from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON IIf( ISNULL( " + enTable + "." + attr.Field + "), " + en.GetValIntByKey(attr.Key) + " , " + enTable + "." + attr.Field + " )=" + tableAttr + "." + nameCol;
+                        }
+                        else
+                        {
+                            from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON IIf( ISNULL( " + enTable + "." + attr.Field + "), '" + en.GetValStringByKey(attr.Key) + "', " + enTable + "." + attr.Field + " )=" + tableAttr + "." + nameCol;
+                        }
                     }
                     else
                     {
-                        from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON IIf( ISNULL( " + enTable + "." + attr.Field + "), '" + en.GetValStringByKey(attr.Key) + "', " + enTable + "." + attr.Field + " )=" + tableAttr + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
+                        Entity en1 = attr.HisFKEn; // ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
+                        table = en1.EnMap.PhysicsTable;
+                        tableAttr = en1.EnMap.PhysicsTable + "_" + attr.Key;
+
+                        if (attr.MyDataType == DataType.AppInt)
+                        {
+                            from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON IIf( ISNULL( " + enTable + "." + attr.Field + "), " + en.GetValIntByKey(attr.Key) + " , " + enTable + "." + attr.Field + " )=" + tableAttr + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
+                        }
+                        else
+                        {
+                            from = from + " LEFT OUTER JOIN " + table + " AS " + tableAttr + " ON IIf( ISNULL( " + enTable + "." + attr.Field + "), '" + en.GetValStringByKey(attr.Key) + "', " + enTable + "." + attr.Field + " )=" + tableAttr + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyValue);
+                        }
                     }
                 }
                 if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
                 {
                     //from= from+ " LEFT OUTER JOIN "+table+" AS "+tableAttr+ " ON "+enTable+"."+attr.Field+"="+tableAttr+"."+en1.EnMap.Attrs.GetFieldByKey( attr.UIRefKeyValue );
                     tableAttr = "Enum_" + attr.Key;
-                    from = from + " LEFT OUTER JOIN ( SELECT Lab, IntKey FROM Sys_Enum WHERE EnumKey='" + attr.UIBindKey + "' )  Enum_" + attr.Key + " ON IIf( ISNULL( " + enTable + "." + attr.Field + "), " + en.GetValIntByKey(attr.Key) + ", " + enTable + "." + attr.Field + ")=" + tableAttr + ".IntKey ";
+                    from = from + " LEFT OUTER JOIN ( SELECT Lab, IntKey FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey='" + attr.UIBindKey + "' )  Enum_" + attr.Key + " ON IIf( ISNULL( " + enTable + "." + attr.Field + "), " + en.GetValIntByKey(attr.Key) + ", " + enTable + "." + attr.Field + ")=" + tableAttr + ".IntKey ";
                     //	where=where+" AND  ( "+en.EnMap.PhysicsTable+"."+attr.Field+"= Enum_"+attr.Key+".IntKey ) ";
                 }
 
@@ -1125,14 +1354,17 @@ namespace BP.En
         {
             string val = ""; // key = null;
             string mainTable = "";
-
+            Map map = en.EnMap;
             if (en.EnMap.HisFKAttrs.Count != 0)
                 mainTable = en.EnMap.PhysicsTable + ".";
-
-            foreach (Attr attr in en.EnMap.Attrs)
+            Attrs attrs = map.Attrs;
+            foreach (Attr attr in attrs)
             {
                 if (attr.MyFieldType == FieldType.RefText)
                     continue;
+                if (map.ParaFields != null && map.ParaFields.Contains(attr.Key + ",") == true)
+                    continue;
+
                 switch (attr.MyDataType)
                 {
                     case DataType.AppString:
@@ -1150,8 +1382,21 @@ namespace BP.En
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
-                            Map map = attr.HisFKEn.EnMap;
-                            val = val + ", T" + attr.Key + "." + map.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
+
+                            if (attr.UIBindKey.Contains(","))
+                            {
+                                string[] strs = attr.UIBindKey.Split(',');
+                                string ptable = strs[0];
+                                string noCol = strs[1];
+                                string nameCol = strs[2];
+                                val = val + ", T" + attr.Key + "." + noCol + " AS " + attr.Key + "Text";
+                            }
+                            else
+                            {
+
+                                Map mapFK = attr.HisFKEn.EnMap;
+                                val = val + ", T" + attr.Key + "." + mapFK.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
+                            }
                         }
                         break;
                     case DataType.AppInt:
@@ -1165,17 +1410,32 @@ namespace BP.En
                             if (DataType.IsNullOrEmpty(attr.UIBindKey))
                                 throw new Exception("@" + en.ToString() + " key=" + attr.Key + " UITag=" + attr.UITag);
 
-                                  SysEnums ses = new  SysEnums(attr.UIBindKey, attr.UITag);
+                            SysEnums ses = new SysEnums(attr.UIBindKey, attr.UITag);
                             val = val + "," + ses.GenerCaseWhenForOracle(en.ToString(), mainTable, attr.Key, attr.Field, attr.UIBindKey,
                                 int.Parse(attr.DefaultVal.ToString()));
                         }
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
-                            if (attr.HisFKEns == null)
-                                throw new Exception("@生成SQL错误 Entity=" + en.ToString() + " 外键字段｛" + attr.Key + "." + attr.Desc + ", UIBindKey=" + attr.UIBindKey + "｝已经无效, 也许该类或者外键字段被移除，请通知管理员解决。");
 
-                            Map map = attr.HisFKEn.EnMap;
-                            val = val + ", T" + attr.Key + "." + map.GetFieldByKey(attr.UIRefKeyText) + "  AS " + attr.Key + "Text";
+                            if (attr.UIBindKey.Contains(","))
+                            {
+                                string[] strs = attr.UIBindKey.Split(',');
+                                string ptable = strs[0];
+                                string noCol = strs[1];
+                                string nameCol = strs[2];
+
+                                val = val + ", T" + attr.Key + "." + nameCol + "  AS " + attr.Key + "Text";
+
+                            }
+                            else
+                            {
+
+                                if (attr.HisFKEns == null)
+                                    throw new Exception("@生成SQL错误 Entity=" + en.ToString() + " 外键字段｛" + attr.Key + "." + attr.Desc + ", UIBindKey=" + attr.UIBindKey + "｝已经无效, 也许该类或者外键字段被移除，请通知管理员解决。");
+
+                                Map mapFK = attr.HisFKEn.EnMap;
+                                val = val + ", T" + attr.Key + "." + mapFK.GetFieldByKey(attr.UIRefKeyText) + "  AS " + attr.Key + "Text";
+                            }
                         }
                         break;
                     case DataType.AppFloat:
@@ -1248,8 +1508,19 @@ namespace BP.En
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
-                            Map map = attr.HisFKEn.EnMap;
-                            val = val + ", " + map.PhysicsTable + "_" + attr.Key + "." + map.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
+                            if (attr.UIBindKey.Contains(","))
+                            {
+                                string[] strs = attr.UIBindKey.Split(',');
+                                string ptable = strs[0];
+                                string noCol = strs[1];
+                                string nameCol = strs[2];
+                                val = val + ", " + ptable + "_" + attr.Key + "." + nameCol + " AS " + attr.Key + "Text";
+                            }
+                            else
+                            {
+                                Map map = attr.HisFKEn.EnMap;
+                                val = val + ", " + map.PhysicsTable + "_" + attr.Key + "." + map.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
+                            }
                         }
                         break;
                     case DataType.AppInt:
@@ -1262,7 +1533,7 @@ namespace BP.En
                             if (DataType.IsNullOrEmpty(attr.UIBindKey))
                                 throw new Exception("@" + en.ToString() + " key=" + attr.Key + " UITag=" + attr.UITag);
 
-                                  SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
+                            SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
                             val = val + "," + ses.GenerCaseWhenForOracle(en.ToString(), mainTable, attr.Key, attr.Field, attr.UIBindKey,
                                 int.Parse(attr.DefaultVal.ToString()));
                         }
@@ -1321,6 +1592,8 @@ namespace BP.En
                 case DBType.Access:
                     return SqlBuilder.SelectSQLOfOLE(en, topNum);
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     return SqlBuilder.SelectSQLOfOra(en, topNum);
                 case DBType.Informix:
                     return SqlBuilder.SelectSQLOfInformix(en, topNum);
@@ -1344,6 +1617,8 @@ namespace BP.En
                 case DBType.Access:
                     return SqlBuilder.SelectSQLOfOLE(en, 0);
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                 case DBType.Informix:
                     return SqlBuilder.SelectSQLOfOra(en, 0);
                 default:
@@ -1371,8 +1646,19 @@ namespace BP.En
                             attr.DefaultVal.ToString() + "', " + mainTable + attr.Field + " ) AS [" + attr.Key + "]";
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
-                            Entity en1 = attr.HisFKEn; // ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
-                            val = val + ", IIf( ISNULL(" + en1.EnMap.PhysicsTable + "_" + attr.Key + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyText) + ") ,''," + en1.EnMap.PhysicsTable + "_" + attr.Key + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyText) + ") AS " + attr.Key + "Text";
+                            if (attr.UIBindKey.Contains(","))
+                            {
+                                string[] strs = attr.UIBindKey.Split(',');
+                                string ptable = strs[0];
+                                string noCol = strs[1];
+                                string nameCol = strs[2];
+                                val = val + ", IIf( ISNULL(" + ptable + "_" + attr.Key + "." + nameCol + ") ,''," + ptable + "_" + attr.Key + "." + nameCol + ") AS " + attr.Key + "Text";
+                            }
+                            else
+                            {
+                                Entity en1 = attr.HisFKEn; // ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
+                                val = val + ", IIf( ISNULL(" + en1.EnMap.PhysicsTable + "_" + attr.Key + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyText) + ") ,''," + en1.EnMap.PhysicsTable + "_" + attr.Key + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyText) + ") AS " + attr.Key + "Text";
+                            }
                         }
                         break;
                     case DataType.AppInt:
@@ -1437,20 +1723,25 @@ namespace BP.En
             string val = ""; // key = null;
             string mainTable = "";
 
-            // if (en.EnMap.HisFKAttrs.Count != 0)
-            mainTable = en.EnMap.PhysicsTable + ".";
+            Map map = en.EnMap;
 
-            if (en.EnMap.Attrs.Count == 0)
+            // if (en.EnMap.HisFKAttrs.Count != 0)
+            mainTable = map.PhysicsTable + ".";
+
+            Attrs attrs = map.Attrs;
+            if (attrs.Count == 0)
             {
                 en.DTSMapToSys_MapData();
                 throw new Exception("err@错误:" + en.ToString() + "没有attrs属性，无法生成SQL, 如果是动态实体请关闭后，重新打开一次。");
             }
 
-
-            foreach (Attr attr in en.EnMap.Attrs)
+            foreach (Attr attr in attrs)
             {
                 if (attr.MyFieldType == FieldType.RefText)
                     continue;
+                if (map.ParaFields != null && map.ParaFields.Contains(attr.Key + ",") == true)
+                    continue;
+
                 switch (attr.MyDataType)
                 {
                     case DataType.AppString:
@@ -1468,15 +1759,37 @@ namespace BP.En
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
-                            if (attr.HisFKEns == null)
-                                throw new Exception("@生成SQL错误 Entity=" + en.ToString() + " 外键字段｛" + attr.Key + "." + attr.Desc + ", UIBindKey=" + attr.UIBindKey + "｝已经无效, 也许该类或者外键字段被移除，请通知管理员解决。");
+                            string ptable = "", noCol = "", nameCol = "";
 
-                            Map map = attr.HisFKEn.EnMap;
 
-                            if (DBAccess.IsExitsObject(map.PhysicsTable))
-                                val = val + ", " + map.PhysicsTable + "_" + attr.Key + "." + map.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
+                            if (attr.UIBindKey.Contains(","))
+                            {
+                                string[] strs = attr.UIBindKey.Split(',');
+
+                                ptable = strs[0];
+                                noCol = strs[1];
+                                nameCol = strs[2];
+
+                                if (DBAccess.IsExitsObject(ptable))
+                                    val = val + ", " + ptable + "_" + attr.Key + "." + noCol + " AS " + attr.Key + "Text";
+                                else
+                                    val = val + ", '' AS " + attr.Key + "Text";
+
+                            }
                             else
-                                val = val + ", '' AS " + attr.Key + "Text";
+                            {
+                                if (attr.HisFKEns == null)
+                                    throw new Exception("@生成SQL错误 Entity=" + en.ToString() + " 外键字段｛" + attr.Key + "." + attr.Desc + ", UIBindKey=" + attr.UIBindKey + "｝已经无效, 也许该类或者外键字段被移除，请通知管理员解决。");
+
+                                Map mapFK = attr.HisFKEn.EnMap;
+
+                                if (DBAccess.IsExitsObject(mapFK.PhysicsTable))
+                                    val = val + ", " + mapFK.PhysicsTable + "_" + attr.Key + "." + mapFK.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
+                                else
+                                    val = val + ", '' AS " + attr.Key + "Text";
+                            }
+
+
                         }
                         break;
                     case DataType.AppInt:
@@ -1494,14 +1807,25 @@ namespace BP.En
                             if (attr.UIBindKey.Contains(".") == true)
                                 throw new Exception("@系统异常:" + en.ToString() + " &UIBindKey=" + attr.UIBindKey + " @Key=" + attr.Key);
 
-                                  SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
+                            SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
                             val = val + "," + ses.GenerCaseWhenForOracle(mainTable, attr.Key, attr.Field, attr.UIBindKey, int.Parse(attr.DefaultVal.ToString()));
                         }
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
-                            Map map = attr.HisFKEn.EnMap;
-                            val = val + ", " + map.PhysicsTable + "_" + attr.Key + "." + map.GetFieldByKey(attr.UIRefKeyText) + "  AS " + attr.Key + "Text";
+                            if (attr.UIBindKey.Contains(","))
+                            {
+                                string[] strs = attr.UIBindKey.Split(',');
+                                string ptable = strs[0];
+                                string noCol = strs[1];
+                                string nameCol = strs[2];
+                                val = val + ", " + ptable + "_" + attr.Key + "." + nameCol + "  AS " + attr.Key + "Text";
+                            }
+                            else
+                            {
+                                Map mapFK = attr.HisFKEn.EnMap;
+                                val = val + ", " + mapFK.PhysicsTable + "_" + attr.Key + "." + mapFK.GetFieldByKey(attr.UIRefKeyText) + "  AS " + attr.Key + "Text";
+                            }
                         }
                         break;
                     case DataType.AppFloat:
@@ -1578,13 +1902,19 @@ namespace BP.En
             string val = ""; // key = null;
             string mainTable = "";
 
-            if (en.EnMap.HisFKAttrs.Count != 0)
-                mainTable = en.EnMap.PhysicsTable + ".";
+            Map map = en.EnMap;
+            Attrs attrs = map.Attrs;
 
-            foreach (Attr attr in en.EnMap.Attrs)
+            if (map.HisFKAttrs.Count != 0)
+                mainTable = map.PhysicsTable + ".";
+
+            foreach (Attr attr in attrs)
             {
                 if (attr.MyFieldType == FieldType.RefText)
                     continue;
+                if (map.ParaFields != null && map.ParaFields.Contains(attr.Key + ",") == true)
+                    continue;
+
                 switch (attr.MyDataType)
                 {
                     case DataType.AppString:
@@ -1604,15 +1934,32 @@ namespace BP.En
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
-                            if (attr.HisFKEns == null)
-                                throw new Exception("@生成SQL错误 Entity=" + en.ToString() + " 外键字段｛" + attr.Key + "." + attr.Desc + ", UIBindKey=" + attr.UIBindKey + "｝已经无效, 也许该类或者外键字段被移除，请通知管理员解决。");
 
-                            Map map = attr.HisFKEn.EnMap;
+                            if (attr.UIBindKey.Contains(","))
+                            {
+                                string[] strs = attr.UIBindKey.Split(',');
+                                string ptable = strs[0];
+                                string noCol = strs[1];
+                                string nameCol = strs[2];
 
-                            if (DBAccess.IsExitsObject(map.PhysicsTable))
-                                val = val + ", " + map.PhysicsTable + "_" + attr.Key + "." + map.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
+                                if (DBAccess.IsExitsObject(ptable))
+                                    val = val + ", " + ptable + "_" + attr.Key + "." + nameCol + " AS " + attr.Key + "Text";
+                                else
+                                    val = val + ", '' AS " + attr.Key + "Text";
+                            }
                             else
-                                val = val + ", '' AS " + attr.Key + "Text";
+                            {
+
+                                if (attr.HisFKEns == null)
+                                    throw new Exception("@生成SQL错误 Entity=" + en.ToString() + " 外键字段｛" + attr.Key + "." + attr.Desc + ", UIBindKey=" + attr.UIBindKey + "｝已经无效, 也许该类或者外键字段被移除，请通知管理员解决。");
+
+                                Map mapFK = attr.HisFKEn.EnMap;
+
+                                if (DBAccess.IsExitsObject(mapFK.PhysicsTable))
+                                    val = val + ", " + mapFK.PhysicsTable + "_" + attr.Key + "." + mapFK.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
+                                else
+                                    val = val + ", '' AS " + attr.Key + "Text";
+                            }
                         }
                         break;
                     case DataType.AppInt:
@@ -1630,14 +1977,25 @@ namespace BP.En
                             if (attr.UIBindKey.Contains("."))
                                 throw new Exception("@" + en.ToString() + " &UIBindKey=" + attr.UIBindKey + " @Key=" + attr.Key);
 
-                                  SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
+                            SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
                             val = val + "," + ses.GenerCaseWhenForOracle(mainTable, attr.Key, attr.Field, attr.UIBindKey, int.Parse(attr.DefaultVal.ToString()));
                         }
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
-                            Map map = attr.HisFKEn.EnMap;
-                            val = val + ", " + map.PhysicsTable + "_" + attr.Key + "." + map.GetFieldByKey(attr.UIRefKeyText) + "  AS " + attr.Key + "Text";
+                            if (attr.UIBindKey.Contains(","))
+                            {
+                                string[] strs = attr.UIBindKey.Split(',');
+                                string ptable = strs[0];
+                                string noCol = strs[1];
+                                string nameCol = strs[2];
+                                val = val + ", " + ptable + "_" + attr.Key + "." + nameCol + "  AS " + attr.Key + "Text";
+                            }
+                            else
+                            {
+                                Map mapFK = attr.HisFKEn.EnMap;
+                                val = val + ", " + mapFK.PhysicsTable + "_" + attr.Key + "." + mapFK.GetFieldByKey(attr.UIRefKeyText) + "  AS " + attr.Key + "Text";
+                            }
                         }
                         break;
                     case DataType.AppFloat:
@@ -1674,18 +2032,24 @@ namespace BP.En
                 topNum = 99999;
             return " SELECT " + val.Substring(1) + SqlBuilder.GenerFormWhereOfMS(en);
         }
+
         public static string SelectSQLOfMySQL(Entity en, int topNum)
         {
             string val = ""; // key = null;
             string mainTable = "";
 
-            if (en.EnMap.HisFKAttrs.Count != 0)
+            Map map = en.EnMap;
+            Attrs attrs = map.Attrs;
+            if (map.HisFKAttrs.Count != 0)
                 mainTable = en.EnMap.PhysicsTable + ".";
 
-            foreach (Attr attr in en.EnMap.Attrs)
+            foreach (Attr attr in attrs)
             {
                 if (attr.MyFieldType == FieldType.RefText)
                     continue;
+                if (map.ParaFields != null && map.ParaFields.Contains(attr.Key + ",") == true)
+                    continue;
+
                 switch (attr.MyDataType)
                 {
                     case DataType.AppString:
@@ -1703,8 +2067,19 @@ namespace BP.En
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
-                            Map map = attr.HisFKEn.EnMap;
-                            val = val + ", " + map.PhysicsTable + "_" + attr.Key + "." + map.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
+                            if (attr.UIBindKey.Contains(","))
+                            {
+                                string[] strs = attr.UIBindKey.Split(',');
+                                string ptable = strs[0];
+                                string noCol = strs[1];
+                                string nameCol = strs[2];
+                                val = val + ", " + ptable + "_" + attr.Key + "." + nameCol + " AS " + attr.Key + "Text";
+                            }
+                            else
+                            {
+                                Map mapFK = attr.HisFKEn.EnMap;
+                                val = val + ", " + mapFK.PhysicsTable + "_" + attr.Key + "." + mapFK.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
+                            }
                         }
                         break;
                     case DataType.AppInt:
@@ -1723,18 +2098,29 @@ namespace BP.En
                             if (attr.UIBindKey.Contains("."))
                                 throw new Exception("@" + en.ToString() + " &UIBindKey=" + attr.UIBindKey + " @Key=" + attr.Key);
 
-                                  SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
+                            SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
                             val = val + "," + ses.GenerCaseWhenForOracle(mainTable, attr.Key, attr.Field, attr.UIBindKey, int.Parse(attr.DefaultVal.ToString()));
                         }
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
-                            if (attr.HisFKEns == null)
-                                throw new Exception("@生成SQL错误 Entity=" + en.ToString() + " 外键字段｛" + attr.Key + "." + attr.Desc + ", UIBindKey=" + attr.UIBindKey + "｝已经无效, 也许该类或者外键字段被移除，请通知管理员解决。");
 
+                            if (attr.UIBindKey.Contains(","))
+                            {
+                                string[] strs = attr.UIBindKey.Split(',');
+                                string ptable = strs[0];
+                                string noCol = strs[1];
+                                string nameCol = strs[2];
+                                val = val + ", " + ptable + "_" + attr.Key + "." + nameCol + "  AS " + attr.Key + "Text";
+                            }
+                            else
+                            {
+                                if (attr.HisFKEns == null)
+                                    throw new Exception("@生成SQL错误 Entity=" + en.ToString() + " 外键字段｛" + attr.Key + "." + attr.Desc + ", UIBindKey=" + attr.UIBindKey + "｝已经无效, 也许该类或者外键字段被移除，请通知管理员解决。");
 
-                            Map map = attr.HisFKEn.EnMap;
-                            val = val + ", " + map.PhysicsTable + "_" + attr.Key + "." + map.GetFieldByKey(attr.UIRefKeyText) + "  AS " + attr.Key + "Text";
+                                Map mapFK = attr.HisFKEn.EnMap;
+                                val = val + ", " + mapFK.PhysicsTable + "_" + attr.Key + "." + mapFK.GetFieldByKey(attr.UIRefKeyText) + "  AS " + attr.Key + "Text";
+                            }
                         }
                         break;
                     case DataType.AppFloat:
@@ -1761,7 +2147,6 @@ namespace BP.En
                         if (BP.Difference.SystemConfig.DateType.Equals("datetime") == true)
                         {
                             string format = GetDataTypeFormt(attr.IsSupperText);
-
 
                             if (DataType.IsNullOrEmpty(attr.DefaultVal as string))
                                 val = val + ",IFNULL(DATE_FORMAT(" + mainTable + attr.Field + ",'" + format + "'),DATE_FORMAT(now(),'" + format + "')) " + attr.Key;
@@ -1803,9 +2188,13 @@ namespace BP.En
         {
             string val = ""; // key = null;
             string mainTable = map.PhysicsTable + ".";
+
             foreach (Attr attr in map.Attrs)
             {
                 if (attr.MyFieldType == FieldType.RefText)
+                    continue;
+
+                if (map.ParaFields != null && map.ParaFields.Contains(attr.Key + ",") == true)
                     continue;
 
                 switch (attr.MyDataType)
@@ -1818,8 +2207,20 @@ namespace BP.En
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
-                            Entity en1 = attr.HisFKEn; // ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
-                            val = val + ", T" + attr.Key + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
+
+                            if (attr.UIBindKey.Contains(","))
+                            {
+                                string[] strs = attr.UIBindKey.Split(',');
+                                string ptable = strs[0];
+                                string noCol = strs[1];
+                                string nameCol = strs[2];
+                                val = val + ", T" + attr.Key + "." + nameCol + " AS " + attr.Key + "Text";
+                            }
+                            else
+                            {
+                                Entity en1 = attr.HisFKEn; // ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
+                                val = val + ", T" + attr.Key + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
+                            }
                         }
                         break;
                     case DataType.AppInt:
@@ -1827,7 +2228,7 @@ namespace BP.En
                             attr.DefaultVal + ") AS  " + attr.Key + "";
                         if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
                         {
-                                  SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
+                            SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
                             val = val + "," + ses.GenerCaseWhenForOracle(enName, mainTable, attr.Key, attr.Field, attr.UIBindKey, int.Parse(attr.DefaultVal.ToString()));
                         }
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
@@ -1891,8 +2292,21 @@ namespace BP.En
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
-                            Entity en1 = attr.HisFKEn;
-                            val = val + "," + en1.EnMap.PhysicsTable + "_" + attr.Key + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
+
+                            if (attr.UIBindKey.Contains(","))
+                            {
+                                string[] strs = attr.UIBindKey.Split(',');
+                                string ptable = strs[0];
+                                string noCol = strs[1];
+                                string nameCol = strs[2];
+                                //  val = val + ", T" + attr.Key + "." + nameCol + " AS " + attr.Key + "Text";
+                                val = val + "," + ptable + "_" + attr.Key + "." + nameCol + " AS " + attr.Key + "Text";
+                            }
+                            else
+                            {
+                                Entity en1 = attr.HisFKEn;
+                                val = val + "," + en1.EnMap.PhysicsTable + "_" + attr.Key + "." + en1.EnMap.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
+                            }
                         }
                         break;
                     case DataType.AppInt:
@@ -1957,517 +2371,9 @@ namespace BP.En
             }
             return "SELECT TOP @TopNum " + val.Substring(1);
         }
-        public static string UpdateOfMSAccess(Entity en, string[] keys)
-        {
-            string val = "";
-            foreach (Attr attr in en.EnMap.Attrs)
-            {
-                /* 两个PK 的情况 */
-                //if (attr.IsPK)
-                //    continue;
-
-                if (keys != null)
-                {
-                    bool isHave = false;
-                    foreach (string s in keys)
-                    {
-                        if (attr.Key == s)
-                        {
-                            /* 如果找到了要更新的key */
-                            isHave = true;
-                            break;
-                        }
-                    }
-                    if (isHave == false)
-                        continue;
-                }
-
-
-                if (attr.MyFieldType == FieldType.RefText
-                    || attr.MyFieldType == FieldType.PK
-                    || attr.MyFieldType == FieldType.PKFK
-                    || attr.MyFieldType == FieldType.PKEnum)
-                    continue;
-
-                switch (attr.MyDataType)
-                {
-                    case DataType.AppString:
-                        val = val + ",[" + attr.Field + "]='" + en.GetValStringByKey(attr.Key) + "'";
-                        break;
-                    case DataType.AppInt:
-                        val = val + ",[" + attr.Field + "]=" + en.GetValStringByKey(attr.Key);
-                        break;
-                    case DataType.AppFloat:
-                    case DataType.AppDouble:
-                    case DataType.AppMoney:
-                        string str = en.GetValStringByKey(attr.Key).ToString();
-                        str = str.Replace("￥", "");
-                        str = str.Replace(",", "");
-                        val = val + ",[" + attr.Field + "]=" + str;
-                        break;
-                    case DataType.AppBoolean:
-                        val = val + ",[" + attr.Field + "]=" + en.GetValStringByKey(attr.Key);
-                        break;
-                    case DataType.AppDate: // 如果是日期类型。
-                    case DataType.AppDateTime:
-                        string da = en.GetValStringByKey(attr.Key);
-                        if (da.IndexOf("_DATE") == -1)
-                            val = val + ",[" + attr.Field + "]='" + da + "'";
-                        else
-                            val = val + ",[" + attr.Field + "]=" + da;
-                        break;
-                    default:
-                        throw new Exception("@SqlBulider.update, 没有这个数据类型");
-                }
-            }
-
-            string sql = "";
-
-            if (DataType.IsNullOrEmpty(val))
-            {
-                /*如果没有出现要更新.*/
-                foreach (Attr attr in en.EnMap.Attrs)
-                {
-                    if (keys != null)
-                    {
-                        bool isHave = false;
-                        foreach (string s in keys)
-                        {
-                            if (attr.Key == s)
-                            {
-                                /* 如果找到了要更新的key */
-                                isHave = true;
-                                break;
-                            }
-                        }
-                        if (isHave == false)
-                            continue;
-                    }
-                    switch (attr.MyDataType)
-                    {
-                        case DataType.AppString:
-                            val = val + ",[" + attr.Field + "]='" + en.GetValStringByKey(attr.Key) + "'";
-                            break;
-                        case DataType.AppInt:
-                            val = val + ",[" + attr.Field + "]=" + en.GetValStringByKey(attr.Key);
-                            break;
-                        case DataType.AppFloat:
-                        case DataType.AppDouble:
-                        case DataType.AppMoney:
-                            string str = en.GetValStringByKey(attr.Key).ToString();
-                            str = str.Replace("￥", "");
-                            str = str.Replace(",", "");
-                            val = val + ",[" + attr.Field + "]=" + str;
-                            break;
-                        case DataType.AppBoolean:
-                            val = val + ",[" + attr.Field + "]=" + en.GetValStringByKey(attr.Key);
-                            break;
-                        case DataType.AppDate: // 如果是日期类型。
-                        case DataType.AppDateTime:
-                            string da = en.GetValStringByKey(attr.Key);
-                            if (da.IndexOf("_DATE") == -1)
-                                val = val + ",[" + attr.Field + "]='" + da + "'";
-                            else
-                                val = val + ",[" + attr.Field + "]=" + da;
-                            break;
-                        default:
-                            throw new Exception("@SqlBulider.update, 没有这个数据类型");
-                    }
-                }
-                //return null;
-                //throw new Exception("出现了一个不合理的更新：没有要更新的数据。");
-            }
-
-            if (DataType.IsNullOrEmpty(val))
-            {
-                string ms = "";
-                foreach (string str in keys)
-                {
-                    ms += str;
-                }
-                throw new Exception(en.EnDesc + "执行更新错误：无效的属性[" + ms + "]对于本实体来说。");
-            }
-            sql = "UPDATE " + en.EnMap.PhysicsTable + " SET " + val.Substring(1) +
-                        " WHERE " + SqlBuilder.GetKeyConditionOfOLE(en);
-            return sql.Replace(",=''", "");
-        }
-        /// <summary>
-        /// 产生要更新的sql 语句
-        /// </summary>
-        /// <param name="en">要更新的entity</param>
-        /// <param name="keys">要更新的keys</param>
-        /// <returns>sql</returns>
-        public static string Update(Entity en, string[] keys)
-        {
-            Map map = en.EnMap;
-            if (map.Attrs.Count == 0)
-                throw new Exception("@实体：" + en.ToString() + " ,Attrs属性集合信息丢失，导致无法生成SQL。");
-
-            string val = "";
-            foreach (Attr attr in map.Attrs)
-            {
-                if (keys != null)
-                {
-                    bool isHave = false;
-                    foreach (string s in keys)
-                    {
-                        if (attr.Key == s)
-                        {
-                            /* 如果找到了要更新的key*/
-                            isHave = true;
-                            break;
-                        }
-                    }
-                    if (isHave == false)
-                        continue;
-                }
-
-                if (attr.MyFieldType == FieldType.RefText)
-                    continue;
-
-                /*有可能是两个主键的情况。*/
-                //  if (attr.IsPK)
-                //  continue;
-
-                switch (attr.MyDataType)
-                {
-                    case DataType.AppString:
-                        if (map.EnDBUrl.DBType == DBType.Access)
-                        {
-                            val = val + ",[" + attr.Field + "]='" + en.GetValStringByKey(attr.Key).Replace('\'', '~') + "'";
-                        }
-                        else
-                        {
-                            if (attr.UIIsDoc && attr.Key == "Doc")
-                            {
-
-                                string doc = en.GetValStringByKey(attr.Key);
-                                if (map.Attrs.Contains("DocLength"))
-                                    en.SetValByKey("DocLength", doc.Length);
-
-                                if (doc.Length >= 2000)
-                                {
-                                          SysDocFile.SetValV2(en.ToString(), en.PKVal.ToString(), doc);
-                                    val = val + "," + attr.Field + "=''";
-                                }
-                                else
-                                {
-                                    val = val + "," + attr.Field + "='" + en.GetValStringByKey(attr.Key).Replace('\'', '~') + "'";
-                                }
-                            }
-                            else
-                            {
-                                val = val + "," + attr.Field + "='" + en.GetValStringByKey(attr.Key).Replace('\'', '~') + "'";
-                            }
-                        }
-                        break;
-                    case DataType.AppInt:
-                        val = val + "," + attr.Field + "=" + en.GetValStringByKey(attr.Key);
-                        break;
-                    case DataType.AppFloat:
-                    case DataType.AppDouble:
-                    case DataType.AppMoney:
-                        string str = en.GetValStringByKey(attr.Key).ToString();
-                        str = str.Replace("￥", "");
-                        str = str.Replace(",", "");
-                        val = val + "," + attr.Field + "=" + str;
-                        break;
-                    case DataType.AppBoolean:
-                        val = val + "," + attr.Field + "=" + en.GetValStringByKey(attr.Key);
-                        break;
-                    case DataType.AppDate: // 如果是日期类型。
-                    case DataType.AppDateTime:
-                        string da = en.GetValStringByKey(attr.Key);
-                        if (da.IndexOf("_DATE") == -1)
-                            val = val + "," + attr.Field + "='" + da + "'";
-                        else
-                            val = val + "," + attr.Field + "=" + da;
-                        break;
-                    default:
-                        throw new Exception("@SqlBulider.update, 没有这个数据类型");
-                }
-            }
-
-            string sql = "";
-
-            if (DataType.IsNullOrEmpty(val))
-            {
-                /*如果没有出现要更新.*/
-                foreach (Attr attr in map.Attrs)
-                {
-                    if (keys != null)
-                    {
-                        bool isHave = false;
-                        foreach (string s in keys)
-                        {
-                            if (attr.Key == s)
-                            {
-                                /* 如果找到了要更新的key */
-                                isHave = true;
-                                break;
-                            }
-                        }
-                        if (isHave == false)
-                            continue;
-                    }
-
-                    // 两个PK 的情况。
-                    //if (attr.IsPK)
-                    //    continue;
-
-
-                    switch (attr.MyDataType)
-                    {
-                        case DataType.AppString:
-                            val = val + "," + attr.Field + "='" + en.GetValStringByKey(attr.Key) + "'";
-                            break;
-                        case DataType.AppInt:
-                            val = val + "," + attr.Field + "=" + en.GetValStringByKey(attr.Key);
-                            break;
-                        case DataType.AppFloat:
-                        case DataType.AppDouble:
-                        case DataType.AppMoney:
-                            string str = en.GetValStringByKey(attr.Key).ToString();
-                            str = str.Replace("￥", "");
-                            str = str.Replace(",", "");
-                            val = val + "," + attr.Field + "=" + str;
-                            break;
-                        case DataType.AppBoolean:
-                            val = val + "," + attr.Field + "=" + en.GetValStringByKey(attr.Key);
-                            break;
-                        case DataType.AppDate: // 如果是日期类型。
-                        case DataType.AppDateTime:
-                            string da = en.GetValStringByKey(attr.Key);
-                            if (da.IndexOf("_DATE") == -1)
-                                val = val + "," + attr.Field + "='" + da + "'";
-                            else
-                                val = val + "," + attr.Field + "=" + da;
-                            break;
-                        default:
-                            throw new Exception("@SqlBulider.update, 没有这个数据类型");
-                    }
-                }
-                //return null;
-                //throw new Exception("出现了一个不合理的更新：没有要更新的数据。");
-            }
-
-            if (DataType.IsNullOrEmpty(val))
-            {
-                string ms = "";
-                foreach (string str in keys)
-                {
-                    ms += str;
-                }
-                throw new Exception(en.EnDesc + "执行更新错误：无效的属性[" + ms + "]对于本实体来说。");
-            }
-
-            switch (en.EnMap.EnDBUrl.DBType)
-            {
-                case DBType.MSSQL:
-                case DBType.Access:
-                case DBType.MySQL:
-                case DBType.PostgreSQL:
-                case DBType.UX:
-                    sql = "UPDATE " + en.EnMap.PhysicsTable + " SET " + val.Substring(1) +
-                        " WHERE " + SqlBuilder.GenerWhereByPK(en, "@");
-                    break;
-                case DBType.Oracle:
-                    sql = "UPDATE " + en.EnMap.PhysicsTable + " SET " + val.Substring(1) +
-                        " WHERE " + SqlBuilder.GenerWhereByPK(en, ":");
-                    break;
-                case DBType.Informix:
-                    sql = "UPDATE " + en.EnMap.PhysicsTable + " SET " + val.Substring(1) +
-                        " WHERE " + SqlBuilder.GenerWhereByPK(en, ":");
-                    break;
-                default:
-                    throw new Exception("no this case db type . ");
-            }
-            return sql.Replace(",=''", "");
-        }
-        public static Paras GenerParas_Update_Informix(Entity en, string[] keys)
-        {
-            if (keys == null)
-                return GenerParas_Update_Informix(en);
-
-            string mykeys = "@";
-            foreach (string key in keys)
-                mykeys += key + "@";
-
-            Map map = en.EnMap;
-            Paras ps = new Paras();
-            foreach (Attr attr in map.Attrs)
-            {
-                if (attr.MyFieldType == FieldType.RefText)
-                    continue;
-
-                if (attr.IsPK)
-                    continue;
-
-                if (mykeys.Contains("@" + attr.Key + "@") == false)
-                    continue;
-
-                switch (attr.MyDataType)
-                {
-                    case DataType.AppString:
-                        if (attr.UIIsDoc && attr.Key == "Doc")
-                        {
-                            string doc = en.GetValStrByKey(attr.Key).Replace('\'', '~');
-
-                            if (map.Attrs.Contains("DocLength"))
-                                en.SetValByKey("DocLength", doc.Length);
-
-                            if (doc.Length >= 2000)
-                            {
-                                      SysDocFile.SetValV2(en.ToString(), en.PKVal.ToString(), doc);
-                                ps.Add(attr.Key, "");
-                            }
-                            else
-                            {
-                                ps.Add(attr.Key, en.GetValStrByKey(attr.Key).Replace('\'', '~'));
-                            }
-                        }
-                        else
-                        {
-                            ps.Add(attr.Key, en.GetValStrByKey(attr.Key).Replace('\'', '~'));
-                        }
-                        break;
-                    case DataType.AppBoolean:
-                    case DataType.AppInt:
-                        ps.Add(attr.Key, en.GetValIntByKey(attr.Key));
-                        break;
-                    case DataType.AppFloat:
-                    case DataType.AppDouble:
-                    case DataType.AppMoney:
-                        string str = en.GetValStrByKey(attr.Key).ToString();
-                        str = str.Replace("￥", "");
-                        str = str.Replace(",", "");
-                        if (DataType.IsNullOrEmpty(str))
-                            ps.Add(attr.Key, 0);
-                        else
-                            ps.Add(attr.Key, decimal.Parse(str));
-                        break;
-                    case DataType.AppDate: // 如果是日期类型。
-                    case DataType.AppDateTime:
-                        string da = en.GetValStringByKey(attr.Key);
-                        ps.Add(attr.Key, da);
-                        break;
-                    default:
-                        throw new Exception("@SqlBulider.update, 没有这个数据类型");
-                }
-            }
-            switch (en.PK)
-            {
-                case "OID":
-                case "WorkID":
-                case "FID":
-                    ps.Add(en.PK, en.GetValIntByKey(en.PK));
-                    break;
-                default:
-                    ps.Add(en.PK, en.GetValStrByKey(en.PK));
-                    break;
-            }
-            return ps;
-        }
-        public static Paras GenerParas_Update_Informix(Entity en)
-        {
-            string mykeys = "@";
-
-            Map map = en.EnMap;
-            Paras ps = new Paras();
-            foreach (Attr attr in map.Attrs)
-            {
-                if (attr.MyFieldType == FieldType.RefText)
-                    continue;
-
-                if (attr.IsPK)
-                    continue;
-
-                switch (attr.MyDataType)
-                {
-                    case DataType.AppString:
-                        if (attr.UIIsDoc && attr.Key == "Doc")
-                        {
-                            string doc = en.GetValStrByKey(attr.Key).Replace('\'', '~');
-
-                            if (map.Attrs.Contains("DocLength"))
-                                en.SetValByKey("DocLength", doc.Length);
-
-                            if (doc.Length >= 2000)
-                            {
-                                      SysDocFile.SetValV2(en.ToString(), en.PKVal.ToString(), doc);
-                                ps.Add(attr.Key, "");
-                            }
-                            else
-                            {
-                                ps.Add(attr.Key, en.GetValStrByKey(attr.Key).Replace('\'', '~'));
-                            }
-                        }
-                        else
-                        {
-                            ps.Add(attr.Key, en.GetValStrByKey(attr.Key).Replace('\'', '~'));
-                        }
-                        break;
-                    case DataType.AppBoolean:
-                    case DataType.AppInt:
-                        ps.Add(attr.Key, en.GetValIntByKey(attr.Key));
-                        break;
-                    case DataType.AppFloat:
-                    case DataType.AppDouble:
-                    case DataType.AppMoney:
-                        string str = en.GetValStrByKey(attr.Key).ToString();
-                        str = str.Replace("￥", "");
-                        str = str.Replace(",", "");
-                        if (DataType.IsNullOrEmpty(str))
-                            ps.Add(attr.Key, 0);
-                        else
-                            ps.Add(attr.Key, decimal.Parse(str));
-                        break;
-                    case DataType.AppDate: // 如果是日期类型。
-                    case DataType.AppDateTime:
-                        string da = en.GetValStringByKey(attr.Key);
-                        ps.Add(attr.Key, da);
-                        break;
-                    default:
-                        throw new Exception("@SqlBulider.update, 没有这个数据类型");
-                }
-            }
-
-            string pk = en.PK;
-            switch (pk)
-            {
-                case "OID":
-                case "WorkID":
-                    ps.Add(en.PK, en.GetValIntByKey(pk));
-                    break;
-                case "No":
-                case "MyPK":
-                case "ID":
-                    ps.Add(en.PK, en.GetValStrByKey(pk));
-                    break;
-                default:
-                    foreach (Attr attr in map.Attrs)
-                    {
-                        if (attr.IsPK == false)
-                            continue;
-                        switch (attr.MyDataType)
-                        {
-                            case DataType.AppString:
-                                ps.Add(attr.Key, en.GetValStrByKey(attr.Key).Replace('\'', '~'));
-                                break;
-                            case DataType.AppInt:
-                                ps.Add(attr.Key, en.GetValIntByKey(attr.Key));
-                                break;
-                            default:
-                                throw new Exception("@SqlBulider.update, 没有这个数据类型...");
-                        }
-                    }
-                    break;
-            }
-            return ps;
-        }
         public static Paras GenerParas(Entity en, string[] keys)
         {
-            bool IsEnableNull =  BP.Difference.SystemConfig.IsEnableNull;
+            bool IsEnableNull = BP.Difference.SystemConfig.IsEnableNull;
             string mykeys = "@";
             if (keys != null)
                 foreach (string key in keys)
@@ -2481,6 +2387,9 @@ namespace BP.En
                 foreach (Attr attr in map.Attrs)
                 {
                     if (attr.MyFieldType == FieldType.RefText)
+                        continue;
+
+                    if (map.ParaFields != null && map.ParaFields.Contains(attr.Key + ",") == true)
                         continue;
 
                     if (keys != null)
@@ -2497,7 +2406,7 @@ namespace BP.En
                     switch (attr.MyDataType)
                     {
                         case DataType.AppString:
-                            #warning 替换掉',是因为在直接使用SQL中查询条件是该值的时候会出现SQL错误
+#warning 替换掉',是因为在直接使用SQL中查询条件是该值的时候会出现SQL错误
                             var val = en.GetValStrByKey(attr.Key).Replace('\'', '~');
                             //对存储的数据进行加密.
                             if (en.EnMap.IsJM && attr.IsPK == false && DataType.IsNullOrEmpty(val) == false)
@@ -2644,6 +2553,8 @@ namespace BP.En
             {
                 if (attr.MyFieldType == FieldType.RefText || attr.IsPK)
                     continue;
+                if (map.ParaFields != null && map.ParaFields.Contains(attr.Key + ",") == true)
+                    continue;
 
                 if (keys != null)
                     if (mykey.Contains("@" + attr.Key + ",") == false)
@@ -2687,6 +2598,8 @@ namespace BP.En
                         " WHERE " + SqlBuilder.GenerWhereByPK(en, "?");
                     break;
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     sql = "UPDATE " + en.EnMap.PhysicsTable + " SET " + val +
                         " WHERE " + SqlBuilder.GenerWhereByPK(en, ":");
                     break;
@@ -2710,8 +2623,6 @@ namespace BP.En
         public static string InsertForPara(Entity en)
         {
             string dbstr = en.HisDBVarStr;
-            if (dbstr == "?")
-                return InsertForPara_Informix(en);
 
             bool isInnkey = false;
             if (en.IsOIDEntity)
@@ -2720,10 +2631,16 @@ namespace BP.En
                 isInnkey = false; // myen.IsInnKey;
             }
 
+            Map map = en.EnMap;
+            Attrs attrs = map.Attrs;
+
             string key = "", field = "", val = "";
-            foreach (Attr attr in en.EnMap.Attrs)
+            foreach (Attr attr in attrs)
             {
                 if (attr.MyFieldType == FieldType.RefText)
+                    continue;
+
+                if (map.ParaFields != null && map.ParaFields.Contains(attr.Key + ",") == true)
                     continue;
 
                 if (isInnkey)
@@ -2731,39 +2648,11 @@ namespace BP.En
                     if (attr.Key == "OID")
                         continue;
                 }
+                
 
                 key = attr.Key;
                 field = field + ",[" + attr.Field + "]";
                 val = val + "," + dbstr + attr.Key;
-            }
-            string sql = "INSERT INTO " + en.EnMap.PhysicsTable + " (" +
-                field.Substring(1) + " ) VALUES ( " + val.Substring(1) + ")";
-            return sql;
-        }
-        public static string InsertForPara_Informix(Entity en)
-        {
-            bool isInnkey = false;
-            if (en.IsOIDEntity)
-            {
-                EntityOID myen = en as EntityOID;
-                isInnkey = false;
-            }
-
-            string key = "", field = "", val = "";
-            foreach (Attr attr in en.EnMap.Attrs)
-            {
-                if (attr.MyFieldType == FieldType.RefText)
-                    continue;
-
-                if (isInnkey)
-                {
-                    if (attr.Key == "OID")
-                        continue;
-                }
-
-                key = attr.Key;
-                field = field + ",[" + attr.Field + "]";
-                val = val + ",?";
             }
             string sql = "INSERT INTO " + en.EnMap.PhysicsTable + " (" +
                 field.Substring(1) + " ) VALUES ( " + val.Substring(1) + ")";
@@ -2777,13 +2666,17 @@ namespace BP.En
         public static string Insert(Entity en)
         {
             string key = "", field = "", val = "";
-            Attrs attrs = en.EnMap.Attrs;
+            Map map = en.EnMap;
+            Attrs attrs = map.Attrs;
             if (attrs.Count == 0)
                 throw new Exception("@实体：" + en.ToString() + " ,Attrs属性集合信息丢失，导致无法生成SQL。");
 
             foreach (Attr attr in attrs)
             {
                 if (attr.MyFieldType == FieldType.RefText)
+                    continue;
+
+                if (map.ParaFields != null && map.ParaFields.Contains(attr.Key + ",") == true)
                     continue;
 
                 key = attr.Key;
@@ -2804,7 +2697,7 @@ namespace BP.En
 
                             if (str.Length >= 2000)
                             {
-                                      SysDocFile.SetValV2(en.ToString(), en.PKVal.ToString(), str);
+                                SysDocFile.SetValV2(en.ToString(), en.PKVal.ToString(), str);
                                 if (attrs.Contains("DocLength"))
                                     en.SetValByKey("DocLength", str.Length);
                                 val = val + ",''";
@@ -2855,51 +2748,6 @@ namespace BP.En
                 field.Substring(1) + " ) VALUES ( " + val.Substring(1) + ")";
             return sql;
         }
-        public static string InsertOFOLE(Entity en)
-        {
-            string key = "", field = "", val = "";
-            foreach (Attr attr in en.EnMap.Attrs)
-            {
-                if (attr.MyFieldType == FieldType.RefText)
-                    continue;
-                key = attr.Key;
-                field = field + ",[" + attr.Field + "]";
-                switch (attr.MyDataType)
-                {
-                    case DataType.AppString:
-                        val = val + ", '" + en.GetValStringByKey(key) + "'";
-                        break;
-                    case DataType.AppInt:
-                    case DataType.AppBoolean:
-                        val = val + "," + en.GetValIntByKey(key);
-                        break;
-                    case DataType.AppFloat:
-                    case DataType.AppDouble:
-                    case DataType.AppMoney:
-                        string str = en.GetValStringByKey(key).ToString();
-                        str = str.Replace("￥", "");
-                        str = str.Replace(",", "");
-                        if (DataType.IsNullOrEmpty(str))
-                            str = "0";
-                        val = val + "," + str;
-                        break;
-                    case DataType.AppDate:
-                    case DataType.AppDateTime:
-                        string da = en.GetValStringByKey(attr.Key);
-                        if (da.IndexOf("_DATE") == -1)
-                            val = val + ",'" + da + "'";
-                        else
-                            val = val + "," + da;
-                        break;
-                    default:
-                        throw new Exception("@bulider insert sql error: 没有这个数据类型");
-                }
-            }
-            string sql = "INSERT INTO " + en.EnMap.PhysicsTable + " (" +
-                field.Substring(1) + " ) VALUES ( " + val.Substring(1) + ")";
-            return sql;
-        }
-
         /// <summary>
         /// 获取判断指定表达式如果为空，则返回指定值的SQL表达式
         /// <para>注：目前只对MSSQL/ORACLE/MYSQL三种数据库做兼容</para>
@@ -2915,6 +2763,8 @@ namespace BP.En
                 case DBType.MSSQL:
                     return " ISNULL(" + expression + "," + isNullBack + ")";
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     return " NVL(" + expression + "," + isNullBack + ")";
                 case DBType.MySQL:
                     return " IFNULL(" + expression + "," + isNullBack + ")";

@@ -5,6 +5,8 @@ using BP.DA;
 using BP.En;
 using BP.Port;
 using BP.Sys;
+using BP.Difference;
+using BP.WF.Port.Admin2Group;
 
 namespace BP.WF.Template
 {
@@ -124,6 +126,20 @@ namespace BP.WF.Template
             EntityTree en = this.DoCreateSameLevelNode(name);
             en.Name = name;
             en.Update();
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc && SystemConfig.GroupStationModel == 2)
+            {
+                //如果当前人员不是部门主要管理员
+                BP.WF.Admin.Org org = new BP.WF.Admin.Org(BP.Web.WebUser.OrgNo);
+                if (BP.Web.WebUser.No.Equals(org.Adminer) == false)
+                {
+                    OAFlowSort oaSort = new OAFlowSort();
+                    oaSort.FK_Emp = BP.Web.WebUser.No;
+                    oaSort.OrgNo = BP.Web.WebUser.OrgNo;
+                    oaSort.SetValByKey("RefOrgAdminer", oaSort.OrgNo + "_" + oaSort.FK_Emp);
+                    oaSort.SetValByKey("FlowSortNo", en.No);
+                    oaSort.Insert();
+                }
+            }
             return en.No;
         }
         /// <summary>
@@ -136,6 +152,20 @@ namespace BP.WF.Template
             EntityTree en = this.DoCreateSubNode(name);
             en.Name = name;
             en.Update();
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc && SystemConfig.GroupStationModel == 2)
+            {
+                //如果当前人员不是部门主要管理员
+                BP.WF.Admin.Org org = new BP.WF.Admin.Org(BP.Web.WebUser.OrgNo);
+                if (BP.Web.WebUser.No.Equals(org.Adminer) == false)
+                {
+                    OAFlowSort oaSort = new OAFlowSort();
+                    oaSort.FK_Emp = BP.Web.WebUser.No;
+                    oaSort.OrgNo = BP.Web.WebUser.OrgNo;
+                    oaSort.SetValByKey("RefOrgAdminer", oaSort.OrgNo + "_" + oaSort.FK_Emp);
+                    oaSort.SetValByKey("FlowSortNo", en.No);
+                    oaSort.Insert();
+                }
+            }
             return en.No;
         }
         #endregion 创建节点.

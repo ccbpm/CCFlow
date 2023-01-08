@@ -158,7 +158,7 @@ namespace BP.CCFast.CCMenu
                 map.AddTBString(ModuleAttr.Name, null, "名称", true, false, 0, 300, 20);
                 map.AddDDLEntities(ModuleAttr.SystemNo, null, "隶属系统", new MySystems(), true);
                 map.AddTBString(MenuAttr.Icon, null, "Icon", true, false, 0, 500, 50, true);
-                map.AddTBInt(ModuleAttr.Idx, 0, "显示顺序", true, false);
+                map.AddTBInt(ModuleAttr.Idx, 0, "顺序", true, false);
                 map.AddTBInt(ModuleAttr.IsEnable, 1, "IsEnable", true, false);
 
                 map.AddTBString(ModuleAttr.OrgNo, null, "组织编号", true, false, 0, 50, 20);
@@ -235,7 +235,7 @@ namespace BP.CCFast.CCMenu
             if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 return base.RetrieveAll("Idx");
 
-            ////集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
+            ////集团模式下的角色体系: @0=每套组织都有自己的角色体系@1=所有的组织共享一套岗则体系.
             //if (BP.Difference.SystemConfig.GroupStationModel == 1)
             //    return base.RetrieveAll("Idx");
 

@@ -173,7 +173,7 @@ namespace BP.WF.HttpHandler
                 info += "\t\n  3. 不要设置everyone 权限会导致，不安全.";
                 info += "\t\n  4. 如果是.net用户,请尝试修改web.config (该步骤没有验证) identity impersonate=true userName=administrator password=bpm2017@123 ";
 
-                return "err@" + ex.Message + "" + info;
+                return "err@上传失败";// + ex.Message + "" + info;
             }
 
             //f.SaveAs(BP.Difference.SystemConfig.PathOfWebApp + "DataUser/Siganture/" + WebUser.No + ".jpg");

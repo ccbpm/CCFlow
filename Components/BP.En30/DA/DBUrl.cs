@@ -60,6 +60,8 @@ namespace BP.DA
                 switch (this.DBType)
                 {
                     case DBType.Oracle:
+					case DBType.KingBaseR3:
+					case DBType.KingBaseR6:
                     case DBType.PostgreSQL:
 					case DBType.UX:
 						return ":";

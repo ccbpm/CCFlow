@@ -133,14 +133,9 @@ namespace BP.Sys
         /// 字体大小
         /// </summary>
         public const string FontSize = "FontSize";
-        /// <summary>
-        /// x
-        /// </summary>
-        public const string X = "X";
-        /// <summary>
-        /// y
-        /// </summary>
-        public const string Y = "Y";
+
+
+
         /// <summary>
         /// TabIdx
         /// </summary>
@@ -209,13 +204,13 @@ namespace BP.Sys
         /// </summary>
         public const string IsEnableInAPP = "IsEnableInAPP";
         public const string IsSupperText = "IsSupperText";
-        public const string IsRichText = "IsRichText";
-        public const string IsSecret = "IsSecret";
         /// <summary>
         /// 默认值设置方式
         /// </summary>
         public const string DefValType = "DefValType";
         public const string DefaultVal = "";
+
+        public const string TextModel = "TextModel";
     }
     /// <summary>
     /// 实体属性
@@ -237,18 +232,16 @@ namespace BP.Sys
                 this.SetValByKey(MapAttrAttr.IsSupperText, value);
             }
         }
-        /// <summary>
-        /// 是否是富文本？
-        /// </summary>
-        public bool IsRichText
+
+        public int TextModel
         {
             get
             {
-                return this.GetParaBoolen(MapAttrAttr.IsRichText, false);
+                return this.GetValIntByKey(MapAttrAttr.TextModel);
             }
             set
             {
-                this.SetPara(MapAttrAttr.IsRichText, value);
+                this.SetValByKey(MapAttrAttr.TextModel, value);
             }
         }
         /// <summary>
@@ -541,7 +534,8 @@ namespace BP.Sys
             {
                 return (EditType)this.GetValIntByKey(MapAttrAttr.EditType);
             }
-            set {
+            set
+            {
                 this.SetValByKey(MapAttrAttr.EditType, (int)value);
             }
         }
@@ -803,7 +797,8 @@ namespace BP.Sys
             {
                 return this.GetValIntByKey(MapAttrAttr.MyDataType);
             }
-            set {
+            set
+            {
                 this.SetValByKey(MapAttrAttr.MyDataType, value);
             }
         }
@@ -1003,7 +998,8 @@ namespace BP.Sys
             {
                 return this.GetValFloatByKey(MapAttrAttr.UIHeight);
             }
-            set {
+            set
+            {
                 this.SetValByKey(MapAttrAttr.UIHeight, value);
             }
         }
@@ -1055,7 +1051,8 @@ namespace BP.Sys
             {
                 return this.GetValBooleanByKey(MapAttrAttr.UIVisible);
             }
-            set {
+            set
+            {
                 this.SetValByKey(MapAttrAttr.UIVisible, value);
             }
         }
@@ -1086,7 +1083,8 @@ namespace BP.Sys
             {
                 return this.GetValBooleanByKey(MapAttrAttr.UIIsLine);
             }
-            set {
+            set
+            {
                 this.SetValByKey(MapAttrAttr.UIIsLine, value);
             }
         }
@@ -1146,7 +1144,8 @@ namespace BP.Sys
             {
                 return this.GetParaInt("RBShowModel");
             }
-            set {
+            set
+            {
                 this.SetPara("RBShowModel", value);
             }
         }
@@ -1292,7 +1291,8 @@ namespace BP.Sys
             {
                 return (UIContralType)this.GetValIntByKey(MapAttrAttr.UIContralType);
             }
-            set {
+            set
+            {
                 this.SetValByKey(MapAttrAttr.UIContralType, (int)value);
 
             }
@@ -1397,8 +1397,7 @@ namespace BP.Sys
                 map.AddTBInt(MapAttrAttr.UIIsEnable, 1, "是否启用", true, true);
                 map.AddTBInt(MapAttrAttr.UIIsLine, 0, "是否单独栏显示", true, true);
                 map.AddTBInt(MapAttrAttr.UIIsInput, 0, "是否必填字段", true, true);
-                map.AddTBInt(MapAttrAttr.IsSecret, 0, "是否保密", true, true);
-                map.AddTBInt(MapAttrAttr.IsRichText, 0, "富文本", true, true);
+                map.AddTBInt(MapAttrAttr.TextModel, 0, "TextModel", true, true);
                 map.AddTBInt(MapAttrAttr.IsSupperText, 0, "是否是大文本", true, true);
                 map.AddTBInt(MapAttrAttr.FontSize, 0, "字体大小", true, true);
 
@@ -1428,7 +1427,6 @@ namespace BP.Sys
 
                 //显示的分组.
                 map.AddTBString(MapAttrAttr.GroupID, null, "显示的分组", false, true, 0, 20, 20);
-                //map.AddTBInt(MapAttrAttr.GroupID, 1, "显示的分组", true, false);
 
                 map.AddBoolean(MapAttrAttr.IsEnableInAPP, true, "是否在移动端中显示", true, true);
 
@@ -1437,7 +1435,6 @@ namespace BP.Sys
                 map.AddTBString(MapAttrAttr.CSSLabel, "0", "CSSLabel标签样式", true, false, 0, 50, 20);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "序号", true, false);
                 map.AddTBString(MapAttrAttr.ICON, "0", "ICON", true, false, 0, 50, 20);
-
                 //参数属性.
                 map.AddTBAtParas(4000); //
 
@@ -1463,7 +1460,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string SaveBigNoteHtmlText(string text)
         {
-            string file =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FK_MapData + ".htm";
+            string file = BP.Difference.SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FK_MapData + ".htm";
             //若文件夹不存在，则创建
             string folder = System.IO.Path.GetDirectoryName(file);
             if (System.IO.Directory.Exists(folder) == false)
@@ -1475,7 +1472,7 @@ namespace BP.Sys
         //删除大块文本信息
         public string DeleteBigNoteHtmlText()
         {
-            string file =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FK_MapData + ".htm";
+            string file = BP.Difference.SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FK_MapData + ".htm";
 
             if (System.IO.File.Exists(file) == true)
                 System.IO.File.Delete(file);
@@ -1492,7 +1489,7 @@ namespace BP.Sys
         public string ReadBigNoteHtmlText()
         {
             string doc = "";
-            string file =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FK_MapData + ".htm";
+            string file = BP.Difference.SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FK_MapData + ".htm";
             string folder = System.IO.Path.GetDirectoryName(file);
             if (System.IO.Directory.Exists(folder) != false)
             {
@@ -1742,11 +1739,11 @@ namespace BP.Sys
             }
 
             if (this.Idx == 0)
-                this.Idx = DBAccess.RunSQLReturnValInt("SELECT MAX(Idx) FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'",0) + 1;
+                this.Idx = DBAccess.RunSQLReturnValInt("SELECT MAX(Idx) FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'", 0) + 1;
 
             //
-            if (this.GroupID==0)
-                this.GroupID = DBAccess.RunSQLReturnValInt("SELECT MAX(GroupID) FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'" ,0);
+            if (this.GroupID == 0)
+                this.GroupID = DBAccess.RunSQLReturnValInt("SELECT MAX(GroupID) FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'", 0);
 
             this.setMyPK(this.FK_MapData + "_" + this.KeyOfEn);
 
@@ -1772,8 +1769,14 @@ namespace BP.Sys
             }
 
 
-
             base.afterInsert();
+        }
+        protected override void afterUpdate()
+        {
+            //调用frmEditAction, 完成其他的操作.
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+
+            base.afterUpdate();
         }
         /// <summary>
         /// 删除之前
@@ -1835,6 +1838,22 @@ namespace BP.Sys
             qo.addOrderBy(MapAttrAttr.Idx);
             // qo.addOrderBy(MapAttrAttr.Idx);
             return qo.DoQuery();
+        }
+        /// <summary>
+        /// 查询日期+日期时间类型的
+        ///  代码移动.
+        /// </summary>
+        /// <param name="fk_map"></param>
+        /// <returns></returns>
+        public string SearchMapAttrsDateAndDateTime(string fk_map)
+        {
+            QueryObject qo = new QueryObject(this);
+            qo.AddWhere(MapAttrAttr.FK_MapData, fk_map);
+            qo.addAnd();
+            qo.AddWhere(MapAttrAttr.MyDataType, " IN ", "(6,7)");
+            qo.addOrderBy(MapAttrAttr.Idx);
+            qo.DoQuery();
+            return this.ToJson();
         }
         /// <summary>
         /// 得到它的 Entity

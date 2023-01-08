@@ -13,6 +13,23 @@ namespace BP.En
     {
         #region 构造函数
         /// <summary>
+        /// 主键
+        /// </summary>
+        public override string PK
+        {
+            get
+            {
+                return "No";
+            }
+        }
+        public override string PKField
+        {
+            get
+            {
+                return "No";
+            }
+        }
+        /// <summary>
         /// 转化为类.
         /// </summary>
         /// <returns></returns>
@@ -30,29 +47,29 @@ namespace BP.En
                 return this._TSclassID;
             }
         }
+        private string _TSclassID = "";
         public TSEntityNoName()
         {
             //构造.
             BP.Port.StationType en = new Port.StationType();
             this._enMap = en.EnMap;
         }
-        /// <summary>
-        /// 主键
-        /// </summary>
-        public string _TSclassID = null;
+
         /// <summary>
         /// 通用编号名称实体
         /// </summary>
-        /// <param name="nodeid">节点ID</param>
+        /// <param name="_TSclassID">类ID</param>
         public TSEntityNoName(string _TSclassID)
         {
             this._TSclassID = _TSclassID;
             this._enMap = BP.EnTS.Glo.GenerMap(_TSclassID);
+            // this._enMap = map as Map;
+            // this._enMap = BP.EnTS.Glo.GenerMap(_TSclassID);
         }
         /// <summary>
         /// 通用编号名称实体
         /// </summary>
-        /// <param name="frmID"></param>
+        /// <param name="frmID">表单ID</param>
         /// <param name="pk"></param>
         public TSEntityNoName(string classID, string pk)
         {
@@ -127,7 +144,6 @@ namespace BP.En
         }
         public TSEntitiesNoName()
         {
-
         }
         public TSEntitiesNoName(string tsClassID)
         {

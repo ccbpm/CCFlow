@@ -184,14 +184,14 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string CC_SelectStations()
         {
-            //岗位类型.
+            //角色类型.
             string sql = "SELECT NO,NAME FROM Port_StationType ORDER BY NO";
             DataSet ds = new DataSet();
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Port_StationType";
             ds.Tables.Add(dt);
 
-            //岗位.
+            //角色.
             string sqlStas = "SELECT NO,NAME,FK_STATIONTYPE FROM Port_Station ORDER BY FK_STATIONTYPE,NO";
             DataTable dtSta = DBAccess.RunSQLReturnTable(sqlStas);
             dtSta.TableName = "Port_Station";
@@ -207,7 +207,7 @@ namespace BP.WF.HttpHandler
             //人员信息. 格式 zhangsan,张三;lisi,李四;
             string emps = this.GetRequestVal("Emps");
 
-            //岗位信息. 格式:  001,002,003,
+            //角色信息. 格式:  001,002,003,
             string stations = this.GetRequestVal("Stations");
             stations = stations.Replace(";", ",");
 

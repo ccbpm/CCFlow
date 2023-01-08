@@ -140,7 +140,6 @@ namespace BP.Sys
         /// 排序表达式.
         /// </summary>
         public const string OrderBySQLExp = "OrderBySQLExp";
-
         /// <summary>
         /// 列自动计算表达式
         /// </summary>
@@ -153,12 +152,10 @@ namespace BP.Sys
         /// 是否可见
         /// </summary>
         public const string IsView = "IsView";
-       
         /// <summary>
         /// H高度
         /// </summary>
         public const string H = "H";
-       
         /// <summary>
         /// 宽度
         /// </summary>
@@ -211,7 +208,7 @@ namespace BP.Sys
         public const string LinkUrl = "LinkUrl";
         public const string LinkTarget = "LinkTarget";
 
-        
+
 
         public const string IsEnableLink2 = "IsEnableLink2";
         public const string LinkLabel2 = "LinkLabel2";
@@ -688,7 +685,7 @@ namespace BP.Sys
                 return obj;
             }
         }
-        
+
         /// <summary>
         /// 附件
         /// </summary>
@@ -860,7 +857,7 @@ namespace BP.Sys
             get
             {
 
-                if (this.IsInsert==false && this.IsUpdate== false && this.IsDelete== false)
+                if (this.IsInsert == false && this.IsUpdate == false && this.IsDelete == false)
                     return true;
 
                 return this.GetValBooleanByKey(MapDtlAttr.IsReadonly);
@@ -983,7 +980,7 @@ namespace BP.Sys
                 this.SetValByKey(MapDtlAttr.IsCopyNDData, value);
             }
         }
-      
+
 
         public bool IsUse = false;
         /// <summary>
@@ -1171,7 +1168,7 @@ namespace BP.Sys
         #region 构造方法
         public Map GenerMap()
         {
-            bool isdebug =  BP.Difference.SystemConfig.IsDebug;
+            bool isdebug = BP.Difference.SystemConfig.IsDebug;
 
             if (isdebug == false)
             {
@@ -1212,7 +1209,7 @@ namespace BP.Sys
         public MapDtl(string no)
         {
             this.No = no;
-         //   this.IsReadonly = 2;
+            //   this.IsReadonly = 2;
             this.Retrieve();
         }
         /// <summary>
@@ -1233,7 +1230,6 @@ namespace BP.Sys
                 map.AddTBString(MapDtlAttr.Alias, null, "别名", true, false, 1, 200, 20);
                 map.AddTBString(MapDtlAttr.FK_MapData, null, "主表", true, false, 0, 100, 20);
                 map.AddTBString(MapDtlAttr.PTable, null, "物理表", true, false, 0, 200, 20);
-                // map.AddTBInt(MapDtlAttr.PTableModel, 0, "物理表的保存方式", false, false);
 
                 map.AddTBString(MapDtlAttr.GroupField, null, "分组字段", true, false, 0, 300, 20);
                 map.AddTBString(MapDtlAttr.RefPK, null, "关联的主键", true, false, 0, 100, 20);
@@ -1241,17 +1237,16 @@ namespace BP.Sys
                 // 为明细表初始化事件类.
                 map.AddTBString(MapDtlAttr.FEBD, null, "映射的事件实体类", true, false, 0, 100, 20);
 
-                //map.AddTBInt(MapDtlAttr.Model, 0, "工作模式", false, false);
-                map.AddDDLSysEnum(MapDtlAttr.Model, 0, "工作模式", true, true,
-                 MapDtlAttr.Model, "@0=普通@1=固定行");
+                // @0=普通@1=固定行
+                map.AddTBInt(MapDtlAttr.Model, 0, "工作模式", false, false);
+                //map.AddDDLSysEnum(MapDtlAttr.Model, 0, "工作模式", true, true,
+                //MapDtlAttr.Model, "@0=普通@1=固定行");
 
                 map.AddTBInt(MapDtlAttr.DtlVer, 0, "使用版本", false, false);
                 // map.AddDDLSysEnum(MapDtlAttr.DtlVer, 0, "使用版本", true, true, MapDtlAttr.DtlVer, "@0=2017传统版@1=2019EasyUI版本");
 
 
                 map.AddTBInt(MapDtlAttr.RowsOfList, 6, "初始化行数", false, false);
-
-
 
                 map.AddBoolean(MapDtlAttr.IsEnableGroupField, false, "是否启用分组字段", false, false);
 
@@ -1283,9 +1278,10 @@ namespace BP.Sys
                 map.AddTBInt(MapDtlAttr.EditModel, 0, "行数据显示格式", false, false);
                 map.AddTBString(MapDtlAttr.UrlDtl, null, "自定义Url", true, false, 0, 200, 20, true);
 
+                map.AddTBString(MapDtlAttr.ColAutoExp, null, "列字段计算", true, false, 0, 200, 20, true);
                 map.AddTBInt(MapDtlAttr.MobileShowModel, 0, "移动端数据显示格式", false, false);
                 map.AddTBString(MapDtlAttr.MobileShowField, null, "移动端列表显示字段", true, false, 0, 100, 20);
- 
+
                 map.AddTBFloat(MapDtlAttr.H, 150, "高度", true, false);
 
                 map.AddTBFloat(MapDtlAttr.FrmW, 900, "表单宽度", true, true);
@@ -1304,10 +1300,8 @@ namespace BP.Sys
                 map.AddTBString(MapDtlAttr.FilterSQLExp, null, "过滤SQL表达式", true, false, 0, 70, 20, true);
                 map.AddTBString(MapDtlAttr.OrderBySQLExp, null, "排序字段", true, false, 0, 70, 20, true);
 
-
                 //add 2014-02-21.
                 map.AddTBInt(MapDtlAttr.FK_Node, 0, "节点(用户独立表单权限控制)", false, false);
-
 
                 //要显示的列.
                 map.AddTBString(MapDtlAttr.ShowCols, null, "显示的列", true, false, 0, 500, 20, true);
@@ -1328,10 +1322,6 @@ namespace BP.Sys
                 map.AddBoolean(MapDtlAttr.IsImp, false, "IsImp", true, true);
                 #endregion 导入导出填充.
 
-
-                //列自动计算表达式.
-                map.AddTBString(MapDtlAttr.ColAutoExp, null, "列自动计算表达式", true, false, 0, 200, 20, true);
-
                 map.AddTBString(MapDtlAttr.GUID, null, "GUID", false, false, 0, 128, 20);
 
                 //参数.
@@ -1343,8 +1333,8 @@ namespace BP.Sys
         }
 
         #region 基本属性.
-        
-       
+
+
         public float H
         {
             get
@@ -1401,8 +1391,10 @@ namespace BP.Sys
             md.No = this.No;
             if (md.RetrieveFromDBSources() == 0)
             {
+                //@hongyan. 
                 md.Name = this.Name;
-                md.Insert();
+              //  md.PTable = this.PTable;
+                md.DirectInsert();
             }
 
             MapAttrs attrs = new MapAttrs(this.No);
@@ -1500,6 +1492,23 @@ namespace BP.Sys
                 attr.Tag = "@WebUser.No";
                 attr.Insert();
             }
+            if (attrs.Contains(MapAttrAttr.KeyOfEn, "Idx") == false)
+            {
+                attr = new BP.Sys.MapAttr();
+                attr.setFK_MapData(this.No);
+                attr.setEditType(EditType.Readonly);
+
+                attr.setKeyOfEn("Idx");
+                attr.setName("Idx");
+                attr.setMyDataType(DataType.AppInt);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
+                attr.DefVal = "0";
+                attr.Insert();
+            }
+
         }
         private void InitExtMembers()
         {
@@ -1517,7 +1526,7 @@ namespace BP.Sys
                     //增加分组
                     GroupField group = new GroupField();
                     group.Lab = athDesc.Name;
-                    group.FrmID = this.No; 
+                    group.FrmID = this.No;
                     group.CtrlType = "Ath";
                     group.CtrlID = athDesc.MyPK;
                     group.Idx = 10;
@@ -1603,6 +1612,9 @@ namespace BP.Sys
         }
         protected override bool beforeUpdate()
         {
+            if (this.No.Equals(this.FK_MapData) == true)
+                throw new Exception("err@从表的No不能与FK_MapData字段相等." + this.No);
+
             MapAttrs mattrs = new MapAttrs(this.No);
             bool isHaveEnable = false;
             foreach (MapAttr attr in mattrs)
@@ -1641,15 +1653,11 @@ namespace BP.Sys
         protected override bool beforeDelete()
         {
             string sql = "";
-          //  sql += "@DELETE FROM Sys_FrmLine WHERE FK_MapData='" + this.No + "'";
-          //  sql += "@DELETE FROM Sys_FrmLab WHERE FK_MapData='" + this.No + "'";
-         //   sql += "@DELETE FROM Sys_FrmLink WHERE FK_MapData='" + this.No + "'";
             sql += "@DELETE FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'";
             sql += "@DELETE FROM Sys_FrmImgAth WHERE FK_MapData='" + this.No + "'";
             sql += "@DELETE FROM Sys_FrmRB WHERE FK_MapData='" + this.No + "'";
             sql += "@DELETE FROM Sys_FrmAttachment WHERE FK_MapData='" + this.No + "'";
             sql += "@DELETE FROM Sys_MapFrame WHERE FK_MapData='" + this.No + "'";
-
 
             if (this.No.Contains("BP.") == false)
                 sql += "@DELETE FROM Sys_MapExt WHERE FK_MapData='" + this.No + "'";
@@ -1659,7 +1667,6 @@ namespace BP.Sys
             sql += "@DELETE FROM Sys_GroupField WHERE FrmID='" + this.No + "'";
             sql += "@DELETE FROM Sys_GroupField WHERE CtrlID='" + this.No + "'";
             DBAccess.RunSQLs(sql);
-
 
             if (DBAccess.IsExitsObject(this.PTable) && this.PTable.IndexOf("ND") == 0)
             {
@@ -1681,11 +1688,9 @@ namespace BP.Sys
                 }
             }
 
-
             //执行清空缓存到的AutoNum.
             MapData md = new MapData(this.FK_MapData);
             md.ClearAutoNumCash(true); //更新缓存.
-
             return base.beforeDelete();
         }
     }

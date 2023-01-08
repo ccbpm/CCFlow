@@ -11,7 +11,6 @@ namespace BP.WF.HttpHandler
 {
     abstract public class DirectoryPageBase
     {
-
         #region 执行方法.
         /// <summary>
         /// 获得Form数据.
@@ -56,12 +55,15 @@ namespace BP.WF.HttpHandler
             if (DataType.IsNullOrEmpty(token) == true)
                 return null;
 
-            //throw new Exception("err@登录信息丢失，或者没有传递过来token,页面:["+page.ToString()+"]方法:["+ mothodName+"]");
-            string host =  BP.Difference.SystemConfig.GetValByKey("TokenHost", null);
+            string host = BP.Difference.SystemConfig.GetValByKey("TokenHost", null);
+            //根据token直接登录
             if (DataType.IsNullOrEmpty(host) == true)
-                return null;
+            {
+                BP.WF.Dev2Interface.Port_LoginByToken(token);
+                return "";
+            }
 
-            //throw new Exception("err@全局变量:TokenHost，没有获取到.");
+
             token = token.Split(',')[0];
             string url = host + token;
             string data = DataType.ReadURLContext(url, 5000);
@@ -76,7 +78,6 @@ namespace BP.WF.HttpHandler
 
             //执行登录.
             BP.WF.Dev2Interface.Port_Login(data);
-            //DBAccess.RunSQL("UPDATE WF_Emp SET Token='" + token + "'  WHERE No='" + emp.No + "'");
             return "info@登录成功.";
         }
         /// <summary>
@@ -87,7 +88,10 @@ namespace BP.WF.HttpHandler
         /// <returns>返回执行的结果，执行错误抛出异常</returns>
         public string DoMethod(DirectoryPageBase myEn, string methodName)
         {
-            //deal token
+
+            if (methodName.Contains(">") == true)
+                return "err@非法的脚本植入.";
+            //在用户名为空的情况下处理token.
             if (WebUser.No == null)
             {
                 bool isCanDealToken = true;
@@ -101,13 +105,26 @@ namespace BP.WF.HttpHandler
                 if (myEn.ToString().Contains("Admin") == true)
                     isCanDealToken = false;
 
-                //if (methodName.Contains("WebUser") == true)
-                //    isCanDealToken = false;
-                //if (isCanDealToken == true)
-                   this.DealToken(myEn, myEn.DoType);
+                if (isCanDealToken == true)
+                    this.DealToken(myEn, myEn.DoType);
             }
 
-            //string token=myEn.ToString
+            //if (WebUser.IsAdmin == false)
+            //{ 
+            //}
+            string clsID = myEn.ToString();
+
+            //权限判断,管理员.
+            if ((clsID.Contains("Admin_")
+                && clsID.Contains("WF_Admin_TestingContainer") == false
+                 && clsID.Contains("WF_Admin_DevelopDesigner") == false)
+                || clsID.Contains("GPMPage")
+               )
+            {
+                if (BP.Web.WebUser.IsAdmin == false)
+                    throw new Exception("err@非管理员用户,无法执行:" + clsID + "类.UserNo=" + WebUser.No);
+            }
+
             try
             {
                 Type tp = myEn.GetType();
@@ -124,14 +141,17 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                if (methodName.Contains(">") == true)
-                    return "err@非法的脚本植入.";
-
                 if (ex.InnerException != null)
                     if (ex.InnerException.Message.IndexOf("err@") == 0)
                         return ex.InnerException.Message;
                     else
-                        return "err@调用类:[" + myEn + "]方法:[" + methodName + "]出现错误:" + ex.InnerException;
+                    {
+                        string msg = "err@调用类:[EnName=" + myEn.EnName + " - EnsName=" + myEn.EnsName + "]";
+                        msg += "方法:[" + myEn.GetRequestVal("MethodName") + " " + methodName + "]";
+                        msg += "主键值:[" + myEn.PKVal + "]";
+                        msg += "出现错误:" + ex.InnerException;
+                        return msg;
+                    }
                 else
                     if (ex.Message.IndexOf("err@") == 0)
                     return ex.Message;
@@ -172,7 +192,7 @@ namespace BP.WF.HttpHandler
             if (val == null)
             {
                 val = HttpContextHelper.RequestParams(key);
-                
+
                 if (val == null)
                     return null;
             }
@@ -648,12 +668,12 @@ namespace BP.WF.HttpHandler
             get
             {
                 string str = this.GetRequestVal("FK_Flow");
+                if (str == null)
+                    str = this.GetRequestVal("FlowNo");
                 if (str == null || str == "" || str == "null")
                     return null;
-
                 if (DataType.IsNumStr(str) == false)
                     return "err@";
-
                 return str;
             }
         }
@@ -758,6 +778,13 @@ namespace BP.WF.HttpHandler
                 return this.FK_Node;
             }
         }
+        public int ToNodeID
+        {
+            get
+            {
+                return this.GetRequestValInt("ToNodeID");
+            }
+        }
         public Int64 FID
         {
             get
@@ -777,7 +804,7 @@ namespace BP.WF.HttpHandler
             get
             {
                 if (_workID != 0)
-                    return _workID; 
+                    return _workID;
                 string str = this.GetRequestVal("WorkID");
                 if (DataType.IsNullOrEmpty(str) == true)
                 {
@@ -785,7 +812,6 @@ namespace BP.WF.HttpHandler
                     if (DataType.IsNullOrEmpty(str) == true)
                         str = this.GetRequestVal("OID");
                 }
-
                 if (DataType.IsNullOrEmpty(str) == true)
                     return 0;
 
@@ -801,7 +827,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string val =  this.GetRequestVal("WorkID");
+                string val = this.GetRequestVal("WorkID");
                 if (DataType.IsNullOrEmpty(val) == true)
                     val = this.GetRequestVal("OID");
                 if (DataType.IsNullOrEmpty(val) == true)
@@ -1028,6 +1054,4 @@ namespace BP.WF.HttpHandler
         }
         #endregion 父子流程相关的属性.
     }
-
-
 }

@@ -54,11 +54,11 @@ namespace BP.WF.Template
         /// </summary>
         public const string PSpecDept = "PSpecDept";
         /// <summary>
-        /// 指定的岗位可看
+        /// 指定的角色可看
         /// </summary>
         public const string PSpecSta = "PSpecSta";
         /// <summary>
-        /// 岗位编号
+        /// 角色编号
         /// </summary>
         public const string PSpecStaExt = "PSpecStaExt";
 
@@ -227,7 +227,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 指定岗位可见
+        /// 指定角色可见
         /// </summary>
         public bool PSpecSta
         {
@@ -241,7 +241,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 岗位编号
+        /// 角色编号
         /// </summary>
         public string PSpecStaExt
         {
@@ -384,8 +384,8 @@ namespace BP.WF.Template
                 #endregion 按部门控制.
 
                 #region 其他权限控制.
-                map.AddBoolean(TruckViewPowerAttr.PSpecSta, true, "指定的岗位可看", true, true, false);
-                map.AddTBString(TruckViewPowerAttr.PSpecStaExt, null, "岗位编号", true, false, 0, 200, 100, false);
+                map.AddBoolean(TruckViewPowerAttr.PSpecSta, true, "指定的角色可看", true, true, false);
+                map.AddTBString(TruckViewPowerAttr.PSpecStaExt, null, "角色编号", true, false, 0, 200, 100, false);
 
                 map.AddBoolean(TruckViewPowerAttr.PSpecGroup, true, "指定的权限组可看", true, true, false);
                 map.AddTBString(TruckViewPowerAttr.PSpecGroupExt, null, "权限组", true, false, 0, 200, 100, false);

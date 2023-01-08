@@ -3,7 +3,7 @@
 namespace BP.CCBill.Template
 {
     /// <summary>
-    /// 单据查询岗位属性	  
+    /// 单据查询角色属性	  
     /// </summary>
     public class FrmStationDeptAttr
     {
@@ -12,7 +12,7 @@ namespace BP.CCBill.Template
         /// </summary>
         public const string FK_Frm = "FK_Frm";
         /// <summary>
-        /// 工作岗位
+        /// 工作角色
         /// </summary>
         public const string FK_Station = "FK_Station";
         /// <summary>
@@ -21,8 +21,8 @@ namespace BP.CCBill.Template
         public const string FK_Dept = "FK_Dept";
     }
     /// <summary>
-    /// 单据查询岗位
-    /// 单据查询岗位有两部分组成.	 
+    /// 单据查询角色
+    /// 单据查询角色有两部分组成.	 
     /// </summary>
     public class FrmStationDept : EntityMM
     {
@@ -55,7 +55,7 @@ namespace BP.CCBill.Template
         }
       
         /// <summary>
-        /// 工作岗位
+        /// 工作角色
         /// </summary>
         public string FK_Station
         {
@@ -84,7 +84,7 @@ namespace BP.CCBill.Template
 
         #region 构造方法
         /// <summary>
-        /// 单据工作岗位
+        /// 单据工作角色
         /// </summary>
         public FrmStationDept() { }
         /// <summary>
@@ -97,11 +97,11 @@ namespace BP.CCBill.Template
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Frm_StationDept", "单据岗位部门");
+                Map map = new Map("Frm_StationDept", "单据角色部门");
 
                 map.AddTBStringPK(FrmStationDeptAttr.FK_Frm, null, "单据编号", false, false, 1, 190, 20);
 
-                map.AddDDLEntitiesPK(FrmStationDeptAttr.FK_Station, null, "工作岗位", new BP.Port.Stations(), true);
+                map.AddDDLEntitiesPK(FrmStationDeptAttr.FK_Station, null, "工作角色", new BP.Port.Stations(), true);
 
                 map.AddDDLEntitiesPK(FrmStationDeptAttr.FK_Dept, null, "部门", new BP.Port.Depts(), true);
 
@@ -115,17 +115,17 @@ namespace BP.CCBill.Template
 
     }
     /// <summary>
-    /// 单据查询岗位
+    /// 单据查询角色
     /// </summary>
     public class FrmStationDepts : EntitiesMM
     {
 
         /// <summary>
-        /// 单据查询岗位
+        /// 单据查询角色
         /// </summary>
         public FrmStationDepts() { }
         /// <summary>
-        /// 单据查询岗位
+        /// 单据查询角色
         /// </summary>
         /// <param name="frmID">单据ID</param>
         public FrmStationDepts(string frmID)

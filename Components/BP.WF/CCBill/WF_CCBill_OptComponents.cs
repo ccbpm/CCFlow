@@ -209,7 +209,7 @@ namespace BP.CCBill
                 ge.SetValByKey(keyOfEn, dtl.MyVal);
                 ge.Update();
 
-                string msg= "字段：[" + dtl.AttrKey + "],已经修改为:" + dtl.MyVal;
+                string msg = "字段：[" + dtl.AttrKey + "],已经修改为:" + dtl.MyVal;
 
                 BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, this.WorkID.ToString(), FrmActionType.DataVerReback, msg);
                 return msg;
@@ -248,87 +248,87 @@ namespace BP.CCBill
 
             // BP.CCBill.Dev2Interface.MyEntityTree_Delete
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID,  this.WorkID.ToString(), FrmActionType.DataVerReback, "数据回滚");
-
+            BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, this.WorkID.ToString(), FrmActionType.DataVerReback, "数据回滚");
             return "已经成功还原...";
         }
-        /// <summary>
-        /// 创建新版本
-        /// </summary>
-        /// <returns></returns>
+
         public string DataVer_NewVer()
         {
-            //创建实体.
-            EnVer ev = new EnVer();
-            ev.setMyPK(DBAccess.GenerGUID());
-            ev.RecNo = WebUser.No;
-            ev.RecName = WebUser.Name;
-            ev.RDT = DataType.CurrentDateTimeCN;
-            ev.FrmID = this.FrmID;
-            ev.EnPKValue = this.WorkID.ToString();
-            ev.MyNote = this.GetRequestVal("MyNote");
-
-            MapData md = new MapData(this.FrmID);
-            ev.Name = md.Name;
-
-            // 获得最大的版本号.
-            int maxVer = DBAccess.RunSQLReturnValInt("SELECT MAX(EnVer) as Num FROM Sys_EnVer WHERE  FrmID='" + this.FrmID + "' AND EnPKValue='" + this.WorkID + "'", 0);
-
-            ev.Ver = maxVer + 1; //设置版本号.
-            ev.Insert(); //执行插入.
-
-            //创建变更数据.
             GEEntity en = new GEEntity(this.FrmID, this.WorkID);
-            EnVerDtl dtl = new EnVerDtl();
-
-            //不需要存储的字段.
-            string sysFiels = ",AtPara,OID,WorkID,WFState,BillNo,Title,RDT,CDT,OrgNo,Starter,StarterName,BillState,FK_Dept,";
-
-            MapAttrs mattrs = new MapAttrs(this.FrmID);
-            foreach (MapAttr attr in mattrs)
-            {
-                //如果是非数据控件.
-                if ((int)attr.UIContralType >= 4)
-                    continue;
-
-                if (sysFiels.Contains("," + attr.KeyOfEn + ",") == true)
-                    continue;
-
-                dtl.setMyPK(DBAccess.GenerGUID());
-                dtl.RefPK = ev.MyPK; //设置关联主键.
-
-                dtl.FrmID = ev.FrmID;
-                dtl.EnPKValue = this.WorkID.ToString(); //设置为主键.
-
-                dtl.AttrKey = attr.KeyOfEn;
-                dtl.AttrName = attr.Name;
-
-                //逻辑类型.
-                dtl.LGType = (int)attr.LGType;
-
-                //if (attr.LGType == FieldType.Enum)
-                //    dtl.LGType = 1;
-                //if (attr.MyFieldType == FieldType.FK)
-                //    dtl.LGType = 2;
-
-                //设置外键.
-                dtl.BindKey = attr.UIBindKey;
-                if (attr.LGType == FieldTypeS.Normal)
-                {
-                    //设置值.
-                    dtl.MyVal = en.GetValByKey(attr.KeyOfEn).ToString();
-                }
-                else
-                {
-                    //设置值.
-                    dtl.MyVal = "[" + en.GetValByKey(attr.KeyOfEn).ToString() + "][" + en.GetValRefTextByKey(attr.KeyOfEn) + "]";
-                }
-                dtl.Insert();
-            }
-
+            BP.Sys.EnVer.NewVer(en);
             BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, this.WorkID.ToString(), FrmActionType.DataVerReback, "创建数据版本.");
+            return "创建成功.";
 
-            return "版本创建成功.";
+            ////创建实体.
+            //EnVer ev = new EnVer();
+            //ev.setMyPK(DBAccess.GenerGUID());
+            //ev.RecNo = WebUser.No;
+            //ev.RecName = WebUser.Name;
+            //ev.RDT = DataType.CurrentDateTimeCN;
+            //ev.FrmID = this.FrmID;
+            //ev.EnPKValue = this.WorkID.ToString();
+            //ev.MyNote = this.GetRequestVal("MyNote");
+
+            //MapData md = new MapData(this.FrmID);
+            //ev.Name = md.Name;
+
+            //// 获得最大的版本号.
+            //int maxVer = DBAccess.RunSQLReturnValInt("SELECT MAX(EnVer) as Num FROM Sys_EnVer WHERE  FrmID='" + this.FrmID + "' AND EnPKValue='" + this.WorkID + "'", 0);
+
+            //ev.Ver = maxVer + 1; //设置版本号.
+            //ev.Insert(); //执行插入.
+
+            ////创建变更数据.
+            //EnVerDtl dtl = new EnVerDtl();
+
+            ////不需要存储的字段.
+            //string sysFiels = ",AtPara,OID,WorkID,WFState,BillNo,Title,RDT,CDT,OrgNo,Starter,StarterName,BillState,FK_Dept,";
+
+            //MapAttrs mattrs = new MapAttrs(this.FrmID);
+            //foreach (MapAttr attr in mattrs)
+            //{
+            //    //如果是非数据控件.
+            //    if ((int)attr.UIContralType >= 4)
+            //        continue;
+
+            //    if (sysFiels.Contains("," + attr.KeyOfEn + ",") == true)
+            //        continue;
+
+            //    dtl.setMyPK(DBAccess.GenerGUID());
+            //    dtl.RefPK = ev.MyPK; //设置关联主键.
+
+            //    dtl.FrmID = ev.FrmID;
+            //    dtl.EnPKValue = this.WorkID.ToString(); //设置为主键.
+
+            //    dtl.AttrKey = attr.KeyOfEn;
+            //    dtl.AttrName = attr.Name;
+
+            //    //逻辑类型.
+            //    dtl.LGType = (int)attr.LGType;
+
+            //    //if (attr.LGType == FieldType.Enum)
+            //    //    dtl.LGType = 1;
+            //    //if (attr.MyFieldType == FieldType.FK)
+            //    //    dtl.LGType = 2;
+
+            //    //设置外键.
+            //    dtl.BindKey = attr.UIBindKey;
+            //    if (attr.LGType == FieldTypeS.Normal)
+            //    {
+            //        //设置值.
+            //        dtl.MyVal = en.GetValByKey(attr.KeyOfEn).ToString();
+            //    }
+            //    else
+            //    {
+            //        //设置值.
+            //        dtl.MyVal = "[" + en.GetValByKey(attr.KeyOfEn).ToString() + "][" + en.GetValRefTextByKey(attr.KeyOfEn) + "]";
+            //    }
+            //    dtl.Insert();
+            //}
+
+            //BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, this.WorkID.ToString(), FrmActionType.DataVerReback, "创建数据版本.");
+
+            //return "版本创建成功.";
         }
         #endregion 数据版本.
 
@@ -341,7 +341,7 @@ namespace BP.CCBill
         {
             string workIDStr = this.GetRequestVal("WorkID");
 
-            string url =  BP.Difference.SystemConfig.HostURL + "/WF/CCBill/OptComponents/QRCode.htm?DoType=MyDict&WorkID=" + workIDStr + "&FrmID=" + this.FrmID + "&MethodNo=" + this.GetRequestVal("MethodNo");
+            string url = BP.Difference.SystemConfig.HostURL + "/WF/CCBill/OptComponents/QRCodeScan.htm?DoType=MyDict&WorkID=" + workIDStr + "&FrmID=" + this.FrmID + "&MethodNo=" + this.GetRequestVal("MethodNo") + "&IsReadonly=" + GetRequestValInt("IsReadonly");
             QRCodeEncoder encoder = new QRCodeEncoder();
             encoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;//编码方式(注意：BYTE能支持中文，ALPHA_NUMERIC扫描出来的都是数字)
             encoder.QRCodeScale = 4; //大小(值越大生成的二维码图片像素越高).
@@ -352,7 +352,7 @@ namespace BP.CCBill
 
             //生成临时文件.
             System.Drawing.Image image = encoder.Encode(url, Encoding.UTF8);
-            string tempPath =  BP.Difference.SystemConfig.PathOfTemp + "/" + workIDStr + ".png";
+            string tempPath = BP.Difference.SystemConfig.PathOfTemp + "/" + workIDStr + ".png";
             image.Save(tempPath, ImageFormat.Png);
             image.Dispose();
 
@@ -365,21 +365,10 @@ namespace BP.CCBill
         /// <returns></returns>
         public string QRCodeScan_Init()
         {
-           
-            string url =  BP.Difference.SystemConfig.HostURL + "/WF/CCBill/OptComponents/QRCodeScan.htm?DoType=MyDict&WorkID=" + this.WorkID + "&FrmID=" + this.FrmID + "&MethodNo=" + this.GetRequestVal("MethodNo");
-            QRCodeEncoder encoder = new QRCodeEncoder();
-            encoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;//编码方式(注意：BYTE能支持中文，ALPHA_NUMERIC扫描出来的都是数字)
-            encoder.QRCodeScale = 4;//大小(值越大生成的二维码图片像素越高)
-            encoder.QRCodeVersion = 0;//版本(注意：设置为0主要是防止编码的字符串太长时发生错误)
-            encoder.QRCodeErrorCorrect = QRCodeEncoder.ERROR_CORRECTION.H;//错误效验、错误更正(有4个等级)
-            encoder.QRCodeBackgroundColor = Color.White;
-            encoder.QRCodeForegroundColor = Color.Black;
+            string doType = this.DoType;
+            string url = "";
 
-            //生成临时文件.
-            System.Drawing.Image image = encoder.Encode(url, Encoding.UTF8);
-            string tempPath =  BP.Difference.SystemConfig.PathOfTemp + "/" + this.WorkID + ".png";
-            image.Save(tempPath, ImageFormat.Png);
-            image.Dispose();
+            url = "/CCMobile/CCBill/MyDict.htm?WorkID=" + this.WorkID + "&FrmID=" + this.FrmID + "&MethodNo=" + this.GetRequestVal("MethodNo") + "&IsReadonly=" + GetRequestValInt("IsReadonly");
 
             //返回url.
             return url;
@@ -394,16 +383,16 @@ namespace BP.CCBill
             //上传附件
             string filepath = "";
             var file = BP.Difference.HttpContextHelper.RequestFiles(0);
-            filepath =  BP.Difference.SystemConfig.PathOfDataUser + "UploadFile/FrmBBS/" + DataType.CurrentYearMonth;
+            filepath = BP.Difference.SystemConfig.PathOfDataUser + "UploadFile/FrmBBS/" + DataType.CurrentYearMonth;
             if (System.IO.Directory.Exists(filepath) == false)
                 System.IO.Directory.CreateDirectory(filepath);
-            filepath= filepath+"/"+ DBAccess.GenerGUID()+ file.FileName;
+            filepath = filepath + "/" + DBAccess.GenerGUID() + file.FileName;
             BP.Difference.HttpContextHelper.UploadFile(file, filepath);
             BP.CCBill.FrmBBS bbs = new BP.CCBill.FrmBBS(this.No);
             string fileName = file.FileName.Substring(0, file.FileName.LastIndexOf("."));
             bbs.SetValByKey("MyFileName", fileName);
             bbs.SetValByKey("MyFilePath", filepath);
-            bbs.SetValByKey("MyFileExt", file.FileName.Replace(fileName,""));
+            bbs.SetValByKey("MyFileExt", file.FileName.Replace(fileName, ""));
             bbs.Update();
             return "附件保存成功";
         }

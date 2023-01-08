@@ -52,10 +52,10 @@ namespace BP.WF.HttpHandler
                 BP.Port.Emp emp = new Emp();
                 emp.No = this.No;
                 if (emp.RetrieveFromDBSources() == 0)
-                    return "err@用户名账号错误.";
+                    return "err@用户名或者密码错误.";
 
                 if (emp.CheckPass(this.GetRequestVal("Pass")) == false)
-                    return "err@s输入密码错误.";
+                    return "err@用户名或者密码错误.";
 
                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                     BP.WF.Dev2Interface.Port_Login(emp.No);
@@ -144,7 +144,7 @@ namespace BP.WF.HttpHandler
                 if (WebUser.No == null)
                     BP.WF.Dev2Interface.Port_Login("Guest");
 
-                return "../../MyView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+                return "/CCMobile/MyView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
             }
 
             // 如果需要权限才能查看表单.
@@ -154,7 +154,7 @@ namespace BP.WF.HttpHandler
                 if (WebUser.No == null)
                     return "Login.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&QRCodeRole=2";
 
-                return "../../MyView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+                return "/CCMobile/MyView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
             }
 
             //外部账户协作模式处理工作.
@@ -170,7 +170,7 @@ namespace BP.WF.HttpHandler
                 HuiQian_AddGuest(this.WorkID, this.FK_Node);
 
 
-                return "../../MyFlowView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+                return "/CCMobile/MyFlowView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
             }
 
             return "err@没有判断的模式.";

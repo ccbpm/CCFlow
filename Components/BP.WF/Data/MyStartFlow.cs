@@ -57,7 +57,7 @@ namespace BP.WF.Data
         /// </summary>
         public const string FK_Node = "FK_Node";
         /// <summary>
-        /// 当前工作岗位
+        /// 当前工作角色
         /// </summary>
         public const string FK_Station = "FK_Station";
         /// <summary>
@@ -738,18 +738,18 @@ namespace BP.WF.Data
                 map.AddHidden(MyStartFlowAttr.FID, "=", "0");
 
                 map.DTSearchWay = DTSearchWay.ByDate;
-                map.DTSearchLable = "发起日期";
+                map.DTSearchLabel = "发起日期";
                 map.DTSearchKey = MyStartFlowAttr.RDT;
 
                 //我发起的流程.
-                AttrOfSearch search = new AttrOfSearch(MyStartFlowAttr.Starter, "发起人",
+                SearchNormal search = new SearchNormal(MyStartFlowAttr.Starter, "发起人",
                     MyStartFlowAttr.Starter, "=", BP.Web.WebUser.No, 0, true);
 
-                map.AttrsOfSearch.Add(search);
+                map.SearchNormals.Add(search);
 
-                search = new AttrOfSearch(MyStartFlowAttr.WFState, "流程状态",
+                search = new SearchNormal(MyStartFlowAttr.WFState, "流程状态",
                     MyStartFlowAttr.WFState, "not in", "('0')", 0, true);
-                map.AttrsOfSearch.Add(search);
+                map.SearchNormals.Add(search);
 
                RefMethod rm = new RefMethod();
                 /*  rm.Title = "轨迹";

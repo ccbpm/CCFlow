@@ -136,9 +136,8 @@ namespace BP.WF.Template
                 #region 基本信息.
                 map.AddMyPK();
                 //map.AddTBString(FrmNodeAttr.FK_Frm, null, "表单", true, true, 0, 300, 20);
-                 map.AddDDLEntities(FrmNodeAttr.FK_Frm, null, "表单", new MapDatas(), false);
+                map.AddDDLEntities(FrmNodeAttr.FK_Frm, null, "表单", new MapDatas(), false);
                 map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点ID", true, true);
-
 
                 map.AddBoolean(FrmNodeAttr.IsPrint, false, "是否可以打印", true, true);
                 map.AddBoolean(FrmNodeAttr.IsEnableLoadData, false, "是否启用装载填充事件", true, true);
@@ -196,13 +195,14 @@ namespace BP.WF.Template
                 #endregion
 
                 #region 隐藏字段.
-                //@0=始终启用@1=有数据时启用@2=有参数时启用@3=按表单的字段表达式@4=按SQL表达式@5=不启用@6=按岗位@7=按部门.
+                //@0=始终启用@1=有数据时启用@2=有参数时启用@3=按表单的字段表达式@4=按SQL表达式@5=不启用@6=按角色@7=按部门.
                 map.AddTBInt(FrmNodeAttr.FrmEnableRole, 0, "启用规则", false, false);
                 map.AddTBString(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", true, false, 0, 900, 20);
                 map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程编号", false, false, 0, 4, 20);
                 #endregion 隐藏字段.
 
                 #region 相关功能..
+                map.AddGroupAttr("基本信息");
                 RefMethod rm = new RefMethod();
                 rm.Title = "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoDFrm()";
@@ -254,50 +254,37 @@ namespace BP.WF.Template
                 #endregion 基本设置.
 
                 #region 表单元素权限.
+                map.AddGroupMethod("表单元素权限");
                 rm = new RefMethod();
-                rm.GroupName = "表单元素权限";
                 rm.Title = "字段权限";
                 rm.ClassMethodName = this.ToString() + ".DoFields()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                //rm = new RefMethod();
-                //rm.GroupName = "表单元素权限";
-                //rm.Title = "组件权限";
-                //rm.ClassMethodName = this.ToString() + ".DoComponents()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.Visable = false;
-                //map.AddRefMethod(rm);
-
                 rm = new RefMethod();
-                rm.GroupName = "表单元素权限";
                 rm.Title = "从表权限";
                 rm.ClassMethodName = this.ToString() + ".DoDtls()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "表单元素权限";
                 rm.Title = "附件权限";
                 rm.ClassMethodName = this.ToString() + ".DoAths()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "表单元素权限";
                 rm.Title = "图片附件权限";
                 rm.ClassMethodName = this.ToString() + ".DoImgAths()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "表单元素权限";
                 rm.Title = "从其他节点Copy权限设置";
                 rm.ClassMethodName = this.ToString() + ".DoCopyFromNode()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "icon-settings"; //正则表达式
                 map.AddRefMethod(rm);
-
                 #endregion 表单元素权限.
 
                 this._enMap = map;
@@ -310,7 +297,8 @@ namespace BP.WF.Template
         public string DoBatchSetting()
         {
             //return "../../Admin/Sln/BindFrms.htm?FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow;
-            return "../../Admin/AttrNode/FrmSln/BatchEditSln.htm?NodeID=" + this.FK_Node;
+           
+            return "../../Admin/AttrNode/FrmSln/BatchEditSln.htm?NodeID=" + this.FK_Node + "&MyPK=" + this.MyPK+"&FrmID="+this.FK_Frm;
 
         }
         /// <summary>
@@ -359,9 +347,14 @@ namespace BP.WF.Template
         {
             Node node = new Node();
             node.NodeID = this.FK_Node;
-            node.RetrieveFromDBSources();
-            node.FrmWorkCheckSta = this.IsEnableFWC;
-            node.Update();
+            int i = node.RetrieveFromDBSources();
+            if (i != 0 && (node.HisFormType == NodeFormType.RefOneFrmTree
+            || node.HisFormType == NodeFormType.FoolTruck))
+            {
+                node.FrmWorkCheckSta = this.IsEnableFWC;
+                node.SetValByKey("CheckField", this.CheckField);
+                node.Update();
+            }
             FrmSubFlow frmSubFlow = new FrmSubFlow(this.FK_Node);
             frmSubFlow.SFSta = this.SFSta;
             base.afterInsertUpdateAction();

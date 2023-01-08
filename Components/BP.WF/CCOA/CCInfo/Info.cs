@@ -199,7 +199,7 @@ namespace BP.CCOA.CCInfo
                 #region 设置查询条件.
                 map.DTSearchKey = InfoAttr.RDT;
                 map.DTSearchWay = DTSearchWay.ByDate;
-                map.DTSearchLable = "发布日期";
+                map.DTSearchLabel = "发布日期";
 
                 if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                     map.AddHidden("OrgNo", "=", BP.Web.WebUser.OrgNo);

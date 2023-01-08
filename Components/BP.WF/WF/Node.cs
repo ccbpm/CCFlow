@@ -110,20 +110,6 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 子线程类型
-        /// </summary>
-        public SubThreadType HisSubThreadType
-        {
-            get
-            {
-                return (SubThreadType)this.GetValIntByKey(NodeAttr.SubThreadType);
-            }
-            set
-            {
-                this.SetValByKey(NodeAttr.SubThreadType, (int)value);
-            }
-        }
-        /// <summary>
         /// 手工启动的子流程个数
         /// </summary>
         public int SubFlowHandNum
@@ -145,6 +131,16 @@ namespace BP.WF
             set
             {
                 this.SetPara(NodeAttr.IsSendBackNode, value);
+            }
+        }
+        /// <summary>
+        /// 抄送数量
+        /// </summary>
+        public int CCRoleNum
+        {
+            get
+            {
+                return this.GetParaInt("CCRoleNum", 0);
             }
         }
         /// <summary>
@@ -355,8 +351,7 @@ namespace BP.WF
 
                 Cash.SQL_Cash.Remove("ND" + this.NodeID);
                 return wk;
-                //this.SetRefObject("HisWork", obj);
-
+               
             }
         }
         /// <summary>
@@ -367,6 +362,7 @@ namespace BP.WF
             get
             {
                 Works obj = this.HisWork.GetNewEntities as Works;
+                obj.Clear();
                 return obj;
             }
         }
@@ -622,10 +618,10 @@ namespace BP.WF
             string sql = "";
             DataTable dt = null;
 
-            // 单据信息，岗位，节点信息。
+            // 单据信息，角色，节点信息。
             foreach (Node nd in nds)
             {
-                // 工作岗位。
+                // 工作角色。
                 sql = "SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + nd.NodeID;
                 dt = DBAccess.RunSQLReturnTable(sql);
                 string strs = "";
@@ -664,7 +660,7 @@ namespace BP.WF
                 }
             }
 
-            // 处理岗位分组.
+            // 处理角色分组.
             sql = "SELECT HisStas, COUNT(*) as NUM FROM WF_Node WHERE FK_Flow='" + flowNo + "' GROUP BY HisStas";
             dt = DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow dr in dt.Rows)
@@ -720,7 +716,7 @@ namespace BP.WF
                             string sql = "";
                             sql = "ALTER TABLE WF_Emp ADD StartFlows text ";
 
-                            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
+                            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6)
                                 sql = "ALTER TABLE WF_Emp ADD StartFlows blob";
 
                             if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
@@ -741,7 +737,7 @@ namespace BP.WF
                 this.ICON = "审核.png";
 
             #region 如果是数据合并模式，就要检查节点中是否有子线程，如果有子线程就需要单独的表.
-            if (this.HisRunModel == RunModel.SubThread)
+            if (this.IsSubThread == true)
             {
                 MapData md = new MapData("ND" + this.NodeID);
                 if (md.PTable != "ND" + this.NodeID)
@@ -787,7 +783,8 @@ namespace BP.WF
                     //else
                     //    this.HisNodeWorkType = NodeWorkType.WorkFHL;
                     break;
-                case RunModel.SubThread:
+                case RunModel.SubThreadUnSameWorkID:
+                case RunModel.SubThreadSameWorkID:
                     this.HisNodeWorkType = NodeWorkType.SubThreadWork;
                     break;
                 default:
@@ -820,7 +817,7 @@ namespace BP.WF
                 workCheckAth.IsVisable = false; // 让其在form 上不可见.
 
                 //位置.
-          
+
                 workCheckAth.H = (float)150;
 
                 //多附件.
@@ -843,7 +840,7 @@ namespace BP.WF
             mapData.No = "ND" + this.NodeID;
             if (mapData.RetrieveFromDBSources() != 0)
             {
-                if (this.HisRunModel == RunModel.SubThread)
+                if (this.IsSubThread == true)
                     mapData.PTable = mapData.No;
                 else
                     mapData.PTable = fl.PTable;
@@ -854,7 +851,7 @@ namespace BP.WF
             if (this.FormType == NodeFormType.RefOneFrmTree)
             {
                 GEEntity en = new GEEntity(this.NodeFrmID);
-                if (this.HisRunModel == RunModel.SubThread && en.EnMap.Attrs.Contains("FID") == false)
+                if (this.IsSubThread == true && en.EnMap.Attrs.Contains("FID") == false)
                 {
                     MapAttr attr = new BP.Sys.MapAttr();
                     attr.setFK_MapData(this.NodeFrmID);
@@ -892,34 +889,6 @@ namespace BP.WF
         }
 
         #region 基本属性
-        /// <summary>
-        /// 是否启动自动运行？
-        /// </summary>
-        public bool AutoRunEnable
-        {
-            get
-            {
-                return this.GetValBooleanByKey(NodeAttr.AutoRunEnable);
-            }
-            set
-            {
-                this.SetValByKey(NodeAttr.AutoRunEnable, value);
-            }
-        }
-        /// <summary>
-        /// 自动运行参数
-        /// </summary>
-        public string AutoRunParas
-        {
-            get
-            {
-                return this.GetValStringByKey(NodeAttr.AutoRunParas);
-            }
-            set
-            {
-                this.SetValByKey(NodeAttr.AutoRunParas, value);
-            }
-        }
         /// <summary>
         /// 审核组件
         /// </summary>
@@ -1034,31 +1003,17 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 启动参数
+        /// 是不是节点表单.
         /// </summary>
-        public string SubFlowStartParas
+        public bool IsNodeFrm
         {
             get
             {
-                return this.GetValStringByKey(NodeAttr.SubFlowStartParas);
-            }
-            set
-            {
-                this.SetValByKey(NodeAttr.SubFlowStartParas, value);
-            }
-        }
-        /// <summary>
-        /// 子线程启动方式
-        /// </summary>
-        public SubFlowStartWay SubFlowStartWay
-        {
-            get
-            {
-                return (SubFlowStartWay)this.GetValIntByKey(NodeAttr.SubFlowStartWay);
-            }
-            set
-            {
-                this.SetValByKey(NodeAttr.SubFlowStartWay, (int)value);
+                if (this.HisFormType == NodeFormType.FoolForm || this.HisFormType == NodeFormType.Develop
+                    || this.HisFormType == NodeFormType.RefNodeFrm || this.HisFormType == NodeFormType.FoolTruck)
+                    return true;
+
+                return false;
             }
         }
         /// <summary>
@@ -1091,9 +1046,11 @@ namespace BP.WF
                 if (this.HisFormType == NodeFormType.FoolTruck)
                     return "傻瓜轨迹表单";
 
-
                 if (this.HisFormType == NodeFormType.Develop)
                     return "开发者表单";
+
+                if (this.HisFormType == NodeFormType.RefNodeFrm)
+                    return "引用"+this.NodeFrmID;
 
                 if (this.HisFormType == NodeFormType.SDKForm)
                     return "SDK表单";
@@ -1159,7 +1116,7 @@ namespace BP.WF
             get
             {
                 string str = this.GetValStrByKey(NodeAttr.FormUrl);
-                str = str.Replace("@SDKFromServHost",BP.Difference.SystemConfig.AppSettings["SDKFromServHost"]);
+                str = str.Replace("@SDKFromServHost", BP.Difference.SystemConfig.AppSettings["SDKFromServHost"]);
                 return str;
             }
             set
@@ -1474,6 +1431,19 @@ namespace BP.WF
             set
             {
                 this.SetValByKey(NodeAttr.RunModel, (int)value);
+            }
+        }
+        /// <summary>
+        /// 是不是子线程?
+        /// </summary>
+        public bool IsSubThread
+        {
+            get
+            {
+                if (this.HisRunModel == RunModel.SubThreadSameWorkID
+                    || this.HisRunModel == RunModel.SubThreadUnSameWorkID)
+                    return true;
+                return false;
             }
         }
         /// <summary>
@@ -1981,11 +1951,11 @@ namespace BP.WF
         /// <summary>
         /// 抄送规则
         /// </summary>
-        public CCRole HisCCRole
+        public CCRoleEnum HisCCRole
         {
             get
             {
-                return (CCRole)this.GetValIntByKey(NodeAttr.CCRole);
+                return (CCRoleEnum)this.GetValIntByKey(NodeAttr.CCRole);
             }
             set
             {
@@ -2090,7 +2060,8 @@ namespace BP.WF
                         return NodeWorkType.WorkHL;
                     case RunModel.FHL:
                         return NodeWorkType.WorkFHL;
-                    case RunModel.SubThread:
+                    case RunModel.SubThreadSameWorkID:
+                    case RunModel.SubThreadUnSameWorkID:
                         return NodeWorkType.SubThreadWork;
                     default:
                         throw new Exception("@没有判断类型NodeWorkType.");
@@ -2560,7 +2531,18 @@ namespace BP.WF
                 }
             }
         }
-
+        /// <summary>
+        /// 按照角色智能获取人员模式 
+        /// 0=集合模式,1=切片-严谨模式. 2=切片-宽泛模式
+        /// </summary>
+        public int DeliveryStationReqEmpsWay
+        {
+            get
+            {
+                int val = this.GetParaInt("StationReqEmpsWay", 0);
+                return val;
+            }
+        }
         /// <summary>
         /// 接受人sql
         /// </summary>
@@ -2749,7 +2731,13 @@ namespace BP.WF
                 this.SetValByKey(BtnAttr.HuiQianRole, (int)value);
             }
         }
-
+        public bool IsResetAccepter
+        {
+            get
+            {
+                return this.GetValBooleanByKey(NodeAttr.IsResetAccepter);
+            }
+        }
 
         /// <summary>
         /// 重写基类方法
@@ -2777,7 +2765,7 @@ namespace BP.WF
                 map.AddTBString(NodeAttr.ICON, null, "节点ICON图片路径", true, false, 0, 70, 10);
 
                 map.AddTBInt(NodeAttr.NodeWorkType, 0, "节点类型", false, false);
-                map.AddTBInt(NodeAttr.SubThreadType, 0, "子线程ID", false, false);
+               // map.AddTBInt(NodeAttr.SubThreadType, 0, "子线程ID", false, false);
 
                 map.AddTBString(NodeAttr.FK_Flow, null, "FK_Flow", false, false, 0, 3, 10);
                 map.AddTBInt(NodeAttr.IsGuestNode, 0, "是否是客户执行节点", false, false);
@@ -2786,13 +2774,8 @@ namespace BP.WF
 
                 //为铁路局,会签子流程. 增加
                 map.AddTBInt(NodeAttr.IsSendDraftSubFlow, 0, "是否发送草稿子流程？", false, false);
-
-
-                //map.AddTBString(NodeAttr.FK_FlowSort, null, "FK_FlowSort", false, true, 0, 4, 10);
-                //map.AddTBString(NodeAttr.FK_FlowSortT, null, "FK_FlowSortT", false, true, 0, 100, 10);
-
+                map.AddTBInt(NodeAttr.IsResetAccepter, 0, "可逆节点时是否重新计算接收人", false, false);
                 map.AddTBString(NodeAttr.FrmAttr, null, "FrmAttr", false, true, 0, 300, 10);
-                //  map.AddTBInt(NodeAttr.IsBUnit, 0, "是否是节点模版(业务单元)", true, false);
                 #endregion 基本属性.
 
                 #region 审核组件.
@@ -2807,6 +2790,8 @@ namespace BP.WF
 
                 #region 子流程信息
                 map.AddTBInt(FrmSubFlowAttr.SFSta, 0, "父子流程组件", false, false);
+                map.AddTBInt(NodeAttr.SubFlowX, 0, "子流程设计器位置X", false, false);
+                map.AddTBInt(NodeAttr.SubFlowY, 0, "子流程设计器位置Y", false, false);
                 #endregion 子流程信息
 
                 #region 考核属性.
@@ -2815,17 +2800,13 @@ namespace BP.WF
 
                 map.AddTBString(BtnAttr.HelpLab, "帮助提示", "帮助", true, false, 0, 50, 10);
                 map.AddTBInt(BtnAttr.HelpRole, 0, "帮助提示规则", true, false);
-
                 map.AddTBFloat(NodeAttr.TimeLimit, 2, "限期(天)", true, false); //"限期(天)".
                                                                              //  map.AddTBFloat(NodeAttr.TSpanHour, 0, "小时", true, false); //"限期(分钟)".
                 map.AddTBInt(NodeAttr.TWay, 0, "时间计算方式", true, false); //0=不计算节假日,1=计算节假日.
-
                 map.AddTBInt(NodeAttr.TAlertRole, 0, "逾期提醒规则", false, false); //"限期(天)"
                 map.AddTBInt(NodeAttr.TAlertWay, 0, "逾期提醒方式", false, false); //"限期(天)"
 
                 map.AddTBFloat(NodeAttr.WarningDay, 1, "工作预警(天)", true, false);    // "警告期限(0不警告)"
-                //  map.AddTBFloat(NodeAttr.WarningHour, 0, "工作预警(小时)", true, false); // "警告期限(0不警告)"
-                //  map.SetHelperUrl(NodeAttr.WarningHour, "http://ccbpm.mydoc.io/?v=5404&t=17999");
 
                 map.AddTBInt(NodeAttr.WAlertRole, 0, "预警提醒规则", false, false); //"限期(天)"
                 map.AddTBInt(NodeAttr.WAlertWay, 0, "预警提醒方式", false, false); //"限期(天)"
@@ -2914,7 +2895,6 @@ namespace BP.WF
                 //@0=上一个节点发送时@1=当前节点工作打开时.
                 map.AddTBInt(NodeAttr.SkipTime, 0, "执行跳转事件", false, false);
 
-
                 // 批处理规则， 2021.1.20 为福建人寿重构.
                 // @0=不启用，1=审核组件模式，2=审核分组字段模式,3=自定义url模式.
                 map.AddTBInt(NodeAttr.BatchRole, 0, "批处理", true, true);
@@ -2939,15 +2919,15 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.TurnToDeal, 0, "转向处理", false, false);
                 map.AddTBString(NodeAttr.TurnToDealDoc, null, "发送后提示信息", true, false, 0, 200, 10, true);
                 map.AddTBInt(NodeAttr.NodePosType, 0, "位置", false, false);
-                map.AddTBString(NodeAttr.HisStas, null, "岗位", false, false, 0, 300, 10);
-                map.AddTBString(NodeAttr.HisDeptStrs, null, "部门", false, false, 0, 300, 10);
-                map.AddTBString(NodeAttr.HisToNDs, null, "转到的节点", false, false, 0, 50, 10);
+                map.AddTBString(NodeAttr.HisStas, null, "角色", false, false, 0, 300, 10);
+                map.AddTBString(NodeAttr.HisDeptStrs, null, "部门", false, false, 0, 600, 10);
+                map.AddTBString(NodeAttr.HisToNDs, null, "转到的节点", false, false, 0, 80, 10);
                 map.AddTBString(NodeAttr.HisBillIDs, null, "单据IDs", false, false, 0, 50, 10);
                 //  map.AddTBString(NodeAttr.HisEmps, null, "HisEmps", false, false, 0, 3000, 10);
                 map.AddTBString(NodeAttr.HisSubFlows, null, "HisSubFlows", false, false, 0, 30, 10);
                 map.AddTBString(NodeAttr.PTable, null, "物理表", false, false, 0, 100, 10);
 
-                map.AddTBString(NodeAttr.GroupStaNDs, null, "岗位分组节点", false, false, 0, 200, 10);
+                map.AddTBString(NodeAttr.GroupStaNDs, null, "角色分组节点", false, false, 0, 200, 10);
                 map.AddTBInt(NodeAttr.X, 0, "X坐标", false, false);
                 map.AddTBInt(NodeAttr.Y, 0, "Y坐标", false, false);
 
@@ -2962,14 +2942,9 @@ namespace BP.WF
                 // map.AddTBString(BtnAttr.ReturnField, "", "退回信息填写字段", true, false, 0, 50, 10, true);
                 map.AddTBAtParas(500);
 
-                // 启动子线程参数 2013-01-04
-                map.AddTBInt(NodeAttr.SubFlowStartWay, 0, "子线程启动方式", true, false);
-                map.AddTBString(NodeAttr.SubFlowStartParas, null, "启动参数", true, false, 0, 100, 10);
-
                 // 启动自动运行. 2013-01-04
-                map.AddTBInt(NodeAttr.AutoRunEnable, 0, "是否启动自动运行？", true, false);
-                map.AddTBString(NodeAttr.AutoRunParas, null, "自动运行参数", true, false, 0, 100, 10);
-
+                //map.AddTBInt(NodeAttr.AutoRunEnable, 0, "是否启动自动运行？", true, false);
+                //map.AddTBString(NodeAttr.AutoRunParas, null, "自动运行参数", true, false, 0, 100, 10);
                 map.AddTBString(NodeAttr.SelfParas, null, "自定义参数(如果太小可以手动扩大)", true, false, 0, 1000, 10);
 
                 #region 与参数有关系的属性。
@@ -3003,34 +2978,34 @@ namespace BP.WF
         /// <returns></returns>
         protected override bool beforeDelete()
         {
-            //检查设计流程权限,集团模式下，不是自己创建的流程，不能设计流程.
+            // 检查设计流程权限,集团模式下，不是自己创建的流程，不能设计流程.
             BP.WF.Template.TemplateGlo.CheckPower(this.FK_Flow);
 
             int num = 0;
-            //如果是结束节点，则自动结束流程
-            if (this.NodePosType == NodePosType.End)
-            {
-                GenerWorkFlows gwfs = new GenerWorkFlows();
-                gwfs.Retrieve("FK_Flow", this.FK_Flow);
-                foreach (GenerWorkFlow gwf in gwfs)
-                {
-                    try
-                    {
-                        BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.WorkID, "流程成功结束");
-                    }
-                    catch (Exception ex)
-                    {
-                        //删除错误，有可能是删除该流程.
-                        continue;
-                    }
-                }
-            }
-            //判断是否可以被删除. 
+            //如果是结束节点，则自动结束流程.
+            //if (this.NodePosType == NodePosType.End)
+            //{
+            //    GenerWorkFlows gwfs = new GenerWorkFlows();
+            //    gwfs.Retrieve("FK_Flow", this.FK_Flow);
+            //    foreach (GenerWorkFlow gwf in gwfs)
+            //    {
+            //        try
+            //        {
+            //            BP.WF.Dev2Interface.Flow_DoFlowOver(gwf.WorkID, "流程成功结束");
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            //删除错误，有可能是删除该流程.
+            //            continue;
+            //        }
+            //    }
+            //}
+            // 判断是否可以被删除. 
             num = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_GenerWorkerlist WHERE FK_Node=" + this.NodeID + " AND IsPass=0 ");
             if (num != 0)
                 throw new Exception("@该节点[" + this.NodeID + "," + this.Name + "]有待办工作存在，您不能删除它.");
 
-            // 删除它的节点。
+            // 删除它的节点
             BP.Sys.MapData md = new BP.Sys.MapData();
             md.No = "ND" + this.NodeID;
             md.Delete();
@@ -3039,36 +3014,34 @@ namespace BP.WF
             BP.Sys.GroupFields gfs = new BP.Sys.GroupFields();
             gfs.Delete(BP.Sys.GroupFieldAttr.FrmID, md.No);
 
-            //删除它的明细。
+            // 删除它的明细
             BP.Sys.MapDtls dtls = new BP.Sys.MapDtls(md.No);
             dtls.Delete();
 
-            //删除框架
+            //删除框架.
             BP.Sys.MapFrames frams = new BP.Sys.MapFrames(md.No);
             frams.Delete();
 
-            // 删除扩展
+            //删除扩展.
             BP.Sys.MapExts exts = new BP.Sys.MapExts(md.No);
             exts.Delete();
 
-            //删除节点与岗位的对应.
+            //删除节点与角色的对应.
             DBAccess.RunSQL("DELETE FROM WF_NodeStation WHERE FK_Node=" + this.NodeID);
             DBAccess.RunSQL("DELETE FROM WF_NodeEmp  WHERE FK_Node=" + this.NodeID);
             DBAccess.RunSQL("DELETE FROM WF_NodeDept WHERE FK_Node=" + this.NodeID);
             DBAccess.RunSQL("DELETE FROM WF_FrmNode  WHERE FK_Node=" + this.NodeID);
             DBAccess.RunSQL("DELETE FROM WF_CCEmp  WHERE FK_Node=" + this.NodeID);
-            DBAccess.RunSQL("DELETE FROM WF_CH  WHERE FK_Node=" + this.NodeID);
+            DBAccess.RunSQL("DELETE FROM WF_CH WHERE FK_Node=" + this.NodeID);
 
             //删除附件.
-            DBAccess.RunSQL("DELETE FROM Sys_FrmAttachment  WHERE FK_MapData='" + this.NodeID + "'");
+            DBAccess.RunSQL("DELETE FROM Sys_FrmAttachment WHERE FK_MapData='" + this.NodeID + "'");
 
             //删除节点后，把关联该节点表单的ID也要删除掉. 同步过去.
             DBAccess.RunSQL("UPDATE WF_Node SET NodeFrmID='' WHERE NodeFrmID='ND" + this.NodeID + "' AND FK_Flow='" + this.FK_Flow + "'");
 
-
             //写入日志.
-            BP.Sys.Base.Glo.WriteUserLog("删除节点：" + this.Name + " - " + this.NodeID);
-
+            BP.Sys.Base.Glo.WriteUserLog("删除节点:" + this.Name + " - " + this.NodeID);
 
             return base.beforeDelete();
         }
@@ -3106,7 +3079,7 @@ namespace BP.WF
                 attr.Insert();
             }
 
-            if (this.HisRunModel != RunModel.SubThread)
+            if (this.IsSubThread==false)
                 return "修复成功.";
 
 
@@ -3300,8 +3273,7 @@ namespace BP.WF
             if (this.HisFormType == NodeFormType.Develop)
                 md.HisFrmType = FrmType.Develop;
 
-            if (this.HisFlow.HisDataStoreModel == DataStoreModel.SpecTable)
-                md.PTable = this.HisFlow.PTable;
+            md.PTable = this.HisFlow.PTable;
             md.Insert();
 
             BP.Sys.MapAttr attr = new BP.Sys.MapAttr();

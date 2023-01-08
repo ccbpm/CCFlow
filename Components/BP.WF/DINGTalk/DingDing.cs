@@ -488,14 +488,14 @@ namespace BP.GPM.DTalk
                         }
                     }
 
-                    //部门在钉钉不存在则进行删除：部门表、部门人员、部门人员岗位、部门职位、部门岗位
+                    //部门在钉钉不存在则进行删除：部门表、部门人员、部门人员角色、部门职位、部门角色
                     if (isHave == false)
                     {
-                        ////部门岗位
+                        ////部门角色
                         //DeptStation deptStation = new DeptStation();
                         //int iDeptStation = deptStation.Delete(DeptStationAttr.FK_Dept, gpm_Dept.No);
                         
-                        ////部门人员岗位
+                        ////部门人员角色
                         //DeptEmpStation deptEmpStation = new DeptEmpStation();
                         //int iDeptEmpStation = deptEmpStation.Delete(DeptEmpStationAttr.FK_Dept, gpm_Dept.No);
                         ////部门人员
@@ -505,8 +505,8 @@ namespace BP.GPM.DTalk
                         //Dept dt = new Dept(gpm_Dept.No);
                         //dt.Delete();
                         //append.Append("\r\n删除部门：" + gpm_Dept.Name + " 部门全路径：" + gpm_Dept.NameOfPath);
-                        //append.Append("\r\n        部门岗位 " + iDeptStation + " 条记录");
-                        //append.Append("\r\n        部门人员岗位 " + iDeptEmpStation + " 条记录");
+                        //append.Append("\r\n        部门角色 " + iDeptStation + " 条记录");
+                        //append.Append("\r\n        部门人员角色 " + iDeptEmpStation + " 条记录");
                         //append.Append("\r\n        部门人员 " + iDeptEmp + " 条记录");
                     }
                     else
@@ -871,7 +871,7 @@ namespace BP.GPM.DTalk
             DBAccess.RunSQL("DELETE FROM Port_Dept");
             //部门人员
             DBAccess.RunSQL("DELETE FROM Port_DeptEmp");
-            //部门人员岗位
+            //部门人员角色
             DBAccess.RunSQL("DELETE FROM Port_DeptEmpStation");
             //admin 是必须存在的
             Emp emp = new Emp();

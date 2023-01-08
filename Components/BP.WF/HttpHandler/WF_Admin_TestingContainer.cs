@@ -64,7 +64,7 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Track";
             //把列大写转化为小写.
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel ==FieldCaseModel.UpperCase)
             {
                 Track tk = new Track();
                 foreach (Attr attr in tk.EnMap.Attrs)
@@ -72,6 +72,18 @@ namespace BP.WF.HttpHandler
                     if (dt.Columns.Contains(attr.Key.ToUpper()) == true)
                     {
                         dt.Columns[attr.Key.ToUpper()].ColumnName = attr.Key;
+
+                    }
+                }
+            }
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                Track tk = new Track();
+                foreach (Attr attr in tk.EnMap.Attrs)
+                {
+                    if (dt.Columns.Contains(attr.Key.ToLower()) == true)
+                    {
+                        dt.Columns[attr.Key.ToLower()].ColumnName = attr.Key;
 
                     }
                 }
@@ -117,6 +129,7 @@ namespace BP.WF.HttpHandler
             {
                 string token = this.GetRequestVal("Token");
                 string userNo = BP.WF.Dev2Interface.Port_LoginByToken(token);
+                Dev2Interface.Port_GenerToken(userNo);
                 return userNo;
             }
             catch (Exception ex)
@@ -125,6 +138,7 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(this.UserNo) == false)
                 {
                     BP.WF.Dev2Interface.Port_Login(this.UserNo);
+                    Dev2Interface.Port_GenerToken(this.UserNo);
                     return this.UserNo;
                 }
                 return ex.Message;
@@ -144,7 +158,8 @@ namespace BP.WF.HttpHandler
                 try
                 {
                     BP.WF.Dev2Interface.Port_Login(this.FK_Emp);
-                    return "登录成功.";
+                    string token = Dev2Interface.Port_GenerToken(this.FK_Emp);
+                    return token;
                 }
                 catch (Exception ex)
                 {
@@ -155,7 +170,8 @@ namespace BP.WF.HttpHandler
             try
             {
                 BP.WF.Dev2Interface.Port_Login(this.FK_Emp, this.OrgNo);
-                return "登录成功.";
+                string token = Dev2Interface.Port_GenerToken(this.FK_Emp);
+                return token;
             }
             catch (Exception ex)
             {
@@ -172,28 +188,20 @@ namespace BP.WF.HttpHandler
         public string TestFlow2020_StartIt()
         {
             //此SID是管理员的SID.
-
-            /* if (WebUser.IsAdmin == false)
-                 return "err@非管理员无法测试,关闭后重新登录。";
- */
             string testerNo = this.GetRequestVal("TesterNo");
             FlowExt fl = new FlowExt(this.FK_Flow);
             fl.Tester = testerNo;
             fl.Update();
 
-            //要测试的用户编号.
-            //  Emp emp = new Emp(userNo);
-            //  sid = emp.GetValStringByKey(EmpAttr.SID);
-            //判断是否可以测试该流程？ 
-            /*  BP.Port.Emp myEmp = new BP.Port.Emp();
-            int i = myEmp.Retrieve("Token", sid);
-            if (i == 0 && 1 == 2)
-                throw new Exception("err@非法的SID:" + sid);*/
+            //选择的人员登录
+            BP.WF.Dev2Interface.Port_Login(testerNo);
+            string token = BP.WF.Dev2Interface.Port_GenerToken(testerNo);
 
             //组织url发起该流程.
             string url = "Default.html?RunModel=1&FK_Flow=" + this.FK_Flow + "&TesterNo=" + testerNo;
             url += "&OrgNo=" + WebUser.OrgNo;
-            url += "&UserNo=" + WebUser.No;
+            url += "&UserNo=" + this.GetRequestVal("UserNo");
+            url += "&Token=" + token;
             return url;
         }
         /// <summary>
@@ -278,7 +286,7 @@ namespace BP.WF.HttpHandler
                         }
                         else
                         {
-                            // 查询当前组织下所有的该岗位的人员. 
+                            // 查询当前组织下所有的该角色的人员. 
                             sql = "SELECT a." + BP.Sys.Base.Glo.UserNo + " as No FROM Port_Emp A, Port_DeptEmpStation B, WF_NodeStation C ";
                             sql += " WHERE A.OrgNo='" + WebUser.OrgNo + "' AND C.FK_Node=" + nd.NodeID;
                             sql += " AND A.No=B.FK_Emp AND B.FK_Station=C.FK_Station ";
@@ -413,8 +421,6 @@ namespace BP.WF.HttpHandler
                     dtMyEmps.Columns["name"].ColumnName = "Name";
                     dtMyEmps.Columns["fk_depttext"].ColumnName = "FK_DeptText";
                 }
-
-
 
                 //返回数据源.
                 return BP.Tools.Json.ToJson(dtMyEmps);

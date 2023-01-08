@@ -183,7 +183,7 @@ namespace BP.CCFast.CCMenu
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("GPM_System", "系统"); 
+                Map map = new Map("GPM_System", "系统");
                 map.DepositaryOfEntity = Depositary.None;
 
                 map.AddTBStringPK(MySystemAttr.No, null, "编号", true, false, 2, 100, 100);
@@ -192,7 +192,7 @@ namespace BP.CCFast.CCMenu
                 map.AddTBString(MySystemAttr.Icon, null, "图标", true, false, 0, 50, 150, true);
 
                 map.AddTBString(MenuAttr.OrgNo, null, "组织编号", true, false, 0, 50, 20);
-                map.AddTBInt(MySystemAttr.Idx, 0, "显示顺序", true, false);
+                map.AddTBInt(MySystemAttr.Idx, 0, "顺序", true, false);
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "导出应用模板";
@@ -454,13 +454,18 @@ namespace BP.CCFast.CCMenu
         {
             if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
             {
-                var i = base.RetrieveAll("Idx");
+
+                var i = this.Retrieve(MySystemAttr.IsEnable, 1, "Idx");
+                if (i != 0)
+                    return i;
+
+                i = this.RetrieveAll("Idx");
                 if (i != 0)
                     return i;
 
                 #region 初始化菜单.
 
-                string file =  BP.Difference.SystemConfig.PathOfData + "XML/AppFlowMenu.xml";
+                string file = BP.Difference.SystemConfig.PathOfData + "XML/AppFlowMenu.xml";
                 DataSet ds = new DataSet();
                 ds.ReadXml(file);
 
@@ -507,7 +512,7 @@ namespace BP.CCFast.CCMenu
                 return RetrieveAll();
             }
 
-            ////集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
+            ////集团模式下的角色体系: @0=每套组织都有自己的角色体系@1=所有的组织共享一套岗则体系.
             //if (BP.Difference.SystemConfig.GroupStationModel == 1)
             //    return base.RetrieveAll("Idx");
 

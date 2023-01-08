@@ -115,7 +115,6 @@ namespace BP.WF.Admin
 
                 map.AddTBString(FlowSortAttr.OrgNo, "0", "组织编号(0为系统组织)", false, false, 0, 150, 30);
                 map.SetHelperAlert(FlowSortAttr.OrgNo, "用于区分不同组织的的流程,比如:一个集团有多个子公司,每个子公司都有自己的业务流程.");
-
                 map.AddTBString(FlowSortAttr.Domain, null, "域/系统编号", true, false, 0, 100, 30);
                 map.SetHelperAlert(FlowSortAttr.Domain, "用于区分不同系统的流程,比如:一个集团有多个子系统每个子系统都有自己的流程,就需要标记那些流程是那个子系统的.");
                 map.AddTBInt(FlowSortAttr.Idx, 0, "Idx", false, false);
@@ -160,7 +159,6 @@ namespace BP.WF.Admin
             Paras ps = new Paras();
             ps.SQL = "SELECT COUNT(*) FROM WF_Flow WHERE FK_FlowSort=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "fk_flowSort";
             ps.Add("fk_flowSort", this.No);
-            //string sql = "SELECT COUNT(*) FROM WF_Flow WHERE FK_FlowSort='" + fk_flowSort + "'";
             if (DBAccess.RunSQLReturnValInt(ps) != 0)
                 throw new Exception("err@该目录下有流程，您不能删除。");
 

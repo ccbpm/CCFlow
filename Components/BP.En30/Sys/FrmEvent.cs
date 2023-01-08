@@ -657,7 +657,7 @@ namespace BP.Sys
                 map.AddTBString(FrmEventAttr.FK_Flow, null, "流程编号", true, true, 0, 100, 10);
                 map.AddTBInt(FrmEventAttr.FK_Node, 0, "节点ID", true, true);
 
-                //执行内容. EventDoType 0=SQL,1=URL.... 
+                //执行内容. EventDoType 0=SQL,1=URL....  
                 map.AddTBInt(FrmEventAttr.EventDoType, 0, "事件执行类型", true, true);
                 map.AddTBString(FrmEventAttr.FK_DBSrc, "local", "数据源", true, false, 0, 100, 20);
                 map.AddTBString(FrmEventAttr.DoDoc, null, "执行内容", true, true, 0, 400, 10);
@@ -727,7 +727,7 @@ namespace BP.Sys
     /// <summary>
     /// 事件
     /// </summary>
-    public class FrmEvents : EntitiesOID
+    public class FrmEvents : EntitiesMyPK
     {
         /// <summary>
         /// 执行事件
@@ -792,7 +792,6 @@ namespace BP.Sys
                 return enBuesss.DoIt();
             }
             #endregion 执行的是业务单元.
-
 
             string doc = nev.DoDoc.Trim();
             if ((doc == null || doc == "") && nev.HisDoType != EventDoType.SpecClass)   //edited by liuxc,2016-01-16,执行DLL文件不需要判断doc为空
@@ -865,7 +864,7 @@ namespace BP.Sys
 
                 if (BP.Difference.SystemConfig.IsBSsystem)
                 {
-                    /*是bs系统，并且是url参数执行类型.*/                    
+                    /*是bs系统，并且是url参数执行类型.*/
                     //2019-07-25 zyt改造
                     string url = HttpContextHelper.RequestRawUrl;
                     if (url.IndexOf('?') != -1)
@@ -908,7 +907,7 @@ namespace BP.Sys
                     if (BP.Difference.SystemConfig.IsBSsystem == false)
                     {
                         /*在cs模式下它的baseurl 从web.config中获取.*/
-                        string cfgBaseUrl =  BP.Difference.SystemConfig.HostURL;
+                        string cfgBaseUrl = BP.Difference.SystemConfig.HostURL;
                         if (DataType.IsNullOrEmpty(cfgBaseUrl))
                         {
                             string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
@@ -962,7 +961,7 @@ namespace BP.Sys
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception(nev.MsgError(en));
+                        throw new Exception(nev.MsgError(en) + ",异常信息:" + ex.Message);
                     }
                     break;
 
@@ -982,7 +981,7 @@ namespace BP.Sys
                         }
                         else
                         {
-                            string cfgBaseUrl =  BP.Difference.SystemConfig.HostURL;
+                            string cfgBaseUrl = BP.Difference.SystemConfig.HostURL;
                             if (DataType.IsNullOrEmpty(cfgBaseUrl))
                             {
                                 string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
@@ -1111,7 +1110,10 @@ namespace BP.Sys
                         ev.SysPara = r;
                         ev.HisEn = en;
                         ev.Do();
-                        return ev.SucessInfo;
+                        string str = ev.SucessInfo;
+                        if (str.Contains("err@") == true)
+                            throw new Exception(str);
+                        return str;
                     }
                     catch (Exception ex)
                     {
@@ -1179,7 +1181,8 @@ namespace BP.Sys
                         //执行POST
                         postData = BP.Tools.PubGlo.HttpPostConnect(apiHost, apiParams);
                         return postData;
-                    }catch(Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         throw new Exception("@" + nev.MsgError(en) + " Error:" + ex.Message);
                     }

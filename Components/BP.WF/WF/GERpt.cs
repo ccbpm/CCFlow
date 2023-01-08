@@ -101,10 +101,6 @@ namespace BP.WF
         /// </summary>
         public const string BillNo = "BillNo";
         /// <summary>
-        /// 流程备注
-        /// </summary>
-        public const string FlowNote = "FlowNote";
-        /// <summary>
         /// 参数
         /// </summary>
         public const string AtPara = "AtPara";
@@ -208,20 +204,7 @@ namespace BP.WF
                 this.SetValByKey(GERptAttr.FlowEmps, value);
             }
         }
-        /// <summary>
-        /// 流程备注
-        /// </summary>
-        public string FlowNote
-        {
-            get
-            {
-                return this.GetValStringByKey(GERptAttr.FlowNote);
-            }
-            set
-            {
-                this.SetValByKey(GERptAttr.FlowNote, value);
-            }
-        }
+        
         /// <summary>
         /// 客户编号
         /// </summary>
@@ -518,7 +501,6 @@ namespace BP.WF
                       || attr.Key == GERptAttr.FlowEnder
                       || attr.Key == GERptAttr.FlowEnderRDT
                       || attr.Key == GERptAttr.FlowEndNode
-                      || attr.Key == GERptAttr.FlowNote
                       || attr.Key == GERptAttr.FlowStarter
                       || attr.Key == GERptAttr.GuestName
                       || attr.Key == GERptAttr.GuestNo
@@ -568,7 +550,6 @@ namespace BP.WF
                     || attr.Key == GERptAttr.FlowEnder
                     || attr.Key == GERptAttr.FlowEnderRDT
                     || attr.Key == GERptAttr.FlowEndNode
-                    || attr.Key == GERptAttr.FlowNote
                     || attr.Key == GERptAttr.FlowStarter
                     || attr.Key == GERptAttr.GuestName
                     || attr.Key == GERptAttr.GuestNo

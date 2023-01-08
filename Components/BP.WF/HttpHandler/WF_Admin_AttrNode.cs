@@ -554,7 +554,7 @@ namespace BP.WF.HttpHandler
                 if (node.HisDeliveryWay == BP.WF.DeliveryWay.ByStation)
                 {
                     dr["HisDeliveryWayJsFnPara"] = "ByStation";
-                    dr["HisDeliveryWayCountLabel"] = "岗位";
+                    dr["HisDeliveryWayCountLabel"] = "角色";
                     BP.WF.Template.NodeStations nss = new BP.WF.Template.NodeStations();
                     intHisDeliveryWayCount = nss.Retrieve(BP.WF.Template.NodeStationAttr.FK_Node, node.NodeID);
                 }

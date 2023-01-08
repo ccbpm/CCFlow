@@ -288,7 +288,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 配件
         /// </summary>
-        /// <param name="_oid">配件ID</param>	
+        /// <param name="mypk">配件ID</param>	
         public Part(string mypk)
         {
             this.setMyPK(mypk);

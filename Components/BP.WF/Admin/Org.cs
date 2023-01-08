@@ -245,7 +245,7 @@ namespace BP.WF.Admin
 
                 rm = new RefMethod();
                 rm.GroupName = "组织";
-                rm.Title = "岗位";
+                rm.Title = "角色";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.ClassMethodName = this.ToString() + ".OrgStation";
                 rm.Icon = "icon-chart";
@@ -253,7 +253,7 @@ namespace BP.WF.Admin
 
                 rm = new RefMethod();
                 rm.GroupName = "组织";
-                rm.Title = "岗位类型";
+                rm.Title = "角色类型";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.ClassMethodName = this.ToString() + ".OrgStationType";
                 rm.Icon = "icon-chart";

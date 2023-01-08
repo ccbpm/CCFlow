@@ -111,6 +111,8 @@ namespace BP.WF.Template
         /// 轨迹是否启用
         /// </summary>
         public const string TrackEnable = "TrackEnable";
+        public const string TrackEnableMyView = "TrackEnableMyView";
+        public const string TrackEnableMyCC = "TrackEnableMyCC";
         /// <summary>
         /// 抄送
         /// </summary>
@@ -119,7 +121,6 @@ namespace BP.WF.Template
         /// 抄送规则
         /// </summary>
         public const string CCRole = "CCRole";
-
         /// <summary>
         /// 二维码
         /// </summary>
@@ -128,7 +129,6 @@ namespace BP.WF.Template
         /// 二维码规则
         /// </summary>
         public const string QRCodeRole = "QRCodeRole";
-
         /// <summary>
         /// 删除
         /// </summary>
@@ -165,6 +165,8 @@ namespace BP.WF.Template
         /// 是否启用查看父流程
         /// </summary>
         public const string ShowParentFormEnable = "ShowParentFormEnable";
+        public const string ShowParentFormEnableMyView = "ShowParentFormEnableMyView";
+        public const string ShowParentFormEnableMyCC = "ShowParentFormEnableMyCC";
         /// <summary>
         /// 数据批阅标签
         /// </summary>
@@ -173,6 +175,7 @@ namespace BP.WF.Template
         /// 数据批阅
         /// </summary>
         public const string FrmDBRemarkEnable = "FrmDBRemarkEnable";
+        public const string FrmDBRemarkEnableMyView = "FrmDBRemarkEnableMyView";
         /// <summary>
         /// 审核
         /// </summary>
@@ -197,7 +200,6 @@ namespace BP.WF.Template
         /// 加签标签
         /// </summary>
         public const string AskforEnable = "AskforEnable";
-
         /// <summary>
         /// 会签标签
         /// </summary>
@@ -222,7 +224,6 @@ namespace BP.WF.Template
         /// 是否启用
         /// </summary>
         public const string AddLeaderEnable = "AddLeaderEnable";
-
         /// <summary>
         /// 流转自定义 TransferCustomLab
         /// </summary>
@@ -231,7 +232,6 @@ namespace BP.WF.Template
         /// 是否启用-流转自定义
         /// </summary>
         public const string TCEnable = "TCEnable";
-
         /// <summary>
         /// 公文
         /// </summary>
@@ -256,7 +256,6 @@ namespace BP.WF.Template
         /// 是否启用-重要性
         /// </summary>
         public const string PRIEnable = "PRIEnable";
-
         /// <summary>
         /// 关注 
         /// </summary>
@@ -299,9 +298,6 @@ namespace BP.WF.Template
         public const string PrintPDFEnable = "PrintPDFEnable";
         public const string PrintPDFMyView = "PrintPDFMyView";
         public const string PrintPDFMyCC = "PrintPDFMyCC";
-
-
-
         /// <summary>
         /// 打印pdf规则
         /// </summary>
@@ -320,8 +316,6 @@ namespace BP.WF.Template
         public const string PrintZipEnable = "PrintZipEnable";
         public const string PrintZipMyView = "PrintZipMyView";
         public const string PrintZipMyCC = "PrintZipMyCC";
-
-
         /// <summary>
         /// 分配
         /// </summary>
@@ -338,7 +332,6 @@ namespace BP.WF.Template
         /// 是否启用选择接受人
         /// </summary>
         public const string SelectAccepterEnable = "SelectAccepterEnable";
-
         /// <summary>
         /// 备注
         /// </summary>
@@ -347,7 +340,6 @@ namespace BP.WF.Template
         //备注是否可用
         /// </summary>
         public const string NoteEnable = "NoteEnable";
-
         /// <summary>
         /// 帮助按钮
         /// </summary>
@@ -364,8 +356,6 @@ namespace BP.WF.Template
         /// 获得规则
         /// </summary>
         public const string NextRole = "NextRole";
-
-        #region 公文2019
         /// <summary>
         /// 公文标签
         /// </summary>
@@ -382,18 +372,12 @@ namespace BP.WF.Template
         /// 显示位置
         /// </summary>
         public const string OfficeBtnLocal = "OfficeBtnLocal";
-        #endregion 公文2019
-
-
-        #region 公文属性
         public const string DocLeftWord = "DocLeftWord";
         public const string DocRightWord = "DocRightWord";
         /// <summary>
         /// 工作方式
         /// </summary>
         public const string WebOfficeFrmModel = "WebOfficeFrmModel";
-        #endregion 公文属性
-
         /// <summary>
         /// 列表
         /// </summary>
@@ -431,5 +415,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string PressLab = "PressLab";
         public const string PressEnable = "PressEnable";
+        /// <summary>
+        /// 回滚
+        /// </summary>
+        public const string RollbackLab = "RollbackLab";
+        public const string RollbackEnable = "RollbackEnable";
     }
 }

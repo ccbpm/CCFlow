@@ -21,7 +21,7 @@ namespace BP.WF.Template
         public WorkNode town = null;
         public WorkNode currWn = null;
         public Flow fl = null;
-        string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
+        string dbStr = BP.Difference.SystemConfig.AppCenterDBVarStr;
         public Paras ps = null;
         string JumpToEmp = null;
         int JumpToNode = 0;
@@ -35,6 +35,8 @@ namespace BP.WF.Template
         public DataTable FindByWorkFlowModel()
         {
             this.town = town;
+
+            Node toNode = town.HisNode;
 
             DataTable dt = new DataTable();
             dt.Columns.Add("No", typeof(string));
@@ -124,7 +126,7 @@ namespace BP.WF.Template
             #region 按绑定部门计算,该部门一人处理标识该工作结束(子线程)..
             if (town.HisNode.HisDeliveryWay == DeliveryWay.BySetDeptAsSubthread)
             {
-                if (this.town.HisNode.HisRunModel != RunModel.SubThread)
+                if (this.town.HisNode.IsSubThread == false)
                     throw new Exception("@您设置的节点接收人方式为：按绑定部门计算,该部门一人处理标识该工作结束(子线程)，但是当前节点非子线程节点。");
 
                 sql = "SELECT " + BP.Sys.Base.Glo.UserNo + ", Name,FK_Dept AS GroupMark FROM Port_Emp WHERE FK_Dept IN (SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + town.HisNode.NodeID + ")";
@@ -138,7 +140,7 @@ namespace BP.WF.Template
             #region 按照明细表,作为子线程的接收人.
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByDtlAsSubThreadEmps)
             {
-                if (this.town.HisNode.HisRunModel != RunModel.SubThread)
+                if (this.town.HisNode.IsSubThread == false)
                     throw new Exception("@您设置的节点接收人方式为：以分流点表单的明细表数据源确定子线程的接收人，但是当前节点非子线程节点。");
 
                 this.currWn.HisNode.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
@@ -271,12 +273,27 @@ namespace BP.WF.Template
                         if (town.HisNode.HisDeliveryWay == DeliveryWay.BySelected
                             || town.HisNode.HisDeliveryWay == DeliveryWay.BySelectedForPrj)
                         {
-                            Node toNode = this.town.HisNode;
+                            Node currNode = this.currWn.HisNode;
+                            if (toNode.IsResetAccepter == false && toNode.HisToNDs.Contains("@" + currNode.NodeID) == true && currNode.HisToNDs.Contains("@" + toNode.NodeID) == true)
+                            {
+                                sql = "SELECT EmpFrom From ND" + Int32.Parse(toNode.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND NDFrom=" + toNode.NodeID + " AND NDTo=" + currNode.NodeID + " AND ActionType IN(0,1,6,7,11)";
+                                DataTable dtt = DBAccess.RunSQLReturnTable(sql);
+                                if (dtt.Rows.Count > 0)
+                                {
+                                    foreach (DataRow drr in dtt.Rows)
+                                    {
+                                        DataRow dr = dt.NewRow();
+                                        dr[0] = drr[0].ToString();
+                                        dt.Rows.Add(dr);
+                                    }
+                                    return dt;
+                                }
+                            }
                             Selector select = new Selector(toNode.NodeID);
                             if (select.SelectorModel == SelectorModel.GenerUserSelecter)
-                                throw new Exception("url@./WorkOpt/AccepterOfGener.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + this.currWn.HisNode.NodeID + "&ToNode=" + toNode.NodeID + "&WorkID=" + this.WorkID);
+                                throw new Exception("url@./WorkOpt/AccepterOfGener.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + this.currWn.HisNode.NodeID + "&ToNode=" + toNode.NodeID + "&WorkID=" + this.WorkID+ "&PageName=AccepterOfGener");
                             else
-                                throw new Exception("url@./WorkOpt/Accepter.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + this.currWn.HisNode.NodeID + "&ToNode=" + toNode.NodeID + "&WorkID=" + this.WorkID);
+                                throw new Exception("url@./WorkOpt/Accepter.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + this.currWn.HisNode.NodeID + "&ToNode=" + toNode.NodeID + "&WorkID=" + this.WorkID+ "PageName=Accepter");
                         }
                         else
                         {
@@ -337,23 +354,23 @@ namespace BP.WF.Template
                         continue;
 
                     if (DataType.IsNumStr(nd) == false)
-                        throw new Exception("流程设计错误:您设置的节点(" + town.HisNode.Name + ")的接收方式为按指定的节点岗位投递，但是您没有在访问规则设置中设置节点编号。");
+                        throw new Exception("流程设计错误:您设置的节点(" + town.HisNode.Name + ")的接收方式为按指定的节点角色投递，但是您没有在访问规则设置中设置节点编号。");
 
                     ps = new Paras();
                     string workSQL = "";
                     //获取指定节点的信息
                     Node specNode = new Node(nd);
                     //指定节点是子线程
-                    if (specNode.HisRunModel == RunModel.SubThread)
+                    if (specNode.IsSubThread == true)
                     {
-                        if (this.currWn.HisNode.HisRunModel == RunModel.SubThread)
+                        if (this.currWn.HisNode.IsSubThread == true)
                             workSQL = "FID=" + this.currWn.HisWork.FID;
                         else
                             workSQL = "FID=" + this.WorkID;
                     }
                     else
                     {
-                        if (this.currWn.HisNode.HisRunModel == RunModel.SubThread)
+                        if (this.currWn.HisNode.IsSubThread == true)
                             workSQL = "WorkID=" + this.currWn.HisWork.FID;
                         else
                             workSQL = "WorkID=" + this.WorkID;
@@ -442,7 +459,7 @@ namespace BP.WF.Template
                         ps = new Paras();
                         ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node AND IsPass=1 AND IsEnable=1 ";
                         ps.Add("FK_Node", nd.NodeID);
-                        if (this.currWn.HisNode.HisRunModel == RunModel.SubThread)
+                        if (this.currWn.HisNode.IsSubThread == true)
                             ps.Add("OID", gwf.PFID);
                         else
                             ps.Add("OID", gwf.PWorkID);
@@ -471,7 +488,7 @@ namespace BP.WF.Template
 
                         ps.Add("NDFrom", nd.NodeID);
 
-                        if (this.currWn.HisNode.HisRunModel == RunModel.SubThread)
+                        if (this.currWn.HisNode.IsSubThread == true)
                             ps.Add("WorkID", gwf.PFID);
                         else
                             ps.Add("WorkID", gwf.PWorkID);
@@ -522,10 +539,7 @@ namespace BP.WF.Template
                 {
                     emps = this.currWn.rptGe.GetValStringByKey(specEmpFields);
                 }
-
-
                 emps = emps.Replace(" ", ""); //去掉空格.
-
                 if (emps.Contains(",") && emps.Contains(";"))
                 {
                     /*如果包含,; 例如 zhangsan,张三;lisi,李四;*/
@@ -573,7 +587,150 @@ namespace BP.WF.Template
             }
             #endregion 按照上一个节点表单指定字段的人员处理。
 
-            #region 为省立医院增加，按照指定的部门范围内的岗位计算..
+
+            #region 按照上一个节点表单指定字段的 【角色】处理。
+            if (town.HisNode.HisDeliveryWay == DeliveryWay.ByPreviousNodeFormStationsAI
+                || town.HisNode.HisDeliveryWay == DeliveryWay.ByPreviousNodeFormStationsOnly)
+            {
+                // 检查接受人员规则,是否符合设计要求.
+                string specEmpFields = town.HisNode.DeliveryParas;
+                if (DataType.IsNullOrEmpty(specEmpFields))
+                    specEmpFields = "SysSendEmps";
+
+                if (this.currWn.rptGe.EnMap.Attrs.Contains(specEmpFields) == false)
+                    throw new Exception("@您设置的接受人规则是按照表单指定的角色字段，决定下一步的接受人员，该字段{" + specEmpFields + "}已经删除或者丢失。");
+
+                //判断该字段是否启用了pop返回值？
+                sql = "SELECT  Tag1 AS VAL FROM Sys_FrmEleDB WHERE RefPKVal=" + this.WorkID + " AND EleID='" + specEmpFields + "'";
+                string emps = "";
+                DataTable dtVals = DBAccess.RunSQLReturnTable(sql);
+
+                //获得角色信息.
+                string stas = "";
+
+                //获取接受人并格式化接受人, 
+                if (dtVals.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dtVals.Rows)
+                        emps += dr[0].ToString() + ",";
+                }
+                else
+                {
+                    emps = this.currWn.rptGe.GetValStringByKey(specEmpFields);
+                }
+                emps = emps.Replace(" ", ""); //去掉空格.
+                if (emps.Contains(",") && emps.Contains(";"))
+                {
+                    /*如果包含,; 例如 zhangsan,张三;lisi,李四;*/
+                    string[] myemps1 = emps.Split(';');
+                    foreach (string str in myemps1)
+                    {
+                        if (DataType.IsNullOrEmpty(str))
+                            continue;
+
+                        string[] ss = str.Split(',');
+                        stas += "," + ss[0]  ;
+
+                        //DataRow dr = dt.NewRow();
+                        // = ss[0];
+                        //dt.Rows.Add(dr);
+                    }
+                    if (dt.Rows.Count == 0 && town.HisNode.HisWhenNoWorker == false)
+                        throw new Exception("@输入的接受人员角色信息错误;[" + emps + "]。");
+                    else
+                        return dt;
+                }
+                else
+                {
+                    emps = emps.Replace(";", ",");
+                    emps = emps.Replace("；", ",");
+                    emps = emps.Replace("，", ",");
+                    emps = emps.Replace("、", ",");
+                    emps = emps.Replace("@", ",");
+
+                    if (DataType.IsNullOrEmpty(emps) && town.HisNode.HisWhenNoWorker == false)
+                        throw new Exception("@没有在字段[" + this.currWn.HisWork.EnMap.Attrs.GetAttrByKey(specEmpFields).Desc + "]中指定接受人，工作无法向下发送。");
+
+                    // 把它加入接受人员列表中.
+                    string[] myemps = emps.Split(',');
+
+
+                    int nodeID = town.HisNode.NodeID;
+                    //NodeStation ns = new NodeStation();
+                    //ns.Delete(NodeStationAttr.FK_Node, nodeID);
+
+                    foreach (string s in myemps)
+                    {
+                        if (DataType.IsNullOrEmpty(s))
+                            continue;
+                        stas += "," + s;
+                    }
+                }
+
+                if (DataType.IsNullOrEmpty(stas) == true)
+                    throw new Exception("err@按照上一个节点表单指定字段的,没有找到选择的岗位信息.");
+
+                //根据角色：集合获取信息.
+                stas = stas.Substring(1);
+
+                //把这次的岗位s存储到临时变量,以方便用到下一个节点多人处理规则，按岗位删除时用到。
+                this.currWn.HisGenerWorkFlow.SetPara("NodeStas" + town.HisNode.NodeID, stas);
+
+
+                // 仅按角色计算.  以下都有要重写.
+                if (toNode.HisDeliveryWay == DeliveryWay.ByPreviousNodeFormStationsOnly)
+                {
+                    dt = WorkFlowBuessRole.FindWorker_GetEmpsByStations(stas);
+                    if (dt.Rows.Count == 0 && toNode.HisWhenNoWorker == false)
+                        throw new Exception("err@按照字段角色(仅按角色计算)找接受人错误,当前部门下没有您选择的角色人员.");
+
+                    return dt;
+                }
+
+                #region 按角色智能计算, 还是集合模式.
+                if (toNode.DeliveryStationReqEmpsWay == 0)
+                {
+                    string deptNo = BP.Web.WebUser.FK_Dept;
+                    dt = WorkFlowBuessRole.FindWorker_GetEmpsByDeptAI(stas, deptNo);
+                    if (dt.Rows.Count == 0 && toNode.HisWhenNoWorker == false)
+                        throw new Exception("err@按照字段角色(智能)找接受人错误,当前部门与父级部门下没有您选择的角色人员.");
+                    return dt;
+                }
+                #endregion 按角色智能计算, 要判断切片模式,还是集合模式.
+
+                #region 按角色智能计算, 切片模式. 需要对每个角色都要找到接受人，然后把这些接受人累加起来.
+                if (toNode.DeliveryStationReqEmpsWay == 1 || toNode.DeliveryStationReqEmpsWay == 2)
+                {
+                    string deptNo = BP.Web.WebUser.FK_Dept;
+                    string[] temps = stas.Split(',');
+                    foreach (string str in temps)
+                    {
+                        //求一个角色下的人员.
+                        DataTable  mydt1 = WorkFlowBuessRole.FindWorker_GetEmpsByDeptAI(str, deptNo);
+
+                        //如果是严谨模式.
+                        if (toNode.DeliveryStationReqEmpsWay == 1 && mydt1.Rows.Count == 0)
+                        {
+                            Station st = new Station(str);
+                            throw new Exception("@角色[" + st.Name + "]下，没有找到人不能发送下去，请检查组织结构是否完整。");
+                        }
+
+                        //累加.
+                        foreach (DataRow dr in mydt1.Rows)
+                        {
+                            DataRow mydr = dt.NewRow();
+                            mydr[0] = dr[0].ToString();
+                            dt.Rows.Add(mydr);
+                        }
+                    }
+                }
+                #endregion 按角色智能计算, 切片模式.
+
+                return dt;
+            }
+            #endregion 按照上一个节点表单指定字段的[角色]人员处理.
+
+            #region 为省立医院增加，按照指定的部门范围内的角色计算..
             if (town.HisNode.HisDeliveryWay == DeliveryWay.FindSpecDeptEmpsInStationlist)
             {
                 //sql = "SELECT pdes.FK_Emp AS No"
@@ -594,14 +751,14 @@ namespace BP.WF.Template
                 else
                 {
                     if (this.town.HisNode.HisWhenNoWorker == false)
-                        throw new Exception("@节点访问规则(" + town.HisNode.HisDeliveryWay.ToString() + ")错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 按照岗位与部门的交集确定接受人的范围错误，没有找到人员:SQL=" + sql);
+                        throw new Exception("@节点访问规则(" + town.HisNode.HisDeliveryWay.ToString() + ")错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 按照角色与部门的交集确定接受人的范围错误，没有找到人员:SQL=" + sql);
                     else
                         return dt;
                 }
             }
-            #endregion 按部门与岗位的交集计算.
+            #endregion 按部门与角色的交集计算.
 
-            #region 按部门与岗位的交集计算.
+            #region 按部门与角色的交集计算.
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByDeptAndStation)
             {
                 //added by liuxc,2015.6.29.
@@ -622,23 +779,25 @@ namespace BP.WF.Template
                 else
                 {
                     if (this.town.HisNode.HisWhenNoWorker == false)
-                        throw new Exception("@节点访问规则(" + town.HisNode.HisDeliveryWay.ToString() + ")错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 按照岗位与部门的交集确定接受人的范围错误，没有找到人员:SQL=" + sql);
+                        throw new Exception("@节点访问规则(" + town.HisNode.HisDeliveryWay.ToString() + ")错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 按照角色与部门的交集确定接受人的范围错误，没有找到人员:SQL=" + sql);
                     else
                         return dt;
                 }
             }
-            #endregion 按部门与岗位的交集计算.
+            #endregion 按部门与角色的交集计算.
 
             #region 判断节点部门里面是否设置了部门，如果设置了就按照它的部门处理。
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByDept)
             {
                 ps = new Paras();
                 ps.Add("FK_Node", this.town.HisNode.NodeID);
-                ps.Add("WorkID", this.currWn.HisWork.OID);
-                ps.SQL = "SELECT FK_Emp FROM WF_SelectAccper WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID AND AccType=0 ORDER BY IDX";
+                ps.SQL = "select No,Name from Port_Emp where FK_Dept in(select FK_dept from wf_nodeDept where FK_node =" + dbStr + "FK_node)";
                 dt = DBAccess.RunSQLReturnTable(ps);
-                if (dt.Rows.Count > 0)
-                    return dt;
+                if (dt.Rows.Count == 0)
+                {
+                    throw new Exception("err@按照 [按绑定的部门计算] 计算接收人的时候出现错误，没有找到人，请检查节点绑定的部门下的人员.");
+                }
+                return dt;
             }
             #endregion 判断节点部门里面是否设置了部门，如果设置了，就按照它的部门处理。
 
@@ -695,13 +854,13 @@ namespace BP.WF.Template
             }
             #endregion
 
-            #region 仅按岗位计算
+            #region 仅按角色计算
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByStationOnly)
             {
                 ps = new Paras();
                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
-                    //2020-4-25 按照岗位倒序排序 修改原因队列模式时，下级岗位处理后发给上级岗位， 岗位越高数值越小
+                    //2020-4-25 按照角色倒序排序 修改原因队列模式时，下级角色处理后发给上级角色， 角色越高数值越小
                     sql = "SELECT A.FK_Emp FROM Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND A.OrgNo=" + dbStr + "OrgNo AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Station desc";
                     ps.Add("OrgNo", BP.Web.WebUser.OrgNo);
                     ps.Add("FK_Node", town.HisNode.NodeID);
@@ -710,7 +869,7 @@ namespace BP.WF.Template
                 }
                 else
                 {
-                    //2020-4-25 按照岗位倒序排序 修改原因队列模式时，下级岗位处理后发给上级岗位， 岗位越高数值越小
+                    //2020-4-25 按照角色倒序排序 修改原因队列模式时，下级角色处理后发给上级角色， 角色越高数值越小
                     sql = "SELECT A.FK_Emp FROM Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Station desc";
                     ps.Add("FK_Node", town.HisNode.NodeID);
                     ps.SQL = sql;
@@ -721,8 +880,8 @@ namespace BP.WF.Template
 
                 if (this.town.HisNode.HisWhenNoWorker == false)
                 {
-                    //   throw new Exception("@节点访问规则错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 仅按岗位计算，没有找到人员:SQL=" + ps.SQLNoPara);
-                    throw new Exception("@节点访问规则错误:流程[" + town.HisNode.FlowName + "]节点[" + town.HisNode.NodeID + "," + town.HisNode.Name + "], 仅按岗位计算，没有找到人员。");
+                    //   throw new Exception("@节点访问规则错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 仅按角色计算，没有找到人员:SQL=" + ps.SQLNoPara);
+                    throw new Exception("@节点访问规则错误:流程[" + town.HisNode.FlowName + "]节点[" + town.HisNode.NodeID + "," + town.HisNode.Name + "], 仅按角色计算，没有找到人员。");
                 }
 
                 return dt;  //可能处理跳转,在没有处理人的情况下.
@@ -771,10 +930,10 @@ namespace BP.WF.Template
             }
             #endregion
 
-            #region 按岗位计算(以部门集合为纬度).
+            #region 按角色计算(以部门集合为纬度).
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByStationAndEmpDept)
             {
-                /* 考虑当前操作人员的部门, 如果本部门没有这个岗位就不向上寻找. */
+                /* 考虑当前操作人员的部门, 如果本部门没有这个角色就不向上寻找. */
 
                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
@@ -799,7 +958,7 @@ namespace BP.WF.Template
                 else
                 {
                     if (this.town.HisNode.HisWhenNoWorker == false)
-                        throw new Exception("@节点访问规则(" + town.HisNode.HisDeliveryWay.ToString() + ")错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 按岗位计算(以部门集合为纬度)。技术信息,执行的SQL=" + ps.SQLNoPara);
+                        throw new Exception("@节点访问规则(" + town.HisNode.HisDeliveryWay.ToString() + ")错误:节点(" + town.HisNode.NodeID + "," + town.HisNode.Name + "), 按角色计算(以部门集合为纬度)。技术信息,执行的SQL=" + ps.SQLNoPara);
                     else
                         return dt; //可能处理跳转,在没有处理人的情况下.
                 }
@@ -821,7 +980,6 @@ namespace BP.WF.Template
                     int i = sas.QueryAccepterPriSetting(this.town.HisNode.NodeID);
                     if (i == 0)
                     {
-                        Node toNode = this.town.HisNode;
                         GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
                         if (DataType.IsNullOrEmpty(toNode.DeliveryParas) == true)
                             throw new Exception("节点" + toNode.NodeID + "_" + toNode.Name + "设置的接收人规则是自定义的URL,现在未获取到设置的信息");
@@ -896,7 +1054,6 @@ namespace BP.WF.Template
                     int i = sas.QueryAccepterPriSetting(this.town.HisNode.NodeID);
                     if (i == 0)
                     {
-                        Node toNode = this.town.HisNode;
                         throw new Exception("url@./WorkOpt/AccepterOfOrg.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + this.currWn.HisNode.NodeID + "&ToNode=" + toNode.NodeID + "&WorkID=" + this.WorkID);
                     }
 
@@ -941,23 +1098,30 @@ namespace BP.WF.Template
             }
             #endregion 发送人的上级部门的负责人 2022.2.20 benjing.
 
-            #region 发送人上级部门指定的岗位 2022.2.20 beijing. by zhoupeng  
+            #region 发送人上级部门指定的角色 2022.2.20 beijing. by zhoupeng  
             if (town.HisNode.HisDeliveryWay == DeliveryWay.BySenderParentDeptStations)
             {
-                string deptNo = BP.Web.WebUser.DeptParentNo;
-                sql = "SELECT A.FK_Emp FROM Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + town.HisNode.NodeID + " AND A.FK_Dept='" + deptNo + "'";
+                //当前人员身份 sf
+                Hashtable sf = GetEmpDeptBySFModel();
+                empDept = sf["DeptNo"].ToString();
+                empNo = sf["EmpNo"].ToString();
+
+                BP.Port.Dept dept = new BP.Port.Dept(empDept);
+                string deptNo = dept.ParentNo;
+
+                sql = "SELECT A.FK_Emp,FK_Dept FROM Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + town.HisNode.NodeID + " AND A.FK_Dept='" + deptNo + "'";
                 dt = DBAccess.RunSQLReturnTable(sql);
-                if (dt.Rows.Count == 0)
+                /*if (dt.Rows.Count == 0)
                 {
                     BP.Port.Dept pDept = new BP.Port.Dept(deptNo);
-                    throw new Exception("err@按照 [发送人上级部门指定的岗位] 计算接收人的时候出现错误，没有找到人，请检查节点绑定的岗位以及该部门【" + pDept.Name + "】下的人员设置的岗位.");
-                }
+                    throw new Exception("err@按照 [发送人上级部门指定的角色] 计算接收人的时候出现错误，没有找到人，请检查节点绑定的角色以及该部门【" + pDept.Name + "】下的人员设置的角色.");
+                }*/
                 return dt;
             }
             #endregion 发送人的上级部门的负责人 2022.2.20 beijing.  
 
-            #region 最后判断 - 按照岗位来执行。
-            //从历史数据中获取接收人 2022-03-25这块代码注释，需要查询本部门的岗位
+            #region 最后判断 - 按照角色来执行。
+            //从历史数据中获取接收人 2022-03-25这块代码注释，需要查询本部门的角色
             //if (this.currWn.HisNode.IsStartNode == false)
             //{
             //    ps = new Paras();
@@ -979,11 +1143,11 @@ namespace BP.WF.Template
 
 
 
-            /* 如果执行节点 与 接受节点岗位集合一致 */
+            /* 如果执行节点 与 接受节点角色集合一致 */
             string currGroupStaNDs = this.currWn.HisNode.GroupStaNDs;
             string toNodeTeamStaNDs = town.HisNode.GroupStaNDs;
 
-            if (DataType.IsNullOrEmpty(currGroupStaNDs) == false && currGroupStaNDs.Equals(toNodeTeamStaNDs) == true)
+            if (DataType.IsNullOrEmpty(currGroupStaNDs) == false && currGroupStaNDs.Equals(toNodeTeamStaNDs) == true && this.currWn.HisNode.GetParaInt("ShenFenModel") == 0 && town.HisNode.GetParaInt("ShenFenModel") == 0)
             {
                 /* 说明，就把当前人员做为下一个节点处理人。*/
                 DataRow dr = dt.NewRow();
@@ -1000,14 +1164,14 @@ namespace BP.WF.Template
             empDept = ht["DeptNo"].ToString();
             empNo = ht["EmpNo"].ToString();
 
-            /* 如果执行节点 与 接受节点岗位集合不一致 */
+            /* 如果执行节点 与 接受节点角色集合不一致 */
             if ((DataType.IsNullOrEmpty(toNodeTeamStaNDs) == true && DataType.IsNullOrEmpty(currGroupStaNDs) == true)
                 || currGroupStaNDs.Equals(toNodeTeamStaNDs) == false)
             {
-                /* 没有查询到的情况下, 先按照本部门计算。*/
+                /* 没有查询到的情况下, 先按照本部门计算。添加FK_Dept*/
 
 
-                sql = "SELECT FK_Emp as No FROM Port_DeptEmpStation A, WF_NodeStation B         WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Dept=" + dbStr + "FK_Dept";
+                sql = "SELECT FK_Emp as No,FK_Dept FROM Port_DeptEmpStation A, WF_NodeStation B         WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Dept=" + dbStr + "FK_Dept";
                 ps = new Paras();
                 ps.SQL = sql;
                 ps.Add("FK_Node", town.HisNode.NodeID);
@@ -1018,7 +1182,7 @@ namespace BP.WF.Template
                 {
                     NodeStations nextStations = town.HisNode.NodeStations;
                     if (nextStations.Count == 0)
-                        throw new Exception("@节点没有岗位:" + town.HisNode.NodeID + "  " + town.HisNode.Name);
+                        throw new Exception("@节点没有角色:" + town.HisNode.NodeID + "  " + town.HisNode.Name);
                 }
                 else
                 {
@@ -1027,13 +1191,13 @@ namespace BP.WF.Template
                     {
                         if (dr[0].ToString() == BP.Web.WebUser.No)
                         {
-                            /* 如果岗位分组不一样，并且结果集合里还有当前的人员，就说明了出现了当前操作员，拥有本节点上的岗位也拥有下一个节点的工作岗位
+                            /* 如果角色分组不一样，并且结果集合里还有当前的人员，就说明了出现了当前操作员，拥有本节点上的角色也拥有下一个节点的工作角色
                              导致：节点的分组不同，传递到同一个人身上。 */
                             isInit = true;
                         }
                     }
 
-#warning edit by peng, 用来确定不同岗位集合的传递包含同一个人的处理方式。
+#warning edit by peng, 用来确定不同角色集合的传递包含同一个人的处理方式。
 
                     //  if (isInit == false || isInit == true)
                     return dt;
@@ -1044,9 +1208,9 @@ namespace BP.WF.Template
 
 
             /* 没有查询到的情况下, 按照最大匹配数 提高一个级别计算，递归算法未完成。
-             * 因为:以上已经做的岗位的判断，就没有必要在判断其它类型的节点处理了。
+             * 因为:以上已经做的角色的判断，就没有必要在判断其它类型的节点处理了。
              * */
-          
+
             string nowDeptID = empDept.Clone() as string;
 
             //第1步:直线父级寻找.
@@ -1057,7 +1221,7 @@ namespace BP.WF.Template
                 if (nowDeptID == "-1" || nowDeptID.ToString() == "0")
                 {
                     break; /*一直找到了最高级仍然没有发现，就跳出来循环从当前操作员人部门向下找。*/
-                    throw new Exception("@按岗位计算没有找到(" + town.HisNode.Name + ")接受人.");
+                    throw new Exception("@按角色计算没有找到(" + town.HisNode.Name + ")接受人.");
                 }
 
                 //检查指定的父部门下面是否有该人员.
@@ -1068,35 +1232,39 @@ namespace BP.WF.Template
                 continue;
             }
 
-            //第2步：父级的子级.
-            nowDeptID = empDept.Clone() as string;
-            while (true)
+            //第2步：父级的平级.如果是0查找，1不查找父级的平级
+            int StationFindWay = town.HisNode.GetParaInt("StationFindWay");
+            if(StationFindWay == 0)
             {
-                BP.Port.Dept myDept = new BP.Port.Dept(nowDeptID);
-                nowDeptID = myDept.ParentNo;
-                if (nowDeptID == "-1" || nowDeptID.ToString() == "0")
+                nowDeptID = empDept.Clone() as string;
+                while (true)
                 {
-                    break; /*一直找到了最高级仍然没有发现，就跳出来循环从当前操作员人部门向下找。*/
-                    throw new Exception("@按岗位计算没有找到(" + town.HisNode.Name + ")接受人.");
-                }
+                    BP.Port.Dept myDept = new BP.Port.Dept(nowDeptID);
+                    nowDeptID = myDept.ParentNo;
+                    if (nowDeptID == "-1" || nowDeptID.ToString() == "0")
+                    {
+                        break; /*一直找到了最高级仍然没有发现，就跳出来循环从当前操作员人部门向下找。*/
+                        throw new Exception("@按角色计算没有找到(" + town.HisNode.Name + ")接受人.");
+                    }
 
-                //该部门下的所有子部门是否有人员.
-                DataTable mydtTemp = Func_GenerWorkerList_SpecDept_SameLevel(nowDeptID, empNo);
-                if (mydtTemp.Rows.Count != 0)
-                    return mydtTemp;
-                continue;
+                    //该部门下的所有子部门是否有人员.
+                    DataTable mydtTemp = Func_GenerWorkerList_SpecDept_SameLevel(nowDeptID, empNo);
+                    if (mydtTemp.Rows.Count != 0)
+                        return mydtTemp;
+                    continue;
+                }
             }
 
             /*如果向上找没有找到，就考虑从本级部门上向下找。只找一级下级的平级 */
             nowDeptID = empDept.Clone() as string;
 
-            //递归出来子部门下有该岗位的人员
+            //递归出来子部门下有该角色的人员 返回数据添加FK_Dept
             DataTable mydt = Func_GenerWorkerList_SpecDept_SameLevel(nowDeptID, empNo);
 
             if ((mydt == null || mydt.Rows.Count == 0) && this.town.HisNode.HisWhenNoWorker == false)
             {
-                //如果递归没有找到人,就全局搜索岗位.
-                sql = "SELECT A.FK_Emp FROM  Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
+                //如果递归没有找到人,就全局搜索角色.
+                sql = "SELECT A.FK_Emp,FK_Dept FROM  Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
                 ps = new Paras();
                 ps.Add("FK_Node", town.HisNode.NodeID);
                 ps.SQL = sql;
@@ -1105,7 +1273,7 @@ namespace BP.WF.Template
                 if (dt.Rows.Count > 0)
                     return dt;
                 if (this.town.HisNode.HisWhenNoWorker == false)
-                    throw new Exception("@按岗位智能计算没有找到(" + town.HisNode.Name + ")接受人 @当前工作人员:" + WebUser.No + ",名称:" + WebUser.Name + " , 部门编号:" + WebUser.FK_Dept + " 部门名称：" + WebUser.FK_DeptName);
+                    throw new Exception("@按角色智能计算没有找到(" + town.HisNode.Name + ")接受人 @当前工作人员:" + WebUser.No + ",名称:" + WebUser.Name + " , 部门编号:" + WebUser.FK_Dept + " 部门名称：" + WebUser.FK_DeptName);
 
                 if (dt.Rows.Count == 0)
                 {
@@ -1116,7 +1284,7 @@ namespace BP.WF.Template
             }
 
             return mydt;
-            #endregion  按照岗位来执行。
+            #endregion  按照角色来执行。
         }
 
         private Hashtable GetEmpDeptBySFModel()
@@ -1131,10 +1299,13 @@ namespace BP.WF.Template
 
             //按照当前节点的身份计算
             if (sfModel == 0)
-                sfVal = currWn.HisNode.NodeID.ToString();
-
+            {
+                ht.Add("EmpNo", WebUser.No);
+                ht.Add("DeptNo", WebUser.FK_Dept);
+                return ht;
+            }
             //按照指定节点的身份计算.
-            if (sfModel == 0 || sfModel == 1)
+            if (sfModel == 1)
             {
                 if (DataType.IsNullOrEmpty(sfVal))
                     sfVal = currWn.HisNode.NodeID.ToString();
@@ -1359,7 +1530,7 @@ namespace BP.WF.Template
             return dt;
         }
         /// <summary>
-        /// 获得指定部门下是否有该岗位的人员.
+        /// 获得指定部门下是否有该角色的人员.
         /// </summary>
         /// <param name="deptNo">部门编号</param>
         /// <param name="empNo">人员编号</param>
@@ -1484,14 +1655,14 @@ namespace BP.WF.Template
                         string specContent = specItems[1];
                         switch (specName)
                         {
-                            case "SpecStations"://按岗位
+                            case "SpecStations"://按角色
                                 string[] stations = specContent.Split(',');
                                 foreach (string station in stations)
                                 {
                                     if (DataType.IsNullOrEmpty(station))
                                         continue;
 
-                                    //获取岗位下的人员
+                                    //获取角色下的人员
                                     string sql = "";
                                     if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                                         sql = "SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Station='" + station + "'";
@@ -1548,6 +1719,10 @@ namespace BP.WF.Template
 
                         DataRow dr = dt.NewRow();
                         dr[0] = row[0];
+
+                        if (row.Table.Columns.Count == 2)
+                            dr[1] = row[1];
+
                         dt.Rows.Add(dr);
                     }
                     return dt;

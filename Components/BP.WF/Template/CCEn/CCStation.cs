@@ -6,7 +6,7 @@ using BP.Port;
 namespace BP.WF.Template.CCEn
 {
     /// <summary>
-    /// 抄送到岗位 属性	  
+    /// 抄送到角色 属性	  
     /// </summary>
     public class CCStationAttr
     {
@@ -15,13 +15,13 @@ namespace BP.WF.Template.CCEn
         /// </summary>
         public const string FK_Node = "FK_Node";
         /// <summary>
-        /// 工作岗位
+        /// 工作角色
         /// </summary>
         public const string FK_Station = "FK_Station";
     }
     /// <summary>
-    /// 抄送到岗位
-    /// 节点的工作岗位有两部分组成.	 
+    /// 抄送到角色
+    /// 节点的工作角色有两部分组成.	 
     /// 记录了从一个节点到其他的多个节点.
     /// 也记录了到这个节点的其他的节点.
     /// </summary>
@@ -55,7 +55,7 @@ namespace BP.WF.Template.CCEn
             }
         }
         /// <summary>
-        /// 岗位名称
+        /// 角色名称
         /// </summary>
         public string FK_StationT
         {
@@ -65,7 +65,7 @@ namespace BP.WF.Template.CCEn
             }
         }
         /// <summary>
-        /// 工作岗位
+        /// 工作角色
         /// </summary>
         public string FK_Station
         {
@@ -82,7 +82,7 @@ namespace BP.WF.Template.CCEn
 
         #region 构造方法
         /// <summary>
-        /// 抄送到岗位
+        /// 抄送到角色
         /// </summary>
         public CCStation() { }
         /// <summary>
@@ -95,10 +95,10 @@ namespace BP.WF.Template.CCEn
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("WF_CCStation", "抄送岗位");
+                Map map = new Map("WF_CCStation", "抄送角色");
 
                 map.AddDDLEntitiesPK(CCStationAttr.FK_Node, 0, DataType.AppInt, "节点", new Nodes(), NodeAttr.NodeID, NodeAttr.Name, true);
-                map.AddDDLEntitiesPK(CCStationAttr.FK_Station, null, "工作岗位", new Stations(), true);
+                map.AddDDLEntitiesPK(CCStationAttr.FK_Station, null, "工作角色", new Stations(), true);
               
                 this._enMap = map;
 
@@ -108,12 +108,12 @@ namespace BP.WF.Template.CCEn
         #endregion
     }
     /// <summary>
-    /// 抄送到岗位
+    /// 抄送到角色
     /// </summary>
     public class CCStations : EntitiesMM
     {
         /// <summary>
-        /// 他的工作岗位
+        /// 他的工作角色
         /// </summary>
         public Stations HisStations
         {
@@ -144,11 +144,11 @@ namespace BP.WF.Template.CCEn
             }
         }
         /// <summary>
-        /// 抄送到岗位
+        /// 抄送到角色
         /// </summary>
         public CCStations() { }
         /// <summary>
-        /// 抄送到岗位
+        /// 抄送到角色
         /// </summary>
         /// <param name="nodeID">节点ID</param>
         public CCStations(int nodeID)
@@ -158,7 +158,7 @@ namespace BP.WF.Template.CCEn
             qo.DoQuery();
         }
         /// <summary>
-        /// 抄送到岗位
+        /// 抄送到角色
         /// </summary>
         /// <param name="StationNo">StationNo </param>
         public CCStations(string StationNo)
@@ -178,9 +178,9 @@ namespace BP.WF.Template.CCEn
             }
         }
         /// <summary>
-        /// 工作岗位对应的节点
+        /// 工作角色对应的节点
         /// </summary>
-        /// <param name="stationNo">工作岗位编号</param>
+        /// <param name="stationNo">工作角色编号</param>
         /// <returns>节点s</returns>
         public Nodes GetHisNodes(string stationNo)
         {

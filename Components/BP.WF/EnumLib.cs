@@ -28,32 +28,6 @@ namespace BP.WF
         Del
     }
     /// <summary>
-    /// 流程表单类型
-    /// </summary>
-    public enum FlowFrmModel
-    {
-        /// <summary>
-        /// 完整版-2019年更早版本
-        /// </summary>
-        Ver2019Earlier = 0,
-        /// <summary>
-        /// 传统(经典-推荐)模式(绑定表单库的表单)
-        /// </summary>
-        TraditionModel = 1,
-        /// <summary>
-        /// 表单树模式
-        /// </summary>
-        FrmTreeModel = 2,
-        /// <summary>
-        /// 嵌入模式
-        /// </summary>
-        EmbeddedModel = 3,
-        /// <summary>
-        /// SDK自定义表单模式
-        /// </summary>
-        SDKFrm = 4
-    }
-    /// <summary>
     /// 所有子流程结束，父流程处理规则
     /// </summary>
     public enum AllSubFlowOverRole
@@ -223,7 +197,7 @@ namespace BP.WF
     public enum SelectorModel
     {
         /// <summary>
-        /// 岗位
+        /// 角色
         /// </summary>
         Station,
         /// <summary>
@@ -247,7 +221,7 @@ namespace BP.WF
         /// </summary>
         GenerUserSelecter,
         /// <summary>
-        /// 按部门与岗位的交集
+        /// 按部门与角色的交集
         /// </summary>
         DeptAndStation,
         /// <summary>
@@ -255,11 +229,11 @@ namespace BP.WF
         /// </summary>
         Url,
         /// <summary>
-        /// 通用部门岗位人员选择器
+        /// 通用部门角色人员选择器
         /// </summary>
         AccepterOfDeptStationEmp,
         /// <summary>
-        /// 按岗位智能计算(操作员所在部门)
+        /// 按角色智能计算(操作员所在部门)
         /// </summary>
         AccepterOfDeptStationOfCurrentOper,
         /// <summary>
@@ -275,7 +249,7 @@ namespace BP.WF
         /// </summary>
         TeamDeptOnly = 12,
         /// <summary>
-        /// 按照岗位智能计算
+        /// 按照角色智能计算
         /// </summary>
         ByStationAI = 13,
         /// <summary>
@@ -287,28 +261,7 @@ namespace BP.WF
         /// </summary>
         ByMyDeptEmps = 15
     }
-    /// <summary>
-    /// 流程删除规则
-    /// </summary>
-    public enum FlowDeleteRole
-    {
-        /// <summary>
-        /// 超级管理员可以删除
-        /// </summary>
-        AdminOnly,
-        /// <summary>
-        /// 分级管理员可以删除
-        /// </summary>
-        AdminAppOnly,
-        /// <summary>
-        /// 发起人可以删除
-        /// </summary>
-        ByMyStarter,
-        /// <summary>
-        /// 节点启动删除按钮的操作员
-        /// </summary>
-        ByNodeSetting
-    }
+    
     /// <summary>
     /// 运行平台
     /// </summary>
@@ -592,32 +545,32 @@ namespace BP.WF
         DealerAsNextStepWorker
     }
     /// <summary>
-    /// 抄送到岗位计算方式
+    /// 抄送到角色计算方式
     /// </summary>
     public enum CCStaWay
     {
         /// <summary>
-        /// 仅按岗位计算
+        /// 仅按角色计算
         /// </summary>
         StationOnly,
         /// <summary>
-        /// 按岗位智能计算(当前节点的人员岗位)
+        /// 按角色智能计算(当前节点的人员角色)
         /// </summary>
         StationSmartCurrNodeWorker,
         /// <summary>
-        /// 按岗位智能计算(接受节点的人员岗位)
+        /// 按角色智能计算(接受节点的人员角色)
         /// </summary>
         StationSmartNextNodeWorker,
         /// <summary>
-        /// 按岗位与部门的交集
+        /// 按角色与部门的交集
         /// </summary>
-        StationAdndDept,
+        StationAndDept,
         /// <summary>
-        /// 按直线部门找岗位下的人员(当前节点)
+        /// 按直线部门找角色下的人员(当前节点)
         /// </summary>
         StationDeptUpLevelCurrNodeWorker,
         /// <summary>
-        /// 按直线部门找岗位下的人员
+        /// 按直线部门找角色下的人员
         /// </summary>
         StationDeptUpLevelNextNodeWorker
     }
@@ -754,24 +707,7 @@ namespace BP.WF
         ByAuto
     }
     
-    /// <summary>
-    /// 子线程启动方式
-    /// </summary>
-    public enum SubFlowStartWay
-    {
-        /// <summary>
-        /// 不启动
-        /// </summary>
-        None,
-        /// <summary>
-        /// 按表单字段
-        /// </summary>
-        BySheetField,
-        /// <summary>
-        /// 按从表数据
-        /// </summary>
-        BySheetDtlTable
-    }
+    
     /// <summary>
     /// 撤销规则
     /// </summary>
@@ -830,7 +766,7 @@ namespace BP.WF
         /// </summary>
         AsEmps,
         /// <summary>
-        /// 按岗位
+        /// 按角色
         /// </summary>
         AsStation,
         /// <summary>
@@ -842,7 +778,7 @@ namespace BP.WF
         /// </summary>
         AsDept,
         /// <summary>
-        /// 按照部门与岗位
+        /// 按照部门与角色
         /// </summary>
         AsDeptAndStation
     }
@@ -998,7 +934,7 @@ namespace BP.WF
     public enum DeliveryWay
     {
         /// <summary>
-        /// 按岗位(以部门为纬度)
+        /// 按角色(以部门为纬度)
         /// </summary>
         ByStation = 0,
         /// <summary>
@@ -1022,6 +958,14 @@ namespace BP.WF
         /// </summary>
         BySelected = 4,
         /// <summary>
+        /// 所有人员都可以发起
+        /// </summary>
+        BySelected_1 = 41,
+        /// <summary>
+        /// 固定范围的选择
+        /// </summary>
+        BySelected_2 = 60,
+        /// <summary>
         /// 按表单选择人员
         /// </summary>
         ByPreviousNodeFormEmpsField = 5,
@@ -1038,15 +982,15 @@ namespace BP.WF
         /// </summary>
         BySpecNodeEmp = 8,
         /// <summary>
-        /// 按岗位与部门交集计算
+        /// 按角色与部门交集计算
         /// </summary>
         ByDeptAndStation = 9,
         /// <summary>
-        /// 按岗位计算(以部门集合为纬度)
+        /// 按角色计算(以部门集合为纬度)
         /// </summary>
         ByStationAndEmpDept = 10,
         /// <summary>
-        /// 按指定节点的人员或者指定字段作为人员的岗位计算
+        /// 按指定节点的人员或者指定字段作为人员的角色计算
         /// </summary>
         BySpecNodeEmpStation = 11,
         /// <summary>
@@ -1058,7 +1002,7 @@ namespace BP.WF
         /// </summary>
         ByDtlAsSubThreadEmps = 13,
         /// <summary>
-        /// 仅按岗位计算
+        /// 仅按角色计算
         /// </summary>
         ByStationOnly = 14,
         /// <summary>
@@ -1078,7 +1022,7 @@ namespace BP.WF
         /// </summary>
         ByFromEmpToEmp = 18,
         /// <summary>
-        /// 按照岗位计算-范围内的
+        /// 按照角色计算-范围内的
         /// </summary>
         ByStationForPrj = 20,
         /// <summary>
@@ -1114,7 +1058,7 @@ namespace BP.WF
         /// </summary>
         ByTeamDeptOnly = 26,
         /// <summary>
-        /// 按照绑定岗位的用户组人员
+        /// 按照绑定角色的用户组人员
         /// </summary>
         ByBindTeamEmp = 27,
         /// <summary>
@@ -1135,14 +1079,25 @@ namespace BP.WF
         /// </summary>
         BySenderParentDeptLeader = 46,
         /// <summary>
-        /// 发送人上级部门指定的岗位
+        /// 发送人上级部门指定的角色
         /// </summary>
         BySenderParentDeptStations = 47,
         /// <summary>
         /// 外部用户
         /// </summary>
         ByGuest = 51,
-
+        /// <summary>
+        /// 按照部门计算
+        /// </summary>
+        ByPreviousNodeFormDepts = 52,
+        /// <summary>
+        /// 按照角色计算
+        /// </summary>
+        ByPreviousNodeFormStationsAI = 53,
+        /// <summary>
+        /// 智能计算
+        /// </summary>
+        ByPreviousNodeFormStationsOnly = 54,
         /// <summary>
         /// 按照ccflow的BPM模式处理
         /// </summary>
@@ -1260,7 +1215,7 @@ namespace BP.WF
         /// </summary>
         ByDept,
         /// <summary>
-        /// 按照岗位
+        /// 按照角色
         /// </summary>
         ByStation
     }
@@ -1286,9 +1241,13 @@ namespace BP.WF
         /// </summary>
         FHL = 3,
         /// <summary>
-        /// 子线程
+        /// 同表单子线程
         /// </summary>
-        SubThread = 4
+        SubThreadSameWorkID = 4,
+        /// <summary>
+        /// 异表单子线程
+        /// </summary>
+        SubThreadUnSameWorkID = 5
     }
     /// <summary>
     /// 流程状态(详)
@@ -1378,7 +1337,7 @@ namespace BP.WF
     /// <summary>
     /// 抄送规则
     /// </summary>
-    public enum CCRole
+    public enum CCRoleEnum
     {
         /// <summary>
         /// 不能抄送
@@ -1496,6 +1455,10 @@ namespace BP.WF
         /// </summary>
         ChapterFrm = 13,
         /// <summary>
+        /// 引用指定节点上的表单
+        /// </summary>
+        RefNodeFrm = 14,
+        /// <summary>
         /// 禁用(对多表单流程有效)
         /// </summary>
         DisableIt = 100,
@@ -1514,20 +1477,6 @@ namespace BP.WF
         /// 自动的
         /// </summary>
         Auto
-    }
-    /// <summary>
-    /// 子线程类型
-    /// </summary>
-    public enum SubThreadType
-    {
-        /// <summary>
-        /// 同表单
-        /// </summary>
-        SameSheet,
-        /// <summary>
-        /// 异表单
-        /// </summary>
-        UnSameSheet
     }
     /// <summary>
     /// 已读回执类型

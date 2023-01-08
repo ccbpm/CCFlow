@@ -121,17 +121,13 @@ namespace BP.Sys.FrmUI
                 Map map = new Map("Sys_MapAttr", "枚举字段");
                 map.IndexField = MapAttrAttr.FK_MapData;
 
-
-                #region 基本信息.
+                #region 基本属性.
+                map.AddGroupAttr("基本属性");
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "实体标识", false, false, 1, 100, 20);
-
                 map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20,true);
-
-
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
                 map.AddTBString(MapAttrAttr.UIBindKey, null, "枚举ID", true, true, 0, 100, 20);
-
                 string sql = "";
                 switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
@@ -140,6 +136,8 @@ namespace BP.Sys.FrmUI
                         sql = "SELECT -1 AS No, '-无(不选择)-' as Name ";
                         break;
                     case DBType.Oracle:
+                    case DBType.KingBaseR3:
+                    case DBType.KingBaseR6:
                         sql = "SELECT -1 AS No, '-无(不选择)-' as Name FROM DUAL ";
                         break;
 
@@ -152,21 +150,17 @@ namespace BP.Sys.FrmUI
                 sql += " union ";
 
                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
-                    sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey'";
+                    sql += "SELECT  IntKey as No, Lab as Name FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey='@UIBindKey'";
 
                 if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 {
-                    sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey' AND OrgNo='" + BP.Web.WebUser.OrgNo + "' ";
+                    sql += "SELECT  IntKey as No, Lab as Name FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey='@UIBindKey' AND OrgNo='" + BP.Web.WebUser.OrgNo + "' ";
                     sql += " union ";
-                    sql += "SELECT  IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='@UIBindKey' AND EnumKey NOT IN(Select EnumKey FROM Sys_Enum WHERE EnumKey='@UIBindKey' AND OrgNo='" + BP.Web.WebUser.OrgNo + "') AND (OrgNo IS NULL OR OrgNo='')  ";
-
+                    sql += "SELECT  IntKey as No, Lab as Name FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey='@UIBindKey' AND EnumKey NOT IN(Select EnumKey FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey='@UIBindKey' AND OrgNo='" + BP.Web.WebUser.OrgNo + "') AND (OrgNo IS NULL OR OrgNo='')  ";
                 }
 
                 //默认值.
                 map.AddDDLSQL(MapAttrAttr.DefVal, "0", "默认值(选中)", sql, true);
-
-                //map.AddTBString(MapAttrAttr.DefVal, "0", "默认值", true, true, 0, 3000, 20);
-
                 map.AddDDLSysEnum(MapAttrAttr.UIContralType, 0, "控件类型", true, true, "EnumUIContralType",
                  "@1=下拉框@2=复选框@3=单选按钮");
 
@@ -176,16 +170,13 @@ namespace BP.Sys.FrmUI
                 //map.AddDDLSysEnum(MapAttrAttr.LGType, 0, "逻辑类型", true, false, MapAttrAttr.LGType, 
                 // "@0=普通@1=枚举@2=外键@3=打开系统页面");
 
-
-
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见?", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑?", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
-
-           
-                #endregion 基本信息.
+                #endregion 基本属性.
 
                 #region 傻瓜表单。
+                map.AddGroupAttr("傻瓜表单");
                 //单元格数量 2013-07-24 增加。
                 map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "单元格数量", true, true, "ColSpanAttrDT",
                    "@1=跨1个单元格@2=跨2个单元格@3=跨3个单元格@4=跨4个单元格");
@@ -206,7 +197,8 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSQL(MapAttrAttr.CSSCtrl, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
                 #endregion 傻瓜表单。
 
-                #region 执行的方法.
+                #region 基本功能.
+                map.AddGroupMethod("基本功能");
                 RefMethod rm = new RefMethod();
 
                 rm = new RefMethod();
@@ -240,25 +232,22 @@ namespace BP.Sys.FrmUI
                 //     rm.GroupName = "高级设置";
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
-                rm.Title = "帮助弹窗显示";
-                rm.ClassMethodName = this.ToString() + ".DoFieldBigHelper()";
+                rm.Title = "字段名链接";
+                rm.ClassMethodName = this.ToString() + ".DoFieldNameLink()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "icon-settings";
                 map.AddRefMethod(rm);
-
-
-                #endregion 执行的方法.
+                #endregion 基本功能.
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
 
-        public string DoFieldBigHelper()
+        public string DoFieldNameLink()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/FieldBigHelper.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/FieldNameLink.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
 
         /// <summary>
@@ -297,7 +286,6 @@ namespace BP.Sys.FrmUI
             }
             #endregion 修改默认值.
 
-
             return base.beforeUpdateInsertAction();
         }
 
@@ -333,6 +321,8 @@ namespace BP.Sys.FrmUI
                             this.RunSQL("alter table  " + en.EnMap.PhysicsTable + " ALTER column " + this.KeyOfEn + " VARCHAR(20)");
                             break;
                         case DBType.Oracle:
+                        case DBType.KingBaseR3:
+                        case DBType.KingBaseR6:
                             //判断数据库当前字段的类型
                             string sql = "SELECT DATA_TYPE FROM ALL_TAB_COLUMNS WHERE upper(TABLE_NAME)='" + en.EnMap.PhysicsTable.ToUpper() + "' AND UPPER(COLUMN_NAME)='" + this.KeyOfEn.ToUpper() + "' ";
                             string val = DBAccess.RunSQLReturnString(sql);
@@ -399,7 +389,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string BindFunction()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&T=" + DateTime.Now.ToString();
         }
         #endregion
 

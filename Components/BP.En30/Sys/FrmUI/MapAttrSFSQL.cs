@@ -200,7 +200,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string BindFunction()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&T=" + DateTime.Now.ToString();
         }
         /// <summary>
         /// 外键表属性

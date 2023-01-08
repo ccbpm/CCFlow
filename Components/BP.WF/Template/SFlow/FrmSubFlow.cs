@@ -512,20 +512,19 @@ namespace BP.WF.Template.SFlow
 
                 Map map = new Map("WF_Node", "父子流程");
 
+                map.AddGroupAttr("父子流程");
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10);
                 map.AddTBString(FrmSubFlowAttr.SFLab, "子流程", "显示标签", true, false, 0, 200, 10, true);
 
-                #region 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
-
-                map.AddDDLSysEnum(FrmSubFlowAttr.SFSta, (int)FrmSubFlowSta.Disable, "组件状态",
+                map.AddDDLSysEnum(FrmSubFlowAttr.SFSta,0, "组件状态",
                    true, true, FrmSubFlowAttr.SFSta, "@0=禁用@1=启用@2=只读");
                 map.SetHelperUrl(FrmSubFlowAttr.SFSta, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3982372&doc_id=31094");
 
-                map.AddDDLSysEnum(FrmSubFlowAttr.SFShowModel, (int)FrmWorkShowModel.Free, "显示方式",
+                map.AddDDLSysEnum(FrmSubFlowAttr.SFShowModel, 0, "显示方式",
                     true, true, FrmSubFlowAttr.SFShowModel, "@0=表格方式@1=自由模式"); //此属性暂时没有用.
 
-                map.AddDDLSysEnum(FrmSubFlowAttr.SFShowCtrl, (int)SFShowCtrl.All, "显示控制方式",
+                map.AddDDLSysEnum(FrmSubFlowAttr.SFShowCtrl, 0, "显示控制方式",
                  true, true, FrmSubFlowAttr.SFShowCtrl, "@0=可以看所有的子流程@1=仅仅可以看自己发起的子流程"); //此属性暂时没有用.
                 map.SetHelperAlert(FrmSubFlowAttr.SFShowCtrl, "是对当前节点，一个流程实例下启动的所有子流程的数据权限查看控制。");
 
@@ -541,9 +540,8 @@ namespace BP.WF.Template.SFlow
                 map.AddDDLSysEnum(FrmSubFlowAttr.SFOpenType, 0, "打开子流程显示",
                  true, true, FrmSubFlowAttr.SFOpenType, "@0=工作查看器@1=流程轨迹"); //此属性暂时没有用.
                 map.SetHelperAlert(FrmSubFlowAttr.SFOpenType, "点击子流程（一个子流程实例）的时候要打开的页面。\t\n1.工作查看器可以看到表单. \t\n2.流程轨迹看到流程运行图，时间轴. ");
-
                 map.AddTBFloat(FrmSubFlowAttr.SF_H, 300, "高度", true, false);
-                #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
+
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "手动启动子流程";

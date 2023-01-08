@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using BP.Difference;
+using BP.DA;
 
 namespace BP.Tools
 {
@@ -18,18 +19,28 @@ namespace BP.Tools
         /// 随机码认证
         /// </summary>
         /// <param name="code">生成认证长度</param>
-        public static string DrawImage(int code, string sessionName, string errorSign, string codeSign)
-        { 
+        public static string DrawImage(int code, string sessionName, string errorSign, string codeSign, string userNo)
+        {
             string str = Rand.Number(5);
 
-            Dictionary<string, string> cookieValues = new Dictionary<string, string>();
-            //base64编码会把+改为空格的问题修复
-            cookieValues.Add(sessionName + codeSign, Convert.ToBase64String(MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(str))).Replace("+", "%2B"));
-            cookieValues.Add(sessionName + errorSign, sessionName + errorSign);
-            HttpContextHelper.ResponseCookieAdd(cookieValues, null, "CCS");
+            //Dictionary<string, string> cookieValues = new Dictionary<string, string>();
+            ////base64编码会把+改为空格的问题修复
+            //cookieValues.Add(sessionName + codeSign, Convert.ToBase64String(MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(str))).Replace("+", "%2B"));
+            //cookieValues.Add(sessionName + errorSign, sessionName + errorSign);
+            //HttpContextHelper.ResponseCookieAdd(cookieValues, null, "CCS");
 
-            // HttpContext Core中没又  session 使用 HttpContextHelper.SessionSet 替代 
-            HttpContextHelper.SessionSet(sessionName, str);
+            //// HttpContext Core中没又  session 使用 HttpContextHelper.SessionSet 替代 
+            //HttpContextHelper.SessionSet(sessionName, str);
+
+           
+            string atPara = DBAccess.RunSQLReturnString("select AtPara from wf_emp where no='" + userNo + "'");
+
+            AtPara ap = new AtPara(atPara);
+            //ap.SetVal(sessionName + errorSign, sessionName + errorSign);
+            //ap.SetVal(sessionName + codeSign, Convert.ToBase64String(MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(str))).Replace("+", "%2B"));
+            ap.SetVal(codeSign, Convert.ToBase64String(MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(str))).Replace("+", "%2B"));
+
+            DBAccess.RunSQL("update wf_emp set atPara='" + ap.GenerAtParaStrs() + "' where no='" + userNo + "'");
 
             return CreateImages(str);
         }

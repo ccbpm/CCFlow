@@ -7,7 +7,7 @@ using BP.En;
 namespace BP.Sys
 {
     /// <summary>
-    /// sss
+    /// 枚举注册 属性
     /// </summary>
     public class SysEnumMainAttr : EntityNoNameAttr
     {
@@ -37,7 +37,7 @@ namespace BP.Sys
         public const string AtPara = "AtPara";
     }
     /// <summary>
-    /// SysEnumMain
+    /// 枚举注册
     /// </summary>
     public class SysEnumMain : EntityNoName
     {
@@ -112,6 +112,16 @@ namespace BP.Sys
         #endregion
 
         #region 构造方法
+        public override UAC HisUAC
+        {
+            get
+            {
+                UAC uac = new UAC();
+                uac.Readonly();
+                return uac;
+            }
+        }
+
         /// <summary>
         /// SysEnumMain
         /// </summary>
@@ -178,7 +188,7 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_EnumMain", "枚举");
+                Map map = new Map("Sys_EnumMain", "枚举注册");
 
                 /*
                  * 为了能够支持cloud 我们做了如下变更.
@@ -201,6 +211,12 @@ namespace BP.Sys
 
                 //参数.
                 map.AddTBString(SysEnumMainAttr.AtPara, null, "AtPara", true, false, 0, 200, 8);
+
+                for (var index = 0; index < 30; index++)
+                {
+                    map.AddTBString("Idx" + index, null, "EnumKey", false, false, 0, 50, 8);
+                    map.AddTBString("Val" + index, null, "枚举值", false, false, 0, 500, 400);
+                }
 
                 this._enMap = map;
                 return this._enMap;
@@ -229,7 +245,6 @@ namespace BP.Sys
                 else
                     this.No = BP.Web.WebUser.OrgNo + "_" + this.EnumKey;
             }
-
             return base.beforeInsert();
         }
 
@@ -238,12 +253,11 @@ namespace BP.Sys
         {
             if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
-
             return base.beforeUpdateInsertAction();
         }
 
         protected override void afterUpdate()
-        {   //@HongYan
+        {   
             //清除所有的缓存，这个位置会造成拼接SQL错误 case When
             BP.DA.Cash.ClearCash();
             base.afterUpdate();
@@ -267,6 +281,9 @@ namespace BP.Sys
             string[] strs = this.CfgVal.Split('@');
             foreach (string str in strs)
             {
+                if (DataType.IsNullOrEmpty(str))
+                    continue;
+
                 string[] kvs = str.Split('=');
 
                 se.EnumKey = this.No;
@@ -283,7 +300,7 @@ namespace BP.Sys
 
     }
     /// <summary>
-    /// 纳税人集合 
+    /// 枚举注册 s
     /// </summary>
     public class SysEnumMains : EntitiesNoName
     {

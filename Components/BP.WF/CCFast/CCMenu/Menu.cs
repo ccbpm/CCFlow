@@ -91,12 +91,9 @@ namespace BP.CCFast.CCMenu
         /// 风格:比如Tab,的风格.
         /// </summary>
         public const string Style = "Style";
-
-
         public const string TagInt1 = "TagInt1";
         public const string TagInt2 = "TagInt2";
         public const string TagInt3 = "TagInt3";
-
     }
     /// <summary>
     /// 菜单
@@ -418,9 +415,8 @@ namespace BP.CCFast.CCMenu
                 msg += "\t\n 2. 视图模式就是查询的模式打开数据..";
                 map.SetHelperAlert(MenuAttr.ListModel, msg);
 
-                map.AddTBInt(MenuAttr.Idx, 0, "顺序号", true, false);
-
                 map.AddTBString(MenuAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 20);
+                map.AddTBInt(MenuAttr.Idx, 0, "顺序号", true, false);
 
                 this._enMap = map;
                 return this._enMap;
@@ -526,7 +522,7 @@ namespace BP.CCFast.CCMenu
             if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.SAAS)
                 return base.RetrieveAll("Idx");
 
-            ////集团模式下的岗位体系: @0=每套组织都有自己的岗位体系@1=所有的组织共享一套岗则体系.
+            ////集团模式下的角色体系: @0=每套组织都有自己的角色体系@1=所有的组织共享一套岗则体系.
             //if (BP.Difference.SystemConfig.GroupStationModel == 1)
             //    return base.RetrieveAll("Idx");
 

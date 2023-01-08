@@ -1,4 +1,6 @@
 ﻿using BP.En;
+using BP.Sys;
+using BP.WF.Template;
 
 namespace BP.WF.Port.Admin2Group
 {
@@ -76,7 +78,7 @@ namespace BP.WF.Port.Admin2Group
 
                 //map.AddDDLEntities(OAFrmTreeAttr.FK_Emp, null, "管理员", new Emps(), false);
                 //map.AddDDLEntities(OAFrmTreeAttr.RefOrgAdminer, null, "管理员", new Emps(), false);
-                map.AddDDLEntities(OAFrmTreeAttr.FrmTreeNo, null, "表单目录", new BP.Sys.FrmTrees(), false);
+                map.AddDDLEntities(OAFrmTreeAttr.FrmTreeNo, null, "表单目录", new SysFormTrees(), false);
 
                 this._enMap = map;
                 return this._enMap;
@@ -97,11 +99,26 @@ namespace BP.WF.Port.Admin2Group
 
             return base.beforeInsert();
         }
+        protected override void afterInsert()
+        {
+            //插入入后更改OrgAdminer中
+            string str = "";
+            SysFormTrees enTrees = new SysFormTrees();
+            enTrees.RetrieveInSQL("SELECT FrmTreeNo FROM Port_OrgAdminerFrmTree WHERE  FK_Emp='" + this.FK_Emp + "' AND OrgNo='" + this.OrgNo + "'");
+            foreach (SysFormTree item in enTrees)
+            {
+                str += "(" + item.No + ")" + item.Name + ";";
+            }
+            OrgAdminer adminer = new OrgAdminer(this.GetValStringByKey("RefOrgAdminer"));
+            adminer.SetValByKey("FrmTrees", str);
+            adminer.Update();
+            base.afterInsert();
+        }
     }
     /// <summary>
     /// 组织管理员s
     /// </summary>
-    public class OAFrmTrees : EntitiesMM
+    public class OAFrmTrees : EntitiesMyPK
     {
         #region 构造
         /// <summary>

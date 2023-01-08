@@ -59,7 +59,7 @@ namespace BP.CCFast.CCMenu
                 map.AddTBStringPK(GroupAttr.No, null, "编号", true, true, 3, 3, 3);
                 map.AddTBString(GroupAttr.Name, null, "名称", true, false, 0, 300, 20);
              //   map.AddTBString(GroupAttr.ParentNo, null, "父亲节编号", true, true, 0, 100, 20);
-                map.AddTBInt(GroupAttr.Idx, 0, "显示顺序", true, false);
+                map.AddTBInt(GroupAttr.Idx, 0, "顺序", true, false);
 
 
                 map.AttrsOfOneVSM.Add(new GroupEmps(), new Emps(),
@@ -75,21 +75,19 @@ namespace BP.CCFast.CCMenu
                 // GroupEmpAttr.FK_Group, GroupEmpAttr.FK_Emp, EmpAttr.Name, EmpAttr.No, "人员(简单)");
 
                 map.AttrsOfOneVSM.Add(new GroupStations(), new BP.Port.Stations(),
-                    GroupEmpAttr.FK_Group, GroupStationAttr.FK_Station, EmpAttr.Name, EmpAttr.No, "岗位(简单)");
+                    GroupEmpAttr.FK_Group, GroupStationAttr.FK_Station, EmpAttr.Name, EmpAttr.No, "角色(简单)");
                     
-
                 map.AttrsOfOneVSM.AddGroupListModel(new GroupStations(), new BP.Port.Stations(),
                   GroupStationAttr.FK_Group,
-                  GroupStationAttr.FK_Station, "岗位(平铺)", BP.Port.StationAttr.FK_StationType);
+                  GroupStationAttr.FK_Station, "角色(平铺)", BP.Port.StationAttr.FK_StationType);
 
                 map.AttrsOfOneVSM.AddBranches(new GroupDepts(), new Depts(),
                    GroupEmpAttr.FK_Group, GroupDeptAttr.FK_Dept, "部门(树)", EmpAttr.Name, EmpAttr.No);
-
-
+                  
                 //节点绑定部门. 节点绑定部门.
-                map.AttrsOfOneVSM.AddBranches(new GroupMenus(), new Menus(),
-                   GroupMenuAttr.FK_Group,
-                   GroupMenuAttr.FK_Menu, "绑定菜单", EmpAttr.Name, EmpAttr.No, "0");
+                //map.AttrsOfOneVSM.AddBranches(new GroupMenus(), new Menus(),
+                //   GroupMenuAttr.FK_Group,
+                //   GroupMenuAttr.FK_Menu, "绑定菜单", EmpAttr.Name, EmpAttr.No, "0");
 
 
                 this._enMap = map;

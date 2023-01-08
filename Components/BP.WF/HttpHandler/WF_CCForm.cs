@@ -17,7 +17,7 @@ using System.Drawing;
 using BP.Sys.FrmUI;
 using BP.WF.Template.SFlow;
 using BP.WF.Template.Frm;
-
+using Newtonsoft.Json.Linq;
 
 namespace BP.WF.HttpHandler
 {
@@ -40,8 +40,10 @@ namespace BP.WF.HttpHandler
                 FrmAttachment athDesc = this.GenerAthDesc();
 
                 //查询出来数据实体.
-                string pkVal = this.OID.ToString();
-                if (pkVal.Equals("0") == true)
+                string pkVal = this.GetRequestVal("RefOID");
+                if (DataType.IsNullOrEmpty(pkVal) == true)
+                    pkVal = this.GetRequestVal("OID");
+                if (DataType.IsNullOrEmpty(pkVal) == true)
                     pkVal = this.WorkID.ToString();
 
                 BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, pkVal,
@@ -275,7 +277,8 @@ namespace BP.WF.HttpHandler
                                 if (ss[1] == "" || ss[1] == null)
                                     continue;
                                 //string dtlKey = System.Web.HttpContext.Current.Session["DtlKey"] as string;
-                                string dtlKey = HttpContextHelper.SessionGet("DtlKey") as string;
+                                //string dtlKey = HttpContextHelper.SessionGet("DtlKey") as string;
+                                string dtlKey = this.GetRequestVal("DtlKey");
                                 if (dtlKey == null)
                                     dtlKey = key;
                                 if (dtlKey.IndexOf(",") != -1)
@@ -459,7 +462,6 @@ namespace BP.WF.HttpHandler
         private string dealSQL = "";
         public string JSONTODT(DataTable dt)
         {
-            //  return BP.Tools.Json.ToJson(dt);
 
             if ((BP.Difference.SystemConfig.AppCenterDBType == DBType.Informix
                      || BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle) && dealSQL != null)
@@ -688,6 +690,8 @@ namespace BP.WF.HttpHandler
             if (this.FK_Node != 0 && this.FK_Node != 999999)
             {
                 fn = new FrmNode(this.FK_Node, this.FK_MapData);
+                if (fn.FrmSln == FrmSln.Readonly)
+                    paras = paras + "&IsReadonly=1";
 
                 if (fn != null && fn.WhoIsPK != WhoIsPK.OID)
                 {
@@ -742,7 +746,7 @@ namespace BP.WF.HttpHandler
                         if (IsMobile == true)
                             return "url@../FrmView.htm?1=2" + paras;
 
-                        if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                        if (this.GetRequestValBoolen("Readonly") ==true || this.GetRequestValBoolen("IsEdit") == false)
                             return "url@FrmGener.htm?1=2" + paras;
                         else
                             return "url@FrmGener.htm?1=2" + paras;
@@ -750,7 +754,7 @@ namespace BP.WF.HttpHandler
 
                     if (md.HisFrmType == FrmType.VSTOForExcel || md.HisFrmType == FrmType.ExcelFrm)
                     {
-                        if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                        if (this.GetRequestValBoolen("Readonly") == true || this.GetRequestValBoolen("IsEdit") == false)
                             return "url@FrmVSTO.htm?1=2" + paras;
                         else
                             return "url@FrmVSTO.htm?1=2" + paras;
@@ -761,13 +765,13 @@ namespace BP.WF.HttpHandler
 
                     if (md.HisFrmType == FrmType.ChapterFrm)
                     {
-                        if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                        if (this.GetRequestValBoolen("Readonly")==true || this.GetRequestValBoolen("IsEdit") == false)
                             return "url@ChapterFrmView.htm?1=2" + paras;
                         else
                             return "url@ChapterFrm.htm?1=2" + paras;
                     }
 
-                    if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                    if (this.GetRequestValBoolen("Readonly") == true || this.GetRequestValBoolen("IsEdit") == false)
                         return "url@FrmGener.htm?1=2" + paras;
                     else
                         return "url@FrmGener.htm?1=2" + paras;
@@ -783,7 +787,7 @@ namespace BP.WF.HttpHandler
 
                 if (IsMobile == true)
                     return "url@../FrmView.htm?1=2" + paras;
-                if ((fn != null && fn.FrmSln == FrmSln.Readonly) || this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                if ((fn != null && fn.FrmSln == FrmSln.Readonly) || this.GetRequestValBoolen("Readonly") == true || this.GetRequestValBoolen("IsEdit") == false)
                     return "url@ChapterFrmView.htm?1=2" + paras;
                 else
                 {
@@ -795,7 +799,7 @@ namespace BP.WF.HttpHandler
             {
                 if (IsMobile == true)
                     return "url@../FrmView.htm?1=2" + paras;
-                if ((fn != null && fn.FrmSln == FrmSln.Readonly) || this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                if ((fn != null && fn.FrmSln == FrmSln.Readonly) || this.GetRequestValBoolen("Readonly") == true || this.GetRequestValBoolen("IsEdit") == false)
                     return "url@FrmGener.htm?1=2" + paras;
                 else
                     return "url@FrmGener.htm?1=2" + paras;
@@ -804,7 +808,7 @@ namespace BP.WF.HttpHandler
 
             if (md.HisFrmType == FrmType.WordFrm)
             {
-                if ((fn != null && fn.FrmSln == FrmSln.Readonly) || this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                if ((fn != null && fn.FrmSln == FrmSln.Readonly) || this.GetRequestValBoolen("Readonly") == true || this.GetRequestValBoolen("IsEdit") == false)
                     return "url@FrmWord.htm?1=2" + paras;
                 else
                     return "url@FrmWord.htm?1=2" + paras;
@@ -812,7 +816,7 @@ namespace BP.WF.HttpHandler
 
             if (md.HisFrmType == FrmType.VSTOForExcel || md.HisFrmType == FrmType.ExcelFrm)
             {
-                if ((fn != null && fn.FrmSln == FrmSln.Readonly) || this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                if ((fn != null && fn.FrmSln == FrmSln.Readonly) || this.GetRequestValBoolen("Readonly") == true || this.GetRequestValBoolen("IsEdit") == false)
                     return "url@FrmVSTO.htm?1=2" + paras;
                 else
                     return "url@FrmVSTO.htm?1=2" + paras;
@@ -821,7 +825,7 @@ namespace BP.WF.HttpHandler
             if (IsMobile == true)
                 return "url@../FrmView.htm?1=2" + paras;
 
-            if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+            if (this.GetRequestValBoolen("Readonly") == true || this.GetRequestValBoolen("IsEdit") == false)
                 return "url@FrmGener.htm?1=2" + paras;
             else
                 return "url@FrmGener.htm?1=2" + paras;
@@ -1096,8 +1100,20 @@ namespace BP.WF.HttpHandler
             en.SetValByKey("RefPK", this.RefPKVal);
 
             en.Insert();
+            string paras= "";
+            string systemPara = "DoType,DoType1,DoMethod,HttpHandlerName,OID,FID,WorkID,PWorkID,RefPKVal,FK_Flow,FK_Node,IsReadonly,EnsName,FK_MapData,";
+            foreach (string str in HttpContextHelper.RequestParamKeys)
+            {
+                if (DataType.IsNullOrEmpty(str) == true || str.Equals("T") == true || str.Equals("t") == true)
+                    continue;
+                if (str.Equals("IsNew") == true || str.Equals("FrmType") == true  || systemPara.Contains(str+",")==true)
+                    continue;
 
-            return "url@DtlFrm.htm?EnsName=" + this.EnsName + "&RefPKVal=" + this.RefPKVal + "&FrmType=" + (int)dtl.HisEditModel + "&OID=" + en.OID;
+                if (paras.Contains(str + "=") == true)
+                    continue;
+                paras += "&" + str + "=" + this.GetRequestVal(str);
+            }
+            return "url@DtlFrm.htm?EnsName=" + this.EnsName + "&RefPKVal=" + this.RefPKVal + "&FrmType=" + (int)dtl.HisEditModel + "&OID=" + en.OID+"&IsNew=1"+paras;
         }
 
         public string DtlFrm_Delete()
@@ -1674,7 +1690,7 @@ namespace BP.WF.HttpHandler
                 MapExts mes = md.MapExts;
 
                 MapExt me = mes.GetEntityByKey("ExtType", MapExtXmlList.PageLoadFull) as MapExt;
-                if (isLoadData == true && me != null && GetRequestValInt("IsTest") != 1)
+                if (isLoadData == true && md.IsPageLoadFull && me != null && GetRequestValInt("IsTest") != 1)
                 {
                     //执行通用的装载方法.
                     MapAttrs attrs = new MapAttrs(this.EnsName);
@@ -2334,7 +2350,44 @@ namespace BP.WF.HttpHandler
             mdtl.No = this.EnsName;
 
             string dtlRefPKVal = this.RefPKVal; //从表的RefPK
+            MapAttr attr = new MapAttr();
+            attr.MyPK = mdtl.No + "_Idx";
+            if (attr.RetrieveFromDBSources() == 0)
+            {
+                attr.setFK_MapData(mdtl.No);
+                attr.setEditType(EditType.Readonly);
+                attr.setKeyOfEn("Idx");
+                attr.setName("Idx");
+                attr.setMyDataType(DataType.AppInt);
+                attr.setUIContralType(UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
+                attr.DefVal = "0";
+                attr.Insert();
+                //增加表字段
+                if (DBAccess.IsExitsTableCol(mdtl.PTable, "Idx") == false)
+                {
+                    switch (SystemConfig.AppCenterDBType)
+                    {
+                        case DBType.MSSQL:
+                        case DBType.Oracle:
+                        case DBType.DM:
+                        case DBType.MySQL:
+                        case DBType.KingBaseR3:
+                        case DBType.KingBaseR6:
+                        case DBType.PostgreSQL:
+                        case DBType.UX:
+                            DBAccess.RunSQL("ALTER TABLE " + mdtl.PTable + " ADD Idx INT DEFAULT 0 NULL");
+                            break;
+                        default:
+                            throw new Exception("err@未解析的数据库类型" + SystemConfig.AppCenterDBType);
+                    }
+                }
+                Cash.SetMap(mdtl.No, null);
+                Cash.SQL_Cash.Remove(mdtl.No);
 
+            }
             #region 如果是测试，就创建表.
             if (this.FK_Node == 999999 || this.GetRequestVal("IsTest") != null)
             {
@@ -2417,10 +2470,13 @@ namespace BP.WF.HttpHandler
         public string Dtl_Save()
         {
             MapDtl mdtl = new MapDtl(this.EnsName);
-            GEDtls dtls = new GEDtls(this.EnsName);
             FrmEvents fes = new FrmEvents(this.EnsName); //获得事件.
             GEEntity mainEn = null;
-
+            //获取集合
+            string str = this.GetRequestVal("Json");
+            if (DataType.IsNullOrEmpty(str) == true)
+                return "不需要保存";
+           
             #region 从表保存前处理事件.
             if (fes.Count > 0)
             {
@@ -2430,9 +2486,73 @@ namespace BP.WF.HttpHandler
                     throw new Exception(msg);
             }
             #endregion 从表保存前处理事件.
-
             #region 保存的业务逻辑.
+            GEDtls dtls = new GEDtls(this.EnsName);
+            GEDtl dtl = dtls.GetNewEntity as GEDtl;
+            Attrs attrs  = dtl.EnMap.Attrs;
+            JArray json = JArray.Parse(str);
+            foreach(JObject item in json)
+            {
+                JToken result = item.GetValue("OID");
+                Int64 oid = 0;
+                if (result != null)
+                    oid =  Int64.Parse(result.ToString());
+                dtl = dtls.GetNewEntity as GEDtl;  
+                foreach(Attr attr in attrs)
+                {
+                    if (attr.IsRefAttr == true)
+                        continue;
+                    string val = item.GetValue(attr.Field)!=null? item.GetValue(attr.Field).ToString():"";
+                    if (attr.MyDataType == DataType.AppDateTime || attr.MyDataType == DataType.AppDate)
+                    {
+                        if (attr.UIIsReadonly == true)
+                            continue;
+                        dtl.SetValByKey(attr.Key, val);
+                        continue;
+                    }
+                    if (attr.UIContralType == UIContralType.CheckBok)
+                    {
+                        if (val.Equals("0"))
+                            dtl.SetValByKey(attr.Key, 0);
+                        else
+                            dtl.SetValByKey(attr.Key, 1);
+                        continue;
+                    }
+                    dtl.SetValByKey(attr.Key, val);
+                    continue;
+                }
+                dtl.SetValByKey("OID", oid);
+                //关联主赋值.
+                dtl.RefPK = this.RefPKVal;
+                switch (mdtl.DtlOpenType)
+                {
+                    case DtlOpenType.ForEmp:  // 按人员来控制.
+                        dtl.RefPK = this.RefPKVal;
+                        break;
+                    case DtlOpenType.ForWorkID: // 按工作ID来控制
+                        dtl.RefPK = this.RefPKVal;
+                        dtl.FID = this.FID;
+                        break;
+                    case DtlOpenType.ForFID: // 按流程ID来控制.
+                        dtl.RefPK = this.RefPKVal;
+                        dtl.FID = this.FID;
+                        break;
+                }
+                dtl.Rec = WebUser.No;
+                if (oid == 0)
+                {
+                    dtl.Insert();
+                    continue;
+                }
+                dtl.Update();  
 
+            }
+            if (fes.Count > 0)
+            {
+                string msg = fes.DoEventNode(EventListFrm.DtlRowSaveAfter, mainEn);
+                if (msg != null)
+                    throw new Exception(msg);
+            }
             #endregion 保存的业务逻辑.
 
             return "保存成功";
@@ -2527,8 +2647,9 @@ namespace BP.WF.HttpHandler
                     continue;
 
                 dtl.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
-            }
 
+            }
+            dtl.SetValByKey("Idx", RowIndex);
             #region 从表保存前处理事件.
             //获得主表事件.
             FrmEvents fes = new FrmEvents(fk_mapDtl); //获得事件.
@@ -2569,34 +2690,22 @@ namespace BP.WF.HttpHandler
                 }
 
                 //dtl生成oid后，将pop弹出的FrmEleDB表中的数据用oid替换掉
-                foreach (BP.En.Attr attr in attrs)
-                {
-                    string Refval = this.RefPKVal + "_" + RowIndex;
-                    FrmEleDBs FrmEleDBs = new FrmEleDBs();
-                    QueryObject qo = new QueryObject(FrmEleDBs);
-                    qo.AddWhere(FrmEleDBAttr.EleID, attr.Key);
-                    qo.addAnd();
-                    qo.AddWhere(FrmEleDBAttr.RefPKVal, Refval);
-                    qo.DoQuery();
-                    if (FrmEleDBs != null && FrmEleDBs.Count == 0)
-                        continue;
-                    foreach (FrmEleDB FrmEleDB in FrmEleDBs)
-                    {
-                        FrmEleDB athDB_N = new FrmEleDB();
-                        athDB_N.setMyPK(attr.Key + "_" + dtl.OID + "_" + FrmEleDB.Tag1);
-                        athDB_N.setFK_MapData(FrmEleDB.FK_MapData);
-                        athDB_N.EleID = FrmEleDB.EleID;
-                        athDB_N.RefPKVal = dtl.OID.ToString();
-                        athDB_N.FID = FrmEleDB.FID;
-                        athDB_N.Tag1 = FrmEleDB.Tag1;
-                        athDB_N.Tag2 = FrmEleDB.Tag2;
-                        athDB_N.Tag3 = FrmEleDB.Tag3;
-                        athDB_N.Tag4 = FrmEleDB.Tag4;
-                        athDB_N.Tag5 = FrmEleDB.Tag5;
-                        athDB_N.DirectInsert();
-                        FrmEleDB.Delete();
-                    }
-                }
+                string refval = this.RefPKVal + "_" + RowIndex;
+                //处理从表行数据插入成功后，更新FrmEleDB中数据
+                string dbstr = SystemConfig.AppCenterDBVarStr;
+                Paras paras = new Paras();
+                if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6)
+                    paras.SQL = "UPDATE Sys_FrmEleDB SET RefPKVal=" + dbstr + "RefPKVal,MyPK=EleID||'_'||"+ dtl.OID.ToString()+ "||'_'||Tag1  WHERE RefPKVal=" + dbstr + "OldRefPKVal";
+                else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
+                    paras.SQL = "UPDATE Sys_FrmEleDB SET RefPKVal=" + dbstr + "RefPKVal,MyPK=CONCAT(EleID,'_'," + dtl.OID.ToString() + ",'_',Tag1)  WHERE RefPKVal=" + dbstr + "OldRefPKVal";
+                else
+                    paras.SQL = "UPDATE Sys_FrmEleDB SET RefPKVal=" + dbstr + "RefPKVal,MyPK= EleID+'_'+'" + dtl.OID.ToString() + "'+'_'+Tag1  WHERE RefPKVal=" + dbstr + "OldRefPKVal";
+                paras.Add("RefPKVal", dtl.OID.ToString());
+                paras.Add("OldRefPKVal", refval);
+                DBAccess.RunSQL(paras);
+                //处理从表行数据插入成功后，更新FrmAttachmentDB中数据
+                paras.SQL = "UPDATE Sys_FrmAttachmentDB SET RefPKVal=" + dbstr + "RefPKVal  WHERE RefPKVal=" + dbstr + "OldRefPKVal";
+                DBAccess.RunSQL(paras);
             }
             else
             {
@@ -2626,6 +2735,30 @@ namespace BP.WF.HttpHandler
 
             //返回当前数据存储信息.
             return dtl.ToJson();
+        }
+        public string Dtl_ChangePopAndAthIdx()
+        {
+            int oldRowIdx = GetRequestValInt("oldRowIdx");
+            int newRowIdx = GetRequestValInt("newRowIdx");
+            //dtl生成oid后，将pop弹出的FrmEleDB表中的数据用oid替换掉
+            string refval = this.WorkID + "_" + oldRowIdx;
+            string newRefVal = this.WorkID + "_" + newRowIdx;
+            //处理从表行数据插入成功后，更新FrmEleDB中数据
+            string dbstr = SystemConfig.AppCenterDBVarStr;
+            Paras paras = new Paras();
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6)
+                paras.SQL = "UPDATE Sys_FrmEleDB SET RefPKVal=" + dbstr + "RefPKVal,MyPK=EleID||'_'||'" + newRefVal + "'||'_'||Tag1  WHERE RefPKVal=" + dbstr + "OldRefPKVal";
+            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
+                paras.SQL = "UPDATE Sys_FrmEleDB SET RefPKVal=" + dbstr + "RefPKVal,MyPK=CONCAT(EleID,'_','" + newRefVal + "','_',Tag1)  WHERE RefPKVal=" + dbstr + "OldRefPKVal";
+            else
+                paras.SQL = "UPDATE Sys_FrmEleDB SET RefPKVal=" + dbstr + "RefPKVal,MyPK= EleID+'_'+'" + newRefVal + "'+'_'+Tag1  WHERE RefPKVal=" + dbstr + "OldRefPKVal";
+            paras.Add("RefPKVal", newRefVal);
+            paras.Add("OldRefPKVal", refval);
+            DBAccess.RunSQL(paras);
+            //处理从表行数据插入成功后，更新FrmAttachmentDB中数据
+            paras.SQL = "UPDATE Sys_FrmAttachmentDB SET RefPKVal=" + dbstr + "RefPKVal  WHERE RefPKVal=" + dbstr + "OldRefPKVal";
+            DBAccess.RunSQL(paras);
+            return "执行成功";
         }
         /// <summary>
         /// 删除
@@ -3246,7 +3379,7 @@ namespace BP.WF.HttpHandler
                     if (cond.Contains("#EnumKey=") == true)
                     {
                         string enumKey = cond.Substring(cond.IndexOf("EnumKey") + 8);
-                        sql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + enumKey + "'";
+                        sql = "SELECT IntKey AS No, Lab as Name FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey='" + enumKey + "'";
                     }
 
                     //处理日期的默认值
@@ -3411,7 +3544,7 @@ namespace BP.WF.HttpHandler
                     if (cond.Contains("#EnumKey=") == true)
                     {
                         string enumKey = cond.Substring(cond.IndexOf("EnumKey") + 8);
-                        sql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + enumKey + "'";
+                        sql = "SELECT IntKey AS No, Lab as Name FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey='" + enumKey + "'";
                     }
 
                     //处理日期的默认值
@@ -3583,7 +3716,7 @@ namespace BP.WF.HttpHandler
                     if (cond.Contains("#EnumKey=") == true)
                     {
                         string enumKey = cond.Substring(cond.IndexOf("EnumKey") + 8);
-                        sql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + enumKey + "'";
+                        sql = "SELECT IntKey AS No, Lab as Name FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey='" + enumKey + "'";
                     }
 
                     //处理日期的默认值
@@ -5716,7 +5849,8 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
             ds.Tables.Add(gfs.ToDataTableField("GroupFields"));
             ds.Tables.Add(attrs.ToDataTableField("MapAttrs"));
-
+            GenerWorkFlow gwf = new GenerWorkFlow(this.OID);
+            ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
             // ds.WriteXml("d:\\xxx.xml");
 
             return BP.Tools.Json.ToJson(ds);
@@ -5848,7 +5982,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <returns></returns>
         public string ChartFrm_GetBigTextByVer()
-        {   //@HongYan
+        {
             string dbstr = SystemConfig.AppCenterDBVarStr;
             string sql = "SELECT MyPK FROM Sys_FrmDBVer WHERE FrmID=" + dbstr + "FrmID AND RefPKVal=" + dbstr + "RefPKVal AND Ver=" + dbstr + "Ver";
             Paras ps = new Paras();
@@ -5863,7 +5997,7 @@ namespace BP.WF.HttpHandler
         }
 
         public string ChartFrm_GetDtlDataByVer()
-        {//@HongYan
+        {
             return DBAccess.GetBigTextFromDB("Sys_FrmDBVer", "MyPK", this.MyPK, "FrmDtlDB");
         }
         #endregion 章节表单.

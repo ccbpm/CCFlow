@@ -83,10 +83,14 @@ namespace BP.CCBill.Template
         public const string PopHeight = "PopHeight";
         #endregion 外观.
 
+        /// <summary>
+        /// 是否启用
+        /// </summary>
         public const string IsEnable = "IsEnable";
-
+        /// <summary>
+        /// 流程编号
+        /// </summary>
         public const string FlowNo = "FlowNo";
-
     }
     /// <summary>
     /// 集合方法
@@ -188,6 +192,18 @@ namespace BP.CCBill.Template
                 this.SetValByKey(CollectionAttr.Tag1, value);
             }
         }
+        public int Idx
+        {
+            get
+            {
+                return this.GetValIntByKey(CollectionAttr.Idx);
+            }
+            set
+            {
+                this.SetValByKey(CollectionAttr.Idx, value);
+            }
+        }
+        
         #endregion
 
         #region 构造方法
@@ -218,6 +234,7 @@ namespace BP.CCBill.Template
 
                 Map map = new Map("Frm_Collection", "集合方法");
 
+                map.AddGroupAttr("基本属性");
                 //主键.
                 map.AddTBStringPK(CollectionAttr.No, null, "编号", true, true, 0, 50, 10);
                 map.AddTBString(CollectionAttr.Name, null, "方法名", true, false, 0, 300, 10);
@@ -236,12 +253,21 @@ namespace BP.CCBill.Template
                 //临时存储.
                 map.AddTBString(CollectionAttr.Docs, null, "方法内容", true, false, 0, 300, 10);
 
+                //是否启用？
+                map.AddBoolean(CollectionAttr.IsEnable, true, "是否启用？", true, true, true);
+                map.AddTBInt(CollectionAttr.Idx, 0, "Idx", true, false);
+
+                map.AddDDLSysEnum(MethodAttr.RefMethodType, 0, "页面打开方式", true, true,
+                    "RefMethodTypeLink", "@0=模态窗口打开@1=新窗口打开@2=右侧窗口打开@4=转到新页面");
+
                 #region 外观.
+                map.AddGroupAttr("外观");
                 map.AddTBInt(CollectionAttr.PopHeight, 0, "弹窗高度", true, false);
                 map.AddTBInt(CollectionAttr.PopWidth, 0, "弹窗宽度", true, false);
                 #endregion 外观.
 
                 #region 对功能有效
+                map.AddGroupAttr("对功能有效");
                 //对功能有效.
                 map.AddTBString(CollectionAttr.WarningMsg, null, "功能执行警告信息", true, false, 0, 300, 10);
                 map.AddTBString(CollectionAttr.MsgSuccess, null, "成功提示信息", true, false, 0, 300, 10, true);
@@ -250,9 +276,6 @@ namespace BP.CCBill.Template
                 "@0=关闭提示窗口@1=关闭提示窗口并刷新@2=转入到Search.htm页面上去");
                 #endregion 对功能有效
 
-                //是否启用？
-                map.AddBoolean(CollectionAttr.IsEnable, true, "是否启用？", true, true, true);
-                map.AddTBInt(CollectionAttr.Idx, 0, "Idx", true, false);
                 this._enMap = map;
                 return this._enMap;
             }

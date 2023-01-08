@@ -52,6 +52,7 @@ namespace BP.WF
         private string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
         private Paras ps;
         public string ReturnToEmp = null;
+        public int ReturnToNodeID = 0;
         /// <summary>
         /// 退回考核规则字段
         /// </summary>
@@ -94,7 +95,7 @@ namespace BP.WF
             this.IsBackTrack = isBackTrack;
             this.Msg = returnInfo;
             this.ReturnToEmp = returnToEmp;
-
+            this.ReturnToNodeID = returnToNodeID;
             //当前工作.
             this.HisWork = this.HisNode.HisWork;
 
@@ -157,7 +158,8 @@ namespace BP.WF
                 string rdt = dt.Rows[0][0].ToString();
 
                 ps.Clear();
-                ps.SQL = "SELECT ActionType,NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE   RDT >=" + dbStr + "RDT AND (WorkID=" + dbStr + "WorkID OR FID=" + dbStr + "FID) AND NDFrom NOT IN(SELECT NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE   RDT <" + dbStr + "RDT And ActionType IN (" + (int)ActionType.Forward + "," + (int)ActionType.ForwardFL + "," + (int)ActionType.ForwardHL + ")) ORDER BY RDT ";
+                ps.SQL = "SELECT ActionType,NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE   RDT >=" + dbStr + "RDT AND (WorkID=" + dbStr + "WorkID OR FID=" + dbStr + "FID) AND NDFrom NOT IN(SELECT NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE   RDT <" + dbStr + "RDT And ActionType IN (" + (int)ActionType.Forward + "," 
+                    + (int)ActionType.ForwardFL + "," + (int)ActionType.ForwardHL + ") AND (WorkID=" + dbStr + "WorkID OR FID=" + dbStr + "FID)) ORDER BY RDT ";
                 ps.Add("RDT", rdt);
                 ps.Add("WorkID", this.WorkID);
                 ps.Add("FID", this.WorkID);
@@ -619,7 +621,8 @@ namespace BP.WF
                         case RunModel.FHL: /*1-4 普通节点to分合流点 */
                             return ExeReturn1_1();
                             break;
-                        case RunModel.SubThread: /*1-5 普通节to子线程点 */
+                        case RunModel.SubThreadSameWorkID: /*1-5 普通节to子线程点 */
+                        case RunModel.SubThreadUnSameWorkID: /*1-5 普通节to子线程点 */
                         default:
                             throw new Exception("@退回错误:非法的设计模式或退回模式.普通节to子线程点");
                             break;
@@ -634,9 +637,9 @@ namespace BP.WF
                         case RunModel.HL:  /*2.3 分流点to合流点,分合流点   */
                         case RunModel.FHL:
                             return ExeReturn1_1(); //
-                        case RunModel.SubThread: /* 2.4 分流点to子线程点   */
+                        case RunModel.SubThreadSameWorkID: /* 2.4 分流点to子线程点   */
+                        case RunModel.SubThreadUnSameWorkID: /* 2.4 分流点to子线程点   */
                             return ExeReturn2_4(); //
-                        // throw new Exception("@退回错误:非法的设计模式或退回模式.分流点to子线程点,请反馈给管理员.");
                         default:
                             throw new Exception("@没有判断的节点类型(" + ReturnToNode.Name + ")");
                             break;
@@ -652,7 +655,8 @@ namespace BP.WF
                         case RunModel.HL: /*3.3 合流点 */
                         case RunModel.FHL:
                             throw new Exception("@尚未完成.");
-                        case RunModel.SubThread:/*3.4 合流点向子线程退回 */
+                        case RunModel.SubThreadSameWorkID:/*3.4 合流点向子线程退回 */
+                        case RunModel.SubThreadUnSameWorkID:/*3.4 合流点向子线程退回 */
                             return ExeReturn3_4();
                         default:
                             throw new Exception("@退回错误:非法的设计模式或退回模式.普通节to子线程点");
@@ -667,13 +671,15 @@ namespace BP.WF
                         case RunModel.HL: /*4.3 合流点 */
                         case RunModel.FHL:
                             throw new Exception("@尚未完成.");
-                        case RunModel.SubThread:/*4.5 子线程*/
+                        case RunModel.SubThreadSameWorkID:/*4.5 子线程*/
+                        case RunModel.SubThreadUnSameWorkID:/*4.5 子线程*/
                             return ExeReturn3_4();
                         default:
                             throw new Exception("@没有判断的节点类型(" + this.ReturnToNode.Name + ")");
                     }
                     break;
-                case RunModel.SubThread:  /* 5: 子线程节点向下发送的 */
+                case RunModel.SubThreadSameWorkID:  /* 5: 子线程节点向下发送的 */
+                case RunModel.SubThreadUnSameWorkID:  /* 5: 子线程节点向下发送的 */
                     switch (this.ReturnToNode.HisRunModel)
                     {
                         case RunModel.Ordinary: /*5.1 普通工作节点 */
@@ -686,7 +692,8 @@ namespace BP.WF
                         case RunModel.FHL: /*5.4 分合流点 */
                             return ExeReturn5_2();
                         //throw new Exception("@目前不支持此场景下的退回,请反馈给管理员.");
-                        case RunModel.SubThread: /*5.5 子线程*/
+                        case RunModel.SubThreadSameWorkID: /*5.5 子线程*/
+                        case RunModel.SubThreadUnSameWorkID: /*5.5 子线程*/
                             return ExeReturn1_1();
                         default:
                             throw new Exception("@没有判断的节点类型(" + ReturnToNode.Name + ")");
@@ -1347,7 +1354,7 @@ namespace BP.WF
                         inStr += "'" + s + "',";
                     }
                     inStr = inStr.Substring(0, inStr.Length - 1);
-                    if (inStr.Contains(",") == true)
+                    if (inStr.Contains(",") == false)
                         qo.AddWhere(GenerWorkerListAttr.FK_Node, int.Parse(inStr));
                     else
                         qo.AddWhereIn(GenerWorkerListAttr.FK_Node, "(" + inStr + ")");

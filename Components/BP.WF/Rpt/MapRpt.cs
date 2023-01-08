@@ -379,7 +379,7 @@ namespace BP.WF.Rpt
                 map.AddTBString(MapRptAttr.RightDeptTag, null, "部门数据查看控制Tag", true, false, 0, 4000, 20);
 
                 map.AttrsOfOneVSM.Add(new RptStations(), new Stations(), RptStationAttr.FK_Rpt, RptStationAttr.FK_Station,
-                    DeptAttr.Name, DeptAttr.No, "岗位权限");
+                    DeptAttr.Name, DeptAttr.No, "角色权限");
                 map.AttrsOfOneVSM.Add(new RptDepts(), new Depts(), RptDeptAttr.FK_Rpt, RptDeptAttr.FK_Dept,
                     DeptAttr.Name, DeptAttr.No, "部门权限");
                 map.AttrsOfOneVSM.Add(new RptEmps(), new Emps(), RptEmpAttr.FK_Rpt, RptEmpAttr.FK_Emp,

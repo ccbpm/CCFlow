@@ -52,7 +52,6 @@ namespace BP.WF
         /// 发起人
         /// </summary>
         public const string PEmp = "PEmp";
-      
         #endregion.
 
         #region 流程跳转相关.
@@ -83,7 +82,6 @@ namespace BP.WF
         public const string DealWork = "DealWork";
         public const string Bill = "Bill";
         public const string Home = "Home";
-
         /// <summary>
         /// 处理消息连接
         /// </summary>

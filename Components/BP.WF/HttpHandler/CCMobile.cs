@@ -8,6 +8,7 @@ using BP.Web;
 using BP.Port;
 using BP.En;
 using BP.WF.Port.Admin2Group;
+using BP.Difference;
 
 namespace BP.WF.HttpHandler
 {
@@ -54,12 +55,36 @@ namespace BP.WF.HttpHandler
         public string Login_Submit()
         {
             string userNo = this.GetRequestVal("TB_No");
-            if(DataType.IsNullOrEmpty(userNo)==true)
-               userNo = this.GetRequestVal("TB_UserNo");
+            if (DataType.IsNullOrEmpty(userNo) == true)
+                userNo = this.GetRequestVal("TB_UserNo");
             string pass = this.GetRequestVal("TB_PW");
             if (DataType.IsNullOrEmpty(pass) == true)
                 pass = this.GetRequestVal("TB_Pass");
-
+            if(SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            {
+                Emp saemp = null;
+                if (DataType.IsNullOrEmpty(this.OrgNo) == false)
+                {
+                    string empNo = this.OrgNo + "_" + userNo;
+                    saemp.No = empNo;
+                    if (saemp.RetrieveFromDBSources() == 0)
+                        return "err@账号" + userNo + "在组织" + this.OrgNo + "还未注册";
+                }
+                else
+                {
+                    //获取当前用户
+                    Emps emps = new Emps();
+                    emps.Retrieve(EmpAttr.UserID, userNo, EmpAttr.EmpSta, 1);
+                    if (emps.Count == 0)
+                        return "err@还未注册该账号或该账号已经禁用";
+                    saemp = emps[0] as Emp;
+                }
+                if (saemp.CheckPass(pass) == false)
+                    return "err@用户名或者密码错误.";
+                //调用登录方法.
+                BP.WF.Dev2Interface.Port_Login(saemp.UserID, saemp.OrgNo);
+                return "url@Home.htm?Token=" + BP.WF.Dev2Interface.Port_GenerToken("PC") + "&UserNo=" + saemp.UserID;
+            }
             BP.Port.Emp emp = new Emp();
             emp.UserID = userNo;
             if (emp.RetrieveFromDBSources() == 0)
@@ -68,7 +93,7 @@ namespace BP.WF.HttpHandler
                 {
                     /*如果包含昵称列,就检查昵称是否存在.*/
                     Paras ps = new Paras();
-                    ps.SQL = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE NikeName=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "userNo";
+                    ps.SQL = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE NikeName=" + SystemConfig.AppCenterDBVarStr + "userNo";
                     ps.Add("userNo", userNo);
                     string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
                     if (no == null)
@@ -83,7 +108,7 @@ namespace BP.WF.HttpHandler
                 {
                     /*如果包含昵称列,就检查昵称是否存在.*/
                     Paras ps = new Paras();
-                    ps.SQL = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE Tel=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "userNo";
+                    ps.SQL = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE Tel=" + SystemConfig.AppCenterDBVarStr + "userNo";
                     ps.Add("userNo", userNo);
                     //string sql = "SELECT No FROM Port_Emp WHERE NikeName='" + userNo + "'";
                     string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
@@ -114,7 +139,7 @@ namespace BP.WF.HttpHandler
                     if (DBAccess.RunSQLReturnValInt(sql, 1) == 1)
                         return "err@该用户已经被禁用.";
                 }
-                return "url@Default.htm?Token=" + BP.WF.Dev2Interface.Port_GenerToken(WebUser.No, "PC", 4000, true) + "&UserNo=" + emp.UserID;
+                return "url@/FastMobilePortal/Default.htm?Token=" + BP.WF.Dev2Interface.Port_GenerToken("PC") + "&UserNo=" + emp.UserID;
             }
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
             {
@@ -126,7 +151,7 @@ namespace BP.WF.HttpHandler
                     if (DBAccess.RunSQLReturnValInt(sql, 1) == 1)
                         return "err@该用户已经被禁用.";
                 }
-                return "url@Default.htm?Token=" + BP.WF.Dev2Interface.Port_GenerToken(WebUser.No, "PC", 4000, true) + "&UserNo=" + emp.UserID;
+                return "url@/FastMobilePortal/Default.htm?Token=" + BP.WF.Dev2Interface.Port_GenerToken("PC") + "&UserNo=" + emp.UserID;
             }
             //获得当前管理员管理的组织数量.
             OrgAdminers adminers = null;
@@ -142,7 +167,7 @@ namespace BP.WF.HttpHandler
                 {
                     //调用登录方法.
                     BP.WF.Dev2Interface.Port_Login(emp.UserID, emp.OrgNo);
-                    return "url@Default.htm?Token=" + BP.WF.Dev2Interface.Port_GenerToken(emp.UserID, "PC", 6000, true) + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
+                    return "url@/FastMobilePortal/Default.htm?Token=" + BP.WF.Dev2Interface.Port_GenerToken("PC") + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
                 }
 
                 foreach (BP.WF.Port.Admin2Group.Org org in orgs)
@@ -163,11 +188,11 @@ namespace BP.WF.HttpHandler
             //执行登录.
             BP.WF.Dev2Interface.Port_Login(emp.UserID, emp.OrgNo);
 
-            string token = BP.WF.Dev2Interface.Port_GenerToken(emp.UserID, "PC", 40000, true);
+            string token = BP.WF.Dev2Interface.Port_GenerToken("PC");
 
             //判断是否是多个组织的情况.
             if (adminers.Count == 1)
-                return "url@Default.htm?Token=" + token + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
+                return "url@/FastMobilePortal/Default.htm?Token=" + token + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
 
             return "url@SelectOneOrg.htm?Token=" + token + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
 
@@ -188,7 +213,7 @@ namespace BP.WF.HttpHandler
                 {
                     /*如果包含昵称列,就检查昵称是否存在.*/
                     Paras ps = new Paras();
-                    ps.SQL = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE NikeName=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "userNo";
+                    ps.SQL = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE NikeName=" + SystemConfig.AppCenterDBVarStr + "userNo";
                     ps.Add("userNo", userNo);
                     //string sql = "SELECT No FROM Port_Emp WHERE NikeName='" + userNo + "'";
                     string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
@@ -204,7 +229,7 @@ namespace BP.WF.HttpHandler
                 {
                     /*如果包含昵称列,就检查昵称是否存在.*/
                     Paras ps = new Paras();
-                    ps.SQL = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE Tel=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "userNo";
+                    ps.SQL = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE Tel=" + SystemConfig.AppCenterDBVarStr + "userNo";
                     ps.Add("userNo", userNo);
                     //string sql = "SELECT No FROM Port_Emp WHERE NikeName='" + userNo + "'";
                     string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
@@ -248,7 +273,7 @@ namespace BP.WF.HttpHandler
 
             StringBuilder append = new StringBuilder();
             append.Append("{");
-            string userPath =  BP.Difference.SystemConfig.PathOfWebApp + "DataUser/UserIcon/";
+            string userPath = SystemConfig.PathOfWebApp + "DataUser/UserIcon/";
             string userIcon = userPath + BP.Web.WebUser.No + "Biger.png";
             if (System.IO.File.Exists(userIcon))
             {
@@ -275,8 +300,8 @@ namespace BP.WF.HttpHandler
             ht.Add("UserName", BP.Web.WebUser.Name);
 
             //系统名称.
-            ht.Add("SysName", BP.Difference.SystemConfig.SysName);
-            ht.Add("CustomerName", BP.Difference.SystemConfig.CustomerName);
+            ht.Add("SysName", SystemConfig.SysName);
+            ht.Add("CustomerName", SystemConfig.CustomerName);
 
             ht.Add("Todolist_EmpWorks", BP.WF.Dev2Interface.Todolist_EmpWorks);
             ht.Add("Todolist_Runing", BP.WF.Dev2Interface.Todolist_Runing);
@@ -298,7 +323,7 @@ namespace BP.WF.HttpHandler
         public string Home_Init_WorkCount()
         {
             Paras ps = new Paras();
-            ps.SQL = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num, FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Emps%' GROUP BY TSpan";
+            ps.SQL = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num, FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + SystemConfig.AppCenterDBVarStr + "Emps%' GROUP BY TSpan";
             ps.Add("Emps", WebUser.No);
             //string sql = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num, FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
             DataSet ds = new DataSet();
@@ -308,7 +333,7 @@ namespace BP.WF.HttpHandler
             dt.Columns[0].ColumnName = "TSpan";
             dt.Columns[1].ColumnName = "Num";
 
-            string sql = "SELECT IntKey as No, Lab as Name FROM Sys_Enum WHERE EnumKey='TSpan'";
+            string sql = "SELECT IntKey as No, Lab as Name FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey='TSpan'";
             DataTable dt1 = DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow dr in dt.Rows)
             {
@@ -340,7 +365,31 @@ namespace BP.WF.HttpHandler
         {
             string fk_node = this.GetRequestVal("FK_Node");
             string showWhat = this.GetRequestVal("ShowWhat");
-            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node, showWhat);
+            string orderBy = this.GetRequestVal("OrderBy");
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node, showWhat,null,null, orderBy);
+            dt.Columns.Add("WFStateLabel");
+            foreach (DataRow dr in dt.Rows)
+            {
+                int sta = int.Parse(dr["WFState"].ToString());
+                dr["WFStateLabel"] = "待办";
+                if (sta == 5)
+                {
+                    dr["WFStateLabel"] = "退回";
+                }
+                if (sta == 4)
+                {
+                    string atpara = dr["AtPara"].ToString();
+                    if (atpara.Contains("@HungupSta=2") == true)
+                        dr["WFStateLabel"] = "拒绝挂起";
+                    if (atpara.Contains("@HungupSta=1") == true)
+                        dr["WFStateLabel"] = "同意挂起";
+                    if (atpara.Contains("@HungupSta=0") == true)
+                        dr["WFStateLabel"] = "挂起等待审批";
+                }
+
+            }
+
+
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -453,7 +502,7 @@ namespace BP.WF.HttpHandler
             string sql = "";
 
             string sqlOrgNoWhere = "";
-            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 sqlOrgNoWhere = " AND OrgNo='" + BP.Web.WebUser.OrgNo + "'";
 
             string tSpan = this.GetRequestVal("TSpan");
@@ -521,13 +570,13 @@ namespace BP.WF.HttpHandler
             }
             sqlWhere += "ORDER BY RDT DESC";
 
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6)
                 sql = "SELECT NVL(WorkID, 0) WorkID,NVL(FID, 0) FID ,FK_Flow,FlowName,Title, NVL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,NVL(RDT, '2018-05-04 19:29') RDT,NVL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM (select * from WF_GenerWorkFlow where " + sqlWhere + ") where rownum <= 500";
-            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
+            else if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                 sql = "SELECT  TOP 500 ISNULL(WorkID, 0) WorkID,ISNULL(FID, 0) FID ,FK_Flow,FlowName,Title, ISNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,ISNULL(RDT, '2018-05-04 19:29') RDT,ISNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere;
-            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
+            else if (SystemConfig.AppCenterDBType == DBType.MySQL)
                 sql = "SELECT IFNULL(WorkID, 0) WorkID,IFNULL(FID, 0) FID ,FK_Flow,FlowName,Title, IFNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,IFNULL(RDT, '2018-05-04 19:29') RDT,IFNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere + " LIMIT 500";
-            else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
+            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
                 sql = "SELECT COALESCE(WorkID, 0) WorkID,COALESCE(FID, 0) FID ,FK_Flow,FlowName,Title, COALESCE(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,COALESCE(RDT, '2018-05-04 19:29') RDT,COALESCE(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere + " LIMIT 500";
             DataTable mydt = DBAccess.RunSQLReturnTable(sql);
 
@@ -567,7 +616,7 @@ namespace BP.WF.HttpHandler
             #region 获取track数据.
             string sqlOfWhere2 = "";
             string sqlOfWhere1 = "";
-            string dbStr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
+            string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             if (fid == 0)
             {
@@ -623,7 +672,8 @@ namespace BP.WF.HttpHandler
             }
             qo.Top = 50;
 
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX
+                || SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6)
             {
                 qo.DoQuery();
                 DataTable dt = gwfs.ToDataTableField("Ens");

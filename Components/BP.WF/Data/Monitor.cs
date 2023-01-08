@@ -50,7 +50,7 @@ namespace BP.WF.Data
         /// </summary>
         public const string FK_Node = "FK_Node";
         /// <summary>
-        /// 当前工作岗位
+        /// 当前工作角色
         /// </summary>
         public const string FK_Station = "FK_Station";
         /// <summary>
@@ -689,9 +689,9 @@ namespace BP.WF.Data
                 map.AddSearchAttr(MonitorAttr.FK_Flow);
 
                 ////增加隐藏的查询条件.
-                //AttrOfSearch search = new AttrOfSearch(MonitorAttr.WorkerDept, "部门",
+                //SearchNormal search = new SearchNormal(MonitorAttr.WorkerDept, "部门",
                 //    MonitorAttr.WorkerDept, "=", BP.Web.WebUser.FK_Dept, 0, true);
-                //map.AttrsOfSearch.Add(search);
+                //map.SearchNormals.Add(search);
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "流程轨迹";  

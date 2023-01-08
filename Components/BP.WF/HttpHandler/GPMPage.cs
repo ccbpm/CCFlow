@@ -8,6 +8,7 @@ using System.Collections;
 using BP.Sys;
 using BP.En;
 using BP.Difference;
+using BP.Port;
 
 namespace BP.WF.HttpHandler
 {
@@ -72,7 +73,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@" + ex.Message;
+                return "err@" ;
             }
 
             HttpContextHelper.UploadFile(f, BP.Difference.SystemConfig.PathOfWebApp + "DataUser/Siganture/" + this.FK_Emp + ".jpg");
@@ -91,21 +92,20 @@ namespace BP.WF.HttpHandler
             BP.Port.Depts depts = new BP.Port.Depts();
             string parentNo = this.GetRequestVal("ParentNo");
             QueryObject qo = new QueryObject(depts);
-            if (DataType.IsNullOrEmpty(parentNo) == false)
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
             {
                 if (parentNo.Equals("0") == true)
                 {
                     qo.AddWhere(BP.Port.DeptAttr.ParentNo, parentNo);
                     qo.addOr();
-                    qo.AddWhereInSQL(BP.Port.DeptAttr.ParentNo, "SELECT No From Port_Dept WHERE ParentNo='0'");
+                    qo.AddWhereInSQL(BP.Port.DeptAttr.ParentNo, "SELECT No From Port_Dept Where ParentNo='0'");
                 }
                 else
-                {
                     qo.AddWhere(BP.Port.DeptAttr.ParentNo, parentNo);
-                    //qo.addOr();
-                    //qo.AddWhere(BP.Port.DeptAttr.No, parentNo);
-                }
-
+            }
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc || SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            {
+               qo.AddWhere(BP.Port.DeptAttr.No, WebUser.OrgNo);
             }
             qo.addOrderBy(BP.Port.DeptAttr.Idx);
             qo.DoQuery();
@@ -113,11 +113,24 @@ namespace BP.WF.HttpHandler
             return depts.ToJson();
 
         }
-        /// <summary>
-        /// 获取本部门及人员信息
-        /// </summary>
-        /// <returns></returns>
-        public string DeptEmp_Init()
+
+        public  string Organization_GetDeptsByParentNo()
+        {
+
+            BP.Port.Depts depts = new BP.Port.Depts();
+            QueryObject qo = new QueryObject(depts);
+            String parentNo = GetRequestVal("ParentNo");
+            qo.AddWhere(BP.Port.DeptAttr.ParentNo, parentNo);
+            qo.addOrderBy(BP.Port.DeptAttr.Idx);
+            qo.DoQuery();
+		    return depts.ToJson("dt");
+	    }
+
+    /// <summary>
+    /// 获取本部门及人员信息
+    /// </summary>
+    /// <returns></returns>
+    public string DeptEmp_Init()
         {
 
             BP.Port.Depts depts = new BP.Port.Depts();
@@ -212,6 +225,8 @@ namespace BP.WF.HttpHandler
             switch (DBAccess.AppCenterDBType)
             {
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     int beginIndex = (pageNumber - 1) * pageSize + 1;
                     int endIndex = pageNumber * pageSize;
 
@@ -390,7 +405,7 @@ namespace BP.WF.HttpHandler
         public string GPM_Search()
         {
             var searchKey = this.GetRequestVal("searchKey");
-            var sql = "SELECT e.No AS No,e.Name AS Name,d.Name AS deptName,e.Email AS Email,e.Tel AS Tel from Port_Dept d,Port_Emp e " +
+            var sql = "SELECT e.no AS \"No\",e.name AS \"Name\",d.No AS FK_Dept,d.Name AS deptName,e.Email AS Email,e.Tel AS Tel from Port_Dept d,Port_Emp e " +
                 "where d.No=e.FK_Dept AND (e.No LIKE '%" + searchKey + "%' or e.NAME LIKE '%" + searchKey + "%' or d.Name LIKE '%" + searchKey + "%' or e.Tel LIKE '%" + searchKey + "%')";
             if (DataType.IsNullOrEmpty(WebUser.OrgNo) == false)
                 sql += " AND e.OrgNo='" + WebUser.OrgNo + "'";
@@ -420,7 +435,7 @@ namespace BP.WF.HttpHandler
 
             #region 获得数据源.
             var sheetNameList = BP.DA.DBLoad.GenerTableNames(filePath).ToList();
-            if (sheetNameList.Count < 3 || sheetNameList.Contains("部门$") == false || sheetNameList.Contains("岗位$") == false || sheetNameList.Contains("人员$") == false)
+            if (sheetNameList.Count < 3 || sheetNameList.Contains("部门$") == false || sheetNameList.Contains("角色$") == false || sheetNameList.Contains("人员$") == false)
                 throw new Exception("excel不符合要求");
 
             //获得部门数据.
@@ -433,8 +448,8 @@ namespace BP.WF.HttpHandler
                 dtDept.Columns[i].ColumnName = name;
             }
 
-            //获得岗位数据.
-            DataTable dtStation = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath, sheetNameList.IndexOf("岗位$"));
+            //获得角色数据.
+            DataTable dtStation = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath, sheetNameList.IndexOf("角色$"));
             for (int i = 0; i < dtStation.Columns.Count; i++)
             {
                 string name = dtStation.Columns[i].ColumnName;
@@ -514,7 +529,7 @@ namespace BP.WF.HttpHandler
             }
             #endregion 检查人员帐号是否重复?
 
-            #region 检查岗位名称是否重复?
+            #region 检查角色名称是否重复?
             string staStrs = "";
             foreach (DataRow dr in dtStation.Rows)
             {
@@ -523,12 +538,12 @@ namespace BP.WF.HttpHandler
                     continue;
 
                 if (staStrs.Contains("," + staName + ",") == true)
-                    return "err@岗位名称:" + staName + "重复.";
+                    return "err@角色名称:" + staName + "重复.";
 
                 //加起来..
                 staStrs += "," + staName + ",";
             }
-            #endregion 检查岗位名称是否重复?
+            #endregion 检查角色名称是否重复?
 
             #region 检查人员的部门名称是否存在于部门数据里?
             int idx = 0;
@@ -554,7 +569,7 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     //先看看数据是否有?
-                    Dept dept = new Dept();
+                    BP.Port.Dept dept = new BP.Port.Dept();
                     if (dept.Retrieve("Name", str) == 1)
                         continue;
 
@@ -574,7 +589,7 @@ namespace BP.WF.HttpHandler
             }
             #endregion 检查人员的部门名称是否存在于部门数据里
 
-            #region 检查人员的岗位名称是否存在于岗位数据里?
+            #region 检查人员的角色名称是否存在于角色数据里?
             idx = 0;
             foreach (DataRow dr in dtEmp.Rows)
             {
@@ -584,12 +599,12 @@ namespace BP.WF.HttpHandler
 
                 idx++;
 
-                //岗位名称..
-                string strs = dr["岗位名称"] as string;
+                //角色名称..
+                string strs = dr["角色名称"] as string;
                 if (DataType.IsNullOrEmpty(strs) == true)
                     continue;
 
-                //判断岗位.
+                //判断角色.
                 string[] mystrs = strs.Split(',');
                 foreach (string str in mystrs)
                 {
@@ -612,7 +627,7 @@ namespace BP.WF.HttpHandler
                         }
                     }
                     if (isHave == false)
-                        return "err@第[" + idx + "]行,人员[" + emp + "]岗位名称[" + str + "]，不存在模版里。";
+                        return "err@第[" + idx + "]行,人员[" + emp + "]角色名称[" + str + "]，不存在模版里。";
                 }
             }
             #endregion 检查人员的部门名称是否存在于部门数据里
@@ -661,7 +676,7 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(str) == true)
                     continue;
 
-                if (str.Equals("岗位类型") == true)
+                if (str.Equals("角色类型") == true)
                     continue;
 
                 str = str.Trim();
@@ -689,7 +704,7 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(str) == true)
                     continue;
 
-                if (str.Equals("岗位名称") == true)
+                if (str.Equals("角色名称") == true)
                     continue;
 
 
@@ -697,7 +712,7 @@ namespace BP.WF.HttpHandler
                 string stationTypeName = dr[1].ToString().Trim();
                 BP.Port.StationType st = new BP.Port.StationType();
                 if (st.Retrieve("Name", stationTypeName) == 0)
-                    return "err@系统出现错误,没有找到岗位类型[" + stationTypeName + "]的数据.";
+                    return "err@系统出现错误,没有找到角色类型[" + stationTypeName + "]的数据.";
 
                 //看看数据库是否存在.
                 BP.Port.Station sta = new BP.Port.Station();
@@ -736,7 +751,7 @@ namespace BP.WF.HttpHandler
                 //说明是根目录.
                 if (parentDeptName.Equals("0") == true || parentDeptName.Equals("root") == true)
                 {
-                    Dept root = new Dept();
+                    BP.Port.Dept root = new BP.Port.Dept();
                     root.No = BP.Web.WebUser.FK_Dept;
                     if (root.RetrieveFromDBSources() == 0)
                         return "err@没有找到根目录节点，请联系管理员。";
@@ -748,12 +763,12 @@ namespace BP.WF.HttpHandler
 
 
                 //先求出来父节点.
-              BP.WF.Port.Dept parentDept = new BP.WF.Port.Dept();
+              BP.Port.Dept parentDept = new BP.Port.Dept();
                 int i = parentDept.Retrieve("Name", parentDeptName);
                 if (i == 0)
                     return "err@没有找到当前部门[" + deptName + "]的上一级部门[" + parentDeptName + "]";
 
-                Dept myDept = new Dept();
+                BP.Port.Dept myDept = new BP.Port.Dept();
 
                 //如果数据库存在.
                 i = parentDept.Retrieve("Name", deptName);
@@ -780,7 +795,7 @@ namespace BP.WF.HttpHandler
                 string deptNames = dr["部门名称"].ToString();
                 string deptPaths = dr["部门路径"].ToString();
 
-                string stationNames = dr["岗位名称"].ToString();
+                string stationNames = dr["角色名称"].ToString();
                 string tel = dr["电话"].ToString();
                 string email = dr["邮箱"].ToString();
                 string leader = dr["直属领导"].ToString(); //部门领导.
@@ -797,7 +812,7 @@ namespace BP.WF.HttpHandler
 
                 //找到人员的部门.
                 string[] myDeptStrs = deptNames.Split(',');
-                Dept dept = new Dept();
+                BP.Port.Dept dept = new BP.Port.Dept();
                 foreach (string deptName in myDeptStrs)
                 {
                     if (DataType.IsNullOrEmpty(deptName) == true)
@@ -816,7 +831,7 @@ namespace BP.WF.HttpHandler
                     de.Insert();
                 }
 
-                //插入岗位.
+                //插入角色.
                 string[] staNames = stationNames.Split(',');
               BP.Port.Station sta = new BP.Port.Station();
                 foreach (var staName in staNames)
@@ -826,7 +841,7 @@ namespace BP.WF.HttpHandler
 
                     i = sta.Retrieve("Name", staName);
                     if (i == 0)
-                        return "err@岗位名称不存在." + staName;
+                        return "err@角色名称不存在." + staName;
 
                     BP.Port.DeptEmpStation des = new BP.Port.DeptEmpStation();
                     des.FK_Dept = dept.No;
@@ -859,6 +874,50 @@ namespace BP.WF.HttpHandler
 
             return "执行完成.";
         }
+
+        public string EnpDepts_Init()
+        {
+            String empNo = this.FK_Emp;
+		    if(DataType.IsNullOrEmpty(empNo)==true)
+			    return "err@参数FK_Emp不能为空";
+		    Emp emp = new Emp(empNo);
+            DataSet ds = new DataSet();
+            string dbstr = SystemConfig.AppCenterDBVarStr;
+            //获取当前人员所在的部门及兼职部门
+            string sql = "SELECT B.No AS \'FK_Dept\',B.Name AS \'FK_DeptText\',A.MyPK AS \'MyPK\' From Port_DeptEmp A,Port_Dept B WHERE A.FK_Dept=B.No AND A.FK_Emp=" + dbstr + "FK_Emp";
+		    if(SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+			    sql +=" B.OrgNo='"+WebUser.OrgNo+"'";
+		    Paras ps = new Paras();
+            ps.SQL = sql;
+		    ps.Add("FK_Emp",empNo);
+		    DataTable dt = DBAccess.RunSQLReturnTable(ps);
+		    if(dt.Rows.Count==0){
+			    DeptEmp deptEmp = new DeptEmp();
+                deptEmp.FK_Dept=emp.FK_Dept;
+			    deptEmp.FK_Emp=emp.No;
+			    deptEmp.MyPK=emp.FK_Dept + "_" + emp.No;
+			    deptEmp.Insert();
+			    DataRow dr = dt.NewRow();
+                dr[0]=emp.FK_Dept;
+			    dr[1]=emp.FK_DeptText;
+			    dr[2]=deptEmp.MyPK;
+			    dt.Rows.Add(dr);
+		    }
+            dt.TableName = "Port_DeptEmp";
+		    ds.Tables.Add(dt);
+            ps.Clear();
+		    //获取岗位
+		    sql="SELECT B.No AS \'FK_Station\',B.Name AS \'FK_StationText\' ,A.FK_Dept From Port_DeptEmpStation A,Port_Station B WHERE A.FK_Station=B.No AND A.FK_Emp="+dbstr+"FK_Emp";
+		    if(SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+			    sql +=" B.OrgNo='"+WebUser.OrgNo+"'";
+
+		    ps.SQL = sql;
+		    ps.Add("FK_Emp",empNo);
+		    dt = DBAccess.RunSQLReturnTable(ps);
+		    dt.TableName = "Port_DeptEmpStation";
+		    ds.Tables.Add(dt);
+		    return BP.Tools.Json.ToJson(ds);
+	    }
 
 
     }

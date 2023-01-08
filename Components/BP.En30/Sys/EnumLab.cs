@@ -69,7 +69,15 @@ namespace BP.Sys
         /// <summary>
         /// 按日期时间
         /// </summary>
-        ByDateTime
+        ByDateTime,
+        /// <summary>
+        /// 按照年月
+        /// </summary>
+        ByYearMonth,
+        /// <summary>
+        /// 按照年份
+        /// </summary>
+        ByYear,
     }
     /// <summary>
     /// 表单类型

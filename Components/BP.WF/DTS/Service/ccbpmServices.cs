@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Data;
-using BP.DA ; 
+using BP.DA;
 using System.Net.Mail;
 using BP.En;
-using BP.Port ; 
+using BP.Port;
 using BP.Sys;
 using BP.WF.Template;
 using BP.Web;
@@ -45,6 +45,9 @@ namespace BP.WF.DTS
         /// <returns></returns>
         public override object Do()
         {
+
+            BP.WF.Dev2Interface.Port_Login("admin");
+
             //执行自动任务,机器执行的节点.
             AutoRun_WhoExeIt myen = new AutoRun_WhoExeIt();
             myen.Do();
@@ -97,7 +100,8 @@ namespace BP.WF.DTS
             sql += " AND a.FK_Node=b.NodeID";
             dt = DBAccess.RunSQLReturnTable(sql);
             // 遍历循环,逾期表进行处理.
-            foreach(DataRow dr in dt.Rows){
+            foreach (DataRow dr in dt.Rows)
+            {
                 string fk_flow = dr["FK_Flow"] + "";
                 int fk_node = int.Parse(dr["FK_Node"] + "");
                 long workid = long.Parse(dr["WorkID"] + "");
@@ -183,7 +187,7 @@ namespace BP.WF.DTS
                     }
 
                     //计算当天时间和节点应完成日期的时间差
-                    int hours = DataType.SpanHours(compleateTime,DataType.CurrentDate);
+                    int hours = DataType.SpanHours(compleateTime, DataType.CurrentDate);
                     int noticeHour = 0;
                     if (hours > minHour)//如果小于最新提醒天数则不发消息
                     {
@@ -260,7 +264,7 @@ namespace BP.WF.DTS
                     int minDay = 0;
                     if (count != 0)
                     {
-                        foreach(PushMsg pushMsg in pushMsgs)
+                        foreach (PushMsg pushMsg in pushMsgs)
                         {
                             if (pushMsg.GetParaInt("NoticeType") == 0)
                             {
@@ -312,7 +316,7 @@ namespace BP.WF.DTS
 
                                 //设置默认同意.
                                 BP.WF.Dev2Interface.WriteTrackWorkCheck(jumpToNode.FK_Flow, node.NodeID, workid, 0,
-                                    "同意（预期自动审批）",null, null);
+                                    "同意（预期自动审批）", null, null);
 
                                 //执行发送.
                                 info = BP.WF.Dev2Interface.Node_SendWork(fk_flow, workid, null, null, jumpToNode.NodeID, null).ToMsgOfText();
@@ -335,7 +339,7 @@ namespace BP.WF.DTS
                             Emp empShift = new Emp(doOutTime);
                             try
                             {
-                                BP.WF.Dev2Interface.Node_Shift( workid,   empShift.UserID,
+                                BP.WF.Dev2Interface.Node_Shift(workid, empShift.UserID,
                                     "流程节点已经逾期,系统自动移交");
 
                                 msg = "流程 '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
@@ -371,7 +375,7 @@ namespace BP.WF.DTS
                             }
                             break;
                         case OutTimeDeal.DeleteFlow:
-                            info = BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(  workid, true);
+                            info = BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(workid, true);
                             msg = "流程  '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
                                   "'超时处理规则为'删除流程'," + info;
                             BP.DA.Log.DebugWriteInfo(msg);
@@ -414,7 +418,7 @@ namespace BP.WF.DTS
                                 Emp myemp = new Emp(doOutTime);
 
                                 bool boo = BP.WF.Dev2Interface.WriteToSMS(myemp.UserID, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "系统发送逾期消息",
-                                    "您的流程:'" + title + "'的完成时间应该为'" + compleateTime + "',流程已经逾期,请及时处理!", "系统消息",workid);
+                                    "您的流程:'" + title + "'的完成时间应该为'" + compleateTime + "',流程已经逾期,请及时处理!", "系统消息", workid);
                                 if (boo)
                                     msg = "'" + title + "'逾期消息已经发送给:'" + myemp.Name + "'";
                                 else
@@ -576,17 +580,17 @@ namespace BP.WF.DTS
             SmtpClient client = new SmtpClient();
 
             //邮件地址.
-            string emailAddr =  BP.Difference.SystemConfig.GetValByKey("SendEmailAddress", null);
+            string emailAddr = BP.Difference.SystemConfig.GetValByKey("SendEmailAddress", null);
             if (emailAddr == null)
                 emailAddr = "ccbpmtester@tom.com";
 
-            string emailPassword =  BP.Difference.SystemConfig.GetValByKey("SendEmailPass", null);
+            string emailPassword = BP.Difference.SystemConfig.GetValByKey("SendEmailPass", null);
             if (emailPassword == null)
                 emailPassword = "ccbpm123";
 
             //是否启用ssl? 
             bool isEnableSSL = false;
-            string emailEnableSSL =  BP.Difference.SystemConfig.GetValByKey("SendEmailEnableSsl", null);
+            string emailEnableSSL = BP.Difference.SystemConfig.GetValByKey("SendEmailEnableSsl", null);
             if (emailEnableSSL == null || emailEnableSSL == "0")
                 isEnableSSL = false;
             else
@@ -595,11 +599,11 @@ namespace BP.WF.DTS
             client.Credentials = new System.Net.NetworkCredential(emailAddr, emailPassword);
 
             //上述写你的邮箱和密码
-            client.Port =  BP.Difference.SystemConfig.GetValByKeyInt("SendEmailPort", 25); //使用的端口
-            client.Host =  BP.Difference.SystemConfig.GetValByKey("SendEmailHost", "smtp.tom.com");
+            client.Port = BP.Difference.SystemConfig.GetValByKeyInt("SendEmailPort", 25); //使用的端口
+            client.Host = BP.Difference.SystemConfig.GetValByKey("SendEmailHost", "smtp.tom.com");
 
             //是否启用加密,有的邮件服务器发送配置不成功就是因为此参数的错误。
-            client.EnableSsl =  BP.Difference.SystemConfig.GetValByKeyBoolen("SendEmailEnableSsl", isEnableSSL);
+            client.EnableSsl = BP.Difference.SystemConfig.GetValByKeyBoolen("SendEmailEnableSsl", isEnableSSL);
 
             object userState = myEmail;
             try

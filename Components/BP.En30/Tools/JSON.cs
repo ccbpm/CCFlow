@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace BP.Tools
 {
-     
+
     public class Json
     {
         /// <summary>
@@ -25,7 +25,7 @@ namespace BP.Tools
             {
                 strJson = "[" + strJson + "]";
             }
-            strJson = strJson.Replace("\\\\\"","'");
+            strJson = strJson.Replace("\\\\\"", "'");
             DataTable dtt = (DataTable)JsonConvert.DeserializeObject<DataTable>(strJson);
             return dtt;
         }
@@ -67,7 +67,7 @@ namespace BP.Tools
         /// </summary> 
         /// <param name="table">Datatable对象</param> 
         /// <returns>Json字符串</returns> 
-        public static string DataTableToJson(DataTable dt, bool isUpperColumn=true)
+        public static string DataTableToJson(DataTable dt, bool isUpperColumn = true)
         {
             StringBuilder jsonString = new StringBuilder();
             if (dt.Rows.Count == 0)
@@ -95,7 +95,7 @@ namespace BP.Tools
 
                     Type type = dt.Columns[j].DataType;
 
-                    string strValue="";
+                    string strValue = "";
                     if (type == typeof(Single))
                     {
                         object v = drc[i][j];
@@ -119,7 +119,7 @@ namespace BP.Tools
                         strValue = drc[i][j] == null ? "" : drc[i][j].ToString();
                     }
 
-                   
+
                     jsonString.Append("\"" + strKey + "\":");
                     strValue = StringFormat(strValue, type);
                     if (j < dt.Columns.Count - 1)
@@ -282,7 +282,8 @@ namespace BP.Tools
                 }
                 else
                 {
-                    strs += "\"" + key + "\":\"" + ht[key].ToString().Replace("\"", "\\\"") + "\",";
+                    string valText = ht[key].ToString().Replace("\"", "\\\\\"");
+                    strs += "\"" + key + "\":\"" + valText + "\",";
                 }
             }
             strs += "\"EndJSON\":\"0\"";
@@ -325,7 +326,7 @@ namespace BP.Tools
         public static string ToJson(DataTable table)
         {
             // 旧版本...
-           return JsonConvert.SerializeObject(table);
+            return JsonConvert.SerializeObject(table);
         }
         /// <summary>
         /// DataSet转换为Json
@@ -334,7 +335,7 @@ namespace BP.Tools
         /// <returns>Json字符串</returns>
         public static string ToJson(DataSet dataSet)
         {
-            return  JsonConvert.SerializeObject(dataSet);
+            return JsonConvert.SerializeObject(dataSet);
         }
         /// <summary>
         /// String转换为Json
@@ -360,7 +361,8 @@ namespace BP.Tools
         /// </summary>
         /// <param name="jsonStr"></param>
         /// <returns></returns>
-        private static string TranJsonStr(string jsonStr) {
+        private static string TranJsonStr(string jsonStr)
+        {
             string strs = jsonStr;
             strs = strs.Replace("\\", "\\\\");
             strs = strs.Replace("\n", "\\n");
@@ -372,7 +374,8 @@ namespace BP.Tools
             return strs;
         }
     }
-    public static partial class ExtensionsJson {
+    public static partial class ExtensionsJson
+    {
         /// <summary>
         /// 字串反序列化成linq对象
         /// </summary>

@@ -279,8 +279,6 @@ namespace BP.WF
         /// <returns>结果集合</returns>
         public static DataTable DB_GenerEmpWorksOfDataTable( string guestNo, string fk_flow = null)
         {
-            
-
             Paras ps = new Paras();
             string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
             string sql;
@@ -318,10 +316,6 @@ namespace BP.WF
                 sql = "SELECT a.* FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.FK_Flow='" + fk_flow + "'  AND A.WorkID=B.WorkID AND B.FK_Emp='" + WebUser.No + "' AND B.IsEnable=1 AND B.IsPass=1  AND A.GuestNo='" + guestNo + "'";
 
             return DBAccess.RunSQLReturnTable(sql);
-
-            //GenerWorkFlows gwfs = new GenerWorkFlows();
-            //gwfs.RetrieveInSQL(GenerWorkFlowAttr.WorkID, "(" + sql + ")");
-            //return gwfs.ToDataTableField();
         }
         #endregion
 

@@ -309,10 +309,11 @@ namespace BP.WF.Template
                 //map 的基 础信息.
                 map.DepositaryOfEntity = Depositary.Application;
                 map.DepositaryOfMap = Depositary.Application;
-
                 map.IndexField = NodeAttr.FK_Flow;
+                map.IsEnableVer = true; //启动日志.
 
-                #region  基础属性。
+                #region  基本信息
+                map.AddGroupAttr("基本信息");
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 // map.SetHelperUrl(NodeAttr.NodeID, "http://ccbpm.mydoc.io/?v=5404&t=17901");
                 map.SetHelperUrl(NodeAttr.NodeID,
@@ -321,7 +322,6 @@ namespace BP.WF.Template
                 //map.SetHelperAlert(NodeAttr.Step, "它用于节点的排序，正确的设置步骤可以让流程容易读写."); //使用alert的方式显示帮助信息.
                 map.AddTBString(NodeAttr.FK_Flow, null, "流程编号", false, false, 0, 5, 10);
                 map.AddTBString(NodeAttr.FlowName, null, "流程名", false, true, 0, 200, 10);
-
 
                 map.AddTBString(NodeAttr.Name, null, "名称", true, false, 0, 100, 10, false);
                 map.SetHelperAlert(NodeAttr.Name, "修改节点名称时如果节点表单名称为空着节点表单名称和节点名称相同，否则节点名称和节点表单名称可以不相同");
@@ -355,7 +355,12 @@ namespace BP.WF.Template
                 //为铁路局,会签子流程. 增加 
                 map.AddBoolean(NodeAttr.IsSendDraftSubFlow, false, "是否发送草稿子流程?", true, true, true);
                 map.SetHelperAlert(NodeAttr.IsSendDraftSubFlow, "如果有启动的草稿子流程，是否发送它们？"); //增加帮助。
-                //map.AddBoolean(NodeAttr.IsToParentNextNode, false, "子流程运行到该节点时，让父流程自动运行到下一步", true, true, true);
+
+                map.AddBoolean(NodeAttr.IsResetAccepter, false, "可逆节点时重新计算接收人?", true, true, true);
+                map.SetHelperAlert(NodeAttr.IsResetAccepter, "-所谓的可逆节点,Reversible Node, 就是双向箭头节点,可以重复执行的节点."
+                 + "- 当一个节点，被运动了1次 +，它就是可逆节点, 因为它被重复发送了."
+                 + "- 第一次按照接收人规则接收人有a, b, c三个人.如果在发送回来, 需要重新计算接收人就true,"
+                 + "不需要重新计算接受人, 把当事人做为接收人就是 false."); //增加帮助。
 
                 map.AddBoolean(NodeAttr.IsGuestNode, false,
                     "是否是外部用户执行的节点(非组织结构人员参与处理工作的节点)?", true, true, true,
@@ -363,20 +368,11 @@ namespace BP.WF.Template
 
                 map.AddBoolean(NodeAttr.IsYouLiTai, false, "该节点是否是游离态", true, true);
                 map.SetHelperUrl(NodeAttr.IsYouLiTai, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3653664&doc_id=31094");
-                //  map.SetHelperAlert(NodeAttr.IsYouLiTai, "当节点为游离状态的时候，只有连接的节点是固定节点才可以往下运行，否则流程结束");
-
-                //map.AddTBDateTime("DTFrom", "生命周期从", true, true);
-                //map.AddTBDateTime("DTTo", "生命周期到", true, true);
-
-                //map.AddBoolean(NodeAttr.IsBUnit, false, "是否是节点模版（业务单元）?", true, true, true,
-                //    "http://ccbpm.mydoc.io/?v=5404&t=17904");
-
                 map.AddTBString(NodeAttr.FocusField, null, "焦点字段", true, false, 0, 50, 10, true,
                     "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3653665&doc_id=31094");
 
-
                 //节点业务类型.
-                map.AddTBInt("NodeAppType", 0, "节点业务类型", false, false);
+                // map.AddTBInt("NodeAppType", 0, "节点业务类型", false, false);
                 map.AddTBInt("FWCSta", 0, "节点状态", false, false);
                 map.AddTBInt("FWCAth", 0, "审核附件是否启用", false, false);
 
@@ -393,24 +389,14 @@ namespace BP.WF.Template
                     "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3653667&doc_id=31094");
                 #endregion  基础属性
 
-                #region 分合流子线程属性
+                #region 运行模式
+                map.AddGroupAttr("运行模式");
                 map.AddDDLSysEnum(NodeAttr.RunModel, 0, "节点类型",
-                    true, false, NodeAttr.RunModel, "@0=普通@1=合流@2=分流@3=分合流@4=子线程");
+                    true, false, NodeAttr.RunModel, "@0=普通@1=合流@2=分流@3=分合流@4=同表单子线程@5=异表单子线程");
                 map.SetHelperUrl(NodeAttr.RunModel, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661853&doc_id=31094"); //增加帮助.
-
-                //子线程类型.
-                map.AddDDLSysEnum(NodeAttr.SubThreadType, 0, "子线程类型", true, false, NodeAttr.SubThreadType, "@0=同表单@1=异表单");
-                map.SetHelperUrl(NodeAttr.SubThreadType, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661855&doc_id=31094"); //增加帮助
 
                 map.AddTBDecimal(NodeAttr.PassRate, 100, "完成通过率", true, false);
                 map.SetHelperUrl(NodeAttr.PassRate, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661856&doc_id=31094"); //增加帮助.
-
-                // 启动子线程参数 2013-01-04
-                map.AddDDLSysEnum(NodeAttr.SubFlowStartWay, (int)SubFlowStartWay.None, "子线程启动方式", true, true,
-                    NodeAttr.SubFlowStartWay, "@0=不启动@1=指定的字段启动@2=按明细表启动");
-                map.AddTBString(NodeAttr.SubFlowStartParas, null, "启动参数", true, false, 0, 100, 10, true);
-                map.SetHelperUrl(NodeAttr.SubFlowStartWay, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661859&doc_id=31094"); //增加帮助
-
 
                 //增加对退回到合流节点的 子线城的处理控制.
                 map.AddBoolean(BtnAttr.ThreadIsCanDel, true, "是否可以删除子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效，在子线程退回后的操作)？", true, true, true);
@@ -418,36 +404,20 @@ namespace BP.WF.Template
 
                 map.AddBoolean(BtnAttr.ThreadIsCanShift, false, "是否可以移交子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效，在子线程退回后的操作)？", true, true, true);
 
-                ////待办处理模式.
-                //map.AddDDLSysEnum(NodeAttr.TodolistModel, (int)TodolistModel.QiangBan, "多人待办处理模式", true, true, NodeAttr.TodolistModel,
-                //    "@0=抢办模式@1=协作模式@2=队列模式@3=共享模式@4=协作组长模式");
-                //map.SetHelperUrl(NodeAttr.TodolistModel, "http://ccbpm.mydoc.io/?v=5404&t=17947"); //增加帮助.
-                //发送阻塞模式.
-                //map.AddDDLSysEnum(NodeAttr.BlockModel, (int)BlockModel.None, "发送阻塞模式", true, true, NodeAttr.BlockModel,
-                //    "@0=不阻塞@1=当前节点有未完成的子流程时@2=按约定格式阻塞未完成子流程@3=按照SQL阻塞@4=按照表达式阻塞");
-                //map.SetHelperUrl(NodeAttr.BlockModel, "http://ccbpm.mydoc.io/?v=5404&t=17948"); //增加帮助.
-                //map.AddTBString(NodeAttr.BlockExp, null, "阻塞表达式", true, false, 0, 700, 10,true);
-                //map.SetHelperUrl(NodeAttr.BlockExp, "http://ccbpm.mydoc.io/?v=5404&t=17948");
-                //map.AddTBString(NodeAttr.BlockAlert, null, "被阻塞时提示信息", true, false, 0, 700, 10, true);
-                //map.SetHelperUrl(NodeAttr.BlockAlert, "http://ccbpm.mydoc.io/?v=5404&t=17948");
-
-              //  map.AddBoolean(NodeAttr.USSWorkIDRole, false, "是否允许子线程接受人员重复(仅当分流点向子线程发送时有效)?", true, true, true);
                 map.AddDDLSysEnum(NodeAttr.USSWorkIDRole, 0, "异表单子线程WorkID生成规则", true, true, NodeAttr.USSWorkIDRole,
                     "@0=仅生成一个WorkID@1=按接受人生成WorkID");
                 map.SetHelperAlert(NodeAttr.USSWorkIDRole, "对上一个节点是合流节点，当前节点是异表单子线程有效.");
 
-
-                map.AddBoolean(NodeAttr.AutoRunEnable, false, "是否启用自动运行？(仅当分流点向子线程发送时有效)", true, true, true);
-                map.AddTBString(NodeAttr.AutoRunParas, null, "自动运行SQL", true, false, 0, 100, 10, true);
+                //map.AddBoolean(NodeAttr.AutoRunEnable, false, "是否启用自动运行？(仅当分流点向子线程发送时有效)", true, true, true);
+                //map.AddTBString(NodeAttr.AutoRunParas, null, "自动运行SQL", true, false, 0, 100, 10, true);
 
                 //为广西计算中心加.
                 map.AddBoolean(NodeAttr.IsSendBackNode, false, "是否是发送返回节点(发送当前节点,自动发送给该节点的发送人,发送节点.)?", true, true, true);
                 map.SetHelperUrl(NodeAttr.IsSendBackNode, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661865&doc_id=31094");
-
-
                 #endregion 分合流子线程属性
 
                 #region 自动跳转规则
+                map.AddGroupAttr("跳转规则");
                 map.AddBoolean(NodeAttr.AutoJumpRole0, false, "处理人就是发起人", true, true, true);
                 map.SetHelperUrl(NodeAttr.AutoJumpRole0, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3980077&doc_id=31094"); //增加帮助
 
@@ -455,26 +425,22 @@ namespace BP.WF.Template
                 map.AddBoolean(NodeAttr.AutoJumpRole2, false, "处理人与上一步相同", true, true, true);
                 map.AddBoolean(NodeAttr.WhenNoWorker, false, "(是)找不到人就跳转,(否)提示错误.", true, true, true);
 
-
                 map.AddTBString(NodeAttr.AutoJumpExp, null, "表达式", true, false, 0, 200, 10, true);
                 map.SetHelperAlert(NodeAttr.AutoJumpExp, "可以输入Url或SQL语句，请参考帮助文档。"); //增加帮助
 
-
                 map.AddDDLSysEnum(NodeAttr.SkipTime, 0, "执行跳转事件", true, true, NodeAttr.SkipTime, "@0=上一个节点发送时@1=当前节点工作打开时");
                 map.SetHelperUrl(NodeAttr.SkipTime, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3980077&doc_id=31094"); //增加帮助
-
-                //map.AddDDLSysEnum(NodeAttr.WhenNoWorker, 0, "找不到处理人处理规则",
-                //true, true, NodeAttr.WhenNoWorker, "@0=提示错误@1=自动转到下一步");
                 #endregion
 
-                //最后增加按钮权限..
-                BtnLab lab = new BtnLab();
-                map.AddAttrs(lab.EnMap.Attrs);
 
-                //节点工具栏,主从表映射.
-                map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node,null, DtlEditerModel.DtlBatch);
+                BtnLab lab = new BtnLab();
+                map.AddAttrs(lab.EnMap.Attrs, true);
 
                 #region 基础功能.
+                map.AddGroupMethod("基本信息");
+                //节点工具栏,主从表映射.
+                map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node, null, DtlEditerModel.DtlBatch);
+
                 RefMethod rm = null;
                 rm = new RefMethod();
                 rm.Title = "接收人规则";
@@ -627,13 +593,14 @@ namespace BP.WF.Template
                 #endregion 字段相关功能（不显示在菜单里）
 
                 #region 表单设置.
+                map.AddGroupMethod("表单设置");
+
                 rm = new RefMethod();
                 rm.Title = "表单方案";
                 //rm.Icon = "../../WF/Admin/CCFormDesigner/Img/Form.png";
                 rm.Icon = "icon-present";
                 rm.ClassMethodName = this.ToString() + ".DoSheet";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "表单设置";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -643,36 +610,57 @@ namespace BP.WF.Template
                 //rm.Icon = ../../Img/Mobile.png";
                 rm.ClassMethodName = this.ToString() + ".DoSortingMapAttrs";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "表单设置";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "节点组件";
+                rm.Title = "审核组件";
                 //rm.Icon = "../../WF/Img/Components.png";
                 rm.Icon = "icon-puzzle";
                 //rm.Icon = ../../Img/Mobile.png";
-                rm.ClassMethodName = this.ToString() + ".DoFrmNodeComponent";
+                rm.ClassMethodName = this.ToString() + ".DoFrmNodeWorkCheck";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "表单设置";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "批量处理";
-                //rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                rm.Icon = "icon-calculator";
-
-                rm.ClassMethodName = this.ToString() + ".DoBatchStartFields()";
+                rm.Title = "父子流程组件";
+                //rm.Icon = "../../WF/Img/Components.png";
+                rm.Icon = "icon-puzzle";
+                //rm.Icon = ../../Img/Mobile.png";
+                rm.ClassMethodName = this.ToString() + ".DoFrmSubFlow";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "表单设置";
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "轨迹组件";
+                //rm.Icon = "../../WF/Img/Components.png";
+                rm.Icon = "icon-puzzle";
+                //rm.Icon = ../../Img/Mobile.png";
+                rm.ClassMethodName = this.ToString() + ".DoFrmTrack";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "流转自定义组件";
+                //rm.Icon = "../../WF/Img/Components.png";
+                rm.Icon = "icon-puzzle";
+                //rm.Icon = ../../Img/Mobile.png";
+                rm.ClassMethodName = this.ToString() + ".DoFrmTransferCustom";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "批量处理";
+                rm.Icon = "icon-calculator";
+                rm.ClassMethodName = this.ToString() + ".DoBatchStartFields()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "特别控件特别用户权限";
                 rm.Icon = "../../WF/Admin/CCFormDesigner/Img/SpecUserSpecFields.png";
                 rm.ClassMethodName = this.ToString() + ".DoSpecFieldsSpecUsers()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "表单设置";
                 rm.Icon = "icon-note";
                 map.AddRefMethod(rm);
                 #endregion 表单设置.
@@ -694,20 +682,19 @@ namespace BP.WF.Template
                 #endregion 考核属性.
 
                 #region 父子流程.
+                map.AddGroupMethod("父子流程");
                 rm = new RefMethod();
                 rm.Title = "父子流程表单组件";
                 //rm.Icon = "../../WF/Admin/AttrNode/Img/SubFlows.png";
                 rm.Icon = "icon-settings";
                 rm.ClassMethodName = this.ToString() + ".DoSubFlow";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "父子流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "手动启动子流程"; // "调用事件接口";
                 rm.ClassMethodName = this.ToString() + ".DoSubFlowHand";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "父子流程";
                 rm.Icon = "icon-social-spotify";
                 map.AddRefMethod(rm);
 
@@ -715,7 +702,6 @@ namespace BP.WF.Template
                 rm.Title = "自动触发子流程"; // "调用事件接口";
                 rm.ClassMethodName = this.ToString() + ".DoSubFlowAuto";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "父子流程";
                 //rm.Icon = "icon-layers";
                 rm.Icon = "icon-feed";
                 map.AddRefMethod(rm);
@@ -725,20 +711,19 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoSubFlowYanXu";
                 //  rm.Icon = "../../WF/Img/Event.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "父子流程";
                 //rm.Icon = "icon-layers";
                 rm.Icon = "icon-organization";
                 map.AddRefMethod(rm);
                 #endregion 父子流程.
 
                 #region 考核.
+                map.AddGroupMethod("考核规则");
                 rm = new RefMethod();
                 rm.Title = "设置考核规则";
                 //rm.Icon = "../../WF/Admin/CCFormDesigner/Img/CH.png";
                 rm.Icon = "icon-book-open";
                 rm.ClassMethodName = this.ToString() + ".DoCHRole";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "考核规则";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -747,11 +732,11 @@ namespace BP.WF.Template
                 rm.Icon = "icon-clock";
                 rm.ClassMethodName = this.ToString() + ".DoCHOvertimeRole";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "考核规则";
                 map.AddRefMethod(rm);
                 #endregion 考核.
 
                 #region 实验中的功能
+                map.AddGroupMethod("实验中的功能");
                 rm = new RefMethod();
                 rm.Title = "自定义属性(通用)";
                 rm.ClassMethodName = this.ToString() + ".DoSelfParas()";
@@ -761,24 +746,31 @@ namespace BP.WF.Template
                 rm.Icon = "icon-layers";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "自定义属性(自定义)";
-                rm.ClassMethodName = this.ToString() + ".DoNodeAttrExt()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "实验中的功能";
-                rm.Visable = false;
-                rm.Icon = "icon-layers";
-                map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "设置节点类型";
-                //rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
-                rm.Icon = "icon-layers";
-                rm.ClassMethodName = this.ToString() + ".DoNodeAppType()";
+                rm.Title = "版本快照";
+                rm.ClassMethodName = this.ToString() + ".ShowVer";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "实验中的功能";
-                //rm.Visable = false;
                 map.AddRefMethod(rm);
+
+                //rm = new RefMethod();
+                //rm.Title = "自定义属性(自定义)";
+                //rm.ClassMethodName = this.ToString() + ".DoNodeAttrExt()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.GroupName = "实验中的功能";
+                //rm.Visable = false;
+                //rm.Icon = "icon-layers";
+                //map.AddRefMethod(rm);
+
+                //rm = new RefMethod();
+                //rm.Title = "设置节点类型";
+                ////rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
+                //rm.Icon = "icon-layers";
+                //rm.ClassMethodName = this.ToString() + ".DoNodeAppType()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.GroupName = "实验中的功能";
+                ////rm.Visable = false;
+                //map.AddRefMethod(rm);
 
                 if (Glo.CCBPMRunModel != CCBPMRunModel.SAAS)
                 {
@@ -805,7 +797,6 @@ namespace BP.WF.Template
                 rm.Icon = "icon-layers";
                 rm.ClassMethodName = this.ToString() + ".DoNodeAttrs()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "实验中的功能";
                 rm.Visable = false;
                 map.AddRefMethod(rm);
 
@@ -820,7 +811,6 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "抄送人规则";
-                rm.GroupName = "实验中的功能";
                 //rm.Icon = "../../WF/Admin/AttrNode/Img/CC.png";
                 rm.Icon = "icon-people";
                 rm.ClassMethodName = this.ToString() + ".DoCCer";  //要执行的方法名.
@@ -829,7 +819,6 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "设置提示信息";
-                rm.GroupName = "实验中的功能";
                 //     rm.Icon = "../../WF/Admin/AttrNode/Img/CC.png";
                 rm.ClassMethodName = this.ToString() + ".DoHelpRole";  //要执行的方法名.
                 rm.RefAttrKey = BtnAttr.HelpRole; //帮助信息.
@@ -852,7 +841,10 @@ namespace BP.WF.Template
             }
         }
 
-
+        public string ShowVer()
+        {
+            return "/WF/Admin/DataVer/DataVerList.htm?FrmID=" + this.ToString() + "&RefPKVal=" + this.NodeID;
+        }
 
         #region 考核规则.
         /// <summary>
@@ -955,12 +947,36 @@ namespace BP.WF.Template
 
         #region 表单相关.
         /// <summary>
-        /// 节点组件
+        /// 审核组件
         /// </summary>
         /// <returns></returns>
-        public string DoFrmNodeComponent()
+        public string DoFrmNodeWorkCheck()
         {
-            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmNodeComponent&PKVal=" + this.NodeID + "&t=" + DataType.CurrentDateTime;
+            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.NodeWorkCheck&PKVal=" + this.NodeID + "&t=" + DataType.CurrentDateTime;
+        }
+        /// <summary>
+        /// 父子流程组件
+        /// </summary>
+        /// <returns></returns>
+        public string DoFrmSubFlow()
+        {
+            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.SFlow.FrmSubFlow&PKVal=" + this.NodeID + "&t=" + DataType.CurrentDateTime;
+        }
+        /// <summary>
+        /// 轨迹组件
+        /// </summary>
+        /// <returns></returns>
+        public string DoFrmTrack()
+        {
+            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmTrack&PKVal=" + this.NodeID + "&t=" + DataType.CurrentDateTime;
+        }
+        /// <summary>
+        /// 流转自定义
+        /// </summary>
+        /// <returns></returns>
+        public string DoFrmTransferCustom()
+        {
+            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmTransferCustom&PKVal=" + this.NodeID + "&t=" + DataType.CurrentDateTime;
         }
         /// <summary>
         /// 特别用户特殊字段权限.
@@ -1122,7 +1138,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCCRole()
         {
-            return "../../Comm/En.htm?EnName=BP.WF.Template.CC&PKVal=" + this.NodeID + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Comm/En.htm?EnName=BP.WF.Template.CCEn.CC&PKVal=" + this.NodeID + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 个性化接受人窗口
@@ -1240,7 +1256,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string SaveHelpAlert(string text)
         {
-            string file =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HelpAlert/" + this.NodeID + ".htm";
+            string file = BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HelpAlert/" + this.NodeID + ".htm";
             string folder = System.IO.Path.GetDirectoryName(file);
             //若文件夹不存在，则创建
             if (System.IO.Directory.Exists(folder) == false)
@@ -1256,7 +1272,7 @@ namespace BP.WF.Template
         public string ReadHelpAlert()
         {
             string doc = "";
-            string file =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HelpAlert/" + this.NodeID + ".htm";
+            string file = BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HelpAlert/" + this.NodeID + ".htm";
             string folder = System.IO.Path.GetDirectoryName(file);
             if (System.IO.Directory.Exists(folder) != false)
             {
@@ -1317,7 +1333,7 @@ namespace BP.WF.Template
             {
                 /*如果是合流点*/
             }
-            
+
             //如果启动了会签,并且是抢办模式,强制设置为队列模式.或者组长模式.
             if (this.HuiQianRole != WF.HuiQianRole.None)
             {
@@ -1394,7 +1410,7 @@ namespace BP.WF.Template
                     workCheckAth.IsVisable = false; // 让其在form 上不可见.
 
                     //位置.
-                
+
                     workCheckAth.H = (float)150;
 
                     //多附件.
@@ -1436,7 +1452,7 @@ namespace BP.WF.Template
             }
 
             //清除所有的缓存.
-            CashEntity.DCash.Clear();
+            Cash.ClearCash(this.ToString());
 
             return base.beforeUpdate();
         }

@@ -9,13 +9,6 @@ namespace BP.WF.Data.AdminGroup
     /// <summary>
     /// 流程实例
     /// </summary>
-    public class GenerWorkFlowViewAttr : BP.WF.Data.GenerWorkFlowViewAttr
-    {
-
-    }
-    /// <summary>
-    /// 流程实例
-    /// </summary>
     public class GenerWorkFlowView : Entity
     {
         #region 基本属性
@@ -26,7 +19,7 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return GenerWorkFlowViewAttr.WorkID;
+                return GenerWorkFlowAttr.WorkID;
             }
         }
         /// <summary>
@@ -36,11 +29,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.FlowNote);
+                return this.GetValStrByKey(GenerWorkFlowAttr.FlowNote);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.FlowNote, value);
+                SetValByKey(GenerWorkFlowAttr.FlowNote, value);
             }
         }
         /// <summary>
@@ -50,11 +43,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.FK_Flow);
+                return this.GetValStrByKey(GenerWorkFlowAttr.FK_Flow);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.FK_Flow, value);
+                SetValByKey(GenerWorkFlowAttr.FK_Flow, value);
             }
         }
         /// <summary>
@@ -64,11 +57,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.BillNo);
+                return this.GetValStrByKey(GenerWorkFlowAttr.BillNo);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.BillNo, value);
+                SetValByKey(GenerWorkFlowAttr.BillNo, value);
             }
         }
         /// <summary>
@@ -78,11 +71,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.FlowName);
+                return this.GetValStrByKey(GenerWorkFlowAttr.FlowName);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.FlowName, value);
+                SetValByKey(GenerWorkFlowAttr.FlowName, value);
             }
         }
         /// <summary>
@@ -92,11 +85,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValIntByKey(GenerWorkFlowViewAttr.PRI);
+                return this.GetValIntByKey(GenerWorkFlowAttr.PRI);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.PRI, value);
+                SetValByKey(GenerWorkFlowAttr.PRI, value);
             }
         }
         /// <summary>
@@ -106,11 +99,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValIntByKey(GenerWorkFlowViewAttr.TodoEmpsNum);
+                return this.GetValIntByKey(GenerWorkFlowAttr.TodoEmpsNum);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.TodoEmpsNum, value);
+                SetValByKey(GenerWorkFlowAttr.TodoEmpsNum, value);
             }
         }
         /// <summary>
@@ -120,11 +113,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.TodoEmps);
+                return this.GetValStrByKey(GenerWorkFlowAttr.TodoEmps);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.TodoEmps, value);
+                SetValByKey(GenerWorkFlowAttr.TodoEmps, value);
             }
         }
         /// <summary>
@@ -134,11 +127,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.Emps);
+                return this.GetValStrByKey(GenerWorkFlowAttr.Emps);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.Emps, value);
+                SetValByKey(GenerWorkFlowAttr.Emps, value);
             }
         }
         /// <summary>
@@ -148,11 +141,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return (TaskSta)this.GetValIntByKey(GenerWorkFlowViewAttr.TaskSta);
+                return (TaskSta)this.GetValIntByKey(GenerWorkFlowAttr.TaskSta);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.TaskSta, (int)value);
+                SetValByKey(GenerWorkFlowAttr.TaskSta, (int)value);
             }
         }
         /// <summary>
@@ -162,11 +155,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.FK_FlowSort);
+                return this.GetValStrByKey(GenerWorkFlowAttr.FK_FlowSort);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.FK_FlowSort, value);
+                SetValByKey(GenerWorkFlowAttr.FK_FlowSort, value);
             }
         }
         /// <summary>
@@ -176,11 +169,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.FK_Dept);
+                return this.GetValStrByKey(GenerWorkFlowAttr.FK_Dept);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.FK_Dept, value);
+                SetValByKey(GenerWorkFlowAttr.FK_Dept, value);
             }
         }
         /// <summary>
@@ -190,11 +183,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.Title);
+                return this.GetValStrByKey(GenerWorkFlowAttr.Title);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.Title, value);
+                SetValByKey(GenerWorkFlowAttr.Title, value);
             }
         }
         /// <summary>
@@ -204,11 +197,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.GuestNo);
+                return this.GetValStrByKey(GenerWorkFlowAttr.GuestNo);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.GuestNo, value);
+                SetValByKey(GenerWorkFlowAttr.GuestNo, value);
             }
         }
         /// <summary>
@@ -218,11 +211,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.GuestName);
+                return this.GetValStrByKey(GenerWorkFlowAttr.GuestName);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.GuestName, value);
+                SetValByKey(GenerWorkFlowAttr.GuestName, value);
             }
         }
         /// <summary>
@@ -232,11 +225,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.RDT);
+                return this.GetValStrByKey(GenerWorkFlowAttr.RDT);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.RDT, value);
+                SetValByKey(GenerWorkFlowAttr.RDT, value);
             }
         }
         /// <summary>
@@ -246,11 +239,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.SDTOfNode);
+                return this.GetValStrByKey(GenerWorkFlowAttr.SDTOfNode);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.SDTOfNode, value);
+                SetValByKey(GenerWorkFlowAttr.SDTOfNode, value);
             }
         }
         /// <summary>
@@ -260,11 +253,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.SDTOfFlow);
+                return this.GetValStrByKey(GenerWorkFlowAttr.SDTOfFlow);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.SDTOfFlow, value);
+                SetValByKey(GenerWorkFlowAttr.SDTOfFlow, value);
             }
         }
         /// <summary>
@@ -274,11 +267,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValInt64ByKey(GenerWorkFlowViewAttr.WorkID);
+                return this.GetValInt64ByKey(GenerWorkFlowAttr.WorkID);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.WorkID, value);
+                SetValByKey(GenerWorkFlowAttr.WorkID, value);
             }
         }
         /// <summary>
@@ -288,11 +281,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValInt64ByKey(GenerWorkFlowViewAttr.FID);
+                return this.GetValInt64ByKey(GenerWorkFlowAttr.FID);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.FID, value);
+                SetValByKey(GenerWorkFlowAttr.FID, value);
             }
         }
         /// <summary>
@@ -302,11 +295,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValInt64ByKey(GenerWorkFlowViewAttr.PWorkID);
+                return this.GetValInt64ByKey(GenerWorkFlowAttr.PWorkID);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.PWorkID, value);
+                SetValByKey(GenerWorkFlowAttr.PWorkID, value);
             }
         }
         /// <summary>
@@ -316,11 +309,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValIntByKey(GenerWorkFlowViewAttr.PNodeID);
+                return this.GetValIntByKey(GenerWorkFlowAttr.PNodeID);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.PNodeID, value);
+                SetValByKey(GenerWorkFlowAttr.PNodeID, value);
             }
         }
         /// <summary>
@@ -330,11 +323,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.PFlowNo);
+                return this.GetValStrByKey(GenerWorkFlowAttr.PFlowNo);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.PFlowNo, value);
+                SetValByKey(GenerWorkFlowAttr.PFlowNo, value);
             }
         }
         /// <summary>
@@ -344,11 +337,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.PEmp);
+                return this.GetValStrByKey(GenerWorkFlowAttr.PEmp);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.PEmp, value);
+                SetValByKey(GenerWorkFlowAttr.PEmp, value);
             }
         }
         /// <summary>
@@ -358,11 +351,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.Starter);
+                return this.GetValStrByKey(GenerWorkFlowAttr.Starter);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.Starter, value);
+                SetValByKey(GenerWorkFlowAttr.Starter, value);
             }
         }
         /// <summary>
@@ -372,11 +365,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.StarterName);
+                return this.GetValStrByKey(GenerWorkFlowAttr.StarterName);
             }
             set
             {
-                this.SetValByKey(GenerWorkFlowViewAttr.StarterName, value);
+                this.SetValByKey(GenerWorkFlowAttr.StarterName, value);
             }
         }
         /// <summary>
@@ -386,11 +379,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.DeptName);
+                return this.GetValStrByKey(GenerWorkFlowAttr.DeptName);
             }
             set
             {
-                this.SetValByKey(GenerWorkFlowViewAttr.DeptName, value);
+                this.SetValByKey(GenerWorkFlowAttr.DeptName, value);
             }
         }
         /// <summary>
@@ -400,11 +393,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.NodeName);
+                return this.GetValStrByKey(GenerWorkFlowAttr.NodeName);
             }
             set
             {
-                this.SetValByKey(GenerWorkFlowViewAttr.NodeName, value);
+                this.SetValByKey(GenerWorkFlowAttr.NodeName, value);
             }
         }
         /// <summary>
@@ -414,11 +407,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValIntByKey(GenerWorkFlowViewAttr.FK_Node);
+                return this.GetValIntByKey(GenerWorkFlowAttr.FK_Node);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.FK_Node, value);
+                SetValByKey(GenerWorkFlowAttr.FK_Node, value);
             }
         }
         /// <summary>
@@ -428,18 +421,18 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return (WFState)this.GetValIntByKey(GenerWorkFlowViewAttr.WFState);
+                return (WFState)this.GetValIntByKey(GenerWorkFlowAttr.WFState);
             }
             set
             {
                 if (value == WF.WFState.Complete)
-                    SetValByKey(GenerWorkFlowViewAttr.WFSta, (int)WFSta.Complete);
+                    SetValByKey(GenerWorkFlowAttr.WFSta, (int)WFSta.Complete);
                 else if (value == WF.WFState.Delete)
-                    SetValByKey(GenerWorkFlowViewAttr.WFSta, (int)WFSta.Etc);
+                    SetValByKey(GenerWorkFlowAttr.WFSta, (int)WFSta.Etc);
                 else
-                    SetValByKey(GenerWorkFlowViewAttr.WFSta, (int)WFSta.Runing);
+                    SetValByKey(GenerWorkFlowAttr.WFSta, (int)WFSta.Runing);
 
-                SetValByKey(GenerWorkFlowViewAttr.WFState, (int)value);
+                SetValByKey(GenerWorkFlowAttr.WFState, (int)value);
             }
         }
         /// <summary>
@@ -449,11 +442,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return (WFSta)this.GetValIntByKey(GenerWorkFlowViewAttr.WFSta);
+                return (WFSta)this.GetValIntByKey(GenerWorkFlowAttr.WFSta);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.WFSta, (int)value);
+                SetValByKey(GenerWorkFlowAttr.WFSta, (int)value);
             }
         }
         public string WFStateText
@@ -487,11 +480,11 @@ namespace BP.WF.Data.AdminGroup
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkFlowViewAttr.GUID);
+                return this.GetValStrByKey(GenerWorkFlowAttr.GUID);
             }
             set
             {
-                SetValByKey(GenerWorkFlowViewAttr.GUID, value);
+                SetValByKey(GenerWorkFlowAttr.GUID, value);
             }
         }
         #endregion
@@ -554,7 +547,7 @@ namespace BP.WF.Data.AdminGroup
         public GenerWorkFlowView(Int64 workId)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(GenerWorkFlowViewAttr.WorkID, workId);
+            qo.AddWhere(GenerWorkFlowAttr.WorkID, workId);
             if (qo.DoQuery() == 0)
                 throw new Exception("工作 GenerWorkFlowView [" + workId + "]不存在。");
         }
@@ -571,26 +564,26 @@ namespace BP.WF.Data.AdminGroup
 
                 Map map = new Map("WF_GenerWorkFlow", "流程查询");
 
-                map.AddTBIntPK(GenerWorkFlowViewAttr.WorkID, 0, "WorkID", true, true);
-                map.AddTBString(GenerWorkFlowViewAttr.StarterName, null, "发起人", true, true, 0, 30, 10);
-                map.AddTBString(GenerWorkFlowViewAttr.Title, null, "标题", true, true, 0, 300, 10, true);
+                map.AddTBIntPK(GenerWorkFlowAttr.WorkID, 0, "WorkID", true, true);
+                map.AddTBString(GenerWorkFlowAttr.StarterName, null, "发起人", true, true, 0, 30, 10);
+                map.AddTBString(GenerWorkFlowAttr.Title, null, "标题", true, true, 0, 300, 10, true);
 
-                map.AddDDLSysEnum(GenerWorkFlowViewAttr.WFSta, 0, "流程状态", true, false,GenerWorkFlowViewAttr.WFSta,
+                map.AddDDLSysEnum(GenerWorkFlowAttr.WFSta, 0, "流程状态", true, false,GenerWorkFlowAttr.WFSta,
                     "@0=运行中@1=已完成@2=其他");
 
-                map.AddTBString(GenerWorkFlowViewAttr.NodeName, null, "当前节点", true, true, 0, 100, 10);
-                map.AddTBDateTime(GenerWorkFlowViewAttr.RDT, "发起日期", true, true);
-                map.AddTBString(GenerWorkFlowViewAttr.BillNo, null, "单据编号", true, true, 0, 100, 10);
-                map.AddTBString(GenerWorkFlowViewAttr.FlowName, null, "流程名", true, true, 0, 100, 10, true);
+                map.AddTBString(GenerWorkFlowAttr.NodeName, null, "当前节点", true, true, 0, 100, 10);
+                map.AddTBDateTime(GenerWorkFlowAttr.RDT, "发起日期", true, true);
+                map.AddTBString(GenerWorkFlowAttr.BillNo, null, "单据编号", true, true, 0, 100, 10);
+                map.AddTBString(GenerWorkFlowAttr.FlowName, null, "流程名", true, true, 0, 100, 10, true);
 
                 map.AddDDLEntities("OrgNo", null, "组织", new BP.WF.Port.AdminGroup.Orgs(), false);
-                map.AddTBString(GenerWorkFlowViewAttr.FK_NY, null, "发起月份", true, true, 0, 100, 10);
+                map.AddTBString(GenerWorkFlowAttr.FK_NY, null, "发起月份", true, true, 0, 100, 10);
 
 
-                map.AddSearchAttr(GenerWorkFlowViewAttr.WFSta);
-                map.DTSearchKey = GenerWorkFlowViewAttr.RDT;
+                map.AddSearchAttr(GenerWorkFlowAttr.WFSta);
+                map.DTSearchKey = GenerWorkFlowAttr.RDT;
                 map.DTSearchWay = DTSearchWay.ByDate;
-                map.DTSearchLable = "发起日期";
+                map.DTSearchLabel = "发起日期";
                   
 
                 //把不等于 0 的去掉.

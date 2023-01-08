@@ -496,7 +496,8 @@ namespace BP.En
         #region 其他
 
         #region 获取 en
-        private static Hashtable Htable_En;
+        public static Hashtable Htable_En;
+
         /// <summary>
         /// 得到一个实体
         /// </summary>
@@ -512,6 +513,8 @@ namespace BP.En
                 else
                     return new GEEntity(className); //表单实体.
             }
+
+            return GetObject_OK(className) as Entity;
 
             if (Htable_En == null)
             {
@@ -541,6 +544,8 @@ namespace BP.En
             if (tmp != null)
                 tmp.Row = null;
             return tmp;
+
+
         }
         #endregion
 
@@ -580,6 +585,22 @@ namespace BP.En
             {
                 GEEntitys myens = new GEEntitys(className);
                 return myens;
+            }
+
+            if (className.IndexOf("TS.") == 0)
+            {
+                Map map = BP.EnTS.Glo.GenerMap(className);
+
+                if (map.Attrs.Contains("No"))
+                    return new TSEntitiesNoName(className);
+                if (map.Attrs.Contains("MyPK"))
+                    return new TSEntitiesMyPK(className);
+                if (map.Attrs.Contains("WorkID"))
+                    return new TSEntitiesWorkID(className);
+                if (map.Attrs.Contains("NodeID"))
+                    return new TSEntitiesNodeID(className);
+
+                throw new Exception("err@没有判断的类型.");
             }
 
             if (Htable_Ens == null || Htable_Ens.Count == 0)

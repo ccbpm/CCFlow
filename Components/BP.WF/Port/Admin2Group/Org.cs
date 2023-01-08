@@ -1,6 +1,8 @@
 ﻿using BP.DA;
 using BP.En;
 using BP.Web;
+using BP.WF.Template;
+using System.Data;
 
 namespace BP.WF.Port.Admin2Group
 {
@@ -36,35 +38,6 @@ namespace BP.WF.Port.Admin2Group
     public class Org : EntityNoName
     {
         #region 属性
-
-        /// <summary>
-        /// 父级组织编号
-        /// </summary>
-        public string ParentNo
-        {
-            get
-            {
-                return this.GetValStrByKey(OrgAttr.ParentNo);
-            }
-            set
-            {
-                this.SetValByKey(OrgAttr.ParentNo, value);
-            }
-        }
-        /// <summary>
-        /// 父级组织名称
-        /// </summary>
-        public string ParentName
-        {
-            get
-            {
-                return this.GetValStrByKey(OrgAttr.ParentName);
-            }
-            set
-            {
-                this.SetValByKey(OrgAttr.ParentName, value);
-            }
-        }
         /// <summary>
         /// 父节点编号
         /// </summary>
@@ -148,51 +121,57 @@ namespace BP.WF.Port.Admin2Group
 
                 map.AddTBInt("GWFS", 0, "运行中流程", true, true);
                 map.AddTBInt("GWFSOver", 0, "结束的流程", true, true);
-
-                map.AddTBInt(OrgAttr.Idx, 0, "排序", true, false);
+                map.AddTBInt(OrgAttr.Idx, 0, "排序", false, false);
 
                 RefMethod rm = new RefMethod();
+
+                //rm = new RefMethod();
+                //rm.Title = "组织结构";
+                //rm.ClassMethodName = this.ToString() + ".DoOrganization";
+                //rm.Icon = "icon-organization";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
+
+                //rm = new RefMethod();
+                //rm.Title = "人员台账";
+                //rm.ClassMethodName = this.ToString() + ".DoEmps";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
+
+
+                //rm = new RefMethod();
+                //rm.Title = "角色类型";
+                //rm.ClassMethodName = this.ToString() + ".DoStationTypes";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
+
+                //rm = new RefMethod();
+                //rm.Title = "角色";
+                //rm.ClassMethodName = this.ToString() + ".DoStations";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
+
+                //rm = new RefMethod();
+                //rm.Title = "清空菜单权限缓存";
+                //rm.ClassMethodName = this.ToString() + ".AddClearUserRegedit";
+                //rm.RefMethodType = RefMethodType.Func;
+                //map.AddRefMethod(rm);
+
+                rm = new RefMethod();
                 rm.Title = "检查正确性";
                 rm.ClassMethodName = this.ToString() + ".DoCheck";
+                rm.Icon = "icon-check";
                 //rm.HisAttrs.AddTBString("No", null, "子公司管理员编号", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "增加管理员";
+                rm.Icon = "icon-user";
                 rm.ClassMethodName = this.ToString() + ".AddAdminer";
                 rm.HisAttrs.AddTBString("adminer", null, "管理员编号", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
-
-                //rm = new RefMethod();
-                //rm.Title = "取消独立组织";
-                //rm.ClassMethodName = this.ToString() + ".DeleteOrg";
-                //rm.Warning = "您确定要取消独立组织吗？系统将要删除该组织以及该组织的管理员，但是不删除部门数据.";
-                //map.AddRefMethod(rm);
-
-                ////只有admin管理员,才能增加二级管理员.
-                //if (BP.Web.WebUser.No != null && BP.Web.WebUser.No.Equals("admin") == true)
-                //{
-                //    //节点绑定人员. 使用树杆与叶子的模式绑定.
-                //    map.AttrsOfOneVSM.AddBranchesAndLeaf(new OrgAdminers(),
-                //        new BP.Port.Emps(),
-                //       OrgAdminerAttr.OrgNo,
-                //       OrgAdminerAttr.FK_Emp,
-                //       "管理员", EmpAttr.FK_Dept, EmpAttr.Name,
-                //       EmpAttr.No, BP.Web.WebUser.OrgNo);
-                //}
-
-                rm = new RefMethod();
-                rm.Title = "发布菜单权限";
-                rm.ClassMethodName = this.ToString() + ".AddClearUserRegedit";
-                rm.RefMethodType = RefMethodType.Func;
-                map.AddRefMethod(rm);
-
-                //rm = new RefMethod();
-                //rm.Title = "设置二级管理员";
-                //rm.Warning = "设置为子公司后，系统就会在流程树上分配一个目录节点.";
-                //rm.ClassMethodName = this.ToString() + ".SetSubOrg";
-                //rm.HisAttrs.AddTBString("No", null, "子公司管理员编号", true, false, 0, 100, 100);
-                //map.AddRefMethod(rm);
+                //管理员.
+                map.AddDtl(new OrgAdminers(), OrgAdminerAttr.OrgNo, null, DtlEditerModel.DtlSearch, "icon-people");
 
                 this._enMap = map;
                 return this._enMap;
@@ -200,38 +179,45 @@ namespace BP.WF.Port.Admin2Group
         }
         #endregion
 
+        public string DoOrganization()
+        {
+            return "/GPM/Organization.htm";
+        }
+        public string DoEmps()
+        {
+            return "/WF/Comm/Search.htm?EnsName=BP.Port.Emps";
+        }
+
+        public string DoStationTypes()
+        {
+            return "/WF/Comm/Ens.htm?EnsName=BP.Port.StationTypes";
+        }
+        public string DoStations()
+        {
+            return "/WF/Comm/Search.htm?EnsName=BP.Port.Stations";
+        }
+
         /// <summary>
         /// 清除缓存
         /// </summary>
         /// <returns></returns>
         public string AddClearUserRegedit()
         {
-            DBAccess.RunSQL("DELETE FROM Sys_UserRegedit WHERE OrgNo='" + WebUser.OrgNo + "' AND CfgKey='Menus'");
+            DBAccess.RunSQL("DELETE FROM Sys_UserRegedit WHERE OrgNo='" + this.No + "' AND CfgKey='Menus'");
             return "执行成功.";
         }
 
-
         protected override bool beforeUpdateInsertAction()
         {
+            this.SetValByKey("FlowNums", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) AS a FROM WF_Flow WHERE OrgNo='" + this.No + "'"));
+            this.SetValByKey("FrmNums", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) AS a FROM Sys_MapData WHERE OrgNo='" + this.No + "'"));
 
-            this.SetValByKey("FlowNums", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) AS a FROM WF_Flow WHERE OrgNo='" + WebUser.OrgNo + "'"));
-            this.SetValByKey("FrmNums", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) AS a FROM Sys_MapData WHERE OrgNo='" + WebUser.OrgNo + "'"));
-
-            this.SetValByKey("Users", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) AS a FROM Port_Emp WHERE OrgNo='" + WebUser.OrgNo + "'"));
-            this.SetValByKey("Depts", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) AS a FROM Port_Dept WHERE OrgNo='" + WebUser.OrgNo + "'"));
-            this.SetValByKey("GWFS", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) AS a FROM WF_GenerWorkFlow WHERE OrgNo='" + WebUser.OrgNo + "' AND WFState!=3"));
-            this.SetValByKey("GWFSOver", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) AS a FROM WF_GenerWorkFlow WHERE OrgNo='" + WebUser.OrgNo + "' AND WFState=3"));
-
-            //map.AddTBInt("FlowNums", 0, "流程数", true, true);
-            //map.AddTBInt("FrmNums", 0, "表单数", true, true);
-            //map.AddTBInt("Users", 0, "用户数", true, true);
-            //map.AddTBInt("Depts", 0, "部门数", true, true);
-            //map.AddTBInt("GWFS", 0, "运行中流程", true, true);
-            //map.AddTBInt("GWFSOver", 0, "结束的流程", true, true);
-
+            this.SetValByKey("Users", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) AS a FROM Port_Emp WHERE OrgNo='" + this.No + "'"));
+            this.SetValByKey("Depts", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) AS a FROM Port_Dept WHERE OrgNo='" + this.No + "'"));
+            this.SetValByKey("GWFS", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) AS a FROM WF_GenerWorkFlow WHERE OrgNo='" + this.No + "' AND WFState!=3"));
+            this.SetValByKey("GWFSOver", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) AS a FROM WF_GenerWorkFlow WHERE OrgNo='" + this.No + "' AND WFState=3"));
             return base.beforeUpdateInsertAction();
         }
-
 
         public string AddAdminer(string adminer)
         {
@@ -241,21 +227,65 @@ namespace BP.WF.Port.Admin2Group
             if (emp.RetrieveFromDBSources() == 0)
                 return "err@管理员编号错误.";
 
-            if (emp.OrgNo.Equals(BP.Web.WebUser.OrgNo) == false)
-                return "err@您与他不在一个组织。";
-
             //检查超级管理员是否存在？
             OrgAdminer oa = new OrgAdminer();
             oa.FK_Emp = adminer;
             oa.OrgNo = this.No;
+            oa.MyPK = this.No + "_" + oa.FK_Emp;
+            if (oa.RetrieveFromDBSources() == 1)
+                return "err@管理员已经存在.";
+
             oa.Delete(OrgAdminerAttr.FK_Emp, adminer, OrgAdminerAttr.OrgNo, this.No);
 
             //插入到管理员.
             oa.FK_Emp = emp.UserID;
             oa.Save();
 
+            //如果不在同一个组织.就给他一个兼职部门.
+            BP.Port.DeptEmps depts = new BP.Port.DeptEmps();
+            depts.Retrieve("OrgNo", this.No, "FK_Emp", adminer);
+            if (depts.Count == 0)
+            {
+                BP.Port.DeptEmp de = new BP.Port.DeptEmp();
+                de.FK_Dept = this.No;
+                de.FK_Emp = adminer;
+                de.MyPK = this.No + "_" + adminer;
+                de.OrgNo = this.No;
+                de.Save();
+            }
+            
+
             //检查超级管理员是否存在？
-            return "修改成功,请关闭当前记录重新打开,请给管理员，分配权限";
+            return "管理员增加成功,请关闭当前记录重新打开,请给管理员[" + emp.No + "," + emp.Name + "]分配权限";
+        }
+        private void SetOrgNo(string deptNo)
+        {
+            DBAccess.RunSQL("UPDATE Port_Emp SET OrgNo='" + this.No + "' WHERE FK_Dept='" + deptNo + "'");
+            DBAccess.RunSQL("UPDATE Port_DeptEmp SET OrgNo='" + this.No + "' WHERE FK_Dept='" + deptNo + "'");
+            DBAccess.RunSQL("UPDATE Port_DeptEmpStation SET OrgNo='" + this.No + "' WHERE FK_Dept='" + deptNo + "'");
+
+            Depts depts = new Depts();
+            depts.Retrieve(DeptAttr.ParentNo, deptNo);
+            string sql = "";
+            foreach (Dept item in depts)
+            {
+                //如果部门下组织不能检查更新
+                sql = "SELECT COUNT(*) From Port_Org Where No='" + item.No + "'";
+                if (DBAccess.RunSQLReturnValInt(sql) == 1)
+                    continue;
+
+                DBAccess.RunSQL("UPDATE Port_Emp SET OrgNo='" + this.No + "' WHERE FK_Dept='" + item.No + "'");
+                DBAccess.RunSQL("UPDATE Port_DeptEmp SET OrgNo='" + this.No + "' WHERE FK_Dept='" + item.No + "'");
+                DBAccess.RunSQL("UPDATE Port_DeptEmpStation SET OrgNo='" + this.No + "' WHERE FK_Dept='" + item.No + "'");
+
+                if (item.OrgNo.Equals(this.No) == false)
+                {
+                    item.OrgNo = this.No;
+                    item.Update();
+                }
+                //递归调用.
+                SetOrgNo(item.No);
+            }
         }
 
         public string DoCheck()
@@ -274,23 +304,11 @@ namespace BP.WF.Port.Admin2Group
                 this.Name = dept.Name;
                 err += "info@部门名称与组织名称已经同步.";
             }
-
-            Dept deptParent = new Dept();
-            deptParent.No = this.ParentNo;
-            if (deptParent.RetrieveFromDBSources() == 0)
-                return "err@部门组织结构树上父级缺少[" + this.No + "]的部门.";
-
-            if (this.ParentName.Equals(deptParent.Name) == false)
-            {
-                this.ParentName = deptParent.Name;
-                err += "info@父级部门名称与组织名称已经同步.";
-            }
             this.Update(); //执行更新.
 
             //设置子集部门，的OrgNo.
             if (DBAccess.IsView("Port_Dept") == false)
-                SetSubDeptOrgNo(this.No);
-
+                this.SetOrgNo(this.No);
             #endregion 组织结构信息检查.
 
             #region 检查流程树.
@@ -346,87 +364,120 @@ namespace BP.WF.Port.Admin2Group
 
             #region 检查表单树.
             //表单根目录.
-            BP.Sys.FrmTree ftRoot = new Sys.FrmTree();
-            ftRoot.Retrieve(BP.WF.Template.FlowSortAttr.ParentNo, "0");
+            SysFormTree ftRoot = new SysFormTree();
+            int val = ftRoot.Retrieve(BP.WF.Template.FlowSortAttr.ParentNo, "0");
+            if (val == 0)
+            {
+                val = ftRoot.Retrieve(BP.WF.Template.FlowSortAttr.No, "100");
+                if (val == 0)
+                {
+                    ftRoot.No = "100";
+                    ftRoot.Name = "表单库";
+                    ftRoot.ParentNo = "0";
+                    ftRoot.Insert();
+                }
+                else
+                {
+                    ftRoot.ParentNo = "0";
+                    ftRoot.Name = "表单库";
+                    ftRoot.Update();
+                }
+            }
 
             //设置表单树权限.
-            BP.Sys.FrmTree ft = new Sys.FrmTree();
+            SysFormTree ft = new SysFormTree();
             ft.No = this.No;
             if (ft.RetrieveFromDBSources() == 0)
             {
                 ft.Name = this.Name;
-                ft.Name = "表单树";
+                ft.Name = "表单树(" + this.Name + ")";
                 ft.ParentNo = ftRoot.No;
                 ft.OrgNo = this.No;
                 ft.Idx = 999;
                 ft.DirectInsert();
 
                 //创建两个目录.
-                BP.Sys.FrmTree mySubFT = ft.DoCreateSubNode() as BP.Sys.FrmTree;
+                SysFormTree mySubFT = ft.DoCreateSubNode() as SysFormTree;
                 mySubFT.Name = "表单目录1";
                 mySubFT.OrgNo = this.No;
                 mySubFT.DirectUpdate();
 
 
-                mySubFT = ft.DoCreateSubNode() as BP.Sys.FrmTree;
+                mySubFT = ft.DoCreateSubNode() as SysFormTree;
                 mySubFT.Name = "表单目录2";
                 mySubFT.OrgNo = this.No;
                 mySubFT.DirectUpdate();
-
             }
             else
             {
                 ft.Name = this.Name;
-                ft.Name = "表单树"; //必须这个命名，否则找不到。
+                ft.Name = "表单树(" + this.Name + ")"; //必须这个命名，否则找不到。
                 ft.ParentNo = ftRoot.No;
                 ft.OrgNo = this.No;
                 ft.Idx = 999;
                 ft.DirectUpdate();
+
+                //检查数量.
+                SysFormTrees frmSorts = new SysFormTrees();
+                frmSorts.Retrieve("OrgNo", this.No);
+                if (frmSorts.Count <= 1)
+                {
+                    //创建两个目录.
+                    SysFormTree mySubFT = ft.DoCreateSubNode() as SysFormTree;
+                    mySubFT.Name = "表单目录1";
+                    mySubFT.OrgNo = this.No;
+                    mySubFT.DirectUpdate();
+
+                    mySubFT = ft.DoCreateSubNode() as SysFormTree;
+                    mySubFT.Name = "表单目录2";
+                    mySubFT.OrgNo = this.No;
+                    mySubFT.DirectUpdate();
+                }
             }
             #endregion 检查表单树.
+
+            #region 删除无效的数据.
+            string sqls = "";
+            if (DBAccess.IsView("Port_DeptEmp") == false)
+            {
+                sqls += "@DELETE FROM Port_DeptEmp WHERE FK_Dept not in (select no from port_dept)";
+                sqls += "@DELETE FROM Port_DeptEmp WHERE FK_Emp not in (select no from port_Emp)";
+            }
+            if (DBAccess.IsView("Port_DeptEmpStation") == false)
+            {
+                sqls += "@DELETE FROM Port_DeptEmpStation WHERE FK_Dept not in (select no from port_dept)";
+                sqls += "@DELETE FROM Port_DeptEmpStation WHERE FK_Emp not in (select no from port_Emp)";
+                sqls += "@DELETE FROM Port_DeptEmpStation WHERE FK_Station not in (select no from port_Station)";
+            }
+            //删除无效的管理员,
+            if (DBAccess.IsView("Port_OrgAdminer") == false)
+            {
+                sqls += "@DELETE from Port_OrgAdminer where OrgNo not in (select No from port_dept)";
+                sqls += "@DELETE from Port_OrgAdminer where FK_Emp not in (select No from port_emp)";
+            }
+            //删除无效的组织.
+            if (DBAccess.IsView("Port_Org") == false)
+                sqls += "@DELETE from Port_Org where No not in (select No from port_dept)";
+            DBAccess.RunSQLs(sqls);
+            #endregion 删除无效的数据.
+
+            #region 检查人员信息.. 应该增加在整体检查的提示
+            //string sql = "SELECT * FROM Port_Emp WHERE OrgNo NOT IN (SELECT No from Port_Dept )";
+            //DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            //if (dt.Rows.Count != 0)
+            //    err += " 人员表里有:" + dt.Rows.Count + "笔 组织编号有丢失. 请处理:" + sql;
+
+            //sql = "SELECT * FROM Port_Emp WHERE FK_DEPT NOT IN (SELECT No from Port_Dept )";
+            //dt = DBAccess.RunSQLReturnTable(sql);
+            //if (dt.Rows.Count != 0)
+            //    err += " 人员表里有:" + dt.Rows.Count + "笔数据部门编号丢失. 请处理:" + sql;
+            #endregion 检查组织编号信息.
 
             if (DataType.IsNullOrEmpty(err) == true)
                 return "系统正确";
 
             //检查表单树.
             return "err@" + err;
-        }
-        /// <summary>
-        /// 设置
-        /// </summary>
-        /// <param name="no"></param>
-        public void SetSubDeptOrgNo(string no)
-        {
-            //同步当前部门与当前部门的子集部门，设置相同的orgNo.
-            Depts subDepts = new Depts();
-            subDepts.Retrieve(DeptAttr.ParentNo, no);
-            foreach (Dept subDept in subDepts)
-            {
-                //判断当前部门是否是组织？
-                Org org = new Org();
-                org.No = subDept.No;
-                if (org.RetrieveFromDBSources() == 1)
-                    continue; //说明当前部门是组织.
-
-                subDept.OrgNo = this.No;
-                subDept.Update();
-
-                //递归调用.
-                SetSubDeptOrgNo(subDept.No);
-            }
-        }
-        /// <summary>
-        /// 检查组织结构信息.
-        /// </summary>
-        /// <returns></returns>
-        public string CheckOrgInfo()
-        {
-            /*
-             * 检查内容如下：
-             * 1. 与org里面的部门是否存在？
-             */
-
-            return "";
         }
     }
     /// <summary>

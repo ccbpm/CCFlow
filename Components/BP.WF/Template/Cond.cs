@@ -17,6 +17,10 @@ namespace BP.WF.Template
     public class CondAttr
     {
         /// <summary>
+        /// 关联的从表-vue版本的数据格式.
+        /// </summary>
+        public const string RefPKVal = "RefPKVal";
+        /// <summary>
         /// 关联的流程编号
         /// </summary>
         public const string RefFlowNo = "RefFlowNo";
@@ -24,6 +28,7 @@ namespace BP.WF.Template
         /// 数据来源
         /// </summary>
         public const string DataFrom = "DataFrom";
+        public const string DataFromText = "DataFromText";
         /// <summary>
         /// 属性Key
         /// </summary>
@@ -80,6 +85,9 @@ namespace BP.WF.Template
         /// 数据源
         /// </summary>
         public const string FK_DBSrc = "FK_DBSrc";
+
+        public const string Tag1 = "Tag1";
+
 
         #region 属性。
         /// <summary>
@@ -188,7 +196,68 @@ namespace BP.WF.Template
             }
             set
             {
+                switch (value)
+                {
+                    case ConnDataFrom.NodeForm:
+                        this.DataFromText = "节点表单";
+                        break;
+                    case ConnDataFrom.StandAloneFrm:
+                        this.DataFromText = "独立表单";
+                        break;
+                    case ConnDataFrom.CondOperator:
+                        this.DataFromText = "操作符";
+                        break;
+                    case ConnDataFrom.Depts:
+                        this.DataFromText = "部门条件";
+                        break;
+                    case ConnDataFrom.Stas:
+                        this.DataFromText = "角色条件";
+                        break;
+                    case ConnDataFrom.SQL:
+                        this.DataFromText = "SQL条件";
+                        break;
+                    case ConnDataFrom.SQLTemplate:
+                        this.DataFromText = "SQL模板条件";
+                        break;
+                    case ConnDataFrom.Paras:
+                        this.DataFromText = "参数条件";
+                        break;
+                    case ConnDataFrom.Url:
+                        this.DataFromText = "URL条件";
+                        break;
+                    case ConnDataFrom.WebApi:
+                        this.DataFromText = "WebAPI条件";
+                        break;
+                    case ConnDataFrom.WorkCheck:
+                        this.DataFromText = "审核组件立场";
+                        break;
+                    default:
+                        break;
+                }
+
                 this.SetValByKey(CondAttr.DataFrom, (int)value);
+            }
+        }
+        public string RefPKVal
+        {
+            get
+            {
+                return this.GetValStringByKey(CondAttr.RefPKVal);
+            }
+            set
+            {
+                this.SetValByKey(CondAttr.RefPKVal, value);
+            }
+        }
+        public string DataFromText
+        {
+            get
+            {
+                return this.GetValStringByKey(CondAttr.DataFromText);
+            }
+            set
+            {
+                this.SetValByKey(CondAttr.DataFromText, value);
             }
         }
         /// <summary>
@@ -248,7 +317,7 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 条件类型(表单条件，岗位条件，部门条件，开发者参数)
+        /// 条件类型(表单条件，角色条件，部门条件，开发者参数)
         /// </summary>
         public CondType CondType
         {
@@ -654,7 +723,7 @@ namespace BP.WF.Template
 
                 if (this.HisDataFrom == ConnDataFrom.Stas)
                 {
-                    #region 按岗位控制
+                    #region 按角色控制
                     string strs = this.OperatorValue.ToString();
                     strs += this.OperatorValueT.ToString();
 
@@ -666,14 +735,14 @@ namespace BP.WF.Template
                     {
                         if (strs.Contains("@" + st.FK_Station + "@"))
                         {
-                            this.MsgOfCond = "@以岗位判断方向，条件为true：岗位集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")岗位:" + st.FK_Station + st.FK_StationT;
+                            this.MsgOfCond = "@以角色判断方向，条件为true：角色集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")角色:" + st.FK_Station + st.FK_StationT;
                             return true;
                         }
                         strs1 += st.FK_Station + "-" + st.FK_StationT;
                     }
 
 
-                    this.MsgOfCond = "@以岗位判断方向，条件为false：岗位集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")岗位:" + strs1;
+                    this.MsgOfCond = "@以角色判断方向，条件为false：角色集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")角色:" + strs1;
                     return false;
                     #endregion
                 }
@@ -704,7 +773,7 @@ namespace BP.WF.Template
                     {
                         if (strs.Contains("@" + st.FK_Dept + "@"))
                         {
-                            this.MsgOfCond = "@以岗位判断方向，条件为true：部门集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")部门:" + st.FK_Dept;
+                            this.MsgOfCond = "@以角色判断方向，条件为true：部门集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")部门:" + st.FK_Dept;
                             return true;
                         }
                         strs1 += st.FK_Dept;
@@ -901,7 +970,7 @@ namespace BP.WF.Template
                         if (BP.Difference.SystemConfig.IsBSsystem == false)
                         {
                             /*在cs模式下它的baseurl 从web.config中获取.*/
-                            string cfgBaseUrl =  BP.Difference.SystemConfig.AppSettings["HostURL"];
+                            string cfgBaseUrl = BP.Difference.SystemConfig.AppSettings["HostURL"];
                             if (DataType.IsNullOrEmpty(cfgBaseUrl))
                             {
                                 string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
@@ -1033,6 +1102,10 @@ namespace BP.WF.Template
         }
         private bool CheckIsPass(Entity en)
         {
+            MapAttr attr = new MapAttr(this.FK_Attr);
+            attr.setMyPK(this.FK_Attr);
+            if (attr.RetrieveFromDBSources() == 0)
+                throw new Exception("err@到达【" + this.ToNodeID + "】方向条件设置错误,原来做方向条件的字段:" + this.FK_Attr + ",已经不存在了.");
 
             try
             {
@@ -1042,12 +1115,26 @@ namespace BP.WF.Template
                     case "!=":
                     case "budingyu":
                     case "budengyu": //不等于.
+                        if (attr.IsNum == true)
+                        {
+                            if (en.GetValDoubleByKey(this.AttrKey) != Double.Parse(this.OperatorValue.ToString()))
+                                return true;
+                            else
+                                return false;
+                        }
                         if (en.GetValStringByKey(this.AttrKey).Equals(this.OperatorValue.ToString()) == false)
                             return true;
                         else
                             return false;
                     case "=":  // 如果是 = 
                     case "dengyu":
+                        if (attr.IsNum == true)
+                        {
+                            if (en.GetValDoubleByKey(this.AttrKey) == Double.Parse(this.OperatorValue.ToString()))
+                                return true;
+                            else
+                                return false;
+                        }
                         if (en.GetValStringByKey(this.AttrKey).Equals(this.OperatorValue.ToString().Replace("\"", "")) == true)
                             return true;
                         else
@@ -1114,37 +1201,46 @@ namespace BP.WF.Template
 
                 map.AddMyPK();
 
-                //用于整体流程的删除，导入，导出.
+                //for vue版本数据主从格式. 2022.9.28.
+                map.AddTBString(CondAttr.RefPKVal, null, "关联主键", true, true, 0, 40, 20);
+
+                //为流程的模板导出.
                 map.AddTBString(CondAttr.RefFlowNo, null, "流程编号", true, true, 0, 5, 20);
 
-                //@0=节点完成条件@1=流程条件@2=方向条件@3=启动子流程
-                map.AddTBInt(CondAttr.CondType, 0, "条件类型", true, true);
+                //用于整体流程的删除，导入，导出.
+                map.AddTBString(CondAttr.RefFlowNo, null, "流程编号", true, true, 0, 5, 20);
+                map.AddTBInt(CondAttr.FK_Node, 0, "节点ID", true, true);
 
-                //@0=NodeForm表单数据,1=StandAloneFrm独立表单,2=Stas岗位数据,3=Depts,4=按sql计算.
-                //5,按sql模版计算.6,按参数,7=按Url @=100条件表达式.
-                map.AddTBInt(CondAttr.DataFrom, 0, "条件数据来源0表单,1岗位(对方向条件有效)", true, true);
+
+                //@0=节点完成条件@1=流程条件@2=方向条件@3=启动子流程.
+                map.AddTBInt(CondAttr.CondType, 0, "条件类型", true, true);
                 map.AddTBString(CondAttr.FK_Flow, null, "流程", true, true, 0, 4, 20);
 
-                //对于启动子流程规则有效.
+                //对于启动子流程规则有效. *************************************
                 map.AddTBString(CondAttr.SubFlowNo, null, "子流程编号", true, true, 0, 5, 20);
 
-                map.AddTBInt(CondAttr.FK_Node, 0, "节点ID(对方向条件有效)", true, true);
+                //对方向条件有效. *************************************
                 map.AddTBInt(CondAttr.ToNodeID, 0, "ToNodeID（对方向条件有效）", true, true);
 
+
+                //条件字段. *************************************
+                //@0=NodeForm表单数据,1=StandAloneFrm独立表单,2=Stas角色数据,3=Depts,4=按sql计算.
+                //5,按sql模版计算.6,按参数,7=按Url @=100条件表达式.
+                map.AddTBInt(CondAttr.DataFrom, 0, "条件数据来源", true, true);
+                map.AddTBString(CondAttr.DataFromText, null, "条件数据来源T", true, true, 0, 4, 20);
                 map.AddTBString(CondAttr.FK_Attr, null, "属性", true, true, 0, 80, 20);
                 map.AddTBString(CondAttr.AttrKey, null, "属性键", true, true, 0, 60, 20);
                 map.AddTBString(CondAttr.AttrName, null, "中文名称", true, true, 0, 500, 20);
                 map.AddTBString(CondAttr.FK_Operator, "=", "运算符号", true, true, 0, 60, 20);
                 map.AddTBString(CondAttr.OperatorValue, "", "要运算的值", true, true, 0, 4000, 20);
                 map.AddTBString(CondAttr.OperatorValueT, "", "要运算的值T", true, true, 0, 4000, 20);
-
                 map.AddTBString(CondAttr.Note, null, "备注", true, true, 0, 500, 20);
-                map.AddTBInt(CondAttr.Idx, 1, "优先级", true, true);
                 map.AddTBString(CondAttr.FK_DBSrc, "local", "SQL的数据来源", false, true, 0, 50, 20);
                 //参数 for wangrui add 2015.10.6. 条件为station,depts模式的时候，需要指定人员。
                 map.AddTBAtParas(2000);
-
-                map.AddTBInt(CondAttr.Idx, 0, "Idx", true, true);
+                map.AddTBInt(CondAttr.Idx, 0, "优先级", true, true);
+                //用到了UIBindKey的存储.
+                map.AddTBString(CondAttr.Tag1, null, "Tag1", true, true, 0, 100, 20);
 
                 this._enMap = map;
                 return this._enMap;
@@ -1154,7 +1250,6 @@ namespace BP.WF.Template
 
         protected override bool beforeUpdateInsertAction()
         {
-
             if (DataType.IsNullOrEmpty(this.RefFlowNo) == true)
             {
                 if (this.CondType == CondType.Dir
@@ -1171,8 +1266,11 @@ namespace BP.WF.Template
                     if (DataType.IsNullOrEmpty(this.RefFlowNo) == true)
                         throw new Exception("err@流程完成条件设置错误，没有给FK_Flow赋值。");
                 }
-            }
 
+                //for vue版本数据格式.增加一个主从表的标记字段.
+                if (this.CondType == CondType.Dir)
+                    this.RefPKVal = this.FK_Flow + '_' + this.FK_Node + '_' + this.ToNodeID;
+            }
             return base.beforeUpdateInsertAction();
         }
     }
@@ -1257,6 +1355,8 @@ namespace BP.WF.Template
                         sql = " SELECT No FROM WF_Emp WHERE " + exp + "    limit 1 ";
                         break;
                     case DBType.Oracle:
+                    case DBType.KingBaseR3:
+                    case DBType.KingBaseR6:
                     case DBType.DM:
                         sql = " SELECT No FROM WF_Emp WHERE " + exp + "  AND  rownum <=1 ";
                         break;

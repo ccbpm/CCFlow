@@ -65,14 +65,7 @@ namespace BP.En
         {
             get
             {
-                try
-                {
-                    return this.GetValIntByKey(EntityOIDAttr.OID);
-                }
-                catch
-                {
-                    return 0;
-                }
+                return this.GetValIntByKey(EntityOIDAttr.OID);
             }
             set
             {
@@ -208,7 +201,7 @@ namespace BP.En
                 return base.beforeInsert();
 
             if (this.OID > 0)
-                throw new Exception("@[" + this.EnDesc + "], 实体已经被实例化 oid=[" + this.OID + "]，不能Insert.");
+                throw new Exception("@[" + this.ToString() + " - " + this.EnDesc + "], 实体已经被实例化 OID=[" + this.OID + "]，不能Insert.");
 
             if (this.IsInnKey)
                 this.OID = -1;
@@ -310,7 +303,7 @@ namespace BP.En
                 this.InsertAsOID(oid);
 
             //         this.SetValByKey("OID",oid);
-           // if (this.IsExits==false)
+            // if (this.IsExits==false)
             //	this.InsertAsOID(oid);
             //this.Update();
         }

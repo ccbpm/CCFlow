@@ -39,10 +39,25 @@ namespace BP.WF
         /// 实体，一般是工作实体
         /// </summary>
         public Entity HisEn = null;
+        private Node _hisNode = null;
         /// <summary>
         /// 当前节点
         /// </summary>
-        public Node HisNode = null;
+        public Node HisNode
+        {
+            get
+            {
+                return _hisNode;
+            }
+            set
+            {
+                _hisNode = value;
+            }
+        }
+        /// <summary>
+        /// 流程注册表
+        /// </summary>
+        public GenerWorkFlow HisGenerWorkFlow = null;
         /// <summary>
         /// 参数对象.
         /// </summary>
@@ -455,10 +470,11 @@ namespace BP.WF
         /// </summary>
         /// <param name="eventType">事件类型</param>
         /// <param name="en">实体参数</param>
-        public string DoIt(string eventType, Node currNode, Entity en, string atPara, int jumpToNodeID = 0, string toEmps = null)
+        public string DoIt(string eventType, Node currNode, Entity en, string atPara, int jumpToNodeID = 0, string toEmps = null,GenerWorkFlow hisGWF=null)
         {
             this.HisEn = en;
             this.HisNode = currNode;
+            this.HisGenerWorkFlow = hisGWF;
             //  this.WorkID = en.GetValInt64ByKey("OID");
             this.JumpToEmps = toEmps;
             this.JumpToNodeID = jumpToNodeID;

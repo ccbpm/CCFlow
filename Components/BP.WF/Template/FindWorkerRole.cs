@@ -20,7 +20,7 @@ namespace BP.WF.Template
         /// </summary>
         SpecDuty,
         /// <summary>
-        /// 指定岗位
+        /// 指定角色
         /// </summary>
         SpecStation      
     }
@@ -601,7 +601,7 @@ namespace BP.WF.Template
             //部门编号.
             string deptNo = this.TagVal1;
 
-            //职务-岗位。
+            //职务-角色。
             string objVal = this.TagVal2;
 
             string way = this.SortVal1;
@@ -612,7 +612,7 @@ namespace BP.WF.Template
                 case "0": //按职务找.
                     sql = "SELECT B." + BP.Sys.Base.Glo.UserNo + ",B.Name FROM Port_DeptEmp A, Port_Emp B WHERE A.FK_Dept='" + deptNo+"'  AND A.FK_Duty='"+objVal+ "' AND B." + BP.Sys.Base.Glo.UserNoWhitOutAS + "=A.FK_Emp";
                     break;
-                case "1": //按岗位找.
+                case "1": //按角色找.
                     sql = "SELECT B." + BP.Sys.Base.Glo.UserNo + ",B.Name FROM Port_DeptEmpStation A, Port_Emp B WHERE A.FK_Dept='" + deptNo + "'  AND A.FK_Station='" + objVal + "' AND B." + BP.Sys.Base.Glo.UserNoWhitOutAS + "=A.FK_Emp";
                     break;
                 case "2": //所有该部门的人员.
@@ -663,7 +663,7 @@ namespace BP.WF.Template
                         tempDeptNo = d.ParentNo;
                     }
                     break;
-                case FindColleague.SpecStation: // 特定岗位的领导.
+                case FindColleague.SpecStation: // 特定角色的领导.
                     tempDeptNo = empDept.Clone() as string;
                     while (true)
                     {
@@ -747,7 +747,7 @@ namespace BP.WF.Template
                         tempDeptNo = d.ParentNo;
                     }
                     break;
-                case FindLeaderModel.SpecStation: // 特定岗位的领导.
+                case FindLeaderModel.SpecStation: // 特定角色的领导.
                     tempDeptNo = empDept.Clone() as string;
                     while (true)
                     {

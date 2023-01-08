@@ -51,11 +51,11 @@ namespace BP.WF.Template
         /// </summary>
         public const string EmpName = "EmpName";
         /// <summary>
-        /// 岗位编号
+        /// 角色编号
         /// </summary>
         public const string StaNo = "StaNo";
         /// <summary>
-        /// 岗位名称
+        /// 角色名称
         /// </summary>
         public const string StaName = "StaName";
         /// <summary>
@@ -130,13 +130,13 @@ namespace BP.WF.Template
                 map.AddTBString(PowerModelAttr.PowerFlagName, null, "权限标记名称", true, false, 0, 100, 10);
 
                 map.AddDDLSysEnum(PowerModelAttr.PowerCtrlType, 0, "控制类型", true, false, PowerModelAttr.PowerCtrlType,
-                    "@0=岗位@1=人员");
+                    "@0=角色@1=人员");
 
                 map.AddTBString(PowerModelAttr.EmpNo, null, "人员编号", true, false, 0, 100, 10);
                 map.AddTBString(PowerModelAttr.EmpName, null, "人员名称", true, false, 0, 100, 10);
 
-                map.AddTBString(PowerModelAttr.StaNo, null, "岗位编号", true, false, 0, 100, 10);
-                map.AddTBString(PowerModelAttr.StaName, null, "岗位名称", true, false, 0, 100, 10);
+                map.AddTBString(PowerModelAttr.StaNo, null, "角色编号", true, false, 0, 100, 10);
+                map.AddTBString(PowerModelAttr.StaName, null, "角色名称", true, false, 0, 100, 10);
 
                 //Model标记.
                 map.AddTBString(PowerModelAttr.FlowNo, null, "流程编号", true, false, 0, 100, 10);

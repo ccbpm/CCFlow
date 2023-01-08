@@ -21,6 +21,16 @@ namespace BP.Port
     {
         #region 构造方法
         /// <summary>
+        /// 类型
+        /// </summary>
+        public string FK_TeamType
+        {
+            get
+            {
+                return this.GetValStringByKey(TeamAttr.FK_TeamType);
+            }
+        }
+        /// <summary>
         /// 用户组
         /// </summary>
         public Team()
@@ -45,7 +55,7 @@ namespace BP.Port
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Port_Team", "用户组");
+                Map map = new Map("Port_Team", "标签");
                 map.setEnType(EnType.Sys);
                 map.setIsAutoGenerNo(true);
 
@@ -54,35 +64,45 @@ namespace BP.Port
                 map.AddDDLEntities(TeamAttr.FK_TeamType, null, "类型", new TeamTypes(), true);
 
                 //   map.AddTBString(TeamAttr.ParentNo, null, "父亲节编号", true, true, 0, 100, 20);
-                map.AddTBInt(TeamAttr.Idx, 0, "显示顺序", true, false);
+                map.AddTBInt(TeamAttr.Idx, 0, "顺序", true, false);
 
                 map.AddSearchAttr(TeamAttr.FK_TeamType);
 
                 map.AttrsOfOneVSM.Add(new BP.Port.TeamEmps(), new Emps(),
-                    TeamEmpAttr.FK_Team, TeamEmpAttr.FK_Emp, EmpAttr.Name, EmpAttr.No, "人员(简单)");
+                    TeamEmpAttr.FK_Team, TeamEmpAttr.FK_Emp, EmpAttr.Name, EmpAttr.No, "人员");
 
 
-                //节点绑定人员. 使用树杆与叶子的模式绑定.
-                map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.Port.TeamEmps(), new BP.Port.Emps(),
-                   TeamEmpAttr.FK_Team,
-                   TeamEmpAttr.FK_Emp, "人员(树)", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                ////节点绑定人员. 使用树杆与叶子的模式绑定.
+                //map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.Port.TeamEmps(), new BP.Port.Emps(),
+                //   TeamEmpAttr.FK_Team,
+                //   TeamEmpAttr.FK_Emp, "人员(树)", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
                 //map.AttrsOfOneVSM.Add(new TeamEmps(), new Emps(),
                 // TeamEmpAttr.FK_Team, TeamEmpAttr.FK_Emp, EmpAttr.Name, EmpAttr.No, "人员(简单)");
 
                 //map.AttrsOfOneVSM.Add(new TeamStations(), new Stations(),
-                //    TeamEmpAttr.FK_Team, TeamStationAttr.FK_Station, EmpAttr.Name, EmpAttr.No, "岗位(简单)");
+                //    TeamEmpAttr.FK_Team, TeamStationAttr.FK_Station, EmpAttr.Name, EmpAttr.No, "角色(简单)");
                     
 
                 //map.AttrsOfOneVSM.AddTeamListModel(new TeamStations(), new BP.Port.Stations(),
                 //  TeamStationAttr.FK_Team,
-                //  TeamStationAttr.FK_Station, "岗位(平铺)", StationAttr.FK_StationType);
+                //  TeamStationAttr.FK_Station, "角色(平铺)", StationAttr.FK_StationType);
 
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+        protected override bool beforeUpdateInsertAction()
+        {
+            if (DataType.IsNullOrEmpty(this.Name) == true)
+                throw new Exception("请输入名称");
+
+            if (DataType.IsNullOrEmpty(this.FK_TeamType) == true)
+                throw new Exception("请选择类型"); //@hongyan.
+
+            return base.beforeUpdateInsertAction();
+        }
     }
     /// <summary>
     /// 用户组s

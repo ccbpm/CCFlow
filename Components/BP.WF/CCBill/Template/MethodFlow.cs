@@ -288,7 +288,6 @@ namespace BP.CCBill.Template
                 map.AddBoolean(MethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
                 #endregion 显示位置控制.
 
-
                 #region 相同字段数据同步方式.
                 map.AddDDLSysEnum(MethodAttr.DTSDataWay, 0, "同步相同字段数据方式", true, true, MethodAttr.DTSDataWay,
                "@0=不同步@1=同步全部的相同字段的数据@2=同步指定字段的数据");

@@ -567,45 +567,222 @@ namespace BP.WF.HttpHandler
 
             //生成签名算法
             string str1 = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonceStr + "&timestamp=" + timestamp + "&url=" + url1 + "";
-            string Signature = Sha1Signature(str1);
+            string Signature = BP.WF.Difference.Glo.Sha1Signature(str1);
             ht.Add("signature", Signature);
 
             return BP.Tools.Json.ToJson(ht);
         }
-        public static string Sha1Signature(string str)
+       
+
+        public string GetIDCardInfo()
         {
-            string s = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(str, "SHA1").ToString();
-            return s.ToLower();
+                string token = getAccessToken();
+                JsonData jd = JsonMapper.ToObject(token);
+                string host = "https://aip.baidubce.com/rest/2.0/ocr/v1/idcard?access_token=" + jd["access_token"].ToString();
+                Encoding encoding = Encoding.Default;
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(host);
+                request.Method = "post";
+                request.KeepAlive = true;
+                // 图片的base64编码
+                var files = HttpContextHelper.RequestFiles();  //context.Request.Files;
+                if (files.Count == 0)
+                    return "err@请选择要上传的身份证件。";
+                Stream stream = files[0].InputStream;//new MemoryStream();
+                byte[] bytes = new byte[stream.Length];
+                stream.Read(bytes, 0, bytes.Length);
+                string base64 = Convert.ToBase64String(bytes);
+                stream.Close();
+                String str = "id_card_side=" + "front" + "&image=" + HttpUtility.UrlEncode(base64);
+                byte[] buffer = encoding.GetBytes(str);
+                request.ContentLength = buffer.Length;
+                request.GetRequestStream().Write(buffer, 0, buffer.Length);
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+                string result = reader.ReadToEnd();
+                return result;
+        }
+        /// <summary>
+        /// 获取微信公众号的签名
+        /// </summary>
+        /// <returns></returns>
+        public string GetWXGZHConfigSetting()
+        {
+            string htmlPage = this.GetRequestVal("htmlPage");
+            Hashtable ht = new Hashtable();
+
+            //生成签名的时间戳
+            string timestamp = DateTime.Now.ToString("yyyyMMDDHHddss");
+            //生成签名的随机串
+            string nonceStr = BP.DA.DBAccess.GenerGUID();
+            //企业号jsapi_ticket
+            string jsapi_ticket = "";
+            string url1 = htmlPage;
+            //获取 AccessToken
+            BP.WF.WeiXin.GZH.WeiXinGZHModel.AccessToken accessToken = BP.WF.WeiXin.WeiXinGZHEntity.getAccessToken();
+
+            if (accessToken.errcode!= "0"&& DataType.IsNullOrEmpty(accessToken.errcode)==false)
+                return "err@获取网页授权失败，errcode：" + accessToken.errcode;
+            string token = accessToken.access_token;
+            string url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + token+ "&type=jsapi";
+
+
+            HttpWebResponse response = new HttpWebResponseUtility().CreateGetHttpResponse(url, 10000, null, null);
+            StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+            string str = reader.ReadToEnd();
+
+            //权限签名算法
+            BP.GPM.WeiXin.Ticket ticket = new BP.GPM.WeiXin.Ticket();
+            ticket = FormatToJson.ParseFromJson<BP.GPM.WeiXin.Ticket>(str);
+
+            if (ticket.errcode == "0")
+                jsapi_ticket = ticket.ticket;
+            else
+                return "err@获取jsapi_ticket失败+accessToken=" + token;
+
+            ht.Add("timestamp", timestamp);
+            ht.Add("nonceStr", nonceStr);
+            //企业微信的corpID
+            ht.Add("AppID", BP.Difference.SystemConfig.WXGZH_Appid);
+
+            //生成签名算法
+            string str1 = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonceStr + "&timestamp=" + timestamp + "&url=" + url1 + "";
+            string Signature = BP.WF.Difference.Glo.Sha1Signature(str1);
+            ht.Add("signature", Signature);
+
+            return BP.Tools.Json.ToJson(ht);
         }
 
-    
-
-    public string GetIDCardInfo()
+        public string WXGZH_AthUpload()
         {
-            string token = getAccessToken();
-            JsonData jd = JsonMapper.ToObject(token);
-            string host = "https://aip.baidubce.com/rest/2.0/ocr/v1/idcard?access_token=" + jd["access_token"].ToString();
-            Encoding encoding = Encoding.Default;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(host);
-            request.Method = "post";
-            request.KeepAlive = true;
-            // 图片的base64编码
-            var files = HttpContextHelper.RequestFiles();  //context.Request.Files;
-            if (files.Count == 0)
-                return "err@请选择要上传的身份证件。";
-            Stream stream = files[0].InputStream;//new MemoryStream();
-            byte[] bytes = new byte[stream.Length];
-            stream.Read(bytes, 0, bytes.Length);
-            string base64 = Convert.ToBase64String(bytes);
-            stream.Close();
-            String str = "id_card_side=" + "front" + "&image=" + HttpUtility.UrlEncode(base64);
-            byte[] buffer = encoding.GetBytes(str);
-            request.ContentLength = buffer.Length;
-            request.GetRequestStream().Write(buffer, 0, buffer.Length);
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
-            string result = reader.ReadToEnd();
-            return result;
+            string imageData = this.GetRequestVal("ImageData");
+            if (DataType.IsNullOrEmpty(imageData) == true)
+                return "";
+            Log.DebugWriteInfo("上传附件信息ImageData:" + imageData);
+            // 多附件描述.
+            string pkVal = this.GetRequestVal("PKVal");
+            string attachPk = this.GetRequestVal("AttachPK");
+
+            BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(attachPk);
+            MapData mapData = new MapData(athDesc.FK_MapData);
+            string msg = "";
+            //求出来实体记录，方便执行事件.
+            GEEntity en = new GEEntity(athDesc.FK_MapData);
+            en.PKVal = pkVal;
+            if (en.RetrieveFromDBSources() == 0)
+            {
+                en.PKVal = this.FID;
+                if (en.RetrieveFromDBSources() == 0)
+                {
+                    en.PKVal = this.PWorkID;
+                    en.RetrieveFromDBSources();
+                }
+            }
+
+            //求主键. 如果该表单挂接到流程上.
+            if (this.FK_Node != 0 && athDesc.NoOfObj.Contains("AthMDtl") == false)
+            {
+                //判断表单方案。
+                FrmNode fn = new FrmNode(this.FK_Node, this.FK_MapData);
+                if (fn.FrmSln == FrmSln.Self)
+                {
+                    BP.Sys.FrmAttachment myathDesc = new FrmAttachment();
+                    myathDesc.setMyPK(attachPk + "_" + this.FK_Node);
+                    if (myathDesc.RetrieveFromDBSources() != 0)
+                        athDesc.HisCtrlWay = myathDesc.HisCtrlWay;
+                }
+                pkVal = BP.WF.Dev2Interface.GetAthRefPKVal(this.WorkID, this.PWorkID, this.FID, this.FK_Node, this.FK_MapData, athDesc);
+            }
+            string savePath = "";
+            string fileName = DBAccess.GenerGUID();
+            if (athDesc.AthSaveWay == AthSaveWay.IISServer)
+            {
+                savePath = athDesc.SaveTo + "/" + pkVal;
+                if (System.IO.Directory.Exists(savePath) == false)
+                    System.IO.Directory.CreateDirectory(savePath);
+                savePath = savePath + "/" + fileName + ".png";
+            }
+            if (athDesc.AthSaveWay == AthSaveWay.FTPServer)
+            {
+                savePath = BP.Difference.SystemConfig.PathOfTemp +fileName + ".tmp";
+            }
+            
+            using (System.IO.FileStream fs = new FileStream(savePath, FileMode.Create))
+            {
+                using (BinaryWriter bw = new BinaryWriter(fs))
+                {
+                    byte[] data = Convert.FromBase64String(imageData);
+                    bw.Write(data);
+                    bw.Close();
+                }
+            }
+            string ny = DateTime.Now.ToString("yyyy_MM");
+            if (athDesc.AthSaveWay == AthSaveWay.FTPServer)
+            {
+                /*保存到fpt服务器上.*/
+                BP.FtpConnection ftpconn = null;
+                try
+                {
+                    ftpconn = new BP.FtpConnection(BP.Difference.SystemConfig.FTPServerIP,
+                    SystemConfig.FTPServerPort,
+                    SystemConfig.FTPUserNo, BP.Difference.SystemConfig.FTPUserPassword);
+                }
+                catch
+                {
+                    throw new Exception("err@FTP连接失败请检查账号,密码，端口号是否正确");
+                }
+
+                //判断目录年月是否存在.
+                if (ftpconn.DirectoryExist(ny) == false)
+                    ftpconn.CreateDirectory(ny);
+                ftpconn.SetCurrentDirectory(ny);
+
+                //判断目录是否存在.
+                if (ftpconn.DirectoryExist(athDesc.FK_MapData) == false)
+                    ftpconn.CreateDirectory(athDesc.FK_MapData);
+
+                //设置当前目录，为操作的目录。
+                ftpconn.SetCurrentDirectory(athDesc.FK_MapData);
+
+                //把文件放上去.
+                try
+                {
+                    ftpconn.PutFile(savePath, fileName + ".png");
+                }
+                catch
+                {
+                    throw new Exception("err@FTP端口号受限或者防火墙未关闭");
+                }
+                ftpconn.Close();
+            }
+            FileInfo info = new FileInfo(savePath);
+            FrmAttachmentDB dbUpload = new FrmAttachmentDB();
+            dbUpload.setMyPK(DBAccess.GenerGUID());
+            dbUpload.Sort = "";
+            dbUpload.NodeID = FK_Node;
+            dbUpload.setFK_MapData(athDesc.FK_MapData);
+            dbUpload.FK_FrmAttachment = athDesc.MyPK;
+            dbUpload.FID = this.FID; //流程id.
+               
+            dbUpload.RefPKVal = pkVal.ToString();
+            dbUpload.setFK_MapData(athDesc.FK_MapData);
+            dbUpload.FK_FrmAttachment = athDesc.MyPK;
+            dbUpload.FileName = fileName+".png";
+            dbUpload.FileSize = (float)info.Length;
+            dbUpload.RDT = DataType.CurrentDateTimess;
+            dbUpload.Rec = BP.Web.WebUser.No;
+            dbUpload.RecName = BP.Web.WebUser.Name;
+            dbUpload.FK_Dept = WebUser.FK_Dept;
+            dbUpload.FK_DeptName = WebUser.FK_DeptName;
+            dbUpload.FileExts = "png";
+            if (athDesc.AthSaveWay == AthSaveWay.IISServer)
+                //文件方式保存
+                dbUpload.FileFullName = savePath;
+
+            if (athDesc.AthSaveWay == AthSaveWay.FTPServer)
+                dbUpload.FileFullName = ny + "//" + athDesc.FK_MapData + "//" + fileName + ".png";
+            dbUpload.Insert();
+           
+            return "上传成功";
         }
     }
 }

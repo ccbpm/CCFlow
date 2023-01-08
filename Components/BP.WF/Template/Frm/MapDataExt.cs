@@ -392,6 +392,7 @@ namespace BP.WF.Template.Frm
                 map.CodeStruct = "4";
 
                 #region 基本属性.
+                map.AddGroupAttr("基本属性");
                 map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, false, 1, 190, 20);
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 500, 20);
@@ -407,6 +408,7 @@ namespace BP.WF.Template.Frm
                 #endregion 基本属性.
 
                 #region 设计者信息.
+                map.AddGroupAttr("设计者信息");
                 map.AddTBString(MapDataAttr.Designer, null, "设计者", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.DesignerContact, null, "联系方式", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20,true);
@@ -439,6 +441,8 @@ namespace BP.WF.Template.Frm
                 //map.AddRefMethod(rm);
 
                 #region 方法 - 基本功能.
+                map.AddGroupMethod("基本功能");
+
                 RefMethod rm = new RefMethod();
                 rm.Title = "装载填充"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoPageLoadFull";
@@ -522,6 +526,7 @@ namespace BP.WF.Template.Frm
 
 
                 //带有参数的方法.
+            
                 rm = new RefMethod();
                 rm.Title = "重命名字段";
               //  rm.Warning = "您确定要处理吗？";
@@ -552,6 +557,7 @@ namespace BP.WF.Template.Frm
 
 
                 #region 方法 - 开发接口.
+                map.AddGroupMethod("开发接口");
                 rm = new RefMethod();
                 rm.Title = "调用查询API"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoSearch";
@@ -559,7 +565,7 @@ namespace BP.WF.Template.Frm
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
-                rm.GroupName = "开发接口";
+              //  rm.GroupName = "开发接口";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -569,7 +575,7 @@ namespace BP.WF.Template.Frm
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
-                rm.GroupName = "开发接口";
+              //  rm.GroupName = "开发接口";
                 map.AddRefMethod(rm);
                 #endregion 方法 - 开发接口.
 

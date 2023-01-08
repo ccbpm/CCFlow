@@ -50,15 +50,15 @@ namespace BP.WF
                 ps.SQL = "SELECT MAX(Ver) From Sys_FrmDBVer WHERE FrmID=" + dbstr + "FrmID AND RefPKVal=" + dbstr + "RefPKVal";
                 ps.Add("FrmID", frmID);
                 ps.Add("RefPKVal", track.WorkID);
-                ver = DBAccess.RunSQLReturnValInt(ps,0);
-                ver = ver == 0 ? 1:ver + 1;
-                BP.Sys.FrmDBVer.AddFrmDBTrack(ver,frmID, track.WorkID.ToString(), track.MyPK, wk.ToJson(), dtlJson,athJson,false);
+                ver = DBAccess.RunSQLReturnValInt(ps, 0);
+                ver = ver == 0 ? 1 : ver + 1;
+                BP.Sys.FrmDBVer.AddFrmDBTrack(ver, frmID, track.WorkID.ToString(), track.MyPK, wk.ToJson(), dtlJson, athJson, false);
                 return;
             }
 
             if (nd.HisFormType == NodeFormType.RefOneFrmTree)
             {
-                FrmNode fn = new FrmNode(nd.NodeID,nd.NodeFrmID);
+                FrmNode fn = new FrmNode(nd.NodeID, nd.NodeFrmID);
                 if (fn.FrmSln == FrmSln.Readonly)
                     return;
                 MapData md = nd.MapData;
@@ -68,25 +68,25 @@ namespace BP.WF
                 ps.Add("RefPKVal", track.WorkID);
                 ver = DBAccess.RunSQLReturnValInt(ps, 0);
                 ver = ver == 0 ? 1 : ver + 1;
-                //@Hongyan
+
                 if (md.HisFrmType == FrmType.ChapterFrm)
                 {
                     //获取字段
                     MapAttrs attrs = md.MapAttrs;
-                    foreach(MapAttr attr in attrs)
+                    foreach (MapAttr attr in attrs)
                     {
                         if (attr.UIVisible == false)
                             continue;
-                        BP.Sys.FrmDBVer.AddKeyOfEnDBTrack(ver,nd.NodeFrmID, track.WorkID.ToString(), track.MyPK, wk.GetValStringByKey(attr.KeyOfEn), attr.KeyOfEn);
+                        BP.Sys.FrmDBVer.AddKeyOfEnDBTrack(ver, nd.NodeFrmID, track.WorkID.ToString(), track.MyPK, wk.GetValStringByKey(attr.KeyOfEn), attr.KeyOfEn);
                     }
                     string json = AddNodeFrmDtlDB(nd.NodeID, track.WorkID, nd.NodeFrmID);
                     string aths = AddNodeFrmAthDB(nd.NodeID, track.WorkID, nd.NodeFrmID);
-                    BP.Sys.FrmDBVer.AddFrmDBTrack(ver,nd.NodeFrmID, track.WorkID.ToString(), track.MyPK, null, json, aths,true);
+                    BP.Sys.FrmDBVer.AddFrmDBTrack(ver, nd.NodeFrmID, track.WorkID.ToString(), track.MyPK, null, json, aths, true);
 
                     //获取控件类型是ChapterFrmLinkFrm的分组
-                    GroupFields groups =new GroupFields();
+                    GroupFields groups = new GroupFields();
                     groups.Retrieve(GroupFieldAttr.FrmID, md.No, GroupFieldAttr.CtrlType, "ChapterFrmLinkFrm");
-                    foreach(GroupField group in groups)
+                    foreach (GroupField group in groups)
                     {
                         //获取表单数据
                         GEEntity en = new GEEntity(group.CtrlID, track.WorkID);
@@ -94,14 +94,14 @@ namespace BP.WF
                         aths = AddNodeFrmAthDB(nd.NodeID, track.WorkID, group.CtrlID);
                         if (en.Row.ContainsKey("RDT"))
                             en.SetValByKey("RDT", "");
-                        BP.Sys.FrmDBVer.AddFrmDBTrack(ver,group.CtrlID, track.WorkID.ToString(), track.MyPK, en.ToJson(), json, aths, false);
+                        BP.Sys.FrmDBVer.AddFrmDBTrack(ver, group.CtrlID, track.WorkID.ToString(), track.MyPK, en.ToJson(), json, aths, false);
                     }
 
                     return;
                 }
                 string dtlJson = AddNodeFrmDtlDB(nd.NodeID, track.WorkID, nd.NodeFrmID);
                 string athJson = AddNodeFrmAthDB(nd.NodeID, track.WorkID, nd.NodeFrmID);
-                BP.Sys.FrmDBVer.AddFrmDBTrack(ver,nd.NodeFrmID, track.WorkID.ToString(), track.MyPK, wk.ToJson(), dtlJson, athJson,false);
+                BP.Sys.FrmDBVer.AddFrmDBTrack(ver, nd.NodeFrmID, track.WorkID.ToString(), track.MyPK, wk.ToJson(), dtlJson, athJson, false);
                 return;
             }
 
@@ -136,7 +136,7 @@ namespace BP.WF
                     ver = ver == 0 ? 1 : ver + 1;
                     string dtlJson = AddNodeFrmDtlDB(nd.NodeID, track.WorkID, fn.FK_Frm);
                     string athJson = AddNodeFrmAthDB(nd.NodeID, track.WorkID, fn.FK_Frm);
-                    BP.Sys.FrmDBVer.AddFrmDBTrack(ver,fn.FK_Frm, track.WorkID.ToString(), track.MyPK, ge.ToJson(), dtlJson, athJson,false);
+                    BP.Sys.FrmDBVer.AddFrmDBTrack(ver, fn.FK_Frm, track.WorkID.ToString(), track.MyPK, ge.ToJson(), dtlJson, athJson, false);
                 }
                 return;
             }
@@ -156,7 +156,8 @@ namespace BP.WF
         {
             MapData mapData = new MapData(frmID);
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
-            MapDtls dtls = mapData.MapDtls;
+            MapDtls dtls = new MapDtls();
+            dtls.Retrieve("FK_MapData", frmID, "FK_Node", 0);
             DataSet ds = new DataSet();
             DataTable dt = null;
             foreach (MapDtl dtl in dtls)
@@ -179,14 +180,15 @@ namespace BP.WF
         {
             MapData mapData = new MapData(frmID);
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
-            FrmAttachments aths = mapData.FrmAttachments;
+            FrmAttachments aths = new FrmAttachments();
+            aths.Retrieve("FK_MapData", frmID, "FK_Node", 0);
             DataSet ds = new DataSet();
             FrmAttachmentDBs dbs = null;
             foreach (FrmAttachment ath in aths)
             {
                 dbs = BP.WF.Glo.GenerFrmAttachmentDBs(ath, gwf.WorkID.ToString(),
                     ath.MyPK, gwf.WorkID, gwf.FID, gwf.PWorkID, true, nodeId, frmID);
-                
+
                 ds.Tables.Add(dbs.ToDataTableField(ath.NoOfObj));
             }
             return BP.Tools.Json.ToJson(ds);
@@ -404,12 +406,14 @@ namespace BP.WF
                     //系统类别
                     switch (src.DBSrcType)
                     {
-                        case Sys.DBSrcType.Localhost:
+                        case Sys.DBSrcType.local:
                             switch (BP.Difference.SystemConfig.AppCenterDBType)
                             {
                                 case DBType.MSSQL:
                                     break;
                                 case DBType.Oracle:
+                                case DBType.KingBaseR3:
+                                case DBType.KingBaseR6:
                                     //如果是时间类型，要进行转换
                                     if (ywDt.Columns[ywArr[i]].DataType == typeof(DateTime))
                                     {
@@ -430,11 +434,13 @@ namespace BP.WF
                                     throw new Exception("没有涉及到的连接测试类型...");
                             }
                             break;
-                        case Sys.DBSrcType.SQLServer:
+                        case Sys.DBSrcType.MSSQL:
                             break;
                         case Sys.DBSrcType.MySQL:
                             break;
                         case Sys.DBSrcType.Oracle:
+                        case Sys.DBSrcType.KingBaseR3:
+                        case Sys.DBSrcType.KingBaseR6:
                             //如果是时间类型，要进行转换
                             if (ywDt.Columns[ywArr[i]].DataType == typeof(DateTime))
                             {
@@ -702,14 +708,129 @@ namespace BP.WF
                 }
             }
 
-            //按照岗位删除.
+            //按照角色删除,同角色的人员.
             if (nd.GenerWorkerListDelRole == 2)
             {
+                //1. 求出来: 当前人员的角色集合与节点角色集合的交集， 表示：当前人员用这些角色做了这个节点的事情.
+                //获得当前节点使用的岗位, 首先从临时的变量里找（动态的获取的）,没有就到 NodeStation 里找.
+                string temp = gwf.GetParaString("NodeStas" + gwf.FK_Node, ""); //这个变量是上一个节点通过字段选择出来的.
+                string stasSQLIn = "";
+                if (DataType.IsNullOrEmpty(temp) == false)
+                {
+                    stasSQLIn = DataType.DealFromatSQLWhereIn(temp);
+                }
+                else
+                {
+                    DataTable dtStas = DBAccess.RunSQLReturnTable("SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + nd.NodeID);
+                    if (dtStas.Rows.Count == 0)
+                        throw new Exception("err@执行按照岗位删除人员待办出现错误，没有找到节点"+nd.NodeID+"-"+nd.Name+",绑定的岗位.");
+
+                    string strs = "";
+                    foreach (DataRow dr in dtStas.Rows)
+                    {
+                        strs += ",'" + dr[0].ToString() + "'";
+                    }
+                    stasSQLIn = strs.Substring(1);
+                }
+                if (DataType.IsNullOrEmpty(stasSQLIn) == true)
+                    throw new Exception("err@没有找到当前节点使用的岗位集合.");
+
+
+                //求出来我使用的岗位集合.
+                string sqlGroupMy = ""; //我使用岗位.
+                sqlGroupMy = "SELECT FK_Station FROM Port_DeptEmpStation  WHERE FK_Station IN (" + stasSQLIn + ") AND FK_Emp='" + BP.Web.WebUser.No + "'";
+
+                DataTable dtGroupMy = DBAccess.RunSQLReturnTable(sqlGroupMy);
+
+                string stasGroupMy = ""; //我使用的岗位.
+                foreach (DataRow dr in dtGroupMy.Rows)
+                    stasGroupMy += ",'" + dr[0].ToString() + "'";
+                stasGroupMy = stasGroupMy.Substring(1);
+
+
+                //2. 遍历: 当前的操作员，一个个的判断是否可以删除.
+                GenerWorkerLists gwls = new GenerWorkerLists();
+                gwls.Retrieve(GenerWorkerListAttr.WorkID, gwf.WorkID, GenerWorkerListAttr.FK_Node, nd.NodeID);
+
+                foreach (GenerWorkerList item in gwls)
+                {
+                    if (item.IsEnable == false)
+                        continue;
+                    if (item.FK_Emp.Equals(BP.Web.WebUser.No) == true)
+                        continue; //要把自己排除在外.
+
+                    string sqlGroupUser = "SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Station IN (" + stasSQLIn + ") AND FK_Emp='" + item.FK_Emp + "'";
+                    DataTable dtGroupUser = DBAccess.RunSQLReturnTable(sqlGroupUser);
+
+                    // 判断  sqlGroupMy  >= sqlGroupUser  是否包含,如果包含，就是删除对象.
+                    bool isCanDel = true;
+                    foreach (DataRow dr in dtGroupUser.Rows)
+                    {
+                        string staNo = "'" + dr[0].ToString() + "'";
+                        if (stasGroupMy.Contains(staNo) == false)
+                            isCanDel = false;
+                    }
+
+                    //符合删除的条件.
+                    if (isCanDel == true)
+                    {
+                        item.IsEnable = false;
+                        item.IsPassInt = 1;
+                        item.Update();
+                    }
+                }
+
+                // 地瓜土豆问题.
+                #region 3 检查同角色的人员是否有交集: 潘茄的人,马铃薯的人，都分别审批了，需要删除 潘茄+马铃薯角色的人.
+                // 3.1 找出来处理人中，用到人角色集合， 就是说已经消耗掉的角色集合.
+                string sql = "SELECT B.FK_Station,A.FK_Emp FROM WF_GenerWorkerlist A, Port_DeptEmpStation B ";
+                sql += " WHERE A.FK_Emp=B.FK_Emp AND B.FK_Station IN ("+ stasSQLIn + ") AND A.WorkID=" + gwf.WorkID + " AND A.FK_Node=" + nd.NodeID;
+                sql += " AND (A.IsPass=1 OR A.FK_Emp='" + BP.Web.WebUser.No + "') ";
+
+                DataTable dtStationsUsed = DBAccess.RunSQLReturnTable(sql);
+                string stasUseed = "";
+                foreach (DataRow dr in dtStationsUsed.Rows)
+                {
+                    stasUseed += ",'" + dr[0].ToString() + "'";
+                }
+
+                // 3.2 扫描剩余的待办人员，这些待办的人员的使用的本节点的角色集合 是否 在消耗掉的角色集合中，如果有，就删除他的待办.
+                gwls = new GenerWorkerLists();
+                gwls.Retrieve("WorkID", gwf.WorkID, "IsPass", 0);
+                foreach (GenerWorkerList item in gwls)
+                {
+                    if (item.FK_Emp.Equals(WebUser.No) == true)
+                        continue;
+
+                    //未处理的人的角色集合.
+                    string sqlGroupUser = "SELECT FK_Station FROM Port_DeptEmpStation A  WHERE  FK_Station IN ("+ stasSQLIn + ") AND FK_Emp='" + item.FK_Emp + "'";
+                    DataTable dtGroupUser = DBAccess.RunSQLReturnTable(sqlGroupUser);
+
+                    // 判断  sqlGroupMy  >= sqlGroupUser  是否包含,如果包含，就是删除对象.
+                    bool isCanDel = true;
+                    foreach (DataRow dr in dtGroupUser.Rows)
+                    {
+                        string staNo = "'" + dr[0].ToString() + "'";
+                        if (stasUseed.Contains(staNo) == false)
+                            isCanDel = false;
+                    }
+
+                    //符合删除的条件.
+                    if (isCanDel == true)
+                    {
+                        item.IsEnable = false;
+                        item.IsPassInt = 1;
+                        item.Update();
+                    }
+                }
+                #endregion  检查同角色的人员是否有交集: 潘茄的人,马铃薯的人，都分别审批了，需要删除 潘茄+马铃薯角色的人.
+
+                /* 以下方法有问题.
                 NodeStations nss = new NodeStations();
                 nss.Retrieve(NodeStationAttr.FK_Node, gwf.FK_Node);
                 if (nss.Count == 0)
-                    throw new Exception("err@流程设计错误: 您设置了待办按照岗位删除的规则,但是在当前节点上，您没有设置岗位。");
-                //定义岗位人员
+                    throw new Exception("err@流程设计错误: 您设置了待办按照角色删除的规则,但是在当前节点上，您没有设置角色。");
+                //定义角色人员
                 string station = "SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'";
                 station = DBAccess.RunSQLReturnString(station);
                 string stationEmp = "SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Station ='" + station + "'";
@@ -727,7 +848,7 @@ namespace BP.WF
                         continue;
                     sql = "UPDATE WF_GenerWorkerlist SET IsPass=1 WHERE WorkID=" + gwf.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND FK_Emp='" + empNo + "'";
                     DBAccess.RunSQL(sql);
-                }
+                } */
             }
         }
         /// <summary>
@@ -775,7 +896,7 @@ namespace BP.WF
                 string ptable = "ND" + int.Parse(wn.HisFlow.No) + "Track";
 
                 var mysql = "";
-                if (wn.HisNode.HisRunModel == RunModel.SubThread)
+                if (wn.HisNode.IsSubThread == true)
                     mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE (WorkID =" + wn.WorkID + " AND FID=" + wn.HisGenerWorkFlow.FID + ") AND ActionType!= " + (int)ActionType.UnSend + " AND NDTo = " + wn.HisNode.NodeID + " AND(NDTo != NDFrom) AND NDFrom In(Select Node From WF_Direction Where ToNode=" + wn.HisNode.NodeID + " AND FK_Flow='" + wn.HisFlow.No + "') ORDER BY RDT DESC";
                 else
                     mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE WorkID =" + wn.WorkID + " AND ActionType!= " + (int)ActionType.UnSend + " AND NDTo = " + wn.HisNode.NodeID + " AND(NDTo != NDFrom) AND NDFrom In(Select Node From WF_Direction Where ToNode=" + wn.HisNode.NodeID + " AND FK_Flow='" + wn.HisFlow.No + "') ORDER BY RDT DESC";

@@ -7,6 +7,7 @@ using BP.En;
 using BP.DA;
 using BP.Web;
 using BP.Sys;
+using BP.WF.Template;
 
 namespace BP.CCBill
 {
@@ -453,7 +454,14 @@ namespace BP.CCBill
             DBAccess.RunSQLs(sqls);
             return "删除成功.";
         }
-
+        public static string MyBill_DeleteBills(string frmID, string workIds)
+        {
+            FrmBill fb = new FrmBill(frmID);
+            string sqls = "DELETE FROM Frm_GenerBill WHERE WorkID in (" + workIds + ")";
+            sqls += "@DELETE FROM " + fb.PTable + " WHERE OID in (" + workIds + ")";
+            DBAccess.RunSQLs(sqls);
+            return "删除成功.";
+        }
 
         /// <summary>
         /// 删除实体
@@ -626,7 +634,7 @@ namespace BP.CCBill
             DataSet ds = new DataSet();
 
             //单据类别.
-            FrmTrees ens = new FrmTrees();
+            SysFormTrees ens = new SysFormTrees();
             ens.RetrieveAll();
 
             DataTable dtSort = ens.ToDataTableField("Sort");

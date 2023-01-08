@@ -284,7 +284,7 @@ namespace BP.WF.Template
                 map.SetHelperAlert(NodeToolbarAttr.IconPath, msg);
 
                 
-                map.AddTBInt(NodeToolbarAttr.Idx, 0, "显示顺序", true, false);
+                map.AddTBInt(NodeToolbarAttr.Idx, 0, "顺序", true, false);
                 map.AddMyFile("图标");
 
                 this._enMap = map;

@@ -32,6 +32,11 @@ namespace BP.Sys
         /// OrgNo
         /// </summary>
         public const string OrgNo = "OrgNo";
+        /// <summary>
+        /// StrKey
+        /// </summary>
+        public const string StrKey = "StrKey";
+
     }
     /// <summary>
     /// SysEnum
@@ -62,7 +67,7 @@ namespace BP.Sys
                 this.SetValByKey(SysEnumAttr.OrgNo, value);
             }
         }
-      
+
         /// <summary>
         /// 标签
         /// </summary>
@@ -117,6 +122,20 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(SysEnumAttr.EnumKey, value);
+            }
+        }
+        /// <summary>
+        /// StrKey
+        /// </summary>
+        public string StrKey
+        {
+            get
+            {
+                return this.GetValStringByKey(SysEnumAttr.StrKey);
+            }
+            set
+            {
+                this.SetValByKey(SysEnumAttr.StrKey, value);
             }
         }
         public void setEnumKey(string val)
@@ -184,7 +203,7 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_Enum", "枚举数据");
+                Map map = new Map(BP.Sys.Base.Glo.SysEnum(), "枚举数据");
 
                 /*
                 * 为了能够支持 cloud 我们做了如下变更.
@@ -202,6 +221,7 @@ namespace BP.Sys
                 map.AddTBString(SysEnumAttr.Lang, "CH", "语言", true, false, 0, 10, 8);
 
                 map.AddTBString(SysEnumMainAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 8);
+                map.AddTBString(SysEnumAttr.StrKey, null, "StrKey", true, false, 1, 100, 8);
 
                 this._enMap = map;
                 return this._enMap;
@@ -393,7 +413,7 @@ namespace BP.Sys
         }
         public SysEnums(string enumKey, string vals)
         {
-            if (vals == null || vals == "")
+            if (DataType.IsNullOrEmpty(vals) == true)
             {
                 this.LoadIt(enumKey);
                 return;

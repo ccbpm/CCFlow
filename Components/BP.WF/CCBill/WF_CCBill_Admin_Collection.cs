@@ -155,6 +155,8 @@ namespace BP.CCBill
             enColl.MethodModel = MethodModelClass.FlowNewEntity; //方法模式.
             //   enColl.UrlExt = "../CCBill/Opt/StartFlowByNewEntity.htm?FlowNo=" + en.FlowNo + "&FrmID=" + this.FrmID + "&MenuNo=" + menu.No;
             enColl.Icon = "icon-drop";
+            enColl.Idx = 100;
+            enColl.SetPara("EnName", "TS.CCBill.CollectionFlowNewEntity");
             enColl.Insert();
 
             return menu.No; //返回的方法ID;

@@ -60,7 +60,7 @@ namespace BP.GPM.WeiXin
             DeptEmps deptEmps = new BP.Port.DeptEmps();
             deptEmps.ClearTable();
 
-            //删除部门人员岗位表
+            //删除部门人员角色表
             DeptEmpStations deptEmpStations = new BP.Port.DeptEmpStations();
             deptEmpStations.ClearTable();
             #endregion 清楚现有的数据.
@@ -117,7 +117,7 @@ namespace BP.GPM.WeiXin
                         deptEmp.FK_Dept = deptMent.id;
                         deptEmp.Insert();
 
-                        //没有岗位，不同步，手动分配岗位吧
+                        //没有角色，不同步，手动分配角色吧
                         //GPM.DeptEmpStation deptEmpStation = new BP.Port.DeptEmpStation();
                         //deptEmpStation.setMyPK(deptMent.id + "_" + userInfo.userid + "";
                     }

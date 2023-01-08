@@ -21,9 +21,10 @@ namespace BP.WF.HttpHandler
         }
         /// <summary>
         /// 设置该流程的所有节点都是用该方案。
+        /// @hongyan, 有变化.
         /// </summary>
         /// <returns></returns>
-        public void RefOneFrmTree_SetAllNodeFrmUseThisSln()
+        public string RefOneFrmTree_SetAllNodeFrmUseThisSln()
         {
             string nodeID = GetRequestVal("FK_Node");
             Node currNode = new Node(nodeID);
@@ -108,6 +109,8 @@ namespace BP.WF.HttpHandler
                         ff.Insert();
                 }
             }
+
+            return "执行成功.";
         }
         /// <summary>
         /// 获得下拉框的值.
@@ -145,7 +148,7 @@ namespace BP.WF.HttpHandler
             //单机模式下
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
             {
-                sql += "SELECT  b.NAME AS SortName, a.No, A.Name,";
+                sql += "SELECT  b.NAME AS SortName, a.no AS \"No\", A.name AS \"Name\",";
                 sql += "A.PTable,";
                 sql += "A.OrgNo ";
                 sql += "FROM ";
@@ -163,7 +166,7 @@ namespace BP.WF.HttpHandler
             // 云服务器环境下
             if (Glo.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
-                sql += "SELECT  b.NAME AS SortName, a.No, A.Name, ";
+                sql += "SELECT  b.NAME AS SortName, a.no AS \"No\", A.name AS \"Name\", ";
                 sql += "A.PTable, ";
                 sql += "A.OrgNo ";
                 sql += "FROM ";
@@ -180,7 +183,7 @@ namespace BP.WF.HttpHandler
             //集团模式下
             if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
             {
-                sql += " SELECT  b.NAME AS SortName, a.No, A.Name,";
+                sql += " SELECT  b.NAME AS SortName, a.no AS \"No\", A.name AS \"Name\",";
                 sql += "A.PTable,";
                 sql += "A.OrgNo, '"+BP.Web.WebUser.OrgName+"' as OrgName ";
                 sql += "FROM ";
@@ -196,7 +199,7 @@ namespace BP.WF.HttpHandler
 
                 sql += " UNION  ";
 
-                sql += " SELECT  '- 共享 -' AS SortName, A.No, A.Name, ";
+                sql += " SELECT  '- 共享 -' AS SortName, a.no AS \"No\", A.name AS \"Name\", ";
                 sql += " A.PTable, A.OrgNo, '其他组织' as OrgName ";
                 sql += " FROM ";
                 sql += " Sys_MapData A,  WF_FrmOrg B, Port_Org C ";

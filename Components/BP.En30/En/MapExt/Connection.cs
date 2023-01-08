@@ -62,7 +62,7 @@ namespace BP.En.FrmUI
         public void Add(string keyOfEn, string refKeyOfEn, string sql)
         {
             Connection en = new Connection();
-            en.KeyOfEn = keyOfEn;
+            en.KeyOfEn=keyOfEn;
             en.RelKeyOfEn = refKeyOfEn;
             en.SQL = sql;
 

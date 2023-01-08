@@ -7,7 +7,7 @@ using BP.En;
 using BP.Web;
 using System.Linq;
 using BP.Difference;
-
+using System.Runtime.InteropServices;
 
 namespace BP.En
 {
@@ -147,6 +147,9 @@ namespace BP.En
                         case 7:
                             dataFormat = "yyyy";
                             break;
+                        case 8:
+                            dataFormat = "MM";
+                            break;
                         default:
                             throw new Exception("没有找到指定的时间类型");
                     }
@@ -167,7 +170,7 @@ namespace BP.En
             if (fk_node != 0 && fk_node != 999999 && fk_flow != null)
             {
                 Paras ps = new Paras();
-                ps.SQL = "SELECT MyPK,DefVal FROM Sys_FrmSln WHERE FK_MapData =" + ps.DBStr + "FK_MapData AND FK_Flow=" + ps.DBStr + "FK_Flow AND FK_Node =" + ps.DBStr + "FK_Node";
+                ps.SQL = "SELECT MyPK,DefVal,UIIsEnable FROM Sys_FrmSln WHERE FK_MapData =" + ps.DBStr + "FK_MapData AND FK_Flow=" + ps.DBStr + "FK_Flow AND FK_Node =" + ps.DBStr + "FK_Node";
                 ps.Add("FK_MapData", fk_mapdata);
                 ps.Add("FK_Flow", fk_flow);
                 ps.Add("FK_Node", fk_node);
@@ -176,13 +179,14 @@ namespace BP.En
             }
 
             Attrs attrs = this.EnMap.Attrs;
+            bool isReadonly = true;
             foreach (Attr attr in attrs)
             {
                 if (attr.IsRefAttr)
                     this.SetValRefTextByKey(attr.Key, "");
 
                 string v = attr.DefaultValOfReal as string;
-
+                isReadonly = attr.UIIsReadonly;
                 //先判断是否设置了字段权限
                 if (dt != null && dt.Rows.Count != 0)
                 {
@@ -193,6 +197,7 @@ namespace BP.En
                         if (myp1k.Equals(mypk) == true)
                         {
                             v = dr[1] as string;
+                            isReadonly = dr[2].ToString().Equals("1") == true ? false : true;
                             break;
                         }
                     }
@@ -208,7 +213,7 @@ namespace BP.En
                 {
                     case "@WebUser.No":
                     case "@CurrWorker":
-                        if (attr.UIIsReadonly == true)
+                        if (isReadonly == true)
                         {
                             this.SetValByKey(attr.Key, WebUser.No);
                         }
@@ -219,7 +224,7 @@ namespace BP.En
                         }
                         continue;
                     case "@WebUser.Name":
-                        if (attr.UIIsReadonly == true)
+                        if (isReadonly == true)
                         {
                             this.SetValByKey(attr.Key, WebUser.Name);
                         }
@@ -230,7 +235,7 @@ namespace BP.En
                         }
                         continue;
                     case "@WebUser.FK_Dept":
-                        if (attr.UIIsReadonly == true)
+                        if (isReadonly == true)
                         {
                             this.SetValByKey(attr.Key, WebUser.FK_Dept);
                         }
@@ -241,7 +246,7 @@ namespace BP.En
                         }
                         continue;
                     case "@WebUser.FK_DeptName":
-                        if (attr.UIIsReadonly == true)
+                        if (isReadonly == true)
                         {
                             this.SetValByKey(attr.Key, WebUser.FK_DeptName);
                         }
@@ -253,7 +258,7 @@ namespace BP.En
                         continue;
                     case "@WebUser.FK_DeptNameOfFull":
                     case "@WebUser.FK_DeptFullName":
-                        if (attr.UIIsReadonly == true)
+                        if (isReadonly == true)
                         {
                             this.SetValByKey(attr.Key, WebUser.FK_DeptNameOfFull);
                         }
@@ -264,7 +269,7 @@ namespace BP.En
                         }
                         continue;
                     case "@WebUser.OrgNo":
-                        if (attr.UIIsReadonly == true)
+                        if (isReadonly == true)
                         {
                             this.SetValByKey(attr.Key, WebUser.OrgNo);
                         }
@@ -275,7 +280,7 @@ namespace BP.En
                         }
                         continue;
                     case "@WebUser.OrgName":
-                        if (attr.UIIsReadonly == true)
+                        if (isReadonly == true)
                         {
                             this.SetValByKey(attr.Key, WebUser.OrgName);
                         }
@@ -311,11 +316,14 @@ namespace BP.En
                             case 7:
                                 dataFormat = "yyyy";
                                 break;
+                            case 8:
+                                dataFormat = "MM";
+                                break;
                             default:
                                 throw new Exception("没有找到指定的时间类型");
                         }
 
-                        if (attr.UIIsReadonly == true)
+                        if (isReadonly == true)
                         {
                             /// if (myval == v)
                             this.SetValByKey(attr.Key, DataType.CurrentDateByFormart(dataFormat));
@@ -329,7 +337,7 @@ namespace BP.En
                         }
                         continue;
                     case "@FK_ND":
-                        if (attr.UIIsReadonly == true)
+                        if (isReadonly == true)
                         {
                             this.SetValByKey(attr.Key, DataType.CurrentYear);
                         }
@@ -339,12 +347,23 @@ namespace BP.En
                                 this.SetValByKey(attr.Key, DataType.CurrentYear);
                         }
                         continue;
+                    case "@FK_YF":
+                        if (isReadonly == true)
+                        {
+                            this.SetValByKey(attr.Key, DataType.CurrentMonth);
+                        }
+                        else
+                        {
+                            if (DataType.IsNullOrEmpty(myval) || myval == v)
+                                this.SetValByKey(attr.Key, DataType.CurrentMonth);
+                        }
+                        continue;
                     case "@yyyy年MM月dd日":
                     case "@yyyy年MM月dd日HH时mm分":
                     case "@yy年MM月dd日":
                     case "@yy年MM月dd日HH时mm分":
                     case "@yyyy-MM-dd":
-                        if (attr.UIIsReadonly == true)
+                        if (isReadonly == true)
                         {
                             this.SetValByKey(attr.Key, DateTime.Now.ToString(v.Replace("@", "")));
                         }
@@ -357,7 +376,7 @@ namespace BP.En
                     default:
                         if (BP.Difference.SystemConfig.IsBSsystem == true && HttpContextHelper.RequestParamKeys.Contains(v.Replace("@", "")) == true)
                         {
-                            if (attr.UIIsReadonly == true)
+                            if (isReadonly == true)
                             {
                                 this.SetValByKey(attr.Key, HttpContextHelper.RequestParams(v.Replace("@", "")));
                             }
@@ -654,8 +673,14 @@ namespace BP.En
             {
                 if (this._row == null)
                 {
-                    this._row = new Row();
-                    this._row.LoadAttrs(this.EnMap.Attrs);
+                    this._row = BP.DA.Cash.GetRow(this.ToString());
+                    if (this._row == null)
+                    {
+                        Row row = new Row();
+                        row.LoadAttrs(this.EnMap.Attrs);
+                        BP.DA.Cash.SetRow(this.ToString(), row);
+                        this._row = BP.DA.Cash.GetRow(this.ToString());
+                    }
                 }
                 return this._row;
             }
@@ -696,11 +721,21 @@ namespace BP.En
         {
             this.Row.SetValByKey(attrKey, val);
         }
+
+        private readonly object _locker = new object();
+        public static string getMemory(object o) // 获取引用类型的内存地址方法  
+        {
+            GCHandle h = GCHandle.Alloc(o, GCHandleType.WeakTrackResurrection);
+
+            IntPtr addr = GCHandle.ToIntPtr(h);
+
+            return "0x" + addr.ToString("X");
+        }
         public void SetValByKey(string attrKey, object val)
         {
             this.Row.SetValByKey(attrKey, val);
-        }
 
+        }
         public void SetValByDesc(string attrDesc, object val)
         {
             if (val == null)
@@ -981,6 +1016,11 @@ namespace BP.En
 
             return true;
         }
+        public DateTime GetValDate(string key)
+        {
+            string val = this.GetValStrByKey(key);
+            return DataType.ParseSysDate2DateTime(val);
+        }
 
         public bool GetValBooleanByKey(string key, bool defval)
         {
@@ -997,7 +1037,7 @@ namespace BP.En
                 return defval;
             }
         }
-       
+
         /// <summary>
         /// 根据key 得到flaot val
         /// </summary>
@@ -1039,7 +1079,7 @@ namespace BP.En
                 throw new Exception("@表[" + this.EnDesc + "]在获取属性[" + key + "]值,出现错误，不能将[" + this.GetValStrByKey(key) + "]转换为 decimal 类型.错误信息：" + ex.Message);
             }
         }
-      
+
         public double GetValDoubleByKey(string key)
         {
             try
@@ -1103,7 +1143,7 @@ namespace BP.En
                 return true;
             }
         }
-      
+
         /// <summary>
         /// 对这个实体的描述
         /// </summary>
@@ -1165,7 +1205,7 @@ namespace BP.En
         {
             get
             {
-                if (this.PK.Equals("OID")==true)
+                if (this.PK.Equals("OID") == true)
                     return true;
                 return false;
             }
@@ -1177,7 +1217,7 @@ namespace BP.En
         {
             get
             {
-                if (this.PK.Equals("No")==true)
+                if (this.PK.Equals("No") == true)
                     return true;
                 return false;
             }
@@ -1194,7 +1234,7 @@ namespace BP.En
                 return false;
             }
         }
-     
+
         /// <summary>
         /// 如果只有一个主键,就返回PK,如果有多个就返回第一个.PK
         /// </summary>

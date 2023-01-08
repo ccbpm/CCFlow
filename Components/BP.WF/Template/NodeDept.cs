@@ -6,57 +6,57 @@ using BP.WF.Port;
 
 namespace BP.WF.Template
 {
-	/// <summary>
-	/// 节点部门属性	  
-	/// </summary>
-	public class NodeDeptAttr
-	{
-		/// <summary>
-		/// 节点
-		/// </summary>
-		public const string FK_Node="FK_Node";
-		/// <summary>
-		/// 工作部门
-		/// </summary>
-		public const string FK_Dept="FK_Dept";
-	}
-	/// <summary>
-	/// 节点部门
-	/// 节点的工作部门有两部分组成.	 
-	/// 记录了从一个节点到其他的多个节点.
-	/// 也记录了到这个节点的其他的节点.
-	/// </summary>
-	public class NodeDept :EntityMM
-	{
-		#region 基本属性
-		/// <summary>
-		///节点
-		/// </summary>
-		public int  FK_Node
-		{
-			get
-			{
-				return this.GetValIntByKey(NodeDeptAttr.FK_Node);
-			}
-			set
-			{
-				this.SetValByKey(NodeDeptAttr.FK_Node,value);
-			}
-		}
-		/// <summary>
-		/// 工作部门
-		/// </summary>
-		public string FK_Dept
-		{
-			get
-			{
-				return this.GetValStringByKey(NodeDeptAttr.FK_Dept);
-			}
-			set
-			{
-				this.SetValByKey(NodeDeptAttr.FK_Dept,value);
-			}
-		}
+    /// <summary>
+    /// 节点部门属性	  
+    /// </summary>
+    public class NodeDeptAttr
+    {
+        /// <summary>
+        /// 节点
+        /// </summary>
+        public const string FK_Node = "FK_Node";
+        /// <summary>
+        /// 工作部门
+        /// </summary>
+        public const string FK_Dept = "FK_Dept";
+    }
+    /// <summary>
+    /// 节点部门
+    /// 节点的工作部门有两部分组成.	 
+    /// 记录了从一个节点到其他的多个节点.
+    /// 也记录了到这个节点的其他的节点.
+    /// </summary>
+    public class NodeDept : EntityMyPK
+    {
+        #region 基本属性
+        /// <summary>
+        ///节点
+        /// </summary>
+        public int FK_Node
+        {
+            get
+            {
+                return this.GetValIntByKey(NodeDeptAttr.FK_Node);
+            }
+            set
+            {
+                this.SetValByKey(NodeDeptAttr.FK_Node, value);
+            }
+        }
+        /// <summary>
+        /// 工作部门
+        /// </summary>
+        public string FK_Dept
+        {
+            get
+            {
+                return this.GetValStringByKey(NodeDeptAttr.FK_Dept);
+            }
+            set
+            {
+                this.SetValByKey(NodeDeptAttr.FK_Dept, value);
+            }
+        }
         public override UAC HisUAC
         {
             get
@@ -66,50 +66,54 @@ namespace BP.WF.Template
                 return base.HisUAC;
             }
         }
-		#endregion 
+        #endregion
 
-		#region 构造方法
-		/// <summary>
-		/// 节点部门
-		/// </summary>
-		public NodeDept(){}
-		/// <summary>
-		/// 重写基类方法
-		/// </summary>
-		public override Map EnMap
-		{
-			get
-			{
-				if (this._enMap!=null) 
-					return this._enMap;
+        #region 构造方法
+        /// <summary>
+        /// 节点部门
+        /// </summary>
+        public NodeDept() { }
+        /// <summary>
+        /// 重写基类方法
+        /// </summary>
+        public override Map EnMap
+        {
+            get
+            {
+                if (this._enMap != null)
+                    return this._enMap;
 
-                Map map = new Map("WF_NodeDept", "节点部门");			 
-
-				map.DepositaryOfEntity=Depositary.None;
-				map.DepositaryOfMap=Depositary.Application;
-
+                Map map = new Map("WF_NodeDept", "节点部门");
+                map.DepositaryOfEntity = Depositary.None;
+                map.DepositaryOfMap = Depositary.Application;
                 map.IndexField = NodeEmpAttr.FK_Node;
 
+                map.AddMyPK();
+                map.AddTBInt(NodeStationAttr.FK_Node, 0, "节点", false, false);
+                map.AddDDLEntities(NodeDeptAttr.FK_Dept, null, "部门", new BP.Port.Depts(), true);
 
-                map.AddTBIntPK(NodeStationAttr.FK_Node, 0, "节点", false, false);
+                //            map.AddTBIntPK(NodeStationAttr.FK_Node, 0, "节点", false, false);
+                //map.AddDDLEntitiesPK( NodeDeptAttr.FK_Dept,null,"部门",new BP.Port.Depts(),true);
 
-                //map.AddDDLEntitiesPK(NodeDeptAttr.FK_Node,0,DataType.AppInt,"节点",new Nodes(),
-                //    NodeAttr.NodeID,NodeAttr.Name,true);
+                this._enMap = map;
 
-				map.AddDDLEntitiesPK( NodeDeptAttr.FK_Dept,null,"部门",new BP.Port.Depts(),true);
+                return this._enMap;
+            }
+        }
+        #endregion
 
-				this._enMap=map;
-				 
-				return this._enMap;
-			}
-		}
-		#endregion
 
-	}
-	/// <summary>
-	/// 节点部门
-	/// </summary>
-    public class NodeDepts : EntitiesMM
+        protected override bool beforeUpdateInsertAction()
+        {
+            this.setMyPK(this.FK_Node + "_" + this.FK_Dept);
+            return base.beforeUpdateInsertAction();
+        }
+
+    }
+    /// <summary>
+    /// 节点部门
+    /// </summary>
+    public class NodeDepts : EntitiesMyPK
     {
         /// <summary>
         /// 节点部门

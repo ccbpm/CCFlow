@@ -213,13 +213,13 @@ namespace BP.WF.HttpHandler
             {
 
                 DataRow dr = dt.NewRow();
-                if (this.IsMobile == false)
+                /*if (this.IsMobile == false)
                 {
                     dr["No"] = "Close";
                     dr["Name"] = "关闭";
                     dr["Oper"] = "Close();";
                     dt.Rows.Add(dr);
-                }
+                }*/
 
 
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
@@ -304,7 +304,7 @@ namespace BP.WF.HttpHandler
                         {
                             dr = dt.NewRow();
                             dr["No"] = "Press";
-                            dr["Name"] = "催办";
+                            dr["Name"] = btnLab.GetValStringByKey(BtnAttr.PressLab);
                             dr["Oper"] = "Press();";
                             dt.Rows.Add(dr);
                         }
@@ -312,11 +312,11 @@ namespace BP.WF.HttpHandler
                     case WFState.Complete: // 完成.
                     case WFState.Delete:   // 逻辑删除..
                         /*恢复使用流程*/
-                        if (WebUser.No.Equals("admin") == true || powers.Contains("FlowDataRollback") == true)
+                        if (WebUser.No.Equals("admin") == true || powers.Contains("FlowDataRollback") == true || (gwf.Emps.Contains(WebUser.No) == true && btnLab.GetValBooleanByKey(BtnAttr.RollbackEnable) == true))
                         {
                             dr = dt.NewRow();
                             dr["No"] = "Rollback";
-                            dr["Name"] = "回滚";
+                            dr["Name"] = btnLab.GetValStringByKey(BtnAttr.RollbackLab);
                             dr["Oper"] = "";
                             dt.Rows.Add(dr);
                         }
@@ -325,11 +325,27 @@ namespace BP.WF.HttpHandler
                     default:
                         break;
                 }
-                //dr = dt.NewRow();
-                //dr["No"] = "Track";
-                //dr["Name"] = "轨迹";
-                //dr["Oper"] = "";
-                //dt.Rows.Add(dr);
+
+                if (btnLab.GetValBooleanByKey(BtnAttr.ShowParentFormEnableMyView) && this.PWorkID != 0)
+                {
+                    /*如果要查看父流程.*/
+                    dr = dt.NewRow();
+                    dr["No"] = "ParentForm";
+                    dr["Name"] = btnLab.ShowParentFormLab;
+                    dr["Oper"] = "";
+
+                    dt.Rows.Add(dr);
+                }
+                if (btnLab.GetValBooleanByKey(BtnAttr.TrackEnableMyView))
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "Track";
+                    dr["Name"] = btnLab.TrackLab;
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+                }
+
+                
                 #endregion 根据流程权限控制规则获取可以操作的按钮功能
 
                 #region 加载流程查看器 - 按钮
@@ -399,7 +415,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 //数据批阅
-                if (btnLab.FrmDBRemarkEnable != 0)
+                if (btnLab.GetValIntByKey(BtnAttr.FrmDBRemarkEnableMyView) != 0)
                 {
                     dr = dt.NewRow();
                     dr["No"] = "FrmDBRemark";
@@ -554,6 +570,8 @@ namespace BP.WF.HttpHandler
             switch (DBAccess.AppCenterDBType)
             {
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     currNode = "SELECT FK_Node FROM (SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' Order by RDT DESC ) WHERE rownum=1";
                     break;
                 case DBType.MySQL:
@@ -569,6 +587,8 @@ namespace BP.WF.HttpHandler
                     break;
             }
             String unSendToNode = DBAccess.RunSQLReturnString(currNode);
+            if (DataType.IsNullOrEmpty(unSendToNode) == true)
+                return "err@你没有撤销当前流程的权限";
             try
             {
                 return BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.WorkID, int.Parse(unSendToNode), this.FID);
@@ -680,8 +700,8 @@ namespace BP.WF.HttpHandler
                 }
 
             }
-            #region 指定岗位可见
-            #endregion 指定岗位可见
+            #region 指定角色可见
+            #endregion 指定角色可见
 
             #region 指定人员可见
             if (viewEn.PSpecEmp == true && DataType.IsNullOrEmpty(viewEn.PSpecEmpExt) == false)
@@ -722,7 +742,7 @@ namespace BP.WF.HttpHandler
             if (gwf.FID != 0)
             {
                 Node nd = new Node(gwf.FK_Node);
-                if (nd.HisRunModel == RunModel.SubThread && toDoEmps.Contains(";" + WebUser.No + ","))
+                if (nd.IsSubThread ==true && toDoEmps.Contains(";" + WebUser.No + ","))
                 {
                     WF_MyFlow handler = new WF_MyFlow();
                     return handler.MyFlow_Init();
@@ -772,7 +792,8 @@ namespace BP.WF.HttpHandler
 
             #region 处理表单类型.
             if (this.currND.HisFormType == NodeFormType.SheetTree
-                 || this.currND.HisFormType == NodeFormType.SheetAutoTree)
+                 || this.currND.HisFormType == NodeFormType.SheetAutoTree
+                 || this.currFlow.FlowDevModel == FlowDevModel.FrmTree)
             {
 
                 #region 开始组合url.
@@ -825,7 +846,8 @@ namespace BP.WF.HttpHandler
                 return "url@" + toUrl;
             }
 
-            if (this.currND.HisFormType == NodeFormType.SDKForm)
+            if (this.currND.HisFormType == NodeFormType.SDKForm
+                || this.currFlow.FlowDevModel == FlowDevModel.SDKFrm)
             {
                 string url = currND.FormUrl;
                 if (DataType.IsNullOrEmpty(url))
@@ -895,7 +917,7 @@ namespace BP.WF.HttpHandler
             }
 
             //自定义表单
-            if (frmtype == NodeFormType.SelfForm && this.IsMobile == false)
+            if ((frmtype == NodeFormType.SelfForm || this.currFlow.FlowDevModel == FlowDevModel.SelfFrm) && this.IsMobile == false)
             {
 
                 string url = "MyViewSelfForm.htm";

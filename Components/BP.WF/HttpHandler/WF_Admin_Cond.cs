@@ -4,6 +4,7 @@ using BP.DA;
 using BP.Sys;
 using BP.En;
 using BP.WF.Template;
+using BP.Difference;
 
 namespace BP.WF.HttpHandler
 {
@@ -29,12 +30,10 @@ namespace BP.WF.HttpHandler
             Directions dirs = new Directions();
             dirs.Retrieve(DirectionAttr.Node, this.FK_Node, DirectionAttr.Idx);
             return dirs.ToJson();
-
             //按照条件的先后计算.
             Conds cds = new Conds();
             cds.Retrieve(CondAttr.FK_Node, this.FK_Node,
                 CondAttr.CondType, 2, CondAttr.Idx);
-
             foreach (Cond item in cds)
             {
                 Node nd = new Node(item.ToNodeID);
@@ -95,7 +94,6 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(dt);
         }
         #region 方向条件-审核组件
-        
         /// <summary>
         /// 保存
         /// </summary>
@@ -128,7 +126,7 @@ namespace BP.WF.HttpHandler
 
             return "保存成功..";
         }
-        
+
         #endregion
 
         #region 方向条件URL
@@ -152,7 +150,7 @@ namespace BP.WF.HttpHandler
             cond.FK_Flow = this.FK_Flow;
             cond.OperatorValue = sql;
             cond.Note = this.GetRequestVal("TB_Note"); //备注.
-           
+
             cond.FK_Flow = this.FK_Flow;
             cond.CondType = condTypeEnum;
             if (DataType.IsNullOrEmpty(this.MyPK) == true)
@@ -171,7 +169,7 @@ namespace BP.WF.HttpHandler
         #endregion
 
         #region WebApi
-       
+
         /// <summary>
         /// 保存
         /// </summary>
@@ -187,21 +185,22 @@ namespace BP.WF.HttpHandler
             Cond cond = new Cond();
             cond.HisDataFrom = ConnDataFrom.WebApi;
 
-            if(this.GetRequestValInt("FK_MainNode")==0)
+            if (this.GetRequestValInt("FK_MainNode") == 0)
                 cond.FK_Node = this.FK_Node;
             else
                 cond.FK_Node = this.GetRequestValInt("FK_MainNode");
-            if(this.ToNodeID==0)
+            if (this.ToNodeID == 0)
                 cond.ToNodeID = this.FK_Node;
             else
                 cond.ToNodeID = this.ToNodeID;
 
             cond.FK_Flow = this.FK_Flow;
-            cond.OperatorValue = sql;
+            cond.OperatorValue = sql; 
             cond.Note = this.GetRequestVal("TB_Note"); //备注.
             cond.FK_Flow = this.FK_Flow;
             cond.CondType = condTypeEnum;
-            cond.SetPara("OperatorValue",atParas);
+            // cond.OperatorValue = atParas; //在存储一遍.
+            cond.SetPara("OperatorValue", atParas);
             if (DataType.IsNullOrEmpty(this.MyPK) == true)
             {
                 cond.setMyPK(DBAccess.GenerGUID());
@@ -215,7 +214,7 @@ namespace BP.WF.HttpHandler
 
             return "保存成功..";
         }
-       
+
         #endregion WebApi
 
         #region 方向条件 Frm 模版
@@ -228,8 +227,11 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             string toNodeID = this.GetRequestVal("ToNodeID");
-
             Node nd = new Node(this.FK_Node);
+
+            string frmID = this.FrmID;
+            if (DataType.IsNullOrEmpty(frmID) == true)
+                frmID = "ND" + int.Parse(nd.FK_Flow) + "Rpt";
 
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
 
@@ -239,26 +241,26 @@ namespace BP.WF.HttpHandler
                 Cond cond = new Cond(this.MyPK);
                 ds.Tables.Add(cond.ToDataTableField("WF_Cond"));
             }
-           
+
             string noteIn = "'FID','PRI','PNodeID','PrjNo', 'PrjName', 'FK_NY','FlowDaySpan', 'Rec','CDT','RDT','AtPara','WFSta','FlowNote','FlowStartRDT','FlowEnderRDT','FlowEnder','FlowSpanDays','WFState','OID','PWorkID','PFlowNo','PEmp','FlowEndNode','GUID'";
 
             //增加字段集合.
             string sql = "";
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6 || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
             {
-                sql = "SELECT KeyOfEn as No, KeyOfEn||' - '||Name as Name FROM Sys_MapAttr WHERE FK_MapData='ND" + int.Parse(nd.FK_Flow) + "Rpt'";
+                sql = "SELECT KeyOfEn as No, KeyOfEn||' - '||Name as Name FROM Sys_MapAttr WHERE FK_MapData='" + frmID + "'";
                 sql += " AND KeyOfEn Not IN (" + noteIn + ") ";
                 sql += " AND MyDataType NOT IN (6,7) ";
             }
             else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
-                sql = "SELECT KeyOfEn as No, CONCAT(KeyOfEn,' - ', Name ) as Name FROM Sys_MapAttr WHERE FK_MapData='ND" + int.Parse(nd.FK_Flow) + "Rpt'";
+                sql = "SELECT KeyOfEn as No, CONCAT(KeyOfEn,' - ', Name ) as Name FROM Sys_MapAttr WHERE FK_MapData='" + frmID + "'";
                 sql += " AND KeyOfEn Not IN (" + noteIn + ") ";
                 sql += " AND MyDataType NOT IN (6,7) ";
             }
             else
             {
-                sql = "SELECT KeyOfEn as No, KeyOfEn+' - '+Name as Name FROM Sys_MapAttr WHERE FK_MapData='ND" + int.Parse(nd.FK_Flow) + "Rpt'";
+                sql = "SELECT KeyOfEn as No, KeyOfEn+' - '+Name as Name FROM Sys_MapAttr WHERE FK_MapData='" + frmID + "'";
                 sql += " AND KeyOfEn Not IN (" + noteIn + ") ";
                 sql += " AND MyDataType NOT IN (6,7) ";
             }
@@ -295,6 +297,8 @@ namespace BP.WF.HttpHandler
             string field = this.GetRequestVal("DDL_Fields");
             field = "ND" + int.Parse(this.FK_Flow) + "Rpt_" + field;
 
+            MapAttr attr = new MapAttr(field);
+
             int toNodeID = this.ToNodeID;
             string oper = this.GetRequestVal("DDL_Operator");
 
@@ -302,9 +306,11 @@ namespace BP.WF.HttpHandler
             string operValT = this.GetRequestVal("OperValText");
 
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
-          
+
             Cond cond = new Cond();
             cond.HisDataFrom = ConnDataFrom.NodeForm;
+            cond.DataFromText = "表单字段";
+
             cond.ToNodeID = toNodeID;
 
             cond.FK_Node = this.FK_Node;
@@ -316,7 +322,9 @@ namespace BP.WF.HttpHandler
 
             cond.FK_Flow = this.FK_Flow;
             cond.CondType = condTypeEnum;
-     
+
+            cond.Note = "表单[" + attr.FK_MapData + "]字段:[" + attr.KeyOfEn + "," + attr.Name + "][" + oper + "][" + operValT + "]";
+
             //#region 方向条件，全部更新.
             //Conds conds = new Conds();
             //QueryObject qo = new QueryObject(conds);
@@ -329,7 +337,7 @@ namespace BP.WF.HttpHandler
             //{
             //    qo.addAnd();
             //    qo.AddWhere(CondAttr.ToNodeID, toNodeID);
-            //}
+            //} 
             //int num = qo.DoQuery();
             //#endregion
 
@@ -337,7 +345,7 @@ namespace BP.WF.HttpHandler
             {
                 case Template.CondType.Flow:
                 case Template.CondType.Node:
-                 
+
                     break;
                 case Template.CondType.Dir:
                 case Template.CondType.SubFlow: //启动子流程.
@@ -375,28 +383,26 @@ namespace BP.WF.HttpHandler
             dt.Columns[0].ColumnName = "No";
             dt.Columns[1].ColumnName = "Name";
 
+            //@gaoxin. 
             DataRow dr = dt.NewRow();
-            dr[0] = "all";
-            dr[1] = "请选择表单";
+            dr[0] = "ND" + int.Parse(this.FK_Flow) + "Rpt";
+            dr[1] = "节点表单(内置表单)";
             dt.Rows.Add(dr);
 
             DataSet ds = new DataSet();
             ds.Tables.Add(dt);
 
             //增加条件集合.
-
             string toNodeID = this.GetRequestVal("ToNodeID");
-           
+
             // 增加条件.
             if (DataType.IsNullOrEmpty(this.MyPK) == false)
             {
                 Cond cond = new Cond(this.MyPK);
                 ds.Tables.Add(cond.ToDataTableField("WF_Cond"));
-               
-              
             }
 
-            return BP.Tools.Json.DataSetToJson(ds, false); 
+            return BP.Tools.Json.DataSetToJson(ds, false);
         }
         /// <summary>
         /// 获得一个表单的字段.
@@ -422,7 +428,7 @@ namespace BP.WF.HttpHandler
 
             //节点,子线城,还是其他
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
-           
+
             Cond cond = new Cond();
             cond.HisDataFrom = ConnDataFrom.StandAloneFrm;
             cond.ToNodeID = toNodeID;
@@ -432,7 +438,7 @@ namespace BP.WF.HttpHandler
             cond.OperatorValue = operVal; //操作值.
 
             cond.FK_Attr = field; //字段属性.
-            
+
             cond.FK_Flow = this.FK_Flow;
             cond.CondType = condTypeEnum;
 
@@ -639,18 +645,16 @@ namespace BP.WF.HttpHandler
             }
             return "保存成功..";
         }
-       
+
         #endregion 方向条件SQL 模版
 
         #region 方向条件SQL
-      
+
         /// 保存
         /// </summary>
         /// <returns></returns>
         public string CondBySQL_Save()
         {
-
-
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
 
             string sql = this.GetRequestVal("TB_Docs");
@@ -681,11 +685,11 @@ namespace BP.WF.HttpHandler
 
             return "保存成功..";
         }
-       
+
         #endregion
 
-        #region 方向条件岗位
-        
+        #region 方向条件角色
+
         /// <summary>
         /// 保存
         /// </summary>
@@ -732,23 +736,22 @@ namespace BP.WF.HttpHandler
 
             return "保存成功..";
         }
-        
+
         #endregion
 
         #region 按照部门条件计算CondByDept_Delete
         public string CondByDept_Save()
         {
 
-            int ToNodeID = this.ToNodeID;
             CondType condType = (CondType)this.CondType;
             Cond cond = new Cond();
-
             cond.HisDataFrom = ConnDataFrom.Depts;
             cond.FK_Node = this.FK_MainNode;
+            cond.RefFlowNo = this.FK_Flow;
             cond.FK_Flow = this.FK_Flow;
             cond.ToNodeID = this.ToNodeID;
             cond.CondTypeInt = this.CondType;
-           
+
             string val = this.GetRequestVal("depts").Replace(",", "@");
             string valT = this.GetRequestVal("deptNames");
             cond.OperatorValue = val;
@@ -763,11 +766,13 @@ namespace BP.WF.HttpHandler
                 cond.SpecOperPara = string.Empty;
             }
             cond.HisDataFrom = ConnDataFrom.Depts;
+            cond.DataFromText = "部门条件";
+
             cond.FK_Flow = this.FK_Flow;
             cond.CondTypeInt = this.CondType;
             cond.FK_Node = this.FK_MainNode;
 
-            cond.ToNodeID = ToNodeID;
+            cond.ToNodeID = this.ToNodeID;
             if (DataType.IsNullOrEmpty(this.MyPK) == true)
             {
                 cond.setMyPK(DBAccess.GenerGUID());
@@ -781,7 +786,7 @@ namespace BP.WF.HttpHandler
 
             return "保存成功!!";
         }
-        
+
         #endregion
 
         public int FK_MainNode
@@ -815,7 +820,7 @@ namespace BP.WF.HttpHandler
         }
 
         #region 方向条件Para
-       
+
         /// <summary>
         /// 保存
         /// </summary>
@@ -853,7 +858,7 @@ namespace BP.WF.HttpHandler
 
             return "保存成功..";
         }
-        
+
         #endregion
 
 

@@ -304,7 +304,7 @@ namespace BP.WF.Template.SFlow
                 map.AddTBString(SubFlowAttr.ParentFlowCopyFields, null, "子流程字段对应父流程字段", true, false, 0, 400, 150, true);
                 map.SetHelperAlert(SubFlowHandAttr.ParentFlowCopyFields, "子流程结束后，按照设置模式:格式为@SubField1=ParentField1@SubField2=ParentField2@SubField3=ParentField3,即子流程字段对应父流程字段，设置成立复制\r\n如果使用签批字段时，请使用按照设置模式");
 
-                map.AddTBInt(SubFlowHandAttr.Idx, 0, "显示顺序", true, false);
+                map.AddTBInt(SubFlowHandAttr.Idx, 0, "顺序", true, false);
 
 
                 //@0=单条手工启动, 1=按照简单数据源批量启动. @2=分组数据源批量启动. @3=树形结构批量启动.

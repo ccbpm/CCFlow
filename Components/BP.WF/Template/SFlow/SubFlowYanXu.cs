@@ -190,7 +190,7 @@ namespace BP.WF.Template.SFlow
                 map.AddDDLSQL(SubFlowYanXuAttr.ReturnToNode, "0", "要退回的节点",
                     "SELECT NodeID AS No, Name FROM WF_Node WHERE FK_Flow IN (SELECT FK_Flow FROM WF_Node WHERE NodeID=@FK_Node) ", true);
 
-                map.AddTBInt(SubFlowYanXuAttr.Idx, 0, "显示顺序", true, false);
+                map.AddTBInt(SubFlowYanXuAttr.Idx, 0, "顺序", true, false);
                 this._enMap = map;
                 return this._enMap;
             }

@@ -9,25 +9,37 @@ namespace BP.Sys
     public class EnVerDtlAttr
     {
         #region 基本属性
-
+        /// <summary>
+        /// 关联外键
+        /// </summary>
         public const string RefPK = "RefPK";
+        /// <summary>
+        /// 表单id
+        /// </summary>
         public const string FrmID = "FrmID";
+        /// <summary>
+        /// 关联主键
+        /// </summary>
         public const string EnPKValue = "EnPKValue";
-
+        /// <summary>
+        /// 属性键值
+        /// </summary>
         public const string AttrKey = "AttrKey";
+        /// <summary>
+        /// 字段名
+        /// </summary>
         public const string AttrName = "AttrName";
         public const string MyVal = "MyVal";
         public const string EnVer = "EnVer";
         public const string RDT = "RDT";
         public const string Rec = "Rec";
-
         public const string RefVerMyPK = "RefVerMyPK";
         public const string LGType = "LGType";
         public const string BindKey = "BindKey";
         #endregion
     }
     /// <summary>
-    /// 部门岗位对应 的摘要说明。
+    /// 部门角色对应 的摘要说明。
     /// </summary>
     public class EnVerDtl : EntityMyPK
     {
@@ -39,7 +51,7 @@ namespace BP.Sys
         {
             get
             {
-                
+
                 UAC uac = new UAC();
                 uac.OpenForSysAdmin();
                 return uac;
@@ -92,7 +104,8 @@ namespace BP.Sys
                 return this.GetValStringByKey(EnVerDtlAttr.AttrKey);
             }
 
-            set {
+            set
+            {
                 SetValByKey(EnVerDtlAttr.AttrKey, value);
             }
         }
@@ -146,8 +159,8 @@ namespace BP.Sys
             }
             set
             {
-                if (value ==null)
-                SetValByKey(EnVerDtlAttr.MyVal, "");
+                if (value == null)
+                    SetValByKey(EnVerDtlAttr.MyVal, "");
                 else
                     SetValByKey(EnVerDtlAttr.MyVal, value);
 
@@ -157,12 +170,11 @@ namespace BP.Sys
         #endregion
 
         #region 扩展属性
-
         #endregion
 
         #region 构造函数
         /// <summary>
-        /// 工作部门岗位对应
+        /// 工作部门角色对应
         /// </summary> 
         public EnVerDtl() { }
 
@@ -182,7 +194,6 @@ namespace BP.Sys
 
                 map.AddMyPK();
                 map.AddTBString(EnVerDtlAttr.RefPK, null, "关联版本主键", true, false, 0, 50, 30);
-
                 map.AddTBString(EnVerDtlAttr.FrmID, null, "FrmID", false, false, 0, 200, 1);
                 map.AddTBString(EnVerDtlAttr.EnPKValue, null, "EnPKValue", true, false, 0, 50, 30);
 
@@ -200,12 +211,12 @@ namespace BP.Sys
         #endregion
     }
     /// <summary>
-    /// 部门岗位对应 
+    /// 部门角色对应 
     /// </summary>
     public class EnVerDtls : EntitiesMyPK
     {
         #region 构造
-       
+
         public EnVerDtls()
         {
         }

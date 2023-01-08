@@ -122,7 +122,6 @@ namespace BP.Web
                 de.FK_Emp = em.No;
                 de.OrgNo = em.OrgNo;
                 de.Insert();
-
                 // em.FK_Dept = em.OrgNo;
             }
 
@@ -172,7 +171,7 @@ namespace BP.Web
 
             WebUser.FK_Dept = em.FK_Dept;
             WebUser.FK_DeptName = em.FK_DeptText;
-
+            WebUser.DeptParentNo = dept.ParentNo;
             WebUser.SysLang = lang;
             if (BP.Difference.SystemConfig.IsBSsystem)
             {
@@ -209,7 +208,7 @@ namespace BP.Web
                 if (authName == null)
                     authName = "";
                 cookieValues.Add("AuthName", authName); //授权人名称..
-
+                //cookieValues.Add("Token", WebUser.Token); //授权人名称..
                 HttpContextHelper.ResponseCookieAdd(cookieValues, null, "CCS");
             }
         }
@@ -286,18 +285,20 @@ namespace BP.Web
         {
             
             string guid = DBAccess.GenerGUID();
+
             //Token信息存储在WF_Emp的AtPara表中了，清空Token
-            DBAccess.RunSQL("UPDATE WF_Emp SET AtPara=REPLACE(AtPara,'@Token_PC=" + BP.Web.WebUser.Token + "', '@Token_PC=" + guid + "') WHERE No = '" + BP.Web.WebUser.No + "'");
+            string sql = "UPDATE WF_Emp SET AtPara = REPLACE(AtPara, '@Token_PC=" + BP.Web.WebUser.Token + "', '@Token_PC=" + guid + "') WHERE No = '" + BP.Web.WebUser.No + "'";
+            DBAccess.RunSQL(sql);
+            sql = "UPDATE WF_Emp SET AtPara=REPLACE(AtPara,'@Online=1','@Online=0') WHERE No = '" + BP.Web.WebUser.No + "'";
+            DBAccess.RunSQL(sql);
 
             if (IsBSMode == false)
             {
                 HttpContextHelper.ResponseCookieDelete(new string[] {
-                        "No", "Name", "Pass", "IsRememberMe", "Auth", "AuthName" },
+                        "No", "Name", "Pass", "IsRememberMe", "Auth", "AuthName","DeptParentNo" },
                     "CCS");
                 return;
             }
-
-
             try
             {
                 BP.Pub.Current.Session.Clear();
@@ -397,11 +398,13 @@ namespace BP.Web
         {
             get
             {
-                return GetSessionByKey("token", "null");
+                return GetValFromCookie("Token", null, false);
             }
             set
             {
                 SetSessionByKey("token", value);
+                HttpContextHelper.AddCookie("CCS", "Token", WebUser.Token);
+
             }
         }
         /// <summary>
@@ -553,9 +556,12 @@ namespace BP.Web
                 string v = HttpContextHelper.SessionGet<string>(valKey);
                 if (DataType.IsNullOrEmpty(v) == false)
                     return v;
+                else if (SystemConfig.IsDebug==false && valKey == "No"  && DataType.IsNullOrEmpty(v))
+                    return null;
             }
             catch
             {
+
             }
 
 
@@ -596,7 +602,7 @@ namespace BP.Web
             AtPara ap = new AtPara(keyVals);
             foreach (string key in ap.HisHT.Keys)
                 cookieValues.Add(key, ap.GetValStrByKey(key));
-
+            cookieValues.Add("Token",WebUser.Token);
             HttpContextHelper.ResponseCookieAdd(cookieValues,
                 DateTime.Now.AddMinutes(BP.Difference.SystemConfig.SessionLostMinute),
                 "CCS");
@@ -636,7 +642,7 @@ namespace BP.Web
         {
             get
             {
-                return GetValFromCookie("No", null, true);
+                return  GetValFromCookie("No", null, true);
             }
             set
             {
@@ -651,13 +657,9 @@ namespace BP.Web
             get
             {
                 string no = BP.Web.WebUser.No;
-
                 string val = GetValFromCookie("Name", no, true);
                 if (val == null)
-                {
-                        
                     throw new Exception("@err-002 Name 登录信息丢失。");
-                }
                 return val;
             }
             set

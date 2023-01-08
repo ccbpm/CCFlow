@@ -64,6 +64,7 @@ namespace BP.CCBill
 
                 #region 基本属性.
                 map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, true, 1, 190, 20);
+                map.AddTBString(MapDataAttr.Name, null, "名称", true, true, 1, 190, 20);
                 #endregion 基本属性.
 
                 #region 数据源.

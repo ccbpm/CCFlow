@@ -99,7 +99,7 @@ namespace BP.WF.Template
             string mapdata = mapData.Replace("ND", "");
             if (DataType.IsNumStr(mapdata) == false)
             {
-              //  this.HisFrmNodeComponentSta = FrmNodeComponentSta.Disable;
+                //  this.HisFrmNodeComponentSta = FrmNodeComponentSta.Disable;
                 return;
             }
 
@@ -133,28 +133,34 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("WF_Node", "节点表单组件");
-                
-                map.DepositaryOfEntity= Depositary.None;
+
+                map.DepositaryOfEntity = Depositary.None;
                 map.DepositaryOfMap = Depositary.Application;
 
+                map.AddGroupAttr("基本属性");
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
-                map.AddTBString(NodeAttr.Name, null, "节点名称", true,true, 0, 100, 10);
+                map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10);
 
+                map.AddGroupAttr("审核组件");
+                //审核组件.
                 NodeWorkCheck fwc = new NodeWorkCheck();
                 map.AddAttrs(fwc.EnMap.Attrs);
 
+                //父子流程.
+                map.AddGroupAttr("父子流程");
                 FrmSubFlow subflow = new FrmSubFlow();
                 map.AddAttrs(subflow.EnMap.Attrs);
- 
 
                 //轨迹组件.
+                map.AddGroupAttr("轨迹组件");
                 FrmTrack track = new FrmTrack();
                 map.AddAttrs(track.EnMap.Attrs);
 
                 //流转自定义组件.
+                map.AddGroupAttr("流转自定义组件");
                 FrmTransferCustom ftt = new FrmTransferCustom();
                 map.AddAttrs(ftt.EnMap.Attrs);
-                
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -233,7 +239,7 @@ namespace BP.WF.Template
                 }
             }
             #endregion 处理轨迹组件.
-           
+
 
             #region 流转自定义组件.
             FrmTransferCustom ftc = new FrmTransferCustom(this.NodeID);

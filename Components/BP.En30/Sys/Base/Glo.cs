@@ -55,6 +55,18 @@ namespace BP.Sys.Base
                 return empNo;
             }
         }
+
+        /// <summary>
+        /// 人大金仓数据库Sys_Enum是关键表
+        /// </summary>
+        /// <returns></returns>
+        public static String SysEnum()
+        {
+            if (SystemConfig.AppCenterDBType.Equals(DBType.KingBaseR3)
+                || SystemConfig.AppCenterDBType.Equals(DBType.KingBaseR6))
+                return "Sys_Enums";
+            return "Sys_Enum";
+        }
         /// <summary>
         /// 处理命名空间.
         /// </summary>

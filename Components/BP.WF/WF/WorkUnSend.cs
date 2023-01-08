@@ -241,9 +241,6 @@ namespace BP.WF
             //GenerWorkerLists wls = new GenerWorkerLists();
             //wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
 
-            // 删除工作信息,如果是按照ccflow格式存储的。
-            if (this.HisFlow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
-                wn.HisWork.Delete();
 
             // 删除附件信息。
             DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='ND" + gwf.FK_Node + "' AND RefPKVal='" + this.WorkID + "'");
@@ -606,7 +603,7 @@ namespace BP.WF
 
                 GenerWorkerList gwl = new GenerWorkerList(this.WorkID, 
                     cancelToNodeID, WebUser.No);
-                gwl.IsPass = false;
+                gwl.IsPassInt = 0;
                 gwl.Update();
                 return "@协作模式下,撤销成功.";
             }
@@ -735,9 +732,6 @@ namespace BP.WF
             GenerWorkerLists wls = new GenerWorkerLists();
             wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
 
-            // 删除工作信息,如果是按照ccflow格式存储的。
-            if (this.HisFlow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
-                wn.HisWork.Delete();
 
             // 删除附件信息。
             DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='ND" + gwf.FK_Node + "' AND RefPKVal='" + this.WorkID + "'");
@@ -932,7 +926,7 @@ namespace BP.WF
                 if (i == 0)
                     continue;
 
-                if (ndNext.HisRunModel == RunModel.SubThread)
+                if (ndNext.IsSubThread==true)
                 {
                     /*如果到达的节点是子线程,就查询出来发起的子线程。*/
                     GenerWorkFlows gwfs = new GenerWorkFlows();
@@ -944,8 +938,6 @@ namespace BP.WF
 
                 // 删除工作记录。
                 Works wks = ndNext.HisWorks;
-                if (this.HisFlow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
-                    wks.Delete(GenerWorkerListAttr.FID, this.WorkID);
             }
 
             //设置当前节点。
@@ -1010,7 +1002,7 @@ namespace BP.WF
                 if (i == 0)
                     continue;
 
-                if (ndNext.HisRunModel == RunModel.SubThread)
+                if (ndNext.IsSubThread==true)
                 {
                     /*如果到达的节点是子线程,就查询出来发起的子线程。*/
                     GenerWorkFlows gwfs = new GenerWorkFlows();
@@ -1022,8 +1014,6 @@ namespace BP.WF
 
                 // 删除工作记录。
                 Works wks = ndNext.HisWorks;
-                if (this.HisFlow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
-                    wks.Delete(GenerWorkerListAttr.FID, this.WorkID);
             }
 
 
@@ -1074,9 +1064,6 @@ namespace BP.WF
             //GenerWorkerLists wls = new GenerWorkerLists();
             //wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node.ToString());
 
-            if (this.HisFlow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
-                wn.HisWork.Delete();
-
             //更改流程信息
             gwf.FK_Node = wnPri.HisNode.NodeID;
             gwf.NodeName = wnPri.HisNode.Name;
@@ -1091,7 +1078,7 @@ namespace BP.WF
                 if (i == 0)
                     continue;
 
-                if (ndNext.HisRunModel == RunModel.SubThread)
+                if (ndNext.IsSubThread == true)
                 {
                     /*如果到达的节点是子线程,就查询出来发起的子线程。*/
                     GenerWorkFlows gwfs = new GenerWorkFlows();
@@ -1103,8 +1090,6 @@ namespace BP.WF
 
                 // 删除工作记录。
                 Works wks = ndNext.HisWorks;
-                if (this.HisFlow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
-                    wks.Delete(GenerWorkerListAttr.FID, this.WorkID);
             }
 
 
@@ -1139,7 +1124,7 @@ namespace BP.WF
             #endregion 恢复工作轨迹，解决工作抢办。
 
             // 删除以前的节点数据.
-            wnPri.DeleteToNodesData(priFLNode.HisToNodes);
+
             if (wnPri.HisNode.IsStartNode)
             {
 
@@ -1170,11 +1155,6 @@ namespace BP.WF
 
             // 删除工作者。
             DeleteSpanNodesGenerWorkerListData();
-            //GenerWorkerLists wls = new GenerWorkerLists();
-            //wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node.ToString());
-
-            if (this.HisFlow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
-                wn.HisWork.Delete();
 
             gwf.FK_Node = wnPri.HisNode.NodeID;
             gwf.NodeName = wnPri.HisNode.Name;

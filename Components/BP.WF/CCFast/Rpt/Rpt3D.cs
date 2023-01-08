@@ -63,7 +63,6 @@ namespace BP.CCFast.Rpt
                 map.AddTBString(MenuAttr.Title, null, "报表标题", true, false, 0, 200, 200,true);
                 map.AddTBString(MenuAttr.Tag4, null, "分析项目名称", true, false, 0, 200, 200);
 
-
                 map.AddDDLSysEnum(MenuAttr.ListModel, 0, "维度显示格式", true, true, "RptModel", "@0=左边@1=顶部");
 
                 map.AddDDLSysEnum(MenuAttr.TagInt1, 0, "合计位置?", true, true, "Rpt3SumModel", "@0=不显示@1=底部@2=头部");
@@ -73,12 +72,17 @@ namespace BP.CCFast.Rpt
                 msg += "\t\n 1. 该数据源一般是一个分组统计语句, 比如： SELECT D1,D2,D3,SUM(XX) AS Num FROM MyTable WHERE 1=2 GROUP BY D1,D2,D3  ";
                 msg += "\t\n 2. 对应的数据列分别是 如下数据源的列数据，列的顺序不要改变。 ";
                 msg += "\t\n 3. 每个维度都是返回的No,Name两个列的数据。 ";
+                msg += "\t\n 3，DEMO ";
+                msg += "\t\n 数据源：SELECT FK_BanJi,XB,ZZMM, COUNT(*) as Num from Demo_Student GROUP BY FK_BanJi,XB,ZZMM";
+                msg += "\t\n 维度1：SELECT No,Name FROM demo_banji ";
+                msg += "\t\n 维度2：SELECT IntKey as No, Lab as Name FROM sys_enum WHERE EnumKey='XB' ";
+                msg += "\t\n 维度3：SELECT IntKey as No, Lab as Name FROM sys_enum WHERE EnumKey='ZZMM'";
+
                 map.SetHelperAlert(MenuAttr.Tag0, msg);
 
                 map.AddTBStringDoc(MenuAttr.Tag1, null, "维度1SQL", true, false, true);
                 map.AddTBStringDoc(MenuAttr.Tag2, null, "维度2SQL", true, false, true);
                 map.AddTBStringDoc(MenuAttr.Tag3, null, "维度3SQL", true, false, true);
-
 
                 //从表明细.
                 map.AddDtl(new SearchAttrs(), SearchAttrAttr.RefMenuNo);
@@ -95,21 +99,30 @@ namespace BP.CCFast.Rpt
         public string Rpt3D_Init()
         {
             DataSet ds = new DataSet();
+
             //维度1
-            DataTable src = DBAccess.RunSQLReturnTable(BP.WF.Glo.DealExp(this.GetValStrByKey(MenuAttr.Tag0), null, null));
+            string tag0 = this.GetValStrByKey(MenuAttr.Tag0);
+            string tag1 = this.GetValStrByKey(MenuAttr.Tag1);
+            string tag2 = this.GetValStrByKey(MenuAttr.Tag2);
+            string tag3 = this.GetValStrByKey(MenuAttr.Tag3);
+            if (DataType.IsNullOrEmpty(tag0) == true|| DataType.IsNullOrEmpty(tag1) == true 
+                || DataType.IsNullOrEmpty(tag2) == true || DataType.IsNullOrEmpty(tag3) == true)
+                return "err@请检查" + this.Name + "的数据源,维度1,维度2,维度3的信息是否设置完整";
+
+            DataTable src = DBAccess.RunSQLReturnTable(BP.WF.Glo.DealExp(tag0, null, null));
             src.TableName = "Src";
             ds.Tables.Add(src);
 
             //维度1
-            DataTable dt1 = DBAccess.RunSQLReturnTable(BP.WF.Glo.DealExp(this.GetValStrByKey(MenuAttr.Tag1), null, null));
+            DataTable dt1 = DBAccess.RunSQLReturnTable(BP.WF.Glo.DealExp(tag1, null, null));
             dt1.TableName = "D1";
             ds.Tables.Add(dt1);
 
-            DataTable dt2 = DBAccess.RunSQLReturnTable(BP.WF.Glo.DealExp(this.GetValStrByKey(MenuAttr.Tag2), null, null));
+            DataTable dt2 = DBAccess.RunSQLReturnTable(BP.WF.Glo.DealExp(tag2, null, null));
             dt2.TableName = "D2";
             ds.Tables.Add(dt2);
 
-            DataTable D3 = DBAccess.RunSQLReturnTable(BP.WF.Glo.DealExp(this.GetValStrByKey(MenuAttr.Tag3), null, null));
+            DataTable D3 = DBAccess.RunSQLReturnTable(BP.WF.Glo.DealExp(tag3, null, null));
             D3.TableName = "D3";
             ds.Tables.Add(D3);
 

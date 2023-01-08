@@ -288,6 +288,7 @@ namespace BP.CCBill.Template
                 Map map = new Map("Frm_Method", "实体方法");
 
                 //主键.
+                map.AddGroupAttr("基本属性");
                 map.AddTBStringPK(MethodAttr.No, null, "编号", true, true, 0, 50, 10);
                 map.AddTBString(MethodAttr.Name, null, "方法名", true, false, 0, 300, 10);
                 map.AddTBString(MethodAttr.MethodID, null, "方法ID", true, true, 0, 300, 10);
@@ -311,20 +312,26 @@ namespace BP.CCBill.Template
                 map.AddTBString(MethodAttr.Docs, null, "方法内容", true, false, 0, 300, 10);
 
                 map.AddDDLSysEnum(MethodAttr.RefMethodType, 0, "方法类型", true, false, MethodAttr.RefMethodType,
-                "@0=功能@1=模态窗口打开@2=新窗口打开@3=右侧窗口打开");
+                "@0=功能@1=模态窗口打开@2=新窗口打开@3=右侧窗口打开@4=转到新页面");
 
                 #region 显示位置控制.
+                map.AddGroupAttr("显示位置控制");
+
                 map.AddBoolean(MethodAttr.IsMyBillToolBar, true, "是否显示在MyBill.htm工具栏上", true, true, true);
                 map.AddBoolean(MethodAttr.IsMyBillToolExt, false, "是否显示在MyBill.htm工具栏右边的更多按钮里", true, true, true);
                 map.AddBoolean(MethodAttr.IsSearchBar, false, "是否显示在Search.htm工具栏上(用于批处理)", true, true, true);
                 #endregion 显示位置控制.
 
                 #region 外观.
+                map.AddGroupAttr("外观");
+
                 map.AddTBInt(MethodAttr.PopHeight, 0, "弹窗高度", true, false);
                 map.AddTBInt(MethodAttr.PopWidth, 0, "弹窗宽度", true, false);
                 #endregion 外观.
 
                 #region 对功能有效
+                map.AddGroupAttr("对功能有效");
+
                 //对功能有效.
                 map.AddTBString(MethodAttr.WarningMsg, null, "功能执行警告信息", true, false, 0, 300, 10);
                 map.AddTBString(MethodAttr.MsgSuccess, null, "成功提示信息", true, false, 0, 300, 10, true);
@@ -336,6 +343,7 @@ namespace BP.CCBill.Template
                 #endregion 对功能有效
 
                 #region (流程)相同字段数据同步方式.
+                map.AddGroupAttr("相同字段数据同步方式");
                 map.AddDDLSysEnum(MethodAttr.DTSDataWay, 0, "同步相同字段数据方式", true, true, MethodAttr.DTSDataWay,
                "@0=不同步@1=同步全部的相同字段的数据@2=同步指定字段的数据");
 

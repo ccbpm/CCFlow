@@ -74,7 +74,7 @@ namespace BP.WF.DTS
                     if (fl.HisFlowRunWay == FlowRunWay.SpecEmpAdv)
                         strs = fl.StartGuidePara2.Split('@');
 
-                    bool isHave = false;
+                    bool isHave = false; //是否可以执行.
                     foreach (string s in strs)
                     {
                         if (string.IsNullOrEmpty(s))
@@ -119,12 +119,32 @@ namespace BP.WF.DTS
                             str = str.Replace("LastDayOfMonth", "");
                         }
 
-                        if (currTime.Contains(str) == false)
+                        //如果自动发起流程过多，会延迟判断时间点，要补偿自动发起
+                        if (str.Contains(":") == false)
                             continue;
 
-                        isHave = true;
+                        if (str.Contains(":"))
+                        {
+                            int i = str.Length;
+                            string currTime01 = currTime.Substring(currTime.Length - i);
+                            DateTime dt1 = Convert.ToDateTime(str);
+                            DateTime dt2 = Convert.ToDateTime(currTime01);
+                            if (dt1 > dt2)
+                            {
+                                continue;
+                            }
+                        }
+
                         //记录执行过的时间点，如果有该时间点，就不要在执行了。
-                        string pkval = "AutoFlow_" + fl.No + "_" + str;
+                        string pkval = "";
+                        //是按照一天的时间点计算的.
+                        if (str.Length <= 6)
+                            pkval = "AutoFlow_" + fl.No + "_" + dt.ToString("yyyyMMDD") + str;
+                        if (str.Contains("Week.") == true) //按周计算.
+                            pkval = "AutoFlow_" + fl.No + "_" + dt.ToString("yyyyMM") + dt.DayOfWeek + str;
+                        if (str.Contains("LastDayOfMonth.") == true)
+                            pkval = "AutoFlow_" + fl.No + "_" + dt.ToString("yyyyMM")  + str;
+
                         BP.Sys.GloVar gv = new GloVar();
                         gv.No = pkval;
                         if (gv.RetrieveFromDBSources() == 0)
@@ -133,10 +153,7 @@ namespace BP.WF.DTS
                             gv.Name = fl.Name + "自动发起.";
                             gv.GroupKey = "AutoStartFlow";
                             gv.Insert();
-                            break;
-                        }
-                        else
-                        {
+                            isHave = true; //可以执行.
                             break;
                         }
                     }

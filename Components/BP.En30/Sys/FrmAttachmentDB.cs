@@ -95,8 +95,6 @@ namespace BP.Sys
         /// 保存方式
         /// </summary>
         public const string AthSaveWay = "AthSaveWay";
-
-
     }
     /// <summary>
     /// 附件数据存储
@@ -148,12 +146,6 @@ namespace BP.Sys
                 str = str.Replace("~", "-");
                 str = str.Replace("'", "-");
                 str = str.Replace("*", "-");
-
-                //str = str.Replace("/", "\\");
-                //str = str.Replace("/", "\\");
-                //str = str.Replace("/", "\\");
-                //str = str.Replace("/", "\\");
-
                 this.SetValByKey(FrmAttachmentDBAttr.FileFullName, str);
             }
         }
@@ -201,7 +193,6 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentDBAttr.FileName, str);
 
                 string fileExt = str.Substring(str.LastIndexOf('.') + 1);
-
                 //后缀名.
                 this.SetValByKey(FrmAttachmentDBAttr.FileExts, fileExt);
             }
@@ -217,7 +208,15 @@ namespace BP.Sys
             }
             set
             {
-                this.SetValByKey(FrmAttachmentDBAttr.FileExts, value.Replace(".", ""));
+                string val = value.Replace(".", "");
+                string[] words = { "asp", "jsp", "do", "php", "msi", "bat", "exe", "sql" };
+                val = val.ToLower();
+                foreach (var item in words)
+                {
+                    if (val.Contains(item) && val.Length == item.Length)
+                        throw new Exception("err@非法的文件格式.");
+
+                }
             }
         }
         /// <summary>
@@ -508,7 +507,7 @@ namespace BP.Sys
         /// <returns></returns>
         private string MakeFullFileFromFtp()
         {
-            string pathOfTemp =  BP.Difference.SystemConfig.PathOfTemp;
+            string pathOfTemp = BP.Difference.SystemConfig.PathOfTemp;
             if (System.IO.Directory.Exists(pathOfTemp) == false)
                 System.IO.Directory.CreateDirectory(pathOfTemp);
 

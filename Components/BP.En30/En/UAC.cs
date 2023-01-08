@@ -33,7 +33,7 @@ namespace BP.En
             this.IsView = true;
         }
         /// <summary>
-        /// 为一个岗位设置全部的权限
+        /// 为一个角色设置全部的权限
         /// </summary>
         /// <param name="fk_station"></param>
         public void OpenAllForStation(string fk_station)

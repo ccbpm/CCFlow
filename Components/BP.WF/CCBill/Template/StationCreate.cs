@@ -3,7 +3,7 @@
 namespace BP.CCBill.Template
 {
     /// <summary>
-    /// 单据可创建的工作岗位属性	  
+    /// 单据可创建的工作角色属性	  
     /// </summary>
     public class StationCreateAttr
     {
@@ -12,13 +12,13 @@ namespace BP.CCBill.Template
         /// </summary>
         public const string FrmID = "FrmID";
         /// <summary>
-        /// 工作岗位
+        /// 工作角色
         /// </summary>
         public const string FK_Station = "FK_Station";
     }
     /// <summary>
-    /// 单据可创建的工作岗位
-    /// 单据的工作岗位有两部分组成.	 
+    /// 单据可创建的工作角色
+    /// 单据的工作角色有两部分组成.	 
     /// 记录了从一个单据到其他的多个单据.
     /// 也记录了到这个单据的其他的单据.
     /// </summary>
@@ -59,7 +59,7 @@ namespace BP.CCBill.Template
             }
         }
         /// <summary>
-        /// 工作岗位
+        /// 工作角色
         /// </summary>
         public string FK_Station
         {
@@ -76,7 +76,7 @@ namespace BP.CCBill.Template
 
         #region 构造方法
         /// <summary>
-        /// 单据可创建的工作岗位
+        /// 单据可创建的工作角色
         /// </summary>
         public StationCreate() { }
         /// <summary>
@@ -89,10 +89,10 @@ namespace BP.CCBill.Template
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Frm_StationCreate", "单据岗位");
+                Map map = new Map("Frm_StationCreate", "单据角色");
 
                 map.AddTBStringPK(StationCreateAttr.FrmID, null, "表单", true, true, 1, 100, 100);
-                map.AddDDLEntitiesPK(StationCreateAttr.FK_Station, null, "可以创建岗位",
+                map.AddDDLEntitiesPK(StationCreateAttr.FK_Station, null, "可以创建角色",
                    new BP.Port.Stations(), true);
                 this._enMap = map;
                 return this._enMap;
@@ -102,17 +102,17 @@ namespace BP.CCBill.Template
 
     }
     /// <summary>
-    /// 单据可创建的工作岗位
+    /// 单据可创建的工作角色
     /// </summary>
     public class StationCreates : EntitiesMM
     {
         #region 构造函数.
         /// <summary>
-        /// 单据可创建的工作岗位
+        /// 单据可创建的工作角色
         /// </summary>
         public StationCreates() { }
         /// <summary>
-        /// 单据可创建的工作岗位
+        /// 单据可创建的工作角色
         /// </summary>
         /// <param name="nodeID">单据ID</param>
         public StationCreates(int nodeID)
@@ -122,7 +122,7 @@ namespace BP.CCBill.Template
             qo.DoQuery();
         }
         /// <summary>
-        /// 单据可创建的工作岗位
+        /// 单据可创建的工作角色
         /// </summary>
         /// <param name="StationNo">StationNo </param>
         public StationCreates(string StationNo)

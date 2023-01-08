@@ -24,7 +24,7 @@ namespace BP.WF
         /// <param name="en"></param>
         /// <param name="atParas"></param>
         /// <returns></returns>
-        public static string DoFrm(MapData md, string eventType, Entity en,string atParas = null)
+        public static string DoFrm(MapData md, string eventType, Entity en, string atParas = null)
         {
             #region 首先执行通用的事件重载方法.
             if (EventListFrm.FrmLoadBefore.Equals(eventType) == true)
@@ -83,29 +83,29 @@ namespace BP.WF
                 return null;
             if (objs == null)
                 objs = wn.HisMsgObjs;
-             
+
             //如果执行了节点发送成功时间. 
             if (doType.Equals(EventListNode.SendSuccess) == true)
                 WorkNodePlus.SendDraftSubFlow(wn); //执行自动发送子流程草稿.
 
-            #region 2021.5.30 gaoxin. 更新授权岗位:为中科软
-            //更新授权岗位:为中科软. 如果是当前节点的处理人员是按照岗位绑定的，就需要吧授权岗，写入到 Emps里面去.
-            if (doType.Equals(EventListNode.SendSuccess) == true && BP.Difference.SystemConfig.GetValByKeyBoolen("IsEnableAuthDeptStation",false)==true)
+            #region 2021.5.30 gaoxin. 更新授权角色:为中科软
+            //更新授权角色:为中科软. 如果是当前节点的处理人员是按照角色绑定的，就需要吧授权岗，写入到 Emps里面去.
+            if (doType.Equals(EventListNode.SendSuccess) == true && BP.Difference.SystemConfig.GetValByKeyBoolen("IsEnableAuthDeptStation", false) == true)
             {
-                // 如果这些计算人员的方式有岗位的因素，就需要把当前人员授权岗增加上去.
-                if (wn.HisNode.HisDeliveryWay== DeliveryWay.ByStation
+                // 如果这些计算人员的方式有角色的因素，就需要把当前人员授权岗增加上去.
+                if (wn.HisNode.HisDeliveryWay == DeliveryWay.ByStation
                     || wn.HisNode.HisDeliveryWay == DeliveryWay.ByStationOnly
                     || wn.HisNode.HisDeliveryWay == DeliveryWay.ByStationAndEmpDept
-                    || wn.HisNode.HisDeliveryWay== DeliveryWay.ByDeptAndStation)
+                    || wn.HisNode.HisDeliveryWay == DeliveryWay.ByDeptAndStation)
                 {
                     string sql = "SELECT A.FK_Dept, A.FK_Station FROM Port_DeptEmpStation A, WF_NodeStation B ";
-                    sql += " WHERE A.FK_Emp='"+WebUser.No+"' AND A.FK_Station=B.FK_Station AND B.FK_Node="+wn.HisNode.NodeID;
+                    sql += " WHERE A.FK_Emp='" + WebUser.No + "' AND A.FK_Station=B.FK_Station AND B.FK_Node=" + wn.HisNode.NodeID;
                     DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
                     foreach (DataRow dr in dt.Rows)
                     {
-                       string strs = "@"+dr[0].ToString() + "_" + dr[1].ToString()+"@";
-                        if (wn.HisGenerWorkFlow.Emps.Contains("@"+strs) == true)
+                        string strs = "@" + dr[0].ToString() + "_" + dr[1].ToString() + "@";
+                        if (wn.HisGenerWorkFlow.Emps.Contains("@" + strs) == true)
                             continue;
 
                         wn.HisGenerWorkFlow.Emps += strs;
@@ -125,7 +125,7 @@ namespace BP.WF
                             if (wn.HisNode.TodolistModel == TodolistModel.QiangBan)
                                 DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE WorkID=" + wn.HisWork.OID);
                             else
-                                DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE SendTo='"+WebUser.No+"' AND WorkID=" + wn.HisWork.OID);
+                                DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE SendTo='" + WebUser.No + "' AND WorkID=" + wn.HisWork.OID);
                             break;
                         case EventListNode.ReturnAfter:
                         case EventListNode.ShitAfter:
@@ -154,7 +154,7 @@ namespace BP.WF
             if (wn.HisFlow.FEventEntity != null)
             {
                 wn.HisFlow.FEventEntity.SendReturnObjs = objs;
-                msg = wn.HisFlow.FEventEntity.DoIt(doType, wn.HisNode, wn.HisWork, atPara, toNodeID, wn.JumpToEmp);
+                msg = wn.HisFlow.FEventEntity.DoIt(doType, wn.HisNode, wn.HisWork, atPara, toNodeID, wn.JumpToEmp, wn.HisGenerWorkFlow);
             }
 
             #region 执行事件.
@@ -217,6 +217,8 @@ namespace BP.WF
                 //执行发送消息.
                 msgAlert += item.DoSendMessage(wn.HisNode, wn.HisWork, atPara, objs);
             }
+            if (DataType.IsNullOrEmpty(msg) == true)
+                return msgAlert;
             return msg + msgAlert;
             #endregion 处理消息推送.
         }
@@ -250,10 +252,10 @@ namespace BP.WF
                 switch (doType)
                 {
                     case EventListFlow.FlowOverAfter:
-                        DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE (MsgType='"+ EventListNode.SendSuccess + "' OR MsgType='" + EventListNode.ReturnAfter + "'  ) AND WorkID=" + wn.HisWork.OID);
+                        DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE (MsgType='" + EventListNode.SendSuccess + "' OR MsgType='" + EventListNode.ReturnAfter + "'  ) AND WorkID=" + wn.HisWork.OID);
                         break;
                     case EventListFlow.AfterFlowDel: //删除所有的消息，包括抄送.
-                        DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE AtPara LIKE '%="+wn.HisWork.OID+"@' OR WorkID=" + wn.HisWork.OID);
+                        DBAccess.RunSQL("DELETE FROM Sys_SMS WHERE AtPara LIKE '%=" + wn.HisWork.OID + "@' OR WorkID=" + wn.HisWork.OID);
                         break;
                     default:
                         break;
@@ -262,13 +264,14 @@ namespace BP.WF
             #endregion 写入消息之前,删除消息,不让其在提醒.
 
             string msg = null;
-            if (wn.HisFlow.FEventEntity == null)
-            {
-            }
+            
             if (wn.HisFlow.FEventEntity != null)
             {
                 wn.HisFlow.FEventEntity.SendReturnObjs = wn.HisMsgObjs;
-                msg = wn.HisFlow.FEventEntity.DoIt(doType, wn.HisNode, wn.HisWork, null, toNodeID, wn.JumpToEmp);
+                if (doType.Equals("FlowOnCreateWorkID") == true)
+                    msg = wn.HisFlow.FEventEntity.DoIt(doType, wn.HisNode, wn.HisWork, null, toNodeID, wn.JumpToEmp, null);
+                else
+                    msg = wn.HisFlow.FEventEntity.DoIt(doType, wn.HisNode, wn.HisWork, null, toNodeID, wn.JumpToEmp, wn.HisGenerWorkFlow);
             }
 
             #region 执行事件.
@@ -302,7 +305,7 @@ namespace BP.WF
             if (pms.Count == 0)
                 return msg;
 
-           
+
 
             string msgAlert = ""; //生成的提示信息.
             foreach (PushMsg item in pms)
@@ -316,6 +319,8 @@ namespace BP.WF
                 //执行发送消息.
                 msgAlert += item.DoSendMessage(wn.HisNode, wn.HisWork, atPara, wn.HisMsgObjs);
             }
+            if (msg == null)
+                return msgAlert;
             return msg + msgAlert;
             #endregion 处理消息推送.
         }

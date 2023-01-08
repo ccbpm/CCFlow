@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using BP.DA;
+using BP.En;
 using BP.Sys;
 using BP.Web;
 using BP.WF.Template;
@@ -33,15 +34,15 @@ namespace BP.WF.HttpHandler
 
             string sql = "";
 
-            if (nd.HisRunModel == RunModel.SubThread)
+            if (nd.IsSubThread==true)
             {
-                sql = "SELECT a.*, b.Starter,b.ADT,b.WorkID FROM " + fl.PTable
+                sql = "SELECT a.*, b.Starter,b.StarterName,b.ADT,b.WorkID FROM " + fl.PTable
                           + " a , WF_EmpWorks b WHERE a.OID=B.FID AND b.WFState Not IN (7) AND b.FK_Node=" + nd.NodeID
                           + " AND b.FK_Emp='" + WebUser.No + "'";
             }
             else
             {
-                sql = "SELECT a.*, b.Starter,b.ADT,b.WorkID FROM " + fl.PTable
+                sql = "SELECT a.*, b.Starter,b.StarterName,b.ADT,b.WorkID FROM " + fl.PTable
                         + " a , WF_EmpWorks b WHERE a.OID=B.WorkID AND b.WFState Not IN (7) AND b.FK_Node=" + nd.NodeID
                         + " AND b.FK_Emp='" + WebUser.No + "'";
             }
@@ -107,6 +108,22 @@ namespace BP.WF.HttpHandler
             int toNode = this.GetRequestValInt("ToNode");
             string toEmps = this.GetRequestVal("ToEmps");
 
+            string editFiles = nd.GetParaString("EditFields");
+            //多表单的签批组件的修改 @Hongyan
+            FrmNode frmNode = null;
+            if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
+            {
+                FrmNodes frmNodes = new FrmNodes();
+                QueryObject qo = new QueryObject(frmNodes);
+                qo.AddWhere(FrmNodeAttr.FK_Node, nd.NodeID);
+                qo.addAnd();
+                qo.AddWhere(FrmNodeAttr.IsEnableFWC, 1);
+                qo.addAnd();
+                qo.AddWhereIsNotNull(NodeWorkCheckAttr.CheckField);
+                qo.DoQuery();
+                if (frmNodes.Count != 0)
+                    frmNode = frmNodes[0] as FrmNode;
+            }
             foreach (DataRow dr in dt.Rows)
             {
                 Int64 workid = Int64.Parse(dr[0].ToString());
@@ -117,6 +134,24 @@ namespace BP.WF.HttpHandler
                 //是否启用了审核组件？
                 if (nd.FrmWorkCheckSta == FrmWorkCheckSta.Enable)
                 {
+                    //绑定多表单，获取启用审核组件的表单
+                    if (frmNode != null)
+                    {
+                        GEEntity en = new GEEntity(frmNode.FK_Frm, workid);
+                        en.SetValByKey(frmNode.CheckField, en.GetValStrByKey(frmNode.CheckField) + "," + nd.NodeID);
+                        en.Update();
+                    }
+                    else
+                    {
+                        NodeWorkCheck workCheck = new NodeWorkCheck(nd.NodeID);
+                        if (DataType.IsNullOrEmpty(workCheck.CheckField) == false)
+                        {
+                            GEEntity en = new GEEntity(nd.NodeFrmID, workid);
+                            en.SetValByKey(workCheck.CheckField, en.GetValStrByKey(workCheck.CheckField) + "," + nd.NodeID);
+                            en.Update();
+                        }
+                    }
+
                     //获取审核意见的值
                     string checkNote = "";
 
@@ -138,12 +173,24 @@ namespace BP.WF.HttpHandler
                     if (DataType.IsNullOrEmpty(checkNote) == false)
                         BP.WF.Dev2Interface.WriteTrackWorkCheck(nd.FK_Flow, nd.NodeID, workid, Int64.Parse(dr["FID"].ToString()), checkNote, null, null);
                 }
-
                 //设置字段的默认值.
                 Work wk = nd.HisWork;
                 wk.OID = workid;
                 wk.Retrieve();
                 wk.ResetDefaultVal();
+                if (DataType.IsNullOrEmpty(editFiles) == false)
+                {
+                    string[] files = editFiles.Split(',');
+                    string val = "";
+                    foreach(string key in files)
+                    {
+                        if (DataType.IsNullOrEmpty(key) == true)
+                            continue;
+                        val =  this.GetRequestVal("TB_"+ workid+"_"+key);
+                        wk.SetValByKey(key, val);
+                    }
+                }
+               
                 wk.Update();
 
                 //执行工作发送.
@@ -172,7 +219,7 @@ namespace BP.WF.HttpHandler
 
             string sql = "";
 
-            if (nd.HisRunModel == RunModel.SubThread)
+            if (nd.IsSubThread == true)
             {
                 sql = "SELECT a.*, b.Starter,b.ADT,b.WorkID FROM " + fl.PTable
                           + " a , WF_EmpWorks b WHERE a.OID=B.FID AND b.WFState Not IN (7) AND b.FK_Node=" + nd.NodeID

@@ -22,7 +22,7 @@
 
 </head>
 <body class="gray-bg">
-    <div id="toolbar"> </div>
+    <div id="toolbar" class="layui-header"> </div>
 
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="ibox-content">
@@ -95,7 +95,7 @@
                 var flowNo = data[i].FK_Flow;
                 var flowName = data[i].FlowName;
                 var rdt = data[i].RDT;
-                var flowNote = data[i].FlowNote;
+            //    var flowNote = data[i].FlowNote;
                 var workID = data[i].WorkID;
                 var paras = data[i].AtPara; //参数.
                 if (paras != '' && paras != null) {
@@ -112,7 +112,7 @@
                 listbox += "<td>" + "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&FID=0&WorkID=" + workID + "&IsRead=0&Paras=" + paras + "&T=" + timeKey + "');\" ><img src='./Img/Mail_UnRead.png' border=0 />" + title + "</a></td>";
                 listbox += "<td>" + flowName + "</td>";
                 listbox += "<td>" + rdt + "</td>";
-                listbox += "<td>" + flowNote + "</td>";
+              //  listbox += "<td>" + flowNote + "</td>";
                 listbox += "<td>";
                 listbox += "<a href=\"javascript:Delete('" + flowNo + "','" + workID + "')\">删除</a>";
                 listbox += "</td>";

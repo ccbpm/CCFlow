@@ -35,7 +35,7 @@ $(function () {
 
 function Setting() {
     var url = './Admin/Default.htm?FlowNo=' + GetQueryString("FlowNo");
-    window.location.href = url;
+    window.location.href = filterXSS(url);
 }
 
 function GetDBGroup() {
@@ -87,8 +87,7 @@ function Start() {
  * @param {any} paras
  */
 function OpenForm(flowNo, nodeID, workid, fid, paras) {
-
-    url = basePath + "/WF/MyFlow.htm?FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&WorkID=" + workid;
+    url = basePath + "/WF/MyView.htm?FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&WorkID=" + workid;
     window.open(url);
 
     // var url = GenerFrmUrl(flowNo, nodeID, workid, fid, paras);

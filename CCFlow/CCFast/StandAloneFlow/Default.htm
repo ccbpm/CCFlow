@@ -50,7 +50,7 @@
                 cellMinWidth: 120,
                 size: 'lg',
                 cols: [cols],
-                page: true,
+                page: false,
                 limits: [5, 10, 15, 20, 25]
             });
            // renderLaypage(data["DT"].length);
@@ -187,7 +187,7 @@
                 sort: true,
                 templet: function (data) {
                     if (this.field == "Title") {
-                        return "<a style='color:#1e9fff' href='javaScript:void(0)' onclick='OpenIt(\"" + data.Title + "\"," + data.OID + "," + data.FlowEndNode + "," + data.FID + ")'>" + data[this.field] + "</a>";
+                        return "<a style='color:#1e9fff' href='javaScript:void(0)' onclick='OpenForm(\"" + GetQueryString("FK_Flow") + "\"," + data.FlowEndNode + "," + data.OID + "," + data.FID + ")'>" + data[this.field] + "</a>";
                     }
                     return data[this.field];
                 }

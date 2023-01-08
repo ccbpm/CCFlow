@@ -73,8 +73,8 @@
                     var d2Val = d2[i2];
 
                     for (var i3 = 0; i3 < d3.length; i3++) {
-                        var item = d3[i3];
-                        html += "<td>" + GetVal(en.No, d2Val.No, item.No) + "</td>";
+                        var d3En = d3[i3];
+                        html += "<td>" + GetVal(en.No, d2Val.No, d3En.No) + "</td>";
                     }
                 }
                 html += "</tr>";
@@ -89,11 +89,11 @@
         function GetVal(d1, d2, d3) {
 
             for (var i = 0; i < src.length; i++) {
-               // debugger;
+                // debugger;
                 var en = src[i];
 
                 var idx = 0;
-                var v1, v2, v3;
+                var v1, v2, v3, v4;
                 for (var item in en) {
 
                     if (idx == 0)
@@ -102,11 +102,18 @@
                         v2 = en[item];
                     if (idx == 2)
                         v3 = en[item];
+                    if (idx == 3)
+                        v4 = en[item];
                     idx++;
                 }
 
-                if (v1 == d1 && v2 == d2 && v3 == d3)
-                    return en[3];
+                if (v1 == d1 && v2 == d2 && v3 == d3) {
+                    return v4;
+                    //  console.log(en);
+                    // return en.Num;
+                    // return en[1];
+
+                }
             }
             return '无';
         }
